@@ -183,8 +183,8 @@ public class ActionBar extends JPanel
 			popup = null;
 		}
 
-
-		final EditAction act = (cmd == null ? null : jEdit.getAction(cmd));
+		final String finalCmd = cmd;
+		final EditAction act = (finalCmd == null ? null : jEdit.getAction(finalCmd));
 		if(temp)
 			view.removeToolBar(ActionBar.this);
 
@@ -195,9 +195,12 @@ public class ActionBar extends JPanel
 				view.getTextArea().grabFocus();
 				if(act == null)
 				{
-					view.getStatus().setMessageAndClear(
-						jEdit.getProperty(
-						"view.action.no-completions"));
+					if(finalCmd != null)
+					{
+						view.getStatus().setMessageAndClear(
+							jEdit.getProperty(
+							"view.action.no-completions"));
+					}
 				}
 				else
 				{

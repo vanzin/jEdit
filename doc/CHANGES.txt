@@ -35,6 +35,11 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 }}}
 {{{ Syntax Highlighting
 
+- A new default color scheme.
+
+- Added a new more token types: COMMENT3, COMMENT4, LITERAL3, LITERAL4,
+  KEYWORD4.
+
 - Improved C pre-processor syntax highlighting.
 
 - Updated NSIS2 syntax highlighting (Ryan Grove).

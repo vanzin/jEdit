@@ -30,7 +30,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
-import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
@@ -130,25 +130,24 @@ class StyleTableModel extends AbstractTableModel
 	//{{{ StyleTableModel constructor
 	StyleTableModel()
 	{
-		styleChoices = new Vector(13);
-		addStyleChoice("options.syntax.comment1Style","view.style.comment1");
-		addStyleChoice("options.syntax.comment2Style","view.style.comment2");
-		addStyleChoice("options.syntax.literal1Style","view.style.literal1");
-		addStyleChoice("options.syntax.literal2Style","view.style.literal2");
-		addStyleChoice("options.syntax.labelStyle","view.style.label");
-		addStyleChoice("options.syntax.keyword1Style","view.style.keyword1");
-		addStyleChoice("options.syntax.keyword2Style","view.style.keyword2");
-		addStyleChoice("options.syntax.keyword3Style","view.style.keyword3");
-		addStyleChoice("options.syntax.functionStyle","view.style.function");
-		addStyleChoice("options.syntax.markupStyle","view.style.markup");
-		addStyleChoice("options.syntax.operatorStyle","view.style.operator");
-		addStyleChoice("options.syntax.digitStyle","view.style.digit");
-		addStyleChoice("options.syntax.invalidStyle","view.style.invalid");
-		addStyleChoice("options.syntax.foldLine.1","view.style.foldLine.1");
-		addStyleChoice("options.syntax.foldLine.2","view.style.foldLine.2");
-		addStyleChoice("options.syntax.foldLine.3","view.style.foldLine.3");
-		addStyleChoice("options.syntax.foldLine.0","view.style.foldLine.0");
-		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringCompare());
+		styleChoices = new Vector(Token.ID_COUNT + 4);
+		// start at 1 not 0 to skip Token.NULL
+		for(int i = 1; i < Token.ID_COUNT; i++)
+		{
+			String tokenName = Token.tokenToString((byte)i);
+			addStyleChoice(tokenName,"view.style." + tokenName.toLowerCase());
+		}
+
+		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.1"),
+			"view.style.foldLine.1");
+		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.2"),
+			"view.style.foldLine.2");
+		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.3"),
+			"view.style.foldLine.3");
+		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.0"),
+			"view.style.foldLine.0");
+
+		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringICaseCompare());
 	} //}}}
 
 	//{{{ getColumnCount() method
@@ -216,7 +215,7 @@ class StyleTableModel extends AbstractTableModel
 	//{{{ addStyleChoice() method
 	private void addStyleChoice(String label, String property)
 	{
-		styleChoices.addElement(new StyleChoice(jEdit.getProperty(label),
+		styleChoices.addElement(new StyleChoice(label,
 			property,
 			GUIUtilities.parseStyle(jEdit.getProperty(property),
 			"Dialog",12)));

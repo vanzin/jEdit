@@ -3,7 +3,13 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- no line break broken
+- split: not focused
+- need distinct default styles for new token types
+- HTML mode: use new token types
+- synchro scroll & folding
+- view.setBuffer(); if already in one edit pane focus there
+  - maybe view.gotoBuffer()?
+- hypersearch: open in new split
 - option to not follow symbolic links
 - C+e C+c long block of text
 - bracket highlight not cleared sometimes?
@@ -20,6 +26,7 @@ and quirks that I need to fix eventually.
 - global options: split pane position suboptimal
 - perl: q{}, etc.
 - position hold still doesn't work
+- changes above a narrow cause display anamolies
 - don't show 'new directory' in favorites:
 - plugin error dialog -- if > 1 error per plugin
 - A+# on OS X, need better modifier mapping on OS X
