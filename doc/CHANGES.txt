@@ -1,5 +1,13 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre11
+
+Thanks to Stefan Kost for contributing to this release.
+
++ Bug Fixes:
+
+- Minor fix to BibTeX syntax highlighting (Stefan Kost).
+
 * Version 4.1pre10
 
 Thanks to Kris Kopicki and Oliver Rutherfurd for contributing to this

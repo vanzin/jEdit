@@ -2,8 +2,10 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- BibTeX mode, by Nils Krahnstoever, krahnsto@cse.psu.edu
-     based PV-WAVE mode by Ed Stewarton and tex mode by unknown author. -->
+<!-- BibTeX mode, by Nils Krahnstoever <krahnsto@cse.psu.edu>
+     based PV-WAVE mode by Ed Stewarton and tex mode by unknown author.
+     updated by Stefan Kost <s.kost@webmacher.de>
+-->
 
 <MODE>
 	<PROPS>
@@ -36,36 +38,38 @@
 		<SEQ TYPE="OPERATOR">,</SEQ>
 
 		<KEYWORDS>
-		<KEYWORD1>address</KEYWORD1>
-		<KEYWORD1>annote</KEYWORD1>
-		<KEYWORD1>author</KEYWORD1>
-		<KEYWORD1>title</KEYWORD1>
-		<KEYWORD1>type</KEYWORD1>
-		<KEYWORD1>abstract</KEYWORD1>
-		<KEYWORD1>volume</KEYWORD1>
-		<KEYWORD1>pages</KEYWORD1>
-		<KEYWORD1>number</KEYWORD1>
-		<KEYWORD1>note</KEYWORD1>
-		<KEYWORD1>key</KEYWORD1>
-		<KEYWORD1>organization</KEYWORD1>
-		<KEYWORD1>school</KEYWORD1>
-		<KEYWORD1>series</KEYWORD1>
-		<KEYWORD1>chapter</KEYWORD1>
-		<KEYWORD1>month</KEYWORD1>
-		<KEYWORD1>department</KEYWORD1>
-		<KEYWORD1>keywords</KEYWORD1>
-		<KEYWORD1>howpublished</KEYWORD1>
-		<KEYWORD1>institution</KEYWORD1>
-		<KEYWORD1>journal</KEYWORD1>
-		<KEYWORD1>publisher</KEYWORD1>
-		<KEYWORD1>editon</KEYWORD1>
-		<KEYWORD1>editor</KEYWORD1>
-		<KEYWORD1>year</KEYWORD1>
-		<KEYWORD1>booktitle</KEYWORD1>
+			<KEYWORD1>address</KEYWORD1>
+			<KEYWORD1>annote</KEYWORD1>
+			<KEYWORD1>author</KEYWORD1>
+			<KEYWORD1>title</KEYWORD1>
+			<KEYWORD1>type</KEYWORD1>
+			<KEYWORD1>abstract</KEYWORD1>
+			<KEYWORD1>volume</KEYWORD1>
+			<KEYWORD1>pages</KEYWORD1>
+			<KEYWORD1>number</KEYWORD1>
+			<KEYWORD1>note</KEYWORD1>
+			<KEYWORD1>key</KEYWORD1>
+			<KEYWORD1>organization</KEYWORD1>
+			<KEYWORD1>school</KEYWORD1>
+			<KEYWORD1>series</KEYWORD1>
+			<KEYWORD1>chapter</KEYWORD1>
+			<KEYWORD1>month</KEYWORD1>
+			<KEYWORD1>department</KEYWORD1>
+			<KEYWORD1>keywords</KEYWORD1>
+			<KEYWORD1>howpublished</KEYWORD1>
+			<KEYWORD1>institution</KEYWORD1>
+			<KEYWORD1>journal</KEYWORD1>
+			<KEYWORD1>publisher</KEYWORD1>
+			<KEYWORD1>editon</KEYWORD1>
+			<KEYWORD1>editor</KEYWORD1>
+			<KEYWORD1>year</KEYWORD1>
+			<KEYWORD1>booktitle</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="ITEM" DEFAULT="LITERAL1">
-		<SEQ TYPE="OPERATOR">{</SEQ>
-		<SEQ TYPE="OPERATOR">}</SEQ>			
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
 	</RULES>
 </MODE>
