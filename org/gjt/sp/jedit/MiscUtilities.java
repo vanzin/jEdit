@@ -84,8 +84,18 @@ public class MiscUtilities
 	{
 		path = canonPath(path);
 
-		if(new File(path).isAbsolute())
-			return path;
+		File file = new File(path);
+		if(file.isAbsolute())
+		{
+			try
+			{
+				return file.getCanonicalPath();
+			}
+			catch(IOException io)
+			{
+				return path;
+			}
+		}
 
 		if(parent == null)
 			parent = System.getProperty("user.dir");
@@ -102,9 +112,18 @@ public class MiscUtilities
 		}
 
 		if(parent.endsWith(File.separator))
-			return parent + path;
+			path = parent + path;
 		else
-			return parent + File.separator + path;
+			path = parent + File.separator + path;
+
+		try
+		{
+			return new File(path).getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			return path;
+		}
 	} //}}}
 
 	//{{{ constructPath() method

@@ -150,7 +150,15 @@ public class BrowserIORequest extends WorkRequest
 		try
 		{
 			setAbortable(true);
-			path1 = vfs._canonPath(session,path1,browser);
+			if(!MiscUtilities.isURL(path1) && !new File(path1).isAbsolute())
+			{
+				String parent = browser.getDirectory();
+				if(parent == null)
+					parent = System.getProperty("user.home");
+				path1 = vfs.constructPath(parent,path1);
+				path1 = vfs._canonPath(session,path1,browser);
+			}
+
 			directory = vfs._listDirectory(session,path1,browser);
 		}
 		catch(IOException io)

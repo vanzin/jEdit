@@ -41,10 +41,12 @@ JEDIT 4.0 VERSION HISTORY
 - '~' in buffer and directory path names is now automatically expanded
   to the home directory
 - Improved undo
-- File selection dialog boxes now have a status bar that shows the number
-  of pending I/O requests
+- File selection dialog boxes now have a status bar that shows the
+  number of pending I/O requests
 - Middle mouse button click in file system browser now has the same
   effect as double-clicking
+- You can now enter relative paths in the file system browser's path
+  field
 
 + Bug Fixes
 
@@ -70,6 +72,8 @@ JEDIT 4.0 VERSION HISTORY
   invalid tool bar buttons
 - It was not possible to bind an action to a non-alphanumeric key
   without any modifiers
+- The file system browser's notion of the current directory is not
+  changed until the directory is actually loaded successfully
 
 + API Changes
 

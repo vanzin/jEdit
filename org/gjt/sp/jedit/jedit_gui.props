@@ -158,7 +158,6 @@ icons=Blank24.gif \
 	StepForward24.gif \
 	Stop24.gif \
 	TipOfTheDay24.gif \
-	ToolbarMenu.gif \
 	Underline24.gif \
 	Undo24.gif \
 	Unsplit24.gif \
@@ -1597,48 +1596,60 @@ browser-multiple-io.message=Each file system browser can only execute one input/
 #{{{ VFS browser
 vfs.browser.title=File System Browser
 vfs.browser.path=Path:
+vfs.browser.path.mnemonic=p
 vfs.browser.filter=Filter:
 vfs.browser.default-filter=[^#]*[^~#]
 vfs.browser.filter-enabled=true
 
-#{{{ Tool bar
-vfs.browser.up.label=Parent Directory
-vfs.browser.up.icon=Up24.gif
-vfs.browser.up-menu.label=Parent Directories
-vfs.browser.up-menu.icon=ToolbarMenu.gif
-vfs.browser.reload.label=Reload Directory
-vfs.browser.reload.icon=Refresh24.gif
-vfs.browser.roots.label=Local Drives
-vfs.browser.roots.icon=Server24.gif
-vfs.browser.home.label=Home Directory
-vfs.browser.home.icon=Home24.gif
-vfs.browser.synchronize.label=Parent Directory of Current Buffer
-vfs.browser.synchronize.icon=Import24.gif
-vfs.browser.more.label=More
-vfs.browser.more.icon=ToolbarMenu.gif
+#{{{ Context menu
+vfs.browser.commands.close.label=Close
+vfs.browser.commands.open.label=Open
+vfs.browser.commands.open-view.label=Open in New View
+vfs.browser.commands.insert.label=Insert
+vfs.browser.commands.browse.label=Browse
+vfs.browser.commands.choose.label=Choose
+vfs.browser.commands.delete.label=Delete...
+vfs.browser.commands.rename.label=Rename...
 #}}}
 
-#{{{ Menu
-vfs.browser.menu.close.label=Close
-vfs.browser.menu.open.label=Open
-vfs.browser.menu.open-view.label=Open in New View
-vfs.browser.menu.insert.label=Insert
-vfs.browser.menu.browse.label=Browse
-vfs.browser.menu.choose.label=Choose
-vfs.browser.menu.delete.label=Delete...
-vfs.browser.menu.rename.label=Rename...
+#{{{ Commands menu and tool bar
+vfs.browser.commands.label=Commands
 
-vfs.browser.menu.show-hidden-files.label=Show Hidden Files
-vfs.browser.menu.new-file.label=New File
-vfs.browser.menu.new-directory.label=New Directory...
-vfs.browser.menu.search-in-directory.label=Search in Directory...
-vfs.browser.menu.add-to-favorites.label=Add to Favorites
-vfs.browser.menu.go-to-favorites.label=Go to Favorites
+vfs.browser.commands.up.label=Parent Directory
+vfs.browser.commands.up.icon=Up24.gif
+vfs.browser.commands.reload.label=Reload Directory
+vfs.browser.commands.reload.icon=Refresh24.gif
+vfs.browser.commands.roots.label=Local Drives
+vfs.browser.commands.roots.icon=Server24.gif
+vfs.browser.commands.home.label=Home Directory
+vfs.browser.commands.home.icon=Home24.gif
+vfs.browser.commands.synchronize.label=Directory of Current Buffer
+vfs.browser.commands.synchronize.icon=Import24.gif
+vfs.browser.commands.new-file.label=New File
+vfs.browser.commands.new-file.icon=New24.gif
+vfs.browser.commands.new-directory.label=New Directory
+# XXX
+vfs.browser.commands.new-directory.icon=Open24.gif
+vfs.browser.commands.search-in-directory.label=Search in Directory
+vfs.browser.commands.search-in-directory.icon=Search24.gif
+vfs.browser.commands.show-hidden-files.label=Show Hidden Files
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=Favorites
+vfs.browser.favorites.add-to-favorites.label=Add to Favorites
+vfs.browser.favorites.go-to-favorites.label=Go to Favorites
+#}}}
+
+#{{{ Plugins menu
+vfs.browser.plugins.label=Plugins
+vfs.browser.plugins.no-plugins.label=No Plugins
 #}}}
 
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save
 vfs.browser.dialog.filename=File name:
+vfs.browser.dialog.filename.mnemonic=f
 
 #{{{ Dialogs
 vfs.browser.bad-filter.title=Invalid Filter

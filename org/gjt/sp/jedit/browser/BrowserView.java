@@ -53,10 +53,9 @@ public class BrowserView extends JPanel
 		tree.setCellRenderer(renderer);
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
-		tree.putClientProperty("JTree.lineStyle", "Angled");
-		tree.setRowHeight(renderer.getTreeCellRendererComponent(
-			tree,new DefaultMutableTreeNode("foo"),
-			false,false,false,0,false).getSize().height);
+		tree.putClientProperty("JTree.lineStyle", "Horizontal");
+		tree.setRootVisible(false);
+		tree.setShowsRootHandles(true);
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -105,9 +104,6 @@ public class BrowserView extends JPanel
 	//{{{ directoryLoaded() method
 	public void directoryLoaded(Vector directory)
 	{
-		if(currentlyLoadingTreeNode == rootNode)
-			rootNode.setUserObject(browser.getDirectory());
-
 		currentlyLoadingTreeNode.removeAllChildren();
 
 		if(directory != null)
@@ -184,6 +180,10 @@ public class BrowserView extends JPanel
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 		renderer.propertiesChanged();
+
+		tree.setRowHeight(renderer.getTreeCellRendererComponent(
+			tree,new DefaultMutableTreeNode("foo"),
+			false,false,false,0,false).getSize().height);
 	} //}}}
 
 	//{{{ Private members
@@ -196,7 +196,7 @@ public class BrowserView extends JPanel
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
-	private BrowserPopupMenu popup;
+	private BrowserCommandsMenu popup;
 	//}}}
 
 	//{{{ Used for tool tips
@@ -278,13 +278,13 @@ public class BrowserView extends JPanel
 		// fire events
 		model.reload(currentlyLoadingTreeNode);
 
-		browser.loadDirectory(path);
+		browser.loadDirectory(path,false);
 	} //}}}
 
 	//{{{ showFilePopup() method
 	private void showFilePopup(VFS.DirectoryEntry file, Point point)
 	{
-		popup = new BrowserPopupMenu(browser,file);
+		popup = new BrowserCommandsMenu(browser,file);
 		GUIUtilities.showPopupMenu(popup,tree,point.x+1,point.y+1);
 	} //}}}
 

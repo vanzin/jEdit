@@ -44,7 +44,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	public void register(DockableWindowManager.Entry entry)
 	{
 		this.entry = entry;
-		setTitle(jEdit.getProperty(entry.title));
+		setTitle(entry.title);
 
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
