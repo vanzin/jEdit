@@ -1,6 +1,12 @@
+/**
+	Print the contents of filename, url, or stream (like Unix cat)
+*/
 
 bsh.help.cat = "usage: cat( filename )";
 
+/**
+	cat comment
+*/
 cat( String filename ) 
 {
 	file = pathToFile( filename );
@@ -13,6 +19,9 @@ cat( String filename )
 	cat ( new FileReader( file ) );
 }
 
+/**
+	cat comment
+*/
 cat( URL url ) 
 {
 	cat( url.openStream() );
