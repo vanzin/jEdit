@@ -300,8 +300,8 @@ public class Buffer implements EBComponent
 				{
 					EditBus.send(new BufferUpdate(Buffer.this,
 						view,BufferUpdate.LOADED));
-					EditBus.send(new BufferUpdate(Buffer.this,
-						view,BufferUpdate.MARKERS_CHANGED));
+					//EditBus.send(new BufferUpdate(Buffer.this,
+					//	view,BufferUpdate.MARKERS_CHANGED));
 				}
 			}
 		}; //}}}
@@ -1544,7 +1544,10 @@ public class Buffer implements EBComponent
 		if(noWordSep == null)
 			noWordSep = "";
 
-		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
+		if(!isTemporary() && firstTimeDone)
+			EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
+
+		firstTimeDone = true;
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -1834,8 +1837,6 @@ public class Buffer implements EBComponent
 			unsetProperty("maxLineLen");
 		//}}}
 
-		Mode oldMode = this.mode;
-
 		this.mode = mode;
 
 		//{{{ Cache these for improved performance
@@ -1845,13 +1846,6 @@ public class Buffer implements EBComponent
 		//}}}
 
 		propertiesChanged(); // sets up token marker
-
-		// don't fire it for initial mode set
-		if(oldMode != null && !getFlag(TEMPORARY))
-		{
-			EditBus.send(new BufferUpdate(this,null,
-				BufferUpdate.MODE_CHANGED));
-		}
 	} //}}}
 
 	//{{{ setMode() method
@@ -3207,6 +3201,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private FoldHandler foldHandler;
 	private FoldVisibilityManager[] inUseFVMs;
 
+	// Minimise EditBus message traffic...
+	private boolean firstTimeDone;
 	//}}}
 
 	//{{{ setPath() method

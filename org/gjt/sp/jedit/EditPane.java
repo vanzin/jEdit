@@ -508,19 +508,6 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.getPainter().repaint();
 			}
 		}
-		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
-		{
-			if(_buffer == buffer)
-			{
-				if(bufferSwitcher != null)
-				{
-					if(buffer.isDirty())
-						bufferSwitcher.repaint();
-					else
-						bufferSwitcher.updateBufferList();
-				}
-			}
-		}
 		else if(msg.getWhat() == BufferUpdate.LOADED)
 		{
 			if(_buffer == buffer)
@@ -542,20 +529,23 @@ public class EditPane extends JPanel implements EBComponent
 			}
 
 		}
+		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		{
+			if(_buffer == buffer)
+			{
+				if(bufferSwitcher != null)
+				{
+					if(buffer.isDirty())
+						bufferSwitcher.repaint();
+					else
+						bufferSwitcher.updateBufferList();
+				}
+			}
+		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
 		{
 			if(_buffer == buffer)
 				textArea.getGutter().repaint();
-		}
-		else if(msg.getWhat() == BufferUpdate.MODE_CHANGED)
-		{
-			if(_buffer == buffer)
-			{
-				textArea.propertiesChanged();
-
-				if(view.getEditPane() == this)
-					view.getStatus().updateBufferStatus();
-			}
 		}
 		else if(msg.getWhat() == BufferUpdate.PROPERTIES_CHANGED)
 		{

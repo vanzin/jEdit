@@ -177,9 +177,12 @@ public class BufferIORequest extends WorkRequest
 			try
 			{
 				String[] args = { vfs.getFileName(path) };
-				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
-				setProgressValue(0);
+				if(!buffer.isTemporary())
+				{
+					setStatus(jEdit.getProperty("vfs.status.load",args));
+					setProgressValue(0);
+				}
 
 				path = vfs._canonPath(session,path,view);
 
@@ -193,10 +196,7 @@ public class BufferIORequest extends WorkRequest
 
 				in = vfs._createInputStream(session,path,false,view);
 				if(in == null)
-				{
-					System.err.println("in = null");
 					return;
-				}
 
 				in = new BufferedInputStream(in);
 
@@ -254,7 +254,8 @@ public class BufferIORequest extends WorkRequest
 				try
 				{
 					String[] args = { vfs.getFileName(path) };
-					setStatus(jEdit.getProperty("vfs.status.load-markers",args));
+					if(!buffer.isTemporary())
+						setStatus(jEdit.getProperty("vfs.status.load-markers",args));
 					setAbortable(true);
 
 					in = vfs._createInputStream(session,markersPath,true,view);
@@ -310,11 +311,14 @@ public class BufferIORequest extends WorkRequest
 		IntegerArray endOffsets = new IntegerArray();
 
 		// only true if the file size is known
-		boolean trackProgress = (length != 0);
+		boolean trackProgress = (!buffer.isTemporary() && length != 0);
 		File file = buffer.getFile();
 
-		setProgressValue(0);
-		setProgressMaximum((int)length);
+		if(trackProgress)
+		{
+			setProgressValue(0);
+			setProgressMaximum((int)length);
+		}
 
 		// if the file size is not known, start with a resonable
 		// default buffer size

@@ -53,8 +53,13 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		setContentPane(content);
 
 		String name;
-		if(path == null || path.endsWith(File.separator) || path.endsWith("/"))
+		if(mode == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 			name = null;
+		else if(path == null || path.endsWith(File.separator)
+			|| path.endsWith("/"))
+		{
+			name = null;
+		}
 		else
 		{
 			VFS vfs = VFSManager.getVFSForPath(path);

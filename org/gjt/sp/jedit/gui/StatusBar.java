@@ -55,8 +55,7 @@ import org.gjt.sp.util.*;
  */
 public class StatusBar extends JPanel implements WorkThreadProgressListener
 {
-	private static final Icon RED_DISK = GUIUtilities.loadIcon("dirty.gif");
-	private static final Icon BLUE_DISK = GUIUtilities.loadIcon("blue_disk.gif");
+	private static final Icon LOADING = GUIUtilities.loadIcon("ReloadSmall.png");
 
 	//{{{ StatusBar constructor
 	public StatusBar(View view)
@@ -76,7 +75,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		caretStatus.addMouseListener(mouseHandler);
 		panel.add(BorderLayout.WEST,caretStatus);
 
-		message = new ToolTipLabel();
+		message = new JLabel();
+		Dimension dim = message.getPreferredSize();
+		message.setPreferredSize(new Dimension(dim.width,
+			Math.max(16,dim.height)));
 		setMessageComponent(message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
@@ -226,20 +228,20 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				{
 					setMessageAndClear(jEdit.getProperty(
 						"view.status.io.done"));
-					message.setIcon(BLUE_DISK);
+					message.setIcon(null);
 				}
 				else if(requestCount == 1)
 				{
 					setMessage(jEdit.getProperty(
 						"view.status.io-1"));
-					message.setIcon(RED_DISK);
+					message.setIcon(LOADING);
 				}
 				else
 				{
 					Object[] args = { new Integer(requestCount) };
 					setMessage(jEdit.getProperty(
 						"view.status.io",args));
-					message.setIcon(RED_DISK);
+					message.setIcon(LOADING);
 				}
 			}
 		});
