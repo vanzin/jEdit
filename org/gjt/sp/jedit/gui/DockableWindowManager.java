@@ -511,10 +511,7 @@ public class DockableWindowManager extends JPanel
 		if(entry.win == null)
 			entry.open();
 
-		if(entry.win != null)
-			entry.container.show(entry);
-		else
-			; // some kind of exception already shown
+		entry.container.show(entry);
 	} //}}}
 
 	//{{{ addDockableWindow() method
@@ -619,6 +616,22 @@ public class DockableWindowManager extends JPanel
 			return false;
 		else
 			return entry.container.isVisible(entry);
+	} //}}}
+
+	//{{{ isDockableWindowDocked() method
+	/**
+	 * Returns if the specified dockable window is docked into the
+	 * view.
+	 * @param name The dockable's name
+	 * @since jEdit 4.0pre2
+	 */
+	public boolean isDockableWindowDocked(String name)
+	{
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+			return false;
+		else
+			return (entry.position != FLOATING);
 	} //}}}
 
 	//{{{ close() method

@@ -3291,7 +3291,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				start--;
 			end--;
 		}
-		int x = offsetToX(caretLine,caret - start));
+		int x = offsetToX(caretLine,caret - start);
 		buffer.remove(start,end - start);
 		setCaretPosition(start + xToOffset(caretLine,x));
 	} //}}}
@@ -5222,6 +5222,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleClick() method
 		private void doSingleClick(MouseEvent evt)
 		{
+			if(buffer.insideCompoundEdit())
+				buffer.endCompoundEdit();
+
 			if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!

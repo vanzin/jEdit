@@ -201,6 +201,11 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void invokeAction(EditAction action)
 	{
+		Buffer buffer = view.getBuffer();
+
+		if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit();
+
 		// remember the last executed action
 		if(lastAction == action)
 			lastActionCount++;
@@ -229,7 +234,7 @@ public abstract class InputHandler extends KeyAdapter
 					label = GUIUtilities.prettifyMenuLabel(label);
 
 				Object[] pp = { label, new Integer(_repeatCount) };
-					
+
 				if(GUIUtilities.confirm(view,"large-repeat-count",pp,
 					JOptionPane.WARNING_MESSAGE,
 					JOptionPane.YES_NO_OPTION)
@@ -242,7 +247,6 @@ public abstract class InputHandler extends KeyAdapter
 				}
 			}
 
-			Buffer buffer = view.getBuffer();
 			try
 			{
 				buffer.beginCompoundEdit();
@@ -300,6 +304,11 @@ public abstract class InputHandler extends KeyAdapter
 		else
 		{
 			JEditTextArea textArea = view.getTextArea();
+
+			Buffer buffer = view.getBuffer();
+			if(!buffer.insideCompoundEdit())
+				buffer.beginCompoundEdit();
+
 			int _repeatCount = getRepeatCount();
 			if(_repeatCount == 1)
 				textArea.userInput(ch);
@@ -340,6 +349,11 @@ public abstract class InputHandler extends KeyAdapter
 	//{{{ invokeReadNextChar() method
 	protected void invokeReadNextChar(char ch)
 	{
+		Buffer buffer = view.getBuffer();
+
+		if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit();
+
 		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 
 		// this might be a bit slow if __char__ occurs a lot
@@ -357,8 +371,6 @@ public abstract class InputHandler extends KeyAdapter
 
 		if(getRepeatCount() != 1)
 		{
-			Buffer buffer = view.getBuffer();
-
 			try
 			{
 				buffer.beginCompoundEdit();

@@ -1,5 +1,8 @@
 /*
  * BrowserIORequest.java - VFS browser I/O request
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,12 +22,14 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.WorkRequest;
 import org.gjt.sp.util.WorkThread;
+//}}}
 
 /**
  * A browser I/O request.
@@ -33,6 +38,7 @@ import org.gjt.sp.util.WorkThread;
  */
 public class BrowserIORequest extends WorkRequest
 {
+	//{{{ Request types
 	/**
 	 * Directory listing I/O request.
 	 */
@@ -52,7 +58,9 @@ public class BrowserIORequest extends WorkRequest
 	 * Make directory I/O request.
 	 */
 	public static final int MKDIR = 3;
+	//}}}
 
+	//{{{ BrowserIORequest constructor
 	/**
 	 * Creates a new browser I/O request.
 	 * @param type The request type
@@ -69,8 +77,9 @@ public class BrowserIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path1 = path1;
 		this.path2 = path2;
-	}
+	} //}}}
 
+	//{{{ run() method
 	public void run()
 	{
 		switch(type)
@@ -90,8 +99,9 @@ public class BrowserIORequest extends WorkRequest
 		}
 
 		browser.endRequest();
-	}
+	} //}}}
 
+	//{{{ toString() method
 	public String toString()
 	{
 		String typeString;
@@ -117,16 +127,20 @@ public class BrowserIORequest extends WorkRequest
 		return getClass().getName() + "[type=" + typeString
 			+ ",vfs=" + vfs + ",path1=" + path1
 			+ ",path2=" + path2 + "]";
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private int type;
 	private VFSBrowser browser;
 	private Object session;
 	private VFS vfs;
 	private String path1;
 	private String path2;
+	//}}}
 
+	//{{{ listDirectory() method
 	private void listDirectory()
 	{
 		VFS.DirectoryEntry[] directory = null;
@@ -136,6 +150,7 @@ public class BrowserIORequest extends WorkRequest
 		try
 		{
 			setAbortable(true);
+			path1 = vfs._canonPath(session,path1,browser);
 			directory = vfs._listDirectory(session,path1,browser);
 		}
 		catch(IOException io)
@@ -162,9 +177,10 @@ public class BrowserIORequest extends WorkRequest
 		}
 
 		setAbortable(false);
-		browser.directoryLoaded(directory);
-	}
+		browser.directoryLoaded(path1,directory);
+	} //}}}
 
+	//{{{ delete() method
 	private void delete()
 	{
 		try
@@ -175,6 +191,7 @@ public class BrowserIORequest extends WorkRequest
 
 			try
 			{
+				path1 = vfs._canonPath(session,path1,browser);
 				if(!vfs._delete(session,path1,browser))
 					VFSManager.error(browser,"vfs.browser.delete-error",args);
 			}
@@ -199,8 +216,9 @@ public class BrowserIORequest extends WorkRequest
 				VFSManager.error(browser,"directory-error",pp);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ rename() method
 	private void rename()
 	{
 		try
@@ -211,6 +229,8 @@ public class BrowserIORequest extends WorkRequest
 
 			try
 			{
+				path1 = vfs._canonPath(session,path1,browser);
+				path2 = vfs._canonPath(session,path2,browser);
 				VFS.DirectoryEntry file = vfs._getDirectoryEntry(
 					session,path2,browser);
 				if(file != null)
@@ -244,8 +264,9 @@ public class BrowserIORequest extends WorkRequest
 				VFSManager.error(browser,"directory-error",pp);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ mkdir() method
 	private void mkdir()
 	{
 		try
@@ -256,6 +277,8 @@ public class BrowserIORequest extends WorkRequest
 
 			try
 			{
+				path1 = vfs._canonPath(session,path1,browser);
+
 				if(!vfs._mkdir(session,path1,browser))
 					VFSManager.error(browser,"vfs.browser.mkdir-error",args);
 			}
@@ -280,5 +303,7 @@ public class BrowserIORequest extends WorkRequest
 				VFSManager.error(browser,"ioerror",args);
 			}
 		}
-	}
+	} //}}}
+
+	//}}}
 }

@@ -1,6 +1,9 @@
 /*
  * BufferIORequest.java - I/O request
- * Copyright (C) 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,12 +22,14 @@
 
 package org.gjt.sp.jedit.io;
 
+//{{{ Imports
 import javax.swing.text.Segment;
 import java.io.*;
 import java.util.zip.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
+//}}}
 
 /**
  * A buffer I/O request.
@@ -33,6 +38,7 @@ import org.gjt.sp.util.*;
  */
 public class BufferIORequest extends WorkRequest
 {
+	//{{{ Constants
 	/**
 	 * Size of I/O buffers.
 	 */
@@ -43,15 +49,9 @@ public class BufferIORequest extends WorkRequest
 	 */
 	public static final int PROGRESS_INTERVAL = 300;
 
-	/**
-	 * Property loaded data is stored in.
-	 */
-	public static final String LOAD_DATA = "IORequest__loadData";
-
-	/**
-	 * Property line end offsets are stored in.
-	 */
-	public static final String END_OFFSETS = "IORequest__endOffsets";
+	public static final String LOAD_DATA = "BufferIORequest__loadData";
+	public static final String END_OFFSETS = "BufferIORequest__endOffsets";
+	public static final String NEW_PATH = "BufferIORequest__newPath";
 
 	/**
 	 * A file load request.
@@ -72,7 +72,9 @@ public class BufferIORequest extends WorkRequest
 	 * An insert file request.
 	 */
 	public static final int INSERT = 3;
+	//}}}
 
+	//{{{ BufferIORequest constructor
 	/**
 	 * Creates a new buffer I/O request.
 	 * @param type The request type
@@ -95,8 +97,9 @@ public class BufferIORequest extends WorkRequest
 		markersPath = vfs.getParentOfPath(path)
 			+ '.' + vfs.getFileName(path)
 			+ ".marks";
-	}
+	} //}}}
 
+	//{{{ run() method
 	public void run()
 	{
 		switch(type)
@@ -114,8 +117,9 @@ public class BufferIORequest extends WorkRequest
 			insert();
 			break;
 		}
-	}
+	} //}}}
 
+	//{{{ toString() method
 	public String toString()
 	{
 		String typeString;
@@ -136,9 +140,11 @@ public class BufferIORequest extends WorkRequest
 
 		return getClass().getName() + "[type=" + typeString
 			+ ",buffer=" + buffer + "]";
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private int type;
 	private View view;
 	private Buffer buffer;
@@ -146,7 +152,9 @@ public class BufferIORequest extends WorkRequest
 	private VFS vfs;
 	private String path;
 	private String markersPath;
+	//}}}
 
+	//{{{ load() method
 	private void load()
 	{
 		InputStream in = null;
@@ -159,6 +167,8 @@ public class BufferIORequest extends WorkRequest
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
 				setProgressValue(0);
+
+				path = vfs._canonPath(session,path,view);
 
 				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
 					session,path,view);
@@ -241,8 +251,9 @@ public class BufferIORequest extends WorkRequest
 			{
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ read() method
 	/**
 	 * Reads the buffer from the specified input stream. Read and
 	 * understand all these notes if you want to snarf this code for
@@ -474,10 +485,12 @@ public class BufferIORequest extends WorkRequest
 		// post-load cleanup runnable, which runs in the AWT thread.
 		buffer.setProperty(LOAD_DATA,seg);
 		buffer.setProperty(END_OFFSETS,endOffsets);
+		buffer.setProperty(NEW_PATH,path);
 
 		return lineSeparator;
-	}
+	} //}}}
 
+	//{{{ readMarkers() method
 	private void readMarkers(Buffer buffer, InputStream _in)
 		throws IOException
 	{
@@ -501,8 +514,9 @@ public class BufferIORequest extends WorkRequest
 		}
 
 		in.close();
-	}
+	} //}}}
 
+	//{{{ save() method
 	private void save()
 	{
 		OutputStream out = null;
@@ -517,6 +531,8 @@ public class BufferIORequest extends WorkRequest
 
 			try
 			{
+				path = vfs._canonPath(session,path,view);
+
 				buffer.readLock();
 
 				/* if the VFS supports renaming files, we first
@@ -611,8 +627,9 @@ public class BufferIORequest extends WorkRequest
 			{
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ autosave() method
 	private void autosave()
 	{
 		OutputStream out = null;
@@ -666,8 +683,9 @@ public class BufferIORequest extends WorkRequest
 				}
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ write() method
 	private void write(Buffer buffer, OutputStream _out)
 		throws IOException
 	{
@@ -700,8 +718,9 @@ public class BufferIORequest extends WorkRequest
 				setProgressValue(i / PROGRESS_INTERVAL);
 		}
 		out.close();
-	}
+	} //}}}
 
+	//{{{ writeMarkers() method
 	private void writeMarkers(Buffer buffer, OutputStream out)
 		throws IOException
 	{
@@ -721,8 +740,9 @@ public class BufferIORequest extends WorkRequest
 			o.write('\n');
 		}
 		o.close();
-	}
+	} //}}}
 
+	//{{{ insert() method
 	private void insert()
 	{
 		InputStream in = null;
@@ -734,6 +754,8 @@ public class BufferIORequest extends WorkRequest
 				String[] args = { vfs.getFileName(path) };
 				setStatus(jEdit.getProperty("vfs.status.load",args));
 				setAbortable(true);
+
+				path = vfs._canonPath(session,path,view);
 
 				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
 					session,path,view);
@@ -788,5 +810,7 @@ public class BufferIORequest extends WorkRequest
 			{
 			}
 		}
-	}
+	} //}}}
+
+	//}}}
 }

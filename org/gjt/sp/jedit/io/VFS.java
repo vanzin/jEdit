@@ -1,5 +1,8 @@
 /*
  * VFS.java - Virtual filesystem implementation
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.io;
 
+//{{{ Imports
 import gnu.regexp.*;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +31,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A virtual filesystem implementation. Note tha methods whose names are
@@ -36,6 +41,8 @@ import org.gjt.sp.util.Log;
  */
 public abstract class VFS
 {
+	//{{{ Capabilities
+
 	/**
 	 * Read capability.
 	 * @since jEdit 2.6pre2
@@ -75,6 +82,9 @@ public abstract class VFS
 	 */
 	public static final int MKDIR_CAP = 1 << 5;
 
+	//}}}
+
+	//{{{ VFS constructor
 	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
@@ -82,8 +92,21 @@ public abstract class VFS
 	public VFS(String name)
 	{
 		this.name = name;
-	}
+	} //}}}
 
+	//{{{ VFS constructor
+	/**
+	 * Creates a new virtual filesystem.
+	 * @param name The name
+	 * @param caps The capabilities
+	 */
+	public VFS(String name, int caps)
+	{
+		this.name = name;
+		this.caps = caps;
+	} //}}}
+
+	//{{{ getName() method
 	/**
 	 * Returns this VFS's name. The name is used to obtain the
 	 * label stored in the <code>vfs.<i>name</i>.label</code>
@@ -92,14 +115,19 @@ public abstract class VFS
 	public String getName()
 	{
 		return name;
-	}
+	} //}}}
 
+	//{{{ getCapabilities() method
 	/**
 	 * Returns the capabilities of this VFS.
 	 * @since jEdit 2.6pre2
 	 */
-	public abstract int getCapabilities();
+	public int getCapabilities()
+	{
+		return caps;
+	} //}}}
 
+	//{{{ showBrowseDialog() method
 	/**
 	 * Displays a dialog box that should set up a session and return
 	 * the initial URL to browse.
@@ -111,8 +139,9 @@ public abstract class VFS
 	public String showBrowseDialog(Object[] session, Component comp)
 	{
 		return null;
-	}
+	} //}}}
 
+	//{{{ getFileName() method
 	/**
 	 * Returns the file name component of the specified path. The
 	 * default implementation calls
@@ -123,8 +152,9 @@ public abstract class VFS
 	public String getFileName(String path)
 	{
 		return MiscUtilities.getFileName(path);
-	}
+	} //}}}
 
+	//{{{ getParentOfPath() method
 	/**
 	 * Returns the parent of the specified path. This must be
 	 * overridden to return a non-null value for browsing of this
@@ -135,8 +165,9 @@ public abstract class VFS
 	public String getParentOfPath(String path)
 	{
 		return null;
-	}
+	} //}}}
 
+	//{{{ constructPath() method
 	/**
 	 * Constructs a path from the specified directory and
 	 * file name component. This must be overridden to return a
@@ -149,8 +180,9 @@ public abstract class VFS
 	public String constructPath(String parent, String path)
 	{
 		return parent + path;
-	}
+	} //}}}
 
+	//{{{ getFileSeparator() method
 	/**
 	 * Returns the file separator used by this VFS.
 	 * @since jEdit 2.6pre9
@@ -158,8 +190,9 @@ public abstract class VFS
 	public char getFileSeparator()
 	{
 		return '/';
-	}
+	} //}}}
 
+	//{{{ createVFSSession() method
 	/**
 	 * Creates a VFS session. This method is called from the AWT thread,
 	 * so it should not do any I/O. It could, however, prompt for
@@ -172,8 +205,9 @@ public abstract class VFS
 	public Object createVFSSession(String path, Component comp)
 	{
 		return new Object();
-	}
+	} //}}}
 
+	//{{{ load() method
 	/**
 	 * Loads the specified buffer. The default implementation posts
 	 * an I/O request to the I/O thread.
@@ -202,8 +236,9 @@ public abstract class VFS
 			VFSManager.runInWorkThread(request);
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ save() method
 	/**
 	 * Saves the specifies buffer. The default implementation posts
 	 * an I/O request to the I/O thread.
@@ -234,8 +269,9 @@ public abstract class VFS
 		VFSManager.runInWorkThread(new BufferIORequest(
 			BufferIORequest.SAVE,view,buffer,session,this,path));
 		return true;
-	}
+	} //}}}
 
+	//{{{ insert() method
 	/**
 	 * Inserts a file into the specified buffer. The default implementation
 	 * posts an I/O request to the I/O thread.
@@ -258,10 +294,27 @@ public abstract class VFS
 		VFSManager.runInWorkThread(new BufferIORequest(
 			BufferIORequest.INSERT,view,buffer,session,this,path));
 		return true;
-	}
+	} //}}}
 
 	// the remaining methods are only called from the I/O thread
 
+	//{{{ _canonPath() method
+	/**
+	 * Returns the canonical form if the specified path name. For example,
+	 * <code>~</code> might be expanded to the user's home directory.
+	 * @param session The session
+	 * @param path The path
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @since jEdit 4.0pre2
+	 */
+	public String _canonPath(Object session, String path, Component comp)
+		throws IOException
+	{
+		return path;
+	} //}}}
+
+	//{{{ _listDirectory() method
 	/**
 	 * Lists the specified directory. Note that this must be a full
 	 * URL, including the host name, path name, and so on. The
@@ -278,8 +331,9 @@ public abstract class VFS
 	{
 		VFSManager.error(comp,"vfs.not-supported.list",new String[] { name });
 		return null;
-	}
+	} //}}}
 
+	//{{{ _getDirectoryEntry() method
 	/**
 	 * Returns the specified directory entry.
 	 * @param session The session
@@ -294,38 +348,33 @@ public abstract class VFS
 		throws IOException
 	{
 		return null;
-	}
+	} //}}}
 
+	//{{{ DirectoryEntry class
 	/**
 	 * A directory entry.
 	 * @since jEdit 2.6pre2
 	 */
 	public static class DirectoryEntry implements Serializable
 	{
+		//{{{ File types
 		public static final int FILE = 0;
 		public static final int DIRECTORY = 1;
 		public static final int FILESYSTEM = 2;
+		//}}}
 
+		//{{{ Instance variables
 		public String name;
 		public String path;
 		public String deletePath;
 		public int type;
 		public long length;
 		public boolean hidden;
-		public Color color;
+		//}}}
 
+		//{{{ DirectoryEntry constructor
 		public DirectoryEntry(String name, String path, String deletePath,
 			int type, long length, boolean hidden)
-		{
-			this(name,path,deletePath,type,length,hidden,
-				getDefaultColorFor(name));
-		}
-
-		/**
-		 * @since jEdit 4.0pre1
-		 */
-		public DirectoryEntry(String name, String path, String deletePath,
-			int type, long length, boolean hidden, Color color)
 		{
 			this.name = name;
 			this.path = path;
@@ -333,15 +382,31 @@ public abstract class VFS
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;
-			this.color = color;
-		}
+		} //}}}
 
+		protected boolean colorCalculated;
+		protected Color color;
+
+		//{{{ getColor() method
+		public Color getColor()
+		{
+			if(!colorCalculated)
+			{
+				colorCalculated = true;
+				color = getDefaultColorFor(name);
+			}
+
+			return color;
+		} //}}}
+
+		//{{{ toString() method
 		public String toString()
 		{
 			return name;
-		}
-	}
+		} //}}}
+	} //}}}
 
+	//{{{ _delete() method
 	/**
 	 * Deletes the specified URL.
 	 * @param session The VFS session
@@ -354,8 +419,9 @@ public abstract class VFS
 		throws IOException
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ _rename() method
 	/**
 	 * Renames the specified URL. Some filesystems might support moving
 	 * URLs between directories, however others may not. Do not rely on
@@ -371,8 +437,9 @@ public abstract class VFS
 		Component comp) throws IOException
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ _mkdir() method
 	/**
 	 * Creates a new directory with the specified URL.
 	 * @param session The VFS session
@@ -385,8 +452,9 @@ public abstract class VFS
 		throws IOException
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ _backup() method
 	/**
 	 * Backs up the specified file. This should only be overriden by
 	 * the local filesystem VFS.
@@ -399,8 +467,9 @@ public abstract class VFS
 	public void _backup(Object session, String path, Component comp)
 		throws IOException
 	{
-	}
+	} //}}}
 
+	//{{{ _createInputStream() method
 	/**
 	 * Creates an input stream. This method is called from the I/O
 	 * thread.
@@ -418,8 +487,9 @@ public abstract class VFS
 	{
 		VFSManager.error(comp,"vfs.not-supported.load",new String[] { name });
 		return null;
-	}
+	} //}}}
 
+	//{{{ _createOutputStream() method
 	/**
 	 * Creates an output stream. This method is called from the I/O
 	 * thread.
@@ -435,8 +505,9 @@ public abstract class VFS
 	{
 		VFSManager.error(comp,"vfs.not-supported.save",new String[] { name });
 		return null;
-	}
+	} //}}}
 
+	//{{{ _saveComplete() method
 	/**
 	 * Called after a file has been saved.
 	 * @param session The VFS session
@@ -446,8 +517,9 @@ public abstract class VFS
 	 * @since jEdit 3.1pre1
 	 */
 	public void _saveComplete(Object session, Buffer buffer, Component comp)
-		throws IOException {}
+		throws IOException {} //}}}
 
+	//{{{ _endVFSSession() method
 	/**
 	 * Finishes the specified VFS session. This must be called
 	 * after all I/O with this VFS is complete, to avoid leaving
@@ -460,8 +532,9 @@ public abstract class VFS
 	public void _endVFSSession(Object session, Component comp)
 		throws IOException
 	{
-	}
+	} //}}}
 
+	//{{{ getDefaultColorFor() method
 	/**
 	 * Returns color of the specified file name, by matching it against
 	 * user-specified regular expressions.
@@ -483,13 +556,15 @@ public abstract class VFS
 
 			return null;
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private String name;
+	private int caps;
 	private static Vector colors;
 	private static Object lock = new Object();
 
+	//{{{ Class initializer
 	static
 	{
 		EditBus.addToBus(new EBComponent()
@@ -505,8 +580,9 @@ public abstract class VFS
 				}
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ loadColors() method
 	private static void loadColors()
 	{
 		synchronized(lock)
@@ -536,8 +612,9 @@ public abstract class VFS
 				Log.log(Log.ERROR,VFS.class,e);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ ColorEntry class
 	static class ColorEntry
 	{
 		RE re;
@@ -548,5 +625,7 @@ public abstract class VFS
 			this.re = re;
 			this.color = color;
 		}
-	}
+	} //}}}
+
+	//}}}
 }

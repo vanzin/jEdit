@@ -34,30 +34,17 @@ import org.gjt.sp.jedit.*;
 
 public class FileCellRenderer extends JLabel implements TreeCellRenderer
 {
+	public static Icon fileIcon;
+	public static Icon dirIcon;
+	public static Icon filesystemIcon;
+	public static Icon loadingIcon;
+
 	//{{{ FileCellRenderer constructor
 	public FileCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
 		boldFont = new Font(plainFont.getName(),Font.BOLD,
 			plainFont.getSize());
-
-		// use metal icons because not all looks and feels define these.
-		// note that metal is guaranteed to exist, so this shouldn't
-		// cause problems in the future.
-		UIDefaults metalDefaults = new javax.swing.plaf.metal.MetalLookAndFeel()
-			.getDefaults();
-		fileIcon = UIManager.getIcon("FileView.fileIcon");
-		if(fileIcon == null)
-			fileIcon = metalDefaults.getIcon("FileView.fileIcon");
-		dirIcon = UIManager.getIcon("FileView.directoryIcon");
-		if(dirIcon == null)
-			dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
-		filesystemIcon = UIManager.getIcon("FileView.hardDriveIcon");
-		if(filesystemIcon == null)
-			filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-		loadingIcon = UIManager.getIcon("FileView.hardDriveIcon");
-		if(loadingIcon == null)
-			loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 
 		setOpaque(true);
 	} //}}}
@@ -96,9 +83,11 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 
 			if(!sel)
 			{
-				setForeground(file.color == null
+				Color color = file.getColor();
+
+				setForeground(color == null
 					? treeNoSelectionForeground
-					: file.color);
+					: color);
 			}
 		}
 		else if(userObject instanceof BrowserView.LoadingPlaceholder)
@@ -175,11 +164,8 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 	//}}}
 
 	//{{{ Private members
-	private Icon fileIcon;
-	private Icon dirIcon;
-	private Icon filesystemIcon;
-	private Icon loadingIcon;
 
+	//{{{ Instance variables
 	private Border closedBorder;
 	private Border openBorder;
 
@@ -190,5 +176,29 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 
 	private Font plainFont;
 	private Font boldFont;
+	//}}}
+
+	//{{{ Class intializer
+	static
+	{
+		// use metal icons because not all looks and feels define these.
+		// note that metal is guaranteed to exist, so this shouldn't
+		// cause problems in the future.
+		UIDefaults metalDefaults = new javax.swing.plaf.metal.MetalLookAndFeel()
+			.getDefaults();
+		fileIcon = UIManager.getIcon("FileView.fileIcon");
+		if(fileIcon == null)
+			fileIcon = metalDefaults.getIcon("FileView.fileIcon");
+		dirIcon = UIManager.getIcon("FileView.directoryIcon");
+		if(dirIcon == null)
+			dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
+		filesystemIcon = UIManager.getIcon("FileView.hardDriveIcon");
+		if(filesystemIcon == null)
+			filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+		loadingIcon = UIManager.getIcon("FileView.hardDriveIcon");
+		if(loadingIcon == null)
+			loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+	} //}}}
+
 	//}}}
 }

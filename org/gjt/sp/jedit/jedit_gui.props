@@ -46,7 +46,7 @@ action-set.jEdit=Built-in Commands
 action-set.macros=Macros
 action-set.plugin=Plugin: {0}
 
-view.docking.close-tooltip=Hides the current dockable
+view.docking.close-tooltip=Hides the current docked window
 #}}}
 
 #{{{ Tool bar
@@ -192,6 +192,7 @@ file=new-file \
      open-file \
      %open-encoding \
      %recent-files \
+     %recent-directories \
      %current-directory \
      insert-file \
      - \
@@ -217,10 +218,12 @@ jedit-encoding=jEdit Default
 os-encoding=System Default
 other-encoding.label=Open With Other Encoding...
 recent-files.label=Recent Files
+recent-directories.label=Recent Directories
 current-directory.label=Current Directory
 current-directory.not-local=Cannot list directories on remote filesystems
 insert-file.label=$Insert File...
-no-recent.label=No Recent Files
+no-recent-files.label=No Recent Files
+no-recent-dirs=No Recent Directories
 reload.label=$Reload
 reload-all.label=R$eload All Buffers...
 close-buffer.label=$Close Buffer

@@ -42,6 +42,37 @@ public class MiscUtilities
 {
 	//{{{ Path name methods. Mostly for local files only
 
+	//{{{ canonPath() method
+	/**
+	 * Returns the canonical form of the specified path name. Currently
+	 * only expands a leading <code>~</code>.
+	 * @param path The path name
+	 * @since jEdit 4.0pre2
+	 */
+	public static String canonPath(String path)
+	{
+		if(File.separatorChar == '\\')
+		{
+			// get rid of mixed paths on Windows
+			path = path.replace('/','\\');
+		}
+
+		if(path.startsWith("~" + File.separator))
+		{
+			path = path.substring(2);
+			String home = System.getProperty("user.home");
+
+			if(home.endsWith(File.separator))
+				return home + path;
+			else
+				return home + File.separator + path;
+		}
+		else if(path.equals("~"))
+			return System.getProperty("user.home");
+		else
+			return path;
+	} //}}}
+
 	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from a directory and another
@@ -51,25 +82,29 @@ public class MiscUtilities
 	 */
 	public static String constructPath(String parent, String path)
 	{
+		path = canonPath(path);
+
 		if(new File(path).isAbsolute())
-			return canonPath(path);
+			return path;
 
 		if(parent == null)
 			parent = System.getProperty("user.dir");
+		else
+			parent = canonPath(parent);
 
 		// have to handle these cases specially on windows.
 		if(File.separatorChar == '\\')
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return path;
-			if(path.startsWith("/") || path.startsWith("\\"))
+			if(path.startsWith("\\"))
 				parent = parent.substring(0,2);
 		}
 
-		if(parent.endsWith(File.separator) || path.endsWith("/"))
-			return canonPath(parent + path);
+		if(parent.endsWith(File.separator))
+			return parent + path;
 		else
-			return canonPath(parent + File.separator + path);
+			return parent + File.separator + path;
 	} //}}}
 
 	//{{{ constructPath() method
@@ -94,6 +129,9 @@ public class MiscUtilities
 	 */
 	public static String concatPath(String parent, String path)
 	{
+		parent = canonPath(parent);
+		path = canonPath(path);
+
 		// Make all child paths relative.
 		if (path.startsWith(File.separator))
 			path = path.substring(1);
@@ -899,25 +937,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ Private members
 	private MiscUtilities() {}
-
-	//{{{ canonPath() method
-	private static String canonPath(String path)
-	{
-		if(File.separatorChar == '\\')
-		{
-			// get rid of mixed paths on Windows
-			path = path.replace('/','\\');
-		}
-
-		try
-		{
-			return new File(path).getCanonicalPath();
-		}
-		catch(Exception e)
-		{
-			return path;
-		}
-	} //}}}
 
 	//{{{ quicksort() method
 	private static void quicksort(Object[] obj, int _start, int _end,

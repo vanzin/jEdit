@@ -48,6 +48,9 @@ public class BrowserView extends JPanel
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
 		tree.putClientProperty("JTree.lineStyle", "Angled");
+		tree.setRowHeight(renderer.getTreeCellRendererComponent(
+			tree,new DefaultMutableTreeNode("foo"),
+			false,false,false,0,false).getSize().height);
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(

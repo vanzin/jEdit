@@ -32,6 +32,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.*;
 //}}}
 
 /**
@@ -40,6 +41,7 @@ import org.gjt.sp.jedit.*;
  * @version $Id$
  */
 public class VFSFileChooserDialog extends EnhancedDialog
+implements WorkThreadProgressListener
 {
 	//{{{ VFSFileChooserDialog constructor
 	public VFSFileChooserDialog(View view, String path,
@@ -64,6 +66,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		browser = new VFSBrowser(view,path,mode,multipleSelection);
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
+
+		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
@@ -110,7 +114,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(mode != VFSBrowser.SAVE_DIALOG)
 			panel.add(Box.createGlue());
 
-		content.add(BorderLayout.SOUTH,panel);
+		bottomPanel.add(BorderLayout.NORTH,panel);
+
+		status = new JLabel(" ");
+		status.setBorder(new EmptyBorder(12,0,0,0));
+		bottomPanel.add(BorderLayout.SOUTH,status);
+		content.add(BorderLayout.SOUTH,bottomPanel);
+
+		VFSManager.getIOThreadPool().addProgressListener(this);
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
@@ -121,6 +132,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
+		VFSManager.getIOThreadPool().removeProgressListener(this);
 		super.dispose();
 	} //}}}
 
@@ -205,11 +217,48 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 	} //}}}
 
+	//{{{ WorkThreadListener implementation
+
+	//{{{ statusUpdate() method
+	public void statusUpdate(final WorkThreadPool threadPool, int threadIndex)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				int requestCount = threadPool.getRequestCount();
+				if(requestCount == 0)
+				{
+					status.setText(" ");
+				}
+				else if(requestCount == 1)
+				{
+					status.setText(jEdit.getProperty(
+						"view.status.io-1"));
+				}
+				else
+				{
+					Object[] args = { new Integer(requestCount) };
+					status.setText(jEdit.getProperty(
+						"view.status.io",args));
+				}
+			}
+		});
+	} //}}}
+
+	//{{{ progressUpdate() method
+	public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+	{
+	} //}}}
+
+	//}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
 	private VFSBrowser browser;
 	private JTextField filenameField;
+	private JLabel status;
 	private String filename;
 	private JButton ok;
 	private JButton cancel;
