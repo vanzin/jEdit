@@ -1,6 +1,9 @@
 /*
  * IOProgressMonitor.java - I/O progress monitor
- * Copyright (C) 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -27,63 +31,74 @@ import java.awt.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
+//}}}
 
-public class IOProgressMonitor extends JFrame
+public class IOProgressMonitor extends JPanel
 {
+	//{{{ IOProgressMonitor constructor
 	public IOProgressMonitor()
 	{
-		super(jEdit.getProperty("io-progress-monitor.title"));
-
-		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
-
+		super(new BorderLayout());
 		caption = new JLabel();
 		updateCaption();
-		content.add(BorderLayout.NORTH,caption);
+		add(BorderLayout.NORTH,caption);
 
-		Box threadBox = new Box(BoxLayout.Y_AXIS);
 		threads = new ThreadProgress[VFSManager.getIOThreadPool()
 			.getThreadCount()];
+
+		Box box = new Box(BoxLayout.Y_AXIS);
 		for(int i = 0; i < threads.length; i++)
 		{
-			threadBox.add(Box.createVerticalStrut(6));
+			if(i != 0)
+				box.add(Box.createVerticalStrut(6));
 
 			threads[i] = new ThreadProgress(i);
-			threadBox.add(threads[i]);
+			box.add(threads[i]);
 		}
 
-		content.add(BorderLayout.CENTER,threadBox);
+		JPanel threadPanel = new JPanel(new BorderLayout());
+		threadPanel.setBorder(new EmptyBorder(6,6,6,6));
+		threadPanel.setBackground(UIManager.getColor("TextArea.background"));
+		threadPanel.add(BorderLayout.NORTH,box);
+
+		add(BorderLayout.CENTER,new JScrollPane(threadPanel));
 
 		workThreadHandler = new WorkThreadHandler();
-		VFSManager.getIOThreadPool().addProgressListener(workThreadHandler);
+	} //}}}
 
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		pack();
-		GUIUtilities.loadGeometry(this,"io-progress-monitor");
-		show();
-	}
-
-	public void dispose()
+	//{{{ addNotify() method
+	public void addNotify()
 	{
-		GUIUtilities.saveGeometry(this,"io-progress-monitor");
-		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
-		super.dispose();
-	}
+		VFSManager.getIOThreadPool().addProgressListener(workThreadHandler);
+		super.addNotify();
+	} //}}}
 
-	// private members
+	//{{{ removeNotify() method
+	public void removeNotify()
+	{
+		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
+		super.removeNotify();
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private JLabel caption;
 	private ThreadProgress[] threads;
 	private WorkThreadHandler workThreadHandler;
+	//}}}
 
+	//{{{ updateCaption() method
 	private void updateCaption()
 	{
 		String[] args = { String.valueOf(VFSManager.getIOThreadPool()
 			.getRequestCount()) };
 		caption.setText(jEdit.getProperty("io-progress-monitor.caption",args));
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ WorkThreadHandler class
 	class WorkThreadHandler implements WorkThreadProgressListener
 	{
 		public void statusUpdate(final WorkThreadPool pool, final int index)
@@ -109,19 +124,22 @@ public class IOProgressMonitor extends JFrame
 				}
 			});
 		}
-	}
+	} //}}}
 
+	//{{{ ThreadProgress class
 	class ThreadProgress extends JPanel
 	{
+		//{{{ ThreadProgress constructor
 		public ThreadProgress(int index)
 		{
-			super(new BorderLayout());
+			super(new BorderLayout(12,12));
+
+			ThreadProgress.this.setBackground(UIManager.getColor(
+				"TextArea.background"));
 
 			this.index = index;
 
-			JPanel box = new JPanel();
-			box.setBorder(new EmptyBorder(0,0,0,12));
-			box.setLayout(new BoxLayout(box,BoxLayout.Y_AXIS));
+			Box box = new Box(BoxLayout.Y_AXIS);
 			box.add(Box.createGlue());
 			box.add(progress = new JProgressBar());
 			progress.setStringPainted(true);
@@ -133,8 +151,9 @@ public class IOProgressMonitor extends JFrame
 			ThreadProgress.this.add(BorderLayout.EAST,abort);
 
 			update();
-		}
+		} //}}}
 
+		//{{{ update() method
 		public void update()
 		{
 			WorkThread thread = VFSManager.getIOThreadPool().getThread(index);
@@ -152,13 +171,15 @@ public class IOProgressMonitor extends JFrame
 					+ ".idle"));
 				progress.setValue(0);
 			}
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private int index;
 		private JProgressBar progress;
 		private JButton abort;
+		//}}}
 
+		//{{{ ActionHandler class
 		class ActionHandler implements ActionListener
 		{
 			public void actionPerformed(ActionEvent evt)
@@ -176,6 +197,6 @@ public class IOProgressMonitor extends JFrame
 					}
 				}
 			}
-		}
-	}
+		} //}}}
+	} //}}}
 }

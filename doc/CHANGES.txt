@@ -26,14 +26,6 @@ contributing to this release.
   known fact is that MS Proxy Server also usually runs a SOCKS service
   that does not require a password. (Alfonso Garcia)
 
-- HyperSearch now respects rectangular selections. 'Replace All' already
-  supported rectangular selections.
-
-- Directory search is now VFS-aware; however it shows a confirm dialog
-  before doing a search on a remote filesystem. If your VFS is not
-  affected by network latency, you can have the getCapabilities() method
-  return the new LOW_LATENCY_CAP capability.
-
 - Added an option to the 'Text Area' pane to implement "standard"
   previous/next word behavior, like that in a lot of other programs
   (next word moves caret to start of next word, instead of end of
@@ -119,10 +111,23 @@ contributing to this release.
 - Improved loading time of plain text files if 'more accurate syntax
   highlighting' is on.
 
-+ User Interface Changes:
++ Search and Replace Changes:
+
+- HyperSearch now respects rectangular selections. 'Replace All' already
+  supported rectangular selections.
+
+- Directory search is now VFS-aware; however it shows a confirm dialog
+  before doing a search on a remote filesystem. If your VFS is not
+  affected by network latency, you can have the getCapabilities() method
+  return the new LOW_LATENCY_CAP capability.
 
 - Search bar no longer takes up the full width of the view. This saves
   some screen space.
+
+- Clicking 'Cancel' or closing the search and replace dialog box no
+  longer shows warnings about empty filesets, etc.
+
++ User Interface Changes:
 
 - Status bar looks somewhat different now, and shows the word wrap mode
   and line separator status.
@@ -134,6 +139,11 @@ contributing to this release.
 
 - Open buffers are shown with a different icon in the file system
   browser.
+
+- 'I/O Progress Monitor' window is dockable now.
+
+- Moved BeanShell evaluation commands from 'Utilities' to 'Macros' menu,
+  and moved 'Utilities' menu to the end of the menu bar.
 
 - New splash screen and about box. (Kris Kopicki)
 

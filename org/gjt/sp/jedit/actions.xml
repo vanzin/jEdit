@@ -388,12 +388,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="io-progress-monitor">
-	<CODE>
-		new IOProgressMonitor();
-	</CODE>
-</ACTION>
-
 <ACTION NAME="join-lines">
 	<CODE>
 		textArea.joinLines();
