@@ -5165,8 +5165,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// as pressing Home twice in a row
 			view.getInputHandler().resetLastActionCount();
 
-			buffer.endCompoundEdit();
-
 			grabFocus();
 
 			if(GUIUtilities.isPopupTrigger(evt) && popup != null)

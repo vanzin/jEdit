@@ -647,18 +647,18 @@ view.status.select-marker=Enter shortcut of marker to select to
 view.status.swap-marker=Enter shortcut of marker to swap caret position with
 view.status.expand-folds=Press 1-9 to specify fold level
 view.status.insert-literal=Press key to insert literally
-view.status.auto-wrap=Search text not found; restarting search
+view.status.auto-wrap=Search text not found; wrapping around
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.io=I/O: {0} operations in progress
 view.status.io-1=I/O: 1 operation in progress
 view.status.io.done=Input/output complete
-view.status.caret-tooltip=Column and line number indicator
+view.status.caret-tooltip=Line and column number indicator
 view.status.mode-tooltip=Current edit mode
 view.status.encoding-tooltip=Current encoding
 view.status.fold-tooltip=Fold mode (click to change)
 view.status.multi-tooltip=Multiple selection indicator (click to change)
 view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
-view.status.memory-tooltip=Used/total Java heap memory
+view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 #}}}
 
 #}}}
@@ -676,6 +676,7 @@ about.text=jEdit is brought to you by:\n\
 	\ \n\
 	Slava Pestov\n\
 	Alwyn Barry\n\
+	Amadeo Farello\n\
 	Andre Kaplan\n\
 	Artur Biesiadowski\n\
 	Aziz Sharif\n\
@@ -702,6 +703,7 @@ about.text=jEdit is brought to you by:\n\
 	John Gellene\n\
 	Jonathan Revusky\n\
 	Juha Lindfors\n\
+	Kenrick Drew\n\
 	Kevin Burton\n\
 	Klaus Hartlage\n\
 	Kris Kopicki\n\

@@ -483,6 +483,16 @@ public class DockableWindowManager extends JPanel
 			showDockableWindow(lastRight);
 	} //}}}
 
+	//{{{ getView() method
+	/**
+	 * Returns this dockable window manager's view.
+	 * @since jEdit 4.0pre2
+	 */
+	public View getView()
+	{
+		return view;
+	} //}}}
+
 	//{{{ showDockableWindow() method
 	/**
 	 * Opens the specified dockable window.

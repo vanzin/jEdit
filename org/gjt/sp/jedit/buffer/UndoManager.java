@@ -47,6 +47,7 @@ public class UndoManager
 	public void clear()
 	{
 		undos.removeAllElements();
+		undoPos = undoCount = 0;
 	} //}}}
 
 	//{{{ undo() method

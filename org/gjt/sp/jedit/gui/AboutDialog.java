@@ -100,7 +100,7 @@ public class AboutDialog extends EnhancedDialog
 				text.addElement(st.nextToken());
 			}
 
-			scrollPosition = -320;
+			scrollPosition = -300;
 
 			thread = new AnimationThread();
 		}

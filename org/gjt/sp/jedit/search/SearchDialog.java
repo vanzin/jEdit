@@ -1,5 +1,8 @@
 /*
  * SearchDialog.java - Search and replace dialog
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -27,16 +31,19 @@ import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.FileVFS;
+import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * Search and replace dialog.
  * @author Slava Pestov
  * @version $Id$
  */
-public class SearchDialog extends EnhancedDialog
+public class SearchDialog extends EnhancedDialog implements EBComponent
 {
+	//{{{ Constants
 	/**
 	 * Default file set.
 	 * @since jEdit 3.2pre2
@@ -44,7 +51,9 @@ public class SearchDialog extends EnhancedDialog
 	public static final int CURRENT_BUFFER = 0;
 	public static final int ALL_BUFFERS = 1;
 	public static final int DIRECTORY = 2;
+	//}}}
 
+	//{{{ SearchDialog constructor
 	/**
 	 * Creates a new search and replace dialog box.
 	 * @param view The view
@@ -53,8 +62,9 @@ public class SearchDialog extends EnhancedDialog
 	public SearchDialog(View view, String searchString)
 	{
 		this(view,searchString,CURRENT_BUFFER);
-	}
+	} //}}}
 
+	//{{{ SearchDialog constructor
 	/**
 	 * Creates a new search and replace dialog box.
 	 * @param view The view
@@ -184,9 +194,12 @@ public class SearchDialog extends EnhancedDialog
 		GUIUtilities.loadGeometry(this,"search");
 		show();
 
-		GUIUtilities.requestFocus(this,find);
-	}
+		EditBus.addToBus(this);
 
+		GUIUtilities.requestFocus(this,find);
+	} //}}}
+
+	//{{{ ok() method
 	public void ok()
 	{
 		try
@@ -212,16 +225,36 @@ public class SearchDialog extends EnhancedDialog
 		{
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		save();
 		GUIUtilities.saveGeometry(this,"search");
-		setVisible(false);
-	}
+		dispose();
+	} //}}}
 
-	// private members
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof SearchSettingsChanged)
+		{
+			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+			regexp.setSelected(SearchAndReplace.getRegexp());
+		}
+	} //}}}
+
+	//{{{ dispose() method
+	public void dispose()
+	{
+		EditBus.removeFromBus(this);
+		super.dispose();
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private View view;
 
 	// fields
@@ -244,7 +277,9 @@ public class SearchDialog extends EnhancedDialog
 	// buttons
 	private JButton findBtn, replaceBtn, replaceAndFindBtn, replaceAllBtn,
 		closeBtn;
+	//}}}
 
+	//{{{ createFieldPanel() method
 	private JPanel createFieldPanel()
 	{
 		ButtonActionHandler actionHandler = new ButtonActionHandler();
@@ -302,8 +337,9 @@ public class SearchDialog extends EnhancedDialog
 		fieldPanel.add(replace);
 
 		return fieldPanel;
-	}
+	} //}}}
 
+	//{{{ createSearchSettingsPanel() method
 	private JPanel createSearchSettingsPanel()
 	{
 		JPanel searchSettings = new JPanel(new VariableGridLayout(
@@ -392,8 +428,9 @@ public class SearchDialog extends EnhancedDialog
 		hyperSearch.addActionListener(actionHandler);
 
 		return searchSettings;
-	}
+	} //}}}
 
+	//{{{ createMultiFilePanel() method
 	private JPanel createMultiFilePanel()
 	{
 		JPanel multifile = new JPanel();
@@ -472,8 +509,9 @@ public class SearchDialog extends EnhancedDialog
 		multifile.add(searchSubDirectories);
 
 		return multifile;
-	}
+	} //}}}
 
+	//{{{ createButtonsPanel() method
 	private Box createButtonsPanel()
 	{
 		Box box = new Box(BoxLayout.Y_AXIS);
@@ -517,8 +555,9 @@ public class SearchDialog extends EnhancedDialog
 		box.add(Box.createGlue());
 
 		return box;
-	}
+	} //}}}
 
+	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
 		wrap.setEnabled(!hyperSearch.isSelected());
@@ -543,8 +582,9 @@ public class SearchDialog extends EnhancedDialog
 
 		findBtn.setEnabled(!searchSelection.isSelected()
 			|| hyperSearch.isSelected());
-	}
+	} //}}}
 
+	//{{{ save() method
 	private boolean save()
 	{
 		String filter = this.filter.getText();
@@ -614,8 +654,9 @@ public class SearchDialog extends EnhancedDialog
 			ok = false;
 
 		return ok;
-	}
+	} //}}}
 
+	//{{{ closeOrKeepDialog() method
 	private void closeOrKeepDialog()
 	{
 		if(keepDialog.isSelected())
@@ -623,9 +664,15 @@ public class SearchDialog extends EnhancedDialog
 		else
 		{
 			GUIUtilities.saveGeometry(this,"search");
-			setVisible(false);
+			dispose();
 		}
-	}
+	} //}}}
+
+	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ MyJRadioButton class
 
 	// used for the stringReplace and beanShell replace radio buttons,
 	// so that the user can press tab to go from the find field to the
@@ -641,8 +688,9 @@ public class SearchDialog extends EnhancedDialog
 		{
 			return false;
 		}
-	}
+	} //}}}
 
+	//{{{ ReplaceActionHandler class
 	class ReplaceActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -653,8 +701,9 @@ public class SearchDialog extends EnhancedDialog
 			SearchAndReplace.setBeanShellReplace(
 				beanShellReplace.isSelected());
 		}
-	}
+	} //}}}
 
+	//{{{ SettingsActionHandler class
 	class SettingsActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -678,8 +727,9 @@ public class SearchDialog extends EnhancedDialog
 
 			updateEnabled();
 		}
-	}
+	} //}}}
 
+	//{{{ MultiFileActionHandler class
 	class MultiFileActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -702,8 +752,9 @@ public class SearchDialog extends EnhancedDialog
 				ok();
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ ButtonActionHandler class
 	class ButtonActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -748,5 +799,7 @@ public class SearchDialog extends EnhancedDialog
 				setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
-	}
+	} //}}}
+
+	//}}}
 }

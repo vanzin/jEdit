@@ -1,5 +1,8 @@
 /*
  * InputHandler.java - Manages key bindings and executes actions
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import java.awt.event.*;
@@ -27,6 +31,7 @@ import java.util.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * An input handler converts the user's key strokes into concrete actions.
@@ -42,6 +47,7 @@ import org.gjt.sp.util.Log;
  */
 public abstract class InputHandler extends KeyAdapter
 {
+	//{{{ InputHandler constructor
 	/**
 	 * Creates a new input handler.
 	 * @param view The view
@@ -49,8 +55,9 @@ public abstract class InputHandler extends KeyAdapter
 	public InputHandler(View view)
 	{
 		this.view = view;
-	}
+	} //}}}
 
+	//{{{ addKeyBinding() method
 	/**
 	 * Adds a key binding to this input handler.
 	 * @param keyBinding The key binding (the format of this is
@@ -58,26 +65,33 @@ public abstract class InputHandler extends KeyAdapter
 	 * @param action The action
 	 */
 	public abstract void addKeyBinding(String keyBinding, EditAction action);
+	//}}}
 
+	//{{{ removeKeyBinding() method
 	/**
 	 * Removes a key binding from this input handler.
 	 * @param keyBinding The key binding
 	 */
 	public abstract void removeKeyBinding(String keyBinding);
+	//}}}
 
+	//{{{ removeAllKeyBindings() method
 	/**
 	 * Removes all key bindings from this input handler.
 	 */
 	public abstract void removeAllKeyBindings();
+	//}}}
 
+	//{{{ isPrefixActive() method
 	/**
 	 * Returns if a prefix key has been pressed.
 	 */
 	public boolean isPrefixActive()
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ isRepeatEnabled() method
 	/**
 	 * Returns if repeating is enabled. When repeating is enabled,
 	 * actions will be executed multiple times. This is usually
@@ -86,8 +100,9 @@ public abstract class InputHandler extends KeyAdapter
 	public boolean isRepeatEnabled()
 	{
 		return repeat;
-	}
+	} //}}}
 
+	//{{{ setRepeatEnabled() method
 	/**
 	 * Enables repeating. When repeating is enabled, actions will be
 	 * executed multiple times. Once repeating is enabled, the input
@@ -98,16 +113,18 @@ public abstract class InputHandler extends KeyAdapter
 		this.repeat = repeat;
 		repeatCount = 0;
 		view.getStatus().setMessage(null);
-	}
+	} //}}}
 
+	//{{{ getRepeatCount() method
 	/**
 	 * Returns the number of times the next action will be repeated.
 	 */
 	public int getRepeatCount()
 	{
 		return (repeat && repeatCount > 0 ? repeatCount : 1);
-	}
+	} //}}}
 
+	//{{{ setRepeatCount() method
 	/**
 	 * Sets the number of times the next action will be repeated.
 	 * @param repeatCount The repeat count
@@ -117,8 +134,9 @@ public abstract class InputHandler extends KeyAdapter
 		repeat = true;
 		this.repeatCount = repeatCount;
 		view.getStatus().setMessage(null);
-	}
+	} //}}}
 
+	//{{{ getLastAction() method
 	/**
 	 * Returns the last executed action.
 	 * @since jEdit 2.5pre5
@@ -126,8 +144,9 @@ public abstract class InputHandler extends KeyAdapter
 	public EditAction getLastAction()
 	{
 		return lastAction;
-	}
+	} //}}}
 
+	//{{{ getLastActionCount() method
 	/**
 	 * Returns the number of times the last action was executed.
 	 * @since jEdit 2.5pre5
@@ -135,8 +154,9 @@ public abstract class InputHandler extends KeyAdapter
 	public int getLastActionCount()
 	{
 		return lastActionCount;
-	}
+	} //}}}
 
+	//{{{ readNextChar() method
 	/**
 	 * Invokes the specified BeanShell code, replacing __char__ in the
 	 * code with the next input character.
@@ -148,16 +168,18 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		view.getStatus().setMessage(msg);
 		readNextChar(code);
-	}
+	} //}}}
 
+	//{{{ readNextChar() method
 	/**
 	 * @deprecated Use the other form of this method instead
 	 */
 	public void readNextChar(String code)
 	{
 		readNextChar = code;
-	}
+	} //}}}
 
+	//{{{ resetLastActionCount() method
 	/**
 	 * Resets the last action count. This should be called when an
 	 * editing operation that is not an action is invoked, for example
@@ -168,8 +190,9 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		lastAction = null;
 		lastActionCount = 0;
-	}
+	} //}}}
 
+	//{{{ invokeAction() method
 	/**
 	 * Invokes the specified action, repeating and recording it as
 	 * necessary.
@@ -178,10 +201,6 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void invokeAction(EditAction action)
 	{
-		Buffer buffer = view.getBuffer();
-
-		buffer.endCompoundEdit();
-
 		// remember the last executed action
 		if(lastAction == action)
 			lastActionCount++;
@@ -223,6 +242,7 @@ public abstract class InputHandler extends KeyAdapter
 				}
 			}
 
+			Buffer buffer = view.getBuffer();
 			try
 			{
 				buffer.beginCompoundEdit();
@@ -254,11 +274,12 @@ public abstract class InputHandler extends KeyAdapter
 			repeatCount = 0;
 			view.getStatus().setMessage(null);
 		}
-	}
+	} //}}}
 
-	// protected members
+	//{{{ Protected members
 	private static final int REPEAT_COUNT_THRESHOLD = 20;
 
+	//{{{ Instance variables
 	protected View view;
 	protected boolean repeat;
 	protected int repeatCount;
@@ -267,7 +288,9 @@ public abstract class InputHandler extends KeyAdapter
 	protected int lastActionCount;
 
 	protected String readNextChar;
+	//}}}
 
+	//{{{ userInput() method
 	protected void userInput(char ch)
 	{
 		lastAction = null;
@@ -276,10 +299,6 @@ public abstract class InputHandler extends KeyAdapter
 			invokeReadNextChar(ch);
 		else
 		{
-			Buffer buffer = view.getBuffer();
-			if(!buffer.insideCompoundEdit())
-				buffer.beginCompoundEdit();
-
 			JEditTextArea textArea = view.getTextArea();
 			int _repeatCount = getRepeatCount();
 			if(_repeatCount == 1)
@@ -316,8 +335,9 @@ public abstract class InputHandler extends KeyAdapter
 		}
 
 		setRepeatEnabled(false);
-	}
+	} //}}}
 
+	//{{{ invokeReadNextChar() method
 	protected void invokeReadNextChar(char ch)
 	{
 		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
@@ -358,5 +378,7 @@ public abstract class InputHandler extends KeyAdapter
 		readNextChar = null;
 
 		view.getStatus().setMessage(null);
-	}
+	} //}}}
+
+	//}}}
 }

@@ -6,6 +6,7 @@
      based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
 <MODE>
 	<PROPS>
+		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="lineComment" VALUE=";" />
 	</PROPS>
 	<RULES HIGHLIGHT_DIGITS="TRUE">
@@ -335,6 +336,7 @@
 			<KEYWORD1>plot_io</KEYWORD1>
 			<KEYWORD1>plot_oi</KEYWORD1>
 			<KEYWORD1>plot_oo</KEYWORD1>
+			<KEYWORD1>plot_windrose</KEYWORD1>
 			<KEYWORD1>ploterr</KEYWORD1>
 			<KEYWORD1>plots</KEYWORD1>
 			<KEYWORD1>pm</KEYWORD1>
@@ -373,6 +375,7 @@
 			<KEYWORD1>randomu</KEYWORD1>
 			<KEYWORD1>rdpix</KEYWORD1>
 			<KEYWORD1>read</KEYWORD1>
+			<KEYWORD1>read_airs</KEYWORD1>
 			<KEYWORD1>read_xbm</KEYWORD1>
 			<KEYWORD1>readf</KEYWORD1>
 			<KEYWORD1>readu</KEYWORD1>
@@ -526,6 +529,7 @@
 			<KEYWORD1>vtkaxes</KEYWORD1>
 			<KEYWORD1>vtkcamera</KEYWORD1>
 			<KEYWORD1>vtkclose</KEYWORD1>
+			<KEYWORD1>vtkcolorbar</KEYWORD1>
 			<KEYWORD1>vtkcolornames</KEYWORD1>
 			<KEYWORD1>vtkcommand</KEYWORD1>
 			<KEYWORD1>vtkerase</KEYWORD1>
@@ -540,6 +544,7 @@
 			<KEYWORD1>vtkpolyshade</KEYWORD1>
 			<KEYWORD1>vtkppmread</KEYWORD1>
 			<KEYWORD1>vtkppmwrite</KEYWORD1>
+			<KEYWORD1>vtkreadvtk</KEYWORD1>
 			<KEYWORD1>vtkrectilineargrid</KEYWORD1>
 			<KEYWORD1>vtkrenderwindow</KEYWORD1>
 			<KEYWORD1>vtkscatter</KEYWORD1>
@@ -547,6 +552,7 @@
 			<KEYWORD1>vtkstructuredpoints</KEYWORD1>
 			<KEYWORD1>vtkstructuredgrid</KEYWORD1>
 			<KEYWORD1>vtksurface</KEYWORD1>
+			<KEYWORD1>vtksurfgen</KEYWORD1>
 			<KEYWORD1>vtktext</KEYWORD1>
 			<KEYWORD1>vtktvrd</KEYWORD1>
 			<KEYWORD1>vtkunstructuredgrid</KEYWORD1>
@@ -582,6 +588,7 @@
 			<KEYWORD2>case</KEYWORD2>
 			<KEYWORD2>common</KEYWORD2>
 			<KEYWORD2>compile</KEYWORD2>
+			<KEYWORD2>declare</KEYWORD2>
 			<KEYWORD2>do</KEYWORD2>
 			<KEYWORD2>else</KEYWORD2>
 			<KEYWORD2>end</KEYWORD2>
@@ -593,6 +600,7 @@
 			<KEYWORD2>endwhile</KEYWORD2>
 			<KEYWORD2>exit</KEYWORD2>
 			<KEYWORD2>for</KEYWORD2>
+			<KEYWORD2>func</KEYWORD2>
 			<KEYWORD2>function</KEYWORD2>
 			<KEYWORD2>goto</KEYWORD2>
 			<KEYWORD2>help</KEYWORD2>
@@ -600,6 +608,7 @@
 			<KEYWORD2>info</KEYWORD2>
 			<KEYWORD2>journal</KEYWORD2>
 			<KEYWORD2>locals</KEYWORD2>
+			<KEYWORD2>of</KEYWORD2>
 			<KEYWORD2>on_error</KEYWORD2>
 			<KEYWORD2>on_error_goto</KEYWORD2>
 			<KEYWORD2>on_ioerror</KEYWORD2>
@@ -625,7 +634,7 @@
 			<KEYWORD3>ge</KEYWORD3>
 			<KEYWORD3>le</KEYWORD3>
 			<KEYWORD3>mod</KEYWORD3>
-			<KEYWORD3>WgAnimate</KEYWORD3>
+			<KEYWORD3>WgAnimateTool</KEYWORD3>
 			<KEYWORD3>WgCbarTool</KEYWORD3>
 			<KEYWORD3>WgCtTool</KEYWORD3>
 			<KEYWORD3>WgIsoSurfTool</KEYWORD3>
