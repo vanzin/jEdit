@@ -19,6 +19,9 @@ Thanks to Stefan Kost for contributing to this release.
 
 - Fixed accidental AbstractOptionPane API breakage.
 
+- FileVFS._mkdir() did not send the correct VFSUpdates if more than one
+  nested directory had to be created.
+
 + API Additions:
 
 - Added Buffer.invalidateCachedFoldLevels() method needed by SideKick

@@ -303,7 +303,14 @@ public class FileVFS extends VFS
 	//{{{ _mkdir() method
 	public boolean _mkdir(Object session, String directory, Component comp)
 	{
-		boolean retVal = new File(directory).mkdirs();
+		String parent = getParentOfPath(directory);
+		if(!new File(parent).exists())
+		{
+			if(!_mkdir(session,parent,comp))
+				return false;
+		}
+
+		boolean retVal = new File(directory).mkdir();
 		VFSManager.sendVFSUpdate(this,directory,true);
 		return retVal;
 	} //}}}
