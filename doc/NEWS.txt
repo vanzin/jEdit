@@ -15,8 +15,8 @@ and performance.
 - The "indent on enter" and "indent on tab" settings have been removed.
   Now, the behavior of the ENTER and TAB keys can be configured in the
   Shortcuts pane of the Global Options dialog box, just as with any
-  other key. The ENTER key can be bound to one of these commands, for
-  example:
+  other key. The ENTER key can be bound to one of the following
+  commands, for example:
 
   - Insert Newline
   - Insert Newline and Indent (default)
@@ -33,7 +33,7 @@ and performance.
 - The "smart home/end" setting has been removed. Now, the behavior of
   the HOME and END keys can be configured in the Shortcuts pane of the
   Global Options dialog box, just as with any other key. The HOME key
-  can be bound to one of these commands, for example:
+  can be bound to one of the following commands, for example:
 
   - Go to Start of Line
   - Go to Start of White Space
