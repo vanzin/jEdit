@@ -35,6 +35,7 @@ public class SplashScreen extends Canvas
 		setBackground(Color.white);
 
 		Font font = new Font("Dialog",Font.PLAIN,12);
+		setFont(font);
 		fm = getFontMetrics(font);
 
 		image = getToolkit().getImage(
@@ -132,7 +133,7 @@ public class SplashScreen extends Canvas
 
 		offscreenGfx.drawString(str,
 			(getWidth() - fm.stringWidth(str)) / 2,
-			win.getHeight() - fm.getDescent()
+			getHeight() - fm.getDescent()
 			- fm.getLeading());
 
 		g.drawImage(offscreenImg,0,0,this);
