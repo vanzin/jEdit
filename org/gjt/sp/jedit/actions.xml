@@ -132,7 +132,7 @@
 
 <ACTION NAME="complete-word">
 	<CODE>
-		CompleteWord.completeWord(textArea);
+		CompleteWord.completeWord(view);
 	</CODE>
 </ACTION>
 

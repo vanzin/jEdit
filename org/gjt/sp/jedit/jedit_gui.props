@@ -1275,6 +1275,8 @@ options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu, label font:
 options.appearance.secondaryFont=List, tree, table, text field font:
 options.appearance.textColors=Use jEdit text area color scheme in all text components
+options.appearance.decorateFrames=Draw window borders using Swing look & feel
+options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 #}}}
 
 #{{{ Loading and Saving pane
@@ -1702,9 +1704,6 @@ vfs.browser.dialog.filename.mnemonic=f
 #{{{ Dialogs
 vfs.browser.bad-filter.title=Invalid Filter
 vfs.browser.bad-filter.message=The filter {0} is invalid ({1})
-
-vfs.browser.files-favorites.title=Cannot Add Files to Favorites
-vfs.browser.files-favorites.message=Only directories can be added to the favorites list.
 
 vfs.browser.recurse-favorites.title=Cannot Add Favorites to Itself
 vfs.browser.recurse-favorites.message=The favorites list cannot be added to itself.

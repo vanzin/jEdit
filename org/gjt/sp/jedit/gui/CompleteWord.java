@@ -36,9 +36,10 @@ import org.gjt.sp.jedit.*;
 public class CompleteWord extends JWindow
 {
 	//{{{ completeWord() method
-	public static void completeWord(JEditTextArea textArea)
+	public static void completeWord(View view)
 	{
-		Buffer buffer = textArea.getBuffer();
+		JEditTextArea textArea = view.getTextArea();
+		Buffer buffer = view.getBuffer();
 		int caretLine = textArea.getCaretLine();
 		int caret = textArea.getCaretPosition();
 
@@ -82,20 +83,22 @@ public class CompleteWord extends JWindow
 
 			SwingUtilities.convertPointToScreen(location,
 				textArea.getPainter());
-			new CompleteWord(textArea,word,completions,location);
+			new CompleteWord(view,word,completions,location);
 		} //}}}
 	} //}}}
 
 	//{{{ CompleteWord constructor
-	public CompleteWord(JEditTextArea textArea, String word, Vector completions,
-		Point location)
+	public CompleteWord(View view, String word, Vector completions, Point location)
 	{
-		super(JOptionPane.getFrameForComponent(textArea));
+		super(view);
 
-		this.view = GUIUtilities.getView(textArea);
+		this.view = view;
+		this.textArea = view.getTextArea();
+		this.buffer = view.getBuffer();
 		this.word = word;
 
 		words = new JList(completions);
+		words.setFont(UIManager.getFont("TextArea.font"));
 
 		words.setVisibleRowCount(Math.min(completions.size(),8));
 
@@ -264,6 +267,8 @@ public class CompleteWord extends JWindow
 
 	//{{{ Instance variables
 	private View view;
+	private JEditTextArea textArea;
+	private Buffer buffer;
 	private String word;
 	private JList words;
 	//}}}
@@ -271,8 +276,7 @@ public class CompleteWord extends JWindow
 	//{{{ insertSelected() method
 	private void insertSelected()
 	{
-		view.getTextArea().setSelectedText(words
-			.getSelectedValue().toString()
+		textArea.setSelectedText(words.getSelectedValue().toString()
 			.substring(word.length()));
 		dispose();
 	} //}}}
@@ -308,9 +312,6 @@ public class CompleteWord extends JWindow
 	//{{{ Renderer class
 	static class Renderer extends DefaultListCellRenderer
 	{
-		static Font plainFont = new Font("Dialog",Font.PLAIN,12);
-		static Font boldFont = new Font("Dialog",Font.BOLD,12);
-
 		public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus)
 		{
@@ -319,9 +320,9 @@ public class CompleteWord extends JWindow
 
 			Completion comp = (Completion)value;
 			if(comp.keyword)
-				setFont(boldFont);
+				setFont(list.getFont().deriveFont(Font.BOLD));
 			else
-				setFont(plainFont);
+				setFont(list.getFont());
 
 			return this;
 		}
@@ -377,14 +378,12 @@ public class CompleteWord extends JWindow
 			case KeyEvent.VK_BACK_SPACE:
 				if(word.length() == 1)
 				{
-					view.getTextArea().backspace();
+					textArea.backspace();
 					dispose();
 				}
 				else
 				{
 					word = word.substring(0,word.length() - 1);
-					Buffer buffer = view.getBuffer();
-					JEditTextArea textArea = view.getTextArea();
 					textArea.backspace();
 					int caret = textArea.getCaretPosition();
 					KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
@@ -420,8 +419,6 @@ public class CompleteWord extends JWindow
 			else if(ch != '\b')
 			{
 				word = word + ch;
-				Buffer buffer = view.getBuffer();
-				JEditTextArea textArea = view.getTextArea();
 				textArea.userInput(ch);
 				int caret = textArea.getCaretPosition();
 				KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);

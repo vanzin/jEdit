@@ -1,46 +1,58 @@
 TO DO
 
++ bugs:
+
+- getCenterPoint()
+- support multi-screen systems properly
+- fs browser: scroll to visible after setting divider location
 - xToOffset(): fucked with //\t
 - aiob in getVirtualLineCount()?
-- complete word: use a single text area/edit pane & use text area font
-- select fold: if not followed by blank line
-- rounding errors (?) result in weird tab placement sometimes
-- Java 2 printing
 - narrow/collapse fold/expand fold: exceptions
-- document changed handling of compressed files
-- text area painter:
-  - token backgrounds
-  - use line metrics
-  - use float co-ordinates
-  - horizontal scrolling is fucked
-  - cache chunk lists
-  - repaint problems in jdk1.4
-- soft wrap
-- finish 'troubleshooting' menu:
-  - about cmd
-  - keytest cmd
-  - make bug report cmd
-  - docs in user's guide
-- jdk 1.4: shortcuts only work in text area
+- horizontal scrolling is fucked
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
 - when loading a file with collapsedFolds property, last line always
   visible
-- faster hypersearch
 - C+e , and . insert , and . in the buffer
-- put package.html everywhere
-- OK_CANCEL_OPTION in confirm() docs
-- C+d with selection: delete all selected lines
-- isToolsJarAvailable(): prompt for location in a file dialog box. Need
-  some way of showing arbitriary message in VFS file chooser.
-- last focused dockable cmd
 - docking buttons not always hidden
 - definately repaint problems
 - nextLineRequested still fucked
 - keyboard navigation of current directory, recent dirs, etc broken
 - keystrokes stop working all of a sudden
 - JDK 1.3 focus bugs
+- fs browser: can get stuck in 'loading' if several requests started
+  - to fix, implement multiple simultaneously loading directories, and
+    better preservation of expansion state
+- allegedly redo doesn't redo everything?
+- changing folding mode using buffer-local props: doesn't take effect on
+  save (?) -- removing doesn't work, but setting to none works
+- dwm: not always focused correctly
+- still collapseFolds behavior problems
+- stylesheet: keycap inside keycombo
+- openFile(): can open two copies of the same buffer if a) remote b)
+  canonPath != path
+
+- text area painter:
+  - token backgrounds
+  - use line metrics
+  - use float co-ordinates
+  - cache chunk lists
+- Java 2 printing
+- document changed handling of compressed files
+- soft wrap
+- finish 'troubleshooting' menu:
+  - about cmd
+  - keytest cmd
+  - make bug report cmd
+  - docs in user's guide
+- faster hypersearch
+- put package.html everywhere
+- OK_CANCEL_OPTION in confirm() docs
+- C+d with selection: delete all selected lines
+- isToolsJarAvailable(): prompt for location in a file dialog box. Need
+  some way of showing arbitriary message in VFS file chooser.
+- last focused dockable cmd
 - XModeHandler: better error reporting
 - documentation to do
   - 'evaluate for selected lines'
@@ -49,21 +61,11 @@ TO DO
 - rule set property docs in part II
 - add index terms throughout user's guide!
 - changing heap memory docs
-- fs browser: can get stuck in 'loading' if several requests started
-  - to fix, implement multiple simultaneously loading directories, and
-    better preservation of expansion state
 - plugin manager needs overhauled error reporting
 - make text area's buffer event handler faster
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
-- allegedly redo doesn't redo everything?
-- changing folding mode using buffer-local props: doesn't take effect on
-  save (?) -- removing doesn't work, but setting to none works
-- read up on JDK 1.4 focus API
-- dwm: not always focused correctly
-- still collapseFolds behavior problems
-- stylesheet: keycap inside keycombo
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 - loading and saving opt pane: 'choose' button for backup directory
@@ -85,17 +87,14 @@ TO DO
   - show wait cursor while directory is loading
   - directory chooser dialog box
   - keyboard select file should activate open files -- or Enter press
-- drop LatestVersion plugin
 - <file>?line= or ?marker=
 - fold navigator to browse fold tree in explicit fold mode
 - reintroduce -bshclient command line switch
 - plugin size reporting, new install plugins dialog UI layout
 - saving a read-only file: show a confirmation dialog box
 - tool bar option pane: editing existing entries
-- frame.setState(Frame.NORMAL);
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
-- option on JDK 1.4 to have the LnF decorate windows and dialogs
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - better auto indent
@@ -142,5 +141,3 @@ TO DO
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - lower case all user's guide ids
-- openFile(): can open two copies of the same buffer if a) remote b)
-  canonPath != path

@@ -23,6 +23,10 @@ metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
 #}}}
 
+# Decorate frames and dialogs using Swing L&F? (JDK 1.4 only)
+decorate.frames=false
+decorate.dialogs=true
+
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
 firstTime=true

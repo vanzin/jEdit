@@ -57,6 +57,28 @@ public abstract class InputHandler extends KeyAdapter
 		this.view = view;
 	} //}}}
 
+	//{{{ processKeyEvent() method
+	/**
+	 * Utility method, calls one of <code>keyPressed()</code>,
+	 * <code>keyReleased()</code>, or <code>keyTyped()</code>.
+	 * @since jEdit 4.0pre4
+	 */
+	public void processKeyEvent(KeyEvent evt)
+	{
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			keyTyped(evt);
+			break;
+		case KeyEvent.KEY_PRESSED:
+			keyPressed(evt);
+			break;
+		case KeyEvent.KEY_RELEASED:
+			keyReleased(evt);
+			break;
+		}
+	} //}}}
+
 	//{{{ addKeyBinding() method
 	/**
 	 * Adds a key binding to this input handler.

@@ -62,6 +62,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		closeBox = new JButton(GUIUtilities.loadIcon("closebox.gif"));
 		closeBox.setRequestFocusEnabled(false);
 		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
+		closeBox.setMargin(new Insets(0,0,0,0));
 		buttons.add(closeBox);
 
 		closeBox.addActionListener(new ActionHandler());
@@ -582,33 +583,29 @@ public class PanelWindowContainer implements DockableWindowContainer
 			Component[] comp = parent.getComponents();
 			if(comp.length != 2)
 			{
-				Dimension buttonSize = comp[2].getPreferredSize();
-				int closeBoxDimension;
-				if(position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM))
-				{
-					closeBoxDimension = comp[2].getMinimumSize().height;
-				}
-				else
-				{
-					closeBoxDimension = comp[2].getMinimumSize().width;
-				}
-				closeBox.setBounds(0,0,closeBoxDimension,closeBoxDimension);
+				boolean closeBoxSizeSet = false;
 				popupButton.setVisible(false);
 
 				Dimension parentSize = parent.getSize();
-				int pos = closeBoxDimension;
+				int pos = 0;
 				for(int i = 2; i < comp.length; i++)
 				{
 					Dimension size = comp[i].getPreferredSize();
 					if(position.equals(DockableWindowManager.TOP)
 						|| position.equals(DockableWindowManager.BOTTOM))
 					{
+						if(!closeBoxSizeSet)
+						{
+							closeBox.setBounds(0,0,size.height,size.height);
+							pos += size.height;
+							closeBoxSizeSet = true;
+						}
+
 						if(pos + size.width > parentSize.width)
 						{
 							popupButton.setBounds(
-								parentSize.width - closeBoxDimension,
-								0,closeBoxDimension,closeBoxDimension);
+								parentSize.width - size.height,
+								0,size.height,size.height);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
 						}
@@ -622,11 +619,18 @@ public class PanelWindowContainer implements DockableWindowContainer
 					}
 					else
 					{
+						if(!closeBoxSizeSet)
+						{
+							closeBox.setBounds(0,0,size.width,size.width);
+							pos += size.width;
+							closeBoxSizeSet = true;
+						}
+
 						if(pos + size.height > parentSize.height)
 						{
 							popupButton.setBounds(
-								0,parentSize.height - closeBoxDimension,
-								closeBoxDimension,closeBoxDimension);
+								0,parentSize.height - size.width,
+								size.width,size.width);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
 						}

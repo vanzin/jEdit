@@ -1,3 +1,27 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
 
-Not yet written.
+- requires java 2
+- more reliable setting saving
+- better sorting
+- search and replace usability improved/word search commands
+- global options usability improved/ui font can be changed
+- file system browser:
+  - new shortcuts
+  - colorized file listings
+  - ~ is now home dir
+  - new ui
+- saving modes automatically reloads
+- better window docking
+- tab/s+tab to shift selection
+- last empty line of selection
+- better status
+- better bracket matching
+- syntax highlighting added for: BibTeX; BBj; ActionScript
+- improved folding
+- new document model
+- macos plugin
+- context-sensitive editing commands
+- complete word: completes keywords, updated on the fly
+- auto detect gzip, unicode files
+- on jdk 1.4, decorate frames/dialogs option
+- better jdk 1.4 support

@@ -333,7 +333,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 			if(requestRunning)
 				return;
 
-			browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
+			// save a file -> sends vfs update. if a VFS file dialog box
+			// is shown from the same event frame as the save, the
+			// VFSUpdate will be delivered before the directory is loaded,
+			// and before the path is set.
+			if(path != null)
+				browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
 		}
 	} //}}}
 
@@ -1241,11 +1246,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 						VFS.DirectoryEntry file = selected[i];
 						if(file.type == VFS.DirectoryEntry.FILE)
 						{
-							GUIUtilities.error(
-								VFSBrowser.this,
-								"vfs.browser.files-favorites",
-								null);
-							return;
+							toAdd.addElement(MiscUtilities
+								.getParentOfPath(file.path));
 						}
 						else
 							toAdd.addElement(file.path);
