@@ -46,6 +46,90 @@ import org.gjt.sp.util.Log;
  */
 public class Macros
 {
+	//{{{ showRunScriptDialog() method
+	/**
+	 * Prompts for one or more files to run as macros
+	 * @param view The view
+	 * @since jEdit 4.0pre7
+	 */
+	public static void showRunScriptDialog(View view)
+	{
+		String[] paths = GUIUtilities.showVFSFileDialog(view,
+			null,JFileChooser.OPEN_DIALOG,true);
+		if(paths != null)
+		{
+			Buffer buffer = view.getBuffer();
+			try
+			{
+				buffer.beginCompoundEdit();
+
+file_loop:			for(int i = 0; i < paths.length; i++)
+					runScript(view,paths[i],false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
+	} //}}}
+
+	//{{{ runScript() method
+	/**
+	 * Runs the specified script.
+	 * Unlike the <code>runScript()</code> method of the
+	 * <code>BeanShell</code> class, this method can run scripts supported
+	 * by any registered macro handler.
+	 * @param view The view
+	 * @param path The VFS path of the script
+	 * @param ignoreUnknown If true, then unknown file types will be
+	 * ignored; otherwise, a warning message will be printed and they will
+	 * be evaluated as BeanShell scripts.
+	 *
+	 * @since jEdit 4.1pre2
+	 */
+	public static void runScript(View view, String path, boolean ignoreUnknown)
+	{
+		String fileName = MiscUtilities.getFileName(path);
+		for (int i = 0; i < macroHandlers.size(); i++)
+		{
+			Handler handler = (Handler)macroHandlers.get(i);
+			try
+			{
+				if (handler.accept(fileName))
+				{
+					Macro newMacro = handler.createMacro(
+						fileName, path);
+					newMacro.invoke(view);
+					return;
+				}
+			}
+			catch (Exception e)
+			{
+				Log.log(Log.ERROR, Macros.class, e);
+				macroHandlers.remove(handler);
+				i--;
+				continue;
+			}
+		}
+
+		// only executed if above loop falls
+		// through, ie there is no handler for
+		// this file
+		if(ignoreUnknown)
+		{
+			Log.log(Log.NOTICE,Macros.class,path +
+				": Cannot find a suitable macro handler");
+		}
+		else
+		{
+			Log.log(Log.ERROR,Macros.class,path +
+				": Cannot find a suitable macro handler, "
+				+ "assuming BeanShell");
+			getHandler("beanshell").createMacro(
+				path,path).invoke(view);
+		}
+	} //}}}
+
 	//{{{ message() method
 	/**
 	 * Utility method that can be used to display a message dialog in a macro.
@@ -309,27 +393,22 @@ public class Macros
 		public void invoke(View view)
 		{
 			lastMacro = this;
-			Buffer buffer = view.getBuffer();
 
-			try
+			if(view == null)
+				handler.runMacro(null,this);
+			else
 			{
-				buffer.beginCompoundEdit();
+				Buffer buffer = view.getBuffer();
 
-				handler.runMacro(view, this);
-			}
-			finally
-			{
-				/* this is probably a bad way to fix this,
-				 * ...DAMN jEdit's source code is getting full
-				 * of stuff like 'this is a hack', 'this sucks',
-				 * etc... ok, back on track,
-				 * EditPane.setBuffer() calls endCompoundEdit()
-				 * if the buffer has a * compound edit pending;
-				 * but if a macro switches buffers, the below
-				 * call will print a warning to the activity
-				 * log. so we check for a pending edit first. */
-				if(buffer.insideCompoundEdit())
+				try
+				{
+					buffer.beginCompoundEdit();
+					handler.runMacro(view,this);
+				}
+				finally
+				{
 					buffer.endCompoundEdit();
+				}
 			}
 		} //}}}
 
@@ -503,58 +582,6 @@ public class Macros
 			lastMacro.invoke(view);
 	} //}}}
 
-	//{{{ showRunScriptDialog() method
-	/**
-	 * Prompts for one or more files to run as macros
-	 * @param view The view
-	 * @since jEdit 4.0pre7
-	 */
-	public static void showRunScriptDialog(View view)
-	{
-		String[] paths = GUIUtilities.showVFSFileDialog(view,
-			null,JFileChooser.OPEN_DIALOG,true);
-		if(paths != null)
-		{
-			Buffer buffer = view.getBuffer();
-			try
-			{
-				buffer.beginCompoundEdit();
-
-file_loop:			for(int i = 0; i < paths.length; i++)
-				{
-					String path = paths[i];
-
-					Handler handler;
-
-					for (int j = 0; j < macroHandlers.size(); j++)
-					{
-						handler = (Handler)macroHandlers.get(j);
-
-						if (handler.accept(path))
-						{
-							Macro macro = handler.createMacro(path,path);
-							macro.invoke(view);
-							continue file_loop;
-						}
-					}
-
-					// only executed if above loop falls
-					// through, ie there is no handler for
-					// this file
-					Log.log(Log.WARNING,Macros.class,path +
-						": Cannot find a suitable macro handler"
-						+ ", assuming BeanShell");
-					getHandler("beanshell").createMacro(
-						path,path).invoke(view);
-				}
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-		}
-	} //}}}
-
 	//{{{ Private members
 
 	//{{{ Static variables
@@ -608,10 +635,9 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 			else
 			{
-				Handler handler;
 				for (int j = 0; j < macroHandlers.size(); j++)
 				{
-					handler = (Handler)macroHandlers.get(j);
+					Handler handler = (Handler)macroHandlers.get(j);
 					try
 					{
 						if (handler.accept(fileName))
@@ -828,8 +854,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		private String label;
 		private RE filter;
 		//}}}
-	}
-	//}}}
+	} //}}}
 
 	//{{{ BeanShellHandler class
 	static class BeanShellHandler extends Handler
@@ -838,8 +863,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		BeanShellHandler()
 		{
 			super("beanshell");
-		}
-		//}}}
+		} //}}}
 
 		//{{{ createMacro() method
 		public Macro createMacro(String macroName, String path)
@@ -849,15 +873,12 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 
 			return new Macro(this, macroName,
 				Macro.macroNameToLabel(macroName), path);
-		}
-		//}}}
+		} //}}}
 
 		//{{{ runMacro() method
 		public void runMacro(View view, Macro macro)
 		{
 			BeanShell.runScript(view,macro.getPath(),null,true);
-		}
-		//}}}
-	}
-	//}}}
+		} //}}}
+	} //}}}
 }

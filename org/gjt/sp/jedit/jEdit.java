@@ -3007,13 +3007,8 @@ public class jEdit
 
 		for(int i = 0; i < snippets.length; ++i)
 		{
-			String snippet = snippets[i];
-			if(!snippet.toLowerCase().endsWith(".bsh"))
-				continue;
-
-			String path = new File(directory,snippet).getPath();
-
-			BeanShell.runScript(null,path,null,false);
+			Macros.runScript(null,new File(
+				directory,snippets[i]).getPath(),true);
 		}
 	} //}}}
 

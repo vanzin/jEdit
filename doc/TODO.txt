@@ -15,7 +15,6 @@ and quirks that I need to fix eventually.
 - add dockable window state change msg
 - rect select and whitespace
 - option to silence beeps
-- rect select: support shift-left/right
 - scroll horizontally when dragging into virtual space
 - support start in virtual space too
 - eval-for-selected-lines doesn't work with rectangular selection
