@@ -142,7 +142,7 @@ public class HelpViewer extends JFrame //implements EBComponent
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		getRootPane().setPreferredSize(new Dimension(800,400));
+		getRootPane().setPreferredSize(new Dimension(750,500));
 
 		pack();
 		GUIUtilities.loadGeometry(this,"helpviewer");

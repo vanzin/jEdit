@@ -707,7 +707,7 @@ class ChunkCache
 			painter.getFontRenderContext(),
 			painter,out,
 			(textArea.getDisplayManager().softWrap
-			? textArea.wrapMargin : 0.0f));
+			? textArea.getDisplayManager().wrapMargin : 0.0f));
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 

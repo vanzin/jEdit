@@ -185,7 +185,10 @@ public class OffsetManager
 				Anchor anchor = anchors;
 				for(;;)
 				{
-					if(anchor == null || anchor.physicalLine < line)
+					if(anchor == null)
+						break;
+
+					if(anchor.physicalLine < line)
 						break;
 
 					if(anchor.index == index)
@@ -206,7 +209,10 @@ public class OffsetManager
 				Anchor anchor = anchors;
 				for(;;)
 				{
-					if(anchor == null || anchor.physicalLine < line)
+					if(anchor == null)
+						break;
+
+					if(anchor.physicalLine < line)
 						break;
 
 					if(anchor.index == index)
@@ -237,6 +243,8 @@ public class OffsetManager
 	//{{{ setScreenLineCount() method
 	public final void setScreenLineCount(int line, int count)
 	{
+		if(Debug.SCREEN_LINES_DEBUG)
+			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
 		long info = lineInfo[line];
 		int oldCount = (int)((info & SCREEN_LINES_MASK) >> SCREEN_LINES_SHIFT);
 		if(oldCount != count)
@@ -244,7 +252,10 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			for(;;)
 			{
-				if(anchor == null || anchor.physicalLine < line)
+				if(anchor == null)
+					break;
+
+				if(anchor.physicalLine < line)
 					break;
 
 				// now, this is strange semantics, but since the
@@ -397,6 +408,8 @@ public class OffsetManager
 	//{{{ resetAnchors() method
 	public void resetAnchors()
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"resetAnchors(): " + anchors);
 		Anchor anchor = anchors;
 		while(anchor != null)
 		{
@@ -489,10 +502,14 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			for(;;)
 			{
-				if(anchor == null || anchor.physicalLine < startLine)
+				if(anchor == null)
 					break;
 
-				anchor.physicalLine += numLines;
+				if(anchor.physicalLine < startLine)
+					break;
+
+				if(anchor.physicalLine != startLine)
+					anchor.physicalLine += numLines;
 				anchor.callChanged = true;
 				anchor = anchor.next;
 			}
@@ -532,16 +549,24 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			for(;;)
 			{
-				if(anchor == null || anchor.physicalLine <= startLine)
+				if(anchor == null)
 					break;
 
-				int end = Math.min(endLine,anchor.physicalLine);
-				for(int i = startLine; i < end; i++)
-				{
-					if(isLineVisible(i,anchor.index))
-						anchor.scrollLine -= getScreenLineCount(i);
-					anchor.physicalLine--;
+				if(anchor.physicalLine < startLine)
+					break;
+
+				if(anchor.physicalLine == startLine)
 					anchor.callChanged = true;
+				else
+				{
+					int end = Math.min(endLine,anchor.physicalLine);
+					for(int i = startLine; i < end; i++)
+					{
+						if(isLineVisible(i,anchor.index))
+							anchor.scrollLine -= getScreenLineCount(i);
+						anchor.physicalLine--;
+						anchor.callChanged = true;
+					}
 				}
 
 				anchor = anchor.next;
@@ -582,11 +607,15 @@ public class OffsetManager
 	 * one before line n. */
 	public void addAnchor(Anchor anchor)
 	{
+		System.err.println("adding " + anchor);
 		Anchor prev = null;
 		Anchor current = anchors;
 		for(;;)
 		{
-			if(current == null || current.physicalLine < anchor.physicalLine)
+			if(current == null)
+				break;
+
+			if(current.physicalLine < anchor.physicalLine)
 			{
 				if(prev != null)
 					prev.next = anchor;
@@ -598,11 +627,17 @@ public class OffsetManager
 			prev = current;
 			current = current.next;
 		}
+
+		if(prev != null)
+			prev.next = anchor;
+		else
+			anchors = anchor;
 	} //}}}
 
 	//{{{ removeAnchor() method
 	public void removeAnchor(Anchor anchor)
 	{
+		System.err.println("removing " + anchor);
 		Anchor current = anchors;
 		Anchor prev = null;
 		while(current != null)

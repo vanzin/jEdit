@@ -1558,15 +1558,16 @@ public class Buffer
 			setFoldHandler(new DummyFoldHandler());
 		}
 
+		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
+
 		String newWrap = getStringProperty("wrap");
 		if(wrap != null && !newWrap.equals(wrap))
 		{
 			offsetMgr.invalidateScreenLineCounts();
-			offsetMgr.resetAnchors();
+			if(isLoaded())
+				offsetMgr.resetAnchors();
 		}
 		this.wrap = newWrap;
-
-		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -3872,7 +3873,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		int collapseFolds = getIntegerProperty("collapseFolds",0);
 		offsetMgr.expandFolds(collapseFolds);
-		offsetMgr.resetAnchors();
+
+		if(isLoaded())
+			offsetMgr.resetAnchors();
 	} //}}}
 
 	//{{{ getPriorNonEmptyLine() method
