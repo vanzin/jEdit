@@ -118,6 +118,8 @@ JEDIT 4.0 VERSION HISTORY
 - Memory indicator in status bar looked stupid on Windows L&F and other
   look and feels where the text color and progress bar foreground was
   the same
+- Possible fix for 'timeout' error when opening a large number of files
+  with jEditLauncher on Windows
 
 + API Additions
 
