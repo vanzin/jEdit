@@ -4,7 +4,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2002 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,6 +226,12 @@ class ChunkCache
 			LinkedList list = new LinkedList();
 			for(int i = firstLine; i < this.firstLine; i++)
 			{
+				if(i >= textArea.getVirtualLineCount()
+					|| list.size() >= visibleLines)
+				{
+					break;
+				}
+
 				int physicalLine = textArea.virtualToPhysical(i);
 
 				out.clear();
@@ -245,7 +251,7 @@ class ChunkCache
 			int firstScreenLine = Math.min(list.size(),visibleLines);
 
 			Iterator iter = list.iterator();
-			for(int i = 0; iter.hasNext(); i++)
+			for(int i = 0; i < visibleLines && iter.hasNext(); i++)
 			{
 				lineInfo[i] = (LineInfo)iter.next();
 			}
@@ -488,7 +494,7 @@ class ChunkCache
 		LineInfo info = lineInfo[screenLine];
 
 		if(!info.chunksValid)
-			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
+			throw new InternalError("Not up-to-date: " + screenLine);
 		return info;
 	} //}}}
 

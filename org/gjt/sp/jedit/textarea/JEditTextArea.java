@@ -271,12 +271,12 @@ public class JEditTextArea extends JComponent
 			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
 			chunkCache.setFirstLine(0,physFirstLine,true);
 
-			painter.repaint();
-			gutter.repaint();
-
 			propertiesChanged();
 
 			recalculateLastPhysicalLine();
+
+			painter.repaint();
+			gutter.repaint();
 
 			updateScrollBars();
 			fireScrollEvent(true);
@@ -358,11 +358,11 @@ public class JEditTextArea extends JComponent
 
 		recalculateLastPhysicalLine();
 
-		if(this.firstLine != vertical.getValue())
-			updateScrollBars();
-
 		painter.repaint();
 		gutter.repaint();
+
+		if(this.firstLine != vertical.getValue())
+			updateScrollBars();
 
 		fireScrollEvent(true);
 	} //}}}
