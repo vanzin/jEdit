@@ -97,7 +97,7 @@ public abstract class OperatingSystem
 			// Write simple script
 			FileWriter out = new FileWriter(script);
 			out.write("#!/bin/sh\n");
-			out.write("# Java heap size, in megabytes (see doc/README.txt)\n");
+			out.write("# Java heap size, in megabytes\n");
 			out.write("JAVA_HEAP_SIZE=32\n");
 			out.write("exec "
 				+ System.getProperty("java.home")

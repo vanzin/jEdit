@@ -7,18 +7,18 @@
 
 ### rpm -ba jedit.spec
 
-### You will need to have jmk, openjade and DocBook-XML 4.1.2 installed
+### You will need to have ant, xsltproc, and DocBook-XML 4.1.2 installed
 ### for this to work.
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 4.0pre4
+Version: 4.0pre8
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 25
+Serial: 26
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre4source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre8source.tar.gz
 Source1: jedit.sh.in
 URL: http://www.jedit.org
 Vendor: Slava Pestov <slava@jedit.org>
@@ -43,11 +43,8 @@ jEdit requires Java 2 version 1.3.
 %build
 export CLASSPATH="."
 
-# Build docs
-ant docs-html-xsltproc
-
-# Build jedit.jar
-ant
+jdk13 ant docs-html-xsltproc dist
+jdk14 ant
 
 # Build LatestVersion.jar
 (cd jars/LatestVersion && ant)
