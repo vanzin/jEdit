@@ -154,14 +154,6 @@
 	</para>
 </listitem>
 
-<listitem>
-    <para><filename>Vertical_Paste.bsh</filename></para>
-    <abstract><para>
-		  Pastes the content of the clipboard vertically and fills empty
-      areas if necessary.
-    </para></abstract>
-</listitem>
-
 </itemizedlist>
 </sect1>
 
