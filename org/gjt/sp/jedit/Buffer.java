@@ -1560,7 +1560,10 @@ public class Buffer
 
 		String newWrap = getStringProperty("wrap");
 		if(wrap != null && !newWrap.equals(wrap))
+		{
 			offsetMgr.invalidateScreenLineCounts();
+			offsetMgr.resetAnchors();
+		}
 		this.wrap = newWrap;
 
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));

@@ -279,9 +279,18 @@ public class JEditTextArea extends JComponent
 
 			chunkCache.setBuffer(buffer);
 			displayManager = new DisplayManager(buffer,this);
+			// we don't do this from the DisplayManager constructor
+			// because reset() calls updateScrollBars() which checks
+			// displayManager.softWrap which would check the wrong
+			// DisplayManager instance since the constructor is
+			// executed before the assignment statement!
+			if(buffer.isLoaded())
+			{
+				displayManager.firstLine.reset();
+				displayManager.scrollLineCount.reset();
+			}
 
 			propertiesChanged();
-
 			if(buffer.isLoaded())
 				recalculateLastPhysicalLine();
 
@@ -336,7 +345,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getFirstLine()
 	{
-		return displayManager.getFirstLine();
+		return displayManager.firstLine.scrollLine
+			+ displayManager.firstLine.skew;
 	} //}}}
 
 	//{{{ setFirstLine() method
@@ -357,17 +367,22 @@ public class JEditTextArea extends JComponent
 			firstLine = 0;
 		//}}}
 
-		if(firstLine == displayManager.getFirstLine())
+		int oldFirstLine = getFirstLine();
+		if(firstLine == oldFirstLine)
 			return;
 
 		trace = new Exception();
 
-		displayManager.setFirstLine(firstLine);
+		int amount = (firstLine - oldFirstLine);
+		if(amount > 0)
+			displayManager.firstLine.scrollDown(amount);
+		else if(amount < 0)
+			displayManager.firstLine.scrollUp(-amount);
 
 		maxHorizontalScrollWidth = 0;
 
-		if(buffer.isLoaded())
-			recalculateLastPhysicalLine();
+		//if(buffer.isLoaded())
+		//	recalculateLastPhysicalLine();
 
 		repaint();
 
@@ -381,7 +396,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getFirstPhysicalLine()
 	{
-		return displayManager.getFirstPhysicalLine();
+		return displayManager.firstLine.physicalLine;
 	} //}}}
 
 	//{{{ setFirstPhysicalLine() method
@@ -410,15 +425,19 @@ public class JEditTextArea extends JComponent
 			physFirstLine = physicalLine;
 		//}}}
 
-		if(physFirstLine == displayManager.getFirstPhysicalLine())
+		if(physFirstLine == displayManager.firstLine.physicalLine)
 			return;
 
-		displayManager.setFirstPhysicalLine(physFirstLine);
+		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
+		if(amount > 0)
+			displayManager.firstLine.physDown(amount);
+		else if(amount < 0)
+			displayManager.firstLine.physUp(-amount);
 
 		maxHorizontalScrollWidth = 0;
 
-		if(buffer.isLoaded())
-			recalculateLastPhysicalLine();
+		//if(buffer.isLoaded())
+		//	recalculateLastPhysicalLine();
 
 		repaint();
 
@@ -858,7 +877,7 @@ public class JEditTextArea extends JComponent
 		//	System.err.println(start + ":" + end + ":" + chunkCache.needFullRepaint());
 		if(chunkCache.needFullRepaint())
 		{
-			recalculateLastPhysicalLine();
+			//recalculateLastPhysicalLine();
 			gutter.repaint();
 			painter.repaint();
 			return;
@@ -887,7 +906,7 @@ public class JEditTextArea extends JComponent
 	{
 		if(!isShowing()
 			|| !buffer.isLoaded()
-			|| line < displayManager.getFirstPhysicalLine()
+			|| line < getFirstPhysicalLine()
 			|| line > physLastLine
 			|| !displayManager.isLineVisible(line))
 			return;
@@ -915,7 +934,7 @@ public class JEditTextArea extends JComponent
 
 		if(chunkCache.needFullRepaint())
 		{
-			recalculateLastPhysicalLine();
+			//recalculateLastPhysicalLine();
 			endLine = visibleLines;
 		}
 		else if(endLine == -1)
@@ -945,7 +964,7 @@ public class JEditTextArea extends JComponent
 			start = tmp;
 		}
 
-		if(end < displayManager.getFirstPhysicalLine() || start > physLastLine)
+		if(end < getFirstPhysicalLine() || start > getLastPhysicalLine())
 			return;
 
 		int startScreenLine = -1;
@@ -974,7 +993,7 @@ public class JEditTextArea extends JComponent
 
 		if(chunkCache.needFullRepaint())
 		{
-			recalculateLastPhysicalLine();
+			//recalculateLastPhysicalLine();
 			endScreenLine = visibleLines;
 		}
 		else if(endScreenLine == -1)
@@ -2884,7 +2903,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		int lastVisible;
 
-		if(displayManager.getFirstLine() + visibleLines >=
+		if(getFirstLine() + visibleLines >=
 			displayManager.getScrollLineCount())
 		{
 			lastVisible = getLineEndOffset(displayManager
@@ -4530,14 +4549,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			painter.getFontRenderContext()).getWidth());
 
 		String wrap = buffer.getStringProperty("wrap");
-		softWrap = wrap.equals("soft");
 		hardWrap = wrap.equals("hard");
 
 		maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
 
 		if(maxLineLen <= 0)
 		{
-			softWrap = hardWrap = false;
+			displayManager.softWrap = hardWrap = false;
 			wrapMargin = 0;
 		}
 		else
@@ -4554,9 +4572,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		maxHorizontalScrollWidth = 0;
-
-		displayManager.propertiesChanged();
-		updateScrollBars();
 
 		chunkCache.invalidateAll();
 		gutter.repaint();
@@ -4761,7 +4776,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	int maxHorizontalScrollWidth;
 
-	boolean softWrap;
 	boolean hardWrap;
 	float tabSize;
 	int wrapMargin;
@@ -4867,12 +4881,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	void updateScrollBars()
 	{
+		if(buffer == null)
+			return;
+
 		if(vertical != null && visibleLines != 0)
 		{
 			// don't display stuff past the end of the buffer if
 			// we can help it
 			int lineCount = displayManager.getScrollLineCount();
-			int firstLine = displayManager.getFirstLine();
+			int firstLine = getFirstLine();
 			int visible = visibleLines - (lastLinePartial ? 1 : 0);
 
 			vertical.setValues(firstLine,visible,0,lineCount);
@@ -5325,6 +5342,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
+		System.err.println("recalculateLastPhysicalLine()");
+		int oldScreenLastLine = screenLastLine;
 		for(int i = visibleLines - 1; i >= 0; i--)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
@@ -5335,6 +5354,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				break;
 			}
 		}
+		invalidateScreenLineRange(oldScreenLastLine,screenLastLine);
 	} //}}}
 
 	//}}}
@@ -5591,7 +5611,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		boolean delayedMultilineUpdate;
 		int delayedRepaintStart;
 		int delayedRepaintEnd;
-		boolean delayedRecalculateLastPhysicalLine;
 
 		//{{{ contentInserted() method
 		public void contentInserted(Buffer buffer, int startLine, int start,
@@ -5601,8 +5620,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// later on
 			//if(!buffer.isTransactionInProgress())
 			chunkCache.invalidateChunksFromPhys(startLine);
-
-			_recalculateLastPhysicalLine(numLines);
 
 			if(!buffer.isLoaded())
 				return;
@@ -5655,7 +5672,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			// -numLines because they are removed.
 			repaintAndScroll(startLine,-numLines);
-			_recalculateLastPhysicalLine(-numLines);
 
 			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
@@ -5737,30 +5753,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				delayedUpdate = false;
 			}
 
-			if(delayedRecalculateLastPhysicalLine)
-			{
-				int oldScreenLastLine = screenLastLine;
-				recalculateLastPhysicalLine();
-				invalidateScreenLineRange(oldScreenLastLine,
-					screenLastLine);
-				delayedRecalculateLastPhysicalLine = false;
-			}
-
 			for(int i = 0; i < runnables.size(); i++)
 				((Runnable)runnables.get(i)).run();
 			runnables.clear();
-		} //}}}
-
-		//{{{ _recalculateLastPhysicalLine() method
-		private void _recalculateLastPhysicalLine(int numLines)
-		{
-			// Inserting multiple lines can change the last physical
-			// line due to folds being pushed down and so on
-			if(numLines != 0 || (softWrap && displayManager
-				.getLastVisibleLine() - numLines <= getLastPhysicalLine()))
-			{
-				delayedRecalculateLastPhysicalLine = true;
-			}
 		} //}}}
 
 		//{{{ repaintAndScroll() method

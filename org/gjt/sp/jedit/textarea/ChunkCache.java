@@ -772,7 +772,8 @@ class ChunkCache
 		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter,out,
-			(textArea.softWrap ? textArea.wrapMargin : 0.0f));
+			(textArea.getDisplayManager().softWrap
+			? textArea.wrapMargin : 0.0f));
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 

@@ -212,6 +212,8 @@ and Ryan Grove for contributing to this release.
   for example (at least with Java 1.4.1 on Linux). This no longer
   happends.
 
+- Faster buffer transactions if both soft wrap and narrowing is active.
+
 }}}
 {{{ Platform-Specific
 
