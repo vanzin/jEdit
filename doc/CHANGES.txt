@@ -5,6 +5,7 @@ JEDIT 3.2 VERSION HISTORY
 + New Features
 
 - JHTML syntax highlighting (Will Sargent)
+- RelationalView syntax highlighting (Will Sargent)
 - clipboardHangWorkaround.bsh startup script included. If your JVM
   hangs when jEdit tries to copy or paste, take a look at this script.
 

@@ -152,6 +152,9 @@
 <MODE NAME="ruby"		FILE="ruby.xml"
 				FILE_NAME_GLOB="*.rb" />
 
+<MODE NAME="rview"		FILE="rview.xml"
+				FILE_NAME_GLOB="*.rvw" />
+
 <!-- Note: same XML file as LISP mode -->
 <MODE NAME="scheme"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.scm" />

@@ -1,6 +1,7 @@
 TO DO
 
 - wait for John to release an updated get_package_name macro
+- wait for John to import jEditLauncher
 
 + features:
 
@@ -9,21 +10,16 @@ TO DO
 - jEdit.get/setInteger/Color/FontProperty()
 - scroll to newly added tool bar button or context menu item in option
   panes
-- instead of mini i/o progress, show messages in status bar: number
-  of i/o requests pending, and setMessageAndClear("foo") when i/o
-  complete
 - select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
 - Macros.confirm()
 - saving a read-only file: show a confirmation dialog box
 - when loading plugins and such, check for settingsDir == jEditHome
 - collapse-all-folds action that calls expandFolds(1)
-- memory display in status bar, click opens memory display dialog;
-  replaces 'show free memory' macro
 - changing read-only flag in buffer options
 - replace shift-left/shift-right actions with an overloaded TAB action,
   and shift-left bound to S+TAB? Then A+LEFT and A+RIGHT can be used for
-  other purposes.
+  other purposes (prev/next-bracket?)
 - trailingEOL property, set on load if file has a trailing newline, when
   saving, only write a trailing newline if property is set
 - if last token of a line has a background color, remainder of line will
@@ -36,6 +32,16 @@ TO DO
 - handle missing modes more gracefully
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
+- status bar:
+  - "over" changes to "ins" instead of being grayed out
+  - ditto for "multi"
+  - remove "fold" indicator
+  - instead of mini i/o progress, show messages in status bar: number
+    of i/o requests pending, and setMessageAndClear("foo") when i/o
+    complete
+  - memory display in status bar, click opens memory display dialog;
+    replaces 'show free memory' macro
+  - double-click on line number opens go to line dialog box
 
 + major:
 
