@@ -185,6 +185,9 @@
 <MODE NAME="rebol"		FILE="rebol.xml"
 				FILE_NAME_GLOB="*.r" />
 
+<MODE NAME="rhtml"		FILE="rhtml.xml"
+				FILE_NAME_GLOB="*.rhtml" />
+
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
 

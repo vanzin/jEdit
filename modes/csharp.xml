@@ -23,6 +23,9 @@
 			<END>*/</END>
 		</SPAN>
 
+		<!-- DocComments may have XML in them -->
+		<EOL_SPAN TYPE="COMMENT2" DELEGATE="DOC_COMMENT">///</EOL_SPAN>
+
 		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 
 		<!-- verbatim strings -->
@@ -161,6 +164,19 @@
 			<LITERAL2>this</LITERAL2>
 			<LITERAL2>true</LITERAL2>
 		</KEYWORDS>
+	</RULES>
+
+	<RULES SET="DOC_COMMENT" DEFAULT="COMMENT2" IGNORE_CASE="TRUE">
+		<!-- XML comments -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+		<!-- XML tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
 	</RULES>
 </MODE>
 
