@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre14
 
-Thanks to Ollie Rutherfurd, Paul Libbrecht and Rob Watson for
-contributing to this release.
+Thanks to Gerd Knops, Ollie Rutherfurd, Paul Libbrecht and Rob Watson
+for contributing to this release.
 
 {{{ Miscellaneous Changes
 
@@ -42,6 +42,11 @@ contributing to this release.
   DisplayManager.hideLineRange() when narrowing to folds in
   indent-folded buffers.
 
+- Fix for window geometry load/save on multiple monitor setups
+  (Gerd Knops).
+
+- If a plugin creates an ActionSet with a null label (which would be a
+  bug in the plugin), the Shortcuts option pane didn't work.
 }}}
 
 }}}

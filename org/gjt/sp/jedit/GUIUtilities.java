@@ -945,14 +945,14 @@ public class GUIUtilities
 		Rectangle osbounds = OperatingSystem.getScreenBounds(desired);
 
 		if(desired.x < osbounds.x || desired.x+desired.width
-			> osbounds.width)
+			> desired.x + osbounds.width)
 		{
 			if (desired.width > osbounds.width)
 				desired.width = osbounds.width;
 			desired.x = (osbounds.width - desired.width) / 2;
 		}
 		if(desired.y < osbounds.y || desired.y+desired.height
-			> osbounds.height)
+			> osbounds.y + osbounds.height)
 		{
 			if (desired.height >= osbounds.height)
 				desired.height = osbounds.height;
