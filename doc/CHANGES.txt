@@ -2,7 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre2
 
-Thanks to Gerd Knops for contributing to this release.
+Thanks to Alexander Maryanovsky and Gerd Knops for contributing to this
+release.
 
 + Editing Changes:
 
