@@ -33,6 +33,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -40,16 +41,14 @@ import org.gjt.sp.util.Log;
 class HelpTOCPanel extends JPanel
 {
 	//{{{ HelpTOCPanel constructor
-	public HelpTOCPanel(HelpViewer helpViewer)
+	HelpTOCPanel(HelpViewer helpViewer)
 	{
 		super(new BorderLayout());
 
 		this.helpViewer = helpViewer;
 		nodes = new Hashtable();
 
-		createTOC();
-
-		toc = new TOCTree(tocModel);
+		toc = new TOCTree();
 
 		// looks bad with the OS X L&F, apparently...
 		if(!OperatingSystem.isMacOSLF())
@@ -57,21 +56,15 @@ class HelpTOCPanel extends JPanel
 
 		toc.setCellRenderer(new TOCCellRenderer());
 		toc.setEditable(false);
-		toc.setRootVisible(false);
 		toc.setShowsRootHandles(true);
 
-		for(int i = 0; i <tocRoot.getChildCount(); i++)
-		{
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-				tocRoot.getChildAt(i);
-			toc.expandPath(new TreePath(node.getPath()));
-		}
-
 		add(BorderLayout.CENTER,new JScrollPane(toc));
+
+		load();
 	} //}}}
 
 	//{{{ selectNode() method
-	public void selectNode(String shortURL)
+	void selectNode(String shortURL)
 	{
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(shortURL);
 
@@ -82,6 +75,45 @@ class HelpTOCPanel extends JPanel
 		toc.expandPath(path);
 		toc.setSelectionPath(path);
 		toc.scrollPathToVisible(path);
+	} //}}}
+
+	//{{{ load() method
+	void load()
+	{
+		DefaultTreeModel empty = new DefaultTreeModel(
+			new DefaultMutableTreeNode(
+			jEdit.getProperty("helpviewer.toc.loading")));
+		toc.setModel(empty);
+		toc.setRootVisible(true);
+
+		final EditPlugin[] plugins = jEdit.getPlugins();
+		VFSManager.runInWorkThread(new Runnable()
+		{
+			public void run()
+			{
+				createTOC(plugins);
+			}
+		});
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				tocModel.reload(tocRoot);
+				toc.setModel(tocModel);
+				toc.setRootVisible(false);
+				for(int i = 0; i <tocRoot.getChildCount(); i++)
+				{
+					DefaultMutableTreeNode node =
+						(DefaultMutableTreeNode)
+						tocRoot.getChildAt(i);
+					toc.expandPath(new TreePath(
+						node.getPath()));
+				}
+				if(helpViewer.getShortURL() != null)
+					selectNode(helpViewer.getShortURL());
+			}
+		});
 	} //}}}
 
 	//{{{ Private members
@@ -101,7 +133,7 @@ class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ createTOC() method
-	private void createTOC()
+	private void createTOC(EditPlugin[] plugins)
 	{
 		tocRoot = new DefaultMutableTreeNode();
 
@@ -129,13 +161,9 @@ class HelpTOCPanel extends JPanel
 		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);
 
-		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin plugin = plugins[i];
-			PluginJAR jar = plugin.getPluginJAR();
-			if(jar == null)
-				continue;
 
 			String name = plugin.getClassName();
 
@@ -145,7 +173,8 @@ class HelpTOCPanel extends JPanel
 			{
 				if(label != null && docs != null)
 				{
-					URL url = jar.getClassLoader()
+					URL url = plugin.getPluginJAR()
+						.getClassLoader()
 						.getResource(docs);
 					if(url != null)
 					{
@@ -301,9 +330,8 @@ class HelpTOCPanel extends JPanel
 	class TOCTree extends JTree
 	{
 		//{{{ TOCTree constructor
-		TOCTree(TreeModel model)
+		TOCTree()
 		{
-			super(model);
 			ToolTipManager.sharedInstance().registerComponent(this);
 		} //}}}
 

@@ -1488,6 +1488,10 @@ options.editing.label=Editing
 options.editing.code=new EditingOptionPane();
 options.editing.defaultMode=Default edit mode:
 options.editing.undoCount=Number of undos:
+options.editing.caption=\
+	Uncheck "use default settings" to customize mode-specific\n\
+	settings. Otherwise, settings from the <global defaults>\n\
+	section will be used.
 options.editing.mode=Change settings for mode:
 options.editing.global=<global defaults>
 options.editing.useDefaults=Use default settings
@@ -1787,6 +1791,7 @@ helpviewer.back.icon=ArrowL.png
 helpviewer.forward.label=Forward
 helpviewer.forward.icon=ArrowR.png
 
+helpviewer.toc.loading=Loading...
 helpviewer.toc.label=Contents
 helpviewer.toc.welcome=Welcome to jEdit
 helpviewer.toc.readme=General Information

@@ -45,7 +45,8 @@ import org.gjt.sp.util.Log;
  * <li><code>editPane</code> - the currently active {@link EditPane}.</li>
  * <li><code>textArea</code> - the edit pane's {@link JEditTextArea}.</li>
  * <li><code>buffer</code> - the edit pane's {@link Buffer}.</li>
- * <li><code>wm</code> - the view's {@link DockableWindowManager}.</li>
+ * <li><code>wm</code> - the view's {@link
+ * org.gjt.sp.jedit.gui.DockableWindowManager}.</li>
  * <li><code>scriptPath</code> - the path name of the currently executing
  * BeanShell script.</li>
  * </ul>

@@ -8,6 +8,9 @@ JEDIT 4.2 VERSION HISTORY
   two new panes, Autosave & Backup, and View. The Loading & Saving pane
   has been removed.
 
+- "Copy" button in Activity Log window now copies entire log if nothing
+  is selected.
+
 }}}
 {{{ Plugin Loader
 
@@ -60,6 +63,14 @@ JEDIT 4.2 VERSION HISTORY
   objects would get garbage collected and closed eventually.
 
 - Fixed incorrect handling of buffer modification flag in undo code.
+
+- No longer print an exception if the clipboard contains a zero-length
+  string.
+
+- The file system browser might not have been updated correctly after
+  moving a file from one expanded branch to the root.
+
+- Right-clicks in the empty space below the file list should work now.
 
 }}}
 {{{ API Changes

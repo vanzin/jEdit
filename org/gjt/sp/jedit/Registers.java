@@ -419,7 +419,7 @@ public class Registers
 					buf.append('\n');
 				}
 				// remove trailing \n
-				if(!trailingEOL)
+				if(!trailingEOL && buf.length() != 0)
 					buf.setLength(buf.length() - 1);
 				return buf.toString();
 			}

@@ -126,12 +126,24 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			}
 			else if(src == copy)
 			{
-				Object[] selected = list.getSelectedValues();
 				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < selected.length; i++)
+				Object[] selected = list.getSelectedValues();
+				if(selected != null && selected.length != 0)
 				{
-					buf.append(selected[i]);
-					buf.append('\n');
+					for(int i = 0; i < selected.length; i++)
+					{
+						buf.append(selected[i]);
+						buf.append('\n');
+					}
+				}
+				else
+				{
+					ListModel model = list.getModel();
+					for(int i = 0; i < model.getSize(); i++)
+					{
+						buf.append(model.getElementAt(i));
+						buf.append('\n');
+					}
 				}
 				Registers.setRegister('$',buf.toString());
 			}

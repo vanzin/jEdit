@@ -65,6 +65,7 @@ class BrowserView extends JPanel
 		JScrollPane tableScroller = new JScrollPane(table);
 		tableScroller.setMinimumSize(new Dimension(0,0));
 		tableScroller.getViewport().setBackground(table.getBackground());
+		tableScroller.getViewport().addMouseListener(new TableMouseHandler());
 		splitPane = new JSplitPane(
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
@@ -128,11 +129,22 @@ class BrowserView extends JPanel
 		table.clearSelection();
 	} //}}}
 
+	//{{{ saveExpansionState() method
+	public void saveExpansionState()
+	{
+		tmpExpanded.clear();
+		table.getExpandedDirectories(tmpExpanded);
+	} //}}}
+
+	//{{{ clearExpansionState() method
+	public void clearExpansionState()
+	{
+		tmpExpanded.clear();
+	} //}}}
+
 	//{{{ loadDirectory() method
 	public void loadDirectory(Object node, String path)
 	{
-		table.getExpandedDirectories(tmpExpanded);
-
 		path = MiscUtilities.constructPath(browser.getDirectory(),path);
 		VFS vfs = VFSManager.getVFSForPath(path);
 
@@ -203,7 +215,10 @@ class BrowserView extends JPanel
 		String browserDir = browser.getDirectory();
 
 		if(path.equals(browserDir))
+		{
+			saveExpansionState();
 			loadDirectory(null,path);
+		}
 
 		// because this method is called for *every* VFS update,
 		// we don't want to scan the tree all the time. So we
@@ -438,10 +453,14 @@ class BrowserView extends JPanel
 		public void mousePressed(MouseEvent evt)
 		{
 			Point p = evt.getPoint();
+			if(evt.getSource() != table)
+			{
+				p.x -= table.getX();
+				p.y -= table.getY();
+			}
+
 			int row = table.rowAtPoint(p);
 			int column = table.columnAtPoint(p);
-			if(row == -1)
-				return;
 			if(column == 0)
 			{
 				table.toggleExpanded(row);
@@ -450,7 +469,9 @@ class BrowserView extends JPanel
 
 			if(GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
-				if(evt.isShiftDown())
+				if(row == -1)
+					/* nothing */;
+				else if(evt.isShiftDown())
 					table.getSelectionModel().addSelectionInterval(row,row);
 				else
 					table.getSelectionModel().setSelectionInterval(row,row);
@@ -464,13 +485,12 @@ class BrowserView extends JPanel
 					return;
 				}
 
-				if(!table.getSelectionModel().isSelectedIndex(row))
-					table.getSelectionModel().setSelectionInterval(row,row);
-
-				if(table.getSelectedRow() == -1)
+				if(row == -1)
 					showFilePopup(null,table,evt.getPoint());
 				else
 				{
+					if(!table.getSelectionModel().isSelectedIndex(row))
+						table.getSelectionModel().setSelectionInterval(row,row);
 					showFilePopup(getSelectedFiles(),table,evt.getPoint());
 				}
 			}
