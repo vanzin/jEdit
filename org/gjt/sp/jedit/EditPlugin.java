@@ -200,11 +200,8 @@ public abstract class EditPlugin
 	 *
 	 * Note that in the last case, plugin activation can occur in a thread
 	 * other than the AWT event dispatch thread - for example, if another
-	 * plugin spaws a thread which accesses this plugin. However, jEdit
-	 * takes care to only execute the <code>start()</code> method from the
-	 * event dispatch thread. A side effect of this is that one of your
-	 * plugin's classes might get called before the <code>start()</code>
-	 * method.<p>
+	 * plugin spaws a thread which accesses this plugin. So this method
+	 * <b>must</b> be thread-safe.<p>
 	 *
 	 * When this method is being called for plugins written for jEdit 4.1
 	 * and below, no views or buffers are open. However, this is not the

@@ -235,7 +235,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			return null;
 
 		String filename = filenameField.getText();
-		if(filename != null && filename.length() != 0)
+
+		if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+		{
+			return new String[] { browser.getDirectory() };
+		}
+		else if(filename != null && filename.length() != 0)
 		{
 			String path = browser.getDirectory();
 			return new String[] { MiscUtilities.constructPath(
@@ -248,16 +253,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			for(int i = 0; i < selectedFiles.length; i++)
 			{
 				VFS.DirectoryEntry file = selectedFiles[i];
-				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
-				{
-					if(file.type != VFS.DirectoryEntry.FILE)
-						vector.addElement(file.path);
-				}
-				else
-				{
-					if(file.type == VFS.DirectoryEntry.FILE)
-						vector.addElement(file.path);
-				}
+				if(file.type == VFS.DirectoryEntry.FILE)
+					vector.addElement(file.path);
 			}
 			String[] retVal = new String[vector.size()];
 			vector.copyInto(retVal);
@@ -279,7 +276,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ doFileExistsWarning() method
 	private boolean doFileExistsWarning(String filename)
 	{
-		if(new File(filename).exists())
+		if(browser.getMode() == VFSBrowser.SAVE_DIALOG
+			&& new File(filename).exists())
 		{
 			String[] args = { MiscUtilities.getFileName(filename) };
 			int result = GUIUtilities.confirm(browser,
@@ -371,8 +369,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			filenameField.selectAll();
 
-			if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+			if(files.length == 0)
+			{
+				// user pressed enter when the vfs table or
+				// file name field has focus, with nothing
+				// selected.
+				ok();
 				return;
+			}
 
 			for(int i = 0; i < files.length; i++)
 			{

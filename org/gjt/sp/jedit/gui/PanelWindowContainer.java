@@ -122,19 +122,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 		wm.revalidate();
 	} //}}}
 
-	//{{{ add() method
-	public void add(DockableWindowManager.Entry entry)
-	{
-		dockablePanel.add(entry.factory.name,entry.win);
-	} //}}}
-
-	//{{{ remove() method
-	public void remove(DockableWindowManager.Entry entry)
+	//{{{ unregister() method
+	public void unregister(DockableWindowManager.Entry entry)
 	{
 		if(entry.factory.name.equals(mostRecent))
 			mostRecent = null;
 
-		int index = dockables.indexOf(entry);
 		buttonPanel.remove(entry.btn);
 		buttons.remove(entry.btn);
 		entry.btn = null;
@@ -151,10 +144,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		else
 			wm.revalidate();
 	} //}}}
-
-	//{{{ save() method
-	public void save(DockableWindowManager.Entry entry) {}
-	//}}}
 
 	//{{{ showMostRecent() method
 	public void showMostRecent()
@@ -204,6 +193,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			mostRecent = entry.factory.name;
 			this.current = entry;
+
+			if(entry.win.getParent() != dockablePanel)
+				dockablePanel.add(entry.factory.name,entry.win);
 
 			dockablePanel.showDockable(entry.factory.name);
 

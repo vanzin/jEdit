@@ -155,7 +155,10 @@ public class IOProgressMonitor extends JPanel
 			if(thread.isRequestRunning())
 			{
 				abort.setEnabled(true);
-				progress.setString(thread.getStatus());
+				String status = thread.getStatus();
+				if(status == null)
+					status = "";
+				progress.setString(status);
 				progress.setMaximum(thread.getProgressMaximum());
 				//System.err.println("value: " + thread.getProgressValue());
 				progress.setValue(thread.getProgressValue());

@@ -122,7 +122,7 @@ class Roster
 			// close JAR file
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
-				jar.closeZipFile();
+				jEdit.removePluginJAR(jar,false);
 
 			// remove cache file
 			String cachePath = jar.getCachePath();

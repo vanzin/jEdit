@@ -6273,7 +6273,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,
-					isRectangularSelectionEnabled());
+					isRectangularSelectionEnabled()
+					|| control);
 
 				if(!quickCopyDrag)
 					moveCaretPosition(dragStart,false);
@@ -6430,7 +6431,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 
 			resizeSelection(dragStart,dot,extraEndVirt,
-				isRectangularSelectionEnabled());
+				isRectangularSelectionEnabled()
+				|| control);
 
 			if(quickCopyDrag)
 			{

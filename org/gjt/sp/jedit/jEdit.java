@@ -420,6 +420,7 @@ public class jEdit
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
 		Macros.loadMacros();
+		Macros.getMacroActionSet().initKeyBindings();
 
 		if(runStartupScripts && jEditHome != null)
 		{
@@ -978,10 +979,18 @@ public class jEdit
 
 	//{{{ addPluginJAR() method
 	/**
-	 * Loads the plugin JAR with the specified path. Note that calling this
-	 * at a time other than jEdit startup can have unpredictable results if
-	 * the plugin has not been updated for the jEdit 4.2 plugin API. Also,
-	 * you must make sure the plugin is not already loaded.
+	 * Loads the plugin JAR with the specified path. Some notes about this
+	 * method:
+	 *
+	 * <ul>
+	 * <li>Calling this at a time other than jEdit startup can have
+	 * unpredictable results if the plugin has not been updated for the
+	 * jEdit 4.2 plugin API.
+	 * <li>You must make sure yourself the plugin is not already loaded.
+	 * <li>After loading, you just make sure all the plugin's dependencies
+	 * are satisified before activating the plugin, using the
+	 * {@link PluginJAR#checkDependencies()} method.
+	 * </ul>
 	 *
 	 * @param path The JAR file path
 	 * @return The new <code>PluginJAR</code> instance
@@ -993,9 +1002,47 @@ public class jEdit
 		PluginJAR jar = new EditPlugin.JAR(new File(path));
 		jars.addElement(jar);
 		jar.init();
-		jar.getClassLoader().activate();
 
 		return jar;
+	} //}}}
+
+	//{{{ addPluginJARsFromDirectory() method
+	/**
+	 * Loads all plugins in a directory.
+	 * @param directory The directory
+	 * @since jEdit 4.2pre1
+	 */
+	private static void addPluginJARsFromDirectory(String directory)
+	{
+		Log.log(Log.NOTICE,jEdit.class,"Loading plugins from "
+			+ directory);
+
+		File file = new File(directory);
+		if(!(file.exists() && file.isDirectory()))
+			return;
+		String[] plugins = file.list();
+		if(plugins == null)
+			return;
+
+		for(int i = 0; i < plugins.length; i++)
+		{
+			String plugin = plugins[i];
+			if(!plugin.toLowerCase().endsWith(".jar"))
+				continue;
+
+			String path = MiscUtilities.constructPath(directory,plugin);
+
+			if(plugin.equals("EditBuddy.jar")
+				|| plugin.equals("PluginManager.jar")
+				|| plugin.equals("Firewall.jar")
+				|| plugin.equals("Tidy.jar"))
+			{
+				pluginError(path,"plugin-error.obsolete",null);
+				continue;
+			}
+
+			addPluginJAR(path);
+		}
 	} //}}}
 
 	//{{{ removePluginJAR() method
@@ -1019,7 +1066,6 @@ public class jEdit
 		else
 		{
 			jar.uninit(false);
-			jar.getClassLoader().deactivate();
 			jars.removeElement(jar);
 		}
 	} //}}}
@@ -2860,14 +2906,23 @@ public class jEdit
 	private static void initPlugins()
 	{
 		if(jEditHome != null)
-			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
+		{
+			addPluginJARsFromDirectory(MiscUtilities.constructPath(
+				jEditHome,"jars"));
+		}
 
 		if(settingsDirectory != null)
 		{
 			File jarsDirectory = new File(settingsDirectory,"jars");
 			if(!jarsDirectory.exists())
 				jarsDirectory.mkdir();
-			loadPlugins(jarsDirectory.getPath());
+			addPluginJARsFromDirectory(jarsDirectory.getPath());
+		}
+
+		PluginJAR[] jars = getPluginJARs();
+		for(int i = 0; i < jars.length; i++)
+		{
+			jars[i].checkDependencies();
 		}
 	} //}}}
 
@@ -3462,45 +3517,6 @@ loop:		for(int i = 0; i < list.length; i++)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
-		}
-	} //}}}
-
-	//{{{ loadPlugins() method
-	/**
-	 * Loads all plugins in a directory.
-	 * @param directory The directory
-	 */
-	private static void loadPlugins(String directory)
-	{
-		Log.log(Log.NOTICE,jEdit.class,"Loading plugins from "
-			+ directory);
-
-		File file = new File(directory);
-		if(!(file.exists() && file.isDirectory()))
-			return;
-		String[] plugins = file.list();
-		if(plugins == null)
-			return;
-
-		MiscUtilities.quicksort(plugins,new MiscUtilities.StringICaseCompare());
-		for(int i = 0; i < plugins.length; i++)
-		{
-			String plugin = plugins[i];
-			if(!plugin.toLowerCase().endsWith(".jar"))
-				continue;
-
-			String path = MiscUtilities.constructPath(directory,plugin);
-
-			if(plugin.equals("EditBuddy.jar")
-				|| plugin.equals("PluginManager.jar")
-				|| plugin.equals("Firewall.jar")
-				|| plugin.equals("Tidy.jar"))
-			{
-				pluginError(path,"plugin-error.obsolete",null);
-				continue;
-			}
-
-			addPluginJAR(path);
 		}
 	} //}}}
 
