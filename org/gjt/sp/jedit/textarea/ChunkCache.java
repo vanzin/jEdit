@@ -103,26 +103,26 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-
-						if(end != null
-							&& addedNonWhiteSpace
-							&& wrapMargin != 0
-							&& x > wrapMargin)
-						{
-							if(first != null)
-								out.add(first);
-							first = new Chunk(firstNonWhiteSpace,end.offset + 1);
-							first.next = end.next;
-							end.next = null;
-
-							x = x + firstNonWhiteSpace - endX;
-						}
-
-						if(first == null)
-							first = current;
-	
-						seenNonWhiteSpace = true;
 					}
+
+					if(end != null
+						&& addedNonWhiteSpace
+						&& wrapMargin != 0
+						&& x > wrapMargin)
+					{
+						if(first != null)
+							out.add(first);
+						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
+						first.next = end.next;
+						end.next = null;
+
+						x = x + firstNonWhiteSpace - endX;
+					}
+
+					if(first == null)
+						first = current;
+	
+					seenNonWhiteSpace = true;
 					//}}}
 
 					//{{{ Create ' ' chunk
