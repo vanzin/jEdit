@@ -95,43 +95,4 @@ public abstract class EBMessage
 	//{{{ Private members
 	private Object source;
 	//}}}
-
-	//{{{ Deprecated methods
-	/**
-	 * @deprecated Does nothing.
-	 */
-	public void veto()
-	{
-	}
-
-	/**
-	 * @deprecated Returns false.
-	 */
-	public boolean isVetoed()
-	{
-		return false;
-	}
-
-	/**
-	 * @deprecated Subclass <code>EBMessage</code> instead.
-	 */
-	public static abstract class NonVetoable extends EBMessage
-	{
-		/**
-		 * Creates a new non-vetoable message.
-		 * @param source The message source
-		 */
-		public NonVetoable(EBComponent source)
-		{
-			super(source);
-		}
-
-		/**
-		 * Disallows this message from being vetoed.
-		 */
-		public void veto()
-		{
-			throw new InternalError("Can't veto this message");
-		}
-	} //}}}
 }
