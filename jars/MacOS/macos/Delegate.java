@@ -39,7 +39,7 @@ import org.gjt.sp.util.Log;
 public class Delegate extends ApplicationAdapter
 {
 	//{{{ Variables
-	private final NSSelector showSel = new NSSelector("show", new Class[] {});
+	private final NSSelector actionSel = new NSSelector("doAction", new Class[] {});
 	
 	private Buffer lastOpenFile;
 	//}}}
@@ -133,10 +133,12 @@ public class Delegate extends ApplicationAdapter
 	{
 		NSMenu dockMenu;
 		BufferMenu bufMenu;
+		MacrosMenu macMenu;
 		RecentMenu recMenu;
 		RecentDirMenu dirMenu;
 		NSMenuItem showCurrItem;
 		NSMenuItem showCurrDirItem;
+		NSMenuItem newViewItem;
 		
 		// Buffers
 		NSMenuItem miBuff = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.buffers.label"),null,"");
@@ -150,35 +152,48 @@ public class Delegate extends ApplicationAdapter
 		NSMenuItem miDir = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.recentDir.label"),null,"");
 		miDir.setSubmenu(dirMenu = new RecentDirMenu());
 		
+		// Macros
+		NSMenuItem miMac = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.macros.label"),null,"");
+		miMac.setSubmenu(macMenu = new MacrosMenu());
+		
 		dockMenu = new NSMenu();
-		showCurrItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.showCurrent"),showSel,"");
+		newViewItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.newView"),actionSel,"");
+		newViewItem.setTarget(new NewViewAction());
+		dockMenu.addItem(newViewItem);
+		dockMenu.addItem(new NSMenuItem().separatorItem());
+		showCurrItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.showCurrent"),actionSel,"");
 		dockMenu.addItem(showCurrItem);
-		showCurrDirItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.showCurrentDir"),showSel,"");
+		showCurrDirItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.showCurrentDir"),actionSel,"");
 		dockMenu.addItem(showCurrDirItem);
 		dockMenu.addItem(new NSMenuItem().separatorItem());
 		dockMenu.addItem(miBuff);
 		dockMenu.addItem(miRec);
 		dockMenu.addItem(miDir);
+		dockMenu.addItem(new NSMenuItem().separatorItem());
+		dockMenu.addItem(miMac);
+		if (jEdit.getViewCount() == 0)
+			miMac.setEnabled(false);
 		
 		bufMenu.updateMenu();
 		recMenu.updateMenu();
 		dirMenu.updateMenu();
+		macMenu.updateMenu();
 		
-		File buff = new File(jEdit.getActiveView().getBuffer().getPath());
-		if (buff.exists())
+		View view = jEdit.getActiveView();
+		if (view != null)
 		{
-			showCurrItem.setTarget(new ShowFileAction(buff.getPath()));
-			showCurrItem.setEnabled(true);
+			File buff = new File(view.getBuffer().getPath());
+			if (buff.exists())
+			{
+				showCurrItem.setTarget(new ShowFileAction(buff.getPath()));
+				showCurrDirItem.setTarget(new ShowFileAction(buff.getParent()));
+			}
 		}
 		else
+		{
 			showCurrItem.setEnabled(false);
-		if (buff.exists())
-		{
-			showCurrDirItem.setTarget(new ShowFileAction(buff.getParent()));
-			showCurrDirItem.setEnabled(true);
-		}
-		else
 			showCurrDirItem.setEnabled(false);
+		}
 		
 		return dockMenu;
 	} //}}}
@@ -186,8 +201,14 @@ public class Delegate extends ApplicationAdapter
 	//{{{ applicationShouldHandleReopen() method
 	public boolean applicationShouldHandleReopen(NSApplication theApplication, boolean flag)
 	{
-		if (jEdit.getViewCount() == 0)
-			jEdit.newView(null,jEdit.restoreOpenFiles());
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				if (jEdit.getViewCount() == 0)
+					jEdit.newView(null,jEdit.restoreOpenFiles());
+			}
+		});
 		
 		return false;
 	} //}}}
@@ -244,7 +265,7 @@ public class Delegate extends ApplicationAdapter
 			{
 				if (!buffs[i].isUntitled())
 				{
-					item = new NSMenuItem(buffs[i].getName(),showSel,"");
+					item = new NSMenuItem(buffs[i].getName(),actionSel,"");
 					item.setTarget(new ShowFileAction(buffs[i].getPath()));
 					//item.setImage(NSWorkspace.sharedWorkspace().iconForFile(
 					//	buffs[i].getPath()));
@@ -259,6 +280,65 @@ public class Delegate extends ApplicationAdapter
 				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.buffers.none"),null,"");
 				item.setEnabled(false);
 				addItem(item);
+			}
+		}
+	} //}}}
+	
+	//{{{ MacrosMenu class
+	class MacrosMenu extends NSMenu
+	{
+		public MacrosMenu()
+		{
+			super();
+		}
+		
+		public void updateMenu()
+		{
+			Vector macroVector = Macros.getMacroHierarchy();
+			NSMenuItem item;
+			File file;
+			int max = macroVector.size();
+			
+			int length = numberOfItems();
+			for (int i=0; i<length; i++)
+				removeItemAtIndex(0);
+			
+			if (max == 0)
+			{
+				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.macros.none"),null,"");
+				item.setEnabled(false);
+				addItem(item);
+				return;
+			}
+			
+			createMenu(this,macroVector);
+		}
+		
+		public void createMenu(NSMenu menu, Vector vector)
+		{
+			for(int i=0; i < vector.size(); i++)
+			{
+				Object obj = vector.elementAt(i);
+				if(obj instanceof Macros.Macro)
+				{
+					Macros.Macro macro = (Macros.Macro)obj;
+					NSMenuItem item = new NSMenuItem(macro.getLabel(),actionSel,"");
+					item.setTarget(new MacroAction(macro));
+					menu.addItem(item);
+				}
+				else if(obj instanceof Vector)
+				{
+					Vector subvector = (Vector)obj;
+					String name = (String)subvector.elementAt(0);
+					NSMenu submenu = new NSMenu();
+					createMenu(submenu,subvector);
+					if(submenu.numberOfItems() > 0)
+					{
+						NSMenuItem submenuitem = new NSMenuItem(name,null,"");
+						submenuitem.setSubmenu(submenu);
+						menu.addItem(submenuitem);
+					}
+				}
 			}
 		}
 	} //}}}
@@ -297,7 +377,7 @@ public class Delegate extends ApplicationAdapter
 			for (int i=max-1; i >= min ; i--)
 			{
 				file = new File(((BufferHistory.Entry)recent.get(i)).path);
-				item = new NSMenuItem(file.getName(),showSel,"");
+				item = new NSMenuItem(file.getName(),actionSel,"");
 				item.setTarget(new ShowFileAction(file.getPath()));
 				//item.setImage(NSWorkspace.sharedWorkspace().iconForFile(file.getPath()));
 				if (!file.exists())
@@ -337,7 +417,7 @@ public class Delegate extends ApplicationAdapter
 			for (int i=0; i < max ; i++)
 			{
 				file = new File(model.getItem(i));
-				item = new NSMenuItem(file.getName(),showSel,"");
+				item = new NSMenuItem(file.getName(),actionSel,"");
 				item.setTarget(new ShowFileAction(file.getPath()));
 				//item.setImage(NSWorkspace.sharedWorkspace().iconForFile(file.getPath()));
 				if (!file.exists())
@@ -347,7 +427,41 @@ public class Delegate extends ApplicationAdapter
 		}
 	} //}}}
 	
-	//{{{ ShowBufferMenuItem class
+	//{{{ MacroAction class
+	class MacroAction
+	{
+		private Macros.Macro macro;
+		
+		public MacroAction(Macros.Macro macro)
+		{
+			this.macro = macro;
+		}
+		
+		public void doAction()
+		{
+			macro.invoke(jEdit.getActiveView());
+		}
+	} //}}}
+	
+	//{{{ NewViewAction class
+	class NewViewAction
+	{
+		public void doAction()
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if (jEdit.getViewCount() == 0)
+						jEdit.newView(null,jEdit.restoreOpenFiles());
+					else
+						jEdit.newView(jEdit.getActiveView());
+				}
+			});
+		}
+	} //}}}
+	
+	//{{{ ShowFileAction class
 	class ShowFileAction
 	{
 		private String path;
@@ -357,7 +471,7 @@ public class Delegate extends ApplicationAdapter
 			this.path = path;
 		}
 		
-		public void show()
+		public void doAction()
 		{
 			MacOSActions.showInFinder(path);
 		}
