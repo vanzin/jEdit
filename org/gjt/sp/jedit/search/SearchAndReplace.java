@@ -947,15 +947,21 @@ loop:			while(path != null)
 		boolean smartCaseReplace = (TextUtilities.getStringCase(replace)
 			== TextUtilities.LOWER_CASE);
 
+		boolean endOfLine = (buffer.getLineEndOffset(
+			buffer.getLineOfOffset(end)) - 1 == end);
+
 		Segment text = new Segment();
 		int offset = start;
 loop:		for(int counter = 0; ; counter++)
 		{
 			buffer.getText(offset,end - offset,text);
+
+			boolean startOfLine = (buffer.getLineStartOffset(
+				buffer.getLineOfOffset(offset)) == offset);
+
 			int[] occur = matcher.nextMatch(
 				new CharIndexedSegment(text,false),
-				start == 0,end == buffer.getLength(),
-				counter == 0);
+				startOfLine,endOfLine,counter == 0);
 			if(occur == null)
 				break loop;
 			int _start = occur[0];
