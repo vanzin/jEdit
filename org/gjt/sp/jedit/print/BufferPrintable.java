@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001, 2002 Slava Pestov
+ * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,11 +108,17 @@ class BufferPrintable extends WorkRequest implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
+		if(pageIndex > currentPage + 1)
+		{
+			for(int i = currentPage; i < pageIndex; i++)
+			{
+				printPage(_gfx,pageFormat,i,true);
+			}
 
-		lineList.clear();
-		currentLine = 0;
+			currentPage = pageIndex - 1;
+		}
 
-		if(pageIndex != currentPage)
+		if(pageIndex == currentPage + 1)
 		{
 			if(end)
 			{
@@ -122,7 +129,7 @@ class BufferPrintable extends WorkRequest implements Printable
 			currentPageStart = currentPhysicalLine;
 			currentPage = pageIndex;
 		}
-		else
+		else if(pageIndex == currentPage)
 		{
 			currentPhysicalLine = currentPageStart;
 
@@ -134,6 +141,50 @@ class BufferPrintable extends WorkRequest implements Printable
 			setStatus(message);
 		}
 
+		printPage(_gfx,pageFormat,pageIndex,true);
+
+		return PAGE_EXISTS;
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Static variables
+	private static Color headerColor = Color.lightGray;
+	private static Color headerTextColor = Color.black;
+	private static Color footerColor = Color.lightGray;
+	private static Color footerTextColor = Color.black;
+	private static Color lineNumberColor = Color.gray;
+	private static Color textColor = Color.black;
+	//}}}
+
+	//{{{ Instance variables
+	private PrinterJob job;
+	private Object format;
+
+	private View view;
+	private Buffer buffer;
+	private Font font;
+	private SyntaxStyle[] styles;
+	private boolean header;
+	private boolean footer;
+	private boolean lineNumbers;
+
+	private int currentPage;
+	private int currentPageStart;
+	private int currentPhysicalLine;
+	private boolean end;
+
+	private LineMetrics lm;
+	private ArrayList lineList;
+
+	private SoftWrapTokenHandler softWrap;
+	//}}}
+
+	//{{{ printPage() method
+	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex,
+		boolean actuallyPaint)
+	{
+		System.err.println("printing page " + pageIndex);
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 
@@ -144,7 +195,8 @@ class BufferPrintable extends WorkRequest implements Printable
 
 		if(header)
 		{
-			double headerHeight = paintHeader(gfx,pageX,pageY,pageWidth);
+			double headerHeight = paintHeader(gfx,pageX,pageY,pageWidth,
+				actuallyPaint);
 			pageY += headerHeight * 2;
 			pageHeight -= headerHeight * 2;
 		}
@@ -152,7 +204,7 @@ class BufferPrintable extends WorkRequest implements Printable
 		if(footer)
 		{
 			double footerHeight = paintFooter(gfx,pageX,pageY,pageWidth,
-				pageHeight,pageIndex);
+				pageHeight,pageIndex,actuallyPaint);
 			pageHeight -= footerHeight * 2;
 		}
 
@@ -196,120 +248,72 @@ class BufferPrintable extends WorkRequest implements Printable
 
 print_loop:	for(;;)
 		{
-			//{{{ get line text
-			if(currentLine == lineList.size())
-			{
-				lineList.add(new Integer(currentPhysicalLine + 1));
-
-				buffer.getLineText(currentPhysicalLine,seg);
-				softWrap.init(seg,styles,frc,e,lineList,
-					(float)(pageWidth - lineNumberWidth));
-
-				buffer.markTokens(currentPhysicalLine,softWrap);
-
-				currentPhysicalLine++;
-
-				if(lineList.size() == currentLine + 1)
-					lineList.add(null);
-			} //}}}
-
-			y += lm.getHeight();
-			if(y >= pageHeight)
-				break print_loop;
-
-			Object obj = lineList.get(currentLine++);
-			if(obj instanceof Integer)
-			{
-				//{{{ paint line number
-				if(lineNumbers)
-				{
-					gfx.setFont(font);
-					gfx.setColor(lineNumberColor);
-					gfx.drawString(String.valueOf(obj),
-						(float)pageX,(float)(pageY + y));
-				} //}}}
-
-				obj = lineList.get(currentLine++);
-			}
-
-			if(obj != null)
-			{
-				Chunk line = (Chunk)obj;
-
-				Chunk.paintChunkList(seg,line,gfx,
-					(float)(pageX + lineNumberWidth),
-					(float)(pageY + y),
-					Color.white,false);
-			}
-
-			if(currentPhysicalLine == buffer.getLineCount()
-				&& currentLine == lineList.size())
+			if(currentPhysicalLine == buffer.getLineCount())
 			{
 				end = true;
 				break print_loop;
 			}
+
+			lineList.clear();
+
+			buffer.getLineText(currentPhysicalLine,seg);
+			softWrap.init(seg,styles,frc,e,lineList,
+				(float)(pageWidth - lineNumberWidth));
+
+			buffer.markTokens(currentPhysicalLine,softWrap);
+			if(lineList.size() == 0)
+				lineList.add(null);
+
+			if(y + (lm.getHeight() * lineList.size()) >= pageHeight)
+				break print_loop;
+
+			if(lineNumbers && actuallyPaint)
+			{
+				gfx.setFont(font);
+				gfx.setColor(lineNumberColor);
+				gfx.drawString(String.valueOf(currentPhysicalLine + 1),
+					(float)pageX,(float)(pageY + y));
+			}
+
+			for(int i = 0; i < lineList.size(); i++)
+			{
+				Chunk chunks = (Chunk)lineList.get(i);
+				if(chunks != null && actuallyPaint)
+				{
+					Chunk.paintChunkList(seg,chunks,gfx,
+						(float)(pageX + lineNumberWidth),
+						(float)(pageY + y),
+						Color.white,false);
+				}
+				y += lm.getHeight();
+			}
+
+			currentPhysicalLine++;
 		}
-
-		return PAGE_EXISTS;
 	} //}}}
-
-	//{{{ Private members
-
-	//{{{ Static variables
-	private static Color headerColor = Color.lightGray;
-	private static Color headerTextColor = Color.black;
-	private static Color footerColor = Color.lightGray;
-	private static Color footerTextColor = Color.black;
-	private static Color lineNumberColor = Color.gray;
-	private static Color textColor = Color.black;
-	//}}}
-
-	//{{{ Instance variables
-	private PrinterJob job;
-	private Object format;
-
-	private View view;
-	private Buffer buffer;
-	private Font font;
-	private SyntaxStyle[] styles;
-	private boolean header;
-	private boolean footer;
-	private boolean lineNumbers;
-
-	private int currentPage;
-	private int currentPageStart;
-	private int currentLine;
-	private int currentPhysicalLine;
-	private boolean end;
-
-	private LineMetrics lm;
-	private ArrayList lineList;
-
-	private SoftWrapTokenHandler softWrap;
-	//}}}
 
 	//{{{ paintHeader() method
 	private double paintHeader(Graphics2D gfx, double pageX, double pageY,
-		double pageWidth)
+		double pageWidth, boolean actuallyPaint)
 	{
 		String headerText = jEdit.getProperty("print.headerText",
 			new String[] { buffer.getPath() });
 		FontRenderContext frc = gfx.getFontRenderContext();
-
-		gfx.setColor(headerColor);
+		lm = font.getLineMetrics(headerText,frc);
 
 		Rectangle2D bounds = font.getStringBounds(headerText,frc);
-
 		Rectangle2D headerBounds = new Rectangle2D.Double(
 			pageX,pageY,pageWidth,bounds.getHeight());
-		gfx.fill(headerBounds);
 
-		gfx.setColor(headerTextColor);
-
-		lm = font.getLineMetrics(headerText,frc);
-		gfx.drawString(headerText,
-			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-			(float)(pageY + lm.getAscent()));
+		if(actuallyPaint)
+		{
+			gfx.setColor(headerColor);
+			gfx.fill(headerBounds);
+			gfx.setColor(headerTextColor);
+			gfx.drawString(headerText,
+				(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+				(float)(pageY + lm.getAscent()));
+		}
 
 		return headerBounds.getHeight();
 	}
@@ -317,27 +321,29 @@ print_loop:	for(;;)
 
 	//{{{ paintFooter() method
 	private double paintFooter(Graphics2D gfx, double pageX, double pageY,
-		double pageWidth, double pageHeight, int pageIndex)
+		double pageWidth, double pageHeight, int pageIndex,
+		boolean actuallyPaint)
 	{
 		String footerText = jEdit.getProperty("print.footerText",
 			new Object[] { new Date(), new Integer(pageIndex + 1) });
 		FontRenderContext frc = gfx.getFontRenderContext();
-
-		gfx.setColor(footerColor);
+		lm = font.getLineMetrics(footerText,frc);
 
 		Rectangle2D bounds = font.getStringBounds(footerText,frc);
 		Rectangle2D footerBounds = new Rectangle2D.Double(
 			pageX,pageY + pageHeight - bounds.getHeight(),
 			pageWidth,bounds.getHeight());
-		gfx.fill(footerBounds);
 
-		gfx.setColor(footerTextColor);
-
-		lm = font.getLineMetrics(footerText,frc);
-		gfx.drawString(footerText,
-			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-			(float)(pageY + pageHeight - bounds.getHeight()
-			+ lm.getAscent()));
+		if(actuallyPaint)
+		{
+			gfx.setColor(footerColor);
+			gfx.fill(footerBounds);
+			gfx.setColor(footerTextColor);
+			gfx.drawString(footerText,
+				(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+				(float)(pageY + pageHeight - bounds.getHeight()
+				+ lm.getAscent()));
+		}
 
 		return footerBounds.getHeight();
 	} //}}}

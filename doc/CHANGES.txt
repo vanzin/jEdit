@@ -191,6 +191,8 @@ contributing to this release.
     version
   - Performs printing in a background thread
 
+- Documentation is now generated using DocBook-XSL 1.51.1 stylesheets.
+
 + Bug Fixes:
 
 - Select Open File; press Enter first; then choose a file to open. Bang,
