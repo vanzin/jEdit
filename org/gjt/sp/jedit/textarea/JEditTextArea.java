@@ -269,7 +269,6 @@ public class JEditTextArea extends JComponent
 			firstLine = 0;
 			maxHorizontalScrollWidth = 0;
 			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
-			chunkCache.invalidateAll();
 			chunkCache.setFirstLine(0,physFirstLine,true);
 
 			painter.repaint();
