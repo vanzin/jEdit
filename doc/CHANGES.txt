@@ -3,7 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre10
 
 Thanks to Barry Carr, Brad Mace, Ken Turner, Nahuel Foronda,
-Trevor Harmon and Thomas Galvin for contributing to this release.
+Ollie Rutherfurd, Trevor Harmon and Thomas Galvin for contributing to
+this release.
 
 {{{ Miscellaneous
 
@@ -25,6 +26,9 @@ Trevor Harmon and Thomas Galvin for contributing to this release.
 - Updated ActionScript syntax highlighting (Nahuel Foronda).
 
 - Updated SDL/PR syntax highlighting (Ken Turner).
+
+- Added CVS and Subversion commit info syntax highlighting
+  (Ollie Rutherfurd).
 
 }}}
 {{{ Bug Fixes
