@@ -162,7 +162,7 @@ public class UndoManager
 			}
 		}
 
-		Insert ins = new Insert(offset,length,text);
+		Insert ins = new Insert(this,offset,length,text);
 
 		if(clearDirty)
 		{
@@ -204,7 +204,7 @@ public class UndoManager
 			}
 		}
 
-		Remove rem = new Remove(offset,length,text);
+		Remove rem = new Remove(this,offset,length,text);
 		if(clearDirty)
 		{
 			redoClearDirty = toMerge;
@@ -295,7 +295,7 @@ public class UndoManager
 	//{{{ Inner classes
 
 	//{{{ Edit class
-	abstract class Edit
+	abstract static class Edit
 	{
 		Edit prev, next;
 
@@ -309,11 +309,12 @@ public class UndoManager
 	} //}}}
 
 	//{{{ Insert class
-	class Insert extends Edit
+	static class Insert extends Edit
 	{
 		//{{{ Insert constructor
-		Insert(int offset, int length, String str)
+		Insert(UndoManager mgr, int offset, int length, String str)
 		{
+			this.mgr = mgr;
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
@@ -322,32 +323,34 @@ public class UndoManager
 		//{{{ undo() method
 		int undo()
 		{
-			buffer.remove(offset,length);
-			if(undoClearDirty == this)
-				buffer.setDirty(false);
+			mgr.buffer.remove(offset,length);
+			if(mgr.undoClearDirty == this)
+				mgr.buffer.setDirty(false);
 			return offset;
 		} //}}}
 
 		//{{{ redo() method
 		int redo()
 		{
-			buffer.insert(offset,str);
-			if(redoClearDirty == this)
-				buffer.setDirty(false);
+			mgr.buffer.insert(offset,str);
+			if(mgr.redoClearDirty == this)
+				mgr.buffer.setDirty(false);
 			return offset + length;
 		} //}}}
 
+		UndoManager mgr;
 		int offset;
 		int length;
 		String str;
 	} //}}}
 
 	//{{{ Remove class
-	class Remove extends Edit
+	static class Remove extends Edit
 	{
 		//{{{ Remove constructor
-		Remove(int offset, int length, String str)
+		Remove(UndoManager mgr, int offset, int length, String str)
 		{
+			this.mgr = mgr;
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
@@ -357,21 +360,22 @@ public class UndoManager
 		//{{{ undo() method
 		int undo()
 		{
-			buffer.insert(offset,str);
-			if(undoClearDirty == this)
-				buffer.setDirty(false);
+			mgr.buffer.insert(offset,str);
+			if(mgr.undoClearDirty == this)
+				mgr.buffer.setDirty(false);
 			return offset + length;
 		} //}}}
 
 		//{{{ redo() method
 		int redo()
 		{
-			buffer.remove(offset,length);
-			if(redoClearDirty == this)
-				buffer.setDirty(false);
+			mgr.buffer.remove(offset,length);
+			if(mgr.redoClearDirty == this)
+				mgr.buffer.setDirty(false);
 			return offset;
 		} //}}}
 
+		UndoManager mgr;
 		int offset;
 		int length;
 		String str;
@@ -380,7 +384,7 @@ public class UndoManager
 	} //}}}
 
 	//{{{ CompoundEdit class
-	class CompoundEdit extends Edit
+	static class CompoundEdit extends Edit
 	{
 		//{{{ undo() method
 		public int undo()

@@ -314,14 +314,14 @@ public class Abbrevs
 				try
 				{
 					saveAbbrevs(new FileWriter(file1));
+					file2.delete();
+					file1.renameTo(file2);
 				}
 				catch(Exception e)
 				{
 					Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + file1);
 					Log.log(Log.ERROR,Abbrevs.class,e);
 				}
-				file2.delete();
-				file1.renameTo(file2);
 				abbrevsModTime = file2.lastModified();
 			}
 		}

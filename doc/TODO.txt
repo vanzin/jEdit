@@ -5,7 +5,6 @@ and quirks that I need to fix eventually.
 
 - option for b&w print
 - document deep indent
-- scroll line count problems
 - tall caret and tab
 - tall caret and backspace
 - change of AT_WORD_START semantics to fix perl highlighting?
@@ -148,7 +147,6 @@ and quirks that I need to fix eventually.
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible
-- hypersearch: open in new split
 - need a new jEditLauncher
 - <script> in javadoc
 - auto indent:

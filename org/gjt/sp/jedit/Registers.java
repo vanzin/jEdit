@@ -401,109 +401,29 @@ public class Registers
 	//{{{ saveRegisters() method
 	public static void saveRegisters()
 	{
-		if(loaded && modified)
+		if(!loaded || !modified)
+			return;
+
+		Log.log(Log.MESSAGE,Registers.class,"Saving registers.xml");
+		File file1 = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(), "#registers.xml#save#"));
+		File file2 = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(), "registers.xml"));
+		if(file2.exists() && file2.lastModified() != registersModTime)
 		{
-			Log.log(Log.MESSAGE,Registers.class,"Saving " + registers);
-			File file1 = new File(MiscUtilities.constructPath(
-				jEdit.getSettingsDirectory(), "#registers.xml#save#"));
-			File file2 = new File(MiscUtilities.constructPath(
-				jEdit.getSettingsDirectory(), "registers.xml"));
-			if(file2.exists() && file2.lastModified() != registersModTime)
-			{
-				Log.log(Log.WARNING,Registers.class,file2 + " changed"
-					+ " on disk; will not save registers");
-			}
-			else
-			{
-				jEdit.backupSettingsFile(file2);
-				saveRegisters(file1);
-				file2.delete();
-				file1.renameTo(file2);
-			}
-			registersModTime = file2.lastModified();
-			modified = false;
+			Log.log(Log.WARNING,Registers.class,file2 + " changed"
+				+ " on disk; will not save registers");
+			return;
 		}
-	} //}}}
 
-	//{{{ Private members
-	private static Register[] registers;
-	private static long registersModTime;
-	private static boolean loaded, loading, modified;
+		jEdit.backupSettingsFile(file2);
 
-	private Registers() {}
-
-	static
-	{
-		registers = new Register[256];
-		registers['$'] = new ClipboardRegister(Toolkit
-			.getDefaultToolkit().getSystemClipboard());
-	}
-
-	//{{{ loadRegisters() method
-	private static void loadRegisters()
-	{
-		File registerFile = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(),"registers.xml"));
-		if(registerFile.exists())
-			registersModTime = registerFile.lastModified();
-		loaded = true;
-		loadRegisters(registerFile);
-	} //}}}
-
-	//{{{ loadRegisters() method
-	private static void loadRegisters(File file)
-	{
-		Log.log(Log.MESSAGE,jEdit.class,"Loading " + file);
-
-		RegistersHandler handler = new RegistersHandler();
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-		Reader in = null;
-		try
-		{
-			loading = true;
-			in = new BufferedReader(new FileReader(file));
-			parser.parse(null, null, in);
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,Registers.class,file + ":" + line
-				+ ": " + message);
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,Registers.class,fnf);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,Registers.class,e);
-		}
-		finally
-		{
-			loading = false;
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,Registers.class,io);
-			}
-		}
-	} //}}}
-
-	//{{{ saveRegisters() method
-	private static void saveRegisters(File file)
-	{
 		String lineSep = System.getProperty("line.separator");
 
 		try
 		{
 			BufferedWriter out = new BufferedWriter(
-				new FileWriter(file));
+				new FileWriter(file1));
 
 			out.write("<?xml version=\"1.0\"?>");
 			out.write(lineSep);
@@ -537,10 +457,89 @@ public class Registers
 			out.write(lineSep);
 
 			out.close();
+
+			/* to avoid data loss, only do this if the above
+			 * completed successfully */
+			file2.delete();
+			file1.renameTo(file2);
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,Registers.class,e);
+		}
+
+		registersModTime = file2.lastModified();
+		modified = false;
+	} //}}}
+
+	//{{{ Private members
+	private static Register[] registers;
+	private static long registersModTime;
+	private static boolean loaded, loading, modified;
+
+	private Registers() {}
+
+	static
+	{
+		registers = new Register[256];
+		registers['$'] = new ClipboardRegister(Toolkit
+			.getDefaultToolkit().getSystemClipboard());
+	}
+
+	//{{{ loadRegisters() method
+	private static void loadRegisters()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File registerFile = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(),"registers.xml"));
+		if(!registerFile.exists())
+			return;
+
+		registersModTime = registerFile.lastModified();
+		loaded = true;
+
+		Log.log(Log.MESSAGE,jEdit.class,"Loading registers.xml");
+
+		RegistersHandler handler = new RegistersHandler();
+		XmlParser parser = new XmlParser();
+		parser.setHandler(handler);
+		Reader in = null;
+		try
+		{
+			loading = true;
+			in = new BufferedReader(new FileReader(registerFile));
+			parser.parse(null, null, in);
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,Registers.class,registerFile + ":"
+				+ line + ": " + message);
+		}
+		catch(FileNotFoundException fnf)
+		{
+			//Log.log(Log.DEBUG,Registers.class,fnf);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,Registers.class,e);
+		}
+		finally
+		{
+			loading = false;
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,Registers.class,io);
+			}
 		}
 	} //}}}
 
