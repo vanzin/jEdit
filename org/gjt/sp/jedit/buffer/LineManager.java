@@ -1,5 +1,5 @@
 /*
- * OffsetManager.java - Manages line info, line start offsets, positions
+ * LineManager.java - Manages line info, line start offsets, positions
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -42,12 +42,11 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class OffsetManager
+public class LineManager
 {
-	//{{{ OffsetManager constructor
-	public OffsetManager()
+	//{{{ LineManager constructor
+	public LineManager()
 	{
-		positions = new PosBottomHalf[100];
 		endOffsets = new int[1];
 		endOffsets[0] = 1;
 		lineInfo = new short[1];
@@ -196,51 +195,6 @@ public class OffsetManager
 		return firstInvalidLineContext;
 	} //}}}
 
-	//{{{ createPosition() method
-
-	// note: Buffer.createPosition() grabs a read lock, so the buffer
-	// will not change during this method. however, if two stops call
-	// it, there can be contention issues unless this method is
-	// synchronized.
-
-	// I could make Buffer.createPosition() grab a write lock, but then
-	// it would be necessary to implement grabbing write locks within
-	// read locks, since HyperSearch for example does everything inside
-	// a read lock.
-	public synchronized Position createPosition(int offset)
-	{
-		PosBottomHalf bh = null;
-
-		for(int i = 0; i < positionCount; i++)
-		{
-			PosBottomHalf _bh = positions[i];
-			if(_bh.offset == offset)
-			{
-				bh = _bh;
-				break;
-			}
-			else if(_bh.offset > offset)
-			{
-				bh = new PosBottomHalf(offset);
-				growPositionArray();
-				System.arraycopy(positions,i,positions,i+1,
-					positionCount - i);
-				positionCount++;
-				positions[i] = bh;
-				break;
-			}
-		}
-
-		if(bh == null)
-		{
-			bh = new PosBottomHalf(offset);
-			growPositionArray();
-			positions[positionCount++] = bh;
-		}
-
-		return new PosTopHalf(bh);
-	} //}}}
-
 	//{{{ invalidateScreenLineCounts() method
 	public void invalidateScreenLineCounts()
 	{
@@ -330,8 +284,6 @@ public class OffsetManager
 		if(firstInvalidFoldLevel == -1 || firstInvalidFoldLevel > startLine)
 			firstInvalidFoldLevel = startLine;
 		moveGap(endLine,length,"contentInserted");
-
-		updatePositionsForInsert(offset,length);
 	} //}}}
 
 	//{{{ contentRemoved() method
@@ -369,8 +321,6 @@ public class OffsetManager
 		if(firstInvalidFoldLevel == -1 || firstInvalidFoldLevel > startLine)
 			firstInvalidFoldLevel = startLine;
 		moveGap(startLine,-length,"contentRemoved");
-
-		updatePositionsForRemove(offset,length);
 	} //}}}
 
 	//{{{ Private members
@@ -396,9 +346,6 @@ public class OffsetManager
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;
-
-	private PosBottomHalf[] positions;
-	private int positionCount;
 
 	/**
 	 * If -1, then there is no gap.
@@ -472,176 +419,6 @@ public class OffsetManager
 			gapLine = -1;
 		else
 			gapLine = newGapLine;
-	} //}}}
-
-	//{{{ growPositionArray() method
-	private void growPositionArray()
-	{
-		if(positions.length < positionCount + 1)
-		{
-			PosBottomHalf[] newPositions = new PosBottomHalf[
-				(positionCount + 1) * 2];
-			System.arraycopy(positions,0,newPositions,0,positionCount);
-			positions = newPositions;
-		}
-	} //}}}
-
-	//{{{ removePosition() method
-	private synchronized void removePosition(PosBottomHalf bh)
-	{
-		int index = -1;
-
-		for(int i = 0; i < positionCount; i++)
-		{
-			if(positions[i] == bh)
-			{
-				index = i;
-				break;
-			}
-		}
-
-		System.arraycopy(positions,index + 1,positions,index,
-			positionCount - index - 1);
-		positions[--positionCount] = null;
-	} //}}}
-
-	//{{{ updatePositionsForInsert() method
-	private void updatePositionsForInsert(int offset, int length)
-	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else
-				bh.offset += length;
-		}
-	} //}}}
-
-	//{{{ updatePositionsForRemove() method
-	private void updatePositionsForRemove(int offset, int length)
-	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else if(bh.offset < offset + length)
-				bh.offset = offset;
-			else
-				bh.offset -= length;
-		}
-	} //}}}
-
-	//{{{ getPositionAtOffset() method
-	private int getPositionAtOffset(int offset)
-	{
-		int start = 0;
-		int end = positionCount - 1;
-
-		PosBottomHalf bh;
-
-loop:		for(;;)
-		{
-			switch(end - start)
-			{
-			case 0:
-				bh = positions[start];
-				if(bh.offset < offset)
-					start++;
-				break loop;
-			case 1:
-				bh = positions[end];
-				if(bh.offset < offset)
-				{
-					start = end + 1;
-				}
-				else
-				{
-					bh = positions[start];
-					if(bh.offset < offset)
-					{
-						start++;
-					}
-				}
-				break loop;
-			default:
-				int pivot = (start + end) / 2;
-				bh = positions[pivot];
-				if(bh.offset > offset)
-					end = pivot - 1;
-				else
-					start = pivot + 1;
-				break;
-			}
-		}
-
-		return start;
-	} //}}}
-
-	//}}}
-
-	//{{{ Inner classes
-
-	//{{{ PosTopHalf class
-	static class PosTopHalf implements Position
-	{
-		PosBottomHalf bh;
-
-		//{{{ PosTopHalf constructor
-		PosTopHalf(PosBottomHalf bh)
-		{
-			this.bh = bh;
-			bh.ref();
-		} //}}}
-
-		//{{{ getOffset() method
-		public int getOffset()
-		{
-			return bh.offset;
-		} //}}}
-
-		//{{{ finalize() method
-		public void finalize()
-		{
-			bh.unref();
-		} //}}}
-	} //}}}
-
-	//{{{ PosBottomHalf class
-	class PosBottomHalf
-	{
-		int offset;
-		int ref;
-
-		//{{{ PosBottomHalf constructor
-		PosBottomHalf(int offset)
-		{
-			this.offset = offset;
-		} //}}}
-
-		//{{{ ref() method
-		void ref()
-		{
-			ref++;
-		} //}}}
-
-		//{{{ unref() method
-		void unref()
-		{
-			if(--ref == 0)
-				removePosition(this);
-		} //}}}
 	} //}}}
 
 	//}}}
