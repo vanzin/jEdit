@@ -3,27 +3,23 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- if(...)
+  
+  { <-- wrong
+
 - SERIOUS PROBLEMS
-  - C+b -- click -- keys don't wokr
-  - 1-9 broken in C+b
-  - C+e C+c broken in php
-  - closing view prints processKeyEvent() npe
   - control-shift-click broken in text area
   - finish vfs browser extended attributes
   - new file: horiz scroll wrong
   - scroll to with invisible caret
-  - block caret: not very good
   - files in favorites: selection is broken
-  - sometimes foo and foo/ both appear in browser history
   - bad wrap:
   						MiscUtilities.quicksort(favorites,
   							new VFS.DirectoryEntryCompare());
-  - delete: no vfs update
   - isn't fsb dir search supposed to use selected file's extension?
   - bizarre dockable window manager button layout problem
   - while loading --> scroll bar
   - auto reload - save caret info first
-  - file dialog: plugin mgr/opts
   - shortcuts: stale shortcuts remain?
   - narrow: scrolls one down
   - eval-for-selected-lines doesn't work with rectangular selection
@@ -80,6 +76,7 @@ and quirks that I need to fix eventually.
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
 - motif l&f: shortcuts in menu items
+- C+b -- click -- keys don't work
 
 + cleanups:
 
@@ -187,7 +184,6 @@ and quirks that I need to fix eventually.
 - MARK_PREVIOUS delegate like SEQ; update mail.xml
 - ruleset inclusions
 - INLINE token type
-- kill ring
 - AT_WORD_END match
 - history text field tweak
 - abbrevs need an overhaul
