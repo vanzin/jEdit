@@ -14,6 +14,9 @@ contributing to this release.
 }}}
 {{{ Miscellaneous Changes
 
+- Drag and drop in the text area. You can disable this in the Mouse pane
+  of the Global Options dialog box.
+
 - Files that don't exist on disk are no longer saved in the perspective
   (Ollie Rutherfurd).
 
@@ -72,6 +75,9 @@ contributing to this release.
 - Clicking "Replace and Find" or "Replace All" in Search dialog will now
   beep if no search string is entered, instead of using the last search
   string.
+
+- Text insertion while overwrite mode is on is now recorded correctly in
+  macros.
 
 }}}
 

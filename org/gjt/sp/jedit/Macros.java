@@ -706,6 +706,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		boolean temporary;
 
 		boolean lastWasInput;
+		boolean lastWasOverwrite;
+		int overwriteCount;
 
 		//{{{ Recorder constructor
 		public Recorder(View view, Buffer buffer, boolean temporary)
@@ -719,11 +721,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ record() method
 		public void record(String code)
 		{
-			if(lastWasInput)
-			{
-				lastWasInput = false;
-				append("\");");
-			}
+			flushInput();
 
 			append("\n");
 			append(code);
@@ -743,8 +741,11 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 		} //}}}
 
-		//{{{ record() method
-		public void record(int repeat, char ch)
+		//{{{ recordInput() method
+		/**
+		 * @since jEdit 4.2pre5
+		 */
+		public void recordInput(int repeat, char ch, boolean overwrite)
 		{
 			// record \n and \t on lines specially so that auto indent
 			// can take place
@@ -757,14 +758,42 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				StringBuffer buf = new StringBuffer();
 				for(int i = 0; i < repeat; i++)
 					buf.append(ch);
-				String charStr = MiscUtilities.charsToEscapes(buf.toString());
+				recordInput(buf.toString(),overwrite);
+			}
+		} //}}}
 
+		//{{{ recordInput() method
+		/**
+		 * @since jEdit 4.2pre5
+		 */
+		public void recordInput(String str, boolean overwrite)
+		{
+			String charStr = MiscUtilities.charsToEscapes(str);
+
+			if(overwrite)
+			{
+				if(lastWasOverwrite)
+				{
+					overwriteCount++;
+					append(charStr);
+				}
+				else
+				{
+					flushInput();
+					overwriteCount = 1;
+					lastWasOverwrite = true;
+					append("\ntextArea.setSelectedText(\"" + charStr);
+				}
+			}
+			else
+			{
 				if(lastWasInput)
 					append(charStr);
 				else
 				{
-					append("\ntextArea.setSelectedText(\"" + charStr);
+					flushInput();
 					lastWasInput = true;
+					append("\ntextArea.setSelectedText(\"" + charStr);
 				}
 			}
 		} //}}}
@@ -792,11 +821,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ dispose() method
 		private void dispose()
 		{
-			if(lastWasInput)
-			{
-				lastWasInput = false;
-				append("\");");
-			}
+			flushInput();
 
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
@@ -808,6 +833,32 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			// setting the message to 'null' causes the status bar to
 			// check if a recording is in progress
 			view.getStatus().setMessage(null);
+		} //}}}
+
+		//{{{ flushInput() method
+		/**
+		 * We try to merge consecutive inputs. This helper method is
+		 * called when something other than input is to be recorded.
+		 */
+		private void flushInput()
+		{
+			if(lastWasInput)
+			{
+				lastWasInput = false;
+				append("\");");
+			}
+
+			if(lastWasOverwrite)
+			{
+				lastWasOverwrite = false;
+				append("\");\n");
+				append("offset = buffer.getLineEndOffset("
+					+ "textArea.getCaretLine()) - 1;\n");
+				append("buffer.remove(textArea.getCaretPosition(),"
+					+ "Math.min(" + overwriteCount
+					+ ",offset - "
+					+ "textArea.getCaretPosition()));");
+			}
 		} //}}}
 	} //}}}
 

@@ -273,7 +273,9 @@ public class Java14
 			catch(Exception e)
 			{
 			}
-						
+
+			c.requestFocus();
+
 			return true;
 		}
 
