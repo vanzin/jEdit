@@ -6152,6 +6152,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 			if(startLine < getFirstPhysicalLine())
 			{
+				if(startLine < getFoldVisibilityManager().getFirstVisibleLine())
+				{
+					// need to update these two!
+					physFirstLine = virtualToPhysical(firstLine);
+					delayedRecalculateLastPhysicalLine = true;
+					return;
+				}
+
 				int virtStartLine = physicalToVirtual(startLine);
 
 				int pos;

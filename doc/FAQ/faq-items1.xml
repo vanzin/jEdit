@@ -124,7 +124,7 @@
             Multiple selection for manipulating several chunks of text at once
           </para></listitem>
           <listitem><para>
-            Syntax highlighting for more than 60 file types
+            Syntax highlighting for more than 80 file types
           </para></listitem>
           <listitem><para>
             Intelligent bracket matching that skips quoted literals
@@ -192,7 +192,7 @@
         window.
       </para>
       <para>
-        There are currently over 40 publicly available plugins that
+        There are currently over 60 publicly available plugins that
         provide such services as a Java source code browser, a
         command-line shell, templated text insertion, and source code
         project management. They can be downloaded, installed, and kept
@@ -569,7 +569,7 @@
         </para></question>
         <answer><para>
             There is an IRC channel, <filename>#jedit</filename>, available
-            on the irc.openprojects.net server that is dedicated to jEdit support
+            on the irc.freenode.net server that is dedicated to jEdit support
             and discussion among developers.  You can reach it using
             any IRC client (including Chatzilla), as well as the IRC plugin
             for jEdit.

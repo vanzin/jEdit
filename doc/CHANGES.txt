@@ -55,6 +55,9 @@ release.
 - Dialog boxes shown by search and replace are now parented by a
   search dialog, if one is open.
 
+- Fixed yet another bug when editing the same buffer in two splits,
+  this time if the second split was narrowed.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and
