@@ -60,20 +60,27 @@ class BSHBinaryExpression extends SimpleNode
 			if ( lhs == Primitive.NULL )
 				return new Primitive(false);
 
+            Class rhs = ((BSHType)jjtGetChild(1)).getType( 
+				callstack, interpreter );
 		/*
 			// primitive (number or void) cannot be tested for instanceof
             if (lhs instanceof Primitive)
 				throw new EvalError("Cannot be instance of primitive type." );
 		*/
-			// Primitive (number or void) is not an instanceof anything
-            if (lhs instanceof Primitive)
-				return new Primitive(false);
+			/*
+				Primitive (number or void) is not normally an instanceof
+				anything.  But for internal use we'll test true for the
+				bsh.Primitive class.  
+				i.e. (5 instanceof bsh.Primitive) will be true
+			*/
+			if ( lhs instanceof Primitive )
+				if ( rhs == bsh.Primitive.class )
+					return new Primitive(true);
+				else
+					return new Primitive(false);
 
 			// General case - performe the instanceof based on assignability
-			NameSpace namespace = callstack.top();
-            Class rhs = ((BSHType)jjtGetChild(1)).getType( 
-				callstack, interpreter );
-            boolean ret = (Reflect.isAssignableFrom(rhs, lhs.getClass()));
+            boolean ret = Reflect.isJavaAssignableFrom( rhs, lhs.getClass() );
             return new Primitive(ret);
         }
 
@@ -134,14 +141,16 @@ class BSHBinaryExpression extends SimpleNode
 					throw e.toEvalError( this, callstack  );
 				}
         }
-
-		/*
-			Do we have a mixture of primitive values and non-primitives ?  
-			(primitiveValue = not null, not void)
-			god, this is getting ugly...
-		*/
 	/*
-	Removing this restriction for now...
+	Doing the following makes it hard to use untyped vars...
+	e.g. if ( arg == null ) ...what if arg is a primitive?
+	The answer is that we should test only if the var is typed...?
+	need to get that info here...
+
+		else
+		{
+		// Do we have a mixture of primitive values and non-primitives ?  
+		// (primitiveValue = not null, not void)
 
 		int primCount = 0;
 		if ( isPrimitiveValue( lhs ) )
@@ -152,15 +161,18 @@ class BSHBinaryExpression extends SimpleNode
 		if ( primCount > 1 )
 			// both primitive types, should have been handled above
 			throw new InterpreterError("should not be here");
-		else if ( primCount == 1 )
+		else 
+		if ( primCount == 1 )
 			// mixture of one and the other
-			throw new EvalError( "Invalid use of primitive and non-primitive"
-				+" values in binary operation.");
+			throw new EvalError("Operator: '" + tokenImage[kind]
+				+"' inappropriate for object / primitive combination.", 
+				this, callstack );
+
 		// else fall through to handle both non-primitive types
 
 		// end check for primitive and non-primitive mix 
+		}
 	*/
-
 
 		/*
 			Treat lhs and rhs as arbitrary objects and do the operation.
@@ -196,7 +208,6 @@ class BSHBinaryExpression extends SimpleNode
                     "' inappropriate for objects", this, callstack );
         }
     }
-
 
 	/*
 		object is a non-null and non-void Primitive type

@@ -12,14 +12,15 @@
 
 	@method void browseClass( String | Object | Class )
 */
-import bsh.Name;
+import bsh.ClassIdentifier;
 
-browseClass( Object o ) {
-
+browseClass( Object o ) 
+{
+	String classname;
 	if ( o instanceof String)
 		classname = o;
-	else if ( o instanceof Name.ClassIdentifier )
-		clasname = this.namespace.identifierToClass(o).getName();
+	else if ( o instanceof ClassIdentifier )
+		classname = this.namespace.identifierToClass(o).getName();
 	else if ( o instanceof Class )
 		classname = o.getName();
 	else 
@@ -28,10 +29,11 @@ browseClass( Object o ) {
 	// really need a way to unset and more poweful testing...
 	if ( bsh.system.desktop == void 
 			|| bsh.system.desktop.classbrowser == void 
-			|| bsh.system.desktop.classbrowser == null ) {
-		browser = classBrowser();
+			|| bsh.system.desktop.classbrowser == null ) 
+	{
+		this.browser = classBrowser();
 	} else {
-		browser = bsh.system.desktop.classbrowser;
+		this.browser = bsh.system.desktop.classbrowser;
 		bsh.system.desktop.classbrowser.toFront();
 	}
 

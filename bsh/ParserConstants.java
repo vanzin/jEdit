@@ -8,119 +8,130 @@ public interface ParserConstants {
   int SINGLE_LINE_COMMENT = 7;
   int HASH_BANG_COMMENT = 8;
   int MULTI_LINE_COMMENT = 9;
-  int BOOLEAN = 10;
-  int BREAK = 11;
-  int CLASS = 12;
-  int BYTE = 13;
-  int CASE = 14;
-  int CATCH = 15;
-  int CHAR = 16;
-  int CONST = 17;
-  int CONTINUE = 18;
-  int _DEFAULT = 19;
-  int DO = 20;
-  int DOUBLE = 21;
-  int ELSE = 22;
-  int FALSE = 23;
-  int FINAL = 24;
-  int FINALLY = 25;
-  int FLOAT = 26;
-  int FOR = 27;
-  int GOTO = 28;
-  int IF = 29;
-  int IMPORT = 30;
-  int INSTANCEOF = 31;
-  int INT = 32;
-  int INTERFACE = 33;
-  int LONG = 34;
-  int NEW = 35;
-  int NULL = 36;
-  int PRIVATE = 37;
-  int PROTECTED = 38;
-  int PUBLIC = 39;
-  int RETURN = 40;
-  int SHORT = 41;
-  int STATIC = 42;
-  int SWITCH = 43;
-  int THROW = 44;
-  int TRUE = 45;
-  int TRY = 46;
-  int VOID = 47;
-  int WHILE = 48;
-  int INTEGER_LITERAL = 49;
-  int DECIMAL_LITERAL = 50;
-  int HEX_LITERAL = 51;
-  int OCTAL_LITERAL = 52;
-  int FLOATING_POINT_LITERAL = 53;
-  int EXPONENT = 54;
-  int CHARACTER_LITERAL = 55;
-  int STRING_LITERAL = 56;
-  int FORMAL_COMMENT = 57;
-  int IDENTIFIER = 58;
-  int LETTER = 59;
-  int DIGIT = 60;
-  int LPAREN = 61;
-  int RPAREN = 62;
-  int LBRACE = 63;
-  int RBRACE = 64;
-  int LBRACKET = 65;
-  int RBRACKET = 66;
-  int SEMICOLON = 67;
-  int COMMA = 68;
-  int DOT = 69;
-  int ASSIGN = 70;
-  int GT = 71;
-  int GTX = 72;
-  int LT = 73;
-  int LTX = 74;
-  int BANG = 75;
-  int TILDE = 76;
-  int HOOK = 77;
-  int COLON = 78;
-  int EQ = 79;
-  int LE = 80;
-  int LEX = 81;
-  int GE = 82;
-  int GEX = 83;
-  int NE = 84;
-  int BOOL_OR = 85;
-  int BOOL_ORX = 86;
-  int BOOL_AND = 87;
-  int BOOL_ANDX = 88;
-  int INCR = 89;
-  int DECR = 90;
-  int PLUS = 91;
-  int MINUS = 92;
-  int STAR = 93;
-  int SLASH = 94;
-  int BIT_AND = 95;
-  int BIT_ANDX = 96;
-  int BIT_OR = 97;
-  int BIT_ORX = 98;
-  int XOR = 99;
-  int MOD = 100;
-  int LSHIFT = 101;
-  int LSHIFTX = 102;
-  int RSIGNEDSHIFT = 103;
-  int RSIGNEDSHIFTX = 104;
-  int RUNSIGNEDSHIFT = 105;
-  int RUNSIGNEDSHIFTX = 106;
-  int PLUSASSIGN = 107;
-  int MINUSASSIGN = 108;
-  int STARASSIGN = 109;
-  int SLASHASSIGN = 110;
-  int ANDASSIGN = 111;
-  int ANDASSIGNX = 112;
-  int ORASSIGN = 113;
-  int ORASSIGNX = 114;
-  int XORASSIGN = 115;
-  int MODASSIGN = 116;
-  int LSHIFTASSIGN = 117;
-  int LSHIFTASSIGNX = 118;
-  int RSIGNEDSHIFTASSIGN = 119;
-  int RSIGNEDSHIFTASSIGNX = 120;
-  int RUNSIGNEDSHIFTASSIGN = 121;
-  int RUNSIGNEDSHIFTASSIGNX = 122;
+  int ABSTRACT = 10;
+  int BOOLEAN = 11;
+  int BREAK = 12;
+  int CLASS = 13;
+  int BYTE = 14;
+  int CASE = 15;
+  int CATCH = 16;
+  int CHAR = 17;
+  int CONST = 18;
+  int CONTINUE = 19;
+  int _DEFAULT = 20;
+  int DO = 21;
+  int DOUBLE = 22;
+  int ELSE = 23;
+  int ENUM = 24;
+  int EXTENDS = 25;
+  int FALSE = 26;
+  int FINAL = 27;
+  int FINALLY = 28;
+  int FLOAT = 29;
+  int FOR = 30;
+  int GOTO = 31;
+  int IF = 32;
+  int IMPLEMENTS = 33;
+  int IMPORT = 34;
+  int INSTANCEOF = 35;
+  int INT = 36;
+  int INTERFACE = 37;
+  int LONG = 38;
+  int NATIVE = 39;
+  int NEW = 40;
+  int NULL = 41;
+  int PACKAGE = 42;
+  int PRIVATE = 43;
+  int PROTECTED = 44;
+  int PUBLIC = 45;
+  int RETURN = 46;
+  int SHORT = 47;
+  int STATIC = 48;
+  int STRICTFP = 49;
+  int SWITCH = 50;
+  int SYNCHRONIZED = 51;
+  int TRANSIENT = 52;
+  int THROW = 53;
+  int THROWS = 54;
+  int TRUE = 55;
+  int TRY = 56;
+  int VOID = 57;
+  int VOLATILE = 58;
+  int WHILE = 59;
+  int INTEGER_LITERAL = 60;
+  int DECIMAL_LITERAL = 61;
+  int HEX_LITERAL = 62;
+  int OCTAL_LITERAL = 63;
+  int FLOATING_POINT_LITERAL = 64;
+  int EXPONENT = 65;
+  int CHARACTER_LITERAL = 66;
+  int STRING_LITERAL = 67;
+  int FORMAL_COMMENT = 68;
+  int IDENTIFIER = 69;
+  int LETTER = 70;
+  int DIGIT = 71;
+  int LPAREN = 72;
+  int RPAREN = 73;
+  int LBRACE = 74;
+  int RBRACE = 75;
+  int LBRACKET = 76;
+  int RBRACKET = 77;
+  int SEMICOLON = 78;
+  int COMMA = 79;
+  int DOT = 80;
+  int ASSIGN = 81;
+  int GT = 82;
+  int GTX = 83;
+  int LT = 84;
+  int LTX = 85;
+  int BANG = 86;
+  int TILDE = 87;
+  int HOOK = 88;
+  int COLON = 89;
+  int EQ = 90;
+  int LE = 91;
+  int LEX = 92;
+  int GE = 93;
+  int GEX = 94;
+  int NE = 95;
+  int BOOL_OR = 96;
+  int BOOL_ORX = 97;
+  int BOOL_AND = 98;
+  int BOOL_ANDX = 99;
+  int INCR = 100;
+  int DECR = 101;
+  int PLUS = 102;
+  int MINUS = 103;
+  int STAR = 104;
+  int SLASH = 105;
+  int BIT_AND = 106;
+  int BIT_ANDX = 107;
+  int BIT_OR = 108;
+  int BIT_ORX = 109;
+  int XOR = 110;
+  int MOD = 111;
+  int LSHIFT = 112;
+  int LSHIFTX = 113;
+  int RSIGNEDSHIFT = 114;
+  int RSIGNEDSHIFTX = 115;
+  int RUNSIGNEDSHIFT = 116;
+  int RUNSIGNEDSHIFTX = 117;
+  int PLUSASSIGN = 118;
+  int MINUSASSIGN = 119;
+  int STARASSIGN = 120;
+  int SLASHASSIGN = 121;
+  int ANDASSIGN = 122;
+  int ANDASSIGNX = 123;
+  int ORASSIGN = 124;
+  int ORASSIGNX = 125;
+  int XORASSIGN = 126;
+  int MODASSIGN = 127;
+  int LSHIFTASSIGN = 128;
+  int LSHIFTASSIGNX = 129;
+  int RSIGNEDSHIFTASSIGN = 130;
+  int RSIGNEDSHIFTASSIGNX = 131;
+  int RUNSIGNEDSHIFTASSIGN = 132;
+  int RUNSIGNEDSHIFTASSIGNX = 133;
 
   int DEFAULT = 0;
 
@@ -135,6 +146,7 @@ public interface ParserConstants {
     "<SINGLE_LINE_COMMENT>",
     "<HASH_BANG_COMMENT>",
     "<MULTI_LINE_COMMENT>",
+    "\"abstract\"",
     "\"boolean\"",
     "\"break\"",
     "\"class\"",
@@ -148,6 +160,8 @@ public interface ParserConstants {
     "\"do\"",
     "\"double\"",
     "\"else\"",
+    "\"enum\"",
+    "\"extends\"",
     "\"false\"",
     "\"final\"",
     "\"finally\"",
@@ -155,24 +169,32 @@ public interface ParserConstants {
     "\"for\"",
     "\"goto\"",
     "\"if\"",
+    "\"implements\"",
     "\"import\"",
     "\"instanceof\"",
     "\"int\"",
     "\"interface\"",
     "\"long\"",
+    "\"native\"",
     "\"new\"",
     "\"null\"",
+    "\"package\"",
     "\"private\"",
     "\"protected\"",
     "\"public\"",
     "\"return\"",
     "\"short\"",
     "\"static\"",
+    "\"strictfp\"",
     "\"switch\"",
+    "\"synchronized\"",
+    "\"transient\"",
     "\"throw\"",
+    "\"throws\"",
     "\"true\"",
     "\"try\"",
     "\"void\"",
+    "\"volatile\"",
     "\"while\"",
     "<INTEGER_LITERAL>",
     "<DECIMAL_LITERAL>",

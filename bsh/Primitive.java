@@ -42,7 +42,7 @@ package bsh;
 */
 public class Primitive implements ParserConstants, java.io.Serializable
 {
-    // stored internally in java.lang. wrappers
+    /** The primitive value stored in its java.lang wrapper class */
     private Object value;
 
     private static class Special implements java.io.Serializable
@@ -66,7 +66,8 @@ public class Primitive implements ParserConstants, java.io.Serializable
     */
     public static final Primitive VOID = new Primitive(Special.VOID_TYPE);
 
-    public Primitive(Object value)
+    // private to prevent invocation with param that isn't a primitive-wrapper
+    private Primitive(Object value)
     {
         if(value == null)
             throw new InterpreterError(
@@ -95,11 +96,15 @@ public class Primitive implements ParserConstants, java.io.Serializable
     public Primitive(float value) { this(new Float(value)); }
     public Primitive(double value) { this(new Double(value)); }
 
+	/**
+    	Return the primitive value stored in its java.lang wrapper class 
+	*/
     public Object getValue()
     {
-        if(value == Special.NULL_VALUE)
+        if ( value == Special.NULL_VALUE )
             return null;
-        else if(value == Special.VOID_TYPE)
+        else 
+		if ( value == Special.VOID_TYPE )
                 throw new InterpreterError("attempt to unwrap void type");
         else
             return value;
@@ -115,56 +120,57 @@ public class Primitive implements ParserConstants, java.io.Serializable
             return value.toString();
     }
 
+	/**
+		Get the corresponding primitive TYPE class for the Primitive
+		@return the primitive TYPE class type of the value or Void.TYPE for
+		Primitive.VOID or null value for type of Primitive.NULL
+	*/
     public Class getType()
     {
-        return getType(value);
-    }
+		if ( this == Primitive.VOID )
+			return Void.TYPE;
 
-    public static Class getType(Object o)
-    {
-        if(o instanceof Boolean)
+		// NULL return null as type... we currently use null type to indicate 
+		// loose typing throughout bsh.
+		if ( this == Primitive.NULL )
+			return null;
+
+        if ( value instanceof Boolean )
             return Boolean.TYPE;
-        else if(o instanceof Byte)
+        else if(value instanceof Byte)
             return Byte.TYPE;
-        else if(o instanceof Short)
+        else if(value instanceof Short)
             return Short.TYPE;
-        else if(o instanceof Character)
+        else if(value instanceof Character)
             return Character.TYPE;
-        else if(o instanceof Integer)
+        else if(value instanceof Integer)
             return Integer.TYPE;
-        else if(o instanceof Long)
+        else if(value instanceof Long)
             return Long.TYPE;
-        else if(o instanceof Float)
+        else if(value instanceof Float)
             return Float.TYPE;
-        else if(o instanceof Double)
+        else if(value instanceof Double)
             return Double.TYPE;
 
-		// VOID and NULL return null as type?
-        return null;
+		throw new InterpreterError("uknown prim: "+ this );
     }
-
-/*
-    public static Primitive binaryOperation(
-		Primitive p1, Primitive p2, int kind )
-        throws UtilEvalError
-    {
-		return new Primitive( binaryOperation( p1, p2, kind ) );
-    }
-*/
 
 	/**
-		Allow primitive operations on wrapper types such as Integer and Boolean.
-		This is static so that it can be reached from wherever...
+		Perform a binary operation on two Primitives or wrapper types.
+		If both original args were Primitives return a Primitive result
+		else it was mixed (wrapper/primitive) return the wrapper type.
+		The exception is for boolean operations where we will return the 
+		primitive type eithe way.
 	*/
     public static Object binaryOperation(
 		Object obj1, Object obj2, int kind)
         throws UtilEvalError
     {
 		// special primitive types
-        if(obj1 == NULL || obj2 == NULL)
+        if ( obj1 == NULL || obj2 == NULL )
             throw new UtilEvalError(
 				"Null value or 'null' literal in binary operation");
-        if(obj1 == VOID || obj2 == VOID)
+        if ( obj1 == VOID || obj2 == VOID )
             throw new UtilEvalError(
 			"Undefined variable, class, or 'void' literal in binary operation");
 
@@ -173,9 +179,9 @@ public class Primitive implements ParserConstants, java.io.Serializable
 		Class rhsOrgType = obj2.getClass();
 
 		// Unwrap primitives
-        if(obj1 instanceof Primitive)
+        if ( obj1 instanceof Primitive )
             obj1 = ((Primitive)obj1).getValue();
-        if(obj2 instanceof Primitive)
+        if ( obj2 instanceof Primitive )
             obj2 = ((Primitive)obj2).getValue();
 
         Object[] operands = promotePrimitives(obj1, obj2);
@@ -190,12 +196,15 @@ public class Primitive implements ParserConstants, java.io.Serializable
 		try {
 			result = binaryOperationImpl( lhs, rhs, kind );
 		} catch ( ArithmeticException e ) {
-			throw new UtilTargetError( "Arithemetic Exception in binary op", e );
+			throw new UtilTargetError( "Arithemetic Exception in binary op", e);
 		}
 
 		// If both original args were Primitives return a Primitive result
 		// else it was mixed (wrapper/primitive) return the wrapper type
-		if ( lhsOrgType == Primitive.class && rhsOrgType == Primitive.class )
+		// Exception is for boolean result, return the primitive
+		if ( (lhsOrgType == Primitive.class && rhsOrgType == Primitive.class)
+			|| result instanceof Boolean
+		)
 			return new Primitive( result );
 		else
 			return result;
@@ -580,15 +589,17 @@ public class Primitive implements ParserConstants, java.io.Serializable
     public static Primitive unaryOperation(Primitive val, int kind)
         throws UtilEvalError
     {
-        if(val == NULL)
-            throw new UtilEvalError("illegal use of null object or 'null' literal");
-        if(val == VOID)
-            throw new UtilEvalError("illegal use of undefined object or 'void' literal");
+        if (val == NULL)
+            throw new UtilEvalError(
+				"illegal use of null object or 'null' literal");
+        if (val == VOID)
+            throw new UtilEvalError(
+				"illegal use of undefined object or 'void' literal");
 
         Class operandType = val.getType();
         Object operand = promoteToInteger(val.getValue());
 
-        if(operand instanceof Boolean)
+        if ( operand instanceof Boolean )
             return new Primitive(booleanUnaryOperation((Boolean)operand, kind));
         else if(operand instanceof Integer)
         {
@@ -614,10 +625,12 @@ public class Primitive implements ParserConstants, java.io.Serializable
         else if(operand instanceof Double)
             return new Primitive(doubleUnaryOperation((Double)operand, kind));
         else
-            throw new InterpreterError("An error occurred.  Please call technical support.");
+            throw new InterpreterError(
+				"An error occurred.  Please call technical support.");
     }
 
-    static boolean booleanUnaryOperation(Boolean B, int kind) throws UtilEvalError
+    static boolean booleanUnaryOperation(Boolean B, int kind) 
+		throws UtilEvalError
     {
         boolean operand = B.booleanValue();
         switch(kind)
@@ -755,11 +768,25 @@ public class Primitive implements ParserConstants, java.io.Serializable
             throw new UtilEvalError("Primitive not a number");
     }
 
-	public boolean equals( Object obj ) {
+	/**
+		Primitives compare equal with other Primitives containing an equal
+		wrapped value.
+	*/
+	public boolean equals( Object obj ) 
+	{
 		if ( obj instanceof Primitive )
 			return ((Primitive)obj).value.equals( this.value );
 		else
-			return obj.equals( this.value );
+			return false;
+	}
+
+	/**
+		The hash of the Primitive is tied to the hash of the wrapped value but
+		shifted so that they are not the same.
+	*/
+	public int hashCode() 
+	{
+		return this.value.hashCode() * 21; // arbitrary
 	}
 
 	/**
@@ -769,20 +796,47 @@ public class Primitive implements ParserConstants, java.io.Serializable
 		@return corresponding "normal" Java type, "unwrapping" 
 			any bsh.Primitive types to their wrapper types.
 	*/
-	public static Object unwrap( Object obj ) {
-		if ( obj == null )
-			return null;
-
+	public static Object unwrap( Object obj ) 
+	{
         // map voids to nulls for the outside world
-        if(obj == Primitive.VOID)
+        if (obj == Primitive.VOID)
             return null;
 
         // unwrap primitives
-        if(obj instanceof Primitive)
+        if (obj instanceof Primitive)
             return((Primitive)obj).getValue();
         else
             return obj;
 	}
 
+	/**
+		Get the appropriate default value per JLS 4.5.4
+	*/
+	public static Primitive getDefaultValue( Class type )
+	{
+		if ( type != null && type.isPrimitive() )
+		{
+			if ( type == Boolean.TYPE )
+				return new Primitive(Boolean.FALSE);
+			if (type ==	Byte.TYPE)
+				return new	Primitive((byte)0);
+			if (type ==	Short.TYPE)
+				return new Primitive((short)0);
+			if (type ==	Character.TYPE)
+				return new Primitive((char)0);
+			if (type ==	Integer.TYPE)
+				return new Primitive((int)0);
+			if (type ==	Long.TYPE)
+				return new Primitive(0L);
+			if (type ==	Float.TYPE)
+				return new Primitive(0.0f);
+			if (type ==	Double.TYPE)
+				return new Primitive(0.0d);
+
+			throw new InterpreterError("unknown prim");
+		}
+		else
+			return Primitive.NULL;
+	}
 
 }

@@ -45,12 +45,20 @@ class BSHAmbiguousName extends SimpleNode
         return namespace.getNameResolver( text );
     }
 
-    public Object toObject(CallStack callstack, Interpreter interpreter) 
+    public Object toObject( CallStack callstack, Interpreter interpreter ) 
+		throws EvalError
+    {
+		return toObject( callstack, interpreter, false );
+    }
+
+    Object toObject( 
+		CallStack callstack, Interpreter interpreter, boolean forceClass ) 
 		throws EvalError
     {
 		try {
         	return 
-				getName( callstack.top() ).toObject( callstack, interpreter );
+				getName( callstack.top() ).toObject( 
+					callstack, interpreter, forceClass );
 		} catch ( UtilEvalError e ) {
 			throw e.toEvalError( this, callstack );
 		}
