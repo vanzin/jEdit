@@ -698,7 +698,7 @@ class ChunkCache
 				{
 					buffer.setScreenLineCount(
 						physicalLine,out.size());
-					if(skew > out.size())
+					if(skew >= out.size())
 					{
 						needFullRepaint = true;
 						lastScreenLine = lineInfo.length - 1;

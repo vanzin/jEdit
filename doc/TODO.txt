@@ -3,15 +3,17 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- disappearing lines!
+- make sure skew < screen line count of first line
+- display manager transaction handler
+  - only one per buffer -- should buffer keep track of display mgrs,
+    ask one of them for screen line counts?
+  - display manager should not be O(n^2) with text areas
 - inserting lines repaints twice
 - vfs browser: re-add option to base filter on filename extension
 - today:
   - finish rect select content inserted/content removed
   - rect select and trailing whitespace
-  - docking panels: better rubber band resize, menu button
-    if no dockable selected, what does the menu show?
-  - action bar: S+TAB/TAB selects completions
-  - complete word: ditto
   - new bracket matching:
     - use interface to determine match
     - show line number in match status msg
@@ -204,7 +206,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the
   buffer notify jEdit of path changes though.
-- display manager should not be O(n^2) with text areas
 - menu drag: slow
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end

@@ -859,66 +859,89 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ createPopupMenu() method
-	public JPopupMenu createPopupMenu(final String dockable, boolean clone)
+	public JPopupMenu createPopupMenu(PanelWindowContainer container,
+		final String dockable, boolean clone)
 	{
 		JPopupMenu popup = new JPopupMenu();
-		JMenuItem caption = new JMenuItem(jEdit.getProperty(dockable + ".title",
-			"NO TITLE PROPERTY: " + dockable));
-		caption.setEnabled(false);
-		popup.add(caption);
-		popup.addSeparator();
-		String currentPos = jEdit.getProperty(dockable + ".dock-position",FLOATING);
-		if(!clone)
+		if(dockable == null)
 		{
-			String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
-			for(int i = 0; i < positions.length; i++)
-			{
-				final String pos = positions[i];
-				if(pos.equals(currentPos))
-					continue;
-
-				JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
-					+ pos));
-
-				moveMenuItem.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent evt)
-					{
-						jEdit.setProperty(dockable + ".dock-position",pos);
-						jEdit.propertiesChanged();
-						showDockableWindow(dockable);
-					}
-				});
-				popup.add(moveMenuItem);
-			}
-
-			popup.addSeparator();
-		}
-
-		JMenuItem cloneMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-clone"));
-
-		cloneMenuItem.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				floatDockableWindow(dockable);
-			}
-		});
-		popup.add(cloneMenuItem);
-
-		if(!(clone || currentPos.equals(FLOATING)))
-		{
-			JMenuItem undockMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-undock"));
-
-			undockMenuItem.addActionListener(new ActionListener()
+			ActionListener listener = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
-					jEdit.setProperty(dockable + ".dock-position",FLOATING);
-					jEdit.propertiesChanged();
+					showDockableWindow(evt.getActionCommand());
+				}
+			};
+
+			String[] dockables = container.getDockables();
+			for(int i = 0; i < dockables.length; i++)
+			{
+				String name = dockables[i];
+				JMenuItem item = new JMenuItem(getDockableTitle(name));
+				item.setActionCommand(name);
+				item.addActionListener(listener);
+				popup.add(item);
+			}
+		}
+		else
+		{
+			JMenuItem caption = new JMenuItem(getDockableTitle(dockable));
+			caption.setEnabled(false);
+			popup.add(caption);
+			popup.addSeparator();
+			String currentPos = jEdit.getProperty(dockable + ".dock-position",FLOATING);
+			if(!clone)
+			{
+				String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
+				for(int i = 0; i < positions.length; i++)
+				{
+					final String pos = positions[i];
+					if(pos.equals(currentPos))
+						continue;
+
+					JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
+						+ pos));
+
+					moveMenuItem.addActionListener(new ActionListener()
+					{
+						public void actionPerformed(ActionEvent evt)
+						{
+							jEdit.setProperty(dockable + ".dock-position",pos);
+							jEdit.propertiesChanged();
+							showDockableWindow(dockable);
+						}
+					});
+					popup.add(moveMenuItem);
+				}
+
+				popup.addSeparator();
+			}
+
+			JMenuItem cloneMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-clone"));
+
+			cloneMenuItem.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					floatDockableWindow(dockable);
 				}
 			});
-			popup.add(undockMenuItem);
+			popup.add(cloneMenuItem);
+
+			if(!(clone || currentPos.equals(FLOATING)))
+			{
+				JMenuItem undockMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-undock"));
+
+				undockMenuItem.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent evt)
+					{
+						jEdit.setProperty(dockable + ".dock-position",FLOATING);
+						jEdit.propertiesChanged();
+					}
+				});
+				popup.add(undockMenuItem);
+			}
 		}
 
 		return popup;
@@ -1009,29 +1032,29 @@ public class DockableWindowManager extends JPanel
 			PanelWindowContainer.SPLITTER_WIDTH - 2);
 		if(resizing == top)
 		{
-			newResizeRect.x = top.dockablePanel.getX();
-			newResizeRect.y = resizePos + top.buttons.getHeight() + 2;
-			newResizeRect.width = top.dockablePanel.getWidth();
+			newResizeRect.x = top.dockablePanel.getX() + 1;
+			newResizeRect.y = resizePos + top.buttons.getHeight() + 1;
+			newResizeRect.width = top.dockablePanel.getWidth() - 2;
 		}
 		else if(resizing == left)
 		{
-			newResizeRect.x = resizePos + left.buttons.getWidth() + 2;
-			newResizeRect.y = left.dockablePanel.getY();
-			newResizeRect.height = left.dockablePanel.getHeight();
+			newResizeRect.x = resizePos + left.buttons.getWidth() + 1;
+			newResizeRect.y = left.dockablePanel.getY() + 1;
+			newResizeRect.height = left.dockablePanel.getHeight() - 2;
 		}
 		else if(resizing == bottom)
 		{
-			newResizeRect.x = bottom.dockablePanel.getX();
+			newResizeRect.x = bottom.dockablePanel.getX() + 1;
 			newResizeRect.y = getHeight() - bottom.buttons.getHeight() - resizePos
 				- PanelWindowContainer.SPLITTER_WIDTH + 2;
-			newResizeRect.width = bottom.dockablePanel.getWidth();
+			newResizeRect.width = bottom.dockablePanel.getWidth() - 2;
 		}
 		else if(resizing == right)
 		{
 			newResizeRect.x = getWidth() - right.buttons.getWidth() - resizePos
-				- PanelWindowContainer.SPLITTER_WIDTH + 2;
-			newResizeRect.y = right.dockablePanel.getY();
-			newResizeRect.height = right.dockablePanel.getHeight();
+				- PanelWindowContainer.SPLITTER_WIDTH + 1;
+			newResizeRect.y = right.dockablePanel.getY() + 1;
+			newResizeRect.height = right.dockablePanel.getHeight() - 2;
 		}
 
 		Rectangle toRepaint;

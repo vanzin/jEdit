@@ -812,7 +812,9 @@ public class DisplayManager
 	//{{{ BufferChangeHandler class
 	class BufferChangeHandler extends BufferChangeAdapter
 	{
-		boolean queuedNotifyScreenLineChanges;
+		int firstChangedLine;
+		int lastChangedLine;
+		boolean queuedScreenLineChanges;
 
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
@@ -838,7 +840,18 @@ public class DisplayManager
 					getScreenLineCount(startLine + i);
 			}
 
-			queuedNotifyScreenLineChanges = true;
+			if(queuedScreenLineChanges)
+			{
+				firstChangedLine = Math.min(firstChangedLine,startLine);
+				lastChangedLine = Math.max(lastChangedLine,startLine + numLines);
+			}
+			else
+			{
+				queuedScreenLineChanges = true;
+				firstChangedLine = startLine;
+				lastChangedLine = startLine + numLines;
+			}
+
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
 		} //}}}
@@ -847,7 +860,17 @@ public class DisplayManager
 		public void contentRemoved(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
-			queuedNotifyScreenLineChanges = true;
+			if(queuedScreenLineChanges)
+			{
+				firstChangedLine = Math.min(firstChangedLine,startLine);
+				lastChangedLine = Math.max(lastChangedLine,startLine);
+			}
+			else
+			{
+				queuedScreenLineChanges = true;
+				firstChangedLine = startLine;
+			}
+
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
 		} //}}}
@@ -855,7 +878,16 @@ public class DisplayManager
 		//{{{ transactionComplete() method
 		public void transactionComplete(Buffer buffer)
 		{
-			offsetMgr.notifyScreenLineChanges();
+			if(queuedScreenLineChanges)
+			{
+				for(int i = firstChangedLine; i <= lastChangedLine; i++)
+				{
+					if(isLineVisible(i))
+						getScreenLineCount(i);
+				}
+				queuedScreenLineChanges = false;
+				offsetMgr.notifyScreenLineChanges();
+			}
 		} //}}}
 	} //}}}
 }
