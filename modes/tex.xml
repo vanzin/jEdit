@@ -30,6 +30,12 @@
 		<SEQ TYPE="KEYWORD1">\\</SEQ>
 		<SEQ TYPE="KEYWORD1">\%</SEQ>
 
+		<!-- \iffalse ... \fi - a block comment -->
+                <SPAN TYPE="COMMENT1">
+                        <BEGIN>\iffalse</BEGIN>
+                        <END>\fi</END>
+                </SPAN>
+
 		<!-- \... commands -->
 		<MARK_FOLLOWING TYPE="KEYWORD1">\</MARK_FOLLOWING>
 
