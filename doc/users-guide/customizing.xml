@@ -316,7 +316,7 @@
   <para>
    If you are using <application>jEditLauncher</application>
    to start jEdit on Windows, these parameters cannot be specified on the
-   MS-DOS prompt command line when starting jedit; they must be set as described
+   MS-DOS prompt command line when starting jEdit; they must be set as described
    in <xref linkend="launcher-starting" />.
   </para>
   <para>

@@ -62,8 +62,8 @@ public class HistoryModel
 
 		data.insertElementAt(text,0);
 
-		if(getSize() > max)
-			data.removeElementAt(getSize() - 1);
+		while(getSize() > max)
+			data.removeElementAt(data.size() - 1);
 	}
 
 	/**

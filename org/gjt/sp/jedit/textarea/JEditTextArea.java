@@ -2924,7 +2924,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
 		int subregion = getSubregionOfOffset(offset,lineInfos);
-		if(subregion == lineInfos.length)
+		if(subregion == lineInfos.length - 1)
 		{
 			lastIndent = getLineLength(line) - MiscUtilities.getTrailingWhiteSpace(getLineText(line));
 			if(lastIndent == 0)
@@ -4840,7 +4840,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ Instance variables
 	Segment lineSegment;
 	MouseHandler mouseHandler;
-	public ChunkCache chunkCache;
+	ChunkCache chunkCache;
 
 	int maxHorizontalScrollWidth;
 

@@ -20,8 +20,7 @@ JEDIT 4.0 VERSION HISTORY
 
 - First time jEdit was run, the file system's divider position would be
   such that the parent directories list would be invisible
-- 'End' key would go to the end of the physical line if the caret was on
-  the first screen line of a wrapped line
+- 'End' key didn't work properly
 - Due to the changes in buffer property handling caused by the
   transition to the new document model, new files would always have the
   system default line separator and encoding, instead of the defaults
@@ -48,7 +47,10 @@ JEDIT 4.0 VERSION HISTORY
 - 'Toggle Line Comment' macro was broken
 - Hard wrap didn't work properly if space was pressed at the end of a
   line whose length was exactly that of the wrap margin
-- Searching for .*, ^ by itself and $ by itself should now work
+- Searching for .*, ^ by itself and $ by itself should now work. Some
+  regular expressions like ^.* still give odd results, but at least
+  operations like 'Replace All' and 'HyperSearch' should no longer hang
+  with these regular expressions
 - Fixed another problem with soft wrapping syntax highlighted buffers
 - Soft wrap would break if a line ended with enough whitespace to be
   longer than the wrap margin
@@ -57,6 +59,9 @@ JEDIT 4.0 VERSION HISTORY
 - When using 'save as' to save over an already opened buffer, the
   already opened buffer is closed first. This prevents having two open
   buffers with the same path (and possibly different contents)
+- Changed shortcut of 'go to next/previous bracket' to C+e C+[/C+] since
+  shortcuts such as C+e [ are tricky to handle
+- Fixed possible NullPointerException in search and replace code
 
 + API Additions
 

@@ -178,7 +178,8 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>[</keycap>; <keycap>]</keycap></entry>
+      <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo></entry>
       <entry>Go to previous; next bracket.</entry>
      </row>
      <row>

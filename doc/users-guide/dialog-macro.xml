@@ -151,6 +151,7 @@ void prefixSuffixDialog()
 
 <anchor id="jEdit-calls"/>        // text manipulation begins here using calls
         // to jEdit methods  (see <xref linkend="explain-jedit-calls"/>)
+        buffer.beginCompoundEdit();
         selectedLines = textArea.getSelectedLines();
         for(i = 0; i &lt; selectedLines.length; ++i)
         {
@@ -163,6 +164,7 @@ void prefixSuffixDialog()
             if(text == null) text = &quot;&quot;;
             textArea.setSelectedText(prefix + text + suffix);
         }
+        buffer.endCompoundEdit();
     }
 }
 
@@ -301,7 +303,7 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
   </para>
 
   <para>
-    The labels that accompnay the text fields are
+    The labels that accompany the text fields are
     <classname>JLabel</classname> objects from the Java Swing
     package. The constructor we use for both labels takes the label text
     as a single <classname>String</classname> parameter.
@@ -516,6 +518,7 @@ void processText()
 
 <informalexample><programlisting>    // text manipulation begins here using calls
     // to jEdit methods
+    buffer.beginCompoundEdit();
     selectedLines = textArea.getSelectedLines();
     for(i = 0; i &lt; selectedLines.length; ++i)
     {
@@ -528,6 +531,7 @@ void processText()
         if(text == null) text = &quot;&quot;;
         textArea.setSelectedText(prefix + text + suffix);
     }
+    buffer.endCompoundEdit();
 }</programlisting></informalexample>
 
   <para>
@@ -605,6 +609,23 @@ void processText()
   </listitem>
 
 </itemizedlist>
+
+<sidebar><title>Compound edits</title>
+ <para>
+  Note the <function>beginCompoundEdit()</function> and
+  <function>endCompoundEdit()</function> calls. These ensure that all edits
+  performed between the two calls can be undone in one step. Normally,
+  jEdit automatically wraps a macro call in these methods; however if
+  the macro shows a non-modal dialog box, as far as jEdit is concerned
+  the macro has finished executing by the time the dialog is shown,
+  since control returns to the event dispatch thread.
+ </para>
+ <para>
+  If you do not understand this, don't worry; just keep it in mind if
+  your macro needs to show a non-modal dialog box for some reason;
+  Most macros won't.
+ </para>
+</sidebar>
 
   <!-- <para>
     The loop routine is bracketed by calls to
