@@ -287,6 +287,8 @@ this release.
 - Pressing TAB in the action bar on JDK 1.3 would cause it to lose
   focus.
 
+- Glob patterns containing + caused exceptions to be thrown.
+
 }}}
 {{{ API Changes
 
