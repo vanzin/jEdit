@@ -168,11 +168,11 @@
             context menu
           </para></listitem>
           <listitem><para>
-            Macros can be recorded from user actions or written in the BeanShell
-            scripting language
+            Macro system permitting recording and writing of macros in the
+            BeanShell scripting language
           </para></listitem>
           <listitem><para>
-            A <quote>plugin manager</quote> that downloads and installs
+            An internal <quote>plugin manager</quote> that downloads and installs
             new and updated plugins from within jEdit
           </para></listitem>
 
@@ -203,10 +203,10 @@
         available plugins.
       </para>
       <para>
-          Additional questions and answers regarding plugins may be found
-          in the section of this document entitled
-          <link linkend="plugins"><quote>Working with
-          Plugins</quote></link>.
+        Additional questions and answers regarding plugins may be found
+        in the section of this document entitled
+        <link linkend="plugins"><quote>Working with
+        Plugins</quote></link>.
       </para></answer>
     </qandaentry>
 
@@ -265,9 +265,13 @@
         jedit-users list</ulink>. If you are interested in jEdit's development or want
         to write plugins, <ulink
         url="http://lists.sourceforge.net/lists/listinfo/jedit-devel">
-        subscribe to jedit-devel</ulink>. As all jEdit developers are
-        subscribed to both the jedit-users and jedit-devel lists, do not
-        cross-post to both lists. Also, keep in mind that both jEdit-users and
+        subscribe to jedit-devel</ulink>.
+      </para>
+      <para>
+        Do not cross-post to both lists. All jEdit developers are
+        subscribed to both the jedit-users and jedit-devel lists, so a post to
+        jedit-users will be seen by most members of both lists. Also, keep in
+        mind that both jEdit-users and
         jEdit-devel are high-traffic lists, and can fill up your mailbox unless
         you check your email regularly.
       </para>
@@ -288,7 +292,7 @@
       <para>
         The <ulink url="http://community.jedit.org">jEdit Community</ulink> web
         site has articles on jEdit and related topics, user-submitted macros and
-        other download resources, and listings of web links of interests to jEdit
+        other download resources, and listings of web links of interest to jEdit
         users. It has a message board system to allow users to ask
         questions and provide feedback on the project without having to subscribe
         to jEdit's mailing lists. Because the message boards have relatively low
@@ -316,7 +320,21 @@
         restrictions on the use of the program as a text editor, and its source
         code can be copied or modified for use in another program that is
         governed by the General Public License.
-      </para></answer>
+      </para>
+      <para>
+        Plugin application that are available using jEdit's Plugin Manager
+        facility, as well as plugins available through the <ulink
+        url="http://plugins.jedit.org">Plugin Central</ulink> web site or
+        <ulink url="http://community.jedit.org">jEdit Community</ulink>, are
+        governed either by the General Public License or another commonly
+        recognized <quote>Open Source</quote> software license.  This means
+        that use of the application, including use for commercial purposes,
+        is unrestricted without any requirement of royalty or license fee payments.
+        To incorporate source code or an application or plugin as a whole in another
+        application, you must consult the specific license terms to determine
+        whether and on what basis you are permitted to do so.
+      </para>
+      </answer>
     </qandaentry>
     <qandaentry>
       <question id="java-only"><para>
@@ -326,11 +344,11 @@
         Absolutely not. Many of the jEdit's plugin applications, and a few of
         the macros distributed with the program, target the Java language or
         integrate tools used in Java development.  However, the core application
-        is designed to work with any programming or markup language, and
-        it contains packages providing syntax highlighting,
+        is designed to work with any programming or markup language.  Included
+        with jEdit are packages providing syntax highlighting,
         abbreviations and other programming support for over 60 programming
         languages and file types, including C, C++, C#,
-        Cobol, HTML, Java, Javascript, Lisp, Pascal, Perl, Python,
+        Cobol, HTML, Java, Javascript, Lisp, Pascal, Perl, PHP, Python,
         TCL, Visual Basic and XML. The full list can be found on the
         <ulink url="http://www.jedit.org/index.php?page=features">jEdit web
         site</ulink>.
@@ -360,14 +378,15 @@
         What software do I need to install and run jEdit?
       </para></question>
       <answer><para>
-        Since jEdit runs on the Java platform, at a minimum you will need a Java
+        Since jEdit runs on a Java platform, at a minimum you will need a Java
         Runtime Environment (JRE) package. If you are planning to use jEdit to
         program in Java, you will need a full Java Development Kit (JDK) package.
         We recommend obtaining a JDK package.
       </para>
       <para>
-        Currently, jEdit runs well on a number of JDK packages, but seems to run
-        best on version 1.3 and (where available) version 1.3.1. The <ulink
+        The current version of jEdit, version 4.0, requires a Java runtime
+        environment having a release version of 1.3 or greater.  It will
+        not run on versions 1.1 or 1.2. The <ulink
         url="http://www.jedit.org/index.php?page=compatibility">jEdit web
         site</ulink> contains a detailed discussion on the compatibility of
         various publicly available JDK's for the major operating systems.
@@ -409,7 +428,7 @@
         <quote>development</quote> version includes new features or new elements
         of program design that require testing and possible further refinement.
         A development version contains the token <quote>pre</quote> in its
-        version number, as in <literal>4.0pre1</literal>.
+        version number, as in <literal>4.0pre5</literal>.
       </para>
       <para>
         The latest stable and development versions of jEdit are always
@@ -426,6 +445,9 @@
         <guimenu>Plugins</guimenu> menu. It queries the jEdit web site, compares
         version information with the version of the currently running
         instance of jEdit, and reports the result to the user in a message box.
+        It will tell you if you do not have the latest version of jEdit, regardless
+        of whether that version is in <quote>stable</quote> or
+        <quote>development</quote> form.
       </para>
       <para>
         Finally, if you subscribe to the <ulink
@@ -445,7 +467,16 @@
         <ulink url="http://www.jedit.org/index.php?page=download&amp;platform=source">
         jEdit web site</ulink> or the <ulink url=
         "http://sourceforge.net/project/showfiles.php?group_id=588">
-        SourceForge web site</ulink>.
+        SourceForge web site</ulink>. The web site provides the source code for the
+        latest stable and development version, while the SourceForge site has
+        a more extensive archive covering earlier versions.
+      </para>
+      <para>
+        If you are interested in testing the absolutely latest changes to jEdit,
+        and you are familiar with compiling your own Java programs and working
+        with CVS, you can download the current code maintained in the <ulink
+        url="http://sourceforge.net/cvs/?group_id=588">SourceForge
+        CVS repository</ulink>.
       </para></answer>
     </qandaentry>
     <qandaentry>
@@ -465,8 +496,7 @@
 <qandaentry>
 	<question id="jedit-compile">
 		<para>
-			I am a new user of jEdit 3.2.2. How do you set the classpath and
-			compile the java files in jEdit?
+			How do you set the classpath and compile the java files in jEdit?
 		</para>
 	</question>
 	<answer>
@@ -618,7 +648,10 @@ How do I track the status of a jEdit bug report?
 <para>
 If you know the bug report number, go to this web address:
 <userinput>http://sourceforge.net/tracker/index.php?func=detail&amp;aid=######&amp;group_id=588&amp;atid=100588</userinput>,
-where <userinput>######</userinput> is the bug report number.
+where <userinput>######</userinput> is the bug report number. If you don't know the bug report number,
+you can browse and search the <ulink
+url="http://sourceforge.net/tracker/index.php?group_id=588&amp;atid=100588">
+bug database</ulink> to find the problem in which you are interested.
 </para>
 </answer>
 </qandaentry>
