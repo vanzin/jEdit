@@ -19,6 +19,8 @@
 
 package org.gjt.sp.jedit;
 
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import javax.swing.UIManager;
 import java.io.File;
 import org.gjt.sp.util.Log;
@@ -31,6 +33,37 @@ import org.gjt.sp.util.Log;
  */
 public class OperatingSystem
 {
+	public static final Rectangle getScreenBounds()
+	{
+		int screenX = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		int screenY = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		int x, y, w, h;
+		
+		if (isMacOS())
+		{
+			x = 0;
+			y = 22;
+			w = screenX;
+			h = screenY - y - 4;//shadow size
+		}
+		else if (isWindows())
+		{
+			x = -4;
+			y = -4;
+			w = screenX - 2*x;
+			h = screenY - 2*y;
+		}
+		else
+		{
+			x = 0;
+			y = 0;
+			w = screenX;
+			h = screenY;
+		}
+		
+		return new Rectangle(x,y,w,h);
+	}
+	
 	//{{{ isDOSDerived() method
 	/**
 	 * Returns if we're running Windows 95/98/ME/NT/2000/XP, or OS/2.
