@@ -1426,6 +1426,8 @@ public class View extends JFrame implements EBComponent
 			}
 		}
 
+		updateGutterBorders();
+
 		return (Component)stack.peek();
 	} //}}}
 

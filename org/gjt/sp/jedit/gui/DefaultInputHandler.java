@@ -309,7 +309,6 @@ public class DefaultInputHandler extends InputHandler
 	{
 		char c = evt.getKeyChar();
 
-		System.err.println("Got a key typed: " + c + "," + (int)c);
 		// ignore
 		if(c == '\b')
 			return;
