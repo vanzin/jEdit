@@ -378,14 +378,13 @@
 
 <ACTION NAME="insert-newline">
 	<CODE>
-		textArea.setSelectedText("\n");
+		textArea.userInput('\n');
 	</CODE>
 </ACTION>
 
 <ACTION NAME="insert-newline-indent">
 	<CODE>
-		textArea.setSelectedText("\n");
-		buffer.indentLine(textArea.getCaretLine(),true,false);
+		textArea.insertEnterAndIndent();
 	</CODE>
 </ACTION>
 

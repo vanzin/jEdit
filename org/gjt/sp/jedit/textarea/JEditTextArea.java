@@ -4363,6 +4363,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
+	//{{{ insertEnterAndIndent() method
+	public void insertEnterAndIndent()
+	{
+		setSelectedText("\n");
+		buffer.indentLine(caretLine,true,false);
+	} //}}}
+
 	//{{{ indentSelectedLines() method
 	/**
 	 * Indents all selected lines.
