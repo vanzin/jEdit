@@ -1614,11 +1614,19 @@ options.gutter.markerHighlight=Show marker positions:
 options.gutter.foldColor=Fold markers:
 options.gutter.focusBorderColor=Focused gutter border:
 options.gutter.noFocusBorderColor=Unfocused gutter border:
-options.gutter.actions=Mouse actions
-options.gutter.foldClick=Click in gutter:
-options.gutter.SfoldClick=Shift-click in gutter:
-options.gutter.toggle-fold=Collapse/expand fold
-options.gutter.toggle-fold-fully=Collapse/expand fold fully
+#}}}
+
+#{{{ Mouse pane
+options.mouse.label=Mouse
+options.mouse.code=new MouseOptionPane();
+options.mouse.dragAndDrop=Drag and drop in text area
+options.mouse.joinNonWordChars=Double-click drag joins non-alphanumeric \
+	characters
+options.mouse.middleMousePaste=Quick copy using middle mouse button
+options.mouse.gutter.foldClick=Click in gutter:
+options.mouse.gutter.SfoldClick=Shift-click in gutter:
+options.mouse.gutter.toggle-fold=Collapse/expand fold
+options.mouse.gutter.toggle-fold-fully=Collapse/expand fold fully
 #}}}
 
 #{{{ Plugin Manager pane
@@ -1753,9 +1761,6 @@ options.textarea.eolMarkers=End of line markers:
 options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
-options.textarea.joinNonWordChars=Double-click drag joins non-alphanumeric \
-	characters
-options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)

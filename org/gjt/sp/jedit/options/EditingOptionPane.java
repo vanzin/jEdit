@@ -232,8 +232,6 @@ public class EditingOptionPane extends AbstractOptionPane
 			firstlineGlob.setEnabled(enabled);
 		}
 
-		filenameGlob.setEnabled(enabled);
-		firstlineGlob.setEnabled(enabled);
 		noWordSep.setEnabled(enabled);
 		folding.setEnabled(enabled);
 		collapseFolds.setEnabled(enabled);

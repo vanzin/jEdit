@@ -3097,7 +3097,7 @@ public class jEdit
 			{
 				//Log.log(Log.DEBUG,jEdit.class,fnf);
 			}
-			catch(IOException e)
+			catch(Exception e)
 			{
 				Log.log(Log.ERROR,jEdit.class,e);
 			}

@@ -154,44 +154,6 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterNoFocusBorder = new ColorWellButton(
 			jEdit.getColorProperty("view.gutter.noFocusBorderColor")),
 			GridBagConstraints.VERTICAL);
-
-		/* Mouse actions */
-		addSeparator("options.gutter.actions");
-
-		int c = clickActionKeys.length;
-		String[] clickActionNames = new String[c];
-		for(int i = 0; i < c; i++)
-		{
-			clickActionNames[i] = jEdit.getProperty(
-				"options.gutter."+clickActionKeys[i]);
-		}
-
-		c = clickModifierKeys.length;
-		String[] clickModifierNames = new String[c];
-		for(int i = 0; i < c; i++)
-		{
-			clickModifierNames[i] = jEdit.getProperty(
-				"options.gutter."+clickModifierKeys[i]);
-		}
-
-		gutterClickActions = new JComboBox[c];
-
-		for(int i = 0; i < c; i++)
-		{
-			JComboBox cb = new JComboBox(clickActionNames);
-			gutterClickActions[i] = cb;
-
-			String val = jEdit.getProperty("view.gutter."+clickModifierKeys[i]);
-			for(int j = 0; j < clickActionKeys.length; j++)
-			{
-				if(val.equals(clickActionKeys[j]))
-				{
-					cb.setSelectedIndex(j);
-				}
-			}
-
-			addComponent(clickModifierNames[i],cb);
-		}
 	} //}}}
 
 	//{{{ _save() method
@@ -246,14 +208,6 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterFocusBorder.getSelectedColor());
 		jEdit.setColorProperty("view.gutter.noFocusBorderColor",
 			gutterNoFocusBorder.getSelectedColor());
-
-		int c = clickModifierKeys.length;
-		for(int i = 0; i < c; i++)
-		{
-			int idx = gutterClickActions[i].getSelectedIndex();
-			jEdit.setProperty("view.gutter."+clickModifierKeys[i],
-				clickActionKeys[idx]);
-		}
 	} //}}}
 
 	//{{{ Private members
@@ -274,17 +228,5 @@ public class GutterOptionPane extends AbstractOptionPane
 	private ColorWellButton gutterFoldMarkers;
 	private ColorWellButton gutterFocusBorder;
 	private ColorWellButton gutterNoFocusBorder;
-
-	private JComboBox[] gutterClickActions;
-
-	// simplified these settings a little...
-	private static final String[] clickActionKeys = new String[] {
-		"toggle-fold",
-		"toggle-fold-fully"
-	};
-	
-	private static final String[] clickModifierKeys = new String[] {
-		"foldClick",
-		"SfoldClick"
-	}; //}}}
+	//}}}
 }
