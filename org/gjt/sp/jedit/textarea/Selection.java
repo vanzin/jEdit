@@ -210,14 +210,41 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ Rect constructor
-		/**
-		 * Special constructor for "Vertical Paste" command.
-		 */
-		public Rect(int start, int end, int startLine, int endLine)
+		public Rect(int startLine, int start, int endLine, int end)
 		{
-			super(start,end);
+			this.startLine = startLine;
+			this.start = start;
+			this.endLine = endLine;
+			this.end = end;
+		} //}}}
+
+		//{{{ Rect constructor
+		public Rect(Buffer buffer, int startLine, int startColumn,
+			int endLine, int endColumn)
+		{
 			this.startLine = startLine;
 			this.endLine = endLine;
+
+			int[] width = new int[1];
+			int startOffset = buffer.getOffsetOfVirtualColumn(startLine,
+				startColumn,width);
+			if(startOffset == -1)
+			{
+				extraStartVirt = startColumn - width[0];
+				startOffset = buffer.getLineEndOffset(startLine) - 1;
+			}
+			else
+				startOffset += buffer.getLineStartOffset(startLine);
+
+			int endOffset = buffer.getOffsetOfVirtualColumn(endLine,
+				endColumn,width);
+			if(endOffset == -1)
+			{
+				extraEndVirt = endColumn - width[0];
+				endOffset = buffer.getLineEndOffset(endLine) - 1;
+			}
+			else
+				endOffset += buffer.getLineStartOffset(endLine);
 		} //}}}
 
 		//{{{ getStartColumn() method
@@ -257,6 +284,7 @@ public abstract class Selection implements Cloneable
 		//{{{ Package-private members
 		int extraStartVirt;
 		int extraEndVirt;
+		//}}}
 
 		//{{{ Private members
 

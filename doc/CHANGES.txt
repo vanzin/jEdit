@@ -8,6 +8,13 @@ contributing to this release.
 
 + Editing Changes:
 
+- Improved rectangular selection. It now does the right thing with hard
+  tabs, and the width of the selection is no longer limited to the width
+  of the last line. A new 'Vertical Paste' command has been added (it
+  behaves in a similar manner to the 'Virtual Paste' macro, which has
+  now been removed). When inserting text into a rectangle, the inserted
+  text is left-justified with spaces.
+
 - Fixed auto-indent behavior when entering constructs like:
   if(foo)
     bar();

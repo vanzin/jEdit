@@ -20,7 +20,7 @@
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="([[:digit:]]|_)+">
+		DIGIT_RE="([[:digit:]]|_)+" NO_WORD_SEP="'">
 		<!-- Comments -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>

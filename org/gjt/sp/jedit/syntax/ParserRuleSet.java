@@ -79,7 +79,7 @@ public class ParserRuleSet
 	public void setProperties(Hashtable props)
 	{
 		this.props = props;
-		noWordSep = null;
+		_noWordSep = null;
 	} //}}}
 
 	//{{{ addRule() method
@@ -146,7 +146,7 @@ public class ParserRuleSet
 	public void setKeywords(KeywordMap km)
 	{
 		keywords = km;
-		noWordSep = null;
+		_noWordSep = null;
 	} //}}}
 
 	//{{{ getHighlightDigits() method
@@ -210,6 +210,13 @@ public class ParserRuleSet
 				noWordSep += keywords.getNonAlphaNumericChars();
 		}
 		return noWordSep;
+	} //}}}
+
+	//{{{ setNoWordSep() method
+	public void setNoWordSep(String noWordSep)
+	{
+		this.noWordSep = noWordSep;
+		_noWordSep = null;
 	} //}}}
 
 	//{{{ toString() method

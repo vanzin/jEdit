@@ -2421,7 +2421,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * virtual width will be stored in its first location if this method
 	 * returns -1.
 	 *
-	 * @return A negative number if the column is out of bounds
+	 * @return -1 if the column is out of bounds
 	 *
 	 * @since jEdit 4.1pre1
 	 */
