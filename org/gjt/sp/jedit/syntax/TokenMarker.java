@@ -231,6 +231,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					: Token.WHITESPACE),pos - line.offset,1,
 					context);
 				lastOffset = pos + 1;
+
+				escaped = false;
 			}
 			else
 			{
@@ -241,7 +243,11 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					&& noWordSep.indexOf(ch) == -1
 					&& noWordSep2.indexOf(ch) == -1)
 				{
-					handleSoftSpan();
+					// if this returns true then the escape
+					// rule was handled, otherwise clear the
+					// flag
+					if(!handleSoftSpan())
+						escaped = false;
 
 					markKeyword(true);
 	
@@ -251,9 +257,14 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						context);
 					lastOffset = pos + 1;
 				}
+				else
+				{
+					// a character which is not a word
+					// separator... nor did it match any
+					// rule. so \ has no effect
+					escaped = false;
+				}
 			} //}}}
-
-			escaped = false;
 		} //}}}
 
 		//{{{ Mark all remaining characters
@@ -476,6 +487,14 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				& (ParserRule.NO_WORD_BREAK
 				| ParserRule.MARK_FOLLOWING)) != 0)
 			{
+				// flip escape flag if necessary, otherwise stuff
+				// like $FOO\n$BAR won't get highlighted correctly
+				// if there is a MARK_FOLLOWING for $ and IS_ESCAPE
+				// for \
+				ParserRule escape = context.parent.rules.getEscapeRule();
+				if(escape != null)
+					handleRule(escape,false);
+
 				tokenHandler.handleToken(rule.token,
 					lastOffset - line.offset,
 					pos - lastOffset,context);
