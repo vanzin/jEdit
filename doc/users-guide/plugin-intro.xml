@@ -4,6 +4,8 @@
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:     -->
 
 <!-- This is the introduction of the jEdit 4.0 Plugin Guide -->
+<!-- $Id$
+-->
 
 <chapter id="plugin-intro"> <title>Introducing the Plugin API</title>
 
