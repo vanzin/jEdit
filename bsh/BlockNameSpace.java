@@ -48,6 +48,8 @@ package	bsh;
 */
 class BlockNameSpace extends NameSpace 
 {
+	/** When true, capture all variable assignment locally */
+	boolean initMode;
 
     public BlockNameSpace( NameSpace parent ) 
 		throws EvalError
@@ -63,11 +65,22 @@ class BlockNameSpace extends NameSpace
 		Typed vars are handled in the ordinary way... local scope.
 	*/
     public void	setVariable(String name, Object	o) throws EvalError {
-		if ( weHaveVar( name ) ) 
+		if ( weHaveVar( name ) || initMode ) 
 			super.setVariable( name, o );
 		else
 			getParent().setVariable( name, o );
     }
+
+	/**
+		When set to true, handle all variable assignment in this local
+		scope - don't delegate to parent.  This is used in catch blocks
+		to initialize local parameters to the block then turned off to allow 
+		the normal BlockNameSpace behavior (which is to keep only locally 
+		declared typed variables local and pass the rest to the parent).
+	*/
+	public void setInitMode( boolean b ) {
+		initMode = b;
+	}
 
 	boolean weHaveVar( String name ) {
 		return super.getVariableImpl( name, false ) != null;

@@ -44,6 +44,12 @@ import java.util.Vector;
 
 	Note: More work to do in here to fix up the extended signature matching.
 	need to work in a search along with findMostSpecificSignature...
+	<p>
+
+	Note: there are lots of cases here where the Java reflection API makes
+	us catch exceptions (e.g. NoSuchFieldException) in order to do basic
+	searching.  This has to be inefficient...  I wish they would add a more
+	normal Java API for locating fields.
 */
 class Reflect {
 
@@ -224,10 +230,10 @@ class Reflect {
 			if ( Capabilities.haveAccessibility() )
 				return findAccessibleField( clas, fieldName );
 			else
-				// this one only finds public 
+				// this one only finds public (and in interfaces, etc.)
 				return clas.getField(fieldName);
         }
-        catch(NoSuchFieldException e)
+        catch( NoSuchFieldException e)
         {
 			// try declaredField
             throw new ReflectError("No such field: " + fieldName );
@@ -244,21 +250,35 @@ class Reflect {
 		distinction about the most derived is important.  Java doesn't normally
 		allow this kind of access (super won't show private variables) so 
 		there is no real syntax for specifying which class scope to use...
-
-		Need to improve this to handle interfaces.
 	*/
 	private static Field findAccessibleField( Class clas, String fieldName ) 
 		throws NoSuchFieldException
 	{
+		// Quick check catches public fields include those in interfaces
+		try {
+			return clas.getField(fieldName);
+		} catch ( NoSuchFieldException e ) { }
+
+		// Now, on with the hunt...
 		while ( clas != null )
 		{
 			try {
 				Field field = clas.getDeclaredField(fieldName);
 				if ( ReflectManager.RMSetAccessible( field ) )
 					return field;
-				// else fall through
-			}
-			catch(NoSuchFieldException e) { }
+
+			/*
+				// Try interfaces of class for the field (has to be public)
+				Class [] interfaces = clas.getInterfaces();
+				for(int i=0; i<interfaces.length;i++) {
+					try {
+						return interfaces[i].getField( fieldName );
+					} catch ( NoSuchFieldException e ) { }
+				}
+			*/
+				// Not found, fall through to next class
+
+			} catch(NoSuchFieldException e) { }
 
 			clas = clas.getSuperclass();
 		}
@@ -392,14 +412,15 @@ class Reflect {
 	/**
 		Locate a version of the method with the exact signature specified 
 		that is accessible via a public interface or through a public 
+		superclass or - if accessibility is on - through any interface or
 		superclass.
 
-		This solves the problem that arises when a package private class
-		or private inner class implements a public interface or derives from
-		a public type.
+		In the normal (non-accessible) case this still solves the problem that 
+		arises when a package private class or private inner class implements a 
+		public interface or derives from a public type.
 
 		@param onlyStatic the method located must be static.
-		@returns null on not found
+		@return null on not found
 	*/
 	static Method findAccessibleMethod( 
 		Class clas, String name, Class [] types, boolean onlyStatic ) 
@@ -413,18 +434,27 @@ class Reflect {
 		{
 			Class c = (Class)classQ.firstElement();
 			classQ.removeElementAt(0);
+//System.out.println("working on:"+c+", setacc"+ReflectManager.RMSetAccessible(c));
 
 			// Is this it?
 			// Is the class public or can we use accessibility?
 			if ( Modifier.isPublic( c.getModifiers() )
 				|| ( Capabilities.haveAccessibility() 
-					&& ReflectManager.RMSetAccessible( c ) ) )
+					/*&& ReflectManager.RMSetAccessible( c )*/ ) )
+			// note: class is not an AccessibleObject, removed that
 			{
+/*
+System.out.println("findAcc: "
+	+c+", name="+name+", types="+types+", types.len="+types.length
+	+", only="+onlyStatic);
+*/
 				try {
 					meth = c.getDeclaredMethod( name, types );
+//System.out.println("findAcc: method ="+meth);
 
 					// Is the method public or are we in accessibility mode?
-					if ( Modifier.isPublic( meth.getModifiers() )  
+					if ( ( Modifier.isPublic( meth.getModifiers() )
+						&& Modifier.isPublic( c.getModifiers() ) )
 						|| ( Capabilities.haveAccessibility() 
 							&& ReflectManager.RMSetAccessible( meth ) ) )
 					{
@@ -612,7 +642,7 @@ class Reflect {
     /**
         Implement JLS 15.11.2 for method resolution
 		@param onlyStatic  only static methods will be considered.
-		@returns null on no match
+		@return null on no match
     */
     static Method findMostSpecificMethod(
 		String name, Class[] idealMatch, Method[] methods )
@@ -644,7 +674,7 @@ class Reflect {
 		compatability of args.  This allows special (non standard Java) bsh 
 		widening operations...
 
-		@returns null on not found
+		@return null on not found
 	*/
     static Method findExtendedMethod(
 		String name, Object[] args, Method[] methods)

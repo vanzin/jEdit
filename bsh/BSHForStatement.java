@@ -71,24 +71,35 @@ class BSHForStatement extends SimpleNode implements ParserConstants
 		/*
 			Note: some interesting things are going on here.
 
-			1) We swap instead of push...  The primary mode of operation acts 
-			like we are in the enclosing namespace...  (super must be 
+			1) We swap instead of push...  The primary mode of operation 
+			acts like we are in the enclosing namespace...  (super must be 
 			preserved, etc.)
 
-			2) We do *not* call the body block eval with the namespace override
-			We allow it to create a second subordinate BlockNameSpace child
-			of the forNameSpace.  Variable propogation still works through
-			the chain, but the block's child cleans the state between iteration.
+			2) We do *not* call the body block eval with the namespace 
+			override.  Instead we allow it to create a second subordinate 
+			BlockNameSpace child of the forNameSpace.  Variable propogation 
+			still works through the chain, but the block's child cleans the 
+			state between iteration.  
 			(which is correct Java behavior... see forscope4.bsh)
 		*/
-		callstack.swap( forNameSpace );
 
+		// put forNameSpace it on the top of the stack
 		// Note: it's important that there is only one exit point from this
 		// method so that we can swap back the namespace.
+		callstack.swap( forNameSpace );
+
+		// If we wanted untyped variables in the for-init to be local, instead
+		// of having side effects in the parent context of the for-loop we
+		// could setInitMode() here to capture them and make them local.
+		///forNameSpace.setInitMode(true); 
 
         // Do the for init
         if ( hasForInit ) 
             forInit.eval( callstack, interpreter );
+
+		// If we had turned on init mode to capture untyped for-init vars 
+		// and make them local to the for-loop scope we would turn it off here
+		//forNameSpace.setInitMode(false); 
 
 		Object returnControl = Primitive.VOID;
         while(true)
