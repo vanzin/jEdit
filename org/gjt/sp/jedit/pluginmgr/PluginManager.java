@@ -280,8 +280,7 @@ public class PluginManager extends JDialog
 					== JOptionPane.YES_OPTION)
 				{
 					new PluginManagerProgress(PluginManager.this,
-						jEdit.getProperty("plugin-manager.progress"
-						+ ".removing-task"),roster);
+						"remove",roster);
 					updateTree();
 				}
 			}
@@ -329,8 +328,7 @@ public class PluginManager extends JDialog
 					return;
 
 				new PluginManagerProgress(PluginManager.this,
-					jEdit.getProperty("plugin-manager.progress"
-					+ ".updating-task"),roster);
+					"remove",roster);
 
 				updateTree();
 			}
@@ -367,8 +365,7 @@ public class PluginManager extends JDialog
 					return;
 
 				new PluginManagerProgress(PluginManager.this,
-					jEdit.getProperty("plugin-manager.progress"
-					+ ".installing-task"),roster);
+					"remove",roster);
 
 				updateTree();
 			}

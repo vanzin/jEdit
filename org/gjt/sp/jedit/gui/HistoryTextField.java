@@ -27,6 +27,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.*;
@@ -94,8 +95,9 @@ public class HistoryTextField extends JTextField
 		if(name != null)
 			historyModel = HistoryModel.getModel(name);
 
-		addMouseMotionListener(new MouseHandler());
-		addFocusListener(new FocusHandler());
+		MouseHandler mouseHandler = new MouseHandler();
+		addMouseListener(mouseHandler);
+		addMouseMotionListener(mouseHandler);
 
 		this.instantPopups = instantPopups;
 		this.enterAddsToHistory = enterAddsToHistory;
@@ -321,7 +323,6 @@ public class HistoryTextField extends JTextField
 	private boolean instantPopups;
 	private boolean enterAddsToHistory;
 	private boolean selectAllOnFocus;
-	private boolean focusClickFlag;
 	private String current;
 	private int index;
 	//}}}
@@ -474,6 +475,8 @@ public class HistoryTextField extends JTextField
 
 	//}}}
 
+	//{{{ Inner classes
+
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
@@ -498,22 +501,30 @@ public class HistoryTextField extends JTextField
 		}
 	} //}}}
 
-	//{{{ FocusHandler class
-	class FocusHandler extends FocusAdapter
-	{
-		public void focusGained(FocusEvent evt)
-		{
-			if(selectAllOnFocus)
-			{
-				selectAll();
-				focusClickFlag = true;
-			}
-		}
-	} //}}}
-
 	//{{{ MouseHandler class
-	class MouseHandler extends MouseMotionAdapter
+	class MouseHandler extends MouseInputAdapter
 	{
+		boolean selectAll;
+
+		//{{{ mousePressed() method
+		public void mousePressed(MouseEvent evt)
+		{
+			selectAll = (!hasFocus() && selectAllOnFocus);
+		} //}}}
+
+		//{{{ mouseReleased() method
+		public void mouseReleased(MouseEvent evt)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if(selectAll)
+						selectAll();
+				}
+			});
+		} //}}}
+
 		//{{{ mouseMoved() method
 		public void mouseMoved(MouseEvent evt)
 		{
@@ -530,13 +541,7 @@ public class HistoryTextField extends JTextField
 		//{{{ mouseDragged() method
 		public void mouseDragged(MouseEvent evt)
 		{
-			if(focusClickFlag)
-			{
-				// unselect if user starts dragging so they can
-				// more easily make a selection
-				setCaretPosition(getCaretPosition());
-				focusClickFlag = false;
-			}
+			selectAll = false;
 		} //}}}
 	} //}}}
 
@@ -577,4 +582,6 @@ public class HistoryTextField extends JTextField
 			return new Insets(0,0,0,WIDTH);
 		}
 	} //}}}
+
+	//}}}
 }

@@ -333,12 +333,12 @@ class PluginList
 
 		boolean canSatisfy()
 		{
-			// new plugins can always be downloaded (assuming Mike
-			// maintains plugin central properly)
 			if(isSatisfied())
 				return true;
 			else if(what.equals("plugin"))
+			{
 				return plugin.canBeInstalled();
+			}
 			else
 				return false;
 		}

@@ -19,7 +19,7 @@ quicknotepad.copy-to-buffer.label=Copy notepad to buffer
 
 # application menu items
 quicknotepad.menu.label=QuickNotepad
-quicknotepad.menu=quicknotepad-toggle - quicknotepad.choose-file \
+quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
 	quicknotepad.save-file quicknotepad.copy-to-buffer
 
 # window title

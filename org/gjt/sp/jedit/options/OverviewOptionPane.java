@@ -20,9 +20,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package org.gjt.sp.jedit.options;
+
 //{{{ Imports
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class OverviewOptionPane extends AbstractOptionPane
@@ -38,8 +43,18 @@ public class OverviewOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 		JEditorPane ep = new JEditorPane();
-		ep.setPage(getResource("overview.html"));
-		add(BorderLayout.CENTER,new JScrollPane(ep));
+		try
+		{
+			ep.setPage(getClass().getResource("overview.html"));
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+		}
+		ep.setEditable(false);
+		JScrollPane scroller = new JScrollPane(ep);
+		scroller.setPreferredSize(new Dimension(400,0));
+		add(BorderLayout.CENTER,scroller);
 	} //}}}
 
 	//{{{ _save() method
