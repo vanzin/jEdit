@@ -43,10 +43,10 @@ public class DummyTokenHandler implements TokenHandler
 	 * @param length The number of characters in the token
 	 * @param id The token type (one of the constants in the
 	 * <code>Token</code> class).
-	 * @param rules The parser rule set that generated this token
+	 * @param context The line context
 	 * @since jEdit 4.1pre1
 	 */
-	public void handleToken(int length, byte id, ParserRuleSet rules)
+	public void handleToken(int length, byte id, TokenMarker.LineContext context)
 	{
 	}
 }

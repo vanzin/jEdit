@@ -98,7 +98,7 @@ public class Chunk
 					gfx.setColor(chunks.style.getForegroundColor());
 
 					if(glyphVector)
-						gfx.drawGlyphVector(chunks.text,x + _x,y);
+						gfx.drawGlyphVector(chunks.gv,x + _x,y);
 					else
 						gfx.drawString(chunks.str,x + _x,y);
 
@@ -136,7 +136,7 @@ public class Chunk
 		{
 			if(!chunks.inaccessable && offset < chunks.offset + chunks.length)
 			{
-				if(chunks.text == null)
+				if(chunks.gv == null)
 					break;
 				else
 				{
@@ -170,7 +170,7 @@ public class Chunk
 		{
 			if(!chunks.inaccessable && x < _x + chunks.width)
 			{
-				if(chunks.text == null)
+				if(chunks.gv == null)
 				{
 					if(round && _x + chunks.width - x < x - _x)
 						return chunks.offset + chunks.length;
@@ -211,12 +211,15 @@ public class Chunk
 	// should xToOffset() ignore this chunk?
 	public boolean inaccessable;
 
-	public float width;
+	public byte id;
 	public SyntaxStyle style;
 	public int offset;
 	public int length;
+
+	// set up after init()
+	public float width;
 	public String str;
-	public GlyphVector text;
+	public GlyphVector gv;
 	public float[] positions;
 
 	public Chunk next;
@@ -231,23 +234,35 @@ public class Chunk
 	} //}}}
 
 	//{{{ Chunk constructor
-	public Chunk(int tokenType, Segment seg, int offset, int length,
-		SyntaxStyle[] styles, FontRenderContext fontRenderContext)
+	public Chunk(byte id, int offset, int length)
 	{
-		style = styles[tokenType == Token.WHITESPACE ? Token.NULL
-			: tokenType];
-
-		if(length != 0)
-		{
-			str = new String(seg.array,seg.offset + offset,length);
-
-			text = style.getFont().createGlyphVector(
-				fontRenderContext,str);
-			width = (float)text.getLogicalBounds().getWidth();
-			positions = text.getGlyphPositions(0,length,null);
-		}
+		this.id = id;
 
 		this.offset = offset;
 		this.length = length;
+	} //}}}
+
+	//{{{ init() method
+	public void init(Segment seg, TabExpander expander, float x,
+		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
+		byte defaultID)
+	{
+		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
+			? defaultID : id];
+
+		if(length == 1 && seg.array[seg.offset + offset] == '\t')
+		{
+			float newX = expander.nextTabStop(x,offset + length);
+			width = newX - x;
+		}
+		else
+		{
+			str = new String(seg.array,seg.offset + offset,length);
+
+			gv = style.getFont().createGlyphVector(
+				fontRenderContext,str);
+			width = (float)gv.getLogicalBounds().getWidth();
+			positions = gv.getGlyphPositions(0,length,null);
+		}
 	} //}}}
 }

@@ -89,7 +89,9 @@ public class Token
 
 	public static final byte ID_COUNT = 14;
 
-	public static final byte WHITESPACE = 126;
+	// Special:
+	public static final byte WHITESPACE = 125;
+	public static final byte TAB = 126;
 	public static final byte END = 127;
 
 	//{{{ Instance variables

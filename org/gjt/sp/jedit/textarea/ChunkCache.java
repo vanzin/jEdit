@@ -246,7 +246,7 @@ class ChunkCache
 				painter.getFontRenderContext(),
 				painter);
 		buffer.markTokens(physicalLine,noWrap);
-		return noWrap.getFirstChunk();
+		return noWrap.getChunks();
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
