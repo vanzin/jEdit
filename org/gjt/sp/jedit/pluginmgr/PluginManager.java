@@ -365,7 +365,7 @@ public class PluginManager extends JDialog
 					return;
 
 				new PluginManagerProgress(PluginManager.this,
-					"remove",roster);
+					"install",roster);
 
 				updateTree();
 			}

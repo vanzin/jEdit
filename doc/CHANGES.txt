@@ -1,5 +1,27 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre5
+
++ Bug Fixes
+
+- Removed unnecessary menu bar hack on MacOS X
+- Tab width would be wrong on some JVMs
+- Tighter layout in the file system browser's parent directory list
+- The Commands->Root Directory command in the file system browser opened
+  the 'roots:' VFS even on systems where it is not used (ie, Unix)
+- Tool bar buttons had incorrect tool tips
+- In the total size tally, the plugin manager didn't add the sizes of
+  plugins that would be implicitly installed due to dependencies
+- Plugin manager displayed the wrong message when installing plugins
+- 'Print' command threw a NullPointerException if 'print header' was
+  disabled
+- Selection wasn't cleared when switching buffers sometimes. This caused
+  problems
+- If the block caret was enabled, mouse clicks would position the caret
+  in the wrong location
+- Files would not be saved properly if two stage saving was disabled and
+  backups were enabled
+
 * Version 4.0pre4
 
 Note that jEdit now has a source file, Java14.java, that only compiles
