@@ -4,7 +4,6 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
- * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +41,10 @@ import org.gjt.sp.util.Log;
 class BufferPrintable implements Printable
 {
 	//{{{ BufferPrintable constructor
-	BufferPrintable(Buffer buffer, Font font, boolean header, boolean footer,
+	BufferPrintable(org.gjt.sp.jedit.View view, Buffer buffer, Font font, boolean header, boolean footer,
 	                boolean lineNumbers, boolean color)
 	{
+		this.view = view;
 		this.buffer = buffer;
 		this.font = font;
 		this.header = header;
@@ -56,6 +56,7 @@ class BufferPrintable implements Printable
 		styles[Token.NULL] = new SyntaxStyle(textColor,null,font);
 
 		lineList = new ArrayList();
+		LastPagelineList = new ArrayList();
 	} //}}}
 
 	//{{{ print() method
@@ -120,7 +121,28 @@ class BufferPrintable implements Printable
 
 		//{{{ get the correct line number in the buffer for this page number
 
-		if(pageIndex == (lastPrintedPage+1))
+		if(pageIndex == lastPrintedPage )
+		{
+			//we are redoing the last page
+			ArrayList lineListForNextPage=new ArrayList();
+			for (int i=0;i<lineList.size();i++)
+				lineListForNextPage.add(lineList.get(i));
+			lineList.clear();
+			for (int i=0;i<LastPagelineList.size();i++)
+				lineList.add(LastPagelineList.get(i));
+			int returnValue= renderPage(pageIndex,gfx,frc,false,linesPerPage,pageWidth,
+				lineNumberWidth,e,pageX,pageY);
+			
+			//restore the continuing lines for the next page
+			if (pageIndex != 0)
+			{
+				lineList.clear();
+				for (int i=0;i<lineListForNextPage.size();i++)
+					lineList.add(lineListForNextPage.get(i));
+			}
+			return returnValue;
+		}
+		else if(pageIndex == (lastPrintedPage+1))
 		{
 			//we are continueing printing to the next page
 			if(end)
@@ -162,10 +184,14 @@ class BufferPrintable implements Printable
 	                       boolean justCounting,int linesPerPage,double pageWidth,double lineNumberWidth,
 	                       PrintTabExpander e,double pageX,double pageY)
 	{
-
 		Segment seg = new Segment();
 		double y = 0.0;
+		String messageText = jEdit.getProperty("print.status.message",
+		                                      new String[] {(new Integer(pageIndex+1)).toString()});
+		view.getStatus().setMessageAndClear(messageText);
 
+		LastPagelineList=new ArrayList();
+		
 		// each loop will print one line on the page
 		//but perhaps less than one buffer line.
 print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
@@ -189,8 +215,8 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 					lineList.add(null);
 			} //}}}
 			y += lm.getHeight();
-
 			Object obj = lineList.get(0);
+			LastPagelineList.add(obj);
 			lineList.remove(0);
 			if(obj instanceof Integer)
 			{
@@ -205,6 +231,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 				} //}}}
 
 				obj = lineList.get(0);
+				LastPagelineList.add(obj);
 				lineList.remove(0);
 			}
 
@@ -234,16 +261,17 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static Color headerColor = Color.lightGray;
-	private static Color headerTextColor = Color.black;
-	private static Color footerColor = Color.lightGray;
-	private static Color footerTextColor = Color.black;
-	private static Color lineNumberColor = Color.gray;
-	private static Color textColor = Color.black;
+	private Color headerColor = Color.lightGray;
+	private Color headerTextColor = Color.black;
+	private Color footerColor = Color.lightGray;
+	private Color footerTextColor = Color.black;
+	private Color lineNumberColor = Color.gray;
+	private Color textColor = Color.black;
 	//}}}
 
 	//{{{ Instance variables
 	private Buffer buffer;
+	private org.gjt.sp.jedit.View view;
 	private Font font;
 	private SyntaxStyle[] styles;
 	private boolean header;
@@ -256,6 +284,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 
 	private LineMetrics lm;
 	private ArrayList lineList;
+	private ArrayList LastPagelineList;
 	//}}}
 
 	//{{{ paintHeader() method
