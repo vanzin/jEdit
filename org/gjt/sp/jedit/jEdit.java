@@ -1016,7 +1016,7 @@ public class jEdit
 		jars.addElement(jar);
 		jar.init();
 
-		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED));
+		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
 		if(!isMainThread())
 			EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}
@@ -1084,7 +1084,7 @@ public class jEdit
 			jars.removeElement(jar);
 		}
 
-		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED));
+		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED,exit));
 		if(!isMainThread() && !exit)
 			EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}

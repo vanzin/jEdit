@@ -24,6 +24,9 @@ Thanks to Ken Turner for contributing to this release.
 - Fixed a performance regression from pre2. Opening large files with
   soft wrap off should now be as fast (or faster) than 4.1.
 
+- Fixed delays when exiting editor if help viewer and/or plugin manager
+  windows were open.
+
 }}}
 {{{ Bug Fixes
 
@@ -50,6 +53,9 @@ Thanks to Ken Turner for contributing to this release.
   and "use jEdit text area colors in all text controls" was on.
 
 - EOL_SPAN_REGEXP rules threw NullPointerExceptions.
+
+- Plugins that failed to load were not marked as such, and showed up as
+  "Loaded" in the plugin manager.
 
 }}}
 

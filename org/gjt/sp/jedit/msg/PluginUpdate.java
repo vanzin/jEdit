@@ -67,8 +67,10 @@ public class PluginUpdate extends EBMessage
 	 * Creates a new plugin update message.
 	 * @param buffer The buffer
 	 * @param what What happened
+	 * @param exit Is the editor exiting?
+	 * @since jEdit 4.2pre3
 	 */
-	public PluginUpdate(PluginJAR jar, Object what)
+	public PluginUpdate(PluginJAR jar, Object what, boolean exit)
 	{
 		super(jar);
 
@@ -76,6 +78,7 @@ public class PluginUpdate extends EBMessage
 			throw new NullPointerException("What must be non-null");
 
 		this.what = what;
+		this.exit = exit;
 	} //}}}
 
 	//{{{ getWhat() method
@@ -85,6 +88,18 @@ public class PluginUpdate extends EBMessage
 	public Object getWhat()
 	{
 		return what;
+	} //}}}
+
+	//{{{ isExiting() method
+	/**
+	 * Returns true if this plugin is being unloaded as part of the
+	 * shutdown process, in which case some components like the help
+	 * viewer and plugin manager ignore the event.
+	 * @since jEdit 4.2pre3
+	 */
+	public boolean isExiting()
+	{
+		return exit;
 	} //}}}
 
 	//{{{ getPluginJAR() method
@@ -99,11 +114,12 @@ public class PluginUpdate extends EBMessage
 	//{{{ paramString() method
 	public String paramString()
 	{
-		return "what=" + what + ","
+		return "what=" + what + ",exit=" + exit + ","
 			+ super.paramString();
 	} //}}}
 
 	//{{{ Private members
 	private Object what;
+	private boolean exit;
 	//}}}
 }
