@@ -405,7 +405,6 @@ public class DefaultInputHandler extends InputHandler
 				case KeyEvent.VK_SUBTRACT:
 				case KeyEvent.VK_DECIMAL:
 				case KeyEvent.VK_DIVIDE:
-				System.err.println("numkey");
 					KeyEventWorkaround.numericKeypadKey();
 					break;
 				}

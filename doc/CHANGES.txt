@@ -38,13 +38,15 @@ this release.
 - Added IMPORT element to RULES tag. All rules from the ruleset named
   by the required attribute DELEGATE are copied into this ruleset.
 
-- Improved Velocity syntax highlighiting.
+- Improved Velocity syntax highlighting.
 
 - Added TPL syntax highlighting (Brant Langer Gurganus).
 
-- Added UnrealScript syntax highlighting (Christoph Daniel Schulze)
+- Added UnrealScript syntax highlighting (Christoph Daniel Schulze).
 
-- Updated FreeMaker syntax highlighting (Jonathan Revusky)
+- Updated FreeMaker syntax highlighting (Jonathan Revusky).
+
+- Updated Pyrex syntax highlighting (Ollie Rutherfurd).
 
 }}}
 {{{ User Interface

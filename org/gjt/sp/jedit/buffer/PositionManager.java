@@ -61,10 +61,9 @@ public class PositionManager
 				bh = new PosBottomHalf(offset);
 				bh.red = true;
 				root.insert(bh);
-				ibalance(bh);
+				if(!Debug.DISABLE_POSITION_BALANCE)
+					ibalance(bh);
 			}
-			else
-				bh.ref++;
 		}
 
 		if(Debug.POSITION_DEBUG)
@@ -108,7 +107,8 @@ public class PositionManager
 				else
 					bh.parent.right = bh.right;
 			}
-			bh.right.parent = bh.parent;
+			if(bh.right != null)
+				bh.right.parent = bh.parent;
 		}
 		else if(bh.right == null)
 		{
@@ -122,7 +122,8 @@ public class PositionManager
 				else
 					bh.parent.right = bh.left;
 			}
-			bh.left.parent = bh.parent;
+			if(bh.left != null)
+				bh.left.parent = bh.parent;
 		}
 		// neither is null
 		else
@@ -147,19 +148,19 @@ public class PositionManager
 					bh.parent.right = nextInorder;
 			}
 
-			nextInorder.parent = bh.parent;
-			nextInorder.left = bh.left;
-			nextInorder.left.parent = nextInorder;
 			if(nextInorder != bh.right)
 			{
+				nextInorder.parent.left = nextInorder.right;
 				if(nextInorder.right != null)
 				{
-					nextInorder.parent.left = nextInorder.right;
 					nextInorder.right.parent = nextInorder.parent;
 				}
 				nextInorder.right = bh.right;
 				nextInorder.right.parent = nextInorder;
 			}
+			nextInorder.parent = bh.parent;
+			nextInorder.left = bh.left;
+			nextInorder.left.parent = nextInorder;
 			x = nextInorder.parent;
 		}
 
@@ -177,7 +178,8 @@ public class PositionManager
 				else
 					y = x.left;
 
-				rbalance(r,x,y);
+				if(!Debug.DISABLE_POSITION_BALANCE)
+					rbalance(r,x,y);
 			}
 		}
 
@@ -539,7 +541,10 @@ public class PositionManager
 					t.right = nodes[3];
 			}
 			else
+			{
+				System.err.println("setting root to " + nodes[3]);
 				root = nodes[3];
+			}
 
 			// Write-only code for constructing a meaningful tree
 			nodes[1].parent = nodes[3];
