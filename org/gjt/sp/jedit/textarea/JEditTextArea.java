@@ -5292,6 +5292,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				Log.log(Log.DEBUG,this,"Horizontal ok");
 			painter.repaint();
 
+			horizontal.setValue(-horizontalOffset);
 			horizontal.setUnitIncrement(painter.getFontMetrics()
 				.charWidth('w'));
 			horizontal.setBlockIncrement(width / 2);
@@ -6576,7 +6577,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(screenLine > screenLastLine)
 					screenLine = screenLastLine;
 				ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
-				if(info.lastSubregion)
+				if(info.lastSubregion && extraEndVirt != 0)
 				{
 					if(!isEditable())
 					{
