@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -824,11 +824,7 @@ public class GUIUtilities
 	 */
 	public static void loadGeometry(Window win, String name)
 	{
-		// all this adjust_* crap is there to work around buggy
-		// Unix Java versions which don't put windows where you
-		// tell them to
-		int x, y, width, height, adjust_x, adjust_y, adjust_width,
-			adjust_height;
+		int x, y, width, height;
 
 		Dimension size = win.getSize();
 		Dimension screen = win.getToolkit().getScreenSize();
@@ -865,35 +861,11 @@ public class GUIUtilities
 				height = screen.height;
 			y = (screen.height - height) / 2;
 		}
-		
-		adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
-		adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
-		adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);
-		adjust_height = jEdit.getIntegerProperty(name + ".d-height",0);
 
 		Rectangle desired = new Rectangle(x,y,width,height);
-		Rectangle required = new Rectangle(x - adjust_x,
-			y - adjust_y,width - adjust_width,
-			height - adjust_height);
-// 		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
-// 			+ ": desired geometry is " + desired);
-// 		Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
-// 			+ ": setting geometry to " + required);
-		win.setBounds(required);
+		win.setBounds(desired);
 
-		// if(File.separatorChar == '/'
-			// && MiscUtilities.compareStrings(
-			// System.getProperty("java.version"),
-			// "1.2",false) < 0)
-		// {
-			// win.setBounds(required);
-			// new UnixWorkaround(win,name,desired,required);
-		// }
-		// else
-			win.setBounds(desired);
-
-		if((win instanceof Frame) && OperatingSystem.hasJava14()
-				&& System.getProperty("jedit.nojava14") == null)
+		if((win instanceof Frame) && OperatingSystem.hasJava14())
 		{
 			int extState = jEdit.getIntegerProperty(name +
 				".extendedState", Frame.NORMAL);
@@ -914,106 +886,6 @@ public class GUIUtilities
 		}
 	} //}}}
 
-	//{{{ UnixWorkaround class
-	/* static class UnixWorkaround
-	{
-		Window win;
-		String name;
-		Rectangle desired;
-		Rectangle required;
-		long start;
-		boolean windowOpened;
-
-		//{{{ UnixWorkaround constructor
-		UnixWorkaround(Window win, String name, Rectangle desired,
-			Rectangle required)
-		{
-			this.win = win;
-			this.name = name;
-			this.desired = desired;
-			this.required = required;
-
-			start = System.currentTimeMillis();
-
-			win.addComponentListener(new ComponentHandler());
-			win.addWindowListener(new WindowHandler());
-		} //}}}
-
-		//{{{ ComponentHandler class
-		class ComponentHandler extends ComponentAdapter
-		{
-			//{{{ componentMoved() method
-			public void componentMoved(ComponentEvent evt)
-			{
-				if(System.currentTimeMillis() - start < 1000)
-				{
-					Rectangle r = win.getBounds();
-					if(!windowOpened && r.equals(required))
-						return;
-
-					if(!r.equals(desired))
-					{
-//						Log.log(Log.DEBUG,GUIUtilities.class,
-//							"Window resize blocked: " + win.getBounds());
-						win.setBounds(desired);
-					}
-				}
-				else
-					win.removeComponentListener(this);
-			} //}}}
-
-			//{{{ componentResized() method
-			public void componentResized(ComponentEvent evt)
-			{
-				if(System.currentTimeMillis() - start < 1000)
-				{
-					Rectangle r = win.getBounds();
-					if(!windowOpened && r.equals(required))
-						return;
-
-					if(!r.equals(desired))
-					{
-// 						Log.log(Log.DEBUG,GUIUtilities.class,
-// 							"Window resize blocked: " + win.getBounds());
-						win.setBounds(desired);
-					}
-				}
-				else
-					win.removeComponentListener(this);
-			} //}}}
-		} //}}}
-
-		//{{{ WindowHandler class
-		class WindowHandler extends WindowAdapter
-		{
-			//{{{ windowOpened() method
-			public void windowOpened(WindowEvent evt)
-			{
-				windowOpened = true;
-
-				Rectangle r = win.getBounds();
-// 				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
-// 					+ name + ": bounds after opening: " + r);
-
-				if(r.x != desired.x || r.y != desired.y
-					|| r.width != desired.width
-					|| r.height != desired.height)
-				{
-					jEdit.setIntegerProperty(name + ".dx",
-						r.x - required.x);
-					jEdit.setIntegerProperty(name + ".dy",
-						r.y - required.y);
-					jEdit.setIntegerProperty(name + ".d-width",
-						r.width - required.width);
-					jEdit.setIntegerProperty(name + ".d-height",
-						r.height - required.height);
-				}
-
-				win.removeWindowListener(this);
-			} //}}}
-		} //}}}
-	} */ //}}}
-
 	//{{{ saveGeometry() method
 	/**
 	 * Saves a window's geometry to the properties.
@@ -1025,8 +897,7 @@ public class GUIUtilities
 	 */
 	public static void saveGeometry(Window win, String name)
 	{
-		if((win instanceof Frame) && OperatingSystem.hasJava14()
-				&& System.getProperty("jedit.nojava14") == null)
+		if((win instanceof Frame) && OperatingSystem.hasJava14())
 		{
 			try
 			{

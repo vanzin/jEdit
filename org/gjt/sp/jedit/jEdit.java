@@ -296,7 +296,7 @@ public class jEdit
 			if(background)
 			{
 				background = false;
-				System.err.println("You cannot specify both the"
+				Log.log(Log.WARNING,jEdit.class,"You cannot specify both the"
 					+ " -background and -noserver switches");
 			}
 		} //}}}
@@ -313,8 +313,7 @@ public class jEdit
 		initUserProperties();
 		initPLAF();
 
-		if(OperatingSystem.hasJava14()
-			&& System.getProperty("jedit.nojava14") == null)
+		if(OperatingSystem.hasJava14())
 		{
 			try
 			{

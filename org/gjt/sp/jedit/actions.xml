@@ -560,14 +560,17 @@
 	<CODE>
 		textArea.toggleOverwriteEnabled();
 	</CODE>
+	<IS_SELECTED>
+		return textArea.isOverwriteEnabled();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="page-setup">
 	<CODE>
-		if("1.4".compareTo(System.getProperty("java.version")) > 0)
-			BufferPrinter1_3.pageSetup(view);
-		else
+		if(OperatingSystem.hasJava14())
 			BufferPrinter1_4.pageSetup(view);
+		else
+			BufferPrinter1_3.pageSetup(view);
 	</CODE>
 </ACTION>
 
@@ -672,10 +675,10 @@
 <ACTION NAME="print">
 	<CODE>
 
-	if("1.4".compareTo(System.getProperty("java.version")) > 0)
-		BufferPrinter1_3.print(view,buffer,false);
-	else
+	if(OperatingSystem.hasJava14())
 		BufferPrinter1_4.print(view,buffer,false);
+	else
+		BufferPrinter1_3.print(view,buffer,false);
 	</CODE>
 </ACTION>
 

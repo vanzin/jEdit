@@ -271,7 +271,7 @@ public class Mode
 	 */
 	public String toString()
 	{
-		return getClass().getName() + "[" + getName() + "]";
+		return name;
 	} //}}}
 
 	//{{{ Private members

@@ -55,13 +55,13 @@
   Here are some examples of glob patterns:
  </para>
  <itemizedlist>
-  <listitem><para><userinput>*</userinput> - all files</para></listitem>
+  <listitem><para><userinput>*</userinput> - all files.</para></listitem>
   <listitem><para><userinput>*.java</userinput> - all files whose names end with
-  <quote>.java</quote></para></listitem>
-  <listitem><para><userinput>*.{c,h}</userinput> - all files whose names end
+  <quote>.java</quote>.</para></listitem>
+  <listitem><para><userinput>*.[ch]</userinput> - all files whose names end
   with either
-  <quote>.c</quote> or <quote>.h</quote></para></listitem>
-  <listitem><para><userinput>*[^~]</userinput> - all files whose names do not
-  end with <quote>~</quote></para></listitem>
+  <quote>.c</quote> or <quote>.h</quote>.</para></listitem>
+  <listitem><para><userinput>[^#]*</userinput> - all files whose names do not
+  start with <quote>#</quote>.</para></listitem>
  </itemizedlist>
 </appendix>

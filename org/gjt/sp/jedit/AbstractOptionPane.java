@@ -193,6 +193,32 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	/**
 	 * Adds a separator component.
 	 * @param label The separator label property
+	 * @since jEdit 4.1pre7
+	 */
+	public void addSeparator()
+	{
+		if(y != 0)
+			addComponent(Box.createVerticalStrut(6));
+
+		JSeparator sep = new JSeparator(JSeparator.HORIZONTAL);
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridy = y++;
+		cons.gridheight = 1;
+		cons.gridwidth = cons.REMAINDER;
+		cons.fill = GridBagConstraints.BOTH;
+		cons.anchor = GridBagConstraints.WEST;
+		cons.weightx = 1.0f;
+		cons.insets = new Insets(1,0,1,0);
+
+		gridBag.setConstraints(sep,cons);
+		add(sep);
+	} //}}}
+
+	//{{{ addSeparator() method
+	/**
+	 * Adds a separator component.
+	 * @param label The separator label property
 	 * @since jEdit 2.6pre2
 	 */
 	public void addSeparator(String label)

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2002 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
@@ -434,7 +434,7 @@ public class JEditTextArea extends JComponent
 			// we can help it
 			int lineCount = getVirtualLineCount();
 
-			// very stupid but proper fix will go into 4.1
+			// very stupid but proper fix will go in later
 			if(softWrap)
 				lineCount += visibleLines - 1;
 
@@ -489,7 +489,26 @@ public class JEditTextArea extends JComponent
 	{
 		if(firstLine > 0)
 		{
-			int newFirstLine = firstLine - visibleLines;
+			int newFirstLine;
+			if(softWrap)
+			{
+				newFirstLine = firstLine;
+				int screenLineCount = 0;
+				while(--newFirstLine >= 0)
+				{
+					int lines = chunkCache
+						.getLineInfosForPhysicalLine(
+						newFirstLine).length;
+					if(screenLineCount + lines >= visibleLines)
+						break;
+					else
+						screenLineCount += lines;
+				}
+			}
+			else
+			{
+				newFirstLine = firstLine - visibleLines;
+			}
 			setFirstLine(newFirstLine);
 		}
 		else
@@ -507,7 +526,7 @@ public class JEditTextArea extends JComponent
 	{
 		int numLines = getVirtualLineCount();
 
-		if((softWrap && firstLine < numLines) ||
+		if((softWrap && firstLine + 1 < numLines) ||
 			(firstLine + visibleLines < numLines))
 			setFirstLine(firstLine + 1);
 		else
@@ -523,16 +542,13 @@ public class JEditTextArea extends JComponent
 	{
 		int numLines = getVirtualLineCount();
 
-		if(firstLine + visibleLines < numLines)
+		if((softWrap && firstLine + 1 < numLines) ||
+			(firstLine + visibleLines < numLines))
 		{
-			int newFirstLine = firstLine + visibleLines;
-			setFirstLine(newFirstLine + visibleLines < numLines
-				? newFirstLine : numLines - visibleLines);
+			setFirstLine(physicalToVirtual(physLastLine));
 		}
 		else
-		{
 			getToolkit().beep();
-		}
 	} //}}}
 
 	//{{{ scrollToCaret() method
@@ -557,7 +573,18 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		int _electricScroll = (doElectricScroll && visibleLines > 6
+		int extraEndVirt;
+		int lineLength = buffer.getLineLength(line);
+		if(offset > lineLength)
+		{
+			extraEndVirt = charWidth * (offset - lineLength);
+			offset = lineLength;
+		}
+		else
+			extraEndVirt = 0;
+
+		int _electricScroll = (doElectricScroll
+			&& visibleLines > electricScroll * 2
 			? electricScroll : 0);
 
 		// visibleLines == 0 before the component is realized
@@ -578,11 +605,16 @@ public class JEditTextArea extends JComponent
 			// It's visible, but is it too close to the borders?
 			int height = painter.getFontMetrics().getHeight();
 
-			Rectangle rect = new Rectangle(0,height * _electricScroll,
+			int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
+			int y2 = (visibleLines + firstLine == getVirtualLineCount()
+				? 0 : height * _electricScroll);
+
+			Rectangle rect = new Rectangle(0,y1,
 				painter.getWidth() - 5,visibleLines * height
-				- height * _electricScroll * 2);
+				- y1 - y2);
 
 			point = offsetToXY(line,offset,returnValue);
+			point.x += extraEndVirt;
 			if(rect.contains(point))
 				return;
 		}
@@ -590,6 +622,7 @@ public class JEditTextArea extends JComponent
 			point = null;
 		//}}}
 
+		System.err.println("scrolling");
 		//{{{ STAGE 2 -- scroll vertically
 		if(line == physLastLine + 1)
 		{
@@ -643,7 +676,7 @@ public class JEditTextArea extends JComponent
 					physFirstLine = line;
 
 					int count = 0;
-	
+
 					for(;;)
 					{
 						if(foldVisibilityManager.isLineVisible(physFirstLine))
@@ -702,6 +735,8 @@ public class JEditTextArea extends JComponent
 				// than the number of visible lines
 				return;
 			}
+			else
+				point.x += extraEndVirt;
 		} //}}}
 
 		//{{{ STAGE 3 -- scroll horizontally
@@ -2061,54 +2096,50 @@ forward_scan:		do
 				+ newCaret);
 		}
 
-		// When the user is typing, etc, we don't want the caret
-		// to blink
-		blink = true;
-		caretTimer.restart();
-
 		if(caret == newCaret)
 		{
 			if(view.getTextArea() == this)
 				finishCaretUpdate(doElectricScroll,false);
-			return;
-		}
-
-		int newCaretLine = getLineOfOffset(newCaret);
-
-		magicCaret = -1;
-
-		if(!foldVisibilityManager.isLineVisible(newCaretLine))
-		{
-			if(foldVisibilityManager.isNarrowed())
-			{
-				int collapseFolds = buffer.getIntegerProperty(
-					"collapseFolds",0);
-				if(collapseFolds != 0)
-					foldVisibilityManager.expandFolds(collapseFolds);
-				else
-					foldVisibilityManager.expandAllFolds();
-			}
-			else
-				foldVisibilityManager.expandFold(newCaretLine,false);
-		}
-
-		if(caretLine == newCaretLine)
-		{
-			if(caretScreenLine != -1)
-				invalidateScreenLineRange(caretScreenLine,caretScreenLine);
 		}
 		else
 		{
-			caretScreenLine = chunkCache.getScreenLineOfOffset(newCaretLine,
-				newCaret - buffer.getLineStartOffset(newCaretLine));
-			invalidateLineRange(caretLine,newCaretLine);
+			int newCaretLine = getLineOfOffset(newCaret);
+
+			magicCaret = -1;
+
+			if(!foldVisibilityManager.isLineVisible(newCaretLine))
+			{
+				if(foldVisibilityManager.isNarrowed())
+				{
+					int collapseFolds = buffer.getIntegerProperty(
+						"collapseFolds",0);
+					if(collapseFolds != 0)
+						foldVisibilityManager.expandFolds(collapseFolds);
+					else
+						foldVisibilityManager.expandAllFolds();
+				}
+				else
+					foldVisibilityManager.expandFold(newCaretLine,false);
+			}
+
+			if(caretLine == newCaretLine)
+			{
+				if(caretScreenLine != -1)
+					invalidateScreenLineRange(caretScreenLine,caretScreenLine);
+			}
+			else
+			{
+				caretScreenLine = chunkCache.getScreenLineOfOffset(newCaretLine,
+					newCaret - buffer.getLineStartOffset(newCaretLine));
+				invalidateLineRange(caretLine,newCaretLine);
+			}
+
+			caret = newCaret;
+			caretLine = newCaretLine;
+
+			if(view.getTextArea() == this)
+				finishCaretUpdate(doElectricScroll,true);
 		}
-
-		caret = newCaret;
-		caretLine = newCaretLine;
-
-		if(view.getTextArea() == this)
-			finishCaretUpdate(doElectricScroll,true);
 	} //}}}
 
 	//{{{ getCaretPosition() method
@@ -4939,6 +4970,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean scrollBarsInitialized;
 
+	// not private so that inner classes can use without access$ methods.
+	// see moveCaretPosition() and BufferChangeHandler.content{Inserted,Removed}()
+	// for details of how these are used.
+	boolean queuedScrollTo;
+	boolean queuedScrollToElectric;
+	boolean queuedFireCaretEvent;
+	boolean queuedRecalculateLastPhysicalLine;
+	ArrayList runnables;
+
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
 	Vector selection;
@@ -4994,6 +5034,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
+		lastLinePartial = (height % lineHeight != 0);
 
 		chunkCache.recalculateVisibleLines();
 		propertiesChanged();
@@ -5144,6 +5185,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private int physFirstLine;
 	private int physLastLine;
 	private int screenLastLine;
+	private boolean lastLinePartial;
 
 	private int visibleLines;
 	private int electricScroll;
@@ -5174,13 +5216,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean overwrite;
 
 	private int maxLineLen;
-
-	// see moveCaretPosition() and BufferChangeHandler.content{Inserted,Removed}()
-	private boolean queuedRecalcLastPhys;
-	private boolean queuedScrollTo;
-	private boolean queuedScrollToElectric;
-	private boolean queuedFireCaretEvent;
-	private ArrayList runnables;
 	//}}}
 
 	//{{{ _addToSelection() method
@@ -5254,6 +5289,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			public void run()
 			{
+				// When the user is typing, etc, we don't want the caret
+				// to blink
+				blink = true;
+				caretTimer.restart();
+
 				scrollToCaret(queuedScrollToElectric);
 				updateBracketHighlight();
 				if(queuedFireCaretEvent)
@@ -5801,8 +5841,40 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ BufferChangeHandler class
+	/**
+	 * Note that in this class we take great care to defer complicated
+	 * calculations to the end of the current transaction if the buffer
+	 * informs us an involved edit is in progress
+	 * (<code>isTransactionInProgress()</code>).
+	 *
+	 * This greatly speeds up replace all for example, by only doing certain
+	 * things once, particularly in <code>moveCaretPosition()</code>.
+	 *
+	 * Try doing a replace all in a large file, for example. It is very slow
+	 * in 3.2, faster in 4.0 (where the transaction optimization was
+	 * introduced) and faster still in 4.1 (where it was further improved).
+	 *
+	 * There is still work to do; see TODO.txt.
+	 */
 	class BufferChangeHandler implements BufferChangeListener
 	{
+		boolean delayedUpdate;
+		boolean delayedMultilineUpdate;
+		int delayedRepaintStart;
+		int delayedRepaintEnd;
+		int delayedFirstLine;
+		Runnable recalculateLastPhysicalLine = new Runnable()
+		{
+			public void run()
+			{
+				int oldScreenLastLine = screenLastLine;
+				recalculateLastPhysicalLine();
+				invalidateScreenLineRange(oldScreenLastLine,
+					screenLastLine);
+				queuedRecalculateLastPhysicalLine = false;
+			}
+		};
+
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
 		{
@@ -5816,27 +5888,19 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
+			// ... otherwise,buffer will call transactionComplete()
+			// later on
+			//if(!buffer.isTransactionInProgress())
 			chunkCache.invalidateChunksFromPhys(startLine);
 
-			// Inserting multiple lines can change the last physical
-			// line due to folds being pushed down and so on
-			if(numLines != 0 || (softWrap
-				&& foldVisibilityManager.getLastVisibleLine()
-				- numLines <= physLastLine))
-			{
-				int oldScreenLastLine = screenLastLine;
-				recalculateLastPhysicalLine();
-				invalidateScreenLineRange(oldScreenLastLine,
-					screenLastLine);
-			}
+			_recalculateLastPhysicalLine(numLines);
 
 			if(!buffer.isLoaded())
 				return;
 
 			repaintAndScroll(startLine,numLines);
 
-			// loop through all selections, resizing them if
-			// necessary
+			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
 			{
 				Selection s = (Selection)selection.elementAt(i);
@@ -5847,20 +5911,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					|| (s instanceof Selection.Range && s.start >= start))
 				{
 					s.start += length;
-					s.startLine = getLineOfOffset(s.start);
+					if(numLines != 0)
+						s.startLine = getLineOfOffset(s.start);
 					changed = true;
 				}
 
 				if(s.end >= start)
 				{
 					s.end += length;
-					s.endLine = getLineOfOffset(s.end);
+					if(numLines != 0)
+						s.endLine = getLineOfOffset(s.end);
 					changed = true;
 				}
 
 				if(changed)
-					invalidateLineRange(s.startLine,s.endLine);
-			}
+				{
+					delayedRepaintStart = Math.min(
+						delayedRepaintStart,
+						s.startLine);
+					delayedRepaintEnd = Math.max(
+						delayedRepaintEnd,
+						s.endLine);
+				}
+			} //}}}
 
 			if(caret >= start)
 				moveCaretPosition(caret + length,true);
@@ -5869,6 +5942,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret);
 			}
+
+			// ... otherwise,buffer will call transactionComplete()
+			// later on
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
 		}
 		//}}}
 
@@ -5876,46 +5954,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentRemoved(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
+			// ... otherwise,buffer will call transactionComplete()
+			// later on
+			//if(!buffer.isTransactionInProgress())
+			chunkCache.invalidateChunksFromPhys(startLine);
+
 			if(!buffer.isLoaded())
 				return;
 
-			chunkCache.invalidateChunksFromPhys(startLine);
-
-			// -lineCount because they are removed.
+			// -numLines because they are removed.
 			repaintAndScroll(startLine,-numLines);
-
-			if(numLines != 0 || (softWrap
-				&& foldVisibilityManager.getLastVisibleLine()
-				+ numLines <= physLastLine))
-			{
-				Runnable r = new Runnable()
-				{
-					public void run()
-					{
-						queuedRecalcLastPhys = false;
-						int oldScreenLastLine = screenLastLine;
-						recalculateLastPhysicalLine();
-						invalidateScreenLineRange(oldScreenLastLine,
-							screenLastLine);
-					}
-				};
-
-				if(buffer.isTransactionInProgress())
-				{
-					if(!queuedRecalcLastPhys)
-					{
-						queuedRecalcLastPhys = true;
-						runnables.add(r);
-					}
-				}
-				else
-					r.run();
-			}
+			_recalculateLastPhysicalLine(-numLines);
 
 			int end = start + length;
 
-			// loop through all selections, resizing them if
-			// necessary
+			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
 			{
 				Selection s = (Selection)selection.elementAt(i);
@@ -5947,16 +6000,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(s.start == s.end)
 				{
 					selection.removeElement(s);
-					invalidateLineRange(s.startLine,s.endLine);
+					delayedRepaintStart = Math.min(
+						delayedRepaintStart,
+						s.startLine);
+					delayedRepaintEnd = Math.max(
+						delayedRepaintEnd,
+						s.endLine);
 					i--;
 				}
 				else if(changed)
 				{
-					s.startLine = getLineOfOffset(s.start);
-					s.endLine = getLineOfOffset(s.end);
-					invalidateLineRange(s.startLine,s.endLine);
+					if(numLines != 0)
+					{
+						s.startLine = getLineOfOffset(s.start);
+						s.endLine = getLineOfOffset(s.end);
+					}
+					delayedRepaintStart = Math.min(
+						delayedRepaintStart,
+						s.startLine);
+					delayedRepaintEnd = Math.max(
+						delayedRepaintEnd,
+						s.endLine);
 				}
-			}
+			} //}}}
 
 			if(caret > start && caret <= end)
 				moveCaretPosition(start,false);
@@ -5967,12 +6033,41 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret);
 			}
+
+			// ... otherwise, it will be called by the buffer
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
 		}
 		//}}}
 
 		//{{{ transactionComplete() method
 		public void transactionComplete(Buffer buffer)
 		{
+			if(delayedUpdate)
+			{
+				//chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
+
+				if(delayedFirstLine != firstLine)
+					setFirstLine(delayedFirstLine);
+				else if(delayedMultilineUpdate)
+					updateScrollBars();
+
+				if(delayedMultilineUpdate)
+				{
+					invalidateScreenLineRange(chunkCache
+						.getScreenLineOfOffset(
+						delayedRepaintStart,0),
+						screenLastLine);
+				}
+				else
+				{
+					invalidateLineRange(delayedRepaintStart,
+						delayedRepaintEnd);
+				}
+
+				delayedUpdate = delayedMultilineUpdate = false;
+			}
+
 			for(int i = 0; i < runnables.size(); i++)
 			{
 				((Runnable)runnables.get(i)).run();
@@ -5980,24 +6075,52 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			runnables.clear();
 		} //}}}
 
+		//{{{ _recalculateLastPhysicalLine() method
+		private void _recalculateLastPhysicalLine(int numLines)
+		{
+			// Inserting multiple lines can change the last physical
+			// line due to folds being pushed down and so on
+			if(numLines != 0 || (softWrap && getFoldVisibilityManager()
+				.getLastVisibleLine() - numLines <= getLastPhysicalLine()))
+			{
+				if(buffer.isTransactionInProgress())
+				{
+					if(!queuedRecalculateLastPhysicalLine)
+					{
+						queuedRecalculateLastPhysicalLine = true;
+						runnables.add(recalculateLastPhysicalLine);
+					}
+				}
+				else
+					recalculateLastPhysicalLine.run();
+			}
+		} //}}}
+
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
-			if(numLines == 0)
-				invalidateLine(startLine);
-			// do magic stuff
-			else if(startLine < firstLine)
+			if(numLines != 0)
+				delayedMultilineUpdate = true;
+
+			if(!delayedUpdate)
 			{
-				setFirstLine(firstLine + numLines);
-				// calls updateScrollBars()
+				delayedFirstLine = getFirstLine();
+				delayedRepaintStart = startLine;
+				delayedRepaintEnd = startLine;
+				delayedUpdate = true;
 			}
-			// end of magic stuff
 			else
 			{
-				updateScrollBars();
-				invalidateScreenLineRange(chunkCache.getScreenLineOfOffset(
-					startLine,0),screenLastLine);
+				delayedRepaintStart = Math.min(
+					delayedRepaintStart,
+					startLine);
+				delayedRepaintEnd = Math.max(
+					delayedRepaintEnd,
+					startLine);
 			}
+
+			if(startLine < delayedFirstLine)
+				delayedFirstLine += numLines;
 		} //}}}
 	} //}}}
 
@@ -6225,9 +6348,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(getFirstLine() + 1);
 			}
 
-			/* boolean rect = (OperatingSystem.isMacOS() && evt.isMetaDown())
-					|| (!OperatingSystem.isMacOS() && evt.isControlDown()); */
-
 			if(quickCopyDrag)
 			{
 				view.getStatus().setMessage(jEdit.getProperty(
@@ -6247,10 +6367,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				doSingleDrag(evt,control);
 				break;
 			case 2:
-				doDoubleDrag(evt,control);
+				doDoubleDrag(evt);
 				break;
 			default: //case 3:
-				doTripleDrag(evt,control);
+				doTripleDrag(evt);
 				break;
 			}
 		} //}}}
@@ -6262,18 +6382,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int dot = xyToOffset(x,
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
 				!painter.isBlockCaretEnabled());
-			int dotLine = getLineOfOffset(dot);
-			float dotLineWidth = offsetToXY(dotLine,getLineLength(dotLine),
-				returnValue).x;
-			int extraEndVirt;
-			if(x > dotLineWidth)
+			int dotLine = buffer.getLineOfOffset(dot);
+			int extraEndVirt = 0;
+
+			if(dotLine != physLastLine || chunkCache.getLineInfo(
+				screenLastLine).lastSubregion)
 			{
-				extraEndVirt = (int)((x - dotLineWidth) / charWidth);
-				if(x % charWidth  > charWidth / 2)
-					extraEndVirt++;
+				float dotLineWidth = offsetToXY(dotLine,getLineLength(dotLine),
+					returnValue).x;
+				if(x > dotLineWidth)
+				{
+					extraEndVirt = (int)((x - dotLineWidth) / charWidth);
+					if(x % charWidth  > charWidth / 2)
+						extraEndVirt++;
+				}
 			}
-			else
-				extraEndVirt = 0;
 
 			dragged = true;
 
@@ -6282,19 +6405,22 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(quickCopyDrag)
 			{
 				// just scroll to the dragged location
-				int line = buffer.getLineOfOffset(dot);
-				scrollTo(line,dot - buffer.getLineStartOffset(line),false);
+				scrollTo(dotLine,dot - buffer.getLineStartOffset(dotLine),false);
 			}
 			else
 			{
-				if(dot == caret)
-					return;
-				moveCaretPosition(dot,false);
+				if(dot != caret)
+					moveCaretPosition(dot,false);
+				if(rect && extraEndVirt != 0)
+				{
+					scrollTo(dotLine,dot - buffer.getLineStartOffset(dotLine)
+						+ extraEndVirt,false);
+				}
 			}
 		} //}}}
 
 		//{{{ doDoubleDrag() method
-		private void doDoubleDrag(MouseEvent evt, boolean rect)
+		private void doDoubleDrag(MouseEvent evt)
 		{
 			int markLineStart = getLineStartOffset(dragStartLine);
 			int markLineLength = getLineLength(dragStartLine);
@@ -6351,13 +6477,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 
 			resizeSelection(markLineStart + mark,lineStart + offset,
-				0,rect);
+				0,false);
 			if(!quickCopyDrag)
 				moveCaretPosition(lineStart + offset,false);
 		} //}}}
 
 		//{{{ doTripleDrag() method
-		private void doTripleDrag(MouseEvent evt, boolean rect)
+		private void doTripleDrag(MouseEvent evt)
 		{
 			int offset = xyToOffset(evt.getX(),
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
@@ -6392,7 +6518,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			dragged = true;
 
-			resizeSelection(mark,mouse,0,rect);
+			resizeSelection(mark,mouse,0,false);
 			moveCaretPosition(mouse,false);
 		} //}}}
 

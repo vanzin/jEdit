@@ -50,10 +50,10 @@
     heap beyond this size fail with out-of-memory errors.
    </para>
    <para>
-    One side-effect of this is that if the maximum heap size is set too low,
+    As a result, if the maximum heap size is set too low,
     opening large files or performing other memory-intensive operations can
-    fail, even if you have a lot of system memory free. The solution is to
-    change the Java heap size.
+    fail unless you increase the Java heap size, even if you have a lot of free
+    system memory.
    </para>
    <para>
     To change the heap size on Windows, run <quote>Set jEdit Parameters</quote>
@@ -90,7 +90,7 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>New Plain View</guimenuitem> creates
    a new view but without any tool bars or docked windows. This can be used to
-   open a small unintrusive for taking notes and so on.
+   open a small, unintrusive window for taking notes and so on.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
@@ -143,11 +143,11 @@
    mouse-based access to frequently-used commands.
    The contents of the tool bar and right-click menu can be
    changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
+   Options</guimenuitem> dialog box; see <xref linkend="global-opts" />.
   </para>
   <sect2 id="docking"><title>Window Docking</title>
    <para>
-    The file system browser, HyperSearch results window, and many plugin
+    Various jEdit and plugin
     windows can optionally be docked into the view. This can be
     configured in the <guibutton>Docking</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
@@ -166,33 +166,30 @@
    </para>
    <sidebar><title>For power users</title>
     <para>
-     In addition to the standard menu item command, each dockable window also
-     has two other commands associated with it; they are named:
+     Each dockable has three commands assiciated with it; one is part of the
+     menu bar and opens the dockable. The other two commands are:
     </para>
     <itemizedlist>
-     <listitem><para><guimenuitem><replaceable>Name of dockable</replaceable>
+     <listitem><para><guimenuitem><replaceable>Window name</replaceable>
      (Toggle)</guimenuitem> - opens the dockable window if it is hidden, and
      hide it if its already open.</para></listitem>
-     <listitem><para><guimenuitem><replaceable>Name of dockable</replaceable>
-     (New Floating Instance)</guimenuitem> - opens a new floating window
-     containing a new instance of the dockable, regardless of the docking
-     configuration.</para></listitem>
-    </itemizedlist>
-    <para>
-     While these commands cannot be invoked from the menu bar, they can be
-     added to the tool bar or context menu, or given keyboard shortcuts.
-     (See <xref linkend="global-opts" /> for information about how to do this.)
-    </para>
-    <para>
-     The former can be used to conveniently open and close dockables with a
-     keyboard command; the latter is useful for doing things like viewing two
+     <listitem><para><guimenuitem><replaceable>Window name</replaceable>
+     (New Floating Instance)</guimenuitem> - opens a new instance of the
+     dockable in a floating window, regardless of the docking
+     configuration. This can be used to view two
      different directories side-by-side in two file system browser windows,
-     for example.
-    </para>
-    <para>
+     for example.</para>
+     <para>
      Another way to open a new floating instance of a window that is already
      docked is to right-click on the appropriate strip of buttons; this shows
      a menu from which you can choose to open a new floating instance.
+    </para>
+    </listitem>
+    </itemizedlist>
+    <para>
+     These commands cannot be invoked from the menu bar. However, they can be
+     added to the tool bar or context menu, and given keyboard shortcuts;
+     see <xref linkend="global-opts" />.
     </para>
    </sidebar>
   </sect2>
@@ -216,10 +213,8 @@
      <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line</guimenuitem> dialog
      box; see <xref linkend="lines" />.
     </para></listitem>
-    <listitem><para>Prompts displayed by commands such as those dealing with
-    registers and markers (see <xref linkend="text-transfer" /> and <xref
-    linkend="markers" />), also I/O progress messages (see
-    <xref linkend="threaded-io" />)</para></listitem>
+    <listitem><para>A message area where various prompts and status messages
+    are shown.</para></listitem>
     <listitem><para>The current buffer's edit mode, fold mode,
     and character encoding. Double-clicking one of these
     displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
@@ -232,45 +227,39 @@
      <listitem><para><xref linkend="encodings" /></para></listitem>
     </itemizedlist>
     </listitem>
-    <listitem><para>To the right of the character encoding display is a set of
+    <listitem><para>A set of
     flags which indicate various editor features and settings. Clicking each
     flag will toggle the feature in question; hovering the mouse over a flag
-    will show a tool tip with an explanation.</para></listitem>
-    <listitem><para>The flags, from left to right, are word wrap,
-    multiple selection, overwrite mode indicator and line separator indicator.
-    For more information about these settings, see:
-    </para>
-    <itemizedlist>
-     <listitem><para><xref linkend="word-wrap" /></para></listitem>
-     <listitem><para><xref linkend="multi-select" /></para></listitem>
-     <listitem><para><xref linkend="entering-text" /></para></listitem>
-     <listitem><para><xref linkend="line-separators" /></para></listitem>
-    </itemizedlist>
-    </listitem>
-    <listitem><para>A Java heap memory usage indicator, that shows used versus
-    total heap memory, in megabytes. Double-clicking here opens the
+    will show a tool tip with an explanation:</para></listitem>
+    <listitem><para>Word wrap - see <xref linkend="word-wrap" />.</para></listitem>
+    <listitem><para>Multiple selection mode - see <xref linkend="multi-select" />.</para></listitem>
+    <listitem><para>Overwrite mode - see <xref linkend="entering-text" />.</para></listitem>
+    <listitem><para>Line separator - see <xref linkend="line-separators" />.</para></listitem>
+    <listitem><para>A Java heap memory usage indicator, that shows used and
+    total heap memory, in megabytes. Double-clicking this indicator opens the
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Memory Status</guimenuitem>
     dialog box.</para></listitem>
    </itemizedlist>
+   <para>
+    The content of the status bar can be customized in the
+    <guibutton>Status Bar</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
+   </para>
    <sidebar><title>For power users</title>
     <para>
-     If you would like to be able to quickly toggle the line
-     separator or word wrap settings without having to use the mouse, you can
-     assign keyboard shortcuts to the following two commands in the
+     To quickly toggle the line
+     separator or word wrap settings without having to use the mouse,
+     assign keyboard shortcuts to the <guimenuitem>Toggle Line Separator</guimenuitem>
+     and <guimenuitem>Toggle Word Wrap</guimenuitem> commands in the
      <guibutton>Shortcuts</guibutton> pane of the
      <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-     dialog box:
+     dialog box.
     </para>
-    <itemizedlist>
-     <listitem><para><guimenuitem>Toggle Line Separator</guimenuitem>
-     </para></listitem>
-     <listitem><para><guimenuitem>Toggle Word Wrap</guimenuitem>
-     </para></listitem>
-    </itemizedlist>
    </sidebar>
   </sect2>
  </sect1>
- <sect1 id="textarea"><title>The Text Area</title>
+ <sect1 id="textarea"><title>The Text Area and Gutter</title>
   <para>
    Text editing takes place in the text area. It behaves in a similar
    manner to many Windows and MacOS editors; the few
@@ -299,7 +288,7 @@
    the  <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes
    of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" /> for details.
+   dialog box; see <xref linkend="global-opts" />.
   </para>
  </sect1>
 </chapter>

@@ -9,12 +9,38 @@ contributing to this release.
 
 - Freemaker syntax highlighting (Jonathan Revusky).
 
-+ Miscellaneous Changes:
++ User Interface Changes:
 
 - The parent directory list in the file system browser now requires a
   double-click (or middle mouse button click) to open a directory. This
   makes it consistent with the behavior of the file tree below it, which
   also requires double-clicks.
+
+- The tooltips shown by the file system browser when a filename is
+  partially obscured are no longer positioned over the filename, because
+  Swing does not pass clicks inside tooltips to the underlying
+  component.
+
+- The help viewer now shows the title of the current page in place of
+  the location field, and the location field is now gone. As a result
+  the help viewer can no longer be used to view arbitriary URLs. Use the
+  InfoViewer plugin for that purpose instead.
+
++ Global Options Dialog Changes:
+
+- The Global Options dialog box now opens to display the most recently
+  viewed option pane. Also the "overview" pane is gone.
+
+- Merged the Editing and Mode-Specific option panes.
+
+- The text area right-click popup menu now contains an item "Customize"
+  for quick access to the Context Menu pane of the Global Options dialog
+  box.
+
+- If a HyperSearch produces no results, older result nodes are collapsed
+  in the "HyperSearch Results" window.
+
++ Miscellaneous Changes:
 
 - If the user and system macro directories have a subdirectory with the
   same name, the contents of the subdirectories are merged in the
@@ -24,14 +50,28 @@ contributing to this release.
 - The plugin list in the "Install Plugins" and "Update Plugins" dialog
   boxes is now categorized.
 
-- The Global Options dialog box now opens to display the most recently
-  viewed option pane. Also the "overview" pane is gone.
+- jEdit now remembers if a window was maximized when saving geometry if
+  running under Java 1.4. (Chris Kent)
 
-- jEdit now remembers if a window was maximized when saving geometry
-  (Chris Kent).
+- The roots: filesystem now calls Java 1.4 methods where appropriate to
+  obtain the roots. This means that on Windows, for example, in addition
+  to listing drive letters, it will also list files on the desktop.
 
-- If a HyperSearch produces no results, older result nodes are collapsed
-  in the "HyperSearch Results" window.
+- The tips of the day have been updated for assorted jEdit 4.1 changes.
+
++ Performance Improvements:
+
+- Improved performance of line offset manager when a lot of changes are
+  made starting from the end of the buffer going to the beginning. Early
+  in the 4.1 series a corresponding optimization was added for edits
+  going in the other direction, which improved performance of "Replace
+  All" and similar operations significantly. This change improves
+  performance of undos of "Replace All".
+
+- Improved performance of text area when a lot of changes are made to a
+  buffer, especially while selections are active, or if soft wrap is
+  switched on. Again this improves performance of "Replace All", which
+  was nearly unusable with soft wrap.
 
 + Bug Fixes:
 
@@ -40,14 +80,15 @@ contributing to this release.
   the assignment (unless you'd like the TAB key to always insert a tab,
   without indenting).
 
-- Backed out Rex Young's ReadWriteLock.java fix since it caused
-  deadlocks.
+- Backed out Rex Young's ReadWriteLock.java fix from pre6 since it
+  caused deadlocks.
 
 - Fixed some long-standing bugs in the reverse search code.
 
 - Dialogs that are shown by other dialogs have been updated to have the
   invoking dialog as their parent, instead of the containing frame. This
   should fix problems with some windows obscuring others, etc.
+  (Marcelo Vanzin)
 
 - Fixed a possible ClassCastException that could occur if macro
   directories were nested.
@@ -61,10 +102,44 @@ contributing to this release.
 - A Control-click did not bring up the right-click popup menu in the
   file system browser on MacOS X.
 
+- Fixed a NullPointerException when selecting text in the last visible
+  line, if soft wrap was on and only the top part of the last visible
+  line was visible.
+
+- Fixed a possible ArrayIndexOutOfBoundsException when a rectangular
+  selection started or ended within a hard tab.
+
+- Plugin actions and dockables are no longer loaded if the plugin's
+  start() method failed, or if dependencies were unsatisfied.
+
+- Wheel mouse scrolling should once again respect the operating system's
+  scroll amount setting.
+
+- The Page Scroll Up and Page Scroll Down commands now scroll the
+  correct amount if soft wrap is enabled.
+
+- Fixed possible ArrayIndexOutOfBoundsException if a buffer had a
+  HyperSearch performed in it, then modified, closed and opened again.
+
+- When doing a Replace All operation over a directory, edits performed
+  on files that were not open before the search started were not batched
+  in a compound edit due to an erronous "isTemporary()" check in
+  begin/endCompoundEdit().
+
+- Fixed a possible ArrayIndexOutOfBoundsException in the status bar when
+  making changes near the end of the buffer.
+
+- Closing the Global Options dialog box would add dockables to plain
+  views. Plain views are not supposed to have dockables.
+
 + API Additions:
 
 - You can now open the Global Options dialog box on a specified option
-  pane using the new GlobalOptions(View,String) constructor.
+  pane using the new GlobalOptions(Frame,String) and
+  GlobalOptions(Dialog,String) constructor.
+
+- Added VFS.getTwoStageSaveName() method. Override this if your VFS does
+  not allow file names to contain the # character.
 
 * Version 4.1pre6
 

@@ -41,14 +41,17 @@ logw|Log.log(Log.WARNING,this,\|);
 logn|Log.log(Log.NOTICE,this,\|);
 logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
+Cget|($1)$2.get($3)
+CtoArray|($1[])$2.toArray(new $1[$2.size()])
 [vhdl]
 sl|std_logic
 slv|std_logic_vector( x downto y )
 var|variable
 sig|signal
 [xml]
-Ykeycap|<keycap>\|</>
-Ykeycombo|<keycombo><keycap>$1</><keycap>$2</></keycombo>
+Ykeycap|<keycap>\|</keycap>
+Ykeycombo|<keycombo><keycap>$1</keycap><keycap>$2</keycap></keycombo>
+YY|<$1>\n\|\n</$1>
 [xsl]
 ai|<xsl:apply-imports/>
 an|<xsl:attribute name="\|"></xsl:attribute>

@@ -151,7 +151,7 @@ public class OffsetManager
 	public final void setFoldLevel(int line, int level)
 	{
 		if(gapLine != -1 && line >= gapLine)
-			moveGap(line + 1,0);
+			moveGap(line + 1,0,"setFoldLevel");
 
 		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK)
 			| ((long)level << FOLD_LEVEL_SHIFT)
@@ -213,7 +213,7 @@ public class OffsetManager
 	public final void setLineContext(int line, TokenMarker.LineContext context)
 	{
 		if(gapLine != -1 && line >= gapLine)
-			moveGap(line + 1,0);
+			moveGap(line + 1,0,"setLineContext");
 
 		lineContext[line] = context;
 		lineInfo[line] |= CONTEXT_VALID_MASK;
@@ -316,7 +316,7 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			moveGap(-1,0);
+			moveGap(-1,0,"contentInserted");
 
 			lineCount += numLines;
 
@@ -384,7 +384,7 @@ public class OffsetManager
 			//}}}
 		} //}}}
 
-		moveGap(endLine,length);
+		moveGap(endLine,length,"contentInserted");
 
 		updatePositionsForInsert(offset,length);
 	} //}}}
@@ -420,7 +420,7 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			moveGap(-1,0);
+			moveGap(-1,0,"contentRemoved");
 
 			lineCount -= numLines;
 			System.arraycopy(lineInfo,startLine + numLines,lineInfo,
@@ -429,7 +429,7 @@ public class OffsetManager
 				startLine,lineCount - startLine);
 		} //}}}
 
-		moveGap(startLine,-length);
+		moveGap(startLine,-length,"contentRemoved");
 
 		updatePositionsForRemove(offset,length);
 	} //}}}
@@ -437,7 +437,7 @@ public class OffsetManager
 	//{{{ lineInfoChangedFrom() method
 	public void lineInfoChangedFrom(int startLine)
 	{
-		moveGap(startLine,0);
+		moveGap(startLine,0,"lineInfoChangedFrom");
 	} //}}}
 
 	//{{{ Private members
@@ -502,25 +502,42 @@ public class OffsetManager
 	} //}}}
 
 	//{{{ moveGap() method
-	private final void moveGap(int newGapLine, int newGapWidth)
+	private final void moveGap(int newGapLine, int newGapWidth, String method)
 	{
-		//System.err.println(buffer.getName() + ": Moving gap from "
-		//	+ gapLine + " to " + newGapLine);
-
 		if(gapLine == -1)
 			gapWidth = newGapWidth;
-		// this handles the newGapLine == -1 case correctly!
-		else if(newGapLine < gapLine)
+		else if(newGapLine == -1)
 		{
-			for(int i = gapLine; i < lineCount; i++)
-				setLineEndOffset(i,getLineEndOffset(i));
+			if(gapWidth != 0)
+			{
+				//if(DEBUG && gapLine != lineCount)
+				//	System.err.println(method + ": update from " + gapLine + " to " + lineCount);
+				for(int i = gapLine; i < lineCount; i++)
+					setLineEndOffset(i,getLineEndOffset(i));
+			}
 
 			gapWidth = newGapWidth;
 		}
+		else if(newGapLine < gapLine)
+		{
+			if(gapWidth != 0)
+			{
+				//if(DEBUG && newGapLine != gapLine)
+				//	System.err.println(method + ": update from " + newGapLine + " to " + gapLine);
+				for(int i = newGapLine; i < gapLine; i++)
+					setLineEndOffset(i,getLineEndOffset(i) - gapWidth);
+			}
+			gapWidth += newGapWidth;
+		}
 		else //if(newGapLine >= gapLine)
 		{
-			for(int i = gapLine; i < newGapLine; i++)
-				setLineEndOffset(i,getLineEndOffset(i));
+			if(gapWidth != 0)
+			{
+				//if(DEBUG && gapLine != newGapLine)
+				//	System.err.println(method + ": update from " + gapLine + " to " + newGapLine);
+				for(int i = gapLine; i < newGapLine; i++)
+					setLineEndOffset(i,getLineEndOffset(i));
+			}
 
 			gapWidth += newGapWidth;
 		}

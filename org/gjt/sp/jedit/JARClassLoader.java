@@ -56,6 +56,7 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
+		this.path = path;
 		zipFile = new JarFile(path);
 		definePackages();
 
@@ -68,21 +69,9 @@ public class JARClassLoader extends ClassLoader
 			String name = entry.getName();
 			String lname = name.toLowerCase();
 			if(lname.equals("actions.xml"))
-			{
-				jEdit.loadActions(
-					path + "!actions.xml",
-					new BufferedReader(new InputStreamReader(
-					zipFile.getInputStream(entry))),
-					jar.getActions());
-			}
+				pluginResources.add(entry);
 			if(lname.equals("dockables.xml"))
-			{
-				DockableWindowManager.loadDockableWindows(
-					path + "!dockables.xml",
-					new BufferedReader(new InputStreamReader(
-					zipFile.getInputStream(entry))),
-					jar.getActions());
-			}
+				pluginResources.add(entry);
 			else if(lname.endsWith(".props"))
 				jEdit.loadProps(zipFile.getInputStream(entry),true);
 			else if(name.endsWith(".class"))
@@ -90,7 +79,7 @@ public class JARClassLoader extends ClassLoader
 				classHash.put(MiscUtilities.fileToClass(name),this);
 
 				if(name.endsWith("Plugin.class"))
-					pluginClasses.addElement(name);
+					pluginClasses.add(name);
 			}
 		}
 
@@ -237,17 +226,21 @@ public class JARClassLoader extends ClassLoader
 	//{{{ startAllPlugins() method
 	void startAllPlugins()
 	{
+		boolean ok = true;
+
 		for(int i = 0; i < pluginClasses.size(); i++)
 		{
-			String name = (String)pluginClasses.elementAt(i);
+			String name = (String)pluginClasses.get(i);
 			name = MiscUtilities.fileToClass(name);
 
 			try
 			{
-				loadPluginClass(name);
+				ok &= loadPluginClass(name);
 			}
 			catch(Throwable t)
 			{
+				ok = false;
+
 				Log.log(Log.ERROR,this,"Error while starting plugin " + name);
 				Log.log(Log.ERROR,this,t);
 
@@ -256,6 +249,47 @@ public class JARClassLoader extends ClassLoader
 				jEdit.pluginError(jar.getPath(),
 					"plugin-error.start-error",args);
 			}
+		}
+
+		if(!ok)
+		{
+			// don't load actions and dockables if plugin didn't load.
+			return;
+		}
+
+		try
+		{
+			for(int i = 0; i < pluginResources.size(); i++)
+			{
+				ZipEntry entry = (ZipEntry)pluginResources.get(i);
+				String name = entry.getName();
+				String lname = name.toLowerCase();
+				if(name.equalsIgnoreCase("actions.xml"))
+				{
+					jEdit.loadActions(
+						path + "!actions.xml",
+						new BufferedReader(new InputStreamReader(
+						zipFile.getInputStream(entry))),
+						jar.getActions());
+				}
+				else if(name.equalsIgnoreCase("dockables.xml"))
+				{
+					DockableWindowManager.loadDockableWindows(
+						path + "!dockables.xml",
+						new BufferedReader(new InputStreamReader(
+						zipFile.getInputStream(entry))),
+						jar.getActions());
+				}
+			}
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,jEdit.class,"Cannot load"
+				+ " plugin " + MiscUtilities.getFileName(path));
+			Log.log(Log.ERROR,jEdit.class,io);
+
+			String[] args = { io.toString() };
+			jEdit.pluginError(path,"plugin-error.load-error",args);
 		}
 	} //}}}
 
@@ -266,12 +300,15 @@ public class JARClassLoader extends ClassLoader
 
 	private static Hashtable classHash = new Hashtable();
 
+	private String path;
+
 	private EditPlugin.JAR jar;
-	private Vector pluginClasses = new Vector();
+	private ArrayList pluginResources = new ArrayList();
+	private ArrayList pluginClasses = new ArrayList();
 	private JarFile zipFile;
 
 	//{{{ loadPluginClass() method
-	private void loadPluginClass(String name)
+	private boolean loadPluginClass(String name)
 		throws Exception
 	{
 		// Check if a plugin with the same name is already loaded
@@ -283,7 +320,7 @@ public class JARClassLoader extends ClassLoader
 			{
 				jEdit.pluginError(jar.getPath(),
 					"plugin-error.already-loaded",null);
-				return;
+				return false;
 			}
 		}
 
@@ -295,14 +332,14 @@ public class JARClassLoader extends ClassLoader
 		{
 			jar.addPlugin(new EditPlugin.Broken(name));
 			jEdit.pluginError(jar.getPath(),"plugin-error.obsolete",null);
-			return;
+			return false;
 		}
 
 		// Check dependencies
 		if(!checkDependencies(name))
 		{
 			jar.addPlugin(new EditPlugin.Broken(name));
-			return;
+			return false;
 		}
 
 		// JDK 1.1.8 throws a GPF when we do an isAssignableFrom()
@@ -324,7 +361,7 @@ public class JARClassLoader extends ClassLoader
 					name + " needs"
 					+ " 'name' and 'version' properties.");
 				jar.addPlugin(new EditPlugin.Broken(name));
-				return;
+				return false;
 			}
 
 			jar.getActions().setLabel(jEdit.getProperty(
@@ -334,6 +371,12 @@ public class JARClassLoader extends ClassLoader
 				+ " (version " + version + ")");
 
 			jar.addPlugin((EditPlugin)clazz.newInstance());
+			return true;
+		}
+		else
+		{
+			// not a real plugin class
+			return true;
 		}
 	} //}}}
 

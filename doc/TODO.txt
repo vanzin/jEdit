@@ -3,63 +3,26 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- some min. width and height for global options?
-- clean up the way macro hierarchy is stored
-- dialog parenting for fsb colors pane, vfs browser dialog
-- docs incorrect w.r.t. C+e C+j
-- what if dir search requires FTP login to list dir
-- soft wrap: dragging on last visible line throws NPEs
-[error] java.lang.ArrayIndexOutOfBoundsException: 2757:-18
-[error] 	at org.gjt.sp.jedit.Buffer.remove(Unknown Source)
-[error] 	at org.gjt.sp.jedit.textarea.Selection$Rect.setText(Unknown Source)
-[error] 	at org.gjt.sp.jedit.textarea.JEditTextArea.setSelectedText(Unknown Source)
-[error] 	at org.gjt.sp.jedit.Registers.paste(Unknown Source)
-[error] 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-[error] 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-[error] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-[error] 	at java.lang.reflect.Method.invoke(Method.java:324)
+- document renamed quick search commands
 
-- narrow to one line: select all: blows up
-- requestDefaultFocus() is bad
-- close current area w/ dockables that don't implement
-  requestDefaultFocus()
-- rect select somewhat fucked
+- wheel mouse page scroll w/ soft wrap
+- S+ENTER in fsb for directories
+- verify roots: on Windows & mention in NEWS.txt
+- cvs add new tips
+- cvs remove ModeOptionPane.java
+- cvs add updating-modes.xml
+- left arrow in filename field
+- if A depends on B but A is loaded before B and B breaks, A ends up
+  being loaded. Solution: load plugins in order of dependencies?
 - A+# on OS X, need better modifier mapping on OS X
 - change indentPrevLine to indentOneLine and indentSubsequentLines
-- try typing foo), put cursor after foo, type some more -- slowdown
-- eliminate redundant scans and events when loading buffer
-- make vfs listing faster
-- fsb tooltip does not accept mouse clicks
-- minor quicknotepad changes -- update docs
-- add dockable window state change msg
-- rect select and whitespace
-- scroll horizontally when dragging into virtual space
-- support start in virtual space too
+- rect select and trailing whitespace
+- scrolling horizontally when dragging into virtual space: a bit quirky
 - eval-for-selected-lines doesn't work with rectangular selection
-- searching in a buffer w/ narrowed fold
-- range-comment & rect select
-- sometimes trying to extend a selection creates one all the way to the
-  end of the buffer
-- don't repaint whole selection when resizing
-- move text utility methods to TextUtilities
-- focus problem with hypersearch in floating window?
-- offset manager: backwards gap movement
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
-- scroll to caret _still_ jumps around?
+- focus problem with hypersearch in floating window
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - first focus: show all files that were modified on disk, in a list
-- add an option to not remove files from PluginManager.download?
-- background tokens are slow
-
-[error] AWT-EventQueue-0: Exception occurred during event dispatching:
-[error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
-[error] AWT-EventQueue-0:       at
-org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
-
-  -- trying to show a non-existent dockable
-
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
     possible.
@@ -73,24 +36,88 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   window again, it has size X not size Y.
 - C+ENTER 1 ...
 - fs browser: scroll to visible after setting divider location
-- if loadMode() throws error, save of a mode file fails?
 - expand fold: try to expand even if already expanded
-- keyboard navigation of current directory, recent dirs, etc broken
-- JDK 1.4 focus bugs
-- dwm: not always focused correctly
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
 - recording 'evaluate for selected lines'
-- custom stylesheet: no xmlns
 - how to handle S+0-9?
-- finish persistent splits code
 - aborts not always fired
 - globalColors setting:
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
 - evalutate for selected lines: > 1 selection per line
 - undo: redo doesn't clear dirty flag if necessary
-- BrowserView.reloadDirectory(): hardcoded design decisions
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
 - motif l&f: shortcuts in menu items
+- fix pg up/down with soft wrap
+
++ verify:
+
+- line 2112 -- isNarrowed() check of moveCaretPosition()
+- searching in a buffer w/ narrowed fold
+- sometimes trying to extend a selection creates one all the way to the
+  end of the buffer
+- narrow to one line: select all: blows up
+- dwm: not always focused correctly
+- JDK 1.4 focus bugs
+- if loadMode() throws error, save of a mode file fails?
+
+[error] AWT-EventQueue-0: Exception occurred during event dispatching:
+[error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
+[error] AWT-EventQueue-0:       at
+org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
+
+  -- trying to show a non-existent dockable
+
++ cleanups:
+
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
+- BrowserView.reloadDirectory(): hardcoded design decisions
+- finish persistent splits code
+- custom stylesheet: no xmlns
+- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
+  keeping INVALID? report errors in some other manner?
+- clean up the way macro hierarchy is stored
+- dialog parenting for fsb colors pane, vfs browser dialog
+- move text utility methods to TextUtilities
+- minor quicknotepad changes -- update docs
+- requestDefaultFocus() is bad
+
++ features:
+
+- close current area w/ dockables that don't implement
+  requestDefaultFocus()
+- add dockable window state change msg
+- range-comment & rect select
+- some min. width and height for global options?
+- update docs for 4.1, from source-edit onwards.
+- user's guide:
+  - vertical paste & rect select insertion
+  - mention whitespace eating word actions
+  - alternative tool bar placement
+  - ESCAPE hides search bar
+  - wheel mouse modifiers
+  - indentOnTab/Enter changes
+  - update shortcuts.xml
+- new tips:
+  - indentOnTab/Enter replacements
+  - smartHome replacements
+  - -float actions
+  - alt tool bar placement if not there already
+  - go to text area
+- support rect start in virtual space too
+
++ performance:
+
+- positions should be gapped too
+- try typing foo), put cursor after foo, type some more -- slowdown
+- eliminate redundant scans and events when loading buffer
+- make vfs listing faster
+- don't repaint whole selection when resizing
+- background tokens are slow
+- backward virtual line scan
+- do not call foldVisibilityManager.getLastVisibleLine() on every change
+  w/ soft wrap. kills performance if also narrowed
+- if caret is at the end of a buffer when doing a replace all, a lot of
+  repaint() and getLineOfOffset() calls are made, however this doesn't
+  seem to affect performance that much.

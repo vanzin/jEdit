@@ -142,20 +142,16 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		Font font = UIManager.getFont("Label.font");
 		FontMetrics fm = getFontMetrics(font);
-		FontRenderContext frc = new FontRenderContext(null,false,false);
-
-		Rectangle2D bounds = null;
 		Dimension dim = null;
 
 		if (showCaretStatus)
 		{
 			panel.add(BorderLayout.WEST,caretStatus);
 
-			bounds = font.getStringBounds(caretTestStr,frc);
 			caretStatus.setFont(font);
 
-			dim = new Dimension((int)bounds.getWidth(),
-				(int)bounds.getHeight());
+			dim = new Dimension(fm.stringWidth(caretTestStr),
+				fm.getHeight());
                         caretStatus.setPreferredSize(dim);
 		}
 		else
@@ -168,40 +164,44 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		if (showWrap)
 		{
-			box.add(wrap);
-			dim = wrap.getPreferredSize();
-			wrap.setPreferredSize(new Dimension(Math.max(
+			dim = new Dimension(Math.max(
 				Math.max(fm.charWidth('-'),fm.charWidth('H')),
-				fm.charWidth('S')) + 1,dim.height));
+				fm.charWidth('S')) + 1,fm.getHeight());
+			wrap.setPreferredSize(dim);
+			wrap.setMaximumSize(dim);
+			box.add(wrap);
 		}
 
 		if (showMultiSelect)
 		{
-			box.add(multiSelect);
-			dim = multiSelect.getPreferredSize();
-			multiSelect.setPreferredSize(new Dimension(
+			dim = new Dimension(
 				Math.max(fm.charWidth('-'),fm.charWidth('M')) + 1,
-				dim.height));
+				fm.getHeight());
+			multiSelect.setPreferredSize(dim);
+			multiSelect.setMaximumSize(dim);
+			box.add(multiSelect);
 		}
 
 		if (showOverwrite)
 		{
-			box.add(overwrite);
-			dim = overwrite.getPreferredSize();
-			overwrite.setPreferredSize(new Dimension(
+			dim = new Dimension(
 				Math.max(fm.charWidth('-'),fm.charWidth('O')) + 1,
-				dim.height));
+				fm.getHeight());
+			overwrite.setPreferredSize(dim);
+			overwrite.setMaximumSize(dim);
+			box.add(overwrite);
 		}
 
 		if (showLineSeperator)
 		{
-			box.add(lineSep);
-			dim = lineSep.getPreferredSize();
-			lineSep.setPreferredSize(new Dimension(Math.max(
+			dim = new Dimension(Math.max(
 				Math.max(fm.charWidth('U'),
 				fm.charWidth('W')),
 				fm.charWidth('M')) + 1,
-				dim.height));
+				fm.getHeight());
+			lineSep.setPreferredSize(dim);
+			lineSep.setMaximumSize(dim);
+			box.add(lineSep);
 		}
 
 		if (showMemory)
@@ -212,10 +212,12 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			// components the same height
 
 			memory.setFont(font);
-			dim = memory.getPreferredSize();
-			memory.setPreferredSize(new Dimension(
-				(int)font.getStringBounds(memoryTestStr,frc).getWidth(),
-				message.getPreferredSize().height));
+			FontRenderContext frc = new FontRenderContext(null,false,false);
+			Rectangle2D bounds = font.getStringBounds(memoryTestStr,frc);
+			dim = new Dimension((int)bounds.getWidth(),
+				(int)bounds.getHeight());
+			memory.setPreferredSize(dim);
+			memory.setMaximumSize(dim);
 			memory.lm = font.getLineMetrics(memoryTestStr,frc);
 
 			memory.progressForeground = jEdit.getColorProperty(

@@ -1326,8 +1326,9 @@ public class Buffer implements EBComponent
 	 */
 	public void beginCompoundEdit()
 	{
-		if(getFlag(TEMPORARY))
-			return;
+		// Why?
+		//if(getFlag(TEMPORARY))
+		//	return;
 
 		try
 		{
@@ -1350,8 +1351,9 @@ public class Buffer implements EBComponent
 	 */
 	public void endCompoundEdit()
 	{
-		if(getFlag(TEMPORARY))
-			return;
+		// Why?
+		//if(getFlag(TEMPORARY))
+		//	return;
 
 		try
 		{

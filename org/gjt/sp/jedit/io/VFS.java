@@ -231,6 +231,24 @@ public abstract class VFS
 		return '/';
 	} //}}}
 
+	//{{{ getTwoStageSaveName() method
+	/**
+	 * Returns a temporary file name based on the given path.
+	 *
+	 * By default jEdit first saves a file to <code>#<i>name</i>#save#</code>
+	 * and then renames it to the original file. However some virtual file
+	 * systems might not support the <code>#</code> character in filenames,
+	 * so this method permits the VFS to override this behavior.
+	 *
+	 * @param path The path name
+	 * @since jEdit 4.1pre7
+	 */
+	public String getTwoStageSaveName(String path)
+	{
+		return MiscUtilities.constructPath(getParentOfPath(path),
+			'#' + getFileName(path) + "#save#");
+	} //}}}
+
 	//{{{ reloadDirectory() method
 	/**
 	 * Called before a directory is reloaded by the file system browser.

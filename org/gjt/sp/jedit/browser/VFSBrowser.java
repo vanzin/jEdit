@@ -515,7 +515,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 */
 	public void rootDirectory()
 	{
-		if(OperatingSystem.isDOSDerived() || OperatingSystem.isMacOS())
+		if(VFSManager.getVFSByName("roots") != null)
 			setDirectory(FileRootsVFS.PROTOCOL + ":");
 		else
 			setDirectory("/");

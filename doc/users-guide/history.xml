@@ -4,7 +4,7 @@
 <appendix id="history"><title>History Text Fields</title>
  <para>
   The text fields in the search and replace dialog box
-  and file system browser remember the last 20 entered strings by
+  and the file system browser remember the last 20 entered strings by
   default. The number of strings to remember can be changed in the
   <guibutton>General</guibutton> pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>

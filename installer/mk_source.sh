@@ -16,4 +16,4 @@ tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
 	-o -name Baserev \
 	-o -name \*.class -o -name \*.jar -o -name .\*.marks -o -name .xvpics \
 	-o -name \*.exe -o -name \*.dll -o -name \*.dl_ \
-	-o -name \*.spec -o -name .cvsignore -o -name tags \)`
+	-o -name .cvsignore -o -name tags \)`

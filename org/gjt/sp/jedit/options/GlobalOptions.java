@@ -73,7 +73,6 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
 		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
 		addOptionPane(new EditingOptionPane(), jEditGroup);
-		addOptionPane(new ModeOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
 		addOptionPane(new DockingOptionPane(), jEditGroup);

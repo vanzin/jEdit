@@ -6,11 +6,11 @@
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
    displays a dialog box for changing editor settings on a per-buffer basis.
-   Any changes made in this dialog box are lost after the buffer is
+   Changes made in this dialog box are not retained after the buffer is
    closed.
   </para>
   <para>
-   The following settings may be changed here:
+   The following settings can be changed here:
   </para>
   <itemizedlist>
    <listitem><para>The line separator (see <xref linkend="line-separators" />)
@@ -34,21 +34,23 @@
  <sect1 id="buffer-local"><title>Buffer-Local Properties</title>
   <para>
    Buffer-local properties provide an alternate way to change editor settings
-   on a per-buffer basis. While changes made in the Buffer Options dialog box
+   on a per-buffer basis. While changes made in the <guimenuitem>Buffer
+   Options</guimenuitem> dialog box
    are lost after the buffer is closed, buffer-local properties take effect
    each time the file is opened, because they are embedded in the file
    itself.
   </para>
   <para>
    When jEdit loads a file, it checks the first and last 10 lines for
-   colon-enclosed name/value pairs. The following example changes
-   the indent width to 4 characters, enables soft tabs, and sets
-   the buffer's edit mode to Perl:
+   colon-enclosed name/value pairs. For example, placing the following in
+   a buffer changes
+   the indent width to 4 characters, enables soft tabs, and activates the
+   Perl edit mode:
   </para>
   <screen>:indentSize=4:noTabs=true:mode=perl:</screen>
   <para>
-   Note that adding buffer-local properties to a buffer only
-   takes effect after the next time the buffer is loaded.
+   Adding buffer-local properties to a buffer
+   takes effect after the next time the buffer is saved.
   </para>
   <para>
    The following table describes each buffer-local property in detail.
@@ -73,18 +75,6 @@
       <entry>folding</entry>
       <entry>The fold mode; one of <quote>none</quote>, <quote>indent</quote>,
       or <quote>explicit</quote>. See <xref linkend="folding" />.</entry>
-     </row>
-     <row>
-      <entry>indentOnEnter</entry>
-      <entry>If set to <quote>true</quote>, pressing <keycap>Enter</keycap> will
-      insert a line break and automatically indent the new line. See
-      <xref linkend="indent" />.</entry>
-     </row>
-     <row>
-      <entry>indentOnTab</entry>
-      <entry>If set to <quote>true</quote>, indentation will be performed when
-      the <keycap>Tab</keycap> key is pressed. See <xref linkend="indent" />.
-      </entry>
      </row>
      <row>
       <entry>indentSize</entry>
@@ -182,22 +172,19 @@
   <bridgehead renderas="sect3">The Editing Pane</bridgehead>
   <para>
    The <guibutton>Editing</guibutton> option pane lets you change settings such
-   as the tab size, syntax highlighting and soft tabs on a global basis.
-  </para>
-  <bridgehead renderas="sect3">The Mode-Specific Pane</bridgehead>
-  <para>
-   The <guibutton>Mode-Specific</guibutton> option pane lets you change settings
-   such as the tab size, syntax highlighting and soft tabs on a
+   as the tab size, syntax highlighting and soft tabs on a global or
    mode-specific basis.
   </para>
   <para>
-   The <guibutton>File name glob</guibutton> and <guibutton>First line
+   When changing mode-specific settings,
+   the <guibutton>File name glob</guibutton> and <guibutton>First line
    glob</guibutton> text fields let you specify a glob pattern that names and
    first lines of buffers will be matched against to determine the edit mode.
+   See <xref linkend="globs"/> for information about glob patterns.
   </para>
   <para>
    This option pane does not change XML mode definition files on disk; it
-   merely writes values to the user properties file which override those
+   merely writes values to the user properties file which override those set
    in mode files. To find out how to edit mode files directly, see
    <xref linkend="writing-modes-part" />.
   </para>
@@ -258,6 +245,11 @@
    The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
    or disable it completely.
   </para>
+  <bridgehead renderas="sect3">The Status Bar Pane</bridgehead>
+  <para>
+   The <guibutton>Status Bar</guibutton> option pane lets you customize the
+   status bar, or disable it completely.
+  </para>
   <bridgehead renderas="sect3">The Printing Pane</bridgehead>
   <para>
    The <guibutton>Printing</guibutton> option pane lets you customize the
@@ -265,36 +257,40 @@
   </para>
   <bridgehead renderas="sect3">The Proxy Servers Pane</bridgehead>
   <para>
-   XXX
+   The <guibutton>Proxy Servers</guibutton> option pane lets you specify HTTP
+   and SOCKS proxy servers to use when jEdit makes network connections (for
+   example, when the plugin manager downloads plugins).
   </para>
   <bridgehead renderas="sect3">The File System Browser Panes</bridgehead>
   <para>
-   The <guibutton>File System Browser</guibutton> branch
+   The <guibutton>File System Browser</guibutton> group
    contains two option panes, <guibutton>General</guibutton> and
-   <guibutton>Colors</guibutton>. Both of these option panes should be
-   self-explanatory. See <xref linkend="vfs-browser" />
+   <guibutton>Colors</guibutton>. The former lets you change various file system
+   browser settings. The latter lets you customize glob patterns used for
+   coloring the file list. See <xref linkend="vfs-browser" />
    for more information.
   </para>
  </sect1>
  <sect1 id="settings-directory"><title>The jEdit Settings Directory</title>
   <para>
-   jEdit stores all settings, macros, and so on as files
-   inside its <firstterm>settings directory</firstterm>. In most cases, editing
-   these files is not necessary, since graphical tools and commands can do the
-   job. However, being familiar with the structure of the settings directory
-   still comes in handy
+   jEdit stores settings, macros, and plugins as files
+   inside the <firstterm>settings directory</firstterm>. In most cases, editing
+   these files by hand is not necessary, since graphical tools and editor
+   commands can do the job. However, being familiar with the structure of the
+   settings directory still comes in handy
    in certain situations, for example when you want to copy jEdit settings
    between computers.
   </para>
   <para>
    The location of the settings directory is system-specific; it is printed to
-   the activity log (<guimenu>Utilities</guimenu>&gt;<guimenuitem>Activity
+   the activity log
+   (<guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity
    Log</guimenuitem>). For example:
   </para>
   <screen>[message] jEdit: Settings directory is /home/slava/.jedit</screen>
   <para>
    Specifying the <command>-settings</command> switch on the command line
-   instructs jEdit to store settings in a different directory.
+   instructs jEdit to store settings in a directory other than the default.
    For example, the following command will instruct jEdit to
    store all settings
    in the <filename>jedit</filename> subdirectory of the <filename>C:</filename>
@@ -303,7 +299,7 @@
   <screen><prompt>C:\jedit&gt;</prompt> <userinput>jedit -settings=C:\jedit</userinput></screen>
   <para>
    The <command>-nosettings</command> switch will force jEdit to not look for
-   or create a settings directory. Default settings will be used instead.
+   or create a settings directory; default settings will be used instead.
   </para>
   <para>
    If you are using <application>jEditLauncher</application>
@@ -344,10 +340,10 @@
    <listitem><para><filename>properties</filename> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent.xml</filename> - an XML file which stores
-   the list of recently opened files. jEdit remembers the caret position,
-   selection state and character encoding of each recent file, and
-   automatically restores those values when one of the files in the list is
-   opened.</para></listitem>
+   the list of recently opened files. jEdit remembers the caret position and
+   character encoding of each recent file, and
+   automatically restores those values when one of the files is opened.
+   </para></listitem>
    <listitem><para><filename>server</filename> - a plain text file that only
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.

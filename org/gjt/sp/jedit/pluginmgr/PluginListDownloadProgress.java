@@ -1,6 +1,6 @@
 /*
  * PluginListDownloadProgress.java - Plugin list download progress dialog
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.InterruptedIOException;
+import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -99,7 +100,24 @@ class PluginListDownloadProgress extends JDialog
 
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				GUIUtilities.error(window,"plugin-list.ioerror",pp);
+
+				String ok = jEdit.getProperty("common.ok");
+				String proxyButton = jEdit.getProperty(
+					"plugin-list.ioerror.proxy-servers");
+				int retVal = JOptionPane.showOptionDialog(window,
+					jEdit.getProperty("plugin-list.ioerror.message",pp),
+					jEdit.getProperty("plugin-list.ioerror.title"),
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					new Object[] {
+						proxyButton,
+						ok
+					},
+					ok);
+
+				if(retVal == 0)
+					new GlobalOptions(window,"firewall");
 			}
 		}
 	}
