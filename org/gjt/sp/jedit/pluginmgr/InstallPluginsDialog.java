@@ -316,6 +316,7 @@ class InstallPluginsDialog extends EnhancedDialog
 		{
 			name.setText(null);
 			author.setText(null);
+			size.setText(null);
 			latestVersion.setText(null);
 			if(installedVersion != null)
 				installedVersion.setText(null);

@@ -111,6 +111,12 @@ public abstract class BufferListSet implements SearchFileSet
 		return null;
 	} //}}}
 
+	//{{{ invalidateCachedList() method
+	public void invalidateCachedList()
+	{
+		files = null;
+	} //}}}
+
 	protected abstract String[] _getFiles(Component comp);
 
 	private String[] files;

@@ -83,7 +83,11 @@ class PluginListHandler extends HandlerBase
 		else if(aname == "PLUGIN")
 			depPlugin = value;
 		else if(aname == "SIZE")
+		{
 			size = Integer.parseInt(value);
+			if(size == 0)
+				Log.log(Log.WARNING,this,"SIZE = 0");
+		}
 	}
 
 	public void doctypeDecl(String name, String publicId,

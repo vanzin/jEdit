@@ -54,6 +54,12 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public static final int DIRECTORY = 2;
 	//}}}
 
+	//{{{ getSearchDialog() method
+	public static SearchDialog getSearchDialog(View view)
+	{
+		return (SearchDialog)viewHash.get(view);
+	} //}}}
+
 	//{{{ showSearchDialog() method
 	/**
 	 * Displays a search and replace dialog box, reusing an existing one
