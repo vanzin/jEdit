@@ -124,7 +124,6 @@ public class BufferOptions extends EnhancedDialog
 		wrap.setSelectedItem(buffer.getStringProperty("wrap"));
 		panel.addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap);
-		wrap.addActionListener(new ActionHandler());
 		//}}}
 
 		//{{{ Max line length
@@ -133,7 +132,6 @@ public class BufferOptions extends EnhancedDialog
 		maxLineLen = new JComboBox(lineLengths);
 		maxLineLen.setEditable(true);
 		maxLineLen.setSelectedItem(buffer.getStringProperty("maxLineLen"));
-		maxLineLen.addActionListener(new ActionHandler());
 		panel.addComponent(jEdit.getProperty("options.editing.maxLineLen"),
 			maxLineLen);
 		//}}}
@@ -271,8 +269,6 @@ public class BufferOptions extends EnhancedDialog
 	} //}}}
 
         //{{{ Private members
-
-	//{{{ Instance variables
 	private View view;
 	private Buffer buffer;
 	private Mode[] modes;
@@ -317,30 +313,6 @@ public class BufferOptions extends EnhancedDialog
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
 			}
-			else if(source == wrap)
-			{
-				if(!wrap.getSelectedItem().equals("none"))
-				{
-					if(maxLineLen.getSelectedItem()
-						.equals("0"))
-					{
-						maxLineLen.setSelectedItem("80");
-					}
-				}
-			}
-			else if(source == maxLineLen)
-			{
-				if(!wrap.getSelectedItem().equals("none"))
-				{
-					if(maxLineLen.getSelectedItem()
-						.equals("0"))
-					{
-						wrap.setSelectedItem("none");
-					}
-				}
-			}
 		} //}}}
 	} //}}}
-
-	//}}}
 }

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
@@ -935,7 +935,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int caret = textArea.getCaretPosition();
 			boolean paintLineHighlight = isLineHighlightEnabled()
 				&& caret >= start && caret < end
-				&& textArea.selection.size() == 0;
+				&& textArea.getSelectionCount() == 0;
 
 			Color bgColor;
 			if(paintLineHighlight)
@@ -978,16 +978,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
-			if(textArea.selection.size() == 0)
+			if(textArea.getSelectionCount() == 0)
 				return;
 
 			gfx.setColor(textArea.isMultipleSelectionEnabled()
 				? getMultipleSelectionColor()
 				: getSelectionColor());
-			for(int i = textArea.selection.size() - 1; i >= 0; i--)
+
+			Iterator iter = textArea.getSelectionIterator();
+			while(iter.hasNext())
 			{
-				paintSelection(gfx,screenLine,physicalLine,y,
-					(Selection)textArea.selection.get(i));
+				Selection s = (Selection)iter.next();
+				paintSelection(gfx,screenLine,physicalLine,y,s);
 			}
 		} //}}}
 
@@ -996,7 +998,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int physicalLine, int y, Selection s)
 		{
 			int[] selectionStartAndEnd
-				= textArea.getSelectionStartAndEnd(
+				= textArea.selectionManager
+				.getSelectionStartAndEnd(
 				screenLine,physicalLine,s);
 			if(selectionStartAndEnd == null)
 				return;
@@ -1015,7 +1018,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int lastLine, int[] physicalLines, int[] start,
 			int[] end, int y, int lineHeight)
 		{
-			if(textArea.getDisplayManager().wrapMargin != 0
+			DisplayManager displayManager = textArea.displayManager;
+			if(displayManager.wrapMargin != 0
+				&& !displayManager.wrapToWidth
 				&& isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
@@ -1029,7 +1034,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public String getToolTipText(int x, int y)
 		{
-			if(textArea.getDisplayManager().wrapMargin != 0 && isWrapGuidePainted())
+			DisplayManager displayManager = textArea.displayManager;
+			if(displayManager.wrapMargin != 0
+				&& !displayManager.wrapToWidth
+				&& isWrapGuidePainted())
 			{
 				int wrapGuidePos = textArea.getDisplayManager().wrapMargin
 					+ textArea.getHorizontalOffset();
