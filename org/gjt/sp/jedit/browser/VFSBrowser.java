@@ -699,7 +699,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		SearchAndReplace.setSearchFileSet(new DirectoryListSet(
 			path,filter,true));
-		new SearchDialog(view,null,SearchDialog.DIRECTORY);
+		SearchDialog.showSearchDialog(view,null,SearchDialog.DIRECTORY);
 	} //}}}
 
 	//{{{ getBrowserView() method

@@ -181,17 +181,43 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		String abbrev = (String)abbrevsModel.getValueAt(row,0);
 		String expansion = (String)abbrevsModel.getValueAt(row,1);
+		String oldAbbrev = abbrev;
 
 		EditAbbrevDialog dialog = new EditAbbrevDialog(
 			GUIUtilities.getParentDialog(AbbrevsOptionPane.this),
-			abbrev,expansion);
+			abbrev,expansion,abbrevsModel.toHashtable());
 		abbrev = dialog.getAbbrev();
 		expansion = dialog.getExpansion();
 		if(abbrev != null && expansion != null)
 		{
-			abbrevsModel.setValueAt(abbrev,row,0);
-			abbrevsModel.setValueAt(expansion,row,1);
+			for(int i = 0; i < abbrevsModel.getRowCount(); i++)
+			{
+				if(abbrevsModel.getValueAt(i,0).equals(oldAbbrev))
+				{
+					abbrevsModel.remove(i);
+					break;
+				}
+			}
+
+			add(abbrevsModel,abbrev,expansion);
 		}
+	} //}}}
+
+	//{{{ add() method
+	private void add(AbbrevsModel abbrevsModel, String abbrev,
+		String expansion)
+	{
+		for(int i = 0; i < abbrevsModel.getRowCount(); i++)
+		{
+			if(abbrevsModel.getValueAt(i,0).equals(abbrev))
+			{
+				abbrevsModel.remove(i);
+				break;
+			}
+		}
+
+		abbrevsModel.add(abbrev,expansion);
+		updateEnabled();
 	} //}}}
 
 	//}}}
@@ -258,21 +284,14 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			{
 				EditAbbrevDialog dialog = new EditAbbrevDialog(
 					GUIUtilities.getParentDialog(AbbrevsOptionPane.this),
-					null,null);
+					null,null,abbrevsModel.toHashtable());
 				String abbrev = dialog.getAbbrev();
 				String expansion = dialog.getExpansion();
 				if(abbrev != null && abbrev.length() != 0
 					&& expansion != null
 					&& expansion.length() != 0)
 				{
-					abbrevsModel.add(abbrev,expansion);
-					int index = abbrevsModel.getRowCount() - 1;
-					abbrevsTable.getSelectionModel()
-						.setSelectionInterval(index,index);
-					Rectangle rect = abbrevsTable.getCellRect(
-						index,0,true);
-					abbrevsTable.scrollRectToVisible(rect);
-					updateEnabled();
+					add(abbrevsModel,abbrev,expansion);
 				}
 			}
 			else if(source == edit)
@@ -315,17 +334,12 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 class AbbrevsModel extends AbstractTableModel
 {
 	Vector abbrevs;
-
-	//{{{ AbbrevsModel constructor
-	AbbrevsModel()
-	{
-		abbrevs = new Vector();
-	} //}}}
+	int lastSort;
 
 	//{{{ AbbrevsModel constructor
 	AbbrevsModel(Hashtable abbrevHash)
 	{
-		this();
+		abbrevs = new Vector();
 
 		if(abbrevHash != null)
 		{
@@ -345,6 +359,7 @@ class AbbrevsModel extends AbstractTableModel
 	//{{{ sort() method
 	void sort(int col)
 	{
+		lastSort = col;
 		MiscUtilities.quicksort(abbrevs,new AbbrevCompare(col));
 		fireTableDataChanged();
 	} //}}}
@@ -353,7 +368,7 @@ class AbbrevsModel extends AbstractTableModel
 	void add(String abbrev, String expansion)
 	{
 		abbrevs.addElement(new Abbrev(abbrev,expansion));
-		fireTableStructureChanged();
+		sort(lastSort);
 	} //}}}
 
 	//{{{ remove() method

@@ -1066,7 +1066,13 @@ public class GUIUtilities
 		{
 			public void windowActivated(WindowEvent evt)
 			{
-				comp.requestFocus();
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						comp.requestFocus();
+					}
+				});
 				win.removeWindowListener(this);
 			}
 		});

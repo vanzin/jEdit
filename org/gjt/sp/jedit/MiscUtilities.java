@@ -95,6 +95,11 @@ public class MiscUtilities
 			// get rid of mixed paths on Windows
 			path = path.replace('/','\\');
 		}
+		else if(OperatingSystem.isMacOS())
+		{
+			// do the same on OS X
+			path = path.replace(':','/');
+		}
 
 		if(path.startsWith("~" + File.separator))
 		{

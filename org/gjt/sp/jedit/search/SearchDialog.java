@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,18 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		return (SearchDialog)viewHash.get(view);
 	} //}}}
 
+	//{{{ preloadSearchDialog() method
+	/**
+	 * Preloads the search dialog for the given for so that it can be
+	 * quickly displayed later.
+	 * @since jEdit 4.2pre3
+	 */
+	public static void preloadSearchDialog(View view)
+	{
+		SearchDialog dialog = new SearchDialog(view);
+		viewHash.put(view,dialog);
+	} //}}}
+
 	//{{{ showSearchDialog() method
 	/**
 	 * Displays a search and replace dialog box, reusing an existing one
@@ -73,132 +85,18 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		int searchIn)
 	{
 		SearchDialog dialog = (SearchDialog)viewHash.get(view);
-		if(dialog != null)
-		{
-			// ugly workaround
-			if(OperatingSystem.isUnix() && !OperatingSystem.isMacOS())
-			{
-				dialog.setVisible(false);
-				dialog.setVisible(true);
-			}
 
-			dialog.setSearchString(searchString,searchIn);
-			GUIUtilities.requestFocus(dialog,dialog.find);
-			dialog.toFront();
-			dialog.requestFocus();
-		}
-		else
-		{
-			dialog = new SearchDialog(view,searchString,searchIn);
-			viewHash.put(view,dialog);
-		}
-	} //}}}
+		dialog.load();
+		dialog.setSearchString(searchString,searchIn);
+		GUIUtilities.requestFocus(dialog,dialog.find);
 
-	//{{{ SearchDialog constructor
-	/**
-	 * Creates a new search and replace dialog box.
-	 * @param view The view
-	 * @param searchString The search string
-	 */
-	public SearchDialog(View view, String searchString)
-	{
-		this(view,searchString,CURRENT_BUFFER);
-	} //}}}
+		// ugly workaround
+		if(OperatingSystem.isUnix() && !OperatingSystem.isMacOS())
+			dialog.setVisible(false);
 
-	//{{{ SearchDialog constructor
-	/**
-	 * Creates a new search and replace dialog box.
-	 * @param view The view
-	 * @param searchString The search string
-	 * @param searchIn One of CURRENT_BUFFER, ALL_BUFFERS, or DIRECTORY
-	 * @since jEdit 3.2pre2
-	 */
-	public SearchDialog(View view, String searchString, int searchIn)
-	{
-		super(view,jEdit.getProperty("search.title"),false);
-
-		this.view = view;
-
-		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(0,12,12,12));
-		setContentPane(content);
-
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(BorderLayout.NORTH,createFieldPanel());
-		centerPanel.add(BorderLayout.CENTER,createSearchSettingsPanel());
-		content.add(BorderLayout.CENTER,centerPanel);
-		content.add(BorderLayout.SOUTH,createMultiFilePanel());
-
-		content.add(BorderLayout.EAST,createButtonsPanel());
-
-		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
-		regexp.setSelected(SearchAndReplace.getRegexp());
-		wrap.setSelected(SearchAndReplace.getAutoWrapAround());
-
-		if(SearchAndReplace.getReverseSearch())
-			searchBack.setSelected(true);
-		else
-			searchForward.setSelected(true);
-
-		if(SearchAndReplace.getBeanShellReplace())
-		{
-			replace.setModel("replace.script");
-			beanShellReplace.setSelected(true);
-		}
-		else
-		{
-			replace.setModel("replace");
-			stringReplace.setSelected(true);
-		}
-
-		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-
-		if(fileset instanceof DirectoryListSet)
-		{
-			filter.setText(((DirectoryListSet)fileset)
-				.getFileFilter());
-			directory.setText(((DirectoryListSet)fileset)
-				.getDirectory());
-			searchSubDirectories.setSelected(((DirectoryListSet)fileset)
-				.isRecursive());
-		}
-		else
-		{
-			directory.setText(view.getBuffer().getDirectory());
-
-			if(fileset instanceof AllBufferSet)
-			{
-				filter.setText(((AllBufferSet)fileset)
-					.getFileFilter());
-			}
-			else
-			{
-				filter.setText("*" + MiscUtilities
-					.getFileExtension(view.getBuffer()
-					.getName()));
-			}
-
-			searchSubDirectories.setSelected(true);
-		}
-
-		directory.addCurrentToHistory();
-
-		keepDialog.setSelected(jEdit.getBooleanProperty(
-			"search.keepDialog.toggle"));
-
-		setSearchString(searchString,searchIn);
-
-		pack();
-		jEdit.unsetProperty("search.width");
-		jEdit.unsetProperty("search.d-width");
-		jEdit.unsetProperty("search.height");
-		jEdit.unsetProperty("search.d-height");
-		GUIUtilities.loadGeometry(this,"search");
-		show();
-
-		EditBus.addToBus(this);
-
-		GUIUtilities.requestFocus(this,find);
+		dialog.setVisible(true);
+		dialog.toFront();
+		dialog.requestFocus();
 	} //}}}
 
 	//{{{ setSearchString() method
@@ -291,7 +189,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	{
 		save(true);
 		GUIUtilities.saveGeometry(this,"search");
-		dispose();
+		setVisible(false);
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -301,15 +199,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
-		}
-		else if(msg instanceof ViewUpdate)
-		{
-			ViewUpdate vmsg = (ViewUpdate)msg;
-			if(vmsg.getView() == view
-				&& vmsg.getWhat() == ViewUpdate.CLOSED)
-			{
-				viewHash.remove(view);
-			}
 		}
 	} //}}}
 
@@ -349,6 +238,40 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	private JButton findBtn, /* replaceBtn, */ replaceAndFindBtn, replaceAllBtn,
 		closeBtn;
 	//}}}
+
+	//{{{ SearchDialog constructor
+	/**
+	 * Creates a new search and replace dialog box.
+	 * @param view The view
+	 * @param searchString The search string
+	 */
+	private SearchDialog(View view)
+	{
+		super(view,jEdit.getProperty("search.title"),false);
+
+		this.view = view;
+
+		JPanel content = new JPanel(new BorderLayout());
+		content.setBorder(new EmptyBorder(0,12,12,12));
+		setContentPane(content);
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(BorderLayout.NORTH,createFieldPanel());
+		centerPanel.add(BorderLayout.CENTER,createSearchSettingsPanel());
+		content.add(BorderLayout.CENTER,centerPanel);
+		content.add(BorderLayout.SOUTH,createMultiFilePanel());
+
+		content.add(BorderLayout.EAST,createButtonsPanel());
+
+		pack();
+		jEdit.unsetProperty("search.width");
+		jEdit.unsetProperty("search.d-width");
+		jEdit.unsetProperty("search.height");
+		jEdit.unsetProperty("search.d-height");
+		GUIUtilities.loadGeometry(this,"search");
+
+		EditBus.addToBus(this);
+	} //}}}
 
 	//{{{ createFieldPanel() method
 	private JPanel createFieldPanel()
@@ -766,8 +689,67 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		else
 		{
 			GUIUtilities.saveGeometry(this,"search");
-			dispose();
+			setVisible(false);
 		}
+	} //}}}
+
+	//{{{ load() method
+	private void load()
+	{
+		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
+		regexp.setSelected(SearchAndReplace.getRegexp());
+		wrap.setSelected(SearchAndReplace.getAutoWrapAround());
+
+		if(SearchAndReplace.getReverseSearch())
+			searchBack.setSelected(true);
+		else
+			searchForward.setSelected(true);
+
+		if(SearchAndReplace.getBeanShellReplace())
+		{
+			replace.setModel("replace.script");
+			beanShellReplace.setSelected(true);
+		}
+		else
+		{
+			replace.setModel("replace");
+			stringReplace.setSelected(true);
+		}
+
+		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
+		if(fileset instanceof DirectoryListSet)
+		{
+			filter.setText(((DirectoryListSet)fileset)
+				.getFileFilter());
+			directory.setText(((DirectoryListSet)fileset)
+				.getDirectory());
+			searchSubDirectories.setSelected(((DirectoryListSet)fileset)
+				.isRecursive());
+		}
+		else
+		{
+			directory.setText(view.getBuffer().getDirectory());
+
+			if(fileset instanceof AllBufferSet)
+			{
+				filter.setText(((AllBufferSet)fileset)
+					.getFileFilter());
+			}
+			else
+			{
+				filter.setText("*" + MiscUtilities
+					.getFileExtension(view.getBuffer()
+					.getName()));
+			}
+
+			searchSubDirectories.setSelected(true);
+		}
+
+		directory.addCurrentToHistory();
+
+		keepDialog.setSelected(jEdit.getBooleanProperty(
+			"search.keepDialog.toggle"));
 	} //}}}
 
 	//}}}

@@ -199,7 +199,7 @@ class InstallPanel extends JPanel
 
 			switch (columnIndex)
 			{
-				case 0: return entry.install;
+				case 0: return new Boolean(entry.install);
 				case 1: return entry.name;
 				case 2: return entry.set;
 				case 3: return entry.version;
@@ -226,7 +226,7 @@ class InstallPanel extends JPanel
 				{
 					Entry entry = getEntry(i);
 					entry.parents = new LinkedList();
-					entry.install = new Boolean(false);
+					entry.install = false;
 				}
 			}
 			fireTableChanged(new TableModelEvent(this));
@@ -251,12 +251,23 @@ class InstallPanel extends JPanel
 			{
 				if (entry.parents.size() > 0)
 				{
-					int result = JOptionPane.showConfirmDialog(window,
-						jEdit.getProperty("plugin-manager.dependency.message"),
-						jEdit.getProperty("plugin-manager.dependency.title"),
-						JOptionPane.OK_CANCEL_OPTION);
-					if (result == JOptionPane.CANCEL_OPTION)
+					String[] args = {
+						entry.name,
+						entry.getParentString()
+					};
+					int result = GUIUtilities.confirm(
+						window,"plugin-manager.dependency",
+						args,JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+					if (result != JOptionPane.OK_OPTION)
 						return;
+					Iterator parentsIter = entry.parents.iterator();
+					while(parentsIter.hasNext())
+					{
+						((Entry)parentsIter.next()).install = false;
+					}
+
+					fireTableRowsUpdated(0,getRowCount() - 1);
 				}
 			}
 
@@ -282,7 +293,7 @@ class InstallPanel extends JPanel
 				}
 			}
 
-			entry.install = (Boolean)aValue;
+			entry.install = Boolean.TRUE.equals(aValue);
 			fireTableCellUpdated(row,column);
 		} //}}}
 
@@ -344,11 +355,11 @@ class InstallPanel extends JPanel
 	{
 		String name, version, author, date, description, set;
 		int size;
-		Boolean install;
+		boolean install;
 		PluginList.Plugin plugin;
 		LinkedList parents = new LinkedList();
 
-		public Entry(PluginList.Plugin plugin, String set)
+		Entry(PluginList.Plugin plugin, String set)
 		{
 			PluginList.Branch branch = plugin.getCompatibleBranch();
 			boolean downloadSource = jEdit.getBooleanProperty("plugin-manager.downloadSource");
@@ -361,8 +372,21 @@ class InstallPanel extends JPanel
 			this.date = branch.date;
 			this.description = plugin.description;
 			this.set = set;
-			this.install = new Boolean(false);
+			this.install = false;
 			this.plugin = plugin;
+		}
+
+		String getParentString()
+		{
+			StringBuffer buf = new StringBuffer();
+			Iterator iter = parents.iterator();
+			while(iter.hasNext())
+			{
+				buf.append(((Entry)iter.next()).name);
+				if(iter.hasNext())
+					buf.append('\n');
+			}
+			return buf.toString();
 		}
 	} //}}}
 
@@ -413,7 +437,7 @@ class InstallPanel extends JPanel
 				for (int i = 0; i < length; i++)
 				{
 					Entry entry = pluginModel.getEntry(i);
-					if (entry.install.booleanValue())
+					if (entry.install)
 						size += entry.size;
 				}
 				setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
@@ -489,7 +513,7 @@ class InstallPanel extends JPanel
 			for (int i = 0; i < length; i++)
 			{
 				Entry entry = pluginModel.getEntry(i);
-				if (entry.install.booleanValue())
+				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);
 					selected.add(entry.plugin);

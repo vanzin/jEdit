@@ -296,7 +296,7 @@ print_loop:	for(;;)
 		double pageWidth, boolean actuallyPaint)
 	{
 		String headerText = jEdit.getProperty("print.headerText",
-			new String[] { buffer.getPath() });
+			new String[] { buffer.getName() });
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(headerText,frc);
 

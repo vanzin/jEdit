@@ -479,16 +479,15 @@ public class GrabKeyDialog extends JDialog
 					GrabKeyDialog.this,
 					"grab-key.remove-ask",
 					null,
-					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 				if(answer == JOptionPane.YES_OPTION)
 				{
 					shortcut.setText(null);
 					isOK = true;
 				}
-				else if(answer == JOptionPane.CANCEL_OPTION)
+				else
 					return false;
-				return true;
 			}
 
 			// check whether this shortcut already exists
@@ -523,7 +522,7 @@ public class GrabKeyDialog extends JDialog
 			int answer = GUIUtilities.confirm(GrabKeyDialog.this,
 				"grab-key.duplicate-shortcut",
 				new Object[] { other.label },
-				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.YES_NO_OPTION,
 				JOptionPane.QUESTION_MESSAGE);
 			if(answer == JOptionPane.YES_OPTION)
 			{
@@ -535,10 +534,8 @@ public class GrabKeyDialog extends JDialog
 				isOK = true;
 				return true;
 			}
-			else if(answer == JOptionPane.CANCEL_OPTION)
+			else
 				return false;
-
-			return true;
 		} //}}}
 	} //}}}
 }

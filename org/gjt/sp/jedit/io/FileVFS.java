@@ -229,6 +229,21 @@ public class FileVFS extends VFS
 	{
 		File _to = new File(to);
 
+		// this is needed because on OS X renaming to a non-existent
+		// directory causes problems
+		File parent = new File(_to.getParent());
+		if(parent.exists())
+		{
+			if(!parent.isDirectory())
+				return false;
+		}
+		else
+		{
+			parent.mkdirs();
+			if(!parent.exists())
+				return false;
+		}
+
 		// Case-insensitive fs workaround
 		if(!from.equalsIgnoreCase(to))
 			_to.delete();
