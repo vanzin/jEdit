@@ -8,7 +8,7 @@ Thomas Alspaugh for contributing to this release.
 {{{ License Change
 
 A small amendment has been added to jEdit's license. It formally allows
-development of non-GPL jEdit plugins.
+development of non-GPL jEdit plugins. See doc/COPYING.PLUGINS.txt.
 
 }}}
 {{{ Syntax Highlighting
@@ -71,6 +71,10 @@ KeyEventTranslator.setModifierMapping(
 - Fix some problems when deleting all visible lines with folding or
   narrowing active.
 
+- If jEdit was run with the -background -nogui switches, there was no
+  perspective.xml, and then a client instance was started, a
+  NullPointerException would be printed.
+  
 }}}
 
 }}}

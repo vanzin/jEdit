@@ -340,8 +340,6 @@ public class PerspectiveManager
 				config.splitConfig = charData;
 			else if(name.equals("VIEW"))
 			{
-				if(jEdit.getBufferCount() == 0)
-					jEdit.newFile(null);
 				view = jEdit.newView(view,null,config);
 				config = new View.ViewConfig();
 			}

@@ -3445,19 +3445,22 @@ public class jEdit
 			{
 				Buffer buffer = openFiles(null,userDir,args);
 
+				int count = getBufferCount();
+				if(count == 0)
+					buffer = newFile(null);
+
 				View view = null;
 
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
-					&& (getBufferCount() == 0
-					|| jEdit.getBooleanProperty("restore.cli"));
+					&& (getBufferCount() == 0 ||
+					jEdit.getBooleanProperty("restore.cli"));
 
-				if(gui || getBufferCount() != 0)
+				if(gui || count != 0)
 				{
-					view = PerspectiveManager.loadPerspective(restoreFiles);
-
-					if(getBufferCount() == 0)
-						buffer = newFile(null);
+					view = PerspectiveManager
+						.loadPerspective(
+						restoreFiles);
 
 					if(view == null)
 						view = newView(null,buffer);
