@@ -523,6 +523,8 @@ public class XModeHandler extends HandlerBase
 	//{{{ stringToToken() method
 	private byte stringToToken(String value)
 	{
+		value = value.intern();
+
 		if (value == "NULL")
 		{
 			return Token.NULL;

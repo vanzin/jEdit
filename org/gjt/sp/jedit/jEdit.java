@@ -1975,7 +1975,7 @@ public class jEdit
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
-		GUIUtilities.requestFocus(newView,newView.getTextArea());
+
 		newView.show();
 
 		// show tip of the day
@@ -1990,6 +1990,8 @@ public class jEdit
 
 			setBooleanProperty("firstTime",false);
 		}
+		else
+			GUIUtilities.requestFocus(newView,newView.getTextArea());
 
 		return newView;
 	} //}}}
@@ -2040,7 +2042,6 @@ public class jEdit
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
-		GUIUtilities.requestFocus(newView,newView.getTextArea());
 		newView.show();
 
 		// show tip of the day
@@ -2055,6 +2056,8 @@ public class jEdit
 
 			setBooleanProperty("firstTime",false);
 		}
+		else
+			GUIUtilities.requestFocus(newView,newView.getTextArea());
 
 		return newView;
 	} //}}}
