@@ -62,7 +62,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		appDir.setToolTipText(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"jars"));
 
-		// Start downloading the list nice and early
 		miraList = new JList(miraModel = new MirrorModel());
 		miraList.setSelectionModel(new SingleSelectionModel());
 		miraList.setSelectedIndex(0);
@@ -130,7 +129,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	protected void _save()
 	{
-		jEdit.setBooleanProperty("plugin-manager.installUser",settingsDir.isSelected());
+		jEdit.setBooleanProperty("plugin-manager.installUser",
+			settingsDir != null && settingsDir.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.deleteDownloads",deleteDownloads.isSelected());
 
@@ -247,7 +247,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			{
 				public void run()
 				{
-					System.err.println(mirrors);
 					miraModel.setList(mirrors);
 
 					String id = jEdit.getProperty("plugin-manager.mirror.id");

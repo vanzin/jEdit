@@ -67,8 +67,6 @@ public class BufferHistory
 
 	public static void load(File file)
 	{
-		max = jEdit.getIntegerProperty("recentFiles",50);
-
 		Log.log(Log.MESSAGE,BufferHistory.class,"Loading " + file);
 
 		RecentHandler handler = new RecentHandler();
@@ -180,7 +178,6 @@ public class BufferHistory
 	// private members
 	private static Vector history;
 	private static boolean pathsCaseInsensitive;
-	private static int max;
 
 	static
 	{
@@ -192,6 +189,7 @@ public class BufferHistory
 	/* private */ static void addEntry(Entry entry)
 	{
 		history.addElement(entry);
+		int max = jEdit.getIntegerProperty("recentFiles",50);
 		while(history.size() > max)
 			history.removeElementAt(0);
 	}
