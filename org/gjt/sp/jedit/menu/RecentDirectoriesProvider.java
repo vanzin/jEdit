@@ -1,9 +1,9 @@
 /*
- * RecentFilesMenu.java - Recent file list menu
+ * RecentDirectoriesProvider.java - Recent directory list menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,42 +20,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
-import org.gjt.sp.jedit.browser.FileCellRenderer;
-import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class RecentFilesMenu extends EnhancedMenu
+public class RecentDirectoriesProvider implements DynamicMenuProvider
 {
-	//{{{ RecentFilesMenu constructor
-	public RecentFilesMenu()
+	//{{{ updateEveryTime() method
+	public boolean updateEveryTime()
 	{
-		super("recent-files");
+		return true;
 	} //}}}
 
-	//{{{ menuSelected() method
-	public void menuSelected(MenuEvent evt)
+	//{{{ update() method
+	public void update(JMenu menu)
 	{
-		super.menuSelected(evt);
-		final View view = GUIUtilities.getView(this);
-
-		if(getMenuComponentCount() != 0)
-			removeAll();
+		final View view = GUIUtilities.getView(menu);
 
 		//{{{ ActionListener...
 		ActionListener actionListener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				jEdit.openFile(view,evt.getActionCommand());
+				VFSBrowser.browseDirectory(view,evt.getActionCommand());
+
 				view.getStatus().setMessage(null);
 			}
 		}; //}}}
@@ -76,42 +72,33 @@ public class RecentFilesMenu extends EnhancedMenu
 			}
 		}; //}}}
 
-		Vector recentVector = BufferHistory.getBufferHistory();
-
-		if(recentVector.size() == 0)
+		HistoryModel model = HistoryModel.getModel("vfs.browser.path");
+		if(model.getSize() == 0)
 		{
-			add(GUIUtilities.loadMenuItem("no-recent-files"));
+			JMenuItem menuItem = new JMenuItem(
+				jEdit.getProperty("no-recent-dirs.label"));
+			menuItem.setEnabled(false);
+			menu.add(menuItem);
 			return;
 		}
 
-		Vector menuItems = new Vector();
 		boolean sort = jEdit.getBooleanProperty("sortRecent");
 
-		/*
-		 * While recentVector has 50 entries or so, we only display
-		 * a few of those in the menu (otherwise it will be way too
-		 * long)
-		 */
-		int recentFileCount = Math.min(recentVector.size(),
-			jEdit.getIntegerProperty("history",25));
+		Vector menuItems = new Vector();
 
-		for(int i = recentVector.size() - 1;
-			i >= recentVector.size() - recentFileCount;
-			i--)
+		for(int i = 0; i < model.getSize(); i++)
 		{
-			String path = ((BufferHistory.Entry)recentVector
-				.elementAt(i)).path;
-			VFS vfs = VFSManager.getVFSForPath(path);
-			JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
+			String path = model.getItem(i);
+			JMenuItem menuItem = new JMenuItem(MiscUtilities.getFileName(path));
 			menuItem.setActionCommand(path);
 			menuItem.addActionListener(actionListener);
 			menuItem.addMouseListener(mouseListener);
-			menuItem.setIcon(FileCellRenderer.fileIcon);
+			menuItem.setIcon(FileCellRenderer.dirIcon);
 
 			if(sort)
 				menuItems.addElement(menuItem);
 			else
-				add(menuItem);
+				menu.add(menuItem);
 		}
 
 		if(sort)
@@ -120,12 +107,8 @@ public class RecentFilesMenu extends EnhancedMenu
 				new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < menuItems.size(); i++)
 			{
-				add((JMenuItem)menuItems.elementAt(i));
+				menu.add((JMenuItem)menuItems.elementAt(i));
 			}
 		}
 	} //}}}
-
-	public void menuDeselected(MenuEvent e) {}
-
-	public void menuCanceled(MenuEvent e) {}
 }

@@ -1,9 +1,9 @@
 /*
- * MarkersMenu.java - Markers menu
+ * MarkersProvider.java - Markers menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.event.*;
@@ -31,34 +31,18 @@ import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class MarkersMenu extends EnhancedMenu
+public class MarkersProvider implements DynamicMenuProvider
 {
-	//{{{ MarkersMenu constructor
-	public MarkersMenu()
+	//{{{ updateEveryTime() method
+	public boolean updateEveryTime()
 	{
-		super("markers");
+		return true;
 	} //}}}
 
-	//{{{ menuSelected() method
-	public void menuSelected(MenuEvent evt)
+	//{{{ update() method
+	public void update(JMenu menu)
 	{
-		super.menuSelected(evt);
-		final View view = GUIUtilities.getView(this);
-
-		if(getMenuComponentCount() != 0)
-		{
-			for(int i = getMenuComponentCount() - 1;
-				i >= 0;
-				i--)
-			{
-				Component comp = getMenuComponent(i);
-				if(comp instanceof JSeparator)
-					break;
-				else
-					remove(comp);
-			}
-		}
-
+		final View view = GUIUtilities.getView(menu);
 		Buffer buffer = view.getBuffer();
 
 		Vector markers = buffer.getMarkers();
@@ -68,13 +52,13 @@ public class MarkersMenu extends EnhancedMenu
 			JMenuItem mi = new JMenuItem(jEdit.getProperty(
 				"no-markers.label"));
 			mi.setEnabled(false);
-			add(mi);
+			menu.add(mi);
 			return;
 		}
 
 		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
-		JMenu current = this;
+		JMenu current = menu;
 
 		for(int i = 0; i < markers.size(); i++)
 		{
@@ -104,10 +88,6 @@ public class MarkersMenu extends EnhancedMenu
 			current.add(mi);
 		}
 	} //}}}
-
-	public void menuDeselected(MenuEvent e) {}
-
-	public void menuCanceled(MenuEvent e) {}
 
 	//{{{ MarkersMenuItem class
 	static class MarkersMenuItem extends JMenuItem

@@ -25,8 +25,8 @@ package org.gjt.sp.jedit;
 import javax.swing.JMenuItem;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.gui.EnhancedMenu;
 import org.gjt.sp.jedit.gui.OptionsDialog;
+import org.gjt.sp.jedit.menu.EnhancedMenu;
 
 /**
  * The abstract base class that every plugin must implement.

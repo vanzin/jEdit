@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.event.*;
@@ -29,7 +29,8 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class EnhancedMenu extends JMenu implements MenuListener
+public class EnhancedMenu extends JMenu implements MenuListener,
+	EBComponent
 {
 	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name)
@@ -66,6 +67,8 @@ public class EnhancedMenu extends JMenu implements MenuListener
 		if(!OperatingSystem.isMacOS())
 			setMnemonic(mnemonic);
 
+		providerCode = jEdit.getProperty(name + ".code");
+
 		addMenuListener(this);
 		//init();
 	} //}}}
@@ -101,9 +104,60 @@ public class EnhancedMenu extends JMenu implements MenuListener
 					add(GUIUtilities.loadMenuItem(context,menuItemName,true));
 			}
 		}
+
+		initialMenuItemCount = getMenuComponentCount();
+
+		if(providerCode != null && provider == null)
+		{
+			Object obj = BeanShell.eval(null,
+				BeanShell.getNameSpace(),
+				providerCode);
+			provider = (DynamicMenuProvider)obj;
+		}
+
+		if(provider != null && (dynamicMenuOutOfDate
+			|| provider.updateEveryTime()))
+		{
+			while(getMenuComponentCount() != initialMenuItemCount)
+			{
+				remove(getMenuComponentCount() - 1);
+			}
+
+			provider.update(this);
+		}
 	} //}}}
 
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
+	} //}}}
+
+	//{{{ addNotify() method
+	public void addNotify()
+	{
+		super.addNotify();
+		if(providerCode != null)
+			EditBus.addToBus(this);
+	} //}}}
+
+	//{{{ removeNotify() method
+	public void removeNotify()
+	{
+		super.removeNotify();
+		if(providerCode != null)
+			EditBus.removeFromBus(this);
+	} //}}}
+
+	//{{{ Protected members
 	protected String _name;
 	protected ActionContext context;
 	protected boolean initialized;
+
+	protected String providerCode;
+	protected DynamicMenuProvider provider;
+	protected boolean dynamicMenuOutOfDate;
+
+	// number of menu items before we call the dynamic menu item provider
+	protected int initialMenuItemCount;
+	//}}}
 }

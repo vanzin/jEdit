@@ -30,6 +30,7 @@ import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.menu.*;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
@@ -192,21 +193,9 @@ public class GUIUtilities
 	 */
 	public static JMenu loadMenu(ActionContext context, String name)
 	{
-		String customMenu = jEdit.getProperty(name + ".custom-menu");
-		if(customMenu != null)
-		{
-			Object eval = BeanShell.eval(null,BeanShell.getNameSpace(),customMenu);
-			if(eval instanceof JMenu)
-				return (JMenu)eval;
-			else
-				return null;
-		}
-		else
-		{
-			return new EnhancedMenu(name,
-				jEdit.getProperty(name.concat(".label")),
-				context);
-		}
+		return new EnhancedMenu(name,
+			jEdit.getProperty(name.concat(".label")),
+			context);
 	} //}}}
 
 	//{{{ loadPopupMenu() method
