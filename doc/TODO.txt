@@ -15,19 +15,9 @@ and quirks that I need to fix eventually.
       descriptions
   - shorten editbus section
 - plugin tutorial:
-  - writing a plugin core class
-    - choosing a base class
-    - implementing the base class
-  - defining actions
-    - actions.xml
-  - defining dockables
-    - dockables.xml
-    - class quicknotepad
-    - class quicknotepadtoolbar
-  - option pane
-  - properties
-  - building
+    - auto-created actions (mention in api docs too)
     - link to jEdit devel page
+- quicknotepad docs
 - javadocs:
   - dockable .title property
   - action .label property
