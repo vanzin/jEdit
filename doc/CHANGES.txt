@@ -2,6 +2,9 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre6
 
+Thanks to Magnus Henriksson, Mirco Bova, Ollie Rutherfurd, and
+Stephen Bartlett for contributing to this release.
+
 {{{ Syntax Highlighting
 
 - Added Apache httpd.conf syntax highlighting (Ollie Rutherfurd).
@@ -51,6 +54,9 @@ JEDIT 4.2 VERSION HISTORY
   for an <?xml ... encoding="..." ?> processing instruction on the first
   line of the file. Note that if this processing instruction is present,
   an encoding selected in the File->Open dialog box is ignored.
+
+- jEdit will now refuse to load a plugin if some of the JAR files listed
+  in its 'jars' property are missing.
 
 }}}
 {{{ Bug Fixes
@@ -131,6 +137,10 @@ JEDIT 4.2 VERSION HISTORY
 
 - If a buffer listed in the 'files on changed' dialog box was closed,
   clicking it in the list would cause problems.
+
+- When editing a buffer in more than one text area, changing the last
+  token of a line (for example, by inserting the start of a comment on
+  that line) would not update subsequent lines in some cases.
 
 }}}
 

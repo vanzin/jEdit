@@ -332,7 +332,6 @@ public class BufferIORequest extends WorkRequest
 			while((count = in.read(_xmlPI,offset,
 				XML_PI_LENGTH - offset)) != -1)
 			{
-				System.err.println(count);
 				offset += count;
 				if(offset == XML_PI_LENGTH)
 					break;
