@@ -1915,7 +1915,9 @@ public class Buffer implements EBComponent
 		{
 			try
 			{
-				return Integer.parseInt(getStringProperty(name));
+				int value = Integer.parseInt(getStringProperty(name));
+				properties.put(name,new Integer(value));
+				return value;
 			}
 			catch(Exception e)
 			{

@@ -346,6 +346,8 @@ public class Gutter extends JComponent implements SwingConstants
 			gutterSize.width = FOLD_MARKER_SIZE + insets.right
 				+ fm.stringWidth("12345");
 		}
+
+		revalidate();
 	} //}}}
 
 	//{{{ setFont() method
@@ -361,6 +363,11 @@ public class Gutter extends JComponent implements SwingConstants
 		fm = getFontMetrics(font);
 
 		baseline = fm.getAscent();
+
+		gutterSize.width = FOLD_MARKER_SIZE
+			+ getBorder().getBorderInsets(this).right
+			+ fm.stringWidth("12345");
+		revalidate();
 	} //}}}
 
 	//{{{ Getters and setters

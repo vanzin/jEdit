@@ -9,12 +9,16 @@ JEDIT 4.0 VERSION HISTORY
 - Closing a docked window now returns focus to the text area
 - Memory indicator tooltip now shows used and total Java heap memory in
   kilobytes
+- Updated Transact-SQL mode (Ollie Rutherfurd)
 
 + Bug Fixes
 
 - Fixed a memory leak with the search and replace dialog box
 - Undo would be broken after a file was reloaded
 - Some files would appear with only the first line visible
+- Fixed exception thrown if a buffer contained definitions for integer
+  properties (tab size, maximum line length, ...)
+- Changing the gutter font didn't update the gutter width
 
 * Version 4.0pre1
 
