@@ -1524,7 +1524,8 @@ public class Buffer implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		parseFully = jEdit.getBooleanProperty("parseFully");
+		parseFully = (!"text".equals(mode.getName())
+			&& jEdit.getBooleanProperty("parseFully"));
 
 		setTokenMarker(mode.getTokenMarker());
 

@@ -1,6 +1,5 @@
 TO DO
 
-- status bar: show status msg when a setting is changed
 - reload: doesn't respect collapseFolds
 - first run on windows -- why is help viewer hidden
 - idea for fixing buffer property issues: BufferProp class
@@ -24,7 +23,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
-
+- less overhead for plain text files
 - more flexible definition of a paragraph, paragraph folding
 - fsb: indicate current buffer
 - escape in panel window container -> focus back to text area?

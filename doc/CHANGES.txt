@@ -40,6 +40,8 @@ JEDIT 4.1 VERSION HISTORY
   baz();
 
   in Java/C/C++/etc modes (Alexander Maryanovsky)
+- Improved loading time of plain text files if 'more accurate syntax
+  highlighting' is on
 
 + Bug Fixes
 
