@@ -1,0 +1,65 @@
+Changes made to QuickNotepad plugin for jEdit 4.0:
+
+(1) Under jEdit 3.2.2 and prior versions, the plugin had a separate class
+implementing the DockableWindow interface, QuickNotepadDockable. The class's
+methods delegated actions to the plugin's top-level visible component, a class
+derived from JPanel called QuickNotepad. The DockableWindow interface is
+deprecated in jEdit 4.0, so this class was eliminated. If the top-level
+component had implemented the DockableWindow interface, it would have been
+necessary to remove DockableWindow as an implemented interface and the eliminate
+the getName() and getComponent() methods of that interface in the plugin class.
+
+(2) A new file, dockables.xml, was created containing XML markup for the
+constructor of a plugin component. Under the new plugin API, this file is read
+to determine the method call or calls for construcuting a new instance of a
+dockable plugin component. The file is quite short:
+
+<?xml version="1.0"?>
+
+<!DOCTYPE DOCKABLES SYSTEM "dockables.dtd">
+
+<!-- QuickNotepad dockable windows -->
+
+<DOCKABLES> 	<DOCKABLE NAME="quicknotepad"> 		new QuickNotepad(view, position);
+	</DOCKABLE> </DOCKABLES>
+
+The parameters are those found in the existing version of the QuickNotepad
+constructor. Both "view" and "position" are defined by the new plugin API in the
+namespace in which the constructor is called. The value of position is taken
+from optional properties set by the user. In the absence of a user setting, the
+position parameter is set to place the plugin component in a floating window.
+The NAME attribute is taken to conform to the value of the static variable
+QuickNotepadPlugin.NAME, which is also used to identify the plugin in user
+action code.
+
+There is one other attribute of the <DOCKABLE> element: a NO_ACTIONS attribute
+that can take a value of either "true" or "false". It is "false" by default:
+this signifies that the plugin does in fact define user actions in a actions.xml
+file. Most plugins will therefore use the default value.
+
+(3) The action definitions contained in actions.xml were revised to call
+DockableWindowManager.getDockable() instead of
+DockableManager.getDockableWindow().
+
+(4) There were two deletions made in the main plugin class, QuickNotepadPlugin.
+The handleMessage() method was eliminated because it was only necessary for the
+plugin to listen for the CreateDockableWindow message, as a result, it is no
+longer necessary for this plugin to connect to the EditBus, so it derivation was
+changed from EBPlugin to EditPlugin. In addition, since the EditBus no longer
+maintained an active list of Windows, the call to EditBus.addToNamedList() is no
+longer needed in the class's start() method and so was elimiated, leaving an
+empty start() method.
+
+(5) No changes were required in the option pane class, QuickNotepadOptionsPane,
+or the other other classes defining components of the plugin.
+
+(6) Finally, the plugin's dependency properties were changed to make the plugin
+dependent upon version 4.0 or greater of jEdit:
+
+plugin.QuickNotepadPlugin.depend.1=jedit 04.00.00.00
+
+The plugin was built using the standard build.xml supplied for plugins,
+after checking to make sure that the name of the plugin and the location of
+jedit.jar were correct. It was also necessary to add dockables.xml to the list
+of files to be archived by the jar utility. Iterations of the build process
+helped to uncover deprecated API elements.
