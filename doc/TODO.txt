@@ -3,11 +3,13 @@ TO DO
 - if first chunk if a line is a syntax chunk, getScreenLineOfOffset()
   broken (?)
 - rect select and soft wrap
-- still problem with last phys line repainting
 - vertical scrollbar w/ soft wrap wrong
 - save to X:filename on Windows
 - plugin manager needs overhauled error reporting
 - motif l&f: shortcuts in menu items
+- still problem with last phys line repainting
+- replace in selection with rectangular selections
+
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
@@ -15,7 +17,6 @@ TO DO
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class
-- replace in selection with rectangular selections
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
