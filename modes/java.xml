@@ -14,6 +14,8 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="indentNextLine"
 			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+		<PROPERTY NAME="unindentThisLine"
+			VALUE="^.*(default:\s*|case.*:.*)$" />
 		<!-- set this to 'true' if you want to use GNU coding style -->
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />

@@ -1,6 +1,6 @@
 /*
  * TextUtilities.java - Various text functions
- * Copyright (C) 1998, 2003 Slava Pestov
+ * Copyright (C) 1998, 2005 Slava Pestov
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -71,6 +71,28 @@ public class TextUtilities
 		}
 	} //}}}
 
+	//{{{ getComplementaryBracket() method
+	/**
+	 * Given an opening bracket, return the corresponding closing bracket
+	 * and store true in <code>direction[0]</code>. Given a closing bracket,
+	 * return the corresponding opening bracket and store false in
+	 * <code>direction[0]</code>. Otherwise, return <code>\0</code>.
+	 * @since jEdit 4.3pre2
+	 */
+	public static char getComplementaryBracket(char ch, boolean[] direction)
+	{
+		switch(ch)
+		{
+		case '(': direction[0] = true;  return ')';
+		case ')': direction[0] = false; return '(';
+		case '[': direction[0] = true;  return ']';
+		case ']': direction[0] = false; return '[';
+		case '{': direction[0] = true;  return '}';
+		case '}': direction[0] = false; return '{';
+		default:  return '\0';
+		}
+	} //}}}
+
 	//{{{ findMatchingBracket() method
 	/**
 	 * Returns the offset of the bracket matching the one at the
@@ -93,19 +115,11 @@ public class TextUtilities
 		buffer.getLineText(line,lineText);
 
 		char c = lineText.array[lineText.offset + offset];
-		char cprime; // corresponding character
-		boolean direction; // false - backwards, true - forwards
+		// false - backwards, true - forwards
+		boolean[] direction = new boolean[1];
 
-		switch(c)
-		{
-		case '(': cprime = ')'; direction = true;  break;
-		case ')': cprime = '('; direction = false; break;
-		case '[': cprime = ']'; direction = true;  break;
-		case ']': cprime = '['; direction = false; break;
-		case '{': cprime = '}'; direction = true;  break;
-		case '}': cprime = '{'; direction = false; break;
-		default: return -1;
-		}
+		// corresponding character
+		char cprime = getComplementaryBracket(c,direction);
 
 		// 1 because we've already 'seen' the first bracket
 		int count = 1;
@@ -123,7 +137,7 @@ public class TextUtilities
 		int startLine = line;
 
 		//{{{ Forward search
-		if(direction)
+		if(direction[0])
 		{
 			offset++;
 
