@@ -43,8 +43,8 @@ Free Software Foundation; with no "Invariant Sections", "Front-Cover
 Texts" or "Back-Cover Texts", each as defined in the license. A copy of
 the license can be found in the file COPYING.DOC.txt.
 
-The class libraries shipped with jEdit (gnu.regexp, AElfred, BeanShell)
-each have their own license; see the 'Libraries' section below.
+The class libraries shipped with jEdit each have their own license; see
+the 'Libraries' section below.
 
 * jEdit on the Internet
 
@@ -106,7 +106,7 @@ jEdit depends on, and comes bundled with the following libraries:
   The AElfred home page is located at <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2b41 with the bsh.util and bsh.classpath packages removed.
+  version 1.2b5 with the bsh.util and bsh.classpath packages removed.
 
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.

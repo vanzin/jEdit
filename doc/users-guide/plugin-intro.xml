@@ -19,7 +19,7 @@ Introducing the Plugin API</title>
   hosting plugin applications without imposing any
   requirements on the design or function of the plugin itself. You could
   write a application that performs spell checking, displays a clock or
-  plays chess and turn it into a jEdit plugin. There are currently over 40
+  plays chess and turn it into a jEdit plugin. There are currently over 50
   released plugins for jEdit. While none of them play chess,
   they perform a wide variety of editing and file management tasks. A
   detailed listing of available plugins is available at the jEdit

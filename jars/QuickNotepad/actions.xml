@@ -10,20 +10,20 @@
 			view.getDockableWindowManager()
 				.getDockable(QuickNotepadPlugin.NAME).chooseFile();
 		</CODE>
-    </ACTION>
+	</ACTION>
 
-    	<ACTION NAME="quicknotepad.save-file">
+	<ACTION NAME="quicknotepad.save-file">
 		<CODE>
 			view.getDockableWindowManager()
 				.getDockable(QuickNotepadPlugin.NAME).saveFile();
 		</CODE>
-		</ACTION>
+	</ACTION>
 
-    <ACTION NAME="quicknotepad.copy-to-buffer">
+	<ACTION NAME="quicknotepad.copy-to-buffer">
 		<CODE>
 			view.getDockableWindowManager()
 				.getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
 		</CODE>
-    </ACTION>
+	</ACTION>
 </ACTIONS>
 

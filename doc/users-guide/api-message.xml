@@ -9,7 +9,7 @@
     This section describes the <classname>EditBus</classname> class
     itself, as well as the abstract <classname>EBMessage</classname>
     class and all classes that derive from it.
-    See <xref linkend="host-display-message" /> for an overview
+    See <xref linkend="host-display-manager" /> for an overview
     of how the EditBus works.
 </para>
 

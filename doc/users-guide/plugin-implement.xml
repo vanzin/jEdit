@@ -408,7 +408,7 @@
 <para>
   A formal description of each element of the
   <filename>actions.xml</filename> file can be found in
-  <xref linkend="api-resources-action" />.
+  <xref linkend="resources-action" />.
 </para>
 
 </sect3>
@@ -991,7 +991,7 @@ plugin.QuickNotepadPlugin.docs=QuickNotepad.html
 plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00</programlisting></informalexample>
 <para>
   These properties are described in detail in <xref
-  linkend="api-resource-properties" /> and do not require further
+  linkend="resources-properties" /> and do not require further
   discussion here.
 </para>
 

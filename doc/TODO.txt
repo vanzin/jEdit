@@ -2,19 +2,17 @@ TO DO
 
 + before 4.0final:
 
-- make sure plugin guide is up to date
-- API guide: need to mention GUIUtilities.{message,input,...}
+- make sure plugin guide is up to date:
+  - finish option pane docs
+  - mention editbus
+  - mention automatically created dockable actions
 
 + 4.0.1:
 
-- scroll to caret _still_ jumps around
+- need to investigate:
+  - scroll to caret _still_ jumps around?
+  - mouse clicks not working?
 - printer output spacing problem
-
-+ in 4.1:
-
-- appendix in plugin guide on contributing plugins
-- escape in panel window container -> focus back to text area?
-- fix GUIUtilities.java to store maximisation state
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
     possible.
@@ -22,6 +20,11 @@ TO DO
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
+
++ in 4.1:
+
+- escape in panel window container -> focus back to text area?
+- fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class

@@ -455,7 +455,7 @@ are useful in some situations. They include the following:</para>
 <para>
     This class represents the <quote>parent</quote> or top-level frame window
     in which the editing occurs. It contains the various visible
-    components of the program, including the editing pane, menubar,
+    components of the program, including the editing pane, menu bar,
     toolbar, and any docked windows.
 </para>
 
@@ -564,101 +564,6 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 </itemizedlist>
-
-</sect1>
-
-<!-- LaTeX spews with id's that are too long? -->
-<sect1 id="class-dockablewindowmanager"><title>Class DockableWindowManager</title>
-
-    <para>
-        Windows conforming to jEdit's dockable window API can appear in
-        <quote>panes</quote> located above, below or to the left or right of the
-        main editing pane. They can also be displayed in <quote>floating</quote>
-        frame windows. A <classname>DockableWindowManager</classname> keeps
-        track of the windows associated with a particular
-        <classname>View</classname>. Each <classname>View</classname> object
-        contains an instance of this class.
-    </para>
-
-    <itemizedlist>
-      <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public JComponent <function>getDockable</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
-        <para>
-          Returns the dockable window
-          named by the <varname>name</varname> parameter. If there is no
-          dockable window bearing the
-          requested name, the method returns <constant>null</constant>.
-        </para>
-        <note>
-         <para>
-          You might wonder why this method is not named
-          <function>getDockableWindow()</function>. A method with that
-          name already exists, but it is deprecated since it returns
-          instances of the <classname>DockableWindow</classname>
-          interface, which should no longer be used.
-         </para>
-         <para>
-          Always call <function>getDockable()</function> instead.
-         </para>
-        </note>
-       </listitem>
-
-       <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>addDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
-        <para>
-          If the dockable window named by the
-          <varname>name</varname> parameter does not exist, it is
-          created. The dockable window is then made visible.
-        </para>
-       </listitem>
-
-       <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>showDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
-       </listitem>
-
-       <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>removeDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
-       </listitem>
-
-       <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>toggleDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
-       <para>
-         These methods, respectively show, hide and toggle the visibility
-         of the dockable window object named by
-         the <varname>name</varname> parameter.  If the
-         <classname>DockableWindowManager</classname> does not contain a
-         reference to the window, these methods send an error message to the
-         activity log and have no other effect.  Only
-         <function>addDockableWindow()</function> can cause the creation
-         of a dockable window.
-         </para>
-       </listitem>
-    </itemizedlist>
 
 </sect1>
 
@@ -2467,8 +2372,13 @@ line count of the buffer represented by the gutter's display.  The
 
 <sect1 id="class-guiutilities"><title>Class GUIUtilities</title>
 
-<itemizedlist>
+<para>
+ The first set of methods in this class, documented below, display
+ various common dialog boxes. The remainder deal with various
+ miscellaneous user interface-related tasks.
+</para>
 
+<itemizedlist>
 
 <listitem>
  <funcsynopsis>
@@ -2490,6 +2400,25 @@ line count of the buffer represented by the gutter's display.  The
     <paramdef>Object[] <parameter>args</parameter></paramdef>
   </funcprototype>
  </funcsynopsis>
+ <para>
+  These two methods both show a dialog box; they are identical
+  in every way except for the icon used (either a message icon, or an
+  error icon).
+  The title of the dialog is taken from a property named
+  <literal><replaceable>prefix</replaceable>.title</literal>;
+  the message text is taken from
+  <literal><replaceable>prefix</replaceable>.message</literal>.
+  The message property can consist of multiple lines of text.
+ </para>
+ <para>
+  The elements of the <varname>args</varname> array are substituted
+  into the value of the message property in place of strings of the
+  form <literal>{<replaceable>n</replaceable>}</literal>, where
+  <replaceable>n</replaceable> is an index in the array.
+  You can find out more about this feature by reading the documentation
+  for the <function>format</function> method of the
+  <classname>java.text.MessageFormat</classname> class.
+ </para>
 </listitem>
 
 <listitem>
@@ -2513,6 +2442,16 @@ line count of the buffer represented by the gutter's display.  The
    <paramdef>Object <parameter>def</parameter></paramdef>
   </funcprototype>
  </funcsynopsis>
+ <para>
+  These two methods prompt for input; both return <literal>null</literal>
+  if the user pressed <guibutton>Cancel</guibutton>, or the entered
+  value if they pressed <guibutton>OK</guibutton>.
+ </para>
+ <para>
+  The dialog box title and message is obtained in the same manner as
+  with the <function>message()</function> and <function>error()</function>
+  methods.
+ </para>
 </listitem>
 
 <listitem>
@@ -2587,6 +2526,18 @@ line count of the buffer represented by the gutter's display.  The
  Plugins should use this method to display popup menus. Unlike the
  standard <function>JPopupMenu.show()</function> method, this one
  ensures that the popup is positioned within the bounds of the screen.
+</para></listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static Icon <function>loadIcon</function></funcdef>
+  <paramdef>String <parameter>name</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+ Loads an icon from the specified URL. Relative URLs are resolved relative
+ to the standard icon directory inside <filename>jedit.jar</filename>.
 </para></listitem>
 
 </itemizedlist>
@@ -3441,6 +3392,101 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 
 </sect1>
 
+<!-- LaTeX spews with id's that are too long? -->
+<sect1 id="class-dockablewindowmanager"><title>Class DockableWindowManager</title>
+
+    <para>
+        Windows conforming to jEdit's dockable window API can appear in
+        <quote>panes</quote> located above, below or to the left or right of the
+        main editing pane. They can also be displayed in <quote>floating</quote>
+        frame windows. A <classname>DockableWindowManager</classname> keeps
+        track of the windows associated with a particular
+        <classname>View</classname>. Each <classname>View</classname> object
+        contains an instance of this class.
+    </para>
+
+    <itemizedlist>
+      <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public JComponent <function>getDockable</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+        <para>
+          Returns the dockable window
+          named by the <varname>name</varname> parameter. If there is no
+          dockable window bearing the
+          requested name, the method returns <constant>null</constant>.
+        </para>
+        <note>
+         <para>
+          You might wonder why this method is not named
+          <function>getDockableWindow()</function>. A method with that
+          name already exists, but it is deprecated since it returns
+          instances of the <classname>DockableWindow</classname>
+          interface, which should no longer be used.
+         </para>
+         <para>
+          Always call <function>getDockable()</function> instead.
+         </para>
+        </note>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>addDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+        <para>
+          If the dockable window named by the
+          <varname>name</varname> parameter does not exist, it is
+          created. The dockable window is then made visible.
+        </para>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>showDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>removeDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       </listitem>
+
+       <listitem>
+        <funcsynopsis>
+          <funcprototype>
+            <funcdef>public void <function>toggleDockableWindow</function></funcdef>
+            <paramdef>String <parameter>name</parameter></paramdef>
+          </funcprototype>
+        </funcsynopsis>
+       <para>
+         These methods, respectively show, hide and toggle the visibility
+         of the dockable window object named by
+         the <varname>name</varname> parameter.  If the
+         <classname>DockableWindowManager</classname> does not contain a
+         reference to the window, these methods send an error message to the
+         activity log and have no other effect.  Only
+         <function>addDockableWindow()</function> can cause the creation
+         of a dockable window.
+         </para>
+       </listitem>
+    </itemizedlist>
+
+</sect1>
+
 <sect1 id="class-beanshell"><title>Class BeanShell</title>
 
 <para>
@@ -3485,6 +3531,246 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 
 </sect1>
 
+<sect1 id="class-ebplugin"><title>Class EBPlugin</title>
+
+<para>
+  Every plugin core class class that uses the EditBus for receiving
+  messages
+  must extend this class. This class implements the
+  <classname>EBComponent</classname> interface, required for any
+  object that wishes to receive EditBus messages.
+</para>
+
+<para>
+  The <classname>EBComponent</classname> interface contains a single
+  method that an implementing class (including any class derived from
+  <classname>EBPlugin</classname>) must provide:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The parameter's type, <classname>EBMessage</classname>, is another
+  abstract class which establishes the core elements of any message that
+  is published to the EditBus. It has two attributes: an
+  <classname>EBComponent</classname> that is the source of the message
+  (the source will be <classname>null</classname> in some cases),
+  and a <classname>boolean</classname> data member, <varname>vetoed</varname>. This
+  flag indicates whether a prior recipient of the message has determined
+  that the message has been handled and need not be passed on to other
+  subscribers. The flag is set by a call
+  to the <function>veto()</function> method of the
+  <classname>EBMessage</classname>. Some message classes, however,
+  are configured so that they cannot be vetoed, to ensure they are
+  received by all subscribers.
+</para>
+
+<para>
+  Message classes extending <classname>EBMessage</classname> typically add
+  other data members and methods to provide subscribers with whatever is
+  needed to handle the message appropriately. Descriptions of specific
+  message classes can be found in <xref linkend="api-message"/>.
+</para>
+
+<para>
+  The <function>handleMessage()</function> method
+  must specify the type of responses
+  the plugin will have for various subclasses of the
+  <classname>EBMessage</classname> class. Typically this is done with
+  one or more <function>if</function> blocks that test whether the message
+  is an instance of a derived message class in which the plugin has an
+  interest, as in the following example:
+</para>
+
+<informalexample><programlisting>if(msg instanceof BufferUpdate) {
+    // a buffer's state has changed!
+}
+else if(msg instanceof ViewUpdate) {
+    // a view's state has changed!
+}
+// ... and so on</programlisting></informalexample>
+
+<para>
+  Note that any object, whether or not derived from
+  <classname>EBComponent</classname>, can send a message to the EditBus
+  by calling the static method <function>EditBus.send()</function>.
+  This method takes a single parameter, an <classname>EBMessage</classname>
+  object that is the message being sent. Most plugins, however, will
+  only concern themselves with receiving, not sending, messages.
+</para>
+
+</sect1>
+
+<sect1 id="class-abstractoptionpane"><title>Class AbstractOptionPane</title>
+
+<para>
+  Most plugin option panes extend this implementation of
+  <classname>OptionPane</classname>, instead of implementing
+  <classname>OptionPane</classname> directly. It provides
+  a convenient default framework for laying out configuration options in
+  a manner similar to the option panes created by jEdit itself.
+  It is derived from Java's <classname>JPanel</classname> class and
+  contains a <classname>GridBagLayout</classname> object for component
+  management. It also contains shortcut methods to simplify layout.
+</para>
+
+<para>
+  The constructor for a class derived from
+  <classname>AbstractOptionPane</classname> should
+  call the parent constructor and pass the option pane's <quote>internal
+  name</quote> as a
+  parameter. The internal name is used to key a property where the
+  option pane's label is stored; see
+  <xref linkend="resources-properties" />.
+  It should also implement two methods:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should create and arrange the components of the option pane
+      and initialize the option data displayed to the user. This method
+      is called when the option pane is first displayed, and is not
+      called again for the lifetime of the object.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should save any settings, to the jEdit properties or
+      other data store.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>
+  <classname>AbstractOptionPane</classname> also contains three shortcut
+  methods, typically called from <function>_init()</function>,
+  for adding components to the option pane:
+</para>
+
+<itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        These shortcut methods add components to the option pane in a
+        single vertical column, running top to bottom.  The first
+        displays the text of the <parameter>label</parameter> parameter
+        to the left of the <classname>Component</classname> represented
+        by <parameter>comp</parameter>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addSeparator</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This is another shortcut method that adds a text label between
+        two horizontal separators to the option pane.
+        The <parameter>label</parameter> parameter represents the name
+        of a property (typically a property defined in the plugin's
+        property file) whose value will be used as the separator text.
+      </para>
+    </listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="class-optiongroup"><title>Class OptionGroup</title>
+
+<para>
+  In those cases where a single option pane is inadequate to present all
+  of a plugin's configuration options, this class can be used to create a
+  group of options panes. The group will appear as a single node in the
+  options dialog tree-based index. The member option panes will appear as
+  leaf nodes under the group's node.  Three simple methods create and
+  populate an option pane:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>OptionGroup</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the internal
+      name of the option group. The internal name is used to key a
+      property where the option group's label is stored; see
+      <xref linkend="resources-properties" />.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionPane</function></funcdef>
+        <paramdef>OptionPane <parameter>pane</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionGroup</function></funcdef>
+        <paramdef>OptionGroup <parameter>group</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This pair of methods adds members to the option group.  The second
+      method enables option groups to be nested, for plugins with a
+      particularly large set of configurable options.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect1>
+
 </chapter>
-
-
