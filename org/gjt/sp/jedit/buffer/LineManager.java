@@ -215,9 +215,6 @@ public class LineManager
 			lineInfo[i] = (short)(1 << SCREEN_LINES_SHIFT);
 
 		lineContext = new TokenMarker.LineContext[lineCount];
-
-		for(int i = 0; i < positionCount; i++)
-			positions[i].offset = 0;
 	} //}}}
 
 	//{{{ contentInserted() method

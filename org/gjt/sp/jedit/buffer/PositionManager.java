@@ -89,7 +89,48 @@ public class PositionManager
 		return new PosTopHalf(bh);
 	} //}}}
 
+	//{{{ contentInserted() method
+	public void contentInserted(int offset, int length)
+	{
+		if(positionCount == 0)
+			return;
+
+		int start = getPositionAtOffset(offset);
+
+		for(int i = start; i < positionCount; i++)
+		{
+			PosBottomHalf bh = positions[i];
+			if(bh.offset < offset)
+				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
+			else
+				bh.offset += length;
+		}
+	} //}}}
+
+	//{{{ contentRemoved() method
+	public void contentRemoved(int offset, int length)
+	{
+		if(positionCount == 0)
+			return;
+
+		int start = getPositionAtOffset(offset);
+
+		for(int i = start; i < positionCount; i++)
+		{
+			PosBottomHalf bh = positions[i];
+			if(bh.offset < offset)
+				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
+			else if(bh.offset < offset + length)
+				bh.offset = offset;
+			else
+				bh.offset -= length;
+		}
+	} //}}}
+
 	//{{{ Private members
+	private PosBottomHalf[] positions;
+	private int positionCount;
+
 	//{{{ growPositionArray() method
 	private void growPositionArray()
 	{
@@ -119,44 +160,6 @@ public class PositionManager
 		System.arraycopy(positions,index + 1,positions,index,
 			positionCount - index - 1);
 		positions[--positionCount] = null;
-	} //}}}
-
-	//{{{ updatePositionsForInsert() method
-	private void updatePositionsForInsert(int offset, int length)
-	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else
-				bh.offset += length;
-		}
-	} //}}}
-
-	//{{{ updatePositionsForRemove() method
-	private void updatePositionsForRemove(int offset, int length)
-	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else if(bh.offset < offset + length)
-				bh.offset = offset;
-			else
-				bh.offset -= length;
-		}
 	} //}}}
 
 	//{{{ getPositionAtOffset() method
