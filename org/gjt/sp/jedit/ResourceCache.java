@@ -53,6 +53,8 @@ class ResourceCache
 
 		URL actionsURI;
 		String[] cachedActionNames;
+		URL browserActionsURI;
+		String[] cachedBrowserActionNames;
 		URL dockablesURI;
 		String[] cachedDockableNames;
 		boolean[] cachedDockableActionFlags;

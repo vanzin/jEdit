@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,18 @@ import org.gjt.sp.util.Log;
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
 	//{{{ EnhancedCheckBoxMenuItem constructor
-	public EnhancedCheckBoxMenuItem(String label, String action)
+	/**
+	 * Creates a new menu item. Most plugins should call
+	 * GUIUtilities.loadMenuItem() instead.
+	 * @param label The menu item label
+	 * @param action The edit action
+	 * @param context An action context
+	 * @since jEdit 4.2pre1
+	 */
+	public EnhancedCheckBoxMenuItem(String label, String action,
+		ActionContext context)
 	{
+		this.context = context;
 		this.action = action;
 		this.shortcut = getShortcut();
 		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
@@ -51,7 +61,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(new EditAction.Wrapper(action));
+			addActionListener(new EditAction.Wrapper(context,action));
 
 			addMouseListener(new MouseHandler());
 		}
@@ -98,6 +108,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private ActionContext context;
 	private String shortcut;
 	private String action;
 	//}}}
@@ -139,12 +150,17 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			if(!isShowing())
 				return false;
 
-			EditAction a = jEdit.getAction(action);
+			EditAction a = context.getAction(action);
+			if(a == null)
+			{
+				Log.log(Log.WARNING,this,"Unknown action: "
+					+ action);
+				return false;
+			}
 
 			try
 			{
-				return a.isSelected(GUIUtilities.getView(
-					EnhancedCheckBoxMenuItem.this));
+				return a.isSelected(EnhancedCheckBoxMenuItem.this);
 			}
 			catch(Throwable t)
 			{

@@ -2417,7 +2417,6 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(select)
 		{
-			System.err.println(caret + ":" + newCaret);
 			RectParams params = getRectParams(caret,newCaret);
 			int extraStartVirt;
 			int extraEndVirt;

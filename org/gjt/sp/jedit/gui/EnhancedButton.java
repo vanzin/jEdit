@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import org.gjt.sp.jedit.ActionContext;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.GUIUtilities;
 //}}}
@@ -33,16 +34,18 @@ import org.gjt.sp.jedit.GUIUtilities;
 public class EnhancedButton extends RolloverButton
 {
 	//{{{ EnhancedButton constructor
-	public EnhancedButton(Icon icon, String toolTip, String action)
+	public EnhancedButton(Icon icon, String toolTip, String action,
+		ActionContext context)
 	{
 		super(icon);
 
 		this.action = action;
+		this.context = context;
 
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(new EditAction.Wrapper(action));
+			addActionListener(new EditAction.Wrapper(context,action));
 			addMouseListener(new MouseHandler());
 		}
 		else
@@ -58,6 +61,7 @@ public class EnhancedButton extends RolloverButton
 	} //}}}
 
 	//{{{ Private members
+	private ActionContext context;
 	private String action;
 	//}}}
 
