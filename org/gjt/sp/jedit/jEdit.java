@@ -2950,8 +2950,31 @@ public class jEdit
 	//{{{ initProxy() method
 	private static void initProxy()
 	{
-		boolean enabled = jEdit.getBooleanProperty("firewall.enabled");
-		if (!enabled) {
+		boolean socksEnabled = jEdit.getBooleanProperty("socks.enabled");
+		if(!socksEnabled)
+		{
+			Log.log(Log.DEBUG,this,"SOCKS proxy disabled");
+                        System.getProperties().remove("socksProxyHost");
+                        System.getProperties().remove("socksProxyPort");
+		}
+		else
+		{
+			String socksHost = jEdit.getProperty("firewall.socks.host");
+			if( socksHost != null )
+			{
+				System.setProperty("socksProxyHost", socksHost);
+				Log.log(Log.DEBUG, jEdit.class,
+					"SOCKS proxy enabled: " + socksHost);
+                        }
+
+			String socksPort =  jEdit.getProperty("firewall.socks.port");
+			if(socksPort != null)
+				System.setProperty("socksProxyPort", socksPort);
+		}
+
+		boolean httpEnabled = jEdit.getBooleanProperty("firewall.enabled");
+		if (!httpEnabled)
+		{
 			Log.log(Log.DEBUG, jEdit.class, "HTTP proxy disabled");
 			System.getProperties().remove("proxySet");
 			System.getProperties().remove("proxyHost");
@@ -2960,7 +2983,9 @@ public class jEdit
 			System.getProperties().remove("http.proxyPort");
 			System.getProperties().remove("http.nonProxyHosts");
 			Authenticator.setDefault(null);
-		} else {
+		}
+		else
+		{
 			// set proxy host
 			String host = jEdit.getProperty("firewall.host");
 			if (host == null)

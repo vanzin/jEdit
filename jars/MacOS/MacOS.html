@@ -14,8 +14,8 @@
 >
   <tr width="100%"> 
     <td valign="TOP"><strong><font size="+2">Mac OS Plugin</font></strong></td>
-    <td valign="TOP" align="RIGHT"><font size="-1"> <strong>Version 1.1 (Feb. 
-      27, 2002)</strong> <br>
+    <td valign="TOP" align="RIGHT"><font size="-1"> <strong>Version 1.2 (Apr. 
+      20, 2002)</strong> <br>
       By Kris Kopicki &lt;krisk4@mac.com&gt; </font></td>
   </tr>
 </table>
@@ -26,18 +26,21 @@
   <li>Files created or associated with jEdit can now be opened from the Finder, 
     by either double-clicking the file's icon or dragging the file's icon onto 
     the jEdit application icon.</li>
-  <li>jEdit is assigned as the creator of new files.</li>
-  <li>"Preferences..." in the application menu can be used to access jEdits Global Options.</li>
-  <li>"About jEdit..." in the application menu can be used to access the About Dialog.
-  (must be using the new 4.0 application bundle)</li>
+  <li>jEdit preserves existing type/creator codes and is assigned as the creator 
+    of new files (Default). Can also be set to ingore existing type/creator codes.</li>
+  <li>"Preferences..." in the application menu can be used to access jEdit's Global 
+    Options.</li>
+  <li>"About jEdit..." in the application menu can be used to access the About 
+    Dialog.</li>
+  <li>The menu's can be placed in the Mac OS X menu bar. This is not recommended, 
+    as there are problems with Java on Mac OS X.</li>
 </ul>
 <h3>Known Issues:</h3>
 <ul>
-  <li>Does not work under Mac OS X 10.0.x, as the MRJToolkit routines were not 
-    implemented until Mac OS X 10.1.</li>
-  <li>"Preferences..." in the application menu will only work under Mac OS X 10.1.3 or later.
-    If using 10.1.3, the "Java 1.3.1 update 1" must be installed.</li>
-  <li>Files opened in the Finder before jEdit is running are not opened in jEdit.</li>
+  <li>"Preferences..." in the application menu will only work under Mac OS X 10.1.3 
+    or later. If using 10.1.3, the "Java 1.3.1 update 1" must be installed.</li>
+  <li>Files opened in the Finder before jEdit is running are not opened in jEdit 
+    (Apple Java bug).</li>
 </ul>
 <p>&nbsp;</p>
 </body>

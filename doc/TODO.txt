@@ -26,6 +26,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + in 4.1:
 
+- SOCKS proxy
 - rect select hypersearch
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state

@@ -1,10 +1,39 @@
+#
+# Plugin info
+#
 plugin.MacOSPlugin.name=Mac OS Plugin
 plugin.MacOSPlugin.author=Kris Kopicki
-plugin.MacOSPlugin.version=1.1
+plugin.MacOSPlugin.version=1.2
 plugin.MacOSPlugin.docs=MacOS.html
 
+#
+# Dependencies
+#
 plugin.MacOSPlugin.depend.0=jedit 04.00.01.00
-plugin.MacOSPlugin.depend.1=jdk 1.1
+plugin.MacOSPlugin.depend.1=jdk 1.3
 
-MacOS.default.type=TEXT
-MacOS.default.creator=JESP
+MacOSPlugin.depend.os.name=Mac OS X
+MacOSPlugin.depend.os.version=10.1
+
+#
+# Default settings
+#
+MacOSPlugin.default.type=TEXT
+MacOSPlugin.default.creator=JESP
+MacOSPlugin.default.useScreenMenuBar=false
+MacOSPlugin.default.preserveCodes=true
+
+#
+# Options dialog
+#
+options.MacOSPlugin.label=Mac OS Settings
+options.MacOSPlugin.menubar.label=Enable Mac OS style menubar (not recommended)
+options.MacOSPlugin.preserve.label=Preserve existing file/creator codes on save
+
+#
+# Error dialogs
+#
+MacOSPlugin.dialog.osname.title=error
+MacOSPlugin.dialog.osname.message=Mac OS Plugin can only be used with {0}.
+MacOSPlugin.dialog.osversion.title=error
+MacOSPlugin.dialog.osversion.message=Mac OS Plugin requires Mac OS X {0} or newer.
