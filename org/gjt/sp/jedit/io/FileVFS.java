@@ -144,8 +144,9 @@ public class FileVFS extends VFS
 	//{{{ LocalDirectoryEntry class
 	public static class LocalDirectoryEntry extends VFS.DirectoryEntry
 	{
+		// use system default short format
 		public static DateFormat DATE_FORMAT
-			= new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+			= DateFormat.getInstance();
 
 		public long modified;
 

@@ -18,6 +18,9 @@ this release.
   invoked at the beginning/end of the buffer, the caret is moved to
   the beginning/end, instead of staying at its current position.
 
+- File system browser now uses locale's short date format, not a
+  hard-coded DD/MM/YYYY hh:mm (Ollie Rutherfurd).
+
 }}}
 {{{ Syntax Highlighting
 
