@@ -1,8 +1,9 @@
 TO DO
 
-- gutter needs some default layer values
+- see if disabling DTDs improves startup performance
+- plugin manager's progress bar: max value is download size
+- save to X:filename on Windows
 - chunk cache problems after collapsing a fold
-- binding stuff to SPACE doesn't work, allegedly
 - removing a plugin should offer to remove the ones that depend on it too
 - installing source for already installed plugins is not possible: 'hide
   already installed' checkbox in install plugins dialog box

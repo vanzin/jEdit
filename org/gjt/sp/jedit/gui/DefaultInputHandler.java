@@ -190,6 +190,10 @@ public class DefaultInputHandler extends InputHandler
 			{
 				return;
 			}
+			else if(keyCode == KeyEvent.VK_SPACE)
+			{
+				return;
+			}
 			else if(readNextChar != null && !evt.isActionKey()
 				&& keyCode != KeyEvent.VK_TAB
 				&& keyCode != KeyEvent.VK_ENTER)
