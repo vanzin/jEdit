@@ -136,5 +136,5 @@ public class Debug
 	/**
 	 * Dump key events received by text area?
 	 */
-	public static boolean DUMP_KEY_EVENTS = true;
+	public static boolean DUMP_KEY_EVENTS = false;
 }
