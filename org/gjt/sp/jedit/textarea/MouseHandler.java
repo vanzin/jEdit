@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2004 Slava Pestov
+ * Copyright (C) 1999, 2005 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
@@ -273,6 +273,13 @@ class MouseHandler extends MouseInputAdapter
 		textArea.moveCaretPosition(newCaret,false);
 
 		dragged = true;
+	} //}}}
+
+	//{{{ mouseMoved() method
+	public void mouseMoved(MouseEvent evt)
+	{
+		textArea.getPainter().setCursor(
+			Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 	} //}}}
 
 	//{{{ mouseDragged() method

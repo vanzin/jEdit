@@ -16,6 +16,10 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- finish code to hide caret on user input; enter is a problem
+  maybe listen for KeyTyped instead
+- join lines with selection
+- delete line with selection
 - independent text area component
   - gutter: has a depenency on View to do focus highlight, and Marker
   - display manager: has a dependency on View for currently focused
@@ -24,7 +28,6 @@ and quirks that I need to fix eventually.
     abbrevs, status bar showing various flags
   - mouse handler: properties, registers
   - text area transfer handler: opening files dependency
-  text area
 - save help index
 - C+j SPACE: space not registered
 - indent folding: fold marker not always updated

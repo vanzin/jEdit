@@ -117,6 +117,15 @@ public class DisplayManager
 	private static Map bufferMap = new HashMap();
 	//}}}
 
+	//{{{ getBuffer() method
+	/**
+	 * @since jEdit 4.3pre1
+	 */
+	public Buffer getBuffer()
+	{
+		return buffer;
+	} //}}}
+
 	//{{{ isLineVisible() method
 	/**
 	 * Returns if the specified line is visible.
@@ -554,9 +563,8 @@ public class DisplayManager
 		{
 			if(buffer.isLoaded())
 			{
-				firstLine.reset();
-				scrollLineCount.reset();
-				clearNotifyFlags();
+				resetAnchors();
+
 				textArea.updateScrollBars();
 				textArea.recalculateLastPhysicalLine();
 			}
@@ -573,11 +581,12 @@ public class DisplayManager
 		}
 	} //}}}
 
-	//{{{ clearNotifyFlags() method
-	private void clearNotifyFlags()
+	//{{{ resetAnchors() method
+	private void resetAnchors()
 	{
-		firstLine.callReset = firstLine.callChanged = false;
-		scrollLineCount.callReset = scrollLineCount.callChanged = false;
+		firstLine.callReset = true;
+		scrollLineCount.callReset = true;
+		notifyScreenLineChanges();
 	} //}}}
 
 	//{{{ notifyScreenLineChanges() method
@@ -596,16 +605,41 @@ public class DisplayManager
 			if(firstLine.callReset)
 				firstLine.reset();
 			else if(firstLine.callChanged)
+			{
 				firstLine.changed();
 
+				if(!scrollLineCount.callChanged
+					&& !scrollLineCount.callReset)
+				{
+					textArea.updateScrollBars();
+					textArea.recalculateLastPhysicalLine();
+				}
+				else
+				{
+					// ScrollLineCount.changed() does the same
+					// thing
+				}
+			}
+
 			if(scrollLineCount.callReset)
+			{
 				scrollLineCount.reset();
+				firstLine.ensurePhysicalLineIsVisible();
+
+				textArea.recalculateLastPhysicalLine();
+				textArea.updateScrollBars();
+			}
 			else if(scrollLineCount.callChanged)
+			{
 				scrollLineCount.changed();
+				textArea.updateScrollBars();
+				textArea.recalculateLastPhysicalLine();
+			}
 		}
 		finally
 		{
-			clearNotifyFlags();
+			firstLine.callReset = firstLine.callChanged = false;
+			scrollLineCount.callReset = scrollLineCount.callChanged = false;
 		}
 	} //}}}
 
@@ -695,6 +729,18 @@ public class DisplayManager
 		scrollLineCount.callReset = true;
 	} //}}}
 
+	//{{{ updateScreenLineCount() method
+	void updateScreenLineCount(int line)
+	{
+		if(!screenLineMgr.isScreenLineCountValid(line))
+		{
+			int newCount = textArea.chunkCache
+				.getLineSubregionCount(line);
+
+			setScreenLineCount(line,newCount);
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -733,8 +779,8 @@ public class DisplayManager
 		this.screenLineMgr = new ScreenLineManager(this,buffer);
 		this.textArea = textArea;
 
-		scrollLineCount = new ScrollLineCount();
-		firstLine = new FirstLine();
+		scrollLineCount = new ScrollLineCount(this,textArea);
+		firstLine = new FirstLine(this,textArea);
 
 		bufferChangeHandler = new BufferChangeHandler();
 		// this listener priority thing is a bad hack...
@@ -1087,18 +1133,6 @@ loop:		for(;;)
 		}
 	} //}}}
 
-	//{{{ updateScreenLineCount() method
-	private void updateScreenLineCount(int line)
-	{
-		if(!screenLineMgr.isScreenLineCountValid(line))
-		{
-			int newCount = textArea.chunkCache
-				.getLineSubregionCount(line);
-
-			setScreenLineCount(line,newCount);
-		}
-	} //}}}
-
 	//{{{ setScreenLineCount() method
 	/**
 	 * Sets the number of screen lines that the specified physical line
@@ -1136,391 +1170,6 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
-
-	//{{{ Anchor class
-	static abstract class Anchor
-	{
-		int physicalLine;
-		int scrollLine;
-		boolean callChanged;
-		boolean callReset;
-
-		abstract void reset();
-		abstract void changed();
-
-		public String toString()
-		{
-			return getClass().getName() + "[" + physicalLine + ","
-				+ scrollLine + "]";
-		}
-	} //}}}
-
-	//{{{ ScrollLineCount class
-	class ScrollLineCount extends Anchor
-	{
-		//{{{ changed() method
-		public void changed()
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"changed()");
-			textArea.updateScrollBars();
-			textArea.recalculateLastPhysicalLine();
-		} //}}}
-
-		//{{{ reset() method
-		public void reset()
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"reset()");
-
-			physicalLine = getFirstVisibleLine();
-			int scrollLine = 0;
-			while(physicalLine != -1)
-			{
-				int before = scrollLine;
-				updateScreenLineCount(physicalLine);
-				if(before != scrollLine)
-					throw new RuntimeException(this + " nudged");
-				scrollLine += getScreenLineCount(physicalLine);
-				if(getScreenLineCount(physicalLine) == 0)
-					System.err.println(physicalLine);
-				physicalLine = getNextVisibleLine(physicalLine);
-			}
-
-			this.scrollLine = scrollLine;
-			physicalLine = buffer.getLineCount();
-
-			firstLine.ensurePhysicalLineIsVisible();
-
-			textArea.recalculateLastPhysicalLine();
-			textArea.updateScrollBars();
-		} //}}}
-	} //}}}
-
-	//{{{ FirstLine class
-	class FirstLine extends Anchor
-	{
-		int skew;
-
-		//{{{ changed() method
-		public void changed()
-		{
-			//{{{ Debug code
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"changed() before: "
-					+ physicalLine + ":" + scrollLine
-					+ ":" + skew);
-			} //}}}
-
-			ensurePhysicalLineIsVisible();
-
-			int screenLines = getScreenLineCount(physicalLine);
-			if(skew >= screenLines)
-				skew = screenLines - 1;
-
-			//{{{ Debug code
-			if(Debug.SCROLL_VERIFY)
-			{
-				System.err.println("SCROLL_VERIFY");
-				int verifyScrollLine = 0;
-
-				for(int i = 0; i < buffer.getLineCount(); i++)
-				{
-					if(!isLineVisible(i))
-						continue;
-
-					if(i >= physicalLine)
-						break;
-
-					verifyScrollLine += getScreenLineCount(i);
-				}
-
-				if(verifyScrollLine != scrollLine)
-				{
-					Exception ex = new Exception(scrollLine + ":" + verifyScrollLine);
-					Log.log(Log.ERROR,this,ex);
-					new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,ex);
-				}
-			}
-
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"changed() after: "
-					+ physicalLine + ":" + scrollLine
-					+ ":" + skew);
-			} //}}}
-
-			if(!scrollLineCount.callChanged
-				&& !scrollLineCount.callReset)
-			{
-				textArea.updateScrollBars();
-				textArea.recalculateLastPhysicalLine();
-			}
-			else
-			{
-				// ScrollLineCount.changed() does the same
-				// thing
-			}
-		} //}}}
-
-		//{{{ reset() method
-		public void reset()
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"reset()");
-
-			int oldPhysicalLine = physicalLine;
-			physicalLine = 0;
-			scrollLine = 0;
-
-			int i = getFirstVisibleLine();
-
-			for(;;)
-			{
-				if(i >= oldPhysicalLine)
-					break;
-
-				int before = scrollLine;
-				updateScreenLineCount(i);
-				if(before != scrollLine)
-					throw new RuntimeException(this + " nudged");
-				scrollLine += getScreenLineCount(i);
-
-				int nextLine = getNextVisibleLine(i);
-				if(nextLine == -1)
-					break;
-				else
-					i = nextLine;
-			}
-
-			physicalLine = i;
-
-			updateScreenLineCount(i);
-			int screenLines = getScreenLineCount(physicalLine);
-			if(skew >= screenLines)
-				skew = screenLines - 1;
-
-			textArea.updateScrollBars();
-		} //}}}
-
-		//{{{ physDown() method
-		// scroll down by physical line amount
-		void physDown(int amount, int screenAmount)
-		{
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"physDown() start: "
-					+ physicalLine + ":" + scrollLine);
-			}
-
-			skew = 0;
-
-			if(!isLineVisible(physicalLine))
-			{
-				int lastVisibleLine = getLastVisibleLine();
-				if(physicalLine > lastVisibleLine)
-					physicalLine = lastVisibleLine;
-				else
-				{
-					int nextPhysicalLine = getNextVisibleLine(physicalLine);
-					amount -= (nextPhysicalLine - physicalLine);
-					scrollLine += getScreenLineCount(physicalLine);
-					physicalLine = nextPhysicalLine;
-				}
-			}
-
-			for(;;)
-			{
-				int nextPhysicalLine = getNextVisibleLine(
-					physicalLine);
-				if(nextPhysicalLine == -1)
-					break;
-				else if(nextPhysicalLine > physicalLine + amount)
-					break;
-				else
-				{
-					scrollLine += getScreenLineCount(physicalLine);
-					amount -= (nextPhysicalLine - physicalLine);
-					physicalLine = nextPhysicalLine;
-				}
-			}
-
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"physDown() end: "
-					+ physicalLine + ":" + scrollLine);
-			}
-
-			callChanged = true;
-
-			// JEditTextArea.scrollTo() needs this to simplify
-			// its code
-			if(screenAmount < 0)
-				scrollUp(-screenAmount);
-			else if(screenAmount > 0)
-				scrollDown(screenAmount);
-		} //}}}
-
-		//{{{ physUp() method
-		// scroll up by physical line amount
-		void physUp(int amount, int screenAmount)
-		{
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"physUp() start: "
-					+ physicalLine + ":" + scrollLine);
-			}
-
-			skew = 0;
-
-			if(!isLineVisible(physicalLine))
-			{
-				int firstVisibleLine = getFirstVisibleLine();
-				if(physicalLine < firstVisibleLine)
-					physicalLine = firstVisibleLine;
-				else
-				{
-					int prevPhysicalLine = getPrevVisibleLine(physicalLine);
-					amount -= (physicalLine - prevPhysicalLine);
-				}
-			}
-
-			for(;;)
-			{
-				int prevPhysicalLine = getPrevVisibleLine(
-					physicalLine);
-				if(prevPhysicalLine == -1)
-					break;
-				else if(prevPhysicalLine < physicalLine - amount)
-					break;
-				else
-				{
-					amount -= (physicalLine - prevPhysicalLine);
-					physicalLine = prevPhysicalLine;
-					scrollLine -= getScreenLineCount(
-						prevPhysicalLine);
-				}
-			}
-
-			if(Debug.SCROLL_DEBUG)
-			{
-				Log.log(Log.DEBUG,this,"physUp() end: "
-					+ physicalLine + ":" + scrollLine);
-			}
-
-			callChanged = true;
-
-			// JEditTextArea.scrollTo() needs this to simplify
-			// its code
-			if(screenAmount < 0)
-				scrollUp(-screenAmount);
-			else if(screenAmount > 0)
-				scrollDown(screenAmount);
-		} //}}}
-
-		//{{{ scrollDown() method
-		// scroll down by screen line amount
-		void scrollDown(int amount)
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"scrollDown()");
-
-			ensurePhysicalLineIsVisible();
-
-			amount += skew;
-
-			skew = 0;
-
-			while(amount > 0)
-			{
-				int screenLines = getScreenLineCount(physicalLine);
-				if(amount < screenLines)
-				{
-					skew = amount;
-					break;
-				}
-				else
-				{
-					int nextLine = getNextVisibleLine(physicalLine);
-					if(nextLine == -1)
-						break;
-					boolean visible = isLineVisible(physicalLine);
-					physicalLine = nextLine;
-					if(visible)
-					{
-						amount -= screenLines;
-						scrollLine += screenLines;
-					}
-				}
-			}
-
-			callChanged = true;
-		} //}}}
-
-		//{{{ scrollUp() method
-		// scroll up by screen line amount
-		void scrollUp(int amount)
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"scrollUp()");
-
-			ensurePhysicalLineIsVisible();
-
-			if(amount <= skew)
-			{
-				skew -= amount;
-			}
-			else
-			{
-				amount -= skew;
-				skew = 0;
-
-				while(amount > 0)
-				{
-					int prevLine = getPrevVisibleLine(physicalLine);
-					if(prevLine == -1)
-						break;
-					physicalLine = prevLine;
-
-					int screenLines = getScreenLineCount(physicalLine);
-					scrollLine -= screenLines;
-					if(amount < screenLines)
-					{
-						skew = screenLines - amount;
-						break;
-					}
-					else
-						amount -= screenLines;
-				}
-			}
-
-			callChanged = true;
-		} //}}}
-
-		//{{{ ensurePhysicalLineIsVisible() method
-		private void ensurePhysicalLineIsVisible()
-		{
-			if(!isLineVisible(physicalLine))
-			{
-				if(physicalLine > getLastVisibleLine())
-				{
-					physicalLine = getLastVisibleLine();
-					scrollLine = getScrollLineCount() - 1;
-				}
-				else if(physicalLine < getFirstVisibleLine())
-				{
-					physicalLine = getFirstVisibleLine();
-					scrollLine = 0;
-				}
-				else
-				{
-					physicalLine = getNextVisibleLine(physicalLine);
-					scrollLine += getScreenLineCount(physicalLine);
-				}
-			}
-		} //}}}
-	} //}}}
 
 	//{{{ BufferChangeHandler class
 	/**
@@ -1570,8 +1219,8 @@ loop:		for(;;)
 				return;
 
 			fvmreset();
-			firstLine.reset();
-			scrollLineCount.reset();
+
+			resetAnchors();
 
 			int collapseFolds = buffer.getIntegerProperty(
 				"collapseFolds",0);
