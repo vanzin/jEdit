@@ -16,8 +16,9 @@ in build.xml.
     "hard" - this is the old hard wrap feature that has been available
     since jEdit 3.0.
   - Change the wrap mode in Global Options or Buffer Options
-  - You can set the 'Wrap margin' setting to zero to wrap to the width
-    of the text area. Some plugins will need to be updated; see below
+  - When soft wrap is enabled, you can set the 'Wrap margin' setting to
+    zero to wrap to the width of the text area.
+  - Some plugins will need to be updated; see below
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
   borders using Swing look & feel'. Both are disabled by default.
@@ -132,6 +133,8 @@ in build.xml.
 - Display_Shortcuts macro didn't work
 - jEdit would hang if 'Find Previous' was invoked while regular
   expressions were enabled
+- "Narrow to Fold" would never include the last line of the buffer in
+  the narrow, even if it was part of the fold in question
 
 + API Additions
 
