@@ -464,17 +464,23 @@ loop:			for(;;)
 
 				if(repeat)
 				{
-					// no point showing this dialog box twice
-					view.getToolkit().beep();
+					if(!BeanShell.isScriptRunning())
+					{
+						view.getStatus().setMessageAndClear(
+							jEdit.getProperty("view.status.search-not-found"));
+
+						view.getToolkit().beep();
+					}
 					return false;
 				}
 
-				/* Don't do this when playing a macro */
-				if(BeanShell.isScriptRunning())
-					break loop;
-
 				boolean restart;
-				if(wrap)
+
+				if(BeanShell.isScriptRunning())
+				{
+					restart = true;
+				}
+				else if(wrap)
 				{
 					view.getStatus().setMessageAndClear(
 						jEdit.getProperty("view.status.auto-wrap"));
@@ -545,17 +551,29 @@ loop:			for(;;)
 		// support reverse search yet.
 		//
 		// REMIND: fix flags when adding reverse regexp search.
-		int[] match = matcher.nextMatch(text,start == 0,true);
+		int[] match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
+			start == 0,true);
 		if(match != null)
 		{
 			jEdit.commitTemporary(buffer);
 			view.setBuffer(buffer);
 			JEditTextArea textArea = view.getTextArea();
-			int matchStart = (reverse ? 0 : start);
-			textArea.setSelection(new Selection.Range(
-				matchStart + match[0],
-				matchStart + match[1]));
-			textArea.moveCaretPosition(matchStart + match[1]);
+
+			if(reverse)
+			{
+				textArea.setSelection(new Selection.Range(
+					start - match[1],
+					start - match[0]));
+				textArea.moveCaretPosition(start - match[1]);
+			}
+			else
+			{
+				textArea.setSelection(new Selection.Range(
+					start + match[0],
+					start + match[1]));
+				textArea.moveCaretPosition(start + match[1]);
+			}
+
 			return true;
 		}
 		else
@@ -778,7 +796,6 @@ loop:			while(path != null)
 		replace = jEdit.getProperty("search.replace.value");
 		ignoreCase = jEdit.getBooleanProperty("search.ignoreCase.toggle");
 		regexp = jEdit.getBooleanProperty("search.regexp.toggle");
-		reverse = jEdit.getBooleanProperty("search.reverse.toggle");
 		beanshell = jEdit.getBooleanProperty("search.beanshell.toggle");
 		wrap = jEdit.getBooleanProperty("search.wrap.toggle");
 
@@ -801,7 +818,6 @@ loop:			while(path != null)
 		jEdit.setProperty("search.replace.value",replace);
 		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
 		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
-		jEdit.setBooleanProperty("search.reverse.toggle",reverse);
 		jEdit.setBooleanProperty("search.beanshell.toggle",beanshell);
 		jEdit.setBooleanProperty("search.wrap.toggle",wrap);
 	} //}}}
@@ -893,8 +909,9 @@ loop:			while(path != null)
 loop:		for(;;)
 		{
 			buffer.getText(offset,end - offset,text);
-			int[] occur = matcher.nextMatch(text,start == 0,
-				end == buffer.getLength());
+			int[] occur = matcher.nextMatch(
+				new CharIndexedSegment(text,false),
+				start == 0,end == buffer.getLength());
 			if(occur == null)
 				break loop;
 			int _start = occur[0];

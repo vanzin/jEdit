@@ -3637,7 +3637,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int line = -1;
 		int level = buffer.getFoldLevel(caretLine);
-		for(int i = caretLine; i >= 0; i--)
+		for(int i = caretLine - 1; i >= 0; i--)
 		{
 			if(buffer.getFoldLevel(i) < level)
 			{
@@ -3659,7 +3659,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		if(!multi)
 			selectNone();
 
-		moveCaretPosition(line);
+		moveCaretPosition(newCaret);
 		setMagicCaretPosition(magic);
 	} //}}}
 
@@ -3797,14 +3797,14 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
 
-		foldVisibilityManager.expandFold(caretLine,fully);
-		int line = caretLine + 1;
-		while(!buffer.isFoldStart(line) && line < buffer.getLineCount())
-			line++;
+		int line = foldVisibilityManager.expandFold(caretLine,fully);
 
-		if(!multi)
-			selectNone();
-		moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+		if(line != -1)
+		{
+			if(!multi)
+				selectNone();
+			moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+		}
 	} //}}}
 
 	//{{{ selectFold() method

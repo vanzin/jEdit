@@ -445,6 +445,16 @@ public class FoldVisibilityManager
 		{
 			buffer.writeLock();
 
+			// if the caret is on a collapsed fold, collapse the
+			// parent fold
+			if(line != 0
+				&& line != buffer.getLineCount() - 1
+				&& buffer.isFoldStart(line)
+				&& !buffer._isLineVisible(line + 1,index))
+			{
+				line--;
+			}
+
 			int initialFoldLevel = buffer.getFoldLevel(line);
 
 			//{{{ Find fold start and end...
@@ -533,10 +543,13 @@ public class FoldVisibilityManager
 	 * Expands the fold at the specified physical line index.
 	 * @param line A physical line index
 	 * @param fully If true, all subfolds will also be expanded
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.0pre3
 	 */
-	public void expandFold(int line, boolean fully)
+	public int expandFold(int line, boolean fully)
 	{
+		// the first sub-fold. used by JEditTextArea.expandFold().
+		int returnValue = -1;
+
 		int lineCount = buffer.getLineCount();
 		int start = 0;
 		int end = lineCount - 1;
@@ -584,7 +597,7 @@ public class FoldVisibilityManager
 				if(!ok)
 				{
 					// no folds in buffer
-					return;
+					return -1;
 				}
 
 				for(int i = line + 1; i < lineCount; i++)
@@ -604,16 +617,22 @@ public class FoldVisibilityManager
 
 			for(int i = start; i <= end; i++)
 			{
-				if(buffer._isLineVisible(i,index))
+				if(buffer.getFoldLevel(i) > initialFoldLevel)
 				{
-					// do nothing
+					if(returnValue == -1
+						&& i != 0
+						&& buffer.isFoldStart(i - 1))
+					{
+						returnValue = i - 1;
+					}
+
+					if(!buffer._isLineVisible(i,index) && fully)
+					{
+						delta++;
+						buffer._setLineVisible(i,index,true);
+					}
 				}
-				else if(!fully && buffer.getFoldLevel(i) > initialFoldLevel)
-				{
-					// don't expand lines with higher fold
-					// levels
-				}
-				else
+				else if(!buffer._isLineVisible(i,index))
 				{
 					delta++;
 					buffer._setLineVisible(i,index,true);
@@ -629,7 +648,7 @@ public class FoldVisibilityManager
 			{
 				// this is a hack, and really needs to be done better.
 				expandFold(line,false);
-				return;
+				return returnValue;
 			}
 		}
 		finally
@@ -647,6 +666,8 @@ public class FoldVisibilityManager
 		{
 			textArea.setFirstLine(virtualLine + delta - visibleLines + 1);
 		}
+
+		return returnValue;
 	} //}}}
 
 	//{{{ expandAllFolds() method

@@ -88,8 +88,8 @@ insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
-prev-marker.shortcut=C+e COMMA
-next-marker.shortcut=C+e PERIOD
+prev-marker.shortcut=C+e ,
+next-marker.shortcut=C+e .
 #}}}
 
 #{{{ C+m C+X

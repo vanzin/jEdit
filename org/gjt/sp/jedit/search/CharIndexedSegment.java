@@ -1,7 +1,10 @@
 /*
  * CharIndexedSegment.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998 Wes Biggs
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -19,35 +22,51 @@
  */
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import java.io.Serializable;
 import javax.swing.text.Segment;
 import gnu.regexp.*;
+ //}}}
 
 public class CharIndexedSegment implements CharIndexed, Serializable
 {
-	private Segment seg;
-	private int m_index;
-
-	CharIndexedSegment(Segment seg, int index)
+	//{{{ CharIndexedSegment constructor
+	CharIndexedSegment(Segment seg, boolean reverse)
 	{
 		this.seg = seg;
-		m_index = index;
-	}
+		m_index = (reverse ? seg.count - 1 : 0);
+		this.reverse = reverse;
+	} //}}}
 
+	//{{{ charAt() method
 	public char charAt(int index)
 	{
-		return ((m_index + index) < seg.count && m_index + index >= 0)
-			? seg.array[seg.offset
-			+ m_index + index] : CharIndexed.OUT_OF_BOUNDS;
-	}
+		if(reverse)
+			index = -index;
 
+		return ((m_index + index) < seg.count && m_index + index >= 0)
+			? seg.array[seg.offset + m_index + index]
+			: CharIndexed.OUT_OF_BOUNDS;
+	} //}}}
+
+	//{{{ isValid() method
 	public boolean isValid()
 	{
-		return (m_index < seg.count);
-	}
+		return (m_index >=0 && m_index < seg.count);
+	} //}}}
 
+	//{{{ move() method
 	public boolean move(int index)
 	{
+		if(reverse)
+			index = -index;
+
 		return ((m_index += index) < seg.count);
-	}
+	} //}}}
+
+	//{{{ Private members
+	private Segment seg;
+	private int m_index;
+	private boolean reverse;
+	//}}}
 }

@@ -549,7 +549,7 @@ public class BrowserView extends JPanel
 					doTypeSelect(typeSelectBuffer.toString());
 
 					timer.stop();
-					timer.setInitialDelay(500);
+					timer.setInitialDelay(750);
 					timer.setRepeats(false);
 					timer.start();
 					break;
