@@ -9,8 +9,6 @@ Thanks to Kris Kopicki for contributing to this release.
 - If regular expressions are enabled, Search->Find Previous now shows a
   dialog box message instead of silently searching forwards.
 
-- Improved C pre-processor syntax highlighting.
-
 - Quick copy now more consistent with usual mouse behavior:
 
   - Control-middle-clicking on a bracket will insert the contents of the
@@ -20,11 +18,23 @@ Thanks to Kris Kopicki for contributing to this release.
     the point at the caret position. Can be used to duplicate a line,
     for example.
 
+- Register contents are now saved across editing sessions in
+  ~/.jedit/registers.xml.
+
++ Syntax Highlighting:
+
+- Improved C pre-processor syntax highlighting.
+
 + Optimizations:
 
 - Faster buffer loading.
 
 - Faster activity log.
+
+- Bracket matching is now only performed 200ms after the last caret
+  movement. This should solve the problem of annoyingly slow response
+  when eg, inserting a number of characters before an unclosed bracket
+  near the beginning of a large source file.
 
 + Platform-Specific Changes:
 

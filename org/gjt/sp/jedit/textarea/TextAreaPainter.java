@@ -261,6 +261,29 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.invalidateSelectedLines();
 	} //}}}
 
+	//{{{ getMultipleSelectionColor() method
+	/**
+	 * Returns the multiple selection color.
+	 * @since jEdit 4.2pre1
+	 */
+	public final Color getMultipleSelectionColor()
+	{
+		return multipleSelectionColor;
+	} //}}}
+
+	//{{{ setMultipleSelectionColor() method
+	/**
+	 * Sets the multiple selection color.
+	 * @param multipleSelectionColor The multiple selection color
+	 * @since jEdit 4.2pre1
+	 */
+	public final void setMultipleSelectionColor(Color multipleSelectionColor)
+	{
+		this.multipleSelectionColor = multipleSelectionColor;
+		if(textArea.getBuffer() != null)
+			textArea.invalidateSelectedLines();
+	} //}}}
+
 	//{{{ getLineHighlightColor() method
 	/**
 	 * Returns the line highlight color.
@@ -744,6 +767,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private SyntaxStyle[] styles;
 	private Color caretColor;
 	private Color selectionColor;
+	private Color multipleSelectionColor;
 	private Color lineHighlightColor;
 	private Color bracketHighlightColor;
 	private Color eolMarkerColor;
@@ -981,7 +1005,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(textArea.selection.size() == 0)
 				return;
 
-			gfx.setColor(getSelectionColor());
+			gfx.setColor(textArea.isMultipleSelectionEnabled()
+				? getMultipleSelectionColor()
+				: getSelectionColor());
 			for(int i = textArea.selection.size() - 1;
 				i >= 0; i--)
 			{

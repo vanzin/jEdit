@@ -2138,6 +2138,12 @@ forward_scan:		do
 					foldVisibilityManager.expandFold(newCaretLine,false);
 			}
 
+			if(bracketLine != -1)
+			{
+				invalidateLineRange(bracketLine,caretLine);
+				bracketLine = bracketPosition = -1;
+			}
+
 			if(caretLine == newCaretLine)
 			{
 				if(caretScreenLine != -1)
@@ -3697,6 +3703,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		this.multi = multi;
 		if(view.getStatus() != null)
 			view.getStatus().updateMiscStatus();
+		painter.repaint();
 	} //}}}
 
 	//}}}
@@ -5201,6 +5208,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private static String BOTTOM = "bottom";
 
 	private static Timer caretTimer;
+	private static Timer bracketTimer;
 	private static JEditTextArea focusedComponent;
 	//}}}
 
@@ -5334,7 +5342,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				caretTimer.restart();
 
 				scrollToCaret(queuedScrollToElectric);
-				updateBracketHighlight();
+				updateBracketHighlightWithDelay();
 				if(queuedFireCaretEvent)
 					fireCaretEvent();
 				queuedScrollTo = queuedScrollToElectric
@@ -5563,14 +5571,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		GUIUtilities.message(view,"wordcount",args);
 	} //}}}
 
+	//{{{ updateBracketHighlightWithDelay() method
+	private void updateBracketHighlightWithDelay()
+	{
+		bracketTimer.stop();
+		bracketTimer.start();
+	} //}}}
+
 	//{{{ updateBracketHighlight() method
 	private void updateBracketHighlight()
 	{
 		if(!painter.isBracketHighlightEnabled())
 			return;
-
-		if(bracketLine != -1)
-			invalidateLineRange(bracketLine,caretLine);
 
 		int offset = caret - getLineStartOffset(caretLine);
 
@@ -6651,5 +6663,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		caretTimer = new Timer(500,new CaretBlinker());
 		caretTimer.setInitialDelay(500);
 		caretTimer.start();
+
+		bracketTimer = new Timer(200,new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				if(focusedComponent != null)
+					focusedComponent.updateBracketHighlight();
+			}
+		});
+		bracketTimer.setInitialDelay(200);
+		bracketTimer.setRepeats(false);
 	} //}}}
 }

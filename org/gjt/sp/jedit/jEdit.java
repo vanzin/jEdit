@@ -2148,6 +2148,12 @@ public class jEdit
 	{
 		if(settingsDirectory != null)
 		{
+			Abbrevs.save();
+			FavoritesVFS.saveFavorites();
+			HistoryModel.saveHistory();
+			Registers.saveRegisters();
+			SearchAndReplace.save();
+
 			// Save the recent file list
 			File file1 = new File(MiscUtilities.constructPath(
 				settingsDirectory, "#recent.xml#save#"));
@@ -2166,11 +2172,6 @@ public class jEdit
 				file1.renameTo(file2);
 			}
 			recentModTime = file2.lastModified();
-
-			HistoryModel.saveHistory();
-			SearchAndReplace.save();
-			Abbrevs.save();
-			FavoritesVFS.saveFavorites();
 
 			file1 = new File(MiscUtilities.constructPath(
 				settingsDirectory,"#properties#save#"));

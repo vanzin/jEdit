@@ -191,6 +191,7 @@ view.caretColor=#ff0000
 
 # Selection color
 view.selectionColor=#ccccff
+view.multipleSelectionColor=#99ff99
 
 # Caret blinking
 view.caretBlink=true
