@@ -7,7 +7,6 @@ and quirks that I need to fix eventually.
   might be more economical
 - popup menu display & history text field
 - do some profiling
-- global options sizing issues
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - format bugs
 - changelog claims roots: lists desktop...
@@ -23,12 +22,6 @@ and quirks that I need to fix eventually.
   - indentOnTab/Enter changes
   - update shortcuts.xml
   - S+ENTER in fsb for directories
-- new tips:
-  - indentOnTab/Enter replacements
-  - smartHome replacements
-  - -float actions
-  - alt tool bar placement if not there already
-  - go to text area
 
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
