@@ -319,7 +319,7 @@ public class Chunk extends Token
 			float newX = expander.nextTabStop(x,offset + length);
 			width = newX - x;
 		}
-		else if(charWidth != 0)
+		else if(charWidth != 0 && !Debug.DISABLE_MONOSPACE_HACK)
 		{
 			visible = monospaced = true;
 			str = new String(seg.array,seg.offset + offset,length);
