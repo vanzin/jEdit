@@ -1754,7 +1754,7 @@ public class Buffer implements EBComponent
 
 		DefaultTokenHandler tokens = new DefaultTokenHandler();
 		markTokens(line,tokens);
-		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
+		Token token = TextUtilities.getTokenAtOffset(tokens.getTokens(),offset);
 		return token.rules;
 	} //}}}
 
@@ -2453,6 +2453,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public static class TokenList extends DefaultTokenHandler
 	{
+		public Token getFirstToken()
+		{
+			return getTokens();
+		}
 	}
 
 	/**

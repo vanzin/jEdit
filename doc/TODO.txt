@@ -5,6 +5,8 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- color printing doesn't work
+- "=\'\" \\"
 - if a directory load fails, the parent dirs list gets messed up
 - soft wrap is still slow
 - change indentPrevLine to indentOneLine and indentSubsequentLines

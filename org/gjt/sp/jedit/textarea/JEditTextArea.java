@@ -585,8 +585,6 @@ public class JEditTextArea extends JComponent
 			point = offsetToXY(line,offset,returnValue);
 			if(rect.contains(point))
 				return;
-
-			System.err.println("not in rect: " + rect + " (" + point + ")");
 		}
 		else
 			point = null;

@@ -3,8 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
- * Portions copyright (C) 2002 Thomas Dilts
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,9 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- *
- * Changed 20020428/Thomas Dilts rewrote to allow non-continuous printing
  */
 
 package org.gjt.sp.jedit.print;
@@ -36,7 +32,6 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 class BufferPrintable implements Printable
@@ -45,7 +40,6 @@ class BufferPrintable implements Printable
 	BufferPrintable(View view, Buffer buffer, Font font, boolean header,
 		boolean footer, boolean lineNumbers, boolean color)
 	{
-		this.view = view;
 		this.buffer = buffer;
 		this.font = font;
 		this.header = header;
@@ -53,23 +47,34 @@ class BufferPrintable implements Printable
 		this.lineNumbers = lineNumbers;
 
 		styles = GUIUtilities.loadStyles(jEdit.getProperty("print.font"),
-		                                 jEdit.getIntegerProperty("print.fontsize",10),color);
+			jEdit.getIntegerProperty("print.fontsize",10),color);
 		styles[Token.NULL] = new SyntaxStyle(textColor,null,font);
 
 		lineList = new ArrayList();
-		LastPagelineList = new ArrayList();
 
-		// On some JDKs, we have to paint a glyph vector instead of a
-		// string, otherwise the string will 
-		glyphVector = jEdit.getBooleanProperty("print.workaround");
+		softWrap = new SoftWrapTokenHandler();
 	} //}}}
 
 	//{{{ print() method
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
+		lineList.clear();
+		currentLine = 0;
 
-		//{{{ get/calculate all the printing constants
+		if(pageIndex != currentPage)
+		{
+			currentPageStart = currentPhysicalLine;
+			currentPage = pageIndex;
+
+			if(end)
+				return NO_SUCH_PAGE;
+			else
+				return PAGE_EXISTS;
+		}
+		else
+			currentPhysicalLine = currentPageStart;
+
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
@@ -89,27 +94,23 @@ class BufferPrintable implements Printable
 		if(footer)
 		{
 			double footerHeight = paintFooter(gfx,pageX,pageY,pageWidth,
-			                                  pageHeight,pageIndex);
+				pageHeight,pageIndex);
 			pageHeight -= footerHeight * 2;
 		}
 
 		FontRenderContext frc = gfx.getFontRenderContext();
 
-		lm = font.getLineMetrics("ABCDEgWZyqp",frc);
-		int linesPerPage=(int)(pageHeight/lm.getHeight() );
-
-
 		// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
 		// and so on.
 		int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
-		                                      / Math.log(10)) + 1;
+			/ Math.log(10)) + 1;
 
 		//{{{ now that we know how many chars there are, get the width.
 		char[] chars = new char[lineNumberDigits];
 		for(int i = 0; i < chars.length; i++)
 			chars[i] = ' ';
 		double lineNumberWidth = font.getStringBounds(chars,
-		                         0,lineNumberDigits,frc).getWidth();
+			0,lineNumberDigits,frc).getWidth();
 		//}}}
 
 		//{{{ calculate tab size
@@ -118,191 +119,115 @@ class BufferPrintable implements Printable
 		for(int i = 0; i < chars.length; i++)
 			chars[i] = ' ';
 		double tabWidth = font.getStringBounds(chars,
-		                                       0,tabSize,frc).getWidth();
-		PrintTabExpander e = new PrintTabExpander(pageX,tabWidth);
+			0,tabSize,frc).getWidth();
+		PrintTabExpander e = new PrintTabExpander(pageX
+			+ (lineNumbers ? lineNumberWidth : 0),tabWidth);
 		//}}}
 
-		//}}}
-
-		//{{{ get the correct line number in the buffer for this page number
-
-		if(pageIndex == lastPrintedPage )
-		{
-			//we are redoing the last page
-			ArrayList lineListForNextPage=new ArrayList();
-			for (int i=0;i<lineList.size();i++)
-				lineListForNextPage.add(lineList.get(i));
-			lineList.clear();
-			for (int i=0;i<LastPagelineList.size();i++)
-				lineList.add(LastPagelineList.get(i));
-			int returnValue= renderPage(pageIndex,gfx,frc,false,linesPerPage,pageWidth,
-				lineNumberWidth,e,pageX,pageY);
-			
-			//restore the continuing lines for the next page
-			if (pageIndex != 0)
-			{
-				lineList.clear();
-				for (int i=0;i<lineListForNextPage.size();i++)
-					lineList.add(lineListForNextPage.get(i));
-			}
-			return returnValue;
-		}
-		else if(pageIndex == (lastPrintedPage+1))
-		{
-			//we are continueing printing to the next page
-			if(end)
-			{
-				//we hit the end of the file on the last printing.
-				//there are no more pages!
-				return NO_SUCH_PAGE;
-			}
-			//all the pointers and counters should be correct from the last page
-			//no need to set the value of anything
-		}
-		else 
-		{
-			//non continuous printing, we must start reading the
-			//buffer from the begining until we get to the page to print.
-
-			//'end' is now invalid, reset it
-			end = false;
-			lineList=new ArrayList();
-			currentPhysicalLine=0;
-			for(int i = 0 ; i < pageIndex && !end ; i++)
-			{
-				renderPage(i,gfx,frc,true,linesPerPage,pageWidth,lineNumberWidth,e,pageX,pageY);
-			}
-			if(end)
-			{
-				//we hit the end of the file 
-				//the requested page does not exist!!!
-				return NO_SUCH_PAGE;
-			}
-		}
-		//}}}
-
-		return renderPage(pageIndex,gfx,frc,false,linesPerPage,pageWidth,lineNumberWidth,e,pageX,pageY);
-	}//}}}
-
-	//{{{ renderPage() method
-	private int renderPage(int pageIndex, Graphics2D gfx,
-		FontRenderContext frc, boolean justCounting,
-		int linesPerPage, double pageWidth,
-		double lineNumberWidth, PrintTabExpander e,
-		double pageX, double pageY)
-	{
 		Segment seg = new Segment();
 		double y = 0.0;
-		String messageText = jEdit.getProperty("view.status.print",
-			new Object[] { new Integer(pageIndex+1) });
-		view.getStatus().setMessageAndClear(messageText);
 
-		LastPagelineList=new ArrayList();
-		
-		// each loop will print one line on the page
-		//but perhaps less than one buffer line.
-print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
+print_loop:	for(;;)
 		{
 			//{{{ get line text
-			if(lineList.size()==0)
+			if(currentLine == lineList.size())
 			{
 				buffer.getLineText(currentPhysicalLine,seg);
 				lm = font.getLineMetrics(seg.array,
 					seg.offset,seg.count,frc);
 
+				lineList.add(new Integer(currentPhysicalLine + 1));
+
 				softWrap.init(seg,styles,frc,e,lineList,
 					(float)(pageWidth - lineNumberWidth));
+				softWrap.setPrintGraphics(gfx);
 
 				buffer.markTokens(currentPhysicalLine,softWrap);
 
-				lineList.add(new Integer(++currentPhysicalLine));
+				currentPhysicalLine++;
 
-				if(lineList.size() == 1)
+				if(lineList.size() == currentLine + 1)
 					lineList.add(null);
 			} //}}}
+
 			y += lm.getHeight();
-			Object obj = lineList.get(0);
-			LastPagelineList.add(obj);
-			lineList.remove(0);
+			if(y >= pageHeight)
+				break print_loop;
+
+			Object obj = lineList.get(currentLine++);
 			if(obj instanceof Integer)
 			{
 				//{{{ paint line number
-				if(lineNumbers &&  ! justCounting)
+				if(lineNumbers)
 				{
 					gfx.setFont(font);
 					gfx.setColor(lineNumberColor);
 					String lineNumberString = String.valueOf(obj);
 					gfx.drawString(lineNumberString,
-					               (float)pageX,(float)(pageY + y));
+						(float)pageX,(float)(pageY + y));
 				} //}}}
 
-				obj = lineList.get(0);
-				LastPagelineList.add(obj);
-				lineList.remove(0);
+				obj = lineList.get(currentLine++);
 			}
 
-			//{{{ paint the line
-			if(obj != null && ! justCounting)
+			if(obj != null)
 			{
 				Chunk line = (Chunk)obj;
 
 				Chunk.paintChunkList(line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
-					Color.white,glyphVector);
+					Color.white,false);
 			}
-			//}}}
 
-			if(currentPhysicalLine >= buffer.getLineCount()
-			                && lineList.size() == 0)
+			if(currentPhysicalLine == buffer.getLineCount()
+				&& currentLine == lineList.size())
 			{
 				end = true;
 				break print_loop;
 			}
 		}
-		lastPrintedPage=pageIndex;
+
 		return PAGE_EXISTS;
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Static variables
-	private Color headerColor = Color.lightGray;
-	private Color headerTextColor = Color.black;
-	private Color footerColor = Color.lightGray;
-	private Color footerTextColor = Color.black;
-	private Color lineNumberColor = Color.gray;
-	private Color textColor = Color.black;
+	private static Color headerColor = Color.lightGray;
+	private static Color headerTextColor = Color.black;
+	private static Color footerColor = Color.lightGray;
+	private static Color footerTextColor = Color.black;
+	private static Color lineNumberColor = Color.gray;
+	private static Color textColor = Color.black;
 	//}}}
 
 	//{{{ Instance variables
 	private Buffer buffer;
-	private org.gjt.sp.jedit.View view;
 	private Font font;
 	private SyntaxStyle[] styles;
 	private boolean header;
 	private boolean footer;
 	private boolean lineNumbers;
 
-	private int lastPrintedPage;
+	private int currentPage;
+	private int currentPageStart;
+	private int currentLine;
 	private int currentPhysicalLine;
 	private boolean end;
 
 	private LineMetrics lm;
 	private ArrayList lineList;
-	private ArrayList LastPagelineList;
-
-	private boolean glyphVector;
 
 	private SoftWrapTokenHandler softWrap;
 	//}}}
 
 	//{{{ paintHeader() method
 	private double paintHeader(Graphics2D gfx, double pageX, double pageY,
-	                           double pageWidth)
+		double pageWidth)
 	{
 		String headerText = jEdit.getProperty("print.headerText",
-			new String[] { buffer.toString() });
+			new String[] { buffer.getPath() });
 		FontRenderContext frc = gfx.getFontRenderContext();
 
 		gfx.setColor(headerColor);
@@ -317,8 +242,8 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 
 		lm = font.getLineMetrics(headerText,frc);
 		gfx.drawString(headerText,
-		               (float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-		               (float)(pageY + lm.getAscent()));
+			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+			(float)(pageY + lm.getAscent()));
 
 		return headerBounds.getHeight();
 	}
@@ -326,27 +251,27 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 
 	//{{{ paintFooter() method
 	private double paintFooter(Graphics2D gfx, double pageX, double pageY,
-	                           double pageWidth, double pageHeight, int pageIndex)
+		double pageWidth, double pageHeight, int pageIndex)
 	{
 		String footerText = jEdit.getProperty("print.footerText",
-		                                      new Object[] { new Date(), new Integer(pageIndex + 1) });
+			new Object[] { new Date(), new Integer(pageIndex + 1) });
 		FontRenderContext frc = gfx.getFontRenderContext();
 
 		gfx.setColor(footerColor);
 
 		Rectangle2D bounds = font.getStringBounds(footerText,frc);
 		Rectangle2D footerBounds = new Rectangle2D.Double(
-		                                   pageX,pageY + pageHeight - bounds.getHeight(),
-		                                   pageWidth,bounds.getHeight());
+			pageX,pageY + pageHeight - bounds.getHeight(),
+			pageWidth,bounds.getHeight());
 		gfx.fill(footerBounds);
 
 		gfx.setColor(footerTextColor);
 
 		lm = font.getLineMetrics(footerText,frc);
 		gfx.drawString(footerText,
-		               (float)(pageX + (pageWidth - bounds.getWidth()) / 2),
-		               (float)(pageY + pageHeight - bounds.getHeight()
-		                       + lm.getAscent()));
+			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
+			(float)(pageY + pageHeight - bounds.getHeight()
+			+ lm.getAscent()));
 
 		return footerBounds.getHeight();
 	} //}}}

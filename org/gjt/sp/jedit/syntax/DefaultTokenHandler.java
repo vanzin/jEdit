@@ -46,7 +46,7 @@ public class DefaultTokenHandler implements TokenHandler
 	 * Returns the first syntax token.
 	 * @since jEdit 4.1pre1
 	 */
-	public Token getFirstToken()
+	public Token getTokens()
 	{
 		return firstToken;
 	} //}}}

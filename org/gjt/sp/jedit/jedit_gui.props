@@ -1396,8 +1396,6 @@ options.print.footer=Print a footer with the date, time and page number
 options.print.lineNumbers=Print line numbers
 options.print.color=Color printing
 options.print.tabSize=Tab width when printing:
-options.print.workaround=Workaround for incorrect word spacing (increases \
-	spool file size)
 #}}}
 
 #{{{ Docking pane
