@@ -252,6 +252,23 @@ public class TextUtilities
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
+		return findWordStart(line, pos, noWordSep, true);
+	} //}}}
+		
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @since jEdit 4.1pre2
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep,
+					boolean joinNonWordChars)
+	{
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
@@ -292,6 +309,7 @@ loop:		for(int i = pos; i >= 0; i--)
 					return i + 1; //}}}
 			//{{{ Symbol...
 			case SYMBOL:
+				if(!joinNonWordChars && pos!=i) return i + 1;
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch))
 				{
@@ -321,6 +339,23 @@ loop:		for(int i = pos; i >= 0; i--)
 	 * should be treated as word characters anyway
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep)
+	{
+		return findWordEnd(line, pos, noWordSep, true);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @since jEdit 4.1pre2
+	 */
+	public static int findWordEnd(String line, int pos, String noWordSep,
+					boolean joinNonWordChars)
 	{
 		if(pos != 0)
 			pos--;
@@ -365,6 +400,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 					return i; //}}}
 			//{{{ Symbol...
 			case SYMBOL:
+				if(!joinNonWordChars && i!=pos) return i;
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch))
 				{

@@ -216,6 +216,9 @@ view.smartEnd=true
 # Standard go to next/previous word behavior
 view.stdNextPrevWord=false
 
+# Treat consecutive non-alphanumeric characters as one word
+view.joinNonWordChars=true
+
 # Middle mouse button pastes % register
 view.middleMousePaste=false
 

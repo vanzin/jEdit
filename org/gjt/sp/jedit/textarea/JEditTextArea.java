@@ -6281,19 +6281,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			String lineText = getLineText(line);
 			String markLineText = getLineText(dragStartLine);
 			String noWordSep = buffer.getStringProperty("noWordSep");
+			boolean joinNonWordChars =
+				jEdit.getBooleanProperty("view.joinNonWordChars");
 
 			if(markLineStart + dragStartOffset > lineStart + offset)
 			{
 				if(offset != 0 && offset != lineLength)
 				{
 					offset = TextUtilities.findWordStart(
-						lineText,offset,noWordSep);
+						lineText,offset,noWordSep,
+						joinNonWordChars);
 				}
 
 				if(markLineLength != 0)
 				{
 					mark = TextUtilities.findWordEnd(
-						markLineText,mark,noWordSep);
+						markLineText,mark,noWordSep,
+						joinNonWordChars);
 				}
 			}
 			else
@@ -6301,13 +6305,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(offset != 0 && lineLength != 0)
 				{
 					offset = TextUtilities.findWordEnd(
-						lineText,offset,noWordSep);
+						lineText,offset,noWordSep,
+						joinNonWordChars);
 				}
 
 				if(mark != 0 && mark != markLineLength)
 				{
 					mark = TextUtilities.findWordStart(
-						markLineText,mark,noWordSep);
+						markLineText,mark,noWordSep,
+						joinNonWordChars);
 				}
 			}
 

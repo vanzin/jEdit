@@ -11,6 +11,9 @@ Thanks to Gerd Knops for contributing to this release.
 
 - Made behavior of mouse in gutter more customizable. (Gerd Knops)
 
+- Added option to make double-click drag treat each non-alphanumeric
+  character as one word. (Gerd Knops)
+
 + Miscellaneous Changes:
 
 - 'scriptPath' BeanShell variable is set to the macro file path while a
