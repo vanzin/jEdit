@@ -79,6 +79,10 @@ contributing to this release.
 - Text insertion while overwrite mode is on is now recorded correctly in
   macros.
 
+- Collapsing or expading nodes in the file system browser would deselect
+  the node. This was a usability problem since pressing LEFT or RIGHT
+  should not deselect anything.
+
 }}}
 
 }}}
