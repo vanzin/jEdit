@@ -150,40 +150,6 @@ public class Macros
 			jEdit.getProperty("macro-confirm.title"),buttons,type);
 	} //}}}
 
-	//{{{ browseSystemMacros() method
-	/**
-	 * Opens the system macro directory in a VFS browser.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public static void browseSystemMacros(View view)
-	{
-		if(systemMacroPath == null)
-		{
-			GUIUtilities.error(view,"no-webstart",null);
-			return;
-		}
-
-		VFSBrowser.browseDirectory(view,systemMacroPath);
-	} //}}}
-
-	//{{{ browseUserMacros() method
-	/**
-	 * Opens the user macro directory in a VFS browser.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public static void browseUserMacros(View view)
-	{
-		if(userMacroPath == null)
-		{
-			GUIUtilities.error(view,"no-settings",null);
-			return;
-		}
-
-		VFSBrowser.browseDirectory(view,userMacroPath);
-	} //}}}
-
 	//{{{ loadMacros() method
 	/**
 	 * Rebuilds the macros list, and sends a MacrosChanged message

@@ -3343,6 +3343,9 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			view.close();
 			removeViewFromList(view);
+
+			if(view == activeView)
+				activeView = null;
 		}
 	} //}}}
 
