@@ -18,6 +18,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
  */
 
 void doRot13()
@@ -42,6 +44,23 @@ void doRot13()
 }
 
 doRot13();
+
+/*
+	Macro index data (in DocBook format)
+<listitem>
+    <para><filename>Rot13.bsh</filename></para>
+    <abstract><para>
+        Replaces the selected text with the text encoded by the Rot13
+        <quote>encryption</quote> algorithm.
+    </para></abstract>
+    <para>
+        Rot13 is a simple encoding scheme involving fixed character
+        substitution. A second application of the algorithm restores the
+        original text.
+    </para>
+</listitem>
+
+*/
 
 // end Rot13.bsh
 
