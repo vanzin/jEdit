@@ -6,6 +6,9 @@ and quirks that I need to fix eventually.
 4.2final to do:
 ---------------
 
+activity log: height wrong
+buffer wrong on stop/restart
+plugin manager loses sort setting
 goToBuffer() and 0-height edit panes
 check tips of the day
 proofread docs
