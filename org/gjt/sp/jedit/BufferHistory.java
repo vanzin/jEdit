@@ -1,6 +1,9 @@
 /*
- * BufferHistory.java - Remembers caret positions 
- * Copyright (C) 2000, 2001 Slava Pestov
+ * BufferHistory.java - Remembers caret positions
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,11 +22,14 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import com.microstar.xml.*;
 import java.io.*;
 import java.util.*;
+import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * Recent file list.
@@ -32,12 +38,13 @@ import org.gjt.sp.util.Log;
  */
 public class BufferHistory
 {
+	//{{{ getEntry() method
 	public static Entry getEntry(String path)
 	{
-		Enumeration enum = history.elements();
-		while(enum.hasMoreElements())
+		Iterator iter = history.iterator();
+		while(iter.hasNext())
 		{
-			Entry entry = (Entry)enum.nextElement();
+			Entry entry = (Entry)iter.next();
 			if(pathsCaseInsensitive)
 			{
 				if(entry.path.equalsIgnoreCase(path))
@@ -51,20 +58,41 @@ public class BufferHistory
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ setEntry() method
 	public static void setEntry(String path, int caret, Selection[] selection,
 		String encoding)
 	{
 		removeEntry(path);
-		addEntry(new Entry(path,caret,selectionToString(selection),encoding));
-	}
+		addEntry(new Entry(path,caret,selectionToString(selection),
+			encoding));
+		EditBus.send(new DynamicMenuChanged("recent-files"));
+	} //}}}
 
-	public static Vector getBufferHistory()
+	//{{{ getHistory() method
+	/**
+	 * @since jEdit 4.2pre2
+	 */
+	public static List getHistory()
 	{
 		return history;
-	}
+	} //}}}
 
+	//{{{ getBufferHistory() method
+	/**
+	 * @deprecated Call {@link #getHistory()} instead.
+	 */
+	public static Vector getBufferHistory()
+	{
+		Vector retVal = new Vector(history.size());
+		Iterator iter = history.iterator();
+		while(iter.hasNext())
+			retVal.add(iter.next());
+		return retVal;
+	} //}}}
+
+	//{{{ load() method
 	public static void load(File file)
 	{
 		Log.log(Log.MESSAGE,BufferHistory.class,"Loading " + file);
@@ -105,8 +133,9 @@ public class BufferHistory
 				Log.log(Log.ERROR,BufferHistory.class,io);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ save() method
 	public static void save(File file)
 	{
 		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + file);
@@ -125,13 +154,13 @@ public class BufferHistory
 			out.write("<RECENT>");
 			out.write(lineSep);
 
-			Enumeration enum = history.elements();
-			while(enum.hasMoreElements())
+			Iterator iter = history.iterator();
+			while(iter.hasNext())
 			{
 				out.write("<ENTRY>");
 				out.write(lineSep);
 
-				Entry entry = (Entry)enum.nextElement();
+				Entry entry = (Entry)iter.next();
 
 				out.write("<PATH>");
 				out.write(MiscUtilities.charsToEntities(entry.path));
@@ -173,40 +202,45 @@ public class BufferHistory
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
 		}
-	}
+	} //}}}
 
-	// private members
-	private static Vector history;
+	//{{{ Private members
+	private static LinkedList history;
 	private static boolean pathsCaseInsensitive;
 
+	//{{{ Class initializer
 	static
 	{
-		history = new Vector();
-		pathsCaseInsensitive = (File.separatorChar == '\\'
-			|| File.separatorChar == ':');
-	}
+		history = new LinkedList();
+		pathsCaseInsensitive = OperatingSystem.isDOSDerived()
+			|| OperatingSystem.isMacOS();
+	} //}}}
 
+	//{{{ addEntry() method
 	/* private */ static void addEntry(Entry entry)
 	{
-		history.addElement(entry);
+		history.addFirst(entry);
 		int max = jEdit.getIntegerProperty("recentFiles",50);
 		while(history.size() > max)
-			history.removeElementAt(0);
-	}
+			history.removeLast();
+	} //}}}
 
+	//{{{ removeEntry() method
 	/* private */ static void removeEntry(String path)
 	{
-		for(int i = 0; i < history.size(); i++)
+		Iterator iter = history.iterator();
+		while(iter.hasNext())
 		{
-			Entry entry = (Entry)history.elementAt(i);
+			Entry entry = (Entry)iter.next();
 			if(entry.path.equals(path))
 			{
-				history.removeElementAt(i);
+				iter.remove();
 				return;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ selectionToString() method
 	private static String selectionToString(Selection[] s)
 	{
 		if(s == null)
@@ -230,8 +264,9 @@ public class BufferHistory
 		}
 
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ stringToSelection() method
 	private static Selection[] stringToSelection(String s)
 	{
 		if(s == null)
@@ -265,8 +300,9 @@ public class BufferHistory
 		Selection[] returnValue = new Selection[selection.size()];
 		selection.copyInto(returnValue);
 		return returnValue;
-	}
+	} //}}}
 
+	//{{{ Entry class
 	/**
 	 * Recent file list entry.
 	 */
@@ -289,8 +325,9 @@ public class BufferHistory
 			this.selection = selection;
 			this.encoding = encoding;
 		}
-	}
+	} //}}}
 
+	//{{{ RecentHandler class
 	static class RecentHandler extends HandlerBase
 	{
 		public Object resolveEntity(String publicId, String systemId)
@@ -360,5 +397,5 @@ public class BufferHistory
 		private String selection;
 		private String encoding;
 		private String charData;
-	}
+	} //}}}
 }

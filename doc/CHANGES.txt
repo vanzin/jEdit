@@ -30,6 +30,8 @@ Sebastien Pierre for contributing to this release.
 
 - Quick copy now works between text areas.
 
+- Paste Previous dialog box now supports multiple selection.
+
 }}}
 {{{ File System Browser
 
@@ -85,6 +87,19 @@ Sebastien Pierre for contributing to this release.
   These were changed to be consistent with the behavior when clicking on
   a fold.
 
+- Previously, jEdit would remember the caret position for the 50 most
+  recent files, and the File->Recent Files menu would list the same
+  number of entries as the history text field setting. Now, a single
+  recent files setting in the General pane of the Global Options
+  controls both.
+
+- A change makes the buffer history use a linked list instead of an
+  array to store entries. However, since Java provides no way to iterate
+  backwards over a linked list, this results in the recent file list
+  being stored backward from how it was in previous versions. So when
+  upgrading from 4.2pre1 or older, your oldest files will be at the top
+  of the list.
+
 }}}
 {{{ Plugin Loader
 
@@ -111,12 +126,16 @@ Sebastien Pierre for contributing to this release.
   rationale for this was, but it has been changed to always respect the
   auto wrap flag.
 
+- "Evaluate For Selected Lines" can now be recorded in a macro.
+
 }}}
 {{{ Optimizations
 
 - Fold visibility information is now stored in a more efficient manner.
   Folding should be faster and more robust. Also, the limit of 8 text
   areas editing the same buffer has been lifted.
+
+- Various minor display manager optimizations.
 
 }}}
 {{{ Bug Fixes

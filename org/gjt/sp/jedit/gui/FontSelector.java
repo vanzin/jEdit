@@ -397,4 +397,4 @@ class FontSelectorDialog extends EnhancedDialog
 			updatePreview();
 		}
 	} //}}}
-}
+} //}}}

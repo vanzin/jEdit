@@ -77,7 +77,7 @@ public class CompleteWord extends JWindow
 		else
 		{
 			String longestPrefix = MiscUtilities.getLongestPrefix(
-				completions);
+				completions,keywordMap.getIgnoreCase());
 
 			if (word.length() < longestPrefix.length())
 			buffer.insert(caret,longestPrefix.substring(word.length()));

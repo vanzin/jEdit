@@ -70,6 +70,18 @@ public class GeneralOptionPane extends AbstractOptionPane
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
 
+		/* Recent file list size */
+		recentFiles = new JTextField(jEdit.getProperty(
+			"options.general.recentFiles"));
+		recentFiles.setText(jEdit.getProperty("recentFiles"));
+		addComponent(recentFiles);
+
+		/* Sort recent file list */
+		sortRecent = new JCheckBox(jEdit.getProperty(
+			"options.general.sortRecent"));
+		sortRecent.setSelected(jEdit.getBooleanProperty("sortRecent"));
+		addComponent(sortRecent);
+
 		/* Save caret positions */
 		saveCaret = new JCheckBox(jEdit.getProperty(
 			"options.general.saveCaret"));
@@ -123,12 +135,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
 
-		/* Sort recent file list */
-		sortRecent = new JCheckBox(jEdit.getProperty(
-			"options.general.sortRecent"));
-		sortRecent.setSelected(jEdit.getBooleanProperty("sortRecent"));
-		addComponent(sortRecent);
-
 		/* Check mod status on focus */
 		checkModStatus = new JCheckBox(jEdit.getProperty(
 			"options.general.checkModStatus"));
@@ -170,6 +176,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
+		jEdit.setProperty("recentFiles",recentFiles.getText());
+		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
@@ -177,7 +185,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
-		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
@@ -186,13 +193,14 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JTextField recentFiles;
 	private JCheckBox saveCaret;
+	private JCheckBox sortRecent;
 	private JCheckBox persistentMarkers;
 	private JCheckBox restore;
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
-	private JCheckBox sortRecent;
 	private JCheckBox checkModStatus;
 	private JCheckBox twoStageSave;
 	private JCheckBox stripTrailingEOL;

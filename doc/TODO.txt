@@ -3,9 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- fix complete word
-- bizarre dockable window manager button layout problem
+- update man page
+- update cli docs in user's guide
 
+- bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
 - auto indent: don't de-indent on enter if no leading indent at all?
 - new file: horiz scroll wrong
@@ -58,6 +59,8 @@ and quirks that I need to fix eventually.
   - selected borders in list, tree, table wrong colors
 - motif l&f: shortcuts in menu items
 - C+b -- click -- keys don't work
+- delete line magic caret w/ block caret
+- replace with lookahead/lookbehind doesn't work
 
 + cleanups:
 
@@ -73,10 +76,8 @@ and quirks that I need to fix eventually.
 
 + features:
 
-- option for number of caret positions to remember in recent file list
 - bsh = { 2 + 2; }
 - eval-for-selected-lines doesn't work with rectangular selection
-- paste from list dialog: multiple seleciton
 - customizable vfs browser extended attributes
 - windows: fsb browser, type c:
 - new plugin mgr:
@@ -86,7 +87,6 @@ and quirks that I need to fix eventually.
 - adapt vfs filename field for the path display at the top
 - vfs dialogs: only one field?
 - vfs.isValidPath()
-- update man page
 - make gutter fully painted by extensions just like text area
 - format should show an error if the line len is 0, not beep
 - shortcut editor: restore default button
@@ -206,8 +206,6 @@ and quirks that I need to fix eventually.
 - don't repaint whole selection when resizing
 - could make non-soft wrap chunk merge even faster!
 - syntax SPAN::END substitution: String --> char[] --> String
-- delete line magic caret w/ block caret
-- replace with lookahead/lookbehind doesn't work
 - is getScreenLineOfOffset() called often?
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
@@ -215,11 +213,16 @@ and quirks that I need to fix eventually.
 - optimize for no folding & no soft wrap case:
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
+  - getLineSubregionCount() can return 1
 - inserting lines repaints whole text area
-- 30,000 line file performance with syntax, word wrap
 - better data structure for undo queue
 - figure out a way to write the autosave without needing a read lock the
   whole time
+- scrollTo() wiggle adds 4 seconds to scroll time on 120,000 line file!
+- TokenHandlers: have the token marker give them a segment to avoid
+  two redundant getLineText()s
+- see if getLineOfOffset() can be optimized
+- replace all at end of file -- slow
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
