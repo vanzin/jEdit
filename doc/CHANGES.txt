@@ -53,6 +53,8 @@ KeyEventTranslator.setModifierMapping(
 
 - Fix problem if a line had more than 127 screen lines.
 
+- The dirty flag was not cleared if 'redo' was invoked when the redone
+  edit was created as part of a compound edit.
 }}}
 
 }}}
