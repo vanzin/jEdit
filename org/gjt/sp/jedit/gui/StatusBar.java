@@ -608,7 +608,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		//{{{ MemoryStatus constructor
 		public MemoryStatus()
 		{
-			Font font = UIManager.getFont("Label.font");
+			// fucking GTK look and feel
+			Font font = new JLabel().getFont();
+			//Font font = UIManager.getFont("Label.font");
 			MemoryStatus.this.setFont(font);
 
 			FontRenderContext frc = new FontRenderContext(

@@ -28,6 +28,31 @@ import java.util.Vector;
  * Implements consumer/producer locking scemantics.
  * @author Peter Graves
  * @version $Id$
+ * The lock tries to be re-entrant when called from the same thread in some
+ * cases.
+ * 
+ * The following is ok:
+ * read lock
+ * read lock
+ * read unlock
+ * read unlock
+ * 
+ * write lock
+ * read lock
+ * read unlock
+ * write unlock
+ * 
+ * The following is not ok:
+ * 
+ * read lock
+ * write lock
+ * write unlock
+ * read unlock
+ * 
+ * write lock
+ * write lock
+ * write unlock
+ * write unlock
  */
 public class ReadWriteLock
 {

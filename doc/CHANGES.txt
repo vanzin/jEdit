@@ -1,5 +1,21 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre10
+
+{{{ Bug Fixes
+
+- Fixed another NullPointerException in the file system browser when
+  using VFS's that do not set the VFS.DirectoryEntry.symlinkPath field.
+
+- Actually fix the MacOS plugin for the latest MRJ update.
+
+- Fix status bar problem with GTK look and feel if memory indicator is
+  enabled.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre9
 
 Thanks to Brad Mace, David Hardin,  Matthew J. Price, Ollie Rutherfurd,

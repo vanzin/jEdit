@@ -226,7 +226,14 @@ public class VFSDirectoryEntryTable extends JTable
 			if(!e.expanded || e.dirEntry.type == VFS.DirectoryEntry.FILE)
 				continue;
 
-			if(VFSBrowser.pathsEqual(path,e.dirEntry.symlinkPath))
+			VFS.DirectoryEntry dirEntry = e.dirEntry;
+			// work around for broken FTP plugin!
+			String otherPath;
+			if(dirEntry.symlinkPath == null)
+				otherPath = dirEntry.path;
+			else
+				otherPath = dirEntry.symlinkPath;
+			if(VFSBrowser.pathsEqual(path,otherPath))
 			{
 				browserView.saveExpansionState();
 				browserView.loadDirectory(e,path);
