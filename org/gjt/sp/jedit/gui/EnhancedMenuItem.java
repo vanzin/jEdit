@@ -63,7 +63,7 @@ public class EnhancedMenuItem extends JMenuItem
 		if(shortcut != null)
 		{
 			d.width += (getFontMetrics(acceleratorFont)
-				.stringWidth(shortcut) + 10);
+				.stringWidth(shortcut) + 15);
 		}
 		return d;
 	}
@@ -83,7 +83,7 @@ public class EnhancedMenuItem extends JMenuItem
 			FontMetrics fm = g.getFontMetrics();
 			Insets insets = getInsets();
 			g.drawString(shortcut,getWidth() - (fm.stringWidth(
-				shortcut) + insets.right + insets.left),
+				shortcut) + insets.right + insets.left + 5),
 				getFont().getSize() + (insets.top - 1)
 				/* XXX magic number */);
 		}

@@ -380,14 +380,20 @@ public class GrabKeyDialog extends JDialog
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
 			if(evt == null)
 			{
-				debugBuffer.insert(debugBuffer.getLength(),
-					"Event " + _evt + " filtered\n");
+				if(debugBuffer != null)
+				{
+					debugBuffer.insert(debugBuffer.getLength(),
+						"Event " + _evt + " filtered\n");
+				}
 				return;
 			}
 			else
 			{
-				debugBuffer.insert(debugBuffer.getLength(),
-					"Event " + _evt + " passed\n");
+				if(debugBuffer != null)
+				{
+					debugBuffer.insert(debugBuffer.getLength(),
+						"Event " + _evt + " passed\n");
+				}
 			}
 
 			evt.consume();

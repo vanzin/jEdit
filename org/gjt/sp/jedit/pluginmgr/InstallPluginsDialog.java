@@ -59,10 +59,12 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		plugins = new JCheckBoxList(model);
 		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
-		panel.add(BorderLayout.CENTER,new JScrollPane(plugins));
+		JScrollPane scroller = new JScrollPane(plugins);
+		scroller.setPreferredSize(new Dimension(0,100));
+		panel.add(BorderLayout.CENTER,scroller);
 
 		JPanel panel2 = new JPanel(new BorderLayout());
-		panel2.setBorder(new EmptyBorder(0,6,0,0));
+		panel2.setBorder(new EmptyBorder(6,0,0,0));
 		JPanel labelBox = new JPanel(new GridLayout(
 			(mode == UPDATE ? 6 : 5),1,0,3));
 		labelBox.setBorder(new EmptyBorder(0,0,3,12));
@@ -157,7 +159,7 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		panel2.add(BorderLayout.SOUTH,panel3);
 
-		panel.add(BorderLayout.EAST,panel2);
+		panel.add(BorderLayout.SOUTH,panel2);
 
 		content.add(BorderLayout.CENTER,panel);
 

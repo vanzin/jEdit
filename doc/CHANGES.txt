@@ -14,6 +14,8 @@ defaults.
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
   borders using Swing look & feel'. Both are disabled by default.
+- New 'Keyboard Tester' command in Utilities->Troubleshooting menu; it
+  displays a 'grab key' dialog and dumps key events into a new buffer
 
 + Enhancements
 
@@ -43,6 +45,20 @@ defaults.
 - On Unix operating systems, the roots: VFS is no longer available,
   since it is not necessary (Unix systems have a single file system
   root, /)
+- Changed file system browser to underline open files, not show a black
+  chunk next to their names
+- Closed three possible holes in the edit server:
+  - Opening a socket and leaving it open no longer stops other clients
+    from connecting; there is now a 1 second timeout
+  - Opening a socket and sending a whole load of crap, all on one line,
+    no longer causes the edit server to read it in; the protocol has
+    been changed to send the authorization key in binary as four octets,
+    as opposed to in a line of text
+  - On some braindamaged Unix systems, users can read files in each
+    other's home directories. In this case, it would be possible for
+    attackers to EXECUTE ARBITRIARY BEANSHELL CODE on jEdit's running in
+    other user's accounts. Very bad, but most Unices do not let people
+    poke around in each other's homes.
 
 + Bug Fixes
 
@@ -72,6 +88,12 @@ defaults.
 - Sometimes hard tabs would be inserted into the buffer, even if soft
   tabs were enabled
 - Trying to reload a read only file would fail
+- Fixed possible NullPointerException in 'Styles' option pane
+- I removed the feature that automatically folds newly inserted text as
+  necessary, because it had too many problems
+- Changed some tree cell renderers to work around problems experienced
+  on MacOS X
+- Fixed possible ArrayIndexOutOfBounds exception when closing a view
 
 + API Changes
 

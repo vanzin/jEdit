@@ -554,14 +554,11 @@ troubleshooting=about-troubleshooting \
 		 log-viewer \
 		 update-log \
 		 - \
-		 prepare-bug-report \
-		 - \
 		 keyboard-tester
 troubleshooting.label=Troubleshooting
 about-troubleshooting.label=About the Troubleshooting Menu
 log-viewer.label=Activity Log
 update-log.label=Update Activity Log on Disk
-prepare-bug-report.label=Prepare Bug Report
 keyboard-tester.label=Keyboard Tester
 #}}}
 

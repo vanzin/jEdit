@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
+import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -36,9 +37,10 @@ import org.gjt.sp.util.Log;
  * the second being the authorization key.<p>
  *
  * You connect to that port on the local machine, sending the authorization
- * key as ASCII, followed by a newline, followed by a BeanShell script.
- * Then close the socket and the BeanShell script will be executed by the
- * server instance of jEdit.<p>
+ * key as four bytes in network byte order, followed by the length of the
+ * BeanShell script as two bytes in network byte order, followed by the
+ * script in UTF8 encoding. After the socked is closed, the BeanShell script
+ * will be executed by jEdit.<p>
  *
  * The snippet is executed in the AWT thread. None of the usual BeanShell
  * variables (view, buffer, textArea, editPane) are set so the script has to
@@ -62,6 +64,17 @@ public class EditServer extends Thread
 
 		try
 		{
+			// On Unix, set permissions of port file to rw-------,
+			// so that on broken Unices which give everyone read
+			// access to user home dirs, people can't see your
+			// port file (and hence send arbitriary BeanShell code
+			// your way. Nasty.)
+			if(OperatingSystem.isUnix())
+			{
+				new File(portFile).createNewFile();
+				FileVFS.setPermissions(portFile,0600);
+			}
+
 			// Bind to any port on localhost; accept 2 simultaneous
 			// connection attempts before rejecting connections
 			socket = new ServerSocket(0, 2,
@@ -103,51 +116,52 @@ public class EditServer extends Thread
 	//{{{ run() method
 	public void run()
 	{
-		try
+		boolean abort = false;
+
+		for(;;)
 		{
-			for(;;)
+			if(abort)
+				return;
+
+			Socket client = null;
+			try
 			{
-				Socket client = socket.accept();
+				client = socket.accept();
+
+				// Stop script kiddies from opening the edit
+				// server port and just leaving it open, as a
+				// DoS
+				client.setSoTimeout(1000);
+
 				Log.log(Log.MESSAGE,this,client + ": connected");
 
-				BufferedReader in = new BufferedReader(
-					new InputStreamReader(
-					client.getInputStream(),
-					"UTF8"));
+				DataInputStream in = new DataInputStream(
+					client.getInputStream());
 
-				try
-				{
-					int key = Integer.parseInt(in.readLine());
-					if(key != authKey)
-					{
-						Log.log(Log.ERROR,this,
-							client + ": wrong"
-							+ " authorization key");
-						in.close();
-						client.close();
-						return;
-					}
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,
-							client + ": invalid"
-							+ " authorization key");
-					in.close();
-					client.close();
-					return;
-				}
-
-				Log.log(Log.DEBUG,this,client + ": authenticated"
-					+ " successfully");
-				handleClient(client,in);
-
-				client.close();
+				if(!handleClient(client,in))
+					abort = true;
 			}
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+				abort = true;
+			}
+			finally
+			{
+				if(client != null)
+				{
+					try
+					{
+						client.close();
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.ERROR,this,e);
+					}
+
+					client = null;
+				}
+			}
 		}
 	} //}}}
 
@@ -233,27 +247,38 @@ public class EditServer extends Thread
 	//}}}
 
 	//{{{ handleClient() method
-	private void handleClient(Socket client, Reader in)
-		throws IOException
+	private boolean handleClient(Socket client, DataInputStream in)
+		throws Exception
 	{
-		final StringBuffer script = new StringBuffer();
-		char[] buf = new char[1024];
-		int count;
-
-		while((count = in.read(buf,0,buf.length)) != -1)
+		int key = in.readInt();
+		if(key != authKey)
 		{
-			script.append(buf,0,count);
+			Log.log(Log.ERROR,this,client + ": wrong"
+				+ " authorization key (got " + key
+				+ ", expected " + authKey + ")");
+			in.close();
+			client.close();
+
+			return false;
 		}
-
-		SwingUtilities.invokeLater(new Runnable()
+		else
 		{
-			public void run()
+			Log.log(Log.DEBUG,this,client + ": authenticated"
+				+ " successfully");
+
+			final String script = in.readUTF();
+			Log.log(Log.DEBUG,this,script);
+
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				String scriptString = script.toString();
-				Log.log(Log.DEBUG,this,scriptString);
-				BeanShell.eval(null,scriptString,false);
-			}
-		});
+				public void run()
+				{
+					BeanShell.eval(null,script,false);
+				}
+			});
+
+			return true;
+		}
 	} //}}}
 
 	//}}}

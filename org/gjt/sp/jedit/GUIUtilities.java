@@ -699,7 +699,11 @@ public class GUIUtilities
 	{
 		StringBuffer buf = new StringBuffer();
 
-		buf.append("color:" + getColorHexString(style.getForegroundColor()));
+		if(style.getForegroundColor() != null)
+		{
+			buf.append("color:" + getColorHexString(style.getForegroundColor()));
+		}
+
 		if(style.getBackgroundColor() != null) 
 		{
 			buf.append(" bgColor:" + getColorHexString(style.getBackgroundColor()));
