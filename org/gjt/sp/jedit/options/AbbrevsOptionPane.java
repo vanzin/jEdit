@@ -91,6 +91,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
 		abbrevsTable = new JTable(globalAbbrevs);
+		abbrevsTable.getColumnModel().getColumn(1).setCellRenderer(
+			new Renderer());
 		abbrevsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		abbrevsTable.getTableHeader().setReorderingAllowed(false);
 		abbrevsTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
@@ -281,6 +283,28 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				abbrevsModel.remove(selectedRow);
 				updateEnabled();
 			}
+		}
+	} //}}}
+
+	//{{{ Renderer class
+	static class Renderer extends DefaultTableCellRenderer
+	{
+		public Component getTableCellRendererComponent(
+			JTable table,
+			Object value,
+			boolean isSelected,
+			boolean cellHasFocus,
+			int row,
+			int col)
+		{
+			String valueStr = value.toString();
+
+			// workaround for Swing's annoying processing of
+			// labels starting with <html>, which often breaks
+			if(valueStr.toLowerCase().startsWith("<html>"))
+				valueStr = " " + valueStr;
+			return super.getTableCellRendererComponent(table,valueStr,
+				isSelected,cellHasFocus,row,col);
 		}
 	} //}}}
 } //}}}

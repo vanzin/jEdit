@@ -257,7 +257,6 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new AppearanceOptionPane(), jEditGroup);
 		addOptionPane(new TextAreaOptionPane(), jEditGroup);
 		addOptionPane(new GutterOptionPane(), jEditGroup);
-		addOptionPane(new ColorOptionPane(), jEditGroup);
 		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
 		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
 		addOptionPane(new EditingOptionPane(), jEditGroup);

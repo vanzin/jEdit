@@ -406,6 +406,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="line-end">
+	<CODE>
+		textArea.goToEndOfLine(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="line-home">
+	<CODE>
+		textArea.goToStartOfLine(false);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="match-bracket">
 	<CODE>
 		textArea.goToMatchingBracket();
@@ -900,6 +912,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="select-line-home">
+	<CODE>
+		textArea.goToStartOfLine(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-line-end">
+	<CODE>
+		textArea.goToEndOfLine(true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="select-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
@@ -995,6 +1019,30 @@
 <ACTION NAME="select-prev-word">
 	<CODE>
 		textArea.goToPrevWord(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-visible-home">
+	<CODE>
+		textArea.goToFirstVisibleLine(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-visible-end">
+	<CODE>
+		textArea.goToLastVisibleLine(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-whitespace-end">
+	<CODE>
+		textArea.goToEndOfWhiteSpace(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-whitespace-home">
+	<CODE>
+		textArea.goToStartOfWhiteSpace(true);
 	</CODE>
 </ACTION>
 
@@ -1128,6 +1176,30 @@
 <ACTION NAME="view-registers">
 	<CODE>
 		new ViewRegisters(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="visible-end">
+	<CODE>
+		textArea.goToLastVisibleLine(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="visible-home">
+	<CODE>
+		textArea.goToFirstVisibleLine(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="whitespace-end">
+	<CODE>
+		textArea.goToEndOfWhiteSpace(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="whitespace-home">
+	<CODE>
+		textArea.goToStartOfWhiteSpace(false);
 	</CODE>
 </ACTION>
 

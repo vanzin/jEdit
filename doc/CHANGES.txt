@@ -76,6 +76,10 @@ contributing to this release.
 - Adding a mode to the user modes directory with the same name as one in
   the system directory would not take effect until jEdit was restarted.
 
+- Abbreviations whose expansions started with the text "<html>" could
+  cause problems since Swing automatically tries to display such strings
+  as HTML. A workaround has now been added.
+
 * Version 4.1pre2
 
 Thanks to Alexander Maryanovsky and Gerd Knops for contributing to this

@@ -2824,22 +2824,28 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void smartHome(boolean select)
 	{
-		if(!jEdit.getBooleanProperty("view.smartHome"))
-			goToStartOfLine(select);
-		else
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		switch(view.getInputHandler().getLastActionCount())
 		{
-			switch(view.getInputHandler().getLastActionCount())
-			{
-			case 1:
-				goToStartOfWhiteSpace(select);
-				break;
-			case 2:
-				goToStartOfLine(select);
-				break;
-			default: //case 3:
-				goToFirstVisibleLine(select);
-				break;
-			}
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
+
+			goToStartOfWhiteSpace(select);
+			break;
+		case 2:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfLine(" + select + ");");
+
+			goToStartOfLine(select);
+			break;
+		default: //case 3:
+			if(recorder != null)
+				recorder.record("textArea.goToFirstVisibleLine(" + select + ");");
+
+			goToFirstVisibleLine(select);
+			break;
 		}
 	} //}}}
 
@@ -2852,22 +2858,27 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void smartEnd(boolean select)
 	{
-		if(!jEdit.getBooleanProperty("view.smartEnd"))
-			goToEndOfLine(select);
-		else
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		switch(view.getInputHandler().getLastActionCount())
 		{
-			switch(view.getInputHandler().getLastActionCount())
-			{
-			case 1:
-				goToEndOfWhiteSpace(select);
-				break;
-			case 2:
-				goToEndOfLine(select);
-				break;
-			default: //case 3:
-				goToLastVisibleLine(select);
-				break;
-			}
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
+
+			goToEndOfWhiteSpace(select);
+			break;
+		case 2:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfLine(" + select + ");");
+
+			goToEndOfLine(select);
+			break;
+		default: //case 3:
+			if(recorder != null)
+				recorder.record("textArea.goToLastVisibleLine(" + select + ");");
+			goToLastVisibleLine(select);
+			break;
 		}
 	} //}}}
 
@@ -2878,11 +2889,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToStartOfLine(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToStartOfLine(" + select + ");");
-
 		Selection s = getSelectionAtOffset(caret);
 		int line = (select || s == null
 			? caretLine : s.startLine);
@@ -2901,11 +2907,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToEndOfLine(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToEndOfLine(" + select + ");");
-
 		Selection s = getSelectionAtOffset(caret);
 		int line = (select || s == null
 			? caretLine : s.endLine);
@@ -2929,11 +2930,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToStartOfWhiteSpace(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
-
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
 		if(select || s == null)
@@ -2979,11 +2975,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToEndOfWhiteSpace(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
-
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
 		if(select || s == null)
@@ -3029,11 +3020,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToFirstVisibleLine(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToFirstVisibleLine(" + select + ");");
-
 		int firstVisibleLine = firstLine == 0 ? 0 : electricScroll;
 		int firstVisible = getScreenLineStartOffset(firstVisibleLine);
 		if(firstVisible == -1)
@@ -3056,11 +3042,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToLastVisibleLine(boolean select)
 	{
-		// do this here, for weird reasons
-		Macros.Recorder recorder = view.getMacroRecorder();
-		if(recorder != null)
-			recorder.record("textArea.goToLastVisibleLine(" + select + ");");
-
 		int lastVisible;
 
 		if(firstLine + visibleLines >= getVirtualLineCount())

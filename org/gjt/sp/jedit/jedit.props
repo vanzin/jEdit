@@ -211,10 +211,6 @@ view.blockCaret=false
 # Electric borders
 view.electricBorders=3
 
-# Smart home/end
-view.smartHome=true
-view.smartEnd=true
-
 # Standard go to next/previous word behavior
 view.stdNextPrevWord=false
 
