@@ -30,6 +30,7 @@ import java.util.*;
 import java.io.File;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
@@ -84,6 +85,12 @@ public class Delegate extends ApplicationAdapter
 		View view = jEdit.getActiveView();
 		if(view == null)
 			view = PerspectiveManager.loadPerspective(true);
+		
+		if (file.isDirectory())
+		{
+			VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
+			return;
+		}
 		
 		if ((buffer = jEdit.openFile(view,file.getPath())) != null)
 			lastOpenFile = buffer;
@@ -195,14 +202,14 @@ public class Delegate extends ApplicationAdapter
 	//{{{ applicationShouldHandleReopen() method
 	public boolean applicationShouldHandleReopen(NSApplication theApplication, boolean flag)
 	{
-		SwingUtilities.invokeLater(new Runnable()
+		/*SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
 				if (jEdit.getViewCount() == 0)
 					jEdit.newView(null);
 			}
-		});
+		});*/
 		
 		return false;
 	} //}}}
