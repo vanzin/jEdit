@@ -1,3 +1,7 @@
+Mac OS Plugin 3.0
+- All native calls now use the Cocoa API. (Java 1.4.1 is required)
+- Added a Dock Menu. Dock Menu provides similar functionality to the plugin menu.
+
 Mac OS Plugin 2.0.4
 
 - Now respects the retore from commandline option when opening files

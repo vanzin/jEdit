@@ -25,6 +25,8 @@ package macos;
 //{{{ Imports
 import java.io.*;
 import javax.swing.*;
+import com.apple.cocoa.application.*;
+import org.gjt.sp.jedit.*;
 //}}}
 
 public class MacOSActions
@@ -34,10 +36,9 @@ public class MacOSActions
 	{
 		if (new File(path).exists())
 		{
-			try {
-				String[] args = {"open","-a","Finder.app",path};
-				Runtime.getRuntime().exec(args);
-			} catch (Exception ex) {}
+			//Remember to make this an option later
+			//NSApplication.sharedApplication().hide(jEdit.getPlugin("MacOSPlugin"));
+			NSWorkspace.sharedWorkspace().selectFile(path,path);
 		}
 	} //}}}
 	

@@ -23,7 +23,6 @@
 package macos;
 
 //{{{ Imports
-import com.apple.mrj.*;
 import java.util.Vector;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
@@ -32,14 +31,16 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 import macos.menu.*;
 import macos.script.*;
+import com.apple.cocoa.application.*;
+import com.apple.eawt.Application;
 //}}}
 
 public class MacOSPlugin extends EBPlugin
 {
 	//{{{ Variables
-	static boolean started = false;
+	private boolean started = false;
 	private boolean osok;
-	private Handler handler;
+	private Delegate delegate;
 	//}}}
 	
 	//{{{ start() method
@@ -47,13 +48,16 @@ public class MacOSPlugin extends EBPlugin
 	{
 		if(osok = osok())
 		{	
-			handler = new MacOSHandler();
+			delegate = new Delegate();
+			NSApplication app = NSApplication.sharedApplication();
+			
 			// Register handlers
 			Macros.registerHandler(new AppleScriptHandler());
-			MRJApplicationUtils.registerQuitHandler((MRJQuitHandler)handler);
-			MRJApplicationUtils.registerAboutHandler((MRJAboutHandler)handler);
-			MRJApplicationUtils.registerPrefsHandler((MRJPrefsHandler)handler);
-			MRJApplicationUtils.registerOpenDocumentHandler((MRJOpenDocumentHandler)handler);
+			Application app2 = new Application();
+			app2.addApplicationListener(delegate);
+			app2.setEnabledPreferencesMenu(true);
+			app.setDelegate(delegate);
+			app.setServicesProvider(delegate);
 		}
 	}//}}}
 	
@@ -77,7 +81,7 @@ public class MacOSPlugin extends EBPlugin
 		{
 			// Set type/creator codes for files
 			if (message instanceof BufferUpdate)
-				handler.handleFileCodes((BufferUpdate)message);
+				delegate.handleFileCodes((BufferUpdate)message);
 			else if (message instanceof PropertiesChanged)
 			{
 				boolean b = jEdit.getBooleanProperty("MacOSPlugin.useSelection",
@@ -90,8 +94,23 @@ public class MacOSPlugin extends EBPlugin
 			// before jEdit is running set as the currently active
 			// buffer.
 			else if (!started && message instanceof ViewUpdate)
-				handler.handleOpenFile((ViewUpdate)message);
+				delegate.handleOpenFile((ViewUpdate)message);
 		}
+	}//}}}
+	
+	//{{{ started() method
+	/**
+	 * Returns true once all initialisations have been done
+	 */
+	public boolean started()
+	{
+		return started;
+	}//}}}
+	
+	//{{{ started() method
+	public void setStarted(boolean v)
+	{
+		started = v;
 	}//}}}
 	
 	//{{{ osok() method
