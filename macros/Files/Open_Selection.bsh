@@ -18,6 +18,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 void openSelection()
@@ -30,6 +33,19 @@ void openSelection()
 }
 
 openSelection();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Open_Selection.bsh</filename></para>
+    <abstract><para>
+        Opens the file named by the current buffer's selected text.
+    </para></abstract>
+</listitem>
+
+*/
+
 
 // end Open_Selection.bsh
 
