@@ -5,10 +5,15 @@
 
 <!-- Entities for attributes shared by multiple rules -->
 <!ENTITY % att-bool '( TRUE | FALSE )' >
-<!ENTITY % att-type 'TYPE %tokens; "NULL"' >
-<!ENTITY % att-at-line-start 'AT_LINE_START %att-bool; "FALSE"' >
-<!ENTITY % att-at-whitespace-end 'AT_WHITESPACE_END %att-bool; "FALSE"' >
+<!ENTITY % att-standard-mix 'TYPE %tokens; "NULL"
+	AT_LINE_START %att-bool; "FALSE"
+	AT_WHITESPACE_END %att-bool; "FALSE"
+	AT_WORD_START %att-bool; "FALSE"' >
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
+<!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
+<!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool; "FALSE"
+	NO_WORD_BREAK %att-bool; "FALSE"'>
+<!ENTITY % att-hash-char 'HASH_CHAR CDATA #REQUIRED' >
 
 <!-- MODE element -->
 <!ELEMENT MODE ( PROPS?, RULES* ) >
@@ -47,48 +52,38 @@
 
 <!-- SEQ attributes -->
 <!ATTLIST SEQ
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
-	DELEGATE CDATA #IMPLIED >
+	%att-standard-mix;
+	%att-delegate; >
 
 <!-- SEQ_REGEXP element -->
 <!ELEMENT SEQ_REGEXP ( #PCDATA ) >
 
 <!-- SEQ_REGEXP attributes -->
 <!ATTLIST SEQ_REGEXP
-	HASH_CHAR CDATA #REQUIRED
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
-	DELEGATE CDATA #IMPLIED >
+	%att-hash-char;
+	%att-standard-mix;
+	%att-delegate; >
 
 <!-- SPAN element -->
 <!ELEMENT SPAN ( BEGIN, END ) >
 
 <!-- SPAN attributes -->
 <!ATTLIST SPAN
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-standard-mix;
+	%att-span-mix;
 	%att-exclude-match;
-	NO_LINE_BREAK %att-bool; "FALSE"
-	NO_WORD_BREAK %att-bool; "FALSE"
-	DELEGATE CDATA #IMPLIED >
+	%att-delegate; >
 
 <!-- SPAN_REGEXP element -->
 <!ELEMENT SPAN_REGEXP ( BEGIN, END ) >
 
 <!-- SPAN_REGEXP attributes -->
 <!ATTLIST SPAN_REGEXP
-	HASH_CHAR CDATA #REQUIRED
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-hash-char;
+	%att-standard-mix;
+	%att-span-mix;
 	%att-exclude-match;
-	NO_LINE_BREAK %att-bool; "FALSE"
-	NO_WORD_BREAK %att-bool; "FALSE"
-	DELEGATE CDATA #IMPLIED >
+	%att-delegate; >
 
 <!-- SPAN and SPAN_REGEXP children -->
 <!ELEMENT BEGIN ( #PCDATA ) >
@@ -99,32 +94,26 @@
 
 <!-- EOL_SPAN attributes -->
 <!ATTLIST EOL_SPAN
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-standard-mix;
 	%att-exclude-match;
-	DELEGATE CDATA #IMPLIED >
+	%att-delegate; >
 
 <!-- EOL_SPAN_REGEXP element -->
 <!ELEMENT EOL_SPAN_REGEXP ( #PCDATA ) >
 
 <!-- EOL_SPAN_REGEXP attributes -->
 <!ATTLIST EOL_SPAN_REGEXP
-	HASH_CHAR CDATA #REQUIRED
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-hash-char;
+	%att-standard-mix;
 	%att-exclude-match;
-	DELEGATE CDATA #IMPLIED >
+	%att-delegate; >
 
 <!-- MARK_FOLLOWING element -->
 <!ELEMENT MARK_FOLLOWING ( #PCDATA ) >
 
 <!-- MARK_FOLLOWING attributes -->
 <!ATTLIST MARK_FOLLOWING
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-standard-mix;
 	%att-exclude-match; >
 
 <!-- MARK_PREVIOUS element -->
@@ -132,9 +121,7 @@
 
 <!-- MARK_PREVIOUS attributes -->
 <!ATTLIST MARK_PREVIOUS
-	%att-type;
-	%att-at-line-start;
-	%att-at-whitespace-end;
+	%att-standard-mix;
 	%att-exclude-match; >
 
 <!-- KEYWORDS element -->

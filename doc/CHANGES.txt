@@ -5,6 +5,43 @@ JEDIT 4.1 VERSION HISTORY
 Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker, Matthias Schneider
 and Rudolf Widmann for contributing to this release.
 
++ Syntax Highlighting Changes:
+
+- Added regular expression matching features. Currently this is used to
+  implement better (but still not 100% accurate) highlighting of various
+  constructs in Perl mode, like s/// and such.
+
+  - SEQ_REGEXP rule: highlights a sequence matching a regular
+    expression.
+  - SPAN_REGEXP rule: like SPAN but the start string is a regular
+    expression (the end cannot be a regular expression currently).
+  - EOL_SPAN_REGEXP rule: ditto, but for EOL_SPAN.
+
+  - All rules must define a HASH_CHAR attribute; this is the character
+    that the rule will be hashed by, to avoid checking every character
+    against every regexp.
+
+- Added a new AT_WORD_START attribute to all syntax rules. If this is
+  set to TRUE, the rule will only match if it is at the start of a token
+  boundary (in most cases, this is the same as a word boundary, hence
+  the name).
+
+  To illustrate the difference, suppose you have a SPAN rule that
+  matches from "quux(" to ")". Without AT_WORD_START, it would highlight
+  this sequence:
+
+  foobarquux(hello world)
+
+  However with AT_WORD_START it would only highlight if there was a
+  token in between foobar and quux().
+
+- CHILL (CCITT recommendation language) syntax highlighting added.
+  (Rudolf Widmann)
+
+- Updated CSS syntax highlighting for CSS2 spec. (Ivan Herman)
+
+- Updated AWK and COBOL syntax highlighting. (Matthias Schneider)
+
 + Editing Changes:
 
 - Previously when expanding an abbreviation with positional parameters,
@@ -26,15 +63,6 @@ and Rudolf Widmann for contributing to this release.
 
 - You can now right-click on directories in the parent directory list to
   display a menu of commands.
-
-+ Syntax Highlighting Changes:
-
-- CHILL (CCITT recommendation language) syntax highlighting added.
-  (Rudolf Widmann)
-
-- Updated CSS syntax highlighting for CSS2 spec. (Ivan Herman)
-
-- Updated AWK and COBOL syntax highlighting. (Matthias Schneider)
 
 + Global Options Dialog Changes:
 
