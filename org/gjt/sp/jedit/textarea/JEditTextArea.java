@@ -341,6 +341,7 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//{{{ setFirstLine() method
+	public Exception trace;
 	/**
 	 * Sets the vertical scroll bar position
 	 *
@@ -358,6 +359,8 @@ public class JEditTextArea extends JComponent
 
 		if(firstLine == displayManager.getFirstLine())
 			return;
+
+		trace = new Exception();
 
 		displayManager.setFirstLine(firstLine);
 
