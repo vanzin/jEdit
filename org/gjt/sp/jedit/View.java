@@ -548,15 +548,76 @@ public class View extends JFrame implements EBComponent
 
 			splitPane = null;
 			updateTitle();
-		}
 
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				editPane.focusOnTextArea();
+				public void run()
+				{
+					editPane.focusOnTextArea();
+				}
+			});
+		}
+		else
+			getToolkit().beep();
+	} //}}}
+
+	//{{{ unsplitCurrent() method
+	/**
+	 * Removes the current split.
+	 * @since jEdit 2.3pre2
+	 */
+	public void unsplitCurrent()
+	{
+		if(splitPane != null)
+		{
+			// find first split pane parenting current edit pane
+			Component comp = editPane;
+			while(!(comp instanceof JSplitPane))
+			{
+				comp = comp.getParent();
 			}
-		});
+
+			JSplitPane split = (JSplitPane)comp;
+			if(split.getLeftComponent() == editPane)
+			{
+				// XXX: close right
+			}
+			else
+			{
+				// XXX: close left
+			}
+
+			JComponent parent = (JComponent)split.getParent();
+
+			if(parent instanceof JSplitPane)
+			{
+				JSplitPane parentSplit = (JSplitPane)parent;
+				if(parentSplit.getLeftComponent() == split)
+					parentSplit.setLeftComponent(editPane);
+				else
+					parentSplit.setRightComponent(editPane);
+			}
+			else
+			{
+				parent.remove(split);
+				parent.add(editPane);
+				splitPane = null;
+			}
+
+			parent.revalidate();
+
+			updateTitle();
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					editPane.focusOnTextArea();
+				}
+			});
+		}
+		else
+			getToolkit().beep();
 	} //}}}
 
 	//{{{ nextTextArea() method

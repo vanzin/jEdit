@@ -37,6 +37,7 @@ close-buffer.shortcut=C+w
 cut.shortcut=C+x
 goto-marker.shortcut=C+y
 undo.shortcut=C+z
+unsplit-current.shortcut=C+0
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
