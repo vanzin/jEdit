@@ -72,6 +72,17 @@ public class ErrorListDialog extends EnhancedDialog
 			messages = new String[tokenizedMessage.size()];
 			tokenizedMessage.copyInto(messages);
 		}
+
+		public boolean equals(Object o)
+		{
+			if(o instanceof ErrorEntry)
+			{
+				ErrorEntry e = (ErrorEntry)o;
+				return e.path.equals(path);
+			}
+			else
+				return false;
+		}
 	} //}}}
 
 	//{{{ ErrorListDialog constructor

@@ -546,6 +546,19 @@ public class PluginJAR
 
 				EditBus.send(new PluginUpdate(this,
 					PluginUpdate.DEACTIVATED,exit));
+
+				if(!exit)
+				{
+					// see if this is a 4.1-style plugin
+					String activate = jEdit.getProperty("plugin."
+						+ plugin.getClassName() + ".activate");
+
+					if(activate == null)
+					{
+						breakPlugin();
+						jEdit.pluginError(path,"plugin-error.not-42",null);
+					}
+				}
 			}
 		}
 	} //}}}

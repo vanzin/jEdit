@@ -1372,7 +1372,7 @@ plugin-error.dep-class=Requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
 plugin-error.obsolete=This plugin is obsolete. Please remove it.
 plugin-error.not-42=This plugin does not support dynamic loading.\n\
-	Restart jEdit to use this plugin.
+	You must restart jEdit after removing or installing this plugin.
 #}}}
 
 #{{{ Macro dialogs
@@ -2083,6 +2083,7 @@ plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
 manage-plugins.title=Manage
 
 manage-plugins.info.enabled=Enabled
+manage-plugins.info.jar=File
 manage-plugins.info.name=Name
 manage-plugins.info.version=Version
 manage-plugins.info.status=Status
