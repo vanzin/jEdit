@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.textarea;
 
+import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -181,7 +182,7 @@ public class DisplayManager
 			// path. its better when the chunk cache records
 			// screen line count changes.
 			int newCount;
-			if(textArea.softWrap)
+			if(softWrap && textArea.wrapMargin != 0.0f)
 				newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
 			else
 				newCount = 1;
@@ -533,6 +534,9 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ Package-private members
+	boolean softWrap;
+	FirstLine firstLine;
+	ScrollLineCount scrollLineCount;
 
 	//{{{ DisplayManager constructor
 	DisplayManager(Buffer buffer, JEditTextArea textArea)
@@ -543,48 +547,13 @@ public class DisplayManager
 		this.index = buffer._displayLock();
 
 		scrollLineCount = new ScrollLineCount(index);
-		// propertiesChanged() takes care of this
-		// scrollLineCount.reset();
-		// reset() calls this
-		//offsetMgr.addAnchor(scrollLineCount);
+		offsetMgr.addAnchor(scrollLineCount);
+
 		firstLine = new FirstLine(index);
-		firstLine.reset();
 		offsetMgr.addAnchor(firstLine);
 
 		bufferChangeHandler = new BufferChangeHandler();
 		buffer.addBufferChangeListener(bufferChangeHandler);
-	} //}}}
-
-	//{{{ getFirstLine() method
-	int getFirstLine()
-	{
-		return firstLine.scrollLine + firstLine.skew;
-	} //}}}
-
-	//{{{ setFirstLine() method
-	void setFirstLine(int firstLine)
-	{
-		int amount = (firstLine - getFirstLine());
-		if(amount > 0)
-			this.firstLine.scrollDown(amount);
-		else if(amount < 0)
-			this.firstLine.scrollUp(-amount);
-	} //}}}
-
-	//{{{ getFirstPhysicalLine() method
-	int getFirstPhysicalLine()
-	{
-		return firstLine.physicalLine;
-	} //}}}
-
-	//{{{ setFirstPhysicalLine() method
-	void setFirstPhysicalLine(int firstPhysLine)
-	{
-		int amount = (firstPhysLine - firstLine.physicalLine);
-		if(amount > 0)
-			firstLine.physDown(amount);
-		else if(amount < 0)
-			firstLine.physUp(-amount);
 	} //}}}
 
 	//{{{ dispose() method
@@ -599,15 +568,6 @@ public class DisplayManager
 		buffer = null;
 	} //}}}
 
-	//{{{ propertiesChanged() method
-	/**
-	 * Update screen line count when user changes soft wrap setting.
-	 */
-	void propertiesChanged()
-	{
-		scrollLineCount.reset();
-	} //}}}
-
 	//}}}
 
 	//{{{ Private members
@@ -616,8 +576,6 @@ public class DisplayManager
 	private JEditTextArea textArea;
 	private int index;
 	private boolean narrowed;
-	private FirstLine firstLine;
-	private ScrollLineCount scrollLineCount;
 	private BufferChangeHandler bufferChangeHandler;
 
 	//{{{ setLineVisible() method
@@ -640,14 +598,17 @@ public class DisplayManager
 		//{{{ changed() method
 		public void changed()
 		{
+			textArea.recalculateLastPhysicalLine();
 			textArea.updateScrollBars();
 		} //}}}
 
 		//{{{ reset() method
 		public void reset()
 		{
+			String wrap = buffer.getStringProperty("wrap");
+			softWrap = wrap.equals("soft");
+
 			offsetMgr.removeAnchor(this);
-			org.gjt.sp.util.Log.log(org.gjt.sp.util.Log.ERROR,this,buffer + ": reset: here is a scan for you");
 			physicalLine = offsetMgr.getLineCount();
 			scrollLine = 0;
 			for(int i = 0; i < physicalLine; i++)
@@ -656,6 +617,8 @@ public class DisplayManager
 					scrollLine += getScreenLineCount(i);
 			}
 			offsetMgr.addAnchor(this);
+			textArea.recalculateLastPhysicalLine();
+			textArea.updateScrollBars();
 		} //}}}
 	} //}}}
 
@@ -686,15 +649,33 @@ public class DisplayManager
 				skew = screenLines - 1;
 
 			textArea.updateScrollBars();
+			textArea.recalculateLastPhysicalLine();
 			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,skew);
 		} //}}}
 
 		//{{{ reset() method
 		public void reset()
 		{
-			physicalLine = getFirstVisibleLine();
 			scrollLine = 0;
-			skew = 0;
+
+			int i = 0;
+
+			for(; i < buffer.getLineCount(); i++)
+			{
+				if(!isLineVisible(i))
+					continue;
+
+				if(i >= physicalLine)
+					break;
+
+				scrollLine += getScreenLineCount(i);
+			}
+
+			physicalLine = i;
+
+			int screenLines = getScreenLineCount(physicalLine);
+			if(skew >= screenLines)
+				skew = screenLines - 1;
 		} //}}}
 
 		//{{{ physDown() method
@@ -848,9 +829,13 @@ public class DisplayManager
 		public void contentInserted(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
+			if(!buffer.isLoaded())
+				return;
+
 			for(int i = 0; i <= numLines; i++)
 			{
-				getScreenLineCount(startLine + i);
+				if(isLineVisible(i))
+					getScreenLineCount(startLine + i);
 			}
 
 			queuedNotifyScreenLineChanges = true;

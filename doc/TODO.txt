@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- inserting lines repaints twice
 - vfs browser: re-add option to base filter on filename extension
 - today:
   - finish rect select content inserted/content removed
@@ -201,10 +202,8 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
-- inserting lines repaints twice
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the
   buffer notify jEdit of path changes though.
-- action bar's completion
 - display manager should not be O(n^2) with text areas
 - menu drag: slow
 - bracket matching: no delay for current line match??
@@ -215,16 +214,11 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   too much of a hack?
 - replace all in a directory could be faster
 - buffer.setMode() slow
-- inserting new lines -- why repaint entire text area?
 - inserting/removing lines -- move gap less agressively
 - positions should be gapped too
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - don't repaint whole selection when resizing
-- backward virtual line scan
-- do not call foldVisibilityManager.getLastVisibleLine() on every change
-  w/ soft wrap. kills performance if also narrowed. or, just make
-  getLastVisibleLine() faster.
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
