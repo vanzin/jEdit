@@ -10,6 +10,10 @@ JEDIT 4.2 VERSION HISTORY
 - Fixed selection issue when right-clicking on a file system browser
   window.
 
+- The file system browser would report files larger than 1 megabyte as
+  being an order of magnitude smaller, eg 13 kilobytes instead of 13
+  megabytes.
+
 }}}
 {{{ API Changes
 
