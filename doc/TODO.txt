@@ -3,6 +3,7 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- press & hold inside selection & release
 - DnD still dosn't work as expected when draging from the same buffer,
 but differen text area (for example droping at the position where drag
 was started erases text)- no support for vertical pasting
