@@ -30,22 +30,22 @@
 		<MARK_FOLLOWING TYPE="KEYWORD4" AT_WORD_START="TRUE">@</MARK_FOLLOWING>
 
 		<!-- Triple-quotes -->
-		<SPAN TYPE="LITERAL2">
+		<SPAN TYPE="LITERAL2" DELEGATE="LITERAL_TWO">
 			<BEGIN>"""</BEGIN>
 			<END>"""</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL2">
+		<SPAN TYPE="LITERAL2" DELEGATE="LITERAL_TWO">
 			<BEGIN>'''</BEGIN>
 			<END>'''</END>
 		</SPAN>
 
 		<!-- Standard literals -->
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL_ONE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL_ONE">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
@@ -341,6 +341,17 @@
 			<KEYWORD3>__version__</KEYWORD3>
 			<KEYWORD3>__xor__</KEYWORD3>
 		</KEYWORDS>
+	</RULES>
+
+	<!-- rulesets to syntax highlight string interpolation sequences -->
+	<RULES SET="LITERAL_ONE" DEFAULT="LITERAL1" ESCAPE="\">
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%[diouxXeEfFgGcrs]</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%\([^)]+\)[+ -]?\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
+	</RULES>
+	<!-- triple-quoted strings has its own, since it's LITERAL2 by default -->
+	<RULES SET="LITERAL_TWO" DEFAULT="LITERAL2" ESCAPE="\">
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%[diouxXeEfFgGcrs]</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%\([^)]+\)[+ -]?\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
 	</RULES>
 </MODE>
 
