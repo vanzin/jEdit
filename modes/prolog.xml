@@ -8,16 +8,28 @@
 	written by	Giulio Piancastelli
 	version		1.0
 	created on	31st December 2001
-	last revised	6th February 2002
+	last revised	19th November 2002
 -->
 
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="%" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+	
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
+		<!--- ISO compliant C-style comments -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
 		
 		<!-- String literals -->
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
@@ -74,7 +86,13 @@
 		<!-- The '.' at the end of each clause -->
 		<SEQ TYPE="OPERATOR">.</SEQ>
 		
-		<KEYWORDS>
+		<!-- Parentheses -->
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">{</SEQ>
+		<SEQ TYPE="NULL">}</SEQ>
+		
+		<KEYWORDS IGNORE_CASE="FALSE">
 		
 			<!-- Keywords that are 0 arity built-in predicates -->
 			<KEYWORD1>true</KEYWORD1>

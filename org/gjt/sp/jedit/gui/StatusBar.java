@@ -374,6 +374,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			JEditTextArea textArea = view.getTextArea();
 
 			int currLine = textArea.getCaretLine();
+			//if(currLine >= textArea.getLineCount())
+			//	System.err.println("foo");
 			int start = textArea.getLineStartOffset(currLine);
 			int dot = textArea.getCaretPosition() - start;
 			buffer.getText(start,dot,seg);

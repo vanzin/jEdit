@@ -109,8 +109,11 @@ public class BeanShell
 		JEditTextArea textArea = view.getTextArea();
 		Buffer buffer = view.getBuffer();
 
+		if(command == null || command.length() == 0)
+			return;
+
 		Selection[] selection = textArea.getSelection();
-		if(selection.length == 0 || command == null || command.length() == 0)
+		if(selection.length == 0)
 		{
 			view.getToolkit().beep();
 			return;

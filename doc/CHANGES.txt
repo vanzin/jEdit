@@ -2,9 +2,9 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
-Thanks to John Perry, Joshua Miller, Kris Kopicki, Marcelo Vanzin, Peter
-Cox, Rex Young, Rudolf Widmann and Steve Snider for contributing to this
-release.
+Thanks to Giulio Piancastelli, John Perry, Joshua Miller, Kris Kopicki,
+Marcelo Vanzin, Peter Cox, Rex Young, Rudolf Widmann and Steve Snider
+for contributing to this release.
 
 + Editing Changes:
 
@@ -29,6 +29,7 @@ release.
 - Updated ColdFusion syntax highlighting (Joshua Miller).
 - Updated Fortran syntax highlighting (Yifan Song).
 - Updated PL-SQL syntax highlighting (Steve Snider).
+- Updated Prolog syntax highlighting (Giulio Piancastelli)
 
 + Miscellaneous Changes:
 
