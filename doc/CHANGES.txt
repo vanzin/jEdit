@@ -51,6 +51,10 @@ contributing to this release.
 - Fixed problem when scrolling with soft wrap where the last visible
   line would get clipped.
 
+- The jeditshell directory was missing from the source download.
+
+- Plugin properties would override site properties.
+
 + API Changes:
 
 - VFS._saveComplete(Object session, Buffer buffer, Component comp) is
