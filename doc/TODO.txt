@@ -5,7 +5,6 @@ and quirks that I need to fix eventually.
 
 - reverse replace still broken?
 - docs incorrect w.r.t. C+e C+j
-- tab w/ one line selection
 - deadlock w/ read/write locks
 - what if dir search requires FTP login to list dir
 - soft wrap: dragging on last visible line throws NPEs
