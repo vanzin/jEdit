@@ -515,8 +515,7 @@ class ChunkCache
 		// find a valid line closest to the last screen line
 		int firstScreenLine = 0;
 
-		for(int i = Math.min(firstInvalidLine - 1,lastScreenLine);
-			i >= 0; i--)
+		for(int i = firstInvalidLine - 1; i >= 0; i--)
 		{
 			if(lineInfo[i].lastSubregion)
 			{

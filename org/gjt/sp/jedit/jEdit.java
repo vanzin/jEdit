@@ -1883,6 +1883,17 @@ public class jEdit
 
 	//{{{ newView() method
 	/**
+	 * Creates a new view.
+	 * @param view An existing view
+	 * @since jEdit 3.2pre2
+	 */
+	public static View newView(View view)
+	{
+		return newView(view,null,false);
+	} //}}}
+
+	//{{{ newView() method
+	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
 	 * @param buffer The buffer
@@ -1910,17 +1921,6 @@ public class jEdit
 		else
 			config = new View.ViewConfig(plainView);
 		return newView(view,buffer,config);
-	} //}}}
-
-	//{{{ newView() method
-	/**
-	 * Creates a new view.
-	 * @param view An existing view
-	 * @since jEdit 3.2pre2
-	 */
-	public static View newView(View view)
-	{
-		return newView(view,null,false);
 	} //}}}
 
 	//{{{ newView() method

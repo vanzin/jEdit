@@ -198,8 +198,8 @@ public class OffsetManager
 					}
 					anchor = anchor.next;
 				}
+				lineInfo[line] = (info | mask);
 			}
-			lineInfo[line] = (info | mask);
 		}
 		else
 		{
@@ -222,8 +222,8 @@ public class OffsetManager
 					}
 					anchor = anchor.next;
 				}
+				lineInfo[line] = (info & ~mask);
 			}
-			lineInfo[line] = (info & ~mask);
 		}
 	} //}}}
 

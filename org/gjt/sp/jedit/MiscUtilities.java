@@ -196,7 +196,9 @@ public class MiscUtilities
 
 		for(;;)
 		{
-			if(path.equals(".."))
+			if(path.equals("."))
+				return parent;
+			else if(path.equals(".."))
 				return getParentOfPath(parent);
 			else if(path.startsWith(dd) || path.startsWith("../"))
 			{
@@ -204,7 +206,7 @@ public class MiscUtilities
 				path = path.substring(3);
 			}
 			else if(path.startsWith(d))
-				path = path.substring(1);
+				path = path.substring(2);
 			else
 				break;
 		}

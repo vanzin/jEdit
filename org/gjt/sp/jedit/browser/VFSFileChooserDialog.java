@@ -67,7 +67,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			path = vfs.getParentOfPath(path);
 		}
 
-		browser = new VFSBrowser(view,path,mode,multipleSelection,true);
+		browser = new VFSBrowser(view,path,mode,multipleSelection,null);
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
 
@@ -75,13 +75,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
 		panel.setBorder(new EmptyBorder(12,0,0,0));
 
-		filenameField = new JTextField();
+		filenameField = new VFSFileNameField(browser);
 		filenameField.setText(name);
-		filenameField.addKeyListener(new KeyHandler());
 		filenameField.selectAll();
-		Dimension dim = filenameField.getPreferredSize();
-		dim.width = Integer.MAX_VALUE;
-		filenameField.setMaximumSize(dim);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		box.add(filenameField);
@@ -126,7 +122,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
 			ok.setText(jEdit.getProperty("vfs.browser.dialog.choose-dir"));
 			// so that it doesn't resize...
-			dim = ok.getPreferredSize();
+			Dimension dim = ok.getPreferredSize();
 			ok.setPreferredSize(dim);
 			break;
 		case VFSBrowser.SAVE_DIALOG:
@@ -278,7 +274,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 	//{{{ Instance variables
 	private VFSBrowser browser;
-	private JTextField filenameField;
+	private VFSFileNameField filenameField;
 	private String filename;
 	private JButton ok;
 	private JButton cancel;
@@ -381,6 +377,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		//{{{ filesActivated() method
 		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
 		{
+			if(files.length == 0)
+				return;
+
 			for(int i = 0; i < files.length; i++)
 			{
 				VFS.DirectoryEntry file = files[i];
@@ -400,84 +399,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				dispose();
 			else
 				ok();
-		} //}}}
-	} //}}}
-
-	//{{{ KeyHandler class
-	class KeyHandler extends KeyAdapter
-	{
-		//{{{ keyPressed() method
-		public void keyPressed(KeyEvent evt)
-		{
-			switch(evt.getKeyCode())
-			{
-			case KeyEvent.VK_LEFT:
-				if(filenameField.getCaretPosition() == 0)
-					browser.getBrowserView().getTree().processKeyEvent(evt);
-				break;
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_DOWN:
-				browser.getBrowserView().getTree().processKeyEvent(evt);
-				break;
-			}
-		} //}}}
-
-		//{{{ keyTyped() method
-		public void keyTyped(KeyEvent evt)
-		{
-			char ch = evt.getKeyChar();
-			if(ch < 0x20 || ch == 0x7f || ch == 0xff)
-				return;
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					String currentText = filenameField.getText();
-					int caret = filenameField.getCaretPosition();
-
-					BrowserView view = browser.getBrowserView();
-					view.selectNone();
-					view.getTree().doTypeSelect(
-						currentText,
-						false);
-					VFS.DirectoryEntry[] files =
-						view.getSelectedFiles();
-					if(files.length != 0)
-					{
-						String path = files[0].path;
-						String name = files[0].name;
-						String parent = MiscUtilities.getParentOfPath(path);
-						if(parent.endsWith("/") || parent.endsWith(File.separator))
-							parent = parent.substring(0,parent.length() - 1);
-
-						String newText;
-						if(MiscUtilities.isAbsolutePath(currentText)
-							&& !currentText.startsWith(browser.getDirectory()))
-						{
-							newText = path;
-						}
-						else
-						{
-							if(MiscUtilities.isAbsolutePath(currentText))
-								caret -= MiscUtilities.getParentOfPath(currentText).length();
-							if(parent.equals(browser.getDirectory()))
-								newText = name;
-							else
-							{
-								caret += parent.length() + 1;
-								newText = path;
-							}
-						}
-
-						filenameField.setText(newText);
-						filenameField.setCaretPosition(
-							newText.length());
-						filenameField.moveCaretPosition(
-							caret);
-					}
-				}
-			});
 		} //}}}
 	} //}}}
 

@@ -3,8 +3,26 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: 5 < 24
+[error] ExtensionManager:  at org.gjt.sp.jedit.syntax.Chunk.offsetToX(Chunk.java:156)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.JEditTextArea.offsetToXY(JEditTextArea.java:858)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintSelection.paintSelection(TextAreaPainter.java:1182)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintSelection.paintValidLine(TextAreaPainter.java:1115)
+
+- shifting larger than screen cause scrollTo NPE
+- macro record: doesn't respect overwrite
+- buffer: if socket already closed
+- -wait: return if view closed too
+- text area font change: wrap margin not updated
 - NO_LINE_BREAK in props.xml not honored -- EOL_SPAN delegates to
   another ruleset...
+- MARK_PREVIOUS delegate like SEQ; update mail.xml
+- focus on one text area; click hypersearch result in another view;
+  the other text area is not focused
+
+- narrow to a set of folds: expands first one. only need to do this if
+  narrowing to a single virtual line
+- narrow: scrolls one down
 
 - plugin api:
   - new option pane api
@@ -17,12 +35,12 @@ and quirks that I need to fix eventually.
   - the cache
   - services
 
-- save file resulting in fold collapse -- scroll line count broken
+- save file resulting in fold collapse -- scroll to 0
 
-- browser: different layout when top or bottom
+- drop horizontal layout setting
+- add hide menu bar setting
+- right click menu: plugins & favorites
 - vfs browser: re-add option to base filter on filename extension
-- enter with browser view focused; hides dialog
-- browser field completion: fills out full path
 - don't show 'new directory' in favorites:
 
 - wm drag: sometimes cursor gets stuck, need to check for resizePos out
@@ -54,9 +72,7 @@ of bounds, etc.
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible
-- goToBuffer(): need to focus edit pane in question
-- display:
-  - synchro scroll needs a rewrite & folding
+- synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked
   - FAQ: better titles
@@ -72,7 +88,6 @@ of bounds, etc.
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
 - C+ENTER 3 C+2
-- tab in action bar
 - beanshell: invokeAction() function
 - perl: q{}, etc.
 - plugin error dialog -- if > 1 error per plugin
