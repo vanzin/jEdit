@@ -26,6 +26,10 @@ Thanks to Gerd Knops for contributing to this release.
   view/buffer/editPane/textArea variables would not be unset when the
   expression finishes executing.
 
+- The text area did not get initial focus if there is a window docked
+  in the left or top part of the view, and the 'tip of the day' was
+  switched on.
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,
