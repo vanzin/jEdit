@@ -31,7 +31,8 @@ KeyEventTranslator.setModifierMapping(
     0,
     InputEvent.SHIFT_MASK);
 
-- "Java File Save" macro (Nicholas O'Leary).
+- "Java File Save", "Move Line Up", "Move Line Down" macros
+  (Nicholas O'Leary).
 
 - Removed usages of show() method deprecated in JDK 1.5.
 

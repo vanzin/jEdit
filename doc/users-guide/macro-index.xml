@@ -149,6 +149,17 @@
      </para>
   </listitem>
 
+  <listitem>
+      <para><filename>Move_Line_Down.bsh</filename></para>
+      <abstract><para>Moves the current line down one, with automatic 
+      indentation.</para></abstract>   
+      </listitem>
+<listitem>
+      <para><filename>Move_Line_Up.bsh</filename></para>
+      <abstract><para>Moves the current line up one, with automatic 
+      indentation.</para></abstract>   
+      </listitem>
+
 </itemizedlist>
 
 </sect1>
