@@ -40,19 +40,6 @@ public class PluginsMenu extends EnhancedMenu
 			try
 			{
 				EditPlugin plugin = pluginArray[i];
-
-				// call old API
-				int count = pluginMenuItems.size();
-				plugin.createMenuItems(null,pluginMenuItems,
-					pluginMenuItems);
-				if(count != pluginMenuItems.size())
-				{
-					Log.log(Log.WARNING,this,plugin.getClassName()
-						+ " is using the obsolete"
-						+ " createMenuItems() API.");
-				}
-
-				// call new API
 				plugin.createMenuItems(pluginMenuItems);
 			}
 			catch(Throwable t)

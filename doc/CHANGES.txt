@@ -58,6 +58,8 @@ JEDIT 4.0 VERSION HISTORY
   an arbitriary java.awt.Component, instead of a View, as the component
   that will parent the dialog box. This will not break any macros since
   BeanShell resolves methods at run-time.
+- Improved window docking:
+  - Windows docked into the view now have close boxes
 
 + Bug Fixes
 
@@ -103,3 +105,10 @@ JEDIT 4.0 VERSION HISTORY
 - VariableGridLayout is now used to lay out tool bars, instead of
   BoxLayout. This means it is no longer necessary to add a
   Box.createGlue() to the tool bar to prevent it from being centered.
+- Removed these APIs, which have been deprecated since jEdit 2.6:
+  EditPlugin.createMenuItems(View,Vector,Vector) (override
+  createMenuItems(Vector) instead)
+  GUIUtilities.loadMenuItem(View,String) (use loadMenuItem(String)
+  instead)
+  GUIUtilities.loadToolBarIcon() (use loadIcon instead)
+  GUIUtilities.showFileDialog() (use showVFSFileDialog() instead)
