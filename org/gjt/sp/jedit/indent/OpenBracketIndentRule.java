@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.indent;
 
 import gnu.regexp.*;
+import java.util.List;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
@@ -39,22 +40,27 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public IndentAction apply(Buffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex)
+	public void apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex,
+		List indentActions)
 	{
-		if(aligned && isMatch(buffer.getLineText(thisLineIndex)))
-			return new IndentAction.Reset();
-		else if(prevLineIndex != -1 && isMatch(
-			buffer.getLineText(prevLineIndex)))
-			return new IndentAction.Increase();
-		else
-			return null;
+		int prevOpenBracketCount = getOpenBracketCount(buffer,prevLineIndex);
+		if(prevOpenBracketCount != 0)
+			indentActions.add(new IndentAction.Increase(prevOpenBracketCount));
+		else if(getOpenBracketCount(buffer,thisLineIndex) != 0)
+		{
+			if(indentActions.contains(new IndentAction.Collapse()))
+				indentActions.add(new IndentAction.Reset());
+		}
 	} //}}}
 
-	//{{{ isMatch() method
-	public boolean isMatch(String line)
+	//{{{ getOpenBracketCount() method
+	private int getOpenBracketCount(Buffer buffer, int line)
 	{
-		return getBrackets(line).openCount != 0;
+		if(line == -1)
+			return 0;
+		else
+			return getBrackets(buffer.getLineText(line)).openCount;
 	} //}}}
 	
 	private boolean aligned;

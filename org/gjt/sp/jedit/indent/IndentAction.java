@@ -37,6 +37,40 @@ public interface IndentAction
 	public int calculateIndent(Buffer buffer, int line, int oldIndent,
 		int newIndent);
 
+	/**
+	 * @return true if the indent engine should keep processing after
+	 * this rule.
+	 */
+	public boolean keepChecking();
+
+	/**
+	 * This handles the following Java code:
+	 * if(something)
+	 * { // no indentation on this line, even though previous matches a rule
+	 */
+	public class Collapse implements IndentAction
+	{
+		/**
+		 * This does nothing; it is merely a sentinel for the
+		 * <code>OpenBracketIndentRule</code>.
+		 */
+		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+			int newIndent)
+		{
+			return newIndent;
+		}
+		
+		public boolean keepChecking()
+		{
+			return true;
+		}
+		
+		public boolean equals(Object o)
+		{
+			return (o instanceof Collapse);
+		}
+	}
+
 	public class Reset implements IndentAction
 	{
 		public int calculateIndent(Buffer buffer, int line, int oldIndent,
@@ -44,16 +78,36 @@ public interface IndentAction
 		{
 			return oldIndent;
 		}
+		
+		public boolean keepChecking()
+		{
+			return false;
+		}
 	}
 
 	public class Increase implements IndentAction
 	{
+		private int amount;
+		
+		public Increase()
+		{
+			amount = 1;
+		}
+		
+		public Increase(int amount)
+		{
+			this.amount = amount;
+		}
+		
 		public int calculateIndent(Buffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
-			/* this is intentional -- we never want to
-			increase indent > 1 */
-			return oldIndent + buffer.getIndentSize();
+			return newIndent + buffer.getIndentSize() * amount;
+		}
+		
+		public boolean keepChecking()
+		{
+			return true;
 		}
 	}
 
@@ -64,31 +118,67 @@ public interface IndentAction
 		{
 			return newIndent - buffer.getIndentSize();
 		}
+		
+		public boolean keepChecking()
+		{
+			return true;
+		}
 	}
 
 	public class AlignBracket implements IndentAction
 	{
 		private int line, offset;
+		private int openLineIndex;
+		private String openLine;
+		private boolean extraIndent;
 
-		public AlignBracket(int line, int offset)
+		public AlignBracket(Buffer buffer, int line, int offset)
 		{
 			this.line = line;
 			this.offset = offset;
+			
+			int openBracketIndex = TextUtilities.findMatchingBracket(
+				buffer,this.line,this.offset);
+			if(openBracketIndex == -1)
+				openLineIndex = -1;
+			else
+			{
+				openLineIndex = buffer.getLineOfOffset(openBracketIndex);
+				openLine = buffer.getLineText(openLineIndex);
+			}
+		}
+
+		public boolean getExtraIndent()
+		{
+			return extraIndent;
+		}
+		
+		public void setExtraIndent(boolean extraIndent)
+		{
+			this.extraIndent = extraIndent;
+		}
+		
+		public String getOpenBracketLine()
+		{
+			return openLine;
 		}
 
 		public int calculateIndent(Buffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
-			int openBracketIndex = TextUtilities.findMatchingBracket(
-				buffer,this.line,this.offset);
-			if(openBracketIndex == -1)
+			if(openLine == null)
 				return newIndent;
-
-			int openLineIndex = buffer.getLineOfOffset(openBracketIndex);
-			String openLine = buffer.getLineText(openLineIndex);
-
-			return MiscUtilities.getLeadingWhiteSpaceWidth(
-				openLine,buffer.getTabSize());
+			else
+			{
+				return MiscUtilities.getLeadingWhiteSpaceWidth(
+					openLine,buffer.getTabSize())
+					+ (extraIndent ? buffer.getIndentSize() : 0);
+			}
+		}
+		
+		public boolean keepChecking()
+		{
+			return false;
 		}
 	}
 }

@@ -52,6 +52,16 @@ public abstract class BracketIndentRule implements IndentRule
 			char ch = line.charAt(i);
 			if(ch == openBracket)
 			{
+				/* Don't increase indent when we see
+				an explicit fold. */
+				if(line.length() - i >= 3)
+				{
+					if(line.substring(i,i+3).equals("{{{"))
+					{
+						i += 2;
+						continue;
+					}
+				}
 				brackets.openCount++;
 			}
 			else if(ch == closeBracket)

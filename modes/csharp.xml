@@ -11,11 +11,13 @@
 		<!-- Auto indent -->
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
 		<PROPERTY NAME="indentNextLine"
 			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
-		<!-- set this to 'true' if you want to use GNU coding style -->
-		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
+		<PROPERTY NAME="unindentThisLine"
+			VALUE="^.*(default:\s*|case.*:.*)$" />
+		<PROPERTY NAME="electricKeys" VALUE=":" />
 	</PROPS>
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"

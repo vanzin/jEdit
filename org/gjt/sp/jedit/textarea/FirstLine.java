@@ -125,7 +125,7 @@ class FirstLine extends Anchor
 		if(skew >= screenLines)
 			skew = screenLines - 1;
 
-		textArea.updateScrollBars();
+		textArea.updateScrollBar();
 	} //}}}
 
 	//{{{ physDown() method

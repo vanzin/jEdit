@@ -346,7 +346,7 @@ public class JEditTextArea extends JComponent
 			displayManager.init();
 
 			if(!buffer.isLoaded())
-				updateScrollBars();
+				updateScrollBar();
 
 			repaint();
 
@@ -561,8 +561,6 @@ public class JEditTextArea extends JComponent
 			return;
 
 		this.horizontalOffset = horizontalOffset;
-		if(horizontalOffset != horizontal.getValue())
-			updateScrollBars();
 		painter.repaint();
 
 		fireScrollEvent(false);
@@ -1008,9 +1006,6 @@ public class JEditTextArea extends JComponent
 		if(!buffer.isLoaded())
 			return;
 
-		//if(start != end)
-		//	System.err.println(start + ":" + end + ":" + chunkCache.needFullRepaint());
-
 		if(start > end)
 		{
 			int tmp = end;
@@ -1065,9 +1060,6 @@ public class JEditTextArea extends JComponent
 
 		if(chunkCache.needFullRepaint() || endLine == -1)
 			endLine = visibleLines;
-
-		//if(startLine != endLine)
-		//	System.err.println(startLine + ":" + endLine);
 
 		invalidateScreenLineRange(startLine,endLine);
 	} //}}}
@@ -5105,7 +5097,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(displayManager != null && buffer != null && buffer.isLoaded())
 			setFirstLine(getFirstLine());
 
-		updateScrollBars();
+		updateScrollBar();
 	} //}}}
 
 	//{{{ foldStructureChanged() method
@@ -5116,19 +5108,19 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		repaint();
 	} //}}}
 
-	//{{{ updateScrollBars() method
+	//{{{ updateScrollBar() method
 	/**
 	 * Updates the state of the scroll bars. This should be called
 	 * if the number of lines in the buffer changes, or when the
 	 * size of the text are changes.
 	 */
-	void updateScrollBars()
+	void updateScrollBar()
 	{
 		if(buffer == null)
 			return;
 
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"updateScrollBars(), slc="
+			Log.log(Log.DEBUG,this,"updateScrollBar(), slc="
 				+ displayManager.getScrollLineCount());
 
 		if(vertical != null && visibleLines != 0)
@@ -5142,19 +5134,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			vertical.setValues(firstLine,visible,0,lineCount);
 			vertical.setUnitIncrement(2);
 			vertical.setBlockIncrement(visible);
-		}
-
-		int width = painter.getWidth();
-		if(horizontal != null && width != 0)
-		{
-			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"Horizontal ok");
-			painter.repaint();
-
-			horizontal.setValue(-horizontalOffset);
-			horizontal.setUnitIncrement(painter.getFontMetrics()
-				.charWidth('w'));
-			horizontal.setBlockIncrement(width / 2);
 		}
 	} //}}}
 

@@ -320,7 +320,7 @@ class BufferChangeHandler extends BufferChangeAdapter
 	{
 		// must update screen line counts before we call
 		// notifyScreenLineChanges() since that calls
-		// updateScrollBars() which needs valid info
+		// updateScrollBar() which needs valid info
 		int line = delayedUpdateStart;
 		if(!displayManager.isLineVisible(line))
 			line = displayManager.getNextVisibleLine(line);

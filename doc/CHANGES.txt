@@ -14,6 +14,52 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 - Updated ASP syntax highlighting (Simon Ruggier).
 
 }}}
+{{{ Auto Indent
+
+- The auto indent engine has been rewritten from scratch to provide
+  more accurate indentation for a variety of langauges, including Java,
+  Common Lisp, and Factor.
+
+- Aligned bracket indent is done as before with "indentOpenBrackets" and
+  "indentCloseBrackets" properties. Unaligned indent was previously
+  enabled by setting "lineUpClosingBrackets" to "false". Now, you must
+  specify "unalignedOpenBrackets" and "unalignedCloseBrackets"
+  properties.
+  
+  The upside is that both aligned and unaligned indent can be used in
+  the same edit mode. For example, in Java source, the following piece
+  of code is indented correctly:
+  
+  public void apply(Buffer buffer, int thisLineIndex,
+          int prevLineIndex, int prevPrevLineIndex,
+          List indentActions)
+  {
+          // ...
+  }
+  
+- The new "unindentThisLine" property, whose value is a regexp, allows
+  indentation of Java switch/case constructs:
+  
+  switch(foo) {
+  case bar:
+          hello();
+  default:
+          yo();
+  }
+
+- In order to immediately re-indent the line as soon as the case or
+  default statement is terminated with a :, the "electricKeys" property
+  is set to a list of characters whose input triggers a re-indent of the
+  current line.
+
+- The new "unindentNextLines" property, whose value is a regexp,  allows
+  indentation of Factor colon definitions -- in particular, after the ;
+  everything must be unindented:
+
+  : refers? ( to obj -- ? )
+      f swap [ pick eq? or ] each-slot nip ;
+  ! Indent returns here
+
 {{{ Miscellaneous
 
 - When an item from the "Paste Previous" or "Paste Deleted" dialog boxes
@@ -86,6 +132,11 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
 - JSwat plugin did not work when running under Java 5 due to a bug in
   jEdit's JARClassLoader (Dirk Moebius).
+
+- Fix some problems with paths that end with multiple file separators.
+
+- Inserting a long line of text did not always scroll horizontally as
+  required.
 
 }}}
 {{{ API Changes

@@ -16,7 +16,6 @@ Recommended jEdit/modes/catalog entry:
 	<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 	<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-	<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	<PROPERTY NAME="wordBreakChars" VALUE="=" />
 </PROPS>
 

@@ -15,7 +15,6 @@
 		<PROPERTY NAME="indentPrevLine" VALUE="\s*(if|while)\s*(|else|case|default:)[^;]*|for\s*\(.*)" />
 		<!-- set this to 'true' if you want to use GNU coding style -->
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE="//" />
