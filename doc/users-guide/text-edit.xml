@@ -965,6 +965,18 @@
     </para>
     <informalexample>
      <para>
+      To turn each occurrence of <quote>Windows</quote> to <quote>Linux</quote>,
+      and turn each occurrence of <quote>Linux</quote> to <quote>Windows</quote>,
+      search for the following regular expression:
+     </para>
+     <programlisting>(Windows|Linux)</programlisting>
+     <para>
+      Replacing it with the following BeanShell snippet:
+     </para>
+     <programlisting>_1.equals("Windows") ? "Linux" : "Windows"</programlisting>
+    </informalexample>
+    <informalexample>
+     <para>
       To convert all HTML tags to lower case, search
       for the following regular expression:
      </para>

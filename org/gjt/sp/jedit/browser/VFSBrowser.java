@@ -363,44 +363,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 			if(bmsg.getWhat() == BufferUpdate.CREATED
 				|| bmsg.getWhat() == BufferUpdate.CLOSED)
 				browserView.updateFileView();
+			else if(bmsg.getWhat() == BufferUpdate.SAVED)
+				maybeReloadDirectory(bmsg.getBuffer().getPath());
 		}
 		else if(msg instanceof VFSUpdate)
 		{
-			// this is a dirty hack and it relies on the fact
-			// that updates for parents are sent before updates
-			// for the changed nodes themselves (if this was not
-			// the case, the browser wouldn't be updated properly
-			// on delete, etc).
-			//
-			// to avoid causing '> 1 request' errors, don't reload
-			// directory if request already active
-			if(requestRunning)
-				return;
-
-			// save a file -> sends vfs update. if a VFS file dialog box
-			// is shown from the same event frame as the save, the
-			// VFSUpdate will be delivered before the directory is loaded,
-			// and before the path is set.
-			if(path != null)
-			{
-				try
-				{
-					requestRunning = true;
-
-					browserView.maybeReloadDirectory(
-						((VFSUpdate)msg).getPath());
-				}
-				finally
-				{
-					VFSManager.runInAWTThread(new Runnable()
-					{
-						public void run()
-						{
-							requestRunning = false;
-						}
-					});
-				}
-			}
+			maybeReloadDirectory(((VFSUpdate)msg).getPath());
 		}
 	} //}}}
 
@@ -1138,6 +1106,45 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private void updateFilterEnabled()
 	{
 		filterField.setEnabled(filterCheckbox.isSelected());
+	} //}}}
+
+	//{{{ maybeReloadDirectory() method
+	private void maybeReloadDirectory(String dir)
+	{
+		// this is a dirty hack and it relies on the fact
+		// that updates for parents are sent before updates
+		// for the changed nodes themselves (if this was not
+		// the case, the browser wouldn't be updated properly
+		// on delete, etc).
+		//
+		// to avoid causing '> 1 request' errors, don't reload
+		// directory if request already active
+		if(requestRunning)
+			return;
+
+		// save a file -> sends vfs update. if a VFS file dialog box
+		// is shown from the same event frame as the save, the
+		// VFSUpdate will be delivered before the directory is loaded,
+		// and before the path is set.
+		if(path != null)
+		{
+			try
+			{
+				requestRunning = true;
+
+				browserView.maybeReloadDirectory(dir);
+			}
+			finally
+			{
+				VFSManager.runInAWTThread(new Runnable()
+				{
+					public void run()
+					{
+						requestRunning = false;
+					}
+				});
+			}
+		}
 	} //}}}
 
 	//}}}
