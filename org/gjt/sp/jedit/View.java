@@ -388,6 +388,9 @@ public class View extends JFrame implements EBComponent
 			else if(text.indexOf('\n') != -1)
 				text = null;
 
+			if(SearchAndReplace.getRegexp())
+				text = SearchAndReplace.escapeRegexp(text);
+
 			searchBar.getField().setText(text);
 		}
 
@@ -415,6 +418,12 @@ public class View extends JFrame implements EBComponent
 
 			if(text != null && text.indexOf('\n') == -1)
 			{
+				if(SearchAndReplace.getRegexp())
+				{
+					text = SearchAndReplace.escapeRegexp(
+						text);
+				}
+
 				HistoryModel.getModel("find").addItem(text);
 				SearchAndReplace.setSearchString(text);
 				SearchAndReplace.setSearchFileSet(new CurrentBufferSet());

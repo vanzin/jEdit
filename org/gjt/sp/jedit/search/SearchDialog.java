@@ -120,7 +120,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			if(searchString.indexOf('\n') == -1)
 			{
-				find.setText(searchString);
+				if(SearchAndReplace.getRegexp())
+				{
+					find.setText(SearchAndReplace.escapeRegexp(
+						searchString));
+				}
+				else
+					find.setText(searchString);
 				find.selectAll();
 				searchCurrentBuffer.setSelected(true);
 			}
