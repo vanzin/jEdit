@@ -80,6 +80,8 @@ release.
   all text components".
 - Fixed a problem where the Complete Word popup would not be closed
   under some circumstances.
+- "Unsplit Current" command no longer changes the divider location to
+  zero.
 
 + API Changes
 

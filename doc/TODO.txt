@@ -19,7 +19,6 @@ and quirks that I need to fix eventually.
 [error] 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
 [error] 	at java.lang.reflect.Method.invoke(Method.java:324)
 
-- finish regexp syntax rules -- SPAN::END substitution
 - narrow to one line: select all: blows up
 - requestDefaultFocus() is bad
 - close current area w/ dockables that don't implement

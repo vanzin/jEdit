@@ -61,12 +61,12 @@ public class HelpTOCPanel extends JPanel
 		toc.setRootVisible(false);
 		toc.setShowsRootHandles(true);
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-			nodes.get("users-guide/using-jedit-part.html");
-		if(node != null)
+		for(int i = 0; i <tocRoot.getChildCount(); i++)
+		{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				tocRoot.getChildAt(i);
 			toc.expandPath(new TreePath(node.getPath()));
-		if(pluginTree != null)
-			toc.expandPath(new TreePath(pluginTree.getPath()));
+		}
 
 		add(BorderLayout.CENTER,new JScrollPane(toc));
 	} //}}}
@@ -88,8 +88,8 @@ public class HelpTOCPanel extends JPanel
 	//{{{ Private members
 	private HelpViewer helpViewer;
 	private DefaultTreeModel tocModel;
+	private DefaultMutableTreeNode tocRoot;
 	private JTree toc;
-	private DefaultMutableTreeNode pluginTree;
 	private Hashtable nodes;
 
 	//{{{ createNode() method
@@ -104,29 +104,29 @@ public class HelpTOCPanel extends JPanel
 	//{{{ createTOC() method
 	private void createTOC()
 	{
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+		tocRoot = new DefaultMutableTreeNode();
 
-		root.add(createNode("welcome.html",
+		tocRoot.add(createNode("welcome.html",
 			jEdit.getProperty("helpviewer.toc.welcome")));
 
-		root.add(createNode("README.txt",
+		tocRoot.add(createNode("README.txt",
 			jEdit.getProperty("helpviewer.toc.readme")));
-		root.add(createNode("NEWS.txt",
+		tocRoot.add(createNode("NEWS.txt",
 			jEdit.getProperty("helpviewer.toc.news")));
-		root.add(createNode("TODO.txt",
-			jEdit.getProperty("helpviewer.toc.todo")));
-		root.add(createNode("CHANGES.txt",
+		tocRoot.add(createNode("CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
-		root.add(createNode("COPYING.txt",
+		tocRoot.add(createNode("TODO.txt",
+			jEdit.getProperty("helpviewer.toc.todo")));
+		tocRoot.add(createNode("COPYING.txt",
 			jEdit.getProperty("helpviewer.toc.copying")));
-		root.add(createNode("COPYING.DOC.txt",
+		tocRoot.add(createNode("COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 
-		loadTOC(root,"users-guide/toc.xml");
-		loadTOC(root,"FAQ/toc.xml");
+		loadTOC(tocRoot,"users-guide/toc.xml");
+		loadTOC(tocRoot,"FAQ/toc.xml");
 
-		pluginTree = new DefaultMutableTreeNode(jEdit.getProperty(
-			"helpviewer.toc.plugins"),true);
+		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
+			jEdit.getProperty("helpviewer.toc.plugins"),true);
 
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
@@ -156,14 +156,14 @@ public class HelpTOCPanel extends JPanel
 		}
 
 		if(pluginTree.getChildCount() != 0)
-			root.add(pluginTree);
+			tocRoot.add(pluginTree);
 		else
 		{
 			// so that HelpViewer constructor doesn't try to expand
 			pluginTree = null;
 		}
 
-		tocModel = new DefaultTreeModel(root);
+		tocModel = new DefaultTreeModel(tocRoot);
 	} //}}}
 
 	//{{{ loadTOC() method
