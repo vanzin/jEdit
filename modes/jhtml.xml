@@ -10,23 +10,23 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-                <!-- Indent droplets and oparams -->
-                <PROPERTY NAME="indentPrevLine" 
-                 VALUE="\s*(&lt;\s*(droplet|oparam))\s+.*" />
-                <!-- Sadly, there doesn't seem to be a way to 
-                     undent when we see a /oparam> tag... -->
+				<!-- Indent droplets and oparams -->
+				<PROPERTY NAME="indentPrevLine"
+				 VALUE="\s*(&lt;\s*(droplet|oparam))\s+.*" />
+				<!-- Sadly, there doesn't seem to be a way to
+					 undent when we see a /oparam> tag... -->
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
 
-                <!-- Allow for Dynamo SSI -->
-                <SPAN TYPE="NULL">
+				<!-- Allow for Dynamo SSI -->
+				<SPAN TYPE="NULL">
 			<BEGIN>&lt;!--#</BEGIN>
 			<END>--&gt;</END>
-                </SPAN>
-                
+				</SPAN>
+
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -38,19 +38,19 @@
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>
-		
-                <!-- Embedded Java -->
+
+				<!-- Embedded Java -->
 		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>&lt;java&gt;</BEGIN>
 			<END>&lt;/java&gt;</END>
 		</SPAN>
-                
-                <!-- Don't know how to do this correctly.
-                <SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
-                        <BEGIN>&lt;java type=</BEGIN>
-                        <END>&lt;/java&gt;</END>
-                </SPAN>
-                -->
+
+				<!-- Don't know how to do this correctly.
+				<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+						<BEGIN>&lt;java type=</BEGIN>
+						<END>&lt;/java&gt;</END>
+				</SPAN>
+				-->
 
 		<!-- JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
@@ -70,7 +70,7 @@
 			<END>&gt;</END>
 		</SPAN>
 
-                <!-- All markup defaults to JHTML. -->
+				<!-- All markup defaults to JHTML. -->
 		<SPAN TYPE="MARKUP" DELEGATE="JHTML">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
@@ -82,43 +82,13 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-        
-        <RULES SET="JHTML" DEFAULT="MARKUP">
-                <!-- whitespace: (space and tab) -->
-                <WHITESPACE> </WHITESPACE>
-                <WHITESPACE>	</WHITESPACE>
-                
-                <KEYWORDS IGNORE_CASE="TRUE">
-                        <KEYWORD1>importbean</KEYWORD1>
-                        <KEYWORD1>droplet</KEYWORD1>
-                        <KEYWORD1>param</KEYWORD1>
-                        <KEYWORD1>oparam</KEYWORD1>
-                        <KEYWORD1>valueof</KEYWORD1>
-                        <KEYWORD1>setvalue</KEYWORD1>
-                        <KEYWORD1>servlet</KEYWORD1>
-                        <KEYWORD2>bean</KEYWORD2>                        
-                        <KEYWORD2>submitvalue</KEYWORD2>                        
-                        <KEYWORD2>declareparam</KEYWORD2>
-                        <KEYWORD2>synchronized</KEYWORD2>
-                        <KEYWORD2>priority</KEYWORD2>
-                        
-                        <!-- standard converters -->
-                        <KEYWORD2>converter</KEYWORD2>
-                        <KEYWORD2>date</KEYWORD2>
-                        <KEYWORD2>number</KEYWORD2>
-                        <KEYWORD2>required</KEYWORD2>
-                        <KEYWORD2>nullable</KEYWORD2>
-                        <KEYWORD2>currency</KEYWORD2>
-                        <KEYWORD2>currencyConversion</KEYWORD2>
-                        <KEYWORD2>euro</KEYWORD2>       
-                        <KEYWORD2>locale</KEYWORD2>
-                        <KEYWORD2>symbol</KEYWORD2>
 
-                        <!-- Can't use this because of image src... -->
-                        <!-- <KEYWORD2>src</KEYWORD2> -->
-                </KEYWORDS>                  
-        
-        <!-- SGML comment -->
+	<RULES SET="JHTML" DEFAULT="MARKUP">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
@@ -135,9 +105,39 @@
 		</SPAN>
 
 		<SEQ TYPE="MARKUP">/</SEQ>
-		<SEQ TYPE="NULL">=</SEQ>        
-        </RULES>       
-                               
+		<SEQ TYPE="NULL">=</SEQ>
+
+		<KEYWORDS IGNORE_CASE="TRUE">
+			<KEYWORD1>importbean</KEYWORD1>
+			<KEYWORD1>droplet</KEYWORD1>
+			<KEYWORD1>param</KEYWORD1>
+			<KEYWORD1>oparam</KEYWORD1>
+			<KEYWORD1>valueof</KEYWORD1>
+			<KEYWORD1>setvalue</KEYWORD1>
+			<KEYWORD1>servlet</KEYWORD1>
+			<KEYWORD2>bean</KEYWORD2>
+			<KEYWORD2>submitvalue</KEYWORD2>
+			<KEYWORD2>declareparam</KEYWORD2>
+			<KEYWORD2>synchronized</KEYWORD2>
+			<KEYWORD2>priority</KEYWORD2>
+
+			<!-- standard converters -->
+			<KEYWORD2>converter</KEYWORD2>
+			<KEYWORD2>date</KEYWORD2>
+			<KEYWORD2>number</KEYWORD2>
+			<KEYWORD2>required</KEYWORD2>
+			<KEYWORD2>nullable</KEYWORD2>
+			<KEYWORD2>currency</KEYWORD2>
+			<KEYWORD2>currencyConversion</KEYWORD2>
+			<KEYWORD2>euro</KEYWORD2>
+			<KEYWORD2>locale</KEYWORD2>
+			<KEYWORD2>symbol</KEYWORD2>
+
+			<!-- Can't use this because of image src... -->
+			<!-- <KEYWORD2>src</KEYWORD2> -->
+		</KEYWORDS>
+	</RULES>
+
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
@@ -147,10 +147,10 @@
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>
-                
-                <!-- Allow param: and bean: properties to be marked up -->
-                <SEQ TYPE="LABEL">param:</SEQ>
-                <SEQ TYPE="LABEL">bean:</SEQ>                         
-	</RULES>       
-      
+
+				<!-- Allow param: and bean: properties to be marked up -->
+				<SEQ TYPE="LABEL">param:</SEQ>
+				<SEQ TYPE="LABEL">bean:</SEQ>
+	</RULES>
+
 </MODE>

@@ -52,7 +52,7 @@
 		<SEQ TYPE="OPERATOR">/</SEQ>
 
 		<!-- workaround to stop "*" from being colorized
-		  -- in import statements. -->
+		     in import statements. -->
 		<SEQ TYPE="NULL">.*</SEQ>
 
 		<SEQ TYPE="OPERATOR">*</SEQ>

@@ -100,38 +100,6 @@
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
-        <KEYWORDS>
-            <KEYWORD1>taglib</KEYWORD1>
-            <KEYWORD1>include</KEYWORD1>
-            <KEYWORD1>page</KEYWORD1>
-            <KEYWORD1>tag</KEYWORD1>
-            <KEYWORD1>tagAttribute</KEYWORD1>
-            <KEYWORD1>tagVariable</KEYWORD1>
-            
-            <KEYWORD2>language</KEYWORD2>
-            <KEYWORD2>session</KEYWORD2>
-            <KEYWORD2>contentType</KEYWORD2>
-            <KEYWORD2>charset</KEYWORD2>
-            <KEYWORD2>import</KEYWORD2>
-            <KEYWORD2>buffer</KEYWORD2>
-            <KEYWORD2>autoflush</KEYWORD2>
-            <KEYWORD2>isThreadSafe</KEYWORD2>
-            <KEYWORD2>info</KEYWORD2>
-            <KEYWORD2>errorPage</KEYWORD2>
-            <KEYWORD2>isErrorpage</KEYWORD2>
-            <KEYWORD2>extends</KEYWORD2>
-            <KEYWORD2>file</KEYWORD2>
-            <KEYWORD2>uri</KEYWORD2>
-            <KEYWORD2>prefix</KEYWORD2>
-            <KEYWORD2>method</KEYWORD2>
-            <KEYWORD2>name</KEYWORD2>
-            <KEYWORD2>default</KEYWORD2>
-            <KEYWORD2>required</KEYWORD2>
-            <KEYWORD2>rtexprvalue</KEYWORD2>
-            <KEYWORD2>id</KEYWORD2>
-            <KEYWORD2>type</KEYWORD2>
-            <KEYWORD2>scope</KEYWORD2>
-        </KEYWORDS>
 
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
@@ -153,7 +121,41 @@
 		<SEQ TYPE="NULL">=</SEQ>
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
+
+		<KEYWORDS>
+			<KEYWORD1>taglib</KEYWORD1>
+			<KEYWORD1>include</KEYWORD1>
+			<KEYWORD1>page</KEYWORD1>
+			<KEYWORD1>tag</KEYWORD1>
+			<KEYWORD1>tagAttribute</KEYWORD1>
+			<KEYWORD1>tagVariable</KEYWORD1>
+
+			<KEYWORD2>language</KEYWORD2>
+			<KEYWORD2>session</KEYWORD2>
+			<KEYWORD2>contentType</KEYWORD2>
+			<KEYWORD2>charset</KEYWORD2>
+			<KEYWORD2>import</KEYWORD2>
+			<KEYWORD2>buffer</KEYWORD2>
+			<KEYWORD2>autoflush</KEYWORD2>
+			<KEYWORD2>isThreadSafe</KEYWORD2>
+			<KEYWORD2>info</KEYWORD2>
+			<KEYWORD2>errorPage</KEYWORD2>
+			<KEYWORD2>isErrorpage</KEYWORD2>
+			<KEYWORD2>extends</KEYWORD2>
+			<KEYWORD2>file</KEYWORD2>
+			<KEYWORD2>uri</KEYWORD2>
+			<KEYWORD2>prefix</KEYWORD2>
+			<KEYWORD2>method</KEYWORD2>
+			<KEYWORD2>name</KEYWORD2>
+			<KEYWORD2>default</KEYWORD2>
+			<KEYWORD2>required</KEYWORD2>
+			<KEYWORD2>rtexprvalue</KEYWORD2>
+			<KEYWORD2>id</KEYWORD2>
+			<KEYWORD2>type</KEYWORD2>
+			<KEYWORD2>scope</KEYWORD2>
+		</KEYWORDS>
 	</RULES>
+
 	<RULES SET="TAGS" DEFAULT="MARKUP">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>

@@ -37,20 +37,6 @@
 			<END>&gt;</END>
 		</SPAN>
 
-
-		<KEYWORDS>
-			<KEYWORD1>#set</KEYWORD1>
-			<KEYWORD1>#foreach</KEYWORD1>
-			<KEYWORD1>#end</KEYWORD1>
-			<KEYWORD1>#if</KEYWORD1>
-			<KEYWORD1>#else</KEYWORD1>
-			<KEYWORD1>#elseif</KEYWORD1>
-			<KEYWORD1>#parse</KEYWORD1>
-			<KEYWORD1>#macro</KEYWORD1>
-			<KEYWORD1>#stop</KEYWORD1>
-			<KEYWORD1>#include</KEYWORD1>
-		</KEYWORDS>
-
 		<MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
 
 		<!-- markup tags -->
@@ -64,6 +50,19 @@
 			<BEGIN>&amp;</BEGIN>
 			<END>;</END>
 		</SPAN>
+
+		<KEYWORDS>
+			<KEYWORD1>#set</KEYWORD1>
+			<KEYWORD1>#foreach</KEYWORD1>
+			<KEYWORD1>#end</KEYWORD1>
+			<KEYWORD1>#if</KEYWORD1>
+			<KEYWORD1>#else</KEYWORD1>
+			<KEYWORD1>#elseif</KEYWORD1>
+			<KEYWORD1>#parse</KEYWORD1>
+			<KEYWORD1>#macro</KEYWORD1>
+			<KEYWORD1>#stop</KEYWORD1>
+			<KEYWORD1>#include</KEYWORD1>
+		</KEYWORDS>
 	</RULES>
 
 	<RULES SET="TAGS" DEFAULT="MARKUP">
