@@ -1,11 +1,8 @@
 TO DO
 
-+ before 4.0pre8:
-
-- fix stylesheet problem
-
 + before 4.0final (or pre9?):
 
+- fix stylesheet problem
 - investigate I/O threads
 - aiob in findMatchingBracket() -- offset >= seg.offset+seg.count? or
   offset == -1?
