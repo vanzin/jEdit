@@ -51,6 +51,9 @@ class PluginList
 		pluginSets = new Vector();
 
 		String path = jEdit.getProperty("plugin-manager.url");
+		String id = jEdit.getProperty("plugin-manager.mirror.id");
+		if (!id.equals("NONE"))
+			path += "?mirror="+id;
 		PluginListHandler handler = new PluginListHandler(this,path);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
@@ -123,7 +126,7 @@ class PluginList
 		}
 	}
 
-	static class Plugin
+	static public class Plugin
 	{
 		String jar;
 		String name;
@@ -132,7 +135,7 @@ class PluginList
 		Vector branches = new Vector();
 		String installed;
 		String installedVersion;
-
+	
 		void checkIfInstalled()
 		{
 			// check if the plugin is already installed.
@@ -143,11 +146,11 @@ class PluginList
 				String path = jars[i].getPath();
 				if(!new File(path).exists())
 					continue;
-
+	
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					installed = path;
-
+	
 					EditPlugin[] plugins = jars[i].getPlugins();
 					if(plugins.length >= 1)
 					{
@@ -158,12 +161,12 @@ class PluginList
 					break;
 				}
 			}
-
+	
 			String[] notLoaded = jEdit.getNotLoadedPluginJARs();
 			for(int i = 0; i < notLoaded.length; i++)
 			{
 				String path = notLoaded[i];
-
+	
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					installed = path;
@@ -171,7 +174,7 @@ class PluginList
 				}
 			}
 		}
-
+	
 		/**
 		 * Find the first branch compatible with the running jEdit release.
 		 */
@@ -183,48 +186,48 @@ class PluginList
 				if(branch.canSatisfyDependencies())
 					return branch;
 			}
-
+	
 			return null;
 		}
-
+	
 		boolean canBeInstalled()
 		{
 			Branch branch = getCompatibleBranch();
 			return branch != null && !branch.obsolete
 				&& branch.canSatisfyDependencies();
 		}
-
+	
 		void install(Roster roster, String installDirectory, boolean downloadSource)
 		{
 			if(installed != null)
 				roster.addOperation(new Roster.Remove(installed));
-
+	
 			Branch branch = getCompatibleBranch();
 			if(branch.obsolete)
 				return;
-
-			branch.satisfyDependencies(roster,installDirectory,
-				downloadSource);
-
+	
+			//branch.satisfyDependencies(roster,installDirectory,
+			//	downloadSource);
+	
 			if(installed != null)
 			{
 				installDirectory = MiscUtilities.getParentOfPath(
 					installed);
 			}
-
+	
 			roster.addOperation(new Roster.Install(
 				(downloadSource ? branch.downloadSource : branch.download),
 				installDirectory,
 				(downloadSource ? branch.downloadSourceSize : branch.downloadSize)));
-
+	
 		}
-
+	
 		public String toString()
 		{
 			return name;
 		}
 	}
-
+	
 	static class Branch
 	{
 		String version;
