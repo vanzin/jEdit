@@ -61,6 +61,8 @@ Simon Ruggier for contributing to this release.
 - Changing the wrap mode didn't update screen line counts, causing
   various problems.
 
+- The custom history text field border with the popup widget is back.
+
 }}}
 
 }}}
