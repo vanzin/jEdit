@@ -239,7 +239,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	{
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 
-		root.add(createNode("welcome.html",
+		root.add(createNode("jeditresource:/doc/welcome.html",
 			jEdit.getProperty("helpviewer.toc.welcome")));
 
 		root.add(createNode("jeditresource:/doc/README.txt",
