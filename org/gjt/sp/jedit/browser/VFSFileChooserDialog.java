@@ -363,6 +363,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 						path = file.name;
 
 					filenameField.setText(path);
+					filenameField.selectAll();
 				}
 			}
 			else
@@ -405,7 +406,32 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		//{{{ keyPressed() method
 		public void keyPressed(KeyEvent evt)
 		{
-			browser.getBrowserView().selectNone();
+			switch(evt.getKeyCode())
+			{
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
+				BrowserView view = browser.getBrowserView();
+				view.getTree().processKeyEvent(evt);
+				/* VFS.DirectoryEntry[] files = view.getSelectedFiles();
+				if(files.length == 0)
+					filenameField.setText(null);
+				else
+					filenameField.setText(files[0]. */
+				break;
+			}
+		} //}}}
+
+		//{{{ keyTyped() method
+		public void keyTyped(KeyEvent evt)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					browser.getBrowserView().getTree().doTypeSelect(
+						filenameField.getText());
+				}
+			});
 		} //}}}
 	} //}}}
 
