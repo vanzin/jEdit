@@ -31,6 +31,7 @@
 		<!-- keywords -->
 		<KEYWORDS>
 			<KEYWORD1>msgid</KEYWORD1>
+			<KEYWORD1>msgid_plural</KEYWORD1>
 			<KEYWORD1>msgstr</KEYWORD1>
 			<KEYWORD2>fuzzy</KEYWORD2>
 <!--		** Ideally, we'd highlight the next msgstr differently

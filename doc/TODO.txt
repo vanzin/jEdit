@@ -3,19 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- more narrowing bugs
-- need a new jEditLauncher before the 4.1final release
-- faq:
-  - several places - latest jEdit is 4.1 not 4.0
-  - no longer exists - file-open with encoding menu
-  - gt; instead of &gt;
-  - community macros - mention inline instead of providing external
-    links
-  - mention macro manager
-  - don't mention obsolete codeaid cdb's
-
-+ later:
-
+- need a new jEditLauncher
 - plugin error dialog -- if > 1 error per plugin
 - plugin tutorial:
   - plugin build environment docs

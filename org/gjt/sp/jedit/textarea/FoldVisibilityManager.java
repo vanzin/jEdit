@@ -811,8 +811,10 @@ public class FoldVisibilityManager
 		if(start > end || start < 0 || end >= offsetMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(start + ", " + end);
 
+		if(start < getFirstVisibleLine() || end > getLastVisibleLine())
+			expandAllFolds();
 		// ideally, this should somehow be rolled into the below loop.
-		if(start != offsetMgr.getLineCount() - 1
+		else if(start != offsetMgr.getLineCount() - 1
 			&& !offsetMgr.isLineVisible(start + 1,index))
 			expandFold(start,false);
 
