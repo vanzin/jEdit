@@ -69,3 +69,25 @@ this problem.
 
 If plan on running jEdit under both 1.3 and 1.4, I recommend you compile
 it using javac.
+
+* Interesting algorithms and tricks
+
+- org.gjt.sp.jedit.browser.VFSDirectoryEntryTable: a tree table control.
+
+- org.gjt.sp.jedit.buffer.LineManager: the "gap" optimization allows
+  update operations to be performed in O(1) time in certain
+  circumstances.
+
+- org.gjt.sp.jedit.buffer.PositionManager: a red/black tree with some
+  additional tricks.
+
+- org.gjt.sp.jedit.search.BoyerMooreSearchMatcher: fast text search.
+
+- org.gjt.sp.jedit.syntax.TokenMarker: generic tokenizer driven by rules
+  defined in an XML file.
+
+- org.gjt.sp.jedit.textarea.DisplayManager: the fold visibility map
+  looks like an RLE-compressed bit set but does lookups in O(log n).
+
+- org.gjt.sp.util.WorkThreadPool: a pool of threads executing requests
+  from a queue, enforcing various concurrency requirements.

@@ -3,8 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre3
 
 Thanks to Brad Mace, Brant Langer Gurganus, Christoph Daniel Schulze,
-Jonathan Revusky, Ken Turner and Ollie Rutherfurd for contributing to
-this release.
+Jonathan Revusky, Ken Turner, Kris Kopicki and Ollie Rutherfurd for
+contributing to this release.
 
 {{{ Editing
 
@@ -292,6 +292,9 @@ this release.
 - Glob patterns containing + caused exceptions to be thrown.
 
 - "Select Line Range" now respects the multiple selection setting.
+
+- When installing updates, dependencies are now correctly installed
+  (Kris Kopicki).
 
 }}}
 {{{ API Changes
