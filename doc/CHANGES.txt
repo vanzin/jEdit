@@ -5,6 +5,7 @@ JEDIT 4.0 VERSION HISTORY
 + Enhancements
 
 - Updated POV-Ray syntax highlighting (Jan Schäfer)
+- Hidden files are no longer listed in the 'Macros' menu
 
 + Bug Fixes
 
