@@ -2840,6 +2840,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void invalidateCachedFoldLevels()
 	{
 		offsetMgr.lineInfoChangedFrom(0);
+		for(int i = 0; i < inUseFVMs.length; i++)
+		{
+			if(inUseFVMs[i] != null)
+				inUseFVMs[i]._invalidate(0);
+		}
 	} //}}}
 
 	//{{{ getFoldLevel() method

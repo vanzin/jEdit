@@ -693,7 +693,7 @@ public class BeanShell
 				new String[] { t.toString() });
 		}
 		else
-			new BeanShellErrorDialog(view,t.toString());
+			new BeanShellErrorDialog(view,t);
 	} //}}}
 
 	//{{{ createInterpreter() method
