@@ -306,6 +306,7 @@ public class Buffer
 				// send some EditBus messages
 				if(!getFlag(TEMPORARY))
 				{
+					fireBufferLoaded();
 					EditBus.send(new BufferUpdate(Buffer.this,
 						view,BufferUpdate.LOADED));
 					//EditBus.send(new BufferUpdate(Buffer.this,
@@ -4300,6 +4301,23 @@ loop:		for(int i = 0; i < seg.count; i++)
 			try
 			{
 				getListener(i).foldHandlerChanged(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireBufferLoaded() method
+	private void fireBufferLoaded()
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				getListener(i).bufferLoaded(this);
 			}
 			catch(Throwable t)
 			{

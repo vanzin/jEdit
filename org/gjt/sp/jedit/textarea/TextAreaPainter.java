@@ -1008,14 +1008,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int[] end, int y, int lineHeight)
 		{
 			DisplayManager displayManager = textArea.displayManager;
-			if(displayManager.wrapMargin != 0
-				&& !displayManager.wrapToWidth
+			if(textArea.wrapMargin != 0
+				&& !textArea.wrapToWidth
 				&& isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
 				int x = textArea.getHorizontalOffset()
-					+ textArea.getDisplayManager()
-					.wrapMargin;
+					+ textArea.wrapMargin;
 				gfx.drawLine(x,y,x,y + (lastLine - firstLine
 					+ 1) * lineHeight);
 			}
@@ -1024,11 +1023,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		public String getToolTipText(int x, int y)
 		{
 			DisplayManager displayManager = textArea.displayManager;
-			if(displayManager.wrapMargin != 0
-				&& !displayManager.wrapToWidth
+			if(textArea.wrapMargin != 0
+				&& !textArea.wrapToWidth
 				&& isWrapGuidePainted())
 			{
-				int wrapGuidePos = textArea.getDisplayManager().wrapMargin
+				int wrapGuidePos = textArea.wrapMargin
 					+ textArea.getHorizontalOffset();
 				if(Math.abs(x - wrapGuidePos) < 5)
 				{
@@ -1077,7 +1076,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.setColor(eolMarkerColor);
 				gfx.drawString(":",Math.max(x,
 					textArea.getHorizontalOffset()
-					+ textArea.getDisplayManager().wrapMargin + textArea.charWidth),
+					+ textArea.wrapMargin + textArea.charWidth),
 					baseLine);
 				x += textArea.charWidth;
 			}

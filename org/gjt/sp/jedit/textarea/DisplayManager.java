@@ -535,36 +535,13 @@ public class DisplayManager
 		textArea.foldStructureChanged();
 	} //}}}
 
-	//{{{ bufferLoaded() method
-	/**
-	 * Do not call this.
-	 */
-	public void bufferLoaded()
-	{
-		fvmreset();
-		screenLineMgr.reset();
-		textArea.propertiesChanged();
-
-		init();
-
-		int collapseFolds = buffer.getIntegerProperty(
-			"collapseFolds",0);
-		if(collapseFolds != 0)
-			expandFolds(collapseFolds);
-	} //}}}
-
 	//{{{ Package-private members
-	boolean softWrap;
-	int wrapMargin;
-	boolean wrapToWidth;
 	FirstLine firstLine;
 	ScrollLineCount scrollLineCount;
 
 	//{{{ init() method
 	void init()
 	{
-		updateWrapSettings();
-
 		if(initialized)
 		{
 			if(buffer.isLoaded())
@@ -585,42 +562,6 @@ public class DisplayManager
 			else
 				fvmreset();
 			notifyScreenLineChanges();
-		}
-	} //}}}
-
-	//{{{ updateWrapSettings() method
-	void updateWrapSettings()
-	{
-		String wrap = buffer.getStringProperty("wrap");
-		softWrap = wrap.equals("soft");
-		if(textArea.maxLineLen <= 0)
-		{
-			if(softWrap)
-			{
-				wrapToWidth = true;
-				wrapMargin = textArea.getPainter().getWidth()
-					- textArea.charWidth * 3;
-			}
-			else
-			{
-				wrapToWidth = false;
-				wrapMargin = 0;
-			}
-		}
-		else
-		{
-			// stupidity
-			char[] foo = new char[textArea.maxLineLen];
-			for(int i = 0; i < foo.length; i++)
-			{
-				foo[i] = ' ';
-			}
-			TextAreaPainter painter = textArea.getPainter();
-			wrapToWidth = false;
-			wrapMargin = (int)painter.getFont().getStringBounds(
-				foo,0,foo.length,
-				painter.getFontRenderContext())
-				.getWidth();
 		}
 	} //}}}
 
@@ -1577,6 +1518,24 @@ loop:		for(;;)
 		boolean delayedMultilineUpdate;
 		int delayedUpdateStart;
 		int delayedUpdateEnd;
+
+		//{{{ bufferLoaded() method
+		public void bufferLoaded(Buffer buffer)
+		{
+			fvmreset();
+			screenLineMgr.reset();
+
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				textArea.propertiesChanged();
+				init();
+			}
+
+			int collapseFolds = buffer.getIntegerProperty(
+				"collapseFolds",0);
+			if(collapseFolds != 0)
+				expandFolds(collapseFolds);
+		} //}}}
 
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
