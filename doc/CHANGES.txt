@@ -1,5 +1,17 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre8
+
++ Bug Fixes
+
+- Fixed tip of the day that referred to the old S+BACK_SPACE/S+DELETE
+  bindings
+- Due to a typo in 4.0pre7, text areas that didn't have focus would also
+  scroll to the caret location on a buffer change. This was not supposed
+  to happen
+- The text area will no longer scroll up and then down again on input if
+  it is smaller than about six lines vertically
+
 * Version 4.0pre7
 
 + Enhancements
