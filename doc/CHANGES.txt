@@ -2,9 +2,18 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2final
 
+Thanks to Brant Gurganus, Justin Dieters and Thomas Bock for
+contributing to this release.
+
 {{{ Syntax Highlighting
 
 - Added Factor syntax highlighting.
+
+- Updated BBj syntax highlighting (Thomas Bock).
+
+- Added ANTLR syntax highlighting (Brant Gurganus).
+
+- Added D syntax highlighting (Jim Lawton).
 
 }}}
 {{{ Bug Fixes
@@ -12,9 +21,12 @@ JEDIT 4.2 VERSION HISTORY
 - Fix a roundoff error in the monospaced font optimization that would
   result in zero-width tabs using some fonts.
 
+- When printing, any syntax styles with a foreground color of white are
+  printed as black (Justin Dieters).
 }}}
 
 }}}
+
 {{{ Version 4.2pre15
 
 Thanks to Adrian Baker, Bertalan Fodor, Eric Ladner, Justin Hagstrom,
