@@ -5,10 +5,7 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- tree-based offset manager
 - fix fsb infinite requests problem
-- i/o progress monitor foolishness
-
 - easier way of inserting newlines in replacement string -- or just
   document this?
 - silly bug that creates selections on click -- how is this even possible?

@@ -776,11 +776,15 @@
     case</guibutton> check box.
    </para>
    <para>
-    Regular expressions may be used to match inexact
-    sequences of text if the <guibutton>Regular expressions</guibutton> check
-    box is selected; see <xref linkend="regexps" /> for more information about
-    regular expressions. Note that regular expressions can only be used when
-    searching forward.
+    If the <guibutton>Regular expressions</guibutton> check
+    box is selected, regular expressions may be used to match inexact
+    sequences of text that can optionally span more than one line.
+    Regular expression syntax is described in detail in
+    <xref linkend="regexps" />.
+   </para>
+   <para>
+    Note that regular expressions can only be used when
+    searching in a forward direction.
    </para>
    <para>
     Clicking <guibutton>Find</guibutton> will locate the next (or previous, if

@@ -58,7 +58,6 @@ public class IOProgressMonitor extends JPanel
 
 		JPanel threadPanel = new JPanel(new BorderLayout());
 		threadPanel.setBorder(new EmptyBorder(6,6,6,6));
-		threadPanel.setBackground(UIManager.getColor("TextArea.background"));
 		threadPanel.add(BorderLayout.NORTH,box);
 
 		add(BorderLayout.CENTER,new JScrollPane(threadPanel));
@@ -133,9 +132,6 @@ public class IOProgressMonitor extends JPanel
 		public ThreadProgress(int index)
 		{
 			super(new BorderLayout(12,12));
-
-			ThreadProgress.this.setBackground(UIManager.getColor(
-				"TextArea.background"));
 
 			this.index = index;
 

@@ -2607,12 +2607,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			if(offsetMgr.isFoldLevelValid(line))
 			{
-				//System.err.println("level valid: " + line + ":"
-				//	+ offsetMgr.getFoldLevel(line));
 				return offsetMgr.getFoldLevel(line);
 			}
 			else
 			{
+				System.err.println("level invalid: " + line + ":"
+					+ offsetMgr.getFoldLevel(line));
+
 				int start = 0;
 				for(int i = line - 1; i >= 0; i--)
 				{
