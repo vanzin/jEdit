@@ -413,5 +413,14 @@ public class SearchBar extends JPanel
 		}
 	} //}}}
 
+	//{{{ FocusHandler class
+	class FocusHandler extends FocusAdapter
+	{
+		public void focusLost(FocusEvent e)
+		{
+			getField().addCurrentToHistory();
+		}
+	} //}}}
+
 	//}}}
 }

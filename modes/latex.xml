@@ -69,6 +69,12 @@
     <SEQ TYPE="FUNCTION">#8</SEQ>
     <SEQ TYPE="FUNCTION">#9</SEQ>
 
+    <!-- \begin{verbatim} ... \end{verbatim} -->
+    <SPAN TYPE="KEYWORD1" DELEGATE="VERBATIM">
+        <BEGIN>\begin{verbatim}</BEGIN>
+        <END>\end{verbatim}</END>
+    </SPAN>
+
     <SEQ TYPE="INVALID">\tabs</SEQ>
     <SEQ TYPE="INVALID">\tabset</SEQ>
     <SEQ TYPE="INVALID">\tabsdone</SEQ>
@@ -2335,6 +2341,8 @@
     <MARK_FOLLOWING TYPE="KEYWORD4">\</MARK_FOLLOWING>
 
   </RULES>  <!--  PictureMode  -->
+
+  <RULES SET="VERBATIM" DEFAULT="NULL" />
 
 </MODE>
 

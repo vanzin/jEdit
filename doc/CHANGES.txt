@@ -43,6 +43,9 @@ Simon Ruggier for contributing to this release.
   more than one line is selected. Same for 'Join Lines' versus
   'Join Line'.
 
+- When the search bar loses focus, the currently entered text is added
+  to the history.
+
 }}}
 {{{ Bug Fixes
 
@@ -76,6 +79,8 @@ Simon Ruggier for contributing to this release.
 
 - 'Cut Append' and 'Copy Append' commands did not update the Registers
   dockable.
+
+- Fix Control key on Mac OS X.
 
 }}}
 {{{ API Changes
