@@ -1621,10 +1621,15 @@ loop:		for(;;)
 					Selection s = (Selection)textArea
 						.selection.elementAt(i);
 	
-					if(s.contentInserted(buffer,startLine,
+					if(s.contentRemoved(buffer,startLine,
 						start,numLines,length))
 					{
 						delayedUpdate(s.startLine,s.endLine);
+						if(s.start == s.end)
+						{
+							textArea.selection.removeElementAt(i);
+							i--;
+						}
 					}
 				} //}}}
 
