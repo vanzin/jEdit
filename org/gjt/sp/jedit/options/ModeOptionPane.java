@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 //}}}
 
 public class ModeOptionPane extends AbstractOptionPane
@@ -66,11 +67,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.noWordSep"),
 			noWordSep = new JTextField());
 
-		String[] foldModes = {
-			"none",
-			"indent",
-			"explicit"
-		};
+		String[] foldModes = FoldHandler.getFoldModes();
 		addComponent(jEdit.getProperty("options.editing.folding"),
 			folding = new JComboBox(foldModes));
 

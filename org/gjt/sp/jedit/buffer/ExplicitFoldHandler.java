@@ -33,8 +33,13 @@ import org.gjt.sp.jedit.Buffer;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class ExplicitFoldHandler implements FoldHandler
+public class ExplicitFoldHandler extends FoldHandler
 {
+	public ExplicitFoldHandler()
+	{
+		super("explicit");
+	}
+
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.

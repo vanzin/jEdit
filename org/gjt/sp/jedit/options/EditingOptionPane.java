@@ -26,6 +26,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 
 public class EditingOptionPane extends AbstractOptionPane
 {
@@ -67,11 +68,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		//}}}
 
 		//{{{ Default fold mode
-		String[] foldModes = {
-			"none",
-			"indent",
-			"explicit"
-		};
+		String[] foldModes = FoldHandler.getFoldModes();
 		addComponent(jEdit.getProperty("options.editing.folding"),
 			defaultFolding = new JComboBox(foldModes));
 

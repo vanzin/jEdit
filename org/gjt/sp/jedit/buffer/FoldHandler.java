@@ -22,8 +22,10 @@
 
 package org.gjt.sp.jedit.buffer;
 
+import java.util.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.util.Log;
 
 /**
  * Interface for obtaining the fold level of a specified label.
@@ -31,8 +33,20 @@ import org.gjt.sp.jedit.Buffer;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public interface FoldHandler
+public abstract class FoldHandler
 {
+	//{{{ getName() method
+	/**
+	 * Returns the internal name of this FoldHandler
+	 * @return The internal name of this FoldHandler
+	 * @since jEdit 4.0pre6
+	 */
+	public String getName()
+	{
+		return name;
+	}
+	//}}}
+
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
@@ -43,6 +57,100 @@ public interface FoldHandler
 	 * @return The fold level of the specified line
 	 * @since jEdit 4.0pre1
 	 */
-	int getFoldLevel(Buffer buffer, int lineIndex, Segment seg);
+	public abstract int getFoldLevel(Buffer buffer, int lineIndex, Segment seg);
+	//}}}
+
+	//{{{ registerFoldHandler() method
+	/**
+	 * Adds a fold handler to the list of registered handlers
+	 * @param handler The fold handler to add
+	 * @since jEdit 4.0pre6
+	 */
+	public static void registerFoldHandler(FoldHandler handler)
+	{
+		if (getFoldHandler(handler.getName()) != null)
+		{
+			Log.log(Log.ERROR, FoldHandler.class, "Cannot register more than one fold handler with the same name");
+			return;
+		}
+
+		foldHandlers.add(handler);
+	}
+	//}}}
+
+	//{{{ getFoldHandlers() method
+	/**
+	 * Returns an array containing the list of registered fold handlers
+	 * @since jEdit 4.0pre6
+	 */
+	public static FoldHandler[] getFoldHandlers()
+	{
+		FoldHandler[] handlers = new FoldHandler[foldHandlers.size()];
+		return (FoldHandler[])foldHandlers.toArray(handlers);
+	}
+	//}}}
+
+	//{{{ getFoldHandler() method
+	/**
+	 * Returns the fold handler with the specified name, or null if
+	 * there is no registered handler with that name.
+	 * @param name The name of the desired fold handler
+	 * @since jEdit 4.0pre6
+	 */
+	public static FoldHandler getFoldHandler(String name)
+	{
+		FoldHandler handler;
+
+		Iterator i = foldHandlers.iterator();
+		while (i.hasNext())
+		{
+			handler = (FoldHandler)i.next();
+			if (name.equals(handler.getName())) return handler;
+		}
+
+		return null;
+	}
+	//}}}
+
+	//{{{ getFoldModes() method
+	/**
+	 * Returns an array containing the names of all registered fold handlers
+	 * @since jEdit 4.0pre6
+	 */
+	public static String[] getFoldModes()
+	{
+		FoldHandler[] handlers = getFoldHandlers();
+		String[] foldModes = new String[handlers.length];
+
+		for (int i = 0; i < foldModes.length; i++)
+		{
+			foldModes[i] = handlers[i].getName();
+		}
+
+		return foldModes;
+	}
+	//}}}
+
+	//{{{ FoldHandler() constructor
+	protected FoldHandler(String name)
+	{
+		this.name = name;
+	}
+	//}}}
+
+	//{{{ Private members
+	private String name;
+
+	private static ArrayList foldHandlers;
+	//}}}
+
+	//{{{ Static initializer
+	static
+	{
+		foldHandlers = new ArrayList();
+		registerFoldHandler(new DummyFoldHandler());
+		registerFoldHandler(new IndentFoldHandler());
+		registerFoldHandler(new ExplicitFoldHandler());
+	}
 	//}}}
 }

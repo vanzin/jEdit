@@ -47,7 +47,7 @@ JEDIT 4.0 VERSION HISTORY
 
 - Support for macros written in other languages (Mike Dillon)
   - Macros.registerHandler(Macros.Handler handler) method
-  - Macros.Handler interface has these methods:
+  - Macros.Handler class has these methods:
 
     public abstract Macro createMacro(String macroName, String path);
     public abstract void runMacro(View view, Macro macro);
@@ -58,6 +58,13 @@ JEDIT 4.0 VERSION HISTORY
   - One minor UI addition is that the language a macro is written in,
     along with the full path to the macro file is shown in the status
     bar when the mouse is over a macro's menu item or tool bar button.
+
+- Support for pluggable fold handlers (Mike Dillon)
+  - FoldHandler.registerFoldHandler(FoldHandler handler) method
+  - FoldHandler class has these methods:
+
+    public abstract int getFoldLevel(Buffer buffer, int line, Segment seg);
+    protected FoldHandler(String name)
 
 * Version 4.0pre5
 

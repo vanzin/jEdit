@@ -31,8 +31,13 @@ import org.gjt.sp.jedit.Buffer;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class IndentFoldHandler implements FoldHandler
+public class IndentFoldHandler extends FoldHandler
 {
+	public IndentFoldHandler()
+	{
+		super("indent");
+	}
+
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
