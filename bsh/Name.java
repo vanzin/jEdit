@@ -38,6 +38,7 @@ import java.lang.reflect.Array;
 import java.util.Hashtable;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 //import bsh.Reflect.MethodInvoker;
 //import bsh.Reflect.JavaMethod;
 
@@ -745,21 +746,16 @@ class Name implements java.io.Serializable
 	*/
 
 		// Look for scripted command as resource
-        String commandName = "commands/" + value + ".bsh";
-// Need to use class manager here...
-        InputStream in = Interpreter.class.getResourceAsStream(commandName);
-        if (in != null)
+		URL url = interpreter.getNameSpace().getCommand(value);
+		if(url != null)
         {
             if ( Interpreter.DEBUG ) 
-				Interpreter.debug("loading resource: " + commandName);
-
-			if ( interpreter == null )
-				throw new InterpreterError(
-					"invokeLocalMethod: interpreter = null");
+				Interpreter.debug("loading resource: " + url);
 
 			try {
 				interpreter.eval( 
-					new InputStreamReader(in), namespace, commandName);
+					new InputStreamReader(url.openStream()),
+					namespace, url.toString());
 			/* 
 				Strange case where we actually catch an EvalError 
 				We are using the interpreter as
@@ -767,6 +763,9 @@ class Name implements java.io.Serializable
 				path.  The error points here... thrown exception includes the 
 				command's error... (right?)
 			*/
+			} catch ( IOException io ) {
+				// what do we do here?
+				Interpreter.debug( io.toString() );
 			} catch ( EvalError e ) {
 				Interpreter.debug( e.toString() );
 				throw new EvalError(
@@ -779,14 +778,14 @@ class Name implements java.io.Serializable
             if ( meth != null )
                 return meth.invoke( args, interpreter, callstack, callerInfo );
             else
-                throw new EvalError("Loaded resource: " + commandName +
+                throw new EvalError("Loaded resource: " + url +
                     "had an error or did not contain the correct method", 
 					 callerInfo, callstack );
         }
 
         // check for compiled bsh command class
 
-        commandName = "bsh.commands." + value;
+        String commandName = "bsh.commands." + value;
         Class c = interpreter.getClassManager().classForName( commandName );
         if ( c == null )
             throw new EvalError("Command not found: " + value, 

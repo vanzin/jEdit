@@ -314,8 +314,9 @@ public class GUIUtilities
 	/**
 	 * Creates a toolbar.
 	 * @param name The toolbar name
+	 * @since jEdit 4.2pre2
 	 */
-	public static JToolBar loadToolBar(String name)
+	public static Box loadToolBar(String name)
 	{
 		return loadToolBar(jEdit.getActionContext(),name);
 	} //}}}
@@ -327,12 +328,11 @@ public class GUIUtilities
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The toolbar name
-	 * @since jEdit 4.2pre1
+	 * @since jEdit 4.2pre2
 	 */
-	public static JToolBar loadToolBar(ActionContext context, String name)
+	public static Box loadToolBar(ActionContext context, String name)
 	{
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
+		Box toolBar = new Box(BoxLayout.X_AXIS);
 
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
@@ -351,6 +351,8 @@ public class GUIUtilities
 				}
 			}
 		}
+
+		toolBar.add(Box.createGlue());
 
 		return toolBar;
 	} //}}}

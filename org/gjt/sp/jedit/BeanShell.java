@@ -756,5 +756,5 @@ public class BeanShell
 					l.classLoaderChanged();
 			}
 		}
-	}
+	} //}}}
 }

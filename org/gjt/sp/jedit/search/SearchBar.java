@@ -106,6 +106,8 @@ public class SearchBar extends JPanel
 
 		// if 'temp' is true, hide search bar after user is done with it
 		this.temp = temp;
+
+		propertiesChanged();
 	} //}}}
 
 	//{{{ getField() method
