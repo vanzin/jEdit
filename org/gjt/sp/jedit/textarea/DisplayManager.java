@@ -226,16 +226,10 @@ public class DisplayManager
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
 	{
-		if(screenLineMgr.isScreenLineCountValid(line))
-			return screenLineMgr.getScreenLineCount(line);
-		else
-		{
-			int newCount = textArea.chunkCache
-				.getLineSubregionCount(line);
+		if(!screenLineMgr.isScreenLineCountValid(line))
+			throw new RuntimeException("Invalid screen line count: " + line);
 
-			setScreenLineCount(line,newCount);
-			return newCount;
-		}
+		return screenLineMgr.getScreenLineCount(line);
 	} //}}}
 
 	//{{{ getScrollLineCount() method
@@ -581,42 +575,6 @@ public class DisplayManager
 				textArea.recalculateLastPhysicalLine();
 			}
 		}
-	} //}}}
-
-	//{{{ setScreenLineCount() method
-	/**
-	 * Sets the number of screen lines that the specified physical line
-	 * is split into.
-	 * @since jEdit 4.2pre1
-	 */
-	void setScreenLineCount(int line, int count)
-	{
-		int oldCount = screenLineMgr.getScreenLineCount(line);
-
-		// old one so that the screen line manager sets the
-		// validity flag!
-
-		screenLineMgr.setScreenLineCount(line,count);
-
-		if(count == oldCount)
-			return;
-
-		if(!isLineVisible(line))
-			return;
-
-		if(firstLine.physicalLine >= line)
-		{
-			if(firstLine.physicalLine == line)
-				firstLine.callChanged = true;
-			else
-			{
-				firstLine.scrollLine += (count - oldCount);
-				firstLine.callChanged = true;
-			}
-		}
-
-		scrollLineCount.scrollLine += (count - oldCount);
-		scrollLineCount.callChanged = true;
 	} //}}}
 
 	//{{{ updateWrapSettings() method
@@ -1017,6 +975,7 @@ loop:		for(;;)
 			if(!isLineVisible(i))
 			{
 				// important: not screenLineMgr.getScreenLineCount()
+				updateScreenLineCount(i);
 				int screenLines = getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
@@ -1152,6 +1111,54 @@ loop:		for(;;)
 		}
 	} //}}}
 
+	//{{{ updateScreenLineCount() method
+	private void updateScreenLineCount(int line)
+	{
+		if(!screenLineMgr.isScreenLineCountValid(line))
+		{
+			int newCount = textArea.chunkCache
+				.getLineSubregionCount(line);
+
+			setScreenLineCount(line,newCount);
+		}
+	} //}}}
+
+	//{{{ setScreenLineCount() method
+	/**
+	 * Sets the number of screen lines that the specified physical line
+	 * is split into.
+	 * @since jEdit 4.2pre1
+	 */
+	private void setScreenLineCount(int line, int count)
+	{
+		int oldCount = screenLineMgr.getScreenLineCount(line);
+
+		// old one so that the screen line manager sets the
+		// validity flag!
+
+		screenLineMgr.setScreenLineCount(line,count);
+
+		if(count == oldCount)
+			return;
+
+		if(!isLineVisible(line))
+			return;
+
+		if(firstLine.physicalLine >= line)
+		{
+			if(firstLine.physicalLine == line)
+				firstLine.callChanged = true;
+			else
+			{
+				firstLine.scrollLine += (count - oldCount);
+				firstLine.callChanged = true;
+			}
+		}
+
+		scrollLineCount.scrollLine += (count - oldCount);
+		scrollLineCount.callChanged = true;
+	} //}}}
+
 	//}}}
 
 	//{{{ Anchor class
@@ -1194,6 +1201,7 @@ loop:		for(;;)
 			scrollLine = 0;
 			while(physicalLine != -1)
 			{
+				updateScreenLineCount(physicalLine);
 				scrollLine += getScreenLineCount(physicalLine);
 				physicalLine = getNextVisibleLine(physicalLine);
 			}
@@ -1311,6 +1319,7 @@ loop:		for(;;)
 				if(i >= physicalLine)
 					break;
 
+				updateScreenLineCount(i);
 				scrollLine += getScreenLineCount(i);
 
 				int nextLine = getNextVisibleLine(i);
@@ -1322,6 +1331,7 @@ loop:		for(;;)
 
 			physicalLine = i;
 
+			updateScreenLineCount(i);
 			int screenLines = getScreenLineCount(physicalLine);
 			if(skew >= screenLines)
 				skew = screenLines - 1;
@@ -1899,10 +1909,7 @@ loop:		for(;;)
 				line = getNextVisibleLine(line);
 			while(line != -1 && line <= delayedUpdateEnd)
 			{
-				if(line < _firstLine || line > _lastLine)
-				{
-					getScreenLineCount(line);
-				}
+				updateScreenLineCount(line);
 				line = getNextVisibleLine(line);
 			}
 

@@ -188,6 +188,12 @@
 <MODE NAME="jsp"		FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
 
+<!-- Note that a generic 'tex.xml' is included as well, for minimal
+     plain TeX/AMSTeX highlighting. -->
+
+<MODE NAME="latex"		FILE="latex.xml"
+				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
+
 <MODE NAME="lilypond"		FILE="lilypond.xml"
 				FILE_NAME_GLOB="*.ly" />
 
@@ -381,14 +387,10 @@
 <MODE NAME="tcl"		FILE="tcl.xml"
 				FILE_NAME_GLOB="*.{tcl,tsh}" />
 
-<!-- Note that a generic 'tex.xml' is included as well, for minimal
-     plain TeX/AMSTeX highlighting. -->
-
-<MODE NAME="tex"		FILE="latex.xml"
-				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
-
 <MODE NAME="texinfo"		FILE="texinfo.xml"
 				FILE_NAME_GLOB="*.texi" />
+
+<MODE NAME="tex"		FILE="tex.xml" />
 
 <MODE NAME="text"		FILE="text.xml"
 				FILE_NAME_GLOB="*.txt" />
