@@ -264,6 +264,9 @@ public class EditServer extends Thread
 		}
 		else
 		{
+			// Reset the timeout
+			client.setSoTimeout(0);
+
 			Log.log(Log.DEBUG,this,client + ": authenticated"
 				+ " successfully");
 

@@ -256,7 +256,7 @@ public class ChunkCache
 					// setPaintMode() does not reset
 					// graphics mode.
 					Graphics2D xorGfx = (Graphics2D)gfx.create();
-					xorGfx.setXORMode(bgColor);
+					xorGfx.setXORMode(background);
 					xorGfx.setColor(bgColor);
 
 					xorGfx.fill(new Rectangle2D.Float(
