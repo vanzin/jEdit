@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre12
 
-Thanks to Thomas Alspaugh for contributing to this release.
+Thanks to Ollie Rutherfurd and Thomas Alspaugh for contributing to this
+release.
 
 {{{ Miscellaneous Changes
 
@@ -17,6 +18,9 @@ Thanks to Thomas Alspaugh for contributing to this release.
 
 - Macros in the user macros directory now override macros in the system
   macro directory.
+
+- Added 'Next Dirty Buffer' and 'Insert Selection' macros
+  (Ollie Rutherfurd).
 
 }}}
 {{{ Bug Fixes
