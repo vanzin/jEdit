@@ -114,42 +114,18 @@
 		</SPAN>
 	</RULES>
 
-    <!-- highlight variables in double quotes -->
-	<RULES SET="PHP_LITERAL" ESCAPE="\" DEFAULT="LITERAL1" NO_WORD_SEP="_[]&apos;&quot;">
-		<SPAN TYPE="KEYWORD3" DELEGATE="PHP_ESCAPED_LITERAL">
-			<BEGIN>{$</BEGIN>
-			<END>}</END>
-		</SPAN>
-		<SPAN TYPE="KEYWORD3" DELEGATE="PHP_ESCAPED_LITERAL">
-			<BEGIN>${</BEGIN>
-			<END>}</END>
-		</SPAN>
-        <MARK_FOLLOWING TYPE="KEYWORD3" DELEGATE="PHP_ESCAPED_LITERAL">$</MARK_FOLLOWING>
-	</RULES>
-
-	<RULES SET="PHP_ESCAPED_LITERAL" ESCAPE="\" DEFAULT="KEYWORD3">
-		<SEQ TYPE="OPERATOR">}</SEQ>
-		<SEQ TYPE="OPERATOR">{</SEQ>
-		<SEQ TYPE="OPERATOR">]</SEQ>
-		<SEQ TYPE="OPERATOR">[</SEQ>
-
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
-		</SPAN>
-
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
-		</SPAN>
-	</RULES>
-
 	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE">
 		<PROPS>
 			<PROPERTY NAME="commentStart" VALUE="/*" />
 			<PROPERTY NAME="commentEnd" VALUE="*/" />
 			<PROPERTY NAME="lineComment" VALUE="//" />
 		</PROPS>
+		
+		<!-- PHPdoc comment -->
+		<SPAN TYPE="COMMENT3" DELEGATE="PHPDOC">
+			<BEGIN>/**</BEGIN>
+			<END>*/</END>
+		</SPAN>
 
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
@@ -179,11 +155,9 @@
 		</SPAN_REGEXP>
 
 		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
-		<MARK_FOLLOWING TYPE="KEYWORD3">-&gt;</MARK_FOLLOWING>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
-		<SEQ TYPE="OPERATOR">=&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
@@ -221,7 +195,8 @@
 		<KEYWORDS>
 			<OPERATOR>and</OPERATOR>
 			<OPERATOR>or</OPERATOR>
-			<!-- Language constructs -->
+			<OPERATOR>instanceof</OPERATOR>
+			<!-- Language constructs (24) -->
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>elseif</KEYWORD1>
 			<KEYWORD1>else</KEYWORD1>
@@ -241,6 +216,7 @@
 			<KEYWORD1>include_once</KEYWORD1>
 			<KEYWORD1>require</KEYWORD1>
 			<KEYWORD1>require_once</KEYWORD1>
+			<KEYWORD1>declare</KEYWORD1>
 			<KEYWORD1>function</KEYWORD1>
 			<KEYWORD1>class</KEYWORD1>
 			<KEYWORD1>new</KEYWORD1>
@@ -253,63 +229,66 @@
 			<KEYWORD1>as</KEYWORD1>
 			<KEYWORD1>endforeach</KEYWORD1>
 			<KEYWORD1>extends</KEYWORD1>
-			<KEYWORD1>var</KEYWORD1>
-			<!-- Language constructs masquerading as functions -->
-			<KEYWORD1>array</KEYWORD1>
-			<KEYWORD1>die</KEYWORD1>
-			<KEYWORD1>echo</KEYWORD1>
 			<KEYWORD1>empty</KEYWORD1>
-			<KEYWORD1>exit</KEYWORD1>
-			<KEYWORD1>isset</KEYWORD1>
+			<KEYWORD1>array</KEYWORD1>
 			<KEYWORD1>list</KEYWORD1>
-			<KEYWORD1>print</KEYWORD1>
-			<KEYWORD1>unset</KEYWORD1>
+			<KEYWORD1>isset</KEYWORD1>
+			<KEYWORD1>echo</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD1>public</KEYWORD1>
+			<KEYWORD1>private</KEYWORD1>
+			<KEYWORD1>protected</KEYWORD1>
+			<KEYWORD1>implements</KEYWORD1>
+			<KEYWORD1>interface</KEYWORD1>
+			<KEYWORD1>abstract</KEYWORD1>
+			<KEYWORD1>final</KEYWORD1>
+			<KEYWORD1>const</KEYWORD1>
+			<KEYWORD1>clone</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
 
 			<KEYWORD3>__LINE__</KEYWORD3>
 			<KEYWORD3>__FILE__</KEYWORD3>
-			<KEYWORD3>__CLASS__</KEYWORD3>
-			<KEYWORD3>__FUNCTION__</KEYWORD3>
 			<KEYWORD3>__METHOD__</KEYWORD3>
+			<KEYWORD3>__FUNCTION__</KEYWORD3>
+			<KEYWORD3>__CLASS__</KEYWORD3>
 			<KEYWORD3>true</KEYWORD3>
 			<KEYWORD3>false</KEYWORD3>
 			<KEYWORD3>null</KEYWORD3>
 
+			<KEYWORD2>COM_invoke</KEYWORD2>
+			<KEYWORD2>COM_load</KEYWORD2>
 			<KEYWORD2>abs</KEYWORD2>
+			<KEYWORD2>accept_connect</KEYWORD2>
 			<KEYWORD2>acos</KEYWORD2>
-			<KEYWORD2>acosh</KEYWORD2>
+			<KEYWORD2>add</KEYWORD2>
+			<KEYWORD2>add</KEYWORD2>
+			<KEYWORD2>add_iovec</KEYWORD2>
+			<KEYWORD2>addaction</KEYWORD2>
+			<KEYWORD2>addcolor</KEYWORD2>
 			<KEYWORD2>addcslashes</KEYWORD2>
+			<KEYWORD2>addentry</KEYWORD2>
+			<KEYWORD2>addfill</KEYWORD2>
+			<KEYWORD2>addshape</KEYWORD2>
 			<KEYWORD2>addslashes</KEYWORD2>
-			<KEYWORD2>aggregate</KEYWORD2>
-			<KEYWORD2>aggregate_info</KEYWORD2>
-			<KEYWORD2>aggregate_methods</KEYWORD2>
-			<KEYWORD2>aggregate_methods_by_list</KEYWORD2>
-			<KEYWORD2>aggregate_methods_by_regexp</KEYWORD2>
-			<KEYWORD2>aggregate_properties</KEYWORD2>
-			<KEYWORD2>aggregate_properties_by_list</KEYWORD2>
-			<KEYWORD2>aggregate_properties_by_regexp</KEYWORD2>
-			<KEYWORD2>aggregation_info</KEYWORD2>
+			<KEYWORD2>addstring</KEYWORD2>
+			<KEYWORD2>addstring</KEYWORD2>
+			<KEYWORD2>align</KEYWORD2>
 			<KEYWORD2>apache_child_terminate</KEYWORD2>
-			<KEYWORD2>apache_get_modules</KEYWORD2>
-			<KEYWORD2>apache_get_version</KEYWORD2>
-			<KEYWORD2>apache_getenv</KEYWORD2>
+			<KEYWORD2>apache_lookup_uri</KEYWORD2>
 			<KEYWORD2>apache_lookup_uri</KEYWORD2>
 			<KEYWORD2>apache_note</KEYWORD2>
-			<KEYWORD2>apache_request_headers</KEYWORD2>
-			<KEYWORD2>apache_response_headers</KEYWORD2>
-			<KEYWORD2>apache_setenv</KEYWORD2>
-			<KEYWORD2>array_change_key_case</KEYWORD2>
-			<KEYWORD2>array_chunk</KEYWORD2>
+			<KEYWORD2>apache_sub_req</KEYWORD2>
 			<KEYWORD2>array_combine</KEYWORD2>
 			<KEYWORD2>array_count_values</KEYWORD2>
 			<KEYWORD2>array_diff</KEYWORD2>
 			<KEYWORD2>array_diff_assoc</KEYWORD2>
 			<KEYWORD2>array_diff_uassoc</KEYWORD2>
-			<KEYWORD2>array_fill</KEYWORD2>
+			<KEYWORD2>array_intersect_assoc</KEYWORD2>
 			<KEYWORD2>array_filter</KEYWORD2>
 			<KEYWORD2>array_flip</KEYWORD2>
 			<KEYWORD2>array_intersect</KEYWORD2>
-			<KEYWORD2>array_intersect_assoc</KEYWORD2>
-			<KEYWORD2>array_key_exists</KEYWORD2>
 			<KEYWORD2>array_keys</KEYWORD2>
 			<KEYWORD2>array_map</KEYWORD2>
 			<KEYWORD2>array_merge</KEYWORD2>
@@ -333,10 +312,9 @@
 			<KEYWORD2>array_unshift</KEYWORD2>
 			<KEYWORD2>array_values</KEYWORD2>
 			<KEYWORD2>array_walk</KEYWORD2>
+			<KEYWORD2>array_walk_recursive</KEYWORD2>
 			<KEYWORD2>arsort</KEYWORD2>
-			<KEYWORD2>ascii2ebcdic</KEYWORD2>
 			<KEYWORD2>asin</KEYWORD2>
-			<KEYWORD2>asinh</KEYWORD2>
 			<KEYWORD2>asort</KEYWORD2>
 			<KEYWORD2>aspell_check</KEYWORD2>
 			<KEYWORD2>aspell_check_raw</KEYWORD2>
@@ -346,7 +324,6 @@
 			<KEYWORD2>assert_options</KEYWORD2>
 			<KEYWORD2>atan</KEYWORD2>
 			<KEYWORD2>atan2</KEYWORD2>
-			<KEYWORD2>atanh</KEYWORD2>
 			<KEYWORD2>base64_decode</KEYWORD2>
 			<KEYWORD2>base64_encode</KEYWORD2>
 			<KEYWORD2>base_convert</KEYWORD2>
@@ -357,14 +334,14 @@
 			<KEYWORD2>bcmod</KEYWORD2>
 			<KEYWORD2>bcmul</KEYWORD2>
 			<KEYWORD2>bcpow</KEYWORD2>
-			<KEYWORD2>bcpowmod</KEYWORD2>
 			<KEYWORD2>bcscale</KEYWORD2>
 			<KEYWORD2>bcsqrt</KEYWORD2>
 			<KEYWORD2>bcsub</KEYWORD2>
 			<KEYWORD2>bin2hex</KEYWORD2>
-			<KEYWORD2>bind_textdomain_codeset</KEYWORD2>
+			<KEYWORD2>bind</KEYWORD2>
 			<KEYWORD2>bindec</KEYWORD2>
 			<KEYWORD2>bindtextdomain</KEYWORD2>
+			<KEYWORD2>build_iovec</KEYWORD2>
 			<KEYWORD2>bzclose</KEYWORD2>
 			<KEYWORD2>bzcompress</KEYWORD2>
 			<KEYWORD2>bzdecompress</KEYWORD2>
@@ -375,10 +352,6 @@
 			<KEYWORD2>bzopen</KEYWORD2>
 			<KEYWORD2>bzread</KEYWORD2>
 			<KEYWORD2>bzwrite</KEYWORD2>
-			<KEYWORD2>cal_days_in_month</KEYWORD2>
-			<KEYWORD2>cal_from_jd</KEYWORD2>
-			<KEYWORD2>cal_info</KEYWORD2>
-			<KEYWORD2>cal_to_jd</KEYWORD2>
 			<KEYWORD2>call_user_func</KEYWORD2>
 			<KEYWORD2>call_user_func_array</KEYWORD2>
 			<KEYWORD2>call_user_method</KEYWORD2>
@@ -403,38 +376,37 @@
 			<KEYWORD2>chdir</KEYWORD2>
 			<KEYWORD2>checkdate</KEYWORD2>
 			<KEYWORD2>checkdnsrr</KEYWORD2>
+			<KEYWORD2>checkdnsrr</KEYWORD2>
 			<KEYWORD2>chgrp</KEYWORD2>
 			<KEYWORD2>chmod</KEYWORD2>
 			<KEYWORD2>chop</KEYWORD2>
 			<KEYWORD2>chown</KEYWORD2>
 			<KEYWORD2>chr</KEYWORD2>
 			<KEYWORD2>chroot</KEYWORD2>
+			<KEYWORD2>chroot</KEYWORD2>
 			<KEYWORD2>chunk_split</KEYWORD2>
 			<KEYWORD2>class_exists</KEYWORD2>
 			<KEYWORD2>clearstatcache</KEYWORD2>
+			<KEYWORD2>close</KEYWORD2>
 			<KEYWORD2>closedir</KEYWORD2>
 			<KEYWORD2>closelog</KEYWORD2>
-			<KEYWORD2>com</KEYWORD2>
-			<KEYWORD2>com_addref</KEYWORD2>
 			<KEYWORD2>com_get</KEYWORD2>
-			<KEYWORD2>com_invoke</KEYWORD2>
-			<KEYWORD2>com_isenum</KEYWORD2>
-			<KEYWORD2>com_load</KEYWORD2>
-			<KEYWORD2>com_load_typelib</KEYWORD2>
 			<KEYWORD2>com_propget</KEYWORD2>
 			<KEYWORD2>com_propput</KEYWORD2>
 			<KEYWORD2>com_propset</KEYWORD2>
-			<KEYWORD2>com_release</KEYWORD2>
 			<KEYWORD2>com_set</KEYWORD2>
 			<KEYWORD2>compact</KEYWORD2>
+			<KEYWORD2>confirm_cybermut_compiled</KEYWORD2>
+			<KEYWORD2>confirm_extname_compiled</KEYWORD2>
+			<KEYWORD2>connect</KEYWORD2>
 			<KEYWORD2>connection_aborted</KEYWORD2>
 			<KEYWORD2>connection_status</KEYWORD2>
-			<KEYWORD2>connection_timeout</KEYWORD2>
 			<KEYWORD2>constant</KEYWORD2>
 			<KEYWORD2>convert_cyr_string</KEYWORD2>
+			<KEYWORD2>convert_uudecode</KEYWORD2>
+			<KEYWORD2>convert_uuencode</KEYWORD2>
 			<KEYWORD2>copy</KEYWORD2>
 			<KEYWORD2>cos</KEYWORD2>
-			<KEYWORD2>cosh</KEYWORD2>
 			<KEYWORD2>count</KEYWORD2>
 			<KEYWORD2>count_chars</KEYWORD2>
 			<KEYWORD2>cpdf_add_annotation</KEYWORD2>
@@ -513,8 +485,10 @@
 			<KEYWORD2>crack_closedict</KEYWORD2>
 			<KEYWORD2>crack_getlastmessage</KEYWORD2>
 			<KEYWORD2>crack_opendict</KEYWORD2>
+			<KEYWORD2>crash</KEYWORD2>
 			<KEYWORD2>crc32</KEYWORD2>
 			<KEYWORD2>create_function</KEYWORD2>
+			<KEYWORD2>crypt</KEYWORD2>
 			<KEYWORD2>crypt</KEYWORD2>
 			<KEYWORD2>ctype_alnum</KEYWORD2>
 			<KEYWORD2>ctype_alpha</KEYWORD2>
@@ -532,38 +506,41 @@
 			<KEYWORD2>curl_error</KEYWORD2>
 			<KEYWORD2>curl_exec</KEYWORD2>
 			<KEYWORD2>curl_getinfo</KEYWORD2>
+			<KEYWORD2>curl_getinfo</KEYWORD2>
 			<KEYWORD2>curl_init</KEYWORD2>
-			<KEYWORD2>curl_multi_add_handle</KEYWORD2>
-			<KEYWORD2>curl_multi_close</KEYWORD2>
-			<KEYWORD2>curl_multi_exec</KEYWORD2>
-			<KEYWORD2>curl_multi_getcontent</KEYWORD2>
-			<KEYWORD2>curl_multi_info_read</KEYWORD2>
-			<KEYWORD2>curl_multi_init</KEYWORD2>
-			<KEYWORD2>curl_multi_remove_handle</KEYWORD2>
-			<KEYWORD2>curl_multi_select</KEYWORD2>
 			<KEYWORD2>curl_setopt</KEYWORD2>
 			<KEYWORD2>curl_version</KEYWORD2>
 			<KEYWORD2>current</KEYWORD2>
+			<KEYWORD2>cv_add</KEYWORD2>
+			<KEYWORD2>cv_auth</KEYWORD2>
+			<KEYWORD2>cv_command</KEYWORD2>
+			<KEYWORD2>cv_count</KEYWORD2>
+			<KEYWORD2>cv_delete</KEYWORD2>
+			<KEYWORD2>cv_done</KEYWORD2>
+			<KEYWORD2>cv_init</KEYWORD2>
+			<KEYWORD2>cv_lookup</KEYWORD2>
+			<KEYWORD2>cv_new</KEYWORD2>
+			<KEYWORD2>cv_report</KEYWORD2>
+			<KEYWORD2>cv_return</KEYWORD2>
+			<KEYWORD2>cv_reverse</KEYWORD2>
+			<KEYWORD2>cv_sale</KEYWORD2>
+			<KEYWORD2>cv_status</KEYWORD2>
+			<KEYWORD2>cv_textvalue</KEYWORD2>
+			<KEYWORD2>cv_void</KEYWORD2>
 			<KEYWORD2>cybercash_base64_decode</KEYWORD2>
 			<KEYWORD2>cybercash_base64_encode</KEYWORD2>
 			<KEYWORD2>cybercash_decr</KEYWORD2>
 			<KEYWORD2>cybercash_encr</KEYWORD2>
-			<KEYWORD2>cyrus_authenticate</KEYWORD2>
-			<KEYWORD2>cyrus_bind</KEYWORD2>
-			<KEYWORD2>cyrus_close</KEYWORD2>
-			<KEYWORD2>cyrus_connect</KEYWORD2>
-			<KEYWORD2>cyrus_query</KEYWORD2>
-			<KEYWORD2>cyrus_unbind</KEYWORD2>
+			<KEYWORD2>cybermut_creerformulairecm</KEYWORD2>
+			<KEYWORD2>cybermut_creerreponsecm</KEYWORD2>
+			<KEYWORD2>cybermut_testmac</KEYWORD2>
 			<KEYWORD2>date</KEYWORD2>
 			<KEYWORD2>dba_close</KEYWORD2>
 			<KEYWORD2>dba_delete</KEYWORD2>
 			<KEYWORD2>dba_exists</KEYWORD2>
 			<KEYWORD2>dba_fetch</KEYWORD2>
 			<KEYWORD2>dba_firstkey</KEYWORD2>
-			<KEYWORD2>dba_handlers</KEYWORD2>
 			<KEYWORD2>dba_insert</KEYWORD2>
-			<KEYWORD2>dba_key_split</KEYWORD2>
-			<KEYWORD2>dba_list</KEYWORD2>
 			<KEYWORD2>dba_nextkey</KEYWORD2>
 			<KEYWORD2>dba_open</KEYWORD2>
 			<KEYWORD2>dba_optimize</KEYWORD2>
@@ -574,7 +551,6 @@
 			<KEYWORD2>dbase_close</KEYWORD2>
 			<KEYWORD2>dbase_create</KEYWORD2>
 			<KEYWORD2>dbase_delete_record</KEYWORD2>
-			<KEYWORD2>dbase_get_header_info</KEYWORD2>
 			<KEYWORD2>dbase_get_record</KEYWORD2>
 			<KEYWORD2>dbase_get_record_with_names</KEYWORD2>
 			<KEYWORD2>dbase_numfields</KEYWORD2>
@@ -592,110 +568,65 @@
 			<KEYWORD2>dbmnextkey</KEYWORD2>
 			<KEYWORD2>dbmopen</KEYWORD2>
 			<KEYWORD2>dbmreplace</KEYWORD2>
-			<KEYWORD2>dbplus_add</KEYWORD2>
-			<KEYWORD2>dbplus_aql</KEYWORD2>
-			<KEYWORD2>dbplus_chdir</KEYWORD2>
-			<KEYWORD2>dbplus_close</KEYWORD2>
-			<KEYWORD2>dbplus_curr</KEYWORD2>
-			<KEYWORD2>dbplus_errcode</KEYWORD2>
-			<KEYWORD2>dbplus_errno</KEYWORD2>
-			<KEYWORD2>dbplus_find</KEYWORD2>
-			<KEYWORD2>dbplus_first</KEYWORD2>
-			<KEYWORD2>dbplus_flush</KEYWORD2>
-			<KEYWORD2>dbplus_freealllocks</KEYWORD2>
-			<KEYWORD2>dbplus_freelock</KEYWORD2>
-			<KEYWORD2>dbplus_freerlocks</KEYWORD2>
-			<KEYWORD2>dbplus_getlock</KEYWORD2>
-			<KEYWORD2>dbplus_getunique</KEYWORD2>
-			<KEYWORD2>dbplus_info</KEYWORD2>
-			<KEYWORD2>dbplus_last</KEYWORD2>
-			<KEYWORD2>dbplus_lockrel</KEYWORD2>
-			<KEYWORD2>dbplus_next</KEYWORD2>
-			<KEYWORD2>dbplus_open</KEYWORD2>
-			<KEYWORD2>dbplus_prev</KEYWORD2>
-			<KEYWORD2>dbplus_rchperm</KEYWORD2>
-			<KEYWORD2>dbplus_rcreate</KEYWORD2>
-			<KEYWORD2>dbplus_rcrtexact</KEYWORD2>
-			<KEYWORD2>dbplus_rcrtlike</KEYWORD2>
-			<KEYWORD2>dbplus_resolve</KEYWORD2>
-			<KEYWORD2>dbplus_restorepos</KEYWORD2>
-			<KEYWORD2>dbplus_rkeys</KEYWORD2>
-			<KEYWORD2>dbplus_ropen</KEYWORD2>
-			<KEYWORD2>dbplus_rquery</KEYWORD2>
-			<KEYWORD2>dbplus_rrename</KEYWORD2>
-			<KEYWORD2>dbplus_rsecindex</KEYWORD2>
-			<KEYWORD2>dbplus_runlink</KEYWORD2>
-			<KEYWORD2>dbplus_rzap</KEYWORD2>
-			<KEYWORD2>dbplus_savepos</KEYWORD2>
-			<KEYWORD2>dbplus_setindex</KEYWORD2>
-			<KEYWORD2>dbplus_setindexbynumber</KEYWORD2>
-			<KEYWORD2>dbplus_sql</KEYWORD2>
-			<KEYWORD2>dbplus_tcl</KEYWORD2>
-			<KEYWORD2>dbplus_tremove</KEYWORD2>
-			<KEYWORD2>dbplus_undo</KEYWORD2>
-			<KEYWORD2>dbplus_undoprepare</KEYWORD2>
-			<KEYWORD2>dbplus_unlockrel</KEYWORD2>
-			<KEYWORD2>dbplus_unselect</KEYWORD2>
-			<KEYWORD2>dbplus_update</KEYWORD2>
-			<KEYWORD2>dbplus_xlockrel</KEYWORD2>
-			<KEYWORD2>dbplus_xunlockrel</KEYWORD2>
 			<KEYWORD2>dbx_close</KEYWORD2>
-			<KEYWORD2>dbx_compare</KEYWORD2>
+			<KEYWORD2>dbx_cmp_asc</KEYWORD2>
+			<KEYWORD2>dbx_cmp_desc</KEYWORD2>
 			<KEYWORD2>dbx_connect</KEYWORD2>
 			<KEYWORD2>dbx_error</KEYWORD2>
-			<KEYWORD2>dbx_escape_string</KEYWORD2>
-			<KEYWORD2>dbx_fetch_row</KEYWORD2>
 			<KEYWORD2>dbx_query</KEYWORD2>
 			<KEYWORD2>dbx_sort</KEYWORD2>
 			<KEYWORD2>dcgettext</KEYWORD2>
-			<KEYWORD2>dcngettext</KEYWORD2>
-			<KEYWORD2>deaggregate</KEYWORD2>
-			<KEYWORD2>debug_backtrace</KEYWORD2>
-			<KEYWORD2>debug_print_backtrace</KEYWORD2>
-			<KEYWORD2>debugger_off</KEYWORD2>
-			<KEYWORD2>debugger_on</KEYWORD2>
 			<KEYWORD2>decbin</KEYWORD2>
 			<KEYWORD2>dechex</KEYWORD2>
 			<KEYWORD2>decoct</KEYWORD2>
+			<KEYWORD2>debug_backtrace</KEYWORD2>
+			<KEYWORD2>debug_print_backtrace</KEYWORD2>
 			<KEYWORD2>define</KEYWORD2>
 			<KEYWORD2>define_syslog_variables</KEYWORD2>
 			<KEYWORD2>defined</KEYWORD2>
 			<KEYWORD2>deg2rad</KEYWORD2>
-			<KEYWORD2>delete</KEYWORD2>
+			<KEYWORD2>delete_iovec</KEYWORD2>
 			<KEYWORD2>dgettext</KEYWORD2>
-			<KEYWORD2>dio_close</KEYWORD2>
-			<KEYWORD2>dio_fcntl</KEYWORD2>
-			<KEYWORD2>dio_open</KEYWORD2>
-			<KEYWORD2>dio_read</KEYWORD2>
-			<KEYWORD2>dio_seek</KEYWORD2>
-			<KEYWORD2>dio_stat</KEYWORD2>
-			<KEYWORD2>dio_tcsetattr</KEYWORD2>
-			<KEYWORD2>dio_truncate</KEYWORD2>
-			<KEYWORD2>dio_write</KEYWORD2>
+			<KEYWORD2>die</KEYWORD2>
 			<KEYWORD2>dir</KEYWORD2>
 			<KEYWORD2>dirname</KEYWORD2>
-			<KEYWORD2>disk_free_space</KEYWORD2>
-			<KEYWORD2>disk_total_space</KEYWORD2>
 			<KEYWORD2>diskfreespace</KEYWORD2>
+			<KEYWORD2>display_disabled_function</KEYWORD2>
 			<KEYWORD2>dl</KEYWORD2>
-			<KEYWORD2>dngettext</KEYWORD2>
-			<KEYWORD2>dns_check_record</KEYWORD2>
-			<KEYWORD2>dns_get_mx</KEYWORD2>
-			<KEYWORD2>dns_get_record</KEYWORD2>
-			<KEYWORD2>domxml_new_doc</KEYWORD2>
-			<KEYWORD2>domxml_open_file</KEYWORD2>
-			<KEYWORD2>domxml_open_mem</KEYWORD2>
+			<KEYWORD2>domxml_add_root</KEYWORD2>
+			<KEYWORD2>domxml_attributes</KEYWORD2>
+			<KEYWORD2>domxml_children</KEYWORD2>
+			<KEYWORD2>domxml_dumpmem</KEYWORD2>
+			<KEYWORD2>domxml_elem_get_attribute</KEYWORD2>
+			<KEYWORD2>domxml_elem_set_attribute</KEYWORD2>
+			<KEYWORD2>domxml_get_attribute</KEYWORD2>
+			<KEYWORD2>domxml_getattr</KEYWORD2>
+			<KEYWORD2>domxml_new_child</KEYWORD2>
+			<KEYWORD2>domxml_new_xmldoc</KEYWORD2>
+			<KEYWORD2>domxml_node</KEYWORD2>
+			<KEYWORD2>domxml_node_attributes</KEYWORD2>
+			<KEYWORD2>domxml_node_children</KEYWORD2>
+			<KEYWORD2>domxml_node_new_child</KEYWORD2>
+			<KEYWORD2>domxml_node_set_content</KEYWORD2>
+			<KEYWORD2>domxml_node_unlink_node</KEYWORD2>
+			<KEYWORD2>domxml_root</KEYWORD2>
+			<KEYWORD2>domxml_set_attribute</KEYWORD2>
+			<KEYWORD2>domxml_setattr</KEYWORD2>
+			<KEYWORD2>domxml_unlink_node</KEYWORD2>
 			<KEYWORD2>domxml_version</KEYWORD2>
-			<KEYWORD2>domxml_xmltree</KEYWORD2>
-			<KEYWORD2>domxml_xslt_stylesheet</KEYWORD2>
-			<KEYWORD2>domxml_xslt_stylesheet_doc</KEYWORD2>
-			<KEYWORD2>domxml_xslt_stylesheet_file</KEYWORD2>
-			<KEYWORD2>dotnet_load</KEYWORD2>
 			<KEYWORD2>doubleval</KEYWORD2>
+			<KEYWORD2>drawarc</KEYWORD2>
+			<KEYWORD2>drawcircle</KEYWORD2>
+			<KEYWORD2>drawcubic</KEYWORD2>
+			<KEYWORD2>drawcubicto</KEYWORD2>
+			<KEYWORD2>drawcurve</KEYWORD2>
+			<KEYWORD2>drawcurveto</KEYWORD2>
+			<KEYWORD2>drawglyph</KEYWORD2>
+			<KEYWORD2>drawline</KEYWORD2>
+			<KEYWORD2>drawlineto</KEYWORD2>
 			<KEYWORD2>each</KEYWORD2>
 			<KEYWORD2>easter_date</KEYWORD2>
 			<KEYWORD2>easter_days</KEYWORD2>
-			<KEYWORD2>ebcdic2ascii</KEYWORD2>
 			<KEYWORD2>end</KEYWORD2>
 			<KEYWORD2>ereg</KEYWORD2>
 			<KEYWORD2>ereg_replace</KEYWORD2>
@@ -705,41 +636,25 @@
 			<KEYWORD2>error_reporting</KEYWORD2>
 			<KEYWORD2>escapeshellarg</KEYWORD2>
 			<KEYWORD2>escapeshellcmd</KEYWORD2>
-			<KEYWORD2>eval</KEYWORD2>
 			<KEYWORD2>exec</KEYWORD2>
-			<KEYWORD2>exif_imagetype</KEYWORD2>
-			<KEYWORD2>exif_read_data</KEYWORD2>
-			<KEYWORD2>exif_thumbnail</KEYWORD2>
+			<KEYWORD2>exit</KEYWORD2>
 			<KEYWORD2>exp</KEYWORD2>
 			<KEYWORD2>explode</KEYWORD2>
-			<KEYWORD2>expm1</KEYWORD2>
 			<KEYWORD2>extension_loaded</KEYWORD2>
 			<KEYWORD2>extract</KEYWORD2>
 			<KEYWORD2>ezmlm_hash</KEYWORD2>
-			<KEYWORD2>fam_cancel_monitor</KEYWORD2>
-			<KEYWORD2>fam_close</KEYWORD2>
-			<KEYWORD2>fam_monitor_collection</KEYWORD2>
-			<KEYWORD2>fam_monitor_directory</KEYWORD2>
-			<KEYWORD2>fam_monitor_file</KEYWORD2>
-			<KEYWORD2>fam_next_event</KEYWORD2>
-			<KEYWORD2>fam_open</KEYWORD2>
-			<KEYWORD2>fam_pending</KEYWORD2>
-			<KEYWORD2>fam_resume_monitor</KEYWORD2>
-			<KEYWORD2>fam_suspend_monitor</KEYWORD2>
+			<KEYWORD2>ezmlm_hash</KEYWORD2>
+			<KEYWORD2>fbsql</KEYWORD2>
 			<KEYWORD2>fbsql_affected_rows</KEYWORD2>
 			<KEYWORD2>fbsql_autocommit</KEYWORD2>
-			<KEYWORD2>fbsql_change_user</KEYWORD2>
 			<KEYWORD2>fbsql_close</KEYWORD2>
 			<KEYWORD2>fbsql_commit</KEYWORD2>
 			<KEYWORD2>fbsql_connect</KEYWORD2>
-			<KEYWORD2>fbsql_create_blob</KEYWORD2>
-			<KEYWORD2>fbsql_create_clob</KEYWORD2>
 			<KEYWORD2>fbsql_create_db</KEYWORD2>
 			<KEYWORD2>fbsql_data_seek</KEYWORD2>
 			<KEYWORD2>fbsql_database</KEYWORD2>
 			<KEYWORD2>fbsql_database_password</KEYWORD2>
 			<KEYWORD2>fbsql_db_query</KEYWORD2>
-			<KEYWORD2>fbsql_db_status</KEYWORD2>
 			<KEYWORD2>fbsql_drop_db</KEYWORD2>
 			<KEYWORD2>fbsql_errno</KEYWORD2>
 			<KEYWORD2>fbsql_error</KEYWORD2>
@@ -756,7 +671,6 @@
 			<KEYWORD2>fbsql_field_table</KEYWORD2>
 			<KEYWORD2>fbsql_field_type</KEYWORD2>
 			<KEYWORD2>fbsql_free_result</KEYWORD2>
-			<KEYWORD2>fbsql_get_autostart_info</KEYWORD2>
 			<KEYWORD2>fbsql_hostname</KEYWORD2>
 			<KEYWORD2>fbsql_insert_id</KEYWORD2>
 			<KEYWORD2>fbsql_list_dbs</KEYWORD2>
@@ -768,54 +682,39 @@
 			<KEYWORD2>fbsql_password</KEYWORD2>
 			<KEYWORD2>fbsql_pconnect</KEYWORD2>
 			<KEYWORD2>fbsql_query</KEYWORD2>
-			<KEYWORD2>fbsql_read_blob</KEYWORD2>
-			<KEYWORD2>fbsql_read_clob</KEYWORD2>
 			<KEYWORD2>fbsql_result</KEYWORD2>
 			<KEYWORD2>fbsql_rollback</KEYWORD2>
 			<KEYWORD2>fbsql_select_db</KEYWORD2>
-			<KEYWORD2>fbsql_set_lob_mode</KEYWORD2>
-			<KEYWORD2>fbsql_set_transaction</KEYWORD2>
 			<KEYWORD2>fbsql_start_db</KEYWORD2>
 			<KEYWORD2>fbsql_stop_db</KEYWORD2>
-			<KEYWORD2>fbsql_tablename</KEYWORD2>
 			<KEYWORD2>fbsql_username</KEYWORD2>
 			<KEYWORD2>fbsql_warnings</KEYWORD2>
 			<KEYWORD2>fclose</KEYWORD2>
-			<KEYWORD2>fdf_add_doc_javascript</KEYWORD2>
+			<KEYWORD2>fd_alloc</KEYWORD2>
+			<KEYWORD2>fd_clear</KEYWORD2>
+			<KEYWORD2>fd_dealloc</KEYWORD2>
+			<KEYWORD2>fd_isset</KEYWORD2>
+			<KEYWORD2>fd_set</KEYWORD2>
+			<KEYWORD2>fd_zero</KEYWORD2>
 			<KEYWORD2>fdf_add_template</KEYWORD2>
 			<KEYWORD2>fdf_close</KEYWORD2>
 			<KEYWORD2>fdf_create</KEYWORD2>
-			<KEYWORD2>fdf_enum_values</KEYWORD2>
-			<KEYWORD2>fdf_errno</KEYWORD2>
-			<KEYWORD2>fdf_error</KEYWORD2>
-			<KEYWORD2>fdf_get_ap</KEYWORD2>
-			<KEYWORD2>fdf_get_attachment</KEYWORD2>
-			<KEYWORD2>fdf_get_encoding</KEYWORD2>
 			<KEYWORD2>fdf_get_file</KEYWORD2>
-			<KEYWORD2>fdf_get_flags</KEYWORD2>
-			<KEYWORD2>fdf_get_opt</KEYWORD2>
 			<KEYWORD2>fdf_get_status</KEYWORD2>
 			<KEYWORD2>fdf_get_value</KEYWORD2>
-			<KEYWORD2>fdf_get_version</KEYWORD2>
-			<KEYWORD2>fdf_header</KEYWORD2>
 			<KEYWORD2>fdf_next_field_name</KEYWORD2>
 			<KEYWORD2>fdf_open</KEYWORD2>
-			<KEYWORD2>fdf_open_string</KEYWORD2>
-			<KEYWORD2>fdf_remove_item</KEYWORD2>
 			<KEYWORD2>fdf_save</KEYWORD2>
-			<KEYWORD2>fdf_save_string</KEYWORD2>
 			<KEYWORD2>fdf_set_ap</KEYWORD2>
-			<KEYWORD2>fdf_set_encoding</KEYWORD2>
 			<KEYWORD2>fdf_set_file</KEYWORD2>
 			<KEYWORD2>fdf_set_flags</KEYWORD2>
 			<KEYWORD2>fdf_set_javascript_action</KEYWORD2>
 			<KEYWORD2>fdf_set_opt</KEYWORD2>
 			<KEYWORD2>fdf_set_status</KEYWORD2>
 			<KEYWORD2>fdf_set_submit_form_action</KEYWORD2>
-			<KEYWORD2>fdf_set_target_frame</KEYWORD2>
 			<KEYWORD2>fdf_set_value</KEYWORD2>
-			<KEYWORD2>fdf_set_version</KEYWORD2>
 			<KEYWORD2>feof</KEYWORD2>
+			<KEYWORD2>fetch_iovec</KEYWORD2>
 			<KEYWORD2>fflush</KEYWORD2>
 			<KEYWORD2>fgetc</KEYWORD2>
 			<KEYWORD2>fgetcsv</KEYWORD2>
@@ -845,13 +744,13 @@
 			<KEYWORD2>flock</KEYWORD2>
 			<KEYWORD2>floor</KEYWORD2>
 			<KEYWORD2>flush</KEYWORD2>
-			<KEYWORD2>fmod</KEYWORD2>
-			<KEYWORD2>fnmatch</KEYWORD2>
 			<KEYWORD2>fopen</KEYWORD2>
+			<KEYWORD2>fopenstream</KEYWORD2>
+			<KEYWORD2>fopenstream</KEYWORD2>
 			<KEYWORD2>fpassthru</KEYWORD2>
-			<KEYWORD2>fprintf</KEYWORD2>
 			<KEYWORD2>fputs</KEYWORD2>
 			<KEYWORD2>fread</KEYWORD2>
+			<KEYWORD2>free_iovec</KEYWORD2>
 			<KEYWORD2>frenchtojd</KEYWORD2>
 			<KEYWORD2>fribidi_log2vis</KEYWORD2>
 			<KEYWORD2>fscanf</KEYWORD2>
@@ -859,37 +758,26 @@
 			<KEYWORD2>fsockopen</KEYWORD2>
 			<KEYWORD2>fstat</KEYWORD2>
 			<KEYWORD2>ftell</KEYWORD2>
-			<KEYWORD2>ftok</KEYWORD2>
 			<KEYWORD2>ftp_alloc</KEYWORD2>
 			<KEYWORD2>ftp_cdup</KEYWORD2>
 			<KEYWORD2>ftp_chdir</KEYWORD2>
-			<KEYWORD2>ftp_chmod</KEYWORD2>
-			<KEYWORD2>ftp_close</KEYWORD2>
 			<KEYWORD2>ftp_connect</KEYWORD2>
 			<KEYWORD2>ftp_delete</KEYWORD2>
 			<KEYWORD2>ftp_exec</KEYWORD2>
 			<KEYWORD2>ftp_fget</KEYWORD2>
 			<KEYWORD2>ftp_fput</KEYWORD2>
 			<KEYWORD2>ftp_get</KEYWORD2>
-			<KEYWORD2>ftp_get_option</KEYWORD2>
 			<KEYWORD2>ftp_login</KEYWORD2>
 			<KEYWORD2>ftp_mdtm</KEYWORD2>
 			<KEYWORD2>ftp_mkdir</KEYWORD2>
-			<KEYWORD2>ftp_nb_continue</KEYWORD2>
-			<KEYWORD2>ftp_nb_fget</KEYWORD2>
-			<KEYWORD2>ftp_nb_fput</KEYWORD2>
-			<KEYWORD2>ftp_nb_get</KEYWORD2>
-			<KEYWORD2>ftp_nb_put</KEYWORD2>
 			<KEYWORD2>ftp_nlist</KEYWORD2>
 			<KEYWORD2>ftp_pasv</KEYWORD2>
 			<KEYWORD2>ftp_put</KEYWORD2>
 			<KEYWORD2>ftp_pwd</KEYWORD2>
 			<KEYWORD2>ftp_quit</KEYWORD2>
-			<KEYWORD2>ftp_raw</KEYWORD2>
 			<KEYWORD2>ftp_rawlist</KEYWORD2>
 			<KEYWORD2>ftp_rename</KEYWORD2>
 			<KEYWORD2>ftp_rmdir</KEYWORD2>
-			<KEYWORD2>ftp_set_option</KEYWORD2>
 			<KEYWORD2>ftp_site</KEYWORD2>
 			<KEYWORD2>ftp_size</KEYWORD2>
 			<KEYWORD2>ftp_ssl_connect</KEYWORD2>
@@ -901,6 +789,7 @@
 			<KEYWORD2>function_exists</KEYWORD2>
 			<KEYWORD2>fwrite</KEYWORD2>
 			<KEYWORD2>gd_info</KEYWORD2>
+			<KEYWORD2>get_all_headers</KEYWORD2>
 			<KEYWORD2>get_browser</KEYWORD2>
 			<KEYWORD2>get_cfg_var</KEYWORD2>
 			<KEYWORD2>get_class</KEYWORD2>
@@ -908,12 +797,12 @@
 			<KEYWORD2>get_class_vars</KEYWORD2>
 			<KEYWORD2>get_current_user</KEYWORD2>
 			<KEYWORD2>get_declared_classes</KEYWORD2>
-			<KEYWORD2>get_defined_constants</KEYWORD2>
+			<KEYWORD2>get_declared_interfaces</KEYWORD2>
 			<KEYWORD2>get_defined_functions</KEYWORD2>
 			<KEYWORD2>get_defined_vars</KEYWORD2>
 			<KEYWORD2>get_extension_funcs</KEYWORD2>
+			<KEYWORD2>get_headers</KEYWORD2>
 			<KEYWORD2>get_html_translation_table</KEYWORD2>
-			<KEYWORD2>get_include_path</KEYWORD2>
 			<KEYWORD2>get_included_files</KEYWORD2>
 			<KEYWORD2>get_loaded_extensions</KEYWORD2>
 			<KEYWORD2>get_magic_quotes_gpc</KEYWORD2>
@@ -924,30 +813,48 @@
 			<KEYWORD2>get_required_files</KEYWORD2>
 			<KEYWORD2>get_resource_type</KEYWORD2>
 			<KEYWORD2>getallheaders</KEYWORD2>
+			<KEYWORD2>getallheaders</KEYWORD2>
+			<KEYWORD2>getascent</KEYWORD2>
+			<KEYWORD2>getascent</KEYWORD2>
 			<KEYWORD2>getcwd</KEYWORD2>
 			<KEYWORD2>getdate</KEYWORD2>
+			<KEYWORD2>getdescent</KEYWORD2>
+			<KEYWORD2>getdescent</KEYWORD2>
 			<KEYWORD2>getenv</KEYWORD2>
+			<KEYWORD2>getheight</KEYWORD2>
 			<KEYWORD2>gethostbyaddr</KEYWORD2>
+			<KEYWORD2>gethostbyaddr</KEYWORD2>
+			<KEYWORD2>gethostbyname</KEYWORD2>
 			<KEYWORD2>gethostbyname</KEYWORD2>
 			<KEYWORD2>gethostbynamel</KEYWORD2>
 			<KEYWORD2>getimagesize</KEYWORD2>
 			<KEYWORD2>getlastmod</KEYWORD2>
+			<KEYWORD2>getleading</KEYWORD2>
+			<KEYWORD2>getleading</KEYWORD2>
 			<KEYWORD2>getmxrr</KEYWORD2>
-			<KEYWORD2>getmygid</KEYWORD2>
+			<KEYWORD2>getmxrr</KEYWORD2>
 			<KEYWORD2>getmyinode</KEYWORD2>
 			<KEYWORD2>getmypid</KEYWORD2>
 			<KEYWORD2>getmyuid</KEYWORD2>
 			<KEYWORD2>getopt</KEYWORD2>
+			<KEYWORD2>getpeername</KEYWORD2>
 			<KEYWORD2>getprotobyname</KEYWORD2>
 			<KEYWORD2>getprotobynumber</KEYWORD2>
 			<KEYWORD2>getrandmax</KEYWORD2>
 			<KEYWORD2>getrusage</KEYWORD2>
+			<KEYWORD2>getrusage</KEYWORD2>
 			<KEYWORD2>getservbyname</KEYWORD2>
 			<KEYWORD2>getservbyport</KEYWORD2>
+			<KEYWORD2>getshape1</KEYWORD2>
+			<KEYWORD2>getshape2</KEYWORD2>
+			<KEYWORD2>getsockname</KEYWORD2>
+			<KEYWORD2>getsockopt</KEYWORD2>
 			<KEYWORD2>gettext</KEYWORD2>
 			<KEYWORD2>gettimeofday</KEYWORD2>
 			<KEYWORD2>gettype</KEYWORD2>
-			<KEYWORD2>glob</KEYWORD2>
+			<KEYWORD2>getwidth</KEYWORD2>
+			<KEYWORD2>getwidth</KEYWORD2>
+			<KEYWORD2>getwidth</KEYWORD2>
 			<KEYWORD2>gmdate</KEYWORD2>
 			<KEYWORD2>gmmktime</KEYWORD2>
 			<KEYWORD2>gmp_abs</KEYWORD2>
@@ -986,10 +893,10 @@
 			<KEYWORD2>gmp_sign</KEYWORD2>
 			<KEYWORD2>gmp_sqrt</KEYWORD2>
 			<KEYWORD2>gmp_sqrtrem</KEYWORD2>
-			<KEYWORD2>gmp_sqrtrm</KEYWORD2>
 			<KEYWORD2>gmp_strval</KEYWORD2>
 			<KEYWORD2>gmp_sub</KEYWORD2>
 			<KEYWORD2>gmp_xor</KEYWORD2>
+			<KEYWORD2>gmstrftime</KEYWORD2>
 			<KEYWORD2>gmstrftime</KEYWORD2>
 			<KEYWORD2>gregoriantojd</KEYWORD2>
 			<KEYWORD2>gzclose</KEYWORD2>
@@ -1019,13 +926,9 @@
 			<KEYWORD2>hexdec</KEYWORD2>
 			<KEYWORD2>highlight_file</KEYWORD2>
 			<KEYWORD2>highlight_string</KEYWORD2>
-			<KEYWORD2>html_entity_decode</KEYWORD2>
 			<KEYWORD2>htmlentities</KEYWORD2>
 			<KEYWORD2>htmlspecialchars</KEYWORD2>
 			<KEYWORD2>http_build_query</KEYWORD2>
-			<KEYWORD2>hw_api_attribute</KEYWORD2>
-			<KEYWORD2>hw_api_content</KEYWORD2>
-			<KEYWORD2>hw_api_object</KEYWORD2>
 			<KEYWORD2>hw_array2objrec</KEYWORD2>
 			<KEYWORD2>hw_changeobject</KEYWORD2>
 			<KEYWORD2>hw_children</KEYWORD2>
@@ -1050,11 +953,16 @@
 			<KEYWORD2>hw_getanchors</KEYWORD2>
 			<KEYWORD2>hw_getanchorsobj</KEYWORD2>
 			<KEYWORD2>hw_getandlock</KEYWORD2>
+			<KEYWORD2>hw_getcgi</KEYWORD2>
 			<KEYWORD2>hw_getchildcoll</KEYWORD2>
 			<KEYWORD2>hw_getchildcollobj</KEYWORD2>
 			<KEYWORD2>hw_getchilddoccoll</KEYWORD2>
 			<KEYWORD2>hw_getchilddoccollobj</KEYWORD2>
 			<KEYWORD2>hw_getobject</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyftquery</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyftquerycoll</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyftquerycollobj</KEYWORD2>
+			<KEYWORD2>hw_getobjectbyftqueryobj</KEYWORD2>
 			<KEYWORD2>hw_getobjectbyquery</KEYWORD2>
 			<KEYWORD2>hw_getobjectbyquerycoll</KEYWORD2>
 			<KEYWORD2>hw_getobjectbyquerycollobj</KEYWORD2>
@@ -1079,19 +987,17 @@
 			<KEYWORD2>hw_modifyobject</KEYWORD2>
 			<KEYWORD2>hw_mv</KEYWORD2>
 			<KEYWORD2>hw_new_document</KEYWORD2>
+			<KEYWORD2>hw_new_document_from_file</KEYWORD2>
 			<KEYWORD2>hw_objrec2array</KEYWORD2>
 			<KEYWORD2>hw_output_document</KEYWORD2>
 			<KEYWORD2>hw_pconnect</KEYWORD2>
+			<KEYWORD2>hw_pipecgi</KEYWORD2>
 			<KEYWORD2>hw_pipedocument</KEYWORD2>
 			<KEYWORD2>hw_root</KEYWORD2>
 			<KEYWORD2>hw_setlinkroot</KEYWORD2>
 			<KEYWORD2>hw_stat</KEYWORD2>
 			<KEYWORD2>hw_unlock</KEYWORD2>
 			<KEYWORD2>hw_who</KEYWORD2>
-			<KEYWORD2>hwapi_hgcsp</KEYWORD2>
-			<KEYWORD2>hypot</KEYWORD2>
-			<KEYWORD2>ibase_add_user</KEYWORD2>
-			<KEYWORD2>ibase_affected_rows</KEYWORD2>
 			<KEYWORD2>ibase_blob_add</KEYWORD2>
 			<KEYWORD2>ibase_blob_cancel</KEYWORD2>
 			<KEYWORD2>ibase_blob_close</KEYWORD2>
@@ -1103,45 +1009,37 @@
 			<KEYWORD2>ibase_blob_open</KEYWORD2>
 			<KEYWORD2>ibase_close</KEYWORD2>
 			<KEYWORD2>ibase_commit</KEYWORD2>
-			<KEYWORD2>ibase_commit_ret</KEYWORD2>
 			<KEYWORD2>ibase_connect</KEYWORD2>
-			<KEYWORD2>ibase_delete_user</KEYWORD2>
-			<KEYWORD2>ibase_drop_db</KEYWORD2>
-			<KEYWORD2>ibase_errcode</KEYWORD2>
 			<KEYWORD2>ibase_errmsg</KEYWORD2>
 			<KEYWORD2>ibase_execute</KEYWORD2>
-			<KEYWORD2>ibase_fetch_assoc</KEYWORD2>
 			<KEYWORD2>ibase_fetch_object</KEYWORD2>
 			<KEYWORD2>ibase_fetch_row</KEYWORD2>
 			<KEYWORD2>ibase_field_info</KEYWORD2>
-			<KEYWORD2>ibase_free_event_handler</KEYWORD2>
 			<KEYWORD2>ibase_free_query</KEYWORD2>
 			<KEYWORD2>ibase_free_result</KEYWORD2>
-			<KEYWORD2>ibase_gen_id</KEYWORD2>
-			<KEYWORD2>ibase_modify_user</KEYWORD2>
-			<KEYWORD2>ibase_name_result</KEYWORD2>
 			<KEYWORD2>ibase_num_fields</KEYWORD2>
-			<KEYWORD2>ibase_num_params</KEYWORD2>
-			<KEYWORD2>ibase_param_info</KEYWORD2>
 			<KEYWORD2>ibase_pconnect</KEYWORD2>
 			<KEYWORD2>ibase_prepare</KEYWORD2>
 			<KEYWORD2>ibase_query</KEYWORD2>
 			<KEYWORD2>ibase_rollback</KEYWORD2>
-			<KEYWORD2>ibase_rollback_ret</KEYWORD2>
-			<KEYWORD2>ibase_set_event_handler</KEYWORD2>
 			<KEYWORD2>ibase_timefmt</KEYWORD2>
 			<KEYWORD2>ibase_trans</KEYWORD2>
-			<KEYWORD2>ibase_wait_event</KEYWORD2>
+			<KEYWORD2>icap_create_calendar</KEYWORD2>
+			<KEYWORD2>icap_delete_calendar</KEYWORD2>
+			<KEYWORD2>icap_delete_event</KEYWORD2>
+			<KEYWORD2>icap_fetch_event</KEYWORD2>
+			<KEYWORD2>icap_list_alarms</KEYWORD2>
+			<KEYWORD2>icap_list_events</KEYWORD2>
+			<KEYWORD2>icap_open</KEYWORD2>
+			<KEYWORD2>icap_popen</KEYWORD2>
+			<KEYWORD2>icap_rename_calendar</KEYWORD2>
+			<KEYWORD2>icap_reopen</KEYWORD2>
+			<KEYWORD2>icap_snooze</KEYWORD2>
+			<KEYWORD2>icap_store_event</KEYWORD2>
 			<KEYWORD2>iconv</KEYWORD2>
 			<KEYWORD2>iconv_get_encoding</KEYWORD2>
-			<KEYWORD2>iconv_mime_decode</KEYWORD2>
-			<KEYWORD2>iconv_mime_decode_headers</KEYWORD2>
-			<KEYWORD2>iconv_mime_encode</KEYWORD2>
 			<KEYWORD2>iconv_set_encoding</KEYWORD2>
-			<KEYWORD2>iconv_strlen</KEYWORD2>
-			<KEYWORD2>iconv_strpos</KEYWORD2>
-			<KEYWORD2>iconv_strrpos</KEYWORD2>
-			<KEYWORD2>iconv_substr</KEYWORD2>
+			<KEYWORD2>idate</KEYWORD2>
 			<KEYWORD2>ifx_affected_rows</KEYWORD2>
 			<KEYWORD2>ifx_blobinfile_mode</KEYWORD2>
 			<KEYWORD2>ifx_byteasvarchar</KEYWORD2>
@@ -1181,15 +1079,29 @@
 			<KEYWORD2>ifxus_tell_slob</KEYWORD2>
 			<KEYWORD2>ifxus_write_slob</KEYWORD2>
 			<KEYWORD2>ignore_user_abort</KEYWORD2>
+			<KEYWORD2>iis_addserver</KEYWORD2>
+			<KEYWORD2>iis_getdirsecurity</KEYWORD2>
+			<KEYWORD2>iis_getscriptmap</KEYWORD2>
+			<KEYWORD2>iis_getserverbycomment</KEYWORD2>
+			<KEYWORD2>iis_getserverbypath</KEYWORD2>
+			<KEYWORD2>iis_getserverright</KEYWORD2>
+			<KEYWORD2>iis_getservicestate</KEYWORD2>
+			<KEYWORD2>iis_removeserver</KEYWORD2>
+			<KEYWORD2>iis_setappsettings</KEYWORD2>
+			<KEYWORD2>iis_setdirsecurity</KEYWORD2>
+			<KEYWORD2>iis_setscriptmap</KEYWORD2>
+			<KEYWORD2>iis_setserverright</KEYWORD2>
+			<KEYWORD2>iis_startserver</KEYWORD2>
+			<KEYWORD2>iis_startservice</KEYWORD2>
+			<KEYWORD2>iis_stopserver</KEYWORD2>
+			<KEYWORD2>iis_stopservice</KEYWORD2>
+			<KEYWORD2>image_type_to_extension</KEYWORD2>
 			<KEYWORD2>image2wbmp</KEYWORD2>
-			<KEYWORD2>image_type_to_mime_type</KEYWORD2>
 			<KEYWORD2>imagealphablending</KEYWORD2>
-			<KEYWORD2>imageantialias</KEYWORD2>
 			<KEYWORD2>imagearc</KEYWORD2>
 			<KEYWORD2>imagechar</KEYWORD2>
 			<KEYWORD2>imagecharup</KEYWORD2>
 			<KEYWORD2>imagecolorallocate</KEYWORD2>
-			<KEYWORD2>imagecolorallocatealpha</KEYWORD2>
 			<KEYWORD2>imagecolorat</KEYWORD2>
 			<KEYWORD2>imagecolorclosest</KEYWORD2>
 			<KEYWORD2>imagecolorclosestalpha</KEYWORD2>
@@ -1210,9 +1122,6 @@
 			<KEYWORD2>imagecopyresampled</KEYWORD2>
 			<KEYWORD2>imagecopyresized</KEYWORD2>
 			<KEYWORD2>imagecreate</KEYWORD2>
-			<KEYWORD2>imagecreatefromgd</KEYWORD2>
-			<KEYWORD2>imagecreatefromgd2</KEYWORD2>
-			<KEYWORD2>imagecreatefromgd2part</KEYWORD2>
 			<KEYWORD2>imagecreatefromgif</KEYWORD2>
 			<KEYWORD2>imagecreatefromjpeg</KEYWORD2>
 			<KEYWORD2>imagecreatefrompng</KEYWORD2>
@@ -1230,17 +1139,14 @@
 			<KEYWORD2>imagefilledpolygon</KEYWORD2>
 			<KEYWORD2>imagefilledrectangle</KEYWORD2>
 			<KEYWORD2>imagefilltoborder</KEYWORD2>
+			<KEYWORD2>imagefilter</KEYWORD2>
 			<KEYWORD2>imagefontheight</KEYWORD2>
 			<KEYWORD2>imagefontwidth</KEYWORD2>
-			<KEYWORD2>imageftbbox</KEYWORD2>
-			<KEYWORD2>imagefttext</KEYWORD2>
 			<KEYWORD2>imagegammacorrect</KEYWORD2>
-			<KEYWORD2>imagegd</KEYWORD2>
-			<KEYWORD2>imagegd2</KEYWORD2>
 			<KEYWORD2>imagegif</KEYWORD2>
 			<KEYWORD2>imageinterlace</KEYWORD2>
-			<KEYWORD2>imageistruecolor</KEYWORD2>
 			<KEYWORD2>imagejpeg</KEYWORD2>
+			<KEYWORD2>imagelayereffect</KEYWORD2>
 			<KEYWORD2>imageline</KEYWORD2>
 			<KEYWORD2>imageloadfont</KEYWORD2>
 			<KEYWORD2>imagepalettecopy</KEYWORD2>
@@ -1256,7 +1162,6 @@
 			<KEYWORD2>imagepstext</KEYWORD2>
 			<KEYWORD2>imagerectangle</KEYWORD2>
 			<KEYWORD2>imagerotate</KEYWORD2>
-			<KEYWORD2>imagesavealpha</KEYWORD2>
 			<KEYWORD2>imagesetbrush</KEYWORD2>
 			<KEYWORD2>imagesetpixel</KEYWORD2>
 			<KEYWORD2>imagesetstyle</KEYWORD2>
@@ -1281,6 +1186,7 @@
 			<KEYWORD2>imap_check</KEYWORD2>
 			<KEYWORD2>imap_clearflag_full</KEYWORD2>
 			<KEYWORD2>imap_close</KEYWORD2>
+			<KEYWORD2>imap_create</KEYWORD2>
 			<KEYWORD2>imap_createmailbox</KEYWORD2>
 			<KEYWORD2>imap_delete</KEYWORD2>
 			<KEYWORD2>imap_deletemailbox</KEYWORD2>
@@ -1290,9 +1196,8 @@
 			<KEYWORD2>imap_fetchbody</KEYWORD2>
 			<KEYWORD2>imap_fetchheader</KEYWORD2>
 			<KEYWORD2>imap_fetchstructure</KEYWORD2>
+			<KEYWORD2>imap_fetchtext</KEYWORD2>
 			<KEYWORD2>imap_get_quota</KEYWORD2>
-			<KEYWORD2>imap_get_quotaroot</KEYWORD2>
-			<KEYWORD2>imap_getacl</KEYWORD2>
 			<KEYWORD2>imap_getmailboxes</KEYWORD2>
 			<KEYWORD2>imap_getsubscribed</KEYWORD2>
 			<KEYWORD2>imap_header</KEYWORD2>
@@ -1301,9 +1206,9 @@
 			<KEYWORD2>imap_last_error</KEYWORD2>
 			<KEYWORD2>imap_list</KEYWORD2>
 			<KEYWORD2>imap_listmailbox</KEYWORD2>
-			<KEYWORD2>imap_listscan</KEYWORD2>
 			<KEYWORD2>imap_listsubscribed</KEYWORD2>
 			<KEYWORD2>imap_lsub</KEYWORD2>
+			<KEYWORD2>imap_mail</KEYWORD2>
 			<KEYWORD2>imap_mail</KEYWORD2>
 			<KEYWORD2>imap_mail_compose</KEYWORD2>
 			<KEYWORD2>imap_mail_copy</KEYWORD2>
@@ -1315,22 +1220,22 @@
 			<KEYWORD2>imap_num_recent</KEYWORD2>
 			<KEYWORD2>imap_open</KEYWORD2>
 			<KEYWORD2>imap_ping</KEYWORD2>
+			<KEYWORD2>imap_popen</KEYWORD2>
 			<KEYWORD2>imap_qprint</KEYWORD2>
+			<KEYWORD2>imap_rename</KEYWORD2>
 			<KEYWORD2>imap_renamemailbox</KEYWORD2>
 			<KEYWORD2>imap_reopen</KEYWORD2>
 			<KEYWORD2>imap_rfc822_parse_adrlist</KEYWORD2>
 			<KEYWORD2>imap_rfc822_parse_headers</KEYWORD2>
 			<KEYWORD2>imap_rfc822_write_address</KEYWORD2>
+			<KEYWORD2>imap_scan</KEYWORD2>
 			<KEYWORD2>imap_scanmailbox</KEYWORD2>
 			<KEYWORD2>imap_search</KEYWORD2>
 			<KEYWORD2>imap_set_quota</KEYWORD2>
-			<KEYWORD2>imap_setacl</KEYWORD2>
 			<KEYWORD2>imap_setflag_full</KEYWORD2>
 			<KEYWORD2>imap_sort</KEYWORD2>
 			<KEYWORD2>imap_status</KEYWORD2>
 			<KEYWORD2>imap_subscribe</KEYWORD2>
-			<KEYWORD2>imap_thread</KEYWORD2>
-			<KEYWORD2>imap_timeout</KEYWORD2>
 			<KEYWORD2>imap_uid</KEYWORD2>
 			<KEYWORD2>imap_undelete</KEYWORD2>
 			<KEYWORD2>imap_unsubscribe</KEYWORD2>
@@ -1338,7 +1243,6 @@
 			<KEYWORD2>imap_utf7_encode</KEYWORD2>
 			<KEYWORD2>imap_utf8</KEYWORD2>
 			<KEYWORD2>implode</KEYWORD2>
-			<KEYWORD2>import_request_variables</KEYWORD2>
 			<KEYWORD2>in_array</KEYWORD2>
 			<KEYWORD2>ingres_autocommit</KEYWORD2>
 			<KEYWORD2>ingres_close</KEYWORD2>
@@ -1360,7 +1264,6 @@
 			<KEYWORD2>ingres_rollback</KEYWORD2>
 			<KEYWORD2>ini_alter</KEYWORD2>
 			<KEYWORD2>ini_get</KEYWORD2>
-			<KEYWORD2>ini_get_all</KEYWORD2>
 			<KEYWORD2>ini_restore</KEYWORD2>
 			<KEYWORD2>ini_set</KEYWORD2>
 			<KEYWORD2>intval</KEYWORD2>
@@ -1369,8 +1272,6 @@
 			<KEYWORD2>iptcparse</KEYWORD2>
 			<KEYWORD2>ircg_channel_mode</KEYWORD2>
 			<KEYWORD2>ircg_disconnect</KEYWORD2>
-			<KEYWORD2>ircg_fetch_error_msg</KEYWORD2>
-			<KEYWORD2>ircg_get_username</KEYWORD2>
 			<KEYWORD2>ircg_html_encode</KEYWORD2>
 			<KEYWORD2>ircg_ignore_add</KEYWORD2>
 			<KEYWORD2>ircg_ignore_del</KEYWORD2>
@@ -1387,26 +1288,19 @@
 			<KEYWORD2>ircg_pconnect</KEYWORD2>
 			<KEYWORD2>ircg_register_format_messages</KEYWORD2>
 			<KEYWORD2>ircg_set_current</KEYWORD2>
-			<KEYWORD2>ircg_set_file</KEYWORD2>
-			<KEYWORD2>ircg_set_on_die</KEYWORD2>
 			<KEYWORD2>ircg_topic</KEYWORD2>
 			<KEYWORD2>ircg_whois</KEYWORD2>
-			<KEYWORD2>is_a</KEYWORD2>
 			<KEYWORD2>is_array</KEYWORD2>
 			<KEYWORD2>is_bool</KEYWORD2>
-			<KEYWORD2>is_callable</KEYWORD2>
 			<KEYWORD2>is_dir</KEYWORD2>
 			<KEYWORD2>is_double</KEYWORD2>
 			<KEYWORD2>is_executable</KEYWORD2>
 			<KEYWORD2>is_file</KEYWORD2>
-			<KEYWORD2>is_finite</KEYWORD2>
 			<KEYWORD2>is_float</KEYWORD2>
-			<KEYWORD2>is_infinite</KEYWORD2>
 			<KEYWORD2>is_int</KEYWORD2>
 			<KEYWORD2>is_integer</KEYWORD2>
 			<KEYWORD2>is_link</KEYWORD2>
 			<KEYWORD2>is_long</KEYWORD2>
-			<KEYWORD2>is_nan</KEYWORD2>
 			<KEYWORD2>is_null</KEYWORD2>
 			<KEYWORD2>is_numeric</KEYWORD2>
 			<KEYWORD2>is_object</KEYWORD2>
@@ -1435,6 +1329,8 @@
 			<KEYWORD2>key</KEYWORD2>
 			<KEYWORD2>krsort</KEYWORD2>
 			<KEYWORD2>ksort</KEYWORD2>
+			<KEYWORD2>labelframe</KEYWORD2>
+			<KEYWORD2>labelframe</KEYWORD2>
 			<KEYWORD2>lcg_value</KEYWORD2>
 			<KEYWORD2>ldap_8859_to_t61</KEYWORD2>
 			<KEYWORD2>ldap_add</KEYWORD2>
@@ -1473,86 +1369,29 @@
 			<KEYWORD2>ldap_rename</KEYWORD2>
 			<KEYWORD2>ldap_search</KEYWORD2>
 			<KEYWORD2>ldap_set_option</KEYWORD2>
-			<KEYWORD2>ldap_set_rebind_proc</KEYWORD2>
-			<KEYWORD2>ldap_sort</KEYWORD2>
-			<KEYWORD2>ldap_start_tls</KEYWORD2>
 			<KEYWORD2>ldap_t61_to_8859</KEYWORD2>
 			<KEYWORD2>ldap_unbind</KEYWORD2>
+			<KEYWORD2>leak</KEYWORD2>
 			<KEYWORD2>levenshtein</KEYWORD2>
 			<KEYWORD2>link</KEYWORD2>
+			<KEYWORD2>link</KEYWORD2>
 			<KEYWORD2>linkinfo</KEYWORD2>
+			<KEYWORD2>linkinfo</KEYWORD2>
+			<KEYWORD2>listen</KEYWORD2>
 			<KEYWORD2>localeconv</KEYWORD2>
 			<KEYWORD2>localtime</KEYWORD2>
 			<KEYWORD2>log</KEYWORD2>
 			<KEYWORD2>log10</KEYWORD2>
-			<KEYWORD2>log1p</KEYWORD2>
 			<KEYWORD2>long2ip</KEYWORD2>
 			<KEYWORD2>lstat</KEYWORD2>
 			<KEYWORD2>ltrim</KEYWORD2>
-			<KEYWORD2>lzf_compress</KEYWORD2>
-			<KEYWORD2>lzf_decompress</KEYWORD2>
-			<KEYWORD2>lzf_optimized_for</KEYWORD2>
+			<KEYWORD2>magic_quotes_runtime</KEYWORD2>
 			<KEYWORD2>mail</KEYWORD2>
-			<KEYWORD2>mailparse_determine_best_xfer_encoding</KEYWORD2>
-			<KEYWORD2>mailparse_msg_create</KEYWORD2>
-			<KEYWORD2>mailparse_msg_extract_part</KEYWORD2>
-			<KEYWORD2>mailparse_msg_extract_part_file</KEYWORD2>
-			<KEYWORD2>mailparse_msg_free</KEYWORD2>
-			<KEYWORD2>mailparse_msg_get_part</KEYWORD2>
-			<KEYWORD2>mailparse_msg_get_part_data</KEYWORD2>
-			<KEYWORD2>mailparse_msg_get_structure</KEYWORD2>
-			<KEYWORD2>mailparse_msg_parse</KEYWORD2>
-			<KEYWORD2>mailparse_msg_parse_file</KEYWORD2>
-			<KEYWORD2>mailparse_rfc822_parse_addresses</KEYWORD2>
-			<KEYWORD2>mailparse_stream_encode</KEYWORD2>
-			<KEYWORD2>mailparse_uudecode_all</KEYWORD2>
-			<KEYWORD2>main</KEYWORD2>
+			<KEYWORD2>mail</KEYWORD2>
 			<KEYWORD2>max</KEYWORD2>
 			<KEYWORD2>mb_convert_case</KEYWORD2>
-			<KEYWORD2>mb_convert_encoding</KEYWORD2>
-			<KEYWORD2>mb_convert_kana</KEYWORD2>
-			<KEYWORD2>mb_convert_variables</KEYWORD2>
-			<KEYWORD2>mb_decode_mimeheader</KEYWORD2>
-			<KEYWORD2>mb_decode_numericentity</KEYWORD2>
-			<KEYWORD2>mb_detect_encoding</KEYWORD2>
-			<KEYWORD2>mb_detect_order</KEYWORD2>
-			<KEYWORD2>mb_encode_mimeheader</KEYWORD2>
-			<KEYWORD2>mb_encode_numericentity</KEYWORD2>
-			<KEYWORD2>mb_ereg</KEYWORD2>
-			<KEYWORD2>mb_ereg_match</KEYWORD2>
-			<KEYWORD2>mb_ereg_replace</KEYWORD2>
-			<KEYWORD2>mb_ereg_search</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_getpos</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_getregs</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_init</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_pos</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_regs</KEYWORD2>
-			<KEYWORD2>mb_ereg_search_setpos</KEYWORD2>
-			<KEYWORD2>mb_eregi</KEYWORD2>
-			<KEYWORD2>mb_eregi_replace</KEYWORD2>
-			<KEYWORD2>mb_get_info</KEYWORD2>
-			<KEYWORD2>mb_http_input</KEYWORD2>
-			<KEYWORD2>mb_http_output</KEYWORD2>
-			<KEYWORD2>mb_internal_encoding</KEYWORD2>
-			<KEYWORD2>mb_language</KEYWORD2>
-			<KEYWORD2>mb_output_handler</KEYWORD2>
-			<KEYWORD2>mb_parse_str</KEYWORD2>
-			<KEYWORD2>mb_preferred_mime_name</KEYWORD2>
-			<KEYWORD2>mb_regex_encoding</KEYWORD2>
-			<KEYWORD2>mb_regex_set_options</KEYWORD2>
-			<KEYWORD2>mb_send_mail</KEYWORD2>
-			<KEYWORD2>mb_split</KEYWORD2>
-			<KEYWORD2>mb_strcut</KEYWORD2>
-			<KEYWORD2>mb_strimwidth</KEYWORD2>
-			<KEYWORD2>mb_strlen</KEYWORD2>
-			<KEYWORD2>mb_strpos</KEYWORD2>
-			<KEYWORD2>mb_strrpos</KEYWORD2>
 			<KEYWORD2>mb_strtolower</KEYWORD2>
 			<KEYWORD2>mb_strtoupper</KEYWORD2>
-			<KEYWORD2>mb_strwidth</KEYWORD2>
-			<KEYWORD2>mb_substitute_character</KEYWORD2>
-			<KEYWORD2>mb_substr</KEYWORD2>
-			<KEYWORD2>mb_substr_count</KEYWORD2>
 			<KEYWORD2>mcal_append_event</KEYWORD2>
 			<KEYWORD2>mcal_close</KEYWORD2>
 			<KEYWORD2>mcal_create_calendar</KEYWORD2>
@@ -1578,7 +1417,6 @@
 			<KEYWORD2>mcal_event_set_recur_yearly</KEYWORD2>
 			<KEYWORD2>mcal_event_set_start</KEYWORD2>
 			<KEYWORD2>mcal_event_set_title</KEYWORD2>
-			<KEYWORD2>mcal_expunge</KEYWORD2>
 			<KEYWORD2>mcal_fetch_current_stream_event</KEYWORD2>
 			<KEYWORD2>mcal_fetch_event</KEYWORD2>
 			<KEYWORD2>mcal_is_leap_year</KEYWORD2>
@@ -1629,86 +1467,9 @@
 			<KEYWORD2>mcrypt_module_open</KEYWORD2>
 			<KEYWORD2>mcrypt_module_self_test</KEYWORD2>
 			<KEYWORD2>mcrypt_ofb</KEYWORD2>
-			<KEYWORD2>mcve_adduser</KEYWORD2>
-			<KEYWORD2>mcve_adduserarg</KEYWORD2>
-			<KEYWORD2>mcve_bt</KEYWORD2>
-			<KEYWORD2>mcve_checkstatus</KEYWORD2>
-			<KEYWORD2>mcve_chkpwd</KEYWORD2>
-			<KEYWORD2>mcve_chngpwd</KEYWORD2>
-			<KEYWORD2>mcve_completeauthorizations</KEYWORD2>
-			<KEYWORD2>mcve_connect</KEYWORD2>
-			<KEYWORD2>mcve_connectionerror</KEYWORD2>
-			<KEYWORD2>mcve_deleteresponse</KEYWORD2>
-			<KEYWORD2>mcve_deletetrans</KEYWORD2>
-			<KEYWORD2>mcve_deleteusersetup</KEYWORD2>
-			<KEYWORD2>mcve_deluser</KEYWORD2>
-			<KEYWORD2>mcve_destroyconn</KEYWORD2>
-			<KEYWORD2>mcve_destroyengine</KEYWORD2>
-			<KEYWORD2>mcve_disableuser</KEYWORD2>
-			<KEYWORD2>mcve_edituser</KEYWORD2>
-			<KEYWORD2>mcve_enableuser</KEYWORD2>
-			<KEYWORD2>mcve_force</KEYWORD2>
-			<KEYWORD2>mcve_getcell</KEYWORD2>
-			<KEYWORD2>mcve_getcellbynum</KEYWORD2>
-			<KEYWORD2>mcve_getcommadelimited</KEYWORD2>
-			<KEYWORD2>mcve_getheader</KEYWORD2>
-			<KEYWORD2>mcve_getuserarg</KEYWORD2>
-			<KEYWORD2>mcve_getuserparam</KEYWORD2>
-			<KEYWORD2>mcve_gft</KEYWORD2>
-			<KEYWORD2>mcve_gl</KEYWORD2>
-			<KEYWORD2>mcve_gut</KEYWORD2>
-			<KEYWORD2>mcve_initconn</KEYWORD2>
-			<KEYWORD2>mcve_initengine</KEYWORD2>
-			<KEYWORD2>mcve_initusersetup</KEYWORD2>
-			<KEYWORD2>mcve_iscommadelimited</KEYWORD2>
-			<KEYWORD2>mcve_liststats</KEYWORD2>
-			<KEYWORD2>mcve_listusers</KEYWORD2>
-			<KEYWORD2>mcve_maxconntimeout</KEYWORD2>
-			<KEYWORD2>mcve_monitor</KEYWORD2>
-			<KEYWORD2>mcve_numcolumns</KEYWORD2>
-			<KEYWORD2>mcve_numrows</KEYWORD2>
-			<KEYWORD2>mcve_override</KEYWORD2>
-			<KEYWORD2>mcve_parsecommadelimited</KEYWORD2>
-			<KEYWORD2>mcve_ping</KEYWORD2>
-			<KEYWORD2>mcve_preauth</KEYWORD2>
-			<KEYWORD2>mcve_preauthcompletion</KEYWORD2>
-			<KEYWORD2>mcve_qc</KEYWORD2>
-			<KEYWORD2>mcve_responseparam</KEYWORD2>
-			<KEYWORD2>mcve_return</KEYWORD2>
-			<KEYWORD2>mcve_returncode</KEYWORD2>
-			<KEYWORD2>mcve_returnstatus</KEYWORD2>
-			<KEYWORD2>mcve_sale</KEYWORD2>
-			<KEYWORD2>mcve_setblocking</KEYWORD2>
-			<KEYWORD2>mcve_setdropfile</KEYWORD2>
-			<KEYWORD2>mcve_setip</KEYWORD2>
-			<KEYWORD2>mcve_setssl</KEYWORD2>
-			<KEYWORD2>mcve_setssl_files</KEYWORD2>
-			<KEYWORD2>mcve_settimeout</KEYWORD2>
-			<KEYWORD2>mcve_settle</KEYWORD2>
-			<KEYWORD2>mcve_text_avs</KEYWORD2>
-			<KEYWORD2>mcve_text_code</KEYWORD2>
-			<KEYWORD2>mcve_text_cv</KEYWORD2>
-			<KEYWORD2>mcve_transactionauth</KEYWORD2>
-			<KEYWORD2>mcve_transactionavs</KEYWORD2>
-			<KEYWORD2>mcve_transactionbatch</KEYWORD2>
-			<KEYWORD2>mcve_transactioncv</KEYWORD2>
-			<KEYWORD2>mcve_transactionid</KEYWORD2>
-			<KEYWORD2>mcve_transactionitem</KEYWORD2>
-			<KEYWORD2>mcve_transactionssent</KEYWORD2>
-			<KEYWORD2>mcve_transactiontext</KEYWORD2>
-			<KEYWORD2>mcve_transinqueue</KEYWORD2>
-			<KEYWORD2>mcve_transnew</KEYWORD2>
-			<KEYWORD2>mcve_transparam</KEYWORD2>
-			<KEYWORD2>mcve_transsend</KEYWORD2>
-			<KEYWORD2>mcve_ub</KEYWORD2>
-			<KEYWORD2>mcve_uwait</KEYWORD2>
-			<KEYWORD2>mcve_verifyconnection</KEYWORD2>
-			<KEYWORD2>mcve_verifysslcert</KEYWORD2>
-			<KEYWORD2>mcve_void</KEYWORD2>
 			<KEYWORD2>md5</KEYWORD2>
 			<KEYWORD2>md5_file</KEYWORD2>
 			<KEYWORD2>mdecrypt_generic</KEYWORD2>
-			<KEYWORD2>memory_get_usage</KEYWORD2>
 			<KEYWORD2>metaphone</KEYWORD2>
 			<KEYWORD2>method_exists</KEYWORD2>
 			<KEYWORD2>mhash</KEYWORD2>
@@ -1717,42 +1478,18 @@
 			<KEYWORD2>mhash_get_hash_name</KEYWORD2>
 			<KEYWORD2>mhash_keygen_s2k</KEYWORD2>
 			<KEYWORD2>microtime</KEYWORD2>
-			<KEYWORD2>mime_content_type</KEYWORD2>
 			<KEYWORD2>min</KEYWORD2>
 			<KEYWORD2>ming_setcubicthreshold</KEYWORD2>
 			<KEYWORD2>ming_setscale</KEYWORD2>
-			<KEYWORD2>ming_useswfversion</KEYWORD2>
 			<KEYWORD2>mkdir</KEYWORD2>
 			<KEYWORD2>mktime</KEYWORD2>
-			<KEYWORD2>money_format</KEYWORD2>
+			<KEYWORD2>move</KEYWORD2>
 			<KEYWORD2>move_uploaded_file</KEYWORD2>
-			<KEYWORD2>msession_connect</KEYWORD2>
-			<KEYWORD2>msession_count</KEYWORD2>
-			<KEYWORD2>msession_create</KEYWORD2>
-			<KEYWORD2>msession_destroy</KEYWORD2>
-			<KEYWORD2>msession_disconnect</KEYWORD2>
-			<KEYWORD2>msession_find</KEYWORD2>
-			<KEYWORD2>msession_get</KEYWORD2>
-			<KEYWORD2>msession_get_array</KEYWORD2>
-			<KEYWORD2>msession_getdata</KEYWORD2>
-			<KEYWORD2>msession_inc</KEYWORD2>
-			<KEYWORD2>msession_list</KEYWORD2>
-			<KEYWORD2>msession_listvar</KEYWORD2>
-			<KEYWORD2>msession_lock</KEYWORD2>
-			<KEYWORD2>msession_plugin</KEYWORD2>
-			<KEYWORD2>msession_randstr</KEYWORD2>
-			<KEYWORD2>msession_set</KEYWORD2>
-			<KEYWORD2>msession_set_array</KEYWORD2>
-			<KEYWORD2>msession_setdata</KEYWORD2>
-			<KEYWORD2>msession_timeout</KEYWORD2>
-			<KEYWORD2>msession_uniq</KEYWORD2>
-			<KEYWORD2>msession_unlock</KEYWORD2>
-			<KEYWORD2>msg_get_queue</KEYWORD2>
-			<KEYWORD2>msg_receive</KEYWORD2>
-			<KEYWORD2>msg_remove_queue</KEYWORD2>
-			<KEYWORD2>msg_send</KEYWORD2>
-			<KEYWORD2>msg_set_queue</KEYWORD2>
-			<KEYWORD2>msg_stat_queue</KEYWORD2>
+			<KEYWORD2>movepen</KEYWORD2>
+			<KEYWORD2>movepento</KEYWORD2>
+			<KEYWORD2>moveto</KEYWORD2>
+			<KEYWORD2>moveto</KEYWORD2>
+			<KEYWORD2>moveto</KEYWORD2>
 			<KEYWORD2>msql</KEYWORD2>
 			<KEYWORD2>msql_affected_rows</KEYWORD2>
 			<KEYWORD2>msql_close</KEYWORD2>
@@ -1760,6 +1497,7 @@
 			<KEYWORD2>msql_create_db</KEYWORD2>
 			<KEYWORD2>msql_createdb</KEYWORD2>
 			<KEYWORD2>msql_data_seek</KEYWORD2>
+			<KEYWORD2>msql_db_query</KEYWORD2>
 			<KEYWORD2>msql_dbname</KEYWORD2>
 			<KEYWORD2>msql_drop_db</KEYWORD2>
 			<KEYWORD2>msql_dropdb</KEYWORD2>
@@ -1768,7 +1506,12 @@
 			<KEYWORD2>msql_fetch_field</KEYWORD2>
 			<KEYWORD2>msql_fetch_object</KEYWORD2>
 			<KEYWORD2>msql_fetch_row</KEYWORD2>
+			<KEYWORD2>msql_field_flags</KEYWORD2>
+			<KEYWORD2>msql_field_len</KEYWORD2>
+			<KEYWORD2>msql_field_name</KEYWORD2>
 			<KEYWORD2>msql_field_seek</KEYWORD2>
+			<KEYWORD2>msql_field_table</KEYWORD2>
+			<KEYWORD2>msql_field_type</KEYWORD2>
 			<KEYWORD2>msql_fieldflags</KEYWORD2>
 			<KEYWORD2>msql_fieldlen</KEYWORD2>
 			<KEYWORD2>msql_fieldname</KEYWORD2>
@@ -1793,54 +1536,89 @@
 			<KEYWORD2>msql_select_db</KEYWORD2>
 			<KEYWORD2>msql_selectdb</KEYWORD2>
 			<KEYWORD2>msql_tablename</KEYWORD2>
-			<KEYWORD2>mssql_bind</KEYWORD2>
+			<KEYWORD2>mssql_affected_rows</KEYWORD2>
+			<KEYWORD2>mssql_affected_rows</KEYWORD2>
+			<KEYWORD2>mssql_close</KEYWORD2>
+			<KEYWORD2>mssql_close</KEYWORD2>
 			<KEYWORD2>mssql_close</KEYWORD2>
 			<KEYWORD2>mssql_connect</KEYWORD2>
+			<KEYWORD2>mssql_connect</KEYWORD2>
+			<KEYWORD2>mssql_connect</KEYWORD2>
 			<KEYWORD2>mssql_data_seek</KEYWORD2>
-			<KEYWORD2>mssql_execute</KEYWORD2>
+			<KEYWORD2>mssql_data_seek</KEYWORD2>
+			<KEYWORD2>mssql_data_seek</KEYWORD2>
 			<KEYWORD2>mssql_fetch_array</KEYWORD2>
-			<KEYWORD2>mssql_fetch_assoc</KEYWORD2>
+			<KEYWORD2>mssql_fetch_array</KEYWORD2>
+			<KEYWORD2>mssql_fetch_array</KEYWORD2>
 			<KEYWORD2>mssql_fetch_batch</KEYWORD2>
 			<KEYWORD2>mssql_fetch_field</KEYWORD2>
+			<KEYWORD2>mssql_fetch_field</KEYWORD2>
+			<KEYWORD2>mssql_fetch_field</KEYWORD2>
 			<KEYWORD2>mssql_fetch_object</KEYWORD2>
+			<KEYWORD2>mssql_fetch_object</KEYWORD2>
+			<KEYWORD2>mssql_fetch_object</KEYWORD2>
+			<KEYWORD2>mssql_fetch_row</KEYWORD2>
+			<KEYWORD2>mssql_fetch_row</KEYWORD2>
 			<KEYWORD2>mssql_fetch_row</KEYWORD2>
 			<KEYWORD2>mssql_field_length</KEYWORD2>
 			<KEYWORD2>mssql_field_name</KEYWORD2>
 			<KEYWORD2>mssql_field_seek</KEYWORD2>
+			<KEYWORD2>mssql_field_seek</KEYWORD2>
+			<KEYWORD2>mssql_field_seek</KEYWORD2>
 			<KEYWORD2>mssql_field_type</KEYWORD2>
 			<KEYWORD2>mssql_free_result</KEYWORD2>
-			<KEYWORD2>mssql_free_statement</KEYWORD2>
+			<KEYWORD2>mssql_free_result</KEYWORD2>
+			<KEYWORD2>mssql_free_result</KEYWORD2>
 			<KEYWORD2>mssql_get_last_message</KEYWORD2>
-			<KEYWORD2>mssql_guid_string</KEYWORD2>
-			<KEYWORD2>mssql_init</KEYWORD2>
+			<KEYWORD2>mssql_get_last_message</KEYWORD2>
+			<KEYWORD2>mssql_get_last_message</KEYWORD2>
+			<KEYWORD2>mssql_min_client_severity</KEYWORD2>
+			<KEYWORD2>mssql_min_error_severity</KEYWORD2>
 			<KEYWORD2>mssql_min_error_severity</KEYWORD2>
 			<KEYWORD2>mssql_min_message_severity</KEYWORD2>
+			<KEYWORD2>mssql_min_message_severity</KEYWORD2>
+			<KEYWORD2>mssql_min_server_severity</KEYWORD2>
 			<KEYWORD2>mssql_next_result</KEYWORD2>
 			<KEYWORD2>mssql_num_fields</KEYWORD2>
+			<KEYWORD2>mssql_num_fields</KEYWORD2>
+			<KEYWORD2>mssql_num_fields</KEYWORD2>
+			<KEYWORD2>mssql_num_rows</KEYWORD2>
+			<KEYWORD2>mssql_num_rows</KEYWORD2>
 			<KEYWORD2>mssql_num_rows</KEYWORD2>
 			<KEYWORD2>mssql_pconnect</KEYWORD2>
+			<KEYWORD2>mssql_pconnect</KEYWORD2>
+			<KEYWORD2>mssql_pconnect</KEYWORD2>
+			<KEYWORD2>mssql_query</KEYWORD2>
+			<KEYWORD2>mssql_query</KEYWORD2>
 			<KEYWORD2>mssql_query</KEYWORD2>
 			<KEYWORD2>mssql_result</KEYWORD2>
+			<KEYWORD2>mssql_result</KEYWORD2>
+			<KEYWORD2>mssql_result</KEYWORD2>
 			<KEYWORD2>mssql_rows_affected</KEYWORD2>
+			<KEYWORD2>mssql_select_db</KEYWORD2>
+			<KEYWORD2>mssql_select_db</KEYWORD2>
 			<KEYWORD2>mssql_select_db</KEYWORD2>
 			<KEYWORD2>mt_getrandmax</KEYWORD2>
 			<KEYWORD2>mt_rand</KEYWORD2>
 			<KEYWORD2>mt_srand</KEYWORD2>
+			<KEYWORD2>multcolor</KEYWORD2>
 			<KEYWORD2>muscat_close</KEYWORD2>
 			<KEYWORD2>muscat_get</KEYWORD2>
 			<KEYWORD2>muscat_give</KEYWORD2>
 			<KEYWORD2>muscat_setup</KEYWORD2>
 			<KEYWORD2>muscat_setup_net</KEYWORD2>
+			<KEYWORD2>mysql</KEYWORD2>
 			<KEYWORD2>mysql_affected_rows</KEYWORD2>
-			<KEYWORD2>mysql_change_user</KEYWORD2>
-			<KEYWORD2>mysql_client_encoding</KEYWORD2>
 			<KEYWORD2>mysql_close</KEYWORD2>
 			<KEYWORD2>mysql_connect</KEYWORD2>
 			<KEYWORD2>mysql_create_db</KEYWORD2>
+			<KEYWORD2>mysql_createdb</KEYWORD2>
 			<KEYWORD2>mysql_data_seek</KEYWORD2>
 			<KEYWORD2>mysql_db_name</KEYWORD2>
 			<KEYWORD2>mysql_db_query</KEYWORD2>
+			<KEYWORD2>mysql_dbname</KEYWORD2>
 			<KEYWORD2>mysql_drop_db</KEYWORD2>
+			<KEYWORD2>mysql_dropdb</KEYWORD2>
 			<KEYWORD2>mysql_errno</KEYWORD2>
 			<KEYWORD2>mysql_error</KEYWORD2>
 			<KEYWORD2>mysql_escape_string</KEYWORD2>
@@ -1856,271 +1634,42 @@
 			<KEYWORD2>mysql_field_seek</KEYWORD2>
 			<KEYWORD2>mysql_field_table</KEYWORD2>
 			<KEYWORD2>mysql_field_type</KEYWORD2>
+			<KEYWORD2>mysql_fieldflags</KEYWORD2>
+			<KEYWORD2>mysql_fieldlen</KEYWORD2>
+			<KEYWORD2>mysql_fieldname</KEYWORD2>
+			<KEYWORD2>mysql_fieldtable</KEYWORD2>
+			<KEYWORD2>mysql_fieldtype</KEYWORD2>
 			<KEYWORD2>mysql_free_result</KEYWORD2>
+			<KEYWORD2>mysql_freeresult</KEYWORD2>
 			<KEYWORD2>mysql_get_client_info</KEYWORD2>
 			<KEYWORD2>mysql_get_host_info</KEYWORD2>
 			<KEYWORD2>mysql_get_proto_info</KEYWORD2>
 			<KEYWORD2>mysql_get_server_info</KEYWORD2>
-			<KEYWORD2>mysql_info</KEYWORD2>
 			<KEYWORD2>mysql_insert_id</KEYWORD2>
 			<KEYWORD2>mysql_list_dbs</KEYWORD2>
 			<KEYWORD2>mysql_list_fields</KEYWORD2>
-			<KEYWORD2>mysql_list_processes</KEYWORD2>
 			<KEYWORD2>mysql_list_tables</KEYWORD2>
+			<KEYWORD2>mysql_listdbs</KEYWORD2>
+			<KEYWORD2>mysql_listfields</KEYWORD2>
+			<KEYWORD2>mysql_listtables</KEYWORD2>
 			<KEYWORD2>mysql_num_fields</KEYWORD2>
 			<KEYWORD2>mysql_num_rows</KEYWORD2>
+			<KEYWORD2>mysql_numfields</KEYWORD2>
+			<KEYWORD2>mysql_numrows</KEYWORD2>
 			<KEYWORD2>mysql_pconnect</KEYWORD2>
-			<KEYWORD2>mysql_ping</KEYWORD2>
 			<KEYWORD2>mysql_query</KEYWORD2>
-			<KEYWORD2>mysql_real_escape_string</KEYWORD2>
 			<KEYWORD2>mysql_result</KEYWORD2>
 			<KEYWORD2>mysql_select_db</KEYWORD2>
-			<KEYWORD2>mysql_stat</KEYWORD2>
+			<KEYWORD2>mysql_selectdb</KEYWORD2>
 			<KEYWORD2>mysql_tablename</KEYWORD2>
-			<KEYWORD2>mysql_thread_id</KEYWORD2>
 			<KEYWORD2>mysql_unbuffered_query</KEYWORD2>
-			<KEYWORD2>mysqli_affected_rows</KEYWORD2>
-			<KEYWORD2>mysqli_autocommit</KEYWORD2>
-			<KEYWORD2>mysqli_bind_param</KEYWORD2>
-			<KEYWORD2>mysqli_bind_result</KEYWORD2>
-			<KEYWORD2>mysqli_change_user</KEYWORD2>
-			<KEYWORD2>mysqli_character_set_name</KEYWORD2>
-			<KEYWORD2>mysqli_close</KEYWORD2>
-			<KEYWORD2>mysqli_commit</KEYWORD2>
-			<KEYWORD2>mysqli_connect</KEYWORD2>
-			<KEYWORD2>mysqli_data_seek</KEYWORD2>
-			<KEYWORD2>mysqli_debug</KEYWORD2>
-			<KEYWORD2>mysqli_disable_reads_from_master</KEYWORD2>
-			<KEYWORD2>mysqli_disable_rpl_parse</KEYWORD2>
-			<KEYWORD2>mysqli_dump_debug_info</KEYWORD2>
-			<KEYWORD2>mysqli_enable_reads_from_master</KEYWORD2>
-			<KEYWORD2>mysqli_enable_rpl_parse</KEYWORD2>
-			<KEYWORD2>mysqli_errno</KEYWORD2>
-			<KEYWORD2>mysqli_error</KEYWORD2>
-			<KEYWORD2>mysqli_execute</KEYWORD2>
-			<KEYWORD2>mysqli_fetch</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_array</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_assoc</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_field</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_field_direct</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_fields</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_lengths</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_object</KEYWORD2>
-			<KEYWORD2>mysqli_fetch_row</KEYWORD2>
-			<KEYWORD2>mysqli_field_count</KEYWORD2>
-			<KEYWORD2>mysqli_field_seek</KEYWORD2>
-			<KEYWORD2>mysqli_field_tell</KEYWORD2>
-			<KEYWORD2>mysqli_free_result</KEYWORD2>
-			<KEYWORD2>mysqli_get_client_info</KEYWORD2>
-			<KEYWORD2>mysqli_get_host_info</KEYWORD2>
-			<KEYWORD2>mysqli_get_proto_info</KEYWORD2>
-			<KEYWORD2>mysqli_get_server_info</KEYWORD2>
-			<KEYWORD2>mysqli_get_server_version</KEYWORD2>
-			<KEYWORD2>mysqli_info</KEYWORD2>
-			<KEYWORD2>mysqli_init</KEYWORD2>
-			<KEYWORD2>mysqli_insert_id</KEYWORD2>
-			<KEYWORD2>mysqli_kill</KEYWORD2>
-			<KEYWORD2>mysqli_master_query</KEYWORD2>
-			<KEYWORD2>mysqli_num_fields</KEYWORD2>
-			<KEYWORD2>mysqli_num_rows</KEYWORD2>
-			<KEYWORD2>mysqli_options</KEYWORD2>
-			<KEYWORD2>mysqli_param_count</KEYWORD2>
-			<KEYWORD2>mysqli_ping</KEYWORD2>
-			<KEYWORD2>mysqli_prepare</KEYWORD2>
-			<KEYWORD2>mysqli_prepare_result</KEYWORD2>
-			<KEYWORD2>mysqli_profiler</KEYWORD2>
-			<KEYWORD2>mysqli_query</KEYWORD2>
-			<KEYWORD2>mysqli_read_query_result</KEYWORD2>
-			<KEYWORD2>mysqli_real_connect</KEYWORD2>
-			<KEYWORD2>mysqli_real_escape_string</KEYWORD2>
-			<KEYWORD2>mysqli_real_query</KEYWORD2>
-			<KEYWORD2>mysqli_reload</KEYWORD2>
-			<KEYWORD2>mysqli_rollback</KEYWORD2>
-			<KEYWORD2>mysqli_rpl_parse_enabled</KEYWORD2>
-			<KEYWORD2>mysqli_rpl_probe</KEYWORD2>
-			<KEYWORD2>mysqli_rpl_query_type</KEYWORD2>
-			<KEYWORD2>mysqli_select_db</KEYWORD2>
-			<KEYWORD2>mysqli_send_long_data</KEYWORD2>
-			<KEYWORD2>mysqli_send_query</KEYWORD2>
-			<KEYWORD2>mysqli_slave_query</KEYWORD2>
-			<KEYWORD2>mysqli_ssl_set</KEYWORD2>
-			<KEYWORD2>mysqli_stat</KEYWORD2>
-			<KEYWORD2>mysqli_stmt_affected_rows</KEYWORD2>
-			<KEYWORD2>mysqli_stmt_close</KEYWORD2>
-			<KEYWORD2>mysqli_stmt_errno</KEYWORD2>
-			<KEYWORD2>mysqli_stmt_error</KEYWORD2>
-			<KEYWORD2>mysqli_stmt_store_result</KEYWORD2>
-			<KEYWORD2>mysqli_store_result</KEYWORD2>
-			<KEYWORD2>mysqli_thread_id</KEYWORD2>
-			<KEYWORD2>mysqli_thread_safe</KEYWORD2>
-			<KEYWORD2>mysqli_use_result</KEYWORD2>
-			<KEYWORD2>mysqli_warning_count</KEYWORD2>
 			<KEYWORD2>natcasesort</KEYWORD2>
 			<KEYWORD2>natsort</KEYWORD2>
-			<KEYWORD2>ncurses_addch</KEYWORD2>
-			<KEYWORD2>ncurses_addchnstr</KEYWORD2>
-			<KEYWORD2>ncurses_addchstr</KEYWORD2>
-			<KEYWORD2>ncurses_addnstr</KEYWORD2>
-			<KEYWORD2>ncurses_addstr</KEYWORD2>
-			<KEYWORD2>ncurses_assume_default_colors</KEYWORD2>
-			<KEYWORD2>ncurses_attroff</KEYWORD2>
-			<KEYWORD2>ncurses_attron</KEYWORD2>
-			<KEYWORD2>ncurses_attrset</KEYWORD2>
-			<KEYWORD2>ncurses_baudrate</KEYWORD2>
-			<KEYWORD2>ncurses_beep</KEYWORD2>
-			<KEYWORD2>ncurses_bkgd</KEYWORD2>
-			<KEYWORD2>ncurses_bkgdset</KEYWORD2>
-			<KEYWORD2>ncurses_border</KEYWORD2>
-			<KEYWORD2>ncurses_bottom_panel</KEYWORD2>
-			<KEYWORD2>ncurses_can_change_color</KEYWORD2>
-			<KEYWORD2>ncurses_cbreak</KEYWORD2>
-			<KEYWORD2>ncurses_clear</KEYWORD2>
-			<KEYWORD2>ncurses_clrtobot</KEYWORD2>
-			<KEYWORD2>ncurses_clrtoeol</KEYWORD2>
-			<KEYWORD2>ncurses_color_content</KEYWORD2>
-			<KEYWORD2>ncurses_color_set</KEYWORD2>
-			<KEYWORD2>ncurses_curs_set</KEYWORD2>
-			<KEYWORD2>ncurses_def_prog_mode</KEYWORD2>
-			<KEYWORD2>ncurses_def_shell_mode</KEYWORD2>
-			<KEYWORD2>ncurses_define_key</KEYWORD2>
-			<KEYWORD2>ncurses_del_panel</KEYWORD2>
-			<KEYWORD2>ncurses_delay_output</KEYWORD2>
-			<KEYWORD2>ncurses_delch</KEYWORD2>
-			<KEYWORD2>ncurses_deleteln</KEYWORD2>
-			<KEYWORD2>ncurses_delwin</KEYWORD2>
-			<KEYWORD2>ncurses_doupdate</KEYWORD2>
-			<KEYWORD2>ncurses_echo</KEYWORD2>
-			<KEYWORD2>ncurses_echochar</KEYWORD2>
-			<KEYWORD2>ncurses_end</KEYWORD2>
-			<KEYWORD2>ncurses_erase</KEYWORD2>
-			<KEYWORD2>ncurses_erasechar</KEYWORD2>
-			<KEYWORD2>ncurses_filter</KEYWORD2>
-			<KEYWORD2>ncurses_flash</KEYWORD2>
-			<KEYWORD2>ncurses_flushinp</KEYWORD2>
-			<KEYWORD2>ncurses_getch</KEYWORD2>
-			<KEYWORD2>ncurses_getmaxyx</KEYWORD2>
-			<KEYWORD2>ncurses_getmouse</KEYWORD2>
-			<KEYWORD2>ncurses_getyx</KEYWORD2>
-			<KEYWORD2>ncurses_halfdelay</KEYWORD2>
-			<KEYWORD2>ncurses_has_colors</KEYWORD2>
-			<KEYWORD2>ncurses_has_ic</KEYWORD2>
-			<KEYWORD2>ncurses_has_il</KEYWORD2>
-			<KEYWORD2>ncurses_has_key</KEYWORD2>
-			<KEYWORD2>ncurses_hide_panel</KEYWORD2>
-			<KEYWORD2>ncurses_hline</KEYWORD2>
-			<KEYWORD2>ncurses_inch</KEYWORD2>
-			<KEYWORD2>ncurses_init</KEYWORD2>
-			<KEYWORD2>ncurses_init_color</KEYWORD2>
-			<KEYWORD2>ncurses_init_pair</KEYWORD2>
-			<KEYWORD2>ncurses_insch</KEYWORD2>
-			<KEYWORD2>ncurses_insdelln</KEYWORD2>
-			<KEYWORD2>ncurses_insertln</KEYWORD2>
-			<KEYWORD2>ncurses_insstr</KEYWORD2>
-			<KEYWORD2>ncurses_instr</KEYWORD2>
-			<KEYWORD2>ncurses_isendwin</KEYWORD2>
-			<KEYWORD2>ncurses_keyok</KEYWORD2>
-			<KEYWORD2>ncurses_keypad</KEYWORD2>
-			<KEYWORD2>ncurses_killchar</KEYWORD2>
-			<KEYWORD2>ncurses_longname</KEYWORD2>
-			<KEYWORD2>ncurses_meta</KEYWORD2>
-			<KEYWORD2>ncurses_mouse_trafo</KEYWORD2>
-			<KEYWORD2>ncurses_mouseinterval</KEYWORD2>
-			<KEYWORD2>ncurses_mousemask</KEYWORD2>
-			<KEYWORD2>ncurses_move</KEYWORD2>
-			<KEYWORD2>ncurses_move_panel</KEYWORD2>
-			<KEYWORD2>ncurses_mvaddch</KEYWORD2>
-			<KEYWORD2>ncurses_mvaddchnstr</KEYWORD2>
-			<KEYWORD2>ncurses_mvaddchstr</KEYWORD2>
-			<KEYWORD2>ncurses_mvaddnstr</KEYWORD2>
-			<KEYWORD2>ncurses_mvaddstr</KEYWORD2>
-			<KEYWORD2>ncurses_mvcur</KEYWORD2>
-			<KEYWORD2>ncurses_mvdelch</KEYWORD2>
-			<KEYWORD2>ncurses_mvgetch</KEYWORD2>
-			<KEYWORD2>ncurses_mvhline</KEYWORD2>
-			<KEYWORD2>ncurses_mvinch</KEYWORD2>
-			<KEYWORD2>ncurses_mvvline</KEYWORD2>
-			<KEYWORD2>ncurses_mvwaddstr</KEYWORD2>
-			<KEYWORD2>ncurses_napms</KEYWORD2>
-			<KEYWORD2>ncurses_new_panel</KEYWORD2>
-			<KEYWORD2>ncurses_newpad</KEYWORD2>
-			<KEYWORD2>ncurses_newwin</KEYWORD2>
-			<KEYWORD2>ncurses_nl</KEYWORD2>
-			<KEYWORD2>ncurses_nocbreak</KEYWORD2>
-			<KEYWORD2>ncurses_noecho</KEYWORD2>
-			<KEYWORD2>ncurses_nonl</KEYWORD2>
-			<KEYWORD2>ncurses_noqiflush</KEYWORD2>
-			<KEYWORD2>ncurses_noraw</KEYWORD2>
-			<KEYWORD2>ncurses_pair_content</KEYWORD2>
-			<KEYWORD2>ncurses_panel_above</KEYWORD2>
-			<KEYWORD2>ncurses_panel_below</KEYWORD2>
-			<KEYWORD2>ncurses_panel_window</KEYWORD2>
-			<KEYWORD2>ncurses_pnoutrefresh</KEYWORD2>
-			<KEYWORD2>ncurses_prefresh</KEYWORD2>
-			<KEYWORD2>ncurses_putp</KEYWORD2>
-			<KEYWORD2>ncurses_qiflush</KEYWORD2>
-			<KEYWORD2>ncurses_raw</KEYWORD2>
-			<KEYWORD2>ncurses_refresh</KEYWORD2>
-			<KEYWORD2>ncurses_replace_panel</KEYWORD2>
-			<KEYWORD2>ncurses_reset_prog_mode</KEYWORD2>
-			<KEYWORD2>ncurses_reset_shell_mode</KEYWORD2>
-			<KEYWORD2>ncurses_resetty</KEYWORD2>
-			<KEYWORD2>ncurses_savetty</KEYWORD2>
-			<KEYWORD2>ncurses_scr_dump</KEYWORD2>
-			<KEYWORD2>ncurses_scr_init</KEYWORD2>
-			<KEYWORD2>ncurses_scr_restore</KEYWORD2>
-			<KEYWORD2>ncurses_scr_set</KEYWORD2>
-			<KEYWORD2>ncurses_scrl</KEYWORD2>
-			<KEYWORD2>ncurses_show_panel</KEYWORD2>
-			<KEYWORD2>ncurses_slk_attr</KEYWORD2>
-			<KEYWORD2>ncurses_slk_attroff</KEYWORD2>
-			<KEYWORD2>ncurses_slk_attron</KEYWORD2>
-			<KEYWORD2>ncurses_slk_attrset</KEYWORD2>
-			<KEYWORD2>ncurses_slk_clear</KEYWORD2>
-			<KEYWORD2>ncurses_slk_color</KEYWORD2>
-			<KEYWORD2>ncurses_slk_init</KEYWORD2>
-			<KEYWORD2>ncurses_slk_noutrefresh</KEYWORD2>
-			<KEYWORD2>ncurses_slk_refresh</KEYWORD2>
-			<KEYWORD2>ncurses_slk_restore</KEYWORD2>
-			<KEYWORD2>ncurses_slk_set</KEYWORD2>
-			<KEYWORD2>ncurses_slk_touch</KEYWORD2>
-			<KEYWORD2>ncurses_standend</KEYWORD2>
-			<KEYWORD2>ncurses_standout</KEYWORD2>
-			<KEYWORD2>ncurses_start_color</KEYWORD2>
-			<KEYWORD2>ncurses_termattrs</KEYWORD2>
-			<KEYWORD2>ncurses_termname</KEYWORD2>
-			<KEYWORD2>ncurses_timeout</KEYWORD2>
-			<KEYWORD2>ncurses_top_panel</KEYWORD2>
-			<KEYWORD2>ncurses_typeahead</KEYWORD2>
-			<KEYWORD2>ncurses_ungetch</KEYWORD2>
-			<KEYWORD2>ncurses_ungetmouse</KEYWORD2>
-			<KEYWORD2>ncurses_update_panels</KEYWORD2>
-			<KEYWORD2>ncurses_use_default_colors</KEYWORD2>
-			<KEYWORD2>ncurses_use_env</KEYWORD2>
-			<KEYWORD2>ncurses_use_extended_names</KEYWORD2>
-			<KEYWORD2>ncurses_vidattr</KEYWORD2>
-			<KEYWORD2>ncurses_vline</KEYWORD2>
-			<KEYWORD2>ncurses_waddch</KEYWORD2>
-			<KEYWORD2>ncurses_waddstr</KEYWORD2>
-			<KEYWORD2>ncurses_wattroff</KEYWORD2>
-			<KEYWORD2>ncurses_wattron</KEYWORD2>
-			<KEYWORD2>ncurses_wattrset</KEYWORD2>
-			<KEYWORD2>ncurses_wborder</KEYWORD2>
-			<KEYWORD2>ncurses_wclear</KEYWORD2>
-			<KEYWORD2>ncurses_wcolor_set</KEYWORD2>
-			<KEYWORD2>ncurses_werase</KEYWORD2>
-			<KEYWORD2>ncurses_wgetch</KEYWORD2>
-			<KEYWORD2>ncurses_whline</KEYWORD2>
-			<KEYWORD2>ncurses_wmouse_trafo</KEYWORD2>
-			<KEYWORD2>ncurses_wmove</KEYWORD2>
-			<KEYWORD2>ncurses_wnoutrefresh</KEYWORD2>
-			<KEYWORD2>ncurses_wrefresh</KEYWORD2>
-			<KEYWORD2>ncurses_wstandend</KEYWORD2>
-			<KEYWORD2>ncurses_wstandout</KEYWORD2>
-			<KEYWORD2>ncurses_wvline</KEYWORD2>
+			<KEYWORD2>new_xmldoc</KEYWORD2>
 			<KEYWORD2>next</KEYWORD2>
-			<KEYWORD2>ngettext</KEYWORD2>
+			<KEYWORD2>nextframe</KEYWORD2>
+			<KEYWORD2>nextframe</KEYWORD2>
 			<KEYWORD2>nl2br</KEYWORD2>
-			<KEYWORD2>nl_langinfo</KEYWORD2>
 			<KEYWORD2>notes_body</KEYWORD2>
 			<KEYWORD2>notes_copy_db</KEYWORD2>
 			<KEYWORD2>notes_create_db</KEYWORD2>
@@ -2135,32 +1684,26 @@
 			<KEYWORD2>notes_search</KEYWORD2>
 			<KEYWORD2>notes_unread</KEYWORD2>
 			<KEYWORD2>notes_version</KEYWORD2>
-			<KEYWORD2>nsapi_request_headers</KEYWORD2>
-			<KEYWORD2>nsapi_response_headers</KEYWORD2>
-			<KEYWORD2>nsapi_virtual</KEYWORD2>
 			<KEYWORD2>number_format</KEYWORD2>
-			<KEYWORD2>ob_clean</KEYWORD2>
 			<KEYWORD2>ob_end_clean</KEYWORD2>
 			<KEYWORD2>ob_end_flush</KEYWORD2>
-			<KEYWORD2>ob_flush</KEYWORD2>
 			<KEYWORD2>ob_get_clean</KEYWORD2>
 			<KEYWORD2>ob_get_contents</KEYWORD2>
 			<KEYWORD2>ob_get_flush</KEYWORD2>
 			<KEYWORD2>ob_get_length</KEYWORD2>
-			<KEYWORD2>ob_get_level</KEYWORD2>
-			<KEYWORD2>ob_get_status</KEYWORD2>
 			<KEYWORD2>ob_gzhandler</KEYWORD2>
 			<KEYWORD2>ob_iconv_handler</KEYWORD2>
 			<KEYWORD2>ob_implicit_flush</KEYWORD2>
 			<KEYWORD2>ob_list_handlers</KEYWORD2>
 			<KEYWORD2>ob_start</KEYWORD2>
-			<KEYWORD2>ob_tidyhandler</KEYWORD2>
 			<KEYWORD2>ocibindbyname</KEYWORD2>
 			<KEYWORD2>ocicancel</KEYWORD2>
-			<KEYWORD2>ocicloselob</KEYWORD2>
 			<KEYWORD2>ocicollappend</KEYWORD2>
 			<KEYWORD2>ocicollassign</KEYWORD2>
 			<KEYWORD2>ocicollassignelem</KEYWORD2>
+			<KEYWORD2>ocicolldateappendelem</KEYWORD2>
+			<KEYWORD2>ocicolldateassignelem</KEYWORD2>
+			<KEYWORD2>ocicolldategetelem</KEYWORD2>
 			<KEYWORD2>ocicollgetelem</KEYWORD2>
 			<KEYWORD2>ocicollmax</KEYWORD2>
 			<KEYWORD2>ocicollsize</KEYWORD2>
@@ -2179,7 +1722,7 @@
 			<KEYWORD2>ocifetch</KEYWORD2>
 			<KEYWORD2>ocifetchinto</KEYWORD2>
 			<KEYWORD2>ocifetchstatement</KEYWORD2>
-			<KEYWORD2>ocifreecollection</KEYWORD2>
+			<KEYWORD2>ocifreecoll</KEYWORD2>
 			<KEYWORD2>ocifreecursor</KEYWORD2>
 			<KEYWORD2>ocifreedesc</KEYWORD2>
 			<KEYWORD2>ocifreestatement</KEYWORD2>
@@ -2203,7 +1746,6 @@
 			<KEYWORD2>ocisetprefetch</KEYWORD2>
 			<KEYWORD2>ocistatementtype</KEYWORD2>
 			<KEYWORD2>ociwritelobtofile</KEYWORD2>
-			<KEYWORD2>ociwritetemporarylob</KEYWORD2>
 			<KEYWORD2>octdec</KEYWORD2>
 			<KEYWORD2>odbc_autocommit</KEYWORD2>
 			<KEYWORD2>odbc_binmode</KEYWORD2>
@@ -2250,12 +1792,9 @@
 			<KEYWORD2>odbc_statistics</KEYWORD2>
 			<KEYWORD2>odbc_tableprivileges</KEYWORD2>
 			<KEYWORD2>odbc_tables</KEYWORD2>
+			<KEYWORD2>open_listen_sock</KEYWORD2>
 			<KEYWORD2>opendir</KEYWORD2>
 			<KEYWORD2>openlog</KEYWORD2>
-			<KEYWORD2>openssl_csr_export</KEYWORD2>
-			<KEYWORD2>openssl_csr_export_to_file</KEYWORD2>
-			<KEYWORD2>openssl_csr_new</KEYWORD2>
-			<KEYWORD2>openssl_csr_sign</KEYWORD2>
 			<KEYWORD2>openssl_error_string</KEYWORD2>
 			<KEYWORD2>openssl_free_key</KEYWORD2>
 			<KEYWORD2>openssl_get_privatekey</KEYWORD2>
@@ -2265,22 +1804,10 @@
 			<KEYWORD2>openssl_pkcs7_encrypt</KEYWORD2>
 			<KEYWORD2>openssl_pkcs7_sign</KEYWORD2>
 			<KEYWORD2>openssl_pkcs7_verify</KEYWORD2>
-			<KEYWORD2>openssl_pkey_export</KEYWORD2>
-			<KEYWORD2>openssl_pkey_export_to_file</KEYWORD2>
-			<KEYWORD2>openssl_pkey_get_private</KEYWORD2>
-			<KEYWORD2>openssl_pkey_get_public</KEYWORD2>
-			<KEYWORD2>openssl_pkey_new</KEYWORD2>
-			<KEYWORD2>openssl_private_decrypt</KEYWORD2>
-			<KEYWORD2>openssl_private_encrypt</KEYWORD2>
-			<KEYWORD2>openssl_public_decrypt</KEYWORD2>
-			<KEYWORD2>openssl_public_encrypt</KEYWORD2>
 			<KEYWORD2>openssl_seal</KEYWORD2>
 			<KEYWORD2>openssl_sign</KEYWORD2>
 			<KEYWORD2>openssl_verify</KEYWORD2>
-			<KEYWORD2>openssl_x509_check_private_key</KEYWORD2>
 			<KEYWORD2>openssl_x509_checkpurpose</KEYWORD2>
-			<KEYWORD2>openssl_x509_export</KEYWORD2>
-			<KEYWORD2>openssl_x509_export_to_file</KEYWORD2>
 			<KEYWORD2>openssl_x509_free</KEYWORD2>
 			<KEYWORD2>openssl_x509_parse</KEYWORD2>
 			<KEYWORD2>openssl_x509_read</KEYWORD2>
@@ -2307,11 +1834,15 @@
 			<KEYWORD2>ora_parse</KEYWORD2>
 			<KEYWORD2>ora_plogon</KEYWORD2>
 			<KEYWORD2>ora_rollback</KEYWORD2>
+			<KEYWORD2>orbit_caught_exception</KEYWORD2>
+			<KEYWORD2>orbit_exception_id</KEYWORD2>
+			<KEYWORD2>orbit_exception_value</KEYWORD2>
+			<KEYWORD2>orbit_get_repository_id</KEYWORD2>
+			<KEYWORD2>orbit_load_idl</KEYWORD2>
 			<KEYWORD2>ord</KEYWORD2>
-			<KEYWORD2>output_add_rewrite_var</KEYWORD2>
-			<KEYWORD2>output_reset_rewrite_vars</KEYWORD2>
-			<KEYWORD2>overload</KEYWORD2>
+			<KEYWORD2>output</KEYWORD2>
 			<KEYWORD2>ovrimos_close</KEYWORD2>
+			<KEYWORD2>ovrimos_close_all</KEYWORD2>
 			<KEYWORD2>ovrimos_commit</KEYWORD2>
 			<KEYWORD2>ovrimos_connect</KEYWORD2>
 			<KEYWORD2>ovrimos_cursor</KEYWORD2>
@@ -2338,16 +1869,6 @@
 			<KEYWORD2>passthru</KEYWORD2>
 			<KEYWORD2>pathinfo</KEYWORD2>
 			<KEYWORD2>pclose</KEYWORD2>
-			<KEYWORD2>pcntl_exec</KEYWORD2>
-			<KEYWORD2>pcntl_fork</KEYWORD2>
-			<KEYWORD2>pcntl_signal</KEYWORD2>
-			<KEYWORD2>pcntl_waitpid</KEYWORD2>
-			<KEYWORD2>pcntl_wexitstatus</KEYWORD2>
-			<KEYWORD2>pcntl_wifexited</KEYWORD2>
-			<KEYWORD2>pcntl_wifsignaled</KEYWORD2>
-			<KEYWORD2>pcntl_wifstopped</KEYWORD2>
-			<KEYWORD2>pcntl_wstopsig</KEYWORD2>
-			<KEYWORD2>pcntl_wtermsig</KEYWORD2>
 			<KEYWORD2>pdf_add_annotation</KEYWORD2>
 			<KEYWORD2>pdf_add_bookmark</KEYWORD2>
 			<KEYWORD2>pdf_add_launchlink</KEYWORD2>
@@ -2389,8 +1910,6 @@
 			<KEYWORD2>pdf_get_fontsize</KEYWORD2>
 			<KEYWORD2>pdf_get_image_height</KEYWORD2>
 			<KEYWORD2>pdf_get_image_width</KEYWORD2>
-			<KEYWORD2>pdf_get_majorversion</KEYWORD2>
-			<KEYWORD2>pdf_get_minorversion</KEYWORD2>
 			<KEYWORD2>pdf_get_parameter</KEYWORD2>
 			<KEYWORD2>pdf_get_pdi_parameter</KEYWORD2>
 			<KEYWORD2>pdf_get_pdi_value</KEYWORD2>
@@ -2434,10 +1953,10 @@
 			<KEYWORD2>pdf_set_info_title</KEYWORD2>
 			<KEYWORD2>pdf_set_leading</KEYWORD2>
 			<KEYWORD2>pdf_set_parameter</KEYWORD2>
-			<KEYWORD2>pdf_set_text_matrix</KEYWORD2>
 			<KEYWORD2>pdf_set_text_pos</KEYWORD2>
 			<KEYWORD2>pdf_set_text_rendering</KEYWORD2>
 			<KEYWORD2>pdf_set_text_rise</KEYWORD2>
+			<KEYWORD2>pdf_set_transition</KEYWORD2>
 			<KEYWORD2>pdf_set_value</KEYWORD2>
 			<KEYWORD2>pdf_set_word_spacing</KEYWORD2>
 			<KEYWORD2>pdf_setcolor</KEYWORD2>
@@ -2469,75 +1988,61 @@
 			<KEYWORD2>pfpro_process_raw</KEYWORD2>
 			<KEYWORD2>pfpro_version</KEYWORD2>
 			<KEYWORD2>pfsockopen</KEYWORD2>
-			<KEYWORD2>pg_affected_rows</KEYWORD2>
-			<KEYWORD2>pg_cancel_query</KEYWORD2>
 			<KEYWORD2>pg_client_encoding</KEYWORD2>
+			<KEYWORD2>pg_clientencoding</KEYWORD2>
 			<KEYWORD2>pg_close</KEYWORD2>
+			<KEYWORD2>pg_cmdtuples</KEYWORD2>
 			<KEYWORD2>pg_connect</KEYWORD2>
-			<KEYWORD2>pg_connection_busy</KEYWORD2>
-			<KEYWORD2>pg_connection_reset</KEYWORD2>
-			<KEYWORD2>pg_connection_status</KEYWORD2>
 			<KEYWORD2>pg_convert</KEYWORD2>
-			<KEYWORD2>pg_copy_from</KEYWORD2>
-			<KEYWORD2>pg_copy_to</KEYWORD2>
 			<KEYWORD2>pg_dbname</KEYWORD2>
 			<KEYWORD2>pg_delete</KEYWORD2>
 			<KEYWORD2>pg_end_copy</KEYWORD2>
-			<KEYWORD2>pg_escape_bytea</KEYWORD2>
-			<KEYWORD2>pg_escape_string</KEYWORD2>
+			<KEYWORD2>pg_errormessage</KEYWORD2>
+			<KEYWORD2>pg_exec</KEYWORD2>
 			<KEYWORD2>pg_fetch_all</KEYWORD2>
 			<KEYWORD2>pg_fetch_array</KEYWORD2>
 			<KEYWORD2>pg_fetch_assoc</KEYWORD2>
 			<KEYWORD2>pg_fetch_object</KEYWORD2>
-			<KEYWORD2>pg_fetch_result</KEYWORD2>
 			<KEYWORD2>pg_fetch_row</KEYWORD2>
-			<KEYWORD2>pg_field_is_null</KEYWORD2>
-			<KEYWORD2>pg_field_name</KEYWORD2>
-			<KEYWORD2>pg_field_num</KEYWORD2>
-			<KEYWORD2>pg_field_prtlen</KEYWORD2>
-			<KEYWORD2>pg_field_size</KEYWORD2>
-			<KEYWORD2>pg_field_type</KEYWORD2>
-			<KEYWORD2>pg_free_result</KEYWORD2>
+			<KEYWORD2>pg_fieldisnull</KEYWORD2>
+			<KEYWORD2>pg_fieldname</KEYWORD2>
+			<KEYWORD2>pg_fieldnum</KEYWORD2>
+			<KEYWORD2>pg_fieldprtlen</KEYWORD2>
+			<KEYWORD2>pg_fieldsize</KEYWORD2>
+			<KEYWORD2>pg_fieldtype</KEYWORD2>
+			<KEYWORD2>pg_freeresult</KEYWORD2>
+			<KEYWORD2>pg_getlastoid</KEYWORD2>
 			<KEYWORD2>pg_get_notify</KEYWORD2>
 			<KEYWORD2>pg_get_pid</KEYWORD2>
-			<KEYWORD2>pg_get_result</KEYWORD2>
 			<KEYWORD2>pg_host</KEYWORD2>
 			<KEYWORD2>pg_insert</KEYWORD2>
-			<KEYWORD2>pg_last_error</KEYWORD2>
-			<KEYWORD2>pg_last_notice</KEYWORD2>
-			<KEYWORD2>pg_last_oid</KEYWORD2>
-			<KEYWORD2>pg_lo_close</KEYWORD2>
-			<KEYWORD2>pg_lo_create</KEYWORD2>
-			<KEYWORD2>pg_lo_export</KEYWORD2>
-			<KEYWORD2>pg_lo_import</KEYWORD2>
-			<KEYWORD2>pg_lo_open</KEYWORD2>
-			<KEYWORD2>pg_lo_read</KEYWORD2>
-			<KEYWORD2>pg_lo_read_all</KEYWORD2>
-			<KEYWORD2>pg_lo_seek</KEYWORD2>
-			<KEYWORD2>pg_lo_tell</KEYWORD2>
-			<KEYWORD2>pg_lo_unlink</KEYWORD2>
-			<KEYWORD2>pg_lo_write</KEYWORD2>
+			<KEYWORD2>pg_loclose</KEYWORD2>
+			<KEYWORD2>pg_locreate</KEYWORD2>
+			<KEYWORD2>pg_loexport</KEYWORD2>
+			<KEYWORD2>pg_loimport</KEYWORD2>
+			<KEYWORD2>pg_loopen</KEYWORD2>
+			<KEYWORD2>pg_loread</KEYWORD2>
+			<KEYWORD2>pg_loreadall</KEYWORD2>
+			<KEYWORD2>pg_lounlink</KEYWORD2>
+			<KEYWORD2>pg_lowrite</KEYWORD2>
+			<KEYWORD2>pg_numfields</KEYWORD2>
+			<KEYWORD2>pg_numrows</KEYWORD2>
 			<KEYWORD2>pg_meta_data</KEYWORD2>
-			<KEYWORD2>pg_num_fields</KEYWORD2>
-			<KEYWORD2>pg_num_rows</KEYWORD2>
 			<KEYWORD2>pg_options</KEYWORD2>
 			<KEYWORD2>pg_pconnect</KEYWORD2>
 			<KEYWORD2>pg_ping</KEYWORD2>
 			<KEYWORD2>pg_port</KEYWORD2>
 			<KEYWORD2>pg_put_line</KEYWORD2>
-			<KEYWORD2>pg_query</KEYWORD2>
-			<KEYWORD2>pg_result_error</KEYWORD2>
+			<KEYWORD2>pg_result</KEYWORD2>
 			<KEYWORD2>pg_result_seek</KEYWORD2>
-			<KEYWORD2>pg_result_status</KEYWORD2>
 			<KEYWORD2>pg_select</KEYWORD2>
-			<KEYWORD2>pg_send_query</KEYWORD2>
 			<KEYWORD2>pg_set_client_encoding</KEYWORD2>
+			<KEYWORD2>pg_setclientencoding</KEYWORD2>
 			<KEYWORD2>pg_trace</KEYWORD2>
 			<KEYWORD2>pg_tty</KEYWORD2>
 			<KEYWORD2>pg_unescape_bytea</KEYWORD2>
 			<KEYWORD2>pg_untrace</KEYWORD2>
 			<KEYWORD2>pg_update</KEYWORD2>
-			<KEYWORD2>php_ini_scanned_files</KEYWORD2>
 			<KEYWORD2>php_logo_guid</KEYWORD2>
 			<KEYWORD2>php_sapi_name</KEYWORD2>
 			<KEYWORD2>php_uname</KEYWORD2>
@@ -2549,7 +2054,6 @@
 			<KEYWORD2>popen</KEYWORD2>
 			<KEYWORD2>pos</KEYWORD2>
 			<KEYWORD2>posix_ctermid</KEYWORD2>
-			<KEYWORD2>posix_get_last_error</KEYWORD2>
 			<KEYWORD2>posix_getcwd</KEYWORD2>
 			<KEYWORD2>posix_getegid</KEYWORD2>
 			<KEYWORD2>posix_geteuid</KEYWORD2>
@@ -2576,7 +2080,6 @@
 			<KEYWORD2>posix_setpgid</KEYWORD2>
 			<KEYWORD2>posix_setsid</KEYWORD2>
 			<KEYWORD2>posix_setuid</KEYWORD2>
-			<KEYWORD2>posix_strerror</KEYWORD2>
 			<KEYWORD2>posix_times</KEYWORD2>
 			<KEYWORD2>posix_ttyname</KEYWORD2>
 			<KEYWORD2>posix_uname</KEYWORD2>
@@ -2622,11 +2125,6 @@
 			<KEYWORD2>printer_start_page</KEYWORD2>
 			<KEYWORD2>printer_write</KEYWORD2>
 			<KEYWORD2>printf</KEYWORD2>
-			<KEYWORD2>proc_close</KEYWORD2>
-			<KEYWORD2>proc_get_status</KEYWORD2>
-			<KEYWORD2>proc_nice</KEYWORD2>
-			<KEYWORD2>proc_open</KEYWORD2>
-			<KEYWORD2>proc_terminate</KEYWORD2>
 			<KEYWORD2>pspell_add_to_personal</KEYWORD2>
 			<KEYWORD2>pspell_add_to_session</KEYWORD2>
 			<KEYWORD2>pspell_check</KEYWORD2>
@@ -2645,6 +2143,7 @@
 			<KEYWORD2>pspell_store_replacement</KEYWORD2>
 			<KEYWORD2>pspell_suggest</KEYWORD2>
 			<KEYWORD2>putenv</KEYWORD2>
+			<KEYWORD2>putenv</KEYWORD2>
 			<KEYWORD2>qdom_error</KEYWORD2>
 			<KEYWORD2>qdom_tree</KEYWORD2>
 			<KEYWORD2>quoted_printable_decode</KEYWORD2>
@@ -2654,6 +2153,7 @@
 			<KEYWORD2>range</KEYWORD2>
 			<KEYWORD2>rawurldecode</KEYWORD2>
 			<KEYWORD2>rawurlencode</KEYWORD2>
+			<KEYWORD2>read</KEYWORD2>
 			<KEYWORD2>read_exif_data</KEYWORD2>
 			<KEYWORD2>readdir</KEYWORD2>
 			<KEYWORD2>readfile</KEYWORD2>
@@ -2664,50 +2164,55 @@
 			<KEYWORD2>readline_completion_function</KEYWORD2>
 			<KEYWORD2>readline_info</KEYWORD2>
 			<KEYWORD2>readline_list_history</KEYWORD2>
+			<KEYWORD2>readline_list_history</KEYWORD2>
 			<KEYWORD2>readline_read_history</KEYWORD2>
 			<KEYWORD2>readline_write_history</KEYWORD2>
 			<KEYWORD2>readlink</KEYWORD2>
+			<KEYWORD2>readlink</KEYWORD2>
+			<KEYWORD2>readv</KEYWORD2>
+			<KEYWORD2>realpath</KEYWORD2>
 			<KEYWORD2>realpath</KEYWORD2>
 			<KEYWORD2>recode</KEYWORD2>
 			<KEYWORD2>recode_file</KEYWORD2>
 			<KEYWORD2>recode_string</KEYWORD2>
+			<KEYWORD2>recv</KEYWORD2>
+			<KEYWORD2>recvfrom</KEYWORD2>
+			<KEYWORD2>recvmsg</KEYWORD2>
 			<KEYWORD2>register_shutdown_function</KEYWORD2>
 			<KEYWORD2>register_tick_function</KEYWORD2>
+			<KEYWORD2>remove</KEYWORD2>
+			<KEYWORD2>remove</KEYWORD2>
 			<KEYWORD2>rename</KEYWORD2>
 			<KEYWORD2>reset</KEYWORD2>
 			<KEYWORD2>restore_error_handler</KEYWORD2>
-			<KEYWORD2>restore_include_path</KEYWORD2>
 			<KEYWORD2>rewind</KEYWORD2>
 			<KEYWORD2>rewinddir</KEYWORD2>
 			<KEYWORD2>rmdir</KEYWORD2>
+			<KEYWORD2>rotate</KEYWORD2>
+			<KEYWORD2>rotateto</KEYWORD2>
+			<KEYWORD2>rotateto</KEYWORD2>
 			<KEYWORD2>round</KEYWORD2>
 			<KEYWORD2>rsort</KEYWORD2>
 			<KEYWORD2>rtrim</KEYWORD2>
+			<KEYWORD2>satellite_caught_exception</KEYWORD2>
+			<KEYWORD2>satellite_exception_id</KEYWORD2>
+			<KEYWORD2>satellite_exception_value</KEYWORD2>
+			<KEYWORD2>satellite_get_repository_id</KEYWORD2>
+			<KEYWORD2>satellite_load_idl</KEYWORD2>
+			<KEYWORD2>save</KEYWORD2>
+			<KEYWORD2>savetofile</KEYWORD2>
+			<KEYWORD2>scale</KEYWORD2>
+			<KEYWORD2>scaleto</KEYWORD2>
+			<KEYWORD2>scaleto</KEYWORD2>
 			<KEYWORD2>scandir</KEYWORD2>
+			<KEYWORD2>select</KEYWORD2>
 			<KEYWORD2>sem_acquire</KEYWORD2>
 			<KEYWORD2>sem_get</KEYWORD2>
 			<KEYWORD2>sem_release</KEYWORD2>
-			<KEYWORD2>sem_remove</KEYWORD2>
+			<KEYWORD2>send</KEYWORD2>
+			<KEYWORD2>sendmsg</KEYWORD2>
+			<KEYWORD2>sendto</KEYWORD2>
 			<KEYWORD2>serialize</KEYWORD2>
-			<KEYWORD2>sesam_affected_rows</KEYWORD2>
-			<KEYWORD2>sesam_commit</KEYWORD2>
-			<KEYWORD2>sesam_connect</KEYWORD2>
-			<KEYWORD2>sesam_diagnostic</KEYWORD2>
-			<KEYWORD2>sesam_disconnect</KEYWORD2>
-			<KEYWORD2>sesam_errormsg</KEYWORD2>
-			<KEYWORD2>sesam_execimm</KEYWORD2>
-			<KEYWORD2>sesam_fetch_array</KEYWORD2>
-			<KEYWORD2>sesam_fetch_result</KEYWORD2>
-			<KEYWORD2>sesam_fetch_row</KEYWORD2>
-			<KEYWORD2>sesam_field_array</KEYWORD2>
-			<KEYWORD2>sesam_field_name</KEYWORD2>
-			<KEYWORD2>sesam_free_result</KEYWORD2>
-			<KEYWORD2>sesam_num_fields</KEYWORD2>
-			<KEYWORD2>sesam_query</KEYWORD2>
-			<KEYWORD2>sesam_rollback</KEYWORD2>
-			<KEYWORD2>sesam_seek_row</KEYWORD2>
-			<KEYWORD2>sesam_settransaction</KEYWORD2>
-			<KEYWORD2>session_cache_expire</KEYWORD2>
 			<KEYWORD2>session_cache_limiter</KEYWORD2>
 			<KEYWORD2>session_decode</KEYWORD2>
 			<KEYWORD2>session_destroy</KEYWORD2>
@@ -2717,7 +2222,6 @@
 			<KEYWORD2>session_is_registered</KEYWORD2>
 			<KEYWORD2>session_module_name</KEYWORD2>
 			<KEYWORD2>session_name</KEYWORD2>
-			<KEYWORD2>session_regenerate_id</KEYWORD2>
 			<KEYWORD2>session_register</KEYWORD2>
 			<KEYWORD2>session_save_path</KEYWORD2>
 			<KEYWORD2>session_set_cookie_params</KEYWORD2>
@@ -2726,14 +2230,49 @@
 			<KEYWORD2>session_unregister</KEYWORD2>
 			<KEYWORD2>session_unset</KEYWORD2>
 			<KEYWORD2>session_write_close</KEYWORD2>
+			<KEYWORD2>set_content</KEYWORD2>
 			<KEYWORD2>set_error_handler</KEYWORD2>
 			<KEYWORD2>set_file_buffer</KEYWORD2>
-			<KEYWORD2>set_include_path</KEYWORD2>
+			<KEYWORD2>set_iovec</KEYWORD2>
 			<KEYWORD2>set_magic_quotes_runtime</KEYWORD2>
+			<KEYWORD2>set_nonblock</KEYWORD2>
+			<KEYWORD2>set_socket_blocking</KEYWORD2>
 			<KEYWORD2>set_time_limit</KEYWORD2>
+			<KEYWORD2>setaction</KEYWORD2>
+			<KEYWORD2>setbackground</KEYWORD2>
+			<KEYWORD2>setbounds</KEYWORD2>
+			<KEYWORD2>setcolor</KEYWORD2>
+			<KEYWORD2>setcolor</KEYWORD2>
 			<KEYWORD2>setcookie</KEYWORD2>
+			<KEYWORD2>setdepth</KEYWORD2>
+			<KEYWORD2>setdimension</KEYWORD2>
+			<KEYWORD2>setdown</KEYWORD2>
+			<KEYWORD2>setfont</KEYWORD2>
+			<KEYWORD2>setfont</KEYWORD2>
+			<KEYWORD2>setframes</KEYWORD2>
+			<KEYWORD2>setframes</KEYWORD2>
+			<KEYWORD2>setheight</KEYWORD2>
+			<KEYWORD2>setheight</KEYWORD2>
+			<KEYWORD2>sethit</KEYWORD2>
+			<KEYWORD2>setindentation</KEYWORD2>
+			<KEYWORD2>setleftfill</KEYWORD2>
+			<KEYWORD2>setleftmargin</KEYWORD2>
+			<KEYWORD2>setline</KEYWORD2>
+			<KEYWORD2>setlinespacing</KEYWORD2>
 			<KEYWORD2>setlocale</KEYWORD2>
+			<KEYWORD2>setmargins</KEYWORD2>
+			<KEYWORD2>setmatrix</KEYWORD2>
+			<KEYWORD2>setname</KEYWORD2>
+			<KEYWORD2>setname</KEYWORD2>
+			<KEYWORD2>setover</KEYWORD2>
+			<KEYWORD2>setrate</KEYWORD2>
+			<KEYWORD2>setratio</KEYWORD2>
+			<KEYWORD2>setrightfill</KEYWORD2>
+			<KEYWORD2>setrightmargin</KEYWORD2>
+			<KEYWORD2>setsockopt</KEYWORD2>
+			<KEYWORD2>setspacing</KEYWORD2>
 			<KEYWORD2>settype</KEYWORD2>
+			<KEYWORD2>setup</KEYWORD2>
 			<KEYWORD2>sha1</KEYWORD2>
 			<KEYWORD2>sha1_file</KEYWORD2>
 			<KEYWORD2>shell_exec</KEYWORD2>
@@ -2751,138 +2290,68 @@
 			<KEYWORD2>shmop_write</KEYWORD2>
 			<KEYWORD2>show_source</KEYWORD2>
 			<KEYWORD2>shuffle</KEYWORD2>
+			<KEYWORD2>shutdown</KEYWORD2>
+			<KEYWORD2>signal</KEYWORD2>
 			<KEYWORD2>similar_text</KEYWORD2>
-			<KEYWORD2>simplexml_load_dom</KEYWORD2>
-			<KEYWORD2>simplexml_load_file</KEYWORD2>
-			<KEYWORD2>simplexml_load_string</KEYWORD2>
 			<KEYWORD2>sin</KEYWORD2>
-			<KEYWORD2>sinh</KEYWORD2>
 			<KEYWORD2>sizeof</KEYWORD2>
+			<KEYWORD2>skewx</KEYWORD2>
+			<KEYWORD2>skewxto</KEYWORD2>
+			<KEYWORD2>skewxto</KEYWORD2>
+			<KEYWORD2>skewy</KEYWORD2>
+			<KEYWORD2>skewyto</KEYWORD2>
+			<KEYWORD2>skewyto</KEYWORD2>
 			<KEYWORD2>sleep</KEYWORD2>
 			<KEYWORD2>snmp_get_quick_print</KEYWORD2>
 			<KEYWORD2>snmp_set_quick_print</KEYWORD2>
 			<KEYWORD2>snmpget</KEYWORD2>
+			<KEYWORD2>snmpget</KEYWORD2>
 			<KEYWORD2>snmprealwalk</KEYWORD2>
 			<KEYWORD2>snmpset</KEYWORD2>
 			<KEYWORD2>snmpwalk</KEYWORD2>
+			<KEYWORD2>snmpwalk</KEYWORD2>
 			<KEYWORD2>snmpwalkoid</KEYWORD2>
-			<KEYWORD2>socket_accept</KEYWORD2>
-			<KEYWORD2>socket_bind</KEYWORD2>
-			<KEYWORD2>socket_clear_error</KEYWORD2>
-			<KEYWORD2>socket_close</KEYWORD2>
-			<KEYWORD2>socket_connect</KEYWORD2>
-			<KEYWORD2>socket_create</KEYWORD2>
-			<KEYWORD2>socket_create_listen</KEYWORD2>
-			<KEYWORD2>socket_create_pair</KEYWORD2>
-			<KEYWORD2>socket_get_option</KEYWORD2>
+			<KEYWORD2>socket</KEYWORD2>
 			<KEYWORD2>socket_get_status</KEYWORD2>
-			<KEYWORD2>socket_getpeername</KEYWORD2>
-			<KEYWORD2>socket_getsockname</KEYWORD2>
-			<KEYWORD2>socket_iovec_add</KEYWORD2>
-			<KEYWORD2>socket_iovec_alloc</KEYWORD2>
-			<KEYWORD2>socket_iovec_delete</KEYWORD2>
-			<KEYWORD2>socket_iovec_fetch</KEYWORD2>
-			<KEYWORD2>socket_iovec_free</KEYWORD2>
-			<KEYWORD2>socket_iovec_set</KEYWORD2>
-			<KEYWORD2>socket_last_error</KEYWORD2>
-			<KEYWORD2>socket_listen</KEYWORD2>
-			<KEYWORD2>socket_read</KEYWORD2>
-			<KEYWORD2>socket_readv</KEYWORD2>
-			<KEYWORD2>socket_recv</KEYWORD2>
-			<KEYWORD2>socket_recvfrom</KEYWORD2>
-			<KEYWORD2>socket_recvmsg</KEYWORD2>
-			<KEYWORD2>socket_select</KEYWORD2>
-			<KEYWORD2>socket_send</KEYWORD2>
-			<KEYWORD2>socket_sendmsg</KEYWORD2>
-			<KEYWORD2>socket_sendto</KEYWORD2>
-			<KEYWORD2>socket_set_block</KEYWORD2>
 			<KEYWORD2>socket_set_blocking</KEYWORD2>
-			<KEYWORD2>socket_set_nonblock</KEYWORD2>
-			<KEYWORD2>socket_set_option</KEYWORD2>
 			<KEYWORD2>socket_set_timeout</KEYWORD2>
-			<KEYWORD2>socket_shutdown</KEYWORD2>
-			<KEYWORD2>socket_strerror</KEYWORD2>
-			<KEYWORD2>socket_write</KEYWORD2>
-			<KEYWORD2>socket_writev</KEYWORD2>
+			<KEYWORD2>socket_set_timeout</KEYWORD2>
+			<KEYWORD2>stream_get_status</KEYWORD2>
+			<KEYWORD2>stream_set_blocking</KEYWORD2>
+			<KEYWORD2>stream_set_timeout</KEYWORD2>
+			<KEYWORD2>stream_set_timeout</KEYWORD2>
+			<KEYWORD2>stream_context_create</KEYWORD2>
+			<KEYWORD2>stream_context_set_params</KEYWORD2>
+			<KEYWORD2>stream_context_set_option</KEYWORD2>
+			<KEYWORD2>stream_filter_prepend</KEYWORD2>
+			<KEYWORD2>stream_filter_append</KEYWORD2>
+			<KEYWORD2>stream_select</KEYWORD2>
+			<KEYWORD2>socketpair</KEYWORD2>
 			<KEYWORD2>sort</KEYWORD2>
 			<KEYWORD2>soundex</KEYWORD2>
 			<KEYWORD2>split</KEYWORD2>
 			<KEYWORD2>spliti</KEYWORD2>
 			<KEYWORD2>sprintf</KEYWORD2>
 			<KEYWORD2>sql_regcase</KEYWORD2>
-			<KEYWORD2>sqlite_array_query</KEYWORD2>
-			<KEYWORD2>sqlite_busy_timeout</KEYWORD2>
-			<KEYWORD2>sqlite_changes</KEYWORD2>
-			<KEYWORD2>sqlite_close</KEYWORD2>
-			<KEYWORD2>sqlite_column</KEYWORD2>
-			<KEYWORD2>sqlite_create_aggregate</KEYWORD2>
-			<KEYWORD2>sqlite_create_function</KEYWORD2>
-			<KEYWORD2>sqlite_current</KEYWORD2>
-			<KEYWORD2>sqlite_error_string</KEYWORD2>
-			<KEYWORD2>sqlite_escape_string</KEYWORD2>
-			<KEYWORD2>sqlite_fetch_array</KEYWORD2>
-			<KEYWORD2>sqlite_fetch_single</KEYWORD2>
-			<KEYWORD2>sqlite_fetch_string</KEYWORD2>
-			<KEYWORD2>sqlite_field_name</KEYWORD2>
-			<KEYWORD2>sqlite_has_more</KEYWORD2>
-			<KEYWORD2>sqlite_last_error</KEYWORD2>
-			<KEYWORD2>sqlite_last_insert_rowid</KEYWORD2>
-			<KEYWORD2>sqlite_libencoding</KEYWORD2>
-			<KEYWORD2>sqlite_libversion</KEYWORD2>
-			<KEYWORD2>sqlite_next</KEYWORD2>
-			<KEYWORD2>sqlite_num_fields</KEYWORD2>
-			<KEYWORD2>sqlite_num_rows</KEYWORD2>
-			<KEYWORD2>sqlite_open</KEYWORD2>
-			<KEYWORD2>sqlite_popen</KEYWORD2>
-			<KEYWORD2>sqlite_query</KEYWORD2>
-			<KEYWORD2>sqlite_rewind</KEYWORD2>
-			<KEYWORD2>sqlite_seek</KEYWORD2>
-			<KEYWORD2>sqlite_udf_decode_binary</KEYWORD2>
-			<KEYWORD2>sqlite_udf_encode_binary</KEYWORD2>
-			<KEYWORD2>sqlite_unbuffered_query</KEYWORD2>
 			<KEYWORD2>sqrt</KEYWORD2>
 			<KEYWORD2>srand</KEYWORD2>
 			<KEYWORD2>sscanf</KEYWORD2>
 			<KEYWORD2>stat</KEYWORD2>
-			<KEYWORD2>str_ireplace</KEYWORD2>
 			<KEYWORD2>str_pad</KEYWORD2>
+			<KEYWORD2>str_rot13</KEYWORD2>
 			<KEYWORD2>str_repeat</KEYWORD2>
 			<KEYWORD2>str_replace</KEYWORD2>
-			<KEYWORD2>str_rot13</KEYWORD2>
-			<KEYWORD2>str_shuffle</KEYWORD2>
 			<KEYWORD2>str_split</KEYWORD2>
-			<KEYWORD2>str_word_count</KEYWORD2>
+			<KEYWORD2>strpbrk</KEYWORD2>
 			<KEYWORD2>strcasecmp</KEYWORD2>
 			<KEYWORD2>strchr</KEYWORD2>
 			<KEYWORD2>strcmp</KEYWORD2>
 			<KEYWORD2>strcoll</KEYWORD2>
+			<KEYWORD2>strcoll</KEYWORD2>
 			<KEYWORD2>strcspn</KEYWORD2>
-			<KEYWORD2>stream_context_create</KEYWORD2>
-			<KEYWORD2>stream_context_get_options</KEYWORD2>
-			<KEYWORD2>stream_context_set_option</KEYWORD2>
-			<KEYWORD2>stream_context_set_params</KEYWORD2>
-			<KEYWORD2>stream_copy_to_stream</KEYWORD2>
-			<KEYWORD2>stream_filter_append</KEYWORD2>
-			<KEYWORD2>stream_filter_prepend</KEYWORD2>
-			<KEYWORD2>stream_filter_register</KEYWORD2>
-			<KEYWORD2>stream_get_contents</KEYWORD2>
-			<KEYWORD2>stream_get_filters</KEYWORD2>
-			<KEYWORD2>stream_get_line</KEYWORD2>
-			<KEYWORD2>stream_get_meta_data</KEYWORD2>
-			<KEYWORD2>stream_get_transports</KEYWORD2>
-			<KEYWORD2>stream_get_wrappers</KEYWORD2>
-			<KEYWORD2>stream_register_wrapper</KEYWORD2>
-			<KEYWORD2>stream_select</KEYWORD2>
-			<KEYWORD2>stream_set_blocking</KEYWORD2>
-			<KEYWORD2>stream_set_timeout</KEYWORD2>
-			<KEYWORD2>stream_set_write_buffer</KEYWORD2>
-			<KEYWORD2>stream_socket_accept</KEYWORD2>
-			<KEYWORD2>stream_socket_client</KEYWORD2>
-			<KEYWORD2>stream_socket_get_name</KEYWORD2>
-			<KEYWORD2>stream_socket_recvfrom</KEYWORD2>
-			<KEYWORD2>stream_socket_sendto</KEYWORD2>
-			<KEYWORD2>stream_socket_server</KEYWORD2>
-			<KEYWORD2>stream_wrapper_register</KEYWORD2>
+			<KEYWORD2>streammp3</KEYWORD2>
+			<KEYWORD2>strerror</KEYWORD2>
+			<KEYWORD2>strftime</KEYWORD2>
 			<KEYWORD2>strftime</KEYWORD2>
 			<KEYWORD2>strip_tags</KEYWORD2>
 			<KEYWORD2>stripcslashes</KEYWORD2>
@@ -2897,7 +2366,6 @@
 			<KEYWORD2>strpos</KEYWORD2>
 			<KEYWORD2>strrchr</KEYWORD2>
 			<KEYWORD2>strrev</KEYWORD2>
-			<KEYWORD2>strripos</KEYWORD2>
 			<KEYWORD2>strrpos</KEYWORD2>
 			<KEYWORD2>strspn</KEYWORD2>
 			<KEYWORD2>strstr</KEYWORD2>
@@ -2907,6 +2375,7 @@
 			<KEYWORD2>strtoupper</KEYWORD2>
 			<KEYWORD2>strtr</KEYWORD2>
 			<KEYWORD2>strval</KEYWORD2>
+			<KEYWORD2>str_word_count</KEYWORD2>
 			<KEYWORD2>substr</KEYWORD2>
 			<KEYWORD2>substr_compare</KEYWORD2>
 			<KEYWORD2>substr_count</KEYWORD2>
@@ -2982,7 +2451,6 @@
 			<KEYWORD2>swfbitmap</KEYWORD2>
 			<KEYWORD2>swfbutton</KEYWORD2>
 			<KEYWORD2>swfbutton_keypress</KEYWORD2>
-			<KEYWORD2>swfdisplayitem</KEYWORD2>
 			<KEYWORD2>swffill</KEYWORD2>
 			<KEYWORD2>swffont</KEYWORD2>
 			<KEYWORD2>swfgradient</KEYWORD2>
@@ -2993,68 +2461,53 @@
 			<KEYWORD2>swftext</KEYWORD2>
 			<KEYWORD2>swftextfield</KEYWORD2>
 			<KEYWORD2>sybase_affected_rows</KEYWORD2>
+			<KEYWORD2>sybase_affected_rows</KEYWORD2>
+			<KEYWORD2>sybase_close</KEYWORD2>
 			<KEYWORD2>sybase_close</KEYWORD2>
 			<KEYWORD2>sybase_connect</KEYWORD2>
+			<KEYWORD2>sybase_connect</KEYWORD2>
 			<KEYWORD2>sybase_data_seek</KEYWORD2>
-			<KEYWORD2>sybase_deadlock_retry_count</KEYWORD2>
+			<KEYWORD2>sybase_data_seek</KEYWORD2>
 			<KEYWORD2>sybase_fetch_array</KEYWORD2>
-			<KEYWORD2>sybase_fetch_assoc</KEYWORD2>
+			<KEYWORD2>sybase_fetch_array</KEYWORD2>
+			<KEYWORD2>sybase_fetch_field</KEYWORD2>
 			<KEYWORD2>sybase_fetch_field</KEYWORD2>
 			<KEYWORD2>sybase_fetch_object</KEYWORD2>
+			<KEYWORD2>sybase_fetch_object</KEYWORD2>
+			<KEYWORD2>sybase_fetch_row</KEYWORD2>
 			<KEYWORD2>sybase_fetch_row</KEYWORD2>
 			<KEYWORD2>sybase_field_seek</KEYWORD2>
+			<KEYWORD2>sybase_field_seek</KEYWORD2>
 			<KEYWORD2>sybase_free_result</KEYWORD2>
+			<KEYWORD2>sybase_free_result</KEYWORD2>
+			<KEYWORD2>sybase_get_last_message</KEYWORD2>
 			<KEYWORD2>sybase_get_last_message</KEYWORD2>
 			<KEYWORD2>sybase_min_client_severity</KEYWORD2>
 			<KEYWORD2>sybase_min_error_severity</KEYWORD2>
 			<KEYWORD2>sybase_min_message_severity</KEYWORD2>
 			<KEYWORD2>sybase_min_server_severity</KEYWORD2>
 			<KEYWORD2>sybase_num_fields</KEYWORD2>
+			<KEYWORD2>sybase_num_fields</KEYWORD2>
+			<KEYWORD2>sybase_num_rows</KEYWORD2>
 			<KEYWORD2>sybase_num_rows</KEYWORD2>
 			<KEYWORD2>sybase_pconnect</KEYWORD2>
+			<KEYWORD2>sybase_pconnect</KEYWORD2>
+			<KEYWORD2>sybase_query</KEYWORD2>
 			<KEYWORD2>sybase_query</KEYWORD2>
 			<KEYWORD2>sybase_result</KEYWORD2>
+			<KEYWORD2>sybase_result</KEYWORD2>
 			<KEYWORD2>sybase_select_db</KEYWORD2>
-			<KEYWORD2>sybase_set_message_handler</KEYWORD2>
-			<KEYWORD2>sybase_unbuffered_query</KEYWORD2>
+			<KEYWORD2>sybase_select_db</KEYWORD2>
+			<KEYWORD2>symlink</KEYWORD2>
 			<KEYWORD2>symlink</KEYWORD2>
 			<KEYWORD2>syslog</KEYWORD2>
 			<KEYWORD2>system</KEYWORD2>
 			<KEYWORD2>tan</KEYWORD2>
-			<KEYWORD2>tanh</KEYWORD2>
 			<KEYWORD2>tempnam</KEYWORD2>
 			<KEYWORD2>textdomain</KEYWORD2>
-			<KEYWORD2>tidy_access_count</KEYWORD2>
-			<KEYWORD2>tidy_clean_repair</KEYWORD2>
-			<KEYWORD2>tidy_config_count</KEYWORD2>
-			<KEYWORD2>tidy_diagnose</KEYWORD2>
-			<KEYWORD2>tidy_error_count</KEYWORD2>
-			<KEYWORD2>tidy_get_body</KEYWORD2>
-			<KEYWORD2>tidy_get_config</KEYWORD2>
-			<KEYWORD2>tidy_get_error_buffer</KEYWORD2>
-			<KEYWORD2>tidy_get_head</KEYWORD2>
-			<KEYWORD2>tidy_get_html</KEYWORD2>
-			<KEYWORD2>tidy_get_html_ver</KEYWORD2>
-			<KEYWORD2>tidy_get_output</KEYWORD2>
-			<KEYWORD2>tidy_get_release</KEYWORD2>
-			<KEYWORD2>tidy_get_root</KEYWORD2>
-			<KEYWORD2>tidy_get_status</KEYWORD2>
-			<KEYWORD2>tidy_getopt</KEYWORD2>
-			<KEYWORD2>tidy_is_xhtml</KEYWORD2>
-			<KEYWORD2>tidy_load_config</KEYWORD2>
-			<KEYWORD2>tidy_parse_file</KEYWORD2>
-			<KEYWORD2>tidy_parse_string</KEYWORD2>
-			<KEYWORD2>tidy_repair_file</KEYWORD2>
-			<KEYWORD2>tidy_repair_string</KEYWORD2>
-			<KEYWORD2>tidy_reset_config</KEYWORD2>
-			<KEYWORD2>tidy_save_config</KEYWORD2>
-			<KEYWORD2>tidy_set_encoding</KEYWORD2>
-			<KEYWORD2>tidy_setopt</KEYWORD2>
-			<KEYWORD2>tidy_warning_count</KEYWORD2>
 			<KEYWORD2>time</KEYWORD2>
+			<KEYWORD2>time_nanosleep</KEYWORD2>
 			<KEYWORD2>tmpfile</KEYWORD2>
-			<KEYWORD2>token_get_all</KEYWORD2>
-			<KEYWORD2>token_name</KEYWORD2>
 			<KEYWORD2>touch</KEYWORD2>
 			<KEYWORD2>trigger_error</KEYWORD2>
 			<KEYWORD2>trim</KEYWORD2>
@@ -3064,13 +2517,7 @@
 			<KEYWORD2>udm_add_search_limit</KEYWORD2>
 			<KEYWORD2>udm_alloc_agent</KEYWORD2>
 			<KEYWORD2>udm_api_version</KEYWORD2>
-			<KEYWORD2>udm_cat_list</KEYWORD2>
-			<KEYWORD2>udm_cat_path</KEYWORD2>
-			<KEYWORD2>udm_check_charset</KEYWORD2>
-			<KEYWORD2>udm_check_stored</KEYWORD2>
 			<KEYWORD2>udm_clear_search_limits</KEYWORD2>
-			<KEYWORD2>udm_close_stored</KEYWORD2>
-			<KEYWORD2>udm_crc32</KEYWORD2>
 			<KEYWORD2>udm_errno</KEYWORD2>
 			<KEYWORD2>udm_error</KEYWORD2>
 			<KEYWORD2>udm_find</KEYWORD2>
@@ -3081,16 +2528,17 @@
 			<KEYWORD2>udm_get_res_field</KEYWORD2>
 			<KEYWORD2>udm_get_res_param</KEYWORD2>
 			<KEYWORD2>udm_load_ispell_data</KEYWORD2>
-			<KEYWORD2>udm_open_stored</KEYWORD2>
 			<KEYWORD2>udm_set_agent_param</KEYWORD2>
 			<KEYWORD2>uksort</KEYWORD2>
 			<KEYWORD2>umask</KEYWORD2>
+			<KEYWORD2>uniqid</KEYWORD2>
 			<KEYWORD2>uniqid</KEYWORD2>
 			<KEYWORD2>unixtojd</KEYWORD2>
 			<KEYWORD2>unlink</KEYWORD2>
 			<KEYWORD2>unpack</KEYWORD2>
 			<KEYWORD2>unregister_tick_function</KEYWORD2>
 			<KEYWORD2>unserialize</KEYWORD2>
+			<KEYWORD2>unset</KEYWORD2>
 			<KEYWORD2>urldecode</KEYWORD2>
 			<KEYWORD2>urlencode</KEYWORD2>
 			<KEYWORD2>user_error</KEYWORD2>
@@ -3099,20 +2547,24 @@
 			<KEYWORD2>utf8_decode</KEYWORD2>
 			<KEYWORD2>utf8_encode</KEYWORD2>
 			<KEYWORD2>var_dump</KEYWORD2>
-			<KEYWORD2>var_export</KEYWORD2>
-			<KEYWORD2>variant</KEYWORD2>
-			<KEYWORD2>version_compare</KEYWORD2>
+			<KEYWORD2>velocis_autocommit</KEYWORD2>
+			<KEYWORD2>velocis_close</KEYWORD2>
+			<KEYWORD2>velocis_commit</KEYWORD2>
+			<KEYWORD2>velocis_connect</KEYWORD2>
+			<KEYWORD2>velocis_exec</KEYWORD2>
+			<KEYWORD2>velocis_fetch</KEYWORD2>
+			<KEYWORD2>velocis_fieldname</KEYWORD2>
+			<KEYWORD2>velocis_fieldnum</KEYWORD2>
+			<KEYWORD2>velocis_freeresult</KEYWORD2>
+			<KEYWORD2>velocis_off_autocommit</KEYWORD2>
+			<KEYWORD2>velocis_result</KEYWORD2>
+			<KEYWORD2>velocis_rollback</KEYWORD2>
 			<KEYWORD2>virtual</KEYWORD2>
 			<KEYWORD2>vpopmail_add_alias_domain</KEYWORD2>
 			<KEYWORD2>vpopmail_add_alias_domain_ex</KEYWORD2>
 			<KEYWORD2>vpopmail_add_domain</KEYWORD2>
 			<KEYWORD2>vpopmail_add_domain_ex</KEYWORD2>
 			<KEYWORD2>vpopmail_add_user</KEYWORD2>
-			<KEYWORD2>vpopmail_alias_add</KEYWORD2>
-			<KEYWORD2>vpopmail_alias_del</KEYWORD2>
-			<KEYWORD2>vpopmail_alias_del_domain</KEYWORD2>
-			<KEYWORD2>vpopmail_alias_get</KEYWORD2>
-			<KEYWORD2>vpopmail_alias_get_all</KEYWORD2>
 			<KEYWORD2>vpopmail_auth_user</KEYWORD2>
 			<KEYWORD2>vpopmail_del_domain</KEYWORD2>
 			<KEYWORD2>vpopmail_del_domain_ex</KEYWORD2>
@@ -3120,13 +2572,6 @@
 			<KEYWORD2>vpopmail_error</KEYWORD2>
 			<KEYWORD2>vpopmail_passwd</KEYWORD2>
 			<KEYWORD2>vpopmail_set_user_quota</KEYWORD2>
-			<KEYWORD2>vprintf</KEYWORD2>
-			<KEYWORD2>vsprintf</KEYWORD2>
-			<KEYWORD2>w32api_deftype</KEYWORD2>
-			<KEYWORD2>w32api_init_dtype</KEYWORD2>
-			<KEYWORD2>w32api_invoke_function</KEYWORD2>
-			<KEYWORD2>w32api_register_function</KEYWORD2>
-			<KEYWORD2>w32api_set_call_method</KEYWORD2>
 			<KEYWORD2>wddx_add_vars</KEYWORD2>
 			<KEYWORD2>wddx_deserialize</KEYWORD2>
 			<KEYWORD2>wddx_packet_end</KEYWORD2>
@@ -3134,6 +2579,8 @@
 			<KEYWORD2>wddx_serialize_value</KEYWORD2>
 			<KEYWORD2>wddx_serialize_vars</KEYWORD2>
 			<KEYWORD2>wordwrap</KEYWORD2>
+			<KEYWORD2>write</KEYWORD2>
+			<KEYWORD2>writev</KEYWORD2>
 			<KEYWORD2>xml_error_string</KEYWORD2>
 			<KEYWORD2>xml_get_current_byte_index</KEYWORD2>
 			<KEYWORD2>xml_get_current_column_number</KEYWORD2>
@@ -3156,37 +2603,29 @@
 			<KEYWORD2>xml_set_processing_instruction_handler</KEYWORD2>
 			<KEYWORD2>xml_set_start_namespace_decl_handler</KEYWORD2>
 			<KEYWORD2>xml_set_unparsed_entity_decl_handler</KEYWORD2>
-			<KEYWORD2>xmlrpc_decode</KEYWORD2>
-			<KEYWORD2>xmlrpc_decode_request</KEYWORD2>
-			<KEYWORD2>xmlrpc_encode</KEYWORD2>
-			<KEYWORD2>xmlrpc_encode_request</KEYWORD2>
-			<KEYWORD2>xmlrpc_get_type</KEYWORD2>
-			<KEYWORD2>xmlrpc_parse_method_descriptions</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_add_introspection_data</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_call_method</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_create</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_destroy</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_register_introspection_callback</KEYWORD2>
-			<KEYWORD2>xmlrpc_server_register_method</KEYWORD2>
-			<KEYWORD2>xmlrpc_set_type</KEYWORD2>
+			<KEYWORD2>xmldoc</KEYWORD2>
+			<KEYWORD2>xmldocfile</KEYWORD2>
+			<KEYWORD2>xmltree</KEYWORD2>
 			<KEYWORD2>xpath_eval</KEYWORD2>
 			<KEYWORD2>xpath_eval_expression</KEYWORD2>
-			<KEYWORD2>xpath_new_context</KEYWORD2>
 			<KEYWORD2>xptr_eval</KEYWORD2>
-			<KEYWORD2>xptr_new_context</KEYWORD2>
+			<KEYWORD2>xslt_closelog</KEYWORD2>
 			<KEYWORD2>xslt_create</KEYWORD2>
 			<KEYWORD2>xslt_errno</KEYWORD2>
 			<KEYWORD2>xslt_error</KEYWORD2>
+			<KEYWORD2>xslt_fetch_result</KEYWORD2>
 			<KEYWORD2>xslt_free</KEYWORD2>
+			<KEYWORD2>xslt_openlog</KEYWORD2>
+			<KEYWORD2>xslt_output_begintransform</KEYWORD2>
+			<KEYWORD2>xslt_output_endtransform</KEYWORD2>
 			<KEYWORD2>xslt_process</KEYWORD2>
+			<KEYWORD2>xslt_run</KEYWORD2>
 			<KEYWORD2>xslt_set_base</KEYWORD2>
 			<KEYWORD2>xslt_set_encoding</KEYWORD2>
 			<KEYWORD2>xslt_set_error_handler</KEYWORD2>
-			<KEYWORD2>xslt_set_log</KEYWORD2>
 			<KEYWORD2>xslt_set_sax_handler</KEYWORD2>
-			<KEYWORD2>xslt_set_sax_handlers</KEYWORD2>
 			<KEYWORD2>xslt_set_scheme_handler</KEYWORD2>
-			<KEYWORD2>xslt_set_scheme_handlers</KEYWORD2>
+			<KEYWORD2>xslt_transform</KEYWORD2>
 			<KEYWORD2>yaz_addinfo</KEYWORD2>
 			<KEYWORD2>yaz_ccl_conf</KEYWORD2>
 			<KEYWORD2>yaz_ccl_parse</KEYWORD2>
@@ -3196,8 +2635,6 @@
 			<KEYWORD2>yaz_element</KEYWORD2>
 			<KEYWORD2>yaz_errno</KEYWORD2>
 			<KEYWORD2>yaz_error</KEYWORD2>
-			<KEYWORD2>yaz_es_result</KEYWORD2>
-			<KEYWORD2>yaz_get_option</KEYWORD2>
 			<KEYWORD2>yaz_hits</KEYWORD2>
 			<KEYWORD2>yaz_itemorder</KEYWORD2>
 			<KEYWORD2>yaz_present</KEYWORD2>
@@ -3205,10 +2642,7 @@
 			<KEYWORD2>yaz_record</KEYWORD2>
 			<KEYWORD2>yaz_scan</KEYWORD2>
 			<KEYWORD2>yaz_scan_result</KEYWORD2>
-			<KEYWORD2>yaz_schema</KEYWORD2>
 			<KEYWORD2>yaz_search</KEYWORD2>
-			<KEYWORD2>yaz_set_option</KEYWORD2>
-			<KEYWORD2>yaz_sort</KEYWORD2>
 			<KEYWORD2>yaz_syntax</KEYWORD2>
 			<KEYWORD2>yaz_wait</KEYWORD2>
 			<KEYWORD2>yp_all</KEYWORD2>
@@ -3222,28 +2656,29 @@
 			<KEYWORD2>yp_next</KEYWORD2>
 			<KEYWORD2>yp_order</KEYWORD2>
 			<KEYWORD2>zend_logo_guid</KEYWORD2>
+			<KEYWORD2>zend_test_func</KEYWORD2>
 			<KEYWORD2>zend_version</KEYWORD2>
-			<KEYWORD2>zip_close</KEYWORD2>
-			<KEYWORD2>zip_entry_close</KEYWORD2>
-			<KEYWORD2>zip_entry_compressedsize</KEYWORD2>
-			<KEYWORD2>zip_entry_compressionmethod</KEYWORD2>
-			<KEYWORD2>zip_entry_filesize</KEYWORD2>
-			<KEYWORD2>zip_entry_name</KEYWORD2>
-			<KEYWORD2>zip_entry_open</KEYWORD2>
-			<KEYWORD2>zip_entry_read</KEYWORD2>
-			<KEYWORD2>zip_open</KEYWORD2>
-			<KEYWORD2>zip_read</KEYWORD2>
-            <KEYWORD2>zlib_get_coding_type</KEYWORD2>
+			<KEYWORD2>zzip_close</KEYWORD2>
+			<KEYWORD2>zzip_closedir</KEYWORD2>
+			<KEYWORD2>zzip_entry_compressedsize</KEYWORD2>
+			<KEYWORD2>zzip_entry_compressionmethod</KEYWORD2>
+			<KEYWORD2>zzip_entry_filesize</KEYWORD2>
+			<KEYWORD2>zzip_entry_name</KEYWORD2>
+			<KEYWORD2>zzip_open</KEYWORD2>
+			<KEYWORD2>zzip_opendir</KEYWORD2>
+			<KEYWORD2>zzip_read</KEYWORD2>
+			<KEYWORD2>zzip_readdir</KEYWORD2>
 		</KEYWORDS>
+	</RULES>
+
+	<RULES SET="PHP_LITERAL" ESCAPE="\" DEFAULT="LITERAL1">
+		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
 	</RULES>
 
 	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP" IGNORE_CASE="TRUE">
 		<SEQ TYPE="MARKUP" DELEGATE="JAVASCRIPT+PHP">&gt;</SEQ>
 		<!-- handle <SCRIPT SRC="..."> properly -->
-		<SPAN TYPE="LITERAL1">
-			<BEGIN>&quot;</BEGIN>
-			<END>&quot;</END>
-		</SPAN>
+		<SEQ TYPE="MARKUP" DELEGATE="BACK_TO_HTML">SRC=</SEQ>
 	</RULES>
 
 	<RULES SET="JAVASCRIPT+PHP">
@@ -3264,5 +2699,67 @@
 		</SPAN>
 
 		<IMPORT DELEGATE="javascript::MAIN"/>
+	</RULES>
+	
+	<RULES SET="PHPDOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
+		<!-- so that @link{...} is highlighted -->
+		<SEQ TYPE="COMMENT3">{</SEQ>
+
+		<!-- so that *@param is highlighted -->
+		<SEQ TYPE="COMMENT3">*</SEQ>
+
+		<!-- HTML comments -->
+		<SPAN TYPE="COMMENT2">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- PHPdoc allows this -->
+		<SEQ TYPE="COMMENT3">&lt;&lt;</SEQ>
+		<SEQ TYPE="COMMENT3">&lt;=</SEQ>
+		<SEQ TYPE="COMMENT3">&lt; </SEQ>
+
+		<!-- HTML tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS"
+			NO_LINE_BREAK="TRUE">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<KEYWORDS>
+			<LABEL>@abstract</LABEL>
+			<LABEL>@access</LABEL>
+			<LABEL>@author</LABEL>
+			<LABEL>@category</LABEL>
+			<LABEL>@copyright</LABEL>
+			<LABEL>@deprecated</LABEL>
+			<LABEL>@example</LABEL>
+			<LABEL>@final</LABEL>
+			<LABEL>@filesource</LABEL>
+			<LABEL>@global</LABEL>
+			<LABEL>@ignore</LABEL>
+			<LABEL>@internal</LABEL>
+			<LABEL>@license</LABEL>
+			<LABEL>@link</LABEL>
+			<LABEL>@name</LABEL>
+			<LABEL>@package</LABEL>
+			<LABEL>@param</LABEL>
+			<LABEL>@return</LABEL>
+			<LABEL>@see</LABEL>
+			<LABEL>@since</LABEL>
+			<LABEL>@static</LABEL>
+			<LABEL>@staticvar</LABEL>
+			<LABEL>@subpackage</LABEL>
+			<LABEL>@todo</LABEL>
+			<LABEL>@tutorial</LABEL>
+			<LABEL>@uses</LABEL>
+			<LABEL>@var</LABEL>
+			<LABEL>@version</LABEL>
+			
+			<LABEL>@id</LABEL>
+			<LABEL>@inheritdoc</LABEL>
+			<LABEL>@source</LABEL>
+			<LABEL>@toc</LABEL>
+		</KEYWORDS>
 	</RULES>
 </MODE>
