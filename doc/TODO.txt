@@ -3,12 +3,14 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- verify: recent files menu
+- delete: no vfs update
+- plugin download dir not saved
 - close dockable fucks up because C+e sends focus to the text area
 - isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- up arrow before buffer is loaded
 - note about dependencies
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
@@ -70,7 +72,6 @@ and quirks that I need to fix eventually.
   keeping INVALID? report errors in some other manner?
 - clean up the way macro hierarchy is stored
 - dialog parenting for fsb colors pane, vfs browser dialog
-- remove 8 text area per buffer limit
 
 + features:
 

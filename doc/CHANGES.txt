@@ -9,6 +9,11 @@ Thanks to Matt Albrecht for contributing to this release.
 - "Complete Word" now inserts the longest common prefix if there is more
   than one possible completion (the popup is still displayed as well).
 
+- Fold visibility information is now stored in each individual display
+  manager instance (a display manager is the layer between a buffer and
+  a text area). Previously this information was retained by the buffer
+  itself, which resulted in a limit of 8 text areas per buffer.
+
 }}}
 {{{ User Interface
 
