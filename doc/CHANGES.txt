@@ -15,6 +15,9 @@ for contributing to this release.
 - Added some global abbreviations for inserting Greek letters and
   various math symbols (Paul Libbrecht).
 
+- The buffer state icons and window icon can now be customized with
+  icon themes.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -23,6 +26,8 @@ for contributing to this release.
 - Embperl syntax highlighting (Ollie Rutherfurd).
 
 - reStructuredText syntax highligting (Ollie Rutherfurd).
+
+- Fix an issue with SSI directives in SHTML files.
 
 }}}
 {{{ Bug Fixes

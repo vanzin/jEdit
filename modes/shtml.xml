@@ -11,9 +11,10 @@
 		<!-- SSI -->
 		<!-- SSI directives should ALWAYS end like this, with a space
 			before the tag end, so let's make it colorize poorly otherwise -->
+		<!-- ... or really? see bug report 964860 -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="SSI">
 			<BEGIN>&lt;!--#</BEGIN>
-			<END> --&gt;</END>
+			<END>--&gt;</END>
 		</SPAN>
 
 		<!-- SGML comment -->

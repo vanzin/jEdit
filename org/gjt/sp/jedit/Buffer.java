@@ -786,13 +786,13 @@ public class Buffer
 	public Icon getIcon()
 	{
 		if(getFlag(DIRTY))
-			return GUIUtilities.DIRTY_BUFFER_ICON;
+			return GUIUtilities.loadIcon("dirty.gif");
 		else if(getFlag(READ_ONLY) || getFlag(READ_ONLY_OVERRIDE))
-			return GUIUtilities.READ_ONLY_BUFFER_ICON;
+			return GUIUtilities.loadIcon("readonly.gif");
 		else if(getFlag(NEW_FILE))
-			return GUIUtilities.NEW_BUFFER_ICON;
+			return GUIUtilities.loadIcon("new.gif");
 		else
-			return GUIUtilities.NORMAL_BUFFER_ICON;
+			return GUIUtilities.loadIcon("normal.gif");
 	} //}}}
 
 	//}}}
