@@ -5904,16 +5904,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			runnables.clear();
 		} //}}}
 
-		//{{{ nextLineRequested() method
-		public void nextLineRequested(Buffer buffer, int line)
-		{
-			/* System.err.println("next line requested: " + line);
-			chunkCache.invalidateChunksFromPhys(line);
-			invalidateScreenLineRange(chunkCache
-				.getScreenLineOfOffset(line,0),
-				visibleLines); */
-		} //}}}
-
 		//{{{ delayedRepaint() method
 		private void delayedRepaint(int startLine, int endLine)
 		{

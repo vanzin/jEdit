@@ -47,7 +47,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowser extends JPanel implements EBComponent
+public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusComponent
 {
 	public static final String NAME = "vfs.browser";
 
@@ -321,11 +321,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		});
 	} //}}}
 
-	//{{{ requestDefaultFocus() method
-	public boolean requestDefaultFocus()
+	//{{{ focusOnDefaultComponent() method
+	public void focusOnDefaultComponent()
 	{
 		browserView.focusOnFileView();
-		return true;
 	} //}}}
 
 	//{{{ addNotify() method

@@ -11,6 +11,7 @@ Fc|for(int $1 = 0; $1 < $2.size(); $1++)\n{\n\t$3 \| = ($3)$2.get($1);\n}
 Fd|for(int $1 = $2 - 1; $1 >= 0; $1--)\n{\n\t\|\n}
 H|Hashtable
 I|if($1)\n{\n\t\|\n}
+Ie|if($1)\n{\n\t|\n}\nelse\n{\n\t\n}\n
 IO|IOException
 N|$1 $2 = new $1(\|);
 O|Object
@@ -34,6 +35,7 @@ gta|getTextArea()
 gb|getBuffer()
 gp|jEdit.getProperty(\|)
 gbp|jEdit.getBooleanProperty(\|)
+gip|jEdit.getIntegerProperty(\|)
 sp|jEdit.setProperty(\|);
 sbp|jEdit.setBooleanProperty(\|);
 ogs|import org.gjt.sp.
@@ -44,6 +46,7 @@ logw|Log.log(Log.WARNING,this,\|);
 logn|Log.log(Log.NOTICE,this,\|);
 logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
+C|$1 $2 = ($1)\|
 Cget|($1)$2.get($3)
 CtoArray|($1[])$2.toArray(new $1[$2.size()])
 WI|while($1.hasNext())\n{\n\t\|\n}

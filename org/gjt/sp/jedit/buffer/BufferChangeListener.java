@@ -106,15 +106,4 @@ public interface BufferChangeListener
 	 */
 	void transactionComplete(Buffer buffer);
 	//}}}
-
-	//{{{ nextLineRequested() method
-	/**
-	 * Called when a syntax highlighting line context changes.
-	 *
-	 * @param buffer The buffer in question
-	 * @param line Reconsider all lines after this
-	 * @since jEdit 4.2pre1
-	 */
-	void nextLineRequested(Buffer buffer, int line);
-	//}}}
 }

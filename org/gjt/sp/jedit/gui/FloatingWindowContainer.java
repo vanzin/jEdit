@@ -97,7 +97,15 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		{
 			public void run()
 			{
-				entry.win.requestDefaultFocus();
+				if(entry.win instanceof DefaultFocusComponent)
+				{
+					((DefaultFocusComponent)entry.win)
+						.focusOnDefaultComponent();
+				}
+				else
+				{
+					entry.win.requestDefaultFocus();
+				}
 			}
 		});
 	} //}}}
