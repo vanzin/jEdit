@@ -28,6 +28,9 @@ this release.
 
 - Documentation updates.
 
+- Status bar clock now uses locale's short time format, instead of a
+  hardcoded format.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -80,6 +83,13 @@ this release.
 - Fixed exception when control-clicking beyond the end of a line in a
   read-only buffer.
 
+- Fixed key binding conflict on OS X; command-drag would both activate
+  rectangular selection and quick copy. This has been resolved and now
+  quick copy is activated with an option-drag.
+
+- The order of the elements in the recent file list was being reversed
+  each time jEdit was restarted if 'sort recent files' was switched off.
+
 }}}
 {{{ API Changes
 
@@ -97,6 +107,9 @@ this release.
   function fine, then you *MUST* add an optional dependency on that
   plugin, otherwise reloading plugins will leave stale classes in the
   active class loader.
+
+- jEdit.getProperties() now returns a new collection, not the internal
+  insance.
 
 }}}
 

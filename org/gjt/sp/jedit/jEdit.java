@@ -487,12 +487,13 @@ public class jEdit
 	//{{{ getProperties() method
 	/**
 	 * Returns the properties object which contains all known
-	 * jEdit properties.
+	 * jEdit properties. Note that as of jEdit 4.2pre10, this returns a
+	 * new collection, not the existing properties instance.
 	 * @since jEdit 3.1pre4
 	 */
 	public static final Properties getProperties()
 	{
-		return props;
+		return propMgr.getProperties();
 	} //}}}
 
 	//{{{ getProperty() method
@@ -502,7 +503,7 @@ public class jEdit
 	 */
 	public static final String getProperty(String name)
 	{
-		return props.getProperty(name);
+		return propMgr.getProperty(name);
 	} //}}}
 
 	//{{{ getProperty() method
@@ -514,7 +515,11 @@ public class jEdit
 	 */
 	public static final String getProperty(String name, String def)
 	{
-		return props.getProperty(name,def);
+		String value = propMgr.getProperty(name);
+		if(value == null)
+			return def;
+		else
+			return value;
 	} //}}}
 
 	//{{{ getProperty() method
@@ -538,10 +543,10 @@ public class jEdit
 		if(name == null)
 			return null;
 		if(args == null)
-			return props.getProperty(name);
+			return getProperty(name);
 		else
 		{
-			String value = props.getProperty(name);
+			String value = getProperty(name);
 			if(value == null)
 				return null;
 			else
@@ -740,29 +745,7 @@ public class jEdit
 	 */
 	public static final void setProperty(String name, String value)
 	{
-		/* if value is null:
-		 * - if default is null, unset user prop
-		 * - else set user prop to ""
-		 * else
-		 * - if default equals value, ignore
-		 * - if default doesn't equal value, set user
-		 */
-		if(value == null)
-		{
-			String prop = (String)defaultProps.get(name);
-			if(prop == null || prop.length() == 0)
-				props.remove(name);
-			else
-				props.put(name,"");
-		}
-		else
-		{
-			String prop = (String)defaultProps.get(name);
-			if(value.equals(prop))
-				props.remove(name);
-			else
-				props.put(name,value);
-		}
+		propMgr.setProperty(name,value);
 	} //}}}
 
 	//{{{ setTemporaryProperty() method
@@ -775,8 +758,7 @@ public class jEdit
 	 */
 	public static final void setTemporaryProperty(String name, String value)
 	{
-		props.remove(name);
-		defaultProps.put(name,value);
+		propMgr.setTemporaryProperty(name,value);
 	} //}}}
 
 	//{{{ setBooleanProperty() method
@@ -838,10 +820,7 @@ public class jEdit
 	 */
 	public static final void unsetProperty(String name)
 	{
-		if(defaultProps.get(name) != null)
-			props.put(name,"");
-		else
-			props.remove(name);
+		propMgr.unsetProperty(name);
 	} //}}}
 
 	//{{{ resetProperty() method
@@ -853,7 +832,7 @@ public class jEdit
 	 */
 	public static final void resetProperty(String name)
 	{
-		props.remove(name);
+		propMgr.resetProperty(name);
 	} //}}}
 
 	//{{{ propertiesChanged() method
@@ -2397,44 +2376,43 @@ public class jEdit
 	 */
 	public static void saveSettings()
 	{
-		if(settingsDirectory != null)
+		if(settingsDirectory == null)
+			return;
+
+		Abbrevs.save();
+		FavoritesVFS.saveFavorites();
+		HistoryModel.saveHistory();
+		Registers.saveRegisters();
+		SearchAndReplace.save();
+		BufferHistory.save();
+		KillRing.save();
+
+		File file1 = new File(MiscUtilities.constructPath(
+			settingsDirectory,"#properties#save#"));
+		File file2 = new File(MiscUtilities.constructPath(
+			settingsDirectory,"properties"));
+		if(file2.exists() && file2.lastModified() != propsModTime)
 		{
-			Abbrevs.save();
-			FavoritesVFS.saveFavorites();
-			HistoryModel.saveHistory();
-			Registers.saveRegisters();
-			SearchAndReplace.save();
-			BufferHistory.save();
-			KillRing.save();
+			Log.log(Log.WARNING,jEdit.class,file2 + " changed"
+				+ " on disk; will not save user properties");
+		}
+		else
+		{
+			backupSettingsFile(file2);
 
-			File file1 = new File(MiscUtilities.constructPath(
-				settingsDirectory,"#properties#save#"));
-			File file2 = new File(MiscUtilities.constructPath(
-				settingsDirectory,"properties"));
-			if(file2.exists() && file2.lastModified() != propsModTime)
+			try
 			{
-				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
-					+ " on disk; will not save user properties");
+				OutputStream out = new FileOutputStream(file1);
+				propMgr.saveUserProps(out);
+				file2.delete();
+				file1.renameTo(file2);
 			}
-			else
+			catch(IOException io)
 			{
-				backupSettingsFile(file2);
-
-				try
-				{
-					OutputStream out = new FileOutputStream(file1);
-					props.store(out,"jEdit properties");
-					out.close();
-					file2.delete();
-					file1.renameTo(file2);
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,jEdit.class,io);
-				}
-
-				propsModTime = file2.lastModified();
+				Log.log(Log.ERROR,jEdit.class,io);
 			}
+
+			propsModTime = file2.lastModified();
 		}
 	} //}}}
 
@@ -2668,36 +2646,16 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ loadProps() method
-	/**
-	 * Loads the properties from the specified input stream. This
-	 * calls the <code>load()</code> method of the properties object
-	 * and closes the stream.
-	 * @param in The input stream
-	 * @param def If true, the properties will be loaded into the
-	 * default table
-	 * @exception IOException if an I/O error occured
-	 */
-	/* package-private */ static void loadProps(InputStream in, boolean def)
-		throws IOException
+	//{{{ addPluginProps() method
+	static void addPluginProps(Properties map)
 	{
-		if(def)
-			defaultProps.load(in);
-		else
-			props.load(in);
-		in.close();
+		propMgr.addPluginProps(map);
 	} //}}}
 
-	//{{{ addProperties() method
-	/* package-private */ static void addProperties(Map map)
+	//{{{ removePluginProps() method
+	static void removePluginProps(Properties map)
 	{
-		Iterator keys = map.keySet().iterator();
-		while(keys.hasNext())
-		{
-			Object key   = keys.next();
-			Object value = map.get(key);
-			defaultProps.put(key,value);
-		}
+		propMgr.removePluginProps(map);
 	} //}}}
 
 	//{{{ pluginError() method
@@ -2748,8 +2706,7 @@ public class jEdit
 	private static String settingsDirectory;
 	private static String jarCacheDirectory;
 	private static long propsModTime;
-	private static Properties defaultProps;
-	private static Properties props;
+	private static PropertyManager propMgr;
 	private static EditServer server;
 	private static boolean background;
 	private static ActionContext actionContext;
@@ -3032,16 +2989,16 @@ public class jEdit
 	 */
 	private static void initSystemProperties()
 	{
-		defaultProps = props = new Properties();
+		propMgr = new PropertyManager();
 
 		try
 		{
-			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit.props"),true);
-			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit_gui.props"),true);
-			loadProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit_keys.props"),true);
+			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+				"/org/gjt/sp/jedit/jedit.props"));
+			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+				"/org/gjt/sp/jedit/jedit_gui.props"));
+			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
+				"/org/gjt/sp/jedit/jedit_keys.props"));
 		}
 		catch(Exception e)
 		{
@@ -3094,7 +3051,7 @@ public class jEdit
 				Log.log(Log.DEBUG,jEdit.class,
 					"Loading site snippet: " + path);
 
-				loadProps(new FileInputStream(new File(path)),true);
+				propMgr.loadSystemProps(new FileInputStream(new File(path)));
 			}
 			catch(FileNotFoundException fnf)
 			{
@@ -3161,8 +3118,6 @@ public class jEdit
 	 */
 	private static void initUserProperties()
 	{
-		props = new Properties(defaultProps);
-
 		if(settingsDirectory != null)
 		{
 			File file = new File(MiscUtilities.constructPath(
@@ -3171,7 +3126,8 @@ public class jEdit
 
 			try
 			{
-				loadProps(new FileInputStream(file),false);
+				propMgr.loadUserProps(
+					new FileInputStream(file));
 			}
 			catch(FileNotFoundException fnf)
 			{

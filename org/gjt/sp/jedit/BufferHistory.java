@@ -380,6 +380,14 @@ public class BufferHistory
 	//{{{ RecentHandler class
 	static class RecentHandler extends HandlerBase
 	{
+		public void endDocument()
+			throws java.lang.Exception
+		{
+			int max = jEdit.getIntegerProperty("recentFiles",50);
+			while(history.size() > max)
+				history.removeLast();
+		}
+
 		public Object resolveEntity(String publicId, String systemId)
 		{
 			if("recent.dtd".equals(systemId))
@@ -418,7 +426,9 @@ public class BufferHistory
 		{
 			if(name.equals("ENTRY"))
 			{
-				addEntry(new Entry(path,caret,selection,encoding));
+				history.addLast(new Entry(
+					path,caret,selection,
+					encoding));
 				path = null;
 				caret = 0;
 				selection = null;

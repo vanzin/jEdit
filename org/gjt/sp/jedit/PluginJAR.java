@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -810,6 +810,8 @@ public class PluginJAR
 			DockableWindowManager.unloadDockableWindows(this);
 			ServiceManager.unloadServices(this);
 
+			jEdit.removePluginProps(properties);
+
 			try
 			{
 				if(zipFile != null)
@@ -842,6 +844,7 @@ public class PluginJAR
 
 	private JARClassLoader classLoader;
 	private ZipFile zipFile;
+	private Properties properties;
 	private String[] classes;
 	private ActionSet actions;
 	private ActionSet browserActions;
@@ -857,6 +860,13 @@ public class PluginJAR
 	private List weRequireThese = new LinkedList();
 	//}}}
 
+	//{{{ actionsPresentButNotCoreClass() method
+	private void actionsPresentButNotCoreClass()
+	{
+		Log.log(Log.WARNING,this,getPath() + " has an actions.xml but no plugin core class");
+		actions.setLabel("MISSING PLUGIN CORE CLASS");
+	} //}}}
+
 	//{{{ loadCache() method
 	private void loadCache(PluginCacheEntry cache)
 	{
@@ -864,7 +874,10 @@ public class PluginJAR
 
 		/* this should be before dockables are initialized */
 		if(cache.cachedProperties != null)
-			jEdit.addProperties(cache.cachedProperties);
+		{
+			properties = cache.cachedProperties;
+			jEdit.addPluginProps(cache.cachedProperties);
+		}
 
 		if(cache.actionsURI != null
 			&& cache.cachedActionNames != null)
@@ -938,17 +951,14 @@ public class PluginJAR
 		else
 		{
 			if(actions.size() != 0)
-			{
-				Log.log(Log.WARNING,this,getPath() + " has an actions.xml but no plugin core class");
-				actions.setLabel("MISSING PLUGIN CORE CLASS");
-			}
+				actionsPresentButNotCoreClass();
 		}
 	} //}}}
 
 	//{{{ generateCache() method
 	private PluginCacheEntry generateCache() throws IOException
 	{
-		Properties properties = new Properties();
+		properties = new Properties();
 
 		LinkedList classes = new LinkedList();
 
@@ -958,7 +968,7 @@ public class PluginJAR
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
-		cache.cachedProperties = new HashMap();
+		cache.cachedProperties = new Properties();
 
 		Enumeration entries = zipFile.entries();
 		while(entries.hasMoreElements())
@@ -1004,7 +1014,7 @@ public class PluginJAR
 		}
 
 		cache.cachedProperties = properties;
-		jEdit.addProperties(properties);
+		jEdit.addPluginProps(properties);
 
 		this.classes = cache.classes =
 			(String[])classes.toArray(
@@ -1096,15 +1106,19 @@ public class PluginJAR
 				dockablesURI,cache);
 		}
 
-		if(label != null)
-		{
-			actions.setLabel(jEdit.getProperty(
-				"action-set.plugin",
-				new String[] { label }));
-		}
-
 		if(actions.size() != 0)
+		{
+			if(label != null)
+			{
+				actions.setLabel(jEdit.getProperty(
+					"action-set.plugin",
+					new String[] { label }));
+			}
+			else
+				actionsPresentButNotCoreClass();
+
 			jEdit.addActionSet(actions);
+		}
 
 		if(servicesURI != null)
 		{
@@ -1222,7 +1236,7 @@ public class PluginJAR
 		public URL servicesURI;
 		public ServiceManager.Descriptor[] cachedServices;
 
-		public Map cachedProperties;
+		public Properties cachedProperties;
 		public String pluginClass;
 		//}}}
 
@@ -1383,9 +1397,10 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ readMap() method
-		private Map readMap(DataInputStream din) throws IOException
+		private Properties readMap(DataInputStream din)
+			throws IOException
 		{
-			HashMap returnValue = new HashMap();
+			Properties returnValue = new Properties();
 			int count = din.readInt();
 			for(int i = 0; i < count; i++)
 			{

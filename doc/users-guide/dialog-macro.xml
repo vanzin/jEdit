@@ -478,13 +478,9 @@ void actionPerformed(e)
   <para>
     The ability to implement interfaces like
     <classname>ActionListener</classname> inside a BeanShell script is
-    one of the more powerful features of the BeanShell package. With an
-    <classname>ActionListener</classname> interface, which has only a
-    single method, implementation is simple.  When using other
-    interfaces with multiple methods, however, there are some details to
-    deal with that will vary depending on the version of the Java
-    platform that you are running.  These techniques are discussed in
-    the next chapter; see <xref linkend="macro-tips-BeanShell-interface" />.
+    one of the more powerful features of the BeanShell package.
+    this technique is discussed in
+    the next chapter; see <xref linkend="macro-tips-BeanShell-class" />.
   </para>
 
 </sect2>
