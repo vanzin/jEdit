@@ -88,12 +88,7 @@ public class XModeHandler extends HandlerBase
 		{
 			lastTokenID = Token.stringToToken(value);
 			if(lastTokenID == -1)
-			{
 				error("token-invalid",value);
-				lastTokenIDString = "NULL";
-			}
-			else
-				lastTokenIDString = value;
 		}
 		else if (aname == "AT_LINE_START")
 		{
@@ -220,7 +215,7 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (tag == "KEYWORDS")
 		{
-			keywords = new KeywordMap(true);
+			keywords = new KeywordMap(rules.getIgnoreCase());
 		}
 		else if (tag == "RULES")
 		{
@@ -243,7 +238,7 @@ public class XModeHandler extends HandlerBase
 			}
 
 			if(lastEscape != null)
-				rules.setEscapeRule(ParserRuleFactory.createEscapeRule(lastEscape));
+				rules.setEscapeRule(ParserRule.createEscapeRule(lastEscape));
 			rules.setDefault(lastDefaultID);
 		}
 	} //}}}
@@ -278,12 +273,6 @@ public class XModeHandler extends HandlerBase
 
 				props = new Hashtable();
 			} //}}}
-			//{{{ KEYWORDS
-			else if (tag == "KEYWORDS")
-			{
-				keywords.setIgnoreCase(lastIgnoreCase);
-				lastIgnoreCase = true;
-			} //}}}
 			//{{{ RULES
 			else if (tag == "RULES")
 			{
@@ -304,6 +293,69 @@ public class XModeHandler extends HandlerBase
 				rules.setTerminateChar(termChar);
 				termChar = -1;
 			} //}}}
+			//{{{ SEQ
+			else if (tag == "SEQ")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","SEQ");
+					return;
+				}
+
+				if (lastDelegateSet != null
+					&& lastDelegateSet.indexOf("::") == -1)
+				{
+					lastDelegateSet = modeName + "::" + lastDelegateSet;
+				}
+
+				rules.addRule(ParserRule.createSequenceRule(
+					lastStart,lastDelegateSet,lastTokenID,
+					lastAtLineStart));
+				lastStart = null;
+				lastEnd = null;
+				lastDelegateSet = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+			} //}}}
+			//{{{ SPAN
+			else if (tag == "SPAN")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","START");
+					return;
+				}
+
+				if(lastEnd == null)
+				{
+					error("empty-tag","END");
+					return;
+				}
+
+				if (lastDelegateSet != null
+					&& lastDelegateSet.indexOf("::") == -1)
+				{
+					lastDelegateSet = modeName + "::" + lastDelegateSet;
+				}
+
+				rules.addRule(ParserRule
+					.createSpanRule(
+					lastStart,lastEnd,
+					lastDelegateSet,
+					lastTokenID,lastNoLineBreak,
+					lastAtLineStart,
+					lastExcludeMatch,
+					lastNoWordBreak));
+
+				lastStart = null;
+				lastEnd = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+				lastNoLineBreak = false;
+				lastExcludeMatch = false;
+				lastNoWordBreak = false;
+				lastDelegateSet = null;
+			} //}}}
 			//{{{ EOL_SPAN
 			else if (tag == "EOL_SPAN")
 			{
@@ -313,8 +365,34 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				rules.addRule(ParserRuleFactory.createEOLSpanRule(
-					lastStart,lastTokenID,lastAtLineStart,
+				if (lastDelegateSet != null
+					&& lastDelegateSet.indexOf("::") == -1)
+				{
+					lastDelegateSet = modeName + "::" + lastDelegateSet;
+				}
+
+				rules.addRule(ParserRule.createEOLSpanRule(
+					lastStart,lastDelegateSet,lastTokenID,
+					lastAtLineStart,lastExcludeMatch));
+				lastStart = null;
+				lastEnd = null;
+				lastDelegateSet = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+				lastExcludeMatch = false;
+			} //}}}
+			//{{{ MARK_FOLLOWING
+			else if (tag == "MARK_FOLLOWING")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","MARK_FOLLOWING");
+					return;
+				}
+
+				rules.addRule(ParserRule
+					.createMarkFollowingRule(lastStart,
+					lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
@@ -331,7 +409,7 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				rules.addRule(ParserRuleFactory
+				rules.addRule(ParserRule
 					.createMarkPreviousRule(lastStart,
 					lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
@@ -341,140 +419,12 @@ public class XModeHandler extends HandlerBase
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
 			} //}}}
-			//{{{ MARK_FOLLOWING
-			else if (tag == "MARK_FOLLOWING")
-			{
-				if(lastStart == null)
-				{
-					error("empty-tag","MARK_FOLLOWING");
-					return;
-				}
-
-				rules.addRule(ParserRuleFactory
-					.createMarkFollowingRule(lastStart,
-					lastTokenID,lastAtLineStart,
-					lastExcludeMatch));
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastExcludeMatch = false;
-			} //}}}
-			//{{{ SEQ
-			else if (tag == "SEQ")
-			{
-				if(lastStart == null)
-				{
-					error("empty-tag","SEQ");
-					return;
-				}
-
-				rules.addRule(ParserRuleFactory.createSequenceRule(
-					lastStart,lastTokenID,lastAtLineStart));
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-			} //}}}
-			//{{{ END
-			else if (tag == "END")
-			{
-				// empty END tags should be supported; see
-				// asp.xml, for example
-				/* if(lastEnd == null)
-				{
-					error("empty-tag","END");
-					return;
-				} */
-
-				if (lastDelegateSet == null)
-				{
-					rules.addRule(ParserRuleFactory
-						.createSpanRule(lastStart,
-						lastEnd,lastTokenIDString,
-						lastTokenID,
-						lastNoLineBreak,
-						lastAtLineStart,
-						lastExcludeMatch,
-						lastNoWordBreak));
-				}
-				else
-				{
-					if (lastDelegateSet.indexOf("::") == -1)
-					{
-						lastDelegateSet = modeName + "::" + lastDelegateSet;
-					}
-
-					rules.addRule(ParserRuleFactory
-						.createSpanRule(
-						lastStart,lastEnd,
-						lastDelegateSet,
-						lastTokenID,lastNoLineBreak,
-						lastAtLineStart,
-						lastExcludeMatch,
-						lastNoWordBreak));
-				}
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastNoLineBreak = false;
-				lastExcludeMatch = false;
-				lastNoWordBreak = false;
-				lastDelegateSet = null;
-			} //}}}
 			//{{{ Keywords
-			else if (tag == "NULL")
+			else
 			{
-				addKeyword(lastKeyword,Token.NULL);
-			}
-			else if (tag == "COMMENT1")
-			{
-				addKeyword(lastKeyword,Token.COMMENT1);
-			}
-			else if (tag == "COMMENT2")
-			{
-				addKeyword(lastKeyword,Token.COMMENT2);
-			}
-			else if (tag == "LITERAL1")
-			{
-				addKeyword(lastKeyword,Token.LITERAL1);
-			}
-			else if (tag == "LITERAL2")
-			{
-				addKeyword(lastKeyword,Token.LITERAL2);
-			}
-			else if (tag == "LABEL")
-			{
-				addKeyword(lastKeyword,Token.LABEL);
-			}
-			else if (tag == "KEYWORD1")
-			{
-				addKeyword(lastKeyword,Token.KEYWORD1);
-			}
-			else if (tag == "KEYWORD2")
-			{
-				addKeyword(lastKeyword,Token.KEYWORD2);
-			}
-			else if (tag == "KEYWORD3")
-			{
-				addKeyword(lastKeyword,Token.KEYWORD3);
-			}
-			else if (tag == "FUNCTION")
-			{
-				addKeyword(lastKeyword,Token.FUNCTION);
-			}
-			else if (tag == "MARKUP")
-			{
-				addKeyword(lastKeyword,Token.MARKUP);
-			}
-			else if (tag == "OPERATOR")
-			{
-				addKeyword(lastKeyword,Token.OPERATOR);
-			}
-			else if (tag == "DIGIT")
-			{
-				addKeyword(lastKeyword,Token.DIGIT);
+				byte token = Token.stringToToken(tag);
+				if(token != -1)
+					addKeyword(lastKeyword,token);
 			} //}}}
 		}
 		else
@@ -517,7 +467,6 @@ public class XModeHandler extends HandlerBase
 	private ParserRuleSet rules;
 	private byte lastDefaultID = Token.NULL;
 	private byte lastTokenID;
-	private String lastTokenIDString;
 	private int termChar = -1;
 	private boolean lastNoLineBreak;
 	private boolean lastNoWordBreak;

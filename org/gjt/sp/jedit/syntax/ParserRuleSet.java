@@ -56,8 +56,8 @@ public class ParserRuleSet
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
 
-		addRule(ParserRuleFactory.createSequenceRule(" ",Token.WHITESPACE,false));
-		addRule(ParserRuleFactory.createSequenceRule("\t",Token.WHITESPACE,false));
+		addRule(ParserRule.createSequenceRule(" ",null,Token.WHITESPACE,false));
+		addRule(ParserRule.createSequenceRule("\t",null,Token.WHITESPACE,false));
 	} //}}}
 
 	//{{{ getMode() method
@@ -81,7 +81,7 @@ public class ParserRuleSet
 	//{{{ addRule() method
 	public void addRule(ParserRule r)
 	{
-		int key = Character.toUpperCase(r.searchChars[0])
+		int key = Character.toUpperCase(r.start[0])
 			% RULE_BUCKET_COUNT;
 		ParserRule last = ruleMapLast[key];
 		if(last == null)

@@ -23,8 +23,8 @@
 	VALUE CDATA #REQUIRED >
 
 <!-- RULES element -->
-<!ELEMENT RULES ( PROPS?, ( TERMINATE | SPAN | EOL_SPAN
-	 | MARK_PREVIOUS | MARK_FOLLOWING | SEQ )*, KEYWORDS? ) >
+<!ELEMENT RULES ( PROPS?, ( SEQ | SPAN | EOL_SPAN | MARK_PREVIOUS
+	 | MARK_FOLLOWING )*, KEYWORDS? ) >
 
 <!-- RULES attributes -->
 <!ATTLIST RULES
@@ -35,12 +35,14 @@
 	ESCAPE CDATA #IMPLIED
 	DEFAULT %tokens; "NULL" >
 
-<!-- RULES children -->
-<!-- TERMINATE element -->
-<!ELEMENT TERMINATE EMPTY >
+<!-- SEQ element -->
+<!ELEMENT SEQ ( #PCDATA ) >
 
-<!-- TERMINATE attributes -->
-<!ATTLIST TERMINATE AT_CHAR CDATA #REQUIRED >
+<!-- SEQ attributes -->
+<!ATTLIST SEQ
+	%att-type;
+	%att-at-line-start;
+	DELEGATE CDATA #IMPLIED >
 
 <!-- SPAN element -->
 <!ELEMENT SPAN ( BEGIN, END ) >
@@ -65,6 +67,16 @@
 <!ATTLIST EOL_SPAN
 	%att-type;
 	%att-at-line-start;
+	%att-exclude-match;
+	DELEGATE CDATA #IMPLIED >
+
+<!-- MARK_FOLLOWING element -->
+<!ELEMENT MARK_FOLLOWING ( #PCDATA ) >
+
+<!-- MARK_FOLLOWING attributes -->
+<!ATTLIST MARK_FOLLOWING
+	%att-type;
+	%att-at-line-start;
 	%att-exclude-match; >
 
 <!-- MARK_PREVIOUS element -->
@@ -76,31 +88,10 @@
 	%att-at-line-start;
 	%att-exclude-match; >
 
-<!-- MARK_FOLLOWING element -->
-<!ELEMENT MARK_FOLLOWING ( #PCDATA ) >
-
-<!-- MARK_FOLLOWING attributes -->
-<!ATTLIST MARK_FOLLOWING
-	%att-type;
-	%att-at-line-start;
-	%att-exclude-match; >
-
-<!-- SEQ element -->
-<!ELEMENT SEQ ( #PCDATA ) >
-
-<!-- SEQ attributes -->
-<!ATTLIST SEQ
-	%att-type;
-	%att-at-line-start; >
-
 <!-- KEYWORDS element -->
 <!ELEMENT KEYWORDS ( NULL | COMMENT1 | COMMENT2 | LITERAL1 | LITERAL2
 	| LABEL | KEYWORD1 | KEYWORD2 | KEYWORD3 | FUNCTION | MARKUP
 	| OPERATOR | DIGIT | INVALID )+ >
-
-<!-- KEYWORDS attributes -->
-<!ATTLIST KEYWORDS
-	IGNORE_CASE %att-bool; "FALSE" >
 
 <!-- KEYWORDS children -->
 <!ELEMENT NULL ( #PCDATA ) >

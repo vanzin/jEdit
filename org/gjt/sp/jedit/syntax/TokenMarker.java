@@ -47,6 +47,7 @@ public class TokenMarker
 {
 	//{{{ Major actions (total: 8)
 	public static final int MAJOR_ACTIONS = 0x000000FF;
+	public static final int SEQ = 0;
 	public static final int SPAN = 1 << 0;
 	public static final int MARK_PREVIOUS = 1 << 1;
 	public static final int MARK_FOLLOWING = 1 << 2;
@@ -279,7 +280,7 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 	private TokenHandler tokenHandler;
 	private Segment line;
 	private LineContext context;
-	private Segment pattern = new Segment(new char[0],0,0);
+	private Segment pattern = new Segment();
 	private int lastOffset;
 	private int lastKeyword;
 	private int lineLength;
@@ -349,49 +350,26 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 	 */
 	private boolean handleRule(ParserRule checkRule, boolean end)
 	{
-		pattern.array = checkRule.searchChars;
 
 		if(end)
 		{
-			// is this an EOL_SPAN?
-			if(checkRule.sequenceLengths.length == 1)
+			pattern.array = checkRule.end;
+			if(checkRule.end == null && (checkRule.action
+				& NO_LINE_BREAK) == NO_LINE_BREAK)
 			{
-				pattern.offset = 0;
-				pattern.count = 1;
 				return (pos == lineLength - 1);
 			}
-
-			pattern.offset = checkRule.sequenceLengths[0];
-			pattern.count = checkRule.sequenceLengths[1];
 		}
 		else
+			pattern.array = checkRule.start;
+
+		pattern.offset = 0;
+		pattern.count = pattern.array.length;
+
+		if(!TextUtilities.regionMatches(context.rules.getIgnoreCase(),
+			line,pos,pattern.array))
 		{
-			pattern.offset = 0;
-			pattern.count = checkRule.sequenceLengths[0];
-		}
-
-		if (pattern.count == 0)
 			return false;
-
-		if (lineLength - pos < pattern.count)
-			return false;
-
-		for (int k = 0; k < pattern.count; k++)
-		{
-			char a = pattern.array[pattern.offset + k];
-			char b = line.array[pos + k];
-
-			// break out and check the next rule if there is a mismatch
-			if (
-				!(
-					a == b ||
-					context.rules.getIgnoreCase() &&
-					(
-						Character.toLowerCase(a) == b ||
-						a == Character.toLowerCase(b)
-					)
-				)
-			) return false;
 		}
 
 		//{{{ Check for an escape sequence
@@ -440,56 +418,30 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 			switch(checkRule.action & MAJOR_ACTIONS)
 			{
 			//{{{ SEQ
-			case 0:
+			case SEQ:
 				// this is a plain sequence rule
 				tokenHandler.handleToken(pattern.count,checkRule.token,
 					context.rules);
 				lastOffset = pos + pattern.count;
 				break;
 			//}}}
-			//{{{ SPAN
+			//{{{ SPAN, EOL_SPAN, MARK_FOLLOWING
 			case SPAN:
+			case EOL_SPAN:
+			case MARK_FOLLOWING:
 				context.inRule = checkRule;
 
-				String setName = new String(checkRule.searchChars,
-					checkRule.sequenceLengths[0] + checkRule.sequenceLengths[1],
-					checkRule.sequenceLengths[2]);
+				ParserRuleSet delegateSet = checkRule.getDelegateRuleSet(this);
 
-				ParserRuleSet delegateSet = getRuleSet(setName);
-
-				if (delegateSet != null)
-				{
-					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-					{
-						tokenHandler.handleToken(pattern.count,
-							context.rules.getDefault(),
-							context.rules);
-					}
-					else
-					{
-						tokenHandler.handleToken(pattern.count,
-							checkRule.token,
-							context.rules);
-					}
-					lastOffset = pos + pattern.count;
-
-					context = new LineContext(delegateSet, context);
-				}
-
-				break;
-			//}}}
-			//{{{ EOL_SPAN
-			case EOL_SPAN:
 				tokenHandler.handleToken(pattern.count,
 					((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH
 					? context.rules.getDefault() : checkRule.token),
 					context.rules);
+
 				lastOffset = pos + pattern.count;
 
-				context.inRule = checkRule;
-				context = new LineContext(
-					ParserRuleSet.getStandardRuleSet(
-					checkRule.token),context);
+				context = new LineContext(delegateSet, context);
+
 				break;
 			//}}}
 			//{{{ MARK_PREVIOUS
@@ -519,31 +471,15 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 
 				break;
 			//}}}
-			//{{{ MARK_FOLLOWING
-			case MARK_FOLLOWING:
-				/* context.inRule = checkRule;
-				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-				{
-					tokenHandler.handleToken(pattern.count,
-						context.rules.getDefault(),
-						context.rules);
-					lastOffset = pos + pattern.count;
-				}
-				else
-				{
-					lastOffset = pos;
-				} */
-
-				break;
-			//}}}
 			default:
 				throw new InternalError("Unhandled major action");
 			}
 
 			lastKeyword = lastOffset;
 
-			pos += (pattern.count - 1); // move pos to last character of match sequence
-			 // break out of inner for loop to check next char
+			// move pos to last character of match sequence
+			pos += (pattern.count - 1); 
+			// break out of inner for loop to check next char
 		} //}}}
 
 		return true;
