@@ -73,7 +73,6 @@ public class Delegate extends ApplicationAdapter
 	//{{{ handleFileCodes() method
 	public void handleFileCodes(BufferUpdate msg)
 	{
-		
 	} //}}}
 	
 	//{{{ handleOpenFile() method
@@ -82,9 +81,9 @@ public class Delegate extends ApplicationAdapter
 		File file = new File(event.getFilename());
 		Buffer buffer;
 		
-		View view = PerspectiveManager.loadPerspective(true);
+		View view = jEdit.getActiveView();
 		if(view == null)
-			view = jEdit.newView(null);
+			view = PerspectiveManager.loadPerspective(true);
 		
 		if ((buffer = jEdit.openFile(view,file.getPath())) != null)
 			lastOpenFile = buffer;
@@ -111,7 +110,7 @@ public class Delegate extends ApplicationAdapter
 	
 	//{{{ handleQuit() method
 	/**
-	 * This never seems to be called when uses with a delegate
+	 * This never seems to be called when used with a delegate
 	 */
 	public void handleQuit(ApplicationEvent event)
 	{
