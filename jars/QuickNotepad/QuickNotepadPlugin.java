@@ -41,15 +41,6 @@ public class QuickNotepadPlugin extends EditPlugin
 	public static final String PROPERTY_PREFIX = "plugin.QuickNotepadPlugin.";
 	public static final String OPTION_PREFIX = "options.quicknotepad.";
 
-	public void start()
-	{
-	}
-
-
-	public void stop()
-	{
-	}
-
 
 	public void createMenuItems(Vector menuItems)
 	{
