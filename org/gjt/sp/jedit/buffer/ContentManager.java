@@ -132,8 +132,21 @@ public class ContentManager
 	//{{{ remove() method
 	public void remove(int start, int len)
 	{
-		close(start,start);
-		gapEnd += len;
+		if(start == gapStart)
+			gapEnd += len;
+		else if(start + len == gapStart)
+			gapStart = start;
+		else if(gapStart != gapEnd)
+		{
+			close(start,start);
+			gapEnd += len;
+		}
+		else
+		{
+			gapStart = start;
+			gapEnd = start + len;
+		}
+
 		length -= len;
 	} //}}}
 
