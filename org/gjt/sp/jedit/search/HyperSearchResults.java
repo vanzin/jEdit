@@ -38,7 +38,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * HyperSearch results window.
+ * HyperSearch results window.<b> hello </b>
  * @author Slava Pestov
  * @version $Id$
  */
