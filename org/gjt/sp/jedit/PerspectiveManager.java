@@ -119,6 +119,19 @@ public class PerspectiveManager
 			View[] views = jEdit.getViews();
 			for(int i = 0; i < views.length; i++)
 			{
+				View view = views[i];
+				// ensures that active view is saved last,
+				// ie created last on next load, ie in front
+				// on next load
+				if(view == jEdit.getActiveView()
+					&& i != views.length - 1)
+				{
+					View last = views[views.length - 1];
+					views[i] = last;
+					views[views.length - 1] = view;
+					view = last;
+				}
+
 				View.ViewConfig config = views[i].getViewConfig();
 				out.write("<VIEW PLAIN=\"");
 				out.write(config.plainView ? "TRUE" : "FALSE");
