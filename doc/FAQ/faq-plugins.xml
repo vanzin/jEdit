@@ -144,7 +144,7 @@
 	</answer>
 </qandaentry>
 
-
+<!--
 <qandaentry>
 	<question id="plugins-codeaid-install">
 		<para>
@@ -161,7 +161,7 @@
 		</para>
 	</answer>
 </qandaentry>
-
+-->
 <qandaentry>
 	<question id="plugin-cvs">
 		<para>
