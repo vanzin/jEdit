@@ -1363,7 +1363,6 @@ options.color.bgColor=Text background
 options.color.fgColor=Text foreground
 options.color.caretColor=Caret
 options.color.selectionColor=Selection
-options.color.foldedLineColor=Collapsed fold line
 options.color.lineHighlightColor=Current line highlight
 options.color.bracketHighlightColor=Bracket highlight in text area
 options.color.eolMarkerColor=EOL markers
@@ -1377,6 +1376,8 @@ options.color.gutterMarkerColor=Markers in gutter
 options.color.gutterFoldColor=Fold markers in gutter
 options.color.gutterFocusBorderColor=Focused gutter border
 options.color.gutterNoFocusBorderColor=Unfocused gutter border
+options.color.memoryForegroundColor=Memory indicator foreground
+options.color.memoryBackgroundColor=Memory indicator background
 #}}}
 
 #{{{ Styles pane
@@ -1396,6 +1397,7 @@ options.style.markupStyle=Markup
 options.style.operatorStyle=Operator
 options.style.digitStyle=Digit
 options.style.invalidStyle=Invalid token
+options.style.foldLine=Collapsed fold line
 #}}}
 
 #{{{ Editing pane

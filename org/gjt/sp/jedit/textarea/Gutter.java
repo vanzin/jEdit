@@ -291,26 +291,6 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 	} //}}}
 
-	//{{{ addCustomHighlight() method
-	/**
-	 * @deprecated Write a <code>TextAreaExtension</code> instead.
-	 */
-	public void addCustomHighlight(TextAreaHighlight highlight)
-	{
-		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
-			+ highlight);
-	} //}}}
-
-	//{{{ removeCustomHighlight() method
-	/**
-	 * @deprecated Write a <code>TextAreaExtension</code> instead.
-	 */
-	public void removeCustomHighlight(TextAreaHighlight highlight)
-	{
-		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
-			+ highlight);
-	} //}}}
-
 	//{{{ addExtension() method
 	/**
 	 * Adds a text area extension, which can perform custom painting and

@@ -76,9 +76,10 @@ public class BrowserView extends JPanel
 		parentScroller.setMinimumSize(new Dimension(0,0));
 		JScrollPane treeScroller = new JScrollPane(tree);
 		treeScroller.setMinimumSize(new Dimension(0,0));
-		splitPane = new JSplitPane( 
+		splitPane = new JSplitPane(
 			splitHorizontally ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
 			parentScroller,treeScroller);
+		splitPane.setOneTouchExpandable(true);
 
 		SwingUtilities.invokeLater(new Runnable()
 		{

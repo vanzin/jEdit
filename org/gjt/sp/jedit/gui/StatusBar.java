@@ -155,6 +155,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			(int)font.getStringBounds(memoryTestStr,frc).getWidth(),
 			multiSelect.getPreferredSize().height));
 		memory.lm = font.getLineMetrics(memoryTestStr,frc);
+
+		memory.progressForeground = jEdit.getColorProperty(
+			"view.status.memory.foreground");
+		memory.progressBackground = jEdit.getColorProperty(
+			"view.status.memory.background");
 	} //}}}
 
 	//{{{ addNotify() method
@@ -525,6 +530,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		} //}}}
 
 		/* package-private */ LineMetrics lm;
+		/* package-private */ Color progressForeground;
+		/* package-private */ Color progressBackground;
 
 		//{{{ paintComponent() method
 		public void paintComponent(Graphics g)
@@ -543,7 +550,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			float fraction = ((float)usedMemory) / totalMemory;
 
-			g.setColor(UIManager.getColor("ProgressBar.selectionBackground"));
+			g.setColor(progressBackground);
 
 			g.fillRect(insets.left,insets.top,
 				(int)(width * fraction),
@@ -561,7 +568,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				(int)(width * fraction),
 				height);
 
-			g2.setColor(UIManager.getColor("ProgressBar.selectionForeground"));
+			g2.setColor(progressForeground);
 
 			g2.drawString(str,
 				insets.left + (int)(width - bounds.getWidth()) / 2,

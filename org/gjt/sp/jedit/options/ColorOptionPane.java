@@ -135,8 +135,6 @@ class ColorTableModel extends AbstractTableModel
 		addColorChoice("options.color.caretColor","view.caretColor");
 		addColorChoice("options.color.selectionColor",
 			"view.selectionColor");
-		addColorChoice("options.color.foldedLineColor",
-			"view.foldedLineColor");
 		addColorChoice("options.color.lineHighlightColor",
 			"view.lineHighlightColor");
 		addColorChoice("options.color.bracketHighlightColor",
@@ -163,6 +161,10 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
+		addColorChoice("options.color.memoryForegroundColor",
+			"view.status.memory.foreground");
+		addColorChoice("options.color.memoryBackgroundColor",
+			"view.status.memory.background");
 		MiscUtilities.quicksort(colorChoices,new MiscUtilities.StringCompare());
 	} //}}}
 

@@ -182,9 +182,6 @@ view.fontstyle=0
 view.bgColor=#ffffff
 view.fgColor=#000000
 
-# Folded line
-view.foldedLineColor=#e8e8e8
-
 # Line highlighting
 view.lineHighlight=true
 view.lineHighlightColor=#ffffe0
@@ -297,14 +294,19 @@ view.style.literal1=color:#404040
 view.style.literal2=color:#404040
 view.style.markup=color:#5e5e5e style:b
 view.style.operator=style:b
+view.style.foldLine=bgColor:#e8e8e8 color:#009999 style:b
 #}}}
 
-# Java 2 only
+# Fancy Java2D stuff
 view.antiAlias=false
 view.fracFontMetrics=false
 
 # Docking
 view.docking.alternateLayout=false
+
+# Status bar
+view.status.memory.foreground=#cccccc
+view.status.memory.background=#666699a
 
 #}}}
 

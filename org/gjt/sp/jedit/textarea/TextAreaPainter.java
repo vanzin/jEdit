@@ -305,26 +305,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.invalidateSelectedLines();
 	} //}}}
 
-	//{{{ getFoldedLineColor() method
-	/**
-	 * Returns the background color of a collapsed fold line.
-	 */
-	public final Color getFoldedLineColor()
-	{
-		return foldedLineColor;
-	} //}}}
-
-	//{{{ setFoldedLineColor() method
-	/**
-	 * Sets the background color of a collapsed fold line.
-	 * @param foldedLineColor The folded line color
-	 */
-	public final void setFoldedLineColor(Color foldedLineColor)
-	{
-		this.foldedLineColor = foldedLineColor;
-		repaint();
-	} //}}}
-
 	//{{{ getBracketHighlightColor() method
 	/**
 	 * Returns the bracket highlight color.
@@ -475,6 +455,26 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		repaint();
 	} //}}}
 
+	//{{{ getFoldLineStyle() method
+	/**
+	 * Returns the fold line style.
+	 */
+	public final SyntaxStyle getFoldLineStyle()
+	{
+		return foldLineStyle;
+	} //}}}
+
+	//{{{ setFoldLineStyle() method
+	/**
+	 * Sets the fold line style.
+	 * @param foldLineStyle The fold line style
+	 */
+	public final void setFoldLineStyle(SyntaxStyle foldLineStyle)
+	{
+		this.foldLineStyle = foldLineStyle;
+		repaint();
+	} //}}}
+
 	//{{{ setAntiAliasEnabled() method
 	/**
 	 * Sets if anti-aliasing should be enabled. Has no effect when
@@ -530,26 +530,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//}}}
-
-	//{{{ addCustomHighlight() method
-	/**
-	 * @deprecated Write a <code>TextAreaExtension</code> instead.
-	 */
-	public void addCustomHighlight(TextAreaHighlight highlight)
-	{
-		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
-			+ highlight);
-	} //}}}
-
-	//{{{ removeCustomHighlight() method
-	/**
-	 * @deprecated Write a <code>TextAreaExtension</code> instead.
-	 */
-	public void removeCustomHighlight(TextAreaHighlight highlight)
-	{
-		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
-			+ highlight);
-	} //}}}
 
 	//{{{ addExtension() method
 	/**
@@ -753,10 +733,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private Color caretColor;
 	private Color selectionColor;
 	private Color lineHighlightColor;
-	private Color foldedLineColor;
 	private Color bracketHighlightColor;
 	private Color eolMarkerColor;
 	private Color wrapGuideColor;
+
+	private SyntaxStyle foldLineStyle;
 
 	private boolean blockCaret;
 	private boolean lineHighlight;
@@ -839,11 +820,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					lineBackground.bgColor,true);
 			}
 
-			gfx.setFont(defaultFont);
-			gfx.setColor(eolMarkerColor);
 
 			if(!lineInfo.lastSubregion)
 			{
+				gfx.setFont(defaultFont);
+				gfx.setColor(eolMarkerColor);
 				gfx.drawString(":",Math.max(x,
 					textArea.getHorizontalOffset()
 					+ textArea.wrapMargin + textArea.charWidth),
@@ -852,6 +833,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else if(lineBackground.collapsedFold)
 			{
+				Font font = foldLineStyle.getFont();
+				gfx.setFont(font);
+				gfx.setColor(foldLineStyle.getForegroundColor());
+
 				int nextLine = textArea.getFoldVisibilityManager()
 					.getNextVisibleLine(physicalLine);
 				if(nextLine == -1)
@@ -859,13 +844,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 				int count = nextLine - physicalLine - 1;
 				String str = " [" + count + " lines]";
+
+				float width = (float)font.getStringBounds(
+					str,fontRenderContext).getWidth();
+
 				gfx.drawString(str,x,baseLine);
-				x += (int)(getFont().getStringBounds(
-					str,fontRenderContext)
-					.getWidth());
+				x += width;
 			}
 			else if(eolMarkers)
 			{
+				gfx.setFont(defaultFont);
+				gfx.setColor(eolMarkerColor);
 				gfx.drawString(".",x,baseLine);
 				x += textArea.charWidth;
 			}
@@ -953,7 +942,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(paintLineHighlight)
 				bgColor = lineHighlightColor;
 			else if(collapsedFold)
-				bgColor = foldedLineColor;
+			{
+				bgColor = foldLineStyle.getBackgroundColor();
+				if(bgColor == null)
+					bgColor = getBackground();
+			}
 			else
 				bgColor = getBackground();
 
