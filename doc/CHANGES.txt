@@ -61,6 +61,8 @@ Thanks to Gerd Knops for contributing to this release.
   trying to resize it if the option to decorate window borders using the
   Swing L&F was enabled.
 
+- 'Expand Fold Fully' command didn't work.
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,

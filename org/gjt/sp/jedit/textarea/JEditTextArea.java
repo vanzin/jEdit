@@ -3874,16 +3874,13 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
 
-		if(!fully)
-		{
-			int line = foldVisibilityManager.expandFold(caretLine,fully);
+		int line = foldVisibilityManager.expandFold(caretLine,fully);
 
-			if(line != -1)
-			{
-				if(!multi)
-					selectNone();
-				moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
-			}
+		if(!fully && line != -1)
+		{
+			if(!multi)
+				selectNone();
+			moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
 		}
 	} //}}}
 
