@@ -469,14 +469,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
-		int lineCount = textArea.getVirtualLineCount();
+		int lineCount = buffer.getVirtualLineCount();
 
 		int y = (clipRect.y - clipRect.y % height);
 
 		try
 		{
-			int maxWidth = textArea.maxHorizontalScrollWidth;
-
 			boolean updateMaxHorizontalScrollWidth = false;
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
@@ -500,8 +498,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 				if(valid)
 				{
-					buffer.setLineWidth(physicalLine,width);
-					if(width > maxWidth)
+					textArea.lineWidths[line - textArea.getFirstLine()] = width;
+					if(width > textArea.maxHorizontalScrollWidth)
 						updateMaxHorizontalScrollWidth = true;
 				}
 

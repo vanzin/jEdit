@@ -55,7 +55,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		Box north = Box.createHorizontalBox();
 		north.add(new JLabel(jEdit.getProperty(
 			"options.shortcuts.select.label")));
-		north.add(Box.createHorizontalStrut(12));
+		north.add(Box.createHorizontalStrut(6));
 		north.add(selectModel);
 
 		keyTable = new JTable(currentModel);

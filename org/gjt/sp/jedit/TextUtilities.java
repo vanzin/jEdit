@@ -99,8 +99,8 @@ public class TextUtilities
 		// the corresponding bracket
 		byte idOfBracket = Token.NULL;
 
-		Buffer.LineInfo lineInfo = buffer.markTokens(line);
-		Token lineTokens = lineInfo.getFirstToken();
+		Buffer.TokenList tokenList = buffer.markTokens(line);
+		Token lineTokens = tokenList.getFirstToken();
 
 		int tokenListOffset = 0;
 		for(;;)
@@ -146,9 +146,8 @@ public class TextUtilities
 				{
  					if(tokenListOffset != lineLength)
  						tokenListOffset += lineTokens.length;
-					//lineTokens = lineInfo.lastToken;
 					scanStartOffset = offset;
-					System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
+					//System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
 				}
 
 				// only check tokens with id 'idOfBracket'
@@ -185,7 +184,7 @@ public class TextUtilities
 									return lineStart + j;
 							}
 						}
-						System.err.println("[" + sb.reverse() + "]");
+						//System.err.println("[" + sb.reverse() + "]");
 					}
 
 					scanStartOffset = tokenListOffset = tokenListOffset - len;

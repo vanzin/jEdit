@@ -494,7 +494,12 @@ public abstract class VFS
 			public void handleMessage(EBMessage msg)
 			{
 				if(msg instanceof PropertiesChanged)
-					colors = null;
+				{
+					synchronized(lock)
+					{
+						colors = null;
+					}
+				}
 			}
 		});
 	}

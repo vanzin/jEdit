@@ -75,11 +75,15 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * Returns the offset of the first match of the specified text
 	 * within this matcher.
 	 * @param text The text to search in
+	 * @param start True if the start of the segment is the beginning of the
+	 * buffer
+	 * @param end True if the end of the segment is the end of the buffer
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
+	 * @since jEdit 4.0pre1
 	 */
-	public int[] nextMatch(Segment text)
+	public int[] nextMatch(Segment text, boolean start, boolean end)
 	{
 		int pos = match(text.array, text.offset, text.offset + text.count);
 

@@ -30,6 +30,9 @@ package org.gjt.sp.jedit.syntax;
  */
 public class Token
 {
+	public static int COUNT;
+	public static int COUNT_GC;
+
 	public static final byte NULL = 0;
 	public static final byte COMMENT1 = 1;
 	public static final byte COMMENT2 = 2;
@@ -77,6 +80,8 @@ public class Token
 	 */
 	public Token(int length, byte id)
 	{
+		COUNT++;
+		COUNT_GC++;
 		this.length = length;
 		this.id = id;
 	}
@@ -87,5 +92,10 @@ public class Token
 	public String toString()
 	{
 		return "[id=" + id + ",length=" + length + "]";
+	}
+
+	public void finalize()
+	{
+		COUNT_GC--;
 	}
 }

@@ -29,13 +29,18 @@ public class HyperSearchResult
 	public String path;
 	public Buffer buffer;
 	public int line;
-	public Position linePos;
+	public int start;
+	public int end;
+	public Position startPos;
+	public Position endPos;
 	public String str; // cached for speed
 
-	public HyperSearchResult(Buffer buffer, int line)
+	public HyperSearchResult(Buffer buffer, int line, int start, int end)
 	{
 		path = buffer.getPath();
 		this.line = line;
+		this.start = start;
+		this.end = end;
 
 		if(!buffer.isTemporary())
 			bufferOpened(buffer);
@@ -72,7 +77,8 @@ public class HyperSearchResult
 			elem = map.getElement(map.getElementCount()-1);
 		try
 		{
-			linePos = buffer.createPosition(elem.getStartOffset());
+			startPos = buffer.createPosition(start);
+			endPos = buffer.createPosition(end);
 		}
 		catch(BadLocationException bl)
 		{
@@ -83,7 +89,7 @@ public class HyperSearchResult
 	public void bufferClosed()
 	{
 		buffer = null;
-		linePos = null;
+		startPos = endPos = null;
 	}
 
 	public Buffer getBuffer()

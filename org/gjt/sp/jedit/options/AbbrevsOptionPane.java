@@ -63,6 +63,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		panel.add(panel2,BorderLayout.NORTH);
 
 		JPanel panel3 = new JPanel();
+		panel3.setLayout(new BoxLayout(panel3,BoxLayout.X_AXIS));
+		panel3.setBorder(new EmptyBorder(0,0,6,0));
+		panel3.add(Box.createGlue());
 		JLabel label = new JLabel(jEdit.getProperty("options.abbrevs.set"));
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel3.add(label);
@@ -83,6 +86,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		ActionHandler actionHandler = new ActionHandler();
 		setsComboBox.addActionListener(actionHandler);
 		panel3.add(setsComboBox);
+		panel3.add(Box.createGlue());
 		panel.add(panel3,BorderLayout.SOUTH);
 
 		add(BorderLayout.NORTH,panel);

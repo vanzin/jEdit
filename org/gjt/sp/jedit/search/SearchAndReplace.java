@@ -309,7 +309,21 @@ public class SearchAndReplace
 	 */
 	public static boolean hyperSearch(View view)
 	{
-		record(view,"hyperSearch(view)",false,true);
+		return hyperSearch(view,false);
+	}
+
+	/**
+	 * Performs a HyperSearch.
+	 * @param view The view
+	 * @param selection If true, will only search in the current selection.
+	 * Note that the file set must be the current buffer file set for this
+	 * to work.
+	 * @since jEdit 4.0pre1
+	 */
+	public static boolean hyperSearch(View view, boolean selection)
+	{
+		record(view,"hyperSearch(view," + selection + ")",false,
+			!selection);
 
 		view.getDockableWindowManager().addDockableWindow(
 			HyperSearchResults.NAME);
@@ -320,8 +334,17 @@ public class SearchAndReplace
 
 		try
 		{
+			Selection[] s;
+			if(selection)
+			{
+				s = view.getTextArea().getSelection();
+				if(s == null)
+					return false;
+			}
+			else
+				s = null;
 			VFSManager.runInWorkThread(new HyperSearchRequest(view,
-				getSearchMatcher(false),results));
+				getSearchMatcher(false),results,s));
 			return true;
 		}
 		catch(Exception e)
@@ -463,7 +486,12 @@ loop:			for(;;)
 		else
 			buffer.getText(start,buffer.getLength() - start,text);
 
-		int[] match = matcher.nextMatch(text);
+		// the start and end flags will be wrong with reverse search enabled,
+		// but they are only used by the regexp matcher, which doesn't
+		// support reverse search yet.
+		//
+		// REMIND: fix flags when adding reverse regexp search.
+		int[] match = matcher.nextMatch(text,start == 0,true);
 		if(match != null)
 		{
 			fileset.matchFound(buffer);
@@ -788,7 +816,8 @@ loop:			for(;;)
 loop:		for(;;)
 		{
 			buffer.getText(offset,end - offset,text);
-			int[] occur = matcher.nextMatch(text);
+			int[] occur = matcher.nextMatch(text,start == 0,
+				end == buffer.getLength());
 			if(occur == null)
 				break loop;
 			int _start = occur[0];
@@ -803,7 +832,15 @@ loop:		for(;;)
 				buffer.insertString(offset + _start,subst,null);
 				occurCount++;
 				offset += _start + subst.length();
+				if(subst.length() == 0 && _length == 0)
+					offset++;
+
 				end += (subst.length() - found.length());
+			}
+			else if(_length == 0)
+			{
+				// avoid infinite loop
+				offset += _start + 1;
 			}
 			else
 				offset += _start + _length;

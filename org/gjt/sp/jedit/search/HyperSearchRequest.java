@@ -1,6 +1,6 @@
 /*
  * HyperSearchRequest.java - HyperSearch request, run in I/O thread
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ import javax.swing.text.Element;
 import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.SwingUtilities;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -34,7 +35,7 @@ import org.gjt.sp.util.*;
 public class HyperSearchRequest extends WorkRequest
 {
 	public HyperSearchRequest(View view, SearchMatcher matcher,
-		HyperSearchResults results)
+		HyperSearchResults results, Selection[] selection)
 	{
 		this.view = view;
 		this.matcher = matcher;
@@ -43,6 +44,8 @@ public class HyperSearchRequest extends WorkRequest
 		this.resultTreeModel = results.getTreeModel();
 		this.resultTreeRoot = (DefaultMutableTreeNode)resultTreeModel
 			.getRoot();
+
+		this.selection = selection;
 	}
 
 	public void run()
@@ -56,23 +59,41 @@ public class HyperSearchRequest extends WorkRequest
 
 		try
 		{
-			int current = 0;
-
 			Buffer buffer = fileset.getFirstBuffer(view);
 
-			if(buffer != null)
+			if(selection != null)
 			{
-				do
+				for(int i = 0; i < selection.length; i++)
 				{
-					setProgressValue(++current);
-					int thisResultCount = doHyperSearch(buffer,matcher);
+					Selection s = selection[i];
+					int thisResultCount = doHyperSearch(buffer,matcher,
+						s.getStart(),s.getEnd());
 					if(thisResultCount != 0)
 					{
-						bufferCount++;
+						bufferCount = 1;
 						resultCount += thisResultCount;
 					}
 				}
-				while((buffer = fileset.getNextBuffer(view,buffer)) != null);
+			}
+			else
+			{
+				int current = 0;
+
+				if(buffer != null)
+				{
+					do
+					{
+						setProgressValue(++current);
+						int thisResultCount = doHyperSearch(buffer,matcher,
+							0,buffer.getLength());
+						if(thisResultCount != 0)
+						{
+							bufferCount++;
+							resultCount += thisResultCount;
+						}
+					}
+					while((buffer = fileset.getNextBuffer(view,buffer)) != null);
+				}
 			}
 		}
 		catch(Exception e)
@@ -106,8 +127,10 @@ public class HyperSearchRequest extends WorkRequest
 	private HyperSearchResults results;
 	private DefaultTreeModel resultTreeModel;
 	private DefaultMutableTreeNode resultTreeRoot;
+	private Selection[] selection;
 
-	private int doHyperSearch(Buffer buffer, SearchMatcher matcher)
+	private int doHyperSearch(Buffer buffer, SearchMatcher matcher,
+		int start, int end)
 		throws Exception
 	{
 		setAbortable(false);
@@ -123,18 +146,24 @@ public class HyperSearchRequest extends WorkRequest
 
 			Element map = buffer.getDefaultRootElement();
 			Segment text = new Segment();
-			int offset = 0;
-			int length = buffer.getLength();
+			int offset = start;
+			int length = end;
 			int line = -1;
 
 loop:			for(;;)
 			{
 				buffer.getText(offset,length - offset,text);
-				int[] match = matcher.nextMatch(text);
+				int[] match = matcher.nextMatch(text,offset == 0,
+					length == buffer.getLength());
 				if(match == null)
 					break loop;
 
+				int matchStart = offset + match[0];
+				int matchEnd = offset + match[1];
+
 				offset += match[1];
+				if(match[0] - match[1] == 0)
+					offset++;
 
 				int newLine = map.getElementIndex(offset);
 				if(line == newLine)
@@ -148,9 +177,9 @@ loop:			for(;;)
 
 				resultCount++;
 
-				bufferNode.insert(new DefaultMutableTreeNode(
-					new HyperSearchResult(buffer,line),false),
-					bufferNode.getChildCount());
+				bufferNode.add(new DefaultMutableTreeNode(
+					new HyperSearchResult(buffer,line,
+					matchStart,matchEnd),false));
 			}
 		}
 		finally

@@ -35,6 +35,7 @@ JEDIT 4.0 VERSION HISTORY
     create the actions to open your dockable windows for you
 - -nogui switch is back. If specified when jEdit is being run in
   background mode, the initial view will not be opened
+- Edit->Invert Selection command added
 
 + Enhancements
 
@@ -65,7 +66,6 @@ JEDIT 4.0 VERSION HISTORY
     area, not just those currently 'open'. When a dockable is requested
     for the first time, it is created and loaded
   - Changes made in the Docking option pane now take effect immediately
-- Improved HyperSearch results window
 - In the Shortcuts option pane, each plugin's actions are shown in a
   separate section. This solves the problem of plugin actions having
   ambiguous names (for example, "Edit Settings"). This change is the
@@ -90,6 +90,20 @@ JEDIT 4.0 VERSION HISTORY
   - - goes to current buffer's directory
 - Improved Abbreviations option pane
 - Improved Styles option pane
+- Improved search and replace:
+  - It is now possible to do a HyperSearch in the current selection
+  - When a match is clicked on in the HyperSearch results window, the
+    match is now selected in the text area. Previously, the caret was
+    only moved to the line containing the match.
+  - Search in Selection radio button: when selected, the 'Replace All'
+    button does the same thing as the 'Replace' button
+  - If text is selected when the dialog box is being opened, this radio
+    button is selected automatically, unless only one line of text is
+    selected, in which case that text becomes the search string
+  - Because of the above, the 'Find Selection' command is no longer
+    necessary
+- Multiple selections are now stored in the order they appear in the
+  buffer, not the order they were added
 
 + Bug Fixes
 
@@ -114,8 +128,6 @@ JEDIT 4.0 VERSION HISTORY
 - Entering a file name in the text field of the Open dialog box would
   open that file name relative to jEdit's current working directory, not
   the directory selected in the dialog box
-- Fixed possible ArrayIndexOutOfBounds when searching for regular
-  expressions that start with \<
 - 'Reload' command didn't preserve caret position very well if sections
   of the buffer were folded
 - When running on Java 2 version 1.3 (and possibly others), the default
@@ -123,6 +135,16 @@ JEDIT 4.0 VERSION HISTORY
 - Velocity mode had an incorrect file name glob
 - In the Search and Replace dialog box, 'Replace with:' and 'Auto wrap'
   had the same Alt-key mnemonic
+- Regular expression bug fixes:
+  - Searching for a regular expression of $ or ^ by itself should work
+    now
+  - In regular expressions, ^ and $ not only matched newlines, but the
+    start and end of the substring to search.
+  - Fixed possible ArrayIndexOutOfBounds when searching for regular
+    expressions that start with \<
+  - The RESearchMatcher class converted \t to the tab character and \n
+    to the newline character, even if the replace string was a BeanShell
+    script, in which case a BeanShell execution error would occur.
 
 + API Changes
 

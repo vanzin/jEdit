@@ -270,7 +270,11 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
-		addOptionPane(new BrowserOptionPane(), jEditGroup);
+
+		OptionGroup browserGroup = new OptionGroup("browser");
+		addOptionPane(new BrowserOptionPane(), browserGroup);
+		addOptionPane(new BrowserColorsOptionPane(), browserGroup);
+		addOptionGroup(browserGroup, jEditGroup);
 
 		addOptionGroup(jEditGroup, rootGroup);
 

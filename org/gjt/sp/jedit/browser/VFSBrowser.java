@@ -855,7 +855,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(popup == null || !popup.isVisible())
 				{
 					createPopup();
-					popup.show(upButton,0,upButton.getHeight());
+					GUIUtilities.showPopupMenu(popup,
+						upButton,0,upButton.getHeight());
 				}
 				else
 				{

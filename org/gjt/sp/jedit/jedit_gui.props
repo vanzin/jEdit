@@ -236,6 +236,7 @@ edit=undo \
      - \
      select-all \
      select-none \
+     invert-selection \
      - \
      word-count \
      - \
@@ -259,6 +260,7 @@ paste.label=$Paste
 paste-previous.label=Paste Pre$vious...
 select-all.label=$Select All
 select-none.label=Select $None
+invert-selection.label=$Invert Selection
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
@@ -336,7 +338,6 @@ view-registers.label=View Registers...
 
 ### Search menu
 search=find \
-       find-selection \
        find-next \
        find-prev \
        - \
@@ -355,7 +356,6 @@ search.label=$Search
 find.label=$Find...
 find-next.label=Fi$nd Next
 find-prev.label=Find Pre$vious
-find-selection.label=Find Se$lection...
 search-in-open-buffers.label=Search in Open $Buffers...
 search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
@@ -868,16 +868,17 @@ search.replace.mnemonic=w
 search.string-replace-btn=Text
 search.beanshell-replace-btn=Return value of a BeanShell snippet
 
+search.settings=Settings:
 search.keep=Keep dialog
 search.keep.mnemonic=k
 search.case=Ignore case
-search.case.mnemonic=g
+search.case.mnemonic=i
 search.regexp=Regular expressions
 search.regexp.mnemonic=x
 search.hypersearch=HyperSearch
 search.hypersearch.mnemonic=h
 search.wrap=Auto wrap
-search.wrap.mnemonic=u
+search.wrap.mnemonic=t
 
 search.direction=Direction:
 search.back=Backward
@@ -886,6 +887,8 @@ search.forward=Forward
 search.forward.mnemonic=o
 
 search.fileset=Search in:
+search.selection=Selection
+search.selection.mnemonic=n
 search.current=Current buffer
 search.current.mnemonic=c
 search.all=All buffers
@@ -894,7 +897,7 @@ search.directory=Directory:
 search.directory.mnemonic=d
 
 search.directoryField=Directory:
-search.directoryField.mnemonic=t
+search.directoryField.mnemonic=y
 search.filterField=Filter:
 search.filterField.mnemonic=f
 search.subdirs=Search subdirectories
@@ -1352,19 +1355,25 @@ grab-key.prefix-shortcut.message=\
 	Please choose another.
 
 options.browser.label=File System Browser
-options.browser.defaultPath=Default path:
-options.browser.defaultPath.buffer=Parent directory of current buffer
-options.browser.defaultPath.home=Home directory
-options.browser.defaultPath.favorites=Favorites
-options.browser.defaultPath.last=Most recently visited directory
-options.browser.showIcons=Show icons
-options.browser.showHiddenFiles=Show hidden files
-options.browser.sortFiles=Sort file list
-options.browser.sortIgnoreCase=Case insensitive sort
-options.browser.sortMixFilesAndDirs=Mix files and directories
-options.browser.doubleClickClose=Double-clicking an open file closes it
-options.browser.currentBufferFilter=Filter in file dialogs is \
+options.browser.general.label=General
+options.browser.general.defaultPath=Default path:
+options.browser.general.defaultPath.buffer=Parent directory of current buffer
+options.browser.general.defaultPath.home=Home directory
+options.browser.general.defaultPath.favorites=Favorites
+options.browser.general.defaultPath.last=Most recently visited directory
+options.browser.general.showIcons=Show icons
+options.browser.general.showHiddenFiles=Show hidden files
+options.browser.general.sortFiles=Sort file list
+options.browser.general.sortIgnoreCase=Case insensitive sort
+options.browser.general.sortMixFilesAndDirs=Mix files and directories
+options.browser.general.doubleClickClose=Double-clicking an open file closes it
+options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
+options.browser.colors.label=Colors
+options.browser.colors.glob=File name glob
+options.browser.colors.color=Color
+options.browser.colors.add=Add
+options.browser.colors.remove=Remove
 
 # Font selector
 font-selector.title=Font Selector
