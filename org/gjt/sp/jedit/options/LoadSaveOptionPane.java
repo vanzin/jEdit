@@ -146,6 +146,12 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		backupEverySave.setSelected(jEdit.getBooleanProperty("backupEverySave"));
 		addComponent(backupEverySave);
 
+		/* Backup on every save */
+		stripTrailingEOL = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.stripTrailingEOL"));
+		stripTrailingEOL.setSelected(jEdit.getBooleanProperty("stripTrailingEOL"));
+		addComponent(stripTrailingEOL);
+
 	} //}}}
 
 	//{{{ _save() method
@@ -180,6 +186,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			persistentMarkers.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("backupEverySave", backupEverySave.isSelected());
+		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -197,5 +204,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JCheckBox persistentMarkers;
 	private JCheckBox twoStageSave;
 	private JCheckBox backupEverySave;
+	private JCheckBox stripTrailingEOL;
 	//}}}
 }

@@ -55,6 +55,12 @@ persistentMarkers=true
 # Two-stage save (save to #filename#save# first, then filename)
 twoStageSave=true
 
+# Strip trailing EOL
+stripTrailingEOL=true
+
+# Need this so that new files have a trailing EOL
+buffer.trailingEOL=true
+
 # Caret saving toggle
 saveCaret=true
 
@@ -142,10 +148,6 @@ buffer.folding=none
 
 # Folds with a level equal to or higher than this will be collapsed
 buffer.collapseFolds=0
-
-# We need this so that new files are saved with a trailing newline
-buffer.trailingEOL=true
-
 #}}}
 
 #{{{ View settings
@@ -380,4 +382,5 @@ vfs.browser.colors.5.color=#003366
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
 showTooltips=true
+view.monospacedHack=false
 #}}}

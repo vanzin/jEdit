@@ -470,7 +470,7 @@ public class HistoryTextField extends JTextField
 			}
 		}
 
-		GUIUtilities.showPopupMenu(popup,this,x,y);
+		GUIUtilities.showPopupMenu(popup,this,x,y,false);
 	} //}}}
 
 	//}}}

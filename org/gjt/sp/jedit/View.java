@@ -395,11 +395,6 @@ public class View extends JFrame implements EBComponent
 					return;
 				}
 			}
-
-			Keymap keymap = ((JTextComponent)getFocusOwner())
-				.getKeymap();
-			if(keymap.getAction(KeyStroke.getKeyStrokeForEvent(evt)) != null)
-				return;
 		}
 
 		if(evt.isConsumed())
