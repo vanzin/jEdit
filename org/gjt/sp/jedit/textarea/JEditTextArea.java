@@ -702,6 +702,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public int offsetToX(int line, int offset)
 	{
+		return 0;
+		/*
 		getLineText(line,lineSegment);
 
 		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
@@ -729,7 +731,7 @@ public class JEditTextArea extends JComponent
 			chunks = chunks.next;
 		}
 
-		return (int)(x + horizontalOffset);
+		return (int)(x + horizontalOffset);*/
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -753,6 +755,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x, boolean round)
 	{
+		return 0;
+		/*
 		x -= horizontalOffset;
 
 		getLineText(line,lineSegment);
@@ -780,7 +784,7 @@ public class JEditTextArea extends JComponent
 			chunks = chunks.next;
 		}
 
-		return length;
+		return length;*/
 	} //}}}
 
 	//{{{ xyToOffset() method

@@ -527,6 +527,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
+		fontRenderContext = gfx.getFontRenderContext();
 
 		Buffer buffer = textArea.getBuffer();
 
@@ -681,18 +682,43 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Chunk first = null;
 		Chunk current = null;
 
-		int flushLen = 0;
-		int flushIndex = seg.offset;
+		int tokenListOffset = 0;
 
-		int end = seg.offset + seg.count;
-
-		for(int i = seg.offset; i < end; i++)
+		StringBuffer buf = new StringBuffer();
+		while(tokens.id != Token.END)
 		{
-			if(seg.array[i] == '\t')
+			buf.append("<");
+			buf.append(tokens.id);
+			buf.append(">");
+			int flushLen = 0;
+			int flushIndex = tokenListOffset;
+
+			for(int i = 0; i < tokens.length; i++)
 			{
-				Chunk newChunk = new Chunk(x,
-					seg.array,flushIndex,flushLen,seg.offset,
-					tokens);
+				char ch = seg.array[seg.offset + tokenListOffset + i];
+				buf.append(ch);
+				if(i == tokens.length - 1)
+					flushLen++;
+				else if(ch != '\t')
+				{
+					flushLen++;
+					continue;
+				}
+
+				// inefficent, but GlyphVector API sucks
+				char[] text;
+				if(flushLen == 0)
+					text = null;
+				else
+				{
+					text = new char[flushLen];
+					System.arraycopy(seg.array,seg.offset
+						+ flushIndex,text,0,flushLen);
+				}
+
+				buf.append("|");
+				Chunk newChunk = new Chunk(x,tokens.id,text,
+					tokenListOffset);
 				if(current == null)
 					current = first = newChunk;
 				else
@@ -705,25 +731,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 				x += newChunk.width;
 
-				flushIndex = i + 1;
+				flushIndex = tokenListOffset + i + 1;
 
-				x = nextTabStop(x,i - seg.offset);
+				if(ch == '\t')
+					x = nextTabStop(x,i - seg.offset);
 			}
-			else
-				flushLen++;
+
+			tokenListOffset += tokens.length;
+			tokens = tokens.next;
 		}
 
-		Chunk newChunk = new Chunk(x,
-			seg.array,flushIndex,flushLen,seg.offset,
-			tokens);
-		if(current == null)
-			current = first = newChunk;
-		else
-		{
-			current.next = newChunk;
-			current = newChunk;
-		}
-
+		System.err.println(buf.toString());
 		return first;
 	} //}}}
 
@@ -793,7 +811,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		while(chunks != null)
 		{
 			if(chunks.text != null)
-				chunks.text.draw(gfx,x + chunks.x,y);
+			{
+				gfx.setFont(chunks.style.getFont());
+				gfx.setColor(chunks.style.getForegroundColor());
+				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
+			}
+
 			width = chunks.x + chunks.width;
 			chunks = chunks.next;
 		}
@@ -1042,28 +1065,26 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Chunk class
 	class Chunk
 	{
-		TextLayout text;
 		float x;
 		float width;
+		SyntaxStyle style;
 		int offset;
 		int length;
+		GlyphVector text;
+
 		Chunk next;
 
-		Chunk(float x,
-			char[] text, int offset, int count, int lineStartOffset,
-			Token tokens)
+		Chunk(float x, int tokenType, char[] text, int offset)
 		{
 			this.x = x;
-			this.offset = offset;
-			length = count;
-
-			if(count != 0)
+			style = styles[tokenType];
+			if(text != null)
 			{
-				SyntaxCharacterIterator iter = new SyntaxCharacterIterator(
-					text,offset,count,lineStartOffset,styles,tokens);
-				this.text = new TextLayout(iter,fontRenderContext);
-				this.width = (float)this.text.getBounds().getWidth();
+				this.text = style.getFont().createGlyphVector(fontRenderContext,text);
+				this.width = (float)this.text.getLogicalBounds().getWidth();
+				this.length = text.length;
 			}
+			this.offset = offset;
 		}
 	} //}}}
 }
