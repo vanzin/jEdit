@@ -236,6 +236,12 @@ public class Buffer implements EBComponent
 
 				if(seg == null)
 					seg = new Segment(new char[1024],0,0);
+				if(endOffsets == null)
+				{
+					endOffsets = new LongArray();
+					endOffsets.add(1);
+				}
+
 				try
 				{
 					writeLock();
@@ -245,8 +251,7 @@ public class Buffer implements EBComponent
 					// SegmentBuffer never does that
 					contentMgr._setContent(seg.array,seg.count);
 
-					if(endOffsets != null)
-						contentInserted(0,seg.count,endOffsets);
+					offsetMgr._contentInserted(endOffsets);
 				}
 				catch(OutOfMemoryError oom)
 				{
@@ -256,6 +261,13 @@ public class Buffer implements EBComponent
 				finally
 				{
 					writeUnlock();
+				}
+
+				// notify fold visibility managers
+				for(int i = 0; i < inUseFVMs.length; i++)
+				{
+					if(inUseFVMs[i] != null)
+						inUseFVMs[i]._invalidate(0);
 				}
 
 				setFlag(READ_ONLY,readOnly);
