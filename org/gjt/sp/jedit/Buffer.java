@@ -203,9 +203,18 @@ public class Buffer
 
 			if(!loadAutosave)
 			{
-				// this returns false if initial sanity
-				// checks (if the file is a directory, etc)
-				// fail
+				if(!checkFileForLoad(view,vfs,path))
+				{
+					setFlag(LOADING,false);
+					return false;
+				}
+
+				if(isNewFile())
+				{
+					// ie, checkFileForLoad() set this
+					return true;
+				}
+
 				if(!vfs.load(view,this,path))
 				{
 					setFlag(LOADING,false);
@@ -3551,6 +3560,65 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 		else
 			return false;
+	} //}}}
+
+	//{{{ checkFileForLoad() method
+	private boolean checkFileForLoad(View view, VFS vfs, String path)
+	{
+		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+		{
+			Object session = vfs.createVFSSession(path,view);
+			if(session == null)
+				return false;
+
+			try
+			{
+				VFS.DirectoryEntry file = vfs._getDirectoryEntry(session,path,view);
+				if(file == null)
+				{
+					setNewFile(true);
+					return true;
+				}
+
+				if(!file.canRead)
+				{
+					VFSManager.error(view,path,"ioerror.no-read",null);
+					setNewFile(false);
+					return false;
+				}
+
+				setReadOnly(!file.canWrite);
+
+				if(file.type != VFS.DirectoryEntry.FILE)
+				{
+					VFSManager.error(view,path,
+						"ioerror.open-directory",null);
+					setNewFile(false);
+					return false;
+				}
+			}
+			catch(IOException io)
+			{
+				VFSManager.error(view,path,"ioerror",
+					new String[] { io.toString() });
+				return false;
+			}
+			finally
+			{
+				try
+				{
+					vfs._endVFSSession(session,view);
+				}
+				catch(IOException io)
+				{
+					VFSManager.error(view,path,"ioerror",
+						new String[] { io.toString() });
+					return false;
+				}
+			}
+		}
+
+		return true;
 	} //}}}
 
 	//{{{ finishLoading() method

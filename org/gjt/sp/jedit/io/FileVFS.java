@@ -78,39 +78,6 @@ public class FileVFS extends VFS
 		return File.separatorChar;
 	} //}}}
 
-	//{{{ load() method
-	public boolean load(View view, Buffer buffer, String path)
-	{
-		File file = new File(path);
-
-		//{{{ Check if file is valid
-		if(!file.exists())
-		{
-			buffer.setNewFile(true);
-			return true;
-		}
-		else
-			buffer.setReadOnly(!file.canWrite());
-
-		if(file.isDirectory())
-		{
-			VFSManager.error(view,file.getPath(),
-				"ioerror.open-directory",null);
-			buffer.setNewFile(false);
-			return false;
-		}
-
-		if(!file.canRead())
-		{
-			VFSManager.error(view,file.getPath(),
-				"ioerror.no-read",null);
-			buffer.setNewFile(false);
-			return false;
-		} //}}}
-
-		return super.load(view,buffer,path);
-	} //}}}
-
 	//{{{ save() method
 	public boolean save(View view, Buffer buffer, String path)
 	{

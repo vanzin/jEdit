@@ -41,22 +41,25 @@ public class BrowserOptionPane extends AbstractOptionPane
 	{
 		/* Default directory */
 		String[] dirs = {
-			jEdit.getProperty("options.browser.general.defaultPath.buffer"),
-			jEdit.getProperty("options.browser.general.defaultPath.home"),
 			jEdit.getProperty("options.browser.general.defaultPath.favorites"),
-			jEdit.getProperty("options.browser.general.defaultPath.last")
+			jEdit.getProperty("options.browser.general.defaultPath.home"),
+			jEdit.getProperty("options.browser.general.defaultPath.last"),
+			jEdit.getProperty("options.browser.general.defaultPath.buffer"),
+			jEdit.getProperty("options.browser.general.defaultPath.working")
 		};
 
 		defaultDirectory = new JComboBox(dirs);
 		String defaultDir = jEdit.getProperty("vfs.browser.defaultPath");
-		if("buffer".equals(defaultDir))
+		if("favorites".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(0);
 		else if("home".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(1);
-		else if("favorites".equals(defaultDir))
-			defaultDirectory.setSelectedIndex(2);
 		else if("last".equals(defaultDir))
+			defaultDirectory.setSelectedIndex(2);
+		else if("buffer".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(3);
+		else if("working".equals(defaultDir))
+			defaultDirectory.setSelectedIndex(4);
 		addComponent(jEdit.getProperty("options.browser.general.defaultPath"),
 			defaultDirectory);
 
@@ -120,7 +123,7 @@ public class BrowserOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	public void _save()
 	{
-		String[] dirs = { "buffer", "home", "favorites", "last" };
+		String[] dirs = { "favorites", "home", "last", "buffer", "working"};
 		jEdit.setProperty("vfs.browser.defaultPath",dirs[defaultDirectory
 			.getSelectedIndex()]);
 		jEdit.setBooleanProperty("vfs.browser.showToolbar",

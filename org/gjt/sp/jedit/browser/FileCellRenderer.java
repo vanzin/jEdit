@@ -67,14 +67,9 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			setFont(file.type == VFS.DirectoryEntry.FILE
 				? plainFont : boldFont);
 
-			if(!isSelected)
-			{
-				Color color = file.getColor();
-
-				setForeground(color == null
-					? UIManager.getColor("Tree.foreground")
-					: color);
-			}
+			colorDetermined = false;
+			this.isSelected = isSelected;
+			this.file = file;
 
 			if(column == 0)
 			{
@@ -136,6 +131,18 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			g.drawLine(x,y,x + fm.stringWidth(getText()),y);
 		}
 
+		if(!colorDetermined)
+		{
+			if(!isSelected)
+			{
+				Color color = file.getColor();
+
+				setForeground(color == null
+					? UIManager.getColor("Tree.foreground")
+					: color);
+			}
+		}
+
 		super.paintComponent(g);
 	} //}}}
 
@@ -168,5 +175,8 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	private Font boldFont;
 
 	private boolean underlined;
+	private boolean colorDetermined;
+	private boolean isSelected;
+	private VFS.DirectoryEntry file;
 	//}}}
 }

@@ -3,7 +3,7 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre1
 
 Thanks to Bill McMilleon, Kasper Graversen, Kris Kopicki,
-Oliver Rutherfurd. Rudi Widmann and Ryan Grove for contributing to this
+Oliver Rutherfurd, Rudi Widmann and Ryan Grove for contributing to this
 release.
 
 {{{ Editing
@@ -136,6 +136,9 @@ release.
 }}}
 {{{ File System Browser
 
+- The file system view now shows file attributes such as type, status,
+  size and modification date.
+
 - Re-added "Filter in file dialogs is current buffer extension" option
   that used to be present in jEdit 4.0.
 
@@ -144,6 +147,9 @@ release.
 - Improved completion in file dialogs. Completion in the field is now
   case-insensitive, and the full path is not inserted into the field
   unless you press TAB.
+
+- Added option to make the default directory the working directory of
+  the jEdit process.
 
 }}}
 {{{ User Interface
@@ -386,6 +392,12 @@ release.
 - Instead of overriding the deprecated requestDefaultFocus() method,
   dockable windows can now implement DefaultFocusComponent and its
   focusOnDefaultComponent() method.
+
+- Added canRead and canWrite fields to VFS.DirectoryEntry class.
+
+- Added VFS extended attribute API. VFS.getExtendedAttributes() returns
+  an array of extended attribute names. Override getExtendedAttribute()
+  method of VFS.DirectoryEntry to return attribute values.
 
 }}}
 

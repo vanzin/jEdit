@@ -39,9 +39,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	public VFSDirectoryEntryTableModel()
 	{
 		extAttrs = new String[] {
-			VFS.EA_TYPE,
+			VFS.EA_SIZE_OR_TYPE,
 			VFS.EA_STATUS,
-			VFS.EA_SIZE,
 			VFS.EA_MODIFIED
 		};
 	} //}}}
@@ -142,7 +141,12 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getColumnName() method
 	public String getColumnName(int col)
 	{
-		return null;
+		if(col == 0)
+			return null;
+		else if(col == 1)
+			return jEdit.getProperty("vfs.browser.name");
+		else
+			return jEdit.getProperty("vfs.browser." + getExtendedAttribute(col));
 	} //}}}
 
 	//{{{ getColumnClass() method

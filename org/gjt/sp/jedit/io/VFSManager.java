@@ -285,15 +285,16 @@ public class VFSManager
 
 			if(errors.size() == 1)
 			{
-				final String caption = jEdit.getProperty(
-					"ioerror.caption" + (errors.size() == 1
-					? "-1" : ""),new Integer[] {
-					new Integer(errors.size()) });
+				
 
 				VFSManager.runInAWTThread(new Runnable()
 				{
 					public void run()
 					{
+						String caption = jEdit.getProperty(
+							"ioerror.caption" + (errors.size() == 1
+							? "-1" : ""),new Integer[] {
+							new Integer(errors.size()) });
 						new ErrorListDialog(
 							frame.isShowing()
 							? frame
