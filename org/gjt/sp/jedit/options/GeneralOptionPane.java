@@ -191,7 +191,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
-		jEdit.setBooleanProperty("buffer.encodingAutodetect",(String)
+		jEdit.setBooleanProperty("buffer.encodingAutodetect",
 			encodingAutodetect.isSelected());
 		switch(checkModStatus.getSelectedIndex())
 		{

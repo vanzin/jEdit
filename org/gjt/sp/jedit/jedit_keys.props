@@ -18,7 +18,7 @@ delete-line.shortcut=C+d
 # C+e is a prefix
 find.shortcut=C+f
 find-next.shortcut=C+g
-find-prev.shortcut=C+h
+# C+h is not usable on MacOS X
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 swap-marker.shortcut=C+k
@@ -121,6 +121,7 @@ add-explicit-fold.shortcut=C+e a
 collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
+find-previous.shortcut=C+e g
 invert-selection.shortcut=C+e i
 select-line.shortcut=C+e l
 narrow-to-fold.shortcut=C+e n n
