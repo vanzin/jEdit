@@ -255,8 +255,9 @@ public class Buffer
 						- 1,getLength());
 
 					contentMgr.remove(0,getLength());
-					offsetMgr.contentRemoved(0,0,getLineCount()
+					lineMgr.contentRemoved(0,0,getLineCount()
 						- 1,getLength());
+					positionMgr.contentRemoved(0,getLength());
 					fireContentRemoved(0,0,getLineCount()
 						- 1,getLength());
 
@@ -265,7 +266,8 @@ public class Buffer
 					// SegmentBuffer never does that
 					contentMgr._setContent(seg.array,seg.count);
 
-					offsetMgr._contentInserted(endOffsets);
+					lineMgr._contentInserted(endOffsets);
+					positionMgr.contentInserted(0,seg.count);
 
 					fireContentInserted(0,0,
 						endOffsets.getSize() - 1,
@@ -893,7 +895,7 @@ public class Buffer
 	public int getLineCount()
 	{
 		// no need to lock since this just returns a value and that's it
-		return offsetMgr.getLineCount();
+		return lineMgr.getLineCount();
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -912,7 +914,7 @@ public class Buffer
 			if(offset < 0 || offset > getLength())
 				throw new ArrayIndexOutOfBoundsException(offset);
 
-			return offsetMgr.getLineOfOffset(offset);
+			return lineMgr.getLineOfOffset(offset);
 		}
 		finally
 		{
@@ -934,12 +936,12 @@ public class Buffer
 		{
 			readLock();
 
-			if(line < 0 || line >= offsetMgr.getLineCount())
+			if(line < 0 || line >= lineMgr.getLineCount())
 				throw new ArrayIndexOutOfBoundsException(line);
 			else if(line == 0)
 				return 0;
 
-			return offsetMgr.getLineEndOffset(line - 1);
+			return lineMgr.getLineEndOffset(line - 1);
 		}
 		finally
 		{
@@ -962,10 +964,10 @@ public class Buffer
 		{
 			readLock();
 
-			if(line < 0 || line >= offsetMgr.getLineCount())
+			if(line < 0 || line >= lineMgr.getLineCount())
 				throw new ArrayIndexOutOfBoundsException(line);
 
-			return offsetMgr.getLineEndOffset(line);
+			return lineMgr.getLineEndOffset(line);
 		}
 		finally
 		{
@@ -1009,7 +1011,7 @@ public class Buffer
 	 */
 	public String getLineText(int line)
 	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
+		if(line < 0 || line >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
 
 		try
@@ -1017,8 +1019,8 @@ public class Buffer
 			readLock();
 
 			int start = (line == 0 ? 0
-				: offsetMgr.getLineEndOffset(line - 1));
-			int end = offsetMgr.getLineEndOffset(line);
+				: lineMgr.getLineEndOffset(line - 1));
+			int end = lineMgr.getLineEndOffset(line);
 
 			return getText(start,end - start - 1);
 		}
@@ -1043,7 +1045,7 @@ public class Buffer
 	 */
 	public void getLineText(int line, Segment segment)
 	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
+		if(line < 0 || line >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
 
 		try
@@ -1051,8 +1053,8 @@ public class Buffer
 			readLock();
 
 			int start = (line == 0 ? 0
-				: offsetMgr.getLineEndOffset(line - 1));
-			int end = offsetMgr.getLineEndOffset(line);
+				: lineMgr.getLineEndOffset(line - 1));
+			int end = lineMgr.getLineEndOffset(line);
 
 			getText(start,end - start - 1,segment);
 		}
@@ -1237,8 +1239,8 @@ public class Buffer
 				|| offset + length > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset + ":" + length);
 
-			int startLine = offsetMgr.getLineOfOffset(offset);
-			int endLine = offsetMgr.getLineOfOffset(offset + length);
+			int startLine = lineMgr.getLineOfOffset(offset);
+			int endLine = lineMgr.getLineOfOffset(offset + length);
 
 			int numLines = endLine - startLine;
 
@@ -1252,7 +1254,8 @@ public class Buffer
 			firePreContentRemoved(startLine,offset,numLines,length);
 
 			contentMgr.remove(offset,length);
-			offsetMgr.contentRemoved(startLine,offset,numLines,length);
+			lineMgr.contentRemoved(startLine,offset,numLines,length);
+			positionMgr.contentRemoved(offset,length);
 
 			fireContentRemoved(startLine,offset,numLines,length);
 
@@ -1544,7 +1547,7 @@ public class Buffer
 		String newWrap = getStringProperty("wrap");
 		if(wrap != null && !newWrap.equals(wrap))
 		{
-			offsetMgr.invalidateScreenLineCounts();
+			lineMgr.invalidateScreenLineCounts();
 			if(isLoaded())
 				fireWrapModeChanged();
 		}
@@ -2093,10 +2096,10 @@ public class Buffer
 		else
 			seg = new Segment();
 
-		if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
+		if(lineIndex < 0 || lineIndex >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(lineIndex);
 
-		int firstInvalidLineContext = offsetMgr.getFirstInvalidLineContext();
+		int firstInvalidLineContext = lineMgr.getFirstInvalidLineContext();
 		int start;
 		if(textMode || firstInvalidLineContext == -1)
 		{
@@ -2114,7 +2117,7 @@ public class Buffer
 		{
 			getLineText(i,seg);
 
-			TokenMarker.LineContext context = offsetMgr.getLineContext(i);
+			TokenMarker.LineContext context = lineMgr.getLineContext(i);
 			ParserRule oldRule;
 			ParserRuleSet oldRules;
 			String oldSpanEndSubst;
@@ -2136,13 +2139,13 @@ public class Buffer
 
 			TokenMarker.LineContext prevContext = (
 				(i == 0 || textMode) ? null
-				: offsetMgr.getLineContext(i - 1)
+				: lineMgr.getLineContext(i - 1)
 			);
 
 			context = tokenMarker.markTokens(prevContext,
 				(i == lineIndex ? tokenHandler
 				: DummyTokenHandler.INSTANCE),seg);
-			offsetMgr.setLineContext(i,context);
+			lineMgr.setLineContext(i,context);
 
 			// Could incorrectly be set to 'false' with
 			// recursive delegates, where the chaining might
@@ -2162,16 +2165,16 @@ public class Buffer
 			}
 		}
 
-		int lineCount = offsetMgr.getLineCount();
+		int lineCount = lineMgr.getLineCount();
 		if(lineCount - 1 == lineIndex)
-			offsetMgr.setFirstInvalidLineContext(-1);
+			lineMgr.setFirstInvalidLineContext(-1);
 		else if(nextLineRequested)
-			offsetMgr.setFirstInvalidLineContext(lineIndex + 1);
+			lineMgr.setFirstInvalidLineContext(lineIndex + 1);
 		else if(firstInvalidLineContext == -1)
 			/* do nothing */;
 		else
 		{
-			offsetMgr.setFirstInvalidLineContext(Math.max(
+			lineMgr.setFirstInvalidLineContext(Math.max(
 				firstInvalidLineContext,lineIndex + 1));
 		}
 	} //}}}
@@ -2962,7 +2965,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void invalidateCachedFoldLevels()
 	{
-		offsetMgr.setFirstInvalidFoldLevel(0);
+		lineMgr.setFirstInvalidFoldLevel(0);
 		fireFoldLevelChanged(0,getLineCount());
 	} //}}}
 
@@ -2974,16 +2977,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getFoldLevel(int line)
 	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
+		if(line < 0 || line >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
 
 		if(foldHandler instanceof DummyFoldHandler)
 			return 0;
 
-		int firstInvalidFoldLevel = offsetMgr.getFirstInvalidFoldLevel();
+		int firstInvalidFoldLevel = lineMgr.getFirstInvalidFoldLevel();
 		if(firstInvalidFoldLevel == -1 || line < firstInvalidFoldLevel)
 		{
-			return offsetMgr.getFoldLevel(line);
+			return lineMgr.getFoldLevel(line);
 		}
 		else
 		{
@@ -2996,15 +2999,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 			for(int i = firstInvalidFoldLevel; i <= line; i++)
 			{
 				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
-				if(newFoldLevel != offsetMgr.getFoldLevel(i))
+				if(newFoldLevel != lineMgr.getFoldLevel(i))
 					changed = true;
-				offsetMgr.setFoldLevel(i,newFoldLevel);
+				lineMgr.setFoldLevel(i,newFoldLevel);
 			}
 
-			if(line == offsetMgr.getLineCount() - 1)
-				offsetMgr.setFirstInvalidFoldLevel(-1);
+			if(line == lineMgr.getLineCount() - 1)
+				lineMgr.setFirstInvalidFoldLevel(-1);
 			else
-				offsetMgr.setFirstInvalidFoldLevel(line + 1);
+				lineMgr.setFirstInvalidFoldLevel(line + 1);
 
 			if(changed && !getFlag(INSIDE_INSERT))
 			{
@@ -3099,7 +3102,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		this.foldHandler = foldHandler;
 
-		offsetMgr.setFirstInvalidFoldLevel(0);
+		lineMgr.setFirstInvalidFoldLevel(0);
 
 		fireFoldHandlerChanged();
 	} //}}}
@@ -3122,7 +3125,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(offset < 0 || offset > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset);
 
-			return offsetMgr.createPosition(offset);
+			return positionMgr.createPosition(offset);
 		}
 		finally
 		{
@@ -3422,14 +3425,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Methods that really shouldn't be public...
 
-	//{{{ _getOffsetManager() method
+	//{{{ _getLineManager() method
 	/**
 	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.2pre1
+	 * @since jEdit 4.2pre3
 	 */
-	public OffsetManager _getOffsetManager()
+	public LineManager _getLineManager()
 	{
-		return offsetMgr;
+		return lineMgr;
 	} //}}}
 
 	//}}}
@@ -3444,7 +3447,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		lock = new ReadWriteLock();
 		propertyLock = new Object();
 		contentMgr = new ContentManager();
-		offsetMgr = new OffsetManager();
+		lineMgr = new LineManager();
+		positionMgr = new PositionManager();
 		integerArray = new IntegerArray();
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();
@@ -3596,7 +3600,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private ReadWriteLock lock;
 	private Object propertyLock;
 	private ContentManager contentMgr;
-	private OffsetManager offsetMgr;
+	private LineManager lineMgr;
+	private PositionManager positionMgr;
 	private IntegerArray integerArray;
 	private UndoManager undoMgr;
 	private Vector bufferListeners;
@@ -3809,7 +3814,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// on a reload, the fold handler doesn't change, but
 			// we still need to re-collapse folds.
 			// don't do this on initial fold handler creation
-			offsetMgr.setFirstInvalidFoldLevel(0);
+			lineMgr.setFirstInvalidFoldLevel(0);
 
 			fireFoldHandlerChanged();
 		}
@@ -4029,7 +4034,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		// don't do this on initial token marker
 		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
 		{
-			offsetMgr.setFirstInvalidLineContext(0);
+			lineMgr.setFirstInvalidLineContext(0);
 		}
 	} //}}}
 
@@ -4056,11 +4061,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			setFlag(INSIDE_INSERT,true);
 
-			int startLine = offsetMgr.getLineOfOffset(offset);
+			int startLine = lineMgr.getLineOfOffset(offset);
 			int numLines = endOffsets.getSize();
 
-			offsetMgr.contentInserted(startLine,offset,numLines,length,
+			lineMgr.contentInserted(startLine,offset,numLines,length,
 				endOffsets);
+			positionMgr.contentInserted(offset,length);
 
 			setDirty(true);
 
