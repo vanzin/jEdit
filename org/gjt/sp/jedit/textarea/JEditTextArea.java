@@ -382,7 +382,10 @@ public class JEditTextArea extends JComponent
 	public void setFirstLine(int firstLine)
 	{
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"setFirstLine()");
+		{
+			Log.log(Log.DEBUG,this,"setFirstLine() from "
+				+ getFirstLine() + " to " + firstLine);
+		}
 
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		int max = displayManager.getScrollLineCount() - visibleLines
@@ -595,7 +598,7 @@ public class JEditTextArea extends JComponent
 	public void scrollUpPage()
 	{
 		setFirstLine(getFirstLine() - getVisibleLines()
-			- (lastLinePartial ? 1 : 0));
+			+ (lastLinePartial ? 1 : 0));
 	} //}}}
 
 	//{{{ scrollDownLine() method
@@ -642,7 +645,8 @@ public class JEditTextArea extends JComponent
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"scrollTo(), " + physLastLine);
+			Log.log(Log.DEBUG,this,"scrollTo(), lineCount="
+				+ getLineCount());
 
 		//{{{ Get ready
 		int extraEndVirt;

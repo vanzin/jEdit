@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.gjt.sp.jedit;
 
 import javax.swing.JMenuItem;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.gui.*;
@@ -229,7 +230,7 @@ public abstract class EditPlugin
 	 *
 	 * @since jEdit 4.2pre1
 	 */
-	public JMenuItem createMenuItems()
+	public final JMenuItem createMenuItems()
 	{
 		if(this instanceof Broken)
 			return null;
@@ -356,6 +357,7 @@ public abstract class EditPlugin
 			this.classLoader = classLoader;
 			this.zipFile = zipFile;
 			plugins = new ArrayList();
+			actions = new ActionSet();
 		} //}}}
 
 		//{{{ JAR constructor
@@ -365,19 +367,7 @@ public abstract class EditPlugin
 			this(path,classLoader,zipFile);
 			if(cache != null)
 			{
-				if(cache.actionsURI != null)
-				{
-					actions = new ActionSet(this,
-						cache.actionsURI,
-						cache.cachedActionNames);
-				}
-				if(cache.dockablesURI != null)
-				{
-					DockableWindowManager.cacheDockableWindows(this,
-						cache.dockablesURI,
-						cache.cachedDockableNames,
-						cache.cachedDockableActionFlags);
-				}
+				
 			}
 		} //}}}
 
@@ -390,9 +380,31 @@ public abstract class EditPlugin
 			}
 		} //}}}
 
-		//{{{ generateCache() method
-		void generateCache() throws IOException
+		//{{{ loadCache() method
+		void loadCache(ResourceCache.PluginCacheEntry cache)
 		{
+			if(cache.actionsURI != null)
+			{
+				actions = new ActionSet(this,
+					cache.actionsURI,
+					cache.cachedActionNames);
+			}
+			if(cache.dockablesURI != null)
+			{
+				DockableWindowManager.cacheDockableWindows(this,
+					cache.dockablesURI,
+					cache.cachedDockableNames,
+					cache.cachedDockableActionFlags);
+			}
+		} //}}}
+
+		//{{{ generateCache() method
+		ResourceCache.PluginCacheEntry generateCache()
+			throws IOException
+		{
+			ResourceCache.PluginCacheEntry cache
+				= new ResourceCache.PluginCacheEntry();
+
 			Enumeration entries = zipFile.entries();
 			while(entries.hasMoreElements())
 			{
@@ -402,23 +414,35 @@ public abstract class EditPlugin
 				String lname = name.toLowerCase();
 				if(lname.equals("actions.xml"))
 				{
+					URL actionsURI = classLoader.getResource(name);
 					actions = new ActionSet(
 						this,
-						classLoader.getResource(name),
+						actionsURI,
 						null);
 					actions.load();
 					jEdit.addActionSet(actions);
+
+					cache.actionsURI = actionsURI;
+					cache.cachedActionNames = actions.getActionNames();
+					//XXX: dockable actions
 				}
 				else if(lname.equals("dockables.xml"))
 				{
+					URL dockablesURI = classLoader.getResource(name);
 					DockableWindowManager.loadDockableWindows(this,
-						classLoader.getResource(name));
+						dockablesURI);
+
+					cache.dockablesURI = dockablesURI;
+					//cache.cachedDockableNames = 
+					//cache.cachedDockableActionFlags =
 				}
 				else if(lname.endsWith(".props"))
 					properties.add(classLoader.getResource(name));
 				else if(name.endsWith(".class"))
 					classes.add(MiscUtilities.fileToClass(name));
 			}
+
+			return cache;
 		} //}}}
 
 		//{{{ getPropertyFiles() method

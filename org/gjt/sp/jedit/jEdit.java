@@ -105,6 +105,7 @@ public class jEdit
 		boolean runStartupScripts = true;
 		boolean quit = false;
 		boolean wait = false;
+		boolean generateCache = false;
 		String userDir = System.getProperty("user.dir");
 
 		// script to run
@@ -186,6 +187,8 @@ public class jEdit
 					wait = true;
 				else if(arg.equals("-quit"))
 					quit = true;
+				else if(arg.equals("-generatecache"))
+					generateCache = true;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -375,11 +378,12 @@ public class jEdit
 			}
 		}
 
-		initDockables();
-
 		VFSManager.init();
 
-		ResourceCache.init();
+		if(generateCache)
+			ResourceCache.generateCache();
+		else if(!ResourceCache.loadCache())
+			ResourceCache.generateCache();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -984,7 +988,8 @@ public class jEdit
 	 */
 	public static void addPluginJAR(EditPlugin.JAR plugin)
 	{
-		addActionSet(plugin.getActionSet());
+		if(plugin.getActionSet() != null)
+			addActionSet(plugin.getActionSet());
 		jars.addElement(plugin);
 	} //}}}
 
@@ -2509,6 +2514,7 @@ public class jEdit
 		System.out.println("	<file> +line:<line>: Positions caret"
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
+		System.out.println("	-generatecache: Force plugin cache to be recreated");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-gui: Only if running in background mode; open initial view (default)");
 		System.out.println("	-nogui: Only if running in background mode; don't open initial view");
@@ -2778,17 +2784,6 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
-	} //}}}
-
-	//{{{ initDockables() method
-	/**
-	 * Load info on jEdit's built-in dockable windows.
-	 */
-	private static void initDockables()
-	{
-		if(!DockableWindowManager.loadDockableWindows(null,
-			jEdit.class.getResource("dockables.xml")))
-			System.exit(1);
 	} //}}}
 
 	//{{{ initPlugins() method
