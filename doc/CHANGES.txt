@@ -40,6 +40,9 @@ Thomas Galvin for contributing to this release.
 - Fixed ArrayIndexOutOfBoundsException when invoking "Expand Fold"
   outside of a narrowed range.
 
+- Fixed problem where any dialogs boxes shown by the search and replace
+  code would force the search and replace dialog to be shown on OS X.
+
 }}}
 {{{ API Changes
 

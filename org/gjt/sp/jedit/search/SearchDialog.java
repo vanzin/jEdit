@@ -71,7 +71,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	public static void preloadSearchDialog(View view)
 	{
-		if(OperatingSystem.isMacOS())
+		if(Debug.DISABLE_SEARCH_DIALOG_POOL)
 			return;
 
 		SearchDialog dialog = new SearchDialog(view);
