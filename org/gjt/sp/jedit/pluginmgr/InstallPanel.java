@@ -638,8 +638,8 @@ class InstallPanel extends JPanel
 
 		public int compare(Object o1, Object o2)
 		{
-			Entry e1 = (Entry)o1;
-			Entry e2 = (Entry)o2;
+			InstallPanel.Entry e1 = (InstallPanel.Entry)o1;
+			InstallPanel.Entry e2 = (InstallPanel.Entry)o2;
 
 			if (type == NAME)
 				return e1.name.compareToIgnoreCase(e2.name);
@@ -653,7 +653,7 @@ class InstallPanel extends JPanel
 		}
 	} //}}}
 
-	//{{{ HeaderMouseHandler()
+	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
