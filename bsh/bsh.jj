@@ -50,12 +50,20 @@ options {
 	/* Print detailed lookahead debugging info
 	DEBUG_LOOKAHEAD=true;
 	*/
+
+	// Not sure exactly what this does
+	ERROR_REPORTING=false;
+
+	// This breaks something for interactive use on the command line,
+	// but may be useful in non-interactive use.
+	//CACHE_TOKENS=true;
 }
 
 PARSER_BEGIN(Parser)
 package bsh;
 
 import java.io.*;
+import java.util.Vector;
 
 /**
 	This is the BeanShell parser.  It is used internally by the Interpreter
@@ -146,8 +154,100 @@ public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants/*@egen*/
 		}
 	}
 
-}
+	/**
+		Lookahead for the enhanced for statement.  
+		Expect "for" "(" and then see whether we hit ":" or a ";" first.
+	*/
+	boolean isRegularForStatement() 
+	{
+		int curTok = 1;
+		Token tok;
+		tok = getToken(curTok++);
+		if ( tok.kind != FOR ) return false;
+		tok = getToken(curTok++);
+		if ( tok.kind != LPAREN ) return false;
+		while (true) 
+		{
+			tok = getToken(curTok++);
+			switch (tok.kind) {
+				case COLON:
+					return false;
+				case SEMICOLON:
+					return true;
+				case EOF: 
+					return false;
+			}
+		}
+	}
 
+	/**
+		Lookahead to determine whether a method has a return type.
+
+		// Case 1 - primitive or void
+		[ void, boolean, char, ... ] foo() { }
+		byte [] foo() { }
+
+		// Case 2 - simple type name
+		Foo foo () { } 
+		Foo [] foo () { } 
+
+		// Case 3 - compound type name
+		foo.Foo foo () { }
+		foo.Foo [] foo () { }
+
+		// Case 4 - Parameterized return type?
+		// ??
+
+		// Case N - no type
+		foo () { }
+	*/
+	/*
+		Note: it's important not to read ahead tokens (e.g. tok2) unless 
+		previous ones match.  We're used in lookaheads and if we have to wait
+		for tokens that couldn't match it messes up interactivity on the
+		command line.
+	*/
+	boolean methodHasReturnType() 
+	{
+		Token tok1 = getToken(1), tok2=null;
+
+		// Case 1
+		if ( tok1.kind == VOID || tok1.kind == BOOLEAN || tok1.kind == CHAR
+			|| tok1.kind == BYTE || tok1.kind == SHORT || tok1.kind == INT
+			|| tok1.kind == LONG || tok1.kind == FLOAT || tok1.kind == DOUBLE
+		)
+				return true;
+
+		// Case 2
+		if ( tok1.kind == IDENTIFIER && (tok2=getToken(2)).kind == LBRACKET )
+			return true;
+		if ( tok1.kind == IDENTIFIER && tok2.kind == IDENTIFIER 
+			&& getToken(3).kind == LPAREN )
+			return true;
+
+		// Case 3
+		if ( tok1.kind == IDENTIFIER && tok2.kind == DOT )
+			return true;
+
+		// Case N
+		return false;
+	}
+
+	/**
+		Generate a ParseException with the specified message, pointing to the
+		current token.
+		The auto-generated Parser.generateParseException() method does not
+		provide line number info, therefore we do this.
+	*/
+	ParseException createParseException( String message )
+	{
+		Token errortok = token;
+		int line = errortok.beginLine, column = errortok.beginColumn;
+		String mess = (errortok.kind == 0) ? tokenImage[0] : errortok.image;
+		return new ParseException( "Parse error at line " + line 
+			+ ", column " + column + " : " + message );
+	}
+}
 
 PARSER_END(Parser)
 
@@ -177,7 +277,8 @@ SPECIAL_TOKEN : /* COMMENTS */
 
 TOKEN : /* RESERVED WORDS AND LITERALS */
 {
-< BOOLEAN: "boolean" >
+< ABSTRACT : "abstract" >
+| < BOOLEAN: "boolean" >
 | < BREAK: "break" >
 | < CLASS: "class" >
 | < BYTE: "byte" >
@@ -190,6 +291,8 @@ TOKEN : /* RESERVED WORDS AND LITERALS */
 | < DO: "do" >
 | < DOUBLE: "double" >
 | < ELSE: "else" >
+| < ENUM: "enum" >
+| < EXTENDS: "extends" >
 | < FALSE: "false" >
 | < FINAL: "final" >
 | < FINALLY: "finally" >
@@ -197,24 +300,32 @@ TOKEN : /* RESERVED WORDS AND LITERALS */
 | < FOR: "for" >
 | < GOTO: "goto" >
 | < IF: "if" >
+| < IMPLEMENTS: "implements" >
 | < IMPORT: "import" >
 | < INSTANCEOF: "instanceof" >
 | < INT: "int" >
 | < INTERFACE: "interface" >
 | < LONG: "long" >
+| < NATIVE: "native" >
 | < NEW: "new" >
 | < NULL: "null" >
+| < PACKAGE: "package" >
 | < PRIVATE: "private" >
 | < PROTECTED: "protected" >
 | < PUBLIC: "public" >
 | < RETURN: "return" >
 | < SHORT: "short" >
 | < STATIC: "static" >
+| < STRICTFP : "strictfp" >
 | < SWITCH: "switch" >
+| < SYNCHRONIZED: "synchronized" >
+| < TRANSIENT: "transient" >
 | < THROW: "throw" >
+| < THROWS: "throws" >
 | < TRUE: "true" >
 | < TRY: "try" >
 | < VOID: "void" >
+| < VOLATILE: "volatile" >
 | < WHILE: "while" >
 }
 
@@ -386,95 +497,174 @@ TOKEN : /* OPERATORS */
 }
 
 
+/*
+	Thanks to Sreenivasa Viswanadha for suggesting how to get rid of expensive
+	lookahead here.
+*/
 boolean Line() :
 {}
 {
   <EOF> { 
 	Interpreter.debug("End of File!"); 
 	return true; 
-	}
+  }
 |
-  (
-	/*
-		SYNTACTIC_LOOKAHEAD
-		I'm guessing this is expensive, but I don't know how to work around
-		it...  Is there another syntactic indication that we are working 
-		through an expression as opposed to a statement?
-		What is the difference?  Well, some statements don't require a
-		semicolon and they don't return vlues...  We could probably broaden
-		bsh to allow everything to return a value, but the semi-colon thing
-		is tougher.  You don't want to have to say if ( foo ) { } ;
-		Maybe we can invert ths and enumerate all of those types of 
-		statements in a special lookahead that's cheaper??
-	*/
-   LOOKAHEAD( Expression() ";" )
-   Expression() ";" 
-  |
-   BlockStatement()
-  )
-	{ 
-		return false; 
-	}
+  BlockStatement() {
+	return false; 
+  }
 }
 
 /*****************************************
  * THE JAVA LANGUAGE GRAMMAR STARTS HERE *
  *****************************************/
 
+/*
+	Gather modifiers for a class, method, or field.
+	I lookahead is true then we are being called as part of a lookahead and we
+	should not enforce any rules.  Otherwise we validate based on context
+	(field, method, class)
+*/
+Modifiers Modifiers( int context, boolean lookahead ) : 
+{
+	Modifiers mods = null;
+}
+{
+  (
+	( 
+		"private" |	"protected" | "public" | "synchronized" | "final"
+		| "native" | "transient" | "volatile" |	"abstract" | "static" 
+		| "strictfp"
+	) {
+		if ( !lookahead )
+			try {
+				if ( mods == null ) mods = new Modifiers(); 
+				mods.addModifier( context, getToken(0).image );
+			} catch ( IllegalStateException e ) { 
+				throw createParseException( e.getMessage() );
+			}
+	}
+  )* {
+  	return mods;
+  }
+}
+
+
+/**
+*/
+void ClassDeclaration()                   :
+{/*@bgen(jjtree) ClassDeclaration */
+        BSHClassDeclaration jjtn000 = new BSHClassDeclaration(JJTCLASSDECLARATION);
+        boolean jjtc000 = true;
+        jjtree.openNodeScope(jjtn000);
+        jjtreeOpenNodeScope(jjtn000);
+/*@egen*/
+	Modifiers mods;
+	Token t;
+	int numInterfaces;
+}
+{/*@bgen(jjtree) ClassDeclaration */
+        try {
+/*@egen*/
+	mods = Modifiers( Modifiers.CLASS, false ) 
+	"class" t=<IDENTIFIER> 
+		[ "extends" AmbiguousName() { jjtn000.extend = true; } ] 
+		[ "implements" numInterfaces=NameList() 
+			{ jjtn000.numInterfaces=numInterfaces; } ]
+		Block()/*@bgen(jjtree)*/
+                        {
+                          jjtree.closeNodeScope(jjtn000, true);
+                          jjtc000 = false;
+                          jjtreeCloseNodeScope(jjtn000);
+                        }
+/*@egen*/ {
+			jjtn000.modifiers = mods;
+			jjtn000.name = t.image;
+		}/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+            jjtreeCloseNodeScope(jjtn000);
+          }
+        }
+/*@egen*/
+}
+
 void MethodDeclaration()                    :
 {/*@bgen(jjtree) MethodDeclaration */
-  BSHMethodDeclaration jjtn000 = new BSHMethodDeclaration(JJTMETHODDECLARATION);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-  jjtreeOpenNodeScope(jjtn000);
-/*@egen*/ Token t = null; }
+        BSHMethodDeclaration jjtn000 = new BSHMethodDeclaration(JJTMETHODDECLARATION);
+        boolean jjtc000 = true;
+        jjtree.openNodeScope(jjtn000);
+        jjtreeOpenNodeScope(jjtn000);
+/*@egen*/ 
+	Token t = null; 
+	Modifiers mods;
+	int count;
+}
 {/*@bgen(jjtree) MethodDeclaration */
-    try {
+        try {
 /*@egen*/
-	// SYNTACTIC_LOOKAHEAD
-	// this one seems cheap enough
-    LOOKAHEAD( MethodDeclarationTypeLookahead() )
-    ReturnType() t = <IDENTIFIER> { jjtn000.name = t.image; }
-    FormalParameters() Block()
-|
-    t = <IDENTIFIER> { jjtn000.name = t.image; }
-    FormalParameters() Block()/*@bgen(jjtree)*/
-    } catch (Throwable jjte000) {
-      if (jjtc000) {
-        jjtree.clearNodeScope(jjtn000);
-        jjtc000 = false;
-      } else {
-        jjtree.popNode();
-      }
-      if (jjte000 instanceof RuntimeException) {
-        throw (RuntimeException)jjte000;
-      }
-      if (jjte000 instanceof ParseException) {
-        throw (ParseException)jjte000;
-      }
-      throw (Error)jjte000;
-    } finally {
-      if (jjtc000) {
-        jjtree.closeNodeScope(jjtn000, true);
-        jjtreeCloseNodeScope(jjtn000);
-      }
-    }
+	mods = Modifiers( Modifiers.METHOD, false ) { jjtn000.modifiers = mods; }
+    [ LOOKAHEAD( { methodHasReturnType() } ) ReturnType() ]
+	t = <IDENTIFIER> { jjtn000.name = t.image; }
+    FormalParameters() 
+	[ "throws" count=NameList() { jjtn000.numThrows=count; } ] 
+	Block()/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+            jjtreeCloseNodeScope(jjtn000);
+          }
+        }
 /*@egen*/
 }
 
+/**
+	It's tempting to collapse this to one like like so:
+
+      [ LOOKAHEAD( { methodHasReturnType() } ) ReturnType() ]
+      <IDENTIFIER> FormalParameters() "{"
+
+	However this doesn't work because nested lookaheads are not evaluated
+	during lookahead!
+	http://www.engr.mun.ca/~theo/JavaCC-FAQ/javacc-faq.htm#tth_sEc4.9
+*/
 void MethodDeclarationLookahead() : { }
 {
-	// SYNTACTIC_LOOKAHEAD
-	// this one seems cheap enough
-    LOOKAHEAD( MethodDeclarationTypeLookahead() )
-    ReturnType() <IDENTIFIER> FormalParameters() "{"
+	Modifiers( Modifiers.METHOD, true )
+  (
+    LOOKAHEAD( { methodHasReturnType() }  ) ReturnType() 
+	<IDENTIFIER> FormalParameters() [ "throws" NameList() ] "{"
 |
-    <IDENTIFIER> FormalParameters() "{"
-}
-
-void MethodDeclarationTypeLookahead() : { }
-{
-    ReturnType() <IDENTIFIER> "("
+	<IDENTIFIER> FormalParameters() [ "throws" NameList() ] "{"
+  )
 }
 
 void ImportDeclaration()                    :
@@ -537,41 +727,47 @@ void ImportDeclaration()                    :
 
 void VariableDeclarator()                     :
 {/*@bgen(jjtree) VariableDeclarator */
-  BSHVariableDeclarator jjtn000 = new BSHVariableDeclarator(JJTVARIABLEDECLARATOR);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-  jjtreeOpenNodeScope(jjtn000);
-/*@egen*/ Token t; }
+        BSHVariableDeclarator jjtn000 = new BSHVariableDeclarator(JJTVARIABLEDECLARATOR);
+        boolean jjtc000 = true;
+        jjtree.openNodeScope(jjtn000);
+        jjtreeOpenNodeScope(jjtn000);
+/*@egen*/ 
+	Token t; 
+	Modifiers mods; 
+}
 {/*@bgen(jjtree) VariableDeclarator */
-  try {
+        try {
 /*@egen*/
-  t=<IDENTIFIER> [ "=" VariableInitializer() ]/*@bgen(jjtree)*/
-                                               {
-                                                 jjtree.closeNodeScope(jjtn000, true);
-                                                 jjtc000 = false;
-                                                 jjtreeCloseNodeScope(jjtn000);
-                                               }
-/*@egen*/ { jjtn000.name = t.image; }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-      jjtreeCloseNodeScope(jjtn000);
-    }
-  }
+	t=<IDENTIFIER> [ "=" VariableInitializer() ]/*@bgen(jjtree)*/
+        {
+          jjtree.closeNodeScope(jjtn000, true);
+          jjtc000 = false;
+          jjtreeCloseNodeScope(jjtn000);
+        }
+/*@egen*/ 
+	{ 
+  		jjtn000.name = t.image;
+	}/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+            jjtreeCloseNodeScope(jjtn000);
+          }
+        }
 /*@egen*/
 }
 
@@ -583,7 +779,7 @@ void VariableDeclaratorId() #VariableDeclaratorId :
 { Token t; }
 {
   t=<IDENTIFIER> { jjtThis.name = t.image; }
-  ( "[" "]" { jjtThis.addArrayDimension(); } )*
+  ( "[" "]" { jjtThis.addUndefinedDimension(); } )*
 }
 */
 
@@ -664,14 +860,6 @@ void FormalParameters()                   :
 /*@egen*/
 }
 
-/*
-void FormalParameter() #FormalParameter :
-{ Token t; }
-{
-    // added [] to Type for bsh.  Removed [ final ] - is that legal?
-  [ LOOKAHEAD(2) Type() ] t=<IDENTIFIER> { jjtThis.name = t.image; }
-}
-*/
 void FormalParameter()                  :
 {/*@bgen(jjtree) FormalParameter */
   BSHFormalParameter jjtn000 = new BSHFormalParameter(JJTFORMALPARAMETER);
@@ -886,9 +1074,9 @@ try {
 
 void AmbiguousName()                :
 /*
- * A lookahead of 2 is required below since "Name" can be followed
- * by a ".*" when used in the context of an "ImportDeclaration".
- */
+	A lookahead of 2 is required below since "Name" can be followed by a ".*"
+	when used in the context of an "ImportDeclaration".
+*/
 {/*@bgen(jjtree) AmbiguousName */
     BSHAmbiguousName jjtn000 = new BSHAmbiguousName(JJTAMBIGUOUSNAME);
     boolean jjtc000 = true;
@@ -901,21 +1089,18 @@ void AmbiguousName()                :
 {/*@bgen(jjtree) AmbiguousName */
   try {
 /*@egen*/
-  t = <IDENTIFIER> {
-        s = new StringBuffer(t.image);
-    }
-  ( LOOKAHEAD(2) "." t = <IDENTIFIER> {
-        s.append("."+t.image);
-    }
-  )*/*@bgen(jjtree)*/
-     {
-       jjtree.closeNodeScope(jjtn000, true);
-       jjtc000 = false;
-       jjtreeCloseNodeScope(jjtn000);
-     }
-/*@egen*/ {
-        jjtn000.text = s.toString();
-    }/*@bgen(jjtree)*/
+  t = <IDENTIFIER> { 
+  	s = new StringBuffer(t.image); 
+  }
+  ( LOOKAHEAD(2) "." t = <IDENTIFIER> { s.append("."+t.image); } )*/*@bgen(jjtree)*/
+                                                                    {
+                                                                      jjtree.closeNodeScope(jjtn000, true);
+                                                                      jjtc000 = false;
+                                                                      jjtreeCloseNodeScope(jjtn000);
+                                                                    }
+/*@egen*/ { 
+  	jjtn000.text = s.toString(); 
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -923,6 +1108,13 @@ void AmbiguousName()                :
     }
   }
 /*@egen*/
+}
+
+int NameList() :
+{ int count = 0; }
+{
+  AmbiguousName() { ++count; } ( "," AmbiguousName() { ++count; } )*
+  { return count; }
 }
 
 /*
@@ -933,9 +1125,10 @@ void Expression() :
 {
 	/**
 		SYNTACTIC_LOOKAHEAD
-		This is probably expensive.  Can we simplify it somehow?
+		Note: the original grammar was cheating here and we've fixed that,
+		but at the expense of another syntactic lookahead.
 	*/
-  LOOKAHEAD( LHSPrimaryExpression() AssignmentOperator() )
+  LOOKAHEAD( PrimaryExpression() AssignmentOperator() )
   Assignment()
 |
   ConditionalExpression()
@@ -951,11 +1144,11 @@ void Assignment()             :
 {/*@bgen(jjtree) Assignment */
   try {
 /*@egen*/
-  LHSPrimaryExpression()
-  op = AssignmentOperator() {
-    jjtn000.operator = op;
-  }
-  Expression()/*@bgen(jjtree)*/
+  PrimaryExpression() 
+  	op = AssignmentOperator() { jjtn000.operator = op; } 
+	// Add this for blocks, e.g. foo = { };
+	//( Expression() | Block() )
+	Expression()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1387,7 +1580,7 @@ void UnaryExpression() :
 void PreIncrementExpression() :
 { Token t = null; }
 {
-  t="++" LHSPrimaryExpression()/*@bgen(jjtree) #UnaryExpression( 1) */
+  t="++" PrimaryExpression()/*@bgen(jjtree) #UnaryExpression( 1) */
     {
       BSHUnaryExpression jjtn001 = new BSHUnaryExpression(JJTUNARYEXPRESSION);
       boolean jjtc001 = true;
@@ -1415,7 +1608,7 @@ void PreIncrementExpression() :
 void PreDecrementExpression() :
 { Token t = null; }
 {
-  t="--" LHSPrimaryExpression()/*@bgen(jjtree) #UnaryExpression( 1) */
+  t="--" PrimaryExpression()/*@bgen(jjtree) #UnaryExpression( 1) */
     {
       BSHUnaryExpression jjtn001 = new BSHUnaryExpression(JJTUNARYEXPRESSION);
       boolean jjtc001 = true;
@@ -1488,8 +1681,8 @@ void PostfixExpression() :
 { Token t = null; }
 {
 // SYNTACTIC_LOOKAHEAD
-  LOOKAHEAD( LHSPrimaryExpression() ("++"|"--") )
-  LHSPrimaryExpression()
+  LOOKAHEAD( PrimaryExpression() ("++"|"--") )
+  PrimaryExpression()
 	  ( t="++" | t="--" )/*@bgen(jjtree) #UnaryExpression( 1) */
                               {
                                 BSHUnaryExpression jjtn001 = new BSHUnaryExpression(JJTUNARYEXPRESSION);
@@ -1628,11 +1821,12 @@ void PrimaryPrefix() : { }
 |
   AllocationExpression()
 |
- // SYNTACTIC_LOOKAHEAD
- LOOKAHEAD( MethodInvocation() ) MethodInvocation()
+  // SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( MethodInvocation() ) 
+	MethodInvocation()
 |
-   LOOKAHEAD( Type() "." "class" ) 
-   Type()
+  LOOKAHEAD( Type() "." "class" ) 
+	Type()
 |
   AmbiguousName()
 
@@ -1725,144 +1919,6 @@ void PrimarySuffix()                :
 */
 }
 
-
-/*
-	Begin LHS part of the grammar --
-
-	The reason this stuff is duplicated (e.g. LHSPrimaryPrefix and 
-	PrimaryPrefix) is that the whole grammar splits based on whether we 
-	are preparig to do an assignment or not.  This is an important issue 
-	to revisit in the future.
-*/
-/**
-	The method invocation is here to force this to an object type in order 
-	to simplify the suffix processing.  
-*/
-void LHSPrimaryPrefix() : { }
-{
-/*
-  // SYNTACTIC_LOOKAHEAD
-  LOOKAHEAD( MethodInvocation() )
-  MethodInvocation()
-|
-*/
-  AmbiguousName()
-}
-
-void LHSPrimaryExpression()                       : {/*@bgen(jjtree) LHSPrimaryExpression */
-  BSHLHSPrimaryExpression jjtn000 = new BSHLHSPrimaryExpression(JJTLHSPRIMARYEXPRESSION);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-  jjtreeOpenNodeScope(jjtn000);
-/*@egen*/ }
-{/*@bgen(jjtree) LHSPrimaryExpression */
-  try {
-/*@egen*/
-  LHSPrimaryPrefix() ( LHSPrimarySuffix( ) )*/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-      jjtreeCloseNodeScope(jjtn000);
-    }
-  }
-/*@egen*/
-}
-
-void LHSPrimarySuffix()                   :
-{/*@bgen(jjtree) LHSPrimarySuffix */
-    BSHLHSPrimarySuffix jjtn000 = new BSHLHSPrimarySuffix(JJTLHSPRIMARYSUFFIX);
-    boolean jjtc000 = true;
-    jjtree.openNodeScope(jjtn000);
-    jjtreeOpenNodeScope(jjtn000);
-/*@egen*/
-    Token t=null, t1, t2 = null;
-}
-{/*@bgen(jjtree) LHSPrimarySuffix */
-  try {
-/*@egen*/
-    // Indexed to a field
-  "[" Expression() "]"/*@bgen(jjtree)*/
-                       {
-                         jjtree.closeNodeScope(jjtn000, true);
-                         jjtc000 = false;
-                         jjtreeCloseNodeScope(jjtn000);
-                       }
-/*@egen*/ {
-        jjtn000.operation = BSHLHSPrimarySuffix.INDEX;
-    }
-|
-/*
-	Broken - return to this...
-	Look at PrimarySuffix... why can't we do it right, as there?
-	See BSHLHSPrimarySuffix.java
-*/
-    // Field access or method invocation followed by field access
-  "." t1 = <IDENTIFIER> [ Arguments() "." t2 = <IDENTIFIER> ]/*@bgen(jjtree)*/
-                                                              {
-                                                                jjtree.closeNodeScope(jjtn000, true);
-                                                                jjtc000 = false;
-                                                                jjtreeCloseNodeScope(jjtn000);
-                                                              }
-/*@egen*/ {
-        jjtn000.operation = BSHLHSPrimarySuffix.NAME;
-        if ( t2 == null )
-            jjtn000.field = t1.image;
-        else {
-            jjtn000.method = t1.image;
-            jjtn000.field = t2.image;
-        }
-    }
-|
-  "{" Expression() "}"/*@bgen(jjtree)*/
-                       {
-                         jjtree.closeNodeScope(jjtn000, true);
-                         jjtc000 = false;
-                         jjtreeCloseNodeScope(jjtn000);
-                       }
-/*@egen*/ {
-        jjtn000.operation = BSHLHSPrimarySuffix.PROPERTY;
-    }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-      jjtreeCloseNodeScope(jjtn000);
-    }
-  }
-/*@egen*/
-}
-
-/*
-	-- End LHS part of the grammar
-*/
-
 void Literal()          :
 {/*@bgen(jjtree) Literal */
     BSHLiteral jjtn000 = new BSHLiteral(JJTLITERAL);
@@ -1897,7 +1953,12 @@ void Literal()          :
         jjtn000.value = new Primitive( new Long( literal ) );
     }
     else
-        jjtn000.value = new Primitive( Integer.decode( literal ) );
+		try {
+        	jjtn000.value = new Primitive( Integer.decode( literal ) );
+		} catch ( NumberFormatException e ) {
+			throw createParseException(
+				"Error or number too big for integer type: "+ literal );
+		}
   }
 |
   x = <FLOATING_POINT_LITERAL>/*@bgen(jjtree)*/
@@ -1934,7 +1995,7 @@ void Literal()          :
 		try {
     		jjtn000.charSetup( x.image.substring(1, x.image.length() - 1) );
 		} catch ( Exception e ) {
-			throw new ParseException("Error parsing character: "+x.image);
+			throw createParseException("Error parsing character: "+x.image);
 		}
     }
 |
@@ -1948,7 +2009,7 @@ void Literal()          :
 		try {
 			jjtn000.stringSetup( x.image.substring(1, x.image.length() - 1) );
 		} catch ( Exception e ) {
-			throw new ParseException("Error parsing string: "+x.image);
+			throw createParseException("Error parsing string: "+x.image);
 		}
     }
 |
@@ -2117,11 +2178,13 @@ void ArrayDimensions()                  :
 {/*@bgen(jjtree) ArrayDimensions */
   try {
 /*@egen*/
+	// e.g. int [4][3][][];
   LOOKAHEAD(2)
-  ( LOOKAHEAD(2) "[" Expression() "]" { jjtn000.addArrayDimension(); } )+
-  // Removed trailing "[]" identifiers.  Specify array dims fully.
+  ( LOOKAHEAD(2) "[" Expression() "]" { jjtn000.addDefinedDimension(); } )+
+  ( LOOKAHEAD(2) "[" "]" { jjtn000.addUndefinedDimension(); } )*
 |
-  ( "[" "]" { jjtn000.addArrayDimension(); } )+ ArrayInitializer()/*@bgen(jjtree)*/
+	// e.g. int [][] { {1,2}, {3,4} };
+  ( "[" "]" { jjtn000.addUndefinedDimension(); } )+ ArrayInitializer()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2169,13 +2232,18 @@ void Statement() : { }
 |
   DoStatement()
 |
+  LOOKAHEAD ( { isRegularForStatement() } )
   ForStatement()
+|
+  EnhancedForStatement()
 |
   BreakStatement()
 |
   ContinueStatement()
 |
   ReturnStatement()
+|
+  SynchronizedStatement()
 |
   ThrowStatement()
 |
@@ -2226,16 +2294,18 @@ void BlockStatement() :
 {
 }
 {
-// SYNTACTIC_LOOKAHEAD
+  // SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( Modifiers( Modifiers.FIELD, true ) "class" )
+  ClassDeclaration() 
+|
+  // SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( MethodDeclarationLookahead() ) MethodDeclaration()
 |
-// SYNTACTIC_LOOKAHEAD
-  LOOKAHEAD([ "final" ] Type() <IDENTIFIER>)
+  // SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( Modifiers( Modifiers.FIELD, true ) Type() <IDENTIFIER> )
   TypedVariableDeclaration() ";"
 |
   Statement()
-
-/* end */ // ??
 
 |  
   // Allow BeanShell imports in any block
@@ -2281,21 +2351,31 @@ void EmptyStatement() :
 }
 
 void StatementExpression() :
-/*
- * The last expansion of this production accepts more than the legal
- * Java expansions for StatementExpression.
- */
 { }
 {
-  PreIncrementExpression()
-|
-  PreDecrementExpression()
-|
-// SYNTACTIC_LOOKAHEAD
-  LOOKAHEAD( PrimaryExpression() AssignmentOperator() )
-  Assignment() { }
-|
-  PostfixExpression()
+  /*
+	This is looser than normal Java to simplify the grammar.  This allows
+	us to type arbitrary expressions on the command line, e.g. "1+1;"
+	We should turn this off in the implementation in strict java mode.
+  */
+  Expression()
+/*
+	// This was the original Java grammar. 
+
+	//  Original comment:
+	//  The last expansion of this production accepts more than the legal
+	//  Java expansions for StatementExpression.
+	  PreIncrementExpression()
+	|
+	  PreDecrementExpression()
+	|
+	  // SYNTACTIC_LOOKAHEAD
+	  LOOKAHEAD( PrimaryExpression() AssignmentOperator() )
+	  Assignment() { }
+	|
+	  PostfixExpression()
+*/
+
 }
 
 void SwitchStatement()                  :
@@ -2500,7 +2580,7 @@ void ForStatement()               :
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
   jjtreeOpenNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = null; }
 {/*@bgen(jjtree) ForStatement */
   try {
 /*@egen*/
@@ -2531,44 +2611,40 @@ void ForStatement()               :
 /*@egen*/
 }
 
-void ForInit() :
-{ Token t = null; }
-{
-// SYNTACTIC_LOOKAHEAD
-  LOOKAHEAD( [ t="final" ] Type() <IDENTIFIER> )
-  TypedVariableDeclaration()
-|
-  StatementExpressionList()
-}
-
-/**
-	Declared a typed variable.
-	Untyped variables are not declared per-se but are handled by the part
-	of the grammar that deals with assignments.
+/*
+	The new JDK1.5 enhanced for statement.
+	e.g. for( int a : arrayOfInts ) { }
+	We also support loose typing of the iterator var for BeanShell
+	e.g. for( a : arrayOfInts ) { }
 */
-void TypedVariableDeclaration()                           :
-{/*@bgen(jjtree) TypedVariableDeclaration */
-        BSHTypedVariableDeclaration jjtn000 = new BSHTypedVariableDeclaration(JJTTYPEDVARIABLEDECLARATION);
-        boolean jjtc000 = true;
-        jjtree.openNodeScope(jjtn000);
-        jjtreeOpenNodeScope(jjtn000);
-/*@egen*/ 
-	Token t = null; 
-}
-{/*@bgen(jjtree) TypedVariableDeclaration */
+void EnhancedForStatement()                       :
+{/*@bgen(jjtree) EnhancedForStatement */
+  BSHEnhancedForStatement jjtn000 = new BSHEnhancedForStatement(JJTENHANCEDFORSTATEMENT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtreeOpenNodeScope(jjtn000);
+/*@egen*/ Token t = null; }
+{/*@bgen(jjtree) EnhancedForStatement */
   try {
 /*@egen*/
-  [ t="final" ] Type() 
-		VariableDeclarator() ( "," VariableDeclarator() )*/*@bgen(jjtree)*/
-        {
-          jjtree.closeNodeScope(jjtn000, true);
-          jjtc000 = false;
-          jjtreeCloseNodeScope(jjtn000);
-        }
-/*@egen*/  
-	{
-        jjtn000.isFinal = (t!=null);
-    }/*@bgen(jjtree)*/
+  LOOKAHEAD( 4 ) // look ahead for the ":" before deciding
+  "for" "(" t=<IDENTIFIER> ":" Expression() ")"
+    Statement()/*@bgen(jjtree)*/
+                {
+                  jjtree.closeNodeScope(jjtn000, true);
+                  jjtc000 = false;
+                  jjtreeCloseNodeScope(jjtn000);
+                }
+/*@egen*/ { jjtn000.varName = t.image; }
+  |
+  "for" "(" Type() t=<IDENTIFIER> ":" Expression() ")"
+    Statement()/*@bgen(jjtree)*/
+                {
+                  jjtree.closeNodeScope(jjtn000, true);
+                  jjtc000 = false;
+                  jjtreeCloseNodeScope(jjtn000);
+                }
+/*@egen*/ { jjtn000.varName = t.image; }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2589,6 +2665,68 @@ void TypedVariableDeclaration()                           :
       jjtreeCloseNodeScope(jjtn000);
     }
   }
+/*@egen*/
+}
+
+void ForInit() :
+{ Token t = null; }
+{
+// SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( Modifiers( Modifiers.FIELD, true ) Type() <IDENTIFIER> )
+  TypedVariableDeclaration()
+|
+  StatementExpressionList()
+}
+
+/**
+	Declared a typed variable.
+	Untyped variables are not declared per-se but are handled by the part
+	of the grammar that deals with assignments.
+*/
+void TypedVariableDeclaration()                           :
+{/*@bgen(jjtree) TypedVariableDeclaration */
+        BSHTypedVariableDeclaration jjtn000 = new BSHTypedVariableDeclaration(JJTTYPEDVARIABLEDECLARATION);
+        boolean jjtc000 = true;
+        jjtree.openNodeScope(jjtn000);
+        jjtreeOpenNodeScope(jjtn000);
+/*@egen*/ 
+	Token t = null; 
+	Modifiers mods;
+}
+{/*@bgen(jjtree) TypedVariableDeclaration */
+        try {
+/*@egen*/
+	mods = Modifiers( Modifiers.FIELD, false )
+  	Type() VariableDeclarator() ( "," VariableDeclarator() )*/*@bgen(jjtree)*/
+        {
+          jjtree.closeNodeScope(jjtn000, true);
+          jjtc000 = false;
+          jjtreeCloseNodeScope(jjtn000);
+        }
+/*@egen*/  
+	{
+        jjtn000.modifiers = mods;
+    }/*@bgen(jjtree)*/
+        } catch (Throwable jjte000) {
+          if (jjtc000) {
+            jjtree.clearNodeScope(jjtn000);
+            jjtc000 = false;
+          } else {
+            jjtree.popNode();
+          }
+          if (jjte000 instanceof RuntimeException) {
+            throw (RuntimeException)jjte000;
+          }
+          if (jjte000 instanceof ParseException) {
+            throw (ParseException)jjte000;
+          }
+          throw (Error)jjte000;
+        } finally {
+          if (jjtc000) {
+            jjtree.closeNodeScope(jjtn000, true);
+            jjtreeCloseNodeScope(jjtn000);
+          }
+        }
 /*@egen*/
 }
 
@@ -2701,6 +2839,49 @@ void ReturnStatement()                  :
                                   jjtreeCloseNodeScope(jjtn000);
                                 }
 /*@egen*/ { jjtn000.kind = RETURN; }/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+      jjtreeCloseNodeScope(jjtn000);
+    }
+  }
+/*@egen*/
+}
+
+void SynchronizedStatement()        :
+{/*@bgen(jjtree) Block */
+  BSHBlock jjtn000 = new BSHBlock(JJTBLOCK);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+  jjtreeOpenNodeScope(jjtn000);
+/*@egen*/
+}
+{/*@bgen(jjtree) Block */
+  try {
+/*@egen*/
+  "synchronized" "(" Expression() ")" Block()/*@bgen(jjtree)*/
+                                              {
+                                                jjtree.closeNodeScope(jjtn000, true);
+                                                jjtc000 = false;
+                                                jjtreeCloseNodeScope(jjtn000);
+                                              }
+/*@egen*/ {
+  		jjtn000.isSynchronized=true;
+  }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
