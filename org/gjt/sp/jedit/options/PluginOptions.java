@@ -65,6 +65,7 @@ public class PluginOptions extends OptionsDialog
 
 		// initialize the Plugins branch of the options tree
 		pluginsGroup = new OptionGroup("plugins");
+		pluginsGroup.setSort(true);
 
 		// Query plugins for option panes
 		EditPlugin[] plugins = jEdit.getPlugins();

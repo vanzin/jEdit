@@ -48,6 +48,15 @@ public interface StructureMatcher
 	Match getMatch(JEditTextArea textArea);
 	//}}}
 
+	//{{{ selectMatch() method
+	/**
+	 * Selects from the caret to the matching structure element (if there is
+	 * one, otherwise the behavior of this method is undefined).
+	 * @since jEdit 4.2pre3
+	 */
+	void selectMatch(JEditTextArea textArea);
+	//}}}
+
 	//{{{ BracketMatcher class
 	static class BracketMatcher implements StructureMatcher
 	{
@@ -68,7 +77,8 @@ public interface StructureMatcher
 					int bracketLine = textArea
 						.getLineOfOffset(
 						bracketOffset);
-					return new Match(bracketLine,
+					return new Match(this,
+						bracketLine,
 						bracketOffset,
 						bracketLine,
 						bracketOffset + 1);
@@ -76,6 +86,11 @@ public interface StructureMatcher
 			}
 
 			return null;
+		}
+
+		public void selectMatch(JEditTextArea textArea)
+		{
+			textArea.selectToMatchingBracket();
 		}
 	} //}}}
 
@@ -86,17 +101,23 @@ public interface StructureMatcher
 	 */
 	public static class Match
 	{
+		public StructureMatcher matcher;
 		public int startLine;
 		public int start;
 		public int endLine;
 		public int end;
 
-		public Match()
+		public Match() {}
+
+		public Match(StructureMatcher matcher)
 		{
+			this.matcher = matcher;
 		}
 
-		public Match(int startLine, int start, int endLine, int end)
+		public Match(StructureMatcher matcher, int startLine,
+			int start, int endLine, int end)
 		{
+			this(matcher);
 			this.startLine = startLine;
 			this.start = start;
 			this.endLine = endLine;

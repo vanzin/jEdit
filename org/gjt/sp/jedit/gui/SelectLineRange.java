@@ -103,9 +103,13 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 		}
 
 		JEditTextArea textArea = view.getTextArea();
-		textArea.setSelection(new Selection.Range(
+		Selection s = new Selection.Range(
 			buffer.getLineStartOffset(startLine),
-			buffer.getLineEndOffset(endLine) - 1));
+			buffer.getLineEndOffset(endLine) - 1);
+		if(textArea.isMultipleSelectionEnabled())
+			textArea.addToSelection(s);
+		else
+			textArea.setSelection(s);
 		textArea.moveCaretPosition(buffer.getLineEndOffset(endLine) - 1);
 
 		dispose();

@@ -11,7 +11,6 @@ and quirks that I need to fix eventually.
   - titles in search are fucked
   - FAQ: better titles
 - new macro handler api
-- click to select bracket in gutter doesn't work
 
 - shift+enter jams translator
 - A+`: inserts in text area

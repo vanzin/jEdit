@@ -831,7 +831,8 @@ public class Gutter extends JComponent implements SwingConstants
 				{
 					if(match != null)
 					{
-						//XXX
+						match.matcher.selectMatch(
+							textArea);
 					}
 				}
 				else if(action.equals("narrow-struct"))
