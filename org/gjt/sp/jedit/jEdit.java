@@ -2498,10 +2498,12 @@ public class jEdit
 
 		mode.setTokenMarker(xmh.getTokenMarker());
 
+		Reader grammar = null;
+
 		parser.setHandler(xmh);
 		try
 		{
-			Reader grammar = new BufferedReader(new FileReader(fileName));
+			grammar = new BufferedReader(new FileReader(fileName));
 
 			parser.parse(null, null, grammar);
 
@@ -2520,6 +2522,18 @@ public class jEdit
 				Object[] args = { fileName, new Integer(line), null,
 					message };
 				GUIUtilities.error(null,"xmode-error",args);
+			}
+		}
+		finally
+		{
+			try
+			{
+				if(grammar != null)
+					grammar.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,jEdit.class,io);
 			}
 		}
 	} //}}}
@@ -3548,6 +3562,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			MiscUtilities.getParentOfPath(path),resource);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
+		Reader in = null;
 		try
 		{
 			InputStream _in;
@@ -3555,8 +3570,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				_in = jEdit.class.getResourceAsStream(path);
 			else
 				_in = new FileInputStream(path);
-			BufferedReader in = new BufferedReader(
-				new InputStreamReader(_in));
+			in = new BufferedReader(new InputStreamReader(_in));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
@@ -3569,6 +3583,18 @@ loop:		for(int i = 0; i < list.length; i++)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,jEdit.class,io);
+			}
 		}
 	} //}}}
 

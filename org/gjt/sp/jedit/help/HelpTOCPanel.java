@@ -172,13 +172,15 @@ class HelpTOCPanel extends JPanel
 	{
 		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
 		XmlParser parser = new XmlParser();
+		Reader in = null;
 		parser.setHandler(h);
 
 		try
 		{
-			parser.parse(null, null, new InputStreamReader(
+			in = new InputStreamReader(
 				new URL(helpViewer.getBaseURL()
-				+ '/' + path).openStream()));
+				+ '/' + path).openStream());
+			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
 		{
@@ -189,7 +191,19 @@ class HelpTOCPanel extends JPanel
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.NOTICE,this,e);
+			Log.log(Log.ERROR,this,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+			}
 		}
 	} //}}}
 

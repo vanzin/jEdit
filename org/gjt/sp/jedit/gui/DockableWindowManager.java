@@ -150,17 +150,20 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	public static void loadDockableWindows(PluginJAR plugin, URL uri,
 		PluginJAR.PluginCacheEntry cache)
 	{
+		Reader in = null;
+
 		try
 		{
 			Log.log(Log.DEBUG,DockableWindowManager.class,
 				"Loading dockables from " + uri);
 
 			DockableListHandler dh = new DockableListHandler(plugin,uri);
+			in = new BufferedReader(
+				new InputStreamReader(
+				uri.openStream()));
 			XmlParser parser = new XmlParser();
 			parser.setHandler(dh);
-			parser.parse(null, null, new BufferedReader(
-				new InputStreamReader(
-				uri.openStream())));
+			parser.parse(null, null, in);
 			if(cache != null)
 			{
 				cache.cachedDockableNames = dh.getCachedDockableNames();
@@ -177,6 +180,18 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,DockableWindowManager.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,DockableWindowManager.class,io);
+			}
 		}
 	} //}}}
 

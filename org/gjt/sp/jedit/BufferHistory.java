@@ -73,10 +73,11 @@ public class BufferHistory
 
 		RecentHandler handler = new RecentHandler();
 		XmlParser parser = new XmlParser();
+		Reader in = null;
 		parser.setHandler(handler);
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(file));
+			in = new BufferedReader(new FileReader(file));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
@@ -93,6 +94,18 @@ public class BufferHistory
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,BufferHistory.class,io);
+			}
 		}
 	}
 
