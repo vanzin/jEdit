@@ -595,6 +595,27 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static String createWhiteSpace(int len, int tabSize)
 	{
+		return createWhiteSpace(len,tabSize,0);
+	} //}}}
+
+	//{{{ createWhiteSpace() method
+	/**
+	 * Creates a string of white space with the specified length.<p>
+	 *
+	 * To get a whitespace string tuned to the current buffer's
+	 * settings, call this method as follows:
+	 *
+	 * <pre>myWhitespace = MiscUtilities.createWhiteSpace(myLength,
+	 *     (buffer.getBooleanProperty("noTabs") ? 0
+	 *     : buffer.getTabSize()));</pre>
+	 *
+	 * @param len The length
+	 * @param tabSize The tab size, or 0 if tabs are not to be used
+	 * @param start The start offset, for tab alignment
+	 * @since jEdit 4.2pre1
+	 */
+	public static String createWhiteSpace(int len, int tabSize, int start)
+	{
 		StringBuffer buf = new StringBuffer();
 		if(tabSize == 0)
 		{
@@ -603,10 +624,10 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 		else
 		{
-			int count = len / tabSize;
+			int count = (len + start % tabSize) / tabSize;
 			while(count-- > 0)
 				buf.append('\t');
-			count = len % tabSize;
+			count = (len + start) % tabSize;
 			while(count-- > 0)
 				buf.append(' ');
 		}

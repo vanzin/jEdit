@@ -459,7 +459,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 				if(whitespace != 0)
 				{
 					buf.append(MiscUtilities
-						.createWhiteSpace(whitespace,tabSize));
+						.createWhiteSpace(whitespace,tabSize,width));
 				}
 				whitespace = 0;
 				width = 0;
@@ -469,7 +469,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 				if(whitespace != 0)
 				{
 					buf.append(MiscUtilities
-						.createWhiteSpace(whitespace,tabSize));
+						.createWhiteSpace(whitespace,tabSize,width));
 					whitespace = 0;
 				}
 				buf.append(in.charAt(i));
@@ -480,7 +480,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 
 		if(whitespace != 0)
 		{
-			buf.append(MiscUtilities.createWhiteSpace(whitespace,tabSize));
+			buf.append(MiscUtilities.createWhiteSpace(whitespace,tabSize,width));
 		}
 
                 return buf.toString();
