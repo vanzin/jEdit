@@ -157,6 +157,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		dim.height = multiSelect.getPreferredSize().height;
 		memory.setPreferredSize(dim);
 
+		// Leave some room for OS X grow box
+		if(System.getProperty("os.name").indexOf("Mac") != -1)
+			box.add(Box.createHorizontalStrut(18));
+
 		add(BorderLayout.EAST,box);
 	} //}}}
 
