@@ -180,8 +180,7 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
-		if(!((evt.isControlDown() ^ evt.isAltDown())
-			|| evt.isMetaDown()))
+		if(!(evt.isControlDown() || evt.isAltDown() || evt.isMetaDown()))
 		{
 			// if modifier active, handle all keys, otherwise
 			// only some

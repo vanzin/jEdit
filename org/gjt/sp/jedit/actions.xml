@@ -767,7 +767,7 @@
 
 <ACTION NAME="run-other-macro">
 	<CODE>
-		BeanShell.showRunScriptDialog(view);
+		Macros.showRunScriptDialog(view);
 	</CODE>
 </ACTION>
 

@@ -158,8 +158,7 @@ public class CloseDialog extends EnhancedDialog
 					selectAllFlag = true;
 
 					bufferList.setSelectionInterval(0,
-						bufferModel.getSize());
-					System.err.println("hello");
+						bufferModel.getSize() - 1);
 				}
 				finally
 				{

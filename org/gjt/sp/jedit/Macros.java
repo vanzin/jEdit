@@ -25,7 +25,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import gnu.regexp.RE;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
@@ -342,7 +342,7 @@ public class Macros
 		//{{{ invoke() method
 		public void invoke(View view)
 		{
-			lastMacro = path;
+			lastMacro = this;
 			Buffer buffer = view.getBuffer();
 
 			try
@@ -500,16 +500,19 @@ public class Macros
 			return;
 		}
 
-		lastMacro = MiscUtilities.constructPath(
+		String path = MiscUtilities.constructPath(
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
+
+		Handler handler = getHandler("beanshell");
+		Macro temp = handler.createMacro(path,path);
 
 		Buffer buffer = view.getBuffer();
 
 		try
 		{
 			buffer.beginCompoundEdit();
-			BeanShell.runScript(view,lastMacro,true,false);
+			temp.invoke(view);
 		}
 		finally
 		{
@@ -531,7 +534,48 @@ public class Macros
 		if(lastMacro == null)
 			view.getToolkit().beep();
 		else
-			BeanShell.runScript(view,lastMacro,true,false);
+			lastMacro.invoke(view);
+	} //}}}
+
+	//{{{ showRunScriptDialog() method
+	/**
+	 * Prompts for one or more files to run as macros
+	 * @param view The view
+	 * @since jEdit 4.0pre7
+	 */
+	public static void showRunScriptDialog(View view)
+	{
+		String[] paths = GUIUtilities.showVFSFileDialog(view,
+			null,JFileChooser.OPEN_DIALOG,true);
+		if(paths != null)
+		{
+			Buffer buffer = view.getBuffer();
+			try
+			{
+				buffer.beginCompoundEdit();
+
+				for(int i = 0; i < paths.length; i++)
+				{
+					Handler handler;
+
+					for (int j = 0; j < macroHandlers.size(); j++)
+					{
+						handler = (Handler)macroHandlers.get(j);
+
+						if (handler.accept(paths[i]))
+						{
+							Macro macro = handler.createMacro(paths[i],paths[i]);
+							macro.invoke(view);
+							break;
+						}
+					}
+				}
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
 	} //}}}
 
 	//{{{ Private members
@@ -545,7 +589,7 @@ public class Macros
 	private static ActionSet macroActionSet;
 	private static Vector macroHierarchy;
 	private static Hashtable macroHash;
-	private static String lastMacro;
+	private static Macro lastMacro;
 	//}}}
 
 	//{{{ Class initializer
@@ -620,7 +664,9 @@ public class Macros
 	 */
 	private static void recordMacro(View view, Buffer buffer, boolean temporary)
 	{
-		lastMacro = buffer.getPath();
+		Handler handler = getHandler("beanshell");
+		String path = buffer.getPath();
+		lastMacro = handler.createMacro(path,path);
 
 		view.setMacroRecorder(new Recorder(view,buffer,temporary));
 
