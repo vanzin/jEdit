@@ -2995,7 +2995,7 @@ public class jEdit
 			{
 				Log.log(Log.DEBUG, jEdit.class, "HTTP proxy user: " + username);
 				PasswordAuthentication pw = new PasswordAuthentication(
-					username,password
+					username,password.toCharArray()
 				);
 				Authenticator.setDefault(new FirewallAuthenticator(pw));
 			}

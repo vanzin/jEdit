@@ -25,6 +25,8 @@ TO DO
 
 + in 4.1:
 
+- 'new plugins installed' thingy on startup
+- text file previews in file dialog?
 - plugin guide: mention fully qualified class names
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
