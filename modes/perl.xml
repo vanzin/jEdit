@@ -105,6 +105,10 @@
 			<END>EOF</END>
 		</SPAN>
 
+		<!-- jEdit 4.1 adds regular expression syntax rules so we can
+		     highlight this sort of crap. -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m">m([[:punct:]]).+?\1</SEQ_REGEXP>
+
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>

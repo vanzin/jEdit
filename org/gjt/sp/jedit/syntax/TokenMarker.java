@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import gnu.regexp.RE;
+import gnu.regexp.*;
 import javax.swing.text.Segment;
 import java.util.*;
 import org.gjt.sp.jedit.search.CharIndexedSegment;
@@ -382,13 +382,37 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	 */
 	private boolean handleRule(ParserRule checkRule, boolean end)
 	{
+		//{{{ Some rules can only match in certain locations
+		if(!end)
+		{
+			if((checkRule.action & ParserRule.AT_LINE_START)
+				== ParserRule.AT_LINE_START)
+			{
+				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
+					lastOffset : pos) != line.offset)
+					return false;
+			}
+			else if((checkRule.action & ParserRule.AT_WHITESPACE_END)
+				== ParserRule.AT_WHITESPACE_END)
+			{
+				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
+					lastOffset : pos) != whitespaceEnd)
+					return false;
+			}
+		} //}}}
+
+		int matchedChars = 1;
+
+		//{{{ See if the rule's start or end sequence matches here
 		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
 		{
-			if((checkRule.action & ParserRule.REGEXP) == 0)
+			// the end cannot be a regular expression
+			if((checkRule.action & ParserRule.REGEXP) == 0 || end)
 			{
 				pattern.array = (end ? checkRule.end : checkRule.start);
 				pattern.offset = 0;
 				pattern.count = pattern.array.length;
+				matchedChars = pattern.count;
 
 				if(!TextUtilities.regionMatches(context.rules
 					.getIgnoreCase(),line,pos,pattern.array))
@@ -398,9 +422,25 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 			else
 			{
-				// XXX
+				System.err.println("matching " + checkRule.startRegexp
+					+ " against " + line);
+				// note that all regexps start with \A so they only
+				// match the start of the string
+				int matchStart = pos - line.offset;
+				REMatch match = checkRule.startRegexp.getMatch(
+					new CharIndexedSegment(line,false),
+					matchStart,RE.REG_ANCHORINDEX);
+				if(match == null || match.getStartIndex() != matchStart)
+				{
+					System.err.println("false positive");
+					return false;
+				}
+				else
+				{
+					System.err.println(match.getStartIndex() + ":" + match.getEndIndex() + ":" + pos);
+				}
 			}
-		}
+		} //}}}
 
 		//{{{ Check for an escape sequence
 		if((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
@@ -419,25 +459,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Handle start of rule
 		else if(!end)
 		{
-			if((checkRule.action & ParserRule.AT_LINE_START)
-				== ParserRule.AT_LINE_START)
-			{
-				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-					lastOffset : pos) != line.offset)
-				{
-					return false;
-				}
-			}
-			else if((checkRule.action & ParserRule.AT_WHITESPACE_END)
-				== ParserRule.AT_WHITESPACE_END)
-			{
-				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-					lastOffset : pos) != whitespaceEnd)
-				{
-					return false;
-				}
-			}
-
 			if(context.inRule != null)
 				handleRule(context.inRule,true);
 

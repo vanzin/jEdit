@@ -178,12 +178,13 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "HASH_CHAR")
 		{
-			if(value.length() != 0)
+			if(value.length() != 1)
 			{
 				error("hash-char-invalid",value);
 				lastDefaultID = Token.NULL;
 			}
-			lastHashChar = aname.charAt(0);
+			else
+				lastHashChar = value.charAt(0);
 		}
 	} //}}}
 
