@@ -2832,6 +2832,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 			&& getFoldLevel(line) < getFoldLevel(line + 1));
 	} //}}}
 
+	//{{{ invalidateCachedFoldLevels() method
+	/**
+	 * Invalidates all cached fold level information.
+	 * @since jEdit 4.1pre11
+	 */
+	public void invalidateCachedFoldLevels()
+	{
+		offsetMgr.lineInfoChangedFrom(0);
+	} //}}}
+
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
