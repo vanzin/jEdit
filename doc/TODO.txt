@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- annoying exceptions when settings files not found
 - activity log: log viewer needs copy
 - better chunk merging
 - split long lines
@@ -171,11 +170,9 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   too much of a hack?
 - replace all in a directory could be faster
 - faster smooth text
-- logging is slow
 - buffer.setMode() slow
 - inserting new lines -- why repaint entire text area?
 - positions should be gapped too
-- try typing foo), put cursor after foo, type some more -- slowdown
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - don't repaint whole selection when resizing
