@@ -29,7 +29,10 @@ release.
 
 + Bug Fixes:
 
-- The action "Insert Tab and Indent" was broken.
+- The action "Insert Tab and Indent" was broken. If you reassigned TAB
+  to "Insert Tab" to work around this problem in pre6, you can revert
+  the assignment (unless you'd like the TAB key to always insert a tab,
+  without indenting).
 
 - Backed out Rex Young's ReadWriteLock.java fix since it caused
   deadlocks.
