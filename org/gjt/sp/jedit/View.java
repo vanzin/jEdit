@@ -898,6 +898,12 @@ public class View extends JFrame implements EBComponent
 			handleEditPaneUpdate((EditPaneUpdate)msg);
 	} //}}}
 
+	//{{{ getMinimumSize() method
+	public Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	} //}}}
+
 	//{{{ Package-private members
 	View prev;
 	View next;
