@@ -47,6 +47,9 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 
 - "Select All" preserves current scroll position.
 
+- When closing jEdit, open buffers are not added to the "Recent Files"
+  list if the "Restore previously open files on startup" option is on.
+
 }}}
 {{{ Bug Fixes
 
