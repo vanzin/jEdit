@@ -772,8 +772,8 @@ The Role of the View Object</title>
   Finally, the <classname>View</classname>
   and <classname>DockableWindowManager</classname>
   classes contain a number of methods
-  that can be called from plugins; see <xref linkend="class-view" />
-  and <xref linkend="class-dockablewindowmanager" /> for details.
+  that can be called from plugins; XXX <!-- see <xref linkend="class-view" />
+  and <xref linkend="class-dockablewindowmanager" /> for details. -->
 </para>
 
 </sect2>
@@ -853,7 +853,7 @@ The DockableWindowManager</title>
   views and editing panes, changes in the set of properties maintained
   by the application, and the closing of the application.  A full list
   of message classes used by the EditBus are summarized beginning with
-  <xref linkend="class-ebmessage"/>.
+  XXX <!-- <xref linkend="class-ebmessage"/>. -->
 </para>
 
 <para>
@@ -928,8 +928,8 @@ The DockableWindowManager</title>
 <para>
   Message classes extending <classname>EBMessage</classname> typically add
   other data members and methods to provide subscribers with whatever is
-  needed to handle the message appropriately. Descriptions of specific
-  message classes can be found in <xref linkend="api-message"/>.
+  needed to handle the message appropriately. XXX <!-- Descriptions of specific
+  message classes can be found in <xref linkend="api-message"/>. -->
 </para>
 
 <para>

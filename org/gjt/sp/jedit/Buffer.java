@@ -59,7 +59,8 @@ import org.gjt.sp.util.*;
  * <li>When accessing the buffer from another thread, you must
  * grab a read lock if you plan on performing more than one call, to ensure that
  * the buffer contents are not changed by the AWT thread for the duration of the
- * lock.
+ * lock. Only methods whose descriptions specify thread safety can be invoked
+ * from other threads.
  * </ul>
  *
  * @author Slava Pestov
@@ -600,6 +601,7 @@ public class Buffer implements EBComponent
 	//{{{ getLastModified() method
 	/**
 	 * Returns the last time jEdit modified the file on disk.
+	 * This method is thread-safe.
 	 */
 	public long getLastModified()
 	{
@@ -619,7 +621,7 @@ public class Buffer implements EBComponent
 	//{{{ getVFS() method
 	/**
 	 * Returns the virtual filesystem responsible for loading and
-	 * saving this buffer.
+	 * saving this buffer. This method is thread-safe.
 	 */
 	public VFS getVFS()
 	{
@@ -638,7 +640,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getName() method
 	/**
-	 * Returns the name of this buffer.
+	 * Returns the name of this buffer. This method is thread-safe.
 	 */
 	public final String getName()
 	{
@@ -647,7 +649,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getPath() method
 	/**
-	 * Returns the path name of this buffer.
+	 * Returns the path name of this buffer. This method is thread-safe.
 	 */
 	public final String getPath()
 	{
@@ -658,6 +660,7 @@ public class Buffer implements EBComponent
 	/**
 	 * Returns true if this buffer has been closed with
 	 * {@link org.gjt.sp.jedit.jEdit#closeBuffer(View,Buffer)}.
+	 * This method is thread-safe.
 	 */
 	public final boolean isClosed()
 	{
@@ -666,7 +669,7 @@ public class Buffer implements EBComponent
 
 	//{{{ isLoaded() method
 	/**
-	 * Returns true if the buffer is loaded.
+	 * Returns true if the buffer is loaded. This method is thread-safe.
 	 */
 	public final boolean isLoaded()
 	{
@@ -676,6 +679,7 @@ public class Buffer implements EBComponent
 	//{{{ isPerformingIO() method
 	/**
 	 * Returns true if the buffer is currently performing I/O.
+	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
 	public final boolean isPerformingIO()
@@ -686,6 +690,7 @@ public class Buffer implements EBComponent
 	//{{{ isNewFile() method
 	/**
 	 * Returns whether this buffer lacks a corresponding version on disk.
+	 * This method is thread-safe.
 	 */
 	public final boolean isNewFile()
 	{
@@ -706,7 +711,7 @@ public class Buffer implements EBComponent
 
 	//{{{ isUntitled() method
 	/**
-	 * Returns true if this file is 'untitled'.
+	 * Returns true if this file is 'untitled'. This method is thread-safe.
 	 */
 	public final boolean isUntitled()
 	{
@@ -716,6 +721,7 @@ public class Buffer implements EBComponent
 	//{{{ isDirty() method
 	/**
 	 * Returns whether there have been unsaved changes to this buffer.
+	 * This method is thread-safe.
 	 */
 	public final boolean isDirty()
 	{
@@ -725,6 +731,7 @@ public class Buffer implements EBComponent
 	//{{{ isReadOnly() method
 	/**
 	 * Returns true if this file is read only, false otherwise.
+	 * This method is thread-safe.
 	 */
 	public final boolean isReadOnly()
 	{
@@ -734,6 +741,7 @@ public class Buffer implements EBComponent
 	//{{{ isEditable() method
 	/**
 	 * Returns true if this file is editable, false otherwise.
+	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
 	public final boolean isEditable()
@@ -790,7 +798,7 @@ public class Buffer implements EBComponent
 
 	//{{{ isTemporary() method
 	/**
-	 * Returns if this is a temporary buffer.
+	 * Returns if this is a temporary buffer. This method is thread-safe.
 	 * @see jEdit#openTemporary(View,String,String,boolean)
 	 * @see jEdit#commitTemporary(Buffer)
 	 * @since jEdit 2.2pre7
@@ -867,7 +875,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getLength() method
 	/**
-	 * Returns the number of characters in the buffer.
+	 * Returns the number of characters in the buffer. This method is thread-safe.
 	 */
 	public int getLength()
 	{
@@ -1043,7 +1051,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getText() method
 	/**
-	 * Returns the specified text range.
+	 * Returns the specified text range. This method is thread-safe.
 	 * @param start The start offset
 	 * @param length The number of characters to get
 	 */
@@ -1499,6 +1507,7 @@ public class Buffer implements EBComponent
 	/**
 	 * Returns the tab size used in this buffer. This is equivalent
 	 * to calling <code>getProperty("tabSize")</code>.
+	 * This method is thread-safe.
 	 */
 	public int getTabSize()
 	{
@@ -1509,6 +1518,7 @@ public class Buffer implements EBComponent
 	/**
 	 * Returns the indent size used in this buffer. This is equivalent
 	 * to calling <code>getProperty("indentSize")</code>.
+	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
 	public final int getIndentSize()
@@ -1533,10 +1543,12 @@ public class Buffer implements EBComponent
 	 * <li>{@link #getRegexpProperty(String,int,gnu.regexp.RESyntax)}</li>
 	 * </ul>
 	 *
+	 * This method is thread-safe.
+	 *
 	 * @param name The property name. For backwards compatibility, this
 	 * is an <code>Object</code>, not a <code>String</code>.
 	 */
-	public Object getProperty(Object name)
+	public synchronized Object getProperty(Object name)
 	{
 		// First try the buffer-local properties
 		PropValue o = (PropValue)properties.get(name);
@@ -1620,7 +1632,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getStringProperty() method
 	/**
-	 * Returns the value of a string property.
+	 * Returns the value of a string property. This method is thread-safe.
 	 * @param name The property name
 	 * @since jEdit 4.0pre1
 	 */
@@ -1647,7 +1659,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getBooleanProperty() method
 	/**
-	 * Returns the value of a boolean property.
+	 * Returns the value of a boolean property. This method is thread-safe.
 	 * @param name The property name
 	 * @since jEdit 4.0pre1
 	 */
@@ -1676,7 +1688,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getIntegerProperty() method
 	/**
-	 * Returns the value of an integer property.
+	 * Returns the value of an integer property. This method is thread-safe.
 	 * @param name The property name
 	 * @since jEdit 4.0pre1
 	 */
@@ -1734,13 +1746,14 @@ public class Buffer implements EBComponent
 	//{{{ getRegexpProperty() method
 	/**
 	 * Returns the value of a property as a regular expression.
+	 * This method is thread-safe.
 	 * @param name The property name
 	 * @param cflags Regular expression compilation flags
 	 * @param syntax Regular expression syntax
 	 * @since jEdit 4.1pre9
 	 */
-	public RE getRegexpProperty(String name, int cflags, RESyntax syntax)
-		throws REException
+	public synchronized RE getRegexpProperty(String name, int cflags,
+		RESyntax syntax) throws REException
 	{
 		boolean defaultValueFlag;
 		Object obj;
@@ -1926,7 +1939,7 @@ public class Buffer implements EBComponent
 
 	//{{{ getMode() method
 	/**
-	 * Returns this buffer's edit mode.
+	 * Returns this buffer's edit mode. This method is thread-safe.
 	 */
 	public final Mode getMode()
 	{

@@ -723,35 +723,31 @@ class BrowserView extends JPanel
 			case MouseEvent.MOUSE_CLICKED:
 				if(path != null)
 				{
-					if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-					{
-						// A double click is not only when clickCount == 2
-						// because every other click can open a new directory
-						if(evt.getClickCount() % 2 == 0)
-						{
-							setSelectionPath(path);
-
-							// don't pass double-clicks to tree, otherwise
-							// directory nodes will be expanded and we don't
-							// want that
-							browser.filesActivated((evt.isShiftDown()
-								? VFSBrowser.M_OPEN_NEW_VIEW
-								: VFSBrowser.M_OPEN),true);
-							break;
-						}
-						else
-						{
-							if(!isPathSelected(path))
-								setSelectionPath(path);
-						}
-					}
-
-					if(GUIUtilities.isMiddleButton(evt.getModifiers()))
+					// A double click is not only when clickCount == 2
+					// because every other click can open a new directory
+					if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0
+						&& evt.getClickCount() % 2 == 0)
 					{
 						setSelectionPath(path);
+
+						// don't pass double-clicks to tree, otherwise
+						// directory nodes will be expanded and we don't
+						// want that
 						browser.filesActivated((evt.isShiftDown()
 							? VFSBrowser.M_OPEN_NEW_VIEW
 							: VFSBrowser.M_OPEN),true);
+						break;
+					}
+					else if(GUIUtilities.isMiddleButton(evt.getModifiers()))
+					{
+						browser.filesActivated((evt.isShiftDown()
+							? VFSBrowser.M_OPEN_NEW_VIEW
+							: VFSBrowser.M_OPEN),true);
+					}
+					else if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+					{
+						if(!isPathSelected(path))
+							setSelectionPath(path);
 					}
 
 					super.processMouseEvent(evt);
@@ -768,7 +764,12 @@ class BrowserView extends JPanel
 						break;
 				}
 
-				if(GUIUtilities.isPopupTrigger(evt))
+				if(GUIUtilities.isMiddleButton(evt.getModifiers()))
+				{
+					if(!isPathSelected(path))
+						setSelectionPath(path);
+				}
+				else if(GUIUtilities.isPopupTrigger(evt))
 				{
 					if(popup != null && popup.isVisible())
 					{
@@ -803,6 +804,7 @@ class BrowserView extends JPanel
 
 				if(evt.getClickCount() % 2 != 0)
 					super.processMouseEvent(evt);
+
 				break;
 			//}}}
 			default:

@@ -7,24 +7,24 @@ release.
 
 + Enhancements:
 
-- The text area no longer falls over if an exception is thrown while
-  firing a caret or scroll event.
-
-- Stricter checks for windows being out-of-bounds.
-
 - Divider position in Global Options dialog box is now saved.
-
-- Saving a file within jEdit will refresh the directory search file list
-  if necessary.
 
 - Minor improvement to Python auto indent (Oliver Rutherfurd).
 
-- Documentation updates (me and Kris Kopicki).
+- FAQ updates (Kris Kopicki).
 
 - API documentation generated with javadoc is now included. A custom
   doclet is used to generate a tree view for the help viewer.
 
 + Bug Fixes:
+
+- Stricter checks for windows being out-of-bounds.
+
+- The text area no longer falls over if an exception is thrown while
+  firing a caret or scroll event.
+
+- Saving a file within jEdit will refresh the directory search file list
+  if necessary.
 
 - The Format Paragraph command was once again broken on Java 1.3.
 
@@ -64,6 +64,8 @@ release.
 
 - Fixed yet another bug when editing the same buffer in two splits,
   this time if the second split was narrowed.
+
+- Fixed obscure file system browser selection bug.
 
 * Version 4.1pre9
 

@@ -189,8 +189,8 @@
 </itemizedlist>
 
 <para>
-  Detailed documentation for each message class can be found in <xref
-  linkend="api-message" />.
+  XXX <!-- Detailed documentation for each message class can be found in <xref
+  linkend="api-message" />. -->
 </para>
 
 <!-- TODO: include data members of derived message classes in appendix -->

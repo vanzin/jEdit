@@ -35,9 +35,44 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * A virtual filesystem implementation. Note tha methods whose names are
- * prefixed with "_" may be called from the I/O thread, so they cannot make
- * Swing UI calls directly.
+ * A virtual filesystem implementation.<p>
+ *
+ * <b>Session objects:</b><p>
+ *
+ * A session is used to persist things like login information, any network
+ * sockets, etc. File system implementations that do not need this kind of
+ * persistence return a dummy object as a session.<p>
+ *
+ * Methods whose names are prefixed with "_" expect to be given a
+ * previously-obtained session object. A session must be obtained from the AWT
+ * thread in one of two ways:
+ *
+ * <ul>
+ * <li>{@link #createVFSSession(String,Component)}</li>
+ * <li>{@link #showBrowseDialog(Object[],Component)}</li>
+ * </ul>
+ *
+ * When done, the session must be disposed of using
+ * {@link #_endVFSSession(Object,Component)}.<p>
+ *
+ * <b>Thread safety:</b><p>
+ *
+ * The following methods cannot be called from an I/O thread:
+ *
+ * <ul>
+ * <li>{@link #createVFSSession(String,Component)}</li>
+ * <li>{@link #insert(View,Buffer,Path)}</li>
+ * <li>{@link #load(View,Buffer,Path)}</li>
+ * <li>{@link #save(View,Buffer,Path)}</li>
+ * <li>{@link #showBrowseDialog(Object[],Component)}</li>
+ * </ul>
+ *
+ * All remaining methods are (required to be) thread-safe.
+ *
+ * @see VFSManager.registerVFS(String,VFS)
+ * @see VFSManager.getVFSByName(String)
+ * @see VFSManager.getVFSForPath(String)
+ * @see VFSManager.getVFSForProtocol(String)
  *
  * @author Slava Pestov
  * @author $Id$
@@ -60,9 +95,17 @@ public abstract class VFS
 
 	/**
 	 * If set, a menu item for this VFS will appear in the browser's
-	 * 'Plugins' menu. If not set, it will still be possible to type in
-	 * URLs in this VFS in the browser, but there won't be a user-visible
+	 * <b>Plugins</b> menu. The property <code>vfs.<i>name</i>.label</code>
+	 * is used as a menu item label.<p>
+	 *
+	 * When invoked, the menu item calls the
+	 * {@link #showBrowseDialog(Object[],Component)} method of the VFS,
+	 * and then lists the directory returned by that method.<p>
+	 *
+	 * If this capability is not set, it will still be possible to type in
+	 * URLs for this VFS in the browser, but there won't be a user-visible
 	 * way of doing this.
+	 *
 	 * @since jEdit 2.6pre2
 	 */
 	public static final int BROWSE_CAP = 1 << 2;
@@ -86,7 +129,7 @@ public abstract class VFS
 	public static final int MKDIR_CAP = 1 << 5;
 
 	/**
-	 * Low latency capability -- if this is not set, then a confirm dialog
+	 * Low latency capability. If this is not set, then a confirm dialog
 	 * will be shown before doing a directory search in this VFS.
 	 * @since jEdit 4.1pre1
 	 */

@@ -37,8 +37,28 @@ import org.gjt.sp.util.Log;
 
 /**
  * Class that implements regular expression and literal search within
- * jEdit buffers.
+ * jEdit buffers.<p>
+ *
+ * There are two main groups of methods in this class:
+ * <ul>
+ * <li>Property accessors - for changing search and replace settings.</li>
+ * <li>Actions - for performing search and replace.</li>
+ * </ul>
+ *
+ * The "HyperSearch" and "Keep dialog" features, as reflected in
+ * checkbox options in the search dialog, are not handled from within
+ * this class. If you wish to have these options set before the search dialog
+ * appears, make a prior call to either or both of the following:
+ *
+ * <pre> jEdit.setBooleanProperty("search.hypersearch.toggle",true);
+ * jEdit.setBooleanProperty("search.keepDialog.toggle",true);</pre>
+ *
+ * If you are not using the dialog to undertake a search or replace, you may
+ * call any of the search and replace methods (including
+ * {@link #hyperSearch(View)}) without concern for the value of these properties.
+ *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class SearchAndReplace
@@ -155,8 +175,10 @@ public class SearchAndReplace
 
 	//{{{ setReverseSearch() method
 	/**
-	 * Sets the reverse search flag. Note that currently, only literal
-	 * reverse searches are supported.
+	 * Determines whether a reverse search will conducted from the current
+	 * position to the beginning of a buffer. Note that reverse search and
+	 * regular expression search is mutually exclusive; enabling one will
+	 * disable the other.
 	 * @param reverse True if searches should go backwards,
 	 * false otherwise
 	 */
@@ -302,6 +324,9 @@ public class SearchAndReplace
 	/**
 	 * Sets the current search file set.
 	 * @param fileset The file set to perform searches in
+	 * @see AllBufferSet
+	 * @see CurrentBufferSet
+	 * @see DirectoryListSet
 	 */
 	public static void setSearchFileSet(SearchFileSet fileset)
 	{

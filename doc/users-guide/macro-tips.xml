@@ -803,17 +803,6 @@ bottom</screen>
 
 </sect2>
 
-<sect2 id="macro-tips-beanshell-commands"><title>BeanShell Commands</title>
-
-<para>
-  BeanShell comes with a large number of built-in scripted
-  <quote>commands</quote> that are useful in many circumstances.
-  Documentation for commands that are helpful when
-  writing macros can be found in <xref linkend="beanshell-commands"/>.
-</para>
-
-</sect2>
-
 </sect1>
 
 <sect1 id="macro-tips-debugging"><title>Debugging Macros</title>

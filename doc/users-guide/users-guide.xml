@@ -33,14 +33,13 @@
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
+<!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
 
 <!ENTITY plugin-intro SYSTEM "plugin-intro.xml">
 <!ENTITY host-design SYSTEM "host-design.xml">
 <!ENTITY plugin-implement SYSTEM "plugin-implement.xml">
 
-<!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
-<!ENTITY api-guide SYSTEM "api-guide.xml">
-<!ENTITY api-message SYSTEM "api-message.xml"> ]>
+]>
 
 <book>
 
@@ -139,6 +138,7 @@
  &macro-basics;
  &dialog-macro;
  &macro-tips;
+ &bsh-commands;
 </part>
 
 <part id="writing-plugins-part"><title>Writing Plugins</title>
@@ -163,32 +163,6 @@
  &plugin-intro;
  &host-design;
  &plugin-implement;
-</part>
-
-<part id="api-guide-part"><title>jEdit API Reference</title>
- <partintro>
-  <para>
-   This part of the user's guide covers the jEdit <firstterm>application
-   programming interface</firstterm>. The information in this part is only useful
-   to macro and plugin developers; you do not need to read it if you only want to
-   use jEdit.
-  </para>
-  <para>
-   The first chapter covers BeanShell commands, which can only
-   be used in macros. The second chapter covers APIs useful to both macros and
-   plugins.
-   The final chapter covers the EditBus message system, which is typically
-   only used by plugins.
-  </para>
-  <para>
-   This part of the user's guide was written by John Gellene
-   <email>jgellene@nyc.rr.com</email>.
-  </para>
- </partintro>
-
- &bsh-commands;
- &api-guide;
- &api-message;
 </part>
 
 </book>
