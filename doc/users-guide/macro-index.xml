@@ -65,98 +65,6 @@
 
 </sect1>
 
-<sect1 id="macros-text"><title>Text Macros</title>
-<para>
-    These macros generate various forms of formatted text.
-</para>
-
-<itemizedlist>
-
-<listitem>
-    <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
-    <abstract><para>
-        Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
-        text to each line in a group of selected lines.
-    </para></abstract>
-    <para>
-        Text is added after leading whitespace and before trailing whitespace.
-        A dialog window receives input and <quote>remembers</quote> past entries.
-    </para>
-</listitem>
-
-<listitem>
-    <para><filename>Color_Picker.bsh</filename></para>
-    <abstract><para>
-        Displays a color picker and inserts the selected color in
-        hexadecimal format, prefixed with a <quote>#</quote>.
-    </para></abstract>
-</listitem>
-
-<listitem>
-    <para><filename>Duplicate_Line.bsh</filename></para>
-    <abstract><para>
-        Duplicates the line on which the caret lies immediately
-        beneath it and moves the caret to the new line.
-    </para></abstract>
-</listitem>
-
-<listitem>
-    <para><filename>Insert_Date.bsh</filename></para>
-    <abstract><para>
-        Inserts the current date and time in the current buffer.
-    </para></abstract>
-    <para>
-        The inserted text includes a representation of the time in the
-        <quote>Internet Time</quote> format.
-    </para>
-</listitem>
-
-<listitem>
-    <para><filename>Insert_Tag.bsh</filename></para>
-    <abstract><para>
-        Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
-        in a input dialog.  The tags will surround any selected text.
-    </para></abstract>
-</listitem>
-
-<listitem>
-    <para><filename>Next_Char.bsh</filename></para>
-    <abstract><para>
-        Finds next occurrence of character on current line.
-    </para></abstract>
-    <para>
-        The macro takes the next character typed after macro execution
-        as the character being searched.  That character is not
-        displayed.  If the character does not appear in the balance of
-        the current line, no action occurs.
-    </para>
-    <para>
-        This macro illustrates the use of
-        <function>InputHandler.readNextChar()</function> as a means of
-        obtaining user input. See <xref linkend="macro-tips-single-char"
-        />.
-    </para>
-</listitem>
-
-<listitem>
-  <para><filename>Toggle_Line_Comment.bsh</filename></para>
-  <abstract><para>
-	  Toggles line comments, alternately inserting and deleting them
-    at the beginning of each selected line. If there is no selection,
-    the macro operates on the current line.
-  </para></abstract>
-	<para>
-		 A <quote>line comment</quote> is a token that designates the entire
-     contents of a line as commented text; it does not use or require
-     a closing token. If the editing mode does not provide for line
-     comments (for example, text or XML modes), the macro will
-     display an error message.
-	</para>
-</listitem>
-
-</itemizedlist>
-</sect1>
-
 <sect1 id="macros-java"><title>Java Code Macros</title>
 <para>
     These macros handle text formatting and generation tasks that are
@@ -412,6 +320,98 @@
 
 </itemizedlist>
 
+</sect1>
+
+<sect1 id="macros-text"><title>Text Macros</title>
+<para>
+    These macros generate various forms of formatted text.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
+    <abstract><para>
+        Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
+        text to each line in a group of selected lines.
+    </para></abstract>
+    <para>
+        Text is added after leading whitespace and before trailing whitespace.
+        A dialog window receives input and <quote>remembers</quote> past entries.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Color_Picker.bsh</filename></para>
+    <abstract><para>
+        Displays a color picker and inserts the selected color in
+        hexadecimal format, prefixed with a <quote>#</quote>.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Duplicate_Line.bsh</filename></para>
+    <abstract><para>
+        Duplicates the line on which the caret lies immediately
+        beneath it and moves the caret to the new line.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Insert_Date.bsh</filename></para>
+    <abstract><para>
+        Inserts the current date and time in the current buffer.
+    </para></abstract>
+    <para>
+        The inserted text includes a representation of the time in the
+        <quote>Internet Time</quote> format.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Insert_Tag.bsh</filename></para>
+    <abstract><para>
+        Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
+        in a input dialog.  The tags will surround any selected text.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Next_Char.bsh</filename></para>
+    <abstract><para>
+        Finds next occurrence of character on current line.
+    </para></abstract>
+    <para>
+        The macro takes the next character typed after macro execution
+        as the character being searched.  That character is not
+        displayed.  If the character does not appear in the balance of
+        the current line, no action occurs.
+    </para>
+    <para>
+        This macro illustrates the use of
+        <function>InputHandler.readNextChar()</function> as a means of
+        obtaining user input. See <xref linkend="macro-tips-single-char"
+        />.
+    </para>
+</listitem>
+
+<listitem>
+  <para><filename>Toggle_Line_Comment.bsh</filename></para>
+  <abstract><para>
+	  Toggles line comments, alternately inserting and deleting them
+    at the beginning of each selected line. If there is no selection,
+    the macro operates on the current line.
+  </para></abstract>
+	<para>
+		 A <quote>line comment</quote> is a token that designates the entire
+     contents of a line as commented text; it does not use or require
+     a closing token. If the editing mode does not provide for line
+     comments (for example, text or XML modes), the macro will
+     display an error message.
+	</para>
+</listitem>
+
+</itemizedlist>
 </sect1>
 
 </appendix>

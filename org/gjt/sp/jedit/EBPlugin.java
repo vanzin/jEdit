@@ -21,16 +21,28 @@ package org.gjt.sp.jedit;
 
 /**
  * Plugins extending this class are automatically added to the EditBus.
+ * Otherwise, this class is identical to the <code>EditPlugin</code>
+ * class.
+ *
+ * @see org.gjt.sp.jedit.EditBus
+ * @see org.gjt.sp.jedit.EBComponent
+ * @see org.gjt.sp.jedit.EBMessage
+ *
  * @author Slava Pestov
  * @version $Id$
  */
 public abstract class EBPlugin extends EditPlugin implements EBComponent
 {
 	/**
-	 * Handles a message sent on the EditBus. The default
-	 * implementation ignores the message.
+	 * Handles a message sent on the EditBus.
 	 */
-	public void handleMessage(EBMessage message) {}
+	// next version: remove this
+	public void handleMessage(EBMessage message)
+	{
+		Log.log(Log.WARNING,this,getClassName() + " should extend"
+			+ " EditPlugin not EBPlugin since it has an empty"
+			+ " handleMessage()");
+	}
 
 	// protected members
 	protected EBPlugin() {}

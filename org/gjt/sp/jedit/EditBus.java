@@ -28,11 +28,42 @@ import org.gjt.sp.util.Log;
 /**
  * jEdit's global event notification mechanism.<p>
  *
- * A number of messages are sent by jEdit; they are all instances of the classes
- * found in the <code>org.gjt.sp.jedit.msg</code> package. Plugins can also send
- * their own messages.
+ * Plugins register with the EditBus to receive messages reflecting
+ * changes in the application's state, including changes in buffers,
+ * views and edit panes, changes in the set of properties maintained
+ * by the application, and the closing of the application.<p>
+ *
+ * The EditBus maintains a list of objects that have requested to receive
+ * messages. When a message is sent using this class, all registered
+ * components receive it in turn. Classes for objects that subscribe to
+ * the EditBus must implement the <code>EBComponent</code> interface, which
+ * defines the single method <code>handleMessage()</code>.<p>
+ *
+ * A plugin core class that extends the
+ * <code>EBPlugin<code> abstract class (and whose name ends with
+ * <code>Plugin<code> for identification purposes) will automatically be
+ * added to the EditBus during jEdit's startup routine.  Any other
+ * class - for example, a dockable window that needs to receive
+ * notification of buffer changes - must perform its own registration by calling
+ * <code>EditBus.addToBus(this)<code> during its initialization.
+ * A convenient place to register in a class derived from <code>JComponent</code>
+ * would be in an implementation of the <code>JComponent<code> method
+ * <code>addNotify()<code>.<p>
+ *
+ * Message types sent by jEdit can be found in the
+ * <code>org.gjt.sp.jedit.msg</code> package.<p>
+ *
+ * Plugins can also send their own messages - any object can send a message to
+ * the EditBus by calling the static method <code>EditBus.send()</code>.
+ * This method takes a single parameter, an <code>EBMessage</code>
+ * object that is the message being sent. Most plugins, however,
+ * only concern themselves with receiving, not sending, messages.
+ *
+ * @see org.gjt.sp.jedit.EBComponent
+ * @see org.gjt.sp.jedit.EBMessage
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  *
  * @since jEdit 2.2pre6
@@ -43,6 +74,7 @@ public class EditBus
 	/**
 	 * Adds a component to the bus. It will receive all messages sent
 	 * on the bus.
+	 *
 	 * @param comp The component to add
 	 */
 	public static void addToBus(EBComponent comp)
@@ -117,9 +149,7 @@ public class EditBus
 
 	//{{{ send() method
 	/**
-	 * Sends a message to all components on the bus.
-	 * The message will be sent to all components in turn, with the
-	 * original sender receiving it last.
+	 * Sends a message to all components on the bus in turn.
 	 * @param message The message
 	 */
 	public static void send(EBMessage message)

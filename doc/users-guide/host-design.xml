@@ -213,8 +213,8 @@ Additional class libraries for plugins</title>
     </funcsynopsis>
     <para>
       The jEdit startup routine calls this method for each loaded
-      plugin.  Plugins typically use this method to register information
-      with the EditBus and perform other initialization.
+      plugin. This method should return as quickly as possible to avoid
+      slowing down jEdit startup.
     </para>
   </listitem>
 
