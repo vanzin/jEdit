@@ -1784,6 +1784,7 @@ helpviewer.toc.changes=Detailed Change Log
 helpviewer.toc.todo=To Do List and Known Bugs
 helpviewer.toc.copying=GNU General Public License
 helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.copying-apache=Apache License
 helpviewer.toc.plugins=Plugins
 
 helpviewer.search.label=Search

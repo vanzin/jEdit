@@ -6250,7 +6250,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 				extraEndVirt = 0;
 
-			if(control)
+			if(control || isRectangularSelectionEnabled())
 			{
 				int screenLine = (evt.getY() / getPainter()
 					.getFontMetrics().getHeight());

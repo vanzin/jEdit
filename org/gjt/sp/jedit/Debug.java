@@ -98,4 +98,9 @@ public class Debug
 	 * Paint strings instead of glyph vectors.
 	 */
 	public static boolean DISABLE_GLYPH_VECTOR = false;
+
+	/**
+	 * Logs messages when BeanShell code is evaluated.
+	 */
+	public static boolean BEANSHELL_DEBUG = false;
 }

@@ -52,10 +52,166 @@
 		Also see <xref linkend="common-api-changes"/>.
 	</para>
 
+	<para>
+		Note that most plugins written for jEdit 4.1 and earlier will continue
+		to work, however they will not take advantage of the new features of the
+		plugin API outlined in this section.
+	</para>
+
+	<sect2><title>General Idea</title>
+
+	<para>
+		In jEdit 4.1 and earlier, plugins are always fully loaded at program
+		startup, and unloaded at program shutdown. While the plugin loader and
+		API was very simple as a result, this scheme had two main
+		disadvantages:
+	</para>
+
+	<itemizedlist>
+		<listitem><para>Having a large number of plugins generally slowed down
+		jEdit startup, since many plugins performed a lot of lengthy
+		initialization.
+		Even if all plugins made their <function>start()</function>
+		methods as quick as possible, there would still be the overhead of
+		scanning the JAR files, loading the plugin classes, and so on.</para>
+		</listitem>
+		<listitem><para>There was no way to reload plugins in a running jEdit
+		instance. This made plugin development and use of the plugin manager
+		a bit cumbersome.</para>
+		</listitem>
+	</itemizedlist>
+
+	<para>
+		Through a stroke of insight, one notices that the only
+		functions called from most plugins' <function>start()</function>
+		methods fall into two categories:
+	</para>
+
+	<itemizedlist>
+		<listitem><para>Registration of virtual file systems, fold handlers,
+		macro handlers, Console shells, SideKick parsers, ...</para>
+		</listitem>
+		<listitem><para>Arbitriary initialization that only needs to be
+		done when the plugin is first invoked by the user, and not at
+		program startup.</para></listitem>
+	</itemizedlist>
+	
+	<para>
+		jEdit 4.2 moves the former task out of the <function>start()</function>
+		method and into a file within the JAR that can be parsed quickly. This
+		allows the plugin core class to only be loaded, and its
+		<function>start()</function> method called, only when
+		the plugin is first invoked.
+	</para>
+	
+	<para>
+		Also, plugins can now be loaded and unloaded at runtime. Note
+		that in 4.2pre1, this code has not been fully implemented yet, so the
+		only way of doing this is by calling BeanShell APIs. Look for a nice UI
+		for this in the 4.2pre2 plugin manager.
+	</para>
+	
+	</sect2>
+
+	<sect2><title>EditPlugin Class Changes</title>
+	
+	<para>
+		Documentation for the properties mentioned below, and their possible values,
+		can be found in the
+		documentation for the <ulink
+		url="../api/org/gjt/sp/jedit/EditPlugin.html">EditPlugin</ulink> class.
+	</para>
+
+	<para>
+		jEdit distinguishes between jEdit 4.1 and 4.2-style plugins by checking
+		for the presence of a single property,
+		<property>plugin.<replaceable>class
+		name</replaceable>.activate</property>. If this property is present, the
+		plugin is loaded using the new API.
+	</para>
+
+	<para>
+		Since the plugin's menu might need to be displayed before its core class
+		is fully loaded, there is a new way of specifying the plugin menu using
+		properties; the <function>createMenuItems()</function> method of the
+		<ulink
+		url="../api/org/gjt/sp/jedit/EditPlugin.html">EditPlugin</ulink>
+		class has been deprecated.
+	</para>
+
+	<para>
+		For example, the jEdit 4.1 version of the QuickNotepad plugin had the
+		following <function>createMenuItems()</function> method:
+	</para>
+
+	<programlisting>public void createMenuItems(Vector menuItems)
+{
+    menuItems.addElement(GUIUtilities.loadMenu("quicknotepad.menu"));
+}</programlisting>
+
+	<para>
+		Additionally, the following two properties were defined in
+		<filename>QuickNotepad.props</filename>:
+	</para>
+
+	<programlisting>quicknotepad.menu.label=QuickNotepad
+quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
+    quicknotepad.save-file quicknotepad.copy-to-buffer</programlisting>
+
+	<para>
+		The jEdit 4.2 version of this plugin no longer has a
+		<function>createMenuItems()</function> method, and instead defines the
+		following property:
+	</para>
+
+	<programlisting>plugin.QuickNotepadPlugin.menu=quicknotepad \
+    - \
+    quicknotepad.choose-file \
+    quicknotepad.save-file \
+    quicknotepad.copy-to-buffer</programlisting>
+
+	<para>
+		Note that specifying a <property>.label</property> property for the menu
+		is no longer necessary, as the label becomes the name of the plugin.
+	</para>
+
+	<para>
+		Similarly, option panes should are now specified using properties, and
+		the <function>createOptionPanes()</function> method of the
+		<ulink
+		url="../api/org/gjt/sp/jedit/EditPlugin.html">EditPlugin</ulink>
+		class has been deprecated.
+	</para>
+
+	<para>
+		In QuickNotepad's case, the <function>createOptionPanes()</function>
+		method has been removed:
+	</para>
+
+	<programlisting>public void createOptionPanes(OptionsDialog od)
+    {
+        od.addOptionPane(new QuickNotepadOptionPane());
+    }</programlisting>
+
+	<para>
+		The new properties look like this:
+	</para>
+
+	<programlisting>plugin.QuickNotepadPlugin.option-pane=quicknotepad
+options.quicknotepad.code=new QuickNotepadOptionPane();</programlisting>
+
+	</sect2>
+
 	<sect2><title>Actions</title>
 	
 	<para>
-		A few methods of the <classname>EditAction</classname> class were made
+		The syntax of the <filename>actions.xml</filename> file has not changed.
+	</para>
+
+	<para>
+		A few methods of the <ulink
+		url="../api/org/gjt/sp/jedit/EditAction.html">EditAction</ulink>
+		class were made
 		final, since these three values must be known even if the action
 		instance in question has not been loaded:
 	</para>
@@ -90,13 +246,15 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 	<para>
 		The <function>jEdit.getActions()</function> method has been
 		deprecated, since it must load all plugin <filename>actions.xml</filename>
-		files in order to return an array of <classname>EditAction</classname>
+		files in order to return an array of <ulink
+		url="../api/org/gjt/sp/jedit/EditAction.html">EditAction</ulink>
 		instances. Use <function>jEdit.getActionNames()</function> instead,
 		which returns an array of strings.
 	</para>
 
 	<para>
-		A new abstract method was added to the <classname>InputHandler</classname>
+		A new abstract method was added to the <ulink
+		url="../api/org/gjt/sp/jedit/gui/InputHandler.html">InputHandler</ulink>
 		class:
 	</para>
 	
@@ -115,11 +273,29 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 	<sect2><title>Dockable Windows</title>
 	
 	<para>
+		The syntax of the <filename>dockables.xml</filename> file has not changed.
+	</para>
+
+	<para>
 		Instead of overriding the deprecated
 		<function>JComponent.requestDefaultFocus()</function> method,
-		dockable windows can now implement the new
-		<classname>DefaultFocusComponent</classname> interface and its
+		dockable windows can now implement the new <ulink
+		url="../api/org/gjt/sp/jedit/gui/DefaultFocusComponent.html">DefaultFocusComponent</ulink>
+		interface and its
 		<function>focusOnDefaultComponent()</function> method.
+	</para>
+
+	</sect2>
+
+	<sect2><title>Services</title>
+	
+	<para>
+		A new <filename>services.xml</filename> file can be provided in the
+		plugin JAR file. The preferred way of adding virtual file systems, fold
+		handlers and many other types of extensions is through this file. Its
+		syntax is described in the documentation for the <ulink
+		url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink>
+		class.
 	</para>
 
 	</sect2>
@@ -127,25 +303,43 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 	<sect2><title>Virtual File Systems</title>
 	
 	<para>
-		A new <classname>VFS.DirectoryEntryCompare</classname> class was added,
+		Instead of calling <function>VFSManager.registerVFS()</function> in your
+		plugin's <function>start()</function> method, add entries in the
+		<filename>services.xml</filename> file that look like so:
+	</para>
+
+	<programlisting><![CDATA[<SERVICE CLASS="org.gjt.sp.jedit.io.VFS" NAME="ftp">
+    new ftp.FtpVFS(false);
+</SERVICE>]]></programlisting>
+
+	<para>
+		A new  <ulink
+		url="../api/org/gjt/sp/jedit/io/VFS.DirectoryEntryCompare.html">VFS.DirectoryEntryCompare</ulink>
+		class was added,
 		for sorting lists of VFS directory entries.
 	</para>
 
 	<para>
 		Fields named <varname>canRead</varname> and <varname>canWrite</varname>
-		were added to the <classname>VFS.DirectoryEntry</classname> class.
+		were added to the <ulink
+		url="../api/org/gjt/sp/jedit/io/VFS.DirectoryEntry.html">VFS.DirectoryEntry</ulink>
+		class.
 	</para>
 
 	<para>
 		There is a new extended attribute API to go with the details view in the
 		file system browser. Pass an array of extended attribute names to the
-		<classname>VFS</classname> constructor, then provide an implementation
+		<ulink
+		url="../api/org/gjt/sp/jedit/io/VFS.html">VFS</ulink> constructor, then
+		provide an implementation
 		of the <function>getExtendedAttribute()</function> method in your
-		subclass of <classname>VFS.DirectoryEntry</classname>.
+		subclass of <ulink
+		url="../api/org/gjt/sp/jedit/io/VFS.DirectoryEntry.html">VFS.DirectoryEntry</ulink>.
 	</para>
 
 	<para>
-		The following two methods in the <classname>VFSManager</classname>
+		The following two methods in the <ulink
+		url="../api/org/gjt/sp/jedit/io/VFSManager.html">VFSManager</ulink>
 		class have been deprecated since they can no longer be implemented for
 		file systems using the deferred loading API
 	</para>
@@ -158,6 +352,30 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		<function>getVFSs()</function>, which returns a string array,
 		instead.</para></listitem>
 	</itemizedlist>
+
+	</sect2>
+
+	<sect2><title>Fold Handlers</title>
+	
+	<para>
+		Instead of calling <function>FoldHandler.registerFoldHandler()</function>
+		in your
+		plugin's <function>start()</function> method, add entries in the
+		<filename>services.xml</filename> file that look like so:
+	</para>
+
+	<programlisting><![CDATA[<SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="sidekick">
+    new sidekick.SideKickFoldHandler()
+</SERVICE>]]></programlisting>
+
+	</sect2>
+
+	<sect2><title>Other Services</title>
+
+	<para>
+		Currently, macro handlers and dynamic menus are not possible in the new
+		plugin API. This will be addressed in 4.2pre2.
+	</para>
 
 	</sect2>
 
@@ -178,7 +396,7 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		be used in other programs.
 		All you need to provide is error handling and logic for locating
 		the XML mode files. See the
-		<ulink url="../api/org/gjt/sp/jedit/syntax/index.html">package
+		<ulink url="../api/org/gjt/sp/jedit/syntax/package-summary.html">package
 		documentation</ulink> for details.
 	</para>
 
@@ -186,22 +404,26 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 
 	<sect2><title>Text Area and Folding</title>
 
-	<para>
-		A new <function>JEditTextArea.addToLeftOfScrollBar()</function> method
+	<para>The
+		<ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
+		class has a new <function>addToLeftOfScrollBar()</function> method that
 		adds a component to the left of the scroll bar. Previously plugins like
 		JDiff had to resort to undocumented hacks to do this.
 	</para>
 
 	<para>
 		The code that displays lines of text on screen has been overhauled for
-		improved performance and correctness. As a result, two methods that have
-		already been deprecated since jEdit 4.0 were removed:
+		improved performance and correctness. As a result, two methods in
+		<ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
+		that have been deprecated since jEdit 4.0 were removed:
 	</para>
 
 	<itemizedlist>
-		<listitem><para><function>JEditTextArea.xToOffset()</function></para>
+		<listitem><para><function>xToOffset()</function></para>
 		</listitem>
-		<listitem><para><function>JEditTextArea.offsetToX()</function></para>
+		<listitem><para><function>offsetToX()</function></para>
 		</listitem>
 	</itemizedlist>
 
@@ -213,24 +435,25 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 	<para>
 		Also, the way folds are handled has changed. The
 		<classname>FoldVisibilityManager</classname> class has been removed,
-		and a number of methods in the <classname>JEditTextArea</classname>
+		and a number of methods in the <ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
 		class have been removed also:
 	</para>
 
 	<itemizedlist>
-		<listitem><para><function>JEditTextArea.virtualToPhysical()</function></para>
+		<listitem><para><function>virtualToPhysical()</function></para>
 		</listitem>
-		<listitem><para><function>JEditTextArea.physicalToVirtual()</function></para>
+		<listitem><para><function>physicalToVirtual()</function></para>
 		</listitem>
-		<listitem><para><function>JEditTextArea.getVirtualLineCount()</function></para>
+		<listitem><para><function>getVirtualLineCount()</function></para>
 		</listitem>
 	</itemizedlist>
 
 	<para>
 		The replacement for the <classname>FoldVisibilityManager</classname>
-		class is a class named <classname>DisplayManager</classname>, with
-		pretty much the same API, in addition to a few methods for dealing with
-		soft wrap display details.
+		class is a class named <ulink
+		url="../api/org/gjt/sp/jedit/io/DisplayManager.html">DisplayManager</ulink>,
+		with a similar but not identical API.
 	</para>
 
 	<para>
@@ -245,8 +468,11 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		In jEdit 4.2, virtual line numbers are no longer used internally; now,
 		similar <quote>scroll line numbers</quote> are used. Scroll line numbers
 		take both hidden lines and soft wrap into account. The
-		<function>JEditTextArea.getFirstLine()</function> and
-		<function>JEditTextArea.setFirstLine()</function> methods now work with
+		<function>getFirstLine()</function> and
+		<function>setFirstLine()</function> methods of the
+		<ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
+		class now work with
 		scroll line numbers.
 	</para>
 
@@ -255,7 +481,10 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		line numbers exists, but it is rather complicated and it will not be
 		made public. Instead, if you want the text area to scroll to a given
 		physical line number, use the new
-		<function>JEditTextArea.setFirstPhysicalLine()</function> method.
+		<function>setFirstPhysicalLine()</function> method in the
+		<ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink>
+		class.
 	</para>
 
 	</sect2>
@@ -271,15 +500,21 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 	</para>
 
 	<para>
-		The constructor of the <classname>EBMessage</classname> class now takes
-		an <classname>Object</classname>, as opposed to a
-		<classname>EBComponent</classname>. Plugins that provide custom message
+		The constructor of the <ulink
+		url="../api/org/gjt/sp/jedit/io/EBMessage.html">EBMessage</ulink> class
+		now takes
+		an <classname>Object</classname>, as opposed to an
+		<ulink
+		url="../api/org/gjt/sp/jedit/io/EBComponent.html">EBComponent</ulink>.
+		Plugins that provide custom message
 		types will need to be recompiled.
 	</para>
 	
 	<para>
 		The following deprecated method was removed from the
-		<classname>GUIUtilities</classname> class:
+		<ulink
+		url="../api/org/gjt/sp/jedit/io/GUIUtilities.html">GUIUtilities</ulink>
+		class:
 	</para>
 	
 	<para>

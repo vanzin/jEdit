@@ -55,8 +55,9 @@ release.
 
   - A status bar indicator has been added for this mode.
 
-  - Control-dragging and Control-Shift-clicking to create rectangular
-    selections is no longer supported.
+  - Clicking beyond the end of the line inserts the appropriate amount
+    of white space and moves the caret there (just like when Control is
+    held down, see above).
 
 - Changed vertical paste behavior. Now if the rectangle we are inserting
   into has more lines than the pasted text, the pasted text cycles
