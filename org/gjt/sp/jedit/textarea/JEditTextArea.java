@@ -6267,7 +6267,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!
-				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
+				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,
+					isRectangularSelectionEnabled());
 
 				if(!quickCopyDrag)
 					moveCaretPosition(dragStart,false);
