@@ -25,10 +25,11 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import bsh.*;
-import java.awt.Component;
+import java.awt.*;
 import javax.swing.JOptionPane;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
@@ -404,11 +405,7 @@ public class SearchAndReplace
 		catch(Exception e)
 		{
 			results.searchFailed();
-			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.toString() };
-			GUIUtilities.error(comp,
-				beanshell ? "searcherror-bsh"
-				: "searcherror",args);
+			handleError(comp,e);
 			return false;
 		}
 	} //}}}
@@ -559,9 +556,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.toString() };
-			GUIUtilities.error(comp,"searcherror",args);
+			handleError(comp,e);
 		}
 		finally
 		{
@@ -732,11 +727,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.toString() };
-			GUIUtilities.error(comp,
-				beanshell ? "searcherror-bsh"
-				: "searcherror",args);
+			handleError(comp,e);
 		}
 		finally
 		{
@@ -787,11 +778,7 @@ loop:			for(;;)
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.toString() };
-			GUIUtilities.error(comp,
-				beanshell ? "searcherror-bsh"
-				: "searcherror",args);
+			handleError(comp,e);
 		}
 		finally
 		{
@@ -891,11 +878,7 @@ loop:			while(path != null)
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.toString() };
-			GUIUtilities.error(comp,
-				beanshell ? "searcherror-bsh"
-				: "searcherror",args);
+			handleError(comp,e);
 		}
 		finally
 		{
@@ -952,6 +935,24 @@ loop:			while(path != null)
 		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
 		jEdit.setBooleanProperty("search.beanshell.toggle",beanshell);
 		jEdit.setBooleanProperty("search.wrap.toggle",wrap);
+	} //}}}
+
+	//{{{ handleError() method
+	static void handleError(Component comp, Exception e)
+	{
+		Log.log(Log.ERROR,SearchAndReplace.class,e);
+		if(comp instanceof Dialog)
+		{
+			new TextAreaDialog((Dialog)comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",e);
+		}
+		else
+		{
+			new TextAreaDialog((Frame)comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",e);
+		}
 	} //}}}
 
 	//{{{ Private members

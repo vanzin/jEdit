@@ -118,8 +118,7 @@ loop:				for(int i = 0; i < files.length; i++)
 			{
 				public void run()
 				{
-					GUIUtilities.error(view,"searcherror",
-						new String[] { e.toString() });
+					SearchAndReplace.handleError(view,e);
 				}
 			});
 		}
