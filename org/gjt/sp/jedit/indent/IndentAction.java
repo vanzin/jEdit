@@ -81,7 +81,7 @@ public interface IndentAction
 		
 		public boolean keepChecking()
 		{
-			return false;
+			return true;
 		}
 	}
 

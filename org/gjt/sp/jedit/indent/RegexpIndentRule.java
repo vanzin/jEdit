@@ -48,7 +48,10 @@ public class RegexpIndentRule implements IndentRule
 	{
 		if(thisAction != null
 			&& isMatch(buffer.getLineText(thisLineIndex)))
+		{
 			indentActions.add(thisAction);
+			indentActions.add(new IndentAction.Collapse());
+		}
 		if(prevAction != null
 			&& prevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevLineIndex)))
@@ -59,7 +62,10 @@ public class RegexpIndentRule implements IndentRule
 		if(prevPrevAction != null
 			&& prevPrevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevPrevLineIndex)))
+		{
 			indentActions.add(prevPrevAction);
+			indentActions.add(new IndentAction.Collapse());
+		}
 	} //}}}
 
 	//{{{ isMatch() method

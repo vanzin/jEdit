@@ -332,6 +332,7 @@ public class JEditTextArea extends JComponent
 			this.buffer = buffer;
 
 			chunkCache.setBuffer(buffer);
+			painter.repaintMgr.setFastScroll(false);
 			propertiesChanged();
 
 			if(displayManager != null)

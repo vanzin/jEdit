@@ -16,16 +16,6 @@ and quirks that I need to fix eventually.
 
 4.3pre2:
 
-(import '(sys::%format
-          sys::source-transform
-          sys::define-source-transform
-          sys::expand-source-transform))
-
-this is broken:
-if(foo)
-{
-
-}
 - 7000 line lisp file: window resize is slow
 - using up/down arrows with a blank text field and pressing / goes to
   the root
@@ -40,7 +30,7 @@ if(foo)
  * Love, Slava */
 - auto indent:
   - deep indent
-  - investigate CL indent
+  - Common Lisp &body forms
   - pressing enter: carry over * from prev line in javadoc
   - javadoc indent: if prev line was /* or *, unindent if prev line is
   */
