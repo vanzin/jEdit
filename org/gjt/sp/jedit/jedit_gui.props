@@ -1834,6 +1834,18 @@ vfs.browser.default-filter=*[^~#]
 vfs.browser.filter-enabled=true
 vfs.browser.tree.loading=Loading...
 
+vfs.browser.name=Name
+vfs.browser.type=Type
+vfs.browser.type.file=File
+vfs.browser.type.directory=Directory
+vfs.browser.type.filesystem=File system
+vfs.browser.status=Status
+vfs.browser.status.no-access=No access
+vfs.browser.status.read-only=Read only
+vfs.browser.status.read-write=Read/write
+vfs.browser.size=Size
+vfs.browser.modified=Last modified
+
 #{{{ Commands menu
 vfs.browser.commands.label=Commands
 

@@ -767,6 +767,7 @@ public class View extends JFrame implements EBComponent
 			EditPane ep = editPanes[i];
 			if(ep.getBuffer() == buffer)
 			{
+				setEditPane(ep);
 				ep.focusOnTextArea();
 				return ep;
 			}
@@ -1190,7 +1191,7 @@ public class View extends JFrame implements EBComponent
 			}
 			catch(IOException io)
 			{
-				Log.log(Log.ERROR,this,io);
+				//Log.log(Log.ERROR,this,io);
 			}
 		}
 	} //}}}

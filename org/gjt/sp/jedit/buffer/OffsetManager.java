@@ -64,8 +64,6 @@ public class OffsetManager
 	public static final long SCREEN_LINES_MASK       = 0x00ff000000000000L;
 	public static final long SCREEN_LINES_SHIFT      = 48;
 	public static final long SCREEN_LINES_VALID_MASK = (1L<<60);
-	public static final long FOLD_LEVEL_VALID_MASK   = (1L<<61);
-	public static final long LINE_CONTEXT_VALID_MASK = (1L<<62);
 
 	//{{{ OffsetManager constructor
 	public OffsetManager(Buffer buffer)
@@ -130,15 +128,6 @@ public class OffsetManager
 			return end;
 	} //}}}
 
-	//{{{ isFoldLevelValid() method
-	public final boolean isFoldLevelValid(int line)
-	{
-		if(gapLine != -1 && line >= gapLine)
-			return false;
-
-		return (lineInfo[line] & FOLD_LEVEL_VALID_MASK) != 0;
-	} //}}}
-
 	//{{{ getFoldLevel() method
 	public final int getFoldLevel(int line)
 	{
@@ -160,8 +149,19 @@ public class OffsetManager
 			moveGap(line + 1,0,"setFoldLevel");
 
 		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK)
-			| ((long)level << FOLD_LEVEL_SHIFT)
-			| FOLD_LEVEL_VALID_MASK);
+			| ((long)level << FOLD_LEVEL_SHIFT));
+	} //}}}
+
+	//{{{ setFirstInvalidFoldLevel() method
+	public void setFirstInvalidFoldLevel(int firstInvalidFoldLevel)
+	{
+		this.firstInvalidFoldLevel = firstInvalidFoldLevel;
+	} //}}}
+
+	//{{{ getFirstInvalidFoldLevel() method
+	public int getFirstInvalidFoldLevel()
+	{
+		return firstInvalidFoldLevel;
 	} //}}}
 
 	//{{{ isLineVisible() method
@@ -289,13 +289,6 @@ public class OffsetManager
 			| SCREEN_LINES_VALID_MASK);
 	} //}}}
 
-	//{{{ isLineContextValid() method
-	public final boolean isLineContextValid(int line)
-	{
-		return line <= lastValidLineContext
-			&& (lineInfo[line] & LINE_CONTEXT_VALID_MASK) != 0;
-	} //}}}
-
 	//{{{ getLineContext() method
 	public final TokenMarker.LineContext getLineContext(int line)
 	{
@@ -303,22 +296,21 @@ public class OffsetManager
 	} //}}}
 
 	//{{{ setLineContext() method
-	// Also sets 'context valid' to true
 	public final void setLineContext(int line, TokenMarker.LineContext context)
 	{
-		if(line > lastValidLineContext)
-		{
-			// maybe this loop only ever happends in text mode?
-			for(int i = lastValidLineContext + 1; i < line; i++)
-			{
-				lineInfo[i] &= ~LINE_CONTEXT_VALID_MASK;
-			}
-
-			lastValidLineContext = line;
-		}
-
 		lineContext[line] = context;
-		lineInfo[line] |= LINE_CONTEXT_VALID_MASK;
+	} //}}}
+
+	//{{{ setFirstInvalidLineContext() method
+	public void setFirstInvalidLineContext(int firstInvalidLineContext)
+	{
+		this.firstInvalidLineContext = firstInvalidLineContext;
+	} //}}}
+
+	//{{{ getFirstInvalidLineContext() method
+	public int getFirstInvalidLineContext()
+	{
+		return firstInvalidLineContext;
 	} //}}}
 
 	//{{{ createPosition() method
@@ -436,7 +428,7 @@ public class OffsetManager
 	//{{{ _contentInserted() method
 	public void _contentInserted(LongArray endOffsets)
 	{
-		gapLine = lastValidLineContext = -1;
+		gapLine = firstInvalidLineContext = -1;
 		gapWidth = 0;
 		lineCount = endOffsets.getSize();
 		lineInfo = endOffsets.getArray();
@@ -488,8 +480,8 @@ public class OffsetManager
 			else if(gapLine != -1)
 				offset -= gapWidth;
 
-			if(startLine < lastValidLineContext)
-				lastValidLineContext += numLines;
+			if(startLine < firstInvalidLineContext)
+				firstInvalidLineContext += numLines;
 
 			long visible = (lineInfo[startLine] & VISIBLE_MASK);
 
@@ -515,6 +507,8 @@ public class OffsetManager
 			}
 		} //}}}
 
+		if(firstInvalidFoldLevel == -1 || firstInvalidFoldLevel > startLine)
+			firstInvalidFoldLevel = startLine;
 		moveGap(endLine,length,"contentInserted");
 
 		updatePositionsForInsert(offset,length);
@@ -537,10 +531,10 @@ public class OffsetManager
 			else if(startLine < gapLine)
 				gapLine = startLine;
 
-			if(startLine + numLines < lastValidLineContext)
-				lastValidLineContext -= numLines;
-			else if(startLine < lastValidLineContext)
-				lastValidLineContext = startLine - 1;
+			if(startLine + numLines < firstInvalidLineContext)
+				firstInvalidLineContext -= numLines;
+			else if(startLine < firstInvalidLineContext)
+				firstInvalidLineContext = startLine - 1;
 
 			lineCount -= numLines;
 
@@ -578,27 +572,11 @@ public class OffsetManager
 				startLine,lineCount - startLine);
 		} //}}}
 
+		if(firstInvalidFoldLevel == -1 || firstInvalidFoldLevel > startLine)
+			firstInvalidFoldLevel = startLine;
 		moveGap(startLine,-length,"contentRemoved");
 
 		updatePositionsForRemove(offset,length);
-	} //}}}
-
-	//{{{ lineInfoChangedFrom() method
-	public void lineInfoChangedFrom(int startLine)
-	{
-		moveGap(startLine,0,"lineInfoChangedFrom");
-	} //}}}
-
-	//{{{ lineContextInvalidFrom() method
-	public void lineContextInvalidFrom(int startLine)
-	{
-		lastValidLineContext = Math.min(lastValidLineContext,startLine);
-	} //}}}
-
-	//{{{ getLastValidLineContext() method
-	public int getLastValidLineContext()
-	{
-		return lastValidLineContext;
 	} //}}}
 
 	//{{{ addAnchor() method
@@ -695,14 +673,19 @@ public class OffsetManager
 	 * If -1, all contexts are valid. Otherwise, all lines after this have
 	 * an invalid context.
 	 */
-	private int lastValidLineContext;
+	private int firstInvalidLineContext;
+
+	/**
+	 * If -1, all fold levels are valid. Otherwise, all lines after this
+	 * have an invalid fold level.
+	 */
+	private int firstInvalidFoldLevel;
 	//}}}
 
 	//{{{ setLineEndOffset() method
 	private final void setLineEndOffset(int line, int end)
 	{
-		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
-			| FOLD_LEVEL_VALID_MASK)) | end);
+		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
 		// what is the point of this -- DO NOT UNCOMMENT THIS IT
 		// CAUSES A PERFORMANCE LOSS; nextLineRequested becomes true
 		//lineContext[line] = null;
@@ -715,7 +698,7 @@ public class OffsetManager
 			gapWidth = newGapWidth;
 		else if(newGapLine == -1)
 		{
-			//if(gapWidth != 0)
+			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && gapLine != lineCount)
 					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + lineCount);
@@ -727,7 +710,7 @@ public class OffsetManager
 		}
 		else if(newGapLine < gapLine)
 		{
-			//if(gapWidth != 0)
+			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && newGapLine != gapLine)
 					Log.log(Log.DEBUG,this,method + ": update from " + newGapLine + " to " + gapLine);
@@ -738,7 +721,7 @@ public class OffsetManager
 		}
 		else //if(newGapLine >= gapLine)
 		{
-			//if(gapWidth != 0)
+			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && gapLine != newGapLine)
 					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + newGapLine);

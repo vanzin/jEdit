@@ -50,7 +50,7 @@ class VFSFileNameField extends HistoryTextField
 	{
 		return false;
 	} //}}}
-	
+
 	//{{{ getFocusTraversalKeysEnabled() method
 	public boolean getFocusTraversalKeysEnabled()
 	{
@@ -77,6 +77,7 @@ class VFSFileNameField extends HistoryTextField
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:
+			case KeyEvent.VK_ENTER:
 				browser.getBrowserView().getTree().processKeyEvent(evt);
 				break;
 			default:
@@ -87,15 +88,27 @@ class VFSFileNameField extends HistoryTextField
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			char ch = evt.getKeyChar();
-			if(ch == '/')
+			if(ch == '/' || ch == File.separatorChar)
 			{
 				super.processKeyEvent(evt);
 				String path = getText();
 
-				if(path.equals("-/"))
+				if(path.length() == 2 && path.charAt(0) == '-')
 				{
 					path = browser.getView().getBuffer()
 						.getDirectory();
+				}
+				else if(path.length() == 3 && path.startsWith(".."))
+				{
+					path = MiscUtilities.getParentOfPath(
+						browser.getDirectory());
+					VFS vfs = VFSManager.getVFSForPath(path);
+					if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+					{
+						browser.setDirectory(path);
+						VFSManager.waitForRequests();
+						setText(null);
+					}
 				}
 				else if(!MiscUtilities.isAbsolutePath(path))
 				{
@@ -129,25 +142,12 @@ class VFSFileNameField extends HistoryTextField
 			{
 				if(getCaretPosition() == 0)
 				{
-					String parent = MiscUtilities.getParentOfPath(
-						browser.getDirectory());
-					if(parent.endsWith("/") || parent.endsWith(File.separator))
-						parent = parent.substring(0,
-							parent.length() - 1);
-					browser.setDirectory(parent);
-					setText(parent);
-
-					VFS vfs = VFSManager.getVFSForPath(parent);
-					if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
-					{
-						VFSManager.waitForRequests();
-						browser.getBrowserView().getTree().doTypeSelect(
-							MiscUtilities.getFileName(parent),
-							true);
-					}
+					goToParent();
 
 					return;
 				}
+				else
+					super.processKeyEvent(evt);
 			}
 			else if(ch > 0x20 && ch != 0x7f && ch != 0xff)
 			{
@@ -206,6 +206,27 @@ class VFSFileNameField extends HistoryTextField
 		if(p2.endsWith("/") || p2.endsWith(File.separator))
 			p2 = p2.substring(0,p2.length() - 2);
 		return p1.equals(p2);
+	} //}}}
+
+	//{{{ goToParent() method
+	private void goToParent()
+	{
+		String name = MiscUtilities.getFileName(browser.getDirectory());
+		if(name.endsWith("/") || name.endsWith(File.separator))
+			name = name.substring(0,
+			name.length() - 1);
+		String parent = MiscUtilities.getParentOfPath(
+			browser.getDirectory());
+		browser.setDirectory(parent);
+
+		VFS vfs = VFSManager.getVFSForPath(parent);
+		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+		{
+			VFSManager.waitForRequests();
+			setText(name);
+			browser.getBrowserView().getTree().doTypeSelect(
+				name,true);
+		}
 	} //}}}
 
 	//}}}

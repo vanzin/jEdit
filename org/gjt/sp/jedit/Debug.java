@@ -54,6 +54,11 @@ public class Debug
 	public static boolean TOKEN_MARKER_DEBUG = false;
 
 	/**
+	 * For checking fold level invalidation, etc.
+	 */
+	public static boolean FOLD_DEBUG = false;
+
+	/**
 	 * For checking invalidation, etc.
 	 */
 	public static boolean CHUNK_CACHE_DEBUG = false;

@@ -378,9 +378,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		//{{{ filesActivated() method
 		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
 		{
-			if(files.length == 0)
-				return;
-
 			filenameField.selectAll();
 
 			if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
@@ -390,12 +387,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					if(files[i].type == VFS.DirectoryEntry.FILE)
 					{
 						dispose();
-						break;
+						return;
 					}
 				}
 			}
-			else
-				ok();
+
+			ok();
 		} //}}}
 	} //}}}
 

@@ -118,8 +118,10 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				if(tailIsOn)
 				{
 					int index = list.getModel().getSize();
-					list.setSelectedIndex(index);
-					list.ensureIndexIsVisible(index);
+					if(index != 0)
+					{
+						list.ensureIndexIsVisible(index - 1);
+					}
 				}
 			}
 			else if(src == copy)
@@ -153,8 +155,14 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		{
 			if(tailIsOn)
 			{
-				int index = list.getModel().getSize() - 1;
-				list.ensureIndexIsVisible(index);
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						int index = list.getModel().getSize() - 1;
+						list.ensureIndexIsVisible(index);
+					}
+				});
 			}
 		}
 	} //}}}

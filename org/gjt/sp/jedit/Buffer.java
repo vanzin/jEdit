@@ -2051,24 +2051,16 @@ public class Buffer
 			 * Scan backwards, looking for a line with
 			 * a valid line context.
 			 */
+			int firstInvalidLineContext = offsetMgr.getFirstInvalidLineContext();
 			int start;
-			if(textMode)
+			if(textMode || firstInvalidLineContext == -1)
 			{
 				start = lineIndex;
 			}
 			else
 			{
-				start = 0;
-
-				for(int i = Math.min(offsetMgr.getLastValidLineContext(),
-					lineIndex - 1); i >= 0; i--)
-				{
-					if(offsetMgr.isLineContextValid(i))
-					{
-						start = i;
-						break;
-					}
-				}
+				start = Math.min(firstInvalidLineContext,
+					lineIndex);
 			}
 
 			if(Debug.TOKEN_MARKER_DEBUG)
@@ -2097,13 +2089,8 @@ public class Buffer
 						: null);
 				}
 
-				// this should be null if the line in question does
-				// not have a valid context because we don't want
-				// to inherit the inRule and rules attributes from
-				// an invalid line.
 				TokenMarker.LineContext prevContext = (
-					(i == 0 || !offsetMgr.isLineContextValid(i - 1))
-					? null
+					i == 0 ? null
 					: offsetMgr.getLineContext(i - 1)
 				);
 
@@ -2131,8 +2118,15 @@ public class Buffer
 			}
 
 			int lineCount = offsetMgr.getLineCount();
-			if(nextLineRequested && lineCount - lineIndex > 1)
-				offsetMgr.lineContextInvalidFrom(lineIndex);
+			if(lineCount == lineIndex)
+				offsetMgr.setFirstInvalidLineContext(-1);
+			else if(nextLineRequested && lineCount - lineIndex > 1)
+				offsetMgr.setFirstInvalidLineContext(lineIndex + 1);
+			else
+			{
+				offsetMgr.setFirstInvalidLineContext(Math.max(
+					firstInvalidLineContext,lineIndex + 1));
+			}
 		}
 		finally
 		{
@@ -2861,7 +2855,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void invalidateCachedFoldLevels()
 	{
-		offsetMgr.lineInfoChangedFrom(0);
+		offsetMgr.setFirstInvalidFoldLevel(0);
 		fireFoldLevelChanged(0,getLineCount());
 	} //}}}
 
@@ -2880,29 +2874,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(line < 0 || line >= offsetMgr.getLineCount())
 				throw new ArrayIndexOutOfBoundsException(line);
 
-			if(offsetMgr.isFoldLevelValid(line))
+			int firstInvalidFoldLevel = offsetMgr.getFirstInvalidFoldLevel();
+			if(firstInvalidFoldLevel == -1 || line < firstInvalidFoldLevel)
 			{
 				return offsetMgr.getFoldLevel(line);
 			}
 			else
 			{
-				//System.err.println("level invalid: " + line + ":"
-				//	+ offsetMgr.getFoldLevel(line));
-
-				int start = 0;
-				for(int i = line - 1; i >= 0; i--)
-				{
-					if(offsetMgr.isFoldLevelValid(i))
-					{
-						start = i + 1;
-						break;
-					}
-				}
+				if(Debug.FOLD_DEBUG)
+					Log.log(Log.DEBUG,this,"Invalid fold levels from " + firstInvalidFoldLevel + " to " + line);
 
 				int newFoldLevel = 0;
 				boolean changed = false;
 
-				for(int i = start; i <= line; i++)
+				for(int i = firstInvalidFoldLevel; i <= line; i++)
 				{
 					newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
 					if(newFoldLevel != offsetMgr.getFoldLevel(i))
@@ -2910,10 +2895,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 					offsetMgr.setFoldLevel(i,newFoldLevel);
 				}
 
+				if(line == offsetMgr.getLineCount() - 1)
+					offsetMgr.setFirstInvalidFoldLevel(-1);
+				else
+					offsetMgr.setFirstInvalidFoldLevel(line + 1);
+
 				if(changed && !getFlag(INSIDE_INSERT))
 				{
 					//System.err.println("fold level changed: " + start + ":" + line);
-					fireFoldLevelChanged(start,line);
+					fireFoldLevelChanged(firstInvalidFoldLevel,line);
 				}
 
 				return newFoldLevel;
@@ -3418,7 +3408,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(IOException io)
 			{
-				Log.log(Log.ERROR,this,io);
+				//Log.log(Log.ERROR,this,io);
 			}
 		}
 	} //}}}
@@ -3580,7 +3570,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// on a reload, the fold handler doesn't change, but
 			// we still need to re-collapse folds.
 			// don't do this on initial fold handler creation
-			offsetMgr.lineInfoChangedFrom(0);
+			offsetMgr.setFirstInvalidFoldLevel(0);
 
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			if(collapseFolds == 0)
@@ -3810,7 +3800,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		// don't do this on initial token marker
 		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
 		{
-			offsetMgr.lineContextInvalidFrom(-1);
+			offsetMgr.setFirstInvalidLineContext(0);
 		}
 	} //}}}
 
@@ -3824,7 +3814,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		this.foldHandler = foldHandler;
 
-		offsetMgr.lineInfoChangedFrom(0);
+		offsetMgr.setFirstInvalidFoldLevel(0);
 
 		int collapseFolds = getIntegerProperty("collapseFolds",0);
 		offsetMgr.expandFolds(collapseFolds);

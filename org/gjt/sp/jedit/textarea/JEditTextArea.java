@@ -399,11 +399,28 @@ public class JEditTextArea extends JComponent
 
 		trace = new Exception();
 
-		int amount = (firstLine - oldFirstLine);
-		if(amount > 0)
-			displayManager.firstLine.scrollDown(amount);
-		else if(amount < 0)
-			displayManager.firstLine.scrollUp(-amount);
+		if(firstLine >= oldFirstLine + visibleLines)
+		{
+			displayManager.firstLine.scrollDown(firstLine - oldFirstLine);
+			chunkCache.invalidateAll();
+		}
+		else if(firstLine <= oldFirstLine - visibleLines)
+		{
+			displayManager.firstLine.scrollUp(oldFirstLine - firstLine);
+			chunkCache.invalidateAll();
+		}
+		else if(firstLine > oldFirstLine)
+		{
+			displayManager.firstLine.scrollDown(firstLine - oldFirstLine);
+			chunkCache.scrollDown(firstLine - oldFirstLine);
+		}
+		else if(firstLine < oldFirstLine)
+		{
+			displayManager.firstLine.scrollUp(oldFirstLine - firstLine);
+			chunkCache.scrollUp(oldFirstLine - firstLine);
+		}
+
+		displayManager.firstLine.changed();
 
 		maxHorizontalScrollWidth = 0;
 
@@ -468,14 +485,37 @@ public class JEditTextArea extends JComponent
 			physFirstLine = physicalLine; */
 		//}}}
 
-		if(physFirstLine == displayManager.firstLine.physicalLine)
+		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
+
+		if(amount == 0)
 			return;
 
-		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
+		int oldFirstLine = getFirstLine();
+
 		if(amount > 0)
 			displayManager.firstLine.physDown(amount,skew);
 		else if(amount < 0)
 			displayManager.firstLine.physUp(-amount,skew);
+
+		int firstLine = getFirstLine();
+
+		if(firstLine == oldFirstLine)
+			/* do nothing */;
+		else if(firstLine >= oldFirstLine + visibleLines
+			|| firstLine <= oldFirstLine - visibleLines)
+		{
+			chunkCache.invalidateAll();
+		}
+		else if(firstLine > oldFirstLine)
+		{
+			chunkCache.scrollDown(firstLine - oldFirstLine);
+		}
+		else if(firstLine < oldFirstLine)
+		{
+			chunkCache.scrollUp(oldFirstLine - firstLine);
+		}
+
+		displayManager.firstLine.changed();
 
 		maxHorizontalScrollWidth = 0;
 
@@ -2045,6 +2085,23 @@ forward_scan:		do
 	 */
 	public void moveCaretPosition(int newCaret, boolean doElectricScroll)
 	{
+		moveCaretPosition(newCaret,doElectricScroll ? ELECTRIC_SCROLL
+			: NORMAL_SCROLL);
+	} //}}}
+
+	//{{{ moveCaretPosition() method
+	public int NO_SCROLL = 0;
+	public int NORMAL_SCROLL = 1;
+	public int ELECTRIC_SCROLL = 2;
+	/**
+	 * Sets the caret position without deactivating the selection.
+	 * @param caret The caret position
+	 * @param scrollMode The scroll mode (NO_SCROLL, NORMAL_SCROLL, or
+	 * ELECTRIC_SCROLL).
+	 * @since jEdit 4.2pre1
+	 */
+	public void moveCaretPosition(int newCaret, int scrollMode)
+	{
 		if(newCaret < 0 || newCaret > buffer.getLength())
 		{
 			throw new IllegalArgumentException("caret out of bounds: "
@@ -2059,8 +2116,10 @@ forward_scan:		do
 				bracketLine = bracketPosition = -1;
 			}
 
-			if(focusedComponent == this)
-				finishCaretUpdate(doElectricScroll,false);
+			if(scrollMode == NORMAL_SCROLL)
+				finishCaretUpdate(false,false);
+			else if(scrollMode == ELECTRIC_SCROLL)
+				finishCaretUpdate(true,true);
 		}
 		else
 		{
@@ -2111,8 +2170,10 @@ forward_scan:		do
 			caret = newCaret;
 			caretLine = newCaretLine;
 
-			if(focusedComponent == this)
-				finishCaretUpdate(doElectricScroll,true);
+			if(scrollMode == NORMAL_SCROLL)
+				finishCaretUpdate(false,false);
+			else if(scrollMode == ELECTRIC_SCROLL)
+				finishCaretUpdate(true,true);
 		}
 	} //}}}
 
@@ -5835,11 +5896,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				transactionComplete(buffer);
 
 			if(caret >= start)
-				moveCaretPosition(caret + length,true);
+			{
+				int scrollMode = (focusedComponent == JEditTextArea.this
+					? ELECTRIC_SCROLL : NO_SCROLL);
+				moveCaretPosition(caret + length,scrollMode);
+			}
 			else
 			{
-				// will update bracket highlight
-				moveCaretPosition(caret);
+				int scrollMode = (focusedComponent == JEditTextArea.this
+					? NORMAL_SCROLL : NO_SCROLL);
+				moveCaretPosition(caret,scrollMode);
 			}
 		}
 		//}}}
@@ -5878,17 +5944,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
+			int scrollMode = (focusedComponent == JEditTextArea.this
+				? NORMAL_SCROLL : NO_SCROLL);
+
 			if(caret > start)
 			{
 				if(caret <= start + length)
-					moveCaretPosition(start,false);
+					moveCaretPosition(start,scrollMode);
 				else
-					moveCaretPosition(caret - length,false);
+					moveCaretPosition(caret - length,scrollMode);
 			}
 			else
 			{
 				// will update bracket highlight
-				moveCaretPosition(caret);
+				moveCaretPosition(caret,scrollMode);
 			}
 
 			// ... otherwise, it will be called by the buffer
@@ -6076,13 +6145,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(control)
 			{
-				// control-click in virtual space inserts
-				// whitespace and moves caret
-				String whitespace = MiscUtilities
-					.createWhiteSpace(extraEndVirt,0);
-				buffer.insert(dragStart,whitespace);
+				int screenLine = (evt.getY() / getPainter()
+					.getFontMetrics().getHeight());
+				if(screenLine > screenLastLine)
+					screenLine = screenLastLine;
+				ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
+				if(info.lastSubregion)
+				{
+					// control-click in virtual space inserts
+					// whitespace and moves caret
+					String whitespace = MiscUtilities
+						.createWhiteSpace(extraEndVirt,0);
+					buffer.insert(dragStart,whitespace);
 
-				dragStart += whitespace.length();
+					dragStart += whitespace.length();
+				}
 			}
 			else if(evt.isShiftDown())
 			{
