@@ -47,7 +47,7 @@ void prefixSuffixDialog()
 {
     // create dialog object and set its features
     title = "Add prefix and suffix to selected lines";
-    dialog = new JDialog(view, title, true);
+    dialog = new JDialog(view, title, false);
     content = new JPanel(new BorderLayout());
     content.setBorder(new EmptyBorder(12, 12, 12, 12));
     dialog.setContentPane(content);
@@ -119,6 +119,7 @@ void prefixSuffixDialog()
 
         // text manipulation begins here using calls
         // to jEdit methods
+		buffer.beginCompoundEdit();
         selectedLines = textArea.getSelectedLines();
         for(i = 0; i < selectedLines.length; ++i)
         {
@@ -130,6 +131,7 @@ void prefixSuffixDialog()
             if(text == null) text = "";
             textArea.setSelectedText(prefix + text + suffix);
         }
+		buffer.endCompoundEdit();
     }
 }
 
