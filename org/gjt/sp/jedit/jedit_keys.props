@@ -45,7 +45,7 @@ delete-end-line.shortcut=CS+DELETE
 #}}}
 
 #{{{ C+e C+X
-# Unused: e, f, h, n, p, q, x, y
+# Unused: e, f, h, n, q, x, y
 copy-append.shortcut=C+e C+a
 search-in-open-buffers.shortcut=C+e C+b
 range-comment.shortcut=C+e C+c
@@ -57,6 +57,7 @@ line-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 add-marker.shortcut=C+e C+m
 open-path.shortcut=C+e C+o
+vertical-paste.shortcut=C+e C+p
 replace-in-selection.shortcut=C+e C+r
 save-all.shortcut=C+e C+s
 toggle-line-numbers.shortcut=C+e C+t
@@ -106,6 +107,7 @@ stop-recording.shortcut=C+m C+s
 copy-append-string-register.shortcut=C+r C+a
 copy-string-register.shortcut=C+r C+c
 clear-register.shortcut=C+r C+l
+vertical-paste-string-register.shortcut=C+r C+p
 cut-append-string-register.shortcut=C+r C+u
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x

@@ -537,7 +537,7 @@
 
 <ACTION NAME="paste">
 	<CODE>
-		Registers.paste(textArea,'$');
+		Registers.paste(textArea,'$',false);
 	</CODE>
 </ACTION>
 
@@ -551,7 +551,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.paste-string-register"),
-			"Registers.paste(textArea,__char__);");
+			"Registers.paste(textArea,__char__,false);");
 	</CODE>
 </ACTION>
 
@@ -1079,6 +1079,9 @@
 	<CODE>
 		textArea.toggleMultipleSelectionEnabled();
 	</CODE>
+	<IS_SELECTED>
+		return textArea.isMultipleSelectionEnabled();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="toggle-synchro-scroll">
@@ -1105,6 +1108,20 @@
 <ACTION NAME="unsplit">
 	<CODE>
 		view.unsplit();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vertical-paste">
+	<CODE>
+		Registers.paste(textArea,'$',true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vertical-paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.vertical-paste-string-register"),
+			"Registers.paste(textArea,__char__,true);");
 	</CODE>
 </ACTION>
 

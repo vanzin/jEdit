@@ -10,8 +10,15 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- better rectangular editing
-- action system overhaul
+- searching in a buffer w/ narrowed fold
+- syntax: separate noWordSep
+- document edit menu rearrangements
+- better rectangular editing:
+  - range-comment & rect select
+  - eval-for-selected-lines doesn't work with rectangular selection
+  - rect select aware user input
+  - creating selections with virtual start/end with mouse
+- don't repaint whole selection when resizing
 - fix print spacing problem
 - fix tom's bugs
 - soft wrap is still slow
@@ -22,9 +29,11 @@ and quirks that I need to fix eventually.
 - add documentation for pre1 features
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
+- action system overhaul
 
 + later:
 
+- move text utility methods to TextUtilities
 - focus problem with hypersearch in floating window?
 - offset manager: backwards gap movement
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
@@ -58,7 +67,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - fix page up/page down
-- don't repaint whole selection when resizing
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
 - expand fold: try to expand even if already expanded
@@ -69,7 +77,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   canonPath != path
 - recording 'evaluate for selected lines'
 - custom stylesheet: no xmlns
-- eval-for-selected-lines doesn't work with rectangular selection
 - how to handle S+0-9?
 - finish persistent splits code
 - aborts not always fired

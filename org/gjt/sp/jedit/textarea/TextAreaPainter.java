@@ -989,37 +989,52 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int selStartScreenLine = textArea.getScreenLineOfOffset(s.start);
 			int selEndScreenLine = textArea.getScreenLineOfOffset(s.end);
 
-			int lineStart = textArea.getLineStartOffset(physicalLine);
-			start -= lineStart;
-			end -= lineStart;
+			Buffer buffer = textArea.getBuffer();
+
+			int lineStart = buffer.getLineStartOffset(physicalLine);
 
 			int x1, x2;
 
 			if(s instanceof Selection.Rect)
 			{
-				int lineLen = textArea.getLineLength(physicalLine);
+				start -= lineStart;
+				end -= lineStart;
 
-				int startOffset = Math.min(lineLen,
-					s.start - textArea.getLineStartOffset(
-					s.startLine));
-				int endOffset = Math.min(lineLen,
-					s.end - textArea.getLineStartOffset(
-					s.endLine));
+				Selection.Rect rect = (Selection.Rect)s;
+				int _start = rect.getStartColumn(buffer);
+				int _end = rect.getEndColumn(buffer);
 
-				if(end <= startOffset || start > endOffset)
+				int lineLen = buffer.getLineLength(physicalLine);
+
+				int[] total = new int[1];
+
+				int rectStart = buffer.getOffsetOfVirtualColumn(
+					physicalLine,_start,total);
+				if(rectStart == -1)
+				{
+					x1 = (_start - total[0]) * textArea.charWidth;
+					rectStart = lineLen;
+				}
+				else
+					x1 = 0;
+
+				int rectEnd = buffer.getOffsetOfVirtualColumn(
+					physicalLine,_end,total);
+				if(rectEnd == -1)
+				{
+					x2 = (_end - total[0]) * textArea.charWidth;
+					rectEnd = lineLen;
+				}
+				else
+					x2 = 0;
+
+				if(end <= rectStart || start > rectEnd)
 					return;
 
-				x1 = (startOffset < start ? 0
-					: textArea.offsetToXY(physicalLine,startOffset,textArea.returnValue).x);
-				x2 = (endOffset > end ? getWidth()
-					: textArea.offsetToXY(physicalLine,endOffset,textArea.returnValue).x);
-
-				if(x1 > x2)
-				{
-					int tmp = x2;
-					x2 = x1;
-					x1 = tmp;
-				}
+				x1 = (rectStart < start ? 0
+					: x1 + textArea.offsetToXY(physicalLine,rectStart,textArea.returnValue).x);
+				x2 = (rectEnd > end ? getWidth()
+					: x2 + textArea.offsetToXY(physicalLine,rectEnd,textArea.returnValue).x);
 			}
 			else if(selStartScreenLine == selEndScreenLine
 				&& selStartScreenLine != -1)

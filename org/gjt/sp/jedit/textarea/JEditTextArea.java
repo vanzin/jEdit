@@ -1854,50 +1854,109 @@ forward_scan:		do
 
 			if(s instanceof Selection.Rect)
 			{
-				int start = s.start - getLineStartOffset(s.startLine);
-				int end = s.end - getLineStartOffset(s.endLine);
+				Selection.Rect rect = (Selection.Rect)s;
+				int start = rect.getStartColumn(buffer);
+				int end = rect.getEndColumn(buffer);
 
-				// Certain rectangles satisfy this condition...
-				if(end < start)
+				int[] total = new int[1];
+
+				int tabSize = buffer.getTabSize();
+
+				int maxWidth = 0;
+				int totalLines = 0;
+				ArrayList lines = new ArrayList();
+				if(selectedText != null)
 				{
-					int tmp = end;
-					end = start;
-					start = tmp;
+					int lastNewline = 0;
+					int currentWidth = start;
+					for(int i = 0; i < selectedText.length(); i++)
+					{
+						char ch = selectedText.charAt(i);
+						if(ch == '\n')
+						{
+							totalLines++;
+							lines.add(selectedText.substring(
+								lastNewline,i));
+							lastNewline = i + 1;
+							maxWidth = Math.max(maxWidth,currentWidth);
+							lines.add(new Integer(currentWidth));
+							currentWidth = start;
+						}
+						else if(ch == '\t')
+							currentWidth += tabSize - (currentWidth % tabSize);
+						else
+							currentWidth++;
+					}
+
+					if(lastNewline != selectedText.length())
+					{
+						totalLines++;
+						lines.add(selectedText.substring(lastNewline));
+						lines.add(new Integer(currentWidth));
+						maxWidth = Math.max(maxWidth,currentWidth);
+					}
 				}
 
-				int lastNewline = 0;
-				int currNewline = 0;
-
-				for(int i = s.startLine; i <= s.endLine; i++)
+				int lastLine = Math.max(s.startLine + totalLines - 1,s.endLine);
+				for(int i = s.startLine; i <= lastLine; i++)
 				{
-					int lineStart = getLineStartOffset(i);
-					int lineEnd = getLineEndOffset(i) - 1;
-					int rectStart = Math.min(lineEnd,lineStart + start);
+					if(i == buffer.getLineCount())
+						buffer.insert(buffer.getLength(),"\n");
 
-					buffer.remove(rectStart,Math.min(lineEnd - rectStart,
-						end - start));
+					int lineStart = buffer.getLineStartOffset(i);
+					int lineLen = buffer.getLineLength(i);
 
-					if(selectedText == null)
-						continue;
+					int rectStart = buffer.getOffsetOfVirtualColumn(
+						i,start,total);
+					int startWhitespace;
+					if(rectStart == -1)
+					{
+						startWhitespace = (start - total[0]);
+						rectStart = lineLen;
+					}
+					else
+						startWhitespace = 0;
 
-					currNewline = selectedText.indexOf('\n',lastNewline);
-					if(currNewline == -1)
-						currNewline = selectedText.length();
+					int rectEnd = buffer.getOffsetOfVirtualColumn(
+						i,end,null);
+					if(rectEnd == -1)
+						rectEnd = lineLen;
 
-					buffer.insert(rectStart,selectedText
-						.substring(lastNewline,currNewline));
+					buffer.remove(rectStart + lineStart,rectEnd - rectStart);
 
-					lastNewline = Math.min(selectedText.length(),
-						currNewline + 1);
-				}
+					int index = 2 * (i - s.startLine);
 
-				if(selectedText != null &&
-					currNewline != selectedText.length())
-				{
-					int offset = getLineEndOffset(s.endLine) - 1;
-					buffer.insert(offset,"\n");
-					buffer.insert(offset + 1,selectedText
-						.substring(currNewline + 1));
+					int endWhitespace;
+					if(rectEnd == lineLen)
+						endWhitespace = 0;
+					else if(i - s.startLine >= totalLines)
+						endWhitespace = maxWidth - start;
+					else
+					{
+						endWhitespace = maxWidth
+							- ((Integer)lines.get(index+1))
+							.intValue();
+					}
+
+					String str = (i - s.startLine >= totalLines
+						? "" : (String)lines.get(index));
+					if(str.length() != 0)
+					{
+						if(startWhitespace != 0)
+						{
+							buffer.insert(rectStart + lineStart,
+								MiscUtilities.createWhiteSpace(startWhitespace,0));
+						}
+
+						buffer.insert(rectStart + lineStart + startWhitespace,str);
+
+						if(endWhitespace != 0)
+						{
+							buffer.insert(rectStart + lineStart
+								+ startWhitespace + str.length(),
+								MiscUtilities.createWhiteSpace(endWhitespace,0));
+						}
+					}
 				}
 			}
 			else
@@ -4132,10 +4191,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			if(selection.length == 0)
 			{
 				int oldCaret = caret;
-				buffer.insert(caret,
-					commentStart);
-				buffer.insert(caret,
-					commentEnd);
+				buffer.insert(caret,commentStart);
+				buffer.insert(caret,commentEnd);
 				setCaretPosition(oldCaret + commentStart.length());
 			}
 
@@ -4144,21 +4201,21 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 				Selection s = selection[i];
 				if(s instanceof Selection.Range)
 				{
-					buffer.insert(s.start,
-						commentStart);
-					buffer.insert(s.end,
-						commentEnd);
+					buffer.insert(s.start,commentStart);
+					buffer.insert(s.end,commentEnd);
 				}
 				else if(s instanceof Selection.Rect)
 				{
+					Selection.Rect rect = (Selection.Rect)s;
+					int start = rect.getStartColumn(buffer);
+					int end = rect.getEndColumn(buffer);
+
 					for(int j = s.startLine; j <= s.endLine; j++)
 					{
-						buffer.insert(s.getStart(buffer,j),
+						buffer.insertAtColumn(j,end,
+							commentEnd);
+						buffer.insertAtColumn(j,start,
 							commentStart);
-						int end = s.getEnd(buffer,j)
-							+ (j == s.endLine
-							? 0 : commentStart.length());
-						buffer.insert(end,commentEnd);
 					}
 				}
 			}
@@ -5294,28 +5351,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		if(s instanceof Selection.Rect)
 		{
-			// Return each row of the selection on a new line
-			int start = s.start - getLineStartOffset(s.startLine);
-			int end = s.end - getLineStartOffset(s.endLine);
-
-			// Certain rectangles satisfy this condition...
-			if(end < start)
-			{
-				int tmp = end;
-				end = start;
-				start = tmp;
-			}
+			Selection.Rect rect = (Selection.Rect)s;
+			int start = rect.getStartColumn(buffer);
+			int end = rect.getEndColumn(buffer);
 
 			for(int i = s.startLine; i <= s.endLine; i++)
 			{
-				int lineStart = getLineStartOffset(i);
-				int lineEnd = getLineEndOffset(i) - 1;
-				int lineLen = lineEnd - lineStart;
+				int lineStart = buffer.getLineStartOffset(i);
+				int lineLen = buffer.getLineLength(i);
 
-				lineStart = Math.min(lineStart + start,lineEnd);
-				lineLen = Math.min(end - start,lineEnd - lineStart);
+				int rectStart = buffer.getOffsetOfVirtualColumn(
+					i,start,null);
+				if(rectStart < 0)
+					rectStart = lineLen;
 
-				getText(lineStart,lineLen,lineSegment);
+				int rectEnd = buffer.getOffsetOfVirtualColumn(
+					i,end,null);
+				if(rectEnd < 0)
+					rectEnd = lineLen;
+
+				getText(lineStart + rectStart,rectEnd - rectStart,
+					lineSegment);
 				buf.append(lineSegment.array,
 					lineSegment.offset,
 					lineSegment.count);
