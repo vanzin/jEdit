@@ -90,7 +90,7 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups,
 		boolean enterAddsToHistory)
 	{
-		controller = new HistoryText(this,name)
+		controller = new HistoryText(this,null)
 		{
 			public void fireActionPerformed()
 			{
@@ -98,6 +98,7 @@ public class HistoryTextField extends JTextField
 			}
 		};
 
+		setModel(name);
 		MouseHandler mouseHandler = new MouseHandler();
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
