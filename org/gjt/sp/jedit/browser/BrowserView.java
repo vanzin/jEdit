@@ -558,7 +558,8 @@ class BrowserView extends JPanel
 				case KeyEvent.VK_UP:
 				case KeyEvent.VK_DOWN:
 					super.processKeyEvent(evt);
-					browser.filesSelected();
+					if(browser.getMode() != VFSBrowser.BROWSER)
+						browser.filesSelected();
 					break;
 				case KeyEvent.VK_ENTER:
 					browser.filesActivated((evt.isShiftDown()
