@@ -5,8 +5,7 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- offset manager: backwards gap movement
-- test tab expansion when printing
+- document printspec file
 - fix tom's bugs
 - color printing doesn't work
 - "=\'\" \\"
@@ -16,10 +15,11 @@ and quirks that I need to fix eventually.
 - fix fsb infinite requests problem, in fact fsb tree expansion state
   preservation seems to be broken
 - add documentation for pre1 features
-- focus problem with hypersearch in floating window?
 
 + later:
 
+- focus problem with hypersearch in floating window?
+- offset manager: backwards gap movement
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
 - silly bug that creates selections on click -- how is this even possible?
