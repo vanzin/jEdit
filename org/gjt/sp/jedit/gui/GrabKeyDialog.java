@@ -397,7 +397,8 @@ public class GrabKeyDialog extends JDialog
 
 			if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				if(!Character.isLetterOrDigit(evt.getKeyChar()))
+				if(!Character.isLetterOrDigit(evt.getKeyChar())
+					&& !Character.isUpperCase(evt.getKeyChar()))
 					return;
 
 				keyString.append(evt.getKeyChar());
