@@ -154,8 +154,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 * @param position Where the browser is located
 	 * @since jEdit 4.2pre1
 	 */
-	public VFSBrowser(View view, String path, int mode, boolean multipleSelection,
-		String position)
+	public VFSBrowser(View view, String path, int mode,
+		boolean multipleSelection, String position)
 	{
 		super(new BorderLayout());
 
@@ -477,6 +477,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			return;
 
 		updateFilenameFilter();
+		browserView.saveExpansionState();
 		browserView.loadDirectory(null,path);
 		this.path = path;
 
@@ -509,6 +510,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		VFSManager.getVFSForPath(path).reloadDirectory(path);
 
 		updateFilenameFilter();
+		browserView.saveExpansionState();
 		browserView.loadDirectory(null,path);
 	} //}}}
 

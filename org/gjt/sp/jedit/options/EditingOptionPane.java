@@ -68,6 +68,9 @@ public class EditingOptionPane extends AbstractOptionPane
 		mode = new JComboBox(modeNames);
 		mode.addActionListener(new ActionHandler());
 
+		addComponent(GUIUtilities.createMultilineLabel(
+			jEdit.getProperty("options.editing.caption")));
+
 		addComponent(jEdit.getProperty("options.editing.mode"),mode);
 
 		useDefaults = new JCheckBox(jEdit.getProperty("options.editing.useDefaults"));

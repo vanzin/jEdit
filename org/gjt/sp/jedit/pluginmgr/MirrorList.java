@@ -47,8 +47,16 @@ public class MirrorList
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
 
-		parser.parse(null,null,new BufferedReader(new InputStreamReader(
-			new URL(path).openStream())));
+		Reader in = new BufferedReader(new InputStreamReader(
+			new URL(path).openStream()));
+		try
+		{
+			parser.parse(null,null,in);
+		}
+		finally
+		{
+			in.close();
+		}
 	} //}}}
 
 	//{{{ Private members

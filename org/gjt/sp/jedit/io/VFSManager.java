@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.awt.*;
+import java.util.Collections;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
@@ -398,6 +399,14 @@ public class VFSManager
 		{
 			synchronized(vfsUpdateLock)
 			{
+				// the vfs browser has what you might call
+				// a design flaw, it doesn't update properly
+				// unless the vfs update for a parent arrives
+				// before any updates for the children. sorting
+				// the list alphanumerically guarantees this.
+				Collections.sort(vfsUpdates,
+					new MiscUtilities.StringCompare()
+				);
 				for(int i = 0; i < vfsUpdates.size(); i++)
 				{
 					EditBus.send((VFSUpdate)vfsUpdates.elementAt(i));

@@ -137,7 +137,10 @@ public class VFSDirectoryEntryTable extends JTable
 		if(entry.expanded)
 			model.collapse(row);
 		else
+		{
+			browserView.clearExpansionState();
 			browserView.loadDirectory(entry,entry.dirEntry.path);
+		}
 	} //}}}
 
 	//{{{ setDirectory() method
@@ -190,7 +193,11 @@ public class VFSDirectoryEntryTable extends JTable
 				continue;
 
 			if(path.equals(e.dirEntry.path))
+			{
+				browserView.saveExpansionState();
 				browserView.loadDirectory(e,path);
+				return;
+			}
 		}
 	} //}}}
 
