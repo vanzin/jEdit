@@ -36,7 +36,7 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	MRJOpenDocumentHandler, MRJPrefsHandler, Handler
 {
 	//{{{ Variables
-	private String		lastOpenFile;
+	private Buffer		lastOpenFile;
 	private ExitThread	et = new ExitThread();
 	
 	private final MRJOSType defaultType = new MRJOSType(jEdit.getProperty("MacOSPlugin.default.type"));
@@ -92,12 +92,20 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	public void handleOpenFile(File file)
 	{
 		View view = jEdit.getActiveView();
+		Buffer buffer;
 		
-		if (view == null)
-			view = jEdit.newView(null,jEdit.newFile(null));
+		if (view == null && MacOSPlugin.started)
+		{
+			if (jEdit.getBooleanProperty("restore.cli"))
+				view = jEdit.newView(null,jEdit.restoreOpenFiles());
+			else
+				view = jEdit.newView(null,jEdit.newFile(null));
+		}
 		
-		if (jEdit.openFile(view,file.getPath()) != null)
-			lastOpenFile = file.getPath();
+		if ((buffer = jEdit.openFile(view,file.getPath())) != null)
+		{
+			lastOpenFile = buffer;
+		}
 		else
 			Log.log(Log.ERROR,this,"Error opening file.");
 	} //}}}
@@ -108,10 +116,8 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 		if(msg.getWhat() == ViewUpdate.CREATED)
 		{
 			if(lastOpenFile != null)
-			{
-				jEdit.getActiveView().setBuffer(jEdit.getBuffer(lastOpenFile));
-			}
-			((MacOSPlugin)jEdit.getPlugin("macos.MacOSPlugin")).started(true);
+				msg.getView().setBuffer(lastOpenFile);
+			MacOSPlugin.started = true;
 		}
 	} //}}}
 	

@@ -1,7 +1,13 @@
+Mac OS Plugin 2.0.4
+
+- Now respects the retore from commandline option when opening files
+  in the Finder.
+- Fixed NPE when opening files from the Finder before jEdit is running.
+
 Mac OS Plugin 2.0.3
 
 - jEdit now works properly when used in background mode. Views can be
-  created by opening a file from the finder.
+  created by opening a file from the Finder.
 
 Mac OS Plugin 2.0.2
 
