@@ -176,8 +176,21 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		optionPane.init();
 
-		pack();
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
+
+		Dimension currentSize = getSize();
+		Dimension requestedSize = getPreferredSize();
+		Dimension newSize = new Dimension(
+			Math.max(currentSize.width,requestedSize.width),
+			Math.max(currentSize.height,requestedSize.height)
+		);
+		if(newSize.width < 300)
+			newSize.width = 400;
+		if(newSize.height < 200)
+			newSize.height = 300;
+		setSize(newSize);
+		validate();
+
 		currentPane = name;
 	} //}}}
 
@@ -245,7 +258,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 		setContentPane(content);
 
 		JPanel stage = new JPanel(new BorderLayout(6,6));
-		stage.setMinimumSize(new Dimension(200,100));
 
 		// currentLabel displays the path of the currently selected
 		// OptionPane at the top of the stage area
@@ -272,6 +284,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			scroller,stage);
+		splitter.setDividerLocation(scroller.getPreferredSize().width);
 		content.add(splitter, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);

@@ -410,7 +410,6 @@ public class CompleteWord extends JWindow
 				else
 				{
 					word = word.substring(0,word.length() - 1);
-					System.err.println("word is " + word);
 					textArea.backspace();
 					int caret = textArea.getCaretPosition();
 					KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
