@@ -759,7 +759,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		if(Debug.SCROLL_DEBUG)
+		if(Debug.SCROLL_TO_DEBUG)
 			Log.log(Log.DEBUG,this,"scrollTo(), lineCount="
 				+ getLineCount());
 
@@ -780,6 +780,8 @@ public class JEditTextArea extends JComponent
 
 		if(visibleLines == 0)
 		{
+			if(Debug.SCROLL_TO_DEBUG)
+				Log.log(Log.DEBUG,this,"visibleLines == 0");
 			setFirstPhysicalLine(line,_electricScroll);
 			// it will figure itself out after being added...
 			return;
@@ -791,6 +793,8 @@ public class JEditTextArea extends JComponent
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
 		{
+			if(Debug.SCROLL_TO_DEBUG)
+				Log.log(Log.DEBUG,this,"screenLine == -1");
 			ChunkCache.LineInfo[] infos = chunkCache
 				.getLineInfosForPhysicalLine(line);
 			int subregion = chunkCache.getSubregionOfOffset(
@@ -799,11 +803,15 @@ public class JEditTextArea extends JComponent
 			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
 			if(line == prevLine)
 			{
+				if(Debug.SCROLL_TO_DEBUG)
+					Log.log(Log.DEBUG,this,line + " == " + prevLine);
 				setFirstPhysicalLine(prevLine,subregion
 					- _electricScroll);
 			}
 			else if(line == nextLine)
 			{
+				if(Debug.SCROLL_TO_DEBUG)
+					Log.log(Log.DEBUG,this,line + " == " + nextLine);
 				setFirstPhysicalLine(nextLine,
 					subregion + electricScroll
 					- visibleLines
@@ -811,17 +819,23 @@ public class JEditTextArea extends JComponent
 			}
 			else
 			{
+				if(Debug.SCROLL_TO_DEBUG)
+					Log.log(Log.DEBUG,this,"neither");
 				setFirstPhysicalLine(line,subregion
 					- visibleLines / 2);
 			}
 		}
 		else if(screenLine < _electricScroll)
 		{
+			if(Debug.SCROLL_TO_DEBUG)
+				Log.log(Log.DEBUG,this,"electric up");
 			setFirstLine(getFirstLine() - _electricScroll + screenLine);
 		}
 		else if(screenLine > visibleLines - _electricScroll
 			- (lastLinePartial ? 2 : 1))
 		{
+			if(Debug.SCROLL_TO_DEBUG)
+				Log.log(Log.DEBUG,this,"electric down");
 			setFirstLine(getFirstLine() + _electricScroll - visibleLines + screenLine + (lastLinePartial ? 2 : 1));
 		} //}}}
 
@@ -831,11 +845,14 @@ public class JEditTextArea extends JComponent
 
 		Point point = offsetToXY(line,offset,returnValue);
 		if(point == null)
+		{
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
 				+ ",visibleLines=" + visibleLines
 				+ ",physicalLine=" + line
 				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
 				+ ",lastPhysicalLine=" + getLastPhysicalLine());
+		}
+
 		point.x += extraEndVirt;
 
 		if(point.x < 0)
@@ -4908,17 +4925,46 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		charWidth = (int)Math.round(painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
-		String wrap = buffer.getStringProperty("wrap");
-		hardWrap = wrap.equals("hard");
+		boolean invalidateCachedScreenLineCounts = false;
 
-		maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
+		String wrap = buffer.getStringProperty("wrap");
+		if(!wrap.equals(this.wrap))
+		{
+			this.wrap = wrap;
+			hardWrap = wrap.equals("hard");
+			if(displayManager != null && !bufferChanging)
+			{
+				displayManager.firstLine.callReset = true;
+				displayManager.scrollLineCount.callReset = true;
+			}
+			invalidateCachedScreenLineCounts = true;
+		}
+
+		int maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
+		if(maxLineLen != this.maxLineLen)
+		{
+			this.maxLineLen = maxLineLen;
+			if(displayManager != null && !bufferChanging)
+			{
+				displayManager.firstLine.callReset = true;
+				displayManager.scrollLineCount.callReset = true;
+			}
+			invalidateCachedScreenLineCounts = true;
+		}
 
 		maxHorizontalScrollWidth = 0;
 
-		if(displayManager != null && !bufferChanging)
-			displayManager.updateWrapSettings();
+		if(invalidateCachedScreenLineCounts)
+			buffer.invalidateCachedScreenLineCounts();
 
 		chunkCache.invalidateAll();
+
+		if(displayManager != null && !bufferChanging)
+		{
+			displayManager.updateWrapSettings();
+			displayManager._notifyScreenLineChanges();
+		}
+
 		gutter.repaint();
 		painter.repaint();
 	} //}}}
@@ -5122,6 +5168,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	int maxHorizontalScrollWidth;
 	boolean updateMaxHorizontalScrollWidth;
 
+	String wrap;
 	boolean hardWrap;
 	float tabSize;
 	int charWidth;
@@ -5255,15 +5302,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	/* called by DisplayManager.BufferChangeHandler.transactionComplete() */
 	void _finishCaretUpdate()
 	{
-		if(queuedCaretUpdate)
+		if(!queuedCaretUpdate)
+			return;
+
+		try
 		{
 			// When the user is typing, etc, we don't want the caret
 			// to blink
 			blink = true;
 			caretTimer.restart();
-
-			/* avoid generating an access$ */
-			int caretLine = getCaretLine();
 
 			if(!displayManager.isLineVisible(caretLine))
 			{
@@ -5288,6 +5335,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			updateBracketHighlightWithDelay();
 			if(queuedFireCaretEvent)
 				fireCaretEvent();
+		}
+		// in case one of the above fails, we still want to
+		// clear these flags.
+		finally
+		{
 			queuedCaretUpdate = queuedScrollToElectric
 				= queuedFireCaretEvent = false;
 		}

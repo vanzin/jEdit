@@ -116,6 +116,9 @@ JEDIT 4.2 VERSION HISTORY
 - Changed default shortcut of "Find Previous" from C+h to C+e g since on
   Mac OS X, C+h is always captured by the OS.
 
+- Changing the wrap mode didn't invalidate screen line counts, this
+  could result in scrolling getting messed up.
+
 }}}
 {{{ API Changes
 

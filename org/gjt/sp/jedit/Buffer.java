@@ -1005,6 +1005,16 @@ public class Buffer
 		}
 	} //}}}
 
+	//{{{ invalidateCachedScreenLineCounts() method
+	/**
+	 * Invalidates all cached screen line count information.
+	 * @since jEdit 4.2pre7.
+	 */
+	public void invalidateCachedScreenLineCounts()
+	{
+		lineMgr.invalidateScreenLineCounts();
+	} //}}}
+
 	//}}}
 
 	//{{{ Text getters and setters
@@ -1560,15 +1570,6 @@ public class Buffer
 		}
 
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
-
-		String newWrap = getStringProperty("wrap");
-		if(wrap != null && !newWrap.equals(wrap))
-		{
-			lineMgr.invalidateScreenLineCounts();
-			if(isLoaded())
-				fireWrapModeChanged();
-		}
-		this.wrap = newWrap;
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -3628,12 +3629,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private Segment seg;
 	private FoldHandler foldHandler;
 
-	/**
-	 * We keep track of this so that we know when to invalidate the
-	 * offset manager's screen line counts.
-	 */
-	private String wrap;
-
 	private Socket waitSocket;
 	//}}}
 
@@ -4215,23 +4210,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 			try
 			{
 				getListener(i).foldHandlerChanged(this);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
-	} //}}}
-
-	//{{{ fireWrapModeChanged() method
-	private void fireWrapModeChanged()
-	{
-		for(int i = 0; i < bufferListeners.size(); i++)
-		{
-			try
-			{
-				getListener(i).wrapModeChanged(this);
 			}
 			catch(Throwable t)
 			{
