@@ -1515,9 +1515,6 @@ loop:		for(;;)
 				{
 					returnValue.add(iter.next());
 				}
-
-				Collections.sort(returnValue,
-					new StringICaseCompare());
 			}
 			catch(Exception e)
 			{

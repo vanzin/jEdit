@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -56,7 +57,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 			lineSeparator);
 
 		/* Default file encoding */
-		encoding = new JComboBox(MiscUtilities.getEncodings());
+		String[] encodings = MiscUtilities.getEncodings();
+		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
+		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
 		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
 			System.getProperty("file.encoding")));

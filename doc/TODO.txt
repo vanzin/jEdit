@@ -3,61 +3,39 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- add note that regexp matching does not cross newlines in token marker
-- add note to documentation about exponential-time regexps
-- files changed dialog switches buffers
-
-- beanshell.xml needs an update
 - test keyboard completion with expanded/collapsed tree
 - teset keyboard completion with high latency VFS
 - file system browser: 2 clicks don't hide menus in jdk 1.5
 - file system browser: tigten gap on left of tool bar
-- invoking action bar command twice
-- editable combo boxes look inconsistent with non-editable combos
-
-remaining features before 4.2final:
-
-- test tall caret with multiple selections
-- text installer in jdk 1.5
 - option to disable context menu
 - plugin mgr inspection of not-loaded plugins
 - history text field tweak
 - optional dependencies
 - tall caret and tab
 - need timeouts for plugin manager list download.
-- redundant updateChunksUpTo() calls
-
-- encoding list: not properly sorted
 - in search bar, C+y a doesn't work
 - printing: check default printer setting
-- news: deep indent, action bar, new cli options
-- remove-marker, select-next/prev-marker/bracket
-- plugin mgr install doesn't update existing plugins
 - vfs updates still broken
 - "downloading plugin list" label in plugin manager
 - column reference counting broken
-- gzip & unicode, or gzip & <?xml encoding...
+- new file: horiz scroll wrong
+
 - unloading VFS plugins with active requests
 - enter after a fold broken *AGAIN*
 - removing property from mode does not take effect until restart
-- new file: horiz scroll wrong
-- shortcuts: stale shortcuts remain?
 - if a plugin's stop() throws an exception, infinite loop?
 - no need to wait for requests after newFile()
 - class loading problems
 - motif l&f: shortcuts in menu items
 - some JLists do not auto-scroll on keystroke
 - C+b -- click -- keys don't work
-- C+` inserts ` again
-- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
 - how to handle S+0-9?
-- auto indent: don't de-indent on enter if no leading indent at all?
-- new macro handler api
 
 + docs:
 
+- add note that regexp matching does not cross newlines in token marker
+- add note to documentation about exponential-time regexps
+- news: deep indent, action bar, new cli options
 - action bar
 - document deep indent
 - quicknotepad help needs to be generated
@@ -107,6 +85,14 @@ remaining features before 4.2final:
 
 + features:
 
+- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
+- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
+  keeping INVALID? report errors in some other manner?
+- auto indent: don't de-indent on enter if no leading indent at all?
+- remove-marker, select-next/prev-marker/bracket
+- gzip & unicode, or gzip & <?xml encoding...
+- new macro handler api
+- invoking action bar command twice
 - hide caret while typing
 - unindentCurrentLine property
 - backup time distance setting
@@ -196,6 +182,7 @@ remaining features before 4.2final:
 - optimize 1 long line case
 - two repaints in line insert
 - redundant calls to recalculateLastPhysicalLines()/updateScrollBars()
+- redundant updateChunksUpTo() calls
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

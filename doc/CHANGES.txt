@@ -9,9 +9,8 @@ Philipp Janda, and Scott Allen for contributing to this release.
 
 - New splash screen (Kris Kopicki).
 
-- "Files Changed on Disk" dialog box now selects the first buffer in the
-  list automatically, and clicking "Reload" selects the next buffer.
-  This improves usability.
+- Clicking "Reload" in the "Files Changed on Disk" dialog box now
+  selects the next buffer. This improves usability.
 
 - Added Alt-key mnemonics to "Files Changed" dialog box
   (Ollie Rutherfurd).
@@ -64,6 +63,11 @@ Philipp Janda, and Scott Allen for contributing to this release.
 
 - Java mode now highlights the "enum" keyword, and annotation types that
   were added in Java 1.5.
+
+- BeanShell mode is now loaded from java.xml since now that BeanShell
+  2.0 supports class declarations, the syntax is almost identical. The
+  "beanshell" mode is still distinct from "java" mode though, to allow
+  plugins to differentiate between the two file types.
 
 }}}
 {{{ Bug Fixes
@@ -128,6 +132,11 @@ Philipp Janda, and Scott Allen for contributing to this release.
 
 - Removed debugging message from VFSBrowser class ("request already in
   progress").
+
+- The backspace key now functions correctly with a tall caret.
+
+- Making changes in a buffer before the start of a rectangular selection
+  would cause exceptions to be thrown.
 
 }}}
 
