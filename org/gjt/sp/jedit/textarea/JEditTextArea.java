@@ -4996,10 +4996,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			foo[i] = ' ';
 		}
 
-		tabSize = (float)painter.getFont().getStringBounds(foo,0,_tabSize,
-			painter.getFontRenderContext()).getWidth();
+		tabSize = (float)painter.getStringWidth(new String(foo));
 
-		charWidth = (int)Math.round(painter.getFont().getStringBounds(foo,0,1,
+		charWidth = (int)Math.round(
+			painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
 		boolean invalidateCachedScreenLineCounts = false;
