@@ -2,14 +2,45 @@ TO DO
 
 + before 4.0pre1:
 
-- 'welcome' node not pre-selected
-- tool tip for panel window container close box
-- inserting {{{ doesn't update subsequent line's fold levels properly
+- cvs remove FoldListener, add BufferChangeListener
+- cvs add FoldVisibilityManager
+- new document and fold engine.
+  - collapseFolds property
+  - fold visibility manager
+    - physicalToVirtual(): look up closest fold start. if invisible,
+      return fold start line.
+      else return (line - fold.p) + fold.v.
+    - virtualToPhysical(): need to think about this. just do a linear search
+      with stored start position for now.
+    - collapseFold(): all folds in a certain range need vis flag cleared,
+      v field changed to the v of the fold actually being collapsed.
+      - all subsequent: decrease v.
+      - do above in one step, by looking at the entire hash table.
+    - fold expansion: full expansion
+      - set vis to true, each f.v=(f.p-s.p)+s.v, s=start fold
+    - one-level expansion:
+      - v is true if level is appropriate
+      - each f.v = (f.p-s.p)+counter
+      - counter:
+        increment when inside a visible fold.
+        - when fold level increases, assume inside invisible fold;
+          when decreases, visible again.
+      - what about expanding a partially expanded fold? current impl.
+        of expandFoldAt() does this correctly.
+      - should not need crappy while(!visible) hack in moveCaretPosition().
+  - OffsetManager manages LineInfos.
+  - ogs.util.ReadWriteLock -- reuse code from j.
+  - ContentManager
+  - OffsetManager tracks positions
+  - OffsetManager tracks line offsets; drop PlainDocument
+  - compatibility APIs
+  - undo
+  - move away from Swing APIs in the core
+- collapse fold: scroll to fold line
 - update macros for API changes
 - blank line after }}}: part of fold
 - auto indent: do not indent on {{{
-- investigate nextLineRequested()
-- per-text area fold visibility
+- investigate nextLineRequested() -- replace with a buffer event.
 - when a new text area is created, if caret is on a bracket, not matched
   initially
 - recompile Firewall.jar before releasing
@@ -17,8 +48,6 @@ TO DO
 - (String)buffer.getProperty(): bad
   buffer.getIntegerProperty(),
   buffer.getStringProperty()?
-- new document model that uses less memory than the Swing document
-- expand-fold too aggressive
 - macro guide entry for Andre's Vertical Paste macro
 - new goodies need to be documented
 - conventions section in user's guide: mention Enter activating default
@@ -26,6 +55,8 @@ TO DO
 - mention Alt-key mnemonics
 - QuickNotepad XSL docs
 - keyboard select file in fs browser!
+- write explicit folding tips
+- mention OS X Apple+q issue in README.txt
 
 + features:
 
@@ -34,11 +65,8 @@ TO DO
   - pasting
   - narrowing
   - anything else?
+- fold navigator to browse fold tree in explicit fold mode
 - command to surround selection with explicit fold markers
-- mention OS X Apple+q issue in README.txt
-- for hex plugin: vetoing document events
-- expand fold at caret: if caret at level 1, don't expand sub level 2
-  folds
 - search & replace: option to skip folded lines
 - complete word: update on the fly as chars typed
 - improved window docking:
@@ -61,7 +89,6 @@ TO DO
 - tool bar option pane: editing existing entries
 - version number in splash screen
 - mode-specific context menu and maybe even tool bar
-- when a dockable is being opened, focus on default component
 - frame.setState(Frame.NORMAL);
 - line-uncomment command
 - search and replace of specific token types only
@@ -91,6 +118,12 @@ TO DO
     int getUnixPermissions()
     void setUnixPermissions()
   - UNIX_PERMISSIONS_CAP capability
+  - FTP plugin: after connect, need to give browser a new directory.
+    _listDirectory(): returns VFS.Directory class, which contains a
+    VFS.DirectoryEntry array, and a path name.
+    backwards compatibility -- maybe instead,
+    _listDirectory(...,String[] newPath)
+    -- but that is a bit hackish. _listDirectoryEx() is a bit hackish too.
 - improve next/prev-word commands
 - option on JDK 1.4 to have the LnF decorate windows and dialogs
 - search and replace: scroll text area so selection is visible despite

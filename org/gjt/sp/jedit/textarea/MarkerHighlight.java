@@ -36,7 +36,7 @@ public class MarkerHighlight implements TextAreaHighlight
 		if(textArea.getBuffer().isLoaded() && highlightEnabled)
 		{
 			Buffer buffer = textArea.getBuffer();
-			if(buffer.getMarkerAtLine(buffer.virtualToPhysical(line)) != null)
+			if(buffer.getMarkerAtLine(textArea.virtualToPhysical(line)) != null)
 			{
 				int firstLine = textArea.getFirstLine();
 				line -= firstLine;
@@ -57,7 +57,7 @@ public class MarkerHighlight implements TextAreaHighlight
 			int line = textArea.getFirstLine() + evt.getY() / fm.getHeight();
 
 			Buffer buffer = textArea.getBuffer();
-			Marker marker = buffer.getMarkerAtLine(buffer.virtualToPhysical(line));
+			Marker marker = buffer.getMarkerAtLine(textArea.virtualToPhysical(line));
 			if(marker != null)
 			{
 				char shortcut = marker.getShortcut();

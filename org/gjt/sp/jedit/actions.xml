@@ -90,13 +90,13 @@
 
 <ACTION NAME="collapse-all-folds">
 	<CODE>
-		buffer.expandFolds(1);
+		textArea.getFoldVisibilityManager().expandFolds(1);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="collapse-fold">
 	<CODE>
-		buffer.collapseFoldAt(textArea.getCaretLine(),textArea);
+		textArea.getFoldVisibilityManager().collapseFold(textArea.getCaretLine());
 	</CODE>
 </ACTION>
 
@@ -260,13 +260,13 @@
 
 <ACTION NAME="expand-fold">
 	<CODE>
-		buffer.expandFoldAt(textArea.getCaretLine(),true,textArea);
+		textArea.getFoldVisibilityManager().expandFold(textArea.getCaretLine(),true);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="expand-one-level">
 	<CODE>
-		buffer.expandFoldAt(textArea.getCaretLine(),false,textArea);
+		textArea.getFoldVisibilityManager().expandFold(textArea.getCaretLine(),false);
 	</CODE>
 </ACTION>
 
@@ -274,7 +274,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.expand-folds"),
-			"buffer.expandFolds(__char__);");
+			"textArea.getFoldVisibilityManager().expandFolds(__char__);");
 	</CODE>
 </ACTION>
 

@@ -40,6 +40,8 @@
 <xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
 <xsl:template match="void"><xsl:apply-templates/></xsl:template>
 
+<xsl:variable name="toc.list.type">ul</xsl:variable>
+
 <xsl:param name="local.l10n.xml" select="document('')"/>
 
 <!-- Swing HTML control doesn't support &ldquo; and &rdquo; -->
@@ -77,11 +79,11 @@
 
 <xsl:template name="toc.content">
   <TOC>
-    <xsl:apply-templates select="." mode="toc"/>
+    <xsl:apply-templates select="." mode="my.toc"/>
   </TOC>
 </xsl:template>
 
-<xsl:template match="set" mode="toc">
+<xsl:template match="set" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="href">
       <xsl:apply-templates mode="chunk-filename" select="."/>
@@ -89,11 +91,11 @@
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="book" mode="toc"/>
+   <xsl:apply-templates select="book" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="book" mode="toc">
+<xsl:template match="book" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="href">
       <xsl:apply-templates mode="chunk-filename" select="."/>
@@ -102,12 +104,12 @@
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
    <xsl:apply-templates select="part|reference|preface|chapter|appendix|article|colophon"
-                         mode="toc"/>
+                         mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
 <xsl:template match="part|reference|preface|chapter|appendix|article"
-              mode="toc">
+              mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
@@ -117,11 +119,11 @@
    </TITLE>
    <xsl:apply-templates
       select="preface|chapter|appendix|refentry|section|sect1"
-      mode="toc"/>
+      mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="section" mode="toc">
+<xsl:template match="section" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="href">
       <xsl:apply-templates mode="chunk-filename" select="."/>
@@ -129,61 +131,61 @@
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="section" mode="toc"/>
+   <xsl:apply-templates select="section" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="sect1" mode="toc">
+<xsl:template match="sect1" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="sect2" mode="toc"/>
+   <xsl:apply-templates select="sect2" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="sect2" mode="toc">
+<xsl:template match="sect2" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="sect3" mode="toc"/>
+   <xsl:apply-templates select="sect3" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="sect3" mode="toc">
+<xsl:template match="sect3" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="sect4" mode="toc"/>
+   <xsl:apply-templates select="sect4" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="sect4" mode="toc">
+<xsl:template match="sect4" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
    </TITLE>
-   <xsl:apply-templates select="sect5" mode="toc"/>
+   <xsl:apply-templates select="sect5" mode="my.toc"/>
   </ENTRY>
 </xsl:template>
 
-<xsl:template match="sect5|colophon" mode="toc">
+<xsl:template match="sect5|colophon" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>

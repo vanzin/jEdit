@@ -68,8 +68,7 @@ public class JEditTextArea extends JComponent
 		renderer = TextRenderer.createTextRenderer();
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
-		documentHandler = new DocumentHandler();
-		foldHandler = new FoldEventHandler();
+		bufferHandler = new BufferChangeHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		bracketLine = bracketPosition = -1;
@@ -150,6 +149,16 @@ public class JEditTextArea extends JComponent
 	public TextRenderer getTextRenderer()
 	{
 		return renderer;
+	} //}}}
+
+	//{{{ getFoldVisibilityManager() method
+	/**
+	 * Returns the fold visibility manager used by this text area.
+	 * @since jEdit 4.0pre1
+	 */
+	public FoldVisibilityManager getFoldVisibilityManager()
+	{
+		return foldVisibilityManager;
 	} //}}}
 
 	//{{{ isCaretBlinkEnabled() method
@@ -238,15 +247,13 @@ public class JEditTextArea extends JComponent
 		if(this.buffer == buffer)
 			return;
 		if(this.buffer != null)
-		{
-			this.buffer.removeDocumentListener(documentHandler);
-			this.buffer.removeFoldListener(foldHandler);
-		}
+			this.buffer.removeBufferChangeListener(bufferHandler);
 		this.buffer = buffer;
 
-		buffer.addDocumentListener(documentHandler);
-		buffer.addFoldListener(foldHandler);
-		documentHandlerInstalled = true;
+		buffer.addBufferChangeListener(bufferHandler);
+		bufferHandlerInstalled = true;
+
+		foldVisibilityManager = buffer.getFoldVisibilityManager(this);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -320,7 +327,7 @@ public class JEditTextArea extends JComponent
 	public void _setFirstLine(int firstLine)
 	{
 		this.firstLine = Math.max(0,firstLine);
-		physFirstLine = buffer.virtualToPhysical(this.firstLine);
+		physFirstLine = virtualToPhysical(this.firstLine);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -328,8 +335,8 @@ public class JEditTextArea extends JComponent
 		// comes into view, it is highlighted
 
 		// 3.2pre9 update: I am commenting this out once again because
-		// I have changed the location of the documentChanged() call
-		// in the DocumentHandler, so this is called before the caret
+		// I have changed the location of the repaintAndScroll() call
+		// in the BufferChangeHandler, so this is called before the caret
 		// position is updated, which can be potentially tricky.
 
 		//if(bracketPosition == -1)
@@ -516,11 +523,10 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollToCaret(boolean doElectricScroll)
 	{
-		if(!buffer.isLineVisible(caretLine))
-			buffer.expandFoldAt(caretLine,true,this);
+		foldVisibilityManager.expandFold(caretLine,false);
 
 		int offset = caret - getLineStartOffset(caretLine);
-		int virtualCaretLine = buffer.physicalToVirtual(caretLine);
+		int virtualCaretLine = physicalToVirtual(caretLine);
 
 		// visibleLines == 0 before the component is realized
 		// we can't do any proper scrolling then, so we have
@@ -563,16 +569,16 @@ public class JEditTextArea extends JComponent
 			}
 			else
 			{
-				startLine = buffer.physicalToVirtual(s.startLine);
-				endLine = buffer.physicalToVirtual(s.endLine);
+				startLine = physicalToVirtual(s.startLine);
+				endLine = physicalToVirtual(s.endLine);
 			}
 
 			if(endLine - startLine <= visibleLines)
 				firstLine = (startLine + endLine - visibleLines) / 2;
 			else
-				firstLine = buffer.physicalToVirtual(caretLine) - visibleLines / 2;
+				firstLine = physicalToVirtual(caretLine) - visibleLines / 2;
 
-			firstLine = Math.min(firstLine,buffer.getVirtualLineCount()
+			firstLine = Math.min(firstLine,getVirtualLineCount()
 				- visibleLines);
 			firstLine = Math.max(firstLine,0);
 
@@ -615,7 +621,7 @@ public class JEditTextArea extends JComponent
 			if(firstLine < 0)
 				firstLine = 0;
 
-			physFirstLine = buffer.virtualToPhysical(firstLine);
+			physFirstLine = virtualToPhysical(firstLine);
 
 			updateScrollBars();
 			painter.repaint();
@@ -824,12 +830,12 @@ public class JEditTextArea extends JComponent
 		{
 			// WRONG!!!
 			// return getBufferLength();
-			return getLineEndOffset(buffer.virtualToPhysical(
-				buffer.getVirtualLineCount() - 1)) - 1;
+			return getLineEndOffset(virtualToPhysical(
+				getVirtualLineCount() - 1)) - 1;
 		}
 		else
 		{
-			line = buffer.virtualToPhysical(line);
+			line = virtualToPhysical(line);
 			return getLineStartOffset(line) + xToOffset(line,x);
 		}
 	} //}}}
@@ -845,7 +851,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void invalidateLine(int line)
 	{
-		line = buffer.physicalToVirtual(line);
+		line = physicalToVirtual(line);
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(line) + fm.getDescent() + fm.getLeading();
@@ -861,17 +867,17 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
-		firstLine = buffer.physicalToVirtual(firstLine);
+		firstLine = physicalToVirtual(firstLine);
 
 		// all your bugs are belong to us
-		if(lastLine > buffer.virtualToPhysical(
-			buffer.getVirtualLineCount() - 1))
+		if(lastLine > virtualToPhysical(
+			getVirtualLineCount() - 1))
 		{
 			lastLine = (lastLine - buffer.getLineCount())
-				+ buffer.getVirtualLineCount();
+				+ getVirtualLineCount();
 		}
 		else
-			lastLine = buffer.physicalToVirtual(lastLine);
+			lastLine = physicalToVirtual(lastLine);
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
@@ -895,7 +901,29 @@ public class JEditTextArea extends JComponent
 
 	//}}}
 
-	//{{{ Convinience methods
+	//{{{ Convenience methods
+
+	//{{{ physicalToVirtual() method
+	/**
+	 * Converts a physical line number to a virtual line number.
+	 * @param line A physical line index
+	 * @since jEdit 4.0pre1
+	 */
+	public int physicalToVirtual(int line)
+	{
+		return foldVisibilityManager.physicalToVirtual(line);
+	} //}}}
+
+	//{{{ virtualToPhysical() method
+	/**
+	 * Converts a virtual line number to a physical line number.
+	 * @param line A virtual line index
+	 * @since jEdit 4.0pre1
+	 */
+	public int virtualToPhysical(int line)
+	{
+		return foldVisibilityManager.physicalToVirtual(line);
+	} //}}}
 
 	//{{{ getBufferLength() method
 	/**
@@ -921,7 +949,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getVirtualLineCount()
 	{
-		return buffer.getVirtualLineCount();
+		return foldVisibilityManager.getVirtualLineCount();
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -1257,16 +1285,16 @@ forward_scan:		do
 	 */
 	public void selectFold()
 	{
-		selectFoldAt(caretLine);
+		selectFold(caretLine);
 	} //}}}
 
 	//{{{ selectFoldAt() method
 	/**
 	 * Selects the fold that contains the specified line number.
 	 * @param line The line number
-	 * @since jEdit 3.1pre3
+	 * @since jEdit 4.0pre1
 	 */
-	public void selectFoldAt(int line)
+	public void selectFold(int line)
 	{
 		int start;
 		int end;
@@ -2015,7 +2043,7 @@ forward_scan:		do
 	{
 		Element map = buffer.getDefaultRootElement();
 
-		int gotoLine = buffer.virtualToPhysical(firstLine + visibleLines / 2);
+		int gotoLine = virtualToPhysical(firstLine + visibleLines / 2);
 
 		if(gotoLine < 0 || gotoLine >= map.getElementCount())
 		{
@@ -2266,7 +2294,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			int line = buffer.getNextVisibleLine(caretLine);
+			int line = foldVisibilityManager.getNextVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
@@ -2298,7 +2326,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		int magic = getMagicCaretPosition();
 
-		int nextLine = buffer.getNextVisibleLine(line);
+		int nextLine = foldVisibilityManager.getNextVisibleLine(line);
 
 		if(nextLine == -1)
 		{
@@ -2356,7 +2384,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextPage(boolean select)
 	{
-		int lineCount = buffer.getVirtualLineCount();
+		int lineCount = getVirtualLineCount();
 
 		int magic = getMagicCaretPosition();
 
@@ -2365,8 +2393,8 @@ loop:		for(int i = 0; i < text.length(); i++)
 		else
 			setFirstLine(firstLine + visibleLines);
 
-		int newLine = buffer.virtualToPhysical(Math.min(lineCount - 1,
-			buffer.physicalToVirtual(caretLine) + visibleLines));
+		int newLine = virtualToPhysical(Math.min(lineCount - 1,
+			physicalToVirtual(caretLine) + visibleLines));
 		int newCaret = getLineStartOffset(newLine)
 			+ xToOffset(newLine,magic + 1);
 
@@ -2394,7 +2422,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
-			if(!buffer.isLineVisible(i))
+			if(!foldVisibilityManager.isLineVisible(i))
 				continue;
 
 			getLineText(i,lineSegment);
@@ -2440,7 +2468,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(newCaret == lineText.length())
 		{
-			int nextLine = buffer.getNextVisibleLine(caretLine);
+			int nextLine = foldVisibilityManager.getNextVisibleLine(caretLine);
 			if(nextLine == -1)
 			{
 				getToolkit().beep();
@@ -2528,7 +2556,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		if(caret == getLineStartOffset(caretLine))
 		{
-			int line = buffer.getPrevVisibleLine(caretLine);
+			int line = foldVisibilityManager.getPrevVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
@@ -2555,7 +2583,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		int magic = getMagicCaretPosition();
 
-		int prevLine = buffer.getPrevVisibleLine(caretLine);
+		int prevLine = foldVisibilityManager.getPrevVisibleLine(caretLine);
 		if(prevLine == -1)
 		{
 			getToolkit().beep();
@@ -2617,8 +2645,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		int magic = getMagicCaretPosition();
 
-		int newLine = buffer.virtualToPhysical(Math.max(0,
-			buffer.physicalToVirtual(caretLine) - visibleLines));
+		int newLine = virtualToPhysical(Math.max(0,
+			physicalToVirtual(caretLine) - visibleLines));
 		int newCaret = getLineStartOffset(newLine)
 			+ xToOffset(newLine,magic + 1);
 
@@ -2645,7 +2673,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
-			if(!buffer.isLineVisible(i))
+			if(!foldVisibilityManager.isLineVisible(i))
 				continue;
 
 			getLineText(i,lineSegment);
@@ -2698,7 +2726,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 			else
 			{
-				int prevLine = buffer.getPrevVisibleLine(caretLine);
+				int prevLine = foldVisibilityManager.getPrevVisibleLine(caretLine);
 				if(prevLine == -1)
 				{
 					getToolkit().beep();
@@ -2893,7 +2921,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(firstVisibleLine >= getVirtualLineCount())
 			firstVisibleLine = getVirtualLineCount() - 1;
 
-		firstVisibleLine = buffer.virtualToPhysical(firstVisibleLine);
+		firstVisibleLine = virtualToPhysical(firstVisibleLine);
 
 		int firstVisible = getLineStartOffset(firstVisibleLine);
 
@@ -2925,7 +2953,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			lastVisibleLine -= (electricScroll + 1);
 
-		lastVisibleLine = buffer.virtualToPhysical(lastVisibleLine);
+		lastVisibleLine = virtualToPhysical(lastVisibleLine);
 
 		int lastVisible = getLineEndOffset(lastVisibleLine) - 1;
 
@@ -3332,7 +3360,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 loop:		for(int i = caretLine - 1; i >= 0; i--)
 		{
-			//if(!buffer.isLineVisible(i))
+			//if(!foldVisibilityManager.isLineVisible(i))
 			//	continue loop;
 
 			getLineText(i,lineSegment);
@@ -3355,7 +3383,7 @@ loop:		for(int i = caretLine - 1; i >= 0; i--)
 
 loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
-			//if(!buffer.isLineVisible(i))
+			//if(!foldVisibilityManager.isLineVisible(i))
 			//	continue loop;
 
 			getLineText(i,lineSegment);
@@ -4129,7 +4157,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			Point location = new Point(offsetToX(caretLine,wordStart),
 				painter.getFontMetrics().getHeight()
-				* (buffer.physicalToVirtual(caretLine)
+				* (physicalToVirtual(caretLine)
 				- firstLine + 1));
 			SwingUtilities.convertPointToScreen(location,painter);
 			new CompleteWord(view,word,completions,location);
@@ -4150,7 +4178,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		Selection sel = (Selection)selection.elementAt(0);
-		buffer.narrow(sel.getStartLine(),sel.getEndLine());
+		foldVisibilityManager.narrow(sel.getStartLine(),sel.getEndLine());
 	} //}}}
 
 	//}}}
@@ -4169,11 +4197,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		ToolTipManager.sharedInstance().registerComponent(painter);
 		ToolTipManager.sharedInstance().registerComponent(gutter);
 
-		if(!documentHandlerInstalled)
+		if(!bufferHandlerInstalled)
 		{
-			documentHandlerInstalled = true;
-			buffer.addDocumentListener(documentHandler);
-			buffer.addFoldListener(foldHandler);
+			bufferHandlerInstalled = true;
+			buffer.addBufferChangeListener(bufferHandler);
 		}
 
 		recalculateVisibleLines();
@@ -4195,11 +4222,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(focusedComponent == this)
 			focusedComponent = null;
 
-		if(documentHandlerInstalled)
+		if(bufferHandlerInstalled)
 		{
-			buffer.removeDocumentListener(documentHandler);
-			buffer.removeFoldListener(foldHandler);
-			documentHandlerInstalled = false;
+			buffer.removeBufferChangeListener(bufferHandler);
+			bufferHandlerInstalled = false;
 		}
 	} //}}}
 
@@ -4309,7 +4335,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ isHighlightVisible() method
 	/**
-	 * Returns true if the line and bracket is visible, false otherwise.
+	 * Returns true if the bracket highlight is visible, false otherwise.
 	 */
 	final boolean isHighlightVisible()
 	{
@@ -4317,10 +4343,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ recalculateVisibleLines()
-	/**
-	 * Recalculates the number of visible lines. This should not
-	 * be called directly.
-	 */
 	void recalculateVisibleLines()
 	{
 		if(painter == null)
@@ -4350,6 +4372,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				0,maxHorizontalScrollWidth
 				+ painter.getFontMetrics().charWidth('w'));
 		}
+	} //}}}
+
+	//{{{ foldStructureChanged() method
+	void foldStructureChanged()
+	{
+		// recalculate first line
+		setFirstLine(physicalToVirtual(physFirstLine));
+
+		// update scroll bars because the number of
+		// virtual lines might have changed
+		updateScrollBars();
+
+		// repaint gutter and painter
+		gutter.repaint();
 	} //}}}
 
 	//}}}
@@ -4394,9 +4430,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean scrollBarsInitialized;
 
 	private Buffer buffer;
-	private DocumentHandler documentHandler;
-	private FoldEventHandler foldHandler;
-	private boolean documentHandlerInstalled;
+	private FoldVisibilityManager foldVisibilityManager;
+	private BufferChangeHandler bufferHandler;
+	private boolean bufferHandlerInstalled;
 
 	private int caret;
 	private int caretLine;
@@ -4789,7 +4825,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			endLine = Math.min(buffer.getLineCount(),
-				buffer.virtualToPhysical(
+				virtualToPhysical(
 				firstLine + visibleLines));
 		}
 
@@ -4814,37 +4850,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		bracketLine = bracketPosition = -1;
-	} //}}}
-
-	//{{{ documentChanged() method
-	private void documentChanged(DocumentEvent evt)
-	{
-		DocumentEvent.ElementChange ch = evt.getChange(
-			buffer.getDefaultRootElement());
-
-		int count;
-		if(ch == null)
-			count = 0;
-		else
-			count = ch.getChildrenAdded().length -
-				ch.getChildrenRemoved().length;
-
-		int line = getLineOfOffset(evt.getOffset());
-		if(count == 0)
-			invalidateLine(line);
-		// do magic stuff
-		else if(line < firstLine)
-		{
-			setFirstLine(firstLine + count);
-			// calls updateScrollBars()
-		}
-		// end of magic stuff
-		else
-		{
-			updateScrollBars();
-			invalidateLineRange(line,buffer.virtualToPhysical(
-				firstLine + visibleLines));
-		}
 	} //}}}
 
 	//}}}
@@ -5090,21 +5095,25 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 	} //}}}
 
-	//{{{ DocumentHandler class
-	class DocumentHandler implements DocumentListener
+	//{{{ BufferChangeHandler class
+	class BufferChangeHandler implements BufferChangeListener
 	{
-		//{{{ insertUpdate() method
-		public void insertUpdate(DocumentEvent evt)
+		//{{{ foldLevelChanged() method
+		public void foldLevelChanged(Buffer buffer, int line)
+		{
+			invalidateLine(line - 1);
+		} //}}}
+
+		//{{{ contentInserted() method
+		public void contentInserted(Buffer buffer, int startLine, int start,
+			int numLines, int length)
 		{
 			if(!buffer.isLoaded())
 				return;
 
-			documentChanged(evt);
+			repaintAndScroll(startLine,numLines);
 
-			int offset = evt.getOffset();
-			int length = evt.getLength();
-
-			if(caret >= offset)
+			if(caret >= start)
 				moveCaretPosition(caret + length,true);
 			else
 				updateBracketHighlight();
@@ -5117,14 +5126,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 				boolean changed = false;
 
-				if(s.start >= offset)
+				if(s.start >= start)
 				{
 					s.start += length;
 					s.startLine = getLineOfOffset(s.start);
 					changed = true;
 				}
 
-				if(s.end >= offset)
+				if(s.end >= start)
 				{
 					s.end += length;
 					s.endLine = getLineOfOffset(s.end);
@@ -5134,19 +5143,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(changed)
 					invalidateLineRange(s.startLine,s.endLine);
 			}
-		} //}}}
+		}
+		//}}}
 
-		//{{{ removeUpdate() method
-		public void removeUpdate(DocumentEvent evt)
+		//{{{ contentRemoved() method
+		public void contentRemoved(Buffer buffer, int startLine, int start,
+			int numLines, int length)
 		{
 			if(!buffer.isLoaded())
 				return;
 
-			documentChanged(evt);
+			// -lineCount because they are removed
+			repaintAndScroll(startLine,-numLines);
 
-			int offset = evt.getOffset();
-			int length = evt.getLength();
-			int end = offset + length;
+			int end = start + length;
 
 			boolean caretEvent = false;
 
@@ -5158,9 +5168,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 				boolean changed = false;
 
-				if(s.start > offset && s.start <= end)
+				if(s.start > start && s.start <= end)
 				{
-					s.start = offset;
+					s.start = start;
 					changed = caretEvent = true;
 				}
 				else if(s.start > end)
@@ -5169,9 +5179,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					changed = caretEvent = true;
 				}
 
-				if(s.end > offset && s.end <= end)
+				if(s.end > start && s.end <= end)
 				{
-					s.end = offset;
+					s.end = start;
 					changed = caretEvent = true;
 				}
 				else if(s.end > end)
@@ -5194,8 +5204,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			}
 
-			if(caret > offset && caret <= end)
-				moveCaretPosition(offset,false);
+			if(caret > start && caret <= end)
+				moveCaretPosition(start,false);
 			else if(caret > end)
 				moveCaretPosition(caret - length,false);
 			else
@@ -5205,43 +5215,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(caretEvent)
 					fireCaretEvent();
 			}
-		} //}}}
-
-		//{{{ changedUpdate() method
-		public void changedUpdate(DocumentEvent evt) {}
+		}
 		//}}}
-	} //}}}
 
-	//{{{ FoldEventListener class
-	class FoldEventHandler implements FoldListener
-	{
-		//{{{ foldHandlerChanged() method
-		public void foldHandlerChanged()
+		//{{{ linesChanged() method
+		private void repaintAndScroll(int startLine, int numLines)
 		{
-			repaint();
-
-			// XXX: this really needs to go elsewhere
-			view.getStatus().updateMiscStatus();
-		} //}}}
-
-		//{{{ foldLevelsChanged() method
-		public void foldLevelsChanged(int firstLine, int lastLine)
-		{
-			invalidateLineRange(firstLine,lastLine);
-		} //}}}
-
-		//{{{ foldStructureChanged() method
-		public void foldStructureChanged()
-		{
-			// recalculate first line
-			setFirstLine(buffer.physicalToVirtual(physFirstLine));
-
-			// update scroll bars because the number of
-			// virtual lines might have changed
-			updateScrollBars();
-
-			// repaint gutter and painter
-			gutter.repaint();
+			if(numLines == 0)
+				invalidateLine(startLine);
+			// do magic stuff
+			else if(startLine < firstLine)
+			{
+				setFirstLine(firstLine + numLines);
+				// calls updateScrollBars()
+			}
+			// end of magic stuff
+			else
+			{
+				updateScrollBars();
+				invalidateLineRange(startLine,virtualToPhysical(
+					firstLine + visibleLines));
+			}
 		} //}}}
 	} //}}}
 
@@ -5302,7 +5296,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int x = evt.getX();
 			int y = evt.getY();
 
-			dragStartLine = buffer.virtualToPhysical(yToLine(y));
+			dragStartLine = virtualToPhysical(yToLine(y));
 			dragStartOffset = xToOffset(dragStartLine,x);
 			dragStart = xyToOffset(x,y,!painter.isBlockCaretEnabled());
 
@@ -5478,7 +5472,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int markLineLength = getLineLength(dragStartLine);
 			int mark = dragStartOffset;
 
-			int line = buffer.virtualToPhysical(yToLine(evt.getY()));
+			int line = virtualToPhysical(yToLine(evt.getY()));
 			int lineStart = getLineStartOffset(line);
 			int lineLength = getLineLength(line);
 			int offset = xToOffset(line,evt.getX());
@@ -5526,7 +5520,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doTripleDrag() method
 		private void doTripleDrag(MouseEvent evt, boolean rect)
 		{
-			int mouseLine = buffer.virtualToPhysical(yToLine(evt.getY()));
+			int mouseLine = virtualToPhysical(yToLine(evt.getY()));
 			int offset = xToOffset(mouseLine,evt.getX());
 			int mark;
 			int mouse;

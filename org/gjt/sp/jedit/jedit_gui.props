@@ -37,14 +37,15 @@ encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
 	KOI8_R SJIS Unicode UTF8 
 #}}}
 
-#{{{ Action set names
+#{{{ Miscellaneous
+history.caption=Previously entered strings:
+print.page=Page {0}
+
 action-set.jEdit=Built-in Commands
 action-set.macros=Macros
 action-set.plugin=Plugin: {0}
-#}}}
 
-#{{{ History text field menu caption
-history.caption=Previously entered strings:
+view.docking.close-tooltip=Hides the current dockable
 #}}}
 
 #{{{ Tool bar
@@ -660,9 +661,6 @@ view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
 view.status.memory-tooltip=Used/total Java heap memory
 #}}}
 
-# Printing
-print.page=Page {0}
-
 #}}}
 
 #{{{ Various dialog boxes
@@ -709,6 +707,7 @@ about.text=jEdit is brought to you by:\n\
 	Kris Kopicki\n\
 	Kristian Ovaska\n\
 	Lionel Fiol\n\
+	Maik Schreiber\n\
 	Marc Rummel\n\
 	Matija Kejzar\n\
 	Matt Albrecht\n\

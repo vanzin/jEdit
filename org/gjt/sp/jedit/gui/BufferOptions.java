@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.textarea.FoldVisibilityManager;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -435,12 +436,14 @@ public class BufferOptions extends EnhancedDialog
 		buffer.propertiesChanged();
 		if(!oldFoldMode.equals(foldMode))
 		{
+			FoldVisibilityManager foldVisibilityManager
+				 = view.getTextArea().getFoldVisibilityManager();
 			Integer collapseFolds = (Integer)buffer.getProperty(
 				"collapseFolds");
 			if(collapseFolds != null && collapseFolds.intValue() != 0)
-				buffer.expandFolds(collapseFolds.intValue());
+				foldVisibilityManager.expandFolds(collapseFolds.intValue());
 			else
-				buffer.expandAllFolds();
+				foldVisibilityManager.expandAllFolds();
 		}
 
 		dispose();

@@ -85,14 +85,18 @@ public class Gutter extends JComponent implements SwingConstants
 
 		Buffer buffer = textArea.getBuffer();
 
-		int firstValidLine = firstLine >= 0 ? firstLine : 0;
-		int lastValidLine = (lastLine >= buffer.getVirtualLineCount())
-			? buffer.getVirtualLineCount() - 1 : lastLine;
+		FoldVisibilityManager foldVisibilityManager
+			= textArea.getFoldVisibilityManager();
+		int physicalLine = foldVisibilityManager
+			.virtualToPhysical(firstLine);
+
+		int lastValidLine = (lastLine >= foldVisibilityManager.getVirtualLineCount())
+			? foldVisibilityManager.getVirtualLineCount() - 1 : lastLine;
 
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
-			boolean valid = (line >= firstValidLine && line <= lastValidLine);
+			boolean valid = (line >= firstLine && line <= lastValidLine);
 
 			if(highlights.size() != 0)
 			{
@@ -120,15 +124,12 @@ public class Gutter extends JComponent implements SwingConstants
 			if(!valid)
 				return;
 
-			// calculate the physical line
-			int physicalLine = buffer.virtualToPhysical(line);
-
 			if(physicalLine != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine))
 			{
 				int _y = y + lineHeight / 2;
 				gfx.setColor(foldColor);
-				if(buffer.isLineVisible(physicalLine + 1))
+				if(foldVisibilityManager.isLineVisible(physicalLine + 1))
 				{
 					gfx.drawLine(1,_y - 3,10,_y - 3);
 					gfx.drawLine(2,_y - 2,9,_y - 2);
@@ -198,38 +199,41 @@ public class Gutter extends JComponent implements SwingConstants
 				}
 			}
 
-			if (!expanded)
-				continue;
-
-			String number = Integer.toString(physicalLine + 1);
-
-			int offset;
-			switch (alignment)
+			if(expanded)
 			{
-			case RIGHT:
-				offset = gutterSize.width - collapsedSize.width
-					- (fm.stringWidth(number) + 1);
-				break;
-			case CENTER:
-				offset = ((gutterSize.width - collapsedSize.width)
-					- fm.stringWidth(number)) / 2;
-				break;
-			case LEFT: default:
-				offset = 0;
-				break;
+				String number = Integer.toString(physicalLine + 1);
+
+				int offset;
+				switch (alignment)
+				{
+				case RIGHT:
+					offset = gutterSize.width - collapsedSize.width
+						- (fm.stringWidth(number) + 1);
+					break;
+				case CENTER:
+					offset = ((gutterSize.width - collapsedSize.width)
+						- fm.stringWidth(number)) / 2;
+					break;
+				case LEFT: default:
+					offset = 0;
+					break;
+				}
+
+				if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
+				{
+					gfx.setColor(currentLineHighlight);
+				}
+				else if (interval > 1 && (line + 1) % interval == 0)
+					gfx.setColor(intervalHighlight);
+				else
+					gfx.setColor(fg);
+
+				gfx.drawString(number, FOLD_MARKER_SIZE + offset,
+					baseline + y);
 			}
 
-			if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
-			{
-				gfx.setColor(currentLineHighlight);
-			}
-			else if (interval > 1 && (line + 1) % interval == 0)
-				gfx.setColor(intervalHighlight);
-			else
-				gfx.setColor(fg);
-
-			gfx.drawString(number, FOLD_MARKER_SIZE + offset,
-				baseline + y);
+			physicalLine = foldVisibilityManager.getNextVisibleLine(
+				physicalLine);
 		}
 	} //}}}
 
@@ -654,21 +658,33 @@ public class Gutter extends JComponent implements SwingConstants
 					.getFontMetrics().getHeight()
 					+ textArea.getFirstLine();
 
-				if(line > buffer.getVirtualLineCount() - 1)
+				FoldVisibilityManager foldVisibilityManager
+					= textArea.getFoldVisibilityManager();
+
+				if(line > foldVisibilityManager.getVirtualLineCount() - 1)
 					return;
 
-				line = buffer.virtualToPhysical(line);
+				line = foldVisibilityManager.virtualToPhysical(line);
 				if(buffer.isFoldStart(line))
 				{
 					if(e.isControlDown())
 					{
-						buffer.expandFoldAt(line,true,textArea);
-						textArea.selectFoldAt(line);
+						foldVisibilityManager
+							.expandFold(line,true);
+						textArea.selectFold(line);
 					}
-					else if(buffer.isLineVisible(line + 1))
-						buffer.collapseFoldAt(line,textArea);
+					else if(foldVisibilityManager
+						.isLineVisible(line + 1))
+					{
+						foldVisibilityManager
+							.collapseFold(line);
+					}
 					else
-						buffer.expandFoldAt(line,e.isShiftDown(),textArea);
+					{
+						foldVisibilityManager
+							.expandFold(line,
+							e.isShiftDown());
+					}
 				}
 			}
 			else

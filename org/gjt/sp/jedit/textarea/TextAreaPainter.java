@@ -535,31 +535,35 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
-		int lineCount = buffer.getVirtualLineCount();
+		
+		FoldVisibilityManager foldVisibilityManager
+			= textArea.getFoldVisibilityManager();
+
+		int lineCount = foldVisibilityManager.getVirtualLineCount();
 
 		int y = (clipRect.y - clipRect.y % height);
 
 		try
 		{
 			boolean updateMaxHorizontalScrollWidth = false;
+			int physicalLine = foldVisibilityManager
+				.virtualToPhysical(firstInvalid);
+
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
 				boolean valid = buffer.isLoaded()
 					&& line >= 0 && line < lineCount;
 
-				int physicalLine;
+				int nextLine;
 				if(valid)
-					physicalLine = buffer.virtualToPhysical(line);
+					nextLine = foldVisibilityManager.getNextVisibleLine(physicalLine);
 				else
-				{
-					int virtualLineCount = buffer.getVirtualLineCount();
-					physicalLine = buffer.virtualToPhysical(
-						virtualLineCount - 1)
-						+ (line - virtualLineCount);
-				}
+					nextLine = physicalLine + 1;
 
 				int width = paintLine(gfx,buffer,valid,line,
-					physicalLine,x,y) - x;
+					physicalLine,x,y,
+					/* this is the collapsedFold flag */
+					nextLine - physicalLine > 1) - x;
 
 				if(valid)
 				{
@@ -575,6 +579,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				}
 
 				y += height;
+				physicalLine = nextLine;
 			}
 
 			if(buffer.isNextLineRequested())
@@ -685,13 +690,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ paintLine() method
 	private int paintLine(Graphics gfx, Buffer buffer, boolean valid,
-		int virtualLine, int physicalLine, int x, int y)
+		int virtualLine, int physicalLine, int x, int y,
+		boolean collapsedFold)
 	{
-		boolean collapsedFold = (valid
-			? (buffer.isFoldStart(physicalLine)
-			&& !buffer.isLineVisible(physicalLine + 1))
-			: false);
-
 		paintHighlight(gfx,virtualLine,physicalLine,y,valid,collapsedFold);
 
 		if(maxLineLen != 0 && wrapGuide)
@@ -726,17 +727,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(collapsedFold)
 			{
-				int count = 0;
-				for(int i = physicalLine + 1;
-					i < buffer.getLineCount();
-					i++)
-				{
-					if(!buffer.isLineVisible(i))
-						count++;
-					else
-						break;
-				}
-
+				int nextLine = buffer.getNextVisibleLine(physicalLine);
+				int count = nextLine - physicalLine - 1;
 				String str = " [" + count + " lines]";
 				gfx.drawString(str,x,baseLine);
 				x += fm.stringWidth(str);
