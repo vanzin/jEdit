@@ -47,7 +47,7 @@ public class VFSDirectoryEntryTable extends JTable
 		col1.setPreferredWidth(20);
 
 		setDefaultRenderer(VFSDirectoryEntryTableModel.Entry.class,
-			renderer = new VFSDirectoryEntryCellRenderer());
+			renderer = new FileCellRenderer());
 
 		JTableHeader header = getTableHeader();
 		header.setReorderingAllowed(false);
@@ -194,7 +194,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 	//{{{ Private members
 	private BrowserView browserView;
-	private VFSDirectoryEntryCellRenderer renderer;
+	private FileCellRenderer renderer;
 	private StringBuffer typeSelectBuffer = new StringBuffer();
 	private Timer timer = new Timer(0,new ClearTypeSelect());
 
