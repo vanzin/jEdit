@@ -224,13 +224,12 @@ public abstract class EditPlugin
 		if(menuItemName != null)
 			return GUIUtilities.loadMenuItem(menuItemName);
 
-		String menuItemNames = jEdit.getProperty("plugin." +
-			getClassName() + ".menu");
-		if(menuItemNames != null)
+		String menuProperty = "plugin." + getClassName() + ".menu";
+		if(jEdit.getProperty(menuProperty) != null)
 		{
 			String pluginName = jEdit.getProperty("plugin." +
 				getClassName() + ".name");
-			return new EnhancedMenu(pluginName,menuItemNames);
+			return new EnhancedMenu(menuProperty,pluginName);
 		}
 
 		return null;

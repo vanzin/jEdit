@@ -239,32 +239,6 @@ public class PluginJAR
 			}
 		}
 
-		if(plugin != null)
-		{
-			String name = plugin.getClassName();
-			String label = jEdit.getProperty("plugin."
-				+ name + ".name");
-			String version = jEdit.getProperty("plugin."
-				+ name + ".version");
-
-			if(label == null || version == null)
-			{
-				Log.log(Log.ERROR,this,"Plugin " + name
-					+ " needs 'name' and 'version'"
-					+ " properties.");
-				plugin = new EditPlugin.Broken(name);
-			}
-			else
-			{
-				if(actions != null)
-				{
-					actions.setLabel(jEdit.getProperty(
-						"action-set.plugin",
-						new String[] { label }));
-				}
-			}
-		}
-
 		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
 	} //}}}
 
@@ -417,6 +391,8 @@ public class PluginJAR
 		// if plugin core class didn't load.
 		ZipFile zipFile = getZipFile();
 
+		List plugins = new LinkedList();
+
 		ResourceCache.PluginCacheEntry cache
 			= new ResourceCache.PluginCacheEntry();
 
@@ -460,10 +436,7 @@ public class PluginJAR
 					}
 					else
 					{
-						plugin = new EditPlugin.Deferred(
-							className);
-						generateCacheForPluginCoreClass(
-							className,cache);
+						plugins.add(className);
 					}
 				}
 				classes.add(className);
@@ -475,9 +448,35 @@ public class PluginJAR
 
 		loadProperties();
 
+		String label = null;
+
+		Iterator iter = plugins.iterator();
+		while(iter.hasNext())
+		{
+			String className = (String)iter.next();
+			String _label = jEdit.getProperty("plugin."
+				+ className + ".name");
+			String version = jEdit.getProperty("plugin."
+				+ className + ".version");
+			if(_label == null || version == null)
+			{
+				Log.log(Log.NOTICE,this,"Ignoring: " + className);
+			}
+			else
+			{
+				plugin = new EditPlugin.Deferred(className);
+				generateCacheForPluginCoreClass(className,cache);
+				label = _label;
+				break;
+			}
+		}
+
 		if(actionsURI != null)
 		{
 			actions = new ActionSet(this,null);
+			actions.setLabel(jEdit.getProperty(
+				"action-set.plugin",
+				new String[] { label }));
 			actions.load();
 			jEdit.addActionSet(actions);
 			cache.cachedActionNames =

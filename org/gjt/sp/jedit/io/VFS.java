@@ -988,7 +988,6 @@ public abstract class VFS
 						jEdit.getColorProperty(
 						"vfs.browser.colors." + i + ".color",
 						Color.black)));
-					i++;
 				}
 				catch(REException e)
 				{
@@ -996,6 +995,8 @@ public abstract class VFS
 						+ glob);
 					Log.log(Log.ERROR,VFS.class,e);
 				}
+
+				i++;
 			}
 		}
 	} //}}}

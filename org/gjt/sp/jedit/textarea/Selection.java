@@ -586,6 +586,7 @@ public abstract class Selection implements Cloneable
 				return false;
 
 			boolean changed = false;
+			this.end += length;
 
 			int startVirtualColumn = buffer.getVirtualWidth(
 				this.startLine,start - buffer.getLineStartOffset(this.startLine));
@@ -619,7 +620,6 @@ public abstract class Selection implements Cloneable
 				changed = true;
 			}
 
-			this.end += length;
 			if(numLines != 0)
 				this.endLine = buffer.getLineOfOffset(this.end);
 			int newEndVirtualColumn = buffer.getVirtualWidth(

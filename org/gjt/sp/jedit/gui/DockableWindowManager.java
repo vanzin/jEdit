@@ -23,17 +23,18 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import bsh.EvalError;
-import bsh.NameSpace;
-import com.microstar.xml.*;
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.io.*;
-import java.net.URL;
-import java.util.*;
+ import bsh.EvalError;
+ import bsh.NameSpace;
+ import com.microstar.xml.*;
+ import javax.swing.*;
+ import java.awt.event.*;
+ import java.awt.*;
+ import java.io.*;
+ import java.net.URL;
+ import java.util.*;
+ import org.gjt.sp.jedit.msg.DockableWindowUpdate;
+ import org.gjt.sp.jedit.*;
+ import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -105,7 +106,7 @@ import java.util.*;
  * @version $Id$
  * @since jEdit 2.6pre3
  */
-public class DockableWindowManager extends JPanel
+public class DockableWindowManager extends JPanel implements EBComponent
 {
 	//{{{ Static part of class
 
@@ -616,6 +617,8 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void init()
 	{
+		EditBus.addToBus(this);
+
 		Iterator entries = dockableWindowFactories.values().iterator();
 
 		while(entries.hasNext())
@@ -652,6 +655,8 @@ public class DockableWindowManager extends JPanel
 			}
 			windows.put(factory.name,e);
 		}
+
+		propertiesChanged();
 	} //}}}
 
 	//{{{ getView() method
@@ -896,6 +901,8 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
+		EditBus.removeFromBus(this);
+
 		Iterator iter = windows.values().iterator();
 		while(iter.hasNext())
 		{
@@ -987,7 +994,11 @@ public class DockableWindowManager extends JPanel
 						public void actionPerformed(ActionEvent evt)
 						{
 							jEdit.setProperty(dockable + ".dock-position",pos);
-							jEdit.propertiesChanged();
+							EditBus.send(new DockableWindowUpdate(
+								DockableWindowManager.this,
+								DockableWindowUpdate.PROPERTIES_CHANGED,
+								null
+							));
 							showDockableWindow(dockable);
 						}
 					});
@@ -1030,7 +1041,11 @@ public class DockableWindowManager extends JPanel
 					public void actionPerformed(ActionEvent evt)
 					{
 						jEdit.setProperty(dockable + ".dock-position",FLOATING);
-						jEdit.propertiesChanged();
+						EditBus.send(new DockableWindowUpdate(
+							DockableWindowManager.this,
+							DockableWindowUpdate.PROPERTIES_CHANGED,
+							null
+						));
 					}
 				});
 				popup.add(undockMenuItem);
@@ -1038,73 +1053,6 @@ public class DockableWindowManager extends JPanel
 		}
 
 		return popup;
-	} //}}}
-
-	//{{{ propertiesChanged() method
-	/**
-	 * Called by the view when properties change.
-	 * @since jEdit 2.6pre3
-	 */
-	public void propertiesChanged()
-	{
-		if(view.isPlainView())
-			return;
-
-		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
-
-		String[] windowList = getRegisteredDockableWindows();
-
-		for(int i = 0; i < windowList.length; i++)
-		{
-			String dockable = windowList[i];
-			Entry entry = (Entry)windows.get(dockable);
-
-			String newPosition = jEdit.getProperty(dockable
-				+ ".dock-position",FLOATING);
-			if(newPosition.equals(entry.position))
-			{
-				continue;
-			}
-
-			entry.position = newPosition;
-			if(entry.container != null)
-			{
-				entry.container.remove(entry);
-				entry.container = null;
-				entry.win = null;
-			}
-
-			if(newPosition.equals(FLOATING))
-				/* do nothing */;
-			else
-			{
-				if(newPosition.equals(TOP))
-					entry.container = top;
-				else if(newPosition.equals(LEFT))
-					entry.container = left;
-				else if(newPosition.equals(BOTTOM))
-					entry.container = bottom;
-				else if(newPosition.equals(RIGHT))
-					entry.container = right;
-				else
-				{
-					Log.log(Log.WARNING,this,
-						"Unknown position: "
-						+ newPosition);
-					continue;
-				}
-
-				entry.container.register(entry);
-			}
-		}
-
-		top.sortDockables();
-		left.sortDockables();
-		bottom.sortDockables();
-		right.sortDockables();
-
-		revalidate();
-		repaint();
 	} //}}}
 
 	//{{{ paintChildren() method
@@ -1117,6 +1065,17 @@ public class DockableWindowManager extends JPanel
 			g.setColor(Color.darkGray);
 			g.fillRect(resizeRect.x,resizeRect.y,
 				resizeRect.width,resizeRect.height);
+		}
+	} //}}}
+
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof DockableWindowUpdate)
+		{
+			if(((DockableWindowUpdate)msg).getWhat()
+				== DockableWindowUpdate.PROPERTIES_CHANGED)
+				propertiesChanged();
 		}
 	} //}}}
 
@@ -1207,6 +1166,70 @@ public class DockableWindowManager extends JPanel
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
 	private ArrayList clones;
+
+	//{{{ propertiesChanged() method
+	private void propertiesChanged()
+	{
+		if(view.isPlainView())
+			return;
+
+		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
+
+		String[] windowList = getRegisteredDockableWindows();
+
+		for(int i = 0; i < windowList.length; i++)
+		{
+			String dockable = windowList[i];
+			Entry entry = (Entry)windows.get(dockable);
+
+			String newPosition = jEdit.getProperty(dockable
+				+ ".dock-position",FLOATING);
+			if(newPosition.equals(entry.position))
+			{
+				continue;
+			}
+
+			entry.position = newPosition;
+			if(entry.container != null)
+			{
+				entry.container.remove(entry);
+				entry.container = null;
+				entry.win = null;
+			}
+
+			if(newPosition.equals(FLOATING))
+				/* do nothing */;
+			else
+			{
+				if(newPosition.equals(TOP))
+					entry.container = top;
+				else if(newPosition.equals(LEFT))
+					entry.container = left;
+				else if(newPosition.equals(BOTTOM))
+					entry.container = bottom;
+				else if(newPosition.equals(RIGHT))
+					entry.container = right;
+				else
+				{
+					Log.log(Log.WARNING,this,
+						"Unknown position: "
+						+ newPosition);
+					continue;
+				}
+
+				entry.container.register(entry);
+			}
+		}
+
+		top.sortDockables();
+		left.sortDockables();
+		bottom.sortDockables();
+		right.sortDockables();
+
+		revalidate();
+		repaint();
+	} //}}}
+
 	//}}}
 
 	//}}}

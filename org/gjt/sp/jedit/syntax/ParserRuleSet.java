@@ -67,6 +67,12 @@ public class ParserRuleSet
 		return setName;
 	} //}}}
 
+	//{{{ getName() method
+	public String getName()
+	{
+		return modeName + "::" + setName;
+	} //}}}
+
 	//{{{ getProperties() method
 	public Hashtable getProperties()
 	{
