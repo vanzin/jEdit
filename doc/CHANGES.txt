@@ -13,6 +13,15 @@ JEDIT 4.0 VERSION HISTORY
 - 'Quick HyperSearch' with a selection, and 'Quick HyperSearch for Word'
   commands will now work even if the search bar is disabled
 - BeanShell 1.2b5 included
+- jEditLauncher 4.0.4 (John Gellene)
+  - jedidiff.exe: new command line utility for displaying graphical
+    comparison of two files using jEdit and the JDiff plugin
+  - jedit.exe: new /1 command line switch that reads the remainder of
+    the command line as a single file path, regardless of whitespace
+    (required for Internet Explorer integration)
+  - jEdit_IE.reg.txt: new, optional Windows registry information file
+    for integrating jEdit with Internet Explorer (version 5 or later) as
+    an HTML editor
 
 + Bug Fixes
 
