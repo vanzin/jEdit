@@ -389,7 +389,7 @@ public class View extends JFrame implements EBComponent
 				text = null;
 
 			if(SearchAndReplace.getRegexp())
-				text = SearchAndReplace.escapeRegexp(text);
+				text = SearchAndReplace.escapeRegexp(text,false);
 
 			searchBar.getField().setText(text);
 		}
@@ -421,7 +421,7 @@ public class View extends JFrame implements EBComponent
 				if(SearchAndReplace.getRegexp())
 				{
 					text = SearchAndReplace.escapeRegexp(
-						text);
+						text,false);
 				}
 
 				HistoryModel.getModel("find").addItem(text);

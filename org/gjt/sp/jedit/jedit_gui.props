@@ -1235,8 +1235,8 @@ search.directory.mnemonic=d
 
 search.directoryField=Directory:
 search.directoryField.mnemonic=y
-search.filterField=Filename filter:
-search.filterField.mnemonic=m
+search.filterField=Filter:
+search.filterField.mnemonic=f
 search.subdirs=Search subdirectories
 search.subdirs.mnemonic=u
 search.choose=Choose...
@@ -1245,7 +1245,6 @@ search.synchronize=Synchronize
 search.synchronize.mnemonic=z
 
 search.findBtn=Find
-search.findBtn.mnemonic=f
 search.replaceAndFindBtn=Replace & Find
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Replace All
