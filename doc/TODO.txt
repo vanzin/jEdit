@@ -4,7 +4,6 @@ Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
 - close dockable fucks up because C+e sends focus to the text area
-- browser follows symlinks
 - isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
 - C+b, action bar: insert longest common prefix

@@ -6074,17 +6074,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(delayedUpdate)
 			{
-				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
-
-				for(int i = delayedRepaintStart;
-					i <= delayedRepaintEnd;
-					i++)
-				{
-					if(displayManager.isLineVisible(i))
-						displayManager.getScreenLineCount(i);
-				}
-				DisplayManager._notifyScreenLineChanges(buffer);
-
 				if(delayedMultilineUpdate)
 				{
 					invalidateScreenLineRange(chunkCache
@@ -6110,6 +6099,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ delayedRepaint() method
 		private void delayedRepaint(int startLine, int endLine)
 		{
+			chunkCache.invalidateChunksFromPhys(startLine);
+
 			if(!delayedUpdate)
 			{
 				delayedRepaintStart = startLine;

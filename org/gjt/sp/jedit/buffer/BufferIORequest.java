@@ -548,7 +548,8 @@ public class BufferIORequest extends WorkRequest
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
-			path = vfs._canonPath(session,path,view);
+			path = vfs._canonPath(session,path,view);			if(!MiscUtilities.isURL(path))
+				path = MiscUtilities.resolveSymlinks(path);
 
 			// Only backup once per session
 			if(buffer.getProperty(Buffer.BACKED_UP) == null

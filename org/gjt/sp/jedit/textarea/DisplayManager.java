@@ -47,27 +47,36 @@ public class DisplayManager
 		JEditTextArea textArea)
 	{
 		List l = (List)bufferMap.get(buffer);
-		if(l == null || l.size() == 0)
+		DisplayManager dmgr;
+		if(l == null)
 		{
-			if(l == null)
-			{
-				l = new LinkedList();
-				bufferMap.put(buffer,l);
-			}
-			return new DisplayManager(buffer,textArea);
+			l = new LinkedList();
+			bufferMap.put(buffer,l);
 		}
-		else
-			return (DisplayManager)l.remove(0);
+
+		Iterator liter = l.iterator();
+		while(liter.hasNext())
+		{
+			dmgr = (DisplayManager)liter.next();
+			if(!dmgr.inUse)
+			{
+				dmgr.inUse = true;
+				return dmgr;
+			}
+		}
+
+		// if we got here, no unused display manager in list
+		dmgr = new DisplayManager(buffer,textArea);
+		dmgr.inUse = true;
+		l.add(dmgr);
+
+		return dmgr;
 	} //}}}
 
 	//{{{ releaseDisplayManager() method
 	static void releaseDisplayManager(DisplayManager dmgr)
 	{
-		List l = (List)bufferMap.get(dmgr.buffer);
-		if(l == null)
-			/* buffer closed! */;
-		else
-			l.add(dmgr);
+		dmgr.inUse = false;
 	} //}}}
 
 	//{{{ bufferClosed() method
@@ -276,7 +285,7 @@ public class DisplayManager
 		{
 			int newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
 
-			offsetMgr.setScreenLineCount(line,newCount);
+			setScreenLineCount(line,newCount);
 			return newCount;
 		}
 	} //}}}
@@ -653,11 +662,13 @@ public class DisplayManager
 		{
 			buffer.writeLock();
 			int oldCount = offsetMgr.getScreenLineCount(line);
-			offsetMgr.setScreenLineCount(line,count);
 			// this notifies each display manager editing this
 			// buffer of the screen line count change
 			if(count != oldCount)
+			{
+				offsetMgr.setScreenLineCount(line,count);
 				_setScreenLineCount(buffer,line,oldCount,count);
+			}
 		}
 		finally
 		{
@@ -695,6 +706,7 @@ public class DisplayManager
 
 	//{{{ Private members
 	private boolean initialized;
+	private boolean inUse;
 	private Buffer buffer;
 	private OffsetManager offsetMgr;
 	private JEditTextArea textArea;
@@ -713,7 +725,9 @@ public class DisplayManager
 		firstLine = new FirstLine();
 
 		bufferChangeHandler = new BufferChangeHandler();
-		buffer.addBufferChangeListener(bufferChangeHandler);
+		// this listener priority thing is a bad hack...
+		buffer.addBufferChangeListener(bufferChangeHandler,
+			Buffer.HIGH_PRIORITY);
 	} //}}}
 
 	//{{{ dispose() method
@@ -739,8 +753,8 @@ public class DisplayManager
 				}
 				scrollLineCount.scrollLine += screenLines;
 				scrollLineCount.callChanged = true;
+				offsetMgr.setLineVisible(i,index,true);
 			}
-			offsetMgr.setLineVisible(i,index,true);
 		}
 	} //}}}
 
@@ -755,13 +769,13 @@ public class DisplayManager
 					.getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
-					firstLine.physicalLine -= screenLines;
+					firstLine.scrollLine -= screenLines;
 					firstLine.callChanged = true;
 				}
 				scrollLineCount.scrollLine -= screenLines;
 				scrollLineCount.callChanged = true;
+				offsetMgr.setLineVisible(i,index,false);
 			}
-			offsetMgr.setLineVisible(i,index,false);
 		}
 	} //}}}
 
@@ -835,6 +849,7 @@ public class DisplayManager
 
 			updateWrapSettings();
 
+			physicalLine = 0;
 			scrollLine = 0;
 			for(int i = 0; i < offsetMgr.getLineCount(); i++)
 			{
@@ -978,8 +993,8 @@ public class DisplayManager
 				{
 					int nextPhysicalLine = getNextVisibleLine(physicalLine);
 					amount -= (nextPhysicalLine - physicalLine);
-					physicalLine = nextPhysicalLine;
 					scrollLine += getScreenLineCount(physicalLine);
+					physicalLine = nextPhysicalLine;
 				}
 			}
 
@@ -1050,10 +1065,10 @@ public class DisplayManager
 					break;
 				else
 				{
-					scrollLine -= getScreenLineCount(
-						prevPhysicalLine);
 					amount -= (physicalLine - prevPhysicalLine);
 					physicalLine = prevPhysicalLine;
+					scrollLine -= getScreenLineCount(
+						prevPhysicalLine);
 				}
 			}
 
@@ -1171,10 +1186,13 @@ public class DisplayManager
 	//{{{ BufferChangeHandler class
 	class BufferChangeHandler extends BufferChangeAdapter
 	{
+		boolean delayedUpdate;
+		int delayedUpdateStart;
+		int delayedUpdateEnd;
+
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
 		{
-			System.err.println("f here in event: " + buffer);
 			firstLine.reset();
 			scrollLineCount.reset();
 			int collapseFolds = buffer.getIntegerProperty(
@@ -1192,7 +1210,6 @@ public class DisplayManager
 		//{{{ wrapModeChanged() method
 		public void wrapModeChanged(Buffer buffer)
 		{
-			System.err.println("w here in event: " + buffer);
 			firstLine.reset();
 			scrollLineCount.reset();
 		} //}}}
@@ -1201,21 +1218,55 @@ public class DisplayManager
 		public void contentInserted(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
-			if(numLines != 0 && buffer.isLoaded())
+			if(!buffer.isLoaded())
+				return;
+
+			delayedUpdate(startLine,startLine + numLines);
+
+			if(numLines != 0)
 			{
 				contentInserted(firstLine,startLine,numLines);
 				contentInserted(scrollLineCount,startLine,numLines);
 			}
+
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
 		} //}}}
 
 		//{{{ preContentRemoved() method
 		public void preContentRemoved(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
-			if(numLines != 0 && buffer.isLoaded())
+			if(!buffer.isLoaded())
+				return;
+
+			delayedUpdate(startLine,startLine);
+
+			if(numLines != 0)
 			{
 				preContentRemoved(firstLine,startLine,numLines);
 				preContentRemoved(scrollLineCount,startLine,numLines);
+			}
+
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
+		} //}}}
+
+		//{{{ transactionComplete() method
+		public void transactionComplete(Buffer buffer)
+		{
+			if(delayedUpdate)
+			{
+				for(int i = delayedUpdateStart;
+					i <= delayedUpdateEnd;
+					i++)
+				{
+					if(isLineVisible(i))
+						getScreenLineCount(i);
+				}
+				_notifyScreenLineChanges();
+
+				delayedUpdate = false;
 			}
 		} //}}}
 
@@ -1232,7 +1283,7 @@ public class DisplayManager
 		} //}}}
 
 		//{{{ preContentRemoved() method
-		public void preContentRemoved(Anchor anchor, int startLine,
+		private void preContentRemoved(Anchor anchor, int startLine,
 			int numLines)
 		{
 			if(anchor.physicalLine >= startLine)
@@ -1255,6 +1306,27 @@ public class DisplayManager
 						anchor.callChanged = true;
 					}
 				}
+			}
+		} //}}}
+
+		//{{{ delayedUpdate() method
+		private void delayedUpdate(int startLine, int endLine)
+		{
+			textArea.chunkCache.invalidateChunksFromPhys(startLine);
+			if(!delayedUpdate)
+			{
+				delayedUpdateStart = startLine;
+				delayedUpdateEnd = endLine;
+				delayedUpdate = true;
+			}
+			else
+			{
+				delayedUpdateStart = Math.min(
+					delayedUpdateStart,
+					startLine);
+				delayedUpdateEnd = Math.max(
+					delayedUpdateEnd,
+					endLine);
 			}
 		} //}}}
 	} //}}}
