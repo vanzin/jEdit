@@ -67,9 +67,6 @@ saveCaret=true
 # Backup on every save
 backupEverySave=false
 
-# I/O thread count
-ioThreadCount=4
-
 # Number of backups to make, 0=no backups
 backups=1
 
@@ -383,4 +380,5 @@ menu.spillover=20
 bufferSwitcher.maxRowCount=10
 showTooltips=true
 view.monospacedHack=false
+ioThreadCount=4
 #}}}

@@ -170,6 +170,8 @@
 			NO_WORD_BREAK="TRUE">class </MARK_FOLLOWING> -->
 
 		<KEYWORDS>
+			<OPERATOR>and</OPERATOR>
+			<OPERATOR>or</OPERATOR>
 			<!-- Language constructs (24) -->
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>elseif</KEYWORD1>
@@ -211,6 +213,7 @@
 			<KEYWORD3>__FILE__</KEYWORD3>
 			<KEYWORD3>true</KEYWORD3>
 			<KEYWORD3>false</KEYWORD3>
+			<KEYWORD3>null</KEYWORD3>
 
 			<KEYWORD2>COM_invoke</KEYWORD2>
 			<KEYWORD2>COM_load</KEYWORD2>
@@ -2422,6 +2425,7 @@
 			<KEYWORD2>unpack</KEYWORD2>
 			<KEYWORD2>unregister_tick_function</KEYWORD2>
 			<KEYWORD2>unserialize</KEYWORD2>
+			<KEYWORD2>unset</KEYWORD2>
 			<KEYWORD2>urldecode</KEYWORD2>
 			<KEYWORD2>urlencode</KEYWORD2>
 			<KEYWORD2>user_error</KEYWORD2>

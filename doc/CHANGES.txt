@@ -2,10 +2,27 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre8
 
-+ Bug Fixes
+Thanks to Chris Petersen for contributing to this release.
+
++ Syntax Highlighting Changes:
+
+- Minor updates to JavaScript and PHP modes (Chris Petersen).
+
++ File System Browser Changes:
+
+- S+ENTER with a directory selected opens the directory in a new browser
+  window.
+
++ Documentation Changes:
+
+- NEWS.txt now documents major changes between jEdit 4.0 and 4.1.
+
++ Bug Fixes:
 
 - Sometimes the status bar was not updated properly in newly created
   views.
+
+- Fixed a few help viewer quirks.
 
 * Version 4.1pre7
 
