@@ -79,19 +79,24 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	//{{{ handleAbout() method
 	public void handleAbout()
 	{
-		new AboutDialog(jEdit.getLastView());
+		new AboutDialog(jEdit.getActiveView());
 	} //}}}
 
 	//{{{ handlePrefs() method
 	public void handlePrefs()
 	{
-		new GlobalOptions(jEdit.getLastView());
+		new GlobalOptions(jEdit.getActiveView());
 	} //}}}
 	
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(File file)
 	{
-		if (jEdit.openFile(jEdit.getLastView(),file.getPath()) != null)
+		View view = jEdit.getActiveView();
+		
+		if (view == null)
+			view = jEdit.newView(null,jEdit.newFile(null));
+		
+		if (jEdit.openFile(view,file.getPath()) != null)
 			lastOpenFile = file.getPath();
 		else
 			Log.log(Log.ERROR,this,"Error opening file.");
@@ -104,7 +109,7 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 		{
 			if(lastOpenFile != null)
 			{
-				jEdit.getLastView().setBuffer(jEdit.getBuffer(lastOpenFile));
+				jEdit.getActiveView().setBuffer(jEdit.getBuffer(lastOpenFile));
 			}
 			((MacOSPlugin)jEdit.getPlugin("macos.MacOSPlugin")).started(true);
 		}
@@ -162,7 +167,7 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	{
 		public void run()
 		{
-			jEdit.exit(jEdit.getLastView(),false);
+			jEdit.exit(jEdit.getActiveView(),true);
 			et = new ExitThread();
 		}
 	} //}}}

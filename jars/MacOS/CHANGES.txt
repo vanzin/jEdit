@@ -1,3 +1,8 @@
+Mac OS Plugin 2.0.3
+
+- jEdit now works properly when used in background mode. Views can be
+  created by opening a file from the finder.
+
 Mac OS Plugin 2.0.2
 
 - Removed the "Run AppleScript" menu in favour of the "Macros" menu.
