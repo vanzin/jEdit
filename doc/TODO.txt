@@ -8,7 +8,6 @@ and quirks that I need to fix eventually.
   reason
 - tool bar option pane: test external icon references
 - maybe make caret status into a JLabel
-- perl: escaped regexp separators not highlighted
 
 [error] java.lang.ArrayIndexOutOfBoundsException: 2757:-18
 [error] 	at org.gjt.sp.jedit.Buffer.remove(Unknown Source)

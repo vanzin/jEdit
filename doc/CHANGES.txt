@@ -8,6 +8,7 @@ JEDIT 4.1 VERSION HISTORY
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
 - Added Pike syntax highlighting (Marco Gotze)
 - Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
+- Improved Perl syntax highlighting (Chris Petersen)
 
 + Global Options Dialog Changes:
 
