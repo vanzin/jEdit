@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.syntax;
 //{{{ Imports
 import gnu.regexp.RE;
 import java.util.*;
-import org.gjt.sp.jedit.Mode;
 //}}}
 
 /**
@@ -48,24 +47,24 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ ParserRuleSet constructor
-	public ParserRuleSet(String name, Mode mode)
+	public ParserRuleSet(String modeName, String setName)
 	{
-		this.name = name;
-		this.mode = mode;
+		this.modeName = modeName;
+		this.setName = setName;
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
 	} //}}}
 
-	//{{{ getName() method
-	public String getName()
+	//{{{ getModeName() method
+	public String getModeName()
 	{
-		return name;
+		return modeName;
 	} //}}}
 
-	//{{{ getMode() method
-	public Mode getMode()
+	//{{{ getSetName() method
+	public String getSetName()
 	{
-		return mode;
+		return setName;
 	} //}}}
 
 	//{{{ getProperties() method
@@ -218,12 +217,20 @@ public class ParserRuleSet
 		_noWordSep = null;
 	} //}}}
 
+	//{{{ isBuiltIn() method
+	/**
+	 * Returns if this is a built-in ruleset.
+	 * @since jEdit 4.2pre1
+	 */
+	public boolean isBuiltIn()
+	{
+		return builtIn;
+	} //}}}
+
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + (mode == null ? ""
-			: mode.getName()) + "::"
-			+ name + "]";
+		return getClass().getName() + "[" + modeName + "::" + setName + "]";
 	} //}}}
 
 	//{{{ Private members
@@ -236,13 +243,13 @@ public class ParserRuleSet
 		{
 			standard[i] = new ParserRuleSet(null,null);
 			standard[i].setDefault(i);
+			standard[i].builtIn = true;
 		}
 	}
 
 	private static final int RULE_BUCKET_COUNT = 128;
 
-	private String name;
-	private Mode mode;
+	private String modeName, setName;
 	private Hashtable props;
 
 	private KeywordMap keywords;
@@ -262,5 +269,7 @@ public class ParserRuleSet
 
 	private String _noWordSep;
 	private String noWordSep;
+
+	private boolean builtIn;
 	//}}}
 }

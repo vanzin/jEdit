@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2002 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ package org.gjt.sp.jedit.syntax;
 import gnu.regexp.*;
 import javax.swing.text.Segment;
 import java.util.*;
-import org.gjt.sp.jedit.search.CharIndexedSegment;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.CharIndexedSegment;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -51,34 +51,12 @@ public class TokenMarker
 		ruleSets = new Hashtable(64);
 	} //}}}
 
-	//{{{ getName() method
-	public String getName()
-	{
-		return name;
-	} //}}}
-
-	//{{{ setName() method
-	public void setName(String name)
-	{
-		if (name == null)
-			throw new NullPointerException();
-
-		this.name = name;
-		rulePfx = name.concat("::");
-	} //}}}
-
 	//{{{ addRuleSet() method
-	public void addRuleSet(String setName, ParserRuleSet rules)
+	public void addRuleSet(ParserRuleSet rules)
 	{
-		if (rules == null)
-			return;
+		ruleSets.put(rules.getSetName(), rules);
 
-		if (setName == null)
-			setName = "MAIN";
-
-		ruleSets.put(rulePfx.concat(setName), rules);
-
-		if (setName.equals("MAIN"))
+		if (rules.getSetName().equals("MAIN"))
 			mainRuleSet = rules;
 	} //}}}
 
@@ -91,48 +69,7 @@ public class TokenMarker
 	//{{{ getRuleSet() method
 	public ParserRuleSet getRuleSet(String setName)
 	{
-		ParserRuleSet rules;
-
-		rules = (ParserRuleSet) ruleSets.get(setName);
-
-		if (rules == null && !setName.startsWith(rulePfx))
-		{
-			int delim = setName.indexOf("::");
-			if(delim == -1)
-			{
-				byte id = Token.stringToToken(setName);
-				rules = ParserRuleSet.getStandardRuleSet(id);
-			}
-			else
-			{
-				String modeName = setName.substring(0, delim);
-
-				Mode mode = jEdit.getMode(modeName);
-				if(mode == null)
-				{
-					Log.log(Log.ERROR,TokenMarker.class,
-						"Unknown edit mode: " + modeName);
-					rules = null;
-				}
-				else
-				{
-					TokenMarker marker = mode.getTokenMarker();
-					rules = marker.getRuleSet(setName);
-				}
-			}
-
-			// store external ParserRuleSet in the local hashtable
-			// for faster lookups later
-			ruleSets.put(setName, rules);
-		}
-
-		if (rules == null)
-		{
-			Log.log(Log.ERROR,this,"Unresolved delegate target: " + setName);
-			return ParserRuleSet.getStandardRuleSet(Token.INVALID);
-		}
-		else
-			return rules;
+		return (ParserRuleSet) ruleSets.get(setName);
 	} //}}}
 
 	//{{{ markTokens() method
@@ -310,8 +247,6 @@ unwind:		while(context.parent != null)
 
 	//{{{ Instance variables
 	private Hashtable ruleSets;
-	private String name;
-	private String rulePfx;
 	private ParserRuleSet mainRuleSet;
 
 	// Instead of passing these around to each method, we just store them
@@ -440,7 +375,7 @@ unwind:		while(context.parent != null)
 				pattern.count = pattern.array.length;
 				matchedChars = pattern.count;
 
-				if(!TextUtilities.regionMatches(context.rules
+				if(!SyntaxUtilities.regionMatches(context.rules
 					.getIgnoreCase(),line,pos,pattern.array))
 				{
 					return false;
@@ -508,10 +443,10 @@ unwind:		while(context.parent != null)
 
 				// a DELEGATE attribute on a SEQ changes the
 				// ruleset from the end of the SEQ onwards
-				ParserRuleSet delegateSet = checkRule.getDelegateRuleSet(this);
-				if(delegateSet != null)
+				if(checkRule.delegate != null)
 				{
-					context = new LineContext(delegateSet,
+					context = new LineContext(
+						checkRule.delegate,
 						context.parent);
 					keywords = context.rules.getKeywords();
 				}
@@ -521,8 +456,6 @@ unwind:		while(context.parent != null)
 			case ParserRule.SPAN:
 			case ParserRule.EOL_SPAN:
 				context.inRule = checkRule;
-
-				delegateSet = checkRule.getDelegateRuleSet(this);
 
 				byte tokenType = ((checkRule.action & ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH
@@ -559,7 +492,9 @@ unwind:		while(context.parent != null)
 				}
 
 				context.spanEndSubst = spanEndSubst;
-				context = new LineContext(delegateSet, context);
+				context = new LineContext(
+					checkRule.delegate,
+					context);
 				keywords = context.rules.getKeywords();
 
 				break;

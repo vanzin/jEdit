@@ -1310,6 +1310,7 @@ xmode-error.token-invalid=The token type {0} is invalid
 xmode-error.empty-keyword=The keyword text cannot be empty
 xmode-error.regexp=Invalid regular expression\n({0})
 xmode-error.hash-char-invalid=HASH_CHAR must be exactly one character
+xmode-error.delegate-invalid=Invalid delegate: {0}
 #}}}
 
 #{{{ JARClassLoader errors

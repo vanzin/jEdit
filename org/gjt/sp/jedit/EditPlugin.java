@@ -124,35 +124,9 @@ public abstract class EditPlugin
 
 	//{{{ createMenuItems() method
 	/**
-	 * When a {@link View} object is created, it calls this
-	 * method on each plugin class to obtain entries to be displayed
-	 * in the view's <b>Plugins</b> menu.
-	 *
-	 * The <code>menuItems</code> vector accumulates menu items and
-	 * menus as it is passed from plugin to plugin.<p>
-	 *
-	 * The easiest way to provide menu items is to
-	 * package them as entries in the plugin's property
-	 * file and implement <code>createMenuItems()</code> with a
-	 * call to the {@link GUIUtilities#loadMenu(String)}
-	 * method:
-	 * <pre>public void createMenuItems(Vector menuItems)
-	 *{
-	 *    menuItems.addElement(GUIUtilities.loadMenu(
-	 *        "myplugin.menu"));
-	 *}</pre>
-	 *
-	 * Alternatively, {@link GUIUtilities#loadMenuItem(String)} can
-	 * be used if your plugin only defines one menu item.<p>
-	 *
-	 * The default implementation does nothing.
-	 *
-	 * @param menuItems Add menus and menu items here.
-	 *
-	 * @see GUIUtilities#loadMenu(String)
-	 * @see GUIUtilities#loadMenuItem(String)
-	 *
-	 * @since jEdit 2.6pre5
+	 * @deprecated Instead of overriding this method, define properties
+	 * as specified in the description of the {@link #createMenuItems()}
+	 * method.
 	 */
 	public void createMenuItems(Vector menuItems) {} //}}}
 
