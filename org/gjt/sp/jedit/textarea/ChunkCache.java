@@ -526,39 +526,34 @@ class ChunkCache
 		}
 	} //}}}
 
-	//{{{ updateChunksUpTo() method
-	private void updateChunksUpTo(int lastScreenLine)
+	//{{{ getFirstScreenLine() method
+	/**
+	 * Find a valid line closest to the last screen line.
+	 */
+	private int getFirstScreenLine()
 	{
-		// this method is a nightmare
-		if(lastScreenLine >= lineInfo.length)
-		{
-			throw new ArrayIndexOutOfBoundsException(lastScreenLine);
-		}
-
-		// if one line's chunks are invalid, remaining lines are also
-		// invalid
-		if(lastScreenLine < firstInvalidLine)
-			return;
-
-		// find a valid line closest to the last screen line
-		int firstScreenLine = 0;
-
 		for(int i = firstInvalidLine - 1; i >= 0; i--)
 		{
 			if(lineInfo[i].lastSubregion)
 			{
-				firstScreenLine = i + 1;
-				break;
+				return i + 1;
 			}
 		}
 
-		int physicalLine;
+		return 0;
+	} //}}}
 
+	//{{{ getUpdateStartLine() method
+	/**
+	 * Return a physical line number.
+	 */
+	private int getUpdateStartLine(int firstScreenLine)
+	{
 		// for the first line displayed, take its physical line to be
 		// the text area's first physical line
 		if(firstScreenLine == 0)
 		{
-			physicalLine = textArea.getFirstPhysicalLine();
+			return textArea.getFirstPhysicalLine();
 		}
 		// otherwise, determine the next visible line
 		else
@@ -569,14 +564,29 @@ class ChunkCache
 			// if -1, the empty space at the end of the text area
 			// when the buffer has less lines than are visible
 			if(prevPhysLine == -1)
-				physicalLine = -1;
+				return -1;
 			else
 			{
-				physicalLine = textArea
-					.displayManager
+				return textArea.displayManager
 					.getNextVisibleLine(prevPhysLine);
 			}
 		}
+	} //}}}
+
+	//{{{ updateChunksUpTo() method
+	private void updateChunksUpTo(int lastScreenLine)
+	{
+		// this method is a nightmare
+		if(lastScreenLine >= lineInfo.length)
+			throw new ArrayIndexOutOfBoundsException(lastScreenLine);
+
+		// if one line's chunks are invalid, remaining lines are also
+		// invalid
+		if(lastScreenLine < firstInvalidLine)
+			return;
+
+		int firstScreenLine = getFirstScreenLine();
+		int physicalLine = getUpdateStartLine(firstScreenLine);
 
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
@@ -628,9 +638,13 @@ class ChunkCache
 
 				info.firstSubregion = true;
 
+				int screenLines;
+
 				// if the line has no text, out.size() == 0
 				if(out.size() == 0)
 				{
+					screenLines = 1;
+
 					if(i == 0)
 					{
 						if(textArea.displayManager.firstLine.skew > 0)
@@ -648,6 +662,8 @@ class ChunkCache
 				// otherwise, the number of subregions
 				else
 				{
+					screenLines = out.size();
+
 					if(i == 0)
 					{
 						int skew = textArea.displayManager.firstLine.skew;
@@ -672,6 +688,13 @@ class ChunkCache
 						length = ((Chunk)out.get(0)).offset - offset;
 					else
 						length = textArea.getLineLength(physicalLine) - offset + 1;
+				}
+
+				int expected = textArea.displayManager
+					.getScreenLineCount(physicalLine);
+				if(screenLines != expected)
+				{
+					Log.log(Log.ERROR,this,"Inconsistent screen line counts: " + screenLines + ", " + expected);
 				}
 			}
 			else

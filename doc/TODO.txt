@@ -145,7 +145,6 @@ dragOver() method)
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
 - auto indent: don't de-indent on enter if no leading indent at all?
 - remove-marker, select-next/prev-marker/bracket
-- gzip & unicode, or gzip & <?xml encoding...
 - invoking action bar command twice
 - backup time distance setting
 - if A depends on B but A is loaded before B and B breaks, A ends up

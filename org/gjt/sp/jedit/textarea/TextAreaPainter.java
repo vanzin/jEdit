@@ -248,8 +248,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setSelectionColor(Color selectionColor)
 	{
 		this.selectionColor = selectionColor;
-		if(textArea.getBuffer() != null)
-			textArea.invalidateSelectedLines();
+		textArea.repaint();
 	} //}}}
 
 	//{{{ getMultipleSelectionColor() method
@@ -271,8 +270,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setMultipleSelectionColor(Color multipleSelectionColor)
 	{
 		this.multipleSelectionColor = multipleSelectionColor;
-		if(textArea.getBuffer() != null)
-			textArea.invalidateSelectedLines();
+		textArea.repaint();
 	} //}}}
 
 	//{{{ getLineHighlightColor() method
@@ -314,8 +312,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightEnabled(boolean lineHighlight)
 	{
 		this.lineHighlight = lineHighlight;
-		if(textArea.getBuffer() != null)
-			textArea.invalidateSelectedLines();
+		textArea.repaint();
 	} //}}}
 
 	//{{{ getStructureHighlightColor() method

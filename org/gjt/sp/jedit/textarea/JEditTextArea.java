@@ -1114,23 +1114,6 @@ public class JEditTextArea extends JComponent
 		invalidateScreenLineRange(startScreenLine,endScreenLine);
 	} //}}}
 
-	//{{{ invalidateSelectedLines() method
-	/**
-	 * Repaints the lines containing the selection.
-	 */
-	public void invalidateSelectedLines()
-	{
-		// to hide line highlight if selections are being added later on
-		invalidateLine(caretLine);
-
-		Iterator iter = selectionManager.selection.iterator();
-		while(iter.hasNext())
-		{
-			Selection s = (Selection)iter.next();
-			invalidateLineRange(s.startLine,s.endLine);
-		}
-	} //}}}
-
 	//}}}
 
 	//{{{ Convenience methods
@@ -1614,9 +1597,8 @@ forward_scan:		do
 	public void setSelection(Selection[] selection)
 	{
 		// invalidate the old selection
-		invalidateSelectedLines();
 		selectionManager.setSelection(selection);
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ setSelection() method
@@ -1628,9 +1610,8 @@ forward_scan:		do
 	 */
 	public void setSelection(Selection selection)
 	{
-		invalidateSelectedLines();
 		selectionManager.setSelection(selection);
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ addToSelection() method
@@ -1643,9 +1624,7 @@ forward_scan:		do
 	public void addToSelection(Selection[] selection)
 	{
 		selectionManager.addToSelection(selection);
-		// to hide current line highlight
-		invalidateLine(caretLine);
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ addToSelection() method
@@ -1658,9 +1637,7 @@ forward_scan:		do
 	public void addToSelection(Selection selection)
 	{
 		selectionManager.addToSelection(selection);
-		// to hide current line highlight
-		invalidateLine(caretLine);
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ getSelectionAtOffset() method
@@ -1684,12 +1661,7 @@ forward_scan:		do
 	public void removeFromSelection(Selection sel)
 	{
 		selectionManager.removeFromSelection(sel);
-		invalidateLineRange(sel.startLine,sel.endLine);
-
-		// to hide current line highlight
-		invalidateLine(caretLine);
-
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ removeFromSelection() method
@@ -1706,13 +1678,7 @@ forward_scan:		do
 			return;
 
 		selectionManager.removeFromSelection(sel);
-
-		invalidateLineRange(sel.startLine,sel.endLine);
-
-		// to hide current line highlight
-		invalidateLine(caretLine);
-
-		fireCaretEvent();
+		finishCaretUpdate(caretLine,false,true);
 	} //}}}
 
 	//{{{ resizeSelection() method
@@ -2118,51 +2084,26 @@ forward_scan:		do
 				+ newCaret);
 		}
 
-		if(match != null)
-		{
-			if(caretLine < match.startLine)
-				invalidateLineRange(caretLine,match.endLine);
-			else
-				invalidateLineRange(match.startLine,caretLine);
-			match = null;
-		}
+		int oldCaretLine = caretLine;
 
 		if(caret == newCaret)
 		{
 			if(scrollMode == NORMAL_SCROLL)
-				finishCaretUpdate(false,false);
+				finishCaretUpdate(oldCaretLine,false,false);
 			else if(scrollMode == ELECTRIC_SCROLL)
-				finishCaretUpdate(true,false);
+				finishCaretUpdate(oldCaretLine,true,false);
 		}
 		else
 		{
-			int newCaretLine = getLineOfOffset(newCaret);
+			caret = newCaret;
+			caretLine = getLineOfOffset(newCaret);
 
 			magicCaret = -1;
 
-			if(caretLine == newCaretLine)
-			{
-				if(caretScreenLine != -1)
-					invalidateScreenLineRange(caretScreenLine,caretScreenLine);
-			}
-			else
-			{
-				int newCaretScreenLine = chunkCache.getScreenLineOfOffset(newCaretLine,
-					newCaret - buffer.getLineStartOffset(newCaretLine));
-				if(caretScreenLine == -1)
-					invalidateScreenLineRange(newCaretScreenLine,newCaretScreenLine);
-				else
-					invalidateScreenLineRange(caretScreenLine,newCaretScreenLine);
-				caretScreenLine = newCaretScreenLine;
-			}
-
-			caret = newCaret;
-			caretLine = newCaretLine;
-
 			if(scrollMode == NORMAL_SCROLL)
-				finishCaretUpdate(false,true);
+				finishCaretUpdate(oldCaretLine,false,true);
 			else if(scrollMode == ELECTRIC_SCROLL)
-				finishCaretUpdate(true,true);
+				finishCaretUpdate(oldCaretLine,true,true);
 		}
 	} //}}}
 
@@ -5200,6 +5141,25 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		try
 		{
+			if(match != null)
+			{
+				if(oldCaretLine < match.startLine)
+					invalidateLineRange(oldCaretLine,match.endLine);
+				else
+					invalidateLineRange(match.startLine,oldCaretLine);
+				match = null;
+			}
+
+			int newCaretScreenLine = chunkCache.getScreenLineOfOffset(caretLine,
+				caret - buffer.getLineStartOffset(caretLine));
+			if(caretScreenLine == -1)
+				invalidateScreenLineRange(newCaretScreenLine,newCaretScreenLine);
+			else
+				invalidateScreenLineRange(caretScreenLine,newCaretScreenLine);
+			caretScreenLine = newCaretScreenLine;
+
+			invalidateSelectedLines();
+			
 			// When the user is typing, etc, we don't want the caret
 			// to blink
 			blink = true;
@@ -5319,16 +5279,34 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean queuedCaretUpdate;
 	private boolean queuedScrollToElectric;
 	private boolean queuedFireCaretEvent;
+	private int oldCaretLine;
 
 	//}}}
+
+	//{{{ invalidateSelectedLines() method
+	/**
+	 * Repaints the lines containing the selection.
+	 */
+	private void invalidateSelectedLines()
+	{
+		// to hide line highlight if selections are being added later on
+		invalidateLine(caretLine);
+
+		Iterator iter = selectionManager.selection.iterator();
+		while(iter.hasNext())
+		{
+			Selection s = (Selection)iter.next();
+			invalidateLineRange(s.startLine,s.endLine);
+		}
+	} //}}}
 
 	//{{{ finishCaretUpdate() method
 	/**
 	 * the collapsing of scrolling/event firing inside compound edits
 	 * greatly speeds up replace-all.
 	 */
-	private void finishCaretUpdate(boolean doElectricScroll,
-		boolean fireCaretEvent)
+	private void finishCaretUpdate(int oldCaretLine,
+		boolean doElectricScroll, boolean fireCaretEvent)
 	{
 		this.queuedScrollToElectric |= doElectricScroll;
 		this.queuedFireCaretEvent |= fireCaretEvent;
@@ -5336,6 +5314,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(queuedCaretUpdate)
 			return;
 
+		this.oldCaretLine = oldCaretLine;
 		queuedCaretUpdate = true;
 
 		if(!buffer.isTransactionInProgress())

@@ -1595,9 +1595,7 @@ loop:		for(;;)
 				int start = index + 1;
 
 				for(int i = start; i < fvmcount; i++)
-				{
 					fvm[i] += numLines;
-				}
 
 				lastfvmget = -1;
 				fvmdump();
@@ -1614,7 +1612,7 @@ loop:		for(;;)
 
 				if(delayedUpdateEnd >= startLine)
 					delayedUpdateEnd += numLines;
-				delayedUpdate(startLine,endLine);
+				delayUpdate(startLine,endLine);
 
 				//{{{ resize selections if necessary
 				Iterator iter = textArea.getSelectionIterator();
@@ -1625,7 +1623,7 @@ loop:		for(;;)
 					if(s.contentInserted(buffer,startLine,offset,
 						numLines,length))
 					{
-						delayedUpdate(s.startLine,s.endLine);
+						delayUpdate(s.startLine,s.endLine);
 					}
 				} //}}}
 
@@ -1673,7 +1671,7 @@ loop:		for(;;)
 
 				if(delayedUpdateEnd >= startLine)
 					delayedUpdateEnd -= numLines;
-				delayedUpdate(startLine,startLine);
+				delayUpdate(startLine,startLine);
 			}
 			else
 			{
@@ -1783,7 +1781,7 @@ loop:		for(;;)
 					if(s.contentRemoved(buffer,startLine,
 						start,numLines,length))
 					{
-						delayedUpdate(s.startLine,s.endLine);
+						delayUpdate(s.startLine,s.endLine);
 						if(s.start == s.end)
 							iter.remove();
 					}
@@ -1959,8 +1957,8 @@ loop:		for(;;)
 			}
 		} //}}}
 
-		//{{{ delayedUpdate() method
-		private void delayedUpdate(int startLine, int endLine)
+		//{{{ delayUpdate() method
+		private void delayUpdate(int startLine, int endLine)
 		{
 			textArea.chunkCache.invalidateChunksFromPhys(startLine);
 			if(!delayedUpdate)
