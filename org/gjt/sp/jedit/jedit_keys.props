@@ -73,6 +73,10 @@ next-bracket.shortcut=C+e ]
 
 # C+e X
 # Unused: a b e g h j k m o q t u y z
+close-left-docking-area.shortcut=C+e 1
+close-top-docking-area.shortcut=C+e 2
+close-right-docking-area.shortcut=C+e 3
+close-bottom-docking-area.shortcut=C+e 4
 collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f

@@ -3293,7 +3293,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		int x = offsetToX(caretLine,caret - start);
 		buffer.remove(start,end - start);
-		setCaretPosition(start + xToOffset(caretLine,x));
+
+		int lastLine = buffer.getLineCount() - 1;
+		if(caretLine == lastLine)
+		{
+			setCaretPosition(buffer.getLineStartOffset(lastLine)
+				+ xToOffset(caretLine,x));
+		}
+		else
+		{
+			setCaretPosition(start + xToOffset(caretLine,x));
+		}
 	} //}}}
 
 	//{{{ deleteParagraph() method

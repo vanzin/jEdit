@@ -20,7 +20,7 @@ JEDIT 4.0 VERSION HISTORY
 - File->Recent Directories menu lists directories that were recently
   visted in the file system browser
 - A new View->Docking menu; contains commands for closing the left, top,
-  right and bottom docking areas
+  right and bottom docking areas (shortcuts: C+e 1,2,3,4)
 
 + Enhancements
 
@@ -68,6 +68,8 @@ JEDIT 4.0 VERSION HISTORY
   gutter was not repainted
 - GUIUtilities.loadToolButton() no longer throws an exception with
   invalid tool bar buttons
+- It was not possible to bind an action to a non-alphanumeric key
+  without any modifiers
 
 + API Changes
 
