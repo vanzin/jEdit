@@ -712,12 +712,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	}
 
 	// these are only public so that an inner class can access them!
-	public void _writeLock()
+	void _writeLock()
 	{
 		writeLock();
 	}
 
-	public void _writeUnlock()
+	void _writeUnlock()
 	{
 		writeUnlock();
 	}
@@ -988,6 +988,108 @@ public class Buffer extends PlainDocument implements EBComponent
 			return GUIUtilities.NEW_BUFFER_ICON;
 		else
 			return GUIUtilities.NORMAL_BUFFER_ICON;
+	}
+
+	/**
+	 * Returns the line containing the specified offset.
+	 * @param offset The offset
+	 * @since jEdit 4.0pre1
+	 */
+	public final int getLineOfOffset(int offset)
+	{
+		return getDefaultRootElement().getElementIndex(offset);
+	}
+
+	/**
+	 * Returns the start offset of the specified line.
+	 * @param line The line
+	 * @return The start offset of the specified line, or -1 if the line is
+	 * invalid
+	 * @since jEdit 4.0pre1
+	 */
+	public int getLineStartOffset(int line)
+	{
+		Element lineElement = getDefaultRootElement()
+			.getElement(line);
+		if(lineElement == null)
+			return -1;
+		else
+			return lineElement.getStartOffset();
+	}
+
+	/**
+	 * Returns the end offset of the specified line.
+	 * @param line The line
+	 * @return The end offset of the specified line, or -1 if the line is
+	 * invalid.
+	 * @since jEdit 4.0pre1
+	 */
+	public int getLineEndOffset(int line)
+	{
+		Element lineElement = getDefaultRootElement()
+			.getElement(line);
+		if(lineElement == null)
+			return -1;
+		else
+			return lineElement.getEndOffset();
+	}
+
+	/**
+	 * Returns the length of the specified line.
+	 * @param line The line
+	 * @since jEdit 4.0pre1
+	 */
+	public int getLineLength(int line)
+	{
+		Element lineElement = getDefaultRootElement()
+			.getElement(line);
+		if(lineElement == null)
+			return -1;
+		else
+			return lineElement.getEndOffset()
+				- lineElement.getStartOffset() - 1;
+	}
+
+	/**
+	 * Returns the text on the specified line.
+	 * @param lineIndex The line
+	 * @return The text, or null if the line is invalid
+	 * @since jEdit 4.0pre1
+	 */
+	public final String getLineText(int lineIndex)
+	{
+		int start = getLineStartOffset(lineIndex);
+		try
+		{
+			return getText(start,getLineEndOffset(lineIndex) - start - 1);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+			return null;
+		}
+	}
+
+	/**
+	 * Copies the text on the specified line into a segment. If the line
+	 * is invalid, the segment will contain a null string.
+	 * @param lineIndex The line
+	 * @since jEdit 4.0pre1
+	 */
+	public final void getLineText(int lineIndex, Segment segment)
+	{
+		Element lineElement = getDefaultRootElement()
+			.getElement(lineIndex);
+		int start = lineElement.getStartOffset();
+		try
+		{
+			getText(start,lineElement.getEndOffset() - start - 1,segment);
+		}
+		catch(BadLocationException bl)
+		{
+			Log.log(Log.ERROR,this,bl);
+			segment.offset = segment.count = 0;
+		}
 	}
 
 	/**
@@ -1723,9 +1825,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		float x = (float)_x;
 		float y = (float)_y;
 
-		LineInfo info = lineInfo[lineIndex];
-
-		if(info.tokensValid)
+		if(lastTokenizedLine == lineIndex)
 		{
 			// have to do this 'manually'
 			Element lineElement = getDefaultRootElement()
@@ -1744,7 +1844,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		else
 			markTokens(lineIndex);
 
-		Token tokens = info.firstToken;
+		Token tokens = tokenList.firstToken;
 
 		// the above should leave the text in the 'seg' segment
 		char[] text = seg.array;
@@ -1797,20 +1897,17 @@ public class Buffer extends PlainDocument implements EBComponent
 	/**
 	 * Returns the syntax tokens for the specified line.
 	 * @param lineIndex The line number
-	 * @since jEdit 3.1pre1
+	 * @since jEdit 4.0pre1
 	 */
-	public LineInfo markTokens(int lineIndex)
+	public TokenList markTokens(int lineIndex)
 	{
-		LineInfo info = lineInfo[lineIndex];
-
 		/* If cached tokens are valid, return 'em */
-		if(info.tokensValid)
-			return info;
-
-		//long _start = System.currentTimeMillis();
+		if(lastTokenizedLine == lineIndex)
+			return tokenList;
 
 		/*
 		 * Else, go up to 100 lines back, looking for a line with
+		 * a valid line context.
 		 * cached tokens. Tokenize from that line to this line.
 		 */
 		int start = Math.max(0,lineIndex - 100) - 1;
@@ -1818,30 +1915,22 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		for(int i = lineIndex - 1; i > end; i--)
 		{
-			if(lineInfo[i].tokensValid)
+			if(lineInfo[i].contextValid)
 			{
 				start = i;
 				break;
 			}
 		}
 
-		LineInfo prev;
-		if(start == -1)
-			prev = null;
-		else
-			prev = lineInfo[start];
+		LineInfo info = null, prev = null;
 
 		//System.err.println("i=" + lineIndex + ",start=" + start);
 		Element map = getDefaultRootElement();
 
 		for(int i = start + 1; i <= lineIndex; i++)
 		{
+			prev = (i == 0 ? null : lineInfo[i - 1]);
 			info = lineInfo[i];
-			if(info.tokensValid)
-			{
-				prev = info;
-				continue;
-			}
 
 			Element lineElement = map.getElement(i);
 			int lineStart = lineElement.getStartOffset();
@@ -1856,17 +1945,19 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 
 			/* Prepare for tokenization */
-			info.lastToken = null;
+			tokenList.lastToken = null;
 
-			ParserRule oldRule = info.context.inRule;
-			TokenMarker.LineContext oldParent = info.context.parent;
+			TokenMarker.LineContext context = info.getLineContext();
+			ParserRule oldRule = context.inRule;
+			TokenMarker.LineContext oldParent = context.parent;
 
-			tokenMarker.markTokens(prev,info,seg);
+			tokenMarker.markTokens(prev,info,tokenList,seg);
 
-			ParserRule newRule = info.context.inRule;
-			TokenMarker.LineContext newParent = info.context.parent;
+			context = info.getLineContext();
+			ParserRule newRule = context.inRule;
+			TokenMarker.LineContext newParent = context.parent;
 
-			info.tokensValid = true;
+			info.contextValid = true;
 
 			if(i != lastTokenizedLine)
 			{
@@ -1874,11 +1965,16 @@ public class Buffer extends PlainDocument implements EBComponent
 				lastTokenizedLine = i;
 			}
 
-			nextLineRequested |= (oldRule != newRule || oldParent != newParent);
+			// Could incorrectly be set to 'false' with
+			// recursive delegates, where the chaning might
+			// have changed but not the rule set in question.
+			if(oldRule != newRule)
+				nextLineRequested = true;
+			else if(oldParent != null && newParent != null
+				&& oldParent.rules != newParent.rules)
+				nextLineRequested = true;
 
-			info.addToken(0,Token.END);
-
-			prev = info;
+			tokenList.addToken(0,Token.END);
 		}
 
 		if(nextLineRequested && lineCount - lineIndex > 1)
@@ -1886,50 +1982,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			linesChanged(lineIndex + 1,lineCount - lineIndex - 1);
 		}
 
-		//System.err.println(System.currentTimeMillis() - _start);
-
-		return info;
-	}
-
-	/**
-	 * Store the width of a line, in pixels.
-	 * @param lineIndex The line number
-	 * @param width The width
-	 * @since jEdit 3.1pre1
-	 */
-	public boolean setLineWidth(int lineIndex, int width)
-	{
-		LineInfo info = lineInfo[lineIndex];
-		int oldWidth = info.width;
-		info.width = width;
-		return width != oldWidth;
-	}
-
-	/**
-	 * Returns the maximum line width in the specified line range.
-	 * The strange mix of physical/virtual line numbers is due to
-	 * the way the text area paints lines.
-	 * @param start The first physical line
-	 * @param len The number of virtual lines from the first line
-	 * @since jEdit 3.1pre1
-	 */
-	public int getMaxLineWidth(int start, int len)
-	{
-		int retVal = 0;
-		int lines = 0;
-		for(int i = start; ; i++)
-		{
-			if(i >= lineCount || lines >= len)
-				break;
-
-			LineInfo info = lineInfo[i];
-			if(info.visible)
-			{
-				retVal = Math.max(lineInfo[i].width,retVal);
-				lines++;
-			}
-		}
-		return retVal;
+		return tokenList;
 	}
 
 	/*
@@ -2001,7 +2054,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		LineInfo info = lineInfo[line];
 
-		if(info.foldLevelValid)
+		if(info.foldLevel != -1)
 			return info.foldLevel;
 		else
 		{
@@ -2071,7 +2124,6 @@ loop:				for(int i = 0; i < count; i++)
 				fireFoldLevelsChanged(line - 1,line - 1);
 			}
 
-			info.foldLevelValid = true;
 			return whitespace;
 		}
 	}
@@ -2806,6 +2858,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
+		tokenList = new TokenList();
 
 		setDocumentProperties(new BufferProps());
 		clearProperties();
@@ -2982,6 +3035,7 @@ loop:				for(int i = 0; i < count; i++)
 	private int lineCount;
 	private int lastTokenizedLine;
 	private boolean nextLineRequested;
+	private TokenList tokenList;
 
 	// Folding
 	private int[] virtualLines;
@@ -3156,9 +3210,13 @@ loop:				for(int i = 0; i < count; i++)
 		for(int i = 0; i < lineCount; i++)
 		{
 			LineInfo info = lineInfo[i];
-			info.context = new TokenMarker.LineContext(null,mainSet);
-			info.tokensValid = false;
+			info.context = null;
+			info.inRule = null;
+			info.rules = mainSet;
+			info.contextValid = false;
 		}
+
+		lastTokenizedLine = -1;
 	}
 
 	/**
@@ -3233,7 +3291,9 @@ loop:				for(int i = 0; i < count; i++)
 		for(int i = 0; i < lines; i++)
 		{
 			LineInfo info = new LineInfo();
-			info.context = new TokenMarker.LineContext(null,mainSet);
+			info.context = null;
+			info.rules = mainSet;
+			info.inRule = null;
 			info.visible = prev.visible;
 			lineInfo[index + i] = info;
 		}
@@ -3285,8 +3345,14 @@ loop:				for(int i = 0; i < count; i++)
 		for(int i = 0; i < lines; i++)
 		{
 			LineInfo info = lineInfo[index + i];
-			info.tokensValid = false;
-			info.foldLevelValid = false;
+			info.contextValid = false;
+			info.foldLevel = -1;
+		}
+
+		if(lastTokenizedLine >= index
+			&& lastTokenizedLine < index + lines)
+		{
+			lastTokenizedLine = -1;
 		}
 	}
 
@@ -3337,19 +3403,14 @@ loop:				for(int i = 0; i < count; i++)
 	}
 
 	/**
-	 * Inner class for storing information about tokenized lines.
+	 * Encapsulates a token list.
+	 * @since jEdit 4.0pre1
 	 */
-	public static class LineInfo
+	public static class TokenList
 	{
 		/**
-		 * Do not use this variable. The only reason it is public
-		 * is so that classes in the 'syntax' package can use it.
-		 */
-		public TokenMarker.LineContext context;
-
-		/**
 		 * Returns the first syntax token.
-		 * @since jEdit 3.1pre1
+		 * @since jEdit 4.0pre1
 		 */
 		public Token getFirstToken()
 		{
@@ -3358,7 +3419,7 @@ loop:				for(int i = 0; i < count; i++)
 
 		/**
 		 * Returns the last syntax token.
-		 * @since jEdit 3.1pre1
+		 * @since jEdit 4.0pre1
 		 */
 		public Token getLastToken()
 		{
@@ -3403,14 +3464,75 @@ loop:				for(int i = 0; i < count; i++)
 			}
 		}
 
-		// package-private members
-		Token firstToken;
-		Token lastToken;
-		boolean tokensValid;
-		int width;
-		int foldLevel;
-		boolean foldLevelValid;
+		private Token firstToken;
+		private Token lastToken;
+	}
+
+	/**
+	 * Inner class for storing information about tokenized lines.
+	 */
+	public static class LineInfo
+	{
+		static TokenMarker.LineContext SIMPLE_CONTEXT = new TokenMarker.LineContext();
+
+		/**
+		 * Do not use this method. The only reason it is public
+		 * is so that classes in the 'syntax' package can use it.
+		 */
+		public TokenMarker.LineContext getLineContext()
+		{
+			// to avoid creating a line context for each line
+			// (= memory waste) we only create a separate instance
+			// for delegated lines, using the SIMPLE_CONTEXT static
+			// instance for other lines.
+			if(context != null)
+				return context;
+			else
+			{
+				SIMPLE_CONTEXT.inRule = inRule;
+				SIMPLE_CONTEXT.rules = rules;
+				SIMPLE_CONTEXT.parent = null;
+				return SIMPLE_CONTEXT;
+			}
+		}
+
+		/**
+		 * Do not use this method. The only reason it is public
+		 * is so that classes in the 'syntax' package can use it.
+		 */
+		public void setLineContext(TokenMarker.LineContext context)
+		{
+			// to avoid creating a line context for each line
+			// (= memory waste) we only create a separate instance
+			// for delegated lines, using the SIMPLE_CONTEXT static
+			// instance for other lines.
+			if(context.parent != null)
+			{
+				if(context == SIMPLE_CONTEXT)
+					context = (TokenMarker.LineContext)context.clone();
+				this.context = context;
+				inRule = null;
+				rules = null;
+			}
+			else
+			{
+				this.context = null;
+				inRule = context.inRule;
+				rules = context.rules;
+			}
+		}
+
+		// private members
+		int foldLevel = -1;
 		boolean visible;
+
+		// true if the context info is valid.
+		boolean contextValid;
+
+		private TokenMarker.LineContext context;
+		private ParserRuleSet rules;
+		private ParserRule inRule;
+
 	}
 
 	// A dictionary that looks in the mode and editor properties

@@ -29,17 +29,17 @@ public class BrowserOptionPane extends AbstractOptionPane
 {
 	public BrowserOptionPane()
 	{
-		super("browser");
+		super("browser.general");
 	}
 
 	public void _init()
 	{
 		/* Default directory */
 		String[] dirs = {
-			jEdit.getProperty("options.browser.defaultPath.buffer"),
-			jEdit.getProperty("options.browser.defaultPath.home"),
-			jEdit.getProperty("options.browser.defaultPath.favorites"),
-			jEdit.getProperty("options.browser.defaultPath.last")
+			jEdit.getProperty("options.browser.general.defaultPath.buffer"),
+			jEdit.getProperty("options.browser.general.defaultPath.home"),
+			jEdit.getProperty("options.browser.general.defaultPath.favorites"),
+			jEdit.getProperty("options.browser.general.defaultPath.last")
 		};
 
 		defaultDirectory = new JComboBox(dirs);
@@ -52,54 +52,54 @@ public class BrowserOptionPane extends AbstractOptionPane
 			defaultDirectory.setSelectedIndex(2);
 		else if("last".equals(defaultDir))
 			defaultDirectory.setSelectedIndex(3);
-		addComponent(jEdit.getProperty("options.browser.defaultPath"),
+		addComponent(jEdit.getProperty("options.browser.general.defaultPath"),
 			defaultDirectory);
 
 		/* Show icons */
 		showIcons = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".showIcons"));
+			+ ".general.showIcons"));
 		showIcons.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".showIcons"));
 		addComponent(showIcons);
 
 		/* Show hidden files */
 		showHiddenFiles = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".showHiddenFiles"));
+			+ ".general.showHiddenFiles"));
 		showHiddenFiles.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".showHiddenFiles"));
 		addComponent(showHiddenFiles);
 
 		/* Sort file list */
 		sortFiles = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".sortFiles"));
+			+ ".general.sortFiles"));
 		sortFiles.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".sortFiles"));
 		addComponent(sortFiles);
 
 		/* Ignore case when sorting */
 		sortIgnoreCase = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".sortIgnoreCase"));
+			+ ".general.sortIgnoreCase"));
 		sortIgnoreCase.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".sortIgnoreCase"));
 		addComponent(sortIgnoreCase);
 
 		/* Mix files and directories */
 		sortMixFilesAndDirs = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".sortMixFilesAndDirs"));
+			+ ".general.sortMixFilesAndDirs"));
 		sortMixFilesAndDirs.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".sortMixFilesAndDirs"));
 		addComponent(sortMixFilesAndDirs);
 
 		/* Double-click close */
 		doubleClickClose = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".doubleClickClose"));
+			+ ".general.doubleClickClose"));
 		doubleClickClose.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".doubleClickClose"));
 		addComponent(doubleClickClose);
 
 		/* Base filter in open/save dialogs on current buffer name */
 		currentBufferFilter = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".currentBufferFilter"));
+			+ ".general.currentBufferFilter"));
 		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".currentBufferFilter"));
 		addComponent(currentBufferFilter);

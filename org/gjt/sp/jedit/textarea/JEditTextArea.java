@@ -819,8 +819,7 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the length of the buffer. Equivalent to calling
-	 * <code>getBuffer().getLength()</code>.
+	 * Returns the length of the buffer.
 	 */
 	public final int getBufferLength()
 	{
@@ -828,7 +827,7 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the number of lines in the document.
+	 * Returns the number of physical lines in the buffer.
 	 */
 	public final int getLineCount()
 	{
@@ -836,9 +835,7 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
-	 * Returns the number of visible lines in the document (which may
-	 * be less than the total due to folding).
-	 * @since jEdit 3.1pre1
+	 * Returns the number of virtual lines in the buffer.
 	 */
 	public final int getVirtualLineCount()
 	{
@@ -851,7 +848,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getLineOfOffset(int offset)
 	{
-		return buffer.getDefaultRootElement().getElementIndex(offset);
+		return buffer.getLineOfOffset(offset);
 	}
 
 	/**
@@ -862,12 +859,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getLineStartOffset(int line)
 	{
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
-		else
-			return lineElement.getStartOffset();
+		return buffer.getLineStartOffset(line);
 	}
 
 	/**
@@ -878,12 +870,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getLineEndOffset(int line)
 	{
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
-		else
-			return lineElement.getEndOffset();
+		return buffer.getLineEndOffset(line);
 	}
 
 	/**
@@ -892,50 +879,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getLineLength(int line)
 	{
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
-		else
-			return lineElement.getEndOffset()
-				- lineElement.getStartOffset() - 1;
-	}
-
-	/**
-	 * Returns the entire text of this text area.
-	 */
-	public String getText()
-	{
-		try
-		{
-			return buffer.getText(0,buffer.getLength());
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Sets the entire text of this text area.
-	 */
-	public void setText(String text)
-	{
-		try
-		{
-			buffer.beginCompoundEdit();
-			buffer.remove(0,buffer.getLength());
-			buffer.insertString(0,text,null);
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
+		return buffer.getLineLength(line);
 	}
 
 	/**
@@ -984,8 +928,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final String getLineText(int lineIndex)
 	{
-		int start = getLineStartOffset(lineIndex);
-		return getText(start,getLineEndOffset(lineIndex) - start - 1);
+		return buffer.getLineText(lineIndex);
 	}
 
 	/**
@@ -995,10 +938,44 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void getLineText(int lineIndex, Segment segment)
 	{
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(lineIndex);
-		int start = lineElement.getStartOffset();
-		getText(start,lineElement.getEndOffset() - start - 1,segment);
+		buffer.getLineText(lineIndex,segment);
+	}
+
+	/**
+	 * Returns the entire text of this text area.
+	 */
+	public String getText()
+	{
+		try
+		{
+			return buffer.getText(0,buffer.getLength());
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Sets the entire text of this text area.
+	 */
+	public void setText(String text)
+	{
+		try
+		{
+			buffer.beginCompoundEdit();
+			buffer.remove(0,buffer.getLength());
+			buffer.insertString(0,text,null);
+		}
+		catch(BadLocationException bl)
+		{
+			bl.printStackTrace();
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
 	}
 
 	/**
@@ -1088,6 +1065,26 @@ public class JEditTextArea extends JComponent
 		setSelection(new Selection.Range(lineStart + wordStart,
 			lineStart + wordEnd));
 		moveCaretPosition(lineStart + wordEnd);
+	}
+
+	/**
+	 * Inverts the selection.
+	 * @since jEdit 4.0pre1
+	 */
+	public final void invertSelection()
+	{
+		Selection[] newSelection = new Selection[selection.size() + 1];
+		int lastOffset = 0;
+		for(int i = 0; i < selection.size(); i++)
+		{
+			Selection s = (Selection)selection.elementAt(i);
+			newSelection[i] = new Selection.Range(lastOffset,
+				s.getStart());
+			lastOffset = s.getEnd();
+		}
+		newSelection[selection.size()] = new Selection.Range(
+			lastOffset,buffer.getLength());
+		setSelection(newSelection);
 	}
 
 	// OLD (NON-MULTI AWARE) SELECTION API
@@ -4066,6 +4063,7 @@ forward_scan:		do
 	// package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
+	int[] lineWidths;
 	int maxHorizontalScrollWidth;
 
 	// this is package-private so that the painter can use it without
@@ -4099,16 +4097,23 @@ forward_scan:		do
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
+		lineWidths = new int[visibleLines + 1];
 		updateScrollBars();
 	}
 
 	void updateMaxHorizontalScrollWidth()
 	{
-		int _maxHorizontalScrollWidth = buffer.getMaxLineWidth(
-			physFirstLine,visibleLines);
-		if(_maxHorizontalScrollWidth != maxHorizontalScrollWidth)
+		int max = 0;
+		for(int i = 0; i < lineWidths.length; i++)
 		{
-			maxHorizontalScrollWidth = _maxHorizontalScrollWidth;
+			int width = lineWidths[i];
+			if(width > max)
+				max = width;
+		}
+
+		if(max != maxHorizontalScrollWidth)
+		{
+			maxHorizontalScrollWidth = max;
 			horizontal.setValues(-horizontalOffset,painter.getWidth(),
 				0,maxHorizontalScrollWidth
 				+ painter.getFontMetrics().charWidth('w'));
@@ -4239,7 +4244,21 @@ forward_scan:		do
 		addMe.startLine = getLineOfOffset(addMe.start);
 		addMe.endLine = getLineOfOffset(addMe.end);
 
-		selection.addElement(addMe);
+		boolean added = false;
+
+		for(int i = 0; i < selection.size(); i++)
+		{
+			Selection s = (Selection)selection.elementAt(i);
+			if(addMe.start < s.start)
+			{
+				selection.insertElementAt(addMe,i);
+				added = true;
+				break;
+			}
+		}
+
+		if(!added)
+			selection.addElement(addMe);
 
 		invalidateLineRange(addMe.startLine,addMe.endLine);
 	}

@@ -110,6 +110,16 @@ public class DockableWindowManager extends JPanel
 			actions,actionSet));
 	}
 
+	public static String[] getRegisteredDockableWindows()
+	{
+		String[] retVal = new String[dockableWindowFactories.size()];
+		for(int i = 0; i < dockableWindowFactories.size(); i++)
+		{
+			retVal[i] = ((Factory)dockableWindowFactories.elementAt(i)).name;
+		}
+		return retVal;
+	}
+
 	static class DockableListHandler extends HandlerBase
 	{
 		DockableListHandler(String path, ActionSet actionSet)
@@ -335,6 +345,17 @@ public class DockableWindowManager extends JPanel
 			{
 				view.getDockableWindowManager()
 					.toggleDockableWindow(name);
+			}
+
+			public boolean isToggle()
+			{
+				return true;
+			}
+
+			public boolean isSelected(View view)
+			{
+				return view.getDockableWindowManager()
+					.isDockableWindowVisible(name);
 			}
 		}
 	}

@@ -2,10 +2,8 @@ TO DO
 
 + before 4.0pre1:
 
-- get confirmation that requestDefaultFocus() works
 - jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
   optimized? Also faster scrolling.
-- fs browser: colors option pane
 - JDK 1.3: about box broken
 - version number in splash screen
 - broken bracket matching
@@ -33,6 +31,8 @@ TO DO
 
 + features:
 
+- mode-specific context menu and maybe even tool bar
+- when a dockable is being opened, focus on default component
 - frame.setState(Frame.NORMAL);
 - line-uncomment command
 - search and replace of specific token types only
@@ -44,7 +44,6 @@ TO DO
 - select-* actions: add to selection in multi-select mode
 - when loading plugins and such, check for settingsDir == jEditHome
 - file system browser:
-  - option pane for changing colorization settings
   - new UI layout:
     [Up][V][Commands V][Favorites V]
     [Reload][Drives][Home][Curr Buf]
@@ -67,7 +66,6 @@ TO DO
 - improve folding:
   - explicit folding with {{{ and }}} markers in text
   - fold navigator
-- HyperSearch should highlight search results
 - caret beyond end of line
 - directory chooser dialog box
 - graphical regular expression editor
@@ -139,6 +137,7 @@ TO DO
 
 + bugs:
 
+- find next with $ or ^
 - Shift+TAB on Java 1.1
 - find btn no work
 - custom stylesheet: no xmlns

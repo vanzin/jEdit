@@ -48,9 +48,12 @@ public class RESearchMatcher implements SearchMatcher
 		boolean ignoreCase, boolean beanshell,
 		String replaceMethod) throws Exception
 	{
-		// gnu.regexp doesn't seem to support \n and \t in the replace
-		// string, so implement it here
-		this.replace = MiscUtilities.escapesToChars(replace);
+		if(!beanshell)
+		{
+			// gnu.regexp doesn't seem to support \n and \t in the replace
+			// string, so implement it here
+			this.replace = MiscUtilities.escapesToChars(replace);
+		}
 
 		this.beanshell = beanshell;
 		this.replaceMethod = replaceMethod;
@@ -64,25 +67,33 @@ public class RESearchMatcher implements SearchMatcher
 	 * Returns the offset of the first match of the specified text
 	 * within this matcher.
 	 * @param text The text to search in
+	 * @param start True if the start of the segment is the beginning of the
+	 * buffer
+	 * @param end True if the end of the segment is the end of the buffer
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
+	 * @since jEdit 4.0pre1
 	 */
-	public int[] nextMatch(Segment text)
+	public int[] nextMatch(Segment text, boolean start, boolean end)
 	{
-		REMatch match = re.getMatch(new CharIndexedSegment(text,0));
+		int flags = 0;
+
+		// unless we are matching from the start of the buffer,
+		// ^ should not match on the beginning of the substring
+		if(!start)
+			flags |= RE.REG_NOTBOL;
+		// unless we are matching to the end of the buffer,
+		// $ should not match on the end of the substring
+		if(!end)
+			flags |= RE.REG_NOTEOL;
+
+		REMatch match = re.getMatch(new CharIndexedSegment(text,0),
+			flags);
 		if(match == null)
 			return null;
 
-		int start = match.getStartIndex();
-		int end = match.getEndIndex();
-		if(start == end)
-		{
-			// searched for (), or ^, or $, or other 'empty' regexp
-			return null;
-		}
-
-		int[] result = { start, end };
+		int[] result = { match.getStartIndex(), match.getEndIndex() };
 		return result;
 	}
 

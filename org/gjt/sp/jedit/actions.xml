@@ -277,7 +277,7 @@
 
 <ACTION NAME="find" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,null,SearchDialog.CURRENT_BUFFER);
+		new SearchDialog(view,textArea.getSelectedText(),SearchDialog.CURRENT_BUFFER);
 	</CODE>
 </ACTION>
 
@@ -292,12 +292,6 @@
 	<CODE>
 		SearchAndReplace.setReverseSearch(true);
 		SearchAndReplace.find(view);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="find-selection" NO_RECORD="TRUE">
-	<CODE>
-		new SearchDialog(view,textArea.getSelectedText());
 	</CODE>
 </ACTION>
 
@@ -362,6 +356,12 @@
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.insert-literal"),
 			"textArea.setSelectedText(String.valueOf(__char__));");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="invert-selection">
+	<CODE>
+		textArea.invertSelection();
 	</CODE>
 </ACTION>
 
