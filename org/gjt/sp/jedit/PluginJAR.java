@@ -790,7 +790,6 @@ public class PluginJAR
 				cache.cachedActionNames,
 				cache.cachedActionToggleFlags,
 				cache.actionsURI);
-			jEdit.addActionSet(actions);
 		}
 		else
 			actions = new ActionSet();
@@ -814,6 +813,9 @@ public class PluginJAR
 				cache.cachedDockableNames,
 				cache.cachedDockableActionFlags);
 		}
+
+		if(actions.size() != 0)
+			jEdit.addActionSet(actions);
 
 		if(cache.servicesURI != null
 			&& cache.cachedServices != null)
@@ -954,7 +956,6 @@ public class PluginJAR
 				"action-set.plugin",
 				new String[] { label }));
 			actions.load();
-			jEdit.addActionSet(actions);
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
 			cache.cachedActionToggleFlags = new boolean[
@@ -994,6 +995,9 @@ public class PluginJAR
 			DockableWindowManager.loadDockableWindows(this,
 				dockablesURI,cache);
 		}
+
+		if(actions.size() != 0)
+			jEdit.addActionSet(actions);
 
 		if(servicesURI != null)
 		{
