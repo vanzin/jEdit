@@ -79,7 +79,20 @@ public class PluginManager extends JFrame implements EBComponent
 			}
 		}
 		else if (message instanceof PluginUpdate)
-			manager.update();
+		{
+			if(!queuedUpdate)
+			{
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						queuedUpdate = false;
+						manager.update();
+					}
+				});
+				queuedUpdate = true;
+			}
+		}
 	} //}}}
 
 	//{{{ showPluginManager() method
@@ -113,8 +126,9 @@ public class PluginManager extends JFrame implements EBComponent
 	} //}}}
 
 	//{{{ Private members
+	private static PluginManager instance;
 
-	//{{{ Variables
+	//{{{ Instance variables
 	private JTabbedPane tabPane;
 	private JButton done;
 	private JButton cancel;
@@ -123,8 +137,7 @@ public class PluginManager extends JFrame implements EBComponent
 	private InstallPanel updater;
 	private ManagePanel manager;
 	private PluginList pluginList;
-
-	private static PluginManager instance;
+	private boolean queuedUpdate;
 	//}}}
 
 	//{{{ PluginManager constructor

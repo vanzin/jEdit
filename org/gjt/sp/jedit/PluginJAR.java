@@ -382,7 +382,7 @@ public class PluginJAR
 
 			activated = true;
 
-			if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+			if(!(plugin instanceof EditPlugin.Deferred))
 				return;
 
 			String className = plugin.getClassName();
@@ -407,7 +407,7 @@ public class PluginJAR
 			catch(Throwable t)
 			{
 				breakPlugin();
-	
+
 				Log.log(Log.ERROR,this,"Error while starting plugin " + className);
 				Log.log(Log.ERROR,this,t);
 				String[] args = { t.toString() };
@@ -428,7 +428,7 @@ public class PluginJAR
 			startPluginLater();
 		}
 
-		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
+		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED,false));
 	} //}}}
 
 	//{{{ activateIfNecessary() method
@@ -494,9 +494,9 @@ public class PluginJAR
 	 * This method can only be called from the AWT event dispatch thread!
 	 * @see EditPlugin#stop()
 	 *
-	 * @since jEdit 4.2pre2
+	 * @since jEdit 4.2pre3
 	 */
-	public void deactivatePlugin()
+	public void deactivatePlugin(boolean exit)
 	{
 		synchronized(this)
 		{
@@ -505,23 +505,26 @@ public class PluginJAR
 
 			activated = false;
 
-			// buffers retain a reference to the fold handler in
-			// question... and the easiest way to handle fold
-			// handler unloading is this...
-			Buffer buffer = jEdit.getFirstBuffer();
-			while(buffer != null)
+			if(!exit)
 			{
-				if(buffer.getFoldHandler() != null
-					&& buffer.getFoldHandler().getClass()
-					.getClassLoader() == classLoader)
+				// buffers retain a reference to the fold handler in
+				// question... and the easiest way to handle fold
+				// handler unloading is this...
+				Buffer buffer = jEdit.getFirstBuffer();
+				while(buffer != null)
 				{
-					buffer.setFoldHandler(
-						new DummyFoldHandler());
+					if(buffer.getFoldHandler() != null
+						&& buffer.getFoldHandler().getClass()
+						.getClassLoader() == classLoader)
+					{
+						buffer.setFoldHandler(
+							new DummyFoldHandler());
+					}
+					buffer = buffer.getNext();
 				}
-				buffer = buffer.getNext();
 			}
 
-			if(plugin != null)
+			if(plugin != null && !(plugin instanceof EditPlugin.Broken))
 			{
 				if(plugin instanceof EBPlugin)
 					EditBus.removeFromBus((EBPlugin)plugin);
@@ -542,7 +545,7 @@ public class PluginJAR
 				plugin.jar = (EditPlugin.JAR)this;
 
 				EditBus.send(new PluginUpdate(this,
-					PluginUpdate.DEACTIVATED));
+					PluginUpdate.DEACTIVATED,exit));
 			}
 		}
 	} //}}}
@@ -717,7 +720,7 @@ public class PluginJAR
 	//{{{ uninit() method
 	void uninit(boolean exit)
 	{
-		deactivatePlugin();
+		deactivatePlugin(exit);
 
 		if(!exit)
 		{

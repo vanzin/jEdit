@@ -1136,6 +1136,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 				propertiesChanged();
 			}
+			else if(pmsg.isExiting())
+			{
+				// we don't care
+			}
 			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
 			{
 				Iterator iter = windows.values().iterator();

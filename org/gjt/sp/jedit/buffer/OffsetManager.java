@@ -344,7 +344,7 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			moveGap(-1,0,"contentRemoved");
+			//moveGap(-1,0,"contentRemoved");
 
 			if(startLine + numLines < gapLine)
 				gapLine -= numLines;

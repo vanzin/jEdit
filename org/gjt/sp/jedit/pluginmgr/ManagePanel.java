@@ -94,8 +94,6 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Variables
 	private JTable table;
 	private PluginTableModel pluginModel;
 	private JButton remove;

@@ -1547,12 +1547,6 @@ loop:		for(;;)
 						starti++;
 					}
 				}
-				/* start is visible, end is invisible. */
-				/* start is invisible, end is visible */
-				else if(fvm[endi] == startLine + numLines)
-				{
-					fvmput(starti,endi + 1,null);
-				}
 				else
 				{
 					fvmput(starti + 1,endi,null);
