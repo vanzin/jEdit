@@ -918,8 +918,11 @@ public class PluginJAR
 		}
 		else
 		{
-			Log.log(Log.WARNING,this,getPath() + " has an actions.xml but no plugin core class");
-			actions.setLabel("MISSING PLUGIN CORE CLASS");
+			if(actions.size() != 0)
+			{
+				Log.log(Log.WARNING,this,getPath() + " has an actions.xml but no plugin core class");
+				actions.setLabel("MISSING PLUGIN CORE CLASS");
+			}
 		}
 	} //}}}
 

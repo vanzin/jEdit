@@ -77,6 +77,27 @@ JEDIT 4.2 VERSION HISTORY
 
 - An entry for inform.xml was missing from the mode catalog file.
 
+- Removing from the before the first visible line to inside the visible
+  region threw an exception.
+
+- Fixed NullPointerException when pressing PageUp/PageDown inside a
+  collapsed fold.
+
+- Sometimes, multiple line insertions did not update the screen line
+  count of newly inserted lines. This would result in the scroll bar
+  value being incorrect until you went to the end of the buffer and back
+  again.
+
+- Using the TextTools plugin's "Transpose Lines" command in the first
+  line of a collapsed fold would cause the folding state to be
+  incorrectly updated, resulting in exceptions and an unusable text
+  area.
+
+- When performing a text removal that would put the first visible line
+  inside an invisible region, the chunk cache would be updated
+  prematurely so the invisible line would be visible, and trying to
+  move the caret to it would throw exceptions.
+
 }}}
 {{{ API Changes
 
