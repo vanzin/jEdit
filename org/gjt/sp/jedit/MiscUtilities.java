@@ -105,6 +105,8 @@ public class MiscUtilities
 
 					return resolveSymlinks(path);
 				}
+				else if(path.startsWith("\\\\"))
+					return resolveSymlinks(path);
 			}
 			else if(OperatingSystem.isUnix())
 			{
