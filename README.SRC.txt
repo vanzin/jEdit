@@ -10,7 +10,7 @@ You will need:
 - A Java compiler, such as Sun's javac or IBM's jikes.
 
 - Jakarta Ant. I use version 1.5; older versions might or might not
-  work. Get it from <http://jakarta.apache.org>.
+  work. Get it from <http://ant.apache.org>.
 
 Once you have all the necessary tools installed, run Ant with the 'dist'
 target in the build.xml file to compile jEdit:
