@@ -193,7 +193,10 @@ public class BufferIORequest extends WorkRequest
 
 				in = vfs._createInputStream(session,path,false,view);
 				if(in == null)
+				{
+					System.err.println("in = null");
 					return;
+				}
 
 				in = new BufferedInputStream(in);
 
@@ -301,55 +304,6 @@ public class BufferIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ read() method
-	/**
-	 * Reads the buffer from the specified input stream. Read and
-	 * understand all these notes if you want to snarf this code for
-	 * your own app; it has a number of subtle behaviours which are
-	 * not entirely obvious.<p>
-	 *
-	 * Some notes that will help future hackers:
-	 * <ul>
-	 * <li>
-	 * We use a StringBuffer because there is no way to pre-allocate
-	 * in the GapContent - and adding text each time to the GapContent
-	 * would be slow because it would require array enlarging, etc.
-	 * Better to do as few gap inserts as possible.
-	 *
-	 * <li>The StringBuffer is pre-allocated to the file's size (obtained
-	 * from the VFS). If the file size is not known, we default to
-	 * IOBUFSIZE.
-	 *
-	 * <li>We read the stream in IOBUFSIZE (= 32k) blocks, and loop over
-	 * the read characters looking for line breaks.
-	 * <ul>
-	 * <li>a \r or \n causes a line to be added to the model, and appended
-	 * to the string buffer
-	 * <li>a \n immediately following an \r is ignored; so that Windows
-	 * line endings are handled
-	 * </ul>
-	 *
-	 * <li>This method remembers the line separator used in the file, and
-	 * stores it in the lineSeparator buffer-local property. However,
-	 * if the file contains, say, hello\rworld\n, lineSeparator will
-	 * be set to \n, and the file will be saved as hello\nworld\n.
-	 * Hence jEdit is not really appropriate for editing binary files.
-	 *
-	 * <li>To make reloading a bit easier, this method automatically
-	 * removes all data from the model before inserting it. This
-	 * shouldn't cause any problems, as most documents will be
-	 * empty before being loaded into anyway.
-	 *
-	 * <li>If the last character read from the file is a line separator,
-	 * it is not added to the model! There are two reasons:
-	 * <ul>
-	 * <li>On Unix, all text files have a line separator at the end,
-	 * there is no point wasting an empty screen line on that
-	 * <li>Because save() appends a line separator after *every* line,
-	 * it prevents the blank line count at the end from growing
-	 * </ul>
-	 * 
-	 * </ul>
-	 */
 	private void read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{

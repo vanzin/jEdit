@@ -1,13 +1,8 @@
 TO DO
 
-+ plugins:
-
-- finish ErrorList 1.2.3 (need to fix tree expansion flaw)
-- finish FTP 0.3.4 (waiting on bug reports!)
-
 + before 4.0final:
 
-- blank files problem
+- stylesheet: shortcuts run together, eg Control+eControl+z
 - proofread documentation one more time
 - make sure plugin guide is up to date
 - API guide: need to mention GUIUtilities.{message,input,...}
@@ -16,7 +11,6 @@ TO DO
 + 4.0.1:
 
 - scroll to caret _still_ jumps around
-- investigate I/O threads
 
 + in 4.1:
 
@@ -29,25 +23,10 @@ TO DO
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
-- 'new plugins installed' thingy on startup
-- text file previews in file dialog?
-- plugin guide: mention fully qualified class names
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class
-- rollover toolbar buttons option
 - fix page up/page down
-- jdk 1.4: popups in wrong location
-- updateChunksUpTo() called too many times
-- plugin manager's progress bar: max value is download size
-- removing a plugin should offer to remove the ones that depend on it too
-- installing source for already installed plugins is not possible: 'hide
-  already installed' checkbox in install plugins dialog box
-- better formatting commands: - document in 'manual wrap' subsect of
-  'word wrap'
-  - format becomes 'wrap paragraph'
-  - 'wrap line'
-  - 'unwrap paragraph'
 - don't repaint whole selection when resizing
 - print should not use so much memory
 - fs browser: scroll to visible after setting divider location
@@ -56,53 +35,11 @@ TO DO
 - keyboard navigation of current directory, recent dirs, etc broken
 - JDK 1.4 focus bugs
 - dwm: not always focused correctly
-- stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-- idea to make things go faster: token marker splits on ' ', '\t'
-  then lineToChunkList() has much less work to do, and could even be
-  eliminated completely.
-- text area painter:
-  - use line metrics
-  - use float co-ordinates
-- C+d with selection: delete all selected lines
-- last focused dockable cmd
-- XModeHandler: better error reporting
-- add index terms throughout user's guide!
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
-- loading and saving opt pane: 'choose' button for backup directory
-- style setting for folding line indicator
-- help viewer: two tabs, contents and index. index browser
-- file system browser:
-  - commands->copy file list
-  - much better autocomplete
-  - pre-load open and search dialogs in background thread, and cache
-    them
-  - better permissions API
-  - show wait cursor while directory is loading
-  - directory chooser dialog box
-- <file>?line= or ?marker=
-- fold navigator to browse fold tree in explicit fold mode
-- reintroduce -bshclient command line switch
-- saving a read-only file: show a confirmation dialog box
-- tool bar option pane: editing existing entries
 - recording 'evaluate for selected lines'
-- search and replace: scroll text area so selection is visible despite
-  dialog position
-- better auto indent
-- HTML mode:
-  - inside tags, delegate on*="..." to JavaScript mode,
-    style="..." to CSS mode
-  - better <script>/<style> handling using nested delegates
-- save markers when a buffer is closed, adding/removing markers shouldn't
-  set the dirty flag
-- keymaps replace .shortcut properties
-  - loaded from $HOME/.jedit/keymaps, and jedit.jar
-  - one keymap can 'extend' another
-  - keymaps are XML files with <bind>, <unbind> tags
-  - jEdit, emacs, keymaps included, maybe others
-  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
 - custom stylesheet: no xmlns
 - eval-for-selected-lines doesn't work with rectangular selection
 - how to handle S+0-9?
@@ -117,9 +54,6 @@ TO DO
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
-- tab/s+tab: use tabSize; a+left/right: use indentSize
-- toggle shift: expand all; no mod: expand one level behavior in gutter
 - triple-click drag down
 - motif l&f: shortcuts in menu items
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- sorting buffer list by edit mode!

@@ -98,23 +98,23 @@ public class WorkThreadPool
 			return;
 		}
 
-		//{{{ if there are no requests, execute AWT requests immediately
-		if(started && inAWT && requestCount == 0 && awtRequestCount == 0)
-		{
-// 			Log.log(Log.DEBUG,this,"AWT immediate: " + run);
-
-			if(SwingUtilities.isEventDispatchThread())
-				run.run();
-			else
-				SwingUtilities.invokeLater(run);
-
-			return;
-		} //}}}
-
-		Request request = new Request(run);
-
 		synchronized(lock)
 		{
+			//{{{ if there are no requests, execute AWT requests immediately
+			if(started && inAWT && requestCount == 0 && awtRequestCount == 0)
+			{
+//				Log.log(Log.DEBUG,this,"AWT immediate: " + run);
+
+				if(SwingUtilities.isEventDispatchThread())
+					run.run();
+				else
+					SwingUtilities.invokeLater(run);
+
+				return;
+			} //}}}
+
+			Request request = new Request(run);
+
 			//{{{ Add to AWT queue...
 			if(inAWT)
 			{
@@ -405,37 +405,34 @@ public class WorkThreadPool
 		{
 			awtRunnerQueued = true;
 			SwingUtilities.invokeLater(new RunRequestsInAWTThread());
-			//Log.log(Log.DEBUG,this,"AWT runner queued");
+//			Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
 	} //}}}
 
 	//{{{ getNextAWTRequest() method
 	private Request getNextAWTRequest()
 	{
-		synchronized(lock)
+		Request request = firstAWTRequest;
+		firstAWTRequest = firstAWTRequest.next;
+		if(firstAWTRequest == null)
+			lastAWTRequest = null;
+
+		if(request.alreadyRun)
+			throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
+		request.alreadyRun = true;
+
+		/* StringBuffer buf = new StringBuffer("AWT request queue is now: ");
+		Request _request = request.next;
+		while(_request != null)
 		{
-			Request request = firstAWTRequest;
-			firstAWTRequest = firstAWTRequest.next;
-			if(firstAWTRequest == null)
-				lastAWTRequest = null;
-
-			if(request.alreadyRun)
-				throw new InternalError("AIEE!!! Request run twice!!! " + request.run);
-			request.alreadyRun = true;
-
-			/* StringBuffer buf = new StringBuffer("AWT request queue is now: ");
-			Request _request = request.next;
-			while(_request != null)
-			{
-				buf.append(_request.id);
-				if(_request.next != null)
-					buf.append(",");
-				_request = _request.next;
-			}
-			Log.log(Log.DEBUG,this,buf.toString()); */
-
-			return request;
+			buf.append(_request.id);
+			if(_request.next != null)
+				buf.append(",");
+			_request = _request.next;
 		}
+		Log.log(Log.DEBUG,this,buf.toString()); */
+
+		return request;
 	} //}}}
 
 	//}}}
@@ -469,8 +466,12 @@ public class WorkThreadPool
 	{
 		public void run()
 		{
-			awtRunnerQueued = false;
-			doAWTRequests();
+			synchronized(lock)
+			{
+				awtRunnerQueued = false;
+				if(requestCount == 0)
+					doAWTRequests();
+			}
 		}
 	} //}}}
 }
