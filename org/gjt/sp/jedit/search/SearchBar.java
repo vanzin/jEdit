@@ -240,7 +240,7 @@ public class SearchBar extends JPanel
 
 		try
 		{
-			if(SearchAndReplace.find(view,view.getBuffer(),start))
+			if(SearchAndReplace.find(view,view.getBuffer(),start,false,reverse))
 				return true;
 		}
 		catch(Exception e)

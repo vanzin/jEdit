@@ -470,6 +470,7 @@ public class GrabKeyDialog extends JDialog
 				shortcut.setText(null);
 				if(debugBuffer == null)
 					updateAssignedTo(null);
+				shortcut.requestFocus();
 			}
 		} //}}}
 
