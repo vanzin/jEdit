@@ -23,6 +23,7 @@ JEDIT 4.0 VERSION HISTORY
   capitalized text. Now the shortcuts of these commands has been changed
   to CS+BACK_SPACE and CS+DELETE, respectively.
 - BeanShell 1.2b41 included
+- Documentation updates
 
 + Bug Fixes
 
@@ -62,8 +63,6 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed another problem with soft wrapping syntax highlighted buffers
 - Soft wrap would break if a line ended with enough whitespace to be
   longer than the wrap margin
-- Paths such as X: on windows where X was a drive letter would not be
-  considered as absolute paths
 - When using 'save as' to save over an already opened buffer, the
   already opened buffer is closed first. This prevents having two open
   buffers with the same path (and possibly different contents)
@@ -81,6 +80,8 @@ JEDIT 4.0 VERSION HISTORY
   screen positions in screen lines.
 - If a save operation fails, the buffer's modified flag is no longer
   cleared, and if it was a 'save as' the buffer is not renamed either
+- Path names of the form "X:foo" (with no \ after the drive letter)
+  will no longer cause problems on Windows
 
 + API Additions
 

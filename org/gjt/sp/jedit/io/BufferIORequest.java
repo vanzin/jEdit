@@ -619,13 +619,15 @@ public class BufferIORequest extends WorkRequest
 						out = new GZIPOutputStream(out);
 
 					write(buffer,out);
-				}
 
-				if(twoStageSave)
-				{
-					if(!vfs._rename(session,savePath,path,view))
-						throw new IOException(path);
+					if(twoStageSave)
+					{
+						if(!vfs._rename(session,savePath,path,view))
+							throw new IOException(path);
+					}
 				}
+				else
+					buffer.setBooleanProperty(ERROR_OCCURRED,true);
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.
