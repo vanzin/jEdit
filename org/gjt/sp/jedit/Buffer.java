@@ -473,8 +473,41 @@ public class Buffer implements EBComponent
 		}
 
 		final String oldPath = this.path;
-		if(rename)
-			setPath(path);
+
+		// I've finally decided to fix the 'two buffers with same path'
+		// bug...
+		if(!path.equals(oldPath))
+		{
+			Buffer buffer = jEdit.getBuffer(path);
+
+			if(rename)
+			{
+				/* if we save a file with the same name as one
+				 * that's already open, we presume that we can
+				 * close the existing file, since the user
+				 * would have confirmed the overwrite in the
+				 * 'save as' dialog box anyway */
+				if(buffer != null && /* can't happen? */
+					!buffer.getPath().equals(oldPath))
+				{
+					buffer.setDirty(false);
+					jEdit.closeBuffer(view,buffer);
+				}
+
+				setPath(path);
+			}
+			else
+			{
+				/* if we saved over an already open file using
+				 * 'save a copy as', then reload the existing
+				 * buffer */
+				if(buffer != null && /* can't happen? */
+					!buffer.getPath().equals(oldPath))
+				{
+					buffer.load(view,true);
+				}
+			}
+		}
 
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
@@ -2643,47 +2676,6 @@ public class Buffer implements EBComponent
 		return new int[] { start, end };
 	} //}}}
 
-	//{{{ _getFoldVisibilityManager() method
-	/**
-	 * Plugins and macros should call
-	 * <code>textArea.getFoldVisibilityManager()</code>
-	 * instead of this method.
-	 * @param textArea The text area
-	 * @since jEdit 4.0pre1
-	 */
-	public FoldVisibilityManager _getFoldVisibilityManager(
-		JEditTextArea textArea)
-	{
-		FoldVisibilityManager mgr = new FoldVisibilityManager(this,
-			offsetMgr,textArea);
-
-		// find it a bit that it can set in line's 'visible' flag sets
-		for(int i = 0; i < inUseFVMs.length; i++)
-		{
-			if(inUseFVMs[i] == null)
-			{
-				inUseFVMs[i] = mgr;
-				mgr._grab(i);
-				return mgr;
-			}
-		}
-
-		//XXX
-		throw new InternalError("Too many text areas editing this buffer");
-	} //}}}
-
-	//{{{ _releaseFoldVisibilityManager() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @param mgr The fold visibility manager
-	 * @since jEdit 4.0pre1
-	 */
-	public void _releaseFoldVisibilityManager(FoldVisibilityManager mgr)
-	{
-		inUseFVMs[mgr._getIndex()] = null;
-		mgr._release();
-	} //}}}
-
 	//}}}
 
 	//{{{ Position methods
@@ -2977,6 +2969,69 @@ public class Buffer implements EBComponent
 				}
 			}
 		}
+	} //}}}
+
+	//}}}
+
+	//{{{ Methods that really shouldn't be public...
+
+	//{{{ _getScreenLineCount() method
+	/**
+	 * Plugins should not call this method.
+	 */
+	public int _getScreenLineCount(int line)
+	{
+		return offsetMgr.getScreenLineCount(line);
+	} //}}}
+
+	//{{{ _setScreenLineCount() method
+	/**
+	 * Plugins should not call this method.
+	 */
+	public void _setScreenLineCount(int line, int count)
+	{
+		offsetMgr.setScreenLineCount(line,count);
+	} //}}}
+
+	//{{{ _getFoldVisibilityManager() method
+	/**
+	 * Plugins and macros should call
+	 * <code>textArea.getFoldVisibilityManager()</code>
+	 * instead of this method.
+	 * @param textArea The text area
+	 * @since jEdit 4.0pre1
+	 */
+	public FoldVisibilityManager _getFoldVisibilityManager(
+		JEditTextArea textArea)
+	{
+		FoldVisibilityManager mgr = new FoldVisibilityManager(this,
+			offsetMgr,textArea);
+
+		// find it a bit that it can set in line's 'visible' flag sets
+		for(int i = 0; i < inUseFVMs.length; i++)
+		{
+			if(inUseFVMs[i] == null)
+			{
+				inUseFVMs[i] = mgr;
+				mgr._grab(i);
+				return mgr;
+			}
+		}
+
+		//XXX
+		throw new InternalError("Too many text areas editing this buffer");
+	} //}}}
+
+	//{{{ _releaseFoldVisibilityManager() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @param mgr The fold visibility manager
+	 * @since jEdit 4.0pre1
+	 */
+	public void _releaseFoldVisibilityManager(FoldVisibilityManager mgr)
+	{
+		inUseFVMs[mgr._getIndex()] = null;
+		mgr._release();
 	} //}}}
 
 	//}}}

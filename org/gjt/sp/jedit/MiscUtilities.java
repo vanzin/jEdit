@@ -90,6 +90,14 @@ public class MiscUtilities
 			return path;
 		else
 		{
+			// have to handle these cases specially on windows.
+			if(OperatingSystem.isDOSDerived()
+				&& path.length() == 2
+				&& path.charAt(1) == ':')
+			{
+				return path;
+			}
+
 			File file = new File(path);
 			if(file.isAbsolute())
 			{

@@ -46,7 +46,7 @@ TO DO
 - dwm: not always focused correctly
 - stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
-  canonPath != path; ditto for save as
+  canonPath != path
 - maybe fix GUIUtilities.java to store maximisation state
 - idea to make things go faster: token marker splits on ' ', '\t'
   then lineToChunkList() has much less work to do, and could even be

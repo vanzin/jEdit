@@ -13,6 +13,8 @@ JEDIT 4.0 VERSION HISTORY
 - MacOS plugin version 1.1 (Kris Kopicki)
 - 'Expand Folds With Level' and 'Expand All Folds' commands now scroll
   the text area to the caret position if necessary
+- Documentation is now generated using DocBook-XSL 1.49, DocBook-DSSSL
+  1.76
 
 + Bug Fixes
 
@@ -50,6 +52,11 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed another problem with soft wrapping syntax highlighted buffers
 - Soft wrap would break if a line ended with enough whitespace to be
   longer than the wrap margin
+- Paths such as X: on windows where X was a drive letter would not be
+  considered as absolute paths
+- When using 'save as' to save over an already opened buffer, the
+  already opened buffer is closed first. This prevents having two open
+  buffers with the same path (and possibly different contents)
 
 + API Additions
 

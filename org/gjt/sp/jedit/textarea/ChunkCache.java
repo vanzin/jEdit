@@ -608,6 +608,8 @@ public class ChunkCache
 			painter,textArea.softWrap
 			? textArea.wrapMargin
 			: 0.0f,out);
+
+		buffer._setScreenLineCount(physicalLine,Math.max(1,out.size()));
 	} //}}}
 
 	//{{{ updateChunksUpTo() method

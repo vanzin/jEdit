@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,52 @@ public class OffsetManager
 	public final int getLineEndOffset(int line)
 	{
 		return (int)(lineInfo[line] & END_MASK);
+	} //}}}
+
+	//{{{ getScrollOverhang() method
+	/**
+	 * If you don't understand this, don't worry. It is just a crude
+	 * workaround. In jEdit 4.1 the relevant source will be reworked and
+	 * this will no longer be necessary.
+	 */
+	public final int getScrollOverhang(int physFirstLine, int visibleLines,
+		int index)
+	{
+		int screenLineTally = 0;
+		int overhang = 0;
+
+		int virtualLineCount = virtualLineCounts[index];
+
+		for(int i = physFirstLine; i < lineCount; i++)
+		{
+			if(isLineVisible(i,index))
+			{
+				screenLineTally += getScreenLineCount(i);
+				if(screenLineTally >= visibleLines)
+				{
+					if(i == lineCount - 1)
+						overhang += getScreenLineCount(lineCount - 1);
+					else
+						overhang++;
+				}
+			}
+		}
+
+		return overhang;
+	} //}}}
+
+	//{{{ getScreenLineCount() method
+	public final int getScreenLineCount(int line)
+	{
+		return (int)((lineInfo[line] & SCREEN_LINES_MASK)
+			>> SCREEN_LINES_SHIFT);
+	} //}}}
+
+	//{{{ setScreenLineCount() method
+	public final void setScreenLineCount(int line, int count)
+	{
+		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
+			| ((long)count << SCREEN_LINES_SHIFT));
 	} //}}}
 
 	//{{{ isFoldLevelValid() method
@@ -312,9 +358,10 @@ public class OffsetManager
 			{
 				// need the line end offset to be in place
 				// for following fold level calculations
-				lineInfo[startLine + i] = ((offset + endOffsets.get(i) + 1)
-					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)
-					| visible);
+				lineInfo[startLine + i] = (((offset + endOffsets.get(i) + 1)
+					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK))
+					| visible
+					| (1L << SCREEN_LINES_SHIFT));
 			}
 
 			//{{{ Unrolled
@@ -411,7 +458,8 @@ public class OffsetManager
 	 * 48-55: visibility bit flags
 	 * 56: fold level valid flag
 	 * 57: context valid flag
-	 * 58-63: reserved
+	 * 58-62: number of screen lines
+	 * 63: reserved
 	 *
 	 * Having all the info packed into a long is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
@@ -431,6 +479,8 @@ public class OffsetManager
 	private static final int VISIBLE_SHIFT = 48;
 	private static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
 	private static final long CONTEXT_VALID_MASK = (1L<<57);
+	private static final long SCREEN_LINES_MASK = 0x7c00000000000000L;
+	private static final long SCREEN_LINES_SHIFT = 58;
 
 	//{{{ Instance variables
 	private Buffer buffer;
