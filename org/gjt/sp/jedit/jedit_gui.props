@@ -1,5 +1,5 @@
 ###
-### jEdit user interface definitions
+### jEdit user interface definitions,
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ###
@@ -763,7 +763,7 @@ view.gutter.marker=Marker: {0}
 view.status.add-marker=Shortcut for new marker? [{0}]
 view.status.auto-wrap=Search string not found; wrapping around!
 view.status.bracket=Matches line {0}: {1}
-view.status.caret-tooltip=Line and column number indicator
+view.status.caret-tooltip=Line and column number (line,column[-virtual] relative%)
 view.status.copy-append-string-register=Register name to copy append to? [{0}]
 view.status.copy-string-register=Register to copy to? [{0}]
 view.status.cut-append-string-register=Register to cut append to? [{0}]
@@ -779,8 +779,8 @@ view.status.linesep-changed=Line separator set to {0}
 view.status.linesep-tooltip=Line separator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.mode-tooltip=Current edit mode, fold mode, and encoding
-view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
-view.status.multi-tooltip=Multiple selection indicator (click to change)
+view.st,atus.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
+view.status.multi-tooltip=Multiple selection mode (click to change)
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
 view.status.no-markers=no markers set
 view.status.no-registers=no registers defined
@@ -852,6 +852,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Sarsgard\n\
 	Bill McMilleon\n\
 	Brad Mace\n\
+	Brant Langer Gurganus\n\
 	Brett Smith\n\
 	Bruno Tatibouet\n\
 	Calvin Yu\n\

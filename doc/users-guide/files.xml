@@ -44,7 +44,7 @@
    The number of recent files to remember can be changed and caret
    position saving can be disabled in the <guibutton>General</guibutton> pane of
    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   dialog box; see <xref linkend="general-pane" />.
   </para>
   <para>
    The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Current Directory</guimenuitem>
@@ -110,13 +110,13 @@
     However, in some situations, this behavior is undesirable. For example,
     on Unix saving files this way will result in the owner and group of the
     file being reset. If this bothers you, you can disable this so-called
-    <quote>two-stage save</quote> in the <guibutton>Loading and Saving</guibutton>
+    <quote>two-stage save</quote> in the <guibutton>General</guibutton>
     pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="general-pane"/>.
    </para>
   </sidebar>
-  <sect2><title>Autosave and Crash Recovery</title>
+  <sect2 id="autosave"><title>Autosave and Crash Recovery</title>
    <para>
     The autosave feature protects your work from computer crashes and
     such. Every 30 seconds, all buffers with unsaved changes are
@@ -137,12 +137,12 @@
    </para>
    <para>
     The autosave interval can be changed
-    in the <guibutton>Loading and Saving</guibutton> pane of the
+    in the <guibutton>Autosave and Backups</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />.
+    dialog box; see <xref linkend="autosave-backups-pane" />.
    </para>
   </sect2>
-  <sect2><title>Backups</title>
+  <sect2 id="backups"><title>Backups</title>
    <para>
     The backup feature can be used to roll back to the previous version
     of a file after changes were made. When a buffer is saved
@@ -150,10 +150,9 @@
     <quote>backed up</quote> under a different file name.
    </para>
    <para>
-    The behavior of the backup feature is specified in the<guibutton>Loading and
-    Saving</guibutton> pane of the
+    The behavior of the backup feature is specified in the <guibutton>Autosave and Backups</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="autosave-backups-pane"/>.`
    </para>
    <para>
     The default behavior is to back up the original contents
@@ -218,9 +217,9 @@
   <para>
    By default, new files are saved with your operating system's native line
    separator. This can be changed in the
-   <guibutton>Loading and Saving</guibutton> pane of the
+   <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />. Note that changing this
+   dialog box; see <xref linkend="general-pane" />. Note that changing this
    setting has no effect on existing files.
   </para>
  </sect1>
@@ -233,10 +232,9 @@
   </para>
   <para>
    The default encoding, used to load and save files for which no
-   other encoding is specified, can be set in the <guibutton>Loading and
-   Saving</guibutton> pane of the
+   other encoding is specified, can be set in the <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="general-pane"/>.
   </para>
   <para>
    Unless you change the default encoding, jEdit will use your operating
@@ -315,15 +313,12 @@
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
    Browser</guimenuitem> displays the file system browser.
-   By default, the file system browser is shown in a floating window.
-   It can be set to dock into the view in the <guibutton>Docking</guibutton>
-   pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box; see <xref linkend="docking" />.
+   By default, the file system browser is shown in a floating window. It can be docked using the commands shown when clicking the popup menu button in the top-left corner; see <xref linkend="docking" />.
   </para>
   <para>
    The file system browser can be customized in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="vfs-browser-pane"/>.
   </para>
   <sect2><title>Navigating the File System</title>
    <para>
@@ -341,8 +336,6 @@
     mouse, you can click the middle mouse button as well). Alternatively, click
     the disclosure
     widget next to a directory to list its contents in place.
-   </para>
-   <para>
     To browse higher up in the directory hierarchy, double-click one of the parent
     directories in the parent directory list.
    </para>
@@ -360,8 +353,6 @@
     those whose names end with <filename>.java</filename>), enter a glob pattern
     in the <guibutton>Filter</guibutton> text field.
     This text fields remembers previously entered strings.
-   </para>
-   <para>
     See <xref linkend="globs" /> for information about glob patterns.
    </para>
    <para>
@@ -442,47 +433,26 @@
   <sect2><title>The Favorites Menu</title>
    <para>
     Clicking the <guibutton>Favorites</guibutton> button displays a menu
-    showing all directories in the favorites list. To add the selected directory
-    to the favorites
-    (or the current directory, if there is no selection), invoke
-    <guimenuitem>Add to Favorites</guimenuitem> from this menu. To remove
-    a directory from the favorites, invoke
+    showing all files and directories in the favorites list. The
+    <guimenuitem>Add to Favorites</guimenuitem> item adds the currently selected file to the favorites list. If nothing is selected, the current directory is added. To remove
+    a file from the favorites, invoke
     <guimenuitem>Edit Favorites</guimenuitem>, which will show the favorites
-    list in the file system view; then select <guimenuitem>Delete</guimenuitem>
-    from the appropriate directory's right-click menu.
+    list in the file system view, then select <guimenuitem>Delete</guimenuitem>
+    from the right-click menu of the entry you want to remove.
    </para>
   </sect2>
   <sect2><title>Keyboard Shortcuts</title>
    <para>
-    The file system browser can be navigated from the keyboard:
+    Completion behaves differently in file dialogs than in the stand-alone file system browser window.
    </para>
-   <itemizedlist>
-    <listitem><para><keycap>Enter</keycap> - opens the currently selected file or
-    directory.</para></listitem>
-    <listitem><para><keycombo><keycap>Shift</keycap>
-    <keycap>Enter</keycap></keycombo> - opens the currently selected file in a
-    new view, or the currently selected directory in a new file system browser
-    window.</para></listitem>
-    <listitem><para><keycap>Left</keycap> - goes to the current directory's parent.
-    </para></listitem>
-    <listitem><para><keycap>Up</keycap> - selects previous file in list.
-    </para></listitem>
-    <listitem><para><keycap>Down</keycap> - selects next file in list.
-    </para></listitem>
-    <listitem><para><keycap>/</keycap> - displays the root directory.
-    </para></listitem>
-    <listitem><para><keycap>~</keycap> - displays your home directory.
-    </para></listitem>
-    <listitem><para><keycap>-</keycap> - displays the directory containing
-    the current buffer.</para></listitem>
-    <listitem><para>Typing the first few characters of
-    a file's name will select that file.
-    </para></listitem>
-   </itemizedlist>
    <para>
-    The file system tree must have keyboard focus for these
-    shortcuts to work. They are not active in the <guibutton>Path</guibutton> or
-    <guibutton>Filter</guibutton> text fields.
+    In the file dialog, keyboard input goes in the file name field by default. Pressing <keycap>Enter</keycap> opens the file or directory path that is either fully or partially entered in the file name field. Typing the first few characters of a file's name selects that file. If the file name field is empty and nothing is selected, <keycap>/</keycap> lists the root directory on Unix and the list of drives on Windows. There are two handy abbreviations that may be used in file paths: <keycap>~</keycap> expands to the home directory, and <keycap>-</keycap> expands to the current buffer's directory.
+   </para>
+   <para>
+    For example, to open a file <filename>/home/slava/jEdit/doc/TODO.txt</filename>, you might enter <filename>~/j/d/to</filename>.
+   </para>
+   <para>
+    In the stand-alone file system browser, keyboard input is handled slightly differently. There is no file name field, instead shortcuts are active when the file tree has keyboard focus. Additionally, pressing <keycap>/</keycap>, <keycap>~</keycap> or <keycap>-</keycap> always immediately goes to the root, home and current buffer's directory, respectively.
    </para>
   </sect2>
  </sect1>

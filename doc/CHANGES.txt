@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre3
 
-Thanks to Brad Mace and Ken Turner for contributing to this release.
+Thanks to Brad Mace, Brant Langer Gurganus and Ken Turner for
+contributing to this release.
 
 {{{ Editing
 
@@ -27,6 +28,8 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   by the required attribute DELEGATE are copied into this ruleset.
 
 - Improved Velocity syntax highlighiting.
+
+- Added TPL syntax highlighting (Brant Langer Gurganus).
 
 }}}
 {{{ User Interface
