@@ -375,6 +375,12 @@ public class UndoManager
 			return offset;
 		} //}}}
 
+		//{{{ toString() method
+		public String toString()
+		{
+			return str;
+		} //}}}
+
 		UndoManager mgr;
 		int offset;
 		int length;

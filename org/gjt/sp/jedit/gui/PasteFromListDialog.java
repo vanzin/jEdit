@@ -205,7 +205,7 @@ public class PasteFromListDialog extends EnhancedDialog
 			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
 
-			setText(shorten((String)value));
+			setText(shorten(value.toString()));
 
 			return this;
 		}

@@ -166,7 +166,7 @@ public class KillRing
 			{
 				out.write("<ENTRY>");
 				out.write(MiscUtilities.charsToEntities(
-					(String)model.getElementAt(i)));
+					model.getElementAt(i).toString()));
 				out.write("</ENTRY>");
 				out.write(lineSep);
 			}
@@ -338,7 +338,7 @@ public class KillRing
 			else
 				rem = ring[count - index - 1];
 
-			return rem.str;
+			return rem;
 		}
 
 		public int getSize()
