@@ -5,7 +5,7 @@
 <chapter id="using-macros"><title>Using Macros</title>
   <para>
     Macros in jEdit are short scripts written in a scripting language called
-    <firstterm>BeanShell</firstterm>. They provide an wasy way to
+    <firstterm>BeanShell</firstterm>. They provide an easy way to
     automate repetitive keyboard and menu procedures,
     as well as access to the objects and methods created by
     jEdit. Macros
@@ -67,11 +67,11 @@
    <guimenu>Macros</guimenu> menu. See <xref linkend="organizing-macros"/>
    for details. When you are happy with the macro, save the buffer and it
    will appear in the <guimenu>Macros</guimenu> menu. To discard the macro,
-   close the buffer without saving.
+   close the buffer without saving it.
   </para>
 
   <para>
-   If a complicated operation only needs to be repeated a few of
+   If a complicated operation only needs to be repeated a few
    times, using the temporary macro feature is quicker than saving a new
    macro file.
   </para>
@@ -81,9 +81,15 @@
    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) begins
    recording to a buffer named <filename>Temporary_Macro.bsh</filename>.
-   Once recording is complete, you don't need to save the
-   <filename>Temporary_Macro.bsh</filename>buffer before playing it back.
+   Once recording of a temporary macro is complete, jEdit does not display
+   the buffer containing the recorded commands, but the name
+   <filename>Temporary_Macro.bsh</filename> will be visible on any list of
+   open buffers. By switching to that buffer, you can view the commands,
+   edit them, and save them if you wish to
+   a permament macro file. Whether or not you look at or save the temporary
+   macro contents, it is immediately available for playback.
   </para>
+
   <para>
    <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Temporary
    Macro</guimenuitem> (shortcut:
@@ -93,12 +99,16 @@
   </para>
 
   <para>
-   If you do not save the temporary macro, you must keep the buffer
-   containing the macro script open during your jEdit session. To have the
-   macro available for your next jEdit session, save the buffer
-   <filename>Temporary_Macro.bsh</filename> as an ordinary macro with a
-   descriptive name of your choice. The new name will then be displayed in
-   the <guimenu>Macros</guimenu> menu.
+    Only one temporary macro is available at a time. If you begin recording
+    a second temporary macro, the first is erased and cannot be recovered
+    unless you have saved the contents to a file with a name other than
+    <filename>Temporary_Macro.bsh</filename>.
+    If you do not save the temporary macro, you must keep the buffer
+    containing the macro script open during your jEdit session. To have the
+    macro available for your next jEdit session, save the buffer
+    <filename>Temporary_Macro.bsh</filename> as an ordinary macro with a
+    descriptive name of your choice. The new name will then be displayed in
+    the <guimenu>Macros</guimenu> menu.
   </para>
 </sect1>
 
@@ -107,11 +117,21 @@
   <para>
     Macros supplied with jEdit, as well as macros that you record or write,
     are displayed under the <guimenu>Macros</guimenu> menu in a
-    hierarchical structure. The jEdit installation includes about 50 macros
+    hierarchical structure. The jEdit installation includes about 30 macros
     divided into several major categories. Each category corresponds to a
     nested submenu under the <guimenu>Macros</guimenu> menu. An index of
     these macros containing short descriptions and usage notes is found in
     <xref linkend="macro-index"/>.
+  </para>
+
+  <para>
+    There is a very large collection of additional macros available at the
+    <ulink url="http://community.jedit.org">jEdit
+    Community></ulink> web site in the <quote>Downloads</quote> section.  The
+    collection includes macros distributed with earlier versions of jEdit
+    as well as many macros contributed by members of the jEdit
+    development team and other users. There are detailed descriptions for
+    each entry as well as a search facility.
   </para>
 
   <para>
@@ -154,8 +174,9 @@
 <sect1 id="organizing-macros"><title>How jEdit Organizes Macros</title>
   <para>
    Every macro, whether or not you originally recorded it, is stored on
-   disk and can be edited as a text file. The file names of macros
-   must have a <filename>.bsh</filename> extension.
+   disk and can be edited as a text file. The file name of a macro
+   must have a <filename>.bsh</filename> extension in order for jEdit
+   to be aware of it.
    By default, jEdit associates a
    <filename>.bsh</filename> file with the BeanShell edit
    mode for purposes of syntax highlighting, indentation and other
@@ -214,10 +235,12 @@
     Macros can be opened and edited much like ordinary files from the
     file system browser. Editing macros from within jEdit will
     automatically update the macros menu; however, if you modify macros
-    from another program, the
+    from another program or add macro files to the macro directories, you
+    should run the
     <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>
-    will need to be invoked to update the macro list.
+    command to update the macro list.
   </para>
  </sect1>
 
 </chapter>
+
