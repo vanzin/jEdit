@@ -132,7 +132,7 @@
    not visible, the text of the matching line will be shown in the status
    bar. If the matching line consists of only whitespace and the bracket
    itself, the <emphasis>line before</emphasis> is shown instead. This
-   feature is very useful for code with bracketes indented like so:
+   feature is very useful for code with brackets indented like so:
   </para>
   <programlisting>public void someMethod()
 {
@@ -432,7 +432,7 @@ With text inside it.
   <warning>
    <para>
     When using indent folding, portions of the buffer may become
-    inaccessable if you change the leading indent of the first line of a
+    inaccessible if you change the leading indent of the first line of a
     collapsed fold. If you experience this, you will need to use the
     <guimenuitem>Expand All Folds</guimenuitem> command to make the text
     visible again.
@@ -442,8 +442,8 @@ With text inside it.
    <para>
     The first line of each fold has a triangle
     drawn next to it in the gutter (see <xref linkend="textarea"/> for
-    more information about the gutter). The triangle points towards the
-    line when the fold is collapsed, and downwards when the fold is
+    more information about the gutter). The triangle points toward the
+    line when the fold is collapsed, and downward when the fold is
     expanded.
     Clicking the triangle collapses and
     expands the fold. To expand all sub-folds as well, hold down the

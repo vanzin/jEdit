@@ -65,7 +65,7 @@
       the data to storage.  If you use jEdit's properties API to hold
       <quote>key-value</quote> type settings for your plugins, no special
       processing is needed for them, since jEdit loads application
-      properties automaticially at startup and writes them to the
+      properties automatically at startup and writes them to the
       <filename>properties</filename> file in the user's settings directory
       when the application exits.  Most plugins find this approach sufficient for
       saving settings.
@@ -84,7 +84,7 @@
       method on each plugin core class to obtain entries to be displayed
       in the view's <guimenu>Plugins</guimenu> menu. The
       <parameter>menuItems</parameter> parameter is a
-      <classname>Vector</classname> that accumilates menu items and
+      <classname>Vector</classname> that accumulates menu items and
       menus as it is passed from plugin to plugin.
     </para>
     <para>
@@ -105,7 +105,7 @@
     <para>
       The parameter passed to <function>loadMenu()</function> is
       the name of a property defined in the plugin's own property file that
-      contains menu data.  The form of the propoerty entry is a list of labels
+      contains menu data.  The form of the property entry is a list of labels
       that in turn correspond to other property names and ultimately to
       the actual text for menu items as well as implementation code. We will
       detail the format of the menu data in <xref linkend="plugin-implement-menu"/>
@@ -387,7 +387,7 @@ else if(msg instanceof ViewUpdate) {
   Options</guilabel> dialog. A plugin that allows user configuration
   should provide one or more implementations of
   jEdit's <classname>OptionPane</classname> interface to have
-  configuration options displayed in a manner consistent wth the rest of
+  configuration options displayed in a manner consistent with the rest of
   the application.
 </para>
 
@@ -507,7 +507,7 @@ else if(msg instanceof ViewUpdate) {
   of a plugin's configuration options, this class can be used to create a
   group of options panes. The group will appear as a single node in the
   options dialog tree-based index. The member option panes will appear as
-  leaf nodes under the group's node.  Threee simple methods create and
+  leaf nodes under the group's node.  Three simple methods create and
   populate an option pane:
 </para>
 
@@ -568,7 +568,7 @@ else if(msg instanceof ViewUpdate) {
   <listitem>
     <para>
       a file named <filename>dockables.xml</filename> contained the
-      name of the plugin and the code for costructing an instance of the
+      name of the plugin and the code for constructing an instance of the
       plugin's docking window component, set forth in a specified XML
       format;
     </para>
@@ -916,7 +916,7 @@ myplugin-grok.label=Grok Current Buffer</programlisting>
   </listitem>
   <listitem>
     <para>
-      licensing information, including acknowledgements for any library
+      licensing information, including acknowledgments for any library
       software used by the plugin.
     </para>
   </listitem>

@@ -399,9 +399,9 @@ result = 14;</programlisting>
     <classname>String</classname> and and then tried these reassignments,
     BeanShell would complain. While avoiding explicit type declaration makes
     writing macro code simpler, using them can act as a check to make sure you are
-    not using the wrong varaible type of object at a later point in your
+    not using the wrong variable type of object at a later point in your
     script. It also makes it easier (if you are so inclined) to take a
-    BeanShell <quote>prototype</quote> and incorporte it in a Java program.
+    BeanShell <quote>prototype</quote> and incorporate it in a Java program.
   </para>
 
   <para>
@@ -674,7 +674,7 @@ String result = df.format(d);
    <para>
     Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
     in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
-    box. This will add a line number to each selected line begining with
+    box. This will add a line number to each selected line beginning with
     the number <userinput>1</userinput>.
    </para>
   </informalexample>

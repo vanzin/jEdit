@@ -280,7 +280,7 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
 
   <para>
     Next we shall create a smaller panel containing two fields for
-    entering the prefix and suffix text and two labels identfying the
+    entering the prefix and suffix text and two labels identifying the
     input fields.
   </para>
 
@@ -349,12 +349,12 @@ buttonPanel.add(Box.createGlue());
 content.add(buttonPanel, <quote>South</quote>);</programlisting></informalexample>
 
   <para>
-    To create the dialog's bittons, we follow repeat the <quote>nested container</quote>
+    To create the dialog's buttons, we follow repeat the <quote>nested container</quote>
     pattern we used in creating the text fields.
     First, we create a new, nested panel. This time we use a <classname>BoxLayout</classname>
     that places components either in a single row or
     column, depending on the parameter passed to its constructor. This layout object
-    is more flexible than a <classname>GridLayout</classname> in that varaible spacing
+    is more flexible than a <classname>GridLayout</classname> in that variable spacing
     between elements can be specified easily. We put an
     <classname>EmptyBorder</classname> in the new panel to set margins for placing
     the buttons. Then we create the buttons, using a <classname>JButton</classname>
@@ -464,7 +464,7 @@ void actionPerformed(e)
     <classname>ActionListener</classname> interface. It looks at the source
     of the <classname>ActionEvent</classname>, determined by a call to
     <function>getSource()</function>. What we do with this return value is
-    straighforward: if the source is not the <guibutton>Cancel</guibutton> button, we
+    straightforward: if the source is not the <guibutton>Cancel</guibutton> button, we
     call the <function>processText()</function> method to insert the prefix
     and suffix text. Then the dialog is closed by calling its
     <function>dispose()</function> method.

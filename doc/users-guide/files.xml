@@ -216,7 +216,7 @@
   </para>
   <para>
    Unfortunately, there
-   is no programmical way to obtain a list of all supported encodings, and the
+   is no way to obtain a list of all supported encodings in Java, and the
    set is constantly changing with each Java version. So to play it safe, jEdit
    has a few pre-defined defaults, but allows you to use any other supported
    encoding, assuming you know its name.
@@ -237,7 +237,7 @@
   </para>
   <para>
    The <guimenu>Open With Other Encoding</guimenu> command in the same menu
-   lets you enter an arbitriary encoding name, assuming it is supported by
+   lets you enter an arbitrary encoding name, assuming it is supported by
    your Java implementation.
   </para>
   <para>
@@ -265,7 +265,7 @@
    <para>
     Because ASCII is unsuitable for international use, most operating
     systems use an 8-bit extension of ASCII, with the first 127 characters
-    remaining the same, and the rest used to encode accents, ulmauts, and
+    remaining the same, and the rest used to encode accents, umlauts, and
     various less frequently used typographical marks. Unfortunately, the three
     major
     operating systems all extend ASCII in a different way. Files written by
@@ -276,7 +276,7 @@
     widespread usage.
    </para>
    <para>
-    Windows users are accustomized to dealing with files in a wide range of
+    Windows users are accustomed to dealing with files in a wide range of
     character sets, known as <firstterm>code pages</firstterm>. Java supports a
     large number of code pages; the encoding name consists of the text
     <quote>Cp</quote>, followed by a number.
@@ -528,7 +528,7 @@
    printed on each page.</para></listitem>
    <listitem><para>If line numbers should be printed.</para></listitem>
    <listitem><para>If the output should be colored according to the current
-   mode's syntax highlighting rules (might look bad on grayscale
+   mode's syntax highlighting rules (might look bad on gray-scale
    printers); otherwise, only syntax styles will be applied.</para></listitem>
    <listitem><para>The tab size to use when printing - this will usually be
    less than the text area tab size, to conserve space in the printed output.

@@ -51,7 +51,7 @@
    </para>
    <para>
     One side-effect of this is that if the maximum heap size is set too low,
-    opening large files or performing other memory-intesive operations can
+    opening large files or performing other memory-intensive operations can
     fail, even if you have a lot of system memory free. The solution is to
     change the Java heap size.
    </para>

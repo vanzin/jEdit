@@ -116,7 +116,7 @@
    <para>
     Not only does the server pick a random TCP port number on startup,
     it also requires that clients provide an <firstterm>authorization
-    key</firstterm>; a randomly-generated number only accessable to
+    key</firstterm>; a randomly-generated number only accessible to
     processes running on the local machine.
     So not only will <quote>bad guys</quote> have to guess a 64-bit integer,
     they will need to get it right on the first try; the edit server
@@ -145,7 +145,7 @@
 
   <para>
    The jEditLauncher package includes a utility for changing the command line
-   parameters that are stored with jEditLauncher and used everytime it runs jEdit.
+   parameters that are stored with jEditLauncher and used every time it runs jEdit.
    You can change the Java interpreter used to launch jEdit, the amount of heap memory,
    the working directory and other command line parameters.  To make these changes,
    select <guilabel>Set jEdit Parameters</guilabel> from the jEdit group in

@@ -86,7 +86,7 @@
    <filename>Temporary_Macro.bsh</filename> will be visible on any list of
    open buffers. By switching to that buffer, you can view the commands,
    edit them, and save them if you wish to
-   a permament macro file. Whether or not you look at or save the temporary
+   a permanent macro file. Whether or not you look at or save the temporary
    macro contents, it is immediately available for playback.
   </para>
 

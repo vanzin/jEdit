@@ -302,7 +302,7 @@
         </funcprototype>
       </funcsynopsis>
       <para>
-        Retruns an array containing the current classpath.
+        Returns an array containing the current classpath.
       </para>
     </listitem>
 
@@ -325,7 +325,7 @@
       <para>
         Reloads the class or package specified by
         <parameter>packagename</parameter> in the BeanShell interpreter.
-        If called without a parameter, releads all classes
+        If called without a parameter, reloads all classes
         in the interpreter's classpath.
       </para>
     </listitem>
@@ -419,7 +419,7 @@
         </funcprototype>
       </funcsynopsis>
       <para>
-        Createes a <quote>server</quote> version of the BeanShell
+        Creates a <quote>server</quote> version of the BeanShell
         interpreter that shares the same namespace as the current
         interpreter.  The server interpreter listens on the designated
         port.
@@ -538,7 +538,7 @@ crufties.counter = 5;
         </funcprototype>
       </funcsynopsis>
       <para>
-        Returns a refernece to the BeanShell <classname>This</classname>
+        Returns a reference to the BeanShell <classname>This</classname>
         object representing the enclosing method scope specified
         by <parameter>scopename</parameter>.  This method work similar to
         the <function>super</function> keyword but can refer to enclosing

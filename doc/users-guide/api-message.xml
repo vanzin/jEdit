@@ -48,32 +48,6 @@
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public static void <function>addToNamedList</function></funcdef>
-        <paramdef>Object <parameter>tag</parameter></paramdef>
-        <paramdef>Object <parameter>entry</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>removeFromNamedList</function></funcdef>
-        <paramdef>Object <parameter>tag</parameter></paramdef>
-        <paramdef>Object <parameter>entry</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-	<para>
-		Manages arbitriary lists of objects. Used by jEdit to manage
-    dockable windows. The
-    <application>ErrorList</application> plugin also uses these methods to
-    manage error sources.
-	</para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
         <funcdef>public EBComponent[] <function>getComponents</function></funcdef>
         <void/>
       </funcprototype>

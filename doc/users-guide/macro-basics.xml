@@ -31,7 +31,7 @@
    BeanShell with a program written in Java is that it allows the user to
    customize the program's behavior using the same interfaces
    designed and used by the program itself. BeanShell can
-   turn a well-designed application into a powerful, extendible toolkit.
+   turn a well-designed application into a powerful, extensible toolkit.
   </para>
 
   <para>

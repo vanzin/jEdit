@@ -142,7 +142,7 @@ if( JOptionPane.OK_OPTION !=
 
   <para>
     This macro takes several items of user input and produces a formatted
-    file header at the begining of the buffer. The full macro is included in
+    file header at the beginning of the buffer. The full macro is included in
     the set of macros installed by jEdit. There are a number of input
     features of this excerpt worth noting.
   </para>
@@ -178,7 +178,7 @@ if( JOptionPane.OK_OPTION !=
         the text field component, expressed as the number of characters of
         <quote>average</quote> width. When
         <function>showConfirmDialog()</function> prepares the layout of the
-        message box, it sets the width wide enough to accomodate the
+        message box, it sets the width wide enough to accommodate the
         designated with of <varname>descField</varname>. This technique produces
         a message box and input text fields that are wide enough for your data
         with one line of code.
@@ -252,7 +252,7 @@ if( JOptionPane.OK_OPTION !=
         <guilabel>Cancel</guilabel> button was pressed or because the
         message box window was closed without a button press), a
         <constant>null</constant> value is returned to a calling function,
-        signaling that the user cancelled macro execution.  If the return
+        signaling that the user canceled macro execution.  If the return
         value is <constant>OK_OPTION</constant>, each of the input components
         can yield their contents for further processing by calls to
         <function>JTextField.getText()</function> (or, in the case of
@@ -302,7 +302,7 @@ if( JOptionPane.OK_OPTION !=
     displayed. In addition, instead of returning an <classname>int</classname>
     representing the user's action, <function>showInputDialog()</function>
     returns the <classname>Object</classname> corresponding to the user's
-    selection, or <constant>null</constant> if the selection is cancelled.
+    selection, or <constant>null</constant> if the selection is canceled.
   </para>
 
   <para>
@@ -331,7 +331,7 @@ result = JOptionPane.showInputDialog(view,
     item or <constant>null</constant> representing no selection.  Any
     further use of this fragment would have to test the value of
     <varname>result</varname> and likely exit from the macro if the value
-    equalled <constant>null</constant>.
+    equaled <constant>null</constant>.
   </para>
 
   <para>
@@ -529,7 +529,7 @@ view.getInputHandler().readNextChar("Enter a character",
   </para>
 
   <para>
-    If a startup script throws an exception (becuase, for example,
+    If a startup script throws an exception (because, for example,
     it attempts to call a method on a <constant>null</constant> object).
     jEdit will show an error dialog box and move on to the next
     startup script. If script bugs are causing jEdit to crash or
@@ -841,7 +841,7 @@ bottom</screen>
     An <glossterm>exception</glossterm> is a condition reflecting an error
     or other unusual result of program execution that requires interruption
     of normal program flow and some kind of special handling. Java has a
-    rich (and extendable) collection of exception classes which represent
+    rich (and extensible) collection of exception classes which represent
     such conditions.
   </para>
 

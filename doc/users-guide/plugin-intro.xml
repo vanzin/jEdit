@@ -31,7 +31,7 @@ Introducing the Plugin API</title>
 
 <para>
   Using the <quote>Plugin Manager</quote> feature of jEdit, users with an
-  Internet connnection can check for new or updated plugins and install
+  Internet connection can check for new or updated plugins and install
   and remove them without leaving jEdit. See <xref
   linkend="using-plugins" /> for details.
 </para>
@@ -43,7 +43,7 @@ Introducing the Plugin API</title>
 
 <itemizedlist>
 	<listitem><para>
-    Ths plugin must supply information about itself, such as its name,
+    This plugin must supply information about itself, such as its name,
     version, author, and compatibility with versions of jEdit.
   </para></listitem>
 
@@ -81,7 +81,7 @@ Introducing the Plugin API</title>
     that jEdit will perform on behalf of the plugin upon
     user request. Actions are small blocks of BeanShell code that
     provide the <quote>glue</quote> between user input and
-    specifc plugin routines.
+    specific plugin routines.
   </para>
 
   <para>
@@ -137,7 +137,7 @@ Introducing the Plugin API</title>
   <para>
     On occasion an API change will break code used by plugins, although
     efforts are made to maintain or deprecate plugin-related code on a
-    trasisional basis. possible. While the majority of plugins are
+    transitional basis. possible. While the majority of plugins are
     unaffected by most changes and will continue working, it is a good idea
     to monitor the jEdit change log, the mailing lists or <ulink
     url="http://community.jedit.org">jEdit Community</ulink> for API changes

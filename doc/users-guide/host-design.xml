@@ -137,7 +137,7 @@ The JARClassLoader</title>
   of jEdit itself be equal to or above some threshold version. A plugin
   can also require the presence of another plugin or a particular class
   from another archive. If any dependency is
-  not satisified, the loader marks the plugin as <quote>broken</quote> and
+  not satisfied, the loader marks the plugin as <quote>broken</quote> and
   logs an error message.
 </para>
 
@@ -280,7 +280,7 @@ The Role of the View Object</title>
 <para>
   A <classname>View</classname> is jEdit's top-level frame window.
   The largest component it contains is an edit pane that in turn contains a
-  text area that displays a buffer.  A view can have more than one eidt pane
+  text area that displays a buffer.  A view can have more than one edit pane
   in a split window configuration.  The view can also contain a menu bar,
   a toolbar and other window decorations, as well as docked plugin components.
 </para>
@@ -346,14 +346,14 @@ The DockableWindowManager and the EditBus</title>
   examines options supplied by the user in the <guilabel>Global
   Options</guilabel> dialog box. It displays any plugins that the user
   designated for one of the four docking positions when the corresponding
-  buttonon a docking pane is selected.
+  button a docking pane is selected.
 </para>
 
 <para>
   The <classname>DockableWindowManager</classname> creates and displays
   plugin windows by routing messages through the application's
   <classname>EditBus</classname> object that we mentioned earlier. The
-  EditBus mantains a list of objects that have requested to receive
+  EditBus maintains a list of objects that have requested to receive
   messages. When a message is sent using this class, all registered
   components receive it in turn.
 </para>
