@@ -1,6 +1,6 @@
 JEDIT 4.1 VERSION HISTORY
 
-* Version 4.1pre9 -- 4.1 release candidate 1
+* Version 4.1pre9
 
 Thanks to Chris Petersen, Kris Kopicki, Randolf Mock and
 Reinout van Schouwen for contributing to this release.
@@ -21,6 +21,9 @@ Reinout van Schouwen for contributing to this release.
 - Much faster auto indent.
 
 - Prefix keys (C+e, C+e n, C+m, C+r) now show a status bar message.
+
+- Added a "Docking Options" item to the docking button's right-click
+  menu.
 
 + Installer Changes:
 
@@ -67,6 +70,10 @@ Reinout van Schouwen for contributing to this release.
 
 - Fixed an auto-indent bug that would give lines incorrect indent if
   they contained both a closing and an opening bracket.
+
+- Fixed a problem with undo -- after undoing the full undo queue,
+  further edits were not being added. This problem has been there since
+  the 4.0 pre-releases, damn.
 
 + API Changes:
 

@@ -44,8 +44,8 @@ action-set.plugin=Plugin: {0}
 
 view.docking.close-tooltip=Hides the current docked window
 view.docking.menu-tooltip=Shows a list of docked windows
-
 view.docking.menu-float=New Floating Instance
+view.docking.menu-config=Docking Options...
 
 view.docking.toggle.label={0} (Toggle)
 view.docking.float.label={0} (New Floating Instance)

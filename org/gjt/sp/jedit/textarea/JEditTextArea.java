@@ -257,10 +257,10 @@ public class JEditTextArea extends JComponent
 			}
 			this.buffer = buffer;
 
+			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
+
 			buffer.addBufferChangeListener(bufferHandler);
 			bufferHandlerInstalled = true;
-
-			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
 			firstLine = 0;
 			maxHorizontalScrollWidth = 0;

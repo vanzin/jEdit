@@ -6,12 +6,11 @@
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>New</guimenuitem> (shortcut:
    <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new
-   untitled buffer. A new file will be created on disk when the buffer is saved
-   for the first time.
-  </para>
-  <para>
+   untitled buffer.
    Another way to create a new file is to specify a non-existent file
    name when starting jEdit on the command line.
+   A new file will be created on disk when the buffer is saved
+   for the first time.
   </para>
  </sect1>
  <sect1 id="opening"><title>Opening Files</title>
@@ -193,7 +192,7 @@
    (<literal>\r\n</literal>). jEdit can read and write files in all three formats.
   </para>
   <para>
-   When a file is being loaded, the line separator is automatically
+   When a file is loaded, the line separator is automatically
    detected, and is used when saving the file back to disk. The line
    separator used in the current buffer can be changed in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
@@ -343,6 +342,8 @@
     To see a specific set of files only (for example,
     those whose names end with <filename>.java</filename>), enter a glob pattern
     in the <guibutton>Filter</guibutton> text field.
+   </para>
+   <para>
     See <xref linkend="globs" /> for information about glob patterns.
     This text fields remembers previously entered strings.
    </para>

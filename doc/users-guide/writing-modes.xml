@@ -264,7 +264,7 @@
    <para>
     If the <literal>HIGHLIGHT_DIGITS</literal> attribute is set to
     <literal>TRUE</literal>, jEdit will attempt to highlight numbers in this
-    edit mode.
+    ruleset.
    </para>
    <para>
     Any word consisting entirely of digits (0-9) will be highlighted with the
@@ -453,6 +453,15 @@
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
+  <para>
+   Here is a <literal>SPAN_REGEXP</literal> rule that highlights constructs
+   placed between <literal>&lt;#ftl</literal> and <literal>&gt;</literal>,
+   as long as the <literal>&lt;#ftl</literal> is followed by a word break:
+  </para>
+  <programlisting><![CDATA[<SPAN_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;" DELEGATE="EXPRESSION">
+    <BEGIN>&lt;#ftl\&gt;</BEGIN>
+    <END>&gt;</END>
+</SPAN_REGEXP>]]></programlisting>
  </sect1>
  <sect1 id="mode-rule-eol-span"><title>The EOL_SPAN Tag</title>
   <para>
@@ -626,9 +635,9 @@
    Perl's matcher constructions such as <literal>m/(.+):(\d+):(.+)/</literal>:
   </para>
   <programlisting><![CDATA[<SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="m"
-                        AT_WORD_START="TRUE"
-                >m([[:punct:]])(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>]]></programlisting>
+    HASH_CHAR="m"
+    AT_WORD_START="TRUE"
+>m([[:punct:]])(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>]]></programlisting>
 
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
@@ -641,7 +650,8 @@
    keywords to highlight.
    Keywords are similar to <literal>SEQ</literal>s, except that
    <literal>SEQ</literal>s match anywhere in the text, whereas keywords only
-   match whole words.
+   match whole words. Words are considered to be runs of text separted by
+   non-alphanumeric characters.
   </para>
   <para>
    The <literal>KEYWORDS</literal> tag does not define any attributes.
