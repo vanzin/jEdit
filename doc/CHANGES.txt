@@ -212,6 +212,13 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   pressed. This was inconsistent with all other completion behavior
   which was case insensitive.
 
+- File names that ended with a colon (:) were being treated like URLs
+  even if there was no VFS named by the string before the colon. This
+  made it impossible to open files named "foo:".
+
+- Docking areas can no longer be resized beyond visible bounds if the
+  "alternate tool bar layout" setting is off.
+
 }}}
 {{{ API Changes
 

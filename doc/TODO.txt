@@ -44,8 +44,6 @@ and quirks that I need to fix eventually.
 - motif l&f: shortcuts in menu items
 - replace with lookahead/lookbehind doesn't work
 - windows: fsb browser, type c:
-- files with names of the form foo: are not handled very well in some
-  cases since jEdit thinks they are URLs.
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 
 - how to handle S+0-9?
