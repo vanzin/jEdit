@@ -269,7 +269,7 @@ public class FileVFS extends VFS
 		File directory = new File(path);
 		File[] list = null;
 		if(directory.exists())
-			fsView.getFiles(directory,false);
+			list = fsView.getFiles(directory,false);
 
 		if(list == null)
 		{
