@@ -14,6 +14,11 @@ Thanks to Gerd Knops for contributing to this release.
 - Added option to make double-click drag treat each non-alphanumeric
   character as one word. (Gerd Knops)
 
+- Added an option to not hide the final end of line character of a
+  buffer.
+
+- Fixed minor highlighting problem with properties mode.
+
 + Miscellaneous Changes:
 
 - 'scriptPath' BeanShell variable is set to the macro file path while a
@@ -26,6 +31,11 @@ Thanks to Gerd Knops for contributing to this release.
 - The HyperSearch feature no longer blocks the GUI while listing a
   directory (which could take some time).
 
+- New 'broken image' icon shown in place of tool bar buttons whose icons
+  cannot be located.
+
+- Improved popup menu positioning code.
+
 + Bug Fixes:
 
 - When evaluating BeanShell expressions, the standard
@@ -37,6 +47,8 @@ Thanks to Gerd Knops for contributing to this release.
   switched on.
 
 - Removed debugging messages from PanelWindowContainer.java.
+
+- Fixed bottom tool bar layout problem.
 
 * Version 4.1pre1
 

@@ -90,9 +90,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				{
 					iconName = jEdit.getProperty(actionName + ".icon");
 					if(iconName == null)
-						continue;
-
-					icon = GUIUtilities.loadIcon(iconName);
+						icon = GUIUtilities.loadIcon("BrokenImage.png");
+					else
+					{
+						icon = GUIUtilities.loadIcon(iconName);
+						if(icon == null)
+							icon = GUIUtilities.loadIcon("BrokenImage.png");
+					}
 				}
 				listModel.addElement(new Button(actionName,iconName,icon,label));
 			}

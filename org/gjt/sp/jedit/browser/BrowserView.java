@@ -414,7 +414,7 @@ class BrowserView extends JPanel
 	private void showFilePopup(VFS.DirectoryEntry file, Point point)
 	{
 		popup = new BrowserCommandsMenu(browser,file);
-		GUIUtilities.showPopupMenu(popup,tree,point.x+1,point.y+1);
+		GUIUtilities.showPopupMenu(popup,tree,point.x,point.y);
 	} //}}}
 
 	//}}}

@@ -1024,8 +1024,8 @@ public class DockableWindowManager extends JPanel
 				bottomToolbars.setBounds(
 					_leftButtons.width + _left.width,
 					_height - _bottom.height
-					- _bottomButtons.height
-					- _bottomToolbars.height,
+					- _bottomToolbars.height
+					+ _topButtons.height,
 					_width - _left.width - _right.width,
 					_bottomToolbars.height);
 			}
@@ -1035,8 +1035,7 @@ public class DockableWindowManager extends JPanel
 				center.setBounds(
 					_leftButtons.width + _left.width,
 					_topButtons.height + _top.height
-					+ _topToolbars.height
-					+ _bottomToolbars.height,
+					+ _topToolbars.height,
 					_width - _left.width - _right.width,
 					_height - _top.height - _bottom.height
 					- _topToolbars.height

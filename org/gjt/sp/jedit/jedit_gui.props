@@ -84,6 +84,7 @@ help.icon=Help.png
 #{{{ Icon list for tool bar editor
 icons=ArrowL.png \
 	ArrowR.png \
+	BrokenImage.png \
 	Copy.png \
 	CopyToBuffer.png \
 	CurrentDir.png \
@@ -92,7 +93,6 @@ icons=ArrowL.png \
 	FindAgain.png \
 	FindInDir.png \
 	Find.png \
-	Folder.png \
 	Help.png \
 	Home.png \
 	NewDir.png \
@@ -1244,7 +1244,6 @@ buffer-options.loading-saving=Loading and Saving
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
 buffer-options.gzipped=GZIP (compress) file on disk
-buffer-options.trailingEOL=Trailing end-of-line at end of file
 buffer-options.editing=Editing
 buffer-options.mode=Edit mode:
 buffer-options.props=Corresponding buffer-local properties:
@@ -1301,6 +1300,7 @@ options.loadsave.newView=Client instances open files in new view
 options.loadsave.persistentMarkers=Save marker positions
 options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
 options.loadsave.backupEverySave=Backup on every save
+options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Text Area pane

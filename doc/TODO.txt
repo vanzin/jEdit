@@ -3,17 +3,15 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- try typing foo), put cursor after foo, type some more -- slowdown
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks
 - shift left/right moves caret in odd ways
 - change indentPrevLine to indentOneLine and indentSubsequentLines
-- better trailing EOL handling
 - minor quicknotepad changes -- update docs
 - add documentation for pre1 features
 - right-click on parent directories in fsb
-- do something 'bout tip 33
 - add dockable window state change msg
-- action system overhaul
 - rect select and whitespace
 - option to silence beeps
 - rect select: support shift-left/right
@@ -26,7 +24,6 @@ and quirks that I need to fix eventually.
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
 - don't repaint whole selection when resizing
-- finish monospaced hack
 - action system overhaul
 - move text utility methods to TextUtilities
 - focus problem with hypersearch in floating window?

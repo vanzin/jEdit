@@ -1156,7 +1156,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 					GUIUtilities.showPopupMenu(
 						popup,CommandsMenuButton.this,0,
-						CommandsMenuButton.this.getHeight());
+						CommandsMenuButton.this.getHeight(),
+						false);
 				}
 				else
 				{
@@ -1259,7 +1260,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					GUIUtilities.showPopupMenu(
 						popup,PluginsMenuButton.this,0,
-						PluginsMenuButton.this.getHeight());
+						PluginsMenuButton.this.getHeight(),
+						false);
 				}
 				else
 				{
@@ -1392,7 +1394,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 					GUIUtilities.showPopupMenu(
 						popup,FavoritesMenuButton.this,0,
-						FavoritesMenuButton.this.getHeight());
+						FavoritesMenuButton.this.getHeight(),
+						false);
 				}
 				else
 				{

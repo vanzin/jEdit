@@ -244,8 +244,8 @@ class ChunkCache
 			softWrap.init(textArea.lineSegment,painter.getStyles(),
 				painter.getFontRenderContext(),
 				painter,out,textArea.wrapMargin);
-			if(MONOSPACED_FONT_OPTIMIZATION)
-				softWrap.setMonospacedCharWidth(textArea.charWidth);
+			softWrap.setMonospacedCharWidth(textArea.monospacedHack
+				? textArea.charWidth : 0);
 			buffer.markTokens(physicalLine,softWrap);
 		}
 		else
@@ -266,8 +266,8 @@ class ChunkCache
 		noWrap.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter);
-		if(MONOSPACED_FONT_OPTIMIZATION)
-			noWrap.setMonospacedCharWidth(textArea.charWidth);
+		noWrap.setMonospacedCharWidth(textArea.monospacedHack
+			? textArea.charWidth : 0);
 		buffer.markTokens(physicalLine,noWrap);
 		return noWrap.getChunks();
 	} //}}}

@@ -78,6 +78,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttons.add(closeBox);
 
 		closeBox.addActionListener(new ActionHandler());
+		closeBox.addMouseListener(new MouseHandler());
 
 		popupButton = new JButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
 		popupButton.setRequestFocusEnabled(false);

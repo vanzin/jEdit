@@ -332,12 +332,12 @@ public class GUIUtilities
 		Icon icon;
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName == null)
-			return null;
+			icon = loadIcon("BrokenImage.png");
 		else
 		{
 			icon = loadIcon(iconName);
 			if(icon == null)
-				return null;
+				icon = loadIcon("BrokenImage.png");
 		}
 
 		String toolTip = prettifyMenuLabel(label);
@@ -1064,44 +1064,73 @@ public class GUIUtilities
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y)
 	{
-		Point p = new Point(x,y);
-		SwingUtilities.convertPointToScreen(p,comp);
+		showPopupMenu(popup,comp,x,y,true);
+	} //}}}
 
-		Dimension size = popup.getPreferredSize();
+	//{{{ showPopupMenu() method
+	/**
+	 * Shows the specified popup menu, ensuring it is displayed within
+	 * the bounds of the screen.
+	 * @param popup The popup menu
+	 * @param comp The component to show it for
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @param point If true, then the popup originates from a single point;
+	 * otherwise it will originate from the component itself. This affects
+	 * positioning in the case where the popup does not fit onscreen.
+	 *
+	 * @since jEdit 4.1pre1
+	 */
+	public static void showPopupMenu(JPopupMenu popup, Component comp,
+		int x, int y, boolean point)
+	{
+		int newX = x;
+		int newY = y;
 
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		int extraOffset = (point ? 1 : 0);
 
-		boolean horiz = false;
-		boolean vert = false;
-
-		// might need later
-		int origX = x;
-
-		if(p.x + size.width > screen.width
-			&& size.width < screen.width)
+		Component win = comp;
+		while(!(win instanceof Window || win == null))
 		{
-			x += (screen.width - p.x - size.width);
-			horiz = true;
+			newX += win.getX();
+			newY += win.getY();
+			win = win.getParent();
 		}
 
-		if(p.y + size.height > screen.height
-			&& size.height < screen.height)
+		if(win != null)
 		{
-			y += (screen.height - p.y - size.height);
-			vert = true;
-		}
+			Dimension size = popup.getPreferredSize();
 
-		// If popup needed to be moved both horizontally and
-		// vertically, the mouse pointer might end up over a
-		// menu item, which will be invoked when the mouse is
-		// released. This is bad, so move popup to a different
-		// location.
-		if(horiz && vert)
-		{
-			x = origX - size.width - 2;
-		}
+			Dimension winSize = win.getSize();
 
-		popup.show(comp,x,y);
+			if(newX + size.width > winSize.width
+				&& newX >= size.width)
+			{
+				newX = (winSize.width - size.width + extraOffset);
+			}
+			else
+			{
+				newX += extraOffset;
+			}
+
+			if(newY + size.height > winSize.height
+				&& newY >= size.height)
+			{
+				if(point)
+					newY -= (size.height + extraOffset);
+				else
+					newY -= (size.height + extraOffset + comp.getHeight());
+			}
+			else
+			{
+				newY += extraOffset;
+			}
+
+			popup.show(win,newX,newY);
+		}
+		else
+			popup.show(comp,x + extraOffset,y + extraOffset);
+
 	} //}}}
 
 	//{{{ getView() method
