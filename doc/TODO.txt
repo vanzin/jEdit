@@ -7,7 +7,6 @@ and quirks that I need to fix eventually.
 - choose directory dialog needs some work
 - kill ring obviously broken
 - odd bug: delete so that bracket match appears, also subr 2 to 1
-- print & markTokens()
 - tall caret and tab
 - tall caret and backspace
 - broken activity log autoscroll

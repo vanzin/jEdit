@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.print;
 import java.awt.print.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.io.VFSManager;
 //}}}
 
 public class BufferPrinter1_3
@@ -98,7 +97,7 @@ public class BufferPrinter1_3
 		if(!job.printDialog())
 			return;
 
-		VFSManager.runInWorkThread(printable);
+		printable.print();
 	} //}}}
 
 	//{{{ getPageFormat() method

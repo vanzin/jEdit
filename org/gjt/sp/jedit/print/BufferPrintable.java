@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2002 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 //}}}
 
-class BufferPrintable extends WorkRequest implements Printable
+class BufferPrintable implements Printable
 {
 	//{{{ BufferPrintable constructor
 	BufferPrintable(PrinterJob job, Object format,
@@ -63,8 +63,8 @@ class BufferPrintable extends WorkRequest implements Printable
 		tokenHandler = new DisplayTokenHandler();
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ print() method
+	public void print()
 	{
 		try
 		{
@@ -106,10 +106,11 @@ class BufferPrintable extends WorkRequest implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
-		if(pageIndex > currentPage + 1)
+		if(pageIndex > currentPage)
 		{
 			for(int i = currentPage; i < pageIndex; i++)
 			{
+				currentPhysicalLine = currentPageStart;
 				printPage(_gfx,pageFormat,i,true);
 			}
 
@@ -119,10 +120,7 @@ class BufferPrintable extends WorkRequest implements Printable
 		if(pageIndex == currentPage + 1)
 		{
 			if(end)
-			{
-				view.getStatus().setMessage(null);
 				return NO_SUCH_PAGE;
-			}
 
 			currentPageStart = currentPhysicalLine;
 			currentPage = pageIndex;
@@ -130,13 +128,6 @@ class BufferPrintable extends WorkRequest implements Printable
 		else if(pageIndex == currentPage)
 		{
 			currentPhysicalLine = currentPageStart;
-
-			// show the message in both the view's status bar, and the
-			// I/O progress monitor
-			Object[] args = new Object[] { new Integer(pageIndex + 1) };
-			String message = jEdit.getProperty("view.status.print",args);
-			view.getStatus().setMessage(message);
-			setStatus(message);
 		}
 
 		printPage(_gfx,pageFormat,pageIndex,true);

@@ -1246,7 +1246,7 @@ public class View extends JFrame implements EBComponent
 		getContentPane().removeAll();
 
 		// notify clients with -wait
-		if(waitSocket != null && !waitSocket.isClosed())
+		if(waitSocket != null)
 		{
 			try
 			{

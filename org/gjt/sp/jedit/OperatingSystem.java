@@ -78,7 +78,7 @@ public class OperatingSystem
 		
 		return new Rectangle(x,y,w,h);
 	} //}}}
-	
+
 	//{{{ getScreenBounds() method
 	/**
 	 * Returns the bounds of the (virtual) screen that the window should be in
@@ -166,7 +166,7 @@ L2:			for (int j=0; j < gc.length; j++)
 		// Yay, we're finally there
 		return new Rectangle(x,y,w,h);
 	} //}}}
-	
+
 	//{{{ isDOSDerived() method
 	/**
 	 * Returns if we're running Windows 95/98/ME/NT/2000/XP, or OS/2.
