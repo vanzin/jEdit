@@ -11,7 +11,7 @@
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 				<!-- Indent droplets and oparams -->
-				<PROPERTY NAME="indentPrevLine"
+				<PROPERTY NAME="indentNextLines"
 				 VALUE="\s*(&lt;\s*(droplet|oparam))\s+.*" />
 				<!-- Sadly, there doesn't seem to be a way to
 					 undent when we see a /oparam> tag... -->

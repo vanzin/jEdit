@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -2280,64 +2280,68 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getIndentForLine(int lineIndex)
 	{
+		final String EXPLICIT_START = "{{{";
+		final String EXPLICIT_END = "}}}";
+
 		if(lineIndex == 0)
 			return -1;
 
-		// Get properties
+		//{{{ Get properties
 		String openBrackets = (String)getProperty("indentOpenBrackets");
-		String closeBrackets = (String)getProperty("indentCloseBrackets");
-		String _indentPrevLine = (String)getProperty("indentPrevLine");
-		boolean doubleBracketIndent = getBooleanProperty("doubleBracketIndent");
-		RE indentPrevLineRE = null;
 		if(openBrackets == null)
 			openBrackets = "";
+
+		String closeBrackets = (String)getProperty("indentCloseBrackets");
 		if(closeBrackets == null)
 			closeBrackets = "";
-		if(_indentPrevLine != null)
+
+		String _indentNextLine = (String)getProperty("indentNextLine");
+		RE indentNextLineRE = null;
+		if(_indentNextLine != null)
 		{
 			try
 			{
-				indentPrevLineRE = new RE(_indentPrevLine,
+				indentNextLineRE = new RE(_indentNextLine,
 					RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
 			}
 			catch(REException re)
 			{
-				Log.log(Log.ERROR,this,"Invalid 'indentPrevLine'"
-					+ " regexp: " + _indentPrevLine);
+				Log.log(Log.ERROR,this,"Invalid 'indentNextLine'"
+					+ " regexp: " + _indentNextLine);
 				Log.log(Log.ERROR,this,re);
 			}
 		}
 
-		int tabSize = getTabSize();
-		int indentSize = getIndentSize();
-
-		String prevLine = null;
-		String line = null;
-
-		int start = getLineStartOffset(lineIndex);
-
-		// Get line text
-		line = getLineText(lineIndex);
-
-		int prevLineIndex = -1;
-		for(int i = lineIndex - 1; i >= 0; i--)
+		String _indentNextLines = (String)getProperty("indentNextLines");
+		RE indentNextLinesRE = null;
+		if(_indentNextLines != null)
 		{
-			if(getLineLength(i) != 0)
+			try
 			{
-				prevLine = getLineText(i);
-				prevLineIndex = i;
-				break;
+				indentNextLinesRE = new RE(_indentNextLines,
+					RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
+			}
+			catch(REException re)
+			{
+				Log.log(Log.ERROR,this,"Invalid 'indentNextLines'"
+					+ " regexp: " + _indentNextLines);
+				Log.log(Log.ERROR,this,re);
 			}
 		}
 
-		if(prevLine == null)
+		boolean doubleBracketIndent = getBooleanProperty("doubleBracketIndent");
+		boolean lineUpClosingBracket = getBooleanProperty("lineUpClosingBracket");
+
+		int tabSize = getTabSize();
+		int indentSize = getIndentSize();
+		//}}}
+
+		//{{{ Get indent attributes of previous line
+		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
+		if(prevLineIndex == -1)
 			return -1;
 
-		/*
-		 * If 'prevLineIndent' matches a line --> +1
-		 */
-		boolean prevLineMatches = (indentPrevLineRE == null ? false
-			: indentPrevLineRE.isMatch(prevLine));
+		String prevLine = getLineText(prevLineIndex);
 
 		/*
 		 * On the previous line,
@@ -2346,7 +2350,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		 * } else if(bob) { --> +1
 		 */
 		boolean prevLineStart = true; // False after initial indent
-		int prevLineIndent = 0; // Indent width (tab expanded)
+		int indent = 0; // Indent width (tab expanded)
 		int prevLineBrackets = 0; // Additional bracket indent
 		int prevLineCloseBracketIndex = -1; // For finding whether we're in
 		                                    // this kind of construct:
@@ -2356,7 +2360,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		                                    //
 		                                    //     }
 		                                    // So we know to indent the next line under the 1st if.
-		
+
 		for(int i = 0; i < prevLine.length(); i++)
 		{
 			char c = prevLine.charAt(i);
@@ -2364,13 +2368,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 			case ' ':
 				if(prevLineStart)
-					prevLineIndent++;
+					indent++;
 				break;
 			case '\t':
 				if(prevLineStart)
 				{
-					prevLineIndent += (tabSize
-						- (prevLineIndent
+					indent += (tabSize
+						- (indent
 						% tabSize));
 				}
 				break;
@@ -2379,161 +2383,167 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 				if(closeBrackets.indexOf(c) != -1)
 				{
-					prevLineBrackets = Math.max(
-						prevLineBrackets-1,0);
-					prevLineCloseBracketIndex = i;
+					if(prevLine.regionMatches(false,
+						i,EXPLICIT_END,0,3))
+						i += 2;
+					else
+					{
+						prevLineBrackets--;
+						if(prevLineBrackets < 0)
+						{
+							if(lineUpClosingBracket)
+								prevLineBrackets = 0;
+							prevLineCloseBracketIndex = i;
+						}
+					}
 				}
 				else if(openBrackets.indexOf(c) != -1)
 				{
-					/*
-					 * If supressBracketAfterIndent is true
-					 * and we have something that looks like:
-					 * if(bob)
-					 * {
-					 * then the 'if' will not shift the indent,
-					 * because of the {.
-					 *
-					 * If supressBracketAfterIndent is false,
-					 * the above would be indented like:
-					 * if(bob)
-					 *         {
-					 */
-					if(!doubleBracketIndent)
-						prevLineMatches = false;
-					prevLineBrackets++;
+					if(prevLine.regionMatches(false,
+						i,EXPLICIT_START,0,3))
+						i += 2;
+					else
+						prevLineBrackets++;
 				}
+
 				break;
 			}
 		}
 
-		// This is a hack so that auto indent does not go haywire
-		// with explicit folding. Proper fix will be done later,
-		// when the auto indent is rewritten.
-		if(prevLineBrackets == 3)
-			prevLineBrackets = 0;
+		String line = getLineText(lineIndex);
+		//}}}
 
+		//{{{ Get indent attributes for current line
 		/*
 		 * On the current line,
 		 * } --> -1
 		 * } else if(bob) { --> -1
 		 * if(bob) { } --> 0
 		 */
-		boolean lineStart = true; // False after initial indent
-		int lineIndent = 0; // Indent width (tab expanded)
-		int lineWidth = 0; // White space count
 		int lineBrackets = 0; // Additional bracket indent
 		int closeBracketIndex = -1; // For lining up closing
 			// and opening brackets
 		for(int i = 0; i < line.length(); i++)
 		{
 			char c = line.charAt(i);
-			switch(c)
+			if(closeBrackets.indexOf(c) != -1)
 			{
-			case ' ':
-				if(lineStart)
+				if(line.regionMatches(false,
+					i,EXPLICIT_END,0,3))
+					i += 2;
+				else
 				{
-					lineIndent++;
-					lineWidth++;
+					closeBracketIndex = i;
+					lineBrackets--;
 				}
-				break;
-			case '\t':
-				if(lineStart)
-				{
-					lineIndent += (tabSize
-						- (lineIndent
-						% tabSize));
-					lineWidth++;
-				}
-				break;
-			default:
-				if(closeBrackets.indexOf(c) != -1)
-				{
-					if(lineBrackets == 0)
-						closeBracketIndex = i;
-					else
-						lineBrackets--;
-				}
-				else if(openBrackets.indexOf(c) != -1)
-				{
-					if((!doubleBracketIndent)&&lineStart)
-						prevLineMatches = false;
-					lineBrackets++;
-				}
-				lineStart = false;
-				break;
 			}
+			else if(openBrackets.indexOf(c) != -1)
+			{
+				if(line.regionMatches(false,
+					i,EXPLICIT_START,0,3))
+					i += 2;
+				else
+					lineBrackets++;
+			}
+		} //}}}
+
+		//{{{ Handle brackets
+		if(prevLineBrackets > 0)
+		{
+			System.err.println("bracket indent +1");
+			indent += (indentSize * prevLineBrackets);
 		}
 
-		// This is a hack so that auto indent does not go haywire
-		// with explicit folding. Proper fix will be done later,
-		// when the auto indent is rewritten.
-		if(lineBrackets == 3)
+		if(lineUpClosingBracket)
 		{
-			closeBracketIndex = -1;
-			lineBrackets = 0;
-		}
-
-		if((indentPrevLineRE != null) && (!prevLineMatches) && (prevLineBrackets == 0))
-		{
-			int indentLineIndex;
-			if(prevLineCloseBracketIndex != -1)
+			if(lineBrackets < 0)
 			{
 				int offset = TextUtilities.findMatchingBracket(
-					this,prevLineIndex,prevLineCloseBracketIndex);
-				if(offset == -1)
-					return -1;
-				indentLineIndex = getLineOfOffset(offset);
-			}
-			else
-				indentLineIndex = prevLineIndex;
-
-			if(indentLineIndex >= 0)
-			{
-				String closeLine = getLineText(indentLineIndex);
-
-				while(--indentLineIndex > 0)
+					this,lineIndex,closeBracketIndex);
+				if(offset != -1)
 				{
-					String tempLine = getLineText(indentLineIndex);
-
-					if(tempLine.trim().length() == 0)
-						continue;
-
-					if(indentPrevLineRE.isMatch(tempLine))
-						closeLine = tempLine;
-					else
-						break;
+					String closeLine = getLineText(getLineOfOffset(offset));
+					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
+						closeLine,tabSize);
 				}
-
-				prevLineIndent = MiscUtilities
-					.getLeadingWhiteSpaceWidth(
-					closeLine,tabSize);
+				else
+					return -1;
 			}
-			else
-				return -1;
-		}
-
-		if(closeBracketIndex != -1)
-		{
-			int offset = TextUtilities.findMatchingBracket(
-				this,lineIndex,closeBracketIndex);
-			if(offset != -1)
-			{
-				String closeLine = getLineText(getLineOfOffset(offset));
-				prevLineIndent = MiscUtilities.getLeadingWhiteSpaceWidth(
-					closeLine,tabSize);
-			}
-			else
-				return -1;
 		}
 		else
 		{
-			prevLineIndent += (prevLineBrackets * indentSize);
-		}
+			if(prevLineBrackets < 0)
+			{
+				int offset = TextUtilities.findMatchingBracket(
+					this,prevLineIndex,prevLineCloseBracketIndex);
+				if(offset != -1)
+				{
+					String closeLine = getLineText(getLineOfOffset(offset));
+					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
+						closeLine,tabSize);
+				}
+				else
+					return -1;
+			}
+		}//}}}
 
-		if (prevLineMatches)
-			prevLineIndent += indentSize;
+		//{{{ Handle regexps
+		if(lineBrackets == 0 || (doubleBracketIndent && lineBrackets > 0))
+		{
+			// If the previous line matches indentNextLine or indentNextLines,
+			// add a level of indent
+			if(indentNextLinesRE != null && indentNextLinesRE.isMatch(prevLine))
+			{
+				indent += indentSize;
+				System.err.println("indent + 1 due to indentNextLines");
+			}
+			else if(indentNextLineRE != null)
+			{
+				if(indentNextLineRE.isMatch(prevLine))
+				{
+					indent += indentSize;
+					System.err.println("indent + 1 due to indentNextLine");
+				}
+				// we don't want
+				// if(foo)
+				// {
+				// <--- decreased indent
+				else if(prevLineBrackets == 0)
+				{
+					// While prior lines match indentNextLine, remove a level of indent
+					// this correctly handles constructs like:
+					// if(foo)
+					//     if(bar)
+					//         if(baz)
+					// <--- put indent here
+					int prevPrevLineIndex;
+					/* if(prevLineCloseBracketIndex != -1)
+					{
+						System.err.println("prev line close bracket index");
+						int offset = TextUtilities.findMatchingBracket(
+							this,prevLineIndex,prevLineCloseBracketIndex);
+						if(offset == -1)
+							return -1;
+						prevPrevLineIndex = getLineOfOffset(offset);
+					}
+					else */
+						prevPrevLineIndex = getPriorNonEmptyLine(prevLineIndex);
 
-		return prevLineIndent;
+					while(prevPrevLineIndex != -1)
+					{
+						System.err.println("still checking");
+						if(indentNextLineRE.isMatch(getLineText(prevPrevLineIndex)))
+							indent -= indentSize;
+						else
+							break;
+
+						prevPrevLineIndex = getPriorNonEmptyLine(prevPrevLineIndex);
+					}
+				}
+			}
+		} //}}}
+
+		return indent;
 	} //}}}
 
 	//{{{ getVirtualWidth() method
@@ -3689,6 +3699,21 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			offsetMgr.expandFolds(collapseFolds);
 		}
+	} //}}}
+
+	//{{{ getPriorNonEmptyLine() method
+	/**
+	 * Auto indent needs this.
+	 */
+	private int getPriorNonEmptyLine(int lineIndex)
+	{
+		for(int i = lineIndex - 1; i >= 0; i--)
+		{
+			if(getLineLength(i) != 0)
+				return i;
+		}
+
+		return -1;
 	} //}}}
 
 	//{{{ contentInserted() method

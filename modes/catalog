@@ -95,7 +95,7 @@
 <MODE NAME="hex"		FILE="hex.xml" />
 
 <MODE NAME="html"		FILE="html.xml"
-				FILE_NAME_GLOB="*.{html,htm}" />
+				FILE_NAME_GLOB="*.{html,htm,hta}" />
 
 <MODE NAME="i4gl"		FILE="i4gl.xml"
 				FILE_NAME_GLOB="*.4gl" />

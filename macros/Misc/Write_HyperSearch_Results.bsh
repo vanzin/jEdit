@@ -35,6 +35,7 @@
  * $Id$
  *
  * Checked for jEdit 4.0 API
+ * Adapted and checked for jEdit 4.1 API by Rudi Widmann
  *
  */
 
@@ -62,27 +63,69 @@ void writeHyperSearchResults()
             title, JOptionPane.YES_NO_OPTION);
         if(answer != JOptionPane.YES_OPTION) return;
     }
-
+    /*******************************************************************
+    * Hyper search result tree structure
+    * root
+    * + searchNode
+    *   + fileNode
+    *     + results 
+    *   + fileNode
+    *     + results 
+    * + searchNode
+    *   + fileNode
+    *     + results 
+    *******************************************************************/
     jEdit.newFile(view);
     writeHeader();
     treeModel = hsearch.getTreeModel();
     root = treeModel.getRoot();
-    childCount = root.getChildCount();
-    if(childCount == 0)
+    rootChildCount = root.getChildCount();
+    if(rootChildCount == 0)
     {
         textArea.setSelectedText(
-            "Search term not found\n\nEnd of report\n");
+            "Search items not found\n\nEnd of report\n");
     }
     else
     {
-        fileNameNode = root.getFirstChild();
-        for(int i = 0; i < childCount; ++i)
+        searchNode = root.getFirstChild();
+        for(int i = 0; i < rootChildCount; ++i)
         {
-            writeResultsForFile(fileNameNode);
-            fileNameNode = fileNameNode.getNextSibling();
+	    super.fileCount = 0;
+	    super.hitCount = 0;
+	    writeSearchHeader(searchNode);
+	    if (i == rootChildCount-1)
+		    writeSearchParameters();  // write only for last result
+	    super.searchCount++;
+	    searchChildCount = searchNode.getChildCount();
+	    if(searchChildCount == 0)
+	    {
+		textArea.setSelectedText(
+			"Search term not found\n\nEnd of report\n");
+	    }
+	    fileNode = searchNode.getFirstChild();
+	    for(int j = 0; j < searchChildCount; ++j)
+	    {
+		writeResultsForFile(fileNode);
+		fileNode = fileNode.getNextSibling();
+	    }
+		searchNode = searchNode.getNextSibling();
+						    writeFileFooter();
         }
-        writeFooter();
+	writeFooter();
     }
+}
+
+void writeSearchHeader( node)
+{
+    node = (DefaultMutableTreeNode)node;
+    if(node == null) return;
+    childCount = node.getChildCount();
+    if( childCount == 0) return;
+    sb.setLength(0);
+    sb.append("Results for search item: \"");
+    sb.append(node.getUserObject().toString());
+    sb.append("\"\n\n");
+    textArea.setSelectedText(sb.toString());
 }
 
 void writeResultsForFile( node)
@@ -95,26 +138,26 @@ void writeResultsForFile( node)
     super.hitCount += childCount;
     obj = node.getUserObject();
     sb.setLength(0);
-    sb.append("Results for file:\n");
+    sb.append("\tMatched file:\n\t");
     sb.append(node.getUserObject().toString());
     sb.append("\n\n");
     lineNode = (DefaultMutableTreeNode)node.getFirstChild();
 	if(lineNode == null) return;
     for( int i = 0; i < childCount; ++i)
     {
-		if(lineNode == null)
-		{
-			sb.append(" Null node for i = " + String.valueOf(i));
-		}
-		else
-		{
-        sb.append("\tline ");
-        sb.append(lineNode.getUserObject().toString());
-		}
+	if(lineNode == null)
+	{
+		sb.append("\t\tNull node for i = " + String.valueOf(i));
+	}
+	else
+	{
+	    sb.append("\t\tline ");
+	    sb.append(lineNode.getUserObject().toString());
+	}
         sb.append('\n');
         lineNode = lineNode.getNextSibling();
     }
-    sb.append("\nNumber of occurrences: ");
+    sb.append("\n\tNumber of occurrences: ");
     sb.append(String.valueOf(childCount));
     sb.append("\n\n");
 
@@ -123,7 +166,16 @@ void writeResultsForFile( node)
 
 void writeHeader()
 {
-    sb.append("Search results for ");
+    sb.append("Hypersearch report written on ");
+    SimpleDateFormat f = new SimpleDateFormat("EE MMM d, yyyy h:mm a z");
+    sb.append(f.format( new Date()));
+    sb.append("\n\n");
+    textArea.setSelectedText(sb.toString());
+}
+void writeSearchParameters()
+{
+    sb.setLength(0);
+    sb.append("\tUsed search parameters for ");
     if(SearchAndReplace.getRegexp())
         sb.append("regular expression:  ");
     else
@@ -133,25 +185,30 @@ void writeHeader()
     if(SearchAndReplace.getIgnoreCase())
         sb.append("in");
     sb.append("sensitive)\n");
-    sb.append("Search conducted on ");
+    sb.append("\tSearch conducted on ");
     sb.append(writeSearchFileSetType());
     sb.append('\n');
-    sb.append("Report written on ");
-    SimpleDateFormat f = new SimpleDateFormat("EE MMM d, yyyy h:mm a z");
-    sb.append(f.format( new Date()));
-    sb.append("\n\n");
+    sb.append('\n');
     textArea.setSelectedText(sb.toString());
 }
 
+void writeFileFooter()
+{
+    sb.setLength(0);
+    sb.append("\tTotal of ");
+    sb.append(String.valueOf(hitCount));
+    sb.append(" occurrences found in ");
+    sb.append(String.valueOf(fileCount));
+    sb.append(" files\n\n");
+
+    textArea.setSelectedText(sb.toString());
+}
 void writeFooter()
 {
     sb.setLength(0);
     sb.append("Total of ");
-    sb.append(String.valueOf(hitCount));
-    sb.append(" occurrences found in ");
-    sb.append(String.valueOf(fileCount));
-    sb.append(" files\n\nEnd of report\n");
-
+    sb.append(String.valueOf(searchCount));
+    sb.append(" search results reported \n\nEnd of report\n");
     textArea.setSelectedText(sb.toString());
 }
 
@@ -183,6 +240,7 @@ String writeSearchFileSetType()
 }
 
 sb = new StringBuffer();
+searchCount = 0;
 fileCount = 0;
 hitCount = 0;
 writeHyperSearchResults();
@@ -212,4 +270,5 @@ writeHyperSearchResults();
 
 
 // end Write_HyperSearch_Results.bsh
+
 

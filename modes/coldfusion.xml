@@ -4,18 +4,8 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="tabSize" VALUE="4" />
-		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
-		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="indentPrevLine"	VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
-		<PROPERTY NAME="doubleBracketIndent" VALUE="true" />
-		<PROPERTY NAME="commentStart" VALUE="/*" />
-		<PROPERTY NAME="commentEnd" VALUE="*/" />
-		<PROPERTY NAME="lineComment" VALUE="//" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="commentStart" VALUE="&lt;!---" />
-		<PROPERTY NAME="commentEnd" VALUE="---&gt;" />
 	</PROPS>
 	
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

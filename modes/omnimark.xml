@@ -9,10 +9,8 @@
 
 <MODE>
     <PROPS>
-        <PROPERTY NAME="indentPrevLine" VALUE="\s*((PROCESS|MARKUP|EXTERNAL|DOCUMENT|DTD|ELEMENT|FIND|TRANSLATE)((-|\s).*|\s*)|(DO|ELSE|REPEAT|MATCH|CASE|USING|GROUP|DEFINE|MACRO)(\s+.*|\s*))" />
-        <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+        <PROPERTY NAME="indentNextLines" VALUE="\s*((PROCESS|MARKUP|EXTERNAL|DOCUMENT|DTD|ELEMENT|FIND|TRANSLATE)((-|\s).*|\s*)|(DO|ELSE|REPEAT|MATCH|CASE|USING|GROUP|DEFINE|MACRO)(\s+.*|\s*))" />
         <PROPERTY NAME="lineComment" VALUE=";" />
-        <PROPERTY NAME="blockComment" VALUE=";" />
         <PROPERTY NAME="noWordSep" VALUE="-_" />
     </PROPS>
     <RULES ESCAPE="%" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

@@ -319,7 +319,7 @@
     changed by remapping these keystrokes to alternative actions whose names end
     with <guimenuitem>(Eat Whitespace)</guimenuitem> in the
     <guibutton>Shortcuts</guibutton> pane of the
-    <guimnenu>Utilities</guimnenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box.
    </para>
   </sidebar>

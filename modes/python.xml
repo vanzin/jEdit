@@ -19,7 +19,7 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="indentPrevLine" VALUE="\s*.{3,}:\s*(#.*)?" />
+		<PROPERTY NAME="indentNextLines" VALUE="\s*.{3,}:\s*(#.*)?" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
