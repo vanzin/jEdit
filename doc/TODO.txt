@@ -1,6 +1,6 @@
 TO DO
 
-- files not removed from PluginManager.download?
+- add an option to not remove files from PluginManager.download?
 - add some tips of the day about pre1 features
 - soft wrap
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
