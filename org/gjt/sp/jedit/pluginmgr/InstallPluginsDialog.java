@@ -292,9 +292,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			StringBuffer buf = new StringBuffer();
 			for(int i = 0; i < deps.size(); i++)
 			{
-				if(i != 0)
-					buf.append('\n');
-				buf.append("- ");
+				buf.append("\n- ");
 				buf.append(deps.get(i));
 			}
 

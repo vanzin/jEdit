@@ -256,17 +256,13 @@ public class JEditTextArea extends JComponent
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
-			chunkCache.invalidateAll();
-
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
-			recalculateLastPhysicalLine();
-
 			propertiesChanged();
 
-			painter.repaint();
-			gutter.repaint();
+			recalculateLastPhysicalLine();
+			chunkCache.updateChunksUpTo(visibleLines);
 		}
 		finally
 		{
@@ -850,7 +846,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLine(int line)
 	{
-		if(line < physFirstLine || line > physLastLine)
+		if(line < physFirstLine || line > physLastLine
+			|| !foldVisibilityManager.isLineVisible(line))
 			return;
 
 		int startLine = -1;
@@ -860,24 +857,24 @@ public class JEditTextArea extends JComponent
 		{
 			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
-			if(info.physicalLine == line)
+			if(info.physicalLine >= line && startLine == -1)
 			{
-				if(startLine == -1)
-					startLine = i;
+				startLine = i;
 			}
-			else if(info.physicalLine > line
+			else if((info.physicalLine > line
 				|| info.physicalLine == -1)
+				&& endLine == -1)
 			{
-				if(endLine == -1)
-				{
-					endLine = i - 1;
-					break;
-				}
+				endLine = i - 1;
+				break;
 			}
 		}
 
-		if(endLine == -1)
+		if(endLine == -1 || chunkCache.needFullRepaint())
 			endLine = visibleLines;
+
+		//if(startLine != endLine)
+		//	System.err.println(startLine + ":" + endLine);
 
 		invalidateScreenLineRange(startLine,endLine);
 	} //}}}
@@ -907,25 +904,23 @@ public class JEditTextArea extends JComponent
 		{
 			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
-			if(info.physicalLine == start)
+
+			if(info.physicalLine >= start && startScreenLine == -1)
 			{
-				if(startScreenLine == -1)
-					startScreenLine = i;
+				startScreenLine = i;
 			}
-			else if(info.physicalLine > end
+			else if((info.physicalLine > end
 				|| info.physicalLine == -1)
+				&& endScreenLine == -1)
 			{
-				if(endScreenLine == -1)
-				{
-					endScreenLine = i - 1;
-					break;
-				}
+				endScreenLine = i - 1;
+				break;
 			}
 		}
 
 		if(startScreenLine == -1)
 			startScreenLine = 0;
-		if(endScreenLine == -1)
+		if(endScreenLine == -1 || chunkCache.needFullRepaint())
 			endScreenLine = visibleLines;
 
 		invalidateScreenLineRange(startScreenLine,endScreenLine);
@@ -2969,6 +2964,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				return;
 			}
 
+			if(ch == ' ')
+			{
+				if(doWordWrap(caretLine,true))
+					return;
+			}
+			else
+				doWordWrap(caretLine,false);
+
 			try
 			{
 				// Don't overstrike if we're on the end of
@@ -3866,8 +3869,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 			return;
 		}
-		int maxLineLength = buffer.getIntegerProperty("maxLineLen",0);
-		if(maxLineLength <= 0)
+
+		if(maxLineLen <= 0)
 		{
 			getToolkit().beep();
 			return;
@@ -3882,7 +3885,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			{
 				Selection s = selection[i];
 				setSelectedText(s,TextUtilities.format(
-					getSelectedText(s),maxLineLength));
+					getSelectedText(s),maxLineLen));
 			}
 
 			buffer.endCompoundEdit();
@@ -3940,7 +3943,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				String text = buffer.getText(start,end - start);
 				buffer.remove(start,end - start);
 				buffer.insert(start,TextUtilities.format(
-					text,maxLineLength));
+					text,maxLineLen));
 			}
 			finally
 			{
@@ -4304,33 +4307,36 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		charWidth = (int)Math.round(painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
-		softWrap = buffer.getBooleanProperty("softWrap");
+		String wrap = buffer.getStringProperty("wrap");
+		softWrap = wrap.equals("soft");
+		hardWrap = wrap.equals("hard");
 
-		int _maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
+		maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
 
-		if(_maxLineLen <= 0)
+		if(maxLineLen <= 0)
 		{
 			if(softWrap)
 			{
 				wrapToWidth = true;
-				maxLineLen = painter.getWidth() - charWidth * 3;
+				wrapMargin = painter.getWidth() - charWidth * 3;
 			}
 			else
 			{
 				wrapToWidth = false;
-				maxLineLen = 0;
+				wrapMargin = 0;
 			}
 		}
 		else
 		{
 			// stupidity
-			foo = new char[_maxLineLen];
+			foo = new char[maxLineLen];
 			for(int i = 0; i < foo.length; i++)
 			{
 				foo[i] = ' ';
 			}
-			maxLineLen = (int)painter.getFont().getStringBounds(
-				foo,0,_maxLineLen,painter.getFontRenderContext())
+			wrapToWidth = false;
+			wrapMargin = (int)painter.getFont().getStringBounds(
+				foo,0,maxLineLen,painter.getFontRenderContext())
 				.getWidth();
 		}
 
@@ -4338,6 +4344,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		updateScrollBars();
 
 		chunkCache.invalidateAll();
+		gutter.repaint();
 		painter.repaint();
 	} //}}}
 
@@ -4629,8 +4636,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	int maxHorizontalScrollWidth;
 
 	boolean softWrap;
+	boolean hardWrap;
 	float tabSize;
-	int maxLineLen;
+	int wrapMargin;
 	boolean wrapToWidth;
 	int charWidth;
 
@@ -4766,6 +4774,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private static boolean multi;
 	private boolean overwrite;
+
+	private int maxLineLen;
 	//}}}
 
 	//{{{ _addToSelection() method
@@ -4938,6 +4948,107 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 		else
 			setSelectedText("\t");
+	} //}}}
+
+	//{{{ doWordWrap() method
+	private boolean doWordWrap(int line, boolean spaceInserted)
+	{
+		if(!hardWrap || maxLineLen <= 0)
+			return false;
+
+		int start = getLineStartOffset(line);
+		int end = getLineEndOffset(line);
+		int len = end - start - 1;
+
+		// don't wrap unless we're at the end of the line
+		if(getCaretPosition() != end - 1)
+			return false;
+
+		boolean returnValue = false;
+
+		int tabSize = buffer.getTabSize();
+
+		String wordBreakChars = buffer.getStringProperty("wordBreakChars");
+
+		buffer.getLineText(line,lineSegment);
+
+		int lineStart = lineSegment.offset;
+		int logicalLength = 0; // length with tabs expanded
+		int lastWordOffset = -1;
+		boolean lastWasSpace = true;
+		boolean initialWhiteSpace = true;
+		int initialWhiteSpaceLength = 0;
+		for(int i = 0; i < len; i++)
+		{
+			char ch = lineSegment.array[lineStart + i];
+			if(ch == '\t')
+			{
+				if(initialWhiteSpace)
+					initialWhiteSpaceLength = i + 1;
+				logicalLength += tabSize - (logicalLength % tabSize);
+				if(!lastWasSpace && logicalLength <= maxLineLen)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else if(ch == ' ')
+			{
+				if(initialWhiteSpace)
+					initialWhiteSpaceLength = i + 1;
+				logicalLength++;
+				if(!lastWasSpace && logicalLength <= maxLineLen)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
+			{
+				initialWhiteSpace = false;
+				logicalLength++;
+				if(!lastWasSpace && logicalLength <= maxLineLen)
+				{
+					lastWordOffset = i;
+					lastWasSpace = true;
+				}
+			}
+			else
+			{
+				initialWhiteSpace = false;
+				logicalLength++;
+				lastWasSpace = false;
+			}
+
+			int insertNewLineAt;
+			if(spaceInserted && logicalLength == maxLineLen
+				&& i == len - 1)
+			{
+				insertNewLineAt = end - 1;
+				returnValue = true;
+			}
+			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
+				insertNewLineAt = lastWordOffset + start;
+			else
+				continue;
+
+			try
+			{
+				buffer.beginCompoundEdit();
+				buffer.insert(insertNewLineAt,"\n");
+				buffer.indentLine(line + 1,true,true);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+
+			/* only ever return true if space was pressed
+			 * with logicalLength == maxLineLen */
+			return returnValue;
+		}
+
+		return false;
 	} //}}}
 
 	//{{{ doWordCount() method

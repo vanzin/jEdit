@@ -1,6 +1,9 @@
 /*
  * AbstractOptionPane.java - Abstract option pane
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,9 +22,11 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
+//}}}
 
 /**
  * The default implementation of the option pane interface. It lays out
@@ -31,6 +36,7 @@ import java.awt.*;
  */
 public abstract class AbstractOptionPane extends JPanel implements OptionPane
 {
+	//{{{ AbstractOptionPane constructor
 	/**
 	 * Creates a new option pane.
 	 * @param name The internal name. The option pane's label is set to the
@@ -40,8 +46,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	{
 		this.name = name;
 		setLayout(gridBag = new GridBagLayout());
-	}
+	} //}}}
 
+	//{{{ getName() method
 	/**
 	 * Returns the internal name of this option pane. The option pane's label
 	 * is set to the value of the property named
@@ -50,8 +57,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	public String getName()
 	{
 		return name;
-	}
+	} //}}}
 
+	//{{{ getComponent() method
 	/**
 	 * Returns the component that should be displayed for this option pane.
 	 * Because this class extends Component, it simply returns "this".
@@ -59,8 +67,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	public Component getComponent()
 	{
 		return this;
-	}
+	} //}}}
 
+	//{{{ init() method
 	public void init()
 	{
 		if(!initialized)
@@ -68,15 +77,18 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 			initialized = true;
 			_init();
 		}
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save()
 	{
 		if(initialized)
 			_save();
-	}
+	} //}}}
 
-	// protected members
+	//{{{ Protected members
+
+	//{{{ Instance variables
 	/**
 	 * Has the option pane been initialized?
 	 */
@@ -91,6 +103,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 * The number of components already added to the layout manager.
 	 */
 	protected int y;
+	//}}}
 
 	/**
 	 * This method should create the option pane's GUI.
@@ -104,6 +117,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	protected void _save() {}
 
+	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
 	 * added in a vertical fashion, one per row. The label is
@@ -118,6 +132,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		cons.gridheight = 1;
 		cons.gridwidth = 1;
 		cons.weightx = 0.0f;
+		cons.insets = new Insets(1,0,1,0);
 		cons.fill = GridBagConstraints.BOTH;
 
 		JLabel l = new JLabel(label,SwingConstants.RIGHT);
@@ -129,8 +144,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		cons.weightx = 1.0f;
 		gridBag.setConstraints(comp,cons);
 		add(comp);
-	}
+	} //}}}
 
+	//{{{ addComponent() method
 	/**
 	 * Adds a component to the option pane. Components are
 	 * added in a vertical fashion, one per row.
@@ -145,11 +161,13 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.NONE;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
+		cons.insets = new Insets(1,0,1,0);
 
 		gridBag.setConstraints(comp,cons);
 		add(comp);
-	}
+	} //}}}
 
+	//{{{ addSeparator() method
 	/**
 	 * Adds a separator component.
 	 * @param label The separator label property
@@ -179,11 +197,15 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.BOTH;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
+		cons.insets = new Insets(1,0,1,0);
 
 		gridBag.setConstraints(box,cons);
 		add(box);
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private String name;
+	//}}}
 }

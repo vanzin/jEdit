@@ -2,20 +2,18 @@ TO DO
 
 - pre4:
 
-- docs not in JAR
-- faq
-- vertical scrollbar w/ soft wrap
+- vertical scrollbar w/ soft wrap wrong?
+- vertical scroll bar if last line is wrapped
 - open file: scroll bar fuckup
-- markerhighlight buggy
 - save to X:filename on Windows
 - chunk cache problems after collapsing a fold
-- chunk cache & scrolling optimization
 - nextLineRequested still fucked
+- syntax highlighted files and soft wrap
+- fix scrollToCaret()
+- use new offset conversion API throughout
+- chunk cache & scrolling optimization
 
-- document soft wrap
-- document fs browser changes
-- add a tip of the day about soft wrap
-
+- FAQ: toc needs to include individual q and a's
 - updateChunksUpTo() called too many times
 - sort mode list and put xml near the start so that xhtml files with the
   .html extension are opened in xml mode
@@ -24,14 +22,10 @@ TO DO
 - removing a plugin should offer to remove the ones that depend on it too
 - installing source for already installed plugins is not possible: 'hide
   already installed' checkbox in install plugins dialog box
-- soft wrap to do:
-  - syntax highlighted files
-  - vertical scroll bar if last line is wrapped
-  - fix scrollToCaret()
-  - use new offset conversion API throughout
 - optimise repaining, key insertion
 - select word: non-alpha single char
-- better formatting commands:
+- better formatting commands: - document in 'manual wrap' subsect of
+  'word wrap'
   - format becomes 'wrap paragraph'
   - 'wrap line'
   - 'unwrap paragraph'

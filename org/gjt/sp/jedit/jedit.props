@@ -125,8 +125,8 @@ buffer.defaultMode=text
 # Undo queue size
 buffer.undoCount=100
 
-# Soft wrap?
-buffer.softWrap=false
+# Wrap mode (none, soft, hard)
+buffer.wrap=none
 
 # Wrap column
 buffer.maxLineLen=0

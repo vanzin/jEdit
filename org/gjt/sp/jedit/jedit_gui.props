@@ -1386,14 +1386,13 @@ options.style.invalidStyle=Invalid token
 options.editing.label=Editing
 options.editing.defaultMode=Default edit mode:
 options.editing.undoCount=Number of undos:
+options.editing.folding=Folding mode:
+options.editing.collapseFolds=Initially collapse folds with level:
+options.editing.wrap=Word wrap:
+options.editing.maxLineLen=Wrap margin:
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
-options.editing.folding=Folding mode:
-options.editing.collapseFolds=Initially collapse folds with level:
-options.editing.maxLineLen=Margin at column:
-options.editing.softWrap=Soft wrap
-options.editing.syntax=Syntax highlighting
 options.editing.indentOnTab=Indent line when Tab key is pressed
 options.editing.indentOnEnter=Indent line when Enter key is pressed
 options.editing.noTabs=Soft (emulated with spaces) tabs
@@ -1600,11 +1599,9 @@ tip.caption=Did you know...
 tip.show-next-time=Show tips on startup
 tip.next-tip=Next Tip
 
+tip.not-found=doc/tips directory not found
 # Show on startup?
 tip.show=true
-
-# Number of tips
-tip.count=71
 #}}}
 
 #{{{ Activity log
