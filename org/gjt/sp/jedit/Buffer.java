@@ -234,29 +234,28 @@ public class Buffer implements EBComponent
 				// For `reload' command
 				remove(0,getLength());
 
-				if(seg != null && endOffsets != null)
+				if(seg == null)
+					seg = new Segment(new char[1024],0,0);
+				try
 				{
-					// This is faster than Buffer.insert()
-					try
-					{
-						writeLock();
+					writeLock();
 
-						// theoretically a segment could
-						// have seg.offset != 0 but
-						// SegmentBuffer never does that
-						contentMgr._setContent(seg.array,seg.count);
+					// theoretically a segment could
+					// have seg.offset != 0 but
+					// SegmentBuffer never does that
+					contentMgr._setContent(seg.array,seg.count);
 
+					if(endOffsets != null)
 						contentInserted(0,seg.count,endOffsets);
-					}
-					catch(OutOfMemoryError oom)
-					{
-						Log.log(Log.ERROR,this,oom);
-						VFSManager.error(view,path,"out-of-memory-error",null);
-					}
-					finally
-					{
-						writeUnlock();
-					}
+				}
+				catch(OutOfMemoryError oom)
+				{
+					Log.log(Log.ERROR,this,oom);
+					VFSManager.error(view,path,"out-of-memory-error",null);
+				}
+				finally
+				{
+					writeUnlock();
 				}
 
 				setFlag(READ_ONLY,readOnly);
