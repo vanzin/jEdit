@@ -385,6 +385,8 @@ public class JARClassLoader extends ClassLoader
 	{
 		int i = 0;
 
+		boolean ok = true;
+
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + name + ".depend." + i++)) != null)
 		{
@@ -408,7 +410,7 @@ public class JARClassLoader extends ClassLoader
 					String[] args = { arg,
 						System.getProperty("java.version") };
 					jEdit.pluginError(jar.getPath(),"plugin-error.dep-jdk",args);
-					return false;
+					ok = false;
 				}
 			}
 			else if(what.equals("jedit"))
@@ -417,7 +419,7 @@ public class JARClassLoader extends ClassLoader
 				{
 					Log.log(Log.ERROR,this,"Invalid jEdit version"
 						+ " number: " + arg);
-					return false;
+					ok = false;
 				}
 
 				if(MiscUtilities.compareStrings(
@@ -428,7 +430,7 @@ public class JARClassLoader extends ClassLoader
 						jEdit.getVersion() };
 					jEdit.pluginError(jar.getPath(),
 						"plugin-error.dep-jedit",args);
-					return false;
+					ok = false;
 				}
 			}
 			else if(what.equals("plugin"))
@@ -453,24 +455,22 @@ public class JARClassLoader extends ClassLoader
 					jEdit.pluginError(jar.getPath(),
 						"plugin-error.dep-plugin.no-version",
 						args);
-					return false;
+					ok = false;
 				}
-
-				if(MiscUtilities.compareStrings(currVersion,
+				else if(MiscUtilities.compareStrings(currVersion,
 					needVersion,false) < 0)
 				{
 					String[] args = { needVersion, plugin, currVersion };
 					jEdit.pluginError(jar.getPath(),
 						"plugin-error.dep-plugin",args);
-					return false;
+					ok = false;
 				}
-
-				if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
+				else if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
 				{
 					String[] args = { plugin };
 					jEdit.pluginError(jar.getPath(),
 						"plugin-error.dep-plugin.broken",args);
-					return false;
+					ok = false;
 				}
 			}
 			else if(what.equals("class"))
@@ -484,7 +484,7 @@ public class JARClassLoader extends ClassLoader
 					String[] args = { arg };
 					jEdit.pluginError(jar.getPath(),
 						"plugin-error.dep-class",args);
-					return false;
+					ok = false;
 				}
 			}
 			else
@@ -495,7 +495,7 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
-		return true;
+		return ok;
 	} //}}}
 
 	//{{{ _loadClass() method
