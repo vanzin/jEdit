@@ -85,7 +85,7 @@ public class EditServer extends Thread
 			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
-			out.write("c\n");
+			out.write("b\n");
 			out.write(String.valueOf(port));
 			out.write("\n");
 			out.write(String.valueOf(authKey));
@@ -132,6 +132,7 @@ public class EditServer extends Thread
 
 				DataInputStream in = new DataInputStream(
 					client.getInputStream());
+				OutputStream out = client.getOutputStream();
 
 				if(!handleClient(client,in))
 					abort = true;
@@ -144,7 +145,7 @@ public class EditServer extends Thread
 			}
 			finally
 			{
-				if(client != null)
+				/* if(client != null)
 				{
 					try
 					{
@@ -156,23 +157,9 @@ public class EditServer extends Thread
 					}
 
 					client = null;
-				}
+				} */
 			}
 		}
-	} //}}}
-
-	//{{{ handleClient() method
-	/**
-	 * @param restore Ignored unless no views are open
-	 * @param parent The client's parent directory
-	 * @param args A list of files. Null entries are ignored, for convinience
-	 * @since jEdit 3.2pre7
-	 */
-	public static void handleClient(boolean restore, String parent,
-		String[] args)
-	{
-		boolean newView = jEdit.getBooleanProperty("client.newView");
-		handleClient(restore,newView,false,parent,args);
 	} //}}}
 
 	//{{{ handleClient() method
@@ -184,8 +171,9 @@ public class EditServer extends Thread
 	 * @param args A list of files. Null entries are ignored, for convinience
 	 * @since jEdit 4.2pre1
 	 */
-	public static Buffer handleClient(boolean restore, boolean newView,
-		boolean newPlainView, String parent, String[] args)
+	public static Buffer handleClient(boolean restore,
+		boolean newView, boolean newPlainView, String parent,
+		String[] args)
 	{
 		// we have to deal with a huge range of possible border cases here.
 		if(jEdit.getFirstView() == null)
@@ -218,7 +206,7 @@ public class EditServer extends Thread
 			Buffer buffer = jEdit.openFiles(null,parent,args);
 			if(buffer == null)
 				buffer = jEdit.getFirstBuffer();
-			jEdit.newView(jEdit.getActiveView(),buffer,true);
+			jEdit.newView(null,buffer,true);
 			return buffer;
 		}
 		else if(newView)
@@ -285,7 +273,7 @@ public class EditServer extends Thread
 	//}}}
 
 	//{{{ handleClient() method
-	private boolean handleClient(Socket client, DataInputStream in)
+	private boolean handleClient(final Socket client, DataInputStream in)
 		throws Exception
 	{
 		int key = in.readInt();
@@ -314,8 +302,27 @@ public class EditServer extends Thread
 			{
 				public void run()
 				{
-					BeanShell.eval(null,BeanShell.getNameSpace(),
-						script);
+					try
+					{
+						BeanShell.getNameSpace().setVariable("socket",client);
+						BeanShell.eval(null,BeanShell.getNameSpace(),
+							script);
+					}
+					catch(bsh.EvalError e)
+					{
+						Log.log(Log.ERROR,this,e);
+					}
+					finally
+					{
+						try
+						{
+							BeanShell.getNameSpace().setVariable("socket",null);
+						}
+						catch(bsh.EvalError e)
+						{
+							Log.log(Log.ERROR,this,e);
+						}
+					}
 				}
 			});
 

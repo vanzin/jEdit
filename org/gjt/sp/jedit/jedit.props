@@ -46,9 +46,6 @@ restore=true
 # Restore even if file names specified on command line?
 restore.cli=true
 
-# Client instances open new views?
-client.newView=false
-
 # Persistent markers
 persistentMarkers=true
 

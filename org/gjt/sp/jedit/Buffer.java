@@ -30,6 +30,7 @@ import javax.swing.text.*;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
@@ -3253,32 +3254,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Miscellaneous methods
 
-	//{{{ waitForClose() method
+	//{{{ setWaitSocket() method
 	/**
-	 * This method blocks until the buffer is closed. It cannot be called
-	 * from the AWT event thread.
-	 * @since jEdit 4.2pre1
+	 * This socket is closed when the buffer is closed.
 	 */
-	public void waitForClose()
+	public void setWaitSocket(Socket socket)
 	{
-		if(SwingUtilities.isEventDispatchThread())
-			throw new InternalError();
-		else
-		{
-			while(!getFlag(CLOSED))
-			{
-				synchronized(closedLock)
-				{
-					try
-					{
-						closedLock.wait();
-					}
-					catch(InterruptedException e)
-					{
-					}
-				}
-			}
-		}
+		this.waitSocket = waitSocket;
 	} //}}}
 
 	//{{{ getNext() method
@@ -3382,7 +3364,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		lock = new ReadWriteLock();
 		propertyLock = new Object();
-		closedLock = new Object();
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
 		integerArray = new LongArray();
@@ -3463,9 +3444,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(autosaveFile != null)
 			autosaveFile.delete();
 
-		synchronized(closedLock)
+		if(waitSocket != null)
 		{
-			closedLock.notify();
+			try
+			{
+				waitSocket.getOutputStream().write('<');
+				waitSocket.getOutputStream().flush();
+				waitSocket.getInputStream().close();
+				waitSocket.getOutputStream().close();
+				waitSocket.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+			}
 		}
 	} //}}}
 
@@ -3523,7 +3515,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	private ReadWriteLock lock;
 	private Object propertyLock;
-	private Object closedLock;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 	private LongArray integerArray;
@@ -3545,6 +3536,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * offset manager's screen line counts.
 	 */
 	private String wrap;
+
+	private Socket waitSocket;
 	//}}}
 
 	//{{{ setPath() method
