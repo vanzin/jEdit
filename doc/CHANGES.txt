@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre8
 
-Thanks to Chris Petersen, Jonathan Revusky and Silas Smith for
-contributing to this release.
+Thanks to Chris Petersen, Jonathan Revusky, Kris Kopicki and Silas Smith
+for contributing to this release.
 
 + Miscellaneous Changes:
 
@@ -49,6 +49,10 @@ contributing to this release.
 - Fixed various minor bugs with the "Format Paragraph" command.
 
 - Fixed some popup menu display bugs.
+
++ API Additions:
+
+- Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).
 
 * Version 4.1pre7
 
