@@ -1,0 +1,23 @@
+Mac OS Plugin 2.0.2
+
+- Removed the "Run AppleScript" menu in favour of the "Macros" menu.
+- Added an option to use the default system highlight colour in the
+  text area.
+
+Mac OS Plugin 2.0.1
+
+- Fixed a bug: scripts directory was not created.
+
+Mac OS Plugin 2.0
+
+- Added MacOS menu to the Plugins menu. Provides time saving features
+  like revealing files and folders in the Finder, and running
+  AppleScripts.
+- You can run AppleScripts (compiled, uncompiled and standalone).
+  Scripts must be located in the scripts folder in the jEdit folder.
+  They can be either plain text or compiled scripts. Scripts must have
+  their type and creator set correctly, have a .scpt (for compiled
+  scripts) or .applescript (for uncompiled scripts) extension, or
+  both. Note: Scripts that require user interaction are not supported.
+- Added and option to Mac OS Plugin settings to change the script
+  folder search depth.

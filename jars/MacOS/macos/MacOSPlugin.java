@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 import macos.menu.*;
+import macos.script.*;
 //}}}
 
 public class MacOSPlugin extends EBPlugin
@@ -48,6 +49,7 @@ public class MacOSPlugin extends EBPlugin
 		{	
 			handler = new MacOSHandler();
 			// Register handlers
+			Macros.registerHandler(new AppleScriptHandler());
 			MRJApplicationUtils.registerQuitHandler((MRJQuitHandler)handler);
 			MRJApplicationUtils.registerAboutHandler((MRJAboutHandler)handler);
 			MRJApplicationUtils.registerPrefsHandler((MRJPrefsHandler)handler);
@@ -73,18 +75,22 @@ public class MacOSPlugin extends EBPlugin
 	{
 		if (osok)
 		{
+			// Set type/creator codes for files
+			if (message instanceof BufferUpdate)
+				handler.handleFileCodes((BufferUpdate)message);
+			else if (message instanceof PropertiesChanged)
+			{
+				boolean b = jEdit.getBooleanProperty("MacOSPlugin.useSelection",
+					jEdit.getBooleanProperty("MacOSPlugin.default.useSelection"));
+				if (b)
+					jEdit.setColorProperty("view.selectionColor",
+						UIManager.getColor("textHighlight"));
+			}
 			// This is necessary to have a file opened from the Finder
 			// before jEdit is running set as the currently active
 			// buffer.
-			if (!started && message instanceof ViewUpdate)
-			{
+			else if (!started && message instanceof ViewUpdate)
 				handler.handleOpenFile((ViewUpdate)message);
-			}
-			// Set type/creator codes for files
-			else if (message instanceof BufferUpdate)
-			{
-				handler.handleFileCodes((BufferUpdate)message);
-			}
 		}
 	}//}}}
 	
