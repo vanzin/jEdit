@@ -29,6 +29,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 
 /**
@@ -101,8 +102,16 @@ public class PluginJAR
 	 * Loads the plugin core class if it is not already loaded.
 	 * @since jEdit 4.2pre1
 	 */
-	public void activatePlugin()
+	public synchronized void activatePlugin()
 	{
+		if(activated)
+		{
+			// recursive call
+			return;
+		}
+
+		activated = true;
+
 		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
 			return;
 
@@ -135,6 +144,8 @@ public class PluginJAR
 
 			if(plugin instanceof EBPlugin)
 				EditBus.addToBus((EBPlugin)plugin);
+
+			EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
 		}
 		catch(Throwable t)
 		{
@@ -181,13 +192,20 @@ public class PluginJAR
 		return servicesURI;
 	} //}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		if(plugin == null)
+			return path;
+		else
+			return path + ",class=" + plugin.getClassName();
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ PluginJAR constructor
 	PluginJAR(String path)
 	{
-		Log.log(Log.DEBUG,this,"Adding JAR file: " + path);
-
 		this.path = path;
 		classLoader = new JARClassLoader(this);
 		actions = new ActionSet();
@@ -243,7 +261,118 @@ public class PluginJAR
 				}
 			}
 		}
+
+		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
 	} //}}}
+
+	//{{{ activateIfNecessary() method
+	void activatePluginIfNecessary()
+	{
+		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+			return;
+
+		String className = plugin.getClassName();
+
+		// default for plugins that don't specify this property (ie,
+		// 4.1-style plugins) is to load them on startup
+		String activate = jEdit.getProperty("plugin."
+			+ className + ".activate","startup");
+		// if at least one property listed here is true, load the
+		// plugin
+		boolean load = false;
+
+		StringTokenizer st = new StringTokenizer(activate);
+		while(st.hasMoreTokens())
+		{
+			String prop = st.nextToken();            
+			boolean value = jEdit.getBooleanProperty(prop);
+			if(value)
+			{
+				Log.log(Log.DEBUG,this,"Activating "
+					+ className + " because of " + prop);
+				load = true;
+				break;
+			}
+		}
+
+		if(load)
+			activatePlugin();
+	} //}}}
+
+	//{{{ loadProperties() method
+	void loadProperties() throws IOException
+	{
+		if(propertiesLoaded)
+			return;
+
+		propertiesLoaded = true;
+
+		Iterator iter = properties.iterator();
+		while(iter.hasNext())
+		{
+			URL propFile = (URL)iter.next();
+			jEdit.loadProps(
+				propFile.openStream(),
+				true);
+		}
+	} //}}}
+
+	//{{{ getPropertyFiles() method
+	List getPropertyFiles()
+	{
+		return properties;
+	} //}}}
+
+	//{{{ getClasses() method
+	List getClasses()
+	{
+		return classes;
+	} //}}}
+
+	//{{{ closeZipFile() method
+	/**
+	 * Closes the ZIP file. This plugin will no longer be usable
+	 * after this.
+	 * @since jEdit 4.2pre1
+	 */
+	public void closeZipFile()
+	{
+		if(zipFile == null)
+			return;
+
+		try
+		{
+			zipFile.close();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+		}
+
+		zipFile = null;
+	} //}}}
+
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private String path;
+	private JARClassLoader classLoader;
+	private ZipFile zipFile;
+	private List properties;
+	private List classes;
+	private ActionSet actions;
+
+	private EditPlugin plugin;
+
+	private URL actionsURI;
+	private URL dockablesURI;
+	private URL servicesURI;
+
+	private boolean propertiesLoaded;
+	private boolean activated;
+	//}}}
 
 	//{{{ loadCache() method
 	private void loadCache(ResourceCache.PluginCacheEntry cache)
@@ -366,80 +495,6 @@ public class PluginJAR
 
 		return cache;
 	} //}}}
-
-	//{{{ loadProperties() method
-	void loadProperties() throws IOException
-	{
-		if(propertiesLoaded)
-			return;
-
-		propertiesLoaded = true;
-
-		Iterator iter = properties.iterator();
-		while(iter.hasNext())
-		{
-			URL propFile = (URL)iter.next();
-			jEdit.loadProps(
-				propFile.openStream(),
-				true);
-		}
-	} //}}}
-
-	//{{{ getPropertyFiles() method
-	List getPropertyFiles()
-	{
-		return properties;
-	} //}}}
-
-	//{{{ getClasses() method
-	List getClasses()
-	{
-		return classes;
-	} //}}}
-
-	//{{{ closeZipFile() method
-	/**
-	 * Closes the ZIP file. This plugin will no longer be usable
-	 * after this.
-	 * @since jEdit 4.2pre1
-	 */
-	public void closeZipFile()
-	{
-		if(zipFile == null)
-			return;
-
-		try
-		{
-			zipFile.close();
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-		}
-
-		zipFile = null;
-	} //}}}
-
-	//}}}
-
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private String path;
-	private JARClassLoader classLoader;
-	private ZipFile zipFile;
-	private List properties;
-	private List classes;
-	private ActionSet actions;
-
-	private EditPlugin plugin;
-
-	private URL actionsURI;
-	private URL dockablesURI;
-	private URL servicesURI;
-
-	private boolean propertiesLoaded;
-	//}}}
 
 	//{{{ checkDependencies() method
 	private boolean checkDependencies()

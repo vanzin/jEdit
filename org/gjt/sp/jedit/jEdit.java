@@ -412,7 +412,7 @@ public class jEdit
 		//{{{ Start plugins
 		for(int i = 0; i < jars.size(); i++)
 		{
-			((PluginJAR)jars.elementAt(i)).activatePlugin();
+			((PluginJAR)jars.elementAt(i)).activatePluginIfNecessary();
 		} //}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded

@@ -160,7 +160,14 @@ class VFSFileNameField extends HistoryTextField
 					return;
 				}
 				else
+				{
 					super.processKeyEvent(evt);
+					String path = getText();
+
+					BrowserView view = browser.getBrowserView();
+					view.selectNone();
+					view.getTable().doTypeSelect(path,true);
+				}
 			}
 			else if(ch > 0x20 && ch != 0x7f && ch != 0xff)
 			{

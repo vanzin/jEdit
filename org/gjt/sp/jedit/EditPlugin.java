@@ -211,17 +211,22 @@ public abstract class EditPlugin
 
 	//{{{ createMenuItems() method
 	/**
-	 * Loads menu items from the
-	 * <code>plugin.<i>class name</i>.menu</code> property.<p>
+	 * Loads menu items from one of these two properties:
 	 *
-	 * If this
-	 * property only lists one menu item, then this item is returned;
-	 * otherwise the multiple items are placed inside a single menu
-	 * with the plugin's name as the label, and this menu is returned.<p>
+	 * <ul>
+	 * <li><code>plugin.<i>class name</i>.menu-item</code>
+	 * <li><code>plugin.<i>class name</i>.menu</code>
+	 * </ul>
+	 *
+	 * If the former is set, then the menu item specified within is loaded
+	 * using {@link GUIUtilities#loadMenuItem(String)}. If the latter is
+	 * set, then each whitespace-separated token is loaded as a menu item,
+	 * and assembled into a menu whose label is taken from the
+	 * <code>plugin.<i>class name</i>.name</code> property.<p>
 	 *
 	 * If the property is not defined, this method returns null.<p>
 	 *
-	 * Do not override this method; define the above mentioned property
+	 * Do not override this method; define the above mentioned properties
 	 * instead.
 	 *
 	 * @since jEdit 4.2pre1

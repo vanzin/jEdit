@@ -225,6 +225,8 @@ public class JARClassLoader extends ClassLoader
 	private Class _loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
+		jar.activatePlugin();
+
 		Class cls = findLoadedClass(clazz);
 		if(cls != null)
 		{

@@ -15,6 +15,8 @@ and quirks that I need to fix eventually.
 - completion: handle full paths
 - file dialog: handle ~ ENTER, - ENTER
 
+- plugin errors after startup
+
 - mouse over text for actions
 
 - F2 doesn't work in JTree/JTable, maybe others
