@@ -175,10 +175,19 @@ public abstract class EditPlugin
 
 	//{{{ getJAR() method
 	/**
+	 * @deprecated Call <code>getPluginJAR()</code> instead.
+	 */
+	public EditPlugin.JAR getJAR()
+	{
+		return jar;
+	} //}}}
+
+	//{{{ getPluginJAR() method
+	/**
 	 * Returns the JAR file containing this plugin.
 	 * @since jEdit 4.2pre1
 	 */
-	public PluginJAR getJAR()
+	public PluginJAR getPluginJAR()
 	{
 		return jar;
 	} //}}}
@@ -228,7 +237,7 @@ public abstract class EditPlugin
 	} //}}}
 
 	//{{{ Package-private members
-	PluginJAR jar;
+	EditPlugin.JAR jar;
 	//}}}
 
 	//{{{ Broken class
@@ -277,4 +286,17 @@ public abstract class EditPlugin
 		// private members
 		private String clazz;
 	} //}}}
+
+	//{{{ JAR class
+	/**
+	 * @deprecated Use <code>PluginJAR</code> instead.
+	 */
+	public static class JAR extends PluginJAR
+	{
+		JAR(String path)
+		{
+			super(path);
+		}
+	}
+	//}}}
 }

@@ -123,7 +123,7 @@ public class PluginJAR
 		if(!checkDependencies())
 		{
 			plugin = new EditPlugin.Broken(className);
-			plugin.jar = this;
+			plugin.jar = (EditPlugin.JAR)this;
 			return;
 		}
 
@@ -141,7 +141,7 @@ public class PluginJAR
 			}
 
 			plugin = (EditPlugin)clazz.newInstance();
-			plugin.jar = this;
+			plugin.jar = (EditPlugin.JAR)this;
 
 			plugin.start();
 
@@ -153,7 +153,7 @@ public class PluginJAR
 		catch(Throwable t)
 		{
 			plugin = new EditPlugin.Broken(className);
-			plugin.jar = this;
+			plugin.jar = (EditPlugin.JAR)this;
 
 			Log.log(Log.ERROR,this,"Error while starting plugin " + className);
 			Log.log(Log.ERROR,this,t);

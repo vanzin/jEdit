@@ -989,7 +989,8 @@ public class jEdit
 	 */
 	public static PluginJAR addPluginJAR(String path)
 	{
-		PluginJAR jar = new PluginJAR(path);
+		// backwards compatibility...
+		PluginJAR jar = new EditPlugin.JAR(path);
 		jars.addElement(jar);
 		jar.init();
 		if(jar.getActionSet() != null)
