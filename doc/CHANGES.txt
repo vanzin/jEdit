@@ -22,6 +22,9 @@ release.
           baz);
   }
 
+- The soft wrap state is no longer reset when a buffer is saved. This
+  was pointless and slowed down the editor.
+
 }}}
 
 }}}

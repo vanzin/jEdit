@@ -17,7 +17,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - ruleset importing trick
   - file system browser column widths are not saved
   - soft warp problems
-  - see if save file can avoid a full reset of everything
   - deleting at end of file leaves empty space
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
