@@ -30,7 +30,7 @@ increaseFontSize();
 <listitem>
 	<para><filename>Increase_Font_Size.bsh</filename></para>
 	<abstract><para>
-		Increases the font size in the editor & gutter by 1.
+		Increases the font size in the gutter and text area by 1 point.
 	</para></abstract>
 </listitem>
 

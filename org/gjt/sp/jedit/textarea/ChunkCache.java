@@ -95,7 +95,8 @@ class ChunkCache
 				if(info.physicalLine > line)
 				{
 					// line is invisible?
-					return -1;
+					return i - 1;
+					//return -1;
 				}
 				else if(info.physicalLine == line)
 				{

@@ -56,6 +56,14 @@ and Scott Allen for contributing to this release.
 
 - apacheconf.xml in 4.2pre7 distribution was corrupted.
 
+- New files no longer appear in the perspective if the autosave task
+  runs while the "Close Files" dialog box is showing.
+
+- Delete perspective.xml before saving it so that past versions don't
+  accumulate on OpenVMS.
+
+- Fixed MiscUtilities.isAbsolutePath() on OpenVMS.
+
 }}}
 
 }}}

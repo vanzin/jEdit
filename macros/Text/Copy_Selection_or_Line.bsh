@@ -25,7 +25,7 @@ copySelectionOrLine();
 <listitem>
 	<para><filename>Copy_Selection_or_Line.bsh</filename>
 	<abstract><para>
-		If no text is selected, the current line is cppied to 
+		If no text is selected, the current line is copied to 
 		the clipboard, otherwise the selected text is copied 
 		to the clipboard.
 	</para></abstract>
