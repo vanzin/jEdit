@@ -614,7 +614,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public Buffer getBuffer()
 	{
-		return editPane.getBuffer();
+		if(editPane == null)
+			return null;
+		else
+			return editPane.getBuffer();
 	} //}}}
 
 	//{{{ setBuffer() method
@@ -632,7 +635,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public JEditTextArea getTextArea()
 	{
-		return editPane.getTextArea();
+		if(editPane == null)
+			return null;
+		else
+			return editPane.getTextArea();
 	} //}}}
 
 	//{{{ getEditPane() method

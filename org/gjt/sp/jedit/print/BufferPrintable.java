@@ -110,6 +110,11 @@ class BufferPrintable extends WorkRequest implements Printable
 		lineList.clear();
 		currentLine = 0;
 
+		System.err.println("getting pageIndex = " + pageIndex
+			+ ", currentPage = " + currentPage
+			+ ", currentPageStart = " + currentPageStart
+			+ ", currentPhysicalLine = " + currentPhysicalLine
+			+ ", end = " + end);
 		if(pageIndex != currentPage)
 		{
 			currentPageStart = currentPhysicalLine;
