@@ -6,6 +6,8 @@ JEDIT 4.1 VERSION HISTORY
 
 - Interilis syntax highlighting (Claude Eisenhut)
 - Added SOCKS proxy support (Alfonso Garcia)
+- WheelMouse plugin integrated into core -- no need to install a
+  separate plugin to get wheel mouse scrolling under Java 2 version 1.4
 
 + Enhancements
 
