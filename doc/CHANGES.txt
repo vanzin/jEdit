@@ -18,6 +18,9 @@ JEDIT 4.1 VERSION HISTORY
 - Fixed a bug with nested compound edits. I'm not sure if it ever caused
   any problems, however it did affect performance.
 
+- More fixes for non-standard mouse button handling under MacOS X
+  (Kris Kopicki).
+
 + API Changes:
 
 - VFS._saveComplete(Object session, Buffer buffer, Component comp) is

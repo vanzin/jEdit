@@ -165,6 +165,16 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		return resultTreeModel;
 	} //}}}
 
+	//{{{ getTree() method
+	/**
+	 * Returns the result tree.
+	 * @since jEdit 4.1pre9
+	 */
+	public JTree getTree()
+	{
+		return resultTree;
+	} //}}}
+
 	//{{{ searchStarted() method
 	public void searchStarted()
 	{

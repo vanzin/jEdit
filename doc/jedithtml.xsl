@@ -79,27 +79,27 @@
 <!-- }}} -->
 
 <!-- {{{ Swing HTML control doesn't support &ldquo; and &rdquo; -->
-<i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
-<l10n language="en">
+<i18n:i18n xmlns:i18n="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+<i18n:l10n language="en">
 
-<dingbat key="startquote" text="&quot;"/>
-<dingbat key="endquote" text="&quot;"/>
-<dingbat key="nestedstartquote" text="&quot;"/>
-<dingbat key="nestedendquote" text="&quot;"/>
+<i18n:dingbat key="startquote" text="&quot;"/>
+<i18n:dingbat key="endquote" text="&quot;"/>
+<i18n:dingbat key="nestedstartquote" text="&quot;"/>
+<i18n:dingbat key="nestedendquote" text="&quot;"/>
 
-<context name="section-xref">
-   <template name="bridgehead" text="the section called &quot;%t&quot;"/>
-   <template name="sect1" text="the section called &quot;%t&quot;"/>
-   <template name="sect2" text="the section called &quot;%t&quot;"/>
-   <template name="sect3" text="the section called &quot;%t&quot;"/>
-   <template name="sect4" text="the section called &quot;%t&quot;"/>
-   <template name="sect5" text="the section called &quot;%t&quot;"/>
-   <template name="section" text="the section called &quot;%t&quot;"/>
-   <template name="simplesect" text="the section called &quot;%t&quot;"/>
-</context>
+<i18n:context name="section-xref">
+   <i18n:template name="bridgehead" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="sect1" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="sect2" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="sect3" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="sect4" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="sect5" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="section" text="the section called &quot;%t&quot;"/>
+   <i18n:template name="simplesect" text="the section called &quot;%t&quot;"/>
+</i18n:context>
 
-</l10n>
-</i18n>
+</i18n:l10n>
+</i18n:i18n>
 <!-- }}} -->
 
 <!-- {{{ TOC generation -->
