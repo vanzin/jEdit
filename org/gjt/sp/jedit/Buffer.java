@@ -766,10 +766,11 @@ public class Buffer
 	public void setDirty(boolean d)
 	{
 		boolean old_d = getFlag(DIRTY);
+		boolean editable = isEditable();
 
 		if(d)
 		{
-			if(isEditable())
+			if(editable)
 			{
 				setFlag(DIRTY,true);
 				setFlag(AUTOSAVE_DIRTY,true);
@@ -793,7 +794,7 @@ public class Buffer
 			}
 		}
 
-		if(d != old_d)
+		if(d != old_d && editable)
 		{
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.DIRTY_CHANGED));
@@ -3217,15 +3218,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void addMarker(char shortcut, int pos)
 	{
-		if(jEdit.getBooleanProperty("persistentMarkers"))
-			setDirty(true);
-
 		Marker markerN = new Marker(this,shortcut,pos);
 		boolean added = false;
 
 		// don't sort markers while buffer is being loaded
 		if(!getFlag(LOADING))
 		{
+			if(jEdit.getBooleanProperty("persistentMarkers"))
+				setDirty(true);
+
 			markerN.createPosition();
 
 			for(int i = 0; i < markers.size(); i++)

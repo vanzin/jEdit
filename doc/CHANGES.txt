@@ -115,6 +115,18 @@ contributing to this release.
 
 - Escape sequences in the replace string (\n, \t) didn't work properly.
 
+- When viewing the favorites: URL, the full path of the entries is now
+  shown, just like in 4.1.
+
+- The Favorites menu in the file system browser was sorted by entry
+  name, but full paths were listed, so it looked like there was no order
+  to it at all.
+
+- Fixed bogus DIRTY_CHANGED messages sent when loading a buffer with
+  persistent markers.
+
+- The numeric keypad didn't work on JDK 1.3.
+
 }}}
 {{{ API Changes
 
