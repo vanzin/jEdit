@@ -168,11 +168,23 @@ contributing to this release.
 - Fixed NullPointerException being thrown when clicking tool bar buttons
   in a file dialog box with no associated view.
 
+- Fixed NullPointerException when pressing RIGHT at the end of a line
+  with rectangular selection mode on.
+
+- The "Save As" dialog box no longer completes file names on the fly.
+  Press TAB to complete file names. This was done since previously it
+  was impossible to save to a file named "jjj.sss" if there was a file
+  "jjj.sss.xxx" already in the destination directory.
+
 }}}
 {{{ API Additions
 
 - Icon theme support. Pass a URL to GUIUtilities.setIconPath() and all
   icons will be loaded from that URL prepended to the icon name.
+
+- Added BeanShell.runScript(View view, String path, Reader in,
+  NameSpace namespace) method. Also added a corresponding _runScript()
+  method.
 
 }}}
 {{{ API Changes

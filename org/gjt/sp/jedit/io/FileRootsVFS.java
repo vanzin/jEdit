@@ -196,7 +196,7 @@ public class FileRootsVFS extends VFS
 				isFloppy = path.startsWith("A:") || path.startsWith("B:");
 
 			// so an empty cd drive is not reported as a file
-			if(isDrive != null)
+			if(isDrive != null && !isFloppy)
 			{
 				try
 				{
@@ -212,7 +212,9 @@ public class FileRootsVFS extends VFS
 			else
 				isDirectory = file.isDirectory();
 
-			if(isFloppy || isDirectory)
+			if(isFloppy)
+				type = VFS.DirectoryEntry.FILESYSTEM;
+			else if(isDirectory)
 			{
 				type = VFS.DirectoryEntry.FILESYSTEM;
 

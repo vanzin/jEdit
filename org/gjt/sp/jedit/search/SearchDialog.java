@@ -105,11 +105,11 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	public void setSearchString(String searchString, int searchIn)
 	{
+		find.setText(null);
+		replace.setText(null);
+
 		if(searchString == null)
-		{
-			find.setText(null);
 			searchCurrentBuffer.setSelected(true);
-		}
 		else
 		{
 			if(searchString.indexOf('\n') == -1)

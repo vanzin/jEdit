@@ -2432,11 +2432,11 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		int newCaret = caret;
 
-		if(select && caret == buffer.getLength())
+		if(caret == buffer.getLength())
 		{
-			if(rectangularSelectionMode || s instanceof Selection.Rect)
+			if(select && (rectangularSelectionMode || s instanceof Selection.Rect))
 			{
-				if(caret == s.start)
+				if(s != null && caret == s.start)
 					extraStartVirt++;
 				else
 					extraEndVirt++;
@@ -2449,9 +2449,9 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 		else if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			if(rectangularSelectionMode || s instanceof Selection.Rect)
+			if(select && (rectangularSelectionMode || s instanceof Selection.Rect))
 			{
-				if(caret == s.start)
+				if(s != null && caret == s.start)
 					extraStartVirt++;
 				else
 					extraEndVirt++;
