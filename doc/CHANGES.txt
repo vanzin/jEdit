@@ -205,6 +205,10 @@ contributing to this release.
   'PluginManager.download' directory on some operating systems, due to a
   missing close() call.
 
+- JEditTextArea.goToEndOfLine() (bound to END if 'smart home/end' is
+  off, or END END if its on) followed by goToNextLine() would move the
+  cursor to the first column.
+
 + API Changes:
 
 - Two methods added to jEdit class:

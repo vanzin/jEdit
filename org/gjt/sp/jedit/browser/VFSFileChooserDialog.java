@@ -364,9 +364,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			for(int i = 0; i < files.length; i++)
 			{
 				VFS.DirectoryEntry file = files[i];
-				if(browser.getMode() != VFSBrowser.CHOOSE_DIRECTORY_DIALOG
-					&& (file.type == VFS.DirectoryEntry.FILESYSTEM
-					|| file.type == VFS.DirectoryEntry.DIRECTORY))
+				if(file.type == VFS.DirectoryEntry.FILESYSTEM
+					|| file.type == VFS.DirectoryEntry.DIRECTORY)
 				{
 					// the browser will list the directory
 					// in question, so just return

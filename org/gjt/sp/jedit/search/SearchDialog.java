@@ -164,6 +164,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 				path = MiscUtilities.getParentOfPath(path);
 			else
 				path = System.getProperty("user.dir");
+
+			if(path.endsWith(File.separator))
+				path = path.substring(0,path.length() - 1);
+
 			directory.setText(path);
 
 			if(fileset instanceof AllBufferSet)
