@@ -2,6 +2,10 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 
++ Enhancements
+
+- Documentation updates
+
 + Bug Fixes
 
 - Fixed tip of the day that referred to the old S+BACK_SPACE/S+DELETE

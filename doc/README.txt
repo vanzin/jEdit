@@ -53,7 +53,7 @@ latest version of jEdit, along with plugin downloads. There is also a
 user-oriented site, <http://community.jedit.org>. Check it out.
 
 If you would like to report a bug, first take a look at the 'jEdit
-Frequently Asked Questions' document, accessable from either jEdit's
+Frequently Asked Questions' document, accessible from either jEdit's
 online help or by pointing your web browser to the file named
 `index.html' in the `doc/FAQ/' directory of the jEdit distribution.
 
@@ -106,7 +106,7 @@ jEdit depends on, and comes bundled with the following libraries:
   The AElfred home page is located at <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2b3 with the bsh.util and bsh.classpath packages removed.
+  version 1.2b41 with the bsh.util and bsh.classpath packages removed.
 
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
