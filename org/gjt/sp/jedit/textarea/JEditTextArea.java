@@ -661,7 +661,9 @@ public class JEditTextArea extends JComponent
 			setFirstLine(getFirstLine() + _electricScroll - visibleLines + screenLine + (lastLinePartial ? 2 : 1));
 		} //}}}
 
-		//{{{ Scroll horizontally
+		// broken
+
+		/*/{{{ Scroll horizontally
 		Point point = offsetToXY(line,offset,returnValue);
 		if(point == null)
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
@@ -678,7 +680,7 @@ public class JEditTextArea extends JComponent
 			setHorizontalOffset(horizontalOffset +
 				(painter.getWidth() - point.x)
 				- charWidth - 5);
-		} //}}}
+		} //}}}*/
 	} //}}}
 
 	//{{{ addScrollListener() method
@@ -2332,11 +2334,12 @@ loop:		for(int i = 0; i < text.length(); i++)
 			int extraEndVirt = getExtraEndVirt(caret,newCaret);
 			if(extraEndVirt < 0)
 			{
-				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - extraEndVirt - 1;
+				newCaret = getLineStartOffset(getLineOfOffset(newCaret)) - extraEndVirt;
 				extraEndVirt = 0;
 			}
+			else if(extraEndVirt > 0)
+				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - 1;
 			extendSelection(caret,newCaret,extraEndVirt);
-			magic = -1;
 		}
 		else if(!multi)
 			selectNone();
@@ -2633,11 +2636,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			int extraEndVirt = getExtraEndVirt(caret,newCaret);
 			if(extraEndVirt < 0)
 			{
-				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - extraEndVirt - 1;
+				newCaret = getLineStartOffset(getLineOfOffset(newCaret)) - extraEndVirt;
 				extraEndVirt = 0;
 			}
+			else if(extraEndVirt > 0)
+				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - 1;
 			extendSelection(caret,newCaret,extraEndVirt);
-			magic = -1;
 		}
 		else if(!multi)
 			selectNone();
@@ -5507,23 +5511,30 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ getExtraEndVirt() method
 	private int getExtraEndVirt(int caret, int newCaret)
 	{
+		int virtualWidth;
 		Selection s = getSelectionAtOffset(caret);
 		if(s instanceof Selection.Rect)
 		{
-			int virtualWidth = buffer.getVirtualWidth(
+			virtualWidth = buffer.getVirtualWidth(
 				s.endLine,s.end - getLineStartOffset(
 				s.endLine)) + ((Selection.Rect)s).extraEndVirt;
-			int newLine = getLineOfOffset(newCaret);
-			int[] totalVirtualWidth = new int[1];
-			int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
-				virtualWidth,totalVirtualWidth);
-			if(newOffset == -1)
-				return virtualWidth - totalVirtualWidth[0];
-			else
-				return -newOffset;
+		}
+		else if(rectangularSelectionMode)
+		{
+			virtualWidth = buffer.getVirtualWidth(
+				caretLine,caret - buffer.getLineStartOffset(caretLine));
 		}
 		else
 			return 0;
+
+		int newLine = getLineOfOffset(newCaret);
+		int[] totalVirtualWidth = new int[1];
+		int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
+			virtualWidth,totalVirtualWidth);
+		if(newOffset == -1)
+			return virtualWidth - totalVirtualWidth[0];
+		else
+			return -newOffset;
 	} //}}}
 
 	//}}}

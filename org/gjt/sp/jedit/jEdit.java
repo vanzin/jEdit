@@ -2580,16 +2580,14 @@ public class jEdit
 			",parent,args);\n");
 		script.append("if(buffer != null && " + wait + ") {\n");
 		script.append("\tbuffer.setWaitSocket(socket);\n");
-		script.append("\tsocket = null;\n");
+		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");
 		script.append("if(view != jEdit.getLastView()) {\n");
-		script.append("\tview.setWaitSocket(socket);\n");
-		script.append("\tsocket = null;\n");
+		script.append("\tjEdit.getLastView().setWaitSocket(socket);\n");
+		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");
-		script.append("if(socket != null)\n");
+		script.append("if(doNotCloseSocket == void)\n");
 		script.append("\tsocket.close();\n");
-		/* the script is run in the global namespace */
-		script.append("buffer = null;\n");
 
 		if(scriptFile != null)
 		{

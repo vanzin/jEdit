@@ -90,10 +90,7 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups,
 		boolean enterAddsToHistory)
 	{
-		setBorder(new CompoundBorder(getBorder(),new HistoryBorder()));
-
-		if(name != null)
-			historyModel = HistoryModel.getModel(name);
+		setModel(name);
 
 		MouseHandler mouseHandler = new MouseHandler();
 		addMouseListener(mouseHandler);
@@ -178,9 +175,16 @@ public class HistoryTextField extends JTextField
 	public void setModel(String name)
 	{
 		if(name == null)
+		{
 			historyModel = null;
+			setBorder(UIManager.getBorder("TextField.border"));
+		}
 		else
+		{
 			historyModel = HistoryModel.getModel(name);
+			setBorder(new CompoundBorder(UIManager.getBorder("TextField.border"),
+			new HistoryBorder()));
+		}
 		index = -1;
 		repaint();
 	} //}}}

@@ -2679,8 +2679,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getOffsetOfVirtualColumn() method
 	/**
-	 * Returns the array offset of a virtual column number (taking tabs
-	 * into account) in the segment.
+	 * Returns the offset of a virtual column number (taking tabs
+	 * into account) relative to the start of the line in question.
 	 *
 	 * @param line The line number
 	 * @param column The virtual column number
