@@ -1015,8 +1015,6 @@ loop:		for(;;)
 			}
 			firstLine.callChanged = true;
 		}
-
-		System.err.println(firstLine);
 	} //}}}
 
 	//{{{ _setScreenLineCount() method
