@@ -145,6 +145,8 @@
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 
+<MODE NAME="mail"		FILE="mail.xml" />
+
 <MODE NAME="makefile"		FILE="makefile.xml"
 				FILE_NAME_GLOB="*makefile" />
 
