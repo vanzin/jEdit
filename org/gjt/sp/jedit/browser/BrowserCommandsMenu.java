@@ -216,7 +216,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			encodingMenuItems.put(browser.currentEncoding,mi);
 		}
 
-		String systemEncoding = System.getProperty("file.encoding")
+		String systemEncoding = System.getProperty("file.encoding");
 		if(encodingMenuItems.get(systemEncoding) == null)
 		{
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
@@ -235,7 +235,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		grp.add(otherEncoding);
 		encodingMenu.add(otherEncoding);
 
-		return;
+		return encodingMenu;
 	} //}}}
 
 	//}}}
