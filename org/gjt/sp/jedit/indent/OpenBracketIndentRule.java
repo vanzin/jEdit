@@ -46,7 +46,11 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	{
 		int prevOpenBracketCount = getOpenBracketCount(buffer,prevLineIndex);
 		if(prevOpenBracketCount != 0)
+		{
+			if(indentActions.contains(new IndentAction.Collapse()))
+				indentActions.add(new IndentAction.Reset());
 			indentActions.add(new IndentAction.Increase(prevOpenBracketCount));
+		}
 		else if(getOpenBracketCount(buffer,thisLineIndex) != 0)
 		{
 			if(indentActions.contains(new IndentAction.Collapse()))
