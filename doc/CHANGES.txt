@@ -49,6 +49,10 @@ contributing to this release.
   a list of supported file encodings. On Java 2 version 1.3, the same
   hard-coded list of encodings is offered as before.
 
+- The Docking option pane has been reintroduced since a number of people
+  preferred the old docking style (the new direct manipulation still
+  works of course).
+
 }}}
 {{{ Bug Fixes
 
@@ -155,7 +159,7 @@ contributing to this release.
   not display in some circumstances.
 
 - The file system browser would not refresh, and edit modes would not be
-  reloaded if the paths in question contained symbolic links.
+  reloaded, if the paths in question contained symbolic links.
 
 - "Join Lines" no longer prints an exception if the buffer is read only.
 

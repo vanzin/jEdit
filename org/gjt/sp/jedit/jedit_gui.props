@@ -1568,6 +1568,13 @@ options.context.add.separator=Separator
 options.context.add.action=Command or macro:
 #}}}
 
+#{{{ Docking pane
+options.docking.label=Docking
+options.docking.code=new DockingOptionPane();
+options.docking.title=Window
+options.docking.dockPosition=Docking position
+#}}}
+
 #{{{ Editing pane
 options.editing.label=Editing
 options.editing.code=new EditingOptionPane();

@@ -70,6 +70,7 @@ public class GlobalOptions extends OptionsDialog
 		jEditGroup.addOptionPane("appearance");
 		jEditGroup.addOptionPane("auto-back");
 		jEditGroup.addOptionPane("context");
+		jEditGroup.addOptionPane("docking");
 		jEditGroup.addOptionPane("editing");
 		jEditGroup.addOptionPane("general");
 		jEditGroup.addOptionPane("gutter");

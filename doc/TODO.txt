@@ -29,8 +29,6 @@ invalidation being performed
 - new file close messes up perspective
 - document lack of C+e C+e
 - control drag doesn't kill existing selection
-- drag and drop: start drag and cancel, caret can be left in a strange
-  place
 - drag and drop: do a compound edit if same buffer
 - fix double slash in path bug
 - thread safety problem in VFSManager.waitForRequests()
