@@ -3430,24 +3430,27 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 			return;
 		}
-
-		int start = getLineStartOffset(caretLine);
-		int end = getLineEndOffset(caretLine);
-
-		int x = chunkCache.subregionOffsetToX(caretLine,caret - start);
-
-		// otherwise a bunch of consecutive C+d's would be merged
-		// into one edit
+		
+		int x = chunkCache.subregionOffsetToX(caretLine,caret - getLineStartOffset(caretLine));
+		int[] lines = getSelectedLines();
+		
 		try
 		{
-			if(end > buffer.getLength())
-			{
-				if(start != 0)
-					start--;
-				end--;
-			}
 			buffer.beginCompoundEdit();
-			buffer.remove(start,end - start);
+			
+			int start,end;
+			for (int i=lines.length-1;i>=0;i--)
+			{
+				start = getLineStartOffset(lines[i]);
+				end = getLineEndOffset(lines[i]);
+				if (end > buffer.getLength())
+				{
+					if (start != 0)
+						start--;
+					end--;
+				}
+				buffer.remove(start,end - start);
+			}
 		}
 		finally
 		{
@@ -3455,17 +3458,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 
 		int lastLine = displayManager.getLastVisibleLine();
+
 		if(caretLine == lastLine)
 		{
 			int offset = chunkCache.xToSubregionOffset(lastLine,0,x,true);
 			setCaretPosition(buffer.getLineStartOffset(lastLine)
-				+ offset);
+			+ offset);
 		}
 		else
 		{
 			int offset = chunkCache.xToSubregionOffset(caretLine,0,x,true);
-			setCaretPosition(start + offset);
+			setCaretPosition(getLineStartOffset(caretLine) + offset);
 		}
+
 	} //}}}
 
 	//{{{ deleteParagraph() method
@@ -4534,28 +4539,54 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void joinLines()
 	{
-		int end = getLineEndOffset(caretLine);
-		if(!buffer.isEditable() || end > buffer.getLength())
+		if (getSelectionCount() == 0)
 		{
-			getToolkit().beep();
-			return;
-		}
+			int end = getLineEndOffset(caretLine);
+			if(!buffer.isEditable() || end > buffer.getLength())
+			{
+				getToolkit().beep();
+				return;
+			}
 
-		try
+			try
+			{
+				buffer.beginCompoundEdit();
+				buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
+					buffer.getLineText(caretLine + 1)) + 1);
+				buffer.insert(end - 1, " ");
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+			setCaretPosition(end - 1);
+		}
+		else
 		{
-			buffer.beginCompoundEdit();
+			try
+			{
+				buffer.beginCompoundEdit();
 
-			buffer.remove(
-				end - 1,MiscUtilities.getLeadingWhiteSpace(
-				buffer.getLineText(caretLine + 1)) + 1);
-			buffer.insert(end - 1, " ");
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
+				int[] selectedLines = getSelectedLines();
+				int offset = 0;
+				for (int i = 0; i < selectedLines.length-1; i++)
+				{
+					if (selectedLines[i+1] - selectedLines[i] > 1)
+						continue;
 
-		setCaretPosition(end - 1);
+					int end = getLineEndOffset(selectedLines[i]-offset);
+					buffer.remove(
+					end - 1,MiscUtilities.getLeadingWhiteSpace(
+						buffer.getLineText(selectedLines[i] + 1 - offset)) + 1);
+					buffer.insert(end - 1, " ");
+					offset++;
+				}
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
 	} //}}}
 
 	//{{{ showWordCountDialog() method

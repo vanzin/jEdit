@@ -39,6 +39,10 @@ Simon Ruggier for contributing to this release.
 
 - The cursor is hidden when you start typing.
 
+- Renamed 'Delete Line' to 'Delete Lines'; now does the right thing if
+  more than one line is selected. Same for 'Join Lines' versus
+  'Join Line'.
+
 }}}
 {{{ Bug Fixes
 
@@ -62,6 +66,10 @@ Simon Ruggier for contributing to this release.
   various problems.
 
 - The custom history text field border with the popup widget is back.
+
+- Fixed a memory leak. Token markers were retaining the line segment
+  they were given to tokenize -- in some cases, this line segment could
+  hang around for a while, and was huge.
 
 }}}
 

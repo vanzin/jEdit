@@ -253,6 +253,10 @@ unwind:		while(context.parent != null)
 
 		context = context.intern();
 		tokenHandler.setLineContext(context);
+
+		/* for GC. */
+		this.line = null;
+
 		return context;
 	} //}}}
 

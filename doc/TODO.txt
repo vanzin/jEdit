@@ -19,8 +19,6 @@ and quirks that I need to fix eventually.
 - new file: explicit folding: type {{{: fold marker doesn't appear
 - finish code to hide caret on user input; enter is a problem
   maybe listen for KeyTyped instead
-- join lines with selection
-- delete line with selection
 - independent text area component
   - gutter: has a depenency on View to do focus highlight, and Marker
   - display manager: has a dependency on View for currently focused
