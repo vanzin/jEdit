@@ -71,7 +71,7 @@
         </para></question>
         <answer><para>
             The easiest way to get this kind of behavior is to use macros that open
-            the Virtual File Browsers to a specific, fixed directory, and then
+            the Virtual File Browser to a specific, fixed directory, and then
             change the default keyboard shortcuts for opening and saving files to
             run these macros.
         </para></answer>
@@ -99,7 +99,7 @@
             File Browser?
         </para></question>
         <answer><para>
-            No.  The feature is being planned for inclusion in a future
+            No. The feature is being planned for inclusion in a future
             jEdit version.  The fastest way to do this in the current
             jEdit version is to use the Console plugin and a native
             command.
@@ -116,17 +116,8 @@
             <quote>dirty</quote> after I undo all changes made to the buffer?
         </para></question>
         <answer><para>
-            This is a shortcoming of the undo code used in the Java Swing document
-            model, on which the current version of jEdit bases its
-            <classname>Buffer</classname>   class. The routine for assigning a
-            <quote>dirty</quote> flags to buffers
-            takes a safe, conservative approach and maintains the flag as set once
-            any changes are made to the buffer.
-         </para>
-         <para>
-            The forthcoming version 4.0 of jEdit will employ a new document model
-            that will overcome this and other limitations of the Swing document
-            architecture.
+            This is a problem in jEdit 3.2.2 that has been fixed in version 4.0.
+            You should upgrade.
          </para></answer>
      </qandaentry>
 
@@ -136,16 +127,20 @@
             saves files?
         </para></question>
         <answer><para>
-            One reason this can be an issue is that jEdit adopts a conservative
-            approach of saving a file to a temporary name before renaming that file
-            to the desired name. This procedure minimizes the risk of crashes
-            causing loss of data, and works without reported problems on local file
-            systems. However, when files are served remotely by FTP or Samba, for
-            example, it may not be possible to preserve file attributes on the
-            server because the newly created temporary file's owner may differ from
-            the owner of the original file on the server. Where this becomes a
-            problem, you will have to modify file attributes on the remote server
-            without using jEdit.
+          One reason this can be an issue is that by default, jEdit adopts the conservative
+          approach of saving a file to a temporary name before renaming that file
+          to the desired name. This procedure minimizes the risk of crashes
+          causing loss of data, and works without reported problems on local file
+          systems. However, when files are served remotely by FTP, Samba or other means,
+          it may not be possible to preserve file attributes on the
+          server because the newly created temporary file's owner may differ from
+          the owner of the original file on the server.
+        </para>
+        <para>
+          To avoid this problem, you can disable the two-step file saving routine. Select
+          <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>, then
+          under <guimenuitem>Loading &amp; Saving</guimenuitem>, clear the checkbox for
+          <guimenuitem>Two-stage save</guimenuitem>.
         </para></answer>
     </qandaentry>
 
@@ -155,12 +150,9 @@
             characters when I save a file?
         </para></question>
         <answer><para>
-            The current procedure is for jEdit to use the line separator
-            found in an existing file when it save the file.  The
-            line separator designated in the buffer options or elsewhere
-            is used only for new files.  One of the new features planned
-            for jEdit 4.0 is the ability to override file-specific line
-            separators.
+            When jEdit saves an existing file, it uses the line separator
+            already used by the file.  The line separator designated in the
+            buffer options or elsewhere is used only for new files.
         </para></answer>
     </qandaentry>
 
@@ -169,8 +161,10 @@
             Can jEdit auto-detect character encodings when it opens a file?
         </para></question>
         <answer><para>
-            No, although there are plans to enable auto-detection of Java Unicode
-            encoding in a future release.
+            Only Unicode can be detected when a file is loaded. For other
+            encodings, you must specify the encoding when the file is loaded
+            if you do not wish to use the default
+            encoding for your operating system.
         </para>
         <para>
             There are a few features that can help you navigate through encoding
@@ -192,8 +186,26 @@
             to use default settings.
         </para></answer>
     </qandaentry>
-    <!-- TODO: qanda on euro symbol -->
-
+    <qandaentry>
+      <question><para>
+        I'm using the iso-8859-1 character encoding.  How do I type and save the
+        Euro sign (<quote>&#x20ac;</quote>)?
+      </para></question>
+      <answer><para>
+        You need to use instead the iso-8859-15 character set, which is a modification
+        of iso-8859-1 that includes the Euro sign and some Finnish and French characters.
+        The Euro sign represents character value 0xA4 in this 8-bit set. To open a file
+        manually using this encoding, select <guimenu>File</guimenu>&gt;<guimenuitem>Open
+        With Encoding</guimenuitem>, and select <guimenuitem>ISO8859_15</guimenuitem>.
+        </para>
+        <para>
+          There is a startup script in the <quote>Downloads</quote> area of
+          <ulink url="http://community.jedit.org">jEdit Community</ulink>
+          named <filename>euro.bsh</filename> that can be used as a startup script to
+          help simplfy the insertion of the Euro symbol if your keyboard currently lacks
+          a dedicated key.
+        </para></answer>
+      </qandaentry>
    </qandadiv>
 
 
@@ -263,7 +275,7 @@
 	<question id="smart-quote">
 		<para>
 			Does jEdit know smart quotes? In .tex files I would like to use
-      <userinput>&#147;</userinput> or <userinput>&#148;</userinput>
+      <userinput>``</userinput> or <userinput>''</userinput>
 			instead of <userinput>&quot;</userinput>.
 		</para>
 	</question>
@@ -274,6 +286,12 @@
 			to insert <quote>smart quote</quote> pairs automatically as some word processors
 			do. This would require a BeanShell macro to modify quoted text.
 		</para>
+    <para>
+      You also have the option of using a TeX macro (or, in LaTeX, a pair of
+      environment tags) to have the standard double quotation mark
+      <userinput>&quot;</userinput> transformed into the appropriate opening or closing
+      smart quotes without the need to keep track of when quoted text opens or closes.
+    </para>
 	</answer>
 </qandaentry>
 
@@ -285,10 +303,12 @@
 	</question>
 	<answer>
 		<para>
-			Beginning with version 4.0pre4, jEdit has soft wrap capability.  In prior
-			versions, both the text wrap feature and the <guimenuitem>Edit&gt;Textgt;Format
+			Beginning with version 4.0pre4, jEdit has soft wrap capability which can be activated
+      for a specific buffer, specific editing modes, or for all documents by default.
+      In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Textgt;Format
 			Paragraph</guimenuitem> command insert <quote>hard</quote> end of line
-			characters.
+			characters.  This <quote>hard wrap</quote> feature remains available as an option
+      for bufers and editing modes.
 		</para>
 	</answer>
 </qandaentry>
@@ -322,7 +342,7 @@ of spaces, tabs, and other whitespace characters.
 			When editing text documents, jEdit supports any available encoding scheme, and
 			can open files with a specified encoding other than the default encoding of your
 			operating system using the <guimenu>File</guimenu>&gt;<guimenuitem>Open
-			with Encoding</guimenuitem> command.
+			With Encoding</guimenuitem> command.
 		</para>
 		<para>
 			With respect to menu labels, message strings and other GUI elements, the jEdit
@@ -350,10 +370,15 @@ of spaces, tabs, and other whitespace characters.
 	</question>
 	<answer>
 		<para>
-			Printing is one of the weak areas of the Java platform. One simple way to
-			improve performance is to use the InfoViewer plugin to display and print a text
-			file in your favorite Web browser. You can also write a macro that saves a
-			buffer and then passes the buffer's file name (using the method
+			Prior to release of version 1.4 of the Java Development Kit (JDK), printing
+      has been one of the weak
+      areas of the Java platform. If you are using JDK version 1.3, here
+      are a few suggestions on improving pritning performance.
+    </para>
+    <para>
+			One simple way to improve printing is to use the InfoViewer plugin to display and
+      print a text file in your favorite Web browser. You can also write a macro that
+      saves a buffer and then passes the buffer's file name (using the method
 			<filename>buffer.getPath()</filename>) to an external print utility. The file
 			<filename>prettyprint.bat</filename> in the
 			Downloads section of <ulink url="http://community.jedit.org">jEdit
@@ -382,11 +407,10 @@ of spaces, tabs, and other whitespace characters.
           before the cursor and its corresponding closing tag after the cursor.
           Use the mouse to select <guilabel>Add global</guilabel> or <guilabel>Add
           mode-specific</guilabel>. The first choice makes the abbreviation
-          available for all documents; the second makes it available oonly in
+          available for all documents; the second makes it available only in
           documents with the same editing mode as the current document. In this
           way, you can add abbreviations that operate only a particular class of
           documents, for example, Java source files or XML markup. Either way, the
-          abbreviation will automatically expand as you have defined it, and the
           abbreviation will be stored for future use.
         </para></answer>
       </qandaentry>
@@ -425,7 +449,7 @@ of spaces, tabs, and other whitespace characters.
             both add the selected text to the existing contents of the Clipboard. A single
             <guimenuitem>Paste</guimenuitem>
             (<keycombo action="simul"><keycap>CTRL</keycap><keycap>V</keycap></keycombo>)
-            command will insert the agrregated text at the cursor or in place of an existing
+            command will insert the aggregated text at the cursor or in place of an existing
             selection.
         </para></answer>
       </qandaentry>

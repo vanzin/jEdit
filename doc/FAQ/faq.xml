@@ -86,12 +86,17 @@
         <date>Oct. 31, 2001</date>
         <revremark>Sections 1-5 completed; section 6 begun.</revremark>
      </revision>
--->
     <revision>
       <revnumber>0.7</revnumber>
       <date>Jan. 15, 2002</date>
       <revremark>Inclusion of material from jEdit Community
       Interactive FAQ</revremark>
+    </revision>
+-->
+    <revision>
+      <revnumber>0.8</revnumber>
+      <date>Feb. 17, 2002</date>
+      <revremark>Additional revisions for jEdit 4.0 release</revremark>
     </revision>
     </revhistory>
 	<releaseinfo>
