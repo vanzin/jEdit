@@ -150,31 +150,34 @@ public abstract class OptionsDialog extends EnhancedDialog
 		StringBuffer buf = new StringBuffer();
 
 		OptionPane optionPane = null;
-		String name = null;
 
 		int lastIdx = nodes.length - 1;
 
 		for (int i = paneTree.isRootVisible() ? 0 : 1;
 			i <= lastIdx; i++)
 		{
+			String label;
 			Object node = nodes[i];
 			if (node instanceof OptionPane)
 			{
 				optionPane = (OptionPane)node;
-				name = optionPane.getName();
+				label = jEdit.getProperty("options."
+					+ optionPane.getName()
+					+ ".label");
 			}
 			else if (node instanceof OptionGroup)
 			{
-				name = ((OptionGroup)node).getName();
+				label = ((OptionGroup)node).getLabel();
 			}
 			else if (node instanceof String)
 			{
-				name = (String)node;
+				label = jEdit.getProperty("options."
+					+ node + ".label");
 				optionPane = (OptionPane)deferredOptionPanes
-					.get(name);
+					.get((String)node);
 				if(optionPane == null)
 				{
-					String propName = "options." + name + ".code";
+					String propName = "options." + node + ".code";
 					String code = jEdit.getProperty(propName);
 					if(code != null)
 					{
@@ -188,7 +191,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 						if(optionPane != null)
 						{
 							deferredOptionPanes.put(
-								name,optionPane);
+								node,optionPane);
 						}
 						else
 							continue;
@@ -206,22 +209,10 @@ public abstract class OptionsDialog extends EnhancedDialog
 				continue;
 			}
 
-			if (name != null)
-			{
-				String label = jEdit.getProperty("options." +
-					name + ".label");
+			buf.append(label);
 
-				if (label == null)
-				{
-					buf.append(name);
-				}
-				else
-				{
-					buf.append(label);
-				}
-			}
-
-			if (i != lastIdx) buf.append(": ");
+			if (i != lastIdx)
+				buf.append(": ");
 		}
 
 		if(optionPane == null)

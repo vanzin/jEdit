@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- scroll to with invisible caret
 - actions/dockables eval: should use own namespace?
 - block caret: not very good
 - files in favorites: selection is broken

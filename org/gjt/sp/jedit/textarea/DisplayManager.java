@@ -938,15 +938,21 @@ loop:		for(;;)
 				fvmput(starti + 1,endi + 1,null);
 			else
 			{
-				fvmput(starti + 1,endi,null);
-				fvm[starti + 1] = end + 1;
+				if(end != fvmcount - 1
+					&& fvm[endi + 1] == end + 1)
+					fvmput(starti + 1,endi + 2,null);
+				else
+				{
+					fvmput(starti + 1,endi,null);
+					fvm[starti + 1] = end + 1;
+				}
 			}
 		}
 		else
 		{
 			if(endi % 2 == 0)
 			{
-				if(fvm[starti] == start)
+				if(starti != -1 && fvm[starti] == start)
 					fvmput(starti,endi + 1,null);
 				else
 				{

@@ -37,11 +37,53 @@
 		This section outlines a few enhancements to jEdit's integrated
 		BeanShell interpreter. Also see <xref linkend="common-api-changes"/>.
 	</para>
-
 	<para>
 		A new preset BeanShell variable, <varname>wm</varname> is set to the
 		<function>view.getDockableWindowManager()</function>.
 	</para>
+
+	<para>
+		BeanShell has been updated from version 1.2b7 to 1.3a1. The
+		changes in stock BeanShell 1.3a1 from 1.2b7 include improved
+		error reporting, improved performance, and various fixes.
+	</para>
+
+	<para>
+		A number of jEdit-specific changes are also present in this
+		BeanShell version; they will eventually be merged back into
+		the main BeanShell source tree.
+	</para>
+
+	<para>
+		Previously plugins that wanted to provide BeanShell scripting
+		commands had to source a BeanShell script on startup. This was
+		slow. Now, BeanShell supports a <quote>command path</quote>.
+		When an unresolved method name is entered, the command path is
+		consulted for the method definition. Entries are added to the
+		command path using the following method of the
+		<ulink
+		url="../api/org/gjt/sp/jedit/NameSpace.html">NameSpace</ulink>
+		class:
+	</para>
+
+	<para>
+		<funcsynopsis>
+		<funcprototype>
+		<funcdef>void <function>addCommandPath</function></funcdef>
+		<paramdef>String <parameter>path</parameter></paramdef>
+		<paramdef>Class <parameter>clas</parameter></paramdef>
+		</funcprototype>
+		</funcsynopsis>
+	</para>
+
+	<para>
+		For example, if your plugin provides commands in the
+		<filename>commands</filename> directory of the JAR file, you
+		could call something like this:
+	</para>
+
+	<programlisting>BeanShell.getNameSpace().addCommandPath("/commands/",
+    MyPlugin.class);</programlisting>
 
 	</sect1>
 
@@ -101,7 +143,10 @@
 		method and into a file within the JAR that can be parsed quickly. This
 		allows the plugin core class to only be loaded, and its
 		<function>start()</function> method called, only when
-		the plugin is first invoked.
+		the plugin is first invoked. Note that the <function>start()</function>
+		method is always called from the event dispatch thread (or from
+		the main thread if the GUI has not yet been loaded). Therefore you
+		do not need to worry about thread-safety issues.
 	</para>
 	
 	<para>
@@ -173,6 +218,20 @@ quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
 	<para>
 		Note that specifying a <property>.label</property> property for the menu
 		is no longer necessary, as the label becomes the name of the plugin.
+	</para>
+
+	<para>
+		If the content of your plugin's menu is determined at runtime, you must
+		use the new dynamic menu API by defining a property like so:
+	</para>
+
+	<programlisting>plugin.MyPlugin.menu.code=new MyPluginMenuProvider();</programlisting>
+
+	<para>
+		The value of the property is a BeanShell snippet that should evaluate to a
+		<ulink
+		url="../api/org/gjt/sp/jedit/menu/DynamicMenuProvider.html">DynamicMenuProvider</ulink>
+		instance.
 	</para>
 
 	<para>
@@ -266,6 +325,13 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		<paramdef>String <parameter>action</parameter></paramdef>
 		</funcprototype>
 		</funcsynopsis>
+	</para>
+
+	<para>
+		The <function>removeKeyBinding()</function> method of the <ulink
+		url="../api/org/gjt/sp/jedit/gui/DefaultInputHandler.html">DefaultInputHandler</ulink>
+		class has finally been implemented. Previously it always threw
+		an <classname>InternalError</classname> when invoked.
 	</para>
 
 	</sect2>
@@ -370,10 +436,65 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 
 	</sect2>
 
+	<sect2><title>Text Area Extensions</title>
+
+	<para>
+		The API for text area extensions is still the same, however you
+		must make sure your plugin correctly adds itself to existing
+		text areas when it is loaded after jEdit startup, and that it
+		removes itself from open views if it is unloaded before jEdit
+		exits.
+	</para>
+
+	<para>
+		A new method was added to the <ulink
+		url="../api/org/gjt/sp/jedit/textarea/TextAreaExtension.html">TextAreaExtension</ulink>
+		class:
+	</para>
+
+	<para>
+		<funcsynopsis>
+		<funcprototype>
+		<funcdef>void <function>paintScreenLineRange</function></funcdef>
+		<paramdef>Graphics2D <parameter>gfx</parameter></paramdef>
+		<paramdef>int <parameter>firstLine</parameter></paramdef>
+		<paramdef>int <parameter>lastLine</parameter></paramdef>
+		<paramdef>int[] <parameter>physicalLines</parameter></paramdef>
+		<paramdef>int[] <parameter>start</parameter></paramdef>
+		<paramdef>int[] <parameter>end</parameter></paramdef>
+		<paramdef>int <parameter>y</parameter></paramdef>
+		<paramdef>int <parameter>lineHeight</parameter></paramdef>
+		</funcprototype>
+		</funcsynopsis>
+	</para>
+
+	<para>
+		See the class documentation for information on each parameter.
+	</para>
+
+	<para>
+		You can override this method to paint a range of
+		lines at once, instead of having to respond to each individual
+		<function>paintValidLine()</function> and
+		<function>paintInvalidLine</function> call.
+	</para>
+
+	<para>
+		While for many text area extensions using this method will result
+		in no speedup, some like the error highlight in the ErrorList
+		plugin become more efficient. The error highlight searches an
+		array each time it has to paint a line. Previously the array
+		was searched for each line painted in screen. Using this method,
+		it is possible to search the array only once when painting a
+		range of lines.
+	</para>
+
+	</sect2>
+
 	<sect2><title>Other Services</title>
 
 	<para>
-		Currently, macro handlers and dynamic menus are not possible in the new
+		Currently, macro handlers are not supported in the new
 		plugin API. This will be addressed in 4.2pre2.
 	</para>
 
