@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.*;
-import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -49,26 +49,30 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		lineHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".lineHighlight"));
 		lineHighlight.setSelected(jEdit.getBooleanProperty("view.lineHighlight"));
-		addComponent(lineHighlight);
+		addComponent(lineHighlight,lineHighlightColor = new ColorWellButton(
+			jEdit.getColorProperty("view.lineHighlightColor")));
 
 		/* Bracket highlight */
 		bracketHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".bracketHighlight"));
 		bracketHighlight.setSelected(jEdit.getBooleanProperty(
 			"view.bracketHighlight"));
-		addComponent(bracketHighlight);
+		addComponent(bracketHighlight,bracketHighlightColor = new ColorWellButton(
+			jEdit.getColorProperty("view.bracketHighlightColor")));
 
 		/* EOL markers */
 		eolMarkers = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".eolMarkers"));
 		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
-		addComponent(eolMarkers);
+		addComponent(eolMarkers,eolMarkerColor =new ColorWellButton(
+			jEdit.getColorProperty("view.eolMarkerColor")));
 
 		/* Wrap guide */
 		wrapGuide = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".wrapGuide"));
 		wrapGuide.setSelected(jEdit.getBooleanProperty("view.wrapGuide"));
-		addComponent(wrapGuide);
+		addComponent(wrapGuide,wrapGuideColor = new ColorWellButton(
+			jEdit.getColorProperty("view.wrapGuideColor")));
 
 		/* Blinking caret */
 		blinkCaret = new JCheckBox(jEdit.getProperty("options.textarea"
@@ -164,9 +168,13 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private FontSelector font;
 	private JCheckBox lineHighlight;
+	private ColorWellButton lineHighlightColor;
 	private JCheckBox bracketHighlight;
+	private ColorWellButton bracketHighlightColor;
 	private JCheckBox eolMarkers;
+	private ColorWellButton eolMarkerColor;
 	private JCheckBox wrapGuide;
+	private ColorWellButton wrapGuideColor;
 	private JCheckBox blinkCaret;
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
