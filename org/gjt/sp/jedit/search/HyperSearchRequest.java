@@ -56,37 +56,44 @@ public class HyperSearchRequest extends WorkRequest
 	public void run()
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-		setProgressMaximum(fileset.getBufferCount());
+		setProgressMaximum(fileset.getFileCount());
 		setStatus(jEdit.getProperty("hypersearch.status"));
 
 		int resultCount = 0;
 		int bufferCount = 0;
 
+		String[] files = fileset.getFiles(view);
+
 		try
 		{
-			Buffer buffer = fileset.getFirstBuffer(view);
-
 			if(selection != null)
+			{
+				Buffer buffer = getBuffer(files[0]);
+				if(buffer == null)
+					return;
+
 				searchInSelection(buffer);
+			}
 			else
 			{
 				int current = 0;
 
-				if(buffer != null)
+loop:				for(int i = 0; i < files.length; i++)
 				{
-					do
+					setProgressValue(++current);
+
+					Buffer buffer = getBuffer(files[i]);
+					if(buffer == null)
+						continue loop;
+
+					int thisResultCount = doHyperSearch(buffer,
+						0,buffer.getLength());
+					if(thisResultCount != 0)
 					{
-						setProgressValue(++current);
-						int thisResultCount = doHyperSearch(buffer,
-							0,buffer.getLength());
-						if(thisResultCount != 0)
-						{
-							bufferCount++;
-							resultCount += thisResultCount;
-						}
+						bufferCount++;
+						resultCount += thisResultCount;
 					}
-					while((buffer = fileset.getNextBuffer(view,buffer)) != null);
-				}
+				};
 			}
 		}
 		catch(final Exception e)
@@ -128,6 +135,30 @@ public class HyperSearchRequest extends WorkRequest
 	private DefaultMutableTreeNode resultTreeRoot;
 	private Selection[] selection;
 	//}}}
+
+	//{{{ getBuffer() method
+	private Buffer getBuffer(final String path)
+	{
+		final Buffer[] retVal = new Buffer[1];
+
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
+				{
+					retVal[0] = jEdit.openTemporary(null,null,
+						path,false);
+				}
+			});
+			return retVal[0];
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+			return null;
+		}
+	} //}}}
 
 	//{{{ searchInSelection() method
 	private int searchInSelection(Buffer buffer) throws Exception

@@ -398,7 +398,9 @@ public class SearchAndReplace
 	public static boolean find(View view)
 	{
 		boolean repeat = false;
-		Buffer buffer = fileset.getNextBuffer(view,null);
+		String path = fileset.getNextFile(view,null);
+		if(path == null)
+			return false;
 
 		try
 		{
@@ -415,8 +417,24 @@ public class SearchAndReplace
 
 loop:			for(;;)
 			{
-				while(buffer != null)
+				while(path != null)
 				{
+					Buffer buffer = jEdit.openTemporary(
+						view,null,path,false);
+
+					/* this is stupid and misleading.
+					 * but 'path' is not used anywhere except
+					 * the above line, and if this is done
+					 * after the 'continue', then we will
+					 * either hang, or be forced to duplicate
+					 * it inside the buffer == null, or add
+					 * a 'finally' clause. you decide which one's
+					 * worse. */
+					 path = fileset.getNextFile(view,path);
+
+					if(buffer == null)
+						continue loop;
+
 					// Wait for the buffer to load
 					if(!buffer.isLoaded())
 						VFSManager.waitForRequests();
@@ -443,7 +461,7 @@ loop:			for(;;)
 					if(find(view,buffer,start))
 						return true;
 
-					buffer = fileset.getNextBuffer(view,buffer);
+					path = fileset.getNextFile(view,path);
 				}
 
 				if(repeat)
@@ -482,7 +500,7 @@ loop:			for(;;)
 				if(restart)
 				{
 					// start search from beginning
-					buffer = fileset.getFirstBuffer(view);
+					path = fileset.getFirstFile(view);
 					repeat = true;
 				}
 				else
@@ -532,7 +550,7 @@ loop:			for(;;)
 		int[] match = matcher.nextMatch(text,start == 0,true);
 		if(match != null)
 		{
-			fileset.matchFound(buffer);
+			jEdit.commitTemporary(buffer);
 			view.setBuffer(buffer);
 			JEditTextArea textArea = view.getTextArea();
 			int matchStart = (reverse ? 0 : start);
@@ -682,9 +700,25 @@ loop:			for(;;)
 
 		try
 		{
-			Buffer buffer = fileset.getFirstBuffer(view);
-			do
+			String path = fileset.getFirstFile(view);
+loop:			while(path != null)
 			{
+				Buffer buffer = jEdit.openTemporary(
+						view,null,path,false);
+
+				/* this is stupid and misleading.
+				 * but 'path' is not used anywhere except
+				 * the above line, and if this is done
+				 * after the 'continue', then we will
+				 * either hang, or be forced to duplicate
+				 * it inside the buffer == null, or add
+				 * a 'finally' clause. you decide which one's
+				 * worse. */
+				path = fileset.getNextFile(view,path);
+
+				if(buffer == null)
+					continue loop;
+
 				// Wait for buffer to finish loading
 				if(buffer.isPerformingIO())
 					VFSManager.waitForRequests();
@@ -700,7 +734,7 @@ loop:			for(;;)
 					{
 						fileCount++;
 						occurCount += retVal;
-						fileset.matchFound(buffer);
+						jEdit.commitTemporary(buffer);
 					}
 				}
 				finally
@@ -708,7 +742,6 @@ loop:			for(;;)
 					buffer.endCompoundEdit();
 				}
 			}
-			while((buffer = fileset.getNextBuffer(view,buffer)) != null);
 		}
 		catch(Exception e)
 		{
@@ -904,6 +937,4 @@ loop:		for(;;)
 
 		return occurCount;
 	} //}}}
-
-	//}}}
 }

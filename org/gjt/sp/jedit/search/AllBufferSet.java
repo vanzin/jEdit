@@ -1,6 +1,9 @@
 /*
  * AllBufferSet.java - All buffer matcher
- * Copyright (C) 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +22,12 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import gnu.regexp.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A file set for searching all open buffers.
@@ -31,6 +36,7 @@ import org.gjt.sp.util.Log;
  */
 public class AllBufferSet extends BufferListSet
 {
+	//{{{ AllBufferSet constructor
 	/**
 	 * Creates a new all buffer set.
 	 * @param glob The filename glob
@@ -38,11 +44,10 @@ public class AllBufferSet extends BufferListSet
 	 */
 	public AllBufferSet(String glob)
 	{
-		super(listFiles(glob));
-
 		this.glob = glob;
-	}
+	} //}}}
 
+	//{{{ getFileFilter() method
 	/**
 	 * Returns the filename filter.
 	 * @since jEdit 2.7pre3
@@ -50,8 +55,9 @@ public class AllBufferSet extends BufferListSet
 	public String getFileFilter()
 	{
 		return glob;
-	}
+	} //}}}
 
+	//{{{ getCode() method
 	/**
 	 * Returns the BeanShell code that will recreate this file set.
 	 * @since jEdit 2.7pre3
@@ -60,12 +66,14 @@ public class AllBufferSet extends BufferListSet
 	{
 		return "new AllBufferSet(\"" + MiscUtilities.charsToEscapes(glob)
 			+ "\")";
-	}
+	} //}}}
 
-	// private members
+	//{{{ Instance variables
 	private String glob;
+	//}}}
 
-	private static Vector listFiles(String glob)
+	//{{{ _getFiles() method
+	protected String[] _getFiles()
 	{
 		Buffer[] buffers = jEdit.getBuffers();
 		Vector vector = new Vector(buffers.length);
@@ -78,7 +86,7 @@ public class AllBufferSet extends BufferListSet
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,DirectoryListSet.class,e);
-			return vector;
+			return null;
 		}
 
 		for(int i = 0; i < buffers.length; i++)
@@ -88,6 +96,8 @@ public class AllBufferSet extends BufferListSet
 				vector.addElement(buffer.getPath());
 		}
 
-		return vector;
-	}
+		String[] retVal = new String[vector.size()];
+		vector.copyInto(retVal);
+		return retVal;
+	} //}}}
 }

@@ -633,7 +633,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		boolean ok = true;
 
-		if(fileset.getBufferCount() == 0)
+		if(fileset.getFileCount() == 0)
 		{
 			// oops
 			GUIUtilities.error(this,"empty-fileset",null);

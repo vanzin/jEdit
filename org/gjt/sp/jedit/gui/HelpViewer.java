@@ -35,6 +35,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -295,7 +296,8 @@ public class HelpViewer extends JFrame implements EBComponent
 			}
 		}
 
-		root.add(pluginDocs);
+		if(pluginDocs.getChildCount() != 0)
+			root.add(pluginDocs);
 
 		tocModel = new DefaultTreeModel(root);
 	} //}}}
@@ -339,6 +341,10 @@ public class HelpViewer extends JFrame implements EBComponent
 		nodes.put(href,node);
 		return node;
 	} //}}}
+
+	//}}}
+
+	//{{{ Inner classes
 
 	//{{{ HelpNode class
 	static class HelpNode
@@ -449,7 +455,7 @@ public class HelpViewer extends JFrame implements EBComponent
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x, cellRect.y - 1);
+					return new Point(cellRect.x + 17, cellRect.y - 1);
 				}
 			}
 			return null;
@@ -524,18 +530,19 @@ public class HelpViewer extends JFrame implements EBComponent
 	{
 		EmptyBorder border = new EmptyBorder(1,0,1,1);
 
-		//{{{ getTreeCellRendererComponent() method
 		public Component getTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean focus)
 		{
 			super.getTreeCellRendererComponent(tree,value,sel,
 				expanded,leaf,row,focus);
-			setIcon(null);
+			setIcon(leaf ? FileCellRenderer.fileIcon
+				: (expanded ? FileCellRenderer.openDirIcon
+				: FileCellRenderer.dirIcon));
 			setBorder(border);
 
 			return this;
-		} //}}}
+		}
 	} //}}}
 
 	//{{{ ActionHandler class

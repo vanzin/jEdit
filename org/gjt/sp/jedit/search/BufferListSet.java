@@ -1,6 +1,9 @@
 /*
  * BufferListSet.java - Buffer list matcher
- * Copyright (C) 1999 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,165 +22,99 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import javax.swing.SwingUtilities;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A file set for searching a user-specified list of buffers.
  * @author Slava Pestov
  * @version $Id$
  */
-public class BufferListSet implements SearchFileSet
+public abstract class BufferListSet implements SearchFileSet
 {
-	/**
-	 * Creates a new buffer list search set. This constructor is
-	 * only used by the multifile settings dialog box.
-	 * @param files The path names to search
-	 */
-	public BufferListSet(Object[] files)
+	//{{{ getFirstFile() method
+	public String getFirstFile(View view)
 	{
-		this.files = new Vector(files.length);
-		for(int i = 0; i < files.length; i++)
+		if(files == null)
+			files = _getFiles();
+
+		if(files == null || files.length == 0)
+			return null;
+		else
+			return files[0];
+	} //}}}
+
+	//{{{ getNextFile() method
+	public String getNextFile(View view, String file)
+	{
+		if(files == null)
+			files = _getFiles();
+
+		if(files == null || files.length == 0)
+			return null;
+
+		if(file == null)
 		{
-			this.files.addElement(((Buffer)files[i]).getPath());
-		}
-	}
+			file = view.getBuffer().getPath();
 
-	/**
-	 * Creates a new buffer list search set.
-	 * @param files The path names to search
-	 */
-	public BufferListSet(Vector files)
-	{
-		this.files = files;
-	}
-
-	/**
-	 * Returns the first buffer to search.
-	 * @param view The view performing the search
-	 */
-	public Buffer getFirstBuffer(View view)
-	{
-		return getBuffer((String)files.elementAt(0));
-	}
-
-	/**
-	 * Returns the next buffer to search.
-	 * @param view The view performing the search
-	 * @param buffer The last buffer searched
-	 */
-	public Buffer getNextBuffer(View view, Buffer buffer)
-	{
-		if(buffer == null)
-		{
-			buffer = view.getBuffer();
-
-			for(int i = 0; i < files.size(); i++)
+			for(int i = 0; i < files.length; i++)
 			{
-				if(files.elementAt(i).equals(buffer.getPath()))
-					return buffer;
+				if(files[i].equals(file))
+					return file;
 			}
 
-			return getFirstBuffer(view);
+			return getFirstFile(view);
 		}
 		else
 		{
 			// -1 so that the last isn't checked
-			for(int i = 0; i < files.size() - 1; i++)
+			for(int i = 0; i < files.length - 1; i++)
 			{
-				if(files.elementAt(i).equals(buffer.getPath()))
-					return getBuffer((String)files.elementAt(i+1));
+				if(files[i].equals(file))
+					return files[i+1];
 			}
 
 			return null;
 		}
-	}
+	} //}}}
 
-	/**
-	 * Called if the specified buffer was found to have a match.
-	 * @param buffer The buffer
-	 */
-	public void matchFound(final Buffer buffer)
+	//{{{ getFiles() method
+	public String[] getFiles(View view)
 	{
-		// HyperSearch runs stuff in another thread
-		if(!SwingUtilities.isEventDispatchThread())
-		{
-			try
-			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						jEdit.commitTemporary(buffer);
-					}
-				});
-			}
-			catch(Exception e)
-			{
-			}
-		}
+		if(files == null)
+			files = _getFiles();
+
+		if(files == null || files.length == 0)
+			return null;
 		else
-			jEdit.commitTemporary(buffer);
-	}
+			return files;
+	} //}}}
 
-	/**
-	 * Returns the number of buffers in this file set.
-	 */
-	public int getBufferCount()
+	//{{{ getFileCount() method
+	public int getFileCount()
 	{
-		return files.size();
-	}
+		if(files == null)
+			files = _getFiles();
 
-	/**
-	 * Returns if this fileset is valid (ie, has one or more buffers
-	 * in it.
-	 */
-	public boolean isValid()
-	{
-		return files.size() != 0;
-	}
+		if(files == null)
+			return 0;
+		else
+			return files.length;
+	} //}}}
 
-	/**
-	 * Returns the BeanShell code to recreate this fileset.
-	 */
+	//{{{ getCode() method
 	public String getCode()
 	{
 		// not supported for arbitriary filesets
 		return null;
-	}
+	} //}}}
 
-	// private members
-	private Vector files;
+	protected abstract String[] _getFiles();
 
-	private Buffer getBuffer(final String path)
-	{
-		// HyperSearch runs stuff in another thread
-		if(!SwingUtilities.isEventDispatchThread())
-		{
-			final Buffer[] retVal = new Buffer[1];
-
-			try
-			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						retVal[0] = jEdit.openTemporary(null,null,
-							path,false);
-					}
-				});
-				return retVal[0];
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-				return null;
-			}
-		}
-		else
-			return jEdit.openTemporary(null,null,path,false);
-	}
+	private String[] files;
 }

@@ -344,7 +344,8 @@ public class Buffer implements EBComponent
 		// view text areas temporarily blank out while a buffer is
 		// being loaded, to indicate to the user that there is no
 		// data available yet.
-		EditBus.send(new BufferUpdate(this,view,BufferUpdate.LOAD_STARTED));
+		if(!getFlag(TEMPORARY))
+			EditBus.send(new BufferUpdate(this,view,BufferUpdate.LOAD_STARTED));
 
 		final boolean loadAutosave;
 
@@ -1963,6 +1964,19 @@ public class Buffer implements EBComponent
 		setProperty(name,new Integer(value));
 	} //}}}
 
+	//{{{ getKeywordMapAtOffset() method
+	/**
+	 * Returns the syntax highlighting keyword map in effect at the
+	 * specified offset. Used by the <b>Complete Word</b> command to
+	 * complete keywords.
+	 * @param offset The offset
+	 * @since jEdit 4.0pre3
+	 */
+	public KeywordMap getKeywordMapAtOffset(int offset)
+	{
+		return getRuleSetAtOffset(offset).getKeywords();
+	} //}}}
+
 	//{{{ getContextSensitiveProperty() method
 	/**
 	 * Some settings, like comment start and end strings, can
@@ -1974,14 +1988,7 @@ public class Buffer implements EBComponent
 	 */
 	public String getContextSensitiveProperty(int offset, String name)
 	{
-		int line = getLineOfOffset(offset);
-		offset -= getLineStartOffset(line);
-		if(offset != 0)
-			offset--;
-
-		TokenList tokens = markTokens(line);
-		Token token = TextUtilities.getTokenAtOffset(tokens,offset);
-		ParserRuleSet rules = token.rules;
+		ParserRuleSet rules = getRuleSetAtOffset(offset);
 
 		Object value = null;
 
@@ -2062,7 +2069,7 @@ public class Buffer implements EBComponent
 		propertiesChanged(); // sets up token marker
 
 		// don't fire it for initial mode set
-		if(oldMode != null)
+		if(oldMode != null && !getFlag(TEMPORARY))
 		{
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.MODE_CHANGED));
@@ -3000,7 +3007,7 @@ public class Buffer implements EBComponent
 		if(!added)
 			markers.addElement(markerN);
 
-		if(!getFlag(LOADING))
+		if(!getFlag(LOADING) && !getFlag(TEMPORARY))
 		{
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.MARKERS_CHANGED));
@@ -3580,6 +3587,19 @@ public class Buffer implements EBComponent
 		{
 			setFlag(INSIDE_INSERT,false);
 		}
+	} //}}}
+
+	//{{{ getRuleSetAtOffset() method
+	private ParserRuleSet getRuleSetAtOffset(int offset)
+	{
+		int line = getLineOfOffset(offset);
+		offset -= getLineStartOffset(line);
+		if(offset != 0)
+			offset--;
+
+		TokenList tokens = markTokens(line);
+		Token token = TextUtilities.getTokenAtOffset(tokens,offset);
+		return token.rules;
 	} //}}}
 
 	//{{{ Event firing methods

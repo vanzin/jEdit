@@ -49,6 +49,7 @@ public class SearchBar extends JPanel
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		box.add(find = new HistoryTextField("find"));
+		find.setSelectAllOnFocus(true);
 		Dimension min = find.getPreferredSize();
 		min.width = Integer.MAX_VALUE;
 		find.setMaximumSize(min);
@@ -240,7 +241,7 @@ public class SearchBar extends JPanel
 
 		timer.stop();
 		timer.setRepeats(false);
-		timer.setInitialDelay(250);
+		timer.setInitialDelay(150);
 		timer.start();
 	} //}}}
 
