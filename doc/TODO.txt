@@ -3,6 +3,18 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+4.2final to do:
+---------------
+
+check tips of the day
+proofread docs, set up PDF toolchain
+- quicknotepad help needs to be generated
+- document optional dependencies
+- news: deep indent, action bar, new cli options
+- help:
+  - titles in search are fucked
+- sidebars: need a border or some sort
+
 [error] WorkThread: java.lang.ClassCastException
 [error] WorkThread:  at archive.ArchiveVFS.getDirectories(Unknown Source)
 [error] WorkThread:  at archive.ArchiveVFS.cacheDirectories(Unknown Source)
@@ -13,7 +25,6 @@ and quirks that I need to fix eventually.
 [error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequests(WorkThread.java:161)
 [error] WorkThread:  at org.gjt.sp.util.WorkThread.run(WorkThread.java:135)
 
-- metal fonts in jdk 1.5.0beta2
 - drag and drop, not at caret position?
 - sidekick out of memory error!
 [error] ChunkCache: BUG: skew=1,out.size()=0
@@ -36,6 +47,7 @@ and quirks that I need to fix eventually.
 [error] EditBus:  at org.gjt.sp.jedit.Buffer$1.run(Buffer.java:280)
 [error] EditBus:  at org.gjt.sp.util.WorkThreadPool.doAWTRequest(WorkThreadPool.java:392)
 
+- SLASH -vs- / shortcut issue
 - wrapped dock buttons broken
 - VFS browser pathsEqual(): case sensitivity!
 - first line problem solved by reset()
@@ -46,8 +58,6 @@ was started erases text)- no support for vertical pasting
 - anoying cursor blinking (responsible for this is scrolling option :
 textArea.moveCaretPosition(pos,JEditTextArea.ELECTRIC_SCROLL) in
 dragOver() method)
-- not an error, but it would be nice to select text that was dropped as
-it is done in most text editors
 - C+d & killring
 - jEdit.checkBufferStatus() fucks with split panes
 - complete word not wide enough
@@ -62,20 +72,12 @@ it is done in most text editors
 
 + docs:
 
-- docs: no jEditLauncher
 - deferred loading mention.
 - addCommandPath()
 - API thread safety
-- document optional dependencies
 - add note to documentation about exponential-time regexps
-- news: deep indent, action bar, new cli options
-- action bar
 - document deep indent
-- quicknotepad help needs to be generated
 - note about dependencies
-- help:
-  - titles in search are fucked
-- sidebars: need a border or some sort
 - plugin tutorial:
   - plugin build environment docs
   - auto-created actions
