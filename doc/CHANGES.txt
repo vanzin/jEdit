@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
+Thanks to Bill McMilleon, Kris Kopicki and Ryan Grove for contributing
+to this release.
 
 {{{ Editing
 
@@ -47,10 +48,6 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - Added a new more token types: COMMENT3, COMMENT4, LITERAL3, LITERAL4,
   KEYWORD4.
 
-- Improved C pre-processor syntax highlighting.
-
-- Updated NSIS2 syntax highlighting (Ryan Grove).
-
 - AT_LINE_START, AT_WORD_START and AT_WHITESPACE_END attributes can now
   be set independently for BEGIN and END tags of a SPAN.
 
@@ -65,6 +62,12 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   into any positional parameters in the END sequence. This allows
   read-ins to be properly handled in languages like Shell Script, PHP,
   and Perl.
+
+- Added JCL and SAS syntax highlighting (Bill McMilleon).
+
+- Improved C pre-processor syntax highlighting.
+
+- Updated NSIS2 syntax highlighting (Ryan Grove).
 
 }}}
 {{{ Folding
