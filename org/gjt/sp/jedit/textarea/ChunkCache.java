@@ -63,19 +63,15 @@ class ChunkCache
 	//{{{ getScreenLineOfOffset() method
 	int getScreenLineOfOffset(int line, int offset)
 	{
-		if(line < textArea.getFirstPhysicalLine())
-		{
+		if(lineInfo.length == 0)
 			return -1;
-		}
+		if(line < textArea.getFirstPhysicalLine())
+			return -1;
 		else if(line == textArea.getFirstPhysicalLine()
 			&& offset < getLineInfo(0).offset)
-		{
 			return -1;
-		}
 		else if(line > textArea.getLastPhysicalLine())
-		{
 			return -1;
-		}
 		else
 		{
 			int screenLine;
