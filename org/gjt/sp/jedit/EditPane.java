@@ -197,6 +197,32 @@ public class EditPane extends JPanel implements EBComponent
 		return textArea;
 	} //}}}
 
+	//{{{ getBufferSwitcher() method
+	/**
+	 * Returns the buffer switcher combo box instance.
+	 * @since jEdit 4.1pre8
+	 */
+	public BufferSwitcher getBufferSwitcher()
+	{
+		return bufferSwitcher;
+	} //}}}
+
+	//{{{ showBufferSwitcher() method
+	/**
+	 * Shows the buffer switcher combo box.
+	 * @since jEdit 4.1pre8
+	 */
+	public void showBufferSwitcher()
+	{
+		if(bufferSwitcher == null)
+			getToolkit().beep();
+		else
+		{
+			bufferSwitcher.requestFocus();
+			bufferSwitcher.showPopup();
+		}
+	} //}}}
+
 	//{{{ saveCaretInfo() method
 	/**
 	 * Saves the caret information to the current buffer.

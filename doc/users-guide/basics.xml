@@ -32,6 +32,11 @@
    (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo>)
    switches to the buffer that was being edited prior to the current one.
   </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Show Buffer Switcher</guimenuitem>
+   (keyboard shortcut: <keycombo><keycap>Alt</keycap><keycap>`</keycap></keycombo>)
+   has the same effect as clicking on the buffer switcher combo box.
+  </para>
   <sect2><title>Memory Usage</title>
    <para>
     The maximum number of open buffers depends on available <firstterm>Java

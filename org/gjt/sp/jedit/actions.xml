@@ -1115,6 +1115,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="show-buffer-switcher">
+	<CODE>
+		editPane.showBufferSwitcher();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="spaces-to-tabs">
 	<CODE>
 		textArea.spacesToTabs();

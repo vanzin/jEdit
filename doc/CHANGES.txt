@@ -2,7 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre8
 
-Thanks to Chris Petersen, Silas Smith for contributing to this release.
+Thanks to Chris Petersen, Jonathan Revusky and Silas Smith for
+contributing to this release.
 
 + Miscellaneous Changes:
 
@@ -10,9 +11,9 @@ Thanks to Chris Petersen, Silas Smith for contributing to this release.
 
 - Minor updates to JavaScript and PHP modes (Chris Petersen).
 
-- Plugin manager progress window now only has one progress bar.
+- Updated Freemaker syntax highlighting (Jonathan Revusky).
 
-- NEWS.txt now documents major changes between jEdit 4.0 and 4.1.
+- Plugin manager progress window now only has one progress bar.
 
 - In the file system browser, S+ENTER with a directory selected opens
   the directory in a new browser window.
@@ -20,9 +21,16 @@ Thanks to Chris Petersen, Silas Smith for contributing to this release.
 - Pressing LEFT in the filename field with the caret already at the
   left-most position goes to the parent directory location.
 
+- Added View->Show Buffer Switcher command (shortcut: A+BACK_QUOTE). It
+  shows the buffer switcher combo box if it is enabled.
+
 - Improved scrolling performance when soft wrap is on. In previous 4.1
   pre-releases and especially in 4.0, the editor was noticably less
   responsive if soft wrap was on. No longer.
+
+- NEWS.txt now documents major changes between jEdit 4.0 and 4.1.
+
+- Added some more tips of the day.
 
 + Bug Fixes:
 
@@ -39,6 +47,8 @@ Thanks to Chris Petersen, Silas Smith for contributing to this release.
 - Fixed possible ArrayIndexOutOfBoundsExceptions when deleting text.
 
 - Fixed various minor bugs with the "Format Paragraph" command.
+
+- Fixed some popup menu display bugs.
 
 * Version 4.1pre7
 

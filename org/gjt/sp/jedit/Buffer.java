@@ -515,7 +515,8 @@ public class Buffer implements EBComponent
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
 		// - only supported on local file system
-		if(!getFlag(IO) && !getFlag(LOADING) && file != null)
+		if(!getFlag(IO) && !getFlag(LOADING) && file != null
+			&& !getFlag(NEW_FILE))
 		{
 			boolean newReadOnly = (file.exists() && !file.canWrite());
 			if(newReadOnly != getFlag(READ_ONLY))

@@ -158,12 +158,36 @@
     spaces at the beginning of a line by looking at program structure.
    </para>
    <para>
-    If indent on enter is enabled, pressing <keycap>Enter</keycap>
+    In the default configuration, pressing <keycap>Enter</keycap>
     will create a new line with the appropriate amount of
-    indent automatically.  If indent on tab is enabled, pressing
+    indent automatically, and pressing
     <keycap>Tab</keycap> at the beginning of, or inside the leading
     whitespace of a line will insert the appropriate amount of
     indentation. Pressing it again will insert a tab character.
+   </para>
+   <para>
+    The behavior of the <keycap>ENTER</keycap> and <keycap>TAB</keycap> keys can
+    be configured in the <guibutton>Shortcuts</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog. box, just as with any other key. The <b>ENTER</b> key can be bound
+    to one of the following commands, for example:
+   </para>
+   <itemizedlist>
+    <listitem><para><guimenuitem>Insert Newline</guimenuitem>.</para></listitem>
+    <listitem><para><guimenuitem>Insert Newline and Indent</guimenuitem>, which
+    is the default.</para></listitem>
+   </itemizedlist>
+   <para>
+    The <keycap>TAB</keycap> key can be bound to one of these commands:
+   </para>
+   <itemizedlist>
+    <listitem><para><guimenuitem>Insert Tab</guimenuitem>.</para></listitem>
+    <listitem><para><guimenuitem>Insert Tab or Indent</guimenuitem>, which is
+    the default.</para></listitem>
+    <listitem><para><guimenuitem>Indent Selected Lines</guimenuitem>.</para></listitem>
+   </itemizedlist>
+   <para>
+    See <xref linkend="global-opts"/> for details.
    </para>
    <para>
     Auto indent behavior is mode-specific. In most edit modes,

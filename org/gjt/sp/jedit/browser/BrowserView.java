@@ -745,7 +745,14 @@ class BrowserView extends JPanel
 								setSelectionPath(path);
 						}
 					}
-					if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
+
+					// isControlDown() -- damn MacOS workaround!
+					// maybe your dinky 500MHz "supercomputers"
+					// run Photoshop faster than a PC,
+					// but you can't even get modifier reporting
+					// working!
+					if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0
+						&& !evt.isControlDown())
 					{
 						setSelectionPath(path);
 						browser.filesActivated((evt.isShiftDown()

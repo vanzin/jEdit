@@ -66,16 +66,10 @@
       <END>&gt;</END>
     </SPAN_REGEXP>
     
-    <!-- Is it really necessary to have 2 SPAN_REGEXP elements here? Kludgy... -->
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|stop|escape|macro|function|transform|call)\s</BEGIN>
+      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|import|stop|escape|macro|function|transform|call)(\s|/|$)</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|stop|escape|macro|function|transform|call)$</BEGIN>
-      <END>&gt;</END>
-    </SPAN_REGEXP>
-
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
       <BEGIN>&lt;/#?(if|switch|foreach|list|escape|macro|function|transform|compress|noescape)\&gt;</BEGIN>
@@ -86,8 +80,13 @@
       <END>&gt;</END>
     </SPAN_REGEXP>
 
+    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
+      <BEGIN>&lt;/\$(([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*)?</BEGIN>
+      <END>&gt;</END>
+    </SPAN_REGEXP>
+
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;@[_a-zA-Z][_a-zA-Z0-9]*\s</BEGIN>
+      <BEGIN>&lt;\$([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
     
