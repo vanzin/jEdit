@@ -665,8 +665,6 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 					Log.log(Log.ERROR, Macros.class, e);
 					macroHandlers.remove(handler);
 				}
-
-				break;
 			}
 		}
 	} //}}}
