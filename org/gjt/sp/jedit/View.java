@@ -108,17 +108,17 @@ public class View extends JFrame implements EBComponent
 	public static final int SYSTEM_BAR_LAYER = 100;
 
 	/**
-	 * Search bar layer. jEdit uses this for the search bar.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.0pre7
+	 * @deprecated Search bar is no longer part of the main tool bar panel.
+	 */
+	public static final int BELOW_SYSTEM_BAR_LAYER = 75;
+
+	/**
+	 * @deprecated Search bar is no longer part of the main tool bar panel.
 	 */
 	public static final int SEARCH_BAR_LAYER = 75;
 
 	/**
-	 * Below search bar layer. This is above the default layer for the
-	 * top group.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.0pre7
+	 * @deprecated Search bar is no longer part of the main tool bar panel.
 	 */
 	public static final int BELOW_SEARCH_BAR_LAYER = 50;
 
@@ -1134,6 +1134,7 @@ public class View extends JFrame implements EBComponent
 		updateTitle();
 
 		dockableWindowManager.propertiesChanged();
+		status.propertiesChanged();
 
 		SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}
@@ -1161,12 +1162,13 @@ public class View extends JFrame implements EBComponent
 			if(searchBar == null)
 			{
 				searchBar = new SearchBar(this);
-				addToolBar(TOP_GROUP, SEARCH_BAR_LAYER, searchBar);
+				dockableWindowManager.add(DockableWindowManager
+					.DockableLayout.SEARCH_BAR,searchBar);
 			}
 		}
 		else if(searchBar != null)
 		{
-			removeToolBar(searchBar);
+			dockableWindowManager.remove(searchBar);
 			searchBar = null;
 		}
 	} //}}}

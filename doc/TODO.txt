@@ -6,8 +6,6 @@ TO DO
 - make print preview look better
 - paginate in background thread
 
-- status: changing folding mode doesn't expand folds? or...?
-
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:
 [error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
 [error] AWT-EventQueue-0:       at
