@@ -530,6 +530,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="page-setup">
+	<CODE>
+		BufferPrinter.pageSetup(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="parent-fold">
 	<CODE>
 		textArea.goToParentFold();
@@ -624,7 +630,13 @@
 
 <ACTION NAME="print">
 	<CODE>
-		buffer.print(view);
+		BufferPrinter.print(view,buffer,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="print-selection">
+	<CODE>
+		BufferPrinter.print(view,buffer,true);
 	</CODE>
 </ACTION>
 

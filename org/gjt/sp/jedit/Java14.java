@@ -74,22 +74,26 @@ public class Java14
 	//{{{ MyFocusManager class
 	static class MyFocusManager extends DefaultKeyboardFocusManager
 	{
-		public void processKeyEvent(Component comp, KeyEvent evt)
+		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
-			for(;;)
+			if(!evt.isConsumed())
 			{
-				if(comp == null || comp instanceof Dialog)
-					break;
-				else if(comp instanceof View)
+				Component comp = (Component)evt.getSource();
+				for(;;)
 				{
-					((View)comp).processKeyEvent(evt);
-					return;
+					if(comp == null || comp instanceof Dialog)
+						break;
+					else if(comp instanceof View)
+					{
+						((View)comp).processKeyEvent(evt);
+						return true;
+					}
+					else
+						comp = comp.getParent();
 				}
-				else
-					comp = comp.getParent();
 			}
 
-			super.processKeyEvent(comp,evt);
+			return super.postProcessKeyEvent(evt);
 		}
 	} //}}}
 
