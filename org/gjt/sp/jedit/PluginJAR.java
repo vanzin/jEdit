@@ -236,8 +236,6 @@ public class PluginJAR
 
 		try
 		{
-			loadProperties();
-
 			if(!checkDependencies())
 			{
 				plugin = new EditPlugin.Broken(className);
@@ -522,28 +520,6 @@ public class PluginJAR
 			activatePlugin();
 	} //}}}
 
-	//{{{ loadProperties() method
-	void loadProperties() throws IOException
-	{
-		if(propertiesLoaded || properties == null)
-			return;
-
-		propertiesLoaded = true;
-
-		for(int i = 0; i < properties.length; i++)
-		{
-			jEdit.loadProps(
-				new URL(properties[i]).openStream(),
-				true);
-		}
-	} //}}}
-
-	//{{{ getPropertyFiles() method
-	String[] getPropertyFiles()
-	{
-		return properties;
-	} //}}}
-
 	//{{{ getClasses() method
 	String[] getClasses()
 	{
@@ -584,7 +560,6 @@ public class PluginJAR
 
 	private JARClassLoader classLoader;
 	private ZipFile zipFile;
-	private String[] properties;
 	private String[] classes;
 	private ActionSet actions;
 	private ActionSet browserActions;
@@ -594,14 +569,12 @@ public class PluginJAR
 	private URL dockablesURI;
 	private URL servicesURI;
 
-	private boolean propertiesLoaded;
 	private boolean activated;
 	//}}}
 
 	//{{{ loadCache() method
 	private void loadCache(PluginCacheEntry cache)
 	{
-		properties = cache.properties;
 		classes = cache.classes;
 
 		if(cache.actionsURI != null
@@ -647,13 +620,8 @@ public class PluginJAR
 			}
 		}
 
-		Iterator keys = cache.cachedProperties.keySet().iterator();
-		while(keys.hasNext())
-		{
-			String key = (String)keys.next();
-			String value = (String)cache.cachedProperties.get(key);
-			jEdit.setTemporaryProperty(key,value);
-		}
+		if(cache.cachedProperties != null)
+			jEdit.addProperties(cache.cachedProperties);
 
 		if(cache.pluginClass != null)
 		{
@@ -673,7 +641,8 @@ public class PluginJAR
 	//{{{ generateCache() method
 	private PluginCacheEntry generateCache() throws IOException
 	{
-		LinkedList properties = new LinkedList();
+		Properties properties = new Properties();
+
 		LinkedList classes = new LinkedList();
 
 		//XXX: need to unload action set, dockables, services
@@ -712,7 +681,11 @@ public class PluginJAR
 				cache.servicesURI = servicesURI;
 			}
 			else if(lname.endsWith(".props"))
-				properties.add(classLoader.getResourceAsPath(name));
+			{
+				InputStream in = classLoader.getResourceAsStream(name);
+				properties.load(in);
+				in.close();
+			}
 			else if(name.endsWith(".class"))
 			{
 				String className = MiscUtilities
@@ -736,14 +709,12 @@ public class PluginJAR
 			}
 		}
 
-		this.properties = cache.properties =
-			(String[])properties.toArray(
-			new String[properties.size()]);
+		cache.cachedProperties = properties;
+		jEdit.addProperties(properties);
+
 		this.classes = cache.classes =
 			(String[])classes.toArray(
 			new String[classes.size()]);
-
-		loadProperties();
 
 		String label = null;
 
@@ -764,8 +735,6 @@ public class PluginJAR
 				plugin = new EditPlugin.Deferred(className);
 				plugin.jar = (EditPlugin.JAR)this;
 				cache.pluginClass = className;
-				cachePluginProperties(className,
-					cache.cachedProperties);
 				label = _label;
 				break;
 			}
@@ -778,7 +747,6 @@ public class PluginJAR
 				"action-set.plugin",
 				new String[] { label }));
 			actions.load();
-			actions.cacheProperties(cache.cachedProperties);
 			jEdit.addActionSet(actions);
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
@@ -789,7 +757,6 @@ public class PluginJAR
 			browserActions = new ActionSet(this,null,
 				cache.browserActionsURI);
 			browserActions.load();
-			browserActions.cacheProperties(cache.cachedProperties);
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 			cache.cachedBrowserActionNames =
 				browserActions.getCacheableActionNames();
@@ -929,48 +896,6 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
-	//{{{ cachePluginProperties() method
-	public void cachePluginProperties(String className,
-		Map cachedProperties)
-	{
-		// this is a kludge, but it means we don't have to even read
-		// the properties file on startup, for 4.2 api aware plugins!
-
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".activate");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".name");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".version");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".author");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".docs");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".jars");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu-item");
-
-		String paneProp = "plugin." + className + ".option-pane";
-		String pane = jEdit.getProperty(paneProp);
-		if(pane != null)
-		{
-			cachedProperties.put(paneProp,pane);
-			jEdit.putProperty(cachedProperties,"options." + pane + ".label");
-			jEdit.putProperty(cachedProperties,"options." + pane + ".code");
-		}
-
-		String groupProp = "plugin." + className + ".option-group";
-		String group = jEdit.getProperty(groupProp);
-		if(group != null)
-		{
-			cachedProperties.put(groupProp,group);
-			StringTokenizer st = new StringTokenizer(group);
-			while(st.hasMoreTokens())
-			{
-				pane = st.nextToken();
-				jEdit.putProperty(cachedProperties,
-					pane + ".label");
-				jEdit.putProperty(cachedProperties,
-					pane + ".code");
-			}
-		}
-	} //}}}
-
 	//}}}
 
 	//{{{ PluginCacheEntry class
@@ -981,13 +906,12 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB1A3E420;
+		public static final int MAGIC = 0xB1A2E420;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
 		public long modTime;
 
-		public String[] properties;
 		public String[] classes;
 		public URL actionsURI;
 		public String[] cachedActionNames;
@@ -1013,7 +937,7 @@ public class PluginJAR
 		{
 			int cacheMagic = din.readInt();
 			if(cacheMagic != MAGIC)
-				throw new IOException("Wrong magic number");
+				return false;
 
 			String cacheBuild = readString(din);
 			if(!cacheBuild.equals(jEdit.getBuild()))
@@ -1053,7 +977,6 @@ public class PluginJAR
 			}
 
 			classes = readStringArray(din);
-			properties = readStringArray(din);
 
 			cachedProperties = readMap(din);
 
@@ -1094,7 +1017,6 @@ public class PluginJAR
 			}
 
 			writeStringArray(dout,classes);
-			writeStringArray(dout,properties);
 
 			writeMap(dout,cachedProperties);
 
@@ -1164,7 +1086,11 @@ public class PluginJAR
 			int count = din.readInt();
 			for(int i = 0; i < count; i++)
 			{
-				returnValue.put(readString(din),readString(din));
+				String key = readString(din);
+				String value = readString(din);
+				if(value == null)
+					value = "";
+				returnValue.put(key,value);
 			}
 			return returnValue;
 		} //}}}

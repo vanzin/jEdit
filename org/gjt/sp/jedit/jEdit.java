@@ -869,21 +869,6 @@ public class jEdit
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
 
-	//{{{ putProperty() method
-	/**
-	 * Stores the given property in the given map, using the property name
-	 * as the key in the map. This is used to create the plugin summary.
-	 * @param map The map
-	 * @param name The property name
-	 * @since jEdit 4.2pre1
-	 */
-	public static void putProperty(Map map, String name)
-	{
-		String value = getProperty(name);
-		if(value != null)
-			map.put(name,value);
-	} //}}}
-
 	//}}}
 
 	//{{{ Plugin management methods
@@ -2459,12 +2444,23 @@ public class jEdit
 	/* package-private */ static void loadProps(InputStream in, boolean def)
 		throws IOException
 	{
-		in = new BufferedInputStream(in);
 		if(def)
 			defaultProps.load(in);
 		else
 			props.load(in);
 		in.close();
+	} //}}}
+
+	//{{{ addProperties() method
+	/* package-private */ static void addProperties(Map map)
+	{
+		Iterator keys = map.keySet().iterator();
+		while(keys.hasNext())
+		{
+			Object key   = keys.next();
+			Object value = map.get(key);
+			defaultProps.put(key,value);
+		}
 	} //}}}
 
 	//{{{ pluginError() method
