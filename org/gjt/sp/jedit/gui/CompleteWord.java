@@ -76,6 +76,11 @@ public class CompleteWord extends JWindow
 		//{{{ show popup if > 1
 		else
 		{
+			String longestPrefix = MiscUtilities.getLongestPrefix(
+				completions);
+
+			buffer.insert(caret,longestPrefix.substring(word.length()));
+
 			textArea.scrollToCaret(false);
 			Point location = textArea.offsetToXY(caret - word.length());
 			location.y += textArea.getPainter().getFontMetrics()
@@ -83,7 +88,7 @@ public class CompleteWord extends JWindow
 
 			SwingUtilities.convertPointToScreen(location,
 				textArea.getPainter());
-			new CompleteWord(view,word,completions,location,noWordSep);
+			new CompleteWord(view,longestPrefix,completions,location,noWordSep);
 		} //}}}
 	} //}}}
 

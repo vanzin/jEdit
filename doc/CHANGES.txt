@@ -2,6 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
+Thanks to Matt Albrecht for contributing to this release.
+
+{{{ Editing
+
+- "Complete Word" now inserts the longest common prefix if there is more
+  than one possible completion (the popup is still displayed as well).
+
+}}}
 {{{ User Interface
 
 - The Global Options dialog box has been rearranged a little. There are
@@ -85,6 +93,8 @@ JEDIT 4.2 VERSION HISTORY
   class.
 
 - Various fixes for dynamic plugin loading.
+
+- Improved handling of symbolic links.
 
 }}}
 {{{ API Changes
