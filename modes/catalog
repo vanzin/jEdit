@@ -141,6 +141,9 @@
 <MODE NAME="inform"		FILE="inform.xml"
 				FILE_NAME_GLOB="*.inf" />
 
+<MODE NAME="inno-setup"		FILE="inno-setup.xml"
+				FILE_NAME_GLOB="*.iss" />
+
 <MODE NAME="ini"		FILE="ini.xml"
 				FILE_NAME_GLOB="*.{ini,reg}" />
 
