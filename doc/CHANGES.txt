@@ -4,6 +4,12 @@ JEDIT 4.2 VERSION HISTORY
 
 Thanks to Ken Turner for contributing to this release.
 
+{{{ Editing
+
+- The kill ring no longer shows duplicate entries, or entries that
+  consist entirely of whitespace.
+
+}}}
 {{{ Syntax Highlighting
 
 - Added LOTOS syntax highlighting (Ken Turner).

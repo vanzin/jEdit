@@ -4,65 +4,29 @@ Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
 - odd bug: delete so that bracket match appears, also subr 2 to 1
-- do all modifier handling through the modifier mapping
-- style editor dialog box needs ui work
 - print & markTokens()
-- dockables for unloaded plugins
-- 'remove plugins' dialog: use a text area
 - tall caret and tab
 - tall caret and backspace
-- is this bogus?
-				else if(fvm[endi] == startLine + numLines)
-				{
-					fvmput(starti,endi + 1,null);
-				}
 - broken activity log autoscroll
 - undo caret pos wrong
 - bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
-- auto indent: don't de-indent on enter if no leading indent at all?
 - new file: horiz scroll wrong
 - while loading --> scroll bar
 - fsb default size
-- bind key to C+e F2 F3: status bar
-- update docs
 - auto reload - save caret info first
-- shortcuts: stale shortcuts remain?
 - narrow: scrolls one down
 - synchro scroll needs a rewrite & folding
-- bad wrap:
-  						MiscUtilities.quicksort(favorites,
-  							new VFS.DirectoryEntryCompare());
-- perm to string for FTP plugin
-- update quicknotepad docs
-- actions/dockables eval: should use own namespace?
-- if A depends on B but A is loaded before B and B breaks, A ends up
-  being loaded. Solution: load plugins in order of dependencies?
-- note about dependencies
 - split view line insert: repainted twice, selection problems
-- F2 doesn't work in JTree/JTable, maybe others
-- path shown twice in tree: maybeReloadDirectory()
 - vfs browser: open in new view: doesn't focus the new view
 - macro record: doesn't respect overwrite
-- rect select and trailing whitespace
-- help:
-  - titles in search are fucked
-  - FAQ: better titles
+- bind key to C+e F2 F3: status bar
+- F2 doesn't work in JTree/JTable, maybe others
+- path shown twice in tree: maybeReloadDirectory()
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
 - C+ENTER 3 C+2
-- A+# on OS X, need better modifier mapping on OS X
-- how to handle S+0-9?
-- C+e , and . insert , and . in the buffer, ditto for [ and ]
-- return after collapsed fold: insert line after end of fold
-- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
-  know mod status
-- some JLists do not auto-scroll on keystroke
-- format -- instead of \n\n, what if it has \n   \n?
-- maximisation state bug: open window, resize to size X. close window,
-  open window again, resize to size Y. maximise. close window, open
-  window again, it has size X not size Y.
-- expand fold: try to expand even if already expanded
+- format -- instead of \n\n, what if it has \n   \n?d
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
 - aborts not always fired
@@ -70,12 +34,39 @@ and quirks that I need to fix eventually.
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
 - motif l&f: shortcuts in menu items
-- C+b -- click -- keys don't work
-- delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work
+- plugin mgr: don't remove a plugin if downloading the update failed
+- plugin mgr: show non-plugin JARs
+- plugin mgr: note about restarting jEdit if doing upgrade of 4.1 to 4.2
+  plugin
+- windows: fsb browser, type c:
+- files with names of the form foo: are not handled very well in some
+  cases since jEdit thinks they are URLs.
+- wheel mouse -- option: jEdit mods -vs- system-wide mods
+
+- how to handle S+0-9?
+- C+e , and . insert , and . in the buffer, ditto for [ and ]
+- return after collapsed fold: insert line after end of fold
+- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
+  know mod status
+- some JLists do not auto-scroll on keystroke
+- maximisation state bug: open window, resize to size X. close window,
+  open window again, resize to size Y. maximise. close window, open
+  window again, it has size X not size Y.
+- C+b -- click -- keys don't work
 
 + cleanups:
 
+- delete line magic caret w/ block caret
+- is this bogus?
+				else if(fvm[endi] == startLine + numLines)
+				{
+					fvmput(starti,endi + 1,null);
+				}
+- shortcuts: stale shortcuts remain?
+- bad wrap:
+  						MiscUtilities.quicksort(favorites,
+  							new VFS.DirectoryEntryCompare());
 - quicknotepad: needs some code cleanup
 - text area mouse handler cleanup
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
@@ -88,14 +79,26 @@ and quirks that I need to fix eventually.
 
 + features:
 
-- plugin mgr: don't remove a plugin if downloading the update failed
-- plugin mgr: show non-plugin JARs
-- plugin mgr: note about restarting jEdit if doing upgrade of 4.1 to 4.2
-  plugin
+- do all modifier handling through the modifier mapping
+- style editor dialog box needs ui work
+- dockables for unloaded plugins
+- 'remove plugins' dialog: use a text area
+- auto indent: don't de-indent on enter if no leading indent at all?
+- update docs
+- perm to string for FTP plugin
+- update quicknotepad docs
+- actions/dockables eval: should use own namespace?
+- if A depends on B but A is loaded before B and B breaks, A ends up
+  being loaded. Solution: load plugins in order of dependencies?
+- note about dependencies
+- rect select and trailing whitespace
+- help:
+  - titles in search are fucked
+  - FAQ: better titles
+- expand fold: try to expand even if already expanded
 - bsh = { 2 + 2; }
 - eval-for-selected-lines doesn't work with rectangular selection
 - customizable vfs browser extended attributes
-- windows: fsb browser, type c:
 - new plugin mgr:
   - ask before selecting dependencies & 'don't show again'
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
@@ -156,8 +159,6 @@ and quirks that I need to fix eventually.
   - status bar messages & readNextChar()
 - links to API docs in macro guide
 - vfs javadoc: invokeAndWait() example for createVFSSession()
-- files with names of the form foo: are not handled very well in some
-  cases since jEdit thinks they are URLs.
 - <script> in javadoc
 - user's guide:
   - vertical paste & rect select insertion
@@ -169,7 +170,6 @@ and quirks that I need to fix eventually.
       in a sidebar about changing them
     - is Log described elsewhere? move to API guide and link from 15.5.2
       (using activity log as a tracing tool).
-- wheel mouse -- option: jEdit mods -vs- system-wide mods
 - auto indent:
   if(foo)
     while(bar)
@@ -181,7 +181,6 @@ and quirks that I need to fix eventually.
 - remember floating & cloned dockables in perspective
 - add dockable window state change msg
 - range-comment & rect select
-- options for recent files list, recent files menu
 - autosave recent file list?
 - hypersearch refresh
 - option to disable floating window dock bar
@@ -197,8 +196,6 @@ and quirks that I need to fix eventually.
 - beanshell: unloading commands when a plugin is unloaded
 - generic matching API used for brackets, tags, etc.
 - persistent kill ring
-- don't put all-whitespace strings in kill ring
-- only put unique strings in the kill ring
 
 + performance:
 
