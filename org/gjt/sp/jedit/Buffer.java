@@ -535,9 +535,9 @@ public class Buffer
 	 * @return One of <code>NOT_CHANGED</code>, <code>CHANGED</code>, or
 	 * <code>DELETED</code>.
 	 *
-	 * @since jEdit 4.1pre3
+	 * @since jEdit 4.2pre1
 	 */
-	public int checkFileStatus()
+	public int checkFileStatus(View view)
 	{
 		// - don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
@@ -564,53 +564,19 @@ public class Buffer
 				if(!file.exists())
 				{
 					setFlag(NEW_FILE,true);
-					EditBus.send(new BufferUpdate(this,null,
-						BufferUpdate.DIRTY_CHANGED));
+					setDirty(true);
 					return FILE_DELETED;
 				}
 				else
+				{
+					if(!isDirty())
+						load(view,true);
 					return FILE_CHANGED;
+				}
 			}
 		}
 
 		return FILE_NOT_CHANGED;
-	} //}}}
-
-	//{{{ checkModTime() method
-	/**
-	 * Check if the buffer has changed on disk.
-	 * @since jEdit 4.1pre8
-	 */
-	public void checkModTime(EditPane editPane)
-	{
-		View view = editPane.getView();
-		int status = checkFileStatus();
-
-		// still need to call the status check even if this option is off,
-		// so that the write protection is updated if it changes on disk
-		if(!jEdit.getBooleanProperty("view.checkModStatus"))
-			return;
-
-		if(status == FILE_DELETED)
-		{
-			Object[] args = { path };
-			GUIUtilities.message(view,"filedeleted",args);
-		}
-		else if(status == FILE_CHANGED)
-		{
-			String prop = (isDirty() ? "filechanged-dirty"
-				: "filechanged-focus");
-
-			Object[] args = { path };
-			int result = GUIUtilities.confirm(view,
-				prop,args,JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE);
-			if(result == JOptionPane.YES_OPTION)
-			{
-				editPane.saveCaretInfo();
-				load(view,true);
-			}
-		}
 	} //}}}
 
 	//}}}

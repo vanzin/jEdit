@@ -1795,6 +1795,34 @@ public class jEdit
 		return buffersLast;
 	} //}}}
 
+	//{{{ checkBufferStatus() method
+	/**
+	 * Checks each buffer's status on disk and shows the dialog box
+	 * informing the user that buffers changed on disk, if necessary.
+	 * @param view The view
+	 * @since jEdit 4.2pre1
+	 */
+	public static void checkBufferStatus(View view)
+	{
+		Buffer[] buffers = jEdit.getBuffers();
+		int[] states = new int[buffers.length];
+		boolean show = false;
+		for(int i = 0; i < buffers.length; i++)
+		{
+			states[i] = buffers[i].checkFileStatus(view);
+			if(states[i] != Buffer.FILE_NOT_CHANGED)
+				show = true;
+		}
+
+		// still need to call the status check even if the option is off,
+		// so that the write protection is updated if it changes on disk
+		if(!getBooleanProperty("view.checkModStatus"))
+			return;
+
+		if(show)
+			new FilesChangedDialog(view,states);
+	} //}}}
+
 	//}}}
 
 	//{{{ View methods

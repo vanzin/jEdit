@@ -739,7 +739,7 @@ view.gutter.marker=Marker: {0}
 #{{{ Status messages
 view.status.add-marker=Enter shortcut for new marker
 view.status.auto-wrap=Search string not found; wrapping around!
-view.status.bracket=Matches {0}: {1}
+view.status.bracket=Matches line {0}: {1}
 view.status.caret-tooltip=Line and column number indicator
 view.status.copy-append-string-register=Enter register name to copy append to
 view.status.copy-string-register=Enter register name to copy to
@@ -1231,23 +1231,11 @@ pasteprev.caption=Previous clippings:
 pasteprev.insert=Insert
 #}}}
 
-#{{{ File changed on disk dialogs
+#{{{ File changed on disk dialog
 filechanged-save.title=File Changed on Disk
 filechanged-save.message=The file {0}\n\
 	has been modified on disk by another program. Are you sure\n\
 	you want to continue saving it?
-filechanged-focus.title=File Changed on Disk
-filechanged-focus.message=The file {0}\n\
-	has been modified on disk by another program. Would you like to\n\
-	reload it from disk?
-filechanged-dirty.title=File Changed on Disk
-filechanged-dirty.message=The file {0}\n\
-	has been modified on disk by another program. Would you like to\n\
-	reload it from disk? IF YOU RELOAD, UNSAVED CHANGES WILL BE LOST.
-
-filedeleted.title=File Deleted on Disk
-filedeleted.message=The file {0}\n\
-	has been deleted. If you want to re-create it, save the buffer.
 #}}}
 
 #{{{ File exists dialog
@@ -1282,6 +1270,14 @@ close.save=Save Selected
 close.save.mnemonic=s
 close.discard=Discard Selected
 close.discard.mnemonic=d
+#}}}
+
+#{{{ Files changed on disk dialog
+files-changed.title=Files Changed on Disk
+files-changed.caption=The following files were changed on disk by another program:
+files-changed.deleted=Deleted on disk; save to recreate:
+files-changed.changed=Automatically reloaded:
+files-changed.changed-dirty=Buffer dirty; not reloaded:
 #}}}
 
 #{{{ Abbrev dialogs
