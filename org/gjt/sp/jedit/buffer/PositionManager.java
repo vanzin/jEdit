@@ -67,7 +67,6 @@ public class PositionManager
 		while(iter.hasNext())
 		{
 			PosBottomHalf bh = (PosBottomHalf)iter.next();
-			System.err.println(bh.offset);
 			bh.offset += length;
 		}
 	} //}}}

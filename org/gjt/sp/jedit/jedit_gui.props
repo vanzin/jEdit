@@ -2079,7 +2079,8 @@ plugin-manager.title=Plugin Manager
 plugin-manager.export-url=http://plugins.jedit.org/export/gzip_plugin_manager.php
 plugin-manager.mirror-url=http://plugins.jedit.org/export/mirror_list.php
 
-plugin-manager.options=Options...
+plugin-manager.mgr-options=Download Options...
+plugin-manager.plugin-options=Plugin Options...
 plugin-manager.done=Close
 
 plugin-manager.remove-confirm.title=Remove Plugins
