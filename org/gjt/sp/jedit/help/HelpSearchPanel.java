@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.help;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
@@ -84,6 +84,54 @@ public class HelpSearchPanel extends JPanel
 		return index;
 	} //}}}
 
+	//{{{ ResultIcon class
+	static class ResultIcon implements Icon
+	{
+		private static RenderingHints renderingHints;
+
+		static
+		{
+			HashMap hints = new HashMap();
+
+			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			renderingHints = new RenderingHints(hints);
+		}
+
+		private int rank;
+
+		ResultIcon(int rank)
+		{
+			this.rank = rank;
+		}
+
+		public int getIconWidth()
+		{
+			return 40;
+		}
+
+		public int getIconHeight()
+		{
+			return 9;
+		}
+
+		public void paintIcon(Component c, Graphics g, int x, int y)
+		{
+			Graphics2D g2d = (Graphics2D)g.create();
+			g2d.setRenderingHints(renderingHints);
+
+			for(int i = 0; i < 4; i++)
+			{
+				if(rank > i)
+					g2d.setColor(UIManager.getColor("Label.foreground"));
+				else
+					g2d.setColor(UIManager.getColor("Label.disabledForeground"));
+				g2d.fillOval(x+i*10,y,9,9);
+			}
+		}
+	} //}}}
+
 	//{{{ ResultRenderer class
 	class ResultRenderer extends DefaultListCellRenderer
 	{
@@ -98,14 +146,47 @@ public class HelpSearchPanel extends JPanel
 				isSelected,cellHasFocus);
 
 			if(value instanceof String)
+			{
+				setIcon(null);
 				setText((String)value);
+			}
 			else
 			{
-				HelpIndex.HelpFile result = (HelpIndex.HelpFile)value;
+				Result result = (Result)value;
+				setIcon(new ResultIcon(result.rank));
 				setText(result.title);
 			}
 
 			return this;
+		}
+	} //}}}
+
+	//{{{ Result class
+	static class Result
+	{
+		String file;
+		String title;
+		int rank;
+
+		Result(HelpIndex.HelpFile file, int count)
+		{
+			this.file = file.file;
+			this.title = file.title;
+			rank = count;
+		}
+	} //}}}
+
+	//{{{ ResultCompare class
+	static class ResultCompare implements Comparator
+	{
+		public int compare(Object o1, Object o2)
+		{
+			Result r1 = (Result)o1;
+			Result r2 = (Result)o2;
+			if(r1.rank == r2.rank)
+				return r1.title.compareTo(r2.title);
+			else
+				return r2.rank - r1.rank;
 		}
 	} //}}}
 
@@ -122,7 +203,7 @@ public class HelpSearchPanel extends JPanel
 				"helpviewer.searching") });
 
 			final String text = searchField.getText();
-			final DefaultListModel resultModel = new DefaultListModel();
+			final Vector resultModel = new Vector();
 
 			VFSManager.runInWorkThread(new Runnable()
 			{
@@ -130,24 +211,53 @@ public class HelpSearchPanel extends JPanel
 				{
 					StringTokenizer st = new StringTokenizer(text,",.;:- ");
 
+					// we later use this to compute a relative ranking
+					int maxRank = 0;
+
 					while(st.hasMoreTokens())
 					{
 						String word = st.nextToken().toLowerCase();
-						int[] lookup = index.lookupWord(word);
-						for(int i = 0; i < lookup.length; i++)
-						{
-							HelpIndex.HelpFile result = index.getFile(lookup[i]);
-							int idx = resultModel.indexOf(result);
+						HelpIndex.Word lookup = index.lookupWord(word);
+						if(lookup == null)
+							continue;
 
-							// if not in list, add; otherwise increment
-							// rank
-							if(idx == -1)
-								resultModel.addElement(result);
-							else
+						for(int i = 0; i < lookup.occurCount; i++)
+						{
+							HelpIndex.Word.Occurrence occur = lookup.occurrences[i];
+
+							boolean ok = false;
+
+							HelpIndex.HelpFile file = index.getFile(occur.file);
+							for(int j = 0; j < resultModel.size(); j++)
 							{
-								/* ((HelpIndex.HelpFile)resultModel.getElementAt(idx))
-									.rank += 1; */
+								Result result = (Result)resultModel.elementAt(j);
+								if(result.file.equals(file.file))
+								{
+									result.rank += occur.count;
+									result.rank += 30; // multiple files w/ word bonus
+									maxRank = Math.max(result.rank,maxRank);
+									ok = true;
+									break;
+								}
 							}
+
+							if(!ok)
+							{
+								maxRank = Math.max(occur.count,maxRank);
+								resultModel.addElement(new Result(file,occur.count));
+							}
+						}
+					}
+
+					Collections.sort(resultModel,new ResultCompare());
+
+					if(maxRank != 0)
+					{
+						// turn the rankings into relative rankings, from 1 to 4
+						for(int i = 0; i < resultModel.size(); i++)
+						{
+							Result result = (Result)resultModel.elementAt(i);
+							result.rank = (int)Math.ceil((double)result.rank * 4 / maxRank);
 						}
 					}
 				}
@@ -157,7 +267,7 @@ public class HelpSearchPanel extends JPanel
 			{
 				public void run()
 				{
-					if(resultModel.getSize() == 0)
+					if(resultModel.size() == 0)
 					{
 						results.setListData(new String[] {
 							jEdit.getProperty(
@@ -166,7 +276,7 @@ public class HelpSearchPanel extends JPanel
 						getToolkit().beep();
 					}
 					else
-						results.setModel(resultModel);
+						results.setListData(resultModel);
 				}
 			});
 
@@ -181,8 +291,7 @@ public class HelpSearchPanel extends JPanel
 			int row = results.locationToIndex(evt.getPoint());
 			if(row != -1)
 			{
-				HelpIndex.HelpFile result =
-					(HelpIndex.HelpFile)results.getModel()
+				Result result = (Result)results.getModel()
 					.getElementAt(row);
 				helpViewer.gotoURL(result.file,true);
 			}

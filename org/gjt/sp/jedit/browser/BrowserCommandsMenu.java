@@ -51,9 +51,9 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 			VFS vfs = VFSManager.getVFSForPath(files[0].deletePath);
 			int type = files[0].type;
-			boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
-			boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
-			boolean canClose = (jEdit.getBuffer(files[0].path) != null);
+			boolean fileOpen = (jEdit.getBuffer(files[0].path) != null);
+			boolean delete = !fileOpen && (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
+			boolean rename = !fileOpen && (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
 
 			for(int i = 1; i < files.length; i++)
 			{
@@ -78,7 +78,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 				// show 'close' item if at least one selected
 				// file is currently open
 				if(jEdit.getBuffer(file.path) != null)
-					canClose = true;
+					fileOpen = true;
 			}
 
 			if(type == VFS.DirectoryEntry.DIRECTORY
@@ -102,7 +102,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 				add(openIn);
 				add(createMenuItem("insert"));
 
-				if(canClose)
+				if(fileOpen)
 					add(createMenuItem("close"));
 			}
 			else if(type != -1)

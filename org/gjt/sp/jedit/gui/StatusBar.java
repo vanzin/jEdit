@@ -359,6 +359,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateCaretStatus() method
 	public void updateCaretStatus()
 	{
+		if(!isShowing())
+			return;
+
 		if (showCaretStatus)
 		{
 			Buffer buffer = view.getBuffer();
@@ -374,8 +377,15 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			JEditTextArea textArea = view.getTextArea();
 
 			int currLine = textArea.getCaretLine();
-			//if(currLine >= textArea.getLineCount())
-			//	System.err.println("foo");
+
+			// there must be a better way of fixing this...
+			// the problem is that this method can sometimes
+			// be called as a result of a text area scroll
+			// event, in which case the caret position has
+			// not been updated yet.
+			if(currLine >= buffer.getLineCount())
+				return; // hopefully another caret update will come?
+
 			int start = textArea.getLineStartOffset(currLine);
 			int dot = textArea.getCaretPosition() - start;
 			buffer.getText(start,dot,seg);
@@ -426,6 +436,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateBufferStatus() method
 	public void updateBufferStatus()
 	{
+		if(!isShowing())
+			return;
+
 		Buffer buffer = view.getBuffer();
 
 		if (showWrap)
@@ -479,6 +492,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateMiscStatus() method
 	public void updateMiscStatus()
 	{
+		if(!isShowing())
+			return;
+
 		JEditTextArea textArea = view.getTextArea();
 
 		if (showMultiSelect)

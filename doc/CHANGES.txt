@@ -6,6 +6,18 @@ Thanks to Giulio Piancastelli, John Perry, Joshua Miller, Kris Kopicki,
 Marcelo Vanzin, Peter Cox, Rex Young, Rudolf Widmann and Steve Snider
 for contributing to this release.
 
++ Help System Changes:
+
+- The user's guide, FAQ, and plugin documentation is now searchable. An
+  in-memory index is built the first time a search is performed during a
+  jEdit session. Currently, the search engine is very simple and only
+  performs whole-word matching (so searching for "auto save" and
+  "autosave" will yield different results). Results are ranked according
+  to how many times that word appears in the document. Searching for
+  multiple words returns all documents that contain at least one of the
+  words, however documents containing multiple search terms are ranked
+  higher.
+
 + Editing Changes:
 
 - The "Indent on Enter" and "Indent on Tab" options are no longer.

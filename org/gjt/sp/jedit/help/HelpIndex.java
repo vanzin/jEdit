@@ -39,6 +39,34 @@ public class HelpIndex
 	{
 		words = new HashMap();
 		files = new ArrayList();
+
+		ignoreWord("a");
+		ignoreWord("an");
+		ignoreWord("and");
+		ignoreWord("are");
+		ignoreWord("as");
+		ignoreWord("be");
+		ignoreWord("by");
+		ignoreWord("can");
+		ignoreWord("for");
+		ignoreWord("from");
+		ignoreWord("how");
+		ignoreWord("if");
+		ignoreWord("in");
+		ignoreWord("is");
+		ignoreWord("it");
+		ignoreWord("not");
+		ignoreWord("of");
+		ignoreWord("on");
+		ignoreWord("or");
+		ignoreWord("s");
+		ignoreWord("that");
+		ignoreWord("the");
+		ignoreWord("this");
+		ignoreWord("to");
+		ignoreWord("will");
+		ignoreWord("with");
+		ignoreWord("you");
 	} //}}}
 
 	/* //{{{ HelpIndex constructor
@@ -56,7 +84,10 @@ public class HelpIndex
 	{
 		String jEditHome = jEdit.getJEditHome();
 		if(jEditHome != null)
-			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc"));
+		{
+			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","users-guide"));
+			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
+		}
 
 		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
 		for(int i = 0; i < jars.length; i++)
@@ -131,13 +162,13 @@ public class HelpIndex
 	} //}}}
 
 	//{{{ lookupWord() method
-	public int[] lookupWord(String word)
+	public Word lookupWord(String word)
 	{
-		Word w = (Word)words.get(word);
-		if(w == null)
-			return EMPTY_ARRAY;
+		Object o = words.get(word);
+		if(o == IGNORE)
+			return null;
 		else
-			return w.files;
+			return (Word)o;
 	} //}}}
 
 	//{{{ getFile() method
@@ -147,9 +178,17 @@ public class HelpIndex
 	} //}}}
 
 	//{{{ Private members
-	private static int[] EMPTY_ARRAY = new int[0];
+	private static Word.Occurrence[] EMPTY_ARRAY = new Word.Occurrence[0];
+	// used to mark words to ignore (see constructor for the list)
+	private static Object IGNORE = new Object();
 	private HashMap words;
 	private ArrayList files;
+
+	//{{{ ignoreWord() method
+	private void ignoreWord(String word)
+	{
+		words.put(word,IGNORE);
+	} //}}}
 
 	//{{{ indexStream() method
 	/**
@@ -187,6 +226,7 @@ public class HelpIndex
 						if(word.toString().equals("title"))
 							title = true;
 						insideTag = false;
+						word.setLength(0);
 					}
 					else
 						word.append(ch);
@@ -201,7 +241,12 @@ public class HelpIndex
 					if(title)
 						title = false;
 
-					word.setLength(0);
+					if(word.length() != 0)
+					{
+						addWord(word.toString(),index);
+						word.setLength(0);
+					}
+
 					insideTag = true;
 				}
 				else if(ch == '&')
@@ -236,11 +281,14 @@ public class HelpIndex
 	{
 		word = word.toLowerCase();
 
-		Word w = (Word)words.get(word);
-		if(w == null)
+		Object o = words.get(word);
+		if(o == IGNORE)
+			return;
+
+		if(o == null)
 			words.put(word,new Word(word,file));
 		else
-			w.addOccurrence(file);
+			((Word)o).addOccurrence(file);
 	} //}}}
 
 	//}}}
@@ -252,44 +300,47 @@ public class HelpIndex
 		String word;
 
 		// files it occurs in
-		int fileCount = 0;
-		int[] files;
+		int occurCount = 0;
+		Occurrence[] occurrences;
 
 		Word(String word, int file)
 		{
 			this.word = word;
-			files = new int[5];
+			occurrences = new Occurrence[5];
 			addOccurrence(file);
 		}
 
 		void addOccurrence(int file)
 		{
-			for(int i = 0; i < fileCount; i++)
+			for(int i = 0; i < occurCount; i++)
 			{
-				if(files[i] == file)
+				if(occurrences[i].file == file)
+				{
+					occurrences[i].count++;
 					return;
+				}
 			}
 
-			if(fileCount >= files.length)
+			if(occurCount >= occurrences.length)
 			{
-				int[] newFiles = new int[files.length * 2];
-				System.arraycopy(files,0,newFiles,0,fileCount);
-				files = newFiles;
+				Occurrence[] newOccur = new Occurrence[occurrences.length * 2];
+				System.arraycopy(occurrences,0,newOccur,0,occurCount);
+				occurrences = newOccur;
 			}
 
-			files[fileCount++] = file;
+			occurrences[occurCount++] = new Occurrence(file);
 		}
 
-		public String toString()
+		static class Occurrence
 		{
-			StringBuffer buf = new StringBuffer();
-			for(int i = 0; i < fileCount; i++)
+			int file;
+			int count;
+
+			Occurrence(int file)
 			{
-				if(i != 0)
-					buf.append(",");
-				buf.append(files[i]);
+				this.file = file;
+				this.count = 1;
 			}
-			return buf.toString();
 		}
 	} //}}}
 
