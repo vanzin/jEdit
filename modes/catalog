@@ -84,6 +84,10 @@
 <MODE NAME="foxpro"		FILE="foxpro.xml"
 				FILE_NAME_GLOB="*.prg" />
 
+<MODE NAME="freemarker"		FILE="freemarker.xml"
+				FILE_NAME_GLOB="*.ftl"
+				FIRST_LINE_GLOB="<\#ftl*"
+/>
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 

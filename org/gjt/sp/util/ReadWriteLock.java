@@ -22,154 +22,153 @@
 
 package org.gjt.sp.util;
 
+import java.util.Vector;
+
 public class ReadWriteLock
 {
 	//{{{ readLock() method
 	public synchronized void readLock()
 	{
-		while(!obtainReadLock())
+		// this seems to make nested readLock() calls work okay.
+		// but I have no idea if it actually fixes things or not.
+		if (activeReaders != 0 || allowRead())
+		{
+			++activeReaders;
+			//readers.addElement(Thread.currentThread());
+			return;
+		}
+		++waitingReaders;
+		while (!allowRead())
 		{
 			try
 			{
 				wait();
 			}
-			catch(InterruptedException e)
+			catch (InterruptedException e)
 			{
-				break;
+				--waitingReaders; // Roll back state.
+				Log.log(Log.ERROR,this,e);
+				return;
 			}
 		}
+		--waitingReaders;
+		++activeReaders;
+		readers.addElement(Thread.currentThread());
 	} //}}}
 
 	//{{{ readUnlock() method
 	public synchronized void readUnlock()
 	{
-		releaseReadLock();
+		if(activeReaders == 0)
+			throw new InternalError("Unbalanced readLock()/readUnlock() calls");
 
-		if(readLockCount == 0)
-			notifyAll();
+		--activeReaders;
+		//readers.removeElement(Thread.currentThread());
+		notifyAll();
 	} //}}}
 
 	//{{{ writeLock() method
 	public synchronized void writeLock()
 	{
-		waitingWriters++;
+		if (writerThread != null)
+		{
+			// Write in progress.
+			if (Thread.currentThread() == writerThread)
+			{
+				// Same thread.
+				++lockCount;
+				return;
+			}
+		}
+		if (allowWrite())
+		{
+			claimWriteLock();
+			return;
+		}
 
-		while(!obtainWriteLock())
+		++waitingWriters;
+		while (!allowWrite())
 		{
 			try
 			{
 				wait();
 			}
-			catch(InterruptedException e)
+			catch (InterruptedException e)
 			{
-				break;
+				--waitingWriters;
+				Log.log(Log.ERROR,this,e);
+				return;
 			}
 		}
-
-		waitingWriters--;
+		--waitingWriters;
+		claimWriteLock();
 	} //}}}
 
 	//{{{ writeUnlock() method
 	public synchronized void writeUnlock()
 	{
-		releaseWriteLock();
+		if(activeWriters != 1 || lockCount <= 0)
+			throw new InternalError("Unbalanced writeLock()/writeUnlock() calls");
 
-		if(writeLockCount == 0)
+		if(Thread.currentThread() != writerThread)
+			throw new InternalError("writeUnlock() from wrong thread");
+
+		if (--lockCount == 0)
+		{
+			--activeWriters;
+			writerThread = null;
 			notifyAll();
+		}
 	} //}}}
 
 	//{{{ isWriteLocked() method
 	public synchronized boolean isWriteLocked()
 	{
-		return writeLockCount > 0;
+		//Debug.assert(activeWriters == 0 || activeWriters == 1);
+		return activeWriters == 1;
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	/*
-	    readLockCount   writeLockCount  theOnlyThread   Description
-	    -------------   --------------  -------------   -----------------------
-		0               0               null        no locks
-		0               0               <value>     N/A, no locks, theOnlyThread must be null
-	
-		1               0               null        N/A, one thread must be recorded by theOnlyThread
-		> 1             0               null        multiple threads hold multiple read locks
-		> 0             0               <value>     one thread hold multiple read locks
-	
-		>= 0            > 0             null        N/A, one thread must be recorded by theOnlyThread
-		>= 0            > 0             <value>     one thread holds multiple read and write locks
-	*/
-	private Thread  theOnlyThread;
+	private int activeReaders;
+	private int activeWriters;
+	private int waitingReaders;
+	private int waitingWriters;
+	private Vector readers = new Vector();
 
-	private int     readLockCount;
-
-	private int     writeLockCount;
-	private int     waitingWriters;
+	private Thread writerThread;
+	private int lockCount;
 	//}}}
 
-	//{{{ obtainReadLock() method
-	private boolean obtainReadLock()
+	//{{{ allowRead() method
+	private final boolean allowRead()
 	{
-		boolean canLock = true;
-
-		if(writeLockCount != 0 || waitingWriters != 0)
-			canLock = theOnlyThread == Thread.currentThread();
-
-		if(canLock)
-		{
-			if(readLockCount == 0 && theOnlyThread == null)
-				theOnlyThread = Thread.currentThread();
-			else if(readLockCount > 0 && theOnlyThread != Thread.currentThread())
-				theOnlyThread = null;
-
-			readLockCount++;
-		}
-
-		return canLock;
+		return (Thread.currentThread() == writerThread)
+			|| (waitingWriters == 0 && activeWriters == 0);
 	} //}}}
 
-	//{{{ releaseReadLock() method
-	private void releaseReadLock()
+	//{{{ allowWrite() method
+	private final boolean allowWrite()
 	{
-		if(writeLockCount == 0)
+		/*Thread current = Thread.currentThread();
+		for(int i = 0; i < readers.size(); i++)
 		{
-			if(readLockCount == 1)
-				theOnlyThread = null;
-			else if(readLockCount == 2)
-				theOnlyThread = Thread.currentThread();
-		}
+			if(readers.elementAt(i) == current)
+				throw new InternalError("Cannot nest writeLock() inside readLock()");
+		}*/
 
-		readLockCount--;
+		return activeReaders == 0 && activeWriters == 0;
 	} //}}}
 
-	//{{{ obtainWriteLock() method
-	private boolean obtainWriteLock()
+	//{{{ claimWriteLock() method
+	private void claimWriteLock()
 	{
-		boolean canLock = false;
-
-		if(theOnlyThread == null)
-			canLock = readLockCount == 0;
-		else
-			canLock = theOnlyThread == Thread.currentThread();
-
-		if(canLock)
-		{
-			theOnlyThread = Thread.currentThread();
-
-			writeLockCount++;
-		}
-
-		return canLock;
-	} //}}}
-
-	//{{{ releaseWriteLock() method
-	private void releaseWriteLock()
-	{
-		if(readLockCount == 0 && writeLockCount == 1)
-			theOnlyThread = null;
-
-		writeLockCount--;
+		++activeWriters;
+		//Debug.assert(writerThread == null);
+		writerThread = Thread.currentThread();
+		//Debug.assert(lockCount == 0);
+		lockCount = 1;
 	} //}}}
 
 	//}}}
