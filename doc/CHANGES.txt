@@ -12,6 +12,7 @@ Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
 - Some minor optimizations.
 
 - FAQ updates (Kris Kopicki).
+
 + Bug Fixes:
 
 - Minor fix to BibTeX syntax highlighting (Stefan Kost).
@@ -28,6 +29,13 @@ Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
 
 - Narrowing would display the wrong text if the text area was scrolled
   to the start of the buffer.
+
+- jEdit.exit() no longer throws an exception if no views are open. This
+  fixes the problem of not being able to exit jEdit when running on
+  MacOS X with the -background command line switch.
+
+- Narrowing to one set of lines and then immediately to another such
+  that the intersection of the two sets is empty would cause problems.
 
 + API Additions:
 

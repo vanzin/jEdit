@@ -2252,7 +2252,8 @@ public class jEdit
 		// if background mode is off
 		reallyExit |= !background;
 
-		saveOpenFiles(view);
+		if (view != null)
+			saveOpenFiles(view);
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))
@@ -2282,7 +2283,8 @@ public class jEdit
 		// Save view properties here - it unregisters
 		// listeners, and we would have problems if the user
 		// closed a view but cancelled an unsaved buffer close
-		view.close();
+		if (view != null)
+			view.close();
 
 		// Stop autosave timer
 		Autosave.stop();
