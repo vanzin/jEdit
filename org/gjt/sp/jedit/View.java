@@ -918,7 +918,7 @@ public class View extends JFrame implements EBComponent
 		if(lastSplitConfig == null)
 			getToolkit().beep();
 		else
-			setSplitConfig(getBuffer(),lastSplitConfig);
+			setSplitConfig(null,lastSplitConfig);
 	} //}}}
 
 	//{{{ nextTextArea() method
@@ -1430,6 +1430,9 @@ public class View extends JFrame implements EBComponent
 			// this should never throw an exception.
 			throw new InternalError();
 		}
+		
+		dockableWindowManager.revalidate();
+		dockableWindowManager.repaint();
 	} //}}}
 
 	//{{{ restoreSplitConfig() method
