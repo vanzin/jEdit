@@ -139,8 +139,6 @@ view.mbar=file edit search markers folds view utils macros plugins help-menu
 file=new-file \
      open-file \
      %recent-files \
-     %recent-directories \
-     %current-directory \
      insert-file \
      - \
      reload \
@@ -162,11 +160,8 @@ file.label=$File
 new-file.label=$New
 open-file.label=$Open...
 recent-files.label=Recent Files
-recent-directories.label=Recent Directories
-current-directory.label=Current Directory
-insert-file.label=$Insert...
 no-recent-files.label=No Recent Files
-no-recent-dirs.label=No Recent Directories
+insert-file.label=$Insert...
 reload.label=$Reload
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
@@ -199,7 +194,6 @@ edit=undo \
      expand-abbrev \
      - \
      goto-line \
-     select-line-range \
      - \
      %text \
      %indent \
@@ -215,7 +209,6 @@ word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
-select-line-range.label=Se$lect Line Range...
 
 #{{{ More Clipboard menu
 clipboard=cut-append \
@@ -255,8 +248,9 @@ selection=select-none \
 	  select-paragraph \
 	  - \
 	  invert-selection \
-	  toggle-multi-select
-
+	  toggle-multi-select \
+	  - \
+          select-line-range
 selection.label=More $Selection
 select-none.label=Select $None
 select-word.label=Select $Word
@@ -264,6 +258,7 @@ select-line.label=Select $Line
 select-paragraph.label=Select $Paragraph
 invert-selection.label=$Invert Selection
 toggle-multi-select.label=$Multiple Selection
+select-line-range.label=Select Line $Range...
 #}}}
 
 #{{{ Text menu
@@ -488,32 +483,52 @@ close-bottom-docking-area.label=Close Bottom Docking Area
 
 #{{{ Utilities menu
 utils=vfs.browser \
+      %recent-directories \
       - \
-      log-viewer \
-      update-log \
-      - \
-      io-progress-monitor \
-      keyboard-tester \
-      memory-status \
-      reload-modes \
-      - \
+      %current-directory \
       %jedit-directory \
       %settings-directory \
+      - \
+      %beanshell \
+      %troubleshooting \
       - \
       buffer-options \
       global-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
-log-viewer.label=Activity Log
-update-log.label=Update Activity Log on Disk
-io-progress-monitor.label=$I/O Progress Monitor
-keyboard-tester.label=Keyboard Tester...
-memory-status.label=$Memory Status...
-reload-modes.label=$Reload Edit Modes
+recent-directories.label=Recent Directories
+current-directory.label=Current Directory
+no-recent-dirs.label=No Recent Directories
 jedit-directory.label=jEdit Home Directory
 settings-directory.label=Settings Directory
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
+
+#{{{ BeanShell menu
+beanshell=eval \
+       eval-for-selected-lines \
+       eval-selection
+beanshell.label=BeanShell
+eval.label=$Evaluate BeanShell Expression...
+eval-for-selected-lines.label=Evaluate $For Selected Lines...
+eval-selection.label=Evaluate $Selection
+#}}}
+
+#{{{ Troubleshooting menu
+troubleshooting=log-viewer \
+		update-log \
+		- \
+		io-progress-monitor \
+		keyboard-tester \
+		memory-status \
+		reload-modes
+troubleshooting.label=Troubleshooting
+log-viewer.label=$Activity Log
+update-log.label=$Update Activity Log on Disk
+io-progress-monitor.label=$I/O Progress Monitor
+keyboard-tester.label=$Keyboard Tester...
+memory-status.label=$Memory Status...
+reload-modes.label=$Reload Edit Modes
 #}}}
 
 #{{{ Macros menu
@@ -525,10 +540,6 @@ macros=record-macro \
        run-last-macro \
        run-other-macro \
        - \
-       eval \
-       eval-for-selected-lines \
-       eval-selection \
-       - \
        rescan-macros \
        -
 macros.label=Ma$cros
@@ -538,9 +549,6 @@ stop-recording.label=$Stop Recording
 run-temp-macro.label=Run Tem$porary Macro
 run-last-macro.label=Run $Last Macro
 run-other-macro.label=Run $Other Macro...
-eval.label=$Evaluate BeanShell Expression...
-eval-for-selected-lines.label=Evaluate $For Selected Lines...
-eval-selection.label=E$valuate Selection
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 #}}}
@@ -801,12 +809,10 @@ ioerror.caption-1=The following I/O operation could not be completed:
 ioerror={0}
 ioerror.directory-error=Cannot list directory: {0}
 ioerror.directory-error-nomsg=Cannot list directory.
-ioerror.encoding-error=Cannot load with "{0}" encoding:\n\
-	{1}\n\
-	To use a different encoding, try the commands in the\n\
-	File->Open With Encoding menu.\n\
-	If you are really stuck and do not know which encoding\n\
-	to use, try "8859_1".
+ioerror.encoding-error=Cannot load with "{0}" encoding.\n\
+	({1})\n\
+	The encoding can be changed in the Commands menu\n\
+	of the file system browser.
 ioerror.read-error=Cannot load: {0}
 ioerror.write-error=Cannot save: {0}
 ioerror.open-directory=Cannot open directory as a buffer.
@@ -1256,8 +1262,8 @@ buffer-options.props=Corresponding buffer-local properties:
 #{{{ Global options dialog
 options.title=Global Options
 options.overview.label=Overview
-options.jedit.label=jEdit Options
-options.plugins.label=Plugin Options
+options.jedit.label=jEdit
+options.plugins.label=Plugins
 
 #{{{ General pane
 options.general.label=General
