@@ -19,6 +19,15 @@ JEDIT 3.2 VERSION HISTORY
   etc) are only loaded into the top-level namespace, and due to the
   above change, classes found in the default imported packages are
   cached and only ever have to be searched for once
+- New version of jEditLauncher (John Gellene)
+  - Whan user elects to retain command line parameters, an upgrade
+    always updates path to jar file.
+  - Location of server file set from -user.home value defined on
+    command line if jEdit -settings parameter is not used.
+  - Eliminates dependence on Windows Sockets 2.0; version 1.1 is
+    sufficient.
+  - Installer module now writes detailed log to install.log in jEdit
+    installation directory.
 
 + Bug Fixes
 
