@@ -2,7 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre10
 
-Thanks to Oliver Rutherfurd for contributing to this release.
+Thanks to Kris Kopicki and Oliver Rutherfurd for contributing to this
+release.
 
 + Enhancements:
 
@@ -43,6 +44,8 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 - Fixed a NullPointerException when doing a "Replace All" over a
   directory right after a HyperSearch in the same directory, then
   closing some of the buffers touched by the "Replace All".
+
+- Fixed display of docking buttons on Mac OS X (Kris Kopicki).
 
 * Version 4.1pre9
 
