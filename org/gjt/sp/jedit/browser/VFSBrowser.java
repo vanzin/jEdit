@@ -672,11 +672,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			filter = getFilenameFilter();
 		}
 
-		if(!(VFSManager.getVFSForPath(path) instanceof FileVFS))
-		{
-			getToolkit().beep();
-			return;
-		}
+		if(path.endsWith("/") || path.endsWith(File.separator))
+			path = path.substring(0,path.length() - 1);
 
 		SearchAndReplace.setSearchFileSet(new DirectoryListSet(
 			path,filter,true));
