@@ -96,7 +96,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(textArea.getBuffer() == null)
 			return;
 
-		tabSize = fm.charWidth(' ') * textArea.getBuffer().getTabSize();
+		int _tabSize = textArea.getBuffer().getTabSize();
+		char[] foo = new char[_tabSize];
+		tabSize = (float)getFont().getStringBounds(foo,0,_tabSize,
+			fontRenderContext).getWidth();
 
 		int _maxLineLen = textArea.getBuffer()
 			.getIntegerProperty("maxLineLen",0);
@@ -106,7 +109,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		else
 		{
 			// stupidity
-			char[] foo = new char[_maxLineLen];
+			foo = new char[_maxLineLen];
 			for(int i = 0; i < foo.length; i++)
 			{
 				foo[i] = ' ';
@@ -654,7 +657,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public float nextTabStop(float x, int tabOffset)
 	{
 		int offset = textArea.getHorizontalOffset();
-		int ntabs = ((int)x - offset) / tabSize;
+		int ntabs = (int)((x - offset) / tabSize);
 		return (ntabs + 1) * tabSize + offset;
 	} //}}}
 
@@ -712,12 +715,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private boolean antiAlias;
 	private boolean fracFontMetrics;
 
-	private int tabSize;
+	private float tabSize;
 	private int maxLineLen;
+
+	// should try to use this as little as possible.
 	private FontMetrics fm;
 
 	private ArrayList highlights;
-
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
 	//}}}

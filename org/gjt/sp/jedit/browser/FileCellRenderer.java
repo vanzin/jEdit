@@ -44,8 +44,7 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 	public FileCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
-		boldFont = new Font(plainFont.getName(),Font.BOLD,
-			plainFont.getSize());
+		boldFont = plainFont.deriveFont(Font.BOLD);
 
 		setOpaque(true);
 	} //}}}

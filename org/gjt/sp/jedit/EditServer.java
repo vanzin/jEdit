@@ -1,5 +1,8 @@
 /*
  * EditServer.java - jEdit server
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,11 +22,13 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * The edit server protocol is very simple. <code>$HOME/.jedit/server</code>
@@ -48,6 +53,7 @@ import org.gjt.sp.util.Log;
  */
 public class EditServer extends Thread
 {
+	//{{{ EditServer constructor
 	EditServer(String portFile)
 	{
 		super("jEdit server daemon [" + portFile + "]");
@@ -86,13 +92,15 @@ public class EditServer extends Thread
 			 * as NOTICE, not ERROR */
 			Log.log(Log.NOTICE,this,io);
 		}
-	}
+	} //}}}
 
+	//{{{ isOK() method
 	public boolean isOK()
 	{
 		return ok;
-	}
+	} //}}}
 
+	//{{{ run() method
 	public void run()
 	{
 		try
@@ -141,8 +149,9 @@ public class EditServer extends Thread
 		{
 			Log.log(Log.ERROR,this,io);
 		}
-	}
+	} //}}}
 
+	//{{{ handleClient() method
 	/**
 	 * @param restore Ignored unless no views are open
 	 * @param parent The client's parent directory
@@ -197,27 +206,33 @@ public class EditServer extends Thread
 
 			jEdit.openFiles(view,parent,args);
 
+			// un-iconify using JDK 1.3 API
+			view.setState(java.awt.Frame.NORMAL);
 			view.requestFocus();
 			view.toFront();
 
 			// do not create a new view
 			return;
 		}
-	}
+	} //}}}
 
-	// package-private members
+	// stopServer() method
 	void stopServer()
 	{
 		stop();
 		new File(portFile).delete();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private String portFile;
 	private ServerSocket socket;
 	private int authKey;
 	private boolean ok;
+	//}}}
 
+	//{{{ handleClient() method
 	private void handleClient(Socket client, Reader in)
 		throws IOException
 	{
@@ -239,5 +254,7 @@ public class EditServer extends Thread
 				BeanShell.eval(null,scriptString,false);
 			}
 		});
-	}
+	} //}}}
+
+	//}}}
 }

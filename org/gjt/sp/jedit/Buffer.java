@@ -2594,7 +2594,7 @@ public class Buffer implements EBComponent
 				else
 					line++;
 			}
-			end = line;
+			end = line - 1;
 		}
 		else
 		{
@@ -2616,6 +2616,8 @@ public class Buffer implements EBComponent
 				else
 					end++;
 			}
+
+			end--;
 		}
 
 		while(getLineLength(end) == 0 && end > start)

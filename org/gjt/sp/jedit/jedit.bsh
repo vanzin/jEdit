@@ -1,9 +1,6 @@
 /* This script is run on jEdit startup. It should be short and simple for
  * performance reasons. */
 
-// We use the '__cruft' scripted object to store various junk.
-__cruft = object();
-
 /* By default, BeanShell imports the following packages:
 
    - javax.swing.event
@@ -29,6 +26,9 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.*;
 
+// We use the '__cruft' scripted object to store various junk.
+__cruft = object();
+
 /* This function prints the specified object to the current console if one
  * exists; otherwise, to the activity log. */
 print(arg)
@@ -48,6 +48,7 @@ print(arg)
 	}
 	else
 	{
+		// Console plugin defines 'output' variable.
 		if(output != null)
 			output.print(null,String.valueOf(arg));
 		else

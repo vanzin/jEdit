@@ -2,6 +2,13 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre4
 
++ New Features
+
+- Two JDK 1.4-specific options added to 'Appearance' option pane:
+  'Draw window borders using Swing look & feel', 'Draw dialog box
+  borders using Swing look & feel'. By default, the former is disabled,
+  the latter is enabled.
+
 + Enhancements
 
 - Firewall plugin integrated into editor core
@@ -18,22 +25,34 @@ JEDIT 4.0 VERSION HISTORY
   - Keywords are now completed (and shown in the list in a bold font)
   - The popup is updated on the fly if you type or press BACKSPACE while
     it is showing
+- In the file system browser, trying to add a file to the favorites now
+  adds that file's directory to the favorites, instead of showing an
+  error message
+- The edit server now un-iconifies the view, if necessary
 
 + Bug Fixes
 
 - Next-fold command was slightly broken
 - Fixed possible plugin manager NPE when installing incompatible plugins
-- The 'select text on focus' feature of some text fields should work on
-  JDK 1.4 now
 - On some Java versions, the plugin manager's progress windows would
   hang until explicitly given focus
-- File system browser's type select should work on JDK 1.4 now
 - Minor fix for S+HOME/S+END behavior
 - Fixed for weird caret position after control-clicking a closing
   bracket
 - The position of the wrap guide is now determined using the Java2D API,
   so it should be correct now. Previously, it could be drawn in the
   wrong place if anti-aliasing was enabled
+- The tab width is also determined using the correct APIs
+- Fixed possible NullPointerException in VFS file dialog box
+- Fixed minor bug in 'Select Fold' command
+- Fixed some JDK 1.4-specific bugs:
+  - The 'select text on focus' feature of some text fields fixed
+  - File system browser's type select fixed
+  - Keyboard shortcuts only worked in the text area
+  - Sometimes keyboard focus would jump to the search bar
+  - Unfortunately, fixing the last two required the use of Java
+    1.4-specific APIs. As a result, the Java14.java source file will not
+    compile under a 1.3 JDK.
 
 + API Changes
 
