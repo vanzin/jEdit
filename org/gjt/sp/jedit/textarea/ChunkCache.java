@@ -195,7 +195,7 @@ class ChunkCache
 
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
-			System.err.println("f > t.f: only " + amount
+			Log.log(Log.DEBUG,this,"f > t.f: only " + amount
 				+ " need updates");
 		}
 
@@ -212,6 +212,8 @@ class ChunkCache
 	//{{{ invalidateChunksFrom() method
 	void invalidateChunksFrom(int screenLine)
 	{
+		if(Debug.CHUNK_CACHE_DEBUG)
+			Log.log(Log.DEBUG,this,"Invalidate from " + screenLine);
 		firstInvalidLine = Math.min(screenLine,firstInvalidLine);
 
 		if(screenLine <= lastScreenLine)
@@ -227,6 +229,8 @@ class ChunkCache
 			if(info.physicalLine == -1 || info.physicalLine >= physicalLine)
 			{
 				firstInvalidLine = i;
+				if(i <= lastScreenLine)
+					lastScreenLine = lastScreenLineP = -1;
 				break;
 			}
 		}
