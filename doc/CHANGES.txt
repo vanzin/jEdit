@@ -25,6 +25,9 @@ release.
 - The soft wrap state is no longer reset when a buffer is saved. This
   was pointless and slowed down the editor.
 
+- Screen line management had an off-by-one error, so in some situations
+  the vertical scroll bar state would become inconsistent.
+
 }}}
 
 }}}
