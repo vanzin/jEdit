@@ -7,6 +7,10 @@ JEDIT 4.1 VERSION HISTORY
 - 'scriptPath' BeanShell variable is set to the macro file path while a
   macro or startup script is executing.
 
+- Fixed default install path settings in installer when running on Unix.
+  Now, instead of checking for a user name of "root", it checks if the
+  appropriate subdirectories of /usr/local are writable.
+
 + Bug Fixes:
 
 - When evaluating BeanShell expressions, the standard

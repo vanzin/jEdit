@@ -77,29 +77,20 @@ public abstract class OperatingSystem
 	{
 		public String getInstallDirectory(String name, String version)
 		{
-			if("root".equals(System.getProperty("user.name")))
-			{
-				return "/usr/local/share/" + name.toLowerCase()
-					+ "/" + version;
-			}
-			else
-			{
-				return new File(System.getProperty(
-					"user.home"),"bin").getPath()
-					+ "/" + name.toLowerCase()
-					+ "/" + version;
-			}
+			String dir = "/usr/local/share/";
+			if(!new File(dir).canWrite())
+				dir = System.getProperty("user.home");
+
+			return new File(dir,name.toLowerCase() + "/" + version).getPath();
 		}
 
 		public String getShortcutDirectory(String name, String version)
 		{
-			if("root".equals(System.getProperty("user.name")))
-				return "/usr/local/bin";
-			else
-			{
-				return new File(System.getProperty(
-					"user.home"),"bin").getPath();
-			}
+			String dir = "/usr/local/";
+			if(!new File(dir).canWrite())
+				dir = System.getProperty("user.home");
+
+			return new File(dir,"bin").getPath();
 		}
 
 		public void createScript(Install installer,
