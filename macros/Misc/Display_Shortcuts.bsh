@@ -139,8 +139,10 @@ void writeLine(Vector row)
 /*
  *  main routine
  */
-void showShortcuts()
+void showShortcuts(View view)
 {
+	this.view = view;
+
 	Vector v = new Vector();
 	makeShortcutsVector(v);
 	MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
@@ -264,7 +266,7 @@ void showShortcuts()
 	dialog.show();
 }
 
-showShortcuts();
+showShortcuts(view);
 
 /*
 	Macro index data (in DocBook format)

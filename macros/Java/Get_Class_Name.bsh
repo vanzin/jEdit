@@ -84,7 +84,9 @@ String getClassName()
 }
 
 String className = getClassName();
-if( className != null && !className.equals("") )
+if( buffer.isReadOnly() )
+	Macros.error( view, "Buffer is read-only." );
+else if( className != null && !className.equals("") )
 {
   textArea.setSelectedText(className);
 }

@@ -32,9 +32,6 @@
  *
  * The use of HistoryTextField objects allows the macro to 'remember'
  * past entries for the prefix and suffix.
- *
- * Checked for jEdit 4.0 API
- *
  */
 
 // beginning of Add_suffix_and_prefix.bsh
@@ -43,8 +40,10 @@
 import javax.swing.border.*;
 
 // main routine
-void prefixSuffixDialog()
+void prefixSuffixDialog(View view)
 {
+	this.view = view;
+
     // create dialog object and set its features
     title = "Add prefix and suffix to selected lines";
     dialog = new JDialog(view, title, false);
@@ -137,7 +136,10 @@ void prefixSuffixDialog()
 
 // this single line of code is the script's main routine
 // it calls the methods and exits
-prefixSuffixDialog();
+if(buffer.isReadOnly())
+	Macros.error(view, "Buffer is read-only.");
+else
+	prefixSuffixDialog(view);
 
 /*
 	Macro index data (in DocBook format)

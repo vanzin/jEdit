@@ -327,6 +327,13 @@
 </listitem>
 
 <listitem>
+    <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
+    <abstract><para>
+        Converts all keywords in the current buffer to upper case.
+    </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Make_Bug_Report.bsh</filename></para>
     <abstract><para>
       Creates a new buffer with installation and error information
@@ -507,22 +514,6 @@
         obtaining user input. See <xref linkend="macro-tips-single-char"
         />.
     </para>
-</listitem>
-
-<listitem>
-  <para><filename>Toggle_Line_Comment.bsh</filename></para>
-  <abstract><para>
-	  Toggles line comments, alternately inserting and deleting them
-    at the beginning of each selected line. If there is no selection,
-    the macro operates on the current line.
-  </para></abstract>
-	<para>
-		 A <quote>line comment</quote> is a token that designates the entire
-     contents of a line as commented text; it does not use or require
-     a closing token. If the editing mode does not provide for line
-     comments (for example, text or XML modes), the macro will
-     display an error message.
-	</para>
 </listitem>
 
 </itemizedlist>
