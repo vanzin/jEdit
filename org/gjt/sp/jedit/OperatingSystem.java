@@ -96,7 +96,7 @@ public class OperatingSystem
 
 	//{{{ isMacOSLF() method
         /**
-         * Returns if we're running MacOS X and using the native L&F.
+         * Returns if we're running MacOS X and using the native look and feel.
          */
         public static final boolean isMacOSLF()
         {

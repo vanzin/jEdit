@@ -4,9 +4,16 @@ JEDIT 4.1 VERSION HISTORY
 
 Thanks to Oliver Rutherfurd for contributing to this release.
 
++ Enhancements:
+
+- The text area no longer falls over if an exception is thrown while
+  firing a caret or scroll event.
+
+- Stricter checks for windows being out-of-bounds.
+
 + Bug Fixes:
 
-- The Format Praragraph command was once again broken on Java 1.3.
+- The Format Paragraph command was once again broken on Java 1.3.
 
 - Installer's "auto" mode works now. The command line syntax has
   changed:
@@ -32,6 +39,10 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 - "Toggle Line Separator" command now sets buffer dirty status.
 
 - Splitting the view more than once could break.
+
+- Fixed a NullPointerException when doing a "Replace All" over a
+  directory right after a HyperSearch in the same directory, then
+  closing some of the buffers touched by the "Replace All".
 
 * Version 4.1pre9
 

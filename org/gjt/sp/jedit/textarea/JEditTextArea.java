@@ -41,6 +41,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -5335,7 +5336,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(listeners[i] == CaretListener.class)
 			{
-				((CaretListener)listeners[i+1]).caretUpdate(caretEvent);
+				try
+				{
+					((CaretListener)listeners[i+1]).caretUpdate(caretEvent);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+				}
 			}
 		}
 	} //}}}
@@ -5348,10 +5356,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(listeners[i] == ScrollListener.class)
 			{
-				if(vertical)
-					((ScrollListener)listeners[i+1]).scrolledVertically(this);
-				else
-					((ScrollListener)listeners[i+1]).scrolledHorizontally(this);
+				try
+				{
+					if(vertical)
+						((ScrollListener)listeners[i+1]).scrolledVertically(this);
+					else
+						((ScrollListener)listeners[i+1]).scrolledHorizontally(this);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+				}
 			}
 		}
 	} //}}}

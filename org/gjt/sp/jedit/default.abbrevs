@@ -1,6 +1,7 @@
 [java]
 Br|BufferedReader $1 = new BufferedReader(\|);
 D|do\n{\n\t\|\n}\nwhile($1);
+DMTN|DefaultMutableTreeNode
 E|Exception
 Ei|else if($1)\n{\n\t\|\n}
 El|else\n{\n\t\|\n}

@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- <script> in javadoc
 - javadocs:
   - gui: better descriptions
 - user's guide:
@@ -27,7 +28,7 @@ and quirks that I need to fix eventually.
   - part IV
   - part V
   - macro index might need updating
-- need a new jEditLauncher before the 4.0final release
+- need a new jEditLauncher before the 4.1final release
 - status bar still fooling around
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - rect select and trailing whitespace
