@@ -141,6 +141,9 @@ public class MiscUtilities
 	 */
 	public static String resolveSymlinks(String path)
 	{
+		if(isURL(path))
+			return path;
+
 		// 2 aug 2003: OS/2 Java has a broken getCanonicalPath()
 		if(OperatingSystem.isOS2())
 			return path;

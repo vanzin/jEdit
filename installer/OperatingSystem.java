@@ -317,7 +317,7 @@ public abstract class OperatingSystem
 
 		public OSTask[] getOSTasks(Install installer)
 		{
-			return new OSTask[] { new JEditLauncherOSTask(installer) };
+			return new OSTask[] { /* new JEditLauncherOSTask(installer) */ };
 		}
 	}
 

@@ -1,5 +1,19 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 2.4pre15
+
+{{{ Bug Fixes
+
+- The rest.xml and embperl.xml mode files were missing from the
+  distribution.
+
+- HyperSearch results would not use floating positions if the files
+  being searched were symbolic links.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre14
 
 Thanks to Gerd Knops, Ollie Rutherfurd, Paul Libbrecht and Rob Watson
