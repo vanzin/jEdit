@@ -17,6 +17,8 @@ JEDIT 4.0 VERSION HISTORY
   - A+q, A+a: page up, page down
   - A+z, A+x: home, end
   - A+d: delete next character
+- File->Recent Directories menu lists directories that were recently
+  visted in the file system browser
 
 + Enhancements
 
@@ -34,6 +36,11 @@ JEDIT 4.0 VERSION HISTORY
 - Updated QuickNotepad sample plugin for jEdit 4.0 API changes (John
   Gellene)
 - 'Delete Line' now leaves the caret in the same column
+- '~' in buffer and directory path names is now automatically expanded
+  to the home directory
+- Improved undo
+- File selection dialog boxes now have a status bar that shows the number
+  of pending I/O requests
 
 + Bug Fixes
 
@@ -55,6 +62,15 @@ JEDIT 4.0 VERSION HISTORY
   interface (Maik Schreiber)
 - When the text area lost focus, the bracket scope indicator in the
   gutter was not repainted
+- GUIUtilities.loadToolButton() no longer throws an exception with
+  invalid tool bar buttons
+
++ API Changes
+
+- New method in VFS class: _canonPath().
+- VFS.DirectoryEntry constructor accepting a 'color' parameter removed.
+  Instead, write a VFS.DirectoryEntry subclass that overrides the
+  getColor() method
 
 * Version 4.0pre1
 

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=0: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>
@@ -368,15 +368,21 @@
   </para>
   <itemizedlist>
    <listitem><para><keycap>Enter</keycap> - opens the currently selected file or
-   directory</para></listitem>
-   <listitem><para><keycap>Left</keycap> - goes to the current directory's parent
+   directory.</para></listitem>
+   <listitem><para><keycap>Left</keycap> - goes to the current directory's parent.
    </para></listitem>
-   <listitem><para><keycap>Up</keycap> - selects previous file in list
+   <listitem><para><keycap>Up</keycap> - selects previous file in list.
    </para></listitem>
-   <listitem><para><keycap>Down</keycap> - selects next file in list
+   <listitem><para><keycap>Down</keycap> - selects next file in list.
    </para></listitem>
+   <listitem><para><keycap>/</keycap> - displays all
+   local drives.</para></listitem>
+   <listitem><para><keycap>~</keycap> - displays your home directory.
+   </para></listitem>
+   <listitem><para><keycap>-</keycap> - displays the directory containing
+   the current buffer.</para></listitem>
    <listitem><para>Typing the first few characters of
-   a file's name will select that file
+   a file's name will select that file.
    </para></listitem>
   </itemizedlist>
   <para>

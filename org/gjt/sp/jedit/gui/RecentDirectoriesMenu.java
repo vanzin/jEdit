@@ -1,5 +1,5 @@
 /*
- * RecentFilesMenu.java - Recent file list menu
+ * RecentDirectoriesMenu.java - Recent directory list menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -26,18 +26,18 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
-import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class RecentFilesMenu extends EnhancedMenu
+public class RecentDirectoriesMenu extends EnhancedMenu
 {
-	//{{{ RecentFilesMenu constructor
-	public RecentFilesMenu()
+	//{{{ RecentDirectoriesMenu constructor
+	public RecentDirectoriesMenu()
 	{
-		super("recent-files");
+		super("recent-directories");
 	} //}}}
 
 	//{{{ setPopupMenuVisible() method
@@ -55,7 +55,20 @@ public class RecentFilesMenu extends EnhancedMenu
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
-					jEdit.openFile(view,evt.getActionCommand());
+					DockableWindowManager wm = view.getDockableWindowManager();
+					wm.addDockableWindow(VFSBrowser.NAME);
+
+					final VFSBrowser browser = (VFSBrowser)wm.getDockable(VFSBrowser.NAME);
+					final String path = evt.getActionCommand();
+					VFSManager.runInAWTThread(new Runnable()
+					{
+						public void run()
+						{
+							if(!browser.getDirectory().equals(path))
+								browser.setDirectory(path);
+						}
+					});
+
 					view.getStatus().setMessage(null);
 				}
 			}; //}}}
@@ -76,38 +89,27 @@ public class RecentFilesMenu extends EnhancedMenu
 				}
 			}; //}}}
 
-			Vector recentVector = BufferHistory.getBufferHistory();
-
-			if(recentVector.size() == 0)
+			HistoryModel model = HistoryModel.getModel("vfs.browser.path");
+			if(model.getSize() == 0)
 			{
-				add(GUIUtilities.loadMenuItem("no-recent-files"));
+				add(GUIUtilities.loadMenuItem("no-recent-dirs"));
 				super.setPopupMenuVisible(b);
 				return;
 			}
 
-			Vector menuItems = new Vector();
 			boolean sort = jEdit.getBooleanProperty("sortRecent");
 
-			/*
-			 * While recentVector has 50 entries or so, we only display
-			 * a few of those in the menu (otherwise it will be way too
-			 * long)
-			 */
-			int recentFileCount = Math.min(recentVector.size(),
-				jEdit.getIntegerProperty("history",25));
+			Vector menuItems = new Vector();
 
-			for(int i = recentVector.size() - 1;
-				i >= recentVector.size() - recentFileCount;
-				i--)
+			for(int i = 0; i < model.getSize(); i++)
 			{
-				String path = ((BufferHistory.Entry)recentVector
-					.elementAt(i)).path;
+				String path = model.getItem(i);
 				VFS vfs = VFSManager.getVFSForPath(path);
 				JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
 				menuItem.setActionCommand(path);
 				menuItem.addActionListener(actionListener);
 				menuItem.addMouseListener(mouseListener);
-				menuItem.setIcon(FileCellRenderer.fileIcon);
+				menuItem.setIcon(FileCellRenderer.dirIcon);
 
 				if(sort)
 					menuItems.addElement(menuItem);

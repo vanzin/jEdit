@@ -1,5 +1,8 @@
 /*
  * CurrentDirectoryMenu.java - File list menu
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -22,15 +25,18 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.jedit.*;
 
 public class CurrentDirectoryMenu extends EnhancedMenu
 {
+	//{{{ CurrentDirectoryMenu constructor
 	public CurrentDirectoryMenu()
 	{
 		super("current-directory");
-	}
+	} //}}}
 
+	//{{{ setPopupMenuVisible() method
 	public void setPopupMenuVisible(boolean b)
 	{
 		if(b)
@@ -59,13 +65,15 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 			addSeparator();
 
 			JMenu current = this;
+
+			//{{{ ActionListener class
 			ActionListener listener = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
 					jEdit.openFile(view,evt.getActionCommand());
 				}
-			};
+			}; //}}}
 
 			// for filtering out backups
 			String backupPrefix = jEdit.getProperty("backup.prefix");
@@ -103,6 +111,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 					mi = new JMenuItem(name);
 					mi.setActionCommand(file.getPath());
 					mi.addActionListener(listener);
+					mi.setIcon(FileCellRenderer.fileIcon);
 
 					if(current.getItemCount() >= 20)
 					{
@@ -120,5 +129,5 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 		}
 
 		super.setPopupMenuVisible(b);
-	}
+	} //}}}
 }
