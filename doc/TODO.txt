@@ -16,6 +16,9 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- ditch monospaced font optimization
+- some fastrepaint bugs
+- changing font size causes some problems
 - option to disable buffer local properties
 - backspace with virtual caret: needs tweaks
 - new file: explicit folding: type {{{: fold marker doesn't appear
@@ -30,7 +33,6 @@ and quirks that I need to fix eventually.
   - mouse handler: properties, registers
   - text area transfer handler: opening files dependency
 - save help index
-- C+j SPACE: space not registered
 - indent folding: fold marker not always updated
 - hypersearch results & folds
 - format: preserve comment chars at start
@@ -53,6 +55,8 @@ and quirks that I need to fix eventually.
 - S+INS, etc in swing controls
 - vfs: a way of running awt requests not all at end
 - wrapped dock buttons broken
+- CA+PLUS +: bad
+- SLASH -vs- / shortcut issue
 
 + docs:
 
@@ -110,8 +114,6 @@ and quirks that I need to fix eventually.
 - tabs to spaces with rect select
 - more flexible mirror list
 
-- CA+PLUS +: bad
-
 check tips of the day
 - help:
   - titles in search are fucked
@@ -132,7 +134,6 @@ check tips of the day
 [error] ChunkCache: BUG: skew=1,out.size()=0
 [error] ChunkCache: BUG: skew=1,out.size()=1
 
-- SLASH -vs- / shortcut issue
 - VFS browser pathsEqual(): case sensitivity!
 - DnD still dosn't work as expected when draging from the same buffer,
 but differen text area (for example droping at the position where drag

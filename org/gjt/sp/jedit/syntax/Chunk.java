@@ -202,9 +202,6 @@ public class Chunk extends Token
 	public boolean visible;
 	public boolean initialized;
 
-	public boolean monospaced;
-	public int charWidth;
-
 	// set up after init()
 	public SyntaxStyle style;
 	// this is either style.getBackgroundColor() or
@@ -251,8 +248,6 @@ public class Chunk extends Token
 	{
 		if(!visible)
 			return 0.0f;
-		else if(monospaced)
-			return offset * charWidth;
 		else
 			return getPositions()[offset * 2];
 	} //}}}
@@ -266,16 +261,6 @@ public class Chunk extends Token
 				return offset + length;
 			else
 				return offset;
-		}
-		else if(monospaced)
-		{
-			x = Math.max(0,x);
-			float remainder = x % charWidth;
-			int i = (int)(x / charWidth);
-			if(round && remainder > charWidth / 2)
-				return offset + i + 1;
-			else
-				return offset + i;
 		}
 		else
 		{
@@ -306,8 +291,6 @@ public class Chunk extends Token
 		FontRenderContext fontRenderContext)
 	{
 		initialized = true;
-		if(style != null)
-			charWidth = style.getCharWidth();
 
 		if(!accessable)
 		{
@@ -318,12 +301,6 @@ public class Chunk extends Token
 			visible = false;
 			float newX = expander.nextTabStop(x,offset + length);
 			width = newX - x;
-		}
-		else if(charWidth != 0 && !Debug.DISABLE_MONOSPACE_HACK)
-		{
-			visible = monospaced = true;
-			str = new String(seg.array,seg.offset + offset,length);
-			width = charWidth * length;
 		}
 		else
 		{
