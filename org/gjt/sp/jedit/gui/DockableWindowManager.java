@@ -997,6 +997,51 @@ public class DockableWindowManager extends JPanel
 		repaint();
 	} //}}}
 
+	//{{{ paintChildren() method
+	public void paintChildren(Graphics g)
+	{
+		super.paintChildren(g);
+
+		if(resizing != null)
+		{
+			g.setColor(Color.darkGray);
+			Rectangle rect = new Rectangle(0,0,
+				PanelWindowContainer.SPLITTER_WIDTH - 2,
+				PanelWindowContainer.SPLITTER_WIDTH - 2);
+			if(resizing == top)
+			{
+				rect.x = top.dockablePanel.getX();
+				rect.y = resizePos + top.buttons.getHeight() + 2;
+				rect.width = top.dockablePanel.getWidth();
+			}
+			else if(resizing == left)
+			{
+				rect.x = resizePos + left.buttons.getWidth() + 2;
+				rect.y = left.dockablePanel.getY();
+				rect.height = left.dockablePanel.getHeight();
+			}
+			else if(resizing == bottom)
+			{
+				rect.x = bottom.dockablePanel.getX();
+				rect.y = getHeight() - bottom.buttons.getHeight() - resizePos
+					- PanelWindowContainer.SPLITTER_WIDTH + 2;
+				rect.width = bottom.dockablePanel.getWidth();
+			}
+			else if(resizing == right)
+			{
+				rect.x = getWidth() - right.buttons.getWidth() - resizePos
+					- PanelWindowContainer.SPLITTER_WIDTH + 2;
+				rect.y = right.dockablePanel.getY();
+				rect.height = right.dockablePanel.getHeight();
+			}
+			g.fillRect(rect.x,rect.y,rect.width,rect.height);
+		}
+	} //}}}
+
+	//{{{ Package-private members
+	PanelWindowContainer resizing;
+	int resizePos;
+
 	//{{{ Private members
 	private View view;
 	private Hashtable windows;

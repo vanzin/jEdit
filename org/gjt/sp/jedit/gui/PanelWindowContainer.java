@@ -252,6 +252,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ Package-private members
 	static final int SPLITTER_WIDTH = 10;
 	DockablePanel dockablePanel;
+	JPanel buttons;
 
 	//{{{ save() method
 	void save()
@@ -291,7 +292,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ Private members
 	private DockableWindowManager wm;
 	private String position;
-	private JPanel buttons;
 	private JButton closeBox;
 	private ButtonGroup buttonGroup;
 	private JToggleButton nullButton;
@@ -771,14 +771,31 @@ public class PanelWindowContainer implements DockableWindowContainer
 		class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
 		{
 			boolean canDrag;
-			int dragStartDimension;
 			Point dragStart;
 
 			//{{{ mousePressed() method
 			public void mousePressed(MouseEvent evt)
 			{
-				dragStartDimension = dimension;
-				dragStart = evt.getPoint();
+				if(canDrag)
+				{
+					wm.resizing = PanelWindowContainer.this;
+					wm.resizePos = dimension;
+					dragStart = evt.getPoint();
+					wm.repaint();
+				}
+			} //}}}
+
+			//{{{ mouseReleased() method
+			public void mouseReleased(MouseEvent evt)
+			{
+				if(canDrag)
+				{
+					wm.resizing = null;
+					dimension = wm.resizePos;
+					dragStart = null;
+					wm.revalidate();
+					wm.repaint();
+				}
 			} //}}}
 
 			//{{{ mouseMoved() method
@@ -846,33 +863,27 @@ public class PanelWindowContainer implements DockableWindowContainer
 				//{{{ Top...
 				if(position.equals(DockableWindowManager.TOP))
 				{
-					dimension = evt.getY()
-						+ dragStartDimension
-						- dragStart.y;
+					wm.resizePos = evt.getY()
+						- (getHeight() - dragStart.y);
 				} //}}}
 				//{{{ Left...
 				else if(position.equals(DockableWindowManager.LEFT))
 				{
-					dimension = evt.getX()
-						+ dragStartDimension
-						- dragStart.x;
+					wm.resizePos = evt.getX()
+						- (getWidth() - dragStart.x);
 				} //}}}
 				//{{{ Bottom...
 				else if(position.equals(DockableWindowManager.BOTTOM))
 				{
-					dimension += (dragStart.y - evt.getY());
+					wm.resizePos = (getHeight() - evt.getY());
 				} //}}}
 				//{{{ Right...
 				else if(position.equals(DockableWindowManager.RIGHT))
 				{
-					dimension += (dragStart.x - evt.getX());
+					wm.resizePos = (getWidth() - evt.getX());
 				} //}}}
 
-				if(dimension <= 0)
-					dimension = dragStartDimension;
-
-				wm.invalidate();
-				wm.validate();
+				wm.repaint();
 			} //}}}
 
 			//{{{ mouseExited() method
