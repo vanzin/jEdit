@@ -587,6 +587,7 @@ public class PluginJAR
 		classLoader.activate();
 
 		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
+		EditBus.send(new DynamicMenuUpdate("plugins"));
 	} //}}}
 
 	//{{{ uninit() method
