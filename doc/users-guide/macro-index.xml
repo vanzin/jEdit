@@ -32,69 +32,112 @@
 
 <listitem>
 	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
+	<para>
 		If no text is selected, the current line is copied to 
 		the clipboard, otherwise the selected text is copied 
 		to the clipboard. Some editors have this has the default copy behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
-<para><filename>Copy_Visible_Lines.bsh</filename></para>        <abstract><para>Copies the visible lines from the current                buffer to the Clipboard.  Lines that are not visible                becuase they are folded are not copied.        </para></abstract>
+<para><filename>Copy_Visible_Lines.bsh</filename></para>
+<para>Copies the visible lines from the current
+  buffer to the Clipboard.  Lines that are not visible
+  becuase they are folded are not copied.
+  </para>
 </listitem>
 
 <listitem>
 	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
+	<para>
 		If no text is selected, the current line is cut to the clipboard,
 		otherwise the selected text is cut to the clipboard. Some editors have this has the default cut behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
+	</para>
 </listitem>
 
 
 <listitem>
    <para><filename>Emacs_Next_Line.bsh</filename></para>
-   <abstract><para>
+   <para>
      Moves the cursor to the next line, centering 
      the current line in the middle of the text area
      if the cursor is at the bottom of the text area.
-   </para></abstract>
+   </para>
 </listitem>
 
 <listitem>
    <para><filename>Emacs_Previous_Line.bsh</filename></para>
-   <abstract><para>
+   <para>
      Moves the cursor to the previous line, centering 
      the current line in the middle of the text area
      if the cursor is at the top of the text area.
-   </para></abstract>
+   </para>
  </listitem>
 
 
 <listitem>
     <para><filename>Go_to_Column.bsh</filename></para>
-    <abstract><para>
-		Prompts the user for a column position on the 
-		current line, then moves the caret there.
-    </para></abstract>
+    <para>
+    Prompts the user for a column position on the 
+    current line, then moves the caret there.
+    </para>
 </listitem>
 
- <listitem>        <para><filename>Greedy_Backspace.bsh</filename></para>        <abstract><para>If buffer is using soft tabs,                this macro will backspace to the previous tab stop,                if all characters between the caret and the tab stop                are spaces.  In all other cases a single character is                removed.</para></abstract></listitem>
+<listitem>
+  <para><filename>Greedy_Backspace.bsh</filename></para>
+  <para>
+  If buffer is using soft tabs, this macro will backspace 
+  to the previous tab stop, if all characters between the 
+  caret and the tab stop are spaces. In all other cases a 
+  single character is removed.
+  </para>
+</listitem>
 
+<listitem>
+  <para><filename>Greedy_Delete.bsh</filename></para>
+  <para>
+    If a buffer is using soft tabs, this macro will 
+    delete tabSize number of spaces, if all the characters 
+    between the caret and the next tab stop are spaces. In 
+    all other cases a single character is deleted.
+  </para>
+</listitem>
+
+<listitem>
+  <para><filename>Greedy_Left.bsh</filename></para>
+  <para>
+    If a buffer is using soft tabs, this macro 
+    will move the caret tabSize spaces to the left,
+    if all the characters between the caret and the previous
+    tab stop are all spaces.  In all other cases, the caret
+    is moved a single character to the left.
+  </para>
+</listitem>
+
+<listitem>
+  <para><filename>Greedy_Right.bsh</filename></para>
+  <para>
+    If a buffer is using soft tabs, this macro will 
+    move the caret tabSize spaces to the right, 
+    if all the characters between the caret and the next
+    tab stop are all spaces.  In all other cases, the caret
+    is moved a single character to the right.
+  </para>
+</listitem>
 
 <listitem>
     <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
-    <abstract><para>
+    <para>
         Converts all keywords in the current buffer to upper case.
-    </para></abstract>
+    </para>
 </listitem>
  
 <listitem>
      <para><filename>Mode_Switcher.bsh</filename></para>
-     <abstract><para>
+     <para>
      Displays a modal dialog with the current buffer's mode in a text field,
      allowing one to change the mode by typing in its name.
-     </para></abstract>
+     </para>
      <para>
      <keycap>ENTER</keycap> selects the current mode; if the text is not a 
      valid mode, the dialog still dismisses, but a warning is logged to the
@@ -119,75 +162,95 @@
 
 <listitem>
     <para><filename>Browse_Directory.bsh</filename></para>
-    <abstract><para>
+    <para>
         Opens a directory supplied by the user in the file system
         browser.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
   <para><filename>Buffer_Switcher.bsh</filename></para>
-  <abstract><para>
+  <para>
     Displays a modal dialog listing all open buffers,
     allowing one to switch to and/or close buffers.
     <keycap>ENTER</keycap> switches to a buffer and closes the dialog, 
     <keycap>DELETE</keycap> closes a buffer, <keycap>SPACE</keycap> 
     switches to a buffer but does not close the dialog.
-  </para></abstract>
+  </para>
 </listitem>
 
 <listitem>
     <para><filename>Close_All_Except_Active.bsh</filename></para>
-    <abstract><para>
+    <para>
         Closes all files except the current buffer.
-    </para></abstract>
+    </para>
     <para>
         Prompts the user to save any buffer containing unsaved changes.
     </para>
 </listitem>
 
-<listitem>        <para><filename>Copy_Path_to_Clipboad.bsh</filename></para>        <abstract><para>Copies the current buffer's path                to the clipboard.        </para></abstract></listitem>
+<listitem>
+  <para><filename>Copy_Path_to_Clipboad.bsh</filename></para>
+  <para>Copies the current buffer's path
+    to the clipboard.
+  </para>
+</listitem>
 
-<listitem>        <para><filename>Copy_Name_to_Clipboad.bsh</filename></para>        <abstract><para>Copies the current buffer's filename                to the clipboard.        </para></abstract></listitem>
+<listitem>
+  <para><filename>Copy_Name_to_Clipboad.bsh</filename></para>
+  <para>Copies the current buffer's filename
+    to the clipboard.
+  </para>
+</listitem>
 
 <listitem>
    <para><filename>Delete_Current.bsh</filename></para>
-   <abstract><para>
+   <para>
     Deletes the current buffer's file on disk, but 
     doesn't close the buffer.
-   </para></abstract>
+   </para>
 </listitem>
 
 <listitem>
 	<para><filename>Glob_Close.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Closes all open buffers matching a given glob pattern.
-	</para></abstract>
+	</para>
 </listitem>
 
-<listitem>        <para><filename>Insert_Selection.bsh</filename></para>        <abstract><para>Assumes the current selection is         file path and tries replaces the selection with the        contents of the file.  Does nothing if no text is         selected or the selection spans multiple lines.        </para></abstract></listitem>
+<listitem>
+  <para><filename>Insert_Selection.bsh</filename></para>
+  <para>Assumes the current selection is
+    file path and tries replaces the selection with the
+    contents of the file.  Does nothing if no text is
+    selected or the selection spans multiple lines.
+  </para>
+</listitem>
 
-<listitem>        <para><filename>Next_Dirty_Buffer.bsh</filename></para>        <abstract><para>Switches to the next dirty buffer, if there is one.        </para></abstract></listitem>
+<listitem>
+  <para><filename>Next_Dirty_Buffer.bsh</filename></para>
+  <para>Switches to the next dirty buffer, if there is one.</para>
+</listitem>
 
 <listitem>
     <para><filename>Open_Path.bsh</filename></para>
-    <abstract><para>
+    <para>
         Opens the file supplied by the user in an input dialog.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Open_Selection.bsh</filename></para>
-    <abstract><para>
+    <para>
         Opens the file named by the current buffer's selected text.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
 	<para><filename>Toggle_ReadOnly.bsh</filename></para>
-	<abstract><para>
+	<para>
 	Toggles a local file's read-only flag. Uses platform-specific commands, so it only works on Windows, Unix and MacOS X.
-	</para></abstract>
+	</para>
 </listitem>
 
 </itemizedlist>
@@ -204,56 +267,56 @@
 
 <listitem>
 	<para><filename>Decrease_Font_Size.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Decreases the font size in the gutter and text area by 1 point.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
 	<para><filename>Increase_Font_Size.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Increases the font size in the gutter and text area by 1 point.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
     <para><filename>Open_Context_Menu.bsh</filename></para>
-    <abstract><para>
+    <para>
         Opens the text area context menu just below and to 
 		the right of the caret.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
 	<para><filename>Toggle_Bottom_Docking_Area.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Expands or collapses the bottom docking area, 
 		depending on it's current state.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
 	<para><filename>Toggle_Left_Docking_Area.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Expands or collapses the left docking area, 
 		depending on it's current state.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
 	<para><filename>Toggle_Right_Docking_Area.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Expands or collapses the right docking area, 
 		depending on it's current state.
-	</para></abstract>
+	</para>
 </listitem>
 
 <listitem>
 	<para><filename>Toggle_Top_Docking_Area.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Expands or collapses the top docking area, 
 		depending on it's current state.
-	</para></abstract>
+	</para>
 </listitem>
 
 </itemizedlist>
@@ -270,23 +333,23 @@
 
 <listitem>
     <para><filename>Create_Constructor.bsh</filename></para>
-    <abstract><para>
+    <para>
         Inserts constructor for the class at the current caret position.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Get_Class_Name.bsh</filename></para>
-    <abstract><para>
+    <para>
         Inserts a Java class name based upon the buffer's file name.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Get_Package_Name.bsh</filename></para>
-    <abstract><para>
+    <para>
         Inserts a plausible Java package name for the current buffer.
-    </para></abstract>
+    </para>
     <para>
         The macro compares the buffer's path name with the elements of the
         classpath being used by the jEdit session.  An error message will be
@@ -299,10 +362,10 @@
 
 <listitem>
     <para><filename>Make_Get_and_Set_Methods.bsh</filename></para>
-    <abstract><para>
+    <para>
         Creates <function>getXXX()</function> or <function>setXXX()</function>
         methods that can be pasted into the buffer text.
-    </para></abstract>
+    </para>
     <para>
         This macro presents a dialog that will <quote>grab</quote> the names
         of instance variables from the caret line of the current buffer
@@ -325,9 +388,9 @@
 
 <listitem>
     <para><filename>Preview_Javadoc_of_Buffer.bsh</filename></para>
-    <abstract><para>
+    <para>
       Create and display API documentation for the current buffer.
-    </para></abstract>
+    </para>
   <para>
     The macro includes various configuration variables you can change; see the comment at the beginning of the macro source for details.
   </para>
@@ -347,10 +410,10 @@
 
 <listitem>
     <para><filename>Display_Abbreviations.bsh</filename></para>
-    <abstract><para>
+    <para>
         Displays the abbreviations registered for each of jEdit's
         editing modes.
-    </para></abstract>
+    </para>
     <para>
         The macro provides a read-only view of the abbreviations
         contained in the <quote>Abbreviations</quote> option pane.  Pressing
@@ -364,10 +427,10 @@
 
 <listitem>
 	<para><filename>Display_Actions.bsh</filename></para>
-	<abstract><para>
+	<para>
 		Displays a list of all the actions known to jEdit categorised by
 		their action set.
-	</para></abstract>
+	</para>
 	<para>
 		This macro can be a useful reference if you want to use the jEdit 4.2 action bar.
 	</para>
@@ -375,9 +438,9 @@
 
 <listitem>
     <para><filename>Display_Shortcuts.bsh</filename></para>
-    <abstract><para>
+    <para>
         Displays a sorted list of the keyboard shortcuts currently in effect.
-    </para></abstract>
+    </para>
     <para>
         The macro provides a combined read-only view of command, macro
         and plugin shortcuts. Pressing a letter key will
@@ -391,11 +454,11 @@
 
 <listitem>
     <para><filename>Evaluate_Buffer_in_BeanShell.bsh</filename></para>
-    <abstract><para>
+    <para>
         Evaluates contents of current buffer as a BeanShell script,
         and opens a new
         buffer to receive any text output.
-    </para></abstract>
+    </para>
     <para>
         This is a quick way to test a macro script even before its text
         is saved to a file.  Opening a new buffer for output is a precaution
@@ -408,26 +471,26 @@
 
 <listitem>
   <para><filename>Hex_Convert.bsh</filename></para>
-  <abstract><para>
+  <para>
     Converts byte characters to their hex equivalent, and vice versa.
-  </para></abstract>
+  </para>
 </listitem>
 
 <listitem>
 	<para><filename>HyperSearch_Results_to_Buffer.bsh</filename></para>
-	<abstract><para>
+	<para>
 	Writes HyperSeach results to a new buffer.
-	</para></abstract>
+	</para>
 </listitem>
 
 
 <listitem>
     <para><filename>Include_Guard.bsh</filename></para>
-    <abstract><para>
+    <para>
 		Intended for C/C++ header files, this macro inserts a preprocessor
 		directive in the current buffer to ensure that the header is
 		included only once per compilation unit.
-    </para></abstract>
+    </para>
     <para>
         To use the macro, first place the caret at the beginning of the
 		header file before any uncommented text.  The macro will return to
@@ -438,10 +501,10 @@
 
 <listitem>
     <para><filename>Make_Bug_Report.bsh</filename></para>
-    <abstract><para>
+    <para>
       Creates a new buffer with installation and error information
 	    extracted from the activity log.
-    </para></abstract>
+    </para>
 	<para>
 	  The macro extracts initial messages written to the activity log
 	  describing the user's operating system, JDK, jEdit version and
@@ -453,20 +516,20 @@
 
 <listitem>
   <para><filename>Run_Script.bsh</filename></para>
-  <abstract><para>
+  <para>
     Runs script using interpreter based upon buffer's editing mode
     (by default, determined using file extension). You must have the
     appropriate interpreter (such as Perl, Python, or Windows Script Host)
     installed on your system.
-  </para></abstract>
+  </para>
 </listitem>
 
 <listitem>
     <para><filename>Show_Threads.bsh</filename></para>
-    <abstract><para>
+    <para>
       Displays in a tree format all running Java threads of the current
       Java Virtual Machine.
-    </para></abstract>
+    </para>
 </listitem>
 
 </itemizedlist>
@@ -484,9 +547,9 @@
 
 <listitem>
 	<para><filename>Insert_Buffer_Properties.bsh</filename></para>
-	<abstract><para>
+	<para>
 	Inserts buffer-local properties into the current buffer.
-	</para></abstract>
+	</para>
 	<para>
 	If the buffer's 
 	mode has a line comment defined, or comment start and end
@@ -496,25 +559,25 @@
 
 <listitem>
     <para><filename>jEdit_Properties.bsh</filename></para>
-    <abstract><para>
+    <para>
        Writes an unsorted list of jEdit properties in a new buffer.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Look_and_Feel_Properties.bsh</filename></para>
-    <abstract><para>
+    <para>
         Writes an unsorted list of the names of Java Look and Feel
         properties in a new buffer.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>System_Properties.bsh</filename></para>
-    <abstract><para>
+    <para>
         Writes an unsorted list of all Java system properties in a new
         buffer.
-    </para></abstract>
+    </para>
 </listitem>
 
 </itemizedlist>
@@ -530,10 +593,10 @@
 
 <listitem>
     <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
-    <abstract><para>
+    <para>
         Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
         text to each line in a group of selected lines.
-    </para></abstract>
+    </para>
     <para>
         Text is added after leading whitespace and before trailing whitespace.
         A dialog window receives input and <quote>remembers</quote> past entries.
@@ -542,25 +605,25 @@
 
 <listitem>
     <para><filename>Color_Picker.bsh</filename></para>
-    <abstract><para>
+    <para>
         Displays a color picker and inserts the selected color in
         hexadecimal format, prefixed with a <quote>#</quote>.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Duplicate_Line.bsh</filename></para>
-    <abstract><para>
+    <para>
         Duplicates the line on which the caret lies immediately
         beneath it and moves the caret to the new line.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Insert_Date.bsh</filename></para>
-    <abstract><para>
+    <para>
         Inserts the current date and time in the current buffer.
-    </para></abstract>
+    </para>
     <para>
         The inserted text includes a representation of the time in the
         <quote>Internet Time</quote> format.
@@ -569,17 +632,17 @@
 
 <listitem>
     <para><filename>Insert_Tag.bsh</filename></para>
-    <abstract><para>
+    <para>
         Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
         in an input dialog.  The tags will surround any selected text.
-    </para></abstract>
+    </para>
 </listitem>
 
 <listitem>
     <para><filename>Next_Char.bsh</filename></para>
-    <abstract><para>
+    <para>
         Finds next occurrence of character on current line.
-    </para></abstract>
+    </para>
     <para>
         The macro takes the next character typed after macro execution
         as the character being searched.  That character is not
@@ -596,18 +659,18 @@
 
 <listitem>
   <para><filename>Reverse_Lines.bsh</filename></para>
-  <abstract><para>
+  <para>
     Reverses the selected lines or the entire buffer if no
     lines are selected.  Does not support Rectangular
     Selections.
-  </para></abstract>
+  </para>
 </listitem>
 
 <listitem>
   <para><filename>Single_Space_Buffer.bsh</filename></para>
-  <abstract><para>
+  <para>
     Removes every second line, if they are all blank.
-  </para></abstract>
+  </para>
 </listitem>
 
 </itemizedlist>
