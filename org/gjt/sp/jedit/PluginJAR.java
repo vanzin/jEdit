@@ -807,8 +807,6 @@ public class PluginJAR
 				cache.cachedActionToggleFlags,
 				cache.actionsURI);
 		}
-		else
-			actions = new ActionSet();
 
 		if(cache.browserActionsURI != null
 			&& cache.cachedBrowserActionNames != null)
@@ -968,9 +966,6 @@ public class PluginJAR
 		{
 			actions = new ActionSet(this,null,null,
 				cache.actionsURI);
-			actions.setLabel(jEdit.getProperty(
-				"action-set.plugin",
-				new String[] { label }));
 			actions.load();
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
@@ -1010,6 +1005,13 @@ public class PluginJAR
 		{
 			DockableWindowManager.loadDockableWindows(this,
 				dockablesURI,cache);
+		}
+
+		if(label != null)
+		{
+			actions.setLabel(jEdit.getProperty(
+				"action-set.plugin",
+				new String[] { label }));
 		}
 
 		if(actions.size() != 0)

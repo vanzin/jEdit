@@ -59,6 +59,10 @@ this release.
 
 - The kill ring is saved between editing sessions.
 
+- The Latest Version plugin now shows the latest stable and development
+  version numbers, previously it only showed the latest development
+  version.
+
 }}}
 {{{ Optimizations
 
@@ -100,6 +104,11 @@ this release.
   delete the old file if the save failed, thus settings could be lost of
   the disk is almost full, etc. Now, files are only overwritten if the
   new settings are saved successfully.
+
+- Fixed file name glob for Pike mode (Peter Lundqvist).
+
+- Fixed possible NullPointerException in Shortcuts option pane when a
+  newly-installed plugin contains dockables but no actions.
 
 }}}
 {{{ API Changes

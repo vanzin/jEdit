@@ -35,7 +35,6 @@ and quirks that I need to fix eventually.
   							new VFS.DirectoryEntryCompare());
 - history text field tweak
 - search dialog: auto-focus fields show last values
-- persistent kill ring
 
 - aborts not always fired
 - globalColors setting:

@@ -204,8 +204,7 @@
 				FIRST_LINE_GLOB="&lt;?php" />
 
 <MODE NAME="pike"		FILE="pike.xml"
-				FILE_NAME_GLOB="*.pike"
-				FIRST_LINE_GLOB="#!/*pike*"/>
+				FILE_NAME_GLOB="*.(pike,pmod)" />
 
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"
 				FILE_NAME_GLOB="*.pls" />
