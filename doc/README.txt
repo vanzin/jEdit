@@ -1,12 +1,5 @@
 JEDIT 4.1 README
 
-* Contents
-
-- About jEdit
-- License
-- jEdit on the Internet
-- Libraries
-
 * About jEdit
 
 jEdit is a cross platform programmer's text editor written in Java.
@@ -83,32 +76,3 @@ can use the IRC plugin, available from <http://plugins.jedit.org>, for
 this purpose.
 
 You may also e-mail me directly by e-mailing <slava@jedit.org>.
-
-* Libraries
-
-jEdit depends on, and comes bundled with the following libraries:
-
-- gnu.regexp by the Free Software Foundation. jEdit bundles the
-  gnu.regexp 1.1.5 CVS snapshot.
-
-  gnu.regexp is released under the 'GNU Lesser General Public License'.
-  The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
-
-- AElfred XML parser by Microstar corporation. This class library is
-  released under its own, non-GPL license, which reads as follows:
-
-  "AElfred is free for both commercial and non-commercial use and
-  redistribution, provided that Microstar's copyright and disclaimer are
-  retained intact.  You are free to modify AElfred for your own use and
-  to redistribute AElfred with your modifications, provided that the
-  modifications are clearly documented."
-
-  The AElfred home page is located at <http://www.microstar.com>.
-
-- BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2b5 with the bsh.util and bsh.classpath packages removed.
-
-  BeanShell is released under a dual Sun Public License/GNU LGPL
-  license. See the BeanShell homepage for details.
-
-  The BeanShell homepage is located at <http://www.beanshell.org>.

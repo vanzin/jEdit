@@ -593,10 +593,12 @@ public class View extends JFrame implements EBComponent
 			if(parent instanceof JSplitPane)
 			{
 				JSplitPane parentSplit = (JSplitPane)parent;
+				int pos = parentSplit.getDividerLocation();
 				if(parentSplit.getLeftComponent() == comp)
 					parentSplit.setLeftComponent(editPane);
 				else
 					parentSplit.setRightComponent(editPane);
+				parentSplit.setDividerLocation(pos);
 			}
 			else
 			{
