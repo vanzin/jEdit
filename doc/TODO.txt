@@ -1,7 +1,8 @@
 TO DO
 
-- make sure there aren't any blatant slowdowns in the soft-wrap code
-- bizarre wrap-around bug
+- get rid of properties dir: people should write startup scripts instead;
+  expose public api for loading properties
+- hypersearch: pressing enter
 - select word: non-alpha single char
 - soft wrap to do:
   - use new offset conversion API throughout

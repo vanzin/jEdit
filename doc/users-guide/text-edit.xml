@@ -702,22 +702,25 @@
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find</guimenuitem> (shortcut:
     <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo>) displays
-    the search and replace dialog box. If text is selected and the selection
-    does not span a line break, the selected text becomes the default search
-    string.
-   </para>
-   <para>
-    If the selection does span one or more line breaks, the default
-    search string is empty, and the <guibutton>Search in Selection</guibutton>
-    and <guibutton>HyperSearch</guibutton>
-    buttons are pre-selected. Note that finding the next or previous
-    ocurrence cannot be constrained to a selected range; only
-    replacement and HyperSearch can be (see <xref linkend="hypersearch" />).
+    the search and replace dialog box.
    </para>
    <para>
     The search string can be entered in the <guibutton>Search for</guibutton>
     text field. This text field remembers previously entered strings; see
     <xref linkend="history" /> for details.
+   </para>
+   <para>
+    If text was selected in the text area and the selection
+    does not span a line break, the selected text becomes the default search
+    string.
+   </para>
+   <para>
+    If the selection consists of multiple lines, the
+    <guibutton>Search in Selection</guibutton>
+    and <guibutton>HyperSearch</guibutton>
+    buttons will be pre-selected instead. <!-- Note that finding the next or previous
+    occurrence cannot be constrained to a selected range; only
+    replacement and HyperSearch can be (see <xref linkend="hypersearch" />). -->
    </para>
    <para>
     The search can be made case insensitive (for example, searching for
@@ -772,82 +775,87 @@
     see <xref linkend="history" /> for details.
    </para>
    <para>
-    Clicking <guibutton>Replace</guibutton> will perform a replacement in each
-    text selection.
     Clicking <guibutton>Replace &amp; Find</guibutton> will perform a
-    replacement in each text selection and locate the next occurrence of the
-    search string. Clicking <guibutton>Replace All</guibutton> will perform a
-    replacement in each buffer to be searched.
+    replacement in the current selection and locate the next occurrence of the
+    search string. Clicking <guibutton>Replace All</guibutton> will replace all
+    occurrences of the search string with the replacement string in the current
+    search scope (which is either the selection, the current buffer, or a set of
+    buffers, as specified in the search and replace dialog box).
    </para>
-   <para>
-    In text replacement mode, the search string is replaced with the replacement
-    string. If the search is case-insensitive, jEdit attempts to modify the
-    case of the replacement string to match that of the particular instance
-    of the search string being replaced. For example, if you are searching
-    for <quote>label</quote> and replacing it with <quote>text</quote>, then
-    the following replacements will be made:
-   </para>
-   <itemizedlist>
-    <listitem><para><quote>String label</quote> becomes <quote>String text</quote>
-    </para></listitem>
-    <listitem><para><quote>setLabel</quote> becomes <quote>setText</quote>
-    </para></listitem>
-    <listitem><para><quote>DEFAULT_LABEL</quote> becomes <quote>DEFAULT_TEXT</quote>
-    </para></listitem>
-   </itemizedlist>
-   <para>
-    If regular expressions are enabled, positional parameters
-    (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
-    on) can be used to insert the contents of matched subexpressions in the
-    replacement text; see <xref linkend="regexps" /> for more information.
-   </para>
-   <para>
-    In BeanShell replacement mode, the search string is replaced with the return
-    value of a BeanShell snippet. The following predefined variables can be
-    referenced in the snippet:
-   </para>
-   <itemizedlist><listitem><para><varname>_0</varname> -- the text to be
-   replaced</para>
-   </listitem><listitem><para><varname>_1</varname> - <varname>_9</varname> --
-   if regular expressions are enabled, these contain the values of matched
-   subexpressions.
-   </para></listitem></itemizedlist>
-   <para>
-    BeanShell syntax and features are covered in great detail in
-    <xref linkend="writing-macros-part" />, but here are some examples:
-   </para>
-   <informalexample>
+   <sect3><title>Text Replace</title>
     <para>
-     To convert all HTML tags to lower case, search
-     for the following regular expression:
+     If the <guibutton>Text</guibutton> radio button is selected,
+     the search string is replaced with the replacement
+     string. If the search is case-insensitive, jEdit attempts to modify the
+     case of the replacement string to match that of the particular instance
+     of the search string being replaced. For example, if you are searching
+     for <quote>label</quote> and replacing it with <quote>text</quote>, then
+     the following replacements could be made:
     </para>
-    <programlisting><![CDATA[<(.*?)>]]></programlisting>
+    <itemizedlist>
+     <listitem><para><quote>String label</quote> would become <quote>String text</quote>
+     </para></listitem>
+     <listitem><para><quote>setLabel</quote> would become <quote>setText</quote>
+     </para></listitem>
+     <listitem><para><quote>DEFAULT_LABEL</quote> would become <quote>DEFAULT_TEXT</quote>
+     </para></listitem>
+    </itemizedlist>
     <para>
-     Replacing it with the following BeanShell snippet:
+     If regular expressions are enabled, positional parameters
+     (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
+     on) can be used to insert the contents of matched subexpressions in the
+     replacement string; see <xref linkend="regexps" /> for more information.
     </para>
-    <programlisting><![CDATA["<" + _1.toLowerCase() + ">"]]></programlisting>
-   </informalexample>
-   <informalexample>
+   </sect3>
+   <sect3><title>BeanShell Replace</title>
     <para>
-     To replace arithmetic expressions between curly braces with their result,
-     search for the following regular expression:
+     In BeanShell replacement mode, the search string is replaced with the return
+     value of a BeanShell snippet. The following predefined variables can be
+     referenced in the snippet:
     </para>
-    <programlisting><![CDATA[\{(.+)\}]]></programlisting>
+    <itemizedlist><listitem><para><varname>_0</varname> -- the text to be
+    replaced</para>
+    </listitem><listitem><para><varname>_1</varname> - <varname>_9</varname> --
+    if regular expressions are enabled, these contain the values of matched
+    subexpressions.
+    </para></listitem></itemizedlist>
     <para>
-     Replacing it with the following BeanShell snippet:
+     BeanShell syntax and features are covered in great detail in
+     <xref linkend="writing-macros-part" />, but here are some examples:
     </para>
-    <programlisting><![CDATA[eval(_1)]]></programlisting>
-   </informalexample>
-   <para>
-    These two examples only scratch the surface; the possibilities are endless.
-   </para>
+    <informalexample>
+     <para>
+      To convert all HTML tags to lower case, search
+      for the following regular expression:
+     </para>
+     <programlisting><![CDATA[<(.*?)>]]></programlisting>
+     <para>
+      Replacing it with the following BeanShell snippet:
+     </para>
+     <programlisting><![CDATA["<" + _1.toLowerCase() + ">"]]></programlisting>
+    </informalexample>
+    <informalexample>
+     <para>
+      To replace arithmetic expressions between curly braces with their result,
+      search for the following regular expression:
+     </para>
+     <programlisting><![CDATA[\{(.+)\}]]></programlisting>
+     <para>
+      Replacing it with the following BeanShell snippet:
+     </para>
+     <programlisting><![CDATA[eval(_1)]]></programlisting>
+    </informalexample>
+    <para>
+     These two examples only scratch the surface; the possibilities are endless.
+    </para>
+   </sect3>
   </sect2>
   <sect2 id="hypersearch"><title>HyperSearch</title>
    <para>
     If the <guibutton>HyperSearch</guibutton> check box in the search and
     replace dialog box is selected, clicking <guibutton>Find</guibutton> will
-    list all occurrences of the search string, rather than locating them one
-    by one.
+    list all occurrences of the search string in the current search scope,
+    instead of locating them one by one as an ordinary search would.
    </para>
    <para>
     By default, HyperSearch results are shown in a floating window;
@@ -864,8 +872,8 @@
   </sect2>
   <sect2><title>Multiple File Search</title>
    <para>
-    Searching, replacement and HyperSearch can also be performed in all
-    open buffers or all files in a directory.
+    Search and replace commands can be performed in more than
+    one file at a time.
    </para>
    <para>
     If the <guibutton>All buffers</guibutton> radio button in the search and
@@ -890,14 +898,14 @@
     text fields remember previously entered strings; see <xref linkend="history" />
     for details.
    </para>
-   <para>
-    Note that selecting the <guibutton>All Buffers</guibutton> or
+   <!-- <para>
+    Note that clicking the <guibutton>All Buffers</guibutton> or
     <guibutton>Directory</guibutton> radio buttons also selects the
     <guibutton>HyperSearch</guibutton> check box. This is merely for
-    convinience, however; normal searching is supported as well.
-   </para>
+    convinience, however; normal searching is supported for multiple files as well.
+   </para> -->
    <para>
-    Two convinience commands are provided for performing multiple file searches.
+    Two convenience commands are provided for performing multiple file searches.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Search in Open

@@ -210,7 +210,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
-		add(BorderLayout.CENTER,browserView = new BrowserView(this));
+		boolean splitHorizontally = false;
+		if(jEdit.getBooleanProperty("vfs.browser.splitHorizontally") && mode != BROWSER)
+			splitHorizontally = true;
+		add(BorderLayout.CENTER,browserView = new BrowserView(this,splitHorizontally));
 
 		propertiesChanged();
 

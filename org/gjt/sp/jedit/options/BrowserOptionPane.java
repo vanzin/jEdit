@@ -117,6 +117,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".currentBufferFilter"));
 		addComponent(currentBufferFilter);
+
+		/* split VFSFileDialog horizontally */
+		splitHorizontally = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".general.splitHorizontally"));
+		splitHorizontally.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".splitHorizontally"));
+		addComponent(splitHorizontally);
 	} //}}}
 
 	//{{{ _save() method
@@ -141,6 +148,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 			doubleClickClose.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
 			currentBufferFilter.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.splitHorizontally",
+			splitHorizontally.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -153,5 +162,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
 	private JCheckBox currentBufferFilter;
+	private JCheckBox splitHorizontally;
 	//}}}
 }

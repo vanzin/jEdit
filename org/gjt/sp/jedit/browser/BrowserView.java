@@ -45,9 +45,10 @@ import org.gjt.sp.jedit.*;
 public class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor
-	public BrowserView(VFSBrowser browser)
+	public BrowserView(VFSBrowser browser, boolean splitHorizontally)
 	{
 		this.browser = browser;
+		this.splitHorizontally = splitHorizontally;
 
 		parentModel = new DefaultListModel();
 		parentDirectories = new JList(parentModel);
@@ -75,7 +76,8 @@ public class BrowserView extends JPanel
 		parentScroller.setMinimumSize(new Dimension(0,0));
 		JScrollPane treeScroller = new JScrollPane(tree);
 		treeScroller.setMinimumSize(new Dimension(0,0));
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+		splitPane = new JSplitPane( 
+			splitHorizontally ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
 			parentScroller,treeScroller);
 
 		tmpExpanded = new Hashtable();
@@ -112,8 +114,8 @@ public class BrowserView extends JPanel
 		{
 			public void run()
 			{
-				int loc = jEdit.getIntegerProperty(
-					"vfs.browser.splitter",0);
+				String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
+				int loc = jEdit.getIntegerProperty(prop,0);
 				if(loc != 0)
 				{
 					splitPane.setDividerLocation(loc);
@@ -128,8 +130,8 @@ public class BrowserView extends JPanel
 	//{{{ removeNotify() method
 	public void removeNotify()
 	{
-		jEdit.setIntegerProperty("vfs.browser.splitter",
-			splitPane.getDividerLocation());
+		String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
+		jEdit.setIntegerProperty(prop,splitPane.getDividerLocation());
 
 		super.removeNotify();
 	} //}}}
@@ -307,6 +309,7 @@ public class BrowserView extends JPanel
 	private Hashtable currentlyLoading;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
+	private boolean splitHorizontally;
 
 	private FileCellRenderer renderer = new FileCellRenderer();
 

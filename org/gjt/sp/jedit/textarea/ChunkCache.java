@@ -66,7 +66,7 @@ class ChunkCache
 			LineInfo last = lineInfo[lastScreenLine];
 
 			if(offset >= last.offset
-				&& offset < last.offset + last.length)
+				&& offset <= last.offset + last.length)
 			{
 				updateChunksUpTo(lastScreenLine);
 				return lastScreenLine;
@@ -103,7 +103,7 @@ class ChunkCache
 				else if(info.physicalLine == line)
 				{
 					if(offset >= info.offset
-						&& offset < info.offset + info.length)
+						&& offset <= info.offset + info.length)
 					{
 						screenLine = i;
 						break;
@@ -206,11 +206,17 @@ class ChunkCache
 		}
 		else
 		{
-			physicalLine = textArea
-				.getFoldVisibilityManager()
-				.getNextVisibleLine(lineInfo[
+			int prevPhysLine = lineInfo[
 				firstScreenLine - 1]
-				.physicalLine);
+				.physicalLine;
+			if(prevPhysLine == -1)
+				physicalLine = -1;
+			else
+			{
+				physicalLine = textArea
+					.getFoldVisibilityManager()
+					.getNextVisibleLine(prevPhysLine);
+			}
 		}
 
 		// TODO: Assumptions...

@@ -402,6 +402,7 @@ public class OffsetManager
 		{
 			lineInfo[startLine + i] &= ~(FOLD_LEVEL_VALID_MASK
 				| CONTEXT_VALID_MASK);
+			lineContext[startLine + i] = null;
 		}
 	} //}}}
 

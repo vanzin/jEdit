@@ -728,12 +728,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="replace-all" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		SearchAndReplace.replaceAll(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="replace-and-find-next" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		if(SearchAndReplace.replace(view))

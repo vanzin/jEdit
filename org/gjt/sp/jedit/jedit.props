@@ -87,6 +87,9 @@ sortRecent=false
 # Default firewall properties
 firewall.enabled=false
 
+# Keep dialog on by default
+search.keepDialog.toggle=true
+
 #}}}
 
 #{{{ Buffer settings
@@ -336,6 +339,7 @@ vfs.browser.sortMixFilesAndDirs=false
 vfs.browser.sortIgnoreCase=true
 vfs.browser.doubleClickClose=false
 vfs.browser.currentBufferFilter=true
+vfs.browser.splitHorizontally=false
 
 # Can be one of: buffer, home, favorites, last
 vfs.browser.defaultPath=buffer
