@@ -412,7 +412,8 @@ public class MiscUtilities
 			return false;
 
 		String protocol = str.substring(0,cIndex);
-		if(VFSManager.getVFSForProtocol(protocol) != null)
+		VFS vfs = VFSManager.getVFSForProtocol(protocol);
+		if(vfs != null && !(vfs instanceof UrlVFS))
 			return true;
 
 		try

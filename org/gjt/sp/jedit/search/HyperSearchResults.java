@@ -497,8 +497,15 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				{
 					resultCount += node.getChildAt(i).getChildCount();
 				}
+
+				String property = "hypersearch-results.result-caption";
+				if (bufferCount == 1)
+				{
+					property += resultCount == 1 ? "1" : "2";
+				}
+
 				Object[] pp = { node.toString(), new Integer(resultCount), new Integer(bufferCount) };
-				setText(jEdit.getProperty("hypersearch-results.result-caption",pp));
+				setText(jEdit.getProperty(property,pp));
 			}
 			else if(node.getUserObject() instanceof String)
 			{
