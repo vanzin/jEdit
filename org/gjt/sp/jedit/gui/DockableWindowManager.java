@@ -885,13 +885,14 @@ public class DockableWindowManager extends JPanel
 			int _height = size.height - _topButtons.height - _bottomButtons.height;
 
 			Dimension _top = top.getPreferredSize();
-			int topHeight = Math.min(_height,_top.height);
 			Dimension _left = left.getPreferredSize();
-			int leftWidth = Math.min(_width,_left.width);
 			Dimension _bottom = bottom.getPreferredSize();
-			int bottomHeight = Math.min(_height,_bottom.height);
 			Dimension _right = right.getPreferredSize();
-			int rightWidth = Math.min(_width,_right.width);
+
+			int topHeight = Math.min(Math.max(0,_height - _bottom.height),_top.height);
+			int leftWidth = Math.min(Math.max(0,_width - _right.width),_left.width);
+			int bottomHeight = Math.min(Math.max(0,_height - topHeight),_bottom.height);
+			int rightWidth = Math.min(Math.max(0,_width - leftWidth),_right.width);
 
 			if(alternateLayout)
 			{

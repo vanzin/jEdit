@@ -382,7 +382,7 @@
    </para></listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing
-   the following in one of the first 10 lines of the buffer, where
+   the following in one of the first or last 10 lines of the buffer, where
    <replaceable>mode</replaceable> is either <quote>soft</quote> or
    <quote>hard</quote>, and
    <replaceable>column</replaceable> is the desired wrap margin position:
@@ -397,6 +397,11 @@
     is inserted or removed.
     If you set the wrap column to zero while soft wrap is enabled, text will be
     wrapped to the width of the text area.
+   </para>
+   <para>
+    If end of line markers are enabled in the <guibutton>Text Area</guibutton>
+    pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box, a colon (<quote>:</quote>) is painted at the end of wrapped lines.
    </para>
   </sect2>
   <sect2><title>Hard Wrap</title>

@@ -42,7 +42,7 @@
    itself.
   </para>
   <para>
-   When jEdit loads a file, it checks the first 10 lines for
+   When jEdit loads a file, it checks the first and last 10 lines for
    colon-enclosed name/value pairs. The following example changes
    the indent width to 4 characters, enables soft tabs, and sets
    the buffer's edit mode to Perl:

@@ -3194,9 +3194,35 @@ public class Buffer implements EBComponent
 			unsetProperty("maxLineLen");
 		//}}}
 
-		int lastLine = Math.min(10,getLineCount() - 1);
-		String prop = getText(0,getLineEndOffset(lastLine) - 1);
+		int lastLine = Math.min(9,getLineCount() - 1);
+		parseBufferLocalProperties(getText(0,getLineEndOffset(lastLine) - 1));
 
+		// first line for last 10 lines, make sure not to overlap
+		// with the first 10
+		int firstLine = Math.max(lastLine + 1, getLineCount() - 10);
+		if(firstLine < getLineCount())
+		{
+			int length = getLineEndOffset(getLineCount() - 1) 
+				- (getLineStartOffset(firstLine) + 1);
+			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
+		}
+
+		//XXX: Why the fuck is this here???
+
+		// Create marker positions
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			int pos = marker.getPosition();
+			if(pos > getLength())
+				marker.setPosition(getLength());
+			marker.createPosition();
+		}
+	} //}}}
+
+	//{{{ parseBufferLocalProperties() method
+	private void parseBufferLocalProperties(String prop)
+	{
 		StringBuffer buf = new StringBuffer();
 		String name = null;
 		boolean escape = false;
@@ -3259,18 +3285,6 @@ public class Buffer implements EBComponent
 				buf.append(c);
 				break;
 			}
-		}
-
-		//XXX: Why the fuck is this here???
-
-		// Create marker positions
-		for(int i = 0; i < markers.size(); i++)
-		{
-			Marker marker = (Marker)markers.elementAt(i);
-			int pos = marker.getPosition();
-			if(pos > getLength())
-				marker.setPosition(getLength());
-			marker.createPosition();
 		}
 	} //}}}
 

@@ -35,6 +35,7 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -91,6 +92,7 @@ public class JEditTextArea extends JComponent
 		bracketLine = bracketPosition = -1;
 		blink = true;
 		lineSegment = new Segment();
+		returnValue = new Point();
 		//}}}
 
 		//{{{ Initialize the GUI
@@ -550,9 +552,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollToCaret(boolean doElectricScroll)
 	{
-		int offset = caret - getLineStartOffset(caretLine);
-		int virtualCaretLine = physicalToVirtual(caretLine);
-
 		// visibleLines == 0 before the component is realized
 		// we can't do any proper scrolling then, so we have
 		// this hack...
@@ -563,106 +562,112 @@ public class JEditTextArea extends JComponent
 			return;
 		}
 
-		int lineCount = getVirtualLineCount();
+		//{{{ STAGE 1 -- determine if the caret is visible.
+		int _electricScroll = (doElectricScroll ? electricScroll : 0);
+		int screenLine = getScreenLineOfOffset(caret);
+		int offset = caret - getLineStartOffset(caretLine);
+		Point point;
+		if(screenLine != -1)
+		{
+			// It's visible, but is it too close to the borders?
+			int height = painter.getFontMetrics().getHeight();
 
-		int electricScroll;
+			Rectangle rect = new Rectangle(0,height * _electricScroll,
+				painter.getWidth(),visibleLines * height
+				- height * _electricScroll * 2);
 
-		if(doElectricScroll && visibleLines > this.electricScroll * 2)
-			electricScroll = this.electricScroll;
+			point = offsetToXY(caretLine,offset,returnValue);
+			if(rect.contains(point))
+				return;
+		}
 		else
-			electricScroll = 0;
+			point = null;
+		//}}}
 
-		boolean changed = false;
-
-		int _firstLine = (firstLine == 0 ? 0 : firstLine + electricScroll);
-		int _lastLine = firstLine + visibleLines - electricScroll;
-
-		if(virtualCaretLine > _firstLine
-			&& (virtualCaretLine < _lastLine
-			|| firstLine + visibleLines >= lineCount))
+		//{{{ STAGE 2 -- scroll vertically
+		// If second case after &&, will get handled below
+		if(screenLine == -1 && physicalToVirtual(caretLine) == firstLine - 1)
 		{
-			// vertical scroll position is correct already
+			firstLine = Math.max(0,firstLine - _electricScroll - 1);
+			physFirstLine = virtualToPhysical(firstLine);
 		}
-		else if(_firstLine - virtualCaretLine > visibleLines
-			|| virtualCaretLine - _lastLine > visibleLines)
+		else if(screenLine == -1)
 		{
-			int startLine, endLine;
-			Selection s = getSelectionAtOffset(caret);
-			if(s == null)
+			physFirstLine = caretLine;
+
+			ArrayList out = new ArrayList();
+			int count = 0;
+
+			// keep chunking lines until we have visibleLines / 2
+			while(count <= visibleLines / 2)
 			{
-				startLine = endLine = virtualCaretLine;
+				if(foldVisibilityManager.isLineVisible(physFirstLine))
+				{
+					out.clear();
+					chunkCache.lineToChunkList(buffer,physFirstLine,out);
+					if(out.size() == 0)
+						count++; // empty line
+					else
+						count += out.size();
+				}
+
+				if(physFirstLine == 0)
+					break;
+				else
+				{
+					physFirstLine = foldVisibilityManager
+						.getPrevVisibleLine(physFirstLine);
+				}
 			}
-			else
-			{
-				startLine = physicalToVirtual(s.startLine);
-				endLine = physicalToVirtual(s.endLine);
-			}
 
-			if(endLine - startLine <= visibleLines)
-				firstLine = (startLine + endLine - visibleLines) / 2;
-			else
-				firstLine = physicalToVirtual(caretLine) - visibleLines / 2;
-
-			firstLine = Math.min(firstLine,getVirtualLineCount()
-				- visibleLines);
-			firstLine = Math.max(firstLine,0);
-
-			changed = true;
+			firstLine = physicalToVirtual(physFirstLine);
 		}
-		else if(virtualCaretLine < _firstLine)
+		else if(screenLine < _electricScroll)
 		{
-			firstLine = Math.max(0,virtualCaretLine - electricScroll);
-
-			changed = true;
+			firstLine = Math.max(0,firstLine - _electricScroll + screenLine);
+			physFirstLine = virtualToPhysical(firstLine);
 		}
-		else if(virtualCaretLine >= _lastLine)
+		else if(screenLine >= visibleLines - _electricScroll)
 		{
-			firstLine = (virtualCaretLine - visibleLines)
-				+ electricScroll + 1;
-			if(firstLine >= getVirtualLineCount() - visibleLines)
-				firstLine = getVirtualLineCount() - visibleLines;
-
-			changed = true;
+			firstLine = Math.min(
+				Math.max(0,foldVisibilityManager.getVirtualLineCount() - visibleLines),
+				firstLine + screenLine - visibleLines + _electricScroll + 1);
+			physFirstLine = virtualToPhysical(firstLine);
 		}
 
-		// I'll make a proper fix in pre5. hopefully no-one will
-		// notice this temporary hack.
-		int x = (softWrap ? 0 : offsetToX(caretLine,offset));
+		recalculateLastPhysicalLine();
 
-		if(x < 0)
+		chunkCache.setFirstLine(firstLine);
+
+		if(point == null)
+			point = offsetToXY(caretLine,offset,returnValue);
+		//}}}
+
+		//{{{ STAGE 3 -- scroll horizontally
+		if(point.x < 0)
 		{
 			horizontalOffset = Math.min(0,horizontalOffset
-				- x + charWidth + 5);
-			changed = true;
+				- point.x + charWidth + 5);
 		}
-		else if(x >= painter.getWidth() - charWidth - 5)
+		else if(point.x >= painter.getWidth() - charWidth - 5)
 		{
 			horizontalOffset = horizontalOffset +
-				(painter.getWidth() - x) - charWidth - 5;
-			changed = true;
-		}
+				(painter.getWidth() - point.x)
+				- charWidth - 5;
+		} //}}}
 
-		if(changed)
-		{
-			if(firstLine < 0)
-				firstLine = 0;
+		//{{{ STAGE 4 -- update some stuff
+		updateScrollBars();
+		painter.repaint();
+		gutter.repaint();
 
-			physFirstLine = virtualToPhysical(firstLine);
-			recalculateLastPhysicalLine();
+		view.synchroScrollVertical(this,firstLine);
+		view.synchroScrollHorizontal(this,horizontalOffset);
 
-			chunkCache.setFirstLine(firstLine);
-
-			updateScrollBars();
-			painter.repaint();
-			gutter.repaint();
-
-			view.synchroScrollVertical(this,firstLine);
-			view.synchroScrollHorizontal(this,horizontalOffset);
-
-			// fire events for both a horizontal and vertical scroll
-			fireScrollEvent(true);
-			fireScrollEvent(false);
-		}
+		// fire events for both a horizontal and vertical scroll
+		fireScrollEvent(true);
+		fireScrollEvent(false);
+		//}}}
 	} //}}}
 
 	//{{{ addScrollListener() method
@@ -714,6 +719,9 @@ public class JEditTextArea extends JComponent
 	{
 		chunkCache.updateChunksUpTo(line);
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		if(lineInfo.physicalLine == -1)
+			return -1;
+
 		return buffer.getLineStartOffset(lineInfo.physicalLine)
 			+ lineInfo.offset;
 	} //}}}
@@ -728,6 +736,9 @@ public class JEditTextArea extends JComponent
 	{
 		chunkCache.updateChunksUpTo(line);
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		if(lineInfo.physicalLine == -1)
+			return -1;
+
 		return buffer.getLineStartOffset(lineInfo.physicalLine)
 			+ lineInfo.offset + lineInfo.length;
 	} //}}}
@@ -1889,15 +1900,11 @@ forward_scan:		do
 	 */
 	public void centerCaret()
 	{
-		int gotoLine = virtualToPhysical(firstLine + visibleLines / 2);
-
-		if(gotoLine < 0 || gotoLine >= getLineCount())
-		{
+		int offset = getScreenLineStartOffset(visibleLines / 2);
+		if(offset == -1)
 			getToolkit().beep();
-			return;
-		}
-
-		setCaretPosition(getLineStartOffset(gotoLine));
+		else
+			setCaretPosition(offset);
 	} //}}}
 
 	//{{{ setCaretPosition() method
@@ -4709,6 +4716,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
 	Vector selection;
+
+	// used to store offsetToXY() results
+	Point returnValue;
 
 	//{{{ isCaretVisible() method
 	/**

@@ -593,6 +593,21 @@ public class ChunkCache
 		}
 	} //}}}
 
+	//{{{ lineToChunkList() method
+	void lineToChunkList(Buffer buffer, int physicalLine, ArrayList out)
+	{
+		TextAreaPainter painter = textArea.getPainter();
+
+		buffer.getLineText(physicalLine,textArea.lineSegment);
+
+		lineToChunkList(textArea.lineSegment,
+			buffer.markTokens(physicalLine).getFirstToken(),
+			painter.getStyles(),painter.getFontRenderContext(),
+			painter,textArea.softWrap
+			? textArea.wrapMargin
+			: 0.0f,out);
+	} //}}}
+
 	//{{{ updateChunksUpTo() method
 	void updateChunksUpTo(int lastScreenLine)
 	{
@@ -641,7 +656,6 @@ public class ChunkCache
 		// to uphold this assumption.
 
 		Buffer buffer = textArea.getBuffer();
-		TextAreaPainter painter = textArea.getPainter();
 
 		out.clear();
 
@@ -670,14 +684,7 @@ public class ChunkCache
 					continue;
 				}
 
-				buffer.getLineText(physicalLine,textArea.lineSegment);
-
-				lineToChunkList(textArea.lineSegment,
-					buffer.markTokens(physicalLine).getFirstToken(),
-					painter.getStyles(),painter.getFontRenderContext(),
-					painter,textArea.softWrap
-					? textArea.wrapMargin
-					: 0.0f,out);
+				lineToChunkList(buffer,physicalLine,out);
 
 				info.firstSubregion = true;
 
