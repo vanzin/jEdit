@@ -7,6 +7,14 @@ JEDIT 4.1 VERSION HISTORY
 - Added AppleScript syntax highlighting (Kris Kopicki)
 - Improved Informix-4GL syntax highlighting (Stefan Jozsa)
 
++ Bug Fixes
+
+- Macro listing code was completely broken in 4.1pre3; only the first
+  macro in each directory would be shown.
+- Disabled Java-style auto indent for LISP and Scheme modes since in
+  fact it is quite inappropriate there.
+- Gutter highlight interval setting was broken.
+
 * Version 4.1pre3
 
 Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker, Matthias Schneider
