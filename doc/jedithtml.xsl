@@ -71,8 +71,8 @@
 
 <!-- {{{ Stuff for FAQ -->
 
-<xsl:param name="generate.qandaset.toc">1</xsl:param>
-<xsl:param name="generate.qandaset.div">1</xsl:param>
+<!-- <xsl:param name="generate.qandaset.toc">1</xsl:param> -->
+<!-- <xsl:param name="generate.qandaset.div">1</xsl:param> -->
 
 <!-- xsl:param name="local.l10n.xml" select="document('')"/ -->
 

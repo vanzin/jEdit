@@ -1,5 +1,28 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1.1
+
++ Enhancements:
+
+- If regular expressions are enabled, Search->Find Previous now shows a
+  dialog box message instead of silently searching forwards.
+
+- Improved C pre-processor syntax highlighting.
+
++ Bug Fixes:
+
+- jEdit no longer minimizes and then restores windows when files are
+  opened through the edit server on windows. This was done to work
+  around an apparent bug in the Windows JRE. If you still experience the
+  problem, execute this BeanShell code:
+
+  jEdit.setBooleanProperty("server.brokenToFront",true);
+
+- Some HTTP proxies decompress GZip streams for whatever reason. The
+  plugin manager now checks if the stream starts with the GZip magic
+  characters; if not, it parses it without decompression, instead of
+  throwing an exception.
+
 * Version 4.1final
 
 Thanks to Alex Jacoby, Andreas Mross, Kris Kopicki, and Patrick Tingen

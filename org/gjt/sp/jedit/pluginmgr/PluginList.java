@@ -34,6 +34,12 @@ import org.gjt.sp.jedit.*;
  */
 class PluginList
 {
+	/**
+	 * Magic numbers used for auto-detecting GZIP files.
+	 */
+	public static final int GZIP_MAGIC_1 = 0x1f;
+	public static final int GZIP_MAGIC_2 = 0x8b;
+
 	Vector plugins;
 	Hashtable pluginHash;
 	Vector pluginSets;
@@ -49,8 +55,19 @@ class PluginList
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
 
-		parser.parse(null,null,new BufferedReader(new InputStreamReader(
-			new GZIPInputStream(new URL(path).openStream()),"UTF8")));
+		InputStream in = new BufferedInputStream(new URL(path).openStream());
+		if(in.markSupported())
+		{
+			in.mark(2);
+			int b1 = in.read();
+			int b2 = in.read();
+			in.reset();
+
+			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+				in = new GZIPInputStream(in);
+		}
+
+		parser.parse(null,null,new InputStreamReader(in,"UTF8"));
 	}
 
 	void addPlugin(Plugin plugin)
