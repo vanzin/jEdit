@@ -41,15 +41,42 @@ public class KeyEventWorkaround
 		//{{{ KEY_PRESSED...
 		case KeyEvent.KEY_PRESSED:
 			// get rid of keys we never need to handle
-			if(keyCode == KeyEvent.VK_CONTROL ||
-				keyCode == KeyEvent.VK_SHIFT ||
-				keyCode == KeyEvent.VK_ALT ||
-				keyCode == KeyEvent.VK_META ||
-				keyCode == '\0')
+			switch(keyCode)
+			{
+			case KeyEvent.VK_CONTROL:
+			case KeyEvent.VK_SHIFT:
+			case KeyEvent.VK_ALT:
+			case KeyEvent.VK_META:
+			case '\0':
 				return null;
 
-			if(!OperatingSystem.isMacOS())
-				handleBrokenKeys(evt,keyCode);
+			case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
+			case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
+			case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
+			case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
+			case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
+			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
+			case KeyEvent.VK_SEPARATOR: case KeyEvent.VK_SUBTRACT:
+			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
+				// if NumLock is on, then ignore the numeric
+				// keypad codes; if NumLock off, ignore the
+				// resulting KeyTyped
+				if(Toolkit.getDefaultToolkit()
+					.getLockingKeyState(
+					KeyEvent.VK_NUM_LOCK))
+				{
+					return null;
+				}
+				else
+				{
+					last = LAST_NUMKEYPAD;
+				}
+				break;
+			default:
+				if(!OperatingSystem.isMacOS())
+					handleBrokenKeys(evt,keyCode);
+				break;
+			}
 
 			return evt;
 		//}}}
@@ -72,6 +99,20 @@ public class KeyEventWorkaround
 				if((evt.isControlDown() ^ evt.isAltDown())
 					|| evt.isMetaDown())
 					return null;
+
+				// if the last key was a numeric keypad key
+				// and NumLock is off, filter it out
+				if(last == LAST_NUMKEYPAD && System.currentTimeMillis()
+					- lastKeyTime < 750)
+				{
+					last = LAST_NOTHING;
+					if(ch >= '0' && ch <= '9' || ch == '.'
+						|| ch == '/' || ch == '*'
+						|| ch == '-' || ch == '+')
+					{
+						return null;
+					}
+				}
 
 				// if the last key was a broken key, filter
 				// out all except 'a'-'z' that occur 750 ms after.
@@ -107,6 +148,7 @@ public class KeyEventWorkaround
 	private static final int LAST_ALTGR = 1;
 	private static final int LAST_ALT = 2;
 	private static final int LAST_BROKEN = 3;
+	private static final int LAST_NUMKEYPAD = 3;
 	//}}}
 
 	//{{{ handleBrokenKeys() method

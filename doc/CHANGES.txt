@@ -33,8 +33,13 @@ JEDIT 4.0 VERSION HISTORY
   the state of the 'show hidden files' menu item in the browser's
   "Commands" menu would be reversed
 - Fixed dockable panel layout bug
+- 'Select All' button in close dialog box didn't work
+- Shortcuts assigned to CA+x where x was a letter didn't work. I hope
+  the fix for this didn't break AltGR sequences; let me know if it did
+- 'Run Last Macro' and 'Run Other Macro' commands assumed the macro was
+  written in BeanShell (Mike Dillon)
 
-+ API Changes
++ API Additions
 
 - View.addToolBar(int group, int layer, Component comp) method
   (Mike Dillon)

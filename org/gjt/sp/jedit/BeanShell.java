@@ -174,23 +174,7 @@ public class BeanShell
 	 */
 	public static void showRunScriptDialog(View view)
 	{
-		String[] paths = GUIUtilities.showVFSFileDialog(view,
-			null,JFileChooser.OPEN_DIALOG,true);
-		if(paths != null)
-		{
-			Buffer buffer = view.getBuffer();
-			try
-			{
-				buffer.beginCompoundEdit();
-
-				for(int i = 0; i < paths.length; i++)
-					runScript(view,paths[i],true,false);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-		}
+		Macros.showRunScriptDialog(view);
 	} //}}}
 
 	//{{{ runScript() method
