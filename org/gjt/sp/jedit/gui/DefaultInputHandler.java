@@ -231,8 +231,7 @@ public class DefaultInputHandler extends InputHandler
 				Toolkit.getDefaultToolkit().beep();
 				// F10 should be passed on, but C+e F10
 				// shouldn't
-				repeatCount = 0;
-				repeat = false;
+				repeatCount = 1;
 				evt.consume();
 				setCurrentBindings(bindings);
 			}
@@ -328,19 +327,7 @@ public class DefaultInputHandler extends InputHandler
 			invokeAction((EditAction)o);
 		}
 		else
-		{
-			// otherwise, reset to default map and do user input
-			setCurrentBindings(bindings);
-
-			if(repeat && Character.isDigit(c))
-			{
-				repeatCount *= 10;
-				repeatCount += (c - '0');
-				view.getStatus().setMessage(null);
-			}
-			else
-				userInput(c);
-		}
+			userInput(c);
 	} //}}}
 
 	//{{{ setModifierMapping() method

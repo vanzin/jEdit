@@ -20,6 +20,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="action-bar" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.actionBar();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="add-explicit-fold">
 	<CODE>
 		textArea.addExplicitFold();
@@ -790,12 +796,6 @@
 <ACTION NAME="replace-in-selection" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		SearchAndReplace.replace(view);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="repeat" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		view.getInputHandler().setRepeatEnabled(true);
 	</CODE>
 </ACTION>
 

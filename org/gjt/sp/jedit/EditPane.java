@@ -121,7 +121,7 @@ public class EditPane extends JPanel implements EBComponent
 					&& (bufferSwitcher == null
 					|| !bufferSwitcher.isPopupVisible()))
 				{
-					focusOnTextArea();
+					textArea.grabFocus();
 				}
 			}
 		});
@@ -190,14 +190,13 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void focusOnTextArea()
 	{
-		textArea.grabFocus();
-		// trying to work around buggy focus handling in some
-		// Java versions
-//		if(!textArea.hasFocus())
-//		{
-//			textArea.processFocusEvent(new FocusEvent(textArea,
-//				FocusEvent.FOCUS_GAINED));
-//		}
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				textArea.grabFocus();
+			}
+		});
 	} //}}}
 
 	//{{{ getTextArea() method

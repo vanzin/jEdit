@@ -332,14 +332,14 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		if(message == null)
 		{
 			InputHandler inputHandler = view.getInputHandler();
-			if(inputHandler.isRepeatEnabled())
+			/* if(inputHandler.isRepeatEnabled())
 			{
 				int repeatCount = inputHandler.getRepeatCount();
 
 				this.message.setText(jEdit.getProperty("view.status.repeat",
 					new Object[] { repeatCount == 1 ? "" : String.valueOf(repeatCount) }));
 			}
-			else if(view.getMacroRecorder() != null)
+			else */ if(view.getMacroRecorder() != null)
 				this.message.setText(jEdit.getProperty("view.status.recording"));
 			else
 				this.message.setText(" ");
