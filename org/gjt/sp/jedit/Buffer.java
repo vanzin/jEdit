@@ -258,16 +258,6 @@ public class Buffer
 				{
 					writeLock();
 
-					if(contentMgr.getLength() != 0)
-					{
-						firePreContentRemoved(0,0,
-							offsetMgr.getLineCount(),
-							contentMgr.getLength() - 1);
-						fireContentRemoved(0,0,
-							offsetMgr.getLineCount(),
-							contentMgr.getLength() - 1);
-					}
-
 					// theoretically a segment could
 					// have seg.offset != 0 but
 					// SegmentBuffer never does that

@@ -338,7 +338,8 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Scrolling
 
-	public void scrollTest(boolean paint)
+	//{{{ Debugging code
+	/* public void scrollTest(boolean paint)
 	{
 		Image im = painter.createImage(painter.getWidth(),painter.getHeight());
 		Graphics gfx = im.getGraphics();
@@ -355,7 +356,7 @@ public class JEditTextArea extends JComponent
 				painter.paintComponent(gfx);
 		}
 		System.err.println(System.currentTimeMillis() - start);
-	}
+	} */ //}}}
 
 	//{{{ getFirstLine() method
 	/**
@@ -702,6 +703,9 @@ public class JEditTextArea extends JComponent
 		} //}}}
 
 		//{{{ Scroll horizontally
+		if(!displayManager.isLineVisible(line))
+			return;
+
 		Point point = offsetToXY(line,offset,returnValue);
 		if(point == null)
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine

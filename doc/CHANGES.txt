@@ -218,6 +218,13 @@ Sebastien Pierre for contributing to this release.
     if(baz) {
         quux();
     }
+
+- Fixed possible exceptions thrown when the buffer is narrowed to a
+  range, and with the caret outside this range.
+
+- Action bar's action list wasn't updated if plugins were added or
+  removed at runtime.
+
 }}}
 {{{ API Additions
 
