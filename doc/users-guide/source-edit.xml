@@ -222,9 +222,9 @@
    has commands which make inserting comments more convenient.
   </para>
   <para>
-   Comment strings are mode-specific, and modes such as HTML where
+   Comment strings are mode-specific, and some in some modes such as HTML
    different parts of a buffer can have different comment strings
-   (for example, in HTML text and inline JavaScript) are handled correctly.
+   (in the case of HTML, in HTML text and inline JavaScript).
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source

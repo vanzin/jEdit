@@ -33,7 +33,7 @@ release.
   pre-releases and especially in 4.0, the editor was noticably less
   responsive if soft wrap was on. No longer.
 
-- NEWS.txt now documents major changes between jEdit 4.0 and 4.1.
+- Documentation updates.
 
 - Added some more tips of the day.
 

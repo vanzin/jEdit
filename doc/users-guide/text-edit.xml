@@ -310,6 +310,19 @@
    This feature be used to avoid retyping
    previously entered identifiers in program source, for example.
   </para>
+  <sidebar><title>For power users</title>
+   <para>
+    The default behavior of the
+    <keycombo><keycap>Control</keycap><keycap>Left</keycap></keycombo> and
+    <keycombo><keycap>Control</keycap><keycap>Right</keycap></keycombo> commands is to
+    stop both at the beginning and the end of each word. However this can be
+    changed by remapping these keystrokes to alternative actions whose names end
+    with <guimenuitem>(Eat Whitespace)</guimenuitem> in the
+    <guibutton>Shortcuts</guibutton> pane of the
+    <guimnenu>Utilities</guimnenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
+   </para>
+  </sidebar>
  </sect1>
  <sect1 id="lines"><title>Working With Lines</title>
   <para>
@@ -537,6 +550,22 @@
    scrolling one text area in a split view will scroll all other text areas
    in the view. Has no effect if the view is not split.
   </para>
+  <sidebar><title>Mouse Wheel Scrolling</title>
+   <para>
+    If you have a mouse with a scroll wheel and are running Java 2
+    version 1.4, you can use the
+    wheel to scroll up and down in the text area. Various modifier keys
+    change the action of the wheel:
+   </para>
+
+   <itemizedlist>
+    <listitem><para><keycap>Shift</keycap> - scrolls an entire page at a time.</para></listitem>
+    <listitem><para><keycap>Control</keycap> - scrolls a single line at a time.</para></listitem>
+    <listitem><para><keycap>Alt</keycap> - moves the caret up and down instead of scrolling.</para></listitem>
+    <listitem><para><keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>
+     - extends the selection up and down instead of scrolling.</para></listitem>
+   </itemizedlist>
+  </sidebar>
  </sect1>
  <sect1 id="text-transfer"><title>Transferring Text</title>
   <para>
@@ -1048,7 +1077,7 @@
     <guibutton>Directory</guibutton> button.
    </para>
   </sect2>
-  <sect2><title>The Search Bar</title>
+  <sect2 id="search-bar"><title>The Search Bar</title>
    <para>
     The search bar feature provides a convenient way to search in the current
     buffer without
@@ -1087,7 +1116,9 @@
     and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
     searches for the next and previous occurrence, respectively.
     Once the desired occurrence has been located, pressing <keycap>Escape</keycap>
-    returns keyboard focus to the text area.
+    returns keyboard focus to the text area. Unless the search bar is set to be
+    always visible (see above), pressing <keycap>Escape</keycap> will also hide
+    the search bar.
    </para>
    <note>
     <para>

@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- xslt mode: $foo-bar not done properly in XPath
 - popups still positioned poorly
 - broken auto-indent
 - final optimization for OffsetManager: scan to zero or scan to end
@@ -13,10 +14,9 @@ and quirks that I need to fix eventually.
 - rect select and trailing whitespace
 - user's guide:
   - vertical paste & rect select insertion
-  - mention whitespace eating word actions
-  - ESCAPE hides search bar
-  - wheel mouse modifiers
-  - part II
+  - mention word splitting mechanism
+  - updating-modes.xml - see above
+  - examples of regexp matching
   - part III
   - part IV
   - part V
