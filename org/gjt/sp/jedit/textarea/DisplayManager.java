@@ -647,7 +647,7 @@ public class DisplayManager
 		public void reset()
 		{
 			offsetMgr.removeAnchor(this);
-			System.err.println(buffer + ": reset: here is a scan for you");
+			org.gjt.sp.util.Log.log(org.gjt.sp.util.Log.ERROR,this,buffer + ": reset: here is a scan for you");
 			physicalLine = offsetMgr.getLineCount();
 			scrollLine = 0;
 			for(int i = 0; i < physicalLine; i++)
