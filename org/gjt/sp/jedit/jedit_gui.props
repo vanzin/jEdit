@@ -3,7 +3,7 @@
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ###
-### Copyright (C) 1998, 2001 Slava Pestov
+### Copyright (C) 1998, 2002 Slava Pestov
 ###
 
 #{{{ Default user catalog file
@@ -547,14 +547,11 @@ buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
 #{{{ Troubleshooting menu
-troubleshooting=about-troubleshooting \
-		 - \
-		 log-viewer \
-		 update-log \
-		 - \
-		 keyboard-tester
+troubleshooting=log-viewer \
+		update-log \
+		- \
+		keyboard-tester
 troubleshooting.label=Troubleshooting
-about-troubleshooting.label=About the Troubleshooting Menu
 log-viewer.label=Activity Log
 update-log.label=Update Activity Log on Disk
 keyboard-tester.label=Keyboard Tester
@@ -1289,7 +1286,8 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu, label font:
 options.appearance.secondaryFont=List, tree, table, text field font:
-options.appearance.textColors=Use jEdit text area color scheme in all text components
+options.appearance.textColors=Use jEdit text area color scheme in all text \
+	components (experimental)
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 #}}}

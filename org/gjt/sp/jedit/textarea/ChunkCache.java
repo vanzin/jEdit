@@ -89,6 +89,10 @@ public class ChunkCache
 
 				if(ch == '\t' || (ch == ' ' && wrapMargin != 0.0f))
 				{
+					/* Create chunk with all text from
+					 * last position up to here, and wrap
+					 * if necessary. */
+					//{{{
 					if(i != flushIndex)
 					{
 						Chunk newChunk = new Chunk(
@@ -99,28 +103,30 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-
-						if(end != null
-							&& addedNonWhiteSpace
-							&& wrapMargin != 0
-							&& x > wrapMargin)
-						{
-							if(first != null)
-								out.add(first);
-							first = new Chunk(firstNonWhiteSpace,flushIndex);
-							first.next = end.next;
-							end.next = null;
-
-							x = x + firstNonWhiteSpace - endX;
-						}
-
-						if(first == null)
-							first = newChunk;
-
-						seenNonWhiteSpace = true;
-						addedNonWhiteSpace = true;
 					}
 
+					if(end != null
+						&& addedNonWhiteSpace
+						&& wrapMargin != 0
+						&& x > wrapMargin)
+					{
+						if(first != null)
+							out.add(first);
+						first = new Chunk(firstNonWhiteSpace,flushIndex);
+						first.next = end.next;
+						end.next = null;
+
+						x = x + firstNonWhiteSpace - endX;
+					}
+
+					if(first == null)
+						first = current;
+
+					if(i != flushIndex)
+						seenNonWhiteSpace = true;
+					//}}}
+
+					//{{{ Create ' ' chunk
 					if(ch == ' ')
 					{
 						Chunk newChunk = new Chunk(
@@ -135,7 +141,8 @@ public class ChunkCache
 						}
 
 						x += current.width;
-					}
+					} //}}}
+					//{{{ Create '\t' chunk
 					else if(ch == '\t')
 					{
 						Chunk newChunk = new Chunk(
@@ -153,7 +160,7 @@ public class ChunkCache
 						current.width = newX - x;
 						x = newX;
 						current.length = 1;
-					}
+					} //}}}
 
 					if(!seenNonWhiteSpace)
 						firstNonWhiteSpace = x;
@@ -165,6 +172,8 @@ public class ChunkCache
 					endX = x;
 
 					flushIndex = i + 1;
+
+					addedNonWhiteSpace = seenNonWhiteSpace;
 				}
 				else if(i == tokenListOffset + tokens.length - 1)
 				{
@@ -190,13 +199,11 @@ public class ChunkCache
 
 						x = x + firstNonWhiteSpace - endX;
 					}
-					else
 
 					if(first == null)
 						first = newChunk;
 
 					seenNonWhiteSpace = true;
-					addedNonWhiteSpace = true;
 				}
 			}
 
