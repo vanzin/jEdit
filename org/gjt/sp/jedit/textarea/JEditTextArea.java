@@ -259,6 +259,10 @@ public class JEditTextArea extends JComponent
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
+			physLastLine = virtualToPhysical(Math.min(
+				getVirtualLineCount() - 1,
+				firstLine + visibleLines));
+
 			propertiesChanged();
 
 			updateScrollBars();
@@ -336,6 +340,10 @@ public class JEditTextArea extends JComponent
 
 		physFirstLine = virtualToPhysical(firstLine);
 
+		physLastLine = virtualToPhysical(Math.min(
+			getVirtualLineCount() - 1,
+			firstLine + visibleLines));
+
 		maxHorizontalScrollWidth = 0;
 
 		chunkCache.setFirstLine(firstLine);
@@ -375,9 +383,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getLastPhysicalLine()
 	{
-		return virtualToPhysical(Math.min(
-			getVirtualLineCount() - 1,
-			firstLine + visibleLines));
+		return physLastLine;
 	} //}}}
 
 	//{{{ getHorizontalOffset() method
@@ -629,6 +635,9 @@ public class JEditTextArea extends JComponent
 				firstLine = 0;
 
 			physFirstLine = virtualToPhysical(firstLine);
+			physLastLine = virtualToPhysical(Math.min(
+				getVirtualLineCount() - 1,
+				firstLine + visibleLines));
 
 			chunkCache.setFirstLine(firstLine);
 
@@ -707,7 +716,7 @@ public class JEditTextArea extends JComponent
 	public int getScreenLineEndOffset(int line)
 	{
 		if(line == visibleLines)
-			return buffer.getLineEndOffset(getLastPhysicalLine());
+			return buffer.getLineEndOffset(physLastLine);
 
 		chunkCache.updateChunksUpTo(line + 1);
 		ChunkCache.LineInfo curr = chunkCache.getLineInfo(line);
@@ -763,8 +772,8 @@ public class JEditTextArea extends JComponent
 
 		if(lineInfo.physicalLine == -1)
 		{
-			return getLineEndOffset(virtualToPhysical(
-				getVirtualLineCount() - 1)) - 1;
+			return getLineEndOffset(foldVisibilityManager
+				.getLastVisibleLine()) - 1;
 		}
 		else
 		{
@@ -806,7 +815,7 @@ public class JEditTextArea extends JComponent
 		{
 			if(line < firstLine)
 				screenLine = 0;
-			else if(line > getLastPhysicalLine())
+			else if(line > physLastLine)
 				screenLine = visibleLines;
 			chunkCache.updateChunksUpTo(screenLine);
 		}
@@ -830,6 +839,22 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Painting
 
+	//{{{ invalidateScreenLineRange() method
+	/**
+	 * Marks a range of screen lines as needing a repaint.
+	 * @param start The first line
+	 * @param end The last line
+	 * @since jEdit 4.0pre4
+	 */
+	public void invalidateScreenLineRange(int start, int end)
+	{
+		FontMetrics fm = painter.getFontMetrics();
+		int y = start * fm.getHeight();
+		int height = (end + 1) * fm.getHeight();
+		painter.repaint(0,y,painter.getWidth(),height);
+		gutter.repaint(0,y,gutter.getWidth(),height);
+	} //}}}
+
 	//{{{ invalidateLine() method
 	/**
 	 * Marks a line as needing a repaint.
@@ -837,63 +862,81 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLine(int line)
 	{
-		if(line < physFirstLine)
+		if(line < physFirstLine || line > physLastLine)
 			return;
 
-		int lineCount = buffer.getLineCount();
-		int virtualLineCount = foldVisibilityManager
-			.getVirtualLineCount();
+		int startLine = -1;
+		int endLine = -1;
 
-		if(line >= lineCount)
-			line = (line - lineCount) + virtualLineCount;
-		else
-			line = foldVisibilityManager.physicalToVirtual(line);
+		for(int i = 0; i <= visibleLines; i++)
+		{
+			chunkCache.updateChunksUpTo(i);
+			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
+			if(info.physicalLine == line)
+			{
+				if(startLine == -1)
+					startLine = i;
+			}
+			else if(info.physicalLine == line + 1)
+			{
+				if(endLine == -1)
+					endLine = i - 1;
+				else
+					break;
+			}
+		}
 
-		if(line > firstLine + visibleLines + 1)
-			return;
+		if(endLine == -1)
+			endLine = visibleLines;
 
-		FontMetrics fm = painter.getFontMetrics();
-		int y = lineToY(line) + fm.getDescent() + fm.getLeading();
-		painter.repaint(0,y,painter.getWidth(),fm.getHeight());
-		gutter.repaint(0,y,gutter.getWidth(),fm.getHeight());
+		invalidateScreenLineRange(startLine,endLine);
 	} //}}}
 
 	//{{{ invalidateLineRange() method
 	/**
 	 * Marks a range of physical lines as needing a repaint.
-	 * @param firstLine The first line to invalidate
-	 * @param lastLine The last line to invalidate
+	 * @param start The first line to invalidate
+	 * @param end The last line to invalidate
 	 */
-	public void invalidateLineRange(int firstLine, int lastLine)
+	public void invalidateLineRange(int start, int end)
 	{
-		if(lastLine < firstLine)
+		if(end < start)
 		{
-			int tmp = lastLine;
-			lastLine = firstLine;
-			firstLine = tmp;
+			int tmp = end;
+			end = start;
+			start = end;
 		}
 
-		if(lastLine < physFirstLine)
+		if(end < physFirstLine || start > physLastLine)
 			return;
 
-		int lineCount = buffer.getLineCount();
-		int virtualLineCount = foldVisibilityManager
-			.getVirtualLineCount();
+		int startScreenLine = -1;
+		int endScreenLine = -1;
 
-		if(firstLine >= lineCount)
-			firstLine = (firstLine - lineCount) + virtualLineCount;
-		else
-			firstLine = foldVisibilityManager.physicalToVirtual(firstLine);
+		for(int i = 0; i <= visibleLines; i++)
+		{
+			chunkCache.updateChunksUpTo(i);
+			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
+			if(info.physicalLine == start)
+			{
+				if(startScreenLine == -1)
+					startScreenLine = i;
+			}
+			else if(info.physicalLine == endScreenLine + 1)
+			{
+				if(endScreenLine == -1)
+					endScreenLine = i - 1;
+				else
+					break;
+			}
+		}
 
-		if(firstLine > firstLine + visibleLines + 1)
-			return;
+		if(startScreenLine == -1)
+			startScreenLine = 0;
+		if(endScreenLine == -1)
+			endScreenLine = visibleLines;
 
-		if(lastLine >= lineCount)
-			lastLine = (lastLine - lineCount) + virtualLineCount;
-		else
-			lastLine = foldVisibilityManager.physicalToVirtual(lastLine);
-
-		invalidateVirtualLineRange(firstLine,lastLine);
+		invalidateScreenLineRange(startScreenLine,endScreenLine);
 	} //}}}
 
 	//{{{ invalidateSelectedLines() method
@@ -910,21 +953,6 @@ public class JEditTextArea extends JComponent
 			Selection s = (Selection)selection.elementAt(i);
 			invalidateLineRange(s.startLine,s.endLine);
 		}
-	} //}}}
-
-	//{{{ invalidateVirtualLineRange() method
-	/**
-	 * Marks a range of virtual lines as needing a repaint.
-	 * @param firstLine The first line to invalidate
-	 * @param lastLine The last line to invalidate
-	 */
-	public void invalidateVirtualLineRange(int firstLine, int lastLine)
-	{
-		FontMetrics fm = painter.getFontMetrics();
-		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
-		int height = (lastLine - firstLine + 1) * fm.getHeight();
-		painter.repaint(0,y,painter.getWidth(),height);
-		gutter.repaint(0,y,gutter.getWidth(),height);
 	} //}}}
 
 	//}}}
@@ -4627,6 +4655,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 
+		if(foldVisibilityManager != null)
+		{
+			physLastLine = virtualToPhysical(Math.min(
+				getVirtualLineCount() - 1,
+				firstLine + visibleLines));
+		}
+
 		propertiesChanged();
 
 		chunkCache.recalculateVisibleLines();
@@ -4692,7 +4727,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean blink;
 
 	private int firstLine;
-	private int physFirstLine; // only used when fold structure changes
+	private int physFirstLine;
+	private int physLastLine;
 
 	private int visibleLines;
 	private int electricScroll;
@@ -5383,10 +5419,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 			{
 				updateScrollBars();
-
-				invalidateVirtualLineRange(
-					physicalToVirtual(startLine),
-					firstLine + visibleLines);
+				invalidateLineRange(startLine,physLastLine);
 			}
 		} //}}}
 	} //}}}

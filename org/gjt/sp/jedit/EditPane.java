@@ -422,6 +422,8 @@ public class EditPane extends JPanel implements EBComponent
 
 		textArea.setMiddleMousePasteEnabled(jEdit.getBooleanProperty(
 			"view.middleMousePaste"));
+
+		textArea.propertiesChanged();
 	} //}}}
 
 	//{{{ loadBufferSwitcher() method
