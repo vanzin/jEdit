@@ -63,6 +63,10 @@ Thanks to Thomas Alspaugh for contributing to this release.
 - Control-clicking in a read-only buffer would beep, even if the click
   location was not beyond the end of a line.
 
+- Fix possible deadlock when calling VFSManager.waitForRequests() from
+  an EditBus message handler for BufferUpdate.CREATED or
+  EditPaneUpdate.BUFFER_CHANGED.
+
 }}}
 
 }}}

@@ -1423,6 +1423,8 @@ public class jEdit
 
 		path = MiscUtilities.constructPath(parent,path);
 
+		Buffer newBuffer;
+
 		synchronized(bufferListLock)
 		{
 			Buffer buffer = getBuffer(path);
@@ -1456,20 +1458,20 @@ public class jEdit
 					props.put(Buffer.ENCODING,entry.encoding);
 			}
 
-			Buffer newBuffer = new Buffer(path,newFile,false,props);
+			newBuffer = new Buffer(path,newFile,false,props);
 
 			if(!newBuffer.load(view,false))
 				return null;
 
 			addBufferToList(newBuffer);
-
-			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
-
-			if(view != null)
-				view.setBuffer(newBuffer);
-
-			return newBuffer;
 		}
+
+		EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
+
+		if(view != null)
+			view.setBuffer(newBuffer);
+
+		return newBuffer;
 	} //}}}
 
 	//{{{ openTemporary() method
