@@ -199,7 +199,7 @@ implements WorkThreadProgressListener
 		if(!isOK)
 			return null;
 
-		if(filename != null)
+		if(filename != null && filename.length() != 0)
 		{
 			String path = browser.getDirectory();
 			return new String[] { MiscUtilities.constructPath(

@@ -6,6 +6,11 @@ JEDIT 4.0 VERSION HISTORY
 
 - Interilis syntax highlighting (Claude Eisenhut)
 
++ Bug Fixes
+
+- Select Open File; press Enter first; then choose a file to open. Bang,
+  an error message. Now fixed
+
 * Version 4.0final
 
 + Enhancements
