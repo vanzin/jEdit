@@ -395,6 +395,11 @@ public class CompleteWord extends JWindow
 			return text;
 		}
 
+		public int hashCode()
+		{
+			return text.hashCode();
+		}
+
 		public boolean equals(Object obj)
 		{
 			if(obj instanceof Completion)
