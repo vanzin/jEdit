@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,8 +93,6 @@ public class BrowserView extends JPanel
 
 		add(BorderLayout.CENTER,splitPane);
 
-		currentlyLoading = new Hashtable();
-
 		propertiesChanged();
 	} //}}}
 
@@ -165,16 +163,10 @@ public class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	public void directoryLoaded(String path, String canonPath, Vector directory)
+	public void directoryLoaded(DefaultMutableTreeNode node,
+		String path, Vector directory)
 	{
-		System.err.println("loaded " + path + ": "
-			+ currentlyLoading);
-		DefaultMutableTreeNode currentlyLoadingTreeNode
-			= (DefaultMutableTreeNode)currentlyLoading.get(path);
-
-		currentlyLoading.remove(path);
-
-		if(currentlyLoadingTreeNode == rootNode)
+		if(node == rootNode)
 		{
 			parentModel.removeAllElements();
 			String parent = path;
@@ -197,7 +189,7 @@ public class BrowserView extends JPanel
 			parentDirectories.ensureIndexIsVisible(parentModel.getSize() - 1);
 		}
 
-		currentlyLoadingTreeNode.removeAllChildren();
+		node.removeAllChildren();
 
 		Vector toExpand = new Vector();
 
@@ -208,16 +200,16 @@ public class BrowserView extends JPanel
 				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
 					directory.elementAt(i);
 				boolean allowsChildren = (file.type != VFS.DirectoryEntry.FILE);
-				DefaultMutableTreeNode node = new DefaultMutableTreeNode(file,allowsChildren);
-				currentlyLoadingTreeNode.add(node);
+				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file,allowsChildren);
+				node.add(newNode);
 				if(tmpExpanded.get(file.path) != null)
-					toExpand.addElement(new TreePath(node.getPath()));
+					toExpand.addElement(new TreePath(newNode.getPath()));
 			}
 		}
 
 		// fire events
-		model.reload(currentlyLoadingTreeNode);
-		tree.expandPath(new TreePath(currentlyLoadingTreeNode.getPath()));
+		model.reload(node);
+		tree.expandPath(new TreePath(node.getPath()));
 
 		// expand branches that were expanded before
 		for(int i = 0; i < toExpand.size(); i++)
@@ -290,12 +282,6 @@ public class BrowserView extends JPanel
 		splitPane.setBorder(null);
 	} //}}}
 
-	//{{{ isLoading() method
-	public boolean isLoading()
-	{
-		return currentlyLoading.size() != 0;
-	} //}}}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -308,7 +294,6 @@ public class BrowserView extends JPanel
 	private Hashtable tmpExpanded;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
-	private Hashtable currentlyLoading;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
 	private boolean splitHorizontally;
@@ -367,8 +352,6 @@ public class BrowserView extends JPanel
 	private void loadDirectory(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
-		currentlyLoading.put(path,node);
-
 		if(node == rootNode)
 		{
 			parentModel.removeAllElements();
@@ -397,7 +380,7 @@ public class BrowserView extends JPanel
 			}
 		}
 
-		browser.loadDirectory(path,node == rootNode);
+		browser.loadDirectory(node,path,node == rootNode);
 	} //}}}
 
 	//{{{ showFilePopup() method

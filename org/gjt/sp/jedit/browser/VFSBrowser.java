@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.browser;
 import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -333,7 +334,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			//
 			// to avoid causing '> 1 request' errors, don't reload
 			// directory if request already active
-			if(browserView.isLoading())
+			if(requestRunning)
 				return;
 
 			// save a file -> sends vfs update. if a VFS file dialog box
@@ -341,7 +342,18 @@ public class VFSBrowser extends JPanel implements EBComponent
 			// VFSUpdate will be delivered before the directory is loaded,
 			// and before the path is set.
 			if(path != null)
-				browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
+			{
+				try
+				{
+					requestRunning = true;
+
+					browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
+				}
+				finally
+				{
+					requestRunning = false;
+				}
+			}
 		}
 	} //}}}
 
@@ -497,7 +509,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.DELETE,this,
-			session,vfs,path,null));
+			session,vfs,path,null,null));
 	} //}}}
 
 	//{{{ rename() method
@@ -523,7 +535,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			session,vfs,from,to));
+			session,vfs,from,to,null));
 	} //}}}
 
 	//{{{ mkdir() method
@@ -562,7 +574,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null));
+			session,vfs,newDirectory,null,null));
 	} //}}}
 
 	//{{{ newFile() method
@@ -661,7 +673,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ Package-private members
 
 	//{{{ loadDirectory() method
-	void loadDirectory(String path, boolean root)
+	void loadDirectory(DefaultMutableTreeNode node, String path, boolean root)
 	{
 		loadingRoot = root;
 
@@ -689,15 +701,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,this,
-			session,vfs,path,null));
+			session,vfs,path,null,node));
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(final String path,
-		final String canonPath,
+	void directoryLoaded(final DefaultMutableTreeNode node, final String path,
 		final VFS.DirectoryEntry[] list)
 	{
-		System.err.println("dl: " + path + "::" + canonPath);
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -705,9 +715,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(loadingRoot)
 				{
 					// This is the new, canonical path
-					VFSBrowser.this.path = canonPath;
-					if(!pathField.getText().equals(canonPath))
-						pathField.setText(canonPath);
+					VFSBrowser.this.path = path;
+					if(!pathField.getText().equals(path))
+						pathField.setText(path);
 					pathField.addCurrentToHistory();
 				}
 
@@ -754,7 +764,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 					}
 				}
 
-				browserView.directoryLoaded(path,canonPath,
+				browserView.directoryLoaded(node,path,
 					directoryVector);
 			}
 		});

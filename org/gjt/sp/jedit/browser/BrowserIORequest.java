@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.jEdit;
@@ -67,9 +68,11 @@ public class BrowserIORequest extends WorkRequest
 	 * @param browser The VFS browser instance
 	 * @param path1 The first path name to operate on
 	 * @param path2 The second path name to operate on
+	 * @param node Only used for type == LIST_DIRECTORY
 	 */
 	public BrowserIORequest(int type, VFSBrowser browser,
-		Object session, VFS vfs, String path1, String path2)
+		Object session, VFS vfs, String path1, String path2,
+		DefaultMutableTreeNode node)
 	{
 		this.type = type;
 		this.browser = browser;
@@ -77,6 +80,7 @@ public class BrowserIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path1 = path1;
 		this.path2 = path2;
+		this.node = node;
 	} //}}}
 
 	//{{{ run() method
@@ -139,6 +143,7 @@ public class BrowserIORequest extends WorkRequest
 	private VFS vfs;
 	private String path1;
 	private String path2;
+	private DefaultMutableTreeNode node;
 	//}}}
 
 	//{{{ listDirectory() method
@@ -154,8 +159,6 @@ public class BrowserIORequest extends WorkRequest
 		{
 			setAbortable(true);
 
-			// directoryLoaded() needs original path to work
-			// correctly
 			canonPath = vfs._canonPath(session,path1,browser);
 
 			directory = vfs._listDirectory(session,canonPath,browser);
@@ -184,7 +187,7 @@ public class BrowserIORequest extends WorkRequest
 		}
 
 		setAbortable(false);
-		browser.directoryLoaded(path1,canonPath,directory);
+		browser.directoryLoaded(node,canonPath,directory);
 	} //}}}
 
 	//{{{ delete() method

@@ -52,6 +52,9 @@ ant
 # Build LatestVersion.jar
 (cd jars/LatestVersion && ant)
 
+# Build QuickNotepad.jar
+(cd jars/QuickNotepad && ant)
+
 # Create installer filelists
 sh installer/mk_filelist.sh
 

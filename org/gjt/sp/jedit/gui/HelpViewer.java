@@ -206,7 +206,10 @@ public class HelpViewer extends JFrame implements EBComponent
 		else
 		{
 			shortURL = url;
-			url = baseURL + '/' + url;
+			if(baseURL.endsWith("/"))
+				url = baseURL + url;
+			else
+				url = baseURL + '/' + url;
 		}
 
 		// reset default cursor so that the hand cursor doesn't
@@ -505,7 +508,7 @@ public class HelpViewer extends JFrame implements EBComponent
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x + 17, cellRect.y - 1);
+					return new Point(cellRect.x + 14, cellRect.y);
 				}
 			}
 			return null;

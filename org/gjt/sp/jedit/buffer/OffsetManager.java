@@ -299,7 +299,8 @@ public class OffsetManager
 			{
 				for(int i = startLine; i > 0; i--)
 				{
-					if(buffer.isFoldStart(i - 1) && buffer.getFoldLevel(i) <= foldLevel)
+					if(/* buffer.isFoldStart(i - 1)
+						&& */ buffer.getFoldLevel(i) <= foldLevel)
 					{
 						visible = (lineInfo[i] & VISIBLE_MASK);
 						break;

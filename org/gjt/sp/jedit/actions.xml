@@ -400,7 +400,7 @@
 
 <ACTION NAME="io-progress-monitor">
 	<CODE>
-		new IOProgressMonitor(view);
+		new IOProgressMonitor();
 	</CODE>
 </ACTION>
 
