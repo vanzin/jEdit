@@ -1334,8 +1334,10 @@ public class View extends JFrame implements EBComponent
 	//{{{ handleEditPaneUpdate() method
 	private void handleEditPaneUpdate(EditPaneUpdate msg)
 	{
-		if(msg.getEditPane().getView() == this
-			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED)
+		EditPane editPane = msg.getEditPane();
+		if(editPane.getView() == this
+			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED
+			&& editPane.getBuffer().isLoaded())
 		{
 			status.repaintCaretStatus();
 			status.updateBufferStatus();
@@ -1353,7 +1355,8 @@ public class View extends JFrame implements EBComponent
 		public void caretUpdate(CaretEvent evt)
 		{
 			status.repaintCaretStatus();
-			status.updateMiscStatus();
+			// no need for this?
+			//status.updateMiscStatus();
 		}
 	} //}}}
 

@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Portions copyright (C) 2002 Peter Cox
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +56,13 @@ public class HyperSearchResults extends JPanel implements EBComponent
 
 		caption = new JLabel();
 		updateCaption(0,0);
-		add(BorderLayout.NORTH, caption);
+
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(BorderLayout.CENTER,caption);
+		multi = new JCheckBox(jEdit.getProperty("hypersearch-results.multi"));
+		topPanel.add(BorderLayout.EAST,multi);
+		multi.addActionListener(new ActionHandler());
+		add(BorderLayout.NORTH, topPanel);
 
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
@@ -94,6 +101,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	{
 		super.addNotify();
 		EditBus.addToBus(this);
+		multi.setSelected(jEdit.getBooleanProperty("hypersearch-results.multi-toggle"));
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -101,6 +109,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	{
 		super.removeNotify();
 		EditBus.removeFromBus(this);
+		jEdit.setBooleanProperty("hypersearch-results.multi-toggle",multi.isSelected());
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -173,7 +182,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ searchDone() method
-	public void searchDone(final MutableTreeNode searchNode)
+	public void searchDone(final DefaultMutableTreeNode searchNode)
 	{
 		final int nodeCount = searchNode.getChildCount();
 		if (nodeCount < 1)
@@ -188,16 +197,31 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		{
 			public void run()
 			{
+				if(!multi.isSelected())
+				{
+					for(int i = 0; i < resultTreeRoot.getChildCount(); i++)
+					{
+						resultTreeRoot.remove(0);
+					}
+				}
 
-				resultTreeModel.insertNodeInto(searchNode, resultTreeRoot,
-					resultTreeRoot.getChildCount());
+				resultTreeRoot.add(searchNode);
+				resultTreeModel.reload(resultTreeRoot);
+
+				TreePath lastNode = null;
+
 				for(int i = 0; i < nodeCount; i++)
 				{
-					resultTree.expandPath(new TreePath(
+					lastNode = new TreePath(
 						((DefaultMutableTreeNode)
 						searchNode.getChildAt(i))
-						.getPath()));
+						.getPath());
+
+					resultTree.expandPath(lastNode);
 				}
+
+				if(lastNode != null)
+					resultTree.scrollPathToVisible(lastNode);
 			}
 		});
 	} //}}}
@@ -209,6 +233,8 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	private JTree resultTree;
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
+
+	private JCheckBox multi;
 
 	//{{{ goToSelectedNode() method
 	private void goToSelectedNode()
@@ -278,6 +304,23 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	} //}}}
 
 	//}}}
+
+	//{{{ ActionHandler class
+	public class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(!multi.isSelected())
+			{
+				for(int i = resultTreeRoot.getChildCount() - 2; i >= 0; i--)
+				{
+					resultTreeModel.removeNodeFromParent(
+						(MutableTreeNode)resultTreeRoot
+						.getChildAt(i));
+				}
+			}
+		}
+	} //}}}
 
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
@@ -427,28 +470,32 @@ public class HyperSearchResults extends JPanel implements EBComponent
 			return this;
 		} //}}}
 	} //}}}
+
+	// these are used to eliminate code duplication. i don't normally use
+	// the visitor or "template method" pattern, but this code was contributed
+	// by Peter Cox and i don't feel like changing it around too much.
+
+	//{{{ ResultVisitor interface
+	interface ResultVisitor
+	{
+		public void visit(Buffer buffer, HyperSearchResult result);
+	} //}}}
+
+	//{{{ BufferLoadedVisitor class
+	class BufferLoadedVisitor implements ResultVisitor
+	{
+		public void visit(Buffer buffer, HyperSearchResult result)
+		{
+			result.bufferOpened(buffer);
+		}
+	} //}}}
+
+	//{{{ BufferClosedVisitor class
+	class BufferClosedVisitor implements ResultVisitor
+	{
+		public void visit(Buffer buffer, HyperSearchResult result)
+		{
+			result.bufferClosed();
+		}
+	} //}}}
 }
-
-//{{{ ResultVisitor interface
-interface ResultVisitor
-{
-	public void visit(Buffer buffer, HyperSearchResult result);
-} //}}}
-
-//{{{ BufferLoadedVisitor class
-class BufferLoadedVisitor implements ResultVisitor
-{
-	public void visit(Buffer buffer, HyperSearchResult result)
-	{
-		result.bufferOpened(buffer);
-	}
-} //}}}
-
-//{{{ BufferClosedVisitor class
-class BufferClosedVisitor implements ResultVisitor
-{
-	public void visit(Buffer buffer, HyperSearchResult result)
-	{
-		result.bufferClosed();
-	}
-} //}}}

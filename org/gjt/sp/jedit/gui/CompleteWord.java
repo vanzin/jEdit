@@ -84,14 +84,17 @@ public class CompleteWord extends JWindow
 
 			SwingUtilities.convertPointToScreen(location,
 				textArea.getPainter());
-			new CompleteWord(view,word,completions,location);
+			new CompleteWord(view,word,completions,location,noWordSep);
 		} //}}}
 	} //}}}
 
 	//{{{ CompleteWord constructor
-	public CompleteWord(View view, String word, Vector completions, Point location)
+	public CompleteWord(View view, String word, Vector completions, Point location,
+		String noWordSep)
 	{
 		super(view);
+
+		this.noWordSep = noWordSep;
 
 		setContentPane(new JPanel(new BorderLayout())
 		{
@@ -292,6 +295,7 @@ public class CompleteWord extends JWindow
 	private Buffer buffer;
 	private String word;
 	private JList words;
+	private String noWordSep;
 	//}}}
 
 	//{{{ insertSelected() method
@@ -409,7 +413,6 @@ public class CompleteWord extends JWindow
 					textArea.backspace();
 					int caret = textArea.getCaretPosition();
 					KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
-					String noWordSep = getNonAlphaNumericWordChars(buffer,keywordMap,caret);
 
 					Vector completions = getCompletions(buffer,word,
 						keywordMap,noWordSep,caret);
@@ -442,17 +445,26 @@ public class CompleteWord extends JWindow
 				return;
 			else if(ch != '\b')
 			{
-				word = word + ch;
 				textArea.userInput(ch);
+
+				if(!Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1)
+				{
+					dispose();
+					return;
+				}
+
+				word = word + ch;
 				int caret = textArea.getCaretPosition();
 				KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
-				String noWordSep = getNonAlphaNumericWordChars(buffer,keywordMap,caret);
 
 				Vector completions = getCompletions(buffer,word,keywordMap,
 					noWordSep,caret);
 
 				if(completions.size() == 0)
+				{
 					dispose();
+					return;
+				}
 
 				words.setListData(completions);
 				words.setSelectedIndex(0);

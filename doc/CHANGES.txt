@@ -3,7 +3,8 @@ JEDIT 4.1 VERSION HISTORY
 * Version 4.1pre6
 
 Thanks to John Perry, Joshua Miller, Kris Kopicki, Marcelo Vanzin, Peter
-Cox, Rex Young and Steve Snider for contributing to this release.
+Cox, Rex Young, Rudolf Widmann and Steve Snider for contributing to this
+release.
 
 + Editing Changes:
 
@@ -22,16 +23,22 @@ Cox, Rex Young and Steve Snider for contributing to this release.
   Indent Line (if you want TAB to indent anywhere in a line, not just in
   the leading whitespace, like in emacs).
 
-- The "HyperSearch Results" window now remembers old search results.
-  They can be cleared out by right-clicking and selecting "Remove Node"
-  from the resulting popup menu (Peter Cox).
-
 + Syntax Highlighting Changes:
 
 - Added Maple syntax highlighting (John Perry).
 - Updated ColdFusion syntax highlighting (Joshua Miller).
 - Updated Fortran syntax highlighting (Yifan Song).
 - Updated PL-SQL syntax highlighting (Steve Snider).
+
++ Miscellaneous Changes:
+
+- Holding down Alt while scrolling with the wheel mouse now moves the
+  caret up or down. Holding down Shift and Alt will extend the selection
+  up or down (Rudolf Widmann).
+
+- The "HyperSearch Results" window now remembers old search results.
+  They can be cleared out by right-clicking and selecting "Remove Node"
+  from the resulting popup menu (Peter Cox).
 
 + Platform-Specific Changes:
 
@@ -71,6 +78,8 @@ Cox, Rex Young and Steve Snider for contributing to this release.
   foreground, not the text field foreground. This could look bad if text
   field colors were customized using the "Use jEdit text area colors in
   all text components".
+- Fixed a problem where the Complete Word popup would not be closed
+  under some circumstances.
 
 + API Changes
 
