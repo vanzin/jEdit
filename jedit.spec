@@ -43,7 +43,7 @@ jEdit requires Java 2 version 1.3.
 %build
 export CLASSPATH="."
 
-ant docs-html-xsltproc dist
+ant docs-html-xsltproc javadoc dist
 
 # Build LatestVersion.jar
 (cd jars/LatestVersion && ant)
