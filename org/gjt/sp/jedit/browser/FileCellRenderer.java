@@ -103,7 +103,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			else
 			{
 				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
-				String extAttr = model.getExtendedAttribute(column - 1);
+				String extAttr = model.getExtendedAttribute(column);
 
 				openBuffer = false;
 				setIcon(null);

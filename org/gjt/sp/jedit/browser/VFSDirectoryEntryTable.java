@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -55,11 +56,6 @@ public class VFSDirectoryEntryTable extends JTable
 
 		setIntercellSpacing(new Dimension(0,0));
 
-		/* TableColumn col1 = getColumnModel().getColumn(0);
-		col1.setMinWidth(20);
-		col1.setMaxWidth(20);
-		col1.setPreferredWidth(20); */
-
 		setDefaultRenderer(VFSDirectoryEntryTableModel.Entry.class,
 			renderer = new FileCellRenderer());
 
@@ -67,9 +63,9 @@ public class VFSDirectoryEntryTable extends JTable
 		header.setReorderingAllowed(false);
 
 		setRowSelectionAllowed(true);
-		//setColumnSelectionAllowed(true);
-		//setCellSelectionEnabled(false);
 
+		getColumnModel().addColumnModelListener(new ColumnHandler());
+		
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
@@ -159,7 +155,7 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			model.collapse(VFSManager.getVFSForPath(
 				entry.dirEntry.getPath()),row);
-			resizeColumnsAppropriately();
+			resizeColumns();
 		}
 		else
 		{
@@ -213,7 +209,7 @@ public class VFSDirectoryEntryTable extends JTable
 			}
 		}
 
-		resizeColumnsAppropriately();
+		resizeColumns();
 	} //}}}
 
 	//{{{ maybeReloadDirectory() method
@@ -394,6 +390,7 @@ public class VFSDirectoryEntryTable extends JTable
 	private FileCellRenderer renderer;
 	private StringBuffer typeSelectBuffer = new StringBuffer();
 	private Timer timer = new Timer(0,new ClearTypeSelect());
+	private boolean resizingColumns;
 
 	//{{{ doTypeSelect() method
 	private boolean doTypeSelect(String str, int start, int end,
@@ -422,11 +419,10 @@ public class VFSDirectoryEntryTable extends JTable
 		return false;
 	} //}}}
 
-	//{{{ resizeColumnsAppropriately() method
-	private void resizeColumnsAppropriately()
+	//{{{ resizeColumns() method
+	private void resizeColumns()
 	{
-		VFSDirectoryEntryTableModel model
-		= (VFSDirectoryEntryTableModel)getModel();
+		VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)getModel();
 
 		FontRenderContext fontRenderContext = new FontRenderContext(
 			null,false,false);
@@ -442,22 +438,11 @@ public class VFSDirectoryEntryTable extends JTable
 			}
 		}
 
-		/* for(int i = 1; i < widths.length; i++)
+		for(int i = 1; i < widths.length; i++)
 		{
-			String extAttr = model.getExtendedAttribute(
-				j - 1);
-			int width = 
-			String attr = entry.dirEntry
-				.getExtendedAttribute(
-				extAttr);
-			if(attr != null)
-			{
-				widths[j] = Math.max(widths[j],
-					(int)font.getStringBounds(
-					attr,fontRenderContext)
-					.getWidth());
-			}
-		} */
+			String extAttr = model.getExtendedAttribute(i);
+			widths[i] = Math.max(widths[i],model.getColumnWidth(i));
+		}
 
 		for(int i = 0; i < model.files.length; i++)
 		{
@@ -471,22 +456,40 @@ public class VFSDirectoryEntryTable extends JTable
 				entry,font,fontRenderContext));
 		}
 
-		for(int i = 0; i < widths.length; i++)
+		widths[0] += 10;
+
+		TableColumnModel columns = getColumnModel();
+
+		try
 		{
-			int width = widths[i];
-			if(i != widths.length - 1 && width != 0)
-				width += 10;
-			else
-				width += 2;
-			getColumnModel().getColumn(i).setPreferredWidth(width);
-			/* getColumnModel().getColumn(i).setMinWidth(width);
-			getColumnModel().getColumn(i).setMaxWidth(width); */
-			getColumnModel().getColumn(i).setWidth(width);
+			resizingColumns = true;
+			for(int i = 0; i < widths.length; i++)
+			{
+				columns.getColumn(i).setPreferredWidth(widths[i]);
+				columns.getColumn(i).setWidth(widths[i]);
+			}
+		}
+		finally
+		{
+			resizingColumns = false;
 		}
 
 		doLayout();
 	} //}}}
 
+	//{{{ saveWidths() method
+	private void saveWidths()
+	{
+		if(resizingColumns)
+			return;
+		
+		VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)getModel();
+		TableColumnModel columns = getColumnModel();
+
+		for(int i = 1; i < model.getColumnCount(); i++)
+			model.setColumnWidth(i,columns.getColumn(i).getWidth());
+	} //}}}
+	
 	//}}}
 
 	//{{{ ClearTypeSelect class
@@ -495,6 +498,20 @@ public class VFSDirectoryEntryTable extends JTable
 		public void actionPerformed(ActionEvent evt)
 		{
 			typeSelectBuffer.setLength(0);
+		}
+	} //}}}
+	
+	//{{{ ColumnHandler class
+	class ColumnHandler implements TableColumnModelListener
+	{
+		public void columnAdded(TableColumnModelEvent e) {}
+		public void columnRemoved(TableColumnModelEvent e) {}
+		public void columnMoved(TableColumnModelEvent e) {}
+		public void columnSelectionChanged(ListSelectionEvent e) {}
+		
+		public void columnMarginChanged(ChangeEvent e)
+		{
+			saveWidths();
 		}
 	} //}}}
 }
