@@ -872,11 +872,6 @@ public class DockableWindowManager extends JPanel
 		{
 			Dimension size = parent.getSize();
 
-			Dimension prefSize = new Dimension(0,0);
-			Dimension _top = top.getPreferredSize();
-			Dimension _left = left.getPreferredSize();
-			Dimension _bottom = bottom.getPreferredSize();
-			Dimension _right = right.getPreferredSize();
 			Dimension _topButtons = topButtons.getPreferredSize();
 			Dimension _leftButtons = leftButtons.getPreferredSize();
 			Dimension _bottomButtons = bottomButtons.getPreferredSize();
@@ -887,6 +882,15 @@ public class DockableWindowManager extends JPanel
 
 			int _width = size.width - _leftButtons.width - _rightButtons.width;
 			int _height = size.height - _topButtons.height - _bottomButtons.height;
+
+			Dimension _top = top.getPreferredSize();
+			int topHeight = Math.min(_height,_top.height);
+			Dimension _left = left.getPreferredSize();
+			int leftWidth = Math.min(_width,_left.width);
+			Dimension _bottom = bottom.getPreferredSize();
+			int bottomHeight = Math.min(_height,_bottom.height);
+			Dimension _right = right.getPreferredSize();
+			int rightWidth = Math.min(_width,_right.width);
 
 			if(alternateLayout)
 			{
@@ -918,32 +922,32 @@ public class DockableWindowManager extends JPanel
 					_leftButtons.width,
 					_topButtons.height,
 					_width,
-					_top.height);
+					topHeight);
 
 				bottom.setBounds(
 					_leftButtons.width,
-					size.height - _bottom.height - _bottomButtons.height,
+					size.height - bottomHeight - _bottomButtons.height,
 					_width,
-					_bottom.height);
+					bottomHeight);
 
 				left.setBounds(
 					_leftButtons.width,
-					_topButtons.height + _top.height,
-					_left.width,
-					_height - _top.height - _bottom.height);
+					_topButtons.height + topHeight,
+					leftWidth,
+					_height - topHeight - bottomHeight);
 
 				right.setBounds(
-					size.width - _right.width - _rightButtons.width,
-					_topButtons.height + _top.height,
-					_right.width,
-					_height - _top.height - _bottom.height);
+					size.width - rightWidth - _rightButtons.width,
+					_topButtons.height + topHeight,
+					rightWidth,
+					_height - topHeight - bottomHeight);
 			}
 			else
 			{
 				topButtons.setBounds(
-					_leftButtons.width + _left.width,
+					_leftButtons.width + leftWidth,
 					0,
-					_width - _left.width - _right.width,
+					_width - leftWidth - rightWidth,
 					_topButtons.height);
 
 				leftButtons.setBounds(
@@ -953,9 +957,9 @@ public class DockableWindowManager extends JPanel
 					_height);
 
 				bottomButtons.setBounds(
-					_leftButtons.width + _left.width,
+					_leftButtons.width + leftWidth,
 					size.height - _bottomButtons.height,
-					_width - _left.width - _right.width,
+					_width - leftWidth - rightWidth,
 					_bottomButtons.height);
 
 				rightButtons.setBounds(
@@ -965,26 +969,26 @@ public class DockableWindowManager extends JPanel
 					_height);
 
 				top.setBounds(
-					_leftButtons.width + _left.width,
+					_leftButtons.width + leftWidth,
 					_topButtons.height,
-					_width - _left.width - _right.width,
-					_top.height);
+					_width - leftWidth - rightWidth,
+					topHeight);
 				bottom.setBounds(
-					_leftButtons.width + _left.width,
-					size.height - _bottom.height - _bottomButtons.height,
-					_width - _left.width - _right.width,
-					_bottom.height);
+					_leftButtons.width + leftWidth,
+					size.height - bottomHeight - _bottomButtons.height,
+					_width - leftWidth - rightWidth,
+					bottomHeight);
 
 				left.setBounds(
 					_leftButtons.width,
 					_topButtons.height,
-					_left.width,
+					leftWidth,
 					_height);
 
 				right.setBounds(
-					size.width - _right.width - _rightButtons.width,
+					size.width - rightWidth - _rightButtons.width,
 					_topButtons.height,
-					_right.width,
+					rightWidth,
 					_height);
 			}
 

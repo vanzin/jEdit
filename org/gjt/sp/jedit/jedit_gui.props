@@ -841,6 +841,9 @@ ioerror.mkdir-error=Cannot create directory.
 vfs.not-supported.list=Directories on the "{0}" filesystem cannot be browsed.
 vfs.not-supported.load=Files on the "{0}" filesystem cannot be opened.
 vfs.not-supported.save=Files cannot be saved to the "{0}" filesystem.
+
+out-of-memory-error=There was insufficent Java heap memory to complete\n\
+	this request. Try increasing the maximum heap size.
 #}}}
 
 #{{{ Old I/O error dialog boxes

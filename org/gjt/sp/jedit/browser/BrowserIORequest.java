@@ -148,12 +148,17 @@ public class BrowserIORequest extends WorkRequest
 		String[] args = { path1 };
 		setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
 
+		String canonPath = null;
+
 		try
 		{
 			setAbortable(true);
-			path1 = vfs._canonPath(session,path1,browser);
 
-			directory = vfs._listDirectory(session,path1,browser);
+			// directoryLoaded() needs original path to work
+			// correctly
+			canonPath = vfs._canonPath(session,path1,browser);
+
+			directory = vfs._listDirectory(session,canonPath,browser);
 		}
 		catch(IOException io)
 		{
@@ -179,7 +184,7 @@ public class BrowserIORequest extends WorkRequest
 		}
 
 		setAbortable(false);
-		browser.directoryLoaded(path1,directory);
+		browser.directoryLoaded(path1,canonPath,directory);
 	} //}}}
 
 	//{{{ delete() method

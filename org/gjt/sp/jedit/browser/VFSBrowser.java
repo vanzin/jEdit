@@ -693,8 +693,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(final String path, final VFS.DirectoryEntry[] list)
+	void directoryLoaded(final String path,
+		final String canonPath,
+		final VFS.DirectoryEntry[] list)
 	{
+		System.err.println("dl: " + path + "::" + canonPath);
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
@@ -702,9 +705,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(loadingRoot)
 				{
 					// This is the new, canonical path
-					VFSBrowser.this.path = path;
-					if(!pathField.getText().equals(path))
-						pathField.setText(path);
+					VFSBrowser.this.path = canonPath;
+					if(!pathField.getText().equals(canonPath))
+						pathField.setText(canonPath);
 					pathField.addCurrentToHistory();
 				}
 
@@ -751,7 +754,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 					}
 				}
 
-				browserView.directoryLoaded(path,directoryVector);
+				browserView.directoryLoaded(path,canonPath,
+					directoryVector);
 			}
 		});
 	} //}}}

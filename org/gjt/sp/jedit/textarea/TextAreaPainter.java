@@ -880,9 +880,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		else if(blockCaret)
 		{
-			gfx.setXORMode(bgColor);
-			gfx.fillRect(caretX,y,textArea.charWidth,height);
-			gfx.setPaintMode();
+			// Workaround for bug in Graphics2D in JDK1.4 under
+			// Windows; calling setPaintMode() does not reset
+			// graphics mode.
+			Graphics2D blockgfx = (Graphics2D)gfx.create();
+			blockgfx.setXORMode(bgColor);
+			blockgfx.fillRect(caretX,y,textArea.charWidth,height);
+			blockgfx.dispose();
 		}
 		else
 		{
