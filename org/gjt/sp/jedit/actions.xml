@@ -102,7 +102,7 @@
 
 <ACTION NAME="collapse-all-folds">
 	<CODE>
-		textArea.getFoldVisibilityManager().expandFolds(1);
+		textArea.getDisplayManager().expandFolds(1);
 	</CODE>
 </ACTION>
 
@@ -254,7 +254,7 @@
 
 <ACTION NAME="expand-all-folds">
 	<CODE>
-		textArea.getFoldVisibilityManager().expandAllFolds();
+		textArea.getDisplayManager().expandAllFolds();
 		textArea.scrollToCaret(false);
 	</CODE>
 </ACTION>
@@ -281,7 +281,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.expand-folds"),
-			"textArea.getFoldVisibilityManager().expandFolds(__char__);\n"
+			"textArea.getDisplayManager().expandFolds(__char__);\n"
 			+ "textArea.scrollToCaret(false);");
 	</CODE>
 </ACTION>

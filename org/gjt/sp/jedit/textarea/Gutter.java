@@ -546,6 +546,8 @@ public class Gutter extends JComponent implements SwingConstants
 	private void paintLine(Graphics2D gfx, int line, int y)
 	{
 		Buffer buffer = textArea.getBuffer();
+		if(!buffer.isLoaded())
+			return;
 
 		int lineHeight = textArea.getPainter().getFontMetrics()
 			.getHeight();

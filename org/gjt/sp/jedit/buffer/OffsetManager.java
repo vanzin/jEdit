@@ -175,7 +175,7 @@ public class OffsetManager
 	{
 		long info = lineInfo[line];
 		long mask = 1L << (index + VISIBLE_SHIFT);
-		boolean oldVisible = ((lineInfo[line] & mask) != 0);
+		boolean oldVisible = ((info & mask) != 0);
 		if(visible)
 		{
 			if(!oldVisible)
@@ -184,8 +184,11 @@ public class OffsetManager
 				Anchor anchor = anchors;
 				while(anchor != null)
 				{
-					if(anchor.physicalLine > line)
+					if(anchor.physicalLine > line && anchor.index == index)
+					{
 						anchor.scrollLine += screenLines;
+						anchor.callChanged = true;
+					}
 					anchor = anchor.next;
 				}
 			}
@@ -193,14 +196,17 @@ public class OffsetManager
 		}
 		else
 		{
-			if(!oldVisible)
+			if(oldVisible)
 			{
 				int screenLines = getScreenLineCount(line);
 				Anchor anchor = anchors;
 				while(anchor != null)
 				{
 					if(anchor.physicalLine > line && anchor.index == index)
+					{
 						anchor.scrollLine -= screenLines;
+						anchor.callChanged = true;
+					}
 					anchor = anchor.next;
 				}
 			}
