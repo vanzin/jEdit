@@ -5,12 +5,10 @@ and quirks that I need to fix eventually.
 
 - popups still positioned poorly
 - broken auto-indent
-- messed up scroll bars when switching buffers
 - final optimization for OffsetManager: scan to zero or scan to end
   might be more economical
 - do some profiling
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
-- changelog claims roots: lists desktop...
 - wheel mouse page scroll w/ soft wrap
 - rect select and trailing whitespace
 - user's guide:

@@ -551,9 +551,11 @@ public class Buffer implements EBComponent
 	//{{{ checkModTime() method
 	/**
 	 * Check if the buffer has changed on disk.
+	 * @since jEdit 4.1pre8
 	 */
-	public void checkModTime(View view)
+	public void checkModTime(EditPane editPane)
 	{
+		View view = editPane.getView();
 		int status = checkFileStatus();
 
 		// still need to call the status check even if this option is off,
@@ -577,7 +579,7 @@ public class Buffer implements EBComponent
 				JOptionPane.WARNING_MESSAGE);
 			if(result == JOptionPane.YES_OPTION)
 			{
-				view.getEditPane().saveCaretInfo();
+				editPane.saveCaretInfo();
 				load(view,true);
 			}
 		}

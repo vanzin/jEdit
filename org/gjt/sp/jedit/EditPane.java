@@ -119,7 +119,7 @@ public class EditPane extends JPanel implements EBComponent
 			public void run()
 			{
 				loadCaretInfo();
-				buffer.checkModTime(view);
+				buffer.checkModTime(EditPane.this);
 			}
 		};
 

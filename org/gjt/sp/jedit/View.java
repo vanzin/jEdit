@@ -1423,7 +1423,7 @@ public class View extends JFrame implements EBComponent
 					for(int i = 0; i < buffers.size(); i++)
 					{
 						((Buffer)buffers.elementAt(i))
-							.checkModTime(View.this);
+							.checkModTime(editPane);
 					}
 				}
 			});
