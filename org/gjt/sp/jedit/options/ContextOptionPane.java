@@ -196,6 +196,12 @@ public class ContextOptionPane extends AbstractOptionPane
 			{
 				int index = list.getSelectedIndex();
 				listModel.removeElementAt(index);
+				if(listModel.getSize() != 0)
+				{
+					list.setSelectedIndex(
+						Math.min(listModel.getSize()-1,
+						index));
+				}
 				updateButtons();
 			}
 			else if(source == moveUp)

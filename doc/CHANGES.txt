@@ -1,5 +1,29 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre5
+
+{{{ Bug Fixes
+
+- Fixed international keys on MacOS X.
+
+- "Multiple results" button in the HyperSearch Results window did not
+  work correctly.
+
+- Line number shown in status bar when matching brackets was off by one.
+
+- Fixed some usability issues with the "Search in selection" setting in
+  the Find dialog box.
+
+- Directory search settings were being reset when a search flag was
+  changed.
+
+- Fixed handling of space bar which could result in extra spaces being
+  inserted when using dead keys.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre4
 
 Thanks to Chris Morris, Marcelo Vanzin, Ryan Fowler and Ryan Grove for
