@@ -89,6 +89,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		popupButton.addMouseListener(new MouseHandler());
 		popup = new JPopupMenu();
+		popup.addSeparator();
+		floatMenu = new JMenu(jEdit.getProperty("view.docking.menu-float"));
+		popup.add(floatMenu);
 
 		buttonGroup = new ButtonGroup();
 		// JDK 1.4 workaround
@@ -135,18 +138,29 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		button.addMouseListener(new MouseHandler());
 
-		//{{{ Create menu item
-		JMenuItem menuItem = new JMenuItem(entry.title);
+		//{{{ Create menu items
+		JMenuItem selectMenuItem = new JMenuItem(entry.title);
 
-		menuItem.addActionListener(new ActionListener()
+		selectMenuItem.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
 				wm.showDockableWindow(entry.factory.name);
 			}
-		}); //}}}
+		});
 
-		popup.add(menuItem);
+		JMenuItem floatMenuItem = new JMenuItem(entry.title);
+
+		floatMenuItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				wm.floatDockableWindow(entry.factory.name);
+			}
+		});//}}}
+
+		popup.add(selectMenuItem,popup.getComponentCount() - 2);
+		floatMenu.add(floatMenuItem);
 
 		wm.revalidate();
 	} //}}}
@@ -291,6 +305,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private DockablePanel dockablePanel;
 	private DockableWindowManager.Entry current;
 	private JPopupMenu popup;
+	private JMenu floatMenu;
 	//}}}
 
 	//{{{ Inner classes

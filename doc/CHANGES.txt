@@ -28,6 +28,11 @@ release.
 - Added an option to Utilities->Global Options->Docking for
   jEdit 4.0-style tool bar placement.
 
+- The popup menu shown when right-clicking on the strip of buttons in a
+  dockable window container now contains a new sub-menu, labelled "New
+  Floating Instance". This menu contains items which open new floating
+  instances of the windows docked in this area.
+
 - A few more menu bar rearrangements:
   - 'Recent Directories' moved from File to Utilities menu.
   - 'Current Directory' moved from File to Utilities menu.
