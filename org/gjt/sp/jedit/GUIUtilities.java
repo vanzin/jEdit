@@ -1114,16 +1114,16 @@ public class GUIUtilities
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y, boolean point)
 	{
-		int newX = x;
-		int newY = y;
+		int offsetX = 0;
+		int offsetY = 0;
 
 		int extraOffset = (point ? 1 : 0);
 
 		Component win = comp;
 		while(!(win instanceof Window || win == null))
 		{
-			newX += win.getX();
-			newY += win.getY();
+			offsetX += win.getX();
+			offsetY += win.getY();
 			win = win.getParent();
 		}
 
@@ -1134,30 +1134,31 @@ public class GUIUtilities
 			Rectangle screenSize = win.getGraphicsConfiguration()
 				.getBounds();
 
-			if(newX + size.width + win.getX() > screenSize.width
-				&& newX + win.getX() >= size.width)
-			{
-				newX -= (size.width + extraOffset);
-			}
-			else
-			{
-				newX += extraOffset;
-			}
-
-			if(newY + size.height > win.getHeight()
-				&& newY >= size.height)
+			if(x + offsetX + size.width + win.getX() > screenSize.width
+				&& x + offsetX + win.getX() >= size.width)
 			{
 				if(point)
-					newY = (win.getHeight() - size.height + extraOffset);
+					x -= (size.width + extraOffset);
 				else
-					newY -= (size.height + extraOffset + comp.getHeight());
+					x = (win.getWidth() - size.width - offsetX + extraOffset);
 			}
 			else
 			{
-				newY += extraOffset;
+				x += extraOffset;
 			}
 
-			popup.show(win,newX,newY);
+			if(y + offsetY + size.height > win.getHeight()
+				&& y + offsetY >= size.height)
+			{
+				if(point)
+					y = (win.getHeight() - size.height - offsetY + extraOffset);
+			}
+			else
+			{
+				y += extraOffset;
+			}
+
+			popup.show(comp,x,y);
 		}
 		else
 			popup.show(comp,x + extraOffset,y + extraOffset);

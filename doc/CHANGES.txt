@@ -7,12 +7,18 @@ JEDIT 4.1 VERSION HISTORY
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
 - Updated C-Sharp mode (Ollie Rutherfurd)
 
++ Bug Fixes:
+
+- Line numbers in the 'Markers' menu were off by one.
+- On some Java versions, the popup menu code would not work in frames
+  and dialog boxes and print a stream of exceptions.
+
 * Version 4.1pre4
 
 Thanks to Kris Kopicki and Stefan Jozsa for contributing to this
 release.
 
-+ Syntax Highlighting Changes
++ Syntax Highlighting Changes:
 
 - Added AppleScript syntax highlighting (Kris Kopicki)
 - Improved Informix-4GL syntax highlighting (Stefan Jozsa)
@@ -22,7 +28,7 @@ release.
 - TAB key can now be used to insert completions in the 'Complete Word'
   popup.
 
-+ Bug Fixes
++ Bug Fixes:
 
 - Macro listing code was completely broken in 4.1pre3; only the first
   macro in each directory would be shown.

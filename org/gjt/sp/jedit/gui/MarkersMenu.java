@@ -80,7 +80,7 @@ public class MarkersMenu extends EnhancedMenu implements MenuListener
 		for(int i = 0; i < markers.size(); i++)
 		{
 			final Marker marker = (Marker)markers.elementAt(i);
-			int lineNo = buffer.getLineOfOffset(marker.getPosition());
+			int lineNo = buffer.getLineOfOffset(marker.getPosition()) + 1;
 
 			if(current.getItemCount() >= maxItems && i != markers.size() - 1)
 			{
