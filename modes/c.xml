@@ -21,7 +21,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+(e[[:digit:]]*)?)[lLdDfF]?">
+		DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
 
 		<!-- C style comment -->
 		<SPAN TYPE="COMMENT1">
