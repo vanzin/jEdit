@@ -261,7 +261,7 @@ public class BrowserView extends JPanel
 	private void showFilePopup(VFS.DirectoryEntry file, Point point)
 	{
 		popup = new BrowserPopupMenu(browser,file);
-		popup.show(tree,point.x+1,point.y+1);
+		GUIUtilities.showPopupMenu(popup,tree,point.x+1,point.y+1);
 	}
 
 	class BrowserJTree extends JTree

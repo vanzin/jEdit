@@ -174,7 +174,11 @@ public class DockableWindowManager extends JPanel
 			return;
 
 		if(entry.container instanceof FloatingWindowContainer)
+		{
 			entry.container.remove(entry);
+			entry.container = null;
+			entry.win = null;
+		}
 		else
 			entry.container.show(null);
 	}

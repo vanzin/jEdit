@@ -3200,7 +3200,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			for(int i = 0; i < lines.length; i++)
 			{
-				buffer.insertString(getLineStartOffset(lines[i]),
+				String text = getLineText(lines[i]);
+				buffer.insertString(getLineStartOffset(lines[i])
+					+ MiscUtilities.getLeadingWhiteSpace(text),
 					comment,null);
 			}
 		}
@@ -4973,7 +4975,10 @@ forward_scan:		do
 				if(popup.isVisible())
 					popup.setVisible(false);
 				else
-					popup.show(painter,evt.getX()+1,evt.getY()+1);
+				{
+					GUIUtilities.showPopupMenu(popup,painter,
+						evt.getX()+1,evt.getY()+1);
+				}
 				return;
 			}
 

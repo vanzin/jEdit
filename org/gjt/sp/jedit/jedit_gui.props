@@ -1076,7 +1076,13 @@ beanshell-error.message.1=A BeanShell execution error occurred. More details can
 beanshell-error.message.2=in the activity log (Utilities->Activity Log).
 
 beanshell-eval-input.title=Evaluate BeanShell Expression
-beanshell-eval-input.message=BeanShell expression:
+beanshell-eval-input.message=BeanShell expression:\n\
+	\n\
+	Variables:\n\
+	view - The current view instance\n\
+	editPane - The current edit pane instance\n\
+	textArea - The current text area instance\n\
+	buffer - The current buffer
 
 beanshell-eval.title=BeanShell Evaluation
 beanshell-eval.message={0}
@@ -1088,7 +1094,11 @@ beanshell-eval-line.message=BeanShell expression to evaluate for each \
 	Variables:\n\
 	line - The index of the line, from the start of the buffer\n\
 	index - The index of the line, from the start of the selection\n\
-	text - The text of the line
+	text - The text of the line\n\
+	view - The current view instance\n\
+	editPane - The current edit pane instance\n\
+	textArea - The current text area instance\n\
+	buffer - The current buffer
 
 macro-not-recording.title=Not Recording
 macro-not-recording.message=A macro is not currently being recorded.
