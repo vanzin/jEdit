@@ -5416,7 +5416,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ getExtraEndVirt() method
-	private void getExtraEndVirt(int caret, int newCaret)
+	private int getExtraEndVirt(int caret, int newCaret)
 	{
 		Selection s = getSelectionAtOffset(caret);
 		if(s instanceof Selection.Rect)
