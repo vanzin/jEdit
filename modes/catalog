@@ -404,6 +404,9 @@
 <MODE NAME="transact-sql"	FILE="tsql.xml"
 				FILE_NAME_GLOB="*.sql" />
 
+<MODE NAME="twiki"		FILE="twiki.xml"
+				FILE_NAME_GLOB="*.twiki"/>
+
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
 
