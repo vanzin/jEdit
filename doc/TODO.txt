@@ -3,6 +3,12 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- rect select somewhat fucked
+- reverse replace and find broken
+- paste previous, abbrevs table: <html> fucks up
+- A+# on OS X, need better modifier mapping on OS X
+- load/save geometry: check for out of bounds
+- ${ in Perl
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - try typing foo), put cursor after foo, type some more -- slowdown
 - fsb: rename in place
@@ -32,7 +38,6 @@ and quirks that I need to fix eventually.
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - first focus: show all files that were modified on disk, in a list
-- idea for fixing buffer property issues: BufferProp class
 - add an option to not remove files from PluginManager.download?
 - background tokens are slow
 

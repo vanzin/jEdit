@@ -133,6 +133,7 @@ public class Abbrevs
 
 			// the first element of pp is the abbrev itself
 			abbrev = (String)pp.elementAt(0);
+			pp.removeElementAt(0);
 		} //}}}
 		//{{{ Handle ordinary abbrevs
 		else
@@ -558,8 +559,10 @@ public class Abbrevs
 
 							int pos = ch - '0';
 							posParamCount = Math.max(pos,posParamCount);
-							if(pos < pp.size())
-								buf.append(pp.elementAt(pos));
+							// $n is 1-indexed, but vector
+							// contents is zero indexed
+							if(pos <= pp.size())
+								buf.append(pp.elementAt(pos - 1));
 						}
 						else
 						{

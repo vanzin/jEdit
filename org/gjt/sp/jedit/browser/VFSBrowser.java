@@ -156,6 +156,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 		this.floating = floating;
 		this.view = view;
 
+		currentEncoding = jEdit.getProperty("buffer.encoding",
+			System.getProperty("file.encoding"));
+
 		ActionHandler actionHandler = new ActionHandler();
 
 		Box topBox = new Box(BoxLayout.Y_AXIS);
@@ -308,9 +311,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 				path = userHome;
 			}
 		}
-
-		currentEncoding = jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding"));
 
 		final String _path = path;
 

@@ -1,5 +1,43 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre3
+
+Thanks to Rudolf Widmann and Marco Hunsicker for contributing to this
+release.
+
++ Editing Changes:
+
+- Previously when expanding an abbreviation with positional parameters,
+  unspecified parameters would expand to $n where 'n' is the number of
+  the parameter. This was not very intuitive; now missing parameters
+  expand to empty strings, and result in a status bar message being
+  shown.
+
++ Syntax Highlighting Changes:
+
+- CHILL (CCITT recommendation language) syntax highlighting added
+  (Rudolf Widmann)
+
++ Plugin Loader Changes:
+
+- The JARClassLoader now registers plugin packages and manifest files.
+  (Marco Hunsicker)
+
++ Bug Fixes:
+
+- Clicking the 'Open' button or pressing Enter in the 'Open File' dialog
+  box did not work; only double-clicking would open files.
+
+- Changing the tab size, indent size or maximum line length settings on
+  a global or mode-specific basis should now take effect in all open
+  buffers. Previously changes to these settings would only take effect
+  in subsequently opened files.
+
+- Under some circumstances the file system browser would case a
+  different buffer to be selected in the current view after a directory
+  was loaded. It has been confirmed that one jEdit user was admitted
+  to a mental asylum because of this bug.
+
 * Version 4.1pre2
 
 Thanks to Alexander Maryanovsky and Gerd Knops for contributing to this
