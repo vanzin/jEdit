@@ -43,16 +43,7 @@ import org.gjt.sp.util.Log;
  */
 public class OffsetManager
 {
-	/* {{{ Format of entries in line info array:
-	 * 0-31: end offset
-	 * 32-47: fold level
-	 * 48-55: visibility bit flags
-	 * 56: fold level valid flag
-	 * 57: context valid flag
-	 * 58-62: number of screen lines (currently unused, reserved for jEdit 4.1)
-	 * 63: reserved
-	 *
-	 * Having all the info packed into a long is not very OO and makes the
+	/* Having all the info packed into a long is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
 	 *
 	 * The new document model has just 12 bytes of overhead per line.
@@ -61,17 +52,17 @@ public class OffsetManager
 	 *
 	 * In the old document model there were 5 objects per line, for a
 	 * total of about 100 bytes, plus a cached token list, which used
-	 * another 100 or so bytes.
-	 * }}}*/
-	public static final long END_MASK = 0x00000000ffffffffL;
-	public static final long FOLD_LEVEL_MASK = 0x0000ffff00000000L;
-	public static final int FOLD_LEVEL_SHIFT = 32;
-	public static final long VISIBLE_MASK = 0x00ff000000000000L;
-	public static final int VISIBLE_SHIFT = 48;
-	public static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
-	public static final long LINE_CONTEXT_VALID_MASK = (1L<<57);
-	public static final long SCREEN_LINES_MASK = 0x7c00000000000000L;
-	public static final long SCREEN_LINES_SHIFT = 58;
+	 * another 100 or so bytes. */
+	public static final long END_MASK                = 0x00000000ffffffffL;
+	public static final long FOLD_LEVEL_MASK         = 0x000000ff00000000L;
+	public static final int FOLD_LEVEL_SHIFT         = 32;
+	public static final long VISIBLE_MASK            = 0x0000ff0000000000L;
+	public static final int VISIBLE_SHIFT            = 40;
+	public static final long SCREEN_LINES_MASK       = 0x00ff000000000000L;
+	public static final long SCREEN_LINES_SHIFT      = 48;
+	public static final long SCREEN_LINES_VALID_MASK = (1L<<60);
+	public static final long FOLD_LEVEL_VALID_MASK   = (1L<<61);
+	public static final long LINE_CONTEXT_VALID_MASK = (1L<<62);
 
 	//{{{ OffsetManager constructor
 	public OffsetManager(Buffer buffer)
@@ -169,6 +160,12 @@ public class OffsetManager
 	// Also sets 'fold level valid' flag
 	public final void setFoldLevel(int line, int level)
 	{
+		if(level > 0xff)
+		{
+			// limitations...
+			level = 0xff;
+		}
+
 		if(gapLine != -1 && line >= gapLine)
 			moveGap(line + 1,0,"setFoldLevel");
 
@@ -194,8 +191,6 @@ public class OffsetManager
 			lineInfo[line] = (lineInfo[line] & ~mask);
 	} //}}}
 
-	/* the next two methods are not used!
-
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
 	{
@@ -207,10 +202,9 @@ public class OffsetManager
 	public final void setScreenLineCount(int line, int count)
 	{
 		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
-			| ((long)count << SCREEN_LINES_SHIFT));
+			| ((long)count << SCREEN_LINES_SHIFT)
+			| SCREEN_LINES_VALID_MASK);
 	} //}}}
-
-	*/
 
 	//{{{ isLineContextValid() method
 	public final boolean isLineContextValid(int line)
@@ -355,6 +349,7 @@ public class OffsetManager
 		int numLines, int length, LongArray endOffsets)
 	{
 		int endLine = startLine + numLines;
+		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
 
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
@@ -441,6 +436,8 @@ public class OffsetManager
 	public void contentRemoved(int startLine, int offset,
 		int numLines, int length)
 	{
+		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
+
 		//{{{ Update virtual line counts
 		for(int i = 0; i < numLines; i++)
 		{

@@ -124,15 +124,17 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 						&& end != null
 						&& seenNonWhitespace)
 					{
-						if(firstToken != null)
-							out.add(merge((Chunk)firstToken));
-
-						firstToken = new Chunk(endOfWhitespace,
+						Chunk nextLine = new Chunk(endOfWhitespace,
 							end.offset + end.length,
 							getParserRuleSet(context));
 
-						firstToken.next = end.next;
+						nextLine.next = end.next;
 						end.next = null;
+
+						if(firstToken != null)
+							out.add(merge((Chunk)firstToken));
+
+						firstToken = nextLine;
 
 						x = x - endX + endOfWhitespace;
 
