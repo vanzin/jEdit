@@ -54,7 +54,8 @@ public class VFSManager
 		int count = jEdit.getIntegerProperty("ioThreadCount",4);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
-		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
+		if(OperatingSystem.isDOSDerived())
+			registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 	} //}}}
 
 	//{{{ start() method

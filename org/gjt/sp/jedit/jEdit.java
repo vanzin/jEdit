@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,16 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		//{{{ Set up log level
+		String javaVersion = System.getProperty("java.version");
+		if(javaVersion.compareTo("1.3") < 0)
+		{
+			System.err.println("You are running Java version "
+				+ javaVersion + ".");
+			System.err.println("jEdit requires Java 1.3 or later.");
+			System.exit(1);
+		}
+
+		//{{{ Set up activity log
 		int level = Log.WARNING;
 		if(args.length >= 1)
 		{
@@ -90,7 +99,10 @@ public class jEdit
 				level = Integer.parseInt(levelStr);
 				args[0] = null;
 			}
-		} //}}}
+		}
+
+		Log.init(true,level);
+		//}}}
 
 		//{{{ Parse command line
 		boolean endOpts = false;
@@ -207,8 +219,8 @@ public class jEdit
 			}
 		} //}}}
 
-		//{{{ MacOS X GUI hacks
-		if(System.getProperty("os.name").indexOf("Mac") != -1)
+		//{{{ MacOS X GUI hack
+		if(OperatingSystem.isMacOS())
 		{
 			// put the menu bar at the top of the screen, as opposed to
 			// inside the jEdit window
@@ -220,9 +232,7 @@ public class jEdit
 		if(!new File(settingsDirectory,"nosplash").exists())
 			GUIUtilities.showSplashScreen();
 
-		Log.init(true,level);
-
-		//{{{ Initialize activity log and settings directory
+		//{{{ Initialize settings directory
 		Writer stream;
 		if(settingsDirectory != null)
 		{
@@ -288,7 +298,7 @@ public class jEdit
 		initUserProperties();
 		initPLAF();
 
-		if(System.getProperty("java.version").compareTo("1.4") >= 0)
+		if(OperatingSystem.hasJava14())
 		{
 			try
 			{

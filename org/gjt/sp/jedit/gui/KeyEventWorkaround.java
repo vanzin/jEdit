@@ -25,13 +25,11 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.event.*;
 import java.awt.*;
+import org.gjt.sp.jedit.OperatingSystem;
 //}}}
 
 public class KeyEventWorkaround
 {
-	// from JDK 1.2 InputEvent.java
-	public static final int ALT_GRAPH_MASK = 1 << 5;
-
 	//{{{ processKeyEvent() method
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
@@ -50,7 +48,7 @@ public class KeyEventWorkaround
 				keyCode == '\0')
 				return null;
 
-			if(!mac)
+			if(!OperatingSystem.isMacOS())
 				handleBrokenKeys(evt,keyCode);
 
 			return evt;
@@ -64,7 +62,7 @@ public class KeyEventWorkaround
 
 			// "Alt" is the option key on MacOS, and it can generate
 			// user input
-			if(mac)
+			if(OperatingSystem.isMacOS())
 			{
 				if(evt.isControlDown() || evt.isMetaDown())
 					return null;
@@ -102,7 +100,6 @@ public class KeyEventWorkaround
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static boolean mac;
 	private static long lastKeyTime;
 
 	private static int last;
@@ -111,12 +108,6 @@ public class KeyEventWorkaround
 	private static final int LAST_ALT = 2;
 	private static final int LAST_BROKEN = 3;
 	//}}}
-
-	//{{{ Class initializer
-	static
-	{
-		mac = (System.getProperty("os.name").indexOf("Mac OS") != -1);
-	} //}}}
 
 	//{{{ handleBrokenKeys() method
 	private static void handleBrokenKeys(KeyEvent evt, int keyCode)

@@ -255,7 +255,7 @@ public class Registers
 	}
 
 	/**
-	 * Clears (i.e. it's value to null) the specified register.
+	 * Sets the value of the specified register to <code>null</code>.
 	 * @param name The register name
 	 */
 	public static void clearRegister(char name)

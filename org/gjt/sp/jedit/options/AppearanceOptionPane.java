@@ -100,7 +100,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"options.appearance.decorateDialogs"));
 		decorateDialogs.setSelected(jEdit.getBooleanProperty("decorate.dialogs"));
 
-		if(System.getProperty("java.version").compareTo("1.4") >= 0)
+		if(OperatingSystem.hasJava14())
 		{
 			addComponent(decorateFrames);
 			addComponent(decorateDialogs);

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 1998, 1999, 2000 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
@@ -56,16 +56,13 @@ public class FileVFS extends VFS
 	//{{{ getParentOfPath() method
 	public String getParentOfPath(String path)
 	{
-		if(File.separatorChar == '\\')
+		if(OperatingSystem.isDOSDerived())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return FileRootsVFS.PROTOCOL + ":";
 			else if(path.length() == 3 && path.endsWith(":\\"))
 				return FileRootsVFS.PROTOCOL + ":";
 		}
-
-		if(path.equals("/"))
-			return FileRootsVFS.PROTOCOL + ":";
 
 		return super.getParentOfPath(path);
 	} //}}}
@@ -74,7 +71,7 @@ public class FileVFS extends VFS
 	public String constructPath(String parent, String path)
 	{
 		// have to handle these cases specially on windows.
-		if(File.separatorChar == '\\')
+		if(OperatingSystem.isDOSDerived())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return path;
@@ -164,7 +161,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ On Unix, preserve permissions
-		if(isUnix)
+		if(OperatingSystem.isUnix())
 		{
 			int permissions = getPermissions(buffer.getPath());
 			Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
@@ -230,7 +227,7 @@ public class FileVFS extends VFS
 		 * path separators, for various reasons. So to work around
 		 * that, we add a '\' to drive letter paths on Windows.
 		 */
-		if(File.separatorChar == '\\')
+		if(OperatingSystem.isWindows())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
 				path = path.concat(File.separator);
@@ -303,7 +300,7 @@ public class FileVFS extends VFS
 	{
 		File _to = new File(to);
 
-		// Windows workaround
+		// Case-insensitive fs workaround
 		if(!from.equalsIgnoreCase(to))
 			_to.delete();
 
@@ -395,8 +392,11 @@ public class FileVFS extends VFS
 	//{{{ _saveComplete() method
 	public void _saveComplete(Object session, Buffer buffer, Component comp)
 	{
-		int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
-		setPermissions(buffer.getPath(),permissions);
+		if(jEdit.getBooleanProperty("twoStageSave"))
+		{
+			int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
+			setPermissions(buffer.getPath(),permissions);
+		}
 	} //}}}
 
 	//{{{ Permission preservation code
@@ -414,7 +414,7 @@ public class FileVFS extends VFS
 	{
 		int permissions = 0;
 
-		if(isUnix)
+		if(OperatingSystem.isUnix())
 		{
 			String[] cmdarray = { "ls", "-ld", path };
 
@@ -487,7 +487,7 @@ public class FileVFS extends VFS
 	{
 		if(permissions != 0)
 		{
-			if(isUnix)
+			if(OperatingSystem.isUnix())
 			{
 				String[] cmdarray = { "chmod", Integer.toString(permissions, 8), path };
 
@@ -510,45 +510,6 @@ public class FileVFS extends VFS
 				}
 			}
 		}
-	} //}}}
-
-	//}}}
-
-	//{{{ Pivate members
-	private static boolean isUnix;
-
-	//{{{ Class initializer
-	static
-	{
-		//{{{ Determine if we are running on a Unix operating system
-		// If the file separator is '/', the OS is either Unix,
-		// MacOS X, or MacOS.
-		if(File.separatorChar == '/')
-		{
-			String osName = System.getProperty("os.name");
-			if(osName.indexOf("Mac") != -1)
-			{
-				if(osName.indexOf("X") != -1)
-				{
-					// MacOS X is Unix.
-					isUnix = true;
-				}
-				else
-				{
-					// Classic MacOS is definately not Unix.
-					isUnix = false;
-				}
-			}
-			else
-			{
-				// Unix.
-				isUnix = true;
-			}
-		} //}}}
-
-		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
-			+ (isUnix ? "detected; will" : "not detected; will not")
-			+ " use permission-preserving code");
 	} //}}}
 
 	//}}}

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			maxLineLen = (int)getFont().getStringBounds(
 				foo,0,_maxLineLen,fontRenderContext).getWidth();
 		}
+
+		textArea.chunkCache.invalidateAll();
+		repaint();
 	} //}}}
 
 	//{{{ Getters and setters
@@ -444,6 +447,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return fracFontMetrics;
 	} //}}}
 
+	//{{{ getFontRenderContext() method
+	/**
+	 * Returns the font render context.
+	 * @since jEdit 4.0pre4
+	 */
+	public FontRenderContext getFontRenderContext()
+	{
+		return fontRenderContext;
+	} //}}}
+
 	//}}}
 
 	//{{{ addCustomHighlight() method
@@ -582,12 +595,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			boolean updateMaxHorizontalScrollWidth = false;
 
+			int physicalLine = 0;
+
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
 				boolean valid = buffer.isLoaded()
 					&& line >= 0 && line < lineCount;
 
-				int physicalLine;
 				boolean collapsedFold;
 
 				if(valid)
@@ -629,6 +643,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(buffer.isNextLineRequested())
 			{
 				int h = clipRect.y + clipRect.height;
+				textArea.chunkCache.invalidateLineRange(lastInvalid,
+					textArea.getVirtualLineCount() - 1);
+
 				repaint(0,h,getWidth(),getHeight() - h);
 			}
 
@@ -678,39 +695,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		return getPreferredSize();
 	} //}}}
-
-	//{{{ Package-private members
-
-	public void timeL2LC()
-	{
-		Buffer buffer = textArea.getBuffer();
-		Segment seg = new Segment();
-		java.util.Random r = new java.util.Random();
-		long start = System.currentTimeMillis();
-		for(int i = 0; i < 1000; i++)
-		{
-			int l = Math.abs(r.nextInt() % textArea.getBuffer()
-				.getLineCount());
-
-			buffer.getLineText(l,seg);
-			lineToChunkList(seg,buffer.markTokens(l).getFirstToken());
-		}
-		System.err.println(System.currentTimeMillis() - start);
-	} //}}}
-
-	//{{{ lineToChunkList() method
-	TextUtilities.Chunk lineToChunkList(Segment seg, Token tokens)
-	{
-		ArrayList l = new ArrayList();
-		TextUtilities.lineToChunkList(seg,tokens,styles,
-			fontRenderContext,this,0.0f,l);
-		if(l.size() == 0)
-			return null;
-		else
-			return (TextUtilities.Chunk)l.get(0);
-	} //}}}
-
-	//}}}
 
 	//{{{ Private members
 
@@ -794,10 +778,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			float baseLine = y + fm.getHeight()
 				- fm.getLeading() - fm.getDescent();
 
-			Segment seg = new Segment();
-			buffer.getLineText(physicalLine,seg);
-			TextUtilities.Chunk chunks = lineToChunkList(seg,buffer.markTokens(
-				physicalLine).getFirstToken());
+			TextUtilities.Chunk chunks = textArea.chunkCache
+				.getLineInfo(virtualLine,physicalLine).chunks;
 
 			if(chunks != null)
 				x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine,getWidth());

@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
 /**
  * A virtual filesystem implementation. Note tha methods whose names are
  * prefixed with "_" are called from the I/O thread.
- * @param author Slava Pestov
+ * @author Slava Pestov
  * @author $Id$
  */
 public abstract class VFS
@@ -329,7 +329,7 @@ public abstract class VFS
 
 	//{{{ _canonPath() method
 	/**
-	 * Returns the canonical form if the specified path name. For example,
+	 * Returns the canonical form of the specified path name. For example,
 	 * <code>~</code> might be expanded to the user's home directory.
 	 * @param session The session
 	 * @param path The path

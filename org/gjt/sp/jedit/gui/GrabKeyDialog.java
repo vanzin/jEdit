@@ -344,7 +344,8 @@ public class GrabKeyDialog extends JDialog
 				// mapped to the Command
 				if(evt.isControlDown())
 				{
-					keyString.append(macOS ? 'M' : 'C');
+					keyString.append(OperatingSystem.isMacOS()
+						? 'M' : 'C');
 					appendPlus = true;
 				}
 
@@ -356,7 +357,8 @@ public class GrabKeyDialog extends JDialog
 
 				if(evt.isMetaDown())
 				{
-					keyString.append(macOS ? 'C' : 'M');
+					keyString.append(OperatingSystem.isMacOS()
+						? 'C' : 'M');
 					appendPlus = true;
 				}
 
@@ -395,9 +397,6 @@ public class GrabKeyDialog extends JDialog
 			setText(keyString.toString());
 			updateAssignedTo(keyString.toString());
 		}
-
-		private boolean macOS = (System.getProperty("os.name")
-			.indexOf("Mac") != -1);
 	}
 
 	class ActionHandler implements ActionListener

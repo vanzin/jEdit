@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,11 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
+import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
+import java.util.ArrayList;
+//}}}
 
 /**
  * A class used internally by the text area.
@@ -35,29 +39,15 @@ class ChunkCache
 	ChunkCache(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
+		out = new ArrayList();
 	} //}}}
 
 	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
-		int newLength = textArea.getVisibleLines() + 1;
-		LineInfo[] newLineInfo = new LineInfo[newLength];
-		int toCopy;
-
-		if(lineInfo == null)
-			toCopy = 0;
-		else
-		{
-			toCopy = Math.min(lineInfo.length,newLength);
-			System.arraycopy(lineInfo,0,newLineInfo,0,toCopy);
-
-			for(int i = toCopy; i < newLength; i++)
-			{
-				newLineInfo[i] = new LineInfo();
-			}
-		}
-
-		lineInfo = newLineInfo;
+		lineInfo = new LineInfo[textArea.getVisibleLines() + 1];
+		for(int i = 0; i < lineInfo.length; i++)
+			lineInfo[i] = new LineInfo();
 	} //}}}
 
 	//{{{ setFirstLine() method
@@ -96,24 +86,70 @@ class ChunkCache
 		this.firstLine = firstLine;
 	} //}}}
 
+	//{{{ invalidateAll() method
+	void invalidateAll()
+	{
+		for(int i = 0; i < lineInfo.length; i++)
+		{
+			lineInfo[i].chunksValid = false;
+			lineInfo[i].chunks = null;
+		}
+	} //}}}
+
 	//{{{ invalidateLineRange() method
 	void invalidateLineRange(int startLine, int endLine)
 	{
 		startLine -= firstLine;
 		startLine = Math.min(lineInfo.length - 1,Math.max(0,startLine));
 		endLine -= firstLine;
-		endLine = Math.min(lineInfo.length - 1,Math.max(0,startLine));
+		endLine = Math.min(lineInfo.length - 1,Math.max(0,endLine));
 
 		for(int i = startLine; i <= endLine; i++)
 		{
+			lineInfo[i].chunksValid = false;
 			lineInfo[i].chunks = null;
 		}
+	} //}}}
+
+	//{{{ getLineInfo() method
+	LineInfo getLineInfo(int virtualLineIndex, int physicalLineIndex)
+	{
+		LineInfo info;
+
+		if(virtualLineIndex < firstLine
+			|| virtualLineIndex >= firstLine + lineInfo.length)
+			info = new LineInfo();
+		else
+			info = lineInfo[virtualLineIndex - firstLine];
+
+		if(!info.chunksValid)
+		{
+			out.clear();
+			Buffer buffer = textArea.getBuffer();
+			buffer.getLineText(physicalLineIndex,textArea.lineSegment);
+
+			TextAreaPainter painter = textArea.getPainter();
+			TextUtilities.lineToChunkList(textArea.lineSegment,
+				buffer.markTokens(physicalLineIndex).getFirstToken(),
+				painter.getStyles(),painter.getFontRenderContext(),
+				painter,0.0f,out);
+
+			if(out.size() == 0)
+				info.chunks = null;
+			else
+				info.chunks = (TextUtilities.Chunk)out.get(0);
+
+			info.chunksValid = true;
+		}
+
+		return info;
 	} //}}}
 
 	//{{{ Private members
 	private JEditTextArea textArea;
 	private int firstLine;
 	private LineInfo[] lineInfo;
+	private ArrayList out;
 	//}}}
 
 	//{{{ LineInfo class
@@ -121,6 +157,7 @@ class ChunkCache
 	{
 		int physicalLine;
 		int subregion;
+		boolean chunksValid;
 		TextUtilities.Chunk chunks;
 		int width;
 	} //}}}
