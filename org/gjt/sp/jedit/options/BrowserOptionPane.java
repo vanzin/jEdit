@@ -67,6 +67,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 			+ ".showToolbar"));
 		addComponent(showToolbar);
 
+		/* Show menu bar */
+		showMenubar = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".general.showMenubar"));
+		showMenubar.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".showMenubar"));
+		addComponent(showMenubar);
+
 		/* Show icons */
 		showIcons = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".general.showIcons"));
@@ -103,11 +110,11 @@ public class BrowserOptionPane extends AbstractOptionPane
 		addComponent(doubleClickClose);
 
 		/* split VFSFileDialog horizontally */
-		splitHorizontally = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".general.splitHorizontally"));
-		splitHorizontally.setSelected(jEdit.getBooleanProperty("vfs.browser"
-			+ ".splitHorizontally"));
-		addComponent(splitHorizontally);
+		currentBufferFilter = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".general.currentBufferFilter"));
+		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".currentBufferFilter"));
+		addComponent(currentBufferFilter);
 	} //}}}
 
 	//{{{ _save() method
@@ -118,6 +125,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 			.getSelectedIndex()]);
 		jEdit.setBooleanProperty("vfs.browser.showToolbar",
 			showToolbar.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.showMenubar",
+			showMenubar.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showIcons",
 			showIcons.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
@@ -128,18 +137,19 @@ public class BrowserOptionPane extends AbstractOptionPane
 			sortMixFilesAndDirs.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.doubleClickClose",
 			doubleClickClose.isSelected());
-		jEdit.setBooleanProperty("vfs.browser.splitHorizontally",
-			splitHorizontally.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
+			currentBufferFilter.isSelected());
 	} //}}}
 
 	//{{{ Private members
 	private JComboBox defaultDirectory;
 	private JCheckBox showToolbar;
+	private JCheckBox showMenubar;
 	private JCheckBox showIcons;
 	private JCheckBox showHiddenFiles;
 	private JCheckBox sortIgnoreCase;
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
-	private JCheckBox splitHorizontally;
+	private JCheckBox currentBufferFilter;
 	//}}}
 } //}}}

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,10 +45,9 @@ import org.gjt.sp.jedit.*;
 class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor
-	public BrowserView(VFSBrowser browser, final boolean splitHorizontally)
+	public BrowserView(final VFSBrowser browser)
 	{
 		this.browser = browser;
-		this.splitHorizontally = splitHorizontally;
 
 		parentDirectories = new JList();
 
@@ -80,7 +79,8 @@ class BrowserView extends JPanel
 		JScrollPane treeScroller = new JScrollPane(tree);
 		treeScroller.setMinimumSize(new Dimension(0,0));
 		splitPane = new JSplitPane(
-			splitHorizontally ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
+			browser.isHorizontalLayout()
+			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
 			parentScroller,treeScroller);
 		splitPane.setOneTouchExpandable(true);
 
@@ -88,7 +88,7 @@ class BrowserView extends JPanel
 		{
 			public void run()
 			{
-				String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
+				String prop = browser.isHorizontalLayout() ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
 				int loc = jEdit.getIntegerProperty(prop,-1);
 				if(loc == -1)
 					loc = parentScroller.getPreferredSize().height;
@@ -125,7 +125,7 @@ class BrowserView extends JPanel
 	//{{{ removeNotify() method
 	public void removeNotify()
 	{
-		String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
+		String prop = browser.isHorizontalLayout() ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
 		jEdit.setIntegerProperty(prop,splitPane.getDividerLocation());
 
 		super.removeNotify();
@@ -320,7 +320,6 @@ class BrowserView extends JPanel
 	private DefaultMutableTreeNode rootNode;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
-	private boolean splitHorizontally;
 
 	private FileCellRenderer renderer = new FileCellRenderer();
 
@@ -464,7 +463,7 @@ class BrowserView extends JPanel
 
 	//}}}
 
-	//{{{ Inner classes
+	//{{{ Inner classesf
 
 	//{{{ ClearTypeSelect
 	class ClearTypeSelect implements ActionListener
@@ -623,13 +622,6 @@ class BrowserView extends JPanel
 		//{{{ processKeyEvent() method
 		public void processKeyEvent(KeyEvent evt)
 		{
-			// could make things somewhat easier...
-			// ... but KeyEventWorkaround 'output contract' will
-			// change in 4.1, so not a good idea
-			//evt = KeyEventWorkaround.processKeyEvent(evt);
-			//if(evt == null)
-			//	return;
-
 			if(evt.getID() == KeyEvent.KEY_PRESSED)
 			{
 				switch(evt.getKeyCode())
@@ -669,16 +661,30 @@ class BrowserView extends JPanel
 				switch(evt.getKeyChar())
 				{
 				case '~':
-					browser.setDirectory(System.getProperty("user.home"));
-					break;
+					if(browser.getMode() == VFSBrowser.BROWSER)
+					{
+						browser.setDirectory(System.getProperty("user.home"));
+						return;
+					}
+					else
+						break;
 				case '/':
-					browser.rootDirectory();
-					break;
+					if(browser.getMode() == VFSBrowser.BROWSER)
+					{
+						browser.rootDirectory();
+						return;
+					}
+					else
+						break;
 				case '-':
-					View view = browser.getView();
-					Buffer buffer = view.getBuffer();
-					browser.setDirectory(buffer.getDirectory());
-					break;
+					if(browser.getMode() == VFSBrowser.BROWSER)
+					{
+						Buffer buffer = browser.getView().getBuffer();
+						browser.setDirectory(buffer.getDirectory());
+						return;
+					}
+					else
+						break;
 				default:
 					typeSelectBuffer.append(evt.getKeyChar());
 					doTypeSelect(typeSelectBuffer.toString(),true);
@@ -687,10 +693,8 @@ class BrowserView extends JPanel
 					timer.setInitialDelay(750);
 					timer.setRepeats(false);
 					timer.start();
-					break;
+					return;
 				}
-
-				return;
 			}
 
 			if(!evt.isConsumed())

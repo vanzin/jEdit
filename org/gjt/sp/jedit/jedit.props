@@ -348,14 +348,14 @@ print.tabSize=2
 #}}}
 
 #{{{ File system browser settings
-
+vfs.browser.showMenubar=true
 vfs.browser.showToolbar=true
 vfs.browser.showIcons=true
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortMixFilesAndDirs=false
 vfs.browser.sortIgnoreCase=true
 vfs.browser.doubleClickClose=false
-vfs.browser.splitHorizontally=false
+vfs.browser.currentBufferFilter=false
 
 # Can be one of: buffer, home, favorites, last
 vfs.browser.defaultPath=buffer

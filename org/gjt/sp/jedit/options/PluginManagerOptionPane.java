@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002 Kris Kopicki
+ * Copyright (C) 2003 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,10 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.pluginmgr.*;
+import org.gjt.sp.util.WorkRequest;
 
 class PluginManagerOptionPane extends AbstractOptionPane
 {
@@ -77,6 +81,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		// Start downloading the list nice and early
 		miraList = new JList(miraModel = new MirrorModel());
 		miraList.setSelectionModel(new SingleSelectionModel());
+		miraList.setSelectedIndex(0);
 
 		/* Download mirror */
 		add(BorderLayout.NORTH,mirrorLabel);
@@ -121,8 +126,16 @@ class PluginManagerOptionPane extends AbstractOptionPane
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("plugin-manager.installUser",settingsDir.isSelected());
-		jEdit.setProperty("plugin-manager.mirror.id",miraModel.getID(miraList.getSelectedIndex()));
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
+		
+		String currentMirror = miraModel.getID(miraList.getSelectedIndex());
+		String previousMirror = jEdit.getProperty("plugin-manager.mirror.id");
+		
+		if (!previousMirror.equals(currentMirror))
+		{
+			jEdit.setProperty("plugin-manager.mirror.id",currentMirror);
+			// Insert code to update the plugin managers list here later
+		}
 	} //}}}
 
 	//}}}
@@ -136,30 +149,8 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		{
 			super();
 			mirrors = new LinkedList();
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					try {
-						mirrors = new MirrorList().mirrors;
-					} catch (Exception ex) {
-						mirrors = new LinkedList();
-					}
-					mirrors.add(0,noMirror);
-					fireContentsChanged(this,0,mirrors.size());
-
-					String ID = jEdit.getProperty("plugin-manager.mirror.id");
-					int size = getSize();
-					for (int i=0; i < size; i++)
-					{
-						if (size == 1 || getID(i).equals(ID))
-						{
-							miraList.setSelectedIndex(i);
-							break;
-						}
-					}
-				}
-			});
+			mirrors.add(noMirror);
+			VFSManager.runInWorkThread(new DownloadMirrorsThread());
 		}
 
 		public String getID(int index)
@@ -180,6 +171,15 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			MirrorList.Mirror mirror = (MirrorList.Mirror)mirrors.get(index);
 			return new String(mirror.continent+": "+mirror.description+" ("+mirror.location+")");
 		}
+		
+		public void addToList(List more)
+		{
+			int size1 = getSize();
+			int size2 = more.size();
+			mirrors.addAll(more);
+			if (size2 > 0)
+				fireIntervalAdded(this,size1, size1 + size2 - 1);
+		}
 	} //}}}
 
 	//{{{ SingleSelectionModel class
@@ -192,5 +192,41 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		}
 
 		public void removeSelectionInterval(int index0, int index1) {}
+	} //}}}
+	
+	//{{{ DownloadMirrorsThread class
+	class DownloadMirrorsThread extends WorkRequest
+	{
+		public void run()
+		{
+			setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
+			setProgressMaximum(1);
+			setProgressValue(0);
+			
+			List mirrors = new LinkedList();
+			try {
+				mirrors = new MirrorList().mirrors;
+			} catch (Exception ex) {}
+			miraModel.addToList(mirrors);
+			
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					String ID = jEdit.getProperty("plugin-manager.mirror.id");
+					int size = miraModel.getSize();
+					for (int i=0; i < size; i++)
+					{
+						if (size == 1 || miraModel.getID(i).equals(ID))
+						{
+							miraList.setSelectedIndex(i);
+							break;
+						}
+					}
+				}
+			});
+			
+			setProgressValue(1);
+		}
 	} //}}}
 }

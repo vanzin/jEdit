@@ -164,19 +164,13 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		Box topBox = new Box(BoxLayout.Y_AXIS);
 
-		boolean horizontalLayout = (mode != BROWSER
+		horizontalLayout = (mode != BROWSER
 			|| DockableWindowManager.TOP.equals(position)
 			|| DockableWindowManager.BOTTOM.equals(position));
 
 		toolbarBox = new Box(horizontalLayout
 			? BoxLayout.X_AXIS
 			: BoxLayout.Y_AXIS);
-		JPanel menuBar = createMenuBar();
-		if(!horizontalLayout)
-			menuBar.add(Box.createGlue());
-		toolbarBox.add(menuBar);
-		if(horizontalLayout)
-			toolbarBox.add(Box.createHorizontalStrut(6));
 
 		topBox.add(toolbarBox);
 
@@ -253,13 +247,27 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
-		add(BorderLayout.CENTER,browserView = new BrowserView(this,horizontalLayout));
+		add(BorderLayout.CENTER,browserView = new BrowserView(this));
 
 		propertiesChanged();
 
-		String filter = jEdit.getProperty("vfs.browser.last-filter");
-		if(filter == null)
-			filter = jEdit.getProperty("vfs.browser.default-filter");
+		String filter;
+		if(mode == BROWSER || !jEdit.getBooleanProperty(
+			"vfs.browser.currentBufferFilter"))
+		{
+			filter = jEdit.getProperty("vfs.browser.last-filter");
+			if(filter == null)
+				filter = jEdit.getProperty("vfs.browser.default-filter");
+		}
+		else
+		{
+			String ext = MiscUtilities.getFileExtension(
+				view.getBuffer().getName());
+			if(ext.length() == 0)
+				filter = jEdit.getProperty("vfs.browser.default-filter");
+			else
+				filter = "*" + ext;
+		}
 
 		filterField.setText(filter);
 		filterField.addCurrentToHistory();
@@ -383,6 +391,12 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	public boolean isMultipleSelectionEnabled()
 	{
 		return multipleSelection;
+	} //}}}
+
+	//{{{ isHorizontalLayout() method
+	public boolean isHorizontalLayout()
+	{
+		return horizontalLayout;
 	} //}}}
 
 	//{{{ getShowHiddenFiles() method
@@ -951,6 +965,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private EventListenerList listenerList;
 	private View view;
 	private boolean floating;
+	private boolean horizontalLayout;
 	private String path;
 	private HistoryTextField pathField;
 	private JCheckBox filterCheckbox;
@@ -977,7 +992,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	{
 		JPanel menuBar = new JPanel();
 		menuBar.setLayout(new BoxLayout(menuBar,BoxLayout.X_AXIS));
-		menuBar.setBorder(new EmptyBorder(0,0,1,0));
+		menuBar.setBorder(new EmptyBorder(0,3,1,0));
 
 		menuBar.add(new CommandsMenuButton());
 		menuBar.add(Box.createHorizontalStrut(3));
@@ -1004,8 +1019,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		toolBar.add(newDirectory = createToolButton("new-directory"));
 		if(mode == BROWSER)
 			toolBar.add(searchInDirectory = createToolButton("search-in-directory"));
-
-		toolBar.add(Box.createGlue());
 
 		return toolBar;
 	} //}}}
@@ -1049,23 +1062,38 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		browserView.propertiesChanged();
 
-		if(mode == BROWSER)
+		toolbarBox.removeAll();
+
+		if(jEdit.getBooleanProperty("vfs.browser.showToolbar"))
 		{
-			boolean showToolbar = jEdit.getBooleanProperty("vfs.browser.showToolbar");
-			if(showToolbar && toolbar == null)
+			JToolBar toolbar = createToolBar();
+			if(horizontalLayout)
+				toolbarBox.add(toolbar);
+			else
 			{
-				toolbar = createToolBar();
 				toolbar.add(Box.createGlue());
-				toolbarBox.add(toolbar,0);
-				revalidate();
-			}
-			else if(!showToolbar && toolbar != null)
-			{
-				toolbarBox.remove(toolbar);
-				toolbar = null;
-				revalidate();
+				toolbarBox.add(toolbar);
 			}
 		}
+
+		if(jEdit.getBooleanProperty("vfs.browser.showMenubar"))
+		{
+			JPanel menubar = createMenuBar();
+			if(horizontalLayout)
+			{
+				toolbarBox.add(Box.createHorizontalStrut(6));
+				toolbarBox.add(menubar,0);
+			}
+			else
+			{
+				menubar.add(Box.createGlue());
+				toolbarBox.add(menubar);
+			}
+		}
+
+		toolbarBox.add(Box.createGlue());
+
+		revalidate();
 
 		if(path != null)
 			reloadDirectory();

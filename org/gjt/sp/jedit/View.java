@@ -28,11 +28,14 @@ import javax.swing.text.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -1138,6 +1141,15 @@ public class View extends JFrame implements EBComponent
 		EditBus.addToBus(this);
 	} //}}}
 
+	//{{{ setWaitSocket() method
+	/**
+	 * This socket is closed when the buffer is closed.
+	 */
+	public void setWaitSocket(Socket waitSocket)
+	{
+		this.waitSocket = waitSocket;
+	} //}}}
+
 	//{{{ close() method
 	void close()
 	{
@@ -1164,6 +1176,23 @@ public class View extends JFrame implements EBComponent
 		recorder = null;
 
 		getContentPane().removeAll();
+
+		// notify clients with -wait
+		if(waitSocket != null && !waitSocket.isClosed())
+		{
+			try
+			{
+				waitSocket.getOutputStream().write('\0');
+				waitSocket.getOutputStream().flush();
+				waitSocket.getInputStream().close();
+				waitSocket.getOutputStream().close();
+				waitSocket.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+			}
+		}
 	} //}}}
 
 	//{{{ updateTitle() method
@@ -1229,6 +1258,8 @@ public class View extends JFrame implements EBComponent
 	private boolean showFullPath;
 
 	private boolean plainView;
+
+	private Socket waitSocket;
 	//}}}
 
 	//{{{ getEditPanes() method

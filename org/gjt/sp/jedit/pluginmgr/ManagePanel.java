@@ -147,6 +147,9 @@ public class ManagePanel extends JPanel
 	//{{{ Entry class
 	class Entry
 	{
+		static final String ERROR = "error";
+		static final String LOADED = "loaded";
+
 		String clazz;
 		String name, version, author, status, docs;
 		Vector jars;
@@ -177,9 +180,9 @@ public class ManagePanel extends JPanel
 				Entry.this.author = jEdit.getProperty("plugin."+clazz+".author");
 
 				if (broken)
-					this.status = "Error";
+					this.status = ERROR;
 				else
-					this.status = "Loaded";
+					this.status = LOADED;
 
 				this.docs = jEdit.getProperty("plugin."+clazz+".docs");
 
@@ -253,10 +256,15 @@ public class ManagePanel extends JPanel
 			Entry entry = (Entry)entries.get(rowIndex);
 			switch (columnIndex)
 			{
-				case 0: return entry.name;
-				case 1: return entry.version;
-				case 2: return entry.status;
-				default: throw new Error("Column out of range");
+				case 0:
+					return entry.name;
+				case 1:
+					return entry.version;
+				case 2:
+					return jEdit.getProperty("plugin-manager.status."
+						+ entry.status);
+				default:
+					throw new Error("Column out of range");
 			}
 		} //}}}
 
@@ -321,7 +329,7 @@ public class ManagePanel extends JPanel
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			Entry entry = pluginModel.getEntry(row);
-			if (entry.status.equals("Error"))
+			if (entry.status.equals(Entry.ERROR))
 				tcr.setForeground(Color.red);
 			else
 				tcr.setForeground(Color.black);

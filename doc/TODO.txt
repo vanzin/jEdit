@@ -3,26 +3,97 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-[error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: 5 < 24
-[error] ExtensionManager:  at org.gjt.sp.jedit.syntax.Chunk.offsetToX(Chunk.java:156)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.JEditTextArea.offsetToXY(JEditTextArea.java:858)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintSelection.paintSelection(TextAreaPainter.java:1182)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintSelection.paintValidLine(TextAreaPainter.java:1115)
-
-- shifting larger than screen cause scrollTo NPE
+- searching in a buffer w/ narrowed fold
+- expand collapse lose sync
+- scrollTo() after expand folds still npe's
+- vfs browser: open in new view: doesn't focus the new view
 - macro record: doesn't respect overwrite
-- buffer: if socket already closed
-- -wait: return if view closed too
-- text area font change: wrap margin not updated
-- NO_LINE_BREAK in props.xml not honored -- EOL_SPAN delegates to
-  another ruleset...
-- MARK_PREVIOUS delegate like SEQ; update mail.xml
 - focus on one text area; click hypersearch result in another view;
   the other text area is not focused
-
-- narrow to a set of folds: expands first one. only need to do this if
-  narrowing to a single virtual line
 - narrow: scrolls one down
+- save file resulting in fold collapse -- scroll to 0
+- wm drag: sometimes cursor gets stuck, need to check for resizePos out
+of bounds, etc.
+- log viewer scrolling
+- magic up/down is broken with select
+- closing lots of files is slow
+- autoscroll down is slower than up if !lastLinePartial
+- propertiesChanged() closes dockables
+- left-bias rects broken with up/down
+- today:
+  - finish rect select content inserted/content removed
+  - rect select and trailing whitespace
+- redo/undo dirty restore is broken.
+- synchro scroll needs a rewrite & folding
+- help:
+  - titles in search are fucked
+  - FAQ: better titles
+- new plugin mgr:
+  - ask before selecting dependencies & 'don't show again'
+  - mirror change: refresh download locations
+  - explicit 'refresh mirror list' button in option pane
+- update horizontal scroll width immediately on buffer switch
+- C+ENTER 3 menu command - bar not hidden - need input handler action
+  listeners or something
+- C+ENTER 3 C+2
+- A+# on OS X, need better modifier mapping on OS X
+- how to handle S+0-9?
+- C+e , and . insert , and . in the buffer, ditto for [ and ]
+- bizarre dockable window manager button layout problem
+- return after collapsed fold: insert line after end of fold
+- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
+  know mod status
+- some JLists do not auto-scroll on keystroke
+- format -- instead of \n\n, what if it has \n   \n?
+- if A depends on B but A is loaded before B and B breaks, A ends up
+  being loaded. Solution: load plugins in order of dependencies?
+- eval-for-selected-lines doesn't work with rectangular selection
+- plugin manager: install plugins, no restart, install another: deps bad
+- plugin deps need JAR name, not plugin name
+- maximisation state bug: open window, resize to size X. close window,
+  open window again, resize to size Y. maximise. close window, open
+  window again, it has size X not size Y.
+- expand fold: try to expand even if already expanded
+- openFile(): can open two copies of the same buffer if a) remote b)
+  canonPath != path
+- recording 'evaluate for selected lines'
+- aborts not always fired
+- globalColors setting:
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+- evalutate for selected lines: > 1 selection per line
+- motif l&f: shortcuts in menu items
+
++ verify:
+
+[error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
+[error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)
+[error] PluginListDownloadProgress$DownloadThread:  at java.io.File.exists(File.java:679)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:3023)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:875)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList$Plugin.checkIfInstalled(PluginList.java:165)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList.addPlugin(PluginList.java:78)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginListHandler.endElement(PluginListHandler.java:180)
+- focus problem with hypersearch in floating window
+- line 2112 -- isNarrowed() check of moveCaretPosition()
+- dwm: not always focused correctly
+- JDK 1.4 focus bugs
+- if loadMode() throws error, save of a mode file fails?
+
++ cleanups:
+
+- text area mouse handler cleanup
+- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
+- BrowserView.reloadDirectory(): hardcoded design decisions
+- finish persistent splits code
+- custom stylesheet: no xmlns
+- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
+  keeping INVALID? report errors in some other manner?
+- clean up the way macro hierarchy is stored
+- dialog parenting for fsb colors pane, vfs browser dialog
+- remove 8 text area per buffer limit
+
++ features:
 
 - plugin api:
   - new option pane api
@@ -34,71 +105,21 @@ and quirks that I need to fix eventually.
   - add jEdit methods to unload plugins
   - the cache
   - services
-
-- save file resulting in fold collapse -- scroll to 0
-
-- drop horizontal layout setting
-- add hide menu bar setting
 - right click menu: plugins & favorites
-- vfs browser: re-add option to base filter on filename extension
 - don't show 'new directory' in favorites:
-
-- wm drag: sometimes cursor gets stuck, need to check for resizePos out
-of bounds, etc.
-- log viewer scrolling
-- magic up/down is broken with select
-- closing lots of files is slow
-- autoscroll down is slower than up if !lastLinePartial
-- propertiesChanged() closes dockables
-- left-bias rects broken with up/down
-- loaded flag cleared before loading finished
-- today:
-  - finish rect select content inserted/content removed
-  - rect select and trailing whitespace
   - new bracket matching:
     - use interface to determine match
-
-[error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
-[error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)
-[error] PluginListDownloadProgress$DownloadThread:  at java.io.File.exists(File.java:679)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:3023)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:875)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList$Plugin.checkIfInstalled(PluginList.java:165)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList.addPlugin(PluginList.java:78)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginListHandler.endElement(PluginListHandler.java:180)
-
 - add option for confirm.save-all
-- redo/undo dirty restore is broken.
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible
-- synchro scroll needs a rewrite & folding
-- help:
-  - titles in search are fucked
-  - FAQ: better titles
-- new plugin mgr:
-  - human readable strings in source.... entry.status
-  - ask before selecting dependencies & 'don't show again'
-  - mirror change: refresh download locations
-  - explicit 'refresh mirror list' button in option pane
-- update horizontal scroll width immediately on buffer switch
 - HTML mode: use new token types
 - hypersearch: open in new split
 - new bsh and bsh command path
-- C+ENTER 3 menu command - bar not hidden - need input handler action
-  listeners or something
-- C+ENTER 3 C+2
 - beanshell: invokeAction() function
 - perl: q{}, etc.
-- plugin error dialog -- if > 1 error per plugin
-- A+# on OS X, need better modifier mapping on OS X
-- how to handle S+0-9?
-- C+e , and . insert , and . in the buffer, ditto for [ and ]
-- bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
-- return after collapsed fold: insert line after end of fold
-
 - need a new jEditLauncher
 - plugin tutorial:
   - plugin build environment docs
@@ -157,55 +178,6 @@ of bounds, etc.
     }
   <--- cursor here
 - examples of EOL_SPAN_REGEXP matching in docs
-- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
-  know mod status
-- some JLists do not auto-scroll on keystroke
-- format -- instead of \n\n, what if it has \n   \n?
-- if A depends on B but A is loaded before B and B breaks, A ends up
-  being loaded. Solution: load plugins in order of dependencies?
-- scrolling horizontally when dragging into virtual space: a bit quirky
-- eval-for-selected-lines doesn't work with rectangular selection
-- focus problem with hypersearch in floating window
-- plugin manager: install plugins, no restart, install another: deps bad
-- plugin deps need JAR name, not plugin name
-- maximisation state bug: open window, resize to size X. close window,
-  open window again, resize to size Y. maximise. close window, open
-  window again, it has size X not size Y.
-- expand fold: try to expand even if already expanded
-- openFile(): can open two copies of the same buffer if a) remote b)
-  canonPath != path
-- recording 'evaluate for selected lines'
-- aborts not always fired
-- globalColors setting:
-  - help viewer looks ugly
-  - selected borders in list, tree, table wrong colors
-- evalutate for selected lines: > 1 selection per line
-- motif l&f: shortcuts in menu items
-
-+ verify:
-
-- line 2112 -- isNarrowed() check of moveCaretPosition()
-- status bar still fooling around
-- popups still positioned poorly
-- searching in a buffer w/ narrowed fold
-- dwm: not always focused correctly
-- JDK 1.4 focus bugs
-- if loadMode() throws error, save of a mode file fails?
-
-+ cleanups:
-
-- text area mouse handler cleanup
-- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- BrowserView.reloadDirectory(): hardcoded design decisions
-- finish persistent splits code
-- custom stylesheet: no xmlns
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
-- clean up the way macro hierarchy is stored
-- dialog parenting for fsb colors pane, vfs browser dialog
-
-+ features:
-
 - remember floating & cloned dockables in perspective
 - caret saving needs to be more flexible w.r.t. split panes
 - add dockable window state change msg
@@ -217,6 +189,7 @@ of bounds, etc.
 
 + performance:
 
+- MARK_PREVIOUS delegate like SEQ; update mail.xml
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the
   buffer notify jEdit of path changes though.
 - menu drag: slow
@@ -233,7 +206,6 @@ of bounds, etc.
 - make vfs listing faster
 - don't repaint whole selection when resizing
 - could make non-soft wrap chunk merge even faster!
-- could make long lines even faster
 - syntax SPAN::END substitution: String --> char[] --> String
 - delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work
@@ -244,8 +216,6 @@ of bounds, etc.
 - optimize for no folding & no soft wrap case:
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
-- optimize for no syntax & no soft wrap case:
-  - markTokens() immediately returns
 - inserting lines repaints whole text area
 
 jEdit buffer local properties:

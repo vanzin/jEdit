@@ -134,6 +134,18 @@ release.
   Misc->Properties->jEdit Properties macro.
 
 }}}
+{{{ File System Browser
+
+- Re-added "Filter in file dialogs is current buffer extension" option
+  that used to be present in jEdit 4.0.
+
+- Added "Show menu bar" option.
+
+- Improved completion in file dialogs. Completion in the field is now
+  case-insensitive, and the full path is not inserted into the field
+  unless you press TAB.
+
+}}}
 {{{ User Interface
 
 - If regular expressions are enabled, Search->Find Previous now shows a
@@ -304,6 +316,14 @@ release.
 - Pressing ENTER with nothing selected in the File->Open dialog box no
   longer closes the dialog box.
 
+- Nested { and } work in globs now.
+
+- Fixed problem with EOL_SPAN delegating to a ruleset with a
+  NO_LINE_BREAK rule.
+
+- Fixed horizontal scrolling when creating a rectangular selection in
+  virtual space.
+
 }}}
 {{{ API Changes
 
@@ -345,6 +365,7 @@ release.
 
   Background
   Console
+  ErrorList
   JDiff
   WhiteSpace
   SideKick

@@ -55,54 +55,76 @@ class VFSFileNameField extends JTextField
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
+		String path = getText();
+
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
 		{
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_TAB:
-				doComplete();
-				return;
+				doComplete(path);
+				break;
 			case KeyEvent.VK_LEFT:
 				if(getCaretPosition() == 0)
 					browser.getBrowserView().getTree().processKeyEvent(evt);
-				return;
+				break;
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:
 				browser.getBrowserView().getTree().processKeyEvent(evt);
-				return;
+				break;
+			default:
+				super.processKeyEvent(evt);
+				break;
 			}
 		}
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
+			super.processKeyEvent(evt);
+
 			char ch = evt.getKeyChar();
-			if(ch > 0x20 && ch != 0x7f && ch != 0xff)
+			if(ch == '/')
 			{
-				SwingUtilities.invokeLater(new Runnable()
+				if(!MiscUtilities.isAbsolutePath(path))
 				{
-					public void run()
+					VFS.DirectoryEntry[] files = browser
+						.getBrowserView().getSelectedFiles();
+					if(files.length != 1
+						|| files[0].type ==
+						VFS.DirectoryEntry.FILE)
 					{
-						BrowserView view = browser.getBrowserView();
-						view.selectNone();
-						view.getTree().doTypeSelect(getText(),false);
+						return;
 					}
-				});
+					path = files[0].path;
+				}
+
+				VFS vfs = VFSManager.getVFSForPath(path);
+				if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+				{
+					setText(null);
+					browser.setDirectory(path);
+					VFSManager.waitForRequests();
+				}
+			}
+			else if(ch > 0x20 && ch != 0x7f && ch != 0xff)
+			{
+				BrowserView view = browser.getBrowserView();
+				view.selectNone();
+				view.getTree().doTypeSelect(path,false);
 			}
 		}
-
-		super.processKeyEvent(evt);
 	} //}}}
 
 	//{{{ Private members
 	private VFSBrowser browser;
 
 	//{{{ doComplete() method
-	private void doComplete()
+	private void doComplete(String currentText)
 	{
-		String currentText = getText();
-
 		BrowserView view = browser.getBrowserView();
+		view.selectNone();
+		view.getTree().doTypeSelect(currentText,false);
 
 		VFS.DirectoryEntry[] files = view.getSelectedFiles();
 		if(files.length == 0)
