@@ -144,6 +144,16 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 - Split panes now have resize weight, ensuring more intuitive behavior
   when a split view is resized.
 
+- If autosave kicked in while the 'Close All Buffers' dialog was open,
+  then the perspective would be saved, and the wrong buffer would be
+  restored on the next startup.
+
+- Fix an exception from being shown when loading a file with a malformed
+  .marks file.
+
+- Fix possible ArrayIndexOutOfBoundsException when deleting text after
+  decreasing the number of history elements.
+
 }}}
 {{{ API Changes
 

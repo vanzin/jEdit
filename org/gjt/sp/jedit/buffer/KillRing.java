@@ -65,7 +65,8 @@ public class KillRing implements MutableListModel
 			count = newCount;
 			wrap = false;
 		}
-		else if(count == ring.length)
+
+		if(count == ring.length)
 		{
 			count = 0;
 			wrap = true;
@@ -126,7 +127,8 @@ public class KillRing implements MutableListModel
 
 		ring = (UndoManager.Remove[])handler.list.toArray(
 			new UndoManager.Remove[handler.list.size()]);
-		count = ring.length;
+		count = 0;
+		wrap = true;
 	} //}}}
 
 	//{{{ save() method

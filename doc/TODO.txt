@@ -76,7 +76,6 @@ and quirks that I need to fix eventually.
 - token values negative?
 - single line selection should not hide line highlight
 - jedit -encoding
-- why is still added to end of kill ring?
 - goToBuffer() -- if any parent has zero height or zero width...
 - save selection between buffer switch
 - more accurate syntax highlighting

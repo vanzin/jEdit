@@ -197,6 +197,10 @@ public class BufferLoadRequest extends BufferIORequest
 				if(!line.startsWith("!"))
 					continue;
 
+				// malformed marks file?
+				if(line.length() == 0)
+					continue;
+				
 				char shortcut = line.charAt(1);
 				int start = line.indexOf(';');
 				int end = line.indexOf(';',start + 1);
