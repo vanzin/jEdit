@@ -41,6 +41,9 @@ contributing to this release.
   C+INSERT bound to copy
   S+INSERT bound to paste
 
+- Optimized the buffer line management code; this should make 'Replace
+  All' and similar edit-intensive tasks much faster.
+
 - BeanShell 1.2b6 included. Changes since 1.2b5 are:
 
   - Made bsh.Parser public and added a main() method allowing users to
