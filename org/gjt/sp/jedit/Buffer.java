@@ -223,7 +223,7 @@ public class Buffer implements EBComponent
 					BufferIORequest.NEW_PATH);
 				Segment seg = (Segment)getProperty(
 					BufferIORequest.LOAD_DATA);
-				IntegerArray endOffsets = (IntegerArray)
+				LongArray endOffsets = (LongArray)
 					getProperty(BufferIORequest.END_OFFSETS);
 
 				// below remove() call only works if read only
@@ -1148,7 +1148,7 @@ public class Buffer implements EBComponent
 			for(int i = 0; i < len; i++)
 			{
 				if(str.charAt(i) == '\n')
-					integerArray.add(i);
+					integerArray.add(i + 1);
 			}
 
 			if(!getFlag(UNDO_IN_PROGRESS))
@@ -1194,7 +1194,7 @@ public class Buffer implements EBComponent
 			for(int i = 0; i < seg.count; i++)
 			{
 				if(seg.array[seg.offset + i] == '\n')
-					integerArray.add(i);
+					integerArray.add(i + 1);
 			}
 
 			if(!getFlag(UNDO_IN_PROGRESS))
@@ -3362,7 +3362,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		lock = new ReadWriteLock();
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
-		integerArray = new IntegerArray();
+		integerArray = new LongArray();
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();
 
@@ -3478,7 +3478,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private ReadWriteLock lock;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
-	private IntegerArray integerArray;
+	private LongArray integerArray;
 	private UndoManager undoMgr;
 	private Vector bufferListeners;
 
@@ -3839,7 +3839,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ contentInserted() method
 	private void contentInserted(int offset, int length,
-		IntegerArray endOffsets)
+		LongArray endOffsets)
 	{
 		try
 		{

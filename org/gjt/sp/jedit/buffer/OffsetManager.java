@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.buffer;
 import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.LongArray;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -309,7 +309,7 @@ public class OffsetManager
 
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
-		int numLines, int length, IntegerArray endOffsets)
+		int numLines, int length, LongArray endOffsets)
 	{
 		int endLine = startLine + numLines;
 
@@ -360,7 +360,7 @@ public class OffsetManager
 				// need the line end offset to be in place
 				// for following fold level calculations
 				lineInfo[startLine + i] = (offset
-					+ endOffsets.get(i) + 1)
+					+ endOffsets.get(i))
 					| visible;
 			}
 
