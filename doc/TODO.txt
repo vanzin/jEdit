@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- DELETE in action bar
 - resize vertically -- can create blank space at bottom
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto

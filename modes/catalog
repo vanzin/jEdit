@@ -124,6 +124,9 @@
 <MODE NAME="javascript"		FILE="javascript.xml"
 				FILE_NAME_GLOB="*.js" />
 
+<MODE NAME="jcl"		FILE="jcl.xml"
+				FILE_NAME_GLOB="*.jcl" />
+
 <MODE NAME="jhtml"		FILE="jhtml.xml"
 				FILE_NAME_GLOB="*.jhtml" />
 
@@ -228,6 +231,9 @@
 
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />
+
+<MODE NAME="sas"		FILE="sas.xml"
+				FILE_NAME_GLOB="*.sas" />
 
 <!-- Note: same XML file as LISP mode -->
 <MODE NAME="scheme"		FILE="lisp.xml"
