@@ -294,8 +294,6 @@ public class JEditTextArea extends JComponent
 				displayManager.firstLine.reset();
 				displayManager.scrollLineCount.reset();
 			}
-			else
-				System.err.println("buffer not loaded when setBuffer() called");
 
 			if(buffer.isLoaded())
 				recalculateLastPhysicalLine();
@@ -447,19 +445,14 @@ public class JEditTextArea extends JComponent
 			physicalLine = prevLine;
 		}
 
-		System.err.println("current first line is " + getFirstLine());
-		System.err.println("was: " + physFirstLine);
 		if(physFirstLine > physicalLine)
 			physFirstLine = physicalLine;
-		System.err.println("now: " + physFirstLine);
-		System.err.println("skew: " + skew);
 		//}}}
 
 		if(physFirstLine == displayManager.firstLine.physicalLine)
 			return;
 
 		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
-		System.err.println("amount is " + amount);
 		if(amount > 0)
 			displayManager.firstLine.physDown(amount,skew);
 		else if(amount < 0)
@@ -5731,11 +5724,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
-			// ... otherwise,buffer will call transactionComplete()
-			// later on
-			//if(!buffer.isTransactionInProgress())
-			chunkCache.invalidateChunksFromPhys(startLine);
-
 			if(!buffer.isLoaded())
 				return;
 
@@ -5777,18 +5765,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentRemoved(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
-			// ... otherwise,buffer will call transactionComplete()
-			// later on
-			//if(!buffer.isTransactionInProgress())
-			chunkCache.invalidateChunksFromPhys(startLine);
-
 			if(!buffer.isLoaded())
 				return;
 
 			if(numLines != 0)
 				delayedMultilineUpdate = true;
 
-			// -numLines because they are removed.
 			delayedRepaint(startLine,startLine);
 
 			//{{{ resize selections if necessary
@@ -5844,6 +5826,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
 
+				for(int i = delayedRepaintStart;
+					i <= delayedRepaintEnd;
+					i++)
+				{
+					if(displayManager.isLineVisible(i))
+						displayManager.getScreenLineCount(i);
+				}
+				displayManager.notifyScreenLineChanges();
+
 				if(delayedMultilineUpdate)
 				{
 					invalidateScreenLineRange(chunkCache
@@ -5858,14 +5849,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						delayedRepaintEnd);
 				}
 
-				for(int i = delayedRepaintStart;
-					i <= delayedRepaintEnd;
-					i++)
-				{
-					if(displayManager.isLineVisible(i))
-						displayManager.getScreenLineCount(i);
-				}
-				displayManager.notifyScreenLineChanges();
 				delayedUpdate = false;
 			}
 

@@ -41,7 +41,7 @@ public class Debug
 	 * Print messages when text area and display manager perform scroll
 	 * updates.
 	 */
-	public static boolean SCROLL_DEBUG = true;
+	public static boolean SCROLL_DEBUG = false;
 
 	/**
 	 * Print messages when screen line counts change.
