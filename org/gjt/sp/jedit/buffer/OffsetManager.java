@@ -44,31 +44,14 @@ import org.gjt.sp.util.Log;
  */
 public class OffsetManager
 {
-	public static final long MAX_DISPLAY_COUNT = 8;
-
-	/* Having all the info packed into an int is not very OO and makes the
-	 * code somewhat more complicated, but it saves a lot of memory.
-	 *
-	 * The new document model has just 12 bytes of overhead per line.
-	 * LineContext instances are now internalized, so only a few should
-	 * actually be in the heap.
-	 *
-	 * In the old document model there were 5 objects per line, for a
-	 * total of about 100 bytes, plus a cached token list, which used
-	 * another 100 or so bytes. */
-	public static final int FOLD_LEVEL_MASK         = 0x000000ff;
-	public static final int VISIBLE_MASK            = 0x0000ff00;
-	public static final int VISIBLE_SHIFT           = 8;
-	public static final int SCREEN_LINES_MASK       = 0x00ff0000;
-	public static final int SCREEN_LINES_SHIFT      = 16;
-	public static final int SCREEN_LINES_VALID_MASK = (1<<25);
-
 	//{{{ OffsetManager constructor
-	public OffsetManager(Buffer buffer)
+	public OffsetManager()
 	{
-		this.buffer = buffer;
-
 		positions = new PosBottomHalf[100];
+		endOffsets = new int[1];
+		endOffsets[0] = 1;
+		lineInfo = new short[1];
+		lineInfo[0] = (short)(1 << SCREEN_LINES_SHIFT);
 	} //}}}
 
 	//{{{ getLineCount() method
@@ -141,7 +124,7 @@ public class OffsetManager
 			level = 0xff;
 		}
 
-		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
+		lineInfo[line] = (short)((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
 	} //}}}
 
 	//{{{ setFirstInvalidFoldLevel() method
@@ -154,25 +137,6 @@ public class OffsetManager
 	public int getFirstInvalidFoldLevel()
 	{
 		return firstInvalidFoldLevel;
-	} //}}}
-
-	//{{{ isLineVisible() method
-	public final boolean isLineVisible(int line, int index)
-	{
-		int mask = 1 << (index + VISIBLE_SHIFT);
-		return (lineInfo[line] & mask) != 0;
-	} //}}}
-
-	//{{{ setLineVisible() method
-	public final void setLineVisible(int line, int index, boolean visible)
-	{
-		int info = lineInfo[line];
-		int mask = 1 << (index + VISIBLE_SHIFT);
-		boolean oldVisible = ((info & mask) != 0);
-		if(visible)
-			lineInfo[line] = (info | mask);
-		else
-			lineInfo[line] = (info & ~mask);
 	} //}}}
 
 	//{{{ isScreenLineCountValid() method
@@ -191,11 +155,19 @@ public class OffsetManager
 	//{{{ setScreenLineCount() method
 	public final void setScreenLineCount(int line, int count)
 	{
+		if(count > 0x7f)
+		{
+			// limitations...
+			count = 0x7f;
+		}
+
 		if(Debug.SCREEN_LINES_DEBUG)
 			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
-		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
+		lineInfo[line] = (short)(
+			((lineInfo[line] & ~SCREEN_LINES_MASK)
 			| (count << SCREEN_LINES_SHIFT)
-			| SCREEN_LINES_VALID_MASK);
+			| SCREEN_LINES_VALID_MASK)
+		);
 	} //}}}
 
 	//{{{ getLineContext() method
@@ -282,9 +254,9 @@ public class OffsetManager
 		firstInvalidLineContext = firstInvalidFoldLevel = 0;
 		lineCount = endOffsets.getSize();
 		this.endOffsets = endOffsets.getArray();
-		lineInfo = new int[lineCount];
+		lineInfo = new short[lineCount];
 		for(int i = 0; i < lineInfo.length; i++)
-			lineInfo[i] = ((1 << SCREEN_LINES_SHIFT) | VISIBLE_MASK);
+			lineInfo[i] = (short)(1 << SCREEN_LINES_SHIFT);
 
 		lineContext = new TokenMarker.LineContext[lineCount];
 
@@ -316,7 +288,7 @@ public class OffsetManager
 
 			if(lineInfo.length <= lineCount)
 			{
-				int[] lineInfoN = new int[(lineCount + 1) * 2];
+				short[] lineInfoN = new short[(lineCount + 1) * 2];
 				System.arraycopy(lineInfo,0,lineInfoN,0,
 						 lineInfo.length);
 				lineInfo = lineInfoN;
@@ -346,12 +318,10 @@ public class OffsetManager
 			if(startLine < firstInvalidLineContext)
 				firstInvalidLineContext += numLines;
 
-			int visible = (lineInfo[startLine] & VISIBLE_MASK);
-
 			for(int i = 0; i < numLines; i++)
 			{
 				this.endOffsets[startLine + i] = (offset + endOffsets.get(i));
-				lineInfo[startLine + i] = visible;
+				lineInfo[startLine + i] = (short)0;
 			}
 		} //}}}
 
@@ -404,9 +374,23 @@ public class OffsetManager
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private Buffer buffer;
+	/* Having all the info packed into an int is not very OO and makes the
+	 * code somewhat more complicated, but it saves a lot of memory.
+	 *
+	 * The new document model has just 10 bytes of overhead per line.
+	 * LineContext instances are now internalized, so only a few should
+	 * actually be in the heap.
+	 *
+	 * In the old document model there were 5 objects per line, for a
+	 * total of about 100 bytes, plus a cached token list, which used
+	 * another 100 or so bytes. */
+	private static final short FOLD_LEVEL_MASK         = 0x00ff;
+	private static final short SCREEN_LINES_MASK       = 0x7f00;
+	private static final short SCREEN_LINES_SHIFT      = 8;
+	private static final short SCREEN_LINES_VALID_MASK = (short)(1<<15);
+
 	private int[] endOffsets;
-	private int[] lineInfo;
+	private short[] lineInfo;
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;

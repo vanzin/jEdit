@@ -258,13 +258,14 @@ public class Buffer
 				{
 					writeLock();
 
-					int lines = offsetMgr.getLineCount();
-					if(lines != 0)
+					if(contentMgr.getLength() != 0)
 					{
-						firePreContentRemoved(0,0,lines,
-							contentMgr.getLength());
-						fireContentRemoved(0,0,lines,
-							contentMgr.getLength());
+						firePreContentRemoved(0,0,
+							offsetMgr.getLineCount(),
+							contentMgr.getLength() - 1);
+						fireContentRemoved(0,0,
+							offsetMgr.getLineCount(),
+							contentMgr.getLength() - 1);
 					}
 
 					// theoretically a segment could
@@ -275,13 +276,8 @@ public class Buffer
 					offsetMgr._contentInserted(endOffsets);
 
 					fireContentInserted(0,0,
-						endOffsets.getSize(),
-						seg.count);
-				}
-				catch(OutOfMemoryError oom)
-				{
-					Log.log(Log.ERROR,Buffer.this,oom);
-					VFSManager.error(view,path,"out-of-memory-error",null);
+						endOffsets.getSize() - 1,
+						seg.count - 1);
 				}
 				finally
 				{
@@ -3346,36 +3342,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return offsetMgr;
 	} //}}}
 
-	//{{{ _displayLock() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.2pre1
-	 */
-	public int _displayLock()
-	{
-		for(int i = 0; i < OffsetManager.MAX_DISPLAY_COUNT; i++)
-		{
-			if((displayLock & (1 << i)) == 0)
-			{
-				displayLock |= (1 << i);
-				return i;
-			}
-		}
-
-		//XXX
-		throw new InternalError("Too many text areas editing this buffer");
-	} //}}}
-
-	//{{{ _displayUnlock() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.2pre1
-	 */
-	public void _displayUnlock(int index)
-	{
-		displayLock &= ~(1 << index);
-	} //}}}
-
 	//}}}
 
 	//{{{ Package-private members
@@ -3388,7 +3354,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		lock = new ReadWriteLock();
 		propertyLock = new Object();
 		contentMgr = new ContentManager();
-		offsetMgr = new OffsetManager(this);
+		offsetMgr = new OffsetManager();
 		integerArray = new IntegerArray();
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();
@@ -3552,7 +3518,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private Segment seg;
 	private boolean nextLineRequested;
 	private FoldHandler foldHandler;
-	private int displayLock;
 
 	/**
 	 * We keep track of this so that we know when to invalidate the

@@ -138,10 +138,8 @@ public class DisplayManager
 	 */
 	public final boolean isLineVisible(int line)
 	{
-		return offsetMgr.isLineVisible(line,index);
+		return fvmget(line) % 2 == 0;
 	} //}}}
-
-	public static long scanCount, scannedLines;
 
 	//{{{ getFirstVisibleLine() method
 	/**
@@ -150,27 +148,7 @@ public class DisplayManager
 	 */
 	public int getFirstVisibleLine()
 	{
-		scanCount++;
-		try
-		{
-			buffer.readLock();
-
-			for(int i = 0; i < buffer.getLineCount(); i++)
-			{
-				if(isLineVisible(i))
-				{
-					scannedLines += i + 1;
-					return i;
-				}
-			}
-		}
-		finally
-		{
-			buffer.readUnlock();
-		}
-
-		// can't happen?
-		return -1;
+		return fvm[0];
 	} //}}}
 
 	//{{{ getLastVisibleLine() method
@@ -180,28 +158,7 @@ public class DisplayManager
 	 */
 	public int getLastVisibleLine()
 	{
-		scanCount++;
-
-		try
-		{
-			buffer.readLock();
-
-			for(int i = buffer.getLineCount() - 1; i >= 0; i--)
-			{
-				if(isLineVisible(i))
-				{
-					scannedLines += (buffer.getLineCount() - i);
-					return i;
-				}
-			}
-		}
-		finally
-		{
-			buffer.readUnlock();
-		}
-
-		// can't happen?
-		return -1;
+		return fvm[fvmcount - 1] - 1;
 	} //}}}
 
 	//{{{ getNextVisibleLine() method
@@ -212,32 +169,30 @@ public class DisplayManager
 	 */
 	public int getNextVisibleLine(int line)
 	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
-			throw new ArrayIndexOutOfBoundsException(line);
-
-		scanCount++;
-
-		try
+		int index = fvmget(line);
+		/* in collapsed range */
+		if(index % 2 == 1)
 		{
-			buffer.readLock();
-
-			if(line == buffer.getLineCount() - 1)
+			/* beyond last visible line */
+			if(fvmcount == index + 1)
+				return - 1;
+			/* start of next expanded range */
+			else
+				return fvm[index + 1];
+		}
+		/* last in expanded range */
+		else if(line == fvm[index + 1] - 1)
+		{
+			/* equal to last visible line */
+			if(fvmcount == index + 2)
 				return -1;
-
-			for(int i = line + 1; i < buffer.getLineCount(); i++)
-			{
-				if(isLineVisible(i))
-				{
-					scannedLines += (i - line);
-					return i;
-				}
-			}
-			return -1;
+			/* start of next expanded range */
+			else
+				return fvm[index + 2];
 		}
-		finally
-		{
-			buffer.readUnlock();
-		}
+		/* next in expanded range */
+		else
+			return line + 1;
 	} //}}}
 
 	//{{{ getPrevVisibleLine() method
@@ -248,32 +203,29 @@ public class DisplayManager
 	 */
 	public int getPrevVisibleLine(int line)
 	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
-			throw new ArrayIndexOutOfBoundsException(line);
-
-		scanCount++;
-
-		try
-		{
-			buffer.readLock();
-
-			if(line == 0)
-				return -1;
-
-			for(int i = line - 1; i >= 0; i--)
-			{
-				if(isLineVisible(i))
-				{
-					scannedLines += (line - i);
-					return i;
-				}
-			}
+		int index = fvmget(line);
+		/* before first visible line */
+		if(index == -1)
 			return -1;
-		}
-		finally
+		/* in collapsed range */
+		else if(index % 2 == 1)
 		{
-			buffer.readUnlock();
+			/* end of prev expanded range */
+			return fvm[index] - 1;
 		}
+		/* first in expanded range */
+		else if(line == fvm[index])
+		{
+			/* equal to first visible line */
+			if(index == 0)
+				return -1;
+			/* end of prev expanded range */
+			else
+				return fvm[index - 1] - 1;
+		}
+		/* prev in expanded range */
+		else
+			return line - 1;
 	} //}}}
 
 	//{{{ getScreenLineCount() method
@@ -640,6 +592,7 @@ public class DisplayManager
 		if(!initialized)
 		{
 			initialized = true;
+			fvm = new int[2];
 			if(buffer.isLoaded())
 				bufferChangeHandler.foldHandlerChanged(buffer);
 		}
@@ -710,8 +663,25 @@ public class DisplayManager
 	private Buffer buffer;
 	private OffsetManager offsetMgr;
 	private JEditTextArea textArea;
-	private int index;
 	private BufferChangeHandler bufferChangeHandler;
+
+	/**
+	 * The fold visibility map.
+	 *
+	 * All lines from fvm[2*n] to fvm[2*n+1]-1 inclusive are visible.
+	 * All lines from position fvm[2*n+1] to fvm[2*n+2]-1 inclusive are
+	 * invisible.
+	 *
+	 * Examples:
+	 * ---------
+	 * All lines visible: { 0, buffer.getLineCount() }
+	 * Narrow from a to b: { a, b + 1 }
+	 * Collapsed fold from a to b: { 0, a + 1, b, buffer.getLineCount() }
+	 *
+	 * Note: length is always even.
+	 */
+	private int[] fvm;
+	private int fvmcount;
 
 	//{{{ DisplayManager constructor
 	private DisplayManager(Buffer buffer, JEditTextArea textArea)
@@ -719,7 +689,6 @@ public class DisplayManager
 		this.buffer = buffer;
 		this.offsetMgr = buffer._getOffsetManager();
 		this.textArea = textArea;
-		this.index = buffer._displayLock();
 
 		scrollLineCount = new ScrollLineCount();
 		firstLine = new FirstLine();
@@ -733,8 +702,94 @@ public class DisplayManager
 	//{{{ dispose() method
 	private void dispose()
 	{
-		buffer._displayUnlock(index);
 		buffer.removeBufferChangeListener(bufferChangeHandler);
+	} //}}}
+
+	//{{{ fvmget() method
+	/**
+	 * Returns the fold visibility map index for the given line.
+	 */
+	private int fvmget(int line)
+	{
+		if(line < fvm[0])
+			return -1;
+		if(line >= fvm[fvmcount - 1])
+			return fvmcount - 1;
+
+		for(int i = 0; i < fvm.length; i++)
+		{
+			if(fvm[i] <= line && line < fvm[i+1])
+				return i;
+		}
+
+		throw new InternalError("Not supposed to happen");
+	} //}}}
+
+	//{{{ fvmput() method
+	/**
+	 * Replaces from <code>start</code> to <code>end-1</code> inclusive with
+	 * <code>put</code>. Update <code>fvmcount</code>.
+	 */
+	private void fvmput(int start, int end, int[] put)
+	{
+		int putl = (put == null ? 0 : put.length);
+
+		int delta = putl - (end - start);
+		if(fvmcount + delta > fvm.length)
+		{
+			int[] newfvm = new int[fvm.length * 2 + 1];
+			System.arraycopy(fvm,0,newfvm,0,fvmcount);
+			fvm = newfvm;
+		}
+
+		if(delta != 0)
+		{
+			System.arraycopy(fvm,end,fvm,start + putl,
+				fvmcount - end);
+		}
+
+		if(putl != 0)
+		{
+			System.arraycopy(put,0,fvm,start,put.length);
+		}
+
+		fvmcount += delta;
+	} //}}}
+
+	//{{{
+	/**
+	 * Merge previous and next entry if necessary.
+	 */
+	private void fvmput2(int starti, int endi, int start, int end)
+	{
+		if(starti != -1 && fvm[starti] == start)
+		{
+			if(endi != fvmcount - 2 && fvm[endi + 1]
+				== end + 1)
+			{
+				fvmput(starti,endi + 2,null);
+			}
+			else
+			{
+				fvmput(starti,endi + 1,
+					new int[] { end + 1 });
+			}
+		}
+		else
+		{
+			if(endi != fvmcount - 2 && fvm[endi + 1]
+				== end + 1)
+			{
+				fvmput(starti + 1,endi + 2,
+					new int[] { start });
+			}
+			else
+			{
+				fvmput(starti + 1,endi + 1,
+					new int[] { start,
+					end + 1 });
+			}
+		}
 	} //}}}
 
 	//{{{ showLineRange() method
@@ -742,7 +797,7 @@ public class DisplayManager
 	{
 		for(int i = start; i <= end; i++)
 		{
-			if(!offsetMgr.isLineVisible(i,index))
+			if(!isLineVisible(i))
 			{
 				int screenLines = offsetMgr
 					.getScreenLineCount(i);
@@ -753,8 +808,32 @@ public class DisplayManager
 				}
 				scrollLineCount.scrollLine += screenLines;
 				scrollLineCount.callChanged = true;
-				offsetMgr.setLineVisible(i,index,true);
 			}
+		}
+
+		/* update fold visibility map. */
+		int starti = fvmget(start);
+		int endi = fvmget(end);
+
+		if(starti % 2 == 0)
+		{
+			if(endi % 2 == 0)
+				fvmput(starti + 1,endi + 1,null);
+			else
+			{
+				fvmput(starti + 1,endi,null);
+				fvm[starti + 1] = end + 1;
+			}
+		}
+		else
+		{
+			if(endi % 2 == 0)
+			{
+				fvmput(starti + 1,endi,null);
+				fvm[starti + 1] = start;
+			}
+			else
+				fvmput2(starti,endi,start,end);
 		}
 	} //}}}
 
@@ -763,7 +842,7 @@ public class DisplayManager
 	{
 		for(int i = start; i <= end; i++)
 		{
-			if(offsetMgr.isLineVisible(i,index))
+			if(isLineVisible(i))
 			{
 				int screenLines = offsetMgr
 					.getScreenLineCount(i);
@@ -774,7 +853,31 @@ public class DisplayManager
 				}
 				scrollLineCount.scrollLine -= screenLines;
 				scrollLineCount.callChanged = true;
-				offsetMgr.setLineVisible(i,index,false);
+			}
+		}
+
+		/* update fold visibility map. */
+		int starti = fvmget(start);
+		int endi = fvmget(end);
+
+		if(starti % 2 == 0)
+		{
+			if(endi % 2 == 0)
+				fvmput2(starti,endi,start,end);
+			else
+			{
+				fvmput(starti + 1,endi,null);
+				fvm[starti + 1] = start;
+			}
+		}
+		else
+		{
+			if(endi % 2 == 0)
+				fvmput(starti + 1,endi + 1,null);
+			else
+			{
+				fvmput(starti + 1,endi,null);
+				fvm[starti + 1] = end + 1;
 			}
 		}
 	} //}}}
@@ -803,17 +906,17 @@ public class DisplayManager
 	//{{{ _notifyScreenLineChanges() method
 	private void _notifyScreenLineChanges()
 	{
-		if(firstLine.callChanged)
-		{
-			firstLine.callChanged = false;
+		if(firstLine.callReset)
+			firstLine.reset();
+		else if(firstLine.callChanged)
 			firstLine.changed();
-		}
+		firstLine.callReset = firstLine.callChanged = false;
 
-		if(scrollLineCount.callChanged)
-		{
-			scrollLineCount.callChanged = false;
+		if(scrollLineCount.callReset)
+			scrollLineCount.reset();
+		else if(scrollLineCount.callChanged)
 			scrollLineCount.changed();
-		}
+		scrollLineCount.callReset = scrollLineCount.callChanged = false;
 	} //}}}
 
 	//}}}
@@ -824,6 +927,7 @@ public class DisplayManager
 		int physicalLine;
 		int scrollLine;
 		boolean callChanged;
+		boolean callReset;
 
 		abstract void reset();
 		abstract void changed();
@@ -851,12 +955,13 @@ public class DisplayManager
 
 			physicalLine = 0;
 			scrollLine = 0;
-			for(int i = 0; i < offsetMgr.getLineCount(); i++)
+			//XXX
+			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
 				if(isLineVisible(i))
 					scrollLine += getScreenLineCount(i);
 			}
-			physicalLine = offsetMgr.getLineCount();
+			physicalLine = buffer.getLineCount();
 
 			firstLine.ensurePhysicalLineIsVisible();
 
@@ -1193,18 +1298,15 @@ public class DisplayManager
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
 		{
+			fvmcount = 2;
+			fvm[0] = 0;
+			fvm[1] = buffer.getLineCount();
 			firstLine.reset();
 			scrollLineCount.reset();
 			int collapseFolds = buffer.getIntegerProperty(
 				"collapseFolds",0);
-			if(collapseFolds == 0)
-			{
-				expandAllFolds();
-			}
-			else
-			{
+			if(collapseFolds != 0)
 				expandFolds(collapseFolds);
-			}
 		} //}}}
 
 		//{{{ wrapModeChanged() method
@@ -1227,6 +1329,10 @@ public class DisplayManager
 			{
 				contentInserted(firstLine,startLine,numLines);
 				contentInserted(scrollLineCount,startLine,numLines);
+
+				int index = fvmget(startLine);
+				for(int i = index + 1; i < fvmcount; i++)
+					fvm[i] += numLines;
 			}
 
 			if(!buffer.isTransactionInProgress())
@@ -1246,6 +1352,39 @@ public class DisplayManager
 			{
 				preContentRemoved(firstLine,startLine,numLines);
 				preContentRemoved(scrollLineCount,startLine,numLines);
+
+				/* update fold visibility map. */
+				int starti = fvmget(startLine);
+				int endi = fvmget(startLine + numLines);
+
+				/* both have same visibility; just remove
+				 * anything in between. */
+				if(Math.abs(starti % 2) == Math.abs(endi % 2))
+				{
+					if(endi - starti == fvmcount)
+					{
+						// we're removing from before
+						// the first visible to after
+						// the last visible
+						fvmcount = 2;
+						fvm[0] = 0;
+						fvm[1] = buffer.getLineCount();
+						firstLine.callReset = true;
+						scrollLineCount.callReset = true;
+					}
+					else
+						fvmput(starti,endi,null);
+				}
+				/* start is visible, end is invisible. */
+				/* start is invisible, end is visible */
+				else
+				{
+					fvmput(starti + 1,endi,null);
+					fvm[starti + 1] = startLine;
+				}
+
+				for(int i = starti + 1; i < fvmcount; i++)
+					fvm[i] -= numLines;
 			}
 
 			if(!buffer.isTransactionInProgress())
@@ -1302,9 +1441,9 @@ public class DisplayManager
 								offsetMgr
 								.getScreenLineCount(i);
 						}
-						anchor.physicalLine--;
-						anchor.callChanged = true;
 					}
+					anchor.physicalLine -= (end - startLine);
+					anchor.callChanged = true;
 				}
 			}
 		} //}}}
