@@ -2056,8 +2056,20 @@ public class jEdit
 
 			if(config.width != 0 && config.height != 0)
 			{
-				GUIUtilities.setWindowBounds(newView,config.x,config.y,
-					config.width,config.height,config.extState);
+				Rectangle desired = new Rectangle(
+					config.x,config.y,config.width,
+					config.height);
+				if(OperatingSystem.isX11())
+				{
+					new GUIUtilities.UnixWorkaround(newView,
+						"view",desired,config.extState);
+				}
+				else
+				{
+					newView.setBounds(desired);
+					GUIUtilities.setExtendedState(newView,
+						config.extState);
+				}
 			}
 			else
 				GUIUtilities.centerOnScreen(newView);

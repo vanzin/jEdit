@@ -185,6 +185,10 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   printing API. Now you can force use of the JDK 1.3 API when running on
   1.4. Enable in Utilities->Global Options->Printing.
 
+- Re-introduced jEdit 3.2.2-style Unix window geometry workarounds. If
+  you saw problems like dialog boxes getting smaller each time they were
+  opened, etc, let me know if this fixes them.
+
 }}}
 {{{ API Changes
 
