@@ -3,21 +3,23 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- reloading: don't show fold triangles in gutter
+- resize vertically -- can create blank space at bottom
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
 - after new display: optimize & match old performance
 - switching between soft wrap and not needs to update anchors, etc
-- scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
   - last physical line cleanup
-  - foldStructureChanged(), etc. doesn't need scroll bar update call
-  - chunk cache first line: can be much better
   - text area: buffer scroll to
-  - scroll up page, scroll down page
   - synchro scroll needs a rewrite & folding
+  - subregion display:
+    chunk cache, first line
+    chunk cache, screen line translation
+    scroll up/down line
+    setFirstPhysicalLine(int,int)
+    getFirstSubregion()
 - help:
   - titles in search are fucked
   - title adds more to the relevance

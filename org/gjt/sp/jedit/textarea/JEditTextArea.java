@@ -477,10 +477,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollUpLine()
 	{
-		//if(firstLine > 0)
-		//	setFirstLine(firstLine - 1);
-		//else
-		//	getToolkit().beep();
+		setFirstLine(getFirstLine() - 1);
 	} //}}}
 
 	//{{{ scrollUpPage() method
@@ -490,24 +487,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollUpPage()
 	{
-		/* if(firstLine > 0)
-		{
-			int newFirstLine = firstLine;
-			int screenLineCount = 0;
-			while(--newFirstLine >= 0)
-			{
-				int lines = chunkCache.getScreenLineCount(newFirstLine);
-				if(screenLineCount + lines >= visibleLines)
-					break;
-				else
-					screenLineCount += lines;
-			}
-			setFirstLine(newFirstLine);
-		} */
-		/* else
-		{
-			getToolkit().beep();
-		} */
+		setFirstLine(getFirstLine() - getVisibleLines());
 	} //}}}
 
 	//{{{ scrollDownLine() method
@@ -517,13 +497,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollDownLine()
 	{
-		/* int numLines = getVirtualLineCount();
-
-		if((softWrap && firstLine + 1 < numLines) ||
-			(firstLine + visibleLines < numLines))
-			setFirstLine(firstLine + 1); */
-		//else
-		//	getToolkit().beep();
+		setFirstLine(getFirstLine() + 1);
 	} //}}}
 
 	//{{{ scrollDownPage() method
@@ -533,15 +507,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollDownPage()
 	{
-		/* int numLines = getVirtualLineCount();
-
-		if((softWrap && firstLine + 1 < numLines) ||
-			(firstLine + visibleLines < numLines))
-		{
-			setFirstLine(physicalToVirtual(physLastLine));
-		} */
-		//else
-		//	getToolkit().beep();
+		setFirstLine(getFirstLine() + getVisibleLines());
 	} //}}}
 
 	//{{{ scrollToCaret() method
@@ -4925,26 +4891,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ foldStructureChanged() method
 	void foldStructureChanged()
 	{
-		/* chunkCache.invalidateAll();
-
-		int firstVisibleLine = displayManager.getFirstVisibleLine();
-
-		if(physFirstLine < firstVisibleLine)
-			physFirstLine = firstVisibleLine;
-		else if(!displayManager.isLineVisible(physFirstLine))
-			physFirstLine = displayManager.getPrevVisibleLine(physFirstLine);
-
-		setFirstLine(physicalToVirtual(physFirstLine));
-
-		// update scroll bars because the number of virtual lines might
-		// have changed even if first line didn't change
-		updateScrollBars();
-
+		chunkCache.invalidateAll();
 		recalculateLastPhysicalLine();
-
-		// repaint gutter and painter
-		gutter.repaint();
-		painter.repaint(); */
+		repaint();
 	} //}}}
 
 	//{{{ updateScrollBars() method

@@ -44,8 +44,6 @@ action-set.plugin=Plugin: {0}
 
 macro-handler.beanshell.label=BeanShell script
 macro-handler.beanshell.glob=*.bsh
-
-action.caption=Action - {0}
 #}}}
 
 #{{{ Tool bar

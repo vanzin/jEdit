@@ -227,8 +227,25 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 }}}
 {{{ API Changes
 
-- Removed deprecated xToOffset() and offsetToX() methods from
-  JEditTextArea.
+- Removed some methods which do not make any sense at all with the new
+  display engine:
+
+  JEditTextArea.virtualToPhysical()
+  JEditTextArea.physicalToVirtual()
+  JEditTextArea.getVirtualLineCount()
+  JEditTextArea.xToOffset() (was already deprecated)
+  JEditTextArea.offsetToX() (was already deprecated)
+
+- The FoldVisibilityManager class has been replaced with a
+  DisplayManager class; obtain an instance by calling
+  JEditTextArea.getDisplayManager().
+
+- The concept of "virtual line numbers" is gone.
+  JEditTextArea.get/setFirstLine() now takes a vertical scroll bar
+  position that takes hidden lines as well as lines split by soft wrap
+  into account. Currently, no public API exists to covert between
+  scroll line numbers and physical line numbers, however there is a new
+  JEditTextArea.setFirstPhysicalLine() method.
 
 }}}
 {{{ API Enhancements
