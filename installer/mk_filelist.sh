@@ -31,6 +31,7 @@ print_size jedit-macros
 # jedit-api fileset
 find doc/api \( -name \*.html -o -name toc.xml \) > installer/jedit-api
 echo doc/api/stylesheet.css >> installer/jedit-api
+echo doc/api/resources/inherit.gif >> installer/jedit-api
 
 print_size jedit-api
 

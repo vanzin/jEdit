@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  * Portions copyright (C) 2002 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -666,6 +666,12 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				{
 					Macro newMacro = handler.createMacro(
 						path + fileName, file.getPath());
+					if(macroHash.get(newMacro.getName())
+						!= null)
+					{
+						continue;
+					}
+
 					vector.addElement(newMacro.getName());
 					macroActionSet.addAction(newMacro);
 					macroHash.put(newMacro.getName(),newMacro);

@@ -2,6 +2,13 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre12
 
+Thanks to Thomas Alspaugh for contributing to this release.
+
+{{{ Miscellaneous Changes
+
+- Updated BibTeX syntax highlighting (Thomas Alspaugh).
+
+}}}
 {{{ Bug Fixes
 
 - Fixed a possible deadlock on startup when loading the SQL plugin. In
@@ -22,6 +29,16 @@ JEDIT 4.2 VERSION HISTORY
 
 - Fixed off-by-one error in Edit->Word Count if the selection ended with
   whitespace.
+
+- Text area's horizontal scroll did not update when the text area was
+  resized.
+
+- jEdit.getActiveView() would return null if the current view was
+  closed, and another view was not focused. This would break the
+  edit server if -reuseview was specified.
+
+- Fixed NullPointerException from syntax highlighting code when buffer
+  switching APIs were called in a certain sequence.
 
 }}}
 
