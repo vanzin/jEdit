@@ -89,6 +89,23 @@
     </para></abstract>
 </listitem>
  
+<listitem>
+     <para><filename>Mode_Switcher.bsh</filename></para>
+     <abstract><para>
+     Displays a modal dialog with the current buffer's mode in a text field,
+     allowing one to change the mode by typing in its name.
+     </para></abstract>
+     <para>
+     <keycap>ENTER</keycap> selects the current mode; if the text is not a 
+     valid mode, the dialog still dismisses, but a warning is logged to the
+     activity log.
+     <keycap>ESACPE</keycap> closes the dialog with no further action.
+     <keycap>TAB</keycap> attempts to auto-complete the mode name. Pressing
+     <keycap>TAB</keycap> repeatedly cycles through the possible completions. 
+   <keycap>SHIFT-TAB</keycap> cycles through the completions in reverse.
+     </para>
+  </listitem>
+
 </itemizedlist>
 
 </sect1>
