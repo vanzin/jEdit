@@ -38,13 +38,14 @@ public class HelpIndex
 	public HelpIndex()
 	{
 		words = new HashMap();
+		files = new ArrayList();
 	} //}}}
 
-	//{{{ HelpIndex constructor
+	/* //{{{ HelpIndex constructor
 	public HelpIndex(String fileListPath, String wordIndexPath)
 	{
 		this();
-	} //}}}
+	} //}}} */
 
 	//{{{ indexEditorHelp() method
 	/**
@@ -130,7 +131,7 @@ public class HelpIndex
 	} //}}}
 
 	//{{{ lookupWord() method
-	public String[] lookupWord(String word)
+	public int[] lookupWord(String word)
 	{
 		Word w = (Word)words.get(word);
 		if(w == null)
@@ -139,9 +140,16 @@ public class HelpIndex
 			return w.files;
 	} //}}}
 
+	//{{{ getFile() method
+	public HelpFile getFile(int index)
+	{
+		return (HelpFile)files.get(index);
+	} //}}}
+
 	//{{{ Private members
-	private static String[] EMPTY_ARRAY = new String[0];
+	private static int[] EMPTY_ARRAY = new int[0];
 	private HashMap words;
+	private ArrayList files;
 
 	//{{{ indexStream() method
 	/**
@@ -150,15 +158,23 @@ public class HelpIndex
 	 * @param _in The input stream
 	 * @param file The file
 	 */
-	private void indexStream(InputStream _in, String file) throws Exception
+	private void indexStream(InputStream _in, String fileName) throws Exception
 	{
+		HelpFile file = new HelpFile(fileName);
+		files.add(file);
+		int index = files.size() - 1;
+
 		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
+
+		StringBuffer titleText = new StringBuffer();
 
 		try
 		{
 			StringBuffer word = new StringBuffer();
 			boolean insideTag = false;
 			boolean insideEntity = false;
+
+			boolean title = false;
 
 			int c;
 			while((c = in.read()) != -1)
@@ -167,7 +183,13 @@ public class HelpIndex
 				if(insideTag)
 				{
 					if(ch == '>')
+					{
+						if(word.toString().equals("title"))
+							title = true;
 						insideTag = false;
+					}
+					else
+						word.append(ch);
 				}
 				else if(insideEntity)
 				{
@@ -175,14 +197,22 @@ public class HelpIndex
 						insideEntity = false;
 				}
 				else if(ch == '<')
+				{
+					if(title)
+						title = false;
+
+					word.setLength(0);
 					insideTag = true;
+				}
 				else if(ch == '&')
 					insideEntity = true;
+				else if(title)
+					titleText.append(ch);
 				else if(!Character.isLetterOrDigit(ch))
 				{
 					if(word.length() != 0)
 					{
-						addWord(word.toString(),file);
+						addWord(word.toString(),index);
 						word.setLength(0);
 					}
 				}
@@ -194,10 +224,15 @@ public class HelpIndex
 		{
 			in.close();
 		}
+
+		if(titleText.length() == 0)
+			file.title = fileName;
+		else
+			file.title = titleText.toString();
 	} //}}}
 
 	//{{{ addWord() method
-	private void addWord(String word, String file)
+	private void addWord(String word, int file)
 	{
 		word = word.toLowerCase();
 
@@ -218,20 +253,17 @@ public class HelpIndex
 
 		// files it occurs in
 		int fileCount = 0;
-		String[] files;
+		int[] files;
 
-		Word(String word, String file)
+		Word(String word, int file)
 		{
 			this.word = word;
-			files = new String[5];
+			files = new int[5];
 			addOccurrence(file);
 		}
 
-		void addOccurrence(String file)
+		void addOccurrence(int file)
 		{
-			if(file == null)
-				throw new NullPointerException();
-
 			for(int i = 0; i < fileCount; i++)
 			{
 				if(files[i] == file)
@@ -240,7 +272,7 @@ public class HelpIndex
 
 			if(fileCount >= files.length)
 			{
-				String[] newFiles = new String[files.length * 2];
+				int[] newFiles = new int[files.length * 2];
 				System.arraycopy(files,0,newFiles,0,fileCount);
 				files = newFiles;
 			}
@@ -258,6 +290,32 @@ public class HelpIndex
 				buf.append(files[i]);
 			}
 			return buf.toString();
+		}
+	} //}}}
+
+	//{{{ HelpFile class
+	static class HelpFile
+	{
+		String file;
+		String title;
+
+		HelpFile(String file)
+		{
+			this.file = file;
+			this.title = title;
+		}
+
+		public String toString()
+		{
+			return title;
+		}
+
+		public boolean equals(Object o)
+		{
+			if(o instanceof HelpFile)
+				return ((HelpFile)o).file.equals(file);
+			else
+				return false;
 		}
 	} //}}}
 }

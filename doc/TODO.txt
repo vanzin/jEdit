@@ -6,9 +6,7 @@ and quirks that I need to fix eventually.
 - deadlock w/ read/write locks
 - what if dir search requires FTP login to list dir
 - soft wrap: dragging on last visible line throws NPEs
-- delayed caret updating: breaks status bar perhaps -- no, some other
-  reason
-
+- caret status updated too much
 [error] java.lang.ArrayIndexOutOfBoundsException: 2757:-18
 [error] 	at org.gjt.sp.jedit.Buffer.remove(Unknown Source)
 [error] 	at org.gjt.sp.jedit.textarea.Selection$Rect.setText(Unknown Source)

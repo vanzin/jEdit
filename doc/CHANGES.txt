@@ -89,6 +89,9 @@ release.
   throw NullPointerExceptions when appending to a register that didn't
   exist. The correct behavior is to put the selected text in the
   register.
+- $ at the end of an abbreviation expansion is now treated literally.
+- Fixed an obscure bug that could result in exceptions being thrown by
+  the caret status display.
 
 + API Changes
 

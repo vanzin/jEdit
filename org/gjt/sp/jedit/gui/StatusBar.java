@@ -72,7 +72,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		MouseHandler mouseHandler = new MouseHandler();
 
-		caretStatus = new CaretStatus();
+		caretStatus = new ToolTipLabel();
 		caretStatus.setToolTipText(jEdit.getProperty("view.status.caret-tooltip"));
 		caretStatus.addMouseListener(mouseHandler);
 
@@ -360,7 +360,65 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public void updateCaretStatus()
 	{
 		if (showCaretStatus)
-			caretStatus.update();
+		{
+			Buffer buffer = view.getBuffer();
+
+			if(!buffer.isLoaded() ||
+				/* can happen when switching buffers sometimes */
+				buffer != view.getTextArea().getBuffer())
+			{
+				caretStatus.setText(" ");
+				return;
+			}
+
+			JEditTextArea textArea = view.getTextArea();
+
+			int currLine = textArea.getCaretLine();
+			int start = textArea.getLineStartOffset(currLine);
+			int dot = textArea.getCaretPosition() - start;
+			buffer.getText(start,dot,seg);
+			int virtualPosition = MiscUtilities.getVirtualWidth(seg,
+				buffer.getTabSize());
+
+			buf.setLength(0);
+			buf.append(Integer.toString(currLine + 1));
+			buf.append(',');
+			buf.append(Integer.toString(dot + 1));
+
+			if (virtualPosition != dot)
+			{
+				buf.append('-');
+				buf.append(Integer.toString(virtualPosition + 1));
+			}
+
+			buf.append(' ');
+
+			int firstLine = textArea.getFirstLine();
+			int visible = textArea.getVisibleLines();
+			int lineCount = textArea.getVirtualLineCount();
+
+			if (visible >= lineCount)
+			{
+				buf.append("All");
+			}
+			else if (firstLine == 0)
+			{
+				buf.append("Top");
+			}
+			else if (firstLine + visible >= lineCount)
+			{
+				buf.append("Bot");
+			}
+			else
+			{
+				float percent = (float)firstLine / (float)lineCount
+					* 100.0f;
+				buf.append(Integer.toString((int)percent));
+				buf.append('%');
+			}
+
+			caretStatus.setText(buf.toString());
+		}
 	} //}}}
 
 	//{{{ updateBufferStatus() method
@@ -433,7 +491,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private View view;
 	private JPanel panel;
 	private Box box;
-	private CaretStatus caretStatus;
+	private ToolTipLabel caretStatus;
 	private Component messageComp;
 	private JLabel message;
 	private JLabel mode;
@@ -445,6 +503,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
+
+	private Segment seg = new Segment();
 
 	private boolean showCaretStatus = jEdit.getBooleanProperty("view.status.show-caret-status");
 	private boolean showEditMode = jEdit.getBooleanProperty("view.status.show-edit-mode");
@@ -505,77 +565,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		{
 			return new Point(event.getX(),-20);
 		} //}}}
-	} //}}}
-
-	//{{{ CaretStatus class
-	class CaretStatus extends JLabel
-	{
-		//{{{ getToolTipLocation() method
-		public Point getToolTipLocation(MouseEvent event)
-		{
-			return new Point(event.getX(),-20);
-		} //}}}
-
-		//{{{ update() method
-		public void update()
-		{
-			Buffer buffer = view.getBuffer();
-
-			if(!buffer.isLoaded())
-				setText(null);
-
-			JEditTextArea textArea = view.getTextArea();
-
-			int currLine = textArea.getCaretLine();
-			int start = textArea.getLineStartOffset(currLine);
-			int dot = textArea.getCaretPosition() - start;
-			buffer.getText(start,dot,seg);
-			int virtualPosition = MiscUtilities.getVirtualWidth(seg,
-				buffer.getTabSize());
-
-			buf.setLength(0);
-			buf.append(Integer.toString(currLine + 1));
-			buf.append(',');
-			buf.append(Integer.toString(dot + 1));
-
-			if (virtualPosition != dot)
-			{
-				buf.append('-');
-				buf.append(Integer.toString(virtualPosition + 1));
-			}
-
-			buf.append(' ');
-
-			int firstLine = textArea.getFirstLine();
-			int visible = textArea.getVisibleLines();
-			int lineCount = textArea.getVirtualLineCount();
-
-			if (visible >= lineCount)
-			{
-				buf.append("All");
-			}
-			else if (firstLine == 0)
-			{
-				buf.append("Top");
-			}
-			else if (firstLine + visible >= lineCount)
-			{
-				buf.append("Bot");
-			}
-			else
-			{
-				float percent = (float)firstLine / (float)lineCount
-					* 100.0f;
-				buf.append(Integer.toString((int)percent));
-				buf.append('%');
-			}
-
-			setText(buf.toString());
-		} //}}}
-
-		//{{{ Private members
-		private Segment seg = new Segment();
-		//}}}
 	} //}}}
 
 	//{{{ MemoryStatus class
