@@ -1,8 +1,7 @@
 TO DO
 
-+ before 4.0final (or pre9?):
++ before 4.0pre9:
 
-- tips: don't mention old wheelmouse
 - investigate I/O threads
 - aiob in findMatchingBracket() -- offset >= seg.offset+seg.count? or
   offset == -1?
