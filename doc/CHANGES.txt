@@ -57,6 +57,10 @@ Thanks to Gerd Knops for contributing to this release.
   to indent fold mode, collapsing some folds, switching to explicit fold
   mode, then switching back to indent fold mode again.
 
+- The view's minimum size was rather large, this caused problems while
+  trying to resize it if the option to decorate window borders using the
+  Swing L&F was enabled.
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,
