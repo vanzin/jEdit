@@ -86,6 +86,9 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void setBuffer(final Buffer buffer)
 	{
+		if(buffer == null)
+			throw new NullPointerException();
+
 		if(this.buffer == buffer)
 			return;
 

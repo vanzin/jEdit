@@ -523,17 +523,17 @@ public class DockableWindowManager extends JPanel
 	 * @param view The view
 	 * @since jEdit 2.6pre3
 	 */
-	public DockableWindowManager(View view)
+	public DockableWindowManager(View view, View.ViewConfig config)
 	{
 		setLayout(new DockableLayout());
 		this.view = view;
 		windows = new Hashtable();
 		clones = new ArrayList();
 
-		top = new PanelWindowContainer(this,TOP);
-		left = new PanelWindowContainer(this,LEFT);
-		bottom = new PanelWindowContainer(this,BOTTOM);
-		right = new PanelWindowContainer(this,RIGHT);
+		top = new PanelWindowContainer(this,TOP,config.topPos);
+		left = new PanelWindowContainer(this,LEFT,config.leftPos);
+		bottom = new PanelWindowContainer(this,BOTTOM,config.bottomPos);
+		right = new PanelWindowContainer(this,RIGHT,config.rightPos);
 
 		add(DockableLayout.TOP_BUTTONS,top.getButtonBox());
 		add(DockableLayout.LEFT_BUTTONS,left.getButtonBox());
@@ -549,9 +549,9 @@ public class DockableWindowManager extends JPanel
 	//{{{ init() method
 	/**
 	 * Initialises dockable window manager. Do not call this method directly.
-	 * @since jEdit 2.6pre3
+	 * @since jEdit 4.2pre1
 	 */
-	public void init()
+	public void init(View.ViewConfig config)
 	{
 		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
 			new Factory[dockableWindowFactories.size()]);
@@ -573,21 +573,17 @@ public class DockableWindowManager extends JPanel
 
 		if(!view.isPlainView())
 		{
-			String lastTop = jEdit.getProperty("view.dock.top.last");
-			if(lastTop != null && lastTop.length() != 0)
-				showDockableWindow(lastTop);
+			if(config.top != null && config.top.length() != 0)
+				showDockableWindow(config.top);
 
-			String lastLeft = jEdit.getProperty("view.dock.left.last");
-			if(lastLeft != null && lastLeft.length() != 0)
-				showDockableWindow(lastLeft);
+			if(config.left != null && config.left.length() != 0)
+				showDockableWindow(config.left);
 
-			String lastBottom = jEdit.getProperty("view.dock.bottom.last");
-			if(lastBottom != null && lastBottom.length() != 0)
-				showDockableWindow(lastBottom);
+			if(config.bottom != null && config.bottom.length() != 0)
+				showDockableWindow(config.bottom);
 
-			String lastRight = jEdit.getProperty("view.dock.right.last");
-			if(lastRight != null && lastRight.length() != 0)
-				showDockableWindow(lastRight);
+			if(config.right != null && config.right.length() != 0)
+				showDockableWindow(config.right);
 		}
 	} //}}}
 
@@ -821,14 +817,6 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
-		if(!view.isPlainView())
-		{
-			top.save();
-			left.save();
-			bottom.save();
-			right.save();
-		}
-
 		Iterator iter = windows.values().iterator();
 		while(iter.hasNext())
 		{

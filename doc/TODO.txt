@@ -7,19 +7,9 @@ and quirks that I need to fix eventually.
   updateChunksUpTo(): support first half valid, rest invalid.
   text area: pass meaningful skew parameter.
 - inserting lines repaints twice
-- global tab size overrides buffer local prop
 - redo/undo dirty restore is broken.
 - consistent formatting for mode files
-- bufferResponseDockable API?
-  - buffer not loaded stage
-  - buffer mode change
-  - buffer content change
-  - all call an 'update()' method
-  - use for fold navigator
-- detached dockables
-- context option pane: "smart options"?
 - gutter options: add option to completely hide gutter
-- each view needs to store its own docking area divider locations
 - scroll jump on click is a real problem
 - expand: scroll to end of fold if possible
 - docking panels: better rubber band resize
@@ -62,7 +52,6 @@ and quirks that I need to fix eventually.
 - need distinct default styles for new token types
 - HTML mode: use new token types
 - hypersearch: open in new split
-- option to not follow symbolic links
 - C+e C+c long block of text
   - soft wrap display provides fix: need nextLineRequested event
 - new bsh and bsh command path
@@ -72,7 +61,6 @@ and quirks that I need to fix eventually.
 - tab in action bar
 - beanshell: invokeAction() function
 - perl: q{}, etc.
-- changes above a narrow cause display anamolies
 - don't show 'new directory' in favorites:
 - plugin error dialog -- if > 1 error per plugin
 - A+# on OS X, need better modifier mapping on OS X

@@ -441,8 +441,8 @@ view=new-view \
      - \
      toggle-line-numbers \
      - \
-     %splitting \
      %scrolling \
+     %splitting \
      %docking
 view.label=$View
 new-view.label=New $View
@@ -453,22 +453,6 @@ next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
 show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
-
-#{{{ Splitting menu
-splitting=unsplit-current \
-          unsplit \
-          split-horizontal \
-          split-vertical \
-          prev-textarea \
-          next-textarea
-splitting.label=$Splitting
-split-horizontal.label=Split $Horizontally
-split-vertical.label=Split $Vertically
-unsplit-current.label=$Unsplit Current
-unsplit.label=Unsplit $All
-prev-textarea.label=Go to $Previous Text Area
-next-textarea.label=Go to $Next Text Area
-#}}}
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
@@ -489,6 +473,22 @@ scroll-down-line.label=Line Scroll $Down
 scroll-up-page.label=Page Scroll U$p
 scroll-down-page.label=Page Scroll D$own
 toggle-synchro-scroll.label=Sy$nchronized Scrolling
+#}}}
+
+#{{{ Splitting menu
+splitting=unsplit-current \
+          unsplit \
+          split-horizontal \
+          split-vertical \
+          prev-textarea \
+          next-textarea
+splitting.label=$Splitting
+split-horizontal.label=Split $Horizontally
+split-vertical.label=Split $Vertically
+unsplit-current.label=$Unsplit Current
+unsplit.label=Unsplit $All
+prev-textarea.label=Go to $Previous Text Area
+next-textarea.label=Go to $Next Text Area
 #}}}
 
 #{{{ Docking menu

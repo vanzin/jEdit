@@ -823,24 +823,7 @@ public class JEditTextArea extends JComponent
 	{
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		if(screenLine == -1)
-		{
-			if(line < displayManager.getFirstPhysicalLine())
-				return null;
-			// must have >= here because the last physical line
-			// might only be partially visible (some offsets would
-			// have a screen line, others would return -1 and hence
-			// this code would be executed)
-			else if(line >= physLastLine)
-				return null;
-			else
-			{
-				throw new InternalError("line=" + line
-					+ ",offset=" + offset
-					+ ",screenLine=" + screenLine
-					+ ",physFirstLine=" + displayManager.getFirstPhysicalLine()
-					+ ",physLastLine=" + physLastLine);
-			}
-		}
+			return null;
 
 		FontMetrics fm = painter.getFontMetrics();
 
@@ -901,7 +884,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLine(int line)
 	{
-		if(!buffer.isLoaded()
+		if(!isShowing()
+			|| !buffer.isLoaded()
 			|| line < displayManager.getFirstPhysicalLine()
 			|| line > physLastLine
 			|| !displayManager.isLineVisible(line))
@@ -910,7 +894,7 @@ public class JEditTextArea extends JComponent
 		int startLine = -1;
 		int endLine = -1;
 
-		for(int i = 0; i <= visibleLines; i++)
+		for(int i = 0; i < visibleLines; i++)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 
@@ -950,7 +934,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLineRange(int start, int end)
 	{
-		if(!buffer.isLoaded())
+		if(!isShowing() || !buffer.isLoaded())
 			return;
 
 		if(end < start)
@@ -966,7 +950,7 @@ public class JEditTextArea extends JComponent
 		int startScreenLine = -1;
 		int endScreenLine = -1;
 
-		for(int i = 0; i <= visibleLines; i++)
+		for(int i = 0; i < visibleLines; i++)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 
@@ -5247,11 +5231,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					- getLineStartOffset(bracketLine);
 				invalidateLineRange(bracketLine,caretLine);
 
-				if(bracketLine < displayManager.getFirstPhysicalLine()
-					|| bracketLine > physLastLine)
-				{
+				if(chunkCache.getScreenLineOfOffset(bracketLine,bracketPosition) == -1)
 					showBracketStatusMessage(bracketLine < caretLine);
-				}
 				return;
 			}
 		}
@@ -6045,8 +6026,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int dotLine = buffer.getLineOfOffset(dot);
 			int extraEndVirt = 0;
 
-			if(dotLine != physLastLine || chunkCache.getLineInfo(
-				screenLastLine).lastSubregion)
+			if(chunkCache.getLineInfo(screenLastLine).lastSubregion)
 			{
 				float dotLineWidth = offsetToXY(dotLine,getLineLength(dotLine),
 					returnValue).x;

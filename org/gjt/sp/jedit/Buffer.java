@@ -29,6 +29,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
@@ -306,7 +307,7 @@ public class Buffer implements EBComponent
 				if(reload)
 					setDirty(false);
 
-				if(!loadAutosave && newPath != null && !path.equals(newPath))
+				if(!loadAutosave && newPath != null)
 					setPath(newPath);
 
 				// if loadAutosave is false, we loaded an
@@ -671,6 +672,17 @@ public class Buffer implements EBComponent
 	public final String getPath()
 	{
 		return path;
+	} //}}}
+
+	//{{{ getSymlinkPath() method
+	/**
+	 * If this file is a symbolic link, returns the link destination.
+	 * Otherwise returns the file's path. This method is thread-safe.
+	 * @since jEdit 4.2pre1
+	 */
+	public final String getSymlinkPath()
+	{
+		return symlinkPath;
 	} //}}}
 
 	//{{{ getDirectory() method
@@ -3501,6 +3513,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ Instance variables
 	private VFS vfs;
 	private String path;
+	private String symlinkPath;
 	private String name;
 	private String directory;
 	private File file;
@@ -3535,6 +3548,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private void setPath(String path)
 	{
 		this.path = path;
+		this.symlinkPath = path;
 		this.vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setReadOnly(true);
@@ -3544,6 +3558,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(vfs instanceof FileVFS)
 		{
 			file = new File(path);
+			try
+			{
+				symlinkPath = file.getCanonicalPath();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+			}
 
 			// if we don't do this, the autosave file won't be
 			// deleted after a save as
@@ -3603,13 +3625,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
-		//parseBufferLocalProperties();
+		parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this
 		FoldHandler oldFoldHandler = foldHandler;
-		//setMode();
+		setMode();
 
-		/* if(foldHandler == oldFoldHandler)
+		if(foldHandler == oldFoldHandler)
 		{
 			// on a reload, the fold handler doesn't change, but
 			// we still need to re-collapse folds.
@@ -3623,7 +3645,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			else
 				offsetMgr.expandFolds(collapseFolds);
-		} */
+		}
 
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)

@@ -817,15 +817,27 @@ public class View extends JFrame implements EBComponent
 			splitConfig.append(getBuffer().getIndex());
 			splitConfig.append(" buffer");
 		}
-		return new ViewConfig(
-			isPlainView(),
-			splitConfig.toString(),
-			getX(),
-			getY(),
-			getWidth(),
-			getHeight(),
-			GUIUtilities.getExtendedState(this)
-		);
+
+		ViewConfig config = new ViewConfig();
+		config.plainView = isPlainView();
+		config.splitConfig = splitConfig.toString();
+		config.x = getX();
+		config.y = getY();
+		config.width = getWidth();
+		config.height = getHeight();
+		config.extState = GUIUtilities.getExtendedState(this);
+
+		config.top = dockableWindowManager.getTopDockingArea().getCurrent();
+		config.left = dockableWindowManager.getLeftDockingArea().getCurrent();
+		config.bottom = dockableWindowManager.getBottomDockingArea().getCurrent();
+		config.right = dockableWindowManager.getRightDockingArea().getCurrent();
+
+		config.topPos = dockableWindowManager.getTopDockingArea().getDimension();
+		config.leftPos = dockableWindowManager.getLeftDockingArea().getDimension();
+		config.bottomPos = dockableWindowManager.getBottomDockingArea().getDimension();
+		config.rightPos = dockableWindowManager.getRightDockingArea().getDimension();
+
+		return config;
 	} //}}}
 
 	//}}}
@@ -1055,15 +1067,15 @@ public class View extends JFrame implements EBComponent
 	View next;
 
 	//{{{ View constructor
-	View(Buffer buffer, String splitConfig, boolean plainView)
+	View(Buffer buffer, ViewConfig config)
 	{
-		this.plainView = plainView;
+		this.plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
-		dockableWindowManager = new DockableWindowManager(this);
+		dockableWindowManager = new DockableWindowManager(this,config);
 
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
@@ -1081,10 +1093,8 @@ public class View extends JFrame implements EBComponent
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
-		Component comp = restoreSplitConfig(buffer,splitConfig);
+		Component comp = restoreSplitConfig(buffer,config.splitConfig);
 		dockableWindowManager.add(comp);
-
-		EditBus.addToBus(this);
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
@@ -1092,12 +1102,14 @@ public class View extends JFrame implements EBComponent
 		// depending in the 'tool bar alternate layout' setting.
 		propertiesChanged();
 
+		dockableWindowManager.init(config);
+
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
 
-		dockableWindowManager.init();
-
 		pack();
+
+		EditBus.addToBus(this);
 	} //}}}
 
 	//{{{ close() method
@@ -1529,6 +1541,10 @@ public class View extends JFrame implements EBComponent
 		public boolean plainView;
 		public String splitConfig;
 		public int x, y, width, height, extState;
+
+		// dockables
+		public String top, left, bottom, right;
+		public int topPos, leftPos, bottomPos, rightPos;
 
 		public ViewConfig()
 		{

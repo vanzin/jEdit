@@ -76,7 +76,7 @@ public class PerspectiveManager
 	} //}}}
 
 	//{{{ savePerspective() method
-	public static void savePerspective()
+	public static void savePerspective(boolean autosave)
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
@@ -89,7 +89,8 @@ public class PerspectiveManager
 		File perspective = new File(MiscUtilities.constructPath(
 			settingsDirectory,"perspective.xml"));
 
-		Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspective);
+		if(!autosave)
+			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspective);
 
 		try
 		{
@@ -121,7 +122,16 @@ public class PerspectiveManager
 				View.ViewConfig config = views[i].getViewConfig();
 				out.write("<VIEW PLAIN=\"");
 				out.write(config.plainView ? "TRUE" : "FALSE");
-				out.write("\" X=\"");
+				out.write("\">");
+
+				out.write("<PANES>");
+				out.write(lineSep);
+				out.write(config.splitConfig);
+				out.write(lineSep);
+				out.write("</PANES>");
+				out.write(lineSep);
+
+				out.write("<GEOMETRY X=\"");
 				out.write(String.valueOf(config.x));
 				out.write("\" Y=\"");
 				out.write(String.valueOf(config.y));
@@ -131,13 +141,26 @@ public class PerspectiveManager
 				out.write(String.valueOf(config.height));
 				out.write("\" EXT_STATE=\"");
 				out.write(String.valueOf(config.extState));
-				out.write("\">");
+				out.write("\" />");
+				out.write(lineSep);
 
-				out.write("<PANES>");
-				out.write(lineSep);
-				out.write(config.splitConfig);
-				out.write(lineSep);
-				out.write("</PANES>");
+				out.write("<DOCKING LEFT=\"");
+				out.write(config.left == null ? "" : config.left);
+				out.write("\" TOP=\"");
+				out.write(config.top == null ? "" : config.top);
+				out.write("\" RIGHT=\"");
+				out.write(config.right == null ? "" : config.right);
+				out.write("\" BOTTOM=\"");
+				out.write(config.bottom == null ? "" : config.bottom);
+				out.write("\" LEFT_POS=\"");
+				out.write(String.valueOf(config.leftPos));
+				out.write("\" TOP_POS=\"");
+				out.write(String.valueOf(config.topPos));
+				out.write("\" RIGHT_POS=\"");
+				out.write(String.valueOf(config.rightPos));
+				out.write("\" BOTTOM_POS=\"");
+				out.write(String.valueOf(config.bottomPos));
+				out.write("\" />");
 				out.write(lineSep);
 
 				out.write("</VIEW>");
@@ -210,16 +233,32 @@ public class PerspectiveManager
 
 			if(aname.equals("X"))
 				config.x = Integer.parseInt(value);
-			if(aname.equals("Y"))
+			else if(aname.equals("Y"))
 				config.y = Integer.parseInt(value);
-			if(aname.equals("WIDTH"))
+			else if(aname.equals("WIDTH"))
 				config.width = Integer.parseInt(value);
-			if(aname.equals("HEIGHT"))
+			else if(aname.equals("HEIGHT"))
 				config.height = Integer.parseInt(value);
-			if(aname.equals("EXT_STATE"))
+			else if(aname.equals("EXT_STATE"))
 				config.extState = Integer.parseInt(value);
-			if(aname.equals("PLAIN"))
+			else if(aname.equals("PLAIN"))
 				config.plainView = ("TRUE".equals(value));
+			else if(aname.equals("TOP"))
+				config.top = value;
+			else if(aname.equals("LEFT"))
+				config.left = value;
+			else if(aname.equals("BOTTOM"))
+				config.bottom = value;
+			else if(aname.equals("RIGHT"))
+				config.right = value;
+			else if(aname.equals("TOP_POS"))
+				config.topPos = Integer.parseInt(value);
+			else if(aname.equals("LEFT_POS"))
+				config.leftPos = Integer.parseInt(value);
+			else if(aname.equals("BOTTOM_POS"))
+				config.bottomPos = Integer.parseInt(value);
+			else if(aname.equals("RIGHT_POS"))
+				config.rightPos = Integer.parseInt(value);
 		}
 
 		public void endElement(String name)
@@ -235,7 +274,7 @@ public class PerspectiveManager
 			{
 				if(jEdit.getBufferCount() == 0)
 					jEdit.newFile(null);
-				view = jEdit.newView(view,config);
+				view = jEdit.newView(view,null,config);
 				config = new View.ViewConfig();
 			}
 		}

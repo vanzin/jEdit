@@ -1,6 +1,9 @@
 /*
  * Autosave.java - Autosave manager
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +22,12 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * @author Slava Pestov
@@ -30,6 +35,7 @@ import org.gjt.sp.util.Log;
  */
 class Autosave implements ActionListener
 {
+	//{{{ setInterval() method
 	public static void setInterval(int interval)
 	{
 		if(interval == 0)
@@ -52,14 +58,16 @@ class Autosave implements ActionListener
 		}
 		else
 			timer.setDelay(interval);
-	}
+	} //}}}
 
+	//{{{ stop() method
 	public static void stop()
 	{
 		if(timer != null)
 			timer.stop();
-	}
+	} //}}}
 
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
 		// might come in handy useful some time
@@ -73,15 +81,17 @@ class Autosave implements ActionListener
 			+ "%"); */
 
 		// save list of open files
-		PerspectiveManager.savePerspective();
+		if(jEdit.getViewCount() != 0)
+			PerspectiveManager.savePerspective(true);
 
 		Buffer[] bufferArray = jEdit.getBuffers();
 		for(int i = 0; i < bufferArray.length; i++)
 			bufferArray[i].autosave();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private static Timer timer;
 
 	private Autosave() {}
+	//}}}
 }

@@ -1,12 +1,12 @@
 <!-- Syntax tokens -->
-<!ENTITY % tokens "( NULL | COMMENT1 | COMMENT2 | LITERAL1 | LITERAL2
-	| LABEL | KEYWORD1 | KEYWORD2 | KEYWORD3 | FUNCTION
-	| MARKUP | OPERATOR | DIGIT | INVALID )" >
+<!ENTITY % tokens "( NULL | COMMENT1 | COMMENT2 | COMMENT3 | COMMENT4 |
+	DIGIT | FUNCTION | INVALID | KEYWORD1 | KEYWORD2 | KEYWORD3 | KEYWORD 4 |
+	LABEL | LITERAL1 | LITERAL2 | LITERAL3 | LITERAL4 | MARKUP | OPERATOR )" >
 
 <!-- Entities for attributes shared by multiple rules -->
 <!ENTITY % att-bool '( TRUE | FALSE )' >
-<!ENTITY % att-type 'TYPE %tokens; "NULL"' >
-<!ENTITY % att-pos-mix 'AT_LINE_START %att-bool; "FALSE"
+<!ENTITY % att-standard-mix 'TYPE %tokens; "NULL"
+	AT_LINE_START %att-bool; "FALSE"
 	AT_WHITESPACE_END %att-bool; "FALSE"
 	AT_WORD_START %att-bool; "FALSE"' >
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
@@ -52,8 +52,7 @@
 
 <!-- SEQ attributes -->
 <!ATTLIST SEQ
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-delegate; >
 
 <!-- SEQ_REGEXP element -->
@@ -62,8 +61,7 @@
 <!-- SEQ_REGEXP attributes -->
 <!ATTLIST SEQ_REGEXP
 	%att-hash-char;
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-delegate; >
 
 <!-- SPAN element -->
@@ -71,7 +69,7 @@
 
 <!-- SPAN attributes -->
 <!ATTLIST SPAN
-	%att-type;
+	%att-standard-mix;
 	%att-span-mix;
 	%att-exclude-match;
 	%att-delegate; >
@@ -82,7 +80,7 @@
 <!-- SPAN_REGEXP attributes -->
 <!ATTLIST SPAN_REGEXP
 	%att-hash-char;
-	%att-type;
+	%att-standard-mix;
 	%att-span-mix;
 	%att-exclude-match;
 	%att-delegate; >
@@ -91,16 +89,12 @@
 <!ELEMENT BEGIN ( #PCDATA ) >
 <!ELEMENT END ( #PCDATA ) >
 
-<!ATTLIST BEGIN %att-pos-mix; >
-<!ATTLIST END %att-pos-mix; >
-
 <!-- EOL_SPAN element -->
 <!ELEMENT EOL_SPAN ( #PCDATA ) >
 
 <!-- EOL_SPAN attributes -->
 <!ATTLIST EOL_SPAN
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-exclude-match;
 	%att-delegate; >
 
@@ -110,8 +104,7 @@
 <!-- EOL_SPAN_REGEXP attributes -->
 <!ATTLIST EOL_SPAN_REGEXP
 	%att-hash-char;
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-exclude-match;
 	%att-delegate; >
 
@@ -120,8 +113,7 @@
 
 <!-- MARK_FOLLOWING attributes -->
 <!ATTLIST MARK_FOLLOWING
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-exclude-match; >
 
 <!-- MARK_PREVIOUS element -->
@@ -129,27 +121,29 @@
 
 <!-- MARK_PREVIOUS attributes -->
 <!ATTLIST MARK_PREVIOUS
-	%att-type;
-	%att-pos-mix;
+	%att-standard-mix;
 	%att-exclude-match; >
 
 <!-- KEYWORDS element -->
-<!ELEMENT KEYWORDS ( NULL | COMMENT1 | COMMENT2 | LITERAL1 | LITERAL2
-	| LABEL | KEYWORD1 | KEYWORD2 | KEYWORD3 | FUNCTION | MARKUP
-	| OPERATOR | DIGIT | INVALID )+ >
+<!ELEMENT KEYWORDS %tokens;+ >
 
 <!-- KEYWORDS children -->
-<!ELEMENT NULL ( #PCDATA ) >
 <!ELEMENT COMMENT1 ( #PCDATA ) >
 <!ELEMENT COMMENT2 ( #PCDATA ) >
-<!ELEMENT LITERAL1 ( #PCDATA ) >
-<!ELEMENT LITERAL2 ( #PCDATA ) >
-<!ELEMENT LABEL ( #PCDATA ) >
+<!ELEMENT COMMENT3 ( #PCDATA ) >
+<!ELEMENT COMMENT4 ( #PCDATA ) >
+<!ELEMENT DIGIT ( #PCDATA ) >
+<!ELEMENT FUNCTION ( #PCDATA ) >
 <!ELEMENT KEYWORD1 ( #PCDATA ) >
 <!ELEMENT KEYWORD2 ( #PCDATA ) >
 <!ELEMENT KEYWORD3 ( #PCDATA ) >
-<!ELEMENT FUNCTION ( #PCDATA ) >
+<!ELEMENT KEYWORD4 ( #PCDATA ) >
+<!ELEMENT LABEL ( #PCDATA ) >
+<!ELEMENT LITERAL1 ( #PCDATA ) >
+<!ELEMENT LITERAL2 ( #PCDATA ) >
+<!ELEMENT LITERAL3 ( #PCDATA ) >
+<!ELEMENT LITERAL4 ( #PCDATA ) >
 <!ELEMENT MARKUP ( #PCDATA ) >
+<!ELEMENT NULL ( #PCDATA ) >
 <!ELEMENT OPERATOR ( #PCDATA ) >
-<!ELEMENT DIGIT ( #PCDATA ) >
 <!ELEMENT INVALID ( #PCDATA ) >
