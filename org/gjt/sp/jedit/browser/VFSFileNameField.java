@@ -26,6 +26,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
