@@ -22,6 +22,9 @@ release.
 - Added 'Next Dirty Buffer' and 'Insert Selection' macros
   (Ollie Rutherfurd).
 
+- Pressing A+DOWN in a history text field now shows the field's popup
+  menu (Joerg Spieler).
+
 }}}
 {{{ Bug Fixes
 
@@ -76,6 +79,9 @@ release.
   behavior.
 
 - QuickNotepad was not saving files with the correct encoding.
+
+- Filename completion on backspace was not disabled in the "Save As"
+  dialog box, as intended.
 
 }}}
 
