@@ -20,6 +20,7 @@ JEDIT 4.0 VERSION HISTORY
 - Only one 'Search and Replace' dialog can be opened per view
 - Favorites menu in file system browser is now sorted using a
   case-insensitive sort
+- Improved behavior of 'Plugins' menu when lots of plugins are installed
 
 + Bug Fixes
 

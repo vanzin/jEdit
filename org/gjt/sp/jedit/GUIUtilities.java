@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.*;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFS;
@@ -145,7 +144,13 @@ public class GUIUtilities
 		JMenuBar mbar = new JMenuBar();
 
 		while(st.hasMoreTokens())
-			mbar.add(loadMenu(st.nextToken()));
+		{
+			String menu = st.nextToken();
+			if(menu.equals("plugins"))
+				loadPluginsMenu(mbar);
+			else
+				mbar.add(loadMenu(menu));
+		}
 
 		return mbar;
 	} //}}}
@@ -181,8 +186,6 @@ public class GUIUtilities
 			return new MarkersMenu();
 		else if(name.equals("macros"))
 			return new MacrosMenu();
-		else if(name.equals("plugins"))
-			return new PluginsMenu();
 		else
 			return new EnhancedMenu(name);
 	} //}}}
@@ -1146,5 +1149,73 @@ public class GUIUtilities
 	private static SplashScreen splash;
 	private static Hashtable icons;
 
-	private GUIUtilities() {} //}}}
+	private GUIUtilities() {}
+
+	//{{{ loadPluginsMenu() method
+	private static void loadPluginsMenu(JMenuBar mbar)
+	{
+		// Query plugins for menu items
+		Vector pluginMenuItems = new Vector();
+
+		EditPlugin[] pluginArray = jEdit.getPlugins();
+		for(int i = 0; i < pluginArray.length; i++)
+		{
+			try
+			{
+				EditPlugin plugin = pluginArray[i];
+				plugin.createMenuItems(pluginMenuItems);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,
+					"Error creating menu items"
+					+ " for plugin");
+				Log.log(Log.ERROR,GUIUtilities.class,t);
+			}
+		}
+
+		JMenu menu = new EnhancedMenu("plugins");
+
+		if(pluginMenuItems.isEmpty())
+		{
+			menu.add(GUIUtilities.loadMenuItem("no-plugins"));
+			mbar.add(menu);
+			return;
+		}
+
+		// Sort them
+		MiscUtilities.quicksort(pluginMenuItems,
+			new MiscUtilities.MenuItemCompare());
+
+		if(pluginMenuItems.size() < 20)
+		{
+			for(int i = 0; i < pluginMenuItems.size(); i++)
+			{
+				menu.add((JMenuItem)pluginMenuItems.get(i));
+			}
+			mbar.add(menu);
+		}
+		else
+		{
+			int menuCount = 1;
+
+			menu.setText(menu.getText() + " " + menuCount);
+
+			for(int i = 0; i < pluginMenuItems.size(); i++)
+			{
+				menu.add((JMenuItem)pluginMenuItems.get(i));
+				if(menu.getMenuComponentCount() == 20)
+				{
+					mbar.add(menu);
+					menu = new JMenu(String.valueOf(
+						++menuCount));
+				}
+			}
+
+			if(menu.getMenuComponentCount() != 0)
+				mbar.add(menu);
+		}
+	} //}}}
+
+	//}}}
 }
