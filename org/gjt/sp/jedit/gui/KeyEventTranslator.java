@@ -115,7 +115,7 @@ public class KeyEventTranslator
 			return null;
 		}
 
-		Key trans = transMap.get(returnValue);
+		Key trans = (Key)transMap.get(returnValue);
 		if(trans == null)
 			return returnValue;
 		else
