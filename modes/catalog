@@ -314,15 +314,13 @@
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
 
-<!-- XML mode must be after XSL mode, otherwise all XSL files
-     will be opened as XML because they start with <?xml... -->
-<MODE NAME="xsl"		FILE="xsl.xml"
-				FILE_NAME_GLOB="*.xsl" />
-
 <!-- Great. AElfred doesn't support entities in attribute values,
      but all other XML parsers complain if < appears. -->
 <MODE NAME="xml"		FILE="xml.xml"
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd}"
 				FIRST_LINE_GLOB="<\?xml*" />
+
+<MODE NAME="xsl"		FILE="xsl.xml"
+				FILE_NAME_GLOB="*.xsl" />
 
 </MODES>

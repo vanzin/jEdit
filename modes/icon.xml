@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Icon mode by Silas Smith (smiths@cs.arizona.edu) -->
+<!-- Updated 08/07/2003 -->
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
+		<PROPERTY NAME="wordBreakChars" VALUE="|.\\:,+-*/=?^!@%&lt;&gt;&amp;" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" 
 	    HIGHLIGHT_DIGITS="TRUE" 
@@ -46,15 +47,25 @@
 		<SEQ TYPE="OPERATOR">**</SEQ> <!-- intersection -->
 		<SEQ TYPE="OPERATOR">--</SEQ> <!-- difference -->
 
+		<SEQ TYPE="OPERATOR">&lt;-&gt;</SEQ> <!-- "<->" -->
+		<SEQ TYPE="OPERATOR">&lt;-</SEQ> <!-- "<-" -->
+		<SEQ TYPE="OPERATOR">op:=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">~=</SEQ>
+		<SEQ TYPE="OPERATOR">:=:</SEQ>
 		<SEQ TYPE="OPERATOR">:=</SEQ>
-
-
+		<SEQ TYPE="OPERATOR">-:</SEQ>
+		<SEQ TYPE="OPERATOR">+:</SEQ>
+		
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">not</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
 		<SEQ TYPE="OPERATOR">?</SEQ>
 		<SEQ TYPE="OPERATOR">@</SEQ>
@@ -72,116 +83,116 @@
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
 		<KEYWORDS>
-			<KEYWORD1>break</KEYWORD1> 
 			<KEYWORD1>by</KEYWORD1>
 			<KEYWORD1>case</KEYWORD1>
 			<KEYWORD1>create</KEYWORD1>
 			<KEYWORD1>default</KEYWORD1>
 			<KEYWORD1>do</KEYWORD1>
 			<KEYWORD1>else</KEYWORD1>
-			<KEYWORD1>end</KEYWORD1>
 			<KEYWORD1>every</KEYWORD1>
-			<KEYWORD1>fail</KEYWORD1>
-			<KEYWORD1>global</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>initial</KEYWORD1>
-			<KEYWORD1>invocable</KEYWORD1>
-			<KEYWORD1>link</KEYWORD1>
-			<KEYWORD1>local</KEYWORD1>
 			<KEYWORD1>next</KEYWORD1>
-			<KEYWORD1>not</KEYWORD1>
 			<KEYWORD1>of</KEYWORD1>
-			<KEYWORD1>procedure</KEYWORD1>
-			<KEYWORD1>record</KEYWORD1>
 			<KEYWORD1>repeat</KEYWORD1>
-			<KEYWORD1>return</KEYWORD1>
-			<KEYWORD1>static</KEYWORD1>
-			<KEYWORD1>suspend</KEYWORD1>
 			<KEYWORD1>then</KEYWORD1>
 			<KEYWORD1>to</KEYWORD1>
 			<KEYWORD1>until</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
+
+			<KEYWORD2>break</KEYWORD2> 
+			<KEYWORD2>end</KEYWORD2>
+			<KEYWORD2>fail</KEYWORD2>
+			<KEYWORD2>global</KEYWORD2>
+			<KEYWORD2>invocable</KEYWORD2>
+			<KEYWORD2>link</KEYWORD2>
+			<KEYWORD2>local</KEYWORD2>
+			<KEYWORD2>procedure</KEYWORD2>
+			<KEYWORD2>record</KEYWORD2>
+			<KEYWORD2>return</KEYWORD2>
+			<KEYWORD2>static</KEYWORD2>
+			<KEYWORD2>suspend</KEYWORD2>
 			
-			<KEYWORD2>&amp;allocated</KEYWORD2>
-			<KEYWORD2>&amp;ascii</KEYWORD2>
-			<KEYWORD2>&amp;clock</KEYWORD2>
-			<KEYWORD2>&amp;collections</KEYWORD2>
-			<KEYWORD2>&amp;cset</KEYWORD2>
-			<KEYWORD2>&amp;current</KEYWORD2>
-			<KEYWORD2>&amp;date</KEYWORD2>
-			<KEYWORD2>&amp;dateline</KEYWORD2>
-			<KEYWORD2>&amp;digits</KEYWORD2>
-			<KEYWORD2>&amp;dump</KEYWORD2>
-			<KEYWORD2>&amp;e</KEYWORD2>
-			<KEYWORD2>&amp;error</KEYWORD2>
-			<KEYWORD2>&amp;errornumber</KEYWORD2>
-			<KEYWORD2>&amp;errortext</KEYWORD2>
-			<KEYWORD2>&amp;errorvalue</KEYWORD2>
-			<KEYWORD2>&amp;errout</KEYWORD2>
-			<KEYWORD2>&amp;fail</KEYWORD2>
-			<KEYWORD2>&amp;features</KEYWORD2>
-			<KEYWORD2>&amp;file</KEYWORD2>
-			<KEYWORD2>&amp;host</KEYWORD2>
-			<KEYWORD2>&amp;input</KEYWORD2>
-			<KEYWORD2>&amp;lcase</KEYWORD2>
-			<KEYWORD2>&amp;letters</KEYWORD2>
-			<KEYWORD2>&amp;level</KEYWORD2>
-			<KEYWORD2>&amp;line</KEYWORD2>
-			<KEYWORD2>&amp;main</KEYWORD2>
-			<KEYWORD2>&amp;null</KEYWORD2>
-			<KEYWORD2>&amp;output</KEYWORD2>
-			<KEYWORD2>&amp;phi</KEYWORD2>
-			<KEYWORD2>&amp;pi</KEYWORD2>
-			<KEYWORD2>&amp;pos</KEYWORD2>
-			<KEYWORD2>&amp;progname</KEYWORD2>
-			<KEYWORD2>&amp;random</KEYWORD2>
-			<KEYWORD2>&amp;regions</KEYWORD2> 
-			<KEYWORD2>&amp;source</KEYWORD2>
-			<KEYWORD2>&amp;storage</KEYWORD2>
-			<KEYWORD2>&amp;subject</KEYWORD2>
-			<KEYWORD2>&amp;time</KEYWORD2>
-			<KEYWORD2>&amp;trace</KEYWORD2>
-			<KEYWORD2>&amp;ucase</KEYWORD2>
-			<KEYWORD2>&amp;version</KEYWORD2>
+			<KEYWORD3>&amp;allocated</KEYWORD3>
+			<KEYWORD3>&amp;ascii</KEYWORD3>
+			<KEYWORD3>&amp;clock</KEYWORD3>
+			<KEYWORD3>&amp;collections</KEYWORD3>
+			<KEYWORD3>&amp;cset</KEYWORD3>
+			<KEYWORD3>&amp;current</KEYWORD3>
+			<KEYWORD3>&amp;date</KEYWORD3>
+			<KEYWORD3>&amp;dateline</KEYWORD3>
+			<KEYWORD3>&amp;digits</KEYWORD3>
+			<KEYWORD3>&amp;dump</KEYWORD3>
+			<KEYWORD3>&amp;e</KEYWORD3>
+			<KEYWORD3>&amp;error</KEYWORD3>
+			<KEYWORD3>&amp;errornumber</KEYWORD3>
+			<KEYWORD3>&amp;errortext</KEYWORD3>
+			<KEYWORD3>&amp;errorvalue</KEYWORD3>
+			<KEYWORD3>&amp;errout</KEYWORD3>
+			<KEYWORD3>&amp;fail</KEYWORD3>
+			<KEYWORD3>&amp;features</KEYWORD3>
+			<KEYWORD3>&amp;file</KEYWORD3>
+			<KEYWORD3>&amp;host</KEYWORD3>
+			<KEYWORD3>&amp;input</KEYWORD3>
+			<KEYWORD3>&amp;lcase</KEYWORD3>
+			<KEYWORD3>&amp;letters</KEYWORD3>
+			<KEYWORD3>&amp;level</KEYWORD3>
+			<KEYWORD3>&amp;line</KEYWORD3>
+			<KEYWORD3>&amp;main</KEYWORD3>
+			<KEYWORD3>&amp;null</KEYWORD3>
+			<KEYWORD3>&amp;output</KEYWORD3>
+			<KEYWORD3>&amp;phi</KEYWORD3>
+			<KEYWORD3>&amp;pi</KEYWORD3>
+			<KEYWORD3>&amp;pos</KEYWORD3>
+			<KEYWORD3>&amp;progname</KEYWORD3>
+			<KEYWORD3>&amp;random</KEYWORD3>
+			<KEYWORD3>&amp;regions</KEYWORD3> 
+			<KEYWORD3>&amp;source</KEYWORD3>
+			<KEYWORD3>&amp;storage</KEYWORD3>
+			<KEYWORD3>&amp;subject</KEYWORD3>
+			<KEYWORD3>&amp;time</KEYWORD3>
+			<KEYWORD3>&amp;trace</KEYWORD3>
+			<KEYWORD3>&amp;ucase</KEYWORD3>
+			<KEYWORD3>&amp;version</KEYWORD3>
 
 			<!-- preprocessor directives -->
-			<KEYWORD2>$define</KEYWORD2>
-			<KEYWORD2>$else</KEYWORD2>
-			<KEYWORD2>$endif</KEYWORD2>
-			<KEYWORD2>$error</KEYWORD2>
-			<KEYWORD2>$ifdef</KEYWORD2>
-			<KEYWORD2>$ifndef</KEYWORD2>
-			<KEYWORD2>$include</KEYWORD2>
-			<KEYWORD2>$line</KEYWORD2>
-			<KEYWORD2>$undef</KEYWORD2>
+			<KEYWORD3>$define</KEYWORD3>
+			<KEYWORD3>$else</KEYWORD3>
+			<KEYWORD3>$endif</KEYWORD3>
+			<KEYWORD3>$error</KEYWORD3>
+			<KEYWORD3>$ifdef</KEYWORD3>
+			<KEYWORD3>$ifndef</KEYWORD3>
+			<KEYWORD3>$include</KEYWORD3>
+			<KEYWORD3>$line</KEYWORD3>
+			<KEYWORD3>$undef</KEYWORD3>
 			
 			<!-- predefined prepocessor symbols -->
-			<KEYWORD2>_MACINTOSH</KEYWORD2>
-			<KEYWORD2>_MS_WINDOWS_NT</KEYWORD2>
-			<KEYWORD2>_MS_WINDOWS</KEYWORD2>
-			<KEYWORD2>_MSDOS_386</KEYWORD2>
-			<KEYWORD2>_MSDOS</KEYWORD2>
-			<KEYWORD2>_OS2</KEYWORD2>
-			<KEYWORD2>_PIPES</KEYWORD2>
-			<KEYWORD2>_PRESENTATION_MGR</KEYWORD2>
-			<KEYWORD2>_SYSTEM_FUNCTION</KEYWORD2>
-			<KEYWORD2>_UNIX</KEYWORD2>
-			<KEYWORD2>_VMS</KEYWORD2>
-			<KEYWORD2>_WINDOW_FUNCTIONS</KEYWORD2>
-			<KEYWORD2>_X_WINDOW_SYSTEM</KEYWORD2>
+			<KEYWORD3>_MACINTOSH</KEYWORD3>
+			<KEYWORD3>_MS_WINDOWS_NT</KEYWORD3>
+			<KEYWORD3>_MS_WINDOWS</KEYWORD3>
+			<KEYWORD3>_MSDOS_386</KEYWORD3>
+			<KEYWORD3>_MSDOS</KEYWORD3>
+			<KEYWORD3>_OS2</KEYWORD3>
+			<KEYWORD3>_PIPES</KEYWORD3>
+			<KEYWORD3>_PRESENTATION_MGR</KEYWORD3>
+			<KEYWORD3>_SYSTEM_FUNCTION</KEYWORD3>
+			<KEYWORD3>_UNIX</KEYWORD3>
+			<KEYWORD3>_VMS</KEYWORD3>
+			<KEYWORD3>_WINDOW_FUNCTIONS</KEYWORD3>
+			<KEYWORD3>_X_WINDOW_SYSTEM</KEYWORD3>
 						
-			<KEYWORD3>co�expression</KEYWORD3>
-			<KEYWORD3>cset</KEYWORD3>
-			<KEYWORD3>file</KEYWORD3>
-			<KEYWORD3>integer</KEYWORD3>
-			<KEYWORD3>list</KEYWORD3>
-			<KEYWORD3>null</KEYWORD3>
-			<KEYWORD3>procedure</KEYWORD3>
-			<KEYWORD3>real</KEYWORD3>
-			<KEYWORD3>set</KEYWORD3>
-			<KEYWORD3>string</KEYWORD3>
-			<KEYWORD3>table</KEYWORD3>
-			<KEYWORD3>window</KEYWORD3>
+			<KEYWORD4>co-expression</KEYWORD4>
+			<KEYWORD4>cset</KEYWORD4>
+			<KEYWORD4>file</KEYWORD4>
+			<KEYWORD4>integer</KEYWORD4>
+			<KEYWORD4>list</KEYWORD4>
+			<KEYWORD4>null</KEYWORD4>
+			<KEYWORD4>real</KEYWORD4>
+			<KEYWORD4>set</KEYWORD4>
+			<KEYWORD4>string</KEYWORD4>
+			<KEYWORD4>table</KEYWORD4>
+			<KEYWORD4>window</KEYWORD4>
 		</KEYWORDS>
 	</RULES>
 </MODE>
+
