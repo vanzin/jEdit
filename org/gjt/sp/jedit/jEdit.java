@@ -998,6 +998,23 @@ public class jEdit
 		return jar;
 	} //}}}
 
+	//{{{ removePluginJAR() method
+	/**
+	 * Unloads the given plugin JAR with the specified path. Note that
+	 * calling this at a time other than jEdit shutdown can have
+	 * unpredictable results if the plugin has not been updated for the
+	 * jEdit 4.2 plugin API.
+	 *
+	 * @param jar The <code>PluginJAR</code> instance
+	 * @since jEdit 4.2pre1
+	 */
+	public static void removePluginJAR(PluginJAR jar)
+	{
+		jar.uninit();
+		jar.getClassLoader().deactivate();
+		jars.removeElement(jar);
+	} //}}}
+
 	//}}}
 
 	//{{{ Action methods
@@ -2263,19 +2280,10 @@ public class jEdit
 				server.stopServer();
 
 			// Stop all plugins
-			EditPlugin[] plugins = getPlugins();
+			PluginJAR[] plugins = getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{
-				try
-				{
-					plugins[i].stop();
-				}
-				catch(Throwable t)
-				{
-					Log.log(Log.ERROR,jEdit.class,"Error while "
-						+ "stopping plugin:");
-					Log.log(Log.ERROR,jEdit.class,t);
-				}
+				removePluginJAR(plugins[i]);
 			}
 
 			// Send EditorExiting

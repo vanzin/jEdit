@@ -3,19 +3,39 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- shortcuts: stale shortcuts remain?
+================================
+
+I'm releasing 4.2pre1 ASAP.
+
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
+- while loading --> scroll bar
+- plugin api:
+  - option panes.
+  - port quicknotepad, errorlist, character map, send buffer,
+      sidekick, xml.
+  - plugin errors after startup
+  - mouse over text for actions
+- save to symlink: don't overwrite symlink
+- file changed dialog: don't reload files if flag is off
+- save caret info first
+- box in io progress
+- split view line insert: repainted twice, selection problems
+- action bar: wrap around arrow keys
+- bizarre dockable window manager button layout problem
+
+================================
+
+- plugin unload:
+  - update dockables
+  - update plugin menu
+
+- shortcuts: stale shortcuts remain?
 
 - plugin api:
 
-  - option panes.
-    - port quicknotepad, errorlist, character map, send buffer,
-      sidekick, xml.
   - operating system activations.
     - port macos
-  - plugin errors after startup
-  - mouse over text for actions
   - cache
 
 - can do perl q|...| etc. using begin/end substitution!
@@ -23,7 +43,6 @@ and quirks that I need to fix eventually.
 - 
 - got a multiple i/o requests thing once
 - browser: /, ~, -
-- save to symlink: don't overwrite symlink
 - browser's default size
 - browser: tab: don't insert full path
 - completion: handle full paths
@@ -31,33 +50,26 @@ and quirks that I need to fix eventually.
 
 - F2 doesn't work in JTree/JTable, maybe others
 - servicemanager javadocs
-- file changed dialog: don't reload files if flag is off
-- save caret info first
 - narrow: scrolls one down
 - update man page
 - make gutter fully painted by extensions just like text area
 - format should show an error if the line len is 0, not beep
 - shortcut editor: restore default button
 - path shown twice in tree: maybeReloadDirectory()
-- box in io progress
 - don't rely on browser view for completion
 - adapt vfs filename field for the path display at the top
 - vfs dialogs: only one field?
 - vfs.isValidPath()
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
 - vfs browser: open in new view: doesn't focus the new view
-- action bar layout problem
 - eval-for-selected-lines doesn't work with rectangular selection
 - recording 'evaluate for selected lines'
 - evalutate for selected lines: > 1 selection per line
-- split view line insert: repainted twice, selection problems
-- action bar: wrap around arrow keys
 - searching in a buffer w/ narrowed fold
 - macro record: doesn't respect overwrite
 - save file resulting in fold collapse -- scroll to 0
 - closing lots of files is slow
-- today:
-  - rect select and trailing whitespace
+- rect select and trailing whitespace
 - redo/undo dirty restore is broken.
 - synchro scroll needs a rewrite & folding
 - help:
@@ -72,7 +84,6 @@ and quirks that I need to fix eventually.
 - A+# on OS X, need better modifier mapping on OS X
 - how to handle S+0-9?
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
-- bizarre dockable window manager button layout problem
 - return after collapsed fold: insert line after end of fold
 - respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
   know mod status
@@ -96,14 +107,6 @@ and quirks that I need to fix eventually.
 
 + verify:
 
-[error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
-[error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)
-[error] PluginListDownloadProgress$DownloadThread:  at java.io.File.exists(File.java:679)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:3023)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:875)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList$Plugin.checkIfInstalled(PluginList.java:165)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList.addPlugin(PluginList.java:78)
-[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginListHandler.endElement(PluginListHandler.java:180)
 - focus problem with hypersearch in floating window
 - dwm: not always focused correctly
 - JDK 1.4 focus bugs
@@ -124,17 +127,7 @@ and quirks that I need to fix eventually.
 
 + features:
 
-- plugin api:
-  - new option pane api
-  - dockable action cache
-  - cache properties
-  - action labels
-  - refactor JARClassLoader
-  - EditPlugin.JAR handles starting/stopping
-  - add jEdit methods to unload plugins
-  - the cache
-  - services
-- right click menu: plugins & favorites
+- vfs browser right click menu: plugins & favorites
 - don't show 'new directory' in favorites:
   - new bracket matching:
     - use interface to determine match
