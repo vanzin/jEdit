@@ -666,69 +666,43 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ charsToEscapes() method
 	/**
-	 * Escapes newlines, tabs, backslashes, quotes in the specified
+	 * Escapes newlines, tabs, backslashes, and quotes in the specified
 	 * string.
 	 * @param str The string
 	 * @since jEdit 2.3pre1
 	 */
 	public static String charsToEscapes(String str)
 	{
-		return charsToEscapes(str,false);
+		return charsToEscapes(str,"\n\t\\\"'");
 	} //}}}
 
 	//{{{ charsToEscapes() method
 	/**
-	 * Escapes newlines, tabs, backslashes, quotes in the specified
-	 * string.
+	 * Escapes the specified characters in the specified string.
 	 * @param str The string
-	 * @param history jEdit history files require additional escaping
-	 * @since jEdit 2.7pre2
+	 * @param extra Any characters that require escaping
+	 * @since jEdit 4.1pre3
 	 */
-	public static String charsToEscapes(String str, boolean history)
+	public static String charsToEscapes(String str, String toEscape)
 	{
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
-			switch(c)
+			if(toEscape.indexOf(c) != -1)
 			{
-			case '\n':
-				buf.append("\\n");
-				break;
-			case '\t':
-				buf.append("\\t");
-				break;
-			case '[':
-				if(history)
-					buf.append("\\[");
+				if(c == '\n')
+					buf.append("\\n");
+				else if(c == '\t')
+					buf.append("\\t");
 				else
+				{
+					buf.append('\\');
 					buf.append(c);
-				break;
-			case ']':
-				if(history)
-					buf.append("\\]");
-				else
-					buf.append(c);
-				break;
-			case '"':
-				if(history)
-					buf.append(c);
-				else
-					buf.append("\\\"");
-				break;
-			case '\'':
-				if(history)
-					buf.append(c);
-				else
-					buf.append("\\\'");
-				break;
-			case '\\':
-				buf.append("\\\\");
-				break;
-			default:
-				buf.append(c);
-				break;
+				}
 			}
+			else
+				buf.append(c);
 		}
 		return buf.toString();
 	} //}}}
