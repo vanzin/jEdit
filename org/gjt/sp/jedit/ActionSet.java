@@ -302,11 +302,11 @@ public class ActionSet
 	public String[] getActionNames()
 	{
 		String[] retVal = new String[actions.size()];
-		Enumeration enum = actions.keys();
+		Enumeration e = actions.keys();
 		int i = 0;
-		while(enum.hasMoreElements())
+		while(e.hasMoreElements())
 		{
-			retVal[i++] = (String)enum.nextElement();
+			retVal[i++] = (String)e.nextElement();
 		}
 		return retVal;
 	} //}}}
@@ -320,11 +320,11 @@ public class ActionSet
 	public String[] getCacheableActionNames()
 	{
 		LinkedList retVal = new LinkedList();
-		Enumeration enum = actions.elements();
+		Enumeration e = actions.elements();
 		int i = 0;
-		while(enum.hasMoreElements())
+		while(e.hasMoreElements())
 		{
-			Object obj = enum.nextElement();
+			Object obj = e.nextElement();
 			if(obj == placeholder)
 			{
 				// ??? this should only be called with
@@ -351,11 +351,11 @@ public class ActionSet
 		load();
 
 		EditAction[] retVal = new EditAction[actions.size()];
-		Enumeration enum = actions.elements();
+		Enumeration e = actions.elements();
 		int i = 0;
-		while(enum.hasMoreElements())
+		while(e.hasMoreElements())
 		{
-			retVal[i++] = (EditAction)enum.nextElement();
+			retVal[i++] = (EditAction)e.nextElement();
 		}
 		return retVal;
 	} //}}}
@@ -476,9 +476,9 @@ public class ActionSet
 	//{{{ getActionNames() method
 	void getActionNames(ArrayList vec)
 	{
-		Enumeration enum = actions.keys();
-		while(enum.hasMoreElements())
-			vec.add(enum.nextElement());
+		Enumeration e = actions.keys();
+		while(e.hasMoreElements())
+			vec.add(e.nextElement());
 	} //}}}
 
 	//}}}

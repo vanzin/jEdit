@@ -149,7 +149,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		lineSep.setBackground(bg);
 		lineSep.setForeground(fg);
 
-		Font font = UIManager.getFont("Label.font");
+		// retarded GTK look and feel!
+		Font font = new JLabel().getFont();
+		//UIManager.getFont("Label.font");
 		FontMetrics fm = getFontMetrics(font);
 		Dimension dim = null;
 

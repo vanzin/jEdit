@@ -331,10 +331,10 @@ class Roster
 			{
 				zipFile = new ZipFile(path);
 
-				Enumeration enum = zipFile.entries();
-				while(enum.hasMoreElements())
+				Enumeration e = zipFile.entries();
+				while(e.hasMoreElements())
 				{
-					ZipEntry entry = (ZipEntry)enum.nextElement();
+					ZipEntry entry = (ZipEntry)e.nextElement();
 					String name = entry.getName().replace('/',File.separatorChar);
 					File file = new File(installDirectory,name);
 					if(entry.isDirectory())

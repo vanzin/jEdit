@@ -181,7 +181,8 @@ public class AboutDialog extends EnhancedDialog
 		class AnimationThread extends Thread
 		{
 			private boolean running = true;
-		
+			private long last;
+
 			AnimationThread()
 			{
 				super("About box animation thread");
@@ -205,13 +206,24 @@ public class AboutDialog extends EnhancedDialog
 					if(scrollPosition > max)
 						scrollPosition = -250;
 
-					try
+					if(last != 0)
 					{
-						Thread.sleep(100);
+						long frameDelay =
+							System.currentTimeMillis()
+							- last;
+
+						try
+						{
+							Thread.sleep(
+								75
+								- frameDelay);
+						}
+						catch(Exception e)
+						{
+						}
 					}
-					catch(Exception e)
-					{
-					}
+
+					last = System.currentTimeMillis();
 
 					repaint(getWidth() / 2 - maxWidth,
 						TOP,maxWidth * 2,

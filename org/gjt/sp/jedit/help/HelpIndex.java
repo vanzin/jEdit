@@ -141,10 +141,10 @@ class HelpIndex
 	 */
 	public void indexJAR(ZipFile jar) throws Exception
 	{
-		Enumeration enum = jar.entries();
-		while(enum.hasMoreElements())
+		Enumeration e = jar.entries();
+		while(e.hasMoreElements())
 		{
-			ZipEntry entry = (ZipEntry)enum.nextElement();
+			ZipEntry entry = (ZipEntry)e.nextElement();
 			String name = entry.getName();
 			String lname = name.toLowerCase();
 			if(lname.endsWith(".html")/*  || lname.endsWith(".txt") */)

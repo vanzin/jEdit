@@ -360,10 +360,10 @@ public abstract class OptionsDialog extends EnhancedDialog
 	{
 		path.add(node);
 
-		Enumeration enum = node.getMembers();
-		while(enum.hasMoreElements())
+		Enumeration e = node.getMembers();
+		while(e.hasMoreElements())
 		{
-			Object obj = enum.nextElement();
+			Object obj = e.nextElement();
 			if(obj instanceof OptionGroup)
 			{
 				OptionGroup grp = (OptionGroup)obj;

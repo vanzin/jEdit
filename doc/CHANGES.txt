@@ -2,10 +2,10 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre9
 
-Thanks to Brad Mace, David Hardin,  Matthew J. Price, Thomas Galvin and
-Wiktor Adamski for contributing to this release.
+Thanks to Brad Mace, David Hardin,  Matthew J. Price, Ollie Rutherfurd,
+Thomas Galvin and Wiktor Adamski for contributing to this release.
 
-{{{ Misacellaneous
+{{{ Miscellaneous
 
 - Includes new "Create Get/Set Methods" macro (Thomas Galvin).
 
@@ -14,6 +14,9 @@ Wiktor Adamski for contributing to this release.
 - Updated Visual FoxPro syntax highlighting (Matthew J. Price).
 
 - Updated Lisp syntax highlighting (David Hardin).
+
+- "Reload All Buffers" command now only asks for confirmation if there
+  are buffers with unsaved changes (Ollie Rutherfurd).
 
 }}}
 {{{ Bug Fixes
@@ -75,6 +78,14 @@ Wiktor Adamski for contributing to this release.
 
 - "Confirm 'Save All Buffers' command" option didn't work.
 
+- jEdit would throw an exception on startup if the GTK look and feel was
+  in use.
+
+- The MacOS plugin didn't work with the latest MRJ release.
+
+- Commands in the right-click menu of the parent directories list
+  operated on the files currently selected in the file listing table.
+
 }}}
 {{{ API Changes
 
@@ -83,6 +94,7 @@ Wiktor Adamski for contributing to this release.
 }}}
 
 }}}
+
 {{{ Version 4.2pre8
 
 Thanks to David Moss, Justin Dieters, Kris Kopicki, Ollie Rutherfurd,

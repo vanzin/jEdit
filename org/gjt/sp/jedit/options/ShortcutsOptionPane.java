@@ -277,12 +277,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public void save()
 		{
-			Enumeration enum = bindings.elements();
-			while(enum.hasMoreElements())
+			Enumeration e = bindings.elements();
+			while(e.hasMoreElements())
 			{
 				GrabKeyDialog.KeyBinding binding[]
 					= (GrabKeyDialog.KeyBinding[])
-						enum.nextElement();
+						e.nextElement();
 				jEdit.setProperty(
 					binding[0].name + ".shortcut",
 					binding[0].shortcut);

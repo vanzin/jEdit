@@ -98,7 +98,8 @@ public class MacOSPlugin extends EBPlugin
 			Log.log(Log.ERROR,this,jEdit.getProperty("MacOSPlugin.dialog.osname.message"));
 			return false;
 		}
-		if (System.getProperty("mrj.version").compareTo(mrjversion) < 0)
+		if (MiscUtilities.compareStrings(
+			System.getProperty("mrj.version"),mrjversion) < 0)
 		{
 			SwingUtilities.invokeLater( new Runnable() { public void run() {
 				GUIUtilities.error(null,"MacOSPlugin.dialog.mrjversion",new Object[] {mrjversion});
