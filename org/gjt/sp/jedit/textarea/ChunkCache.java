@@ -170,7 +170,7 @@ class ChunkCache
 
 		int visibleLines = lineInfo.length;
 		// rely on the fact that when we're called physLastLine not updated yet
-		/* if(physFirstLine > textArea.getLastPhysicalLine()) */
+		if(physFirstLine > textArea.getLastPhysicalLine())
 		{
 			if(DEBUG)
 				System.err.println("too far");
@@ -179,7 +179,7 @@ class ChunkCache
 				lineInfo[i].chunksValid = false;
 			}
 		}
-		/* else if(firstLine > this.firstLine)
+		else if(firstLine > this.firstLine)
 		{
 			boolean invalidateAll = false;
 
@@ -249,20 +249,19 @@ class ChunkCache
 			LinkedList list = new LinkedList();
 			for(int i = firstLine; i < this.firstLine; i++)
 			{
-				if(i >= textArea.getVirtualLineCount()
-					|| list.size() >= visibleLines)
+				if(list.size() >= visibleLines)
 				{
 					break;
 				}
 
-				int physicalLine = textArea.virtualToPhysical(i);
-
 				out.clear();
-				lineToChunkList(physicalLine,out);
+				lineToChunkList(physFirstLine,out);
 				if(out.size() == 0)
 					out.add(null);
 
-				getLineInfosForPhysicalLine(physicalLine,list);
+				getLineInfosForPhysicalLine(physFirstLine,list);
+				physFirstLine = textArea.displayManager
+					.getNextVisibleLine(physFirstLine);
 			}
 
 			if(list.size() < visibleLines)
@@ -284,7 +283,7 @@ class ChunkCache
 				System.err.println("t.f > f: only " + firstScreenLine
 					+ " need updates");
 			}
-		} */
+		}
 
 		lastScreenLine = lastScreenLineP = -1;
 		this.firstLine = firstLine;
