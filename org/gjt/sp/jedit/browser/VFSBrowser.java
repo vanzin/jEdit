@@ -157,7 +157,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		layout.setConstraints(label,cons);
 		pathAndFilterPanel.add(label);
 
-		pathField = new HistoryTextField("vfs.browser.path",true,false);
+		pathField = new HistoryTextField("vfs.browser.path");
+		pathField.setInstantPopups(true);
+		pathField.setEnterAddsToHistory(false);
+		pathField.setSelectAllOnFocus(true);
 
 		if(floating)
 		{
@@ -174,7 +177,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathField.setPreferredSize(prefSize);
 		pathField.addActionListener(actionHandler);
 		pathField.addFocusListener(new FocusHandler());
-		pathField.addMouseMotionListener(new MouseHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 
@@ -195,10 +197,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 		layout.setConstraints(filterCheckbox,cons);
 		pathAndFilterPanel.add(filterCheckbox);
 
-		filterField = new HistoryTextField("vfs.browser.filter",true);
+		filterField = new HistoryTextField("vfs.browser.filter");
+		filterField.setInstantPopups(true);
+		filterField.setSelectAllOnFocus(true);
 		filterField.addActionListener(actionHandler);
-		filterField.addFocusListener(new FocusHandler());
-		filterField.addMouseMotionListener(new MouseHandler());
 
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -1057,40 +1059,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 	} //}}}
 
-	private boolean focusClickFlag;
-
 	//{{{ FocusHandler class
 	class FocusHandler extends FocusAdapter
 	{
-		public void focusGained(FocusEvent evt)
-		{
-			((JTextField)evt.getSource()).selectAll();
-			focusClickFlag = true;
-		}
-
 		public void focusLost(FocusEvent evt)
 		{
-			if(evt.getSource() != pathField)
-				return;
-
 			if(!requestRunning && !pathField.getText().equals(path))
 				pathField.setText(path);
-		}
-	} //}}}
-
-	//{{{ MouseHandler class
-	class MouseHandler extends MouseInputAdapter
-	{
-		public void mouseDragged(MouseEvent evt)
-		{
-			JTextField textField = (JTextField)evt.getSource();
-			if(focusClickFlag)
-			{
-				// unselect if user starts dragging so they can
-				// more easily make a selection
-				textField.setCaretPosition(textField.getCaretPosition());
-				focusClickFlag = false;
-			}
 		}
 	} //}}}
 

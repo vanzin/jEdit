@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
+import java.util.Vector;
 import org.gjt.sp.jedit.TextUtilities;
 
 /**
@@ -40,6 +41,7 @@ public class KeywordMap
 	{
 		this(ignoreCase, 52);
 		this.ignoreCase = ignoreCase;
+		noWordSep = new StringBuffer();
 	}
 
 	/**
@@ -84,12 +86,63 @@ public class KeywordMap
 	/**
 	 * Adds a key-value mapping.
 	 * @param keyword The key
-	 * @Param id The value
+	 * @param id The value
 	 */
 	public void add(String keyword, byte id)
 	{
 		int key = getStringMapKey(keyword);
-		map[key] = new Keyword(keyword.toCharArray(),id,map[key]);
+
+		char[] chars = keyword.toCharArray();
+
+		// complete-word command needs a list of all non-alphanumeric
+		// characters used in a keyword map.
+loop:		for(int i = 0; i < chars.length; i++)
+		{
+			char ch = chars[i];
+			if(!Character.isLetterOrDigit(ch))
+			{
+				for(int j = 0; j < noWordSep.length(); j++)
+				{
+					if(noWordSep.charAt(j) == ch)
+						continue loop;
+				}
+
+				noWordSep.append(ch);
+			}
+		}
+
+		map[key] = new Keyword(chars,id,map[key]);
+	}
+
+	/**
+	 * Returns all non-alphanumeric characters that appear in the
+	 * keywords of this keyword map.
+	 * @since jEdit 4.0pre3
+	 */
+	public String getNonAlphaNumericChars()
+	{
+		return noWordSep.toString();
+	}
+
+	/**
+	 * Returns an array containing all keywords in this keyword map.
+	 * @since jEdit 4.0pre3
+	 */
+	public String[] getKeywords()
+	{
+		Vector vector = new Vector(100);
+		for(int i = 0; i < map.length; i++)
+		{
+			Keyword keyword = map[i];
+			while(keyword != null)
+			{
+				vector.addElement(new String(keyword.keyword));
+				keyword = keyword.next;
+			}
+		}
+		String[] retVal = new String[vector.size()];
+		vector.copyInto(retVal);
+		return retVal;
 	}
 
 	/**
@@ -145,4 +198,5 @@ public class KeywordMap
 
 	private Keyword[] map;
 	private boolean ignoreCase;
+	private StringBuffer noWordSep;
 }

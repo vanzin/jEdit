@@ -55,6 +55,14 @@ JEDIT 4.0 VERSION HISTORY
 - When HOME is pressed while there is a selection, the caret is moved to
   the beginning of the first selected line. END moves the caret to the
   end of the last selected line.
+- Search bar automatically selects its contents as soon as it gets focus
+- The file system browser's 'Search in Directory' command no longer
+  hangs the event dispatch thread until the directory hierarchy has been
+  listed
+- If an error occurs while loading one of the files involved in a
+  multi-file search, the search will continue; previously it would have
+  been aborted. Any errors will be listed in a dialog box after the
+  search is complete.
 
 + Neutral
 
@@ -97,6 +105,8 @@ JEDIT 4.0 VERSION HISTORY
 - Sometimes multi-line tokens would not be repainted correctly
 - Opening files whose path began with ~ (which was supposed to be
   expanded to your home directory path) didn't work
+- Trying to do a directory search inside a directory which contained a
+  symlink loop would hang jEdit
 
 + API Changes
 
@@ -117,6 +127,8 @@ JEDIT 4.0 VERSION HISTORY
   prepended or appended to the property name).
 
 - New method: VFSBrowser.browseDirectory(View view, String path)
+- New method: MiscUtilities.listDirectory(String directory, String glob,
+    boolean recurse)
 
 * Version 4.0pre2
 

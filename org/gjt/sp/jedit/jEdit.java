@@ -2582,6 +2582,13 @@ public class jEdit
 			"org.gjt.sp.jedit.proto|" +
 			System.getProperty("java.protocol.handler.pkgs",""));
 
+		// Set the User-Agent string used by the java.net HTTP handler
+		String userAgent = "jEdit/" + getVersion()
+			+ " (Java " + System.getProperty("java.version")
+			+ ". " + System.getProperty("java.vendor")
+			+ "; " + System.getProperty("os.arch") + ")";
+		System.getProperties().put("http.agent",userAgent);
+
 		inputHandler = new DefaultInputHandler(null);
 
 		/* Determine installation directory.

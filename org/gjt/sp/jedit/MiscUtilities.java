@@ -25,6 +25,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import gnu.regexp.RE;
 import javax.swing.JMenuItem;
 import java.io.*;
 import java.util.Vector;
@@ -934,6 +935,42 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return true;
 	} //}}}
 
+	//{{{ listFiles() method
+	/**
+	 * Returns an array containing the full path names of all files
+	 * within the specified directory that match the specified file
+	 * name glob.
+	 * @param directory The directory path
+	 * @param glob The file name glob
+	 * @param recurse If true, subdirectories will be listed as well
+	 */
+	public static String[] listDirectory(String directory, String glob,
+		boolean recurse)
+	{
+		Log.log(Log.DEBUG,MiscUtilities.class,"Listing " + directory);
+		Vector files = new Vector(100);
+
+		RE filter;
+		try
+		{
+			filter = new RE(globToRE(glob));
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,MiscUtilities.class,e);
+			return null;
+		}
+
+		listDirectory(new Vector(),files,new File(directory),filter,recurse);
+
+		String[] retVal = new String[files.size()];
+		files.copyInto(retVal);
+
+		quicksort(retVal,new StringICaseCompare());
+
+		return retVal;
+	} //}}}
+
 	//{{{ Private members
 	private MiscUtilities() {}
 
@@ -1011,6 +1048,58 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 		if(start < _end)
 			quicksort(obj,start,_end,compare);
+	} //}}}
+
+	//{{{ listDirectory() method
+	private static void listDirectory(Vector stack, Vector files,
+		File directory, RE filter, boolean recurse)
+	{
+		if(stack.contains(directory))
+		{
+			Log.log(Log.ERROR,MiscUtilities.class,
+				"Recursion in listDirectory(): "
+				+ directory.getPath());
+			return;
+		}
+		else
+			stack.addElement(directory);
+
+		String[] _files = directory.list();
+		if(_files == null)
+			return;
+
+		for(int i = 0; i < _files.length; i++)
+		{
+			String name = _files[i];
+
+			File file = new File(directory,name);
+			if(file.isDirectory())
+			{
+				if(recurse)
+				{
+					// resolve symlinks to avoid loops
+					try
+					{
+						file = new File(file.getCanonicalPath());
+					}
+					catch(IOException io)
+					{
+					}
+
+					listDirectory(stack,files,file,filter,recurse);
+				}
+			}
+			else
+			{
+				if(!filter.isMatch(name))
+					continue;
+
+				String path = file.getPath();
+				Log.log(Log.DEBUG,MiscUtilities.class,path);
+
+				files.addElement(path);
+			}
+		}
 	} //}}}
 
 	//}}}

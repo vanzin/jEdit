@@ -132,7 +132,7 @@
 
 <ACTION NAME="complete-word">
 	<CODE>
-		textArea.completeWord();
+		CompleteWord.completeWord(textArea);
 	</CODE>
 </ACTION>
 
@@ -362,14 +362,13 @@
 
 <ACTION NAME="hypersearch" NO_RECORD="TRUE">
 	<CODE>
-		view.quickHyperSearch();
+		view.quickHyperSearch(false);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="hypersearch-word" NO_RECORD="TRUE">
 	<CODE>
-		textArea.selectWord();
-		view.quickHyperSearch();
+		view.quickHyperSearch(true);
 	</CODE>
 </ACTION>
 
@@ -607,14 +606,13 @@
 
 <ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<CODE>
-		view.quickIncrementalSearch();
+		view.quickIncrementalSearch(false);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="quick-search-word" NO_RECORD="TRUE">
 	<CODE>
-		textArea.selectWord();
-		view.quickIncrementalSearch();
+		view.quickIncrementalSearch(true);
 	</CODE>
 </ACTION>
 

@@ -2,18 +2,18 @@ TO DO
 
 + before pre3:
 
-- complete word: update on the fly as chars typed
-- complete word: custom WrapAroundJList control
-- complete-word: complete current mode's keywords
-- move vfs browser's funky auto-select text field class to ogsj.gui package
+- finish new complete word
+  - fix bug that was fixed before
+  - better list control
+  - better cell renderer
+  - update on the fly
 - last focused dockable cmd
 - when loading a file with collapsedFolds property, last line always
   visible
-- search in directory: should not be so slow
-- help: tree should have icons
 - C+d with selection: delete all selected lines
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
+- faster hypersearch
 
 - docking buttons not always hidden
 - definately repaint problems
