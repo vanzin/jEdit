@@ -1002,45 +1002,67 @@ public class DockableWindowManager extends JPanel
 	{
 		super.paintChildren(g);
 
-		if(resizing != null)
+		if(resizeRect != null)
 		{
 			g.setColor(Color.darkGray);
-			Rectangle rect = new Rectangle(0,0,
-				PanelWindowContainer.SPLITTER_WIDTH - 2,
-				PanelWindowContainer.SPLITTER_WIDTH - 2);
-			if(resizing == top)
-			{
-				rect.x = top.dockablePanel.getX();
-				rect.y = resizePos + top.buttons.getHeight() + 2;
-				rect.width = top.dockablePanel.getWidth();
-			}
-			else if(resizing == left)
-			{
-				rect.x = resizePos + left.buttons.getWidth() + 2;
-				rect.y = left.dockablePanel.getY();
-				rect.height = left.dockablePanel.getHeight();
-			}
-			else if(resizing == bottom)
-			{
-				rect.x = bottom.dockablePanel.getX();
-				rect.y = getHeight() - bottom.buttons.getHeight() - resizePos
-					- PanelWindowContainer.SPLITTER_WIDTH + 2;
-				rect.width = bottom.dockablePanel.getWidth();
-			}
-			else if(resizing == right)
-			{
-				rect.x = getWidth() - right.buttons.getWidth() - resizePos
-					- PanelWindowContainer.SPLITTER_WIDTH + 2;
-				rect.y = right.dockablePanel.getY();
-				rect.height = right.dockablePanel.getHeight();
-			}
-			g.fillRect(rect.x,rect.y,rect.width,rect.height);
+			g.fillRect(resizeRect.x,resizeRect.y,
+				resizeRect.width,resizeRect.height);
 		}
 	} //}}}
 
 	//{{{ Package-private members
-	PanelWindowContainer resizing;
-	int resizePos;
+	Rectangle resizeRect;
+
+	//{{{ setResizePos() method
+	void setResizePos(PanelWindowContainer resizing, int resizePos)
+	{
+		Rectangle newResizeRect = new Rectangle(0,0,
+			PanelWindowContainer.SPLITTER_WIDTH - 2,
+			PanelWindowContainer.SPLITTER_WIDTH - 2);
+		if(resizing == top)
+		{
+			newResizeRect.x = top.dockablePanel.getX();
+			newResizeRect.y = resizePos + top.buttons.getHeight() + 2;
+			newResizeRect.width = top.dockablePanel.getWidth();
+		}
+		else if(resizing == left)
+		{
+			newResizeRect.x = resizePos + left.buttons.getWidth() + 2;
+			newResizeRect.y = left.dockablePanel.getY();
+			newResizeRect.height = left.dockablePanel.getHeight();
+		}
+		else if(resizing == bottom)
+		{
+			newResizeRect.x = bottom.dockablePanel.getX();
+			newResizeRect.y = getHeight() - bottom.buttons.getHeight() - resizePos
+				- PanelWindowContainer.SPLITTER_WIDTH + 2;
+			newResizeRect.width = bottom.dockablePanel.getWidth();
+		}
+		else if(resizing == right)
+		{
+			newResizeRect.x = getWidth() - right.buttons.getWidth() - resizePos
+				- PanelWindowContainer.SPLITTER_WIDTH + 2;
+			newResizeRect.y = right.dockablePanel.getY();
+			newResizeRect.height = right.dockablePanel.getHeight();
+		}
+
+		Rectangle toRepaint;
+		if(resizeRect == null)
+			toRepaint = newResizeRect;
+		else
+			toRepaint = resizeRect.union(newResizeRect);
+		resizeRect = newResizeRect;
+		repaint(toRepaint);
+	} //}}}
+
+	//{{{ finishResizing() method
+	void finishResizing()
+	{
+		resizeRect = null;
+		repaint();
+	} //}}}
+
+	//}}}
 
 	//{{{ Private members
 	private View view;

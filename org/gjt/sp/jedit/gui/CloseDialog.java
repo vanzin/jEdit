@@ -234,7 +234,7 @@ public class CloseDialog extends EnhancedDialog
 
 			int index = bufferList.getSelectedIndex();
 			if(index != -1)
-				view.setBuffer(jEdit.getBuffer((String)
+				view.goToBuffer(jEdit.getBuffer((String)
 					bufferModel.getElementAt(index)));
 
 			updateButtons();
