@@ -3,7 +3,8 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- A JEdit mode configuration file for FTL (FreeMarker Template Language) 
-     Note that this version will only work with JEdit 4.1pre6 or later. -->
+     Note that this version will only work with JEdit 4.1pre6 or later. 
+     by Jonathan Revusky, revusky@users.sourceforge.net -->
 
 <MODE>
   <RULES IGNORE_CASE="FALSE">
@@ -67,11 +68,11 @@
     
     <!-- Is it really necessary to have 2 SPAN_REGEXP elements here? Kludgy... -->
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|include|stop|escape|macro|function|transform|call)\s</BEGIN>
+      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|stop|escape|macro|function|transform|call)\s</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|include|stop|escape|macro|function|transform|call)$</BEGIN>
+      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|stop|escape|macro|function|transform|call)$</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
@@ -82,6 +83,11 @@
     </SPAN_REGEXP>
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
       <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|return)\&gt;</BEGIN>
+      <END>&gt;</END>
+    </SPAN_REGEXP>
+
+    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
+      <BEGIN>&lt;@[_a-zA-Z][_a-zA-Z0-9]*\s</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
     
@@ -124,6 +130,26 @@
     <SPAN TYPE="OPERATOR" DELEGATE="EXPRESSION">
       <BEGIN>(</BEGIN><END>)</END>
     </SPAN>
+    <SEQ TYPE="OPERATOR">=</SEQ>
+    <SEQ TYPE="OPERATOR">!</SEQ>
+    <SEQ TYPE="OPERATOR">|</SEQ>
+    <SEQ TYPE="OPERATOR">&amp;</SEQ>
+    <SEQ TYPE="OPERATOR">&lt;</SEQ>
+    <SEQ TYPE="OPERATOR">&gt;</SEQ>
+    <SEQ TYPE="OPERATOR">*</SEQ>
+    <SEQ TYPE="OPERATOR">/</SEQ>
+    <SEQ TYPE="OPERATOR">-</SEQ>
+    <SEQ TYPE="OPERATOR">+</SEQ>
+    <SEQ TYPE="OPERATOR">%</SEQ>
+    <SEQ TYPE="OPERATOR">.</SEQ>
+    <SEQ TYPE="OPERATOR">:</SEQ>
+    <SEQ TYPE="OPERATOR">.</SEQ>
+    <SEQ TYPE="OPERATOR">.</SEQ>
+    <SEQ TYPE="OPERATOR">[</SEQ>
+    <SEQ TYPE="OPERATOR">]</SEQ>
+    <SEQ TYPE="OPERATOR">{</SEQ>
+    <SEQ TYPE="OPERATOR">}</SEQ>
+    <SEQ TYPE="OPERATOR">;</SEQ>
     <!-- Builtins -->
     <MARK_FOLLOWING TYPE="FUNCTION">?</MARK_FOLLOWING>
     <KEYWORDS IGNORE_CASE="FALSE">
@@ -131,34 +157,10 @@
       <KEYWORD1>false</KEYWORD1>
       <KEYWORD1>as</KEYWORD1>
       <KEYWORD1>in</KEYWORD1>
-      <OPERATOR>!</OPERATOR>
-      <OPERATOR>=</OPERATOR>
-      <OPERATOR>!=</OPERATOR>
-      <OPERATOR>==</OPERATOR>
-      <OPERATOR>|</OPERATOR>
-      <OPERATOR>||</OPERATOR>
-      <OPERATOR>&amp;</OPERATOR>
-      <OPERATOR>&amp;&amp;</OPERATOR>
-      <OPERATOR>&lt;</OPERATOR>
-      <OPERATOR>&gt;</OPERATOR>
-      <OPERATOR>&lt;=</OPERATOR>
-      <OPERATOR>&gt;=</OPERATOR>
       <OPERATOR>gt</OPERATOR>
       <OPERATOR>gte</OPERATOR>
       <OPERATOR>lt</OPERATOR>
       <OPERATOR>lte</OPERATOR>
-      <OPERATOR>*</OPERATOR>
-      <OPERATOR>/</OPERATOR>
-      <OPERATOR>-</OPERATOR>
-      <OPERATOR>+</OPERATOR>
-      <OPERATOR>.</OPERATOR>
-      <OPERATOR>:</OPERATOR>
-      <OPERATOR>%</OPERATOR>
-      <OPERATOR>[</OPERATOR>
-      <OPERATOR>]</OPERATOR>
-      <OPERATOR>{</OPERATOR>
-      <OPERATOR>}</OPERATOR>
-      <OPERATOR>;</OPERATOR>
     </KEYWORDS>
   </RULES>
 
