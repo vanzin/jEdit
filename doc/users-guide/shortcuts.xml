@@ -95,17 +95,31 @@
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo></entry>
-      <entry>Go to previous text area.</entry>
+      <entry>Send keyboard focus to previous text area.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo></entry>
-      <entry>Go to next text area.</entry>
+      <entry>Send keyboard focus to next text area.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>1</keycap></keycombo>; <keycap>2</keycap>; <keycap>3</keycap>;
-      <keycap>4</keycap></entry>
-      <entry>Close top; bottom; left; right docking area.</entry>
+      <keycombo><keycap>Control</keycap> <keycap>Up</keycap></keycombo></keycombo>;
+      <keycombo><keycap>Control</keycap> <keycap>Left</keycap></keycombo>;
+      <keycombo><keycap>Control</keycap> <keycap>Down</keycap></keycombo>;
+      <keycombo><keycap>Control</keycap> <keycap>Right</keycap></keycombo></entry>
+      <entry>Send keyboard focus to top; bottom; left; right docking area.</entry>
+     </row>
+     <row>
+      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo></keycombo>
+      </entry>
+      <entry>Close currently focused docking area.</entry>
+     </row>
+     <row>
+      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo></keycombo>
+      </entry>
+      <entry>Send keyboard focus back to current text area.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -362,11 +376,13 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
+      or <keycombo><keycap>Shift</keycap><keycap>Delete</keycap></keycombo></entry>
       <entry>Cut selected text to clipboard.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
+      or <keycombo><keycap>Control</keycap><keycap>Insert</keycap></keycombo></entry>
       <entry>Copy selected text to clipboard.</entry>
      </row>
      <row>
@@ -382,8 +398,14 @@
       buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
+      or <keycombo><keycap>Shift</keycap><keycap>Insert</keycap></keycombo></entry>
       <entry>Paste clipboard contents.</entry>
+     </row>
+     <row>
+      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo></entry>
+      <entry>Vertical paste clipboard contents.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
@@ -421,6 +443,13 @@
       </keycombo>
       <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
       <entry>Paste contents of register <replaceable>key</replaceable>.</entry>
+     </row>
+     <row>
+      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>P</keycap>
+      </keycombo>
+      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry>Vertically paste contents of register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
