@@ -6083,7 +6083,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					if(displayManager.isLineVisible(i))
 						displayManager.getScreenLineCount(i);
 				}
-				displayManager.notifyScreenLineChanges();
+				DisplayManager._notifyScreenLineChanges(buffer);
 
 				if(delayedMultilineUpdate)
 				{
