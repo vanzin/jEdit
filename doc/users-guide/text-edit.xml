@@ -875,7 +875,7 @@
     for details.
    </para>
    <para>
-    Note that selecting the <guibutton>All Buffers</guibuttons> or
+    Note that selecting the <guibutton>All Buffers</guibutton> or
     <guibutton>Directory</guibutton> radio buttons also selects the
     <guibutton>HyperSearch</guibutton> check box. This is merely for
     convinience, however; normal searching is supported as well.

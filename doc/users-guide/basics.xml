@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFold=1: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="basics"><title>jEdit Basics</title>
  <sect1 id="buffers"><title>Buffers</title>
@@ -120,19 +120,20 @@
     windows can optionally be docked into the view. This can be
     configured in the <guibutton>Docking</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />. Note that changes made in
-    this option pane will not take effect
-    immediately; you must restart jEdit or open a new view first.
+    dialog box; see <xref linkend="global-opts" />.
    </para>
    <para>
-    When windows are docked into the view,
-    the commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
+    When windows are docked into the view, strips of buttons are shown in the
+    left, right, top, and bottom sides of the text area. Each strip contains
+    buttons for the windows docked in that location, as well as a close box.
+    Clicking a window's button shows that dockable window; clicking the close
+    box hides the window again.
+   </para>
+   <para>
+    The commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
     menu (shortcuts: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>1</keycap>, <keycap>2</keycap>, <keycap>3</keycap>, <keycap>4</keycap>)
-    can be used
-    to show or hide the top, bottom, left and right docking areas,
-    respectively. Double-clicking on the borders of docking areas has
-    the same effect.
+    provide keyboard equivalents for the close boxes.
    </para>
   </sect2>
   <sect2 id="status-bar"><title>The Status Bar</title>

@@ -213,7 +213,7 @@ org.gjt.sp.util</programlisting>
   Macros Class</title>
 
   <para>
-   Including <function>message()</function>, there are four static methods
+   Including <function>message()</function>, there are five static methods
    in the <classname>Macros</classname> class that allow you to converse
    easily with your macros. They all encapsulate calls to methods of the
    Java platform's <classname>JOptionPane</classname> class.
@@ -225,7 +225,7 @@ org.gjt.sp.util</programlisting>
       <funcsynopsis>
          <funcprototype>
            <funcdef>public static void <function>message</function></funcdef>
-           <paramdef>View <parameter>view</parameter></paramdef>
+           <paramdef>Component <parameter>comp</parameter></paramdef>
            <paramdef>String <parameter>message</parameter></paramdef>
          </funcprototype>
        </funcsynopsis>
@@ -235,7 +235,7 @@ org.gjt.sp.util</programlisting>
        <funcsynopsis>
          <funcprototype>
           <funcdef>public static void <function>error</function></funcdef>
-          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
           <paramdef>String <parameter>message</parameter></paramdef>
          </funcprototype>
        </funcsynopsis>
@@ -245,7 +245,7 @@ org.gjt.sp.util</programlisting>
       <funcsynopsis>
         <funcprototype>
           <funcdef>public static String <function>input</function></funcdef>
-          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
           <paramdef>String <parameter>prompt</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
@@ -255,9 +255,20 @@ org.gjt.sp.util</programlisting>
       <funcsynopsis>
         <funcprototype>
           <funcdef>public static String <function>input</function></funcdef>
-          <paramdef>View <parameter>view</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
           <paramdef>String <parameter>prompt</parameter></paramdef>
           <paramdef>String <parameter>defaultValue</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+     </listitem>
+
+     <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static String <function>confirm</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+          <paramdef>int <parameter>buttons</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
      </listitem>
@@ -293,6 +304,17 @@ org.gjt.sp.util</programlisting>
    <function>input()</function> method; the first form with two parameters
    displays an empty input field, the other lets you specify an initial
    default value.
+  </para>
+
+  <para>
+   The <function>confirm()</function> method is the trickiest. The
+   <varname>buttons</varname> parameter should either be
+   <constant>JOptionPane.YES_NO_OPTION</constant> or
+   <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>. The return
+   value of the method is either
+   <constant>JOptionPane.YES_OPTION</constant>,
+   <constant>JOptionPane.NO_OPTION</constant> or
+   <constant>JOptionPane.CANCEL_OPTION</constant>
   </para>
 
   <para>

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>
@@ -140,8 +140,10 @@
   <para>
    If the character immediately before the caret position is a bracket, the
    matching one will be highlighted (assuming it is visible on the
-   screen). Bracket highlighting can be disabled in the
-   <guibutton>Text Area</guibutton> pane of the
+   screen) and a scope indicator will be drawn in the gutter between the
+   current line and the line containing the bracket. Bracket highlighting
+   can be disabled in the
+   <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
   </para>
@@ -222,10 +224,10 @@
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guisubmenu>Shift Indent Right</guisubmenu>
-   (shortcut: <keycap>Tab</keycap> if there is a selection,
-   or <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
+   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
    removes one level of indent from each selected line, or the current line
-   if there is no selection.
+   if there is no selection. Pressing <keycap>Tab</keycap> while a multi-line
+   selection is active has the same effect.
   </para>
   <sect2 id="soft-tabs"><title>Soft Tabs</title>
    <para>
@@ -278,13 +280,13 @@
     If indent on enter is enabled, pressing <keycap>Enter</keycap>
     will create a new line with the appropriate amount of
     indent automatically.  If indent on tab is enabled, pressing
-    <keycap>Tab</keycap> on
-    an unindented line will insert the appropriate amount of
+    <keycap>Tab</keycap> at the beginning of, or inside the leading
+    whitespace of, a line will insert the appropriate amount of
     indentation. Pressing it again will insert a tab character.
    </para>
    <para>
-    By default, indent on enter is enabled and indent on tab is
-    disabled. This can be changed in one of several ways:
+    By default, both indent on enter and indent on tab is enabled.
+    This can be changed in one of several ways:
    </para>
    <itemizedlist>
     <listitem><para>On a global or mode-specific

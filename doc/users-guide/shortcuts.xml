@@ -1,10 +1,10 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <appendix id="shortcuts"><title>Keyboard Shortcuts</title>
  <para>
   This appendix documents the default set of keyboard shortcuts. They can
-  be customized to suit your taste in the <guibutton>Shortcuts</guibuttons>
+  be customized to suit your taste in the <guibutton>Shortcuts</guibutton>
   pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
   dialog box; see <xref linkend="global-opts" />.
@@ -105,7 +105,7 @@
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycap>1</keycap>; <keycap>2</keycap>; <keycap>3</keycap>;
       <keycap>4</keycap></entry>
-      <entry>Collapse/expand top; bottom; left; right docking area.</entry>
+      <entry>Close top; bottom; left; right docking area.</entry>
      </row>
     </tbody>
    </tgroup>

@@ -149,6 +149,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		filterField = new HistoryTextField("vfs.browser.filter",true);
 		filterField.addActionListener(actionHandler);
+		filterField.addFocusListener(new FocusHandler());
+		filterField.addMouseMotionListener(new MouseHandler());
 
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
@@ -992,12 +994,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		public void focusGained(FocusEvent evt)
 		{
-			pathField.selectAll();
+			((JTextField)evt.getSource()).selectAll();
 			focusClickFlag = true;
 		}
 
 		public void focusLost(FocusEvent evt)
 		{
+			if(evt.getSource() != pathField)
+				return;
+
 			if(!requestRunning && !pathField.getText().equals(path))
 				pathField.setText(path);
 		}
@@ -1008,11 +1013,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		public void mouseDragged(MouseEvent evt)
 		{
+			JTextField textField = (JTextField)evt.getSource();
 			if(focusClickFlag)
 			{
 				// unselect if user starts dragging so they can
 				// more easily make a selection
-				pathField.setCaretPosition(pathField.getCaretPosition());
+				textField.setCaretPosition(textField.getCaretPosition());
 				focusClickFlag = false;
 			}
 		}

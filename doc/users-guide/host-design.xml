@@ -295,7 +295,7 @@ The Role of the View Object</title>
   <classname>EditPlugin</classname>, this method is an empty
   <quote>no-op</quote>.  In order to add items to jEdit's menu bar
   under the <guilabel>Plugins</guilabel> heading, the plugin core class
-  supplies its own version of function>createMenuItems()</function>.
+  supplies its own version of <function>createMenuItems()</function>.
   As we will explain in the next chapter,
   the typical plugin, instead of creating Java
   <classname>JMenu</classname> and <classname>JMenuItem</classname>
