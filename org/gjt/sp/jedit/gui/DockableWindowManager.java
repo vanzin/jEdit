@@ -773,8 +773,6 @@ public class DockableWindowManager extends JPanel
 					.getRootPane());
 			}
 		}
-
-		revalidate();
 	} //}}}
 
 	//{{{ Private members
@@ -851,6 +849,10 @@ public class DockableWindowManager extends JPanel
 		{
 			if(center == comp)
 				center = null;
+			if(comp == topToolbars)
+				topToolbars = null;
+			if(comp == bottomToolbars)
+				bottomToolbars = null;
 			{
 				// none of the others are ever meant to be
 				// removed. retarded, eh? this needs to be

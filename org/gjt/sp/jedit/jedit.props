@@ -311,8 +311,9 @@ view.style.foldLine=bgColor:#e8e8e8 color:#009999 style:b
 view.antiAlias=false
 view.fracFontMetrics=false
 
-# Docking
+# Docking and tool bar positioning
 view.docking.alternateLayout=false
+view.toolbar.alternateLayout=false
 
 # Status bar
 view.status.memory.foreground=#cccccc

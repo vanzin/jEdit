@@ -23,6 +23,20 @@ release.
 - The JARClassLoader now registers plugin packages and manifest files.
   (Marco Hunsicker)
 
++ User Interface Changes:
+
+- Added an option to Utilities->Global Options->Docking for
+  jEdit 4.0-style tool bar placement.
+
+- A few more menu bar rearrangements:
+  - 'Recent Directories' moved from File to Utilities menu.
+  - 'Current Directory' moved from File to Utilities menu.
+  - 'Select Line Range' from from Edit to Edit->More Selection.
+  - BeanShell evaluation commands moved from Macros to.
+    Utilities->BeanShell.
+  - Various troubleshooting-related commands moved from Utilities to
+    Utilities->Troubleshooting (like they were in 4.1pre1).
+
 + Bug Fixes:
 
 - Clicking the 'Open' button or pressing Enter in the 'Open File' dialog
@@ -37,6 +51,8 @@ release.
   different buffer to be selected in the current view after a directory
   was loaded. It has been confirmed that one jEdit user was admitted
   to a mental asylum because of this bug.
+
+- The file system browser's 'Encoding' menu did not work at all.
 
 * Version 4.1pre2
 

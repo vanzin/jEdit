@@ -1436,7 +1436,10 @@ options.print.tabSize=Tab width when printing:
 
 #{{{ Docking pane
 options.docking.label=Docking
-options.docking.layout=Docked window placement:
+options.docking.viewLayout=View layout
+options.docking.alternateDockingLayout=Alternate docked window placement
+options.docking.alternateToolBarLayout=Alternate tool bar placement
+options.docking.windowDocking=Window docking
 options.docking.title=Window
 options.docking.dockPosition=Docking position
 #}}}

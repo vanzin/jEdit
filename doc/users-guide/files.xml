@@ -29,10 +29,6 @@
    buffer.
   </para>
   <para>
-   The <guimenu>File</guimenu>&gt;<guimenuitem>Current Directory</guimenuitem>
-   menu lists all files in the current buffer's directory.
-  </para>
-  <para>
    The <guimenu>File</guimenu>&gt;<guimenuitem>Recent Files</guimenuitem> menu
    lists recent files. When a recent file is opened, the caret
    is automatically moved to its previous location in that file.
@@ -40,6 +36,10 @@
    position saving can be disabled in the <guibutton>General</guibutton> pane of
    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <para>
+   The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Current Directory</guimenuitem>
+   menu lists all files in the current buffer's directory.
   </para>
   <tip>
    <para>

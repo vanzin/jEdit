@@ -16,7 +16,6 @@ and quirks that I need to fix eventually.
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks
 - minor quicknotepad changes -- update docs
-- add documentation for pre1 features
 - right-click on parent directories in fsb
 - add dockable window state change msg
 - rect select and whitespace
@@ -28,7 +27,6 @@ and quirks that I need to fix eventually.
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
 - don't repaint whole selection when resizing
-- action system overhaul
 - move text utility methods to TextUtilities
 - focus problem with hypersearch in floating window?
 - offset manager: backwards gap movement

@@ -279,7 +279,8 @@
    input dialog box and moves the caret to the specified line number.
   </para>
   <para>
-   <guimenu>Edit</guimenu>&gt;<guimenuitem>Select Line Range</guimenuitem>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>More
+   Selection</guisubmenu>&gt;<guimenuitem>Select Line Range</guimenuitem>
    (shortcut
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>)
@@ -513,7 +514,19 @@
     places the selected text in the clipboard and leaves it in the buffer.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guimenuitem>Cut Append</guimenuitem>
+    <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste</guimenuitem>
+    (shortcut: <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>)
+    inserts the clipboard contents in place of the selection (or at the
+    caret position, if there is no selection).
+   </para>
+   <para>
+    The <guimenuitem>Cut</guimenuitem> and <guimenuitem>Copy</guimenuitem>
+    commands replace the old clipboard contents with the selected text.
+    There are two alternative commands which add the selection to the existing
+    clipboard contents, instead of replacing it.
+   </para>
+   <para>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut Append</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
     appends the selected text to the clipboard, then removes it from the
@@ -522,19 +535,11 @@
     selected text.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guimenuitem>Copy Append</guimenuitem>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy Append</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>)
-    appends the selected text to the clipboard, and leaves it in the
-    buffer. After this command has been invoked, the clipboard will consist of
-    the former clipboard contents, followed by a newline, followed by the
-    selected text.
-   </para>
-   <para>
-    <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>)
-    inserts the clipboard contents in place of the selection (or at the
-    caret position, if there is no selection).
+    is the same as <guimenuitem>Cut Append</guimenuitem> except it does not
+    remove the selection from the buffer.
    </para>
   </sect2>
   <sect2><title>Quick Copy</title>
@@ -585,7 +590,7 @@
     will cancel the operation.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Cut
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
@@ -594,7 +599,7 @@
     register, removing it from the buffer.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Copy
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy
     to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
@@ -603,7 +608,7 @@
     register, leaving it in the buffer.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Cut
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
@@ -612,7 +617,7 @@
     register, and removes it from the buffer.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Copy
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy
     Append to Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>
@@ -621,7 +626,7 @@
     register, without removing it from the buffer.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>Paste
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste
     from Register</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
@@ -630,7 +635,7 @@
     contents of the specified register.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste Previous</guimenuitem>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste Previous</guimenuitem>
     (shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>)
@@ -641,7 +646,7 @@
     dialog box; see <xref linkend="global-opts" />.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Registers</guisubmenu>&gt;<guimenuitem>View
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>View
     Registers</guimenuitem> displays a dialog box for
     viewing the contents of registers (including the clipboard).
    </para>
