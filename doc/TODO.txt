@@ -1,18 +1,40 @@
 TO DO
 
++ tomorrow:
+
+- noWordSep in editing option pane
+- fs browser: can get stuck in 'loading' if several requests started
+  - to fix, implement multiple simultaneously loading directories, and
+    better preservation of expansion state
 - document backup every save option
 - plugin manager needs overhauled error reporting
 - hypersearch follows caret position
 - hypersearch in selection: one node for each selection, fucked
-- cvs add ErrorListDialog.java, ErrorListCellRenderer.java
 - readNextChar() fucks out with non-alpha characters
 - tags plugin fucks up search settings?
 - C+end/C+home: first/last virtual, not physical line
+- position bug still there
+- documentation to do
+  - new folding
+  - add index terms throughout user's guide!
+  - changing heap memory docs
+  - tip about compareStrings()
+  - trailing EOL
+  - 'evaluate for selected lines'
+  - smart case insens replace
+  - write explicit folding tips
+  - API guide: compareStrings(), showPopupMenu()
+  - MiscUtilities path name methods need to be documented
+- search in directory: should not be so slow
+
++ later:
+
+- help: tree should have icons
+- browser.getDirectory().equals(path): what if path ends with /? eg in
+  CurrentDirectoryMenu
+- plugin guide: mention fully qualified class names
 - docking buttons not always hidden
 - allegedly redo doesn't redo everything?
-- position bug still there
-- either fix recent files/recent directories/current dir icon issue, or
-  ditch icons
 - changing folding mode using buffer-local props: doesn't take effect on
   save (?) -- removing doesn't work, but setting to none works
 - read up on JDK 1.4 focus API
@@ -28,20 +50,8 @@ TO DO
 - {: only re-indent line if prev matches the regexp
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
-- documentation to do
-  - new folding
-  - add index terms throughout user's guide!
-  - changing heap memory docs
-  - tip about compareStrings()
-  - trailing EOL
-  - 'evaluate for selected lines'
-  - smart case insens replace
-  - write explicit folding tips
-  - API guide: compareStrings(), showPopupMenu()
-  - MiscUtilities path name methods need to be documented
 - loading and saving opt pane: 'choose' button for backup directory
 - style setting for folding line indicator
-- search in directory: should not be so slow
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
 - check: pressing Enter on an open file
@@ -58,7 +68,6 @@ TO DO
   - DockableLayout: handle too large
   - CCW rotated text not drawn correctly
 - file system browser:
-  - fs browser: only one level expanded. need drastic new algorithm.
   - commands->copy path, copy file list, paste path
   - much better autocomplete
   - aliases

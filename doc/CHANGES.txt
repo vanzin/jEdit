@@ -24,6 +24,12 @@ JEDIT 4.0 VERSION HISTORY
 - I/O errors are now batched into a single dialog box
 - New, smaller icons in file system browser (Dirk Moebius)
 - New window icon (Phillip Richdale)
+- First item in File->Current Directory menu (the directory path itself)
+  is no longer disabled; you can select it to view the directory in the
+  file system browser
+- First item in 'Paste Previous' dialog pre-selected when dialog shown
+- Focus is returned to file list in 'Close All' dialog box after one of
+  the buttons are clicked
 
 + Neutral
 
@@ -49,6 +55,10 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed minor undo modified flag clearing bug
 - Pressing the tab key with a one-line selection would insert a hard tab
   even if soft tabs were enabled
+- Deprecated MiscUtilities.compareVersions() method was an instance
+  method, which made plugins that used to throw VerifyErrors on startup.
+  These plugins will now work again (but should eventually be updated to
+  call non-deprecated methods).
 
 + API Changes
 

@@ -25,7 +25,8 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
-import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 
 public class CurrentDirectoryMenu extends EnhancedMenu
@@ -46,10 +47,37 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 			if(getMenuComponentCount() != 0)
 				removeAll();
 
-			File file = view.getBuffer().getFile();
-			if(file == null)
+			final String path = MiscUtilities.getParentOfPath(
+				view.getBuffer().getPath());
+			JMenuItem mi = new JMenuItem(path);
+			mi.setIcon(FileCellRenderer.openDirIcon);
+
+			//{{{ Directory action listener...
+			mi.addActionListener(new ActionListener()
 			{
-				JMenuItem mi = new JMenuItem(jEdit.getProperty(
+				public void actionPerformed(ActionEvent evt)
+				{
+					DockableWindowManager wm = view.getDockableWindowManager();
+					wm.addDockableWindow(VFSBrowser.NAME);
+
+					final VFSBrowser browser = (VFSBrowser)wm.getDockable(VFSBrowser.NAME);
+					VFSManager.runInAWTThread(new Runnable()
+					{
+						public void run()
+						{
+							if(!browser.getDirectory().equals(path))
+								browser.setDirectory(path);
+						}
+					});
+				}
+			}); //}}}
+
+			add(mi);
+			addSeparator();
+
+			if(view.getBuffer().getFile() == null)
+			{
+				mi = new JMenuItem(jEdit.getProperty(
 					"current-directory.not-local"));
 				mi.setEnabled(false);
 				add(mi);
@@ -57,12 +85,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 				return;
 			}
 
-			File dir = new File(file.getParent());
-
-			JMenuItem mi = new JMenuItem(dir.getPath());
-			mi.setEnabled(false);
-			add(mi);
-			addSeparator();
+			File dir = new File(path);
 
 			JMenu current = this;
 
@@ -111,7 +134,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 						continue;
 
 					// skip directories
-					file = new File(dir,name);
+					File file = new File(path,name);
 					if(file.isDirectory())
 						continue;
 
