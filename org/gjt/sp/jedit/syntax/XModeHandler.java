@@ -219,10 +219,22 @@ public class XModeHandler extends HandlerBase
 		)
 		{
 			lastStart = text;
+			lastStartPosMatch = ((lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+				| (lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+				| (lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+			lastAtLineStart = false;
+			lastAtWordStart = false;
+			lastAtWhitespaceEnd = false;
 		}
 		else if (tag == "END")
 		{
 			lastEnd = text;
+			lastEndPosMatch = ((lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+				| (lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+				| (lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+			lastAtLineStart = false;
+			lastAtWordStart = false;
+			lastAtWhitespaceEnd = false;
 		}
 		else
 		{
@@ -342,16 +354,9 @@ public class XModeHandler extends HandlerBase
 				}
 
 				rules.addRule(ParserRule.createSequenceRule(
-					lastStart,lastDelegateSet,lastTokenID,
-					lastAtLineStart,lastAtWhitespaceEnd,
-					lastAtWordStart));
-				lastStart = null;
-				lastEnd = null;
-				lastDelegateSet = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
+					lastStartPosMatch,lastStart,lastDelegateSet,
+					lastTokenID));
+				reset();
 			} //}}}
 			//{{{ SEQ_REGEXP
 			else if (tag == "SEQ_REGEXP")
@@ -365,24 +370,16 @@ public class XModeHandler extends HandlerBase
 				try
 				{
 					rules.addRule(ParserRule.createRegexpSequenceRule(
-						lastHashChar,
+						lastHashChar,lastStartPosMatch,
 						lastStart,lastDelegateSet,lastTokenID,
-						lastAtLineStart,lastAtWhitespaceEnd,
-						lastAtWordStart,lastIgnoreCase));
+						lastIgnoreCase));
 				}
 				catch(REException re)
 				{
 					error("regexp",re);
 				}
 
-				lastHashChar = '\0';
-				lastStart = null;
-				lastEnd = null;
-				lastDelegateSet = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
+				reset();
 			} //}}}
 			//{{{ SPAN
 			else if (tag == "SPAN")
@@ -401,25 +398,14 @@ public class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule
 					.createSpanRule(
-					lastStart,lastEnd,
+					lastStartPosMatch,lastStart,
+					lastEndPosMatch,lastEnd,
 					lastDelegateSet,
-					lastTokenID,lastNoLineBreak,
-					lastAtLineStart,
-					lastAtWhitespaceEnd,
-					lastAtWordStart,
-					lastExcludeMatch,
+					lastTokenID,lastExcludeMatch,
+					lastNoLineBreak,
 					lastNoWordBreak));
 
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastNoLineBreak = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
-				lastNoWordBreak = false;
-				lastDelegateSet = null;
+				reset();
 			} //}}}
 			//{{{ SPAN_REGEXP
 			else if (tag == "SPAN_REGEXP")
@@ -441,13 +427,12 @@ public class XModeHandler extends HandlerBase
 					rules.addRule(ParserRule
 						.createRegexpSpanRule(
 						lastHashChar,
-						lastStart,lastEnd,
+						lastStartPosMatch,lastStart,
+						lastEndPosMatch,lastEnd,
 						lastDelegateSet,
-						lastTokenID,lastNoLineBreak,
-						lastAtLineStart,
-						lastAtWhitespaceEnd,
-						lastAtWordStart,
+						lastTokenID,
 						lastExcludeMatch,
+						lastNoLineBreak,
 						lastNoWordBreak,
 						lastIgnoreCase));
 				}
@@ -456,17 +441,7 @@ public class XModeHandler extends HandlerBase
 					error("regexp",re);
 				}
 
-				lastHashChar = '\0';
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastNoLineBreak = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
-				lastNoWordBreak = false;
-				lastDelegateSet = null;
+				reset();
 			} //}}}
 			//{{{ EOL_SPAN
 			else if (tag == "EOL_SPAN")
@@ -478,18 +453,11 @@ public class XModeHandler extends HandlerBase
 				}
 
 				rules.addRule(ParserRule.createEOLSpanRule(
-					lastStart,lastDelegateSet,lastTokenID,
-					lastAtLineStart,lastAtWhitespaceEnd,
-					lastAtWordStart,lastExcludeMatch));
+					lastStartPosMatch,lastStart,
+					lastDelegateSet,lastTokenID,
+					lastExcludeMatch));
 
-				lastStart = null;
-				lastEnd = null;
-				lastDelegateSet = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
+				reset();
 			} //}}}
 			//{{{ EOL_SPAN_REGEXP
 			else if (tag == "EOL_SPAN_REGEXP")
@@ -503,9 +471,8 @@ public class XModeHandler extends HandlerBase
 				try
 				{
 					rules.addRule(ParserRule.createRegexpEOLSpanRule(
-						lastHashChar,lastStart,lastDelegateSet,
-						lastTokenID,lastAtLineStart,
-						lastAtWhitespaceEnd,lastAtWordStart,
+						lastHashChar,lastStartPosMatch,lastStart,
+						lastDelegateSet,lastTokenID,
 						lastExcludeMatch,lastIgnoreCase));
 				}
 				catch(REException re)
@@ -513,15 +480,7 @@ public class XModeHandler extends HandlerBase
 					error("regexp",re);
 				}
 
-				lastHashChar = '\0';
-				lastStart = null;
-				lastEnd = null;
-				lastDelegateSet = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
+				reset();
 			} //}}}
 			//{{{ MARK_FOLLOWING
 			else if (tag == "MARK_FOLLOWING")
@@ -533,17 +492,10 @@ public class XModeHandler extends HandlerBase
 				}
 
 				rules.addRule(ParserRule
-					.createMarkFollowingRule(lastStart,
-					lastTokenID,lastAtLineStart,
-					lastAtWhitespaceEnd,lastAtWordStart,
-					lastExcludeMatch));
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
+					.createMarkFollowingRule(
+					lastStartPosMatch,lastStart,
+					lastTokenID,lastExcludeMatch));
+				reset();
 			} //}}}
 			//{{{ MARK_PREVIOUS
 			else if (tag == "MARK_PREVIOUS")
@@ -555,17 +507,10 @@ public class XModeHandler extends HandlerBase
 				}
 
 				rules.addRule(ParserRule
-					.createMarkPreviousRule(lastStart,
-					lastTokenID,lastAtLineStart,
-					lastAtWhitespaceEnd,lastAtWordStart,
-					lastExcludeMatch));
-				lastStart = null;
-				lastEnd = null;
-				lastTokenID = Token.NULL;
-				lastAtLineStart = false;
-				lastAtWordStart = false;
-				lastAtWhitespaceEnd = false;
-				lastExcludeMatch = false;
+					.createMarkPreviousRule(
+					lastStartPosMatch,lastStart,
+					lastTokenID,lastExcludeMatch));
+				reset();
 			} //}}}
 			//{{{ Keywords
 			else
@@ -619,15 +564,30 @@ public class XModeHandler extends HandlerBase
 	private int termChar = -1;
 	private boolean lastNoLineBreak;
 	private boolean lastNoWordBreak;
-	private boolean lastAtLineStart;
-	private boolean lastAtWhitespaceEnd;
-	private boolean lastAtWordStart;
 	private boolean lastExcludeMatch;
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;
+	private boolean lastAtLineStart;
+	private boolean lastAtWhitespaceEnd;
+	private boolean lastAtWordStart;
+	private int lastStartPosMatch;
+	private int lastEndPosMatch;
 	private String lastDigitRE;
 	private char lastHashChar;
 	//}}}
+
+	//{{{ reset() method
+	private void reset()
+	{
+		lastHashChar = '\0';
+		lastStartPosMatch = 0;
+		lastStart = null;
+		lastEndPosMatch = 0;
+		lastEnd = null;
+		lastDelegateSet = null;
+		lastTokenID = Token.NULL;
+		lastExcludeMatch = false;
+	} //}}}
 
 	//{{{ addKeyword() method
 	private void addKeyword(String k, byte id)

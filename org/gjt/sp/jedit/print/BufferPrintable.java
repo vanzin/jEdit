@@ -280,10 +280,12 @@ print_loop:	for(;;)
 				Chunk chunks = (Chunk)lineList.get(i);
 				if(chunks != null && actuallyPaint)
 				{
+					Chunk.paintChunkBackgrounds(chunks,gfx,
+						(float)(pageX + lineNumberWidth),
+						(float)(pageY + y));
 					Chunk.paintChunkList(seg,chunks,gfx,
 						(float)(pageX + lineNumberWidth),
-						(float)(pageY + y),
-						Color.white,false);
+						(float)(pageY + y),false);
 				}
 			}
 

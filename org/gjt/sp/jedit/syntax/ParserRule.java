@@ -33,38 +33,38 @@ import org.gjt.sp.jedit.search.RESearchMatcher;
  */
 public class ParserRule
 {
-	//{{{ Major actions (total: 8)
+	//{{{ Major actions
 	public static final int MAJOR_ACTIONS = 0x000000FF;
 	public static final int SEQ = 0;
 	public static final int SPAN = 1 << 1;
 	public static final int MARK_PREVIOUS = 1 << 2;
 	public static final int MARK_FOLLOWING = 1 << 3;
 	public static final int EOL_SPAN = 1 << 4;
-//	public static final int MAJOR_ACTION_5 = 1 << 5;
-//	public static final int MAJOR_ACTION_6 = 1 << 6;
-//	public static final int MAJOR_ACTION_7 = 1 << 7;
 	//}}}
 
-	//{{{ Action hints (total: 8)
+	//{{{ Action hints
 	public static final int ACTION_HINTS = 0x0000FF00;
 	public static final int EXCLUDE_MATCH = 1 << 8;
-	public static final int AT_LINE_START = 1 << 9;
-	public static final int AT_WHITESPACE_END = 1 << 10;
-	public static final int AT_WORD_START = 1 << 11;
-	public static final int NO_LINE_BREAK = 1 << 12;
-	public static final int NO_WORD_BREAK = 1 << 13;
-	public static final int IS_ESCAPE = 1 << 14;
-	public static final int REGEXP = 1 << 15;
+	public static final int NO_LINE_BREAK = 1 << 9;
+	public static final int NO_WORD_BREAK = 1 << 10;
+	public static final int IS_ESCAPE = 1 << 11;
+	public static final int REGEXP = 1 << 12;
+	//}}}
+
+	//{{{ Position match hints
+	public static final int AT_LINE_START = 1 << 1;
+	public static final int AT_WHITESPACE_END = 1 << 2;
+	public static final int AT_WORD_START = 1 << 3;
 	//}}}
 
 	//{{{ Instance variables
 	public final char hashChar;
+	public final int startPosMatch;
 	public final char[] start;
-	// only for SEQ_REGEXP and SPAN_REGEXP rules
 	public final RE startRegexp;
 
+	public final int endPosMatch;
 	public final char[] end;
-
 
 	public final int action;
 	public final byte token;
@@ -104,146 +104,114 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createSequenceRule() method
-	public static final ParserRule createSequenceRule(String seq,
-		String delegate, byte id, boolean atLineStart,
-		boolean atWhitespaceEnd, boolean atWordStart)
+	public static final ParserRule createSequenceRule(
+		int posMatch, String seq, String delegate, byte id)
 	{
-		int ruleAction = SEQ |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0);
+		int ruleAction = SEQ;
 
-		return new ParserRule(ruleAction, seq.charAt(0),
-			seq.toCharArray(), null, null,
-			delegate, id);
+		return new ParserRule(SEQ, seq.charAt(0),
+			posMatch, seq.toCharArray(), null,
+			0, null, delegate, id);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
-	public static final ParserRule createRegexpSequenceRule(char hashChar,
-		String seq, String delegate, byte id, boolean atLineStart,
-		boolean atWhitespaceEnd, boolean atWordStart, boolean ignoreCase)
+	public static final ParserRule createRegexpSequenceRule(
+		char hashChar, int posMatch, String seq,
+		String delegate, byte id, boolean ignoreCase)
 		throws REException
 	{
-		int ruleAction = SEQ | REGEXP |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0);
-
-		return new ParserRule(ruleAction, hashChar,
+		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
 			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT),
+			RESearchMatcher.RE_SYNTAX_JEDIT), 0,
 			null, delegate, id);
 	} //}}}
 
 	//{{{ createSpanRule() method
-	public static final ParserRule createSpanRule(String begin, String end,
-		String delegate, byte id, boolean noLineBreak,
-		boolean atLineStart, boolean atWhitespaceEnd, boolean atWordStart,
-		boolean excludeMatch, boolean noWordBreak)
+	public static final ParserRule createSpanRule(
+		int startPosMatch, String start, int endPosMatch, String end,
+		String delegate, byte id, boolean excludeMatch, boolean noLineBreak,
+		boolean noWordBreak)
 	{
 		int ruleAction = SPAN |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0) |
 			((noWordBreak) ? NO_WORD_BREAK : 0);
 
-		return new ParserRule(ruleAction, begin.charAt(0),
-			begin.toCharArray(), null,
-			end.toCharArray(), delegate, id);
+		return new ParserRule(ruleAction, start.charAt(0), startPosMatch,
+			start.toCharArray(), null,
+			endPosMatch, end.toCharArray(),
+			delegate, id);
 	} //}}}
 
 	//{{{ createRegexpSpanRule() method
-	public static final ParserRule createRegexpSpanRule(char hashChar,
-		String begin, String end, String delegate, byte id,
-		boolean noLineBreak, boolean atLineStart,
-		boolean atWhitespaceEnd, boolean atWordStart,
-		boolean excludeMatch, boolean noWordBreak, boolean ignoreCase)
+	public static final ParserRule createRegexpSpanRule(
+		char hashChar, int startPosMatch, String start,
+		int endPosMatch, String end, String delegate, byte id,
+		boolean excludeMatch, boolean noLineBreak, boolean noWordBreak,
+		boolean ignoreCase)
 		throws REException
 	{
 		int ruleAction = SPAN | REGEXP |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0) |
 			((noWordBreak) ? NO_WORD_BREAK : 0);
 
-		return new ParserRule(ruleAction, hashChar,
-			null, new RE("\\A" + begin,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT),
+		return new ParserRule(ruleAction, hashChar, startPosMatch, null,
+			new RE("\\A" + start,(ignoreCase ? RE.REG_ICASE : 0),
+			RESearchMatcher.RE_SYNTAX_JEDIT), endPosMatch,
 			end.toCharArray(), delegate, id);
 	} //}}}
 
 	//{{{ createEOLSpanRule() method
-	public static final ParserRule createEOLSpanRule(String seq,
-		String delegate, byte id, boolean atLineStart,
-		boolean atWhitespaceEnd, boolean atWordStart,
+	public static final ParserRule createEOLSpanRule(
+		int posMatch, String seq, String delegate, byte id,
 		boolean excludeMatch)
 	{
 		int ruleAction = EOL_SPAN |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0)
 			| NO_LINE_BREAK;
 
-		return new ParserRule(ruleAction, seq.charAt(0),
-			seq.toCharArray(), null, null,
+		return new ParserRule(ruleAction, seq.charAt(0), posMatch,
+			seq.toCharArray(), null, 0, null,
 			delegate, id);
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method
 	public static final ParserRule createRegexpEOLSpanRule(
-		char hashChar, String seq, String delegate, byte id,
-		boolean atLineStart, boolean atWhitespaceEnd, boolean atWordStart,
-		boolean excludeMatch, boolean ignoreCase)
+		char hashChar, int posMatch, String seq, String delegate,
+		byte id, boolean excludeMatch, boolean ignoreCase)
 		throws REException
 	{
 		int ruleAction = EOL_SPAN | REGEXP |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0)
 			| NO_LINE_BREAK;
 
-		return new ParserRule(ruleAction, hashChar,
+		return new ParserRule(ruleAction, hashChar, posMatch,
 			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT), null,
+			RESearchMatcher.RE_SYNTAX_JEDIT), 0, null,
 			delegate, id);
 	} //}}}
 
 	//{{{ createMarkFollowingRule() method
-	public static final ParserRule createMarkFollowingRule(String seq,
-		byte id, boolean atLineStart, boolean atWhitespaceEnd,
-		boolean atWordStart, boolean excludeMatch)
+	public static final ParserRule createMarkFollowingRule(
+		int posMatch, String seq, byte id, boolean excludeMatch)
 	{
 		int ruleAction = MARK_FOLLOWING |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
-		return new ParserRule(ruleAction, seq.charAt(0),
-			seq.toCharArray(), null, null,
-			null, id);
+		return new ParserRule(ruleAction, seq.charAt(0), posMatch,
+			seq.toCharArray(), null, 0, null, null, id);
 	} //}}}
 
 	//{{{ createMarkPreviousRule() method
-	public static final ParserRule createMarkPreviousRule(String seq,
-		byte id, boolean atLineStart, boolean atWhitespaceEnd,
-		boolean atWordStart, boolean excludeMatch)
+	public static final ParserRule createMarkPreviousRule(
+		int posMatch, String seq, byte id, boolean excludeMatch)
 	{
 		int ruleAction = MARK_PREVIOUS |
-			((atLineStart) ? AT_LINE_START : 0) |
-			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
-			((atWordStart) ? AT_WORD_START : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
-		return new ParserRule(ruleAction, seq.charAt(0),
-			seq.toCharArray(), null, null,
-			null, id);
+		return new ParserRule(ruleAction, seq.charAt(0), posMatch,
+			seq.toCharArray(), null, 0, null, null, id);
 	} //}}}
 
 	//{{{ createEscapeRule() method
@@ -252,22 +220,26 @@ public class ParserRule
 		int ruleAction = IS_ESCAPE;
 
 		return new ParserRule(ruleAction, seq.charAt(0),
-			seq.toCharArray(), null, null,
+			0, seq.toCharArray(), null, 0, null,
 			null, Token.NULL);
 	} //}}}
 
 	//{{{ Private members
 	private String delegate;
 
-	private ParserRule(int action, char hashChar, char[] start,
-		RE startRegexp, char[] end, String delegate, byte token)
+	private ParserRule(int action, char hashChar,
+		int startPosMatch, char[] start, RE startRegexp,
+		int endPosMatch, char[] end,
+		String delegate, byte token)
 	{
+		this.action = action;
 		this.hashChar = hashChar;
+		this.startPosMatch = startPosMatch;
 		this.start = start;
 		this.startRegexp = startRegexp;
+		this.endPosMatch = endPosMatch;
 		this.end = end;
 		this.delegate = delegate;
-		this.action = action;
 		this.token = token;
 	} //}}}
 }
