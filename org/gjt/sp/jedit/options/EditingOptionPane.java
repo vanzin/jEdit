@@ -41,6 +41,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		Mode[] modes = jEdit.getModes();
+		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
 
 		defaultMode = new JComboBox(modes);
 		defaultMode.setSelectedItem(jEdit.getMode(

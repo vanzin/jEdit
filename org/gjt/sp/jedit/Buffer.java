@@ -2126,29 +2126,13 @@ public class Buffer
 
 		if(Debug.TOKEN_MARKER_DEBUG)
 			Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
+		TokenMarker.LineContext oldContext = null;
+		TokenMarker.LineContext context = null;
 		for(int i = start; i <= lineIndex; i++)
 		{
 			getLineText(i,seg);
 
-			TokenMarker.LineContext context = lineMgr.getLineContext(i);
-			ParserRule oldRule;
-			ParserRuleSet oldRules;
-			char[] oldSpanEndSubst;
-			if(context == null)
-			{
-				//System.err.println(i + ": null context");
-				oldRule = null;
-				oldRules = null;
-				oldSpanEndSubst = null;
-			}
-			else
-			{
-				oldRule = context.inRule;
-				oldRules = context.rules;
-				oldSpanEndSubst = (context.parent != null
-					? context.parent.spanEndSubst
-					: null);
-			}
+			oldContext = lineMgr.getLineContext(i);
 
 			TokenMarker.LineContext prevContext = (
 				(i == 0 || textMode) ? null
@@ -2164,9 +2148,8 @@ public class Buffer
 		int lineCount = lineMgr.getLineCount();
 		if(lineCount - 1 == lineIndex)
 			lineMgr.setFirstInvalidLineContext(-1);
-		//XXX
-		//else if(nextLineRequested)
-		//	lineMgr.setFirstInvalidLineContext(lineIndex + 1);
+		else if(oldContext != context)
+			lineMgr.setFirstInvalidLineContext(lineIndex + 1);
 		else if(firstInvalidLineContext == -1)
 			/* do nothing */;
 		else

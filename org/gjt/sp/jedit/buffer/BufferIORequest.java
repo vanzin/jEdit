@@ -86,6 +86,9 @@ public class BufferIORequest extends WorkRequest
 	public static final int GZIP_MAGIC_2 = 0x8b;
 	public static final int UNICODE_MAGIC_1 = 0xfe;
 	public static final int UNICODE_MAGIC_2 = 0xff;
+	public static final int UTF8_MAGIC_1 = 0xef;
+	public static final int UTF8_MAGIC_2 = 0xbb;
+	public static final int UTF8_MAGIC_3 = 0xbf;
 
 	/**
 	 * Length of longest XML PI used for encoding detection.
@@ -313,6 +316,7 @@ public class BufferIORequest extends WorkRequest
 			in.mark(XML_PI_LENGTH);
 			int b1 = in.read();
 			int b2 = in.read();
+			int b3 = in.read();
 			in.reset();
 
 			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
@@ -320,10 +324,19 @@ public class BufferIORequest extends WorkRequest
 				in = new GZIPInputStream(in);
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
 			}
-			else if((b1 == UNICODE_MAGIC_1 && b2 == UNICODE_MAGIC_2)
-				|| (b1 == UNICODE_MAGIC_2 && b2 == UNICODE_MAGIC_1))
+			else if((b1 == UNICODE_MAGIC_1
+				&& b2 == UNICODE_MAGIC_2)
+				|| (b1 == UNICODE_MAGIC_2
+				&& b2 == UNICODE_MAGIC_1))
 			{
-				buffer.setProperty(Buffer.ENCODING,"Unicode");
+				encoding = "UTF-16";
+				buffer.setProperty(Buffer.ENCODING,encoding);
+			}
+			else if(b1 == UTF8_MAGIC_1 && b2 == UTF8_MAGIC_2
+				&& b3 == UTF8_MAGIC_3)
+			{
+				encoding = "UTF-8";
+				buffer.setProperty(Buffer.ENCODING,encoding);
 			}
 
 			byte[] _xmlPI = new byte[XML_PI_LENGTH];

@@ -135,7 +135,10 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			public void run()
 			{
-				loadCaretInfo();
+				// avoid a race condition
+				// see bug #834338
+				if(buffer == getBuffer())
+					loadCaretInfo();
 			}
 		};
 

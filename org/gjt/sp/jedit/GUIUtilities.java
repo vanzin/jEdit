@@ -96,7 +96,7 @@ public class GUIUtilities
 			return icon;
 
 		// get the icon
-		if(iconName.startsWith("file:"))
+		if(MiscUtilities.isURL(iconName))
 		{
 			icon = new ImageIcon(iconName.substring(5));
 		}

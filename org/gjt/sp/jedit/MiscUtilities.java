@@ -215,13 +215,15 @@ public class MiscUtilities
 				parent = getParentOfPath(parent);
 				path = path.substring(3);
 			}
-			else if(path.startsWith(d))
+			else if(path.startsWith(d) || path.startsWith("./"))
 				path = path.substring(2);
 			else
 				break;
 		}
 
-		if(OperatingSystem.isDOSDerived() && path.startsWith("\\"))
+		if(OperatingSystem.isDOSDerived()
+			&& !isURL(parent)
+			&& path.startsWith("\\"))
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);

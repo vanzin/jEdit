@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Set;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -236,8 +236,9 @@ public class CompleteWord extends JWindow
 		int caret)
 	{
 		// build a list of unique words in all visible buffers
-		Set completions = new HashSet();
-		Set buffers = new HashSet();
+		Set completions = new TreeSet(new MiscUtilities
+			.StringICaseCompare());
+		Set buffers = new TreeSet();
 
 		View views = jEdit.getFirstView();
 		while(views != null)

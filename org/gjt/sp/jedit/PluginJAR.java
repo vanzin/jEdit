@@ -753,7 +753,7 @@ public class PluginJAR
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,"Cannot load"
-					+ " plugin " + plugin);
+					+ " plugin " + path);
 				Log.log(Log.ERROR,this,io);
 
 				String[] args = { io.toString() };

@@ -2,7 +2,7 @@
 <!ELEMENT RECENT ( ENTRY+ ) >
 
 <!-- ENTRY element -->
-<!ELEMENT ENTRY ( PATH | CARET | SELECTION | ENCODING ) >
+<!ELEMENT ENTRY ( PATH | CARET | SELECTION | ENCODING )* >
 
 <!-- ENTRY child elements -->
 <!ELEMENT PATH ( #PCDATA ) >
