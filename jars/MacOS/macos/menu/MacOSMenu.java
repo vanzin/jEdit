@@ -62,11 +62,7 @@ public class MacOSMenu extends JMenu implements ActionListener, MenuListener
 	//{{{ construct() method
 	private void construct()
 	{
-		Component comp = getParent();
-		while (!(comp instanceof View))
-			comp = comp.getParent();
-		
-		File buff = new File(((View)comp).getBuffer().getPath());
+		File buff = new File(jEdit.getActiveView().getBuffer().getPath());
 		showCurrent.setPath(buff.getPath());
 		showCurrent.setEnabled(buff.exists());
 		showCurrentDir.setPath(buff.getParent());
