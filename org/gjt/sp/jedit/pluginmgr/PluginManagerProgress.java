@@ -47,19 +47,20 @@ public class PluginManagerProgress extends JDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		globalProgress = new JProgressBar();
-		globalProgress.setStringPainted(true);
-		globalProgress.setString(jEdit.getProperty("plugin-manager.progress."
+		progress = new JProgressBar();
+		progress.setStringPainted(true);
+		progress.setString(jEdit.getProperty("plugin-manager.progress."
 			+ type + "-task"));
 
+		int maximum = 0;
 		count = roster.getOperationCount();
+		for(int i = 0; i < count; i++)
+		{
+			maximum += roster.getOperation(i).getMaximum();
+		}
 
-		globalProgress.setMaximum(count);
-		content.add(BorderLayout.NORTH,globalProgress);
-
-		localProgress = new JProgressBar();
-		localProgress.setStringPainted(true);
-		content.add(BorderLayout.CENTER,localProgress);
+		progress.setMaximum(maximum);
+		content.add(BorderLayout.CENTER,progress);
 
 		stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
 		stop.addActionListener(new ActionHandler());
@@ -107,18 +108,6 @@ public class PluginManagerProgress extends JDialog
 		stop.setEnabled(false);
 	} //}}}
 
-	//{{{ setMaximum() method
-	public void setMaximum(final int total)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				localProgress.setMaximum(total);
-			}
-		});
-	} //}}}
-
 	//{{{ setValue() method
 	public void setValue(final int value)
 	{
@@ -126,7 +115,7 @@ public class PluginManagerProgress extends JDialog
 		{
 			public void run()
 			{
-				localProgress.setValue(value);
+				progress.setValue(valueSoFar + value);
 			}
 		});
 	} //}}}
@@ -167,8 +156,10 @@ public class PluginManagerProgress extends JDialog
 				{
 					public void run()
 					{
-						globalProgress.setValue(done++);
-						localProgress.setValue(0);
+						valueSoFar += roster.getOperation(done - 1)
+							.getMaximum();
+						progress.setValue(valueSoFar);
+						done++;
 					}
 				});
 			}
@@ -193,10 +184,13 @@ public class PluginManagerProgress extends JDialog
 
 	private String type;
 
-	private JProgressBar globalProgress, localProgress;
+	private JProgressBar progress;
 	private JButton stop;
 	private int count;
 	private int done = 1;
+
+	// progress value as of start of current task
+	private int valueSoFar;
 
 	private boolean ok;
 
@@ -206,7 +200,7 @@ public class PluginManagerProgress extends JDialog
 	//{{{ showMessage() method
 	private void showMessage(final String msg)
 	{
-		try
+		/* try
 		{
 			SwingUtilities.invokeAndWait(new Runnable()
 			{
@@ -220,7 +214,7 @@ public class PluginManagerProgress extends JDialog
 		{
 		}
 
-		Thread.yield();
+		Thread.yield(); */
 	} //}}}
 
 	//{{{ ActionHandler class

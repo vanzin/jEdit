@@ -24,10 +24,10 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
+import java.util.*;
 import javax.swing.text.*;
-import java.util.ArrayList;
-import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -42,9 +42,6 @@ import org.gjt.sp.util.Log;
  */
 class ChunkCache
 {
-	// set this to true at your own risk
-	public static final boolean MONOSPACED_FONT_OPTIMIZATION = false;
-
 	//{{{ ChunkCache constructor
 	ChunkCache(JEditTextArea textArea)
 	{
@@ -150,36 +147,79 @@ class ChunkCache
 	} //}}}
 
 	//{{{ setFirstLine() method
-	void setFirstLine(int firstLine)
+	/**
+	 * This method takes care of shifting the cached tokens so that
+	 * scrolling doesn't cause all visible lines, only newly exposed
+	 * ones, to be retokenized.
+	 */
+	void setFirstLine(int firstLine, int physFirstLine)
 	{
-		if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+		int visibleLines = lineInfo.length;
+		// rely on the fact that when we're called physLastLine not updated yet
+		if((!textArea.softWrap && Math.abs(firstLine - this.firstLine) >= visibleLines)
+			|| (textArea.softWrap && physFirstLine > textArea.getLastPhysicalLine()))
 		{
-			for(int i = 0; i < lineInfo.length; i++)
+			//System.err.println("too far");
+			for(int i = 0; i < visibleLines; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
 		}
 		else if(firstLine > this.firstLine)
 		{
-			System.arraycopy(lineInfo,firstLine - this.firstLine,
-				lineInfo,0,lineInfo.length - firstLine
-				+ this.firstLine);
+			int firstScreenLine = 0;
+			for(int i = 0; i < visibleLines; i++)
+			{
+				if(lineInfo[i].physicalLine == physFirstLine)
+				{
+					firstScreenLine = i;
+					break;
+				}
+			}
 
-			for(int i = lineInfo.length - firstLine
-				+ this.firstLine; i < lineInfo.length; i++)
+			if(firstScreenLine != visibleLines)
+			{
+				System.arraycopy(lineInfo,firstScreenLine,
+					lineInfo,0,visibleLines - firstScreenLine);
+			}
+
+			for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
 			{
 				lineInfo[i] = new LineInfo();
 			}
+			//System.err.println("only " + firstScreenLine
+			//	+ " need updates");
 		}
 		else if(this.firstLine > firstLine)
 		{
-			System.arraycopy(lineInfo,0,lineInfo,this.firstLine - firstLine,
-				lineInfo.length - this.firstLine + firstLine);
-
-			for(int i = 0; i < this.firstLine - firstLine; i++)
+			LinkedList list = new LinkedList();
+			for(int i = firstLine; i < this.firstLine; i++)
 			{
-				lineInfo[i] = new LineInfo();
+				int physicalLine = textArea.virtualToPhysical(i);
+
+				out.clear();
+				lineToChunkList(physicalLine,out);
+				if(out.size() == 0)
+					out.add(null);
+
+				getLineInfosForPhysicalLine(physicalLine,list);
 			}
+
+			if(list.size() < visibleLines)
+			{
+				System.arraycopy(lineInfo,0,lineInfo,list.size(),
+					visibleLines - list.size());
+			}
+
+			int firstScreenLine = Math.min(list.size(),visibleLines);
+
+			Iterator iter = list.iterator();
+			for(int i = 0; iter.hasNext(); i++)
+			{
+				lineInfo[i] = (LineInfo)iter.next();
+			}
+			//System.err.println("only " + firstScreenLine
+			//	+ " need updates");
 		}
 
 		lastScreenLine = lastScreenLineP = -1;
@@ -226,7 +266,7 @@ class ChunkCache
 	} //}}}
 
 	//{{{ lineToChunkList() method
-	void lineToChunkList(int physicalLine, ArrayList out)
+	void lineToChunkList(int physicalLine, List out)
 	{
 		if(textArea.softWrap)
 		{
@@ -268,9 +308,6 @@ class ChunkCache
 	//{{{ updateChunksUpTo() method
 	void updateChunksUpTo(int lastScreenLine)
 	{
-		if(!textArea.softWrap)
-			return;
-
 		if(lineInfo[lastScreenLine].chunksValid)
 			return;
 
@@ -410,41 +447,9 @@ class ChunkCache
 	{
 		LineInfo info = lineInfo[screenLine];
 
-		if(textArea.softWrap)
-		{
-			if(!info.chunksValid)
-				Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
-			return info;
-		}
-		else
-		{
-			if(!info.chunksValid)
-			{
-				int virtLine = screenLine + firstLine;
-				if(virtLine >= textArea.getVirtualLineCount())
-				{
-					info.chunks = null;
-					info.chunksValid = true;
-					info.physicalLine = -1;
-				}
-				else
-				{
-					info.physicalLine = textArea.getFoldVisibilityManager()
-						.virtualToPhysical(virtLine);
-
-
-					info.chunks = lineToChunkList(info.physicalLine);
-					info.chunksValid = true;
-
-					info.firstSubregion = true;
-					info.lastSubregion = true;
-					info.offset = 0;
-					info.length = textArea.getLineLength(info.physicalLine) + 1;
-				}
-			}
-
-			return info;
-		}
+		if(!info.chunksValid)
+			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
+		return info;
 	} //}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
@@ -456,8 +461,43 @@ class ChunkCache
 		if(out.size() == 0)
 			out.add(null);
 
-		LineInfo[] returnValue = new LineInfo[out.size()];
+		ArrayList returnValue = new ArrayList(out.size());
+		getLineInfosForPhysicalLine(physicalLine,returnValue);
+		return (LineInfo[])returnValue.toArray(new LineInfo[out.size()]);
+	} //}}}
 
+	//{{{ needFullRepaint() method
+	/**
+	 * The needFullRepaint variable becomes true when the number of screen
+	 * lines in a physical line changes.
+	 */
+	boolean needFullRepaint()
+	{
+		boolean retVal = needFullRepaint;
+		needFullRepaint = false;
+		return retVal;
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private JEditTextArea textArea;
+	private int firstLine;
+	private LineInfo[] lineInfo;
+	private ArrayList out;
+
+	private int lastScreenLineP;
+	private int lastScreenLine;
+
+	private boolean needFullRepaint;
+
+	private DisplayTokenHandler noWrap;
+	private SoftWrapTokenHandler softWrap;
+	//}}}
+
+	//{{{ updateChunksForLine() method
+	private void getLineInfosForPhysicalLine(int physicalLine, List list)
+	{
 		for(int i = 0; i < out.size(); i++)
 		{
 			Chunk chunks = (Chunk)out.get(i);
@@ -486,37 +526,10 @@ class ChunkCache
 			info.chunksValid = true;
 			info.chunks = chunks;
 
-			returnValue[i] = info;
+			list.add(info);
 		}
-
-		return returnValue;
 	} //}}}
 
-	//{{{ needFullRepaint() method
-	/**
-	 * The needFullRepaint variable becomes true when the number of screen
-	 * lines in a physical line changes.
-	 */
-	boolean needFullRepaint()
-	{
-		boolean retVal = needFullRepaint;
-		needFullRepaint = false;
-		return retVal;
-	} //}}}
-
-	//{{{ Private members
-	private JEditTextArea textArea;
-	private int firstLine;
-	private LineInfo[] lineInfo;
-	private ArrayList out;
-
-	private int lastScreenLineP;
-	private int lastScreenLine;
-
-	private boolean needFullRepaint;
-
-	private DisplayTokenHandler noWrap;
-	private SoftWrapTokenHandler softWrap;
 	//}}}
 
 	//{{{ LineInfo class

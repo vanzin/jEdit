@@ -195,9 +195,10 @@ class PluginList
 					installed);
 			}
 
-			roster.addOperation(new Roster.Install((downloadSource
-				? branch.downloadSource : branch.download),
-				installDirectory));
+			roster.addOperation(new Roster.Install(
+				(downloadSource ? branch.downloadSource : branch.download),
+				installDirectory,
+				(downloadSource ? branch.downloadSourceSize : branch.downloadSize)));
 
 		}
 

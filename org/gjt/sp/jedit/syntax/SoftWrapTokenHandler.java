@@ -27,7 +27,7 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -37,7 +37,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	//{{{ init() method
 	public void init(Segment seg, SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
-		TabExpander expander, ArrayList out,
+		TabExpander expander, List out,
 		float wrapMargin)
 	{
 		super.init(seg,styles,fontRenderContext,expander);
@@ -56,9 +56,9 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	//{{{ getChunks() method
 	/**
 	 * Returns the list of chunks.
-	 * @since jEdit 4.1pre1
+	 * @since jEdit 4.1pre7
 	 */
-	public ArrayList getChunkList()
+	public List getChunkList()
 	{
 		return out;
 	} //}}}
@@ -126,7 +126,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	} //}}}
 
 	//{{{ Private members
-	private ArrayList out;
+	private List out;
 	private float wrapMargin;
 	private float endX;
 	private Token end;

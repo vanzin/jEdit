@@ -4,18 +4,23 @@ JEDIT 4.1 VERSION HISTORY
 
 Thanks to Chris Petersen for contributing to this release.
 
-+ Syntax Highlighting Changes:
++ Miscellaneous Changes:
 
 - Minor updates to JavaScript and PHP modes (Chris Petersen).
 
-+ File System Browser Changes:
-
-- S+ENTER with a directory selected opens the directory in a new browser
-  window.
-
-+ Documentation Changes:
+- Plugin manager progress window now only has one progress bar.
 
 - NEWS.txt now documents major changes between jEdit 4.0 and 4.1.
+
+- In the file system browser, S+ENTER with a directory selected opens
+  the directory in a new browser window.
+
+- Pressing LEFT in the filename field with the caret already at the
+  left-most position goes to the parent directory location.
+
+- Improved scrolling performance when soft wrap is on. In previous 4.1
+  pre-releases and especially in 4.0, the editor was noticably less
+  responsive if soft wrap was on. No longer.
 
 + Bug Fixes:
 
@@ -23,6 +28,9 @@ Thanks to Chris Petersen for contributing to this release.
   views.
 
 - Fixed a few help viewer quirks.
+
+- Fixed an obscure bug in the text area scrolling code that could
+  manifest when the same buffer was viewed in multiple text areas.
 
 * Version 4.1pre7
 
