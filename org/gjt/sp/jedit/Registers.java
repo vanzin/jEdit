@@ -307,6 +307,7 @@ public class Registers
 		}
 
 		registers[name] = newRegister;
+		EditBus.send(new RegisterChanged(null,name));
 	} //}}}
 
 	//{{{ setRegister() method
