@@ -3,10 +3,10 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="indentOpenBrackets" VALUE="["/>
-		<PROPERTY NAME="indentCloseBrackets" VALUE="]"/>
+		<PROPERTY NAME="indentOpenBrackets" VALUE="[{"/>
+		<PROPERTY NAME="indentCloseBrackets" VALUE="]}"/>
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
-		<PROPERTY NAME="indentNextLines" VALUE="^(\*&lt;&lt;|:|M:|\{).*"/>
+		<PROPERTY NAME="indentNextLines" VALUE="^(:|M:)[^;]*"/>
 		<PROPERTY NAME="doubleBracketIndent" VALUE="true"/>
 		<PROPERTY NAME="commentStart" VALUE="("/>
 		<PROPERTY NAME="commentEnd" VALUE=")"/>

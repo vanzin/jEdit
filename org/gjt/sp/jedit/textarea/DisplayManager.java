@@ -564,9 +564,10 @@ public class DisplayManager
 	//{{{ init() method
 	void init()
 	{
+		updateWrapSettings();
+
 		if(initialized)
 		{
-			updateWrapSettings();
 			if(buffer.isLoaded())
 			{
 				firstLine.reset();

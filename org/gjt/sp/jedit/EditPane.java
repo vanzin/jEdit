@@ -635,7 +635,7 @@ public class EditPane extends JPanel implements EBComponent
 		}
 		else if(msg.getWhat() == BufferUpdate.PROPERTIES_CHANGED)
 		{
-			if(_buffer == buffer)
+			if(_buffer == buffer && buffer.isLoaded())
 			{
 				textArea.propertiesChanged();
 				if(view.getEditPane() == this)

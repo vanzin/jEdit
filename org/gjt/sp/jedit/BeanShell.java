@@ -321,30 +321,14 @@ public class BeanShell
 		{
 			if(in == null)
 			{
-				Buffer buffer = jEdit.getBuffer(path);
+				Buffer buffer = jEdit.openTemporary(null,
+					null,path,false);
 
-				vfs = VFSManager.getVFSForPath(path);
-				session = vfs.createVFSSession(path,view);
-				if(session == null)
-				{
-					// user cancelled???
-					return;
-				}
+				if(!buffer.isLoaded())
+					VFSManager.waitForRequests();
 
-				if(buffer != null)
-				{
-					if(!buffer.isLoaded())
-						VFSManager.waitForRequests();
-
-					in = new StringReader(buffer.getText(0,
-						buffer.getLength()));
-				}
-				else
-				{
-					in = new BufferedReader(new InputStreamReader(
-						vfs._createInputStream(session,
-						path,false,view)));
-				}
+				in = new StringReader(buffer.getText(0,
+					buffer.getLength()));
 			}
 
 			setupDefaultVariables(namespace,view);

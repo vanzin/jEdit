@@ -70,6 +70,8 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 - Fix potential ArrayIndexOutOfBoundsException when indenting lines
   containing unmatched brackets.
 
+- Macros written in the UTF-8Y and UTF-16 encodings are auto-detected.
+
 }}}
 {{{ API Changes
 
