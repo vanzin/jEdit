@@ -34,6 +34,10 @@ Thanks to Chris Petersen, Silas Smith for contributing to this release.
 - Fixed an obscure bug in the text area scrolling code that could
   manifest when the same buffer was viewed in multiple text areas.
 
+- Fixed Global Options dialog box resizing problems.
+
+- Fixed possible ArrayIndexOutOfBoundsExceptions when deleting text.
+
 * Version 4.1pre7
 
 Thanks to Chris Kent, Jonathan Revusky and Marcelo Vanzin for
