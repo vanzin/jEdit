@@ -83,10 +83,15 @@ public class DockableWindowManager extends JPanel
 		bottom = new PanelWindowContainer(this,BOTTOM);
 		right = new PanelWindowContainer(this,RIGHT);
 
-		add(BorderLayout.NORTH,top);
-		add(BorderLayout.WEST,left);
-		add(BorderLayout.SOUTH,bottom);
-		add(BorderLayout.EAST,right);
+		add(DockableLayout.TOP_BUTTONS,top.getButtonBox());
+		add(DockableLayout.LEFT_BUTTONS,left.getButtonBox());
+		add(DockableLayout.BOTTOM_BUTTONS,bottom.getButtonBox());
+		add(DockableLayout.RIGHT_BUTTONS,right.getButtonBox());
+
+		add(TOP,top.getDockablePanel());
+		add(LEFT,left.getDockablePanel());
+		add(BOTTOM,bottom.getDockablePanel());
+		add(RIGHT,right.getDockablePanel());
 	}
 
 	/**
@@ -107,19 +112,19 @@ public class DockableWindowManager extends JPanel
 			}
 		}
 
-		String lastTop = jEdit.getProperty("view.docking.last-top");
+		String lastTop = jEdit.getProperty("view.dock.top.last");
 		if(lastTop != null)
 			showDockableWindow(lastTop);
 
-		String lastLeft = jEdit.getProperty("view.docking.last-left");
+		String lastLeft = jEdit.getProperty("view.dock.left.last");
 		if(lastLeft != null)
 			showDockableWindow(lastLeft);
 
-		String lastBottom = jEdit.getProperty("view.docking.last-bottom");
+		String lastBottom = jEdit.getProperty("view.dock.bottom.last");
 		if(lastBottom != null)
 			showDockableWindow(lastBottom);
 
-		String lastRight = jEdit.getProperty("view.docking.last-right");
+		String lastRight = jEdit.getProperty("view.dock.right.last");
 		if(lastRight != null)
 			showDockableWindow(lastRight);
 	}
@@ -227,18 +232,10 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
-		top.saveDimension();
-		if(top.getCurrent() != null)
-			jEdit.setProperty("view.docking.last-top",top.getCurrent().name);
-		left.saveDimension();
-		if(left.getCurrent() != null)
-			jEdit.setProperty("view.docking.last-left",left.getCurrent().name);
-		bottom.saveDimension();
-		if(bottom.getCurrent() != null)
-			jEdit.setProperty("view.docking.last-bottom",bottom.getCurrent().name);
-		right.saveDimension();
-		if(right.getCurrent() != null)
-			jEdit.setProperty("view.docking.last-right",right.getCurrent().name);
+		top.save();
+		left.save();
+		bottom.save();
+		right.save();
 
 		Enumeration enum = windows.elements();
 		while(enum.hasMoreElements())
@@ -247,9 +244,6 @@ public class DockableWindowManager extends JPanel
 			if(entry.win != null)
 				entry.remove();
 		}
-
-		windows = null;
-		top = left = bottom = right = null;
 	}
 
 	public PanelWindowContainer getTopDockingArea()
@@ -284,6 +278,39 @@ public class DockableWindowManager extends JPanel
 		while(enum.hasMoreElements())
 		{
 			Entry entry = (Entry)enum.nextElement();
+			String position = entry.position;
+			String newPosition = jEdit.getProperty(entry.name
+				+ ".dock-position");
+			if(newPosition != null /* ??? */
+				&& !position.equals(newPosition))
+			{
+				entry.position = newPosition;
+				if(entry.container != null)
+				{
+					entry.container.remove(entry);
+					entry.container = null;
+					entry.win = null;
+				}
+
+				if(position.equals(FLOATING))
+					/* do nothing */;
+				else
+				{
+					if(newPosition.equals(TOP))
+						entry.container = top;
+					else if(newPosition.equals(LEFT))
+						entry.container = left;
+					else if(newPosition.equals(BOTTOM))
+						entry.container = bottom;
+					else if(newPosition.equals(RIGHT))
+						entry.container = right;
+					else
+						throw new InternalError("Unknown position: " + position);
+
+					entry.container.register(entry);
+				}
+			}
+
 			if(entry.container instanceof FloatingWindowContainer)
 			{
 				SwingUtilities.updateComponentTreeUI(((JFrame)entry.container)
@@ -313,7 +340,18 @@ public class DockableWindowManager extends JPanel
 
 	class DockableLayout implements LayoutManager2
 	{
+		// for backwards compatibility with plugins that fiddle with
+		// jEdit's UI layout
+		static final String CENTER = BorderLayout.CENTER;
+
+		static final String TOP_BUTTONS = "top-buttons";
+		static final String LEFT_BUTTONS = "left-buttons";
+		static final String BOTTOM_BUTTONS = "bottom-buttons";
+		static final String RIGHT_BUTTONS = "right-buttons";
+
 		Component center;
+		Component top, left, bottom, right;
+		Component topButtons, leftButtons, bottomButtons, rightButtons;
 
 		public void addLayoutComponent(String name, Component comp)
 		{
@@ -322,8 +360,24 @@ public class DockableWindowManager extends JPanel
 
 		public void addLayoutComponent(Component comp, Object cons)
 		{
-			if(cons == null || BorderLayout.CENTER.equals(cons))
+			if(cons == null || CENTER.equals(cons))
 				center = comp;
+			else if(TOP.equals(cons))
+				top = comp;
+			else if(LEFT.equals(cons))
+				left = comp;
+			else if(BOTTOM.equals(cons))
+				bottom = comp;
+			else if(RIGHT.equals(cons))
+				right = comp;
+			else if(TOP_BUTTONS.equals(cons))
+				topButtons = comp;
+			else if(LEFT_BUTTONS.equals(cons))
+				leftButtons = comp;
+			else if(BOTTOM_BUTTONS.equals(cons))
+				bottomButtons = comp;
+			else if(RIGHT_BUTTONS.equals(cons))
+				rightButtons = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
@@ -339,19 +393,43 @@ public class DockableWindowManager extends JPanel
 			Dimension _left = left.getPreferredSize();
 			Dimension _bottom = bottom.getPreferredSize();
 			Dimension _right = right.getPreferredSize();
+			Dimension _topButtons = topButtons.getPreferredSize();
+			Dimension _leftButtons = leftButtons.getPreferredSize();
+			Dimension _bottomButtons = bottomButtons.getPreferredSize();
+			Dimension _rightButtons = rightButtons.getPreferredSize();
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
 
-			prefSize.height = _top.height + _bottom.height + _center.height;
-			prefSize.width = _left.width + _right.width + _center.width;
+			prefSize.height = _top.height + _bottom.height + _center.height
+				+ _topButtons.height + _bottomButtons.height;
+			prefSize.width = _left.width + _right.width + _center.width
+				+ _leftButtons.width + _rightButtons.width;
 
 			return prefSize;
 		}
 
 		public Dimension minimumLayoutSize(Container parent)
 		{
-			return preferredLayoutSize(parent);
+			Dimension minSize = new Dimension(0,0);
+			Dimension _top = top.getMinimumSize();
+			Dimension _left = left.getMinimumSize();
+			Dimension _bottom = bottom.getMinimumSize();
+			Dimension _right = right.getMinimumSize();
+			Dimension _topButtons = topButtons.getMinimumSize();
+			Dimension _leftButtons = leftButtons.getMinimumSize();
+			Dimension _bottomButtons = bottomButtons.getMinimumSize();
+			Dimension _rightButtons = rightButtons.getMinimumSize();
+			Dimension _center = (center == null
+				? new Dimension(0,0)
+				: center.getMinimumSize());
+
+			minSize.height = _top.height + _bottom.height + _center.height
+				+ _topButtons.height + _bottomButtons.height;
+			minSize.width = _left.width + _right.width + _center.width
+				+ _leftButtons.width + _rightButtons.width;
+
+			return minSize;
 		}
 
 		public Dimension maximumLayoutSize(Container parent)
@@ -368,52 +446,125 @@ public class DockableWindowManager extends JPanel
 			Dimension _left = left.getPreferredSize();
 			Dimension _bottom = bottom.getPreferredSize();
 			Dimension _right = right.getPreferredSize();
+			Dimension _topButtons = topButtons.getPreferredSize();
+			Dimension _leftButtons = leftButtons.getPreferredSize();
+			Dimension _bottomButtons = bottomButtons.getPreferredSize();
+			Dimension _rightButtons = rightButtons.getPreferredSize();
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
 
-			if(_left.width + _right.width > size.width)
-			{
-				left.show(null);
-				right.show(null);
-				_left = left.getPreferredSize();
-				_right = right.getPreferredSize();
-			}
-
-			if(_top.height + _bottom.height > size.height)
-			{
-				top.show(null);
-				bottom.show(null);
-				_top = top.getPreferredSize();
-				_bottom = bottom.getPreferredSize();
-			}
-
-			int _width = size.width - _left.width - _right.width;
-			int _height = size.height - _top.height - _bottom.height;
+			int _width = size.width - _leftButtons.width - _rightButtons.width;
+			int _height = size.height - _topButtons.height - _bottomButtons.height;
 
 			if(alternateLayout)
 			{
-				top.setBounds(0,0,size.width,_top.height);
-				bottom.setBounds(0,size.height - _bottom.height,
-					size.width,_bottom.height);
+				topButtons.setBounds(
+					_leftButtons.width,
+					0,
+					_width,
+					_topButtons.height);
 
-				left.setBounds(0,_top.height,_left.width,_height);
-				right.setBounds(size.width - _right.width,
-					_top.height,_right.width,_height);
+				leftButtons.setBounds(
+					0,
+					_topButtons.height + _top.height,
+					_leftButtons.width,
+					_height - _top.height - _bottom.height);
+
+				bottomButtons.setBounds(
+					_leftButtons.width,
+					size.height - _bottomButtons.height,
+					_width,
+					_bottomButtons.height);
+
+				rightButtons.setBounds(
+					size.width - _rightButtons.width,
+					_topButtons.height + _top.height,
+					_rightButtons.width,
+					_height - _top.height - _bottom.height);
+
+				top.setBounds(
+					_leftButtons.width,
+					_topButtons.height,
+					_width,
+					_top.height);
+
+				bottom.setBounds(
+					_leftButtons.width,
+					size.height - _bottom.height - _bottomButtons.height,
+					_width,
+					_bottom.height);
+
+				left.setBounds(
+					_leftButtons.width,
+					_topButtons.height + _top.height,
+					_left.width,
+					_height - _top.height - _bottom.height);
+
+				right.setBounds(
+					size.width - _right.width - _rightButtons.width,
+					_topButtons.height + _top.height,
+					_right.width,
+					_height - _top.height - _bottom.height);
 			}
 			else
 			{
-				left.setBounds(0,0,_left.width,size.height);
-				right.setBounds(size.width - _right.width,0,
-					_right.width,size.height);
+				topButtons.setBounds(
+					_leftButtons.width + _left.width,
+					0,
+					_width - _left.width - _right.width,
+					_topButtons.height);
 
-				top.setBounds(_left.width,0,_width,_top.height);
-				bottom.setBounds(_left.width,size.height - _bottom.height,
-					_width,_bottom.height);
+				leftButtons.setBounds(
+					0,
+					_topButtons.height,
+					_leftButtons.width,
+					_height);
+
+				bottomButtons.setBounds(
+					_leftButtons.width + _left.width,
+					size.height - _bottomButtons.height,
+					_width - _left.width - _right.width,
+					_bottomButtons.height);
+
+				rightButtons.setBounds(
+					size.width - _rightButtons.width,
+					_topButtons.height,
+					_rightButtons.width,
+					_height);
+
+				top.setBounds(
+					_leftButtons.width + _left.width,
+					_topButtons.height,
+					_width - _left.width - _right.width,
+					_top.height);
+				bottom.setBounds(
+					_leftButtons.width + _left.width,
+					size.height - _bottom.height - _bottomButtons.height,
+					_width - _left.width - _right.width,
+					_bottom.height);
+
+				left.setBounds(
+					_leftButtons.width,
+					_topButtons.height,
+					_left.width,
+					_height);
+
+				right.setBounds(
+					size.width - _right.width - _rightButtons.width,
+					_topButtons.height,
+					_right.width,
+					_height);
 			}
 
 			if(center != null)
-				center.setBounds(_left.width,_top.height,_width,_height);
+			{
+				center.setBounds(
+					_leftButtons.width + _left.width,
+					_topButtons.height + _top.height,
+					_width - _left.width - _right.width,
+					_height - _top.height - _bottom.height);
+			}
 		}
 
 		public float getLayoutAlignmentX(Container target)
@@ -445,6 +596,9 @@ public class DockableWindowManager extends JPanel
 			this.position = jEdit.getProperty(name + ".dock-position",
 				FLOATING);
 			title = jEdit.getProperty(name + ".title");
+
+			if(position == null)
+				position = FLOATING;
 
 			if(position.equals(FLOATING))
 				/* do nothing */;

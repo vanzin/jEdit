@@ -15,7 +15,7 @@ JEDIT 4.0 VERSION HISTORY
 - File listings in the file system browser are now colorized. Change the
   colors in Utilities->Global Options->File System Browser
 - When a file is loaded, jEdit now remembers if it contained a trailing
-  newline, and if so, writes it out when saving the file. Previosuly, a
+  newline, and if so, writes it out when saving the file. Previously, a
   trailing newline would always be written, regardless of it being
   present in the file on disk or not
 - The tab and enter key can now be used in shortcut assignments
@@ -55,6 +55,7 @@ JEDIT 4.0 VERSION HISTORY
   - ALL dockable windows set to dock in a certain area are shown in that
     area, not just those currently 'open'. When a dockable is requested
     for the first time, it is created and loaded
+  - Changes made in the Docking option pane now take effect immediately
 - Improved HyperSearch results window
 - In the Shortcuts option pane, each plugin's actions are shown in a
   separate section. This solves the problem of plugin actions having
@@ -69,6 +70,7 @@ JEDIT 4.0 VERSION HISTORY
 - jEdit now makes an effort to display popup menus on-screen. If you
   want your plugin to do this, use the new GUIUtilities.showPopupMenu()
   method.
+- GNU General Public License now shown in installer
 
 + Bug Fixes
 

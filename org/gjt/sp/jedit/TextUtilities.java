@@ -148,16 +148,7 @@ public class TextUtilities
  						tokenListOffset += lineTokens.length;
 					//lineTokens = lineInfo.lastToken;
 					scanStartOffset = offset;
-					/*System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
-
-					Token __ = lineTokens;
-					 for(;;)
-					{
-						if(__ == null)
-							break;
-						System.err.println(__);
-						__ = __.prev;
-					} */
+					System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
 				}
 
 				// only check tokens with id 'idOfBracket'
@@ -170,10 +161,10 @@ public class TextUtilities
 						continue;
 					}
 
-					//System.err.println(lineTokens);
 					int len = lineTokens.length;
 					if(id == idOfBracket)
 					{
+						StringBuffer sb = new StringBuffer();
 						for(int j = scanStartOffset; j >= Math.max(0,tokenListOffset - len); j--)
 						{
 							if(j >= lineText.count)
@@ -185,7 +176,7 @@ public class TextUtilities
 							}
 
 							char ch = lineText.array[lineText.offset + j];
-							//System.err.print(ch);
+							sb.append(ch);
 							if(ch == c)
 								count++;
 							else if(ch == cprime)
@@ -194,7 +185,7 @@ public class TextUtilities
 									return lineStart + j;
 							}
 						}
-						//System.err.println();
+						System.err.println("[" + sb.reverse() + "]");
 					}
 
 					scanStartOffset = tokenListOffset = tokenListOffset - len;

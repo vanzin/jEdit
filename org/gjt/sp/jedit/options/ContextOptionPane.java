@@ -55,10 +55,18 @@ public class ContextOptionPane extends AbstractOptionPane
 		while(st.hasMoreTokens())
 		{
 			String actionName = (String)st.nextToken();
-			String label = getActionLabel(actionName);
-			if(label == null)
-				continue;
-			listModel.addElement(new MenuItem(actionName,label));
+			if(actionName.equals("-"))
+				listModel.addElement(new ContextOptionPane.MenuItem("-","-"));
+			else
+			{
+				EditAction action = jEdit.getAction(actionName);
+				if(action == null)
+					continue;
+				String label = action.getLabel();
+				if(label == null)
+					continue;
+				listModel.addElement(new ContextOptionPane.MenuItem(actionName,label));
+			}
 		}
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -90,26 +98,6 @@ public class ContextOptionPane extends AbstractOptionPane
 
 		updateButtons();
 		add(BorderLayout.SOUTH,buttons);
-
-		// create actions list
-		EditAction[] actions = jEdit.getActions();
-		Vector vector = new Vector(actions.length);
-		for(int i = 0; i < actions.length; i++)
-		{
-			String actionName = actions[i].getName();
-			String label = jEdit.getProperty(actionName + ".label");
-			if(label == null)
-				continue;
-			vector.addElement(new MenuItem(actionName,label));
-		}
-		MiscUtilities.quicksort(vector,new MenuItemCompare());
-
-		actionsList = new DefaultListModel();
-		actionsList.ensureCapacity(vector.size());
-		for(int i = 0; i < vector.size(); i++)
-		{
-			actionsList.addElement(vector.elementAt(i));
-		}
 	}
 
 	class MenuItemCompare implements MiscUtilities.Compare
@@ -133,33 +121,12 @@ public class ContextOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.context",buf.toString());
 	}
 
-	// package-private members
-	static String getActionLabel(String actionName)
-	{
-		if(actionName.equals("-"))
-			return "-";
-		else
-		{
-			if(actionName.startsWith("play-macro@"))
-			{
-				int index = Math.max(11,actionName
-					.indexOf('/') + 1);
-				return actionName.substring(index)
-					.replace('_',' ');
-			}
-			else
-				return jEdit.getProperty(actionName + ".label");
-		}
-	}
-
 	// private members
 	private DefaultListModel listModel;
 	private JList list;
 	private JButton add;
 	private JButton remove;
 	private JButton moveUp, moveDown;
-
-	private DefaultListModel actionsList;
 
 	private void updateButtons()
 	{
@@ -177,15 +144,12 @@ public class ContextOptionPane extends AbstractOptionPane
 		MenuItem(String actionName, String label)
 		{
 			this.actionName = actionName;
-			if(label.equals("-"))
-				this.label = label;
-			else
-				this.label = GUIUtilities.prettifyMenuLabel(label);
+			this.label = label;
 		}
 
 		public String toString()
 		{
-			return label;
+			return GUIUtilities.prettifyMenuLabel(label);
 		}
 	}
 
@@ -198,9 +162,8 @@ public class ContextOptionPane extends AbstractOptionPane
 			if(source == add)
 			{
 				ContextAddDialog dialog = new ContextAddDialog(
-					ContextOptionPane.this,
-					actionsList);
-				MenuItem selection = dialog.getSelection();
+					ContextOptionPane.this);
+				String selection = dialog.getSelection();
 				if(selection == null)
 					return;
 
@@ -210,7 +173,17 @@ public class ContextOptionPane extends AbstractOptionPane
 				else
 					index++;
 
-				listModel.insertElementAt(selection,index);
+				MenuItem menuItem;
+				if(selection.equals("-"))
+					menuItem = new ContextOptionPane.MenuItem("-","-");
+				else
+				{
+					menuItem = new ContextOptionPane.MenuItem(selection,
+						jEdit.getAction(selection)
+						.getLabel());
+				}
+
+				listModel.insertElementAt(menuItem,index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
 			}
@@ -250,7 +223,7 @@ public class ContextOptionPane extends AbstractOptionPane
 
 class ContextAddDialog extends EnhancedDialog
 {
-	public ContextAddDialog(Component comp, ListModel actionsListModel)
+	public ContextAddDialog(Component comp)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("options.context.add.title"),
@@ -260,53 +233,41 @@ class ContextAddDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		content.add(BorderLayout.NORTH,new JLabel(
-			jEdit.getProperty("options.context.add.caption")));
-
-		JPanel mainPanel = new JPanel(new BorderLayout(6,0));
-
 		ActionHandler actionHandler = new ActionHandler();
 		ButtonGroup grp = new ButtonGroup();
 
-		// Add separator
+		JPanel typePanel = new JPanel(new GridLayout(3,1,6,6));
+		typePanel.setBorder(new EmptyBorder(0,0,6,0));
+		typePanel.add(new JLabel(
+			jEdit.getProperty("options.context.add.caption")));
+
 		separator = new JRadioButton(jEdit.getProperty("options.context"
 			+ ".add.separator"));
-		separator.setSelected(true);
 		separator.addActionListener(actionHandler);
 		grp.add(separator);
-		mainPanel.add(BorderLayout.NORTH,separator);
+		typePanel.add(separator);
 
-		// Add action
-		JPanel actionPanel = new JPanel(new BorderLayout(6,0));
 		action = new JRadioButton(jEdit.getProperty("options.context"
 			+ ".add.action"));
 		action.addActionListener(actionHandler);
 		grp.add(action);
-		actionPanel.add(BorderLayout.NORTH,action);
+		action.setSelected(true);
+		typePanel.add(action);
 
-		actionsList = new JList(actionsListModel);
-		actionsList.setVisibleRowCount(8);
-		actionsList.setEnabled(false);
-		actionPanel.add(BorderLayout.CENTER,new JScrollPane(actionsList));
+		content.add(BorderLayout.NORTH,typePanel);
 
-		mainPanel.add(BorderLayout.CENTER,actionPanel);
+		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-		// Add macro
-		JPanel macroPanel = new JPanel(new BorderLayout(6,0));
-		macro = new JRadioButton(jEdit.getProperty("options.context"
-			+ ".add.macro"));
-		macro.addActionListener(actionHandler);
-		grp.add(macro);
-		macroPanel.add(BorderLayout.NORTH,macro);
+		actionsList = jEdit.getActionSets();
+		combo = new JComboBox(actionsList);
+		combo.addActionListener(actionHandler);
+		actionPanel.add(BorderLayout.NORTH,combo);
 
-		macrosList = new JList(Macros.getMacroList());
-		macrosList.setVisibleRowCount(8);
-		macrosList.setEnabled(false);
-		macroPanel.add(BorderLayout.CENTER,new JScrollPane(macrosList));
+		list = new JList();
+		list.setVisibleRowCount(8);
+		actionPanel.add(BorderLayout.CENTER,new JScrollPane(list));
 
-		mainPanel.add(BorderLayout.SOUTH,macroPanel);
-
-		content.add(BorderLayout.CENTER,mainPanel);
+		content.add(BorderLayout.CENTER,actionPanel);
 
 		JPanel southPanel = new JPanel();
 		southPanel.setLayout(new BoxLayout(southPanel,BoxLayout.X_AXIS));
@@ -324,6 +285,8 @@ class ContextAddDialog extends EnhancedDialog
 
 		content.add(BorderLayout.SOUTH,southPanel);
 
+		updateList();
+
 		pack();
 		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
@@ -340,21 +303,17 @@ class ContextAddDialog extends EnhancedDialog
 		dispose();
 	}
 
-	public ContextOptionPane.MenuItem getSelection()
+	public String getSelection()
 	{
 		if(!isOK)
 			return null;
 
 		if(separator.isSelected())
-			return new ContextOptionPane.MenuItem("-","-");
+			return "-";
 		else if(action.isSelected())
-			return (ContextOptionPane.MenuItem)actionsList.getSelectedValue();
-		else if(macro.isSelected())
 		{
-			String selectedMacro = macrosList.getSelectedValue().toString();
-			selectedMacro = "play-macro@" + selectedMacro;
-			return new ContextOptionPane.MenuItem(selectedMacro,
-				ContextOptionPane.getActionLabel(selectedMacro));
+			return ((ContextOptionPane.MenuItem)list.getSelectedValue())
+				.actionName;
 		}
 		else
 			throw new InternalError();
@@ -362,9 +321,31 @@ class ContextAddDialog extends EnhancedDialog
 
 	// private members
 	private boolean isOK;
-	private JRadioButton separator, action, macro;
-	private JList actionsList, macrosList;
+	private JRadioButton separator, action;
+	private ActionSet[] actionsList;
+	private JComboBox combo;
+	private JList list;
 	private JButton ok, cancel;
+
+	private void updateList()
+	{
+		ActionSet actionSet = (ActionSet)combo.getSelectedItem();
+		DefaultListModel listModel = new DefaultListModel();
+		EditAction[] actions = actionSet.getActions();
+
+		for(int j = 0; j < actions.length; j++)
+		{
+			EditAction action = actions[j];
+			String label = action.getLabel();
+			if(label == null)
+				continue;
+
+			listModel.addElement(new ContextOptionPane.MenuItem(
+				action.getName(),label));
+		}
+
+		list.setModel(listModel);
+	}
 
 	class ActionHandler implements ActionListener
 	{
@@ -373,13 +354,15 @@ class ContextAddDialog extends EnhancedDialog
 			Object source = evt.getSource();
 			if(source instanceof JRadioButton)
 			{
-				actionsList.setEnabled(action.isSelected());
-				macrosList.setEnabled(macro.isSelected());
+				combo.setEnabled(action.isSelected());
+				list.setEnabled(action.isSelected());
 			}
 			if(source == ok)
 				ok();
 			else if(source == cancel)
 				cancel();
+			else if(source == combo)
+				updateList();
 		}
 	}
 }

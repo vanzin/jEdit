@@ -11,6 +11,9 @@ app.version=4.0pre1
 # Info to display on first page of installer
 app.readme=readme.html
 
+# License to display on second page of installer
+app.license=/doc/COPYING.txt
+
 # Main class of program. Used when creating a shortcut
 app.main.class=org.gjt.sp.jedit.jEdit
 
