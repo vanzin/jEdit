@@ -288,7 +288,7 @@
    </para>
   </sect2>
   
-  <sect2><title>Rule Ordering Requirements</title>
+  <sect2 id="rule-ordering"><title>Rule Ordering Requirements</title>
    <para>
     You might encounter this very common pitfall when writing your own modes.
    </para>
@@ -460,8 +460,8 @@
    the <literal>SPAN</literal> tag, the
    <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
    the first character that
-   the regular expression matches. Note that this disallows regular expressions
-   which can match more than one character at the start position.
+   the regular expression matches.  This rules out using regular expressions
+   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
   </para>
   <para>
    Any text matched by groups in the <literal>BEGIN</literal> regular
@@ -535,12 +535,16 @@
    the <literal>EOL_SPAN</literal> tag, the
    <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
    the first character that
-   the regular expression matches. Note that this disallows regular expressions
-   which can match more than one character at the start position.
+   the regular expression matches.  This rules out using regular expressions
+   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
   </para>
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
+  <para>
+   Here is an <literal>EOL_SPAN_REGEXP</literal> that highlights MS-DOS batch file comments, which start with <literal>REM</literal>, followed by any whitespace character, and extend until the end of the line:
+  </para>
+  <programlisting><![CDATA[<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="R" TYPE="COMMENT1">REM\s</EOL_SPAN_REGEXP>]]></programlisting>
  </sect1>
  <sect1 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Tag</title>
   <para>
@@ -653,8 +657,8 @@
    the <literal>SEQ</literal> tag, the
    <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
    the first character that
-   the regular expression matches. Note that this disallows regular expressions
-   which can match more than one character at the start position.
+   the regular expression matches. This rules out using regular expressions
+   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
   </para>
   <para>
    Here is an example of a <literal>SEQ_REGEXP</literal> rule that highlights
@@ -668,6 +672,45 @@
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
+ </sect1>
+ <sect1 id="mode-rule-import"><title>The IMPORT Tag</title>
+  <para>
+   The <literal>IMPORT</literal> tag, which must be placed inside a <literal>RULES</literal> tag, loads all rules defined in a given ruleset into the current ruleset; in other words, it has the same effect as copying and pasting the imported ruleset.
+  </para>
+  <para>
+   The only required attribute <literal>DELEGATE</literal> must be set to the name of a ruleset. To import a ruleset defined
+   in the current mode, just specify its name. To import a ruleset
+   defined in another mode, specify a name of the form
+   <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
+   Note that the first (unnamed) ruleset in a mode is called
+   <quote>MAIN</quote>.
+  </para>
+  <para>
+   One quirk is that the definition of the imported ruleset is not copied to the location of the <literal>IMPORT</literal> tag, but rather to the end of the containing ruleset. This has implications with rule-ordering; see <xref linkend="rule-ordering"/>.
+  </para>
+  <para>
+   Here is an example from the PHP mode, which extends the inline JavaScript highlighting to support embedded PHP:
+  </para>
+  <programlisting>
+   <![CDATA[<RULES SET="JAVASCRIPT+PHP">
+
+   <SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+       <BEGIN>&lt;?php</BEGIN>
+       <END>?&gt;</END>
+   </SPAN>
+   
+   <SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+       <BEGIN>&lt;?</BEGIN>
+       <END>?&gt;</END>
+   </SPAN>
+   
+   <SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+       <BEGIN>&lt;%=</BEGIN>
+       <END>%&gt;</END>
+   </SPAN>
+
+   <IMPORT DELEGATE="javascript::MAIN"/>
+</RULES>]]></programlisting>
  </sect1>
  <sect1 id="mode-rule-keywords"><title>The KEYWORDS Tag</title>
   <para>

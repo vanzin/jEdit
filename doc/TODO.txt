@@ -43,7 +43,6 @@ it is done in most text editors
 -Dsun.java2d.noddraw=true
 - API thread safety
 - document optional dependencies
-- add note that regexp matching does not cross newlines in token marker
 - add note to documentation about exponential-time regexps
 - news: deep indent, action bar, new cli options
 - action bar
@@ -57,7 +56,6 @@ it is done in most text editors
   - part III
     - describe alternative ways to obtain buffers, edit panes, text areas,
       in a sidebar about changing them
-- examples of EOL_SPAN_REGEXP matching in docs
 - plugin tutorial:
   - plugin build environment docs
   - auto-created actions
