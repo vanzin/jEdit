@@ -75,7 +75,7 @@ abstract class Anchor
 			{
 				int end = Math.min(startLine + numLines,
 					this.physicalLine);
-				for(int i = startLine; i < end; i++)
+				for(int i = startLine + 1; i <= end; i++)
 				{
 					//XXX
 					if(displayManager.isLineVisible(i))

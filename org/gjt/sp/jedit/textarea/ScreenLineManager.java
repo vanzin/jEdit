@@ -121,10 +121,10 @@ class ScreenLineManager
 		int endLine = startLine + numLines;
 		screenLines[startLine] &= ~SCREEN_LINES_VALID_MASK;
 
-		if(numLines > 0)
+		if(numLines > 0 && endLine != screenLines.length)
 		{
-			System.arraycopy(screenLines,endLine,screenLines,
-				startLine,screenLines.length - endLine);
+			System.arraycopy(screenLines,endLine + 1,screenLines,
+				startLine + 1,screenLines.length - endLine - 1);
 		}
 	} //}}}
 
