@@ -264,10 +264,13 @@ view.gutter.highlightCurrentLine=true
 view.gutter.markerHighlight=true
 
 # Click behavior
-view.gutter.gutterClick=toggleFold
-view.gutter.gutterShiftClick=toggleFoldFully
-view.gutter.gutterControlClick=selectFold
-view.gutter.gutterAltClick=narrowToFold
+view.gutter.foldClick=toggle-fold
+view.gutter.SfoldClick=toggle-fold-fully
+view.gutter.CfoldClick=select-fold
+view.gutter.AfoldClick=narrow-fold
+view.gutter.bracketClick=match-bracket
+view.gutter.CbracketClick=select-bracket
+view.gutter.AbracketClick=narrow-bracket
 #}}}
 
 # Expand abbrevs when space bar pressed

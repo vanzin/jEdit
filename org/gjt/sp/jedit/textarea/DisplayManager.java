@@ -571,7 +571,8 @@ public class DisplayManager
 		hideLineRange(end + 1,buffer.getLineCount() - 1);
 
 		// if we narrowed to a single collapsed fold
-		if(getNextVisibleLine(start) == -1)
+		if(start != buffer.getLineCount() - 1
+			&& !isLineVisible(start + 1))
 			expandFold(start,false);
 
 		// Hack... need a more direct way of obtaining a view?

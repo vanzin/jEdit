@@ -279,15 +279,12 @@ public class GutterOptionPane extends AbstractOptionPane
 
 	// simplified these settings a little...
 	private static final String[] clickActionKeys = new String[] {
-		"toggleFold",
-		"toggleFoldFully" /* ,
-		"selectFold" */
+		"toggle-fold",
+		"toggle-fold-fully"
 	};
 	
 	private static final String[] clickModifierKeys = new String[] {
-		"gutterClick",
-		"gutterShiftClick" /* ,
-		"gutterControlClick",
-		"gutterAltClick" */
+		"foldClick",
+		"SfoldClick"
 	}; //}}}
 }
