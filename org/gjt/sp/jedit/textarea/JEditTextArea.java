@@ -89,7 +89,7 @@ public class JEditTextArea extends JComponent
 		add(CENTER,painter);
 
 		// some plugins add stuff in a "right-hand" gutter
-		verticalBox = new Box(BoxLayout.Y_AXIS);
+		verticalBox = new Box(BoxLayout.X_AXIS);
 		verticalBox.add(vertical = new JScrollBar(JScrollBar.VERTICAL));
 		add(RIGHT,verticalBox);
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
@@ -4444,7 +4444,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ addLeftOfScrollBar() method
 	/**
-	 * Adds a component to the box left of the scroll bar. The
+	 * Adds a component to the box left of the vertical scroll bar. The
 	 * ErrorList plugin uses this to show a global error overview, for
 	 * example.
 	 *
@@ -4453,7 +4453,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void addLeftOfScrollBar(Component comp)
 	{
-		verticalBox.add(comp,0);
+		verticalBox.add(comp,verticalBox.getComponentCount() - 1);
+	} //}}}
+
+	
+	//{{{ removeLeftOfScrollBar() method
+	/**
+	 * Removes a component from the box left of the vertical scroll bar.
+	 *
+	 * @param comp The component
+	 * @since jEdit 4.2pre1
+	 */
+	public void removeLeftOfScrollBar(Component comp)
+	{
+		verticalBox.remove(comp);
 	} //}}}
 
 	//{{{ addNotify() method

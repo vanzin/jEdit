@@ -34,8 +34,13 @@ public class EnhancedMenu extends JMenu implements MenuListener
 	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name)
 	{
+		this(name,jEdit.getProperty(name.concat(".label")));
+	} //}}}
+
+	//{{{ EnhancedMenu constructor
+	public EnhancedMenu(String name, String label)
+	{
 		this._name = name;
-		String label = jEdit.getProperty(name.concat(".label"));
 		if(label == null)
 			label = name;
 
@@ -85,12 +90,7 @@ public class EnhancedMenu extends JMenu implements MenuListener
 				if(menuItemName.equals("-"))
 					addSeparator();
 				else
-				{
-					if(menuItemName.startsWith("%"))
-						add(GUIUtilities.loadMenu(menuItemName.substring(1)));
-					else
-						add(GUIUtilities.loadMenuItem(menuItemName));
-				}
+					add(GUIUtilities.loadMenuItem(menuItemName));
 			}
 		}
 	} //}}}
