@@ -4890,7 +4890,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			invalidateScreenLineCounts = true;
 		}
 
-		if(invalidateScreenLineCounts && displayManager != null)
+		if(invalidateScreenLineCounts && displayManager != null
+			&& buffer.isLoaded())
 			displayManager.invalidateScreenLineCounts();
 
 		chunkCache.invalidateAll();
