@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Position;
 import org.gjt.sp.util.Log;
 
@@ -69,14 +68,7 @@ public class Marker
 
 	void createPosition()
 	{
-		try
-		{
-			position = buffer.createPosition(pos);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		position = buffer.createPosition(pos);
 	}
 
 	void removePosition()

@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
 import java.awt.Component;

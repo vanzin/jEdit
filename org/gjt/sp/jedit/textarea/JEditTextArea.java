@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.textarea;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
 import javax.swing.text.Utilities;
@@ -1037,40 +1036,23 @@ public class JEditTextArea extends JComponent
 	 * Returns the specified substring of the buffer.
 	 * @param start The start offset
 	 * @param len The length of the substring
-	 * @return The substring, or null if the offsets are invalid
+	 * @return The substring
 	 */
 	public final String getText(int start, int len)
 	{
-		try
-		{
-			return buffer.getText(start,len);
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-			return null;
-		}
+		return buffer.getText(start,len);
 	} //}}}
 
 	//{{{ getText() method
 	/**
 	 * Copies the specified substring of the buffer into a segment.
-	 * If the offsets are invalid, the segment will contain a null string.
 	 * @param start The start offset
 	 * @param len The length of the substring
 	 * @param segment The segment
 	 */
 	public final void getText(int start, int len, Segment segment)
 	{
-		try
-		{
-			buffer.getText(start,len,segment);
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-			segment.offset = segment.count = 0;
-		}
+		buffer.getText(start,len,segment);
 	} //}}}
 
 	//{{{ getLineText() method
@@ -1101,15 +1083,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public String getText()
 	{
-		try
-		{
-			return buffer.getText(0,buffer.getLength());
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
-			return null;
-		}
+		return buffer.getText(0,buffer.getLength());
 	} //}}}
 
 	//{{{ setText() method
@@ -1122,11 +1096,7 @@ public class JEditTextArea extends JComponent
 		{
 			buffer.beginCompoundEdit();
 			buffer.remove(0,buffer.getLength());
-			buffer.insertString(0,text,null);
-		}
-		catch(BadLocationException bl)
-		{
-			bl.printStackTrace();
+			buffer.insert(0,text);
 		}
 		finally
 		{
@@ -1720,8 +1690,8 @@ forward_scan:		do
 					if(currNewline == -1)
 						currNewline = selectedText.length();
 
-					buffer.insertString(rectStart,selectedText
-						.substring(lastNewline,currNewline),null);
+					buffer.insert(rectStart,selectedText
+						.substring(lastNewline,currNewline));
 
 					lastNewline = Math.min(selectedText.length(),
 						currNewline + 1);
@@ -1732,9 +1702,9 @@ forward_scan:		do
 				{
 					int offset = map.getElement(s.endLine)
 						.getEndOffset() - 1;
-					buffer.insertString(offset,"\n",null);
-					buffer.insertString(offset + 1,selectedText
-						.substring(currNewline + 1),null);
+					buffer.insert(offset,"\n");
+					buffer.insert(offset + 1,selectedText
+						.substring(currNewline + 1));
 				}
 			}
 			else
@@ -1742,14 +1712,9 @@ forward_scan:		do
 				buffer.remove(s.start,s.end - s.start);
 				if(selectedText != null && selectedText.length() != 0)
 				{
-					buffer.insertString(s.start,
-						selectedText,null);
+					buffer.insert(s.start,selectedText);
 				}
 			}
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
 		}
 		// No matter what happends... stops us from leaving buffer
 		// in a bad state
@@ -1780,14 +1745,7 @@ forward_scan:		do
 		if(selection.length == 0)
 		{
 			// for compatibility with older jEdit versions
-			try
-			{
-				buffer.insertString(caret,selectedText,null);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
+			buffer.insert(caret,selectedText);
 		}
 		else
 		{
@@ -2168,8 +2126,6 @@ forward_scan:		do
 
 		caret = newCaret;
 		caretLine = newCaretLine;
-
-		buffer.addUndoableEdit(new CaretUndo(caret));
 
 		if(focusedComponent == this)
 			scrollToCaret(doElectricScroll);
@@ -3011,19 +2967,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		int dot = caret - getLineStartOffset(caretLine);
 
-		try
+		int bracket = TextUtilities.findMatchingBracket(
+			buffer,caretLine,Math.max(0,dot - 1));
+		if(bracket != -1)
 		{
-			int bracket = TextUtilities.findMatchingBracket(
-				buffer,caretLine,Math.max(0,dot - 1));
-			if(bracket != -1)
-			{
-				setCaretPosition(bracket + 1);
-				return;
-			}
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
+			setCaretPosition(bracket + 1);
+			return;
 		}
 
 		getToolkit().beep();
@@ -3127,20 +3076,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				return;
 			}
 
-			try
+			if(ch == ' ')
 			{
-				if(ch == ' ')
-				{
-					if(doWordWrap(caretLine,true))
-						return;
-				}
-				else
-					doWordWrap(caretLine,false);
+				if(doWordWrap(caretLine,true))
+					return;
 			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
+			else
+				doWordWrap(caretLine,false);
 
 			try
 			{
@@ -3155,11 +3097,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 						buffer.remove(caret,1);
 				}
 
-				buffer.insertString(caret,str,null);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
+				buffer.insert(caret,str);
 			}
 			finally
 			{
@@ -3239,14 +3177,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				getToolkit().beep();
 				return;
 			}
-			try
-			{
-				buffer.remove(caret - 1,1);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
+
+			buffer.remove(caret - 1,1);
 		}
 	} //}}}
 
@@ -3289,15 +3221,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep);
 		}
 
-		try
-		{
-			buffer.remove(_caret + lineStart,
-				caret - (_caret + lineStart));
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(_caret + lineStart,
+			caret - (_caret + lineStart));
 	} //}}}
 
 	//{{{ delete() method
@@ -3322,14 +3247,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				getToolkit().beep();
 				return;
 			}
-			try
-			{
-				buffer.remove(caret,1);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
+
+			buffer.remove(caret,1);
 		}
 	} //}}}
 
@@ -3346,15 +3265,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		try
-		{
-			buffer.remove(caret,getLineEndOffset(caretLine)
-				- caret - 1);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(caret,getLineEndOffset(caretLine)
+			- caret - 1);
 	} //}}}
 
 	//{{{ deleteLine() method
@@ -3372,22 +3284,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		Element map = buffer.getDefaultRootElement();
 		Element lineElement = map.getElement(caretLine);
-		try
+		int start = lineElement.getStartOffset();
+		int end = lineElement.getEndOffset();
+		if(end > buffer.getLength())
 		{
-			int start = lineElement.getStartOffset();
-			int end = lineElement.getEndOffset();
-			if(end > buffer.getLength())
-			{
-				if(start != 0)
-					start--;
-				end--;
-			}
-			buffer.remove(start,end - start);
+			if(start != 0)
+				start--;
+			end--;
 		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(start,end - start);
 	} //}}}
 
 	//{{{ deleteParagraph() method
@@ -3451,14 +3356,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			break loop;
 		}
 
-		try
-		{
-			buffer.remove(start,end - start);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(start,end - start);
 	} //}}}
 
 	//{{{ deleteToStartOfLine() method
@@ -3477,15 +3375,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		Element map = buffer.getDefaultRootElement();
 		Element lineElement = map.getElement(caretLine);
 
-		try
-		{
-			buffer.remove(lineElement.getStartOffset(),
-				caret - lineElement.getStartOffset());
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(lineElement.getStartOffset(),
+			caret - lineElement.getStartOffset());
 	} //}}}
 
 	//{{{ deleteWord() method
@@ -3528,14 +3419,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 				_caret+1,noWordSep);
 		}
 
-		try
-		{
-			buffer.remove(caret,(_caret + lineStart) - caret);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(caret,(_caret + lineStart) - caret);
 	} //}}}
 
 	//{{{ isMultipleSelectionEnabled() method
@@ -3681,14 +3565,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			for(int i = 0; i < lines.length; i++)
 			{
 				String text = getLineText(lines[i]);
-				buffer.insertString(getLineStartOffset(lines[i])
+				buffer.insert(getLineStartOffset(lines[i])
 					+ MiscUtilities.getLeadingWhiteSpace(text),
-					comment,null);
+					comment);
 			}
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
 		}
 		finally
 		{
@@ -3727,10 +3607,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			if(selection.length == 0)
 			{
 				int oldCaret = caret;
-				buffer.insertString(caret,
-					commentStart,null);
-				buffer.insertString(caret,
-					commentEnd,null);
+				buffer.insert(caret,
+					commentStart);
+				buffer.insert(caret,
+					commentEnd);
 				setCaretPosition(oldCaret + commentStart.length());
 			}
 
@@ -3739,31 +3619,27 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 				Selection s = selection[i];
 				if(s instanceof Selection.Range)
 				{
-					buffer.insertString(s.start,
-						commentStart,null);
-					buffer.insertString(s.end,
-						commentEnd,null);
+					buffer.insert(s.start,
+						commentStart);
+					buffer.insert(s.end,
+						commentEnd);
 				}
 				else if(s instanceof Selection.Rect)
 				{
 					for(int j = s.startLine; j <= s.endLine; j++)
 					{
-						buffer.insertString(s.getStart(buffer,j),
-							commentStart,null);
+						buffer.insert(s.getStart(buffer,j),
+							commentStart);
 						int end = s.getEnd(buffer,j)
 							+ (j == s.endLine
 							? 0
 							: commentStart.length());
-						buffer.insertString(end,commentEnd,null);
+						buffer.insert(end,commentEnd);
 					}
 				}
 			}
 
 			selectNone();
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
 		}
 		finally
 		{
@@ -3857,12 +3733,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 				String text = buffer.getText(start,end - start);
 				buffer.remove(start,end - start);
-				buffer.insertString(start,TextUtilities.format(
-					text,maxLineLength),null);
-			}
-			catch(BadLocationException bl)
-			{
-				return;
+				buffer.insert(start,TextUtilities.format(
+					text,maxLineLength));
 			}
 			finally
 			{
@@ -4057,15 +3929,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		Element nextLineElement = map.getElement(caretLine + 1);
 		int nextStart = nextLineElement.getStartOffset();
 		int nextEnd = nextLineElement.getEndOffset();
-		try
-		{
-			buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
-				buffer.getText(nextStart,nextEnd - nextStart)) + 1);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
+			buffer.getText(nextStart,nextEnd - nextStart)) + 1);
 
 		setCaretPosition(end - 1);
 	} //}}}
@@ -4083,14 +3948,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			doWordCount(view,selection);
 			return;
 		}
-		try
-		{
-			doWordCount(view,buffer.getText(0,buffer.getLength()));
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+
+		doWordCount(view,buffer.getText(0,buffer.getLength()));
 	} //}}}
 
 	//{{{ completeWord() method
@@ -4703,7 +4562,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ doWordWrap() method
 	private boolean doWordWrap(int line, boolean spaceInserted)
-		throws BadLocationException
 	{
 		int maxLineLen = ((Integer)buffer.getProperty("maxLineLen"))
 			.intValue();
@@ -4792,7 +4650,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			try
 			{
 				buffer.beginCompoundEdit();
-				buffer.insertString(insertNewLineAt,"\n",null);
+				buffer.insert(insertNewLineAt,"\n");
 				buffer.indentLine(line + 1,true,true);
 			}
 			finally
@@ -4882,22 +4740,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		int beginLine = Math.min(line,physFirstLine);
 
-		try
+		int bracketOffset = TextUtilities.findMatchingBracket(
+			buffer,line,offset - 1,beginLine,endLine);
+		if(bracketOffset != -1)
 		{
-			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,line,offset - 1,beginLine,endLine);
-			if(bracketOffset != -1)
-			{
-				bracketLine = getLineOfOffset(bracketOffset);
-				bracketPosition = bracketOffset
-					- getLineStartOffset(bracketLine);
-				invalidateLine(bracketLine);
-				return;
-			}
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
+			bracketLine = getLineOfOffset(bracketOffset);
+			bracketPosition = bracketOffset
+				- getLineStartOffset(bracketLine);
+			invalidateLine(bracketLine);
+			return;
 		}
 
 		bracketLine = bracketPosition = -1;
@@ -5365,16 +5216,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				doSingleClick(evt);
 				break;
 			case 2:
-				// It uses the bracket matching stuff, so
-				// it can throw a BLE
-				try
-				{
-					doDoubleClick(evt);
-				}
-				catch(BadLocationException bl)
-				{
-					bl.printStackTrace();
-				}
+				doDoubleClick(evt);
 				break;
 			default: //case 3:
 				doTripleClick(evt);
@@ -5426,39 +5268,31 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		//{{{ doDoubleClick() method
 		private void doDoubleClick(MouseEvent evt)
-			throws BadLocationException
 		{
 			// Ignore empty lines
 			if(getLineLength(dragStartLine) == 0)
 				return;
 
-			try
-			{
-				int bracket = TextUtilities.findMatchingBracket(
-					buffer,dragStartLine,
-					Math.max(0,dragStartOffset - 1));
+			int bracket = TextUtilities.findMatchingBracket(
+				buffer,dragStartLine,
+				Math.max(0,dragStartOffset - 1));
 
-				if(bracket != -1)
+			if(bracket != -1)
+			{
+				// Hack
+				if(bracket < caret)
 				{
-					// Hack
-					if(bracket < caret)
-					{
-						addToSelection(new Selection.Range(
-							bracket,caret));
-					}
-					else
-					{
-						addToSelection(new Selection.Range(
-							caret - 1,++bracket));
-					}
-
-					moveCaretPosition(bracket,false);
-					return;
+					addToSelection(new Selection.Range(
+						bracket,caret));
 				}
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
+				else
+				{
+					addToSelection(new Selection.Range(
+						caret - 1,++bracket));
+				}
+
+				moveCaretPosition(bracket,false);
+				return;
 			}
 
 			// Ok, it's not a bracket... select the word
@@ -5604,69 +5438,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			resizeSelection(mark,mouse,rect);
 			moveCaretPosition(mouse,false);
-		} //}}}
-	} //}}}
-
-	//{{{ CaretUndo class
-	static class CaretUndo extends AbstractUndoableEdit
-	{
-		private int caret;
-
-		//{{{ CaretUndo constructor
-		CaretUndo(int caret)
-		{
-			this.caret = caret;
-		} //}}}
-
-		//{{{ isSignificant() method
-		public boolean isSignificant()
-		{
-			return false;
-		} //}}}
-
-		//{{{ getPresentationName() method
-		public String getPresentationName()
-		{
-			return "caret move";
-		} //}}}
-
-		//{{{ undo() method
-		public void undo() throws CannotUndoException
-		{
-			super.undo();
-
-			if(focusedComponent != null)
-			{
-				int length = focusedComponent
-					.getBuffer().getLength();
-				if(caret <= length)
-				{
-					focusedComponent.selectNone();
-					focusedComponent.setCaretPosition(caret);
-				}
-				else
-					Log.log(Log.WARNING,this,
-						caret + " > " + length + "??!!");
-			}
-		} //}}}
-
-		//{{{ addEdit() method
-		public boolean addEdit(UndoableEdit edit)
-		{
-			if(edit instanceof CaretUndo)
-			{
-				edit.die();
-
-				return true;
-			}
-			else
-				return false;
-		} //}}}
-
-		//{{{ toString() method
-		public String toString()
-		{
-			return getPresentationName() + "[caret=" + caret + "]";
 		} //}}}
 	} //}}}
 

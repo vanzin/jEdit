@@ -229,7 +229,7 @@ public abstract class VFS
 		 * a backup of the new path, even if the old path was
 		 * backed up as well (BACKED_UP property set) */
 		if(!path.equals(buffer.getPath()))
-			buffer.getDocumentProperties().remove(Buffer.BACKED_UP);
+			buffer.unsetProperty(Buffer.BACKED_UP);
 
 		VFSManager.runInWorkThread(new BufferIORequest(
 			BufferIORequest.SAVE,view,buffer,session,this,path));

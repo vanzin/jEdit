@@ -130,7 +130,8 @@ public class ReadWriteLock
 	//{{{ allowRead() method
 	private final boolean allowRead()
 	{
-		return waitingWriters == 0 && activeWriters == 0;
+		return (Thread.currentThread() == writerThread)
+			|| (waitingWriters == 0 && activeWriters == 0);
 	} //}}}
 
 	//{{{ allowWrite() method

@@ -27,7 +27,6 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.HistoryTextField;
@@ -177,10 +176,6 @@ public class SearchBar extends JPanel
 		{
 			if(SearchAndReplace.find(view,view.getBuffer(),start))
 				return true;
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
 		}
 		catch(Exception e)
 		{

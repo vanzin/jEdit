@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.*;
 import java.awt.event.*;
@@ -112,20 +111,13 @@ public class MarkersMenu extends EnhancedMenu
 			Element line = buffer.getDefaultRootElement()
 				.getElement(lineNo);
 
-			try
-			{
-				int start = line.getStartOffset();
-				String text = buffer.getText(start,
-					line.getEndOffset() - start - 1);
-				text = text.trim();
-				if(text.length() == 0)
-					text = jEdit.getProperty("markers.blank-line");
-				setText(lineNo + ": " + text);
-			}
-			catch(BadLocationException ble)
-			{
-				Log.log(Log.ERROR,this,ble);
-			}
+			int start = line.getStartOffset();
+			String text = buffer.getText(start,
+				line.getEndOffset() - start - 1);
+			text = text.trim();
+			if(text.length() == 0)
+				text = jEdit.getProperty("markers.blank-line");
+			setText(lineNo + ": " + text);
 
 			shortcutProp = "goto-marker.shortcut";
 			MarkersMenuItem.this.shortcut = shortcut;
