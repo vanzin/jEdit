@@ -7,6 +7,7 @@ JEDIT 4.0 VERSION HISTORY
 - Updated POV-Ray syntax highlighting (Jan Schäfer)
 - Hidden files are no longer listed in the 'Macros' menu
 - Minor improvements to RPM Spec syntax highlighting
+- Updated Python mode (Ollie Rutherfurd)
 
 + Bug Fixes
 
