@@ -1,6 +1,9 @@
 /*
  * FloatingWindowContainer.java - holds dockable windows
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,12 +22,13 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.border.*;
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * A container for dockable windows. This class should never be used
@@ -34,13 +38,15 @@ import org.gjt.sp.jedit.*;
  */
 public class FloatingWindowContainer extends JFrame implements DockableWindowContainer
 {
+	//{{{ FloatingWindowContainer constructor
 	public FloatingWindowContainer(DockableWindowManager dockableWindowManager)
 	{
 		this.dockableWindowManager = dockableWindowManager;
 		setIconImage(GUIUtilities.getPluginIcon());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-	}
+	} //}}}
 
+	//{{{ register() method
 	public void register(DockableWindowManager.Entry entry)
 	{
 		this.entry = entry;
@@ -51,22 +57,26 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		pack();
 		GUIUtilities.loadGeometry(this,entry.name);
 		show();
-	}
+	} //}}}
 
+	//{{{ add() method
 	public void add(DockableWindowManager.Entry entry)
 	{
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save(DockableWindowManager.Entry entry)
 	{
 		GUIUtilities.saveGeometry(this,entry.name);
-	}
+	} //}}}
 
+	//{{{ remove() method
 	public void remove(DockableWindowManager.Entry entry)
 	{
 		super.dispose();
-	}
+	} //}}}
 
+	//{{{ show() method
 	public void show(final DockableWindowManager.Entry entry)
 	{
 		toFront();
@@ -78,21 +88,30 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 				entry.win.requestDefaultFocus();
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ isVisible() method
 	public boolean isVisible(DockableWindowManager.Entry entry)
 	{
 		return true;
-	}
+	} //}}}
 
+	//{{{ dispose() method
 	public void dispose()
 	{
 		dockableWindowManager.removeDockableWindow(entry.name);
 		// eventually calls this.remove() which calls
 		// super.dispose().
-	}
+	} //}}}
 
-	// private members
+	//{{{ getMinimumSize() method
+	public Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	} //}}}
+
+	//{{{ Private members
 	private DockableWindowManager dockableWindowManager;
 	private DockableWindowManager.Entry entry;
+	//}}}
 }
