@@ -98,6 +98,32 @@ public class BrowserView extends JPanel
 		return true;
 	} //}}}
 
+	//{{{ addNotify() method
+	public void addNotify()
+	{
+		super.addNotify();
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				int loc = jEdit.getIntegerProperty(
+					"vfs.browser.splitter",0);
+				if(loc != 0)
+					splitPane.setDividerLocation(loc);
+			}
+		});
+	} //}}}
+
+	//{{{ removeNotify() method
+	public void removeNotify()
+	{
+		jEdit.setIntegerProperty("vfs.browser.splitter",
+			splitPane.getDividerLocation());
+
+		super.removeNotify();
+	} //}}}
+
 	//{{{ getSelectedFiles() method
 	public VFS.DirectoryEntry[] getSelectedFiles()
 	{
@@ -200,8 +226,14 @@ public class BrowserView extends JPanel
 		tree.repaint();
 	} //}}}
 
-	//{{{ reloadDirectory() method
-	public void reloadDirectory(String path)
+	//{{{ loadDirectory() method
+	public void loadDirectory(String path)
+	{
+		loadDirectory(rootNode,path,false);
+	} //}}}
+
+	//{{{ maybeReloadDirectory() method
+	public void maybeReloadDirectory(String path)
 	{
 		// because this method is called for *every* VFS update,
 		// we don't want to scan the tree all the time. So we
@@ -216,15 +248,15 @@ public class BrowserView extends JPanel
 		//   the local filesystem, do a tree scan
 		String browserDir = browser.getDirectory();
 		if(browserDir.startsWith(FavoritesVFS.PROTOCOL))
-			reloadDirectory(rootNode,path);
+			maybeReloadDirectory(rootNode,path);
 		else if(browserDir.startsWith(FileRootsVFS.PROTOCOL))
 		{
 			if(!MiscUtilities.isURL(path) || MiscUtilities.getProtocolOfURL(path)
 				.equals("file"))
-				reloadDirectory(rootNode,path);
+				maybeReloadDirectory(rootNode,path);
 		}
 		else if(path.startsWith(browserDir))
-			reloadDirectory(rootNode,path);
+			maybeReloadDirectory(rootNode,path);
 	} //}}}
 
 	//{{{ getDefaultFocusComponent() method
@@ -276,16 +308,16 @@ public class BrowserView extends JPanel
 		}
 	} //}}}
 
-	//{{{ reloadDirectory() method
-	private boolean reloadDirectory(DefaultMutableTreeNode node, String path)
+	//{{{ maybeReloadDirectory() method
+	private boolean maybeReloadDirectory(DefaultMutableTreeNode node, String path)
 	{
 		// nodes which are not expanded need not be checked
 		if(!tree.isExpanded(new TreePath(node.getPath())))
 			return false;
 
-		if(node == rootNode)
+		if(node == rootNode && path.equals(browser.getDirectory()))
 		{
-			loadDirectoryNode(rootNode,path,false);
+			loadDirectory(rootNode,path,false);
 			return true;
 		}
 
@@ -300,7 +332,7 @@ public class BrowserView extends JPanel
 
 			if(path.equals(file.path))
 			{
-				loadDirectoryNode(node,path,false);
+				loadDirectory(node,path,false);
 				return true;
 			}
 		}
@@ -312,7 +344,7 @@ public class BrowserView extends JPanel
 			{
 				DefaultMutableTreeNode child = (DefaultMutableTreeNode)
 					children.nextElement();
-				if(reloadDirectory(child,path))
+				if(maybeReloadDirectory(child,path))
 					return true;
 			}
 		}
@@ -320,14 +352,17 @@ public class BrowserView extends JPanel
 		return false;
 	} //}}}
 
-	//{{{ loadDirectoryNode() method
-	private void loadDirectoryNode(DefaultMutableTreeNode node, String path,
+	//{{{ loadDirectory() method
+	private void loadDirectory(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
 		currentlyLoadingTreeNode = node;
 
-		parentModel.removeAllElements();
-		parentModel.addElement(new LoadingPlaceholder());
+		if(node == rootNode)
+		{
+			parentModel.removeAllElements();
+			parentModel.addElement(new LoadingPlaceholder());
+		}
 
 		if(showLoading)
 		{
@@ -371,12 +406,12 @@ public class BrowserView extends JPanel
 	//{{{ ParentDirectoryRenderer class
 	class ParentDirectoryRenderer extends DefaultListCellRenderer
 	{
-		Font boldFont;
+		Font plainFont, boldFont;
 
 		ParentDirectoryRenderer()
 		{
-			Font font = UIManager.getFont("Label.font");
-			boldFont = new Font(font.getName(),Font.BOLD,font.getSize());
+			plainFont = UIManager.getFont("Tree.font");
+			boldFont = new Font(plainFont.getName(),Font.BOLD,plainFont.getSize());
 		}
 
 		public Component getListCellRendererComponent(
@@ -389,18 +424,20 @@ public class BrowserView extends JPanel
 			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
 
-			ParentDirectoryRenderer.this.setFont(boldFont);
-
 			ParentDirectoryRenderer.this.setBorder(new EmptyBorder(
 				0,index * 17 + 1,0,0));
 
 			if(value instanceof LoadingPlaceholder)
 			{
+				ParentDirectoryRenderer.this.setFont(plainFont);
+
 				setIcon(showIcons ? FileCellRenderer.loadingIcon : null);
 				setText(jEdit.getProperty("vfs.browser.tree.loading"));
 			}
 			else
 			{
+				ParentDirectoryRenderer.this.setFont(boldFont);
+
 				setIcon(showIcons ? FileCellRenderer.dirIcon : null);
 				setText(MiscUtilities.getFileName(value.toString()));
 			}
@@ -414,12 +451,19 @@ public class BrowserView extends JPanel
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
+			// ignore double clicks
+			if(evt.getClickCount() == 2)
+				return;
+
 			int row = parentDirectories.locationToIndex(evt.getPoint());
 			if(row != -1)
 			{
 				Object obj = parentModel.getElementAt(row);
 				if(obj instanceof String)
+				{
 					browser.setDirectory((String)obj);
+					requestDefaultFocus();
+				}
 			}
 		}
 	} //}}}
@@ -707,7 +751,7 @@ public class BrowserView extends JPanel
 			Object userObject = treeNode.getUserObject();
 			if(userObject instanceof VFS.DirectoryEntry)
 			{
-				loadDirectoryNode(treeNode,((VFS.DirectoryEntry)
+				loadDirectory(treeNode,((VFS.DirectoryEntry)
 					userObject).path,true);
 			}
 		} //}}}

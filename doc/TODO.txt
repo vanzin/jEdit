@@ -1,40 +1,15 @@
 TO DO
 
-- content manager corruption bug
-- check: backup dir path can contain ~. also, 'choose' button
-- colors opt pane broken
-- fs browser: after dir load, focus in b view
-- fs browser: only one level expanded. need drastic new algorithm.
-- C+e s broken
-- still fold at end expand bug
-- investigate nextLineRequested() -- replace with a buffer event.
-- investigate wrap around in macros
-- either fix recent files/recent directories/current dir icon issue, or
-  ditch icons
-
-- style setting for folding line indicator
-- search in directory: should use that file's extension
-- search in directory: should not be so slow
-- inefficencies: lots of File objects created for the sake of
-  isAbsolute().
-- check: pressing Enter on an open file
-- stylesheet: keycap inside keycombo
 - documentation to do
   - miscutils stuff vfs aware
   - shifting the indent changes
   - indent on tab enabled by default and behavior change
-  - fs browser usability tweaks
   - close-*-docking-area shortcuts
-  - mmb click in fs browser
-  - File->Recent Directories menu
   - being able to use ~ in path names
   - status bar in file dialogs
   - add index terms throughout user's guide!
   - changing heap memory docs
   - new folding
-  - global options changes: appearance pane, changing mental font,
-    styles option pane, fs browser option pane
-  - fs browser: colors
   - tip about compareStrings()
   - trailing EOL
   - 'evaluate for selected lines'
@@ -44,6 +19,22 @@ TO DO
   - smart case insens replace
   - API guide: compareStrings(), showPopupMenu()
   - write explicit folding tips
+- colors opt pane broken
+- C+e s broken
+- still fold at end expand bug
+- investigate nextLineRequested() -- replace with a buffer event.
+- investigate wrap around in macros
+- either fix recent files/recent directories/current dir icon issue, or
+  ditch icons
+- still collapseFolds behavior problems
+
+- loading and saving opt pane: 'choose' button for backup directory
+- style setting for folding line indicator
+- search in directory: should not be so slow
+- inefficencies: lots of File objects created for the sake of
+  isAbsolute().
+- check: pressing Enter on an open file
+- stylesheet: keycap inside keycombo
 - -noplugins command line switch
 - I/O errors and plugin load errors batched together in one dialog box
 - plugin error dialogs have 'Update Plugins' button
@@ -53,7 +44,6 @@ TO DO
 - next-fold/prev-fold actions
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
-
 - idea: position caret after [nnn lines] to insert stuff after a
   collapsed fold? anything other than newline: insert before [nnn lines].
   a newline: insert after last line of fold.
@@ -64,7 +54,7 @@ TO DO
   - double click on dockable panel to hide
   - CCW rotated text not drawn correctly
 - file system browser:
-  - try 'edit favorites'; list problems?
+  - fs browser: only one level expanded. need drastic new algorithm.
   - commands->copy path, copy file list, paste path
   - much better autocomplete
   - aliases

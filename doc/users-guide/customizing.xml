@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=2: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
  <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
@@ -165,7 +165,13 @@
   <para>
    The <guibutton>General</guibutton> option pane lets you change various
    miscellaneous settings, such as the number of recent files to remember,
-   the Swing look &amp; feel, and such.
+   if the buffer list should be sorted, and so on.
+  </para>
+  <bridgehead renderas="sect3">The Appearance Pane</bridgehead>
+  <para>
+   The <guibutton>Appearance</guibutton> option pane lets you change the
+   Swing look and feel, as well as the fonts used to display user interface
+   controls such as buttons, labels and menus.
   </para>
   <bridgehead renderas="sect3">The Loading and Saving Pane</bridgehead>
   <para>
@@ -282,10 +288,13 @@
    The <guibutton>Printing</guibutton> option pane lets you customize the
    appearance of printed output.
   </para>
-  <bridgehead renderas="sect3">The File System Browser Pane</bridgehead>
+  <bridgehead renderas="sect3">The File System Browser Panes</bridgehead>
   <para>
-   The <guibutton>File System Browser</guibutton> option pane lets you customize
-   jEdit's file system browser.
+   The <guibutton>File System Browser</guibutton> branch
+   contains two option panes, <guibutton>General</guibutton> and
+   <guibutton>Colors</guibutton>. Both of these option panes should be
+   self-explanatory. See <xref linkend="vfs-browser" />
+   for more information.
   </para>
  </sect1>
  <sect1 id="settings-directory"><title>The jEdit Settings Directory</title>
