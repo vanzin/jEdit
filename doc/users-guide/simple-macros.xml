@@ -265,7 +265,7 @@ org.gjt.sp.util</programlisting>
      <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public static String <function>confirm</function></funcdef>
+          <funcdef>public static int <function>confirm</function></funcdef>
           <paramdef>Component <parameter>comp</parameter></paramdef>
           <paramdef>String <parameter>prompt</parameter></paramdef>
           <paramdef>int <parameter>buttons</parameter></paramdef>
@@ -314,7 +314,8 @@ org.gjt.sp.util</programlisting>
    <constant>JOptionPane.OK_CANCEL_OPTION</constant>. The return
    value of the method is one of
    <constant>JOptionPane.YES_OPTION</constant>,
-   <constant>JOptionPane.NO_OPTION</constant> or
+   <constant>JOptionPane.NO_OPTION</constant>,
+   <constant>JOptionPane.OK_OPTION</constant> or
    <constant>JOptionPane.CANCEL_OPTION</constant>.
   </para>
 

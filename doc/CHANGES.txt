@@ -88,6 +88,8 @@ JEDIT 4.0 VERSION HISTORY
   not be unacceptably wide when 'Find' is invoked
 - Fixed broken soft wrap in syntax highlighted files
 - Made sure that all XML mode files now validate against the xmode.dtd
+- Print jobs would be named 'true' (or 'false' if you were lucky)
+- Fixed unprintable characters in the help table of contents
 
 * Version 4.0pre4
 

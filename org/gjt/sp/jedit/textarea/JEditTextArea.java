@@ -260,6 +260,8 @@ public class JEditTextArea extends JComponent
 
 			if(this.buffer != null)
 			{
+				setFirstLine(0);
+
 				selectNone();
 				caretLine = caret = 0;
 				bracketLine = bracketPosition = -1;
@@ -273,8 +275,6 @@ public class JEditTextArea extends JComponent
 			bufferHandlerInstalled = true;
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
-
-			maxHorizontalScrollWidth = 0;
 
 			chunkCache.setFirstLine(0);
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
