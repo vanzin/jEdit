@@ -33,9 +33,9 @@ import org.gjt.sp.util.Log;
 
 public class PluginManager extends JDialog
 {
-	public PluginManager(View view)
+	public PluginManager(Frame frame)
 	{
-		super(view,jEdit.getProperty("plugin-manager.title"),true);
+		super(frame,jEdit.getProperty("plugin-manager.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -110,7 +110,7 @@ public class PluginManager extends JDialog
 
 		pack();
 
-		setLocationRelativeTo(view);
+		setLocationRelativeTo(frame);
 
 		show();
 	}

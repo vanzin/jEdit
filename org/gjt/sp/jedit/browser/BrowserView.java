@@ -23,11 +23,13 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -47,6 +49,16 @@ public class BrowserView extends JPanel
 	{
 		this.browser = browser;
 
+		parentModel = new DefaultListModel();
+		parentDirectories = new JList(parentModel);
+
+		parentDirectories.getSelectionModel().setSelectionMode(
+			TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
+		parentDirectories.setVisibleRowCount(5);
+		parentDirectories.addMouseListener(new MouseHandler());
+
 		currentlyLoadingTreeNode = rootNode = new DefaultMutableTreeNode(null,true);
 		model = new DefaultTreeModel(rootNode,true);
 
@@ -57,6 +69,11 @@ public class BrowserView extends JPanel
 		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
+		tree.setVisibleRowCount(12);
+
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+			new JScrollPane(parentDirectories),new JScrollPane(tree));
+		splitPane.setBorder(null);
 
 		tmpExpanded = new Hashtable();
 
@@ -69,11 +86,16 @@ public class BrowserView extends JPanel
 
 		setLayout(new BorderLayout());
 
-		scroller = new JScrollPane(tree);
-		scroller.setPreferredSize(new Dimension(0,200));
-		add(BorderLayout.CENTER,scroller);
+		add(BorderLayout.CENTER,splitPane);
 
 		propertiesChanged();
+	} //}}}
+
+	//{{{ requestDefaultFocus() method
+	public boolean requestDefaultFocus()
+	{
+		tree.requestFocus();
+		return true;
 	} //}}}
 
 	//{{{ getSelectedFiles() method
@@ -105,8 +127,28 @@ public class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	public void directoryLoaded(Vector directory)
+	public void directoryLoaded(String path, Vector directory)
 	{
+		parentModel.removeAllElements();
+		String parent = path;
+		for(;;)
+		{
+			parentModel.insertElementAt(parent,0);
+			String newParent = MiscUtilities.getParentOfPath(parent);
+			if(newParent.length() != 1 && (newParent.endsWith("/")
+				|| newParent.endsWith(File.separator)))
+				newParent = newParent.substring(0,newParent.length() - 1);
+
+			if(newParent == null || parent.equals(newParent))
+				break;
+			else
+				parent = newParent;
+		}
+
+		int index = parentModel.getSize() - 1;
+		parentDirectories.setSelectedIndex(index);
+		parentDirectories.ensureIndexIsVisible(parentModel.getSize() - 1);
+
 		currentlyLoadingTreeNode.removeAllChildren();
 
 		Vector toExpand = new Vector();
@@ -134,8 +176,8 @@ public class BrowserView extends JPanel
 		// expand branches that were expanded before
 		for(int i = 0; i < toExpand.size(); i++)
 		{
-			TreePath path = (TreePath)toExpand.elementAt(i);
-			tree.expandPath(path);
+			TreePath treePath = (TreePath)toExpand.elementAt(i);
+			tree.expandPath(treePath);
 		}
 
 		/* If the user expands a tree node manually, the tree
@@ -207,17 +249,17 @@ public class BrowserView extends JPanel
 	//{{{ Instance variables
 	private VFSBrowser browser;
 
+	private JSplitPane splitPane;
+	private JList parentDirectories;
+	private DefaultListModel parentModel;
 	private JTree tree;
 	private Hashtable tmpExpanded;
-	private JScrollPane scroller;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
 	private BrowserCommandsMenu popup;
-	//}}}
-
-	//{{{ Used for tool tips
 	private boolean showIcons;
+
 	private FileCellRenderer renderer = new FileCellRenderer();
 
 	private StringBuffer typeSelectBuffer = new StringBuffer();
@@ -284,6 +326,9 @@ public class BrowserView extends JPanel
 	{
 		currentlyLoadingTreeNode = node;
 
+		parentModel.removeAllElements();
+		parentModel.addElement(new LoadingPlaceholder());
+
 		if(showLoading)
 		{
 			node.removeAllChildren();
@@ -320,6 +365,64 @@ public class BrowserView extends JPanel
 	} //}}}
 
 	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ ParentDirectoryRenderer class
+	class ParentDirectoryRenderer extends DefaultListCellRenderer
+	{
+		Font boldFont;
+
+		ParentDirectoryRenderer()
+		{
+			Font font = UIManager.getFont("Label.font");
+			boldFont = new Font(font.getName(),Font.BOLD,font.getSize());
+		}
+
+		public Component getListCellRendererComponent(
+			JList list,
+			Object value,
+			int index,
+			boolean isSelected,
+			boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list,value,index,
+				isSelected,cellHasFocus);
+
+			ParentDirectoryRenderer.this.setFont(boldFont);
+
+			ParentDirectoryRenderer.this.setBorder(new EmptyBorder(
+				0,index * 17 + 1,0,0));
+
+			if(value instanceof LoadingPlaceholder)
+			{
+				setIcon(showIcons ? FileCellRenderer.loadingIcon : null);
+				setText(jEdit.getProperty("vfs.browser.tree.loading"));
+			}
+			else
+			{
+				setIcon(showIcons ? FileCellRenderer.dirIcon : null);
+				setText(MiscUtilities.getFileName(value.toString()));
+			}
+
+			return this;
+		}
+	} //}}}
+
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			int row = parentDirectories.locationToIndex(evt.getPoint());
+			if(row != -1)
+			{
+				Object obj = parentModel.getElementAt(row);
+				if(obj instanceof String)
+					browser.setDirectory((String)obj);
+			}
+		}
+	} //}}}
 
 	//{{{ BrowserJTree class
 	class BrowserJTree extends JTree
@@ -627,5 +730,6 @@ public class BrowserView extends JPanel
 		} //}}}
 	} //}}}
 
-	class LoadingPlaceholder {}
+	static class LoadingPlaceholder {}
+	//}}}
 }

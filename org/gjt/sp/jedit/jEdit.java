@@ -1364,6 +1364,17 @@ public class jEdit
 	public static Buffer openFile(final View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
+		if(view != null && parent == null)
+			parent = MiscUtilities.getParentOfPath(view.getBuffer().getPath());
+
+		if(MiscUtilities.isURL(path))
+		{
+			if(MiscUtilities.getProtocolOfURL(path).equals("file"))
+				path = path.substring(5);
+		}
+
+		path = MiscUtilities.constructPath(parent,path);
+
 		Buffer buffer = getBuffer(path);
 		if(buffer != null)
 		{

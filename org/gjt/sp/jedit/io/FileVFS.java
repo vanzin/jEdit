@@ -68,7 +68,7 @@ public class FileVFS extends VFS
 		if(path.equals("/"))
 			return FileRootsVFS.PROTOCOL + ":";
 
-                return super.getParentOfPath(path);
+		return super.getParentOfPath(path);
 	} //}}}
 
 	//{{{ constructPath() method
