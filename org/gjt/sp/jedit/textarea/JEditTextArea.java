@@ -2904,7 +2904,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToStartOfLine(" + select + ");");
 
-		int newCaret = getLineStartOffset(getCaretLine());
+		Selection s = getSelectionAtOffset(caret);
+		int line = (s == null ? caretLine : s.startLine);
+		int newCaret = getLineStartOffset(line);
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -2924,7 +2926,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToEndOfLine(" + select + ");");
 
-		int newCaret = getLineEndOffset(getCaretLine()) - 1;
+		Selection s = getSelectionAtOffset(caret);
+		int line = (s == null ? caretLine : s.endLine);
+		int newCaret = getLineEndOffset(line) - 1;
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -2949,11 +2953,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
 
-		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(caretLine));
-		int firstOfLine = getLineStartOffset(caretLine);
+		Selection s = getSelectionAtOffset(caret);
+		int line = (s == null ? caretLine : s.startLine);
+
+		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
+		int firstOfLine = getLineStartOffset(line);
 
 		firstIndent = firstOfLine + firstIndent;
-		if(firstIndent == getLineEndOffset(caretLine) - 1)
+		if(firstIndent == getLineEndOffset(line) - 1)
 			firstIndent = firstOfLine;
 
 		if(select)
@@ -2976,11 +2983,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(recorder != null)
 			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
-		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(caretLine));
-		int lastOfLine = getLineEndOffset(caretLine) - 1;
+		Selection s = getSelectionAtOffset(caret);
+		int line = (s == null ? caretLine : s.endLine);
+
+		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
+		int lastOfLine = getLineEndOffset(line) - 1;
 
 		lastIndent = lastOfLine - lastIndent;
-		if(lastIndent == getLineStartOffset(caretLine))
+		if(lastIndent == getLineStartOffset(line))
 			lastIndent = lastOfLine;
 
 		if(select)
@@ -3016,6 +3026,38 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else if(!multi)
 			selectNone();
 		moveCaretPosition(firstVisible);
+	} //}}}
+
+	//{{{ goToBufferStart() method
+	/**
+	 * Moves the caret to the beginning of the buffer.
+	 * @since jEdit 4.0pre3
+	 */
+	public void goToBufferStart(boolean select)
+	{
+		int start = buffer.getLineStartOffset(
+			foldVisibilityManager.getFirstVisibleLine());
+		if(select)
+			extendSelection(caret,start);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(start);
+	} //}}}
+
+	//{{{ goToBufferEnd() method
+	/**
+	 * Moves the caret to the end of the buffer.
+	 * @since jEdit 4.0pre3
+	 */
+	public void goToBufferEnd(boolean select)
+	{
+		int end = buffer.getLineEndOffset(
+			foldVisibilityManager.getLastVisibleLine()) - 1;
+		if(select)
+			extendSelection(caret,end);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(end);
 	} //}}}
 
 	//{{{ goToLastVisibleLine() method
@@ -3317,7 +3359,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep);
+			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,true);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3522,7 +3564,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep);
+				_caret+1,noWordSep,true);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);
@@ -4202,9 +4244,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		String lineComment = buffer.getStringProperty("lineComment");
-		String commentStart = buffer.getStringProperty("commentStart");
-		String commentEnd = buffer.getStringProperty("commentEnd");
+		// BUG: if there are multiple selections in different
+		// contexts, the wrong comment strings will be inserted.
+		String lineComment = buffer.getContextSensitiveProperty(caret,"lineComment");
+		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
+		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
 
 		String start, end;
 		if(lineComment != null)

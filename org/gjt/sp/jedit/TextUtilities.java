@@ -246,7 +246,7 @@ public class TextUtilities
 	 * @param pos The position
 	 * @param noWordSep Characters that are non-alphanumeric, but
 	 * should be treated as word characters anyway
-	 * @param whiteSpace If true, any whitespace at the start of the
+	 * @param whiteSpace If true, any whitespace at the end of the
 	 * word is also included
 	 * @since jEdit 4.0pre3
 	 */
@@ -270,6 +270,7 @@ public class TextUtilities
 		//}}}
 
 		boolean seenWhiteSpace = false;
+		int whiteSpaceEnd = 0;
 loop:		for(int i = pos; i >= 0; i--)
 		{
 			ch = line.charAt(i);
@@ -287,6 +288,8 @@ loop:		for(int i = pos; i >= 0; i--)
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch) && whiteSpace)
 				{
+					if(!seenWhiteSpace)
+						whiteSpaceEnd = i + 1;
 					seenWhiteSpace = true;
 					break;
 				}
@@ -308,6 +311,8 @@ loop:		for(int i = pos; i >= 0; i--)
 				{
 					if(whiteSpace)
 					{
+						if(!seenWhiteSpace)
+							whiteSpaceEnd = i + 1;
 						seenWhiteSpace = true;
 						break;
 					}
@@ -328,7 +333,7 @@ loop:		for(int i = pos; i >= 0; i--)
 			}
 		}
 
-		return 0;
+		return whiteSpaceEnd;
 	} //}}}
 
 	//{{{ findWordEnd() method

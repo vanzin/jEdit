@@ -113,7 +113,7 @@ public class FileVFS extends VFS
 		if(!file.exists())
 		{
 			buffer.setNewFile(true);
-			return false;
+			return true;
 		}
 		else
 			buffer.setReadOnly(!file.canWrite());

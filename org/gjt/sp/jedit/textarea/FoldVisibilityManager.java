@@ -88,6 +88,58 @@ public class FoldVisibilityManager
 		}
 	} //}}}
 
+	//{{{ getFirstVisibleLine() method
+	/**
+	 * Returns the physical line number of the first visible line.
+	 * @since jEdit 4.0pre3
+	 */
+	public int getFirstVisibleLine()
+	{
+		try
+		{
+			buffer.readLock();
+
+			for(int i = 0; i < buffer.getLineCount(); i++)
+			{
+				if(isLineVisible(i))
+					return i;
+			}
+		}
+		finally
+		{
+			buffer.readUnlock();
+		}
+
+		// can't happen?
+		return -1;
+	} //}}}
+
+	//{{{ getLastVisibleLine() method
+	/**
+	 * Returns the physical line number of the last visible line.
+	 * @since jEdit 4.0pre3
+	 */
+	public int getLastVisibleLine()
+	{
+		try
+		{
+			buffer.readLock();
+
+			for(int i = buffer.getLineCount() - 1; i >= 0; i--)
+			{
+				if(isLineVisible(i))
+					return i;
+			}
+		}
+		finally
+		{
+			buffer.readUnlock();
+		}
+
+		// can't happen?
+		return -1;
+	} //}}}
+
 	//{{{ getNextVisibleLine() method
 	/**
 	 * Returns the next visible line after the specified line index.

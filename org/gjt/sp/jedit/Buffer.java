@@ -176,8 +176,6 @@ public class Buffer implements EBComponent
 		String header = path;
 		String footer = new Date().toString();
 
-		int lineCount = getDefaultRootElement().getElementCount();
-
 		TabExpander expander = null;
 
 		Graphics gfx = null;
@@ -201,7 +199,7 @@ public class Buffer implements EBComponent
 		int page = 0;
 
 		int lineNumberDigits = (int)Math.ceil(Math.log(
-			lineCount) / Math.log(10));
+			getLineCount()) / Math.log(10));
 
 		int lineNumberWidth = 0;
 
@@ -209,7 +207,7 @@ public class Buffer implements EBComponent
 
 		renderer.configure(false,false);
 
-		for(int i = 0; i < lineCount; i++)
+		for(int i = 0; i < getLineCount(); i++)
 		{
 			if(gfx == null)
 			{
@@ -270,7 +268,7 @@ public class Buffer implements EBComponent
 			if(printFooter)
 				bottomOfPage -= lineHeight * 2;
 
-			if(y >= bottomOfPage || i == lineCount - 1)
+			if(y >= bottomOfPage || i == getLineCount() - 1)
 			{
 				if(printFooter)
 				{
@@ -892,6 +890,8 @@ public class Buffer implements EBComponent
 	public final void setNewFile(boolean newFile)
 	{
 		setFlag(NEW_FILE,newFile);
+		if(!newFile)
+			setFlag(UNTITLED,false);
 	} //}}}
 
 	//{{{ isUntitled() method
@@ -1484,8 +1484,6 @@ public class Buffer implements EBComponent
 	 */
 	public void removeTrailingWhiteSpace(int[] lines)
 	{
-		Element map = getDefaultRootElement();
-
 		try
 		{
 			beginCompoundEdit();
@@ -1494,10 +1492,7 @@ public class Buffer implements EBComponent
 			{
 				int pos, lineStart, lineEnd, tail;
 
-				Element lineElement = map.getElement(lines[i]);
-				getText(lineElement.getStartOffset(),
-					lineElement.getEndOffset()
-					- lineElement.getStartOffset() - 1,seg);
+				getLineText(lines[i],seg);
 
 				// blank line
 				if (seg.count == 0) continue;
@@ -1516,7 +1511,7 @@ public class Buffer implements EBComponent
 				// no whitespace
 				if (tail == 0) continue;
 
-				remove(lineElement.getEndOffset() - 1 - tail,tail);
+				remove(getLineEndOffset(lines[i]) - 1 - tail,tail);
 			}
 		}
 		finally
@@ -1536,7 +1531,6 @@ public class Buffer implements EBComponent
 		int tabSize = getTabSize();
 		int indentSize = getIndentSize();
 		boolean noTabs = getBooleanProperty("noTabs");
-		Element map = getDefaultRootElement();
 
 		try
 		{
@@ -1544,10 +1538,8 @@ public class Buffer implements EBComponent
 
 			for(int i = 0; i < lines.length; i++)
 			{
-				Element lineElement = map.getElement(lines[i]);
-				int lineStart = lineElement.getStartOffset();
-				String line = getText(lineStart,
-					lineElement.getEndOffset() - lineStart - 1);
+				int lineStart = getLineStartOffset(lines[i]);
+				String line = getLineText(lines[i]);
 				int whiteSpace = MiscUtilities
 					.getLeadingWhiteSpace(line);
 				if(whiteSpace == 0)
@@ -1584,15 +1576,17 @@ public class Buffer implements EBComponent
 			int tabSize = getTabSize();
 			int indentSize = getIndentSize();
 			boolean noTabs = getBooleanProperty("noTabs");
-			Element map = getDefaultRootElement();
 			for(int i = 0; i < lines.length; i++)
 			{
-				Element lineElement = map.getElement(lines[i]);
-				int lineStart = lineElement.getStartOffset();
-				String line = getText(lineStart,
-					lineElement.getEndOffset() - lineStart - 1);
+				int lineStart = getLineStartOffset(lines[i]);
+				String line = getLineText(lines[i]);
 				int whiteSpace = MiscUtilities
 					.getLeadingWhiteSpace(line);
+
+				// silly usability hack
+				if(lines.length != 1 && whiteSpace == 0)
+					continue;
+
 				int whiteSpaceWidth = MiscUtilities
 					.getLeadingWhiteSpaceWidth(
 					line,tabSize) + indentSize;
@@ -2391,14 +2385,7 @@ public class Buffer implements EBComponent
 		float y = (float)_y;
 
 		if(lastTokenizedLine == lineIndex)
-		{
-			// have to do this 'manually'
-			Element lineElement = getDefaultRootElement()
-				.getElement(lineIndex);
-			int lineStart = lineElement.getStartOffset();
-			getText(lineStart,lineElement.getEndOffset()
-				- lineStart - 1,seg);
-		}
+			getLineText(lineIndex,seg);
 		else
 			markTokens(lineIndex);
 
@@ -2504,31 +2491,27 @@ public class Buffer implements EBComponent
 
 				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
 				ParserRule oldRule;
-				TokenMarker.LineContext oldParent;
+				ParserRuleSet oldRules;
 				if(context == null)
 				{
 					oldRule = null;
-					oldParent = null;
+					oldRules = null;
 				}
 				else
 				{
 					oldRule = context.inRule;
-					oldParent = context.parent;
+					oldRules = context.rules;
 				}
 
 				context = tokenMarker.markTokens(prevContext,tokenList,seg);
 				offsetMgr.setLineContext(i,context);
 
 				// Could incorrectly be set to 'false' with
-				// recursive delegates, where the chaning might
+				// recursive delegates, where the chaining might
 				// have changed but not the rule set in question (?)
 				if(oldRule != context.inRule)
 					nextLineRequested = true;
-				else if(oldParent == null && context.parent == null)
-					nextLineRequested = false;
-				else if(oldParent != null && context.parent != null)
-					nextLineRequested = (oldParent.rules != context.parent.rules);
-				else if(oldParent != null ^ context.parent != null)
+				else if(oldRules != context.rules)
 					nextLineRequested = true;
 				else if(i != lastTokenizedLine)
 					nextLineRequested = false;
@@ -2960,8 +2943,7 @@ public class Buffer implements EBComponent
 	 */
 	public void addOrRemoveMarker(char shortcut, int pos)
 	{
-		Element map = getDefaultRootElement();
-		int line = map.getElementIndex(pos);
+		int line = getLineOfOffset(pos);
 		if(getMarkerAtLine(line) != null)
 			removeMarker(line);
 		else
@@ -2983,8 +2965,7 @@ public class Buffer implements EBComponent
 		Marker markerN = new Marker(this,shortcut,pos);
 		boolean added = false;
 
-		Element map = getDefaultRootElement();
-		int line = map.getElementIndex(pos);
+		int line = getLineOfOffset(pos);
 
 		// don't sort markers while buffer is being loaded
 		if(!getFlag(LOADING))
@@ -2997,7 +2978,7 @@ public class Buffer implements EBComponent
 				if(shortcut != '\0' && marker.getShortcut() == shortcut)
 					marker.setShortcut('\0');
 
-				if(map.getElementIndex(marker.getPosition()) == line)
+				if(getLineOfOffset(marker.getPosition()) == line)
 				{
 					markers.removeElementAt(i);
 					i--;
@@ -3034,12 +3015,10 @@ public class Buffer implements EBComponent
 	 */
 	public Marker getMarkerAtLine(int line)
 	{
-		Element map = getDefaultRootElement();
-
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
-			if(map.getElementIndex(marker.getPosition()) == line)
+			if(getLineOfOffset(marker.getPosition()) == line)
 				return marker;
 		}
 
@@ -3054,12 +3033,10 @@ public class Buffer implements EBComponent
 	 */
 	public void removeMarker(int line)
 	{
-		Element map = getDefaultRootElement();
-
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
-			if(map.getElementIndex(marker.getPosition()) == line)
+			if(getLineOfOffset(marker.getPosition()) == line)
 			{
 				if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
 					setDirty(true);
@@ -3252,14 +3229,10 @@ public class Buffer implements EBComponent
 		 * exist on disk; only untitled ones.
 		 */
 		setFlag(UNTITLED,newFile);
-
-		if(file != null)
-			newFile |= !file.exists();
+		setFlag(NEW_FILE,newFile);
 
 		if(!temp)
 			EditBus.addToBus(Buffer.this);
-
-		setFlag(NEW_FILE,newFile);
 	} //}}}
 
 	//{{{ commitTemporary() method
@@ -3451,12 +3424,13 @@ public class Buffer implements EBComponent
 					String value = buf.toString();
 					try
 					{
-						putProperty(name,new Integer(value));
+						setProperty(name,new Integer(value));
 					}
 					catch(NumberFormatException nf)
 					{
-						putProperty(name,value);
+						setProperty(name,value);
 					}
+					name = null;
 				}
 				buf.setLength(0);
 				break;

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <chapter id="editing"><title>Editing Text</title>
  <sect1 id="caret"><title>Moving The Caret</title>
@@ -18,8 +18,7 @@
    When pressed once, the <keycap>Home</keycap> key moves the caret to the first
    non-whitespace character of the current line. Pressing it a second time
    moves the caret to the beginning of the line. Pressing it a third time
-   moves the caret to
-   the first visible line.
+   moves the caret to the first visible line.
   </para>
   <para>
    The <keycap>End</keycap> key behaves in a
@@ -27,9 +26,15 @@
    the line, and finally to the last visible line.
   </para>
   <para>
+   If there is a selection, <keycap>Home</keycap> and <keycap>End</keycap>
+   behave the same as above, except that instead of operating on the current
+   line, they move the caret to the first and last lines of the selection,
+   respectively.
+  </para>
+  <para>
    <keycombo><keycap>Control</keycap><keycap>Home</keycap></keycombo> and
    <keycombo><keycap>Control</keycap><keycap>End</keycap></keycombo> move the
-   caret to the beginning and end of the buffer, respectively.
+   caret to the beginning and end of the buffer.
   </para>
   <para>
    More advanced caret movement is covered in
@@ -906,6 +911,8 @@
     perform simple searches without
     opening the search and replace dialog box first. Neither multiple file
     search nor replacement can be done from the search bar.
+    The search bar remembers
+    previously entered strings; see <xref linkend="history" /> for details.
    </para>
    <para>
     Unless the <guibutton>HyperSearch</guibutton> check box is selected, the
@@ -921,26 +928,45 @@
    <para>
     If the <guibutton>HyperSearch</guibutton> check box is selected, entering a
     search string and pressing <keycap>Enter</keycap> will perform a
-    HyperSearch. When in HyperSearch mode, the search bar remembers
-    previously entered strings; see <xref linkend="history" /> for details.
+    HyperSearch.
    </para>
    <para>
-    The search bar can be accessed from the keyboard using the
-    <guimenu>Search</guimenu>&gt;<guimenuitem>Quick Incremental Search</guimenuitem>
+    <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo>)
-    and <guimenu>Search</guimenu>&gt;<guimenuitem>Quick HyoerSearch</guimenuitem>
+    moves keyboard focus to the search bar. If text is selected when this
+    command is invoked, the selection is inserted into the search bar
+    automatically.
+   </para>
+   <para>
+    <guimenu>Search</guimenu>&gt;<guimenuitem>Quick HyperSearch</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo>)
-    commands.
+    moves keyboard focus to the search bar and pre-selects the
+    <guibutton>HyperSearch</guibutton> check box. If text is selected when this
+    command is invoked, a HyperSearch for that text is performed immediately.
+   </para>
+   <para>
+    The
+    <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search
+    for Word</guimenuitem>
+    (shortcut: <keycombo><keycap>Alt</keycap><keycap>,</keycap></keycombo>)
+    and <guimenu>Search</guimenu>&gt;<guimenuitem>Quick HyperSearch
+    for Word</guimenuitem>
+    (shortcut: <keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo>)
+    commands perform an incremental search and HyperSearch, respectively,
+    for the word under the caret.
    </para>
    <para>
     The search bar can be disabled in the <guibutton>General</guibutton> pane of
     the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
     Options</guimenuitem> dialog box.
    </para>
-   <para>
-    Note that incremental searches cannot be not recorded in macros. Use the
-    search and replace dialog box instead.
-   </para>
+   <note>
+    <para>
+     Incremental searches cannot be not recorded in macros. Use the
+     search and replace dialog box instead. See <xref linkend="using-macros" />
+     for information about macros.
+    </para>
+   </note>
   </sect2>
  </sect1>
 </chapter>

@@ -24,6 +24,10 @@ JEDIT 4.0 VERSION HISTORY
     element to define ruleset-specific properties. Currently, only the
     'commentStart', 'commentEnd' and 'lineComment' properties can be
     ruleset-specific.
+- 'Search->Incremental Search for Word' command puts the word under the
+  caret in the search bar
+- 'Search->HyperSearch for Word' performs a HyperSearch for the word
+  under the caret
 
 + Enhancements
 
@@ -35,20 +39,27 @@ JEDIT 4.0 VERSION HISTORY
 - Added option to disable file system browser's tool bar
 - I/O errors are now batched into a single dialog box
 - New, smaller icons in file system browser (Dirk Moebius)
-- New window icon (Phillip Richdale)
+- New jEdit window icon (Phillip Richdale)
 - First item in File->Current Directory menu (the directory path itself)
-  is no longer disabled; you can select it to view the directory in the
-  file system browser
+  is no longer a grayed out label; you can invoke it to view the
+  directory in the file system browser
 - First item in 'Paste Previous' dialog pre-selected when dialog shown
 - Focus is returned to file list in 'Close All' dialog box after one of
   the buttons are clicked
 - Recent Directories menu, Browse System/User Macros commands, and other
   commands that open directories in the file system browser now work a
   little better
+- The list of open files is now saved by the autosave task
+- The 'Shift Indent Right' command now ignores blank lines
+- Smoother incremental search
+- When HOME is pressed while there is a selection, the caret is moved to
+  the beginning of the first selected line. END moves the caret to the
+  end of the last selected line.
 
 + Neutral
 
-- Syntax highlighting can no longer be disabled
+- Syntax highlighting can no longer be disabled -- too many features
+  (bracket matching, commenting commands) rely on syntax info now
 
 + Bug Fixes
 
@@ -82,6 +93,10 @@ JEDIT 4.0 VERSION HISTORY
   was inserted
 - Fixed another file system browser 'Search in Directory'
   NullPointerException
+- Buffer-local property parsing code was broken
+- Sometimes multi-line tokens would not be repainted correctly
+- Opening files whose path began with ~ (which was supposed to be
+  expanded to your home directory path) didn't work
 
 + API Changes
 

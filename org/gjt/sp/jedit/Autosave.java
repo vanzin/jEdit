@@ -61,6 +61,10 @@ class Autosave implements ActionListener
 
 	public void actionPerformed(ActionEvent evt)
 	{
+		// save list of open files
+		if(jEdit.getFirstView() != null)
+			jEdit.saveOpenFiles(jEdit.getFirstView());
+
 		Buffer[] bufferArray = jEdit.getBuffers();
 		for(int i = 0; i < bufferArray.length; i++)
 			bufferArray[i].autosave();

@@ -37,7 +37,7 @@ import org.gjt.sp.util.Log;
 public class SearchBar extends JPanel
 {
 	//{{{ SearchBar constructor
-	public SearchBar(View view)
+	public SearchBar(final View view)
 	{
 		super(new BorderLayout());
 
@@ -81,6 +81,27 @@ public class SearchBar extends JPanel
 		update();
 
 		add(buttons,BorderLayout.EAST);
+
+		//{{{ Create the timer used by incremental search
+		timer = new Timer(0,new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				if(!incrementalSearch(searchStart,searchReverse))
+				{
+					if(!incrementalSearch(
+						(searchReverse
+						? view.getBuffer().getLength()
+						: 0),searchReverse))
+					{
+						// not found at all.
+						view.getStatus().setMessageAndClear(
+							jEdit.getProperty(
+							"view.status.search-not-found"));
+					}
+				}
+			}
+		}); //}}}
 	} //}}}
 
 	//{{{ getField() method
@@ -106,13 +127,21 @@ public class SearchBar extends JPanel
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Instance variables
 	private View view;
 	private HistoryTextField find;
 	private JCheckBox ignoreCase, regexp, hyperSearch;
+	private Timer timer;
+	private int searchStart;
+	private boolean searchReverse;
+	//}}}
 
 	//{{{ find() method
 	private void find(boolean reverse)
 	{
+		timer.stop();
+
 		String text = find.getText();
 		//{{{ If nothing entered, show search and replace dialog box
 		if(text.length() == 0)
@@ -153,8 +182,10 @@ public class SearchBar extends JPanel
 					? view.getBuffer().getLength()
 					: 0,reverse))
 				{
-					// not found at all. beep.
-					getToolkit().beep();
+					// not found at all.
+					view.getStatus().setMessageAndClear(
+						jEdit.getProperty(
+						"view.status.search-not-found"));
 				}
 				else
 				{
@@ -199,6 +230,18 @@ public class SearchBar extends JPanel
 		}
 
 		return false;
+	} //}}}
+
+	//{{{ timerIncrementalSearch() method
+	private void timerIncrementalSearch(int start, boolean reverse)
+	{
+		this.searchStart = start;
+		this.searchReverse = reverse;
+
+		timer.stop();
+		timer.setRepeats(false);
+		timer.setInitialDelay(250);
+		timer.start();
 	} //}}}
 
 	//}}}
@@ -250,17 +293,10 @@ public class SearchBar extends JPanel
 					textArea.getCaretPosition());
 				if(s == null)
 					start = textArea.getCaretPosition();
-				else 
+				else
 					start = s.getStart();
 
-				if(!incrementalSearch(start,false))
-				{
-					if(!incrementalSearch(0,false))
-					{
-						// not found at all. beep.
-						getToolkit().beep();
-					}
-				}
+				timerIncrementalSearch(start,false);
 			}
 		} //}}}
 
@@ -282,7 +318,7 @@ public class SearchBar extends JPanel
 						// reverse regexp search
 						// not supported yet, so
 						// 'sumulate' with restart
-						incrementalSearch(0,false);
+						timerIncrementalSearch(0,false);
 					}
 					else
 					{
@@ -292,9 +328,9 @@ public class SearchBar extends JPanel
 							textArea.getCaretPosition());
 						if(s == null)
 							start = textArea.getCaretPosition();
-						else 
+						else
 							start = s.getStart();
-						incrementalSearch(start,true);
+						timerIncrementalSearch(start,true);
 					}
 				}
 			}

@@ -230,19 +230,13 @@
 
 <ACTION NAME="document-end">
 	<CODE>
-		if(textArea.isMultipleSelectionEnabled())
-			textArea.moveCaretPosition(buffer.getLength());
-		else
-			textArea.setCaretPosition(buffer.getLength());
+		textArea.goToBufferEnd(false);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="document-home">
 	<CODE>
-		if(textArea.isMultipleSelectionEnabled())
-			textArea.moveCaretPosition(0);
-		else
-			textArea.setCaretPosition(0);
+		textArea.goToBufferStart(false);
 	</CODE>
 </ACTION>
 
@@ -368,6 +362,13 @@
 
 <ACTION NAME="hypersearch" NO_RECORD="TRUE">
 	<CODE>
+		view.quickHyperSearch();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="hypersearch-word" NO_RECORD="TRUE">
+	<CODE>
+		textArea.selectWord();
 		view.quickHyperSearch();
 	</CODE>
 </ACTION>
@@ -610,6 +611,13 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="quick-search-word" NO_RECORD="TRUE">
+	<CODE>
+		textArea.selectWord();
+		view.quickIncrementalSearch();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="range-comment">
 	<CODE>
 		textArea.rangeComment();
@@ -781,13 +789,15 @@
 
 <ACTION NAME="search-in-open-buffers" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,null,SearchDialog.ALL_BUFFERS);
+		new SearchDialog(view,textArea.getSelectedText(),
+			SearchDialog.ALL_BUFFERS);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="search-in-directory" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,null,SearchDialog.DIRECTORY);
+		new SearchDialog(view,textArea.getSelectedText(),
+			SearchDialog.DIRECTORY);
 	</CODE>
 </ACTION>
 
@@ -847,15 +857,13 @@
 
 <ACTION NAME="select-document-end">
 	<CODE>
-		textArea.extendSelection(textArea.getCaretPosition(),buffer.getLength());
-		textArea.moveCaretPosition(buffer.getLength());
+		textArea.goToBufferEnd(true);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="select-document-home">
 	<CODE>
-		textArea.extendSelection(textArea.getCaretPosition(),0);
-		textArea.moveCaretPosition(0);
+		textArea.goToBufferStart(true);
 	</CODE>
 </ACTION>
 

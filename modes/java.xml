@@ -165,8 +165,8 @@
 		</SPAN>
 
 		<!-- Javadoc allows this -->
-		<SEQ TYPE="NULL">&lt;=</SEQ>
-		<SEQ TYPE="NULL">&lt; </SEQ>
+		<SEQ TYPE="COMMENT2">&lt;=</SEQ>
+		<SEQ TYPE="COMMENT2">&lt; </SEQ>
 
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">

@@ -1261,7 +1261,8 @@ public class jEdit
 		File session = new File(MiscUtilities.constructPath(
 			settingsDirectory,"session"));
 
-		backupSettingsFile(session);
+		// maybe not, since it's autosaved now
+		//backupSettingsFile(session);
 
 		try
 		{
@@ -1371,8 +1372,8 @@ public class jEdit
 
 	//{{{ openFile() method
 	/**
-	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
-	 * null if the buffer could not be opened.
+	 * Opens a file. This may return null if the buffer could not be
+	 * opened for some reason.
 	 * @param view The view to open the file in
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
@@ -1382,7 +1383,7 @@ public class jEdit
 	 *
 	 * @since jEdit 3.2pre10
 	 */
-	public static Buffer openFile(final View view, String parent,
+	public static Buffer openFile(View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
 		if(view != null && parent == null)
@@ -1395,6 +1396,9 @@ public class jEdit
 		}
 
 		path = MiscUtilities.constructPath(parent,path);
+
+		if(!MiscUtilities.isURL(path))
+			path = MiscUtilities.canonPath(path);
 
 		Buffer buffer = getBuffer(path);
 		if(buffer != null)
@@ -1428,7 +1432,7 @@ public class jEdit
 				props.put(Buffer.ENCODING,entry.encoding);
 		}
 
-		final Buffer newBuffer = new Buffer(view,path,newFile,false,props);
+		Buffer newBuffer = new Buffer(view,path,newFile,false,props);
 
 		if(!newBuffer.load(view,false))
 			return null;
@@ -2370,7 +2374,7 @@ public class jEdit
 
 			// give it an empty token marker to avoid problems
 			TokenMarker marker = new TokenMarker();
-			marker.addRuleSet("MAIN",new ParserRuleSet(mode));
+			marker.addRuleSet("MAIN",new ParserRuleSet("MAIN",mode));
 			mode.setTokenMarker(marker);
 		}
 	} //}}}
