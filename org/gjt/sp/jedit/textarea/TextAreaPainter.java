@@ -883,7 +883,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				Log.log(Log.DEBUG,this,"Not using monospaced font optimization: " + font);
 				Log.log(Log.DEBUG,this,"Minimum width = " + minWidth
-					+ ", maximum width = " + maxWidth);
+					+ ", maximum width = " + maxWidth
+					+ ", width 1 = " + width1
+					+ ", width 2 = " + width2);
 				returnValue = new Integer(0);
 			}
 

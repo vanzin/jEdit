@@ -6,7 +6,7 @@ Thanks to Thomas Alspaugh for contributing to this release.
 
 {{{ Miscellaneous Changes
 
-- Updated BibTeX syntax highlighting (Thomas Alspaugh).
+- Updated BibTeX and LaTeX syntax highlighting (Thomas Alspaugh).
 
 }}}
 {{{ Bug Fixes
