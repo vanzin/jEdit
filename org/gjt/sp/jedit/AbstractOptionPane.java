@@ -147,7 +147,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
 		cons.gridheight = 1;
-		cons.gridwidth = 1;
+		cons.gridwidth = 2;
 		cons.weightx = 0.0f;
 		cons.insets = new Insets(1,0,1,0);
 		cons.fill = GridBagConstraints.BOTH;
@@ -155,7 +155,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		gridBag.setConstraints(comp1,cons);
 		add(comp1);
 
-		cons.gridx = 1;
+		cons.gridx = 2;
 		cons.weightx = 1.0f;
 		gridBag.setConstraints(comp2,cons);
 		add(comp2);
