@@ -3400,8 +3400,16 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ userInput() method
 	/**
-	 * Handles the insertion of the specified character. Performs
-	 * auto indent, expands abbreviations, does word wrap, etc.
+	 * Handles the insertion of the specified character. It performs the
+	 * following operations above and beyond simply inserting the text:
+	 * <ul>
+	 * <li>Inserting a TAB with a selection will shift to the right
+	 * <li>Inserting a space with automatic abbrev expansion enabled will
+	 * try to expand the abbrev
+	 * <li>Inserting an indent open/close bracket will re-indent the current
+	 * line as necessary
+	 * </ul>
+	 *
 	 * @param ch The character
 	 * @see #setSelectedText(String)
 	 * @see #isOverwriteEnabled()
@@ -4749,8 +4757,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 			return;
 		}
-		buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
-			buffer.getLineText(caretLine + 1)) + 1);
+
+		try
+		{
+			buffer.beginCompoundEdit();
+
+			buffer.remove(
+				end - 1,MiscUtilities.getLeadingWhiteSpace(
+				buffer.getLineText(caretLine + 1)) + 1);
+			buffer.insert(end - 1, " ");
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
 
 		setCaretPosition(end - 1);
 	} //}}}

@@ -2,13 +2,18 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre14
 
-Thanks to Ollie Rutherfurd and Rob Watson for contributing to this
-release.
+Thanks to Ollie Rutherfurd, Paul Libbrecht and Rob Watson for
+contributing to this release.
 
-{{{ Platform-Specific Changes
+{{{ Miscellaneous Changes
 
 - jEditLauncher no longer included due to a large number of bugs, and
   the fact that it is unmaintained.
+
+- Join Lines (C+j) now inserts a space between joined lines.
+
+- Added some global abbreviations for inserting Greek letters and
+  various math symbols (Paul Libbrecht).
 
 }}}
 {{{ Syntax Highlighting
@@ -26,6 +31,9 @@ release.
 
 - "File Changed Since Save" warning on Reload now has the buffer name,
   to make it clear which buffer is being reloaded.
+
+- Abbreviations are now loaded/saved using the UTF8 encoding, making
+  them more friendly towards international characters.
 
 }}}
 
