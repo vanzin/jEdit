@@ -461,6 +461,11 @@ loop:			for(;;)
 				{
 					view.getStatus().setMessageAndClear(
 						jEdit.getProperty("view.status.auto-wrap"));
+					// beep if beep property set
+					if(jEdit.getBooleanProperty("search.beepOnSearchAutoWrap"))
+					{
+						view.getToolkit().beep();
+					}
 					restart = true;
 				}
 				else

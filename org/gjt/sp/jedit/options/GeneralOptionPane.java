@@ -94,6 +94,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"view.showSearchbar"));
 		addComponent(showSearchbar);
 
+		/* Beep on search auto wrap */
+		beepOnSearchAutoWrap = new JCheckBox(jEdit.getProperty(
+			"options.general.beepOnSearchAutoWrap"));
+		beepOnSearchAutoWrap.setSelected(jEdit.getBooleanProperty(
+			"search.beepOnSearchAutoWrap"));
+		addComponent(beepOnSearchAutoWrap);
+
 		/* Show buffer switcher */
 		showBufferSwitcher = new JCheckBox(jEdit.getProperty(
 			"options.general.showBufferSwitcher"));
@@ -130,6 +137,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
 			.isSelected());
 		jEdit.setBooleanProperty("view.showSearchbar",showSearchbar
+			.isSelected());
+		jEdit.setBooleanProperty("search.beepOnSearchAutoWrap",beepOnSearchAutoWrap
 			.isSelected());
 		jEdit.setBooleanProperty("view.showBufferSwitcher",
 			showBufferSwitcher.isSelected());
@@ -169,6 +178,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox checkModStatus;
 	private JCheckBox showFullPath;
 	private JCheckBox showSearchbar;
+  private JCheckBox beepOnSearchAutoWrap;
 	private JCheckBox showBufferSwitcher;
 	private JCheckBox showTips;
 	private JCheckBox showSplash;
