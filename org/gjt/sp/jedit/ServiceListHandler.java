@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
 class ServiceListHandler extends HandlerBase
 {
 	//{{{ ServiceListHandler constructor
-	ServiceListHandler(URL uri, EditPlugin.JAR plugin)
+	ServiceListHandler(URL uri, PluginJAR plugin)
 	{
 		this.uri = uri;
 		this.plugin = plugin;
@@ -149,7 +149,7 @@ class ServiceListHandler extends HandlerBase
 
 	//{{{ Instance variables
 	private URL uri;
-	private EditPlugin.JAR plugin;
+	private PluginJAR plugin;
 
 	private String serviceName;
 	private String serviceClass;

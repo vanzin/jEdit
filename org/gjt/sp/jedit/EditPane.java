@@ -321,6 +321,15 @@ public class EditPane extends JPanel implements EBComponent
 		return new Dimension(0,0);
 	} //}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		return getClass().getName() + "["
+			+ (view.getEditPane() == this
+			? "active" : "inactive")
+			+ "]";
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ EditPane constructor

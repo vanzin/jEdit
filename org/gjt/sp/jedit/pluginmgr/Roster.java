@@ -120,7 +120,7 @@ class Roster
 			progress.removing(MiscUtilities.getFileName(plugin));
 
 			// close JAR file
-			EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
+			PluginJAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
 				jar.closeZipFile();
 

@@ -34,23 +34,22 @@ import org.gjt.sp.jedit.gui.DockableWindowManager;
  */
 class ResourceCache
 {
-	//{{{ loadCache() method
-	static boolean loadCache()
+	//{{{ getPluginCache() method
+	static PluginCacheEntry getPluginCache(String jarPath)
 	{
-		return false;
+		return null;
 	} //}}}
 
-	//{{{ generateCache() method
-	static void generateCache()
+	//{{{ setPluginCache() method
+	static void setPluginCache(String jarPath, PluginCacheEntry cache)
 	{
-		
 	} //}}}
 
 	//{{{ PluginCacheEntry class
 	static class PluginCacheEntry
 	{
 		List properties;
-		Set classes;
+		List classes;
 
 		URL actionsURI;
 		String[] cachedActionNames;

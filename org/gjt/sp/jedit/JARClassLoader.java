@@ -3,9 +3,8 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
- * Portions copyright (C) 2002 Marco Hunsicker
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +24,13 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.io.*;
-import java.lang.reflect.Modifier;
-import java.net.*;
-import java.util.*;
-import java.util.jar.*;
-import java.util.zip.*;
-import org.gjt.sp.jedit.gui.DockableWindowManager;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -50,33 +49,6 @@ public class JARClassLoader extends ClassLoader
 	 */
 	public JARClassLoader()
 	{
-	} //}}}
-
-	//{{{ JARClassLoader constructor
-	public static long scanTime;
-	public static long startTime;
-
-	public JARClassLoader(String path)
-		throws IOException
-	{
-		long time = System.currentTimeMillis();
-
-		//definePackages();
-
-		//XXX: push this up
-		jar = new EditPlugin.JAR(path,this);
-		jEdit.addPluginJAR(jar);
-
-		//XXX: move these to ResourceCache eventually
-		ResourceCache.PluginCacheEntry e = jar.generateCache();
-		Iterator iter = e.classes.iterator();
-		while(iter.hasNext())
-		{
-			String clazz = (String)iter.next();
-			classHash.put(clazz,this);
-		}
-
-		scanTime += (System.currentTimeMillis() - time);
 	} //}}}
 
 	//{{{ loadClass() method
@@ -187,7 +159,7 @@ public class JARClassLoader extends ClassLoader
 
 	//{{{ getZipFile() method
 	/**
-	 * @deprecated Call <code>EditPlugin.JAR.getZipFile()</code> instead.
+	 * @deprecated Call <code>PluginJAR.getZipFile()</code> instead.
 	 */
 	public ZipFile getZipFile()
 	{
@@ -202,38 +174,40 @@ public class JARClassLoader extends ClassLoader
 		}
 	} //}}}
 
-	//{{{ startAllPlugins() method
-	void startAllPlugins()
+	//{{{ Package-private members
+
+	//{{{ JARClassLoader constructor
+	/**
+	 * @since jEdit 4.2pre1
+	 */
+	JARClassLoader(PluginJAR jar)
 	{
-		long time = System.currentTimeMillis();
-
-		boolean ok = true;
-
-		for(int i = 0; i < pluginClasses.size(); i++)
-		{
-			String name = (String)pluginClasses.get(i);
-			name = MiscUtilities.fileToClass(name);
-
-			try
-			{
-				ok &= loadPluginClass(name);
-			}
-			catch(Throwable t)
-			{
-				ok = false;
-
-				Log.log(Log.ERROR,this,"Error while starting plugin " + name);
-				Log.log(Log.ERROR,this,t);
-
-				jar.addPlugin(new EditPlugin.Broken(name));
-				String[] args = { t.toString() };
-				jEdit.pluginError(jar.getPath(),
-					"plugin-error.start-error",args);
-			}
-		}
-
-		startTime += (System.currentTimeMillis() - time);
+		this.jar = jar;
 	} //}}}
+
+	//{{{ activate() method
+	void activate()
+	{
+		Iterator iter = jar.getClasses().iterator();
+		while(iter.hasNext())
+		{
+			String clazz = (String)iter.next();
+			classHash.put(clazz,this);
+		}
+	} //}}}
+
+	//{{{ deactivate() method
+	void deactivate()
+	{
+		Iterator iter = jar.getClasses().iterator();
+		while(iter.hasNext())
+		{
+			String clazz = (String)iter.next();
+			classHash.remove(clazz);
+		}
+	} //}}}
+
+	//}}}
 
 	//{{{ Private members
 
@@ -242,199 +216,7 @@ public class JARClassLoader extends ClassLoader
 
 	private static Hashtable classHash = new Hashtable();
 
-	private EditPlugin.JAR jar;
-	/* private */ ArrayList pluginClasses = new ArrayList();
-
-	//{{{ loadPluginClass() method
-	private boolean loadPluginClass(String name)
-		throws Exception
-	{
-		// Check if a plugin with the same name is already loaded
-		EditPlugin[] plugins = jEdit.getPlugins();
-
-		for(int i = 0; i < plugins.length; i++)
-		{
-			if(plugins[i].getClass().getName().equals(name))
-			{
-				jEdit.pluginError(jar.getPath(),
-					"plugin-error.already-loaded",null);
-				return false;
-			}
-		}
-
-		/* This is a bit silly... but WheelMouse seems to be
-		 * unmaintained so the best solution is to add a hack here.
-		 */
-		if(name.equals("WheelMousePlugin")
-			&& OperatingSystem.hasJava14())
-		{
-			jar.addPlugin(new EditPlugin.Broken(name));
-			jEdit.pluginError(jar.getPath(),"plugin-error.obsolete",null);
-			return false;
-		}
-
-		// Check dependencies
-		if(!checkDependencies(name))
-		{
-			jar.addPlugin(new EditPlugin.Broken(name));
-			return false;
-		}
-
-		// JDK 1.1.8 throws a GPF when we do an isAssignableFrom()
-		// on an unresolved class
-		Class clazz = loadClass(name,true);
-		int modifiers = clazz.getModifiers();
-		if(!Modifier.isInterface(modifiers)
-			&& !Modifier.isAbstract(modifiers)
-			&& EditPlugin.class.isAssignableFrom(clazz))
-		{
-			String label = jEdit.getProperty("plugin."
-				+ name + ".name");
-			String version = jEdit.getProperty("plugin."
-				+ name + ".version");
-
-			if(version == null)
-			{
-				Log.log(Log.ERROR,this,"Plugin " +
-					name + " needs"
-					+ " 'name' and 'version' properties.");
-				jar.addPlugin(new EditPlugin.Broken(name));
-				return false;
-			}
-
-			jar.getActionSet().setLabel(jEdit.getProperty(
-				"action-set.plugin",
-				new String[] { label }));
-			Log.log(Log.NOTICE,this,"Starting plugin " + label
-				+ " (version " + version + ")");
-
-			jar.addPlugin((EditPlugin)clazz.newInstance());
-			return true;
-		}
-		else
-		{
-			// not a real plugin class
-			return true;
-		}
-	} //}}}
-
-	//{{{ checkDependencies() method
-	private boolean checkDependencies(String name)
-	{
-		int i = 0;
-
-		boolean ok = true;
-
-		String dep;
-		while((dep = jEdit.getProperty("plugin." + name + ".depend." + i++)) != null)
-		{
-			int index = dep.indexOf(' ');
-			if(index == -1)
-			{
-				Log.log(Log.ERROR,this,name + " has an invalid"
-					+ " dependency: " + dep);
-				return false;
-			}
-
-			String what = dep.substring(0,index);
-			String arg = dep.substring(index + 1);
-
-			if(what.equals("jdk"))
-			{
-				if(MiscUtilities.compareStrings(
-					System.getProperty("java.version"),
-					arg,false) < 0)
-				{
-					String[] args = { arg,
-						System.getProperty("java.version") };
-					jEdit.pluginError(jar.getPath(),"plugin-error.dep-jdk",args);
-					ok = false;
-				}
-			}
-			else if(what.equals("jedit"))
-			{
-				if(arg.length() != 11)
-				{
-					Log.log(Log.ERROR,this,"Invalid jEdit version"
-						+ " number: " + arg);
-					ok = false;
-				}
-
-				if(MiscUtilities.compareStrings(
-					jEdit.getBuild(),arg,false) < 0)
-				{
-					String needs = MiscUtilities.buildToVersion(arg);
-					String[] args = { needs,
-						jEdit.getVersion() };
-					jEdit.pluginError(jar.getPath(),
-						"plugin-error.dep-jedit",args);
-					ok = false;
-				}
-			}
-			else if(what.equals("plugin"))
-			{
-				int index2 = arg.indexOf(' ');
-				if(index2 == -1)
-				{
-					Log.log(Log.ERROR,this,name 
-						+ " has an invalid dependency: "
-						+ dep + " (version is missing)");
-					return false;
-				}
-				
-				String plugin = arg.substring(0,index2);
-				String needVersion = arg.substring(index2 + 1);
-				String currVersion = jEdit.getProperty("plugin." 
-					+ plugin + ".version");
-
-				if(currVersion == null)
-				{
-					String[] args = { needVersion, plugin };
-					jEdit.pluginError(jar.getPath(),
-						"plugin-error.dep-plugin.no-version",
-						args);
-					ok = false;
-				}
-				else if(MiscUtilities.compareStrings(currVersion,
-					needVersion,false) < 0)
-				{
-					String[] args = { needVersion, plugin, currVersion };
-					jEdit.pluginError(jar.getPath(),
-						"plugin-error.dep-plugin",args);
-					ok = false;
-				}
-				else if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
-				{
-					String[] args = { plugin };
-					jEdit.pluginError(jar.getPath(),
-						"plugin-error.dep-plugin.broken",args);
-					ok = false;
-				}
-			}
-			else if(what.equals("class"))
-			{
-				try
-				{
-					loadClass(arg,false);
-				}
-				catch(Exception e)
-				{
-					String[] args = { arg };
-					jEdit.pluginError(jar.getPath(),
-						"plugin-error.dep-class",args);
-					ok = false;
-				}
-			}
-			else
-			{
-				Log.log(Log.ERROR,this,name + " has unknown"
-					+ " dependency: " + dep);
-				return false;
-			}
-		}
-
-		return ok;
-	} //}}}
+	private PluginJAR jar;
 
 	//{{{ _loadClass() method
 	/**
@@ -494,141 +276,6 @@ public class JARClassLoader extends ClassLoader
 			throw new ClassNotFoundException(clazz);
 		}
 	} //}}}
-
-	//{{{ definePackages() method
-	/**
-	 * Defines all packages found in the given Java archive file. The
-	 * attributes contained in the specified Manifest will be used to obtain
-	 * package version and sealing information.
-	 */
-	/* private void definePackages()
-	{
-		try
-		{
-			Manifest manifest = zipFile.getManifest();
-
-			if(manifest != null)
-			{
-				Map entries = manifest.getEntries();
-				Iterator i = entries.keySet().iterator();
-
-				while(i.hasNext())
-				{
-					String path = (String)i.next();
-
-					if(!path.endsWith(".class"))
-					{
-						String name = path.replace('/', '.');
-
-						if(name.endsWith("."))
-							name = name.substring(0, name.length() - 1);
-
-						// code url not implemented
-						definePackage(path,name,manifest,null);
-					}
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			// should never happen, not severe anyway
-			Log.log(Log.ERROR, this,"Error extracting manifest info "
-				+ "for file " + zipFile);
-			Log.log(Log.ERROR, this, ex);
-		}
-	} */ //}}}
-
-	//{{{ definePackage() method
-	/**
-	 * Defines a new package by name in this ClassLoader. The attributes
-	 * contained in the specified Manifest will be used to obtain package
-	 * version and sealing information. For sealed packages, the additional
-	 * URL specifies the code source URL from which the package was loaded.
-	 */
-	/* private Package definePackage(String path, String name, Manifest man,
-		URL url) throws IllegalArgumentException
-	{
-		String specTitle = null;
-		String specVersion = null;
-		String specVendor = null;
-		String implTitle = null;
-		String implVersion = null;
-		String implVendor = null;
-		String sealed = null;
-		URL sealBase = null;
-
-		Attributes attr = man.getAttributes(path);
-
-		if(attr != null)
-		{
-			specTitle = attr.getValue(
-				Attributes.Name.SPECIFICATION_TITLE);
-			specVersion = attr.getValue(
-				Attributes.Name.SPECIFICATION_VERSION);
-			specVendor = attr.getValue(
-				Attributes.Name.SPECIFICATION_VENDOR);
-			implTitle = attr.getValue(
-				Attributes.Name.IMPLEMENTATION_TITLE);
-			implVersion = attr.getValue(
-				Attributes.Name.IMPLEMENTATION_VERSION);
-			implVendor = attr.getValue(
-				Attributes.Name.IMPLEMENTATION_VENDOR);
-			sealed = attr.getValue(Attributes.Name.SEALED);
-		}
-
-		attr = man.getMainAttributes();
-
-		if (attr != null)
-		{
-			if (specTitle == null)
-			{
-				specTitle = attr.getValue(
-					Attributes.Name.SPECIFICATION_TITLE);
-			}
-
-			if (specVersion == null)
-			{
-				specVersion = attr.getValue(
-					Attributes.Name.SPECIFICATION_VERSION);
-			}
-
-			if (specVendor == null)
-			{
-				specVendor = attr.getValue(
-					Attributes.Name.SPECIFICATION_VENDOR);
-			}
-
-			if (implTitle == null)
-			{
-				implTitle = attr.getValue(
-					Attributes.Name.IMPLEMENTATION_TITLE);
-			}
-
-			if (implVersion == null)
-			{
-				implVersion = attr.getValue(
-					Attributes.Name.IMPLEMENTATION_VERSION);
-			}
-
-			if (implVendor == null)
-			{
-				implVendor = attr.getValue(
-					Attributes.Name.IMPLEMENTATION_VENDOR);
-			}
-
-			if (sealed == null)
-			{
-				sealed = attr.getValue(Attributes.Name.SEALED);
-			}
-		}
-
-		//if("true".equalsIgnoreCase(sealed))
-		//	sealBase = url;
-
-		return super.definePackage(name, specTitle, specVersion, specVendor,
-			implTitle, implVersion, implVendor,
-			sealBase);
-	} */ //}}}
 
 	//}}}
 }

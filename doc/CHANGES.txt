@@ -383,6 +383,13 @@ release.
 
   addKeyBinding(String keyBinding, String action);
 
+- These two methods are now final and must be specified using
+  "<name>.label" and "<name>.toggle" properties (use
+  jEdit.setTemporaryProperty() for dynamic actions):
+
+  EditAction.getLabel()
+  EditAction.isToggle()
+
 - The following plugins are known to be broken:
 
   Background
@@ -391,6 +398,7 @@ release.
   JDiff
   WhiteSpace
   SideKick
+  Templates
   Vimulator
   XML
 

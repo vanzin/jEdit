@@ -414,7 +414,7 @@ public class ManagePanel extends JPanel
 					Entry entry = pluginModel.getEntry(table.getSelectedRow());
 					String label = entry.clazz;
 					String docs = entry.docs;
-					EditPlugin.JAR jar = jEdit.getPlugin(label).getJAR();
+					PluginJAR jar = jEdit.getPlugin(label).getJAR();
 					if(jar != null && label != null && docs != null)
 					{
 						URL url = jar.getClassLoader()

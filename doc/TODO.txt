@@ -6,8 +6,6 @@ and quirks that I need to fix eventually.
 - can do perl q|...| etc. using begin/end substitution!
 - means of overriding escape to fix C# @"..." issue
 - perl: q{}, etc.
-
-- already loaded check needs to go somewhere
 - 
 - got a multiple i/o requests thing once
 - browser: /, ~, -

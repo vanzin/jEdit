@@ -1094,6 +1094,15 @@ public class View extends JFrame implements EBComponent
 		this.waitSocket = waitSocket;
 	} //}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		return getClass().getName() + "["
+			+ (jEdit.getActiveView() == this
+			? "active" : "inactive")
+			+ "]";
+	} //}}}
+
 	//{{{ Package-private members
 	View prev;
 	View next;

@@ -140,7 +140,7 @@ class PluginList
 		{
 			// check if the plugin is already installed.
 			// this is a bit of hack
-			EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+			PluginJAR[] jars = jEdit.getPluginJARs();
 			for(int i = 0; i < jars.length; i++)
 			{
 				String path = jars[i].getPath();
@@ -151,11 +151,11 @@ class PluginList
 				{
 					installed = path;
 	
-					EditPlugin[] plugins = jars[i].getPlugins();
-					if(plugins.length >= 1)
+					EditPlugin plugin = jars[i].getPlugin();
+					if(plugin != null)
 					{
 						installedVersion = jEdit.getProperty(
-							"plugin." + plugins[0].getClassName()
+							"plugin." + plugin.getClassName()
 							+ ".version");
 					}
 					break;
