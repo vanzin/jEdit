@@ -294,6 +294,9 @@
 <MODE NAME="text"		FILE="text.xml"
 				FILE_NAME_GLOB="*.txt" />
 
+<MODE NAME="tpl"		FILE="tpl.xml"
+				FILE_NAME_GLOB="*.tpl" />
+
 <MODE NAME="transact-sql"	FILE="tsql.xml"
 				FILE_NAME_GLOB="*.sql" />
 

@@ -38,6 +38,12 @@
    (keyboard shortcut: <keycombo><keycap>Alt</keycap><keycap>`</keycap></keycombo>)
    has the same effect as clicking on the buffer switcher combo box.
   </para>
+  <sidebar><title>Plugins</title>
+   <para>
+    Plugins are available to implement various alternative buffer switching interfaces. Check out <application>BufferList</application>,
+    <application>BufferSelector</application>, <application>BufferTabs</application>, and <application>SwitchBuffer</application>.
+   </para>
+  </sidebar>
   <sect2><title>Memory Usage</title>
    <para>
     The maximum number of open buffers depends on available <firstterm>Java
@@ -87,7 +93,7 @@
   <para>
    A <firstterm>view</firstterm> is the jEdit term for an editor window.
    It is possible to have multiple views open at once, and each view can
-   be split into multiple panes.
+   be split into multiple panes. jEdit remembers the state of open views between editing sessions.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem> creates a new view.
@@ -148,7 +154,8 @@
    mouse-based access to frequently-used commands.
    The contents of the tool bar and right-click menu can be
    changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box; see <xref linkend="global-opts" />.
+   Options</guimenuitem> dialog box; see <xref linkend="context-pane" />
+   and <xref linkend="toolbar-pane"/>.
   </para>
   <sect2 id="docking"><title>Window Docking</title>
    <para>
@@ -157,8 +164,7 @@
     have a popup button in their top-left corner. Clicking this button displays a menu with commands for docking the window in one of four sides of the view.
    </para>
    <para>
-    Strips of buttons are shown on each side of the text area where windows are docked. Each strip contains
-    buttons for the windows docked in that location, as well as a close box and a popup button. Clicking the popup button shows a menu for moving the currently active dockable to another location, or for undocking it from the view. If no dockable is active, clicking the popup button shows a list of windows docked in that location.
+    On each side of the text area where there are docked windows, a strip of buttons is shown. There is a button for activating each docked window, as well as a close box and a popup menu button, which when clicked shows a menu for moving or undocking the currently selected window. The popup menu also contains a command for opening a new floating instance of the current window.
    </para>
    <para>
     The commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
@@ -227,21 +233,25 @@
     <listitem><para>A set of
     flags which indicate various editor features and settings. Clicking each
     flag will toggle the feature in question; hovering the mouse over a flag
-    will show a tool tip with an explanation:</para></listitem>
+    will show a tool tip with an explanation:</para>
+    <itemizedlist>
     <listitem><para>Word wrap - see <xref linkend="word-wrap" />.</para></listitem>
-    <listitem><para>Multiple selection mode - see <xref linkend="multi-select" />.</para></listitem>
+    <listitem><para>Multiple selection - see <xref linkend="multi-select" />.</para></listitem>
+    <listitem><para>Rectangular selection - see <xref linkend="rect-select" />.</para></listitem>
     <listitem><para>Overwrite mode - see <xref linkend="entering-text" />.</para></listitem>
     <listitem><para>Line separator - see <xref linkend="line-separators" />.</para></listitem>
     <listitem><para>A Java heap memory usage indicator, that shows used and
     total heap memory, in megabytes. Double-clicking this indicator opens the
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Memory Status</guimenuitem>
     dialog box.</para></listitem>
+    </itemizedlist>
+    </listitem>
    </itemizedlist>
    <para>
-    The content of the status bar can be customized in the
+    The visibility of each of the above items can be controlled in the
     <guibutton>Status Bar</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="status-bar-pane"/>.
    </para>
    <sidebar><title>For power users</title>
     <para>
@@ -285,7 +295,7 @@
    the  <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes
    of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   dialog box; see <xref linkend="text-area-pane" /> and <xref linkend="gutter-pane" />.
   </para>
  </sect1>
  <sect1 id="action-bar"><title>The Action Bar</title>
@@ -293,18 +303,52 @@
    The action bar allows almost any editor feature to be accessed from the keyboard.
   </para>
   <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Action Bar</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Enter</keycap></keycombo>) displays the action bar at the bottom of the view and gives it keyboard focus.
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Action Bar</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Enter</keycap></keycombo>) displays the action bar at the bottom of the view and gives it keyboard focus. The action bar remembers previously entered strings; see <xref linkend="history" /> for details.
   </para>
   <para>
    To use the action bar, input a command and press <keycap>Enter</keycap>.
    The following commands are supported:
   </para>
   <itemizedlist>
-   <listitem><para>
-   To repeat a command multiple times, press
-   <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>, enter the
-   desired repeat count, then invoke the command to repeat (either using a
-   keyboard shortcut, or by selecting it from the menu bar). For example,
+   <listitem><formalpara><title>Action invocations</title>
+   <para>
+    Each menu item and tool bar button is bound to an <firstterm>action</firstterm>. To find out the name of an action, invoke the menu item or click the tool bar button, and look in the action bar's history.
+   </para>
+   <para>
+    If a substring or an action name is entered, pressing <keycap>Tab</keycap> shows a popup listing matching actions. An action can be selected using the
+    <keycap>Up</keycap> and <keycap>Down</keycap> arrow keys, or by entering more characters of its name.
+   </para>
+   <para>
+    Pressing <keycap>Enter</keycap> with an incomplete substring invokes the action that would be first in the completion popup's list.
+   </para>
+   <para>
+    For example, entering <userinput>l-o</userinput> will most likely match <userinput>global-options</userinput>, which has the same effect as invoking <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>.
+   </para>
+   </formalpara>
+   </listitem>
+   <listitem>
+   <formalpara><title>Buffer-local properties</title>
+   <para>
+    Entering <userinput>buffer.<replaceable>property</replaceable>=<replaceable>value</replaceable> sets the value of the buffer-local property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
+    </userinput>
+    Buffer-local properties are documented in <xref linkend="buffer-local"/>.
+   </para>
+   <para>
+    For example, entering <userinput>buffer.tabSize=4</userinput> changes the current buffer's tab size to 4.
+   </para>
+   </formalpara>
+   </listitem>
+   <listitem><formalpara><title>Global properties</title>
+   <para>
+    Entering <userinput><replaceable>property</replaceable>=<replaceable>value</replaceable> sets the value of the global property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
+    </userinput> This feature is primarily intended to help plugin develpers, since the properties jEdit uses to store its settings are not currently documented.
+   </para>
+   </formalpara>
+   </listitem>
+   <listitem>
+   <formalpara><title>Command repetition</title>
+   <para>
+   To repeat a command multiple times, enter a number in the action bar, then invoke the command. For example,
    <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
    <keycap>1</keycap> <keycap>4</keycap>
    <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></quote> will delete
@@ -317,7 +361,8 @@
    If you specify a repeat count greater than 20, a confirmation dialog box will
    be displayed, asking if you really want to perform the action. This prevents
    you from hanging jEdit by executing a command too many times.
-  </para></listitem>
+  </para>
+  </formalpara></listitem>
  </itemizedlist>
  </sect1>
 </chapter>

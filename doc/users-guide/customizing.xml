@@ -138,7 +138,7 @@
    panes, and information about them can be found in the documentation
    for the plugins in question.
   </para>
-  <sect2><title>The Abbreviations Pane</title>
+  <sect2 id="abbrevs-pane"><title>The Abbreviations Pane</title>
   <para>
    The <guibutton>Abbreviations</guibutton> option pane can be used to enable or
    disable automatic abbreviation expansion, and to edit currently defined
@@ -165,22 +165,26 @@
    See <xref linkend="positional-params" /> for information about positional
    parameters in abbreviations.
   </para>
-  </sect2><sect2><title>The Appearance Pane</title>
+  </sect2><sect2 id="appearance-pane"><title>The Appearance Pane</title>
   <para>
    The <guibutton>Appearance</guibutton> pane can be used to change the
    appearance of user interface controls such as buttons, labels and menus.
   </para>
-  </sect2><sect2><title>The Context Menu Pane</title>
+  <para>
+   Note that changes to certain settings such as the Swing look and feel require a restart of jEdit to take effect.
+  </para>
+  </sect2><sect2 id="autosave-backups-pane"><title>The Autosave and Backups Pane</title>
+  <para>
+   The <guibutton>Autosave</guibutton> option pane contains settings for the autosave and backup features. See <xref linkend="autosave" /> and
+   <xref linkend="backups"/>.
+  </para>
+  </sect2><sect2 id="context-pane"><title>The Context Menu Pane</title>
   <para>
    The <guibutton>Context Menu</guibutton> option pane edits the text
    area's right-click context menu.
   </para>
-  </sect2><sect2><title>The Docking Pane</title>
-  <para>
-   The <guibutton>Docking</guibutton> option pane specifies which
-   dockable windows should be floating, and which should be docked in the view.
-  </para>
-  </sect2><sect2><title>The Editing Pane</title>
+  </sect2>
+  <sect2 id="editing-pane"><title>The Editing Pane</title>
   <para>
    The <guibutton>Editing</guibutton> option pane contains settings such
    as the tab size, syntax highlighting and soft tabs on a global or
@@ -199,35 +203,33 @@
    in mode files. To find out how to edit mode files directly, see
    <xref linkend="writing-modes-part" />.
   </para>
-  </sect2><sect2><title>The General Pane</title>
+  </sect2><sect2 id="general-pane"><title>The General Pane</title>
   <para>
    The <guibutton>General</guibutton> pane contains various
-   miscellaneous settings, such as the number of recent files to remember,
+   miscellaneous settings, such as the default line separator and file encoding, the number of recent files to remember,
    if the buffer list should be sorted, and so on.
   </para>
-  </sect2><sect2><title>The Gutter Pane</title>
+  </sect2><sect2 id="gutter-pane"><title>The Gutter Pane</title>
   <para>
    The <guibutton>Gutter</guibutton> option pane contains settings to
    customize the appearance of the gutter.
   </para>
-  </sect2><sect2><title>The Loading and Saving Pane</title>
-  <para>
-   The <guibutton>Loading and Saving</guibutton> option pane contains settings
-   such as the autosave frequency, backup settings, file encoding,
-   and so on.
-  </para>
-  </sect2><sect2><title>The Printing Pane</title>
+  </sect2><sect2 id="printing-pane"><title>The Printing Pane</title>
   <para>
    The <guibutton>Printing</guibutton> option pane contains settings to
-   control the appearance of printed output.
+   control the appearance of printed output. Workarounds that might be needed for your Java version to print correctly can also be enabled here. See <xref linkend="printing"/>.
   </para>
-  </sect2><sect2><title>The Proxy Servers Pane</title>
+  </sect2><sect2 id="plugin-mgr-pane"><title>The Plugin Manager Pane</title>
+  <para>
+   The <guibutton>Plugin Manager</guibutton> pane XXX
+  </para>
+  </sect2><sect2 id="firewall-pane"><title>The Proxy Servers Pane</title>
   <para>
    The <guibutton>Proxy Servers</guibutton> option pane lets you specify HTTP
    and SOCKS proxy servers to use when jEdit makes network connections (for
    example, when the plugin manager downloads plugins).
   </para>
-  </sect2><sect2><title>The Shortcuts Pane</title>
+  </sect2><sect2 id="shortcuts-pane"><title>The Shortcuts Pane</title>
   <para>
    The <guibutton>Shortcuts</guibutton> option pane associates keyboard shortcuts with commands. Each command can have up to two shortcuts
    associated with it.
@@ -241,27 +243,27 @@
    keys you want associated with that command in the resulting dialog box.
    The dialog box will warn you if the shortcut is already assigned.
   </para>
-  </sect2><sect2><title>The Status Bar Pane</title>
+  </sect2><sect2 id="status-bar-pane"><title>The Status Bar Pane</title>
   <para>
    The <guibutton>Status Bar</guibutton> option pane contains settings to customize the
    status bar, or disable it completely.
   </para>
-  </sect2><sect2><title>The Syntax Highlighting Pane</title>
+  </sect2><sect2 id="syntax-hilite-pane"><title>The Syntax Highlighting Pane</title>
   <para>
    The <guibutton>Syntax Highlighting</guibutton> pane can be used to
    customize the fonts and colors for syntax highlighting.
   </para>
-  </sect2><sect2><title>The Text Area Pane</title>
+  </sect2><sect2 id="text-area-pane"><title>The Text Area Pane</title>
   <para>
    The <guibutton>Text Area</guibutton> pane contains settings to customize
    the appearance of the text area.
   </para>
-  </sect2><sect2><title>The Tool Bar Pane</title>
+  </sect2><sect2 id="toolbar-pane"><title>The Tool Bar Pane</title>
   <para>
    The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
    or disable it completely.
   </para>
-  </sect2><sect2><title>The File System Browser Panes</title>
+  </sect2><sect2 id="vfs-browser-pane"><title>The File System Browser Panes</title>
   <para>
    The <guibutton>File System Browser</guibutton> group
    contains two option panes, <guibutton>General</guibutton> and
