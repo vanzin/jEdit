@@ -56,13 +56,13 @@ class BufferPrintable implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
-		if(end)
-			return NO_SUCH_PAGE;
-
 		if(pageIndex == currentPage)
 			currentLine = currentPageStart;
 		else
 		{
+			if(end)
+				return NO_SUCH_PAGE;
+
 			currentPageStart = currentLine;
 			currentPage = pageIndex;
 		}
@@ -169,7 +169,8 @@ print_loop:	for(;;)
 					(float)(pageWidth - lineNumberWidth));
 			}
 
-			if(currentPhysicalLine == buffer.getLineCount())
+			if(currentPhysicalLine == buffer.getLineCount()
+				&& currentLine == lineList.size())
 			{
 				end = true;
 				break print_loop;

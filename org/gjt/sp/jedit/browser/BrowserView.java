@@ -91,6 +91,8 @@ public class BrowserView extends JPanel
 
 		add(BorderLayout.CENTER,splitPane);
 
+		currentlyLoading = new Hashtable();
+
 		propertiesChanged();
 	} //}}}
 
@@ -163,6 +165,11 @@ public class BrowserView extends JPanel
 	//{{{ directoryLoaded() method
 	public void directoryLoaded(String path, Vector directory)
 	{
+		DefaultMutableTreeNode currentlyLoadingTreeNode
+			= (DefaultMutableTreeNode)currentlyLoading.get(path);
+
+		currentlyLoading.remove(path);
+
 		if(currentlyLoadingTreeNode == rootNode)
 		{
 			parentModel.removeAllElements();
@@ -204,8 +211,6 @@ public class BrowserView extends JPanel
 			}
 		}
 
-		tmpExpanded.clear();
-
 		// fire events
 		model.reload(currentlyLoadingTreeNode);
 		tree.expandPath(new TreePath(currentlyLoadingTreeNode.getPath()));
@@ -230,6 +235,8 @@ public class BrowserView extends JPanel
 	//{{{ loadDirectory() method
 	public void loadDirectory(String path)
 	{
+		// called by VFSBrowser.setDirectory()
+		tmpExpanded.clear();
 		loadDirectory(rootNode,path,false);
 	} //}}}
 
@@ -291,7 +298,7 @@ public class BrowserView extends JPanel
 	private Hashtable tmpExpanded;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
-	private DefaultMutableTreeNode currentlyLoadingTreeNode;
+	private Hashtable currentlyLoading;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
 
@@ -349,7 +356,7 @@ public class BrowserView extends JPanel
 	private void loadDirectory(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
-		currentlyLoadingTreeNode = node;
+		currentlyLoading.put(path,node);
 
 		if(node == rootNode)
 		{
@@ -361,10 +368,9 @@ public class BrowserView extends JPanel
 		{
 			node.removeAllChildren();
 			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
-			model.reload(currentlyLoadingTreeNode);
+			model.reload(node);
 		}
 
-		tmpExpanded.clear();
 		int rowCount = tree.getRowCount();
 		for(int i = 0; i < rowCount; i++)
 		{

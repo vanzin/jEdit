@@ -2,22 +2,15 @@ TO DO
 
 short term plan:
 
+before soft wrap, must fix all the document bugs:
+
 - narrow: insert line after first fucked
-- soft tabs bugs
-- maybe fix GUIUtilities.java to store maximisation state
-- 1-page files don't print
-- print should not use so much memory
-- narrow/collapse fold/expand fold: exceptions
-- horizontal scrolling is fucked
 - when loading a file with collapsedFolds property, last line always
   visible
 - nextLineRequested still fucked
-- background color for tokens
-- idea to make things go faster: token marker splits on ' ', '\t'
-  then lineToChunkList() has much less work to do, and could even be
-  eliminated completely.
 
-+ bugs:
+- print should not use so much memory
+- background color for tokens
 
 - DoS in edit server
 - idea for fixing buffer property issues: BufferProp class
@@ -34,23 +27,22 @@ short term plan:
 - keyboard navigation of current directory, recent dirs, etc broken
 - keystrokes stop working all of a sudden
 - JDK 1.3 focus bugs
-- fs browser: can get stuck in 'loading' if several requests started
-  - to fix, implement multiple simultaneously loading directories, and
-    better preservation of expansion state
 - allegedly redo doesn't redo everything?
-- changing folding mode using buffer-local props: doesn't take effect on
-  save (?) -- removing doesn't work, but setting to none works
 - dwm: not always focused correctly
 - still collapseFolds behavior problems
 - stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-
+- maybe fix GUIUtilities.java to store maximisation state
+- idea to make things go faster: token marker splits on ' ', '\t'
+  then lineToChunkList() has much less work to do, and could even be
+  eliminated completely.
+- ensure that the commenting out of _isLineVisible() in expand fold
+  won't stuff anything up.
 - text area painter:
   - use line metrics
   - use float co-ordinates
   - cache chunk lists
-- document changed handling of compressed files
 - soft wrap
 - finish 'troubleshooting' menu:
   - about cmd

@@ -43,9 +43,12 @@
   </para>
   <tip>
    <para>
-    jEdit supports transparent editing of GZipped files; files with
-    the <filename>.gz</filename> extension are automatically decompressed before
-    loading, and compressed when saving.
+    jEdit supports transparent editing of GZipped files; if a file begins with
+    the GZip <quote>magic number</quote>, it is automaticlaly decompressed
+    before loading, and compressed when saving. To compress an existing file,
+    you need to change a setting in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box; see <xref linkend="buffer-opts"/> for details.
    </para>
   </tip>
  </sect1>

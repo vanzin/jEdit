@@ -572,7 +572,8 @@ public class FoldVisibilityManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
-					if(buffer._isLineVisible(i,index) && buffer.getFoldLevel(i) <= initialFoldLevel)
+					if(/* buffer._isLineVisible(i,index) && */
+						buffer.getFoldLevel(i) <= initialFoldLevel)
 					{
 						end = i - 1;
 						break;
@@ -602,7 +603,8 @@ public class FoldVisibilityManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
-					if(buffer._isLineVisible(i,index) && buffer.getFoldLevel(i) < initialFoldLevel)
+					if(/* buffer._isLineVisible(i,index) && */
+						buffer.getFoldLevel(i) < initialFoldLevel)
 					{
 						end = i - 1;
 						break;
@@ -614,6 +616,11 @@ public class FoldVisibilityManager
 
 			// we need a different value of initialFoldLevel here!
 			initialFoldLevel = buffer.getFoldLevel(start);
+
+			for(int i = start; i <= end; i++)
+			{
+				buffer.getFoldLevel(i);
+			}
 
 			for(int i = start; i <= end; i++)
 			{
