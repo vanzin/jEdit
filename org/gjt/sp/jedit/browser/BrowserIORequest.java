@@ -153,14 +153,13 @@ public class BrowserIORequest extends WorkRequest
 		String[] args = { path1 };
 		setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
 
-		String canonPath = null;
+		String canonPath = path1;
 
 		try
 		{
 			setAbortable(true);
 
 			canonPath = vfs._canonPath(session,path1,browser);
-
 			directory = vfs._listDirectory(session,canonPath,browser);
 		}
 		catch(IOException io)
