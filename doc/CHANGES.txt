@@ -177,6 +177,10 @@ release.
   two buffers both pointing to the same file on disk is still not
   allowed.
 
+- If buffers have changed on disk, instead of asking for each one, they
+  are all listed in a single dialog box. Also, if the buffer is not
+  dirty, it is reloaded automatically.
+
 }}}
 {{{ Command Line
 
@@ -345,5 +349,8 @@ release.
 
 }}}
 
+}}}
+
 jEdit buffer local properties:
-:wrap=hard:folding=explicit:maxLineLen=72:indentSize=2:
+:wrap=hard:maxLineLen=72:indentSize=2:
+:folding=explicit:collapseFolds=2:

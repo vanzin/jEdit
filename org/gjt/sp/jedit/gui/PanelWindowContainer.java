@@ -851,7 +851,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 				}
 
 				Insets insets = border.getBorderInsets(DockablePanel.this);
-				int cursor = Cursor.DEFAULT_CURSOR;
 				canDrag = false;
 				//{{{ Top...
 				if(position.equals(DockableWindowManager.TOP))
@@ -882,6 +881,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 				{
 					wm.setCursor(Cursor.getPredefinedCursor(
 						getAppropriateCursor()));
+				}
+				else
+				{
+					wm.setCursor(Cursor.getPredefinedCursor(
+						Cursor.DEFAULT_CURSOR));
 				}
 			} //}}}
 

@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- wm drag: sometimes cursor gets stuck, need to check for resizePos out
+of bounds, etc.
 - log viewer scrolling
 - magic up/down is broken with select
 - closing lots of files is slow
@@ -10,7 +12,6 @@ and quirks that I need to fix eventually.
 - propertiesChanged() closes dockables
 - left-bias rects broken with up/down
 - loaded flag cleared before loading finished
-- inserting lines repaints twice
 - vfs browser: re-add option to base filter on filename extension
 - today:
   - finish rect select content inserted/content removed
@@ -189,12 +190,11 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + features:
 
+- caret saving needs to be more flexible w.r.t. split panes
 - close current area w/ dockables that don't implement
   requestDefaultFocus()
 - add dockable window state change msg
 - range-comment & rect select
-- support rect start in virtual space too
-- first focus: show all files that were modified on disk, in a list
 - options for recent files list, recent files menu
 - autosave recent file list?
 - hypersearch refresh
@@ -231,6 +231,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - scroll/physUp/Down() simpler
 - optimize for no syntax & no soft wrap case:
   - markTokens() immediately returns
+- inserting lines repaints whole text area
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
