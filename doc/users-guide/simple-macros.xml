@@ -1,4 +1,4 @@
-<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene -->
+<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
@@ -9,7 +9,7 @@
 <!-- which introduces BeanShell through a "Hello world" script. -->
 <!-- It provides a little background on Java syntax and         -->
 <!-- class structure.  A few simple methods and macros are also -->
-<!-- discussed.                                                 -->
+<!-- discussed, as well as one-time macro execution features    -->
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
 
@@ -110,7 +110,7 @@
    subclass of Java's <classname>JFrame</classname> class.
    With jEdit, you can create and display multiple views simultaneously.
    The variable <varname>view</varname> is predefined for purposes of
-   BeanShell as the current, active <classname>View</classname> object.
+   BeanShell scripts as the current, active <classname>View</classname> object.
    This is in fact the variable you want to specify as the first parameter.
    Normally you would not want to associate a message box with anything
    other than the current <classname>View</classname>.
@@ -172,7 +172,7 @@
   <para>
     Java requires <literal>import</literal> statement at the beginning of a
     source file. BeanShell allows you to place <literal>import</literal>
-    statements anywhere in a script, including inside of block of
+    statements anywhere in a script, including inside a block of
     statements. The <literal>import</literal> statement will cover all names
     used following the statement in the enclosing block.
   </para>
@@ -197,6 +197,7 @@ javax.swing
 javax.swing.event
 org.gjt.sp.jedit
 org.gjt.sp.jedit.browser
+org.gjt.sp.jedit.buffer
 org.gjt.sp.jedit.gui
 org.gjt.sp.jedit.io
 org.gjt.sp.jedit.msg
@@ -302,21 +303,8 @@ org.gjt.sp.util</programlisting>
    is pressed, a <classname>String</classname> containing the contents of
    the text field is returned. Note that there are two forms of the
    <function>input()</function> method; the first form with two parameters
-   displays an empty input field, the other lets you specify an initial
-   default value.
-  </para>
-
-  <para>
-   The <function>confirm()</function> method is the trickiest. The
-   <varname>buttons</varname> parameter should either be
-   <constant>JOptionPane.YES_NO_OPTION</constant>,
-   <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>, or
-   <constant>JOptionPane.OK_CANCEL_OPTION</constant>. The return
-   value of the method is one of
-   <constant>JOptionPane.YES_OPTION</constant>,
-   <constant>JOptionPane.NO_OPTION</constant>,
-   <constant>JOptionPane.OK_OPTION</constant> or
-   <constant>JOptionPane.CANCEL_OPTION</constant>.
+   displays an empty input field, the other forms lets you specify an initial,
+   default input value.
   </para>
 
   <para>
@@ -335,6 +323,24 @@ org.gjt.sp.util</programlisting>
   </para>
 
   <para>
+   The <function>confirm()</function> method in the
+   <classname>Macros</classname> class is a ;ittle more complex. The
+   <varname>buttons</varname> parameter has an <type>int</type>
+   type, and the usual way to supply a value is to use one of
+   the predefined values taken from Java's
+   <classname>JOptionPane</classname> class. You can choose among
+   <constant>JOptionPane.YES_NO_OPTION</constant>,
+   <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>, or
+   <constant>JOptionPane.OK_CANCEL_OPTION</constant>. The return
+   value of the method is also an <type>int</type>, and should be tested
+   against the value of other predefined constants:
+   <constant>JOptionPane.YES_OPTION</constant>,
+   <constant>JOptionPane.NO_OPTION</constant>,
+   <constant>JOptionPane.OK_OPTION</constant> or
+   <constant>JOptionPane.CANCEL_OPTION</constant>.
+  </para>
+
+  <para>
    We've looked at using <function>Macros.message()</function>. To
    use the other methods, you would write something like the
    following:
@@ -346,20 +352,25 @@ org.gjt.sp.util</programlisting>
 
 String result = Macros.input(view, "Type something here.");
 
-String result = Macros.input(view, "What is your name?",
-    "John Gellene");</programlisting>
+String result = Macros.input(view, "When were you born?",
+    "I don't remember, I was very young at the time");
+
+int result = Macros.confirm("Do you really want to learn about BeanShell?",
+    JOptionPane.YES_NO_OPTION);
+    </programlisting>
   </informalexample>
 
   <para>
-    In the last two examples, placing the word <classname>String</classname>
+    In the last three examples, placing the word <classname>String</classname>
+    or <type>int</type>
     before the variable name <varname>result</varname> tells BeanShell that
-    the variable refers to a <classname>String</classname> object, even
-    before a particular <classname>String</classname> object is assigned to
-    it. In BeanShell, this <glossterm>declaration</glossterm> of the
+    the variable refers to an integer or a <classname>String</classname> object, even
+    before a particular value is assigned to the variable.
+    In BeanShell, this <glossterm>declaration</glossterm> of the
     <glossterm>type</glossterm> of <varname>result</varname> is not
     necessary; BeanShell can figure it out when the macro runs. This can be
-    helpful if you are not comfortable with types and classes; just use your
-    variables and let BeanShell worry about it.
+    helpful if you are not comfortable with specifying types and classes;
+    just use your variables and let BeanShell worry about it.
   </para>
 
   <para>
@@ -386,7 +397,11 @@ result = 14;</programlisting>
   <para>
     However, if you first declared <varname>result</varname> to be type
     <classname>String</classname> and and then tried these reassignments,
-    BeanShell would complain.
+    BeanShell would complain. While avoiding explicit type declaration makes
+    writing macro code simpler, using them can act as a check to make sure you are
+    not using the wrong varaible type of object at a later point in your
+    script. It also makes it easier (if you are so inclined) to take a
+    BeanShell <quote>prototype</quote> and incorporte it in a Java program.
   </para>
 
   <para>
@@ -431,10 +446,9 @@ textArea.setSelectedText(newText);</programlisting>
   <itemizedlist>
     <listitem>
       <para>
-        A <classname>Buffer</classname> represents the contents of an open text
-        file. It is derived from Java's <classname>PlainDocument</classname>
-        class. The variable <varname>buffer</varname> is predefined as the
-        current buffer.
+        A <classname>Buffer</classname> object represents the contents of an open text
+        file. The variable <varname>buffer</varname> is predefined as the
+        current, visible buffer being edited.
       </para>
     </listitem>
     <listitem>
@@ -612,5 +626,91 @@ String result = df.format(d);
    </para>
   </sidebar>
  </sect1>
+
+<!-- moved from introductory chapter in 3.2 macro guide -->
+
+ <sect1 id="single-macros"><title>Single Execution Macros</title>
+  <para>
+   At this point, we have covered some basic techniques for writing
+   one-line or other short macros. As noted earlier, you can save a BeanShell
+   script of any length as a text file with the <filename>.bsh</filename>
+   extension. There are three other ways jEdit lets you use BeanShell quickly,
+   without saving a script to storage, on a <quote>one time only</quote>
+   basis. You will find them in the <guimenu>Utilities</guimenu> menu.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+   Expression</guimenuitem> displays a text input dialog
+   that asks you to type a single line of BeanShell commands. You can type
+   more than one BeanShell statement so long as each of them ends with a
+   semicolon. If BeanShell successfully interprets your input, a message
+   box will appear with the return value of the last statement. You can do
+   the same thing using the BeanShell interpreter provided with the
+   <application>Console</application> plugin; the return value will appear
+   in the output window.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate For Selected
+   Lines</guimenuitem> displays a text input dialog that asks you to
+   type a single line of BeanShell commands. The commands are evaluated
+   for each line of the selection. In addition to the standard set of
+   variables, this command defines the following:
+  </para>
+
+  <itemizedlist>
+   <listitem><para><varname>line</varname> - the line number, from the
+   start of the buffer. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>index</varname> - the line number, from the
+   start of the selection. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>text</varname> - the text of the line.
+   </para></listitem>
+  </itemizedlist>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
+    in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
+    box. This will add a line number to each selected line begining with
+    the number <userinput>1</userinput>.
+   </para>
+  </informalexample>
+
+  <para>
+    The BeanShell expression you enter will be evaluated and substituted in place of
+    the entire text of a selected line.  If you want to leave the line's current
+    text as an element of the modified line, you must include the defined variable
+    <userinput>text</userinput> as part of the BeanShell expression that you enter.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   evaluates the selected text as a BeanShell script and
+   replaces it with the return value of the statement.
+  </para>
+
+  <para>
+    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
+    easy way to do arithmetic calculations inline while editing. BeanShell
+    uses numbers and arithmetic operations in an ordinary, intuitive way.
+  </para>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(3745*856)+74</userinput>
+    in the buffer, select it, and choose
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
+    Selection</guimenuitem>. The selected text will be replaced by the
+    answer, <userinput>3205794</userinput>. Since this is a text file
+    and not a spreadsheet, the original values that BeanShell evaluated are
+    not retained or saved as part of the buffer's contents.
+   </para>
+  </informalexample>
+
+ </sect1>
+
 </chapter>
 

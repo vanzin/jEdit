@@ -1,10 +1,11 @@
-<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
-<!-- Revised Tue Jun 19 18:02:08 EDT 2001 @959 /Internet Time/   -->
+<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene          -->
 <!--                                                             -->
 <!-- jEdit buffer-local properties:                              -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
 <!--                                                             -->
 <!-- This file cover the introductory section of the macro guide -->
+<!-- $Id$
+ -->
 
 <chapter id="macro-basics"><title>Introducing BeanShell</title>
 
@@ -24,24 +25,13 @@
   </blockquote>
 
   <para>
-   As you might gather from this short quote, BeanShell is very similar to
-   Java and is designed to be easy for Java programmers to learn. If you
-   know how to program in Java, you already know how to write BeanShell
-   macros. Nonetheless, the premise of this guide is that you should not
-   have to know anything about Java to begin writing your own macros for
-   jEdit.
-  </para>
-
-  <para>
-   If you are not a Java programmer, you will have to learn a
-   little about Java classes and syntax, but that's not a bad thing.
-   You will also have to learn a little (but not too much) about
-   some of the classes that are defined and used by the jEdit
-   program itself. That is in fact the major strength of using
-   BeanShell with a program written in Java: it allows the user to
-   customize the program's behavior by employing the same interfaces
-   designed and used by the program's developer. Thus, BeanShell can
-   turn a well-designed application into a powerful toolkit.
+   You do not have to know anything about Java to begin writing your own
+   jEdit macros. But if you know how to program in Java, you already know
+   how to write BeanShell scripts.  The major strength of using
+   BeanShell with a program written in Java is that it allows the user to
+   customize the program's behavior using the same interfaces
+   designed and used by the program itself. BeanShell can
+   turn a well-designed application into a powerful, extendible toolkit.
   </para>
 
   <para>
@@ -52,81 +42,5 @@
    installation or written by you, can be found in
    <xref linkend="using-macros"/>.
   </para>
-
- <sect1 id="single-macros"><title>Single Execution Macros</title>
-  <para>
-   There are three ways jEdit lets you use BeanShell quickly on a
-   <quote>one time only</quote> basis. You will find them in the
-   <guimenu>Utilities</guimenu> menu.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-   Expression</guimenuitem> displays a text input dialog
-   that asks you to type a single line of BeanShell commands. You can type
-   more than one BeanShell statement so long as each of them ends with a
-   semicolon. If BeanShell successfully interprets your input, a message
-   box will appear with the return value of the last statement. You can do
-   the same thing using the BeanShell interpreter provided with the
-   <application>Console</application> plugin; the return value will appear
-   in the output window.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate For Selected
-   Lines</guimenuitem> displays a text input dialog that asks you to
-   type a single line of BeanShell commands. The commands are evaluated
-   for each line of the selection. In addition to the standard set of
-   variables, this command defines the following:
-  </para>
-
-  <itemizedlist>
-   <listitem><para><varname>line</varname> - the line number, from the
-   start of the buffer. The first line is numbered 0.
-   </para></listitem>
-   <listitem><para><varname>index</varname> - the line number, from the
-   start of the selection. The first line is numbered 0.
-   </para></listitem>
-   <listitem><para><varname>text</varname> - the text of the line.
-   </para></listitem>
-  </itemizedlist>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
-    in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
-    box. This will add a line number to each selected line.
-   </para>
-  </informalexample>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
-   evaluates the selected text as a BeanShell script and
-   replaces it with the return value of the statement.
-  </para>
-
-  <para>
-    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
-    easy way to do arithmetic calculations inline while editing. BeanShell
-    uses numbers and arithmetic operations in an ordinary, intuitive way.
-  </para>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(3745*856)+74</userinput>
-    in the buffer, select it, and choose
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
-    Selection</guimenuitem>. The selected text will be replaced by the
-    answer, <userinput>3205794</userinput>.
-   </para>
-  </informalexample>
-
-  <para>
-    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
-    easy way to do arithmetic calculations inline while editing. BeanShell
-    uses numbers and arithmetic operations in an ordinary, intuitive way.
-  </para>
-
- </sect1>
 
 </chapter>
