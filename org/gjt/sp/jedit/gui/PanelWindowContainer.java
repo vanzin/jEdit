@@ -115,7 +115,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 	public void add(DockableWindowManager.Entry entry)
 	{
-		dockablePanel.add(entry.name,entry.win.getComponent());
+		dockablePanel.add(entry.name,entry.win);
 	}
 
 	public void remove(DockableWindowManager.Entry entry)
@@ -125,7 +125,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		dockables.removeElement(entry);
 		if(entry.win != null)
-			dockablePanel.remove(entry.win.getComponent());
+			dockablePanel.remove(entry.win);
 
 		if(current == entry)
 		{
@@ -158,7 +158,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int index = dockables.indexOf(entry);
 			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
 
-			entry.win.getComponent().requestFocus();
+			entry.win.requestFocus();
 		}
 		else
 		{

@@ -19,6 +19,8 @@
 
 package org.gjt.sp.jedit.gui;
 
+import bsh.EvalError;
+import com.microstar.xml.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.msg.CreateDockableWindow;
 import org.gjt.sp.jedit.search.HyperSearchResults;
@@ -27,6 +29,7 @@ import org.gjt.sp.util.Log;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -37,6 +40,8 @@ import java.util.*;
  */
 public class DockableWindowManager extends JPanel
 {
+	// static part of class
+
 	/**
 	 * Floating position.
 	 * @since jEdit 2.6pre3
@@ -66,6 +71,282 @@ public class DockableWindowManager extends JPanel
 	 * @since jEdit 2.6pre3
 	 */
 	public static final String RIGHT = "right";
+
+	/**
+	 * Plugins shouldn't need to call this method.
+	 * @since jEdit 4.0pre1
+	 */
+	public static boolean loadDockableWindows(String path, Reader in, ActionSet actionSet)
+	{
+		try
+		{
+			Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + path);
+
+			DockableListHandler dh = new DockableListHandler(path,actionSet);
+			XmlParser parser = new XmlParser();
+			parser.setHandler(dh);
+			parser.parse(null, null, in);
+			return true;
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,jEdit.class,e);
+		}
+
+		return false;
+	}
+
+	public static void registerDockableWindow(String name, String code,
+		boolean actions, ActionSet actionSet)
+	{
+		dockableWindowFactories.addElement(new Factory(name,code,
+			actions,actionSet));
+	}
+
+	static class DockableListHandler extends HandlerBase
+	{
+		DockableListHandler(String path, ActionSet actionSet)
+		{
+			this.path = path;
+			this.actionSet = actionSet;
+			stateStack = new Stack();
+			actions = true;
+		}
+
+		public Object resolveEntity(String publicId, String systemId)
+		{
+			if("dockables.dtd".equals(systemId))
+			{
+				try
+				{
+					return new BufferedReader(new InputStreamReader(
+						getClass().getResourceAsStream
+						("/org/gjt/sp/jedit/dockables.dtd")));
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,"Error while opening"
+						+ " dockables.dtd:");
+					Log.log(Log.ERROR,this,e);
+				}
+			}
+
+			return null;
+		}
+
+		public void attribute(String aname, String value, boolean isSpecified)
+		{
+			aname = (aname == null) ? null : aname.intern();
+			value = (value == null) ? null : value.intern();
+
+			if(aname == "NAME")
+				dockableName = value;
+			else if(aname == "NO_ACTIONS")
+				actions = (value == "FALSE");
+		}
+
+		public void doctypeDecl(String name, String publicId,
+			String systemId) throws Exception
+		{
+			if("DOCKABLES".equals(name))
+				return;
+
+			Log.log(Log.ERROR,this,path + ": DOCTYPE must be DOCKABLES");
+		}
+
+		public void charData(char[] c, int off, int len)
+		{
+			String tag = peekElement();
+			String text = new String(c, off, len);
+
+			if (tag == "DOCKABLE")
+			{
+				code = text;
+			}
+		}
+
+		public void startElement(String tag)
+		{
+			tag = pushElement(tag);
+		}
+
+		public void endElement(String name)
+		{
+			if(name == null)
+				return;
+
+			String tag = peekElement();
+
+			if(name.equals(tag))
+			{
+				if(tag == "DOCKABLE")
+				{
+					registerDockableWindow(dockableName,
+						code,actions,actionSet);
+					// make default be true for the next
+					// action
+					actions = true;
+				}
+
+				popElement();
+			}
+			else
+			{
+				// can't happen
+				throw new InternalError();
+			}
+		}
+
+		public void startDocument()
+		{
+			try
+			{
+				pushElement(null);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		// end HandlerBase implementation
+
+		// private members
+		private String path;
+		private ActionSet actionSet;
+
+		private String dockableName;
+		private String code;
+		private boolean actions;
+
+		private Stack stateStack;
+
+		private String pushElement(String name)
+		{
+			name = (name == null) ? null : name.intern();
+
+			stateStack.push(name);
+
+			return name;
+		}
+
+		private String peekElement()
+		{
+			return (String) stateStack.peek();
+		}
+
+		private String popElement()
+		{
+			return (String) stateStack.pop();
+		}
+	}
+
+	static class Factory
+	{
+		String name;
+		String sanitizedName;
+		String code;
+		String cachedCode;
+
+		Factory(String name, String code, boolean actions, ActionSet actionSet)
+		{
+			this.name = name;
+			this.code = code;
+			if(actions)
+			{
+				actionSet.addAction(new OpenAction());
+				actionSet.addAction(new ToggleAction());
+			}
+
+			/* Some characters that we like to use in action names
+			 * ('.', '-') are not allowed in BeanShell identifiers. */
+			sanitizedName = name.replace('.','_').replace('-','_');
+		}
+
+		Component createDockableWindow(View view, String position)
+		{
+			// BACKWARDS COMPATIBILITY with jEdit 2.6-3.2 docking APIs
+			if(code == null)
+			{
+				CreateDockableWindow msg = new CreateDockableWindow(view,name,
+					position);
+				EditBus.send(msg);
+
+				DockableWindow win = msg.getDockableWindow();
+				if(win == null)
+				{
+					Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+					return null;
+				}
+				return win.getComponent();
+			}
+			// END BACKWARDS COMPATIBILITY
+			else
+			{
+				if(cachedCode == null)
+				{
+					cachedCode = BeanShell.cacheBlock(
+						sanitizedName,code,true);
+				}
+				try
+				{
+					BeanShell.getNameSpace().setVariable(
+						"position",position);
+				}
+				catch(EvalError e)
+				{
+					Log.log(Log.ERROR,this,e);
+				}
+				Component win = (Component)
+					BeanShell.runCachedBlock(
+					cachedCode,view,null);
+				return win;
+			}
+		}
+
+		class OpenAction extends EditAction
+		{
+			OpenAction()
+			{
+				super(name);
+			}
+
+			public void invoke(View view)
+			{
+				view.getDockableWindowManager()
+					.showDockableWindow(name);
+			}
+		}
+
+		class ToggleAction extends EditAction
+		{
+			ToggleAction()
+			{
+				super(name + "-toggle");
+			}
+
+			public void invoke(View view)
+			{
+				view.getDockableWindowManager()
+					.toggleDockableWindow(name);
+			}
+		}
+	}
+
+	private static Vector dockableWindowFactories;
+
+	static
+	{
+		dockableWindowFactories = new Vector();
+	}
+
+	// instance part of class
 
 	/**
 	 * Creates a new dockable window manager.
@@ -100,16 +381,12 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void init()
 	{
-		Object[] dockables = EditBus.getNamedList(DockableWindow
-			.DOCKABLE_WINDOW_LIST);
-		if(dockables != null)
+		for(int i = 0; i < dockableWindowFactories.size(); i++)
 		{
-			for(int i = 0; i < dockables.length; i++)
-			{
-				String name = (String)dockables[i];
-				Entry entry = new Entry(name);
-				windows.put(name,entry);
-			}
+			Factory factory = (Factory)
+				dockableWindowFactories.elementAt(i);
+			Entry entry = new Entry(factory);
+			windows.put(factory.name,entry);
 		}
 
 		String lastTop = jEdit.getProperty("view.dock.top.last");
@@ -204,7 +481,7 @@ public class DockableWindowManager extends JPanel
 	 * Returns the specified dockable window.
 	 * @param name The dockable window name.
 	 */
-	public DockableWindow getDockableWindow(String name)
+	public Component getDockableWindow(String name)
 	{
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null || entry.win == null)
@@ -329,14 +606,6 @@ public class DockableWindowManager extends JPanel
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
-
-	static
-	{
-		EditBus.addToBus(new DefaultFactory());
-		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"vfs.browser");
-		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"hypersearch-results");
-		EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST,"log-viewer");
-	}
 
 	class DockableLayout implements LayoutManager2
 	{
@@ -580,19 +849,22 @@ public class DockableWindowManager extends JPanel
 		public void invalidateLayout(Container target) {}
 	}
 
-	public class Entry
+	class Entry
 	{
+		Factory factory;
 		String name;
 		String position;
 		String title;
+
 		DockableWindowContainer container;
 
 		// only set if open
-		DockableWindow win;
+		Component win;
 
-		Entry(String name)
+		Entry(Factory factory)
 		{
-			this.name = name;
+			this.factory = factory;
+			this.name = factory.name;
 			this.position = jEdit.getProperty(name + ".dock-position",
 				FLOATING);
 			title = jEdit.getProperty(name + ".title");
@@ -621,16 +893,7 @@ public class DockableWindowManager extends JPanel
 
 		void open()
 		{
-			CreateDockableWindow msg = new CreateDockableWindow(view,name,
-				position);
-			EditBus.send(msg);
-
-			win = msg.getDockableWindow();
-			if(win == null)
-			{
-				Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
-				return;
-			}
+			win = factory.createDockableWindow(view,position);
 
 			Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
 
@@ -656,34 +919,6 @@ public class DockableWindowManager extends JPanel
 				container = null;
 
 			win = null;
-		}
-	}
-
-	// factory for creating the dockables built into the jEdit core
-	// (VFS browser, HyperSearch results)
-	static class DefaultFactory implements EBComponent
-	{
-		public void handleMessage(EBMessage msg)
-		{
-			if(msg instanceof CreateDockableWindow)
-			{
-				CreateDockableWindow cmsg = (CreateDockableWindow)msg;
-				String name = cmsg.getDockableWindowName();
-				if(name.equals("vfs.browser"))
-				{
-					cmsg.setDockableWindow(new VFSBrowser(
-						cmsg.getView(),null));
-				}
-				else if(name.equals("hypersearch-results"))
-				{
-					cmsg.setDockableWindow(new HyperSearchResults(
-						cmsg.getView()));
-				}
-				else if(name.equals("log-viewer"))
-				{
-					cmsg.setDockableWindow(new LogViewer());
-				}
-			}
 		}
 	}
 }

@@ -274,6 +274,7 @@ public class jEdit
 		initPLAF();
 
 		initActions();
+		initDockables();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -929,6 +930,23 @@ public class jEdit
 				.getAction(name);
 			if(action != null)
 				return action;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the action set that contains the specified action.
+	 * @param action The action
+	 * @since jEdit 4.0pre1
+	 */
+	public static ActionSet getActionSetForAction(EditAction action)
+	{
+		for(int i = 0; i < actionSets.size(); i++)
+		{
+			ActionSet set = (ActionSet)actionSets.elementAt(i);
+			if(set.contains(action))
+				return set;
 		}
 
 		return null;
@@ -2176,20 +2194,17 @@ public class jEdit
 	/**
 	 * Loads the specified action list.
 	 */
-	static ActionSet loadActions(String path, Reader in)
+	static boolean loadActions(String path, Reader in, ActionSet actionSet)
 	{
 		try
 		{
 			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
 
-			ActionSet actionSet = new ActionSet();
 			ActionListHandler ah = new ActionListHandler(path,actionSet);
 			XmlParser parser = new XmlParser();
 			parser.setHandler(ah);
 			parser.parse(null, null, in);
-
-			addActionSet(actionSet);
-			return actionSet;
+			return true;
 		}
 		catch(XmlException xe)
 		{
@@ -2203,7 +2218,7 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
 
-		return null;
+		return false;
 	}
 
 	// private members
@@ -2215,6 +2230,7 @@ public class jEdit
 	private static EditServer server;
 	private static boolean background;
 	private static Vector actionSets;
+	private static ActionSet builtInActionSet;
 	private static Vector jars;
 	private static Vector modes;
 	private static Vector recent;
@@ -2472,11 +2488,23 @@ public class jEdit
 
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
-		ActionSet actionSet = loadActions("actions.xml",in);
-		if(actionSet == null)
+		builtInActionSet = new ActionSet(jEdit.getProperty(
+			"action-set.jEdit"));
+		if(!loadActions("actions.xml",in,builtInActionSet))
 			System.exit(1);
+		addActionSet(builtInActionSet);
+	}
 
-		actionSet.setLabel(jEdit.getProperty("action-set.jEdit"));
+	/**
+	 * Load info on jEdit's built-in dockable windows.
+	 */
+	private static void initDockables()
+	{
+		Reader in = new BufferedReader(new InputStreamReader(
+			jEdit.class.getResourceAsStream("dockables.xml")));
+		if(!DockableWindowManager.loadDockableWindows("dockables.xml",
+			in,builtInActionSet))
+			System.exit(1);
 	}
 
 	/**

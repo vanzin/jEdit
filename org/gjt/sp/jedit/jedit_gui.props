@@ -35,6 +35,7 @@ encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
 # Action set names
 action-set.jEdit=Built-in Commands
 action-set.macros=Macros
+action-set.plugin=Plugin: {0}
 
 # History text field menu caption
 history.caption=Previously entered strings:
@@ -212,11 +213,11 @@ current-directory.not-local=Cannot list directories on remote filesystems
 insert-file.label=$Insert File...
 no-recent.label=No Recent Files
 reload.label=$Reload
-reload-all.label=Reload $All Buffers...
+reload-all.label=R$eload All Buffers...
 close-buffer.label=$Close Buffer
 close-all.label=Close All $Buffers
 save.label=$Save
-save-as.label=Sa$ve As...
+save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll Buffers...
 print.label=$Print...
@@ -464,7 +465,7 @@ prev-textarea.label=Go to Previous Text Area
 next-textarea.label=Go to Next Text Area
 
 ### Utilities menu
-utils=vfs-browser \
+utils=vfs.browser \
       io-progress-monitor \
       - \
       log-viewer \
@@ -481,7 +482,7 @@ utils=vfs-browser \
       buffer-options \
       global-options
 utils.label=$Utilities
-vfs-browser.label=$File System Browser
+vfs.browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log
 update-log.label=Update Activity Log on $Disk
@@ -590,6 +591,9 @@ select-prev-word.label=Select Previous Word
 shift-left.label=Shift Indent Left
 shift-right.label=Shift Indent Right
 toggle-multi-select.label=Multiple Selection
+hypersearch-results-toggle=HyperSearch Results Toggle
+vfs.browser-toggle.label=File System Browser Toggle
+log-viewer-toggle.label=Activity Log Toggle
 
 ###
 ### VIEW STUFF
@@ -873,7 +877,7 @@ search.regexp.mnemonic=x
 search.hypersearch=HyperSearch
 search.hypersearch.mnemonic=h
 search.wrap=Auto wrap
-search.wrap.mnemonic=w
+search.wrap.mnemonic=u
 
 search.direction=Direction:
 search.back=Backward
@@ -1272,19 +1276,19 @@ options.toolbar.label=Tool Bar
 options.toolbar.showToolbar=Show tool bar
 options.toolbar.caption=Buttons to display on tool bar:
 options.toolbar.add=Add...
+options.toolbar.edit=Edit...
 options.toolbar.remove=Remove
 options.toolbar.moveUp=Move Up
 options.toolbar.moveDown=Move Down
-options.toolbar.add.title=Add Item
-options.toolbar.add.caption=Add to tool bar:
-options.toolbar.add.separator=Separator
-options.toolbar.add.action=Command:
-options.toolbar.add.macro=Macro:
-options.toolbar.add.icon=Icon:
-options.toolbar.add.builtin=Use built-in icon:
-options.toolbar.add.file=Load icon from file:
-options.toolbar.add.choose=Choose
-options.toolbar.add.no-icon=No icon selected
+options.toolbar.edit.title=Edit Tool Bar Entry
+options.toolbar.edit.caption=Type:
+options.toolbar.edit.separator=Separator
+options.toolbar.edit.action=Command or macro:
+options.toolbar.edit.icon=Icon:
+options.toolbar.edit.builtin=Use built-in icon:
+options.toolbar.edit.file=Load icon from file:
+options.toolbar.edit.choose=Choose
+options.toolbar.edit.no-icon=No icon selected
 
 options.context.label=Context Menu
 options.context.caption=Items in text area right click menu:
@@ -1292,7 +1296,7 @@ options.context.add=Add...
 options.context.remove=Remove
 options.context.moveUp=Move Up
 options.context.moveDown=Move Down
-options.context.add.title=Add Item
+options.context.add.title=Add to Context Menu
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
 options.context.add.action=Command or macro:

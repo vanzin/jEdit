@@ -26,6 +26,13 @@ JEDIT 4.0 VERSION HISTORY
 - BBj (Business Basic based on Java) syntax highlighting (Thomas Bock)
 - BibTeX syntax highlighting (Nils Krahnstoever)
 - Option added to sort recent file list by name
+- New dockable window API. This does not affect the user interface, it
+  is just a plugin implementation issue.
+  - The old API (registering the dockable window using
+    EditBus.addToNamedList(), and listening for a  CreateDockableWindow
+    message) will continue to work, but the new API is much simpler
+  - All you have to do is write a dockables.xml file, and it will even
+    create the actions to open your dockable windows for you
 
 + Enhancements
 
@@ -101,6 +108,9 @@ JEDIT 4.0 VERSION HISTORY
   of the buffer were folded
 - When running on Java 2 version 1.3 (and possibly others), the default
   size of the help viewer was not set properly
+- Velocity mode had an incorrect file name glob
+- In the Search and Replace dialog box, 'Replace with:' and 'Auto wrap'
+  had the same Alt-key mnemonic
 
 + API Changes
 
@@ -129,3 +139,10 @@ JEDIT 4.0 VERSION HISTORY
   EditAction.isSelected(Component)
   EditAction.getView(EventObject)
   EditAction.getBuffer(EventObject)
+- CreateDockableWindow class deprecated. Write a dockables.xml file
+  instead of listening for this message.
+- DockableWindow interface deprecated. No need to implement it any more.
+- EditBus named list stuff deprecated. It was only being used for
+  dockables and ErrorList's error sources. To register dockables, use
+  the new dockables.xml API. To register error sources, use the relevant
+  APIs in the ErrorList plugin.

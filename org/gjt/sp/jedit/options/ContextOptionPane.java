@@ -1,6 +1,6 @@
 /*
  * ContextOptionPane.java - Context menu options panel
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,8 +104,8 @@ public class ContextOptionPane extends AbstractOptionPane
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return ((MenuItem)obj1).label.toLowerCase().compareTo(
-				((MenuItem)obj2).label.toLowerCase());
+			return ((MenuItem)obj1).label.compareTo(
+				((MenuItem)obj2).label);
 		}
 	}
 
@@ -258,8 +258,15 @@ class ContextAddDialog extends EnhancedDialog
 
 		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-		actionsList = jEdit.getActionSets();
-		combo = new JComboBox(actionsList);
+		ActionSet[] actionsList = jEdit.getActionSets();
+		Vector vec = new Vector(actionsList.length);
+		for(int i = 0; i < actionsList.length; i++)
+		{
+			ActionSet actionSet = actionsList[i];
+			if(actionSet.getActionCount() != 0)
+				vec.addElement(actionSet);
+		}
+		combo = new JComboBox(vec);
 		combo.addActionListener(actionHandler);
 		actionPanel.add(BorderLayout.NORTH,combo);
 
@@ -322,7 +329,6 @@ class ContextAddDialog extends EnhancedDialog
 	// private members
 	private boolean isOK;
 	private JRadioButton separator, action;
-	private ActionSet[] actionsList;
 	private JComboBox combo;
 	private JList list;
 	private JButton ok, cancel;

@@ -416,7 +416,7 @@ public class BeanShell
 	public static Object runCachedBlock(String id, View view, NameSpace namespace)
 	{
 		if(namespace == null)
-			namespace = internal;
+			namespace = global;
 
 		Object[] args = { namespace };
 

@@ -42,8 +42,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HyperSearchResults extends JPanel implements DockableWindow,
-	EBComponent
+public class HyperSearchResults extends JPanel implements EBComponent
 {
 	public static final String NAME = "hypersearch-results";
 
@@ -74,16 +73,6 @@ public class HyperSearchResults extends JPanel implements DockableWindow,
 		dim.width = 400;
 		scrollPane.setPreferredSize(dim);
 		add(BorderLayout.CENTER, scrollPane);
-	}
-
-	public String getName()
-	{
-		return NAME;
-	}
-
-	public Component getComponent()
-	{
-		return this;
 	}
 
 	public void addNotify()

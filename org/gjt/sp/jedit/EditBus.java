@@ -23,13 +23,10 @@ import java.util.*;
 import org.gjt.sp.util.Log;
 
 /**
- * The EditBus provides a way for plugins to communicate without knowing
- * too much about each other's internals.<p>
- *
- * The EditBus is similar to the data bus inside a computer; there are
- * a number of components connected, and all components can send messages
- * to the bus. When a message is sent, all other components receive it,
- * and do something appropriate (or simply ignore it).
+ * The EditBus is jEdit's global event notification mechanism. A number of
+ * messages are sent by jEdit; they are all instances of the classes found
+ * in the <code>org.gjt.sp.jedit.msg</code> package. Plugins can also send
+ * their own messages.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -113,8 +110,7 @@ public class EditBus
 	}
 
 	/**
-	 * Returns a named list.
-	 * @param tag The list name
+	 * @deprecated Do not use
 	 */
 	public static Object[] getNamedList(Object tag)
 	{
@@ -135,8 +131,7 @@ public class EditBus
 	}
 
 	/**
-	 * Returns an enumeration of all named lists.
-	 * @param tag The list name
+	 * @deprecated Do not use
 	 */
 	public static Enumeration getNamedLists()
 	{
@@ -144,27 +139,35 @@ public class EditBus
 	}
 
 	/**
-	 * Adds an entry to a named list.
-	 * @param tag The list name
-	 * @param entry The entry
+	 * @deprecated For dockable windows, write a <code>dockables.xml</code>
+	 * file instead. For ErrorList error sources, use the appropriate
+	 * ErrorList APIs.
 	 */
 	public static void addToNamedList(Object tag, Object entry)
 	{
-		Vector listVector = (Vector)listVectors.get(tag);
-		if(listVector == null)
+		if(tag.equals(org.gjt.sp.jedit.gui.DockableWindow.DOCKABLE_WINDOW_LIST))
 		{
-			listVector = new Vector();
-			listVectors.put(tag,listVector);
+			// clumsy backwards compatibility hack
+			org.gjt.sp.jedit.gui.DockableWindowManager
+				.registerDockableWindow((String)entry,
+				null,false,jEdit.getActionSets()[0]);
 		}
+		else
+		{
+			Vector listVector = (Vector)listVectors.get(tag);
+			if(listVector == null)
+			{
+				listVector = new Vector();
+				listVectors.put(tag,listVector);
+			}
 
-		listVector.addElement(entry);
-		listArrays.remove(tag);
+			listVector.addElement(entry);
+			listArrays.remove(tag);
+		}
 	}
 
 	/**
-	 * Removes an entry from a named list.
-	 * @param tag The list name
-	 * @param entry The entry
+	 * @deprecated Do not use.
 	 */
 	public static void removeFromNamedList(Object tag, Object entry)
 	{

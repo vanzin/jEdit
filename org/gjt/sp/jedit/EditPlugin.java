@@ -155,6 +155,7 @@ public abstract class EditPlugin
 			this.path = path;
 			this.classLoader = classLoader;
 			plugins = new Vector();
+			actions = new ActionSet();
 		}
 
 		// package-private members
@@ -170,7 +171,7 @@ public abstract class EditPlugin
 		private String path;
 		private JARClassLoader classLoader;
 		private Vector plugins;
-		/*package-private*/ ActionSet actions;
+		private ActionSet actions;
 	}
 
 	// private members

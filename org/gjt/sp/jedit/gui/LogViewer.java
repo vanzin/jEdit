@@ -26,11 +26,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import org.gjt.sp.jedit.gui.DockableWindow;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class LogViewer extends JPanel implements DockableWindow
+public class LogViewer extends JPanel
 {
 	public LogViewer()
 	{
@@ -64,16 +63,6 @@ public class LogViewer extends JPanel implements DockableWindow
 
 		add(BorderLayout.NORTH,captionBox);
 		add(BorderLayout.CENTER,new JScrollPane(textArea));
-	}
-
-	public String getName()
-	{
-		return "log-viewer";
-	}
-
-	public Component getComponent()
-	{
-		return this;
 	}
 
 	private JTextArea textArea;

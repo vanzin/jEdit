@@ -39,7 +39,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
+public class VFSBrowser extends JPanel implements EBComponent
 {
 	public static final String NAME = "vfs.browser";
 
@@ -235,18 +235,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		}
 		EditBus.removeFromBus(this);
 	}
-
-	// DockableWindow implementation
-	public String getName()
-	{
-		return NAME;
-	}
-
-	public Component getComponent()
-	{
-		return this;
-	}
-	// end DockableWindow implementation
 
 	public void handleMessage(EBMessage msg)
 	{
