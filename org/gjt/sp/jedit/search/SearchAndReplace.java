@@ -714,10 +714,18 @@ loop:			for(;;)
 				}
 				else if(s instanceof Selection.Rect)
 				{
+					Selection.Rect rect = (Selection.Rect)s;
+					int startCol = rect.getStartColumn(
+						buffer);
+					int endCol = rect.getEndColumn(
+						buffer);
+
 					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
 					{
-						retVal += _replace(view,buffer,matcher,
-							s.getStart(buffer,j),s.getEnd(buffer,j),
+						retVal += _replace(view,buffer,
+							matcher,
+							getColumnOnOtherLine(buffer,j,startCol),
+							getColumnOnOtherLine(buffer,j,endCol),
 							smartCaseReplace);
 					}
 					textArea.addToSelection(new Selection.Rect(
@@ -1223,6 +1231,21 @@ loop:		for(int counter = 0; ; counter++)
 				return replace;
 			}
 		}
+	} //}}}
+
+	//{{{ getColumnOnOtherLine() method
+	/**
+	 * Should be somewhere else...
+	 */
+	private static int getColumnOnOtherLine(Buffer buffer, int line,
+		int col)
+	{
+		int returnValue = buffer.getOffsetOfVirtualColumn(
+			line,col,null);
+		if(returnValue == -1)
+			return buffer.getLineEndOffset(line) - 1;
+		else
+			return buffer.getLineStartOffset(line) + returnValue;
 	} //}}}
 
 	//}}}

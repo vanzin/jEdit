@@ -376,7 +376,13 @@ public class jEdit
 
 		GUIUtilities.init();
 		BeanShell.init();
+
+		if(jEditHome != null)
+			initSiteProperties();
+
 		initUserProperties();
+
+
 		initPLAF();
 
 		VFSManager.init();
@@ -387,9 +393,6 @@ public class jEdit
 
 		if(loadPlugins)
 			initPlugins();
-
-		if(jEditHome != null)
-			initSiteProperties();
 
 		BufferHistory.load();
 		KillRing.load();
@@ -1082,10 +1085,12 @@ public class jEdit
 
 			String path = MiscUtilities.constructPath(directory,plugin);
 
+			// remove this when 4.1 plugin API is deprecated
 			if(plugin.equals("EditBuddy.jar")
 				|| plugin.equals("PluginManager.jar")
 				|| plugin.equals("Firewall.jar")
-				|| plugin.equals("Tidy.jar"))
+				|| plugin.equals("Tidy.jar")
+				|| plugin.equals("DragAndDrop.jar"))
 			{
 				pluginError(path,"plugin-error.obsolete",null);
 				continue;

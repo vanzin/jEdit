@@ -33,10 +33,10 @@ import org.gjt.sp.jedit.*;
 public class TextAreaDialog extends EnhancedDialog
 {
 	//{{{ TextAreaDialog constructor
-	public TextAreaDialog(View view, String title, String caption,
+	public TextAreaDialog(Frame frame, String title, String caption,
 		Icon icon, String text)
 	{
-		super(view,title,true);
+		super(frame,title,true);
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -71,7 +71,7 @@ public class TextAreaDialog extends EnhancedDialog
 		getRootPane().setDefaultButton(ok);
 
 		pack();
-		setLocationRelativeTo(view);
+		setLocationRelativeTo(frame);
 		show();
 	} //}}}
 

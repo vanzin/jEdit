@@ -706,7 +706,11 @@ public class PluginJAR
 			try
 			{
 				cache = generateCache();
-				setPluginCache(this,cache);
+				if(cache != null)
+				{
+					setPluginCache(this,cache);
+					classLoader.activate();
+				}
 			}
 			catch(IOException io)
 			{
@@ -716,10 +720,10 @@ public class PluginJAR
 
 				String[] args = { io.toString() };
 				jEdit.pluginError(path,"plugin-error.load-error",args);
+
+				uninit(false);
 			}
 		}
-
-		classLoader.activate();
 	} //}}}
 
 	//{{{ uninit() method
@@ -842,16 +846,31 @@ public class PluginJAR
 
 		if(cache.pluginClass != null)
 		{
-			if(actions != null)
+			// Check if a plugin with the same name
+			// is already loaded
+			System.err.println("Check " + cache.pluginClass);
+			if(jEdit.getPlugin(cache.pluginClass) != null)
 			{
-				String label = jEdit.getProperty("plugin."
-					+ cache.pluginClass + ".name");
-				actions.setLabel(jEdit.getProperty(
-					"action-set.plugin",
-					new String[] { label }));
+				jEdit.pluginError(path,
+					"plugin-error.already-loaded",
+					null);
+				uninit(false);
 			}
-			plugin = new EditPlugin.Deferred(cache.pluginClass);
-			plugin.jar = (EditPlugin.JAR)this;
+			else
+			{
+				if(actions != null)
+				{
+					String label = jEdit.getProperty(
+						"plugin." + cache.pluginClass
+						+ ".name");
+					actions.setLabel(jEdit.getProperty(
+						"action-set.plugin",
+						new String[] { label }));
+				}
+				plugin = new EditPlugin.Deferred(
+					cache.pluginClass);
+				plugin.jar = (EditPlugin.JAR)this;
+			}
 		}
 	} //}}}
 
@@ -907,18 +926,7 @@ public class PluginJAR
 					.fileToClass(name);
 				if(className.endsWith("Plugin"))
 				{
-					// Check if a plugin with the same name
-					// is already loaded
-					if(jEdit.getPlugin(className) != null)
-					{
-						jEdit.pluginError(path,
-							"plugin-error.already-loaded",
-							null);
-					}
-					else
-					{
-						plugins.add(className);
-					}
+					plugins.add(className);
 				}
 				classes.add(className);
 			}
@@ -937,20 +945,37 @@ public class PluginJAR
 		while(iter.hasNext())
 		{
 			String className = (String)iter.next();
+
 			String _label = jEdit.getProperty("plugin."
 				+ className + ".name");
 			String version = jEdit.getProperty("plugin."
 				+ className + ".version");
 			if(_label == null || version == null)
 			{
-				Log.log(Log.NOTICE,this,"Ignoring: " + className);
+				Log.log(Log.NOTICE,this,"Ignoring: "
+					+ className);
 			}
 			else
 			{
-				plugin = new EditPlugin.Deferred(className);
-				plugin.jar = (EditPlugin.JAR)this;
 				cache.pluginClass = className;
-				label = _label;
+
+				// Check if a plugin with the same name
+				// is already loaded
+				if(jEdit.getPlugin(className) != null)
+				{
+					jEdit.pluginError(path,
+						"plugin-error.already-loaded",
+						null);
+					return null;
+				}
+				else
+				{
+					plugin = new EditPlugin.Deferred(
+						className);
+					plugin.jar = (EditPlugin.JAR)this;
+					label = _label;
+				}
+
 				break;
 			}
 		}

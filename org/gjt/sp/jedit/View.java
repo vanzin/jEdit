@@ -494,7 +494,6 @@ public class View extends JFrame implements EBComponent
 				|| inputHandler.isPrefixActive()
 				|| getTextArea().hasFocus())
 			{
-			System.err.println(getFocusOwner());
 				KeyEventTranslator.Key keyStroke
 					= KeyEventTranslator
 					.translateKeyEvent(evt);
