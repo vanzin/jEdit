@@ -8,6 +8,7 @@ JEDIT 4.0 VERSION HISTORY
   shouldn't be any more ClassCastExceptions
 - Fixed stack overflow if attempting to use URL filesystem (to open an
   http:// URL, for instance)
+- Fixed stupid bug in installer that affected MacOS X installation
 
 * Version 4.0pre2
 

@@ -114,6 +114,7 @@ public class SwingInstall extends JFrame
 		int size = 0;
 
 		JPanel comp = selectComponents.comp;
+		Vector ids = selectedComponents.filesets;
 
 		for(int i = 0; i < comp.getComponentCount(); i++)
 		{
@@ -121,9 +122,9 @@ public class SwingInstall extends JFrame
 				.getModel().isSelected())
 			{
 				size += installer.getIntProperty(
-					"comp." + i + ".real-size");
+					"comp." + ids.elementAt(i) + ".real-size");
 				components.addElement(installer.getProperty(
-					"comp." + i + ".fileset"));
+					"comp." + ids.elementAt(i) + ".fileset"));
 			}
 		}
 
