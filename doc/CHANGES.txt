@@ -1,5 +1,12 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre4
+
++ Syntax Highlighting Changes
+
+- Added AppleScript syntax highlighting (Kris Kopicki)
+- Improved Informix-4GL syntax highlighting (Stefan Jozsa)
+
 * Version 4.1pre3
 
 Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker, Matthias Schneider
