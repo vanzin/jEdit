@@ -587,13 +587,15 @@ loop:		for(int i = pos; i < line.length(); i++)
 					break;
 				}
 				else
+				{
 					newline = true;
+					/* fall through -- handle like a space */
+				}
 			case ' ':
 				if(lineLength + word.length() >= maxLineLength)
 				{
 					buf.append('\n');
 					lineLength = 0;
-					newline = true;
 				}
 				else if(space && lineLength != 0 && word.length() != 0)
 				{

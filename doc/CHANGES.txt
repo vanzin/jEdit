@@ -8,6 +8,16 @@ JEDIT 4.1 VERSION HISTORY
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
 - Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
 
++ Global Options Dialog Changes:
+
+- The tool bar option pane now has an "Edit" button for modifying the
+  currently selected tool bar entry.
+- The location and size of the dialog box is now persistent.
+- Now org.gjt.sp.jedit.gui.OptionsDialog is an abstract class, with a
+  concrete org.gjt.sp.jedit.options.GlobalOptions subclass with the
+  Global Options-specific code. This allows plugins to create paned
+  dialog boxes similar to Global Options.
+
 + Plugin Manager Changes:
 
 - Added "Select All" button to Install and Update Plugins dialogs
@@ -31,6 +41,11 @@ JEDIT 4.1 VERSION HISTORY
     would not take effect until jEdit was restarted.
 - Entering a relative path in the file system browser's "Path" field
   didn't work
+- "Format Paragraph" command would insert extra newlines if a line ended
+  with a space
+- The MacOS plugin had a version check that looked for an exact MRJ
+  version match, rather than an equal or newer version. This broke the
+  plugin when running on MacOS X 10.2. (Kris Kopicki)
 
 * Version 4.1pre4
 

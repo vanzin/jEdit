@@ -1,5 +1,5 @@
 /*
- * OptionsDialog.java - Global options dialog
+ * OptionsDialog.java - Tree options dialog
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -28,7 +28,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -36,14 +35,16 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class OptionsDialog extends EnhancedDialog
+public abstract class OptionsDialog extends EnhancedDialog
 	implements ActionListener, TreeSelectionListener
 {
-	public OptionsDialog(View view)
+	public OptionsDialog(View view, String name)
 	{
 		super(view, jEdit.getProperty("options.title"), true);
 
 		view.showWaitCursor();
+
+		this.name = name;
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -103,27 +104,30 @@ public class OptionsDialog extends EnhancedDialog
 		// first selected OptionPane is displayed on startup.
 		paneTree.getSelectionModel().addTreeSelectionListener(this);
 
-		paneTree.expandPath(new TreePath(
-			new Object[] { paneTree.getModel().getRoot(), jEditGroup }));
-		paneTree.expandPath(new TreePath(
-			new Object[] { paneTree.getModel().getRoot(), pluginsGroup }));
+		OptionGroup rootNode = (OptionGroup)paneTree.getModel().getRoot();
+		for(int i = 0; i < rootNode.getMemberCount(); i++)
+		{
+			paneTree.expandPath(new TreePath(
+			new Object[] { rootNode, rootNode.getMember(i) }));
+		}
+
 		paneTree.setSelectionRow(0);
 
 		view.hideWaitCursor();
 
 		pack();
-		setLocationRelativeTo(view);
+		GUIUtilities.loadGeometry(this,name);
 		show();
 	}
 
 	public void addOptionGroup(OptionGroup group)
 	{
-		addOptionGroup(group, pluginsGroup);
+		addOptionGroup(group, getDefaultGroup());
 	}
 
 	public void addOptionPane(OptionPane pane)
 	{
-		addOptionPane(pane, pluginsGroup);
+		addOptionPane(pane, getDefaultGroup());
 	}
 
 	// EnhancedDialog implementation
@@ -134,6 +138,7 @@ public class OptionsDialog extends EnhancedDialog
 
 	public void cancel()
 	{
+		GUIUtilities.saveGeometry(this,name);
 		dispose();
 	}
 	// end EnhancedDialog implementation
@@ -152,7 +157,10 @@ public class OptionsDialog extends EnhancedDialog
 
 		// get rid of this dialog if necessary
 		if(dispose)
+		{
+			GUIUtilities.saveGeometry(this,name);
 			dispose();
+		}
 	}
 
 	public void actionPerformed(ActionEvent evt)
@@ -232,7 +240,11 @@ public class OptionsDialog extends EnhancedDialog
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
 	}
 
+	protected abstract OptionTreeModel createOptionTreeModel();
+	protected abstract OptionGroup getDefaultGroup();
+
 	// private members
+	private String name;
 	private Hashtable panes;
 	private JTree paneTree;
 	private JPanel cardPanel;
@@ -240,72 +252,8 @@ public class OptionsDialog extends EnhancedDialog
 	private JButton ok;
 	private JButton cancel;
 	private JButton apply;
-	private OptionGroup jEditGroup;
-	private OptionGroup pluginsGroup;
 
-	private OptionTreeModel createOptionTreeModel()
-	{
-		OptionTreeModel paneTreeModel = new OptionTreeModel();
-		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
-
-		addOptionPane(new OverviewOptionPane(), rootGroup);
-
-		// initialize the jEdit branch of the options tree
-		jEditGroup = new OptionGroup("jedit");
-
-		addOptionPane(new GeneralOptionPane(), jEditGroup);
-		addOptionPane(new AppearanceOptionPane(), jEditGroup);
-		addOptionPane(new TextAreaOptionPane(), jEditGroup);
-		addOptionPane(new GutterOptionPane(), jEditGroup);
-		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
-		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
-		addOptionPane(new EditingOptionPane(), jEditGroup);
-		addOptionPane(new ModeOptionPane(), jEditGroup);
-		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
-		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
-		addOptionPane(new DockingOptionPane(), jEditGroup);
-		addOptionPane(new ContextOptionPane(), jEditGroup);
-		addOptionPane(new ToolBarOptionPane(), jEditGroup);
-		addOptionPane(new PrintOptionPane(), jEditGroup);
-		addOptionPane(new FirewallOptionPane(), jEditGroup);
-
-		OptionGroup browserGroup = new OptionGroup("browser");
-		addOptionPane(new BrowserOptionPane(), browserGroup);
-		addOptionPane(new BrowserColorsOptionPane(), browserGroup);
-		addOptionGroup(browserGroup, jEditGroup);
-
-		addOptionGroup(jEditGroup, rootGroup);
-
-		// initialize the Plugins branch of the options tree
-		pluginsGroup = new OptionGroup("plugins");
-
-		// Query plugins for option panes
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			EditPlugin ep = plugins[i];
-			try
-			{
-				ep.createOptionPanes(this);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR, ep,
-					"Error creating option pane");
-				Log.log(Log.ERROR, ep, t);
-			}
-		}
-
-		// only add the Plugins branch if there are OptionPanes
-		if (pluginsGroup.getMemberCount() > 0)
-		{
-			addOptionGroup(pluginsGroup, rootGroup);
-		}
-
-		return paneTreeModel;
-	}
-
-	private void addOptionGroup(OptionGroup child, OptionGroup parent)
+	protected void addOptionGroup(OptionGroup child, OptionGroup parent)
 	{
 		Enumeration enum = child.getMembers();
 
@@ -326,7 +274,7 @@ public class OptionsDialog extends EnhancedDialog
 		parent.addOptionGroup(child);
 	}
 
-	private void addOptionPane(OptionPane pane, OptionGroup parent)
+	protected void addOptionPane(OptionPane pane, OptionGroup parent)
 	{
 		String name = pane.getName();
 
@@ -391,7 +339,7 @@ public class OptionsDialog extends EnhancedDialog
 		private Font groupFont;
 	}
 
-	class OptionTreeModel implements TreeModel
+	public class OptionTreeModel implements TreeModel
 	{
 		public void addTreeModelListener(TreeModelListener l)
 		{
