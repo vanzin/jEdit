@@ -4275,9 +4275,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				buffer.beginCompoundEdit();
 
 				String text = buffer.getText(start,end - start);
+				int offset = getCaretPosition() - start;
+				int noSpaceOffset = TextUtilities.indexIgnoringWhitespace(
+					text,offset);
 				buffer.remove(start,end - start);
-				buffer.insert(start,TextUtilities.format(
-					text,maxLineLen,buffer.getTabSize()));
+				text = TextUtilities.format(
+					text,maxLineLen,buffer.getTabSize());
+				buffer.insert(start,text);
+				moveCaretPosition(start + Math.min(text.length(),
+					TextUtilities.ignoringWhitespaceIndex(
+					text,noSpaceOffset)));
 			}
 			finally
 			{
@@ -5073,6 +5080,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				painter.getWidth(),
 				0,maxHorizontalScrollWidth
 				+ charWidth);
+			vertical.setUnitIncrement(2);
+			vertical.setBlockIncrement(visibleLines);
 		}
 	} //}}}
 

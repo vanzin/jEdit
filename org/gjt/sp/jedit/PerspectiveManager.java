@@ -56,6 +56,28 @@ public class PerspectiveManager
 		PerspectiveManager.dirty = dirty;
 	} //}}}
 
+	//{{{ isPerspectiveEnabled() method
+	/**
+	 * We disable saving of the perspective while the 'close all' dialog is
+	 * showing.
+	 * @since jEdit 4.3pre2
+	 */
+	public static boolean isPerspectiveEnabled()
+	{
+		return enabled;
+	} //}}}
+
+	//{{{ setPerspectiveEnabled() method
+	/**
+	 * We disable saving of the perspective while the 'close all' dialog is
+	 * showing.
+	 * @since jEdit 4.3pre2
+	 */
+	public static void setPerspectiveEnabled(boolean enabled)
+	{
+		PerspectiveManager.enabled = enabled;
+	} //}}}
+
 	//{{{ loadPerspective() method
 	public static View loadPerspective(boolean restoreFiles)
 	{
@@ -113,6 +135,9 @@ public class PerspectiveManager
 	//{{{ savePerspective() method
 	public static void savePerspective(boolean autosave)
 	{
+		if(!isPerspectiveEnabled())
+			return;
+		
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
 			return;
@@ -245,7 +270,7 @@ public class PerspectiveManager
 		file1.renameTo(file2);
 	} //}}}
 
-	private static boolean dirty;
+	private static boolean dirty, enabled = true;
 
 	//{{{ PerspectiveHandler class
 	static class PerspectiveHandler extends HandlerBase

@@ -2451,9 +2451,18 @@ public class jEdit
 
 		PerspectiveManager.savePerspective(false);
 
-		// Close all buffers
-		if(!closeAllBuffers(view,reallyExit))
-			return;
+		try
+		{
+			PerspectiveManager.setPerspectiveEnabled(false);
+
+			// Close all buffers
+			if(!closeAllBuffers(view,reallyExit))
+				return;
+		}
+		finally
+		{
+			PerspectiveManager.setPerspectiveEnabled(true);
+		}
 
 		// If we are running in background mode and
 		// reallyExit was not specified, then return here.
