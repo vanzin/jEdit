@@ -18,6 +18,9 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - Register contents are now saved across editing sessions in
   ~/.jedit/registers.xml.
 
+- Complete Word popup now has keyboard shortcuts (1 - 0) for inserting
+  the first 10 elements in the list.
+
 }}}
 {{{ Input
 
@@ -99,6 +102,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   when eg, inserting a number of characters before an unclosed bracket
   near the beginning of a large source file.
 
+- Bracket matching now only scans up to 10,000 lines.
+
 - Consecutive "chunks" with the same style attributes were previously
   merged when a line was being painted, for improved performance. Now we
   take this one step further and merge them when putting a line's chunk
@@ -111,6 +116,9 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - A funky little display optimization with monospaced fonts is now
   performed. In jEdit 4.1 this could be enabled with a hidden property,
   but now we detect if a monospaced font is actually in use.
+
+- Faster line insertion and removal when there are collapsed folds below
+  the insertion point.
 
 }}}
 {{{ Platform-Specific Changes:
@@ -144,6 +152,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   switching between split panes.
 
 - Not all keyboard shortcuts worked in the Complete Word popup.
+
+- Closing a view did not close any cloned dockable windows.
 
 }}}
 

@@ -269,17 +269,15 @@ public class Log
 			{
 				StringTokenizer st = new StringTokenizer(
 					_message,"\r\n");
+				int lineCount = 0;
+				boolean oldWrap = wrap;
 				while(st.hasMoreTokens())
 				{
-					_log(urgency,_source,st.nextToken());
+					lineCount++;
+					_log(urgency,_source,st.nextToken()
+						.replace('\t',' '));
 				}
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						listModel.fireChanged();
-					}
-				});
+				listModel.update(lineCount,oldWrap);
 			}
 		}
 	} //}}}
@@ -406,15 +404,27 @@ public class Log
 	{
 		Vector listeners = new Vector();
 
-		void fireChanged()
+		private void fireIntervalAdded(int index1, int index2)
 		{
 			for(int i = 0; i < listeners.size(); i++)
 			{
 				ListDataListener listener = (ListDataListener)
 					listeners.elementAt(i);
-				listener.contentsChanged(new ListDataEvent(this,
-					ListDataEvent.CONTENTS_CHANGED,
-					0,getSize()));
+				listener.intervalAdded(new ListDataEvent(this,
+					ListDataEvent.INTERVAL_ADDED,
+					index1,index2));
+			}
+		}
+
+		private void fireIntervalRemoved(int index1, int index2)
+		{
+			for(int i = 0; i < listeners.size(); i++)
+			{
+				ListDataListener listener = (ListDataListener)
+					listeners.elementAt(i);
+				listener.intervalRemoved(new ListDataEvent(this,
+					ListDataEvent.INTERVAL_REMOVED,
+					index1,index2));
 			}
 		}
 
@@ -447,6 +457,38 @@ public class Log
 				return MAXLINES;
 			else
 				return logLineCount;
+		}
+
+		void update(final int lineCount, final boolean oldWrap)
+		{
+			if(lineCount == 0)
+				return;
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					if(wrap)
+					{
+						if(oldWrap)
+							fireIntervalRemoved(0,lineCount - 1);
+						else
+						{
+							fireIntervalRemoved(0,
+								logLineCount);
+						}
+						fireIntervalAdded(
+							MAXLINES - lineCount + 1,
+							MAXLINES);
+					}
+					else
+					{
+						fireIntervalAdded(
+							logLineCount - lineCount + 1,
+							logLineCount);
+					}
+				}
+			});
 		}
 	} //}}}
 }

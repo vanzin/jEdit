@@ -1426,7 +1426,7 @@ public class JEditTextArea extends JComponent
 	 * bracket for it), <code>false</code> otherwise.
 	 * @since jEdit 4.2pre1
 	 */
-	public Selection selectToMatchingBracket(int position, boolean moveCaret)
+	public Selection selectToMatchingBracket(int position, boolean quickCopy)
 	{
 		int positionLine = buffer.getLineOfOffset(position);
 		int lineOffset = position - buffer.getLineStartOffset(positionLine);
@@ -1441,18 +1441,18 @@ public class JEditTextArea extends JComponent
 
 			if(bracket < position)
 			{
-				if(moveCaret)
+				if(!quickCopy)
 					moveCaretPosition(position,false);
 				s = new Selection.Range(++bracket,position);
 			}
 			else
 			{
-				if(moveCaret)
+				if(!quickCopy)
 					moveCaretPosition(position + 1,false);
 				s = new Selection.Range(position + 1,bracket);
 			}
 
-			if(!multi)
+			if(!multi && !quickCopy)
 				selectNone();
 
 			addToSelection(s);
@@ -1470,7 +1470,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void selectToMatchingBracket()
 	{
-		selectToMatchingBracket(caret,true);
+		selectToMatchingBracket(caret,false);
 	} //}}}
 
 	//{{{ selectBlock() method
@@ -6603,7 +6603,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					case ')': case ']': case '}':
 						if(!quickCopyDrag)
 							moveCaretPosition(offset,false);
-						sel = selectToMatchingBracket(offset,false);
+						sel = selectToMatchingBracket(offset,true);
 						dragged = true;
 						break;
 					}

@@ -339,10 +339,18 @@ public class CompleteWord extends JWindow
 		public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus)
 		{
-			super.getListCellRendererComponent(list,value,index,
+			super.getListCellRendererComponent(list,null,index,
 				isSelected,cellHasFocus);
 
 			Completion comp = (Completion)value;
+
+			if(index < 9)
+				setText((index + 1) + ": " + comp.text);
+			else if(index == 9)
+				setText("0: " + comp.text);
+			else
+				setText(comp.text);
+
 			if(comp.keyword)
 				setFont(list.getFont().deriveFont(Font.BOLD));
 			else
@@ -448,11 +456,27 @@ public class CompleteWord extends JWindow
 			evt = KeyEventWorkaround.processKeyEvent(evt);
 			if(evt == null)
 				return;
+			else if(Character.isDigit(ch))
+			{
+				int index = ch - '0';
+				if(index == 0)
+					index = 9;
+				else
+					index--;
+				if(index < words.getModel().getSize())
+				{
+					words.setSelectedIndex(index);
+					textArea.setSelectedText(words.getModel()
+						.getElementAt(index).toString()
+						.substring(word.length()));
+					dispose();
+				}
+			}
 			else if(ch != '\b')
 			{
 				textArea.userInput(ch);
 
-				if(!Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1)
+				if(!Character.isLetter(ch) && noWordSep.indexOf(ch) == -1)
 				{
 					dispose();
 					return;

@@ -3,15 +3,19 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- C+ENTER 3 menu command - bar not hidden
+- fold handlers should not have to multiply levels by the tab size
+- different colors for collapsed fold lines of different levels
+- C+ENTER 3 menu command - bar not hidden - need input handler action
+  listeners or something
 - C+ENTER 3 C+2
 - tab in action bar
+- action bar: only move focus to text area if it is still in the text
+  field after the action invocation
 - action bar completion popup
 - beanshell: invokeAction() function
 - changing fileset parameters should modify the file set not create a
   new one
 - dir search: resolve path relative to current buffer's path
-- split pane wiggles
 - global options: split pane position suboptimal
 - perl: q{}, etc.
 - position hold still doesn't work
@@ -24,8 +28,6 @@ and quirks that I need to fix eventually.
 - bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
-- activity log: log viewer needs copy, tabs in log entries need to be
-  replaced
 - rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold
 - global options: don't use card layout
@@ -170,10 +172,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - bracket matching: scan up to, say, 10,000 lines
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
-- insert/remove lines with a lot of folds below is slow for two reasons:
-  - getNext/PrevVisibleLine() is a linear scan
-  - markTokens(x) tokenizes all lines y < x s.t. line context of y is
-    not valid
+- getNext/PrevVisibleLine() is a linear scan
 - do buffer load AWT half immediately after work thread half
 - prioritize work requests so that active buffers get loaded first?
   too much of a hack?

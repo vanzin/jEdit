@@ -228,9 +228,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ getCurrent() method
-	public DockableWindowManager.Entry getCurrent()
+	public String getCurrent()
 	{
-		return current;
+		if(current == null)
+			return null;
+		else
+			return current.name;
 	} //}}}
 
 	//{{{ getDockables() method
