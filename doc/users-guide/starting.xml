@@ -306,6 +306,11 @@
       connect to a running edit server, and do not start one either.
       </entry>
      </row>
+     <row>
+      <entry><userinput>-wait</userinput></entry>
+      <entry>Keeps the client open until the user closes the specified buffer in the server instance. Does nothing if passed to the initial jEdit instance. Use this switch if jEdit is being invoked by another program as an external editor; otherwise the client will exit immediately and the invoking program will assume you have finished editing the given file. 
+      </entry>
+     </row>
     </tbody>
    </tgroup>
    </informaltable>

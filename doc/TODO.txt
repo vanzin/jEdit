@@ -47,7 +47,6 @@ it is done in most text editors
 
 + docs:
 
-- review cli options
 - addCommandPath()
 -Dsun.java2d.noddraw=true
 - API thread safety
