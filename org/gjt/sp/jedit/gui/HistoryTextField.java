@@ -90,16 +90,20 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups,
 		boolean enterAddsToHistory)
 	{
-		setModel(name);
+		controller = new HistoryText(this,name)
+		{
+			public void fireActionPerformed()
+			{
+				HistoryTextField.this.fireActionPerformed();
+			}
+		};
 
 		MouseHandler mouseHandler = new MouseHandler();
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
 
-		this.instantPopups = instantPopups;
-		this.enterAddsToHistory = enterAddsToHistory;
-
-		index = -1;
+		setInstantPopups(instantPopups);
+		setEnterAddsToHistory(enterAddsToHistory);
 	} //}}}
 
 	//{{{ setInstantPopups() method
@@ -110,7 +114,7 @@ public class HistoryTextField extends JTextField
 	 */
 	public void setInstantPopups(boolean instantPopups)
 	{
-		this.instantPopups = instantPopups;
+		controller.setInstantPopups(instantPopups);
 	} //}}}
 
 	//{{{ getInstantPopups() method
@@ -121,7 +125,7 @@ public class HistoryTextField extends JTextField
 	 */
 	public boolean getInstantPopups()
 	{
-		return instantPopups;
+		return controller.getInstantPopups();
 	} //}}}
 
 	//{{{ setEnterAddsToHistory() method
@@ -172,7 +176,7 @@ public class HistoryTextField extends JTextField
 	 */
 	public HistoryModel getModel()
 	{
-		return historyModel;
+		return controller.getModel();
 	} //}}}
 
 	//{{{ setModel() method
@@ -183,24 +187,23 @@ public class HistoryTextField extends JTextField
 	 */
 	public void setModel(String name)
 	{
+		controller.setModel(name);
+
 		Border textFieldBorder = UIManager.getBorder("TextField.border");
 
 		if(name == null)
 		{
-			historyModel = null;
 			if(textFieldBorder != null)
 				setBorder(textFieldBorder);
 		}
 		else
 		{
-			historyModel = HistoryModel.getModel(name);
 			if(textFieldBorder != null)
 			{
 				setBorder(new CompoundBorder(textFieldBorder,
 					new HistoryBorder()));
 			}
 		}
-		index = -1;
 		repaint();
 	} //}}}
 
@@ -210,9 +213,7 @@ public class HistoryTextField extends JTextField
 	 */
 	public void addCurrentToHistory()
 	{
-		if(historyModel != null)
-			historyModel.addItem(getText());
-		index = 0;
+		controller.addCurrentToHistory();
 	} //}}}
 
 	//{{{ setText() method
@@ -222,13 +223,12 @@ public class HistoryTextField extends JTextField
 	public void setText(String text)
 	{
 		super.setText(text);
-		index = -1;
+		controller.setIndex(-1);
 	} //}}}
 
 	//{{{ fireActionPerformed() method
 	/**
-	 * Fires an action event to all listeners. This is public so
-	 * that inner classes can access it.
+	 * Make it public.
 	 */
 	public void fireActionPerformed()
 	{
@@ -242,10 +242,6 @@ public class HistoryTextField extends JTextField
 	{
 		if(!isEnabled())
 			return;
-
-		/*evt = KeyEventWorkaround.processKeyEvent(evt);
-		if(evt == null)
-			return;*/
 
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
 		{
@@ -263,24 +259,27 @@ public class HistoryTextField extends JTextField
 				break;
 			case KeyEvent.VK_UP:
 				if(evt.isShiftDown())
-					doBackwardSearch();
+					controller.doBackwardSearch();
 				else
-					historyPrevious();
+					controller.historyPrevious();
 				evt.consume();
 				break;
 			case KeyEvent.VK_DOWN:
 				if(evt.isShiftDown())
-					doForwardSearch();
+					controller.doForwardSearch();
 				else if(evt.isAltDown())
-					showPopupMenu(evt.isShiftDown());
+				{
+					controller.showPopupMenu(
+						evt.isShiftDown());
+				}
 				else
-					historyNext();
+					controller.historyNext();
 				evt.consume();
 				break;
 			case KeyEvent.VK_TAB:
 				if(evt.isControlDown())
 				{
-					doBackwardSearch();
+					controller.doBackwardSearch();
 					evt.consume();
 				}
 				break;
@@ -306,7 +305,7 @@ public class HistoryTextField extends JTextField
 			if(evt.getX() >= getWidth() - insets.right
 				|| GUIUtilities.isPopupTrigger(evt))
 			{
-				showPopupMenu(evt.isShiftDown());
+				controller.showPopupMenu(evt.isShiftDown());
 			}
 			else
 				super.processMouseEvent(evt);
@@ -327,198 +326,14 @@ public class HistoryTextField extends JTextField
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private HistoryModel historyModel;
-	private JPopupMenu popup;
-	private boolean instantPopups;
+	private HistoryText controller;
 	private boolean enterAddsToHistory;
 	private boolean selectAllOnFocus;
-	private String current;
-	private int index;
 	//}}}
-
-	//{{{ doBackwardSearch() method
-	private void doBackwardSearch()
-	{
-		if(historyModel == null)
-			return;
-
-		if(getSelectionEnd() != getDocument().getLength())
-		{
-			setCaretPosition(getDocument().getLength());
-		}
-
-		String text = getText().substring(0,getSelectionStart());
-		if(text == null)
-		{
-			historyPrevious();
-			return;
-		}
-
-		for(int i = index + 1; i < historyModel.getSize(); i++)
-		{
-			String item = historyModel.getItem(i);
-			if(item.startsWith(text))
-			{
-				replaceSelection(item.substring(text.length()));
-				select(text.length(),getDocument().getLength());
-				index = i;
-				return;
-			}
-		}
-
-		getToolkit().beep();
-	} //}}}
-
-	//{{{ doForwardSearch() method
-	private void doForwardSearch()
-	{
-		if(historyModel == null)
-			return;
-
-		if(getSelectionEnd() != getDocument().getLength())
-		{
-			setCaretPosition(getDocument().getLength());
-		}
-
-		String text = getText().substring(0,getSelectionStart());
-		if(text == null)
-		{
-			historyNext();
-			return;
-		}
-
-		for(int i = index - 1; i >= 0; i--)
-		{
-			String item = historyModel.getItem(i);
-			if(item.startsWith(text))
-			{
-				replaceSelection(item.substring(text.length()));
-				select(text.length(),getDocument().getLength());
-				index = i;
-				return;
-			}
-		}
-
-		getToolkit().beep();
-	} //}}}
-
-	//{{{ historyPrevious() method
-	private void historyPrevious()
-	{
-		if(historyModel == null)
-			return;
-
-		if(index == historyModel.getSize() - 1)
-			getToolkit().beep();
-		else if(index == -1)
-		{
-			current = getText();
-			setText(historyModel.getItem(0));
-			index = 0;
-		}
-		else
-		{
-			// have to do this because setText() sets index to -1
-			int newIndex = index + 1;
-			setText(historyModel.getItem(newIndex));
-			index = newIndex;
-		}
-	} //}}}
-
-	//{{{ historyNext() method
-	private void historyNext()
-	{
-		if(historyModel == null)
-			return;
-
-		if(index == -1)
-			getToolkit().beep();
-		else if(index == 0)
-			setText(current);
-		else
-		{
-			// have to do this because setText() sets index to -1
-			int newIndex = index - 1;
-			setText(historyModel.getItem(newIndex));
-			index = newIndex;
-		}
-	} //}}}
-
-	//{{{ showPopupMenu() method
-	private void showPopupMenu(String text, int x, int y)
-	{
-		if(historyModel == null)
-			return;
-
-		requestFocus();
-
-		if(popup != null && popup.isVisible())
-		{
-			popup.setVisible(false);
-			return;
-		}
-
-		ActionHandler actionListener = new ActionHandler();
-
-		popup = new JPopupMenu();
-		JMenuItem caption = new JMenuItem(jEdit.getProperty(
-			"history.caption"));
-		caption.getModel().setEnabled(false);
- 		popup.add(caption);
- 		popup.addSeparator();
-
-		for(int i = 0; i < historyModel.getSize(); i++)
-		{
-			String item = historyModel.getItem(i);
-			if(item.startsWith(text))
-			{
-				JMenuItem menuItem = new JMenuItem(item);
-				menuItem.setActionCommand(String.valueOf(i));
-				menuItem.addActionListener(actionListener);
-				popup.add(menuItem);
-			}
-		}
-
-		GUIUtilities.showPopupMenu(popup,this,x,y,false);
-	} //}}}
-
-	//{{{ showPopupMenu() method
-	private void showPopupMenu(boolean search)
-	{
-		if(search)
-			showPopupMenu(getText().substring(0,
-				getSelectionStart()),0,getHeight());
-		else
-			showPopupMenu("",0,getHeight());
-	} //}}}
 
 	//}}}
 
 	//{{{ Inner classes
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			int ind = Integer.parseInt(evt.getActionCommand());
-			if(ind == -1)
-			{
-				if(index != -1)
-					setText(current);
-			}
-			else
-			{
-				setText(historyModel.getItem(ind));
-				index = ind;
-			}
-			if(instantPopups)
-			{
-				addCurrentToHistory();
-				fireActionPerformed();
-			}
-		}
-	} //}}}
 
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter

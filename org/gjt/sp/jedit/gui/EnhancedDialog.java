@@ -45,6 +45,16 @@ public abstract class EnhancedDialog extends JDialog
 		_init();
 	}
 
+	public boolean getEnterEnabled()
+	{
+		return enterEnabled;
+	}
+
+	public void setEnterEnabled(boolean enterEnabled)
+	{
+		this.enterEnabled = enterEnabled;
+	}
+	
 	public abstract void ok();
 	public abstract void cancel();
 
@@ -60,12 +70,15 @@ public abstract class EnhancedDialog extends JDialog
 		addWindowListener(new WindowHandler());
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
+		enterEnabled = true;
 	}
 
 	//}}}
 	
 	// protected members
 	protected KeyHandler keyHandler;
+	protected boolean enterEnabled;
 
 	// Recursively adds our key listener to sub-components
 	class ContainerHandler extends ContainerAdapter
@@ -118,9 +131,9 @@ public abstract class EnhancedDialog extends JDialog
 			if(evt.isConsumed())
 				return;
 
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			if(evt.getKeyCode() == KeyEvent.VK_ENTER
+				&& enterEnabled)
 			{
-				// crusty workaround
 				Component comp = getFocusOwner();
 				while(comp != null)
 				{

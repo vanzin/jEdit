@@ -11,6 +11,10 @@ contributing to this release.
   for Word" actions, if regular expression search is on, any special
   characters in the selection are automatically escaped.
 
+- Find dialog box now has fields that accept multi-line input. To invoke
+  the "Find" button from the keyboard, you must now press A+f not
+  ENTER.
+
 }}}
 {{{ Miscellaneous
 
@@ -37,6 +41,9 @@ contributing to this release.
 {{{ API Changes
 
 - Removed EditPlugin.JAR, deprecated since 4.2.
+
+- New org.gjt.sp.jedit.gui.HistoryTextArea class can be used by
+  plugins.
 
 }}}
 
