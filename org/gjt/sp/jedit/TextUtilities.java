@@ -114,6 +114,9 @@ public class TextUtilities
 		Segment lineText = new Segment();
 		buffer.getLineText(line,lineText);
 
+		if(lineText.count == 0)
+			return -1;
+
 		if(offset < 0 || offset >= lineText.count)
 		{
 			throw new ArrayIndexOutOfBoundsException(offset + ":"
