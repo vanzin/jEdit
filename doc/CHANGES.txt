@@ -118,12 +118,15 @@ release.
 
 - Various fixes for dynamic plugin loading.
 
-- Improved handling of symbolic links.
-
 - Changing the plugin download mirror had no effect on an open plugin
   manager window.
 
 - Fixed popup menu positioning.
+
+- Fixed possible corruption of the undo queue due to a regression in
+  pre1.
+
+- Fixed some problems with symbolic links.
 
 }}}
 {{{ API Changes

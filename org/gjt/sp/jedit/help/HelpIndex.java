@@ -79,23 +79,40 @@ class HelpIndex
 
 	//{{{ indexEditorHelp() method
 	/**
-	 * Indexes all available help, including the jEdit user's guide, FAQ, and
-	 * plugin documentation.
+	 * Indexes all available help, including the jEdit user's guide, FAQ,]
+	 * and plugin documentation.
 	 */
-	public void indexEditorHelp() throws Exception
+	public void indexEditorHelp()
 	{
-		String jEditHome = jEdit.getJEditHome();
-		if(jEditHome != null)
+		try
 		{
-			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","users-guide"));
-			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
-			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","news42"));
+			String jEditHome = jEdit.getJEditHome();
+			if(jEditHome != null)
+			{
+				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","users-guide"));
+				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
+				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","news42"));
+			}
+		}
+		catch(Throwable e)
+		{
+			Log.log(Log.ERROR,this,"Error indexing editor help");
+			Log.log(Log.ERROR,this,e);
 		}
 
 		PluginJAR[] jars = jEdit.getPluginJARs();
 		for(int i = 0; i < jars.length; i++)
 		{
-			indexJAR(jars[i].getZipFile());
+			try
+			{
+				indexJAR(jars[i].getZipFile());
+			}
+			catch(Throwable e)
+			{
+				Log.log(Log.ERROR,this,"Error indexing JAR: "
+					+ jars[i].getPath());
+				Log.log(Log.ERROR,this,e);
+			}
 		}
 
 		Log.log(Log.DEBUG,this,"Indexed " + words.size() + " words");
