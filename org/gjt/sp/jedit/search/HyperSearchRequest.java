@@ -55,6 +55,8 @@ public class HyperSearchRequest extends WorkRequest
 	//{{{ run() method
 	public void run()
 	{
+		setStatus(jEdit.getProperty("hypersearch-status"));
+
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		String[] files = fileset.getFiles(view);
 		if(files == null || files.length == 0)
@@ -85,8 +87,6 @@ public class HyperSearchRequest extends WorkRequest
 		{
 			if(selection != null)
 			{
-				setStatus(jEdit.getProperty("hypersearch.status-selection"));
-
 				Buffer buffer = view.getBuffer();
 
 				bufferCount = 1;
@@ -104,7 +104,7 @@ loop:				for(int i = 0; i < files.length; i++)
 					long currentTime = System.currentTimeMillis();
 					if(currentTime - lastStatusTime > 500)
 					{
-						setStatus(jEdit.getProperty("hypersearch.status",
+						setStatus(jEdit.getProperty("hypersearch-status-file",
 							new String[] { file }));
 						setProgressValue(current);
 						lastStatusTime = currentTime;

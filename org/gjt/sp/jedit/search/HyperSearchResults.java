@@ -158,7 +158,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	//{{{ searchStarted() method
 	public void searchStarted()
 	{
-		caption.setText(jEdit.getProperty("hypersearch-results.searching"));
+		caption.setText(jEdit.getProperty("hypersearch-status"));
 		resultTreeRoot.removeAllChildren();
 		resultTreeModel.reload(resultTreeRoot);
 	} //}}}
