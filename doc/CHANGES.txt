@@ -64,6 +64,9 @@ release.
   known, so it was possible to resize a docking area beyond the edge of
   the view.
 
+- ChunkCache.getScreenLineOfOffset() didn't return the correct value -1
+  if the given offset was before the first visible line.
+
 }}}
 
 }}}
