@@ -63,6 +63,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 * backwards compatibility.
 	 */
 	public static final int SAVE_DIALOG = 1;
+	/**
+	 * Choose directory dialog mode.
+	 */
+	public static final int CHOOSE_DIRECTORY_DIALOG = 3;
 
 	/**
 	 * Stand-alone browser mode.
@@ -191,21 +195,28 @@ public class VFSBrowser extends JPanel implements EBComponent
 			jEdit.getBooleanProperty("vfs.browser.filter-enabled"));
 
 		filterCheckbox.addActionListener(actionHandler);
-		cons.gridx = 0;
-		cons.weightx = 0.0f;
-		cons.gridy = 1;
-		layout.setConstraints(filterCheckbox,cons);
-		pathAndFilterPanel.add(filterCheckbox);
+
+		if(mode != CHOOSE_DIRECTORY_DIALOG)
+		{
+			cons.gridx = 0;
+			cons.weightx = 0.0f;
+			cons.gridy = 1;
+			layout.setConstraints(filterCheckbox,cons);
+			pathAndFilterPanel.add(filterCheckbox);
+		}
 
 		filterField = new HistoryTextField("vfs.browser.filter");
 		filterField.setInstantPopups(true);
 		filterField.setSelectAllOnFocus(true);
 		filterField.addActionListener(actionHandler);
 
-		cons.gridx = 1;
-		cons.weightx = 1.0f;
-		layout.setConstraints(filterField,cons);
-		pathAndFilterPanel.add(filterField);
+		if(mode != CHOOSE_DIRECTORY_DIALOG)
+		{
+			cons.gridx = 1;
+			cons.weightx = 1.0f;
+			layout.setConstraints(filterField,cons);
+			pathAndFilterPanel.add(filterField);
+		}
 
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
@@ -767,6 +778,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 						}
 
 						if(file.type == VFS.DirectoryEntry.FILE
+							&& mode == CHOOSE_DIRECTORY_DIALOG)
+						{
+							invisible++;
+							continue;
+						}
+
+						if(file.type == VFS.DirectoryEntry.FILE
 							&& filterEnabled
 							&& filenameFilter != null
 							&& !filenameFilter.isMatch(file.name))
@@ -792,6 +810,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 				browserView.directoryLoaded(node,path,
 					directoryVector);
+
+				// to notify listeners that any existing
+				// selection has been deactivated
+				filesSelected();
 			}
 		});
 	} //}}}

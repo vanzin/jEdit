@@ -39,7 +39,7 @@ contributing to this release.
   the 4.0 pre-releases, but now it's back as a configurable option.
   (Alexander Maryanovsky)
 
-- Added two new methods to the Utilities menu, 'jEdit Home Directory'
+- Added two new sub-menus to the Utilities menu, 'jEdit Home Directory'
   and 'Settings Directory'. These two work in a similar fashion to the
   'Current Directory' menu.
 
@@ -233,6 +233,8 @@ contributing to this release.
   org.gjt.sp.jedit.syntax.
 
 - Added new jEdit.getActiveView() method.
+
+- VFS file chooser now supports a new 'CHOOSE_DIRECTORY_DIALOG' mode.
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

@@ -30,8 +30,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.HashMap;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
@@ -159,12 +159,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		}
 		else
 		{
-			String path;
-			if(view.getBuffer().getVFS() instanceof FileVFS)
-			{
-				path = MiscUtilities.getParentOfPath(
-					view.getBuffer().getPath());
-			}
+			String path = view.getBuffer().getPath();
+			if(!MiscUtilities.isURL(path))
+				path = MiscUtilities.getParentOfPath(path);
 			else
 				path = System.getProperty("user.dir");
 			directory.setText(path);
@@ -831,14 +828,22 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			if(evt.getSource() == choose)
 			{
-				File dir = new File(directory.getText());
-				JFileChooser chooser = new JFileChooser(dir.getParent());
-				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				chooser.setSelectedFile(dir);
+				String[] dirs = GUIUtilities.showVFSFileDialog(
+					view,directory.getText(),
+					VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
+					false);
+				if(dirs != null)
+				{
+					if(MiscUtilities.isURL(dirs[0]))
+					{
+						GUIUtilities.error(view,
+							"remote-dir-search",
+							null);
+						return;
+					}
 
-				if(chooser.showOpenDialog(SearchDialog.this)
-					== JFileChooser.APPROVE_OPTION)
-					directory.setText(chooser.getSelectedFile().getPath());
+					directory.setText(dirs[0]);
+				}
 			}
 			else // source is directory or filter field
 			{
