@@ -8,9 +8,6 @@ and quirks that I need to fix eventually.
 - wheel mouse page scroll w/ soft wrap
 - S+ENTER in fsb for directories
 - verify roots: on Windows & mention in NEWS.txt
-- cvs add new tips
-- cvs remove ModeOptionPane.java
-- cvs add updating-modes.xml
 - left arrow in filename field
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
