@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- status bar exceptions
+- scroll line count problems
 - auto indent:
   if(foo
      bar)
@@ -11,7 +13,6 @@ and quirks that I need to fix eventually.
 - some search dialog problems
 - choose directory dialog needs some work
 - kill ring obviously broken
-- odd bug: delete so that bracket match appears, also subr 2 to 1
 - tall caret and tab
 - tall caret and backspace
 - broken activity log autoscroll

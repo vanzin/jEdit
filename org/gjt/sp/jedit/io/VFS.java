@@ -147,6 +147,12 @@ public abstract class VFS
 	 */
 	public static final int LOW_LATENCY_CAP = 1 << 6;
 
+	/**
+	 * Case insensitive file system capability.
+	 * @since jEdit 4.1pre1
+	 */
+	public static final int CASE_INSENSITIVE_CAP = 1 << 7;
+
 	//}}}
 
 	//{{{ Extended attributes

@@ -14,6 +14,7 @@
 package installer;
 
 import java.io.*;
+import java.util.Vector;
 
 /*
  * Abstracts away operating-specific stuff, like finding out the installation
@@ -77,7 +78,8 @@ public abstract class OperatingSystem
 			this.directory = directory;
 		}
 
-		public abstract void perform(String installDir) throws IOException;
+		public abstract void perform(String installDir,
+			Vector filesets) throws IOException;
 	}
 
 	public OSTask[] getOSTasks(Install installer)
@@ -142,9 +144,11 @@ public abstract class OperatingSystem
 				return new File(dir,"bin").getPath();
 			}
 
-			public void perform(String installDir) throws IOException
+			public void perform(String installDir,
+				Vector filesets) throws IOException
 			{
-				if(!enabled)
+				if(!enabled
+					|| !filesets.contains("jedit-windows"))
 					return;
 
 				mkdirs(directory);
@@ -197,7 +201,8 @@ public abstract class OperatingSystem
 				return new File(dir,"man/man1").getPath();
 			}
 
-			public void perform(String installDir) throws IOException
+			public void perform(String installDir,
+				Vector filesets) throws IOException
 			{
 				if(!enabled)
 					return;
@@ -275,7 +280,8 @@ public abstract class OperatingSystem
 				return null;
 			}
 
-			public void perform(String installDir)
+			public void perform(String installDir,
+				Vector filesets)
 			{
 				if(!enabled)
 					return;

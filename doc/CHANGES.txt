@@ -189,6 +189,13 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   you saw problems like dialog boxes getting smaller each time they were
   opened, etc, let me know if this fixes them.
 
+- Fixed hang if a mode contains regular expression rules that match a
+  zero-width string.
+
+- The jEditLauncher configuration is no longer updated if installing a
+  new jEdit release over an old one with the jEditLauncher de-selected
+  in the installer.
+
 }}}
 {{{ API Changes
 
@@ -203,6 +210,10 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   the file is writable on disk.
 
 - Added JEditTextArea.addTopComponent() method (Brad Mace).
+
+- Case-sensitivity is now determined on a per-filesystem basis, instead
+  of always being on when running on Windows or MacOS X. To have your
+  VFS be case-insensitive, define the CASE_INSENSITIVE_CAP.
 
 }}}
 

@@ -408,7 +408,14 @@ unwind:		while(context.parent != null)
 				else if(match.getStartIndex() != 0)
 					throw new InternalError("Can't happen");
 				else
+				{
 					matchedChars = match.getEndIndex();
+					/* workaround for hang if match was
+					 * zero-width. not sure if there is
+					 * a better way to handle this */
+					if(matchedChars == 0)
+						matchedChars = 1;
+				}
 			}
 		} //}}}
 
