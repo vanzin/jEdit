@@ -55,12 +55,28 @@ public class OffsetManager
 		lineCount = 1;
 
 		positions = new Vector();
+
+		virtualLineCounts = new int[8];
+		for(int i = 0; i < 8; i++)
+			virtualLineCounts[i] = 1;
 	} //}}}
 
 	//{{{ getLineCount() method
 	public final int getLineCount()
 	{
 		return lineCount;
+	} //}}}
+
+	//{{{ getVirtualLineCount() method
+	public final int getVirtualLineCount(int index)
+	{
+		return virtualLineCounts[index];
+	} //}}}
+
+	//{{{ setVirtualLineCount() method
+	public final void setVirtualLineCount(int index, int lineCount)
+	{
+		virtualLineCounts[index] = lineCount;
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -211,12 +227,13 @@ public class OffsetManager
 	public void contentInserted(int startLine, int offset,
 		int numLines, int length, IntegerArray endOffsets)
 	{
-		lineCount += numLines;
 		int endLine = startLine + numLines;
 
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
+			lineCount += numLines;
+
 			if(lineInfo.length <= lineCount)
 			{
 				long[] lineInfoN = new long[(lineCount + 1) * 2];
@@ -236,13 +253,74 @@ public class OffsetManager
 			System.arraycopy(lineContext,startLine,lineContext,
 				endLine,lineCount - endLine);
 
+			//{{{ Find fold start of this line
+			int foldLevel = buffer.getFoldLevel(startLine);
+			long visible = (0xffL << VISIBLE_SHIFT);
+			if(startLine != 0)
+			{
+				for(int i = startLine; i > 0; i--)
+				{
+					if(buffer.isFoldStart(i - 1) && buffer.getFoldLevel(i) <= foldLevel)
+					{
+						visible = (lineInfo[i] & VISIBLE_MASK);
+						break;
+					}
+				}
+			} //}}}
+
+			int[] newVirtualLineCounts = new int[8];
+			System.arraycopy(virtualLineCounts,0,newVirtualLineCounts,0,8);
+
+			int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
+			if(collapseFolds != 0)
+				collapseFolds = (collapseFolds - 1) * buffer.getIndentSize() + 1;
+
+			int threshold = Math.max(foldLevel + 1,collapseFolds);
+			boolean seenVisibleLine = (startLine != 0);
+
 			for(int i = 0; i < numLines; i++)
 			{
+				long _visible;
+				if(collapseFolds == 0)
+					_visible = visible;
+				else if(buffer.getFoldLevel(i) >= threshold)
+					_visible = 0L;
+				else
+					_visible = visible;
+
+				if(!seenVisibleLine && _visible == 0L)
+					_visible = (0xffL << VISIBLE_SHIFT);
+
+				if(_visible != 0L)
+				{
+					seenVisibleLine = true;
+
+					// Unrolled for max efficency
+					if((_visible & (1L << (VISIBLE_SHIFT + 0))) != 0)
+						newVirtualLineCounts[0]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 1))) != 0)
+						newVirtualLineCounts[1]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 2))) != 0)
+						newVirtualLineCounts[2]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 3))) != 0)
+						newVirtualLineCounts[3]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 4))) != 0)
+						newVirtualLineCounts[4]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 5))) != 0)
+						newVirtualLineCounts[5]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 6))) != 0)
+						newVirtualLineCounts[6]++;
+					if((_visible & (1L << (VISIBLE_SHIFT + 7))) != 0)
+						newVirtualLineCounts[7]++;
+				}
+
 				lineInfo[startLine + i] =
 					(((offset + endOffsets.get(i) + 1)
 					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK))
-					| 0xffL << FOLD_LEVEL_SHIFT);
+					| _visible);
 			}
+
+			virtualLineCounts = newVirtualLineCounts;
 		} //}}}
 
 		//{{{ Update remaining line start offsets
@@ -260,6 +338,30 @@ public class OffsetManager
 	public void contentRemoved(int startLine, int offset,
 		int numLines, int length)
 	{
+		//{{{ Update virtual line counts
+		for(int i = 0; i < numLines; i++)
+		{
+			long info = lineInfo[startLine + i];
+
+			// Unrolled for max efficency
+			if((info & (1L << (VISIBLE_SHIFT + 0))) != 0)
+				virtualLineCounts[0]--;
+			if((info & (1L << (VISIBLE_SHIFT + 1))) != 0)
+				virtualLineCounts[1]--;
+			if((info & (1L << (VISIBLE_SHIFT + 2))) != 0)
+				virtualLineCounts[2]--;
+			if((info & (1L << (VISIBLE_SHIFT + 3))) != 0)
+				virtualLineCounts[3]--;
+			if((info & (1L << (VISIBLE_SHIFT + 4))) != 0)
+				virtualLineCounts[4]--;
+			if((info & (1L << (VISIBLE_SHIFT + 5))) != 0)
+				virtualLineCounts[5]--;
+			if((info & (1L << (VISIBLE_SHIFT + 6))) != 0)
+				virtualLineCounts[6]--;
+			if((info & (1L << (VISIBLE_SHIFT + 7))) != 0)
+				virtualLineCounts[7]--;
+		} //}}}
+
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
@@ -328,6 +430,8 @@ public class OffsetManager
 	private int lineCount;
 
 	private Vector positions;
+
+	private int[] virtualLineCounts;
 	//}}}
 
 	//{{{ setLineEndOffset() method
@@ -474,4 +578,6 @@ loop:		for(;;)
 				positions.removeElement(this);
 		} //}}}
 	} //}}}
+
+	//}}}
 }
