@@ -8,6 +8,9 @@ JEDIT 4.0 VERSION HISTORY
   even faster
 - Added a hack to prevent the WheelMouse plugin version 0.5 from being
   loaded under JDK 1.4
+- It should now be possible to bind shortcuts to the numeric keypad,
+  although this might not work perfectly on all Java implementations
+- MacOS plugin version 1.1 (Kris Kopicki)
 
 + Bug Fixes
 
@@ -41,6 +44,7 @@ JEDIT 4.0 VERSION HISTORY
 - 'Toggle Line Comment' macro was broken
 - Hard wrap didn't work properly if space was pressed at the end of a
   line whose length was exactly that of the wrap margin
+- Searching for .*, ^ by itself and $ by itself should now work
 
 + API Additions
 
