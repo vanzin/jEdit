@@ -361,8 +361,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateCaretStatus() method
 	public void updateCaretStatus()
 	{
-		if(!isShowing())
-			return;
+		//if(!isShowing())
+		//	return;
 
 		if (showCaretStatus)
 		{
@@ -438,8 +438,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateBufferStatus() method
 	public void updateBufferStatus()
 	{
-		if(!isShowing())
-			return;
+		//if(!isShowing())
+		//	return;
 
 		Buffer buffer = view.getBuffer();
 
@@ -494,8 +494,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateMiscStatus() method
 	public void updateMiscStatus()
 	{
-		if(!isShowing())
-			return;
+		//if(!isShowing())
+		//	return;
 
 		JEditTextArea textArea = view.getTextArea();
 

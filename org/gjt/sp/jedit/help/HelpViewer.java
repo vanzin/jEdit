@@ -176,8 +176,8 @@ public class HelpViewer extends JFrame implements EBComponent
 	 */
 	public void gotoURL(String url, boolean addToHistory)
 	{
-		title.setText(jEdit.getProperty("helpviewer.loading"));
-
+		// the TOC pane looks up user's guide URLs relative to the
+		// doc directory...
 		String shortURL;
 		if(MiscUtilities.isURL(url))
 		{
@@ -189,7 +189,7 @@ public class HelpViewer extends JFrame implements EBComponent
 			}
 			else
 			{
-				shortURL = null;
+				shortURL = url;
 			}
 		}
 		else
@@ -211,6 +211,14 @@ public class HelpViewer extends JFrame implements EBComponent
 		try
 		{
 			_url = new URL(url);
+
+			if(!_url.equals(viewer.getPage()))
+				title.setText(jEdit.getProperty("helpviewer.loading"));
+			else
+			{
+				/* don't show loading msg because we won't
+				   receive a propertyChanged */
+			}
 
 			viewer.setPage(_url);
 			if(addToHistory)
