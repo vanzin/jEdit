@@ -4837,7 +4837,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ Instance variables
 	Segment lineSegment;
 	MouseHandler mouseHandler;
-	ChunkCache chunkCache;
+	public ChunkCache chunkCache;
 
 	int maxHorizontalScrollWidth;
 

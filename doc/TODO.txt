@@ -3,8 +3,8 @@ TO DO
 - soft wrap: adding lots of spaces: fucks up wrapping
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
-  replace all .* with foo breaks
   ^.* with foo only replaces every second line
+  replace all ^ with something does not replace after blank line
 - scrollToCaret() still "jumps around"
 - if first chunk if a line is a syntax chunk, start offset of screen
   line wrong
@@ -96,11 +96,9 @@ TO DO
   - keymaps are XML files with <bind>, <unbind> tags
   - jEdit, emacs, keymaps included, maybe others
   - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
-- find next with $ or ^
 - custom stylesheet: no xmlns
 - eval-for-selected-lines doesn't work with rectangular selection
 - how to handle S+0-9?
-- if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
 - failed saves should not clear the dirty flag

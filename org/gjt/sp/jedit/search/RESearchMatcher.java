@@ -112,6 +112,12 @@ public class RESearchMatcher implements SearchMatcher
 		{
 			text.move(1);
 
+			if(text.charAt(0) == CharIndexed.OUT_OF_BOUNDS)
+			{
+				// never mind
+				return null;
+			}
+
 			match = re.getMatch(text,0,flags | RE.REG_NOTBOL);
 			if(match == null)
 				return null;

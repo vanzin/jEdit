@@ -32,7 +32,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
-, MRJAboutHandler, MRJOpenDocumentHandler
+, MRJAboutHandler, MRJOpenDocumentHandler, MRJPrefsHandler
 {
     //{{{ Instance variables
 	private boolean onStartup = true;
@@ -53,6 +53,7 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 			// Register handlers
 			MRJApplicationUtils.registerQuitHandler(this);
     		MRJApplicationUtils.registerAboutHandler(this);
+			MRJApplicationUtils.registerPrefsHandler(this);
 			MRJApplicationUtils.registerOpenDocumentHandler(this);
     	} else {
             Log.log(Log.ERROR,this,"This plugin requires Mac OS.");
@@ -78,6 +79,12 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 		new AboutDialog(jEdit.getLastView());
 	}//}}}
 
+	//{{{ handlePrefs() method
+	public void handlePrefs()
+	{
+		new OptionsDialog(jEdit.getLastView());
+	}//}}}
+	
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(File file)
     {

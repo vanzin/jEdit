@@ -945,12 +945,9 @@ loop:		for(int counter = 0; ; counter++)
 				break loop;
 			int _start = occur[0];
 			int _length = occur[1] - occur[0];
-			System.err.println("at " + _start + ", length " + _length);
 
 			String found = new String(text.array,text.offset + _start,_length);
-			System.err.println("found=" + found);
 			String subst = matcher.substitute(found);
-			System.err.println("subst=" + subst);
 			if(smartCaseReplace && ignoreCase)
 			{
 				int strCase = TextUtilities.getStringCase(found);

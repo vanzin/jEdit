@@ -177,14 +177,17 @@ public class ChunkCache
 				}
 				else if(i == tokenListOffset + tokens.length - 1)
 				{
-					Chunk newChunk = new Chunk(
-						tokens.id,seg,flushIndex,
-						i + 1,styles,fontRenderContext);
-					if(current != null)
-						current.next = newChunk;
-					current = newChunk;
+					if(flushIndex != i + 1)
+					{
+						Chunk newChunk = new Chunk(
+							tokens.id,seg,flushIndex,
+							i + 1,styles,fontRenderContext);
+						if(current != null)
+							current.next = newChunk;
+						current = newChunk;
 
-					x += newChunk.width;
+						x += newChunk.width;
+					}
 
 					if(i == seg.count - 1 && wrapMargin != 0
 						&& x > wrapMargin
@@ -201,7 +204,7 @@ public class ChunkCache
 					}
 
 					if(first == null)
-						first = newChunk;
+						first = current;
 
 					seenNonWhiteSpace = true;
 				}
@@ -749,6 +752,17 @@ public class ChunkCache
 			info.chunksValid = true;
 		}
 	} //}}}
+
+	public void dump(int line)
+	{
+		LineInfo info = getLineInfo(line);
+		Chunk chunk = info.chunks;
+		while(chunk != null)
+		{
+			System.err.println(chunk.offset + "::" + chunk.length);
+			chunk = chunk.next;
+		}
+	}
 
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
