@@ -93,7 +93,7 @@ public class Interpreter
 {
 	/* --- Begin static stuff --- */
 
-	public static final String VERSION = "1.2b6";
+	public static final String VERSION = "1.2.7";
 	/* 
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).
@@ -192,7 +192,8 @@ public class Interpreter
 			loadRCFiles();
 
 		long t2=System.currentTimeMillis();
-		Interpreter.debug("Time to initialize interpreter: "+(t2-t1));
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("Time to initialize interpreter: "+(t2-t1));
     }
 
     public Interpreter(
@@ -510,7 +511,7 @@ public class Interpreter
             }
         }
 
-		if ( interactive && !noExitOnEOF ) 
+		if ( interactive && !noExitOnEOF )
 			System.exit(0);
     }
 
@@ -523,9 +524,13 @@ public class Interpreter
 		throws FileNotFoundException, IOException, EvalError 
 	{
 		File file = pathToFile( filename );
-		debug("Sourcing file: "+file);
-		Reader in = new BufferedReader( new FileReader(file) );
-		return eval( in, nameSpace, filename );
+		if ( Interpreter.DEBUG ) debug("Sourcing file: "+file);
+		Reader sourceIn = new BufferedReader( new FileReader(file) );
+		try {
+			return eval( sourceIn, nameSpace, filename );
+		} finally {
+			sourceIn.close();
+		}
 	}
 
 	/**
@@ -566,7 +571,7 @@ public class Interpreter
 		throws EvalError 
 	{
 		Object retVal = null;
-		debug("eval: nameSpace = "+nameSpace);
+		if ( Interpreter.DEBUG ) debug("eval: nameSpace = "+nameSpace);
 
 		/* 
 			Create non-interactive local interpreter for this namespace
@@ -673,7 +678,7 @@ public class Interpreter
 		Evaluate the string in this interpreter's global namespace.
 	*/
     public Object eval( String statement ) throws EvalError {
-		debug("eval(String): "+statement);
+		if ( Interpreter.DEBUG ) debug("eval(String): "+statement);
 		return eval(statement, globalNameSpace);
 	}
 
@@ -750,7 +755,7 @@ public class Interpreter
 	*/
     public final static void debug(String s)
     {
-        if(DEBUG)
+        if ( DEBUG )
             debug.println("// Debug: " + s);
     }
 
@@ -968,7 +973,7 @@ public class Interpreter
 			source( rcfile, globalNameSpace );
 		} catch ( Exception e ) { 
 			// squeltch security exception, filenotfoundexception
-			debug("Could not find rc file: "+e);
+			if ( Interpreter.DEBUG ) debug("Could not find rc file: "+e);
 		}
 	}
 

@@ -55,7 +55,7 @@ class BSHUnaryExpression extends SimpleNode implements ParserConstants
 
     private Object lhsUnaryOperation(LHS lhs) throws EvalError
     {
-        Interpreter.debug("lhsUnaryOperation");
+        if ( Interpreter.DEBUG ) Interpreter.debug("lhsUnaryOperation");
         Object prevalue, postvalue;
         prevalue = lhs.getValue();
         postvalue = unaryOperation(prevalue, kind);

@@ -74,7 +74,8 @@ class Reflect {
 		throws ReflectError, InvocationTargetException, EvalError 
 	{
         /*
-		Interpreter.debug("invoke Method " + methodName + " on object " 
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("invoke Method " + methodName + " on object " 
 			+ object + " with args (");
 		*/
 
@@ -109,7 +110,8 @@ class Reflect {
     public static Object getIndex(Object array, int index)
         throws ReflectError, TargetError
     {
-		Interpreter.debug("getIndex: "+array+", index="+index);
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("getIndex: "+array+", index="+index);
         try {
             Object val = Array.get(array, index);
             return wrapPrimitive(val, array.getClass().getComponentType());
@@ -337,7 +339,8 @@ class Reflect {
 			} catch ( SecurityException e ) { }
 
 			if ( m == null )
-				Interpreter.debug("Exact method " + 
+				if ( Interpreter.DEBUG ) 
+					Interpreter.debug("Exact method " + 
 					StringUtil.methodString(name, types) +
 					" not found in '" + clas.getName() + "'" );
 
@@ -494,10 +497,10 @@ System.out.println("findAcc: "
 		
 		// Didn't find one
 		/*
-		Interpreter.debug(
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug(
 			"Can't find publically accessible "+
-			( onlyStatic ? " static " : "" )
-			+" version of method: "+
+			( onlyStatic ? " static " : "" ) +" version of method: "+
 			StringUtil.methodString(name, types) +
 			" in interfaces or class hierarchy of class "+clas.getName() );
 		*/
@@ -609,7 +612,8 @@ System.out.println("findAcc: "
 			(there are no inherited constructors to worry about) 
 		*/
 		Constructor[] constructors = clas.getDeclaredConstructors();
-		Interpreter.debug("Looking for most specific constructor: "+clas);
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("Looking for most specific constructor: "+clas);
 		con = findMostSpecificConstructor(types, constructors);
 
 		if ( con == null )
@@ -661,7 +665,8 @@ System.out.println("findAcc: "
 		Class [][] candidates = new Class [ sigs.size() ][];
 		sigs.copyInto( candidates );
 
-		Interpreter.debug("Looking for most specific method: "+name);
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("Looking for most specific method: "+name);
 		int match = findMostSpecificSignature( idealMatch, candidates );
 		if ( match == -1 )
 			return null;
@@ -792,7 +797,8 @@ System.out.println("findAcc: "
 
 		if ( bestMatch != null ) {
 			/*
-			Interpreter.debug("best match: " 
+			if ( Interpreter.DEBUG ) 
+				Interpreter.debug("best match: " 
 				+ StringUtil.methodString("args",bestMatch));
 			*/
 				

@@ -137,7 +137,7 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		if(!(value instanceof String))
 			throw new EvalError("Property expression must be a String or identifier.", this);
 
-		Interpreter.debug("LHS property access: ");
+		if ( Interpreter.DEBUG ) Interpreter.debug("LHS property access: ");
 		return new LHS(obj, (String)value);
 	}
 }

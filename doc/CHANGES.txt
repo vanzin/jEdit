@@ -54,6 +54,9 @@ contributing to this release.
   switched on. Again this improves performance of "Replace All", which
   was nearly unusable with soft wrap.
 
+- Updated to BeanShell 1.2b7. This version has less debugging code and
+  should be faster.
+
 + Miscellaneous Changes:
 
 - If the user and system macro directories have a subdirectory with the
