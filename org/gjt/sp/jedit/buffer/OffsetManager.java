@@ -243,7 +243,7 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			for(;;)
 			{
-				if(anchor == null || anchor.physicalLine < line)
+				if(anchor == null || anchor.physicalLine <= line)
 					break;
 
 				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));

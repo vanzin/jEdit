@@ -4745,6 +4745,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	// used to store offsetToXY() results
 	Point returnValue;
+
+	boolean lastLinePartial;
 	//}}}
 
 	//{{{ isCaretVisible() method
@@ -4795,6 +4797,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 		lastLinePartial = (height % lineHeight != 0);
+		if(lastLinePartial)
+			visibleLines++;
 
 		chunkCache.recalculateVisibleLines();
 		maxHorizontalScrollWidth = 0;
@@ -4876,7 +4880,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private int physLastLine;
 	private int screenLastLine;
-	private boolean lastLinePartial;
 
 	private int visibleLines;
 	private int electricScroll;

@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- chunk cache:
+  updateChunksUpTo(): support first half valid, rest invalid.
+  text area: pass meaningful skew parameter.
 - inserting lines repaints twice
 - global tab size overrides buffer local prop
 - redo/undo dirty restore is broken.
