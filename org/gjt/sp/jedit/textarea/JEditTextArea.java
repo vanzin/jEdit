@@ -932,6 +932,7 @@ public class JEditTextArea extends JComponent
 	//{{{ getScreenLineOfOffset() method
 	/**
 	 * Returns the screen (wrapped) line containing the specified offset.
+	 * Returns -1 if the line is not currently visible on the screen.
 	 * @param offset The offset
 	 * @since jEdit 4.0pre4
 	 */
@@ -1074,6 +1075,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public Point offsetToXY(int line, int offset, Point retVal)
 	{
+		if(!displayManager.isLineVisible(line))
+			return null;
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		if(screenLine == -1)
 			return null;
@@ -2619,19 +2622,13 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		scrollToCaret(false);
 		int magic = getMagicCaretPosition();
-		int caretScreenLine;
-		if(displayManager.isLineVisible(caretLine))
-			caretScreenLine = getScreenLineOfOffset(caret);
-		else if(caretLine < displayManager.getFirstVisibleLine())
+		if(caretLine < displayManager.getFirstVisibleLine())
 		{
-			caretScreenLine = displayManager.getNextVisibleLine(
+			caretLine = displayManager.getNextVisibleLine(
 				caretLine);
 		}
-		else
-		{
-			caretScreenLine = displayManager.getPrevVisibleLine(
-				caretLine);
-		}
+
+		int caretScreenLine = getScreenLineOfOffset(caret);
 
 		scrollDownPage();
 
@@ -2948,19 +2945,14 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		scrollToCaret(false);
 		int magic = getMagicCaretPosition();
-		int caretScreenLine;
-		if(displayManager.isLineVisible(caretLine))
-			caretScreenLine = getScreenLineOfOffset(caret);
-		else if(caretLine < displayManager.getFirstVisibleLine())
+
+		if(caretLine < displayManager.getFirstVisibleLine())
 		{
-			caretScreenLine = displayManager.getNextVisibleLine(
+			caretLine = displayManager.getNextVisibleLine(
 				caretLine);
 		}
-		else
-		{
-			caretScreenLine = displayManager.getPrevVisibleLine(
-				caretLine);
-		}
+
+		int caretScreenLine = getScreenLineOfOffset(caret);
 
 		scrollUpPage();
 
@@ -5783,8 +5775,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 				invalidateLineRange(match.startLine,caretLine);
 
-			if(chunkCache.getScreenLineOfOffset(match.startLine,
-				match.start - getLineStartOffset(match.startLine))
+			if(!displayManager.isLineVisible(match.startLine)
+				|| chunkCache.getScreenLineOfOffset(
+				match.startLine,match.start - getLineStartOffset(match.startLine))
 				== -1)
 			{
 				showStructureStatusMessage(match.startLine < caretLine);

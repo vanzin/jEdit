@@ -67,13 +67,10 @@ Macro index data (in DocBook format)
 	<para><filename>Display_Actions.bsh</filename></para>
 	<abstract><para>
 		Displays a list of all the actions known to jEdit categorised by
-		ActionSet
+		their action set.
 	</para></abstract>
 	<para>
-		This macro creates a new buffer of all the actions known to jEdit and
-		categorises them by action set.  For ease of use, the action sets are
-		wrapped up in a jEdit fold.  This macro can be a useful reference for
-		people wanting to utilise the jEdit 4.2 action bar.
+		This macro can be a useful reference if you want to use the jEdit 4.2 action bar.
 	</para>
 </listitem>
 */

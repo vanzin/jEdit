@@ -3,20 +3,24 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+remaining features before 4.2final:
+
+- option to disable context menu
+- plugin mgr inspection of not-loaded plugins
+- history text field tweak
+- optional dependencies
+- tall caret and backspace
+- need timeouts for plugin manager list download.
+
 - encoding list: not properly sorted
-- reference counting problem in fs browser
 - in search bar, C+y a doesn't work
 - printing: check default printer setting
 - still broken: https://sourceforge.net/tracker/?func=detail&atid=100588&aid=831264&group_id=588
 - news: deep indent, action bar, new cli options
 - remove-marker, select-next/prev-marker/bracket
-- option to disable context menu
-- hide caret while typing
 - plugin mgr install doesn't update existing plugins
-- plugin mgr inspection of not-loaded plugins
 - entering ../.. inside archive
 - vfs updates still broken
-- history text field tweak
 - "downloading plugin list" label in plugin manager
 - column reference counting broken
 - gzip & unicode, or gzip & <?xml encoding...
@@ -27,7 +31,6 @@ and quirks that I need to fix eventually.
 - shortcuts: stale shortcuts remain?
 - if a plugin's stop() throws an exception, infinite loop?
 - no need to wait for requests after newFile()
-- plugin mgr install doesn't update existing plugins
 - class loading problems
 - motif l&f: shortcuts in menu items
 - some JLists do not auto-scroll on keystroke
@@ -42,6 +45,8 @@ and quirks that I need to fix eventually.
 
 + docs:
 
+- action bar
+- document deep indent
 - quicknotepad help needs to be generated
 - note about dependencies
 - help:
@@ -91,20 +96,15 @@ and quirks that I need to fix eventually.
 
 - hide caret while typing
 - unindentCurrentLine property
-- need timeouts for plugin manager list download.
 - backup time distance setting
 - fsb date
 - preserve 2 spaces after . w/ format
 - toggle caret scroll to when not in vis region?
 - print selection
 - adding to icons prop
-- option for b&w print
-- document deep indent
 - tall caret and tab
-- tall caret and backspace
 - fsb default size
 - C+ENTER 3 C+2
-- optional dependencies
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - format -- instead of \n\n, what if it has \n   \n?
 - do all modifier handling through the modifier mapping
@@ -131,7 +131,6 @@ and quirks that I need to fix eventually.
 - <edit pane,buffer> --> <caret info> map
 - vfs browser right click menu: plugins & favorites
 - don't show 'new directory' in favorites:
-- add option for confirm.save-all
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible

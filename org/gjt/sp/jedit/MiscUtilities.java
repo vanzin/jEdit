@@ -177,7 +177,9 @@ public class MiscUtilities
 			if(path.startsWith("\\\\"))
 				return true;
 		}
-		else if(OperatingSystem.isUnix())
+		// not sure if this is correct for OpenVMS.
+		else if(OperatingSystem.isUnix()
+			|| OperatingSystem.isVMS())
 		{
 			// nice and simple
 			if(path.length() > 0 && path.charAt(0) == '/')

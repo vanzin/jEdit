@@ -607,21 +607,31 @@ public class Gutter extends JComponent implements SwingConstants
 				int caretScreenLine;
 				if(caretLine > textArea.getLastPhysicalLine())
 					caretScreenLine = Integer.MAX_VALUE;
-				else
+				else if(textArea.displayManager.isLineVisible(
+						textArea.getCaretLine()))
 				{
 					caretScreenLine = textArea
 						.getScreenLineOfOffset(
 						textArea.getCaretPosition());
 				}
+				else
+				{
+					caretScreenLine = -1;
+				}
 
 				int structScreenLine;
 				if(match.startLine > textArea.getLastPhysicalLine())
 					structScreenLine = Integer.MAX_VALUE;
-				else
+				else if(textArea.displayManager.isLineVisible(
+						match.startLine))
 				{
 					structScreenLine = textArea
 						.getScreenLineOfOffset(
 						match.start);
+				}
+				else
+				{
+					structScreenLine = -1;
 				}
 
 				if(caretScreenLine > structScreenLine)
