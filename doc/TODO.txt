@@ -14,10 +14,6 @@ TO DO
 
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
-- regexp search problems:
-  - hypersearch for .*$: only finds random lines
-  - hypersearch for .*: only finds non-empty lines
-  - hypersearch for $: doesn't work
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
     possible.

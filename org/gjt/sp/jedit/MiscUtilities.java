@@ -743,7 +743,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(Vector vector, Comparator compare)
 	{
-		quicksort((List)vector,compare);
+		Collections.sort(vector,compare);
 	} //}}}
 
 	//{{{ quicksort() method
@@ -755,10 +755,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(List list, Comparator compare)
 	{
-		if(list.size() == 0)
-			return;
-
-		quicksort(list,0,list.size() - 1,compare);
+		Collections.sort(list,compare);
 	} //}}}
 
 	//{{{ quicksort() method
@@ -781,12 +778,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(Vector vector, Compare compare)
 	{
-		quicksort((List)vector,(Comparator)compare);
+		Collections.sort(vector,compare);
 	} //}}}
 
 	//{{{ Compare interface
 	/**
-	 * An interface for comparing objects.
+	 * An interface for comparing objects. This is a hold-over from
+	 * they days when jEdit had its own sorting API due to JDK 1.1
+	 * compatibility requirements. Use <code>java.util.Comparable</code>
+	 * instead.
 	 */
 	public interface Compare extends Comparator
 	{
@@ -1049,43 +1049,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ Private members
 	private MiscUtilities() {}
-
-	//{{{ quicksort() method
-	private static void quicksort(List obj, int _start, int _end, Comparator compare)
-	{
-		int start = _start;
-		int end = _end;
-
-		Object mid = obj.get((_start + _end) / 2);
-
-		if(_start > _end)
-			return;
-
-		while(start <= end)
-		{
-			while((start < _end) && (compare.compare(obj.get(start),mid) < 0))
-				start++;
-
-			while((end > _start) && (compare.compare(obj.get(end),mid) > 0))
-				end--;
-
-			if(start <= end)
-			{
-				Object o = obj.get(start);
-				obj.set(start,obj.get(end));
-				obj.set(end,o);
-
-				start++;
-				end--;
-			}
-		}
-
-		if(_start < end)
-			quicksort(obj,_start,end,compare);
-
-		if(start < _end)
-			quicksort(obj,start,_end,compare);
-	} //}}}
 
 	//{{{ listDirectory() method
 	private static void listDirectory(Vector stack, Vector files,

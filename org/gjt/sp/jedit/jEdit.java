@@ -1642,7 +1642,7 @@ public class jEdit
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
-				(String)buffer.getProperty(Buffer.ENCODING));
+				buffer.getStringProperty(Buffer.ENCODING));
 		}
 
 		removeBufferFromList(buffer);
@@ -1716,7 +1716,7 @@ public class jEdit
 				int caret = (_caret == null ? 0 : _caret.intValue());
 				BufferHistory.setEntry(buffer.getPath(),caret,
 					(Selection[])buffer.getProperty(Buffer.SELECTION),
-					(String)buffer.getProperty(Buffer.ENCODING));
+					buffer.getStringProperty(Buffer.ENCODING));
 			}
 
 			buffer.close();
