@@ -2,6 +2,13 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 2.4pre15
 
+Thanks to Justin Hagstrom for contributing to this release.
+
+{{{ Syntax Highlighting
+
+- Updated PHP syntax highlighting for PHP5 and PHPDoc (Justin Hagstrom).
+
+}}}
 {{{ Bug Fixes
 
 - The rest.xml and embperl.xml mode files were missing from the

@@ -10,7 +10,8 @@
 		<author>
 			<firstname>Slava</firstname><surname>Pestov</surname>
 		</author>
-		<copyright><year>2003</year><holder>Slava Pestov</holder></copyright>
+		<copyright><year>2003</year>
+		<year>2004</year><holder>Slava Pestov</holder></copyright>
 		<legalnotice><title>Legal Notice</title>
 			<para>
 				Permission is granted to copy, distribute and/or modify this document
@@ -27,7 +28,7 @@
 
 	<chapter id="user-changes"><title>User-Visible Changes</title>
 	
-	<sect1 id="incompatible"><title>Incompatible Changes</title>
+	<sect1 id="incompatible"><title>Removed Features</title>
 	
 	<para>
 	 Soft wrapping to the text area width (by setting the wrap width to zero) is no longer supported.
@@ -35,6 +36,10 @@
 
 	<para>
 	 The <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Synchronized Scrolling</guimenuitem> command has been removed.
+	</para>
+
+	<para>
+	 The <application>jEditLauncher</application> component for Windows shell integration is no longer included.
 	</para>
 
 	</sect1>
@@ -74,7 +79,7 @@
 	</para>
 
 	<para>
-	 The status bar can now optionally display a simple 24-hour clock. This can be enabled in the <guilabel>Status Bar</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box
+	 The status bar can now optionally display a simple clock. This can be enabled in the <guilabel>Status Bar</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box
 	</para>
 
 	</sect1>
@@ -86,16 +91,7 @@
 	</para>
 
 	<para>
-	 The <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> command (shortcut:  <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) now looks in all visible buffers for completions.
-	</para>
-
-	<para>
-	 <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Vertical Paste</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering characters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection can now act like a <quote>tall caret</quote>.
-	</para>
-	
-	<para>
-	 The new <guimenu>Edit</guimenu>&gt;<guimenuitem>More Selection</guimenuitem>&gt;<guimenuitem>Rectangular Selection</guimenuitem> command (shortcut: <keycombo><keycap>Alt</keycap><keycap>\</keycap></keycombo>) permits rectangular selections to be created using the keyboard. A static bar indicator is shown when rectangular selection mode is active. Clicking beyond the end of a line in rectangular selection mode (or <keycap>Control</keycap>-clicking otherwise) inserts the appropriate amount of whitespace and moves the caret to the clicked location.
+	 The <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> command (shortcut:  <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) now looks in all visible buffers for completions. Also, the longest common prefix of the completions is inserted if there are multiple completions.
 	</para>
 
 	<para>
@@ -118,13 +114,34 @@
 	<para>
 	 When soft wrap is on, the text area now scrolls by screen lines, instead of scrolling by physical lines.
 	</para>
+
+	</sect1>
+
+	<sect1 id="rect"><title>Rectangular Editing</title>
+
+	<para>
+	 <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Vertical Paste</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering characters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection can now act like a <quote>tall caret</quote>.
+	</para>
 	
+	<para>
+	 The new <guimenu>Edit</guimenu>&gt;<guimenuitem>More Selection</guimenuitem>&gt;<guimenuitem>Rectangular Selection</guimenuitem> command (shortcut: <keycombo><keycap>Alt</keycap><keycap>\</keycap></keycombo>) permits rectangular selections to be created using the keyboard. A static bar indicator is shown when rectangular selection mode is active.
+	</para>
+	
+	<para>
+	 Clicking beyond the end of a line in rectangular selection mode (or <keycap>Control</keycap>-clicking otherwise) inserts the appropriate amount of whitespace and moves the caret to the clicked location.
+	</para>
+
+	<para>
+	 The rectangular selection now acts like a <quote>tall caret</quote>. Inserting text or pressing <keycap>Backspace</keycap> or <keycap>Delete</keycap> while a rectangular selection is active performs that operation on each selected line.
+	</para>
+
 	</sect1>
 
 	<sect1 id="syntax"><title>Syntax Highlighting</title>
 	 <para>
-	 <!-- as of pre9, -->
-	  27 new syntax highlighting modes were added, and many existing ones were enhanced. jEdit now supports syntax highlighting for 118 languages.
+	 <!-- as of pre15, -->
+	  34 new syntax highlighting modes were added, and many existing ones were enhanced. jEdit now supports syntax highlighting for 122 languages.
 	 </para>
 	 <para>
 	  The following new token types were added:
@@ -180,13 +197,31 @@
 	</itemizedlist>
 
 	<para>
+	 When opening a symbolic link on Unix, the opened buffer has the path name of the link itself, not the file pointed by the link. However, it is still not possible to open the same buffer twice by opening two links to the same file.
+	</para>
+
+	</sect1>
+
+	<sect1 id="encodings"><title>Handling of Multiple Encodings</title>
+	
+	<para>
 	 A full list of encodings is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. The encoding declaration of XML files is now honoured when loading and saving buffers.
 	</para>
 
 	<para>
-	 When opening a symbolic link on Unix, the opened buffer has the path name of the link itself, not the file pointed by the link. However, it is still not possible to open the same buffer twice by opening two links to the same file.
+	 Files saved in the <literal>UTF-8Y</literal> encoding are now supported. This encoding is identical to <literal>UTF-8</literal> except there
+	 is a three-byte signature (<literal>0xEFBBBF</literal>) at the beginning of the file.
 	</para>
 
+	<para>
+	 UTF8-Y-encoded files are auto-detected as being such.
+	</para>
+
+	<para>
+	 The encoding used by XML files is also auto-detected if the file provides an XML declaration like the following:
+	</para>
+
+	<programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></programlisting>
 	</sect1>
 
 	<sect1 id="vfs.browser"><title>File System Browser</title>
@@ -205,6 +240,18 @@
 
 	</sect1>
 
+	<sect1 id="bundled-macros"><title>Bundled Macros</title>
+	
+	<para>
+	 There are a number of new bundled macros, and most of the existing ones have undergone enhancements and bug fixes. jEdit 4.1 bundled 28 macros in 4 categories; jEdit 4.2 bundles 58 macros in 7 categories.
+	</para>
+
+	<para>
+	  Of course you can create new macros of your own, either by recording actions or writing them from scratch.
+	</para>
+
+	</sect1>
+
 	</chapter>
 	
 	<chapter id="api-changes"><title>API Changes</title>
@@ -217,7 +264,7 @@
 		classes, static imports, mixins, better
 		error reporting, improved performance, and various fixes.
 	</para>
-c
+
 	<para>
 		A number of jEdit-specific changes are also present in this
 		BeanShell version; they will eventually be merged back into
