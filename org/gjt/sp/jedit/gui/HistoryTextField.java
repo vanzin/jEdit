@@ -233,9 +233,9 @@ public class HistoryTextField extends JTextField
 		if(!isEnabled())
 			return;
 
-		evt = KeyEventWorkaround.processKeyEvent(evt);
+		/*evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
-			return;
+			return;*/
 
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
 		{

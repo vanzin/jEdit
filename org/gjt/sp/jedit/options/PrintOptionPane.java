@@ -84,6 +84,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
 		jEdit.setBooleanProperty("print.color",color.isSelected());
+		jEdit.setProperty("print.tabSize",(String)tabSize.getSelectedItem());
 	} //}}}
 
 	//{{{ Private members
