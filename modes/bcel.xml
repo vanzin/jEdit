@@ -13,9 +13,6 @@
 
 
     <RULES HIGHLIGHT_DIGITS="TRUE">
-        <WHITESPACE> </WHITESPACE>
-        <WHITESPACE>	</WHITESPACE>
-
         <!-- Silly comment -->
         <SEQ TYPE="COMMENT1">/**/</SEQ>
 

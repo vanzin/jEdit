@@ -60,6 +60,7 @@ contributing to this release.
   C+INSERT bound to copy
   S+INSERT bound to paste
 - New splash screen (Kris Kopicki)
+- WHITESPACE rule no longer necessary in mode definitions
 
 + Bug Fixes
 

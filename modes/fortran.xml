@@ -24,9 +24,6 @@ platform or vendor specific keywords (in paticular COMPAQ(Digital) FORTRAN).
 <!-- In fixed form, column 72 is the last column parsed, unless the 
 \extend_source option is invoked -->
     <TERMINATE AT_CHAR="72" />
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 
 <!-- comment either !, C, or * can be used as a comment in the first column
 in either free or fixed form FORTRAN-->

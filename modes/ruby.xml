@@ -12,10 +12,6 @@
 		<PROPERTY NAME="lineComment" VALUE="#" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Ruby comment (Inline Documetation ) -->
 		<SPAN TYPE="COMMENT2">
 			<BEGIN>=begin</BEGIN>

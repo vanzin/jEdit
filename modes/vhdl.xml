@@ -10,10 +10,6 @@
 		<PROPERTY NAME="lineComment" VALUE="--" />
 	</PROPS>
 	<RULES ESCAPE="\">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>

@@ -10,10 +10,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="MARKUP" DELEGATE="PHP">
 			<BEGIN>&lt;?php</BEGIN>
 			<END>?&gt;</END>
@@ -67,10 +63,6 @@
 	</RULES>
 
 	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="MARKUP" DELEGATE="PHP">
 			<BEGIN>&lt;?php</BEGIN>
 			<END>?&gt;</END>
@@ -100,10 +92,6 @@
 	</RULES>
 
 	<RULES SET="TAGS_LITERAL" DEFAULT="LITERAL1">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>    </WHITESPACE>
-
 		<SPAN TYPE="MARKUP" DELEGATE="PHP">
 			<BEGIN>&lt;?php</BEGIN>
 			<END>?&gt;</END>
@@ -125,10 +113,6 @@
 			<PROPERTY NAME="commentStart" VALUE="/*" />
 			<PROPERTY NAME="lineComment" VALUE="//" />
 		</PROPS>
-
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
@@ -2571,9 +2555,6 @@
 	</RULES>
 
 	<RULES SET="PHP_LITERAL" ESCAPE="\" DEFAULT="LITERAL1">
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-		
 		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
 		<SEQ TYPE="LITERAL1">\</SEQ>
 		<SEQ TYPE="LITERAL1">=</SEQ>

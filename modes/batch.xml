@@ -19,9 +19,6 @@
 		<PROPERTY NAME="lineComment" VALUE="rem " />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- 'echo off' statements -->
 		<SEQ TYPE="KEYWORD3">@</SEQ>
 

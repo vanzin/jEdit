@@ -9,10 +9,6 @@
 		<PROPERTY NAME="lineComment" VALUE="%" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT2">%!</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT2">%?</EOL_SPAN>
@@ -93,10 +89,6 @@
 	</RULES>
 
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN>(</BEGIN>
 			<END>)</END>

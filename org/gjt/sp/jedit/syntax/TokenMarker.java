@@ -468,10 +468,11 @@ public class TokenMarker
 			{
 				lastKeyword = pos + pattern.count;
 
-				if ((checkRule.action & WHITESPACE) == WHITESPACE)
+				// XXX: deal with this
+				/* if ((checkRule.action & WHITESPACE) == WHITESPACE)
 				{
 					return false; // break out of inner for loop to check next char
-				}
+				} */
 
 				// mark previous sequence as NULL (plain text)
 				if (lastOffset < pos)

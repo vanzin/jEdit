@@ -7,9 +7,6 @@
 		<PROPERTY NAME="lineComment" VALUE="%" />
 	</PROPS>
 	<RULES>
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- $$...$$ -->
 		<SPAN TYPE="MARKUP" DELEGATE="MATH">
 			<BEGIN>$$</BEGIN>
@@ -69,10 +66,6 @@
 	</RULES>
 
 	<RULES SET="MATH" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- some commands must be handled specially -->
 		<SEQ TYPE="KEYWORD3">\$</SEQ>
 		<SEQ TYPE="KEYWORD3">\\</SEQ>

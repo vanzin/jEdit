@@ -17,10 +17,6 @@
 					 undent when we see a /oparam> tag... -->
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 				<!-- Allow for Dynamo SSI -->
 				<SPAN TYPE="NULL">
 			<BEGIN>&lt;!--#</BEGIN>
@@ -84,10 +80,6 @@
 	</RULES>
 
 	<RULES SET="JHTML" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -139,9 +131,6 @@
 	</RULES>
 
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 		<!-- backticks are java -->
 		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
 			<BEGIN>`</BEGIN>

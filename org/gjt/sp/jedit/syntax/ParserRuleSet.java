@@ -44,6 +44,9 @@ public class ParserRuleSet
 		this.mode = mode;
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
+
+		addRule(ParserRuleFactory.createSequenceRule(" ",Token.WHITESPACE,false));
+		addRule(ParserRuleFactory.createSequenceRule("\t",Token.WHITESPACE,false));
 	} //}}}
 
 	//{{{ getMode() method

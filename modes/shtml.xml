@@ -8,11 +8,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
-
 		<!-- SSI -->
 		<!-- SSI directives should ALWAYS end like this, with a space
 			before the tag end, so let's make it colorize poorly otherwise -->
@@ -74,10 +69,6 @@
 	</RULES>
 
 	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
@@ -92,9 +83,6 @@
 	</RULES>
 
 	<RULES SET="SSI" DEFAULT="KEYWORD3">
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1" EXCLUDE_MATCH="TRUE" DELEGATE="SSI-EXPRESSION">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
