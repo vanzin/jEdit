@@ -28,6 +28,9 @@ contributing to this release.
 
 - Added Register and Marker dockables (Nicholas O'Leary).
 
+- "Rectangular Selection" command now changes the state of the current
+  selection to match the flag.
+
 }}}
 {{{ Bug Fixes
 
