@@ -83,6 +83,8 @@ public class KeyEventTranslator
 			}
 			else
 			{
+				if(keyCode == KeyEvent.VK_TAB)
+					evt.consume();
 				returnValue = new Key(getModifierString(evt),keyCode,'\0');
 			}
 			break;

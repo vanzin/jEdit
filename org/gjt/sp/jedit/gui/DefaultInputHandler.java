@@ -342,6 +342,7 @@ public class DefaultInputHandler extends InputHandler
 			case '\t':
 			case ' ':
 				input = (char)keyStroke.key;
+				break;
 			default:
 				input = keyStroke.input;
 			}
