@@ -6,7 +6,7 @@ JEDIT 4.0 VERSION HISTORY
 
 - If jEdit runs out of memory while loading a file, it now reports the
   error using the standard I/O error reporting method, instead of just
-  dumping an exception of the activity log
+  dumping an exception in the activity log
 - If indent folding is enabled, lines consisting of white space only no
   longer inherit the fold level of the previous line
 - QuickNotepad plugin compiled by default
@@ -33,6 +33,15 @@ JEDIT 4.0 VERSION HISTORY
 - Workaround for Graphics2D.setPaintMode() bug on Windows (John Gellene)
 - Docked windows can no longer be made larger than the width or height
   of the view
+- If the first narrowed line was not a fold start, newly inserted lines
+  within the narrowed region would become invisible
+- Making changes to the last line in the buffer that would result in the
+  line being wrapped would result in incorrect repaints
+- Double-click and triple-click drags would throw exceptions if the
+  mouse was moved outside the text area
+- Fixed several bugs when painting tokens with a background color
+- File system browser would throw NullPointerExceptions when loading
+  directories under some circumstances
 
 * Version 4.0pre4
 

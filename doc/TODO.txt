@@ -1,15 +1,11 @@
 TO DO
 
-- cancel ftp password prompt: stuck in 'loading'
-- directoryLoaded() NPE
-- paintSelection AIOB?
+- floatie position not remembered
 - test dir replace all and save all
 - macro that calls saveAllBuffers() results in unbalanced
   begin/endCompoundEdit() calls?
 - syntax highlighted files and soft wrap
 - switch buffers: bracket matching status msg
-- last line wrapped; shorten; repaint problem
-- narrow: inserting lines messes things up
 - switching buffers: horiz scroll bar not updated?
 - vertical scrollbar w/ soft wrap wrong
 - fix scrollToCaret()

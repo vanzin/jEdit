@@ -238,27 +238,27 @@ public class ChunkCache
 
 		while(chunks != null)
 		{
+			Font font = chunks.style.getFont();
+			Color bgColor = chunks.style.getBackgroundColor();
+			if(bgColor != null)
+			{
+				float x2 = (chunks.next == null ? width
+					: _x + chunks.width);
+
+				//LineMetrics lm = font.getLineMetrics(
+				//	chunks.text,gfx.getFontRenderContext());
+				gfx.setXORMode(background);
+				gfx.setColor(bgColor);
+
+				gfx.fill(new Rectangle2D.Float(
+					_x,y - forBackground.getAscent(),
+					x2 - _x,forBackground.getHeight()));
+
+				gfx.setPaintMode();
+			}
+
 			if(chunks.text != null)
 			{
-				Font font = chunks.style.getFont();
-				Color bgColor = chunks.style.getBackgroundColor();
-				if(bgColor != null)
-				{
-					float x2 = (chunks.next == null ? width
-						: x + chunks.width);
-
-					//LineMetrics lm = font.getLineMetrics(
-					//	chunks.text,gfx.getFontRenderContext());
-					gfx.setXORMode(background);
-					gfx.setColor(bgColor);
-
-					gfx.fill(new Rectangle2D.Float(
-						_x,y - forBackground.getAscent(),
-						x2 - _x,forBackground.getHeight()));
-
-					gfx.setPaintMode();
-				}
-
 				gfx.setFont(font);
 				gfx.setColor(chunks.style.getForegroundColor());
 

@@ -832,6 +832,13 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateScreenLineRange(int start, int end)
 	{
+		if(start > end)
+		{
+			int tmp = end;
+			end = start;
+			start = tmp;
+		}
+
 		FontMetrics fm = painter.getFontMetrics();
 		int y = start * fm.getHeight();
 		int height = (end - start + 1) * fm.getHeight();
@@ -5432,8 +5439,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
-			if(numLines != 0 && buffer.getLineCount() - numLines - 1 <= physLastLine)
+			if(/* numLines != 0 && */ foldVisibilityManager.getLastVisibleLine()
+				- numLines <= physLastLine)
+			{
+				int oldScreenLastLine = screenLastLine;
 				recalculateLastPhysicalLine();
+				invalidateScreenLineRange(oldScreenLastLine,
+					screenLastLine);
+			}
 
 			if(!buffer.isLoaded())
 				return;
@@ -5483,8 +5496,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// -lineCount because they are removed.
 			repaintAndScroll(startLine,-numLines);
 
-			if(numLines != 0 && buffer.getLineCount() - numLines - 1 <= physLastLine)
+			if(/* numLines != 0 && */ foldVisibilityManager.getLastVisibleLine()
+				+ numLines <= physLastLine)
+			{
+				int oldScreenLastLine = screenLastLine;
 				recalculateLastPhysicalLine();
+				invalidateScreenLineRange(oldScreenLastLine,
+					screenLastLine);
+			}
 
 			int end = start + length;
 
@@ -5744,6 +5763,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				|| (popup != null && popup.isVisible()))
 				return;
 
+			if(evt.getY() < 0)
+			{
+				setFirstLine(firstLine - 2);
+			}
+			else if(evt.getY() >= getHeight())
+			{
+				setFirstLine(firstLine + 2);
+			}
+
 			boolean rect = evt.isControlDown();
 
 			switch(clickCount)
@@ -5763,15 +5791,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleDrag() method
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
-			if(evt.getY() < 0)
-			{
-				setFirstLine(firstLine - 2);
-			}
-			else if(evt.getY() >= getHeight())
-			{
-				setFirstLine(firstLine + 2);
-			}
-
 			int dot = xyToOffset(evt.getX(),
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
 				!painter.isBlockCaretEnabled());
