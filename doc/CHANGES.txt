@@ -126,6 +126,12 @@ Thanks to Ken Turner for contributing to this release.
   jEdit would pick this up as A+QUOTE which is bound to "Scroll Page
   Up".
 
+- Fixed NullPointerException when clicking in text area in a soft
+  wrapped line that was but off at the bottom.
+
+- Fixed NullPointerException when scrolling to a line that was longer
+  than the visible area.
+
 }}}
 {{{ API Changes
 
