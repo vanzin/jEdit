@@ -273,6 +273,7 @@ public class Java14
 				/* otherwise just insert the text */
 				else
 					textArea.getBuffer().insert(caret,str);
+				textArea.scrollToCaret(true);
 			}
 			catch(Exception e)
 			{
