@@ -259,6 +259,9 @@ release.
   live updates of the dockable container's size. This improves
   responsiveness of resizing noticably.
 
+- When dragging with the mouse, the text area now autoscroll at a rate
+  proportional to how far away the mouse is from the edge of the area.
+
 }}}
 {{{ Platform-Specific
 
@@ -331,6 +334,9 @@ release.
 
 - Fixed horizontal scrolling when creating a rectangular selection in
   virtual space.
+
+- Clicking in the text area before the buffer is loaded no longer throws
+  exceptions.
 
 }}}
 {{{ API Changes

@@ -39,16 +39,6 @@ import org.gjt.sp.util.Log;
  */
 public class DisplayManager
 {
-	//{{{ isNarrowed() method
-	/**
-	 * Returns if the buffer has been narrowed.
-	 * @since jEdit 4.2pre1
-	 */
-	public boolean isNarrowed()
-	{
-		return narrowed;
-	} //}}}
-
 	//{{{ isLineVisible() method
 	/**
 	 * Returns if the specified line is visible.
@@ -440,8 +430,6 @@ public class DisplayManager
 		{
 			buffer.writeLock();
 
-			narrowed = false;
-
 			showLineRange(0,buffer.getLineCount() - 1);
 		}
 		finally
@@ -480,8 +468,6 @@ public class DisplayManager
 		try
 		{
 			buffer.writeLock();
-
-			narrowed = false;
 
 			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
 				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
@@ -531,8 +517,6 @@ public class DisplayManager
 		// if we narrowed to a single collapsed fold
 		if(getNextVisibleLine(start) == -1)
 			expandFold(start,false);
-
-		narrowed = true;
 
 		// Hack... need a more direct way of obtaining a view?
 		// JEditTextArea.getView() method?
@@ -633,7 +617,6 @@ public class DisplayManager
 	private OffsetManager offsetMgr;
 	private JEditTextArea textArea;
 	private int index;
-	private boolean narrowed;
 
 	//{{{ setLineVisible() method
 	private final void setLineVisible(int line, boolean visible)

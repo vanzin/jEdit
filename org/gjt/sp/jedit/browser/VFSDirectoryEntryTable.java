@@ -195,7 +195,65 @@ public class VFSDirectoryEntryTable extends JTable
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		if(evt.getID() == KeyEvent.KEY_TYPED)
+		if(evt.getID() == KeyEvent.KEY_PRESSED)
+		{
+			VFSDirectoryEntryTableModel model =
+				(VFSDirectoryEntryTableModel)getModel();
+			int row = getSelectedRow();
+
+			switch(evt.getKeyCode())
+			{
+			case KeyEvent.VK_LEFT:
+				evt.consume();
+				if(row != -1)
+				{
+					if(model.files[row].expanded)
+					{
+						model.collapse(row);
+						break;
+					}
+
+					for(int i = row - 1; i >= 0; i--)
+					{
+						if(model.files[i].expanded)
+						{
+							setSelectedRow(i);
+							break;
+						}
+					}
+				}
+
+				String dir = browserView.getBrowser()
+					.getDirectory();
+				dir = MiscUtilities.getParentOfPath(dir);
+				browserView.getBrowser().setDirectory(dir);
+				break;
+			case KeyEvent.VK_RIGHT:
+				if(row != -1)
+				{
+					if(!model.files[row].expanded)
+						toggleExpanded(row);
+				}
+				evt.consume();
+				break;
+			case KeyEvent.VK_DOWN:
+				// stupid Swing
+				if(row == -1 && getModel().getRowCount() != 0)
+				{
+					setSelectedRow(0);
+					evt.consume();
+				}
+				break;
+			case KeyEvent.VK_ENTER:
+				browserView.getBrowser().filesActivated(
+					(evt.isShiftDown()
+					? VFSBrowser.M_OPEN_NEW_VIEW
+					: VFSBrowser.M_OPEN),false);
+				evt.consume();
+				break;
+			}
+		}
+		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			if(evt.isControlDown() || evt.isAltDown()
 				|| evt.isMetaDown())
@@ -229,6 +287,13 @@ public class VFSDirectoryEntryTable extends JTable
 			super.processKeyEvent(evt);
 	} //}}}
 
+	//{{{ setSelectedRow() method
+	public void setSelectedRow(int row)
+	{
+		getSelectionModel().setSelectionInterval(row,row);
+		scrollRectToVisible(getCellRect(row,0,true));
+	} //}}}
+
 	//{{{ Private members
 	private BrowserView browserView;
 	private FileCellRenderer renderer;
@@ -248,8 +313,7 @@ public class VFSDirectoryEntryTable extends JTable
 			if(matchAgainst.regionMatches(ignoreCase,
 				0,str,0,str.length()))
 			{
-				setRowSelectionInterval(i,i);
-				//scrollRowToVisible(i);
+				setSelectedRow(i);
 				return true;
 			}
 		}

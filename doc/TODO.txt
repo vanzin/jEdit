@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- format should show an error if the line len is 0, not beep
+- tree table: expansion state save broken
 - shortcut editor: restore default button
 - fsb plugins menu: plugin options
 - browser's default size
@@ -10,7 +12,6 @@ and quirks that I need to fix eventually.
 - box in io progress
 - browser: tab: don't insert full path
 - completion: handle full paths
-- browser: left: only if nothing selected
 - don't rely on browser view for completion
 - file dialog: handle ~ ENTER, - ENTER
 - adapt vfs filename field for the path display at the top
@@ -18,18 +19,13 @@ and quirks that I need to fix eventually.
 - vfs.isValidPath()
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
 - vfs browser: open in new view: doesn't focus the new view
-- docking area default size
 - electric scroll inconsistent w.r.t. deletes
-- tmpExpanded cleanup
 - action bar layout problem
-- pasting into a new file is broken
-- not loaded file -- text area clicks
 - eval-for-selected-lines doesn't work with rectangular selection
 - recording 'evaluate for selected lines'
 - evalutate for selected lines: > 1 selection per line
 - split view line insert: repainted twice, selection problems
 - action bar: wrap around arrow keys
-- up/down with soft wrap
 - means of overriding escape to fix C# @"..." issue
 - searching in a buffer w/ narrowed fold
 - expand collapse lose sync
@@ -37,12 +33,7 @@ and quirks that I need to fix eventually.
 - macro record: doesn't respect overwrite
 - narrow: scrolls one down
 - save file resulting in fold collapse -- scroll to 0
-- wm drag: sometimes cursor gets stuck, need to check for resizePos out
-of bounds, etc.
 - closing lots of files is slow
-- autoscroll down is slower than up if !lastLinePartial
-- propertiesChanged() closes dockables
-- left-bias rects broken with up/down
 - today:
   - finish rect select content inserted with virtual space
   - rect select and trailing whitespace
@@ -93,7 +84,6 @@ of bounds, etc.
 [error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList.addPlugin(PluginList.java:78)
 [error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginListHandler.endElement(PluginListHandler.java:180)
 - focus problem with hypersearch in floating window
-- line 2112 -- isNarrowed() check of moveCaretPosition()
 - dwm: not always focused correctly
 - JDK 1.4 focus bugs
 - if loadMode() throws error, save of a mode file fails?

@@ -321,7 +321,7 @@ public abstract class OperatingSystem
 	{
 		public String getInstallDirectory(String name, String version)
 		{
-			return "./" + name.toLowerCase() + "/" + version);
+			return "./" + name.toLowerCase() + "/" + version;
 		}
 	}
 
