@@ -223,7 +223,7 @@ public class EditPane extends JPanel implements EBComponent
 	public void loadCaretInfo()
 	{
 		Integer caret = (Integer)buffer.getProperty(Buffer.CARET);
-		Selection[] selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+		//Selection[] selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
 
 		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
 		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);

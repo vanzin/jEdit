@@ -246,6 +246,17 @@ public class Buffer implements EBComponent
 				if(!getFlag(TEMPORARY))
 					finishLoading();
 
+				/* Ultra-obscure: we have to fire this event
+				 * after the buffer might have been collapsed
+				 * by finishLoading(), since finishLoading(),
+				 * unlike "official" fold APIs, does not notify
+				 * the text area to invalidate its cached
+				 * virtual to physical information. Note that
+				 * the text area's contentInserted() handler
+				 * updates 'lastPhysLine' even if the LOADING
+				 * flag is set. */
+				fireContentInserted(0,0,getLineCount(),getLength() - 1);
+
 				setFlag(LOADING,false);
 
 				// if reloading a file, clear dirty flag
@@ -2246,8 +2257,8 @@ public class Buffer implements EBComponent
 					nextLineRequested = true;
 				else if(oldRules != context.rules)
 					nextLineRequested = true;
-				else if(i != lastTokenizedLine)
-					nextLineRequested = false;
+				//else if(i != lastTokenizedLine)
+				//	nextLineRequested = false;
 			}
 
 			lastTokenizedLine = lineIndex;
@@ -2274,7 +2285,9 @@ public class Buffer implements EBComponent
 	 */
 	public boolean isNextLineRequested()
 	{
-		return nextLineRequested;
+		boolean retVal = nextLineRequested;
+		nextLineRequested = false;
+		return retVal;
 	} //}}}
 
 	//{{{ getTokenMarker() method
@@ -2527,7 +2540,7 @@ public class Buffer implements EBComponent
 
 				if(changed && !getFlag(INSIDE_INSERT))
 				{
-					System.err.println("fold level changed: " + start + ":" + line);
+					//System.err.println("fold level changed: " + start + ":" + line);
 					fireFoldLevelChanged(start,line);
 				}
 
@@ -3295,7 +3308,8 @@ public class Buffer implements EBComponent
 	} //}}}
 
 	//{{{ contentInserted() method
-	private void contentInserted(int offset, int length, IntegerArray endOffsets)
+	private void contentInserted(int offset, int length,
+		IntegerArray endOffsets)
 	{
 		try
 		{
@@ -3320,9 +3334,10 @@ public class Buffer implements EBComponent
 			if(lastTokenizedLine >= startLine)
 				lastTokenizedLine = -1;
 
-			fireContentInserted(startLine,offset,numLines,length);
-
 			setDirty(true);
+
+			if(!getFlag(LOADING))
+				fireContentInserted(startLine,offset,numLines,length);
 		}
 		finally
 		{

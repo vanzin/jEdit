@@ -125,6 +125,8 @@ public abstract class Selection
 		//this.endLine = endLine;
 	} //}}}
 
+	//}}}
+
 	//{{{ Range class
 	/**
 	 * An ordinary range selection.

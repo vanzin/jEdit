@@ -591,7 +591,6 @@ public class ChunkCache
 
 		out.clear();
 
-		int subregion = 0;
 		int offset = 0;
 		int length = 0;
 
@@ -617,8 +616,6 @@ public class ChunkCache
 					continue;
 				}
 
-				subregion = 0;
-
 				buffer.getLineText(physicalLine,textArea.lineSegment);
 
 				lineToChunkList(textArea.lineSegment,
@@ -627,6 +624,8 @@ public class ChunkCache
 					painter,textArea.softWrap
 					? textArea.wrapMargin
 					: 0.0f,out);
+
+				info.firstSubregion = true;
 
 				if(out.size() == 0)
 				{
@@ -647,8 +646,6 @@ public class ChunkCache
 			}
 			else
 			{
-				subregion++;
-
 				chunks = (Chunk)out.get(0);
 				out.remove(0);
 				offset = chunks.offset;
@@ -682,7 +679,7 @@ public class ChunkCache
 			}
 
 			info.physicalLine = physicalLine;
-			info.subregion = subregion;
+			info.lastSubregion = (out.size() == 0);
 			info.offset = offset;
 			info.length = length;
 			info.chunks = chunks;
@@ -754,7 +751,8 @@ public class ChunkCache
 		int physicalLine;
 		int offset;
 		int length;
-		int subregion;
+		boolean firstSubregion;
+		boolean lastSubregion;
 		boolean chunksValid;
 		Chunk chunks;
 		int width;

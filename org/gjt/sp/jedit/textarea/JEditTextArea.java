@@ -262,7 +262,6 @@ public class JEditTextArea extends JComponent
 			propertiesChanged();
 
 			recalculateLastPhysicalLine();
-			chunkCache.updateChunksUpTo(visibleLines);
 		}
 		finally
 		{
@@ -857,15 +856,17 @@ public class JEditTextArea extends JComponent
 		{
 			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
-			if(info.physicalLine >= line && startLine == -1)
+
+			if((info.physicalLine >= line || info.physicalLine == -1)
+				&& startLine == -1)
 			{
 				startLine = i;
 			}
-			else if((info.physicalLine > line
+
+			if((info.physicalLine >= line && info.lastSubregion)
 				|| info.physicalLine == -1)
-				&& endLine == -1)
 			{
-				endLine = i - 1;
+				endLine = i;
 				break;
 			}
 		}
@@ -905,15 +906,16 @@ public class JEditTextArea extends JComponent
 			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 
-			if(info.physicalLine >= start && startScreenLine == -1)
+			if((info.physicalLine >= start || info.physicalLine == -1)
+				&& startScreenLine == -1)
 			{
 				startScreenLine = i;
 			}
-			else if((info.physicalLine > end
+
+			if((info.physicalLine >= end && info.lastSubregion)
 				|| info.physicalLine == -1)
-				&& endScreenLine == -1)
 			{
-				endScreenLine = i - 1;
+				endScreenLine = i;
 				break;
 			}
 		}

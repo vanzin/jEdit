@@ -33,8 +33,8 @@ lineSep.mac=MacOS (\\r)
 #}}}
 
 #{{{ A list of common file encodings used in various places
-encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
-	KOI8_R SJIS Unicode UTF8
+encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 ISO8859_15 \
+	MacRoman Big5 GBK KOI8_R SJIS Unicode UTF8
 #}}}
 
 #{{{ Miscellaneous
@@ -249,6 +249,7 @@ edit=undo \
      copy-append \
      paste \
      paste-previous \
+     %registers \
      - \
      select-all \
      select-none \
@@ -263,8 +264,7 @@ edit=undo \
      select-line-range \
      - \
      %text \
-     %source \
-     %registers
+     %source
 edit.label=$Edit
 undo.label=$Undo
 redo.label=$Redo
@@ -282,6 +282,23 @@ complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
 select-line-range.label=Se$lect Line Range...
+
+#{{{ Registers menu
+registers=view-registers \
+	  - \
+	  cut-string-register \
+          copy-string-register \
+	  cut-append-string-register \
+	  copy-append-string-register \
+	  paste-string-register
+registers.label=Registers
+cut-string-register.label=Cut to Register
+copy-string-register.label=Copy to Register
+cut-append-string-register.label=Cut Append to Register
+copy-append-string-register.label=Copy Append to Register
+paste-string-register.label=Paste Register
+view-registers.label=View Registers...
+#}}}
 
 #{{{ Text menu
 text=select-word \
@@ -342,23 +359,6 @@ prev-bracket.label=Go to Previous Bracket
 next-bracket.label=Go to Next Bracket
 spaces-to-tabs.label=Spaces to Tabs
 tabs-to-spaces.label=Tabs to Spaces
-#}}}
-
-#{{{ Registers menu
-registers=view-registers \
-	  - \
-	  cut-string-register \
-          copy-string-register \
-	  cut-append-string-register \
-	  copy-append-string-register \
-	  paste-string-register
-registers.label=Registers
-cut-string-register.label=Cut to Register
-copy-string-register.label=Copy to Register
-cut-append-string-register.label=Cut Append to Register
-copy-append-string-register.label=Copy Append to Register
-paste-string-register.label=Paste Register
-view-registers.label=View Registers...
 #}}}
 
 #}}}

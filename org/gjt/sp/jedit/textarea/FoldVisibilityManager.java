@@ -333,6 +333,8 @@ public class FoldVisibilityManager
 		}
 	} //}}}
 
+	public boolean debug;
+
 	//{{{ virtualToPhysical() method
 	/**
 	 * Converts a virtual line number to a physical line number.
@@ -341,6 +343,8 @@ public class FoldVisibilityManager
 	 */
 	public int virtualToPhysical(int line)
 	{
+		if(!javax.swing.SwingUtilities.isEventDispatchThread())
+			new Exception().printStackTrace();
 		try
 		{
 			buffer.readLock();
@@ -355,6 +359,8 @@ public class FoldVisibilityManager
 
 			if(lastVirtual == line)
 			{
+				if(debug)
+					System.err.println("lastVirtual: " + lastVirtual + "::" + lastPhysical);
 				if(lastPhysical < 0 || lastPhysical >= buffer.getLineCount())
 				{
 					throw new ArrayIndexOutOfBoundsException(
@@ -363,8 +369,14 @@ public class FoldVisibilityManager
 			}
 			else if(line > lastVirtual && lastVirtual != -1)
 			{
+				if(debug)
+					System.err.println("forward scan: " + lastVirtual + ":" + line
+						+ ":" + lastPhysical);
 				for(;;)
 				{
+					if(debug)
+						System.err.println(lastPhysical + " to " + lastVirtual + ", "
+							+ offsetMgr.isLineVisible(lastPhysical,index));
 					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
@@ -387,8 +399,14 @@ public class FoldVisibilityManager
 			}
 			else if(line < lastVirtual && lastVirtual - line > line)
 			{
+				if(debug)
+					System.err.println("backward scan: " + lastVirtual + ":" + line
+						+ ":" + lastPhysical);
 				for(;;)
 				{
+					if(debug)
+						System.err.println(lastPhysical + " to " + lastVirtual + ", "
+							+ offsetMgr.isLineVisible(lastPhysical,index));
 					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
@@ -411,6 +429,10 @@ public class FoldVisibilityManager
 			}
 			else
 			{
+				if(debug)
+					System.err.println("from start scan: " + lastVirtual + ":" + line
+						+ ":" + lastPhysical);
+
 				lastPhysical = 0;
 				// find first visible line
 				while(!offsetMgr.isLineVisible(lastPhysical,index))
@@ -419,6 +441,9 @@ public class FoldVisibilityManager
 				lastVirtual = 0;
 				for(;;)
 				{
+					if(debug)
+						System.err.println(lastPhysical + " to " + lastVirtual + ", "
+							+ offsetMgr.isLineVisible(lastPhysical,index));
 					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
