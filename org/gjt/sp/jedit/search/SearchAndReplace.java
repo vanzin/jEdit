@@ -645,11 +645,11 @@ loop:			for(;;)
 
 		try
 		{
+			buffer.beginCompoundEdit();
+
 			SearchMatcher matcher = getSearchMatcher(false);
 			if(matcher == null)
 				return false;
-
-			buffer.beginCompoundEdit();
 
 			int retVal = 0;
 
@@ -737,13 +737,13 @@ loop:			for(;;)
 
 		try
 		{
+			buffer.beginCompoundEdit();
+
 			SearchMatcher matcher = getSearchMatcher(false);
 			if(matcher == null)
 				return false;
 
 			int retVal = 0;
-
-			buffer.beginCompoundEdit();
 
 			retVal += _replace(view,buffer,matcher,start,end,
 				smartCaseReplace);

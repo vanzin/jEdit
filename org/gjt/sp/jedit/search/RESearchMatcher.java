@@ -54,16 +54,19 @@ public class RESearchMatcher implements SearchMatcher
 		boolean ignoreCase, boolean beanshell,
 		String replaceMethod) throws Exception
 	{
-		if(!beanshell)
+		if(beanshell && replace != null && replace.length() != 0)
+		{
+			this.beanshell = true;
+			this.replaceMethod = replaceMethod;
+			replaceNS = new NameSpace(BeanShell.getNameSpace(),
+				"search and replace");
+		}
+		else
 		{
 			// gnu.regexp doesn't seem to support \n and \t in the replace
 			// string, so implement it here
 			this.replace = MiscUtilities.escapesToChars(replace);
 		}
-
-		this.beanshell = beanshell;
-		this.replaceMethod = replaceMethod;
-		replaceNS = new NameSpace(BeanShell.getNameSpace(),"search and replace");
 
 		re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
 			| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);

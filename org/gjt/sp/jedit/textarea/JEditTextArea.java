@@ -1375,8 +1375,15 @@ public class JEditTextArea extends JComponent
 	 */
 	public void selectToMatchingBracket()
 	{
-		int bracket = TextUtilities.findMatchingBracket(buffer,caretLine,
-			Math.max(0,caret - buffer.getLineStartOffset(caretLine)));
+		int offset = caret - buffer.getLineStartOffset(caretLine);
+
+		if(buffer.getLineLength(caretLine) == 0)
+			return;
+
+		if(offset == buffer.getLineLength(caretLine))
+			offset--;
+
+		int bracket = TextUtilities.findMatchingBracket(buffer,caretLine,offset);
 
 		if(bracket != -1)
 		{
@@ -3105,15 +3112,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToMatchingBracket()
 	{
-		int dot = caret - getLineStartOffset(caretLine);
-
-		int bracket = TextUtilities.findMatchingBracket(
-			buffer,caretLine,Math.max(0,dot - 1));
-		if(bracket != -1)
+		if(getLineLength(caretLine) != 0)
 		{
-			selectNone();
-			moveCaretPosition(bracket + 1,false);
-			return;
+			int dot = caret - getLineStartOffset(caretLine);
+
+			int bracket = TextUtilities.findMatchingBracket(
+				buffer,caretLine,Math.max(0,dot - 1));
+			if(bracket != -1)
+			{
+				selectNone();
+				moveCaretPosition(bracket + 1,false);
+				return;
+			}
 		}
 
 		getToolkit().beep();
@@ -5513,7 +5523,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(bracketLine != -1)
 			invalidateLineRange(bracketLine,caretLine);
 
-		int offset = getCaretPosition() - getLineStartOffset(caretLine);
+		int offset = caret - getLineStartOffset(caretLine);
 
 		if(offset != 0)
 		{

@@ -33,6 +33,10 @@ JEDIT 4.0 VERSION HISTORY
   files on startup
 - Fixed typo in css.xml
 - Fixed minor problem in HTML version of user's guide
+- Fixed possible "Unbalanced begin/endCompoundEdit()" if BeanShell
+  replace fails
+- Fixed an off-by-one error that would cause Control-clicks beyond the
+  end of a line to fail
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
