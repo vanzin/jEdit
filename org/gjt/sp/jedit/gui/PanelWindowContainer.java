@@ -26,8 +26,9 @@ import javax.swing.border.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.font.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -562,14 +563,19 @@ public class PanelWindowContainer implements DockableWindowContainer
 				this.rotate = rotate;
 				this.text = text;
 
-				// should use 2D text measurement here
-				FontMetrics fm = getFontMetrics(getFont());
-				width = fm.stringWidth(text);
-				height = fm.getHeight();
+				FontRenderContext fontRenderContext
+					= new FontRenderContext(null,true,
+					true);
+				GlyphVector glyphs = getFont().createGlyphVector(
+					fontRenderContext,text);
+				width = (int)glyphs.getLogicalBounds().getWidth();
+				height = (int)glyphs.getLogicalBounds().getHeight();
 
 				renderHints = new RenderingHints(
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
+				renderHints.put(RenderingHints.KEY_FRACTIONALMETRICS,
+					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 				renderHints.put(RenderingHints.KEY_RENDERING,
 					RenderingHints.VALUE_RENDER_QUALITY);
 			} //}}}
