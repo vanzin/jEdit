@@ -24,6 +24,9 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 - Fixed minor problem with expanding files when moving the caret outside
   the narrowed range.
 
+- Fixed digit highlighting regexp since it didn't pick up 0xff00 (and
+  various other combinations) properly.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and
