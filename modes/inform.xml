@@ -28,7 +28,6 @@
 		</SPAN>
         
         <!-- special sequences that require special highlighting -->
-		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
@@ -49,19 +48,11 @@
 		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">.&amp;</SEQ>
 		<SEQ TYPE="OPERATOR">.#</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
 
 		<!-- Function calls -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">::</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
-
-		<SEQ TYPE="NULL">:</SEQ>
 
 		<KEYWORDS>
 			<KEYWORD1>has</KEYWORD1>

@@ -24,14 +24,6 @@
 			<END>"</END>
 		</SPAN>
 
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">^</SEQ>
 		<SEQ TYPE="OPERATOR">:=</SEQ>
 		<SEQ TYPE="OPERATOR">_</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>

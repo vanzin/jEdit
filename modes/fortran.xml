@@ -41,13 +41,6 @@ in either free or fixed form FORTRAN-->
 			<END>'</END>
 		</SPAN>
 
-<!-- not highlighting these operators -->
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">*</SEQ>
-
 <!-- Highlighted Operators -->
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>

@@ -1,6 +1,9 @@
 /*
  * KeywordMap.java - Fast keyword->id map
- * Copyright (C) 1998, 1999 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 2002 Slava Pestov
  * Copyright (C) 1999 Mike Dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -33,6 +36,7 @@ import org.gjt.sp.jedit.TextUtilities;
  */
 public class KeywordMap
 {
+	//{{{ KeywordMap constructor
 	/**
 	 * Creates a new <code>KeywordMap</code>.
 	 * @param ignoreCase True if keys are case insensitive
@@ -42,8 +46,9 @@ public class KeywordMap
 		this(ignoreCase, 52);
 		this.ignoreCase = ignoreCase;
 		noWordSep = new StringBuffer();
-	}
+	} //}}}
 
+	//{{{ KeywordMap constructor
 	/**
 	 * Creates a new <code>KeywordMap</code>.
 	 * @param ignoreCase True if the keys are case insensitive
@@ -55,8 +60,9 @@ public class KeywordMap
 		this.mapLength = mapLength;
 		this.ignoreCase = ignoreCase;
 		map = new Keyword[mapLength];
-	}
+	} //}}}
 
+	//{{{ lookup() method
 	/**
 	 * Looks up a key.
 	 * @param text The text segment
@@ -81,8 +87,9 @@ public class KeywordMap
 			k = k.next;
 		}
 		return Token.NULL;
-	}
+	} //}}}
 
+	//{{{ add() method
 	/**
 	 * Adds a key-value mapping.
 	 * @param keyword The key
@@ -111,9 +118,11 @@ loop:		for(int i = 0; i < chars.length; i++)
 			}
 		}
 
+		noWordSepStr = null;
 		map[key] = new Keyword(chars,id,map[key]);
-	}
+	} //}}}
 
+	//{{{ getNonAlphaNumericChars() method
 	/**
 	 * Returns all non-alphanumeric characters that appear in the
 	 * keywords of this keyword map.
@@ -121,9 +130,13 @@ loop:		for(int i = 0; i < chars.length; i++)
 	 */
 	public String getNonAlphaNumericChars()
 	{
-		return noWordSep.toString();
-	}
+		if(noWordSepStr == null)
+			noWordSepStr = noWordSep.toString();
 
+		return noWordSepStr;
+	} //}}}
+
+	//{{{ getKeywords() method
 	/**
 	 * Returns an array containing all keywords in this keyword map.
 	 * @since jEdit 4.0pre3
@@ -143,8 +156,9 @@ loop:		for(int i = 0; i < chars.length; i++)
 		String[] retVal = new String[vector.size()];
 		vector.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ getIgnoreCase() method
 	/**
 	 * Returns true if the keyword map is set to be case insensitive,
 	 * false otherwise.
@@ -152,8 +166,9 @@ loop:		for(int i = 0; i < chars.length; i++)
 	public boolean getIgnoreCase()
 	{
 		return ignoreCase;
-	}
+	} //}}}
 
+	//{{{ setIgnoreCase() method
 	/**
 	 * Sets if the keyword map should be case insensitive.
 	 * @param ignoreCase True if the keyword map should be case
@@ -162,26 +177,37 @@ loop:		for(int i = 0; i < chars.length; i++)
 	public void setIgnoreCase(boolean ignoreCase)
 	{
 		this.ignoreCase = ignoreCase;
-	}
+	} //}}}
 
-	// protected members
-	protected int mapLength;
+	//{{{ Private members
 
-	protected int getStringMapKey(String s)
+	//{{{ Instance variables
+	private int mapLength;
+	private Keyword[] map;
+	private boolean ignoreCase;
+	private StringBuffer noWordSep;
+	private String noWordSepStr;
+	//}}}
+
+	//{{{ getStringMapKey() method
+	private int getStringMapKey(String s)
 	{
 		return (Character.toUpperCase(s.charAt(0)) +
 				Character.toUpperCase(s.charAt(s.length()-1)))
 				% mapLength;
-	}
+	} //}}}
 
+	//{{{ getSegmentMapKey() method
 	protected int getSegmentMapKey(Segment s, int off, int len)
 	{
 		return (Character.toUpperCase(s.array[off]) +
 				Character.toUpperCase(s.array[off + len - 1]))
 				% mapLength;
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Keyword class
 	class Keyword
 	{
 		public Keyword(char[] keyword, byte id, Keyword next)
@@ -194,9 +220,5 @@ loop:		for(int i = 0; i < chars.length; i++)
 		public char[] keyword;
 		public byte id;
 		public Keyword next;
-	}
-
-	private Keyword[] map;
-	private boolean ignoreCase;
-	private StringBuffer noWordSep;
+	} //}}}
 }

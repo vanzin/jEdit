@@ -23,8 +23,6 @@
 
 		<!-- LISP stuff -->
 		<SEQ TYPE="NULL">'(</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">)</SEQ>
 
 		<MARK_FOLLOWING TYPE="LITERAL1">'</MARK_FOLLOWING>
 

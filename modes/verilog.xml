@@ -59,17 +59,6 @@
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
 
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">:</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
-		<SEQ TYPE="NULL">#</SEQ>
-		<SEQ TYPE="NULL">@</SEQ>
-
 		<KEYWORDS>
 			<!-- Regular Keywords -->
 			<KEYWORD1>always</KEYWORD1>

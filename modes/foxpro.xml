@@ -31,10 +31,6 @@
 		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">**</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*-</EOL_SPAN>
 
-		
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-
 		<!-- Comparison operators -->
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
@@ -66,7 +62,6 @@
 		<!-- Instruction separator -->
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
-		<SEQ TYPE="NULL">:</SEQ>
 
 		<KEYWORDS>
 			<!-- Conditional Statements -->

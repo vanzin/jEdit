@@ -68,7 +68,7 @@
 		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
 
 		<!-- some of these should be marked OPERATOR -->
-		<SEQ TYPE="NULL">)</SEQ>
+		<!-- <SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="NULL">!</SEQ>
@@ -82,13 +82,13 @@
 		<SEQ TYPE="NULL">~</SEQ>
 		<SEQ TYPE="NULL">}</SEQ>
 		<SEQ TYPE="NULL">{</SEQ>
-		<!-- SEQ TYPE="NULL">.</SEQ -->
+		SEQ TYPE="NULL">.</SEQ
 		<SEQ TYPE="NULL">,</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
 		<SEQ TYPE="NULL">]</SEQ>
 		<SEQ TYPE="NULL">[</SEQ>
 		<SEQ TYPE="NULL">?</SEQ>
-		<SEQ TYPE="NULL">:</SEQ>
+		<SEQ TYPE="NULL">:</SEQ> -->
 	</RULES>
 
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
