@@ -2,12 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre5
 
-Thanks to Ollie Rutherfurd and Silas Smith for contributing to this
-release.
+Thanks to Ollie Rutherfurd, Peter Lundqvist and Silas Smith for
+contributing to this release.
 
 {{{ Syntax Highlighting
 
 - Updated Icon syntax highlighting (Silas Smith).
+
+- Updated Pike syntax highlighting (Peter Lundqvist).
 
 }}}
 {{{ Miscellaneous Changes
