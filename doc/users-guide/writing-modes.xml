@@ -488,7 +488,6 @@
     <BEGIN>&lt;#ftl\&gt;</BEGIN>
     <END>&gt;</END>
 </SPAN_REGEXP>]]></programlisting>
-  <para>
  </sect1>
  <sect1 id="mode-rule-eol-span"><title>The EOL_SPAN Tag</title>
   <para>

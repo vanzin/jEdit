@@ -596,6 +596,7 @@ With text inside it.
    <para>
     Holding down <keycap>Alt</keycap> while clicking a fold expansion triangle in the gutter will hide all lines the buffer except
     those in the fold in question.
+   </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
     Buffer to Fold</guimenuitem> (keyboard shortcut:
