@@ -13,6 +13,9 @@
 <MODE NAME="ada95"		FILE="ada95.xml"
 				FILE_NAME_GLOB="*.{ada,adb,ads}" />
 
+<MODE NAME="applescript"	FILE="applescript.xml"
+				FILE_NAME_GLOB="*.applescript" />
+
 <MODE NAME="asp"		FILE="asp.xml"
 				FILE_NAME_GLOB="*.{asp,asa}" />
 
