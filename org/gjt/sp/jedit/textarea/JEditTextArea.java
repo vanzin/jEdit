@@ -4430,7 +4430,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	void foldStructureChanged()
 	{
 		// recalculate first line
-		System.err.println(physFirstLine + ":" + physicalToVirtual(physFirstLine));
 		setFirstLine(physicalToVirtual(physFirstLine));
 
 		// update scroll bars because the number of
