@@ -2,23 +2,27 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- 	
-	Compiled by Mirco Bova on 04-12-2001 
+<!--
+	Compiled by Mirco Bova on 04-12-2001
 	this file is based on the original JEdit batch.xml mode.
 	The main upgrade consisting in adding the standard MS-DOS
 	commands as keywords and functions:
 	- keywords =    internal shell commands;
 	- functions =   standard MS-DOS commands (.exe or .com in DOS or
 	  windows\command directory).
+
+	Minor enhancements by Alex Jacoby on 28-feb-2003
 -->
 
-<!-- The keywords and functions here defined are those of MS-DOS 6.22 -->
+<!-- The keywords and functions here defined are those of MS-DOS 6.22,
+     plus a few as of Windows XP.
+ -->
 
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="rem" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
 		<!-- 'echo off' statements -->
 		<SEQ TYPE="KEYWORD3">@</SEQ>
 
@@ -29,19 +33,20 @@
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 
-		<!-- labels - eg :test -->
-		<EOL_SPAN TYPE="LABEL" AT_LINE_START="TRUE">:</EOL_SPAN>
+		<!-- labels - eg ":test" or "goto :test" -->
+		<MARK_FOLLOWING AT_WORD_START="TRUE" TYPE="LABEL">:</MARK_FOLLOWING>
 
 		<!-- comments -->
-		<EOL_SPAN TYPE="COMMENT1">REM</EOL_SPAN>
+		<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="R" TYPE="COMMENT1">REM\s</EOL_SPAN_REGEXP>
 
 		<!-- literals -->
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		
+
 		<!-- variables -->
+		<SEQ TYPE="KEYWORD2">%0</SEQ>
 		<SEQ TYPE="KEYWORD2">%1</SEQ>
 		<SEQ TYPE="KEYWORD2">%2</SEQ>
 		<SEQ TYPE="KEYWORD2">%3</SEQ>
@@ -51,6 +56,11 @@
 		<SEQ TYPE="KEYWORD2">%7</SEQ>
 		<SEQ TYPE="KEYWORD2">%8</SEQ>
 		<SEQ TYPE="KEYWORD2">%9</SEQ>
+		<!-- for-loop variable (one char after %%) -->
+		<SEQ_REGEXP TYPE="KEYWORD2"
+		      HASH_CHAR="%"
+		      AT_WORD_START="TRUE"
+		      >%%[[:alpha:]]</SEQ_REGEXP>
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>%</BEGIN>
 			<END>%</END>
@@ -62,27 +72,38 @@
 			<KEYWORD1>chdir</KEYWORD1>
 			<KEYWORD1>md</KEYWORD1>
 			<KEYWORD1>mkdir</KEYWORD1>
-		
+
 			<KEYWORD1>cls</KEYWORD1>
-		
+
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
-		
+			<KEYWORD1>in</KEYWORD1>
+
 			<KEYWORD1>echo</KEYWORD1>
 			<KEYWORD1>echo.</KEYWORD1>
-		
+
 			<KEYWORD1>move</KEYWORD1>
 			<KEYWORD1>copy</KEYWORD1>
 			<KEYWORD1>move</KEYWORD1>
 			<KEYWORD1>ren</KEYWORD1>
 			<KEYWORD1>del</KEYWORD1>
 			<KEYWORD1>set</KEYWORD1>
-		
-			<!-- KEYWORD2 are commands options -->
-		
+
+			<KEYWORD1>call</KEYWORD1>
+			<KEYWORD1>exit</KEYWORD1>
+
+			<!-- KEYWORD2 are commands options and special devices -->
+
+			<KEYWORD2>defined</KEYWORD2>
 			<KEYWORD2>exist</KEYWORD2>
 			<KEYWORD2>errorlevel</KEYWORD2>
+
+			<KEYWORD2>NUL</KEYWORD2>
+			<KEYWORD2>AUX</KEYWORD2>
+			<KEYWORD2>PRN</KEYWORD2>
 			<KEYWORD1>not</KEYWORD1>
-		
+
 			<!-- goto is a special case we want to distinguish it -->
 			<KEYWORD3>goto</KEYWORD3>
 
@@ -118,6 +139,7 @@
 			<FUNCTION>NLSFUNC</FUNCTION>
 			<FUNCTION>POWER</FUNCTION>
 			<FUNCTION>PRINT</FUNCTION>
+			<FUNCTION>RD</FUNCTION>
 			<FUNCTION>REPLACE</FUNCTION>
 			<FUNCTION>RESTORE</FUNCTION>
 			<FUNCTION>SETVER</FUNCTION>

@@ -113,8 +113,6 @@ public class EditServer extends Thread
 	//{{{ run() method
 	public void run()
 	{
-		boolean abort = false;
-
 		for(;;)
 		{
 			if(abort)
@@ -243,7 +241,15 @@ public class EditServer extends Thread
 	// stopServer() method
 	void stopServer()
 	{
-		stop();
+		abort = true;
+		try
+		{
+			socket.close();
+		}
+		catch(IOException io)
+		{
+		}
+
 		new File(portFile).delete();
 	} //}}}
 
@@ -254,6 +260,7 @@ public class EditServer extends Thread
 	private ServerSocket socket;
 	private int authKey;
 	private boolean ok;
+	private boolean abort;
 	//}}}
 
 	//{{{ handleClient() method
