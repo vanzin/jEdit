@@ -4,7 +4,8 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE="&amp;&amp;" />
+		<PROPERTY NAME="blockComment" VALUE="&amp;&amp;" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
@@ -25,16 +26,7 @@
 		<EOL_SPAN TYPE="KEYWORD2">#if</EOL_SPAN>
 		<EOL_SPAN TYPE="KEYWORD2">#else</EOL_SPAN>
 		<EOL_SPAN TYPE="KEYWORD2">#end</EOL_SPAN>
-		
-		<!-- To avoid commenting out most SQL statements and mathematical operations, 
-			Comments must start with one of these formats: 
-			*<space><space><space>
-			*<tab>
-			*!
-			**
-			*-
-		-->
-			
+
 		<EOL_SPAN TYPE="COMMENT1">&amp;&amp;</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*   </EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="FALSE">*	</EOL_SPAN>
@@ -47,12 +39,12 @@
 		<SEQ TYPE="NULL">(</SEQ>
 
 		<!-- Comparison operators -->
-		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">.</SEQ>
 		<!-- See in keywords: is -->
 
@@ -173,6 +165,7 @@
 			<OPERATOR>not</OPERATOR>
 			<OPERATOR>xor</OPERATOR>
 			<OPERATOR>imp</OPERATOR>
+			<OPERATOR>?</OPERATOR>
 
 			<!-- Datatypes Constants/Literals -->
 			<KEYWORD3>false</KEYWORD3>
@@ -726,6 +719,38 @@
 			<KEYWORD3>AddLineFeeds</KEYWORD3>
 
 			<!-- Other FoxPro's Keywords -->
+			<KEYWORD3>MULTILOCKS</KEYWORD3>
+			<KEYWORD3>FULLPATH</KEYWORD3>
+			<KEYWORD3>UNIQUE</KEYWORD3>
+			<KEYWORD3>CLASSLIB</KEYWORD3>
+			<KEYWORD3>LIBRARY</KEYWORD3>
+			<KEYWORD3>structure</KEYWORD3>
+			<KEYWORD3>last</KEYWORD3>
+			<KEYWORD3>production</KEYWORD3>
+			<KEYWORD3>path</KEYWORD3>
+			<KEYWORD3>date</KEYWORD3>
+			<KEYWORD3>datetime</KEYWORD3>
+			<KEYWORD3>rest</KEYWORD3>
+			<KEYWORD3>fields</KEYWORD3>
+			<KEYWORD3>array</KEYWORD3>
+			<KEYWORD3>free</KEYWORD3>
+			<KEYWORD3>structure</KEYWORD3>
+			<KEYWORD3>ASCENDING</KEYWORD3>
+			<KEYWORD3>window</KEYWORD3>
+			<KEYWORD3>nowait</KEYWORD3>
+			<KEYWORD3>between</KEYWORD3>
+			<KEYWORD3>dbf</KEYWORD3>
+			<KEYWORD3>noconsole</KEYWORD3>
+			<KEYWORD3>dif</KEYWORD3>
+			<KEYWORD3>xls</KEYWORD3>
+			<KEYWORD3>csv</KEYWORD3>
+			<KEYWORD3>delimited</KEYWORD3>
+			<KEYWORD3>right</KEYWORD3>
+			<KEYWORD3>decimal</KEYWORD3>
+			<KEYWORD3>additive</KEYWORD3>
+			<KEYWORD3>between</KEYWORD3>
+			<KEYWORD3>noupdate</KEYWORD3>
+			
 			<KEYWORD3>Abs</KEYWORD3>
 			<KEYWORD3>Accept</KEYWORD3>
 			<KEYWORD3>Access</KEYWORD3>

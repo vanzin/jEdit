@@ -5105,24 +5105,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				buffer,caretLine,offset - 1,0,buffer.getLineCount() - 1);
 			if(bracketOffset != -1)
 			{
-				int endLine;
-				if(visibleLines == 0)
-					endLine = buffer.getLineCount();
-				else
-				{
-					endLine = virtualToPhysical(
-						Math.min(foldVisibilityManager
-						.getVirtualLineCount() - 1,
-						firstLine + visibleLines));
-				}
-
 				bracketLine = getLineOfOffset(bracketOffset);
 				bracketPosition = bracketOffset
 					- getLineStartOffset(bracketLine);
 				invalidateLineRange(bracketLine,caretLine);
 
 				if(bracketLine < physFirstLine
-					|| bracketLine > endLine)
+					|| bracketLine > physLastLine)
 				{
 					showBracketStatusMessage(bracketLine < caretLine);
 				}

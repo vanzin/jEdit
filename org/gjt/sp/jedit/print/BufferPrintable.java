@@ -168,7 +168,7 @@ print_loop:	for(;;)
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
 					(float)(pageWidth - lineNumberWidth),
-					Color.white);
+					Color.white,false);
 			}
 
 			if(currentPhysicalLine == buffer.getLineCount()

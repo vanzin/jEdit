@@ -143,14 +143,17 @@
 <MODE NAME="povray"		FILE="povray.xml"
 				FILE_NAME_GLOB="*.{pov,povray}" />
 
+<MODE NAME="prolog"             FILE="prolog.xml"
+                                FILE_NAME_GLOB="*.pro" />
+
 <MODE NAME="progress"           FILE="progress.xml"
-                                FILE_NAME_GLOB="*.{p,i,w,f}" />
+                                FILE_NAME_GLOB="*.[piwf]" />
 
 <MODE NAME="properties"		FILE="props.xml"
 				FILE_NAME_GLOB="*{properties,props}" />
 
 <MODE NAME="pvwave"		FILE="pvwave.xml"
-				FILE_NAME_GLOB="*.{pro,jou}" />
+				FILE_NAME_GLOB="*.jou" />
 
 <MODE NAME="python"		FILE="python.xml"
 				FILE_NAME_GLOB="*.py" />

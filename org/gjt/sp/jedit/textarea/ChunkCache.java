@@ -64,7 +64,7 @@ public class ChunkCache
 		TabExpander e, float wrapMargin, java.util.List out)
 	{
 		// SILLY: allow for anti-aliased characters' "fuzz"
-		if(wrapMargin != 0.0)
+		if(wrapMargin != 0.0f)
 			wrapMargin += 2.0f;
 
 		float x = 0.0f;
@@ -85,7 +85,7 @@ public class ChunkCache
 			{
 				char ch = seg.array[seg.offset + i];
 
-				if(ch == ' ' || ch == '\t')
+				if(ch == '\t' || (ch == ' ' && wrapMargin != 0.0f))
 				{
 					if(i != flushIndex)
 					{
@@ -99,16 +99,12 @@ public class ChunkCache
 						{
 							if(first != null)
 								out.add(first);
-							first = null;
-							newChunk.x = firstNonWhiteSpace;
+							first = current = new Chunk(firstNonWhiteSpace);
 							x = firstNonWhiteSpace
 								+ newChunk.width;
 						}
 						else
-						{
-							newChunk.x = x;
 							x += newChunk.width;
-						}
 
 						if(first == null)
 							first = current = newChunk;
@@ -127,7 +123,6 @@ public class ChunkCache
 						Chunk newChunk = new Chunk(
 							tokens.id,seg,i,i + 1,
 							styles,fontRenderContext);
-						newChunk.x = x;
 						if(first == null)
 							first = current = newChunk;
 						else
@@ -143,7 +138,6 @@ public class ChunkCache
 						Chunk newChunk = new Chunk(
 							tokens.id,seg,i,i,
 							styles,fontRenderContext);
-						newChunk.x = x;
 						if(first == null)
 							first = current = newChunk;
 						else
@@ -152,8 +146,9 @@ public class ChunkCache
 							current = newChunk;
 						}
 
-						x = e.nextTabStop(x,i + tokenListOffset);
-						current.width = x - current.x;
+						float newX = e.nextTabStop(x,i + tokenListOffset);
+						current.width = newX - x;
+						x = newX;
 						current.length = 1;
 					}
 
@@ -171,22 +166,18 @@ public class ChunkCache
 						tokens.id,seg,flushIndex,
 						i + 1,styles,fontRenderContext);
 
-					if(/* i == seg.count - 1 && */ wrapMargin != 0
+					if(i == seg.count - 1 && wrapMargin != 0
 						&& x + newChunk.width > wrapMargin
 						&& addedNonWhiteSpace)
 					{
 						if(first != null)
 							out.add(first);
-						first = null;
-						newChunk.x = firstNonWhiteSpace;
+						first = current = new Chunk(firstNonWhiteSpace);
 						x = firstNonWhiteSpace
 							+ newChunk.width;
 					}
 					else
-					{
-						newChunk.x = x;
 						x += newChunk.width;
-					}
 
 					if(first == null)
 						first = current = newChunk;
@@ -220,11 +211,15 @@ public class ChunkCache
 	 * background color hack
 	 * @param background The background color of the painting area,
 	 * used for background color hack
+	 * @param glyphVector This should be true when painting on screen,
+	 * false when painting in a print context; since using the glyph vector
+	 * in printed output results in huge spool files.
 	 * @return The width of the painted text
 	 * @since jEdit 4.0pre4
 	 */
 	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
-		float x, float y, float width, Color background)
+		float x, float y, float width, Color background,
+		boolean glyphVector)
 	{
 		FontMetrics forBackground = gfx.getFontMetrics();
 
@@ -241,14 +236,8 @@ public class ChunkCache
 				Color bgColor = chunks.style.getBackgroundColor();
 				if(bgColor != null)
 				{
-					float x1 = (_x == 0.0f ? x : x + chunks.x);
-					float x2;
-					if(chunks.next == null)
-						x2 = width;
-					else if(chunks.next.style == chunks.style)
-						x2 = x + chunks.next.x;
-					else
-						x2 = x + chunks.width;
+					float x2 = (chunks.next == null ? width
+						: x + chunks.width);
 
 					//LineMetrics lm = font.getLineMetrics(
 					//	chunks.text,gfx.getFontRenderContext());
@@ -256,8 +245,8 @@ public class ChunkCache
 					gfx.setColor(bgColor);
 
 					gfx.fill(new Rectangle2D.Float(
-						x1,y - forBackground.getAscent(),
-						x2 - x1,forBackground.getHeight()));
+						_x,y - forBackground.getAscent(),
+						x2 - _x,forBackground.getHeight()));
 
 					gfx.setPaintMode();
 				}
@@ -265,15 +254,18 @@ public class ChunkCache
 				gfx.setFont(font);
 				gfx.setColor(chunks.style.getForegroundColor());
 
-				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
-				//gfx.drawString(chunks.str,x + chunks.x,y);
+				if(glyphVector)
+					gfx.drawGlyphVector(chunks.text,x + _x,y);
+				else
+					gfx.drawString(chunks.str,x + _x,y);
 
 				// Useful for debugging purposes
 				//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
 				//	chunks.width,10));
 			}
 
-			_x = chunks.x + chunks.width;
+			//_x += chunks.x + chunks.width;
+			_x += chunks.width;
 			chunks = chunks.next;
 		}
 
@@ -296,18 +288,23 @@ public class ChunkCache
 
 		while(chunks != null)
 		{
-			if(offset < chunks.offset + chunks.length)
+			if(!chunks.inaccessable && offset < chunks.offset + chunks.length)
 			{
 				if(chunks.text == null)
-					return chunks.x;
+					break;
 				else
 				{
-					return chunks.x + chunks.positions[
+					if((offset - chunks.offset) * 2 < 0)
+					{
+						System.err.println(offset + ":"
+							+ chunks.offset);
+					}
+					return x + chunks.positions[
 						(offset - chunks.offset) * 2];
 				}
 			}
 
-			x = chunks.x + chunks.width;
+			x += chunks.width;
 			chunks = chunks.next;
 		}
 
@@ -326,20 +323,22 @@ public class ChunkCache
 	 */
 	public static int xToOffset(Chunk chunks, float x, boolean round)
 	{
+		float _x = 0.0f;
+
 		while(chunks != null)
 		{
-			if(x < chunks.x + chunks.width)
+			if(!chunks.inaccessable && x < _x + chunks.width)
 			{
 				if(chunks.text == null)
 				{
-					if(round && chunks.x + chunks.width - x < x - chunks.x)
+					if(round && _x + chunks.width - x < x - _x)
 						return chunks.offset + chunks.length;
 					else
 						return chunks.offset;
 				}
 				else
 				{
-					float _x = x - chunks.x;
+					float xInChunk = x - _x;
 
 					for(int i = 0; i < chunks.length; i++)
 					{
@@ -348,9 +347,9 @@ public class ChunkCache
 							? chunks.width
 							: chunks.positions[i*2+2]);
 
-						if(nextX > _x)
+						if(nextX > xInChunk)
 						{
-							if(round && nextX - _x > _x - glyphX)
+							if(round && nextX - xInChunk > xInChunk - glyphX)
 								return chunks.offset + i;
 							else
 								return chunks.offset + i + 1;
@@ -359,6 +358,7 @@ public class ChunkCache
 				}
 			}
 
+			_x += chunks.width;
 			chunks = chunks.next;
 		}
 
@@ -373,7 +373,9 @@ public class ChunkCache
 	 */
 	public static class Chunk
 	{
-		public float x;
+		// should xToOffset() ignore this chunk?
+		public boolean inaccessable;
+
 		public float width;
 		public SyntaxStyle style;
 		public int offset;
@@ -383,6 +385,12 @@ public class ChunkCache
 		public float[] positions;
 
 		public Chunk next;
+
+		Chunk(float width)
+		{
+			inaccessable = true;
+			this.width = width;
+		}
 
 		Chunk(int tokenType, Segment seg, int offset, int end,
 			SyntaxStyle[] styles, FontRenderContext fontRenderContext)
@@ -502,14 +510,14 @@ public class ChunkCache
 	//{{{ setFirstLine() method
 	void setFirstLine(int firstLine)
 	{
-		if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+		//if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
 		{
 			for(int i = 0; i < lineInfo.length; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
 		}
-		else if(firstLine > this.firstLine)
+		/*else if(firstLine > this.firstLine)
 		{
 			System.arraycopy(lineInfo,firstLine - this.firstLine,
 				lineInfo,0,lineInfo.length - firstLine
@@ -530,7 +538,7 @@ public class ChunkCache
 			{
 				lineInfo[i] = new LineInfo();
 			}
-		}
+		}*/
 
 		lastScreenLine = lastScreenLineP = -1;
 		this.firstLine = firstLine;
@@ -678,6 +686,8 @@ public class ChunkCache
 			}
 			else
 			{
+				info.firstSubregion = false;
+
 				chunks = (Chunk)out.get(0);
 				out.remove(0);
 				offset = chunks.offset;
@@ -722,8 +732,8 @@ public class ChunkCache
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
 	{
-		//if(!lineInfo[screenLine].chunksValid)
-		//	Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
+		if(!lineInfo[screenLine].chunksValid)
+			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
 		return lineInfo[screenLine];
 	} //}}}
 
