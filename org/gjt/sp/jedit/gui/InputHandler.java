@@ -94,7 +94,7 @@ public abstract class InputHandler
 	 */
 	public boolean isPrefixActive()
 	{
-		return false;
+		return readNextChar != null;
 	} //}}}
 
 	//{{{ handleKey() method

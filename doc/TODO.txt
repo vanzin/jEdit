@@ -3,6 +3,8 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- nop file
+- action bar & bottom dockable btns
 - complete word not wide enough
 - new files in perspective -- something's broken
 - test keyboard completion with expanded/collapsed tree
@@ -15,17 +17,16 @@ and quirks that I need to fix eventually.
 - optional dependencies
 - tall caret and tab
 - need timeouts for plugin manager list download.
-- in search bar, C+y a doesn't work
 - printing: check default printer setting
 - vfs updates still broken
 - "downloading plugin list" label in plugin manager
-- column reference counting broken
 - new file: horiz scroll wrong
 - enter after a fold broken *AGAIN*
 - fsb default size
 
 + docs:
 
+- 2-stage save and hardlinks
 - add note that regexp matching does not cross newlines in token marker
 - add note to documentation about exponential-time regexps
 - news: deep indent, action bar, new cli options
