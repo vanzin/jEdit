@@ -23,12 +23,28 @@
   each macro as well as a search facility.
 </para>
 
-<sect1 id="macros-editing"><title>Editing Macros</title>
+<sect1 id="macros-clipboard"><title>Clipboard Macros</title>
 <para>
-    These macros automate various text editing tasks.
+  These macros copy or cut text to the clipboard.
 </para>
 
 <itemizedlist>
+
+<listitem>
+  <para><filename>Copy_Lines_Containing.bsh</filename></para>
+  <para>
+    Copies all lines from the current buffer, containing a 
+    user-supplied string, to the clipboard.
+  </para>
+</listitem>
+
+<listitem>
+  <para><filename>Cut_Lines_Containing.bsh</filename></para>
+  <para>
+    Cuts all lines from the current buffer, containing a 
+    user-supplied string, to the clipboard.
+  </para>
+</listitem>
 
 <listitem>
 	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
@@ -40,14 +56,6 @@
 </listitem>
 
 <listitem>
-<para><filename>Copy_Visible_Lines.bsh</filename></para>
-<para>Copies the visible lines from the current
-  buffer to the Clipboard.  Lines that are not visible
-  becuase they are folded are not copied.
-  </para>
-</listitem>
-
-<listitem>
 	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
 	<para>
 		If no text is selected, the current line is cut to the clipboard,
@@ -55,6 +63,24 @@
 	</para>
 </listitem>
 
+<listitem>
+<para><filename>Copy_Visible_Lines.bsh</filename></para>
+<para>Copies the visible lines from the current
+  buffer to the Clipboard.  Lines that are not visible
+  becuase they are folded are not copied.
+  </para>
+</listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="macros-editing"><title>Editing Macros</title>
+<para>
+    These macros automate various text editing tasks.
+</para>
+
+<itemizedlist>
 
 <listitem>
    <para><filename>Emacs_Next_Line.bsh</filename></para>
@@ -147,18 +173,19 @@
      <keycap>TAB</keycap> repeatedly cycles through the possible completions. 
    <keycap>SHIFT-TAB</keycap> cycles through the completions in reverse.
      </para>
-  </listitem>
+</listitem>
 
-  <listitem>
-      <para><filename>Move_Line_Down.bsh</filename></para>
-      <abstract><para>Moves the current line down one, with automatic 
-      indentation.</para></abstract>   
-      </listitem>
 <listitem>
-      <para><filename>Move_Line_Up.bsh</filename></para>
-      <abstract><para>Moves the current line up one, with automatic 
-      indentation.</para></abstract>   
-      </listitem>
+     <para><filename>Move_Line_Down.bsh</filename></para>
+     <para>Moves the current line down one, with automatic 
+     indentation.</para>
+ </listitem>
+
+<listitem>
+     <para><filename>Move_Line_Up.bsh</filename></para>
+     <para>Moves the current line up one, with automatic 
+     indentation.</para>
+ </listitem>
 
 </itemizedlist>
 
