@@ -71,12 +71,16 @@
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save As</guimenuitem> saves the
    buffer to a different specified file on disk. The buffer is then
-   renamed, and subsequent saves also save to the specified file.
+   renamed, and subsequent saves also save to the specified file. Note that
+   using this command to save over an already open buffer will close that
+   buffer, to avoid having two buffers open with the same path name.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save a Copy As</guimenuitem> saves
    the buffer to a different specified file on disk, but doesn't rename the
-   buffer, and doesn't clear the <quote>modified</quote> flag.
+   buffer, and doesn't clear the <quote>modified</quote> flag. Note that using
+   this command to save over an already open buffer will automatically reload
+   that buffer.
   </para>
   <sidebar><title>How files are saved</title>
    <para>

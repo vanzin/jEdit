@@ -3,7 +3,7 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <!-- jEdit action table                                                      -->
-<!-- Copyright (C) 2000, 2001 Slava Pestov                                   -->
+<!-- Copyright (C) 2000, 2001, 2002 Slava Pestov                             -->
 
 <!-- :tabSize=8:indentSize=8:noTabs=false:                                   -->
 <!-- :folding=indent:collapseFolds=1:                                        -->
@@ -273,7 +273,7 @@
 <ACTION NAME="expand-all-folds">
 	<CODE>
 		textArea.getFoldVisibilityManager().expandAllFolds();
-		textArea.scrollToCaret();
+		textArea.scrollToCaret(false);
 	</CODE>
 </ACTION>
 
@@ -300,7 +300,7 @@
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.expand-folds"),
 			"textArea.getFoldVisibilityManager().expandFolds(__char__);\n"
-			+ "textArea.scrollToCaret();");
+			+ "textArea.scrollToCaret(false);");
 	</CODE>
 </ACTION>
 
@@ -646,11 +646,13 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="print-selection">
+<!-- not yet implemented -->
+
+<!-- <ACTION NAME="print-selection">
 	<CODE>
 		BufferPrinter.print(view,buffer,true);
 	</CODE>
-</ACTION>
+</ACTION> -->
 
 <ACTION NAME="quick-search" NO_RECORD="TRUE">
 	<CODE>

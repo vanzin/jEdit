@@ -445,7 +445,10 @@ public class JEditTextArea extends JComponent
 				}
 			}
 
-			vertical.setValues(firstLine,visibleLines,0,lineCount);
+			vertical.setValues(firstLine,visibleLines,0,
+				(softWrap ? lineCount
+				+ foldVisibilityManager.getScrollOverhang()
+				: lineCount));
 			vertical.setUnitIncrement(2);
 			vertical.setBlockIncrement(visibleLines);
 		}
