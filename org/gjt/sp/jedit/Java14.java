@@ -275,6 +275,8 @@ public class Java14
 			{
 			}
 
+			GUIUtilities.getView(c).toFront();
+			GUIUtilities.getView(c).requestFocus();
 			c.requestFocus();
 
 			return true;

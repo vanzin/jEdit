@@ -65,7 +65,7 @@ public class RolloverButton extends JButton
 		{
 			setBorder(new EtchedBorder());
 			setBorderPainted(false);
-			setMargin(new Insets(0,0,0,0));
+			setMargin(new Insets(1,1,1,1));
 
 			setRequestFocusEnabled(false);
 

@@ -970,8 +970,6 @@ loop:		for(;;)
 			}
 		}
 
-		System.err.println(firstLine.scrollLine + ":" + firstLine.physicalLine);
-
 		/* update fold visibility map. */
 		int starti = fvmget(start);
 		int endi = fvmget(end);
