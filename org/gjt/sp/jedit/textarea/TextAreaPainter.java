@@ -800,7 +800,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			TextUtilities.Chunk chunks = lineToChunkList(seg,buffer.markTokens(
 				physicalLine).getFirstToken());
 
-			x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine);
+			if(chunks != null)
+				x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine,false);
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);

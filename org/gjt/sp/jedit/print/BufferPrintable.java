@@ -143,9 +143,14 @@ print_loop:	for(;;)
 			if(y >= pageHeight)
 				break print_loop;
 
+			// I hate this, but it's needed for now. See comment
+			// in TextUtilities.java.
+			boolean mungeX = true;
 			Object obj = lineList.get(currentLine++);
 			if(obj instanceof Integer)
 			{
+				mungeX = false;
+
 				//{{{ paint line number
 				if(lineNumbers)
 				{
@@ -159,11 +164,14 @@ print_loop:	for(;;)
 				obj = lineList.get(currentLine++);
 			}
 
-			TextUtilities.Chunk line = (TextUtilities.Chunk)obj;
+			if(obj != null)
+			{
+				TextUtilities.Chunk line = (TextUtilities.Chunk)obj;
 
-			TextUtilities.paintChunkList(line,gfx,
-				(float)(pageX + lineNumberWidth),
-				(float)(pageY + y));
+				TextUtilities.paintChunkList(line,gfx,
+					(float)(pageX + lineNumberWidth),
+					(float)(pageY + y),mungeX);
+			}
 
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
