@@ -623,6 +623,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		super.setFont(font);
 		fm = getFontMetrics(font);
 		textArea.recalculateVisibleLines();
+		textArea.propertiesChanged();
 	} //}}}
 
 	//{{{ paintComponent() method
@@ -656,7 +657,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		//if(lastInvalid - firstInvalid > 1)
 		//	System.err.println("repainting " + (lastInvalid - firstInvalid) + " lines");
-		textArea.chunkCache.updateChunksUpTo(lastInvalid);
 
 		int y = (clipRect.y - clipRect.y % height);
 
@@ -1001,6 +1001,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			else
 			{
 				Log.log(Log.DEBUG,this,"Not using monospaced font optimization: " + font);
+				Log.log(Log.DEBUG,this,"Minimum width = " + minWidth
+					+ ", maximum width = " + maxWidth);
 				returnValue = new Integer(0);
 			}
 

@@ -512,9 +512,7 @@ public class JEditTextArea extends JComponent
 			int screenLineCount = 0;
 			while(--newFirstLine >= 0)
 			{
-				int lines = chunkCache
-					.getLineInfosForPhysicalLine(
-					newFirstLine).length;
+				int lines = chunkCache.getScreenLineCount(newFirstLine);
 				if(screenLineCount + lines >= visibleLines)
 					break;
 				else
@@ -636,12 +634,12 @@ public class JEditTextArea extends JComponent
 		//{{{ STAGE 2 -- scroll vertically
 		if(line == physLastLine + 1)
 		{
-			int count = chunkCache.getLineInfosForPhysicalLine(physLastLine).length
-				+ chunkCache.getLineInfosForPhysicalLine(physLastLine + 1).length
+			int count = chunkCache.getScreenLineCount(physLastLine)
+				+ chunkCache.getScreenLineCount(physLastLine + 1)
 				+ _electricScroll;
 			while(count > 0)
 			{
-				count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine++;
 				physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
 			}
@@ -650,11 +648,11 @@ public class JEditTextArea extends JComponent
 		{
 			if(line == physLastLine)
 			{
-				int count = chunkCache.getLineInfosForPhysicalLine(physLastLine).length
+				int count = chunkCache.getScreenLineCount(physLastLine)
 					+ _electricScroll;
 				while(count > 0)
 				{
-					count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+					count -= chunkCache.getScreenLineCount(physFirstLine);
 					firstLine++;
 					int nextLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
 					if(nextLine == -1)
@@ -681,7 +679,7 @@ public class JEditTextArea extends JComponent
 				{
 					if(foldVisibilityManager.isLineVisible(physFirstLine))
 					{
-						int incr = chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+						int incr = chunkCache.getScreenLineCount(physFirstLine);
 						if(count + incr > visibleLines / 2)
 							break;
 						else
@@ -704,7 +702,7 @@ public class JEditTextArea extends JComponent
 			int count = _electricScroll - screenLine;
 			while(count > 0 && firstLine > 0)
 			{
-				count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine--;
 				physFirstLine = foldVisibilityManager.getPrevVisibleLine(physFirstLine);
 			}
@@ -714,7 +712,7 @@ public class JEditTextArea extends JComponent
 			int count = _electricScroll - visibleLines + screenLine + 1;
 			while(count > 0 && firstLine <= getVirtualLineCount())
 			{
-				count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine++;
 				physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
 			}
@@ -799,7 +797,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getPhysicalLineOfScreenLine(int screenLine)
 	{
-		chunkCache.updateChunksUpTo(screenLine);
 		return chunkCache.getLineInfo(screenLine).physicalLine;
 	} //}}}
 
@@ -824,7 +821,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getScreenLineStartOffset(int line)
 	{
-		chunkCache.updateChunksUpTo(line);
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
 		if(lineInfo.physicalLine == -1)
 			return -1;
@@ -841,7 +837,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getScreenLineEndOffset(int line)
 	{
-		chunkCache.updateChunksUpTo(line);
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
 		if(lineInfo.physicalLine == -1)
 			return -1;
@@ -888,11 +883,7 @@ public class JEditTextArea extends JComponent
 		if(line < 0 || line > visibleLines)
 			return -1;
 
-		chunkCache.updateChunksUpTo(line);
-
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
-		if(!lineInfo.chunksValid)
-			System.err.println("xy to offset: not valid");
 
 		if(lineInfo.physicalLine == -1)
 		{
@@ -964,10 +955,7 @@ public class JEditTextArea extends JComponent
 
 		retVal.y = screenLine * fm.getHeight();
 
-		chunkCache.updateChunksUpTo(screenLine);
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
-		if(!info.chunksValid)
-			System.err.println("offset to xy: not valid");
 
 		retVal.x = (int)(horizontalOffset + Chunk.offsetToX(
 			info.chunks,offset));
@@ -1032,7 +1020,6 @@ public class JEditTextArea extends JComponent
 
 		for(int i = 0; i <= visibleLines; i++)
 		{
-			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 
 			if((info.physicalLine >= line || info.physicalLine == -1)
@@ -1089,7 +1076,6 @@ public class JEditTextArea extends JComponent
 
 		for(int i = 0; i <= visibleLines; i++)
 		{
-			chunkCache.updateChunksUpTo(i);
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 
 			if((info.physicalLine >= start || info.physicalLine == -1)
@@ -2188,14 +2174,16 @@ forward_scan:		do
 
 	//{{{ getMagicCaretPosition() method
 	/**
-	 * @deprecated Do not call this method.
+	 * Returns an internal position used to keep the caret in one
+	 * column while moving around lines of varying lengths.
+	 * @since jEdit 4.2pre1
 	 */
-	public final int getMagicCaretPosition()
+	public float getMagicCaretPosition()
 	{
 		if(magicCaret == -1)
 		{
-			magicCaret = offsetToX(caretLine,caret
-				- getLineStartOffset(caretLine));
+			magicCaret = chunkCache.subregionOffsetToX(
+				caretLine,caret - getLineStartOffset(caretLine));
 		}
 
 		return magicCaret;
@@ -2206,8 +2194,9 @@ forward_scan:		do
 	 * Sets the `magic' caret position. This can be used to preserve
 	 * the column position when moving up and down lines.
 	 * @param magicCaret The magic caret position
+	 * @since jEdit 4.2pre1
 	 */
-	public final void setMagicCaretPosition(int magicCaret)
+	public void setMagicCaretPosition(float magicCaret)
 	{
 		this.magicCaret = magicCaret;
 	} //}}}
@@ -2350,23 +2339,18 @@ loop:		for(int i = 0; i < text.length(); i++)
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(caretLine);
 
 		int caretFromStartOfLine = caret - buffer.getLineStartOffset(caretLine);
-		int subregion = getSubregionOfOffset(caretFromStartOfLine,
+		int subregion = chunkCache.getSubregionOfOffset(caretFromStartOfLine,
 			lineInfos);
 
-		int magic = this.magicCaret;
-		if(magic == -1)
-		{
-			magic = subregionOffsetToX(lineInfos[subregion],
-				caretFromStartOfLine);
-		}
+		float magic = getMagicCaretPosition();
 
 		int newCaret;
 
 		if(subregion != lineInfos.length - 1)
 		{
 			newCaret = buffer.getLineStartOffset(caretLine)
-				+ xToSubregionOffset(lineInfos[subregion + 1],magic,
-				true);
+				+ chunkCache.xToSubregionOffset(lineInfos[subregion + 1],
+				magic,true);
 		}
 		else
 		{
@@ -2387,8 +2371,8 @@ loop:		for(int i = 0; i < text.length(); i++)
 			{
 				lineInfos = chunkCache.getLineInfosForPhysicalLine(nextLine);
 				newCaret = getLineStartOffset(nextLine)
-					+ xToSubregionOffset(lineInfos[0],magic + 1,
-					true);
+					+ chunkCache.xToSubregionOffset(lineInfos[0],
+					magic + 1,true);
 			}
 		}
 
@@ -2399,7 +2383,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		moveCaretPosition(newCaret);
 
-		this.magicCaret = magic;
+		setMagicCaretPosition(magic);
 	} //}}}
 
 	//{{{ goToNextMarker() method
@@ -2447,7 +2431,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		int lineCount = getVirtualLineCount();
 
-		int magic = getMagicCaretPosition();
+		int magic = (int)getMagicCaretPosition(); //XXX
 
 		if(firstLine + visibleLines * 2 >= lineCount - 1)
 			setFirstLine(lineCount - visibleLines);
@@ -2457,7 +2441,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		int newLine = virtualToPhysical(Math.min(lineCount - 1,
 			physicalToVirtual(caretLine) + visibleLines));
 		int newCaret = getLineStartOffset(newLine)
-			+ xToOffset(newLine,magic + 1);
+			+ xToOffset(newLine,magic + 1); //XXX
 
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2665,23 +2649,18 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(caretLine);
 
 		int caretFromStartOfLine = caret - buffer.getLineStartOffset(caretLine);
-		int subregion = getSubregionOfOffset(caretFromStartOfLine,
+		int subregion = chunkCache.getSubregionOfOffset(caretFromStartOfLine,
 			lineInfos);
 
-		int magic = this.magicCaret;
-		if(magic == -1)
-		{
-			magic = subregionOffsetToX(lineInfos[subregion],
-				caretFromStartOfLine);
-		}
+		float magic = getMagicCaretPosition();
 
 		int newCaret;
 
 		if(subregion != 0)
 		{
 			newCaret = buffer.getLineStartOffset(caretLine)
-				+ xToSubregionOffset(lineInfos[subregion - 1],magic,
-				true);
+				+ chunkCache.xToSubregionOffset(lineInfos[subregion - 1],
+				magic,true);
 		}
 		else
 		{
@@ -2702,7 +2681,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			{
 				lineInfos = chunkCache.getLineInfosForPhysicalLine(prevLine);
 				newCaret = getLineStartOffset(prevLine)
-					+ xToSubregionOffset(lineInfos[
+					+ chunkCache.xToSubregionOffset(lineInfos[
 					lineInfos.length - 1],magic + 1,
 					true);
 			}
@@ -2715,7 +2694,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		moveCaretPosition(newCaret);
 
-		this.magicCaret = magic;
+		setMagicCaretPosition(magic);
 	} //}}}
 
 	//{{{ goToPrevMarker() method
@@ -2765,12 +2744,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		else
 			setFirstLine(firstLine - visibleLines);
 
-		int magic = getMagicCaretPosition();
+		int magic = (int)getMagicCaretPosition(); //XXX
 
 		int newLine = virtualToPhysical(Math.max(0,
 			physicalToVirtual(caretLine) - visibleLines));
 		int newCaret = getLineStartOffset(newLine)
-			+ xToOffset(newLine,magic + 1);
+			+ xToOffset(newLine,magic + 1); //XXX
 
 		if(select)
 			extendSelection(caret,newCaret);
@@ -3021,7 +3000,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int firstIndent;
 
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		int subregion = getSubregionOfOffset(offset,lineInfos);
+		int subregion = chunkCache.getSubregionOfOffset(offset,lineInfos);
 		if(subregion == 0)
 		{
 			firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
@@ -3066,7 +3045,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int lastIndent;
 
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		int subregion = getSubregionOfOffset(offset,lineInfos);
+		int subregion = chunkCache.getSubregionOfOffset(offset,lineInfos);
 		if(subregion == lineInfos.length - 1)
 		{
 			lastIndent = getLineLength(line) - MiscUtilities.getTrailingWhiteSpace(getLineText(line));
@@ -3509,18 +3488,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		int start = getLineStartOffset(caretLine);
 		int end = getLineEndOffset(caretLine);
-		if(end > buffer.getLength())
-		{
-			if(start != 0)
-				start--;
-			end--;
-		}
-		int x = offsetToX(caretLine,caret - start);
+
+		float x = chunkCache.subregionOffsetToX(caretLine,caret - start);
 
 		// otherwise a bunch of consecutive C+d's would be merged
 		// into one edit
 		try
 		{
+			if(end > buffer.getLength())
+			{
+				if(start != 0)
+					start--;
+				end--;
+			}
 			buffer.beginCompoundEdit();
 			buffer.remove(start,end - start);
 		}
@@ -3529,15 +3509,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.endCompoundEdit();
 		}
 
-		int lastLine = buffer.getLineCount() - 1;
+		int lastLine = foldVisibilityManager.getLastVisibleLine();
 		if(caretLine == lastLine)
 		{
+			int offset = chunkCache.xToSubregionOffset(lastLine,0,x,true);
 			setCaretPosition(buffer.getLineStartOffset(lastLine)
-				+ xToOffset(caretLine,x));
+				+ offset);
 		}
 		else
 		{
-			setCaretPosition(start + xToOffset(caretLine,x));
+			int offset = chunkCache.xToSubregionOffset(caretLine,0,x,true);
+			setCaretPosition(start + offset);
 		}
 	} //}}}
 
@@ -3817,10 +3799,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		int magic = getMagicCaretPosition();
+		float magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(line)
-			+ xToOffset(line,magic + 1);
+			+ chunkCache.xToSubregionOffset(line,0,magic + 1,true);
 		if(!multi)
 			selectNone();
 
@@ -3852,10 +3834,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		int magic = getMagicCaretPosition();
+		float magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(nextFold)
-			+ xToOffset(nextFold,magic + 1);
+			+ chunkCache.xToSubregionOffset(nextFold,0,magic + 1,true);
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -3889,10 +3871,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		int magic = getMagicCaretPosition();
+		float magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(prevFold)
-			+ xToOffset(prevFold,magic + 1);
+			+ chunkCache.xToSubregionOffset(prevFold,0,magic + 1,true);
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -3910,7 +3892,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void collapseFold()
 	{
-		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
+		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine)); //XXX
 
 		foldVisibilityManager.collapseFold(caretLine);
 
@@ -3921,7 +3903,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 		if(!multi)
 			selectNone();
-		moveCaretPosition(buffer.getLineStartOffset(line) + xToOffset(line,x));
+		moveCaretPosition(buffer.getLineStartOffset(line) + xToOffset(line,x)); //XXX
 	} //}}}
 
 	//{{{ expandFold() method
@@ -3932,7 +3914,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void expandFold(boolean fully)
 	{
-		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
+		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine)); //XXX
 
 		int line = foldVisibilityManager.expandFold(caretLine,fully);
 
@@ -3940,7 +3922,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			if(!multi)
 				selectNone();
-			moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+			moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));//XXX
 		}
 	} //}}}
 
@@ -4572,6 +4554,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		recalculateVisibleLines();
 		if(buffer.isLoaded())
 			recalculateLastPhysicalLine();
+		propertiesChanged();
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -5077,7 +5060,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		lastLinePartial = (height % lineHeight != 0);
 
 		chunkCache.recalculateVisibleLines();
-		propertiesChanged();
+		if(softWrap && wrapToWidth)
+			wrapMargin = painter.getWidth() - charWidth * 3;
+		maxHorizontalScrollWidth = 0;
+		updateScrollBars();
 	} //}}}
 
 	//{{{ foldStructureChanged() method
@@ -5104,97 +5090,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		gutter.repaint();
 		painter.repaint();
 	} //}}}
-
-	//{{{ getSubregionOfOffset() method
-	/**
-	 * Returns the subregion containing the specified offset. A subregion
-	 * is a subset of a physical line. Each screen line corresponds to one
-	 * subregion. Unlike the {@link #getScreenLineOfOffset()} method,
-	 * this method works with non-visible lines too.
-	 * @since jEdit 4.0pre6
-	 */
-	// not public yet
-	/* public */ int getSubregionOfOffset(int offset, ChunkCache.LineInfo[] lineInfos)
-	{
-		//ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		for(int i = 0; i < lineInfos.length; i++)
-		{
-			ChunkCache.LineInfo info = lineInfos[i];
-			if(offset >= info.offset && offset < info.offset + info.length)
-				return i;
-		}
-
-		return -1;
-	} //}}}
-
-	//{{{ xToSubregionOffset() method
-	/**
-	 * Converts an x co-ordinate within a subregion into an offset from the
-	 * start of that subregion.
-	 * @param info The line info object
-	 * @param x The x co-ordinate
-	 * @param round Round up to next character if x is past the middle of a
-	 * character?
-	 * @since jEdit 4.0pre6
-	 */
-	// not public yet
-	/* public */ int xToSubregionOffset(ChunkCache.LineInfo info, float x,
-		boolean round)
-	{
-		int offset = Chunk.xToOffset(info.chunks,
-			x - horizontalOffset,round);
-		if(offset == -1 || offset == info.offset + info.length)
-			offset = info.offset + info.length - 1;
-
-		return offset;
-	} //}}}
-
-	//{{{ subregionOffsetToX() method
-	/**
-	 * Converts an offset within a subregion into an x co-ordinate.
-	 * @param info The line info object
-	 * @param offset The offset
-	 * @since jEdit 4.0pre6
-	 */
-	// not public yet
-	/* public */ int subregionOffsetToX(ChunkCache.LineInfo info, int offset)
-	{
-		return (int)(horizontalOffset + Chunk.offsetToX(
-			info.chunks,offset));
-	} //}}}
-
-	//{{{ getSubregionStartOffset() method
-	/**
-	 * Returns the start offset of the specified subregion of the specified
-	 * physical line.
-	 * @param line The physical line number
-	 * @param subregion The subregion
-	 * @since jEdit 4.0pre6
-	 */
-	// not public yet
-	/* public int getSubregionStartOffset(int line, int subregion)
-	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		return buffer.getLineStartOffset(lineInfos[subregion].physicalLine)
-			+ lineInfos[subregion].offset;
-	} */ //}}}
-
-	//{{{ getSubregionEndOffset() method
-	/**
-	 * Returns the end offset of the specified subregion of the specified
-	 * physical line.
-	 * @param line The physical line number
-	 * @param subregion The subregion
-	 * @since jEdit 4.0pre6
-	 */
-	// not public yet
-	/* public int getSubregionEndOffset(int line, int subregion)
-	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		ChunkCache.LineInfo info = lineInfos[subregion];
-		return buffer.getLineStartOffset(info.physicalLine)
-			+ info.offset + info.length;
-	} */ //}}}
 
 	//}}}
 
@@ -5253,7 +5148,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private int bracketPosition;
 	private int bracketLine;
 
-	private int magicCaret;
+	private float magicCaret;
 
 	private boolean multi;
 	private boolean overwrite;
@@ -5635,7 +5530,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
-		chunkCache.updateChunksUpTo(visibleLines);
 		for(int i = visibleLines; i >= 0; i--)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);

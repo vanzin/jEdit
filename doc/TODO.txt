@@ -3,7 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- split: not focused
+- go to next/prev line: inefficient
 - need distinct default styles for new token types
 - HTML mode: use new token types
 - synchro scroll & folding
@@ -181,6 +181,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - replace all in a directory could be faster
 - buffer.setMode() slow
 - inserting new lines -- why repaint entire text area?
+- inserting/removing lines -- move gap less agressively
 - positions should be gapped too
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster

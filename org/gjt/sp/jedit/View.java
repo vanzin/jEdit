@@ -1441,6 +1441,8 @@ public class View extends JFrame implements EBComponent
 
 			if(comp != editPane)
 				setEditPane((EditPane)comp);
+			else
+				updateGutterBorders();
 		}
 	} //}}}
 

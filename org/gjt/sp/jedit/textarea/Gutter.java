@@ -113,8 +113,6 @@ public class Gutter extends JComponent implements SwingConstants
 
 		int y = (clip.y - clip.y % lineHeight);
 
-		textArea.chunkCache.updateChunksUpTo(lastLine);
-
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
@@ -757,7 +755,6 @@ public class Gutter extends JComponent implements SwingConstants
 
 				int screenLine = e.getY() / textArea.getPainter()
 					.getFontMetrics().getHeight();
-				textArea.chunkCache.updateChunksUpTo(screenLine);
 
 				int line = textArea.chunkCache.getLineInfo(screenLine)
 					.physicalLine;

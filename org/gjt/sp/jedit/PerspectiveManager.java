@@ -26,10 +26,16 @@ import com.microstar.xml.*;
 import java.io.*;
 import org.gjt.sp.util.Log;
 
-class PerspectiveManager
+/**
+ * Manages persistence of open buffers and views across jEdit sessions.
+ * @since jEdit 4.2pre1
+ * @author Slava Pestov
+ * @version $Id$
+ */
+public class PerspectiveManager
 {
 	//{{{ loadPerspective() method
-	static View loadPerspective(boolean restoreFiles)
+	public static View loadPerspective(boolean restoreFiles)
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
@@ -70,7 +76,7 @@ class PerspectiveManager
 	} //}}}
 
 	//{{{ savePerspective() method
-	static void savePerspective()
+	public static void savePerspective()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
