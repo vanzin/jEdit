@@ -62,6 +62,8 @@ public class FileVFS extends VFS
 				return FileRootsVFS.PROTOCOL + ":";
 			else if(path.length() == 3 && path.endsWith(":\\"))
 				return FileRootsVFS.PROTOCOL + ":";
+			else if(path.startsWith("\\\\") && path.indexOf('\\',2) == -1)
+				return path;
 		}
 
 		return super.getParentOfPath(path);
