@@ -667,6 +667,7 @@ public class DisplayManager
 		// scroll down by physical line amount
 		void physDown(int amount)
 		{
+			int newScrollLine = scrollLine;
 			for(int i = 0; i < amount; i++)
 			{
 				if(physicalLine + i >= offsetMgr.getLineCount())
@@ -674,9 +675,15 @@ public class DisplayManager
 					amount = i;
 					break;
 				}
-				scrollLine += getScreenLineCount(physicalLine + i);
+				if(isLineVisible(physicalLine + i))
+					newScrollLine += getScreenLineCount(physicalLine + i);
 			}
-			physicalLine += amount;
+
+			if(newScrollLine != scrollLine)
+			{
+				scrollLine = newScrollLine;
+				physicalLine += amount;
+			}
 
 			changed();
 		} //}}}
@@ -685,6 +692,7 @@ public class DisplayManager
 		// scroll up by physical line amount
 		void physUp(int amount)
 		{
+			int newScrollLine = scrollLine;
 			for(int i = 0; i < amount; i++)
 			{
 				if(physicalLine - i == 0)
@@ -692,9 +700,15 @@ public class DisplayManager
 					amount = i;
 					break;
 				}
-				scrollLine -= getScreenLineCount(physicalLine - i - 1);
+				if(isLineVisible(physicalLine + i))
+					newScrollLine -= getScreenLineCount(physicalLine - i - 1);
 			}
-			physicalLine -= amount;
+
+			if(newScrollLine != scrollLine)
+			{
+				scrollLine = newScrollLine;
+				physicalLine -= amount;
+			}
 
 			changed();
 		} //}}}

@@ -893,8 +893,19 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.setFont(font);
 				gfx.setColor(lineBackground.foldLineStyle.getForegroundColor());
 
-				int nextLine = textArea.displayManager
-					.getNextVisibleLine(physicalLine);
+				int nextLine;
+				int nextScreenLine = screenLine + 1;
+				if(nextScreenLine < textArea.getVisibleLines())
+				{
+					nextLine = textArea.chunkCache.getLineInfo(nextScreenLine)
+						.physicalLine;
+				}
+				else
+				{
+					nextLine = textArea.displayManager
+						.getNextVisibleLine(physicalLine);
+				}
+
 				if(nextLine == -1)
 					nextLine = buffer.getLineCount();
 
@@ -1218,8 +1229,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public void paintInvalidLine(Graphics2D gfx, int screenLine, int y)
 		{
-			if(!textArea.wrapToWidth && textArea.wrapMargin != 0
-				&& isWrapGuidePainted())
+			if(textArea.wrapMargin != 0 && isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
 				int x = textArea.getHorizontalOffset() + textArea.wrapMargin;
@@ -1229,8 +1239,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public String getToolTipText(int x, int y)
 		{
-			if(!textArea.wrapToWidth && textArea.wrapMargin != 0
-				&& isWrapGuidePainted())
+			if(textArea.wrapMargin != 0 && isWrapGuidePainted())
 			{
 				int wrapGuidePos = textArea.wrapMargin
 					+ textArea.getHorizontalOffset();
