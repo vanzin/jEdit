@@ -481,7 +481,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					+ ".label");
 				if(label == null)
 					label = "NO LABEL PROPERTY: " + name;
-				System.err.println("label is " + label);
 
 				String[] args = { label };
 				jEdit.setTemporaryProperty(name + ".label",

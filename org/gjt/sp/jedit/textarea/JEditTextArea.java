@@ -6506,8 +6506,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			moveCaretPosition(lineStart + wordEnd,false);
 
-			// with double clicks, even if nothing extra
-			// selected, still activate quick copy drag code
 			dragged = true;
 		} //}}}
 
@@ -6530,6 +6528,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				quickCopyDrag = false;
 
 			moveCaretPosition(newCaret,false);
+
+			dragged = true;
 		} //}}}
 
 		//{{{ mouseDragged() method
@@ -6704,8 +6704,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			resizeSelection(markLineStart + mark,lineStart + offset,
 				0,false);
-			if(!quickCopyDrag)
-				moveCaretPosition(lineStart + offset,false);
+			moveCaretPosition(lineStart + offset,false);
+
+			dragged = true;
 		} //}}}
 
 		//{{{ doTripleDrag() method
@@ -6742,10 +6743,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(mouse == caret)
 				return;
 
-			dragged = true;
-
 			resizeSelection(mark,mouse,0,false);
 			moveCaretPosition(mouse,false);
+
+			dragged = true;
 		} //}}}
 
 		//{{{ mouseReleased() method
