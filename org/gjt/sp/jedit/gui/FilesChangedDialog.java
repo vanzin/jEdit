@@ -33,6 +33,12 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
+/**
+ * Files changed on disk dialog.
+ *
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class FilesChangedDialog extends EnhancedDialog
 {
 	//{{{ FilesChangedDialog constructor
@@ -74,7 +80,7 @@ public class FilesChangedDialog extends EnhancedDialog
 				addTo = deleted;
 				break;
 			case Buffer.FILE_CHANGED:
-				addTo = (buffer.isDirty() ? changed : changedDirty);
+				addTo = (buffer.isDirty() ? changedDirty : changed);
 				break;
 			default:
 				addTo = null;
@@ -113,7 +119,21 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		content.add(BorderLayout.SOUTH,buttons);
 
-		bufferTree.setSelectionRow(0);
+		bufferTree.expandPath(new TreePath(
+			new Object[] {
+				root,
+				deleted
+			}));
+		bufferTree.expandPath(new TreePath(
+			new Object[] {
+				root,
+				changed
+			}));
+		bufferTree.expandPath(new TreePath(
+			new Object[] {
+				root,
+				changedDirty
+			}));
 
 		GUIUtilities.requestFocus(this,bufferTree);
 
@@ -157,7 +177,8 @@ public class FilesChangedDialog extends EnhancedDialog
 			if(path != null)
 			{
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
-				view.goToBuffer((Buffer)node.getUserObject());
+				if(node.getUserObject() instanceof Buffer)
+					view.goToBuffer((Buffer)node.getUserObject());
 			}
 		}
 	} //}}}
