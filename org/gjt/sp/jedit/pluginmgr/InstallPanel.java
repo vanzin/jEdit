@@ -41,16 +41,15 @@ class InstallPanel extends JPanel
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
 	{
-		super(new BorderLayout());
-		
+		super(new BorderLayout(12,12));
+
 		this.window = window;
 		this.updates = updates;
-		pluginList = null;
-		
-		setBorder(new EmptyBorder(12,12,6,12));
+
+		setBorder(new EmptyBorder(12,12,12,12));
 
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,true);
-		
+
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
@@ -61,86 +60,67 @@ class InstallPanel extends JPanel
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
-		
+
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
 		TableColumn col4 = table.getColumnModel().getColumn(3);
 		TableColumn col5 = table.getColumnModel().getColumn(4);
-		
+
 		col1.setPreferredWidth(50);
 		col1.setMinWidth(50);
 		col1.setMaxWidth(50);
 		col1.setResizable(false);
-		
+
 		col2.setPreferredWidth(180);
 		col3.setPreferredWidth(130);
 		col4.setPreferredWidth(70);
 		col5.setPreferredWidth(70);
-		
+
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
 		((DefaultTableCellRenderer)header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.LEFT);
-		
+
 		JScrollPane scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		split.setTopComponent(scrollpane);
 
 		/* Create description */
 		JScrollPane infoPane = new JScrollPane(new PluginInfoBox());
-		infoPane.getViewport().setPreferredSize(new Dimension(500,100));
+		infoPane.setPreferredSize(new Dimension(500,100));
 		split.setBottomComponent(infoPane);
-		
+
 		add(BorderLayout.CENTER,split);
-		
+
 		/* Create buttons */
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(3,0,0,0));
+		Box buttons = new Box(BoxLayout.Y_AXIS);
 
 		buttons.add(new InstallButton());
 		buttons.add(Box.createHorizontalStrut(12));
 		buttons.add(new SelectallButton());
 		buttons.add(Box.createGlue());
 		buttons.add(new SizeLabel());
-		
+
 		add(BorderLayout.SOUTH,buttons);
 	} //}}}
 
-	//{{{ getPluginList() method
-	public PluginList getPluginList()
+	//{{{ updateModel() method
+	public void updateModel()
 	{
-		if(jEdit.getSettingsDirectory() == null
-			&& jEdit.getJEditHome() == null)
-		{
-			GUIUtilities.error(window,"no-settings",null);
-			return null;
-		}
-		
-		if(pluginList == null)
-		{
-			pluginList = new PluginListDownloadProgress(window)
-				.getPluginList();
-			
-		}
 		pluginModel.update();
-		
-		return pluginList;
 	} //}}}
-	
+
 	//{{{ Private members
-	
+
 	//{{{ Variables
 	private JTable table;
 	private PluginTableModel pluginModel;
 	private PluginManager window;
-	
+
 	private boolean updates;
-	
-	static PluginList pluginList;
 	//}}}
-	
+
 	//{{{ formatSize() method
 	private String formatSize(int size)
 	{
@@ -154,22 +134,23 @@ class InstallPanel extends JPanel
 			sizeText = df.format(size/1048576d) + "MB";
 		return sizeText;
 	} //}}}
-	
+
+	//}}}
+
 	//{{{ Inner classes
 
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private LinkedList entries = new LinkedList();
+		private ArrayList entries = new ArrayList();
 		private int sortType = EntryCompare.CATEGORY;
-		
+
 		//{{{ Constructor
 		public PluginTableModel()
 		{
-			super();
 			update();
 		} //}}}
-		
+
 		//{{{ getColumnClass() method
 		public Class getColumnClass(int columnIndex)
 		{
@@ -183,13 +164,13 @@ class InstallPanel extends JPanel
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
-		
+
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
 			return 5;
 		} //}}}
-		
+
 		//{{{ getColumnName() method
 		public String getColumnName(int column)
 		{
@@ -203,24 +184,24 @@ class InstallPanel extends JPanel
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
-		
+
 		//{{{ getEntry() method
 		public Entry getEntry(int rowIndex)
 		{
 			return (Entry)entries.get(rowIndex);
 		} //}}}
-		
+
 		//{{{ getRowCount() method
 		public int getRowCount()
 		{
 			return entries.size();
 		} //}}}
-		
+
 		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
 			Entry entry = (Entry)entries.get(rowIndex);
-			
+
 			switch (columnIndex)
 			{
 				case 0: return entry.install;
@@ -231,13 +212,13 @@ class InstallPanel extends JPanel
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
-		
+
 		//{{{ isCellEditable() method
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			return (columnIndex == 0);
 		} //}}}
-		
+
 		//{{{ setSelectAll() method
 		public void setSelectAll(boolean b)
 		{
@@ -255,19 +236,19 @@ class InstallPanel extends JPanel
 			}
 			fireTableChanged(new TableModelEvent(this));
 		} //}}}
-		
+
 		//{{{ setSortType() method
 		public void setSortType(int type)
 		{
 			sortType = type;
 			sort(type);
 		} //}}}
-		
+
 		//{{{ setValueAt() method
 		public void setValueAt(Object aValue, int row, int column)
 		{
 			if (column != 0) return;
-			
+
 			Entry entry = getEntry(row);
 			Vector deps = entry.plugin.getCompatibleBranch().deps;
 			boolean value = ((Boolean)aValue).booleanValue();
@@ -283,7 +264,7 @@ class InstallPanel extends JPanel
 						return;
 				}
 			}
-				
+
 			for (int i = 0; i < deps.size(); i++)
 			{
 				PluginList.Dependency dep = (PluginList.Dependency)deps.elementAt(i);
@@ -309,7 +290,7 @@ class InstallPanel extends JPanel
 			entry.install = (Boolean)aValue;
 			fireTableCellUpdated(row,column);
 		} //}}}
-		
+
 		//{{{ sort() method
 		public void sort(int type)
 		{
@@ -317,14 +298,16 @@ class InstallPanel extends JPanel
 			fireTableChanged(new TableModelEvent(this));
 		}
 		//}}}
-		
+
 		//{{{ update() method
 		public void update()
 		{
+			PluginList pluginList = window.getPluginList();
+
 			if (pluginList == null) return;
-			
-			entries = new LinkedList();
-			
+
+			entries = new ArrayList();
+
 			for(int i = 0; i < pluginList.pluginSets.size(); i++)
 			{
 				PluginList.PluginSet set = (PluginList.PluginSet)
@@ -352,13 +335,13 @@ class InstallPanel extends JPanel
 					}
 				}
 			}
-			
+
 			sort(sortType);
-			
+
 			fireTableChanged(new TableModelEvent(this));
 		} //}}}
 	} //}}}
-	
+
 	//{{{ Entry class
 	class Entry
 	{
@@ -367,13 +350,13 @@ class InstallPanel extends JPanel
 		Boolean install;
 		PluginList.Plugin plugin;
 		LinkedList parents = new LinkedList();
-		
+
 		public Entry(PluginList.Plugin plugin, String set)
 		{
 			PluginList.Branch branch = plugin.getCompatibleBranch();
 			boolean downloadSource = jEdit.getBooleanProperty("plugin-manager.downloadSource");
 			int size = (downloadSource) ? branch.downloadSourceSize : branch.downloadSize;
-			
+
 			this.name = plugin.name;
 			this.author = plugin.author;
 			this.version = branch.version;
@@ -385,57 +368,45 @@ class InstallPanel extends JPanel
 			this.plugin = plugin;
 		}
 	} //}}}
-	
+
 	//{{{ PluginInfoBox class
-	class PluginInfoBox extends JEditorPane implements ListSelectionListener
+	class PluginInfoBox extends JTextArea implements ListSelectionListener
 	{
 		public PluginInfoBox()
 		{
-			super();
-			
-			setContentType("text/html");
 			setEditable(false);
-			setMargin(new Insets(5,5,5,5));
+			setLineWrap(true);
+			setWrapStyleWord(true);
 			table.getSelectionModel().addListSelectionListener(this);
 		}
-		
-		
+
+
 		public void valueChanged(ListSelectionEvent e)
 		{
 			String text = "";
 			if (table.getSelectedRowCount() == 1)
 			{
 				Entry entry = pluginModel.getEntry(table.getSelectedRow());
-				text = jEdit.getProperty("install-plugins.info.html",
+				text = jEdit.getProperty("install-plugins.info",
 					new String[] {entry.author,entry.date,entry.description});
-				/*text.append("<html>\n");
-				text.append("<body>\n");
-				text.append("<em><font size=\"2\" face=\"Arial, Helvetica, sans-serif\">Author: "
-					+entry.author+"<br>\n");
-				text.append("Released: "+entry.date+"</em><br></font><br>\n");
-				text.append("<font size=\"2\" face=\"Arial, Helvetica, sans-serif\">"
-					+entry.description+"</font>\n");
-				text.append("</body>\n");
-				text.append("</html>\n");*/		
 			}
 			setText(text);
 			setCaretPosition(0);
 		}
 	} //}}}
-	
+
 	//{{{ SizeLabel class
 	class SizeLabel extends JLabel implements TableModelListener
 	{
 		private int size;
-		
+
 		public SizeLabel()
 		{
-			super();
 			size = 0;
 			setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
 			pluginModel.addTableModelListener(this);
 		}
-		
+
 		public void tableChanged(TableModelEvent e)
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
@@ -452,7 +423,7 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ UpdatesButton class
 	class UpdatesButton extends JCheckBox implements ActionListener
 	{
@@ -461,14 +432,14 @@ class InstallPanel extends JPanel
 			super(jEdit.getProperty("install-plugins.show-updates"));
 			addActionListener(this);
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			jEdit.setBooleanProperty("plugin-manager.showAll",!isSelected());
 			pluginModel.update();
 		}
 	} //}}}
-	
+
 	//{{{ SelectallButton class
 	class SelectallButton extends JCheckBox implements ActionListener, TableModelListener
 	{
@@ -479,12 +450,12 @@ class InstallPanel extends JPanel
 			pluginModel.addTableModelListener(this);
 			setEnabled(false);
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			pluginModel.setSelectAll(isSelected());
 		}
-		
+
 		public void tableChanged(TableModelEvent e)
 		{
 			setEnabled(pluginModel.getRowCount() != 0);
@@ -502,7 +473,7 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ InstallButton class
 	class InstallButton extends JButton implements ActionListener, TableModelListener
 	{
@@ -513,7 +484,7 @@ class InstallPanel extends JPanel
 			addActionListener(this);
 			setEnabled(false);
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			boolean downloadSource = jEdit.getBooleanProperty(
@@ -531,7 +502,7 @@ class InstallPanel extends JPanel
 				installDirectory = MiscUtilities.constructPath(
 					jEdit.getJEditHome(),"jars");
 			}
-			
+
 			int length = pluginModel.getRowCount();
 			LinkedList selected = new LinkedList();
 			for (int i = 0; i < length; i++)
@@ -543,21 +514,21 @@ class InstallPanel extends JPanel
 					selected.add(entry.plugin);
 				}
 			}
-			
+
 			if(roster.isEmpty())
 				return;
 
 			new PluginManagerProgress(window,"install",roster);
-			
+
 			for (int i = 0; i < selected.size(); i++)
 			{
 				PluginList.Plugin plugin = (PluginList.Plugin)selected.get(i);
 				plugin.checkIfInstalled();
 			}
-			
+
 			pluginModel.update();
 		}
-		
+
 		public void tableChanged(TableModelEvent e)
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
@@ -573,25 +544,25 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ EntryCompare class
-	static class EntryCompare implements Comparator 
+	static class EntryCompare implements Comparator
 	{
 		public static final int NAME = 0;
 		public static final int CATEGORY = 1;
-		
+
 		private int type;
-		
+
 		public EntryCompare(int type)
 		{
 			this.type = type;
 		}
-		
+
 		public int compare(Object o1, Object o2)
 		{
 			Entry e1 = (Entry)o1;
 			Entry e2 = (Entry)o2;
-			
+
 			if (type == NAME)
 				return e1.name.compareToIgnoreCase(e2.name);
 			else
@@ -603,7 +574,7 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ HeaderMouseHandler()
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -621,26 +592,23 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ TextRenderer
 	class TextRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
-		
+
 		public TextRenderer(DefaultTableCellRenderer tcr)
 		{
-			super();
 			this.tcr = tcr;
 		}
-		
+
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
 		}
 	} //}}}
-	
-	//}}}
-	
+
 	//}}}
 }

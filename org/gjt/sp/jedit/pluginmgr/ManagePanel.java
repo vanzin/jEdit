@@ -43,11 +43,11 @@ public class ManagePanel extends JPanel
 	//{{{ ManagePanel constructor
 	public ManagePanel(PluginManager window)
 	{
-		super(new BorderLayout());
-		
+		super(new BorderLayout(12,12));
+
 		this.window = window;
-		
-		setBorder(new EmptyBorder(12,12,6,12));
+
+		setBorder(new EmptyBorder(12,12,12,12));
 
 		/* Create the plugin table */
 		table = new JTable(pluginModel = new PluginTableModel());
@@ -58,44 +58,42 @@ public class ManagePanel extends JPanel
 		table.setRequestFocusEnabled(false);
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
-		
+
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
-		
+
 		col1.setPreferredWidth(300);
 		col2.setPreferredWidth(100);
 		col3.setPreferredWidth(100);
-		
+
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
 		((DefaultTableCellRenderer)header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.LEFT);
-		
+
 		JScrollPane scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		add(BorderLayout.CENTER,scrollpane);
 
 		/* Create button panel */
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(6,0,0,0));
+		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		buttons.add(new RemoveButton());
 		buttons.add(Box.createGlue());
 		buttons.add(new HelpButton());
-		
+
 		add(BorderLayout.SOUTH,buttons);
 	} //}}}
-	
+
 	//{{{ update() method
 	public void update()
 	{
 		pluginModel.update();
 	} //}}}
-	
+
 	//{{{ Private members
-	
+
 	//{{{ Variables
 	private JTable table;
 	private PluginTableModel pluginModel;
@@ -103,9 +101,9 @@ public class ManagePanel extends JPanel
 	private JButton help;
 	private PluginManager window;
 	//}}}
-	
+
 	//{{{ Inner classes
-	
+
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
@@ -145,7 +143,7 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ Entry class
 	class Entry
 	{
@@ -182,9 +180,9 @@ public class ManagePanel extends JPanel
 					this.status = "Error";
 				else
 					this.status = "Loaded";
-				
+
 				this.docs = jEdit.getProperty("plugin."+clazz+".docs");
-				
+
 				String jarsProp = jEdit.getProperty("plugin."+clazz+".jars");
 
 				if(jarsProp != null)
@@ -206,26 +204,25 @@ public class ManagePanel extends JPanel
 			return Entry.this.name;
 		}
 	} //}}}
-	
+
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private LinkedList entries = new LinkedList();
+		private ArrayList entries;
 		private int sortType = EntryCompare.STATUS;
-		
+
 		//{{{ Constructor
 		public PluginTableModel()
 		{
-			super();
 			update();
 		} //}}}
-		
+
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
 			return 3;
 		} //}}}
-		
+
 		//{{{ getColumnName() method
 		public String getColumnName(int column)
 		{
@@ -237,19 +234,19 @@ public class ManagePanel extends JPanel
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
-		
+
 		//{{{ getEntry() method
 		public Entry getEntry(int rowIndex)
 		{
 			return (Entry)entries.get(rowIndex);
 		} //}}}
-		
+
 		//{{{ getRowCount() method
 		public int getRowCount()
 		{
 			return entries.size();
 		} //}}}
-		
+
 		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
@@ -262,14 +259,14 @@ public class ManagePanel extends JPanel
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
-		
+
 		//{{{ setSortType() method
 		public void setSortType(int type)
 		{
 			sortType = type;
 			sort(type);
 		} //}}}
-		
+
 		//{{{ sort() method
 		public void sort(int type)
 		{
@@ -277,12 +274,12 @@ public class ManagePanel extends JPanel
 			fireTableChanged(new TableModelEvent(this));
 		}
 		//}}}
-		
+
 		//{{{ update() method
 		public void update()
 		{
 			EditPlugin[] plugins = jEdit.getPlugins();
-			entries = new LinkedList();
+			entries = new ArrayList();
 			for(int i = 0; i < plugins.length; i++)
 			{
 				EditPlugin plugin = plugins[i];
@@ -291,36 +288,35 @@ public class ManagePanel extends JPanel
 				{
 					continue;
 				}
-	
+
 				if(plugin instanceof EditPlugin.Broken)
 					entries.add(new Entry(path,plugin.getClassName(),true));
 				else
 					entries.add(new Entry(path,plugin.getClassName(),false));
 			}
-			
+
 			String[] newPlugins = jEdit.getNotLoadedPluginJARs();
 			for(int i = 0; i < newPlugins.length; i++)
 			{
 				entries.add(new Entry(newPlugins[i],null,true));
 			}
-			
+
 			sort(sortType);
-			
+
 			fireTableChanged(new TableModelEvent(this));
 		} //}}}
 	} //}}}
-	
+
 	//{{{ TextRenderer
 	class TextRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
-		
+
 		public TextRenderer(DefaultTableCellRenderer tcr)
 		{
-			super();
 			this.tcr = tcr;
 		}
-		
+
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
@@ -332,7 +328,7 @@ public class ManagePanel extends JPanel
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
 		}
 	} //}}}
-	
+
 	//{{{ RemoveButton class
 	class RemoveButton extends JButton implements ListSelectionListener, ActionListener
 	{
@@ -343,7 +339,7 @@ public class ManagePanel extends JPanel
 			addActionListener(this);
 			setEnabled(false);
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			int[] selected = table.getSelectedRows();
@@ -375,7 +371,7 @@ public class ManagePanel extends JPanel
 				pluginModel.update();
 			}
 		}
-		
+
 		public void valueChanged(ListSelectionEvent e)
 		{
 			if (table.getSelectedRowCount() == 0)
@@ -384,12 +380,12 @@ public class ManagePanel extends JPanel
 				setEnabled(true);
 		}
 	} //}}}
-	
+
 	//{{{ HelpButton class
 	class HelpButton extends JButton implements ListSelectionListener, ActionListener
 	{
 		private URL docURL;
-		
+
 		public HelpButton()
 		{
 			super(jEdit.getProperty("manage-plugins.help"));
@@ -397,12 +393,12 @@ public class ManagePanel extends JPanel
 			addActionListener(this);
 			setEnabled(false);
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			new HelpViewer(docURL);
 		}
-		
+
 		public void valueChanged(ListSelectionEvent e)
 		{
 			if (table.getSelectedRowCount() == 1)
@@ -428,25 +424,25 @@ public class ManagePanel extends JPanel
 			setEnabled(false);
 		}
 	} //}}}
-	
+
 	//{{{ EntryCompare class
-	static class EntryCompare implements Comparator 
+	static class EntryCompare implements Comparator
 	{
 		public static final int NAME = 0;
 		public static final int STATUS = 1;
-		
+
 		private int type;
-		
+
 		public EntryCompare(int type)
 		{
 			this.type = type;
 		}
-		
+
 		public int compare(Object o1, Object o2)
 		{
 			Entry e1 = (Entry)o1;
 			Entry e2 = (Entry)o2;
-			
+
 			if (type == NAME)
 				return e1.name.compareToIgnoreCase(e2.name);
 			else
@@ -458,7 +454,7 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ HeaderMouseHandler()
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -476,8 +472,8 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//}}}
-	
+
 	//}}}
 }

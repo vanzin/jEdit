@@ -802,7 +802,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 					}
 
 					MiscUtilities.quicksort(directoryVector,
-						new FileCompare());
+						new VFS.DirectoryEntryCompare(
+						sortMixFilesAndDirs,
+						sortIgnoreCase));
 				}
 
 				browserView.directoryLoaded(node,path,
@@ -822,25 +824,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 					filesSelected();
 			}
 		});
-	} //}}}
-
-	//{{{ FileCompare class
-	class FileCompare implements MiscUtilities.Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			VFS.DirectoryEntry file1 = (VFS.DirectoryEntry)obj1;
-			VFS.DirectoryEntry file2 = (VFS.DirectoryEntry)obj2;
-
-			if(!sortMixFilesAndDirs)
-			{
-				if(file1.type != file2.type)
-					return file2.type - file1.type;
-			}
-
-			return MiscUtilities.compareStrings(file1.name,
-				file2.name,sortIgnoreCase);
-		}
 	} //}}}
 
 	//{{{ filesSelected() method

@@ -223,29 +223,6 @@ public class TextUtilities
 		return -1;
 	} //}}}
 
-	//{{{ findMatchingBracketFuzzy() method
-	/**
-	 * Works exactly like the findMatchingBracket(Bufferm int, int) method,
-	 * but if there is no (matching) bracket at the specified offset, it
-	 * looks at the next character too. The caller only needs to make sure
-	 * that the given offset is valid.
-	 * @param buffer The buffer
-	 * @param line The line
-	 * @param offset The offset within that line
-	 * @since 4.1pre1
-	 */
-	public static int findMatchingBracketFuzzy(Buffer buffer, int line, int offset)
-	{
-		int result = findMatchingBracket(buffer,line,offset);
-		if((result == -1)&&(offset + 1 < buffer.getLineLength(line)))
-		{
-			return findMatchingBracket(buffer,line,offset + 1);
-		}
-		else{
-			return result;	
-		}
-	} //}}}
-
 	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.

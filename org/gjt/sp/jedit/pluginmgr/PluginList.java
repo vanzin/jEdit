@@ -50,7 +50,7 @@ class PluginList
 		pluginHash = new Hashtable();
 		pluginSets = new Vector();
 
-		String path = jEdit.getProperty("plugin-manager.url");
+		String path = jEdit.getProperty("plugin-manager.export-url");
 		String id = jEdit.getProperty("plugin-manager.mirror.id");
 		if (!id.equals("NONE"))
 			path += "?mirror="+id;

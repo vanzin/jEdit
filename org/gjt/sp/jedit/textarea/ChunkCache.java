@@ -146,6 +146,14 @@ class ChunkCache
 		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
+	//{{{ setBuffer() method
+	void setBuffer(Buffer buffer)
+	{
+		this.buffer = buffer;
+		this.firstLine = 0;
+		invalidateAll();
+	} //}}}
+
 	//{{{ setFirstLine() method
 	public static boolean DEBUG = false;
 	/**
@@ -153,17 +161,17 @@ class ChunkCache
 	 * scrolling doesn't cause all visible lines, only newly exposed
 	 * ones, to be retokenized.
 	 */
-	void setFirstLine(int firstLine, int physFirstLine, boolean bufferSwitch)
+	void setFirstLine(int firstLine, int physFirstLine)
 	{
 		if(DEBUG)
 		{
 			System.err.println("old: " + this.firstLine + ",new: " +
-				firstLine + ",phys: " + physFirstLine + ",bs: " + bufferSwitch);
+				firstLine + ",phys: " + physFirstLine);
 		}
 
 		int visibleLines = lineInfo.length;
 		// rely on the fact that when we're called physLastLine not updated yet
-		if(bufferSwitch || physFirstLine > textArea.getLastPhysicalLine())
+		if(physFirstLine > textArea.getLastPhysicalLine())
 		{
 			if(DEBUG)
 				System.err.println("too far");
@@ -340,7 +348,6 @@ class ChunkCache
 	//{{{ getScreenLineCount() method
 	int getScreenLineCount(int physicalLine)
 	{
-		Buffer buffer = textArea.getBuffer();
 		int screenLines = buffer.getScreenLineCount(physicalLine);
 		if(screenLines == 0)
 		{
@@ -545,24 +552,8 @@ class ChunkCache
 		return retVal;
 	} //}}}
 
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private JEditTextArea textArea;
-	private int firstLine;
-	private LineInfo[] lineInfo;
-	private ArrayList out;
-
-	private int lastScreenLineP;
-	private int lastScreenLine;
-
-	private boolean needFullRepaint;
-
-	private DisplayTokenHandler tokenHandler;
-	//}}}
-
 	//{{{ getLineInfosForPhysicalLine() method
-	private LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
+	LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
 	{
 		out.clear();
 		lineToChunkList(physicalLine,out);
@@ -574,6 +565,23 @@ class ChunkCache
 		getLineInfosForPhysicalLine(physicalLine,returnValue);
 		return (LineInfo[])returnValue.toArray(new LineInfo[out.size()]);
 	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private JEditTextArea textArea;
+	private Buffer buffer;
+	private int firstLine;
+	private LineInfo[] lineInfo;
+	private ArrayList out;
+
+	private int lastScreenLineP;
+	private int lastScreenLine;
+
+	private boolean needFullRepaint;
+
+	private DisplayTokenHandler tokenHandler;
+	//}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
 	private void getLineInfosForPhysicalLine(int physicalLine, List list)
@@ -686,7 +694,7 @@ class ChunkCache
 
 				if(out.size() == 0)
 				{
-					textArea.getBuffer().setScreenLineCount(
+					buffer.setScreenLineCount(
 						physicalLine,1);
 					chunks = null;
 					offset = 0;
@@ -694,7 +702,7 @@ class ChunkCache
 				}
 				else
 				{
-					textArea.getBuffer().setScreenLineCount(
+					buffer.setScreenLineCount(
 						physicalLine,out.size());
 					chunks = (Chunk)out.get(0);
 					out.remove(0);
@@ -755,7 +763,6 @@ class ChunkCache
 	private void lineToChunkList(int physicalLine, List out)
 	{
 		TextAreaPainter painter = textArea.getPainter();
-		Buffer buffer = textArea.getBuffer();
 
 		buffer.getLineText(physicalLine,textArea.lineSegment);
 		tokenHandler.init(textArea.lineSegment,painter.getStyles(),

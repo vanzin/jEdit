@@ -179,7 +179,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 			if (i != lastIdx) buf.append(": ");
 		}
 
-		currentLabel.setText(buf.toString());
+		setTitle(jEdit.getProperty("options.title-template",
+			new Object[] { jEdit.getProperty(this.name + ".title"),
+			buf.toString() }));
 
 		optionPane.init();
 
@@ -240,7 +242,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 	private JSplitPane splitter;
 	private JTree paneTree;
 	private JPanel cardPanel;
-	private JLabel currentLabel;
 	private JButton ok;
 	private JButton cancel;
 	private JButton apply;
@@ -257,16 +258,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JPanel stage = new JPanel(new BorderLayout(6,6));
-
-		// currentLabel displays the path of the currently selected
-		// OptionPane at the top of the stage area
-		currentLabel = new JLabel();
-		currentLabel.setHorizontalAlignment(JLabel.LEFT);
-		stage.add(currentLabel, BorderLayout.NORTH);
-
 		cardPanel = new JPanel(new CardLayout());
-		stage.add(cardPanel, BorderLayout.CENTER);
 
 		paneTree = new JTree(createOptionTreeModel());
 		paneTree.setVisibleRowCount(1);
@@ -283,8 +275,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			scroller,stage);
-		splitter.setDividerLocation(scroller.getPreferredSize().width);
+			scroller,cardPanel);
 		content.add(splitter, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -321,6 +312,8 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		if(pane == null || !selectPane(rootNode,pane))
 			selectPane(rootNode,firstPane);
+
+		splitter.setDividerLocation(paneTree.getPreferredSize().width);
 
 		GUIUtilities.loadGeometry(this,name);
 		int dividerLocation = jEdit.getIntegerProperty(name + ".splitter",-1);

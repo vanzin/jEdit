@@ -44,40 +44,38 @@ public class PluginManager extends JFrame implements EBComponent
 		super(jEdit.getProperty("plugin-manager.title"));
 
 		EditBus.addToBus(this);
-		
+
 		/* Setup panes */
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		tabPane = new JTabbedPane();
+		tabPane.addTab(jEdit.getProperty("manage-plugins.title"),
+			manager = new ManagePanel(this));
+		tabPane.addTab(jEdit.getProperty("update-plugins.title"),
+			updater = new InstallPanel(this,true));
+		tabPane.addTab(jEdit.getProperty("install-plugins.title"),
+			installer = new InstallPanel(this,false));
 		tabPane.addChangeListener(new ListUpdater());
-		tabPane.addTab(jEdit.getProperty("manage-plugins.title")
-			,manager = new ManagePanel(this));
-		tabPane.addTab(jEdit.getProperty("update-plugins.title")
-			,updater = new InstallPanel(this,true));
-		tabPane.addTab(jEdit.getProperty("install-plugins.title")
-			,installer = new InstallPanel(this,false));
 
 		content.add(BorderLayout.CENTER,tabPane);
 
 		/* Create the buttons */
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(12,0,0,0));
+		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		ActionListener al = new ActionHandler();
 		options = new JButton(jEdit.getProperty("plugin-manager.options"));
 		options.addActionListener(al);
 		done = new JButton(jEdit.getProperty("plugin-manager.done"));
 		done.addActionListener(al);
-		
+
 		buttons.add(Box.createGlue());
 		buttons.add(options);
 		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(done);
 		buttons.add(Box.createGlue());
-		
+
 		getRootPane().setDefaultButton(done);
 
 		content.add(BorderLayout.SOUTH,buttons);
@@ -97,20 +95,20 @@ public class PluginManager extends JFrame implements EBComponent
 		EditBus.removeFromBus(this);
 		super.dispose();
 	} //}}}
-	
+
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage message)
 	{
 		// Force the install tab to refresh for possible
 		// change of mirror
-		if (message instanceof PropertiesChanged)
+		/* if (message instanceof PropertiesChanged)
 		{
 			InstallPanel.pluginList = null;
 			installer.getPluginList();
 			updater.getPluginList();
-		}
+		} */
 	} //}}}
-	
+
 	//{{{ showPluginManager() method
 	public static void showPluginManager(Frame frame)
 	{
@@ -122,7 +120,7 @@ public class PluginManager extends JFrame implements EBComponent
 			return;
 		}
 	} //}}}
-	
+
 	//{{{ ok() method
 	public void ok()
 	{
@@ -135,9 +133,27 @@ public class PluginManager extends JFrame implements EBComponent
 		dispose();
 	} //}}}
 
+	//{{{ getPluginList() method
+	public PluginList getPluginList()
+	{
+		if(jEdit.getSettingsDirectory() == null
+			&& jEdit.getJEditHome() == null)
+		{
+			GUIUtilities.error(this,"no-settings",null);
+			return null;
+		}
+
+		if(pluginList == null)
+		{
+			pluginList = new PluginListDownloadProgress(this)
+				.getPluginList();
+
+		}
+
+		return pluginList;
+	} //}}}
+
 	//{{{ Private members
-	
-	//{{{ Variables
 	private JTabbedPane tabPane;
 	private JButton done;
 	private JButton cancel;
@@ -145,10 +161,11 @@ public class PluginManager extends JFrame implements EBComponent
 	private InstallPanel installer;
 	private InstallPanel updater;
 	private ManagePanel manager;
-	
+	private PluginList pluginList;
+
 	private static PluginManager instance;
 	//}}}
-	
+
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
@@ -165,22 +182,28 @@ public class PluginManager extends JFrame implements EBComponent
 				new GlobalOptions(PluginManager.this,"plugin-manager");
 		}
 	} //}}}
-	
+
 	//{{{ ListUpdater class
 	class ListUpdater implements ChangeListener
 	{
 		public void stateChanged(ChangeEvent e)
 		{
-			if (tabPane.getSelectedComponent() == installer)
-				installer.getPluginList();
-			if (tabPane.getSelectedComponent() == updater)
-				updater.getPluginList();
-			if (tabPane.getSelectedComponent() == manager)
+			final Component selected = tabPane.getSelectedComponent();
+			if(selected == installer || selected == updater)
+			{
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						installer.updateModel();
+						updater.updateModel();
+					}
+				});
+			}
+			else if(selected == manager)
 				manager.update();
 		}
 	} //}}}
-	
-	//}}}
-	
+
 	//}}}
 }

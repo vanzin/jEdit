@@ -319,9 +319,6 @@ public class BufferIORequest extends WorkRequest
 		throws IOException
 	{
 		LongArray endOffsets = new LongArray();
-		// we construct line information in the same format as
-		// the offset manager expects it in
-		long visible = (0xffL << OffsetManager.VISIBLE_SHIFT);
 
 		// only true if the file size is known
 		boolean trackProgress = (!buffer.isTemporary() && length != 0);
@@ -399,7 +396,7 @@ public class BufferIORequest extends WorkRequest
 					seg.append(buf,lastLine,i -
 						lastLine);
 					seg.append('\n');
-					endOffsets.add(seg.count | visible);
+					OffsetManager.addLineEndOffset(endOffsets,seg.count);
 					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
 						setProgressValue(seg.count);
 
@@ -437,7 +434,7 @@ public class BufferIORequest extends WorkRequest
 						seg.append(buf,lastLine,
 							i - lastLine);
 						seg.append('\n');
-						endOffsets.add(seg.count | visible);
+						OffsetManager.addLineEndOffset(endOffsets,seg.count);
 						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
 							setProgressValue(seg.count);
 						lastLine = i + 1;
@@ -501,7 +498,7 @@ public class BufferIORequest extends WorkRequest
 
 		// add a line marker at the end for proper offset manager
 		// operation
-		endOffsets.add(seg.count + 1 | visible);
+		OffsetManager.addLineEndOffset(endOffsets,seg.count + 1);
 
 		// to avoid having to deal with read/write locks and such,
 		// we insert the loaded data into the buffer in the
@@ -555,8 +552,6 @@ public class BufferIORequest extends WorkRequest
 			{
 				path = vfs._canonPath(session,path,view);
 
-				buffer.readLock();
-
 				// Only backup once per session
 				if(buffer.getProperty(Buffer.BACKED_UP) == null
 					|| jEdit.getBooleanProperty("backupEverySave"))
@@ -584,6 +579,10 @@ public class BufferIORequest extends WorkRequest
 					savePath = path;
 
 				out = vfs._createOutputStream(session,savePath,view);
+
+				// this must be after the stream is created or
+				// we deadlock with SSHTools.
+				buffer.readLock();
 				if(out != null)
 				{
 					// Can't use buffer.getName() here because

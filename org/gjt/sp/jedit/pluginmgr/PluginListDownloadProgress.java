@@ -86,7 +86,7 @@ class PluginListDownloadProgress extends JDialog
 				dispose();
 
 				int line = xe.getLine();
-				String path = jEdit.getProperty("plugin-manager.url");
+				String path = jEdit.getProperty("plugin-manager.export-url");
 				String message = xe.getMessage();
 				Log.log(Log.ERROR,this,path + ":" + line
 					+ ": " + message);

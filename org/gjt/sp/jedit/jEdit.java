@@ -87,26 +87,16 @@ public class jEdit
 		}
 
 		//{{{ Parse command line
-		int level = Log.WARNING;
-		if(args.length >= 1)
-		{
-			String levelStr = args[0];
-			if(levelStr.length() == 1 && Character.isDigit(
-				levelStr.charAt(0)))
-			{
-				level = Integer.parseInt(levelStr);
-				args[0] = null;
-			}
-		}
-
 		boolean endOpts = false;
+		int level = Log.WARNING;
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
 		boolean gui = true; // open initial view?
-		boolean noPlugins = false;
-		boolean noStartupScripts = false;
+		boolean loadPlugins = true;
+		boolean runStartupScripts = true;
+		boolean quit = false;
 		String userDir = System.getProperty("user.dir");
 
 		// script to run
@@ -135,6 +125,17 @@ public class jEdit
 					version();
 					System.exit(1);
 				}
+				else if(arg.startsWith("-log="))
+				{
+					try
+					{
+						level = Integer.parseInt(arg.substring("log=".length()));
+					}
+					catch(NumberFormatException nf)
+					{
+						System.err.println("Malformed option: " + arg);
+					}
+				}
 				else if(arg.equals("-nosettings"))
 					settingsDirectory = null;
 				else if(arg.startsWith("-settings="))
@@ -147,16 +148,28 @@ public class jEdit
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
 					background = true;
+				else if(arg.startsWith("-nobackground"))
+					background = true;
+				else if(arg.equals("-gui"))
+					gui = true;
 				else if(arg.equals("-nogui"))
 					gui = false;
+				else if(arg.equals("-restore"))
+					restore = true;
 				else if(arg.equals("-norestore"))
 					restore = false;
+				else if(arg.equals("-plugins"))
+					loadPlugins = true;
 				else if(arg.equals("-noplugins"))
-					noPlugins = true;
+					loadPlugins = false;
+				else if(arg.equals("-startupscripts"))
+					runStartupScripts = true;
 				else if(arg.equals("-nostartupscripts"))
-					noStartupScripts = true;
+					runStartupScripts = false;
 				else if(arg.startsWith("-run="))
 					scriptFile = arg.substring(5);
+				else if(arg.equals("-quit"))
+					quit = true;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -195,7 +208,11 @@ public class jEdit
 					socket.getOutputStream());
 				out.writeInt(key);
 
-				String script = makeServerScript(restore,args,scriptFile);
+				String script;
+				if(quit)
+					script = "jEdit.exit(null,true);";
+				else
+					script = makeServerScript(restore,args,scriptFile);
 
 				out.writeUTF(script);
 
@@ -218,6 +235,13 @@ public class jEdit
 				Log.log(Log.NOTICE,jEdit.class,e);
 			}
 		} //}}}
+
+		if(quit)
+		{
+			// if no server running and user runs jedit -quit,
+			// just exit
+			System.exit(0);
+		}
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
@@ -332,7 +356,7 @@ public class jEdit
 
 		VFSManager.init();
 
-		if(!noPlugins)
+		if(loadPlugins)
 			initPlugins();
 
 		if(jEditHome != null)
@@ -370,7 +394,7 @@ public class jEdit
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
 		Macros.loadMacros();
 
-		if(!noStartupScripts && jEditHome != null)
+		if(runStartupScripts && jEditHome != null)
 		{
 			String path = MiscUtilities.constructPath(jEditHome,"startup");
 			File file = new File(path);
@@ -378,7 +402,7 @@ public class jEdit
 				runStartupScripts(file);
 		}
 
-		if(!noStartupScripts && settingsDirectory != null)
+		if(runStartupScripts && settingsDirectory != null)
 		{
 			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
 			File file = new File(path);
@@ -2094,6 +2118,10 @@ public class jEdit
 	 */
 	public static void exit(View view, boolean reallyExit)
 	{
+		// Close dialog, view.close() call need a view...
+		if(view == null)
+			view = activeView;
+
 		// Wait for pending I/O requests
 		VFSManager.waitForRequests();
 
@@ -2127,50 +2155,48 @@ public class jEdit
 			// Save settings in case user kills the backgrounded
 			// jEdit process
 			saveSettings();
-
-			return;
 		}
-
-		// Save view properties here - it unregisters
-		// listeners, and we would have problems if the user
-		// closed a view but cancelled an unsaved buffer close
-		if (view != null)
-			view.close();
-
-		// Stop autosave timer
-		Autosave.stop();
-
-		// Stop server
-		if(server != null)
-			server.stopServer();
-
-		// Stop all plugins
-		EditPlugin[] plugins = getPlugins();
-		for(int i = 0; i < plugins.length; i++)
+		else
 		{
-			try
+			// Save view properties here
+			if(view != null)
+				view.close();
+
+			// Stop autosave timer
+			Autosave.stop();
+
+			// Stop server
+			if(server != null)
+				server.stopServer();
+
+			// Stop all plugins
+			EditPlugin[] plugins = getPlugins();
+			for(int i = 0; i < plugins.length; i++)
 			{
-				plugins[i].stop();
+				try
+				{
+					plugins[i].stop();
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,jEdit.class,"Error while "
+						+ "stopping plugin:");
+					Log.log(Log.ERROR,jEdit.class,t);
+				}
 			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,jEdit.class,"Error while "
-					+ "stopping plugin:");
-				Log.log(Log.ERROR,jEdit.class,t);
-			}
+
+			// Send EditorExiting
+			EditBus.send(new EditorExiting(null));
+
+			// Save settings
+			saveSettings();
+
+			// Close activity log stream
+			Log.closeStream();
+
+			// Byebye...
+			System.exit(0);
 		}
-
-		// Send EditorExiting
-		EditBus.send(new EditorExiting(null));
-
-		// Save settings
-		saveSettings();
-
-		// Close activity log stream
-		Log.closeStream();
-
-		// Byebye...
-		System.exit(0);
 	} //}}}
 
 	//}}}
@@ -2376,28 +2402,25 @@ public class jEdit
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
 		System.out.println("	-background: Run in background mode");
-		System.out.println("	-nogui: Only if running in background mode;"
-			+ " don't open initial view");
+		System.out.println("	-gui: Only if running in background mode; open initial view (default)");
+		System.out.println("	-nogui: Only if running in background mode; don't open initial view");
+		System.out.println("	-log=<level>: Log messages with level equal to or higher than this to");
+		System.out.println("	 standard error. <level> must be between 1 and 9. Default is 7.");
+		System.out.println("	-restore: Restore previously open files (default)");
 		System.out.println("	-norestore: Don't restore previously open files");
-		System.out.println("	-run=<script>: Run the specified BeanShell script");
-		System.out.println("	-server: Read/write server"
-			+ " info from/to $HOME/.jedit/server");
-		System.out.println("	-server=<name>: Read/write server"
-			+ " info from/to $HOME/.jedit/<name>");
-		System.out.println("	-noserver: Don't start edit server");
-		System.out.println("	-settings=<path>: Load user-specific"
-			+ " settings from <path>");
-		System.out.println("	-nosettings: Don't load user-specific"
-			+ " settings");
+		System.out.println("	-plugins: Load plugins (default)");
 		System.out.println("	-noplugins: Don't load any plugins");
+		System.out.println("	-quit: Quit a running instance");
+		System.out.println("	-run=<script>: Run the specified BeanShell script");
+		System.out.println("	-server: Read/write server info from/to $HOME/.jedit/server (default)");
+		System.out.println("	-server=<name>: Read/write server info from/to $HOME/.jedit/<name>");
+		System.out.println("	-noserver: Don't start edit server");
+		System.out.println("	-settings=<path>: Load user-specific settings from <path>");
+		System.out.println("	-nosettings: Don't load user-specific settings");
+		System.out.println("	-startupscripts: Run startup scripts (default)");
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-version: Print jEdit version and exit");
 		System.out.println("	-usage: Print this message and exit");
-		System.out.println();
-		System.out.println("To set minimum activity log level,"
-			+ " specify a number as the first");
-		System.out.println("command line parameter"
-			+ " (1-9, 1 = print everything, 9 = fatal errors only)");
 		System.out.println();
 		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
 	} //}}}
@@ -3100,7 +3123,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				}
 
 				int comp = MiscUtilities.compareStrings(str11,str21,true);
-				if(comp <= 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) <= 0))
+				if(comp < 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) < 0))
 				{
 					buffer.next = _buffer;
 					buffer.prev = _buffer.prev;

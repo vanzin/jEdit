@@ -879,7 +879,7 @@ public class DockableWindowManager extends JPanel
 		caption.setEnabled(false);
 		popup.add(caption);
 		popup.addSeparator();
-		String currentPos = jEdit.getProperty(dockable + ".dock-position");
+		String currentPos = jEdit.getProperty(dockable + ".dock-position",FLOATING);
 		if(!clone)
 		{
 			String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
