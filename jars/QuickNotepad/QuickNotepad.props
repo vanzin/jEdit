@@ -1,3 +1,6 @@
+# Properties file for QuickNotepad plugin
+# $Id$
+
 # general plugin information
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene

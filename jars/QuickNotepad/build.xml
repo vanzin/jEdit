@@ -71,9 +71,20 @@
 	</target>
 
 	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
+	<!-- NOTE: the "o" or "output" options do not appear to be working.     -->
+	<!-- To customize the title of an HTML output file, set the             -->
+	<!-- 'use.id.as.filename' variable in your XSL customization file       -->
+	<!-- and provide the file name (without extension) as the 'id'          -->
+	<!-- attribute of the element that constitutes a 'chunk' of output. For -->
+	<!-- a plugin help file, there should usually be only one chunk, so the -->
+	<!-- top-level element (<article> or <book>) should have the 'id'       -->
+	<!-- attribute.                                                         -->
 	<target name="docs-xsltproc">
 		<exec executable="xsltproc">
 			<arg value="--catalogs"/>
+			<arg value="--nonet"/>
+			<arg value="--output"/>
+			<arg value="QuickNotepad.html"/>
 			<arg value="users-guide.xsl"/>
 			<arg value="users-guide.xml"/>
 		</exec>
@@ -83,7 +94,9 @@
 	<target name="docs-xalan">
 		<style
 			style="users-guide.xsl"
-			in="users-guide.xml"/>
+			in="users-guide.xml"
+			out="QuickNotepad.html"
+			destdir="."/>
 	</target>
 
 	<target name="clean">
