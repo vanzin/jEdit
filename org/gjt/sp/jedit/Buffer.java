@@ -3738,7 +3738,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 				{
 					// if user adds mode buffer-local property
 					String newMode = getStringProperty("mode");
-					if(!newMode.equals(getMode().getName()))
+					if(newMode != null &&
+						!newMode.equals(getMode()
+						.getName()))
 						setMode();
 					else
 						propertiesChanged();

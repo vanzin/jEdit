@@ -205,6 +205,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
+					if(wrapMargin != 0.0f)
+						throw new InternalError("Consistency error");
 					initChunk(chunk);
 					x += chunk.width;
 				}

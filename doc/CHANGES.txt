@@ -2,8 +2,9 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Bill McMilleon, Kris Kopicki, Oliver Rutherfurd. Rudi Widmann
-and Ryan Grove for contributing to this release.
+Thanks to Bill McMilleon, Kasper Graversen, Kris Kopicki,
+Oliver Rutherfurd. Rudi Widmann and Ryan Grove for contributing to this
+release.
 
 {{{ Editing
 
@@ -90,6 +91,8 @@ and Ryan Grove for contributing to this release.
 - Updated NSIS2 syntax highlighting (Ryan Grove).
 
 - Parrot syntax highlighting (Oliver Rutherfurd).
+
+- Aspect-J syntax highlighting (Kasper Graversen).
 
 }}}
 {{{ Folding
@@ -221,6 +224,10 @@ and Ryan Grove for contributing to this release.
 - Faster search and replace where the search or replace string matches
   on multiple lines.
 
+- Dockable window resizing is now done with a "rubber band", instead of
+  live updates of the dockable container's size. This improves
+  responsiveness of resizing noticably.
+
 }}}
 {{{ Platform-Specific
 
@@ -321,6 +328,8 @@ and Ryan Grove for contributing to this release.
 - Added View.goToBuffer() method. If the specified buffer is already
   visible in one of the view's edit panes, sends focus to that edit
   pane. Otherwise, calls setBuffer() on the current edit pane.
+
+- Added JEditTextArea.addToLeftOfScrollBar() method.
 
 }}}
 

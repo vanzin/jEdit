@@ -27,6 +27,7 @@ import java.awt.Toolkit;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * Manages low-level text display tasks.
@@ -551,9 +552,6 @@ public class DisplayManager
 
 		firstLine = new FirstLine(index);
 		offsetMgr.addAnchor(firstLine);
-
-		bufferChangeHandler = new BufferChangeHandler();
-		buffer.addBufferChangeListener(bufferChangeHandler);
 	} //}}}
 
 	//{{{ dispose() method
@@ -563,9 +561,14 @@ public class DisplayManager
 		offsetMgr.removeAnchor(firstLine);
 		offsetMgr = null;
 
-		buffer.removeBufferChangeListener(bufferChangeHandler);
 		buffer._displayUnlock(index);
 		buffer = null;
+	} //}}}
+
+	//{{{ notifyScreenLineChanges() method
+	void notifyScreenLineChanges()
+	{
+		offsetMgr.notifyScreenLineChanges();
 	} //}}}
 
 	//}}}
@@ -576,7 +579,6 @@ public class DisplayManager
 	private JEditTextArea textArea;
 	private int index;
 	private boolean narrowed;
-	private BufferChangeHandler bufferChangeHandler;
 
 	//{{{ setLineVisible() method
 	private final void setLineVisible(int line, boolean visible)
@@ -598,6 +600,8 @@ public class DisplayManager
 		//{{{ changed() method
 		public void changed()
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"changed()");
 			textArea.recalculateLastPhysicalLine();
 			textArea.updateScrollBars();
 		} //}}}
@@ -605,6 +609,9 @@ public class DisplayManager
 		//{{{ reset() method
 		public void reset()
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"reset()");
+
 			String wrap = buffer.getStringProperty("wrap");
 			softWrap = wrap.equals("soft");
 
@@ -638,6 +645,9 @@ public class DisplayManager
 		//{{{ changed() method
 		public void changed()
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"changed()");
+
 			if(!isLineVisible(physicalLine))
 			{
 				if(physicalLine > getLastVisibleLine())
@@ -680,6 +690,9 @@ public class DisplayManager
 		//{{{ reset() method
 		public void reset()
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"reset()");
+
 			scrollLine = 0;
 
 			int i = 0;
@@ -706,6 +719,9 @@ public class DisplayManager
 		// scroll down by physical line amount
 		void physDown(int amount, int screenAmount)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"physDown()");
+
 			skew = 0;
 
 			offsetMgr.removeAnchor(this);
@@ -749,6 +765,9 @@ public class DisplayManager
 		// scroll up by physical line amount
 		void physUp(int amount, int screenAmount)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"physUp()");
+
 			skew = 0;
 
 			offsetMgr.removeAnchor(this);
@@ -792,6 +811,9 @@ public class DisplayManager
 		// scroll down by screen line amount
 		void scrollDown(int amount)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"scrollDown()");
+
 			offsetMgr.removeAnchor(this);
 
 			amount += skew;
@@ -825,6 +847,9 @@ public class DisplayManager
 		// scroll up by screen line amount
 		void scrollUp(int amount)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"scrollDown()");
+
 			offsetMgr.removeAnchor(this);
 
 			if(amount <= skew)
@@ -856,88 +881,6 @@ public class DisplayManager
 
 			offsetMgr.addAnchor(this);
 			changed();
-		} //}}}
-	} //}}}
-
-	//{{{ BufferChangeHandler class
-	class BufferChangeHandler extends BufferChangeAdapter
-	{
-		int firstChangedLine;
-		int lastChangedLine;
-		boolean queuedScreenLineChanges;
-
-		//{{{ foldLevelChanged() method
-		public void foldLevelChanged(Buffer buffer, int start, int end)
-		{
-			if(!textArea.bufferChanging && end != 0
-				&& buffer.isLoaded())
-			{
-				textArea.invalidateLineRange(start - 1,
-					textArea.getLastPhysicalLine());
-			}
-		} //}}}
-
-		//{{{ contentInserted() method
-		public void contentInserted(Buffer buffer, int startLine,
-			int offset, int numLines, int length)
-		{
-			if(!buffer.isLoaded())
-				return;
-
-			for(int i = 0; i <= numLines; i++)
-			{
-				if(isLineVisible(i))
-					getScreenLineCount(startLine + i);
-			}
-
-			if(queuedScreenLineChanges)
-			{
-				firstChangedLine = Math.min(firstChangedLine,startLine);
-				lastChangedLine = Math.max(lastChangedLine,startLine + numLines);
-			}
-			else
-			{
-				queuedScreenLineChanges = true;
-				firstChangedLine = startLine;
-				lastChangedLine = startLine + numLines;
-			}
-
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
-		} //}}}
-
-		//{{{ contentRemoved() method
-		public void contentRemoved(Buffer buffer, int startLine,
-			int offset, int numLines, int length)
-		{
-			if(queuedScreenLineChanges)
-			{
-				firstChangedLine = Math.min(firstChangedLine,startLine);
-				lastChangedLine = Math.max(lastChangedLine,startLine);
-			}
-			else
-			{
-				queuedScreenLineChanges = true;
-				firstChangedLine = startLine;
-			}
-
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
-		} //}}}
-
-		//{{{ transactionComplete() method
-		public void transactionComplete(Buffer buffer)
-		{
-			if(queuedScreenLineChanges)
-			{
-				for(int i = firstChangedLine; i <= lastChangedLine; i++)
-				{
-					if(isLineVisible(i))
-						getScreenLineCount(i);
-				}
-				queuedScreenLineChanges = false;
-				offsetMgr.notifyScreenLineChanges();
-			}
 		} //}}}
 	} //}}}
 }
