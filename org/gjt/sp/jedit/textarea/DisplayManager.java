@@ -233,8 +233,8 @@ public class DisplayManager
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
 	{
-		if(offsetMgr.isScreenLineCountValid(line))
-			return offsetMgr.getScreenLineCount(line);
+		if(lineMgr.isScreenLineCountValid(line))
+			return lineMgr.getScreenLineCount(line);
 		else
 		{
 			int newCount = textArea.chunkCache
@@ -584,11 +584,11 @@ public class DisplayManager
 	 */
 	void setScreenLineCount(int line, int count)
 	{
-		int oldCount = offsetMgr.getScreenLineCount(line);
+		int oldCount = lineMgr.getScreenLineCount(line);
 		// still have to call this even if it equals the
 		// old one so that the offset manager sets the
 		// validity flag!
-		offsetMgr.setScreenLineCount(line,count);
+		lineMgr.setScreenLineCount(line,count);
 		// this notifies each display manager editing this
 		// buffer of the screen line count change
 		if(count != oldCount)
@@ -652,7 +652,7 @@ public class DisplayManager
 	private boolean initialized;
 	private boolean inUse;
 	private Buffer buffer;
-	private OffsetManager offsetMgr;
+	private LineManager lineMgr;
 	private JEditTextArea textArea;
 	private BufferChangeHandler bufferChangeHandler;
 
@@ -680,7 +680,7 @@ public class DisplayManager
 	private DisplayManager(Buffer buffer, JEditTextArea textArea)
 	{
 		this.buffer = buffer;
-		this.offsetMgr = buffer._getOffsetManager();
+		this.lineMgr = buffer._getLineManager();
 		this.textArea = textArea;
 
 		scrollLineCount = new ScrollLineCount();
@@ -914,7 +914,7 @@ loop:		for(;;)
 			//XXX
 			if(!isLineVisible(i))
 			{
-				int screenLines = offsetMgr
+				int screenLines = lineMgr
 					.getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
@@ -979,7 +979,7 @@ loop:		for(;;)
 			//XXX
 			if(isLineVisible(i))
 			{
-				int screenLines = offsetMgr
+				int screenLines = lineMgr
 					.getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
@@ -1582,7 +1582,7 @@ loop:		for(;;)
 						if(isLineVisible(i))
 						{
 							anchor.scrollLine -=
-								offsetMgr
+								lineMgr
 								.getScreenLineCount(i);
 						}
 					}

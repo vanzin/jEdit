@@ -42,10 +42,11 @@ public class PasteFromListDialog extends EnhancedDialog
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
+		JPanel center = new JPanel(new GridLayout(2,1,2,12));
 
 		clips = new JList(model);
 		clips.setCellRenderer(new Renderer());
-		clips.setVisibleRowCount(16);
+		clips.setVisibleRowCount(12);
 
 		clips.addMouseListener(new MouseHandler());
 		clips.addListSelectionListener(new ListHandler());
@@ -58,10 +59,16 @@ public class PasteFromListDialog extends EnhancedDialog
 		content.add(BorderLayout.NORTH,label);
 
 		JScrollPane scroller = new JScrollPane(clips);
-		Dimension dim = scroller.getPreferredSize();
-		scroller.setPreferredSize(new Dimension(640,dim.height));
+		scroller.setPreferredSize(new Dimension(500,200));
+		center.add(scroller);
 
-		content.add(scroller, BorderLayout.CENTER);
+		clipText = new JTextArea(60,12);
+		clipText.setEditable(false);
+		scroller = new JScrollPane(clipText);
+		scroller.setPreferredSize(new Dimension(500,200));
+		center.add(scroller);
+
+		content.add(center, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
@@ -98,15 +105,7 @@ public class PasteFromListDialog extends EnhancedDialog
 			return;
 		}
 
-		StringBuffer clip = new StringBuffer();
-		for(int i = 0; i < selected.length; i++)
-		{
-			if(i != 0)
-				clip.append('\n');
-			clip.append(selected[i]);
-		}
-
-		view.getTextArea().setSelectedText(clip.toString());
+		view.getTextArea().setSelectedText(getSelectedClipText());
 
 		dispose();
 	} //}}}
@@ -122,8 +121,24 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ Instance variables
 	private View view;
 	private JList clips;
+	private JTextArea clipText;
 	private JButton insert;
 	private JButton cancel;
+	//}}}
+
+	//{{{ getSelectedClipText()
+	private String getSelectedClipText()
+	{
+		Object[] selected = clips.getSelectedValues();
+		StringBuffer clip = new StringBuffer();
+		for(int i = 0; i < selected.length; i++)
+		{
+			if(i != 0)
+				clip.append('\n');
+			clip.append(selected[i]);
+		}
+		return clip.toString();
+	}
 	//}}}
 
 	//{{{ updateButtons() method
@@ -132,6 +147,18 @@ public class PasteFromListDialog extends EnhancedDialog
 		int selected = clips.getSelectedIndex();
 		insert.setEnabled(selected != -1);
 	} //}}}
+
+	//{{{ showClipText() method
+	private void showClipText()
+	{
+		Object[] selected = clips.getSelectedValues();
+		if(selected == null || selected.length == 0)
+			clipText.setText("");
+		else
+			clipText.setText(getSelectedClipText());
+		clipText.setCaretPosition(0);
+	}
+	//}}}
 
 	//}}}
 
@@ -203,6 +230,7 @@ public class PasteFromListDialog extends EnhancedDialog
 		//{{{ valueChanged() method
 		public void valueChanged(ListSelectionEvent evt)
 		{
+			showClipText();
 			updateButtons();
 		} //}}}
 	} //}}}
