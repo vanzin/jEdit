@@ -545,7 +545,8 @@ public class JEditTextArea extends JComponent
 		// this hack...
 		if(visibleLines == 0)
 		{
-			setFirstLine(caretLine - electricScroll);
+			setFirstLine(physicalToVirtual(
+				Math.max(0,caretLine - electricScroll)));
 			return;
 		}
 

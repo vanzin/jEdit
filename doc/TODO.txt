@@ -1,11 +1,9 @@
 TO DO
 
-- new view, split view: still broken
+- eliminate second pass when loading files
 - might still need brutal undo code to avoid lumping everything together
 - still fold at end expand bug
-- MacOS X plugin
 - help: expand user's guide -> using jEdit by default
-- MacOS X status bar hack
 - too many lines being made invisible
 - new goodies need to be documented
 - conventions section in user's guide: mention Enter activating default
@@ -16,7 +14,6 @@ TO DO
   parts of the user's guide. always shown initially when help viewer
   opened.
 
-- eliminate second pass when loading files
 - CCW rotated text not drawn correctly
 - write explicit folding tips
 - investigate nextLineRequested() -- replace with a buffer event.

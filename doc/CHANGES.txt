@@ -2,6 +2,15 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre2
 
++ New Features
+
+- MacOS plugin bundled (Kris Kopicki)
+  - jEdit exits cleanly when Command+Q is pressed
+  - Files created or associated with jEdit can now be opened from the
+    Finder by double-clicking on them, or dragging them to the jEdit
+    icon
+  - jEdit is assigned as the creator of new files
+
 + Enhancements
 
 - Icon added to 'BeanShell Error' dialog box
@@ -20,6 +29,9 @@ JEDIT 4.0 VERSION HISTORY
 - Changing the gutter font didn't update the gutter width
 - Fixed broken scrolling behavior
 - Some files would open with only one line visible
+- MiscUtilities.compareStrings() would throw exceptions with strings
+  that contained embedded numbers larger than 2^31
+- Creating a new view or splitting the view didn't work
 
 * Version 4.0pre1
 

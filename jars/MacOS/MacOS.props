@@ -1,0 +1,10 @@
+plugin.MacOSPlugin.name=Mac OS Plugin
+plugin.MacOSPlugin.author=Kris Kopicki
+plugin.MacOSPlugin.version=1.0.1
+plugin.MacOSPlugin.docs=MacOS.html
+
+plugin.MacOSPlugin.depend.0=jedit 04.00.01.00
+plugin.MacOSPlugin.depend.1=jdk 1.1
+
+MacOS.default.type=TEXT
+MacOS.default.creator=JESP

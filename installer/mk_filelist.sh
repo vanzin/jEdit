@@ -39,6 +39,10 @@ echo unlaunch.exe >> installer/jedit-windows
 echo -n "jedit-windows: "
 ls -l `cat installer/jedit-windows` | awk 'BEGIN { size=0 } { disk_size+=(int($5/8192+1)*8); size+=$5/1024 } END { print disk_size " " size }'
 
+# jedit-mac fileset
+echo jars/MacOS.jar > installer/jedit-mac
+echo -n "jedit-mac: "
+ls -l `cat installer/jedit-mac` | awk 'BEGIN { size=0 } { disk_size+=(int($5/8192+1)*8); size+=$5/1024 } END { print disk_size " " size }'
 
 # jedit-os2 fileset
 echo jedit.cmd > installer/jedit-os2

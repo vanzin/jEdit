@@ -146,8 +146,13 @@ public class FoldVisibilityManager
 		{
 			buffer.readLock();
 
-			if(line < 0 || line >= buffer.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
+			if(line < 0)
+				throw new ArrayIndexOutOfBoundsException(line + " < 0");
+			else if(line >= buffer.getLineCount())
+			{
+				throw new ArrayIndexOutOfBoundsException(line + " > "
+					+ buffer.getLineCount());
+			}
 
 			while(!buffer._isLineVisible(line,index) && line > 0)
 				line--;
@@ -248,8 +253,13 @@ public class FoldVisibilityManager
 		{
 			buffer.readLock();
 
-			if(line < 0 || line >= buffer._getVirtualLineCount(index))
-				throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
+			if(line < 0)
+				throw new ArrayIndexOutOfBoundsException(line + " < 0");
+			else if(line >= buffer._getVirtualLineCount(index))
+			{
+				throw new ArrayIndexOutOfBoundsException(line + " > "
+					+ buffer._getVirtualLineCount(index));
+			}
 
 			if(lastVirtual == line)
 			{

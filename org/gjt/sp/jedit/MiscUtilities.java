@@ -600,13 +600,22 @@ loop:		for(int i = 0; i < str.length(); i++)
 					}
 				}
 
-				int num1 = Integer.parseInt(new String(char1,
-					i,_i - i));
-				int num2 = Integer.parseInt(new String(char2,
-					j,_j - j));
-
-				if(num1 != num2)
-					return num1 - num2;
+				int len1 = _i - i;
+				int len2 = _j - j;
+				if(len1 > len2)
+					return 1;
+				else if(len1 < len2)
+					return -1;
+				else
+				{
+					for(int k = 0; k < len1; k++)
+					{
+						ch1 = char1[i + k];
+						ch2 = char2[j + k];
+						if(ch1 != ch2)
+							return ch1 - ch2;
+					}
+				}
 
 				i = _i - 1;
 				j = _j - 1;
