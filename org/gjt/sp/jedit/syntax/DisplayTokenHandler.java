@@ -64,9 +64,12 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 			if(lastToken != null)
 			{
 				Chunk lastChunk = (Chunk)lastToken;
-				lastChunk.init(seg,expander,x,styles,
-					fontRenderContext,
-					context.rules.getDefault());
+				if(!lastChunk.initialized)
+				{
+					lastChunk.init(seg,expander,x,styles,
+						fontRenderContext,
+						context.rules.getDefault());
+				}
 				x += lastChunk.width;
 			}
 

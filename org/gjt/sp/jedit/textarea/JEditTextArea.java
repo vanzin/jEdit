@@ -2106,7 +2106,7 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
-			if(focusedComponent == this)
+			if(view.getTextArea() == this)
 				finishCaretUpdate(doElectricScroll,false);
 			return;
 		}
@@ -2145,7 +2145,7 @@ forward_scan:		do
 		caret = newCaret;
 		caretLine = newCaretLine;
 
-		if(focusedComponent == this)
+		if(view.getTextArea() == this)
 			finishCaretUpdate(doElectricScroll,true);
 	} //}}}
 
@@ -4552,7 +4552,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		Component focusOwner = ((Window)c).getFocusOwner();
 		boolean hasFocus = (focusOwner == this);
-		if(hasFocus && focusedComponent != this)
+		if(hasFocus)
 			focusedComponent = this;
 		return hasFocus;
 	} //}}}

@@ -211,9 +211,10 @@ public class Chunk extends Token
 	// should xToOffset() ignore this chunk?
 	public boolean inaccessable;
 
-	public SyntaxStyle style;
+	public boolean initialized;
 
 	// set up after init()
+	public SyntaxStyle style;
 	public float width;
 	public String str;
 	public GlyphVector gv;
@@ -240,6 +241,8 @@ public class Chunk extends Token
 		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
 		byte defaultID)
 	{
+		initialized = true;
+
 		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
 			? defaultID : id];
 
