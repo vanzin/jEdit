@@ -68,6 +68,10 @@ public class ManagePanel extends JPanel
 		TableColumn col4 = table.getColumnModel().getColumn(3);
 
 		col1.setPreferredWidth(30);
+		col1.setMinWidth(30);
+		col1.setMaxWidth(30);
+		col1.setResizable(false);
+
 		col2.setPreferredWidth(300);
 		col3.setPreferredWidth(100);
 		col4.setPreferredWidth(100);
@@ -198,7 +202,7 @@ public class ManagePanel extends JPanel
 			switch (column)
 			{
 				case 0:
-					return "";
+					return " ";
 				case 1:
 					return jEdit.getProperty("manage-plugins.info.name");
 				case 2:

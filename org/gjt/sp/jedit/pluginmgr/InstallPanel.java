@@ -171,7 +171,7 @@ class InstallPanel extends JPanel
 		{
 			switch (column)
 			{
-				case 0: return " "+jEdit.getProperty("install-plugins.info.install");
+				case 0: return " ";
 				case 1: return " "+jEdit.getProperty("install-plugins.info.name");
 				case 2: return " "+jEdit.getProperty("install-plugins.info.category");
 				case 3: return " "+jEdit.getProperty("install-plugins.info.version");

@@ -154,7 +154,7 @@ view.context=insert-file reload - paste-previous view-registers - \
 	unsplit split-horizontal - buffer-options global-options
 view.context.customize=Customize This Menu...
 #}}}
-
+,
 #{{{ Menu bar
 view.mbar=file edit search markers folds view utils macros plugins help-menu
 
@@ -2102,7 +2102,6 @@ install-plugins.title=Install
 install-plugins.info.name=Name
 install-plugins.info.size=Size
 install-plugins.info.version=Version
-install-plugins.info.install=Install
 install-plugins.info.category=Category
 
 install-plugins.totalSize=Total Size:\ 
