@@ -240,6 +240,34 @@ public class PluginJAR
 		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
 	} //}}}
 
+	//{{{ uninit() method
+	void uninit()
+	{
+		if(plugin != null)
+		{
+			try
+			{
+				plugin.stop();
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Error while "
+					+ "stopping plugin:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+
+		if(actions != null)
+			jEdit.getActionContext().removeActionSet(actions);
+		if(browserActions != null)
+			VFSBrowser.getActionContext().removeActionSet(browserActions);
+
+		DockableWindowManager.unloadDockableWindows(this);
+		ServiceManager.unloadServices(this);
+
+		EditBus.send(new PluginUpdate(this,PluginUpdate.UNLOADED));
+	} //}}}
+
 	//{{{ activateIfNecessary() method
 	void activatePluginIfNecessary()
 	{

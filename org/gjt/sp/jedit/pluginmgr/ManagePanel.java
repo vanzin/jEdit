@@ -290,7 +290,7 @@ public class ManagePanel extends JPanel
 			for(int i = 0; i < plugins.length; i++)
 			{
 				EditPlugin plugin = plugins[i];
-				String path = plugin.getJAR().getPath();
+				String path = plugin.getPluginJAR().getPath();
 				if(!new File(path).exists())
 				{
 					continue;

@@ -81,15 +81,6 @@ public class SearchBar extends JPanel
 		hyperSearch.setMargin(margin);
 		hyperSearch.setRequestFocusEnabled(false);
 
-		if(temp)
-		{
-			close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
-			close.addActionListener(actionHandler);
-			close.setToolTipText(jEdit.getProperty(
-				"view.search.close-tooltip"));
-			add(close);
-		}
-
 		update();
 
 		//{{{ Create the timer used by incremental search
@@ -137,6 +128,24 @@ public class SearchBar extends JPanel
 		regexp.setSelected(SearchAndReplace.getRegexp());
 		hyperSearch.setSelected(jEdit.getBooleanProperty(
 			"view.search.hypersearch.toggle"));
+	} //}}}
+
+	//{{{ propertiesChanged() method
+	public void propertiesChanged()
+	{
+		if(temp)
+		{
+			if(close == null)
+			{
+				close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
+				close.addActionListener(new ActionHandler());
+				close.setToolTipText(jEdit.getProperty(
+					"view.search.close-tooltip"));
+			}
+			add(close);
+		}
+		else if(close != null)
+			remove(close);
 	} //}}}
 
 	//{{{ Private members

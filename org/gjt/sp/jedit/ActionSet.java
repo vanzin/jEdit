@@ -375,7 +375,7 @@ public class ActionSet
 
 		try
 		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
+			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
 
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
 			XmlParser parser = new XmlParser();
