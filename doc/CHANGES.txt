@@ -9,6 +9,8 @@ JEDIT 4.1 VERSION HISTORY
 
 - Improved C pre-processor syntax highlighting.
 
+- Minor startup optimizations.
+
 + Bug Fixes:
 
 - jEdit no longer minimizes and then restores windows when files are
