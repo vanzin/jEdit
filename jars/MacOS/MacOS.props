@@ -3,7 +3,7 @@
 #
 plugin.macos.MacOSPlugin.name=Mac OS Plugin
 plugin.macos.MacOSPlugin.author=Kris Kopicki
-plugin.macos.MacOSPlugin.version=2.0.2
+plugin.macos.MacOSPlugin.version=2.0.3
 plugin.macos.MacOSPlugin.docs=MacOS.html
 
 #
