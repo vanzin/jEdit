@@ -1,0 +1,340 @@
+<!-- jEdit buffer-local properties:                     -->
+<!-- :indentSize=1:noTabs=true:maxLineLen=72:tab Size=2: -->
+
+<!-- jEdit FAQ									        -->
+<!-- Copyright (C) 2002 John Gellene                    -->
+
+<!-- $Id$
+-->
+
+<sect1 id="working-files"><title>Working with Files</title>
+<para>
+  This section deals with creating, opening, closing and changing
+  the properties of files using jEdit.
+</para>
+<qandaset>
+    <qandadiv id="file-manage"><title>File Management</title>
+
+    <qandaentry>
+        <question id="open-dnd"><para>
+            How can I open files in jEdit using drag and drop?
+        </para></question>
+        <answer><para>
+            Try installing the Drag and Drop plugin using the Plugin Manager
+            feature. It works with most (but not all) combinations of operating
+            systems and current Java runtime environments.
+        </para></answer>
+    </qandaentry>
+
+    <qandaentry>
+        <question id="add-favorites"><para>
+            How do I add and remove directories to the list of
+            <quote>favorites</quote> in jEdit's File System Browser?
+        </para></question>
+        <answer><para>
+            To add a directory to the list of favorites, navigate so that
+            the directory is at the top of the tree displayed in the File System
+            Browser window, click the <guimenuitem>More</guimenuitem> button (or
+            right-click anywhere in the browser window), and select
+            <guimenuitem>Add to favorites</guimenuitem> from the resulting menu.
+            To delete a directory from the favorites list, use the same menu
+            to go to the favorites list. Right-click on the directory to
+            be deleted and select <guimenuitem>Delete</guimenuitem>.
+            This operation will delete the directory from the list of
+            favorites but will have no effect on the directory itself.
+        </para></answer>
+    </qandaentry>
+
+    <qandaentry>
+        <question id="associate-files"><para>
+            How do I associate particular file types with jEdit so I can open them
+            by double clicking their icons in Windows Explorer?
+        </para></question>
+        <answer><para>
+            If you are using jEditLauncher, you associate the file extension with
+            <replaceable>[full path]</replaceable><userinput>\jedit.exe
+            &quot;%1&quot;</userinput>.
+        </para>
+        <para>
+            The jEditLauncher package for Windows includes a custom
+            context menu handler.  It will provide menu items for
+            using jEdit any time you right-click on a file icon in
+            Windows Explorer or a Windows file menu.  This feature does
+            not interfere with any existing file assocations.
+        </para></answer>
+     </qandaentry>
+
+    <qandaentry>
+        <question id="open-restrict-dir"><para>
+            Can I restrict jEdit to opening and saving files in a single directory
+            without changing file permissions?
+        </para></question>
+        <answer><para>
+            The easiest way to get this kind of behavior is to use macros that open
+            the Virtual File Browsers to a specific, fixed directory, and then
+            change the default keyboard shortcuts for opening and saving files to
+            run these macros.
+        </para></answer>
+     </qandaentry>
+
+    <qandaentry>
+        <question id="filename-uc-to-lc"><para>
+            On Windows, how can I change the name of my file from
+            <filename>myfile.txt</filename> to <filename>MyFile.txt</filename>?
+        </para></question>
+        <answer><para>
+            The Windows native file system deals with file names in a
+            case-insensitive manner, so <filename>myfile.txt</filename> and
+            <filename>MyFile.txt</filename> refer to the same file. As a result, the
+            jEdit file browser treats both spellings identically and does not
+            make a name change. Using our example, the easiest workaround is to
+            rename the file in two steps: first to <filename>_myfile.txt</filename>,
+            then to <filename>MyFile.txt</filename>.
+        </para></answer>
+     </qandaentry>
+
+     <qandaentry>
+        <question id="file-delete-recurse"><para>
+            Can I recursively delete a directory's files in jEdit's
+            File Browser?
+        </para></question>
+        <answer><para>
+            No.  The feature is being planned for inclusion in a future
+            jEdit version.  The fastest way to do this in the current
+            jEdit version is to use the Console plugin and a native
+            command.
+        </para></answer>
+     </qandaentry>
+
+   </qandadiv>
+
+   <qandadiv id="file-attributes"><title>File Attributes</title>
+
+    <qandaentry>
+        <question id="dirty-file"><para>
+            Why does the screen display continue to mark a file as
+            <quote>dirty</quote> after I undo all changes made to the buffer?
+        </para></question>
+        <answer><para>
+            This is a shortcoming of the undo code used in the Java Swing document
+            model, on which the current version of jEdit bases its
+            <classname>Buffer</classname>   class. The routine for assigning a
+            <quote>dirty</quote> flags to buffers
+            takes a safe, conservative approach and maintains the flag as set once
+            any changes are made to the buffer.
+         </para>
+         <para>
+            The forthcoming version 4.0 of jEdit will employ a new document model
+            that will overcome this and other limitations of the Swing document
+            architecture.
+         </para></answer>
+     </qandaentry>
+
+    <qandaentry>
+        <question id="file-owner-preserve"><para>
+            Does jEdit preserve file ownership and permissions when it
+            saves files?
+        </para></question>
+        <answer><para>
+            One reason this can be an issue is that jEdit adopts a conservative
+            approach of saving a file to a temporary name before renaming that file
+            to the desired name. This procedure minimizes the risk of crashes
+            causing loss of data, and works without reported problems on local file
+            systems. However, when files are served remotely by FTP or Samba, for
+            example, it may not be possible to preserve file attributes on the
+            server because the newly created temporary file's owner may differ from
+            the owner of the original file on the server. Where this becomes a
+            problem, you will have to modify file attributes on the remote server
+            without using jEdit.
+        </para></answer>
+    </qandaentry>
+
+    <qandaentry>
+        <question id="file-linesep-choice"><para>
+            Why does jEdit ignore my choice for line separator
+            characters when I save a file?
+        </para></question>
+        <answer><para>
+            The current procedure is for jEdit to use the line separator
+            found in an existing file when it save the file.  The
+            line separator designated in the buffer options or elsewhere
+            is used only for new files.  One of the new features planned
+            for jEdit 4.0 is the ability to override file-specific line
+            separators.
+        </para></answer>
+    </qandaentry>
+
+    <qandaentry>
+        <question id="file-autodetect-encoding"><para>
+            Can jEdit auto-detect character encodings when it opens a file?
+        </para></question>
+        <answer><para>
+            No, although there are plans to enable auto-detection of Java Unicode
+            encoding in a future release.
+        </para>
+        <para>
+            There are a few features that can help you navigate through encoding
+            issues. By selecting <guimenu>File</guimenu>&gt;<guimenuitem>Open With
+            Encoding</guimenuitem>, you can open a file with a specified encoding.
+            You can also designate a default encoding in the <guimenuitem>Loading
+            &amp; Saving</guimenuitem> pane of the Global Options dialog; if you do
+            not, jEdit adopts your operating's system default encoding as its own
+            default. You can change the encoding used to save an individual file by
+            selecting <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+            Options</guimenuitem> and changing the current buffer's properties.
+            Finally, jEdit keeps track of the encodings used in the files named in
+            the <guimenu>File</guimenu>&gt;<guimenuitem>Recent Files</guimenuitem>
+            drop-down list.
+         </para>
+         <para>
+            These features allow you to minimize the attention given to character
+            encodings, but you must still pay some attention if you do not want
+            to use default settings.
+        </para></answer>
+    </qandaentry>
+    <!-- TODO: qanda on euro symbol -->
+
+   </qandadiv>
+
+
+</qandaset>
+
+
+</sect1>
+
+<sect1 id="working-text"><title>Working with Text</title>
+  <para>
+    This section deals with indenting and other formatting of text,
+    abbreviations and the clipboard and related features.
+  </para>
+  <qandaset>
+
+    <qandadiv id="text-format"><title>Formatting text</title>
+
+      <qandaentry>
+        <question id="text-indent"><para>
+          How do I indent or unindent selections of text?
+        </para></question>
+        <answer><para>
+            Using jEdit's default configuration, you can indent a selection of text
+            by pressing <keycombo
+            action="simul"><keycap>ALT</keycap><keycap>RIGHT</keycap></keycombo>.
+            Unindent a selection by pressing
+            <keycombo action="simul"><keycap>ALT</keycap><keycap>LEFT</keycap></keycombo>.
+        </para></answer>
+      </qandaentry>
+
+    </qandadiv>
+
+    <qandadiv id="text-abbrev"><title>Abbreviations</title>
+
+      <qandaentry>
+        <question id="abbrevs-create-onfly"><para>
+          How can I create abbreviations <quote>on the fly</quote> as I type?
+        </para></question>
+        <answer><para>
+          Type the form of abbreviation you wish to use, then without pressing the
+          <keycap>SPACE</keycap> key, press <keycombo
+          action="simul"><keycap>CTRL</keycap><keycap>;</keycap></keycombo>.
+          A dialog will appear for entering text that goes before and after the
+          editing caret. For example, you can insert an opening HTML or XML tag
+          before the cursor and its corresponding closing tag after the cursor.
+          Use the mouse to select <guilabel>Add global</guilabel> or <guilabel>Add
+          mode-specific</guilabel>. The first choice makes the abbreviation
+          available for all documents; the second makes it available oonly in
+          documents with the same editing mode as the current document. In this
+          way, you can add abbreviations that operate only a particular class of
+          documents, for example, Java source files or XML markup. Either way, the
+          abbreviation will automatically expand as you have defined it, and the
+          abbreviation will be stored for future use.
+        </para></answer>
+      </qandaentry>
+
+      <qandaentry>
+        <question id="abbrevs-expand-type"><para>
+          How can I have abbreviations expanded automatically as I type?
+        </para></question>
+        <answer><para>
+          Select <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+          Options</guimenuitem>, then select the <guimenuitem>Abbreviations</guimenuitem>
+          option pane. You will see an checkbox option for <quote>Space bar expands
+          abbrevs</quote>.  Here you can also add, modify and delete abbreviations on
+          a global basis or for individual editing modes.
+        </para></answer>
+      </qandaentry>
+
+    </qandadiv>
+
+    <qandadiv id="text-clipboard"><title>Clipboard features</title>
+      <qandaentry>
+        <question id="clip-multiple"><para>
+          Can I copy selections from more than one location in a document
+          (or more than one document) and paste the aggregate text in one
+          operation?
+        </para></question>
+        <answer><para>
+            The <guimenuitem>Cut Append</guimenuitem>
+            (<keycombo action="seq"><keycombo
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
+            <keycombo action="simul"><keycap>CTRL</keycap><keycap>U</keycap></keycombo></keycombo>)
+            and <guimenuitem>Copy
+            Append</guimenuitem> (<keycombo action="seq"><keycombo
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
+            <keycombo action="simul"><keycap>CTRL</keycap><keycap>A</keycap></keycombo></keycombo>)
+            both add the selected text to the existing contents of the Clipboard. A single
+            <guimenuitem>Paste</guimenuitem>
+            (<keycombo action="simul"><keycap>CTRL</keycap><keycap>V</keycap></keycombo>)
+            command will insert the agrregated text at the cursor or in place of an existing
+            selection.
+        </para></answer>
+      </qandaentry>
+
+    </qandadiv>
+
+
+  </qandaset>
+</sect1>
+
+<sect1 id="working-source-code"><title>Working with Source Code</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="shortcuts"><title>Shortcuts</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="abbreviations"><title>Abbreviations</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="other-customizing"><title>Other Ways to Customize jEdit</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="macros"><title>Working with Macros</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="plugins"><title>Working with Plugins</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+
