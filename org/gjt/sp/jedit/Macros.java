@@ -118,6 +118,25 @@ public class Macros
 	 * @param prompt The prompt string
 	 * @param buttons The buttons to display - for example,
 	 * JOptionPane.YES_NO_CANCEL_OPTION
+	 * @since jEdit 4.0pre2
+	 */
+	public static int confirm(Component comp, String prompt, int buttons)
+	{
+		GUIUtilities.hideSplashScreen();
+
+		return JOptionPane.showConfirmDialog(comp,prompt,
+			jEdit.getProperty("macro-confirm.title"),buttons,
+			JOptionPane.QUESTION_MESSAGE);
+	} //}}}
+
+	//{{{ confirm() method
+	/**
+	 * Utility method that can be used to ask for confirmation in a macro.
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
+	 * @param prompt The prompt string
+	 * @param buttons The buttons to display - for example,
+	 * JOptionPane.YES_NO_CANCEL_OPTION
 	 * @param type The dialog type - for example,
 	 * JOptionPane.WARNING_MESSAGE
 	 */
@@ -504,7 +523,8 @@ public class Macros
 				Vector submenu = new Vector();
 				submenu.addElement(fileName.replace('_',' '));
 				loadMacros(submenu,path + fileName + '/',file);
-				vector.addElement(submenu);
+				if(submenu.size() != 1)
+					vector.addElement(submenu);
 			}
 		}
 	} //}}}

@@ -3224,7 +3224,6 @@ This class is another collection of <type>static</type> utility methods.
 </funcsynopsis>
 <para>
     Returns the directory containing the specified local file.
-    <!-- XXX: for local files only -->
 </para>
 </listitem>
 

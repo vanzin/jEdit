@@ -61,6 +61,8 @@ JEDIT 4.0 VERSION HISTORY
 - If indent on tab is enabled, a line will only be indented if Tab is
   pressed inside the leading whitespace of that line. Indent on tab is
   now enabled by default
+- Bundled set of macros slimmed down somewhat. You can find more macros
+  at http://community.jedit.org (John Gellene)
 
 + Bug Fixes
 
@@ -98,6 +100,8 @@ JEDIT 4.0 VERSION HISTORY
 - 'Trailing EOL' setting did not work
 - Fixed possible MacOS x keyboard problems (again...)
 - Fixed a buffer corruption bug
+- 'Select Fold' command threw an exception of there were no folds in the
+  buffer
 
 + API Changes
 

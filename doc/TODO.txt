@@ -1,33 +1,32 @@
 TO DO
 
++ before pre2:
+
+- document new folding
+- colors opt pane broken
+- either fix recent files/recent directories/current dir icon issue, or
+  ditch icons
+- narrowing
+- switching from narrowed buffer, to one with caret at already zero might
+  cause problems, since physFirstLine won't be updated?
+- changing folding mode using buffer-local props: doesn't take effect on
+  save
+- read up on JDK 1.4 focus API
+
 - documentation to do
-  - miscutils stuff vfs aware
-  - shifting the indent changes
-  - indent on tab enabled by default and behavior change
-  - close-*-docking-area shortcuts
-  - being able to use ~ in path names
-  - status bar in file dialogs
   - add index terms throughout user's guide!
   - changing heap memory docs
-  - new folding
   - tip about compareStrings()
   - trailing EOL
   - 'evaluate for selected lines'
-  - Macros.confirm(); other method sig changes
-  - bracket matching: scope indicator
-  - better window docking
   - smart case insens replace
-  - API guide: compareStrings(), showPopupMenu()
   - write explicit folding tips
-- colors opt pane broken
-- C+e s broken
+  - API guide: compareStrings(), showPopupMenu()
+  - MiscUtilities path name methods need to be documented
 - still fold at end expand bug
 - investigate nextLineRequested() -- replace with a buffer event.
 - investigate wrap around in macros
-- either fix recent files/recent directories/current dir icon issue, or
-  ditch icons
 - still collapseFolds behavior problems
-
 - loading and saving opt pane: 'choose' button for backup directory
 - style setting for folding line indicator
 - search in directory: should not be so slow
@@ -72,12 +71,7 @@ TO DO
   + more intuitive button labels throughout
 
 - getFoldLevel(): should not call linesChanged() all the time
-- clean up buffer-local properties, propertiesChanged(), setMode()
-- optimize ContentManager.close()
 - v2p/p2v: implement from end backward scan
-- narrowing
-- switching from narrowed buffer, to one with caret at already zero might
-  cause problems, since physFirstLine won't be updated?
 
 - incremental search; find all occurrences that are visible
 - if caps lock is pressed during startup, show dialog box for changing
@@ -95,7 +89,6 @@ TO DO
 - selective undo
 - <file>?line= or ?marker=
 - wacky bracket matching stuff: only on }, ), ]
-- read up on JDK 1.4 focus API
 - persistent fold visibility option
 - fold navigator to browse fold tree in explicit fold mode
 - command to surround selection with explicit fold markers
@@ -197,7 +190,8 @@ TO DO
   String getToolTipText(int line)
 - Used by ErrorList, HyperSearch, markers
 - use java2d to draw block caret (instead of XOR)
-- cache plugin list in plugin manager
+- cache plugin list in plugin manager, only loading it from the server if
+  the modification date has changed?
 
 - work thread hang?
 - when a new text area is created, if caret is on a bracket, not matched
@@ -239,3 +233,4 @@ TO DO
 - prev line fold gutter bug
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
+- lower case all user's guide ids
