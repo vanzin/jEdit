@@ -84,6 +84,16 @@ public class HistoryModel
 		return (String)data.elementAt(index);
 	} //}}}
 
+	//{{{ clear() method
+	/**
+	 * Removes all entries from this history model.
+	 * @since jEdit 4.2pre2
+	 */
+	public void clear()
+	{
+		data.removeAllElements();
+	} //}}}
+
 	//{{{ getSize() method
 	/**
 	 * Returns the number of elements in this history list.
@@ -265,6 +275,8 @@ public class HistoryModel
 			{
 				HistoryModel model = (HistoryModel)modelEnum
 					.nextElement();
+				if(model.getSize() == 0)
+					continue;
 
 				out.write('[');
 				out.write(model.getName());

@@ -141,13 +141,13 @@
     it only affects subsequently-inserted tabs.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Spaces
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guimenuitem>Spaces
     to Tabs</guimenuitem>
     converts soft tabs to hard tabs in the current selection, or the entire
     buffer if nothing is selected.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Tabs
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guimenuitem>Tabs
      to Spaces</guimenuitem>
     converts hard tabs to soft tabs in the current selection, or the entire
     buffer if nothing is selected.
