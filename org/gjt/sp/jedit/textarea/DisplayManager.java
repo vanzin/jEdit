@@ -934,7 +934,7 @@ loop:		for(;;)
 				fvmput(starti + 1,endi + 1,null);
 			else
 			{
-				if(end != fvmcount - 1
+				if(endi != fvmcount - 1
 					&& fvm[endi + 1] == end + 1)
 					fvmput(starti + 1,endi + 2,null);
 				else
@@ -1393,7 +1393,7 @@ loop:		for(;;)
 				if(physicalLine > getLastVisibleLine())
 				{
 					physicalLine = getPrevVisibleLine(physicalLine);
-					scrollLine -= getScreenLineCount(physicalLine);
+					//scrollLine -= getScreenLineCount(physicalLine);
 				}
 				else
 				{

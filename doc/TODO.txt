@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- sort fold handler list
 - scrolling problem still there
 - fix double slash in path bug
 - thread safety problem in VFSManager.waitForRequests()
@@ -28,7 +29,7 @@ and quirks that I need to fix eventually.
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - F2 doesn't work in JTree/JTable, maybe others
 - path shown twice in tree: maybeReloadDirectory()
-- format -- instead of \n\n, what if it has \n   \n?d
+- format -- instead of \n\n, what if it has \n   \n?
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
 - shortcuts: stale shortcuts remain?
