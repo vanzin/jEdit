@@ -1,5 +1,5 @@
 fileDialogReturnValue = GUIUtilities.showVFSFileDialog(view,null,
-	VFSBrowser.CHOOSE_DIRECTORY,false);
+	VFSBrowser.CHOOSE_DIRECTORY_DIALOG,false);
 if(fileDialogReturnValue != null)
 {
 	SearchAndReplace.setSearchString("<SCRIPT>(.|\n)*?</SCRIPT>");

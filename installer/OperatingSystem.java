@@ -204,8 +204,8 @@ public abstract class OperatingSystem
 				// install man page
 				String manpage = installer.getProperty("ostask.unix-man.manpage");
 
-				installer.copy(getClass().getResourceAsStream("/" + manpage),
-					new File(directory,manpage).getPath(),
+				InputStream in = getClass().getResourceAsStream("/" + manpage);
+				installer.copy(in,new File(directory,manpage).getPath(),
 					null);
 			}
 		}

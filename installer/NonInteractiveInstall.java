@@ -46,7 +46,6 @@ public class NonInteractiveInstall
 				OperatingSystem.OSTask osTask = osTasks[j];
 				if(osTask.getName().equals(taskName))
 				{
-					System.out.println(arg);
 					if(taskDir.equals("off"))
 						osTask.setEnabled(false);
 					else
