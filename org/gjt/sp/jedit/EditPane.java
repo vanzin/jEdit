@@ -125,7 +125,7 @@ public class EditPane extends JPanel implements EBComponent
 					&& (bufferSwitcher == null
 					|| !bufferSwitcher.isPopupVisible()))
 				{
-					textArea.grabFocus();
+					textArea.requestFocus();
 				}
 			}
 		});
@@ -197,7 +197,7 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			public void run()
 			{
-				textArea.grabFocus();
+				textArea.requestFocus();
 			}
 		});
 	} //}}}

@@ -107,7 +107,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ focusOnDefaultComponent() method
 	public void focusOnDefaultComponent()
 	{
-		resultTree.grabFocus();
+		resultTree.requestFocus();
 	} //}}}
 
 	//{{{ addNotify() method

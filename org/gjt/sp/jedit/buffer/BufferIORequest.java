@@ -319,7 +319,8 @@ public class BufferIORequest extends WorkRequest
 		throws IOException
 	{
 		/* we guess an initial size for the array */
-		IntegerArray endOffsets = new IntegerArray((int)(length / 50));
+		IntegerArray endOffsets = new IntegerArray(
+			Math.max(1,(int)(length / 50)));
 
 		// only true if the file size is known
 		boolean trackProgress = (!buffer.isTemporary() && length != 0);
