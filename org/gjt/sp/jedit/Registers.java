@@ -297,14 +297,7 @@ public class Registers
 	 */
 	public static void setRegister(char name, Register newRegister)
 	{
-		if(name != '%' && name != '$')
-		{
-			if(!loaded)
-				loadRegisters();
-
-			if(!loading)
-				modified = true;
-		}
+		touchRegister(name);
 
 		if(name >= registers.length)
 		{
@@ -327,6 +320,7 @@ public class Registers
 	 */
 	public static void setRegister(char name, String value)
 	{
+		touchRegister(name);
 		Register register = getRegister(name);
 		if(register != null)
 			register.setValue(value);
@@ -512,9 +506,24 @@ public class Registers
 			registers['%'] = new ClipboardRegister(selection);
 	}
 
+	//{{{ touchRegister() method
+	private static void touchRegister(char name)
+	{
+		if(name == '%' || name == '$')
+			return;
+
+		if(!loaded)
+			loadRegisters();
+
+		if(!loading)
+			modified = true;
+	} //}}}
+	
 	//{{{ loadRegisters() method
 	private static void loadRegisters()
 	{
+		loaded = true;
+
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
 			return;
@@ -525,7 +534,6 @@ public class Registers
 			return;
 
 		registersModTime = registerFile.lastModified();
-		loaded = true;
 
 		Log.log(Log.MESSAGE,jEdit.class,"Loading registers.xml");
 
