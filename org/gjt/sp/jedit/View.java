@@ -388,7 +388,7 @@ public class View extends JFrame implements EBComponent
 			else if(text.indexOf('\n') != -1)
 				text = null;
 
-			if(SearchAndReplace.getRegexp())
+			if(text != null && SearchAndReplace.getRegexp())
 				text = SearchAndReplace.escapeRegexp(text,false);
 
 			searchBar.getField().setText(text);
