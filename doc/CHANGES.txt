@@ -109,6 +109,9 @@ JEDIT 4.0 VERSION HISTORY
 - Added missing 'read error' and 'write error' I/O error strings
 - Workaround for Graphics2D.setPaintMode() bug on Windows placed in
   background token painting code as well
+- Memory indicator in status bar looked stupid on Windows L&F and other
+  look and feels where the text color and progress bar foreground was
+  the same
 
 + API Additions
 

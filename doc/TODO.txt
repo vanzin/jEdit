@@ -1,7 +1,7 @@
 TO DO
 
-- windows l&f: memory indicator
 - motif l&f: shortcuts in menu items
+
 - documentation:
 
 - changing heap memory docs

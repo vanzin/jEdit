@@ -2872,7 +2872,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
 		int subregion = getSubregionOfOffset(offset,lineInfos);
-		System.err.println(subregion);
 		if(subregion == 0)
 		{
 			firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
