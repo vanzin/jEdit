@@ -13,6 +13,10 @@ release.
 
 - Updated LaTeX syntax highlighting (Thomas Alspaugh).
 
+- Added Lilypond syntax highlighting (Bertalan Fodor).
+
+- Updated Omnimark syntax highlighting (Lionel Fiol).
+
 }}}
 {{{ Miscellaneous
 
@@ -28,6 +32,8 @@ KeyEventTranslator.setModifierMapping(
     InputEvent.SHIFT_MASK);
 
 - "Java File Save" macro (Nicholas O'Leary).
+
+- Removed usages of show() method deprecated in JDK 1.5.
 
 }}}
 {{{ Bug Fixes

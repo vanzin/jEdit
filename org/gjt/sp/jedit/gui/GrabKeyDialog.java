@@ -257,7 +257,7 @@ public class GrabKeyDialog extends JDialog
 		pack();
 		setLocationRelativeTo(getParent());
 		setResizable(false);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ getSymbolicName() method

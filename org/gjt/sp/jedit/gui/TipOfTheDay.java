@@ -92,7 +92,7 @@ public class TipOfTheDay extends EnhancedDialog
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

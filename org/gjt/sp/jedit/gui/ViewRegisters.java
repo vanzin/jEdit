@@ -99,7 +99,7 @@ public class ViewRegisters extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	}
 
 	// EnhancedDialog implementation

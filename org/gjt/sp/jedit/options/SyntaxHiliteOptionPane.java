@@ -350,7 +350,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 
 		setResizable(false);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ actionPerformed() method

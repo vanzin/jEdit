@@ -59,7 +59,7 @@ public class AboutDialog extends EnhancedDialog
 		pack();
 		setResizable(false);
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

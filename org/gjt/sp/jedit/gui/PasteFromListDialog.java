@@ -92,7 +92,7 @@ public class PasteFromListDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

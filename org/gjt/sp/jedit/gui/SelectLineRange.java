@@ -73,7 +73,7 @@ public class SelectLineRange extends EnhancedDialog implements ActionListener
 
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

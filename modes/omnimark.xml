@@ -1,25 +1,35 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
-<!-- contributed by Lionel Fiol <lio-sand@ifrance.com> -->
-<!-- 09/NOV/2001: add automatic indentation properties -->
-<!--              correct and add some keywords        -->
-<!--              reorganize all keywords (sorted)     -->
-<!-- 20/APR/2004: all keywords are now in lower case   -->
+<!-- contributed by Lionel Fiol <lio-sand@ifrance.com>       -->
+<!-- 09/NOV/2001: add automatic indentation properties       -->
+<!--              correct and add some keywords              -->
+<!--              reorganize all keywords (sorted)           -->
+<!-- 20/APR/2004: all keywords are now in lower case         -->
+<!-- 06/MAY/2004: add specific patterns for invalid literals -->
+<!-- 06/JUN/2004: add '.' (dot) in the noWordSep property    -->
 <MODE>
     <PROPS>
         <PROPERTY NAME="indentNextLines" VALUE="\s*((PROCESS|MARKUP|EXTERNAL|DOCUMENT|DTD|ELEMENT|FIND|TRANSLATE)((-|\s).*|\s*)|(DO|ELSE|REPEAT|MATCH|CASE|USING|GROUP|DEFINE|MACRO)(\s+.*|\s*))" />
         <PROPERTY NAME="lineComment" VALUE=";" />
-        <PROPERTY NAME="noWordSep" VALUE="-_" />
+        <PROPERTY NAME="noWordSep" VALUE=".-_" />
     </PROPS>
     <RULES ESCAPE="%" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
         <!-- Comments -->
         <EOL_SPAN TYPE="COMMENT1">#!</EOL_SPAN>
         <EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
         <!-- Literals -->
+        <SPAN_REGEXP HASH_CHAR='"' NO_LINE_BREAK="TRUE" TYPE="INVALID">
+            <BEGIN>"((?!$)[^"])*$</BEGIN>
+            <END>$</END>
+        </SPAN_REGEXP>
         <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
             <BEGIN>"</BEGIN>
             <END>"</END>
         </SPAN>
+        <SPAN_REGEXP HASH_CHAR="'" NO_LINE_BREAK="TRUE" TYPE="INVALID">
+            <BEGIN>'((?!$)[^'])*$</BEGIN>
+            <END>$</END>
+        </SPAN_REGEXP>
         <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
             <BEGIN>'</BEGIN>
             <END>'</END>

@@ -116,7 +116,7 @@ public class EditAbbrevDialog extends JDialog
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(getParent());
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ checkForExistingAbbrev() method

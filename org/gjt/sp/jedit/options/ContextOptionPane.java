@@ -310,7 +310,7 @@ class ContextAddDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
-		show();
+		setVisible(true);
 	}
 
 	public void ok()

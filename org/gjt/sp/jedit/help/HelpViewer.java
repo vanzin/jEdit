@@ -149,7 +149,7 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		EditBus.addToBus(this);
 
-		show();
+		setVisible(true);
 
 		SwingUtilities.invokeLater(new Runnable()
 		{

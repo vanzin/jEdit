@@ -473,7 +473,7 @@ public class ActionBar extends JPanel
 			Point p = new Point(0,-getHeight());
 			SwingUtilities.convertPointToScreen(p,action);
 			setLocation(p);
-			show();
+			setVisible(true);
 
 			KeyHandler keyHandler = new KeyHandler();
 			addKeyListener(keyHandler);

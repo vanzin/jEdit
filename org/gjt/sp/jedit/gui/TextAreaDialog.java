@@ -107,7 +107,7 @@ public class TextAreaDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(getParent());
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

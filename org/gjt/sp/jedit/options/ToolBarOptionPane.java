@@ -551,7 +551,7 @@ class ToolBarEditDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method
