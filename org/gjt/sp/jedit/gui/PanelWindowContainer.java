@@ -215,14 +215,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int index = dockables.indexOf(entry);
 			((JToggleButton)buttons.getComponent(index + 2)).setSelected(true);
 
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					entry.win.requestFocus();
-					entry.win.requestDefaultFocus();
-				}
-			});
+			entry.win.requestFocus();
+			entry.win.requestDefaultFocus();
 		}
 		else
 		{

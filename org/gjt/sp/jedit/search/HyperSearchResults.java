@@ -74,7 +74,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 
 		resultTree.setEditable(false);
 
-		resultTree.addTreeSelectionListener(new TreeSelectionHandler());
 		resultTree.addKeyListener(new KeyHandler());
 		resultTree.addMouseListener(new MouseHandler());
 
@@ -337,7 +336,20 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		public void keyPressed(KeyEvent evt)
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			{
 				goToSelectedNode();
+
+				// fuck me dead
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						resultTree.requestFocus();
+					}
+				});
+
+				evt.consume();
+			}
 		}
 	} //}}}
 
@@ -359,11 +371,13 @@ public class HyperSearchResults extends JPanel implements EBComponent
 			if (GUIUtilities.isPopupTrigger(evt))
 				showPopupMenu(evt);
 			else
+			{
 				goToSelectedNode();
 
-			view.toFront();
-			view.requestFocus();
-			view.getTextArea().requestFocus();
+				view.toFront();
+				view.requestFocus();
+				view.getTextArea().requestFocus();
+			}
 		} //}}}
 
 		//{{{ Private members
@@ -405,15 +419,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 			resultTreeModel.removeNodeFromParent(value);
 		}
 	}//}}}
-
-	//{{{ TreeSelectionHandler class
-	class TreeSelectionHandler implements TreeSelectionListener
-	{
-		public void valueChanged(TreeSelectionEvent evt)
-		{
-			goToSelectedNode();
-		}
-	} //}}}
 
 	//{{{ ResultCellRenderer class
 	class ResultCellRenderer extends DefaultTreeCellRenderer

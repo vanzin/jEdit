@@ -187,18 +187,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		// workaround...
 		addNotify();
 
-		Dimension currentSize = getSize();
-		Dimension requestedSize = getPreferredSize();
-		Dimension newSize = new Dimension(
-			Math.max(currentSize.width,requestedSize.width),
-			Math.max(currentSize.height,requestedSize.height)
-		);
-		if(newSize.width < 300)
-			newSize.width = 300;
-		if(newSize.height < 200)
-			newSize.height = 200;
-		setSize(newSize);
-		validate();
+		updateSize();
 
 		currentPane = name;
 	} //}}}
@@ -328,12 +317,13 @@ public abstract class OptionsDialog extends EnhancedDialog
 			new Object[] { rootNode, rootNode.getMember(i) }));
 		}
 
-		// load geometry before selectPane() since we might need to
-		// enlarge the dialog if the saved geometry is too small.
-		GUIUtilities.loadGeometry(this,name);
-
 		if(pane == null || !selectPane(rootNode,pane))
 			selectPane(rootNode,firstPane);
+
+		GUIUtilities.loadGeometry(this,name);
+
+		// in case saved geometry is too small
+		updateSize();
 
 		show();
 	} //}}}
@@ -387,6 +377,23 @@ public abstract class OptionsDialog extends EnhancedDialog
 		path.remove(node);
 
 		return false;
+	} //}}}
+
+	//{{{ updateSize() method
+	private void updateSize()
+	{
+		Dimension currentSize = getSize();
+		Dimension requestedSize = getPreferredSize();
+		Dimension newSize = new Dimension(
+			Math.max(currentSize.width,requestedSize.width),
+			Math.max(currentSize.height,requestedSize.height)
+		);
+		if(newSize.width < 300)
+			newSize.width = 300;
+		if(newSize.height < 200)
+			newSize.height = 200;
+		setSize(newSize);
+		validate();
 	} //}}}
 
 	//}}}

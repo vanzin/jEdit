@@ -348,14 +348,15 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			markKeyword(true);
 
+			context = (LineContext)context.parent.clone();
+
 			tokenHandler.handleToken(
-				(context.parent.inRule.action & ParserRule.EXCLUDE_MATCH)
+				(context.inRule.action & ParserRule.EXCLUDE_MATCH)
 				== ParserRule.EXCLUDE_MATCH
-				? context.parent.rules.getDefault()
-				: context.parent.inRule.token,
+				? context.rules.getDefault()
+				: context.inRule.token,
 				pos - line.offset,pattern.count,context);
 
-			context = (LineContext)context.parent.clone();
 			keywords = context.rules.getKeywords();
 			context.inRule = null;
 			lastOffset = pos + pattern.count;
