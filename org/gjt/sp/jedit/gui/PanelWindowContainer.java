@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,7 +204,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			dockablePanel.showDockable(entry.factory.name);
 
 			int index = dockables.indexOf(entry);
-			((JToggleButton)buttons.getComponent(index + 2)).setSelected(true);
+			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
 
 			entry.win.requestFocus();
 			entry.win.requestDefaultFocus();
@@ -297,6 +297,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private int dimension;
 	private Vector dockables;
 	private DockableWindowManager.Entry current;
+	private JPopupMenu popup;
 
 	// remember the most recent dockable
 	private String mostRecent;
@@ -309,6 +310,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
+			if(popup != null && popup.isVisible())
+				popup.setVisible(false);
+
 			if(evt.getSource() == closeBox)
 				show(null);
 			else
@@ -324,8 +328,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
-		JPopupMenu popup;
-
 		public void mousePressed(MouseEvent evt)
 		{
 			if(GUIUtilities.isPopupTrigger(evt))
@@ -336,7 +338,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				{
 					AbstractButton btn = (AbstractButton)evt.getSource();
 					String dockable = btn.getActionCommand();
-					popup = wm.createPopupMenu(dockable);
+					popup = wm.createPopupMenu(dockable,false);
 					GUIUtilities.showPopupMenu(popup,
 						btn,evt.getX(),evt.getY());
 				}
@@ -591,27 +593,25 @@ public class PanelWindowContainer implements DockableWindowContainer
 				.getBorderInsets((JComponent)parent);
 
 			Component[] comp = parent.getComponents();
-			if(comp.length == 2)
+			if(comp.length == 1)
 			{
-				// nothing 'cept close box and popup button
+				// nothing 'cept close box
 				return new Dimension(0,0);
+			}
+
+			if(position.equals(DockableWindowManager.TOP)
+				|| position.equals(DockableWindowManager.BOTTOM))
+			{
+				return new Dimension(0,
+					comp[1].getPreferredSize().height
+					+ insets.top
+					+ insets.bottom);
 			}
 			else
 			{
-				if(position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM))
-				{
-					return new Dimension(0,
-						comp[2].getPreferredSize().height
-						+ insets.top
-						+ insets.bottom);
-				}
-				else
-				{
-					return new Dimension(
-						comp[2].getPreferredSize().width
-						+ insets.left + insets.right,0);
-				}
+				return new Dimension(
+					comp[1].getPreferredSize().width
+					+ insets.left + insets.right,0);
 			}
 		} //}}}
 
@@ -628,7 +628,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				.getBorderInsets((JComponent)parent);
 
 			Component[] comp = parent.getComponents();
-			if(comp.length != 2)
+			if(comp.length != 1)
 			{
 				boolean closeBoxSizeSet = false;
 				boolean noMore = false;
@@ -638,7 +638,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 					|| position.equals(DockableWindowManager.BOTTOM)
 					) ? 0 : insets.left;
 
-				for(int i = 2; i < comp.length; i++)
+				for(int i = 1; i < comp.length; i++)
 				{
 					Dimension size = comp[i].getPreferredSize();
 					if(position.equals(DockableWindowManager.TOP)

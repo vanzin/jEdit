@@ -648,32 +648,42 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 */
 	public void searchInDirectory()
 	{
-		String path, filter;
-
 		VFS.DirectoryEntry[] selected = getSelectedFiles();
 		if(selected.length >= 1)
 		{
 			VFS.DirectoryEntry file = selected[0];
-			if(file.type == VFS.DirectoryEntry.DIRECTORY)
-			{
-				path = file.path;
-				filter = getFilenameFilter();
-			}
-			else
-			{
-				VFS vfs = VFSManager.getVFSForPath(file.path);
-				path = vfs.getParentOfPath(file.path);
-				String name = MiscUtilities.getFileName(file.path);
-				String ext = MiscUtilities.getFileExtension(name);
-				filter = (ext == null || ext.length() == 0
-					? getFilenameFilter()
-					: "*" + ext);
-			}
+			searchInDirectory(file.path,file.type != VFS.DirectoryEntry.FILE);
 		}
 		else
 		{
-			path = this.path;
+			searchInDirectory(this.path,true);
+		}
+	} //}}}
+
+	//{{{ searchInDirectory() method
+	/**
+	 * Opens a directory search in the specified directory.
+	 * @param path The path name
+	 * @param directory True if the path is a directory, false if it is a file
+	 * @since jEdit 4.2pre1
+	 */
+	public void searchInDirectory(String path, boolean directory)
+	{
+		String filter;
+
+		if(directory)
+		{
 			filter = getFilenameFilter();
+		}
+		else
+		{
+			VFS vfs = VFSManager.getVFSForPath(path);
+			path = vfs.getParentOfPath(path);
+			String name = MiscUtilities.getFileName(path);
+			String ext = MiscUtilities.getFileExtension(name);
+			filter = (ext == null || ext.length() == 0
+				? getFilenameFilter()
+				: "*" + ext);
 		}
 
 		if(path.endsWith("/") || path.endsWith(File.separator))
