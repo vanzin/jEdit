@@ -865,6 +865,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="resplit">
+	<CODE>
+		view.resplit();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="right-docking-area">
 	<CODE>
 		wm.getRightDockingArea().showMostRecent();

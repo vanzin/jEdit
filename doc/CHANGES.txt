@@ -70,6 +70,9 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 - When a directory is reloaded, it is no longer moved to the top of the
   file system browser's history list.
 
+- Added View->Splitting->Restore Split command -- it recreates a
+  split pane configuration as it was before the most recent 'Unsplit'.
+
 }}}
 {{{ Bug Fixes
 

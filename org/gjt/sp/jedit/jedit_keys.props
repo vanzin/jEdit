@@ -41,6 +41,7 @@ unsplit-current.shortcut=C+0
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
+resplit.shortcut=C+4
 #}}}
 
 #{{{ C+non-alpha

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2003 Slava Pestov
+ * Copyright (C) 1998, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -820,6 +820,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
+			lastSplitConfig = getSplitConfig();
+
 			PerspectiveManager.setPerspectiveDirty(true);
 
 			EditPane[] editPanes = getEditPanes();
@@ -854,6 +856,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
+			lastSplitConfig = getSplitConfig();
+
 			PerspectiveManager.setPerspectiveDirty(true);
 
 			// find first split pane parenting current edit pane
@@ -901,6 +905,20 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 			getToolkit().beep();
+	} //}}}
+
+	//{{{ resplit() method
+	/**
+	 * Restore the split configuration as it was before unsplitting.
+	 *
+	 * @since jEdit 4.3pre1
+	 */
+	public void resplit()
+	{
+		if(lastSplitConfig == null)
+			getToolkit().beep();
+		else
+			setSplitConfig(getBuffer(),lastSplitConfig);
 	} //}}}
 
 	//{{{ nextTextArea() method
@@ -1061,20 +1079,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public ViewConfig getViewConfig()
 	{
-		StringBuffer splitConfig = new StringBuffer();
-		if(splitPane != null)
-			getSplitConfig(splitPane,splitConfig);
-		else
-		{
-			splitConfig.append('"');
-			splitConfig.append(MiscUtilities.charsToEscapes(
-				getBuffer().getPath()));
-			splitConfig.append("\" buffer");
-		}
-
 		ViewConfig config = new ViewConfig();
 		config.plainView = isPlainView();
-		config.splitConfig = splitConfig.toString();
+		config.splitConfig = getSplitConfig();
 		config.x = getX();
 		config.y = getY();
 		config.width = getWidth();
@@ -1203,16 +1210,7 @@ public class View extends JFrame implements EBComponent
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
-		try
-		{
-			Component comp = restoreSplitConfig(buffer,config.splitConfig);
-			dockableWindowManager.add(comp,0);
-		}
-		catch(IOException e)
-		{
-			// this should never throw an exception.
-			throw new InternalError();
-		}
+		setSplitConfig(buffer,config.splitConfig);
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
@@ -1326,6 +1324,7 @@ public class View extends JFrame implements EBComponent
 
 	private EditPane editPane;
 	private JSplitPane splitPane;
+	private String lastSplitConfig;
 
 	private StatusBar status;
 
@@ -1354,6 +1353,24 @@ public class View extends JFrame implements EBComponent
 			getEditPanes(vec,split.getLeftComponent());
 			getEditPanes(vec,split.getRightComponent());
 		}
+	} //}}}
+
+	//{{{ getSplitConfig() method
+	private String getSplitConfig()
+	{
+		StringBuffer splitConfig = new StringBuffer();
+		
+		if(splitPane != null)
+			getSplitConfig(splitPane,splitConfig);
+		else
+		{
+			splitConfig.append('"');
+			splitConfig.append(MiscUtilities.charsToEscapes(
+				getBuffer().getPath()));
+			splitConfig.append("\" buffer");
+		}
+		
+		return splitConfig.toString();
 	} //}}}
 
 	//{{{ getSplitConfig() method
@@ -1392,6 +1409,27 @@ public class View extends JFrame implements EBComponent
 		splitConfig.append(' ');
 		splitConfig.append(splitPane.getOrientation()
 			== JSplitPane.VERTICAL_SPLIT ? "vertical" : "horizontal");
+	} //}}}
+
+	//{{{ setSplitConfig() method
+	private void setSplitConfig(Buffer buffer, String splitConfig)
+	{
+		if(editPane != null)
+			dockableWindowManager.remove(editPane);
+
+		if(splitPane != null)
+			dockableWindowManager.remove(splitPane);
+
+		try
+		{
+			Component comp = restoreSplitConfig(buffer,splitConfig);
+			dockableWindowManager.add(comp,0);
+		}
+		catch(IOException e)
+		{
+			// this should never throw an exception.
+			throw new InternalError();
+		}
 	} //}}}
 
 	//{{{ restoreSplitConfig() method
