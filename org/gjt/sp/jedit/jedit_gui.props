@@ -1167,8 +1167,8 @@ empty-fileset.message=The specified search file set contains no files.\n\
 #}}}
 
 #{{{ Reverse regular expression search not supported dialog
-reverse-regexp.title=Not Supported
-reverse-regexp.message=Cannot search backwards for a regular expression.\n\
+regexp-reverse.title=Not Supported
+regexp-reverse.message=Cannot search backwards for a regular expression.\n\
 	Either search forwards or disable regular expressions.
 #}}}
 
