@@ -112,7 +112,6 @@ descField = new JTextField(<quote></quote>, 25);
 
 namePanel = new JPanel(new GridLayout(1, 2));
 nameLabel = new JLabel(<quote>Name of file:</quote>, SwingConstants.LEFT);
-nameLabel.setForeground(Color.black);
 saveField = new JCheckBox(<quote>Save file when done</quote>,
     !buffer.isNewFile());
 namePanel.add(nameLabel);
@@ -205,11 +204,7 @@ if( JOptionPane.OK_OPTION !=
         The two visible components created by
         <function>showConfirmDialog()</function> appear at positions 3 and 6 of
         the <varname>message</varname> array. Only the text is required; they
-        are rendered as text labels. Note that the constructor sets the
-        foreground color <varname>nameLabel</varname> to black. The default text
-        color of <classname>JLabel</classname> objects is gray for Java's
-        default look-and-feel, so the color was reset for consistency with
-        the rest of the message box.
+        are rendered as text labels.
       </para>
     </listitem>
 
@@ -222,10 +217,10 @@ if( JOptionPane.OK_OPTION !=
         that gives the user great flexibility in sizing and positioning
         components. Here we use a <function>static</function> method of
         the <classname>Box</classname> class that produces a vertical
-        <glossterm>struct</glossterm>.  This is a transparent component
+        <glossterm>strut</glossterm>.  This is a transparent component
         whose width expands to fill its parent component (in this case,
-        the message box).  The single parameter indicates the fixed height
-        of the spacing <quote>strut</quote> in pixels.  The last call to
+        the message box).  The single parameter indicates the height
+        of the strut in pixels.  The last call to
         <function>createVerticalStrut()</function> separates the
         description text field from the <guilabel>OK</guilabel> and
         <guilabel>Cancel</guilabel> buttons that are automatically added
@@ -572,7 +567,7 @@ view.getInputHandler().readNextChar("Enter a character",
     without restarting
     jEdit, using a BeanShell statement like the following:
    </para>
-   <programlisting>BeanShell.runScript(view,<replaceable>path</replaceable>,false,false);</programlisting>
+   <programlisting>BeanShell.runScript(view,<replaceable>path</replaceable>,null,false);</programlisting>
    <para>
     For <replaceable>path</replaceable>, you can substitute any string,
     or a method call such as <function>buffer.getPath()</function>.
@@ -802,7 +797,7 @@ bottom</screen>
   object. Under Java 1.3 and above, the virtual machine's reflection
   mechanism will throw an exception for any
   missing interface methods.  This will bring macro execution to a
-  halt unless the exception is trapped and handled.  The better solution
+  halt unless the exception is trapped and handled.  The solution
   is to implement the <function>invoke()</function> method,
   which is called when an undefined method is invoked on a scripted
   object. Typically, the implementation of this method will do nothing,

@@ -582,6 +582,7 @@ public class BeanShell
 		global = new NameSpace("jEdit embedded BeanShell interpreter");
 		global.importPackage("org.gjt.sp.jedit");
 		global.importPackage("org.gjt.sp.jedit.browser");
+		global.importPackage("org.gjt.sp.jedit.buffer");
 		global.importPackage("org.gjt.sp.jedit.gui");
 		global.importPackage("org.gjt.sp.jedit.help");
 		global.importPackage("org.gjt.sp.jedit.io");

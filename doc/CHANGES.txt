@@ -18,6 +18,12 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 
 - EOL_SPAN_REGEXP rule was broken (Oliver Rutherfurd).
 
+- Undoing all changes up to a save would not delete the autosave file,
+  even though the buffer was no longer marked as "dirty".
+
+- Fixed minor problem with expanding files when moving the caret outside
+  the narrowed range.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and

@@ -745,7 +745,7 @@ public class Buffer implements EBComponent
 
 	//{{{ setDirty() method
 	/**
-	 * Sets the `dirty' (changed since last save) flag of this buffer.
+	 * Sets the 'dirty' (changed since last save) flag of this buffer.
 	 */
 	public void setDirty(boolean d)
 	{
@@ -764,6 +764,9 @@ public class Buffer implements EBComponent
 		{
 			setFlag(DIRTY,false);
 			setFlag(AUTOSAVE_DIRTY,false);
+
+			if(autosaveFile != null)
+				autosaveFile.delete();
 
 			// this ensures that undo can clear the dirty flag properly
 			// when all edits up to a save are undone

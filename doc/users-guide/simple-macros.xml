@@ -13,6 +13,93 @@
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
 
+<!-- moved from introductory chapter in 3.2 macro guide -->
+
+ <sect1 id="single-macros"><title>Single Execution Macros</title>
+  <para>
+   As noted earlier, you can save a BeanShell
+   script of any length as a text file with the <filename>.bsh</filename>
+   extension. There are three other ways jEdit lets you use BeanShell quickly,
+   without saving a script to storage, on a <quote>one time only</quote>
+   basis. You will find them in the <guimenu>Utilities</guimenu> menu.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate BeanShell
+   Expression</guimenuitem> displays a text input dialog
+   that asks you to type a single line of BeanShell commands. You can type
+   more than one BeanShell statement so long as each of them ends with a
+   semicolon. If BeanShell successfully interprets your input, a message
+   box will appear with the return value of the last statement. You can do
+   the same thing using the BeanShell interpreter provided with the
+   <application>Console</application> plugin; the return value will appear
+   in the output window.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate For Selected
+   Lines</guimenuitem> displays a text input dialog that asks you to
+   type a single line of BeanShell commands. The commands are evaluated
+   for each line of the selection. In addition to the standard set of
+   variables, this command defines the following:
+  </para>
+
+  <itemizedlist>
+   <listitem><para><varname>line</varname> - the line number, from the
+   start of the buffer. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>index</varname> - the line number, from the
+   start of the selection. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>text</varname> - the text of the line.
+   </para></listitem>
+  </itemizedlist>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
+    in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
+    box. This will add a line number to each selected line beginning with
+    the number <userinput>1</userinput>.
+   </para>
+  </informalexample>
+
+  <para>
+    The BeanShell expression you enter will be evaluated and substituted in place of
+    the entire text of a selected line.  If you want to leave the line's current
+    text as an element of the modified line, you must include the defined variable
+    <userinput>text</userinput> as part of the BeanShell expression that you enter.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   evaluates the selected text as a BeanShell script and
+   replaces it with the return value of the statement.
+  </para>
+
+  <para>
+    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
+    easy way to do arithmetic calculations inline while editing. BeanShell
+    uses numbers and arithmetic operations in an ordinary, intuitive way.
+  </para>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(3745*856)+74</userinput>
+    in the buffer, select it, and choose
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate
+    Selection</guimenuitem>. The selected text will be replaced by the
+    answer, <userinput>3205794</userinput>.
+
+    <!-- Irrelevant? -->
+    <!-- Since this is a text file
+    and not a spreadsheet, the original values that BeanShell evaluated are
+    not retained or saved as part of the buffer's contents. -->
+   </para>
+  </informalexample>
+
+ </sect1>
+
  <sect1 id="first-example" ><title>The Mandatory First Example</title>
   <informalexample><!-- <title>A first one-line macro</title> -->
    <programlisting>Macros.message(view, "Hello world!");</programlisting>
@@ -45,7 +132,7 @@
      A <glossterm>class</glossterm> is a specification of what data an object
      contains and what methods can be used to work with the data. A Java
      application consists of one or more classes (in the case of jEdit ,over
-     500 classes) written by the programmer that defines the application's
+     600 classes) written by the programmer that defines the application's
      behavior. A BeanShell macro uses these classes, along with built-in
      classes that are supplied with the Java platform, to define its own
      behavior.
@@ -170,8 +257,9 @@
   </para>
 
   <para>
-    Java requires <literal>import</literal> statement at the beginning of a
-    source file. BeanShell allows you to place <literal>import</literal>
+    Java requires <literal>import</literal> statement to be located
+    at the beginning of a source file. BeanShell allows you to place
+    <literal>import</literal>
     statements anywhere in a script, including inside a block of
     statements. The <literal>import</literal> statement will cover all names
     used following the statement in the enclosing block.
@@ -199,10 +287,12 @@ org.gjt.sp.jedit
 org.gjt.sp.jedit.browser
 org.gjt.sp.jedit.buffer
 org.gjt.sp.jedit.gui
+org.gjt.sp.jedit.help
 org.gjt.sp.jedit.io
 org.gjt.sp.jedit.msg
 org.gjt.sp.jedit.options
 org.gjt.sp.jedit.pluginmgr
+org.gjt.sp.jedit.print
 org.gjt.sp.jedit.search
 org.gjt.sp.jedit.syntax
 org.gjt.sp.jedit.textarea
@@ -372,6 +462,10 @@ int result = Macros.confirm("Do you really want to learn"
     helpful if you are not comfortable with specifying types and classes;
     just use your variables and let BeanShell worry about it.
   </para>
+
+  </sect1>
+
+  <sect1 id="dynamic-typing"><title>BeanShell Dynamic Typing</title>
 
   <para>
     Without an explicit <glossterm>type declaration</glossterm> like
@@ -625,94 +719,6 @@ String result = df.format(d);
     split views.
    </para>
   </sidebar>
- </sect1>
-
-<!-- moved from introductory chapter in 3.2 macro guide -->
-
- <sect1 id="single-macros"><title>Single Execution Macros</title>
-  <para>
-   At this point, we have covered some basic techniques for writing
-   one-line or other short macros. As noted earlier, you can save a BeanShell
-   script of any length as a text file with the <filename>.bsh</filename>
-   extension. There are three other ways jEdit lets you use BeanShell quickly,
-   without saving a script to storage, on a <quote>one time only</quote>
-   basis. You will find them in the <guimenu>Utilities</guimenu> menu.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate BeanShell
-   Expression</guimenuitem> displays a text input dialog
-   that asks you to type a single line of BeanShell commands. You can type
-   more than one BeanShell statement so long as each of them ends with a
-   semicolon. If BeanShell successfully interprets your input, a message
-   box will appear with the return value of the last statement. You can do
-   the same thing using the BeanShell interpreter provided with the
-   <application>Console</application> plugin; the return value will appear
-   in the output window.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate For Selected
-   Lines</guimenuitem> displays a text input dialog that asks you to
-   type a single line of BeanShell commands. The commands are evaluated
-   for each line of the selection. In addition to the standard set of
-   variables, this command defines the following:
-  </para>
-
-  <itemizedlist>
-   <listitem><para><varname>line</varname> - the line number, from the
-   start of the buffer. The first line is numbered 0.
-   </para></listitem>
-   <listitem><para><varname>index</varname> - the line number, from the
-   start of the selection. The first line is numbered 0.
-   </para></listitem>
-   <listitem><para><varname>text</varname> - the text of the line.
-   </para></listitem>
-  </itemizedlist>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
-    in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
-    box. This will add a line number to each selected line beginning with
-    the number <userinput>1</userinput>.
-   </para>
-  </informalexample>
-
-  <para>
-    The BeanShell expression you enter will be evaluated and substituted in place of
-    the entire text of a selected line.  If you want to leave the line's current
-    text as an element of the modified line, you must include the defined variable
-    <userinput>text</userinput> as part of the BeanShell expression that you enter.
-  </para>
-
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
-   evaluates the selected text as a BeanShell script and
-   replaces it with the return value of the statement.
-  </para>
-
-  <para>
-    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
-    easy way to do arithmetic calculations inline while editing. BeanShell
-    uses numbers and arithmetic operations in an ordinary, intuitive way.
-  </para>
-
-  <informalexample>
-   <para>
-    Try typing an expression like <userinput>(3745*856)+74</userinput>
-    in the buffer, select it, and choose
-    <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate
-    Selection</guimenuitem>. The selected text will be replaced by the
-    answer, <userinput>3205794</userinput>.
-
-    <!-- Irrelevant? -->
-    <!-- Since this is a text file
-    and not a spreadsheet, the original values that BeanShell evaluated are
-    not retained or saved as part of the buffer's contents. -->
-   </para>
-  </informalexample>
-
  </sect1>
 
 </chapter>

@@ -21,9 +21,6 @@
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- labels - eg :test -->
 		<EOL_SPAN TYPE="LABEL" AT_LINE_START="TRUE">:</EOL_SPAN>
 
@@ -1541,7 +1538,7 @@
 			<END>%</END>
 		</SPAN>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 
 <!--		ANSYS Commands (incl. abbreviated version)	-->
 
@@ -7236,7 +7233,7 @@
 			<KEYWORD3>lmd3</KEYWORD3>
 			<KEYWORD3>lmd4</KEYWORD3>
 			<KEYWORD3>lmd5</KEYWORD3>
-			.lmd6
+			<KEYWORD3>lmd6</KEYWORD3>
 			<KEYWORD3>emd1</KEYWORD3>
 			<KEYWORD3>emd2</KEYWORD3>
 			<KEYWORD3>emd3</KEYWORD3>
@@ -8661,7 +8658,7 @@
 			<KEYWORD3>off</KEYWORD3>
 			<KEYWORD3>back</KEYWORD3>
 			<KEYWORD3>scrn</KEYWORD3>
-			<KEYWORD3>rect</KEYWORD3>			
+			<KEYWORD3>rect</KEYWORD3>
 			
 		</KEYWORDS>
 	</RULES>
