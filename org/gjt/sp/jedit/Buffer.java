@@ -3828,6 +3828,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int pos = marker.getPosition();
 			if(pos > getLength())
 				marker.setPosition(getLength());
+			else if(pos < 0)
+				marker.setPosition(0);
 			marker.createPosition();
 		}
 	} //}}}

@@ -103,7 +103,7 @@ public class KeyEventTranslator
 			boolean mod = (System.currentTimeMillis() -
 				KeyEventWorkaround.lastKeyTime < 750
 				&& (KeyEventWorkaround.modifiers
-				& ~(InputEvent.SHIFT_MASK | InputEvent.ALT_GRAPH_MASK)) == 0);
+				& ~(InputEvent.SHIFT_MASK | InputEvent.ALT_GRAPH_MASK)) != 0);
 
 			if(mod)
 			{
