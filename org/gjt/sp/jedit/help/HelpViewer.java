@@ -143,8 +143,9 @@ public class HelpViewer extends JFrame implements EBComponent
 		tabs.addTab(jEdit.getProperty("helpviewer.search.label"),
 			new HelpSearchPanel(this));
 
+		// search not finished yet so we don't show the search panel
 		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			tabs,new JScrollPane(viewer));
+			toc,new JScrollPane(viewer));
 		splitter.setBorder(null);
 
 		getContentPane().add(BorderLayout.CENTER,splitter);

@@ -25,7 +25,8 @@ contributing to this release.
     instead of only looking 100 lines back.
 
   However, the second made the first unnecessary, and with the first
-  behavior gone, the performance hit is not noticable.
+  behavior gone, the performance hit is not noticable. So this option is
+  now effectively always on.
 
 + Global Options Dialog Changes:
 
