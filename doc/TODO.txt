@@ -21,7 +21,6 @@ it is done in most text editors
 
 - don't show windows launcher in installer list
 - nop file
-- action bar & bottom dockable btns
 - complete word not wide enough
 - new files in perspective -- something's broken
 - test keyboard completion with expanded/collapsed tree

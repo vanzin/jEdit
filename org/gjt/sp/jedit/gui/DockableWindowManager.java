@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1191,8 +1191,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	Rectangle resizeRect;
 
 	//{{{ setResizePos() method
-	void setResizePos(PanelWindowContainer resizing)
+	void setResizePos(int resizePos, PanelWindowContainer resizing)
 	{
+		this.resizePos = resizePos;
+
 		if(resizePos < 0)
 			resizePos = 0;
 
@@ -1557,59 +1559,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				_height = size.height
 					- topButtonHeight
 					- bottomButtonHeight; //}}}
-			}
-			else
-			{
-				//{{{ Lay out independent buttons
-				_height = size.height;
 
-				leftButtonWidth = DockableWindowManager.this.
-					left.getWrappedDimension(_height
-					- closeBoxWidth * 2);
-				leftButtons.setBounds(
-					0,
-					closeBoxWidth,
-					leftButtonWidth,
-					_height - closeBoxWidth * 2);
-
-				rightButtonWidth = DockableWindowManager.this.
-					right.getWrappedDimension(_height);
-				rightButtons.setBounds(
-					size.width - rightButtonWidth,
-					closeBoxWidth,
-					rightButtonWidth,
-					_height - closeBoxWidth * 2);
-
-				_width = size.width - leftButtonWidth
-					- rightButtonWidth; //}}}
-			}
-
-			//{{{ Adjust docking area dimensions so that they fit
-			int maxTopHeight = size.height - bottomHeight
-				- topButtonHeight - bottomButtonHeight
-				- _topToolbars.height - _bottomToolbars.height;
-			topHeight = Math.min(Math.max(0,maxTopHeight),
-				topHeight);
-			leftWidth = Math.min(Math.max(0,
-				size.width - leftButtonWidth
-				- rightButtonWidth - rightWidth),leftWidth);
-			int maxBottomHeight = size.height - topHeight
-				- topButtonHeight - bottomButtonHeight
-				- _topToolbars.height - _bottomToolbars.height;
-			bottomHeight = Math.min(Math.max(0,maxBottomHeight),
-				bottomHeight);
-			rightWidth = Math.min(Math.max(0,
-				size.width - leftButtonWidth
-				- rightButtonWidth - leftWidth),rightWidth);
-
-			DockableWindowManager.this.top.setDimension(topHeight);
-			DockableWindowManager.this.left.setDimension(leftWidth);
-			DockableWindowManager.this.bottom.setDimension(bottomHeight);
-			DockableWindowManager.this.right.setDimension(rightWidth);
-			//}}}
-
-			if(alternateLayout)
-			{
 				//{{{ Lay out dependent buttons
 				leftButtonWidth = DockableWindowManager.this.
 					left.getWrappedDimension(_height);
@@ -1627,6 +1577,24 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					rightButtonWidth,
 					_height - topHeight - bottomHeight);
 				//}}}
+
+				int[] dimensions = adjustDockingAreasToFit(
+					size,
+					topHeight,
+					leftWidth,
+					bottomHeight,
+					rightWidth,
+					topButtonHeight,
+					leftButtonWidth,
+					bottomButtonHeight,
+					rightButtonWidth,
+					_topToolbars,
+					_bottomToolbars);
+
+				topHeight = dimensions[0];
+				leftWidth = dimensions[1];
+				bottomHeight = dimensions[2];
+				rightWidth = dimensions[3];
 
 				//{{{ Lay out docking areas
 				top.setBounds(
@@ -1657,6 +1625,29 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			}
 			else
 			{
+				//{{{ Lay out independent buttons
+				_height = size.height;
+
+				leftButtonWidth = DockableWindowManager.this.
+					left.getWrappedDimension(_height
+					- closeBoxWidth * 2);
+				leftButtons.setBounds(
+					0,
+					closeBoxWidth,
+					leftButtonWidth,
+					_height - closeBoxWidth * 2);
+
+				rightButtonWidth = DockableWindowManager.this.
+					right.getWrappedDimension(_height);
+				rightButtons.setBounds(
+					size.width - rightButtonWidth,
+					closeBoxWidth,
+					rightButtonWidth,
+					_height - closeBoxWidth * 2);
+
+				_width = size.width - leftButtonWidth
+					- rightButtonWidth; //}}}
+
 				//{{{ Lay out dependent buttons
 				topButtonHeight = DockableWindowManager.this.
 					top.getWrappedDimension(_width);
@@ -1673,6 +1664,24 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					_height - bottomButtonHeight,
 					_width - leftWidth - rightWidth,
 					bottomButtonHeight); //}}}
+
+				int[] dimensions = adjustDockingAreasToFit(
+					size,
+					topHeight,
+					leftWidth,
+					bottomHeight,
+					rightWidth,
+					topButtonHeight,
+					leftButtonWidth,
+					bottomButtonHeight,
+					rightButtonWidth,
+					_topToolbars,
+					_bottomToolbars);
+
+				topHeight = dimensions[0];
+				leftWidth = dimensions[1];
+				bottomHeight = dimensions[2];
+				rightWidth = dimensions[3];
 
 				//{{{ Lay out docking areas
 				top.setBounds(
@@ -1706,7 +1715,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				topToolbars.setBounds(
 					leftButtonWidth + leftWidth,
 					topButtonHeight + topHeight,
-					_width - leftWidth - rightWidth,
+					_width - leftWidth - rightWidth
+					- leftButtonWidth - rightButtonWidth,
 					_topToolbars.height);
 			}
 
@@ -1715,9 +1725,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				bottomToolbars.setBounds(
 					leftButtonWidth + leftWidth,
 					_height - bottomHeight
+					- bottomButtonHeight
 					- _bottomToolbars.height
-					+ topButtonHeight,
-					_width - leftWidth - rightWidth,
+					+ topButtonHeight
+					+ topHeight,
+					_width - leftWidth - rightWidth
+					- leftButtonWidth - rightButtonWidth,
 					_bottomToolbars.height);
 			} //}}}
 
@@ -1741,6 +1754,50 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					- _topToolbars.height
 					- _bottomToolbars.height);
 			} //}}}
+		} //}}}
+
+		//{{{ adjustDockingAreasToFit() method
+		private int[] adjustDockingAreasToFit(
+			Dimension size,
+			int topHeight,
+			int leftWidth,
+			int bottomHeight,
+			int rightWidth,
+			int topButtonHeight,
+			int leftButtonWidth,
+			int bottomButtonHeight,
+			int rightButtonWidth,
+			Dimension _topToolbars,
+			Dimension _bottomToolbars)
+		{
+			int maxTopHeight = size.height - bottomHeight
+				- topButtonHeight - bottomButtonHeight
+				- _topToolbars.height - _bottomToolbars.height;
+			topHeight = Math.min(Math.max(0,maxTopHeight),
+				topHeight);
+			leftWidth = Math.min(Math.max(0,
+				size.width - leftButtonWidth
+				- rightButtonWidth - rightWidth),leftWidth);
+			int maxBottomHeight = size.height - topHeight
+				- topButtonHeight - bottomButtonHeight
+				- _topToolbars.height - _bottomToolbars.height;
+			bottomHeight = Math.min(Math.max(0,maxBottomHeight),
+				bottomHeight);
+			rightWidth = Math.min(Math.max(0,
+				size.width - leftButtonWidth
+				- rightButtonWidth - leftWidth),rightWidth);
+
+			DockableWindowManager.this.top.setDimension(topHeight);
+			DockableWindowManager.this.left.setDimension(leftWidth);
+			DockableWindowManager.this.bottom.setDimension(bottomHeight);
+			DockableWindowManager.this.right.setDimension(rightWidth);
+
+			return new int[] {
+				topHeight,
+				leftWidth,
+				bottomHeight,
+				rightWidth
+			};
 		} //}}}
 
 		//{{{ getLayoutAlignmentX() method
