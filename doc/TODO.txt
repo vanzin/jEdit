@@ -12,8 +12,6 @@ and quirks that I need to fix eventually.
   - FAQ: better titles
 - new macro handler api
 
-- shift+enter jams translator
-- A+`: inserts in text area
 - sidebars: need a border or some sort
 - user's guide:
   - part III
