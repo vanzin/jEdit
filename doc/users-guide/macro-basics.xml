@@ -152,7 +152,8 @@
   </para>
   <para>
    This statement calls a static method (or function) named
-   <function>message</function> in jEdit's <classname>Macros</classname>
+   <function>message</function> in jEdit's <ulink
+		url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink>
    class. If you don't know anything about classes or static methods or
    Java (or C++, which employs the same concept), you will need to gain
    some understanding of a few terms. Obviously this is not the place for
@@ -226,10 +227,10 @@
   <para>
    In our one line script, the static method
    <function>Macros.message()</function> has two parameters because that is
-   the way the method is defined in the <classname>Macros</classname>
+   the way the method is defined in the <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink>
    class. You must specify both parameters when you call the function. The
    first parameter, <parameter>view</parameter>, is a a variable naming
-   the current, active <classname>View</classname> object. Information
+   the current, active <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink> object. Information
    about pre-defined variables can be found in <xref linkend="predefined-variables" />.
   </para>
 
@@ -252,7 +253,7 @@
    example. You can think of a BeanShell script as an implicit definition
    of a <function>main()</function> method in an anonymous class. That is
    in fact how BeanShell is implemented; the class is derived from
-   a BeanShell class called <classname>XThis</classname>. If you
+   a BeanShell class called <ulink url="../api/bsh/XThis.html">XThis</ulink>. If you
    don't find that helpful, just think of a script as one or more blocks of
    procedural statements conforming to Java syntax rules. You will also get
    along fine (for the most part) with C or C++ syntax if you leave out
@@ -339,18 +340,18 @@ org.gjt.sp.util</programlisting>
 
   <itemizedlist>
    <listitem><para><varname>buffer</varname> -
-    a <classname>Buffer</classname> object represents the contents of an open text
+    a <ulink url="../api/org/gjt/sp/jedit/Buffer.html">Buffer</ulink> object represents the contents of an open text
     file. The variable <varname>buffer</varname> is predefined as the
     current, visible buffer being edited.
    </para></listitem>
    <listitem><para><varname>view</varname> -
-   A <classname>View</classname>
+   A <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink>
    represents a top-level window, extending Java's <classname>JFrame</classname>
    class, that
    contains the various visible components of the program, including the
    text area, menu bar, toolbar, and any docked windows.
    The variable <varname>view</varname> is defined
-   as the current, active <classname>View</classname> object.
+   as the current, active <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink> object.
    </para>
    <para>
    This variable has the same value as calling:
@@ -358,10 +359,10 @@ org.gjt.sp.util</programlisting>
    <programlisting>jEdit.getActiveView()</programlisting>
    </listitem>
    <listitem><para><varname>editPane</varname> -
-    an <classname>EditPane</classname> object contains a text area and
+    an <ulink url="../api/org/gjt/sp/jedit/EditPane.html">EditPane</ulink> object contains a text area and
     buffer switcher. A view can be split to display multiple
     buffers, each in its own edit pane. Among other things, the
-    <classname>EditPane</classname> class contains methods for selecting
+    <ulink url="../api/org/gjt/sp/jedit/EditPane.html">EditPane</ulink> class contains methods for selecting
     the buffer to edit.
    </para>
    <para>
@@ -377,11 +378,11 @@ org.gjt.sp.util</programlisting>
    <programlisting>view.getEditPane()</programlisting>
    </listitem>
    <listitem><para><varname>textArea</varname> -
-    a <classname>JEditTextArea</classname> is the visible component that
+    a <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> is the visible component that
     displays the file being edited. It is derived from the
     <classname>JComponent</classname> class. The variable
     <varname>textArea</varname> represents the current
-    <classname>JEditTextArea</classname> object, which in turn displays
+    <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> object, which in turn displays
     the current buffer.
    </para>
    <para>
@@ -407,7 +408,7 @@ org.gjt.sp.util</programlisting>
 
   <para>
    Including <function>message()</function>, there are five static methods
-   in the <classname>Macros</classname> class that allow you to converse
+   in the <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink> class that allow you to converse
    easily with your macros. They all encapsulate calls to methods of the
    Java platform's <classname>JOptionPane</classname> class.
   </para>
@@ -472,14 +473,14 @@ org.gjt.sp.util</programlisting>
     The format of these four <glossterm>declarations</glossterm> provides a
     concise reference to the way in which the methods may be used. The
     keyword <function>public</function> means that the method can be used
-    outside the <classname>Macros</classname> class. The alternatives are
+    outside the <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink> class. The alternatives are
     <function>private</function> and <function>protected</function>. For
     purposes of BeanShell, you just have to know that BeanShell can only use
     public methods of other Java classes. The keyword
     <function>static</function> we have already discussed. It means that the
     method does not operate on a particular object. You call a static
     function using the name of the class (like
-    <classname>Macros</classname>) rather than the name of a particular
+    <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink>) rather than the name of a particular
     object (like <varname>view</varname>). The third word is the type of the
     value returned by the method. The keyword <function>void</function> is
     Java's way of saying the the method does not have a return value.
@@ -516,7 +517,7 @@ org.gjt.sp.util</programlisting>
 
   <para>
    The <function>confirm()</function> method in the
-   <classname>Macros</classname> class is a little more complex. The
+   <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink> class is a little more complex. The
    <varname>buttons</varname> parameter has an <classname>int</classname>
    type, and the usual way to supply a value is to use one of
    the predefined values taken from Java's
@@ -563,6 +564,10 @@ int result = Macros.confirm("Do you really want to learn"
     necessary; BeanShell can figure it out when the macro runs. This can be
     helpful if you are not comfortable with specifying types and classes;
     just use your variables and let BeanShell worry about it.
+  </para>
+
+  <para>
+   Note that macros are not limited to using these methods for presenting a user interface. In fact, full-blown user interfaces using the Java Swing APIs are also possible, and will be covered later on in <xref linkend="dialog-macro"/>.
   </para>
 
   </sect1>
@@ -633,7 +638,7 @@ textArea.setSelectedText(newText);</programlisting>
   <para>
     Unlike in our first macro example, here we are calling class methods on
     particular objects. First, we call <function>getPath()</function> on the
-    current <classname>Buffer</classname> object to get the full path of the
+    current <ulink url="../api/org/gjt/sp/jedit/Buffer.html">Buffer</ulink> object to get the full path of the
     text file currently being edited. Next, we call
     <function>setSelectedText()</function> on the current text display
     component, specifying the text to be inserted as a parameter.
@@ -677,7 +682,7 @@ String newText = "This file contains "
    <listitem>
     <para>
       In the first, the call to <function>getName()</function> invokes
-      another method of the <classname>Buffer</classname> class.
+      another method of the <ulink url="../api/org/gjt/sp/jedit/Buffer.html">Buffer</ulink> class.
     </para>
    </listitem>
 
@@ -753,10 +758,10 @@ String result = df.format(d);
 	  <listitem>
 	   <para>
        <function>getLineCount()</function> is a method in jEdit's
-       <classname>JEditTextArea</classname> class. It returns an
+       <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> class. It returns an
        <classname>int</classname> representing the number of lines in the
        current text buffer. We call it on <varname>textArea</varname>, the
-       pre-defined, current <classname>JEditTextArea</classname> object.
+       pre-defined, current <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> object.
       </para>
 	  </listitem>
 

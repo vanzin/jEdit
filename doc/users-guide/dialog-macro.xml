@@ -285,7 +285,9 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
   </para>
 
   <para>
-    For the text fields, we will use jEdit's <classname>HistoryTextField</classname>
+    For the text fields, we will use jEdit's
+    <ulink
+		url="../api/org/gjt/sp/jedit/gui/HistoryTextField.html">HistoryTextField</ulink>
     class. It is derived from the Java Swing class
     <classname>JTextField</classname>. This class offers the enhancement of a stored
     list of prior values used as text input. When the component has input focus, the
@@ -296,7 +298,8 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
   </para>
 
   <para>
-    To create the <classname>HistoryTextField</classname> objects we use a
+    To create the <ulink
+		url="../api/org/gjt/sp/jedit/gui/HistoryTextField.html">HistoryTextField</ulink> objects we use a
     constructor method that takes a single parameter: the name of the tag
     under which history values will be stored. Here we choose names that are
     not likely to conflict with existing jEdit history items.
@@ -383,7 +386,9 @@ suffixField.addActionListener(this);</programlisting></informalexample>
     In order to specify the action to be taken upon clicking a
     button or pressing the <keycap>Enter</keycap> key, we must register
     an <classname>ActionListener</classname> for each of the four active
-    components of the dialog - the two <classname>HistoryTextField</classname>
+    components of the dialog - the two
+    <ulink
+		url="../api/org/gjt/sp/jedit/HistoryTextField.html">HistoryTextField</ulink>
     components and the two buttons. In Java, an
     <classname>ActionListener</classname> is an <glossterm>interface</glossterm> - an
     abstract specification for a derived class to implement. The
@@ -571,7 +576,8 @@ void processText()
 
     <para>
       The <function>goTo...</function> methods in
-      <classname>JEditTextArea</classname> take a single parameter which
+      <ulink
+		url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> take a single parameter which
       tells jEdit whether the text between the current caret position and
       the desired position should be selected. Here, we call
       <function>textArea.goToStartOfWhiteSpace(false)</function> so that

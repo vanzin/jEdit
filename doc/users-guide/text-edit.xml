@@ -93,10 +93,10 @@
  <sect1 id="selection"><title>Selecting Text</title>
   <para>
    A <firstterm>selection</firstterm> is a a block of text marked for further
-   manipulation. jEdit supports both
-   range and rectangular selections, and several chunks of text can be
+   manipulation. Range selections cover text between two points in a buffer, and rectangular selections cover a rectangular area. Several chunks of text can be
    selected simultaneously.
   </para>
+  <sect2><title>Range Selection</title>
   <para>
    Dragging the mouse creates a range selection from where the mouse was
    pressed to where it was released.
@@ -119,6 +119,7 @@
    None</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem> (shortcut:
    <keycap>Escape</keycap>) deactivates the selection.
   </para>
+  </sect2>
   <sect2 id="rect-select"><title>Rectangular Selection</title>
    <para>
     Dragging with the <keycap>Control</keycap> key held down will create a
@@ -128,12 +129,14 @@
     position to the clicked location.
    </para>
    <para>
-    Rectangular selections can also be created using the keyboard.
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More
     Selection</guisubmenu>&gt;<guimenuitem>Rectangular Selection</guimenuitem>
     toggles keyboard rectangular selection mode. In this mode, commands that
     normally create range selections will create rectangular selections.
     A status bar indicator is shown when this mode is enabled.
+   </para>
+   <para>
+    Rectangular selections behave differently than range selections when text is inserted. If the text has more lines than the rectangular selection, the text insertion proceeds as if the rectangular selection was automatically resized to the appropriate height. If the text to insert has less lines than the rectangular selection, the lines are repeated as many times as necessary to fill the selection.
    </para>
    <para>
     It is possible to select a rectangle with zero width but non-zero height.
@@ -142,14 +145,12 @@
     vertical line.
    </para>
    <para>
-    While entering text into a range selection deactivates the selection,
-    entering text into a rectangular selection shifts it to the right.
-    For example, to insert a string at a specific column on a number of lines,
+    Range selections and non-zero-width rectangular selections are deactivated after text is inserted, while zero-width rectangular selections are shifted horizontally. This makes them behave like a <quote>tall caret</quote>. For example, to insert a string at a specific column on a number of lines,
     select a zero width rectangle at that column, and type the desired string.
    </para>
    <para>
     Rectangles can be deleted, copied, pasted, and operated on using ordinary
-    editing commands.
+    editing commands. If necessary, rectangular selections are automatically filled in with whitespace to maintain alignment.
    </para>
    <para>
     Rectangular selections can extend beyond the end of a line into

@@ -375,12 +375,12 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
   </para>
 
   <para>
-    The jEdit class <classname>InputHandler</classname> is an abstract class
+    The jEdit class <ulink url="../api/org/gjt/sp/jedit/gui/InputHandler.html">InputHandler</ulink> is an abstract class
     that that manages associations between keyboard input and editing
     actions, along with the recording of macros. Keyboard input
     in jEdit is normally managed by the derived class
-    <classname>DefaultInputHandler</classname>. One of the methods in
-    the <classname>InputHandler</classname> class handles input from a
+    <ulink url="../api/org/gjt/sp/jedit/gui/DefaultInputHandler.html">DefaultInputHandler</ulink>. One of the methods in
+    the <ulink url="../api/org/gjt/sp/jedit/gui/InputHandler.html">InputHandler</ulink> class handles input from a
     single keypress:
   </para>
 
@@ -471,7 +471,7 @@ view.getInputHandler().readNextChar("Enter a character",
 
     <listitem>
       <para>
-        Finally, access to the <classname>InputHandler</classname> object used
+        Finally, access to the <ulink url="../api/org/gjt/sp/jedit/gui/InputHandler.html">InputHandler</ulink> object used
         by jEdit is available by calling
         <function>getInputHandler()</function> on the current view.
       </para>
@@ -881,7 +881,7 @@ bottom</screen>
 
   <para>
    To write a message to the activity log,
-   use the following method of the <classname>Log</classname>
+   use the following method of the <ulink url="../api/org/gjt/sp/util/Log.html">Log</ulink>
    class:
   </para>
 
@@ -899,29 +899,7 @@ bottom</screen>
   </itemizedlist>
 
   <para>
-   The parameter <varname>urgency</varname> can take one of the
-   following constant values:
-  </para>
-
-  <itemizedlist>
-   <listitem><para><constant>Log.DEBUG</constant></para></listitem>
-   <listitem><para><constant>Log.MESSAGE</constant></para></listitem>
-   <listitem><para><constant>Log.NOTICE</constant></para></listitem>
-   <listitem><para><constant>Log.WARNING</constant></para></listitem>
-   <listitem><para><constant>Log.ERROR</constant></para></listitem>
-  </itemizedlist>
-
-  <para>
-   Note that the <varname>urgency</varname> parameter merely changes
-   the string prefixed to the log message; it does not change the logging
-   behavior in any other way.
-  </para>
-
-  <para>
-   The parameter <varname>source</varname> can be either an object or a
-   class instance. When writing log messages from macros, set
-   this parameter to <literal>BeanShell.class</literal> to make macro
-   errors easier to spot in the activity log.
+   See the documentation for the <ulink url="../api/org/gjt/sp/util/Log.html">Log</ulink> class for information about the method's parameters.
   </para>
 
   <para>
