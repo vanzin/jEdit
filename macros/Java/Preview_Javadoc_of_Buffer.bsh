@@ -165,7 +165,7 @@ String _returnCommandInConsole(View view, String shell, String command)
   manager.addDockableWindow("console");
   // Obtain the console instance
   console.Shell _shell = console.Shell.getShell(shell);
-  _console = manager.getDockableWindow("console");
+  _console = manager.getDockable("console");
   // Ensure we are using the console shell
   _console.setShell(_shell);
   // Call its run() method

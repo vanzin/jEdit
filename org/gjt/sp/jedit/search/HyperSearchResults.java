@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.search;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.text.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -34,12 +33,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -70,7 +64,11 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		resultTree.setVisibleRowCount(16);
 		resultTree.setRootVisible(false);
 		resultTree.setShowsRootHandles(true);
-		resultTree.putClientProperty("JTree.lineStyle", "Angled");
+
+		// looks bad with the OS X L&F, apparently...
+		if(!OperatingSystem.isMacOS())
+			resultTree.putClientProperty("JTree.lineStyle", "Angled");
+
 		resultTree.setEditable(false);
 
 		resultTree.addTreeSelectionListener(new TreeSelectionHandler());

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -370,53 +370,40 @@ public class BeanShell
 	 * runCachedBlock().
 	 * @param id An identifier. If null, a unique identifier is generated
 	 * @param code The code
-	 * @param childNamespace If the method body should be run in a new
-	 * namespace (slightly faster). Note that you must pass a null namespace
-	 * to the runCachedBlock() method if you do this
 	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
-	 * @since jEdit 3.2pre5
+	 * @since jEdit 4.1pre1
 	 */
-	public static String cacheBlock(String id, String code,
-		boolean childNamespace) throws Exception
+	public static BshMethod cacheBlock(String id, String code)
+		throws Exception
 	{
-		String name;
-		if(id == null)
-			name = "b_" + (cachedBlockCounter++);
-		else
-			name = "b_" + id;
+		String name = "__internal_" + id;
 
-		code = "setNameSpace(__cruft.namespace);\n"
-			+ name
-			+ "(ns) {\n"
-			+ "setNameSpace(ns);"
-			+ code
-			+ "\n}";
+		// evaluate a method declaration
+		_eval(null,global,name + "(){" + code + "}");
 
-		_eval(null,global,code);
-
-		return name;
+		return global.getMethod(name,new Class[] { NameSpace.class });
 	} //}}}
 
 	//{{{ runCachedBlock() method
 	/**
 	 * Runs a cached block of code in the specified namespace. Faster than
 	 * evaluating the block each time.
-	 * @param id The identifier returned by cacheBlock()
+	 * @param method The method instance returned by cacheBlock()
 	 * @param view The view
-	 * @param namespace The namespace to run the code in. Can only be null if
-	 * childNamespace parameter was true in cacheBlock() call
-	 * @exception Exception instances are thrown when various BeanShell errors
-	 * occur
-	 * @since jEdit 3.2pre5
+	 * @param namespace The namespace to run the code in
+	 * @exception Exception instances are thrown when various BeanShell
+	 * errors occur
+	 * @since jEdit 4.1pre1
 	 */
-	public static Object runCachedBlock(String id, View view, NameSpace namespace)
-		throws Exception
+	public static Object runCachedBlock(BshMethod method, View view,
+		NameSpace namespace) throws Exception
 	{
 		if(namespace == null)
 			namespace = global;
 
-		Object[] args = { namespace };
+		CallStack callstack = new CallStack();
+		callstack.push(namespace);
 
 		try
 		{
@@ -429,7 +416,8 @@ public class BeanShell
 				namespace.setVariable("textArea",editPane.getTextArea());
 			}
 
-			Object retVal = internal.invokeMethod(id,args,interpForMethods);
+			Object retVal = method.invoke(NO_ARGS,interpForMethods,
+				callstack);
 			if(retVal instanceof Primitive)
 			{
 				if(retVal == Primitive.VOID)
@@ -555,8 +543,6 @@ public class BeanShell
 
 		interpForMethods = createInterpreter(global);
 
-		internal = (NameSpace)eval(null,"__cruft = object();__cruft.namespace;",false);
-
 		Log.log(Log.DEBUG,BeanShell.class,"BeanShell interpreter version "
 			+ Interpreter.VERSION);
 	} //}}}
@@ -565,10 +551,10 @@ public class BeanShell
 
 	//{{{ Private members
 
-	//{{{ Instance variables
+	//{{{ Static variables
+	private static Object[] NO_ARGS = new Object[0];
 	private static Interpreter interpForMethods;
 	private static NameSpace global;
-	private static NameSpace internal;
 	private static boolean running;
 	private static int cachedBlockCounter;
 	//}}}

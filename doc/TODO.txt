@@ -5,6 +5,9 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- easier way of inserting newlines in replacement string -- or just
+  document this?
+- i/o progress monitor foolishness
 - silly bug that creates selections on click -- how is this even possible?
 - scroll to caret _still_ jumps around?
 - plugin manager: install plugins, no restart, install another: deps bad

@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+import bsh.BshMethod;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
 import java.awt.Component;
@@ -287,11 +288,11 @@ public class SearchAndReplace
 		// replace must not be null
 		String replace = (SearchAndReplace.replace == null ? "" : SearchAndReplace.replace);
 
-		String replaceMethod;
+		BshMethod replaceMethod;
 		if(beanshell && replace.length() != 0)
 		{
 			replaceMethod = BeanShell.cacheBlock("replace","return ("
-				+ replace + ");",false);
+				+ replace + ");");
 		}
 		else
 			replaceMethod = null;

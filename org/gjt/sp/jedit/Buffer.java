@@ -1737,6 +1737,24 @@ public class Buffer implements EBComponent
 		return getRuleSetAtOffset(offset).getKeywords();
 	} //}}}
 
+	//{{{ getRuleSetAtOffset() method
+	/**
+	 * Returns the syntax highlighting ruleset at the specified offset.
+	 * @since jEdit 4.1pre1
+	 */
+	public ParserRuleSet getRuleSetAtOffset(int offset)
+	{
+		int line = getLineOfOffset(offset);
+		offset -= getLineStartOffset(line);
+		if(offset != 0)
+			offset--;
+
+		DefaultTokenHandler tokens = new DefaultTokenHandler();
+		markTokens(line,tokens);
+		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
+		return token.rules;
+	} //}}}
+
 	//{{{ getContextSensitiveProperty() method
 	/**
 	 * Some settings, like comment start and end strings, can
@@ -3554,20 +3572,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			setFlag(INSIDE_INSERT,false);
 		}
-	} //}}}
-
-	//{{{ getRuleSetAtOffset() method
-	private ParserRuleSet getRuleSetAtOffset(int offset)
-	{
-		int line = getLineOfOffset(offset);
-		offset -= getLineStartOffset(line);
-		if(offset != 0)
-			offset--;
-
-		DefaultTokenHandler tokens = new DefaultTokenHandler();
-		markTokens(line,tokens);
-		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
-		return token.rules;
 	} //}}}
 
 	//{{{ Event firing methods

@@ -136,7 +136,11 @@ public class HelpViewer extends JFrame implements EBComponent
 		createTOC();
 
 		toc = new TOCTree(tocModel);
-		toc.putClientProperty("JTree.lineStyle", "Angled");
+
+		// looks bad with the OS X L&F, apparently...
+		if(!OperatingSystem.isMacOS())
+			toc.putClientProperty("JTree.lineStyle", "Angled");
+
 		toc.setCellRenderer(new TOCCellRenderer());
 		toc.setEditable(false);
 		toc.setRootVisible(false);
