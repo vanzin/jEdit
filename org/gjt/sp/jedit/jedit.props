@@ -74,6 +74,9 @@ backup.directory=
 backup.prefix=
 backup.suffix=~
 
+# Min time between backups (0 = always backup)
+backup.minTime=0
+
 # Sort buffer list
 sortBuffers=true
 sortByName=true

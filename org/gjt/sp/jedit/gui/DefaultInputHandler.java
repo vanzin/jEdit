@@ -24,7 +24,8 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.KeyStroke;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 import java.awt.Toolkit;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -193,28 +194,110 @@ public class DefaultInputHandler extends InputHandler
 		return bindings != currentBindings;
 	} //}}}
 
-	//{{{ keyPressed() method
+	//{{{ handleKey() method
 	/**
-	 * Handle a key pressed event. This will look up the binding for
-	 * the key stroke and execute it.
+	 * Handles the given keystroke.
+	 * @param keyStroke The key stroke
+	 * @since jEdit 4.2pre5
 	 */
-	public void keyPressed(KeyEvent evt)
+	public boolean handleKey(KeyEventTranslator.Key keyStroke)
 	{
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
-		if(keyStroke != null)
-			handleKey(keyStroke);
-	} //}}}
+		char input = '\0';
+		if(keyStroke.modifiers == null
+			|| keyStroke.modifiers.equals("S"))
+		{
+			switch(keyStroke.key)
+			{
+			case '\n':
+			case '\t':
+				input = (char)keyStroke.key;
+				break;
+			default:
+				input = keyStroke.input;
+				break;
+			}
+		}
 
-	//{{{ keyTyped() method
-	/**
-	 * Handle a key typed event. This will look up the binding for
-	 * the key stroke and execute it.
-	 */
-	public void keyTyped(KeyEvent evt)
-	{
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
-		if(keyStroke != null)
-			handleKey(keyStroke);
+		if(readNextChar != null)
+		{
+			if(input != '\0')
+			{
+				setCurrentBindings(bindings);
+				invokeReadNextChar(input);
+				repeatCount = 1;
+				return true;
+			}
+			else
+			{
+				readNextChar = null;
+				view.getStatus().setMessage(null);
+			}
+		}
+
+		Object o = currentBindings.get(keyStroke);
+		if(o == null)
+		{
+			// Don't beep if the user presses some
+			// key we don't know about unless a
+			// prefix is active. Otherwise it will
+			// beep when caps lock is pressed, etc.
+			if(currentBindings != bindings)
+			{
+				Toolkit.getDefaultToolkit().beep();
+				// F10 should be passed on, but C+e F10
+				// shouldn't
+				repeatCount = 1;
+				setCurrentBindings(bindings);
+			}
+
+			if(input != '\0')
+				userInput(input);
+			else
+			{
+				// this is retarded. excuse me while I drool
+				// and make stupid noises
+				switch(keyStroke.key)
+				{
+				case KeyEvent.VK_NUMPAD0:
+				case KeyEvent.VK_NUMPAD1:
+				case KeyEvent.VK_NUMPAD2:
+				case KeyEvent.VK_NUMPAD3:
+				case KeyEvent.VK_NUMPAD4:
+				case KeyEvent.VK_NUMPAD5:
+				case KeyEvent.VK_NUMPAD6:
+				case KeyEvent.VK_NUMPAD7:
+				case KeyEvent.VK_NUMPAD8:
+				case KeyEvent.VK_NUMPAD9:
+				case KeyEvent.VK_MULTIPLY:
+				case KeyEvent.VK_ADD:
+				/* case KeyEvent.VK_SEPARATOR: */
+				case KeyEvent.VK_SUBTRACT:
+				case KeyEvent.VK_DECIMAL:
+				case KeyEvent.VK_DIVIDE:
+					KeyEventWorkaround.numericKeypadKey();
+					break;
+				}
+			}
+		}
+		else if(o instanceof Hashtable)
+		{
+			setCurrentBindings((Hashtable)o);
+			return true;
+		}
+		else if(o instanceof String)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((String)o);
+			return true;
+		}
+		else if(o instanceof EditAction)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((EditAction)o);
+			return true;
+		}
+
+		return false;
 	} //}}}
 
 	//{{{ getSymbolicModifierName() method
@@ -247,13 +330,7 @@ public class DefaultInputHandler extends InputHandler
 
 	//{{{ parseKeyStroke() method
 	/**
-	 * Converts a string to a keystroke. The string should be of the
-	 * form <i>modifiers</i>+<i>shortcut</i> where <i>modifiers</i>
-	 * is any combination of A for Alt, C for Control, S for Shift
-	 * or M for Meta, and <i>shortcut</i> is either a single character,
-	 * or a keycode name from the <code>KeyEvent</code> class, without
-	 * the <code>VK_</code> prefix.
-	 * @param keyStroke A string description of the key stroke
+	 * @deprecated We don't use Swing KeyStrokes anymore.
 	 */
 	public static KeyStroke parseKeyStroke(String keyStroke)
 	{
@@ -329,102 +406,6 @@ public class DefaultInputHandler extends InputHandler
 
 	private Hashtable bindings;
 	private Hashtable currentBindings;
-
-	//{{{ handleKey() method
-	private void handleKey(KeyEventTranslator.Key keyStroke)
-	{
-		char input = '\0';
-		if(keyStroke.modifiers == null
-			|| keyStroke.modifiers.equals("S"))
-		{
-			switch(keyStroke.key)
-			{
-			case '\n':
-			case '\t':
-				input = (char)keyStroke.key;
-				break;
-			default:
-				input = keyStroke.input;
-				break;
-			}
-		}
-
-		if(readNextChar != null)
-		{
-			if(input != '\0')
-			{
-				setCurrentBindings(bindings);
-				invokeReadNextChar(input);
-				repeatCount = 1;
-				return;
-			}
-			else
-			{
-				readNextChar = null;
-				view.getStatus().setMessage(null);
-			}
-		}
-
-		Object o = currentBindings.get(keyStroke);
-		if(o == null)
-		{
-			// Don't beep if the user presses some
-			// key we don't know about unless a
-			// prefix is active. Otherwise it will
-			// beep when caps lock is pressed, etc.
-			if(currentBindings != bindings)
-			{
-				Toolkit.getDefaultToolkit().beep();
-				// F10 should be passed on, but C+e F10
-				// shouldn't
-				repeatCount = 1;
-				setCurrentBindings(bindings);
-			}
-
-			if(input != '\0')
-				userInput(input);
-			else
-			{
-				// this is retarded. excuse me while I drool
-				// and make stupid noises
-				switch(keyStroke.key)
-				{
-				case KeyEvent.VK_NUMPAD0:
-				case KeyEvent.VK_NUMPAD1:
-				case KeyEvent.VK_NUMPAD2:
-				case KeyEvent.VK_NUMPAD3:
-				case KeyEvent.VK_NUMPAD4:
-				case KeyEvent.VK_NUMPAD5:
-				case KeyEvent.VK_NUMPAD6:
-				case KeyEvent.VK_NUMPAD7:
-				case KeyEvent.VK_NUMPAD8:
-				case KeyEvent.VK_NUMPAD9:
-				case KeyEvent.VK_MULTIPLY:
-				case KeyEvent.VK_ADD:
-				/* case KeyEvent.VK_SEPARATOR: */
-				case KeyEvent.VK_SUBTRACT:
-				case KeyEvent.VK_DECIMAL:
-				case KeyEvent.VK_DIVIDE:
-					KeyEventWorkaround.numericKeypadKey();
-					break;
-				}
-			}
-		}
-		else if(o instanceof Hashtable)
-		{
-			setCurrentBindings((Hashtable)o);
-		}
-		else if(o instanceof String)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((String)o);
-		}
-		else if(o instanceof EditAction)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((EditAction)o);
-		}
-	} //}}}
 
 	//{{{ setCurrentBindings() method
 	private void setCurrentBindings(Hashtable bindings)

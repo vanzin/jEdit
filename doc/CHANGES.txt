@@ -18,7 +18,9 @@ contributing to this release.
 {{{ Miscellaneous Changes
 
 - Drag and drop in the text area. You can disable this in the Mouse pane
-  of the Global Options dialog box.
+  of the Global Options dialog box. The functionality of the DragAndDrop
+  plugin (handling files dropped from your operating system's file
+  manager) has been incorporated too.
 
 - Files that don't exist on disk are no longer saved in the perspective
   (Ollie Rutherfurd).
@@ -130,6 +132,10 @@ contributing to this release.
   contained more than twice the text of the current I/O buffer size.
   When it ran out of the room, the I/O buffer was always doubled even if
   the text to be inserted was more than this length.
+
+- Restored the jEdit 4.1 behavior of consuming key events that are bound
+  to an action. So now you can bind A+f to a command, and pressing A+f
+  will execute the command without popping up the File menu.
 
 }}}
 {{{ API Additions
