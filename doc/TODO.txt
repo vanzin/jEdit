@@ -67,7 +67,6 @@ and quirks that I need to fix eventually.
 - save file resulting in fold collapse -- scroll to 0
 - closing lots of files is slow
 - rect select and trailing whitespace
-- redo/undo dirty restore is broken.
 - synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked

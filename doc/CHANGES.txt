@@ -59,6 +59,8 @@ JEDIT 4.2 VERSION HISTORY
   been there for ages, however its not too major since the stream
   objects would get garbage collected and closed eventually.
 
+- Fixed incorrect handling of buffer modification flag in undo code.
+
 }}}
 {{{ API Changes
 

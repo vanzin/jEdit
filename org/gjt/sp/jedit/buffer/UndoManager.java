@@ -164,12 +164,12 @@ public class UndoManager
 			}
 		}
 
-		Insert ins = new Insert(offset,length,text,clearDirty);
+		Insert ins = new Insert(offset,length,text);
+
 		if(clearDirty)
 		{
-			if(clearDirtyEdit != null)
-				clearDirtyEdit.clearDirty = false;
-			clearDirtyEdit = ins;
+			redoClearDirty = toMerge;
+			undoClearDirty = ins;
 		}
 
 		if(compoundEdit != null)
@@ -201,12 +201,11 @@ public class UndoManager
 			}
 		}
 
-		Remove rem = new Remove(offset,length,text,clearDirty);
+		Remove rem = new Remove(offset,length,text);
 		if(clearDirty)
 		{
-			if(clearDirtyEdit != null)
-				clearDirtyEdit.clearDirty = false;
-			clearDirtyEdit = rem;
+			redoClearDirty = toMerge;
+			undoClearDirty = rem;
 		}
 
 		if(compoundEdit != null)
@@ -218,10 +217,20 @@ public class UndoManager
 	//{{{ bufferSaved() method
 	public void bufferSaved()
 	{
-		if(clearDirtyEdit != null)
+		redoClearDirty = getLastEdit();
+		if(undoPos == undoCount)
+			undoClearDirty = null;
+		else
 		{
-			clearDirtyEdit.clearDirty = false;
-			clearDirtyEdit = null;
+			Edit edit = (Edit)undos.get(undoPos);
+			if(edit instanceof CompoundEdit)
+			{
+				undoClearDirty = (Edit)
+					((CompoundEdit)edit)
+					.undos.get(0);
+			}
+			else
+				undoClearDirty = edit;
 		}
 	} //}}}
 
@@ -235,7 +244,7 @@ public class UndoManager
 	private int undoCount;
 	private int compoundEditCount;
 	private CompoundEdit compoundEdit;
-	private Edit clearDirtyEdit;
+	private Edit undoClearDirty, redoClearDirty;
 	//}}}
 
 	//{{{ addEdit() method
@@ -301,27 +310,24 @@ public class UndoManager
 		//{{{ redo() method
 		abstract int redo();
 		//}}}
-
-		boolean clearDirty;
 	} //}}}
 
 	//{{{ Insert class
 	class Insert extends Edit
 	{
 		//{{{ Insert constructor
-		Insert(int offset, int length, String str, boolean clearDirty)
+		Insert(int offset, int length, String str)
 		{
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
-			this.clearDirty = clearDirty;
 		} //}}}
 
 		//{{{ undo() method
 		int undo()
 		{
 			buffer.remove(offset,length);
-			if(clearDirty)
+			if(undoClearDirty == this)
 				buffer.setDirty(false);
 			return offset;
 		} //}}}
@@ -330,7 +336,7 @@ public class UndoManager
 		int redo()
 		{
 			buffer.insert(offset,str);
-			if(clearDirty)
+			if(redoClearDirty == this)
 				buffer.setDirty(false);
 			return offset + length;
 		} //}}}
@@ -344,19 +350,18 @@ public class UndoManager
 	class Remove extends Edit
 	{
 		//{{{ Remove constructor
-		Remove(int offset, int length, String str, boolean clearDirty)
+		Remove(int offset, int length, String str)
 		{
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
-			this.clearDirty = clearDirty;
 		} //}}}
 
 		//{{{ undo() method
 		int undo()
 		{
 			buffer.insert(offset,str);
-			if(clearDirty)
+			if(undoClearDirty == this)
 				buffer.setDirty(false);
 			return offset + length;
 		} //}}}
@@ -364,6 +369,8 @@ public class UndoManager
 		//{{{ redo() method
 		int redo()
 		{
+			if(redoClearDirty == this)
+				buffer.setDirty(false);
 			buffer.remove(offset,length);
 			return offset;
 		} //}}}
