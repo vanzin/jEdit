@@ -5,7 +5,6 @@ JEDIT 4.0 README
 - About jEdit
 - License
 - jEdit on the Internet
-- Common problems
 - Libraries
 
 * About jEdit
@@ -78,64 +77,6 @@ Finally, if you want to chat about jEdit with other users and
 developers, come join the #jedit channel on irc.openprojects.net. You
 can use the IRC plugin, available from http://plugins.jedit.org, for
 this purpose.
-
-* Common problems
-
-Before reporting a problem with jEdit, please make sure it is not
-actually a Java bug, or a well-known problem:
-
-- If you get an OutOfMemoryError while editing a large file, even if
-  your computer has a large amount of RAM present, increase the Java
-  virtual machine heap size.
-
-  - On Windows, run "Set jEdit Parameters" from the "jEdit" group in the
-    Programs menu. Then, in the resulting dialog box, under "Command
-    line options for Java executable", change the option that looks like
-    so:
-
-    -mx32m
-
-  - On Unix, edit the `jedit' shell script and change the line that
-    looks like so:
-
-    JAVA_HEAP_SIZE=32
-
-  In both cases, replace `32' with the desired heap size, in megabytes.
-  For best results, use a heap size of about 2.5 times the largest file
-  size you plan to edit.
-
-- Printing doesn't work very well on some Java implementations. There
-  isn't much I can do about this until Sun fixes several outstanding
-  bugs in Java.
-
-- With Java versions older than 1.4 on Unix, you might not be able to
-  copy and paste between jEdit and other programs. This is mainly
-  because X Windows defines two clipboards, CLIPBOARD and PRIMARY.
-  Older Java versions can only access the CLIPBOARD, but many X Windows
-  programs only use PRIMARY.
-
-- If you experience window positioning problems when running on Unix,
-  try using a different window manager or Java version.
-
-- International keyboards, input methods, composed keys, etc. might not
-  work properly. As I do not have an international keyboard, this will
-  likely remain unfixed until someone submits the necessary code.
-
-- Anti-aliased text might not display correctly with some Java versions.
-  If you enabled anti-aliasing and are seeing problems such as text
-  being drawn with the wrong font style, try using a different Java
-  version or disable anti-aliasing.
-
-- Aborting I/O operations in the I/O Progress Monitor doesn't always
-  work.
-
-- The Swing HTML component used by jEdit's help viewer is very buggy.
-  Although the jEdit online help works around many of the bugs, it still
-  renders some HTML incorrectly and runs very slowly.
-
-- Because jEdit is written in Java, it will always be slower than a
-  native application. For best performance, use a recent Java version,
-  such as Java 2 version 1.4.
 
 * Libraries
 

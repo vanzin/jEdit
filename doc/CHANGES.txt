@@ -3,18 +3,21 @@ JEDIT 4.0 VERSION HISTORY
 * Version 4.0pre4
 
 Note that jEdit now has a source file, Java14.java, that only compiles
-under Java 2 version 1.4. Two new targets have been added to the
-build.xml file, "compile-13" and "dist-13". These will compile jEdit
-while skipping this source file. If you're compiling from the source
-yourself and running JDK 1.3, you must use these targets instead of the
-defaults.
+under Java 2 version 1.4. If you're using Java 2 version 1.3 and wish to
+compile jEdit from source, you should comment out the "jdk14" property
+in build.xml.
 
 + New Features
 
-- Soft wrap: enable it in Global Options, or Buffer Options. Note that
-  you can set the 'Margin at column' setting to zero to wrap to the
-  width of the text area. Some plugins will need to be updated; see
-  below
+- Soft wrap.
+  - Three wrapping modes are available:
+    "none" - no wrapping is performed
+    "soft" - soft wrap
+    "hard" - this is the old hard wrap feature that has been available
+    since jEdit 3.0.
+  - Change the wrap mode in Global Options or Buffer Options
+  - You can set the 'Wrap margin' setting to zero to wrap to the width
+    of the text area. Some plugins will need to be updated; see below
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
   borders using Swing look & feel'. Both are disabled by default.
@@ -75,6 +78,10 @@ defaults.
   - Keep dialog on by default
   - Somewhat confusing 'Replace' button removed
 - Faster HyperSearch
+
++ Neutral
+
+- Tips moved to doc/tips directory
 
 + Bug Fixes
 
