@@ -3,24 +3,14 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- magic up/down is broken
+- finish rect select keyboard extend
+- nextLineRequested broken -- needs refactoring
 - closing lots of files is slow
 - protect all uses of show/hideWaitCursor() in try/finally
 - document all uses of show/hideWaitCursor() in try/finally
 - autoscroll down is slower than up if !lastLinePartial
-- soft wrap switching bug is back
 - propertiesChanged() closes dockables
-- wrap of
-			if(extraEndVirt < 0)
-			{
-				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - extraEndVirt - 1;
-				extraEndVirt = 0;
-			}
-
-- optimize for no folding & no soft wrap case:
-  - reset() and changed() don't need to scan
-  - scroll/physUp/Down() simpler
-- optimize for no syntax & no soft wrap case:
-  - markTokens() immediately returns
 - left-bias rects broken with up/down
 - loaded flag cleared before loading finished
 - inserting lines repaints twice
@@ -240,6 +230,11 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
- 
+- optimize for no folding & no soft wrap case:
+  - reset() and changed() don't need to scan
+  - scroll/physUp/Down() simpler
+- optimize for no syntax & no soft wrap case:
+  - markTokens() immediately returns
+
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

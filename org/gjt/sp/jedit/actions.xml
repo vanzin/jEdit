@@ -1219,10 +1219,20 @@
 
 <ACTION NAME="toggle-rect-select">
 	<CODE>
-		textArea.toggleRectangularSelectionEnabled();
+		s = textArea.getSelectionAtOffset(textArea.getCaretPosition());
+		if(s instanceof Selection.Rect)
+			textArea.addToSelection(new Selection.Range(s.getStart(),s.getEnd()));
+		else if(s instanceof Selection.Range)
+			textArea.addToSelection(new Selection.Rect(s.getStart(),s.getEnd()));
+		else
+			textArea.toggleRectangularSelectionEnabled();
 	</CODE>
 	<IS_SELECTED>
-		return textArea.isRectangularSelectionEnabled();
+		s = textArea.getSelectionAtOffset(textArea.getCaretPosition());
+		if(s != null)
+			return (s instanceof Selection.Rect);
+		else
+			return textArea.isRectangularSelectionEnabled();
 	</IS_SELECTED>
 </ACTION>
 

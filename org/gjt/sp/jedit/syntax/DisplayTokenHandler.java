@@ -127,6 +127,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 						Chunk nextLine = new Chunk(endOfWhitespace,
 							end.offset + end.length,
 							getParserRuleSet(context));
+						initChunk(nextLine);
 
 						nextLine.next = end.next;
 						end.next = null;
@@ -205,10 +206,9 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
-					if(wrapMargin != 0.0f)
-						throw new InternalError("Consistency error");
 					initChunk(chunk);
-					x += chunk.width;
+					if(wrapMargin == 0.0f)
+						x += chunk.width;
 				}
 				chunk = next;
 			}

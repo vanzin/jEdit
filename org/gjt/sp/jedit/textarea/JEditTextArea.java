@@ -282,6 +282,7 @@ public class JEditTextArea extends JComponent
 			bufferHandlerInstalled = true;
 
 			chunkCache.setBuffer(buffer);
+			propertiesChanged();
 			displayManager = new DisplayManager(buffer,this);
 			// we don't do this from the DisplayManager constructor
 			// because reset() calls updateScrollBars() which checks
@@ -293,8 +294,9 @@ public class JEditTextArea extends JComponent
 				displayManager.firstLine.reset();
 				displayManager.scrollLineCount.reset();
 			}
+			else
+				System.err.println("buffer not loaded when setBuffer() called");
 
-			propertiesChanged();
 			if(buffer.isLoaded())
 				recalculateLastPhysicalLine();
 
@@ -431,13 +433,13 @@ public class JEditTextArea extends JComponent
 			Log.log(Log.DEBUG,this,"setFirstPhysicalLine()");
 
 		//{{{ ensure we don't have empty space at the bottom or top, etc
-		int screenLineCount = -skew;
+		int screenLineCount = 0;
 		int physicalLine = displayManager.getLastVisibleLine();
 		int visibleLines = this.visibleLines - (lastLinePartial ? 1 : 0);
 		for(;;)
 		{
 			screenLineCount += displayManager.getScreenLineCount(physicalLine);
-			if(screenLineCount >= visibleLines)
+			if(screenLineCount + skew >= visibleLines)
 				break;
 			int prevLine = displayManager.getPrevVisibleLine(physicalLine);
 			if(prevLine == -1)
@@ -1711,6 +1713,12 @@ forward_scan:		do
 			s = new Selection.Range(offset,end);
 		_addToSelection(s);
 		fireCaretEvent();
+
+		if(rect && extraEndVirt != 0)
+		{
+			int line = getLineOfOffset(end);
+			scrollTo(line,getLineLength(line) + extraEndVirt,false);
+		}
 	} //}}}
 
 	//{{{ getSelectedText() method
@@ -2199,7 +2207,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(select && caret == buffer.getLength())
 		{
-			if(s instanceof Selection.Rect)
+			if(rectangularSelectionMode || s instanceof Selection.Rect)
 				extraEndVirt++;
 			else
 			{
@@ -2209,7 +2217,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 		else if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			if(s instanceof Selection.Rect)
+			if(rectangularSelectionMode || s instanceof Selection.Rect)
 				extraEndVirt++;
 			else
 			{
@@ -4637,24 +4645,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
 
-		if(maxLineLen <= 0)
-		{
-			displayManager.softWrap = hardWrap = false;
-			wrapMargin = 0;
-		}
-		else
-		{
-			// stupidity
-			foo = new char[maxLineLen];
-			for(int i = 0; i < foo.length; i++)
-			{
-				foo[i] = ' ';
-			}
-			wrapMargin = (int)painter.getFont().getStringBounds(
-				foo,0,maxLineLen,painter.getFontRenderContext())
-				.getWidth();
-		}
-
 		maxHorizontalScrollWidth = 0;
 
 		chunkCache.invalidateAll();
@@ -4862,8 +4852,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean hardWrap;
 	float tabSize;
-	int wrapMargin;
 	int charWidth;
+	int maxLineLen;
 
 	boolean scrollBarsInitialized;
 
@@ -5059,8 +5049,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean multi;
 	private boolean overwrite;
 	private boolean rectangularSelectionMode;
-
-	private int maxLineLen;
 
 	private boolean delayedScrollTo;
 	//}}}
@@ -5876,8 +5864,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				{
 					if(displayManager.isLineVisible(i))
 						displayManager.getScreenLineCount(i);
-					displayManager.notifyScreenLineChanges();
 				}
+				displayManager.notifyScreenLineChanges();
 				delayedUpdate = false;
 			}
 

@@ -183,8 +183,11 @@ public class DisplayManager
 			// path. its better when the chunk cache records
 			// screen line count changes.
 			int newCount;
-			if(softWrap && textArea.wrapMargin != 0.0f)
+			if(softWrap && wrapMargin != 0.0f)
+			{
+				System.err.println("this is what lifpl got");
 				newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
+			}
 			else
 				newCount = 1;
 			offsetMgr.setScreenLineCount(line,newCount);
@@ -536,6 +539,7 @@ public class DisplayManager
 
 	//{{{ Package-private members
 	boolean softWrap;
+	int wrapMargin;
 	FirstLine firstLine;
 	ScrollLineCount scrollLineCount;
 
@@ -552,6 +556,7 @@ public class DisplayManager
 
 		firstLine = new FirstLine(index);
 		offsetMgr.addAnchor(firstLine);
+		System.err.println("created display mgr");
 	} //}}}
 
 	//{{{ dispose() method
@@ -614,6 +619,25 @@ public class DisplayManager
 
 			String wrap = buffer.getStringProperty("wrap");
 			softWrap = wrap.equals("soft");
+			if(textArea.maxLineLen <= 0)
+			{
+				softWrap = false;
+				wrapMargin = 0;
+			}
+			else
+			{
+				// stupidity
+				char[] foo = new char[textArea.maxLineLen];
+				for(int i = 0; i < foo.length; i++)
+				{
+					foo[i] = ' ';
+				}
+				TextAreaPainter painter = textArea.getPainter();
+				wrapMargin = (int)painter.getFont().getStringBounds(
+					foo,0,foo.length,
+					painter.getFontRenderContext())
+					.getWidth();
+			}
 
 			offsetMgr.removeAnchor(this);
 			physicalLine = offsetMgr.getLineCount();
@@ -626,6 +650,9 @@ public class DisplayManager
 			offsetMgr.addAnchor(this);
 			textArea.recalculateLastPhysicalLine();
 			textArea.updateScrollBars();
+
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"scroll line count is now " + scrollLine + " and wrap is " + wrap);
 		} //}}}
 	} //}}}
 
@@ -692,6 +719,28 @@ public class DisplayManager
 		{
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"reset()");
+
+			String wrap = buffer.getStringProperty("wrap");
+			softWrap = wrap.equals("soft");
+			if(textArea.maxLineLen <= 0)
+			{
+				softWrap = false;
+				wrapMargin = 0;
+			}
+			else
+			{
+				// stupidity
+				char[] foo = new char[textArea.maxLineLen];
+				for(int i = 0; i < foo.length; i++)
+				{
+					foo[i] = ' ';
+				}
+				TextAreaPainter painter = textArea.getPainter();
+				wrapMargin = (int)painter.getFont().getStringBounds(
+					foo,0,foo.length,
+					painter.getFontRenderContext())
+					.getWidth();
+			}
 
 			scrollLine = 0;
 

@@ -883,7 +883,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.setColor(eolMarkerColor);
 				gfx.drawString(":",Math.max(x,
 					textArea.getHorizontalOffset()
-					+ textArea.wrapMargin + textArea.charWidth),
+					+ textArea.getDisplayManager().wrapMargin + textArea.charWidth),
 					baseLine);
 				x += textArea.charWidth;
 			}
@@ -1227,19 +1227,19 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public void paintInvalidLine(Graphics2D gfx, int screenLine, int y)
 		{
-			if(textArea.wrapMargin != 0 && isWrapGuidePainted())
+			if(textArea.getDisplayManager().wrapMargin != 0 && isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
-				int x = textArea.getHorizontalOffset() + textArea.wrapMargin;
+				int x = textArea.getHorizontalOffset() + textArea.getDisplayManager().wrapMargin;
 				gfx.drawLine(x,y,x,y + fm.getHeight());
 			}
 		}
 
 		public String getToolTipText(int x, int y)
 		{
-			if(textArea.wrapMargin != 0 && isWrapGuidePainted())
+			if(textArea.getDisplayManager().wrapMargin != 0 && isWrapGuidePainted())
 			{
-				int wrapGuidePos = textArea.wrapMargin
+				int wrapGuidePos = textArea.getDisplayManager().wrapMargin
 					+ textArea.getHorizontalOffset();
 				if(Math.abs(x - wrapGuidePos) < 5)
 				{

@@ -76,7 +76,7 @@ public class LogViewer extends JPanel
 		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
 		Dimension dim = scroller.getPreferredSize();
-		dim.width = Math.min(300,dim.width);
+		dim.width = Math.min(600,dim.width);
 		scroller.setPreferredSize(dim);
 		add(BorderLayout.CENTER,scroller);
 	} //}}}
