@@ -79,12 +79,13 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ addToken() method
-	protected boolean addToken(Token token, TokenMarker.LineContext context)
+	protected boolean addToken(Token token, TokenMarker.LineContext context,
+		boolean merge)
 	{
 		Chunk oldLastChunk = (Chunk)lastToken;
 		if(super.addToken(token,context,
-			oldLastChunk == null
-			|| !((Chunk)oldLastChunk).inaccessable))
+			merge && (oldLastChunk == null
+			|| !((Chunk)oldLastChunk).inaccessable)))
 		{
 			oldLastChunk.init(seg,expander,x,styles,
 				fontRenderContext,context.rules.getDefault());

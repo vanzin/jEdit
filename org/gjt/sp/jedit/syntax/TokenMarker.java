@@ -232,14 +232,17 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					context);
 				lastOffset = pos + 1;
 			}
-			else if(keywords != null)
+			else
 			{
-				String noWordSep2 = keywords.getNonAlphaNumericChars();
+				String noWordSep2 = (keywords == null
+					? "" : keywords.getNonAlphaNumericChars());
 
 				if(!Character.isLetterOrDigit(ch)
 					&& noWordSep.indexOf(ch) == -1
 					&& noWordSep2.indexOf(ch) == -1)
 				{
+					handleSoftSpan();
+
 					markKeyword(true);
 	
 					tokenHandler.handleToken(

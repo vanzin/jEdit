@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.OperatingSystem;
 //}}}
 
 /**
@@ -43,10 +44,12 @@ public class ColorWellButton extends JButton
 	public ColorWellButton(Color color)
 	{
 		setIcon(new ColorWell(color));
-
-		setMargin(new Insets(1,1,1,1));
-
+		setMargin(new Insets(2,2,2,2));
 		addActionListener(new ActionHandler());
+
+		// according to krisk this looks better on OS X...
+		if(OperatingSystem.isMacOSLF())
+			putClientProperty("JButton.buttonType","toolbar");
 	} //}}}
 
 	//{{{ getSelectedColor() method
@@ -74,12 +77,12 @@ public class ColorWellButton extends JButton
 
 		public int getIconWidth()
 		{
-			return 28;
+			return 25;
 		}
 
 		public int getIconHeight()
 		{
-			return 14;
+			return 13;
 		}
 
 		public void paintIcon(Component c, Graphics g, int x, int y)
@@ -89,6 +92,8 @@ public class ColorWellButton extends JButton
 
 			g.setColor(color);
 			g.fillRect(x,y,getIconWidth(),getIconHeight());
+			g.setColor(color.darker());
+			g.drawRect(x,y,getIconWidth()-1,getIconHeight()-1);
 		}
 	} //}}}
 
