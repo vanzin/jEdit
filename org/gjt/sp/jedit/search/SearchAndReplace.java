@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  * Portions copyright (C) 2001 Tom Locke
  *
  * This program is free software; you can redistribute it and/or
@@ -323,6 +323,19 @@ public class SearchAndReplace
 	public static SearchFileSet getSearchFileSet()
 	{
 		return fileset;
+	} //}}}
+
+	//{{{ getSmartCaseReplace() method
+	/**
+	 * Returns if the replacement string will assume the same case as
+	 * each specific occurrence of the search string.
+	 * @since jEdit 4.2pre10
+	 */
+	public static boolean getSmartCaseReplace()
+	{
+		return (replace != null
+			&& TextUtilities.getStringCase(replace)
+			== TextUtilities.LOWER_CASE);
 	} //}}}
 
 	//}}}
@@ -661,9 +674,7 @@ loop:			for(;;)
 		if(!buffer.isEditable())
 			return false;
 
-		boolean smartCaseReplace = (replace != null
-			&& TextUtilities.getStringCase(replace)
-			== TextUtilities.LOWER_CASE);
+		boolean smartCaseReplace = getSmartCaseReplace();
 
 		Selection[] selection = textArea.getSelection();
 		if(selection.length == 0)
@@ -696,41 +707,8 @@ loop:			for(;;)
 			{
 				s = selection[i];
 
-				/* if an occurence occurs at the
-				beginning of the selection, the
-				selection start will get moved.
-				this sucks, so we hack to avoid it. */
-				int start = s.getStart();
-
-				if(s instanceof Selection.Range)
-				{
-					retVal += _replace(view,buffer,matcher,
-						s.getStart(),s.getEnd(),
-						smartCaseReplace);
-
-					textArea.removeFromSelection(s);
-					textArea.addToSelection(new Selection.Range(
-						start,s.getEnd()));
-				}
-				else if(s instanceof Selection.Rect)
-				{
-					Selection.Rect rect = (Selection.Rect)s;
-					int startCol = rect.getStartColumn(
-						buffer);
-					int endCol = rect.getEndColumn(
-						buffer);
-
-					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
-					{
-						retVal += _replace(view,buffer,
-							matcher,
-							getColumnOnOtherLine(buffer,j,startCol),
-							getColumnOnOtherLine(buffer,j,endCol),
-							smartCaseReplace);
-					}
-					textArea.addToSelection(new Selection.Rect(
-						start,s.getEnd()));
-				}
+				retVal += replaceInSelection(view,textArea,
+					buffer,matcher,smartCaseReplace,s);
 			}
 
 			boolean _reverse = !regexp && reverse && fileset instanceof CurrentBufferSet;
@@ -791,9 +769,7 @@ loop:			for(;;)
 		if(comp == null)
 			comp = view;
 
-		boolean smartCaseReplace = (replace != null
-			&& TextUtilities.getStringCase(replace)
-			== TextUtilities.LOWER_CASE);
+		boolean smartCaseReplace = getSmartCaseReplace();
 
 		try
 		{
@@ -1058,6 +1034,55 @@ loop:			while(path != null)
 		}
 	} //}}}
 
+	//{{{ replaceInSelection() method
+	private static int replaceInSelection(View view, JEditTextArea textArea,
+		Buffer buffer, SearchMatcher matcher, boolean smartCaseReplace,
+		Selection s) throws Exception
+	{
+		/* if an occurence occurs at the
+		beginning of the selection, the
+		selection start will get moved.
+		this sucks, so we hack to avoid it. */
+		int start = s.getStart();
+
+		int returnValue;
+
+		if(s instanceof Selection.Range)
+		{
+			returnValue = _replace(view,buffer,matcher,
+				s.getStart(),s.getEnd(),
+				smartCaseReplace);
+
+			textArea.removeFromSelection(s);
+			textArea.addToSelection(new Selection.Range(
+				start,s.getEnd()));
+		}
+		else if(s instanceof Selection.Rect)
+		{
+			Selection.Rect rect = (Selection.Rect)s;
+			int startCol = rect.getStartColumn(
+				buffer);
+			int endCol = rect.getEndColumn(
+				buffer);
+
+			returnValue = 0;
+			for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
+			{
+				returnValue += _replace(view,buffer,
+					matcher,
+					getColumnOnOtherLine(buffer,j,startCol),
+					getColumnOnOtherLine(buffer,j,endCol),
+					smartCaseReplace);
+			}
+			textArea.addToSelection(new Selection.Rect(
+				start,s.getEnd()));
+		}
+		else
+			throw new RuntimeException("Unsupported: " + s);
+
+		return returnValue;
+	} //}}}
+
 	//{{{ _replace() method
 	/**
 	 * Replaces all occurances of the search string with the replacement
@@ -1095,142 +1120,177 @@ loop:		for(int counter = 0; ; counter++)
 				false);
 			if(occur == null)
 				break loop;
-			int _start = occur.start;
-			int _length = occur.end - occur.start;
 
-			String found = new String(text.array,text.offset + _start,_length);
-			String subst = _replace(occur,found);
-			if(smartCaseReplace && ignoreCase)
-			{
-				int strCase = TextUtilities.getStringCase(found);
-				if(strCase == TextUtilities.LOWER_CASE)
-					subst = subst.toLowerCase();
-				else if(strCase == TextUtilities.UPPER_CASE)
-					subst = subst.toUpperCase();
-				else if(strCase == TextUtilities.TITLE_CASE)
-					subst = TextUtilities.toTitleCase(subst);
-			}
+			String found = new String(text.array,
+				text.offset + occur.start,
+				occur.end - occur.start);
 
-			if(subst != null)
-			{
-				buffer.remove(offset + _start,_length);
-				buffer.insert(offset + _start,subst);
-				occurCount++;
-				offset += _start + subst.length();
-
-				end += (subst.length() - found.length());
-			}
+			int length = replaceOne(buffer,occur,offset,found,
+				smartCaseReplace);
+			if(length == -1)
+				offset += occur.end;
 			else
-				offset += _start + _length;
+			{
+				offset += occur.start + length;
+				end += (length - found.length());
+				occurCount++;
+			}
 		}
 
 		return occurCount;
 	} //}}}
 
-	//{{{ _replace() method
-	private static String _replace(SearchMatcher.Match occur, String found)
+	//{{{ replaceOne() method
+	/**
+	 * Replace one occurrence of the search string with the
+	 * replacement string.
+	 */
+	private static int replaceOne(Buffer buffer, SearchMatcher.Match occur,
+		int offset, String found, boolean smartCaseReplace)
 		throws Exception
+	{
+		String subst = replaceOne(occur,found);
+		if(smartCaseReplace && ignoreCase)
+		{
+			int strCase = TextUtilities.getStringCase(found);
+			if(strCase == TextUtilities.LOWER_CASE)
+				subst = subst.toLowerCase();
+			else if(strCase == TextUtilities.UPPER_CASE)
+				subst = subst.toUpperCase();
+			else if(strCase == TextUtilities.TITLE_CASE)
+				subst = TextUtilities.toTitleCase(subst);
+		}
+
+		if(subst != null)
+		{
+			int start = offset + occur.start;
+			int end = offset + occur.end;
+
+			buffer.remove(start,end - start);
+			buffer.insert(start,subst);
+			return subst.length();
+		}
+		else
+			return -1;
+	} //}}}
+
+	//{{{ replaceOne() method
+	private static String replaceOne(SearchMatcher.Match occur,
+		String found) throws Exception
 	{
 		if(regexp)
 		{
 			if(replaceMethod != null)
-			{
-				for(int i = 0; i < occur.substitutions.length; i++)
-				{
-					replaceNS.setVariable("_" + i,
-						occur.substitutions[i]);
-				}
-
-				Object obj = BeanShell.runCachedBlock(
-					replaceMethod,null,replaceNS);
-				if(obj == null)
-					return "";
-				else
-					return obj.toString();
-			}
+				return regexpBeanShellReplace(occur,found);
 			else
-			{
-				StringBuffer buf = new StringBuffer();
-
-				for(int i = 0; i < replace.length(); i++)
-				{
-					char ch = replace.charAt(i);
-					switch(ch)
-					{
-					case '$':
-						if(i == replace.length() - 1)
-						{
-							buf.append(ch);
-							break;
-						}
-
-						ch = replace.charAt(++i);
-						if(ch == '$')
-							buf.append('$');
-						else if(ch == '0')
-							buf.append(found);
-						else if(Character.isDigit(ch))
-						{
-							int n = ch - '0';
-							if(n < occur
-								.substitutions
-								.length)
-							{
-								buf.append(
-									occur
-									.substitutions
-									[n]
-								);
-							}
-						}
-						break;
-					case '\\':
-						if(i == replace.length() - 1)
-						{
-							buf.append('\\');
-							break;
-						}
-						ch = replace.charAt(++i);
-						switch(ch)
-						{
-						case 'n':
-							buf.append('\n');
-							break;
-						case 't':
-							buf.append('\t');
-							break;
-						default:
-							buf.append(ch);
-							break;
-						}
-						break;
-					default:
-						buf.append(ch);
-						break;
-					}
-				}
-
-				return buf.toString();
-			}
+				return regexpReplace(occur,found);
 		}
 		else
 		{
 			if(replaceMethod != null)
-			{
-				replaceNS.setVariable("_0",found);
-				Object obj = BeanShell.runCachedBlock(
-					replaceMethod,
-					null,replaceNS);
-				if(obj == null)
-					return "";
-				else
-					return obj.toString();
-			}
+				return literalBeanShellReplace(occur,found);
 			else
-			{
 				return replace;
+		}
+	} //}}}
+
+	//{{{ regexpBeanShellReplace() method
+	private static String regexpBeanShellReplace(SearchMatcher.Match occur,
+		String found) throws Exception
+	{
+		for(int i = 0; i < occur.substitutions.length; i++)
+		{
+			replaceNS.setVariable("_" + i,
+				occur.substitutions[i]);
+		}
+
+		Object obj = BeanShell.runCachedBlock(
+			replaceMethod,null,replaceNS);
+		if(obj == null)
+			return "";
+		else
+			return obj.toString();
+	} //}}}
+
+	//{{{ regexpReplace() method
+	private static String regexpReplace(SearchMatcher.Match occur,
+		String found) throws Exception
+	{
+		StringBuffer buf = new StringBuffer();
+
+		for(int i = 0; i < replace.length(); i++)
+		{
+			char ch = replace.charAt(i);
+			switch(ch)
+			{
+			case '$':
+				if(i == replace.length() - 1)
+				{
+					buf.append(ch);
+					break;
+				}
+
+				ch = replace.charAt(++i);
+				if(ch == '$')
+					buf.append('$');
+				else if(ch == '0')
+					buf.append(found);
+				else if(Character.isDigit(ch))
+				{
+					int n = ch - '0';
+					if(n < occur
+						.substitutions
+						.length)
+					{
+						buf.append(
+							occur
+							.substitutions
+							[n]
+						);
+					}
+				}
+				break;
+			case '\\':
+				if(i == replace.length() - 1)
+				{
+					buf.append('\\');
+					break;
+				}
+				ch = replace.charAt(++i);
+				switch(ch)
+				{
+				case 'n':
+					buf.append('\n');
+					break;
+				case 't':
+					buf.append('\t');
+					break;
+				default:
+					buf.append(ch);
+					break;
+				}
+				break;
+			default:
+				buf.append(ch);
+				break;
 			}
 		}
+
+		return buf.toString();
+	} //}}}
+
+	//{{{ literalBeanShellReplace() method
+	private static String literalBeanShellReplace(SearchMatcher.Match occur,
+		String found) throws Exception
+	{
+		replaceNS.setVariable("_0",found);
+		Object obj = BeanShell.runCachedBlock(
+			replaceMethod,
+			null,replaceNS);
+		if(obj == null)
+			return "";
+		else
+			return obj.toString();
 	} //}}}
 
 	//{{{ getColumnOnOtherLine() method
