@@ -1522,14 +1522,17 @@ grab-key.prefix-shortcut.message=\
 	Please choose another.
 #}}}
 
-#{{{ HTTP Proxy pane
-options.firewall.label=HTTP Proxy
-options.firewall.enabled=Enable HTTP proxy/firewall authentication
-options.firewall.host=Host:
-options.firewall.port=Port:
-options.firewall.user=Username:
-options.firewall.password=Password:
-options.firewall.nonProxy=No proxy for:
+#{{{ Proxy pane
+options.firewall.label=Proxy Servers
+options.firewall.http.enabled=Use HTTP proxy server
+options.firewall.http.host=HTTP proxy host:
+options.firewall.http.port=HTTP proxy port:
+options.firewall.http.user=Username:
+options.firewall.http.password=Password:
+options.firewall.http.nonProxy=Connect directly to:
+options.firewall.socks.enabled=Use SOCKS proxy server
+options.firewall.socks.host=SOCKS proxy host:
+options.firewall.socks.port=SOCKS proxy port:
 #}}}
 
 #{{{ File System Browser panes
