@@ -150,7 +150,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public void ok()
 	{
 		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
-		String filename = filenameField.getText();
+		filename = filenameField.getText();
 
 		if(files.length != 0)
 		{
@@ -238,7 +238,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(!isOK)
 			return null;
 
-		String filename = filenameField.getText();
+		//String filename = filenameField.getText();
 
 		if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 		{
@@ -271,6 +271,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ Instance variables
 	private VFSBrowser browser;
 	private VFSFileNameField filenameField;
+	private String filename;
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;

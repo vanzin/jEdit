@@ -217,7 +217,7 @@
 		classes, static imports, mixins, better
 		error reporting, improved performance, and various fixes.
 	</para>
-
+c
 	<para>
 		A number of jEdit-specific changes are also present in this
 		BeanShell version; they will eventually be merged back into
