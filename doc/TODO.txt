@@ -13,7 +13,6 @@ and quirks that I need to fix eventually.
   - part III
   - part IV
   - part V
-
 - examples of SPAN_REGEXP, EOL_SPAN_REGEXP matching in docs
 - final optimization for OffsetManager: scan to zero or scan to end
 - auto indent:
