@@ -348,13 +348,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Color structureHighlightColor)
 	{
 		this.structureHighlightColor = structureHighlightColor;
-		StructureMatcher.Match match = textArea.getStructureMatch();
-		if(match != null)
-		{
-			textArea.invalidateLineRange(
-				match.startLine,match.endLine
-			);
-		}
+		textArea.invalidateStructureMatch();
 	} //}}}
 
 	//{{{ isStructureHighlightEnabled() method
@@ -377,14 +371,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setStructureHighlightEnabled(boolean structureHighlight)
 	{
 		this.structureHighlight = structureHighlight;
-		StructureMatcher.Match match = textArea.getStructureMatch();
-		if(match != null)
-		{
-			textArea.invalidateLineRange(
-				match.startLine,
-				match.endLine
-			);
-		}
+		textArea.invalidateStructureMatch();
 	} //}}}
 
 	//{{{ isBlockCaretEnabled() method

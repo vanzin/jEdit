@@ -86,15 +86,16 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Initialize the GUI
 		setLayout(new ScrollLayout());
-		add(CENTER,painter);
-		add(LEFT,gutter);
+		add(ScrollLayout.CENTER,painter);
+		add(ScrollLayout.LEFT,gutter);
 
 		// some plugins add stuff in a "right-hand" gutter
 		verticalBox = new Box(BoxLayout.X_AXIS);
 		verticalBox.add(vertical = new JScrollBar(JScrollBar.VERTICAL));
 		vertical.setRequestFocusEnabled(false);
-		add(RIGHT,verticalBox);
-		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+		add(ScrollLayout.RIGHT,verticalBox);
+		add(ScrollLayout.BOTTOM,
+			horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
 		horizontal.setRequestFocusEnabled(false);
 
 		horizontal.setValues(0,0,0,0);
@@ -120,7 +121,7 @@ public class JEditTextArea extends JComponent
 		vertical.addAdjustmentListener(new AdjustHandler());
 		horizontal.addAdjustmentListener(new AdjustHandler());
 
-		mouseHandler = new MouseHandler();
+		mouseHandler = new MouseHandler(this);
 		painter.addMouseListener(mouseHandler);
 		painter.addMouseMotionListener(mouseHandler);
 
@@ -169,6 +170,15 @@ public class JEditTextArea extends JComponent
 		return view;
 	} //}}}
 
+	//{{{ getInputHandler() method
+	/**
+	 * @since jEdit 4.3pre1
+	 */
+	public InputHandler getInputHandler()
+	{
+		return view.getInputHandler();
+	} //}}}
+	
 	//{{{ getPainter() method
 	/**
 	 * Returns the object responsible for painting this text area.
@@ -198,6 +208,16 @@ public class JEditTextArea extends JComponent
 		return displayManager;
 	} //}}}
 
+	//{{{ setStatusMessage() method
+	/**
+	 * Show a message in a status bar associated with the text area.
+	 * @since jEdit 4.3pre1
+	 */
+	public void setStatusMessage(String msg)
+	{
+		view.getStatus().setMessageAndClear(msg);
+	} //}}}
+	
 	//{{{ isCaretBlinkEnabled() method
 	/**
 	 * Returns true if the caret is blinking, false otherwise.
@@ -390,26 +410,6 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Scrolling
 
-	//{{{ Debugging code
-	/* public void scrollTest(boolean paint)
-	{
-		Image im = painter.createImage(painter.getWidth(),painter.getHeight());
-		Graphics gfx = im.getGraphics();
-		gfx.setFont(painter.getFont());
-		gfx.setColor(painter.getForeground());
-		gfx.clipRect(0,0,painter.getWidth(),painter.getHeight());
-		long start = System.currentTimeMillis();
-		for(int i = 0; i < displayManager.getScrollLineCount(); i++)
-		{
-			setFirstLine(i);
-			if(!paint)
-				chunkCache.getLineInfo(visibleLines - 1);
-			else
-				painter.paintComponent(gfx);
-		}
-		System.err.println(System.currentTimeMillis() - start);
-	} */ //}}}
-
 	//{{{ getFirstLine() method
 	/**
 	 * Returns the vertical scroll bar position.
@@ -449,34 +449,7 @@ public class JEditTextArea extends JComponent
 		if(firstLine == oldFirstLine)
 			return;
 
-		trace = new Exception();
-
-		if(firstLine >= oldFirstLine + visibleLines)
-		{
-			displayManager.firstLine.scrollDown(firstLine - oldFirstLine);
-			chunkCache.invalidateAll();
-		}
-		else if(firstLine <= oldFirstLine - visibleLines)
-		{
-			displayManager.firstLine.scrollUp(oldFirstLine - firstLine);
-			chunkCache.invalidateAll();
-		}
-		else if(firstLine > oldFirstLine)
-		{
-			displayManager.firstLine.scrollDown(firstLine - oldFirstLine);
-			chunkCache.scrollDown(firstLine - oldFirstLine);
-		}
-		else if(firstLine < oldFirstLine)
-		{
-			displayManager.firstLine.scrollUp(oldFirstLine - firstLine);
-			chunkCache.scrollUp(oldFirstLine - firstLine);
-		}
-
-		// we have to be careful
-		displayManager._notifyScreenLineChanges();
-
-		//if(buffer.isLoaded())
-		//	recalculateLastPhysicalLine();
+		displayManager.setFirstLine(oldFirstLine,firstLine);
 
 		repaint();
 
@@ -519,73 +492,9 @@ public class JEditTextArea extends JComponent
 				+ physFirstLine + "," + skew + ")");
 		}
 
-		//{{{ ensure we don't have empty space at the bottom or top, etc
-		/* int screenLineCount = 0;
-		int physicalLine = displayManager.getLastVisibleLine();
-		int visibleLines = this.visibleLines - (lastLinePartial ? 1 : 0);
-		for(;;)
-		{
-			screenLineCount += displayManager.getScreenLineCount(physicalLine);
-			if(screenLineCount >= visibleLines)
-				break;
-			int prevLine = displayManager.getPrevVisibleLine(physicalLine);
-			if(prevLine == -1)
-				break;
-			physicalLine = prevLine;
-		}
-
-		if(physFirstLine > physicalLine)
-			physFirstLine = physicalLine; */
-		//}}}
-
 		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
 
-		int oldFirstLine = getFirstLine();
-
-		if(amount == 0)
-		{
-			skew -= displayManager.firstLine.skew;
-
-			// JEditTextArea.scrollTo() needs this to simplify
-			// its code
-			if(skew < 0)
-				displayManager.firstLine.scrollUp(-skew);
-			else if(skew > 0)
-				displayManager.firstLine.scrollDown(skew);
-			else
-			{
-				// nothing to do
-				return;
-			}
-		}
-		else if(amount > 0)
-			displayManager.firstLine.physDown(amount,skew);
-		else if(amount < 0)
-			displayManager.firstLine.physUp(-amount,skew);
-
-		int firstLine = getFirstLine();
-
-		if(firstLine == oldFirstLine)
-			/* do nothing */;
-		else if(firstLine >= oldFirstLine + visibleLines
-			|| firstLine <= oldFirstLine - visibleLines)
-		{
-			chunkCache.invalidateAll();
-		}
-		else if(firstLine > oldFirstLine)
-		{
-			chunkCache.scrollDown(firstLine - oldFirstLine);
-		}
-		else if(firstLine < oldFirstLine)
-		{
-			chunkCache.scrollUp(oldFirstLine - firstLine);
-		}
-
-		// we have to be careful
-		displayManager._notifyScreenLineChanges();
-
-		//if(buffer.isLoaded())
-		//	recalculateLastPhysicalLine();
+		displayManager.setFirstPhysicalLine(amount,skew);
 
 		repaint();
 
@@ -600,6 +509,15 @@ public class JEditTextArea extends JComponent
 	public final int getLastPhysicalLine()
 	{
 		return physLastLine;
+	} //}}}
+
+	//{{{ getLastScreenLine() method
+	/**
+	 * @since jEdit 4.3pre1
+	 */
+	public int getLastScreenLine()
+	{
+		return screenLastLine;
 	} //}}}
 
 	//{{{ getVisibleLines() method
@@ -1019,6 +937,20 @@ public class JEditTextArea extends JComponent
 		offset -= buffer.getLineStartOffset(line);
 		Point retVal = new Point();
 		return offsetToXY(line,offset,retVal);
+	} //}}}
+
+	//{{{ offsetToXY() method
+	/**
+	 * Converts an offset into a point in the text area painter's
+	 * co-ordinate space.
+	 * @param line The line
+	 * @param offset The offset
+	 * @return The location of the offset on screen, or <code>null</code>
+	 * if the specified offset is not visible
+	 */
+	public Point offsetToXY(int line, int offset)
+	{
+		return offsetToXY(line,offset,new Point());
 	} //}}}
 
 	//{{{ offsetToXY() method
@@ -2143,7 +2075,7 @@ forward_scan:		do
 		structureMatchers.remove(matcher);
 	} //}}}
 
-	//{{{ getStructureMatch() method
+	//{{{ getStructureMatchStart() method
 	/**
 	 * Returns the structure element (bracket, or XML tag, etc) matching the
 	 * one before the caret.
@@ -4953,7 +4885,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void addTopComponent(Component comp)
 	{
-		add(TOP,comp);
+		add(ScrollLayout.TOP,comp);
 	} //}}}
 
 	//{{{ removeTopComponent() method
@@ -5222,6 +5154,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ Package-private members
 
+	static JEditTextArea focusedComponent;
+
 	//{{{ Instance variables
 	Segment lineSegment;
 	MouseHandler mouseHandler;
@@ -5247,6 +5181,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	Point returnValue;
 
 	boolean lastLinePartial;
+
+	boolean blink;
 	//}}}
 
 	//{{{ isCaretVisible() method
@@ -5552,20 +5488,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			&& x <= selectionStartAndEnd[1];
 	} //}}}
 
+	//{{{ invalidateStructureMatch() method
+	void invalidateStructureMatch()
+	{
+		if(match != null)
+			invalidateLineRange(match.startLine,match.endLine);
+	} //}}}
+	
+	//{{{ startDragAndDrop() method
+	void startDragAndDrop(InputEvent evt, boolean copy)
+	{
+		Log.log(Log.DEBUG,this,"Drag and drop callback");
+		getTransferHandler().exportAsDrag(this,evt,
+			copy ? TransferHandler.COPY
+			: TransferHandler.MOVE);
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static final String CENTER = "center";
-	private static final String RIGHT = "right";
-	private static final String LEFT = "left";
-	private static final String BOTTOM = "bottom";
-	private static final String TOP = "top";
-
 	private static Timer caretTimer;
 	private static Timer structureTimer;
-	private static JEditTextArea focusedComponent;
 	//}}}
 
 	//{{{ Instance variables
@@ -5580,7 +5525,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
-	private boolean blink;
 
 	private int physLastLine;
 	private int screenLastLine;
@@ -5627,16 +5571,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean queuedFireCaretEvent;
 
 	//}}}
-
-	//{{{ startDragAndDrop() method
-	// calls dndCallback via reflection
-	private void startDragAndDrop(InputEvent evt, boolean copy)
-	{
-		Log.log(Log.DEBUG,this,"Drag and drop callback");
-		getTransferHandler().exportAsDrag(this,evt,
-			copy ? TransferHandler.COPY
-			: TransferHandler.MOVE);
-	} //}}}
 
 	//{{{ _addToSelection() method
 	private void _addToSelection(Selection addMe)
@@ -6215,220 +6149,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ Inner classes
 
-	//{{{ TextAreaBorder class
-	static class TextAreaBorder extends AbstractBorder
-	{
-		//{{{ paintBorder() method
-		public void paintBorder(Component c, Graphics g, int x, int y,
-			int width, int height)
-		{
-			g.translate(x,y);
-
-			g.setColor(MetalLookAndFeel.getControlDarkShadow());
-			g.drawRect(0,0,width-2,height-2);
-
-			g.setColor(MetalLookAndFeel.getControlHighlight());
-			g.drawLine(width-1,1,width-1,height-1);
-			g.drawLine(1,height-1,width-1,height-1);
-
-			g.setColor(MetalLookAndFeel.getControl());
-			g.drawLine(width-2,2,width-2,2);
-			g.drawLine(1,height-2,1,height-2);
-
-			g.translate(-x,-y);
-		} //}}}
-
-		//{{{ getBorderInsets() method
-		public Insets getBorderInsets(Component c)
-		{
-			return new Insets(1,1,2,2);
-		} //}}}
-	} //}}}
-
-	//{{{ ScrollLayout class
-	class ScrollLayout implements LayoutManager
-	{
-		//{{{ addLayoutComponent() method
-		public void addLayoutComponent(String name, Component comp)
-		{
-			if(name.equals(CENTER))
-				center = comp;
-			else if(name.equals(RIGHT))
-				right = comp;
-			else if(name.equals(LEFT))
-				left = comp;
-			else if(name.equals(BOTTOM))
-				bottom = comp;
-			else if(name.equals(TOP))
-				top = comp;
-		} //}}}
-
-		//{{{ removeLayoutComponent() method
-		public void removeLayoutComponent(Component comp)
-		{
-			if(center == comp)
-				center = null;
-			else if(right == comp)
-				right = null;
-			else if(left == comp)
-				left = null;
-			else if(bottom == comp)
-				bottom = null;
-			else if(top == comp)
-				top = null;
-		} //}}}
-
-		//{{{ preferredLayoutSize() method
-		public Dimension preferredLayoutSize(Container parent)
-		{
-			Dimension dim = new Dimension();
-			Border border = getBorder();
-			Insets insets;
-			if(border == null)
-				insets = new Insets(0,0,0,0);
-			else
-			{
-				insets = getBorder().getBorderInsets(
-					JEditTextArea.this);
-			}
-
-			dim.width = insets.left + insets.right;
-			dim.height = insets.top + insets.bottom;
-
-			Dimension leftPref = left.getPreferredSize();
-			dim.width += leftPref.width;
-			Dimension centerPref = center.getPreferredSize();
-			dim.width += centerPref.width;
-			dim.height += centerPref.height;
-			Dimension rightPref = right.getPreferredSize();
-			dim.width += rightPref.width;
-			Dimension bottomPref = bottom.getPreferredSize();
-			dim.height += bottomPref.height;
-			if(top != null)
-			{
-				Dimension topPref = top.getPreferredSize();
-				dim.height += topPref.height;
-			}
-
-			return dim;
-		} //}}}
-
-		//{{{ minimumLayoutSize() method
-		public Dimension minimumLayoutSize(Container parent)
-		{
-			Dimension dim = new Dimension();
-			Border border = getBorder();
-			Insets insets;
-			if(border == null)
-				insets = new Insets(0,0,0,0);
-			else
-			{
-				insets = getBorder().getBorderInsets(
-					JEditTextArea.this);
-			}
-
-			dim.width = insets.left + insets.right;
-			dim.height = insets.top + insets.bottom;
-
-			Dimension leftPref = left.getMinimumSize();
-			dim.width += leftPref.width;
-			Dimension centerPref = center.getMinimumSize();
-			dim.width += centerPref.width; 
-			dim.height += centerPref.height;
-			Dimension rightPref = right.getMinimumSize();
-			dim.width += rightPref.width;
-			Dimension bottomPref = bottom.getMinimumSize();
-			dim.height += bottomPref.height;
-			if(top != null)
-			{
-				Dimension topPref = top.getMinimumSize();
-				dim.height += topPref.height;
-			}
-			
-			return dim;
-		} //}}}
-
-		//{{{ layoutContainer() method
-		public void layoutContainer(Container parent)
-		{
-			Dimension size = parent.getSize();
-			Border border = getBorder();
-			Insets insets;
-			if(border == null)
-				insets = new Insets(0,0,0,0);
-			else
-			{
-				insets = getBorder().getBorderInsets(
-					JEditTextArea.this);
-			}
-
-			int itop = insets.top;
-			int ileft = insets.left;
-			int ibottom = insets.bottom;
-			int iright = insets.right;
-
-			int rightWidth = right.getPreferredSize().width;
-			int leftWidth = left.getPreferredSize().width;
-			int topHeight;
-			if(top != null)
-			{
-				topHeight = top.getPreferredSize().height;
-			}
-			else
-			{
-				topHeight = 0;
-			}
-			int bottomHeight = bottom.getPreferredSize().height;
-			int centerWidth = Math.max(0,size.width - leftWidth
-				- rightWidth - ileft - iright);
-			int centerHeight = Math.max(0,size.height - topHeight
-				- bottomHeight - itop - ibottom);
-				
-			left.setBounds(
-				ileft,
-				itop+topHeight,
-				leftWidth,
-				centerHeight);
-
-			center.setBounds(
-				ileft + leftWidth,
-				itop+topHeight,
-				centerWidth,
-				centerHeight);
-
-			right.setBounds(
-				ileft + leftWidth + centerWidth,
-				itop+topHeight,
-				rightWidth,
-				centerHeight);
-
-			bottom.setBounds(
-				ileft,
-				itop + topHeight + centerHeight,
-				/* silly that we reference the vertical
-				   scroll bar here directly. we do this so
-				   that the horizontal scroll bar is flush
-				   with the vertical scroll bar */
-				Math.max(0,size.width - vertical.getWidth()
-					- ileft - iright),
-				bottomHeight);
-			if(top != null)
-			{
-				top.setBounds(
-					ileft,
-					itop,
-					leftWidth+centerWidth+rightWidth,
-					topHeight);
-			}
-		} //}}}
-
-		Component center;
-		Component left;
-		Component right;
-		Component bottom;
-		Component top;
-	} //}}}
-
 	//{{{ CaretBlinker class
 	static class CaretBlinker implements ActionListener
 	{
@@ -6515,492 +6235,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else
 				invalidateLine(caretLine);
-		} //}}}
-	} //}}}
-
-	//{{{ MouseHandler class
-	class MouseHandler extends MouseInputAdapter
-	{
-		private int dragStartLine;
-		private int dragStartOffset;
-		private int dragStart;
-		private int clickCount;
-		private boolean dragged;
-		private boolean quickCopyDrag;
-		private boolean clearStatus;
-		private boolean control;
-		/* with drag and drop on, a mouse down in a selection does not
-		immediately deselect */
-		private boolean maybeDragAndDrop;
-
-		//{{{ mousePressed() method
-		public void mousePressed(MouseEvent evt)
-		{
-			control = (OperatingSystem.isMacOS() && evt.isMetaDown())
-				|| (!OperatingSystem.isMacOS() && evt.isControlDown());
-
-			// so that Home <mouse click> Home is not the same
-			// as pressing Home twice in a row
-			view.getInputHandler().resetLastActionCount();
-
-			quickCopyDrag = (isQuickCopyEnabled() &&
-				GUIUtilities.isMiddleButton(evt.getModifiers()));
-
-			if(!quickCopyDrag)
-			{
-				requestFocus();
-				focusedComponent = JEditTextArea.this;
-			}
-
-			if(!buffer.isLoaded())
-				return;
-
-			int x = evt.getX();
-			int y = evt.getY();
-
-			dragStart = xyToOffset(x,y,!(painter.isBlockCaretEnabled()
-				|| isOverwriteEnabled()));
-			dragStartLine = getLineOfOffset(dragStart);
-			dragStartOffset = dragStart - getLineStartOffset(dragStartLine);
-
-			if(GUIUtilities.isPopupTrigger(evt) && popup != null)
-			{
-				if(popupEnabled)
-					handlePopupTrigger(evt);
-				return;
-			}
-
-			dragged = false;
-
-			blink = true;
-			invalidateLine(caretLine);
-
-			clickCount = evt.getClickCount();
-
-			if(isDragEnabled()
-				&& insideSelection(x,y)
-				&& clickCount == 1 && !evt.isShiftDown())
-			{
-				maybeDragAndDrop = true;
-				moveCaretPosition(dragStart,false);
-				return;
-			}
-			else
-				maybeDragAndDrop = false;
-
-			switch(clickCount)
-			{
-			case 1:
-				doSingleClick(evt);
-				break;
-			case 2:
-				doDoubleClick();
-				break;
-			default: //case 3:
-				doTripleClick();
-				break;
-			}
-		} //}}}
-
-		//{{{ doSingleClick() method
-		private void doSingleClick(MouseEvent evt)
-		{
-			/* if(buffer.insideCompoundEdit())
-				buffer.endCompoundEdit(); */
-			int x = evt.getX();
-
-			int extraEndVirt = 0;
-			if(chunkCache.getLineInfo(screenLastLine).lastSubregion)
-			{
-				float dragStartLineWidth = offsetToXY(
-					dragStartLine,getLineLength(dragStartLine),
-					returnValue).x;
-				if(x > dragStartLineWidth)
-				{
-					extraEndVirt = (int)(
-						(x - dragStartLineWidth)
-						/ charWidth);
-					if(!getPainter().isBlockCaretEnabled()
-						&& !isOverwriteEnabled()
-						&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
-					{
-						extraEndVirt++;
-					}
-				}
-			}
-
-			if(control || isRectangularSelectionEnabled())
-			{
-				int screenLine = (evt.getY() / getPainter()
-					.getFontMetrics().getHeight());
-				if(screenLine > screenLastLine)
-					screenLine = screenLastLine;
-				ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
-				if(info.lastSubregion && extraEndVirt != 0)
-				{
-					if(!isEditable())
-					{
-						getToolkit().beep();
-						return;
-					}
-
-					// control-click in virtual space inserts
-					// whitespace and moves caret
-					String whitespace = MiscUtilities
-						.createWhiteSpace(extraEndVirt,0);
-					buffer.insert(dragStart,whitespace);
-
-					dragStart += whitespace.length();
-				}
-			}
-
-			if(evt.isShiftDown())
-			{
-				// XXX: getMarkPosition() deprecated!
-				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,
-					isRectangularSelectionEnabled()
-					|| control);
-
-				if(!quickCopyDrag)
-					moveCaretPosition(dragStart,false);
-
-				// so that shift-click-drag works
-				dragStartLine = getMarkLine();
-				dragStart = getMarkPosition();
-				dragStartOffset = dragStart
-					- getLineStartOffset(dragStartLine);
-
-				// so that quick copy works
-				dragged = true;
-
-				return;
-			}
-
-			if(!quickCopyDrag)
-				moveCaretPosition(dragStart,false);
-
-			if(!(multi || quickCopyDrag))
-				selectNone();
-		} //}}}
-
-		//{{{ doDoubleClick() method
-		private void doDoubleClick()
-		{
-			// Ignore empty lines
-			if(getLineLength(dragStartLine) == 0)
-				return;
-
-			String lineText = getLineText(dragStartLine);
-			String noWordSep = buffer.getStringProperty("noWordSep");
-			if(dragStartOffset == getLineLength(dragStartLine))
-				dragStartOffset--;
-
-			boolean joinNonWordChars =
-				jEdit.getBooleanProperty("view.joinNonWordChars");
-			int wordStart = TextUtilities.findWordStart(lineText,
-				dragStartOffset,noWordSep,joinNonWordChars);
-			int wordEnd = TextUtilities.findWordEnd(lineText,
-				dragStartOffset+1,noWordSep,joinNonWordChars);
-
-			int lineStart = getLineStartOffset(dragStartLine);
-			Selection sel = new Selection.Range(
-				lineStart + wordStart,
-				lineStart + wordEnd);
-			if(isMultipleSelectionEnabled())
-				addToSelection(sel);
-			else
-				setSelection(sel);
-
-			if(quickCopyDrag)
-				quickCopyDrag = false;
-
-			moveCaretPosition(lineStart + wordEnd,false);
-
-			dragged = true;
-		} //}}}
-
-		//{{{ doTripleClick() method
-		private void doTripleClick()
-		{
-			int newCaret = getLineEndOffset(dragStartLine);
-			if(dragStartLine == buffer.getLineCount() - 1)
-				newCaret--;
-
-			Selection sel = new Selection.Range(
-				getLineStartOffset(dragStartLine),
-				newCaret);
-			if(isMultipleSelectionEnabled())
-				addToSelection(sel);
-			else
-				setSelection(sel);
-
-			if(quickCopyDrag)
-				quickCopyDrag = false;
-
-			moveCaretPosition(newCaret,false);
-
-			dragged = true;
-		} //}}}
-
-		//{{{ mouseDragged() method
-		public void mouseDragged(MouseEvent evt)
-		{
-			if(maybeDragAndDrop)
-			{
-				startDragAndDrop(evt,control);
-				return;
-			}
-
-			if(dndInProgress)
-				return;
-
-			if(GUIUtilities.isPopupTrigger(evt)
-				|| (popup != null && popup.isVisible()))
-				return;
-
-			if(!buffer.isLoaded())
-				return;
-
-			if(evt.getY() < 0)
-			{
-				int delta = Math.min(-1,evt.getY()
-					/ painter.getFontMetrics()
-					.getHeight());
-				setFirstLine(getFirstLine() + delta);
-			}
-			else if(evt.getY() >= painter.getHeight())
-			{
-				int delta = Math.max(1,(evt.getY()
-					- painter.getHeight()) /
-					painter.getFontMetrics()
-					.getHeight());
-				if(lastLinePartial)
-					delta--;
-				setFirstLine(getFirstLine() + delta);
-			}
-
-			if(quickCopyDrag)
-			{
-				view.getStatus().setMessage(jEdit.getProperty(
-					"view.status.rect-quick-copy"));
-				clearStatus = true;
-			}
-
-			switch(clickCount)
-			{
-			case 1:
-				doSingleDrag(evt);
-				break;
-			case 2:
-				doDoubleDrag(evt);
-				break;
-			default: //case 3:
-				doTripleDrag(evt);
-				break;
-			}
-		} //}}}
-
-		//{{{ doSingleDrag() method
-		private void doSingleDrag(MouseEvent evt)
-		{
-			dragged = true;
-
-			int x = evt.getX();
-			int y = evt.getY();
-			if(y < 0)
-				y = 0;
-			else if(y >= painter.getHeight())
-				y = painter.getHeight() - 1;
-
-			int dot = xyToOffset(x,y,
-				(!painter.isBlockCaretEnabled()
-				&& !isOverwriteEnabled())
-				|| quickCopyDrag);
-			int dotLine = buffer.getLineOfOffset(dot);
-			int extraEndVirt = 0;
-
-			if(chunkCache.getLineInfo(screenLastLine).lastSubregion)
-			{
-				float dotLineWidth = offsetToXY(dotLine,getLineLength(dotLine),
-					returnValue).x;
-				if(x > dotLineWidth)
-				{
-					extraEndVirt = (int)((x - dotLineWidth) / charWidth);
-					if(!getPainter().isBlockCaretEnabled()
-						&& !isOverwriteEnabled()
-						&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
-						extraEndVirt++;
-				}
-			}
-
-			resizeSelection(dragStart,dot,extraEndVirt,
-				isRectangularSelectionEnabled()
-				|| control);
-
-			if(quickCopyDrag)
-			{
-				// just scroll to the dragged location
-				scrollTo(dotLine,dot - buffer.getLineStartOffset(dotLine),false);
-			}
-			else
-			{
-				if(dot != caret)
-					moveCaretPosition(dot,false);
-				if(isRectangularSelectionEnabled()
-					&& extraEndVirt != 0)
-				{
-					scrollTo(dotLine,dot - buffer.getLineStartOffset(dotLine)
-						+ extraEndVirt,false);
-				}
-			}
-		} //}}}
-
-		//{{{ doDoubleDrag() method
-		private void doDoubleDrag(MouseEvent evt)
-		{
-			int markLineStart = getLineStartOffset(dragStartLine);
-			int markLineLength = getLineLength(dragStartLine);
-			int mark = dragStartOffset;
-
-			int pos = xyToOffset(evt.getX(),
-				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
-				!(painter.isBlockCaretEnabled() || isOverwriteEnabled()));
-			int line = getLineOfOffset(pos);
-			int lineStart = getLineStartOffset(line);
-			int lineLength = getLineLength(line);
-			int offset = pos - lineStart;
-
-			String lineText = getLineText(line);
-			String markLineText = getLineText(dragStartLine);
-			String noWordSep = buffer.getStringProperty("noWordSep");
-			boolean joinNonWordChars =
-				jEdit.getBooleanProperty("view.joinNonWordChars");
-
-			if(markLineStart + dragStartOffset > lineStart + offset)
-			{
-				if(offset != 0 && offset != lineLength)
-				{
-					offset = TextUtilities.findWordStart(
-						lineText,offset,noWordSep,
-						joinNonWordChars);
-				}
-
-				if(markLineLength != 0)
-				{
-					mark = TextUtilities.findWordEnd(
-						markLineText,mark,noWordSep,
-						joinNonWordChars);
-				}
-			}
-			else
-			{
-				if(offset != 0 && lineLength != 0)
-				{
-					offset = TextUtilities.findWordEnd(
-						lineText,offset,noWordSep,
-						joinNonWordChars);
-				}
-
-				if(mark != 0 && mark != markLineLength)
-				{
-					mark = TextUtilities.findWordStart(
-						markLineText,mark,noWordSep,
-						joinNonWordChars);
-				}
-			}
-
-			if(lineStart + offset == caret)
-				return;
-
-			resizeSelection(markLineStart + mark,lineStart + offset,
-				0,false);
-			moveCaretPosition(lineStart + offset,false);
-
-			dragged = true;
-		} //}}}
-
-		//{{{ doTripleDrag() method
-		private void doTripleDrag(MouseEvent evt)
-		{
-			int offset = xyToOffset(evt.getX(),
-				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
-				false);
-			int mouseLine = getLineOfOffset(offset);
-			int mark;
-			int mouse;
-			if(dragStartLine > mouseLine)
-			{
-				mark = getLineEndOffset(dragStartLine) - 1;
-				if(offset == getLineEndOffset(mouseLine) - 1)
-					mouse = offset;
-				else
-					mouse = getLineStartOffset(mouseLine);
-			}
-			else
-			{
-				mark = getLineStartOffset(dragStartLine);
-				if(offset == getLineStartOffset(mouseLine))
-					mouse = offset;
-				else if(offset == getLineEndOffset(mouseLine) - 1
-					&& mouseLine != getBuffer().getLineCount() - 1)
-					mouse = getLineEndOffset(mouseLine);
-				else
-					mouse = getLineEndOffset(mouseLine) - 1;
-			}
-
-			mouse = Math.min(getBuffer().getLength(),mouse);
-
-			if(mouse == caret)
-				return;
-
-			resizeSelection(mark,mouse,0,false);
-			moveCaretPosition(mouse,false);
-
-			dragged = true;
-		} //}}}
-
-		//{{{ mouseReleased() method
-		public void mouseReleased(MouseEvent evt)
-		{
-			// middle mouse button drag inserts selection
-			// at caret position
-			Selection sel = getSelectionAtOffset(dragStart);
-			if(dragged && sel != null)
-			{
-				Registers.setRegister('%',getSelectedText(sel));
-				if(quickCopyDrag)
-				{
-					removeFromSelection(sel);
-					Registers.paste(focusedComponent,
-						'%',sel instanceof Selection.Rect);
-
-					focusedComponent.requestFocus();
-				}
-			}
-			else if(!dragged && isQuickCopyEnabled() &&
-				GUIUtilities.isMiddleButton(evt.getModifiers()))
-			{
-				JEditTextArea.this.requestFocus();
-				focusedComponent = JEditTextArea.this;
-
-				setCaretPosition(dragStart,false);
-				if(!isEditable())
-					getToolkit().beep();
-				else
-					Registers.paste(JEditTextArea.this,'%',control);
-			}
-			else if(maybeDragAndDrop && !isMultipleSelectionEnabled())
-			{
-				selectNone();
-			}
-
-			dragged = false;
-
-			if(clearStatus)
-			{
-				clearStatus = false;
-				view.getStatus().setMessage(null);
-			}
 		} //}}}
 	} //}}}
 
