@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- enter after a fold broken *AGAIN*
 - removing property from mode does not take effect until restart
 - new file: horiz scroll wrong
 - shortcuts: stale shortcuts remain?
