@@ -85,29 +85,6 @@ public class TextUtilities
 	 */
 	public static int findMatchingBracket(Buffer buffer, int line, int offset)
 	{
-		return findMatchingBracket(buffer,line,offset,0,
-			buffer.getLineCount() - 1);
-	} //}}}
-
-	//{{{ findMatchingBracket() method
-	/**
-	 * Returns the offset of the bracket matching the one at the
-	 * specified offset of the buffer, or -1 if the bracket is
-	 * unmatched (or if the character is not a bracket).
-	 * @param buffer The buffer
-	 * @param line The line
-	 * @param offset The offset within that line
-	 * @param startLine The first line to scan. This is used to speed up
-	 * on-screen bracket matching because only visible lines need to be
-	 * scanned
-	 * @param endLine The last line to scan. This is used to speed up
-	 * on-screen bracket matching because only visible lines need to be
-	 * scanned
-	 * @since jEdit 2.7pre3
-	 */
-	public static int findMatchingBracket(Buffer buffer, int line, int offset,
-		int startLine, int endLine)
-	{
 		if(offset < 0 || offset >= buffer.getLineLength(line))
 		{
 			throw new ArrayIndexOutOfBoundsException(offset + ":"
@@ -182,7 +159,7 @@ public class TextUtilities
 
 				//{{{ Go on to next line
 				line++;
-				if(line > endLine)
+				if(line >= buffer.getLineCount())
 					break;
 				buffer.getLineText(line,lineText);
 				offset = 0;
@@ -228,7 +205,7 @@ public class TextUtilities
 
 				//{{{ Go on to next line
 				line--;
-				if(line < startLine)
+				if(line < 0)
 					break;
 				buffer.getLineText(line,lineText);
 				offset = lineText.count - 1;

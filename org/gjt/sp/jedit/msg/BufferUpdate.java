@@ -142,8 +142,8 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	//{{{ paramString() method
 	public String paramString()
 	{
-		return super.paramString() + ",what=" + what
-			+ ",view=" + view;
+		return "what=" + what + ",view=" + view + ","
+			+ super.paramString();
 	} //}}}
 
 	//{{{ Private members

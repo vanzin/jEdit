@@ -79,7 +79,7 @@ public class EditPaneUpdate extends EBMessage.NonVetoable
 
 	public String paramString()
 	{
-		return super.paramString() + ",what=" + what;
+		return "what=" + what + "," + super.paramString();
 	}
 
 	// private members

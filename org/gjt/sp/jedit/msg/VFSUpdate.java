@@ -54,7 +54,7 @@ public class VFSUpdate extends EBMessage
 
 	public String paramString()
 	{
-		return super.paramString() + ",path=" + path;
+		return "path=" + path + "," + super.paramString();
 	}
 
 	// private members

@@ -1,6 +1,9 @@
 /*
  * ViewUpdate.java - View update message
- * Copyright (C) 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +45,13 @@ public class ViewUpdate extends EBMessage.NonVetoable
 	public static final Object CLOSED = "CLOSED";
 
 	/**
+	 * Active edit pane changed.
+	 * @since jEdit 4.1pre1
+	 */
+	public static final Object EDIT_PANE_CHANGED = "EDIT_PANE_CHANGED";
+
+	//{{{ ViewUpdate constructor
+	/**
 	 * Creates a new view update message.
 	 * @param view The view
 	 * @param what What happened
@@ -54,29 +64,33 @@ public class ViewUpdate extends EBMessage.NonVetoable
 			throw new NullPointerException("What must be non-null");
 
 		this.what = what;
-	}
+	} //}}}
 
+	//{{{ getWhat() method
 	/**
 	 * Returns what caused this view update.
 	 */
 	public Object getWhat()
 	{
 		return what;
-	}
+	} //}}}
 
+	//{{{ getView() method
 	/**
 	 * Returns the view involved.
 	 */
 	public View getView()
 	{
 		return (View)getSource();
-	}
+	} //}}}
 
+	//{{{ paramString() method
 	public String paramString()
 	{
-		return super.paramString() + ",what=" + what;
-	}
+		return "what=" + what + "," + super.paramString();
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private Object what;
+	//}}}
 }

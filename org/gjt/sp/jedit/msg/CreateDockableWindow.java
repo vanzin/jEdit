@@ -89,8 +89,8 @@ public class CreateDockableWindow extends EBMessage
 
 	public String paramString()
 	{
-		return super.paramString() + ",name=" + name + ",position="
-			+ position;
+		return "name=" + name + ",position="
+			+ position + "," + super.paramString();
 	}
 
 	// private members
