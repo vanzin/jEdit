@@ -51,6 +51,8 @@ void prefixSuffixDialog()
     content = new JPanel(new BorderLayout());
     content.setBorder(new EmptyBorder(12, 12, 12, 12));
     dialog.setContentPane(content);
+    buf = buffer;
+    textarea = textArea;
 
     // add to the dialog a panel containing the text fields for
     // entry of the prefix and suffix text
@@ -119,19 +121,19 @@ void prefixSuffixDialog()
 
         // text manipulation begins here using calls
         // to jEdit methods
-        buffer.beginCompoundEdit();
-        selectedLines = textArea.getSelectedLines();
+        buf.beginCompoundEdit();
+        selectedLines = tarea.getSelectedLines();
         for(i = 0; i < selectedLines.length; ++i)
         {
-            offsetBOL = textArea.getLineStartOffset(selectedLines[i]);
-            textArea.setCaretPosition(offsetBOL);
-            textArea.goToStartOfWhiteSpace(false);
-            textArea.goToEndOfWhiteSpace(true);
-            text = textArea.getSelectedText();
+            offsetBOL = textarea.getLineStartOffset(selectedLines[i]);
+            textarea.setCaretPosition(offsetBOL);
+            textarea.goToStartOfWhiteSpace(false);
+            textarea.goToEndOfWhiteSpace(true);
+            text = textarea.getSelectedText();
             if(text == null) text = "";
-            textArea.setSelectedText(prefix + text + suffix);
+            textarea.setSelectedText(prefix + text + suffix);
         }
-        buffer.endCompoundEdit();
+        buf.endCompoundEdit();
     }
 }
 
