@@ -308,7 +308,7 @@ text=delete-line \
      to-lower \
      to-upper
 text.label=$Text
-delete-line.label=$Delete Line
+delete-line.label=$Delete Lines
 delete-start-line.label=Delete to $Start of Line
 delete-end-line.label=Delete to $End of Line
 join-lines.label=$Join Lines
@@ -328,7 +328,7 @@ indent=indent-lines \
        tabs-to-spaces
 
 indent.label=$Indent
-indent-lines.label=$Indent Selected Lines
+indent-lines.label=$Indent Lines
 shift-left.label=Shift Indent $Left
 shift-right.label=Shift Indent $Right
 remove-trailing-ws.label=Remove Trailing $Whitespace
