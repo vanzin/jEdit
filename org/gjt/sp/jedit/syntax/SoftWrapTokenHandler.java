@@ -48,7 +48,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 		this.out = out;
 		initialSize = out.size();
 
-		seenNonWhitespace = false;
+		seenNonWhitespace = addedNonWhitespace = false;
 		endX = endOfWhitespace = 0.0f;
 		end = null;
 	} //}}}
@@ -104,7 +104,8 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 					endX = x;
 				}
 			}
-			else if(x + chunk.width > wrapMargin && end != null)
+			else if(x + chunk.width > wrapMargin && end != null
+				&& addedNonWhitespace)
 			{
 				Chunk blankSpace = new Chunk(endOfWhitespace,
 					end.offset + end.length,
@@ -120,6 +121,8 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 				end = null;
 				endX = x;
 			}
+
+			addedNonWhitespace = seenNonWhitespace;
 		}
 	} //}}}
 
@@ -130,6 +133,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	private Token end;
 
 	private boolean seenNonWhitespace;
+	private boolean addedNonWhitespace;
 	private float endOfWhitespace;
 
 	private int initialSize;
