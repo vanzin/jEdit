@@ -245,7 +245,7 @@ class HelpIndex
 
 					if(word.length() != 0)
 					{
-						addWord(word.toString(),index);
+						addWord(word.toString(),index,title);
 						word.setLength(0);
 					}
 
@@ -259,7 +259,7 @@ class HelpIndex
 				{
 					if(word.length() != 0)
 					{
-						addWord(word.toString(),index);
+						addWord(word.toString(),index,title);
 						word.setLength(0);
 					}
 				}
@@ -279,7 +279,7 @@ class HelpIndex
 	} //}}}
 
 	//{{{ addWord() method
-	private void addWord(String word, int file)
+	private void addWord(String word, int file, boolean title)
 	{
 		word = word.toLowerCase();
 
@@ -288,9 +288,9 @@ class HelpIndex
 			return;
 
 		if(o == null)
-			words.put(word,new Word(word,file));
+			words.put(word,new Word(word,file,title));
 		else
-			((Word)o).addOccurrence(file);
+			((Word)o).addOccurrence(file,title);
 	} //}}}
 
 	//}}}
@@ -298,6 +298,9 @@ class HelpIndex
 	//{{{ Word class
 	static class Word
 	{
+		// how much an occurrence in the title is worth
+		static final int TITLE_OCCUR = 10;
+
 		// the word
 		String word;
 
@@ -305,20 +308,20 @@ class HelpIndex
 		int occurCount = 0;
 		Occurrence[] occurrences;
 
-		Word(String word, int file)
+		Word(String word, int file, boolean title)
 		{
 			this.word = word;
 			occurrences = new Occurrence[5];
-			addOccurrence(file);
+			addOccurrence(file,title);
 		}
 
-		void addOccurrence(int file)
+		void addOccurrence(int file, boolean title)
 		{
 			for(int i = 0; i < occurCount; i++)
 			{
 				if(occurrences[i].file == file)
 				{
-					occurrences[i].count++;
+					occurrences[i].count += (title ? TITLE_OCCUR : 1);
 					return;
 				}
 			}
@@ -330,7 +333,7 @@ class HelpIndex
 				occurrences = newOccur;
 			}
 
-			occurrences[occurCount++] = new Occurrence(file);
+			occurrences[occurCount++] = new Occurrence(file,title);
 		}
 
 		static class Occurrence
@@ -338,10 +341,10 @@ class HelpIndex
 			int file;
 			int count;
 
-			Occurrence(int file)
+			Occurrence(int file, boolean title)
 			{
 				this.file = file;
-				this.count = 1;
+				this.count = (title ? TITLE_OCCUR : 1);
 			}
 		}
 	} //}}}

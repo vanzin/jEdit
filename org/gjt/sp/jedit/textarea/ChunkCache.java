@@ -125,7 +125,22 @@ class ChunkCache
 	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
-		ensureCapacity(textArea.getVisibleLines());
+		LineInfo[] newLineInfo = new LineInfo[textArea.getVisibleLines()];
+
+		int start;
+		if(lineInfo == null)
+			start = 0;
+		else
+		{
+			start = Math.min(lineInfo.length,newLineInfo.length);
+			System.arraycopy(lineInfo,0,newLineInfo,0,start);
+		}
+
+		for(int i = start; i < newLineInfo.length; i++)
+			newLineInfo[i] = new LineInfo();
+
+		lineInfo = newLineInfo;
+
 		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
@@ -299,7 +314,7 @@ class ChunkCache
 	//{{{ invalidateChunksFrom() method
 	void invalidateChunksFrom(int screenLine)
 	{
-		for(int i = screenLine + skew; i < lineInfo.length; i++)
+		for(int i = screenLine; i < lineInfo.length; i++)
 		{
 			lineInfo[i].chunksValid = false;
 		}
@@ -315,7 +330,7 @@ class ChunkCache
 			LineInfo info = lineInfo[i];
 			if(!info.chunksValid)
 				break;
-			else if(info.physicalLine >= physicalLine)
+			else if(info.physicalLine == -1 || info.physicalLine >= physicalLine)
 				info.chunksValid = false;
 		}
 	} //}}}
@@ -323,11 +338,10 @@ class ChunkCache
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
 	{
-		updateChunksUpTo(screenLine + skew);
-		LineInfo info = lineInfo[screenLine + skew];
+		updateChunksUpTo(screenLine);
+		LineInfo info = lineInfo[screenLine];
 		if(!info.chunksValid)
-			throw new InternalError("Not up-to-date: " + screenLine
-				+ " + " + skew);
+			throw new InternalError("Not up-to-date: " + screenLine);
 		return info;
 	} //}}}
 
@@ -556,29 +570,6 @@ class ChunkCache
 
 	private DisplayTokenHandler tokenHandler;
 	//}}}
-
-	//{{{ ensureCapacity() method
-	private void ensureCapacity(int capacity)
-	{
-		if(lineInfo == null || capacity > lineInfo.length)
-		{
-			LineInfo[] newLineInfo = new LineInfo[capacity * 2 + 1];
-
-			int start;
-			if(lineInfo == null)
-				start = 0;
-			else
-			{
-				start = Math.min(lineInfo.length,newLineInfo.length);
-				System.arraycopy(lineInfo,0,newLineInfo,0,start);
-			}
-
-			for(int i = start; i < newLineInfo.length; i++)
-				newLineInfo[i] = new LineInfo();
-
-			lineInfo = newLineInfo;
-		}
-	} //}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
 	private void getLineInfosForPhysicalLine(int physicalLine, List list)
