@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -45,7 +46,8 @@ public class MiscUtilities
 	//{{{ canonPath() method
 	/**
 	 * Returns the canonical form of the specified path name. Currently
-	 * only expands a leading <code>~</code>.
+	 * only expands a leading <code>~</code>. <b>For local path names
+	 * only.</b>
 	 * @param path The path name
 	 * @since jEdit 4.0pre2
 	 */
@@ -76,59 +78,43 @@ public class MiscUtilities
 	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from a directory and another
-	 * path name.
+	 * path name. This method is VFS-aware.
 	 * @param parent The directory
 	 * @param path The path name
 	 */
 	public static String constructPath(String parent, String path)
 	{
-		path = canonPath(path);
-
-		File file = new File(path);
-		if(file.isAbsolute())
+		if(MiscUtilities.isURL(path))
+			return path;
+		else if(path.startsWith("~"))
+			return path;
+		else
 		{
-			try
+			File file = new File(path);
+			if(file.isAbsolute())
 			{
-				return file.getCanonicalPath();
-			}
-			catch(IOException io)
-			{
-				return path;
+				try
+				{
+					return file.getCanonicalPath();
+				}
+				catch(IOException io)
+				{
+					return path;
+				}
 			}
 		}
 
 		if(parent == null)
 			parent = System.getProperty("user.dir");
-		else
-			parent = canonPath(parent);
 
-		// have to handle these cases specially on windows.
-		if(File.separatorChar == '\\')
-		{
-			if(path.length() == 2 && path.charAt(1) == ':')
-				return path;
-			if(path.startsWith("\\"))
-				parent = parent.substring(0,2);
-		}
-
-		if(parent.endsWith(File.separator))
-			path = parent + path;
-		else
-			path = parent + File.separator + path;
-
-		try
-		{
-			return new File(path).getCanonicalPath();
-		}
-		catch(IOException io)
-		{
-			return path;
-		}
+		VFS vfs = VFSManager.getVFSForPath(parent);
+		return vfs.constructPath(parent,path);
 	} //}}}
 
 	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from three path components.
+	 * This method is VFS-aware.
 	 * @param parent The parent directory
 	 * @param path1 The first path
 	 * @param path2 The second path
@@ -183,17 +169,19 @@ public class MiscUtilities
 
 	//{{{ getFileName() method
 	/**
-	 * For use with local files only - returns the last component
-	 * of the specified path.
+	 * Returns the last component of the specified path.
+	 * This method is VFS-aware.
 	 * @param path The path name
 	 */
 	public static String getFileName(String path)
 	{
-		int count = Math.max(0,path.length() - 2);
-		int index1 = path.lastIndexOf(File.separatorChar,count);
-		int index2 = path.lastIndexOf('/',count);
-
-		return path.substring(Math.max(index1,index2) + 1);
+		if(isURL(path))
+		{
+			VFS vfs = VFSManager.getVFSForPath(path);
+			return vfs.getFileName(path);
+		}
+		else
+			return VFSManager.getFileVFS().getFileName(path);
 	} //}}}
 
 	//{{{ getFileParent() method
@@ -207,27 +195,19 @@ public class MiscUtilities
 
 	//{{{ getParentOfPath() method
 	/**
-	 * For use with local files only - returns the parent of the
-	 * specified path.
+	 * Returns the parent of the specified path. This method is VFS-aware.
 	 * @param path The path name
 	 * @since jEdit 2.6pre5
 	 */
 	public static String getParentOfPath(String path)
 	{
-		// ignore last character of path to properly handle
-		// paths like /foo/bar/
-		int count = Math.max(0,path.length() - 2);
-		int index = path.lastIndexOf(File.separatorChar,count);
-		if(index == -1)
-			index = path.lastIndexOf('/',count);
-		if(index == -1)
+		if(isURL(path))
 		{
-			// this ensures that getFileParent("protocol:"), for
-			// example, is "protocol:" and not "".
-			index = path.lastIndexOf(':');
+			VFS vfs = VFSManager.getVFSForPath(path);
+			return vfs.getParentOfPath(path);
 		}
-
-		return path.substring(0,index + 1);
+		else
+			return VFSManager.getFileVFS().getParentOfPath(path);
 	} //}}}
 
 	//{{{ getFileProtocol() method

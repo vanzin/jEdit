@@ -287,9 +287,7 @@ public class DockableWindowManager extends JPanel
 	static class Factory
 	{
 		String name;
-		String sanitizedName;
 		String code;
-		String cachedCode;
 
 		//{{{ Factory constructor
 		Factory(String name, String code, boolean actions, ActionSet actionSet)
@@ -301,10 +299,6 @@ public class DockableWindowManager extends JPanel
 				actionSet.addAction(new OpenAction());
 				actionSet.addAction(new ToggleAction());
 			}
-
-			/* Some characters that we like to use in action names
-			 * ('.', '-') are not allowed in BeanShell identifiers. */
-			sanitizedName = name.replace('.','_').replace('-','_');
 		} //}}}
 
 		//{{{ createDockableWindow() method
@@ -328,11 +322,6 @@ public class DockableWindowManager extends JPanel
 			// END BACKWARDS COMPATIBILITY
 			else
 			{
-				if(cachedCode == null)
-				{
-					cachedCode = BeanShell.cacheBlock(
-						sanitizedName,code,true);
-				}
 				try
 				{
 					BeanShell.getNameSpace().setVariable(
@@ -343,8 +332,8 @@ public class DockableWindowManager extends JPanel
 					Log.log(Log.ERROR,this,e);
 				}
 				JComponent win = (JComponent)
-					BeanShell.runCachedBlock(
-					cachedCode,view,null);
+					BeanShell.eval(view,
+					code,false);
 				return win;
 			}
 		} //}}}
@@ -575,6 +564,19 @@ public class DockableWindowManager extends JPanel
 	 */
 	public DockableWindow getDockableWindow(String name)
 	{
+		if(BeanShell.isScriptRunning())
+		{
+			Log.log(Log.WARNING,this,"You are using the"
+				+ " DockableWindowManager.getDockableWindow() method in");
+			Log.log(Log.WARNING,this,"your macro.");
+			Log.log(Log.WARNING,this,"This method is deprecated and will"
+				+ " be removed in a future jEdit");
+			Log.log(Log.WARNING,this,"version, because it cannot be used"
+				+ " with newer plugins.");
+			Log.log(Log.WARNING,this,"Modify the macro to call"
+				+ " DockableWindowManager.getDockable() instead.");
+		}
+
 		/* this is broken, so you should switch to getDockable() ASAP.
 		 * first of all, if the dockable in question returns something
 		 * other than itself from the getComponent() method, it won't

@@ -290,6 +290,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
+		VFSManager.init();
 		initPlugins();
 
 		if(settingsDirectory != null)
@@ -1363,26 +1364,6 @@ public class jEdit
 	public static Buffer openFile(final View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
-		if(view != null && parent == null)
-		{
-			File file = view.getBuffer().getFile();
-			if(file != null)
-				parent = file.getParent();
-		}
-
-		String protocol;
-		if(MiscUtilities.isURL(path))
-		{
-			protocol = MiscUtilities.getProtocolOfURL(path);
-			if(protocol.equals("file"))
-				path = path.substring(5);
-		}
-		else
-			protocol = "file";
-
-		if(protocol.equals("file"))
-			path = MiscUtilities.constructPath(parent,path);
-
 		Buffer buffer = getBuffer(path);
 		if(buffer != null)
 		{
@@ -1448,24 +1429,15 @@ public class jEdit
 		String path, boolean newFile)
 	{
 		if(view != null && parent == null)
-		{
-			File file = view.getBuffer().getFile();
-			if(file != null)
-				parent = file.getParent();
-		}
+			parent = MiscUtilities.getParentOfPath(view.getBuffer().getPath());
 
-		String protocol;
 		if(MiscUtilities.isURL(path))
 		{
-			protocol = MiscUtilities.getProtocolOfURL(path);
-			if(protocol.equals("file"))
+			if(MiscUtilities.getProtocolOfURL(path).equals("file"))
 				path = path.substring(5);
 		}
-		else
-			protocol = "file";
-			
-		if(protocol.equals("file"))
-			path = MiscUtilities.constructPath(parent,path);
+
+		path = MiscUtilities.constructPath(parent,path);
 
 		Buffer buffer = getBuffer(path);
 		if(buffer != null)
@@ -1973,7 +1945,9 @@ public class jEdit
 		// show tip of the day
 		if(newView == viewsFirst)
 		{
-			if(getBooleanProperty("firstTime"))
+			// Don't show the welcome message if jEdit was started
+			// with the -nosettings switch
+			if(settingsDirectory != null && getBooleanProperty("firstTime"))
 				new HelpViewer("jeditresource:/doc/welcome.html");
 			else if(jEdit.getBooleanProperty("tip.show"))
 				new TipOfTheDay(newView);

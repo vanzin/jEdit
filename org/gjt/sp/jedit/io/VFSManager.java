@@ -1,5 +1,8 @@
 /*
  * VFSManager.java - Main class of virtual filesystem
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.io;
 
+//{{{ Imports
 import java.util.Enumeration;
 import java.util.Hashtable;
 import javax.swing.SwingUtilities;
@@ -28,6 +32,7 @@ import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkThreadPool;
+//}}}
 
 /**
  * jEdit's virtual filesystem allows it to transparently edit files
@@ -38,22 +43,30 @@ import org.gjt.sp.util.WorkThreadPool;
  */
 public class VFSManager
 {
+	//{{{ init() method
+	/**
+	 * Do not call.
+	 */
+	public static void init()
+	{
+		int count = jEdit.getIntegerProperty("ioThreadCount",4);
+		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
+		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
+		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
+	} //}}}
+
+	//{{{ start() method
 	/**
 	 * Do not call.
 	 */
 	public static void start()
 	{
 		ioThreadPool.start();
-	}
+	} //}}}
 
-	/**
-	 * Returns the I/O thread pool.
-	 */
-	public static WorkThreadPool getIOThreadPool()
-	{
-		return ioThreadPool;
-	}
+	//{{{ VFS methods
 
+	//{{{ getFileVFS() method
 	/**
 	 * Returns the local filesystem VFS.
 	 * @since jEdit 2.5pre1
@@ -61,8 +74,9 @@ public class VFSManager
 	public static VFS getFileVFS()
 	{
 		return fileVFS;
-	}
+	} //}}}
 
+	//{{{ getUrlVFS() method
 	/**
 	 * Returns the URL VFS.
 	 * @since jEdit 2.5pre1
@@ -70,8 +84,9 @@ public class VFSManager
 	public static VFS getUrlVFS()
 	{
 		return urlVFS;
-	}
+	} //}}}
 
+	//{{{ getVFSByName() method
 	/**
 	 * Returns the VFS for the specified name.
 	 * @param name The VFS name
@@ -80,8 +95,9 @@ public class VFSManager
 	public static VFS getVFSByName(String name)
 	{
 		return (VFS)vfsHash.get(name);
-	}
+	} //}}}
 
+	//{{{ getVFSForProtocol() method
 	/**
 	 * Returns the VFS for the specified protocol.
 	 * @param protocol The protocol
@@ -99,8 +115,9 @@ public class VFSManager
 			else
 				return urlVFS;
 		}
-	}
+	} //}}}
 
+	//{{{ getVFSForPath() method
 	/**
 	 * Returns the VFS for the specified path.
 	 * @param path The path
@@ -112,8 +129,9 @@ public class VFSManager
 			return getVFSForProtocol(MiscUtilities.getProtocolOfURL(path));
 		else
 			return fileVFS;
-	}
+	} //}}}
 
+	//{{{ registerVFS() method
 	/**
 	 * Registers a virtual filesystem.
 	 * @param protocol The protocol
@@ -127,8 +145,9 @@ public class VFSManager
 			+ protocol + " protocol");
 		vfsHash.put(vfs.getName(),vfs);
 		protocolHash.put(protocol,vfs);
-	}
+	} //}}}
 
+	//{{{ getFilesystems() method
 	/**
 	 * Returns an enumeration of all registered filesystems.
 	 * @since jEdit 2.5pre1
@@ -136,8 +155,22 @@ public class VFSManager
 	public static Enumeration getFilesystems()
 	{
 		return vfsHash.elements();
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ I/O request methods
+
+	//{{{ getIOThreadPool() method
+	/**
+	 * Returns the I/O thread pool.
+	 */
+	public static WorkThreadPool getIOThreadPool()
+	{
+		return ioThreadPool;
+	} //}}}
+
+	//{{{ waitForRequests() method
 	/**
 	 * Returns when all pending requests are complete.
 	 * @since jEdit 2.5pre1
@@ -145,24 +178,27 @@ public class VFSManager
 	public static void waitForRequests()
 	{
 		ioThreadPool.waitForRequests();
-	}
+	} //}}}
 
+	//{{{ errorOccurred() method
 	/**
 	 * Returns if the last request caused an error.
 	 */
 	public static boolean errorOccurred()
 	{
 		return error;
-	}
+	} //}}}
 
+	//{{{ getRequestCount() method
 	/**
 	 * Returns the number of pending I/O requests.
 	 */
 	public static int getRequestCount()
 	{
 		return ioThreadPool.getRequestCount();
-	}
+	} //}}}
 
+	//{{{ runInAWTThread() method
 	/**
 	 * Executes the specified runnable in the AWT thread once all
 	 * pending I/O requests are complete.
@@ -171,8 +207,9 @@ public class VFSManager
 	public static void runInAWTThread(Runnable run)
 	{
 		ioThreadPool.addWorkRequest(run,true);
-	}
+	} //}}}
 
+	//{{{ runInWorkThread() method
 	/**
 	 * Executes the specified runnable in one of the I/O threads.
 	 * @since jEdit 2.6pre2
@@ -180,8 +217,11 @@ public class VFSManager
 	public static void runInWorkThread(Runnable run)
 	{
 		ioThreadPool.addWorkRequest(run,false);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ error() method
 	/**
 	 * For use by VFS implementations and IO requests. Displays the
 	 * specified error in the AWT thread.
@@ -216,8 +256,9 @@ public class VFSManager
 					GUIUtilities.error(comp,error,args);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ sendVFSUpdate() method
 	/**
 	 * Sends a VFS update message.
 	 * @param vfs The VFS
@@ -265,8 +306,9 @@ public class VFSManager
 				}
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ SendVFSUpdatesSafely class
 	static class SendVFSUpdatesSafely implements Runnable
 	{
 		public void run()
@@ -281,9 +323,11 @@ public class VFSManager
 				vfsUpdates.removeAllElements();
 			}
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS;
 	private static VFS urlVFS;
@@ -292,20 +336,19 @@ public class VFSManager
 	private static boolean error;
 	private static Object vfsUpdateLock;
 	private static Vector vfsUpdates;
+	//}}}
 
+	//{{{ Class initializer
 	static
 	{
-		int count = jEdit.getIntegerProperty("ioThreadCount",4);
-		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		fileVFS = new FileVFS();
 		urlVFS = new UrlVFS();
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
 		vfsUpdateLock = new Object();
 		vfsUpdates = new Vector();
-		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
-		registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
-	}
+	} //}}}
 
 	private VFSManager() {}
+	//}}}
 }

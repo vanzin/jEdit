@@ -1,9 +1,10 @@
 /*
  * SearchAndReplace.java - Search and replace
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
- * Portions copyright (C) 2001 Tom Locke
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Portions copyright (C) 2001 Tom Locke
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -750,14 +751,7 @@ loop:			for(;;)
 		beanshell = jEdit.getBooleanProperty("search.beanshell.toggle");
 		wrap = jEdit.getBooleanProperty("search.wrap.toggle");
 
-		String filesetCode = jEdit.getProperty("search.fileset.value");
-		if(filesetCode != null)
-		{
-			fileset = (SearchFileSet)BeanShell.eval(null,filesetCode,true);
-		}
-
-		if(fileset == null)
-			fileset = new CurrentBufferSet();
+		fileset = new CurrentBufferSet();
 	} //}}}
 
 	//{{{ save() method
@@ -773,12 +767,6 @@ loop:			for(;;)
 		jEdit.setBooleanProperty("search.reverse.toggle",reverse);
 		jEdit.setBooleanProperty("search.beanshell.toggle",beanshell);
 		jEdit.setBooleanProperty("search.wrap.toggle",wrap);
-
-		String code = fileset.getCode();
-		if(code != null)
-			jEdit.setProperty("search.fileset.value",code);
-		else
-			jEdit.unsetProperty("search.fileset.value");
 	} //}}}
 
 	//{{{ Private members

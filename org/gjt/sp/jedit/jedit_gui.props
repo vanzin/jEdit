@@ -210,8 +210,8 @@ file=new-file \
      - \
      exit
 file.label=$File
-new-file.label=$New File
-open-file.label=$Open File...
+new-file.label=$New
+open-file.label=$Open...
 open-encoding.label=Open With Encoding
 jedit-encoding=jEdit Default
 os-encoding=System Default
@@ -220,17 +220,18 @@ recent-files.label=Recent Files
 recent-directories.label=Recent Directories
 current-directory.label=Current Directory
 current-directory.not-local=Cannot list directories on remote filesystems
-insert-file.label=$Insert File...
+current-directory.no-files=No Files
+insert-file.label=$Insert...
 no-recent-files.label=No Recent Files
-no-recent-dirs=No Recent Directories
+no-recent-dirs.label=No Recent Directories
 reload.label=$Reload
-reload-all.label=R$eload All Buffers...
-close-buffer.label=$Close Buffer
-close-all.label=Close All $Buffers
+reload-all.label=Reloa$d All...
+close-buffer.label=$Close
+close-all.label=Clos$e All
 save.label=$Save
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
-save-all.label=Save A$ll Buffers...
+save-all.label=Save A$ll...
 print.label=$Print...
 exit.label=E$xit
 #}}}
@@ -413,11 +414,11 @@ markers.blank-line=[Blank line]
 view=new-view \
      close-view \
      - \
-     toggle-line-numbers \
-     - \
      prev-buffer \
      next-buffer \
      recent-buffer \
+     - \
+     toggle-line-numbers \
      - \
      %scrolling \
      %folding \
@@ -426,10 +427,10 @@ view=new-view \
 view.label=$View
 new-view.label=New $View
 close-view.label=$Close View
-toggle-line-numbers.label=$Line Numbers
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
+toggle-line-numbers.label=$Line Numbers
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
@@ -1627,16 +1628,17 @@ vfs.browser.commands.synchronize.label=Directory of Current Buffer
 vfs.browser.commands.synchronize.icon=Import24.gif
 vfs.browser.commands.new-file.label=New File
 vfs.browser.commands.new-file.icon=New24.gif
-vfs.browser.commands.new-directory.label=New Directory
+vfs.browser.commands.new-directory.label=New Directory...
 # XXX
 vfs.browser.commands.new-directory.icon=Open24.gif
-vfs.browser.commands.search-in-directory.label=Search in Directory
+vfs.browser.commands.search-in-directory.label=Search in Directory...
 vfs.browser.commands.search-in-directory.icon=Search24.gif
 vfs.browser.commands.show-hidden-files.label=Show Hidden Files
 #}}}
 
 #{{{ Plugins menu
 vfs.browser.plugins.label=Plugins
+vfs.browser.plugins.plugin-manager.label=Plugin Manager...
 vfs.browser.plugins.no-plugins.label=No Plugins
 #}}}
 
@@ -1644,6 +1646,7 @@ vfs.browser.plugins.no-plugins.label=No Plugins
 vfs.browser.favorites.label=Favorites
 vfs.browser.favorites.add-to-favorites.label=Add to Favorites
 vfs.browser.favorites.edit-favorites.label=Edit Favorites
+vfs.browser.favorites.no-favorites.label=No Favorites
 #}}}
 
 vfs.browser.dialog.open=Open

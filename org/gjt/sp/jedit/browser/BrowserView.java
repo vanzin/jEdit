@@ -28,8 +28,7 @@ import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -56,6 +55,8 @@ public class BrowserView extends JPanel
 		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
+
+		tmpExpanded = new Hashtable();
 
 		if(browser.isMultipleSelectionEnabled())
 			tree.getSelectionModel().setSelectionMode(
@@ -106,6 +107,8 @@ public class BrowserView extends JPanel
 	{
 		currentlyLoadingTreeNode.removeAllChildren();
 
+		Vector toExpand = new Vector();
+
 		if(directory != null)
 		{
 			for(int i = 0; i < directory.size(); i++)
@@ -113,14 +116,25 @@ public class BrowserView extends JPanel
 				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
 					directory.elementAt(i);
 				boolean allowsChildren = (file.type != VFS.DirectoryEntry.FILE);
-				currentlyLoadingTreeNode.add(new DefaultMutableTreeNode(file,allowsChildren));
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(file,allowsChildren);
+				currentlyLoadingTreeNode.add(node);
+				if(tmpExpanded.get(file.path) != null)
+					toExpand.addElement(node.getPath());
 			}
 		}
 
+		tmpExpanded.clear();
+
 		// fire events
 		model.reload(currentlyLoadingTreeNode);
-
 		tree.expandPath(new TreePath(currentlyLoadingTreeNode.getPath()));
+
+		// expand branches that were expanded before
+		for(int i = 0; i < toExpand.size(); i++)
+		{
+			TreePath path = (TreePath)toExpand.elementAt(i);
+			tree.expandPath(path);
+		}
 
 		/* If the user expands a tree node manually, the tree
 		 * listener sets currentlyLoadingTreeNode to that.
@@ -192,6 +206,7 @@ public class BrowserView extends JPanel
 	private VFSBrowser browser;
 
 	private JTree tree;
+	private Hashtable tmpExpanded;
 	private JScrollPane scroller;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
@@ -224,16 +239,14 @@ public class BrowserView extends JPanel
 		if(!tree.isExpanded(new TreePath(node.getPath())))
 			return false;
 
-		Object userObject = node.getUserObject();
-		if(userObject instanceof String)
+		if(node == rootNode)
 		{
-			if(path.equals(userObject))
-			{
-				loadDirectoryNode(node,path,false);
-				return true;
-			}
+			loadDirectoryNode(rootNode,path,false);
+			return true;
 		}
-		else if(userObject instanceof VFS.DirectoryEntry)
+
+		Object userObject = node.getUserObject();
+		if(userObject instanceof VFS.DirectoryEntry)
 		{
 			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
 
@@ -275,10 +288,26 @@ public class BrowserView extends JPanel
 			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 		}
 
+		tmpExpanded.clear();
+		int rowCount = tree.getRowCount();
+		for(int i = 0; i < rowCount; i++)
+		{
+			TreePath treePath = tree.getPathForRow(i);
+			if(tree.isExpanded(treePath))
+			{
+				DefaultMutableTreeNode _node = (DefaultMutableTreeNode)
+					treePath.getLastPathComponent();
+				VFS.DirectoryEntry file = ((VFS.DirectoryEntry)
+					_node.getUserObject());
+
+				tmpExpanded.put(file.path,file.path);
+			}
+		}
+
 		// fire events
 		model.reload(currentlyLoadingTreeNode);
 
-		browser.loadDirectory(path,false);
+		browser.loadDirectory(path,node == rootNode);
 	} //}}}
 
 	//{{{ showFilePopup() method

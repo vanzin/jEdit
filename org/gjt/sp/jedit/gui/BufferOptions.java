@@ -488,7 +488,6 @@ public class BufferOptions extends EnhancedDialog
 			+ ":tabSize=" + tabSize.getSelectedItem()
 			+ ":indentSize=" + indentSize.getSelectedItem()
 			+ ":maxLineLen=" + maxLineLen.getSelectedItem()
-			+ ":trailingEOL=" + trailingEOL.isSelected()
 			+ ":syntax=" + syntax.isSelected()
 			+ ":noTabs=" + noTabs.isSelected()
 			+ ":indentOnTab=" + indentOnTab.isSelected()

@@ -163,6 +163,7 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
+		MiscUtilities.quicksort(colorChoices,new MiscUtilities.StringCompare());
 	} //}}}
 
 	//{{{ getColumnCount() method
@@ -245,6 +246,12 @@ class ColorTableModel extends AbstractTableModel
 			this.label = label;
 			this.property = property;
 			this.color = color;
+		}
+
+		// for sorting
+		public String toString()
+		{
+			return label;
 		}
 	} //}}}
 

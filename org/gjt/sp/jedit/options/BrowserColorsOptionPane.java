@@ -1,5 +1,8 @@
 /*
  * BrowserColorsOptionPane.java - Browser colors options panel
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -27,7 +31,9 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
+//{{{ BrowserColorsOptionPane class
 /**
  * Browser color editor.
  * @author Slava Pestov
@@ -35,12 +41,15 @@ import org.gjt.sp.jedit.*;
  */
 public class BrowserColorsOptionPane extends AbstractOptionPane
 {
+	//{{{ BrowserColorsOptionPane constructor
 	public BrowserColorsOptionPane()
 	{
 		super("browser.colors");
-	}
+	} //}}}
 
-	// protected members
+	//{{{ Protected members
+
+	//{{{ _init() method
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -77,33 +86,41 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,buttons);
 
 		updateEnabled();
-	}
+	} //}}}
 
+	//{{{ _save() method
 	protected void _save()
 	{
 		colorsModel.save();
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private BrowserColorsModel colorsModel;
 	private JTable colorsTable;
 	private JButton add;
 	private JButton remove;
 
+	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
 		int selectedRow = colorsTable.getSelectedRow();
 		remove.setEnabled(selectedRow != -1);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ SelectionHandler class
 	class SelectionHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
 			updateEnabled();
 		}
-	}
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -120,14 +137,17 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 				updateEnabled();
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			int row = colorsTable.rowAtPoint(evt.getPoint());
-			if(row == -1)
+			Point p = evt.getPoint();
+			int row = colorsTable.rowAtPoint(p);
+			int column = colorsTable.columnAtPoint(p);
+			if(row == -1 || column != 1)
 				return;
 
 			Color color = JColorChooser.showDialog(
@@ -137,13 +157,15 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 			if(color != null)
 				colorsModel.setValueAt(color,row,1);
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ BrowserColorsModel class
 class BrowserColorsModel extends AbstractTableModel
 {
 	Vector entries;
 
+	//{{{ BrowserColorsModel constructor
 	BrowserColorsModel()
 	{
 		entries = new Vector();
@@ -158,20 +180,23 @@ class BrowserColorsModel extends AbstractTableModel
 				Color.black)));
 			i++;
 		}
-	}
+	} //}}}
 
+	//{{{ add() method
 	void add()
 	{
-		entries.addElement(new Entry(null,null));
+		entries.addElement(new Entry("",UIManager.getColor("Tree.foreground")));
 		fireTableStructureChanged();
-	}
+	} //}}}
 
+	//{{{ remove() method
 	void remove(int index)
 	{
 		entries.removeElementAt(index);
 		fireTableStructureChanged();
-	}
+	} //}}}
 
+	//{{{ save() method
 	void save()
 	{
 		int i;
@@ -185,18 +210,21 @@ class BrowserColorsModel extends AbstractTableModel
 		}
 		jEdit.unsetProperty("vfs.browser.colors." + i + ".glob");
 		jEdit.unsetProperty("vfs.browser.colors." + i + ".color");
-	}
+	} //}}}
 
+	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
 		return 2;
-	}
+	} //}}}
 
+	//{{{ getRowCount() method
 	public int getRowCount()
 	{
 		return entries.size();
-	}
+	} //}}}
 
+	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
 		Entry entry = (Entry)entries.elementAt(row);
@@ -210,13 +238,15 @@ class BrowserColorsModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ isCellEditable() method
 	public boolean isCellEditable(int row, int col)
 	{
 		return (col == 0);
-	}
+	} //}}}
 
+	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
 		Entry entry = (Entry)entries.elementAt(row);
@@ -227,8 +257,9 @@ class BrowserColorsModel extends AbstractTableModel
 			entry.color = (Color)value;
 
 		fireTableRowsUpdated(row,row);
-	}
+	} //}}}
 
+	//{{{ getColumnName() method
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -240,8 +271,23 @@ class BrowserColorsModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ getColumnClass() method
+	public Class getColumnClass(int col)
+	{
+		switch(col)
+		{
+		case 0:
+			return String.class;
+		case 1:
+			return Color.class;
+		default:
+			throw new InternalError();
+		}
+	} //}}}
+
+	//{{{ Entry class
 	static class Entry
 	{
 		String glob;
@@ -252,18 +298,20 @@ class BrowserColorsModel extends AbstractTableModel
 			this.glob = glob;
 			this.color = color;
 		}
-	}
+	} //}}}
 
+	//{{{ ColorRenderer class
 	static class ColorRenderer extends JLabel
 		implements TableCellRenderer
 	{
+		//{{{ ColorRenderer constructor
 		public ColorRenderer()
 		{
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
-		}
+		} //}}}
 
-		// TableCellRenderer implementation
+		//{{{ getTableCellRendererComponent() method
 		public Component getTableCellRendererComponent(
 			JTable table,
 			Object value,
@@ -290,7 +338,6 @@ class BrowserColorsModel extends AbstractTableModel
 				"Table.focusCellHighlightBorder")
 				: StyleOptionPane.noFocusBorder);
 			return this;
-		}
-		// end TableCellRenderer implementation
-	}
-}
+		} //}}}
+	} //}}}
+} //}}}

@@ -143,6 +143,7 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice("options.style.operatorStyle","view.style.operator");
 		addStyleChoice("options.style.digitStyle","view.style.digit");
 		addStyleChoice("options.style.invalidStyle","view.style.invalid");
+		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringCompare());
 	} //}}}
 
 	//{{{ getColumnCount() method
@@ -228,6 +229,12 @@ class StyleTableModel extends AbstractTableModel
 			this.label = label;
 			this.property = property;
 			this.style = style;
+		}
+
+		// for sorting
+		public String toString()
+		{
+			return label;
 		}
 	} //}}}
 

@@ -375,7 +375,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ reloadDirectory() method
 	public void reloadDirectory()
 	{
-		loadDirectory(path,true);
+		browserView.reloadDirectory(path);
 	} //}}}
 
 	//{{{ delete() method
@@ -586,15 +586,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			GUIUtilities.error(this,"vfs.browser.bad-filter",args);
 		}
 
-		VFS vfs;
-		if(MiscUtilities.isURL(path))
-			vfs = VFSManager.getVFSForPath(path);
-		else if(new File(path).isAbsolute())
-			vfs = VFSManager.getFileVFS();
-		else if(this.path != null)
-			vfs = VFSManager.getVFSForPath(this.path);
-		else
-			vfs = VFSManager.getFileVFS();
+		path = MiscUtilities.constructPath(this.path,path);
+		VFS vfs = VFSManager.getVFSForPath(path);
 
 		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
@@ -623,9 +616,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 						pathField.setText(path);
 					pathField.addCurrentToHistory();
 				}
-
-				if(pathField.hasFocus())
-					browserView.requestFocus();
 
 				boolean filterEnabled = filterCheckbox.isSelected();
 
@@ -962,6 +952,14 @@ public class VFSBrowser extends JPanel implements EBComponent
 				String path = pathField.getText();
 				if(path != null)
 					setDirectory(path);
+
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						browserView.requestFocus();
+					}
+				});
 			}
 			else if(source == up)
 			{
@@ -1104,7 +1102,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
 			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
-			setHorizontalTextPosition(SwingConstants.LEFT);
+			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
 
@@ -1142,13 +1140,22 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
 			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
-			setHorizontalTextPosition(SwingConstants.LEFT);
+			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			PluginsMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
 			PluginsMenuButton.this.addMouseListener(new MouseHandler());
 
 			popup = new JPopupMenu();
+			ActionHandler actionHandler = new ActionHandler();
+
+			JMenuItem mi = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.plugins.plugin-manager.label"));
+			mi.setActionCommand("plugin-manager");
+			mi.addActionListener(actionHandler);
+
+			popup.add(mi);
+			popup.addSeparator();
 
 			// put them in a vector for sorting
 			Vector vec = new Vector();
@@ -1163,7 +1170,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
 					"vfs." + vfs.getName() + ".label"));
 				menuItem.setActionCommand(vfs.getName());
-				menuItem.addActionListener(new ActionHandler());
+				menuItem.addActionListener(actionHandler);
 				vec.addElement(menuItem);
 			}
 
@@ -1175,7 +1182,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 			else
 			{
-				JMenuItem mi = new JMenuItem(jEdit.getProperty(
+				mi = new JMenuItem(jEdit.getProperty(
 					"vfs.browser.plugins.no-plugins.label"));
 				mi.setEnabled(false);
 				popup.add(mi);
@@ -1189,11 +1196,16 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());
-				String directory = vfs.showBrowseDialog(null,
-					VFSBrowser.this);
-				if(directory != null)
-					setDirectory(directory);
+				if(evt.getActionCommand().equals("plugin-manager"))
+					new org.gjt.sp.jedit.pluginmgr.PluginManager(view);
+				else
+				{
+					VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());
+					String directory = vfs.showBrowseDialog(null,
+						VFSBrowser.this);
+					if(directory != null)
+						setDirectory(directory);
+				}
 			}
 		} //}}}
 
@@ -1224,7 +1236,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
 			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
-			setHorizontalTextPosition(SwingConstants.LEFT);
+			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
@@ -1315,14 +1327,26 @@ public class VFSBrowser extends JPanel implements EBComponent
 					popup.addSeparator();
 
 					String[] favorites = FavoritesVFS.getFavorites();
-					MiscUtilities.quicksort(favorites,
-						new MiscUtilities.StringCompare());
-					for(int i = 0; i < favorites.length; i++)
+					if(favorites.length == 0)
 					{
-						mi = new JMenuItem(favorites[i]);
-						mi.setIcon(FileCellRenderer.dirIcon);
-						mi.addActionListener(actionHandler);
+						mi = new JMenuItem(
+							jEdit.getProperty(
+							"vfs.browser.favorites"
+							+ ".no-favorites.label"));
+						mi.setEnabled(false);
 						popup.add(mi);
+					}
+					else
+					{
+						MiscUtilities.quicksort(favorites,
+							new MiscUtilities.StringCompare());
+						for(int i = 0; i < favorites.length; i++)
+						{
+							mi = new JMenuItem(favorites[i]);
+							mi.setIcon(FileCellRenderer.dirIcon);
+							mi.addActionListener(actionHandler);
+							popup.add(mi);
+						}
 					}
 
 					GUIUtilities.showPopupMenu(
