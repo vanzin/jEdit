@@ -228,13 +228,13 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			{
 			case STATE_COLLAPSED:
 				COLLAPSED_ICON.paintIcon(c,g,
-					x + level * LEVEL_WIDTH + 1,
-					y + 1);
+					x + level * LEVEL_WIDTH + 2,
+					y + (height - COLLAPSED_ICON.getIconHeight()) / 2);
 				break;
 			case STATE_EXPANDED:
 				EXPANDED_ICON.paintIcon(c,g,
-					x + level * LEVEL_WIDTH + 1,
-					y + 1);
+					x + level * LEVEL_WIDTH + 2,
+					y + 2 + (height - EXPANDED_ICON.getIconHeight()) / 2);
 				break;
 			}
 		} //}}}
@@ -243,7 +243,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		public Insets getBorderInsets(Component c)
 		{
 			return new Insets(1,level * LEVEL_WIDTH
-				+ ICON_WIDTH + 2,1,1);
+				+ ICON_WIDTH + 4,1,1);
 		} //}}}
 
 		//{{{ isBorderOpaque() method
@@ -265,8 +265,8 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 		static
 		{
-			COLLAPSED_ICON = UIManager.getIcon("Tree.collapsedIcon");
-			EXPANDED_ICON = UIManager.getIcon("Tree.expandedIcon");
+			COLLAPSED_ICON = GUIUtilities.loadIcon("arrow1.png");
+			EXPANDED_ICON = GUIUtilities.loadIcon("arrow2.png");
 			ICON_WIDTH = Math.max(COLLAPSED_ICON.getIconWidth(),
 				EXPANDED_ICON.getIconWidth());
 		} //}}}

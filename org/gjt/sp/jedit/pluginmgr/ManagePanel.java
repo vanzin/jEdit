@@ -302,7 +302,6 @@ public class ManagePanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
-			System.err.println("sorting " + type);
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
 		}
@@ -509,11 +508,11 @@ public class ManagePanel extends JPanel
 		{
 			String s1, s2;
 			if(e1.name == null)
-				s1 = e1.jar;
+				s1 = MiscUtilities.getFileName(e1.jar);
 			else
 				s1 = e1.name;
 			if(e2.name == null)
-				s2 = e2.jar;
+				s2 = MiscUtilities.getFileName(e2.jar);
 			else
 				s2 = e2.name;
 

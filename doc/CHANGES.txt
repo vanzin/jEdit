@@ -14,6 +14,8 @@ contributing to this release.
 
 - Updated Ruby syntax highlighting (Chris Morris).
 
+- Updated Pike syntax highlighting (Peter Lundqvist).
+
 }}}
 {{{ Scripting
 
@@ -105,8 +107,6 @@ contributing to this release.
   the disk is almost full, etc. Now, files are only overwritten if the
   new settings are saved successfully.
 
-- Fixed file name glob for Pike mode (Peter Lundqvist).
-
 - Fixed possible NullPointerException in Shortcuts option pane when a
   newly-installed plugin contains dockables but no actions.
 
@@ -126,6 +126,15 @@ contributing to this release.
   persistent markers.
 
 - The numeric keypad didn't work on JDK 1.3.
+
+- Apparently OS/2 Java has a broken File.getCanonicalPath()
+  implementation, so we don't call this method on that OS.
+
+- Reload command now works with Untitled files.
+
+- If a virtual file system threw an exception other than an IOException,
+  the file system browser would refuse to perform further operations
+  with an "I/O already in progress" message.
 
 }}}
 {{{ API Changes

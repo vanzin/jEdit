@@ -101,9 +101,6 @@ class BrowserIORequest extends WorkRequest
 			mkdir();
 			break;
 		}
-
-		if(type != LIST_DIRECTORY)
-			browser.endRequest();
 	} //}}}
 
 	//{{{ toString() method

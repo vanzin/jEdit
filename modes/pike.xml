@@ -1,29 +1,25 @@
 <?xml version="1.0"?>
 
-<!-- Pike mode, contributed by Marco G"otze, <gomar@gmx.net> -->
+<!-- Pike mode, contributed by Marco Götze, <gomar@gmx.net> -->
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <MODE>
   <PROPS>
-    <PROPERTY NAME="commentStart" VALUE="/*" />
-    <PROPERTY NAME="commentEnd" VALUE="*/" />
-    <PROPERTY NAME="lineComment" VALUE="//" />
-    <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*`" />
+    <PROPERTY NAME="commentStart" VALUE="/*"/>
+    <PROPERTY NAME="commentEnd" VALUE="*/"/>
+    <PROPERTY NAME="lineComment" VALUE="//"/>
+    <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*`"/>
 
     <!-- Auto indent -->
-    <PROPERTY NAME="indentOpenBrackets" VALUE="{<" />
-    <PROPERTY NAME="indentCloseBrackets" VALUE="}>" />
-    <PROPERTY NAME="indentNextLine"
-      VALUE="\s*(((if|(for(each)?)|while|catch|gauge)\s*\(|(do|else)\s*|else\s+if\s*\()[^{;]*)" />
+    <PROPERTY NAME="indentOpenBrackets" VALUE="{"/>
+    <PROPERTY NAME="indentCloseBrackets" VALUE="}"/>
+    <PROPERTY NAME="indentNextLine" VALUE="\s*(((if|(for(each)?)|while|catch|gauge)\s*\(|(do|else)\s*|else\s+if\s*\()[^{;]*)"/>
     <!-- set this to 'true' if you want to use GNU coding style -->
-    <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-    <PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
+    <PROPERTY NAME="doubleBracketIndent" VALUE="false"/>
+    <PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
   </PROPS>
-  <RULES ESCAPE="\"
-    IGNORE_CASE="FALSE"
-    HIGHLIGHT_DIGITS="TRUE"
-    DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
+  <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
 
     <!-- comments -->
     <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
@@ -31,11 +27,19 @@
       <END>*/</END>
     </SPAN>
     <SEQ TYPE="INVALID">*/</SEQ>
+
+    <!-- Autodoc comment -->
+    <EOL_SPAN TYPE="COMMENT1" DELEGATE="AUTODOC">//!</EOL_SPAN>
+    <!-- C++ line comment -->
     <EOL_SPAN TYPE="COMMENT1" DELEGATE="COMMENT">//</EOL_SPAN>
 
     <!-- string, char literals -->
     <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING_LITERAL">
       <BEGIN>"</BEGIN>
+      <END>"</END>
+    </SPAN>
+    <SPAN TYPE="LITERAL1" DELEGATE="STRING_LITERAL">
+      <BEGIN>#"</BEGIN>
       <END>"</END>
     </SPAN>
     <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
@@ -44,10 +48,7 @@
     </SPAN>
 
     <!-- preprocessor statements -->
-    <SEQ_REGEXP TYPE="KEYWORD2"
-      HASH_CHAR="#"
-      AT_LINE_START="TRUE"
-    >#.*?(?=($|/\*|//))</SEQ_REGEXP>
+    <SEQ_REGEXP TYPE="KEYWORD2" HASH_CHAR="#" AT_LINE_START="TRUE">#.*?(?=($|/\*|//))</SEQ_REGEXP>
 
     <!-- operators -->
     <SEQ TYPE="OPERATOR">({</SEQ>
@@ -136,10 +137,45 @@
     </KEYWORDS>
   </RULES>
 
+	<RULES SET="AUTODOC" IGNORE_CASE="TRUE" DEFAULT="COMMENT2">
+		<!-- highlight @ref{...@} -->
+		<SEQ TYPE="COMMENT2">{</SEQ>
+		<!-- highlight !@param -->
+		<SEQ TYPE="COMMENT2">!</SEQ>
+
+		<!-- XML tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+  		<BEGIN>@xml{</BEGIN>
+			<END>@}</END>
+		</SPAN>
+				
+		<KEYWORDS>
+		  <LABEL>@b</LABEL>
+			<LABEL>@class</LABEL>
+			<LABEL>@endclass</LABEL>
+			<LABEL>@example</LABEL>
+			<LABEL>@decl</LABEL>
+			<LABEL>@dl</LABEL>
+			<LABEL>@enddl</LABEL>
+			<LABEL>@i</LABEL>
+			<LABEL>@ignore</LABEL>
+			<LABEL>@endignore</LABEL>
+			<LABEL>@item</LABEL>
+			<LABEL>@mapping</LABEL>
+			<LABEL>@endmapping</LABEL>
+			<LABEL>@member</LABEL>
+			<LABEL>@module</LABEL>
+			<LABEL>@endmodule</LABEL>
+			<LABEL>@note</LABEL>
+			<LABEL>@param</LABEL>
+			<LABEL>@ref</LABEL>
+			<LABEL>@returns</LABEL>
+			<LABEL>@tt</LABEL>
+		</KEYWORDS>
+	</RULES>
+	
   <RULES SET="STRING_LITERAL" IGNORE_CASE="TRUE" DEFAULT="LITERAL1">
-    <SEQ_REGEXP TYPE="LITERAL2" HASH_CHAR="%"
-      >%([^ a-z]*[a-z]|\[[^\]]*\])</SEQ_REGEXP>
+    <SEQ_REGEXP TYPE="LITERAL2" HASH_CHAR="%">%([^ a-z]*[a-z]|\[[^\]]*\])</SEQ_REGEXP>
     <SEQ_REGEXP TYPE="COMMENT2" HASH_CHAR="D">DEBUG:</SEQ_REGEXP>
   </RULES>
 </MODE>
-

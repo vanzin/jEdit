@@ -41,7 +41,7 @@ import org.gjt.sp.util.Log;
  * <code>services.xml</code> files like so:
  *
  * <pre>&lt;SERVICE CLASS="org.gjt.sp.jedit.io.VFS" NAME="<i>name</i>"&gt;
- *    new <i>MyVFS<i>();
+ *    new <i>MyVFS</i>();
  *&lt;/SERVICE&gt;</pre>
  *
  * URLs of the form <code><i>name</i>:<i>path</i></code> will then be handled

@@ -1,5 +1,5 @@
 /*
- * WorkThread.java - Background thread that does stuff
+ * WorkThreadPool.java - Background thread pool that does stuff
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -66,6 +66,7 @@ public class WorkThreadPool
 	 */
 	public void start()
 	{
+		/* not really needed since threads don't start until after */
 		synchronized(lock)
 		{
 			started = true;
