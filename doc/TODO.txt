@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- option for b&w print
 - document deep indent
 - scroll line count problems
 - tall caret and tab
@@ -29,12 +30,6 @@ and quirks that I need to fix eventually.
 - format -- instead of \n\n, what if it has \n   \n?d
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-- aborts not always fired
-- globalColors setting:
-  - help viewer looks ugly
-  - selected borders in list, tree, table wrong colors
-- motif l&f: shortcuts in menu items
-- replace with lookahead/lookbehind doesn't work
 - shortcuts: stale shortcuts remain?
 - bad wrap:
   						MiscUtilities.quicksort(favorites,
@@ -42,6 +37,13 @@ and quirks that I need to fix eventually.
 - history text field tweak
 - search dialog: auto-focus fields show last values
 - persistent kill ring
+
+- aborts not always fired
+- globalColors setting:
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+- motif l&f: shortcuts in menu items
+- replace with lookahead/lookbehind doesn't work
 
 - auto indent: don't de-indent on enter if no leading indent at all?
 - note about dependencies
