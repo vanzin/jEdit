@@ -12,7 +12,7 @@ void displayCharacterCode(View view)
 	JEditTextArea textArea = view.getTextArea();
 	int caret = textArea.getCaretPosition();
 	int line = textArea.getCaretLine();
-	if(caret < textArea.getLineEndOffset(line))
+	if(caret < textArea.getLineEndOffset(line)-1)
 	{
 		char c = buffer.getText(caret,1).charAt(0);
 		StringBuffer buf = new StringBuffer();
