@@ -117,17 +117,25 @@ class MouseHandler extends MouseInputAdapter
 		else
 			maybeDragAndDrop = false;
 
-		switch(clickCount)
+		if(quickCopyDrag)
 		{
-		case 1:
+			// ignore double clicks of middle button
 			doSingleClick(evt);
-			break;
-		case 2:
-			doDoubleClick();
-			break;
-		default: //case 3:
-			doTripleClick();
-			break;
+		}
+		else
+		{
+			switch(clickCount)
+			{
+			case 1:
+				doSingleClick(evt);
+				break;
+			case 2:
+				doDoubleClick();
+				break;
+			default: //case 3:
+				doTripleClick();
+				break;
+			}
 		}
 	} //}}}
 

@@ -5376,6 +5376,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(!buffer.isTransactionInProgress())
 			_finishCaretUpdate();
 		/* otherwise DisplayManager.BufferChangeHandler calls */
+		
+		repaintMgr.setFastScroll(false);
 	} //}}}
 
 	//{{{ fireCaretEvent() method
