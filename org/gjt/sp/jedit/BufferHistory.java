@@ -254,6 +254,9 @@ public class BufferHistory
 		return returnValue;
 	}
 
+	/**
+	 * Recent file list entry.
+	 */
 	public static class Entry
 	{
 		public String path;

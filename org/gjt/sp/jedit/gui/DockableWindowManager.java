@@ -38,7 +38,51 @@ import java.util.*;
  * The <code>DockableWindowManager</code> keeps track of dockable windows.
  * Each {@link org.gjt.sp.jedit.View} has an instance of this class.<p>
  *
- * When an instance of this class is initialized, it
+ * <b>dockables.xml:</b><p>
+ *
+ * Dockable window definitions are read from <code>dockables.xml</code> files
+ * contained inside plugin JARs. A dockable definition file has the following
+ * form:
+ *
+ * <pre>&lt;?xml version="1.0"?&gt;
+ *&lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
+ *&lt;DOCKABLES&gt;
+ *    &lt;DOCKABLE NAME="name"&gt;
+ *        // Code to create the dockable
+ *    &lt;/DOCKABLE&gt;
+ *&lt;/DOCKABLES&gt;</pre>
+ *
+ * More than one <code>&lt;DOCKABLE&gt;<code> tag may be present. The code that
+ * creates the dockable can reference any BeanShell built-in variable
+ * (see {@link org.gjt.sp.jedit.BeanShell}), along with a variable
+ * <code>position</code> whose value is one of
+ * {@link #FLOATING}, {@link #TOP}, {@link #LEFT}, {@link #BOTTOM},
+ * and {@link #RIGHT}.<p>
+ *
+ * The following properties must be defined for each dockable window:
+ *
+ * <ul>
+ * <li><code><i>name</i>.title</code> - the string to show in the title bar
+ * of the dockable.</li>
+ * <li><code><i>name</i>.label</code> - the dockable's menu item label.</li>
+ * </ul>
+ *
+ * A number of actions are automatically created for each dockable window:
+ *
+ * <ul>
+ * <li><code><i>name</i></code> - opens the dockable window.</li>
+ * <li><code><i>name</i>-toggle</code> - toggles the dockable window's visibility.</li>
+ * <li><code><i>name</i>-float</code> - opens the dockable window in a new
+ * floating window.</li>
+ * </ul>
+ *
+ * Note that only the first action needs a <code>label</code> property, the
+ * rest have automatically-generated labels.
+ *
+ * <b>Implementation details:</b><p>
+ *
+ * When an instance of this class is initialized by the {@link org.gjt.sp.jedit.View}
+ * class, it
  * iterates through the list of registered dockable windows (from jEdit itself,
  * and any loaded plugins) and
  * examines options supplied by the user in the <b>Global
@@ -50,9 +94,7 @@ import java.util.*;
  * <code>dockables.xml</code> file. This code will typically consist of a call
  * to the constructor of the dockable window component. The result of the
  * BeanShell expression, typically a newly constructed component, is placed
- * in a window managed by this class. Windows can appear in
- * above, below or to the left or right of the main editing pane. They can also
- * be displayed in <quote>floating</quote> frames.
+ * in a window managed by this class.
  *
  * @see org.gjt.sp.jedit.View#getDockableWindowManager()
  *

@@ -5,37 +5,49 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
+- slower if comment open till end?
 - fsb: at roots:; select something; path not prepended
-- plugin guide: shorten host-design a little:
-  - replace class-editplugin with link to API docs
-  - replace plugin info prop/dep description with link to API docs
-  - host design's actions.xml/dockables.xml description; move meat
-    to other sections
-    - link to DockableWindowManager and ActionSet which have formal
-      descriptions
-  - shorten editbus section
+- BeanShell javadoc: scriptPath
 - plugin tutorial:
-    - auto-created actions (mention in api docs too)
-    - link to jEdit devel page
+  - auto-created actions
+  - link to jEdit devel page
+- plugin tips and techniques:
+  - libraries
+  - editbus
+  - cutting down on startup time
+  - canned dialog boxes in GUIUtilities
+  - tools.jar
+  - string comparison in MiscUtilities
+  - writing a macro handler
+  - writing a fold handler
+  - OperatingSystem class
+  - option groups
+  - listening for buffer changes
+  - canned controls:
+    animated icon, color well button, enhanced dialog,
+    font selector, history text field, 
+    jcheckboxlist, rolloverbutton,
+    variablegridlayout
+  - displaying a help viewer
+  - canned icons
+  - vfs implementation
+  - running stuff in i/o threads
+  - multi-threaded i/o
+  - jeditresource: protocol
+  - getting line syntax info, textutilities.getTokenAtOffset()
+  - text area extensions
+  - text area caret & scroll listeners
+  - status bar messages & readNextChar()
 - quicknotepad docs
-- javadocs:
-  - dockable .title property
-  - action .label property
-  - formal actions.xml description
-  - formal dockables.xml description
-- links to API docs in plugin guide, macro guide
+- links to API docs in macro guide
 - section xrefs are broken
-- review user's guide
 - need a new jEditLauncher before the 4.1final release
-- review FAQ
 
 + later:
 
 - files with names of the form foo: are not handled very well in some
   cases since jEdit thinks they are URLs.
 - <script> in javadoc
-- javadocs:
-  - gui: better descriptions
 - user's guide:
   - vertical paste & rect select insertion
   - part III
@@ -44,17 +56,8 @@ and quirks that I need to fix eventually.
       upcoming dialog macro
     - describe alternative ways to obtain buffers, edit panes, text areas,
       in a sidebar about changing them
-    - plugin devel -- mention readNextChar() somewhere
     - is Log described elsewhere? move to API guide and link from 15.5.2
       (using activity log as a tracing tool).
-    - section on jEdit's various UI controls;
-      - GUIUtilities stuff
-      - HistoryTextField
-      - ColorWellButton
-      - FontSelector
-      - JCheckBoxList
-      - RolloverButton
-      - VariableGridLayout
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - rect select and trailing whitespace
 - final optimization for OffsetManager: scan to zero or scan to end

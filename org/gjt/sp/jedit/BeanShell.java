@@ -33,7 +33,18 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * Convenience methods for evaluating BeanShell code.
+ * BeanShell is jEdit's extension language.<p>
+ *
+ * When run from jEdit, BeanShell code has access to the following predefined
+ * variables:
+ *
+ * <ul>
+ * <li><code>view</code> - the currently active {@link View}.</li>
+ * <li><code>editPane</code> - the currently active {@link EditPane}.</li>
+ * <li><code>textArea</code> - the edit pane's {@link JEditTextArea}.</li>
+ * <li><code>buffer</code> - the edit pane's {@link Buffer}.</li>
+ * </ul>
+ *
  * @author Slava Pestov
  * @version $Id$
  */

@@ -27,7 +27,7 @@ find macros -name \*.bsh > installer/jedit-macros
 print_size jedit-macros
 
 # jedit-api fileset
-find doc/api \( -name \*.html -o -name toc.xml \) >> installer/jedit-api
+find doc/api \( -name \*.html -o -name toc.xml \) > installer/jedit-api
 
 print_size jedit-api
 
@@ -54,6 +54,11 @@ print_size jedit-mac
 echo jedit.cmd > installer/jedit-os2
 
 print_size jedit-os2
+
+# jedit-source fileset
+#find . \( -name \*.java -o -name \*.props -o -name \*.xml -o -name \*.png -o -name \*.gif \) -print > installer/jedit-source
+
+#print_size jedit-source
 
 for file in installer/jedit-*
 do
