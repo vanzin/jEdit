@@ -1719,6 +1719,8 @@ public class jEdit
 
 		boolean dirty = false;
 
+		boolean saveRecent = !(isExiting && jEdit.getBooleanProperty("restore"));
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
@@ -1754,7 +1756,7 @@ public class jEdit
 
 		while(buffer != null)
 		{
-			if(!buffer.isNewFile())
+			if(!buffer.isNewFile() && saveRecent)
 			{
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 				int caret = (_caret == null ? 0 : _caret.intValue());

@@ -22,8 +22,6 @@ and quirks that I need to fix eventually.
 - blank space at end
 - word wrap at wrong place
 
-- modifier change broke stuff
-
 - tabs to spaces with rect select
 - C+a gave NPE
 - more flexible mirror list
