@@ -342,11 +342,7 @@ public class KillRing implements MutableListModel
 			int newCount = 0;
 			for(int j = 0; j < ring.length; j++)
 			{
-				int index;
-				if(j < count)
-					index = count - j - 1;
-				else
-					index = count + ring.length - j - 1;
+				int index = virtualToPhysicalIndex(j);
 
 				if(i == index)
 				{

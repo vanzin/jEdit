@@ -205,10 +205,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		this.styles = styles;
 		styles[Token.NULL] = new SyntaxStyle(getForeground(),null,getFont());
-		for(int i = 0; i < styles.length; i++)
-		{
-			styles[i].setCharWidth(getCharWidth(styles[i].getFont()));
-		}
 		repaint();
 	} //}}}
 
@@ -660,12 +656,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	} //}}}
 
-	//{{{ paintComponent() method
+	//{{{ paint() method
 	/**
 	 * Repaints the text.
 	 * @param _gfx The graphics context
 	 */
-	public void paintComponent(Graphics _gfx)
+	public void paint(Graphics _gfx)
 	{
 		Graphics2D gfx = repaintMgr.getGraphics();
 
@@ -678,25 +674,32 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		int height = fm.getHeight();
 		if(height != 0 && buffer.isLoaded())
 		{
+			long prepareTime = System.currentTimeMillis();
 			FastRepaintManager.RepaintLines lines
 				= repaintMgr.prepareGraphics(clipRect,
-				textArea.getFirstLine());
+				textArea.getFirstLine(),gfx);
+			prepareTime = (System.currentTimeMillis() - prepareTime);
 
+			long linesTime = System.currentTimeMillis();
 			int numLines = (lines.last - lines.first + 1);
-			if(Debug.PAINT_TIMER && numLines >= 1)
-				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines");
 
 			int y = lines.first * height;
 			gfx.fillRect(0,y,getWidth(),numLines * height);
 
 			extensionMgr.paintScreenLineRange(textArea,gfx,
 				lines.first,lines.last,y,height);
+			linesTime = (System.currentTimeMillis() - linesTime);
 
-			repaintMgr.setFullRepaint(
+			repaintMgr.setFastScroll(
 				clipRect.equals(new Rectangle(0,0,
 				getWidth(),getHeight())));
 
+			long blitTime = System.currentTimeMillis();
 			repaintMgr.paint(_gfx);
+			blitTime = (System.currentTimeMillis() - blitTime);
+
+			if(Debug.PAINT_TIMER && numLines >= 1)
+				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + "/" + blitTime + " ms");
 		}
 		else
 		{
@@ -849,51 +852,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		renderingHints = new RenderingHints(hints);
 		fontRenderContext = new FontRenderContext(null,antiAlias,
 			fracFontMetrics);
-	} //}}}
-
-	//{{{ getCharWidth() method
-	private int getCharWidth(Font font)
-	{
-		Integer returnValue = (Integer)fonts.get(font);
-		if(returnValue == null)
-		{
-			int minWidth = Integer.MAX_VALUE;
-			int maxWidth = Integer.MIN_VALUE;
-			FontMetrics fm = getFontMetrics(font);
-			int[] widths = fm.getWidths();
-			for(int i = 0; i < widths.length; i++)
-			{
-				int width = widths[i];
-				if(width == 0 || !font.canDisplay((char)i))
-					continue;
-				minWidth = Math.min(width,minWidth);
-				maxWidth = Math.max(width,maxWidth);
-			}
-
-			String str = "iwiwiwiau1234";
-			double width1 = font.createGlyphVector(textArea.getPainter()
-				.getFontRenderContext(),str).getLogicalBounds()
-				.getWidth();
-			double width2 = str.length() * maxWidth;
-			if(minWidth == maxWidth
-				&& (int)width1 == (int)width2)
-			{
-				Log.log(Log.DEBUG,this,"Using monospaced font optimization: " + font);
-				returnValue = new Integer(maxWidth);
-			}
-			else
-			{
-				Log.log(Log.DEBUG,this,"Not using monospaced font optimization: " + font);
-				Log.log(Log.DEBUG,this,"Minimum width = " + minWidth
-					+ ", maximum width = " + maxWidth
-					+ ", width 1 = " + width1
-					+ ", width 2 = " + width2);
-				returnValue = new Integer(0);
-			}
-
-			fonts.put(font,returnValue);
-		}
-		return returnValue.intValue();
 	} //}}}
 
 	//}}}

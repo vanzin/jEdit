@@ -73,31 +73,9 @@ public class SyntaxStyle
 		return font;
 	} //}}}
 
-	//{{{ getCharWidth() method
-	/**
-	 * Returns the character width of the monospaced font.
-	 * @since jEdit 4.2pre1
-	 */
-	public int getCharWidth()
-	{
-		return charWidth;
-	} //}}}
-
-	//{{{ setCharWidth() method
-	/**
-	 * Sets the character width of the monospaced font.
-	 * @param charWidth The character width
-	 * @since jEdit 4.2pre1
-	 */
-	public void setCharWidth(int charWidth)
-	{
-		this.charWidth = charWidth;
-	} //}}}
-
 	//{{{ Private members
 	private Color fgColor;
 	private Color bgColor;
 	private Font font;
-	private int charWidth;
 	//}}}
 }

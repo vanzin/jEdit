@@ -55,11 +55,14 @@ class FastRepaintManager
 		if(gfx != null)
 			gfx.dispose();
 
-		img = painter.createImage(
+		img = painter.getGraphicsConfiguration()
+			.createCompatibleImage(
 			painter.getWidth(),
-			painter.getHeight());
+			painter.getHeight(),
+			Transparency.OPAQUE);
 		gfx = (Graphics2D)img.getGraphics();
 		gfx.clipRect(0,0,painter.getWidth(),painter.getHeight());
+		fastScroll = false;
 	} //}}}
 
 	//{{{ getGraphics() method
@@ -81,14 +84,15 @@ class FastRepaintManager
 	} //}}}
 
 	//{{{ prepareGraphics() method
-	RepaintLines prepareGraphics(Rectangle clipRect, int firstLine)
+	RepaintLines prepareGraphics(Rectangle clipRect, int firstLine,
+		Graphics2D gfx)
 	{
 		gfx.setFont(painter.getFont());
 		gfx.setColor(painter.getBackground());
 
 		int height = gfx.getFontMetrics().getHeight();
 
-		if(fullRepaint)
+		if(fastScroll)
 		{
 			int lineDelta = (this.firstLine - firstLine);
 			int yDelta = lineDelta * height;
@@ -131,10 +135,10 @@ class FastRepaintManager
 		g.drawImage(img,0,0,null);
 	} //}}}
 
-	//{{{ setFullRepaint() method
-	void setFullRepaint(boolean fullRepaint)
+	//{{{ setFastScroll() method
+	void setFastScroll(boolean fastScroll)
 	{
-		this.fullRepaint = fullRepaint;
+		this.fastScroll = fastScroll;
 	} //}}}
 
 	//{{{ Private members
@@ -142,7 +146,7 @@ class FastRepaintManager
 	private TextAreaPainter painter;
 	private Graphics2D gfx;
 	private Image img;
-	private boolean fullRepaint;
+	private boolean fastScroll;
 	/* Most recently rendered first line */
 	private int firstLine;
 	//}}}
