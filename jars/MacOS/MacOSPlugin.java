@@ -17,9 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import com.apple.cocoa.application.*;
 import com.apple.mrj.*;
 import java.io.*;
 import java.lang.*;
+import javax.swing.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -40,7 +42,7 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
     {		
 		if(System.getProperty("os.name").indexOf("Mac OS") != -1)
         {
-    		// Register handlers
+			// Register handlers
 			MRJApplicationUtils.registerQuitHandler(this);
     		MRJApplicationUtils.registerAboutHandler(this);
 			MRJApplicationUtils.registerOpenDocumentHandler(this);
@@ -58,6 +60,8 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 			// Spawn a new thread. This is a work around because of a
 			// bug in Mac OS X 10.1's MRJToolkit
 			exitThread.start();
+		else
+			Log.log(Log.DEBUG,this,"exitThread still alive.");
 	}
 	
 /* ------------------------------------------------------------ */
@@ -138,6 +142,7 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 		public void run()
 		{
 			jEdit.exit(jEdit.getLastView(),false);
+			exitThread = new ExitThread();
 		}
 	}
 }

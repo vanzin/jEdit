@@ -1585,8 +1585,8 @@ public class Buffer implements EBComponent
 					.getLeadingWhiteSpace(line);
 
 				// silly usability hack
-				if(lines.length != 1 && whiteSpace == 0)
-					continue;
+				//if(lines.length != 1 && whiteSpace == 0)
+				//	continue;
 
 				int whiteSpaceWidth = MiscUtilities
 					.getLeadingWhiteSpaceWidth(
