@@ -64,15 +64,11 @@ How Plugins are Loaded</title>
 </para>
 
 <para>
-  Plugin loading occurs after jEdit has loaded application properties, any
-  user-supplied properties, and the application's set of actions that
-  will be available from jEdit's menu bar (as well as the toolbar and
-  keyboard shortcuts).
+  Additionally, plugins using the new jEdit 4.2 plugin API can be loaded and unloaded at any time. This is a great help when developing your own plugins -- there is no need to restart the editor after making changes.
 </para>
 
 <para>
-  Plugin loading occurs before jEdit opens the initial view or loads any files
-  for editing. It also occurs before jEdit runs any startup scripts.
+  Note that plugins using the older jEdit 4.1 API are still only loaded on editor startup, and unloaded on editor exit. The jEdit 4.1 API is deprecated and will not be described in this guide.
 </para>
 
 <para>
@@ -90,8 +86,8 @@ How Plugins are Loaded</title>
 <itemizedlist>
  <listitem><para>
    Adds to a collection maintained by jEdit a new object of
-   type <ulink url="../api/org/gjt/sp/jedit/EditPlugin.JAR.html">
-   <classname>EditPlugin.JAR</classname></ulink>. This is a data structure
+   type <ulink url="../api/org/gjt/sp/jedit/PluginJAR.html">
+   <classname>PluginJAR</classname></ulink>. This is a data structure
    holding the name of the JAR archive file, a reference to the
    <ulink url="../api/org/gjt/sp/jedit/JARClassLoader.html">
    <classname>JARClassLoader</classname></ulink>, and a collection
@@ -145,8 +141,8 @@ How Plugins are Loaded</title>
   After scanning the plugin JAR file and loading any resources,
   a new instance
   of the plugin core class is created and added to the collection
-  maintained by the appropriate <ulink url="../api/org/gjt/sp/jedit/EditPlugin.JAR.html">
-  <classname>EditPlugin.JAR</classname></ulink>.
+  maintained by the appropriate <ulink url="../api/org/gjt/sp/jedit/PluginJAR.html">
+  <classname>PluginJAR</classname></ulink>.
   jEdit then calls the
   <function>start()</function> method of the plugin core class.
   The <function>start()</function> method can perform initialization of the
@@ -156,6 +152,16 @@ How Plugins are Loaded</title>
   <classname>EditPlugin</classname></ulink> abstract class, a plugin need not
   provide an implementation if no unique initialization is required.
 </para>
+
+<sidebar>
+
+<title>Updating 4.1 plugins</title>
+
+<para>
+ Note that while jEdit 4.1 plugins were only loaded on startup, jEdit 4.2 plugins can be loaded at any time. As a result, the <function>start()</function> method needs to cope with being called at any time, and <function>stop()</function> needs to fully clean up after the plugin. See the API documentation for the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> class for details.
+ </para>
+</sidebar>
 
 </sect1>
 
@@ -376,11 +382,12 @@ backslash.property=A backslash can be inserted by writing \\.</programlisting>
 </para>
 
 <informalexample><programlisting># general plugin information
+plugin.QuickNotepadPlugin.activate=defer
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 plugin.QuickNotepadPlugin.version=4.1
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00</programlisting></informalexample>
+plugin.QuickNotepadPlugin.depend.0=jedit 04.02.10.00</programlisting></informalexample>
 <para>
   These properties are described in detail in the documentation for the
   <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
@@ -456,6 +463,16 @@ options.quicknotepad.fontsize=14
 
 # Setting not defined but supplied for completeness
 options.quicknotepad.filepath=</programlisting></informalexample>
+
+<sidebar>
+
+<title>Updating 4.1 plugins</title>
+
+<para>
+ jEdit 4.2 plugins are distinguished from jEdit 4.1 plugins by the presence of the <literal>plugin.<replaceable>name</replaceable>.activate</literal> property. If this property is set, the plugin is treated like a jEdit 4.2 plugin. Usually, this property should be set to <literal>defer</literal>. See the API documentation for the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> class for details.
+ </para>
+</sidebar>
 
 </sect1>
 
