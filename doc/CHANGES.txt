@@ -62,6 +62,8 @@ defaults.
   disabled by default, since people seem to get confused by it to no end
   when they accidentally click the middle mouse button while using a
   wheel mouse to scroll
+- Shift-double click and shift-middle mouse button clicks in the file
+  system browser now open files in a new view
 
 + Bug Fixes
 
