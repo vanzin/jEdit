@@ -58,6 +58,11 @@ Thanks to Thomas Alspaugh for contributing to this release.
 - Disabling the status bar in the Status Bar option pane did not disable
   the "Show clock" option.
 
+- Scrolling with the keyboard did not update the horizontal scroll bar.
+
+- Control-clicking in a read-only buffer would beep, even if the click
+  location was not beyond the end of a line.
+
 }}}
 
 }}}
