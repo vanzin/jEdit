@@ -19,6 +19,8 @@ JEDIT 4.0 VERSION HISTORY
   - A+d: delete next character
 - A new View->Docking menu; contains commands for closing the left, top,
   right and bottom docking areas (shortcuts: C+e 1,2,3,4)
+- Narrowing re-implemented. This feature was present in jEdit 3.2 but
+  was missing from 4.0pre1.
 
 + Enhancements
 
@@ -39,7 +41,7 @@ JEDIT 4.0 VERSION HISTORY
   - If invoked while a file is selected, the 'Search in Directory'
     command now sets the search file name filter to that file's
     extension
-- Icon added to 'BeanShell Error' dialog box
+- Icons added to 'BeanShell Error' and 'Close All' dialog boxes
 - Updated PV-WAVE mode (Ed Stewart)
 - Updated Transact-SQL mode (Ollie Rutherfurd)
 - Updated Omnimark mode (Lionel Fiol)
@@ -102,6 +104,8 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed a buffer corruption bug
 - 'Select Fold' command threw an exception of there were no folds in the
   buffer
+- Floating position locations were not updated correctly, so they did
+  indeed 'float' all over the buffer
 
 + API Changes
 
@@ -111,6 +115,10 @@ JEDIT 4.0 VERSION HISTORY
   getColor() method
 - MiscUtilities.constructPath(), .getFileName(), .getParentOfPath()
   methods are now VFS-aware
+- Note that the behavior of correspondingly-named methods in the VFS
+  class has changed in a suttle manner, and they should no longer be
+  called directory.
+- EditAction.getView() deprecated, call GUIUtilities.getView() instead
 
 * Version 4.0pre1
 

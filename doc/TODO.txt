@@ -6,13 +6,14 @@ TO DO
 - colors opt pane broken
 - either fix recent files/recent directories/current dir icon issue, or
   ditch icons
-- narrowing
-- switching from narrowed buffer, to one with caret at already zero might
-  cause problems, since physFirstLine won't be updated?
+- narrowing; what happends if caret put in top narrow or bottom narrow?
 - changing folding mode using buffer-local props: doesn't take effect on
   save
 - read up on JDK 1.4 focus API
+- getFoldLevel(): should not call linesChanged() all the time
+- v2p/p2v: implement from end backward scan
 
+- dwm: not always focused correctly?
 - documentation to do
   - add index terms throughout user's guide!
   - changing heap memory docs
@@ -69,9 +70,6 @@ TO DO
 - clickable stack traces in activity log
 - JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
   + more intuitive button labels throughout
-
-- getFoldLevel(): should not call linesChanged() all the time
-- v2p/p2v: implement from end backward scan
 
 - incremental search; find all occurrences that are visible
 - if caps lock is pressed during startup, show dialog box for changing

@@ -1049,6 +1049,27 @@ public class GUIUtilities
 		popup.show(comp,x,y);
 	} //}}}
 
+	//{{{ getView() method
+	/**
+	 * Finds the view parent of the specified component.
+	 * @since jEdit 4.0pre2
+	 */
+	public static View getView(Component comp)
+	{
+		for(;;)
+		{
+			if(comp instanceof View)
+				return (View)comp;
+			else if(comp instanceof JPopupMenu)
+				comp = ((JPopupMenu)comp).getInvoker();
+			else if(comp != null)
+				comp = comp.getParent();
+			else
+				break;
+		}
+		return null;
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ showSplashScreen() method

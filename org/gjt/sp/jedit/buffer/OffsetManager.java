@@ -460,7 +460,6 @@ loop:		for(;;)
 			switch(end - start)
 			{
 			case 0:
-				break loop;
 			case 1:
 				bh = (PosBottomHalf)positions.elementAt(start);
 				if(bh.offset < offset)
@@ -480,6 +479,8 @@ loop:		for(;;)
 		for(int i = start; i < positions.size(); i++)
 		{
 			bh = (PosBottomHalf)positions.elementAt(i);
+			if(bh.offset < offset)
+				System.err.println("fuck: " + bh.offset);
 			bh.offset += length;
 		}
 	} //}}}
@@ -500,7 +501,6 @@ loop:		for(;;)
 			switch(end - start)
 			{
 			case 0:
-				break loop;
 			case 1:
 				bh = (PosBottomHalf)positions.elementAt(start);
 				if(bh.offset < offset)
@@ -510,7 +510,7 @@ loop:		for(;;)
 				int pivot = (start + end) / 2;
 				bh = (PosBottomHalf)positions.elementAt(pivot);
 				if(bh.offset > offset)
-					end = pivot - 1;
+					end = pivot;
 				else
 					start = pivot + 1;
 				break;

@@ -250,7 +250,6 @@ public class JEditTextArea extends JComponent
 
 			if(this.buffer != null)
 			{
-				setCaretPosition(0);
 				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
 				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
@@ -260,6 +259,11 @@ public class JEditTextArea extends JComponent
 			bufferHandlerInstalled = true;
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
+
+			setCaretPosition(0);
+
+			// just in case, maybe not necessary?...
+			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
 			painter.updateTabSize();
 

@@ -49,7 +49,7 @@ public class BeanShellErrorDialog extends EnhancedDialog
 		JPanel centerPanel = new JPanel(new BorderLayout());
 
 		JPanel caption = new JPanel(new GridLayout(2,1,3,3));
-		caption.setBorder(new EmptyBorder(0,0,3,0));
+		caption.setBorder(new EmptyBorder(0,0,6,0));
 		caption.add(new JLabel(jEdit.getProperty("beanshell-error.message.1")));
 		caption.add(new JLabel(jEdit.getProperty("beanshell-error.message.2")));
 		centerPanel.add(BorderLayout.NORTH,caption);
