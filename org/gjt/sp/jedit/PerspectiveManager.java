@@ -34,6 +34,28 @@ import org.gjt.sp.util.Log;
  */
 public class PerspectiveManager
 {
+	//{{{ isPerspectiveDirty() method
+	/**
+	 * We only autosave the perspective if it has changed, to avoid spinning
+	 * up the disk on laptops.
+	 * @since jEdit 4.2pre13
+	 */
+	public static boolean isPerspectiveDirty()
+	{
+		return dirty;
+	} //}}}
+
+	//{{{ setPerspectiveDirty() method
+	/**
+	 * We only autosave the perspective if it has changed, to avoid spinning
+	 * up the disk on laptops.
+	 * @since jEdit 4.2pre13
+	 */
+	public static void setPerspectiveDirty(boolean dirty)
+	{
+		PerspectiveManager.dirty = dirty;
+	} //}}}
+
 	//{{{ loadPerspective() method
 	public static View loadPerspective(boolean restoreFiles)
 	{
@@ -209,6 +231,8 @@ public class PerspectiveManager
 			Log.log(Log.ERROR,PerspectiveManager.class,io);
 		}
 	} //}}}
+
+	private static boolean dirty;
 
 	//{{{ PerspectiveHandler class
 	static class PerspectiveHandler extends HandlerBase

@@ -1412,6 +1412,8 @@ public class jEdit
 	public static Buffer openFile(View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
+		PerspectiveManager.setPerspectiveDirty(true);
+
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
 
@@ -1526,6 +1528,8 @@ public class jEdit
 	{
 		if(!buffer.isTemporary())
 			return;
+
+		PerspectiveManager.setPerspectiveDirty(true);
 
 		addBufferToList(buffer);
 		buffer.commitTemporary();
@@ -1671,6 +1675,8 @@ public class jEdit
 			return;
 		}
 
+		PerspectiveManager.setPerspectiveDirty(true);
+
 		if(!buffer.isNewFile())
 		{
 			view.getEditPane().saveCaretInfo();
@@ -1777,6 +1783,8 @@ public class jEdit
 
 		if(!isExiting)
 			newFile(view);
+
+		PerspectiveManager.setPerspectiveDirty(true);
 
 		return true;
 	} //}}}
@@ -2109,6 +2117,8 @@ public class jEdit
 	 */
 	public static View newView(View view, Buffer buffer, View.ViewConfig config)
 	{
+		PerspectiveManager.setPerspectiveDirty(true);
+
 		try
 		{
 			if(view != null)
@@ -3772,6 +3782,8 @@ loop:		for(int i = 0; i < list.length; i++)
 	 */
 	private static void closeView(View view, boolean callExit)
 	{
+		PerspectiveManager.setPerspectiveDirty(true);
+
 		if(viewsFirst == viewsLast && callExit)
 			exit(view,false); /* exit does editor event & save */
 		else
