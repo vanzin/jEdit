@@ -38,6 +38,9 @@
      please let me know -->
 <MODE NAME="bcel"		FILE="bcel.xml" />
 
+<MODE NAME="bibtex"		FILE="bibtex.xml"
+				FILE_NAME_GLOB="*.bib" />
+
 <!--  We let Objective C mode highlight .h files -->
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.c" />

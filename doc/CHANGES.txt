@@ -24,6 +24,7 @@ JEDIT 4.0 VERSION HISTORY
   that line with the return value of the expression
 - Macros.confirm() method added, for use in macros
 - BBj (Business Basic based on Java) syntax highlighting (Thomas Bock)
+- BibTeX syntax highlighting (Nils Krahnstoever)
 
 + Enhancements
 
