@@ -28,48 +28,125 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.util.Log;
 
 /**
- * The interface between jEdit and a plugin.
+ * The abstract base class that every plugin must implement.<p>
+ *
+ * Each plugin must have the following properties defined in its property file:
+ *
+ * <ul>
+ * <li><code>plugin.<i>class name</i>.name</code></li>
+ * <li><code>plugin.<i>class name</i>.version</code></li>
+ * <li><code>plugin.<i>class name</i>.jars</code> - only needed if your plugin
+ * bundles external JAR files. Contains a whitespace-separated list of JAR
+ * file names. Without this property, the plugin manager will leave behind the
+ * external JAR files when removing the plugin.</li>
+ * </ul>
+ *
+ * The following properties are optional but recommended:
+ *
+ * <ul>
+ * <li><code>plugin.<i>class name</i>.author</code></li>
+ * <li><code>plugin.<i>class name</i>.docs</code> - the path to plugin
+ * documentation in HTML format within the JAR file.</li>
+ * </ul>
+ *
+ * Plugin dependencies are also specified using properties.
+ * Each dependency is defined in a property named with
+ * <code>plugin.<i>class name</i>.depend.</code> followed by a number.
+ * Dependencies must be numbered in order, starting from zero.<p>
+ *
+ * The value of a dependency property has one of the following forms:
+ *
+ * <ul>
+ * <li><code>jdk <i>minimum Java version</i></code></li>
+ * <li><code>jedit <i>minimum jEdit version</i></code> - note that this must be a
+ * version number in the form returned by <code>jEdit.getBuild()</code>,
+ * not <code>jEdit.getVersion()</code>.</li>
+ * <li><code>plugin <i>plugin</i> <i>version</i></code> - the fully quailified
+ * plugin class name must be specified.</li>
+ * </ul>
+ *
+ * Here is an example set of plugin properties:
+ *
+ * <pre>plugin.QuickNotepadPlugin.name=QuickNotepad
+ * plugin.QuickNotepadPlugin.author=John Gellene
+ * plugin.QuickNotepadPlugin.version=4.1
+ * plugin.QuickNotepadPlugin.docs=QuickNotepad.html
+ * plugin.QuickNotepadPlugin.depend.0=jedit 04.01.01.00</pre>
+ *
+ * Note that in all cases above where a class name is needed, the fully
+ * qualified class name, including the package name, if any, must be used.<p>
+ *
+ * Alternatively, instead of extending this class, a plugin core class can
+ * extend <code>EBPlugin</code> to automatically receive EditBus messages.
+ *
+ * @see org.gjt.sp.jedit.EBPlugin
+ * @see org.gjt.sp.jedit.jEdit#getProperty(String)
+ * @see org.gjt.sp.jedit.jEdit#getPlugin()
+ * @see org.gjt.sp.jedit.jEdit#getPlugins()
+ * @see org.gjt.sp.jedit.jEdit#getPluginJAR()
+ * @see org.gjt.sp.jedit.jEdit#getPluginJARs()
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  * @since jEdit 2.1pre1
  */
 public abstract class EditPlugin
 {
-	//{{{ getClassName() method
-	/**
-	 * Returns the plugin's class name.
-	 *
-	 * @since jEdit 2.5pre3
-	 */
-	public String getClassName()
-	{
-		return getClass().getName();
-	} //}}}
-
 	//{{{ start() method
 	/**
-	 * Method called by jEdit to initialize the plugin.
-	 * Actions and edit modes should be registered here, along
-	 * with any EditBus paraphinalia.
+	 * The jEdit startup routine calls this method for each loaded
+	 * plugin.
+	 *
+	 * This method should return as quickly as possible to avoid
+	 * slowing down jEdit startup.<p>
+	 *
+	 * The default implementation does nothing.
+	 *
 	 * @since jEdit 2.1pre1
 	 */
-	public void start() {} //}}}
+	public void start() {}
+	//}}}
 
 	//{{{ stop() method
 	/**
-	 * Method called by jEdit before exiting. Usually, nothing
-	 * needs to be done here.
+	 * The jEdit exit routine calls this method fore ach loaded plugin.
+	 *
+	 * If a plugin uses state information or other persistent data
+	 * that should be stored in a special format, this would be a good place
+	 * to write the data to storage.  If the plugin uses jEdit's properties
+	 * API to hold settings, no special processing is needed for them on
+	 * exit, since they will be saved automatically.<p>
+	 *
+	 * The default implementation does nothing.
+	 *
 	 * @since jEdit 2.1pre1
 	 */
 	public void stop() {} //}}}
 
 	//{{{ createMenuItems() method
 	/**
-	 * Method called every time a view is created to set up the
-	 * Plugins menu. Menus and menu items should be loaded using the
-	 * methods in the GUIUtilities class, and added to the vector.
-	 * @param menuItems Add menus and menu items here
+	 * When a <code>View</code> object is created, it calls this
+	 * method on each plugin class to obtain entries to be displayed
+	 * in the view's <b>Plugins</b> menu.
+	 *
+	 * The <code>menuItems</code> vector accumulates menu items and
+	 * menus as it is passed from plugin to plugin.<p>
+	 *
+	 * The easiest way to provide menu items is to
+	 * package them as entries in the plugin's property
+	 * file and implement <code>createMenuItems()</code> with a
+	 * call to the <code>GUIUtilities.loadMenu()</code>
+	 * method:
+	 * <pre>public void createMenuItems(Vector menuItems)
+	 * {
+	 *     menuItems.addElement(GUIUtilities.loadMenu(
+	 *         "myplugin.menu"));
+	 * }</pre>
+	 *
+	 * The default implementation does nothing.
+	 *
+	 * @param menuItems Add menus and menu items here.
 	 *
 	 * @see GUIUtilities#loadMenu(String)
 	 * @see GUIUtilities#loadMenuItem(String)
@@ -80,17 +157,45 @@ public abstract class EditPlugin
 
 	//{{{ createOptionPanes() method
 	/**
-	 * Method called every time the plugin options dialog box is
-	 * displayed. Any option panes created by the plugin should be
-	 * added here.
+	 * When the <b>Global Options</b> dialog is opened, this method is
+	 * called for each plugin in turn.
+	 *
+	 * To show an option pane, the plugin should define an
+	 * option pane class and implement <code>createOptionPane()</code>
+	 * as follows:
+	 *
+	 * <pre>public void createOptionPanes(OptionsDialog optionsDialog)
+	 * {
+	 *     dialog.addOptionPane(new MyPluginOptionPane());
+	 * }</pre>
+	 *
+	 * Plugins can also define more than one option pane, grouped in an
+	 * "option group". See the documentation for the <code>OptionGroup</code>
+	 * class for information.<p>
+	 *
+	 * The default implementation does nothing.
+	 *
 	 * @param optionsDialog The plugin options dialog box
 	 *
 	 * @see OptionPane
 	 * @see OptionsDialog#addOptionPane(OptionPane)
+	 * @see OptionGroup
+	 * @see OptionsDialog#addOptionGroup(OptionGroup)
 	 *
 	 * @since jEdit 2.1pre1
 	 */
 	public void createOptionPanes(OptionsDialog optionsDialog) {} //}}}
+
+	//{{{ getClassName() method
+	/**
+	 * Returns the plugin's class name.
+	 *
+	 * @since jEdit 2.5pre3
+	 */
+	public String getClassName()
+	{
+		return getClass().getName();
+	} //}}}
 
 	//{{{ getJAR() method
 	/**

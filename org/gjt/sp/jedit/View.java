@@ -36,16 +36,47 @@ import org.gjt.sp.jedit.textarea.*;
 //}}}
 
 /**
- * A window that edits buffers.<p>
+ * A <code>View</code> is jEdit's top-level frame window.<p>
  *
  * In a BeanShell script, you can obtain the current view instance from the
  * <code>view</code> variable.<p>
+ *
+ * The largest component it contains is an <code>EditPane</code> that in turn
+ * contains a <code>JEditTextArea</code> that displays a <code>Buffer</code>.
+ * A view can have more than one edit pane in a split window configuration.
+ * A view also contains a menu bar, an optional toolbar and other window
+ * decorations, as well as docked windows.<p>
+ *
+ * The <b>View</b> class performs two important operations
+ * dealing with plugins: creating plugin menu items, and managing dockable
+ * windows.
+ *
+ * <ul>
+ * <li>When a view is being created, its initialization routine
+ * iterates through the collection of loaded plugins and calls
+ * the <code>createMenuItems()</code> method of
+ * each plugin core class.</li>
+ * <li>The view also creates and initializes a <code>DockableWindowManager</code>
+ * object.  This object is
+ * responsible for creating, closing and managing dockable windows.</li>
+ * </ul>
  *
  * This class does not have a public constructor.
  * Views can be opened and closed using methods in the <code>jEdit</code>
  * class.
  *
+ * @see org.gjt.sp.jedit.EditPane
+ * @see org.gjt.sp.jedit.textarea.JEditTextArea
+ * @see org.gjt.sp.jedit.Buffer
+ * @see org.gjt.sp.jedit.gui.DockableWindowManager
+ * @see org.gjt.sp.jedit.EditPlugin#createMenuItems(Vector)
+ * @see org.gjt.sp.jedit.jEdit#newView(View)
+ * @see org.gjt.sp.jedit.jEdit#newView(View,Buffer)
+ * @see org.gjt.sp.jedit.jEdit#newView(View,Buffer,boolean)
+ * @see org.gjt.sp.jedit.jEdit#closeView(View)
+ *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class View extends JFrame implements EBComponent

@@ -35,8 +35,26 @@ import java.util.*;
 //}}}
 
 /**
- * Manages dockable windows.
+ * The <code>DockableWindowManager</code> keeps track of dockable windows.
+ * Each <code>View</code> has an instance of this class.<p>
+ *
+ * When an instance of this class is initialized, it
+ * iterates through the list of registered dockable windows (from jEdit itself,
+ * and any loaded plugins) and
+ * examines options supplied by the user in the <b>Global
+ * Options</b> dialog box. Any plugins designated for one of the
+ * four docking positions are displayed.<p>
+ *
+ * To create an instance of a dockable window, the <code>DockableWindowManager</code>
+ * finds and executes the BeanShell code extracted from the appropriate
+ * <code>dockables.xml</code> file. This code will typically consist of a call
+ * to the constructor of the dockable window component. The result of the
+ * BeanShell expression, typically a newly constructed component, is placed
+ * inside the docked or floating window managed by the
+ * <code>DockableWindowManager</code>.
+ *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  * @since jEdit 2.6pre3
  */

@@ -289,7 +289,7 @@
 
 
 
-<informalexample><programlisting>public class QuickNotepadPlugin extends EBPlugin {
+<informalexample><programlisting>public class QuickNotepadPlugin extends EditPlugin {
     public static final String NAME = "quicknotepad";
     public static final String MENU = "quicknotepad.menu";
     public static final String PROPERTY_PREFIX
@@ -319,8 +319,8 @@
 </para>
 
 <para>
-  If the plugin only had a single menu item (for example, a checkbox item
-  that toggled activation of a dockable window), we would call
+  If the plugin only had a single menu item (for example, an item
+  activating a dockable window), we would call
   <function>GUIUtilities.loadMenuItem()</function> instead of
   <function>loadMenu()</function>. We will explain the use of both methods
   in the next section.
