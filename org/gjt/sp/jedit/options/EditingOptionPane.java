@@ -68,8 +68,8 @@ public class EditingOptionPane extends AbstractOptionPane
 		mode = new JComboBox(modeNames);
 		mode.addActionListener(new ActionHandler());
 
-		addComponent(GUIUtilities.createMultilineLabel(
-			jEdit.getProperty("options.editing.caption")));
+		captionBox = new Box(BoxLayout.X_AXIS);
+		addComponent(captionBox);
 
 		addComponent(jEdit.getProperty("options.editing.mode"),mode);
 
@@ -146,6 +146,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private ModeProperties global;
 	private ModeProperties[] modeProps;
 	private ModeProperties current;
+	private Box captionBox;
 	private JComboBox mode;
 	private JCheckBox useDefaults;
 	private JTextField filenameGlob;
@@ -184,6 +185,11 @@ public class EditingOptionPane extends AbstractOptionPane
 		current.edited = true;
 		current.load();
 
+		captionBox.removeAll();
+		captionBox.add(GUIUtilities.createMultilineLabel(
+			jEdit.getProperty("options.editing.caption-"
+			+ (index == 0 ? "0" : "1"))));
+
 		useDefaults.setSelected(current.useDefaults);
 		filenameGlob.setText(current.filenameGlob);
 		firstlineGlob.setText(current.firstlineGlob);
@@ -197,6 +203,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		noTabs.setSelected(current.noTabs);
 
 		updateEnabled();
+		revalidate();
 	} //}}}
 
 	//{{{ updateEnabled() method
