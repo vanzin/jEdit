@@ -7,6 +7,9 @@
 
 <MODES>
 
+<MODE NAME="4gl"		FILE="4gl.xml"
+				FILE_NAME_GLOB="*.4gl" />
+
 <MODE NAME="actionscript"	FILE="actionscript.xml"
 				FILE_NAME_GLOB="*.as" />
 
