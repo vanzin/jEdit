@@ -672,11 +672,11 @@ public class Buffer implements EBComponent
 						writeUnlock();
 					}
 
+					parseBufferLocalProperties();
+
 					if(!getPath().equals(oldPath))
 					{
 						jEdit.updatePosition(Buffer.this);
-
-						parseBufferLocalProperties();
 						setMode();
 					}
 
@@ -1753,13 +1753,6 @@ public class Buffer implements EBComponent
 			setFoldHandler(new IndentFoldHandler());
 		else
 			setFoldHandler(new DummyFoldHandler());
-
-		/* if(undo != null)
-		{
-			undo.setLimit(jEdit.getIntegerProperty(
-				"buffer.undoCount",100));
-		} */
-		putProperty("maxLineLen",getProperty("maxLineLen"));
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -2731,7 +2724,7 @@ public class Buffer implements EBComponent
 					changed = true;
 				}
 
-				if(changed)
+				if(changed && !inInsert)
 					fireFoldLevelChanged(start,line);
 
 				return newFoldLevel;
@@ -2830,7 +2823,7 @@ public class Buffer implements EBComponent
 	{
 		try
 		{
-			writeLock();
+			readLock();
 
 			if(offset < 0 || offset > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset);
@@ -2839,7 +2832,7 @@ public class Buffer implements EBComponent
 		}
 		finally
 		{
-			writeUnlock();
+			readUnlock();
 		}
 	} //}}}
 
@@ -3240,6 +3233,7 @@ public class Buffer implements EBComponent
 
 	private Hashtable properties;
 	private ReadWriteLock lock;
+	private boolean inInsert;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 	private IntegerArray integerArray;
@@ -3343,14 +3337,14 @@ public class Buffer implements EBComponent
 			parseBufferLocalProperty(text);
 		}
 
+		//XXX: Why the fuck is this here???
+
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
 		{
 			((Marker)markers.elementAt(i))
 				.createPosition();
 		}
-
-		setMode();
 	} //}}}
 
 	//{{{ parseBufferLocalProperty() method
@@ -3439,7 +3433,7 @@ public class Buffer implements EBComponent
 	{
 		FoldHandler oldFoldHandler = this.foldHandler;
 
-		// Will break with possible future plugin fold handlers
+		//XXX: Will break with possible future plugin fold handlers
 		if(oldFoldHandler != null
 			&& oldFoldHandler.getClass() == foldHandler.getClass())
 			return;
@@ -3458,31 +3452,40 @@ public class Buffer implements EBComponent
 	//{{{ contentInserted() method
 	private void contentInserted(int offset, int length, IntegerArray endOffsets)
 	{
-		int startLine = offsetMgr.getLineOfOffset(offset);
-		int numLines = endOffsets.getSize();
-
-		offsetMgr.contentInserted(startLine,offset,numLines,length,
-			endOffsets);
-
-		if(numLines > 0)
+		try
 		{
-			// notify fold visibility managers
-			for(int i = 0; i < inUseFVMs.length; i++)
+			inInsert = true;
+
+			int startLine = offsetMgr.getLineOfOffset(offset);
+			int numLines = endOffsets.getSize();
+
+			offsetMgr.contentInserted(startLine,offset,numLines,length,
+				endOffsets);
+
+			if(numLines > 0)
 			{
-				if(inUseFVMs[i] != null)
+				// notify fold visibility managers
+				for(int i = 0; i < inUseFVMs.length; i++)
 				{
-					inUseFVMs[i]._linesInserted(
-						startLine,numLines);
+					if(inUseFVMs[i] != null)
+					{
+						inUseFVMs[i]._linesInserted(
+							startLine,numLines);
+					}
 				}
 			}
+
+			if(lastTokenizedLine >= startLine)
+				lastTokenizedLine = -1;
+
+			fireContentInserted(startLine,offset,numLines,length);
+
+			setDirty(true);
 		}
-
-		if(lastTokenizedLine >= startLine)
-			lastTokenizedLine = -1;
-
-		fireContentInserted(startLine,offset,numLines,length);
-
-		setDirty(true);
+		finally
+		{
+			inInsert = false;
+		}
 	} //}}}
 
 	//{{{ Event firing methods

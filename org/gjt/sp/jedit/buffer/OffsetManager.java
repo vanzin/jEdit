@@ -168,7 +168,17 @@ public class OffsetManager
 	} //}}}
 
 	//{{{ createPosition() method
-	public Position createPosition(int offset)
+
+	// note: Buffer.createPosition() grabs a read lock, so the buffer
+	// will not change during this method. however, if two stops call
+	// it, there can be contention issues unless this method is
+	// synchronized.
+
+	// I could make Buffer.createPosition() grab a write lock, but then
+	// it would be necessary to implement grabbing write locks within
+	// read locks, since HyperSearch for example does everything insude
+	// a read lock.
+	public synchronized Position createPosition(int offset)
 	{
 		PosBottomHalf bh = null;
 
@@ -229,8 +239,7 @@ public class OffsetManager
 			for(int i = 0; i < numLines; i++)
 			{
 				lineInfo[startLine + i] =
-					(((offset + endOffsets.get(i) + 1)
-					| (0xffL << VISIBLE_SHIFT))
+					((offset + endOffsets.get(i) + 1)
 					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
 			}
 		} //}}}
@@ -238,8 +247,7 @@ public class OffsetManager
 		//{{{ Update remaining line start offsets
 		for(int i = endLine; i < lineCount; i++)
 		{
-			lineInfo[i] = (((getLineEndOffset(i) + length)
-				| (0xffL << VISIBLE_SHIFT))
+			lineInfo[i] = ((getLineEndOffset(i) + length)
 				& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
 		} //}}}
 

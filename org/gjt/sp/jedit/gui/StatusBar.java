@@ -350,15 +350,15 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 				JEditTextArea textArea = view.getTextArea();
 				Buffer buffer = view.getBuffer();
-				buffer.putProperty("folding",text);
+				buffer.setStringProperty("folding",text);
 				buffer.propertiesChanged();
 
-				Integer collapseFolds = (Integer)buffer.getProperty(
-					"collapseFolds");
-				if(collapseFolds != null && collapseFolds.intValue() != 0)
+				int collapseFolds = buffer.getIntegerProperty(
+					"collapseFolds",0);
+				if(collapseFolds != 0)
 				{
 					textArea.getFoldVisibilityManager()
-						.expandFolds(collapseFolds.intValue());
+						.expandFolds(collapseFolds);
 				}
 				else
 				{

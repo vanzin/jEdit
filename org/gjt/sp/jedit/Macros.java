@@ -1,5 +1,8 @@
 /*
  * Macros.java - Macro manager
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +22,7 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.text.Element;
+//{{{ Imports
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +34,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * This class records and runs macros.
@@ -40,6 +44,7 @@ import org.gjt.sp.util.Log;
  */
 public class Macros
 {
+	//{{{ message() method
 	/**
 	 * Utility method that can be used to display a message dialog in a macro.
 	 * @param comp The component to show the dialog on behalf of, this
@@ -54,8 +59,9 @@ public class Macros
 		JOptionPane.showMessageDialog(comp,message,
 			jEdit.getProperty("macro-message.title"),
 			JOptionPane.INFORMATION_MESSAGE);
-	}
+	} //}}}
 
+	//{{{ error() method
 	/**
 	 * Utility method that can be used to display an error dialog in a macro.
 	 * @param comp The component to show the dialog on behalf of, this
@@ -70,8 +76,9 @@ public class Macros
 		JOptionPane.showMessageDialog(comp,message,
 			jEdit.getProperty("macro-message.title"),
 			JOptionPane.ERROR_MESSAGE);
-	}
+	} //}}}
 
+	//{{{ input() method
 	/**
 	 * Utility method that can be used to prompt for input in a macro.
 	 * @param comp The component to show the dialog on behalf of, this
@@ -84,8 +91,9 @@ public class Macros
 		GUIUtilities.hideSplashScreen();
 
 		return input(comp,prompt,null);
-	}
+	} //}}}
 
+	//{{{ input() method
 	/**
 	 * Utility method that can be used to prompt for input in a macro.
 	 * @param comp The component to show the dialog on behalf of, this
@@ -100,8 +108,9 @@ public class Macros
 		return (String)JOptionPane.showInputDialog(comp,prompt,
 			jEdit.getProperty("macro-input.title"),
 			JOptionPane.QUESTION_MESSAGE,null,null,defaultValue);
-	}
+	} //}}}
 
+	//{{{ confirm() method
 	/**
 	 * Utility method that can be used to ask for confirmation in a macro.
 	 * @param comp The component to show the dialog on behalf of, this
@@ -118,8 +127,9 @@ public class Macros
 
 		return JOptionPane.showConfirmDialog(comp,prompt,
 			jEdit.getProperty("macro-confirm.title"),buttons,type);
-	}
+	} //}}}
 
+	//{{{ browseSystemMacros() method
 	/**
 	 * Opens the system macro directory in a VFS browser.
 	 * @param view The view
@@ -147,8 +157,9 @@ public class Macros
 				browser.setDirectory(systemMacroPath);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ browseUserMacros() method
 	/**
 	 * Opens the user macro directory in a VFS browser.
 	 * @param view The view
@@ -176,8 +187,9 @@ public class Macros
 				browser.setDirectory(userMacroPath);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ loadMacros() method
 	/**
 	 * Rebuilds the macros list, and sends a MacrosChanged message
 	 * (views update their Macros menu upon receiving it)
@@ -206,8 +218,9 @@ public class Macros
 		}
 
 		EditBus.send(new MacrosChanged(null));
-	}
+	} //}}}
 
+	//{{{ getMacroHierarchy() method
 	/**
 	 * Returns a vector hierarchy with all known macros in it.
 	 * Each element of this vector is either a macro name string,
@@ -219,8 +232,9 @@ public class Macros
 	public static Vector getMacroHierarchy()
 	{
 		return macroHierarchy;
-	}
+	} //}}}
 
+	//{{{ getMacroActionSet() method
 	/**
 	 * Returns an action set with all known macros in it.
 	 * @since jEdit 4.0pre1
@@ -228,8 +242,9 @@ public class Macros
 	public static ActionSet getMacroActionSet()
 	{
 		return macroActionSet;
-	}
+	} //}}}
 
+	//{{{ getMacro() method
 	/**
 	 * Returns the macro with the specified name.
 	 * @param macro The macro's name
@@ -238,14 +253,16 @@ public class Macros
 	public static Macro getMacro(String macro)
 	{
 		return (Macro)macroHash.get(macro);
-	}
+	} //}}}
 
+	//{{{ Macro class
 	/**
 	 * Encapsulates the macro's label, name and path.
 	 * @since jEdit 2.2pre4
 	 */
 	public static class Macro extends EditAction
 	{
+		//{{{ Macro constructor
 		public Macro(String name, String path)
 		{
 			// stupid name for backwards compatibility
@@ -255,13 +272,15 @@ public class Macros
 			int index = name.lastIndexOf('/');
 			label = name.substring(index + 1)
 				.replace('_',' ');
-		}
+		} //}}}
 
+		//{{{ getLabel() method
 		public String getLabel()
 		{
 			return label;
-		}
+		} //}}}
 
+		//{{{ invoke() method
 		public void invoke(View view)
 		{
 			lastMacro = path;
@@ -278,20 +297,23 @@ public class Macros
 			{
 				buffer.endCompoundEdit();
 			}
-		}
+		} //}}}
 
+		//{{{ getCode() method
 		public String getCode()
 		{
 			return "Macros.getMacro(\""
 				+ getName().substring("play-macro@".length())
 				+ "\").invoke(view);";
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private String path;
 		private String label;
-	}
+		//}}}
+	} //}}}
 
+	//{{{ recordTemporaryMacro() method
 	/**
 	 * Starts recording a temporary macro.
 	 * @param view The view
@@ -322,8 +344,9 @@ public class Macros
 		buffer.insert(0,jEdit.getProperty("macro.temp.header"));
 
 		recordMacro(view,buffer,true);
-	}
+	} //}}}
 
+	//{{{ recordMacro() method
 	/**
 	 * Starts recording a macro.
 	 * @param view The view
@@ -362,8 +385,9 @@ public class Macros
 		buffer.insert(0,jEdit.getProperty("macro.header"));
 
 		recordMacro(view,buffer,false);
-	}
+	} //}}}
 
+	//{{{ stopRecording() method
 	/**
 	 * Stops a recording currently in progress.
 	 * @param view The view
@@ -383,8 +407,9 @@ public class Macros
 				view.setBuffer(recorder.buffer);
 			recorder.dispose();
 		}
-	}
+	} //}}}
 
+	//{{{ runTemporaryMacro() method
 	/**
 	 * Runs the temporary macro.
 	 * @param view The view
@@ -415,8 +440,9 @@ public class Macros
 		{
 			buffer.endCompoundEdit();
 		}
-	}
+	} //}}}
 
+	//{{{ runLastMacro() method
 	/**
 	 * Runs the most recently run or recorded macro.
 	 * @param view The view
@@ -428,9 +454,11 @@ public class Macros
 			view.getToolkit().beep();
 		else
 			BeanShell.runScript(view,lastMacro,true,false);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Static variables
 	private static String systemMacroPath;
 	private static String userMacroPath;
 
@@ -438,15 +466,18 @@ public class Macros
 	private static Vector macroHierarchy;
 	private static Hashtable macroHash;
 	private static String lastMacro;
+	//}}}
 
+	//{{{ Class initializer
 	static
 	{
 		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
 		jEdit.addActionSet(macroActionSet);
 		macroHierarchy = new Vector();
 		macroHash = new Hashtable();
-	}
+	} //}}}
 
+	//{{{ loadMacros() method
 	private static void loadMacros(Vector vector, String path, File directory)
 	{
 		String[] macroFiles = directory.list();
@@ -476,8 +507,9 @@ public class Macros
 				vector.addElement(submenu);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ recordMacro() method
 	/**
 	 * Starts recording a macro.
 	 * @param view The view
@@ -494,8 +526,11 @@ public class Macros
 		// setting the message to 'null' causes the status bar to check
 		// if a recording is in progress
 		view.getStatus().setMessage(null);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Recorder class
 	public static class Recorder implements EBComponent
 	{
 		View view;
@@ -504,14 +539,16 @@ public class Macros
 
 		boolean lastWasInput;
 
+		//{{{ Recorder constructor
 		public Recorder(View view, Buffer buffer, boolean temporary)
 		{
 			this.view = view;
 			this.buffer = buffer;
 			this.temporary = temporary;
 			EditBus.addToBus(this);
-		}
+		} //}}}
 
+		//{{{ record() method
 		public void record(String code)
 		{
 			if(lastWasInput)
@@ -522,8 +559,9 @@ public class Macros
 
 			append("\n");
 			append(code);
-		}
+		} //}}}
 
+		//{{{ record() method
 		public void record(int repeat, String code)
 		{
 			if(repeat == 1)
@@ -535,8 +573,9 @@ public class Macros
 					+ code + "\n"
 					+ "}");
 			}
-		}
+		} //}}}
 
+		//{{{ record() method
 		public void record(int repeat, char ch)
 		{
 			// record \n and \t on lines specially so that auto indent
@@ -560,8 +599,9 @@ public class Macros
 					lastWasInput = true;
 				}
 			}
-		}
+		} //}}}
 
+		//{{{ handleMessage() method
 		public void handleMessage(EBMessage msg)
 		{
 			if(msg instanceof BufferUpdate)
@@ -573,13 +613,15 @@ public class Macros
 						stopRecording(view);
 				}
 			}
-		}
+		} //}}}
 
+		//{{{ append() method
 		private void append(String str)
 		{
 			buffer.insert(buffer.getLength(),str);
-		}
+		} //}}}
 
+		//{{{ dispose() method
 		private void dispose()
 		{
 			if(lastWasInput)
@@ -588,9 +630,7 @@ public class Macros
 				append("\");");
 			}
 
-			int lineCount = buffer.getDefaultRootElement()
-				.getElementCount();
-			for(int i = 0; i < lineCount; i++)
+			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
 				buffer.indentLine(i,true,true);
 			}
@@ -600,6 +640,6 @@ public class Macros
 			// setting the message to 'null' causes the status bar to
 			// check if a recording is in progress
 			view.getStatus().setMessage(null);
-		}
-	}
+		} //}}}
+	} //}}}
 }
