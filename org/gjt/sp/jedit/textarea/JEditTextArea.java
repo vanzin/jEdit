@@ -3064,7 +3064,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 					&& buffer.indentLine(caretLine,true,false))
 					return;
 				else
-					setSelectedText("\t");
+					insertTab();
 			}
 			else
 				insertTab();

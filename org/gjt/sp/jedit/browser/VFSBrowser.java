@@ -422,7 +422,18 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		pathField.setText(path);
 
+		if(!startRequest())
+			return;
+
 		browserView.loadDirectory(path);
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				endRequest();
+			}
+		});
 	} //}}}
 
 	//{{{ reloadDirectory() method
@@ -658,9 +669,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		Object session = vfs.createVFSSession(path,this);
 		if(session == null)
-			return;
-
-		if(!startRequest())
 			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(

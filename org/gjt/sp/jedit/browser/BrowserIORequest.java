@@ -98,7 +98,8 @@ public class BrowserIORequest extends WorkRequest
 			break;
 		}
 
-		browser.endRequest();
+		if(type != LIST_DIRECTORY)
+			browser.endRequest();
 	} //}}}
 
 	//{{{ toString() method

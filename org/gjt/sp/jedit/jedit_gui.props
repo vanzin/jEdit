@@ -298,9 +298,7 @@ text=select-word \
      delete-paragraph \
      - \
      to-lower \
-     to-upper \
-     spaces-to-tabs \
-     tabs-to-spaces
+     to-upper
 text.label=Text
 select-word.label=Select Word
 select-line.label=Select Line
@@ -314,8 +312,6 @@ delete-paragraph.label=Delete Paragraph
 format-paragraph.label=Format Paragraph
 to-lower.label=To Lower Case
 to-upper.label=To Upper Case
-spaces-to-tabs.label=Spaces to Tabs
-tabs-to-spaces.label=Tabs to Spaces
 #}}}
 
 #{{{ Source menu
@@ -329,7 +325,11 @@ source=range-comment \
        select-block \
        match-bracket \
        prev-bracket \
-       next-bracket
+       next-bracket \
+       - \
+       spaces-to-tabs \
+       tabs-to-spaces
+
 source.label=Source
 range-comment.label=Range Comment
 line-comment.label=Line Comment
@@ -340,6 +340,8 @@ select-block.label=Select Code Block
 match-bracket.label=Go to Matching Bracket
 prev-bracket.label=Go to Previous Bracket
 next-bracket.label=Go to Next Bracket
+spaces-to-tabs.label=Spaces to Tabs
+tabs-to-spaces.label=Tabs to Spaces
 #}}}
 
 #{{{ Registers menu

@@ -654,9 +654,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public float nextTabStop(float x, int tabOffset)
 	{
-		int offset = textArea.getHorizontalOffset();
-		int ntabs = (int)((x - offset) / tabSize);
-		return (ntabs + 1) * tabSize + offset;
+		int ntabs = (int)(x / tabSize);
+		return (ntabs + 1) * tabSize;
 	} //}}}
 
 	//{{{ getPreferredSize() method
