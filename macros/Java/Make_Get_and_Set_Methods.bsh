@@ -4,6 +4,7 @@
  * get() and set() methods from instance variables
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * based on code contributed to the jEdit Macro Guide project
  * by Seppo Silaste
@@ -45,6 +46,9 @@
  * instance variables. Otherwise, the macro will parse C++ variables and
  * write C++ methods (with an equal potential for writing nonsense if an data
  * member is not being grabbed).
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 import javax.swing.border.*;
@@ -281,4 +285,36 @@ mainView = view;
 
 makeGetSetDialog();
 
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Make_Get_and_Set_Methods.bsh</filename></para>
+    <abstract><para>
+        Creates <function>getXXX()</function> or <function>setXXX()</function>
+        methods that can be pasted into the buffer text.
+    </para></abstract>
+    <para>
+        This macro presents a dialog that will <quote>grab</quote> the names
+        of instance variables from the caret line of the current buffer
+        and paste a corresponding <function>getXXX()</function> or
+        <function>setXXX()</function> method to one of two text areas in the
+        dialog.  The text can be edited in the dialog and then pasted into the
+        current buffer using the <guilabel>Insert...</guilabel> buttons.  If
+        the caret is set to a line containing something other than an instance
+        variable, the text grabbing routine is likely to generate nonsense.
+    </para>
+    <para>
+        As explained in the notes accompanying the source code, the macro
+        uses a global variable which can be set to configure the macro to work
+        with either Java or C++ code.  When set for use with C++ code,
+        the macro will also write (in commented text) definitions of
+        <function>getXXX()</function> or <function>setXXX()</function>
+        suitable for inclusion in a header file.
+    </para>
+</listitem>
+
+*/
+
+// end Make_Get_and_Set_Methods.bsh
 
