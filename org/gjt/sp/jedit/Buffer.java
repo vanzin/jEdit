@@ -2494,15 +2494,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 						% tabSize));
 				}
 				break;
-			case '(':
-				openParens.push(new Integer(i));
-				prevLineParenWeight++;
-				break;
-			case ')':
-				if(openParens.size() > 0)
-					openParens.pop();
-				prevLineParenWeight--;
-				break;
 			default:
 				prevLineStart = false;
 
@@ -2529,8 +2520,19 @@ loop:		for(int i = 0; i < seg.count; i++)
 						i += 2;
 					else
 						prevLineBrackets++;
+				} 
+				else if (c == '(')
+				{
+					openParens.push(new Integer(i));
+					prevLineParenWeight++;
 				}
-
+				else if (c == ')')
+				{
+					if(openParens.size() > 0)
+						openParens.pop();
+					prevLineParenWeight--;
+				}
+						 
 				break;
 			}
 		}
@@ -2611,7 +2613,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				{
 					int startLine = getLineOfOffset(openParenOffset);
 					int startLineParenWeight = getLineParenWeight(startLine);
-
+					
 					if(startLineParenWeight == 1)
 						indent = getCurrentIndentForLine(startLine,null);
 					else
@@ -2621,7 +2623,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// no parenthesis on previous line (prevLineParenWeight == 0) so the normal indenting rules are used
 		}
 		//}}}
-
+		
 		//{{{ Handle brackets
 		if(prevLineBrackets > 0)
 			indent += (indentSize * prevLineBrackets);
@@ -2636,13 +2638,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 				{
 					int openLineIndex = getLineOfOffset(openBracketIndex);
 					String openLine = getLineText(openLineIndex);
+					Log.log(Log.DEBUG,this,"parenWeight of "+openLine+" is "+getLineParenWeight(openLineIndex));
 					if (getLineParenWeight(openLineIndex) < 0)
 					{
 						openBracketIndex = TextUtilities.findMatchingBracket(this,openLineIndex,openLine.indexOf(")"));
+						Log.log(Log.DEBUG,this,"openBracketIndex: "+openBracketIndex);
 					}
 					openLine = getLineText(getLineOfOffset(openBracketIndex));
+					Log.log(Log.DEBUG,this,"openLine: "+openLine);
 					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
 						openLine,tabSize);
+					Log.log(Log.DEBUG,this,"indent: "+indent);
 				}
 				else
 					return -1;
@@ -4172,7 +4178,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -4191,7 +4197,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -4210,7 +4216,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -4229,7 +4235,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -4246,7 +4252,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -4263,7 +4269,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}

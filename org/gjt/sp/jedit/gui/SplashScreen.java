@@ -111,11 +111,11 @@ public class SplashScreen extends JComponent
 		g.drawImage(image,1,1,this);
 
 		// XXX: This should not be hardcoded
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.fillRect(1,image.getHeight(this) + 1,
 			((win.getWidth() - 2) * progress) / 5,PROGRESS_HEIGHT);
 
-		g.setColor(Color.lightGray);
+		g.setColor(Color.black);
 
 		String str = "VERSION " + jEdit.getVersion();
 
