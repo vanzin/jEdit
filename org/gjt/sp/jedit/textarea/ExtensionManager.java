@@ -146,7 +146,6 @@ class ExtensionManager
 				ext.paintScreenLineRange(gfx,firstLine,lastLine,
 					physicalLines,start,end,y,lineHeight);
 			}
-			
 			catch(Throwable t)
 			{
 				Log.log(Log.ERROR,this,t);

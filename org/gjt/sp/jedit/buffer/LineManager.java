@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;

@@ -153,7 +153,7 @@ view.action.close-tooltip=Hide action bar
 #}}}
 
 #{{{ Context menu
-view.context=cut copy paste paste-previous paste-deleted - insert-file - \
+view.context=cut copy paste paste-previous paste-deleted - \
 	select-block to-upper to-lower - hypersearch-word - \
 	add-marker - collapse-fold expand-fold narrow-to-fold
 view.context.customize=Customize This Menu...
@@ -166,7 +166,6 @@ view.mbar=file edit search markers folds view utils macros plugins help-menu
 file=new-file \
      open-file \
      %recent-files \
-     insert-file \
      - \
      reload \
      reload-all \
@@ -186,7 +185,6 @@ file=new-file \
 file.label=$File
 new-file.label=$New
 open-file.label=$Open...
-insert-file.label=$Insert...
 reload.label=$Reload
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close

@@ -3,6 +3,14 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- action bar menu command doesn't work
+- goToBuffer(): ignore text area with height 0
+- entering ../.. inside archive
+- remove a plugin with a key binding: null pointer exception
+- vfs updates still broken
+- vfs browser insert with multiple files
+- insert command doesn't need to exist
+- soft wrap: with invisible display managers
 - history text field tweak
 - search in subdirs always off
 - exceptions in display manager with zero-height text area

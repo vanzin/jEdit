@@ -401,12 +401,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="insert-file">
-	<CODE>
-		buffer.showInsertFileDialog(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="insert-literal">
 	<CODE>
 		view.getInputHandler().readNextChar(
