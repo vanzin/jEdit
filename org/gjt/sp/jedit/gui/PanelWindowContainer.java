@@ -52,6 +52,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		//{{{ Button box setup
 		buttons = new JPanel(new ButtonLayout());
+		buttons.setBorder(new EmptyBorder(1,1,1,1));
 
 		// the close box must be the same size as the other buttons to look good.
 		// there are two ways to achieve this:
@@ -565,6 +566,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 		//{{{ preferredLayoutSize() method
 		public Dimension preferredLayoutSize(Container parent)
 		{
+			Insets insets = ((JComponent)parent).getBorder()
+				.getBorderInsets((JComponent)parent);
+
 			Component[] comp = parent.getComponents();
 			if(comp.length == 2)
 			{
@@ -576,11 +580,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 				if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
 				{
-					return new Dimension(0,comp[2].getPreferredSize().height);
+					return new Dimension(0,
+						comp[2].getPreferredSize().height
+						+ insets.top
+						+ insets.bottom);
 				}
 				else
 				{
-					return new Dimension(comp[2].getPreferredSize().width,0);
+					return new Dimension(
+						comp[2].getPreferredSize().width
+						+ insets.left + insets.right,0);
 				}
 			}
 		} //}}}
@@ -588,29 +597,15 @@ public class PanelWindowContainer implements DockableWindowContainer
 		//{{{ minimumLayoutSize() method
 		public Dimension minimumLayoutSize(Container parent)
 		{
-			Component[] comp = parent.getComponents();
-			if(comp.length == 2)
-			{
-				// nothing 'cept close box and popup button
-				return new Dimension(0,0);
-			}
-			else
-			{
-				if(position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM))
-				{
-					return new Dimension(0,comp[2].getMinimumSize().height);
-				}
-				else
-				{
-					return new Dimension(comp[2].getMinimumSize().width,0);
-				}
-			}
+			return preferredLayoutSize(parent);
 		} //}}}
 
 		//{{{ layoutContainer() method
 		public void layoutContainer(Container parent)
 		{
+			Insets insets = ((JComponent)parent).getBorder()
+				.getBorderInsets((JComponent)parent);
+
 			Component[] comp = parent.getComponents();
 			if(comp.length != 2)
 			{
@@ -619,7 +614,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 				popupButton.setVisible(false);
 
 				Dimension parentSize = parent.getSize();
-				int pos = 0;
+				int pos = (position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM)
+					) ? 0 : insets.left;
+
 				for(int i = 2; i < comp.length; i++)
 				{
 					Dimension size = comp[i].getPreferredSize();
@@ -628,7 +626,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 					{
 						if(!closeBoxSizeSet)
 						{
-							closeBox.setBounds(0,0,size.height,size.height);
+							closeBox.setBounds(pos,
+								insets.top,
+								size.height,size.height);
 							pos += size.height;
 							closeBoxSizeSet = true;
 						}
@@ -638,15 +638,18 @@ public class PanelWindowContainer implements DockableWindowContainer
 							? 0 : closeBox.getWidth()))
 						{
 							popupButton.setBounds(
-								parentSize.width - size.height,
-								0,size.height,size.height);
+								parentSize.width - size.height
+								- insets.right,
+								insets.top,size.height,
+								size.height);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
 							noMore = true;
 						}
 						else
 						{
-							comp[i].setBounds(pos,0,size.width,size.height);
+							comp[i].setBounds(pos,insets.top,
+								size.width,size.height);
 							comp[i].setVisible(true);
 							pos += size.width;
 						}
@@ -655,7 +658,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 					{
 						if(!closeBoxSizeSet)
 						{
-							closeBox.setBounds(0,0,size.width,size.width);
+							closeBox.setBounds(insets.left,
+								insets.top,size.width,size.width);
 							pos += size.width;
 							closeBoxSizeSet = true;
 						}
@@ -665,7 +669,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 							? 0 : closeBox.getHeight()))
 						{
 							popupButton.setBounds(
-								0,parentSize.height - size.width,
+								insets.top,
+								parentSize.height - size.width,
 								size.width,size.width);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
@@ -673,7 +678,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 						}
 						else
 						{
-							comp[i].setBounds(0,pos,size.width,size.height);
+							comp[i].setBounds(insets.left,
+								pos,size.width,size.height);
 							comp[i].setVisible(true);
 							pos += size.height;
 						}

@@ -762,17 +762,20 @@ public class DockableWindowManager extends JPanel
 	//}}}
 
 	//{{{ DockableLayout class
-	class DockableLayout implements LayoutManager2
+	public class DockableLayout implements LayoutManager2
 	{
 		// for backwards compatibility with plugins that fiddle with
 		// jEdit's UI layout
 		static final String CENTER = BorderLayout.CENTER;
+
+		public static final String SEARCH_BAR = "search-bar";
 
 		static final String TOP_BUTTONS = "top-buttons";
 		static final String LEFT_BUTTONS = "left-buttons";
 		static final String BOTTOM_BUTTONS = "bottom-buttons";
 		static final String RIGHT_BUTTONS = "right-buttons";
 
+		Component searchBar;
 		Component center;
 		Component top, left, bottom, right;
 		Component topButtons, leftButtons, bottomButtons, rightButtons;
@@ -788,6 +791,8 @@ public class DockableWindowManager extends JPanel
 		{
 			if(cons == null || CENTER.equals(cons))
 				center = comp;
+			else if(SEARCH_BAR.equals(cons))
+				searchBar = comp;
 			else if(TOP.equals(cons))
 				top = comp;
 			else if(LEFT.equals(cons))
@@ -811,10 +816,13 @@ public class DockableWindowManager extends JPanel
 		{
 			if(center == comp)
 				center = null;
-			else
+			else if(searchBar == comp)
+				searchBar = null;
 			{
 				// none of the others are ever meant to be
-				// removed. retarded, eh?
+				// removed. retarded, eh? this needs to be
+				// fixed eventually, for plugins might
+				// want to do weird stuff to jEdit's UI
 			}
 		} //}}}
 
@@ -833,10 +841,15 @@ public class DockableWindowManager extends JPanel
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
+			Dimension _searchBar = (searchBar == null
+				? new Dimension(0,0)
+				: searchBar.getPreferredSize());
 
 			prefSize.height = _top.height + _bottom.height + _center.height
-				+ _topButtons.height + _bottomButtons.height;
-			prefSize.width = _left.width + _right.width + _center.width
+				+ _topButtons.height + _bottomButtons.height
+				+ _searchBar.height;
+			prefSize.width = _left.width + _right.width
+				+ Math.max(_center.width,_searchBar.width)
 				+ _leftButtons.width + _rightButtons.width;
 
 			return prefSize;
@@ -845,25 +858,8 @@ public class DockableWindowManager extends JPanel
 		//{{{ minimumLayoutSize() method
 		public Dimension minimumLayoutSize(Container parent)
 		{
-			Dimension minSize = new Dimension(0,0);
-			Dimension _top = top.getMinimumSize();
-			Dimension _left = left.getMinimumSize();
-			Dimension _bottom = bottom.getMinimumSize();
-			Dimension _right = right.getMinimumSize();
-			Dimension _topButtons = topButtons.getMinimumSize();
-			Dimension _leftButtons = leftButtons.getMinimumSize();
-			Dimension _bottomButtons = bottomButtons.getMinimumSize();
-			Dimension _rightButtons = rightButtons.getMinimumSize();
-			Dimension _center = (center == null
-				? new Dimension(0,0)
-				: center.getMinimumSize());
-
-			minSize.height = _top.height + _bottom.height + _center.height
-				+ _topButtons.height + _bottomButtons.height;
-			minSize.width = _left.width + _right.width + _center.width
-				+ _leftButtons.width + _rightButtons.width;
-
-			return minSize;
+			// I'm lazy
+			return preferredLayoutSize(parent);
 		} //}}}
 
 		//{{{ maximumLayoutSize() method
@@ -884,6 +880,9 @@ public class DockableWindowManager extends JPanel
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
+			Dimension _searchBar = (searchBar == null
+				? new Dimension(0,0)
+				: searchBar.getPreferredSize());
 
 			int _width = size.width - _leftButtons.width - _rightButtons.width;
 			int _height = size.height - _topButtons.height - _bottomButtons.height;
@@ -1003,13 +1002,24 @@ public class DockableWindowManager extends JPanel
 					_height);
 			}
 
+			if(searchBar != null)
+			{
+				searchBar.setBounds(
+					_leftButtons.width + _left.width,
+					_topButtons.height + _top.height,
+					_width - _left.width - _right.width,
+					_searchBar.height);
+			}
+
 			if(center != null)
 			{
 				center.setBounds(
 					_leftButtons.width + _left.width,
-					_topButtons.height + _top.height,
+					_topButtons.height + _top.height
+					+ _searchBar.height,
 					_width - _left.width - _right.width,
-					_height - _top.height - _bottom.height);
+					_height - _top.height - _bottom.height
+					- _searchBar.height);
 			}
 		} //}}}
 

@@ -22,6 +22,9 @@ JEDIT 4.1 VERSION HISTORY
 - A single invalid file system browser coloring regular expression no
   longer stops the remaining expressions from working
 - HyperSearch now respects rectangular selections
+- Search bar no longer takes up the full width of the view. This saves
+  some screen space
+- Status bar looks somewhat better now
 
 + Bug Fixes
 

@@ -572,7 +572,7 @@ public class EditPane extends JPanel implements EBComponent
 				textArea.repaint();
 
 				if(view.getEditPane() == this)
-					view.getStatus().updateMiscStatus();
+					view.getStatus().updateBufferStatus();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.SAVED)
