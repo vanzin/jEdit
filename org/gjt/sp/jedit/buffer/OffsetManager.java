@@ -48,7 +48,7 @@ public class OffsetManager
 
 		lineInfo = new long[1];
 		// make first line visible by default
-		lineInfo[0] = (0xff << VISIBLE_SHIFT);
+		lineInfo[0] = (0xffL << VISIBLE_SHIFT);
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
 	} //}}}
@@ -82,27 +82,26 @@ public class OffsetManager
 	// Also sets 'fold level valid' flag
 	public final void setFoldLevel(int line, int level)
 	{
-		long info = lineInfo[line];
-		lineInfo[line] = (info & ~FOLD_LEVEL_MASK
-			| (level << FOLD_LEVEL_SHIFT)
+		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK)
+			| ((long)level << FOLD_LEVEL_SHIFT)
 			| FOLD_LEVEL_VALID_MASK);
 	} //}}}
 
 	//{{{ isLineVisible() method
 	public final boolean isLineVisible(int line, int index)
 	{
-		int mask = 1 << (index + VISIBLE_SHIFT);
+		long mask = 1L << (index + VISIBLE_SHIFT);
 		return (lineInfo[line] & mask) != 0;
 	} //}}}
 
 	//{{{ setLineVisible() method
 	public final void setLineVisible(int line, int index, boolean visible)
 	{
-		int mask = 1 << (index + VISIBLE_SHIFT);
+		long mask = 1L << (index + VISIBLE_SHIFT);
 		if(visible)
 			lineInfo[line] = (lineInfo[line] | mask);
 		else
-			lineInfo[line] = (lineInfo[line] | ~mask);
+			lineInfo[line] = (lineInfo[line] & ~mask);
 	} //}}}
 
 	//{{{ isLineContextValid() method
@@ -129,6 +128,7 @@ public class OffsetManager
 	public void contentInserted(int startLine, int offset,
 		int numLines, int length, int[] startOffsets)
 	{
+		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
 			int endLine = startLine + numLines;
@@ -151,15 +151,22 @@ public class OffsetManager
 
 			System.arraycopy(lineInfo,startLine,lineInfo,endLine,
 				lineInfo.length - endLine);
+			System.arraycopy(lineContext,startLine,lineContext,endLine,
+				lineContext.length - endLine);
 
 			for(int i = 0; i < numLines; i++)
 			{
 				lineInfo[startLine + i] = ((offset + startOffsets[i])
-					| (0xff << VISIBLE_SHIFT));
+					| (0xffL << VISIBLE_SHIFT));
 			}
-		}
+		} //}}}
 
-		// TODO: update remaining line start offsets
+		//{{{ Update remaining line start offsets
+		for(int i = startLine + numLines; i < lineCount; i++)
+		{
+			setLineStartOffset(i,getLineStartOffset(i) + length);
+		} //}}}
+
 		// TODO: positions
 
 		linesChanged(startLine,lineCount - startLine);
@@ -169,14 +176,22 @@ public class OffsetManager
 	public void contentRemoved(int startLine, int offset,
 		int numLines, int length)
 	{
+		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
 			lineCount -= numLines;
 			System.arraycopy(lineInfo,startLine + numLines,lineInfo,
 				startLine,lineInfo.length - startLine - numLines);
-		}
+			System.arraycopy(lineContext,startLine + numLines,lineContext,
+				startLine,lineContext.length - startLine - numLines);
+		} //}}}
 
-		// TODO: update line start offsets
+		//{{{ Update remaining line start offsets
+		for(int i = startLine + 1; i < lineCount; i++)
+		{
+			setLineStartOffset(i,getLineStartOffset(i) - length);
+		} //}}}
+
 		// TODO: positions
 
 		linesChanged(startLine,lineCount - startLine);
