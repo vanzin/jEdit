@@ -240,6 +240,9 @@
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />
 
+<MODE NAME="s+"		FILE="splus.xml"
+				FILE_NAME_GLOB="*.ssc" />
+
 <MODE NAME="sas"		FILE="sas.xml"
 				FILE_NAME_GLOB="*.sas" />
 
