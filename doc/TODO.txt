@@ -3,12 +3,11 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- C+[ -vs- C+OPEN_BRACKET
 - close current area doesn't work
 - favorites menu position of too far to the right
-- finish file system browser autocomplete: doesn't work with expanded tree,
-  and differing paths! need to prefix!
 - use createMultilineLabel()
-- memory indicator color settings lost limbo
+- memory indicator color settings lost in limbo
 - rect select somewhat fucked
 - A+# on OS X, need better modifier mapping on OS X
 - load/save geometry: check for out of bounds
