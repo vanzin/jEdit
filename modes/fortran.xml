@@ -23,7 +23,7 @@ platform or vendor specific keywords (in paticular COMPAQ(Digital) FORTRAN).
     <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
 <!-- In fixed form, column 72 is the last column parsed, unless the 
 \extend_source option is invoked -->
-    <TERMINATE AT_CHAR="72" />
+    <!-- TERMINATE AT_CHAR="72" / -->
 
 <!-- comment either !, C, or * can be used as a comment in the first column
 in either free or fixed form FORTRAN-->
@@ -101,6 +101,8 @@ in either free or fixed form FORTRAN-->
 <KEYWORD1>IF</KEYWORD1>
 <KEYWORD1>ELSEWHERE</KEYWORD1>
 <KEYWORD1>END</KEYWORD1>
+<KEYWORD1>ENDIF</KEYWORD1>
+<KEYWORD1>ENDDO</KEYWORD1>
 <KEYWORD1>FORALL</KEYWORD1>
 <KEYWORD1>WHERE</KEYWORD1>
 <KEYWORD1>EXIT</KEYWORD1>

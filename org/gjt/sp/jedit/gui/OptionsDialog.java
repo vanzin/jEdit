@@ -40,7 +40,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 {
 	public OptionsDialog(View view, String name)
 	{
-		super(view, jEdit.getProperty("options.title"), true);
+		super(view, jEdit.getProperty(name + ".title"), true);
 
 		view.showWaitCursor();
 
@@ -116,7 +116,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		view.hideWaitCursor();
 
 		pack();
-		GUIUtilities.loadGeometry(this,name);
+		setLocationRelativeTo(view);
 		show();
 	}
 
@@ -157,10 +157,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		// get rid of this dialog if necessary
 		if(dispose)
-		{
-			GUIUtilities.saveGeometry(this,name);
 			dispose();
-		}
 	}
 
 	public void actionPerformed(ActionEvent evt)
