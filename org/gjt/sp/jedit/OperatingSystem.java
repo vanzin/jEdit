@@ -230,6 +230,17 @@ L2:			for (int j=0; j < gc.length; j++)
 		return os == MAC_OS_X;
 	} //}}}
 
+	//{{{ isX11() method
+	/**
+	 * Returns if this OS is likely to be using X11 as the graphics
+	 * system.
+	 * @since jEdit 4.2pre3
+	 */
+	public static boolean isX11()
+	{
+		return os == UNIX;
+	} //}}}
+
 	//{{{ isVMS() method
 	/**
 	 * Returns if we're running VMS.

@@ -889,39 +889,165 @@ public class GUIUtilities
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
 		int extState = jEdit.getIntegerProperty(name + ".extendedState", 0);
-		setWindowBounds(win,x,y,width,height,extState);
-	} //}}}
-
-	//{{{ setWindowBounds() method
-	/**
-	 * Gives a window the specified bounds, ensuring it is within the
-	 * screen bounds.
-	 * @since jEdit 4.2pre1
-	 */
-	public static void setWindowBounds(Window win, int x, int y,
-		int width, int height, int extState)
-	{
-		// Make sure the window is displayed in visible region
-		Rectangle osbounds = OperatingSystem.getScreenBounds(new Rectangle(x,y,width,height));
-
-		if(x < osbounds.x || x+width > osbounds.width)
-		{
-			if (width > osbounds.width)
-				width = osbounds.width;
-			x = (osbounds.width - width) / 2;
-		}
-		if(y < osbounds.y || y+height > osbounds.height)
-		{
-			if (height >= osbounds.height)
-				height = osbounds.height;
-			y = (osbounds.height - height) / 2;
-		}
 
 		Rectangle desired = new Rectangle(x,y,width,height);
-		win.setBounds(desired);
+		adjustForScreenBounds(desired);
 
-		if(win instanceof Frame)
-			setExtendedState((Frame)win,extState);
+		if(OperatingSystem.isX11())
+			new UnixWorkaround(win,name,desired,extState);
+		else
+		{
+			win.setBounds(desired);
+			if(win instanceof Frame)
+				setExtendedState((Frame)win,extState);
+		}
+	} //}}}
+
+	//{{{ adjustForScreenBounds() method
+	/**
+	 * Gives a rectangle the specified bounds, ensuring it is within the
+	 * screen bounds.
+	 * @since jEdit 4.2pre3
+	 */
+	public static void adjustForScreenBounds(Rectangle desired)
+	{
+		// Make sure the window is displayed in visible region
+		Rectangle osbounds = OperatingSystem.getScreenBounds(desired);
+
+		if(desired.x < osbounds.x || desired.x+desired.width
+			> osbounds.width)
+		{
+			if (desired.width > osbounds.width)
+				desired.width = osbounds.width;
+			desired.x = (osbounds.width - desired.width) / 2;
+		}
+		if(desired.y < osbounds.y || desired.y+desired.height
+			> osbounds.height)
+		{
+			if (desired.height >= osbounds.height)
+				desired.height = osbounds.height;
+			desired.y = (osbounds.height - desired.height) / 2;
+		}
+	} //}}}
+
+	//{{{ UnixWorkaround class
+	static class UnixWorkaround
+	{
+		Window win;
+		String name;
+		Rectangle desired;
+		Rectangle required;
+		long start;
+		boolean windowOpened;
+
+		//{{{ UnixWorkaround constructor
+		UnixWorkaround(Window win, String name, Rectangle desired,
+			int extState)
+		{
+			this.win = win;
+			this.name = name;
+			this.desired = desired;
+
+			int adjust_x, adjust_y, adjust_width, adjust_height;
+			adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
+			adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
+			adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);
+			adjust_height = jEdit.getIntegerProperty(name + ".d-height",0);
+
+			required = new Rectangle(
+				desired.x - adjust_x,
+				desired.y - adjust_y,
+				desired.width - adjust_width,
+				desired.height - adjust_height);
+
+			Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+				+ ": desired geometry is " + desired);
+			Log.log(Log.DEBUG,GUIUtilities.class,"Window " + name
+				+ ": setting geometry to " + required);
+
+			start = System.currentTimeMillis();
+
+			win.setBounds(required);
+			if(win instanceof Frame)
+				setExtendedState((Frame)win,extState);
+
+			win.addComponentListener(new ComponentHandler());
+			win.addWindowListener(new WindowHandler());
+		} //}}}
+
+		//{{{ ComponentHandler class
+		class ComponentHandler extends ComponentAdapter
+		{
+			//{{{ componentMoved() method
+			public void componentMoved(ComponentEvent evt)
+			{
+				if(System.currentTimeMillis() - start < 1000)
+				{
+					Rectangle r = win.getBounds();
+					if(!windowOpened && r.equals(required))
+						return;
+
+					if(!r.equals(desired))
+					{
+						Log.log(Log.DEBUG,GUIUtilities.class,
+							"Window resize blocked: " + win.getBounds());
+						win.setBounds(desired);
+					}
+				}
+
+				win.removeComponentListener(this);
+			} //}}}
+
+			//{{{ componentResized() method
+			public void componentResized(ComponentEvent evt)
+			{
+				if(System.currentTimeMillis() - start < 1000)
+				{
+					Rectangle r = win.getBounds();
+					if(!windowOpened && r.equals(required))
+						return;
+
+					if(!r.equals(desired))
+					{
+ 						Log.log(Log.DEBUG,GUIUtilities.class,
+ 							"Window resize blocked: " + win.getBounds());
+						win.setBounds(desired);
+					}
+				}
+
+				win.removeComponentListener(this);
+			} //}}}
+		} //}}}
+
+		//{{{ WindowHandler class
+		class WindowHandler extends WindowAdapter
+		{
+			//{{{ windowOpened() method
+			public void windowOpened(WindowEvent evt)
+			{
+				windowOpened = true;
+
+				Rectangle r = win.getBounds();
+ 				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
+ 					+ name + ": bounds after opening: " + r);
+
+				if(r.x != desired.x || r.y != desired.y
+					|| r.width != desired.width
+					|| r.height != desired.height)
+				{
+					jEdit.setIntegerProperty(name + ".dx",
+						r.x - required.x);
+					jEdit.setIntegerProperty(name + ".dy",
+						r.y - required.y);
+					jEdit.setIntegerProperty(name + ".d-width",
+						r.width - required.width);
+					jEdit.setIntegerProperty(name + ".d-height",
+						r.height - required.height);
+				}
+
+				win.removeWindowListener(this);
+			} //}}}
+		} //}}}
 	} //}}}
 
 	//{{{ saveGeometry() method
