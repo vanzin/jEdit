@@ -15,6 +15,22 @@
 <qandadiv id="macro-using"><title>Using macros</title>
 
 <qandaentry>
+	<question id="macro-getting">
+		<para>
+			Where can I get macro's from?
+		</para>
+	</question>
+	<answer>
+		<para>
+			There is a plugin available called MacroManager that will provide a
+			similar interface to jEdit's plugin manager for installing new macros.
+			The plugin downloads the macros from the jEdit Community site, so an
+			internet connection is necessary.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
   <question id="macro-new-store">
     <para>
       I just wrote a new macro for myself.  Where should I save the
