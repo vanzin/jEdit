@@ -819,6 +819,22 @@ loop:		for(;;)
 	 */
 	private void fvmput(int start, int end, int[] put)
 	{
+		if(Debug.FOLD_VIS_DEBUG)
+		{
+			StringBuffer buf = new StringBuffer("{");
+			if(put != null)
+			{
+				for(int i = 0; i < put.length; i++)
+				{
+					if(i != 0)
+						buf.append(',');
+					buf.append(put[i]);
+				}
+			}
+			buf.append("}");
+			Log.log(Log.DEBUG,this,"fvmput(" + start + ","
+				+ end + "," + buf + ")");
+		}
 		int putl = (put == null ? 0 : put.length);
 
 		int delta = putl - (end - start);
@@ -849,9 +865,14 @@ loop:		for(;;)
 	 */
 	private void fvmput2(int starti, int endi, int start, int end)
 	{
+		if(Debug.FOLD_VIS_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"*fvmput2(" + starti + ","
+				+ endi + "," + start + "," + end + ")");
+		}
 		if(starti != -1 && fvm[starti] == start)
 		{
-			if(endi != fvmcount - 2 && fvm[endi + 1]
+			if(endi <= fvmcount - 2 && fvm[endi + 1]
 				== end + 1)
 			{
 				fvmput(starti,endi + 2,null);
