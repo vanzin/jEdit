@@ -1,5 +1,15 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre14
+
+Thanks to Rob Watson for contributing to this release.
+
+{{{ Syntax Highlighting
+
+- PL/I syntax highlighting (Rob Watson).
+}}}
+
+}}}
 {{{ Version 4.2pre13
 
 Thanks to Magnus Henriksson, Nicholas O'Leary, Ollie Rutherfurd and

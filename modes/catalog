@@ -229,6 +229,9 @@
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"
 				FILE_NAME_GLOB="*.pls" />
 
+<MODE NAME="pl1"		FILE="pl1.xml"
+				FILE_NAME_GLOB="*.pl[i1]" />
+
 <MODE NAME="pop11"		FILE="pop11.xml" 
 				FILE_NAME_GLOB="*.{p,pop11,p11}" />
 
@@ -274,6 +277,10 @@
 
 <MODE NAME="renderman-rib"	FILE="rib.xml"
 				FILE_NAME_GLOB="*.rib" />
+
+<MODE NAME="rest"		FILE="rest.xml"
+				FILE_NAME_GLOB="*.{rst,rest}"
+				FIRST_LINE_GLOB="{===,~~~,---,+++}*"/>
 
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
