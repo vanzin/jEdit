@@ -9,11 +9,19 @@ JEDIT 4.0 VERSION HISTORY
 - General look and feel settings moved to 'Appearance' option pane
 - If you are using the Metal or Kunststoff L&F, the UI control font can
   be changed in Utilities->Global Options->Appearance
-- Kunststoff look and feel bundled with jEdit ,default on Java >= 1.2
-- "Plastic" UI widget theme available in Utilities->Global
-  Options->Appearance (this is the color scheme part of the Kunststoff
-  look and feel, and it is enabled by default)
 - 'Vertical Paste' macro (Andre Kaplan)
+- View->Folding->Collapse All Folds command, equivalent to invoking
+  'Expand Folds With Level' and specifying a level of 1
+- File listings in the file system browser are now colorized. Change the
+  colors in Utilities->Global Options->File System Browser
+- When a file is loaded, jEdit now remembers if it contained a trailing
+  newline, and if so, writes it out when saving the file. Previosuly, a
+  trailing newline would always be written, regardless of it being
+  present in the file on disk or not
+- The tab and enter key can now be used in shortcut assignments
+- Utilities->Evaluate for Selected Lines command evaluates specified
+  BeanShell expression for each selected line, replacing the contents of
+  that line with the return value of the expression
 
 + Enhancements
 
@@ -31,6 +39,15 @@ JEDIT 4.0 VERSION HISTORY
   - I/O status is now shown in the message area of the status bar
 - New splash screen (Kris Kopicki)
 - New color scheme
+- Pressing Tab while a selection is active shifts it right by one level
+  of indent
+- Pressing S+Tab shifts the selection right by one level of indent
+- If a selection ends at the beginning of a line, that line is no longer
+  considered to be part of the selection by line manipulation commands
+- Improved window docking feature:
+  - 'Auto open' setting in Docking option pane removed, now jEdit
+    remembers which dockables were open automatically
+- Improved HyperSearch results window
 
 + Bug Fixes
 
@@ -38,6 +55,12 @@ JEDIT 4.0 VERSION HISTORY
   recent files
 - Fixed a NullPointerException if the 'Narrow to Selection' command
   was invoked with no selection
+- JCheckBoxList typo prevented it from working in the XML plugin
+- On MacOS, the option key, which is reported as ALT, can be used to
+  generate user input, but jEdit ignored Alt key strokes that were not
+  bound to shortcuts.
+- More JDK 1.4 key event bug workarounds
+- History text field border wasn't repainted after the model was changed
 
 + API Changes
 
@@ -45,7 +68,12 @@ JEDIT 4.0 VERSION HISTORY
 
   jEdit.getIntegerProperty(String name, int def);
   jEdit.setIntegerProperty(String name, int value);
+  jEdit.getFontProperty(String name);
   jEdit.getFontProperty(String name, Font def);
   jEdit.setFontProperty(String name, Font value);
+  jEdit.getColorProperty(String name);
   jEdit.getColorProperty(String name, Color def);
   jEdit.setColorProperty(String name, Color value);
+
+- jEdit.addAction() method removed. Plugins not using the jEdit 3.0
+  action API will need to be updated.

@@ -20,9 +20,6 @@ metal.secondary.font=Dialog
 metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
 
-# Funky color scheme
-plasticColors=true
-
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
 firstTime=true
@@ -121,6 +118,9 @@ buffer.noWordSep=
 # Folds with a level equal to or higher than this will be collapsed
 buffer.collapseFolds=0
 
+# We need this so that new files are saved with a trailing newline
+buffer.trailingEOL=true
+
 ###
 ### VIEW SETTINGS
 ###
@@ -173,7 +173,7 @@ view.wrapGuideColor=#8080ff
 view.caretColor=#ff0000
 
 # Selection color
-view.selectionColor=#c8c8e0
+view.selectionColor=#ccccff
 
 # Caret blinking
 view.caretBlink=true
@@ -263,6 +263,11 @@ view.fracFontMetrics=false
 view.docking.alternateLayout=false
 view.docking.tabsPos=0
 
+# Dock these in by default
+hypersearch-results.dock-position=top
+vfs.browser.dock-position=right
+vfs.browser.auto-open=true
+
 ###
 ### PRINTING
 ###
@@ -305,3 +310,17 @@ vfs.browser.currentBufferFilter=true
 
 # Can be one of: buffer, home, favorites, last
 vfs.browser.defaultPath=buffer
+
+# File list coloring
+vfs.browser.colorize=true
+
+vfs.browser.colors.0.glob={CVS,#*,*~}
+vfs.browser.colors.0.color=#a0a0a0
+vfs.browser.colors.1.glob=*.class
+vfs.browser.colors.1.color=#660066
+vfs.browser.colors.2.glob={build.xml,makefile*}
+vfs.browser.colors.2.color=#666600
+vfs.browser.colors.3.glob=*.{gif,jpg,jpeg,png,bmp,xpm,svg}
+vfs.browser.colors.3.color=#009933
+vfs.browser.colors.4.glob=*.{gz,jar,zip,tgz,z}
+vfs.browser.colors.4.color=#990000

@@ -43,8 +43,7 @@ public class KeyEventWorkaround
 				keyCode == '\0')
 				return null;
 
-			if(!java14)
-				handleBrokenKeys(evt.getModifiers(),keyCode);
+			handleBrokenKeys(evt,keyCode);
 
 			return evt;
 		case KeyEvent.KEY_TYPED:
@@ -53,27 +52,34 @@ public class KeyEventWorkaround
 			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
 				return null;
 
-			if((evt.isControlDown() ^ evt.isAltDown())
-				|| evt.isMetaDown())
-				return null;
-
-			if(!java14)
+			// "Alt" is the option key on MacOS, and it can generate
+			// user input
+			if(mac)
 			{
-				// if the last key was a broken key, filter
-				// out all except 'a'-'z' that occur 750 ms after.
-				if(last == LAST_BROKEN && System.currentTimeMillis()
-					- lastKeyTime < 750 && !Character.isLetter(ch))
-				{
-					last = LAST_NOTHING;
+				if(evt.isControlDown() || evt.isMetaDown())
 					return null;
-				}
-				// otherwise, if it was ALT, filter out everything.
-				else if(last == LAST_ALT && System.currentTimeMillis()
-					- lastKeyTime < 750)
-				{
-					last = LAST_NOTHING;
+			}
+			else
+			{
+				if((evt.isControlDown() ^ evt.isAltDown())
+					|| evt.isMetaDown())
 					return null;
-				}
+			}
+
+			// if the last key was a broken key, filter
+			// out all except 'a'-'z' that occur 750 ms after.
+			if(last == LAST_BROKEN && System.currentTimeMillis()
+				- lastKeyTime < 750 && !Character.isLetter(ch))
+			{
+				last = LAST_NOTHING;
+				return null;
+			}
+			// otherwise, if it was ALT, filter out everything.
+			else if(last == LAST_ALT && System.currentTimeMillis()
+				- lastKeyTime < 750)
+			{
+				last = LAST_NOTHING;
+				return null;
 			}
 
 			return evt;
@@ -84,6 +90,7 @@ public class KeyEventWorkaround
 
 	// private members
 	private static boolean java14;
+	private static boolean mac;
 	private static long lastKeyTime;
 
 	private static int last;
@@ -95,27 +102,24 @@ public class KeyEventWorkaround
 	static
 	{
 		java14 = (System.getProperty("java.version").compareTo("1.4") >= 0);
+		mac = (System.getProperty("os.name").indexOf("Mac OS") != -1);
 	}
 
-	private static void handleBrokenKeys(int modifiers, int keyCode)
+	private static void handleBrokenKeys(KeyEvent evt, int keyCode)
 	{
-		// If you have any keys you would like to add to this list,
-		// e-mail me
-
-		if(modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK)
-			|| modifiers == (KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK
-			| KeyEvent.SHIFT_MASK))
+		if(evt.isAltDown() && evt.isControlDown()
+			&& !evt.isMetaDown())
 		{
 			last = LAST_ALTGR;
 			return;
 		}
-		else if((modifiers & (~ (ALT_GRAPH_MASK | KeyEvent.SHIFT_MASK))) == 0)
+		else if(!(evt.isControlDown() || evt.isMetaDown()))
 		{
 			last = LAST_NOTHING;
 			return;
 		}
 
-		if((modifiers & KeyEvent.ALT_MASK) != 0)
+		if(evt.isAltDown())
 			last = LAST_ALT;
 		else if((keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
 			&& keyCode != KeyEvent.VK_LEFT && keyCode != KeyEvent.VK_RIGHT

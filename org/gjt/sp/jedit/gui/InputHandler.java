@@ -191,7 +191,7 @@ public abstract class InputHandler extends KeyAdapter
 			// stop people doing dumb stuff like C+ENTER 100 C+n
 			if(_repeatCount > REPEAT_COUNT_THRESHOLD)
 			{
-				String label = jEdit.getProperty(action.getName() + ".label");
+				String label = jEdit.getProperty(action.getLabel());
 				if(label == null)
 					label = action.getName();
 				else

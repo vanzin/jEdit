@@ -32,6 +32,10 @@ lineSep.mac=MacOS (\\r)
 encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
 	KOI8_R SJIS Unicode UTF8 
 
+# Action set names
+action-set.jEdit=jEdit
+action-set.macros=Macros
+
 # History text field menu caption
 history.caption=Previously entered strings:
 
@@ -299,8 +303,6 @@ source=range-comment \
        line-comment \
        - \
        indent-lines \
-       shift-left \
-       shift-right \
        - \
        select-block \
        match-bracket \
@@ -310,8 +312,6 @@ source.label=Source
 range-comment.label=Range Comment
 line-comment.label=Line Comment
 indent-lines.label=Indent Selected Lines
-shift-left.label=Shift Indent Left
-shift-right.label=Shift Indent Right
 select-block.label=Select Code Block
 match-bracket.label=Go to Matching Bracket
 prev-bracket.label=Go to Previous Bracket
@@ -434,6 +434,7 @@ folding=collapse-fold \
 	expand-one-level \
 	expand-fold \
 	- \
+	collapse-all-folds \
 	expand-folds \
 	expand-all-folds \
 	- \
@@ -445,6 +446,7 @@ folding.label=Folding
 collapse-fold.label=Collapse Fold
 expand-one-level.label=Expand Fold One Level
 expand-fold.label=Expand Fold Fully
+collapse-all-folds.label=Collapse All Folds
 expand-folds.label=Expand Folds With Level
 expand-all-folds.label=Expand All Folds
 select-fold.label=Select Fold
@@ -480,6 +482,7 @@ utils=vfs-browser \
       update-log \
       - \
       eval \
+      eval-for-selected-lines \
       eval-selection \
       - \
       reload-modes \
@@ -492,8 +495,9 @@ utils.label=$Utilities
 vfs-browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
 log-viewer.label=$Activity Log
-update-log.label=Update Activity $Log on Disk
+update-log.label=Update Activity Log on $Disk
 eval.label=$Evaluate BeanShell Expression...
+eval-for-selected-lines.label=Evaluate For Selected $Lines...
 eval-selection.label=E$valuate Selection
 reload-modes.label=$Reload Edit Modes
 memory-status.label=$Memory Status...
@@ -594,6 +598,8 @@ select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
+shift-left.label=Shift Indent Left
+shift-right.label=Shift Indent Right
 toggle-multi-select.label=Multiple Selection
 
 ###
@@ -610,10 +616,17 @@ view.gutter.marker=Marker: {0}
 # Status messages
 view.status.recording=Macro recording
 view.status.repeat=Enter repeat count: {0}
-view.status.register-prompt=Press key to specify register:
-view.status.marker-prompt=Press key to specify marker:
-view.status.expand-folds=Press 0-9 to specify fold level:
-view.status.insert-literal=Press key to insert literally:
+view.status.cut-string-register=Enter register name to cut to
+view.status.copy-string-register=Enter register name to copy to
+view.status.cut-append-string-register=Enter register name to cut append to
+view.status.copy-append-string-register=Enter register name to copy append to
+view.status.paste-string-register=Enter register name to paste from
+view.status.add-marker=Enter shortcut for new marker
+view.status.goto-marker=Enter shortcut of marker to go to
+view.status.select-marker=Enter shortcut of marker to select to
+view.status.swap-marker=Enter shortcut of marker to swap caret position with
+view.status.expand-folds=Press 0-9 to specify fold level
+view.status.insert-literal=Press key to insert literally
 view.status.auto-wrap=Search text not found; restarting search
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.io={0} input/output operations in progress
@@ -838,6 +851,8 @@ keepsearching.message=No more matches were found. Continue search from\n\
 # HyperSearch results dialog
 hypersearch-results.title=HyperSearch Results
 hypersearch-results.caption=Found {0} occurrence(s) in {1} file(s).
+hypersearch-results.file-caption={0} ({1} occurrences)
+hypersearch-results.file-caption1={0} (1 occurrence)
 hypersearch-results.searching=Searching...
 hypersearch.status=HyperSearch
 
@@ -990,7 +1005,6 @@ macro-error.title=Macro Error
 macro-message.title=Macro Message
 
 # BeanShell stuff
-
 beanshell-error.title=BeanShell Execution Error
 beanshell-error.message.1=A BeanShell execution error occurred. More details can \
 	be found
@@ -1001,6 +1015,15 @@ beanshell-eval-input.message=BeanShell expression:
 
 beanshell-eval.title=BeanShell Evaluation
 beanshell-eval.message={0}
+
+beanshell-eval-line.title=Evaluate BeanShell Expression
+beanshell-eval-line.message=BeanShell expression to evaluate for each \
+	selected line:\n\
+	\n\
+	Variables:\n\
+	line - The index of the line, from the start of the buffer\n\
+	index - The index of the line, from the start of the selection\n\
+	text - The text of the line
 
 macro-not-recording.title=Not Recording
 macro-not-recording.message=A macro is not currently being recorded.
@@ -1018,6 +1041,7 @@ buffer-options.title=Buffer Options
 buffer-options.mode=Edit mode:
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
+buffer-options.trailingEOL=Trailing end-of-line at end of file
 buffer-options.props=Corresponding buffer-local properties: (C+c copies)
 
 # Global options dialog
@@ -1042,7 +1066,6 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu, label font:
 options.appearance.secondaryFont=List, tree, table, text field font:
-options.appearance.plasticColors=Alternative "plastic" widget theme
 options.appearance.textColors=Use jEdit text area color scheme in all text components
 
 options.loadsave.label=Loading & Saving
@@ -1169,7 +1192,6 @@ options.docking.top=top
 options.docking.bottom=bottom
 options.docking.title=Window
 options.docking.dockPosition=Docking position
-options.docking.autoOpen=Auto open
 
 options.toolbar.label=Tool Bar
 options.toolbar.showToolbar=Show tool bar

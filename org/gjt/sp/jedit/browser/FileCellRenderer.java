@@ -32,10 +32,9 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 {
 	public FileCellRenderer()
 	{
-		Font font = UIManager.getFont("Tree.font");
-		// make a non-UIResource copy so that updateUI() doesn't
-		// reset it
-		setFont(new Font(font.getFamily(),font.getStyle(),font.getSize()));
+		plainFont = UIManager.getFont("Tree.font");
+		boldFont = new Font(plainFont.getName(),Font.BOLD,
+			plainFont.getSize());
 
 		// use metal icons because not all looks and feels define these.
 		// note that metal is guaranteed to exist, so this shouldn't
@@ -74,39 +73,32 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 			boolean opened = (jEdit.getBuffer(file.path) != null);
 			setBorder(opened ? openBorder : closedBorder);
 
-			if(showIcons)
+			setIcon(showIcons
+				? getIconForFile(file)
+				: null);
+			setFont(file.type == VFS.DirectoryEntry.FILE
+				? plainFont : boldFont);
+			setText(file.name);
+
+			if(!sel)
 			{
-				setIcon(getIconForFile(file));
-				setText(file.name);
-			}
-			else
-			{
-				setIcon(null);
-				setText(file.type == VFS.DirectoryEntry.DIRECTORY
-					? file.name + "/" : file.name);
+				setForeground(file.color == null
+					? treeSelectionForeground
+					: file.color);
 			}
 		}
 		else if(userObject instanceof BrowserView.LoadingPlaceholder)
 		{
-			if(showIcons)
-				setIcon(loadingIcon);
-			else
-				setIcon(null);
+			setIcon(showIcons ? loadingIcon : null);
+			setFont(plainFont);
 			setText(jEdit.getProperty("vfs.browser.tree.loading"));
 			setBorder(closedBorder);
 		}
 		else if(userObject instanceof String)
 		{
-			if(showIcons)
-			{
-				setIcon(dirIcon);
-				setText((String)userObject);
-			}
-			else
-			{
-				setIcon(null);
-				setText(userObject + "/");
-			}
+			setIcon(showIcons ? dirIcon : null);
+			setFont(boldFont);
+			setText((String)userObject);
 
 			setBorder(closedBorder);
 		}
@@ -174,4 +166,7 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 	private Color treeNoSelectionForeground;
 	private Color treeSelectionBackground;
 	private Color treeNoSelectionBackground;
+
+	private Font plainFont;
+	private Font boldFont;
 }

@@ -292,6 +292,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 				listModel.insertElementAt(selection,index);
 				list.setSelectedIndex(index);
+				list.ensureIndexIsVisible(index);
 			}
 			else if(source == remove)
 			{

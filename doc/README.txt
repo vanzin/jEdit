@@ -183,7 +183,16 @@ jEdit depends on, and comes bundled with the following libraries:
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
 
+  The version of BeanShell shipped with jEdit differs slightly from the
+  official version. The main change is a few performance improvements.
+
   The BeanShell homepage is located at <http://www.beanshell.org>.
+
+- Kunststoff look and feel. It looks nicer than the Java look and feel,
+  and is used by default when running on Java 2 version 1.2 or later. It
+  is released under the 'GNU Lesser General Public License'.
+
+  The Kunststoff home page can be found at <http://www.incors.com>.
 
 - The Sun Java look and Feel icon collection. The license may be found
   in the ICONS.LICENSE.txt file.

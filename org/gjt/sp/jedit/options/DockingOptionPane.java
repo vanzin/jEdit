@@ -1,6 +1,6 @@
 /*
  * DockingOptionPane.java - Dockable window options panel
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ class WindowTableModel extends AbstractTableModel
 
 	public int getColumnCount()
 	{
-		return 3;
+		return 2;
 	}
 
 	public int getRowCount()
@@ -188,8 +188,6 @@ class WindowTableModel extends AbstractTableModel
 		case 0:
 		case 1:
 			return String.class;
-		case 2:
-			return Boolean.class;
 		default:
 			throw new InternalError();
 		}
@@ -204,8 +202,6 @@ class WindowTableModel extends AbstractTableModel
 			return window.title;
 		case 1:
 			return window.dockPosition;
-		case 2:
-			return new Boolean(window.autoOpen);
 		default:
 			throw new InternalError();
 		}
@@ -227,9 +223,6 @@ class WindowTableModel extends AbstractTableModel
 		case 1:
 			window.dockPosition = (String)value;
 			break;
-		case 2:
-			window.autoOpen = ((Boolean)value).booleanValue();
-			break;
 		default:
 			throw new InternalError();
 		}
@@ -245,8 +238,6 @@ class WindowTableModel extends AbstractTableModel
 			return jEdit.getProperty("options.docking.title");
 		case 1:
 			return jEdit.getProperty("options.docking.dockPosition");
-		case 2:
-			return jEdit.getProperty("options.docking.autoOpen");
 		default:
 			throw new InternalError();
 		}
@@ -265,7 +256,6 @@ class WindowTableModel extends AbstractTableModel
 		String name;
 		String title;
 		String dockPosition;
-		boolean autoOpen;
 
 		Entry(String name)
 		{
@@ -277,13 +267,11 @@ class WindowTableModel extends AbstractTableModel
 			dockPosition = jEdit.getProperty(name + ".dock-position");
 			if(dockPosition == null)
 				dockPosition = DockableWindowManager.FLOATING;
-			autoOpen = jEdit.getBooleanProperty(name + ".auto-open");
 		}
 
 		void save()
 		{
 			jEdit.setProperty(name + ".dock-position",dockPosition);
-			jEdit.setBooleanProperty(name + ".auto-open",autoOpen);
 		}
 	}
 
