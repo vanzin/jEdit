@@ -26,6 +26,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+import bsh.BshMethod;
 import bsh.NameSpace;
 import gnu.regexp.CharIndexed;
 import javax.swing.text.Segment;
@@ -41,16 +42,12 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 */
 	public BoyerMooreSearchMatcher(String pattern, String replace,
 		boolean ignoreCase, boolean reverseSearch,
-		boolean beanshell, String replaceMethod)
+		boolean beanshell, BshMethod replaceMethod)
 	{
 		if (ignoreCase)
-		{
 			this.pattern = pattern.toUpperCase().toCharArray();
-		}
 		else
-		{
 			this.pattern = pattern.toCharArray();
-		}
 
 		if (reverseSearch)
 		{
@@ -66,7 +63,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		this.ignoreCase = ignoreCase;
 		this.reverseSearch = reverseSearch;
 
-		if(beanshell && replace != null && replace.length() != 0)
+		if(beanshell && replaceMethod != null && replace.length() != 0)
 		{
 			this.beanshell = true;
 			this.replaceMethod = replaceMethod;
@@ -217,7 +214,7 @@ SEARCH:
 	private boolean ignoreCase;
 	private boolean reverseSearch;
 	private boolean beanshell;
-	private String replaceMethod;
+	private BshMethod replaceMethod;
 	private NameSpace replaceNS;
 
 	// Boyer-Moore member fields

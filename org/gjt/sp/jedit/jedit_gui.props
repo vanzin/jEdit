@@ -766,6 +766,7 @@ about.text=jEdit is brought to you by\n\
 	Giulio Piancastelli\n\
 	Greg Merrill\n\
 	Ian Maclean\n\
+	Israel Olalla\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jerry McBride\n\
@@ -1674,7 +1675,7 @@ abort.message=Are you sure you want to abort the currently executing\n\
 
 #}}}
 
-#{{{ Multiple I/O requst errors
+#{{{ Multiple I/O request errors
 buffer-multiple-io.title=I/O Error
 buffer-multiple-io.message=Each buffer can only execute one input/output\n\
 	operation at a time. Please wait until the current\n\

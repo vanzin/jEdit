@@ -58,6 +58,9 @@ contributing to this release.
   - Exposed bsh.BshMethod and added a public invoke() method.
   - Added getMethods() method to namespace to enumerate methods.
 
+  The fact that BshMethod is now public has facilitated optimizations
+  which improve performance of BeanShell search and replace.
+
 + Printing Changes:
 
 - Updated printing code (Thomas Dilts)
@@ -240,6 +243,15 @@ contributing to this release.
   off, or END END if its on) followed by goToNextLine() would move the
   cursor to the first column.
 
+- Preview_Javadoc_of_Buffer.bsh macro used the deprecated
+  DockableWindowManager.getDockableWindow() method.
+
+- Added ColorWellButton control. Under OS X, changing the background
+  color of a JButton doesn't work if the MacOS Adaptive look and feel is
+  in use... so I wrote a custom control. It looks better and eliminates
+  duplicated code anyway. Plugin developers, please use this instead of
+  the widely-copied and pasted JButton trick.
+
 + API Changes:
 
 - Two methods added to jEdit class:
@@ -270,6 +282,8 @@ contributing to this release.
 - Added new jEdit.getActiveView() method.
 
 - VFS file chooser now supports a new 'CHOOSE_DIRECTORY_DIALOG' mode.
+
+- Buffer.getRuleSetAtOffset() method is now public.
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

@@ -67,7 +67,11 @@ public class BrowserView extends JPanel
 		tree.setCellRenderer(renderer);
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
-		tree.putClientProperty("JTree.lineStyle", "Angled");
+
+		// looks bad with the OS X L&F, apparently...
+		if(!OperatingSystem.isMacOS())
+			tree.putClientProperty("JTree.lineStyle", "Angled");
+
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
 		tree.setVisibleRowCount(12);

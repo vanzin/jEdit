@@ -70,7 +70,11 @@ public class OptionsDialog extends EnhancedDialog
 		paneTree = new JTree(createOptionTreeModel());
 
 		paneTree.setCellRenderer(new PaneNameRenderer());
-		paneTree.putClientProperty("JTree.lineStyle", "Angled");
+
+		// looks bad with the OS X L&F, apparently...
+		if(!OperatingSystem.isMacOS())
+			paneTree.putClientProperty("JTree.lineStyle", "Angled");
+
 		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
 		content.add(new JScrollPane(paneTree,

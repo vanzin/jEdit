@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import bsh.BshMethod;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
@@ -48,7 +49,7 @@ public class BeanShellAction extends EditAction
 			try
 			{
 				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-					isSelected,true);
+					isSelected);
 			}
 			catch(Exception e)
 			{
@@ -66,7 +67,7 @@ public class BeanShellAction extends EditAction
 			if(cachedCode == null)
 			{
 				String cachedCodeName = "action_" + sanitizedName;
-				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
+				cachedCode = BeanShell.cacheBlock(cachedCodeName,code);
 			}
 
 			BeanShell.runCachedBlock(cachedCode,view,null);
@@ -124,7 +125,7 @@ public class BeanShellAction extends EditAction
 	private boolean noRecord;
 	private String code;
 	private String isSelected;
-	private String cachedCode;
-	private String cachedIsSelected;
+	private BshMethod cachedCode;
+	private BshMethod cachedIsSelected;
 	private String sanitizedName;
 }

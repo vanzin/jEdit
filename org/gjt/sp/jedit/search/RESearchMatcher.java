@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+import bsh.BshMethod;
 import bsh.NameSpace;
 import gnu.regexp.*;
 import javax.swing.text.Segment;
@@ -52,9 +53,9 @@ public class RESearchMatcher implements SearchMatcher
 	 */
 	public RESearchMatcher(String search, String replace,
 		boolean ignoreCase, boolean beanshell,
-		String replaceMethod) throws Exception
+		BshMethod replaceMethod) throws Exception
 	{
-		if(beanshell && replace != null && replace.length() != 0)
+		if(beanshell && replaceMethod != null && replace.length() != 0)
 		{
 			this.beanshell = true;
 			this.replaceMethod = replaceMethod;
@@ -168,7 +169,7 @@ public class RESearchMatcher implements SearchMatcher
 	private String replace;
 	private RE re;
 	private boolean beanshell;
-	private String replaceMethod;
+	private BshMethod replaceMethod;
 	private NameSpace replaceNS;
 	//}}}
 }

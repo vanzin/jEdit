@@ -57,6 +57,12 @@ public class ParserRuleSet
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
 	} //}}}
 
+	//{{{ getName() method
+	public String getName()
+	{
+		return name;
+	} //}}}
+
 	//{{{ getMode() method
 	public Mode getMode()
 	{
