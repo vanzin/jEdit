@@ -72,6 +72,14 @@ public class BufferIORequest extends WorkRequest
 	 * An insert file request.
 	 */
 	public static final int INSERT = 3;
+
+	/**
+	 * Magic number used for auto-detecting Unicode and GZIP files.
+	 */
+	public static final int GZIP_MAGIC_1 = 0x1f;
+	public static final int GZIP_MAGIC_2 = 0x8b;
+	public static final int UNICODE_MAGIC_1 = 0xfe;
+	public static final int UNICODE_MAGIC_2 = 0xff;
 	//}}}
 
 	//{{{ BufferIORequest constructor
@@ -182,7 +190,27 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				if(path.endsWith(".gz"))
+				in = new BufferedInputStream(in);
+
+				if(in.markSupported())
+				{
+					in.mark(2);
+					int b1 = in.read();
+					int b2 = in.read();
+					in.reset();
+
+					if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+					{
+						in = new GZIPInputStream(in);
+						buffer.setBooleanProperty(Buffer.GZIPPED,true);
+					}
+					else if((b1 == UNICODE_MAGIC_1 && b2 == UNICODE_MAGIC_2)
+						|| (b1 == UNICODE_MAGIC_2 && b2 == UNICODE_MAGIC_1))
+					{
+						buffer.setProperty(Buffer.ENCODING,"Unicode");
+					}
+				}
+				else if(path.toLowerCase().endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
 				read(buffer,in,length);
@@ -554,7 +582,7 @@ public class BufferIORequest extends WorkRequest
 				out = vfs._createOutputStream(session,savePath,view);
 				if(out != null)
 				{
-					if(path.endsWith(".gz"))
+					if(buffer.getBooleanProperty(Buffer.GZIPPED))
 						out = new GZIPOutputStream(out);
 
 					write(buffer,out);

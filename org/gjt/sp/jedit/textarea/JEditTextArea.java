@@ -256,7 +256,7 @@ public class JEditTextArea extends JComponent
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
-			painter.updateTabSize();
+			painter.propertiesChanged();
 
 			for(int i = 0; i < lineWidths.length; i++)
 			{
@@ -1246,7 +1246,10 @@ public class JEditTextArea extends JComponent
 			Selection s;
 
 			if(bracket < caret)
+			{
 				s = new Selection.Range(bracket + 1,caret - 1);
+				moveCaretPosition(caret - 1);
+			}
 			else
 				s = new Selection.Range(caret,bracket);
 			if(multi)
@@ -2838,7 +2841,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToStartOfLine(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (s == null ? caretLine : s.startLine);
+		int line = (select || s == null ? caretLine : s.startLine);
 		int newCaret = getLineStartOffset(line);
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2860,7 +2863,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToEndOfLine(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (s == null ? caretLine : s.endLine);
+		int line = (select || s == null ? caretLine : s.endLine);
 		int newCaret = getLineEndOffset(line) - 1;
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2887,7 +2890,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (s == null ? caretLine : s.startLine);
+		int line = (select || s == null ? caretLine : s.startLine);
 
 		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
 		int firstOfLine = getLineStartOffset(line);
@@ -2917,7 +2920,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (s == null ? caretLine : s.endLine);
+		int line = (select || s == null ? caretLine : s.endLine);
 
 		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
 		int lastOfLine = getLineEndOffset(line) - 1;

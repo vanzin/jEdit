@@ -1067,15 +1067,13 @@ loop:		for(int i = 0; i < str.length(); i++)
 		else
 			stack.addElement(directory);
 
-		String[] _files = directory.list();
+		File[] _files = directory.listFiles();
 		if(_files == null)
 			return;
 
 		for(int i = 0; i < _files.length; i++)
 		{
-			String name = _files[i];
-
-			File file = new File(directory,name);
+			File file = _files[i];
 			if(file.isDirectory())
 			{
 				if(recurse)
@@ -1094,7 +1092,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 			else
 			{
-				if(!filter.isMatch(name))
+				if(!filter.isMatch(file.getName()))
 					continue;
 
 				String path = file.getPath();

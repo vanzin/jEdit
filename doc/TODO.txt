@@ -5,18 +5,15 @@ TO DO
   - use float co-ordinates
   - horizontal scrolling is fucked
   - cache chunk lists
-  - wrap guide: don't use font metrics
   - repaint problems in jdk1.4
-  - trailing tabs not drawn
 - soft wrap
+- 'gzipped' option in buffer options dialog box
 - finish 'troubleshooting' menu:
   - about cmd
   - keytest cmd
   - make bug report cmd
   - docs in user's guide
-- control clicks on closing brackets suck
 - jdk 1.4: shortcuts only work in text area
-- S+END/S+HOME
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
@@ -103,9 +100,6 @@ TO DO
   dialog position
 - better auto indent
 - appendix in plugin guide on contributing plugins
-- when loading a file: if the stream supports a mark, read first 16 bytes,
-  check for unicode byte order mark, push back, if one is found, set
-  encoding to Unicode automatically
 - HTML mode:
   - inside tags, delegate on*="..." to JavaScript mode,
     style="..." to CSS mode

@@ -90,6 +90,32 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return false;
 	} //}}}
 
+	//{{{ propertiesChanged() method
+	public void propertiesChanged()
+	{
+		if(textArea.getBuffer() == null)
+			return;
+
+		tabSize = fm.charWidth(' ') * textArea.getBuffer().getTabSize();
+
+		int _maxLineLen = textArea.getBuffer()
+			.getIntegerProperty("maxLineLen",0);
+
+		if(_maxLineLen <= 0)
+			maxLineLen = 0;
+		else
+		{
+			// stupidity
+			char[] foo = new char[_maxLineLen];
+			for(int i = 0; i < foo.length; i++)
+			{
+				foo[i] = ' ';
+			}
+			maxLineLen = (int)getFont().getStringBounds(
+				foo,0,_maxLineLen,fontRenderContext).getWidth();
+		}
+	} //}}}
+
 	//{{{ Getters and setters
 
 	//{{{ getStyles() method
@@ -513,7 +539,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		fm = getFontMetrics(font);
 		textArea.recalculateVisibleLines();
 
-		updateTabSize();
+		propertiesChanged();
 	} //}}}
 
 	//{{{ paintComponent() method
@@ -523,8 +549,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
-		updateTabSize();
-
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -657,23 +681,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ Package-private members
 
-	//{{{ updateTabSize() method
-	void updateTabSize()
-	{
-		if(textArea.getBuffer() == null)
-			return;
-
-		tabSize = fm.charWidth(' ') * textArea.getBuffer().getTabSize();
-
-		int _maxLineLen = textArea.getBuffer()
-			.getIntegerProperty("maxLineLen",0);
-
-		if(_maxLineLen <= 0)
-			maxLineLen = 0;
-		else
-			maxLineLen = fm.charWidth(' ') * _maxLineLen;
-	} //}}}
-
 	//{{{ lineToChunkList() method
 	Chunk lineToChunkList(Segment seg, Token tokens)
 	{
@@ -731,6 +738,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				{
 					current.length++;
 					x = nextTabStop(x,i - seg.offset);
+					current.width = x - current.x;
 				}
 			}
 

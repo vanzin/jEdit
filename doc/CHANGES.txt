@@ -10,6 +10,11 @@ JEDIT 4.0 VERSION HISTORY
   ignored; on other Java versions, they are loaded. The next version of
   the XML plugin will split xerces.jar into xerces.jar and jaxp.jar; so
   it should work better on Java 1.4.
+- Better GZIP file auto-detection; previously, jEdit would check for a
+  filename extension of .gz, now it checks for the GZIP magic number at
+  the start of the file
+- Unicode files are now automatically detected as being such, and opened
+  with the Unicode encoding
 
 + Bug Fixes
 
@@ -20,6 +25,12 @@ JEDIT 4.0 VERSION HISTORY
 - On some Java versions, the plugin manager's progress windows would
   hang until explicitly given focus
 - File system browser's type select should work on JDK 1.4 now
+- Minor fix for S+HOME/S+END behavior
+- Fixed for weird caret position after control-clicking a closing
+  bracket
+- The position of the wrap guide is now determined using the Java2D API,
+  so it should be correct now. Previously, it could be drawn in the
+  wrong place if anti-aliasing was enabled
 
 * Version 4.0pre3
 
