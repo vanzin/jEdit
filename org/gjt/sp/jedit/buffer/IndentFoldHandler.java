@@ -64,9 +64,6 @@ public class IndentFoldHandler implements FoldHandler
 		}
 		else
 		{
-			// this is so that lines consisting of only
-			// whitespace don't cause disruptions
-			boolean seenNonWhitespace = false;
 loop:			for(int i = 0; i < count; i++)
 			{
 				switch(seg.array[offset + i])
@@ -78,17 +75,8 @@ loop:			for(int i = 0; i < count; i++)
 					whitespace += (tabSize - whitespace % tabSize);
 					break;
 				default:
-					seenNonWhitespace = true;
 					break loop;
 				}
-			}
-
-			if(!seenNonWhitespace)
-			{
-				if(lineIndex != 0)
-					whitespace = buffer.getFoldLevel(lineIndex - 1);
-				else
-					whitespace = 0;
 			}
 		}
 

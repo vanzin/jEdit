@@ -6,6 +6,7 @@
 # jedit-program fileset
 echo jedit.jar > installer/jedit-program
 echo jars/LatestVersion.jar >> installer/jedit-program
+echo jars/QuickNotepad.jar >> installer/jedit-program
 echo properties/README.txt >> installer/jedit-program
 echo startup/README.txt >> installer/jedit-program
 echo startup/*.bsh >> installer/jedit-program

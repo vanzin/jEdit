@@ -2,6 +2,15 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre5
 
++ Enhancements
+
+- If jEdit runs out of memory while loading a file, it now reports the
+  error using the standard I/O error reporting method, instead of just
+  dumping an exception of the activity log
+- If indent folding is enabled, lines consisting of white space only no
+  longer inherit the fold level of the previous line
+- QuickNotepad plugin compiled by default
+
 + Bug Fixes
 
 - Removed unnecessary menu bar hack on MacOS X
@@ -21,6 +30,9 @@ JEDIT 4.0 VERSION HISTORY
   in the wrong location
 - Files would not be saved properly if two stage saving was disabled and
   backups were enabled
+- Workaround for Graphics2D.setPaintMode() bug on Windows (John Gellene)
+- Docked windows can no longer be made larger than the width or height
+  of the view
 
 * Version 4.0pre4
 

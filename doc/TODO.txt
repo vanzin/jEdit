@@ -1,5 +1,7 @@
 TO DO
 
+- cancel ftp password prompt: stuck in 'loading'
+- directoryLoaded() NPE
 - paintSelection AIOB?
 - test dir replace all and save all
 - macro that calls saveAllBuffers() results in unbalanced
@@ -9,7 +11,6 @@ TO DO
 - last line wrapped; shorten; repaint problem
 - narrow: inserting lines messes things up
 - switching buffers: horiz scroll bar not updated?
-- better handling of oom's when loading buffers
 - vertical scrollbar w/ soft wrap wrong
 - fix scrollToCaret()
 - use new offset conversion API throughout
@@ -81,7 +82,6 @@ TO DO
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
 - help viewer: two tabs, contents and index. index browser
-- DockableLayout: handle too large
 - file system browser:
   - commands->copy file list
   - much better autocomplete

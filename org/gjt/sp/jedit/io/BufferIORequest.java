@@ -229,6 +229,11 @@ public class BufferIORequest extends WorkRequest
 				Object[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
 			}
+			catch(OutOfMemoryError oom)
+			{
+				Log.log(Log.ERROR,this,oom);
+				VFSManager.error(view,path,"out-of-memory-error",null);
+			}
 
 			if(jEdit.getBooleanProperty("persistentMarkers"))
 			{

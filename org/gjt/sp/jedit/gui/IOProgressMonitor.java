@@ -28,11 +28,11 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 
-public class IOProgressMonitor extends JDialog
+public class IOProgressMonitor extends JFrame
 {
-	public IOProgressMonitor(View view)
+	public IOProgressMonitor()
 	{
-		super(view,jEdit.getProperty("io-progress-monitor.title"),false);
+		super(jEdit.getProperty("io-progress-monitor.title"));
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
