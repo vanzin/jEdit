@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2004 Slava Pestov
+ * Copyright (C) 2001, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,14 @@ public class DisplayManager
 			bufferMap.put(buffer,l);
 		}
 
+		/* An existing display manager's fold visibility map
+		that a new display manager will inherit */
+		DisplayManager copy = null;
 		Iterator liter = l.iterator();
 		while(liter.hasNext())
 		{
 			dmgr = (DisplayManager)liter.next();
+			copy = dmgr;
 			if(!dmgr.inUse && dmgr.textArea == textArea)
 			{
 				dmgr.inUse = true;
@@ -66,7 +70,7 @@ public class DisplayManager
 		}
 
 		// if we got here, no unused display manager in list
-		dmgr = new DisplayManager(buffer,textArea);
+		dmgr = new DisplayManager(buffer,textArea,copy);
 		dmgr.inUse = true;
 		l.add(dmgr);
 
@@ -718,7 +722,8 @@ public class DisplayManager
 	private int lastfvmget = -1;
 
 	//{{{ DisplayManager constructor
-	private DisplayManager(Buffer buffer, JEditTextArea textArea)
+	private DisplayManager(Buffer buffer, JEditTextArea textArea,
+		DisplayManager copy)
 	{
 		this.buffer = buffer;
 		this.screenLineMgr = new ScreenLineManager(this,buffer);
@@ -731,6 +736,13 @@ public class DisplayManager
 		// this listener priority thing is a bad hack...
 		buffer.addBufferChangeListener(bufferChangeHandler,
 			Buffer.HIGH_PRIORITY);
+
+		if(copy != null)
+		{
+			this.fvm = (int[])copy.fvm.clone();
+			this.fvmcount = copy.fvmcount;
+			initialized = true;
+		}
 	} //}}}
 
 	//{{{ dispose() method

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,10 +34,11 @@ import org.gjt.sp.jedit.*;
 public class PasteFromListDialog extends EnhancedDialog
 {
 	//{{{ PasteFromListDialog constructor
-	public PasteFromListDialog(String name, View view, ListModel model)
+	public PasteFromListDialog(String name, View view, MutableListModel model)
 	{
 		super(view,jEdit.getProperty(name + ".title"),true);
 		this.view = view;
+		this.listModel = model;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -105,6 +106,17 @@ public class PasteFromListDialog extends EnhancedDialog
 			return;
 		}
 
+		/**
+		 * For each selected clip, we remove it, then add it back
+		 * to the model. This has the effect of moving it to the
+		 * top of the list.
+		 */
+		for(int i = 0; i < selected.length; i++)
+		{
+			listModel.removeElement(selected[i]);
+			listModel.insertElementAt(selected[i],0);
+		}
+
 		view.getTextArea().setSelectedText(getSelectedClipText());
 
 		dispose();
@@ -120,6 +132,7 @@ public class PasteFromListDialog extends EnhancedDialog
 
 	//{{{ Instance variables
 	private View view;
+	private MutableListModel listModel;
 	private JList clips;
 	private JTextArea clipText;
 	private JButton insert;

@@ -41,11 +41,11 @@ s(search,replace,flags)
  * change operating system specific-scripts (as if the below method is
  * any easier...)
  */
-if(jEdit.getPlugin("console.ConsolePlugin") != null)
+/* if(jEdit.getPlugin("console.ConsolePlugin") != null)
 {
 	setenv("CVS_RSH","ssh");
 	// setenv("PATH",getenv("PATH") + ":" + getenv("HOME") + "/bin");
-}
+} */
 
 /*}}}*/
 

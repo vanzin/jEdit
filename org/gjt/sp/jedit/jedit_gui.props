@@ -3,7 +3,7 @@
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ###
-### Copyright (C) 1998, 2004 Slava Pestov
+### Copyright (C) 1998, 2005 Slava Pestov
 ###
 
 #{{{ Default user catalog file
@@ -1272,6 +1272,10 @@ hypersearch-results.title=HyperSearch Results
 hypersearch-results.result-caption={0} ({1} occurrences in {2} files)
 hypersearch-results.result-caption1={0} ({1} occurrence in {2} file)
 hypersearch-results.result-caption2={0} ({1} occurrences in {2} file)
+hypersearch-results.open=Open
+hypersearch-results.open-view=Open in New View
+hypersearch-results.open-plain-view=Open in New Plain View
+hypersearch-results.open-split=Open in New Split
 hypersearch-results.remove-node=Remove Node
 hypersearch-results.clear.label=Remove All Nodes
 hypersearch-results.multi.label=Toggle Multiple Results

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.jEdit;
@@ -35,10 +35,12 @@ import org.gjt.sp.util.Log;
  * A history list. One history list can be used by several history text
  * fields. Note that the list model implementation is incomplete; no events
  * are fired when the history model changes.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
-public class HistoryModel extends AbstractListModel
+public class HistoryModel extends DefaultListModel
+	implements MutableListModel
 {
 	//{{{ HistoryModel constructor
 	/**
@@ -48,8 +50,6 @@ public class HistoryModel extends AbstractListModel
 	public HistoryModel(String name)
 	{
 		this.name = name;
-
-		data = new Vector(max);
 	} //}}}
 
 	//{{{ addItem() method
@@ -63,16 +63,21 @@ public class HistoryModel extends AbstractListModel
 		if(text == null || text.length() == 0)
 			return;
 
-		modified = true;
-
-		int index = data.indexOf(text);
+		int index = indexOf(text);
 		if(index != -1)
-			data.removeElementAt(index);
+			removeElementAt(index);
 
-		data.insertElementAt(text,0);
+		insertElementAt(text,0);
 
 		while(getSize() > max)
-			data.removeElementAt(data.size() - 1);
+			removeElementAt(getSize() - 1);
+	} //}}}
+
+	//{{{ insertElementAt() method
+	public void insertElementAt(Object obj, int index)
+	{
+		modified = true;
+		super.insertElementAt(obj,index);
 	} //}}}
 
 	//{{{ getItem() method
@@ -82,40 +87,30 @@ public class HistoryModel extends AbstractListModel
 	 */
 	public String getItem(int index)
 	{
-		return (String)data.elementAt(index);
+		return (String)elementAt(index);
 	} //}}}
 
-	//{{{ getElementAt() method
-	/**
-	 * Returns an item from the history list. This method returns the
-	 * same thing as {@link #getItem(int)} and only exists so that
-	 * <code>HistoryModel</code> instances can be used as list models.
-	 * @param index The index
-	 * @since jEdit 4.2pre2
-	 */
-	public Object getElementAt(int index)
+	//{{{ removeElement() method
+	public boolean removeElement(Object obj)
 	{
-		return getItem(index);
+		modified = true;
+		return super.removeElement(obj);
 	} //}}}
 
 	//{{{ clear() method
 	/**
-	 * Removes all entries from this history model.
-	 * @since jEdit 4.2pre2
+	 * @deprecated Call <code>removeAllElements()</code> instead.
 	 */
 	public void clear()
 	{
-		modified = true;
-		data.removeAllElements();
+		removeAllElements();
 	} //}}}
 
-	//{{{ getSize() method
-	/**
-	 * Returns the number of elements in this history list.
-	 */
-	public int getSize()
+	//{{{ removeAllElements() method
+	public void removeAllElements()
 	{
-		return data.size();
+		modified = true;
+		super.removeAllElements();
 	} //}}}
 
 	//{{{ getName() method
@@ -200,7 +195,7 @@ public class HistoryModel extends AbstractListModel
 				}
 				else
 				{
-					currentModel.data.addElement(MiscUtilities
+					currentModel.addElement(MiscUtilities
 						.escapesToChars(line));
 				}
 			}
@@ -323,7 +318,6 @@ public class HistoryModel extends AbstractListModel
 	private static int max;
 
 	private String name;
-	private Vector data;
 	private static Hashtable models;
 
 	private static boolean modified;

@@ -167,20 +167,10 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			BufferUpdate bmsg = (BufferUpdate)msg;
 			Buffer buffer = bmsg.getBuffer();
 			Object what = bmsg.getWhat();
-			if(what == BufferUpdate.LOADED ||
-				what == BufferUpdate.CLOSED)
-			{
-				ResultVisitor visitor = null;
-				if (what == BufferUpdate.LOADED)
-				{
-					visitor = new BufferLoadedVisitor();
-				}
-				else // BufferUpdate.CLOSED
-				{
-					visitor = new BufferClosedVisitor();
-				}
-				visitBuffers(visitor,buffer);
-			}
+			if(what == BufferUpdate.LOADED)
+				visitBuffers(new BufferLoadedVisitor(),buffer);
+			else if(what == BufferUpdate.CLOSED)
+				visitBuffers(new BufferClosedVisitor(),buffer);
 		}
 	} //}}}
 
@@ -289,7 +279,12 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ goToSelectedNode() method
-	private void goToSelectedNode()
+	public static final int M_OPEN = 0;
+	public static final int M_OPEN_NEW_VIEW = 1;
+	public static final int M_OPEN_NEW_PLAIN_VIEW = 2;
+	public static final int M_OPEN_NEW_SPLIT = 3;
+
+	private void goToSelectedNode(int mode)
 	{
 		TreePath path = resultTree.getSelectionPath();
 		if(path == null)
@@ -299,30 +294,35 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			.getLastPathComponent();
 		Object value = node.getUserObject();
 
-		if(node.getParent() == resultTreeRoot)
+		// do nothing if clicked "foo (showing n occurrences in m files)"
+		if(node.getParent() != resultTreeRoot)
 		{
-			// do nothing if clicked "foo (showing n occurrences in m files)"
-		}
-		else if(value instanceof String)
-		{
-			Buffer buffer = jEdit.openFile(view,(String)value);
+			HyperSearchNode n = (HyperSearchNode)value;
+			Buffer buffer = n.getBuffer();
 			if(buffer == null)
 				return;
 
-			view.goToBuffer(buffer);
+			EditPane pane;
 
-			// fuck me dead
-			SwingUtilities.invokeLater(new Runnable()
+			switch(mode)
 			{
-				public void run()
-				{
-					resultTree.requestFocus();
-				}
-			});
-		}
-		else if (value instanceof HyperSearchResult)
-		{
-			((HyperSearchResult)value).goTo(view);
+			case M_OPEN:
+				pane = view.goToBuffer(buffer);
+				break;
+			case M_OPEN_NEW_VIEW:
+				pane = jEdit.newView(view,buffer,false).getEditPane();
+				break;
+			case M_OPEN_NEW_PLAIN_VIEW:
+				pane = jEdit.newView(view,buffer,true).getEditPane();
+				break;
+			case M_OPEN_NEW_SPLIT:
+				pane = view.splitHorizontally();
+				break;
+			default:
+				throw new IllegalArgumentException("Bad mode: " + mode);
+			}
+
+			((HyperSearchNode)value).goTo(pane);
 		}
 	} //}}}
 
@@ -364,7 +364,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		{
 			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
 			{
-				goToSelectedNode();
+				goToSelectedNode(M_OPEN);
 
 				// fuck me dead
 				SwingUtilities.invokeLater(new Runnable()
@@ -399,7 +399,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				showPopupMenu(evt);
 			else
 			{
-				goToSelectedNode();
+				goToSelectedNode(M_OPEN);
 
 				view.toFront();
 				view.requestFocus();
@@ -416,6 +416,18 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			if (popupMenu == null)
 			{
 				popupMenu = new JPopupMenu();
+				popupMenu.add(new GoToNodeAction(
+					"hypersearch-results.open",
+					M_OPEN));
+				popupMenu.add(new GoToNodeAction(
+					"hypersearch-results.open-view",
+					M_OPEN_NEW_VIEW));
+				popupMenu.add(new GoToNodeAction(
+					"hypersearch-results.open-plain-view",
+					M_OPEN_NEW_PLAIN_VIEW));
+				popupMenu.add(new GoToNodeAction(
+					"hypersearch-results.open-split",
+					M_OPEN_NEW_SPLIT));
 				popupMenu.add(new RemoveTreeNodeAction());
 			}
 
@@ -463,6 +475,23 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		}
 	}//}}}
 
+	//{{{ GoToNodeAction class
+	class GoToNodeAction extends AbstractAction
+	{
+		private int mode;
+
+		public GoToNodeAction(String labelProp, int mode)
+		{
+			super(jEdit.getProperty(labelProp));
+			this.mode = mode;
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			goToSelectedNode(mode);
+		}
+	}//}}}
+
 	//{{{ ResultCellRenderer class
 	class ResultCellRenderer extends DefaultTreeCellRenderer
 	{
@@ -507,7 +536,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				Object[] pp = { node.toString(), new Integer(resultCount), new Integer(bufferCount) };
 				setText(jEdit.getProperty(property,pp));
 			}
-			else if(node.getUserObject() instanceof String)
+			else if(node.getUserObject() instanceof HyperSearchFileNode)
 			{
 				// file name
 				ResultCellRenderer.this.setFont(boldFont);

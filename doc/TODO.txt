@@ -16,6 +16,17 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- format: preserve comment chars at start
+- focus workaround:
+    view.setAlwaysOnTop(true);
+    view.setAlwaysOnTop(false); 
+- token values negative?
+- single line selection should not hide line highlight
+- jedit -encoding
+- filled cursor option
+- blink frequency option
+- numeric keypad bindings
+- plugin manager's dependency tracking is broken
 - A+f l -- inserts l
 - why is still added to end of kill ring?
 - goToBuffer() -- if any parent has zero height or zero width...
@@ -30,7 +41,6 @@ and quirks that I need to fix eventually.
 - deferred loading API for macro handlers
 - autosave directory option
 - S+INS, etc in swing controls
-- quick copy into vertical selection: keep a tall caret
 - vfs: a way of running awt requests not all at end
 - wrapped dock buttons broken
 

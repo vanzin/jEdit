@@ -584,6 +584,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
  		searchSubDirectories = new JCheckBox(jEdit.getProperty(
  			"search.subdirs"));
+		searchSubDirectories.setMnemonic(jEdit.getProperty(
+ 			"search.subdirs.mnemonic"));
 
  		layout.setConstraints(searchSubDirectories,cons);
  		multifile.add(searchSubDirectories);

@@ -637,7 +637,7 @@
 <ACTION NAME="paste-deleted">
 	<CODE>
 		new PasteFromListDialog("paste-deleted",view,
-			KillRing.getListModel());
+			KillRing.getInstance());
 	</CODE>
 </ACTION>
 

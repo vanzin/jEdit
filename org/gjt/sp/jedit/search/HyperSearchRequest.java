@@ -203,14 +203,12 @@ loop:				for(int i = 0; i < files.length; i++)
 		setAbortable(false);
 
 		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
-			buffer.getPath());
+			new HyperSearchFileNode(buffer.getPath()));
 
 		int resultCount = doHyperSearch(buffer,start,end,bufferNode);
 
 		if(resultCount != 0)
-		{
 			rootSearchNode.insert(bufferNode,rootSearchNode.getChildCount());
-		}
 
 		setAbortable(true);
 

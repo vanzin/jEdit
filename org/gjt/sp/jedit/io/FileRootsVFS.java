@@ -80,7 +80,7 @@ public class FileRootsVFS extends VFS
 	} //}}}
 
 	//{{{ Private members
-	private static FileSystemView fsView;
+	private static FileSystemView fsView = FileSystemView.getFileSystemView();
 
 	//{{{ listRoots() method
 	private static File[] listRoots()

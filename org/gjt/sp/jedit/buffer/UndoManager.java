@@ -192,7 +192,7 @@ public class UndoManager
 				rem.str = rem.str.concat(text);
 				rem.hashcode = rem.str.hashCode();
 				rem.length += length;
-				KillRing.changed(rem);
+				KillRing.getInstance().changed(rem);
 				return;
 			}
 			else if(offset + length == rem.offset)
@@ -201,7 +201,7 @@ public class UndoManager
 				rem.hashcode = rem.str.hashCode();
 				rem.length += length;
 				rem.offset = offset;
-				KillRing.changed(rem);
+				KillRing.getInstance().changed(rem);
 				return;
 			}
 		}
@@ -218,7 +218,7 @@ public class UndoManager
 		else
 			addEdit(rem);
 
-		KillRing.add(rem);
+		KillRing.getInstance().add(rem);
 	} //}}}
 
 	//{{{ bufferSaved() method

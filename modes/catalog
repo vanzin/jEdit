@@ -322,6 +322,9 @@
 <MODE NAME="renderman-rib"	FILE="rib.xml"
 				FILE_NAME_GLOB="*.rib" />
 
+<MODE NAME="rd"			FILE="rd.xml"
+				FILE_NAME_GLOB="*.rd" />
+
 <MODE NAME="rest"		FILE="rest.xml"
 				FILE_NAME_GLOB="*.{rst,rest}"
 				FIRST_LINE_GLOB="{===,~~~}*"/>

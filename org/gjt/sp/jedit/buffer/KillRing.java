@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,26 @@ import javax.swing.ListModel;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.MutableListModel;
 import org.gjt.sp.util.Log;
 
-public class KillRing
+/**
+ * The kill ring retains deleted text. This class is a singleton -- only one
+ * kill ring is used for all of jEdit. Nothing prevents plugins from making their
+ * own kill rings for whatever reason, though.
+ */
+public class KillRing implements MutableListModel
 {
+	//{{{ getInstance() method
+	public static KillRing getInstance()
+	{
+		if(killRing == null)
+			killRing = new KillRing();
+		return killRing;
+	} //}}}
+
 	//{{{ propertiesChanged() method
-	public static void propertiesChanged()
+	public void propertiesChanged()
 	{
 		int newSize = Math.max(1,jEdit.getIntegerProperty("history",25));
 		if(ring == null)
@@ -42,12 +56,10 @@ public class KillRing
 		{
 			UndoManager.Remove[] newRing = new UndoManager.Remove[
 				newSize];
-			ListModel model = new RingListModel();
-			int newCount = Math.min(model.getSize(),newSize);
+			int newCount = Math.min(getSize(),newSize);
 			for(int i = 0; i < newCount; i++)
 			{
-				newRing[i] = (UndoManager.Remove)
-					model.getElementAt(i);
+				newRing[i] = (UndoManager.Remove)getElementAt(i);
 			}
 			ring = newRing;
 			count = newCount;
@@ -60,14 +72,8 @@ public class KillRing
 		}
 	} //}}}
 
-	//{{{ getListModel() method
-	public static ListModel getListModel()
-	{
-		return new RingListModel();
-	} //}}}
-
 	//{{{ load() method
-	public static void load()
+	public void load()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
@@ -124,7 +130,7 @@ public class KillRing
 	} //}}}
 
 	//{{{ save() method
-	public static void save()
+	public void save()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
@@ -161,13 +167,12 @@ public class KillRing
 			out.write("<KILLRING>");
 			out.write(lineSep);
 
-			ListModel model = getListModel();
-			int size = model.getSize();
+			int size = getSize();
 			for(int i = size - 1; i >=0; i--)
 			{
 				out.write("<ENTRY>");
 				out.write(MiscUtilities.charsToEntities(
-					model.getElementAt(i).toString()));
+					getElementAt(i).toString()));
 				out.write("</ENTRY>");
 				out.write(lineSep);
 			}
@@ -201,13 +206,59 @@ public class KillRing
 		killRingModTime = file2.lastModified();
 	} //}}}
 
+	//{{{ MutableListModel implementation
+	public void addListDataListener(ListDataListener listener) {}
+
+	public void removeListDataListener(ListDataListener listener) {}
+
+	//{{{ getElementAt() method
+	public Object getElementAt(int index)
+	{
+		return ring[virtualToPhysicalIndex(index)];
+	} //}}}
+
+	//{{{ getSize() method
+	public int getSize()
+	{
+		if(wrap)
+			return ring.length;
+		else
+			return count;
+	} //}}}
+
+	//{{{ removeElement() method
+	public boolean removeElement(Object value)
+	{
+		for(int i = 0; i < getSize(); i++)
+		{
+			if(ring[i].equals(value))
+			{
+				remove(i);
+				return true;
+			}
+		}
+		return false;
+	} //}}}
+
+	//{{{ insertElementAt() method
+	public void insertElementAt(Object value, int index)
+	{
+		/* This is not terribly efficient, but this method is only
+		called by the 'Paste Deleted' dialog where the performance
+		is not exactly vital */
+		remove(index);
+		add((UndoManager.Remove)value);
+	} //}}}
+	
+	//}}}
+	
 	//{{{ Package-private members
-	static UndoManager.Remove[] ring;
-	static int count;
-	static boolean wrap;
+	UndoManager.Remove[] ring;
+	int count;
+	boolean wrap;
 
 	//{{{ changed() method
-	static void changed(UndoManager.Remove rem)
+	void changed(UndoManager.Remove rem)
 	{
 		if(rem.inKillRing)
 		{
@@ -236,7 +287,7 @@ public class KillRing
 	} //}}}
 
 	//{{{ add() method
-	static void add(UndoManager.Remove rem)
+	void add(UndoManager.Remove rem)
 	{
 		// compare existing entries' hashcode with this
 		int length = (wrap ? ring.length : count);
@@ -282,7 +333,7 @@ public class KillRing
 	} //}}}
 
 	//{{{ remove() method
-	static void remove(int i)
+	void remove(int i)
 	{
 		if(wrap)
 		{
@@ -319,50 +370,31 @@ public class KillRing
 	//}}}
 
 	//{{{ Private members
-	private static long killRingModTime;
-
-	private KillRing() {}
-	//}}}
-
-	//{{{ RingListModel class
-	static class RingListModel implements ListModel
+	private long killRingModTime;
+	private static KillRing killRing;
+	
+	//{{{ virtualToPhysicalIndex() method
+	/**
+	 * Since the kill ring has a wrap-around representation, we need to
+	 * convert user-visible indices to actual indices in the array.
+	 */
+	private int virtualToPhysicalIndex(int index)
 	{
-		public void addListDataListener(ListDataListener listener)
+		if(wrap)
 		{
-		}
-
-		public void removeListDataListener(ListDataListener listener)
-		{
-		}
-
-		public Object getElementAt(int index)
-		{
-			UndoManager.Remove rem;
-
-			if(wrap)
-			{
-				if(index < count)
-					rem = ring[count - index - 1];
-				else
-					rem = ring[count + ring.length - index - 1];
-			}
+			if(index < count)
+				return count - index - 1;
 			else
-				rem = ring[count - index - 1];
-
-			return rem;
+				return count + ring.length - index - 1;
 		}
-
-		public int getSize()
-		{
-			if(wrap)
-				return ring.length;
-			else
-				return count;
-		}
+		else
+			return count - index - 1;
 	} //}}}
 
+	//}}}
+
 	//{{{ KillRingHandler class
-	static class KillRingHandler extends HandlerBase
+	class KillRingHandler extends HandlerBase
 	{
 		List list = new LinkedList();
 
