@@ -693,7 +693,7 @@ public class DisplayManager
 	private boolean initialized;
 	private boolean inUse;
 	private Buffer buffer;
-	private ScreenLineManager screenLineMgr;
+	/* private */ ScreenLineManager screenLineMgr;
 	private JEditTextArea textArea;
 	private BufferChangeHandler bufferChangeHandler;
 
@@ -1679,10 +1679,10 @@ loop:		for(;;)
 				scrollLineCount.callReset = true;
 			}
 
+			screenLineMgr.contentRemoved(startLine,numLines);
+
 			if(numLines == 0)
 				return;
-
-			screenLineMgr.contentRemoved(startLine,numLines);
 
 			int endLine = startLine + numLines;
 
