@@ -26,6 +26,9 @@ JEDIT 4.0 VERSION HISTORY
   will no longer throw a fit when it occurs
 - When opening a floating dockable, the default component will be given
   focus. Previously this was only done for docked windows
+- Fixed typo in General option pane
+- Fixed race condition in work thread pool that could result in blank
+  files on startup
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
