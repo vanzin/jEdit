@@ -1,6 +1,6 @@
 JEDIT 4.1 VERSION HISTORY
 
-* Version 4.1pre9 -- 4.0 release candidate 1
+* Version 4.1pre9 -- 4.1 release candidate 1
 
 + Performance Enhancements:
 
