@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- reloading: don't show fold triangles in gutter
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
@@ -11,14 +12,12 @@ and quirks that I need to fix eventually.
 - scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
-  - Java14's wheel mouse scroll
-  - offset manager's expandFolds()
-  - edit pane properties changed
-  - edit pane first line preserve
+  - last physical line cleanup
   - foldStructureChanged(), etc. doesn't need scroll bar update call
   - chunk cache first line: can be much better
-  - text area: buffer scroll to, set first line, position hold
+  - text area: buffer scroll to
   - scroll up page, scroll down page
+  - synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked
   - title adds more to the relevance
@@ -38,7 +37,6 @@ and quirks that I need to fix eventually.
   close all (w/ no unsaved changes)
 - need distinct default styles for new token types
 - HTML mode: use new token types
-- synchro scroll & folding
 - hypersearch: open in new split
 - option to not follow symbolic links
 - C+e C+c long block of text

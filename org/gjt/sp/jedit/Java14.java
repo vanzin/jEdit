@@ -167,11 +167,7 @@ class Java14
 
 		private void scrollLine(JEditTextArea textArea, int amt)
 		{
-			int newpos = textArea.getFirstLine() + amt;
-			newpos = Math.max(newpos, 0);
-			newpos = Math.min(newpos, textArea.getDisplayManager()
-				.getScrollLineCount());
-			textArea.setFirstLine(newpos);
+			textArea.setFirstLine(textArea.getFirstLine() + amt);
 		}
 
 		private void scrollPage(JEditTextArea textArea, int amt)

@@ -883,7 +883,7 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < editPanes.length; i++)
 		{
 			if(editPanes[i].getTextArea() != textArea)
-				editPanes[i].getTextArea()._setFirstLine(firstLine);
+				editPanes[i].getTextArea().setFirstLine(firstLine);
 		}
 	} //}}}
 
@@ -903,7 +903,7 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < editPanes.length; i++)
 		{
 			if(editPanes[i].getTextArea() != textArea)
-				editPanes[i].getTextArea()._setHorizontalOffset(horizontalOffset);
+				editPanes[i].getTextArea().setHorizontalOffset(horizontalOffset);
 		}
 	} //}}}
 
