@@ -3,6 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- finish file system browser autocomplete: doesn't work with expanded tree,
+  and differing paths! need to prefix!
+- also its kind of broken: type "browserm" and it will still select
+  "BrowserS..."
 - mention on web page: http://www.sys-con.com/java/articlea.cfm?id=1559
 - memory indicator color settings lost limbo
 - rect select somewhat fucked
