@@ -93,6 +93,9 @@ release.
 
 - Fixed a possible deadlock when unloading the ProjectViewer plugin.
 
+- Workaround for A+PAGE_UP/PAGE_DOWN inserting garbage in the text area
+  on Windows.
+
 }}}
 
 }}}

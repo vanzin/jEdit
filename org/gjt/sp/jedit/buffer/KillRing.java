@@ -381,7 +381,6 @@ public class KillRing
 		{
 			if(name.equals("ENTRY"))
 			{
-				System.err.println(charData);
 				list.add(new UndoManager.Remove(null,0,0,charData));
 			}
 		}
