@@ -1,5 +1,6 @@
 TO DO
 
+- INVALID is broken
 - escapes don't work
 - background tokens are probably broken
 - zero-length tokens: should the token marker be spitting them out at all?
