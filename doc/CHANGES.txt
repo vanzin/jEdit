@@ -3,8 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre7
 
 Thanks to Aaron Bell, Alessandro Falappa, Ben Williams, Chris Petersen,
-Ollie Rutherfurd, Mike Dillon, Randolf Mock, and Randy Hudson for
-contributing to this release.
+Lee Turner, Ollie Rutherfurd, Mike Dillon, Randolf Mock, and
+Randy Hudson for contributing to this release.
 
 {{{ Miscellaneous
 
@@ -35,6 +35,8 @@ contributing to this release.
   File->Open and select "Insert" from a file's right-click menu in the
   file system browser.
 
+- Added "Display Actions" macro (Lee Turner).
+
 }}}
 {{{ Syntax Highlighting
 
@@ -51,6 +53,11 @@ contributing to this release.
 - Added PowerDynamo syntax highlighting (Ben Williams).
 
 - Added WebSphere MQ scripting syntax highlighting (Aaron Bell).
+
+}}}
+{{{ Platform Specific
+
+- MacOS plugin now supports services.
 
 }}}
 {{{ Bug Fixes
