@@ -190,13 +190,24 @@ public class MiscUtilities
 	 */
 	public static String getFileName(String path)
 	{
-		if(isURL(path))
-		{
-			VFS vfs = VFSManager.getVFSForPath(path);
-			return vfs.getFileName(path);
-		}
+		return VFSManager.getVFSForPath(path).getFileName(path);
+	} //}}}
+
+	//{{{ getFileNameNoExtension() method
+	/**
+	 * Returns the last component of the specified path name without the
+	 * trailing extension (if there is one).
+	 * @param path The path name
+	 * @since jEdit 4.0pre8
+	 */
+	public static String getFileNameNoExtension(String path)
+	{
+		String name = getFileName(path);
+		int index = name.lastIndexOf('.');
+		if(index == -1)
+			return name;
 		else
-			return VFSManager.getFileVFS().getFileName(path);
+			return name.substring(0,index);
 	} //}}}
 
 	//{{{ getFileParent() method
