@@ -274,6 +274,7 @@
 			<KEYWORD3>__div__</KEYWORD3>
 			<KEYWORD3>__divmod__</KEYWORD3>
 			<KEYWORD3>__doc__</KEYWORD3>
+			<KEYWORD3>__docformat__</KEYWORD3>
 			<KEYWORD3>__eq__</KEYWORD3>
 			<KEYWORD3>__file__</KEYWORD3>
 			<KEYWORD3>__float__</KEYWORD3>

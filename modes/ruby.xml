@@ -134,7 +134,7 @@
 			<LITERAL2>__LINE__</LITERAL2>
 		</KEYWORDS>
 	</RULES>
-  <RULES SET="doubleQuoteLiteral">
+  <RULES SET="doubleQuoteLiteral" DEFAULT="LITERAL1">
     <SPAN TYPE="LITERAL2" EXCLUDE_MATCH="TRUE">
       <BEGIN>#{</BEGIN>
       <END>}</END>

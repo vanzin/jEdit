@@ -93,6 +93,16 @@
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="LITERAL2">$$</SEQ>
 
+		<SPAN TYPE="LITERAL4">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL4">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>${</BEGIN>
 			<END>}</END>
@@ -111,6 +121,7 @@
 			<KEYWORD4>path</KEYWORD4>
 			<KEYWORD4>python</KEYWORD4>
 			<KEYWORD4>string</KEYWORD4>
+			<KEYWORD4>structure</KEYWORD4>
 
 			<!-- built-in TALES variables -->
 			<!-- NOTE: root, here, container, template, 
