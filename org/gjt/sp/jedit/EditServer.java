@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ public class EditServer extends Thread
 			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
-			out.write("b\n");
+			out.write("c\n");
 			out.write(String.valueOf(port));
 			out.write("\n");
 			out.write(String.valueOf(authKey));
@@ -172,7 +172,21 @@ public class EditServer extends Thread
 		String[] args)
 	{
 		boolean newView = jEdit.getBooleanProperty("client.newView");
+		handleClient(restore,newView,false,parent,args);
+	} //}}}
 
+	//{{{ handleClient() method
+	/**
+	 * @param restore Ignored unless no views are open
+	 * @param newView Open a new view?
+	 * @param newPlainView Open a new plain view?
+	 * @param parent The client's parent directory
+	 * @param args A list of files. Null entries are ignored, for convinience
+	 * @since jEdit 4.2pre1
+	 */
+	public static Buffer handleClient(boolean restore, boolean newView,
+		boolean newPlainView, String parent, String[] args)
+	{
 		// we have to deal with a huge range of possible border cases here.
 		if(jEdit.getFirstView() == null)
 		{
@@ -195,6 +209,17 @@ public class EditServer extends Thread
 			}
 			else if(buffer != null)
 				view.setBuffer(buffer);
+
+			return buffer;
+		}
+		else if(newPlainView)
+		{
+			// no background mode, and opening a new view
+			Buffer buffer = jEdit.openFiles(null,parent,args);
+			if(buffer == null)
+				buffer = jEdit.getFirstBuffer();
+			jEdit.newView(jEdit.getActiveView(),buffer,true);
+			return buffer;
 		}
 		else if(newView)
 		{
@@ -203,13 +228,14 @@ public class EditServer extends Thread
 			if(buffer == null)
 				buffer = jEdit.getFirstBuffer();
 			jEdit.newView(jEdit.getActiveView(),buffer,false);
+			return buffer;
 		}
 		else
 		{
 			// no background mode, and reusing existing view
 			View view = jEdit.getActiveView();
 
-			jEdit.openFiles(view,parent,args);
+			Buffer buffer = jEdit.openFiles(view,parent,args);
 
 			// Hack done to fix bringing the window to the front.
 			// At least on windows, Frame.toFront() doesn't cut it.
@@ -222,6 +248,8 @@ public class EditServer extends Thread
 			view.setState(java.awt.Frame.NORMAL);
 			view.requestFocus();
 			view.toFront();
+
+			return buffer;
 		}
 	} //}}}
 

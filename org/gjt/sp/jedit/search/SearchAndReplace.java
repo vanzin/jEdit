@@ -513,6 +513,8 @@ public class SearchAndReplace
 
 		try
 		{
+			view.showWaitCursor();
+
 			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 			{
@@ -521,8 +523,6 @@ public class SearchAndReplace
 			}
 
 			record(view,"find(view)",false,true);
-
-			view.showWaitCursor();
 
 loop:			for(;;)
 			{

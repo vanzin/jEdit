@@ -431,13 +431,13 @@ public class JEditTextArea extends JComponent
 			Log.log(Log.DEBUG,this,"setFirstPhysicalLine()");
 
 		//{{{ ensure we don't have empty space at the bottom or top, etc
-		int screenLineCount = 0;
+		/* int screenLineCount = 0;
 		int physicalLine = displayManager.getLastVisibleLine();
 		int visibleLines = this.visibleLines - (lastLinePartial ? 1 : 0);
 		for(;;)
 		{
 			screenLineCount += displayManager.getScreenLineCount(physicalLine);
-			if(screenLineCount + skew >= visibleLines)
+			if(screenLineCount >= visibleLines)
 				break;
 			int prevLine = displayManager.getPrevVisibleLine(physicalLine);
 			if(prevLine == -1)
@@ -446,7 +446,7 @@ public class JEditTextArea extends JComponent
 		}
 
 		if(physFirstLine > physicalLine)
-			physFirstLine = physicalLine;
+			physFirstLine = physicalLine; */
 		//}}}
 
 		if(physFirstLine == displayManager.firstLine.physicalLine)
@@ -5795,11 +5795,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
-			// this is a rough workaround but it ensures that
-			// scroll listeners never receive an event while the
-			// text area caret position is invalid.
-			int oldFirstLine = getFirstLine();
-
 			if(caret > start)
 			{
 				if(caret <= start + length)
@@ -5824,8 +5819,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(delayedUpdate)
 			{
-				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
-
 				for(int i = delayedRepaintStart;
 					i <= delayedRepaintEnd;
 					i++)
@@ -5834,6 +5827,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						displayManager.getScreenLineCount(i);
 				}
 				displayManager.notifyScreenLineChanges();
+
+				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
 
 				if(delayedMultilineUpdate)
 				{
@@ -5855,6 +5850,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			for(int i = 0; i < runnables.size(); i++)
 				((Runnable)runnables.get(i)).run();
 			runnables.clear();
+		} //}}}
+
+		//{{{ nextLineRequested() method
+		public void nextLineRequested(Buffer buffer, int line)
+		{
+			/* System.err.println("next line requested: " + line);
+			chunkCache.invalidateChunksFromPhys(line);
+			invalidateScreenLineRange(chunkCache
+				.getScreenLineOfOffset(line,0),
+				visibleLines); */
 		} //}}}
 
 		//{{{ delayedRepaint() method

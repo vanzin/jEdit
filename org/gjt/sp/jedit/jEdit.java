@@ -98,6 +98,8 @@ public class jEdit
 		int level = Log.WARNING;
 		String portFile = "server";
 		boolean restore = true;
+		boolean newView = true;
+		boolean newPlainView = false;
 		boolean gui = true; // open initial view?
 		boolean loadPlugins = true;
 		boolean runStartupScripts = true;
@@ -159,6 +161,12 @@ public class jEdit
 					gui = true;
 				else if(arg.equals("-nogui"))
 					gui = false;
+				else if(arg.equals("-newview"))
+					newView = true;
+				else if(arg.equals("-newplainview"))
+					newPlainView = true;
+				else if(arg.equals("-reuseview"))
+					newPlainView = newView = false;
 				else if(arg.equals("-restore"))
 					restore = true;
 				else if(arg.equals("-norestore"))
@@ -201,7 +209,7 @@ public class jEdit
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
 				String check = in.readLine();
-				if(!check.equals("b"))
+				if(!check.equals("c"))
 					throw new Exception("Wrong port file format");
 
 				port = Integer.parseInt(in.readLine());
@@ -217,7 +225,7 @@ public class jEdit
 				if(quit)
 					script = "jEdit.exit(null,true);";
 				else
-					script = makeServerScript(restore,args,scriptFile);
+					script = makeServerScript(restore,newView,newPlainView,args,scriptFile);
 
 				out.writeUTF(script);
 
@@ -1853,47 +1861,52 @@ public class jEdit
 	 */
 	public static View newView(View view, Buffer buffer, View.ViewConfig config)
 	{
-		if(view != null)
+		try
 		{
-			view.showWaitCursor();
-			view.getEditPane().saveCaretInfo();
+			if(view != null)
+			{
+				view.showWaitCursor();
+				view.getEditPane().saveCaretInfo();
+			}
+
+			View newView = new View(buffer,config);
+
+			if(config.width != 0 && config.height != 0)
+			{
+				GUIUtilities.setWindowBounds(newView,config.x,config.y,
+					config.width,config.height,config.extState);
+			}
+				else newView.setLocationRelativeTo(view);
+
+			addViewToList(newView);
+			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
+
+			newView.show();
+
+			// show tip of the day
+			if(newView == viewsFirst)
+			{
+				newView.getTextArea().requestFocus();
+
+				// Don't show the welcome message if jEdit was started
+				// with the -nosettings switch
+				if(settingsDirectory != null && getBooleanProperty("firstTime"))
+					new HelpViewer();
+				else if(jEdit.getBooleanProperty("tip.show"))
+					new TipOfTheDay(newView);
+
+				setBooleanProperty("firstTime",false);
+			}
+			else
+				GUIUtilities.requestFocus(newView,newView.getTextArea());
+
+			return newView;
 		}
-
-		View newView = new View(buffer,config);
-
-		if(config.width != 0 && config.height != 0)
+		finally
 		{
-			GUIUtilities.setWindowBounds(newView,config.x,config.y,
-				config.width,config.height,config.extState);
+			if(view != null)
+				view.hideWaitCursor();
 		}
-			else newView.setLocationRelativeTo(view);
-
-		addViewToList(newView);
-		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
-
-		newView.show();
-
-		if(view != null)
-			view.hideWaitCursor();
-
-		// show tip of the day
-		if(newView == viewsFirst)
-		{
-			newView.getTextArea().requestFocus();
-
-			// Don't show the welcome message if jEdit was started
-			// with the -nosettings switch
-			if(settingsDirectory != null && getBooleanProperty("firstTime"))
-				new HelpViewer();
-			else if(jEdit.getBooleanProperty("tip.show"))
-				new TipOfTheDay(newView);
-
-			setBooleanProperty("firstTime",false);
-		}
-		else
-			GUIUtilities.requestFocus(newView,newView.getTextArea());
-
-		return newView;
 	} //}}}
 
 	//{{{ closeView() method
@@ -2421,10 +2434,13 @@ public class jEdit
 		System.out.println("	-nogui: Only if running in background mode; don't open initial view");
 		System.out.println("	-log=<level>: Log messages with level equal to or higher than this to");
 		System.out.println("	 standard error. <level> must be between 1 and 9. Default is 7.");
-		System.out.println("	-restore: Restore previously open files (default)");
-		System.out.println("	-norestore: Don't restore previously open files");
+		System.out.println("	-newplainview: Client instance opens a new plain view");
+		System.out.println("	-newview: Client instance opens a new view (default)");
 		System.out.println("	-plugins: Load plugins (default)");
 		System.out.println("	-noplugins: Don't load any plugins");
+		System.out.println("	-restore: Restore previously open files (default)");
+		System.out.println("	-norestore: Don't restore previously open files");
+		System.out.println("	-reuseview: Client instance reuses existing view");
 		System.out.println("	-quit: Quit a running instance");
 		System.out.println("	-run=<script>: Run the specified BeanShell script");
 		System.out.println("	-server: Read/write server info from/to $HOME/.jedit/server (default)");
@@ -2451,6 +2467,7 @@ public class jEdit
 	 * Creates a BeanShell script that can be sent to a running edit server.
 	 */
 	private static String makeServerScript(boolean restore,
+		boolean newView, boolean newPlainView,
 		String[] args, String scriptFile)
 	{
 		StringBuffer script = new StringBuffer();
@@ -2483,7 +2500,9 @@ public class jEdit
 			script.append(";\n");
 		}
 
-		script.append("EditServer.handleClient(" + restore + ",parent,args);\n");
+		script.append("EditServer.handleClient(" + restore +
+			"," + newView + "," + newPlainView +
+			",parent,args);\n");
 
 		if(scriptFile != null)
 		{

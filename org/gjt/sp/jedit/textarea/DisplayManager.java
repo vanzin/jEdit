@@ -179,16 +179,8 @@ public class DisplayManager
 			return offsetMgr.getScreenLineCount(line);
 		else
 		{
-			// this is an optimization but the less preferred
-			// path. its better when the chunk cache records
-			// screen line count changes.
-			int newCount;
-			if(softWrap && wrapMargin != 0.0f)
-			{
-				newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
-			}
-			else
-				newCount = 1;
+			int newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
+
 			offsetMgr.setScreenLineCount(line,newCount);
 			return newCount;
 		}
@@ -574,6 +566,25 @@ public class DisplayManager
 		offsetMgr.notifyScreenLineChanges();
 	} //}}}
 
+	//{{{ setScreenLineCount() method
+	/**
+	 * Sets the number of screen lines that the specified physical line
+	 * is split into.
+	 * @since jEdit 4.2pre1
+	 */
+	public void setScreenLineCount(int line, int count)
+	{
+		try
+		{
+			buffer.writeLock();
+			offsetMgr.setScreenLineCount(line,count);
+		}
+		finally
+		{
+			buffer.writeUnlock();
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -605,8 +616,8 @@ public class DisplayManager
 		{
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"changed()");
-			textArea.recalculateLastPhysicalLine();
 			textArea.updateScrollBars();
+			textArea.recalculateLastPhysicalLine();
 		} //}}}
 
 		//{{{ reset() method
@@ -685,29 +696,6 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
-			int visibleLines = textArea.getVisibleLines();
-
-			int _scrollLine = scrollLine + skew;
-			int _oldScrollLine = oldScrollLine + oldSkew;
-
-			if(_scrollLine == _oldScrollLine)
-				/* do nothing */;
-			else if(_scrollLine >= _oldScrollLine + visibleLines
-				|| _scrollLine <= oldScrollLine - visibleLines)
-			{
-				textArea.chunkCache.invalidateAll();
-			}
-			else if(_scrollLine > _oldScrollLine)
-			{
-				textArea.chunkCache.scrollDown(_scrollLine - _oldScrollLine);
-			}
-			else if(_scrollLine < _oldScrollLine)
-			{
-				textArea.chunkCache.scrollUp(_oldScrollLine - _scrollLine);
-			}
-
-			oldScrollLine = scrollLine;
-			oldSkew = skew;
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
 		} //}}}
@@ -805,7 +793,7 @@ public class DisplayManager
 				// since scrollUp/Down() call changed()
 			}
 
-			changed();
+			scroll();
 		} //}}}
 
 		//{{{ physUp() method
@@ -851,7 +839,7 @@ public class DisplayManager
 				// since scrollUp/Down() call changed()
 			}
 
-			changed();
+			scroll();
 		} //}}}
 
 		//{{{ scrollDown() method
@@ -887,7 +875,7 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
-			changed();
+			scroll();
 		} //}}}
 
 		//{{{ scrollUp() method
@@ -927,6 +915,36 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
+			scroll();
+		} //}}}
+
+		//{{{ scroll() method
+		private void scroll()
+		{
+			int visibleLines = textArea.getVisibleLines();
+
+			int _scrollLine = scrollLine + skew;
+			int _oldScrollLine = oldScrollLine + oldSkew;
+
+			if(_scrollLine == _oldScrollLine)
+				/* do nothing */;
+			else if(_scrollLine >= _oldScrollLine + visibleLines
+				|| _scrollLine <= oldScrollLine - visibleLines)
+			{
+				textArea.chunkCache.invalidateAll();
+			}
+			else if(_scrollLine > _oldScrollLine)
+			{
+				textArea.chunkCache.scrollDown(_scrollLine - _oldScrollLine);
+			}
+			else if(_scrollLine < _oldScrollLine)
+			{
+				textArea.chunkCache.scrollUp(_oldScrollLine - _scrollLine);
+			}
+
+			oldScrollLine = scrollLine;
+			oldSkew = skew;
+
 			changed();
 		} //}}}
 	} //}}}

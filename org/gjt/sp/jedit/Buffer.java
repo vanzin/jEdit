@@ -1038,44 +1038,6 @@ public class Buffer
 		}
 	} //}}}
 
-	//{{{ getScreenLineCount() method
-	/**
-	 * Returns the number of screen lines that the specified physical line
-	 * is split into, or 0 if this information is not available.
-	 * @since jEdit 4.2pre1
-	 */
-	public int getScreenLineCount(int line)
-	{
-		try
-		{
-			readLock();
-			return offsetMgr.getScreenLineCount(line);
-		}
-		finally
-		{
-			readUnlock();
-		}
-	} //}}}
-
-	//{{{ setScreenLineCount() method
-	/**
-	 * Sets the number of screen lines that the specified physical line
-	 * is split into.
-	 * @since jEdit 4.2pre1
-	 */
-	public void setScreenLineCount(int line, int count)
-	{
-		try
-		{
-			writeLock();
-			offsetMgr.setScreenLineCount(line,count);
-		}
-		finally
-		{
-			writeUnlock();
-		}
-	} //}}}
-
 	//}}}
 
 	//{{{ Text getters and setters
@@ -2142,6 +2104,8 @@ public class Buffer
 				}
 			}
 
+			boolean nextLineRequested = false;
+
 			if(Debug.TOKEN_MARKER_DEBUG)
 				Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
 			for(int i = start; i <= lineIndex; i++)
@@ -2205,6 +2169,7 @@ public class Buffer
 			if(nextLineRequested && lineCount - lineIndex > 1)
 			{
 				offsetMgr.lineContextInvalidFrom(lineIndex);
+				fireNextLineRequested(lineIndex);
 			}
 		}
 		finally
@@ -3288,6 +3253,34 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Miscellaneous methods
 
+	//{{{ waitForClose() method
+	/**
+	 * This method blocks until the buffer is closed. It cannot be called
+	 * from the AWT event thread.
+	 * @since jEdit 4.2pre1
+	 */
+	public void waitForClose()
+	{
+		if(SwingUtilities.isEventDispatchThread())
+			throw new InternalError();
+		else
+		{
+			while(!getFlag(CLOSED))
+			{
+				synchronized(closedLock)
+				{
+					try
+					{
+						closedLock.wait();
+					}
+					catch(InterruptedException e)
+					{
+					}
+				}
+			}
+		}
+	} //}}}
+
 	//{{{ getNext() method
 	/**
 	 * Returns the next buffer in the list.
@@ -3389,6 +3382,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		lock = new ReadWriteLock();
 		propertyLock = new Object();
+		closedLock = new Object();
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
 		integerArray = new LongArray();
@@ -3468,6 +3462,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		if(autosaveFile != null)
 			autosaveFile.delete();
+
+		synchronized(closedLock)
+		{
+			closedLock.notify();
+		}
 	} //}}}
 
 	//}}}
@@ -3524,6 +3523,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	private ReadWriteLock lock;
 	private Object propertyLock;
+	private Object closedLock;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 	private LongArray integerArray;
@@ -4007,6 +4007,24 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				((BufferChangeListener)bufferListeners.elementAt(i))
 					.transactionComplete(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireNextLineRequested() method
+	private void fireNextLineRequested(int line)
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.nextLineRequested(this,line);
 			}
 			catch(Throwable t)
 			{
