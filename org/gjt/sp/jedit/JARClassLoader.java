@@ -1,6 +1,9 @@
 /*
  * JARClassLoader.java - Loads classes from JAR files
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.*;
@@ -27,6 +31,7 @@ import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A class loader implementation that loads classes from JAR files.
@@ -35,35 +40,23 @@ import org.gjt.sp.util.Log;
  */
 public class JARClassLoader extends ClassLoader
 {
-	public static long openTime;
-	public static long scanTime;
-	public static long resTime;
-
-	// no-args constructor is for loading classes from all plugins
-	// eg BeanShell uses one of these so that scripts can use
-	// plugin classes
+	//{{{ JARClassLoader constructor
+	/**
+	 * This constructor creates a class loader for loading classes from all
+	 * plugins. For example BeanShell uses one of these so that scripts can
+	 * use plugin classes.
+	 */
 	public JARClassLoader()
 	{
-	}
+	} //}}}
 
+	//{{{ JARClassLoader constructor
 	public JARClassLoader(String path)
 		throws IOException
 	{
-		long start = System.currentTimeMillis();
 		zipFile = new ZipFile(path);
-		openTime += (System.currentTimeMillis() - start);
 		jar = new EditPlugin.JAR(path,this);
 
-		start = System.currentTimeMillis();
-		Enumeration _entires = zipFile.entries();
-		while(_entires.hasMoreElements())
-		{
-			_entires.nextElement();
-		}
-
-		scanTime += (System.currentTimeMillis() - start);
-
-		start = System.currentTimeMillis();
 		Enumeration entires = zipFile.entries();
 		while(entires.hasMoreElements())
 		{
@@ -97,11 +90,10 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
-		resTime += (System.currentTimeMillis() - start);
-		
 		jEdit.addPluginJAR(jar);
-	}
+	} //}}}
 
+	//{{{ loadClass() method
 	/**
 	 * @exception ClassNotFoundException if the class could not be found
 	 */
@@ -147,8 +139,9 @@ public class JARClassLoader extends ClassLoader
 
 			throw cnf;
 		}
-	}
+	} //}}}
 
+	//{{{ getResourceAsStream() method
 	public InputStream getResourceAsStream(String name)
 	{
 		if(zipFile == null)
@@ -168,8 +161,9 @@ public class JARClassLoader extends ClassLoader
 
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ getResource() method
 	public URL getResource(String name)
 	{
 		if(zipFile == null)
@@ -188,8 +182,9 @@ public class JARClassLoader extends ClassLoader
 			Log.log(Log.ERROR,this,mu);
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ getResourceAsPath() method
 	public String getResourceAsPath(String name)
 	{
 		if(zipFile == null)
@@ -200,8 +195,9 @@ public class JARClassLoader extends ClassLoader
 
 		return "jeditresource:/" + MiscUtilities.getFileName(
 			jar.getPath()) + "!" + name;
-	}
+	} //}}}
 
+	//{{{ closeZipFile() method
 	/**
 	 * Closes the ZIP file. This plugin will no longer be usable
 	 * after this.
@@ -222,8 +218,9 @@ public class JARClassLoader extends ClassLoader
 		}
 
 		zipFile = null;
-	}
+	} //}}}
 
+	//{{{ getZipFile() method
 	/**
 	 * Returns the ZIP file associated with this class loader.
 	 * @since jEdit 3.0final
@@ -231,9 +228,9 @@ public class JARClassLoader extends ClassLoader
 	public ZipFile getZipFile()
 	{
 		return zipFile;
-	}
+	} //}}}
 
-	// package-private members
+	//{{{ startAllPlugins() method
 	void startAllPlugins()
 	{
 		for(int i = 0; i < pluginClasses.size(); i++)
@@ -256,9 +253,9 @@ public class JARClassLoader extends ClassLoader
 					"plugin-error.start-error",args);
 			}
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 
 	// used to mark non-existent classes in class hash
 	private static final Object NO_CLASS = new Object();
@@ -269,6 +266,7 @@ public class JARClassLoader extends ClassLoader
 	private Vector pluginClasses = new Vector();
 	private ZipFile zipFile;
 
+	//{{{ loadPluginClass() method
 	private void loadPluginClass(String name)
 		throws Exception
 	{
@@ -283,6 +281,18 @@ public class JARClassLoader extends ClassLoader
 					"plugin-error.already-loaded",null);
 				return;
 			}
+		}
+
+		/* This is a bit silly... but WheelMouse 0.5 seems to be
+		 * unmaintained so the best solution is to add a hack here.
+		 */
+		if(name.equals("WheelMousePlugin")
+			&& jEdit.getProperty("plugin.WheelMousePlugin.version").equals("0.5")
+			&& System.getProperty("java.version").compareTo("1.4") >= 0)
+		{
+			jar.addPlugin(new EditPlugin.Broken(name));
+			jEdit.pluginError(jar.getPath(),"plugin-error.update",null);
+			return;
 		}
 
 		// Check dependencies
@@ -323,8 +333,9 @@ public class JARClassLoader extends ClassLoader
 
 			jar.addPlugin((EditPlugin)clazz.newInstance());
 		}
-	}
+	} //}}}
 
+	//{{{ checkDependencies() method
 	private boolean checkDependencies(String name)
 	{
 		int i = 0;
@@ -433,9 +444,12 @@ public class JARClassLoader extends ClassLoader
 		}
 
 		return true;
-	}
+	} //}}}
 
-	// Load class from this JAR only.
+	//{{{ _loadClass() method
+	/**
+	 * Load class from this JAR only.
+	 */
 	private Class _loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
@@ -488,5 +502,7 @@ public class JARClassLoader extends ClassLoader
 
 			throw new ClassNotFoundException(clazz);
 		}
-	}
+	} //}}}
+
+	//}}}
 }
