@@ -535,6 +535,25 @@ public class DisplayManager
 		textArea.foldStructureChanged();
 	} //}}}
 
+	//{{{ bufferLoaded() method
+	/**
+	 * Do not call this.
+	 */
+	public void bufferLoaded()
+	{
+		fvmreset();
+		screenLineMgr.reset();
+
+		firstLine.reset();
+		scrollLineCount.reset();
+		clearNotifyFlags();
+
+		int collapseFolds = buffer.getIntegerProperty(
+			"collapseFolds",0);
+		if(collapseFolds != 0)
+			expandFolds(collapseFolds);
+	} //}}}
+
 	//{{{ Package-private members
 	boolean softWrap;
 	int wrapMargin;
@@ -545,7 +564,19 @@ public class DisplayManager
 	//{{{ init() method
 	void init()
 	{
-		if(!initialized)
+		if(initialized)
+		{
+			updateWrapSettings();
+			if(buffer.isLoaded())
+			{
+				firstLine.reset();
+				scrollLineCount.reset();
+				clearNotifyFlags();
+				textArea.updateScrollBars();
+				textArea.recalculateLastPhysicalLine();
+			}
+		}
+		else
 		{
 			initialized = true;
 			fvm = new int[2];
@@ -554,18 +585,6 @@ public class DisplayManager
 			else
 				fvmreset();
 			notifyScreenLineChanges();
-		}
-		else
-		{
-			updateWrapSettings();
-			if(buffer.isLoaded())
-			{
-				firstLine.reset();
-				scrollLineCount.reset();
-				notifyScreenLineChanges();
-				textArea.updateScrollBars();
-				textArea.recalculateLastPhysicalLine();
-			}
 		}
 	} //}}}
 
@@ -1289,28 +1308,6 @@ loop:		for(;;)
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"reset()");
 
-			String wrap = buffer.getStringProperty("wrap");
-			softWrap = wrap.equals("soft");
-			if(textArea.maxLineLen <= 0)
-			{
-				softWrap = false;
-				wrapMargin = 0;
-			}
-			else
-			{
-				// stupidity
-				char[] foo = new char[textArea.maxLineLen];
-				for(int i = 0; i < foo.length; i++)
-				{
-					foo[i] = ' ';
-				}
-				TextAreaPainter painter = textArea.getPainter();
-				wrapMargin = (int)painter.getFont().getStringBounds(
-					foo,0,foo.length,
-					painter.getFontRenderContext())
-					.getWidth();
-			}
-
 			scrollLine = 0;
 
 			int i = getFirstVisibleLine();
@@ -1584,6 +1581,9 @@ loop:		for(;;)
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
 		{
+			if(!buffer.isLoaded())
+				return;
+
 			fvmreset();
 			firstLine.reset();
 			scrollLineCount.reset();
@@ -1612,11 +1612,7 @@ loop:		for(;;)
 			int offset, int numLines, int length)
 		{
 			if(!buffer.isLoaded())
-			{
-				fvmreset();
-				screenLineMgr.reset();
 				return;
-			}
 
 			screenLineMgr.contentInserted(startLine,numLines);
 
