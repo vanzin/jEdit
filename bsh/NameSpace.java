@@ -175,8 +175,6 @@ public class NameSpace
 	}
 
 	/**
-		@deprecated  Use the form specifying strict java.  This method 
-			assumes strict java is false.
 		@see #setVariable( String, Object, boolean );
 	*/
     public void	setVariable( String name, Object value ) 

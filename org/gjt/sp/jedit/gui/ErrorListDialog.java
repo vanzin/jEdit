@@ -76,9 +76,9 @@ public class ErrorListDialog extends EnhancedDialog
 
 	//{{{ ErrorListDialog constructor
 	public ErrorListDialog(Frame frame, String title, String caption,
-		Vector messages, boolean showPluginMgrButton)
+		Vector messages, boolean pluginError)
 	{
-		super(frame,title,true);
+		super(frame,title,!pluginError);
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -118,7 +118,7 @@ public class ErrorListDialog extends EnhancedDialog
 		ok = new JButton(jEdit.getProperty("common.ok"));
 		ok.addActionListener(new ActionHandler());
 
-		if(showPluginMgrButton)
+		if(pluginError)
 		{
 			pluginMgr = new JButton(jEdit.getProperty("error-list.plugin-manager"));
 			pluginMgr.addActionListener(new ActionHandler());

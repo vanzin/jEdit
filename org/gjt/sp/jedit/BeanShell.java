@@ -24,8 +24,10 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import bsh.*;
-import java.lang.reflect.InvocationTargetException;
 import java.io.*;
+import java.lang.ref.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.*;
@@ -43,6 +45,7 @@ import org.gjt.sp.util.Log;
  * <li><code>editPane</code> - the currently active {@link EditPane}.</li>
  * <li><code>textArea</code> - the edit pane's {@link JEditTextArea}.</li>
  * <li><code>buffer</code> - the edit pane's {@link Buffer}.</li>
+ * <li><code>wm</code> - the view's {@link DockableWindowManager}.</li>
  * <li><code>scriptPath</code> - the path name of the currently executing
  * BeanShell script.</li>
  * </ul>
@@ -574,9 +577,10 @@ public class BeanShell
 	//{{{ init() method
 	static void init()
 	{
-		BshClassManager mgr = new BshClassManager();
-		mgr.setClassLoader(new JARClassLoader());
-		global = new NameSpace(mgr,
+		classManager = new CustomClassManager();
+		classManager.setClassLoader(new JARClassLoader());
+
+		global = new NameSpace(classManager,
 			"jEdit embedded BeanShell interpreter");
 		global.importPackage("org.gjt.sp.jedit");
 		global.importPackage("org.gjt.sp.jedit.browser");
@@ -596,8 +600,19 @@ public class BeanShell
 
 		interpForMethods = createInterpreter(global);
 
-		Log.log(Log.DEBUG,BeanShell.class,"BeanShell interpreter version "
+		Log.log(Log.DEBUG,BeanShell.class,
+			"BeanShell interpreter version "
 			+ Interpreter.VERSION);
+	} //}}}
+
+	//{{{ resetClassManager() method
+	/**
+	 * Causes BeanShell internal structures to drop references to cached
+	 * Class instances.
+	 */
+	static void resetClassManager()
+	{
+		classManager.reset();
 	} //}}}
 
 	//}}}
@@ -606,6 +621,7 @@ public class BeanShell
 
 	//{{{ Static variables
 	private static final Object[] NO_ARGS = new Object[0];
+	private static CustomClassManager classManager;
 	private static Interpreter interpForMethods;
 	private static NameSpace global;
 	private static boolean running;
@@ -684,4 +700,61 @@ public class BeanShell
 	} //}}}
 
 	//}}}
+
+	//{{{ CustomClassManager class
+	static class CustomClassManager extends BshClassManager
+	{
+		private LinkedList listeners = new LinkedList();
+		private ReferenceQueue refQueue = new ReferenceQueue();
+
+		// copy and paste from bsh/classpath/ClassManagerImpl.java...
+		public synchronized void addListener( Listener l )
+		{
+			listeners.add( new WeakReference( l, refQueue) );
+
+			// clean up old listeners
+			Reference deadref;
+			while ( (deadref = refQueue.poll()) != null )
+			{
+				boolean ok = listeners.remove( deadref );
+				if ( ok )
+				{
+					//System.err.println("cleaned up weak ref: "+deadref);
+				}
+				else
+				{
+					if ( Interpreter.DEBUG ) Interpreter.debug(
+						"tried to remove non-existent weak ref: "+deadref);
+				}
+			}
+		}
+
+		public void removeListener( Listener l )
+		{
+			throw new Error("unimplemented");
+		}
+
+		public void reset()
+		{
+			classLoaderChanged();
+		}
+
+		protected synchronized void classLoaderChanged()
+		{
+			// clear the static caches in BshClassManager
+			clearCaches();
+
+			for (Iterator iter = listeners.iterator();
+				iter.hasNext(); )
+			{
+				WeakReference wr = (WeakReference)
+					iter.next();
+				Listener l = (Listener)wr.get();
+				if ( l == null )  // garbage collected
+					iter.remove();
+				else
+					l.classLoaderChanged();
+			}
+		}
+	}
 }

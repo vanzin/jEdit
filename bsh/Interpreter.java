@@ -50,9 +50,9 @@ import java.io.*;
 		// Evaluate statements and expressions
 		bsh.eval("foo=Math.sin(0.5)");
 		bsh.eval("bar=foo*5; bar=Math.cos(bar);");
-		bsh.eval("for(i=0; i<10; i++) { print(\"hello\"); }");
+		bsh.eval("for(i=0; i&lt;10; i++) { print(\"hello\"); }");
 		// same as above using java syntax and apis only
-		bsh.eval("for(int i=0; i<10; i++) { System.out.println(\"hello\"); }");
+		bsh.eval("for(int i=0; i&lt;10; i++) { System.out.println(\"hello\"); }");
 
 		// Source from files or streams
 		bsh.source("myscript.bsh");  // or bsh.eval("source(\"myscript.bsh\")");
@@ -93,7 +93,7 @@ public class Interpreter
 {
 	/* --- Begin static members --- */
 
-	public static final String VERSION = "1.3a1";
+	public static final String VERSION = "1.3a1-jedit1";
 	/* 
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).

@@ -66,8 +66,7 @@ public class Primitive implements ParserConstants, java.io.Serializable
     */
     public static final Primitive VOID = new Primitive(Special.VOID_TYPE);
 
-    // private to prevent invocation with param that isn't a primitive-wrapper
-    private Primitive(Object value)
+    public Primitive(Object value)
     {
         if(value == null)
             throw new InterpreterError(
@@ -121,7 +120,7 @@ public class Primitive implements ParserConstants, java.io.Serializable
         return getType(value);
     }
 
-    private Class getType(Object o)
+    public static Class getType(Object o)
     {
         if(o instanceof Boolean)
             return Boolean.TYPE;
