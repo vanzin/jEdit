@@ -457,6 +457,15 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="last-macro" NO_RECORD="TRUE" NO_REMEMBER_LAST="TRUE">
+	<CODE>
+		if(Macros.getLastMacro() == null)
+			view.getToolkit().beep();
+		else
+			Macros.getLastMacro().invoke(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="left-docking-area">
 	<CODE>
 		wm.getLeftDockingArea().showMostRecent();

@@ -642,6 +642,34 @@ public class GUIUtilities
 			jEdit.getProperty(name + ".title"),buttons,type);
 	} //}}}
 
+	//{{{ listConfirm() method
+	/**
+	 * Displays a confirm dialog box and returns the button pushed by the
+	 * user. The title of the dialog is fetched from the
+	 * <code><i>name</i>.title</code> property. The message is fetched
+	 * from the <code><i>name</i>.message</code> property. The dialog
+	 * also shows a list of entries given by the <code>listModel</code>
+	 * parameter.
+	 * @since jEdit 4.3pre1
+	 */
+	public static int listConfirm(Component comp, String name, String[] args,
+		Object[] listModel)
+	{
+		JList list = new JList(listModel);
+		list.setVisibleRowCount(8);
+
+		Object[] message = {
+			jEdit.getProperty(name + ".message",args),
+			new JScrollPane(list)
+		};
+
+		return JOptionPane.showConfirmDialog(comp,
+			message,
+			jEdit.getProperty(name + ".title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE);
+	} //}}}
+
 	//{{{ showVFSFileDialog() method
 	/**
 	 * Displays a VFS file selection dialog box.
