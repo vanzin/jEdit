@@ -12,10 +12,10 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 4.0pre9
+Version: 4.0final
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 27
+Serial: 28
 Copyright: GPL
 Group: Applications/Editors
 Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre9source.tar.gz

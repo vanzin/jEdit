@@ -1,5 +1,10 @@
 TO DO
 
++ plugins:
+
+- finish ErrorList 1.2.3
+- finish XML 0.9
+
 + before 4.0final:
 
 - investigate I/O threads
