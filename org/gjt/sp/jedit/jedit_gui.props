@@ -1420,7 +1420,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=56
+tip.count=64
 
 # Activity log
 log-viewer.title=Activity Log
