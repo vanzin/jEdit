@@ -67,7 +67,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer implements EBComponent
+public class Buffer
 {
 	//{{{ Some constants
 	/**
@@ -1558,10 +1558,12 @@ public class Buffer implements EBComponent
 			setFoldHandler(new DummyFoldHandler());
 		}
 
-		if(!isTemporary() && firstTimeDone)
-			EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
+		String newWrap = getStringProperty("wrap");
+		if(wrap != null && !newWrap.equals(wrap))
+			offsetMgr.invalidateScreenLineCounts();
+		this.wrap = newWrap;
 
-		firstTimeDone = true;
+		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -3328,16 +3330,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return name + " (" + directory + ")";
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
-	{
-		if(msg instanceof PropertiesChanged)
-		{
-			resetCachedProperties();
-			propertiesChanged();
-		}
-	} //}}}
-
 	//}}}
 
 	//{{{ Methods that really shouldn't be public...
@@ -3424,11 +3416,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		// this must be called before any EditBus messages are sent
 		setPath(path);
 
-		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
-		if(defaultMode == null)
-			defaultMode = jEdit.getMode("text");
-		setMode(defaultMode);
-
 		/* Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
 		 * doesn't exist on disk.
@@ -3446,18 +3433,28 @@ loop:		for(int i = 0; i < seg.count; i++)
 		 */
 		setFlag(UNTITLED,newFile);
 		setFlag(NEW_FILE,newFile);
-
-		if(!temp)
-			EditBus.addToBus(Buffer.this);
 	} //}}}
 
 	//{{{ commitTemporary() method
 	void commitTemporary()
 	{
 		setFlag(TEMPORARY,false);
-		EditBus.addToBus(this);
 
 		finishLoading();
+	} //}}}
+
+	//{{{ resetCachedProperties() method
+	void resetCachedProperties()
+	{
+		// Need to reset properties that were cached defaults,
+		// since the defaults might have changed.
+		Iterator iter = properties.values().iterator();
+		while(iter.hasNext())
+		{
+			PropValue value = (PropValue)iter.next();
+			if(value.defaultValue)
+				iter.remove();
+		}
 	} //}}}
 
 	//{{{ close() method
@@ -3467,8 +3464,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		if(autosaveFile != null)
 			autosaveFile.delete();
-
-		EditBus.removeFromBus(this);
 	} //}}}
 
 	//}}}
@@ -3541,8 +3536,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private FoldHandler foldHandler;
 	private int displayLock;
 
-	// Minimise EditBus message traffic...
-	private boolean firstTimeDone;
+	/**
+	 * We keep track of this so that we know when to invalidate the
+	 * offset manager's screen line counts.
+	 */
+	private String wrap;
 	//}}}
 
 	//{{{ setPath() method
@@ -3573,20 +3571,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(autosaveFile != null)
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
-		}
-	} //}}}
-
-	//{{{ resetCachedProperties() method
-	private void resetCachedProperties()
-	{
-		// Need to reset properties that were cached defaults,
-		// since the defaults might have changed.
-		Iterator iter = properties.values().iterator();
-		while(iter.hasNext())
-		{
-			PropValue value = (PropValue)iter.next();
-			if(value.defaultValue)
-				iter.remove();
 		}
 	} //}}}
 
@@ -3645,8 +3629,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 				// all visible by default after load!
 			}
 			else
+			{
 				offsetMgr.expandFolds(collapseFolds);
+			}
 		}
+
+		offsetMgr.resetAnchors();
 
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
@@ -3875,6 +3863,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			offsetMgr.expandFolds(collapseFolds);
+			offsetMgr.resetAnchors();
 		}
 	} //}}}
 

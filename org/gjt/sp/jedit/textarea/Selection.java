@@ -243,7 +243,7 @@ public abstract class Selection implements Cloneable
 		{
 			boolean changed = false;
 
-			if(this.start > start)
+			if(this.start >= start)
 			{
 				this.start += length;
 				if(numLines != 0)

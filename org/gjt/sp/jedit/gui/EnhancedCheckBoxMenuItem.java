@@ -38,15 +38,20 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	//{{{ EnhancedCheckBoxMenuItem constructor
 	public EnhancedCheckBoxMenuItem(String label, EditAction action)
 	{
-		super(label);
 		this.action = action;
+		this.shortcut = getShortcut();
+		if(OperatingSystem.isMacOSLF() && shortcut != null)
+		{
+			setText(label + " (" + shortcut + ")");
+			shortcut = null;
+		}
+		else
+			setText(label);
 
 		if(action != null)
 		{
 			setEnabled(true);
 			addActionListener(new EditAction.Wrapper(action));
-			shortcutProp1 = action.getName() + ".shortcut";
-			shortcutProp2 = action.getName() + ".shortcut2";
 
 			addMouseListener(new MouseHandler());
 		}
@@ -61,8 +66,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		Dimension d = super.getPreferredSize();
 
-		String shortcut = getShortcut();
-
 		if(shortcut != null)
 		{
 			d.width += (getFontMetrics(acceleratorFont)
@@ -76,8 +79,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		super.paint(g);
 
-		String shortcut = getShortcut();
-
 		if(shortcut != null)
 		{
 			g.setFont(acceleratorFont);
@@ -88,22 +89,16 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			Insets insets = getInsets();
 			g.drawString(shortcut,getWidth() - (fm.stringWidth(
 				shortcut) + insets.right + insets.left + 5),
-				getFont().getSize() + (insets.top - 1)
+				getFont().getSize() + (insets.top - 
+				(OperatingSystem.isMacOSLF() ? 0 : 1))
 				/* XXX magic number */);
 		}
-	} //}}}
-
-	//{{{ getActionCommand() method
-	public String getActionCommand()
-	{
-		return getModel().getActionCommand();
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private String shortcutProp1;
-	private String shortcutProp2;
+	private String shortcut;
 	private EditAction action;
 	private static Font acceleratorFont;
 	private static Color acceleratorForeground;
@@ -117,8 +112,8 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			return null;
 		else
 		{
-			String shortcut1 = jEdit.getProperty(shortcutProp1);
-			String shortcut2 = jEdit.getProperty(shortcutProp2);
+			String shortcut1 = jEdit.getProperty(action.getName() + ".shortcut");
+			String shortcut2 = jEdit.getProperty(action.getName() + ".shortcut2");
 
 			if(shortcut1 == null || shortcut1.length() == 0)
 			{
@@ -178,10 +173,16 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
+		boolean msgSet = false;
+
 		public void mouseReleased(MouseEvent evt)
 		{
-			GUIUtilities.getView((Component)evt.getSource())
-				.getStatus().setMessage(null);
+			if(msgSet)
+			{
+				GUIUtilities.getView((Component)evt.getSource())
+					.getStatus().setMessage(null);
+				msgSet = false;
+			}
 		}
 
 		public void mouseEntered(MouseEvent evt)
@@ -191,13 +192,18 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(msg);
+				msgSet = true;
 			}
 		}
 
 		public void mouseExited(MouseEvent evt)
 		{
-			GUIUtilities.getView((Component)evt.getSource())
-				.getStatus().setMessage(null);
+			if(msgSet)
+			{
+				GUIUtilities.getView((Component)evt.getSource())
+					.getStatus().setMessage(null);
+				msgSet = false;
+			}
 		}
 	} //}}}
 }

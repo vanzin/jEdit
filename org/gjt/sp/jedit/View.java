@@ -1088,8 +1088,6 @@ public class View extends JFrame implements EBComponent
 
 		status = new StatusBar(this);
 
-		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
-
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
@@ -1308,6 +1306,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	private void propertiesChanged()
 	{
+		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
+
 		loadToolBars();
 
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");

@@ -1079,23 +1079,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.setColor(bgColor);
 				gfx.fillRect(0,y,getWidth(),fm.getHeight());
 			} //}}}
-			//{{{ Paint token backgrounds
-			else
-			{
-				ChunkCache.LineInfo lineInfo = textArea.chunkCache
-					.getLineInfo(screenLine);
-				if(!lineInfo.chunksValid)
-					Log.log(Log.ERROR,this,"Chunks not valid for " + screenLine);
 
-				if(lineInfo.chunks != null)
-				{
-					float baseLine = y + fm.getHeight()
-						- fm.getLeading() - fm.getDescent();
-					Chunk.paintChunkBackgrounds(
-						lineInfo.chunks,gfx,
-						textArea.getHorizontalOffset(),
-						baseLine);
-				}
+			//{{{ Paint token backgrounds
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache
+				.getLineInfo(screenLine);
+			if(!lineInfo.chunksValid)
+				Log.log(Log.ERROR,this,"Chunks not valid for " + screenLine);
+
+			if(lineInfo.chunks != null)
+			{
+				float baseLine = y + fm.getHeight()
+					- fm.getLeading() - fm.getDescent();
+				Chunk.paintChunkBackgrounds(
+					lineInfo.chunks,gfx,
+					textArea.getHorizontalOffset(),
+					baseLine);
 			} //}}}
 		} //}}}
 	} //}}}

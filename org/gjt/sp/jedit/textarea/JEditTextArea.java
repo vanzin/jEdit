@@ -4554,6 +4554,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		maxHorizontalScrollWidth = 0;
+
+		displayManager.propertiesChanged();
 		updateScrollBars();
 
 		chunkCache.invalidateAll();

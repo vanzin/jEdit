@@ -91,6 +91,8 @@ class InstallPanel extends JPanel
 		infoPane.setPreferredSize(new Dimension(500,100));
 		split.setBottomComponent(infoPane);
 
+		split.setDividerLocation(200);
+
 		add(BorderLayout.CENTER,split);
 
 		/* Create buttons */

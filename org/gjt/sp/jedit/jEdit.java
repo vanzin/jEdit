@@ -838,6 +838,15 @@ public class jEdit
 
 		initProxy();
 
+		// we do this here instead of adding buffers to the bus.
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			buffer.resetCachedProperties();
+			buffer.propertiesChanged();
+			buffer = buffer.next;
+		}
+
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
 
