@@ -88,7 +88,7 @@ public class RESearchMatcher implements SearchMatcher
 		if(!end)
 			flags |= RE.REG_NOTEOL;
 
-		REMatch match = re.getMatch(new CharIndexedSegment(text,0),
+		REMatch match = re.getMatch(new CharIndexedSegment(text,0),0,
 			flags);
 		if(match == null)
 			return null;

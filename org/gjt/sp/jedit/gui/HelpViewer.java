@@ -53,6 +53,16 @@ public class HelpViewer extends JFrame implements EBComponent
 	 * Creates a new help viewer for the specified URL.
 	 * @param url The URL
 	 */
+	public HelpViewer(URL url)
+	{
+		this(url.toString());
+	}
+
+	//{{{ HelpViewer constructor
+	/**
+	 * Creates a new help viewer for the specified URL.
+	 * @param url The URL
+	 */
 	public HelpViewer(String url)
 	{
 		super(jEdit.getProperty("helpviewer.title"));

@@ -343,5 +343,7 @@ vfs.browser.colors.3.glob=*.{gif,jpg,jpeg,png,bmp,xpm,svg}
 vfs.browser.colors.3.color=#009933
 vfs.browser.colors.4.glob=*.{gz,jar,zip,tgz,z}
 vfs.browser.colors.4.color=#990000
+vfs.browser.colors.5.glob=tags
+vfs.browser.colors.5.color=#003366
 
 #}}}

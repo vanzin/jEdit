@@ -56,12 +56,12 @@ public interface BufferChangeListener
 	 * Called when text is inserted into the buffer.
 	 * @param buffer The buffer in question
 	 * @param startLine The first line
-	 * @param start The start offset, from the beginning of the buffer
+	 * @param offset The start offset, from the beginning of the buffer
 	 * @param numLines The number of lines inserted
 	 * @param length The number of characters inserted
 	 * @since jEdit 4.0pre1
 	 */
-	void contentInserted(Buffer buffer, int startLine, int start,
+	void contentInserted(Buffer buffer, int startLine, int offset,
 		int numLines, int length);
 	//}}}
 
@@ -70,12 +70,12 @@ public interface BufferChangeListener
 	 * Called when text is removed from the buffer.
 	 * @param buffer The buffer in question
 	 * @param startLine The first line
-	 * @param start The start offset, from the beginning of the buffer
+	 * @param offset The start offset, from the beginning of the buffer
 	 * @param numLines The number of lines removed
 	 * @param length The number of characters removed
 	 * @since jEdit 4.0pre1
 	 */
-	void contentRemoved(Buffer buffer, int startLine, int start,
+	void contentRemoved(Buffer buffer, int startLine, int offset,
 		int numLines, int length);
 	//}}}
 }

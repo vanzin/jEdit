@@ -150,18 +150,13 @@ public class TokenMarker
 	 * Do not call this method directly; call Buffer.markTokens() instead.
 	 */
 	public LineContext markTokens(LineContext prevContext,
-		LineContext _context, Buffer.TokenList tokenList,
-		Segment line)
+		Buffer.TokenList tokenList, Segment line)
 	{
-		this.context = _context;
+		this.context = new LineContext();
 
 		//{{{ Set up context
 		if(prevContext == null)
-		{
-			context.parent = null;
-			context.inRule = null;
 			context.rules = getMainRuleSet();
-		}
 		else
 		{
 			context.parent = prevContext.parent;
@@ -353,7 +348,9 @@ public class TokenMarker
 			}
 		} //}}}
 
-		return context;
+		tokenList.addToken(0,Token.END);
+
+		return context.intern();
 	} //}}}
 
 	//{{{ Private members
@@ -760,6 +757,19 @@ loop:			for(int i = 0; i < len; i++)
 	//{{{ LineContext class
 	public static class LineContext
 	{
+		//{{{ Debug code
+		static int count;
+		static int countGC;
+
+		public String getAllocationStatistics()
+		{
+			return "total: " + count + ", in core: " +
+				(count - countGC)
+				+ ", interned: " + intern.size();
+		} //}}}
+
+		static Hashtable intern = new Hashtable();
+
 		public LineContext parent;
 		public ParserRule inRule;
 		public ParserRuleSet rules;
@@ -790,6 +800,62 @@ loop:			for(int i = 0; i < len; i++)
 		//{{{ LineContext constructor
 		public LineContext()
 		{
+			count++;
+		} //}}}
+
+		//{{{ intern() method
+		public LineContext intern()
+		{
+			Object obj = intern.get(this);
+			if(obj == null)
+			{
+				intern.put(this,this);
+				return this;
+			}
+			else
+				return (LineContext)obj;
+		} //}}}
+
+		//{{{ finalize() method
+		public void finalize()
+		{
+			countGC++;
+		} //}}}
+
+		//{{{ hashCode() method
+		public int hashCode()
+		{
+			if(inRule != null)
+				return inRule.hashCode();
+			else if(rules != null)
+				return rules.hashCode();
+			else
+				return 0;
+		} //}}}
+
+		//{{{ equals() method
+		public boolean equals(Object obj)
+		{
+			if(obj instanceof LineContext)
+			{
+				LineContext lc = (LineContext)obj;
+				if(lc.parent == null)
+				{
+					if(parent != null)
+						return false;
+				}
+				else //if(lc.parent != null)
+				{
+					if(parent == null)
+						return false;
+					else if(!lc.parent.equals(parent))
+						return false;
+				}
+
+				return lc.inRule == inRule && lc.rules == rules;
+			}
+			else
+				return false;
 		} //}}}
 
 		//{{{ clone() method

@@ -2,14 +2,12 @@ TO DO
 
 + before 4.0pre1:
 
-- something broken with regexp search
-- rotation 270 degrees still broken
-- JDK 1.3: floating dockables need testing
+- fold level breakage
+- context and tool bar option panes: move up and move down: scroll to
+  item
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
-- fix next line requested -- replace with buffer event
-- incorporate offset manager into buffer
-- inserting line after closed fold issues
+- inserting line after closed fold issues -- fix in OffsetManager
 - positions and line start offsets properly managed in offset manager
 - ContentManager
 - new undo

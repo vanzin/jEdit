@@ -46,11 +46,12 @@ each have their own license; see the 'Libraries' section below.
 * jEdit on the Internet
 
 The jEdit homepage, located at <http://www.jedit.org> contains the
-latest version of jEdit, along with plugin downloads.
+latest version of jEdit, along with plugin downloads. There is also a
+user-oriented site, <http://community.jedit.org>. Check it out.
 
 There are three mailing lists dedicated to jEdit; for details, visit
 <http://www.jedit.org/index.php?page=lists>. The mailing lists are the
-preferred place to post feature suggestions.
+preferred place to post feature suggestions, questions, and the like.
 
 If you would like to report a bug, first read the `Common Problems'
 section below. If that doesn't answer your question, report a bug with
