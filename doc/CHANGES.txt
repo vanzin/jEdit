@@ -23,6 +23,8 @@ JEDIT 4.0 VERSION HISTORY
   soft-wrapped to more screen lines than can be displayed at once. Note
   that this case still won't be handled very well, but at least jEdit
   will no longer throw a fit when it occurs
+- When opening a floating dockable, the default component will be given
+  focus. Previously this was only done for docked windows
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
