@@ -111,7 +111,7 @@ public class XModeHandler extends HandlerBase
 		else if (aname == "IGNORE_CASE")
 		{
 			lastIgnoreCase = (isSpecified) ? (value.equals("TRUE")) :
-				false;
+				true;
 		}
 		else if (aname == "HIGHLIGHT_DIGITS")
 		{

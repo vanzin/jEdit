@@ -59,6 +59,7 @@ contributing to this release.
   S+DELETE bound to cut
   C+INSERT bound to copy
   S+INSERT bound to paste
+- New splash screen (Kris Kopicki)
 
 + Bug Fixes
 
@@ -89,6 +90,12 @@ contributing to this release.
 - A few printing bugs fixed (Thomas Dilts)
 - The help viewer should no longer open behind the view when jEdit is
   run for the first time on some Java implementations
+- StatusBar.MemoryIndicator.removeNotify() was missing a
+  super.removeNotify() call (Alexander Maryanovsky)
+- Workaround for views not being brought to front on windows. This
+  workaround minimises and then restores the view, so a minimise
+  animation might be visible for a brief period of time. However,
+  there is no other way of fixing this (Alexander Maryanovsky)
 
 + API Changes
 

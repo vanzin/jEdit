@@ -221,6 +221,13 @@ public class EditServer extends Thread
 
 			jEdit.openFiles(view,parent,args);
 
+			// Hack done to fix bringing the window to the front.
+			// At least on windows, Frame.toFront() doesn't cut it.
+			// Remove the isWindows check if it's broken under other
+			// OSes too.
+			if (OperatingSystem.isWindows())
+				view.setState(java.awt.Frame.ICONIFIED);
+			
 			// un-iconify using JDK 1.3 API
 			view.setState(java.awt.Frame.NORMAL);
 			view.requestFocus();

@@ -1,7 +1,5 @@
 TO DO
 
-- check ignore case/digit defaults
-
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
 
