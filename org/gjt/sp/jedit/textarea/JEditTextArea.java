@@ -4822,35 +4822,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
-		boolean invalidateScreenLineCounts = false;
-
-		int oldWrapMargin = wrapMargin;
-		String oldWrap = wrap;
-
 		wrap = buffer.getStringProperty("wrap");
 		hardWrap = wrap.equals("hard");
 		softWrap = wrap.equals("soft");
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
 
-		if(oldWrapMargin != wrapMargin || !wrap.equals(oldWrap))
-		{
-			if(displayManager != null && !bufferChanging)
-			{
-				displayManager.firstLine.callReset = true;
-				displayManager.scrollLineCount.callReset = true;
-			}
-			invalidateScreenLineCounts = true;
-		}
-
-		if(invalidateScreenLineCounts && displayManager != null
-			&& buffer.isLoaded())
-			displayManager.invalidateScreenLineCounts();
-
-		chunkCache.invalidateAll();
-
 		if(displayManager != null && !bufferChanging
-			&& buffer.isLoaded())
+			&&  buffer.isLoaded())
+		{
+			displayManager.invalidateScreenLineCounts();
+			chunkCache.invalidateAll();
 			displayManager.notifyScreenLineChanges();
+		}
 
 		gutter.repaint();
 		painter.repaint();
