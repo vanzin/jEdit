@@ -7,12 +7,17 @@ JEDIT 4.2 VERSION HISTORY
 - It was possible to open multiple plugin manager instances from the
   "Plugin Error" dialog box.
 
+- Fixed selection issue when right-clicking on a file system browser
+  window.
+
 }}}
 {{{ API Changes
 
 - Added a new dynamic menu API, so that plugins using the 4.2 plugin API
   can provide dynamic menus. Simply write an implementation of
   org.gjt.sp.jedit.menu.DynamicMenuProvider
+
+- EditPlugin.start() is always called from the AWT thread now.
 
 }}}
 

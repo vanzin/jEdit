@@ -38,56 +38,6 @@ import org.gjt.sp.jedit.*;
 
 public class PluginManager extends JFrame implements EBComponent
 {
-	//{{{ PluginManager constructor
-	public PluginManager(Frame frame)
-	{
-		super(jEdit.getProperty("plugin-manager.title"));
-
-		EditBus.addToBus(this);
-
-		/* Setup panes */
-		JPanel content = new JPanel(new BorderLayout(12,12));
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
-
-		tabPane = new JTabbedPane();
-		tabPane.addTab(jEdit.getProperty("manage-plugins.title"),
-			manager = new ManagePanel(this));
-		tabPane.addTab(jEdit.getProperty("update-plugins.title"),
-			updater = new InstallPanel(this,true));
-		tabPane.addTab(jEdit.getProperty("install-plugins.title"),
-			installer = new InstallPanel(this,false));
-
-		content.add(BorderLayout.CENTER,tabPane);
-
-		tabPane.addChangeListener(new ListUpdater());
-
-		/* Create the buttons */
-		Box buttons = new Box(BoxLayout.X_AXIS);
-
-		ActionListener al = new ActionHandler();
-		options = new JButton(jEdit.getProperty("plugin-manager.options"));
-		options.addActionListener(al);
-		done = new JButton(jEdit.getProperty("plugin-manager.done"));
-		done.addActionListener(al);
-
-		buttons.add(Box.createGlue());
-		buttons.add(options);
-		buttons.add(Box.createHorizontalStrut(6));
-		buttons.add(done);
-		buttons.add(Box.createGlue());
-
-		getRootPane().setDefaultButton(done);
-
-		content.add(BorderLayout.SOUTH,buttons);
-
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		pack();
-		GUIUtilities.loadGeometry(this,"plugin-manager");
-		show();
-	} //}}}
-
 	//{{{ dispose() method
 	public void dispose()
 	{
@@ -154,6 +104,56 @@ public class PluginManager extends JFrame implements EBComponent
 
 	private static PluginManager instance;
 	//}}}
+
+	//{{{ PluginManager constructor
+	private PluginManager(Frame frame)
+	{
+		super(jEdit.getProperty("plugin-manager.title"));
+
+		EditBus.addToBus(this);
+
+		/* Setup panes */
+		JPanel content = new JPanel(new BorderLayout(12,12));
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		tabPane = new JTabbedPane();
+		tabPane.addTab(jEdit.getProperty("manage-plugins.title"),
+			manager = new ManagePanel(this));
+		tabPane.addTab(jEdit.getProperty("update-plugins.title"),
+			updater = new InstallPanel(this,true));
+		tabPane.addTab(jEdit.getProperty("install-plugins.title"),
+			installer = new InstallPanel(this,false));
+
+		content.add(BorderLayout.CENTER,tabPane);
+
+		tabPane.addChangeListener(new ListUpdater());
+
+		/* Create the buttons */
+		Box buttons = new Box(BoxLayout.X_AXIS);
+
+		ActionListener al = new ActionHandler();
+		options = new JButton(jEdit.getProperty("plugin-manager.options"));
+		options.addActionListener(al);
+		done = new JButton(jEdit.getProperty("plugin-manager.done"));
+		done.addActionListener(al);
+
+		buttons.add(Box.createGlue());
+		buttons.add(options);
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(done);
+		buttons.add(Box.createGlue());
+
+		getRootPane().setDefaultButton(done);
+
+		content.add(BorderLayout.SOUTH,buttons);
+
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		pack();
+		GUIUtilities.loadGeometry(this,"plugin-manager");
+		show();
+	} //}}}
 
 	//{{{ updatePluginList() method
 	private void updatePluginList()
