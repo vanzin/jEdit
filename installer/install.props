@@ -26,8 +26,8 @@ ostask.unix-man.manpage=jedit.1
 comp.count=6
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=5024
-comp.0.real-size=4146
+comp.0.disk-size=5016
+comp.0.real-size=4167
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
@@ -36,8 +36,8 @@ comp.1.real-size=115
 comp.1.fileset=jedit-macros
 
 comp.2.name=API documentation (for macro and plugin development)
-comp.2.disk-size=7024
-comp.2.real-size=6375
+comp.2.disk-size=7028
+comp.2.real-size=6389
 comp.2.fileset=jedit-api
 
 comp.3.name=Windows desktop integration (jEditLauncher)
