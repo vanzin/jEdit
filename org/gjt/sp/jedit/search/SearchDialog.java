@@ -162,7 +162,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			String path = MiscUtilities.getParentOfPath(
 				view.getBuffer().getPath());
 
-			if(path.endsWith(File.separator))
+			if(path.endsWith("/") || path.endsWith(File.separator))
 				path = path.substring(0,path.length() - 1);
 
 			directory.setText(path);
@@ -260,7 +260,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-			if(!save())
+			if(!save(false))
 				return;
 
 			if(hyperSearch.isSelected() || searchSelection.isSelected())
@@ -290,7 +290,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	//{{{ cancel() method
 	public void cancel()
 	{
-		save();
+		save(true);
 		GUIUtilities.saveGeometry(this,"search");
 		dispose();
 	} //}}}
@@ -665,7 +665,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	} //}}}
 
 	//{{{ save() method
-	private boolean save()
+	/**
+	 * @param cancel If true, we don't bother the user with warning messages
+	 */
+	private boolean save(boolean cancel)
 	{
 		String filter = this.filter.getText();
 		this.filter.addCurrentToHistory();
@@ -692,6 +695,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 			if(MiscUtilities.isURL(directory))
 			{
+				if(cancel)
+					return false;
+
 				int retVal = GUIUtilities.confirm(
 					SearchDialog.this,"remote-dir-search",
 					null,JOptionPane.YES_NO_OPTION,
@@ -727,7 +733,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		if(fileset.getFileCount(view) == 0)
 		{
 			// oops
-			GUIUtilities.error(this,"empty-fileset",null);
+			if(!cancel)
+				GUIUtilities.error(this,"empty-fileset",null);
 			ok = false;
 		}
 		else
@@ -872,7 +879,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			}
 			else if(source == replaceAndFindBtn)
 			{
-				save();
+				save(false);
 				if(SearchAndReplace.replace(view))
 					ok();
 				else
@@ -882,7 +889,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-				save();
+				save(false);
 
 				if(searchSelection.isSelected())
 				{

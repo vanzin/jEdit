@@ -88,7 +88,7 @@ contributing to this release.
 - SEQ elements can now have DELEGATE attributes. If specified, this rule
   set will be swapped in after the text matched by the sequence rule.
 
-- Delegates to rule sets with TERMINATE rules should work now.
+- Delegates to rulesets with TERMINATE rules should work now.
 
 - IGNORE_CASE attribute of KEYWORDS rule removed. This value is now the
   same as the IGNORE_CASE attribute of the parent RULES tag.
