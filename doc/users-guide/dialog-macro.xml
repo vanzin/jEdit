@@ -186,7 +186,7 @@ import javax.swing.border.*;</programlisting></informalexample>
     This macro makes use of classes in the
     <literal>javax.swing.border</literal> package, which is not
     automatically imported. As we mentioned
-    previously (see <xref linkend="first-example"/>), jEdit's implementation of
+    previously (see <xref linkend="first-example" />), jEdit's implementation of
     BeanShell causes a number of classes to be automatically imported. Classes
     that are not automatically imported must be identified by a full qualified
     name or be the subject of an <function>import</function> statement.

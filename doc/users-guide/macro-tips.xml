@@ -27,7 +27,7 @@
 <title>Getting a Single Line of Text</title>
 
   <para>
-    As mentioned earlier in <xref linkend="helpful-methods"/>, the method
+    As mentioned earlier in <xref linkend="helpful-methods" />, the method
     <function>Macros.input()</function> offers a convenient way to obtain
     a single line of text input. Here is an example that inserts a pair
     of HTML markup tags specified by the user.
@@ -239,7 +239,7 @@ if( JOptionPane.OK_OPTION !=
         defined constants for the option type and the message type.  The
         constants are the same as those used with the
         <function>Macros.confirm()</function> method; see
-        <xref linkend="helpful-methods"/>. The
+        <xref linkend="helpful-methods" />. The
         option type signifies the use of <guilabel>OK</guilabel>
         and <guilabel>Cancel</guilabel> buttons. The
         <constant>QUERY_MESSAGE</constant> message type causes the message box

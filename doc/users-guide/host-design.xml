@@ -86,7 +86,7 @@ The JARClassLoader</title>
         creating a docking or floating window that will contain the visible
         components of the plugin.  Not all plugins have a visible interface,
         but those that do need a <filename>dockables.xml</filename> file.
-        <!-- See <xref linkend="api-resources-activation" />. -->
+        See <xref linkend="api-resources-activation" />.
       </para></listitem>
       <listitem><para>
         Loads any properties defined in files ending with
