@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002 Slava Pestov
+ * Copyright (C) 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,9 @@ import org.gjt.sp.jedit.syntax.*;
  */
 public class DisplayTokenHandler extends DefaultTokenHandler
 {
+	// don't have chunks longer than 100 characters to avoid slowing things down
+	public static final int MAX_CHUNK_LEN = 100;
+
 	//{{{ init() method
 	public void init(Segment seg, SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
@@ -61,12 +64,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		seenNonWhitespace = false;
 		endX = endOfWhitespace = 0.0f;
 		end = null;
-	} //}}}
-
-	//{{{ setMonospacedCharWidth() method
-	public void setMonospacedCharWidth(float charWidth)
-	{
-		this.charWidth = charWidth;
 	} //}}}
 
 	//{{{ getChunkList() method
@@ -99,48 +96,52 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			return;
 		}
 
-		Chunk chunk = createChunk(id,offset,length,context);
-		addToken(chunk,context);
-
-		if(wrapMargin != 0.0f)
+		for(int splitOffset = 0; splitOffset < length; splitOffset += MAX_CHUNK_LEN)
 		{
-			initChunk(chunk);
-			x += chunk.width;
+			int splitLength = Math.min(length - splitOffset,MAX_CHUNK_LEN);
+			Chunk chunk = createChunk(id,offset + splitOffset,splitLength,context);
+			addToken(chunk,context);
 
-			if(id == Token.WHITESPACE
-				|| id == Token.TAB)
+			if(wrapMargin != 0.0f)
 			{
-				if(seenNonWhitespace)
+				initChunk(chunk);
+				x += chunk.width;
+
+				if(id == Token.WHITESPACE
+					|| id == Token.TAB)
 				{
-					end = lastToken;
-					endX = x;
+					if(seenNonWhitespace)
+					{
+						end = lastToken;
+						endX = x;
+					}
+					else
+						endOfWhitespace = x;
 				}
 				else
-					endOfWhitespace = x;
-			}
-			else
-			{
-				if(x > wrapMargin
-					&& end != null
-					&& seenNonWhitespace)
 				{
-					if(firstToken != null)
-						out.add(merge((Chunk)firstToken));
+					if(x > wrapMargin
+						&& end != null
+						&& seenNonWhitespace)
+					{
+						if(firstToken != null)
+							out.add(merge((Chunk)firstToken));
 
-					firstToken = new Chunk(endOfWhitespace,
-						end.offset + end.length,
-						getParserRuleSet(context));
+						firstToken = new Chunk(endOfWhitespace,
+							end.offset + end.length,
+							getParserRuleSet(context));
 
-					firstToken.next = end.next;
-					end.next = null;
+						firstToken.next = end.next;
+						end.next = null;
 
-					x = x - endX + endOfWhitespace;
+						x = x - endX + endOfWhitespace;
 
-					end = null;
-					endX = x;
+						end = null;
+						endX = x;
+					}
+
+					seenNonWhitespace = true;
 				}
-
-				seenNonWhitespace = true;
 			}
 		}
 	} //}}}
@@ -153,7 +154,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	private FontRenderContext fontRenderContext;
 	private TabExpander expander;
 	private float x;
-	private float charWidth;
 
 	private List out;
 	private float wrapMargin;
@@ -178,7 +178,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ initChunk() method
 	protected void initChunk(Chunk chunk)
 	{
-		chunk.init(seg,expander,x,fontRenderContext,charWidth);
+		chunk.init(seg,expander,x,fontRenderContext);
 	} //}}}
 
 	//{{{ merge() method
@@ -219,7 +219,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		return ((c1.style == c2.style)
 			&& c1.id != Token.TAB
 			&& c2.id != Token.TAB
-			&& c1.accessable && c2.accessable);
+			&& c1.accessable && c2.accessable
+			&& (c1.length + c2.length <= MAX_CHUNK_LEN));
 	} //}}}
 
 	//}}}

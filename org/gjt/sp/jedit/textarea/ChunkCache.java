@@ -330,8 +330,6 @@ class ChunkCache
 			painter.getFontRenderContext(),
 			painter,out,
 			(textArea.softWrap ? textArea.wrapMargin : 0.0f));
-		tokenHandler.setMonospacedCharWidth(textArea.monospacedHack
-			? textArea.charWidth : 0);
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 
@@ -348,8 +346,6 @@ class ChunkCache
 		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter,out,0.0f);
-		tokenHandler.setMonospacedCharWidth(textArea.monospacedHack
-			? textArea.charWidth : 0);
 		buffer.markTokens(physicalLine,tokenHandler);
 
 		if(out.size() == 0)
