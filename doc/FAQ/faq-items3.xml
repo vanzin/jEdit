@@ -187,7 +187,7 @@
         </para></answer>
     </qandaentry>
     <qandaentry>
-      <question><para>
+      <question id="file-euro-char"><para>
         I'm using the iso-8859-1 character encoding.  How do I type and save the
         Euro sign (<quote>&#x20ac;</quote>)?
       </para></question>
