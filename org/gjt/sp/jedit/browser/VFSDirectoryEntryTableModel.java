@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,7 +168,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		if(col == 0)
 			return jEdit.getProperty("vfs.browser.name");
 		else
-			return jEdit.getProperty("vfs.browser." + getExtendedAttribute(col - 1));
+			return jEdit.getProperty("vfs.browser." + getExtendedAttribute(col));
 	} //}}}
 
 	//{{{ getColumnClass() method
@@ -189,9 +189,35 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getExtendedAttribute() method
 	public String getExtendedAttribute(int index)
 	{
-		return ((ExtendedAttribute)extAttrs.get(index)).name;
+		return ((ExtendedAttribute)extAttrs.get(index - 1)).name;
 	} //}}}
 
+	//{{{ getColumnWidth() method
+	/**
+	 * @param i The column index
+	 * @return A saved column width
+	 * @since jEdit 4.3pre2
+	 */
+	public int getColumnWidth(int i)
+	{
+		String extAttr = getExtendedAttribute(i);
+		return jEdit.getIntegerProperty("vfs.browser."
+			+ extAttr + ".width",100);
+	} //}}}
+	
+	//{{{ setColumnWidth() method
+	/**
+	 * @param i The column index
+	 * @param w The column width
+	 * @since jEdit 4.3pre2
+	 */
+	public void setColumnWidth(int i, int w)
+	{
+		String extAttr = getExtendedAttribute(i);
+		jEdit.setIntegerProperty("vfs.browser."
+			+ extAttr + ".width",w);
+	} //}}}
+	
 	//{{{ Package-private members
 	Entry[] files;
 	//}}}

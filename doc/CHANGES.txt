@@ -5,17 +5,6 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski,
 Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
-{{{ Syntax Highlighting
-
-- Updated LilyPond syntax highlighting (Bertalan Fodor).
-
-- Rd syntax highlighting (Jarek Tuszynski).
-
-- Updated ASP syntax highlighting (Simon Ruggier).
-
-- Slate (http://slate.tunes.org) syntax highlighting.
-
-}}}
 {{{ Auto Indent
 
 - The auto indent engine has been rewritten from scratch to provide
@@ -61,6 +50,28 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
   : refers? ( to obj -- ? )
       f swap [ pick eq? or ] each-slot nip ;
   ! Indent returns here
+
+}}}
+{{{ Syntax Highlighting
+
+- Updated LilyPond syntax highlighting (Bertalan Fodor).
+
+- Rd syntax highlighting (Jarek Tuszynski).
+
+- Updated ASP syntax highlighting (Simon Ruggier).
+
+- Slate (http://slate.tunes.org) syntax highlighting.
+
+}}}
+{{{
+
+- The file system now lazily retreives file system attributes. For
+  plugins that use the VFS API, this has important implications; see
+  the below "API Changes" section. (Joshua Gertzen).
+
+- Previously, file system browser columns would resize to fit all the
+  attributes of all visible files. Now, this is not possible, so instead
+  columns can be resized manually and their size is preserved.
 
 }}}
 {{{ Miscellaneous
