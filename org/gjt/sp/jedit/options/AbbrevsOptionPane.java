@@ -53,29 +53,20 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout(6,6));
+
+		expandOnInput = new JCheckBox(jEdit.getProperty("options.abbrevs"
+			+ ".expandOnInput"),Abbrevs.getExpandOnInput());
+
+		panel.add(expandOnInput,BorderLayout.NORTH);
 
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new BoxLayout(panel2,BoxLayout.X_AXIS));
 		panel2.setBorder(new EmptyBorder(0,0,6,0));
-
 		panel2.add(Box.createGlue());
-
-		expandOnInput = new JCheckBox(jEdit.getProperty("options.abbrevs"
-			+ ".expandOnInput"),Abbrevs.getExpandOnInput());
-		panel2.add(expandOnInput);
-
-		panel2.add(Box.createGlue());
-
-		panel.add(panel2,BorderLayout.NORTH);
-
-		JPanel panel3 = new JPanel();
-		panel3.setLayout(new BoxLayout(panel3,BoxLayout.X_AXIS));
-		panel3.setBorder(new EmptyBorder(0,0,6,0));
-		panel3.add(Box.createGlue());
 		JLabel label = new JLabel(jEdit.getProperty("options.abbrevs.set"));
 		label.setBorder(new EmptyBorder(0,0,0,12));
-		panel3.add(label);
+		panel2.add(label);
 
 		Hashtable _modeAbbrevs = Abbrevs.getModeAbbrevs();
 		modeAbbrevs = new Hashtable();
@@ -92,9 +83,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		setsComboBox = new JComboBox(sets);
 		ActionHandler actionHandler = new ActionHandler();
 		setsComboBox.addActionListener(actionHandler);
-		panel3.add(setsComboBox);
-		panel3.add(Box.createGlue());
-		panel.add(panel3,BorderLayout.SOUTH);
+		panel2.add(setsComboBox);
+		panel2.add(Box.createGlue());
+		panel.add(panel2,BorderLayout.SOUTH);
 
 		add(BorderLayout.NORTH,panel);
 
@@ -198,6 +189,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			abbrevsModel.setValueAt(expansion,row,1);
 		}
 	} //}}}
+
+	//}}}
 
 	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter

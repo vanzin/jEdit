@@ -1290,7 +1290,6 @@ options.loadsave.backupDirectory=Backup directory:
 options.loadsave.backupPrefix=Backup filename prefix:
 options.loadsave.backupSuffix=Backup filename suffix:
 options.loadsave.lineSeparator=Default line separator:
-options.loadsave.ioThreadCount=Number of I/O threads:
 options.loadsave.restore=Restore previously open files on startup
 options.loadsave.restore.cli=... even if file names were specified on the \
 	command line
@@ -1320,7 +1319,6 @@ options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
-options.textarea.parseFully=More accurate (and slower) syntax highlighting
 #}}}
 
 #{{{ Gutter pane
@@ -1367,24 +1365,25 @@ options.color.memoryForegroundColor=Memory indicator foreground
 options.color.memoryBackgroundColor=Memory indicator background
 #}}}
 
-#{{{ Styles pane
-options.style.label=Styles
-options.style.object=Object
-options.style.style=Style
-options.style.comment1Style=Comment 1
-options.style.comment2Style=Comment 2
-options.style.literal1Style=Literal 1
-options.style.literal2Style=Literal 2
-options.style.labelStyle=Label
-options.style.keyword1Style=Keyword 1
-options.style.keyword2Style=Keyword 2
-options.style.keyword3Style=Keyword 3
-options.style.functionStyle=Function
-options.style.markupStyle=Markup
-options.style.operatorStyle=Operator
-options.style.digitStyle=Digit
-options.style.invalidStyle=Invalid token
-options.style.foldLine=Collapsed fold line
+#{{{ Syntax highlighting pane
+options.syntax.label=Syntax Highlighting
+options.syntax.parseFully=More accurate (and slower) syntax highlighting
+options.syntax.object=Token type
+options.syntax.style=Text style
+options.syntax.comment1Style=Comment 1
+options.syntax.comment2Style=Comment 2
+options.syntax.literal1Style=Literal 1
+options.syntax.literal2Style=Literal 2
+options.syntax.labelStyle=Label
+options.syntax.keyword1Style=Keyword 1
+options.syntax.keyword2Style=Keyword 2
+options.syntax.keyword3Style=Keyword 3
+options.syntax.functionStyle=Function
+options.syntax.markupStyle=Markup
+options.syntax.operatorStyle=Operator
+options.syntax.digitStyle=Digit
+options.syntax.invalidStyle=Invalid token
+options.syntax.foldLine=Collapsed fold line
 #}}}
 
 #{{{ Editing pane
@@ -1529,6 +1528,7 @@ options.firewall.socks.port=SOCKS proxy port:
 
 #{{{ File System Browser panes
 options.browser.label=File System Browser
+
 options.browser.general.label=General
 options.browser.general.defaultPath=Default path:
 options.browser.general.defaultPath.buffer=Parent directory of current buffer
@@ -1538,12 +1538,9 @@ options.browser.general.defaultPath.last=Most recently visited directory
 options.browser.general.showToolbar=Show tool bar
 options.browser.general.showIcons=Show icons
 options.browser.general.showHiddenFiles=Show hidden files
-options.browser.general.sortFiles=Sort file list
-options.browser.general.sortIgnoreCase=Case insensitive sort
+options.browser.general.sortIgnoreCase=Ignore case when sorting
 options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
-options.browser.general.currentBufferFilter=Filter in file dialogs is \
-	current buffer extension
 options.browser.general.splitHorizontally=Hierarchy and browsing panes \
 	side-by-side (in file dialogs only)
 
@@ -1567,11 +1564,11 @@ font-selector.preview=Preview
 font-selector.long-text=The quick brown fox jumped over the lazy dog.
 #}}}
 
-#{{{ Color chooser, used by options.styles
+#{{{ Color chooser, used by options.syntaxs
 colorChooser.title=Pick a Color
 #}}}
 
-#{{{ Style editor, used by options.styles
+#{{{ Style editor, used by options.syntaxs
 style-editor.title=Style Editor
 style-editor.italics=Italics
 style-editor.bold=Bold

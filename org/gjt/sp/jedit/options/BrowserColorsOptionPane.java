@@ -308,7 +308,7 @@ class BrowserColorsModel extends AbstractTableModel
 		public ColorRenderer()
 		{
 			setOpaque(true);
-			setBorder(StyleOptionPane.noFocusBorder);
+			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
 		} //}}}
 
 		//{{{ getTableCellRendererComponent() method
@@ -336,7 +336,7 @@ class BrowserColorsModel extends AbstractTableModel
 
 			setBorder((cellHasFocus) ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
-				: StyleOptionPane.noFocusBorder);
+				: SyntaxHiliteOptionPane.noFocusBorder);
 			return this;
 		} //}}}
 	} //}}}

@@ -132,12 +132,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		fracFontMetrics.setSelected(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 		addComponent(fracFontMetrics);
-
-		/* Parse fully */
-		parseFully = new JCheckBox(jEdit.getProperty(
-			"options.textarea.parseFully"));
-		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
-		addComponent(parseFully);
 	} //}}}
 
 	//{{{ _save() method
@@ -165,7 +159,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			middleMousePaste.isSelected());
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
-		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -183,7 +176,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
-	private JCheckBox parseFully;
 	private JCheckBox joinNonWordChars;
 	//}}}
 }

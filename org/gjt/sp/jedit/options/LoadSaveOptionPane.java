@@ -96,11 +96,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.loadsave.encoding"),encoding);
 
-		/* Number of I/O threads to start */
-		ioThreadCount = new JTextField(jEdit.getProperty("ioThreadCount"));
-		addComponent(jEdit.getProperty("options.loadsave.ioThreadCount"),
-			ioThreadCount);
-
 		/* Session management */
 		restore = new JCheckBox(jEdit.getProperty(
 			"options.loadsave.restore"));
@@ -178,7 +173,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
-		jEdit.setProperty("ioThreadCount",ioThreadCount.getText());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("client.newView",newView.isSelected());
@@ -197,7 +191,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
-	private JTextField ioThreadCount;
 	private JCheckBox restore;
 	private JCheckBox restoreCLI;
 	private JCheckBox newView;

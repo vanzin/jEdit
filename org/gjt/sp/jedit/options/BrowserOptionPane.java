@@ -23,13 +23,17 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
+//{{{ BrowserOptionPane class
 public class BrowserOptionPane extends AbstractOptionPane
 {
 	//{{{ BrowserOptionPane constructor
@@ -83,13 +87,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 			+ ".showHiddenFiles"));
 		addComponent(showHiddenFiles);
 
-		/* Sort file list */
-		sortFiles = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".general.sortFiles"));
-		sortFiles.setSelected(jEdit.getBooleanProperty("vfs.browser"
-			+ ".sortFiles"));
-		addComponent(sortFiles);
-
 		/* Ignore case when sorting */
 		sortIgnoreCase = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".general.sortIgnoreCase"));
@@ -111,13 +108,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 			+ ".doubleClickClose"));
 		addComponent(doubleClickClose);
 
-		/* Base filter in open/save dialogs on current buffer name */
-		currentBufferFilter = new JCheckBox(jEdit.getProperty("options.browser"
-			+ ".general.currentBufferFilter"));
-		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
-			+ ".currentBufferFilter"));
-		addComponent(currentBufferFilter);
-
 		/* split VFSFileDialog horizontally */
 		splitHorizontally = new JCheckBox(jEdit.getProperty("options.browser"
 			+ ".general.splitHorizontally"));
@@ -138,16 +128,12 @@ public class BrowserOptionPane extends AbstractOptionPane
 			showIcons.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
 			showHiddenFiles.isSelected());
-		jEdit.setBooleanProperty("vfs.browser.sortFiles",
-			sortFiles.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortIgnoreCase",
 			sortIgnoreCase.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.sortMixFilesAndDirs",
 			sortMixFilesAndDirs.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.doubleClickClose",
 			doubleClickClose.isSelected());
-		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
-			currentBufferFilter.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.splitHorizontally",
 			splitHorizontally.isSelected());
 	} //}}}
@@ -157,11 +143,9 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox showToolbar;
 	private JCheckBox showIcons;
 	private JCheckBox showHiddenFiles;
-	private JCheckBox sortFiles;
 	private JCheckBox sortIgnoreCase;
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
-	private JCheckBox currentBufferFilter;
 	private JCheckBox splitHorizontally;
 	//}}}
-}
+} //}}}

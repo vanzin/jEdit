@@ -262,27 +262,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 		propertiesChanged();
 
 		HistoryModel filterModel = HistoryModel.getModel("vfs.browser.filter");
-		String filter;
-		if(mode == BROWSER || view == null || !jEdit.getBooleanProperty(
-			"vfs.browser.currentBufferFilter"))
-		{
-			filter = jEdit.getProperty("vfs.browser.last-filter");
-			if(filter == null)
-				filter = jEdit.getProperty("vfs.browser.default-filter");
-		}
-		else
-		{
-			String name = view.getBuffer().getName();
-			int index = name.lastIndexOf('.');
-
-			if(index == -1)
-				filter = jEdit.getProperty("vfs.browser.default-filter");
-			else
-			{
-				String ext = name.substring(index);
-				filter = "*" + ext;
-			}
-		}
+		String filter = jEdit.getProperty("vfs.browser.last-filter");
+		if(filter == null)
+			filter = jEdit.getProperty("vfs.browser.default-filter");
 
 		filterField.setText(filter);
 		filterField.addCurrentToHistory();
@@ -838,11 +820,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 						directoryVector.addElement(file);
 					}
 
-					if(sortFiles)
-					{
-						MiscUtilities.quicksort(directoryVector,
-							new FileCompare());
-					}
+					MiscUtilities.quicksort(directoryVector,
+						new FileCompare());
 				}
 
 				browserView.directoryLoaded(node,path,
@@ -1016,7 +995,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private boolean multipleSelection;
 
 	private boolean showHiddenFiles;
-	private boolean sortFiles;
 	private boolean sortMixFilesAndDirs;
 	private boolean sortIgnoreCase;
 	private boolean doubleClickClose;
@@ -1095,7 +1073,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private void propertiesChanged()
 	{
 		showHiddenFiles = jEdit.getBooleanProperty("vfs.browser.showHiddenFiles");
-		sortFiles = jEdit.getBooleanProperty("vfs.browser.sortFiles");
 		sortMixFilesAndDirs = jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs");
 		sortIgnoreCase = jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase");
 		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
