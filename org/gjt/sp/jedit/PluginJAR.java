@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
-import org.gjt.sp.jedit.msg.PluginUpdate;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -587,7 +587,7 @@ public class PluginJAR
 		classLoader.activate();
 
 		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
-		EditBus.send(new DynamicMenuUpdate("plugins"));
+		EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}
 
 	//{{{ uninit() method

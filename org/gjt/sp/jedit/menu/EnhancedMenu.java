@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.menu;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.msg.DynamicMenuUpdate;
+import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -131,8 +131,9 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
-		if(msg instanceof DynamicMenuUpdate
-			&& _name.equals(((DynamicMenuUpdate)msg).getMenuName()))
+		if(msg instanceof DynamicMenuChanged
+			&& _name.equals(((DynamicMenuChanged)msg)
+			.getMenuName()))
 		{
 			dynamicMenuOutOfDate = true;
 		}
