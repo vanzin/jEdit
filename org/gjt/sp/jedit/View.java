@@ -467,17 +467,14 @@ public class View extends JFrame implements EBComponent
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
-		final JSplitPane newSplitPane = new JSplitPane(orientation,
-			oldEditPane,editPane);
-		newSplitPane.setOneTouchExpandable(true);
-		newSplitPane.setBorder(null);
-
 		if(oldParent instanceof JSplitPane)
 		{
 			JSplitPane oldSplitPane = (JSplitPane)oldParent;
 			int dividerPos = oldSplitPane.getDividerLocation();
 
 			Component left = oldSplitPane.getLeftComponent();
+			final JSplitPane newSplitPane = new JSplitPane(orientation,
+				oldEditPane,editPane);
 
 			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
@@ -485,22 +482,40 @@ public class View extends JFrame implements EBComponent
 				oldSplitPane.setRightComponent(newSplitPane);
 
 			oldSplitPane.setDividerLocation(dividerPos);
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					newSplitPane.setDividerLocation(0.5);
+					editPane.focusOnTextArea();
+				}
+			});
 		}
 		else
 		{
-			splitPane = newSplitPane;
+			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
+				oldEditPane,editPane);
+			newSplitPane.setBorder(null);
 			oldParent.add(splitPane);
 			oldParent.revalidate();
-		}
 
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
+			Dimension size;
+			if(oldParent instanceof JSplitPane)
+				size = oldParent.getSize();
+			else
+				size = oldEditPane.getSize();
+			newSplitPane.setDividerLocation(((orientation
+				== JSplitPane.VERTICAL_SPLIT) ? size.height
+				: size.width) / 2);
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				newSplitPane.setDividerLocation(0.5);
-				editPane.focusOnTextArea();
-			}
-		});
+				public void run()
+				{
+					editPane.focusOnTextArea();
+				}
+			});
+		}
 
 		return editPane;
 	} //}}}
