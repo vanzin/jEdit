@@ -1,5 +1,9 @@
 TO DO
 
+- xToOffset(): fucked with //\t
+- aiob in getVirtualLineCount()?
+- complete word: use a single text area/edit pane & use text area font
+- select fold: if not followed by blank line
 - rounding errors (?) result in weird tab placement sometimes
 - Java 2 printing
 - narrow/collapse fold/expand fold: exceptions

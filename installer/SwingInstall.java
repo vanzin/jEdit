@@ -67,7 +67,7 @@ public class SwingInstall extends JFrame
 
 		pages = new Component[] {
 			new TextPanel("app.readme"),
-//			new TextPanel("app.license"),
+			new TextPanel("app.license"),
 			chooseDirectory = new ChooseDirectory(),
 			selectComponents = new SelectComponents(),
 			progress = new SwingProgress(),
@@ -150,26 +150,26 @@ public class SwingInstall extends JFrame
 			nextButton.setText("Next");
 			prevButton.setEnabled(false);
 			break;
-		/*case 1:
-			caption.setText("License");
+		case 1:
+			caption.setText(installer.getProperty("app.license.title"));
 
 			nextButton.setText("Next");
 			prevButton.setEnabled(true);
-			break;*/
-		case 1:
+			break;
+		case 2:
 			caption.setText("Specify where " + appName
 				+ " is to be installed");
 
 			nextButton.setText("Next");
 			prevButton.setEnabled(true);
 			break;
-		case 2:
+		case 3:
 			caption.setText("Choose components to install");
 
 			nextButton.setText("Install");
 			prevButton.setEnabled(true);
 			break;
-		case 3:
+		case 4:
 			caption.setText("Installing " + appName);
 
 			nextButton.setText("Finish");
@@ -177,7 +177,7 @@ public class SwingInstall extends JFrame
 			nextButton.setEnabled(false);
 			install();
 			break;
-		case 4:
+		case 5:
 			caption.setText("Installation complete");
 
 			nextButton.setText("Finish");
@@ -336,6 +336,7 @@ public class SwingInstall extends JFrame
 
 			JScrollPane scrollPane = new JScrollPane(text);
 			Dimension dim = new Dimension();
+			dim.width = 450;
 			dim.height = 200;
 			scrollPane.setPreferredSize(dim);
 			TextPanel.this.add(BorderLayout.CENTER,scrollPane);

@@ -28,8 +28,7 @@ package org.gjt.sp.jedit;
 import gnu.regexp.RE;
 import javax.swing.JMenuItem;
 import java.io.*;
-import java.util.Vector;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -680,16 +679,54 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ quicksort() method
 	/**
-	 * Sorts the specified array.
+	 * Sorts the specified array. Equivalent to calling
+	 * <code>Arrays.sort()</code>.
+	 * @param obj The array
+	 * @param compare Compares the objects
+	 * @since jEdit 4.0pre4
+	 */
+	public static void quicksort(Object[] obj, Comparator compare)
+	{
+		Arrays.sort(obj,compare);
+	} //}}}
+
+	//{{{ quicksort() method
+	/**
+	 * Sorts the specified vector.
+	 * @param vector The vector
+	 * @param compare Compares the objects
+	 * @since jEdit 4.0pre4
+	 */
+	public static void quicksort(Vector vector, Comparator compare)
+	{
+		quicksort((List)vector,compare);
+	} //}}}
+
+	//{{{ quicksort() method
+	/**
+	 * Sorts the specified list.
+	 * @param list The list
+	 * @param compare Compares the objects
+	 * @since jEdit 4.0pre4
+	 */
+	public static void quicksort(List list, Comparator compare)
+	{
+		if(list.size() == 0)
+			return;
+
+		quicksort(list,0,list.size() - 1,compare);
+	} //}}}
+
+	//{{{ quicksort() method
+	/**
+	 * Sorts the specified array. Equivalent to calling
+	 * <code>Arrays.sort()</code>.
 	 * @param obj The array
 	 * @param compare Compares the objects
 	 */
 	public static void quicksort(Object[] obj, Compare compare)
 	{
-		if(obj.length == 0)
-			return;
-
-		quicksort(obj,0,obj.length - 1,compare);
+		Arrays.sort(obj,compare);
 	} //}}}
 
 	//{{{ quicksort() method
@@ -700,17 +737,14 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static void quicksort(Vector vector, Compare compare)
 	{
-		if(vector.size() == 0)
-			return;
-
-		quicksort(vector,0,vector.size() - 1,compare);
+		quicksort((List)vector,(Comparator)compare);
 	} //}}}
 
 	//{{{ Compare interface
 	/**
 	 * An interface for comparing objects.
 	 */
-	public interface Compare
+	public interface Compare extends Comparator
 	{
 		int compare(Object obj1, Object obj2);
 	} //}}}
@@ -978,68 +1012,29 @@ loop:		for(int i = 0; i < str.length(); i++)
 	private MiscUtilities() {}
 
 	//{{{ quicksort() method
-	private static void quicksort(Object[] obj, int _start, int _end,
-		Compare compare)
+	private static void quicksort(List obj, int _start, int _end, Comparator compare)
 	{
 		int start = _start;
 		int end = _end;
 
-		Object mid = obj[(_start + _end) / 2];
+		Object mid = obj.get((_start + _end) / 2);
 
 		if(_start > _end)
 			return;
 
 		while(start <= end)
 		{
-			while((start < _end) && (compare.compare(obj[start],mid) < 0))
+			while((start < _end) && (compare.compare(obj.get(start),mid) < 0))
 				start++;
 
-			while((end > _start) && (compare.compare(obj[end],mid) > 0))
+			while((end > _start) && (compare.compare(obj.get(end),mid) > 0))
 				end--;
 
 			if(start <= end)
 			{
-				Object o = obj[start];
-				obj[start] = obj[end];
-				obj[end] = o;
-
-				start++;
-				end--;
-			}
-		}
-
-		if(_start < end)
-			quicksort(obj,_start,end,compare);
-
-		if(start < _end)
-			quicksort(obj,start,_end,compare);
-	} //}}}
-
-	//{{{ quicksort() method
-	private static void quicksort(Vector obj, int _start, int _end,
-		Compare compare)
-	{
-		int start = _start;
-		int end = _end;
-
-		Object mid = obj.elementAt((_start + _end) / 2);
-
-		if(_start > _end)
-			return;
-
-		while(start <= end)
-		{
-			while((start < _end) && (compare.compare(obj.elementAt(start),mid) < 0))
-				start++;
-
-			while((end > _start) && (compare.compare(obj.elementAt(end),mid) > 0))
-				end--;
-
-			if(start <= end)
-			{
-				Object o = obj.elementAt(start);
-				obj.setElementAt(obj.elementAt(end),start);
-				obj.setElementAt(o,end);
+				Object o = obj.get(start);
+				obj.set(start,obj.get(end));
+				obj.set(end,o);
 
 				start++;
 				end--;
