@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<project name="QuickNotepad"
-         default="build">
-    <description>
-        This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
-    </description>
-    
-    <import file="../../build-support/plugin-build.xml" />
-</project>

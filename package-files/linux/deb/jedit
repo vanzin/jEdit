@@ -1,2 +1,0 @@
-?package(jedit):needs="X11" section="Apps/Programming" \
-  title="jEdit" command="/usr/bin/jedit"
