@@ -95,6 +95,8 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 - When the search bar loses focus, the currently entered text is added
   to the history.
 
+- "Format Paragraph" now preserves the caret position.
+
 }}}
 {{{ Bug Fixes
 
@@ -165,6 +167,9 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
   reading/writing the public fields of that class (they are public but
   deprecated for VFS.DirectoryEntry compatibility), you should call the
   accessor/mutator methods.
+
+- A new MiscUtilities.pathsEqual() method has been added to check for
+  equality of path names while ignoring case sensitivity on Windows.
 
 }}}
 

@@ -350,7 +350,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					String directory = browser.getDirectory();
 					String parent = MiscUtilities
 						.getParentOfPath(path);
-					if(VFSBrowser.pathsEqual(parent,directory))
+					if(MiscUtilities.pathsEqual(parent,directory))
 						path = file.getName();
 
 					filenameField.setText(path);

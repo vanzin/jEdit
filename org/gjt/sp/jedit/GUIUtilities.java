@@ -1274,8 +1274,6 @@ public class GUIUtilities
 		{
 			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
 				return ((modifiers & MouseEvent.ALT_MASK) != 0);
-			if(!OperatingSystem.hasJava14())
-				return ((modifiers & MouseEvent.BUTTON3_MASK) != 0);
 			else
 				return ((modifiers & MouseEvent.BUTTON2_MASK) != 0);
 		}
@@ -1294,8 +1292,6 @@ public class GUIUtilities
 		{
 			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
 				return ((modifiers & MouseEvent.CTRL_MASK) != 0);
-			if(!OperatingSystem.hasJava14())
-				return ((modifiers & MouseEvent.BUTTON2_MASK) != 0);
 			else
 				return ((modifiers & MouseEvent.BUTTON3_MASK) != 0);
 		}

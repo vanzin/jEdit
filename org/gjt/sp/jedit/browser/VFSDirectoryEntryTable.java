@@ -235,7 +235,7 @@ public class VFSDirectoryEntryTable extends JTable
 				otherPath = dirEntry.getPath();
 			else
 				otherPath = dirEntry.getSymlinkPath();
-			if(VFSBrowser.pathsEqual(path,otherPath))
+			if(MiscUtilities.pathsEqual(path,otherPath))
 			{
 				browserView.saveExpansionState();
 				browserView.loadDirectory(e,path,false);

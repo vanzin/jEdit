@@ -193,7 +193,7 @@ class BrowserView extends JPanel
 				String newParent = _vfs.getParentOfPath(parent);
 
 				if(newParent == null ||
-					VFSBrowser.pathsEqual(parent,newParent))
+					MiscUtilities.pathsEqual(parent,newParent))
 					break;
 				else
 					parent = newParent;
@@ -230,7 +230,7 @@ class BrowserView extends JPanel
 				browserDir);
 		}
 
-		if(VFSBrowser.pathsEqual(path,symlinkBrowserDir))
+		if(MiscUtilities.pathsEqual(path,symlinkBrowserDir))
 		{
 			saveExpansionState();
 			loadDirectory(null,browserDir,false);

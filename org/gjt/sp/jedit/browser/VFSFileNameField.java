@@ -230,7 +230,7 @@ class VFSFileNameField extends HistoryTextField
 		}
 		else
 		{
-			if(VFSBrowser.pathsEqual(parent,browser.getDirectory()))
+			if(MiscUtilities.pathsEqual(parent,browser.getDirectory()))
 				newText = name;
 			else
 				newText = path;

@@ -883,20 +883,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	String currentEncoding;
 	boolean autoDetectEncoding;
 
-	//{{{ pathsEqual() method
-	/**
-	 * This will be made public at some stage, in the io package, but not
-	 * yet.
-	 */
-	static boolean pathsEqual(String p1, String p2)
-	{
-		if(p1.endsWith("/") || p1.endsWith(File.separator))
-			p1 = p1.substring(0,p1.length() - 1);
-		if(p2.endsWith("/") || p2.endsWith(File.separator))
-			p2 = p2.substring(0,p2.length() - 1);
-		return p1.equals(p2);
-	} //}}}
-
 	//{{{ updateFilenameFilter() method
 	void updateFilenameFilter()
 	{

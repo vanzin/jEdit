@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2004 Slava Pestov
+ * Copyright (C) 1999, 2005 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
  *
@@ -617,6 +617,34 @@ public class MiscUtilities
 		return name.replace('.','/').concat(".class");
 	} //}}}
 
+	//{{{ pathsEqual() method
+	/**
+	 * @param path1 A path name
+	 * @param path2 A path name
+	 * @return True if both paths are equal, ignoring trailing slashes, as
+	 * well as case insensitivity on Windows.
+	 * @since jEdit 4.3pre2
+	 */
+	public static boolean pathsEqual(String p1, String p2)
+	{
+		VFS v1 = VFSManager.getVFSForPath(p1);
+		VFS v2 = VFSManager.getVFSForPath(p2);
+
+		if(v1 != v2)
+			return false;
+		
+		if(p1.endsWith("/") || p1.endsWith(File.separator))
+			p1 = p1.substring(0,p1.length() - 1);
+
+		if(p2.endsWith("/") || p2.endsWith(File.separator))
+			p2 = p2.substring(0,p2.length() - 1);
+
+		if((v1.getCapabilities() & VFS.CASE_INSENSITIVE_CAP) != 0)
+			return p1.equalsIgnoreCase(p2);
+		else
+			return p1.equals(p2);
+	} //}}}
+	
 	//}}}
 
 	//{{{ Text methods
