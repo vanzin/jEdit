@@ -32,7 +32,7 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.options.GlobalOptions;
+import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -132,7 +132,8 @@ public class PluginManager extends JFrame implements EBComponent
 	private JTabbedPane tabPane;
 	private JButton done;
 	private JButton cancel;
-	private JButton options;
+	private JButton mgrOptions;
+	private JButton pluginOptions;
 	private InstallPanel installer;
 	private InstallPanel updater;
 	private ManagePanel manager;
@@ -168,13 +169,17 @@ public class PluginManager extends JFrame implements EBComponent
 		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		ActionListener al = new ActionHandler();
-		options = new JButton(jEdit.getProperty("plugin-manager.options"));
-		options.addActionListener(al);
+		mgrOptions = new JButton(jEdit.getProperty("plugin-manager.mgr-options"));
+		mgrOptions.addActionListener(al);
+		pluginOptions = new JButton(jEdit.getProperty("plugin-manager.plugin-options"));
+		pluginOptions.addActionListener(al);
 		done = new JButton(jEdit.getProperty("plugin-manager.done"));
 		done.addActionListener(al);
 
 		buttons.add(Box.createGlue());
-		buttons.add(options);
+		buttons.add(mgrOptions);
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(pluginOptions);
 		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(done);
 		buttons.add(Box.createGlue());
@@ -221,8 +226,10 @@ public class PluginManager extends JFrame implements EBComponent
 				ok();
 			else if (source == cancel)
 				cancel();
-			else if (source == options)
+			else if (source == mgrOptions)
 				new GlobalOptions(PluginManager.this,"plugin-manager");
+			else if (source == pluginOptions)
+				new PluginOptions(PluginManager.this);
 		}
 	} //}}}
 

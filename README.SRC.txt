@@ -78,8 +78,8 @@ it using javac.
   update operations to be performed in O(1) time in certain
   circumstances.
 
-- org.gjt.sp.jedit.buffer.PositionManager: a red/black tree with some
-  additional tricks.
+- org.gjt.sp.jedit.buffer.KillRing: uses a hash to speed up comparisons
+  with sets of strings.
 
 - org.gjt.sp.jedit.search.BoyerMooreSearchMatcher: fast text search.
 

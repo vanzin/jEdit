@@ -22,6 +22,16 @@ contributing to this release.
 
 - The end of a fold is now indicated in the gutter.
 
+- Added "Plugin Options" button to plugin manager.
+
+- Pressing a non-alphanumeric character with the 'Complete Word' popup
+  showing now inserts the currently selected entry first, instead of
+  just closing the popup and then inserting the entered character.
+
+- If there are several search results in one line, clicking the line in
+  the HyperSearch Results window now selects all occurrences, not just
+  the first one.
+
 }}}
 {{{ Bug Fixes
 

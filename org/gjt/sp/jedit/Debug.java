@@ -124,16 +124,6 @@ public class Debug
 	public static boolean GEOMETRY_WORKAROUND = false;
 
 	/**
-	 * Position tree debugging.
-	 */
-	public static boolean POSITION_DEBUG = false;
-
-	/**
-	 * Disable red-black tree.
-	 */
-	public static boolean DISABLE_POSITION_BALANCE = false;
-
-	/**
 	 * Dump key events received by text area?
 	 */
 	public static boolean DUMP_KEY_EVENTS = false;

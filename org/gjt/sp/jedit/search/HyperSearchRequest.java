@@ -233,7 +233,8 @@ loop:				for(int i = 0; i < files.length; i++)
 
 			Segment text = new Segment();
 			int offset = start;
-			int line = -1;
+
+			HyperSearchResult lastResult = null;
 
 loop:			for(int counter = 0; ; counter++)
 			{
@@ -248,26 +249,23 @@ loop:			for(int counter = 0; ; counter++)
 				if(match == null)
 					break loop;
 
-				int matchStart = offset + match.start;
-				int matchEnd = offset + match.end;
+				int newLine = buffer.getLineOfOffset(
+					offset + match.start);
+				if(lastResult == null || lastResult.line != newLine)
+				{
+					lastResult = new HyperSearchResult(
+						buffer,newLine);
+					bufferNode.add(
+						new DefaultMutableTreeNode(
+						lastResult,false));
+				}
+
+				lastResult.addOccur(offset + match.start,
+					offset + match.end);
 
 				offset += match.end;
 
-				int newLine = buffer.getLineOfOffset(offset);
-				if(line == newLine)
-				{
-					// already had a result on this
-					// line, skip
-					continue loop;
-				}
-
-				line = newLine;
-
 				resultCount++;
-
-				bufferNode.add(new DefaultMutableTreeNode(
-					new HyperSearchResult(buffer,line,
-					matchStart,matchEnd),false));
 			}
 		}
 		finally

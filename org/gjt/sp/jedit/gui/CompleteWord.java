@@ -463,7 +463,8 @@ public class CompleteWord extends JWindow
 			evt = KeyEventWorkaround.processKeyEvent(evt);
 			if(evt == null)
 				return;
-			else if(Character.isDigit(ch))
+
+			if(Character.isDigit(ch))
 			{
 				int index = ch - '0';
 				if(index == 0)
@@ -477,17 +478,24 @@ public class CompleteWord extends JWindow
 						.getElementAt(index).toString()
 						.substring(word.length()));
 					dispose();
+					return;
 				}
+				else
+					/* fall through */;
 			}
-			else if(ch != '\b')
-			{
-				textArea.userInput(ch);
 
+			if(ch != '\b')
+			{
+				/* eg, foo<C+b>, will insert foobar, */
 				if(!Character.isLetter(ch) && noWordSep.indexOf(ch) == -1)
 				{
+					insertSelected();
+					textArea.userInput(ch);
 					dispose();
 					return;
 				}
+
+				textArea.userInput(ch);
 
 				word = word + ch;
 				int caret = textArea.getCaretPosition();
