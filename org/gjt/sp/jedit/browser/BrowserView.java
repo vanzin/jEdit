@@ -464,7 +464,8 @@ class BrowserView extends JPanel
 					return;
 				}
 
-				table.getSelectionModel().addSelectionInterval(row,row);
+				if(!table.getSelectionModel().isSelectedIndex(row))
+					table.getSelectionModel().setSelectionInterval(row,row);
 
 				if(table.getSelectedRow() == -1)
 					showFilePopup(null,table,evt.getPoint());
