@@ -692,6 +692,8 @@ public class DockableWindowManager extends JPanel
 				container.show(null);
 				return;
 			}
+
+			comp = comp.getParent();
 		}
 
 		getToolkit().beep();
