@@ -1692,10 +1692,11 @@ options.browser.label=File System Browser
 
 options.browser.general.label=General
 options.browser.general.defaultPath=Default path:
-options.browser.general.defaultPath.buffer=Parent directory of current buffer
-options.browser.general.defaultPath.home=Home directory
 options.browser.general.defaultPath.favorites=Favorites
+options.browser.general.defaultPath.home=Home directory
 options.browser.general.defaultPath.last=Most recently visited directory
+options.browser.general.defaultPath.buffer=Parent directory of current buffer
+options.browser.general.defaultPath.working=Working directory of jEdit process
 options.browser.general.showMenubar=Show menu bar
 options.browser.general.showToolbar=Show tool bar
 options.browser.general.showIcons=Show icons
@@ -1836,7 +1837,7 @@ vfs.browser.filter-enabled=true
 vfs.browser.tree.loading=Loading...
 
 vfs.browser.name=Name
-vfs.browser.type=Type
+vfs.browser.type=Use EA_SIZE_OR_TYPE instead
 vfs.browser.type.file=File
 vfs.browser.type.directory=Directory
 vfs.browser.type.filesystem=File system
@@ -1845,7 +1846,8 @@ vfs.browser.status.no=No access
 vfs.browser.status.ro=Read only
 vfs.browser.status.append=Append only
 vfs.browser.status.rw=Read/write
-vfs.browser.size=Size
+vfs.browser.size=Use EA_SIZE_OR_TYPE instead
+vfs.browser.size-type=Size
 vfs.browser.modified=Last modified
 
 #{{{ Commands menu

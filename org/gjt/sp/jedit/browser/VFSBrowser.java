@@ -284,6 +284,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			String defaultPath = jEdit.getProperty("vfs.browser.defaultPath");
 			if(defaultPath.equals("home"))
 				path = userHome;
+			else if(defaultPath.equals("working"))
+				path = System.getProperty("user.dir");
 			else if(defaultPath.equals("buffer"))
 			{
 				if(view != null)

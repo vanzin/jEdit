@@ -157,6 +157,13 @@ public abstract class VFS
 	public static final String EA_SIZE = "size";
 
 	/**
+	 * File size if its a regular file; file type if not. The file system
+	 * browser uses this to conserve space.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String EA_SIZE_OR_TYPE = "size-type";
+
+	/**
 	 * File last modified date.
 	 * @since jEdit 4.2pre1
 	 */
@@ -172,7 +179,7 @@ public abstract class VFS
 	 */
 	public VFS(String name)
 	{
-		this.name = name;
+		this(name,0);
 	} //}}}
 
 	//{{{ VFS constructor
@@ -185,7 +192,7 @@ public abstract class VFS
 	{
 		this.name = name;
 		this.caps = caps;
-		this.extAttrs = new String[] { EA_TYPE, EA_STATUS, EA_SIZE, EA_MODIFIED };
+		this.extAttrs = new String[] { EA_SIZE_OR_TYPE, EA_STATUS, EA_MODIFIED };
 	} //}}}
 
 	//{{{ VFS constructor
@@ -642,7 +649,7 @@ public abstract class VFS
 					if(canWrite)
 						return jEdit.getProperty("vfs.browser.status.append");
 					else
-						return jEdit.getProperty("vfs.brower.status.no");
+						return jEdit.getProperty("vfs.browser.status.no");
 				}
 			}
 			else if(name.equals(EA_SIZE))
@@ -651,6 +658,13 @@ public abstract class VFS
 					return null;
 				else
 					return MiscUtilities.formatFileSize(length);
+			}
+			else if(name.equals(EA_SIZE_OR_TYPE))
+			{
+				if(type != FILE)
+					return getExtendedAttribute(EA_TYPE);
+				else
+					return getExtendedAttribute(EA_SIZE);
 			}
 			else
 				return null;

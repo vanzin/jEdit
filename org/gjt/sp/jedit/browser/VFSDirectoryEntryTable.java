@@ -277,7 +277,10 @@ public class VFSDirectoryEntryTable extends JTable
 
 		for(int i = 0; i < widths.length; i++)
 		{
-			getColumnModel().getColumn(i).setPreferredWidth(widths[i] + (i == widths.length - 1 ? 0 : 10));
+			int width = widths[i];
+			if(i != 0 && i != widths.length - 1 && width != 0)
+				width += 10;
+			getColumnModel().getColumn(i).setPreferredWidth(width);
 		}
 
 		doLayout();

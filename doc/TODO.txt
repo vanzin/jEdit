@@ -3,34 +3,36 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- fsb plugins menu: plugin options
+- browser's default size
 - path shown twice in tree: maybeReloadDirectory()
-- electric scroll inconsistent w.r.t. deletes
-- tmpExpanded cleanup
-- action bar layout problem
-- vfs browser: option for default dir being user.dir
-- pasting into a new file is broken
-- not loaded file -- text area clicks
-- eval-for-selected-lines doesn't work with rectangular selection
-- recording 'evaluate for selected lines'
-- evalutate for selected lines: > 1 selection per line
 - box in io progress
-- split view line insert: repainted twice, selection problems
-- action bar: wrap around arrow keys
 - browser: tab: don't insert full path
 - completion: handle full paths
 - browser: left: only if nothing selected
-- up/down with soft wrap
-- means of overriding escape to fix C# @"..." issue
 - don't rely on browser view for completion
 - file dialog: handle ~ ENTER, - ENTER
 - adapt vfs filename field for the path display at the top
 - vfs dialogs: only one field?
 - vfs.isValidPath()
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
+- vfs browser: open in new view: doesn't focus the new view
+- docking area default size
+- electric scroll inconsistent w.r.t. deletes
+- tmpExpanded cleanup
+- action bar layout problem
+- pasting into a new file is broken
+- not loaded file -- text area clicks
+- eval-for-selected-lines doesn't work with rectangular selection
+- recording 'evaluate for selected lines'
+- evalutate for selected lines: > 1 selection per line
+- split view line insert: repainted twice, selection problems
+- action bar: wrap around arrow keys
+- up/down with soft wrap
+- means of overriding escape to fix C# @"..." issue
 - searching in a buffer w/ narrowed fold
 - expand collapse lose sync
 - scrollTo() after expand folds still npe's
-- vfs browser: open in new view: doesn't focus the new view
 - macro record: doesn't respect overwrite
 - narrow: scrolls one down
 - save file resulting in fold collapse -- scroll to 0
