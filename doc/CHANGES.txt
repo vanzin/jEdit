@@ -91,6 +91,7 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed a few bugs in the File System Browser->Colors option pane
 - Compound edits were rather buggy
 - 'Trailing EOL' setting did not work
+- Fixed possible MacOS x keyboard problems (again...)
 
 + API Changes
 
