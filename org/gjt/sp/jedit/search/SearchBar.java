@@ -173,7 +173,13 @@ public class SearchBar extends JPanel
 		//{{{ HyperSearch
 		else if(hyperSearch.isSelected())
 		{
-			find.setText(null);
+			if(temp)
+			{
+				view.removeToolBar(SearchBar.this);
+			}
+                        else
+				find.setText(null);
+
 			SearchAndReplace.setSearchString(text);
 			SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
 			SearchAndReplace.hyperSearch(view);
@@ -377,6 +383,11 @@ public class SearchBar extends JPanel
 			case KeyEvent.VK_RIGHT:
 				if(!hyperSearch.isSelected())
 				{
+					if(temp)
+					{
+						view.removeToolBar(SearchBar.this);
+					}
+
 					evt.consume();
 					view.getEditPane().focusOnTextArea();
 					view.getEditPane().getTextArea()

@@ -63,6 +63,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 		closeBox = new JButton(GUIUtilities.loadIcon("closebox.gif"));
 		closeBox.setRequestFocusEnabled(false);
 		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
+		if(OperatingSystem.isMacOSLF())
+			closeBox.putClientProperty("JButton.buttonType","toolbar");
 
 		// makes it look a bit better
 		int left;

@@ -42,7 +42,7 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class BrowserView extends JPanel
+class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor
 	public BrowserView(VFSBrowser browser, final boolean splitHorizontally)
@@ -117,11 +117,10 @@ public class BrowserView extends JPanel
 		propertiesChanged();
 	} //}}}
 
-	//{{{ requestDefaultFocus() method
-	public boolean requestDefaultFocus()
+	//{{{ focusOnFileView() method
+	public void focusOnFileView()
 	{
 		tree.requestFocus();
-		return true;
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -159,6 +158,14 @@ public class BrowserView extends JPanel
 	public void selectNone()
 	{
 		tree.setSelectionPaths(new TreePath[0]);
+	} //}}}
+
+	//{{{ loadDirectory() method
+	public void loadDirectory(String path)
+	{
+		// called by VFSBrowser.setDirectory()
+		tmpExpanded.clear();
+		loadDirectory(rootNode,path,false);
 	} //}}}
 
 	//{{{ directoryLoaded() method
@@ -207,7 +214,10 @@ public class BrowserView extends JPanel
 				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file,allowsChildren);
 				node.add(newNode);
 				if(tmpExpanded.get(file.path) != null)
+				{
+					tmpExpanded.remove(file.path);
 					toExpand.addElement(new TreePath(newNode.getPath()));
+				}
 			}
 		}
 
@@ -230,14 +240,6 @@ public class BrowserView extends JPanel
 	public void updateFileView()
 	{
 		tree.repaint();
-	} //}}}
-
-	//{{{ loadDirectory() method
-	public void loadDirectory(String path)
-	{
-		// called by VFSBrowser.setDirectory()
-		tmpExpanded.clear();
-		loadDirectory(rootNode,path,false);
 	} //}}}
 
 	//{{{ maybeReloadDirectory() method
@@ -358,20 +360,7 @@ public class BrowserView extends JPanel
 	private void loadDirectory(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
-		int rowCount = tree.getRowCount();
-		for(int i = 0; i < rowCount; i++)
-		{
-			TreePath treePath = tree.getPathForRow(i);
-			if(tree.isExpanded(treePath))
-			{
-				DefaultMutableTreeNode _node = (DefaultMutableTreeNode)
-					treePath.getLastPathComponent();
-				VFS.DirectoryEntry file = ((VFS.DirectoryEntry)
-					_node.getUserObject());
-
-				tmpExpanded.put(file.path,file.path);
-			}
-		}
+		saveExpansionState(node);
 
 		if(node == rootNode)
 		{
@@ -386,7 +375,39 @@ public class BrowserView extends JPanel
 			model.reload(node);
 		}
 
-		browser.loadDirectory(node,path,node == rootNode);
+		path = MiscUtilities.constructPath(browser.getDirectory(),path);
+		VFS vfs = VFSManager.getVFSForPath(path);
+
+		Object session = vfs.createVFSSession(path,this);
+		if(session == null)
+			return;
+
+		VFSManager.runInWorkThread(new BrowserIORequest(
+			BrowserIORequest.LIST_DIRECTORY,browser,
+			session,vfs,path,null,node,node == rootNode));
+	} //}}}
+
+	//{{{ saveExpansionState() method
+	private void saveExpansionState(DefaultMutableTreeNode node)
+	{
+		for(int i = 0; i < node.getChildCount(); i++)
+		{
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)
+				node.getChildAt(i);
+
+			TreePath treePath = new TreePath(child.getPath());
+
+			if(tree.isExpanded(treePath))
+			{
+				VFS.DirectoryEntry file = ((VFS.DirectoryEntry)
+					child.getUserObject());
+
+				tmpExpanded.put(file.path,file.path);
+
+				if(file.type != VFS.DirectoryEntry.FILE)
+					saveExpansionState(child);
+			}
+		}
 	} //}}}
 
 	//{{{ showFilePopup() method
@@ -469,7 +490,7 @@ public class BrowserView extends JPanel
 				if(obj instanceof String)
 				{
 					browser.setDirectory((String)obj);
-					requestDefaultFocus();
+					focusOnFileView();
 				}
 			}
 		}
