@@ -149,7 +149,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ ok() method
 	public void ok()
 	{
-		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+		VFSFile[] files = browser.getSelectedFiles();
 		filename = filenameField.getText();
 
 		if(files.length != 0)
@@ -197,7 +197,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			{
 				switch(type[0])
 				{
-				case VFS.DirectoryEntry.FILE:
+				case VFSFile.FILE:
 					if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 						break;
 
@@ -217,8 +217,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					}
 					dispose();
 					break;
-				case VFS.DirectoryEntry.DIRECTORY:
-				case VFS.DirectoryEntry.FILESYSTEM:
+				case VFSFile.DIRECTORY:
+				case VFSFile.FILESYSTEM:
 					browser.setDirectory(path);
 					break;
 				}
@@ -253,12 +253,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		else
 		{
 			Vector vector = new Vector();
-			VFS.DirectoryEntry[] selectedFiles = browser.getSelectedFiles();
+			VFSFile[] selectedFiles = browser.getSelectedFiles();
 			for(int i = 0; i < selectedFiles.length; i++)
 			{
-				VFS.DirectoryEntry file = selectedFiles[i];
-				if(file.type == VFS.DirectoryEntry.FILE)
-					vector.addElement(file.path);
+				VFSFile file = selectedFiles[i];
+				if(file.getType() == VFSFile.FILE)
+					vector.addElement(file.getPath());
 			}
 			String[] retVal = new String[vector.size()];
 			vector.copyInto(retVal);
@@ -324,7 +324,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	class BrowserHandler implements BrowserListener
 	{
 		//{{{ filesSelected() method
-		public void filesSelected(VFSBrowser browser, VFS.DirectoryEntry[] files)
+		public void filesSelected(VFSBrowser browser, VFSFile[] files)
 		{
 			if(files.length == 0)
 			{
@@ -343,15 +343,15 @@ public class VFSFileChooserDialog extends EnhancedDialog
 						"vfs.browser.dialog.open"));
 				}
 
-				VFS.DirectoryEntry file = files[0];
-				if(file.type == VFS.DirectoryEntry.FILE)
+				VFSFile file = files[0];
+				if(file.getType() == VFSFile.FILE)
 				{
-					String path = file.path;
+					String path = file.getPath();
 					String directory = browser.getDirectory();
 					String parent = MiscUtilities
 						.getParentOfPath(path);
 					if(VFSBrowser.pathsEqual(parent,directory))
-						path = file.name;
+						path = file.getName();
 
 					filenameField.setText(path);
 					filenameField.selectAll();
@@ -370,7 +370,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		} //}}}
 
 		//{{{ filesActivated() method
-		public void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files)
+		public void filesActivated(VFSBrowser browser, VFSFile[] files)
 		{
 			filenameField.selectAll();
 
@@ -385,9 +385,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 			for(int i = 0; i < files.length; i++)
 			{
-				if(files[i].type == VFS.DirectoryEntry.FILE)
+				if(files[i].getType() == VFSFile.FILE)
 				{
-					String path = files[i].path;
+					String path = files[i].getPath();
 					VFS vfs = VFSManager.getVFSForPath(path);
 					if(browser.getMode() == VFSBrowser.SAVE_DIALOG
 						&& vfs instanceof FileVFS)
@@ -481,18 +481,17 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			try
 			{
-				VFS.DirectoryEntry entry
-					= vfs._getDirectoryEntry(
+				VFSFile entry = vfs._getFile(
 						session,
 						path,
 						browser);
 				if(entry == null)
 				{
 					// non-existent file
-					type[0] = VFS.DirectoryEntry.FILE;
+					type[0] = VFSFile.FILE;
 				}
 				else
-					type[0] = entry.type;
+					type[0] = entry.getType();
 			}
 			catch(IOException e)
 			{

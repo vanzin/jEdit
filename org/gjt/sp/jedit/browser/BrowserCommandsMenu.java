@@ -39,21 +39,21 @@ import org.gjt.sp.jedit.*;
 public class BrowserCommandsMenu extends JPopupMenu
 {
 	//{{{ BrowserCommandsMenu constructor
-	public BrowserCommandsMenu(VFSBrowser browser, VFS.DirectoryEntry[] files)
+	public BrowserCommandsMenu(VFSBrowser browser, VFSFile[] files)
 	{
 		this.browser = browser;
 
 		if(files != null)
 		{
 			VFS vfs = VFSManager.getVFSForPath(
-				files[0].deletePath);
-			int type = files[0].type;
+				files[0].getDeletePath());
+			int type = files[0].getType();
 
-			boolean fileOpen = (jEdit.getBuffer(files[0].path) != null);
+			boolean fileOpen = (jEdit.getBuffer(files[0].getPath()) != null);
 
 			/* We check this flag separately so that we can
 			delete open files from the favorites. */
-			boolean deletePathOpen = (jEdit.getBuffer(files[0].deletePath) != null);
+			boolean deletePathOpen = (jEdit.getBuffer(files[0].getDeletePath()) != null);
 
 			boolean delete = !deletePathOpen
 				&& (vfs.getCapabilities()
@@ -64,13 +64,13 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 			for(int i = 1; i < files.length; i++)
 			{
-				VFS.DirectoryEntry file = files[i];
+				VFSFile file = files[i];
 
-				VFS _vfs = VFSManager.getVFSForPath(file.deletePath);
+				VFS _vfs = VFSManager.getVFSForPath(file.getDeletePath());
 				delete &= (vfs == _vfs) && (_vfs.getCapabilities()
 					& VFS.DELETE_CAP) != 0;
 
-				if(type == file.type)
+				if(type == file.getType())
 					/* all good */;
 				else
 				{
@@ -84,19 +84,19 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 				// show 'close' item if at least one selected
 				// file is currently open
-				if(jEdit.getBuffer(file.path) != null)
+				if(jEdit.getBuffer(file.getPath()) != null)
 					fileOpen = true;
 			}
 
-			if(type == VFS.DirectoryEntry.DIRECTORY
-				|| type == VFS.DirectoryEntry.FILESYSTEM)
+			if(type == VFSFile.DIRECTORY
+				|| type == VFSFile.FILESYSTEM)
 			{
 				if(files.length == 1)
 					add(createMenuItem("browse"));
 				if(browser.getMode() == VFSBrowser.BROWSER)
 					add(createMenuItem("browse-window"));
 			}
-			else if(type == VFS.DirectoryEntry.FILE
+			else if(type == VFSFile.FILE
 				&& (browser.getMode() == VFSBrowser.BROWSER
 				|| browser.getMode() == VFSBrowser.BROWSER_DIALOG))
 			{

@@ -26,6 +26,7 @@ import javax.swing.table.*;
 import javax.swing.*;
 import java.util.*;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -55,7 +56,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		files = new Entry[list.size()];
 		for(int i = 0; i < files.length; i++)
 		{
-			files[i] = new Entry((VFS.DirectoryEntry)list.get(i),0);
+			files[i] = new Entry((VFSFile)list.get(i),0);
 		}
 
 		/* if(files.length != 0)
@@ -86,7 +87,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			for(int i = 0; i < list.size(); i++)
 			{
 				newFiles[startIndex + i + 1] = new Entry(
-					(VFS.DirectoryEntry)list.get(i),
+					(VFSFile)list.get(i),
 					entry.level + 1);
 			}
 			System.arraycopy(files,startIndex + 1,
@@ -127,7 +128,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			if(e.expanded)
 			{
 				removeExtendedAttributes(VFSManager.getVFSForPath(
-					e.dirEntry.path));
+					e.dirEntry.getPath()));
 			}
 		}
 
@@ -259,12 +260,12 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 	//{{{ Entry class
 	static class Entry
 	{
-		VFS.DirectoryEntry dirEntry;
+		VFSFile dirEntry;
 		boolean expanded;
 		// how deeply we are nested
 		int level;
 
-		Entry(VFS.DirectoryEntry dirEntry, int level)
+		Entry(VFSFile dirEntry, int level)
 		{
 			this.dirEntry = dirEntry;
 			this.level = level;

@@ -56,8 +56,8 @@ public class FileRootsVFS extends VFS
 		return PROTOCOL + ":";
 	} //}}}
 
-	//{{{ _listDirectory() method
-	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
+	//{{{ _listFiles() method
+	public VFSFile[] _listFiles(Object session, String url,
 		Component comp)
 	{
 		File[] roots = listRoots();
@@ -65,18 +65,18 @@ public class FileRootsVFS extends VFS
 		if(roots == null)
 			return null;
 
-		VFS.DirectoryEntry[] rootDE = new VFS.DirectoryEntry[roots.length];
+		VFSFile[] rootDE = new VFSFile[roots.length];
 		for(int i = 0; i < roots.length; i++)
-			rootDE[i] = new RootsEntry(roots[i]);
+			rootDE[i] = new Root(roots[i]);
 
 		return rootDE;
 	} //}}}
 
-	//{{{ _getDirectoryEntry() method
-	public DirectoryEntry _getDirectoryEntry(Object session, String path,
+	//{{{ _getFile() method
+	public VFSFile _getFile(Object session, String path,
 		Component comp)
 	{
-		return new RootsEntry(new File(path));
+		return new Root(new File(path));
 	} //}}}
 
 	//{{{ Private members
@@ -119,42 +119,44 @@ public class FileRootsVFS extends VFS
 
 	//}}}
 
-	//{{{ RootsEntry class
-	static class RootsEntry extends VFS.DirectoryEntry
+	//{{{ Root class
+	static class Root extends VFSFile
 	{
-		RootsEntry(File file)
+		Root(File file)
 		{
 			// REMIND: calling isDirectory() on a floppy drive
 			// displays stupid I/O error dialog box on Windows
 
-			this.path = this.deletePath = this.symlinkPath
-				= file.getPath();
+			String path = file.getPath();
+			setPath(path);
+			setDeletePath(path);
+			setSymlinkPath(path);
 
 			if(fsView.isFloppyDrive(file))
 			{
-				type = VFS.DirectoryEntry.FILESYSTEM;
-				name = path;
+				setType(VFSFile.FILESYSTEM);
+				setName(path);
 			}
 			else if(fsView.isDrive(file))
 			{
-				type = VFS.DirectoryEntry.FILESYSTEM;
-
-				name =  path + " "
-					+ fsView.getSystemDisplayName(file);
+				setType(VFSFile.FILESYSTEM);
+				setName(path + " "
+					+ fsView.getSystemDisplayName(file));
 			}
 			else if(file.isDirectory())
 			{
-				type = VFS.DirectoryEntry.FILESYSTEM;
 				if(fsView.isFileSystemRoot(file))
-					type = VFS.DirectoryEntry.DIRECTORY;
+					setType(VFSFile.DIRECTORY);
+				else
+					setType(VFSFile.FILESYSTEM);
 
 				if(OperatingSystem.isMacOS())
-					name = MiscUtilities.getFileName(path);
+					setName(MiscUtilities.getFileName(path));
 				else
-					name = path;
+					setName(path);
 			}
 			else
-				type = VFS.DirectoryEntry.FILE;
+				setType(VFSFile.FILE);
 		}
 
 		public String getExtendedAttribute(String name)

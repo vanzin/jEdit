@@ -546,7 +546,7 @@ public abstract class VFS
 		return retVal;
 	} //}}}
 
-	//{{{ _listDirectory() method
+	//{{{ _listFiles() method
 	/**
 	 * Lists the specified directory.
 	 * @param session The session
@@ -556,7 +556,18 @@ public abstract class VFS
 	 * session instance.
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
-	 * @since jEdit 2.7pre1
+	 * @since jEdit 4.3pre2
+	 */
+	public VFSFile[] _listFiles(Object session, String directory,
+		Component comp)
+		throws IOException
+	{
+		return _listDirectory(session,directory,comp);
+	} //}}}
+
+	//{{{ _listDirectory() method
+	/**
+	 * @deprecated Use <code>_listFiles()</code> instead.
 	 */
 	public DirectoryEntry[] _listDirectory(Object session, String directory,
 		Component comp)
@@ -564,6 +575,23 @@ public abstract class VFS
 	{
 		VFSManager.error(comp,directory,"vfs.not-supported.list",new String[] { name });
 		return null;
+	} //}}}
+
+	//{{{ _getFile() method
+	/**
+	 * Returns the specified directory entry.
+	 * @param session The session
+	 * @param path The path
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @return The specified directory entry, or null if it doesn't exist.
+	 * @since jEdit 4.3pre2
+	 */
+	public VFSFile _getFile(Object session, String path,
+		Component comp)
+		throws IOException
+	{
+		return _getDirectoryEntry(session,path,comp);
 	} //}}}
 
 	//{{{ _getDirectoryEntry() method
@@ -585,34 +613,10 @@ public abstract class VFS
 
 	//{{{ DirectoryEntry class
 	/**
-	 * A directory entry.
-	 * @since jEdit 2.6pre2
+	 * @deprecated Use <code>VFSFile</code> instead.
 	 */
-	public static class DirectoryEntry implements Serializable
+	public static class DirectoryEntry extends VFSFile
 	{
-		//{{{ File types
-		public static final int FILE = 0;
-		public static final int DIRECTORY = 1;
-		public static final int FILESYSTEM = 2;
-		//}}}
-
-		//{{{ Instance variables
-		public String name;
-		public String path;
-
-		/**
-		 * @since jEdit 4.2pre5
-		 */
-		public String symlinkPath;
-
-		public String deletePath;
-		public int type;
-		public long length;
-		public boolean hidden;
-		public boolean canRead;
-		public boolean canWrite;
-		//}}}
-
 		//{{{ DirectoryEntry constructor
 		/**
 		 * @since jEdit 4.2pre2
@@ -639,80 +643,6 @@ public abstract class VFS
 				canRead = ((vfs.getCapabilities() & READ_CAP) != 0);
 				canWrite = ((vfs.getCapabilities() & WRITE_CAP) != 0);
 			}
-		} //}}}
-
-		protected boolean colorCalculated;
-		protected Color color;
-
-		//{{{ getExtendedAttribute() method
-		/**
-		 * Returns the value of an extended attribute. Note that this
-		 * returns formatted strings (eg, "10 Mb" for a file size of
-		 * 1048576 bytes). If you need access to the raw data, access
-		 * fields and methods of this class.
-		 * @param name The extended attribute name
-		 * @since jEdit 4.2pre1
-		 */
-		public String getExtendedAttribute(String name)
-		{
-			if(name.equals(EA_TYPE))
-			{
-				switch(type)
-				{
-				case FILE:
-					return jEdit.getProperty("vfs.browser.type.file");
-				case DIRECTORY:
-					return jEdit.getProperty("vfs.browser.type.directory");
-				case FILESYSTEM:
-					return jEdit.getProperty("vfs.browser.type.filesystem");
-				default:
-					throw new IllegalArgumentException();
-				}
-			}
-			else if(name.equals(EA_STATUS))
-			{
-				if(canRead)
-				{
-					if(canWrite)
-						return jEdit.getProperty("vfs.browser.status.rw");
-					else
-						return jEdit.getProperty("vfs.browser.status.ro");
-				}
-				else
-				{
-					if(canWrite)
-						return jEdit.getProperty("vfs.browser.status.append");
-					else
-						return jEdit.getProperty("vfs.browser.status.no");
-				}
-			}
-			else if(name.equals(EA_SIZE))
-			{
-				if(type != FILE)
-					return null;
-				else
-					return MiscUtilities.formatFileSize(length);
-			}
-			else
-				return null;
-		} //}}}
-
-		//{{{ getColor() method
-		public Color getColor()
-		{
-			if(!colorCalculated)
-			{
-				colorCalculated = true;
-				color = getDefaultColorFor(name);
-			}
-
-			return color;
-		} //}}}
-
-		//{{{ toString() method
-		public String toString()
-		{
-			return name;
 		} //}}}
 	} //}}}
 
@@ -897,17 +827,17 @@ public abstract class VFS
 
 		public int compare(Object obj1, Object obj2)
 		{
-			VFS.DirectoryEntry file1 = (VFS.DirectoryEntry)obj1;
-			VFS.DirectoryEntry file2 = (VFS.DirectoryEntry)obj2;
+			VFSFile file1 = (VFSFile)obj1;
+			VFSFile file2 = (VFSFile)obj2;
 
 			if(!sortMixFilesAndDirs)
 			{
-				if(file1.type != file2.type)
-					return file2.type - file1.type;
+				if(file1.getType() != file2.getType())
+					return file2.getType() - file1.getType();
 			}
 
-			return MiscUtilities.compareStrings(file1.name,
-				file2.name,sortIgnoreCase);
+			return MiscUtilities.compareStrings(file1.getName(),
+				file2.getName(),sortIgnoreCase);
 		}
 	} //}}}
 
@@ -951,22 +881,23 @@ public abstract class VFS
 		else
 			stack.add(directory);
 
-		VFS.DirectoryEntry[] _files = _listDirectory(session,directory,
+		VFSFile[] _files = _listFiles(session,directory,
 			comp);
 		if(_files == null || _files.length == 0)
 			return;
 
 		for(int i = 0; i < _files.length; i++)
 		{
-			VFS.DirectoryEntry file = _files[i];
+			VFSFile file = _files[i];
 
-			if(file.type == VFS.DirectoryEntry.DIRECTORY
-				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+			if(file.getType() == VFSFile.DIRECTORY
+				|| file.getType() == VFSFile.FILESYSTEM)
 			{
 				if(recursive)
 				{
 					// resolve symlinks to avoid loops
-					String canonPath = _canonPath(session,file.path,comp);
+					String canonPath = _canonPath(session,
+						file.getPath(),comp);
 					if(!MiscUtilities.isURL(canonPath))
 						canonPath = MiscUtilities.resolveSymlinks(canonPath);
 
@@ -977,12 +908,11 @@ public abstract class VFS
 			}
 			else
 			{
-				if(!glob.isMatch(file.name))
+				if(!glob.isMatch(file.getName()))
 					continue;
 
-				Log.log(Log.DEBUG,this,file.path);
-
-				files.add(file.path);
+				Log.log(Log.DEBUG,this,file.getPath());
+				files.add(file.getPath());
 			}
 		}
 	} //}}}

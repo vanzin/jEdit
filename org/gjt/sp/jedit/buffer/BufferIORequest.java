@@ -199,11 +199,11 @@ public class BufferIORequest extends WorkRequest
 
 				path = vfs._canonPath(session,path,view);
 
-				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
+				VFSFile entry = vfs._getFile(
 					session,path,view);
 				long length;
 				if(entry != null)
-					length = entry.length;
+					length = entry.getLength();
 				else
 					length = 0L;
 
@@ -978,11 +978,11 @@ public class BufferIORequest extends WorkRequest
 
 				path = vfs._canonPath(session,path,view);
 
-				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
+				VFSFile entry = vfs._getFile(
 					session,path,view);
 				long length;
 				if(entry != null)
-					length = entry.length;
+					length = entry.getLength();
 				else
 					length = 0L;
 

@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
@@ -80,7 +81,7 @@ public class VFSDirectoryEntryTable extends JTable
 			VFSDirectoryEntryTableModel.Entry entry =
 				(VFSDirectoryEntryTableModel.Entry)
 				getValueAt(i,1);
-			if(entry.dirEntry.path.equals(path))
+			if(entry.dirEntry.getPath().equals(path))
 			{
 				setSelectedRow(i);
 				return true;
@@ -113,7 +114,7 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ getSelectedFiles() method
-	public VFS.DirectoryEntry[] getSelectedFiles()
+	public VFSFile[] getSelectedFiles()
 	{
 		VFSDirectoryEntryTableModel model
 			= (VFSDirectoryEntryTableModel)getModel();
@@ -124,8 +125,8 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			returnValue.add(model.files[selectedRows[i]].dirEntry);
 		}
-		return (VFS.DirectoryEntry[])returnValue.toArray(new
-		VFS.DirectoryEntry[returnValue.size()]);
+		return (VFSFile[])returnValue.toArray(new
+		VFSFile[returnValue.size()]);
 	} //}}}
 
 	//{{{ getExpandedDirectories() method
@@ -139,7 +140,7 @@ public class VFSDirectoryEntryTable extends JTable
 			for(int i = 0; i < model.files.length; i++)
 			{
 				if(model.files[i].expanded)
-					set.add(model.files[i].dirEntry.path);
+					set.add(model.files[i].dirEntry.getPath());
 			}
 		}
 	} //}}}
@@ -151,19 +152,19 @@ public class VFSDirectoryEntryTable extends JTable
 		= (VFSDirectoryEntryTableModel)getModel();
 
 		VFSDirectoryEntryTableModel.Entry entry = model.files[row];
-		if(entry.dirEntry.type == VFS.DirectoryEntry.FILE)
+		if(entry.dirEntry.getType() == VFSFile.FILE)
 			return;
 
 		if(entry.expanded)
 		{
 			model.collapse(VFSManager.getVFSForPath(
-				entry.dirEntry.path),row);
+				entry.dirEntry.getPath()),row);
 			resizeColumnsAppropriately();
 		}
 		else
 		{
 			browserView.clearExpansionState();
-			browserView.loadDirectory(entry,entry.dirEntry.path,
+			browserView.loadDirectory(entry,entry.dirEntry.getPath(),
 				false);
 		}
 
@@ -204,7 +205,7 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			VFSDirectoryEntryTableModel.Entry e
 				= model.files[startIndex + i];
-			String path = e.dirEntry.path;
+			String path = e.dirEntry.getPath();
 			if(tmpExpanded.contains(path))
 			{
 				browserView.loadDirectory(e,path,false);
@@ -224,16 +225,16 @@ public class VFSDirectoryEntryTable extends JTable
 		for(int i = 0; i < model.files.length; i++)
 		{
 			VFSDirectoryEntryTableModel.Entry e = model.files[i];
-			if(!e.expanded || e.dirEntry.type == VFS.DirectoryEntry.FILE)
+			if(!e.expanded || e.dirEntry.getType() == VFSFile.FILE)
 				continue;
 
-			VFS.DirectoryEntry dirEntry = e.dirEntry;
+			VFSFile dirEntry = e.dirEntry;
 			// work around for broken FTP plugin!
 			String otherPath;
-			if(dirEntry.symlinkPath == null)
-				otherPath = dirEntry.path;
+			if(dirEntry.getSymlinkPath() == null)
+				otherPath = dirEntry.getPath();
 			else
-				otherPath = dirEntry.symlinkPath;
+				otherPath = dirEntry.getSymlinkPath();
 			if(VFSBrowser.pathsEqual(path,otherPath))
 			{
 				browserView.saveExpansionState();
@@ -249,7 +250,7 @@ public class VFSDirectoryEntryTable extends JTable
 		renderer.propertiesChanged();
 
 		VFS.DirectoryEntry template = new VFS.DirectoryEntry(
-			"foo","foo","foo",VFS.DirectoryEntry.FILE,0L,false);
+			"foo","foo","foo",VFSFile.FILE,0L,false);
 		setRowHeight(renderer.getTableCellRendererComponent(
 			this,new VFSDirectoryEntryTableModel.Entry(template,0),
 			false,false,0,0).getPreferredSize().height);
@@ -285,7 +286,7 @@ public class VFSDirectoryEntryTable extends JTable
 					{
 						model.collapse(
 							VFSManager.getVFSForPath(
-							model.files[row].dirEntry.path),
+							model.files[row].dirEntry.getPath()),
 							row);
 						break;
 					}
@@ -402,14 +403,14 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			VFSDirectoryEntryTableModel.Entry entry =
 				(VFSDirectoryEntryTableModel.Entry)getValueAt(i,1);
-			if(dirsOnly && entry.dirEntry.type
-				== VFS.DirectoryEntry.FILE)
+			if(dirsOnly && entry.dirEntry.getType()
+				== VFSFile.FILE)
 			{
 				continue;
 			}
 
 			String matchAgainst = (MiscUtilities.isAbsolutePath(str)
-				? entry.dirEntry.path : entry.dirEntry.name);
+				? entry.dirEntry.getPath() : entry.dirEntry.getName());
 			if(matchAgainst.regionMatches(true,
 				0,str,0,str.length()))
 			{
@@ -441,32 +442,33 @@ public class VFSDirectoryEntryTable extends JTable
 			}
 		}
 
+		/* for(int i = 1; i < widths.length; i++)
+		{
+			String extAttr = model.getExtendedAttribute(
+				j - 1);
+			int width = 
+			String attr = entry.dirEntry
+				.getExtendedAttribute(
+				extAttr);
+			if(attr != null)
+			{
+				widths[j] = Math.max(widths[j],
+					(int)font.getStringBounds(
+					attr,fontRenderContext)
+					.getWidth());
+			}
+		} */
+
 		for(int i = 0; i < model.files.length; i++)
 		{
 			VFSDirectoryEntryTableModel.Entry entry
 				= model.files[i];
-			Font font = (entry.dirEntry.type
-				== VFS.DirectoryEntry.FILE
+			Font font = (entry.dirEntry.getType()
+				== VFSFile.FILE
 				? renderer.plainFont : renderer.boldFont);
 
 			widths[0] = Math.max(widths[0],renderer.getEntryWidth(
 				entry,font,fontRenderContext));
-
-			for(int j = 1; j < widths.length; j++)
-			{
-				String extAttr = model.getExtendedAttribute(
-					j - 1);
-				String attr = entry.dirEntry
-					.getExtendedAttribute(
-					extAttr);
-				if(attr != null)
-				{
-					widths[j] = Math.max(widths[j],
-						(int)font.getStringBounds(
-						attr,fontRenderContext)
-						.getWidth());
-				}
-			}
 		}
 
 		for(int i = 0; i < widths.length; i++)
@@ -477,8 +479,8 @@ public class VFSDirectoryEntryTable extends JTable
 			else
 				width += 2;
 			getColumnModel().getColumn(i).setPreferredWidth(width);
-			getColumnModel().getColumn(i).setMinWidth(width);
-			getColumnModel().getColumn(i).setMaxWidth(width);
+			/* getColumnModel().getColumn(i).setMinWidth(width);
+			getColumnModel().getColumn(i).setMaxWidth(width); */
 			getColumnModel().getColumn(i).setWidth(width);
 		}
 

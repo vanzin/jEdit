@@ -21,7 +21,7 @@ package org.gjt.sp.jedit.browser;
 
 import java.util.EventListener;
 
-import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
 
 /**
  * A browser event listener.
@@ -34,13 +34,15 @@ public interface BrowserListener extends EventListener
 	 * The user has selected a set of files.
 	 * @param browser The VFS browser
 	 * @param files The selected files
+	 * @since jEdit 4.3pre1
 	 */
-	void filesSelected(VFSBrowser browser, VFS.DirectoryEntry[] files);
+	void filesSelected(VFSBrowser browser, VFSFile[] files);
 
 	/**
 	 * The user has double-clicked a set of files.
 	 * @param browser The VFS browser
 	 * @param files The selected files
+	 * @since jEdit 4.3pre1
 	 */
-	void filesActivated(VFSBrowser browser, VFS.DirectoryEntry[] files);
+	void filesActivated(VFSBrowser browser, VFSFile[] files);
 }

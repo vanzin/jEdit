@@ -118,7 +118,7 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ getSelectedFiles() method
-	public VFS.DirectoryEntry[] getSelectedFiles()
+	public VFSFile[] getSelectedFiles()
 	{
 		return table.getSelectedFiles();
 	} //}}}
@@ -182,13 +182,13 @@ class BrowserView extends JPanel
 				VFS _vfs = VFSManager.getVFSForPath(
 					parent);
 				// create a DirectoryEntry manually
-				// instead of using _vfs._getDirectoryEntry()
+				// instead of using _vfs._getFile()
 				// since so many VFS's have broken
 				// implementations of this method
-				parentList.insertElementAt(new VFS.DirectoryEntry(
+				parentList.insertElementAt(new VFSFile(
 					_vfs.getFileName(parent),
 					parent,parent,
-					VFS.DirectoryEntry.DIRECTORY,
+					VFSFile.DIRECTORY,
 					0L,false),0);
 				String newParent = _vfs.getParentOfPath(parent);
 
@@ -307,7 +307,7 @@ class BrowserView extends JPanel
 	//}}}
 
 	//{{{ showFilePopup() method
-	private void showFilePopup(VFS.DirectoryEntry[] files, Component comp,
+	private void showFilePopup(VFSFile[] files, Component comp,
 		Point point)
 	{
 		popup = new BrowserCommandsMenu(browser,files);
@@ -377,14 +377,14 @@ class BrowserView extends JPanel
 				setIcon(showIcons ? FileCellRenderer.loadingIcon : null);
 				setText(jEdit.getProperty("vfs.browser.tree.loading"));
 			}
-			else if(value instanceof VFS.DirectoryEntry)
+			else if(value instanceof VFSFile)
 			{
-				VFS.DirectoryEntry dirEntry = (VFS.DirectoryEntry)value;
+				VFSFile dirEntry = (VFSFile)value;
 				ParentDirectoryRenderer.this.setFont(boldFont);
 
 				setIcon(showIcons ? FileCellRenderer.getIconForFile(dirEntry,true)
 					: null);
-				setText(dirEntry.name);
+				setText(dirEntry.getName());
 			}
 			else if(value == null)
 				setText("VFS does not follow VFS API");
@@ -403,9 +403,9 @@ class BrowserView extends JPanel
 			{
 				Object obj = parentDirectories.getModel()
 					.getElementAt(row);
-				if(obj instanceof VFS.DirectoryEntry)
+				if(obj instanceof VFSFile)
 				{
-					VFS.DirectoryEntry dirEntry = ((VFS.DirectoryEntry)obj);
+					VFSFile dirEntry = ((VFSFile)obj);
 					if(GUIUtilities.isPopupTrigger(evt))
 					{
 						if(popup != null && popup.isVisible())
@@ -416,7 +416,7 @@ class BrowserView extends JPanel
 						else
 						{
 							parentDirectories.setSelectedIndex(row);
-							showFilePopup(new VFS.DirectoryEntry[] {
+							showFilePopup(new VFSFile[] {
 								dirEntry },parentDirectories,
 								evt.getPoint());
 						}
@@ -436,12 +436,12 @@ class BrowserView extends JPanel
 			{
 				Object obj = parentDirectories.getModel()
 					.getElementAt(row);
-				if(obj instanceof VFS.DirectoryEntry)
+				if(obj instanceof VFSFile)
 				{
-					VFS.DirectoryEntry dirEntry = ((VFS.DirectoryEntry)obj);
+					VFSFile dirEntry = ((VFSFile)obj);
 					if(!GUIUtilities.isPopupTrigger(evt))
 					{
-						browser.setDirectory(dirEntry.path);
+						browser.setDirectory(dirEntry.getPath());
 						if(browser.getMode() == VFSBrowser.BROWSER)
 						focusOnFileView();
 					}

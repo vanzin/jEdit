@@ -72,6 +72,11 @@ Simon Ruggier for contributing to this release.
   hang around for a while, and was huge.
 
 }}}
+{{{ API Changes
+
+- View.updateTitle() is now public.
+
+}}}
 
 }}}
 {{{ Version 4.3pre1
