@@ -1187,7 +1187,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		// directory if request already active
 		if(maybeReloadRequestRunning)
 		{
-			Log.log(Log.WARNING,this,"VFS update: request already in progress");
+			//Log.log(Log.WARNING,this,"VFS update: request already in progress");
 			return;
 		}
 

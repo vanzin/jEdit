@@ -212,8 +212,9 @@
 	<sect1 id="beanshell"><title>BeanShell</title>
 
 	<para>
-		BeanShell has been updated from version 1.2b7 to 1.3.1. The
-		new release of BeanShell brings better
+		BeanShell has been updated from version 1.2b7 to 2.0b1. The
+		new release of BeanShell brings support for scripted
+		classes, static imports, mixins, better
 		error reporting, improved performance, and various fixes.
 	</para>
 

@@ -150,79 +150,80 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	public void ok()
 	{
 		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
+		String filename = filenameField.getText();
 
 		if(files.length != 0)
 		{
 			browser.filesActivated(VFSBrowser.M_OPEN,false);
+			return;
 		}
-		else
+		else if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG
+			&& (filename == null || filename.length() == 0))
 		{
-			if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
-			{
-				isOK = true;
-				dispose();
-				return;
-			}
-
-			String filename = filenameField.getText();
-			if(filename == null || filename.length() == 0)
-			{
-				getToolkit().beep();
-				return;
-			}
-
-			String bufferDir = browser.getView().getBuffer()
-				.getDirectory();
-			if(filename.equals("-"))
-				filename = bufferDir;
-			else if(filename.startsWith("-/")
-				|| filename.startsWith("-" + File.separator))
-			{
-				filename = MiscUtilities.constructPath(
-					bufferDir,filename.substring(2));
-			}
-
-			final int[] type = { -1 };
-			final String path = MiscUtilities.constructPath(
-				browser.getDirectory(),filename);
-			final VFS vfs = VFSManager.getVFSForPath(path);
-			Object session = vfs.createVFSSession(path,this);
-			if(session == null)
-				return;
-
-			VFSManager.runInWorkThread(new GetFileTypeRequest(
-				vfs,session,path,type));
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					switch(type[0])
-					{
-					case VFS.DirectoryEntry.FILE:
-						if(vfs instanceof FileVFS)
-						{
-							if(doFileExistsWarning(path))
-								break;
-						}
-						isOK = true;
-						if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
-						{
-							Hashtable props = new Hashtable();
-							props.put(Buffer.ENCODING,browser.currentEncoding);
-							jEdit.openFile(browser.getView(),
-								browser.getDirectory(),
-								path,false,props);
-						}
-						dispose();
-						break;
-					case VFS.DirectoryEntry.DIRECTORY:
-					case VFS.DirectoryEntry.FILESYSTEM:
-						browser.setDirectory(path);
-						break;
-					}
-				}
-			});
+			isOK = true;
+			dispose();
+			return;
 		}
+		else if(filename == null || filename.length() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		String bufferDir = browser.getView().getBuffer()
+			.getDirectory();
+		if(filename.equals("-"))
+			filename = bufferDir;
+		else if(filename.startsWith("-/")
+			|| filename.startsWith("-" + File.separator))
+		{
+			filename = MiscUtilities.constructPath(
+				bufferDir,filename.substring(2));
+		}
+
+		final int[] type = { -1 };
+		final String path = MiscUtilities.constructPath(
+			browser.getDirectory(),filename);
+		final VFS vfs = VFSManager.getVFSForPath(path);
+		Object session = vfs.createVFSSession(path,this);
+		if(session == null)
+			return;
+
+		VFSManager.runInWorkThread(new GetFileTypeRequest(
+			vfs,session,path,type));
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				switch(type[0])
+				{
+				case VFS.DirectoryEntry.FILE:
+					if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+						break;
+
+					if(vfs instanceof FileVFS)
+					{
+						if(doFileExistsWarning(path))
+							break;
+					}
+					isOK = true;
+					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+					{
+						Hashtable props = new Hashtable();
+						props.put(Buffer.ENCODING,browser.currentEncoding);
+						jEdit.openFile(browser.getView(),
+							browser.getDirectory(),
+							path,false,props);
+					}
+					dispose();
+					break;
+				case VFS.DirectoryEntry.DIRECTORY:
+				case VFS.DirectoryEntry.FILESYSTEM:
+					browser.setDirectory(path);
+					break;
+				}
+			}
+		});
 	} //}}}
 
 	//{{{ cancel() method
@@ -396,7 +397,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 					isOK = true;
 					filenameField.setText(null);
-					dispose();
+					if(browser.getMode() != VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+					{
+						dispose();
+					}
 					return;
 				}
 				else

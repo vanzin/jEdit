@@ -137,4 +137,9 @@ public class Debug
 	 * Indent debug.
 	 */
 	public static boolean INDENT_DEBUG = false;
+
+	/**
+	 * Printing debug.
+	 */
+	public static boolean PRINT_DEBUG = false;
 }

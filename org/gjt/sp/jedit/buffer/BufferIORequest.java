@@ -568,7 +568,13 @@ public class BufferIORequest extends WorkRequest
 		setAbortable(false);
 
 		String lineSeparator;
-		if(CRLF)
+		if(length == 0)
+		{
+			// fix for "[ 865589 ] 0-byte files should open using
+			// the default line seperator"
+			lineSeparator = null;
+		}
+		else if(CRLF)
 			lineSeparator = "\r\n";
 		else if(CROnly)
 			lineSeparator = "\r";
@@ -610,7 +616,8 @@ public class BufferIORequest extends WorkRequest
 			buffer.setProperty(LOAD_DATA,seg);
 			buffer.setProperty(END_OFFSETS,endOffsets);
 			buffer.setProperty(NEW_PATH,path);
-			buffer.setProperty(Buffer.LINESEP,lineSeparator);
+			if(lineSeparator != null)
+				buffer.setProperty(Buffer.LINESEP,lineSeparator);
 		}
 
 		// used in insert()
@@ -708,7 +715,7 @@ public class BufferIORequest extends WorkRequest
 					if(twoStageSave)
 					{
 						if(!vfs._rename(session,savePath,path,view))
-							throw new IOException(savePath);
+							throw new IOException("Rename failed: " + savePath);
 					}
 
 					// We only save markers to VFS's that support deletion.

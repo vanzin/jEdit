@@ -220,6 +220,10 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_ALT:
 				modifiers &= ~InputEvent.ALT_MASK;
 				lastKeyTime = evt.getWhen();
+				// we consume this to work around the bug
+				// where A+TAB window switching activates
+				// the menu bar on Windows.
+				evt.consume();
 				return null;
 			case KeyEvent.VK_ALT_GRAPH:
 				modifiers &= ~InputEvent.ALT_GRAPH_MASK;

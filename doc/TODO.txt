@@ -3,7 +3,12 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- add note that regexp matching does not cross newlines in token marker
+- add note to documentation about exponential-time regexps
+- files changed dialog switches buffers
+
 - test keyboard completion with expanded/collapsed tree
+- teset keyboard completion with high latency VFS
 - file system browser: 2 clicks don't hide menus
 - file system browser: tigten gap on left of tool bar
 - invoking action bar command twice
@@ -17,15 +22,14 @@ remaining features before 4.2final:
 - optional dependencies
 - tall caret and backspace
 - need timeouts for plugin manager list download.
+- redundant updateChunksUpTo() calls
 
 - encoding list: not properly sorted
 - in search bar, C+y a doesn't work
 - printing: check default printer setting
-- still broken: https://sourceforge.net/tracker/?func=detail&atid=100588&aid=831264&group_id=588
 - news: deep indent, action bar, new cli options
 - remove-marker, select-next/prev-marker/bracket
 - plugin mgr install doesn't update existing plugins
-- entering ../.. inside archive
 - vfs updates still broken
 - "downloading plugin list" label in plugin manager
 - column reference counting broken
