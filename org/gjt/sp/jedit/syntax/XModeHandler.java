@@ -161,6 +161,11 @@ public class XModeHandler extends HandlerBase
 		else if (aname == "DELEGATE")
 		{
 			lastDelegateSet = value;
+			if (lastDelegateSet != null
+				&& lastDelegateSet.indexOf("::") == -1)
+			{
+				lastDelegateSet = modeName + "::" + lastDelegateSet;
+			}
 		}
 		else if (aname == "DEFAULT")
 		{
@@ -170,6 +175,15 @@ public class XModeHandler extends HandlerBase
 				error("token-invalid",value);
 				lastDefaultID = Token.NULL;
 			}
+		}
+		else if (aname == "HASH_CHAR")
+		{
+			if(value.length() != 0)
+			{
+				error("hash-char-invalid",value);
+				lastDefaultID = Token.NULL;
+			}
+			lastHashChar = aname.charAt(0);
 		}
 	} //}}}
 
@@ -192,6 +206,7 @@ public class XModeHandler extends HandlerBase
 			tag == "MARK_PREVIOUS" ||
 			tag == "MARK_FOLLOWING" ||
 			tag == "SEQ" ||
+			tag == "SEQ_REGEXP" ||
 			tag == "BEGIN"
 		)
 		{
@@ -317,15 +332,39 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				if (lastDelegateSet != null
-					&& lastDelegateSet.indexOf("::") == -1)
-				{
-					lastDelegateSet = modeName + "::" + lastDelegateSet;
-				}
-
 				rules.addRule(ParserRule.createSequenceRule(
 					lastStart,lastDelegateSet,lastTokenID,
 					lastAtLineStart,lastAtWhitespaceEnd));
+				lastStart = null;
+				lastEnd = null;
+				lastDelegateSet = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
+			} //}}}
+			//{{{ SEQ_REGEXP
+			else if (tag == "SEQ_REGEXP")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","SEQ_REGEXP");
+					return;
+				}
+
+				try
+				{
+					rules.addRule(ParserRule.createRegexpSequenceRule(
+						lastHashChar,
+						lastStart,lastDelegateSet,lastTokenID,
+						lastAtLineStart,lastAtWhitespaceEnd,
+						lastIgnoreCase));
+				}
+				catch(REException re)
+				{
+					error("regexp",re);
+				}
+
+				lastHashChar = '\0';
 				lastStart = null;
 				lastEnd = null;
 				lastDelegateSet = null;
@@ -348,12 +387,6 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				if (lastDelegateSet != null
-					&& lastDelegateSet.indexOf("::") == -1)
-				{
-					lastDelegateSet = modeName + "::" + lastDelegateSet;
-				}
-
 				rules.addRule(ParserRule
 					.createSpanRule(
 					lastStart,lastEnd,
@@ -374,6 +407,51 @@ public class XModeHandler extends HandlerBase
 				lastNoWordBreak = false;
 				lastDelegateSet = null;
 			} //}}}
+			//{{{ SPAN_REGEXP
+			else if (tag == "SPAN_REGEXP")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","START");
+					return;
+				}
+
+				if(lastEnd == null)
+				{
+					error("empty-tag","END");
+					return;
+				}
+
+				try
+				{
+					rules.addRule(ParserRule
+						.createRegexpSpanRule(
+						lastHashChar,
+						lastStart,lastEnd,
+						lastDelegateSet,
+						lastTokenID,lastNoLineBreak,
+						lastAtLineStart,
+						lastAtWhitespaceEnd,
+						lastExcludeMatch,
+						lastNoWordBreak,
+						lastIgnoreCase));
+				}
+				catch(REException re)
+				{
+					error("regexp",re);
+				}
+
+				lastHashChar = '\0';
+				lastStart = null;
+				lastEnd = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+				lastNoLineBreak = false;
+				lastAtWhitespaceEnd = false;
+				lastExcludeMatch = false;
+				lastNoWordBreak = false;
+				lastDelegateSet = null;
+			} //}}}
 			//{{{ EOL_SPAN
 			else if (tag == "EOL_SPAN")
 			{
@@ -383,16 +461,42 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				if (lastDelegateSet != null
-					&& lastDelegateSet.indexOf("::") == -1)
-				{
-					lastDelegateSet = modeName + "::" + lastDelegateSet;
-				}
-
 				rules.addRule(ParserRule.createEOLSpanRule(
 					lastStart,lastDelegateSet,lastTokenID,
 					lastAtLineStart,lastAtWhitespaceEnd,
 					lastExcludeMatch));
+
+				lastStart = null;
+				lastEnd = null;
+				lastDelegateSet = null;
+				lastTokenID = Token.NULL;
+				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
+				lastExcludeMatch = false;
+			} //}}}
+			//{{{ EOL_SPAN_REGEXP
+			else if (tag == "EOL_SPAN_REGEXP")
+			{
+				if(lastStart == null)
+				{
+					error("empty-tag","EOL_SPAN_REGEXP");
+					return;
+				}
+
+				try
+				{
+					rules.addRule(ParserRule.createRegexpEOLSpanRule(
+						lastHashChar,lastStart,lastDelegateSet,
+						lastTokenID,lastAtLineStart,
+						lastAtWhitespaceEnd,lastExcludeMatch,
+						lastIgnoreCase));
+				}
+				catch(REException re)
+				{
+					error("regexp",re);
+				}
+
+				lastHashChar = '\0';
 				lastStart = null;
 				lastEnd = null;
 				lastDelegateSet = null;
@@ -501,6 +605,7 @@ public class XModeHandler extends HandlerBase
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;
 	private String lastDigitRE;
+	private char lastHashChar;
 	//}}}
 
 	//{{{ addKeyword() method

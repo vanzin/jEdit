@@ -384,14 +384,21 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	{
 		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
 		{
-			pattern.array = (end ? checkRule.end : checkRule.start);
-			pattern.offset = 0;
-			pattern.count = pattern.array.length;
-
-			if(!TextUtilities.regionMatches(context.rules
-				.getIgnoreCase(),line,pos,pattern.array))
+			if((checkRule.action & ParserRule.REGEXP) == 0)
 			{
-				return false;
+				pattern.array = (end ? checkRule.end : checkRule.start);
+				pattern.offset = 0;
+				pattern.count = pattern.array.length;
+
+				if(!TextUtilities.regionMatches(context.rules
+					.getIgnoreCase(),line,pos,pattern.array))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				// XXX
 			}
 		}
 
@@ -468,6 +475,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					? context.rules.getDefault() : checkRule.token),
 					pos - line.offset,pattern.count,context);
 
+				String spanEndSubst = null;
+				// XXX
+				/* if((checkRule.action & ParserRule.REGEXP) == ParserRule.REGEXP)
+					spanEndSubst = checkRule.startRegexp... */
 				context = new LineContext(delegateSet, context);
 				keywords = context.rules.getKeywords();
 
@@ -664,12 +675,16 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		public LineContext parent;
 		public ParserRule inRule;
 		public ParserRuleSet rules;
+		// used for SPAN_REGEXP rules; otherwise null
+		public String spanEndSubst;
 
 		//{{{ LineContext constructor
-		public LineContext(ParserRule r, ParserRuleSet rs)
+		public LineContext(ParserRule r, ParserRuleSet rs,
+			String spanEndSubst)
 		{
 			inRule = r;
 			rules = rs;
+			this.spanEndSubst = spanEndSubst;
 		} //}}}
 
 		//{{{ LineContext constructor
@@ -677,12 +692,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		{
 			rules = rs;
 			parent = (lc == null ? null : (LineContext)lc.clone());
-		} //}}}
-
-		//{{{ LineContext constructor
-		public LineContext(ParserRule r)
-		{
-			inRule = r;
 		} //}}}
 
 		//{{{ LineContext constructor
@@ -733,6 +742,19 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						return false;
 				}
 
+				if(lc.spanEndSubst == null)
+				{
+					if(spanEndSubst != null)
+						return false;
+				}
+				else
+				{
+					if(spanEndSubst == null)
+						return false;
+					else if(!lc.spanEndSubst.equals(spanEndSubst))
+						return false;
+				}
+
 				return lc.inRule == inRule && lc.rules == rules;
 			}
 			else
@@ -746,6 +768,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			lc.inRule = inRule;
 			lc.rules = rules;
 			lc.parent = (parent == null) ? null : (LineContext) parent.clone();
+			lc.spanEndSubst = spanEndSubst;
 
 			return lc;
 		} //}}}

@@ -51,6 +51,17 @@
 	%att-at-whitespace-end;
 	DELEGATE CDATA #IMPLIED >
 
+<!-- SEQ_REGEXP element -->
+<!ELEMENT SEQ_REGEXP ( #PCDATA ) >
+
+<!-- SEQ_REGEXP attributes -->
+<!ATTLIST SEQ_REGEXP
+	HASH_CHAR CDATA #REQUIRED
+	%att-type;
+	%att-at-line-start;
+	%att-at-whitespace-end;
+	DELEGATE CDATA #IMPLIED >
+
 <!-- SPAN element -->
 <!ELEMENT SPAN ( BEGIN, END ) >
 
@@ -64,7 +75,21 @@
 	NO_WORD_BREAK %att-bool; "FALSE"
 	DELEGATE CDATA #IMPLIED >
 
-<!-- SPAN children -->
+<!-- SPAN_REGEXP element -->
+<!ELEMENT SPAN_REGEXP ( BEGIN, END ) >
+
+<!-- SPAN_REGEXP attributes -->
+<!ATTLIST SPAN_REGEXP
+	HASH_CHAR CDATA #REQUIRED
+	%att-type;
+	%att-at-line-start;
+	%att-at-whitespace-end;
+	%att-exclude-match;
+	NO_LINE_BREAK %att-bool; "FALSE"
+	NO_WORD_BREAK %att-bool; "FALSE"
+	DELEGATE CDATA #IMPLIED >
+
+<!-- SPAN and SPAN_REGEXP children -->
 <!ELEMENT BEGIN ( #PCDATA ) >
 <!ELEMENT END ( #PCDATA ) >
 
@@ -73,6 +98,18 @@
 
 <!-- EOL_SPAN attributes -->
 <!ATTLIST EOL_SPAN
+	%att-type;
+	%att-at-line-start;
+	%att-at-whitespace-end;
+	%att-exclude-match;
+	DELEGATE CDATA #IMPLIED >
+
+<!-- EOL_SPAN_REGEXP element -->
+<!ELEMENT EOL_SPAN_REGEXP ( #PCDATA ) >
+
+<!-- EOL_SPAN_REGEXP attributes -->
+<!ATTLIST EOL_SPAN_REGEXP
+	HASH_CHAR CDATA #REQUIRED
 	%att-type;
 	%att-at-line-start;
 	%att-at-whitespace-end;
