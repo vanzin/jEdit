@@ -11,6 +11,8 @@ JEDIT 4.2 VERSION HISTORY
   registers a drag if the mouse is actually within the rectangular
   region, not just between the start and end locations in the buffer.
 
+- jEdit did not compile with Java 1.3.
+
 }}}
 
 }}}
