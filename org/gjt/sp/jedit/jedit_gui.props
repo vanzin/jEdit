@@ -507,6 +507,8 @@ splitting=unsplit-current \
           unsplit \
           split-horizontal \
           split-vertical \
+	  resplit \
+	  - \
           prev-textarea \
           next-textarea
 splitting.label=$Splitting
@@ -514,6 +516,7 @@ split-horizontal.label=Split $Horizontally
 split-vertical.label=Split $Vertically
 unsplit-current.label=$Unsplit Current
 unsplit.label=Unsplit $All
+resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 #}}}
