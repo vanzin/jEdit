@@ -39,7 +39,7 @@ action code contained in actions.xml.
 
 There is one other, optional attribute of the <DOCKABLE> element: a NO_ACTIONS
 attribute that can take a value of either "true" or "false". It is "false" by
-default: this signifies that the plugin does in fact define user actions in a
+default: this signifies that the plugin does in fact define user actions in an
 actions.xml file. Most plugins will therefore use the default value.
 
 (3) The user action definitions contained in actions.xml were revised to call
@@ -50,12 +50,12 @@ DockableManager.getDockableWindow().
 The handleMessage() method was eliminated because it was only necessary for the
 plugin to listen for the CreateDockableWindow message. As a result, it is no
 longer necessary for this plugin to connect to the EditBus, so its derivation
-was changed from EBPlugin to EditPlugin. Individual instance of the QuickNotepad
-class still need to listen for a PropertiesChanged message, so that class
-continues to implement EBComponent. In addition, since the EditBus no longer
-maintained an active list of Windows, the call to EditBus.addToNamedList() is no
-longer needed in the class's start() method and so was eliminated, leaving an
-empty start() method.
+was changed from EBPlugin to EditPlugin. Individual instances of the
+QuickNotepad class still need to listen for a PropertiesChanged message, so that
+class continues to implement EBComponent. In addition, since the EditBus no
+longer maintains an active list of windows, the call to EditBus.addToNamedList()
+is no longer needed in the class's start() method and so was eliminated, leaving
+an empty start() method.
 
 (5) No changes were required in the option pane class, QuickNotepadOptionsPane,
 or the other other classes defining components of the plugin.
