@@ -1409,6 +1409,9 @@ plugin-error.dep-plugin=Requires version {0} or later of {1}, \
 	but you only have {1} version {2}.
 plugin-error.dep-class=Requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
+plugin-error.missing-jar=Requires JAR file {0}.\n\
+	This JAR file is part of this plugin, but it cannot be found.\n\
+	Try reinstalling this plugin.
 plugin-error.obsolete=This plugin is obsolete. Please remove it.
 plugin-error.not-42=This plugin does not support dynamic loading.\n\
 	You must restart jEdit after removing or installing this plugin.

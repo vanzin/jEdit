@@ -305,7 +305,9 @@ public class PluginJAR
 				}
 				else
 				{
-					plugin.getPluginJAR().theseRequireMe.add(path);
+					PluginJAR jar = plugin.getPluginJAR();
+					jar.theseRequireMe.add(path);
+					weRequireThese.add(jar.getPath());
 				}
 			}
 			else if(what.equals("class"))
@@ -327,6 +329,35 @@ public class PluginJAR
 				Log.log(Log.ERROR,this,name + " has unknown"
 					+ " dependency: " + dep);
 				ok = false;
+			}
+		}
+
+		// each JAR file listed in the plugin's jars property
+		// needs to know that we need them
+		String jars = jEdit.getProperty("plugin."
+			+ plugin.getClassName() + ".jars");
+		if(jars != null)
+		{
+			String dir = MiscUtilities.getParentOfPath(path);
+
+			StringTokenizer st = new StringTokenizer(jars);
+			while(st.hasMoreTokens())
+			{
+				String jarPath = MiscUtilities.constructPath(
+					dir,st.nextToken());
+				PluginJAR jar = jEdit.getPluginJAR(jarPath);
+				if(jar == null)
+				{
+					String[] args = { jarPath };
+					jEdit.pluginError(path,
+						"plugin-error.missing-jar",args);
+					ok = false;
+				}
+				else
+				{
+					weRequireThese.add(jarPath);
+					jar.theseRequireMe.add(path);
+				}
 			}
 		}
 
@@ -698,11 +729,14 @@ public class PluginJAR
 	//{{{ init() method
 	void init()
 	{
+		boolean initialized = false;
+
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
 		{
 			loadCache(cache);
 			classLoader.activate();
+			initialized = true;
 		}
 		else
 		{
@@ -713,6 +747,7 @@ public class PluginJAR
 				{
 					setPluginCache(this,cache);
 					classLoader.activate();
+					initialized = true;
 				}
 			}
 			catch(IOException io)
@@ -736,6 +771,15 @@ public class PluginJAR
 
 		if(!exit)
 		{
+			Iterator iter = weRequireThese.iterator();
+			while(iter.hasNext())
+			{
+				String path = (String)iter.next();
+				PluginJAR jar = jEdit.getPluginJAR(path);
+				if(jar != null)
+					jar.theseRequireMe.remove(this.path);
+			}
+
 			classLoader.deactivate();
 			BeanShell.resetClassManager();
 
@@ -791,6 +835,7 @@ public class PluginJAR
 	private boolean activated;
 
 	private List theseRequireMe = new LinkedList();
+	private List weRequireThese = new LinkedList();
 	//}}}
 
 	//{{{ loadCache() method

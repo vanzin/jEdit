@@ -114,7 +114,7 @@ public class ManagePanel extends JPanel
 
 	//{{{ showListConfirm() method
 	private int showListConfirm(String name, String[] args,
-		ListModel listModel)
+		Vector listModel)
 	{
 		JList list = new JList(listModel);
 		list.setVisibleRowCount(8);
@@ -297,35 +297,14 @@ public class ManagePanel extends JPanel
 					if(value.equals(Boolean.FALSE))
 						return;
 
-					jEdit.addPluginJAR(entry.jar);
-					jar = jEdit.getPluginJAR(entry.jar);
-					if(jar != null)
-					{
-						jar.checkDependencies();
-						jar.activatePluginIfNecessary();
-					}
+					loadPluginJAR(entry.jar);
 				}
 				else
 				{
 					if(value.equals(Boolean.TRUE))
 						return;
 
-					String[] dependents = jar.getDependentPlugins();
-					DefaultListModel listModel = new DefaultListModel();
-
-					for(int i = 0;
-						i < dependents.length;
-						i++)
-					{
-						listModel.addElement(dependents[i]);
-					}
-
-					int button = showListConfirm(
-						"plugin-manager.dependency",
-						new String[] { jar.getFile()
-						.getName() },listModel);
-					if(button == JOptionPane.YES_OPTION)
-						unloadPluginJAR(jar);
+					unloadPluginJARWithDialog(jar);
 				}
 			}
 
@@ -375,6 +354,87 @@ public class ManagePanel extends JPanel
 			}
 
 			sort(sortType);
+		} //}}}
+
+		//{{{ loadExtraJARsIfNecessary() method
+		/**
+		 * This should go into the core...
+		 */
+		private void loadPluginJAR(String jarPath)
+		{
+			jEdit.addPluginJAR(jarPath);
+			PluginJAR jar = jEdit.getPluginJAR(jarPath);
+			if(jar == null || jar.getPlugin() == null)
+				return;
+
+			String jars = jEdit.getProperty("plugin."
+				+ jar.getPlugin().getClassName() + ".jars");
+
+			if(jars != null)
+			{
+				String dir = MiscUtilities.getParentOfPath(
+					jarPath);
+
+				StringTokenizer st = new StringTokenizer(jars);
+				while(st.hasMoreTokens())
+				{
+					String _jarPath
+						= MiscUtilities.constructPath(
+						dir,st.nextToken());
+					PluginJAR _jar = jEdit.getPluginJAR(
+						_jarPath);
+					if(_jar == null)
+					{
+						jEdit.addPluginJAR(_jarPath);
+					}
+				}
+			}
+
+			jar.checkDependencies();
+			jar.activatePluginIfNecessary();
+		} //}}}
+
+		//{{{ unloadPluginJARWithDialog() method
+		private void unloadPluginJARWithDialog(PluginJAR jar)
+		{
+			String[] dependents = jar.getDependentPlugins();
+			if(dependents.length == 0)
+				unloadPluginJAR(jar);
+			else
+			{
+				Vector listModel = new Vector();
+				transitiveClosure(dependents,listModel);
+
+				int button = showListConfirm(
+					"plugin-manager.dependency",
+					new String[] { jar.getFile()
+					.getName() },listModel);
+				if(button == JOptionPane.YES_OPTION)
+					unloadPluginJAR(jar);
+			}
+		} //}}}
+
+		//{{{ transitiveClosure() method
+		/**
+		 * If plugin A is needed by B, and B is needed by C, we want to
+		 * tell the user that A is needed by B and C when they try to
+		 * unload A.
+		 */
+		private void transitiveClosure(String[] dependents,
+			Vector listModel)
+		{
+			for(int i = 0; i < dependents.length; i++)
+			{
+				String jarPath = dependents[i];
+				if(!listModel.contains(jarPath))
+				{
+					listModel.add(jarPath);
+					PluginJAR jar = jEdit.getPluginJAR(
+						jarPath);
+					transitiveClosure(jar.getDependentPlugins(),
+						listModel);
+				}
+			}
 		} //}}}
 
 		//{{{ unloadPluginJAR() method
@@ -455,7 +515,7 @@ public class ManagePanel extends JPanel
 		{
 			int[] selected = table.getSelectedRows();
 
-			DefaultListModel listModel = new DefaultListModel();
+			Vector listModel = new Vector();
 			Roster roster = new Roster();
 			for(int i = 0; i < selected.length; i++)
 			{

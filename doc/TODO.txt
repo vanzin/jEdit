@@ -7,6 +7,7 @@ and quirks that I need to fix eventually.
   - removing property from mode does not take effect until restart
   - new file: horiz scroll wrong
   - shortcuts: stale shortcuts remain?
+  - if a plugin's stop() throws an exception, infinite loop?
 
 + bugs:
 
@@ -22,7 +23,6 @@ and quirks that I need to fix eventually.
 - fix double slash in path bug
 - thread safety problem in VFSManager.waitForRequests()
 - print qq{ $key="$attributes->{$key}"}; in perl
-- if a plugin's stop() throws an exception, infinite loop?
 - vfs browser: open in new view: doesn't focus the new view
 - class loading problems
 - broken activity log autoscroll
