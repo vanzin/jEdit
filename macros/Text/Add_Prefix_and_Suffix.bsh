@@ -124,9 +124,9 @@ void prefixSuffixDialog()
         for(i = 0; i < selectedLines.length; ++i)
         {
             offsetBOL = textArea.getLineStartOffset(selectedLines[i]);
-            textarea.setCaretPosition(offsetBOL);
-            textarea.goToStartOfWhiteSpace(false);
-            textarea.goToEndOfWhiteSpace(true);
+            textArea.setCaretPosition(offsetBOL);
+            textArea.goToStartOfWhiteSpace(false);
+            textArea.goToEndOfWhiteSpace(true);
             text = textArea.getSelectedText();
             if(text == null) text = "";
             textArea.setSelectedText(prefix + text + suffix);
