@@ -603,7 +603,7 @@ class BrowserView extends JPanel
 					break;
 				default:
 					typeSelectBuffer.append(evt.getKeyChar());
-					doTypeSelect(typeSelectBuffer.toString());
+					doTypeSelect(typeSelectBuffer.toString(),true);
 
 					timer.stop();
 					timer.setInitialDelay(750);
@@ -748,26 +748,28 @@ class BrowserView extends JPanel
 		} //}}}
 
 		//{{{ doTypeSelect() method
-		void doTypeSelect(String str)
+		void doTypeSelect(String str, boolean ignoreCase)
 		{
 			if(getSelectionCount() == 0)
-				doTypeSelect(str,0,getRowCount());
+				doTypeSelect(str,0,getRowCount(),ignoreCase);
 			else
 			{
 				int start = getMaxSelectionRow();
-				boolean retVal = doTypeSelect(str,start,getRowCount());
+				boolean retVal = doTypeSelect(str,start,getRowCount(),
+					ignoreCase);
 
 				if(!retVal)
 				{
 					// scan from selection to end failed, so
 					// scan from start to selection
-					doTypeSelect(str,0,start);
+					doTypeSelect(str,0,start,ignoreCase);
 				}
 			}
 		} //}}}
 
 		//{{{ doTypeSelect() method
-		private boolean doTypeSelect(String str, int start, int end)
+		private boolean doTypeSelect(String str, int start, int end,
+			boolean ignoreCase)
 		{
 			for(int i = start; i < end; i++)
 			{
@@ -777,7 +779,8 @@ class BrowserView extends JPanel
 				if(obj instanceof VFS.DirectoryEntry)
 				{
 					VFS.DirectoryEntry file = (VFS.DirectoryEntry)obj;
-					if(file.name.regionMatches(true,0,str,0,str.length()))
+					if(file.name.regionMatches(ignoreCase,
+						0,str,0,str.length()))
 					{
 						setSelectionRow(i);
 						scrollRowToVisible(i);

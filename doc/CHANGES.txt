@@ -15,6 +15,10 @@ contributing to this release.
 
 + File System Browser Changes:
 
+- In file dialog boxes, the 'File name' text field now supports
+  auto-completion. Previously auto-completion was only supported in the
+  browser view itself.
+
 - For some reason I can't remember now, the state of the 'Filter' check
   box was only being saved on the browser, and not the dialog box
   versions of this control. I have changed this so the state of the

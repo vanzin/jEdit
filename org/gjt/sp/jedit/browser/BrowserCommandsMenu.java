@@ -161,9 +161,18 @@ public class BrowserCommandsMenu extends JPopupMenu
 			JRadioButtonMenuItem mi = (JRadioButtonMenuItem)
 				encodingMenuItems.get(browser.currentEncoding);
 			if(mi != null)
+			{
 				mi.setSelected(true);
+				otherEncoding.setText(jEdit.getProperty(
+					"vfs.browser.commands.other-encoding.label"));
+			}
 			else
+			{
 				otherEncoding.setSelected(true);
+				otherEncoding.setText(jEdit.getProperty(
+					"vfs.browser.commands.other-encoding-2.label",
+					new String[] { browser.currentEncoding }));
+			}
 		}
 	} //}}}
 
@@ -210,17 +219,6 @@ public class BrowserCommandsMenu extends JPopupMenu
 			encodingMenu.add(mi);
 		}
 
-		if(encodingMenuItems.get(browser.currentEncoding) == null)
-		{
-			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
-				browser.currentEncoding);
-			mi.setActionCommand("encoding@" + browser.currentEncoding);
-			mi.addActionListener(actionHandler);
-			grp.add(mi);
-			encodingMenuItems.put(browser.currentEncoding,mi);
-			encodingMenu.add(mi);
-		}
-
 		String systemEncoding = System.getProperty("file.encoding");
 		if(encodingMenuItems.get(systemEncoding) == null)
 		{
@@ -235,8 +233,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 		encodingMenu.addSeparator();
 
-		otherEncoding = new JRadioButtonMenuItem(jEdit.getProperty(
-			"vfs.browser.commands.other-encoding.label"));
+		otherEncoding = new JRadioButtonMenuItem();
 		otherEncoding.setActionCommand("other-encoding");
 		otherEncoding.addActionListener(actionHandler);
 		grp.add(otherEncoding);

@@ -71,6 +71,10 @@ next-marker.shortcut=C+e C+PERIOD
 prev-bracket.shortcut=C+e C+OPEN_BRACKET
 next-bracket.shortcut=C+e C+CLOSE_BRACKET
 close-docking-area.shortcut=C+e C+BACK_QUOTE
+left-docking-area.shortcut=C+e C+LEFT
+top-docking-area.shortcut=C+e C+UP
+right-docking-area.shortcut=C+e C+RIGHT
+bottom-docking-area.shortcut=C+e C+DOWN
 #}}}
 
 #{{{ C+e X
@@ -91,10 +95,6 @@ select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
 expand-folds.shortcut=C+e ENTER
-left-docking-area.shortcut=C+e LEFT
-top-docking-area.shortcut=C+e UP
-right-docking-area.shortcut=C+e RIGHT
-bottom-docking-area.shortcut=C+e DOWN
 #}}}
 
 #{{{ C+m C+X

@@ -432,8 +432,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				public void run()
 				{
 					BrowserView view = browser.getBrowserView();
+					view.selectNone();
 					view.getTree().doTypeSelect(
-						filenameField.getText());
+						filenameField.getText(),
+						false);
 					VFS.DirectoryEntry[] files =
 						view.getSelectedFiles();
 					if(files.length != 0)
