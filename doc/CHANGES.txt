@@ -108,7 +108,8 @@ and Ryan Grove for contributing to this release.
   keyboard.
 
 - Enter an action name (or a substring) to invoke that action.
-  Completion popups are shown after a brief delay.
+
+- Press TAB for a completion popup.
 
 - Enter a repeat count then invoke an action using any means to repeat
   that action.
@@ -121,11 +122,14 @@ and Ryan Grove for contributing to this release.
   basis; for example, "!buffer.tabSize=4" changes the default tab size
   for all buffers to 4.
 
+- Buffer-local properties are documented in the user's guide.
+
 - Enter "<prop>=<value>" to set any other global property; for
   example, "view.showToolbar=false" hides the tool bar.
 
-- Note that property names are undocumented. You can get a list using
-  the Misc->Properties->jEdit Properties macro.
+- Note that global property names are undocumented, so this feature is
+  primarily for plugin developers. You can get a list using the
+  Misc->Properties->jEdit Properties macro.
 
 }}}
 {{{ User Interface
@@ -296,6 +300,11 @@ and Ryan Grove for contributing to this release.
   JDiff
   WhiteSpace
   XML
+
+- Constructor of EBMessage class now takes an Object, not an
+  EBComponent, and getSource() now returns an Object, not an
+  EBComponent. This could break any plugins that provide custom message
+  types.
 
 }}}
 {{{ API Enhancements

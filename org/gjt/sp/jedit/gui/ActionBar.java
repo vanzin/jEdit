@@ -69,18 +69,6 @@ public class ActionBar extends JPanel
 			add(close);
 		}
 
-		//{{{ Create the timer used by the completion popup
-		timer = new Timer(0,new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				complete();
-			}
-		});
-		timer.setRepeats(false);
-		timer.setInitialDelay(300);
-		//}}}
-
 		// if 'temp' is true, hide search bar after user is done with it
 		this.temp = temp;
 	} //}}}
@@ -107,7 +95,6 @@ public class ActionBar extends JPanel
 	private int repeatCount;
 	private HistoryTextField action;
 	private CompletionPopup popup;
-	private Timer timer;
 	private RolloverButton close;
 	private EditAction[] actions;
 	//}}}
@@ -264,18 +251,6 @@ public class ActionBar extends JPanel
 		}
 	} //}}}
 
-	//{{{ timerComplete() method
-	private void timerComplete()
-	{
-		if(popup == null)
-		{
-			timer.stop();
-			timer.start();
-		}
-		else
-			complete();
-	} //}}}
-
 	//}}}
 
 	//{{{ Inner classes
@@ -298,13 +273,15 @@ public class ActionBar extends JPanel
 		//{{{ insertUpdate() method
 		public void insertUpdate(DocumentEvent evt)
 		{
-			timerComplete();
+			if(popup != null)
+				complete();
 		} //}}}
 
 		//{{{ removeUpdate() method
 		public void removeUpdate(DocumentEvent evt)
 		{
-			timerComplete();
+			if(popup != null)
+				complete();
 		} //}}}
 
 		//{{{ changedUpdate() method
@@ -324,6 +301,16 @@ public class ActionBar extends JPanel
 			setSelectAllOnFocus(true);
 		}
 
+		public boolean isManagingFocus()
+		{
+			return false;
+		}
+
+		public boolean getFocusTraversalKeysEnabled()
+		{
+			return false;
+		}
+
 		public void processKeyEvent(KeyEvent evt)
 		{
 			evt = KeyEventWorkaround.processKeyEvent(evt);
@@ -338,7 +325,6 @@ public class ActionBar extends JPanel
 				{
 					super.processKeyEvent(evt);
 					repeat = true;
-					timer.stop();
 					repeatCount = Integer.parseInt(action.getText());
 				}
 				else
@@ -368,17 +354,25 @@ public class ActionBar extends JPanel
 						passToView(evt);
 						break;
 					}
+					else if(keyCode == KeyEvent.VK_TAB)
+					{
+						complete();
+					}
 					else if(keyCode == KeyEvent.VK_ESCAPE)
 					{
 						evt.consume();
-						if(temp)
-							view.removeToolBar(ActionBar.this);
 						if(popup != null)
 						{
 							popup.dispose();
 							popup = null;
+							action.requestFocus();
 						}
-						view.getEditPane().focusOnTextArea();
+						else
+						{
+							if(temp)
+								view.removeToolBar(ActionBar.this);
+							view.getEditPane().focusOnTextArea();
+						}
 						break;
 					}
 					else if((keyCode == KeyEvent.VK_UP

@@ -691,7 +691,7 @@ view.title=jEdit -\
 view.title.dirty=\ (modified)
 
 view.docking.close-tooltip=Hides the current docked window
-view.docking.menu-tooltip=Shows a menu of docking options
+view.docking.menu-tooltip=Docking options
 view.docking.menu-floating=Float
 view.docking.menu-top=Dock at Top
 view.docking.menu-left=Dock at Left
