@@ -6,6 +6,11 @@ JEDIT 4.0 VERSION HISTORY
 
 - Interilis syntax highlighting (Claude Eisenhut)
 
++ Enhancements
+
+- MacOS plugin version 1.2 adds an option pane with a few settings, and
+  some bug fixes and cleanups (Kris Kopicki)
+
 + Bug Fixes
 
 - Select Open File; press Enter first; then choose a file to open. Bang,
