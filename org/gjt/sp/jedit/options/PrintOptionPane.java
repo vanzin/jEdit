@@ -1,5 +1,8 @@
 /*
  * PrintOptionPane.java - Printing options panel
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,19 +22,22 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class PrintOptionPane extends AbstractOptionPane
 {
+	//{{{ PrintOptionPane constructor
 	public PrintOptionPane()
 	{
 		super("print");
-	}
+	} //}}}
 
-	// protected members
+	//{{{ _init() method
 	protected void _init()
 	{
 		/* Font */
@@ -56,53 +62,28 @@ public class PrintOptionPane extends AbstractOptionPane
 		printLineNumbers.setSelected(jEdit.getBooleanProperty("print.lineNumbers"));
 		addComponent(printLineNumbers);
 
-		/* Syntax highlighting */
-		style = new JCheckBox(jEdit.getProperty("options.print"
-			+ ".style"));
-		style.setSelected(jEdit.getBooleanProperty("print.style"));
-		addComponent(style);
-
+		/* Color */
 		color = new JCheckBox(jEdit.getProperty("options.print"
 			+ ".color"));
 		color.setSelected(jEdit.getBooleanProperty("print.color"));
 		addComponent(color);
+	} //}}}
 
-		addSeparator("options.print.margins");
-
-		/* Margins */
-		topMargin = new JTextField(jEdit.getProperty("print.margin.top"));
-		addComponent(jEdit.getProperty("options.print.margin.top"),topMargin);
-		leftMargin = new JTextField(jEdit.getProperty("print.margin.left"));
-		addComponent(jEdit.getProperty("options.print.margin.left"),leftMargin);
-		bottomMargin = new JTextField(jEdit.getProperty("print.margin.bottom"));
-		addComponent(jEdit.getProperty("options.print.margin.bottom"),bottomMargin);
-		rightMargin = new JTextField(jEdit.getProperty("print.margin.right"));
-		addComponent(jEdit.getProperty("options.print.margin.right"),rightMargin);
-	}
-
+	//{{{ _save() method
 	protected void _save()
 	{
 		jEdit.setFontProperty("print.font",font.getFont());
 		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
-		jEdit.setBooleanProperty("print.style",style.isSelected());
 		jEdit.setBooleanProperty("print.color",color.isSelected());
-		jEdit.setProperty("print.margin.top",topMargin.getText());
-		jEdit.setProperty("print.margin.left",leftMargin.getText());
-		jEdit.setProperty("print.margin.bottom",bottomMargin.getText());
-		jEdit.setProperty("print.margin.right",rightMargin.getText());
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private FontSelector font;
 	private JCheckBox printHeader;
 	private JCheckBox printFooter;
 	private JCheckBox printLineNumbers;
-	private JCheckBox style;
 	private JCheckBox color;
-	private JTextField topMargin;
-	private JTextField leftMargin;
-	private JTextField bottomMargin;
-	private JTextField rightMargin;
+	//}}}
 }
