@@ -617,7 +617,7 @@ public class Buffer
 	 * Returns the autosave file for this buffer. This may be null if
 	 * the file is non-local.
 	 */
-	public final File getAutosaveFile()
+	public File getAutosaveFile()
 	{
 		return autosaveFile;
 	} //}}}
@@ -626,7 +626,7 @@ public class Buffer
 	/**
 	 * Returns the name of this buffer. This method is thread-safe.
 	 */
-	public final String getName()
+	public String getName()
 	{
 		return name;
 	} //}}}
@@ -635,7 +635,7 @@ public class Buffer
 	/**
 	 * Returns the path name of this buffer. This method is thread-safe.
 	 */
-	public final String getPath()
+	public String getPath()
 	{
 		return path;
 	} //}}}
@@ -646,7 +646,7 @@ public class Buffer
 	 * Otherwise returns the file's path. This method is thread-safe.
 	 * @since jEdit 4.2pre1
 	 */
-	public final String getSymlinkPath()
+	public String getSymlinkPath()
 	{
 		return symlinkPath;
 	} //}}}
@@ -667,7 +667,7 @@ public class Buffer
 	 * {@link org.gjt.sp.jedit.jEdit#closeBuffer(View,Buffer)}.
 	 * This method is thread-safe.
 	 */
-	public final boolean isClosed()
+	public boolean isClosed()
 	{
 		return getFlag(CLOSED);
 	} //}}}
@@ -676,7 +676,7 @@ public class Buffer
 	/**
 	 * Returns true if the buffer is loaded. This method is thread-safe.
 	 */
-	public final boolean isLoaded()
+	public boolean isLoaded()
 	{
 		return !getFlag(LOADING);
 	} //}}}
@@ -687,7 +687,7 @@ public class Buffer
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
-	public final boolean isPerformingIO()
+	public boolean isPerformingIO()
 	{
 		return getFlag(LOADING) || getFlag(IO);
 	} //}}}
@@ -697,7 +697,7 @@ public class Buffer
 	 * Returns whether this buffer lacks a corresponding version on disk.
 	 * This method is thread-safe.
 	 */
-	public final boolean isNewFile()
+	public boolean isNewFile()
 	{
 		return getFlag(NEW_FILE);
 	} //}}}
@@ -707,7 +707,7 @@ public class Buffer
 	 * Sets the new file flag.
 	 * @param newFile The new file flag
 	 */
-	public final void setNewFile(boolean newFile)
+	public void setNewFile(boolean newFile)
 	{
 		setFlag(NEW_FILE,newFile);
 		if(!newFile)
@@ -718,7 +718,7 @@ public class Buffer
 	/**
 	 * Returns true if this file is 'untitled'. This method is thread-safe.
 	 */
-	public final boolean isUntitled()
+	public boolean isUntitled()
 	{
 		return getFlag(UNTITLED);
 	} //}}}
@@ -728,7 +728,7 @@ public class Buffer
 	 * Returns whether there have been unsaved changes to this buffer.
 	 * This method is thread-safe.
 	 */
-	public final boolean isDirty()
+	public boolean isDirty()
 	{
 		return getFlag(DIRTY);
 	} //}}}
@@ -738,7 +738,7 @@ public class Buffer
 	 * Returns true if this file is read only, false otherwise.
 	 * This method is thread-safe.
 	 */
-	public final boolean isReadOnly()
+	public boolean isReadOnly()
 	{
 		return getFlag(READ_ONLY);
 	} //}}}
@@ -749,7 +749,7 @@ public class Buffer
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
-	public final boolean isEditable()
+	public boolean isEditable()
 	{
 		return !(getFlag(READ_ONLY) || getFlag(IO) || getFlag(LOADING));
 	} //}}}
@@ -759,7 +759,7 @@ public class Buffer
 	 * Sets the read only flag.
 	 * @param readOnly The read only flag
 	 */
-	public final void setReadOnly(boolean readOnly)
+	public void setReadOnly(boolean readOnly)
 	{
 		setFlag(READ_ONLY,readOnly);
 	} //}}}
@@ -844,7 +844,7 @@ public class Buffer
 	 * The buffer is guaranteed not to change between calls to
 	 * {@link #readLock()} and {@link #readUnlock()}.
 	 */
-	public final void readLock()
+	public void readLock()
 	{
 		lock.readLock();
 	} //}}}
@@ -854,7 +854,7 @@ public class Buffer
 	 * The buffer is guaranteed not to change between calls to
 	 * {@link #readLock()} and {@link #readUnlock()}.
 	 */
-	public final void readUnlock()
+	public void readUnlock()
 	{
 		lock.readUnlock();
 	} //}}}
@@ -864,7 +864,7 @@ public class Buffer
 	 * Attempting to obtain read lock will block between calls to
 	 * {@link #writeLock()} and {@link #writeUnlock()}.
 	 */
-	public final void writeLock()
+	public void writeLock()
 	{
 		lock.writeLock();
 	} //}}}
@@ -874,7 +874,7 @@ public class Buffer
 	 * Attempting to obtain read lock will block between calls to
 	 * {@link #writeLock()} and {@link #writeUnlock()}.
 	 */
-	public final void writeUnlock()
+	public void writeUnlock()
 	{
 		lock.writeUnlock();
 	} //}}}
@@ -912,7 +912,7 @@ public class Buffer
 	 * @param offset The offset
 	 * @since jEdit 4.0pre1
 	 */
-	public final int getLineOfOffset(int offset)
+	public int getLineOfOffset(int offset)
 	{
 		try
 		{
@@ -1569,7 +1569,7 @@ public class Buffer
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
-	public final int getIndentSize()
+	public int getIndentSize()
 	{
 		return getIntegerProperty("indentSize",8);
 	} //}}}
@@ -1996,7 +1996,7 @@ public class Buffer
 	/**
 	 * Returns this buffer's edit mode. This method is thread-safe.
 	 */
-	public final Mode getMode()
+	public Mode getMode()
 	{
 		return mode;
 	} //}}}
@@ -2874,7 +2874,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * @deprecated Do not call this method, use {@link #getPath()}
 	 * instead.
 	 */
-	public final File getFile()
+	public File getFile()
 	{
 		return file;
 	} //}}}
@@ -3087,7 +3087,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Returns a vector of markers.
 	 * @since jEdit 3.2pre1
 	 */
-	public final Vector getMarkers()
+	public Vector getMarkers()
 	{
 		return markers;
 	} //}}}
@@ -3324,7 +3324,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Returns the next buffer in the list.
 	 */
-	public final Buffer getNext()
+	public Buffer getNext()
 	{
 		return next;
 	} //}}}
@@ -3333,7 +3333,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Returns the previous buffer in the list.
 	 */
-	public final Buffer getPrev()
+	public Buffer getPrev()
 	{
 		return prev;
 	} //}}}
@@ -3342,7 +3342,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Returns the position of this buffer in the buffer list.
 	 */
-	public final int getIndex()
+	public int getIndex()
 	{
 		int count = 0;
 		Buffer buffer = prev;
