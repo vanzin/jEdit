@@ -1002,6 +1002,16 @@ public class jEdit
 
 	//{{{ Action methods
 
+	//{{{ getActionContext() method
+	/**
+	 * Returns the action context used to store editor actions.
+	 * @since jEdit 4.2pre1
+	 */
+	public static ActionContext getActionContext()
+	{
+		return actionContext;
+	} //}}}
+
 	//{{{ addActionSet() method
 	/**
 	 * Adds a new action set to jEdit's list. Plugins probably won't
@@ -1010,13 +1020,7 @@ public class jEdit
 	 */
 	public static void addActionSet(ActionSet actionSet)
 	{
-		actionSets.addElement(actionSet);
-		actionSet.added = true;
-		String[] actions = actionSet.getActionNames();
-		for(int i = 0; i < actions.length; i++)
-		{
-			actionHash.put(actions[i],actionSet);
-		}
+		actionContext.addActionSet(actionSet);
 	} //}}}
 
 	//{{{ removeActionSet() method
@@ -1027,13 +1031,7 @@ public class jEdit
 	 */
 	public static void removeActionSet(ActionSet actionSet)
 	{
-		actionSets.removeElement(actionSet);
-		actionSet.added = false;
-		String[] actions = actionSet.getActionNames();
-		for(int i = 0; i < actions.length; i++)
-		{
-			actionHash.remove(actions[i]);
-		}
+		actionContext.removeActionSet(actionSet);
 	} //}}}
 
 	//{{{ getBuiltInActionSet() method
@@ -1053,9 +1051,7 @@ public class jEdit
 	 */
 	public static ActionSet[] getActionSets()
 	{
-		ActionSet[] retVal = new ActionSet[actionSets.size()];
-		actionSets.copyInto(retVal);
-		return retVal;
+		return actionContext.getActionSets();
 	} //}}}
 
 	//{{{ getAction() method
@@ -1065,11 +1061,7 @@ public class jEdit
 	 */
 	public static EditAction getAction(String name)
 	{
-		ActionSet set = (ActionSet)actionHash.get(name);
-		if(set == null)
-			return null;
-		else
-			return set.getAction(name);
+		return actionContext.getAction(name);
 	} //}}}
 
 	//{{{ getActionSetForAction() method
@@ -1081,14 +1073,7 @@ public class jEdit
 	 */
 	public static ActionSet getActionSetForAction(String action)
 	{
-		for(int i = 0; i < actionSets.size(); i++)
-		{
-			ActionSet set = (ActionSet)actionSets.elementAt(i);
-			if(set.contains(action))
-				return set;
-		}
-
-		return null;
+		return actionContext.getActionSetForAction(action);
 	} //}}}
 
 	//{{{ getActionSetForAction() method
@@ -1097,7 +1082,7 @@ public class jEdit
 	 */
 	public static ActionSet getActionSetForAction(EditAction action)
 	{
-		return getActionSetForAction(action.getName());
+		return actionContext.getActionSetForAction(action.getName());
 	} //}}}
 
 	//{{{ getActions() method
@@ -1106,11 +1091,13 @@ public class jEdit
 	 */
 	public static EditAction[] getActions()
 	{
-		ArrayList vec = new ArrayList();
-		for(int i = 0; i < actionSets.size(); i++)
-			((ActionSet)actionSets.elementAt(i)).getActions(vec);
-
-		return (EditAction[])vec.toArray(new EditAction[vec.size()]);
+		String[] names = actionContext.getActionNames();
+		EditAction[] actions = new EditAction[names.length];
+		for(int i = 0; i < actions.length; i++)
+		{
+			actions[i] = actionContext.getAction(names[i]);
+		}
+		return actions;
 	} //}}}
 
 	//{{{ getActionNames() method
@@ -1119,11 +1106,7 @@ public class jEdit
 	 */
 	public static String[] getActionNames()
 	{
-		ArrayList vec = new ArrayList();
-		for(int i = 0; i < actionSets.size(); i++)
-			((ActionSet)actionSets.elementAt(i)).getActionNames(vec);
-
-		return (String[])vec.toArray(new String[vec.size()]);
+		return actionContext.getActionNames();
 	} //}}}
 
 	//}}}
@@ -2313,8 +2296,6 @@ public class jEdit
 
 	//{{{ Package-private members
 
-	static Hashtable actionHash;
-
 	//{{{ updatePosition() method
 	/**
 	 * If buffer sorting is enabled, this repositions the buffer.
@@ -2433,37 +2414,6 @@ public class jEdit
 		in.close();
 	} //}}}
 
-	//{{{ loadActions() method
-	/**
-	 * Loads the specified action list.
-	 */
-	static boolean loadActions(String path, Reader in, ActionSet actionSet)
-	{
-		try
-		{
-			//Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
-
-			ActionListHandler ah = new ActionListHandler(path,actionSet);
-			XmlParser parser = new XmlParser();
-			parser.setHandler(ah);
-			parser.parse(null, null, in);
-			return true;
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,jEdit.class,e);
-		}
-
-		return false;
-	} //}}}
-
 	//{{{ pluginError() method
 	static void pluginError(final String path, String messageProp, Object[] args)
 	{
@@ -2492,7 +2442,7 @@ public class jEdit
 	private static Properties props;
 	private static EditServer server;
 	private static boolean background;
-	private static Vector actionSets;
+	private static ActionContext actionContext;
 	private static ActionSet builtInActionSet;
 	private static Vector pluginErrors;
 	private static Vector jars;
@@ -2635,8 +2585,17 @@ public class jEdit
 	private static void initMisc()
 	{
 		jars = new Vector();
-		actionHash = new Hashtable();
-		actionSets = new Vector();
+		actionContext = new ActionContext()
+		{
+			public void invokeAction(EventObject evt,
+				EditAction action)
+			{
+				View view = GUIUtilities.getView(
+					(Component)evt.getSource());
+				view.getInputHandler().invokeAction(action);
+			}
+		};
+
 		inputHandler = new DefaultInputHandler(null);
 
 		// Add our protocols to java.net.URL's list
@@ -2804,11 +2763,12 @@ public class jEdit
 	//{{{ initResources() method
 	private static void initResources()
 	{
-		builtInActionSet = new ActionSet(null,null);
+		builtInActionSet = new ActionSet(null,null,
+			jEdit.class.getResource("actions.xml"));
 		builtInActionSet.setLabel(getProperty("action-set.jEdit"));
-		builtInActionSet.load(jEdit.class.getResource("actions.xml"));
+		builtInActionSet.load();
 
-		addActionSet(builtInActionSet);
+		actionContext.addActionSet(builtInActionSet);
 
 		DockableWindowManager.loadDockableWindows(null,
 			jEdit.class.getResource("dockables.xml"));
@@ -3469,10 +3429,10 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		inputHandler.removeAllKeyBindings();
 
-		for(int i = 0; i < actionSets.size(); i++)
+		ActionSet[] actionSets = getActionSets();
+		for(int i = 0; i < actionSets.length; i++)
 		{
-			ActionSet set = (ActionSet)actionSets.get(i);
-			set.initKeyBindings();
+			actionSets[i].initKeyBindings();
 		}
 	} //}}}
 

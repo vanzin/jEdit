@@ -22,13 +22,13 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.JMenuItem;
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.*;
 import java.util.zip.*;
-import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 
@@ -85,6 +85,15 @@ public class PluginJAR
 	public ActionSet getActionSet()
 	{
 		return actions;
+	} //}}}
+
+	//{{{ getBrowserActionSet() method
+	/**
+	 * @since jEdit 4.2pre1
+	 */
+	public ActionSet getBrowserActionSet()
+	{
+		return browserActions;
 	} //}}}
 
 	//{{{ getPlugin() method
@@ -160,17 +169,6 @@ public class PluginJAR
 			String[] args = { t.toString() };
 			jEdit.pluginError(path,"plugin-error.start-error",args);
 		}
-	} //}}}
-
-	//{{{ getActionsURI() method
-	/**
-	 * Returns the location of the plugin's <code>actions.xml</code>
-	 * file.
-	 * @since jEdit 4.2pre1
-	 */
-	public URL getActionsURI()
-	{
-		return actionsURI;
 	} //}}}
 
 	//{{{ getDockablesURI() method
@@ -340,10 +338,10 @@ public class PluginJAR
 	private List properties;
 	private List classes;
 	private ActionSet actions;
+	private ActionSet browserActions;
 
 	private EditPlugin plugin;
 
-	private URL actionsURI;
 	private URL dockablesURI;
 	private URL servicesURI;
 
@@ -360,7 +358,14 @@ public class PluginJAR
 		if(cache.actionsURI != null)
 		{
 			actions = new ActionSet(this,
-				cache.cachedActionNames);
+				cache.cachedActionNames,
+				cache.actionsURI);
+		}
+		if(cache.browserActionsURI != null)
+		{
+			browserActions = new ActionSet(this,
+				cache.cachedBrowserActionNames,
+				cache.browserActionsURI);
 		}
 		if(cache.dockablesURI != null)
 		{
@@ -405,8 +410,11 @@ public class PluginJAR
 			String lname = name.toLowerCase();
 			if(lname.equals("actions.xml"))
 			{
-				actionsURI = classLoader.getResource(name);
-				cache.actionsURI = actionsURI;
+				cache.actionsURI = classLoader.getResource(name);
+			}
+			if(lname.equals("browser.actions.xml"))
+			{
+				cache.browserActionsURI = classLoader.getResource(name);
 			}
 			else if(lname.equals("dockables.xml"))
 			{
@@ -471,9 +479,9 @@ public class PluginJAR
 			}
 		}
 
-		if(actionsURI != null)
+		if(cache.actionsURI != null)
 		{
-			actions = new ActionSet(this,null);
+			actions = new ActionSet(this,null,cache.actionsURI);
 			actions.setLabel(jEdit.getProperty(
 				"action-set.plugin",
 				new String[] { label }));
@@ -481,6 +489,16 @@ public class PluginJAR
 			jEdit.addActionSet(actions);
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
+		}
+
+		if(cache.browserActionsURI != null)
+		{
+			browserActions = new ActionSet(this,null,
+				cache.browserActionsURI);
+			browserActions.load();
+			VFSBrowser.getActionContext().addActionSet(browserActions);
+			cache.cachedBrowserActionNames =
+				browserActions.getCacheableActionNames();
 		}
 
 		if(dockablesURI != null)

@@ -93,8 +93,9 @@ public abstract class EditAction
 	 * @param view The view
 	 * @since jEdit 2.7pre2
 	 */
-	public abstract void invoke(View view);
-	//}}}
+	public void invoke(View view)
+	{
+	} //}}}
 
 	//{{{ getView() method
 	/**
@@ -120,10 +121,10 @@ public abstract class EditAction
 	//{{{ isSelected() method
 	/**
 	 * If this edit action is a toggle, returns if it is selected or not.
-	 * @param view The view
-	 * @since jEdit 3.2pre5
+	 * @param comp The component
+	 * @since jEdit 4.2pre1
 	 */
-	public boolean isSelected(View view)
+	public boolean isSelected(Component comp)
 	{
 		return false;
 	} //}}}
@@ -186,14 +187,14 @@ public abstract class EditAction
 	 */
 	public static class Wrapper implements ActionListener
 	{
-		public Wrapper(String actionName)
+		/**
+		 * Creates a new action listener wrapper.
+		 * @since jEdit 4.2pre1
+		 */
+		public Wrapper(ActionContext context, String actionName)
 		{
+			this.context = context;
 			this.actionName = actionName;
-		}
-
-		public Wrapper(EditAction action)
-		{
-			this.action = action;
 		}
 
 		/**
@@ -206,17 +207,17 @@ public abstract class EditAction
 		 */
 		public void actionPerformed(ActionEvent evt)
 		{
-			InputHandler ih = jEdit.getActiveView()
-				.getInputHandler();
-			if(actionName != null)
-				ih.invokeAction(actionName);
-			else if(action != null)
-				ih.invokeAction(action);
+			EditAction action = context.getAction(actionName);
+			if(action == null)
+			{
+				Log.log(Log.WARNING,this,"Unknown action: "
+					+ actionName);
+			}
 			else
-				Log.log(Log.WARNING,this,"Nothing to do");
+				context.invokeAction(evt,action);
 		}
 
+		private ActionContext context;
 		private String actionName;
-		private EditAction action;
 	} //}}}
 }

@@ -93,7 +93,7 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 			{
 				menuItems.add(new EnhancedMenuItem(
 					jEdit.getProperty(obj + ".label"),
-					(String)obj));
+					(String)obj,jEdit.getActionContext()));
 			}
 			else if(obj instanceof Vector)
 			{

@@ -105,14 +105,16 @@ public class ActionSet
 	/**
 	 * Creates a new action set.
 	 * @param plugin The plugin
-	 * @param uri The actions.xml URI
 	 * @param cachedActionNames The list of cached action names
+	 * @param uri The actions.xml URI
 	 * @since jEdit 4.2pre1
 	 */
-	public ActionSet(PluginJAR plugin, String[] cachedActionNames)
+	public ActionSet(PluginJAR plugin, String[] cachedActionNames,
+		URL uri)
 	{
 		this();
 		this.plugin = plugin;
+		this.uri = uri;
 		if(cachedActionNames != null)
 		{
 			for(int i = 0; i < cachedActionNames.length; i++)
@@ -176,8 +178,8 @@ public class ActionSet
 	public void addAction(EditAction action)
 	{
 		actions.put(action.getName(),action);
-		if(added)
-			jEdit.actionHash.put(action.getName(),this);
+		if(context != null)
+			context.actionHash.put(action.getName(),this);
 	} //}}}
 
 	//{{{ removeAction() method
@@ -189,8 +191,8 @@ public class ActionSet
 	public void removeAction(String name)
 	{
 		actions.remove(name);
-		if(added)
-			jEdit.actionHash.remove(name);
+		if(context != null)
+			context.actionHash.remove(name);
 	} //}}}
 
 	//{{{ removeAllActions() method
@@ -200,10 +202,13 @@ public class ActionSet
 	 */
 	public void removeAllActions()
 	{
-		String[] actions = getActionNames();
-		for(int i = 0; i < actions.length; i++)
+		if(context != null)
 		{
-			jEdit.actionHash.remove(actions[i]);
+			String[] actions = getActionNames();
+			for(int i = 0; i < actions.length; i++)
+			{
+				context.actionHash.remove(actions[i]);
+			}
 		}
 		this.actions.clear();
 	} //}}}
@@ -368,21 +373,6 @@ public class ActionSet
 		loaded = true;
 		actions.clear();
 
-		load(plugin.getActionsURI());
-	} //}}}
-
-	//{{{ load() method
-	/**
-	 * Forces the action set to be loaded. Plugins and macros should not
-	 * call this method.
-	 * @param uri URI to load from
-	 * @since jEdit 4.2pre1
-	 */
-	public void load(URL uri)
-	{
-		loaded = true;
-		actions.clear();
-
 		try
 		{
 			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
@@ -408,7 +398,7 @@ public class ActionSet
 	} //}}}
 
 	//{{{ Package-private members
-	boolean added;
+	ActionContext context;
 
 	//{{{ getActions() method
 	void getActions(ArrayList vec)
@@ -434,6 +424,7 @@ public class ActionSet
 	private String label;
 	private Hashtable actions;
 	private PluginJAR plugin;
+	private URL uri;
 	private boolean loaded;
 
 	private static final Object placeholder = new Object();

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,9 @@
 package org.gjt.sp.jedit;
 
 import bsh.BshMethod;
+import bsh.EvalError;
+import bsh.NameSpace;
+import java.awt.Component;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;
 
@@ -75,10 +78,12 @@ public class BeanShellAction extends EditAction
 	} //}}}
 
 	//{{{ isSelected() method
-	public boolean isSelected(View view)
+	public boolean isSelected(Component comp)
 	{
 		if(isSelected == null)
 			return false;
+
+		NameSpace global = BeanShell.getNameSpace();
 
 		try
 		{
@@ -88,6 +93,13 @@ public class BeanShellAction extends EditAction
 				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
 					isSelected,false);
 			}
+
+			View view = GUIUtilities.getView(comp);
+
+			// undocumented hack to allow browser actions to work.
+			// XXX - clean up in 4.3
+			global.setVariable("_comp",comp);
+
 			return Boolean.TRUE.equals(BeanShell.runCachedBlock(
 				cachedIsSelected,view,null));
 		}
@@ -95,9 +107,25 @@ public class BeanShellAction extends EditAction
 		{
 			Log.log(Log.ERROR,this,e);
 
-			new BeanShellErrorDialog(view,e);
+			// dialogs fuck things up if a menu is visible, etc!
+			//new BeanShellErrorDialog(view,e);
+
+			// so that in the future we don't see streams of
+			// exceptions
+			isSelected = null;
 
 			return false;
+		}
+		finally
+		{
+			try
+			{
+				global.setVariable("_comp",null);
+			}
+			catch(EvalError err)
+			{
+				Log.log(Log.ERROR,this,err);
+			}
 		}
 	} //}}}
 

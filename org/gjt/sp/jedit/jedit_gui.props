@@ -1854,33 +1854,65 @@ vfs.browser.size=Use EA_SIZE_OR_TYPE instead
 vfs.browser.size-type=Size/Type
 vfs.browser.modified=Last modified
 
+#{{{ Actions
+vfs.browser.browse-window.label=Browse in New Window
+vfs.browser.browse.label=Browse
+vfs.browser.close.label=Close
+vfs.browser.delete.label=Delete...
+vfs.browser.home.icon=Home.png
+vfs.browser.home.label=Home Directory
+vfs.browser.insert.label=Insert
+vfs.browser.new-directory.icon=NewDir.png
+vfs.browser.new-directory.label=New Directory...
+vfs.browser.new-file.icon=New.png
+vfs.browser.new-file.label=New File
+vfs.browser.open.label=Open
+vfs.browser.other-encoding-2.label=Other ({0})...
+vfs.browser.other-encoding.label=Other...
+vfs.browser.reload.icon=Reload.png
+vfs.browser.reload.label=Reload Directory
+vfs.browser.rename.label=Rename...
+vfs.browser.roots.icon=Drive.png
+vfs.browser.roots.label=Root Directory
+vfs.browser.search-directory.icon=FindInDir.png
+vfs.browser.search-directory.label=Search in Directory...
+vfs.browser.show-hidden-files.label=Show Hidden Files
+vfs.browser.synchronize.icon=CurrentDir.png
+vfs.browser.synchronize.label=Directory of Current Buffer
+vfs.browser.up.icon=ParentDir.png
+vfs.browser.up.label=Parent Directory
+#}}}
+
+#{{{ Tool bar
+vfs.browser.toolbar-browser=vfs.browser.up \
+			    vfs.browser.reload \
+			    vfs.browser.roots \
+			    vfs.browser.home \
+			    vfs.browser.synchronize \
+			    vfs.browser.new-file \
+			    vfs.browser.new-directory \
+			    vfs.browser.search-directory
+vfs.browser.toolbar-dialog=vfs.browser.up \
+			   vfs.browser.reload \
+			   vfs.browser.roots \
+			   vfs.browser.home \
+			   vfs.browser.synchronize \
+			   vfs.browser.new-directory
+#}}}
+
 #{{{ Commands menu
 vfs.browser.commands.label=Commands
-
-vfs.browser.commands.close.label=Close
-vfs.browser.commands.open.label=Open
-vfs.browser.commands.open-in.label=Open in
-vfs.browser.commands.open-view.label=New View
-vfs.browser.commands.open-plain-view.label=New Plain View
-vfs.browser.commands.open-split.label=New Split
-vfs.browser.commands.insert.label=Insert
-vfs.browser.commands.browse.label=Browse
-vfs.browser.commands.browse-window.label=Browse in New Window
-vfs.browser.commands.choose.label=Choose
-vfs.browser.commands.delete.label=Delete...
-vfs.browser.commands.rename.label=Rename...
-vfs.browser.commands.up.label=Parent Directory
-vfs.browser.commands.reload.label=Reload Directory
-vfs.browser.commands.roots.label=Root Directory
-vfs.browser.commands.home.label=Home Directory
-vfs.browser.commands.synchronize.label=Directory of Current Buffer
-vfs.browser.commands.new-file.label=New File
-vfs.browser.commands.new-directory.label=New Directory...
-vfs.browser.commands.search-in-directory.label=Search in Directory...
-vfs.browser.commands.show-hidden-files.label=Show Hidden Files
 vfs.browser.commands.encoding.label=Encoding
-vfs.browser.commands.other-encoding.label=Other...
-vfs.browser.commands.other-encoding-2.label=Other ({0})...
+
+vfs.browser.open-in.label=Open in
+vfs.browser.open-in=vfs.browser.open-view \
+                    vfs.browser.open-plain-view \
+                    vfs.browser.open-split
+vfs.browser.open-view.label=New View
+vfs.browser.open-plain-view.label=New Plain View
+vfs.browser.open-split.label=New Split
+#}}}
+
 #}}}
 
 #{{{ Plugins menu
@@ -1895,17 +1927,6 @@ vfs.browser.favorites.label=Favorites
 vfs.browser.favorites.add-to-favorites.label=Add to Favorites
 vfs.browser.favorites.edit-favorites.label=Edit Favorites
 vfs.browser.favorites.no-favorites.label=No Favorites
-#}}}
-
-#{{{ Tool bar
-vfs.browser.commands.up.icon=ParentDir.png
-vfs.browser.commands.reload.icon=Reload.png
-vfs.browser.commands.roots.icon=Drive.png
-vfs.browser.commands.home.icon=Home.png
-vfs.browser.commands.synchronize.icon=CurrentDir.png
-vfs.browser.commands.new-file.icon=New.png
-vfs.browser.commands.new-directory.icon=NewDir.png
-vfs.browser.commands.search-in-directory.icon=FindInDir.png
 #}}}
 
 vfs.browser.dialog.open=Open

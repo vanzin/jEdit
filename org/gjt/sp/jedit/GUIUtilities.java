@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,12 +41,11 @@ import org.gjt.sp.util.Log;
  * The most frequently used members of this class are:
  *
  * <ul>
- * <li>{@link #loadMenu(String)}</li>
- * <li>{@link #loadMenuItem(String)}</li>
  * <li>{@link #loadIcon(String)}</li>
  * <li>{@link #confirm(Component,String,Object[],int,int)}</li>
  * <li>{@link #error(Component,String,Object[])}</li>
  * <li>{@link #message(Component,String,Object[])}</li>
+ * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li>
  * <li>{@link #showVFSFileDialog(View,String,int,boolean)}</li>
  * <li>{@link #loadGeometry(Window,String)}</li>
  * <li>{@link #saveGeometry(Window,String)}</li>
@@ -155,11 +154,18 @@ public class GUIUtilities
 
 	//{{{ loadMenu() method
 	/**
-	 * @deprecated Use loadMenu(name) instead
+	 * Creates a menu. The menu label is set from the
+	 * <code><i>name</i>.label</code> property. The menu contents is taken
+	 * from the <code><i>name</i></code> property, which is a whitespace
+	 * separated list of action names. An action name of <code>-</code>
+	 * inserts a separator in the menu.
+	 * @param name The menu name
+	 * @see #loadMenuItem(String)
+	 * @since jEdit 2.6pre2
 	 */
-	public static JMenu loadMenu(View view, String name)
+	public static JMenu loadMenu(String name)
 	{
-		return loadMenu(name);
+		return loadMenu(jEdit.getActionContext(),name);
 	} //}}}
 
 	//{{{ loadMenu() method
@@ -169,12 +175,14 @@ public class GUIUtilities
 	 * from the <code><i>name</i></code> property, which is a whitespace
 	 * separated list of action names. An action name of <code>-</code>
 	 * inserts a separator in the menu.
-	 * @param view The view to load the menu for
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The menu name
 	 * @see #loadMenuItem(String)
-	 * @since jEdit 2.6pre2
+	 * @since jEdit 4.2pre1
 	 */
-	public static JMenu loadMenu(String name)
+	public static JMenu loadMenu(ActionContext context, String name)
 	{
 		String customMenu = jEdit.getProperty(name + ".custom-menu");
 		if(customMenu != null)
@@ -186,16 +194,36 @@ public class GUIUtilities
 				return null;
 		}
 		else
-			return new EnhancedMenu(name);
+		{
+			return new EnhancedMenu(name,
+				jEdit.getProperty(name.concat(".label")),
+				context);
+		}
 	} //}}}
 
 	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
+	 
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
 	 */
 	public static JPopupMenu loadPopupMenu(String name)
+	{
+		return loadPopupMenu(jEdit.getActionContext(),name);
+	} //}}}
+
+	//{{{ loadPopupMenu() method
+	/**
+	 * Creates a popup menu.
+	 
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
+	 * @param name The menu name
+	 * @since jEdit 4.2pre1
+	 */
+	public static JPopupMenu loadPopupMenu(ActionContext context, String name)
 	{
 		JPopupMenu menu = new JPopupMenu();
 
@@ -209,7 +237,7 @@ public class GUIUtilities
 				if(menuItemName.equals("-"))
 					menu.addSeparator();
 				else
-					menu.add(loadMenuItem(menuItemName,false));
+					menu.add(loadMenuItem(context,menuItemName,false));
 			}
 		}
 
@@ -228,7 +256,7 @@ public class GUIUtilities
 	 */
 	public static JMenuItem loadMenuItem(String name)
 	{
-		return loadMenuItem(name,true);
+		return loadMenuItem(jEdit.getActionContext(),name,true);
 	} //}}}
 
 	//{{{ loadMenuItem() method
@@ -240,8 +268,24 @@ public class GUIUtilities
 	 */
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
+		return loadMenuItem(jEdit.getActionContext(),name,setMnemonic);
+	} //}}}
+
+	//{{{ loadMenuItem() method
+	/**
+	 * Creates a menu item.
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
+	 * @param name The menu item name
+	 * @param setMnemonic True if the menu item should have a mnemonic
+	 * @since jEdit 4.2pre1
+	 */
+	public static JMenuItem loadMenuItem(ActionContext context, String name,
+		boolean setMnemonic)
+	{
 		if(name.startsWith("%"))
-			return loadMenu(name.substring(1));
+			return loadMenu(context,name.substring(1));
 
 		String label = jEdit.getProperty(name + ".label");
 		if(label == null)
@@ -259,9 +303,9 @@ public class GUIUtilities
 
 		JMenuItem mi;
 		if(jEdit.getBooleanProperty(name + ".toggle"))
-			mi = new EnhancedCheckBoxMenuItem(label,name);
+			mi = new EnhancedCheckBoxMenuItem(label,name,context);
 		else
-			mi = new EnhancedMenuItem(label,name);
+			mi = new EnhancedMenuItem(label,name,context);
 
 		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
@@ -275,6 +319,20 @@ public class GUIUtilities
 	 * @param name The toolbar name
 	 */
 	public static JToolBar loadToolBar(String name)
+	{
+		return loadToolBar(jEdit.getActionContext(),name);
+	} //}}}
+
+	//{{{ loadToolBar() method
+	/**
+	 * Creates a toolbar.
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
+	 * @param name The toolbar name
+	 * @since jEdit 4.2pre1
+	 */
+	public static JToolBar loadToolBar(ActionContext context, String name)
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
@@ -290,7 +348,7 @@ public class GUIUtilities
 					toolBar.add(Box.createHorizontalStrut(12));
 				else
 				{
-					JButton b = loadToolButton(button);
+					JButton b = loadToolButton(context,button);
 					if(b != null)
 						toolBar.add(b);
 				}
@@ -310,6 +368,25 @@ public class GUIUtilities
 	 * @param name The name of the button
 	 */
 	public static EnhancedButton loadToolButton(String name)
+	{
+		return loadToolButton(jEdit.getActionContext(),name);
+	} //}}}
+
+	//{{{ loadToolButton() method
+	/**
+	 * Loads a tool bar button. The tooltip is constructed from
+	 * the <code><i>name</i>.label</code> and
+	 * <code><i>name</i>.shortcut</code> properties and the icon is loaded
+	 * from the resource named '/org/gjt/sp/jedit/icons/' suffixed
+	 * with the value of the <code><i>name</i>.icon</code> property.
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
+	 * @param name The name of the button
+	 * @since jEdit 4.2pre1
+	 */
+	public static EnhancedButton loadToolButton(ActionContext context,
+		String name)
 	{
 		String label = jEdit.getProperty(name + ".label");
 
@@ -342,7 +419,7 @@ public class GUIUtilities
 				: "") + ")";
 		}
 
-		return new EnhancedButton(icon,toolTip,name);
+		return new EnhancedButton(icon,toolTip,name,context);
 	} //}}}
 
 	//{{{ prettifyMenuLabel() method
@@ -1177,12 +1254,15 @@ public class GUIUtilities
 		return (p instanceof JDialog) ? (JDialog) p : null;
 	} //}}}
 
-	//{{{ getView() method
+	//{{{ getComponentParent() method
 	/**
-	 * Finds the view parent of the specified component.
-	 * @since jEdit 4.0pre2
+	 * Finds a parent of the specified component.
+	 * @param comp The component
+	 * @param clazz Looks for a parent with this class (exact match, not
+	 * derived).
+	 * @since jEdit 4.2pre1
 	 */
-	public static View getView(Component comp)
+	public static Component getComponentParent(Component comp, Class clazz)
 	{
 		for(;;)
 		{
@@ -1194,15 +1274,14 @@ public class GUIUtilities
 					comp = real;
 			}
 
-			if(comp instanceof View)
-				return (View)comp;
+			if(comp.getClass().equals(clazz))
+				return comp;
 			else if(comp instanceof JPopupMenu)
 				comp = ((JPopupMenu)comp).getInvoker();
 			else if(comp instanceof FloatingWindowContainer)
 			{
-				return ((FloatingWindowContainer)comp)
-					.getDockableWindowManager()
-					.getView();
+				comp = ((FloatingWindowContainer)comp)
+					.getDockableWindowManager();
 			}
 			else if(comp != null)
 				comp = comp.getParent();
@@ -1210,6 +1289,16 @@ public class GUIUtilities
 				break;
 		}
 		return null;
+	} //}}}
+
+	//{{{ getView() method
+	/**
+	 * Finds the view parent of the specified component.
+	 * @since jEdit 4.0pre2
+	 */
+	public static View getView(Component comp)
+	{
+		return (View)getComponentParent(comp,View.class);
 	} //}}}
 
 	//{{{ Package-private members

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,10 +40,12 @@ public class EnhancedMenuItem extends JMenuItem
 	 * GUIUtilities.loadMenuItem() instead.
 	 * @param label The menu item label
 	 * @param action The edit action
-	 * @param actionCommand The action command
+	 * @param context An action context
+	 * @since jEdit 4.2pre1
 	 */
-	public EnhancedMenuItem(String label, String action)
+	public EnhancedMenuItem(String label, String action, ActionContext context)
 	{
+		this.context = context;
 		this.action = action;
 		this.shortcut = getShortcut();
 		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
@@ -57,7 +59,7 @@ public class EnhancedMenuItem extends JMenuItem
 		if(action != null)
 		{
 			setEnabled(true);
-			addActionListener(new EditAction.Wrapper(action));
+			addActionListener(new EditAction.Wrapper(context,action));
 			addMouseListener(new MouseHandler());
 		}
 		else
@@ -107,6 +109,7 @@ public class EnhancedMenuItem extends JMenuItem
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private ActionContext context;
 	private String shortcut;
 	private String action;
 	//}}}

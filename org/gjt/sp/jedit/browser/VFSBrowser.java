@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import bsh.EvalError;
+import bsh.NameSpace;
 import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -31,9 +33,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -123,6 +123,16 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			wm.addDockableWindow("vfs.browser");
 			jEdit.unsetProperty("vfs.browser.path.tmp");
 		}
+	} //}}}
+
+	//{{{ getActionContext() method
+	/**
+	 * Returns the browser action context.
+	 * @since jEdit 4.2pre1
+	 */
+	public static ActionContext getActionContext()
+	{
+		return actionContext;
 	} //}}}
 
 	//{{{ VFSBrowser constructor
@@ -956,6 +966,62 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	//{{{ Private members
 
+	private static ActionContext actionContext;
+
+	static
+	{
+		actionContext = new ActionContext()
+		{
+			public void invokeAction(EventObject evt,
+				EditAction action)
+			{
+				VFSBrowser browser = (VFSBrowser)
+					GUIUtilities.getComponentParent(
+					(Component)evt.getSource(),
+					VFSBrowser.class);
+
+				// in the future we will want something better,
+				// eg. having an 'evt' object passed to
+				// EditAction.invoke().
+
+				// for now, since all browser actions are
+				// written in beanshell we set the 'browser'
+				// variable directly.
+				NameSpace global = BeanShell.getNameSpace();
+				try
+				{
+					global.setVariable("browser",
+						browser);
+					global.setVariable("files",
+						browser.getSelectedFiles());
+
+					action.invoke(browser.getView());
+				}
+				catch(EvalError err)
+				{
+					Log.log(Log.ERROR,this,err);
+				}
+				finally
+				{
+					try
+					{
+						global.setVariable("browser",null);
+						global.setVariable("files",null);
+					}
+					catch(EvalError err)
+					{
+						Log.log(Log.ERROR,this,err);
+					}
+				}
+			}
+		};
+
+		ActionSet builtInActionSet = new ActionSet(null,null,
+			jEdit.class.getResource("browser.actions.xml"));
+		builtInActionSet.load();
+		actionContext.addActionSet(builtInActionSet);
+	}
+
 	//{{{ Instance variables
 	private EventListenerList listenerList;
 	private View view;
@@ -967,8 +1033,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private HistoryTextField filterField;
 	private Box toolbarBox;
 	private JToolBar toolbar;
-	private JButton up, reload, roots, home, synchronize,
-		newFile, newDirectory, searchInDirectory;
 	private BrowserView browserView;
 	private RE filenameFilter;
 	private int mode;
@@ -1001,50 +1065,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ createToolBar() method
 	private JToolBar createToolBar()
 	{
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
-
-		toolBar.add(up = createToolButton("up"));
-		toolBar.add(reload = createToolButton("reload"));
-		toolBar.add(roots = createToolButton("roots"));
-		toolBar.add(home = createToolButton("home"));
-		toolBar.add(synchronize = createToolButton("synchronize"));
 		if(mode == BROWSER)
-			toolBar.add(newFile = createToolButton("new-file"));
-		toolBar.add(newDirectory = createToolButton("new-directory"));
-		if(mode == BROWSER)
-			toolBar.add(searchInDirectory = createToolButton("search-in-directory"));
-
-		return toolBar;
-	} //}}}
-
-	//{{{ createToolButton() method
-	private JButton createToolButton(String name)
-	{
-		JButton button = new RolloverButton();
-		String prefix = "vfs.browser.commands.";
-
-		String iconName = jEdit.getProperty(
-			prefix + name + ".icon");
-		if(iconName != null)
-		{
-			Icon icon = GUIUtilities.loadIcon(iconName);
-			if(icon != null)
-				button.setIcon(icon);
-			else
-			{
-				Log.log(Log.ERROR,this,"Missing icon: "
-					+ iconName);
-			}
-		}
+			return GUIUtilities.loadToolBar(actionContext,
+				"vfs.browser.toolbar-browser");
 		else
-			Log.log(Log.ERROR,this,"Missing icon name: " + name);
-
-		button.setToolTipText(jEdit.getProperty(prefix + name + ".label"));
-
-		button.addActionListener(new ActionHandler());
-
-		return button;
+			return GUIUtilities.loadToolBar(actionContext,
+				"vfs.browser.toolbar-dialog");
 	} //}}}
 
 	//{{{ propertiesChanged() method
@@ -1181,28 +1207,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 				browserView.focusOnFileView();
 			}
-			else if(source == up)
-			{
-				VFS vfs = VFSManager.getVFSForPath(path);
-				setDirectory(vfs.getParentOfPath(path));
-			}
-			else if(source == reload)
-				reloadDirectory();
-			else if(source == roots)
-				rootDirectory();
-			else if(source == home)
-				setDirectory(System.getProperty("user.home"));
-			else if(source == synchronize)
-			{
-				Buffer buffer = view.getBuffer();
-				setDirectory(buffer.getDirectory());
-			}
-			else if(source == newFile)
-				newFile();
-			else if(source == newDirectory)
-				mkdir();
-			else if(source == searchInDirectory)
-				searchInDirectory();
 		}
 	} //}}}
 
@@ -1235,7 +1239,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			{
 				if(!popup.isVisible())
 				{
-					// Update 'show hidden files' check box
 					popup.update();
 
 					GUIUtilities.showPopupMenu(
