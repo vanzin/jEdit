@@ -43,9 +43,16 @@ import org.gjt.sp.util.*;
 
 /**
  * An in-memory copy of an open file.
- * Note that only very few methods in this class are thread safe; namely,
- * those that deal with obtaining buffer contents (<code>getText()</code>,
- * <code>getLineStartOffset()</code>, and so on).
+ *
+ * This class is partially thread-safe, however you must pay attention to a few
+ * very important issues:
+ * <ul>
+ * <li>Changes to a buffer can only be made from the AWT thread.
+ * <li>When accessing the buffer from another thread, you must
+ * grab a read lock if you plan on performing more than one call, to ensure that
+ * the buffer contents are not changed by the AWT thread for the duration of the
+ * lock.
+ * <li>
  *
  * @author Slava Pestov
  * @version $Id$
@@ -3148,10 +3155,6 @@ public class Buffer implements EBComponent
 		parseBufferLocalProperties();
 		setMode();
 
-		int collapseFolds = getIntegerProperty("collapseFolds",0);
-		if(collapseFolds != 0)
-			offsetMgr.expandFolds(collapseFolds);
-
 		if(parseFully)
 		{
 			for(int i = 0; i < offsetMgr.getLineCount(); i++)
@@ -3404,6 +3407,10 @@ public class Buffer implements EBComponent
 		if(oldFoldHandler != null)
 		{
 			offsetMgr.lineInfoChangedFrom(0);
+
+			int collapseFolds = getIntegerProperty("collapseFolds",0);
+			offsetMgr.expandFolds(collapseFolds);
+
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}

@@ -3306,7 +3306,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 
 		if(selection.size() != 0)
-			setSelectedText("");
+			setSelectedText(null);
 		else
 		{
 			if(caret == 0)
@@ -4946,29 +4946,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
-	//{{{ foldStructureChanged() method
-	void foldStructureChanged()
-	{
-		chunkCache.invalidateAll();
-
-		// recalculate first line
-		while(!foldVisibilityManager.isLineVisible(physFirstLine)
-			&& physFirstLine != 0)
-			physFirstLine--;
-
-		setFirstLine(physicalToVirtual(physFirstLine));
-
-		// update scroll bars because the number of
-		// virtual lines might have changed
-		updateScrollBars();
-
-		recalculateLastPhysicalLine();
-
-		// repaint gutter and painter
-		gutter.repaint();
-		painter.repaint();
-	} //}}}
-
 	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
@@ -4980,6 +4957,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		chunkCache.recalculateVisibleLines();
 		propertiesChanged();
+	} //}}}
+
+	//{{{ foldStructureChanged() method
+	void foldStructureChanged()
+	{
+		chunkCache.invalidateAll();
+
+		// physFirstLine should not be invisible
+		while(!foldVisibilityManager.isLineVisible(physFirstLine)
+			&& physFirstLine != 0)
+			physFirstLine--;
+
+		setFirstLine(physicalToVirtual(physFirstLine));
+
+		// update scroll bars because the number of virtual lines might
+		// have changed even if first line didn't change
+		updateScrollBars();
+
+		recalculateLastPhysicalLine();
+
+		// repaint gutter and painter
+		gutter.repaint();
+		painter.repaint();
 	} //}}}
 
 	//{{{ getSubregionOfOffset() method

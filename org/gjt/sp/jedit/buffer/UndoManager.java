@@ -208,6 +208,13 @@ public class UndoManager
 				rem.length += length;
 				return;
 			}
+			else if(offset + length == rem.offset)
+			{
+				rem.str = text.concat(rem.str);
+				rem.length += length;
+				rem.offset = offset;
+				return;
+			}
 		}
 
 		Remove rem = new Remove(offset,length,text,clearDirty);

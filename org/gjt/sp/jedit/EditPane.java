@@ -567,6 +567,8 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
+				textArea.getFoldVisibilityManager()
+					.foldStructureChanged();
 				textArea.repaint();
 
 				if(view.getEditPane() == this)

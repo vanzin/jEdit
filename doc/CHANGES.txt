@@ -1,6 +1,6 @@
 JEDIT 4.0 VERSION HISTORY
 
-* Version 4.0pre8
+* Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 
 + Bug Fixes
 
@@ -22,6 +22,16 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed another soft wrap bug with syntax highlighting
 - Middle-mouse-drag (quick copy) failed if the selected region ended or
   began at the caret position
+- Changed behavior of numeric keypad keys once again. Since some Java
+  versions have a broken Toolkit.getLockingKeyState() (hence there is
+  no reliable way to know of NumLock is on), they now work as follows:
+  - If an action is bound to a key, the action is executed when the key
+    is pressed.
+  - If no action is bound, the character is inserted when the key is
+    pressed.
+- Cleaned up handling of changing fold handlers and 'collapsedFolds'
+  property. This should fix a few obscure bugs
+- Consecutive backspaces of characters would not be merged into one undo
 
 + API Changes
 
