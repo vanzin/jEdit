@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,32 +59,32 @@ public class IndentFoldHandler extends FoldHandler
 
 		int whitespace = 0;
 
-		if(count == 0)
+		boolean seenNonWhiteSpace = false;
+
+loop:		for(int i = 0; i < count; i++)
 		{
-			// empty line. inherit previous line's fold level
-			if(lineIndex != 0)
-				whitespace = buffer.getFoldLevel(lineIndex - 1);
-			else
-				whitespace = 0;
-		}
-		else
-		{
-loop:			for(int i = 0; i < count; i++)
+			switch(seg.array[offset + i])
 			{
-				switch(seg.array[offset + i])
-				{
-				case ' ':
-					whitespace++;
-					break;
-				case '\t':
-					whitespace += (tabSize - whitespace % tabSize);
-					break;
-				default:
-					break loop;
-				}
+			case ' ':
+				whitespace++;
+				break;
+			case '\t':
+				whitespace += (tabSize - whitespace % tabSize);
+				break;
+			default:
+				seenNonWhiteSpace = true;
+				break loop;
 			}
 		}
 
-		return whitespace;
+		if(!seenNonWhiteSpace)
+		{
+			// empty line. inherit previous line's fold level
+			if(lineIndex != 0)
+				return buffer.getFoldLevel(lineIndex - 1);
+			else
+				return 0;
+		}
+			return whitespace;
 	} //}}}
 }
