@@ -132,7 +132,7 @@ public class Mode
 		//if(jEdit.getBooleanProperty(prefix + "customSettings"))
 		//{
 			String property = jEdit.getProperty(prefix + key);
-			if(property != null)
+			if(property != null && property.length() != 0)
 			{
 				Object value;
 				try
@@ -212,7 +212,13 @@ public class Mode
 	 */
 	public void setProperties(Hashtable props)
 	{
+		String filenameGlob = (String)getProperty("filenameGlob");
+		String firstlineGlob = (String)getProperty("firstlineGlob");
 		this.props = props;
+		if(filenameGlob != null)
+			props.put("filenameGlob",filenameGlob);
+		if(firstlineGlob != null)
+			props.put("firstlineGlob",firstlineGlob);
 	} //}}}
 
 	//{{{ accept() method

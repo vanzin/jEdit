@@ -769,6 +769,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		paintHighlight(gfx,virtualLine,physicalLine,y,valid,collapsedFold);
 
+		Color bgColor;
+		if(collapsedFold)
+			bgColor = foldedLineColor;
+		else if(textArea.selection == null && lineHighlight)
+			bgColor = lineHighlightColor;
+		else
+			bgColor = getBackground();
+
 		if(maxLineLen != 0 && wrapGuide)
 		{
 			gfx.setColor(wrapGuideColor);
@@ -791,7 +799,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				.getLineInfo(virtualLine,physicalLine).chunks;
 
 			if(chunks != null)
-				x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine,getWidth());
+			{
+				x += TextUtilities.paintChunkList(chunks,gfx,x,
+					baseLine,getWidth(),bgColor);
+			}
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);
@@ -818,7 +829,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(physicalLine == textArea.getCaretLine()
 				&& textArea.isCaretVisible())
-				paintCaret(gfx,physicalLine,y);
+				paintCaret(gfx,physicalLine,y,bgColor);
 		}
 
 		return x;
@@ -826,8 +837,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ paintHighlight() method
 	private void paintHighlight(Graphics2D gfx, int virtualLine,
-		int physicalLine, int y, boolean valid,
-		boolean collapsedFold)
+		int physicalLine, int y, boolean valid, boolean collapsedFold)
 	{
 		if(valid)
 		{
@@ -909,7 +919,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintCaret() method
-	private void paintCaret(Graphics2D gfx, int physicalLine, int y)
+	private void paintCaret(Graphics2D gfx, int physicalLine, int y,
+		Color bgColor)
 	{
 		int offset = textArea.getCaretPosition()
 			- textArea.getLineStartOffset(physicalLine);
@@ -925,11 +936,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		else if(blockCaret)
 		{
-			Composite com = gfx.getComposite();
-			gfx.setComposite(AlphaComposite.getInstance(
-				AlphaComposite.SRC_OVER,0.6f));
-			gfx.fillRect(caretX,y,charWidth,height);
-			gfx.setComposite(com);
+			gfx.setXORMode(bgColor);
+			gfx.fillRect(caretX,y,fm.charWidth('w'),height);
+			gfx.setPaintMode();
 		}
 		else
 		{

@@ -94,6 +94,8 @@ defaults.
 - Changed some tree cell renderers to work around problems experienced
   on MacOS X
 - Fixed possible ArrayIndexOutOfBounds exception when closing a view
+- File name and first line globs were not shown in the 'Mode specific'
+  option pane
 
 + API Changes
 

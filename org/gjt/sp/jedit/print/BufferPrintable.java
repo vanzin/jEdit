@@ -166,7 +166,8 @@ print_loop:	for(;;)
 				TextUtilities.paintChunkList(line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
-					(float)(pageWidth - lineNumberWidth));
+					(float)(pageWidth - lineNumberWidth),
+					Color.white);
 			}
 
 			if(currentPhysicalLine == buffer.getLineCount()

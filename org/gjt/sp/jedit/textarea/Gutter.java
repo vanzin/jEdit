@@ -68,9 +68,8 @@ public class Gutter extends JComponent implements SwingConstants
 		int lineHeight = textArea.getPainter().getFontMetrics()
 			.getHeight();
 
-		int firstLine = clip.y / lineHeight + textArea.getFirstLine();
-		int lastLine = (clip.y + clip.height - 1) / lineHeight
-			+ textArea.getFirstLine();
+		int firstLine = clip.y / lineHeight;
+		int lastLine = (clip.y + clip.height - 1) / lineHeight;
 
 		FontMetrics pfm = textArea.getPainter().getFontMetrics();
 		Color fg = getForeground();
@@ -84,19 +83,12 @@ public class Gutter extends JComponent implements SwingConstants
 		int y = (clip.y - clip.y % lineHeight);
 
 		Buffer buffer = textArea.getBuffer();
-
-		FoldVisibilityManager foldVisibilityManager
-			= textArea.getFoldVisibilityManager();
-
-		int lastValidLine = (lastLine >= foldVisibilityManager.getVirtualLineCount())
-			? foldVisibilityManager.getVirtualLineCount() - 1 : lastLine;
+		textArea.chunkCache.updateChunksUpTo(lastLine);
 
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
-			boolean valid = (line >= firstLine && line <= lastValidLine);
-
-			//{{{ Paint plugin highlights
+			/* //{{{ Paint plugin highlights
 			if(highlights.size() != 0)
 			{
 				for(int i = 0; i < highlights.size(); i++)
@@ -118,21 +110,25 @@ public class Gutter extends JComponent implements SwingConstants
 						i--;
 					}
 				}
-			} //}}}
+			} //}}} */
 
-			if(!valid)
+			ChunkCache.LineInfo info = textArea.chunkCache
+				.getLineInfoForScreenLine(line);
+			int physicalLine = info.physicalLine;
+
+			// Skip lines beyond EOL, and wrapped lines
+			if(physicalLine == -1)
 				return;
 
-			int physicalLine = foldVisibilityManager
-				.virtualToPhysical(line);
-
 			//{{{ Paint fold triangles
-			if(physicalLine != buffer.getLineCount() - 1
+			if(info.subregion == 0
+				&& physicalLine != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine))
 			{
 				int _y = y + lineHeight / 2;
 				gfx.setColor(foldColor);
-				if(foldVisibilityManager.isLineVisible(physicalLine + 1))
+				if(textArea.getFoldVisibilityManager()
+					.isLineVisible(physicalLine + 1))
 				{
 					gfx.drawLine(1,_y - 3,10,_y - 3);
 					gfx.drawLine(2,_y - 2,9,_y - 2);
@@ -203,7 +199,7 @@ public class Gutter extends JComponent implements SwingConstants
 			} //}}}
 
 			//{{{ Paint line numbers
-			if(expanded)
+			if(info.subregion == 0 && expanded)
 			{
 				String number = Integer.toString(physicalLine + 1);
 
@@ -227,7 +223,9 @@ public class Gutter extends JComponent implements SwingConstants
 				{
 					gfx.setColor(currentLineHighlight);
 				}
-				else if (interval > 1 && (line + 1) % interval == 0)
+				else if (interval > 1 && (line
+					+ textArea.getFirstLine() + 1)
+					% interval == 0)
 					gfx.setColor(intervalHighlight);
 				else
 					gfx.setColor(fg);

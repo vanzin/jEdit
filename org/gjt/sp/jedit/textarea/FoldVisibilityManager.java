@@ -603,8 +603,9 @@ public class FoldVisibilityManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
-					if(/* buffer._isLineVisible(i,index) && */
+					if((buffer._isLineVisible(i,index) &&
 						buffer.getFoldLevel(i) < initialFoldLevel)
+						|| i == buffer._getVirtualLineCount(index) - 1)
 					{
 						end = i - 1;
 						break;
