@@ -214,7 +214,7 @@
       jEdit Plugin Central, use the <guimenuitem>Plugin Manager</guimenuitem>guimenuitem>
       feature on jEdit's <guimenu>Plugin</guimenu> menu. You can also get more
       detailed descriptions of the plugins from the <ulink
-      ulink="http://plugins.jedit.org">Plugin Central</ulink> web site.
+      url="http://plugins.jedit.org">Plugin Central</ulink> web site.
     </para>
   </answer>
 </qandaentry>

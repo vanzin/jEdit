@@ -103,6 +103,7 @@
 		</para>
 	</question>
 	<answer>
+  
 		<para>
 			You need to specify the <userinput>-jar</userinput> option for the Java
 			application loader so that the loader will search the installation archive
@@ -182,7 +183,46 @@
 	</answer>
 </qandaentry>
 
+</qandadiv>
 
+<qandadiv id="install-mac">
+  <title>Install jEdit on MacOS</title>
+  <qandaentry> 
+    <question id="install.mac9-basic">
+      <para>How do I install jEdit on MacOS 8 or MacOS 9?</para>
+    </question>
+    <answer>
+      <para>
+        To install Jedit on Mac OS 9.1 and earlier download JBinary which 
+        is part of the MRJ SDK 2.2 package available from Apple. Once 
+        you have installed JBinary do the following:
+      </para>  
+      <procedure>
+        <step><para>Drag the jEdit installer to JBinary and JBinary 
+        will launch.</para></step>
+        <step><para>In the Command window in the Class path box replace 
+        <userinput>jedit322install,</userinput> with 
+        <userinput>installer.Install</userinput>.</para></step>
+        <step><para>Then click the Run button. The installer will 
+        install jEdit on your system.</para></step>
+      </procedure>
+      <para>
+        Once you have completed installing jEdit locate the jedit.jar 
+        file and do the following:
+      </para>  
+      <procedure>
+        <step><para>Drag the <filename>jedit.jar</filename> to JBinary 
+        and JBinary will launch.</para></step>
+        <step><para>In the Command window in the Class path box replace 
+        <userinput>jedit</userinput> with 
+        <userinput>org.gjt.sp.jedit.jEdit</userinput>.</para></step>
+        <step><para>Then click the Save settings button. It will ask 
+        for an application name and will create a double-clickable icon 
+        on your desktop.</para></step>
+        <step><para>Double-click on your icon to launch jEdit.</para></step>
+       </procedure>
+     </answer>
+   </qandaentry>  
 
 </qandadiv>
 
