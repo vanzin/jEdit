@@ -94,11 +94,24 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				if(buffer.isFoldStart(physicalLine))
 				{
+					int _y = y + lineHeight / 2;
 					gfx.setColor(foldColor);
 					if(buffer.isLineVisible(physicalLine + 1))
-						gfx.drawRect(2,y + (lineHeight - 6) / 2,5,5);
+					{
+						gfx.drawLine(1,_y - 3,10,_y - 3);
+						gfx.drawLine(2,_y - 2,9,_y - 2);
+						gfx.drawLine(3,_y - 1,8,_y - 1);
+						gfx.drawLine(4,_y,7,_y);
+						gfx.drawLine(5,_y + 1,6,_y + 1);
+					}
 					else
-						gfx.fillRect(2,y + (lineHeight - 6) / 2,6,6);
+					{
+						gfx.drawLine(4,_y - 5,4,_y + 4);
+						gfx.drawLine(5,_y - 4,5,_y + 3);
+						gfx.drawLine(6,_y - 3,6,_y + 2);
+						gfx.drawLine(7,_y - 2,7,_y + 1);
+						gfx.drawLine(8,_y - 1,8,_y);
+					}
 				}
 			}
 
@@ -376,7 +389,7 @@ public class Gutter extends JComponent implements SwingConstants
 	}
 
 	// private members
-	private static final int FOLD_MARKER_SIZE = 10;
+	private static final int FOLD_MARKER_SIZE = 12;
 
 	private View view;
 	private JEditTextArea textArea;

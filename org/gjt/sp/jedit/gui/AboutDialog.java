@@ -88,6 +88,7 @@ public class AboutDialog extends EnhancedDialog
 
 		AboutPanel()
 		{
+			setFont(UIManager.getFont("Label.font"));
 			setForeground(new Color(206,206,229));
 			image = new ImageIcon(getClass().getResource(
 				"/org/gjt/sp/jedit/icons/about.gif"));
@@ -101,7 +102,7 @@ public class AboutDialog extends EnhancedDialog
 				text.addElement(st.nextToken());
 			}
 
-			scrollPosition = -320;
+			scrollPosition = -300;
 
 			thread = new AnimationThread();
 		}
@@ -115,7 +116,7 @@ public class AboutDialog extends EnhancedDialog
 			int firstLine = scrollPosition / height;
 
 			int firstLineOffset = height - scrollPosition % height;
-			int lastLine = (scrollPosition + 320) / height;
+			int lastLine = (scrollPosition + 320) / height - 3;
 
 			int y = 50 + firstLineOffset;
 
@@ -129,6 +130,11 @@ public class AboutDialog extends EnhancedDialog
 				}
 				y += fm.getHeight();
 			}
+
+			String[] args = { jEdit.getVersion() };
+			String version = jEdit.getProperty("about.version",args);
+			g.drawString(version,130 + (340 - fm.stringWidth(version)) / 2,
+				370);
 		}
 
 		public Dimension getPreferredSize()
@@ -160,16 +166,25 @@ public class AboutDialog extends EnhancedDialog
 			{
 				for(;;)
 				{
-					repaint();
-					scrollPosition += 2;
+					long start = System.currentTimeMillis();
+
+					scrollPosition++;
+
+					FontMetrics fm = getFontMetrics(getFont());
+					int max = text.size() * fm.getHeight();
+					if(scrollPosition > max)
+						scrollPosition = -300;
 
 					try
 					{
-						Thread.sleep(60);
+						Thread.sleep(Math.max(0,50 -
+							(System.currentTimeMillis() - start)));
 					}
 					catch(InterruptedException ie)
 					{
 					}
+
+					repaint();
 				}
 			}
 		}

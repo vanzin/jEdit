@@ -212,6 +212,9 @@ view.gutter.markerColor=#ccffcc
 view.gutter.focusBorderColor=#666699
 view.gutter.noFocusBorderColor=#a0a0b4
 
+# Fold triangle color
+view.gutter.foldColor=#666699
+
 # Gutter font name
 view.gutter.font=Monospaced
 

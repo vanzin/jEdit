@@ -1,9 +1,9 @@
 TO DO
 
-- framse.setState(Frame.NORMAL);
+- version number in splash screen
+- frame.setState(Frame.NORMAL);
 - plugin size reporting
 - broken bracket matching
-- reload doesn't scroll to caret properly
 - update tool bar, context option panes for action set API
 - Shift+TAB on Java 1.1
 - (String)buffer.getProperty(): bad
@@ -13,11 +13,8 @@ TO DO
 - line-uncomment command
 - find btn no work
 - new goodies need to be documented
-- better fold marker color and appearance (draw triangle)
 - installer: show GPL
-- write custom stylesheet
-- ant build file: pdf output target
-- version, wrap around in about dialog box
+- custom stylesheet: no xmlns
 - JComponent.requestDefaultFocus(): new 1.4 method
 - eval-for-selected-lines doesn't work with rectangular selection
 - colors not loaded initially
