@@ -24,6 +24,8 @@ JEDIT 4.0 VERSION HISTORY
 - Faster (in theory anyway) file loading as a side effect of some bug
   fixes
 - Improved help viewer welcome screen
+- Updated QuickNotepad sample plugin for jEdit 4.0 API changes (John
+  Gellene)
 
 + Bug Fixes
 
@@ -38,6 +40,8 @@ JEDIT 4.0 VERSION HISTORY
   that contained embedded numbers larger than 2^31
 - Creating a new view or splitting the view didn't work
 - Tool bar tooltips were broken
+- With the Windows look and feel, file names were invisible in the file
+  system browser
 
 * Version 4.0pre1
 

@@ -1,8 +1,17 @@
 TO DO
 
-- double click on dockable panel to hide
+- investigate alleged MacOS X keyboard problems
 - saving: show with indent fold, with explicit fold changes not take
   effect?
+- might still need brutal undo code to avoid lumping everything together
+- still fold at end expand bug
+- investigate nextLineRequested() -- replace with a buffer event.
+- gutter scope bracket repaint problems
+- geometry workaround from j
+- test normal keys bound to actions
+- investigate wrap around in macros
+- Alt-key alternatives for arrow keys and home and end
+
 - user's guide and help viewer problems:
   - toc.xml: for sect2, etc anchor not included in href
   - xref labels are fucked
@@ -32,10 +41,11 @@ TO DO
     - smart case insens replace
   - API guide: compareStrings(), showPopupMenu()
   - settings backups
-- might still need brutal undo code to avoid lumping everything together
-- still fold at end expand bug
-- QuickNotepad XSL docs
-
+- improved window docking:
+  - do something about there being more buttons than can fit
+  - DockableLayout: handle too large
+  - double click on dockable panel to hide
+  - CCW rotated text not drawn correctly
 - file system browser:
   - File->Recent Directories menu
   - Browser: one text field for dirs and files
@@ -60,13 +70,12 @@ TO DO
     backwards compatibility -- maybe instead,
     _listDirectory(...,String[] newPath)
     -- but that is a bit hackish. _listDirectoryEx() is a bit hackish too.
-- CCW rotated text not drawn correctly
+  - mmb click in fs browser == double click
+  - directory chooser dialog box
+  - keyboard select file should activate open files -- or Enter press
+  - search in directory: should use that file's extension
+  - alt-key mnemonics for fields in vfs file dialog
 - write explicit folding tips
-- investigate nextLineRequested() -- replace with a buffer event.
-- gutter scope bracket repaint problems
-- geometry workaround from j
-- test normal keys bound to actions
-- investigate wrap around in macros
 - -noplugins command line switch
 - I/O errors and plugin load errors batched together in one dialog box
 - plugin error dialogs have 'Update Plugins' button
@@ -75,13 +84,10 @@ TO DO
   collapsed when the caret leaves that fold
 - next-fold/prev-fold actions
 - clickable stack traces in activity log
-- Alt-key alternatives for arrow keys and home and end
-- select file + search in directory in fsb: should use that file's extension
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
 - JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
   + more intuitive button labels throughout
-- alt-key mnemonics for fields in vfs file dialog
 
 - tab: if indent-on-tab on, only indent if in leading whitespace; make
   indent on tab on by default
@@ -108,18 +114,13 @@ TO DO
 - web start version
 - selective undo
 - <file>?line= or ?marker=
-- keyboard select file in fs browser!
 - wacky bracket matching stuff: only on }, ), ]
 - read up on JDK 1.4 focus API
-- mmb click in fs browser == double click
 - persistent fold visibility option
 - fold navigator to browse fold tree in explicit fold mode
 - command to surround selection with explicit fold markers
 - search & replace: option to skip folded lines
 - complete word: update on the fly as chars typed
-- improved window docking:
-  - do something about there being more buttons than can fit
-  - DockableLayout: handle too large
 - if caret inside hidden line, don't show bracket highlight
 - bracket matching:
   - if not on screen, do matching in background thread and show matching
@@ -152,7 +153,6 @@ TO DO
   dialog position
 - better auto indent
 - caret beyond end of line
-- directory chooser dialog box
 - graphical regular expression editor
 - appendix in plugin guide on contributing plugins
 - when loading a file: if the stream supports a mark, read first 16 bytes,

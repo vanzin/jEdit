@@ -1,5 +1,8 @@
 /*
  * FileCellRenderer.java - renders list and tree cells for the VFS browser
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999 Jason Ginchereau
  * Portions copyright (C) 2001 Slava Pestov
  *
@@ -20,16 +23,18 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.border.*;
-
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
+//}}}
 
-public final class FileCellRenderer extends JLabel implements TreeCellRenderer
+public class FileCellRenderer extends JLabel implements TreeCellRenderer
 {
+	//{{{ FileCellRenderer constructor
 	public FileCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
@@ -55,8 +60,9 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 			loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 
 		setOpaque(true);
-	}
+	} //}}}
 
+	//{{{ getTreeCellRendererComponent() method
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 		boolean sel, boolean expanded, boolean leaf, int row,
 		boolean focus)
@@ -91,7 +97,7 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 			if(!sel)
 			{
 				setForeground(file.color == null
-					? treeSelectionForeground
+					? treeNoSelectionForeground
 					: file.color);
 			}
 		}
@@ -118,9 +124,11 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 		}
 
 		return this;
-	}
+	} //}}}
 
-	// protected members
+	//{{{ Protected members
+
+	//{{{ getIconForFile() method
 	protected Icon getIconForFile(VFS.DirectoryEntry file)
 	{
 		if(file.type == VFS.DirectoryEntry.DIRECTORY)
@@ -129,11 +137,14 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 			return filesystemIcon;
 		else
 			return fileIcon;
-	}
+	} //}}}
 
-	// package-private members
+	//}}}
+
+	//{{{ Package-private members
 	boolean showIcons;
 
+	//{{{ propertiesChanged() method
 	void propertiesChanged()
 	{
 		// bug in DefaultTreeCellRenderer?
@@ -159,9 +170,11 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
 		treeSelectionBackground = UIManager.getColor("Tree.selectionBackground");
 		treeNoSelectionBackground = UIManager.getColor("Tree.textBackground");
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private Icon fileIcon;
 	private Icon dirIcon;
 	private Icon filesystemIcon;
@@ -177,4 +190,5 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 
 	private Font plainFont;
 	private Font boldFont;
+	//}}}
 }
