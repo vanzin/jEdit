@@ -51,10 +51,10 @@ class ChunkCache
 	int getMaxHorizontalScrollWidth()
 	{
 		int max = 0;
-		for(int i = 0; i < lineInfo.length; i++)
+		for(int i = 0; i < firstInvalidLine; i++)
 		{
 			LineInfo info = lineInfo[i];
-			if(info.chunksValid && info.width > max)
+			if(info.width > max)
 				max = info.width;
 		}
 		return max;
@@ -164,7 +164,11 @@ class ChunkCache
 		{
 			lineInfo[i] = new LineInfo();
 		}
-                
+
+		firstInvalidLine -= amount;
+		if(firstInvalidLine < 0)
+			firstInvalidLine = 0;
+
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
 			System.err.println("f > t.f: only " + amount
@@ -185,7 +189,13 @@ class ChunkCache
 			lineInfo[i] = new LineInfo();
 		}
 
+		// don't try this at home
+		int oldFirstInvalidLine = firstInvalidLine;
+		firstInvalidLine = 0;
 		updateChunksUpTo(amount);
+		firstInvalidLine = oldFirstInvalidLine + amount;
+		if(firstInvalidLine > textArea.getVisibleLines())
+			firstInvalidLine = textArea.getVisibleLines();
 
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
@@ -199,26 +209,14 @@ class ChunkCache
 	//{{{ invalidateAll() method
 	void invalidateAll()
 	{
-		for(int i = 0; i < lineInfo.length; i++)
-		{
-			if(!lineInfo[i].chunksValid)
-			{
-				// remainder are also invalid
-				break;
-			}
-			lineInfo[i].chunksValid = false;
-		}
-
+		firstInvalidLine = 0;
 		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateChunksFrom() method
 	void invalidateChunksFrom(int screenLine)
 	{
-		for(int i = screenLine; i < lineInfo.length; i++)
-		{
-			lineInfo[i].chunksValid = false;
-		}
+		firstInvalidLine = Math.min(screenLine,firstInvalidLine);
 
 		if(screenLine <= lastScreenLine)
 			lastScreenLine = lastScreenLineP = -1;
@@ -227,13 +225,14 @@ class ChunkCache
 	//{{{ invalidateChunksFromPhys() method
 	void invalidateChunksFromPhys(int physicalLine)
 	{
-		for(int i = 0; i < lineInfo.length; i++)
+		for(int i = 0; i < firstInvalidLine; i++)
 		{
 			LineInfo info = lineInfo[i];
-			if(!info.chunksValid)
+			if(info.physicalLine == -1 || info.physicalLine >= physicalLine)
+			{
+				firstInvalidLine = i;
 				break;
-			else if(info.physicalLine == -1 || info.physicalLine >= physicalLine)
-				info.chunksValid = false;
+			}
 		}
 	} //}}}
 
@@ -241,10 +240,7 @@ class ChunkCache
 	LineInfo getLineInfo(int screenLine)
 	{
 		updateChunksUpTo(screenLine);
-		LineInfo info = lineInfo[screenLine];
-		if(!info.chunksValid)
-			throw new InternalError("Not up-to-date: " + screenLine);
-		return info;
+		return lineInfo[screenLine];
 	} //}}}
 
 	//{{{ getSubregionOfOffset() method
@@ -463,6 +459,7 @@ class ChunkCache
 	private LineInfo[] lineInfo;
 	private ArrayList out;
 
+	private int firstInvalidLine;
 	private int lastScreenLineP;
 	private int lastScreenLine;
 
@@ -499,7 +496,6 @@ class ChunkCache
 					- info.offset;
 			}
 
-			info.chunksValid = true;
 			info.chunks = chunks;
 
 			list.add(info);
@@ -513,15 +509,16 @@ class ChunkCache
 
 		// if one line's chunks are invalid, remaining lines are also
 		// invalid
-		if(lineInfo[lastScreenLine].chunksValid)
+		if(lastScreenLine < firstInvalidLine)
 			return;
 
 		// find a valid line closest to the last screen line
 		int firstScreenLine = 0;
 
-		for(int i = lastScreenLine; i >= 0; i--)
+		for(int i = Math.min(firstInvalidLine - 1,lastScreenLine);
+			i >= 0; i--)
 		{
-			if(lineInfo[i].chunksValid && lineInfo[i].lastSubregion)
+			if(lineInfo[i].lastSubregion)
 			{
 				firstScreenLine = i + 1;
 				break;
@@ -591,7 +588,6 @@ class ChunkCache
 				if(physicalLine == -1)
 				{
 					info.chunks = null;
-					info.chunksValid = true;
 					info.physicalLine = -1;
 					continue;
 				}
@@ -695,8 +691,9 @@ class ChunkCache
 			info.offset = offset;
 			info.length = length;
 			info.chunks = chunks;
-			info.chunksValid = true;
 		}
+
+		firstInvalidLine = Math.max(lastScreenLine + 1,firstInvalidLine);
 	} //}}}
 
 	//{{{ lineToChunkList() method
@@ -723,7 +720,6 @@ class ChunkCache
 		int length;
 		boolean firstSubregion;
 		boolean lastSubregion;
-		boolean chunksValid;
 		Chunk chunks;
 		int width;
 	} //}}}

@@ -582,8 +582,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"scrollTo()");
+		//if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"scrollTo(), " + physLastLine);
 		//{{{ Get ready
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
@@ -1311,6 +1311,39 @@ public class JEditTextArea extends JComponent
 		selectToMatchingBracket(caret,false);
 	} //}}}
 
+	//{{{ narrowToMatchingBracket() method
+	/**
+	 * Narrows from the bracket at the specified position to the
+	 * corresponding bracket.
+	 * @since jEdit 4.2pre1
+	 */
+	public void narrowToMatchingBracket()
+	{
+		narrowToMatchingBracket(caret);
+	} //}}}
+
+	//{{{ narrowToMatchingBracket() method
+	/**
+	 * Narrows from the bracket at the specified position to the
+	 * corresponding bracket.
+	 * @since jEdit 4.2pre1
+	 */
+	public void narrowToMatchingBracket(int position)
+	{
+		int line = buffer.getLineOfOffset(position);
+		int offset = position - buffer.getLineStartOffset(position);
+
+		int bracket = TextUtilities.findMatchingBracket(buffer,line,offset);
+
+		if(bracket != -1)
+		{
+			int start = Math.min(bracketLine,line);
+			int end = Math.max(bracketLine,line);
+
+			displayManager.narrow(start,end);
+		}
+	} //}}}
+
 	//{{{ selectBlock() method
 	/**
 	 * Selects the code block surrounding the caret.
@@ -1396,6 +1429,23 @@ forward_scan:		do
 		else
 			setSelection(s);
 		moveCaretPosition(end);
+	} //}}}
+
+	//{{{ lineInBracketScope() method
+	/**
+	 * Returns if the specified line is contained in the currently
+	 * matched bracket's scope.
+	 * @since jEdit 4.2pre1
+	 */
+	public boolean lineInBracketScope(int line)
+	{
+		if(bracketPosition == -1)
+			return false;
+
+		if(bracketLine < caretLine)
+			return (line >= bracketLine && line <= caretLine);
+		else
+			return (line <= bracketLine && line >= caretLine);
 	} //}}}
 
 	//{{{ invertSelection() method
@@ -5819,6 +5869,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(delayedUpdate)
 			{
+				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
+
 				for(int i = delayedRepaintStart;
 					i <= delayedRepaintEnd;
 					i++)
@@ -5826,9 +5878,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					if(displayManager.isLineVisible(i))
 						displayManager.getScreenLineCount(i);
 				}
+				System.err.println("notify, " + physLastLine);
 				displayManager.notifyScreenLineChanges();
-
-				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
+				System.err.println(physLastLine);
 
 				if(delayedMultilineUpdate)
 				{
@@ -6001,7 +6053,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 				extraEndVirt = 0;
 
-			if(evt.isShiftDown())
+			if(control)
+			{
+				// control-click in virtual space inserts
+				// whitespace and moves caret
+				String whitespace = MiscUtilities
+					.createWhiteSpace(extraEndVirt,0);
+				buffer.insert(dragStart,whitespace);
+
+				dragStart += whitespace.length();
+			}
+			else if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
@@ -6019,16 +6081,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				dragged = true;
 
 				return;
-			}
-			else if(control)
-			{
-				// control-click in virtual space inserts
-				// whitespace and moves caret
-				String whitespace = MiscUtilities
-					.createWhiteSpace(extraEndVirt,0);
-				buffer.insert(dragStart,whitespace);
-
-				dragStart += whitespace.length();
 			}
 
 			if(!quickCopyDrag)
@@ -6305,10 +6357,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					{
 					case '(': case '[': case '{':
 					case ')': case ']': case '}':
-						if(!quickCopyDrag)
+						if(evt.isShiftDown())
+						{
 							moveCaretPosition(offset,false);
-						sel = selectToMatchingBracket(offset,true);
-						dragged = true;
+							narrowToMatchingBracket(offset);
+						}
+						else
+						{
+							if(!quickCopyDrag)
+								moveCaretPosition(offset,false);
+							sel = selectToMatchingBracket(offset,true);
+							dragged = true;
+						}
 						break;
 					}
 				}

@@ -27,9 +27,8 @@ release.
   the text area. This allows shortcuts like C+e n n to be used from the
   search bar and such without having to prefix them with C+e C+e first.
 
-- Previously, a Control-click on a bracket scope would select the
-  bracketed expression. Now, a Shift-click selects the expression and a
-  Control-click narrows to the expression.
+- Control-Shift-click on a bracket scope in the gutter or a bracket in
+  the text area narrows to that scope.
 
 - Previously setting the wrap margin to zero with soft wrap on would
   wrap to the width of the text area. This is no longer supported.
