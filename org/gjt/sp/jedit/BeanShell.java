@@ -43,6 +43,8 @@ import org.gjt.sp.util.Log;
  * <li><code>editPane</code> - the currently active {@link EditPane}.</li>
  * <li><code>textArea</code> - the edit pane's {@link JEditTextArea}.</li>
  * <li><code>buffer</code> - the edit pane's {@link Buffer}.</li>
+ * <li><code>scriptPath</code> - the path name of the currently executing
+ * BeanShell script.</li>
  * </ul>
  *
  * @author Slava Pestov
@@ -188,10 +190,14 @@ public class BeanShell
 
 	//{{{ runScript() method
 	/**
-	 * Runs a BeanShell script. Errors are shown in a dialog box.
+	 * Runs a BeanShell script. Errors are shown in a dialog box.<p>
+	 *
 	 * If the <code>in</code> parameter is non-null, the script is
 	 * read from that stream; otherwise it is read from the file identified
-	 * by <code>path</code>.
+	 * by <code>path</code>.<p>
+	 *
+	 * The <code>scriptPath</code> BeanShell variable is set to the path
+	 * name of the script.
 	 *
 	 * @param view The view. Within the script, references to
 	 * <code>buffer</code>, <code>textArea</code> and <code>editPane</code>
@@ -224,10 +230,14 @@ public class BeanShell
 
 	//{{{ _runScript() method
 	/**
-	 * Runs a BeanShell script. Errors are passed to the caller.
+	 * Runs a BeanShell script. Errors are passed to the caller.<p>
+	 *
 	 * If the <code>in</code> parameter is non-null, the script is
 	 * read from that stream; otherwise it is read from the file identified
-	 * by <code>path</code>.
+	 * by <code>path</code>.<p>
+	 *
+	 * The <code>scriptPath</code> BeanShell variable is set to the path
+	 * name of the script.
 	 *
 	 * @param view The view. Within the script, references to
 	 * <code>buffer</code>, <code>textArea</code> and <code>editPane</code>

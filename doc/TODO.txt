@@ -5,15 +5,16 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
+- need a new jEditLauncher before the 4.1final release
 - slower if comment open till end?
 - fsb: at roots:; select something; path not prepended
-- BeanShell javadoc: scriptPath
-- plugin build environment docs
 - plugin tutorial:
+  - plugin build environment docs
   - auto-created actions
   - link to jEdit devel page
   - quicknotepad class -- links to API docs
   - functions - links to API docs
+  - quicknotepad docs
 - plugin tips and techniques:
   - cutting down on startup time
   - canned dialog boxes in GUIUtilities
@@ -39,10 +40,7 @@ and quirks that I need to fix eventually.
   - text area extensions
   - text area caret & scroll listeners
   - status bar messages & readNextChar()
-- quicknotepad docs
 - links to API docs in macro guide
-- section xrefs are broken
-- need a new jEditLauncher before the 4.1final release
 
 + later:
 
@@ -170,6 +168,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
+- opening huge number of buffers
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
