@@ -28,19 +28,20 @@ CDATA DSSSL> ]>
 (element void (empty-sosofo))
 
 (define %funcsynopsis-style% 'ansi)
+(element void (literal "();"))
 
 (element funcprototype
   (let ((paramdefs (select-elements (children (current-node))
-				    (normalize "paramdef"))))
+                                    (normalize "paramdef"))))
     (make sequence
-	font-family-name: %mono-font-family%
-    font-size: (* (inherited-font-size)
-		%verbatim-size-factor%)
-	(process-children)
+      (make paragraph
+        start-indent: (inherited-start-indent)
+        font-family-name: %mono-font-family%
+        (process-children))
       (if (equal? %funcsynopsis-style% 'kr)
-	  (with-mode kr-funcsynopsis-mode
-	    (process-node-list paramdefs))
-	  (empty-sosofo)))))
+          (with-mode kr-funcsynopsis-mode
+            (process-node-list paramdefs))
+          (empty-sosofo)))))
 
 (define %verbatim-size-factor% 0.85)
 

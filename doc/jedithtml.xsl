@@ -45,6 +45,9 @@
 
 <xsl:variable name="toc.list.type">ul</xsl:variable>
 
+<xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
+<xsl:template match="void"><xsl:text>();</xsl:text></xsl:template>
+
 <!-- Stuff for FAQ -->
 
 <xsl:param name="generate.qandaset.toc" doc:type="boolean">1</xsl:param>
