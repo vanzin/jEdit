@@ -1,5 +1,11 @@
 TO DO
 
+- fold vis manager: check for out of bounds line numbers
+- finish text area painter's use of chunk cache
+- new offset conversion and highlighter API
+- soft wrap landing
+
+- plugin size reporting, new install plugins dialog UI layout
 - nextLineRequested still fucked
 
 - textArea.getLastVisibleLine() method
@@ -30,12 +36,9 @@ TO DO
 - idea to make things go faster: token marker splits on ' ', '\t'
   then lineToChunkList() has much less work to do, and could even be
   eliminated completely.
-- ensure that the commenting out of _isLineVisible() in expand fold
-  won't stuff anything up.
 - text area painter:
   - use line metrics
   - use float co-ordinates
-- soft wrap
 - finish 'troubleshooting' menu:
   - about cmd
   - docs in user's guide
@@ -79,7 +82,6 @@ TO DO
 - <file>?line= or ?marker=
 - fold navigator to browse fold tree in explicit fold mode
 - reintroduce -bshclient command line switch
-- plugin size reporting, new install plugins dialog UI layout
 - saving a read-only file: show a confirmation dialog box
 - tool bar option pane: editing existing entries
 - recording 'evaluate for selected lines'

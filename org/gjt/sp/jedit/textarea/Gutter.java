@@ -116,7 +116,7 @@ public class Gutter extends JComponent implements SwingConstants
 				.getLineInfoForScreenLine(line);
 			int physicalLine = info.physicalLine;
 
-			// Skip lines beyond EOL, and wrapped lines
+			// Skip lines beyond EOL
 			if(physicalLine == -1)
 				return;
 

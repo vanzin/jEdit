@@ -260,11 +260,6 @@ public class JEditTextArea extends JComponent
 
 			painter.propertiesChanged();
 
-			for(int i = 0; i < lineWidths.length; i++)
-			{
-				lineWidths[i] = 0;
-			}
-
 			updateScrollBars();
 			chunkCache.invalidateAll();
 			painter.repaint();
@@ -372,6 +367,28 @@ public class JEditTextArea extends JComponent
 	public final int getVisibleLines()
 	{
 		return visibleLines;
+	} //}}}
+
+	//{{{ getFirstPhysicalLine() method
+	/**
+	 * Returns the first visible physical line index.
+	 * @since jEdit 4.0pre4
+	 */
+	public final int getFirstPhysicalLine()
+	{
+		return physFirstLine;
+	} //}}}
+
+	//{{{ getLastPhysicalLine() method
+	/**
+	 * Returns the last visible physical line index.
+	 * @since jEdit 4.0pre4
+	 */
+	public final int getLastPhysicalLine()
+	{
+		return virtualToPhysical(Math.min(
+			getVirtualLineCount() - 1,
+			firstLine + visibleLines));
 	} //}}}
 
 	//{{{ getHorizontalOffset() method
@@ -710,11 +727,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		getLineText(line,lineSegment);
-
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
-			physicalToVirtual(line),line).chunks;
-
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
 		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
 	} //}}}
 
@@ -727,12 +740,7 @@ public class JEditTextArea extends JComponent
 	public int xToOffset(int line, int x)
 	{
 		x -= horizontalOffset;
-
-		getLineText(line,lineSegment);
-
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
-			physicalToVirtual(line),line).chunks;
-
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
 		return TextUtilities.xToOffset(chunks,x,true);
 	} //}}}
 
@@ -747,12 +755,7 @@ public class JEditTextArea extends JComponent
 	public int xToOffset(int line, int x, boolean round)
 	{
 		x -= horizontalOffset;
-
-		getLineText(line,lineSegment);
-
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
-			physicalToVirtual(line),line).chunks;
-
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
 		return (int)TextUtilities.xToOffset(chunks,x,round);
 	} //}}}
 
@@ -4436,9 +4439,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ Package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
-	int[] lineWidths;
-	int maxHorizontalScrollWidth;
 	ChunkCache chunkCache;
+
+	int maxHorizontalScrollWidth;
 
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
@@ -4473,8 +4476,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
-		lineWidths = new int[visibleLines + 1];
-		maxHorizontalScrollWidth = -1;
 
 		chunkCache.recalculateVisibleLines();
 
@@ -4485,9 +4486,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	void updateMaxHorizontalScrollWidth()
 	{
 		int max = 0;
-		for(int i = 0; i < lineWidths.length; i++)
+		for(int i = 0; i < visibleLines; i++)
 		{
-			int width = lineWidths[i];
+			int width = chunkCache.getLineInfoForScreenLine(i).width;
 			if(width > max)
 				max = width;
 		}

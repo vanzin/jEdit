@@ -23,9 +23,10 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
+import java.util.ArrayList;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
-import java.util.ArrayList;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -136,7 +137,6 @@ class ChunkCache
 		if(firstScreenLine == 0)
 		{
 			physicalLine = textArea.virtualToPhysical(firstLine);
-				System.err.println("v2p returns " + physicalLine);
 		}
 		else
 		{
@@ -145,10 +145,7 @@ class ChunkCache
 				.getNextVisibleLine(lineInfo[
 				firstScreenLine - 1]
 				.physicalLine);
-			System.err.println("next vis of prev: " + physicalLine);
 		}
-
-		System.err.println(firstScreenLine + "::" + physicalLine);
 
 		// TODO: Assumptions...
 
@@ -224,49 +221,53 @@ class ChunkCache
 	} //}}}
 
 	//{{{ getLineInfo() method
-	LineInfo getLineInfo(int virtualLineIndex, int physicalLineIndex)
+	LineInfo getLineInfo(int physicalLineIndex)
 	{
-		LineInfo info;
-
-		if(virtualLineIndex < firstLine
-			|| virtualLineIndex >= firstLine + lineInfo.length)
-			info = new LineInfo();
-		else
-			info = lineInfo[virtualLineIndex - firstLine];
-
-		if(!info.chunksValid)
+		int firstPhysLine = textArea.getFirstPhysicalLine();
+		int lastPhysLine = textArea.getLastPhysicalLine();
+		if(physicalLineIndex >= firstPhysLine
+			&& physicalLineIndex <= lastPhysLine)
 		{
-			out.clear();
-			Buffer buffer = textArea.getBuffer();
-			buffer.getLineText(physicalLineIndex,textArea.lineSegment);
+			for(int i = 0; i < lineInfo.length; i++)
+			{
+				LineInfo info = lineInfo[i];
+				if(!info.chunksValid)
+					updateChunksUpTo(i);
+				if(info.physicalLine == physicalLineIndex)
+					return info;
+			}
 
-			TextAreaPainter painter = textArea.getPainter();
-			TextUtilities.lineToChunkList(textArea.lineSegment,
-				buffer.markTokens(physicalLineIndex).getFirstToken(),
-				painter.getStyles(),painter.getFontRenderContext(),
-				painter,0.0f,out);
-
-			if(out.size() == 0)
-				info.chunks = null;
-			else
-				info.chunks = (TextUtilities.Chunk)out.get(0);
-
-			info.physicalLine = physicalLineIndex;
-			info.chunksValid = true;
+			Log.log(Log.ERROR,this,"Not in line info: " + physicalLineIndex);
 		}
+
+		LineInfo info = new LineInfo();
+
+		out.clear();
+		Buffer buffer = textArea.getBuffer();
+		buffer.getLineText(physicalLineIndex,textArea.lineSegment);
+
+		TextAreaPainter painter = textArea.getPainter();
+		TextUtilities.lineToChunkList(textArea.lineSegment,
+			buffer.markTokens(physicalLineIndex).getFirstToken(),
+			painter.getStyles(),painter.getFontRenderContext(),
+			painter,0.0f,out);
+
+		if(out.size() == 0)
+			info.chunks = null;
+		else
+			info.chunks = (TextUtilities.Chunk)out.get(0);
+
+		info.physicalLine = physicalLineIndex;
+		info.chunksValid = true;
 
 		return info;
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Instance variables
 	private JEditTextArea textArea;
 	private int firstLine;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
-	//}}}
-
 	//}}}
 
 	//{{{ LineInfo class
