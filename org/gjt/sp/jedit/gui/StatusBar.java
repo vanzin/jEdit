@@ -372,7 +372,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			else if(source == memory)
 			{
 				if(evt.getClickCount() == 2)
+				{
 					jEdit.showMemoryDialog(view);
+					memory.repaint();
+				}
 			}
 		}
 	} //}}}
@@ -552,10 +555,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			Color text = MemoryStatus.this.getForeground();
 			Color status = UIManager.getColor("ProgressBar.foreground");
-			if(status.equals(text))
-				g.setXORMode(MemoryStatus.this.getBackground());
-			else
-				g.setColor(status);
 
 			float fraction = ((float)usedMemory) / totalMemory;
 
@@ -563,8 +562,13 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				(int)(width * fraction),
 				MemoryStatus.this.getHeight()
 				- insets.top - insets.bottom);
-
-			g.setPaintMode();
+			if(status.equals(text))
+			{
+				g.setXORMode(MemoryStatus.this.getBackground());
+				g.setColor(status);
+			}
+			else
+				g.setColor(status);
 
 			g.setColor(text);
 
@@ -575,6 +579,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			g.drawString(str,
 				insets.left + (width - fm.stringWidth(str)) / 2,
 				insets.top + fm.getAscent());
+
+			g.setPaintMode();
 		} //}}}
 
 		private Timer timer;
