@@ -93,7 +93,7 @@ public class Interpreter
 {
 	/* --- Begin static stuff --- */
 
-	public static final String VERSION = "1.2b5";
+	public static final String VERSION = "1.2b6";
 	/* 
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).
@@ -134,8 +134,8 @@ public class Interpreter
 	String sourceFileInfo;
 
 	/** 
-		Do we override exit on EOF as normally done in iteractive mode?
-		(This is used by Sessiond)
+		Specify whether we override exit on EOF as normally done in 
+		iteractive mode.  (This is used by Sessiond)
 	*/
 	public boolean noExitOnEOF;
 
@@ -242,11 +242,16 @@ public class Interpreter
 	// End constructors
 
 	/**
-		Attach the console thusly... ;)
+		Attach a console
+		Note: this method is incomplete.
 	*/
 	public void setConsole( ConsoleInterface console ) {
 		this.console = console;
 		setu( "bsh.console", console );
+		// redundant with constructor
+		setOut( console.getOut() );
+		setErr( console.getErr() );
+		// need to set the input stream - reinit the parser?
 	}
 
 	private void initRootSystemObject() 
@@ -1013,7 +1018,7 @@ public class Interpreter
 		classes supplied through the external classloader.
 		<p>
 
-		@see BshClassManager.setClassLoader()
+		@see BshClassManager#setClassLoader( ClassLoader )
 	*/
 	public void setClassLoader( ClassLoader externalCL ) {
 		BshClassManager.setClassLoader( externalCL );
@@ -1047,7 +1052,7 @@ public class Interpreter
 		sourcing and from what file a method was originally parsed.  One
 		file may call a method sourced from another file.  See SimpleNode
 		for origination file info.
-		@see SimpleNode.getSourceFile 
+		@see bsh.SimpleNode#getSourceFile()
 	*/
 	public String getSourceFileInfo() { 
 		if ( sourceFileInfo != null )
@@ -1065,6 +1070,25 @@ public class Interpreter
 	}
 	public void setErr( PrintStream out ) {
 		this.err = err;
+	}
+
+	/**
+		De-serialization setup.
+		Default out and err streams to stdout, stderr if they are null.
+	*/
+	private void readObject(ObjectInputStream stream) 
+		throws java.io.IOException, ClassNotFoundException
+	{
+		stream.defaultReadObject();
+
+		// set transient fields
+		if ( console != null ) {
+			setOut( console.getOut() );
+			setErr( console.getErr() );
+		} else {
+			setOut( System.out );
+			setErr( System.err );
+		}
 	}
 
 }
