@@ -8,7 +8,8 @@
 <!ATTLIST ACTION
 	NAME ID #REQUIRED
 	NO_REPEAT %att-bool; "FALSE"
-	NO_RECORD %att-bool; "FALSE" >
+	NO_RECORD %att-bool; "FALSE"
+	NO_REMEMBER_LAST %att-bool; "FALSE" >
 
 <!-- ACTION children -->
 <!ELEMENT CODE ( #PCDATA ) >

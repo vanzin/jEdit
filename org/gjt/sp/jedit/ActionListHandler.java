@@ -78,6 +78,8 @@ class ActionListHandler extends HandlerBase
 			noRepeat = (value == "TRUE");
 		else if(aname == "NO_RECORD")
 			noRecord = (value == "TRUE");
+		else if(aname == "NO_REMEMBER_LAST")
+			noRememberLast = (value == "TRUE");
 	} //}}}
 
 	//{{{ doctypeDecl() method
@@ -131,8 +133,9 @@ class ActionListHandler extends HandlerBase
 			if(tag == "ACTION")
 			{
 				actionSet.addAction(new BeanShellAction(actionName,
-					code,isSelected,noRepeat,noRecord));
-				noRepeat = noRecord = false;
+					code,isSelected,noRepeat,noRecord,
+					noRememberLast));
+				noRepeat = noRecord = noRememberLast = false;
 			}
 
 			popElement();
@@ -169,6 +172,7 @@ class ActionListHandler extends HandlerBase
 
 	private boolean noRepeat;
 	private boolean noRecord;
+	private boolean noRememberLast;
 
 	private Stack stateStack;
 	//}}}

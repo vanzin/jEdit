@@ -38,26 +38,26 @@ class PluginManagerOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ Private members
-	
+
 	//{{{ Variables
 	private JLabel locationLabel;
 	private JLabel mirrorLabel;
-	
+
 	private ButtonGroup locGrp;
 	private JRadioButton settingsDir;
 	private JRadioButton appDir;
 	private JCheckBox downloadSource;
-	
+
 	private MirrorModel miraModel;
 	private JList miraList;
 	private MirrorList.Mirror noMirror;
 	//}}}
-	
+
 	//{{{ _init() method
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
-		
+
 		locationLabel = new JLabel(jEdit.getProperty(
 			"options.plugin-manager.location"));
 		mirrorLabel = new JLabel(jEdit.getProperty(
@@ -73,28 +73,28 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		// A fake mirror for the default
 		noMirror = new MirrorList.Mirror();
 		noMirror.id = "NONE";
-		
+
 		// Start downloading the list nice and early
 		miraList = new JList(miraModel = new MirrorModel());
 		miraList.setSelectionModel(new SingleSelectionModel());
-		
+
 		/* Download mirror */
 		add(BorderLayout.NORTH,mirrorLabel);
 		add(BorderLayout.CENTER,new JScrollPane(miraList));
-		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
-		
+
 		buttonPanel.add(Box.createVerticalStrut(10));
-		
+
 		/* Download source */
 		downloadSource = new JCheckBox(jEdit.getProperty(
 			"options.plugin-manager.downloadSource"));
 		downloadSource.setSelected(jEdit.getBooleanProperty("plugin-manager.downloadSource"));
 		buttonPanel.add(downloadSource);
-		
+
 		buttonPanel.add(Box.createVerticalStrut(10));
-		
+
 		/* Install location */
 		locGrp = new ButtonGroup();
 		locGrp.add(settingsDir);
@@ -107,10 +107,10 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		locPanel.add(appDir);
 		buttonPanel.add(locationLabel);
 		buttonPanel.add(locPanel);
-		
+
 		buttonPanel.add(Box.createGlue());
 		add(BorderLayout.SOUTH,buttonPanel);
-		
+
 		if (jEdit.getBooleanProperty("plugin-manager.installUser"))
 			settingsDir.setSelected(true);
 		else
@@ -125,11 +125,13 @@ class PluginManagerOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
 	} //}}}
 
+	//}}}
+
 	//{{{ MirrorModel class
 	class MirrorModel extends AbstractListModel
 	{
 		private List mirrors;
-		
+
 		public MirrorModel()
 		{
 			super();
@@ -145,7 +147,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 					}
 					mirrors.add(0,noMirror);
 					fireContentsChanged(this,0,mirrors.size());
-					
+
 					String ID = jEdit.getProperty("plugin-manager.mirror.id");
 					int size = getSize();
 					for (int i=0; i < size; i++)
@@ -159,17 +161,17 @@ class PluginManagerOptionPane extends AbstractOptionPane
 				}
 			});
 		}
-		
+
 		public String getID(int index)
 		{
 			return ((MirrorList.Mirror)mirrors.get(index)).id;
 		}
-		
+
 		public int getSize()
 		{
 			return mirrors.size();
 		}
-		
+
 		public Object getElementAt(int index)
 		{
 			// Default will always be at 0
@@ -179,7 +181,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			return new String(mirror.continent+": "+mirror.description+" ("+mirror.location+")");
 		}
 	} //}}}
-	
+
 	//{{{ SingleSelectionModel class
 	class SingleSelectionModel extends DefaultListSelectionModel
 	{
@@ -188,9 +190,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			super();
 			setSelectionMode(SINGLE_SELECTION);
 		}
-		
+
 		public void removeSelectionInterval(int index0, int index1) {}
 	} //}}}
-	
-	//}}}
 }

@@ -69,6 +69,7 @@ scroll-down-line.shortcut=C+SLASH
 toggle-multi-select.shortcut=C+BACK_SLASH
 prev-buffer.shortcut=C+PAGE_UP
 next-buffer.shortcut=C+PAGE_DOWN
+last-action.shortcut=C+SPACE
 #}}}
 
 #{{{ C+e C+X

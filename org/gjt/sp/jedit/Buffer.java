@@ -3369,6 +3369,48 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Methods that really shouldn't be public...
 
+	//{{{ _getOffsetManager() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public OffsetManager _getOffsetManager()
+	{
+		return offsetMgr;
+	} //}}}
+
+	//{{{ _displayLock() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public int _displayLock()
+	{
+		for(int i = 0; i < OffsetManager.MAX_DISPLAY_COUNT; i++)
+		{
+			if((displayLock & (1 << i)) == 0)
+			{
+				displayLock |= (1 << i);
+				return i;
+			}
+		}
+
+		//XXX
+		throw new InternalError("Too many text areas editing this buffer");
+	} //}}}
+
+	//{{{ _displayUnlock() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public void _displayUnlock(int index)
+	{
+		displayLock &= ~(1 << index);
+	} //}}}
+
+	//{{{ OBSOLETE
+
 	//{{{ _getFoldVisibilityManager() method
 	/**
 	 * Plugins and macros should not call this method. Call
@@ -3412,6 +3454,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		inUseFVMs[mgr._getIndex()] = null;
 		mgr._release();
 	} //}}}
+
+	//}}}
 
 	//}}}
 
@@ -3564,14 +3608,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	private Vector markers;
 
-	// Syntax highlighting
+	// Display
 	private boolean textMode;
 	private TokenMarker tokenMarker;
 	private Segment seg;
 	private boolean nextLineRequested;
-
-	// Folding
 	private FoldHandler foldHandler;
+	private int displayLock;
+
+	// OBSOLETE
 	private FoldVisibilityManager[] inUseFVMs;
 
 	// Minimise EditBus message traffic...

@@ -151,7 +151,6 @@ class ChunkCache
 	{
 		this.buffer = buffer;
 		this.firstLine = 0;
-		invalidateAll();
 	} //}}}
 
 	//{{{ setFirstLine() method
