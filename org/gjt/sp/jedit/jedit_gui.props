@@ -1138,8 +1138,8 @@ hypersearch-results.multi=Multiple results
 hypersearch-results.file-caption={0} ({1} occurrences)
 hypersearch-results.file-caption1={0} (1 occurrence)
 hypersearch-results.searching=Searching...
-hypersearch-results.no-results=No occurrences of the search string were found.
-hypersearch-results.done=Search done.
+hypersearch-results.no-results=Not found.
+hypersearch-results.done=Done.
 
 hypersearch-status=Searching
 #}}}

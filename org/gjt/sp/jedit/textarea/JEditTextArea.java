@@ -6222,7 +6222,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 
 			quickCopyDrag = (isQuickCopyEnabled()
-				&& (evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0);
+				&& GUIUtilities.isMiddleMouseButton(evt));
 			blink = true;
 			invalidateLine(caretLine);
 
@@ -6574,7 +6574,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					Registers.setRegister('%',getSelectedText());
 			}
 			else if(isQuickCopyEnabled()
-				&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+				&& GUIUtilities.isMiddleMouseButton(evt))
 			{
 				setCaretPosition(dragStart,false);
 				if(!isEditable())

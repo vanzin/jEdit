@@ -558,7 +558,7 @@ class BrowserView extends JPanel
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(evt.getClickCount() % 2 != 0 &&
-				(evt.getModifiers() & InputEvent.BUTTON2_MASK) == 0)
+				GUIUtilities.isMiddleButton(evt.getModifiers()))
 				return;
 
 			int row = parentDirectories.locationToIndex(evt.getPoint());
@@ -746,13 +746,7 @@ class BrowserView extends JPanel
 						}
 					}
 
-					// isControlDown() -- damn MacOS workaround!
-					// maybe your dinky 500MHz "supercomputers"
-					// run Photoshop faster than a PC,
-					// but you can't even get modifier reporting
-					// working!
-					if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0
-						&& !evt.isControlDown())
+					if(GUIUtilities.isMiddleButton(evt.getModifiers()))
 					{
 						setSelectionPath(path);
 						browser.filesActivated((evt.isShiftDown()
