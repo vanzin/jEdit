@@ -3,6 +3,7 @@
  * jEdit text editor - displays all shortcut key assignments
  * Copyright (C) 2001 John Gellene
  * email: jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +41,8 @@
  * Vectors to hold the data would be to write a highly customized sorting
  * routine.  Sorting by keyname would require a second custom sorting routine.
  * There is also a hack in the code creating the table.
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -257,3 +260,27 @@ void showShortcuts()
 }
 
 showShortcuts();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Display_Shortcuts.bsh</filename></para>
+    <abstract><para>
+        Displays a sorted list of the keyboard shortcuts currently in effect.
+    </para></abstract>
+    <para>
+        The macro provides a combined read-only view of command, macro
+        and plugin shortcuts. Pressing a letter key will
+        scroll the table to the first entry beginning with that letter.
+        A further option is provided to write the shortcut assignments in a
+        text buffer for printing as a reference. Notes in the source code
+        listing point out some display options that are configured by
+        modifying global variables.
+    </para>
+</listitem>
+
+*/
+
+// end Display_Shortcuts.bsh
+
