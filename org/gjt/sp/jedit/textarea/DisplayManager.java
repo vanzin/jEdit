@@ -756,7 +756,7 @@ public class DisplayManager
 		fvmcount += delta;
 	} //}}}
 
-	//{{{
+	//{{{ fvmput2() method
 	/**
 	 * Merge previous and next entry if necessary.
 	 */

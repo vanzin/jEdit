@@ -52,12 +52,24 @@ public class PluginManager extends JFrame implements EBComponent
 	{
 		// Force the install tab to refresh for possible
 		// change of mirror
-		/* if (message instanceof PropertiesChanged)
+		if (message instanceof PropertiesChanged)
 		{
-			InstallPanel.pluginList = null;
-			installer.getPluginList();
-			updater.getPluginList();
-		} */
+			pluginList = null;
+			if(tabPane.getSelectedIndex() != 0)
+			{
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						updatePluginList();
+						installer.updateModel();
+						updater.updateModel();
+					}
+				});
+			}
+		}
+		else if (message instanceof PluginUpdate)
+			manager.update();
 	} //}}}
 
 	//{{{ showPluginManager() method

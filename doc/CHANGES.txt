@@ -101,6 +101,9 @@ Thanks to Matt Albrecht for contributing to this release.
 
 - Improved handling of symbolic links.
 
+- Changing the plugin download mirror had no effect on an open plugin
+  manager window.
+
 }}}
 {{{ API Changes
 
