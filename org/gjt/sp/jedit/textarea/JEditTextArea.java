@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -337,6 +338,62 @@ public class JEditTextArea extends JComponent
 	public final void setRightClickPopup(JPopupMenu popup)
 	{
 		this.popup = popup;
+	} //}}}
+
+	//{{{ getDragAndDropCallback() method
+	/**
+	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
+	 * however since jEdit must run with Java 1.3, this class only has the
+	 * necessary support to call a hook method via reflection. The method
+	 * is provided by the {@link org.gjt.sp.jedit.Java14} class and handles
+	 * the drag and drop API calls themselves.
+	 * @since jEdit 4.2pre5
+	 */
+	public Method getDragAndDropCallback()
+	{
+		return dndCallback;
+	} //}}}
+
+	//{{{ setDragAndDropCallback() method
+	/**
+	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
+	 * however since jEdit must run with Java 1.3, this class only has the
+	 * necessary support to call a hook method via reflection. The method
+	 * is provided by the {@link org.gjt.sp.jedit.Java14} class and handles
+	 * the drag and drop API calls themselves.
+	 * @since jEdit 4.2pre5
+	 */
+	public void setDragAndDropCallback(Method meth)
+	{
+		dndCallback = meth;
+	} //}}}
+
+	//{{{ getDragInProgress() method
+	/**
+	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
+	 * however since jEdit must run with Java 1.3, this class only has the
+	 * necessary support to call a hook method via reflection. This method
+	 * is called by the {@link org.gjt.sp.jedit.Java14} class to signal that
+	 * a drag is in progress.
+	 * @since jEdit 4.2pre5
+	 */
+	public boolean getDragInProgress()
+	{
+		return dndInProgress;
+	} //}}}
+
+	//{{{ setDragInProgress() method
+	/**
+	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
+	 * however since jEdit must run with Java 1.3, this class only has the
+	 * necessary support to call a hook method via reflection. This method
+	 * is called by the {@link org.gjt.sp.jedit.Java14} class to signal that
+	 * a drag is in progress.
+	 * @since jEdit 4.2pre5
+	 */
+	public void setDragInProgress(boolean dndInProgress)
+	{
+		this.dndInProgress = dndInProgress;
 	} //}}}
 
 	//}}}
@@ -2131,9 +2188,9 @@ forward_scan:		do
 	} //}}}
 
 	//{{{ moveCaretPosition() method
-	public int NO_SCROLL = 0;
-	public int NORMAL_SCROLL = 1;
-	public int ELECTRIC_SCROLL = 2;
+	public static int NO_SCROLL = 0;
+	public static int NORMAL_SCROLL = 1;
+	public static int ELECTRIC_SCROLL = 2;
 	/**
 	 * Sets the caret position without deactivating the selection.
 	 * @param caret The caret position
@@ -5213,7 +5270,31 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean rectangularSelectionMode;
 
 	private boolean delayedScrollTo;
+
+	/* on JDK 1.4, this is set to a method by Java14. The method must take
+	* these parameters:
+	* - a JEditTextArea
+	* - an InputEvent
+	* - a boolean (copy text or move, depending on modifier user held down)
+	*/
+	private Method dndCallback;
+	private boolean dndInProgress;
 	//}}}
+
+	//{{{ startDragAndDrop() method
+	// calls dndCallback via reflection
+	private void startDragAndDrop(InputEvent evt, boolean copy)
+	{
+		try
+		{
+			dndCallback.invoke(null,new Object[] { this, evt,
+				new Boolean(copy) });
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	} //}}}
 
 	//{{{ _addToSelection() method
 	private void _addToSelection(Selection addMe)
@@ -6020,13 +6101,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(caret >= start)
 			{
-				int scrollMode = (hasFocus()
+				int scrollMode = (caretAutoScroll()
 					? ELECTRIC_SCROLL : NO_SCROLL);
 				moveCaretPosition(caret + length,scrollMode);
 			}
 			else
 			{
-				int scrollMode = (hasFocus()
+				int scrollMode = (caretAutoScroll()
 					? NORMAL_SCROLL : NO_SCROLL);
 				moveCaretPosition(caret,scrollMode);
 			}
@@ -6067,7 +6148,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
-			int scrollMode = (hasFocus()
+			int scrollMode = (caretAutoScroll()
 				? NORMAL_SCROLL : NO_SCROLL);
 
 			if(caret > start)
@@ -6115,6 +6196,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			while(iter.hasNext())
 				((Runnable)iter.next()).run();
 			runnables.clear();
+		} //}}}
+
+		//{{{ caretAutoScroll() method
+		/**
+		 * Return if change in buffer should scroll this text area.
+		 */
+		private boolean caretAutoScroll()
+		{
+			return view == jEdit.getActiveView()
+				&& view.getTextArea() == JEditTextArea.this;
 		} //}}}
 
 		//{{{ delayedRepaint() method
@@ -6242,6 +6333,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			invalidateLine(caretLine);
 
 			clickCount = evt.getClickCount();
+
+			if(getSelectionAtOffset(dragStart) != null)
+			{
+				if(evt.getModifiers() == InputEvent.BUTTON1_MASK)
+					startDragAndDrop(evt,false);
+				else if(control)
+					startDragAndDrop(evt,true);
+				return;
+			}
 
 			switch(clickCount)
 			{
@@ -6394,6 +6494,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseDragged() method
 		public void mouseDragged(MouseEvent evt)
 		{
+			if(dndInProgress)
+				return;
+
 			if(GUIUtilities.isPopupTrigger(evt)
 				|| (popup != null && popup.isVisible()))
 				return;
@@ -6648,7 +6751,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		caretTimer.setInitialDelay(500);
 		caretTimer.start();
 
-		structureTimer = new Timer(200,new ActionListener()
+		structureTimer = new Timer(100,new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
@@ -6656,7 +6759,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					focusedComponent.updateStructureHighlight();
 			}
 		});
-		structureTimer.setInitialDelay(200);
+		structureTimer.setInitialDelay(100);
 		structureTimer.setRepeats(false);
 	} //}}}
 }
