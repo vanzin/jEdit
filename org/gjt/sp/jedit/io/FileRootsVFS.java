@@ -157,7 +157,8 @@ public class FileRootsVFS extends VFS
 	//{{{ listRoots() method
 	private static File[] listRoots()
 	{
-		if(getRoots != null)
+		// will finish this later
+		/* if(getRoots != null)
 		{
 			try
 			{
@@ -170,7 +171,7 @@ public class FileRootsVFS extends VFS
 				return null;
 			}
 		}
-		else if (OperatingSystem.isMacOS())
+		else */ if (OperatingSystem.isMacOS())
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();

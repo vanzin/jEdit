@@ -141,8 +141,6 @@ public class Java14
 		int dbg;
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
-			System.err.println((dbg++) + ": wheel mouse scrolled: "
-				+ e.getScrollAmount());
 			JEditTextArea textArea = (JEditTextArea)e.getSource();
 
 			/****************************************************

@@ -622,7 +622,6 @@ public class JEditTextArea extends JComponent
 			point = null;
 		//}}}
 
-		System.err.println("scrolling");
 		//{{{ STAGE 2 -- scroll vertically
 		if(line == physLastLine + 1)
 		{
