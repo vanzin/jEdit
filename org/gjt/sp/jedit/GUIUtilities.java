@@ -845,13 +845,13 @@ public class GUIUtilities
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
 		// Make sure the window is displayed in visible region
-		if ( x + width < 0 || x > screen.width)
+		if(x < -4 || x > screen.width)
 		{
 			if (width > screen.width)
 				width = screen.width;
 			x = (screen.width - width) / 2;
 		}
-		if ( y + height < 0 || y > screen.height)
+		if(y < -4 || y > screen.height)
 		{
 			if (height >= screen.height)
 				height = screen.height;

@@ -123,6 +123,7 @@ class HelpTOCPanel extends JPanel
 
 		loadTOC(tocRoot,"users-guide/toc.xml");
 		loadTOC(tocRoot,"FAQ/toc.xml");
+		loadTOC(tocRoot,"api/toc.xml");
 
 		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);

@@ -1402,7 +1402,10 @@ public class jEdit
 		addBufferToList(buffer);
 		buffer.commitTemporary();
 
+		// send full range of events to avoid breaking plugins
 		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.CREATED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.LOAD_STARTED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.LOADED));
 	} //}}}
 
 	//{{{ newFile() method

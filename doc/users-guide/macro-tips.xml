@@ -688,14 +688,8 @@ b{"text"} = "Choose";
 
 <para>
   The last form can also be used to access a key-value pair of a
-  <classname>Hashtable</classname> object. It can even be used to obtain
-  the values of buffer-local properties; the following two statements
-  are equivalent:
+  <classname>Hashtable</classname> object.
 </para>
-
-<informalexample><programlisting>buffer.getProperty("tabSize")
-buffer{"tabSize"}
-</programlisting></informalexample>
 
 <!-- actually, the following requires the bsh.classpath package, which
      is not included with jEdit at this point in time.
