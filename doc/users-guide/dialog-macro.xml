@@ -1,13 +1,10 @@
-<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                       -->
+<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene                       -->
 <!-- jEdit buffer-local properties:                                     -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:                  -->
-
-<!-- Wed Jun 20 16:45:29 EDT 2001 @906 /Internet Time/                  -->
-
 <!-- This file contains an extended discussion of a                     -->
 <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"             -->
-
-<!-- Note: macro has been revised to accomodate Selection API in jEdit3.2 -->
+<!-- $Id$
+ -->
 
 <chapter id="dialog-macro"><title>A Dialog-Based Macro</title>
  <para>
@@ -39,7 +36,7 @@ country</screen>
     <quote>suffix</quote> to be applied to each line; in this case, the prefix is
     <userinput>ourStringBuffer.append(</userinput> and the suffix is
     <userinput>);</userinput>. After selecting these lines and
-    running the macro, the the resulting text would look like this:
+    running the macro, the resulting text would look like this:
    </para>
 
 <screen>ourStringBuffer.append(profileString_1);
@@ -95,7 +92,7 @@ void prefixSuffixDialog()
     fieldPanel.add(suffixField);
     content.add(fieldPanel, <quote>Center</quote>);
 
-<anchor id="button-panel"/>    // add the buttons (see <xref
+<anchor id="button-panel"/>    // add a panel containing the buttons (see <xref
  linkend="explain-button-panel"/>)
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new BoxLayout(buttonPanel,
@@ -191,8 +188,8 @@ import javax.swing.border.*;</programlisting></informalexample>
     automatically imported. As we mentioned
     previously (see <xref linkend="first-example"/>), jEdit's implementation of
     BeanShell causes a number of classes to be automatically imported. Classes
-    that are not automatically imported must be named by a full qualified name or be
-    the subject of an <function>import</function> statement.
+    that are not automatically imported must be identified by a full qualified
+    name or be the subject of an <function>import</function> statement.
   </para>
 
 </sect2>
@@ -249,10 +246,10 @@ dialog.setContentPane(content);</programlisting></informalexample>
 
   <para>
     A <classname>BorderLayout</classname> is one of the simpler layout
-    schemes available for Java Swing objects.
+    schemes available for container objects like <classname>JPanel</classname>.
     A <classname>BorderLayout</classname>
     divides the container into five sections: <quote>North</quote>,
-    <quote>South</quote>, <quote></quote>East, <quote>West</quote> and
+    <quote>South</quote>, <quote>East</quote>, <quote>West</quote> and
     <quote>Center</quote>. Components are added to the layout using the
     container's <function>add</function> method, specifying the component to
     be added and the section to which it is assigned. Building a
@@ -289,8 +286,9 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
     For the text fields, we will use jEdit's <classname>HistoryTextField</classname>
     class. It is derived from the Java Swing class
     <classname>JTextField</classname>. This class offers the enhancement of a stored
-    list of prior values used as text input. The up and down keys scroll through the
-    prior values for the variable. <!-- The prior values are stored in a file named
+    list of prior values used as text input. When the component has input focus, the
+    up and down keys scroll through the prior values for the variable.
+    <!-- The prior values are stored in a file named
     <filename>history</filename> located in the directory in which jEdit stores
     various user data. -->
   </para>
@@ -303,15 +301,17 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting></informalexampl
   </para>
 
   <para>
-    The labels are <classname>JLabel</classname> objects from the Java Swing
-    package. The constructor we use takes the label text as a single
-    <classname>String</classname> parameter.
+    The labels that accompnay the text fields are
+    <classname>JLabel</classname> objects from the Java Swing
+    package. The constructor we use for both labels takes the label text
+    as a single <classname>String</classname> parameter.
   </para>
 
   <para>
     We wish to arrange these four components from top to bottom,
     one after the other. To achieve that, we use a
-    <classname>JPanel</classname> object named <varname>fieldPanel</varname> that
+    <classname>JPanel</classname> container object named
+    <varname>fieldPanel</varname> that
     will be nested inside the dialog's content pane that we have
     already created. In the constructor for <varname>fieldPanel</varname>,
     we assign a new <classname>GridLayout</classname> with the indicated
@@ -347,18 +347,21 @@ buttonPanel.add(Box.createGlue());
 content.add(buttonPanel, <quote>South</quote>);</programlisting></informalexample>
 
   <para>
-    Creating the buttons repeats the pattern we used in creating the text fields.
-    First, we create a new, nested panel with a <classname>BoxLayout</classname>. A
-    <classname>BoxLayout</classname> places components either in a single row or
-    column, depending on the parameter passed to its constructor. We put an
+    To create the dialog's bittons, we follow repeat the <quote>nested container</quote>
+    pattern we used in creating the text fields.
+    First, we create a new, nested panel. This time we use a <classname>BoxLayout</classname>
+    that places components either in a single row or
+    column, depending on the parameter passed to its constructor. This layout object
+    is more flexible than a <classname>GridLayout</classname> in that varaible spacing
+    between elements can be specified easily. We put an
     <classname>EmptyBorder</classname> in the new panel to set margins for placing
     the buttons. Then we create the buttons, using a <classname>JButton</classname>
     constructor that specifies the button text. After setting the size of the
     <guilabel>OK</guilabel> button to equal the size of the
     <guilabel>Cancel</guilabel> button, we designate the <guilabel>OK</guilabel>
     button as the default button in the dialog. This causes the
-    <guilabel>OK</guilabel> button to be outlined as the default button. Finally, we
-    place the button side by side with a 6 pixel gap between them (for aesthetic
+    <guilabel>OK</guilabel> button to be outlined when the dialog if first displayed.
+    Finally, we place the buttons side by side with a 6 pixel gap between them (for aesthetic
     reasons), and place the completed <varname>buttonPanel</varname> in the
     <quote>South</quote> section of the dialog's content pane.
   </para>
@@ -396,10 +399,10 @@ suffixField.addActionListener(this);</programlisting></informalexample>
   <para>
     BeanShell does not permit a script to create derived classes.
     However, BeanShell offers a useful substitute: a method can be
-    used as a scripted object that can implement methods of a
+    used as a scripted object that can include nested methods implementing a
     number of Java interfaces. The method
     <function>prefixSuffixDialog()</function> that we are writing can thus be
-    treated as an <function>ActionListener</function>. To accomplish this, we
+    treated as an <classname>ActionListener</classname> object. To accomplish this, we
     call <function>addActionListener()</function> on each of the four
     components specifying <varname>this</varname> as the
     <classname>ActionListener</classname>. We still need to implement the
