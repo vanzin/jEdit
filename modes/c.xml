@@ -122,12 +122,9 @@
 			<END>*/</END>
 		</SPAN>
 
-		<!-- Include statements have this -->
-		<!-- Minor fix so that #include <net/if.h> is highlighted -->
-		<SPAN TYPE="KEYWORD2">
-			<BEGIN>&lt;</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
+		<!-- this is a hack so that #include <net/if.h> does not get
+		     the if highlighted -->
+		<EOL_SPAN TYPE="MARKUP" DELEGATE="INCLUDE">include</EOL_SPAN>
 
 		<!-- Directives -->
 		<KEYWORDS>
@@ -154,4 +151,6 @@
 			<MARKUP>warning</MARKUP>
 		</KEYWORDS>
 	</RULES>
+
+	<RULES SET="INCLUDE" DEFAULT="KEYWORD2" />
 </MODE>

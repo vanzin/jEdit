@@ -15,6 +15,10 @@ JEDIT 4.2 VERSION HISTORY
   DragAndDrop plugin. Having it installed causes all dropped text to be
   copied, instead of moved.)
 
+- Fixed a problem highlighting C preprocessor directives containing <.
+
+- Batch mode didn't recognize @rem as a comment.
+
 }}}
 
 }}}
