@@ -90,10 +90,6 @@ firewall.enabled=false
 # Keep dialog on by default
 search.keepDialog.toggle=true
 
-# Macros.DefaultHandler properties
-macro-handler.beanshell.label=Beanshell script
-macro-handler.beanshell.glob=*.bsh
-
 #}}}
 
 #{{{ Buffer settings

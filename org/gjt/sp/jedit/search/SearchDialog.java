@@ -159,11 +159,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		}
 		else
 		{
-			String path = view.getBuffer().getPath();
-			if(!MiscUtilities.isURL(path))
-				path = MiscUtilities.getParentOfPath(path);
-			else
-				path = System.getProperty("user.dir");
+			String path = MiscUtilities.getParentOfPath(
+				view.getBuffer().getPath());
 
 			if(path.endsWith(File.separator))
 				path = path.substring(0,path.length() - 1);
@@ -692,6 +689,17 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			String directory = this.directory.getText();
 			this.directory.addCurrentToHistory();
+
+			if(MiscUtilities.isURL(directory))
+			{
+				int retVal = GUIUtilities.confirm(
+					SearchDialog.this,"remote-dir-search",
+					null,JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				if(retVal != JOptionPane.YES_OPTION)
+					return false;
+			}
+
 			boolean recurse = searchSubDirectories.isSelected();
 
 			if(fileset instanceof DirectoryListSet)
@@ -716,7 +724,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		boolean ok = true;
 
-		if(fileset.getFileCount() == 0)
+		if(fileset.getFileCount(view) == 0)
 		{
 			// oops
 			GUIUtilities.error(this,"empty-fileset",null);
@@ -837,17 +845,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 					false);
 				if(dirs != null)
-				{
-					if(MiscUtilities.isURL(dirs[0]))
-					{
-						GUIUtilities.error(view,
-							"remote-dir-search",
-							null);
-						return;
-					}
-
 					directory.setText(dirs[0]);
-				}
 			}
 			else // source is directory or filter field
 			{

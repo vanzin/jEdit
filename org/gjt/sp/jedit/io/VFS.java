@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import gnu.regexp.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -35,7 +35,9 @@ import org.gjt.sp.util.Log;
 
 /**
  * A virtual filesystem implementation. Note tha methods whose names are
- * prefixed with "_" are called from the I/O thread.
+ * prefixed with "_" may be called from the I/O thread, so they cannot make
+ * Swing UI calls directly.
+ *
  * @author Slava Pestov
  * @author $Id$
  */
@@ -81,6 +83,13 @@ public abstract class VFS
 	 * @since jEdit 2.6pre2
 	 */
 	public static final int MKDIR_CAP = 1 << 5;
+
+	/**
+	 * Low latency capability -- if this is not set, then a confirm dialog
+	 * will be shown before doing a directory search in this VFS.
+	 * @since jEdit 4.1pre1
+	 */
+	public static final int LOW_LATENCY_CAP = 1 << 6;
 
 	//}}}
 
@@ -235,7 +244,7 @@ public abstract class VFS
 	 * so it should not do any I/O. It could, however, prompt for
 	 * a login name and password, for example.
 	 * @param path The path in question
-	 * @param comp The component that will parent error dialog boxes
+	 * @param comp The component that will parent any dialog boxes shown
 	 * @return The session
 	 * @since jEdit 2.6pre3
 	 */
@@ -336,7 +345,7 @@ public abstract class VFS
 		return true;
 	} //}}}
 
-	// the remaining methods are only called from the I/O thread
+	// the remaining methods are called from the I/O thread
 
 	//{{{ _canonPath() method
 	/**
@@ -356,11 +365,55 @@ public abstract class VFS
 
 	//{{{ _listDirectory() method
 	/**
-	 * Lists the specified directory. Note that this must be a full
-	 * URL, including the host name, path name, and so on. The
-	 * username and password is obtained from the session.
+	 * A convinience method that matches file names against globs, and can
+	 * optionally list the directory recursively.
 	 * @param session The session
-	 * @param directory The directory
+	 * @param directory The directory. Note that this must be a full
+	 * URL, including the host name, path name, and so on. The
+	 * username and password (if needed by the VFS) is obtained from the
+	 * session instance.
+	 * @param glob Only file names matching this glob will be returned
+	 * @param recursive If true, subdirectories will also be listed.
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @since jEdit 4.1pre1
+	 */
+	public String[] _listDirectory(Object session, String directory,
+		String glob, boolean recursive, Component comp)
+		throws IOException
+	{
+		Log.log(Log.DEBUG,this,"Listing " + directory);
+		ArrayList files = new ArrayList(100);
+
+		RE filter;
+		try
+		{
+			filter = new RE(MiscUtilities.globToRE(glob));
+		}
+		catch(REException e)
+		{
+			Log.log(Log.ERROR,this,e);
+			return null;
+		}
+
+		_listDirectory(session,new ArrayList(),files,directory,filter,
+			recursive,comp);
+
+		String[] retVal = (String[])files.toArray(new String[files.size()]);
+
+		Arrays.sort(retVal,new MiscUtilities.StringICaseCompare());
+
+		return retVal;
+	} //}}}
+
+	//{{{ _listDirectory() method
+	/**
+	 * Lists the specified directory. 
+	 * @param session The session
+	 * @param directory The directory. Note that this must be a full
+	 * URL, including the host name, path name, and so on. The
+	 * username and password (if needed by the VFS) is obtained from the
+	 * session instance.
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
 	 * @since jEdit 2.7pre1
@@ -620,6 +673,55 @@ public abstract class VFS
 				}
 			}
 		});
+	} //}}}
+
+	//{{{ _listDirectory() method
+	private void _listDirectory(Object session, ArrayList stack,
+		ArrayList files, String directory, RE glob, boolean recursive,
+		Component comp) throws IOException
+	{
+		if(stack.contains(directory))
+		{
+			Log.log(Log.ERROR,this,
+				"Recursion in _listDirectory(): "
+				+ directory);
+			return;
+		}
+		else
+			stack.add(directory);
+
+		VFS.DirectoryEntry[] _files = _listDirectory(session,directory,
+			comp);
+		if(_files == null || _files.length == 0)
+			return;
+
+		for(int i = 0; i < _files.length; i++)
+		{
+			VFS.DirectoryEntry file = _files[i];
+
+			if(file.type == VFS.DirectoryEntry.DIRECTORY
+				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+			{
+				if(recursive)
+				{
+					// resolve symlinks to avoid loops
+					String canonPath = _canonPath(session,file.path,comp);
+
+					_listDirectory(session,stack,files,
+						canonPath,glob,recursive,
+						comp);
+				}
+			}
+			else
+			{
+				if(!glob.isMatch(file.name))
+					continue;
+
+				Log.log(Log.DEBUG,this,file.path);
+
+				files.add(file.path);
+			}
+		}
 	} //}}}
 
 	//{{{ loadColors() method

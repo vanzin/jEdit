@@ -24,8 +24,10 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import gnu.regexp.RE;
+import java.awt.Component;
 import java.io.*;
 import java.util.Vector;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -72,9 +74,23 @@ public class DirectoryListSet extends BufferListSet
 	} //}}}
 
 	//{{{ _getFiles() method
-	protected String[] _getFiles()
+	protected String[] _getFiles(Component comp)
 	{
-		return MiscUtilities.listDirectory(directory,glob,recurse);
+		VFS vfs = VFSManager.getVFSForPath(directory);
+		Object session = vfs.createVFSSession(directory,comp);
+		if(session == null)
+			return null;
+
+		try
+		{
+			return vfs._listDirectory(session,directory,glob,recurse,comp);
+		}
+		catch(IOException io)
+		{
+			VFSManager.error(comp,directory,"ioerror",new String[]
+				{ io.toString() });
+			return null;
+		}
 	} //}}}
 
 	//{{{ Private members

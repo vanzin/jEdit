@@ -62,8 +62,8 @@ public class FileRootsVFS extends VFS
 	public int getCapabilities()
 	{
 		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create the default 'favorites' item in the 'More' menu
-		return 0 /* BROWSE_CAP | */;
+		// to create an item for this VFS in its 'Plugins' menu
+		return LOW_LATENCY_CAP;
 	} //}}}
 
 	//{{{ getParentOfPath() method

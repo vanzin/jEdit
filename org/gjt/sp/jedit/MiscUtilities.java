@@ -327,6 +327,68 @@ public class MiscUtilities
 		}
 	} //}}}
 
+	//{{{ fileToClass() method
+	/**
+	 * Converts a file name to a class name. All slash characters are
+	 * replaced with periods and the trailing '.class' is removed.
+	 * @param name The file name
+	 */
+	public static String fileToClass(String name)
+	{
+		char[] clsName = name.toCharArray();
+		for(int i = clsName.length - 6; i >= 0; i--)
+			if(clsName[i] == '/')
+				clsName[i] = '.';
+		return new String(clsName,0,clsName.length - 6);
+	} //}}}
+
+	//{{{ classToFile() method
+	/**
+	 * Converts a class name to a file name. All periods are replaced
+	 * with slashes and the '.class' extension is added.
+	 * @param name The class name
+	 */
+	public static String classToFile(String name)
+	{
+		return name.replace('.','/').concat(".class");
+	} //}}}
+
+	//{{{ listFiles() method
+	/**
+	 * Returns an array containing the full path names of all files
+	 * within the specified directory that match the specified file
+	 * name glob.
+	 * @param directory The directory path
+	 * @param glob The file name glob
+	 * @param recurse If true, subdirectories will be listed as well
+	 */
+	public static String[] listDirectory(String directory, String glob,
+		boolean recurse)
+	{
+		Log.log(Log.DEBUG,MiscUtilities.class,"Listing " + directory);
+		Vector files = new Vector(100);
+
+		RE filter;
+		try
+		{
+			filter = new RE(globToRE(glob));
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,MiscUtilities.class,e);
+			return null;
+		}
+
+		listDirectory(new Vector(),files,new File(directory),filter,recurse);
+
+		String[] retVal = new String[files.size()];
+		files.copyInto(retVal);
+
+		quicksort(retVal,new StringICaseCompare());
+
+		return retVal;
+	} //}}}
+
 	//}}}
 
 	//{{{ Text methods
@@ -831,32 +893,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//}}}
 
-	//{{{ fileToClass() method
-	/**
-	 * Converts a file name to a class name. All slash characters are
-	 * replaced with periods and the trailing '.class' is removed.
-	 * @param name The file name
-	 */
-	public static String fileToClass(String name)
-	{
-		char[] clsName = name.toCharArray();
-		for(int i = clsName.length - 6; i >= 0; i--)
-			if(clsName[i] == '/')
-				clsName[i] = '.';
-		return new String(clsName,0,clsName.length - 6);
-	} //}}}
-
-	//{{{ classToFile() method
-	/**
-	 * Converts a class name to a file name. All periods are replaced
-	 * with slashes and the '.class' extension is added.
-	 * @param name The class name
-	 */
-	public static String classToFile(String name)
-	{
-		return name.replace('.','/').concat(".class");
-	} //}}}
-
 	//{{{ buildToVersion() method
 	/**
 	 * Converts an internal version number (build) into a
@@ -1009,42 +1045,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 		//}}}
 
 		return true;
-	} //}}}
-
-	//{{{ listFiles() method
-	/**
-	 * Returns an array containing the full path names of all files
-	 * within the specified directory that match the specified file
-	 * name glob.
-	 * @param directory The directory path
-	 * @param glob The file name glob
-	 * @param recurse If true, subdirectories will be listed as well
-	 */
-	public static String[] listDirectory(String directory, String glob,
-		boolean recurse)
-	{
-		Log.log(Log.DEBUG,MiscUtilities.class,"Listing " + directory);
-		Vector files = new Vector(100);
-
-		RE filter;
-		try
-		{
-			filter = new RE(globToRE(glob));
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,MiscUtilities.class,e);
-			return null;
-		}
-
-		listDirectory(new Vector(),files,new File(directory),filter,recurse);
-
-		String[] retVal = new String[files.size()];
-		files.copyInto(retVal);
-
-		quicksort(retVal,new StringICaseCompare());
-
-		return retVal;
 	} //}}}
 
 	//{{{ Private members

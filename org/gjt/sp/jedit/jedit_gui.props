@@ -49,6 +49,9 @@ view.docking.menu-tooltip=Shows a list of docked windows
 
 directory.not-local=Cannot list directories on remote filesystems
 directory.no-files=No Files
+
+macro-handler.beanshell.label=BeanShell script
+macro-handler.beanshell.glob=*.bsh
 #}}}
 
 #{{{ Tool bar
@@ -1102,9 +1105,10 @@ empty-fileset.message=The specified search file set contains no files.\n\
 #}}}
 
 #{{{ Can only search local directories dialog
-remote-dir-search.title=Cannot Search Non-Local Directories
-remote-dir-search.message=Only directories on the local filesystem\n\
-	may be searched.
+remote-dir-search.title=Non-Local Directory Chosen
+remote-dir-search.message=You have elected to search a non-local directory.\n\
+	This can be very slow due to network latency and so on.\n\
+	Are you sure you want to continue?
 #}}}
 
 #{{{ Paste previous dialog

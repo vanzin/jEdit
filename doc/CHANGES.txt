@@ -29,6 +29,11 @@ contributing to this release.
 - HyperSearch now respects rectangular selections. 'Replace All' already
   supported rectangular selections.
 
+- Directory search is now VFS-aware; however it shows a confirm dialog
+  before doing a search on a remote filesystem. If your VFS is not
+  affected by network latency, you can have the getCapabilities() method
+  return the new LOW_LATENCY_CAP capability.
+
 - Added an option to the 'Text Area' pane to implement "standard"
   previous/next word behavior, like that in a lot of other programs
   (next word moves caret to start of next word, instead of end of

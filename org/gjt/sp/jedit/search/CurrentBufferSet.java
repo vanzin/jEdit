@@ -53,7 +53,7 @@ public class CurrentBufferSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getFileCount() method
-	public int getFileCount()
+	public int getFileCount(View view)
 	{
 		return 1;
 	} //}}}
