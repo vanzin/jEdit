@@ -3,7 +3,20 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- files changed dialog: visible row count
+- NO_LINE_BREAK in props.xml not honored -- EOL_SPAN delegates to
+  another ruleset...
+
+- plugin api:
+  - new option pane api
+  - dockable action cache
+  - cache properties
+  - action labels
+  - refactor JARClassLoader
+  - EditPlugin.JAR handles starting/stopping
+  - add jEdit methods to unload plugins
+  - the cache
+  - services
+
 - save file resulting in fold collapse -- scroll line count broken
 
 - browser: different layout when top or bottom
@@ -53,7 +66,6 @@ of bounds, etc.
   - mirror change: refresh download locations
   - explicit 'refresh mirror list' button in option pane
 - update horizontal scroll width immediately on buffer switch
-- need distinct default styles for new token types
 - HTML mode: use new token types
 - hypersearch: open in new split
 - new bsh and bsh command path
