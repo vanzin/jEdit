@@ -17,6 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Checked for jEeit 4.0 API
+ *
  */
 
 import java.util.StringTokenizer;
@@ -195,10 +198,9 @@ void verticalPaste() {
             int physicalLineOffset;
 
             if (line >= textArea.getLineCount()) {
-                buffer.insertString(
+                buffer.insert(
                       textArea.getLineEndOffset(textArea.getLineCount() - 1) - 1
                     , "\n"
-                    , null
                 );
 
                 lineStartOffset = textArea.getLineStartOffset(
@@ -219,10 +221,9 @@ void verticalPaste() {
                         - physicalToVirtualLineOffset(
                             line, physicalLineOffset - 1
                           );
-                    buffer.insertString(
+                    buffer.insert(
                           lineStartOffset + physicalLineOffset - 1
                         , MiscUtilities.createWhiteSpace(spacesToPrepend, 0)
-                        , null
                     );
 
                     physicalLineOffset--;
@@ -246,10 +247,9 @@ void verticalPaste() {
                 }
             }
 
-            buffer.insertString(
+            buffer.insert(
                   lineStartOffset + physicalLineOffset
                 , leftSpacer + s + rightSpacer
-                , null
             );
         }
     } catch (BadLocationException ble) {
@@ -261,3 +261,15 @@ void verticalPaste() {
 
 verticalPaste();
 
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Vertical_Paste.bsh</filename></para>
+    <abstract><para>
+		Pastes the content of the clipboard vertically and fills empty
+		areas if necessary.
+    </para></abstract>
+</listitem>
+
+*/

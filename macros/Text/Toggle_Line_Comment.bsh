@@ -4,6 +4,7 @@
  * selected line (jEdit version 3.2 or greater required)
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,8 @@
  * This macro requires version 3.2 (or greater) of jEdit.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -67,7 +70,7 @@ void toggleLineComment()
 					return;
 				}
 			}
-			buffer.insertString(offset, super.comment, null);
+			buffer.insert(offset, super.comment);
 		}
 		catch(javax.swing.text.BadLocationException bl)
 		{
@@ -117,6 +120,22 @@ void toggleLineComment()
 }
 
 toggleLineComment();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+  <para><filename>Toggle_Line_Comment.bsh</filename></para>
+  <abstract><para>
+	  Toggles line comments, alternately inserting and deleting them
+    at the beginning of each selected line.
+  </para></abstract>
+	<para>
+		If there is no selection, the macro operates on the current line.
+	</para>
+</listitem>
+
+*/
 
 // end Toggle_Line_Comment.bsh
 
