@@ -452,8 +452,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 						String parent = MiscUtilities.getParentOfPath(path);
 						if(parent.endsWith("/") || parent.endsWith(File.separator))
 							parent = parent.substring(0,parent.length() - 1);
+
 						String newText;
-						if(parent.equals(browser.getDirectory()))
+						if(MiscUtilities.isAbsolutePath(currentText)
+							&& !currentText.startsWith(browser.getPath()))
+							newText = path;
+						else if(parent.equals(browser.getDirectory()))
 							newText = name;
 						else
 							newText = path;

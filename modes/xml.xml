@@ -50,7 +50,7 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-	<RULES SET="TAGS" DEFAULT="MARKUP">
+	<RULES SET="TAGS" DEFAULT="MARKUP" NO_WORD_SEP="-_">
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
