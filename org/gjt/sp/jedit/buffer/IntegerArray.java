@@ -1,5 +1,5 @@
 /*
- * IntegerArray.java - jEdit buffer
+ * IntegerArray.java - Automatically growing array of ints
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -22,6 +22,9 @@
 
 package org.gjt.sp.jedit.buffer;
 
+/**
+ * A simple collection that stores integers and grows automatically.
+ */
 public class IntegerArray
 {
 	//{{{ IntegerArray constructor
@@ -43,12 +46,22 @@ public class IntegerArray
 		array[len++] = num;
 	} //}}}
 
-	//{{{ toArray() method
-	public int[] toArray()
+	//{{{ get() method
+	public final int get(int index)
 	{
-		int[] retVal = new int[len];
-		System.arraycopy(array,0,retVal,0,len);
-		return retVal;
+		return array[index];
+	} //}}}
+
+	//{{{ size() method
+	public final int size()
+	{
+		return len;
+	} //}}}
+
+	//{{{ clear() method
+	public final void clear()
+	{
+		len = 0;
 	} //}}}
 
 	//{{{ Private members

@@ -128,7 +128,7 @@
 				FIRST_LINE_GLOB="#!/*perl*" />
 
 <MODE NAME="php"		FILE="php.xml"
-				FILE_NAME_GLOB="*.{php3,php,phtml}"
+				FILE_NAME_GLOB="*.{php3,php4,php,phtml}"
 				FIRST_LINE_GLOB="&lt;?php" />
 
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"

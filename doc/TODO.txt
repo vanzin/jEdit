@@ -2,14 +2,15 @@ TO DO
 
 + before 4.0pre1:
 
-- cvs add ContentManager.java, IntegerArray.java
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
 - inserting line after closed fold issues -- fix in OffsetManager
-- positions and line start offsets properly managed in offset manager
-- ContentManager
+- check for out-of-bounds access in Buffer class
+- optimize content and offset managers
+- positions
 - new undo
 - narrowing
+- buffer properties
 - move away from Swing APIs in the core
 - respect collapseFolds buffer property when:
   - pasting
@@ -32,6 +33,9 @@ TO DO
 
 + features:
 
+- drop LatestVersion plugin
+- roll Firewall plugin into core
+- web start version
 - selective undo
 - if moving caret resulted in expansion of a fold, that fold should be
   collapsed when the caret leaves that fold
@@ -180,6 +184,7 @@ TO DO
 
 + bugs:
 
+- work thread hang?
 - when a new text area is created, if caret is on a bracket, not matched
   initially
 - resizing doesn't update horizontal scroll bar
