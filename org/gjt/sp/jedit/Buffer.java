@@ -389,17 +389,25 @@ public class Buffer implements EBComponent
 				IntegerArray endOffsets = (IntegerArray)
 					getProperty(BufferIORequest.END_OFFSETS);
 
+				// For `reload' command
+				remove(0,getLength());
+
 				if(seg != null && endOffsets != null)
 				{
-					// For `reload' command
-					remove(0,getLength());
-
 					// This is faster than Buffer.insert()
 					try
 					{
 						writeLock();
 
 						contentMgr.insert(0,seg.toString());
+
+						parseBufferLocalProperties(
+							contentMgr.getText(0,
+								endOffsets.get(Math.min(
+								endOffsets.getSize() - 1,
+								10))));
+						setModeForFirstLine(contentMgr.getText(0,
+							endOffsets.get(0)));
 
 						contentInserted(0,seg.count,
 							endOffsets);
@@ -416,20 +424,6 @@ public class Buffer implements EBComponent
 				undoMgr.clear();
 				undoMgr.setLimit(jEdit.getIntegerProperty(
 					"buffer.undoCount",100));
-
-				parseBufferLocalProperties();
-				setMode();
-
-				int collapseFolds = getIntegerProperty("collapseFolds",0);
-				if(collapseFolds != 0)
-				{
-					for(int i = 0; i < inUseFVMs.length; i++)
-					{
-						FoldVisibilityManager mgr = inUseFVMs[i];
-						if(mgr != null)
-							mgr.expandFolds(collapseFolds);
-					}
-				}
 
 				setFlag(LOADING,false);
 
@@ -462,7 +456,7 @@ public class Buffer implements EBComponent
 						view,BufferUpdate.LOADED));
 					EditBus.send(new BufferUpdate(Buffer.this,
 						view,BufferUpdate.MARKERS_CHANGED));
-		}
+				}
 			}
 		}; //}}}
 
@@ -2004,39 +1998,7 @@ public class Buffer implements EBComponent
 	 */
 	public void setMode()
 	{
-		String userMode = (String)getProperty("mode");
-		if(userMode != null)
-		{
-			Mode m = jEdit.getMode(userMode);
-			if(m != null)
-			{
-				setMode(m);
-				return;
-			}
-		}
-
-		String nogzName = name.substring(0,name.length() -
-			(name.endsWith(".gz") ? 3 : 0));
-		Element lineElement = getDefaultRootElement().getElement(0);
-
-		String line = getText(0,(lineElement == null
-			? 0 : lineElement.getEndOffset()-1));
-
-		Mode[] modes = jEdit.getModes();
-
-		for(int i = 0; i < modes.length; i++)
-		{
-			if(modes[i].accept(nogzName,line))
-			{
-				setMode(modes[i]);
-				return;
-			}
-		}
-
-		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
-		if(defaultMode == null)
-			defaultMode = jEdit.getMode("text");
-		setMode(defaultMode);
+		setModeForFirstLine(getLineText(0));
 	} //}}}
 
 	//{{{ indentLine() method
@@ -3436,6 +3398,39 @@ public class Buffer implements EBComponent
 			((Marker)markers.elementAt(i))
 				.createPosition();
 		}
+	} //}}}
+
+	//{{{ setModeForFirstLine() method
+	private void setModeForFirstLine(String firstLine)
+	{
+		String userMode = getStringProperty("mode");
+		if(userMode != null)
+		{
+			Mode m = jEdit.getMode(userMode);
+			if(m != null)
+			{
+				setMode(m);
+				return;
+			}
+		}
+
+		String nogzName = name.substring(0,name.length() -
+			(name.endsWith(".gz") ? 3 : 0));
+		Mode[] modes = jEdit.getModes();
+
+		for(int i = 0; i < modes.length; i++)
+		{
+			if(modes[i].accept(nogzName,firstLine))
+			{
+				setMode(modes[i]);
+				return;
+			}
+		}
+
+		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
+		if(defaultMode == null)
+			defaultMode = jEdit.getMode("text");
+		setMode(defaultMode);
 	} //}}}
 
 	//{{{ setTokenMarker() method

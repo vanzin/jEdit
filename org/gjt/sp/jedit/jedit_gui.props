@@ -53,7 +53,7 @@ view.docking.close-tooltip=Hides the current dockable
 view.toolbar=new-file open-file save print - \
 	undo redo cut copy paste - find find-next - new-view unsplit \
 	split-horizontal split-vertical - buffer-options global-options - \
-	help
+	plugin-manager - help
 
 new-file.icon=New24.gif
 open-file.icon=Open24.gif
@@ -72,6 +72,7 @@ split-horizontal.icon=SplitHorizontal24.gif
 split-vertical.icon=SplitVertical24.gif
 buffer-options.icon=Properties24.gif
 global-options.icon=Preferences24.gif
+plugin-manager.icon=BeanAdd24.gif
 help.icon=Help24.gif
 
 #{{{ Icon list for tool bar editor

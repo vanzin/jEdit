@@ -129,7 +129,7 @@
       <entry>noWordSep</entry>
       <entry>A list of non-alphanumeric characters that are
       <emphasis>not</emphasis> to
-      be treated as word separators.</entry>
+      be treated as word separators. Global default is <quote>_</quote>.</entry>
      </row>
      <row>
       <entry>syntax</entry>

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:collapseFolds=0: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="writing-modes"><title>Writing Edit Modes</title>
  <para>
@@ -10,12 +10,15 @@
   start with a short XML primer, followed by detailed information about
   each supported tag and highlighting rule.
  </para>
- <sidebar><title>Reload Edit Modes command</title>
+ <sidebar><title>Changes to modes take effect immediately</title>
+  <para>
+   Editing a mode file, or a mode catalog file within jEdit will cause the
+   edit modes to be reloaded automatically as soon as the file is saved.
+  </para>
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-   reloads all edit mode XML files from disk. It is very useful when writing
-   edit modes because it lets you see changes take effect without having to
-   restart jEdit.
+   can be used to reload edit modes after changes to mode files are made
+   outside jEdit.
   </para>
  </sidebar>
  <sect1 id="xml-primer"><title>An XML Primer</title>
@@ -153,7 +156,6 @@
     &lt;PROPERTY NAME="commentStart" VALUE="/*" /&gt;
     &lt;PROPERTY NAME="commentEnd" VALUE="*/" /&gt;
     &lt;PROPERTY NAME="blockComment" VALUE="//" /&gt;
-    &lt;PROPERTY NAME="noWordSep" VALUE="_" /&gt;
     &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
 &lt;/PROPS&gt;</programlisting>
  </sect1>

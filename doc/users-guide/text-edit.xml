@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="editing"><title>Editing Text</title>
  <sect1 id="caret"><title>Moving The Caret</title>
@@ -101,7 +101,7 @@
     turns multiple selection mode on and
     off. In multiple selection mode, multiple fragments of text can be selected
     and operated on simultaneously, and the text <literal>multi</literal> is shown
-    in black in the status bar.
+    in the status bar.
    </para>
    <para>
     While multiple selection mode is active, you can click and drag the mouse
@@ -136,13 +136,18 @@
     <listitem><para>Some older plugins may not support multiple selection at
     all.</para></listitem>
    </itemizedlist>
+   <para>
+    <guimenu>Edit</guimenu>&gt;<guimenuitem>Invert Selection</guimenuitem>
+    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>I</keycap>) selects a set of text chunks such that all text
+    that was formely part of a selection is now unselected, and all text that
+    wasn't, is selected.
+   </para>
    <tip>
     <para>
      Deactivating multiple selection
      mode while a fragmented selection exists will leave the selection in place,
-     but it will prevent you from making further fragmented selections. If a
-     fragmented selection exists but multiple selection mode is not active, the
-     text <literal>multi</literal> will be shown in dark blue in the status bar.
+     but it will prevent you from making further fragmented selections.
     </para>
    </tip>
   </sect2>
@@ -154,7 +159,7 @@
    front of the caret position for every character that is inserted.
    To activate overwrite mode, press <keycap>Insert</keycap>. The caret is
    drawn as horizontal line while in overwrite
-   mode; the text <literal>over</literal> also appears in the status bar.
+   mode; the text <literal>ovr</literal> also appears in the status bar.
   </para>
   <para>
    Inserting text while there is a selection will replace the selection

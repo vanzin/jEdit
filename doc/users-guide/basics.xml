@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFold=1: -->
 
 <chapter id="basics"><title>jEdit Basics</title>
  <sect1 id="buffers"><title>Buffers</title>
@@ -32,6 +32,30 @@
    (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo>)
    switches to the buffer that was being edited prior to the current one.
   </para>
+  <sidebar><title>Memory usage</title>
+   <para>
+    The maximum number of open buffers depends on available <firstterm>Java
+    heap memory</firstterm>. Each buffer requires the memory of
+    approximately two and a half it's size on disk. This overhead is caused
+    by the file being stored internally in Unicode (see
+    <xref linkend="encodings" />), and the fact that additional information,
+    such as line numbers, also needs to be stored.
+   </para>
+   <para>
+    The status bar at the bottom of the view displays used and total Java
+    heap memory; see <xref linkend="status-bar" /> for details. This can give
+    you a rough idea of how much memory the currently opened files are using.
+    The Java heap grows if it runs out of room; but it only grows to a certain
+    maximum size, and attempts to allocate Java objects that would grow the
+    heap beyond this size fail with out-of-memory errors.
+   </para>
+   <para>
+    One side-effect of this is that if the maximum heap size is set too low,
+    opening large files or performing other memory-intesive operations can
+    fail, even if you have a lot of system memory free. The solution is to
+    change the Java heap size.
+   </para>
+  </sidebar>
  </sect1>
  <sect1 id="views"><title>Views</title>
   <para>
@@ -111,7 +135,7 @@
     the same effect.
    </para>
   </sect2>
-  <sect2><title>The Status Bar</title>
+  <sect2 id="status-bar"><title>The Status Bar</title>
    <para>
     A <firstterm>status bar</firstterm> at the bottom of the view displays the
     following information, from left to right:
@@ -126,36 +150,42 @@
      <firstterm>screen</firstterm> position (where each tab counts for the number of
      columns until the next tab stop).
     </para>
+    <para>
+     Double-clicking on the caret location indicator displays the
+     <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line</guimenuitem> dialog
+     box; see <xref linkend="lines" />.
+    </para>
     </listitem>
     <listitem><para>Prompts displayed by commands such as those dealing with
     registers and markers (see <xref linkend="text-transfer" /> and <xref
-    linkend="markers" />)</para></listitem>
-    <listitem><para>The current buffer's edit mode. Clicking this
+    linkend="markers" />), also I/O progress messages (see
+    <xref linkend="threaded-io" />)</para></listitem>
+    <listitem><para>The current buffer's edit mode. Double-clicking this
     displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
     Options</guimenuitem> dialog box. See <xref
     linkend="modes" /> and <xref linkend="buffer-opts" />.</para></listitem>
-    <listitem><para>The current buffer's character encoding.  Clicking this
+    <listitem><para>The current buffer's character encoding.  Double-clicking this
     displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
     Options</guimenuitem> dialog box. See <xref
     linkend="encodings" /> and <xref linkend="buffer-opts" />.</para></listitem>
-    <listitem><para>If multiple selection is enabled, the text
-    <guilabel>multi</guilabel> is shown in black, otherwise it will be grayed out.
-    Clicking her or pressing <keycombo><keycap>Control</keycap>
+    <listitem><para>The current buffer's fold mode; this is either
+    <quote>none</quote>, <quote>indent</quote> or <quote>explicit</quote>.
+    Clicking here toggles between the three modes. See <xref linkend="folding" />.
+    </para></listitem>
+    <listitem><para>If multiple selection is enabled, the string
+    <guilabel>multi</guilabel>; otherwise <guilabel>single</guilabel> is shown.
+    Clicking here or pressing <keycombo><keycap>Control</keycap>
     <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
     linkend="multi-select" />.</para></listitem>
-    <listitem><para>If overwrite mode is enabled, the text <guilabel>over</guilabel> is
-    shown in black, otherwise it will be grayed out. Clicking here or pressing
+    <listitem><para>If overwrite mode is enabled, the string
+    <guilabel>ovr</guilabel>; otherwise <guilabel>ins</guilabel> is shown.
+    Clicking here or pressing
     <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
     linkend="entering-text" />.</para></listitem>
-    <listitem><para>If portions of the buffer are invisible due to folding,
-    the text <guilabel>fold</guilabel> is
-    shown in black, otherwise it will be grayed out. See <xref
-    linkend="folding" />.</para></listitem>
-    <listitem><para>If input/output operations are in progress, a small disk icon
-    and progress bars for each running operation are displayed. Clicking
-    here will display the <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O
-    Progress Monitor</guimenuitem> dialog box. See <xref
-    linkend="threaded-io" />.</para></listitem>
+    <listitem><para>A Java heap memory usage indicator, that shows used versus
+    total heap memory, in megabytes. Double-clicking here opens the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Memory Status</guimenuitem>
+    dialog box.</para></listitem>
    </itemizedlist>
   </sect2>
  </sect1>

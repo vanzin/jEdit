@@ -56,7 +56,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	public HelpViewer(URL url)
 	{
 		this(url.toString());
-	}
+	} //}}}
 
 	//{{{ HelpViewer constructor
 	/**
@@ -120,6 +120,11 @@ public class HelpViewer extends JFrame implements EBComponent
 		toc.setRootVisible(false);
 		toc.setShowsRootHandles(true);
 
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+			nodes.get("jeditresource:/doc/users-guide/using-jedit-part.html");
+		if(node != null)
+			toc.expandPath(new TreePath(node.getPath()));
+
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
 		viewer.addHyperlinkListener(new LinkHandler());
@@ -128,7 +133,6 @@ public class HelpViewer extends JFrame implements EBComponent
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			new JScrollPane(toc),new JScrollPane(viewer));
 		splitter.setBorder(null);
-
 
 		getContentPane().add(BorderLayout.CENTER,splitter);
 

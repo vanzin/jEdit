@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=0: -->
 
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>
@@ -41,13 +41,13 @@
    Files that you do not have write access to are opened in read-only
    mode, and editing will not be permitted.
   </para>
-  <sidebar><title>GZipped Files</title>
+  <tip>
    <para>
     jEdit supports transparent editing of GZipped files; files with
     the <filename>.gz</filename> extension are automatically decompressed before
     loading, and compressed when saving.
    </para>
-  </sidebar>
+  </tip>
  </sect1>
  <sect1 id="saving"><title>Saving Files</title>
   <para>
@@ -434,12 +434,13 @@
   <para>
    To improve responsiveness and perceived performance,
    jEdit executes all input/output operations asynchronously.
-   While I/O is in progress, a small disk icon and progress meters for each
-   running operation are shown in the status bar.
+   While I/O is in progress, the status bar displays the number of
+   remaining I/O operations. When I/O is complete, the status bar shows a message
+   to this effect.
    The <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O Progress
    Monitor</guimenuitem> command displays a window with more detailed status
-   information. Requests can also be aborted in this window. Note that aborting
-   a buffer save can result in data loss.
+   information and progress meters. Requests can also be aborted in this window.
+   Note that aborting a buffer save can result in data loss.
   </para>
   <para>
    By default, four I/O threads are created, which means that up

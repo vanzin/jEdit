@@ -511,7 +511,10 @@ public class DockableWindowManager extends JPanel
 		if(entry.win == null)
 			entry.open();
 
-		entry.container.show(entry);
+		if(entry.win != null)
+			entry.container.show(entry);
+		else
+			; // some kind of exception already shown
 	} //}}}
 
 	//{{{ addDockableWindow() method

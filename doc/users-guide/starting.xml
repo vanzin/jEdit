@@ -1,11 +1,11 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="starting"><title>Starting jEdit</title>
  <sect1 id="conventions"><title>Conventions</title>
   <para>
-   Several conventions are used throughout the manual. They will be
-   described here.
+   Several conventions are used throughout jEdit's user interface and
+   this manual. They will be described here.
   </para>
   <para>
    When a menu item selection is being described, the
@@ -33,12 +33,39 @@
    press <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>, followed by
    <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>.
   </para>
+  <para>
+   In many dialog boxes, the default button (it has a heavy outline, or a
+   special border, depending on your look and feel) can be activated by
+   pressing <keycap>Enter</keycap>. Similarly, pressing
+   <keycap>Escape</keycap> will usually close a dialog box.
+  </para>
+  <para>
+   Finally, some user interface elements (menus, menu items, buttons) have a
+   certain letter in their label underlined. Pressing this letter in combination
+   with the <keycap>Alt</keycap> key activates the associated user interface
+   widget.
+  </para>
   <sidebar><title>MacOS</title>
    <para>
-    When running on MacOS, the primary modifier key is <keycap>Command</keycap>,
-    not <keycap>Control</keycap>. If you are a Mac user, mentally substitute
-    <keycap>Command</keycap> whenever you see <keycap>Control</keycap> in this
-    guide.
+    jEdit tries to adapt itself to established conventions when running on
+    MacOS.
+   </para>
+   <para>
+    If you are using MacOS, mentally substitute the modifier keys you see in
+    this manual as follows:
+   </para>
+   <itemizedlist>
+    <listitem><para>Read <keycap>Control</keycap> as <keycap>Command</keycap>
+    </para></listitem>
+    <listitem><para>Read <keycap>Alt</keycap> as <keycap>Option</keycap>
+    </para></listitem>
+   </itemizedlist>
+   <para>
+    If you only have a one-button mouse, a right button click (to show a
+    context menu, and so on) can be simulated by holding down
+    <keycap>Control</keycap> while clicking. A middle button click (to insert
+    the most recent selection in the text area) can be simulated by
+    holding down <keycap>Option</keycap> while clicking.
    </para>
   </sidebar>
  </sect1>
@@ -178,6 +205,15 @@
       the edit server will continue listening for
       client connections even after all views are closed.
       See <xref linkend="starting" />.</entry>
+     </row>
+     <row>
+      <entry>-nogui</entry>
+      <entry>jEdit will not open an initial view, and instead only open one
+      when the first client connects. Can only be used in combination with
+      the <command>-background</command> switch. You can use this switch to
+      <quote>pre-load</quote> jEdit when you log in to your computer, for
+      example.
+      </entry>
      </row>
      <row>
       <entry>-norestore</entry>
