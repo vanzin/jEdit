@@ -422,7 +422,8 @@ view=new-view \
      - \
      %scrolling \
      %folding \
-     %splitting
+     %splitting \
+     %docking
 view.label=$View
 new-view.label=New $View
 close-view.label=$Close View
@@ -489,6 +490,16 @@ prev-textarea.label=Go to Previous Text Area
 next-textarea.label=Go to Next Text Area
 #}}}
 
+#{{{ Docking menu
+docking=close-left-docking-area \
+	close-top-docking-area \
+	close-right-docking-area \
+	close-bottom-docking-area
+docking.label=Docking
+close-left-docking-area.label=Close Left Docking Area
+close-top-docking-area.label=Close Top Docking Area
+close-right-docking-area.label=Close Right Docking Area
+close-bottom-docking-area.label=Close Bottom Docking Area
 #}}}
 
 #{{{ Utilities menu
