@@ -5,7 +5,8 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - New document model uses less memory, loads files faster, and has a
-  simpler API for developers
+  simpler API for developers. Also, finally, the file modification flag
+  is cleared when all edits up to a save are undone
 - New folding features:
   - Three fold modes: none, indent, explicit. 'none' is the default now.
     'indent' is the indent-based folding mode, that behaves the same as
@@ -187,6 +188,7 @@ JEDIT 4.0 VERSION HISTORY
   -background command line switch was used
 - Sometimes, Untitled buffers would not be replaced when another file
   was opened
+- Fixed slowdown when making changes to the last line of a buffer
 
 + API Changes
 

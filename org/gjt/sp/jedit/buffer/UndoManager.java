@@ -37,6 +37,12 @@ public class UndoManager
 		undos = new Vector(100);
 	} //}}}
 
+	//{{{ setLimit() method
+	public void setLimit(int limit)
+	{
+		this.limit = limit;
+	} //}}}
+
 	//{{{ clear() method
 	public void clear()
 	{
@@ -46,25 +52,53 @@ public class UndoManager
 	//{{{ undo() method
 	public boolean undo(JEditTextArea textArea)
 	{
-		return false;
+		if(undoPos == 0)
+			return false;
+		else
+		{
+			Edit edit = (Edit)undos.elementAt(--undoPos);
+			int caret = edit.undo();
+			if(caret != -1)
+				textArea.setCaretPosition(caret);
+			return true;
+		}
 	} //}}}
 
 	//{{{ redo() method
 	public boolean redo(JEditTextArea textArea)
 	{
-		return false;
+		if(undoPos == undoCount)
+			return false;
+		else
+		{
+			Edit edit = (Edit)undos.elementAt(undoPos++);
+			int caret = edit.redo();
+			if(caret != -1)
+				textArea.setCaretPosition(caret);
+			return true;
+		}
 	} //}}}
 
 	//{{{ beginCompoundEdit() method
 	public void beginCompoundEdit()
 	{
-		
+		if(compoundEditCount == 0)
+			compoundEdit = new CompoundEdit();
+
+		compoundEditCount++;
 	} //}}}
 
 	//{{{ endCompoundEdit() method
 	public void endCompoundEdit()
 	{
-		
+		if(compoundEditCount == 1)
+		{
+			if(compoundEdit.getSize() != 0)
+				addEdit(compoundEdit);
+			compoundEdit = null;
+		}
+
+		compoundEditCount--;
 	} //}}}
 
 	//{{{ insideCompoundEdit() method
@@ -74,116 +108,248 @@ public class UndoManager
 	} //}}}
 
 	//{{{ contentInserted() method
-	public void contentInserted(int offset, int length, String text)
+	public void contentInserted(int offset, int length, String text, boolean clearDirty)
 	{
-		
+		Edit toMerge = null;
+		if(compoundEdit != null)
+		{
+			int size = compoundEdit.getSize();
+			if(size != 0)
+				toMerge = (Edit)compoundEdit.undos.elementAt(size - 1);
+		}
+		else
+		{
+			if(undoPos != 0)
+				toMerge = (Edit)undos.elementAt(undoPos - 1);
+		}
+
+		if(!clearDirty && toMerge instanceof Insert)
+		{
+			Insert ins = (Insert)toMerge;
+			if(ins.offset == offset)
+			{
+				ins.str = text.concat(ins.str);
+				ins.length += length;
+				return;
+			}
+			else if(ins.offset + ins.length == offset)
+			{
+				ins.str = ins.str.concat(text);
+				ins.length += length;
+				return;
+			}
+		}
+
+		Insert ins = new Insert(offset,length,text,clearDirty);
+		if(clearDirty)
+		{
+			if(clearDirtyEdit != null)
+				clearDirtyEdit.clearDirty = false;
+			clearDirtyEdit = ins;
+		}
+
+		if(compoundEdit != null)
+			compoundEdit.addEdit(ins);
+		else
+			addEdit(ins);
 	} //}}}
 
 	//{{{ contentRemoved() method
-	public void contentRemoved(int offset, int length, String text)
+	public void contentRemoved(int offset, int length, String text, boolean clearDirty)
 	{
-		
+		Edit toMerge = null;
+		if(compoundEdit != null)
+		{
+			int size = compoundEdit.getSize();
+			if(size != 0)
+				toMerge = (Edit)compoundEdit.undos.elementAt(size - 1);
+		}
+		else
+		{
+			if(undoPos != 0)
+				toMerge = (Edit)undos.elementAt(undoPos - 1);
+		}
+
+		if(!clearDirty && toMerge instanceof Remove)
+		{
+			Remove rem = (Remove)toMerge;
+			if(rem.offset == offset)
+			{
+				rem.str = rem.str.concat(text);
+				rem.length += length;
+				return;
+			}
+			else if(rem.offset + rem.length == offset)
+			{
+				rem.str = text.concat(rem.str);
+				rem.length += length;
+				return;
+			}
+		}
+
+		Remove rem = new Remove(offset,length,text,clearDirty);
+		if(clearDirty)
+		{
+			if(clearDirtyEdit != null)
+				clearDirtyEdit.clearDirty = false;
+			clearDirtyEdit = rem;
+		}
+
+		if(compoundEdit != null)
+			compoundEdit.addEdit(rem);
+		else
+			addEdit(rem);
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Instance variables
 	private Buffer buffer;
 	private Vector undos;
+	private int limit;
+	private int undoPos;
+	private int undoCount;
 	private int compoundEditCount;
 	private CompoundEdit compoundEdit;
+	private Edit clearDirtyEdit;
+	//}}}
+
+	//{{{ addEdit() method
+	private void addEdit(Edit edit)
+	{
+		undos.insertElementAt(edit,undoPos++);
+
+		if(undos.size() > limit)
+		{
+			undos.removeElementAt(0);
+			undoPos--;
+		}
+
+		undoCount = undoPos;
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
 
 	//{{{ Edit interface
-	interface Edit
+	abstract class Edit
 	{
 		//{{{ undo() method
-		int undo(Buffer buffer, JEditTextArea textArea);
+		abstract int undo();
 		//}}}
 
 		//{{{ redo() method
-		int redo(Buffer buffer, JEditTextArea textArea);
+		abstract int redo();
 		//}}}
+
+		boolean clearDirty;
 	} //}}}
 
 	//{{{ Insert class
-	public static class Insert implements Edit
+	class Insert extends Edit
 	{
 		//{{{ Insert constructor
-		public Insert(int offset, int length, String str)
+		Insert(int offset, int length, String str, boolean clearDirty)
 		{
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
+			this.clearDirty = clearDirty;
 		} //}}}
 
 		//{{{ undo() method
-		public int undo(Buffer buffer, JEditTextArea textArea)
+		int undo()
 		{
+			buffer.remove(offset,length);
+			if(clearDirty)
+				buffer.setDirty(false);
 			return offset;
 		} //}}}
 
 		//{{{ redo() method
-		public int redo(Buffer buffer, JEditTextArea textArea)
+		int redo()
 		{
+			buffer.insert(offset,str);
 			return offset + length;
 		} //}}}
 
-		private int offset;
-		private int length;
-		private String str;
+		int offset;
+		int length;
+		String str;
 	} //}}}
 
 	//{{{ Remove class
-	public static class Remove implements Edit
+	class Remove extends Edit
 	{
 		//{{{ Remove constructor
-		public Remove(int offset, int length, String str)
+		Remove(int offset, int length, String str, boolean clearDirty)
 		{
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
+			this.clearDirty = clearDirty;
 		} //}}}
 
 		//{{{ undo() method
-		public int undo(Buffer buffer, JEditTextArea textArea)
+		int undo()
 		{
+			buffer.insert(offset,str);
+			if(clearDirty)
+				buffer.setDirty(false);
 			return offset + length;
 		} //}}}
 
 		//{{{ redo() method
-		public int redo(Buffer buffer, JEditTextArea textArea)
+		int redo()
 		{
+			buffer.remove(offset,length);
 			return offset;
 		} //}}}
 
-		private int offset;
-		private int length;
-		private String str;
+		int offset;
+		int length;
+		String str;
 	} //}}}
 
 	//{{{ CompoundEdit class
-	public static class CompoundEdit implements Edit
+	class CompoundEdit extends Edit
 	{
 		//{{{ undo() method
-		public int undo(Buffer buffer, JEditTextArea textArea)
+		public int undo()
 		{
-			return 0;
+			int retVal = -1;
+			for(int i = 0; i < undos.size(); i++)
+			{
+				retVal = ((Edit)undos.elementAt(i)).undo();
+			}
+			return retVal;
 		} //}}}
 
 		//{{{ redo() method
-		public int redo(Buffer buffer, JEditTextArea textArea)
+		public int redo()
 		{
-			return 0;
+			int retVal = -1;
+			for(int i = 0; i < undos.size(); i++)
+			{
+				retVal = ((Edit)undos.elementAt(i)).redo();
+			}
+			return retVal;
+		} //}}}
+
+		//{{{ addEdit() method
+		public void addEdit(Edit edit)
+		{
+			undos.addElement(edit);
 		} //}}}
 
 		//{{{ getSize() method
 		public int getSize()
 		{
 			return undos.size();
-		}
+		} //}}}
 
-		private Vector undos = new Vector();
+		Vector undos = new Vector();
 	} //}}}
 
 	//}}}
