@@ -32,13 +32,14 @@ public class MirrorList
 {
 	public ArrayList mirrors;
 
-	//{{{ Constructor
+	//{{{ MirrorList constructor
 	public MirrorList() throws Exception
 	{
 		mirrors = new ArrayList();
 
 		Mirror none = new Mirror();
 		none.id = Mirror.NONE;
+		none.description = none.location = none.country = none.continent = "";
 		mirrors.add(none);
 
 		String path = jEdit.getProperty("plugin-manager.mirror-url");

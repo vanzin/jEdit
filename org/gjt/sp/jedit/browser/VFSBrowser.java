@@ -31,9 +31,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -555,7 +555,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			VFSManager.runInWorkThread(new BrowserIORequest(
 				BrowserIORequest.DELETE,this,
 				session,vfs,files[i].deletePath,
-				null,null,false));
+				null,null));
 		}
 	} //}}}
 
@@ -582,7 +582,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null,false));
+			session,vfs,from,to,null));
 	} //}}}
 
 	//{{{ mkdir() method
@@ -621,7 +621,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null,null,false));
+			session,vfs,newDirectory,null,null));
 	} //}}}
 
 	//{{{ newFile() method
@@ -747,15 +747,15 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(final DefaultMutableTreeNode node,
-		final boolean loadingRoot, final String path,
+	void directoryLoaded(final Object node,
+		final String path,
 		final VFS.DirectoryEntry[] list)
 	{
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
 			{
-				if(loadingRoot)
+				if(node == null)
 				{
 					// This is the new, canonical path
 					VFSBrowser.this.path = path;
@@ -766,7 +766,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 				boolean filterEnabled = filterCheckbox.isSelected();
 
-				Vector directoryVector = new Vector();
+				ArrayList directoryVector = new ArrayList();
 
 				int directories = 0;
 				int files = 0;
@@ -804,7 +804,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 						else
 							directories++;
 
-						directoryVector.addElement(file);
+						directoryVector.add(file);
 					}
 
 					MiscUtilities.quicksort(directoryVector,
@@ -1282,7 +1282,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			popup.addSeparator();
 
 			// put them in a vector for sorting
-			Vector vec = new Vector();
+			ArrayList vec = new ArrayList();
 			Enumeration enum = VFSManager.getFilesystems();
 
 			while(enum.hasMoreElements())
@@ -1295,14 +1295,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					"vfs." + vfs.getName() + ".label"));
 				menuItem.setActionCommand(vfs.getName());
 				menuItem.addActionListener(actionHandler);
-				vec.addElement(menuItem);
+				vec.add(menuItem);
 			}
 
 			if(vec.size() != 0)
 			{
 				MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
 				for(int i = 0; i < vec.size(); i++)
-					popup.add((JMenuItem)vec.elementAt(i));
+					popup.add((JMenuItem)vec.get(i));
 			}
 			else
 			{
@@ -1390,25 +1390,25 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					// if any directories are selected, add
 					// them, otherwise add current directory
-					Vector toAdd = new Vector();
+					ArrayList toAdd = new ArrayList();
 					VFS.DirectoryEntry[] selected = getSelectedFiles();
 					for(int i = 0; i < selected.length; i++)
 					{
 						VFS.DirectoryEntry file = selected[i];
 						if(file.type == VFS.DirectoryEntry.FILE)
 						{
-							toAdd.addElement(MiscUtilities
+							toAdd.add(MiscUtilities
 								.getParentOfPath(file.path));
 						}
 						else
-							toAdd.addElement(file.path);
+							toAdd.add(file.path);
 					}
 
 					if(toAdd.size() != 0)
 					{
 						for(int i = 0; i < toAdd.size(); i++)
 						{
-							FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
+							FavoritesVFS.addToFavorites((String)toAdd.get(i));
 						}
 					}
 					else

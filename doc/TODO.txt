@@ -3,7 +3,21 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- enter in browser tree: two i/o requests
+- path shown twice in tree: maybeReloadDirectory()
+- electric scroll inconsistent w.r.t. deletes
+- tmpExpanded cleanup
+- action bar layout problem
+- not wrapped:
+		return (VFS.DirectoryEntry[])returnValue.toArray(new VFS.DirectoryEntry[returnValue.size()])
+- vfs browser: option for default dir being user.dir
+- clear type select calling browser's file selected
+- expanded folder icons in tree table
+- pasting into a new file is broken
+- not loaded file -- text area clicks
+- eval-for-selected-lines doesn't work with rectangular selection
+- recording 'evaluate for selected lines'
+- evalutate for selected lines: > 1 selection per line
+- box in io progress
 - split view line insert: repainted twice, selection problems
 - action bar: wrap around arrow keys
 - browser: tab: don't insert full path
@@ -40,8 +54,6 @@ of bounds, etc.
   - FAQ: better titles
 - new plugin mgr:
   - ask before selecting dependencies & 'don't show again'
-  - mirror change: refresh download locations
-  - explicit 'refresh mirror list' button in option pane
 - update horizontal scroll width immediately on buffer switch
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
@@ -57,7 +69,6 @@ of bounds, etc.
 - format -- instead of \n\n, what if it has \n   \n?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- eval-for-selected-lines doesn't work with rectangular selection
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - maximisation state bug: open window, resize to size X. close window,
@@ -66,12 +77,10 @@ of bounds, etc.
 - expand fold: try to expand even if already expanded
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-- recording 'evaluate for selected lines'
 - aborts not always fired
 - globalColors setting:
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
-- evalutate for selected lines: > 1 selection per line
 - motif l&f: shortcuts in menu items
 
 + verify:

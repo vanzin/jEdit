@@ -828,6 +828,7 @@ public class DisplayManager
 			{
 				scrollLine = newScrollLine;
 				physicalLine += amount;
+				ensurePhysicalLineIsVisible();
 			}
 
 			offsetMgr.addAnchor(this);
@@ -870,6 +871,7 @@ public class DisplayManager
 			{
 				scrollLine = newScrollLine;
 				physicalLine -= amount;
+				ensurePhysicalLineIsVisible();
 			}
 
 			offsetMgr.addAnchor(this);

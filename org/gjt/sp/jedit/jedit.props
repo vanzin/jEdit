@@ -124,7 +124,7 @@ buffer.undoCount=100
 buffer.wrap=none
 
 # Wrap column
-buffer.maxLineLen=0
+buffer.maxLineLen=80
 
 # Word break characters
 buffer.wordBreakChars=

@@ -1,10 +1,10 @@
 /*
- * FileCellRenderer.java - renders list and tree cells for the VFS browser
+ * VFSDirectoryEntryCellRenderer.java - renders table cells for the VFS browser
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999 Jason Ginchereau
- * Portions copyright (C) 2001 Slava Pestov
+ * Portions copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,13 +26,13 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.tree.*;
 import javax.swing.border.*;
+import javax.swing.table.*;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class FileCellRenderer extends DefaultTreeCellRenderer
+public class VFSDirectoryEntryCellRenderer extends DefaultTableCellRenderer
 {
 	public static Icon fileIcon = GUIUtilities.loadIcon("File.png");
 	public static Icon openFileIcon = GUIUtilities.loadIcon("OpenFile.png");
@@ -41,8 +41,8 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 	public static Icon filesystemIcon = GUIUtilities.loadIcon("DriveSmall.png");
 	public static Icon loadingIcon = GUIUtilities.loadIcon("ReloadSmall.png");
 
-	//{{{ FileCellRenderer constructor
-	public FileCellRenderer()
+	//{{{ VFSDirectoryEntryCellRenderer constructor
+	public VFSDirectoryEntryCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
 		if(plainFont == null)
@@ -51,30 +51,31 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 		setBorder(new EmptyBorder(1,0,1,0));
 	} //}}}
 
-	//{{{ getTreeCellRendererComponent() method
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-		boolean sel, boolean expanded, boolean leaf, int row,
-		boolean focus)
+	//{{{ getTableCellRendererComponent() method
+	public Component getTableCellRendererComponent(JTable table,
+		Object value, boolean isSelected, boolean hasFocus, 
+		int row, int column)
 	{
-		super.getTreeCellRendererComponent(tree,value,sel,expanded,
-			leaf,row,focus);
+		super.getTableCellRendererComponent(table,value,isSelected,
+			hasFocus,row,column);
 
-		DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
-		Object userObject = treeNode.getUserObject();
-		if(userObject instanceof VFS.DirectoryEntry)
+		if(value instanceof VFSDirectoryEntryTableModel.Entry)
 		{
-			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
+			VFSDirectoryEntryTableModel.Entry entry =
+				(VFSDirectoryEntryTableModel.Entry)value;
+			VFS.DirectoryEntry file = entry.dirEntry;
 
 			underlined = (jEdit.getBuffer(file.path) != null);
 
 			setIcon(showIcons
-				? getIconForFile(file,expanded)
+				? getIconForFile(file,entry.expanded)
 				: null);
 			setFont(file.type == VFS.DirectoryEntry.FILE
 				? plainFont : boldFont);
 			setText(file.name);
+			setBorder(new EmptyBorder(0,entry.level * 5,0,0));
 
-			if(!sel)
+			if(!isSelected)
 			{
 				Color color = file.getColor();
 
@@ -82,26 +83,6 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 					? UIManager.getColor("Tree.foreground")
 					: color);
 			}
-		}
-		else if(userObject instanceof BrowserView.LoadingPlaceholder)
-		{
-			setIcon(showIcons ? loadingIcon : null);
-			setFont(plainFont);
-			setText(jEdit.getProperty("vfs.browser.tree.loading"));
-			underlined = false;
-		}
-		else if(userObject instanceof String)
-		{
-			setIcon(showIcons ? dirIcon : null);
-			setFont(boldFont);
-			setText((String)userObject);
-			underlined = false;
-		}
-		else
-		{
-			// userObject is null?
-			setIcon(null);
-			setText(null);
 		}
 
 		return this;
