@@ -43,10 +43,9 @@ public class Install
 		}
 		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
-		else if((args.length == 2 || args.length == 3)
-			&& args[0].equals("auto"))
+		else if(args.length >= 2 && args[0].equals("auto"))
 		{
-			new NonInteractiveInstall(args[1]);
+			new NonInteractiveInstall(args);
 		}
 		else
 		{
@@ -54,7 +53,7 @@ public class Install
 			System.err.println("java -jar <installer JAR>");
 			System.err.println("java -jar <installer JAR> text");
 			System.err.println("java -jar <installer JAR> auto"
-				+ " <install dir>");
+				+ " <install dir> [unix-script=<dir>] [unix-man=<dir>]");
 			System.err.println("text parameter starts installer in text-only mode.");
 			System.err.println("auto parameter starts installer in non-interactive mode.");
 		}

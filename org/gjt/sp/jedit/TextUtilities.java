@@ -659,7 +659,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 		String leadingWhitespace = text.substring(0,leadingWhitespaceCount);
 		int leadingWhitespaceWidth = MiscUtilities.getLeadingWhiteSpaceWidth(text,tabSize);
 
-		buf.append(new StringBuffer(leadingWhitespace));
+		buf.append(leadingWhitespace);
 
 		int lineLength = leadingWhitespaceWidth;
 		StringTokenizer st = new StringTokenizer(text);

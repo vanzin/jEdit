@@ -64,8 +64,14 @@ public class ConsoleInstall
 				System.out.flush();
 
 				dir = readLine(in);
+				osTask.setEnabled(true);
 				if(dir.length() != 0)
-					osTask.setDirectory(dir);
+				{
+					if(dir.equals("off"))
+						osTask.setEnabled(false);
+					else
+						osTask.setDirectory(dir);
+				}
 			}
 		}
 

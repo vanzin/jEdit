@@ -143,7 +143,12 @@ public class SwingInstall extends JFrame
 			OperatingSystem.OSTask osTask = (OperatingSystem.OSTask)keys.next();
 			String dir = ((JTextField)osTaskDirs.get(osTask)).getText();
 			if(dir != null && dir.length() != 0)
+			{
+				osTask.setEnabled(false);
 				osTask.setDirectory(dir);
+			}
+			else
+				osTask.setEnabled(false);
 		}
 
 		InstallThread thread = new InstallThread(
