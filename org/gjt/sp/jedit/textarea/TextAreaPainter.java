@@ -143,6 +143,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void setBounds(int x, int y, int width, int height)
 	{
+		if(x == getX() && y == getY() && width == getWidth()
+			&& height == getHeight())
+		{
+			return;
+		}
+
 		super.setBounds(x,y,width,height);
 
 		textArea.recalculateVisibleLines();
@@ -612,6 +618,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
+		long start = System.currentTimeMillis();
+
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -675,6 +683,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				+ lastInvalid + "}:");
 			Log.log(Log.ERROR,this,e);
 		}
+
+		//System.err.println((System.currentTimeMillis() - start)
+		//	+ ": " + (lastInvalid - firstInvalid + 1));
 	} //}}}
 
 	//{{{ nextTabStop() method

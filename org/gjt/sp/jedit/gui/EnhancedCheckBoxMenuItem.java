@@ -1,6 +1,9 @@
 /*
  * EnhancedCheckBoxMenuItem.java - Check box menu item
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,18 +22,21 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * jEdit's custom menu item. It adds support for multi-key shortcuts.
  */
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
+	//{{{ EnhancedCheckBoxMenuItem constructor
 	public EnhancedCheckBoxMenuItem(String label, EditAction action)
 	{
 		super(label);
@@ -42,13 +48,16 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			addActionListener(new EditAction.Wrapper(action));
 			shortcutProp1 = action.getName() + ".shortcut";
 			shortcutProp2 = action.getName() + ".shortcut2";
+
+			addMouseListener(new MouseHandler());
 		}
 		else
 			setEnabled(false);
 
 		setModel(new Model());
-	}
+	} //}}}
 
+	//{{{ getPreferredSize() method
 	public Dimension getPreferredSize()
 	{
 		Dimension d = super.getPreferredSize();
@@ -61,8 +70,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 				.stringWidth(shortcut) + 15);
 		}
 		return d;
-	}
+	} //}}}
 
+	//{{{ paint() method
 	public void paint(Graphics g)
 	{
 		super.paint(g);
@@ -82,21 +92,26 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 				getFont().getSize() + (insets.top - 1)
 				/* XXX magic number */);
 		}
-	}
+	} //}}}
 
+	//{{{ getActionCommand() method
 	public String getActionCommand()
 	{
 		return getModel().getActionCommand();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private String shortcutProp1;
 	private String shortcutProp2;
 	private EditAction action;
 	private static Font acceleratorFont;
 	private static Color acceleratorForeground;
 	private static Color acceleratorSelectionForeground;
+	//}}}
 
+	//{{{ getShortcut() method
 	private String getShortcut()
 	{
 		if(action == null)
@@ -121,8 +136,9 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 					return shortcut1 + " or " + shortcut2;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ Class initializer
 	static
 	{
 		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
@@ -133,8 +149,11 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			.getColor("MenuItem.acceleratorForeground");
 		acceleratorSelectionForeground = UIManager
 			.getColor("MenuItem.acceleratorSelectionForeground");
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Model class
 	class Model extends DefaultButtonModel
 	{
 		public boolean isSelected()
@@ -155,5 +174,31 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 		}
 
 		public void setSelected(boolean b) {}
-	}
+	} //}}}
+
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			GUIUtilities.getView((Component)evt.getSource())
+				.getStatus().setMessage(null);
+		}
+
+		public void mouseEntered(MouseEvent evt)
+		{
+			String msg = action.getMouseOverText();
+			if(msg != null)
+			{
+				GUIUtilities.getView((Component)evt.getSource())
+					.getStatus().setMessage(msg);
+			}
+		}
+
+		public void mouseExited(MouseEvent evt)
+		{
+			GUIUtilities.getView((Component)evt.getSource())
+				.getStatus().setMessage(null);
+		}
+	} //}}}
 }

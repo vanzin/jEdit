@@ -21,6 +21,12 @@ JEDIT 4.0 VERSION HISTORY
   currently collapsed folds, which could result in portions of the
   buffer becoming inaccessable
 - Fixed ugly memory usage indicator on MacOS X
+- Even when 'quick copy' was disabled in the text area option pane, the
+  middle-drag feature would still be active
+- Fixed ArrayIndexOutOfBoundsException when triple-clicking on the only
+  line of a blank new file
+- Fixed repaint slowdown that would happen when switching menus on some
+  JDKs
 
 * Version 4.0pre6
 
