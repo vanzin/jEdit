@@ -10,6 +10,7 @@ JEDIT 4.1 VERSION HISTORY
 - Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
 - Updated Perl syntax highlighting (Chris Petersen)
 - Updated PL-SQL syntax highlighting (Steve Snider)
+- Updated CSS syntax highlighting (Axel Biernat)
 - The "More accurate syntax highlighting" option is no longer. When it
   was on, it would do the following:
 
