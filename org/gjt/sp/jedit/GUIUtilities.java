@@ -65,7 +65,7 @@ public class GUIUtilities
 	public static final Icon DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
 	public static final Icon READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
 	public static final Icon NORMAL_BUFFER_ICON = loadIcon("normal.gif");
-	public static final Icon WINDOW_ICON = loadIcon("jedit-icon.png");
+	public static final Icon WINDOW_ICON = loadIcon("jedit-icon.gif");
 	//}}}
 
 	//{{{ Icon methods

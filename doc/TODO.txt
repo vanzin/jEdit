@@ -1,14 +1,14 @@
 TO DO
 
+- macro that calls saveAllBuffers() results in unbalanced
+  begin/endCompoundEdit() calls?
 - syntax highlighted files and soft wrap
-- C+h freezes editor with regexps enabled
-
+- switch buffers: bracket matching status msg
+- last line wrapped; shorten; repaint problem
+- narrow: inserting lines messes things up
 - switching buffers: horiz scroll bar not updated?
 - better handling of oom's when loading buffers
-- chunk cache problems after collapsing a fold
-- colon at margin, not eol
-- vertical scrollbar w/ soft wrap wrong?
-- vertical scroll bar if last line is wrapped
+- vertical scrollbar w/ soft wrap wrong
 - fix scrollToCaret()
 - use new offset conversion API throughout
 - save to X:filename on Windows

@@ -243,8 +243,8 @@ public class JEditTextArea extends JComponent
 
 			if(this.buffer != null)
 			{
-				setCaretPosition(0);
-				setFirstLine(0);
+				caretLine = caret = 0;
+				bracketLine = bracketPosition = -1;
 
 				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
 				this.buffer.removeBufferChangeListener(bufferHandler);
@@ -3654,7 +3654,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	public void narrowToFold()
 	{
 		int[] lines = buffer.getFoldAtLine(caretLine);
-		foldVisibilityManager.narrow(lines[0],lines[1]);
+		if(lines[0] == 0 && lines[1] == buffer.getLineCount() - 1)
+			getToolkit().beep();
+		else
+			foldVisibilityManager.narrow(lines[0],lines[1]);
 	} //}}}
 
 	//{{{ narrowToSelection() method
@@ -4707,14 +4710,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		chunkCache.invalidateAll();
 
 		// recalculate first line
+		while(!foldVisibilityManager.isLineVisible(physFirstLine))
+			physFirstLine++;
+
 		setFirstLine(physicalToVirtual(physFirstLine));
 
 		// update scroll bars because the number of
 		// virtual lines might have changed
 		updateScrollBars();
 
+		recalculateLastPhysicalLine();
+
 		// repaint gutter and painter
 		gutter.repaint();
+		painter.repaint();
 	} //}}}
 
 	//}}}

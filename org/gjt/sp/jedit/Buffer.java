@@ -2574,11 +2574,12 @@ public class Buffer implements EBComponent
 
 			while(getFoldLevel(line) > foldLevel)
 			{
-				if(line == getLineCount() - 1)
+				line++;
+
+				if(line == getLineCount())
 					break;
-				else
-					line++;
 			}
+
 			end = line - 1;
 		}
 		else
@@ -2596,10 +2597,10 @@ public class Buffer implements EBComponent
 			end = line;
 			while(getFoldLevel(end) >= foldLevel)
 			{
-				if(end == getLineCount() - 1)
+				end++;
+
+				if(end == getLineCount())
 					break;
-				else
-					end++;
 			}
 
 			end--;
