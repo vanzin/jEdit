@@ -145,6 +145,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			wm.revalidate();
 			dockablePanel.repaint();
+			buttonPanel.repaint();
 		}
 	} //}}}
 

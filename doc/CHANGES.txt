@@ -90,6 +90,11 @@ this release.
 - The order of the elements in the recent file list was being reversed
   each time jEdit was restarted if 'sort recent files' was switched off.
 
+- PluginJAR.generateCache() didn't correctly handle the case where a
+  plugin JAR file had an actions.xml but no core class.
+
+- Unloading a plugin did not remove the buttons for its docked windows.
+
 }}}
 {{{ API Changes
 
