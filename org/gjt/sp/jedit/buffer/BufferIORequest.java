@@ -86,6 +86,12 @@ public class BufferIORequest extends WorkRequest
 	public static final int GZIP_MAGIC_2 = 0x8b;
 	public static final int UNICODE_MAGIC_1 = 0xfe;
 	public static final int UNICODE_MAGIC_2 = 0xff;
+
+	/**
+	 * Length of longest XML PI used for encoding detection.
+	 * <?xml version="1.0" encoding="................"?>
+	 */
+	public static final int XML_PI_LENGTH = 50;
 	//}}}
 
 	//{{{ BufferIORequest constructor
@@ -195,34 +201,12 @@ public class BufferIORequest extends WorkRequest
 				else
 					length = 0L;
 
-				in = vfs._createInputStream(session,path,false,view);
+				in = vfs._createInputStream(session,path,
+					false,view);
 				if(in == null)
 					return;
 
-				in = new BufferedInputStream(in);
-
-				if(in.markSupported())
-				{
-					in.mark(2);
-					int b1 = in.read();
-					int b2 = in.read();
-					in.reset();
-
-					if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
-					{
-						in = new GZIPInputStream(in);
-						buffer.setBooleanProperty(Buffer.GZIPPED,true);
-					}
-					else if((b1 == UNICODE_MAGIC_1 && b2 == UNICODE_MAGIC_2)
-						|| (b1 == UNICODE_MAGIC_2 && b2 == UNICODE_MAGIC_1))
-					{
-						buffer.setProperty(Buffer.ENCODING,"Unicode");
-					}
-				}
-				else if(path.toLowerCase().endsWith(".gz"))
-					in = new GZIPInputStream(in);
-
-				read(buffer,in,length);
+				read(buffer,autodetect(in),length);
 				buffer.setNewFile(false);
 			}
 			catch(CharConversionException ch)
@@ -314,8 +298,73 @@ public class BufferIORequest extends WorkRequest
 		}
 	} //}}}
 
+	//{{{ autodetect() method
+	/**
+	 * Tries to detect if the stream is gzipped, and if it has an encoding
+	 * specified with an XML PI.
+	 */
+	private Reader autodetect(InputStream in) throws IOException
+	{
+		in = new BufferedInputStream(in);
+
+		String encoding = buffer.getStringProperty(Buffer.ENCODING);
+		if(in.markSupported())
+		{
+			in.mark(XML_PI_LENGTH);
+			int b1 = in.read();
+			int b2 = in.read();
+			in.reset();
+
+			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+			{
+				in = new GZIPInputStream(in);
+				buffer.setBooleanProperty(Buffer.GZIPPED,true);
+			}
+			else if((b1 == UNICODE_MAGIC_1 && b2 == UNICODE_MAGIC_2)
+				|| (b1 == UNICODE_MAGIC_2 && b2 == UNICODE_MAGIC_1))
+			{
+				buffer.setProperty(Buffer.ENCODING,"Unicode");
+			}
+
+			byte[] _xmlPI = new byte[XML_PI_LENGTH];
+			int offset = 0;
+			int count;
+			while((count = in.read(_xmlPI,offset,
+				XML_PI_LENGTH - offset)) != -1)
+			{
+				System.err.println(count);
+				offset += count;
+				if(offset == XML_PI_LENGTH)
+					break;
+			}
+
+			String xmlPI = new String(_xmlPI,0,offset,"ASCII");
+			if(xmlPI.startsWith("<?xml"))
+			{
+				int index = xmlPI.indexOf("encoding=");
+				if(index != -1 && index + 9 != xmlPI.length())
+				{
+					char ch = xmlPI.charAt(index + 9);
+					int endIndex = xmlPI.indexOf(ch,
+						index + 10);
+					encoding = xmlPI.substring(
+						index + 10,endIndex);
+
+					// for possible error messages, etc.
+					buffer.setProperty(Buffer.ENCODING,encoding);
+				}
+			}
+
+			in.reset();
+		}
+		else
+			Log.log(Log.WARNING,this,"Mark not supported: " + in);
+
+		return new InputStreamReader(in,encoding);
+	} //}}}
+
 	//{{{ read() method
-	private void read(Buffer buffer, InputStream _in, long length)
+	private void read(Buffer buffer, Reader in, long length)
 		throws IOException
 	{
 		/* we guess an initial size for the array */
@@ -338,8 +387,6 @@ public class BufferIORequest extends WorkRequest
 
 		SegmentBuffer seg = new SegmentBuffer((int)length + 1);
 
-		InputStreamReader in = new InputStreamReader(_in,
-			buffer.getStringProperty(Buffer.ENCODING));
 		char[] buf = new char[IOBUFSIZE];
 
 		// Number of characters in 'buf' array.
@@ -821,10 +868,7 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				if(path.endsWith(".gz"))
-					in = new GZIPInputStream(in);
-
-				read(buffer,in,length);
+				read(buffer,autodetect(in),length);
 			}
 			catch(IOException io)
 			{

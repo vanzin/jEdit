@@ -692,6 +692,13 @@ class ChunkCache
 			if(i == lastScreenLine
 				&& lastScreenLine != lineInfo.length - 1)
 			{
+				/* if the user changes the syntax token at the
+				 * end of a line, need to do a full repaint. */
+				if(buffer.isNextLineRequested())
+				{
+					lastScreenLine++;
+					needFullRepaint = true;
+				}
 				/* If this line has become longer or shorter
 				 * (in which case the new physical line number
 				 * is different from the cached one) we need to:
@@ -701,12 +708,15 @@ class ChunkCache
 				 * lastScreenLine, we need to keep updating the
 				 * chunk list to ensure proper alignment of
 				 * invalidation flags (see start of method) */
-				if(info.physicalLine != physicalLine
+				else if(info.physicalLine != physicalLine
 					|| info.lastSubregion != lastSubregion)
 				{
 					lastScreenLine++;
 					needFullRepaint = true;
 				}
+				/* We only cache entire physical lines at once;
+				 * don't want to split a physical line into
+				 * screen lines and only have some valid. */
 				else if(out.size() != 0)
 					lastScreenLine++;
 			}

@@ -342,6 +342,8 @@ public class Java14
 				JEditTextArea textArea = (JEditTextArea)c;
 				if(action == MOVE)
 					textArea.setSelectedText(null,false);
+				else
+					textArea.selectNone();
 			}
 		}
 
