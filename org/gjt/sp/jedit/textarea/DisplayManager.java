@@ -1447,8 +1447,11 @@ loop:		for(;;)
 			fvmcount = 2;
 			fvm[0] = 0;
 			fvm[1] = buffer.getLineCount();
-			firstLine.reset();
-			scrollLineCount.reset();
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				firstLine.reset();
+				scrollLineCount.reset();
+			}
 			int collapseFolds = buffer.getIntegerProperty(
 				"collapseFolds",0);
 			if(collapseFolds != 0)
