@@ -2,6 +2,7 @@ TO DO
 
 + before 4.0pre8:
 
+- B, X, c, !, ,, ?
 - proofread documentation one more time
 - make sure plugin guide is up to date
 - lots of spaces then one word; word should not be wrapped
