@@ -131,7 +131,7 @@ public class Java14
 	{
 		public Component getDefaultComponent(Container focusCycleRoot)
 		{
-			return ((View)focusCycleRoot).getTextArea();
+			return GUIUtilities.getView(focusCycleRoot).getTextArea();
 		}
 	} //}}}
 
