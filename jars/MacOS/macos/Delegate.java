@@ -120,6 +120,8 @@ public class Delegate extends ApplicationAdapter
 			while (i.hasNext())
 				jEdit.openFile(msg.getView(),(String)i.next());
 			MacOSPlugin.started = true;
+			NSApplication app = NSApplication.sharedApplication();
+			app.setServicesProvider(new Delegate());
 		}
 	} //}}}
 	
@@ -286,7 +288,13 @@ public class Delegate extends ApplicationAdapter
 			error);
 		int count = filenames.count();
 		for (int i=0; i<count; i++)
-			jEdit.openFile(jEdit.getActiveView(),(String)filenames.objectAtIndex(i));
+		{
+			File file = new File((String)filenames.objectAtIndex(i));
+			if (file.isDirectory())
+				VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
+			else
+				jEdit.openFile(jEdit.getActiveView(),file.getPath());
+		}
 		
 		return null;
 	} //}}}
