@@ -216,7 +216,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		else
 		{
 			useDefaults.setEnabled(true);
-			boolean enabled = !modeProps[mode.getSelectedIndex()].useDefaults;
+			boolean enabled = !modeProps[mode.getSelectedIndex() - 1].useDefaults;
 			filenameGlob.setEnabled(enabled);
 			firstlineGlob.setEnabled(enabled);
 			noWordSep.setEnabled(enabled);
