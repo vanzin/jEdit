@@ -66,7 +66,7 @@ public class DefaultTokenHandler implements TokenHandler
 	{
 		Token token = createToken(id,offset,length,context);
 		if(token != null)
-			addToken(token,context);
+			addToken(token,context,true);
 	} //}}}
 
 	//{{{ Protected members
@@ -98,7 +98,8 @@ public class DefaultTokenHandler implements TokenHandler
 	 * @return False if the new token was merged with the last one; true
 	 * otherwise.
 	 */
-	protected boolean addToken(Token token, TokenMarker.LineContext context)
+	protected boolean addToken(Token token, TokenMarker.LineContext context,
+		boolean merge)
 	{
 		if(firstToken == null)
 		{
@@ -107,15 +108,18 @@ public class DefaultTokenHandler implements TokenHandler
 		}
 		else
 		{
-			if((lastToken.id == context.rules.getDefault()
-				&& token.id == Token.WHITESPACE)
-				|| (lastToken.id == token.id
-				&& lastToken.rules == token.rules))
+			if(merge)
 			{
-				if(token.id != Token.TAB)
+				if((lastToken.id == context.rules.getDefault()
+					&& token.id == Token.WHITESPACE)
+					|| (lastToken.id == token.id
+					&& lastToken.rules == token.rules))
 				{
-					lastToken.length += token.length;
-					return false;
+					if(token.id != Token.TAB)
+					{
+						lastToken.length += token.length;
+						return false;
+					}
 				}
 			}
 

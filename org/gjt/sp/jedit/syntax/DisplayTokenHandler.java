@@ -81,13 +81,13 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ addToken() method
 	protected boolean addToken(Token token, TokenMarker.LineContext context)
 	{
-		Token oldLastToken = lastToken;
-		if(super.addToken(token,context))
+		Chunk oldLastChunk = (Chunk)lastToken;
+		if(super.addToken(token,context,
+			oldLastChunk == null
+			|| !((Chunk)oldLastChunk).inaccessable))
 		{
-			Chunk oldLastChunk = (Chunk)oldLastToken;
 			oldLastChunk.init(seg,expander,x,styles,
 				fontRenderContext,context.rules.getDefault());
-			x += oldLastChunk.width;
 			return true;
 		}
 		else
