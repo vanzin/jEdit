@@ -834,7 +834,9 @@ class BrowserView extends JPanel
 		//{{{ doTypeSelect() method
 		void doTypeSelect(String str, boolean ignoreCase)
 		{
-			if(getSelectionCount() == 0)
+			if(str.length() == 0)
+				setSelectionPaths(new TreePath[0]);
+			else if(getSelectionCount() == 0)
 				doTypeSelect(str,0,getRowCount(),ignoreCase);
 			else
 			{

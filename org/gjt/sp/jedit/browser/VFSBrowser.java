@@ -751,7 +751,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		final boolean loadingRoot, final String path,
 		final VFS.DirectoryEntry[] list)
 	{
-		SwingUtilities.invokeLater(new Runnable()
+		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
 			{

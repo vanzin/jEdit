@@ -70,7 +70,6 @@ public class ManagePanel extends JPanel
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
-		((DefaultTableCellRenderer)header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.LEFT);
 
 		JScrollPane scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());

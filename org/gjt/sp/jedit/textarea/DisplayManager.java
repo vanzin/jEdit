@@ -385,7 +385,9 @@ public class DisplayManager
 			{
 				// we need a different value of initialFoldLevel here!
 				initialFoldLevel = buffer.getFoldLevel(start);
-	
+
+				int firstVisible = start;
+
 				for(int i = start; i <= end; i++)
 				{
 					if(buffer.getFoldLevel(i) > initialFoldLevel)
@@ -396,11 +398,18 @@ public class DisplayManager
 						{
 							returnValue = i - 1;
 						}
+
+						if(firstVisible != i)
+						{
+							showLineRange(firstVisible,i - 1);
+						}
+						firstVisible = i + 1;
 					}
-					else
-						setLineVisible(i,true);
 				}
-	
+
+				if(firstVisible != end + 1)
+					showLineRange(firstVisible,end);
+
 				if(!isLineVisible(line))
 				{
 					// this is a hack, and really needs to be done better.
@@ -698,8 +707,6 @@ public class DisplayManager
 	//{{{ FirstLine class
 	class FirstLine extends OffsetManager.Anchor
 	{
-		int oldScrollLine;
-		int oldSkew;
 		int skew;
 
 		//{{{ FirstLine constructor
@@ -815,11 +822,7 @@ public class DisplayManager
 					scrollUp(-screenAmount);
 				else
 					scrollDown(screenAmount);
-				return;
-				// since scrollUp/Down() call changed()
 			}
-
-			scroll();
 		} //}}}
 
 		//{{{ physUp() method
@@ -861,11 +864,7 @@ public class DisplayManager
 					scrollUp(-screenAmount);
 				else
 					scrollDown(screenAmount);
-				return;
-				// since scrollUp/Down() call changed()
 			}
-
-			scroll();
 		} //}}}
 
 		//{{{ scrollDown() method
@@ -907,7 +906,6 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
-			scroll();
 		} //}}}
 
 		//{{{ scrollUp() method
@@ -950,37 +948,6 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
-			scroll();
-		} //}}}
-
-		//{{{ scroll() method
-		private void scroll()
-		{
-			int visibleLines = textArea.getVisibleLines();
-
-			int _scrollLine = scrollLine + skew;
-			int _oldScrollLine = oldScrollLine + oldSkew;
-
-			if(_scrollLine == _oldScrollLine)
-				/* do nothing */;
-			else if(_scrollLine >= _oldScrollLine + visibleLines
-				|| _scrollLine <= _oldScrollLine - visibleLines)
-			{
-				textArea.chunkCache.invalidateAll();
-			}
-			else if(_scrollLine > _oldScrollLine)
-			{
-				textArea.chunkCache.scrollDown(_scrollLine - _oldScrollLine);
-			}
-			else if(_scrollLine < _oldScrollLine)
-			{
-				textArea.chunkCache.scrollUp(_oldScrollLine - _scrollLine);
-			}
-
-			oldScrollLine = scrollLine;
-			oldSkew = skew;
-
-			changed();
 		} //}}}
 
 		//{{{ ensurePhysicalLineIsVisible() method
