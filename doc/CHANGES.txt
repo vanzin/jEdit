@@ -87,6 +87,10 @@ release.
 
 - Minor fix to VHDL syntax highlighting.
 
+- Kill ring was not being loaded properly; the text entries were loaded
+  but the count was never incremented, so the "Paste Deleted" dialog
+  would always be blank after a jEdit restart.
+
 }}}
 
 }}}
