@@ -25,9 +25,11 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import java.util.Enumeration;
 import java.util.Hashtable;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import java.awt.Component;
+import java.awt.*;
 import java.util.Vector;
+import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -223,9 +225,7 @@ public class VFSManager
 
 	//{{{ error() method
 	/**
-	 * For use by VFS implementations and IO requests. Displays the
-	 * specified error in the AWT thread.
-	 * @since jEdit 2.6pre1
+	 * @deprecated Call the other <code>error()</code> method instead.
 	 */
 	public static void error(final Component comp, final String error, final Object[] args)
 	{
@@ -256,6 +256,55 @@ public class VFSManager
 					GUIUtilities.error(comp,error,args);
 			}
 		});
+	} //}}}
+
+	//{{{ error() method
+	/**
+	 * Reports an I/O error.
+	 *
+	 * @param comp The component
+	 * @param path The path name that caused the error
+	 * @param message The error message property name
+	 * @param args Positional parameters
+	 * @since jEdit 4.0pre3
+	 */
+	public static void error(Component comp,
+		final String path,
+		String messageProp,
+		Object[] args)
+	{
+		final Frame frame = JOptionPane.getFrameForComponent(comp);
+
+		synchronized(errorLock)
+		{
+			error = true;
+
+			errors.addElement(new ErrorListDialog.ErrorEntry(
+				path,messageProp,args));
+
+			if(errors.size() == 1)
+			{
+				final String caption = jEdit.getProperty(
+					"ioerror.caption" + (errors.size() == 1
+					? "-1" : ""),new Integer[] {
+					new Integer(errors.size()) });
+
+				VFSManager.runInAWTThread(new Runnable()
+				{
+					public void run()
+					{
+						new ErrorListDialog(
+							frame.isShowing()
+							? frame
+							: jEdit.getFirstView(),
+							jEdit.getProperty("ioerror.title"),
+							caption,errors,false);
+						errors.removeAllElements();
+						error = false;
+					}
+				});
+			}
+		}
 	} //}}}
 
 	//{{{ sendVFSUpdate() method
@@ -327,13 +376,15 @@ public class VFSManager
 
 	//{{{ Private members
 
-	//{{{ Instance variables
+	//{{{ Static variables
 	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS;
 	private static VFS urlVFS;
 	private static Hashtable vfsHash;
 	private static Hashtable protocolHash;
 	private static boolean error;
+	private static Object errorLock;
+	private static Vector errors;
 	private static Object vfsUpdateLock;
 	private static Vector vfsUpdates;
 	//}}}
@@ -341,6 +392,8 @@ public class VFSManager
 	//{{{ Class initializer
 	static
 	{
+		errorLock = new Object();
+		errors = new Vector();
 		fileVFS = new FileVFS();
 		urlVFS = new UrlVFS();
 		vfsHash = new Hashtable();

@@ -1,18 +1,32 @@
 TO DO
 
-- C+d with selection: delete all selected lines
+- plugin manager needs overhauled error reporting
+- hypersearch follows caret position
+- hypersearch in selection: one node for each selection, fucked
+- cvs add ErrorListDialog.java, ErrorListCellRenderer.java
+- readNextChar() fucks out with non-alpha characters
+- tags plugin fucks up search settings?
+- C+end/C+home: first/last virtual, not physical line
+- docking buttons not always hidden
+- allegedly redo doesn't redo everything?
 - position bug still there
 - either fix recent files/recent directories/current dir icon issue, or
   ditch icons
 - changing folding mode using buffer-local props: doesn't take effect on
   save (?) -- removing doesn't work, but setting to none works
 - read up on JDK 1.4 focus API
+- dwm: not always focused correctly
+- still fold at end expand bug -- last line always visible?
+- investigate nextLineRequested() -- replace with a buffer event.
+- investigate wrap around in macros
+- still collapseFolds behavior problems
+- stylesheet: keycap inside keycombo
+- C+d with selection: delete all selected lines
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 - {: only re-indent line if prev matches the regexp
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
-- dwm: not always focused correctly
 - documentation to do
   - new folding
   - add index terms throughout user's guide!
@@ -24,21 +38,12 @@ TO DO
   - write explicit folding tips
   - API guide: compareStrings(), showPopupMenu()
   - MiscUtilities path name methods need to be documented
-- still fold at end expand bug -- last line always visible?
-- investigate nextLineRequested() -- replace with a buffer event.
-- investigate wrap around in macros
-- still collapseFolds behavior problems
 - loading and saving opt pane: 'choose' button for backup directory
 - style setting for folding line indicator
 - search in directory: should not be so slow
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
 - check: pressing Enter on an open file
-- stylesheet: keycap inside keycombo
-- -noplugins command line switch
-- I/O errors and plugin load errors batched together in one dialog box
-- plugin error dialogs have 'Update Plugins' button
-- icons in i/o error, plugin error dialog boxes
 - if moving caret resulted in expansion of a fold, that fold should be
   collapsed when the caret leaves that fold
 - next-fold/prev-fold actions
@@ -49,9 +54,7 @@ TO DO
   a newline: insert after last line of fold.
 - help viewer: two tabs, contents and index. index browser
 - improved window docking:
-  - do something about there being more buttons than can fit
   - DockableLayout: handle too large
-  - double click on dockable panel to hide
   - CCW rotated text not drawn correctly
 - file system browser:
   - fs browser: only one level expanded. need drastic new algorithm.
@@ -71,15 +74,6 @@ TO DO
 - JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
   + more intuitive button labels throughout
 - incremental search; find all occurrences that are visible
-- if caps lock is pressed during startup, show dialog box for changing
-  settings that are currently set on the CLI (settings directory,
-  flags such as -norestore, background mode)
-- show 'this was shown cos caps lock down', blah blah so users don't
-  get confused.
-- 'Go to Log' button; opens relevant exception in activity log
-- 'Go to Log' button in beanshell error dialog box too
-- click on plugin in plugin manager to see the error that caused it to
-  not load
 - drop LatestVersion plugin
 - roll Firewall plugin into core
 - web start version
@@ -87,16 +81,12 @@ TO DO
 - <file>?line= or ?marker=
 - persistent fold visibility option
 - fold navigator to browse fold tree in explicit fold mode
-- command to surround selection with explicit fold markers
 - search & replace: option to skip folded lines
 - complete word: update on the fly as chars typed
 - reintroduce -bshclient command line switch
 - complete word: custom WrapAroundJList control
-- jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
-  optimized? Also faster scrolling.
 - plugin size reporting, new install plugins dialog UI layout
 - saving a read-only file: show a confirmation dialog box
-- ant targets to replace mk_installer/mk_source scripts
 - tool bar option pane: editing existing entries
 - version number in splash screen
 - mode-specific context menu and maybe even tool bar
@@ -112,47 +102,25 @@ TO DO
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - better auto indent
-- caret beyond end of line
-- graphical regular expression editor
 - appendix in plugin guide on contributing plugins
 - when loading a file: if the stream supports a mark, read first 16 bytes,
   check for unicode byte order mark, push back, if one is found, set
   encoding to Unicode automatically
-- hypersearch:
-  - show replace results in search results window
-  - new search results window for each search, no 'search results' menu
-    item
-- smarter/better userInput() that accepts strings, not just characters
-- option pane API changes:
-  - boolean validate() method added; if returns false, user is not allowed
-    to close dialog with 'OK' button, have to either fix values or cancel.
-  - OptionsDialog handles selective initialization of option panes;
-    AbstractOptionPane's _init() and _save() methods no longer necessary
-    and deprecated.
 - new token types:
   - MARKUP renamed MARKUP1
   - MARKUP2
   - MARKUP3
   - MARKUP4
   - KEYWORD4 (in addition to KEYWORD[123])
-  - INLINE (for inline scripts)
 - HTML mode:
   - inside tags, delegate on*="..." to JavaScript mode,
     style="..." to CSS mode
   - better <script>/<style> handling using nested delegates
-- this might be too hard: DELEGATE_TYPE attribute of SPAN rule, defines
-  token type from which default attributes are obtained for all tokens
-  inside the SPAN. eg, if a rule delegates to the javascript mode, with a
-  DELEGATE_TYPE of INLINE, and INLINE is defined as a light-gray background,
-  all tokens in the JavaScript source that do not define a background color
-  will be drawn with a light-gray background.
 - save markers when a buffer is closed, adding/removing markers shouldn't
   set the dirty flag
 - per-mode encodings and line separators, to optionally override those
   auto-detected when a buffer is loaded
 - they should be overridable on a global basis too
-- if last token of a line has a background color, remainder of line will
-  be drawn with that color
 - improve rectangular selection:
   - shift-left/shift-right: behave differently with rectangular selection
   - 'fill' command
@@ -180,11 +148,7 @@ TO DO
 - use java2d to draw block caret (instead of XOR)
 - cache plugin list in plugin manager, only loading it from the server if
   the modification date has changed?
-- work thread hang?
-- when a new text area is created, if caret is on a bracket, not matched
-  initially
 - resizing doesn't update horizontal scroll bar
-- JDK 1.3: about box broken
 - find next with $ or ^
 - Shift+TAB on Java 1.1
 - custom stylesheet: no xmlns
@@ -194,12 +158,10 @@ TO DO
 - formatting problems in user's guide in table cells
 - finish persistent splits code
 - complete word: keys to navigate don't work with some Java versions
-- don't do #save# stuff if destination directory is not writeable
 - installing source for already installed plugins is not possible
 - directory search: continue even if a file can't be loaded
 - a line consisting entirely of spaces & word wrap
 - switching option panes real fast
-- fix '... is not a function name' when running openjade
 - tabbing to text area fails
 - zlib decompression errors in plugin manager
 - failed saves should not clear the dirty flag
@@ -214,10 +176,7 @@ TO DO
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
 - 'Stop' in plugin manager needs to be handled more gracefully
-- binding an action to ` doesn't work
 - evalutate for selected lines: > 1 selection per line
-- folding paint up bug
-- prev line fold gutter bug
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - lower case all user's guide ids

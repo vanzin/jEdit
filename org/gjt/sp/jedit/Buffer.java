@@ -1760,10 +1760,7 @@ public class Buffer implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		if(getBooleanProperty("syntax"))
-			setTokenMarker(mode.getTokenMarker());
-		else
-			setTokenMarker(jEdit.getMode("text").getTokenMarker());
+		setTokenMarker(mode.getTokenMarker());
 
 		String folding = getStringProperty("folding");
 		if("explicit".equals(folding))

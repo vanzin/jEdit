@@ -7,11 +7,23 @@ JEDIT 4.0 VERSION HISTORY
 - Two-stage save (where a file is first saved to #filename#save#, then
   renamed to the actual file name) can be disabled in the 'Loading and
   Saving' option pane
+- View->Folding->Add Explicit Fold (shortcut: C+e a) command added;
+  surrounds selection with {{{ and }}}
+- -noplugins command line switch added
 
 + Enhancements
 
 - C+LEFT/C+RIGHT are now more intelligent. Tell me if you like the new
   behavior.
+- If there are more buttons in a docking area than can fit, a popup menu
+  button is shown; clicking it shows a popup listing all dockables in
+  that area
+- Added option to disable file system browser's tool bar
+- I/O errors are now batched into a single dialog box
+
++ Neutral
+
+- Syntax highlighting can no longer be disabled
 
 + Bug Fixes
 
@@ -31,6 +43,26 @@ JEDIT 4.0 VERSION HISTORY
 - Select Line, Select Word, Select Paragraph actions were slightly
   broken
 - Fixed minor undo modified flag clearing bug
+- Pressing the tab key with a one-line selection would insert a hard tab
+  even if soft tabs were enabled
+
++ API Changes
+
+- VFS.reloadDirectory() method added; it is called before a directory is
+  reloaded by the file system browser
+- MiscUtilities.charsToXMLEscapes() method added
+- To take advantage of the new I/O error dialog box, virtual filesystem
+  implementations should call:
+
+  VFSManager.error(Component comp, String path, String messageProp,
+    Object[] args)
+
+  instead of
+
+  VFSManager.error(Component comp, String message, Object[] args)
+
+  The message is obtained from the property 'messageProp' (nothing is
+  prepended or appended to the property name).
 
 * Version 4.0pre2
 

@@ -278,6 +278,8 @@ public class BrowserView extends JPanel
 		tree.setRowHeight(renderer.getTreeCellRendererComponent(
 			tree,new DefaultMutableTreeNode("foo"),
 			false,false,false,0,false).getSize().height);
+
+		splitPane.setBorder(null);
 	} //}}}
 
 	//{{{ Private members

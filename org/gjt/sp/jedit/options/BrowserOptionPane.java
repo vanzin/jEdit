@@ -1,5 +1,8 @@
 /*
  * BrowserOptionPane.java - Browser options panel
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,19 +22,23 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class BrowserOptionPane extends AbstractOptionPane
 {
+	//{{{ BrowserOptionPane constructor
 	public BrowserOptionPane()
 	{
 		super("browser.general");
-	}
+	} //}}}
 
+	//{{{ _init() method
 	public void _init()
 	{
 		/* Default directory */
@@ -54,6 +61,13 @@ public class BrowserOptionPane extends AbstractOptionPane
 			defaultDirectory.setSelectedIndex(3);
 		addComponent(jEdit.getProperty("options.browser.general.defaultPath"),
 			defaultDirectory);
+
+		/* Show tool bar */
+		showToolbar = new JCheckBox(jEdit.getProperty("options.browser"
+			+ ".general.showToolbar"));
+		showToolbar.setSelected(jEdit.getBooleanProperty("vfs.browser"
+			+ ".showToolbar"));
+		addComponent(showToolbar);
 
 		/* Show icons */
 		showIcons = new JCheckBox(jEdit.getProperty("options.browser"
@@ -103,13 +117,16 @@ public class BrowserOptionPane extends AbstractOptionPane
 		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".currentBufferFilter"));
 		addComponent(currentBufferFilter);
-	}
+	} //}}}
 
+	//{{{ _save() method
 	public void _save()
 	{
 		String[] dirs = { "buffer", "home", "favorites", "last" };
 		jEdit.setProperty("vfs.browser.defaultPath",dirs[defaultDirectory
 			.getSelectedIndex()]);
+		jEdit.setBooleanProperty("vfs.browser.showToolbar",
+			showToolbar.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showIcons",
 			showIcons.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.showHiddenFiles",
@@ -124,10 +141,11 @@ public class BrowserOptionPane extends AbstractOptionPane
 			doubleClickClose.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
 			currentBufferFilter.isSelected());
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JComboBox defaultDirectory;
+	private JCheckBox showToolbar;
 	private JCheckBox showIcons;
 	private JCheckBox showHiddenFiles;
 	private JCheckBox sortFiles;
@@ -135,4 +153,5 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
 	private JCheckBox currentBufferFilter;
+	//}}}
 }

@@ -3098,14 +3098,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ User input
 
-	public void userInputTest()
-	{
-		long start = System.currentTimeMillis();
-		for(int i = 0; i < 70; i++)
-			userInput('m');
-		System.err.println((System.currentTimeMillis() - start) / 70);
-	}
-
 	//{{{ userInput() method
 	/**
 	 * Handles the insertion of the specified character. Performs
@@ -3134,7 +3126,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				if(sel.startLine == sel.endLine
 					&& sel.start != buffer.getLineStartOffset(sel.startLine)
 					&& sel.end != buffer.getLineEndOffset(sel.startLine) - 1)
-					setSelectedText("\t");
+				{
+					insertTab();
+				}
 				else
 					shiftIndentRight();
 			}
@@ -3153,16 +3147,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				else
 					setSelectedText("\t");
 			}
-			else if(buffer.getBooleanProperty("noTabs"))
-			{
-				int lineStart = getLineStartOffset(caretLine);
-
-				String line = getText(lineStart,caret - lineStart);
-
-				setSelectedText(createSoftTab(line,buffer.getTabSize()));
-			}
 			else
-				setSelectedText("\t");
+				insertTab();
 			return;
 		}
 		else if(ch == '\n')
@@ -3552,7 +3538,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		return multi;
 	} //}}}
 
-	///{{{ toggleMultipleSelectionEnabled() method
+	//{{{ toggleMultipleSelectionEnabled() method
 	/**
 	 * Toggles multiple selection.
 	 * @since jEdit 3.2pre1
@@ -4203,6 +4189,76 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		foldVisibilityManager.narrow(sel.getStartLine(),sel.getEndLine());
 	} //}}}
 
+	//{{{ addExplicitFold() method
+	/**
+	 * Surrounds the selection with explicit fold markers.
+	 * @since jEdit 4.0pre3
+	 */
+	public void addExplicitFold()
+	{
+		if(!buffer.getStringProperty("folding").equals("explicit"))
+		{
+			GUIUtilities.error(view,"folding-not-explicit",null);
+			return;
+		}
+
+		String lineComment = buffer.getStringProperty("lineComment");
+		String commentStart = buffer.getStringProperty("commentStart");
+		String commentEnd = buffer.getStringProperty("commentEnd");
+
+		String start, end;
+		if(lineComment != null)
+		{
+			start = lineComment + "{{{\n";
+			end = " " + lineComment + "}}}";
+		}
+		else if(commentStart != null && commentEnd != null)
+		{
+			start = commentStart + "{{{" + commentEnd + "\n";
+			end = " " + commentStart + "}}}" + commentEnd;
+		}
+		else
+		{
+			start = "{{{\n";
+			end = " }}}";
+		}
+
+		try
+		{
+			buffer.beginCompoundEdit();
+
+			if(selection.size() == 0)
+			{
+				String line = buffer.getLineText(caretLine);
+				String whitespace = line.substring(0,
+					MiscUtilities.getLeadingWhiteSpace(line));
+				start = start + whitespace;
+				buffer.insert(caret,start);
+				// stupid: caret will automatically be incremented
+				buffer.insert(caret,end);
+			}
+			else
+			{
+				for(int i = 0; i < selection.size(); i++)
+				{
+					Selection s = (Selection)selection.elementAt(i);
+					String line = buffer.getLineText(s.startLine);
+					String whitespace = line.substring(0,
+						MiscUtilities.getLeadingWhiteSpace(line));
+					start = start + whitespace;
+					buffer.insert(s.start,start);
+					buffer.insert(s.end,end);
+				}
+
+				selectNone();
+			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ AWT stuff
@@ -4651,26 +4707,37 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
-	//{{{ createSoftTab() method
-	private String createSoftTab(String line, int tabSize)
+	//{{{ insertTab() method
+	private void insertTab()
 	{
-		int pos = 0;
-
-		for(int i = 0; i < line.length(); i++)
+		int tabSize = buffer.getTabSize();
+		if(buffer.getBooleanProperty("noTabs"))
 		{
-			switch(line.charAt(pos))
-			{
-			case '\t':
-				pos = 0;
-				break;
-			default:
-				if(++pos >= tabSize)
-					pos = 0;
-				break;
-			}
-		}
+			int lineStart = getLineStartOffset(caretLine);
 
-		return MiscUtilities.createWhiteSpace(tabSize - pos,0);
+			String line = getText(lineStart,caret - lineStart);
+
+			int pos = 0;
+
+			for(int i = 0; i < line.length(); i++)
+			{
+				switch(line.charAt(pos))
+				{
+				case '\t':
+					pos = 0;
+					break;
+				default:
+					if(++pos >= tabSize)
+						pos = 0;
+					break;
+				}
+			}
+
+			setSelectedText(MiscUtilities.createWhiteSpace(
+				tabSize - pos,0));
+		}
+		else
+			setSelectedText("\t");
 	} //}}}
 
 	//{{{ doWordWrap() method

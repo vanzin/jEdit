@@ -266,21 +266,6 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(trailingEOL);
 		//}}}
 
-		//{{{ Syntax highlighting
-		cons.gridx = 0;
-		cons.gridy++;
-		cons.weightx = 0.0f;
-		cons.gridwidth = cons.REMAINDER;
-		cons.fill = GridBagConstraints.NONE;
-		cons.anchor = GridBagConstraints.WEST;
-		syntax = new JCheckBox(jEdit.getProperty(
-			"options.editing.syntax"));
-		syntax.setSelected(buffer.getBooleanProperty("syntax"));
-		syntax.addActionListener(actionListener);
-		layout.setConstraints(syntax,cons);
-		panel.add(syntax);
-		//}}}
-
 		//{{{ Indent on tab
 		cons.gridy++;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
@@ -428,7 +413,6 @@ public class BufferOptions extends EnhancedDialog
 			buffer.setDirty(true);
 		}
 
-		buffer.setBooleanProperty("syntax",syntax.isSelected());
 		buffer.setBooleanProperty("indentOnTab",indentOnTab.isSelected());
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 		buffer.setBooleanProperty("noTabs",noTabs.isSelected());
@@ -472,7 +456,6 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
 	private JCheckBox trailingEOL;
-	private JCheckBox syntax;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;
 	private JCheckBox noTabs;
@@ -488,7 +471,6 @@ public class BufferOptions extends EnhancedDialog
 			+ ":tabSize=" + tabSize.getSelectedItem()
 			+ ":indentSize=" + indentSize.getSelectedItem()
 			+ ":maxLineLen=" + maxLineLen.getSelectedItem()
-			+ ":syntax=" + syntax.isSelected()
 			+ ":noTabs=" + noTabs.isSelected()
 			+ ":indentOnTab=" + indentOnTab.isSelected()
 			+ ":indentOnEnter=" + indentOnEnter.isSelected()
@@ -520,8 +502,6 @@ public class BufferOptions extends EnhancedDialog
 					"indentOnTab"));
 				indentOnEnter.setSelected(_mode.getBooleanProperty(
 					"indentOnEnter"));
-				syntax.setSelected(_mode.getBooleanProperty(
-					"syntax"));
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
 				updatePropsField();

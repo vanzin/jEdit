@@ -93,7 +93,27 @@ public class VFSBrowser extends JPanel implements EBComponent
 		ActionHandler actionHandler = new ActionHandler();
 
 		Box topBox = new Box(BoxLayout.Y_AXIS);
-		createToolBars(topBox);
+
+		// this is tricky, because in BROWSER mode, the menu bar
+		// and tool bar are stacked on top of each other, and
+		// the user can toggle the tool bar. In dialog modes,
+		// the two are side by side and the tool bar is always
+		// visible.
+		toolbarBox = new Box(mode == BROWSER
+			? BoxLayout.Y_AXIS
+			: BoxLayout.X_AXIS);
+		JToolBar menuBar = createMenuBar();
+		if(mode == BROWSER)
+			menuBar.add(Box.createGlue());
+		toolbarBox.add(menuBar);
+		if(mode != BROWSER)
+		{
+			toolbarBox.add(Box.createHorizontalStrut(6));
+			toolbarBox.add(createToolBar());
+			toolbarBox.add(Box.createGlue());
+		}
+
+		topBox.add(toolbarBox);
 
 		GridBagLayout layout = new GridBagLayout();
 		JPanel pathAndFilterPanel = new JPanel(layout);
@@ -369,6 +389,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ reloadDirectory() method
 	public void reloadDirectory()
 	{
+		// used by FTP plugin to clear directory cache
+		VFSManager.getVFSForPath(path).reloadDirectory(path);
+
 		browserView.loadDirectory(path);
 	} //}}}
 
@@ -784,6 +807,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private HistoryTextField pathField;
 	private JCheckBox filterCheckbox;
 	private HistoryTextField filterField;
+	private Box toolbarBox;
+	private JToolBar toolbar;
 	private JButton up, reload, roots, home, synchronize,
 		newFile, newDirectory, searchInDirectory;
 	private BrowserView browserView;
@@ -801,8 +826,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	private boolean loadingRoot;
 	//}}}
 
-	//{{{ createToolBars() method
-	private void createToolBars(Box box)
+	//{{{ createMenuBar() method
+	private JToolBar createMenuBar()
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
@@ -814,19 +839,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolBar.add(Box.createHorizontalStrut(3));
 		toolBar.add(new FavoritesMenuButton());
 
-		// open and save dialog boxes: everything in one tool bar
-		// browser: two slightly narrower tool bars
-		if(mode == BROWSER)
-		{
-			toolBar.add(Box.createGlue());
-			box.add(toolBar);
+		return toolBar;
+	} //}}}
 
-			toolBar = new JToolBar();
-			toolBar.setFloatable(false);
-			toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
-		}
-		else
-			toolBar.addSeparator();
+	//{{{ createToolBar() method
+	private JToolBar createToolBar()
+	{
+		JToolBar toolBar = new JToolBar();
+		toolBar.setFloatable(false);
+		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		toolBar.add(up = createToolButton("up"));
 		toolBar.add(reload = createToolButton("reload"));
@@ -839,8 +860,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(mode == BROWSER)
 			toolBar.add(searchInDirectory = createToolButton("search-in-directory"));
 
-		toolBar.add(Box.createGlue());
-		box.add(toolBar);
+		return toolBar;
 	} //}}}
 
 	//{{{ createToolButton() method
@@ -908,6 +928,24 @@ public class VFSBrowser extends JPanel implements EBComponent
 		doubleClickClose = jEdit.getBooleanProperty("vfs.browser.doubleClickClose");
 
 		browserView.propertiesChanged();
+
+		if(mode == BROWSER)
+		{
+			boolean showToolbar = jEdit.getBooleanProperty("vfs.browser.showToolbar");
+			if(showToolbar && toolbar == null)
+			{
+				toolbar = createToolBar();
+				toolbar.add(Box.createGlue());
+				toolbarBox.add(toolbar);
+				revalidate();
+			}
+			else if(!showToolbar && toolbar != null)
+			{
+				toolbarBox.remove(toolbar);
+				toolbar = null;
+				revalidate();
+			}
+		}
 
 		if(path != null)
 			reloadDirectory();

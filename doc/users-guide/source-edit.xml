@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>
@@ -46,28 +46,6 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="global-opts" />.
    </para>
-   <para>
-    Syntax highlighting can be enabled or disabled in one of
-    several ways:
-   </para>
-   <itemizedlist>
-    <listitem><para>On a global or mode-specific
-    basis in the
-    <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
-    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-    Options</guimenuitem> dialog box.</para></listitem>
-    <listitem><para>In the current buffer
-    for the duration of the editing session in the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
-    <listitem><para>In the current buffer for future editing sessions, by placing
-    the following in one of the first 10 lines of the buffer, where
-    <replaceable>flag</replaceable> is either <quote>true</quote> or
-    <quote>false</quote>:
-    </para>
-    <screen>:syntax=<replaceable>flag</replaceable>:</screen>
-    </listitem>
-   </itemizedlist>
   </sect2>
  </sect1>
  <sect1 id="abbrevs"><title>Abbreviations</title>
