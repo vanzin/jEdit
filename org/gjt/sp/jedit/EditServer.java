@@ -205,10 +205,16 @@ public class EditServer extends Thread
 
 			Buffer buffer = jEdit.openFiles(null,parent,args);
 
-			boolean restoreFiles = restore && jEdit.getBooleanProperty("restore")
-				&& (buffer == null || jEdit.getBooleanProperty("restore.cli"));
+			if(jEdit.getBufferCount() == 0)
+				jEdit.newFile(null);
 
-			View view = PerspectiveManager.loadPerspective(restoreFiles);
+			boolean restoreFiles = restore
+				&& jEdit.getBooleanProperty("restore")
+				&& (buffer == null
+				|| jEdit.getBooleanProperty("restore.cli"));
+
+			View view = PerspectiveManager.loadPerspective(
+				restoreFiles);
 
 			if(view == null)
 			{
