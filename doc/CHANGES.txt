@@ -9,7 +9,8 @@ JEDIT 4.0 VERSION HISTORY
 - Added a hack to prevent the WheelMouse plugin version 0.5 from being
   loaded under JDK 1.4
 - It should now be possible to bind shortcuts to the numeric keypad,
-  although this might not work perfectly on all Java implementations
+  although this might not work perfectly on all Java implementations due
+  to implementation bugs
 - MacOS plugin version 1.1 (Kris Kopicki)
 - 'Expand Folds With Level' and 'Expand All Folds' commands now scroll
   the text area to the caret position if necessary
@@ -38,7 +39,10 @@ JEDIT 4.0 VERSION HISTORY
 - If the file system browser was set to show hidden files by default,
   the state of the 'show hidden files' menu item in the browser's
   "Commands" menu would be reversed
-- Fixed dockable panel layout bug
+- Fixed dockable panel layout problem if there were more buttons than
+  can fit
+- Fixed a problem when dockable panels were larger than the size of the
+  view
 - 'Select All' button in close dialog box didn't work
 - Shortcuts assigned to CA+x where x was a letter didn't work. I hope
   the fix for this didn't break AltGR sequences; let me know if it did
@@ -59,6 +63,11 @@ JEDIT 4.0 VERSION HISTORY
 - Changed shortcut of 'go to next/previous bracket' to C+e C+[/C+] since
   shortcuts such as C+e [ are tricky to handle
 - Fixed possible NullPointerException in search and replace code
+- Replace All in selection now works with rectangular selections
+- Selection.Rect.getEnd(Buffer,int) returned incorrect values
+- 'Range Comment' command didn't work properly with a rectangular
+  selection
+- Control-Shift clicks in the text area didn't work
 
 + API Additions
 

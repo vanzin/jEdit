@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 2001 Tom Locke
  *
  * This program is free software; you can redistribute it and/or
@@ -622,7 +622,14 @@ loop:			for(;;)
 	{
 		JEditTextArea textArea = view.getTextArea();
 
-		int caret = textArea.getCaretPosition();
+		Buffer buffer = view.getBuffer();
+		if(!buffer.isEditable())
+			return false;
+
+		boolean smartCaseReplace = (replace != null
+			&& TextUtilities.getStringCase(replace)
+			== TextUtilities.LOWER_CASE);
+
 		Selection[] selection = textArea.getSelection();
 		if(selection.length == 0)
 		{
@@ -632,10 +639,12 @@ loop:			for(;;)
 
 		record(view,"replace(view)",true,false);
 
-		Buffer buffer = view.getBuffer();
-
 		try
 		{
+			SearchMatcher matcher = getSearchMatcher(false);
+			if(matcher == null)
+				return false;
+
 			buffer.beginCompoundEdit();
 
 			int retVal = 0;
@@ -650,25 +659,33 @@ loop:			for(;;)
 				this sucks, so we hack to avoid it. */
 				int start = s.getStart();
 
-				retVal += _replace(view,buffer,
-					s.getStart(),s.getEnd());
-
-				// this has no effect if the selection
-				// no longer exists
-				textArea.removeFromSelection(s);
 				if(s instanceof Selection.Range)
 				{
+					retVal += _replace(view,buffer,matcher,
+						s.getStart(),s.getEnd(),
+						smartCaseReplace);
+
+					textArea.removeFromSelection(s);
 					textArea.addToSelection(new Selection.Range(
 						start,s.getEnd()));
 				}
 				else if(s instanceof Selection.Rect)
 				{
+					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
+					{
+						retVal += _replace(view,buffer,matcher,
+							s.getStart(buffer,j),s.getEnd(buffer,j),
+							smartCaseReplace);
+					}
 					textArea.addToSelection(new Selection.Rect(
 						start,s.getEnd()));
 				}
 			}
 
-			textArea.moveCaretPosition(caret);
+			Selection s = textArea.getSelectionAtOffset(
+				textArea.getCaretPosition());
+			if(s != null)
+				textArea.moveCaretPosition(s.getEnd());
 
 			if(retVal == 0)
 			{
@@ -705,15 +722,27 @@ loop:			for(;;)
 	 */
 	public static boolean replace(View view, Buffer buffer, int start, int end)
 	{
+		if(!buffer.isEditable())
+			return false;
+
+		boolean smartCaseReplace = (replace != null
+			&& TextUtilities.getStringCase(replace)
+			== TextUtilities.LOWER_CASE);
+
 		JEditTextArea textArea = view.getTextArea();
 
 		try
 		{
+			SearchMatcher matcher = getSearchMatcher(false);
+			if(matcher == null)
+				return false;
+
 			int retVal = 0;
 
 			buffer.beginCompoundEdit();
 
-			retVal += _replace(view,buffer,start,end);
+			retVal += _replace(view,buffer,matcher,start,end,
+				smartCaseReplace);
 
 			if(retVal != 0)
 				return true;
@@ -749,8 +778,16 @@ loop:			for(;;)
 
 		view.showWaitCursor();
 
+		boolean smartCaseReplace = (replace != null
+			&& TextUtilities.getStringCase(replace)
+			== TextUtilities.LOWER_CASE);
+
 		try
 		{
+			SearchMatcher matcher = getSearchMatcher(false);
+			if(matcher == null)
+				return false;
+
 			String path = fileset.getFirstFile(view);
 loop:			while(path != null)
 			{
@@ -774,6 +811,9 @@ loop:			while(path != null)
 				if(buffer.isPerformingIO())
 					VFSManager.waitForRequests();
 
+				if(!buffer.isEditable())
+					continue loop;
+
 				// Leave buffer in a consistent state if
 				// an error occurs
 				int retVal = 0;
@@ -781,8 +821,9 @@ loop:			while(path != null)
 				try
 				{
 					buffer.beginCompoundEdit();
-					retVal = _replace(view,buffer,
-						0,buffer.getLength());
+					retVal = _replace(view,buffer,matcher,
+						0,buffer.getLength(),
+						smartCaseReplace);
 				}
 				finally
 				{
@@ -926,26 +967,16 @@ loop:			while(path != null)
 	 * @param buffer The buffer
 	 * @param start The start offset
 	 * @param end The end offset
-	 * @return True if the replace operation was successful, false
-	 * if no matches were found
+	 * @param matcher The search matcher to use
+	 * @param smartCaseReplace See user's guide
+	 * @return The number of occurrences replaced
 	 */
 	private static int _replace(View view, Buffer buffer,
-		int start, int end) throws Exception
+		SearchMatcher matcher, int start, int end,
+		boolean smartCaseReplace)
+		throws Exception
 	{
-		if(!buffer.isEditable())
-			return 0;
-
-		SearchMatcher matcher = getSearchMatcher(false);
-		if(matcher == null)
-			return 0;
-
 		int occurCount = 0;
-
-		if(replace == null)
-			replace = "";
-
-		boolean smartCaseReplace = (TextUtilities.getStringCase(replace)
-			== TextUtilities.LOWER_CASE);
 
 		boolean endOfLine = (buffer.getLineEndOffset(
 			buffer.getLineOfOffset(end)) - 1 == end);

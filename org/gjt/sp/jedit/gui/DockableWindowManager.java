@@ -899,6 +899,11 @@ public class DockableWindowManager extends JPanel
 			int bottomHeight = Math.min(Math.max(0,_height - topHeight),_bottom.height);
 			int rightWidth = Math.min(Math.max(0,_width - leftWidth),_right.width);
 
+			DockableWindowManager.this.top.setDimension(topHeight);
+			DockableWindowManager.this.left.setDimension(leftWidth);
+			DockableWindowManager.this.bottom.setDimension(bottomHeight);
+			DockableWindowManager.this.right.setDimension(rightWidth);
+
 			if(alternateLayout)
 			{
 				topButtons.setBounds(

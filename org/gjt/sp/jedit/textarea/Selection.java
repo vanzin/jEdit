@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.Buffer;
  * @version $Id$
  * @since jEdit 3.2pre1
  */
-public abstract class Selection
+public abstract class Selection implements Cloneable
 {
 	//{{{ getStart() method
 	/**
@@ -94,6 +94,21 @@ public abstract class Selection
 		return getClass().getName() + "[start=" + start
 			+ ",end=" + end + ",startLine=" + startLine
 			+ ",endLine=" + endLine + "]";
+	} //}}}
+
+	//{{{ clone() method
+	public Object clone()
+	{
+		try
+		{
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e)
+		{
+			throw new InternalError("I just drank a whole "
+				+ "bottle of cough syrup and I feel "
+				+ "funny!");
+		}
 	} //}}}
 
 	//{{{ Package-private members
@@ -220,7 +235,7 @@ public abstract class Selection
 			else
 			{
 				int _start = start - buffer.getLineStartOffset(startLine);
-				int _end = end - buffer.getLineEndOffset(endLine);
+				int _end = end - buffer.getLineStartOffset(endLine);
 
 				return Math.min(buffer.getLineEndOffset(line) - 1,
 					buffer.getLineStartOffset(line)
