@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- jedit -background -nogui && jedit -norestore opens "Untitled 2"
 - need a new jEditLauncher
 - plugin error dialog -- if > 1 error per plugin
 - plugin tutorial:
@@ -151,6 +152,15 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
+- insert/remove lines with a lot of folds below is slow for two reasons:
+  - getNext/PrevVisibleLine() is a linear scan
+  - markTokens(x) tokenizes all lines y < x s.t. line context of y is
+    not valid
+- do buffer load AWT half immediately after work thread half
+- prioritize work requests so that active buffers get loaded first?
+  too much of a hack?
+- replace all in a directory could be faster
+- faster smooth text
 - logging is slow
 - buffer.setMode() slow
 - inserting new lines -- why repaint entire text area?
@@ -166,7 +176,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
-- faster getNext/PrevVisibleLine()
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

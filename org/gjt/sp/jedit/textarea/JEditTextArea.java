@@ -5100,7 +5100,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			physFirstLine--;
 		} */
 
-		physFirstLine = virtualToPhysical(firstLine);
+		physFirstLine = virtualToPhysical(Math.min(foldVisibilityManager
+			.getVirtualLineCount() - 1,firstLine));
 		setFirstLine(physicalToVirtual(physFirstLine));
 
 		// update scroll bars because the number of virtual lines might
