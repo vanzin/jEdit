@@ -238,6 +238,7 @@ Additional class libraries for plugins</title>
     application, the plugin core class should be derived from the
     <classname>EBPlugin</classname> class instead of directly from
     <classname>EditPlugin</classname>
+  </para></listitem>
 </itemizedlist>
 
 <para>
