@@ -3356,14 +3356,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.insert(caret,str);
 
 				if(indent)
-					buffer.indentLine(caretLine,false,true);
+					buffer.indentLine(caretLine);
 			}
 			finally
 			{
 				if(overwrite || indent)
 					buffer.endCompoundEdit();
 			}
-
 		}
 	} //}}}
 
@@ -4514,7 +4513,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				buffer.beginCompoundEdit();
 				setSelectedText("\n");
-				buffer.indentLine(caretLine,true,false);
+				buffer.indentLine(caretLine);
 			}
 			finally
 			{
@@ -4540,7 +4539,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int whiteSpace = MiscUtilities.getLeadingWhiteSpace(text);
 
 			if(caret - start <= whiteSpace
-				&& buffer.indentLine(caretLine,true,false))
+				&& buffer.indentLine(caretLine))
 				return;
 		}
 
@@ -5489,7 +5488,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				buffer.insert(start + insertNewLineAt,"\n");
 				// caretLine would have been incremented
 				// since insertNewLineAt <= caretPos
-				buffer.indentLine(caretLine,true,true);
+				buffer.indentLine(caretLine);
 			}
 			finally
 			{

@@ -128,14 +128,36 @@
     position to the clicked location.
    </para>
    <para>
+    Rectangular selections can also be created using the keyboard.
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More
+    Selection</guisubmenu>&gt;<guimenuitem>Rectangular Selection</guimenuitem>
+    toggles keyboard rectangular selection mode. In this mode, commands that
+    normally create range selections will create rectangular selections.
+    A status bar indicator is shown when this mode is enabled.
+   </para>
+   <para>
     It is possible to select a rectangle with zero width but non-zero height.
     This can be used to insert a new column between two existing
     columns, for example. Such zero-width selections are shown as a thin
     vertical line.
    </para>
    <para>
+    While entering text into a range selection deactivates the selection,
+    entering text into a rectangular selection shifts it to the right.
+    For example, to insert a string at a specific column on a number of lines,
+    select a zero width rectangle at that column, and type the desired string.
+   </para>
+   <para>
     Rectangles can be deleted, copied, pasted, and operated on using ordinary
     editing commands.
+   </para>
+   <para>
+    Rectangular selections can extend beyond the end of a line into
+    <quote>virtual space</quote>. Furthermore,
+    if keyboard rectangular selection mode is on or if the
+    <keycap>Control</keycap> key is being held down, clicking beyond the
+    end of a line will insert the appropriate amount of whitespace in order
+    to position the cursor at the clicked location.
    </para>
    <note>
     <para>
@@ -310,10 +332,14 @@
    the caret position. To insert a completion from the list, either click it
    with the mouse,
    or select it using the <keycap>Up</keycap> and <keycap>Down</keycap> keys and
-   press <keycap>Enter</keycap>. To close the popup without inserting a
-   completion, press <keycap>Escape</keycap>. Typing while the popup is
+   press <keycap>Enter</keycap>, or press a digit to insert one of the first
+   ten completions (1 is the first completion; 9 is the 9th; 0 is the 10th).
+  </para>
+  <para>Typing while the popup is
    visible will automatically update the popup and narrow the set of
    completions as necessary.
+   To close the popup without inserting a
+   completion, press <keycap>Escape</keycap>.
   </para>
   <sidebar><title>For power users</title>
    <para>
@@ -472,18 +498,6 @@
     pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box, a colon (<quote>:</quote>) is painted at the end of wrapped lines.
    </para>
-   <para>
-    Note that since jEdit only scrolls one whole <quote>physical</quote>
-    (newline-delimited) line
-    at a time, having lines wrapped into more sections than visible in the
-    text area will render portions of the buffer inaccessible.
-   </para>
-   <tip>
-    <para>
-     If you enable soft wrap and set the wrap margin to 0, text will be
-     wrapped to the width of the text area.
-    </para>
-   </tip>
   </sect2>
   <sect2><title>Hard Wrap</title>
    <para>
@@ -629,14 +643,38 @@
     Quick copy is disabled by default, but it can be enabled in the
     <guibutton>Text Area</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box. When quick copy is enabled,
-    clicking the middle mouse button in the text area inserts the most recently
+    dialog box.
+   </para>
+   <para>
+    The quick copy feature enables the following behavior:
+   </para>
+   <itemizedlist>
+    <listitem><para>
+    Clicking the middle mouse button in the text area inserts the most recently
     selected text at the clicked location.
     If you only have a two-button mouse, you can click the left mouse button
     while holding down <keycap>Alt</keycap> instead of middle-clicking.
-   </para>
+   </para></listitem>
+   <listitem><para>
+    Dragging with the middle mouse button
+    creates a selection without moving the
+    caret. As soon as the mouse button is released, the selected text is
+    inserted at the caret position and the selection is deactivated.
+    A message is shown in the status bar while text is being selected to
+    remind you that this is not an ordinary selection.
+   </para></listitem>
+   <listitem><para>
+    Holding down <keycap>Shift</keycap> while clicking the middle mouse
+    button will duplicate text between the caret and the clicked location.
+   </para></listitem>
+   <listitem><para>
+    Holding down <keycap>Control</keycap> while clicking the middle mouse
+    button on a bracket will insert all text in that bracket's scope at the
+    caret position.
+   </para></listitem>
+   </itemizedlist>
    <para>
-    This is implemented by storing the most recently selected text
+    Quick copy is implemented by storing the most recently selected text
     in the register named <filename>%</filename>.
    </para>
    <para>
@@ -645,16 +683,8 @@
     quick copy feature. On other platforms and Java versions, the contents
     of the quick copy register are only accessible from within jEdit.
    </para>
-   <para>
-    Also, dragging with the middle mouse button
-    creates a selection without moving the
-    caret. As soon as the mouse button is released, the selected text is
-    inserted at the caret position and the selection is deactivated.
-    A message is shown in the status bar while text is being selected to
-    remind you that this is not an ordinary selection.
-   </para>
   </sect2>
-  <sect2><title>General Register Commands</title>
+  <sect2 id="registers"><title>General Register Commands</title>
    <para>
     These commands require more keystrokes than the two methods shown above,
     but they can operate on any register, allowing an arbitrary number of
@@ -665,6 +695,10 @@
     after being invoked.
     Pressing <keycap>Escape</keycap> instead of specifying a register name
     will cancel the operation.
+   </para>
+   <para>
+    Note that the content of registers other than the clipboard and
+    quick copy text are automatically saved between jEdit sessions.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut

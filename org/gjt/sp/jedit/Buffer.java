@@ -2327,16 +2327,20 @@ public class Buffer
 
 	//{{{ indentLine() method
 	/**
-	 * If auto indent is enabled, this method is called when the `Tab'
-	 * or `Enter' key is pressed to perform mode-specific indentation
-	 * and return true, or return false if a normal tab is to be inserted.
+	 * @deprecated Use {@link #indentLine(int)} instead.
+	 */
+	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
+		boolean canDecreaseIndent)
+	{
+		return indentLine(lineIndex);
+	} //}}}
+
+	//{{{ indentLine() method
+	/**
+	 * Indents the specified line.
 	 * @param line The line number to indent
-	 * @param canIncreaseIndent If false, nothing will be done if the
-	 * calculated indent is greater than the current
-	 * @param canDecreaseIndent If false, nothing will be done if the
-	 * calculated indent is less than the current
-	 * @return true if the tab key event should be swallowed (ignored)
-	 * false if a real tab should be inserted
+	 * @return true If indentation took place, false otherwise.
+	 * @since jEdit 4.2pre2
 	 */
 	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
 		boolean canDecreaseIndent)
@@ -2367,13 +2371,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 
 		int idealIndent = getIndentForLine(lineIndex);
-		if(idealIndent == -1)
-			return false;
-
-		if(!canDecreaseIndent && idealIndent <= currentIndent)
-			return false;
-
-		if(!canIncreaseIndent && idealIndent >= currentIndent)
+		if(idealIndent == -1 || idealIndent == currentIndent)
 			return false;
 
 		// Do it
@@ -2409,7 +2407,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			beginCompoundEdit();
 			for(int i = start; i <= end; i++)
-				indentLine(i,true,true);
+				indentLine(i);
 		}
 		finally
 		{
@@ -2429,7 +2427,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			beginCompoundEdit();
 			for(int i = 0; i < lines.length; i++)
-				indentLine(lines[i],true,true);
+				indentLine(lines[i]);
 		}
 		finally
 		{

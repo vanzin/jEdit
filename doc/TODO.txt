@@ -3,6 +3,15 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- control-shift-click broken in text area
+
+- tips:
+  - persistent registers
+  - tall caret
+  - virtual space
+  - quick copy shift click
+  - various action bar hacks
+  - persistent views
 - finish vfs browser extended attributes
 - new file: horiz scroll wrong
 - scroll to with invisible caret

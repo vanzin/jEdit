@@ -153,17 +153,12 @@
   <sect2 id="docking"><title>Window Docking</title>
    <para>
     Various jEdit and plugin
-    windows can optionally be docked into the view. This can be
-    configured in the <guibutton>Docking</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />.
+    windows can be docked into the view for convenience. Dockable windows
+    have a popup button in their top-left corner. Clicking this button displays a menu with commands for docking the window in one of four sides of the view.
    </para>
    <para>
-    When windows are docked into the view, strips of buttons are shown in the
-    left, right, top, and bottom sides of the text area. Each strip contains
-    buttons for the windows docked in that location, as well as a close box.
-    Clicking a window's button shows that dockable window; clicking the close
-    box hides the window again.
+    Strips of buttons are shown on each side of the text area where windows are docked. Each strip contains
+    buttons for the windows docked in that location, as well as a close box and a popup button. Clicking the popup button shows a menu for moving the currently active dockable to another location, or for undocking it from the view. If no dockable is active, clicking the popup button shows a list of windows docked in that location.
    </para>
    <para>
     The commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
@@ -181,16 +176,10 @@
      <listitem><para><guimenuitem>Window Name
      (New Floating Instance)</guimenuitem> - opens a new instance of the
      dockable in a floating window, regardless of the docking
-     configuration.</para>
+     configuration. For example, this can be used to view two
+     different directories side-by-side in two file system browser windows.</para>
      <para>
-     Another way to open a new floating instance of a window that is already
-     docked is to right-click on the appropriate strip of buttons; this shows
-     a menu from which you can choose to open a new floating instance.
-     </para>
-     <para>
-     This can be used to view two
-     different directories side-by-side in two file system browser windows,
-     for example.
+     A new floating instance can also be opened from the dockable window's popup menu.
      </para>
     </listitem>
     </itemizedlist>

@@ -344,6 +344,10 @@
    character encoding of each recent file, and
    automatically restores those values when one of the files is opened.
    </para></listitem>
+   <listitem><para><filename>registers.xml</filename> - an XML file which stores
+   register contents. See <xref linkend="registers"/> for more information
+   about registers.
+   </para></listitem>
    <listitem><para><filename>server</filename> - a plain text file that only
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.
