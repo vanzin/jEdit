@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- eliminate redundant scans and events when loading buffer
 - try typing foo), put cursor after foo, type some more -- slowdown
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks

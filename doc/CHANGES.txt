@@ -50,6 +50,13 @@ Thanks to Gerd Knops for contributing to this release.
 
 - Fixed bottom tool bar layout problem.
 
+- Image shown in 'welcome to jEdit' page in help was not being installed
+  by the installer.
+
+- Fixed a bug in the folding code that could be triggered by switching
+  to indent fold mode, collapsing some folds, switching to explicit fold
+  mode, then switching back to indent fold mode again.
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,

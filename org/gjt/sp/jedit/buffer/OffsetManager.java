@@ -277,6 +277,9 @@ public class OffsetManager
 		if(foldLevel == 0)
 		{
 			newVirtualLineCount = lineCount;
+
+			for(int i = 0; i < lineCount; i++)
+				lineInfo[i] |= VISIBLE_MASK;
 		}
 		else
 		{
