@@ -1,5 +1,11 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0final
+
++ Enhancements
+
+- Updated POV-Ray syntax highlighting (Jan Schäfer)
+
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
 + Enhancements
