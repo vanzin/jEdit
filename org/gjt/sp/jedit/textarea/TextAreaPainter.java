@@ -163,7 +163,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.updateMaxHorizontalScrollWidth();
 		textArea.scrollBarsInitialized = true;
 
-		repaintMgr.updateGraphics();
+		textArea.repaintMgr.updateGraphics();
 	} //}}}
 
 	//{{{ getFocusTraversalKeysEnabled() method
@@ -673,7 +673,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paint(Graphics _gfx)
 	{
-		Graphics2D gfx = repaintMgr.getGraphics();
+		Graphics2D gfx = textArea.repaintMgr.getGraphics();
 
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -686,7 +686,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			long prepareTime = System.currentTimeMillis();
 			FastRepaintManager.RepaintLines lines
-				= repaintMgr.prepareGraphics(clipRect,
+				= textArea.repaintMgr.prepareGraphics(clipRect,
 				textArea.getFirstLine(),gfx);
 			prepareTime = (System.currentTimeMillis() - prepareTime);
 
@@ -700,12 +700,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				lines.first,lines.last,y,height);
 			linesTime = (System.currentTimeMillis() - linesTime);
 
-			repaintMgr.setFastScroll(
+			textArea.repaintMgr.setFastScroll(
 				clipRect.equals(new Rectangle(0,0,
 				getWidth(),getHeight())));
 
 			long blitTime = System.currentTimeMillis();
-			repaintMgr.paint(_gfx);
+			textArea.repaintMgr.paint(_gfx);
 			blitTime = (System.currentTimeMillis() - blitTime);
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
@@ -765,7 +765,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/* package-private since they are accessed by inner classes and we
 	 * want this to be fast */
 	JEditTextArea textArea;
-	FastRepaintManager repaintMgr;
 
 	SyntaxStyle[] styles;
 	Color caretColor;
@@ -803,7 +802,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		this.textArea = textArea;
 
-		repaintMgr = new FastRepaintManager(textArea,this);
 		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 

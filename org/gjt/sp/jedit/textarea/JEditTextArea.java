@@ -82,6 +82,7 @@ public class JEditTextArea extends JComponent
 		selectionManager = new SelectionManager(this);
 		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
+		repaintMgr = new FastRepaintManager(this,painter);
 		gutter = new Gutter(view,this);
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
@@ -321,7 +322,7 @@ public class JEditTextArea extends JComponent
 			this.buffer = buffer;
 
 			chunkCache.setBuffer(buffer);
-			painter.repaintMgr.setFastScroll(false);
+			repaintMgr.setFastScroll(false);
 			propertiesChanged();
 
 			if(displayManager != null)
@@ -4829,6 +4830,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			displayManager.notifyScreenLineChanges();
 		}
 
+		repaintMgr.setFastScroll(false);
 		chunkCache.invalidateAll();
 		gutter.repaint();
 		painter.repaint();
@@ -5027,6 +5029,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	Segment lineSegment;
 	MouseHandler mouseHandler;
 	ChunkCache chunkCache;
+	FastRepaintManager repaintMgr;
 	DisplayManager displayManager;
 	SelectionManager selectionManager;
 	boolean bufferChanging;
@@ -5128,6 +5131,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ foldStructureChanged() method
 	void foldStructureChanged()
 	{
+		repaintMgr.setFastScroll(false);
 		chunkCache.invalidateAll();
 		recalculateLastPhysicalLine();
 		repaint();
