@@ -2,6 +2,12 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
+{{{ Scripting Changes
+
+- BeanShell 1.3a1 included. This release features improved error
+  reporting, code cleanups and minor bug fixes.
+
+}}}
 {{{ Bug Fixes
 
 - It was possible to open multiple plugin manager instances from the
@@ -13,6 +19,11 @@ JEDIT 4.2 VERSION HISTORY
 - The file system browser would report files larger than 1 megabyte as
   being an order of magnitude smaller, eg 13 kilobytes instead of 13
   megabytes.
+
+- Changing the folding mode to "none" did not work correctly.
+
+- Changing from a syntax highlighting mode to text mode did not
+  invalidate line contexts.
 
 }}}
 {{{ API Changes

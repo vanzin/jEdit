@@ -435,9 +435,23 @@ public class PluginJAR
 
 			activated = false;
 
-			plugin.stop();
-			plugin = new EditPlugin.Deferred(plugin.getClassName());
-			plugin.jar = (EditPlugin.JAR)this;
+			if(plugin != null)
+			{
+				try
+				{
+					plugin.stop();
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,"Error while "
+						+ "stopping plugin:");
+					Log.log(Log.ERROR,this,t);
+				}
+
+				plugin = new EditPlugin.Deferred(
+					plugin.getClassName());
+				plugin.jar = (EditPlugin.JAR)this;
+			}
 		}
 	} //}}}
 
@@ -614,19 +628,7 @@ public class PluginJAR
 	//{{{ uninit() method
 	void uninit(boolean exit)
 	{
-		if(plugin != null)
-		{
-			try
-			{
-				plugin.stop();
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Error while "
-					+ "stopping plugin:");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
+		deactivatePlugin();
 
 		if(!exit)
 		{
@@ -950,7 +952,7 @@ public class PluginJAR
 		if(plugin instanceof EBPlugin)
 		{
 			if(jEdit.getProperty("plugin."
-				+ className + ".activate")
+				+ plugin.getClassName() + ".activate")
 				== null)
 			{
 				// old plugins expected jEdit 4.1-style

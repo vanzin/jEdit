@@ -3228,6 +3228,9 @@ public class jEdit
 	//{{{ showPluginErrorDialog() method
 	private static void showPluginErrorDialog()
 	{
+		if(pluginErrors == null)
+			return;
+
 		String caption = jEdit.getProperty(
 			"plugin-error.caption" + (pluginErrors.size() == 1
 			? "-1" : ""));
@@ -3236,7 +3239,7 @@ public class jEdit
 			jEdit.getFirstView(),
 			jEdit.getProperty("plugin-error.title"),
 			caption,pluginErrors,true);
-		pluginErrors.removeAllElements();
+		pluginErrors = null;
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method
