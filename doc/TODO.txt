@@ -6,7 +6,6 @@ and quirks that I need to fix eventually.
 - soft wrap: dragging on last visible line throws NPEs
 - delayed caret updating: breaks status bar perhaps -- no, some other
   reason
-- tool bar option pane: test external icon references
 - maybe make caret status into a JLabel
 
 [error] java.lang.ArrayIndexOutOfBoundsException: 2757:-18
@@ -21,8 +20,9 @@ and quirks that I need to fix eventually.
 
 - finish regexp syntax rules -- SPAN::END substitution
 - narrow to one line: select all: blows up
-- C+[ -vs- C+OPEN_BRACKET
-- close current area doesn't work
+- requestDefaultFocus() is bad
+- close current area w/ dockables that don't implement
+  requestDefaultFocus()
 - use createMultilineLabel()
 - memory indicator color settings lost in limbo
 - rect select somewhat fucked

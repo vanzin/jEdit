@@ -193,7 +193,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 		if(current == entry)
 		{
 			if(entry != null)
+			{
+				entry.win.requestFocus();
 				entry.win.requestDefaultFocus();
+			}
 			return;
 		}
 
@@ -217,6 +220,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				public void run()
 				{
+					entry.win.requestFocus();
 					entry.win.requestDefaultFocus();
 				}
 			});

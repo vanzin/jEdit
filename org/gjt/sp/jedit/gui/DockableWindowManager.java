@@ -701,24 +701,33 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void closeCurrentArea()
 	{
-		Component comp = view.getFocusOwner();
-		while(comp != null)
+		// I don't know of any other way to fix this, since invoking this
+		// command from a menu results in the focus owner being the menu
+		// until the menu goes away.
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			System.err.println(comp.getClass());
-			if(comp instanceof PanelWindowContainer
-				.DockablePanel)
+			public void run()
 			{
-				PanelWindowContainer container =
-					((PanelWindowContainer.DockablePanel)
-					comp).getWindowContainer();
-				container.show(null);
-				return;
+				Component comp = view.getFocusOwner();
+				while(comp != null)
+				{
+					//System.err.println(comp.getClass());
+					if(comp instanceof PanelWindowContainer
+						.DockablePanel)
+					{
+						PanelWindowContainer container =
+							((PanelWindowContainer.DockablePanel)
+							comp).getWindowContainer();
+						container.show(null);
+						return;
+					}
+
+					comp = comp.getParent();
+				}
+
+				getToolkit().beep();
 			}
-
-			comp = comp.getParent();
-		}
-
-		getToolkit().beep();
+		});
 	} //}}}
 
 	//{{{ close() method

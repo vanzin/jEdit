@@ -61,26 +61,18 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout(6,6));
 
-		/* Parse fully */
-		parseFully = new JCheckBox(jEdit.getProperty(
-			"options.syntax.parseFully"));
-		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
-
-		add(BorderLayout.NORTH,parseFully);
 		add(BorderLayout.CENTER,createStyleTableScroller());
 	} //}}}
 
 	//{{{ _save() method
 	protected void _save()
 	{
-		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
 		styleModel.save();
 	} //}}}
 
 	//}}}
 
 	//{{{ Private members
-	private JCheckBox parseFully;
 	private StyleTableModel styleModel;
 	private JTable styleTable;
 

@@ -8,7 +8,19 @@ JEDIT 4.1 VERSION HISTORY
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
 - Added Pike syntax highlighting (Marco Gotze)
 - Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
-- Improved Perl syntax highlighting (Chris Petersen)
+- Updated Perl syntax highlighting (Chris Petersen)
+- Updated PL-SQL syntax highlighting (Steve Snider)
+- The "More accurate syntax highlighting" option is no longer. When it
+  was on, it would do the following:
+
+  - Cause the buffer to be parsed entirely by the syntax engine when
+    first loaded.
+  - When parsing a line for syntax tokens, it would scan back to the
+    start of the buffer looking for a line with valid syntax info,
+    instead of only looking 100 lines back.
+
+  However, the second made the first unnecessary, and with the first
+  behavior gone, the performance hit is not noticable.
 
 + Global Options Dialog Changes:
 
@@ -82,6 +94,7 @@ JEDIT 4.1 VERSION HISTORY
   terminate at was taken to be from the start of the file, not from the
   start of the current line. This broke FORTRAN syntax highlighting, for
   example.
+- The "Close Current Docking Area" command should work now.
 
 * Version 4.1pre4
 

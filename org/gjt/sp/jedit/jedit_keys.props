@@ -118,8 +118,8 @@ cut-string-register.shortcut=C+r C+x
 
 #{{{ Other keys
 recent-buffer.shortcut=C+BACK_QUOTE
-select-block.shortcut=C+[
-match-bracket.shortcut=C+]
+select-block.shortcut=C+OPEN_BRACKET
+match-bracket.shortcut=C+CLOSE_BRACKET
 prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP

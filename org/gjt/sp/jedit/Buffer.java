@@ -1438,8 +1438,7 @@ public class Buffer implements EBComponent
 				iter.remove();
 		}
 
-		parseFully = (!"text".equals(mode.getName())
-			&& jEdit.getBooleanProperty("parseFully"));
+		textMode = "text".equals(mode.getName());
 
 		setTokenMarker(mode.getTokenMarker());
 
@@ -1933,27 +1932,25 @@ public class Buffer implements EBComponent
 			 * a valid line context.
 			 */
 			int start, end;
-			if(parseFully)
+			if(textMode)
 			{
-				start = -1;
-				end = 0;
+				start = lineIndex;
 			}
 			else
 			{
-				start = Math.max(0,lineIndex - 100) - 1;
-				end = Math.max(0,lineIndex - 100);
-			}
+				start = 0;
 
-			for(int i = lineIndex - 1; i > end; i--)
-			{
-				if(offsetMgr.isLineContextValid(i))
+				for(int i = lineIndex - 1; i >= 0; i--)
 				{
-					start = i;
-					break;
+					if(offsetMgr.isLineContextValid(i))
+					{
+						start = i;
+						break;
+					}
 				}
 			}
 
-			for(int i = start + 1; i <= lineIndex; i++)
+			for(int i = start; i <= lineIndex; i++)
 			{
 				getLineText(i,seg);
 
@@ -3350,7 +3347,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private Vector markers;
 
 	// Syntax highlighting
-	private boolean parseFully;
+	private boolean textMode;
 	private TokenMarker tokenMarker;
 	private Segment seg;
 	private boolean nextLineRequested;
@@ -3436,12 +3433,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			offsetMgr.expandFolds(collapseFolds);
-		}
-
-		if(parseFully)
-		{
-			for(int i = 0; i < offsetMgr.getLineCount(); i++)
-				markTokens(i,DummyTokenHandler.INSTANCE);
 		}
 	} //}}}
 
