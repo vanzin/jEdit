@@ -3,13 +3,13 @@
 #
 plugin.MacOSPlugin.name=Mac OS Plugin
 plugin.MacOSPlugin.author=Kris Kopicki
-plugin.MacOSPlugin.version=1.2.2
+plugin.MacOSPlugin.version=1.2.3
 plugin.MacOSPlugin.docs=MacOS.html
 
 #
 # Dependencies
 #
-plugin.MacOSPlugin.depend.0=jedit 04.00.01.00
+plugin.MacOSPlugin.depend.0=jedit 04.00.05.00
 plugin.MacOSPlugin.depend.1=jdk 1.3
 
 MacOSPlugin.depend.os.name=Mac OS X
