@@ -1503,6 +1503,8 @@ loop:		for(;;)
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
 		{
+			System.err.println("Invalidate " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
+
 			if(textArea.getDisplayManager() == DisplayManager.this
 				&& end != 0 && buffer.isLoaded())
 			{
@@ -1825,6 +1827,18 @@ loop:		for(;;)
 						textArea.chunkCache.getLineInfo(
 							visibleLines - 1);
 					}
+
+					// force the fold levels to be
+					// updated.
+
+					// when painting the last line of
+					// a buffer, Buffer.isFoldStart()
+					// doesn't call getFoldLevel(),
+					// hence the foldLevelChanged()
+					// event might not be sent for the
+					// previous line.
+
+					buffer.getFoldLevel(delayedUpdateEnd);
 				}
 
 				textArea._finishCaretUpdate();

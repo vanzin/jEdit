@@ -3,10 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- narrowing in namespaces.factor
-- docs: no jEditLauncher
-- indent folding: indent triangle not repainted
 - sidekick out of memory error!
+[error] ChunkCache: BUG: skew=1,out.size()=0
 [error] ChunkCache: BUG: skew=1,out.size()=1
 
 [error] EditBus: java.lang.ArrayIndexOutOfBoundsException: 1
@@ -52,6 +50,7 @@ it is done in most text editors
 
 + docs:
 
+- docs: no jEditLauncher
 - deferred loading mention.
 - FAQ: swing window border problems
 - addCommandPath()
