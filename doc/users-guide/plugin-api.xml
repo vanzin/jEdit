@@ -1,13 +1,13 @@
-<!-- <<<<<<< plugin-api.xml -->
-<!-- jEdit 3.2 Plugin Guide, (C) 2001 John Gellene            -->
+<!-- jEdit 4.0 Plugin Guide, (C) 2001 John Gellene            -->
 
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
 
-<!-- Sat Jun 23 08:54:21 EDT 2001 @579 /Internet Time/        -->
-
 <!-- This chapter of the jEdit 3.2 Plugin Guide               -->
 <!-- describes the principal elements of the jEdit Plugin API -->
+
+<!-- $Id$
+-->
 
 
 <chapter id="plugin-api"><title>The jEdit Plugin API</title>
@@ -561,11 +561,19 @@ else if(msg instanceof ViewUpdate)
 <sect1 id="api-other-resources"><title>Other Plugin Resources</title>
 
 <para>
-  There are three other types of files containing resources used by a
+  There are four other types of files containing resources used by a
   plugin:
 </para>
 
 <itemizedlist>
+  <listitem>
+    <para>
+      a file named <filename>dockables.xml</filename> contained the
+      name of the plugin and the code for costructing an instance of the
+      plugin's docking window component, set forth in a specified XML
+      format;
+    </para>
+  </listitem>
   <listitem>
     <para>
       a catalog of the plugin's user actions in a specified XML format,
@@ -587,6 +595,16 @@ else if(msg instanceof ViewUpdate)
     </para>
   </listitem>
 </itemizedlist>
+
+<!-- open sect2 -->
+<sect2 id="api-resources-activation"><title>The Activation Data File</title>
+
+<para>
+  [To be supplied]
+</para>
+
+
+</sect2>
 
 <sect2 id="api-resources-action"><title>The Action Catalog</title>
 
@@ -653,7 +671,7 @@ else if(msg instanceof ViewUpdate)
   <listitem>
     <para>
       An <varname>ACTION</varname> contains the data for a particular action.
-      It has three attributes: a required <varname>NAME</varname>; 
+      It has three attributes: a required <varname>NAME</varname>;
       an optional <varname>NO_REPEAT</varname>, which is a flag
       indicating whether the action should not be repeated with the
       <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
@@ -750,7 +768,7 @@ plugin.MyPlugin.version=1.0.3</programlisting></informalexample>
     </para>
     <para>
       The value of a dependency property is one of the words
-      <literal>jdk</literal>, <literal>jedit</literal>, 
+      <literal>jdk</literal>, <literal>jedit</literal>,
       <literal>class</literal> or <literal>plugin</literal>,
       followed by a Java version number, a jEdit build number, a class
       name, or plugin class name and plugin version number,
