@@ -561,7 +561,8 @@ public class BufferIORequest extends WorkRequest
 				}
 
 				// Only backup once per session
-				if(buffer.getProperty(Buffer.BACKED_UP) == null)
+				if(buffer.getProperty(Buffer.BACKED_UP) == null 
+					|| jEdit.getBooleanProperty("backupEverySave"))
 				{
 					vfs._backup(session,path,view);
 					buffer.setBooleanProperty(Buffer.BACKED_UP,true);

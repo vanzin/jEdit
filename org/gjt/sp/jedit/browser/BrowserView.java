@@ -431,7 +431,7 @@ public class BrowserView extends JPanel
 				isSelected,cellHasFocus);
 
 			ParentDirectoryRenderer.this.setBorder(new EmptyBorder(
-				0,index * 17 + 1,0,0));
+				1,index * 17 + 1,1,1));
 
 			if(value instanceof LoadingPlaceholder)
 			{
@@ -444,7 +444,7 @@ public class BrowserView extends JPanel
 			{
 				ParentDirectoryRenderer.this.setFont(boldFont);
 
-				setIcon(showIcons ? FileCellRenderer.dirIcon : null);
+				setIcon(showIcons ? FileCellRenderer.openDirIcon : null);
 				setText(MiscUtilities.getFileName(value.toString()));
 			}
 

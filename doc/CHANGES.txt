@@ -10,6 +10,8 @@ JEDIT 4.0 VERSION HISTORY
 - View->Folding->Add Explicit Fold (shortcut: C+e a) command added;
   surrounds selection with {{{ and }}}
 - -noplugins command line switch added
+- Added option to have backups created on every save (default is to only
+  create one backup for each file, until it is closed) (Ollie Rutherfurd)
 
 + Enhancements
 
@@ -20,6 +22,8 @@ JEDIT 4.0 VERSION HISTORY
   that area
 - Added option to disable file system browser's tool bar
 - I/O errors are now batched into a single dialog box
+- New, smaller icons in file system browser (Dirk Moebius)
+- New window icon (Phillip Richdale)
 
 + Neutral
 

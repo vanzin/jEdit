@@ -57,6 +57,9 @@ saveCaret=true
 # Parse files fully when loading for syntax info
 parseFully=false
 
+# Backup on every save
+backupEverySave=false
+
 # I/O thread count
 ioThreadCount=4
 

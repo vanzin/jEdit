@@ -1,5 +1,6 @@
 TO DO
 
+- document backup every save option
 - plugin manager needs overhauled error reporting
 - hypersearch follows caret position
 - hypersearch in selection: one node for each selection, fucked
