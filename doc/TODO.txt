@@ -3,6 +3,20 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[error] ExtensionManager: java.lang.NullPointerException
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.getOffsets(StructureMatcher.java:181)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintHighlight(StructureMatcher.java:207)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintValidLine(StructureMatcher.java:147)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paintComponent(TextAreaPainter.java:699)
+
+- quick copy into vertical selection: keep the selection
+- select ebrowse/delelect
+
+- select all; shift left; if less lines, broken
+
 - save changes wrap margin; breakage, even after reload
 
 - blank space at end
@@ -41,23 +55,6 @@ check tips of the day
 - sidekick out of memory error!
 [error] ChunkCache: BUG: skew=1,out.size()=0
 [error] ChunkCache: BUG: skew=1,out.size()=1
-
-[error] EditBus: java.lang.ArrayIndexOutOfBoundsException: 1
-[error] EditBus:  at org.gjt.sp.jedit.buffer.LineManager.isScreenLineCountValid(LineManager.java:145)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager.getScreenLineCount(DisplayManager.java:223)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager$ScrollLineCount.reset(DisplayManager.java:1098)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager._notifyScreenLineChanges(DisplayManager.java:650)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.JEditTextArea.propertiesChanged(JEditTextArea.java:4968)
-[error] EditBus:  at org.gjt.sp.jedit.EditPane.handleBufferUpdate(EditPane.java:667)
-[error] EditBus:  at org.gjt.sp.jedit.EditPane.handleMessage(EditPane.java:317)
-[error] EditBus:  at org.gjt.sp.jedit.EditBus.send(EditBus.java:148)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer.propertiesChanged(Buffer.java:1530)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer.setMode(Buffer.java:2025)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer.setMode(Buffer.java:2058)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer.finishLoading(Buffer.java:3866)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer.access$800(Buffer.java:71)
-[error] EditBus:  at org.gjt.sp.jedit.Buffer$1.run(Buffer.java:280)
-[error] EditBus:  at org.gjt.sp.util.WorkThreadPool.doAWTRequest(WorkThreadPool.java:392)
 
 - SLASH -vs- / shortcut issue
 - wrapped dock buttons broken
