@@ -301,8 +301,6 @@ public class JEditTextArea extends JComponent
 
 			displayManager.init();
 
-			maxHorizontalScrollWidth = 0;
-
 			if(!buffer.isLoaded())
 				updateScrollBars();
 
@@ -509,8 +507,6 @@ public class JEditTextArea extends JComponent
 		// we have to be careful
 		displayManager._notifyScreenLineChanges();
 
-		maxHorizontalScrollWidth = 0;
-
 		//if(buffer.isLoaded())
 		//	recalculateLastPhysicalLine();
 
@@ -620,8 +616,6 @@ public class JEditTextArea extends JComponent
 
 		// we have to be careful
 		displayManager._notifyScreenLineChanges();
-
-		maxHorizontalScrollWidth = 0;
 
 		//if(buffer.isLoaded())
 		//	recalculateLastPhysicalLine();
@@ -4993,8 +4987,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			invalidateCachedScreenLineCounts = true;
 		}
 
-		maxHorizontalScrollWidth = 0;
-
 		if(invalidateCachedScreenLineCounts)
 			buffer.invalidateCachedScreenLineCounts();
 
@@ -5279,7 +5271,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			visibleLines++;
 
 		chunkCache.recalculateVisibleLines();
-		maxHorizontalScrollWidth = 0;
 
 		// this does the "trick" to eliminate blank space at the end
 		if(displayManager != null && buffer != null && buffer.isLoaded())
@@ -5329,7 +5320,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"Horizontal ok");
-			maxHorizontalScrollWidth = 0;
 			painter.repaint();
 
 			horizontal.setUnitIncrement(painter.getFontMetrics()
