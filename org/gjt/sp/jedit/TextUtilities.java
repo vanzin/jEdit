@@ -1,6 +1,8 @@
 /*
  * TextUtilities.java - Various text functions
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +31,7 @@ import org.gjt.sp.jedit.syntax.*;
  */
 public class TextUtilities
 {
+	//{{{ findMatchingBracket() method
 	/**
 	 * Returns the offset of the bracket matching the one at the
 	 * specified offset of the buffer, or -1 if the bracket is
@@ -44,9 +47,10 @@ public class TextUtilities
 		throws BadLocationException
 	{
 		return findMatchingBracket(buffer,line,offset,0,
-			buffer.getDefaultRootElement().getElementCount());
-	}
+			buffer.getDefaultRootElement().getElementCount() - 1);
+	} //}}}
 
+	//{{{ findMatchingBracket() method
 	/**
 	 * Returns the offset of the bracket matching the one at the
 	 * specified offset of the buffer, or -1 if the bracket is
@@ -120,10 +124,9 @@ public class TextUtilities
 			}
 		}
 
+		//{{{ scan backwards
 		if(direction)
 		{
-			// scan backwards
-
 			count = 0;
 
 			for(int i = line; i >= startLine; i--)
@@ -191,14 +194,13 @@ public class TextUtilities
 					lineTokens = lineTokens.prev;
 				}
 			}
-		}
+		} //}}}
+		//{{{ scan forwards
 		else
 		{
-			// scan forwards
-
 			count = 0;
 
-			for(int i = line; i < endLine; i++)
+			for(int i = line; i <= endLine; i++)
 			{
 				// get text
 				lineElement = map.getElement(i);
@@ -243,12 +245,13 @@ public class TextUtilities
 					lineTokens = lineTokens.next;
 				}
 			}
-		}
+		} //}}}
 
 		// Nothing found
 		return -1;
-	}
+	} //}}}
 
+	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -278,8 +281,9 @@ public class TextUtilities
 		}
 
 		return wordStart;
-	}
+	} //}}}
 
+	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -311,8 +315,9 @@ public class TextUtilities
 			}
 		}
 		return wordEnd;
-	}
+	} //}}}
 
+	//{{{ regionMatches() method
 	/**
 	 * Checks if a subregion of a <code>Segment</code> is equal to a
 	 * character array.
@@ -342,8 +347,9 @@ public class TextUtilities
 				return false;
 		}
 		return true;
-	}
+	} //}}}
 
+	//{{{ spacesToTabs() method
 	/**
 	 * Converts consecutive spaces to tabs in the specified string.
 	 * @param in The string
@@ -396,8 +402,9 @@ public class TextUtilities
 		}
 
                 return buf.toString();
-	}
+	} //}}}
 
+	//{{{ tabsToSpaces() method
 	/**
 	 * Converts tabs to consecutive spaces in the specified string.
 	 * @param in The string
@@ -428,8 +435,9 @@ public class TextUtilities
                         }
                 }
                 return buf.toString();
-	}
+	} //}}}
 
+	//{{{ format() method
 	/**
 	 * Formats the specified text by merging and breaking lines to the
 	 * specified width.
@@ -513,8 +521,9 @@ public class TextUtilities
 			buf.append(' ');
 		buf.append(word);
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ getStringCase() method
 	public static final int MIXED = 0;
 	public static final int LOWER_CASE = 1;
 	public static final int UPPER_CASE = 2;
@@ -568,8 +577,9 @@ public class TextUtilities
 		}
 
 		return state;
-	}
+	} //}}}
 
+	//{{{ toTitleCase() method
 	/**
 	 * Converts the specified string to title case, by capitalizing the
 	 * first letter.
@@ -585,5 +595,5 @@ public class TextUtilities
 			return Character.toUpperCase(str.charAt(0))
 				+ str.substring(1).toLowerCase();
 		}
-	}
+	} //}}}
 }

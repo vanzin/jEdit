@@ -535,7 +535,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
-		
+
 		FoldVisibilityManager foldVisibilityManager
 			= textArea.getFoldVisibilityManager();
 
@@ -558,7 +558,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				if(valid)
 				{
 					physicalLine = textArea.virtualToPhysical(line);
-					collapsedFold = (physicalLine < lineCount - 1
+					collapsedFold = (physicalLine < buffer.getLineCount() - 1
 						&& !foldVisibilityManager
 						.isLineVisible(physicalLine + 1));
 				}

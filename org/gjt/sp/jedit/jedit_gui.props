@@ -645,7 +645,7 @@ view.status.add-marker=Enter shortcut for new marker
 view.status.goto-marker=Enter shortcut of marker to go to
 view.status.select-marker=Enter shortcut of marker to select to
 view.status.swap-marker=Enter shortcut of marker to swap caret position with
-view.status.expand-folds=Press 0-9 to specify fold level
+view.status.expand-folds=Press 1-9 to specify fold level
 view.status.insert-literal=Press key to insert literally
 view.status.auto-wrap=Search text not found; restarting search
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
@@ -1530,7 +1530,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=64
+tip.count=65
 #}}}
 
 #{{{ Activity log

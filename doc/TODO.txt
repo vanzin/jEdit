@@ -2,12 +2,18 @@ TO DO
 
 + before 4.0pre1:
 
+- exceptions still thrown when collapsing/expanding folds
+- switching from narrowed buffer, to one with caret at already zero might
+  cause problems, since physFirstLine won't be updated?
+- cvs add tip64.html
 - fix rotated text on java 2
 - new document and fold engine.
   - collapseFolds property
   - fold visibility manager
     - return after //}}} issue
     - should not need crappy while(!visible) hack in moveCaretPosition().
+    - expand fold
+    - collapse fold
   - OffsetManager manages LineInfos.
   - ogs.util.ReadWriteLock -- reuse code from j.
   - ContentManager
@@ -70,8 +76,6 @@ TO DO
 - frame.setState(Frame.NORMAL);
 - line-uncomment command
 - search and replace of specific token types only
-- replace: automatically change case, depending on case of insert string
-  (all lower, all upper, title)
 - complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
@@ -107,9 +111,6 @@ TO DO
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - better auto indent
-- improve folding:
-  - explicit folding with {{{ and }}} markers in text
-  - fold navigator
 - caret beyond end of line
 - directory chooser dialog box
 - graphical regular expression editor
@@ -173,6 +174,7 @@ TO DO
   - update display when shown register changes
   - use a timer to update display of $ register every 5 seconds or so
   - use a timer to update display of % register if it is a ClipboardRegister
+- store register contents in ~/.jedit/registers.xml
 - ScrollBarHighlight interface:
   Color getColor()
   int[] getHighlightedLines()
@@ -184,7 +186,6 @@ TO DO
 
 + bugs:
 
-- bracket highlight repaint problems when gaining focus
 - when a new text area is created, if caret is on a bracket, not matched
   initially
 - resizing doesn't update horizontal scroll bar

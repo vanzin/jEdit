@@ -248,7 +248,7 @@
 
 <ACTION NAME="expand-all-folds">
 	<CODE>
-		buffer.expandAllFolds();
+		textArea.getFoldVisibilityManager().expandAllFolds();
 	</CODE>
 </ACTION>
 
