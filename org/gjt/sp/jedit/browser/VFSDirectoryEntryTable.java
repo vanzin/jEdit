@@ -163,7 +163,8 @@ public class VFSDirectoryEntryTable extends JTable
 		else
 		{
 			browserView.clearExpansionState();
-			browserView.loadDirectory(entry,entry.dirEntry.path);
+			browserView.loadDirectory(entry,entry.dirEntry.path,
+				false);
 		}
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -206,7 +207,7 @@ public class VFSDirectoryEntryTable extends JTable
 			String path = e.dirEntry.path;
 			if(tmpExpanded.contains(path))
 			{
-				browserView.loadDirectory(e,path);
+				browserView.loadDirectory(e,path,false);
 				tmpExpanded.remove(path);
 			}
 		}
@@ -236,7 +237,7 @@ public class VFSDirectoryEntryTable extends JTable
 			if(VFSBrowser.pathsEqual(path,otherPath))
 			{
 				browserView.saveExpansionState();
-				browserView.loadDirectory(e,path);
+				browserView.loadDirectory(e,path,false);
 				return;
 			}
 		}

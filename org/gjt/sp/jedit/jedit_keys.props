@@ -144,6 +144,7 @@ record-temp-macro.shortcut=C+m C+m
 run-temp-macro.shortcut=C+m C+p
 record-macro.shortcut=C+m C+r
 stop-recording.shortcut=C+m C+s
+last-macro.shortuct=C+m C+l
 #}}}
 
 #{{{ C+r C+X

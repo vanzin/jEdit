@@ -2991,35 +2991,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return list;
 	} //}}}
 
-	//{{{ getRootElements() method
-	/**
-	 * @deprecated
-	 */
-	public Element[] getRootElements()
-	{
-		return new Element[] { getDefaultRootElement() };
-	} //}}}
-
-	//{{{ getParagraphElement() method
-	/**
-	 * @deprecated
-	 */
-	public Element getParagraphElement(int offset)
-	{
-		return new LineElement(this,getLineOfOffset(offset));
-	} //}}}
-
-	//{{{ getDefaultRootElement() method
-	/**
-	 * @deprecated Use <code>getLineOfOffset()</code>,
-	 * <code>getLineStartOffset()</code>, and
-	 * <code>getLineEndOffset()</code> instead.
-	 */
-	public Element getDefaultRootElement()
-	{
-		return new RootElement(this);
-	} //}}}
-
 	//{{{ insertString() method
 	/**
 	 * @deprecated Call <code>insert()</code> instead.
@@ -3038,14 +3009,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		return file;
 	} //}}}
-
-	//{{{ getCurrentIdentForLine() method
-	/**
-	 * @deprecated Use the correctly spelled getCurrentIndentForLine() instead.
-	 */
-	public int getCurrentIdentForLine(int lineIndex, int[] whitespaceChars) {
-		return getCurrentIndentForLine(lineIndex,whitespaceChars);
-	}//}}}
 
 	//}}}
 

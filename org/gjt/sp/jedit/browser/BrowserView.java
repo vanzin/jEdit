@@ -143,7 +143,8 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ loadDirectory() method
-	public void loadDirectory(Object node, String path)
+	public void loadDirectory(Object node, String path,
+		boolean addToHistory)
 	{
 		path = MiscUtilities.constructPath(browser.getDirectory(),path);
 		VFS vfs = VFSManager.getVFSForPath(path);
@@ -163,7 +164,7 @@ class BrowserView extends JPanel
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,browser,
 			session,vfs,path,null,loadInfo));
-		browser.directoryLoaded(node,loadInfo);
+		browser.directoryLoaded(node,loadInfo,addToHistory);
 	} //}}}
 
 	//{{{ directoryLoaded() method
@@ -232,7 +233,7 @@ class BrowserView extends JPanel
 		if(VFSBrowser.pathsEqual(path,symlinkBrowserDir))
 		{
 			saveExpansionState();
-			loadDirectory(null,browserDir);
+			loadDirectory(null,browserDir,false);
 		}
 
 		// because this method is called for *every* VFS update,

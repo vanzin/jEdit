@@ -30,7 +30,14 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
@@ -274,6 +281,31 @@ class InstallPanel extends JPanel
 			sort(type);
 		} //}}}
 
+		//{{{ deselectParents() method
+		private void deselectParents(Entry entry)
+		{
+			Entry[] parents = entry.getParents();
+
+			if (parents.length == 0)
+				return;
+
+			String[] args = { entry.name };
+
+			int result = GUIUtilities.listConfirm(
+				window,"plugin-manager.dependency",
+				args,parents);
+			if (result != JOptionPane.OK_OPTION)
+			{
+				entry.install = true;
+				return;
+			}
+
+			for(int i = 0; i < parents.length; i++)
+				 parents[i].install = false;
+
+			fireTableRowsUpdated(0,getRowCount() - 1);
+		} //}}}
+
 		//{{{ setValueAt() method
 		public void setValueAt(Object aValue, int row, int column)
 		{
@@ -284,31 +316,10 @@ class InstallPanel extends JPanel
 				return;
 
 			Entry entry = (Entry)obj;
-			Vector deps = entry.plugin.getCompatibleBranch().deps;
-			boolean value = ((Boolean)aValue).booleanValue();
-			if (!value)
-			{
-				if (entry.parents.size() > 0)
-				{
-					String[] args = {
-						entry.name,
-						entry.getParentString()
-					};
-					int result = GUIUtilities.confirm(
-						window,"plugin-manager.dependency",
-						args,JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.WARNING_MESSAGE);
-					if (result != JOptionPane.OK_OPTION)
-						return;
-					Iterator parentsIter = entry.parents.iterator();
-					while(parentsIter.hasNext())
-					{
-						((Entry)parentsIter.next()).install = false;
-					}
+			if (!entry.install)
+				deselectParents(entry);
 
-					fireTableRowsUpdated(0,getRowCount() - 1);
-				}
-			}
+			Vector deps = entry.plugin.getCompatibleBranch().deps;
 
 			for (int i = 0; i < deps.size(); i++)
 			{
@@ -320,7 +331,7 @@ class InstallPanel extends JPanel
 						Entry temp = (Entry)entries.get(j);
 						if (temp.plugin == dep.plugin)
 						{
-							if (value)
+							if (entry.install)
 							{
 								temp.parents.add(entry);
 								setValueAt(Boolean.TRUE,j,0);
@@ -433,17 +444,33 @@ class InstallPanel extends JPanel
 			this.plugin = plugin;
 		}
 
-		String getParentString()
+		private void getParents(List list)
 		{
-			StringBuffer buf = new StringBuffer();
 			Iterator iter = parents.iterator();
 			while(iter.hasNext())
 			{
-				buf.append(((Entry)iter.next()).name);
-				if(iter.hasNext())
-					buf.append('\n');
+				Entry entry = (Entry)iter.next();
+				if(!list.contains(entry))
+				{
+					list.add(entry);
+					entry.getParents(list);
+				}
 			}
-			return buf.toString();
+		}
+
+		Entry[] getParents()
+		{
+			List list = new ArrayList();
+			getParents(list);
+			Entry[] array = (Entry[])list.toArray(
+				new Entry[list.size()]);
+			Arrays.sort(array,new MiscUtilities.StringICaseCompare());
+			return array;
+		}
+		
+		public String toString()
+		{
+			return name;
 		}
 	} //}}}
 

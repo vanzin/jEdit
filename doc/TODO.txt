@@ -16,6 +16,8 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- A+f l -- inserts l
+- why is still added to end of kill ring?
 - goToBuffer() -- if any parent has zero height or zero width...
 - independent text area component
 - better auto indent
@@ -27,7 +29,6 @@ and quirks that I need to fix eventually.
 - ditch aelfred
 - deferred loading API for macro handlers
 - resplit action, to restore last split configuration
-- vfs browser; don't move dir to top of history on reload
 - autosave directory option
 - S+INS, etc in swing controls
 - run last macro command

@@ -373,6 +373,24 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		return (Macro)macroHash.get(macro);
 	} //}}}
 
+	//{{{ getLastMacro() method
+	/**
+	 * @since jEdit 4.3pre1
+	 */
+	public static Macro getLastMacro()
+	{
+		return lastMacro;
+	} //}}}
+
+	//{{{ setLastMacro() method
+	/**
+	 * @since jEdit 4.3pre1
+	 */
+	public static void setLastMacro(Macro macro)
+	{
+		lastMacro = macro;
+	} //}}}
+
 	//{{{ Macro class
 	/**
 	 * Encapsulates the macro's label, name and path.
@@ -405,6 +423,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ invoke() method
 		public void invoke(View view)
 		{
+			setLastMacro(this);
+
 			if(view == null)
 				handler.runMacro(null,this);
 			else
@@ -595,6 +615,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	private static ActionSet macroActionSet;
 	private static Vector macroHierarchy;
 	private static Hashtable macroHash;
+	
+	private static Macro lastMacro;
 	//}}}
 
 	//{{{ Class initializer
@@ -611,6 +633,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	//{{{ loadMacros() method
 	private static void loadMacros(Vector vector, String path, File directory)
 	{
+		lastMacro = null;
+
 		File[] macroFiles = directory.listFiles();
 		if(macroFiles == null || macroFiles.length == 0)
 			return;

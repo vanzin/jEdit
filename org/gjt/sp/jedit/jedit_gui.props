@@ -624,6 +624,8 @@ reload-modes.label=$Reload Edit Modes
 macros=record-macro \
        stop-recording \
        - \
+       last-macro \
+       - \
        record-temp-macro \
        run-temp-macro \
        - \
@@ -633,8 +635,9 @@ macros=record-macro \
 macros.code=new MacrosProvider();
 macros.label=Ma$cros
 record-macro.label=$Record Macro...
-record-temp-macro.label=Record $Temporary Macro
 stop-recording.label=$Stop Recording
+last-macro.label=Repeat Last Macro
+record-temp-macro.label=Record $Temporary Macro
 run-temp-macro.label=Run Tem$porary Macro
 run-other-macro.label=Run $Other Macro...
 rescan-macros.label=Resca$n Macros
@@ -2164,8 +2167,7 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 
 plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message={0} is required by the following plugins.\n\
-	Deselecting {0} will also deselect the below plugins:\n\
-	{1}
+	Deselecting {0} will also deselect the below plugins:
 
 install-plugins.depend.title=Dependency Required
 install-plugins.depend.message=One or more of the plugins you are installing\n\

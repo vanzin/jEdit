@@ -366,13 +366,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			if(bmsg.getWhat() == BufferUpdate.CREATED
 				|| bmsg.getWhat() == BufferUpdate.CLOSED)
 				browserView.updateFileView();
-			// hacked BufferIORequest to send VFSUpdates in case
-			// two stage save is off now...
-			/* else if(bmsg.getWhat() == BufferUpdate.SAVED)
-			{
-				maybeReloadDirectory(MiscUtilities.getParentOfPath(
-					bmsg.getBuffer().getPath()));
-			} */
 		}
 		else if(msg instanceof PluginUpdate)
 		{
@@ -481,7 +474,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		updateFilenameFilter();
 		browserView.saveExpansionState();
-		browserView.loadDirectory(null,path);
+		browserView.loadDirectory(null,path,true);
 		this.path = path;
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -514,7 +507,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		updateFilenameFilter();
 		browserView.saveExpansionState();
-		browserView.loadDirectory(null,path);
+		browserView.loadDirectory(null,path,false);
 	} //}}}
 
 	//{{{ delete() method
@@ -920,10 +913,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(Object node, Object[] loadInfo)
+	void directoryLoaded(Object node, Object[] loadInfo,
+		boolean addToHistory)
 	{
 		VFSManager.runInAWTThread(new DirectoryLoadedAWTRequest(
-			node,loadInfo));
+			node,loadInfo,addToHistory));
 	} //}}}
 
 	//{{{ filesSelected() method
@@ -1502,13 +1496,16 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ DirectoryLoadedAWTRequest class
 	class DirectoryLoadedAWTRequest implements Runnable
 	{
-		Object node;
-		Object[] loadInfo;
+		private Object node;
+		private Object[] loadInfo;
+		private boolean addToHistory;
 
-		DirectoryLoadedAWTRequest(Object node, Object[] loadInfo)
+		DirectoryLoadedAWTRequest(Object node, Object[] loadInfo,
+			boolean addToHistory)
 		{
 			this.node = node;
 			this.loadInfo = loadInfo;
+			this.addToHistory = addToHistory;
 		}
 
 		public void run()
@@ -1539,8 +1536,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						path.length() - 1);
 				}
 
-				HistoryModel.getModel("vfs.browser.path")
-					.addItem(path);
+				if(addToHistory)
+				{
+					HistoryModel.getModel("vfs.browser.path")
+						.addItem(path);
+				}
 			}
 
 			boolean filterEnabled = filterCheckbox.isSelected();
