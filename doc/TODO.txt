@@ -5,6 +5,7 @@ and quirks that I need to fix eventually.
 
 + text area:
 
+  - deleting at end of file leaves empty space
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
   - independent text area component
