@@ -26,7 +26,7 @@
 			<END>'</END>
 		</SPAN>
         
-        <EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+        <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
         
         <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
         

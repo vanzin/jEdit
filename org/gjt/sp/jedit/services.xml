@@ -8,7 +8,7 @@
 		new FavoritesVFS();
 	</SERVICE>
 	<SERVICE CLASS="org.gjt.sp.jedit.io.VFS" NAME="roots">
-		new RootsVFS();
+		new FileRootsVFS();
 	</SERVICE>
 
 	<!-- Fold handlers -->

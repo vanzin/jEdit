@@ -141,6 +141,10 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				x = getIcon().getIconWidth() + getIconTextGap();
 				y = Math.max(fm.getAscent() + 2,16);
 			}
+
+			Insets border = getBorder().getBorderInsets(this);
+			x += border.left;
+
 			g.setColor(getForeground());
 			g.drawLine(x,y,x + fm.stringWidth(getText()),y);
 		}

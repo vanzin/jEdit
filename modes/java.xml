@@ -27,7 +27,7 @@
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
 
 		<!-- Javadoc comment -->
-		<SPAN TYPE="COMMENT2" DELEGATE="JAVADOC">
+		<SPAN TYPE="COMMENT3" DELEGATE="JAVADOC">
 			<BEGIN>/**</BEGIN>
 			<END>*/</END>
 		</SPAN>
@@ -47,7 +47,7 @@
 			<END>'</END>
 		</SPAN>
 
-		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
@@ -138,12 +138,12 @@
 		</KEYWORDS>
 	</RULES>
 
-	<RULES SET="JAVADOC" DEFAULT="COMMENT2" IGNORE_CASE="TRUE">
+	<RULES SET="JAVADOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
 		<!-- so that @link{...} is highlighted -->
-		<SEQ TYPE="COMMENT2">{</SEQ>
+		<SEQ TYPE="COMMENT3">{</SEQ>
 
 		<!-- so that *@param is highlighted -->
-		<SEQ TYPE="COMMENT2">*</SEQ>
+		<SEQ TYPE="COMMENT3">*</SEQ>
 
 		<!-- Javadoc ignores tags inside <pre> -->
 		<!-- XXX no it doesn't -->
@@ -159,9 +159,9 @@
 		</SPAN>
 
 		<!-- Javadoc allows this -->
-		<SEQ TYPE="COMMENT2">&lt;&lt;</SEQ>
-		<SEQ TYPE="COMMENT2">&lt;=</SEQ>
-		<SEQ TYPE="COMMENT2">&lt; </SEQ>
+		<SEQ TYPE="COMMENT3">&lt;&lt;</SEQ>
+		<SEQ TYPE="COMMENT3">&lt;=</SEQ>
+		<SEQ TYPE="COMMENT3">&lt; </SEQ>
 
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
@@ -213,6 +213,4 @@
 			<LABEL>@spec</LABEL>
 		</KEYWORDS>
 	</RULES>
-
-	<!-- RULES SET="JAVADOC_PRE" DEFAULT="COMMENT2" / -->
 </MODE>

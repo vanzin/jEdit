@@ -91,6 +91,9 @@ release.
   read-ins to be properly handled in languages like Shell Script, PHP,
   and Perl.
 
+- Added NO_ESCAPE attribute to SPAN and SPAN_REGEXP rules. This allows
+  C# literals (@"...") to be highlighted correctly.
+
 - Added JCL and SAS syntax highlighting (Bill McMilleon).
 
 - Improved C pre-processor syntax highlighting.

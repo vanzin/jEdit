@@ -117,6 +117,11 @@ public abstract class XModeHandler extends HandlerBase
 			lastNoWordBreak = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
+		else if (aname == "NO_ESCAPE")
+		{
+			lastNoEscape = (isSpecified) ? (value.equals("TRUE")) :
+				false;
+		}
 		else if (aname == "EXCLUDE_MATCH")
 		{
 			lastExcludeMatch = (isSpecified) ? (value.equals("TRUE")) :
@@ -424,7 +429,8 @@ public abstract class XModeHandler extends HandlerBase
 					lastDelegateSet,
 					lastTokenID,lastExcludeMatch,
 					lastNoLineBreak,
-					lastNoWordBreak));
+					lastNoWordBreak,
+					lastNoEscape));
 
 				reset();
 			} //}}}
@@ -455,7 +461,8 @@ public abstract class XModeHandler extends HandlerBase
 						lastExcludeMatch,
 						lastNoLineBreak,
 						lastNoWordBreak,
-						lastIgnoreCase));
+						lastIgnoreCase,
+						lastNoEscape));
 				}
 				catch(REException re)
 				{
@@ -624,6 +631,7 @@ public abstract class XModeHandler extends HandlerBase
 	private boolean lastAtLineStart;
 	private boolean lastAtWhitespaceEnd;
 	private boolean lastAtWordStart;
+	private boolean lastNoEscape;
 	private int lastStartPosMatch;
 	private int lastEndPosMatch;
 	private String lastDigitRE;
@@ -643,6 +651,7 @@ public abstract class XModeHandler extends HandlerBase
 		lastExcludeMatch = false;
 		lastNoLineBreak = false;
 		lastNoWordBreak = false;
+		lastNoEscape = false;
 	} //}}}
 
 	//{{{ addKeyword() method

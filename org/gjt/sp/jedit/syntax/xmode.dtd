@@ -12,7 +12,8 @@
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool; "FALSE"
-	NO_WORD_BREAK %att-bool; "FALSE"'>
+	NO_WORD_BREAK %att-bool; "FALSE"
+	NO_ESCAPE %att-bool; "FALSE"'>
 <!ENTITY % att-hash-char 'HASH_CHAR CDATA #REQUIRED' >
 
 <!-- MODE element -->

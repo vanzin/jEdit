@@ -10,7 +10,7 @@
 	
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- CFML comment -->
-		<SPAN TYPE="COMMENT2">
+		<SPAN TYPE="COMMENT4">
 			<BEGIN>&lt;!---</BEGIN>
 			<END>---&gt;</END>
 		</SPAN>
@@ -21,11 +21,11 @@
 			<END>*/</END>
 		</SPAN>
 		
-		<!--- CFSCRIPT single-line comment --->
-		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<!-- CFSCRIPT single-line comment -->
+		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
 		<!-- SGML comment -->
-		<SPAN TYPE="COMMENT1">
+		<SPAN TYPE="COMMENT3">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -113,7 +113,7 @@
 		</SPAN>
 		
 		<!--- CFSCRIPT single-line comment --->
-		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 	
 		<SPAN TYPE="LABEL">
 			<BEGIN>"</BEGIN>

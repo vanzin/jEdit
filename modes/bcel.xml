@@ -19,7 +19,7 @@
         <SEQ TYPE="COMMENT1">/**/</SEQ>
 
         <!-- Javadoc comment -->
-        <SPAN TYPE="COMMENT2" DELEGATE="JAVADOC">
+        <SPAN TYPE="COMMENT3" DELEGATE="JAVADOC">
             <BEGIN>/**</BEGIN>
             <END>*/</END>
         </SPAN>
@@ -30,7 +30,7 @@
             <END>*/</END>
         </SPAN>
 
-        <EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+        <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
         <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
             <BEGIN>'</BEGIN>
