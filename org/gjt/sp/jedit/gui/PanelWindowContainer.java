@@ -24,6 +24,7 @@ import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.awt.geom.AffineTransform;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -342,7 +343,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			setMargin(new Insets(0,0,0,0));
 			setRequestFocusEnabled(false);
-			setIcon(new RotatedTextIcon(rotate,text));
+			if(MiscUtilities.compareStrings(
+				System.getProperty("java.version"),
+				"1.2",false) >= 0)
+			{
+				setIcon(new RotatedTextIcon2D(rotate,text));
+			}
+			else
+			{
+				setIcon(new RotatedTextIcon(rotate,text));
+			}
 		}
 
 		class RotatedTextIcon implements Icon
@@ -428,6 +438,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 				super.setDimensions(height,width);
 			}
 
+			public void setColorModel(ColorModel model)
+			{
+				super.setColorModel(indexModel);
+			}
+
 			// Fuck all the retards at Sun who made it impossible to
 			// write polymorphic array-access code.
 
@@ -479,6 +494,70 @@ public class PanelWindowContainer implements DockableWindowContainer
 					(rotation == CW
 					? x : height - x - w),h,w,
 					indexModel,retVal,0,h);
+			}
+		}
+
+		class RotatedTextIcon2D implements Icon
+		{
+			int rotate;
+			String text;
+			int width;
+			int height;
+
+			RotatedTextIcon2D(int rotate, String text)
+			{
+				this.rotate = rotate;
+				this.text = text;
+				FontMetrics fm = getFontMetrics(getFont());
+				width = fm.stringWidth(text);
+				height = fm.getHeight();
+			}
+
+			public int getIconWidth()
+			{
+				return (rotate == CW || rotate == CCW
+					? height : width);
+			}
+
+			public int getIconHeight()
+			{
+				return (rotate == CW || rotate == CCW
+					? width : height);
+			}
+
+			public void paintIcon(Component c, Graphics g, int x, int y)
+			{
+				FontMetrics fm = g.getFontMetrics();
+
+				Graphics2D g2d = (Graphics2D)g;
+				AffineTransform oldTransform = g2d.getTransform();
+
+				g2d.setColor(getForeground());
+
+				if(rotate == NONE)
+				{
+					g2d.setTransform(AffineTransform
+						.getRotateInstance(
+						0,x,y));
+					g2d.drawString(text,x,y + fm.getAscent());
+				}
+				else if(rotate == CW)
+				{
+					g2d.setTransform(AffineTransform
+						.getRotateInstance(
+						Math.PI / 3,x,y));
+					g2d.fillRect(0,0,1000,1000);
+					g2d.drawString(text,y,x + fm.getAscent());
+				}
+				else if(rotate == CCW)
+				{
+					g2d.setTransform(AffineTransform
+						.getRotateInstance(
+						-Math.PI / 3,x,y));
+					g2d.drawString(text,y,x + fm.getAscent());
+				}
+
+				g2d.setTransform(oldTransform);
 			}
 		}
 	}

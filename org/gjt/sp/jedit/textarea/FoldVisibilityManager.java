@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.Toolkit;
-import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.*;
 
 /**
@@ -41,15 +40,13 @@ import org.gjt.sp.jedit.*;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class FoldVisibilityManager implements BufferChangeListener
+public class FoldVisibilityManager
 {
 	//{{{ FoldVisibilityManager constructor
 	public FoldVisibilityManager(Buffer buffer, JEditTextArea textArea)
 	{
 		this.buffer = buffer;
 		this.textArea = textArea;
-		map = new FoldVisibilityMap();
-		virtualLineCount = buffer.getLineCount();
 	} //}}}
 
 	//{{{ getVirtualLineCount() method
@@ -68,13 +65,9 @@ public class FoldVisibilityManager implements BufferChangeListener
 	 * @param line A physical line index
 	 * @since jEdit 4.0pre1
 	 */
-	public boolean isLineVisible(int line)
+	public final boolean isLineVisible(int line)
 	{
-		int foldStart = getFoldForLine(line);
-		if(foldStart == -1)
-			return true;
-		else
-			return map.getp(foldStart).visible;
+		return buffer.getLineInfo(line).isVisible(index);
 	} //}}}
 
 	//{{{ getNextVisibleLine() method
@@ -85,26 +78,12 @@ public class FoldVisibilityManager implements BufferChangeListener
 	 */
 	public int getNextVisibleLine(int line)
 	{
-		if(line >= buffer.getLineCount() - 1)
-			return -1;
-		else
+		for(int i = line + 1; i < buffer.getLineCount(); i++)
 		{
-			int foldStart = getFoldForLine(line);
-			if(foldStart == -1 || (map.getp(foldStart).visible
-				&& !isHashLine(line + 1)))
-				return line + 1;
-			else
-			{
-				for(int i = line + 1; i < buffer.getLineCount(); i++)
-				{
-					if(isHashLine(i) && map.getp(i).visible)
-						return i;
-				}
-
-				// it was the last visible line
-				return -1;
-			}
+			if(isLineVisible(i))
+				return i;
 		}
+		return -1;
 	} //}}}
 
 	//{{{ getPrevVisibleLine() method
@@ -115,31 +94,32 @@ public class FoldVisibilityManager implements BufferChangeListener
 	 */
 	public int getPrevVisibleLine(int line)
 	{
-		if(line == 0)
-			return -1;
-		else
+		for(int i = line - 1; i >= 0; i--)
 		{
-			int foldStart = getFoldForLine(line);
-			if(foldStart == -1 || (map.getp(foldStart).visible
-				&& foldStart != line))
-				return line - 1;
-			else
+			if(isLineVisible(i))
+				return i;
+		}
+		return -1;
+	} //}}}
+
+	//{{{ test() method
+	public void test()
+	{
+		java.util.Random random = new java.util.Random();
+		for(int i = 0; i < 10000; i++)
+		{
+			int line = Math.abs(random.nextInt() % virtualLineCount);
+			if(physicalToVirtual(line) != line)
 			{
-				for(int i = line - 1; i >= 0; /* nothing */)
-				{
-					foldStart = getFoldForLine(i);
-					if(foldStart == -1)
-						return -1;
-
-					if(map.getp(foldStart).visible)
-						return i;
-					else
-						i = foldStart - 1;
-				}
-
-				// it was the first visible line
-				return -1;
+				System.err.println("p2v failed: " + line);
+				return;
 			}
+			if(virtualToPhysical(line) != line)
+			{
+				System.err.println("v2p failed: " + line);
+				return;
+			}
+			//System.err.println("--- passed: " + line);
 		}
 	} //}}}
 
@@ -151,7 +131,63 @@ public class FoldVisibilityManager implements BufferChangeListener
 	 */
 	public int physicalToVirtual(int line)
 	{
-		return line;
+		if(line < 0 || line >= buffer.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
+
+		if(lastPhysical == line)
+			/* do nothing */;
+		else if(line > lastPhysical)
+		{
+			for(;;)
+			{
+				if(lastPhysical == line)
+					break;
+
+				if(isLineVisible(lastPhysical))
+					lastVirtual++;
+
+				if(lastPhysical == buffer.getLineCount() - 1)
+					break;
+
+				lastPhysical++;
+			}
+		}
+		else if(line < lastPhysical && lastPhysical - line > line)
+		{
+			for(;;)
+			{
+				if(lastPhysical == line)
+					break;
+
+				if(isLineVisible(lastVirtual))
+					lastVirtual--;
+
+				if(lastPhysical == 0)
+					break;
+
+				lastPhysical--;
+			}
+
+		}
+		else
+		{
+			lastPhysical = lastVirtual = 0;
+			for(;;)
+			{
+				if(lastPhysical == line)
+					break;
+
+				if(isLineVisible(lastPhysical))
+					lastVirtual++;
+
+				if(lastPhysical == buffer.getLineCount() - 1)
+					break;
+
+				lastPhysical++;
+			}
+		}
+
+		return lastVirtual;
 	} //}}}
 
 	//{{{ virtualToPhysical() method
@@ -162,7 +198,63 @@ public class FoldVisibilityManager implements BufferChangeListener
 	 */
 	public int virtualToPhysical(int line)
 	{
-		return line;
+		if(line < 0 || line >= virtualLineCount)
+			throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
+
+		if(lastVirtual == line)
+			/* do nothing */;
+		else if(line > lastVirtual)
+		{
+			for(;;)
+			{
+				if(lastVirtual == line)
+					break;
+
+				if(isLineVisible(lastPhysical))
+					lastVirtual++;
+
+				if(lastPhysical == buffer.getLineCount() - 1)
+					break;
+
+				lastPhysical++;
+			}
+		}
+		else if(line < lastVirtual && lastVirtual - line > line)
+		{
+			for(;;)
+			{
+				if(lastVirtual == line)
+					break;
+
+				if(isLineVisible(lastPhysical))
+					lastVirtual--;
+
+				if(lastPhysical == 0)
+					break;
+
+				lastPhysical--;
+			}
+
+		}
+		else
+		{
+			lastPhysical = lastVirtual = 0;
+			for(;;)
+			{
+				if(lastVirtual == line)
+					break;
+
+				if(isLineVisible(lastPhysical))
+					lastVirtual++;
+
+				if(lastPhysical == buffer.getLineCount() - 1)
+					break;
+
+				lastPhysical++;
+			}
+		}
+
+		return lastPhysical;
 	} //}}}
 
 	//{{{ collapseFold() method
@@ -233,94 +325,79 @@ public class FoldVisibilityManager implements BufferChangeListener
 	{
 	} //}}}
 
-	//{{{ Buffer change handlers
+	//{{{ Methods for Buffer class to call
 
-	//{{{ foldLevelChanged() method
+	//{{{ _grab() method
 	/**
-	 * Called when the fold level of a line changes.
-	 * @param buffer The buffer in question
-	 * @param line The line number
-	 * @since jEdit 4.0pre1
+	 * Do not call this method. The only reason it is public is so
+	 * that the <code>Buffer</code> class can call it.
 	 */
-	public void foldLevelChanged(Buffer buffer, int line)
+	public final void _grab(int index)
 	{
-		if(line == 0)
-			return;
-
-		int level = buffer.getFoldLevel(line);
-
-		if(isHashLine(line))
+		this.index = index;
+		virtualLineCount = 0;
+		for(int i = 0; i < buffer.getLineCount(); i++)
 		{
-			int virtualLine = 0;
-			boolean visible = true;
+			if(isLineVisible(i))
+				virtualLineCount++;
+		}
+		lastPhysical = lastVirtual = 0;
+	} //}}}
 
-			int counter = 0;
-			for(int i = line - 1; i >= 0; /* nothing */)
+	//{{{ _release() method
+	/**
+	 * Do not call this method. The only reason it is public is so
+	 * that the <code>Buffer</code> class can call it.
+	 */
+	public final void _release()
+	{
+		index = -1;
+	} //}}}
+
+	//{{{ _getIndex() method
+	/**
+	 * Do not call this method. The only reason it is public is so
+	 * that the <code>Buffer</code> class can call it.
+	 */
+	public final int _getIndex()
+	{
+		return index;
+	}
+
+	//{{{ _linesInserted() method
+	/**
+	 * Do not call this method. The only reason it is public is so
+	 * that the <code>Buffer</code> class can call it.
+	 */
+	public void _linesInserted(int startLine, int numLines)
+	{
+		if(numLines != 0)
+		{
+			for(int i = 0; i < numLines; i++)
 			{
-				int foldStart = getFoldForLine(i);
-				if(foldStart == -1)
-				{
-					virtualLine = counter + i;
-					visible = true;
-					break;
-				}
-
-				visible = map.getp(foldStart).visible;
-				if(visible)
-					counter += (i - foldStart);
-
-				if(buffer.getFoldLevel(i) < level)
-				{
-					virtualLine = counter;
-					break;
-				}
-
-				i = foldStart - 1;
+				if(isLineVisible(startLine + i))
+					virtualLineCount++;
 			}
-
-			map.put(line,virtualLine,visible);
-		}
-		else
-			map.removep(line);
-	} //}}}
-
-	//{{{ contentInserted() method
-	/**
-	 * Called when text is inserted into the buffer.
-	 * @param buffer The buffer in question
-	 * @param startLine The first line
-	 * @param start The start offset, from the beginning of the buffer
-	 * @param numLines The number of lines inserted
-	 * @param length The number of characters inserted
-	 * @since jEdit 4.0pre1
-	 */
-	public void contentInserted(Buffer buffer, int startLine, int start,
-		int numLines, int length)
-	{
-		if(numLines != 0)
-		{
-			virtualLineCount += numLines;
-			map.insertLines(startLine,numLines);
 		}
 	} //}}}
 
-	//{{{ contentRemoved() method
+	//{{{ _linesRemoved() method
 	/**
-	 * Called when text is removed from the buffer.
-	 * @param buffer The buffer in question
-	 * @param startLine The first line
-	 * @param start The start offset, from the beginning of the buffer
-	 * @param numLines The number of lines removed
-	 * @param length The number of characters removed
-	 * @since jEdit 4.0pre1
+	 * Do not call this method. The only reason it is public is so
+	 * that the <code>Buffer</code> class can call it.
 	 */
-	public void contentRemoved(Buffer buffer, int startLine, int start,
-		int numLines, int length)
+	public void _linesRemoved(int startLine, int numLines)
 	{
 		if(numLines != 0)
 		{
-			virtualLineCount -= numLines;
-			map.removeLines(startLine,numLines);
+			for(int i = 0; i < numLines; i++)
+			{
+				// note that Buffer calls linesRemoved()
+				// of FoldVisibilityManagers before the
+				// line info array is shrunk.
+				if(isLineVisible(startLine + i))
+					virtualLineCount--;
+			}
 		}
 	} //}}}
 
@@ -331,30 +408,11 @@ public class FoldVisibilityManager implements BufferChangeListener
 	//{{{ Instance variables
 	private Buffer buffer;
 	private JEditTextArea textArea;
-	private FoldVisibilityMap map;
+	private int index;
 	private int virtualLineCount;
+	private int lastPhysical;
+	private int lastVirtual;
 	//}}}
-
-	//{{{ isHashLine() method
-	private boolean isHashLine(int line)
-	{
-		if(line == 0)
-			return false;
-		else
-			return buffer.getFoldLevel(line) != buffer.getFoldLevel(line - 1);
-	}
-
-	//{{{ getFoldForLine() method
-	private int getFoldForLine(int line)
-	{
-		for(int i = line; i >= 1; i--)
-		{
-			if(isHashLine(i))
-				return i;
-		}
-
-		return -1;
-	} //}}}
 
 	//}}}
 }

@@ -87,8 +87,6 @@ public class Gutter extends JComponent implements SwingConstants
 
 		FoldVisibilityManager foldVisibilityManager
 			= textArea.getFoldVisibilityManager();
-		int physicalLine = foldVisibilityManager
-			.virtualToPhysical(firstLine);
 
 		int lastValidLine = (lastLine >= foldVisibilityManager.getVirtualLineCount())
 			? foldVisibilityManager.getVirtualLineCount() - 1 : lastLine;
@@ -123,6 +121,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 			if(!valid)
 				return;
+
+			int physicalLine = foldVisibilityManager
+				.virtualToPhysical(line);
 
 			if(physicalLine != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine))
@@ -231,9 +232,6 @@ public class Gutter extends JComponent implements SwingConstants
 				gfx.drawString(number, FOLD_MARKER_SIZE + offset,
 					baseline + y);
 			}
-
-			physicalLine = foldVisibilityManager.getNextVisibleLine(
-				physicalLine);
 		}
 	} //}}}
 
