@@ -62,6 +62,9 @@ Philipp Janda, and Scott Allen for contributing to this release.
 
 - Added Poplog-11 syntax highlighting (David Moss).
 
+- Java mode now highlights the "enum" keyword, and annotation types that
+  were added in Java 1.5.
+
 }}}
 {{{ Bug Fixes
 

@@ -7,20 +7,23 @@ and quirks that I need to fix eventually.
 - add note to documentation about exponential-time regexps
 - files changed dialog switches buffers
 
+- beanshell.xml needs an update
 - test keyboard completion with expanded/collapsed tree
 - teset keyboard completion with high latency VFS
-- file system browser: 2 clicks don't hide menus
+- file system browser: 2 clicks don't hide menus in jdk 1.5
 - file system browser: tigten gap on left of tool bar
 - invoking action bar command twice
 - editable combo boxes look inconsistent with non-editable combos
 
 remaining features before 4.2final:
 
+- test tall caret with multiple selections
+- text installer in jdk 1.5
 - option to disable context menu
 - plugin mgr inspection of not-loaded plugins
 - history text field tweak
 - optional dependencies
-- tall caret and backspace
+- tall caret and tab
 - need timeouts for plugin manager list download.
 - redundant updateChunksUpTo() calls
 

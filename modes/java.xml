@@ -77,6 +77,9 @@
 		<!-- Function calls -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
+		<!-- Annotation types -->
+		<MARK_FOLLOWING TYPE="KEYWORD4">@</MARK_FOLLOWING>
+
 		<KEYWORDS>
 			<KEYWORD1>abstract</KEYWORD1>
 			<KEYWORD1>break</KEYWORD1>
@@ -127,6 +130,7 @@
 			<FUNCTION>assert</FUNCTION>
 			<KEYWORD1>strictfp</KEYWORD1>
 
+
 			<LITERAL2>false</LITERAL2>
 			<LITERAL2>null</LITERAL2>
 			<LITERAL2>super</LITERAL2>
@@ -135,6 +139,9 @@
 
 			<INVALID>goto</INVALID>
 			<INVALID>const</INVALID>
+
+			<!-- Java 1.5 -->
+			<KEYWORD3>enum</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
 
