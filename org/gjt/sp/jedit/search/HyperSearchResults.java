@@ -242,7 +242,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 					else
 						textArea.setSelection(s);
 
-					textArea.moveCaretPosition(start);
+					textArea.moveCaretPosition(end);
 				}
 			});
 		}
@@ -270,7 +270,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
-		//{{{ mouseClicked() method
 		public void mouseClicked(MouseEvent evt)
 		{
 			TreePath path1 = resultTree.getPathForLocation(
@@ -278,20 +277,13 @@ public class HyperSearchResults extends JPanel implements EBComponent
 			if(path1 == null)
 				return;
 
-			TreePath path2 = resultTree.getSelectionPath();
-			// if same thing selected twice, another selection event
-			// is not sent, so we handle it in the mouse event
-			if(path1.equals(path2))
-			{
-				resultTree.setSelectionPath(path1);
-				goToSelectedNode();
-			}
-			else
-			{
-				view.toFront();
-				view.requestFocus();
-			}
-		} //}}}
+			resultTree.setSelectionPath(path1);
+			goToSelectedNode();
+
+			view.toFront();
+			view.requestFocus();
+			view.getTextArea().requestFocus();
+		}
 	} //}}}
 
 	//{{{ TreeSelectionHandler class

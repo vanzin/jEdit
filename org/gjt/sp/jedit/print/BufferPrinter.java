@@ -56,8 +56,7 @@ public class BufferPrinter
 		boolean lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		boolean color = jEdit.getBooleanProperty("print.color");
 
-		job.setJobName(jEdit.getProperty("print.header",
-			new String[] { buffer.getPath() }));
+		job.setJobName(buffer.getPath());
 
 		job.setPrintable(new BufferPrintable(buffer,font,header,footer,
 			lineNumbers,color),format);
