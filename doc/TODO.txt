@@ -16,12 +16,12 @@ and quirks that I need to fix eventually.
 
 4.3pre2:
 
-- jedit -nosettings test.java; new file: fucks up
-- file size not in list
 - auto indent:
   - deep indent
   - investigate CL indent
   - electric keys property
+  - anon inner classes
+  - update existing modes for new auto indent properties
 - some fastrepaint bugs
 - option to disable buffer local properties
 - option to disable electric keys
