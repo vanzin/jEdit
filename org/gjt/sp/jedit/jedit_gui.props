@@ -823,6 +823,7 @@ about.text=jEdit is brought to you by\n\
 	Lionel Fiol\n\
 	Maik Schreiber\n\
 	Marc Rummel\n\
+	Marcelo Vanzin\n\
 	Marcio Marchini\n\
 	Marco Hunsicker\n\
 	Marco Gotze\n\
@@ -830,6 +831,7 @@ about.text=jEdit is brought to you by\n\
 	Matija Kejzar\n\
 	Matt Albrecht\n\
 	Matt Price\n\
+	Matthew Flower\n\
 	Matthias Schneider\n\
 	Michael Jacobson\n\
 	Michael Taft\n\
@@ -1915,7 +1917,7 @@ plugin-manager.up-to-date.message=All installed plugins are their latest version
 install-plugins.title=Install Plugins
 update-plugins.title=Update Plugins
 install-plugins.caption=Click the check box next to plugins you wish to install.
-install-plugins.plugin-info=Plugin info:
+install-plugins.plugin-info=Plugin info
 install-plugins.info.name=Name:
 install-plugins.info.author=Author:
 install-plugins.info.size=Download size:

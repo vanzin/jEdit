@@ -38,55 +38,112 @@ import org.gjt.sp.util.Log;
  */
 public class GrabKeyDialog extends JDialog
 {
-	//{{{ keyboardTest() method
-	public static void keyboardTest(View view)
-	{
-		Buffer buffer = jEdit.newFile(view);
-		new GrabKeyDialog(view,null,null,buffer);
-	} //}}}
-
 	//{{{ GrabKeyDialog constructor
 	/**
 	 * Create and show a new modal dialog.
 	 *
-	 * @param  comp  center dialog on this component.
-	 * @param  binding  the action/macro that should get a binding.
-	 * @param  allBindings  all other key bindings.
-	 */
-	public GrabKeyDialog(Component comp, KeyBinding binding,
-		Vector allBindings)
-	{
-		this(comp,binding,allBindings,null);
-	} //}}}
-
-	//{{{ GrabKeyDialog constructor
-	/**
-	 * Create and show a new modal dialog.
-	 *
-	 * @param  comp  center dialog on this component.
-	 * @param  debugBuffer  debug info will be dumped to this buffer
-	 * (may be null)
-	 */
-	public GrabKeyDialog(Component comp, Buffer debugBuffer)
-	{
-		this(comp,null,null,debugBuffer);
-	} //}}}
-
-	//{{{ GrabKeyDialog constructor
-	/**
-	 * Create and show a new modal dialog.
-	 *
-	 * @param  comp  center dialog on this component.
+	 * @param  parent  center dialog on this component.
 	 * @param  binding  the action/macro that should get a binding.
 	 * @param  allBindings  all other key bindings.
 	 * @param  debugBuffer  debug info will be dumped to this buffer
 	 * (may be null)
+	 * @since jEdit 4.1pre7
 	 */
-	public GrabKeyDialog(Component comp, KeyBinding binding,
+	public GrabKeyDialog(Dialog parent, KeyBinding binding,
 		Vector allBindings, Buffer debugBuffer)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
-			jEdit.getProperty("grab-key.title"),true);
+		super(parent,jEdit.getProperty("grab-key.title"),true);
+
+		init(binding,allBindings,debugBuffer);
+	} //}}}
+
+	//{{{ GrabKeyDialog constructor
+	/**
+	 * Create and show a new modal dialog.
+	 *
+	 * @param  parent  center dialog on this component.
+	 * @param  binding  the action/macro that should get a binding.
+	 * @param  allBindings  all other key bindings.
+	 * @param  debugBuffer  debug info will be dumped to this buffer
+	 * (may be null)
+	 * @since jEdit 4.1pre7
+	 */
+	public GrabKeyDialog(Frame parent, KeyBinding binding,
+		Vector allBindings, Buffer debugBuffer)
+	{
+		super(parent,jEdit.getProperty("grab-key.title"),true);
+
+		init(binding,allBindings,debugBuffer);
+	} //}}}
+
+	//{{{ getShortcut() method
+	/**
+	 * Returns the shortcut, or null if the current shortcut should be
+	 * removed or the dialog either has been cancelled. Use isOK()
+	 * to determine if the latter is true.
+	 */
+	public String getShortcut()
+	{
+		if(isOK)
+			return shortcut.getText();
+		else
+			return null;
+	} //}}}
+
+	//{{{ isOK() method
+	/**
+	 * Returns true, if the dialog has not been cancelled.
+	 * @since jEdit 3.2pre9
+	 */
+	public boolean isOK()
+	{
+		return isOK;
+	} //}}}
+
+	//{{{ isManagingFocus() method
+	/**
+	 * Returns if this component can be traversed by pressing the
+	 * Tab key. This returns false.
+	 */
+	public boolean isManagingFocus()
+	{
+		return false;
+	} //}}}
+
+	//{{{ getFocusTraversalKeysEnabled() method
+	/**
+	 * Makes the tab key work in Java 1.4.
+	 * @since jEdit 3.2pre4
+	 */
+	public boolean getFocusTraversalKeysEnabled()
+	{
+		return false;
+	} //}}}
+
+	//{{{ processKeyEvent() method
+	protected void processKeyEvent(KeyEvent evt)
+	{
+		shortcut.processKeyEvent(evt);
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private InputPane shortcut; // this is a bad hack
+	private JLabel assignedTo;
+	private JButton ok;
+	private JButton remove;
+	private JButton cancel;
+	private JButton clear;
+	private boolean isOK;
+	private KeyBinding binding;
+	private Vector allBindings;
+	private Buffer debugBuffer;
+	//}}}
+
+	//{{{ init() method
+	private void init(KeyBinding binding, Vector allBindings, Buffer debugBuffer)
+	{
 		this.binding = binding;
 		this.allBindings = allBindings;
 		this.debugBuffer = debugBuffer;
@@ -170,75 +227,10 @@ public class GrabKeyDialog extends JDialog
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
-		setLocationRelativeTo(comp);
+		setLocationRelativeTo(getParent());
 		setResizable(false);
 		show();
 	} //}}}
-
-	//{{{ getShortcut() method
-	/**
-	 * Returns the shortcut, or null if the current shortcut should be
-	 * removed or the dialog either has been cancelled. Use isOK()
-	 * to determine if the latter is true.
-	 */
-	public String getShortcut()
-	{
-		if(isOK)
-			return shortcut.getText();
-		else
-			return null;
-	} //}}}
-
-	//{{{ isOK() method
-	/**
-	 * Returns true, if the dialog has not been cancelled.
-	 * @since jEdit 3.2pre9
-	 */
-	public boolean isOK()
-	{
-		return isOK;
-	} //}}}
-
-	//{{{ isManagingFocus() method
-	/**
-	 * Returns if this component can be traversed by pressing the
-	 * Tab key. This returns false.
-	 */
-	public boolean isManagingFocus()
-	{
-		return false;
-	} //}}}
-
-	//{{{ getFocusTraversalKeysEnabled() method
-	/**
-	 * Makes the tab key work in Java 1.4.
-	 * @since jEdit 3.2pre4
-	 */
-	public boolean getFocusTraversalKeysEnabled()
-	{
-		return false;
-	} //}}}
-
-	//{{{ processKeyEvent() method
-	protected void processKeyEvent(KeyEvent evt)
-	{
-		shortcut.processKeyEvent(evt);
-	} //}}}
-
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private InputPane shortcut; // this is a bad hack
-	private JLabel assignedTo;
-	private JButton ok;
-	private JButton remove;
-	private JButton cancel;
-	private JButton clear;
-	private boolean isOK;
-	private KeyBinding binding;
-	private Vector allBindings;
-	private Buffer debugBuffer;
-	//}}}
 
 	//{{{ getSymbolicName() method
 	private String getSymbolicName(int keyCode)

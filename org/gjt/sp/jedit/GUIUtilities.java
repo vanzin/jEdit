@@ -1201,6 +1201,21 @@ public class GUIUtilities
 		return false;
 	} //}}}
 
+	//{{{ getParentDialog() method
+	/**
+	 * Traverses the given component's parent tree looking for an
+	 * instance of JDialog, and return it. If not found, return null.
+	 * @param c The component
+	 */
+	public static JDialog getParentDialog(Component c)
+	{
+		Component p = c.getParent();
+		while (p != null && !(p instanceof JDialog))
+			p = p.getParent();
+
+		return (p instanceof JDialog) ? (JDialog) p : null;
+	} //}}}
+
 	//{{{ getView() method
 	/**
 	 * Finds the view parent of the specified component.

@@ -6225,8 +6225,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(getFirstLine() + 1);
 			}
 
-			boolean rect = (OperatingSystem.isMacOS() && evt.isMetaDown())
-					|| (!OperatingSystem.isMacOS() && evt.isControlDown());
+			/* boolean rect = (OperatingSystem.isMacOS() && evt.isMetaDown())
+					|| (!OperatingSystem.isMacOS() && evt.isControlDown()); */
 
 			if(quickCopyDrag)
 			{
@@ -6234,7 +6234,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					"view.status.quick-copy"));
 				clearStatus = true;
 			}
-			else if(evt.isControlDown())
+			else if(control)
 			{
 				view.getStatus().setMessage(jEdit.getProperty(
 					"view.status.rect-select"));
@@ -6244,13 +6244,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			switch(clickCount)
 			{
 			case 1:
-				doSingleDrag(evt,rect);
+				doSingleDrag(evt,control);
 				break;
 			case 2:
-				doDoubleDrag(evt,rect);
+				doDoubleDrag(evt,control);
 				break;
 			default: //case 3:
-				doTripleDrag(evt,rect);
+				doTripleDrag(evt,control);
 				break;
 			}
 		} //}}}

@@ -1,3 +1,32 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 4.0 AND 4.1
 
-Not yet written.
+XXX: Need to go into more detail and clean this up!!!
+
+- 10 new syntax modes (as of 4.1pre6)
+- Categorized plugin manager, select all
+- Help search
+- Changes to indent on tab, indent on enter
+- Multiple results in hypersearch, rect select for hypersearch
+- Customizable status bar
+- Better OS X support
+- Next/prev word flag change
+- unsplit current
+- regexp syntax matching, AT_WORD_START, AT_WHITESPACE_END, digit
+  changes, EOL_SPAN delegates, SEQ delegates, mention fixed Perl & HTML
+- fsb browser: dialog field auto-complete, parent dir right click,
+  multi select, open in new view/new split, better encoding handling
+- smart home/end change
+- view->docking commands
+- toggle line sep/toggle word wrap actions
+- updated BSH to 1.2b6, scriptPath variable, user & system macro dir
+  merge
+- startup scripts in any language
+- plain views
+- -float actions for dockables
+- better rect select
+- better Java auto indent
+- directory search over VFS's
+- search bar auto hide
+- WheelMouse in core
+- SOCKS proxy support
+

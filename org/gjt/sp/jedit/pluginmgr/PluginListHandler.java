@@ -127,6 +127,7 @@ class PluginListHandler extends HandlerBase
 		{
 			description = null;
 			pluginSet = new PluginList.PluginSet();
+			pluginSet.name = name;
 		}
 		else if(tag == "PLUGIN")
 		{

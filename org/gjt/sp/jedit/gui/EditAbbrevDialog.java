@@ -33,13 +33,46 @@ import org.gjt.sp.jedit.*;
 public class EditAbbrevDialog extends JDialog
 {
 	//{{{ EditAbbrevDialog constructor
-	public EditAbbrevDialog(Component comp, String abbrev, String expansion)
+	public EditAbbrevDialog(Frame frame, String abbrev, String expansion)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
-			jEdit.getProperty("edit-abbrev.title"),true);
+		super(frame,jEdit.getProperty("edit-abbrev.title"),true);
+		init(abbrev, expansion);
+	} //}}}
 
-		this.comp = comp;
+	//{{{ EditAbbrevDialog constructor
+	public EditAbbrevDialog(Dialog dialog, String abbrev, String expansion)
+	{
+		super(dialog,jEdit.getProperty("edit-abbrev.title"),true);
+		init(abbrev, expansion);
+	} //}}}
 
+	//{{{ getAbbrev() method
+	public String getAbbrev()
+	{
+		if(!isOK)
+			return null;
+
+		return editor.getAbbrev();
+	} //}}}
+
+	//{{{ getExpansion() method
+	public String getExpansion()
+	{
+		if(!isOK)
+			return null;
+
+		return editor.getExpansion();
+	} //}}}
+
+	//{{{ Private members
+	private AbbrevEditor editor;
+	private JButton ok;
+	private JButton cancel;
+	private boolean isOK;
+
+	//{{{ init() method
+	private void init(String abbrev, String expansion)
+	{
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -70,34 +103,10 @@ public class EditAbbrevDialog extends JDialog
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
-		setLocationRelativeTo(comp);
+		setLocationRelativeTo(getParent());
 		show();
 	} //}}}
 
-	//{{{ getAbbrev() method
-	public String getAbbrev()
-	{
-		if(!isOK)
-			return null;
-
-		return editor.getAbbrev();
-	} //}}}
-
-	//{{{ getExpansion() method
-	public String getExpansion()
-	{
-		if(!isOK)
-			return null;
-
-		return editor.getExpansion();
-	} //}}}
-
-	//{{{ Private members
-	private Component comp;
-	private AbbrevEditor editor;
-	private JButton ok;
-	private JButton cancel;
-	private boolean isOK;
 	//}}}
 
 	//{{{ ActionHandler class

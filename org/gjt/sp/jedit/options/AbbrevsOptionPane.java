@@ -179,9 +179,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		String abbrev = (String)abbrevsModel.getValueAt(row,0);
 		String expansion = (String)abbrevsModel.getValueAt(row,1);
-	
+
 		EditAbbrevDialog dialog = new EditAbbrevDialog(
-			AbbrevsOptionPane.this,
+			GUIUtilities.getParentDialog(AbbrevsOptionPane.this),
 			abbrev,expansion);
 		abbrev = dialog.getAbbrev();
 		expansion = dialog.getExpansion();
@@ -255,7 +255,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			else if(source == add)
 			{
 				EditAbbrevDialog dialog = new EditAbbrevDialog(
-					AbbrevsOptionPane.this,
+					GUIUtilities.getParentDialog(AbbrevsOptionPane.this),
 					null,null);
 				String abbrev = dialog.getAbbrev();
 				String expansion = dialog.getExpansion();

@@ -1,6 +1,9 @@
 /*
  * JCheckBoxList.java - A list, each item can be checked or unchecked
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,15 +22,20 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.table.*;
-import javax.swing.*;
+//{{{ Imports
+import java.awt.Component;
+import java.awt.Font;
 import java.util.Vector;
+import javax.swing.*;
+import javax.swing.table.*;
+//}}}
 
 /**
  * @since jEdit 3.2pre9
  */
 public class JCheckBoxList extends JTable
 {
+	//{{{ JCheckBoxList constructor
 	/**
 	 * Creates a checkbox list with the given list of objects. The elements
 	 * of this array can either be Entry instances, or other objects (if the
@@ -36,8 +44,9 @@ public class JCheckBoxList extends JTable
 	public JCheckBoxList(Object[] items)
 	{
 		setModel(items);
-	}
+	} //}}}
 
+	//{{{ JCheckBoxList constructor
 	/**
 	 * Creates a checkbox list with the given list of objects. The elements
 	 * of this vector can either be Entry instances, or other objects (if the
@@ -46,8 +55,9 @@ public class JCheckBoxList extends JTable
 	public JCheckBoxList(Vector items)
 	{
 		setModel(items);
-	}
+	} //}}}
 
+	//{{{ setModel() method
 	/**
 	 * Sets the model to the given list of objects. The elements of this
 	 * array can either be Entry instances, or other objects (if the
@@ -57,8 +67,9 @@ public class JCheckBoxList extends JTable
 	{
 		setModel(new CheckBoxListModel(items));
 		init();
-	}
+	} //}}}
 
+	//{{{ setModel() method
 	/**
 	 * Sets the model to the given list of objects. The elements of this
 	 * vector can either be Entry instances, or other objects (if the
@@ -68,8 +79,9 @@ public class JCheckBoxList extends JTable
 	{
 		setModel(new CheckBoxListModel(items));
 		init();
-	}
+	} //}}}
 
+	//{{{ getCheckedValues() method
 	public Object[] getCheckedValues()
 	{
 		Vector values = new Vector();
@@ -77,35 +89,39 @@ public class JCheckBoxList extends JTable
 		for(int i = 0; i < model.items.size(); i++)
 		{
 			Entry entry = (Entry)model.items.elementAt(i);
-			if(entry.checked)
+			if(entry.checked && !entry.caption)
 				values.addElement(entry.value);
 		}
 
 		Object[] retVal = new Object[values.size()];
 		values.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ selectAll() method
 	public void selectAll()
 	{
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		for(int i = 0; i < model.items.size(); i++)
 		{
 			Entry entry = (Entry)model.items.elementAt(i);
-			entry.checked = true;
+			if(!entry.caption)
+				entry.checked = true;
 		}
 
 		model.fireTableRowsUpdated(0,model.getRowCount());
-	}
+	} //}}}
 
+	//{{{ getValues() method
 	public Entry[] getValues()
 	{
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		Entry[] retVal = new Entry[model.items.size()];
 		model.items.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ getSelectedValue() method
 	public Object getSelectedValue()
 	{
 		int row = getSelectedRow();
@@ -113,11 +129,28 @@ public class JCheckBoxList extends JTable
 			return null;
 		else
 			return getModel().getValueAt(row,1);
-	}
+	} //}}}
 
-	// private members
+	//{{{ getCellRenderer() method
+	public TableCellRenderer getCellRenderer(int row, int column)
+	{
+		if(column == 0)
+		{
+			Entry entry = (Entry)((CheckBoxListModel)getModel()).items.get(row);
+			if(entry.caption)
+				return dummy;
+		}
+
+		return super.getCellRenderer(row,column);
+	} //}}}
+
+	//{{{ Private members
+	private TableCellRenderer dummy;
+
+	//{{{ init() method
 	private void init()
 	{
+		dummy = new DummyRenderer();
 		getSelectionModel().setSelectionMode(ListSelectionModel
 			.SINGLE_SELECTION);
 		setShowGrid(false);
@@ -129,12 +162,25 @@ public class JCheckBoxList extends JTable
 		column.setWidth(checkBoxWidth);
 		column.setMaxWidth(checkBoxWidth);
 		column.setResizable(false);
-	}
 
+		column = getColumnModel().getColumn(1);
+		column.setCellRenderer(new LabelRenderer());
+	} //}}}
+
+	//}}}
+
+	//{{{ Entry class
 	public static class Entry
 	{
 		boolean checked;
+		boolean caption;
 		Object value;
+
+		public Entry(Object value)
+		{
+			this.caption = true;
+			this.value = value;
+		}
 
 		public Entry(boolean checked, Object value)
 		{
@@ -151,7 +197,44 @@ public class JCheckBoxList extends JTable
 		{
 			return value;
 		}
-	}
+	} //}}}
+
+	//{{{ DummyRenderer class
+	private class DummyRenderer extends DefaultTableCellRenderer
+	{
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			return super.getTableCellRendererComponent(table,null /* value */,
+				isSelected,false /* hasFocus */,row,column);
+		}
+	} //}}}
+
+	//{{{ LabelRenderer class
+	private class LabelRenderer extends DefaultTableCellRenderer
+	{
+		Font plainFont, boldFont;
+
+		LabelRenderer()
+		{
+			plainFont = UIManager.getFont("Tree.font");
+			boldFont = plainFont.deriveFont(Font.BOLD);
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			super.getTableCellRendererComponent(table,value,isSelected,
+				hasFocus,row,column);
+
+			Entry entry = (Entry)((CheckBoxListModel)getModel()).items.get(row);
+			if(entry.caption)
+				setFont(boldFont);
+			else
+				setFont(plainFont);
+			return this;
+		}
+	} //}}}
 }
 
 class CheckBoxListModel extends AbstractTableModel
@@ -228,16 +311,20 @@ class CheckBoxListModel extends AbstractTableModel
 
 	public boolean isCellEditable(int row, int col)
 	{
-		return col == 0;
+		JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
+		return col == 0 && !entry.caption;
 	}
 
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(col == 0)
 		{
-			((JCheckBoxList.Entry)items.elementAt(row)).checked =
-				(value.equals(Boolean.TRUE));
-			fireTableRowsUpdated(row,row);
+			JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
+			if(!entry.caption)
+			{
+				entry.checked = (value.equals(Boolean.TRUE));
+				fireTableRowsUpdated(row,row);
+			}
 		}
 	}
 }

@@ -180,9 +180,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			if(col != 0 && row != -1)
 			{
 				 GrabKeyDialog gkd = new GrabKeyDialog(
-					ShortcutsOptionPane.this,
+					GUIUtilities.getParentDialog(
+					ShortcutsOptionPane.this),
 					currentModel.getBindingAt(row,col-1),
-					allBindings);
+					allBindings,null);
 				if(gkd.isOK())
 					currentModel.setValueAt(
 						gkd.getShortcut(),row,col);

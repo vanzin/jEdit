@@ -35,7 +35,7 @@ public class PluginManagerProgress extends JDialog
 	//{{{ PluginManagerProgress constructor
 	public PluginManagerProgress(JDialog dialog, String type, Roster roster)
 	{
-		super(JOptionPane.getFrameForComponent(dialog),
+		super(dialog,
 			jEdit.getProperty("plugin-manager.progress."
 			+ type + "-task"),true);
 
@@ -271,4 +271,7 @@ public class PluginManagerProgress extends JDialog
 			roster.performOperations(PluginManagerProgress.this);
 		}
 	} //}}}
+
+	//}}}
+
 }

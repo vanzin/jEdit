@@ -223,6 +223,8 @@ public class PluginManager extends EnhancedDialog
 
 	//}}}
 
+	//}}}
+
 	//{{{ Entry class
 	class Entry
 	{
@@ -350,6 +352,37 @@ public class PluginManager extends EnhancedDialog
 						plugins.addElement(plugin);
 				}
 
+				Vector plugins = new Vector();
+				for(int i = 0; i < list.pluginSets.size(); i++)
+				{
+					PluginList.PluginSet set = (PluginList.PluginSet)
+						list.pluginSets.get(i);
+					boolean addedSetLabel = false;
+					for(int j = 0; j < set.plugins.size(); j++)
+					{
+						PluginList.Plugin plugin = (PluginList.Plugin)
+							list.pluginHash.get(set.plugins.get(j));
+						PluginList.Branch branch = plugin.getCompatibleBranch();
+
+						if(branch != null
+							&& branch.canSatisfyDependencies()
+							&& plugin.installedVersion != null
+							&& MiscUtilities.compareStrings(branch.version,
+							plugin.installedVersion,false) > 0)
+						{
+							// this ensures set name is only added if
+							// > 0 elements in set
+							if(!addedSetLabel)
+							{
+								plugins.add(new JCheckBoxList.Entry(set.name + ":"));
+								addedSetLabel = true;
+							}
+
+							plugins.addElement(plugin);
+						}
+					}
+				}
+
 				if(plugins.size() == 0)
 				{
 					GUIUtilities.message(PluginManager.this,
@@ -384,13 +417,29 @@ public class PluginManager extends EnhancedDialog
 					return;
 
 				Vector plugins = new Vector();
-				for(int i = 0; i < list.plugins.size(); i++)
+				for(int i = 0; i < list.pluginSets.size(); i++)
 				{
-					PluginList.Plugin plugin = (PluginList.Plugin)list
-						.plugins.elementAt(i);
-					if(plugin.installed == null
-						&& plugin.canBeInstalled())
-						plugins.addElement(plugin);
+					PluginList.PluginSet set = (PluginList.PluginSet)
+						list.pluginSets.get(i);
+					boolean addedSetLabel = false;
+					for(int j = 0; j < set.plugins.size(); j++)
+					{
+						PluginList.Plugin plugin = (PluginList.Plugin)
+							list.pluginHash.get(set.plugins.get(j));
+						if(plugin.installed == null
+							&& plugin.canBeInstalled())
+						{
+							// this ensures set name is only added if
+							// > 0 elements in set
+							if(!addedSetLabel)
+							{
+								plugins.add(new JCheckBoxList.Entry(set.name + ":"));
+								addedSetLabel = true;
+							}
+
+							plugins.addElement(plugin);
+						}
+					}
 				}
 
 				Roster roster = new Roster();

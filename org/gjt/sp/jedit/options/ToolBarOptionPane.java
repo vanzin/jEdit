@@ -389,7 +389,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		DefaultComboBoxModel iconListModel,
 		ToolBarOptionPane.Button current)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
+		super(GUIUtilities.getParentDialog(comp),
 			jEdit.getProperty("options.toolbar.edit.title"),
 			true);
 
@@ -544,7 +544,7 @@ class ToolBarEditDialog extends EnhancedDialog
 		updateEnabled();
 
 		pack();
-		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
+		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 		show();
 	} //}}}
 

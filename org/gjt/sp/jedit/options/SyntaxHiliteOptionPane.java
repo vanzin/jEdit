@@ -291,7 +291,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 	//{{{ StyleEditor constructor
 	StyleEditor(Component comp, SyntaxStyle style)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
+		super(GUIUtilities.getParentDialog(comp),
 			jEdit.getProperty("style-editor.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
@@ -368,7 +368,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 
 		Dimension screen = getToolkit().getScreenSize();
 		pack();
-		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
+		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 
 		setResizable(false);
 		show();
