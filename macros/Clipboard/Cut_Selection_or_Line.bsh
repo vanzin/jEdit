@@ -3,7 +3,7 @@
 * which cuts either the selected text, or the current line 
 * if no text is selected, to the clipboard.
 *
-* Copyright (C) 2003 Ollie Rutherfurd <oliver@rutherfurd.net>
+* Copyright (C) 2003 Ollie Rutherfurd <oliver@jedit.org>
 *
 * $Id$
 */
@@ -17,7 +17,10 @@ cutSelectionOrLine(){
 	Registers.cut(textArea,'$');
 }
 
-cutSelectionOrLine();
+if(buffer.isReadOnly())
+	Toolkit.getDefaultToolkit().beep();
+else
+	cutSelectionOrLine();
 
 /*
 	Macro index data (in DocBook format)
