@@ -134,6 +134,9 @@ public interface StructureMatcher
 			int physicalLine, int start, int end, int y,
 			Match match)
 		{
+			if(!textArea.isStructureHighlightVisible())
+				return;
+
 			if(match.start >= end || match.end < start)
 			{
 				return;

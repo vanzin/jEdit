@@ -71,12 +71,14 @@ public class PositionManager
 				bh = new PosBottomHalf(offset);
 				bh.red = true;
 				root.insert(bh);
+				ibalance(bh);
 			}
 			else
 				bh.ref++;
 		}
 
-		root.dump(0);
+		if(Debug.POSITION_DEBUG)
+			root.dump(0);
 
 		return new PosTopHalf(bh);
 	} //}}}
@@ -101,13 +103,12 @@ public class PositionManager
 	//{{{ removePosition() method
 	private synchronized void removePosition(PosBottomHalf bh)
 	{
-		PosBottomHalf w = null, r, x = bh.parent, y, z = null;
+		PosBottomHalf r, x = bh.parent;
 
 		// if one of the siblings is null, make &this=non null sibling
 		if(bh.left == null)
 		{
 			r = bh.right;
-			x = bh.parent;
 			if(bh.parent == null)
 				root = bh.right;
 			else
@@ -122,7 +123,6 @@ public class PositionManager
 		else if(bh.right == null)
 		{
 			r = bh.left;
-			x = bh.parent;
 			if(bh.parent == null)
 				root = bh.left;
 			else
@@ -173,12 +173,59 @@ public class PositionManager
 			x = nextInorder.parent;
 		}
 
-		root.dump(0);
+		if(Debug.POSITION_DEBUG)
+		{
+			root.dump(0);
+			Log.log(Log.DEBUG,this,"w=" + w + ",r=" + r + ",x=" + x);
+		}
 
-		Log.log(Log.DEBUG,this,"w=" + w + ",r=" + r + ",x=" + x);
-		if(bh.red)
-			/* do nothing */;
-		else if(r != null && r.red)
+		if(!bh.red)
+			rbalance(r,x);
+	} //}}}
+
+	//{{{ ibalance() method
+	private void ibalance(PosBottomHalf bh)
+	{
+		if(bh.parent.red)
+		{
+			PosBottomHalf u = bh.parent.parent;
+			PosBottomHalf w;
+			if(u.left == bh.parent)
+				w = u.right;
+			else
+				w = u.left;
+			if(w != null && w.red)
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"case 2");
+				bh.parent.red = false;
+				w.red = false;
+				if(u.parent == null)
+					u.red = false;
+				else
+				{
+					u.red = true;
+					ibalance(u);
+				}
+			}
+			else
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"case 1");
+				PosBottomHalf b = bh.restructure();
+				b.red = false;
+				b.left.red = true;
+				b.right.red = true;
+			}
+		}
+	} //}}}
+
+	//{{{ rbalance() method
+	private void rbalance(PosBottomHalf r, PosBottomHalf x)
+	{
+		PosBottomHalf y, z;
+
+		if(r != null && r.red)
 		{
 			r.red = false;
 		}
@@ -199,7 +246,8 @@ public class PositionManager
 					z = y.right;
 				else
 				{
-					System.err.println("case 3");
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"case 3");
 					if(x.left == y)
 						z = y.right;
 					else
@@ -211,20 +259,20 @@ public class PositionManager
 					return;
 				}
 
-				System.err.println("case 1");
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"case 1");
 
 				boolean oldXRed = x.red;
 				PosBottomHalf b = z.restructure();
 				b.left.red = false;
 				b.right.red = false;
 				b.red = oldXRed;
-				r.red = false;
 			}
 			else if((y.left == null || !y.left.red)
 				&& (y.right != null && y.right.red))
 			{
-				System.err.println("case 2");
-				r.red = false;
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"case 2");
 				y.red = true;
 				if(x.red)
 					x.red = false;
@@ -308,7 +356,6 @@ public class PositionManager
 				{
 					pos.parent = this;
 					left = pos;
-					pos.ibalance();
 				}
 				else
 					left.insert(pos);
@@ -319,7 +366,6 @@ public class PositionManager
 				{
 					pos.parent = this;
 					right = pos;
-					pos.ibalance();
 				}
 				else
 					right.insert(pos);
@@ -401,41 +447,6 @@ public class PositionManager
 				removePosition(this);
 		} //}}}
 
-		//{{{ ibalance() method
-		private void ibalance()
-		{
-			if(parent.red)
-			{
-				PosBottomHalf u = parent.parent;
-				PosBottomHalf w;
-				if(u.left == parent)
-					w = u.right;
-				else
-					w = u.left;
-				if(w != null && w.red)
-				{
-					System.err.println("case 2");
-					parent.red = false;
-					w.red = false;
-					if(u.parent == null)
-						u.red = false;
-					else
-					{
-						u.red = true;
-						u.ibalance();
-					}
-				}
-				else
-				{
-					System.err.println("case 1");
-					PosBottomHalf b = restructure();
-					b.red = false;
-					b.left.red = true;
-					b.right.red = true;
-				}
-			}
-		} //}}}
-
 		//{{{ restructure() method
 		private PosBottomHalf restructure()
 		{
@@ -468,7 +479,8 @@ public class PositionManager
 					//   v
 					//  /
 					// z
-					System.err.println("restructure 1");
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"restructure 1");
 					// zl, z, zr, v, vr, u, ur
 					nodes = new PosBottomHalf[] {
 						left, this, right,
@@ -483,7 +495,8 @@ public class PositionManager
 					// v
 					//  \
 					//   z
-					System.err.println("restructure 2");
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"restructure 2");
 					// vl, v, zl, z, zr, u, ur
 					nodes = new PosBottomHalf[] {
 						parent.left, parent, left,
@@ -500,7 +513,8 @@ public class PositionManager
 					//   v
 					//    \
 					//     z
-					System.err.println("restructure 3");
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"restructure 3");
 					// ul, u, vl, v, zl, z, zr
 					nodes = new PosBottomHalf[] {
 						u.left, u, parent.left,
@@ -514,7 +528,8 @@ public class PositionManager
 					//   v
 					//  /
 					// z
-					System.err.println("restructure 4");
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"restructure 4");
 					// ul, u, zl, z, zr, v, vr
 					nodes = new PosBottomHalf[] {
 						u.left, u, left, this, right,
@@ -539,7 +554,8 @@ public class PositionManager
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
 
-			System.err.println("setting parent to " + t);
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"setting parent to " + t);
 			nodes[3].parent = t;
 			nodes[3].left   = nodes[1];
 			nodes[3].right  = nodes[5];

@@ -117,4 +117,14 @@ public class Debug
 	 * <b>On by default on MacOS.</b>
 	 */
 	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
+
+	/**
+	 * Geometry workaround for X11.
+	 */
+	public static boolean GEOMETRY_WORKAROUND = false;
+
+	/**
+	 * Position tree debugging.
+	 */
+	public static boolean POSITION_DEBUG = false;
 }

@@ -893,7 +893,7 @@ public class GUIUtilities
 		Rectangle desired = new Rectangle(x,y,width,height);
 		adjustForScreenBounds(desired);
 
-		if(OperatingSystem.isX11())
+		if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 			new UnixWorkaround(win,name,desired,extState);
 		else
 		{
@@ -1031,19 +1031,14 @@ public class GUIUtilities
  				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
  					+ name + ": bounds after opening: " + r);
 
-				if(r.x != desired.x || r.y != desired.y
-					|| r.width != desired.width
-					|| r.height != desired.height)
-				{
-					jEdit.setIntegerProperty(name + ".dx",
-						r.x - required.x);
-					jEdit.setIntegerProperty(name + ".dy",
-						r.y - required.y);
-					jEdit.setIntegerProperty(name + ".d-width",
-						r.width - required.width);
-					jEdit.setIntegerProperty(name + ".d-height",
-						r.height - required.height);
-				}
+				jEdit.setIntegerProperty(name + ".dx",
+					r.x - required.x);
+				jEdit.setIntegerProperty(name + ".dy",
+					r.y - required.y);
+				jEdit.setIntegerProperty(name + ".d-width",
+					r.width - required.width);
+				jEdit.setIntegerProperty(name + ".d-height",
+					r.height - required.height);
 
 				win.removeWindowListener(this);
 			} //}}}

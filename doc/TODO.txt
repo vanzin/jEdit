@@ -95,8 +95,6 @@ and quirks that I need to fix eventually.
 - how to handle S+0-9?
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
 - return after collapsed fold: insert line after end of fold
-- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
-  know mod status
 - some JLists do not auto-scroll on keystroke
 - maximisation state bug: open window, resize to size X. close window,
   open window again, resize to size Y. maximise. close window, open

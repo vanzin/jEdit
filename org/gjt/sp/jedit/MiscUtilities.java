@@ -721,7 +721,11 @@ loop:		for(int i = 0; i < str.length(); i++)
 				buf.append('.');
 				break;
 			case '.':
-				buf.append("\\.");
+			case '+':
+			case '(':
+			case ')':
+				buf.append('\\');
+				buf.append(c);
 				break;
 			case '*':
 				buf.append(".*");
