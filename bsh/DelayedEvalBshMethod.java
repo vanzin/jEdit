@@ -31,51 +31,76 @@
  *                                                                           *
  *****************************************************************************/
 
-
 package bsh;
 
-class BSHImportDeclaration extends SimpleNode
+public class DelayedEvalBshMethod extends BshMethod
 {
-	public boolean importPackage;
-	public boolean staticImport;
-	public boolean superImport;
+	String returnTypeDescriptor;
+	BSHReturnType returnTypeNode;
+	String [] paramTypeDescriptors;
+	BSHFormalParameters paramTypesNode;
 
-	BSHImportDeclaration(int id) { super(id); }
+	// used for the delayed evaluation...
+	transient CallStack callstack;
+	transient Interpreter interpreter;
 
-	public Object eval( CallStack callstack, Interpreter interpreter) 
-		throws EvalError
-	{
-		NameSpace namespace = callstack.top();
-		if ( superImport )
-			try {
-				namespace.doSuperImport();
-			} catch ( UtilEvalError e ) {
-				throw e.toEvalError( this, callstack  );
-			}
-		else 
-		{
-			if ( staticImport )
-			{
-				if ( importPackage )
-				{
-					Class clas = ((BSHAmbiguousName)jjtGetChild(0)).toClass( 
-						callstack, interpreter );
-					namespace.importStatic( clas );
-				} else
-					throw new EvalError( 
-						"static field imports not supported yet", 
-						this, callstack );
-			} else 
-			{
-				String name = ((BSHAmbiguousName)jjtGetChild(0)).text;
-				if ( importPackage )
-					namespace.importPackage(name);
-				else
-					namespace.importClass(name);
-			}
+	/**
+		This constructor is used in class generation.  It supplies String type
+		descriptors for return and parameter class types and allows delay of 
+		the evaluation of those types until they are requested.  It does this
+		by holding BSHType nodes, as well as an evaluation callstack, and
+		interpreter which are called when the class types are requested. 
+	*/
+	/*
+		Note: technically I think we could get by passing in only the
+		current namespace or perhaps BshClassManager here instead of 
+		CallStack and Interpreter.  However let's just play it safe in case
+		of future changes - anywhere you eval a node you need these.
+	*/
+	DelayedEvalBshMethod( 
+		String name, 
+		String returnTypeDescriptor, BSHReturnType returnTypeNode,
+		String [] paramNames,
+		String [] paramTypeDescriptors, BSHFormalParameters paramTypesNode,
+		BSHBlock methodBody, 
+		NameSpace declaringNameSpace, Modifiers modifiers,
+		CallStack callstack, Interpreter interpreter
+	) {
+		super( name, null/*returnType*/, paramNames, null/*paramTypes*/,
+			methodBody, declaringNameSpace, modifiers );
+
+		this.returnTypeDescriptor = returnTypeDescriptor;
+		this.returnTypeNode = returnTypeNode;
+		this.paramTypeDescriptors = paramTypeDescriptors;
+		this.paramTypesNode = paramTypesNode;
+		this.callstack = callstack;
+		this.interpreter = interpreter;
+	}
+
+	public String getReturnTypeDescriptor() { return returnTypeDescriptor; }
+
+	public Class getReturnType() 
+	{ 
+		if ( returnTypeNode == null )
+			return null;
+
+		// BSHType will cache the type for us
+		try {
+			return returnTypeNode.evalReturnType( callstack, interpreter );
+		} catch ( EvalError e ) {
+			throw new InterpreterError("can't eval return type: "+e);
 		}
+	}
 
-        return Primitive.VOID;
+	public String [] getParamTypeDescriptors() { return paramTypeDescriptors; }
+
+	public Class [] getParameterTypes() 
+	{ 
+		// BSHFormalParameters will cache the type for us
+		try {
+			return (Class [])paramTypesNode.eval( callstack, interpreter );
+		} catch ( EvalError e ) {
+			throw new InterpreterError("can't eval param types: "+e);
+		}
 	}
 }
-
