@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ import com.microstar.xml.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -838,6 +839,49 @@ public class DockableWindowManager extends JPanel
 		return right;
 	} //}}}
 
+	//{{{ createPopupMenu() method
+	public JPopupMenu createPopupMenu(final String dockable)
+	{
+		JPopupMenu popup = new JPopupMenu();
+		String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
+		for(int i = 0; i < positions.length; i++)
+		{
+			final String pos = positions[i];
+			String currentPos = jEdit.getProperty(dockable + ".dock-position");
+			if(pos.equals(currentPos))
+				continue;
+
+			JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
+				+ pos));
+
+			moveMenuItem.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					jEdit.setProperty(dockable + ".dock-position",pos);
+					propertiesChanged();
+					showDockableWindow(dockable);
+				}
+			});
+			popup.add(moveMenuItem);
+		}
+
+		popup.addSeparator();
+
+		JMenuItem cloneMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-clone"));
+
+		cloneMenuItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				floatDockableWindow(dockable);
+			}
+		});
+		popup.add(cloneMenuItem);
+
+		return popup;
+	} //}}}
+
 	//{{{ propertiesChanged() method
 	/**
 	 * Called by the view when properties change.
@@ -894,6 +938,8 @@ public class DockableWindowManager extends JPanel
 					.getRootPane());
 			} */
 		}
+
+		revalidate();
 	} //}}}
 
 	//{{{ Private members

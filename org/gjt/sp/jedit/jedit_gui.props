@@ -678,9 +678,13 @@ whitespace-home.label=Go to Start of White Space
 view.title=jEdit - 
 
 view.docking.close-tooltip=Hides the current docked window
-view.docking.menu-tooltip=Shows a list of docked windows
-view.docking.menu-float=New Floating Instance
-view.docking.menu-config=Docking Options...
+view.docking.menu-tooltip=Shows a menu of docking options
+view.docking.menu-floating=Float
+view.docking.menu-top=Dock at Top
+view.docking.menu-left=Dock at Left
+view.docking.menu-bottom=Dock at Bottom
+view.docking.menu-right=Dock at Right
+view.docking.menu-clone=Clone
 
 view.docking.toggle.label={0} (Toggle)
 view.docking.float.label={0} (New Floating Instance)
@@ -1396,6 +1400,10 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
+options.appearance.menuSpillover=Number of items before menus spill over:
+options.appearance.viewLayout=View layout
+options.appearance.alternateDockingLayout=Alternate docked window placement
+options.appearance.alternateToolBarLayout=Alternate tool bar placement
 options.appearance.experimental.label=Experimental options
 options.appearance.experimental.caption=The below three options might not work \
 	correctly with some\n\
@@ -1580,16 +1588,6 @@ grab-key.prefix-shortcut.message=\
 	You cannot use this shortcut, because\n\
 	it is a prefix to other shortcuts.\n\
 	Please choose another.
-#}}}
-
-#{{{ Docking pane
-options.docking.label=Docking
-options.docking.viewLayout=View layout
-options.docking.alternateDockingLayout=Alternate docked window placement
-options.docking.alternateToolBarLayout=Alternate tool bar placement
-options.docking.windowDocking=Window docking
-options.docking.title=Window
-options.docking.dockPosition=Docking position
 #}}}
 
 #{{{ Context Menu pane

@@ -69,7 +69,6 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new AppearanceOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
-		addOptionPane(new DockingOptionPane(), jEditGroup);
 		addOptionPane(new EditingOptionPane(), jEditGroup);
 		addOptionPane(new GeneralOptionPane(), jEditGroup);
 		addOptionPane(new GutterOptionPane(), jEditGroup);

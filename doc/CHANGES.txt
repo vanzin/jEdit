@@ -21,6 +21,9 @@ Thanks to Kris Kopicki for contributing to this release.
 - Register contents are now saved across editing sessions in
   ~/.jedit/registers.xml.
 
+- Added an option to Appearance option pane to control menu spillover
+  (default is 20 items).
+
 + Syntax Highlighting:
 
 - Improved C pre-processor syntax highlighting.

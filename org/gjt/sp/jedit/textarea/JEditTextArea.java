@@ -6328,7 +6328,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
 
-				moveCaretPosition(dragStart,false);
+				if(!quickCopyDrag)
+					moveCaretPosition(dragStart,false);
 
 				// so that shift-click-drag works
 				dragStartLine = getMarkLine();
