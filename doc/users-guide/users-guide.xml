@@ -7,7 +7,8 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY starting SYSTEM "starting.xml">
 <!ENTITY basics SYSTEM "basics.xml">
@@ -45,7 +46,7 @@
 <book>
 
 <bookinfo>
- <title>jEdit 3.2 User's Guide</title>
+ <title>jEdit 4.0 User's Guide</title>
 
  <copyright><year>1998</year><year>2001</year><holder>Slava Pestov</holder></copyright>
  <copyright><year>2001</year><holder>John Gellene</holder></copyright>

@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+
+<!--
+     This is a build.xml file for building jEdit.
+-->
+
+<project name="jEdit" default="dist" basedir=".">
+
+	<target name="compile">
+		<javac
+			srcdir="."
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<include name="bsh/**/*.java"/>
+			<include name="com/**/*.java"/>
+			<include name="gnu/**/*.java"/>
+			<include name="installer/**/*.java"/>
+			<include name="org/**/*.java"/>
+		</javac>
+	</target>
+
+
+	<target name="dist" depends="compile">
+		<jar
+			jarfile="jedit.jar"
+			manifest="org/gjt/sp/jedit/jedit.manifest"
+		>
+			<fileset dir=".">
+				<include name="bsh/**/*.class"/>
+				<include name="bsh/**/*.bsh"/>
+
+				<include name="com/**/*.class"/>
+				<include name="gnu/regexp/*.class"/>
+				<include name="gnu/regexp/MessagesBundle.properties"/>
+				<include name="javax/help/**/*.class"/>
+
+				<include name="org/gjt/sp/jedit/**/*.class"/>
+				<include name="org/gjt/sp/util/**/*.class"/>
+				<include name="org/gjt/sp/jedit/**/*.dtd"/>
+				<include name="org/gjt/sp/jedit/**/*.gif"/>
+				<include name="org/gjt/sp/jedit/**/*.html"/>
+				<include name="org/gjt/sp/jedit/**/*.props"/>
+
+				<include name="org/gjt/sp/jedit/actions.xml"/>
+				<include name="org/gjt/sp/jedit/default.abbrevs"/>
+				<include name="org/gjt/sp/jedit/jedit.bsh"/>
+
+				<include name="doc/**/*.txt"/>
+				<include name="doc/**/*.html"/>
+				<include name="doc/**/jhelpidx.xml"/>
+				<include name="doc/**/jhelpmap.jhm"/>
+				<include name="doc/**/jhelpset.hs"/>
+				<include name="doc/**/jhelptoc.xml"/>
+				<include name="doc/**/JavaHelpSearch/*"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
+	<target name="docs-html-xsltproc">
+		<exec executable="xsltproc" dir="doc/users-guide">
+			<arg value="--catalogs"/>
+			<arg value="jedithtml.xsl"/>
+			<arg value="users-guide.xml"/>
+		</exec>
+	</target>
+
+	<!-- Generate docs with Xalan tool from xml.apache.org -->
+	<target name="docs-html-xalan">
+		<style
+			in="doc/users-guide/users-guide.xml"
+			destdir="doc/users-guide"
+			style="doc/users-guide/jedithtml.xsl"/>
+	</target>
+
+	<!-- Generate JavaHelp full-text search index -->
+	<target name="jhindex">
+		<exec executable="jhindexer" dir="doc/users-guide">
+			<arg value="*.html"/>
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete>
+			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
+			<fileset dir="." includes="**/#*#" defaultexcludes="no"/>
+			<fileset dir="." includes="**/*.orig"/>
+			<fileset dir="." includes="**/*.rej"/>
+			<fileset dir="." includes="**/.*.swp"/>
+			<fileset dir="." includes="**/.#*"/>
+			<fileset dir="." includes="**/.new*"/>
+			<fileset dir="." includes="**/.directory"/>
+			<fileset dir=".">
+				<include name="**/*.class"/>
+				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
+				<exclude name="bsh/XThis*.class"/>
+				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
+				<exclude name="com/sun/**/*.class"/>
+				<exclude name="javax/help/**/*.class"/>
+			</fileset>
+
+			<fileset dir="." includes="doc/users-guide/*.html"/>
+			<fileset dir="." includes="doc/users-guide/jhelpidx.xml"/>
+			<fileset dir="." includes="doc/users-guide/jhelpmap.jhm"/>
+			<fileset dir="." includes="doc/users-guide/jhelpset.hs"/>
+			<fileset dir="." includes="doc/users-guide/jhelptoc.xml"/>
+			<fileset dir="." includes="doc/users-guide/JavaHelpSearch/*"/>
+
+			<fileset dir="." includes="doc/users-guide/*.pdf"/>
+			<fileset dir="." includes="doc/users-guide/*.aux"/>
+			<fileset dir="." includes="doc/users-guide/*.tex"/>
+			<fileset dir="." includes="doc/users-guide/*.log"/>
+
+			<fileset dir="." includes="installer/jedit-*"/>
+		</delete>
+	</target>
+
+</project>
