@@ -61,17 +61,20 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		this.view = view;
 		this.floating  = position.equals(DockableWindowManager.FLOATING);
 
-		this.filename = jEdit.getProperty(
-			QuickNotepadPlugin.OPTION_PREFIX + "filepath");
-		if(this.filename == null || this.filename.length() == 0)
+		if(jEdit.getSettingsDirectory() != null)
 		{
-			this.filename = new String(jEdit.getSettingsDirectory()
-				+ File.separator + "qn.txt");
-			jEdit.setProperty(
-				QuickNotepadPlugin.OPTION_PREFIX + "filepath",
-				this.filename);
+			this.filename = jEdit.getProperty(
+				QuickNotepadPlugin.OPTION_PREFIX + "filepath");
+			if(this.filename == null || this.filename.length() == 0)
+			{
+				this.filename = new String(jEdit.getSettingsDirectory()
+					+ File.separator + "qn.txt");
+				jEdit.setProperty(
+					QuickNotepadPlugin.OPTION_PREFIX + "filepath",
+					this.filename);
+			}
+			this.defaultFilename = this.filename;
 		}
-		this.defaultFilename = new String(this.filename);
 
 		this.toolPanel = new QuickNotepadToolPanel(this);
 		add(BorderLayout.NORTH, this.toolPanel);
@@ -82,7 +85,6 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		textArea = new QuickNotepadTextArea();
 		textArea.setFont(QuickNotepadOptionPane.makeFont());
 		textArea.addKeyListener(new KeyHandler());
-		textArea.addAncestorListener(new AncestorHandler());
 
 		JScrollPane pane = new JScrollPane(textArea);
 		add(BorderLayout.CENTER, pane);
@@ -122,19 +124,18 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	{
 		String propertyFilename = jEdit.getProperty(
 			QuickNotepadPlugin.OPTION_PREFIX + "filepath");
-		if(!defaultFilename.equals(propertyFilename))
+		if(!MiscUtilities.objectsEqual(defaultFilename,propertyFilename))
 		{
 			saveFile();
 			toolPanel.propertiesChanged();
-			defaultFilename = new String(propertyFilename);
-			filename = new String(defaultFilename);
+			defaultFilename = propertyFilename;
+			filename = defaultFilename;
 			readFile();
 		}
 		Font newFont = QuickNotepadOptionPane.makeFont();
 		if(!newFont.equals(textArea.getFont()))
 		{
 			textArea.setFont(newFont);
-			textArea.invalidate();
 		}
 	}
 
@@ -162,7 +163,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 
 	public void saveFile()
 	{
-		if(filename.length() == 0) return;
+		if(filename == null || filename.length() == 0) return;
 		try
 		{
 			DataOutputStream dos = new DataOutputStream(
@@ -203,6 +204,8 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 
 	private void readFile()
 	{
+		if(filename == null || filename.length() == 0) return;
+
 		FileInputStream fis = null;
 		BufferedReader bf = null;
 		try
@@ -246,20 +249,6 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 				wm.removeDockableWindow(QuickNotepadPlugin.NAME);
 			}
 		}
-	}
-
-	private class AncestorHandler implements AncestorListener
-	{
-		public void ancestorAdded(AncestorEvent e)
-		{
-			if(e.getSource() == QuickNotepad.this.textArea)
-			{
-				if(QuickNotepad.this.floating)
-					QuickNotepad.this.textArea.requestFocus();
-			}
-		}
-		public void ancestorMoved(AncestorEvent e) {}
-		public void ancestorRemoved(AncestorEvent e) {}
 	}
 
 }

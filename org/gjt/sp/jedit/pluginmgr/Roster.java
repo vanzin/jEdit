@@ -72,12 +72,12 @@ class Roster
 	} //}}}
 
 	//{{{ performOperations() method
-	boolean performOperations(PluginManagerProgress progress)
+	boolean performOperations(final PluginManagerProgress progress)
 	{
-		/* for(int i = 0; i < operations.size(); i++)
+		for(int i = 0; i < operations.size(); i++)
 		{
 			Operation op = (Operation)operations.get(i);
-			if(op.perform(progress))
+			if(op.runInWorkThread(progress))
 				progress.done(true);
 			else
 			{
@@ -95,14 +95,27 @@ class Roster
 			{
 				public void run()
 				{
+					for(int i = 0; i < operations.size(); i++)
+					{
+						Operation op = (Operation)
+							operations.get(i);
+						if(op.runInAWTThread(progress))
+							progress.done(true);
+						else
+						{
+							progress.done(false);
+							return;
+						}
+					}
+
 					finishOperations();
 				}
 			});
 		}
-		catch(Exception e)
+		catch(InterruptedException e)
 		{
 			Log.log(Log.ERROR,this,e);
-		} */
+		}
 
 		return true;
 	} //}}}

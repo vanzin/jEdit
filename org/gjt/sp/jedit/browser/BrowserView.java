@@ -191,7 +191,8 @@ class BrowserView extends JPanel
 					0L,false),0);
 				String newParent = _vfs.getParentOfPath(parent);
 
-				if(newParent == null || parent.equals(newParent))
+				if(newParent == null ||
+					VFSBrowser.pathsEqual(parent,newParent))
 					break;
 				else
 					parent = newParent;

@@ -9,7 +9,7 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 

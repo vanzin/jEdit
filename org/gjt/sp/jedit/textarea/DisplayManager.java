@@ -120,14 +120,14 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ _notifyScreenLineChanges() method
-	static void _notifyScreenLineChanges(Buffer buffer)
+	/* static void _notifyScreenLineChanges(Buffer buffer)
 	{
 		Iterator iter = ((List)bufferMap.get(buffer)).iterator();
 		while(iter.hasNext())
 		{
 			((DisplayManager)iter.next())._notifyScreenLineChanges();
 		}
-	} //}}}
+	} */ //}}}
 
 	private static Map bufferMap = new HashMap();
 	//}}}
@@ -386,6 +386,7 @@ public class DisplayManager
 				// scan backwards looking for the start
 				for(int i = line - 1; i >= 0; i--)
 				{
+					//XXX
 					if(isLineVisible(i) && buffer.getFoldLevel(i) < initialFoldLevel)
 					{
 						start = i + 1;
@@ -402,6 +403,7 @@ public class DisplayManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
+					//XXX
 					if((isLineVisible(i) &&
 						buffer.getFoldLevel(i) < initialFoldLevel)
 						|| i == getLastVisibleLine())
@@ -928,6 +930,7 @@ loop:		for(;;)
 
 		for(int i = start; i <= end; i++)
 		{
+			//XXX
 			if(!isLineVisible(i))
 			{
 				int screenLines = offsetMgr
@@ -992,6 +995,7 @@ loop:		for(;;)
 
 		for(int i = start; i <= end; i++)
 		{
+			//XXX
 			if(isLineVisible(i))
 			{
 				int screenLines = offsetMgr
@@ -1058,6 +1062,9 @@ loop:		for(;;)
 	//{{{ _notifyScreenLineChanges() method
 	private void _notifyScreenLineChanges()
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"_notifyScreenLineChanges()");
+
 		// when the text area switches to us, it will do
 		// a reset anyway
 		if(textArea.getDisplayManager() == this)
@@ -1158,10 +1165,10 @@ loop:		for(;;)
 				{
 					if(!isLineVisible(i))
 						continue;
-	
+
 					if(i >= physicalLine)
 						break;
-	
+
 					verifyScrollLine += getScreenLineCount(i);
 				}
 
@@ -1511,8 +1518,6 @@ loop:		for(;;)
 			if(!buffer.isLoaded())
 				return;
 
-			delayedUpdate(startLine,startLine);
-
 			if(numLines != 0)
 			{
 				preContentRemoved(firstLine,startLine,numLines);
@@ -1559,6 +1564,13 @@ loop:		for(;;)
 
 				lastfvmget = -1;
 			}
+		} //}}}
+
+		//{{{ contentRemoved() method
+		public void contentRemoved(Buffer buffer, int startLine,
+			int offset, int numLines, int length)
+		{
+			delayedUpdate(startLine,startLine);
 
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
@@ -1571,13 +1583,13 @@ loop:		for(;;)
 			{
 				if(textArea.getDisplayManager() == DisplayManager.this)
 				{
-					//XXX
-					for(int i = delayedUpdateStart;
-						i <= delayedUpdateEnd;
-						i++)
+					int line = delayedUpdateStart;
+					if(!isLineVisible(line))
+						line = getNextVisibleLine(line);
+					while(line != -1 && line <= delayedUpdateEnd)
 					{
-						if(isLineVisible(i))
-							getScreenLineCount(i);
+						getScreenLineCount(line);
+						line = getNextVisibleLine(line);
 					}
 				}
 				_notifyScreenLineChanges();
@@ -1612,6 +1624,7 @@ loop:		for(;;)
 						anchor.physicalLine);
 					for(int i = startLine; i < end; i++)
 					{
+						//XXX
 						if(isLineVisible(i))
 						{
 							anchor.scrollLine -=

@@ -5,10 +5,10 @@ and quirks that I need to fix eventually.
 
 pre2 on thursday!!!
 
+- change of AT_WORD_START semantics to fix perl highlighting?
+- still file reload problems
 - key typed in complete word broken again
 - auto indent: don't de-indent on enter if no leading indent at all?
-- soft wrap: one line file, editing at end
-- bind key to C+e F2 F3: status bar
 - if(...)
   
   { <-- wrong
@@ -18,23 +18,20 @@ pre2 on thursday!!!
 - bad wrap:
   						MiscUtilities.quicksort(favorites,
   							new VFS.DirectoryEntryCompare());
-- isn't fsb dir search supposed to use selected file's extension?
 - bizarre dockable window manager button layout problem
 - while loading --> scroll bar
+
+- fsb default size
+- bind key to C+e F2 F3: status bar
 - update docs
 - review tips
-
-  - auto reload - save caret info first
-  - shortcuts: stale shortcuts remain?
-  - narrow: scrolls one down
-  - eval-for-selected-lines doesn't work with rectangular selection
-  - recording 'evaluate for selected lines'
-  - evalutate for selected lines: > 1 selection per line
-- quicknotepad: use a box not a tool bar
-- update quicknotepad docs
-- quicknotepad: handle no settings dir more gracefully
+- auto reload - save caret info first
+- shortcuts: stale shortcuts remain?
+- narrow: scrolls one down
 - synchro scroll needs a rewrite & folding
 
+- perm to string for FTP plugin
+- update quicknotepad docs
 - actions/dockables eval: should use own namespace?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
@@ -74,6 +71,7 @@ pre2 on thursday!!!
 
 + cleanups:
 
+- quicknotepad: needs some code cleanup
 - text area mouse handler cleanup
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
 - BrowserView.reloadDirectory(): hardcoded design decisions
@@ -85,6 +83,10 @@ pre2 on thursday!!!
 
 + features:
 
+- option for number of caret positions to remember in recent file list
+- bsh = { 2 + 2; }
+- eval-for-selected-lines doesn't work with rectangular selection
+- paste from list dialog: multiple seleciton
 - customizable vfs browser extended attributes
 - windows: fsb browser, type c:
 - new plugin mgr:
@@ -191,6 +193,7 @@ pre2 on thursday!!!
 - generic matching API used for brackets, tags, etc.
 - persistent kill ring
 - don't put all-whitespace strings in kill ring
+- only put unique strings in the kill ring
 
 + performance:
 
