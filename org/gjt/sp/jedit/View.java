@@ -109,40 +109,39 @@ public class View extends JFrame implements EBComponent
 	public static final int SYSTEM_BAR_LAYER = 100;
 
 	/**
-	 * @deprecated Search bar is no longer part of the main tool bar panel.
+	 * Below system tool bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
 	 */
 	public static final int BELOW_SYSTEM_BAR_LAYER = 75;
 
 	/**
-	 * @deprecated Search bar is no longer part of the main tool bar panel.
+	 * Search bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
 	 */
 	public static final int SEARCH_BAR_LAYER = 75;
 
 	/**
-	 * @deprecated Search bar is no longer part of the main tool bar panel.
+	 * Below search bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
 	 */
 	public static final int BELOW_SEARCH_BAR_LAYER = 50;
 
 	// Layers for bottom group
 	/**
-	 * Above status bar layer. This is above the status bar and below the
-	 * default layer for the bottom group. Vimulator will use this.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.0pre7
+	 * @deprecated Status bar no longer added as a tool bar.
 	 */
 	public static final int ABOVE_STATUS_BAR_LAYER = -50;
 
 	/**
-	 * Status bar layer. jEdit uses this for the status bar.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.0pre7
+	 * @deprecated Status bar no longer added as a tool bar.
 	 */
 	public static final int STATUS_BAR_LAYER = -100;
 
 	/**
-	 * Below status bar layer. BufferSelector will use this.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.0pre7
+	 * @deprecated Status bar no longer added as a tool bar.
 	 */
 	public static final int BELOW_STATUS_BAR_LAYER = -150;
 	//}}}
@@ -908,18 +907,20 @@ public class View extends JFrame implements EBComponent
 		JPanel topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
+		dockableWindowManager.add(DockableWindowManager.DockableLayout
+			.TOP_TOOLBARS,topToolBars);
 		JPanel bottomToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
+		dockableWindowManager.add(DockableWindowManager.DockableLayout
+			.BOTTOM_TOOLBARS,bottomToolBars);
 
 		toolBarManager = new ToolBarManager(topToolBars, bottomToolBars);
 
-		getContentPane().add(BorderLayout.NORTH,topToolBars);
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
-		getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
 
 		status = new StatusBar(this);
-		addToolBar(BOTTOM_GROUP, STATUS_BAR_LAYER, status);
+		getContentPane().add(BorderLayout.SOUTH,status);
 
 		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
 
@@ -1161,13 +1162,12 @@ public class View extends JFrame implements EBComponent
 			if(searchBar == null)
 			{
 				searchBar = new SearchBar(this);
-				dockableWindowManager.add(DockableWindowManager
-					.DockableLayout.SEARCH_BAR,searchBar);
+				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
 			}
 		}
 		else if(searchBar != null)
 		{
-			dockableWindowManager.remove(searchBar);
+			removeToolBar(searchBar);
 			searchBar = null;
 		}
 	} //}}}

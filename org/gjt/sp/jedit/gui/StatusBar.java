@@ -55,8 +55,6 @@ import org.gjt.sp.util.*;
  */
 public class StatusBar extends JPanel implements WorkThreadProgressListener
 {
-	private static final Icon LOADING = GUIUtilities.loadIcon("ReloadSmall.png");
-
 	//{{{ StatusBar constructor
 	public StatusBar(View view)
 	{
@@ -76,9 +74,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		panel.add(BorderLayout.WEST,caretStatus);
 
 		message = new JLabel();
-		Dimension dim = message.getPreferredSize();
-		message.setPreferredSize(new Dimension(dim.width,
-			Math.max(16,dim.height)));
 		setMessageComponent(message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
@@ -120,6 +115,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		memory = new MemoryStatus();
 		memory.addMouseListener(mouseHandler);
 		box.add(memory);
+
+		// Leave some room for OS X grow box
+		if(OperatingSystem.isMacOS())
+			box.add(Box.createHorizontalStrut(18));
 
 		panel.add(BorderLayout.EAST,box);
 
@@ -228,20 +227,17 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				{
 					setMessageAndClear(jEdit.getProperty(
 						"view.status.io.done"));
-					message.setIcon(null);
 				}
 				else if(requestCount == 1)
 				{
 					setMessage(jEdit.getProperty(
 						"view.status.io-1"));
-					message.setIcon(LOADING);
 				}
 				else
 				{
 					Object[] args = { new Integer(requestCount) };
 					setMessage(jEdit.getProperty(
 						"view.status.io",args));
-					message.setIcon(LOADING);
 				}
 			}
 		});
@@ -282,8 +278,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ setMessage() method
 	public void setMessage(String message)
 	{
-		this.message.setIcon(null);
-
 		if(tempTimer != null)
 		{
 			tempTimer.stop();

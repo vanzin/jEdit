@@ -768,14 +768,15 @@ public class DockableWindowManager extends JPanel
 		// jEdit's UI layout
 		static final String CENTER = BorderLayout.CENTER;
 
-		public static final String SEARCH_BAR = "search-bar";
+		public static final String TOP_TOOLBARS = "top-toolbars";
+		public static final String BOTTOM_TOOLBARS = "bottom-toolbars";
 
 		static final String TOP_BUTTONS = "top-buttons";
 		static final String LEFT_BUTTONS = "left-buttons";
 		static final String BOTTOM_BUTTONS = "bottom-buttons";
 		static final String RIGHT_BUTTONS = "right-buttons";
 
-		Component searchBar;
+		Component topToolbars, bottomToolbars;
 		Component center;
 		Component top, left, bottom, right;
 		Component topButtons, leftButtons, bottomButtons, rightButtons;
@@ -791,8 +792,10 @@ public class DockableWindowManager extends JPanel
 		{
 			if(cons == null || CENTER.equals(cons))
 				center = comp;
-			else if(SEARCH_BAR.equals(cons))
-				searchBar = comp;
+			else if(TOP_TOOLBARS.equals(cons))
+				topToolbars = comp;
+			else if(BOTTOM_TOOLBARS.equals(cons))
+				bottomToolbars = comp;
 			else if(TOP.equals(cons))
 				top = comp;
 			else if(LEFT.equals(cons))
@@ -816,8 +819,6 @@ public class DockableWindowManager extends JPanel
 		{
 			if(center == comp)
 				center = null;
-			else if(searchBar == comp)
-				searchBar = null;
 			{
 				// none of the others are ever meant to be
 				// removed. retarded, eh? this needs to be
@@ -841,15 +842,19 @@ public class DockableWindowManager extends JPanel
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
-			Dimension _searchBar = (searchBar == null
+			Dimension _topToolbars = (topToolbars == null
 				? new Dimension(0,0)
-				: searchBar.getPreferredSize());
+				: topToolbars.getPreferredSize());
+			Dimension _bottomToolbars = (bottomToolbars == null
+				? new Dimension(0,0)
+				: bottomToolbars.getPreferredSize());
 
 			prefSize.height = _top.height + _bottom.height + _center.height
 				+ _topButtons.height + _bottomButtons.height
-				+ _searchBar.height;
+				+ _topToolbars.height + _bottomToolbars.height;
 			prefSize.width = _left.width + _right.width
-				+ Math.max(_center.width,_searchBar.width)
+				+ Math.max(_center.width,
+				Math.max(_topToolbars.width,_bottomToolbars.width))
 				+ _leftButtons.width + _rightButtons.width;
 
 			return prefSize;
@@ -880,9 +885,12 @@ public class DockableWindowManager extends JPanel
 			Dimension _center = (center == null
 				? new Dimension(0,0)
 				: center.getPreferredSize());
-			Dimension _searchBar = (searchBar == null
+			Dimension _topToolbars = (topToolbars == null
 				? new Dimension(0,0)
-				: searchBar.getPreferredSize());
+				: topToolbars.getPreferredSize());
+			Dimension _bottomToolbars = (bottomToolbars == null
+				? new Dimension(0,0)
+				: bottomToolbars.getPreferredSize());
 
 			int _width = size.width - _leftButtons.width - _rightButtons.width;
 			int _height = size.height - _topButtons.height - _bottomButtons.height;
@@ -1002,13 +1010,24 @@ public class DockableWindowManager extends JPanel
 					_height);
 			}
 
-			if(searchBar != null)
+			if(topToolbars != null)
 			{
-				searchBar.setBounds(
+				topToolbars.setBounds(
 					_leftButtons.width + _left.width,
 					_topButtons.height + _top.height,
 					_width - _left.width - _right.width,
-					_searchBar.height);
+					_topToolbars.height);
+			}
+
+			if(bottomToolbars != null)
+			{
+				bottomToolbars.setBounds(
+					_leftButtons.width + _left.width,
+					_height - _bottom.height
+					- _bottomButtons.height
+					- _bottomToolbars.height,
+					_width - _left.width - _right.width,
+					_bottomToolbars.height);
 			}
 
 			if(center != null)
@@ -1016,10 +1035,12 @@ public class DockableWindowManager extends JPanel
 				center.setBounds(
 					_leftButtons.width + _left.width,
 					_topButtons.height + _top.height
-					+ _searchBar.height,
+					+ _topToolbars.height
+					+ _bottomToolbars.height,
 					_width - _left.width - _right.width,
 					_height - _top.height - _bottom.height
-					- _searchBar.height);
+					- _topToolbars.height
+					- _bottomToolbars.height);
 			}
 		} //}}}
 
