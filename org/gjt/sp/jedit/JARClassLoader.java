@@ -27,15 +27,15 @@ package org.gjt.sp.jedit;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * A class loader implementation that loads classes from JAR files.
+ * A class loader implementation that loads classes from JAR files. All
+ * instances share the same set of classes.
  * @author Slava Pestov
  * @version $Id$
  */
@@ -49,6 +49,8 @@ public class JARClassLoader extends ClassLoader
 	 */
 	public JARClassLoader()
 	{
+		// for debugging
+		id = INDEX++;
 	} //}}}
 
 	//{{{ loadClass() method
@@ -174,6 +176,34 @@ public class JARClassLoader extends ClassLoader
 		}
 	} //}}}
 
+	//{{{ dump() method
+	/**
+	 * For debugging.
+	 */
+	public static void dump()
+	{
+		synchronized(classHash)
+		{
+			Iterator entries = classHash.entrySet().iterator();
+			while(entries.hasNext())
+			{
+				Map.Entry entry = (Map.Entry)entries.next();
+				if(entry.getValue() != NO_CLASS)
+				{
+					Log.log(Log.DEBUG,JARClassLoader.class,
+						entry.getKey() + " ==> "
+						+ entry.getValue());
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ toString() method
+	public String toString()
+	{
+		return jar.getPath() + " (" + id + ")";
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ JARClassLoader constructor
@@ -182,6 +212,7 @@ public class JARClassLoader extends ClassLoader
 	 */
 	JARClassLoader(PluginJAR jar)
 	{
+		this();
 		this.jar = jar;
 	} //}}}
 
@@ -222,68 +253,73 @@ public class JARClassLoader extends ClassLoader
 	// used to mark non-existent classes in class hash
 	private static final Object NO_CLASS = new Object();
 
+	private static int INDEX;
 	private static Hashtable classHash = new Hashtable();
 
+	private int id;
 	private PluginJAR jar;
 
 	//{{{ _loadClass() method
 	/**
 	 * Load class from this JAR only.
 	 */
-	private Class _loadClass(String clazz, boolean resolveIt)
+	private synchronized Class _loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
 		jar.activatePlugin();
 
-		Class cls = findLoadedClass(clazz);
-		if(cls != null)
+		synchronized(this)
 		{
-			if(resolveIt)
-				resolveClass(cls);
-			return cls;
-		}
-
-		String name = MiscUtilities.classToFile(clazz);
-
-		try
-		{
-			ZipFile zipFile = jar.getZipFile();
-			ZipEntry entry = zipFile.getEntry(name);
-
-			if(entry == null)
-				throw new ClassNotFoundException(clazz);
-
-			InputStream in = zipFile.getInputStream(entry);
-
-			int len = (int)entry.getSize();
-			byte[] data = new byte[len];
-			int success = 0;
-			int offset = 0;
-			while(success < len)
+			Class cls = findLoadedClass(clazz);
+			if(cls != null)
 			{
-				len -= success;
-				offset += success;
-				success = in.read(data,offset,len);
-				if(success == -1)
-				{
-					Log.log(Log.ERROR,this,"Failed to load class "
-						+ clazz + " from " + zipFile.getName());
-					throw new ClassNotFoundException(clazz);
-				}
+				if(resolveIt)
+					resolveClass(cls);
+				return cls;
 			}
 
-			cls = defineClass(clazz,data,0,data.length);
+			String name = MiscUtilities.classToFile(clazz);
 
-			if(resolveIt)
-				resolveClass(cls);
+			try
+			{
+				ZipFile zipFile = jar.getZipFile();
+				ZipEntry entry = zipFile.getEntry(name);
 
-			return cls;
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
+				if(entry == null)
+					throw new ClassNotFoundException(clazz);
 
-			throw new ClassNotFoundException(clazz);
+				InputStream in = zipFile.getInputStream(entry);
+
+				int len = (int)entry.getSize();
+				byte[] data = new byte[len];
+				int success = 0;
+				int offset = 0;
+				while(success < len)
+				{
+					len -= success;
+					offset += success;
+					success = in.read(data,offset,len);
+					if(success == -1)
+					{
+						Log.log(Log.ERROR,this,"Failed to load class "
+							+ clazz + " from " + zipFile.getName());
+						throw new ClassNotFoundException(clazz);
+					}
+				}
+
+				cls = defineClass(clazz,data,0,data.length);
+
+				if(resolveIt)
+					resolveClass(cls);
+
+				return cls;
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+
+				throw new ClassNotFoundException(clazz);
+			}
 		}
 	} //}}}
 

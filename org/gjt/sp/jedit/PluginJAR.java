@@ -149,7 +149,7 @@ public class PluginJAR
 	 * Returns the plugin's JAR file, opening it if necessary.
 	 * @since jEdit 4.2pre1
 	 */
-	public ZipFile getZipFile() throws IOException
+	public synchronized ZipFile getZipFile() throws IOException
 	{
 		if(zipFile == null)
 		{
