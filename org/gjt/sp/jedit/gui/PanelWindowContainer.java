@@ -233,7 +233,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		if(current == null)
 			return null;
 		else
-			return current.name;
+			return current.factory.name;
 	} //}}}
 
 	//{{{ getDockables() method

@@ -390,28 +390,29 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 				return false;
 			}
+		}
 
-			if((checkRule.action & ParserRule.AT_LINE_START)
-				== ParserRule.AT_LINE_START)
-			{
-				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-					lastOffset : pos) != line.offset)
-					return false;
-			}
-			else if((checkRule.action & ParserRule.AT_WHITESPACE_END)
-				== ParserRule.AT_WHITESPACE_END)
-			{
-				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-					lastOffset : pos) != whitespaceEnd)
-					return false;
-			}
-			else if((checkRule.action & ParserRule.AT_WORD_START)
-				== ParserRule.AT_WORD_START)
-			{
-				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-					lastOffset : pos) != lastOffset)
-					return false;
-			}
+		int offset = ((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
+			lastOffset : pos;
+		int posMatch = (end ? checkRule.endPosMatch : checkRule.startPosMatch);
+
+		if((posMatch & ParserRule.AT_LINE_START)
+			== ParserRule.AT_LINE_START)
+		{
+			if(offset != line.offset)
+				return false;
+		}
+		else if((posMatch & ParserRule.AT_WHITESPACE_END)
+			== ParserRule.AT_WHITESPACE_END)
+		{
+			if(offset != whitespaceEnd)
+				return false;
+		}
+		else if((posMatch & ParserRule.AT_WORD_START)
+			== ParserRule.AT_WORD_START)
+		{
+			if(offset != lastOffset)
+				return false;
 		} //}}}
 
 		int matchedChars = 1;

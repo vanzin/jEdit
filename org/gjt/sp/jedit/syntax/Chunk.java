@@ -39,6 +39,7 @@ import org.gjt.sp.jedit.syntax.*;
 public class Chunk extends Token
 {
 	public static boolean DEBUG = false;
+	public static boolean PAINT_MODE_WORKAROUND = false;
 
 	//{{{ paintChunkList() method
 	/**
@@ -48,17 +49,13 @@ public class Chunk extends Token
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
-	 * @param background The background color of the painting area,
-	 * used for the background color hack
 	 * @return The width of the painted text
 	 * @since jEdit 4.1pre1
 	 */
 	public static float paintChunkList(Segment lineText, Chunk chunks,
-		Graphics2D gfx, float x, float y, Color background,
-		boolean glyphVector)
+		Graphics2D gfx, float x, float y, boolean glyphVector)
 	{
 		Rectangle clipRect = gfx.getClipBounds();
-		FontMetrics forBackground = gfx.getFontMetrics();
 
 		float _x = 0.0f;
 
@@ -75,43 +72,71 @@ public class Chunk extends Token
 						chunks.width,10));
 				}
 
+				if(chunks.accessable && chunks.visible)
+				{
+					gfx.setFont(chunks.style.getFont());
+					gfx.setColor(chunks.style.getForegroundColor());
+                                        
+					if(glyphVector && chunks.gv != null)
+						gfx.drawGlyphVector(chunks.gv,x + _x,y);
+					else
+					{
+						gfx.drawChars(lineText.array,
+							lineText.offset
+							+ chunks.offset,
+							chunks.length,
+							(int)(x + _x),(int)y);
+					}
+				}
+			}
+
+			_x += chunks.width;
+			chunks = (Chunk)chunks.next;
+		}
+
+		return _x;
+	} //}}}
+
+	//{{{ paintChunkBackgrounds() method
+	/**
+	 * Paints the background highlights of a chunk list.
+	 * @param chunks The chunk list
+	 * @param gfx The graphics context
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @return The width of the painted backgrounds
+	 * @since jEdit 4.2pre1
+	 */
+	public static float paintChunkBackgrounds(Chunk chunks,
+		Graphics2D gfx, float x, float y)
+	{
+		Rectangle clipRect = gfx.getClipBounds();
+
+		float _x = 0.0f;
+
+		FontMetrics forBackground = gfx.getFontMetrics();
+
+		int ascent = forBackground.getAscent();
+		int height = forBackground.getHeight();
+
+		while(chunks != null)
+		{
+			// only paint visible chunks
+			if(x + _x + chunks.width > clipRect.x
+				&& x + _x < clipRect.x + clipRect.width)
+			{
 				if(chunks.accessable)
 				{
 					//{{{ Paint token background color if necessary
-					Color bgColor = chunks.style.getBackgroundColor();
+					Color bgColor = chunks.background;
 					if(bgColor != null)
 					{
-						// Workaround for bug in Graphics2D in
-						// JDK1.4 under Windows; calling
-						// setPaintMode() does not reset
-						// graphics mode.
-						Graphics2D xorGfx = (Graphics2D)gfx.create();
-						xorGfx.setXORMode(background);
-						xorGfx.setColor(bgColor);
+						gfx.setColor(bgColor);
 
-						xorGfx.fill(new Rectangle2D.Float(
-							x + _x,y - forBackground.getAscent(),
-							_x + chunks.width - _x,forBackground.getHeight()));
-
-						xorGfx.dispose();
-					} //}}}
-
-					//{{{ If there is text in this chunk, paint it
-					if(chunks.visible)
-					{
-						gfx.setFont(chunks.style.getFont());
-						gfx.setColor(chunks.style.getForegroundColor());
-
-						if(glyphVector && chunks.gv != null)
-							gfx.drawGlyphVector(chunks.gv,x + _x,y);
-						else
-						{
-							gfx.drawChars(lineText.array,
-								lineText.offset
-								+ chunks.offset,
-								chunks.length,
-								(int)(x + _x),(int)y);
-						}
+						gfx.fill(new Rectangle2D.Float(
+							x + _x,y - ascent,
+							_x + chunks.width - _x,
+							height));
 					} //}}}
 				}
 			}
@@ -188,6 +213,9 @@ public class Chunk extends Token
 
 	// set up after init()
 	public SyntaxStyle style;
+	// this is either style.getBackgroundColor() or
+	// styles[defaultID].getBackgroundColor()
+	public Color background;
 	public float width;
 	public GlyphVector gv;
 	//}}}
@@ -207,6 +235,9 @@ public class Chunk extends Token
 		accessable = true;
 		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
 			? defaultID : id];
+		background = style.getBackgroundColor();
+		if(background == null)
+			background = styles[defaultID].getBackgroundColor();
 	} //}}}
 
 	//{{{ getPositions() method

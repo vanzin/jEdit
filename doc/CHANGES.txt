@@ -35,6 +35,16 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 - Updated NSIS2 syntax highlighting (Ryan Grove).
 
+- AT_LINE_START, AT_WORD_START and AT_WHITESPACE_END attributes can now
+  be set independently for BEGIN and END tags of a SPAN.
+
+- The default background color of a token is now the background color of
+  the current ruleset's default token type. It now only defaults to the
+  text area background if the ruleset's default token type does not have
+  a background color. This matters because for example if COMMENT2 has a
+  background but MARKUP does not, HTML markup in Javadocs now has the
+  same background as the rest of the comment.
+
 }}}
 {{{ User Interface
 
@@ -119,6 +129,11 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 - Faster line insertion and removal when there are collapsed folds below
   the insertion point.
+
+- Faster painting of tokens with background colors. Previously if tokens
+  defined a background color, there was a noticable lag when scrolling
+  for example (at least with Java 1.4.1 on Linux). This no longer
+  happends.
 
 }}}
 {{{ Platform-Specific Changes:

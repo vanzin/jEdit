@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
@@ -42,6 +43,7 @@ public class ActionBar extends JPanel
 		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
 		actions = jEdit.getActions();
+		Arrays.sort(actions,new MiscUtilities.StringICaseCompare());
 		this.view = view;
 		this.temp = temp;
 

@@ -5,17 +5,19 @@ and quirks that I need to fix eventually.
 
 - fold handlers should not have to multiply levels by the tab size
 - different colors for collapsed fold lines of different levels
+- action bar: only move focus to text area if it is still in the text
+  field after the action invocation
+- action bar completion popup
+- changing fileset parameters should modify the file set not create a
+  new one
+- dir search: resolve path relative to current buffer's path
+
+- new bsh and bsh command path
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
 - C+ENTER 3 C+2
 - tab in action bar
-- action bar: only move focus to text area if it is still in the text
-  field after the action invocation
-- action bar completion popup
 - beanshell: invokeAction() function
-- changing fileset parameters should modify the file set not create a
-  new one
-- dir search: resolve path relative to current buffer's path
 - global options: split pane position suboptimal
 - perl: q{}, etc.
 - position hold still doesn't work
@@ -169,7 +171,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
-- bracket matching: scan up to, say, 10,000 lines
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
 - getNext/PrevVisibleLine() is a linear scan
@@ -183,7 +184,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - don't repaint whole selection when resizing
-- background tokens are slow
 - backward virtual line scan
 - do not call foldVisibilityManager.getLastVisibleLine() on every change
   w/ soft wrap. kills performance if also narrowed.
@@ -192,7 +192,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   seem to affect performance that much.
 - could make non-soft wrap chunk merge even faster!
 - could make long lines even faster
-- repeat: use a compound edit
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

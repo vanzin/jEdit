@@ -868,10 +868,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				buffer.getLineText(physicalLine,textArea.lineSegment);
 				x += Chunk.paintChunkList(textArea.lineSegment,
-					lineInfo.chunks,gfx,x,baseLine,
-					lineBackground.bgColor,true);
+					lineInfo.chunks,gfx,x,baseLine,true);
 			}
-
 
 			if(!lineInfo.lastSubregion)
 			{
@@ -1022,6 +1020,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			JEditTextArea textArea = TextAreaPainter.this.textArea;
 			Buffer buffer = textArea.getBuffer();
 
+			//{{{ Paint line highlight and collapsed fold highlight
 			collapsedFold = (physicalLine < buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine)
 				&& !textArea.getFoldVisibilityManager()
@@ -1047,7 +1046,25 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				gfx.setColor(bgColor);
 				gfx.fillRect(0,y,getWidth(),fm.getHeight());
-			}
+			} //}}}
+			//{{{ Paint token backgrounds
+			else
+			{
+				ChunkCache.LineInfo lineInfo = textArea.chunkCache
+					.getLineInfo(screenLine);
+				if(!lineInfo.chunksValid)
+					Log.log(Log.ERROR,this,"Chunks not valid for " + screenLine);
+
+				if(lineInfo.chunks != null)
+				{
+					float baseLine = y + fm.getHeight()
+						- fm.getLeading() - fm.getDescent();
+					Chunk.paintChunkBackgrounds(
+						lineInfo.chunks,gfx,
+						textArea.getHorizontalOffset(),
+						baseLine);
+				}
+			} //}}}
 		} //}}}
 	} //}}}
 
