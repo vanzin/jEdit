@@ -132,6 +132,17 @@ Thanks to Ken Turner for contributing to this release.
 - Fixed NullPointerException when scrolling to a line that was longer
   than the visible area.
 
+- Added a workaround for a problem with the Toolkit class which is
+  non-reentrant on the Solaris JDK. This could cause a segmentation
+  fault on jEdit startup.
+
+- Fixed a problem in the text offset to screen line conversion. It
+  usually manifested itself in the form of the "disappearing selection"
+  bug; if only part of the first line was visible due to scrolling and a
+  selection began in the part that was not visible, painting the
+  selection would throw an exception which would result in the selection
+  extension being removed from the text area.
+
 }}}
 {{{ API Changes
 
