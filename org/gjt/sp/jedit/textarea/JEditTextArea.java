@@ -4980,10 +4980,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	// not private so that inner classes can use without access$ methods.
 	// see moveCaretPosition() and BufferChangeHandler.content{Inserted,Removed}()
 	// for details of how these are used.
+	//
+	// maybe should do it some other way since in fact the only runnable that
+	// ever goes here is from finishCaretUpdate().
 	boolean queuedScrollTo;
 	boolean queuedScrollToElectric;
 	boolean queuedFireCaretEvent;
-	boolean queuedRecalculateLastPhysicalLine;
 	ArrayList runnables;
 
 	// this is package-private so that the painter can use it without
@@ -5861,21 +5863,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		boolean delayedMultilineUpdate;
 		int delayedRepaintStart;
 		int delayedRepaintEnd;
+		boolean delayedRecalculateLastPhysicalLine;
 		// if changes are being made above the first line, we don't want
 		// them to scroll us down or up. so we store the first line
 		// position at the start of the transaction.
 		Position holdPosition;
-		Runnable recalculateLastPhysicalLine = new Runnable()
-		{
-			public void run()
-			{
-				int oldScreenLastLine = screenLastLine;
-				recalculateLastPhysicalLine();
-				invalidateScreenLineRange(oldScreenLastLine,
-					screenLastLine);
-				queuedRecalculateLastPhysicalLine = false;
-			}
-		};
 
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
@@ -6026,9 +6018,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
-			// ... otherwise, it will be called by the buffer
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
+			// this is a rough workaround but it ensures that
+			// scroll listeners never receive an event while the
+			// text area caret position is invalid.
+			int oldFirstLine = getFirstLine();
 
 			if(caret > start && caret <= end)
 				moveCaretPosition(start,false);
@@ -6039,6 +6032,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret);
 			}
+
+			if(getFirstLine() != oldFirstLine)
+			{
+				// so that transactionComplete() doesn't scroll
+				holdPosition = null;
+			}
+
+			// ... otherwise, it will be called by the buffer
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
 		}
 		//}}}
 
@@ -6054,16 +6057,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					setFirstLine(physicalToVirtual(
 						getBuffer().getLineOfOffset(
 						holdPosition.getOffset())));
+					holdPosition = null;
 				}
-				else if(delayedMultilineUpdate)
-					updateScrollBars();
 
 				if(delayedMultilineUpdate)
 				{
+					updateScrollBars();
 					invalidateScreenLineRange(chunkCache
 						.getScreenLineOfOffset(
 						delayedRepaintStart,0),
 						screenLastLine);
+					delayedMultilineUpdate = false;
 				}
 				else
 				{
@@ -6071,8 +6075,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						delayedRepaintEnd);
 				}
 
-				delayedUpdate = delayedMultilineUpdate = false;
-				holdPosition = null;
+				delayedUpdate = false;
+			}
+
+			if(delayedRecalculateLastPhysicalLine)
+			{
+				int oldScreenLastLine = screenLastLine;
+				recalculateLastPhysicalLine();
+				invalidateScreenLineRange(oldScreenLastLine,
+					screenLastLine);
+				delayedRecalculateLastPhysicalLine = false;
 			}
 
 			for(int i = 0; i < runnables.size(); i++)
@@ -6088,16 +6100,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(numLines != 0 || (softWrap && getFoldVisibilityManager()
 				.getLastVisibleLine() - numLines <= getLastPhysicalLine()))
 			{
-				if(buffer.isTransactionInProgress())
-				{
-					if(!queuedRecalculateLastPhysicalLine)
-					{
-						queuedRecalculateLastPhysicalLine = true;
-						runnables.add(recalculateLastPhysicalLine);
-					}
-				}
-				else
-					recalculateLastPhysicalLine.run();
+				delayedRecalculateLastPhysicalLine = true;
 			}
 		} //}}}
 
