@@ -302,6 +302,11 @@ release.
 }}}
 {{{ API Changes
 
+- Deprecated some methods:
+
+  jEdit.getActions() -- use jEdit.getActionNames() instead
+  jEdit.getActionSetForAction() -- use form that takes a String
+
 - Removed some methods which do not make any sense at all with the new
   display engine:
 
@@ -327,6 +332,10 @@ release.
   EBComponent. This could break any plugins that provide custom message
   types.
 
+- Added a new abstract method to the InputHandler class:
+
+  addKeyBinding(String keyBinding, String action);
+
 - The following plugins are known to be broken:
 
   Background
@@ -334,6 +343,7 @@ release.
   JDiff
   WhiteSpace
   SideKick
+  Vimulator
   XML
 
 }}}

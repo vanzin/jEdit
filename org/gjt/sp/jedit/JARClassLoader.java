@@ -285,11 +285,10 @@ public class JARClassLoader extends ClassLoader
 				}
 				else if(name.equalsIgnoreCase("dockables.xml"))
 				{
-					DockableWindowManager.loadDockableWindows(
+					DockableWindowManager.loadDockableWindows(jar,
 						path + "!dockables.xml",
 						new BufferedReader(new InputStreamReader(
-						zipFile.getInputStream(entry))),
-						jar.getActions());
+						zipFile.getInputStream(entry))));
 				}
 			}
 		}

@@ -983,7 +983,7 @@ public class jEdit
 	 */
 	public static void addPluginJAR(EditPlugin.JAR plugin)
 	{
-		addActionSet(plugin.getActions());
+		addActionSet(plugin.getActionSet());
 		jars.addElement(plugin);
 	} //}}}
 
@@ -1001,10 +1001,10 @@ public class jEdit
 	{
 		actionSets.addElement(actionSet);
 		actionSet.added = true;
-		EditAction[] actions = actionSet.getActions();
+		String[] actions = actionSet.getActionNames();
 		for(int i = 0; i < actions.length; i++)
 		{
-			actionHash.put(actions[i].getName(),actions[i]);
+			actionHash.put(actions[i],actionSet);
 		}
 	} //}}}
 
@@ -1018,11 +1018,21 @@ public class jEdit
 	{
 		actionSets.removeElement(actionSet);
 		actionSet.added = false;
-		EditAction[] actions = actionSet.getActions();
+		String[] actions = actionSet.getActionNames();
 		for(int i = 0; i < actions.length; i++)
 		{
-			actionHash.remove(actions[i].getName());
+			actionHash.remove(actions[i]);
 		}
+	} //}}}
+
+	//{{{ getBuiltInActionSet() method
+	/**
+	 * Returns the set of commands built into jEdit.
+	 * @since jEdit 4.2pre1
+	 */
+	public static ActionSet getBuiltInActionSet()
+	{
+		return builtInActionSet;
 	} //}}}
 
 	//{{{ getActionSets() method
@@ -1044,16 +1054,21 @@ public class jEdit
 	 */
 	public static EditAction getAction(String name)
 	{
-		return (EditAction)actionHash.get(name);
+		ActionSet set = (ActionSet)actionHash.get(name);
+		if(set == null)
+			return null;
+		else
+			return set.getAction(name);
 	} //}}}
 
 	//{{{ getActionSetForAction() method
 	/**
 	 * Returns the action set that contains the specified action.
+	 *
 	 * @param action The action
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.2pre1
 	 */
-	public static ActionSet getActionSetForAction(EditAction action)
+	public static ActionSet getActionSetForAction(String action)
 	{
 		for(int i = 0; i < actionSets.size(); i++)
 		{
@@ -1065,19 +1080,39 @@ public class jEdit
 		return null;
 	} //}}}
 
+	//{{{ getActionSetForAction() method
+	/**
+	 * @deprecated Use the form that takes a String instead
+	 */
+	public static ActionSet getActionSetForAction(EditAction action)
+	{
+		return getActionSetForAction(action.getName());
+	} //}}}
+
 	//{{{ getActions() method
 	/**
-	 * Returns the list of actions registered with the editor.
+	 * @deprecated Call getActionNames() instead
 	 */
 	public static EditAction[] getActions()
 	{
-		Vector vec = new Vector();
+		ArrayList vec = new ArrayList();
 		for(int i = 0; i < actionSets.size(); i++)
 			((ActionSet)actionSets.elementAt(i)).getActions(vec);
 
-		EditAction[] retVal = new EditAction[vec.size()];
-		vec.copyInto(retVal);
-		return retVal;
+		return (EditAction[])vec.toArray(new EditAction[vec.size()]);
+	} //}}}
+
+	//{{{ getActionNames() method
+	/**
+	 * Returns all registered action names.
+	 */
+	public static String[] getActionNames()
+	{
+		ArrayList vec = new ArrayList();
+		for(int i = 0; i < actionSets.size(); i++)
+			((ActionSet)actionSets.elementAt(i)).getActionNames(vec);
+
+		return (String[])vec.toArray(new String[vec.size()]);
 	} //}}}
 
 	//}}}
@@ -2755,8 +2790,8 @@ public class jEdit
 	{
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("dockables.xml")));
-		if(!DockableWindowManager.loadDockableWindows("dockables.xml",
-			in,builtInActionSet))
+		if(!DockableWindowManager.loadDockableWindows(null,
+			"dockables.xml",in))
 			System.exit(1);
 	} //}}}
 
@@ -3427,20 +3462,10 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		inputHandler.removeAllKeyBindings();
 
-		EditAction[] actions = getActions();
-		for(int i = 0; i < actions.length; i++)
+		for(int i = 0; i < actionSets.size(); i++)
 		{
-			EditAction action = actions[i];
-
-			String shortcut1 = jEdit.getProperty(action.getName()
-				+ ".shortcut");
-			if(shortcut1 != null)
-				inputHandler.addKeyBinding(shortcut1,action);
-
-			String shortcut2 = jEdit.getProperty(action.getName()
-				+ ".shortcut2");
-			if(shortcut2 != null)
-				inputHandler.addKeyBinding(shortcut2,action);
+			ActionSet set = (ActionSet)actionSets.get(i);
+			set.initKeyBindings();
 		}
 	} //}}}
 

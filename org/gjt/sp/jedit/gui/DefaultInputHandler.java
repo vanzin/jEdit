@@ -77,36 +77,26 @@ public class DefaultInputHandler extends InputHandler
 	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
 	 * @param keyBinding The key binding
 	 * @param action The action
+	 * @since jEdit 4.2pre1
+	 */
+	public void addKeyBinding(String keyBinding, String action)
+	{
+		_addKeyBinding(keyBinding,(Object)action);
+	} //}}}
+
+	//{{{ addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler. The key binding is
+	 * a list of white space separated key strokes of the form
+	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
+	 * or S for Shift, and key is either a character (a-z) or a field
+	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
+	 * @param keyBinding The key binding
+	 * @param action The action
 	 */
 	public void addKeyBinding(String keyBinding, EditAction action)
 	{
-	        Hashtable current = bindings;
-
-		StringTokenizer st = new StringTokenizer(keyBinding);
-		while(st.hasMoreTokens())
-		{
-			String keyCodeStr = st.nextToken();
-			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
-			if(keyStroke == null)
-				return;
-
-			if(st.hasMoreTokens())
-			{
-				Object o = current.get(keyStroke);
-				if(o instanceof Hashtable)
-					current = (Hashtable)o;
-				else
-				{
-					Hashtable hash = new Hashtable();
-					hash.put(PREFIX_STR,keyCodeStr);
-					o = hash;
-					current.put(keyStroke,o);
-					current = (Hashtable)o;
-				}
-			}
-			else
-				current.put(keyStroke,action);
-		}
+		_addKeyBinding(keyBinding,(Object)action);
 	} //}}}
 
 	//{{{ removeKeyBinding() method
@@ -243,7 +233,13 @@ public class DefaultInputHandler extends InputHandler
 			view.getStatus().setMessage(null);
 		}
 
-		if(o instanceof EditAction)
+		if(o instanceof String)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((String)o);
+			evt.consume();
+		}
+		else if(o instanceof EditAction)
 		{
 			setCurrentBindings(bindings);
 			invokeAction((EditAction)o);
@@ -289,7 +285,7 @@ public class DefaultInputHandler extends InputHandler
 		{
 			setCurrentBindings(bindings);
 			invokeReadNextChar(c);
-			repeatCount = -1;
+			repeatCount = 1;
 			return;
 		}
 
@@ -322,6 +318,11 @@ public class DefaultInputHandler extends InputHandler
 		if(o instanceof Hashtable)
 		{
 			setCurrentBindings((Hashtable)o);
+		}
+		else if(o instanceof String)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((String)o);
 		}
 		else if(o instanceof EditAction)
 		{
@@ -531,6 +532,47 @@ public class DefaultInputHandler extends InputHandler
 			view.getStatus().setMessage(null);
 
 		currentBindings = bindings;
+	} //}}}
+
+	//{{{ _addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler. The key binding is
+	 * a list of white space separated key strokes of the form
+	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
+	 * or S for Shift, and key is either a character (a-z) or a field
+	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
+	 * @param keyBinding The key binding
+	 * @param action The action
+	 */
+	public void _addKeyBinding(String keyBinding, Object action)
+	{
+		Hashtable current = bindings;
+
+		StringTokenizer st = new StringTokenizer(keyBinding);
+		while(st.hasMoreTokens())
+		{
+			String keyCodeStr = st.nextToken();
+			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
+			if(keyStroke == null)
+				return;
+
+			if(st.hasMoreTokens())
+			{
+				Object o = current.get(keyStroke);
+				if(o instanceof Hashtable)
+					current = (Hashtable)o;
+				else
+				{
+					Hashtable hash = new Hashtable();
+					hash.put(PREFIX_STR,keyCodeStr);
+					o = hash;
+					current.put(keyStroke,o);
+					current = (Hashtable)o;
+				}
+			}
+			else
+				current.put(keyStroke,action);
+		}
 	} //}}}
 
 	//}}}

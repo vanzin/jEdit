@@ -32,6 +32,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 //}}}
 
@@ -145,13 +146,14 @@ public class DockableWindowManager extends JPanel
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.0pre1
 	 */
-	public static boolean loadDockableWindows(String path, Reader in, ActionSet actionSet)
+	public static boolean loadDockableWindows(EditPlugin.JAR plugin,
+		String path, Reader in)
 	{
 		try
 		{
 			//Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + path);
 
-			DockableListHandler dh = new DockableListHandler(path,actionSet);
+			DockableListHandler dh = new DockableListHandler(path,plugin);
 			XmlParser parser = new XmlParser();
 			parser.setHandler(dh);
 			parser.parse(null, null, in);
@@ -161,33 +163,71 @@ public class DockableWindowManager extends JPanel
 		{
 			int line = xe.getLine();
 			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
+			Log.log(Log.ERROR,DockableWindowManager.class,path + ":" + line
 				+ ": " + message);
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,jEdit.class,e);
+			Log.log(Log.ERROR,DockableWindowManager.class,e);
 		}
 
 		return false;
 	} //}}}
 
-	//{{{ registerDockableWindow() method
-	public static void registerDockableWindow(String name, String code,
-		boolean actions, ActionSet actionSet)
+	//{{{ unloadDockableWindows() method
+	/**
+	 * Plugins shouldn't need to call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public static void unloadDockableWindows(EditPlugin.JAR plugin)
 	{
-		Factory factory = new Factory(name,code,actions,actionSet);
-		dockableWindowFactories.addElement(factory);
+		Iterator entries = dockableWindowFactories.entrySet().iterator();
+		while(entries.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)entries.next();
+			Factory factory = (Factory)entry.getValue();
+			if(factory.plugin == plugin)
+				entries.remove();
+		}
+	} //}}}
+
+	//{{{ cacheDockableWindow() method
+	/**
+	 * @since jEdit 4.2pre1
+	 */
+	public static void cacheDockableWindow(EditPlugin.JAR plugin,
+		String name, URL uri, boolean actions)
+	{
+		Factory factory = new Factory(plugin,name,uri,null,actions);
+		dockableWindowFactories.put(name,factory);
+	} //}}}
+
+	//{{{ registerDockableWindow() method
+	public static void registerDockableWindow(EditPlugin.JAR plugin,
+		String name, String code, boolean actions)
+	{
+		Factory factory = (Factory)dockableWindowFactories.get(name);
+		if(factory != null)
+			factory.code = code;
+		else
+		{
+			factory = new Factory(plugin,name,null,code,actions);
+			dockableWindowFactories.put(name,factory);
+		}
 	} //}}}
 
 	//{{{ getRegisteredDockableWindows() method
 	public static String[] getRegisteredDockableWindows()
 	{
 		String[] retVal = new String[dockableWindowFactories.size()];
-		for(int i = 0; i < dockableWindowFactories.size(); i++)
+		Iterator entries = dockableWindowFactories.values().iterator();
+		int i = 0;
+		while(entries.hasNext())
 		{
-			retVal[i] = ((Factory)dockableWindowFactories.elementAt(i)).name;
+			Factory factory = (Factory)entries.next();
+			retVal[i++] = factory.name;
 		}
+
 		Arrays.sort(retVal,new DockableWindowCompare());
 		return retVal;
 	} //}}}
@@ -210,10 +250,10 @@ public class DockableWindowManager extends JPanel
 	static class DockableListHandler extends HandlerBase
 	{
 		//{{{ DockableListHandler constructor
-		DockableListHandler(String path, ActionSet actionSet)
+		DockableListHandler(String path, EditPlugin.JAR plugin)
 		{
 			this.path = path;
-			this.actionSet = actionSet;
+			this.plugin = plugin;
 			stateStack = new Stack();
 			actions = true;
 		} //}}}
@@ -297,8 +337,8 @@ public class DockableWindowManager extends JPanel
 			{
 				if(tag == "DOCKABLE")
 				{
-					registerDockableWindow(dockableName,
-						code,actions,actionSet);
+					registerDockableWindow(plugin,
+						dockableName,code,actions);
 					// make default be true for the next
 					// action
 					actions = true;
@@ -330,7 +370,7 @@ public class DockableWindowManager extends JPanel
 
 		//{{{ Instance variables
 		private String path;
-		private ActionSet actionSet;
+		private EditPlugin.JAR plugin;
 
 		private String dockableName;
 		private String code;
@@ -372,25 +412,65 @@ public class DockableWindowManager extends JPanel
 		private static NameSpace nameSpace = new NameSpace(
 			BeanShell.getNameSpace(),"dockable window");
 
+		EditPlugin.JAR plugin;
 		String name;
+		URL uri;
 		String code;
+		boolean loaded;
 
 		//{{{ Factory constructor
-		Factory(String name, String code, boolean actions, ActionSet actionSet)
+		Factory(EditPlugin.JAR plugin, String name, URL uri,
+			String code, boolean actions)
 		{
+			this.plugin = plugin;
 			this.name = name;
+			this.uri = uri;
 			this.code = code;
+
+			if(code != null)
+				loaded = true;
+
 			if(actions)
 			{
-				actionSet.addAction(new OpenAction());
-				actionSet.addAction(new ToggleAction());
-				actionSet.addAction(new FloatAction());
+				ActionSet actionSet = (plugin == null
+					? jEdit.getBuiltInActionSet()
+					: plugin.getActionSet());
+				actionSet.addAction(new OpenAction(name));
+				actionSet.addAction(new ToggleAction(name));
+				actionSet.addAction(new FloatAction(name));
+			}
+		} //}}}
+
+		//{{{ load() method
+		void load()
+		{
+			if(loaded)
+				return;
+
+			try
+			{
+				loadDockableWindows(plugin,uri.toString(),
+					new BufferedReader(
+					new InputStreamReader(
+					uri.openStream())));
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,DockableWindowManager.class,io);
 			}
 		} //}}}
 
 		//{{{ createDockableWindow() method
 		JComponent createDockableWindow(View view, String position)
 		{
+			load();
+
+			if(!loaded)
+			{
+				Log.log(Log.WARNING,this,"Outdated cache");
+				return null;
+			}
+
 			try
 			{
 				BeanShell.getNameSpace().setVariable(
@@ -406,43 +486,49 @@ public class DockableWindowManager extends JPanel
 		} //}}}
 
 		//{{{ OpenAction class
-		class OpenAction extends EditAction
+		static class OpenAction extends EditAction
 		{
+			private String dockable;
+
 			//{{{ OpenAction constructor
-			OpenAction()
+			OpenAction(String name)
 			{
 				super(name);
+				this.dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
-					.showDockableWindow(name);
+					.showDockableWindow(dockable);
 			} //}}}
 
 			//{{{ getCode() method
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
-					+ ".showDockableWindow(\"" + name + "\");";
+					+ ".showDockableWindow(\"" + dockable + "\");";
 			} //}}}
 		} //}}}
 
 		//{{{ ToggleAction class
-		class ToggleAction extends EditAction
+		static class ToggleAction extends EditAction
 		{
+			private String dockable;
+
 			//{{{ ToggleAction constructor
-			ToggleAction()
+			ToggleAction(String name)
 			{
 				super(name + "-toggle");
+				this.dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
-					.toggleDockableWindow(name);
+					.toggleDockableWindow(dockable);
 			} //}}}
 
 			//{{{ isToggle() method
@@ -455,62 +541,65 @@ public class DockableWindowManager extends JPanel
 			public boolean isSelected(View view)
 			{
 				return view.getDockableWindowManager()
-					.isDockableWindowVisible(name);
+					.isDockableWindowVisible(dockable);
 			} //}}}
 
 			//{{{ getCode() method
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
-					+ ".toggleDockableWindow(\"" + name + "\");";
+					+ ".toggleDockableWindow(\"" + dockable + "\");";
 			} //}}}
 
 			//{{{ getLabel() method
 			public String getLabel()
 			{
-				String[] args = { jEdit.getProperty(name + ".label") };
+				String[] args = { jEdit.getProperty(dockable + ".label") };
 				return jEdit.getProperty("view.docking.toggle.label",args);
 			} //}}}
 		} //}}}
 
 		//{{{ FloatAction class
-		class FloatAction extends EditAction
+		static class FloatAction extends EditAction
 		{
+			private String dockable;
+
 			//{{{ FloatAction constructor
-			FloatAction()
+			FloatAction(String name)
 			{
 				super(name + "-float");
+				this.dockable = name;
 			} //}}}
 
 			//{{{ invoke() method
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
-					.floatDockableWindow(name);
+					.floatDockableWindow(dockable);
 			} //}}}
 
 			//{{{ getCode() method
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
-					+ ".floatDockableWindow(\"" + name + "\");";
+					+ ".floatDockableWindow(\"" + dockable + "\");";
 			} //}}}
 
 			//{{{ getLabel() method
 			public String getLabel()
 			{
-				String[] args = { jEdit.getProperty(name + ".label") };
+				String[] args = { jEdit.getProperty(dockable + ".label") };
 				return jEdit.getProperty("view.docking.float.label",args);
 			} //}}}
 		} //}}}
 	} //}}}
 
-	private static Vector dockableWindowFactories;
+	private static HashMap dockableWindowFactories;
 
 	//{{{ Static initializer
 	static
 	{
-		dockableWindowFactories = new Vector();
+		dockableWindowFactories = new HashMap();
 	} //}}}
 
 	//}}}
@@ -552,13 +641,11 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void init()
 	{
-		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
-			new Factory[dockableWindowFactories.size()]);
-		Arrays.sort(windowList,new DockableWindowCompare());
+		Iterator entries = dockableWindowFactories.values().iterator();
 
-		for(int i = 0; i < windowList.length; i++)
+		while(entries.hasNext())
 		{
-			Factory factory = windowList[i];
+			Factory factory = (Factory)entries.next();
 			Entry e;
 			if(view.isPlainView())
 			{
@@ -957,13 +1044,11 @@ public class DockableWindowManager extends JPanel
 
 		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
 
-		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
-			new Factory[dockableWindowFactories.size()]);
-		Arrays.sort(windowList,new DockableWindowCompare());
+		String[] windowList = getRegisteredDockableWindows();
 
 		for(int i = 0; i < windowList.length; i++)
 		{
-			String dockable = windowList[i].name;
+			String dockable = windowList[i];
 			Entry entry = (Entry)windows.get(dockable);
 
 			String newPosition = jEdit.getProperty(dockable

@@ -42,7 +42,7 @@ public class ActionBar extends JPanel
 	{
 		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
-		actions = jEdit.getActions();
+		actions = jEdit.getActionNames();
 		Arrays.sort(actions,new MiscUtilities.StringICaseCompare());
 		this.view = view;
 		this.temp = temp;
@@ -96,7 +96,7 @@ public class ActionBar extends JPanel
 	private HistoryTextField action;
 	private CompletionPopup popup;
 	private RolloverButton close;
-	private EditAction[] actions;
+	private String[] actions;
 	//}}}
 
 	//{{{ invoke() method
@@ -165,10 +165,10 @@ public class ActionBar extends JPanel
 			}
 			else if(cmd.length() != 0)
 			{
-				EditAction[] completions = getCompletions(cmd);
+				String[] completions = getCompletions(cmd);
 				if(completions.length != 0)
 				{
-					cmd = completions[0].getName();
+					cmd = completions[0];
 				}
 			}
 			else
@@ -210,17 +210,17 @@ public class ActionBar extends JPanel
 	} //}}}
 
 	//{{{ getCompletions() method
-	private EditAction[] getCompletions(String str)
+	private String[] getCompletions(String str)
 	{
 		str = str.toLowerCase();
 		ArrayList returnValue = new ArrayList(actions.length);
 		for(int i = 0; i < actions.length; i++)
 		{
-			if(actions[i].getName().toLowerCase().indexOf(str) != -1)
+			if(actions[i].toLowerCase().indexOf(str) != -1)
 				returnValue.add(actions[i]);
 		}
 
-		return (EditAction[])returnValue.toArray(new EditAction[returnValue.size()]);
+		return (String[])returnValue.toArray(new String[returnValue.size()]);
 	} //}}}
 
 	//{{{ complete() method
@@ -229,8 +229,8 @@ public class ActionBar extends JPanel
 		String text = action.getText().trim();
 		if(text.length() != 0)
 		{
-			EditAction[] completions = getCompletions(text);
-			if(completions.length == 1 && completions[0].getName().equals(text))
+			String[] completions = getCompletions(text);
+			if(completions.length == 1 && completions[0].equals(text))
 			{
 				// do nothing
 			}
@@ -416,7 +416,7 @@ public class ActionBar extends JPanel
 		CompletionList list;
 
 		//{{{ CompletionPopup constructor
-		CompletionPopup(EditAction[] actions)
+		CompletionPopup(String[] actions)
 		{
 			super(view);
 
@@ -468,7 +468,7 @@ public class ActionBar extends JPanel
 		} //}}}
 
 		//{{{ setModel() method
-		void setModel(EditAction[] actions)
+		void setModel(String[] actions)
 		{
 			list.setListData(actions);
 			list.setSelectedIndex(0);
