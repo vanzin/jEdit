@@ -21,8 +21,8 @@ app.license=gpl.html
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=3948
-comp.0.real-size=3125
+comp.0.disk-size=3776
+comp.0.real-size=2974
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
