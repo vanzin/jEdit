@@ -1124,6 +1124,7 @@ public class jEdit
 		{
 			jar.uninit(false);
 			jars.removeElement(jar);
+			initKeyBindings();
 		}
 
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED,exit));
@@ -3167,9 +3168,12 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		theme = new JEditMetalTheme();
-		theme.propertiesChanged();
-		MetalLookAndFeel.setCurrentTheme(theme);
+		if(!OperatingSystem.hasJava15())
+		{
+			theme = new JEditMetalTheme();
+			theme.propertiesChanged();
+			MetalLookAndFeel.setCurrentTheme(theme);
+		}
 
 		try
 		{

@@ -146,7 +146,7 @@ public class KeyEventTranslator
 
 			boolean mod;
 			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
-				&& System.currentTimeMillis()
+				&& evt.getWhen()
 				-  KeyEventWorkaround.lastKeyTime < 750
 				&& (KeyEventWorkaround.modifiers & ~ignoreMods)
 				!= 0)
@@ -161,7 +161,16 @@ public class KeyEventTranslator
 					return null;
 			}
 			else
-				returnValue = new Key(null,0,ch);
+			{
+				if(ch == ' ')
+				{
+					returnValue = new Key(
+						modifiersToString(modifiers),
+						0,ch);
+				}
+				else
+					returnValue = new Key(null,0,ch);
+			}
 			break;
 		default:
 			return null;

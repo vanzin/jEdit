@@ -203,14 +203,22 @@ insert-tab-indent.shortcut=TAB
 
 #{{{ Alternative shortcuts for frequently-used commands
 next-page.shortcut2=A+a
+select-next-page.shortcut2=AS+a
 delete.shortcut2=A+d
 prev-line.shortcut2=A+i
+select-prev-line.shortcut2=AS+i
 prev-char.shortcut2=A+j
+select-prev-char.shortcut2=AS+j
 next-line.shortcut2=A+k
+select-next-line.shortcut2=AS+k
 next-char.shortcut2=A+l
+select-next-char.shortcut2=AS+l
 prev-page.shortcut2=A+q
+select-prev-page.shortcut2=AS+q
 end.shortcut2=A+x
+select-end.shortcut2=AS+x
 home.shortcut2=A+z
+select-home.shortcut2=AS+z
 copy.shortcut2=C+INSERT
 paste.shortcut2=S+INSERT
 cut.shortcut2=S+DELETE

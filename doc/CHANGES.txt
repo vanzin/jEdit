@@ -16,6 +16,12 @@ and Scott Allen for contributing to this release.
 - Added Alt-key mnemonics to "Files Changed" dialog box
   (Ollie Rutherfurd).
 
+- Alternative caret movement shortcuts (A+a,i,j,k,l,q,x,z) now work
+  together with Shift to extend the selection.
+
+- "Using jEdit" section of the jEdit user's guide is now mostly up to
+  date for jEdit 4.2.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -63,6 +69,16 @@ and Scott Allen for contributing to this release.
   accumulate on OpenVMS.
 
 - Fixed MiscUtilities.isAbsolutePath() on OpenVMS.
+
+- It was not possible to bind an action to S+SPACE.
+
+- Key event workaround code now uses the time when an event was fired,
+  not when it was received. This should fix the problem with stray keys
+  getting inserted into the text area when an action takes a long time
+  to execute.
+
+- Fixed possible deadlock in VFSFileChooserDialog when changing the
+  cursor.
 
 }}}
 

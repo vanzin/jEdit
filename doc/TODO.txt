@@ -3,6 +3,12 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- test keyboard completion with expanded/collapsed tree
+- file system browser: 2 clicks don't hide menus
+- file system browser: tigten gap on left of tool bar
+- invoking action bar command twice
+- editable combo boxes look inconsistent with non-editable combos
+
 remaining features before 4.2final:
 
 - option to disable context menu
