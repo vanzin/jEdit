@@ -32,7 +32,8 @@ public class Install
 
 		if(args.length == 0)
 		{
-			MetalLookAndFeel.setCurrentTheme(new JEditMetalTheme());
+			if(javaVersion.compareTo("1.5") < 0)
+				MetalLookAndFeel.setCurrentTheme(new JEditMetalTheme());
 			new SwingInstall();
 		}
 		else if(args.length == 1 && args[0].equals("text"))

@@ -53,7 +53,9 @@
      please let me know -->
 <MODE NAME="bcel"		FILE="bcel.xml" />
 
-<MODE NAME="beanshell"		FILE="beanshell.xml"
+<!-- Now that BeanShell 2.0 supports class declarations, its syntax is
+     almost identical to Java. -->
+<MODE NAME="beanshell"		FILE="java.xml"
 				FILE_NAME_GLOB="*.bsh" />
 
 <MODE NAME="bibtex"		FILE="bibtex.xml"

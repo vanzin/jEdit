@@ -97,25 +97,18 @@ public class FilesChangedDialog extends EnhancedDialog
 			}
 		}
 
-		TreeNode selection = null;
-
 		root = new DefaultMutableTreeNode("",true);
 		if(deleted.getChildCount() != 0)
 		{
 			root.add(deleted);
-			selection = deleted.getChildAt(0);
 		}
 		if(changed.getChildCount() != 0)
 		{
 			root.add(changed);
-			if(selection == null)
-				selection = changed.getChildAt(0);
 		}
 		if(changedDirty.getChildCount() != 0)
 		{
 			root.add(changedDirty);
-			if(selection == null)
-				selection = changedDirty.getChildAt(0);
 		}
 
 		bufferTreeModel = new DefaultTreeModel(root);
@@ -126,8 +119,6 @@ public class FilesChangedDialog extends EnhancedDialog
 		bufferTree.getSelectionModel().addTreeSelectionListener(new TreeHandler());
 		bufferTree.getSelectionModel().setSelectionMode(
 			TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		bufferTree.setSelectionPath(new TreePath(
-			((DefaultMutableTreeNode)selection).getPath()));
 
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferTree));
 
@@ -184,6 +175,8 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		GUIUtilities.requestFocus(this,bufferTree);
 
+		updateEnabled();
+
 		pack();
 		setLocationRelativeTo(view);
 		show();
@@ -213,6 +206,26 @@ public class FilesChangedDialog extends EnhancedDialog
 
 	private JButton reload;
 	private JButton close;
+
+	//{{{ updateEnabled() method
+	private void updateEnabled()
+	{
+		TreePath[] paths = bufferTree
+			.getSelectionPaths();
+		boolean enabled = false;
+		if(paths != null)
+		{
+			for(int i = 0; i < paths.length; i++)
+			{
+				Object[] path = paths[i].getPath();
+				if(path.length == 3)
+					enabled = true;
+			}
+		}
+
+		if(reload != null)
+			reload.setEnabled(enabled);
+	} //}}}
 
 	//{{{ selectAll() method
 	private void selectAll()
@@ -343,6 +356,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		{
 			if(selectAllInProgress)
 				return;
+
+			updateEnabled();
 
 			TreePath[] paths = bufferTree
 				.getSelectionPaths();
