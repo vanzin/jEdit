@@ -5418,10 +5418,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(queuedCaretUpdate)
 			return;
 
-		if(buffer.isTransactionInProgress())
-			queuedCaretUpdate = true;
-		else
+		queuedCaretUpdate = true;
+
+		if(!buffer.isTransactionInProgress())
 			_finishCaretUpdate();
+		/* otherwise DisplayManager.BufferChangeHandler calls */
 	} //}}}
 
 	//{{{ fireCaretEvent() method
