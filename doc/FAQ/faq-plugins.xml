@@ -144,24 +144,6 @@
 	</answer>
 </qandaentry>
 
-<!--
-<qandaentry>
-	<question id="plugins-codeaid-install">
-		<para>
-			How do you install a CodeAid database?
-		</para>
-	</question>
-	<answer>
-		<para>
-			Copy the database to the <filename>/codeaid</filename> subdirectory
-			of your user settings directory.
-			To obtain the path to the settings directory, evaluate
-			<userinput>jEdit.getSettingsDirectory()</userinput> as a
-			BeanShell expression.
-		</para>
-	</answer>
-</qandaentry>
--->
 <qandaentry>
 	<question id="plugin-cvs">
 		<para>
