@@ -700,10 +700,10 @@ public class DisplayManager
 				}
 				else
 				{
-					int prevLine = getPrevVisibleLine(physicalLine);
-					if(prevLine == -1)
+					int nextLine = getNextVisibleLine(physicalLine);
+					if(nextLine == -1)
 						return;
-					physicalLine = prevLine;
+					physicalLine = nextLine;
 					amount -= screenLines;
 					scrollLine += screenLines;
 				}
@@ -718,19 +718,19 @@ public class DisplayManager
 		{
 			while(amount > 0)
 			{
-				int screenLines = getScreenLineCount(physicalLine);
+				int prevLine = getPrevVisibleLine(physicalLine);
+				if(prevLine == -1)
+					return;
+				int screenLines = getScreenLineCount(prevLine);
 				if(amount < screenLines)
 				{
 					return;
 				}
 				else
 				{
-					int nextLine = getNextVisibleLine(physicalLine);
-					if(nextLine == -1)
-						return;
-					physicalLine = nextLine;
+					physicalLine = prevLine;
 					amount -= screenLines;
-					scrollLine += screenLines;
+					scrollLine -= screenLines;
 				}
 			}
 
