@@ -68,12 +68,14 @@ public class ChunkCache
 			wrapMargin += 2.0f;
 
 		float x = 0.0f;
+		float endX = 0.0f;
 		boolean seenNonWhiteSpace = false;
 		boolean addedNonWhiteSpace = false;
 		float firstNonWhiteSpace = 0.0f;
 
 		Chunk first = null;
 		Chunk current = null;
+		Chunk end = null;
 
 		int tokenListOffset = 0;
 
@@ -92,27 +94,28 @@ public class ChunkCache
 						Chunk newChunk = new Chunk(
 							tokens.id,seg,flushIndex,
 							i,styles,fontRenderContext);
-						if(addedNonWhiteSpace
+						if(current != null)
+							current.next = newChunk;
+						current = newChunk;
+
+						x += newChunk.width;
+
+						if(end != null
+							&& addedNonWhiteSpace
 							&& wrapMargin != 0
-							&& x + newChunk.width
-							> wrapMargin)
+							&& x > wrapMargin)
 						{
 							if(first != null)
 								out.add(first);
-							first = current = new Chunk(firstNonWhiteSpace);
-							x = firstNonWhiteSpace
-								+ newChunk.width;
+							first = new Chunk(firstNonWhiteSpace,flushIndex);
+							first.next = end.next;
+							end.next = null;
+
+							x = x + firstNonWhiteSpace - endX;
 						}
-						else
-							x += newChunk.width;
 
 						if(first == null)
-							first = current = newChunk;
-						else
-						{
-							current.next = newChunk;
-							current = newChunk;
-						}
+							first = newChunk;
 
 						seenNonWhiteSpace = true;
 						addedNonWhiteSpace = true;
@@ -158,6 +161,9 @@ public class ChunkCache
 					if(first == null)
 						first = current;
 
+					end = current;
+					endX = x;
+
 					flushIndex = i + 1;
 				}
 				else if(i == tokenListOffset + tokens.length - 1)
@@ -165,27 +171,29 @@ public class ChunkCache
 					Chunk newChunk = new Chunk(
 						tokens.id,seg,flushIndex,
 						i + 1,styles,fontRenderContext);
+					if(current != null)
+						current.next = newChunk;
+					current = newChunk;
+
+					x += newChunk.width;
 
 					if(i == seg.count - 1 && wrapMargin != 0
-						&& x + newChunk.width > wrapMargin
-						&& addedNonWhiteSpace)
+						&& x > wrapMargin
+						&& addedNonWhiteSpace
+						&& end != null)
 					{
 						if(first != null)
 							out.add(first);
-						first = current = new Chunk(firstNonWhiteSpace);
-						x = firstNonWhiteSpace
-							+ newChunk.width;
+						first = new Chunk(firstNonWhiteSpace,flushIndex);
+						first.next = end.next;
+						end.next = null;
+
+						x = x + firstNonWhiteSpace - endX;
 					}
 					else
-						x += newChunk.width;
 
 					if(first == null)
-						first = current = newChunk;
-					else
-					{
-						current.next = newChunk;
-						current = newChunk;
-					}
+						first = newChunk;
 
 					seenNonWhiteSpace = true;
 					addedNonWhiteSpace = true;
@@ -294,11 +302,6 @@ public class ChunkCache
 					break;
 				else
 				{
-					if((offset - chunks.offset) * 2 < 0)
-					{
-						System.err.println(offset + ":"
-							+ chunks.offset);
-					}
 					return x + chunks.positions[
 						(offset - chunks.offset) * 2];
 				}
@@ -386,10 +389,11 @@ public class ChunkCache
 
 		public Chunk next;
 
-		Chunk(float width)
+		Chunk(float width, int offset)
 		{
 			inaccessable = true;
 			this.width = width;
+			this.offset = offset;
 		}
 
 		Chunk(int tokenType, Segment seg, int offset, int end,

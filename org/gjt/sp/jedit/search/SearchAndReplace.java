@@ -134,6 +134,9 @@ public class SearchAndReplace
 			return;
 
 		SearchAndReplace.regexp = regexp;
+		if(regexp && reverse)
+			reverse = false;
+
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
@@ -161,7 +164,7 @@ public class SearchAndReplace
 		if(reverse == SearchAndReplace.reverse)
 			return;
 
-		SearchAndReplace.reverse = reverse;
+		SearchAndReplace.reverse = (regexp ? false : reverse);
 
 		matcher = null;
 
@@ -952,4 +955,6 @@ loop:		for(;;)
 
 		return occurCount;
 	} //}}}
+
+	//}}}
 }

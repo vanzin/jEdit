@@ -130,6 +130,8 @@ in build.xml.
 - Text area syntax highlighting would not always be updated properly
   when switching modes
 - Display_Shortcuts macro didn't work
+- jEdit would hang if 'Find Previous' was invoked while regular
+  expressions were enabled
 
 + API Additions
 

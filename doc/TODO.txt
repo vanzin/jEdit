@@ -1,9 +1,10 @@
 TO DO
 
 - syntax highlighted files and soft wrap
-- installer: bork if dest dir not writable
-- better handling of oom's when loading buffers
+- C+h freezes editor with regexps enabled
 
+- switching buffers: horiz scroll bar not updated?
+- better handling of oom's when loading buffers
 - chunk cache problems after collapsing a fold
 - colon at margin, not eol
 - vertical scrollbar w/ soft wrap wrong?
@@ -11,7 +12,6 @@ TO DO
 - fix scrollToCaret()
 - use new offset conversion API throughout
 - save to X:filename on Windows
-- horizontal scroll bar not updated some times
 - chunk cache & scrolling optimization
 - jdk 1.4: popups in wrong location
 - FAQ: toc needs to include individual q and a's
