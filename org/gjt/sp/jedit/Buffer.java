@@ -448,8 +448,9 @@ public class Buffer
 			}
 		}
 
-		setFlag(IO,true);
 		EditBus.send(new BufferUpdate(this,view,BufferUpdate.SAVING));
+
+		setFlag(IO,true);
 
 		final String oldPath = this.path;
 		final String oldSymlinkPath = this.symlinkPath;
@@ -1523,7 +1524,7 @@ public class Buffer
 		else
 		{
 			if (folding != null)
-				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding); 
+				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding);
 			setFoldHandler(new DummyFoldHandler());
 		}
 
@@ -2207,7 +2208,7 @@ public class Buffer
 				int whiteSpaceWidth = Math.max(0,MiscUtilities
 					.getLeadingWhiteSpaceWidth(line,tabSize)
 					- indentSize);
-	
+
 				insert(lineStart + whiteSpace,MiscUtilities
 					.createWhiteSpace(whiteSpaceWidth,
 					(noTabs ? 0 : tabSize)));
@@ -2325,7 +2326,7 @@ public class Buffer
 	public boolean indentLine(int lineIndex, boolean canDecreaseIndent)
 	{
 		int[] whitespaceChars = new int[1];
-		int currentIndent = getCurrentIdentForLine(lineIndex,
+		int currentIndent = getCurrentIndentForLine(lineIndex,
 			whitespaceChars);
 		int idealIndent = getIdealIndentForLine(lineIndex);
 
@@ -2353,7 +2354,7 @@ public class Buffer
 		return true;
 	} //}}}
 
-	//{{{ getCurrentIdentForLine() method
+	//{{{ getCurrentIndentForLine() method
 	/**
 	 * Returns the line's current leading indent.
 	 * @param lineIndex The line number
@@ -2361,7 +2362,7 @@ public class Buffer
 	 * characters is stored at the 0 index
 	 * @since jEdit 4.2pre2
 	 */
-	public int getCurrentIdentForLine(int lineIndex, int[] whitespaceChars)
+	public int getCurrentIndentForLine(int lineIndex, int[] whitespaceChars)
 	{
 		getLineText(lineIndex,seg);
 
@@ -2465,14 +2466,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int indent = 0; // Indent width (tab expanded)
 		int prevLineBrackets = 0; // Additional bracket indent
 		int prevLineCloseBracketIndex = -1; // For finding whether we're in
-		                                    // this kind of construct:
-		                                    // if (cond1)
-		                                    //   while (cond2)
-		                                    //     if (cond3){
-		                                    //
-		                                    //     }
-		                                    // So we know to indent the next line under the 1st if.
+						    // this kind of construct:
+						    // if (cond1)
+						    //   while (cond2)
+						    //     if (cond3){
+						    //
+						    //     }
+						    // So we know to indent the next line under the 1st if.
 		int prevLineUnclosedParenIndex = -1; // Index of the last unclosed parenthesis
+		int prevLineParenWeight = 0; // (openParens - closeParens)
 		Stack openParens = new Stack();
 
 		for(int i = 0; i < prevLine.length(); i++)
@@ -2492,17 +2494,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 						% tabSize));
 				}
 				break;
+			case '(':
+				openParens.push(new Integer(i));
+				prevLineParenWeight++;
+				break;
+			case ')':
+				if(openParens.size() > 0)
+					openParens.pop();
+				prevLineParenWeight--;
+				break;
 			default:
 				prevLineStart = false;
-
-				// for deep indent
-				if(c == '(')
-					openParens.push(new Integer(i));
-				else if(c == ')')
-				{
-					if(openParens.size() > 0)
-						openParens.pop();
-				}
 
 				if(closeBrackets.indexOf(c) != -1)
 				{
@@ -2581,11 +2583,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 				else if(lineBrackets >= 0)
 					lineBrackets++;
 			}
-		}
-
-		if(openParens.size() > 0)
-		{
-			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
 		} //}}}
 
 		if(Debug.INDENT_DEBUG)
@@ -2598,24 +2595,30 @@ loop:		for(int i = 0; i < seg.count; i++)
 		//{{{ Deep indenting
 		if(getBooleanProperty("deepIndent"))
 		{
-			if(prevLineUnclosedParenIndex != -1)
+			if(prevLineParenWeight > 0)
 			{
-				indent = prevLineUnclosedParenIndex;
-				for(int i = 0; i < prevLine.length(); i++)
-				{
-					if(prevLine.charAt(i) == '\t')
-					{
+				indent = prevLineUnclosedParenIndex+1;
+				for (int i = 0; i < prevLine.length(); i++) {
+					if (prevLine.charAt(i) == '\t')
 						indent += tabSize-1;
-					}
-					else
-					{
-						break;
-					}
 				}
-
-				indent++;
 				return indent;
 			}
+			else if(prevLineParenWeight < 0)
+			{
+				int openParenOffset = TextUtilities.findMatchingBracket(this,prevLineIndex,prevLine.lastIndexOf(")"));
+				if(openParenOffset >= 0)
+				{
+					int startLine = getLineOfOffset(openParenOffset);
+					int startLineParenWeight = getLineParenWeight(startLine);
+
+					if(startLineParenWeight == 1)
+						indent = getCurrentIndentForLine(startLine,null);
+					else
+						indent = getOpenParenIndent(startLine,lineIndex);
+				}
+			}
+			// no parenthesis on previous line (prevLineParenWeight == 0) so the normal indenting rules are used
 		}
 		//}}}
 
@@ -2627,13 +2630,19 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			if(lineBrackets < 0)
 			{
-				int offset = TextUtilities.findMatchingBracket(
+				int openBracketIndex = TextUtilities.findMatchingBracket(
 					this,lineIndex,closeBracketIndex);
-				if(offset != -1)
+				int openLineIndex = getLineOfOffset(openBracketIndex);
+				if(openBracketIndex != -1)
 				{
-					String closeLine = getLineText(getLineOfOffset(offset));
+					String openLine = getLineText(openLineIndex);
+					if (getLineParenWeight(openLineIndex) < 0)
+					{
+						openBracketIndex = TextUtilities.findMatchingBracket(this,openLineIndex,openLine.indexOf(")"));
+					}
+					openLine = getLineText(getLineOfOffset(openBracketIndex));
 					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
-						closeLine,tabSize);
+						openLine,tabSize);
 				}
 				else
 					return -1;
@@ -2704,7 +2713,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 					while(prevPrevLineIndex != -1)
 					{
 						if(indentNextLineRE.isMatch(getLineText(prevPrevLineIndex)))
-							indent = getCurrentIdentForLine(prevPrevLineIndex,null);
+							indent = getCurrentIndentForLine(prevPrevLineIndex,null);
 						else
 							break;
 
@@ -2724,6 +2733,73 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		return indent;
 	} //}}}
+
+	//{{{ getLineParenWeight() method
+	/**
+	 * Returns the number of open parenthesis minus the number of close parenthesis.
+	 * @param line The line number
+	 * @since jEdit 4.2pre9
+	 */
+	private int getLineParenWeight(int line)
+	{
+		String lineText = getLineText(line);
+		int parenWeight = 0;
+		for(int i = 0; i < lineText.length(); i++)
+		{
+			char c = lineText.charAt(i);
+			switch(c)
+			{
+				case '(':
+					parenWeight++;
+					break;
+				case ')':
+					parenWeight--;
+					break;
+				default:
+			}
+		}
+		return parenWeight;
+	} //}}}
+
+	//{{{ getOpenParenIndent() method
+	/**
+	 * Returns the appropriate indent based on open parenthesis on previous lines.
+	 *
+	 * @param startLine The line where parens were last balanced
+	 * @param targetLine The line we're finding the indent for
+	 */
+	private int getOpenParenIndent(int startLine, int targetLine)
+	{
+		Stack openParens = new Stack();
+		String lineText;
+
+		for(int lineIndex = startLine; lineIndex < targetLine; lineIndex++)
+		{
+			lineText = getLineText(lineIndex);
+			for(int i = 0; i < lineText.length(); i++)
+			{
+				char c = lineText.charAt(i);
+				switch(c)
+				{
+					case '(':
+						openParens.push(new Integer(i));
+						break;
+					case ')':
+						if(openParens.size() > 0)
+							openParens.pop();
+						break;
+					default:
+				}
+			}
+		}
+		int indent = getCurrentIndentForLine(startLine,null);
+
+		if(openParens.size() > 0)
+			indent += ((Integer) openParens.pop()).intValue();
+
+		return indent;
+	}
+	//}}}
 
 	//{{{ getVirtualWidth() method
 	/**
@@ -2912,6 +2988,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		return file;
 	} //}}}
+
+	//{{{ getCurrentIdentForLine() method
+	/**
+	 * @deprecated Use the correctly spelled getCurrentIndentForLine() instead.
+	 */
+	public int getCurrentIdentForLine(int lineIndex, int[] whitespaceChars) {
+		return getCurrentIndentForLine(lineIndex,whitespaceChars);
+	}//}}}
 
 	//}}}
 
@@ -3917,7 +4001,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int firstLine = Math.max(lastLine + 1, getLineCount() - 10);
 		if(firstLine < getLineCount())
 		{
-			int length = getLineEndOffset(getLineCount() - 1) 
+			int length = getLineEndOffset(getLineCount() - 1)
 				- (getLineStartOffset(firstLine) + 1);
 			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
 		}

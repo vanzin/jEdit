@@ -1805,7 +1805,7 @@ public class jEdit
 	 */
 	public static void saveAllBuffers(View view)
 	{
-		saveAllBuffers(view,jEdit.getBooleanProperty("confirm.save-all"));
+		saveAllBuffers(view,jEdit.getBooleanProperty("confirmSaveAll"));
 	} //}}}
 
 	//{{{ saveAllBuffers() method
