@@ -5,10 +5,20 @@ JEDIT 3.2 VERSION HISTORY
 + New Features
 
 - JHTML syntax highlighting (Will Sargent)
+- clipboardHangWorkaround.bsh startup script included. If your JVM
+  hangs when jEdit tries to copy or paste, take a look at this script.
 
 + Bug Fixes
 
 - 'Welcome' link in help didn't work
+- Fixed another grab key dialog box bug
+- Fixed minor slowdown when making changes in the first or last three
+  lines of a buffer
+- On Windows, javax.swing.filechooser.FileSystemView.isHiddenFile()
+  always returns false. So now we attempt calling the File.isHidden()
+  method via reflection to find out if a file is hidden or not.
+- File permissions were not preserved on MacOS X, because FileVFS did
+  not detect if it was running on MacOS X properly
 
 * Version 3.2.1
 

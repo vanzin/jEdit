@@ -1,23 +1,50 @@
 TO DO
 
-- slow electric scroll
+- 'Stop' button in plugin list download progress
+- eval IS_SELECTED
+- wait for John to release an updated get_package_name macro
 
 + features:
 
++ minor:
+
+- jEdit.get/setInteger/Color/FontProperty()
 - scroll to newly added tool bar button or context menu item in option
   panes
 - instead of mini i/o progress, show messages in status bar: number
   of i/o requests pending, and setMessageAndClear("foo") when i/o
   complete
-- Jext-style undo to replace CaretUndo crap
 - select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
 - Macros.confirm()
 - saving a read-only file: show a confirmation dialog box
-- jEdit.get/setInteger/Color/FontProperty()
-- new document model
 - when loading plugins and such, check for settingsDir == jEditHome
 - collapse-all-folds action that calls expandFolds(1)
+- command to reset edit server
+- memory display in status bar, click opens memory display dialog;
+  replaces 'show free memory' macro
+- changing read-only flag in buffer options
+- replace shift-left/shift-right actions with an overloaded TAB action,
+  and shift-left bound to S+TAB? Then A+LEFT and A+RIGHT can be used for
+  other purposes.
+- trailingEOL property, set on load if file has a trailing newline, when
+  saving, only write a trailing newline if property is set
+- if last token of a line has a background color, remainder of line will
+  be drawn with that color
+- 'Invert Selection' command
+- after a VFSUpdate for a mode file is received, reload that mode automatically
+- after a VFSUpdate for a mode catalog is received, reload all modes
+- when loading a file: if the stream supports a mark, read first 16 bytes,
+  check for unicode byte order mark, push back, if one is found, set
+  encoding to Unicode automatically
+- handle missing modes more gracefully
+- plugin manager: show all dependencies, not just first-order ones
+- removing a plugin should offer to remove the ones that depend on it too
+
++ major:
+
+- use VariableGridLayout to lay out tool bars, not a BoxLayout
+- new document model
 - docking:
   - each tab has a close box
   - registerDockableWindow(name,multi) instead of named lists
@@ -33,10 +60,6 @@ TO DO
   - remove 'hypersearch results' menu item
   - select lines with matches capability
 - smarter/better userInput() that accepts strings, not just characters
-- command to reset edit server
-- memory display in status bar, click opens memory display dialog;
-  replaces 'show free memory' macro
-- changing read-only flag in buffer options
 - configurable metal font
 - changing key bindings for ENTER, TAB, C+TAB, S+TAB, etc.
 - keymaps replace .shortcut properties
@@ -51,23 +74,29 @@ TO DO
   - optional underline, color can be changed
   - style editor: check boxes next to fg, bg, underline flags; if off,
     use default
+  - better default color scheme
 - abbrevs option pane: add, remove, edit buttons, don't show abbrev
   expansion in table
-- trailingEOL property, set on load if file has a trailing newline, when
-  saving, only write a trailing newline if property is set
 - file system browser:
   - right-click menu: show all toolbar options
   - parent directory, parent directories menu, reload, local drives, home,
     go to buffer directory
   - back, forward menu items
-  - option to disable tool bar in stand-alone browser
   - some additional keyboard shortcuts:
     - ~ goes to home directory
     - / goes to roots:
     - - goes to buffer directory
-  - show directories in boldface
-  - if icons disabled, no longer append / to directory names
-  - smaller 16x16 icons
+  - smaller 14x14 icons
+  - easier way for plugins to add right-click menu commands
+  - custom colors for icons for file names matching specified globs
+  - two-pane "jEdit commander" window with support for moving and
+    copying files
+  - recursive remove of directories, with safety features for symlinks
+  - new VFS methods:
+    int getUnixPermissions()
+    void setUnixPermissions()
+  - UNIX_PERMISSIONS_CAP capability
+  - VFS.DirectoryEntry: icon and color fields
 - shift-left/shift-right: behave differently with rectangular selection
 - docking option pane: changes take effect immediately
 - option pane API changes:
@@ -93,45 +122,23 @@ TO DO
   - inside tags, delegate on*="..." to JavaScript mode,
     style="..." to CSS mode
   - better <script>/<style> handling using nested delegates
-  - inside tags: coloring different types of tags using different MARKUP
-    token types
-  - SPAN:<a:/a> delegates to A_TAG_MIX rule
-  - A_TAG_MIX rule defines normal tag rules, along with SPAN:>:< which
-    delegates to A_CONTENT_MIX rule, with default token type LINK and all
-    other usual HTML rules for tags, entities, etc.
-  - xml.mix file, can be included in other modes, defines rules for tags,
-    entities, <!, <?, and so on.
-    html.mix file, for inclusion in html, php, jsp, etc. defines rules for
-    tags, entities, <script>, <style>, <a>, etc.
 - this might be too hard: DELEGATE_TYPE attribute of SPAN rule, defines
   token type from which default attributes are obtained for all tokens
   inside the SPAN. eg, if a rule delegates to the javascript mode, with a
   DELEGATE_TYPE of INLINE, and INLINE is defined as a light-gray background,
   all tokens in the JavaScript source that do not define a background color
   will be drawn with a light-gray background.
-- if last token of a line has a background color, remainder of line will
-  be drawn with that color
-- 'Invert Selection' command
-- after a VFSUpdate for a mode file is received, reload that mode automatically
-- after a VFSUpdate for a mode catalog is received, reload all modes
 - save markers when a buffer is closed, adding/removing markers shouldn't
   set the dirty flag
 - per-mode encodings and line separators, to optionally override those
   auto-detected when a buffer is loaded
 - they should be overridable on a global basis too
-- when loading a file: if the stream supports a mark, read first 16 bytes,
-  check for unicode byte order mark, push back, if one is found, set
-  encoding to Unicode automatically
-- handle missing modes more gracefully
-- better XMode entity handling (necessary for HTML mode changes described
-  above)
 - folding:
   - needs to be improved, but I haven't thought about it yet
-- plugin manager: show all dependencies, not just first-order ones
-- removing a plugin should offer to remove the ones that depend on it too
 
 + bugs:
 
+- how to record S+0-9?
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
@@ -164,3 +171,4 @@ TO DO
   - selected borders in list, tree, table wrong colors
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
+- editing on last line shouldn't cause scrolling

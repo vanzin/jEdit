@@ -330,8 +330,7 @@ public class GrabKeyDialog extends JDialog
 
 			if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				if(evt.getKeyChar() == '\0'
-					|| evt.getKeyChar() == '\b')
+				if(!Character.isLetterOrDigit(evt.getKeyChar()))
 					return;
 
 				keyString.append(evt.getKeyChar());
@@ -361,7 +360,6 @@ public class GrabKeyDialog extends JDialog
 					appendPlus = true;
 				}
 
-				// don't want Shift+'d' recorded as S+D
 				if(evt.isShiftDown())
 				{
 					keyString.append('S');
@@ -373,11 +371,14 @@ public class GrabKeyDialog extends JDialog
 
 				int keyCode = evt.getKeyCode();
 
-				if(keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z
-					&& !(evt.isAltDown() ^ evt.isControlDown())
-					&& !evt.isMetaDown())
+				if(((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
+					|| (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9))
+					&& !evt.isAltDown()
+					&& !evt.isControlDown()
+					&& !evt.isMetaDown()
+					&& !evt.isShiftDown())
 				{
-					// already handled by KEY_TYPED
+					// will be handled by KEY_TYPED
 					return;
 				}
 
