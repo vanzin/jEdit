@@ -227,7 +227,7 @@ public class DisplayManager
 	public final int getScreenLineCount(int line)
 	{
 		if(screenLineMgr.isScreenLineCountValid(line))
-			return lineMgr.getScreenLineCount(line);
+			return screenLineMgr.getScreenLineCount(line);
 		else
 		{
 			int newCount = textArea.chunkCache
@@ -590,23 +590,34 @@ public class DisplayManager
 	 */
 	void setScreenLineCount(int line, int count)
 	{
-		int oldCount = lineMgr.getScreenLineCount(line);
-		// still have to call this even if it equals the
-		// old one so that the offset manager sets the
+		int oldCount = screenLineMgr.getScreenLineCount(line);
+
+		// old one so that the screen line manager sets the
 		// validity flag!
+
 		screenLineMgr.setScreenLineCount(line,count);
-		// this notifies each display manager editing this
-		// buffer of the screen line count change
-		if(count != oldCount)
+
+		if(count == oldCount)
+			return;
+
+		screenLineMgr.setScreenLineCount(line,count);
+
+		if(!isLineVisible(line))
+			return;
+
+		if(firstLine.physicalLine >= line)
 		{
-			Iterator iter = ((List)bufferMap.get(buffer))
-				.iterator();
-			while(iter.hasNext())
+			if(firstLine.physicalLine == line)
+				firstLine.callChanged = true;
+			else
 			{
-				((DisplayManager)iter.next())._setScreenLineCount(
-					line,oldCount,count);
+				firstLine.scrollLine += (count - oldCount);
+				firstLine.callChanged = true;
 			}
 		}
+
+		scrollLineCount.scrollLine += (count - oldCount);
+		scrollLineCount.callChanged = true;
 	} //}}}
 
 	//{{{ updateWrapSettings() method
@@ -743,13 +754,18 @@ public class DisplayManager
 		_notifyScreenLineChanges();
 	} //}}}
 
+	//{{{ invalidateScreenLineCounts() method
+	void invalidateScreenLineCounts()
+	{
+		screenLineMgr.invalidateScreenLineCounts();
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
 	private boolean initialized;
 	private boolean inUse;
 	private Buffer buffer;
-	private LineManager lineMgr;
 	private ScreenLineManager screenLineMgr;
 	private JEditTextArea textArea;
 	private BufferChangeHandler bufferChangeHandler;
@@ -778,7 +794,6 @@ public class DisplayManager
 	private DisplayManager(Buffer buffer, JEditTextArea textArea)
 	{
 		this.buffer = buffer;
-		this.lineMgr = buffer._getLineManager();
 		this.screenLineMgr = new ScreenLineManager(this,buffer);
 		this.textArea = textArea;
 
@@ -992,7 +1007,7 @@ loop:		for(;;)
 			//XXX
 			if(!isLineVisible(i))
 			{
-				// important: not lineMgr.getScreenLineCount()
+				// important: not screenLineMgr.getScreenLineCount()
 				int screenLines = getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
@@ -1057,7 +1072,7 @@ loop:		for(;;)
 			i = getNextVisibleLine(i);
 		while(i != -1 && i <= end)
 		{
-			int screenLines = lineMgr.getScreenLineCount(i);
+			int screenLines = screenLineMgr.getScreenLineCount(i);
 			if(i < firstLine.physicalLine)
 			{
 				firstLine.scrollLine -= screenLines;
@@ -1121,34 +1136,11 @@ loop:		for(;;)
 				firstLine.physicalLine = getPrevVisibleLine(
 					firstLine.physicalLine);
 				firstLine.scrollLine -=
-					lineMgr.getScreenLineCount(
+					screenLineMgr.getScreenLineCount(
 					firstLine.physicalLine);
 			}
 			firstLine.callChanged = true;
 		}
-	} //}}}
-
-	//{{{ _setScreenLineCount() method
-	private void _setScreenLineCount(int line, int oldCount, int count)
-	{
-		screenLineMgr.setScreenLineCount(line,count);
-
-		if(!isLineVisible(line))
-			return;
-
-		if(firstLine.physicalLine >= line)
-		{
-			if(firstLine.physicalLine == line)
-				firstLine.callChanged = true;
-			else
-			{
-				firstLine.scrollLine += (count - oldCount);
-				firstLine.callChanged = true;
-			}
-		}
-
-		scrollLineCount.scrollLine += (count - oldCount);
-		scrollLineCount.callChanged = true;
 	} //}}}
 
 	//}}}
@@ -2002,7 +1994,7 @@ loop:		for(;;)
 						if(isLineVisible(i))
 						{
 							anchor.scrollLine -=
-								lineMgr
+								screenLineMgr
 								.getScreenLineCount(i);
 						}
 					}

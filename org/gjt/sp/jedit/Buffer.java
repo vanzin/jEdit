@@ -964,16 +964,6 @@ public class Buffer
 		}
 	} //}}}
 
-	//{{{ invalidateCachedScreenLineCounts() method
-	/**
-	 * Invalidates all cached screen line count information.
-	 * @since jEdit 4.2pre7.
-	 */
-	public void invalidateCachedScreenLineCounts()
-	{
-		lineMgr.invalidateScreenLineCounts();
-	} //}}}
-
 	//}}}
 
 	//{{{ Text getters and setters
@@ -3543,20 +3533,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public String toString()
 	{
 		return name + " (" + directory + ")";
-	} //}}}
-
-	//}}}
-
-	//{{{ Methods that really shouldn't be public...
-
-	//{{{ _getLineManager() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.2pre3
-	 */
-	public LineManager _getLineManager()
-	{
-		return lineMgr;
 	} //}}}
 
 	//}}}
