@@ -366,6 +366,13 @@ public class OffsetManager
 					lineInfo[i] &= ~VISIBLE_MASK;
 			}
 		}
+
+		Anchor anchor = anchors;
+		while(anchor != null)
+		{
+			anchor.reset();
+			anchor = anchor.next;
+		}
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method

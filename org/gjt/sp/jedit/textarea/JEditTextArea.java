@@ -126,6 +126,16 @@ public class JEditTextArea extends JComponent
 		focusedComponent = this;
 	} //}}}
 
+	//{{{ dispose() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public void dispose()
+	{
+		displayManager.dispose();
+	} //}}}
+
 	//{{{ Getters and setters
 
 	//{{{ getPainter() method
@@ -338,17 +348,17 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setFirstLine(int firstLine)
 	{
+		//{{{ ensure we don't have empty space at the bottom or top, etc
+		int max = displayManager.getScrollLineCount() - visibleLines;
+		if(firstLine > max)
+			firstLine = max;
+		if(firstLine < 0)
+			firstLine = 0;
+		//}}}
+
 		if(firstLine == displayManager.getFirstLine())
 			return;
 
-		_setFirstLine(firstLine);
-
-		view.synchroScrollVertical(this,firstLine);
-	} //}}}
-
-	//{{{ _setFirstLine() method
-	public void _setFirstLine(int firstLine)
-	{
 		displayManager.setFirstLine(firstLine);
 		chunkCache.setFirstLine(firstLine,displayManager.getFirstPhysicalLine());
 
@@ -359,19 +369,7 @@ public class JEditTextArea extends JComponent
 
 		repaint();
 
-		if(firstLine != vertical.getValue())
-			updateScrollBars();
-
 		fireScrollEvent(true);
-	} //}}}
-
-	//{{{ getVisibleLines() method
-	/**
-	 * Returns the number of lines visible in this text area.
-	 */
-	public final int getVisibleLines()
-	{
-		return visibleLines;
 	} //}}}
 
 	//{{{ getFirstPhysicalLine() method
@@ -384,6 +382,47 @@ public class JEditTextArea extends JComponent
 		return displayManager.getFirstPhysicalLine();
 	} //}}}
 
+	//{{{ setFirstPhysicalLine() method
+	/**
+	 * Sets the vertical scroll bar position.
+	 * @param physFirstLine The first physical line to display
+	 * @since jEdit 4.2pre1
+	 */
+	public void setFirstPhysicalLine(int physFirstLine)
+	{
+		//{{{ ensure we don't have empty space at the bottom or top, etc
+		int screenLineCount = 0;
+		int physicalLine = buffer.getLineCount() - 1;
+		for(;;)
+		{
+			screenLineCount += displayManager.getScreenLineCount(physicalLine);
+			if(screenLineCount >= visibleLines)
+				break;
+			physicalLine = displayManager.getPrevVisibleLine(physicalLine);
+			if(physicalLine == -1)
+				break;
+		}
+
+		if(physFirstLine > physicalLine && physicalLine != -1)
+			physFirstLine = physicalLine;
+		//}}}
+
+		if(physFirstLine == displayManager.getFirstPhysicalLine())
+			return;
+
+		displayManager.setFirstPhysicalLine(physFirstLine);
+		chunkCache.setFirstLine(displayManager.getFirstLine(),physFirstLine);
+
+		maxHorizontalScrollWidth = 0;
+
+		if(buffer.isLoaded())
+			recalculateLastPhysicalLine();
+
+		repaint();
+
+		fireScrollEvent(true);
+	} //}}}
+
 	//{{{ getLastPhysicalLine() method
 	/**
 	 * Returns the last visible physical line index.
@@ -392,6 +431,15 @@ public class JEditTextArea extends JComponent
 	public final int getLastPhysicalLine()
 	{
 		return physLastLine;
+	} //}}}
+
+	//{{{ getVisibleLines() method
+	/**
+	 * Returns the number of lines visible in this text area.
+	 */
+	public final int getVisibleLines()
+	{
+		return visibleLines;
 	} //}}}
 
 	//{{{ getHorizontalOffset() method
@@ -413,64 +461,13 @@ public class JEditTextArea extends JComponent
 	{
 		if(horizontalOffset == this.horizontalOffset)
 			return;
-		_setHorizontalOffset(horizontalOffset);
 
-		view.synchroScrollHorizontal(this,horizontalOffset);
-	} //}}}
-
-	//{{{ _setHorizontalOffset() method
-	public void _setHorizontalOffset(int horizontalOffset)
-	{
 		this.horizontalOffset = horizontalOffset;
 		if(horizontalOffset != horizontal.getValue())
 			updateScrollBars();
 		painter.repaint();
 
 		fireScrollEvent(false);
-	} //}}}
-
-	//{{{ updateScrollBars() method
-	/**
-	 * Updates the state of the scroll bars. This should be called
-	 * if the number of lines in the buffer changes, or when the
-	 * size of the text are changes.
-	 */
-	public void updateScrollBars()
-	{
-		if(vertical != null && visibleLines != 0)
-		{
-			// don't display stuff past the end of the buffer if
-			// we can help it
-			int lineCount = displayManager.getScrollLineCount();
-			int firstLine = displayManager.getFirstLine();
-
-			if(lineCount < firstLine + visibleLines)
-			{
-				// this will call updateScrollBars(), so
-				// just return...
-				int newFirstLine = Math.max(0,lineCount - visibleLines);
-				if(newFirstLine != firstLine)
-				{
-					setFirstLine(newFirstLine);
-					return;
-				}
-			}
-
-			vertical.setValues(firstLine,visibleLines,0,lineCount);
-			vertical.setUnitIncrement(2);
-			vertical.setBlockIncrement(visibleLines);
-		}
-
-		int width = painter.getWidth();
-		if(horizontal != null && width != 0)
-		{
-			maxHorizontalScrollWidth = 0;
-			painter.repaint();
-
-			horizontal.setUnitIncrement(painter.getFontMetrics()
-				.charWidth('w'));
-			horizontal.setBlockIncrement(width / 2);
-		}
 	} //}}}
 
 	//{{{ scrollUpLine() method
@@ -4950,6 +4947,38 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		painter.repaint(); */
 	} //}}}
 
+	//{{{ updateScrollBars() method
+	/**
+	 * Updates the state of the scroll bars. This should be called
+	 * if the number of lines in the buffer changes, or when the
+	 * size of the text are changes.
+	 */
+	void updateScrollBars()
+	{
+		if(vertical != null && visibleLines != 0)
+		{
+			// don't display stuff past the end of the buffer if
+			// we can help it
+			int lineCount = displayManager.getScrollLineCount();
+			int firstLine = displayManager.getFirstLine();
+
+			vertical.setValues(firstLine,visibleLines,0,lineCount);
+			vertical.setUnitIncrement(2);
+			vertical.setBlockIncrement(visibleLines);
+		}
+
+		int width = painter.getWidth();
+		if(horizontal != null && width != 0)
+		{
+			maxHorizontalScrollWidth = 0;
+			painter.repaint();
+
+			horizontal.setUnitIncrement(painter.getFontMetrics()
+				.charWidth('w'));
+			horizontal.setBlockIncrement(width / 2);
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -5652,10 +5681,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int delayedRepaintStart;
 		int delayedRepaintEnd;
 		boolean delayedRecalculateLastPhysicalLine;
-		// if changes are being made above the first line, we don't want
-		// them to scroll us down or up. so we store the first line
-		// position at the start of the transaction.
-		Position holdPosition;
 
 		//{{{ contentInserted() method
 		public void contentInserted(Buffer buffer, int startLine, int start,
@@ -5812,12 +5837,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				moveCaretPosition(caret);
 			}
 
-			if(getFirstLine() != oldFirstLine)
-			{
-				// so that transactionComplete() doesn't scroll
-				holdPosition = null;
-			}
-
 			// ... otherwise, it will be called by the buffer
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
@@ -5829,15 +5848,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(delayedUpdate)
 			{
-				//chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
-
-				/* if(holdPosition != null)
-				{
-					setFirstLine(physicalToVirtual(
-						getBuffer().getLineOfOffset(
-						holdPosition.getOffset())));
-					holdPosition = null;
-				} */
+				chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
 
 				if(delayedMultilineUpdate)
 				{
@@ -5885,7 +5896,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
-			/* if(numLines != 0)
+			if(numLines != 0)
 				delayedMultilineUpdate = true;
 
 			if(!delayedUpdate)
@@ -5903,42 +5914,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					delayedRepaintEnd,
 					startLine);
 			}
-
-			// this is less than ideal... but it fixes the issue
-			// mentioned in the holdPosition declaration comment
-			// much better than the old fix, which didn't work
-			// with folding.
-			if(holdPosition != null)
-				return;
-			if(startLine < getFirstPhysicalLine())
-			{
-				if(startLine < displayManager.getFirstVisibleLine())
-				{
-					// need to update these two!
-					physFirstLine = virtualToPhysical(firstLine);
-					delayedRecalculateLastPhysicalLine = true;
-					return;
-				}
-
-				int virtStartLine = physicalToVirtual(startLine);
-
-				int pos;
-
-				int virtLine = getFirstLine() + physicalToVirtual(
-					Math.max(0,startLine + numLines))
-					- virtStartLine;
-				if(virtLine < 0)
-					pos = 0;
-				else if(virtLine >= getVirtualLineCount())
-					pos = getBufferLength();
-				else
-				{
-					pos = buffer.getLineStartOffset(
-						virtualToPhysical(virtLine));
-				}
-
-				holdPosition = buffer.createPosition(pos);
-			} */
 		} //}}}
 	} //}}}
 

@@ -3596,7 +3596,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 			offsetMgr.lineInfoChangedFrom(0);
 
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
-			offsetMgr.expandFolds(collapseFolds);
+			if(collapseFolds == 0)
+			{
+				// all visible by default after load!
+			}
+			else
+				offsetMgr.expandFolds(collapseFolds);
 		}
 
 		// Create marker positions
