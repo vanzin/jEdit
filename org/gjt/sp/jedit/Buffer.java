@@ -400,6 +400,8 @@ public class Buffer implements EBComponent
 					{
 						writeLock();
 
+						undoMgr.clear();
+
 						contentMgr.insert(0,seg.toString());
 
 						contentInserted(0,seg.count,
@@ -1289,6 +1291,9 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, String str)
 	{
+		if(str == null || str.length() == 0)
+			return;
+
 		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
@@ -1309,6 +1314,8 @@ public class Buffer implements EBComponent
 					integerArray.add(i);
 			}
 
+			if(!getFlag(UNDO_IN_PROGRESS))
+				undoMgr.contentInserted(offset,str.length(),str);
 			contentInserted(offset,str.length(),integerArray);
 		}
 		finally
@@ -1326,6 +1333,9 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, Segment seg)
 	{
+		if(seg.count == 0)
+			return;
+
 		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
@@ -1346,6 +1356,8 @@ public class Buffer implements EBComponent
 					integerArray.add(i);
 			}
 
+			if(!getFlag(UNDO_IN_PROGRESS))
+				undoMgr.contentInserted(offset,seg.count,seg.toString());
 			contentInserted(offset,seg.count,integerArray);
 		}
 		finally
@@ -1362,6 +1374,9 @@ public class Buffer implements EBComponent
 	 */
 	public void remove(int offset, int length)
 	{
+		if(length == 0)
+			return;
+
 		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
@@ -1398,6 +1413,9 @@ public class Buffer implements EBComponent
 					}
 				}
 			}
+
+			if(!getFlag(UNDO_IN_PROGRESS))
+				undoMgr.contentRemoved(offset,length,seg.toString());
 
 			contentMgr.remove(offset,length);
 
@@ -1556,34 +1574,33 @@ public class Buffer implements EBComponent
 	/**
 	 * Undoes the most recent edit.
 	 *
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 4.0pre1
 	 */
-	public void undo()
+	public void undo(JEditTextArea textArea)
 	{
-		/* if(undo == null)
+		if(undoMgr == null)
 			return;
 
 		if(!isEditable())
 		{
-			Toolkit.getDefaultToolkit().beep();
+			textArea.getToolkit().beep();
 			return;
 		}
 
 		try
 		{
+			writeLock();
+
 			setFlag(UNDO_IN_PROGRESS,true);
-			undo.undo();
-		}
-		catch(CannotUndoException cu)
-		{
-			Log.log(Log.DEBUG,this,cu);
-			Toolkit.getDefaultToolkit().beep();
-			return;
+			if(!undoMgr.undo(textArea))
+				textArea.getToolkit().beep();
 		}
 		finally
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
-		} */
+
+			writeUnlock();
+		}
 	} //}}}
 
 	//{{{ redo() method
@@ -1593,9 +1610,9 @@ public class Buffer implements EBComponent
 	 *
 	 * @since jEdit 2.7pre2
 	 */
-	public void redo()
+	public void redo(JEditTextArea textArea)
 	{
-		/* if(undo == null)
+		if(undoMgr == null)
 			return;
 
 		if(!isEditable())
@@ -1606,53 +1623,19 @@ public class Buffer implements EBComponent
 
 		try
 		{
+			writeLock();
+
 			setFlag(UNDO_IN_PROGRESS,true);
-			undo.redo();
-		}
-		catch(CannotRedoException cr)
-		{
-			Log.log(Log.DEBUG,this,cr);
-			Toolkit.getDefaultToolkit().beep();
-			return;
+			if(!undoMgr.redo(textArea))
+				textArea.getToolkit().beep();
 		}
 		finally
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
-		} */
-	} //}}}
 
-	//{{{ addUndoableEdit() method
-	/**
-	 * Adds an undoable edit to this document. This is non-trivial
-	 * mainly because the text area adds undoable edits every time
-	 * the caret is moved. First of all, undos are ignored while
-	 * an undo is already in progress. This is no problem with Swing
-	 * Document undos, but caret undos are fired all the time and
-	 * this needs to be done. Also, insignificant undos are ignored
-	 * if the redo queue is non-empty to stop something like a caret
-	 * move from flushing all redos.
-	 * @param edit The undoable edit
-	 *
-	 * @since jEdit 2.2pre1
-	 */
-	/*public void addUndoableEdit(UndoableEdit edit)
-	{
-		if(undo == null || getFlag(UNDO_IN_PROGRESS) || getFlag(LOADING))
-			return;
-
-		// Ignore insificant edits if the redo queue is non-empty.
-		// This stops caret movement from killing redos.
-		if(undo.canRedo() && !edit.isSignificant())
-			return;
-
-		if(compoundEdit != null)
-		{
-			compoundEditNonEmpty = true;
-			compoundEdit.addEdit(edit);
+			writeUnlock();
 		}
-		else
-			undo.addEdit(edit);
-	}*/ //}}}
+	} //}}}
 
 	//{{{ beginCompoundEdit() method
 	/**
@@ -1668,15 +1651,19 @@ public class Buffer implements EBComponent
 	 */
 	public void beginCompoundEdit()
 	{
-		/* if(getFlag(TEMPORARY))
+		if(getFlag(TEMPORARY))
 			return;
 
-		compoundEditCount++;
-		if(compoundEdit == null)
+		try
 		{
-			compoundEditNonEmpty = false;
-			compoundEdit = new CompoundEdit();
-		} */
+			writeLock();
+
+			undoMgr.beginCompoundEdit();
+		}
+		finally
+		{
+			writeUnlock();
+		}
 	} //}}}
 
 	//{{{ endCompoundEdit() method
@@ -1689,20 +1676,19 @@ public class Buffer implements EBComponent
 	 */
 	public void endCompoundEdit()
 	{
-		/* if(getFlag(TEMPORARY))
+		if(getFlag(TEMPORARY))
 			return;
 
-		if(compoundEditCount == 0)
-			return;
-
-		compoundEditCount--;
-		if(compoundEditCount == 0)
+		try
 		{
-			compoundEdit.end();
-			if(compoundEditNonEmpty && compoundEdit.canUndo())
-				undo.addEdit(compoundEdit);
-			compoundEdit = null;
-		} */
+			writeLock();
+
+			undoMgr.endCompoundEdit();
+		}
+		finally
+		{
+			writeUnlock();
+		}
 	}//}}}
 
 	//{{{ insideCompoundEdit() method
@@ -1712,7 +1698,7 @@ public class Buffer implements EBComponent
 	 */
 	public boolean insideCompoundEdit()
 	{
-		return false; //compoundEdit != null;
+		return undoMgr.insideCompoundEdit();
 	} //}}}
 
 	//}}}
@@ -2751,7 +2737,7 @@ public class Buffer implements EBComponent
 					changed = true;
 				}
 
-				if(changed && !inInsert)
+				if(changed && !getFlag(INSIDE_INSERT))
 					fireFoldLevelChanged(start,line);
 
 				return newFoldLevel;
@@ -3143,6 +3129,7 @@ public class Buffer implements EBComponent
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
 		integerArray = new IntegerArray();
+		undoMgr = new UndoManager(this);
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
@@ -3242,6 +3229,7 @@ public class Buffer implements EBComponent
 	private static final int READ_ONLY = 7;
 	private static final int UNDO_IN_PROGRESS = 8;
 	private static final int TEMPORARY = 9;
+	private static final int INSIDE_INSERT = 10;
 	//}}}
 
 	private int flags;
@@ -3250,20 +3238,20 @@ public class Buffer implements EBComponent
 
 	//{{{ Instance variables
 
-	private long modTime;
-	private File file;
 	private VFS vfs;
-	private File autosaveFile;
 	private String path;
 	private String name;
+	private File file;
+	private File autosaveFile;
+	private long modTime;
 	private Mode mode;
-
 	private Hashtable properties;
+
 	private ReadWriteLock lock;
-	private boolean inInsert;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 	private IntegerArray integerArray;
+	private UndoManager undoMgr;
 
 	private Vector markers;
 
@@ -3475,7 +3463,7 @@ public class Buffer implements EBComponent
 	{
 		try
 		{
-			inInsert = true;
+			setFlag(INSIDE_INSERT,true);
 
 			int startLine = offsetMgr.getLineOfOffset(offset);
 			int numLines = endOffsets.getSize();
@@ -3505,7 +3493,7 @@ public class Buffer implements EBComponent
 		}
 		finally
 		{
-			inInsert = false;
+			setFlag(INSIDE_INSERT,false);
 		}
 	} //}}}
 
