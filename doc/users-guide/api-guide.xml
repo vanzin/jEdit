@@ -2633,6 +2633,7 @@ line count of the buffer represented by the gutter's display.  The
   <funcdef>public static String <function>format</function></funcdef>
   <paramdef>String <parameter>text</parameter></paramdef>
   <paramdef>int <parameter>maxLineLength</parameter></paramdef>
+  <paramdef>int <parameter>tabSize</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>

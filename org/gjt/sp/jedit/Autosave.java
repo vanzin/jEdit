@@ -69,7 +69,7 @@ class Autosave implements ActionListener
 		int usedMemory = (totalMemory - freeMemory);
 
 		Log.log(Log.DEBUG,this,"Java heap: " + usedMemory + "Kb / "
-			+ totalMemory + "Kb, " + (totalMemory * 100 / usedMemory)
+			+ totalMemory + "Kb, " + (usedMemory * 100 / totalMemory)
 			+ "%");
 
 		// save list of open files

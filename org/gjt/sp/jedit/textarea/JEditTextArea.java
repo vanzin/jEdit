@@ -5845,7 +5845,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	/**
 	 * Note that in this class we take great care to defer complicated
 	 * calculations to the end of the current transaction if the buffer
-	 * informs us an involved edit is in progress
+	 * informs us a compound edit is in progress
 	 * (<code>isTransactionInProgress()</code>).
 	 *
 	 * This greatly speeds up replace all for example, by only doing certain

@@ -488,19 +488,19 @@ public class DockableWindowManager extends JPanel
 		if(!view.isPlainView())
 		{
 			String lastTop = jEdit.getProperty("view.dock.top.last");
-			if(lastTop != null)
+			if(lastTop != null && lastTop.length() != 0)
 				showDockableWindow(lastTop);
 
 			String lastLeft = jEdit.getProperty("view.dock.left.last");
-			if(lastLeft != null)
+			if(lastLeft != null && lastLeft.length() != 0)
 				showDockableWindow(lastLeft);
 
 			String lastBottom = jEdit.getProperty("view.dock.bottom.last");
-			if(lastBottom != null)
+			if(lastBottom != null && lastBottom.length() != 0)
 				showDockableWindow(lastBottom);
 
 			String lastRight = jEdit.getProperty("view.dock.right.last");
-			if(lastRight != null)
+			if(lastRight != null && lastRight.length() != 0)
 				showDockableWindow(lastRight);
 		}
 	} //}}}
