@@ -3,32 +3,18 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- find next over directory
+
 - metal fonts in jdk 1.5.0beta2
 - drag and drop, not at caret position?
-
-[error] Buffer: Exception while sending buffer event to org.gjt.sp.jedit.textare
-a.DisplayManager$BufferChangeHandler@6be4cc :
-[error] Buffer: java.lang.ArrayIndexOutOfBoundsException: Array index out of ran
-ge: 0
-[error] Buffer:  at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkC
-ache.java:539)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.
-java:248)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.ChunkCache.getScreenLineOfOffset(C
-hunkCache.java:70)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.DisplayManager$BufferChangeHandler
-.transactionComplete(DisplayManager.java:1792)
-[error] Buffer:  at org.gjt.sp.jedit.Buffer.fireTransactionComplete(Buffer.java:
-4304)
-[error] Buffer:  at org.gjt.sp.jedit.Buffer.endCompoundEdit(Buffer.java:1398)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.JEditTextArea.deleteLine(JEditText
-Area.java:3689)
-[error] Buffer:  at sun.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
-[error] Buffer:  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMe
-thodAccessorImpl.java:25)
-[error] Buffer:  at java.lang.reflect.Method.invoke(Method.java:324)
-[error] Buffer:  at bsh.Reflect.invokeOnMethod(Reflect.java:149)
-[error] Buffer:  at bsh.Reflect.invokeObjectMethod(Reflect.java:81)
+[error] AWT-EventQueue-0: java.lang.ArrayIndexOutOfBoundsException: -1
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.fvmget(DisplayManager.java:739)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.getNextVisibleLine(DisplayManager.java:164)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager$ScrollLineCount.reset(DisplayManager.java:1115)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager._notifyScreenLineChanges(DisplayManager.java:656)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.init(DisplayManager.java:578)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.setBuffer(JEditTextArea.java:304)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.EditPane.setBuffer(EditPane.java:105)
 
 - sidekick out of memory error!
 [error] ChunkCache: BUG: skew=1,out.size()=0
