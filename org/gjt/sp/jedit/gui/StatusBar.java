@@ -62,7 +62,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
-		setBorder(new CompoundBorder(new EmptyBorder(10,0,0,0),
+		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,0),
 			UIManager.getBorder("TextField.border")));
 
 		this.view = view;
@@ -76,24 +76,24 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		caretStatus.addMouseListener(mouseHandler);
 		panel.add(BorderLayout.WEST,caretStatus);
 
-		message = new JLabel();
+		message = new ToolTipLabel();
 		setMessageComponent(message);
 
 		Box box = new Box(BoxLayout.X_AXIS);
-		mode = new JLabel();
+		mode = new ToolTipLabel();
 		mode.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
 		mode.addMouseListener(mouseHandler);
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(4));
 
-		multiSelect = new JLabel();
+		multiSelect = new ToolTipLabel();
 		multiSelect.setHorizontalAlignment(SwingConstants.CENTER);
 		multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 		multiSelect.addMouseListener(mouseHandler);
 
 		box.add(multiSelect);
 
-		overwrite = new JLabel();
+		overwrite = new ToolTipLabel();
 		overwrite.setHorizontalAlignment(SwingConstants.CENTER);
 		overwrite.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
 		overwrite.addMouseListener(mouseHandler);
@@ -354,12 +354,28 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		}
 	} //}}}
 
+	//{{{ ToolTipLabel class
+	class ToolTipLabel extends JLabel
+	{
+		//{{{ getToolTipLocation() method
+		public Point getToolTipLocation(MouseEvent event)
+		{
+			return new Point(event.getX(),-20);
+		} //}}}
+	} //}}}
+
 	//{{{ VICaretStatus class
 	class VICaretStatus extends JComponent
 	{
 		//{{{ VICaretStatus constructor
 		public VICaretStatus()
 		{
+		} //}}}
+
+		//{{{ getToolTipLocation() method
+		public Point getToolTipLocation(MouseEvent event)
+		{
+			return new Point(event.getX(),-20);
 		} //}}}
 
 		//{{{ paintComponent() method
