@@ -543,10 +543,9 @@ public class DisplayManager
 	{
 		fvmreset();
 		screenLineMgr.reset();
+		textArea.propertiesChanged();
 
-		firstLine.reset();
-		scrollLineCount.reset();
-		clearNotifyFlags();
+		init();
 
 		int collapseFolds = buffer.getIntegerProperty(
 			"collapseFolds",0);

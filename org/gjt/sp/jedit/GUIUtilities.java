@@ -945,7 +945,15 @@ public class GUIUtilities
 		int extState = jEdit.getIntegerProperty(name + ".extendedState", 0);
 
 		Rectangle desired = new Rectangle(x,y,width,height);
-		adjustForScreenBounds(desired);
+		try
+		{
+			adjustForScreenBounds(desired);
+		}
+		catch(Exception e)
+		{
+			/* Workaround for OS X bug. */
+			Log.log(Log.ERROR,GUIUtilities.class,e);
+		}
 
 		if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 			new UnixWorkaround(win,name,desired,extState);
