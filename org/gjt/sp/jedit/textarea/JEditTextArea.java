@@ -45,9 +45,15 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * jEdit's text component.
+ * jEdit's text component.<p>
+ *
+ * Unlike most other text editors, the selection API permits selection and
+ * concurrent manipulation of multiple, non-contiguous regions of text.
+ * Methods in this class that deal with selecting text rely upon classes derived
+ * the {@link Selection} class.
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class JEditTextArea extends JComponent
@@ -319,7 +325,8 @@ public class JEditTextArea extends JComponent
 	//{{{ getFirstLine() method
 	/**
 	 * Returns the line displayed at the text area's origin. This is
-	 * a virtual, not a physical, line number.
+	 * a virtual, not a physical, line number. See
+	 * {@link #virtualToPhysical()}.
 	 */
 	public final int getFirstLine()
 	{
@@ -328,8 +335,10 @@ public class JEditTextArea extends JComponent
 
 	//{{{ setFirstLine() method
 	/**
-	 * Sets the line displayed at the text area's origin. This is
-	 * a virtual, not a physical, line number.
+	 * Sets the line displayed at the text area's origin.
+	 *
+	 * @param firstLine A virtual, not a physical, line number. See
+	 * {@link #physicalToVirtual()}.
 	 */
 	public void setFirstLine(int firstLine)
 	{
@@ -1587,8 +1596,8 @@ forward_scan:		do
 
 	//{{{ getSelectionCount() method
 	/**
-	 * Returns the number of selections. This is primarily for use by the
-	 * the status bar.
+	 * Returns the number of selections. This can be used to test
+	 * for the existence of selections.
 	 * @since jEdit 3.2pre2
 	 */
 	public int getSelectionCount()
@@ -1619,7 +1628,8 @@ forward_scan:		do
 
 	//{{{ setSelection() method
 	/**
-	 * Sets the selection.
+	 * Sets the selection. Nested and overlapping selections are merged
+	 * where possible.
 	 * @param selection The new selection
 	 * since jEdit 3.2pre1
 	 */
@@ -1641,7 +1651,8 @@ forward_scan:		do
 
 	//{{{ setSelection() method
 	/**
-	 * Sets the selection.
+	 * Sets the selection. Nested and overlapping selections are merged
+	 * where possible.
 	 * @param selection The new selection
 	 * since jEdit 3.2pre1
 	 */
@@ -1658,7 +1669,8 @@ forward_scan:		do
 
 	//{{{ addToSelection() method
 	/**
-	 * Adds to the selection.
+	 * Adds to the selection. Nested and overlapping selections are merged
+	 * where possible.
 	 * @param selection The new selection
 	 * since jEdit 3.2pre1
 	 */
@@ -1678,7 +1690,8 @@ forward_scan:		do
 
 	//{{{ addToSelection() method
 	/**
-	 * Adds to the selection.
+	 * Adds to the selection. Nested and overlapping selections are merged
+	 * where possible.
 	 * @param selection The new selection
 	 * since jEdit 3.2pre1
 	 */
@@ -1694,7 +1707,7 @@ forward_scan:		do
 
 	//{{{ getSelectionAtOffset() method
 	/**
-	 * Returns the selection containing the specific offset, or null
+	 * Returns the selection containing the specific offset, or <code>null</code>
 	 * if there is no selection at that offset.
 	 * @param offset The offset
 	 * @since jEdit 3.2pre1
@@ -1969,9 +1982,14 @@ forward_scan:		do
 
 	//{{{ getSelectedLines() method
 	/**
-	 * Returns an array of all line numbers that contain a selection.
-	 * This array will also include the line number containing the
-	 * caret, for convinience.
+	 * Returns a sorted array of line numbers on which a selection or
+	 * selections are present.<p>
+	 *
+	 * This method is the most convenient way to iterate through selected
+	 * lines in a buffer. The line numbers in the array returned by this
+	 * method can be passed as a parameter to such methods as
+	 * {@link org.gjt.sp.jedit.Buffer#getLineText(int)}.
+	 *
 	 * @since jEdit 3.2pre1
 	 */
 	public int[] getSelectedLines()
@@ -2159,7 +2177,7 @@ forward_scan:		do
 
 	//{{{ getCaretPosition() method
 	/**
-	 * Returns the caret position.
+	 * Returns a zero-based index of the caret position.
 	 */
 	public int getCaretPosition()
 	{
@@ -3667,7 +3685,12 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ setMultipleSelectionEnabled() method
 	/**
-	 * Sets multiple selection.
+	 * Set multiple selection on or off according to the value of
+	 * <code>multi</code>. This only affects the ability to
+	 * make multiple selections in the user interface; macros and plugins
+	 * can manipulate them regardless of the setting of this flag. In fact,
+	 * in most cases, calling this method should not be necessary.
+	 *
 	 * @param multi Should multiple selection be enabled?
 	 * @since jEdit 3.2pre1
 	 */

@@ -256,7 +256,11 @@ public class View extends JFrame implements EBComponent
 
 	//{{{ showWaitCursor() method
 	/**
-	 * Shows the wait cursor and glass pane.
+	 * Shows the wait cursor. This method and
+	 * {@link #hideWaitCursor()} are implemented using a reference
+	 * count of requests for wait cursors, so that nested calls work
+	 * correctly; however, you should be careful to use these methods in
+	 * tandem.
 	 */
 	public synchronized void showWaitCursor()
 	{
@@ -276,7 +280,7 @@ public class View extends JFrame implements EBComponent
 
 	//{{{ hideWaitCursor() method
 	/**
-	 * Hides the wait cursor and glass pane.
+	 * Hides the wait cursor.
 	 */
 	public synchronized void hideWaitCursor()
 	{
@@ -312,7 +316,11 @@ public class View extends JFrame implements EBComponent
 
 	//{{{ getStatus() method
 	/**
-	 * Returns the status bar.
+	 * Returns the status bar. The
+	 * {@link org.gjt.sp.jedit.StatusBar#setMessage()} and
+	 * {@link org.gjt.sp.jedit.StatusBar#setMessageAndClear()} methods can
+	 * be called on the return value of this method to display status
+	 * information to the user.
 	 * @since jEdit 3.2pre2
 	 */
 	public StatusBar getStatus()

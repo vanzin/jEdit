@@ -41,7 +41,9 @@ import org.gjt.sp.util.*;
 //}}}
 
 /**
- * An in-memory copy of an open file.<p>
+ * A <code>Buffer</code> represents the contents of an open text
+ * file as it is maintained in the computer's memory (as opposed to
+ * how it may be stored on a disk).<p>
  *
  * In a BeanShell script, you can obtain the current buffer instance from the
  * <code>buffer</code> variable.<p>
@@ -132,7 +134,7 @@ public class Buffer implements EBComponent
 	//{{{ reload() method
 	/**
 	 * Reloads the buffer from disk, asking for confirmation if the buffer
-	 * is dirty.
+	 * has unsaved changes.
 	 * @param view The view
 	 * @since jEdit 2.7pre2
 	 */
@@ -683,7 +685,7 @@ public class Buffer implements EBComponent
 
 	//{{{ isNewFile() method
 	/**
-	 * Returns true if this file doesn't exist on disk.
+	 * Returns whether this buffer lacks a corresponding version on disk.
 	 */
 	public final boolean isNewFile()
 	{
@@ -713,8 +715,7 @@ public class Buffer implements EBComponent
 
 	//{{{ isDirty() method
 	/**
-	 * Returns true if this file has changed since last save, false
-	 * otherwise.
+	 * Returns whether there have been unsaved changes to this buffer.
 	 */
 	public final boolean isDirty()
 	{
@@ -1014,8 +1015,14 @@ public class Buffer implements EBComponent
 
 	//{{{ getLineText() method
 	/**
-	 * Copies the text on the specified line into a segment.
+	 * Returns the specified line in a <code>Segment</code>.<p>
+	 *
+	 * Using a <classname>Segment</classname> is generally more
+	 * efficient than using a <classname>String</classname> because it
+	 * results in less memory allocation and array copying.<p>
+	 *
 	 * This method is thread-safe.
+	 *
 	 * @param lineIndex The line
 	 * @since jEdit 4.0pre1
 	 */
@@ -1060,7 +1067,14 @@ public class Buffer implements EBComponent
 
 	//{{{ getText() method
 	/**
-	 * Returns the specified text range.
+	 * Returns the specified text range in a <code>Segment</code>.<p>
+	 *
+	 * Using a <classname>Segment</classname> is generally more
+	 * efficient than using a <classname>String</classname> because it
+	 * results in less memory allocation and array copying.<p>
+	 *
+	 * This method is thread-safe.
+	 *
 	 * @param start The start offset
 	 * @param length The number of characters to get
 	 * @param seg The segment to copy the text to
@@ -1484,7 +1498,7 @@ public class Buffer implements EBComponent
 	//{{{ getTabSize() method
 	/**
 	 * Returns the tab size used in this buffer. This is equivalent
-	 * to calling getProperty("tabSize").
+	 * to calling <code>getProperty("tabSize")</code>.
 	 */
 	public int getTabSize()
 	{
@@ -1494,7 +1508,7 @@ public class Buffer implements EBComponent
 	//{{{ getIndentSize() method
 	/**
 	 * Returns the indent size used in this buffer. This is equivalent
-	 * to calling getProperty("indentSize").
+	 * to calling <code>getProperty("indentSize")</code>.
 	 * @since jEdit 2.7pre1
 	 */
 	public final int getIndentSize()
@@ -1504,7 +1518,21 @@ public class Buffer implements EBComponent
 
 	//{{{ getProperty() method
 	/**
-	 * Returns the value of a buffer-local property.
+	 * Returns the value of a buffer-local property.<p>
+	 *
+	 * Using this method is generally discouraged, because it returns an
+	 * <code>Object</code> which must be cast to another type
+	 * in order to be useful, and this can cause problems if the object
+	 * is of a different type than what the caller expects.<p>
+	 *
+	 * The following methods should be used instead:
+	 * <ul>
+	 * <li>{@link #getStringProperty(String)}</li>
+	 * <li>{@link #getBooleanProperty(String)}</li>
+	 * <li>{@link #getIntegerProperty(String,int)}</li>
+	 * <li>{@link #getRegexpProperty(String)}</li>
+	 * </ul>
+	 *
 	 * @param name The property name. For backwards compatibility, this
 	 * is an <code>Object</code>, not a <code>String</code>.
 	 */
@@ -2760,7 +2788,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getFile() method
 	/**
-	 * @deprecated Do not call this method, use <code>getPath()</code>
+	 * @deprecated Do not call this method, use {@link #getPath()}
 	 * instead.
 	 */
 	public final File getFile()

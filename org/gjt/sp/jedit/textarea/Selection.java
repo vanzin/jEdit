@@ -29,8 +29,17 @@ import org.gjt.sp.jedit.MiscUtilities;
 //}}}
 
 /**
- * An interface representing a portion of the current selection.
+ * An abstract class that holds data on a region of selected text.
+ * As an abstract class, it cannot be used
+ * directly, but instead serves as a parent class for two specific types
+ * of selection structures:
+ * <ul>
+ * <li>{@link Selection.Range} - represents an ordinary range of selected text.</li>
+ * <li>{@link Selection.Rect} - represents a rectangular selection.</li>
+ * </ul>
+ *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  * @since jEdit 3.2pre1
  */
@@ -56,8 +65,9 @@ public abstract class Selection implements Cloneable
 
 	//{{{ getStart() method
 	/**
-	 * Returns the start offset of this selection on the specified
-	 * line.
+	 * Returns the beginning of the portion of the selection
+	 * falling on the specified line. Used to manipulate
+         * selection text on a line-by-line basis.
 	 * @param buffer The buffer
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
@@ -67,8 +77,9 @@ public abstract class Selection implements Cloneable
 
 	//{{{ getEnd() method
 	/**
-	 * Returns the end offset of this selection on the specified
-	 * line.
+	 * Returns the end of the portion of the selection
+	 * falling on the specified line. Used to manipulate
+         * selection text on a line-by-line basis.
 	 * @param buffer The buffer
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
