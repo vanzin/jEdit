@@ -101,6 +101,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 	private JList registerList;
 	private JTextArea contentTextArea;
 	private View view;
+	private boolean editing;
 	//}}}
 
 	//{{{ refreshList
@@ -152,12 +153,16 @@ public class RegisterViewer extends JPanel implements EBComponent
 		else if (o instanceof Character)
 		{
 			Registers.Register reg = Registers.getRegister(((Character)o).charValue());
-			contentTextArea.setText(reg.toString());
+			if(!editing)
+				contentTextArea.setText(reg.toString());
 			contentTextArea.setEditable(true);
 		}
 		else
-			contentTextArea.setText("");
+		{
+			if(!editing)
+				contentTextArea.setText("");
 			contentTextArea.setEditable(false);
+		}
 
 		contentTextArea.setCaretPosition(0);
 	}//}}}
@@ -257,20 +262,33 @@ public class RegisterViewer extends JPanel implements EBComponent
 	{
 		public void changedUpdate(DocumentEvent e)
 		{
-			updateRegister();
+			updateRegisterSafely();
 		}
 
 		public void insertUpdate(DocumentEvent e)
 		{
-			updateRegister();
+			updateRegisterSafely();
 		}
 
 		public void removeUpdate(DocumentEvent e)
 		{
-			updateRegister();
+			updateRegisterSafely();
 		}
 
-		public void updateRegister()
+		private void updateRegisterSafely()
+		{
+			try
+			{
+				editing = true;
+				updateRegister();
+			}
+			finally
+			{
+				editing = false;
+			}
+		}
+		
+		private void updateRegister()
 		{
 			Object value = registerList.getSelectedValue();
 			if(!(value instanceof Character))
