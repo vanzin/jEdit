@@ -30,7 +30,7 @@ void findNextOccurrence()
 {
 	jEdit.setTemporaryProperty("temp.findXXX.type", "next");
 
-	searchMacro = Macros.getMacro("Search/Find_occurrence");
+	searchMacro = Macros.getMacro("Search/Find_Occurrence");
 
 	if(searchMacro == null)
 		Macros.message(view, "Cannot find search macro.");
