@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.util.WorkRequest;
-import org.gjt.sp.util.WorkThread;
+import org.gjt.sp.util.*;
 //}}}
 
 /**
@@ -170,6 +169,7 @@ class BrowserIORequest extends WorkRequest
 		catch(IOException io)
 		{
 			setAbortable(false);
+			Log.log(Log.ERROR,this,io);
 			String[] pp = { io.toString() };
 			VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 		}
@@ -185,6 +185,7 @@ class BrowserIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
@@ -214,6 +215,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
@@ -229,6 +232,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
@@ -263,6 +268,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
@@ -278,6 +285,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
@@ -302,6 +311,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				args[0] = io.toString();
 				VFSManager.error(browser,path1,"ioerror",args);
 			}
@@ -317,6 +328,8 @@ class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
+				setAbortable(false);
+				Log.log(Log.ERROR,this,io);
 				String[] args = { io.toString() };
 				VFSManager.error(browser,path1,"ioerror",args);
 			}
