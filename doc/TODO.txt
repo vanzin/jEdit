@@ -225,7 +225,6 @@ TO DO
 - tabbing to text area fails
 - zlib decompression errors in plugin manager
 - failed saves should not clear the dirty flag
-- see if new beanshell fixes trailing \n bug
 - get rid of final blank page of user's guide
 - aborts not always fired
 - macro guide: JOptionPane not a good idea for getting user input?
