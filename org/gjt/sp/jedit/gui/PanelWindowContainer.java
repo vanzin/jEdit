@@ -200,8 +200,17 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ showMostRecent() method
 	public void showMostRecent()
 	{
-		if(mostRecent == null)
+		if(dockables.size() == 0)
+		{
 			Toolkit.getDefaultToolkit().beep();
+			return;
+		}
+
+		if(mostRecent == null)
+		{
+			mostRecent = ((DockableWindowManager.Entry)
+				dockables.get(0)).factory.name;
+		}
 
 		wm.showDockableWindow(mostRecent);
 	} //}}}
