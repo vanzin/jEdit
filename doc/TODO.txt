@@ -1,6 +1,11 @@
 TO DO
 
+- first run on windows -- why is help viewer hidden
+
 + 4.0.1:
+
+- status: changing folding mode doesn't expand folds? or...?
+- closing a file if save fails -- check the save ok property
 
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:
 [error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
@@ -11,9 +16,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - make fs color regexp error more intuitive
-- need to investigate:
-  - scroll to caret _still_ jumps around?
-  - mouse clicks not working?
+- scroll to caret _still_ jumps around?
 - printer output spacing problem
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
@@ -25,6 +28,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + in 4.1:
 
+- more flexible definition of a paragraph, paragraph folding
 - fsb: indicate current buffer
 - double click on _current_ buffer: close
 - double click on other open: select

@@ -275,6 +275,12 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			{
 				if(SearchAndReplace.find(view))
 					closeOrKeepDialog();
+				else
+				{
+					toFront();
+					requestFocus();
+					find.requestFocus();
+				}
 			}
 		}
 		finally
