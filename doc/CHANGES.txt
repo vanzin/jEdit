@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre4
 
-Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
+Thanks to Chris Morris, Ryan Fowler and Ryan Grove for contributing to
+this release.
 
 {{{ Syntax Highlighting
 
@@ -10,6 +11,8 @@ Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
 
 - Modes from the user catalog file are checked first for a matching
   first line or file name glob (Ryan Fowler).
+
+- Updated Ruby syntax highlighting (Chris Morris).
 
 }}}
 {{{ Scripting

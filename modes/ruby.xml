@@ -3,6 +3,7 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Ruby mode by Ian Maclean -->
+<!-- tweakage by Chris Morris - clabs.org -->
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
@@ -19,7 +20,12 @@
 			<END>=end</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+    <SPAN TYPE="LITERAL2" EXCLUDE_MATCH="TRUE">
+      <BEGIN>#{</BEGIN>
+      <END>}</END>
+    </SPAN>
+    
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="doubleQuoteLiteral">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
@@ -128,4 +134,10 @@
 			<LITERAL2>__LINE__</LITERAL2>
 		</KEYWORDS>
 	</RULES>
+  <RULES SET="doubleQuoteLiteral">
+    <SPAN TYPE="LITERAL2" EXCLUDE_MATCH="TRUE">
+      <BEGIN>#{</BEGIN>
+      <END>}</END>
+    </SPAN>
+  </RULES>
 </MODE>
