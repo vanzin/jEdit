@@ -38,6 +38,16 @@ import org.gjt.sp.jedit.*;
 
 public class PluginManager extends JFrame implements EBComponent
 {
+	//{{{ getInstance() method
+	/**
+	 * Returns the currently visible plugin manager window, or null.
+	 * @since jEdit 4.2pre2
+	 */
+	public static PluginManager getInstance()
+	{
+		return instance;
+	} //}}}
+
 	//{{{ dispose() method
 	public void dispose()
 	{

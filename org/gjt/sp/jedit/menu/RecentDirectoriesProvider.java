@@ -84,6 +84,8 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 
 		boolean sort = jEdit.getBooleanProperty("sortRecent");
 
+		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
+
 		Vector menuItems = new Vector();
 
 		for(int i = 0; i < model.getSize(); i++)
@@ -98,7 +100,18 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 			if(sort)
 				menuItems.addElement(menuItem);
 			else
+			{
+				if(menu.getMenuComponentCount() >= maxItems
+					&& i != model.getSize() - 1)
+				{
+					JMenu newMenu = new JMenu(
+						jEdit.getProperty("common.more"));
+					menu.add(newMenu);
+					menu = newMenu;
+				}
+
 				menu.add(menuItem);
+			}
 		}
 
 		if(sort)
@@ -107,6 +120,15 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 				new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < menuItems.size(); i++)
 			{
+				if(menu.getMenuComponentCount() >= maxItems
+					&& i != 0)
+				{
+					JMenu newMenu = new JMenu(
+						jEdit.getProperty("common.more"));
+					menu.add(newMenu);
+					menu = newMenu;
+				}
+
 				menu.add((JMenuItem)menuItems.elementAt(i));
 			}
 		}

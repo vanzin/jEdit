@@ -105,46 +105,6 @@ public class ManagePanel extends JPanel
 
 	//{{{ Inner classes
 
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			Object source = evt.getSource();
-			if(source == remove)
-			{
-				int[] selected = table.getSelectedRows();
-
-				StringBuffer buf = new StringBuffer();
-				Roster roster = new Roster();
-				for(int i = 0; i < selected.length; i++)
-				{
-					Entry entry = pluginModel.getEntry(selected[i]);
-					for(int j = 0; j < entry.jars.size(); j++)
-					{
-						String jar = (String)entry.jars.elementAt(j);
-						if(buf.length() != 0)
-							buf.append('\n');
-						buf.append(jar);
-						roster.addRemove(jar);
-					}
-				}
-
-				String[] args = { buf.toString() };
-				if(GUIUtilities.confirm(window,
-					"plugin-manager.remove-confirm",args,
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE)
-					== JOptionPane.YES_OPTION)
-				{
-					new PluginManagerProgress(window,
-						"remove",roster);
-					pluginModel.update();
-				}
-			}
-		}
-	} //}}}
-
 	//{{{ Entry class
 	class Entry
 	{
@@ -460,8 +420,7 @@ public class ManagePanel extends JPanel
 				JOptionPane.QUESTION_MESSAGE)
 				== JOptionPane.YES_OPTION)
 			{
-				new PluginManagerProgress(window,
-					"remove",roster);
+				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
 			}
 		}

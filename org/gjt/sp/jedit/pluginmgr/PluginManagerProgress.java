@@ -33,15 +33,12 @@ import org.gjt.sp.jedit.*;
 class PluginManagerProgress extends JDialog
 {
 	//{{{ PluginManagerProgress constructor
-	public PluginManagerProgress(PluginManager dialog, String type, Roster roster)
+	public PluginManagerProgress(PluginManager dialog, Roster roster)
 	{
-		super(dialog,
-			jEdit.getProperty("plugin-manager.progress."
-			+ type + "-task"),true);
+		super(dialog,jEdit.getProperty("plugin-manager.progress"),true);
 
 		this.dialog = dialog;
 		this.roster = roster;
-		this.type = type;
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -49,8 +46,7 @@ class PluginManagerProgress extends JDialog
 
 		progress = new JProgressBar();
 		progress.setStringPainted(true);
-		progress.setString(jEdit.getProperty("plugin-manager.progress."
-			+ type + "-task"));
+		progress.setString(jEdit.getProperty("plugin-manager.progress"));
 
 		int maximum = 0;
 		count = roster.getOperationCount();
@@ -60,51 +56,20 @@ class PluginManagerProgress extends JDialog
 		}
 
 		progress.setMaximum(maximum);
-		content.add(BorderLayout.CENTER,progress);
+		content.add(BorderLayout.NORTH,progress);
 
 		stop = new JButton(jEdit.getProperty("plugin-manager.progress.stop"));
 		stop.addActionListener(new ActionHandler());
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.add(Box.createGlue());
+		JPanel panel = new JPanel(new FlowLayout(
+			FlowLayout.CENTER,0,0));
 		panel.add(stop);
-		panel.add(Box.createGlue());
-		content.add(BorderLayout.SOUTH,panel);
+		content.add(BorderLayout.CENTER,panel);
 
 		addWindowListener(new WindowHandler());
 
 		pack();
-
-		Dimension size = getSize();
-		size.width = Math.max(size.width,500);
-		setSize(size);
 		setLocationRelativeTo(dialog);
-
 		show();
-	} //}}}
-
-	//{{{ removing() method
-	public void removing(String plugin)
-	{
-		String[] args = { plugin };
-		showMessage(jEdit.getProperty("plugin-manager.progress.removing",args));
-		stop.setEnabled(true);
-	} //}}}
-
-	//{{{ downloading() method
-	public void downloading(String plugin)
-	{
-		String[] args = { plugin };
-		showMessage(jEdit.getProperty("plugin-manager.progress.downloading",args));
-		stop.setEnabled(true);
-	} //}}}
-
-	//{{{ installing() method
-	public void installing(String plugin)
-	{
-		String[] args = { plugin };
-		showMessage(jEdit.getProperty("plugin-manager.progress.installing",args));
-		stop.setEnabled(false);
 	} //}}}
 
 	//{{{ setValue() method
@@ -120,32 +85,17 @@ class PluginManagerProgress extends JDialog
 	} //}}}
 
 	//{{{ done() method
-	public void done(final boolean ok)
+	public void done()
 	{
-		this.ok |= ok;
-
 		try
 		{
-			if(!ok || done == count)
+			if(done == count)
 			{
 				SwingUtilities.invokeAndWait(new Runnable()
 				{
 					public void run()
 					{
 						dispose();
-						if(ok)
-						{
-							//GUIUtilities.message(dialog,
-							//	"plugin-manager." + type
-							//	+ "-done",null);
-						}
-						else
-						{
-							// user will see an error in any case
-
-							//GUIUtilities.message(PluginManagerProgress.this,
-							//	"plugin-manager.failed",null);
-						}
 					}
 				});
 			}
@@ -166,12 +116,6 @@ class PluginManagerProgress extends JDialog
 		catch(Exception e)
 		{
 		}
-	} //}}}
-
-	//{{{ isOK() method
-	public boolean isOK()
-	{
-		return ok;
 	} //}}}
 
 	//{{{ Private members
@@ -195,26 +139,6 @@ class PluginManagerProgress extends JDialog
 
 	private Roster roster;
 	//}}}
-
-	//{{{ showMessage() method
-	private void showMessage(final String msg)
-	{
-		/* try
-		{
-			SwingUtilities.invokeAndWait(new Runnable()
-			{
-				public void run()
-				{
-					localProgress.setString(msg);
-				}
-			});
-		}
-		catch(Exception e)
-		{
-		}
-
-		Thread.yield(); */
-	} //}}}
 
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
@@ -261,9 +185,9 @@ class PluginManagerProgress extends JDialog
 
 		public void run()
 		{
-			roster.performOperations(PluginManagerProgress.this);
+			roster.performOperationsInWorkThread(PluginManagerProgress.this);
 		}
 	} //}}}
-	
+
 	//}}}
 }

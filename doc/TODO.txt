@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+before pre2:
+- scrolling problem
+
 - bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
 - auto indent: don't de-indent on enter if no leading indent at all?
@@ -205,8 +208,7 @@ and quirks that I need to fix eventually.
 - syntax SPAN::END substitution: String --> char[] --> String
 - is getScreenLineOfOffset() called often?
 - if caret is at the end of a buffer when doing a replace all, a lot of
-  repaint() and getLineOfOffset() calls are made, however this doesn't
-  seem to affect performance that much.
+  repaint() and getLineOfOffset() calls are made
 - optimize for no folding & no soft wrap case:
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
@@ -219,7 +221,6 @@ and quirks that I need to fix eventually.
 - TokenHandlers: have the token marker give them a segment to avoid
   two redundant getLineText()s
 - see if getLineOfOffset() can be optimized
-- replace all at end of file -- slow
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

@@ -266,7 +266,7 @@ public class ActionBar extends JPanel
 			if(insertLongestPrefix)
 			{
 				String prefix = MiscUtilities.getLongestPrefix(
-					completions);
+					completions,true);
 				if(prefix.indexOf(text) != -1)
 					action.setText(prefix);
 			}

@@ -2101,15 +2101,8 @@ install-plugins.info=Author: {0}\n\
 	{2}
 
 update-plugins.title=Update
-#}}}
 
-#{{{ Plugin progress
-plugin-manager.progress.remove-task=Removing Plugins
-plugin-manager.progress.update-task=Updating Plugins
-plugin-manager.progress.install-task=Installing Plugins
-plugin-manager.progress.removing=Removing {0}
-plugin-manager.progress.downloading=Downloading {0}
-plugin-manager.progress.installing=Installing {0}
+plugin-manager.progress=Installing Plugins
 plugin-manager.progress.stop=Stop
 #}}}
 

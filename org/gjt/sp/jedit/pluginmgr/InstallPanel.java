@@ -499,14 +499,9 @@ class InstallPanel extends JPanel
 			if(roster.isEmpty())
 				return;
 
-			new PluginManagerProgress(window,"install",roster);
+			new PluginManagerProgress(window,roster);
 
-			for (int i = 0; i < selected.size(); i++)
-			{
-				PluginList.Plugin plugin = (PluginList.Plugin)selected.get(i);
-				plugin.checkIfInstalled();
-			}
-
+			roster.performOperationsInAWTThread(window);
 			pluginModel.update();
 		}
 
