@@ -183,6 +183,14 @@
     </para></note>
 </listitem>
 
+<listitem>
+    <para><filename>Vertical_Paste.bsh</filename></para>
+    <abstract><para>
+		  Pastes the content of the clipboard vertically and fills empty
+      areas if necessary.
+    </para></abstract>
+</listitem>
+
 </itemizedlist>
 </sect1>
 
@@ -613,7 +621,7 @@
 	  attached to an email message or a bug report made on SourceForge.
 	</para>
   </listitem>
-  
+
 <listitem>
     <para><filename>Run_Macro_at_Caret.bsh</filename></para>
     <abstract><para>
