@@ -3,14 +3,13 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-<<<<<<< TODO.txt
-=======
-java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 319
-	at org.gjt.sp.jedit.textarea.DisplayManager.getNextVisibleLine(DisplayManager.java:121)
-	at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:651)
-	at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.java:342)
-	at org.gjt.sp.jedit.textarea.JEditTextArea.recalculateLastPhysicalLine(JEditTextArea.java:5417)
-	at org.gjt.sp.jedit.textarea.DisplayManager$ScrollLineCount.reset(DisplayManager.java:620)
+- "need repaint" line info flags & chunk cache handling invalidation
+  - if caret is at the end of a buffer when doing a replace all, a lot of
+    repaint() and getLineOfOffset() calls are made, however this doesn't
+    seem to affect performance that much.
+  - make replace-all fast/faster than 4.1
+- tags: hyperlinks in text area, narrow & follow link
+  same logic as error list
 - save: new buffer props don't take effect (mode, maybe others)
 - propertiesChanged() closes dockables
 - wrap of
@@ -241,14 +240,12 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - don't repaint whole selection when resizing
-- if caret is at the end of a buffer when doing a replace all, a lot of
-  repaint() and getLineOfOffset() calls are made, however this doesn't
-  seem to affect performance that much.
 - could make non-soft wrap chunk merge even faster!
 - could make long lines even faster
 - syntax SPAN::END substitution: String --> char[] --> String
 - delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work
+- is getScreenLineOfOffset() called often?
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
