@@ -211,7 +211,7 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				read(buffer,autodetect(in),length);
+				read(buffer,autodetect(in),length,false);
 				buffer.setNewFile(false);
 			}
 			catch(CharConversionException ch)
@@ -396,8 +396,8 @@ public class BufferIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ read() method
-	private void read(Buffer buffer, Reader in, long length)
-		throws IOException
+	private SegmentBuffer read(Buffer buffer, Reader in, long length,
+		boolean insert) throws IOException
 	{
 		/* we guess an initial size for the array */
 		IntegerArray endOffsets = new IntegerArray(
@@ -584,10 +584,16 @@ public class BufferIORequest extends WorkRequest
 		// to avoid having to deal with read/write locks and such,
 		// we insert the loaded data into the buffer in the
 		// post-load cleanup runnable, which runs in the AWT thread.
-		buffer.setProperty(LOAD_DATA,seg);
-		buffer.setProperty(END_OFFSETS,endOffsets);
-		buffer.setProperty(NEW_PATH,path);
-		buffer.setProperty(Buffer.LINESEP,lineSeparator);
+		if(!insert)
+		{
+			buffer.setProperty(LOAD_DATA,seg);
+			buffer.setProperty(END_OFFSETS,endOffsets);
+			buffer.setProperty(NEW_PATH,path);
+			buffer.setProperty(Buffer.LINESEP,lineSeparator);
+		}
+
+		// used in insert()
+		return seg;
 	} //}}}
 
 	//{{{ readMarkers() method
@@ -911,7 +917,19 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				read(buffer,autodetect(in),length);
+				final SegmentBuffer seg = read(buffer,
+					autodetect(in),length,true);
+
+				/* we don't do this in Buffer.insert() so that
+				   we can insert multiple files at once */
+				VFSManager.runInAWTThread(new Runnable()
+				{
+					public void run()
+					{
+						view.getTextArea().setSelectedText(
+							seg.toString());
+					}
+				});
 			}
 			catch(IOException io)
 			{

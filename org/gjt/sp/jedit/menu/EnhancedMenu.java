@@ -184,5 +184,5 @@ public class EnhancedMenu extends JMenu implements MenuListener
 				menuOutOfDate = true;
 			}
 		}
-	}
+	} //}}}
 }

@@ -68,17 +68,17 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			setFont(file.type == VFS.DirectoryEntry.FILE
 				? plainFont : boldFont);
 
-			colorDetermined = false;
 			this.isSelected = isSelected;
 			this.file = file;
 
 			if(column == 0)
 			{
-				underlined = (jEdit.getBuffer(file.path) != null);
+				openBuffer = (jEdit._getBuffer(
+					file.symlinkPath) != null);
 
 				setIcon(showIcons
-					? getIconForFile(file,entry.expanded)
-					: null);
+					? getIconForFile(file,entry.expanded,
+					openBuffer) : null);
 				setText(file.name);
 
 				int state;
@@ -97,7 +97,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
 				String extAttr = model.getExtendedAttribute(column - 1);
 
-				underlined = false;
+				openBuffer = false;
 				setIcon(null);
 				setText(file.getExtendedAttribute(extAttr));
 				setBorder(new EmptyBorder(1,1,1,1));
@@ -110,21 +110,18 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	//{{{ paintComponent() method
 	public void paintComponent(Graphics g)
 	{
-		if(!colorDetermined)
+		if(!isSelected)
 		{
-			if(!isSelected)
-			{
-				Color color = file.getColor();
+			Color color = file.getColor();
 
-				setForeground(color == null
-					? UIManager.getColor("Tree.foreground")
-					: color);
-			}
+			setForeground(color == null
+				? UIManager.getColor("Tree.foreground")
+				: color);
 		}
 
 		super.paintComponent(g);
 
-		if(underlined)
+		if(openBuffer)
 		{
 			Font font = getFont();
 
@@ -150,13 +147,25 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	} //}}}
 
 	//{{{ getIconForFile() method
-	public static Icon getIconForFile(VFS.DirectoryEntry file, boolean expanded)
+	/**
+	 * @since jEdit 4.2pre7
+	 */
+	public static Icon getIconForFile(VFS.DirectoryEntry file,
+		boolean expanded)
+	{
+		return getIconForFile(file,expanded,
+			jEdit._getBuffer(file.symlinkPath) != null);
+	} //}}}
+
+	//{{{ getIconForFile() method
+	public static Icon getIconForFile(VFS.DirectoryEntry file,
+		boolean expanded, boolean openBuffer)
 	{
 		if(file.type == VFS.DirectoryEntry.DIRECTORY)
 			return (expanded ? openDirIcon : dirIcon);
 		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
 			return filesystemIcon;
-		else if(jEdit.getBuffer(file.path) != null)
+		else if(openBuffer)
 			return openFileIcon;
 		else
 			return fileIcon;
@@ -194,8 +203,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	//}}}
 
 	//{{{ Private members
-	private boolean underlined;
-	private boolean colorDetermined;
+	private boolean openBuffer;
 	private boolean isSelected;
 	private VFS.DirectoryEntry file;
 	//}}}

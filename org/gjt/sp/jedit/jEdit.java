@@ -1882,18 +1882,22 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ getBuffer() method
+	//{{{ _getBuffer() method
 	/**
 	 * Returns the buffer with the specified path name. The path name
 	 * must be an absolute, canonical, path.
+	 *
 	 * @param path The path name
 	 * @see MiscUtilities#constructPath(String,String)
+	 * @see MiscUtilities#resolveSymlinks(String)
+	 * @see #getBuffer(String)
+	 *
+	 * @since jEdit 4.2pre7
 	 */
-	public static Buffer getBuffer(String path)
+	public static Buffer _getBuffer(String path)
 	{
-		if(!MiscUtilities.isURL(path))
-			path = MiscUtilities.resolveSymlinks(path);
-
+		// paths on case-insensitive filesystems are stored as lower
+		// case in the hash.
 		if((VFSManager.getVFSForPath(path).getCapabilities()
 			& VFS.CASE_INSENSITIVE_CAP) != 0)
 		{
@@ -1904,6 +1908,25 @@ public class jEdit
 		{
 			return (Buffer)bufferHash.get(path);
 		}
+	} //}}}
+
+	//{{{ getBuffer() method
+	/**
+	 * Returns the buffer with the specified path name. The path name
+	 * must be an absolute path. This method automatically resolves
+	 * symbolic links. If performance is critical, cache the canonical
+	 * path and call {@link #_getBuffer(String)} instead.
+	 *
+	 * @param path The path name
+	 * @see MiscUtilities#constructPath(String,String)
+	 * @see MiscUtilities#resolveSymlinks(String)
+	 */
+	public static Buffer getBuffer(String path)
+	{
+		if(MiscUtilities.isURL(path))
+			return _getBuffer(path);
+		else
+			return _getBuffer(MiscUtilities.resolveSymlinks(path));
 	} //}}}
 
 	//{{{ getBuffers() method

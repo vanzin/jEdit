@@ -951,7 +951,7 @@ loop:		for(;;)
 				+ "," + end + ")");
 		}
 
-		for(int i = start; i <= end; i++)
+		for(int i = start; i < end; i++)
 		{
 			//XXX
 			if(isLineVisible(i))
@@ -1233,6 +1233,8 @@ loop:		for(;;)
 					+ physicalLine + ":" + scrollLine);
 			}
 
+			callChanged = true;
+
 			// JEditTextArea.scrollTo() needs this to simplify
 			// its code
 			if(screenAmount < 0)
@@ -1288,6 +1290,8 @@ loop:		for(;;)
 					+ physicalLine + ":" + scrollLine);
 			}
 
+			callChanged = true;
+
 			// JEditTextArea.scrollTo() needs this to simplify
 			// its code
 			if(screenAmount < 0)
@@ -1331,6 +1335,8 @@ loop:		for(;;)
 					}
 				}
 			}
+
+			callChanged = true;
 		} //}}}
 
 		//{{{ scrollUp() method
@@ -1369,6 +1375,8 @@ loop:		for(;;)
 						amount -= screenLines;
 				}
 			}
+
+			callChanged = true;
 		} //}}}
 
 		//{{{ ensurePhysicalLineIsVisible() method

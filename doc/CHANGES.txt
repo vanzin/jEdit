@@ -2,8 +2,9 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre7
 
-Thanks to Ollie Rutherfurd, Randy Hudson, Chris Petersen, Randolf Mock,
-Alessandro Falappa and Ben Williams for contributing to this release.
+Thanks to Aaron Bell, Alessandro Falappa, Ben Williams, Chris Petersen,
+Ollie Rutherfurd, Randolf Mock, Randy Hudson, and for contributing to
+this release.
 
 {{{ Miscellaneous
 
@@ -49,6 +50,8 @@ Alessandro Falappa and Ben Williams for contributing to this release.
 
 - Added PowerDynamo syntax highlighting (Ben Williams).
 
+- Added WebSphere MQ scripting syntax highlighting (Aaron Bell).
+
 }}}
 {{{ Bug Fixes
 
@@ -73,7 +76,7 @@ Alessandro Falappa and Ben Williams for contributing to this release.
   ~/.jedit/history file.
 
 - Fixed a slowdown of 5-7 seconds on startup in some cases that results
-  fromcalling GraphicsDevice.getConfigurations().
+  from calling GraphicsDevice.getConfigurations().
 
 - The list of words in the "Complete Word" window was not sorted.
 
@@ -142,6 +145,10 @@ Alessandro Falappa and Ben Williams for contributing to this release.
   buffers.
 
 - The Utilities->Action Bar command would only work once.
+
+- Scrolling would jump if electric scrolling was off when moving the
+  caret past the first or last visible line, if they were only partially
+  visible due to soft wrapping.
 
 }}}
 {{{ API Changes
