@@ -9,8 +9,7 @@ and quirks that I need to fix eventually.
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks
-- minor quicknotepad changes -- update docs -- use stock icons instead
-  of private copies
+- minor quicknotepad changes -- update docs
 - add documentation for pre1 features
 - right-click on parent directories in fsb
 - add dockable window state change msg
@@ -20,7 +19,6 @@ and quirks that I need to fix eventually.
 - eval-for-selected-lines doesn't work with rectangular selection
 - searching in a buffer w/ narrowed fold
 - range-comment & rect select
-- rect select aware user input
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
 - don't repaint whole selection when resizing
@@ -55,9 +53,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - popup menus
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
-- drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
-- fix page up/page down
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
 - expand fold: try to expand even if already expanded
@@ -80,6 +76,5 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
-- triple-click drag down
 - motif l&f: shortcuts in menu items
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
