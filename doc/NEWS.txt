@@ -16,11 +16,6 @@ improved performance and reduced memory footprint.
   recreate those settings after upgrading to jEdit 4.0 since the way
   macros are handled internally has changed.
 
-- In previous jEdit versions, holding down Control while dragging would
-  create a rectangular selection. Now, Control-drags are used by the
-  quick copy feature, and you must drag with the middle mouse button to
-  create rectangular selections. If you only have a two button mouse,
-
 - Clicking the middle mouse button no longer inserts the most recently
   selected text by default. This can be enabled in the 'Text Area' pane
   of the Utilities->Global Options dialog box.
@@ -77,7 +72,7 @@ some of the more noteworthy ones are:
 
 - Unicode files are automatically detected and opened as such.
 
-- If "quick copy" is enabled, holding down Control while dragging now
+- If "quick copy" is enabled, dragging with the middle mouse button
   creates a selection without moving the caret. When the mouse button is
   released the selected text is inserted at the caret position and the
   selection is deactivated.

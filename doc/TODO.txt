@@ -1,13 +1,11 @@
 TO DO
 
 - rename MacOS.jar
-- regexp search:
-  $ doesn't find last -- gnu.regexp bug
-  hypersearch for .* doesn't list blank lines
-- scrollToCaret(): reimplement electric scroll, triple-click drag down
-- rect select and soft wrap
+- $ doesn't find last -- gnu.regexp bug
+- hypersearch for .* doesn't list blank lines
 - save to X:filename on Windows
 - motif l&f: shortcuts in menu items
+- fix stylesheet problem
 
 - plugin manager needs overhauled error reporting
 - API guide: compareStrings(), showPopupMenu()
@@ -109,3 +107,4 @@ TO DO
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
 - tab/s+tab: use tabSize; a+left/right: use indentSize
 - toggle shift: expand all; no mod: expand one level behavior in gutter
+- triple-click drag down
