@@ -222,7 +222,15 @@ public abstract class OptionsDialog extends EnhancedDialog
 			new Object[] { jEdit.getProperty(this.name + ".title"),
 			buf.toString() }));
 
-		optionPane.init();
+		try
+		{
+			optionPane.init();
+		}
+		catch(Throwable t)
+		{
+			Log.log(Log.ERROR,this,"Error initializing options:");
+			Log.log(Log.ERROR,this,t);
+		}
 
 		if(currentPane != null)
 			stage.remove(currentPane.getComponent());

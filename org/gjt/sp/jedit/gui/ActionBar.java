@@ -366,8 +366,6 @@ public class ActionBar extends JPanel
 					nonDigit = true;
 					if(repeat)
 					{
-						if(ch == ' ')
-							System.err.println("typed space");
 						passToView(evt);
 					}
 					else
@@ -389,8 +387,6 @@ public class ActionBar extends JPanel
 					nonDigit = true;
 					if(repeat)
 					{
-						if(keyCode == KeyEvent.VK_SPACE)
-							System.err.println("pressed space");
 						passToView(evt);
 						break;
 					}

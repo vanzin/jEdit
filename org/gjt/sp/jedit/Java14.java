@@ -153,7 +153,8 @@ public class Java14
 				{
 					if(comp instanceof View)
 					{
-						((View)comp).processKeyEvent(evt);
+						((View)comp).processKeyEvent(evt,
+							View.VIEW);
 						return true;
 					}
 					else if(comp == null || comp instanceof Window

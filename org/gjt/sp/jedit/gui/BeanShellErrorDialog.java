@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.PrintWriter;
@@ -40,11 +39,17 @@ import org.gjt.sp.jedit.*;
  */
 public class BeanShellErrorDialog extends TextAreaDialog
 {
-	public BeanShellErrorDialog(View view, Throwable t)
+	public BeanShellErrorDialog(Frame frame, Throwable t)
 	{
-		super(view,jEdit.getProperty("beanshell-error.title"),
+		super(frame,jEdit.getProperty("beanshell-error.title"),
 			jEdit.getProperty("beanshell-error.message"),
 			UIManager.getIcon("OptionPane.errorIcon"),
 			MiscUtilities.throwableToString(t));
+	}
+
+	// for ABI compatibility
+	public BeanShellErrorDialog(View view, Throwable t)
+	{
+		this((Frame)view,t);
 	}
 }

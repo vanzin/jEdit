@@ -48,6 +48,19 @@ JEDIT 4.2 VERSION HISTORY
 
 - Fixed problem with repeating user input in the action bar.
 
+- Made it so that site properties are loaded just before user
+  properties. This allows the look and feel to be changed via the site
+  properties.
+
+- Fixed a problem with Replace All over rectangular selections where
+  only the first occurrence would be replaced.
+
+- If a duplicate copy of a plugin was installed, opening the Shortcuts
+  option pane could throw an exception.
+
+- The Plugin Options dialog box can still be opened if initialization of
+  an option pane fails.
+
 }}}
 
 }}}
