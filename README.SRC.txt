@@ -2,7 +2,7 @@ COMPILING JEDIT FROM SOURCE
 
 To compile jEdit, you will need:
 
-- Jakarta Ant. I use version 1.4; older versions might or might not
+- Jakarta Ant. I use version 1.5; older versions might or might not
   work. Get it from <http://jakarta.apache.org>.
 
 - A Java compiler, such as Sun's javac or IBM's jikes.

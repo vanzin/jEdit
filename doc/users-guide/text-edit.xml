@@ -48,6 +48,49 @@
    <xref linkend="words" />, <xref linkend="lines" /> and
    <xref linkend="paragraphs" />.
   </para>
+  <sidebar><title>The Home and End keys</title>
+   <para>
+    If you prefer more traditional behavior for the
+    <keycap>Home</keycap> and <keycap>End</keycap> keys, you can reassign
+    the respective keyboard shortcuts in the <guibutton>Shortcuts</guibutton>
+    pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>.
+   </para>
+   <para>
+    By default, the shortcuts are assigned as follows:
+   </para>
+   <itemizedlist>
+    <listitem><para><keycap>Home</keycap> is bound to <guimenuitem>Smart
+    Home</guimenuitem>.</para></listitem>
+    <listitem><para><keycap>End</keycap> is bound to <guimenuitem>Smart
+    End</guimenuitem>.</para></listitem>
+    <listitem><para><keycombo><keycap>Shift</keycap> <keycap>Home</keycap>
+    </keycombo> is bound to <guimenuitem>Select to Smart
+    Home Position</guimenuitem>.</para></listitem>
+    <listitem><para><keycombo><keycap>Shift</keycap> <keycap>End</keycap>
+    </keycombo> is bound to <guimenuitem>Select to Smart
+    End Position</guimenuitem>.</para></listitem>
+   </itemizedlist>
+   <para>
+    However you can rebind them to any set of other commands, such as:
+   </para>
+   <itemizedlist>
+    <listitem><para><guimenuitem>Go to Start of White Space</guimenuitem>,</para>
+    </listitem>
+    <listitem><para><guimenuitem>Go to End of White Space</guimenuitem>,</para>
+    </listitem>
+    <listitem><para><guimenuitem>Go to Start of Line</guimenuitem>,</para>
+    </listitem>
+    <listitem><para><guimenuitem>Go to End of Line</guimenuitem>,</para>
+    </listitem>
+    <listitem><para>... and so on.</para>
+    </listitem>
+   </itemizedlist>
+   <para>
+    For more information about changing keyboard shortcuts, see
+    <xref linkend="global-opts"/>.
+   </para>
+  </sidebar>
  </sect1>
  <sect1 id="selection"><title>Selecting Text</title>
   <para>

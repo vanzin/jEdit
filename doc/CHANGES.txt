@@ -86,7 +86,7 @@ and Rudolf Widmann for contributing to this release.
   C+e C+BACK_QUOTE.
 
 - 'Go to Top/Left/Bottom/Right Docking Area' commands added, bound by
-  default to C+e UP/LEFT/DOWN/RIGHT. It opens the docking area in
+  default to C+e C+UP/LEFT/DOWN/RIGHT. It opens the docking area in
   question if it is closed, and sends keyboard focus to the selected
   dockable window.
 
