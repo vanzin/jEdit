@@ -443,6 +443,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt, boolean calledFromTextArea)
 	{
+		if(Debug.DUMP_KEY_EVENTS && calledFromTextArea)
+			Log.log(Log.DEBUG,this,"Key event: " + evt);
 		evt = _preprocessKeyEvent(evt);
 		if(evt == null)
 			return;
