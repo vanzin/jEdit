@@ -1018,7 +1018,8 @@ ioerror.directory-error=Cannot list directory: {0}
 ioerror.directory-error-nomsg=Cannot list directory.
 ioerror.encoding-error=Cannot load with "{0}" encoding.\n\
 	({1})\n\
-	The encoding can be changed in the Commands menu\n\
+	Try disabling selecting a different encoding and\n\
+	disabling auto-detection in the Commands menu\n\
 	of the file system browser.
 ioerror.read-error=Cannot load: {0}
 ioerror.write-error=Cannot save: {0}

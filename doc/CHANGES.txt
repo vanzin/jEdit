@@ -44,6 +44,12 @@ Bock for contributing to this release.
 
 - Fix appearance of rollover toolbar buttons on Windows.
 
+- "Go to Next Bracket" would throw an exception if the caret was
+  positioned at the end of the buffer.
+
+- The caret position of the current buffer was not saved when closing
+  all buffers.
+
 }}}
 
 }}}

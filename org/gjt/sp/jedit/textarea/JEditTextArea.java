@@ -2386,17 +2386,21 @@ forward_scan:		do
 	 */
 	public void goToNextBracket(boolean select)
 	{
-		String text = getText(caret,buffer.getLength() - caret - 1);
-
 		int newCaret = -1;
 
-loop:		for(int i = 0; i < text.length(); i++)
+		if(caret != buffer.getLength())
 		{
-			switch(text.charAt(i))
+			String text = getText(caret,buffer.getLength()
+				- caret - 1);
+
+loop:			for(int i = 0; i < text.length(); i++)
 			{
-			case ')': case ']': case '}':
-				newCaret = caret + i + 1;
-				break loop;
+				switch(text.charAt(i))
+				{
+				case ')': case ']': case '}':
+					newCaret = caret + i + 1;
+					break loop;
+				}
 			}
 		}
 
