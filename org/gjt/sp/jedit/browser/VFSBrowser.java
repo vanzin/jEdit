@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -363,8 +363,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 			if(bmsg.getWhat() == BufferUpdate.CREATED
 				|| bmsg.getWhat() == BufferUpdate.CLOSED)
 				browserView.updateFileView();
-			else if(bmsg.getWhat() == BufferUpdate.SAVED)
-				maybeReloadDirectory(bmsg.getBuffer().getPath());
+			// hacked BufferIORequest to send VFSUpdates in case
+			// two stage save is off now...
+			/* else if(bmsg.getWhat() == BufferUpdate.SAVED)
+			{
+				maybeReloadDirectory(MiscUtilities.getParentOfPath(
+					bmsg.getBuffer().getPath()));
+			} */
 		}
 		else if(msg instanceof VFSUpdate)
 		{

@@ -615,6 +615,9 @@ public class BufferIORequest extends WorkRequest
 				}
 				else
 					buffer.setBooleanProperty(ERROR_OCCURRED,true);
+
+				if(!twoStageSave)
+					VFSManager.sendVFSUpdate(vfs,path,true);
 			}
 			catch(IOException io)
 			{
