@@ -826,9 +826,15 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		{
 			Calendar c = Calendar.getInstance();
 			buf.setLength(0);
-			buf.append(c.get(Calendar.HOUR_OF_DAY));
+			int hour = c.get(Calendar.HOUR_OF_DAY);
+			if(hour < 10)
+				buf.append('0');
+			buf.append(hour);
 			buf.append(':');
-			buf.append(c.get(Calendar.MINUTE));
+			int minute = c.get(Calendar.MINUTE);
+			if(minute < 10)
+				buf.append('0');
+			buf.append(minute);
 			setText(buf.toString());
 		} //}}}
 

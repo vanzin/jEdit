@@ -844,6 +844,7 @@ about.version=jEdit version {0}
 about.text=jEdit is brought to you by\n\
 	\ \n\
 	Slava Pestov\n\
+	Alessandro Falappa\n\
 	Alex Levin\n\
 	Alexander Maryanovsky\n\
 	Alfonso Garcia\n\
@@ -1215,7 +1216,7 @@ search.subdirs.mnemonic=u
 search.choose=Choose...
 search.choose.mnemonic=e
 search.synchronize=Synchronize
-search.synchronize.mnemonic=y
+search.synchronize.mnemonic=z
 
 search.findBtn=Find
 search.replaceAndFindBtn=Replace & Find
@@ -1766,6 +1767,8 @@ grab-key.prefix-shortcut.message=\
 options.status.label=Status Bar
 options.status.code=new StatusBarOptionPane();
 options.status.visible=Show status bar
+options.status.foreground=Status bar text:
+options.status.background=Status bar background:
 options.status.show-caret-status=Show caret status
 options.status.show-encoding=Show buffer encoding
 options.status.show-edit-mode=Show edit mode
@@ -1778,6 +1781,7 @@ options.status.show-line-seperator=Show buffer line seperator
 options.status.show-memory=Show memory indicator
 options.status.memory.foreground=Memory indicator foreground:
 options.status.memory.background=Memory indicator background:
+options.status.show-clock=Show time
 #}}}
 
 #{{{ Syntax Highlighting pane

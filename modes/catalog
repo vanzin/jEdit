@@ -249,6 +249,9 @@
 <MODE NAME="relax-ng-compact"	FILE="relax-ng-compact.xml"
 				FILE_NAME_GLOB="*.rnc" />
 
+<MODE NAME="renderman-rib"	FILE="rib.xml"
+				FILE_NAME_GLOB="*.rib" />
+
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
 

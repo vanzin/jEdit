@@ -7,16 +7,20 @@ JEDIT 4.2 VERSION HISTORY
 - The list of modes in various dialog boxes is now sorted (this does not
   affect the order that buffer names are matched against modes).
 
+- Bundled some macros from various sources (Ollie Rutherfurd).
+
 }}}
 {{{ Syntax Highlighting
 
-- MoinMoin syntax highlighting (Ollie Rutherfurd).
+- Added MoinMoin syntax highlighting (Ollie Rutherfurd).
 
-- Relax NG compact syntax highlighting (Randy Hudson).
+- Added Relax NG compact syntax highlighting (Randy Hudson).
 
 - Minor fix to Perl heredoc syntax highlighting (Chris Petersen).
 
 - Updated ADPL syntax highlighting (Randolf Mock)
+
+- Added Renderman-RIB syntax highlighting (Alessandro Falappa).
 
 }}}
 {{{ Bug Fixes

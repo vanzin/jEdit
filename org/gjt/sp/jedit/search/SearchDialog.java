@@ -161,8 +161,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			hyperSearch.setSelected(true);
 			searchDirectory.setSelected(true);
 		}
-		else
-			synchronizeMultiFileSettings();
 
 		updateEnabled();
 	} //}}}
@@ -499,6 +497,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		synchronize.setMnemonic(jEdit.getProperty(
 			"search.synchronize.mnemonic")
 			.charAt(0));
+		synchronize.addActionListener(actionListener);
 		layout.setConstraints(synchronize,cons);
 		multifile.add(synchronize);
 
@@ -794,7 +793,12 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
-		synchronizeMultiFileSettings();
+		HistoryModel model = filter.getModel();
+		if(model.getSize() != 0)
+			filter.setText(model.getItem(0));
+		model = directory.getModel();
+		if(model.getSize() != 0)
+			directory.setText(model.getItem(0));
 
 		if(fileset instanceof DirectoryListSet)
 		{
@@ -884,6 +888,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 					false);
 				if(dirs != null)
 					directory.setText(dirs[0]);
+			}
+			else if(evt.getSource() == synchronize)
+			{
+				synchronizeMultiFileSettings();
 			}
 			else // source is directory or filter field
 			{
