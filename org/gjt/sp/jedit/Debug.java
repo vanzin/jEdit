@@ -22,8 +22,6 @@
 
 package org.gjt.sp.jedit;
 
-import org.gjt.sp.jedit.Debug;
-
 /**
  * This class contains various debugging flags mainly useful for core
  * development.
