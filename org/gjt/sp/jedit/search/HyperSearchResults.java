@@ -295,6 +295,9 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent evt)
 		{
+			if(evt.isConsumed())
+				return;
+
 			TreePath path1 = resultTree.getPathForLocation(
 				evt.getX(),evt.getY());
 			if(path1 == null)
