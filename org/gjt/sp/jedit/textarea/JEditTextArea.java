@@ -2952,7 +2952,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		// so that end followed by up arrow will always put caret at
 		// the end of the previous line, for example
-		setMagicCaretPosition(Integer.MAX_VALUE);
+		//setMagicCaretPosition(Integer.MAX_VALUE);
 	} //}}}
 
 	//{{{ goToStartOfWhiteSpace() method

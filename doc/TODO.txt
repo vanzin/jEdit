@@ -1,7 +1,5 @@
 TO DO
 
-- 'multi io' error with directory chooser dialog
-- why strip trailing /?
 - add an option to not remove files from PluginManager.download?
 - add some tips of the day about pre1 features
 - soft wrap
