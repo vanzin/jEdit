@@ -25,9 +25,9 @@ release.
   distribution, the old installer balooned to 2.7Mb; the new installer
   is only 1.4Mb.
 
-  To implement this the installer uses the com.aftexsw.util.bzip and
-  com.ice.tar libraries. Licensing info and home page links can be found
-  in README.txt.
+  To implement this the installer uses the org.apache.excalibur.bzip2
+  and com.ice.tar libraries. Licensing info and home page links can be
+  found in README.txt.
 
 + Bug Fixes:
 

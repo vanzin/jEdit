@@ -21,9 +21,12 @@ edit modes to the core, or writing plugins can be viewed by selecting
 
 * License
 
-jEdit is free software, and you are welcome to redistribute it under the
-terms of the GNU General Public License (either version 2 or any later
-version, at the user's election). See the file COPYING.txt for details.
+jEdit is free software, and you are welcome to redistribute and modify
+it under the terms of the GNU General Public License (either version 2
+or any later version). See the file COPYING.txt for details.
+
+The jEdit installer is released under a public domain license and may be
+used for any purpose.
 
 A number of plugins are available for jEdit. Unless otherwise stated in
 the plugin's documentation, each of the plugins is licensed for use and
@@ -108,10 +111,12 @@ jEdit bundles the following libraries:
 
 The jEdit installer bundles the following libraries:
 
-- com.aftexsw.util.bzip originally by AftexSw <http://www.aftexsw.com>,
-  but now part of the Apache Jakarta project. The original AftexSw
-  version is bundled because it is released under a BSD-style license,
-  as opposed to the Apache license of the newer code.
+- org.apache.excalibur.bzip2 compression library. This library is
+  released under the Apache license, which can be found in
+  doc/Apache.LICENSE.txt.
+
+  The org.apache.excalibur.bzip2 web site is
+  <http://jakarta.apache.org/avalon/excalibur/bzip2/>.
 
 - com.ice.tar, by Tim Endres. This code is in the public domain.
 

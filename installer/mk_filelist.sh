@@ -17,7 +17,8 @@ echo startup/README.txt >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc \( -name \*.txt -o -name \*.png \) >> installer/jedit-program
-find doc/users-guide doc/FAQ \( -name \*.html -o -name toc.xml \) >> installer/jedit-program
+find doc/users-guide doc/FAQ doc/tips \( -name \*.html -o -name toc.xml \) >> installer/jedit-program
+echo doc/welcome.html >> installer/jedit-program
 
 print_size jedit-program
 
@@ -28,6 +29,7 @@ print_size jedit-macros
 
 # jedit-api fileset
 find doc/api \( -name \*.html -o -name toc.xml \) > installer/jedit-api
+echo doc/api/stylesheet.css >> installer/jedit-api
 
 print_size jedit-api
 
@@ -60,10 +62,11 @@ print_size jedit-os2
 
 #print_size jedit-source
 
-rm installer/jedit-*.tar.bz2
+rm -f installer/jedit-*.tar.bz2
 
 for file in installer/jedit-*
 do
+	echo "creating $file.tar.bz2"
 	tar cfj $file.tar.bz2 `cat $file`
 	rm $file
 done
