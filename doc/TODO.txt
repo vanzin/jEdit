@@ -2,7 +2,8 @@ TO DO
 
 + before 4.0pre1:
 
-- splash screen problem?
+- splash screen problem
+- CCW rotated text not drawn correctly
 - auto indent: do not indent on {{{
 - undo
 - recompile Firewall.jar before releasing

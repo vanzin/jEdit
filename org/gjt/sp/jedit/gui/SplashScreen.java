@@ -62,7 +62,7 @@ public class SplashScreen extends Canvas
 		win.validate();
 		win.show();
 
-		synchronized(this)
+		/*synchronized(this)
 		{
 			try
 			{
@@ -72,7 +72,7 @@ public class SplashScreen extends Canvas
 			{
 				Log.log(Log.ERROR,this,ie);
 			}
-		}
+		}*/
 	}
 
 	public void dispose()

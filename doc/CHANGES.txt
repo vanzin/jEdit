@@ -184,6 +184,8 @@ JEDIT 4.0 VERSION HISTORY
   only differs from the old in case
 - Sometimes, the most recently opened files would not be restored if the
   -background command line switch was used
+- Sometimes, Untitled buffers would not be replaced when another file
+  was opened
 
 + API Changes
 
@@ -229,8 +231,6 @@ JEDIT 4.0 VERSION HISTORY
   highlighter.
 - MiscUtilities.VersionCompare class and MiscUtilities.compareVersions()
   method removed. Use compareStrings() instead
-- Sometimes, Untitled buffers would not be replaced when another file
-  was opened
 - Buffer.markTokens() now returns instance of Buffer.TokenList class
 - New BufferUpdate message type: FOLD_HANDLER_CHANGED
 - Buffer.insertString() deprecated; call Buffer.insert() instead
