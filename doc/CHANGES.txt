@@ -16,6 +16,14 @@ Nicholas O'Leary for contributing to this release.
 - Updated Java and LaTeX syntax highlighting (Alexander Klimetschek).
 
 }}}
+{{{ Miscellaneous
+
+- A single-line selection no longer hides the line highlight, for
+  better readability.
+
+- The selection is now saved between buffer switches.
+
+}}}
 {{{ Bug Fixes
 
 - The following Java code did not indent properly:

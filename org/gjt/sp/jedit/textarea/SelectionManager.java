@@ -92,7 +92,7 @@ class SelectionManager
 	//{{{ addToSelection() method
 	/**
 	 * Adds to the selection. Nested and overlapping selections are merged
-	 * where possible.
+	 * where possible. Null elements of the array are ignored.
 	 * @param selection The new selection
 	 * since jEdit 3.2pre1
 	 */
@@ -101,7 +101,11 @@ class SelectionManager
 		if(selection != null)
 		{
 			for(int i = 0; i < selection.length; i++)
-				addToSelection(selection[i]);
+			{
+				Selection s = selection[i];
+				if(s != null)
+					addToSelection(s);
+			}
 		}
 	} //}}}
 
