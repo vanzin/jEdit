@@ -951,7 +951,7 @@ loop:		for(;;)
 				+ "," + end + ")");
 		}
 
-		for(int i = start; i < end; i++)
+		for(int i = start; i <= end; i++)
 		{
 			//XXX
 			if(isLineVisible(i))
@@ -1555,6 +1555,21 @@ loop:		for(;;)
 			if(!buffer.isLoaded())
 				return;
 
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				preContentRemoved(firstLine,startLine,numLines);
+				preContentRemoved(scrollLineCount,startLine,numLines);
+				
+				if(delayedUpdateEnd >= startLine)
+					delayedUpdateEnd -= numLines;
+				delayedUpdate(startLine,startLine);
+			}
+			else
+			{
+				firstLine.callReset = true;
+				scrollLineCount.callReset = true;
+			}
+
 			if(numLines != 0)
 			{
 				delayedMultilineUpdate = true;
@@ -1627,21 +1642,6 @@ loop:		for(;;)
 
 				lastfvmget = -1;
 				fvmdump();
-			}
-
-			if(textArea.getDisplayManager() == DisplayManager.this)
-			{
-				preContentRemoved(firstLine,startLine,numLines);
-				preContentRemoved(scrollLineCount,startLine,numLines);
-				
-				if(delayedUpdateEnd >= startLine)
-					delayedUpdateEnd -= numLines;
-				delayedUpdate(startLine,startLine);
-			}
-			else
-			{
-				firstLine.callReset = true;
-				scrollLineCount.callReset = true;
 			}
 		} //}}}
 

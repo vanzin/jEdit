@@ -1,8 +1,11 @@
-TO DO
+﻿TO DO
 
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- option to disable context menu
+- hide caret while typing
+- plugin mgr install doesn't update existing plugins
 - undo dirty broken
 - plugin mgr inspection of not-loaded plugins
 - drag and drop: grabbing non-selected areas

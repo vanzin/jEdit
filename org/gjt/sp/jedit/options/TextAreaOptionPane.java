@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
@@ -132,7 +134,19 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		/* Anti-aliasing */
 		antiAlias = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".antiAlias"));
-		antiAlias.setSelected(jEdit.getBooleanProperty("view.antiAlias"));
+		boolean antiAliasEnabled = jEdit.getBooleanProperty(
+			"view.antiAlias");
+		font.setAntiAliasEnabled(antiAliasEnabled);
+		antiAlias.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				font.setAntiAliasEnabled(
+					antiAlias.isSelected());
+				font.repaint();
+			}
+		});
+		antiAlias.setSelected(antiAliasEnabled);
 		addComponent(antiAlias);
 
 		/* Fractional font metrics */

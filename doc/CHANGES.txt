@@ -3,8 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre7
 
 Thanks to Aaron Bell, Alessandro Falappa, Ben Williams, Chris Petersen,
-Ollie Rutherfurd, Randolf Mock, Randy Hudson, and for contributing to
-this release.
+Ollie Rutherfurd, Mike Dillon, Randolf Mock, and Randy Hudson for
+contributing to this release.
 
 {{{ Miscellaneous
 
