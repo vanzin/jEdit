@@ -396,10 +396,10 @@ public class SearchAndReplace
 		{
 			results.searchFailed();
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			Object[] args = { e.toString() };
+			GUIUtilities.error(comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",args);
 			return false;
 		}
 	} //}}}
@@ -551,9 +551,7 @@ loop:			for(;;)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
+			Object[] args = { e.toString() };
 			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
@@ -753,10 +751,10 @@ loop:			for(;;)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			Object[] args = { e.toString() };
+			GUIUtilities.error(comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",args);
 		}
 		finally
 		{
@@ -810,10 +808,10 @@ loop:			for(;;)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			Object[] args = { e.toString() };
+			GUIUtilities.error(comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",args);
 		}
 		finally
 		{
@@ -914,10 +912,10 @@ loop:			while(path != null)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			GUIUtilities.error(comp,"searcherror",args);
+			Object[] args = { e.toString() };
+			GUIUtilities.error(comp,
+				beanshell ? "searcherror-bsh"
+				: "searcherror",args);
 		}
 		finally
 		{

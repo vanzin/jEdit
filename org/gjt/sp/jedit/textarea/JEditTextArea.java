@@ -2263,25 +2263,6 @@ forward_scan:		do
 
 			magicCaret = -1;
 
-			if(!displayManager.isLineVisible(newCaretLine))
-			{
-				if(newCaretLine < displayManager.getFirstVisibleLine()
-					|| newCaretLine > displayManager.getLastVisibleLine())
-				{
-					int collapseFolds = buffer.getIntegerProperty(
-						"collapseFolds",0);
-					if(collapseFolds != 0)
-					{
-						displayManager.expandFolds(collapseFolds);
-						displayManager.expandFold(newCaretLine,false);
-					}
-					else
-						displayManager.expandAllFolds();
-				}
-				else
-					displayManager.expandFold(newCaretLine,false);
-			}
-
 			if(caretLine == newCaretLine)
 			{
 				if(caretScreenLine != -1)
@@ -5410,6 +5391,28 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// to blink
 				blink = true;
 				caretTimer.restart();
+
+				/* avoid generating an access$ */
+				int caretLine = getCaretLine();
+
+				if(!displayManager.isLineVisible(caretLine))
+				{
+					if(caretLine < displayManager.getFirstVisibleLine()
+						|| caretLine > displayManager.getLastVisibleLine())
+					{
+						int collapseFolds = buffer.getIntegerProperty(
+							"collapseFolds",0);
+						if(collapseFolds != 0)
+						{
+							displayManager.expandFolds(collapseFolds);
+							displayManager.expandFold(caretLine,false);
+						}
+						else
+							displayManager.expandAllFolds();
+					}
+					else
+						displayManager.expandFold(caretLine,false);
+				}
 
 				scrollToCaret(queuedScrollToElectric);
 				updateBracketHighlightWithDelay();

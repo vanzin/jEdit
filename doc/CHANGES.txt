@@ -98,11 +98,25 @@ contributing to this release.
 - Inserting text at the end of the buffer did not update the vertical
   scroll bar in other text areas viewing the same buffer.
 
+- Fixed an exception thrown when narrowing to a range where the first or
+  last line was the first or last line of the buffer.
+
+- Various combinations of insertions and removes could mess up the fold
+  visibility map.
+
 }}}
 {{{ API Additions
 
 - Icon theme support. Pass a URL to GUIUtilities.setIconPath() and all
   icons will be loaded from that URL prepended to the icon name.
+
+}}}
+{{{ API Changes
+
+- Within an event listener, Buffer.isTransactionInProgress() always
+  returns true, and transactionComplete() is now always called on each
+  event listener after every buffer change. As far as I know, no plugins
+  use the transaction API so this should not affect anyone.
 
 }}}
 
