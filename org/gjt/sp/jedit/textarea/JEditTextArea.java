@@ -2424,8 +2424,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep,
-				!select) + lineStart;
+			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
+				noWordSep) + lineStart;
 		}
 
 		if(select)
@@ -2724,9 +2724,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep,
-				!select)
-				+ lineStart;
+			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
+				noWordSep) + lineStart;
 		}
 
 		if(select)
@@ -3306,7 +3305,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,true);
+			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3511,7 +3510,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep,true);
+				_caret+1,noWordSep);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);

@@ -1512,7 +1512,14 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view)
 	{
-		return newFile(view,null);
+		String path = MiscUtilities.getParentOfPath(view.getBuffer().getPath());
+		VFS vfs = VFSManager.getVFSForPath(path);
+		// don't want 'New File' to create a read only buffer if current
+		// file is on SQL VFS or something
+		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
+			path = System.getProperty("user.home");
+
+		return newFile(view,path);
 	} //}}}
 
 	//{{{ newFile() method

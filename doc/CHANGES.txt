@@ -52,6 +52,7 @@ JEDIT 4.0 VERSION HISTORY
 - Documentation updates (me and John Gellene)
 - Changes to build.xml; documentation on compiling from source now part
   of the source distribution (README.SRC.txt)
+- Restored word command behavior to how it was in jEdit 3.2
 
 + Bug Fixes
 
@@ -120,6 +121,12 @@ JEDIT 4.0 VERSION HISTORY
   the same
 - Possible fix for 'timeout' error when opening a large number of files
   with jEditLauncher on Windows
+- Autosave would stall the editor because it grabbed a read lock for the
+  entire operation
+- 'New File' command no longer creates read only buffers if the current
+  buffer is located on a read-only filesystem
+- jEditLauncher 4.0.2 fixes several bugs in the installer module
+  (John Gellene)
 
 + API Additions
 

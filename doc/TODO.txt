@@ -1,7 +1,5 @@
 TO DO
 
-- next/prev word: if whitespace at start of word, don't eat trailing
-
 - rect select and soft wrap
 - still problem with last phys line repainting
 - vertical scrollbar w/ soft wrap wrong

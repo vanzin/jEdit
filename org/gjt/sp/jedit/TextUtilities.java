@@ -248,23 +248,6 @@ public class TextUtilities
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
-		return findWordStart(line,pos,noWordSep,false);
-	} //}}}
-
-	//{{{ findWordStart() method
-	/**
-	 * Locates the start of the word at the specified position.
-	 * @param line The text
-	 * @param pos The position
-	 * @param noWordSep Characters that are non-alphanumeric, but
-	 * should be treated as word characters anyway
-	 * @param whiteSpace If true, any whitespace at the end of the
-	 * word is also included
-	 * @since jEdit 4.0pre3
-	 */
-	public static int findWordStart(String line, int pos, String noWordSep,
-		boolean whiteSpace)
-	{
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
@@ -281,7 +264,6 @@ public class TextUtilities
 			type = SYMBOL;
 		//}}}
 
-		boolean seenWhiteSpace = false;
 		int whiteSpaceEnd = 0;
 loop:		for(int i = pos; i >= 0; i--)
 		{
@@ -297,22 +279,10 @@ loop:		for(int i = pos; i >= 0; i--)
 					return i + 1; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
-				// if we see whitespace, set flag.
-				if(Character.isWhitespace(ch) && whiteSpace)
-				{
-					if(!seenWhiteSpace)
-						whiteSpaceEnd = i + 1;
-					seenWhiteSpace = true;
-					break;
-				}
-				else if(Character.isLetterOrDigit(ch) ||
+				if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 				{
-					// next word?
-					if(seenWhiteSpace)
-						return i + 1;
-					else
-						break;
+					break;
 				}
 				else
 					return i + 1; //}}}
@@ -321,26 +291,16 @@ loop:		for(int i = pos; i >= 0; i--)
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch))
 				{
-					if(whiteSpace)
-					{
-						if(!seenWhiteSpace)
-							whiteSpaceEnd = i + 1;
-						seenWhiteSpace = true;
-						break;
-					}
-					else
-						return i + 1;
+					return i + 1;
 				}
 				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
+				{
 					return i + 1;
+				}
 				else
 				{
-					// next word?
-					//if(seenWhiteSpace)
-						return i;
-					//else
-					//	break;
+					break;
 				} //}}}
 			}
 		}
@@ -357,23 +317,6 @@ loop:		for(int i = pos; i >= 0; i--)
 	 * should be treated as word characters anyway
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep)
-	{
-		return findWordEnd(line,pos,noWordSep,false);
-	} //}}}
-
-	//{{{ findWordEnd() method
-	/**
-	 * Locates the end of the word at the specified position.
-	 * @param line The text
-	 * @param pos The position
-	 * @param noWordSep Characters that are non-alphanumeric, but
-	 * should be treated as word characters anyway
-	 * @param whiteSpace If true, any whitespace at the start of the
-	 * word is also included
-	 * @since jEdit 4.0pre3
-	 */
-	public static int findWordEnd(String line, int pos, String noWordSep,
-		boolean whiteSpace)
 	{
 		if(pos != 0)
 			pos--;
@@ -409,20 +352,10 @@ loop:		for(int i = pos; i < line.length(); i++)
 					return i; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
-				// if we see whitespace, set flag.
-				if(Character.isWhitespace(ch) && whiteSpace)
-				{
-					seenWhiteSpace = true;
-					break;
-				}
-				else if(Character.isLetterOrDigit(ch) ||
+				if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 				{
-					// next word?
-					if(seenWhiteSpace)
-						return i;
-					else
-						break;
+					break;
 				}
 				else
 					return i; //}}}
@@ -431,24 +364,14 @@ loop:		for(int i = pos; i < line.length(); i++)
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch))
 				{
-					if(whiteSpace)
-					{
-						seenWhiteSpace = true;
-						break;
-					}
-					else
-						return i;
+					return i;
 				}
 				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 					return i;
 				else
 				{
-					// next word?
-					// if(seenWhiteSpace)
-						return i + 1;
-					// else
-					//	break;
+					break;
 				} //}}}
 			}
 		}
