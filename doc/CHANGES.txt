@@ -1,5 +1,27 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre8
+
+Thanks to Scott Allen for contributing to this release.
+
+{{{ Syntax Highlighting
+
+- Lua syntax highlighting (Philipp Janda)
+
+- SMI-MIB syntax highlighting (Scott Allen).
+
+}}}
+{{{ Bug Fixes
+
+- Fixed NullPointerException in FileCellRenderer if a VFS.DirectoryEntry
+  had a null symlinkPath (which should not be the case anyway).
+
+- Fixed the roots: VFS to return non-null symlinkPaths.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre7
 
 Thanks to Aaron Bell, Alessandro Falappa, Ben Williams, Chris Petersen,

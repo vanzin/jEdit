@@ -3,6 +3,9 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- CA+ to switch desktops, then numpad keys
+- printing: check default printer setting
+- still broken: https://sourceforge.net/tracker/?func=detail&atid=100588&aid=831264&group_id=588
 - news: deep indent, action bar, new cli options
 - remove-marker, select-next/prev-marker/bracket
 - option to disable context menu

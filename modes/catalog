@@ -159,7 +159,10 @@
 
 <MODE NAME="lotos"		FILE="lotos.xml"
 				FILE_NAME_GLOB="*.{lot,lotos}"/>
-                                                                                
+
+<MODE NAME="lua"		FILE="lua.xml"
+				FILE_NAME_GLOB="*.lua" />
+
 <MODE NAME="mail"		FILE="mail.xml" />
 
 <MODE NAME="makefile"		FILE="makefile.xml"
@@ -297,6 +300,9 @@
 
 <MODE NAME="sdl/pr"		FILE="sdl_pr.xml"
 				FILE_NAME_GLOB="*.pr"/>
+
+<MODE NAME="smi-mib"		FILE="smi-mib.xml"
+				FILE_NAME_GLOB="*{.mib,-MIB.txt}" />
 
 <MODE NAME="sqr"                FILE="sqr.xml"
                                 FILE_NAME_GLOB="*.{sqr,sqc}" />

@@ -175,7 +175,8 @@ public class FileRootsVFS extends VFS
 			// REMIND: calling isDirectory() on a floppy drive
 			// displays stupid I/O error dialog box on Windows
 
-			this.path = this.deletePath = file.getPath();
+			this.path = this.deletePath = this.symlinkPath
+				= file.getPath();
 
 			if(isFloppy(file))
 			{
