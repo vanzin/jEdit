@@ -13,7 +13,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="[[:digit:]]?(px|pt|mm|cm|in|em)"
+		DIGIT_RE="[[:digit:]]?(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
 		NO_WORD_SEP="-">
 
 		<SEQ TYPE="OPERATOR">:</SEQ>
@@ -57,6 +57,22 @@
 			<KEYWORD2>font-variant</KEYWORD2>
 			<KEYWORD2>font-weight</KEYWORD2>
 			<KEYWORD2>font-stretch</KEYWORD2>
+			<KEYWORD2>src</KEYWORD2>
+			<KEYWORD2>definition-src</KEYWORD2>
+			<KEYWORD2>unicode-range</KEYWORD2>
+			<KEYWORD2>panose-1</KEYWORD2>
+			<KEYWORD2>stemv</KEYWORD2>
+			<KEYWORD2>stemh</KEYWORD2>
+			<KEYWORD2>units-per-em</KEYWORD2>
+			<KEYWORD2>slope</KEYWORD2>
+			<KEYWORD2>cap-height</KEYWORD2>
+			<KEYWORD2>x-height</KEYWORD2>
+			<KEYWORD2>ascent</KEYWORD2>
+			<KEYWORD2>descent</KEYWORD2>
+			<KEYWORD2>baseline</KEYWORD2>
+			<KEYWORD2>centerline</KEYWORD2>
+			<KEYWORD2>mathline</KEYWORD2>
+			<KEYWORD2>topline</KEYWORD2>
 
 			<!-- Text properties -->
 			<KEYWORD2>letter-spacing</KEYWORD2>
@@ -154,6 +170,7 @@
 			<KEYWORD2>page-break-inside</KEYWORD2>
 			<KEYWORD2>page</KEYWORD2>
 			<KEYWORD2>orphans</KEYWORD2>
+			<KEYWORD2>widows</KEYWORD2>
 												
 			<!-- Table properties -->
 			<KEYWORD2>caption-side</KEYWORD2>
@@ -195,12 +212,13 @@
 			<KEYWORD2>richness</KEYWORD2>
 			<KEYWORD2>speak-punctuation</KEYWORD2>
 			<KEYWORD2>speak-numeral</KEYWORD2>
+			<KEYWORD2>speak-header-cell</KEYWORD2>
 
 			<KEYWORD3>rgb</KEYWORD3>
 			<KEYWORD3>url</KEYWORD3>
 
 			<!-- measurement units -->
-			<KEYWORD3>left-side</KEYWORD3>
+			<KEYWORD3>left-side</KEYWORD3			>
 			<KEYWORD3>far-left</KEYWORD3>
 			<KEYWORD3>center-left</KEYWORD3>
 			<KEYWORD3>center</KEYWORD3>
@@ -249,7 +267,7 @@
 			<KEYWORD3>inline</KEYWORD3>
 			<KEYWORD3>block</KEYWORD3>
 			<KEYWORD3>list-item</KEYWORD3>
-			<KEYWORD3> run-in</KEYWORD3>
+			<KEYWORD3>run-in</KEYWORD3>
 			<KEYWORD3>compact</KEYWORD3>
 			<KEYWORD3>marker</KEYWORD3>
 			<KEYWORD3>table</KEYWORD3>
@@ -285,6 +303,16 @@
 			<KEYWORD3>italic</KEYWORD3>
 			<KEYWORD3>oblique</KEYWORD3>
 			<KEYWORD3>normal</KEYWORD3>
+			<KEYWORD3>xx-small</KEYWORD3>
+			<KEYWORD3>x-small</KEYWORD3>
+			<KEYWORD3>small</KEYWORD3>
+			<KEYWORD3>large</KEYWORD3>
+			<KEYWORD3>x-large</KEYWORD3>
+			<KEYWORD3>xx-large</KEYWORD3>
+			<KEYWORD3>thin</KEYWORD3>
+			<KEYWORD3>thick</KEYWORD3>
+			<KEYWORD3>smaller</KEYWORD3>
+			<KEYWORD3>larger</KEYWORD3>
 			<KEYWORD3>small-caps</KEYWORD3>
 			<KEYWORD3>inherit</KEYWORD3>
 			<KEYWORD3>bold</KEYWORD3>
@@ -320,7 +348,6 @@
 			<KEYWORD3>avoid</KEYWORD3>
 			<KEYWORD3>x-low</KEYWORD3>
 			<KEYWORD3>low</KEYWORD3>
-			<KEYWORD3>medium</KEYWORD3>
 			<KEYWORD3>high</KEYWORD3>
 			<KEYWORD3>x-high</KEYWORD3>
 			<KEYWORD3>absolute</KEYWORD3>
@@ -363,6 +390,23 @@
 			<KEYWORD3>x-loud</KEYWORD3>
 			<KEYWORD3>pre</KEYWORD3>
 			<KEYWORD3>nowrap</KEYWORD3>
+			<KEYWORD3>dotted</KEYWORD3>
+			<KEYWORD3>dashed</KEYWORD3>
+			<KEYWORD3>solid</KEYWORD3>
+			<KEYWORD3>double</KEYWORD3>
+			<KEYWORD3>groove</KEYWORD3>
+			<KEYWORD3>ridge</KEYWORD3>
+			<KEYWORD3>inset</KEYWORD3>
+			<KEYWORD3>outset</KEYWORD3>
+			<KEYWORD3>once</KEYWORD3>
+			<KEYWORD3>both</KEYWORD3>
+			<KEYWORD3>silent</KEYWORD3>
+			<KEYWORD3>medium</KEYWORD3>
+			<KEYWORD3>mix</KEYWORD3>
+			<KEYWORD3>male</KEYWORD3>
+			<KEYWORD3>female</KEYWORD3>
+			<KEYWORD3>child</KEYWORD3>
+			<KEYWORD3>code</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
