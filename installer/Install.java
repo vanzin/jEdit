@@ -14,31 +14,12 @@
 package installer;
 
 import javax.swing.plaf.metal.*;
+import javax.swing.*;
 import java.io.*;
 import java.util.Properties;
 
 public class Install
 {
-	private static MetalTheme createMetalTheme()
-	{
-		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.5") < 0)
-			return new JEditMetalTheme14();
-		else
-		{
-			try
-			{
-				return (MetalTheme)
-					Class.forName("JEditMetalTheme15")
-					.newInstance();
-			}
-			catch(Exception e)
-			{
-				return new JEditMetalTheme14();
-			}
-		}
-	}
-	
 	public static void main(String[] args)
 	{
 		String javaVersion = System.getProperty("java.version");
@@ -51,16 +32,11 @@ public class Install
 		}
 
 		if(args.length == 0)
-		{
-			MetalLookAndFeel.setCurrentTheme(createMetalTheme());
 			new SwingInstall();
-		}
 		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
 		else if(args.length >= 2 && args[0].equals("auto"))
-		{
 			new NonInteractiveInstall(args);
-		}
 		else
 		{
 			System.err.println("Usage:");
