@@ -35,7 +35,7 @@ public class KillRing
 	//{{{ propertiesChanged() method
 	public static void propertiesChanged()
 	{
-		int newSize = jEdit.getIntegerProperty("history",25);
+		int newSize = Math.max(1,jEdit.getIntegerProperty("history",25));
 		if(ring == null)
 			ring = new UndoManager.Remove[newSize];
 		else if(newSize != ring.length)

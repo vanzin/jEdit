@@ -58,7 +58,7 @@
 		</SPAN>
 
 		<!-- Readins -->
-		<SPAN_REGEXP HASH_CHAR="<" TYPE="LITERAL1" DELEGATE="LITERAL">
+		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN><![CDATA[<<[[:space:]'"]*([[:alnum:]_]+)[[:space:]'"]*]]></BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
