@@ -47,6 +47,11 @@ JEDIT 4.2 VERSION HISTORY
 - The plugin manager now has better handling of loading and unloading
   plugins with dependencies.
 
+- jEdit now attempts to auto-detect the encoding of XML files by looking
+  for an <?xml ... encoding="..." ?> processing instruction on the first
+  line of the file. Note that if this processing instruction is present,
+  an encoding selected in the File->Open dialog box is ignored.
+
 }}}
 {{{ Bug Fixes
 

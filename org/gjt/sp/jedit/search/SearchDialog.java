@@ -746,7 +746,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
-		if(fileset instanceof DirectoryListSet)
+		/* if(fileset instanceof DirectoryListSet)
 		{
 			filter.setText(((DirectoryListSet)fileset)
 				.getFileFilter());
@@ -755,7 +755,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchSubDirectories.setSelected(((DirectoryListSet)fileset)
 				.isRecursive());
 		}
-		else
+		else */
 		{
 			directory.setText(view.getBuffer().getDirectory());
 

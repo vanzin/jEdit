@@ -297,7 +297,10 @@ public class CompleteWord extends JWindow
 				{
 					Completion keyword = new Completion(_keyword,true);
 					if(!completions.contains(keyword))
+					{
+						System.err.println(completions);
 						completions.add(keyword);
+					}
 				}
 			}
 		} //}}}
@@ -317,7 +320,10 @@ public class CompleteWord extends JWindow
 
 				// remove duplicates
 				if(!completions.contains(comp))
+				{
+					System.err.println(completions);
 					completions.add(comp);
+				}
 			}
 
 			// check for match inside line
@@ -335,7 +341,10 @@ public class CompleteWord extends JWindow
 
 						// remove duplicates
 						if(!completions.contains(comp))
+						{
+							System.err.println(completions);
 							completions.add(comp);
+						}
 					}
 				}
 			}
