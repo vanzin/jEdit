@@ -230,7 +230,15 @@ public class OffsetManager
 	public final void setLineContext(int line, TokenMarker.LineContext context)
 	{
 		if(line > lastValidLineContext)
+		{
+			// maybe this loop only ever happends in text mode?
+			for(int i = lastValidLineContext + 1; i < line; i++)
+			{
+				lineInfo[i] &= ~LINE_CONTEXT_VALID_MASK;
+			}
+
 			lastValidLineContext = line;
+		}
 
 		lineContext[line] = context;
 		lineInfo[line] |= LINE_CONTEXT_VALID_MASK;
@@ -490,6 +498,12 @@ public class OffsetManager
 	public void lineContextInvalidFrom(int startLine)
 	{
 		lastValidLineContext = Math.min(lastValidLineContext,startLine);
+	} //}}}
+
+	//{{{ getLastValidLineContext() method
+	public int getLastValidLineContext()
+	{
+		return lastValidLineContext;
 	} //}}}
 
 	//{{{ Private members

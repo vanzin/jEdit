@@ -1183,12 +1183,7 @@ public class View extends JFrame implements EBComponent
 
 	//{{{ getSplitConfig() method
 	/*
-	 * The split config is recorded in a simple RPN "language":
-	 * "vertical" pops the two topmost elements off the stack, creates a
-	 * vertical split
-	 * "horizontal" pops the two topmost elements off the stack, creates a
-	 * horizontal split
-	 * A path name creates an edit pane editing that buffer
+	 * The split config is recorded in a simple RPN "language".
 	 */
 	private void getSplitConfig(JSplitPane splitPane,
 		StringBuffer splitConfig)
@@ -1334,7 +1329,7 @@ public class View extends JFrame implements EBComponent
 				removeToolBar(searchBar);
 
 			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
-				new SearchBar(this,false));
+				searchBar = new SearchBar(this,false));
 		}
 		else if(searchBar != null)
 		{

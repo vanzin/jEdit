@@ -233,8 +233,7 @@ public class Chunk extends Token
 	{
 		super(id,offset,length,rules);
 		accessable = true;
-		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
-			? defaultID : id];
+		style = styles[id];
 		background = style.getBackgroundColor();
 		if(background == null)
 			background = styles[defaultID].getBackgroundColor();

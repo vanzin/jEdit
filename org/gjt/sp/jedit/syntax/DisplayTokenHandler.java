@@ -107,8 +107,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				initChunk(chunk);
 				x += chunk.width;
 
-				if(id == Token.WHITESPACE
-					|| id == Token.TAB)
+				if(Character.isWhitespace(seg.array[
+					seg.offset + chunk.offset]))
 				{
 					if(seenNonWhitespace)
 					{
@@ -216,10 +216,14 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ canMerge() method
 	private boolean canMerge(Chunk c1, Chunk c2)
 	{
+		if(!c1.accessable || !c2.accessable)
+			return false;
+
+		char ch1 = seg.array[seg.offset + c1.offset];
+		char ch2 = seg.array[seg.offset + c2.offset];
+
 		return ((c1.style == c2.style)
-			&& c1.id != Token.TAB
-			&& c2.id != Token.TAB
-			&& c1.accessable && c2.accessable
+			&& ch1 != '\t' && ch2 != '\t'
 			&& (c1.length + c2.length <= MAX_CHUNK_LEN));
 	} //}}}
 

@@ -2072,7 +2072,8 @@ public class Buffer implements EBComponent
 			{
 				start = 0;
 
-				for(int i = lineIndex - 1; i >= 0; i--)
+				for(int i = Math.min(offsetMgr.getLastValidLineContext(),
+					lineIndex - 1); i >= 0; i--)
 				{
 					if(offsetMgr.isLineContextValid(i))
 					{

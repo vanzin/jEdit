@@ -765,51 +765,22 @@ public class GUIUtilities
 	{
 		SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
 
-		try
+		// start at 1 not 0 to skip Token.NULL
+		for(int i = 1; i < styles.length; i++)
 		{
-			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment1"),
-				family,size,color);
-			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.comment2"),
-				family, size,color);
-			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal1"),
-				family,size,color);
-			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.literal2"),
-				family,size,color);
-			styles[Token.LABEL] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.label"),
-				family,size,color);
-			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword1"),
-				family,size,color);
-			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword2"),
-				family,size,color);
-			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.keyword3"),
-				family,size,color);
-			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.function"),
-				family,size,color);
-			styles[Token.MARKUP] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.markup"),
-				family,size,color);
-			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.operator"),
-				family,size,color);
-			styles[Token.DIGIT] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.digit"),
-				family,size,color);
-			styles[Token.INVALID] = GUIUtilities.parseStyle(
-				jEdit.getProperty("view.style.invalid"),
-				family,size,color);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,GUIUtilities.class,e);
+			try
+			{
+				String styleName = "view.style."
+					+ Token.tokenToString((byte)i)
+					.toLowerCase();
+				styles[i] = GUIUtilities.parseStyle(
+					jEdit.getProperty(styleName),
+					family,size,color);
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,e);
+			}
 		}
 
 		return styles;

@@ -240,10 +240,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						context);
 				}
 
-				tokenHandler.handleToken(
-					(ch == '\t' ? Token.TAB
-					: Token.WHITESPACE),pos - line.offset,1,
-					context);
+				tokenHandler.handleToken(context.rules.getDefault(),
+					pos - line.offset,1,context);
 				lastOffset = pos + 1;
 
 				escaped = false;
