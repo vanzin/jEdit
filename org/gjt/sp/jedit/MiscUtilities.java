@@ -300,8 +300,10 @@ public class MiscUtilities
 		// If backups is 1, create ~ file
 		if(backups == 1)
 		{
-			file.renameTo(new File(backupDirectory,
-				backupPrefix + name + backupSuffix));
+			File backupFile = new File(backupDirectory,
+				backupPrefix + name + backupSuffix);
+			backupFile.delete();
+			file.renameTo(backupFile);
 		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
 		else

@@ -38,7 +38,7 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 	public static Icon openFileIcon = GUIUtilities.loadIcon("OpenFile.png");
 	public static Icon dirIcon = GUIUtilities.loadIcon("Folder.png");
 	public static Icon openDirIcon = GUIUtilities.loadIcon("OpenFolder.png");
-	public static Icon filesystemIcon = GUIUtilities.loadIcon("Drive.png");
+	public static Icon filesystemIcon = GUIUtilities.loadIcon("DriveSmall.png");
 	public static Icon loadingIcon = GUIUtilities.loadIcon("ReloadSmall.png");
 
 	//{{{ FileCellRenderer constructor

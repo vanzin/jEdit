@@ -175,8 +175,17 @@ contributing to this release.
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
   some bug fixes and cleanups. (Kris Kopicki)
 
+- When running on MacOS, the roots: filesystem now lists all disks
+  mounted under /Volumes. (Kris Kopicki)
+
 - On Unix, the installer now defaults to installing in the user's home
   directory when running as a non-root user.
+
+- Added ColorWellButton control. Under Mac OS X, changing the background
+  color of a JButton doesn't work if the MacOS Adaptive look and feel is
+  in use... so I wrote a custom control. It looks better and eliminates
+  duplicated code anyway. Plugin developers, please use this instead of
+  the widely-copied and pasted JButton trick.
 
 + Bug Fixes:
 
@@ -249,12 +258,6 @@ contributing to this release.
 
 - Preview_Javadoc_of_Buffer.bsh macro used the deprecated
   DockableWindowManager.getDockableWindow() method.
-
-- Added ColorWellButton control. Under OS X, changing the background
-  color of a JButton doesn't work if the MacOS Adaptive look and feel is
-  in use... so I wrote a custom control. It looks better and eliminates
-  duplicated code anyway. Plugin developers, please use this instead of
-  the widely-copied and pasted JButton trick.
 
 + API Changes:
 
