@@ -196,15 +196,15 @@ class BufferPrintable extends WorkRequest implements Printable
 		{
 			double headerHeight = paintHeader(gfx,pageX,pageY,pageWidth,
 				actuallyPaint);
-			pageY += headerHeight * 2;
-			pageHeight -= headerHeight * 2;
+			pageY += headerHeight;
+			pageHeight -= headerHeight;
 		}
 
 		if(footer)
 		{
 			double footerHeight = paintFooter(gfx,pageX,pageY,pageWidth,
 				pageHeight,pageIndex,actuallyPaint);
-			pageHeight -= footerHeight * 2;
+			pageHeight -= footerHeight;
 		}
 
 		FontRenderContext frc = gfx.getFontRenderContext();
@@ -271,11 +271,12 @@ print_loop:	for(;;)
 				gfx.setFont(font);
 				gfx.setColor(lineNumberColor);
 				gfx.drawString(String.valueOf(currentPhysicalLine + 1),
-					(float)pageX,(float)(pageY + y));
+					(float)pageX,(float)(pageY + y + lm.getHeight()));
 			}
 
 			for(int i = 0; i < lineList.size(); i++)
 			{
+				y += lm.getHeight();
 				Chunk chunks = (Chunk)lineList.get(i);
 				if(chunks != null && actuallyPaint)
 				{
@@ -284,7 +285,6 @@ print_loop:	for(;;)
 						(float)(pageY + y),
 						Color.white,false);
 				}
-				y += lm.getHeight();
 			}
 
 			currentPhysicalLine++;

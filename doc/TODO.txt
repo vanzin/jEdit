@@ -24,7 +24,6 @@ and quirks that I need to fix eventually.
 - requestDefaultFocus() is bad
 - close current area w/ dockables that don't implement
   requestDefaultFocus()
-- use createMultilineLabel()
 - memory indicator color settings lost in limbo
 - rect select somewhat fucked
 - A+# on OS X, need better modifier mapping on OS X
