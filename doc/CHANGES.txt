@@ -40,6 +40,9 @@ release.
   They can be cleared out by right-clicking and selecting "Remove Node"
   from the resulting popup menu (Peter Cox).
 
+- The content of the status bar can be customized in the new
+  "Status Bar" pane of the Global Options dialog box (Kenrick Drew).
+
 + Platform-Specific Changes:
 
 - Updated MacOS plugin (Kris Kopicki).
@@ -82,6 +85,10 @@ release.
   under some circumstances.
 - "Unsplit Current" command no longer changes the divider location to
   zero.
+- "Copy Append to Register" and "Cut Append to Register" commands would
+  throw NullPointerExceptions when appending to a register that didn't
+  exist. The correct behavior is to put the selected text in the
+  register.
 
 + API Changes
 

@@ -111,13 +111,16 @@ public class Registers
 
 		Register reg = getRegister(register);
 
-		String registerContents = reg.toString();
-		if(reg != null && registerContents != null)
+		if(reg != null)
 		{
-			if(registerContents.endsWith(separator))
-				selection = registerContents + selection;
-			else
-				selection = registerContents + separator + selection;
+			String registerContents = reg.toString();
+			if(registerContents != null)
+			{
+				if(registerContents.endsWith(separator))
+					selection = registerContents + selection;
+				else
+					selection = registerContents + separator + selection;
+			}
 		}
 
 		setRegister(register,selection);

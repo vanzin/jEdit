@@ -1014,9 +1014,6 @@ public class View extends JFrame implements EBComponent
 		Component comp = restoreSplitConfig(buffer,splitConfig);
 		dockableWindowManager.add(comp);
 
-		status.updateBufferStatus();
-		status.updateMiscStatus();
-
 		EditBus.addToBus(this);
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
@@ -1233,8 +1230,10 @@ public class View extends JFrame implements EBComponent
 		{
 			getContentPane().add(BorderLayout.NORTH,topToolBars);
 			getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-			if(!plainView)
+			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
 				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+			else
+				removeToolBar(status);
 		}
 		else
 		{
@@ -1242,11 +1241,13 @@ public class View extends JFrame implements EBComponent
 				.TOP_TOOLBARS,topToolBars);
 			dockableWindowManager.add(DockableWindowManager.DockableLayout
 				.BOTTOM_TOOLBARS,bottomToolBars);
-			if(!plainView)
+			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
 			{
 				removeToolBar(status);
 				getContentPane().add(BorderLayout.SOUTH,status);
 			}
+			else
+				getContentPane().remove(status);
 		}
 
 		getRootPane().revalidate();
@@ -1303,7 +1304,7 @@ public class View extends JFrame implements EBComponent
 	private void setEditPane(EditPane editPane)
 	{
 		this.editPane = editPane;
-		status.repaintCaretStatus();
+		status.updateCaretStatus();
 		status.updateBufferStatus();
 		status.updateMiscStatus();
 
@@ -1341,7 +1342,7 @@ public class View extends JFrame implements EBComponent
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED
 			&& editPane.getBuffer().isLoaded())
 		{
-			status.repaintCaretStatus();
+			status.updateCaretStatus();
 			status.updateBufferStatus();
 			status.updateMiscStatus();
 		}
@@ -1356,9 +1357,7 @@ public class View extends JFrame implements EBComponent
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			status.repaintCaretStatus();
-			// no need for this?
-			//status.updateMiscStatus();
+			status.updateCaretStatus();
 		}
 	} //}}}
 
@@ -1388,7 +1387,7 @@ public class View extends JFrame implements EBComponent
 		public void scrolledVertically(JEditTextArea textArea)
 		{
 			if(getTextArea() == textArea)
-				status.repaintCaretStatus();
+				status.updateCaretStatus();
 		}
 
 		public void scrolledHorizontally(JEditTextArea textArea) {}

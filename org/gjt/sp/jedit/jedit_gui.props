@@ -721,6 +721,18 @@ view.status.rect-select=Rectangular selection mode
 view.status.print=Printing page {0}
 #}}}
 
+#{{{ Status bar component visibility
+view.status.show-caret-status=true
+view.status.show-edit-mode=true
+view.status.show-fold-mode=true
+view.status.show-encoding=true
+view.status.show-wrap=true
+view.status.show-multi-select=true
+view.status.show-overwrite=true
+view.status.show-line-seperator=true
+view.status.show-memory=true
+#}}}
+
 #}}}
 
 #{{{ Printing
@@ -1409,6 +1421,22 @@ options.gutter.gutterAltClick=Alt-click in gutter:
 options.gutter.toggleFold=Collapse/expand fold
 options.gutter.toggleFoldFully=Collapse/expand fold fully
 options.gutter.selectFold=Select fold
+#}}}
+
+#{{{ Status bar pane
+options.status.label=Status Bar
+options.status.visible=Show status bar
+options.status.show-caret-status=Show caret status
+options.status.show-encoding=Show buffer encoding
+options.status.show-edit-mode=Show edit mode
+options.status.show-fold-mode=Show fold mode
+options.status.show-wrap=Show wrap mode
+options.status.show-multi-select=Show multiple selection status
+options.status.show-overwrite=Show overwrite status
+options.status.show-line-seperator=Show buffer line seperator
+options.status.show-memory=Show memory indicator
+options.status.memory.foreground=Memory indicator foreground:
+options.status.memory.background=Memory indicator background:
 #}}}
 
 #{{{ Syntax Highlighting pane
