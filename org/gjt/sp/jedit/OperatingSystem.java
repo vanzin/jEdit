@@ -1,12 +1,9 @@
 /*
- * :tabSize=8:indentSize=8:noTabs=false:
- * :folding=explicit:collapseFolds=1:
- *
  * OperatingSystem.java - OS detection
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002, 2003 Slava Pestov
+ * Copyright (C) 2002, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,7 +247,7 @@ public class OperatingSystem
 		return (isMacOS() && UIManager.getLookAndFeel().isNativeLookAndFeel());
 	} //}}}
 
-	//{{{ hasScreenMenuBar
+	//{{{ hasScreenMenuBar() method
 	/**
 	 * Returns whether the screen menu bar on Mac OS X is in use.
 	 * @since jEdit 4.2pre1
@@ -276,6 +273,9 @@ public class OperatingSystem
 	 */
 	public static final boolean hasJava14()
 	{
+		// jEdit 4.3 requires Java 1.4 or later. However, this method exists
+		// for two reasons. Compatibility with plugins for jEdit 4.2, and
+		// in case somebody wants to borrow this class for their app.
 		return java14;
 	} //}}}
 
@@ -288,6 +288,15 @@ public class OperatingSystem
 		return java15;
 	} //}}}
 
+	//{{{ isCaseInsensitiveFS() method
+	/**
+	 * @since jEdit 4.3pre2
+	 */
+	public static boolean isCaseInsensitiveFS()
+	{
+		return isDOSDerived() || isMacOS();
+	} //}}}
+	
 	//{{{ Private members
 	private static final int UNIX = 0x31337;
 	private static final int WINDOWS_9x = 0x640;

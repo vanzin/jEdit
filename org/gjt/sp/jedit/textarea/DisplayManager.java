@@ -28,9 +28,6 @@ import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -500,8 +497,7 @@ public class DisplayManager
 
 		// Hack... need a more direct way of obtaining a view?
 		// JEditTextArea.getView() method?
-		GUIUtilities.getView(textArea).getStatus().setMessageAndClear(
-			jEdit.getProperty("view.status.narrow"));
+		textArea.fireNarrowActive();
 
 		notifyScreenLineChanges();
 		textArea.foldStructureChanged();

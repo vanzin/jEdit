@@ -74,7 +74,7 @@ to one of the BeanShell mailing lists by visiting
 <http://www.beanshell.org/contact.html>.
 
 Finally, if you want to chat about jEdit with other users and
-developers, come join the #jedit channel on irc.openprojects.net. You
+developers, come join the #jedit channel on irc.freenode.net. You
 can use the IRC plugin, available from <http://plugins.jedit.org>, for
 this purpose.
 

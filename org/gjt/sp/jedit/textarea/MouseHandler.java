@@ -40,7 +40,6 @@ import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.Registers;
@@ -135,8 +134,6 @@ class MouseHandler extends MouseInputAdapter
 	//{{{ doSingleClick() method
 	private void doSingleClick(MouseEvent evt)
 	{
-		/* if(buffer.insideCompoundEdit())
-			buffer.endCompoundEdit(); */
 		int x = evt.getX();
 
 		int extraEndVirt = 0;
@@ -230,12 +227,12 @@ class MouseHandler extends MouseInputAdapter
 		if(dragStartOffset == textArea.getLineLength(dragStartLine))
 			dragStartOffset--;
 
-		boolean joinNonWordChars =
-			jEdit.getBooleanProperty("view.joinNonWordChars");
-		int wordStart = TextUtilities.findWordStart(lineText,
-			dragStartOffset,noWordSep,joinNonWordChars);
+		boolean joinNonWordChars = textArea.getJoinNonWordChars();
+		int wordStart = TextUtilities.findWordStart(lineText,dragStartOffset,
+			noWordSep,textArea.getJoinNonWordChars());
 		int wordEnd = TextUtilities.findWordEnd(lineText,
-			dragStartOffset+1,noWordSep,joinNonWordChars);
+			dragStartOffset+1,noWordSep,
+			textArea.getJoinNonWordChars());
 
 		int lineStart = textArea.getLineStartOffset(dragStartLine);
 		Selection sel = new Selection.Range(
@@ -320,13 +317,6 @@ class MouseHandler extends MouseInputAdapter
 			if(textArea.lastLinePartial)
 				delta--;
 			textArea.setFirstLine(textArea.getFirstLine() + delta);
-		}
-
-		if(quickCopyDrag)
-		{
-			textArea.setStatusMessage(jEdit.getProperty(
-				"view.status.rect-quick-copy"));
-			clearStatus = true;
 		}
 
 		switch(clickCount)
@@ -424,8 +414,7 @@ class MouseHandler extends MouseInputAdapter
 		String markLineText = textArea.getLineText(dragStartLine);
 		String noWordSep = textArea.getBuffer()
 			.getStringProperty("noWordSep");
-		boolean joinNonWordChars =
-			jEdit.getBooleanProperty("view.joinNonWordChars");
+		boolean joinNonWordChars = textArea.getJoinNonWordChars();
 
 		if(markLineStart + dragStartOffset > lineStart + offset)
 		{
@@ -549,12 +538,6 @@ class MouseHandler extends MouseInputAdapter
 		}
 
 		dragged = false;
-
-		if(clearStatus)
-		{
-			clearStatus = false;
-			textArea.setStatusMessage(null);
-		}
 	} //}}}
 
 	//{{{ Private members
@@ -565,7 +548,6 @@ class MouseHandler extends MouseInputAdapter
 	private int clickCount;
 	private boolean dragged;
 	private boolean quickCopyDrag;
-	private boolean clearStatus;
 	private boolean control;
 	/* with drag and drop on, a mouse down in a selection does not
 	immediately deselect */

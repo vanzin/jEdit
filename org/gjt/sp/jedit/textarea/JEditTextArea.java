@@ -43,7 +43,6 @@ import org.gjt.sp.jedit.Abbrevs;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Macros;
 import org.gjt.sp.jedit.Marker;
 import org.gjt.sp.jedit.MiscUtilities;
@@ -215,16 +214,6 @@ public class JEditTextArea extends JComponent
 	public DisplayManager getDisplayManager()
 	{
 		return displayManager;
-	} //}}}
-
-	//{{{ setStatusMessage() method
-	/**
-	 * Show a message in a status bar associated with the text area.
-	 * @since jEdit 4.3pre1
-	 */
-	public void setStatusMessage(String msg)
-	{
-		view.getStatus().setMessageAndClear(msg);
 	} //}}}
 
 	//{{{ isCaretBlinkEnabled() method
@@ -416,6 +405,26 @@ public class JEditTextArea extends JComponent
 		this.dndEnabled = dndEnabled;
 	} //}}}
 
+	//{{{ getJoinNonWordChars() method
+	/**
+	 * If set, double clicking will join non-word characters to form one "word".
+	 * @since jEdit 4.3pre2
+	 */
+	public boolean getJoinNonWordChars()
+	{
+		return joinNonWordChars;
+	} //}}}
+	
+	//{{{ setJoinNonWordChars() method
+	/**
+	 * If set, double clicking will join non-word characters to form one "word".
+	 * @since jEdit 4.3pre2
+	 */
+	public void setJoinNonWordChars(boolean joinNonWordChars)
+	{
+		this.joinNonWordChars = joinNonWordChars;
+	} //}}}
+	
 	//}}}
 
 	//{{{ Scrolling
@@ -1976,8 +1985,7 @@ forward_scan:		do
 	 */
 	public boolean caretAutoScroll()
 	{
-		return view == jEdit.getActiveView()
-			&& view.getTextArea() == this;
+		return (focusedComponent == this);
 	} //}}}
 
 	//{{{ addStructureMatcher() method
@@ -3284,8 +3292,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		this.overwrite = overwrite;
 		invalidateLine(caretLine);
-		if(view.getStatus() != null)
-			view.getStatus().updateMiscStatus();
+		fireStatusChanged(StatusListener.OVERWRITE_CHANGED,overwrite);
 	} //}}}
 
 	//{{{ toggleOverwriteEnabled() method
@@ -3296,12 +3303,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public final void toggleOverwriteEnabled()
 	{
 		setOverwriteEnabled(!overwrite);
-		if(view.getStatus() != null)
-		{
-			view.getStatus().setMessageAndClear(
-				jEdit.getProperty("view.status.overwrite-changed",
-				new Integer[] { new Integer(overwrite ? 1 : 0) }));
-		}
 	} //}}}
 
 	//{{{ backspace() method
@@ -3606,12 +3607,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	public final void toggleMultipleSelectionEnabled()
 	{
 		setMultipleSelectionEnabled(!multi);
-		if(view.getStatus() != null)
-		{
-			view.getStatus().setMessageAndClear(
-				jEdit.getProperty("view.status.multi-changed",
-				new Integer[] { new Integer(multi ? 1 : 0) }));
-		}
 	} //}}}
 
 	//{{{ setMultipleSelectionEnabled() method
@@ -3628,8 +3623,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	public final void setMultipleSelectionEnabled(boolean multi)
 	{
 		this.multi = multi;
-		if(view.getStatus() != null)
-			view.getStatus().updateMiscStatus();
+		fireStatusChanged(StatusListener.MULTI_SELECT_CHANGED,multi);
 		painter.repaint();
 	} //}}}
 
@@ -3667,13 +3661,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					s.getStart(),s.getEnd()));
 			}
 		}
-
-		if(view.getStatus() != null)
-		{
-			view.getStatus().setMessageAndClear(
-				jEdit.getProperty("view.status.rect-select-changed",
-				new Integer[] { new Integer(rectangularSelectionMode ? 1 : 0) }));
-		}
 	} //}}}
 
 	//{{{ setRectangularSelectionEnabled() method
@@ -3692,8 +3679,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		boolean rectangularSelectionMode)
 	{
 		this.rectangularSelectionMode = rectangularSelectionMode;
-		if(view.getStatus() != null)
-			view.getStatus().updateMiscStatus();
+		fireStatusChanged(StatusListener.RECT_SELECT_CHANGED,
+			rectangularSelectionMode);
 		painter.repaint();
 	} //}}}
 
@@ -4788,6 +4775,28 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//}}}
 
+	//{{{ addStatusListener() method
+	/**
+	 * Adds a scroll listener to this text area.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre2
+	 */
+	public final void addStatusListener(StatusListener listener)
+	{
+		listenerList.add(StatusListener.class,listener);
+	} //}}}
+
+	//{{{ removeStatusListener() method
+	/**
+	 * Removes a scroll listener from this text area.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre2
+	 */
+	public final void removeStatusListener(StatusListener listener)
+	{
+		listenerList.remove(StatusListener.class,listener);
+	} //}}}
+
 	//{{{ propertiesChanged() method
 	/**
 	 * Called by jEdit when necessary. Plugins should not call this method.
@@ -5080,8 +5089,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				painter.getWidth(),
 				0,maxHorizontalScrollWidth
 				+ charWidth);
-			vertical.setUnitIncrement(2);
-			vertical.setBlockIncrement(visibleLines);
+			horizontal.setUnitIncrement(10);
+			horizontal.setBlockIncrement(painter.getWidth());
 		}
 	} //}}}
 
@@ -5239,6 +5248,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			: TransferHandler.MOVE);
 	} //}}}
 
+	//{{{ fireNarrowActive() method
+	void fireNarrowActive()
+	{
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2; i >= 0; i--)
+		{
+			if(listeners[i] == StatusListener.class)
+			{
+				try
+				{
+					((StatusListener)listeners[i+1])
+						.narrowActive(this);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+				}
+			}
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -5293,12 +5323,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean overwrite;
 	private boolean rectangularSelectionMode;
 
-	/* on JDK 1.4, this is set to a method by Java14. The method must take
-	* these parameters:
-	* - a JEditTextArea
-	* - an InputEvent
-	* - a boolean (copy text or move, depending on modifier user held down)
-	*/
 	private boolean dndEnabled;
 	private boolean dndInProgress;
 
@@ -5308,6 +5332,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean queuedFireCaretEvent;
 	private int oldCaretLine;
 
+	private boolean joinNonWordChars;
 	//}}}
 
 	//{{{ invalidateSelectedLines() method
@@ -5383,6 +5408,48 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						((ScrollListener)listeners[i+1]).scrolledVertically(this);
 					else
 						((ScrollListener)listeners[i+1]).scrolledHorizontally(this);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ fireStatusChanged() method
+	private void fireStatusChanged(int flag, boolean value)
+	{
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2; i >= 0; i--)
+		{
+			if(listeners[i] == StatusListener.class)
+			{
+				try
+				{
+					((StatusListener)listeners[i+1])
+						.statusChanged(this,flag,value);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ fireBracketSelected() method
+	private void fireBracketSelected(int line, String text)
+	{
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = listeners.length - 2; i >= 0; i--)
+		{
+			if(listeners[i] == StatusListener.class)
+			{
+				try
+				{
+					((StatusListener)listeners[i+1])
+						.bracketSelected(this,line,text);
 				}
 				catch(Throwable t)
 				{
@@ -5686,11 +5753,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		// get rid of embedded tabs not removed by trim()
-		text = text.replace('\t',' ');
-
-		view.getStatus().setMessageAndClear(jEdit.getProperty(
-			"view.status.bracket",new Object[] {
-			new Integer(match.startLine + 1), text }));
+		fireBracketSelected(match.startLine + 1,text.replace('\t',' '));
 	} //}}}
 
 	//{{{ recalculateLastPhysicalLine() method

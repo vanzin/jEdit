@@ -16,10 +16,11 @@ and quirks that I need to fix eventually.
 
 4.3pre2:
 
+- double-clicking middle mouse button
+- split view; last physical line invalid or something?
 - 7000 line lisp file: window resize is slow
 - using up/down arrows with a blank text field and pressing / goes to
   the root
-- caret position not saved properly when switching buffers
 - there is a comment in browser.actions.xml:
 /* NOTE: I do NOT want plugins creating check box menu items
  * in jEdit 4.2! The API is not stable, note the _comp hack...
@@ -37,7 +38,6 @@ and quirks that I need to fix eventually.
 - some fastrepaint bugs
 - option to disable buffer local properties
 - option to disable electric keys
-- hypersearch results & folds
 - more configurable file system browser
   - at least, preserve column widths
 - CA+PLUS +: bad
@@ -65,10 +65,9 @@ and quirks that I need to fix eventually.
 - independent text area component
   - gutter: has a depenency on View to do focus highlight, and Marker
   - display manager: has a dependency on View for currently focused
-  - text area: depends on view for status bar, input handling,
-    smart home/end macro record, showing dialog boxes, properties,
-    abbrevs, status bar showing various flags
-  - mouse handler: properties, registers
+  - text area: depends on view for input handling,
+    smart home/end macro record, showing dialog boxes, abbrevs
+  - mouse handler: registers
   - text area transfer handler: opening files dependency
 - save help index
 - indent folding: fold marker not always updated
@@ -164,7 +163,6 @@ check tips of the day
 [error] ChunkCache: BUG: skew=1,out.size()=0
 [error] ChunkCache: BUG: skew=1,out.size()=1
 
-- VFS browser pathsEqual(): case sensitivity!
 - DnD still dosn't work as expected when draging from the same buffer,
 but differen text area (for example droping at the position where drag
 was started erases text)- no support for vertical pasting

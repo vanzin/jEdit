@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2004 Slava Pestov
+ * Copyright (C) 2000, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,6 +352,7 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
+		textArea.addStatusListener(new StatusHandler());
 
 		add(BorderLayout.CENTER,textArea);
 
@@ -518,6 +519,9 @@ public class EditPane extends JPanel implements EBComponent
 		textArea.setDragEnabled(jEdit.getBooleanProperty(
 			"view.dragAndDrop"));
 
+		textArea.setJoinNonWordChars(jEdit.getBooleanProperty(
+			"view.joinNonWordChars"));
+
 		textArea.propertiesChanged();
 	} //}}}
 
@@ -649,4 +653,57 @@ public class EditPane extends JPanel implements EBComponent
 	} //}}}
 
 	//}}}
+
+	//{{{ StatusHandler class
+	class StatusHandler implements StatusListener
+	{
+		public void statusChanged(JEditTextArea textArea, int flag, boolean value)
+		{
+			StatusBar status = view.getStatus();
+			if(status == null)
+				return;
+			
+			switch(flag)
+			{
+			case OVERWRITE_CHANGED:
+				status.setMessageAndClear(
+					jEdit.getProperty("view.status.overwrite-changed",
+					new Integer[] { new Integer(value ? 1 : 0) }));
+				break;
+			case MULTI_SELECT_CHANGED:
+				status.setMessageAndClear(
+					jEdit.getProperty("view.status.multi-changed",
+					new Integer[] { new Integer(value ? 1 : 0) }));
+				break;
+			case RECT_SELECT_CHANGED:
+				status.setMessageAndClear(
+					jEdit.getProperty("view.status.rect-select-changed",
+					new Integer[] { new Integer(value ? 1 : 0) }));
+				break;
+			}
+			
+			status.updateMiscStatus();
+		}
+	
+		public void bracketSelected(JEditTextArea textArea, int line, String text)
+		{
+			StatusBar status = view.getStatus();
+			if(status == null)
+				return;
+			
+			status.setMessageAndClear(jEdit.getProperty(
+				"view.status.bracket",new Object[] {
+				new Integer(line), text }));
+		}
+	
+		public void narrowActive(JEditTextArea textArea)
+		{
+			StatusBar status = view.getStatus();
+			if(status == null)
+				return;
+			
+			status.setMessageAndClear(
+				jEdit.getProperty("view.status.narrow"));
+		}
+	} //}}}
 }

@@ -247,12 +247,10 @@ class BrowserIORequest extends WorkRequest
 				path1 = vfs._canonPath(session,path1,browser);
 				path2 = vfs._canonPath(session,path2,browser);
 
-				VFSFile file = vfs._getFile(
-					session,path2,browser);
+				VFSFile file = vfs._getFile(session,path2,browser);
 				if(file != null)
 				{
-					if((OperatingSystem.isDOSDerived()
-						|| OperatingSystem.isMacOS())
+					if((OperatingSystem.isCaseInsensitiveFS())
 						&& path1.equalsIgnoreCase(path2))
 					{
 						// allow user to change name

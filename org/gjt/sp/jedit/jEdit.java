@@ -3687,11 +3687,8 @@ loop:		for(int i = 0; i < list.length; i++)
 		{
 			bufferCount--;
 
-			boolean caseInsensitiveFilesystem =
-				OperatingSystem.isDOSDerived()
-				|| OperatingSystem.isMacOS();
 			String path = buffer.getPath();
-			if(caseInsensitiveFilesystem)
+			if(OperatingSystem.isCaseInsensitiveFS())
 				path = path.toLowerCase();
 
 			bufferHash.remove(path);
