@@ -145,6 +145,18 @@ public class ActionSet
 	//{{{ ActionSet constructor
 	/**
 	 * Creates a new action set.
+	 * @since jEdit 4.0pre1
+	 */
+	public ActionSet()
+	{
+		actions = new Hashtable();
+		loaded = true;
+		label = "<no label set; plugin bug>";
+	} //}}}
+
+	//{{{ ActionSet constructor
+	/**
+	 * Creates a new action set.
 	 * @param plugin The plugin
 	 * @param cachedActionNames The list of cached action names
 	 * @param cachedActionToggleFlags The list of cached action toggle flags
@@ -168,17 +180,6 @@ public class ActionSet
 			}
 		}
 		loaded = false;
-	} //}}}
-
-	//{{{ ActionSet constructor
-	/**
-	 * Creates a new action set.
-	 * @since jEdit 4.0pre1
-	 */
-	public ActionSet()
-	{
-		actions = new Hashtable();
-		loaded = true;
 	} //}}}
 
 	//{{{ ActionSet constructor
