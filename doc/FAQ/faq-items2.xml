@@ -489,6 +489,48 @@
 
   </qandadiv>
 
+  <qandadiv id="problems-running-general">
+    <title>General problems running jEdit</title>
+    <qandaentry>
+      <question id="problems-out-of-memory"><para>
+        During an editing session I get a error message about an
+        <quote>OutOfMemoryError</quote> while working with a large file or
+        performing a lengthy operation. The message reappears every time
+        I retry the operation.  How can I prevent this?
+      </para></question>
+      <answer><para>
+        One solution that often works is to set or increase the allocation of
+        memory to the heap for Java objects created by the Java Virtual Machine
+        in which jEdit is running. Add the command line option
+        <userinput>-mxXXm</userinput> to the options passed to the version of
+        the Java application loader you are using (such as
+        <filename>java</filename>, <filename>java.exe</filename> or
+        <filename>javaw.exe</filename>). In place of the
+        <userinput>XX</userinput> in the option, use a multiple of 16
+        between 32 and 128. If you already are using the option, increase the
+        numeric portion of the <userinput>-mxXXm</userinput> parameter in
+        increments of 16. Many users have good results using 48 or 64, but you
+        should try different values for the best result on your installation.
+       </para>
+       <para>
+        If you are using the <userinput>-jar</userinput> command line option
+        with Java to run jEdit, remember that the <userinput>-jar</userinput>
+        parameter must be the last Java option, followed immediately by the path
+        to <filename>jedit.jar</filename> and then any jEdit command line options.
+       </para>
+       <para>
+        If out of memory errors occur while running a build or compilation
+        operation from within jEdit, you can also have the operation run in an
+        external process rather than inside the same Java Virtual Machine
+        running jEdit. The AntFarm plugin, for example, lets you select this
+        approach as a configuration option. In other cases, you can run an
+        external program using the command line interface of the Console plugin,
+        which will capture and display the output of the external process and in
+        many cases parse the output for error information.
+      </para></answer>
+    </qandaentry>
+  </qandadiv>
+
 </qandaset>
 
 </sect1>
