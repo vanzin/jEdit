@@ -19,13 +19,6 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.border.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.*;
-import org.gjt.sp.jedit.*;
-
 /**
  * A container for dockable windows. This class should never be used
  * directly.

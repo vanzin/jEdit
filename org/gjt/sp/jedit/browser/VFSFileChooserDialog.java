@@ -71,8 +71,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
 
-		JPanel bottomPanel = new JPanel(new BorderLayout());
-
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
 		panel.setBorder(new EmptyBorder(12,0,0,0));

@@ -526,9 +526,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						pos - line.offset,matchedChars,context);
 				}
 
-				String spanEndSubst = null;
 				// XXX
-				/* if((checkRule.action & ParserRule.REGEXP) == ParserRule.REGEXP)
+				/* String spanEndSubst = null;
+				if((checkRule.action & ParserRule.REGEXP) == ParserRule.REGEXP)
 					spanEndSubst = checkRule.startRegexp... */
 				context = new LineContext(delegateSet, context);
 				keywords = context.rules.getKeywords();

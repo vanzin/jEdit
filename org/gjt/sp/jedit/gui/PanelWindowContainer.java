@@ -29,7 +29,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;

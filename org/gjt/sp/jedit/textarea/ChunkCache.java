@@ -25,10 +25,8 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.*;
-import javax.swing.text.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**

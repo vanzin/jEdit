@@ -263,7 +263,6 @@ public class JARClassLoader extends ClassLoader
 			{
 				ZipEntry entry = (ZipEntry)pluginResources.get(i);
 				String name = entry.getName();
-				String lname = name.toLowerCase();
 				if(name.equalsIgnoreCase("actions.xml"))
 				{
 					jEdit.loadActions(

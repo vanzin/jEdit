@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -366,7 +365,6 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 
 		content.add(BorderLayout.SOUTH,box);
 
-		Dimension screen = getToolkit().getScreenSize();
 		pack();
 		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 

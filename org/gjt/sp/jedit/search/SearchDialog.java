@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -36,7 +35,6 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**

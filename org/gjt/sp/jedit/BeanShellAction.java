@@ -20,8 +20,6 @@
 package org.gjt.sp.jedit;
 
 import bsh.BshMethod;
-import java.awt.event.ActionEvent;
-import java.awt.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;
 

@@ -21,7 +21,6 @@ package installer;
 
 import javax.swing.plaf.metal.*;
 import javax.swing.plaf.*;
-import javax.swing.*;
 import java.awt.Font;
 
 public class JEditMetalTheme extends DefaultMetalTheme

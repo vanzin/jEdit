@@ -23,14 +23,11 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import java.awt.Component;
 import java.io.*;
 import java.net.*;
 import java.util.zip.*;
 import java.util.*;
-import org.gjt.sp.jedit.io.VFSManager; // we use VFSManager.error() method
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}

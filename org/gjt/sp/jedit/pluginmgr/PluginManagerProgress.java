@@ -75,7 +75,6 @@ public class PluginManagerProgress extends JDialog
 
 		pack();
 
-		Dimension screen = getToolkit().getScreenSize();
 		Dimension size = getSize();
 		size.width = Math.max(size.width,500);
 		setSize(size);

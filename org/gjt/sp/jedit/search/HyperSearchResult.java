@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.search;
 import javax.swing.text.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class HyperSearchResult

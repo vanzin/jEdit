@@ -26,14 +26,9 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import gnu.regexp.RE;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
-import org.gjt.sp.jedit.browser.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -530,7 +525,6 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	public static void stopRecording(View view)
 	{
-		InputHandler inputHandler = view.getInputHandler();
 		Recorder recorder = view.getMacroRecorder();
 
 		if(recorder == null)

@@ -26,12 +26,9 @@ package org.gjt.sp.jedit.gui;
 import bsh.EvalError;
 import bsh.NameSpace;
 import com.microstar.xml.*;
-import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.search.HyperSearchResults;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -973,9 +970,6 @@ public class DockableWindowManager extends JPanel
 			Dimension _leftButtons = leftButtons.getPreferredSize();
 			Dimension _bottomButtons = bottomButtons.getPreferredSize();
 			Dimension _rightButtons = rightButtons.getPreferredSize();
-			Dimension _center = (center == null
-				? new Dimension(0,0)
-				: center.getPreferredSize());
 			Dimension _topToolbars = (topToolbars == null
 				? new Dimension(0,0)
 				: topToolbars.getPreferredSize());

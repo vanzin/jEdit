@@ -24,10 +24,8 @@
 package org.gjt.sp.jedit.options;
 
  //{{{ Imports
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import org.gjt.sp.jedit.*;
 //}}}
 

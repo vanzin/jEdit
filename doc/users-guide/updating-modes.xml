@@ -26,6 +26,9 @@
     can be used to achieve the same effect as endless span.
    </para>
   </listitem>
-  <listitem><para>Mention SEQ NULLs</para></listitem>
+  <listitem>
+   <para>
+   </para>
+  </listitem>
  </itemizedlist>
 </chapter>

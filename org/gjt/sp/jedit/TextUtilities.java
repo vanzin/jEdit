@@ -22,7 +22,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.awt.*;
 import java.util.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.syntax.*;
@@ -376,7 +375,6 @@ loop:		for(int i = pos; i >= 0; i--)
 			type = SYMBOL;
 		//}}}
 
-		boolean seenWhiteSpace = false;
 loop:		for(int i = pos; i < line.length(); i++)
 		{
 			ch = line.charAt(i);

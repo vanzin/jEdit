@@ -41,8 +41,7 @@ public class ConsoleInstall
 
 		OperatingSystem os = OperatingSystem.getOperatingSystem();
 
-		String installDir = OperatingSystem.getOperatingSystem()
-			.getInstallDirectory(appName,appVersion);
+		String installDir = os.getInstallDirectory(appName,appVersion);
 
 		System.out.print("Installation directory [" + installDir + "]: ");
 		System.out.flush();
@@ -51,8 +50,7 @@ public class ConsoleInstall
 		if(_installDir.length() != 0)
 			installDir = _installDir;
 
-		String binDir = OperatingSystem.getOperatingSystem()
-			.getShortcutDirectory(appName,appVersion);
+		String binDir = os.getShortcutDirectory(appName,appVersion);
 
 		if(binDir != null)
 		{
@@ -75,8 +73,7 @@ public class ConsoleInstall
 			String osDep = installer.getProperty("comp." + i + ".os");
 			if(osDep != null)
 			{
-				if(!OperatingSystem.getOperatingSystem()
-					.getClass().getName().endsWith(osDep))
+				if(!os.getClass().getName().endsWith(osDep))
 				{
 					continue;
 				}

@@ -24,7 +24,6 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.InterruptedIOException;
 import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;

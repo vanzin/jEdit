@@ -33,7 +33,6 @@ import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class PluginManager extends EnhancedDialog

@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.event.*;
-import java.awt.*;
 import org.gjt.sp.jedit.OperatingSystem;
 //}}}
 

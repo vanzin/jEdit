@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.text.Position;
-import org.gjt.sp.util.Log;
 
 /**
  * A named location in a buffer.

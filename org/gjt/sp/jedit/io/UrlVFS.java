@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.io;
 import java.awt.Component;
 import java.io.*;
 import java.net.*;
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 

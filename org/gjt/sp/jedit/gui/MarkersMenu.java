@@ -29,7 +29,6 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class MarkersMenu extends EnhancedMenu implements MenuListener

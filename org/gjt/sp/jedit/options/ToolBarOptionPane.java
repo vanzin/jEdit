@@ -28,7 +28,6 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
 import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;

@@ -166,10 +166,10 @@
     indentation. Pressing it again will insert a tab character.
    </para>
    <para>
-    The behavior of the <keycap>ENTER</keycap> and <keycap>TAB</keycap> keys can
+    The behavior of the <keycap>Enter</keycap> and <keycap>Tab</keycap> keys can
     be configured in the <guibutton>Shortcuts</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog. box, just as with any other key. The <b>ENTER</b> key can be bound
+    dialog. box, just as with any other key. The <keycap>Enter</keycap> key can be bound
     to one of the following commands, for example:
    </para>
    <itemizedlist>

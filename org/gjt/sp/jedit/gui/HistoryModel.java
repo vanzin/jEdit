@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.jEdit;

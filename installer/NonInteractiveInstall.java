@@ -19,7 +19,6 @@
 
 package installer;
 
-import java.io.*;
 import java.util.Vector;
 
 /*
@@ -43,8 +42,7 @@ public class NonInteractiveInstall
 			String osDep = installer.getProperty("comp." + i + ".os");
 			if(osDep != null)
 			{
-				if(!OperatingSystem.getOperatingSystem()
-					.getClass().getName().endsWith(osDep))
+				if(!os.getClass().getName().endsWith(osDep))
 				{
 					continue;
 				}

@@ -25,7 +25,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import gnu.regexp.RE;
 import javax.swing.text.Segment;
 import javax.swing.JMenuItem;
 import java.io.*;

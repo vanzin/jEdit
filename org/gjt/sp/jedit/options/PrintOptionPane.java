@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
-import java.awt.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
 //}}}

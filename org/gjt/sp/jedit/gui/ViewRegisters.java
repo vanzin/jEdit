@@ -24,7 +24,6 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
 public class ViewRegisters extends EnhancedDialog

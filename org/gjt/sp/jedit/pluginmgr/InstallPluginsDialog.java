@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 class InstallPluginsDialog extends EnhancedDialog

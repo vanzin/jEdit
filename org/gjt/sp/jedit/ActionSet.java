@@ -151,7 +151,6 @@ public class ActionSet
 	void getActions(Vector vec)
 	{
 		Enumeration enum = actions.elements();
-		int i = 0;
 		while(enum.hasMoreElements())
 			vec.addElement(enum.nextElement());
 	}

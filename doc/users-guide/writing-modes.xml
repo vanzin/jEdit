@@ -239,6 +239,10 @@
    <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
    will not matter. Default is <literal>TRUE</literal>.
    </para></listitem>
+   <listitem><para><literal>NO_WORD_SEP</literal> - any non-alphanumeric
+   character <emphasis>not</emphasis> in this list is treated as a word separator
+   for the purposes of syntax highlighting.
+   </para></listitem>
    <listitem><para><literal>DEFAULT</literal> - the token type for
    text which doesn't match
    any specific rule. Default is <literal>NULL</literal>. See

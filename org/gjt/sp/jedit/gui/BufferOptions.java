@@ -29,8 +29,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.textarea.FoldVisibilityManager;
 import org.gjt.sp.jedit.*;
 //}}}
 

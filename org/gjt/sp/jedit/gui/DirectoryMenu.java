@@ -29,7 +29,6 @@ import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.io.FileVFS;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 //}}}
 
