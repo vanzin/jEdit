@@ -1188,11 +1188,13 @@ public class GUIUtilities
 			return;
 		}
 
+		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
+
 		// Sort them
 		MiscUtilities.quicksort(pluginMenuItems,
 			new MiscUtilities.MenuItemCompare());
 
-		if(pluginMenuItems.size() < 20)
+		if(pluginMenuItems.size() < maxItems)
 		{
 			for(int i = 0; i < pluginMenuItems.size(); i++)
 			{
@@ -1209,7 +1211,7 @@ public class GUIUtilities
 			for(int i = 0; i < pluginMenuItems.size(); i++)
 			{
 				menu.add((JMenuItem)pluginMenuItems.get(i));
-				if(menu.getMenuComponentCount() == 20)
+				if(menu.getMenuComponentCount() == maxItems)
 				{
 					mbar.add(menu);
 					menu = new JMenu(String.valueOf(

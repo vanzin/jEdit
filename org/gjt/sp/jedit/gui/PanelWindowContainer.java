@@ -82,6 +82,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 		popupButton = new JButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
 		popupButton.setRequestFocusEnabled(false);
 		popupButton.setToolTipText(jEdit.getProperty("view.docking.menu-tooltip"));
+		if(OperatingSystem.isMacOSLF())
+			popupButton.putClientProperty("JButton.buttonType","toolbar");
 		buttons.add(popupButton);
 
 		popupButton.addMouseListener(new MouseHandler());

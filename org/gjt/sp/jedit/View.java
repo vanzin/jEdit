@@ -1171,11 +1171,11 @@ public class View extends JFrame implements EBComponent
 
 		if(jEdit.getBooleanProperty("view.showSearchbar"))
 		{
-			if(searchBar == null)
-			{
-				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
-					new SearchBar(this,false));
-			}
+			if(searchBar != null)
+				removeToolBar(searchBar);
+
+			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
+				new SearchBar(this,false));
 		}
 		else if(searchBar != null)
 		{

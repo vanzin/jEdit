@@ -1312,7 +1312,8 @@ options.textarea.wrapGuide=Wrap guide
 options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
-options.textarea.homeEnd="Smart" home/end key behaviour
+options.textarea.smartHome="Smart" home key
+options.textarea.smartEnd="Smart" end key
 options.textarea.stdNextPrevWord=Standard "Go to next/previous word" behaviour
 options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
@@ -1331,6 +1332,13 @@ options.gutter.lineNumbers=Line numbering
 options.gutter.currentLineHighlight=Current line highlighting
 options.gutter.bracketHighlight=Show bracket scope
 options.gutter.markerHighlight=Indicate marker positions
+options.gutter.gutterClick=Click in gutter:
+options.gutter.gutterShiftClick=Shift-click in gutter:
+options.gutter.gutterControlClick=Control-click in gutter:
+options.gutter.gutterAltClick=Alt-click in gutter:
+options.gutter.toggleFold=Collapse/expand fold
+options.gutter.toggleFoldFully=Collapse/expand fold fully
+options.gutter.selectFold=Select fold
 #}}}
 
 #{{{ Colors pane

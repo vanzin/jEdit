@@ -89,12 +89,18 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			"view.electricBorders")));
 		addComponent(electricBorders);
 
-		/* Smart home/end */
-		homeEnd = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".homeEnd"));
-		homeEnd.setSelected(jEdit.getBooleanProperty("view.homeEnd"));
-		addComponent(homeEnd);
-		
+		/* Smart home */
+		smartHome = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".smartHome"));
+		smartHome.setSelected(jEdit.getBooleanProperty("view.smartHome"));
+		addComponent(smartHome);
+
+		/* Smart end */
+		smartEnd = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".smartEnd"));
+		smartEnd.setSelected(jEdit.getBooleanProperty("view.smartEnd"));
+		addComponent(smartEnd);
+
 		/* Standard go to next/previous word behaviour */
 		stdNextPrevWord = new JCheckBox(jEdit.getProperty("options.textarea.stdNextPrevWord"));
 		stdNextPrevWord.setSelected(jEdit.getBooleanProperty("view.stdNextPrevWord"));
@@ -144,7 +150,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
+		jEdit.setBooleanProperty("view.smartHome",smartHome.isSelected());
+		jEdit.setBooleanProperty("view.smartEnd",smartEnd.isSelected());
 		jEdit.setBooleanProperty("view.stdNextPrevWord",stdNextPrevWord.isSelected());
 		jEdit.setBooleanProperty("view.middleMousePaste",
 			middleMousePaste.isSelected());
@@ -162,7 +169,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox blinkCaret;
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
-	private JCheckBox homeEnd;
+	private JCheckBox smartHome;
+	private JCheckBox smartEnd;
 	private JCheckBox stdNextPrevWord;
 	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;

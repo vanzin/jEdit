@@ -113,6 +113,8 @@ public class DirectoryMenu extends EnhancedMenu implements MenuListener
 		}
 		else
 		{
+			int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
+
 			MiscUtilities.quicksort(list,
 				new MiscUtilities.StringICaseCompare());
 			for(int i = 0; i < list.length; i++)
@@ -149,7 +151,7 @@ public class DirectoryMenu extends EnhancedMenu implements MenuListener
 					? FileCellRenderer.dirIcon
 					: FileCellRenderer.fileIcon);
 
-				if(current.getItemCount() >= 20 && i != list.length - 1)
+				if(current.getItemCount() >= maxItems && i != list.length - 1)
 				{
 					//current.addSeparator();
 					JMenu newCurrent = new JMenu(

@@ -3,7 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- separate smart home/end settings
+- fsb tooltip does not accept mouse clicks
 - shift left/right moves caret in odd ways
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - better trailing EOL handling

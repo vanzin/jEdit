@@ -73,6 +73,8 @@ public class MarkersMenu extends EnhancedMenu implements MenuListener
 			return;
 		}
 
+		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
+
 		JMenu current = this;
 
 		for(int i = 0; i < markers.size(); i++)
@@ -80,7 +82,7 @@ public class MarkersMenu extends EnhancedMenu implements MenuListener
 			final Marker marker = (Marker)markers.elementAt(i);
 			int lineNo = buffer.getLineOfOffset(marker.getPosition());
 
-			if(current.getItemCount() >= 20 && i != markers.size() - 1)
+			if(current.getItemCount() >= maxItems && i != markers.size() - 1)
 			{
 				//current.addSeparator();
 				JMenu newCurrent = new JMenu(

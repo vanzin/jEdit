@@ -764,7 +764,28 @@ public class Gutter extends JComponent implements SwingConstants
 				//{{{ Clicking on fold triangle does various things
 				if(buffer.isFoldStart(line))
 				{
+					StringBuffer property = new StringBuffer(
+						"view.gutter.gutter");
+					if(e.isShiftDown())
+						property.append("Shift");
 					if(e.isControlDown())
+						property.append("Control");
+					if(e.isAltDown())
+						property.append("Alt");
+					property.append("Click");
+
+					String action = jEdit.getProperty(property
+						.toString());
+					if(action == null)
+					{
+						action = jEdit.getProperty(
+							"view.gutter.gutterClick");
+					}
+
+					if(action == null)
+						action = "toggleFold";
+
+					if(action.equals("selectFold"))
 					{
 						foldVisibilityManager
 							.expandFold(line,true);
@@ -778,9 +799,19 @@ public class Gutter extends JComponent implements SwingConstants
 					}
 					else
 					{
-						foldVisibilityManager
-							.expandFold(line,
-							e.isShiftDown());
+						if(action.equals(
+							"toggleFoldFully"))
+						{
+							foldVisibilityManager
+								.expandFold(line,
+								true);
+						}
+						else
+						{
+							foldVisibilityManager
+								.expandFold(line,
+								false);
+						}
 					}
 				} //}}}
 				//{{{ Clicking in bracket scope locates matching bracket

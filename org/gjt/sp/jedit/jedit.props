@@ -210,7 +210,8 @@ view.blockCaret=false
 view.electricBorders=3
 
 # Smart home/end
-view.homeEnd=true
+view.smartHome=true
+view.smartEnd=true
 
 # Standard go to next/previous word behavior
 view.stdNextPrevWord=false
@@ -273,6 +274,12 @@ view.gutter.highlightCurrentLine=true
 
 # Marker highlight
 view.gutter.markerHighlight=true
+
+# Click behavior
+view.gutter.gutterClick=toggleFold
+view.gutter.gutterShiftClick=toggleFoldFully
+view.gutter.gutterControlClick=selectFold
+view.gutter.gutterAltClick=toggleFold
 
 #}}}
 
@@ -364,4 +371,9 @@ vfs.browser.colors.4.color=#990000
 vfs.browser.colors.5.glob=tags
 vfs.browser.colors.5.color=#003366
 
+#}}}
+
+#{{{ Hidden settings
+menu.spillover=20
+bufferSwitcher.maxRowCount=10
 #}}}
