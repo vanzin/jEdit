@@ -75,7 +75,25 @@ public class EditingOptionPane extends AbstractOptionPane
 		defaultWordBreakChars = new JTextField(jEdit.getProperty("buffer.wordBreakChars"));
 		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),defaultWordBreakChars);
 
-		/* Word break chars */
+		/* Default fold mode */
+		String[] foldModes = {
+			jEdit.getProperty("options.editing.folding.none"),
+			jEdit.getProperty("options.editing.folding.indent"),
+			jEdit.getProperty("options.editing.folding.explicit")
+		};
+		addComponent(jEdit.getProperty("options.editing.folding"),
+			defaultFolding = new JComboBox(foldModes));
+
+		String foldMode = jEdit.getProperty("buffer.folding");
+		
+		if("indent".equals(foldMode))
+			defaultFolding.setSelectedIndex(1);
+		else if("explicit".equals(foldMode))
+			defaultFolding.setSelectedIndex(2);
+		else
+			defaultFolding.setSelectedIndex(0);
+	
+		/* Default fold level */
 		defaultCollapseFolds = new JTextField(jEdit.getProperty("buffer.collapseFolds"));
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),defaultCollapseFolds);
 
@@ -118,6 +136,20 @@ public class EditingOptionPane extends AbstractOptionPane
 			.getSelectedItem());
 		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
 		jEdit.setProperty("buffer.wordBreakChars",defaultWordBreakChars.getText());
+
+		switch(defaultFolding.getSelectedIndex())
+		{
+		case 0:
+			jEdit.setProperty("buffer.folding","none");
+			break;
+		case 1:
+			jEdit.setProperty("buffer.folding","indent");
+			break;
+		case 2:
+			jEdit.setProperty("buffer.folding","explicit");
+			break;
+		}
+
 		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
@@ -134,6 +166,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox defaultIndentSize;
 	private JComboBox defaultMaxLineLen;
 	private JTextField defaultWordBreakChars;
+	private JComboBox defaultFolding;
 	private JTextField defaultCollapseFolds;
 	private JTextField undoCount;
 	private JCheckBox defaultSyntax;

@@ -2,6 +2,24 @@ TO DO
 
 + before 4.0pre1:
 
+- blank line after }}}: part of fold
+- collapse fold: scroll to collapsed fold
+- auto indent: do not indent on {{{
+- investigate nextLineRequested()
+- text are painter: indicate lines with collapsed folds differently
+  (diff background color?)
+- gutter: instead of border, change background to indicate focus status
+- fold mode in buffer options
+- dockable window manager: requestDefaultFocus()
+- CVS add ogsj.buffer
+- per-text area fold visibility
+- when a new text area is created, if caret is on a bracket, not matched
+  initially
+- word wrap off by default
+- folding off by default
+- 'welcome' node not pre-selected
+- complete word: update on the fly as chars typed
+- test style editor
 - recompile Firewall.jar before releasing
 - <file>#line: or #marker:
 - editing on last line shouldn't cause scrolling

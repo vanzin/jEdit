@@ -118,6 +118,9 @@ buffer.wordBreakChars=
 # Non-alphanumeric word characters
 buffer.noWordSep=_
 
+# Fold mode (explicit, indent, or none)
+buffer.folding=none
+
 # Folds with a level equal to or higher than this will be collapsed
 buffer.collapseFolds=0
 

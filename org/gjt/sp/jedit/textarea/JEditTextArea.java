@@ -34,6 +34,7 @@ import java.awt.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
@@ -4934,7 +4935,7 @@ forward_scan:		do
 		public void changedUpdate(DocumentEvent evt) {}
 	}
 
-	class FoldHandler implements Buffer.FoldListener
+	class FoldHandler implements FoldListener
 	{
 		public void foldLevelsChanged(int firstLine, int lastLine)
 		{

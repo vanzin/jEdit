@@ -1,5 +1,7 @@
 /*
  * Buffer.java - jEdit buffer
+ * :tabSize=8:indentSize=8:folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
  *
@@ -20,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import gnu.regexp.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -29,12 +32,14 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * An in-memory copy of an open file.<p>
@@ -47,6 +52,7 @@ import org.gjt.sp.util.Log;
  */
 public class Buffer extends PlainDocument implements EBComponent
 {
+	//{{{ Some constants
 	/**
 	 * Line separator property.
 	 */
@@ -84,30 +90,10 @@ public class Buffer extends PlainDocument implements EBComponent
 	 * @since jEdit 4.0pre1
 	 */
 	public static final String TRAILING_EOL = "trailingEOL";
+	//}}}
 
-	/**
-	 * Reloads settings from the properties. This should be called
-	 * after the <code>syntax</code> buffer-local property is
-	 * changed.
-	 */
-	public void propertiesChanged()
-	{
-		if(getBooleanProperty("syntax"))
-			setTokenMarker(mode.getTokenMarker());
-		else
-			setTokenMarker(jEdit.getMode("text").getTokenMarker());
-
-		if(undo != null)
-		{
-			undo.setLimit(jEdit.getIntegerProperty(
-				"buffer.undoCount",100));
-		}
-
-		// cache these for improved performance
-		putProperty("tabSize",getProperty("tabSize"));
-		putProperty("maxLineLen",getProperty("maxLineLen"));
-	}
-
+	//{{{ Input/output methods
+	//{{{ showInsertFileDialog() method
 	/**
 	 * Displays the 'insert file' dialog box and inserts the selected file
 	 * into the buffer.
@@ -121,8 +107,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		if(files != null)
 			insert(view,files[0]);
-	}
+	} //}}}
 
+	//{{{ print() method
 	/**
 	 * Prints the buffer.
 	 * @param view The view
@@ -310,8 +297,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		job.end();
 
 		view.hideWaitCursor();
-	}
+	} //}}}
 
+	//{{{ reload() method
 	/**
 	 * Reloads the buffer from disk, asking for confirmation if the buffer
 	 * is dirty.
@@ -332,8 +320,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		view.getEditPane().saveCaretInfo();
 		load(view,true);
-	}
+	} //}}}
 
+	//{{{ load() method
 	/**
 	 * Loads the buffer from disk, even if it is loaded already.
 	 * @param view The view
@@ -479,8 +468,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			VFSManager.runInAWTThread(runnable);
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ insert() method
 	/**
 	 * Loads a file from disk, and inserts it into this buffer.
 	 * @param view The view
@@ -546,8 +536,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		});
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ autosave() method
 	/**
 	 * Autosaves this buffer.
 	 */
@@ -564,8 +555,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		VFSManager.runInWorkThread(new BufferIORequest(
 			BufferIORequest.AUTOSAVE,null,this,null,
 			VFSManager.getFileVFS(),autosaveFile.getPath()));
-	}
+	} //}}}
 
+	//{{{ saveAs() method
 	/**
 	 * Prompts the user for a file to save this buffer to.
 	 * @param view The view
@@ -584,8 +576,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			return false;
 
 		return save(view,files[0],rename);
-	}
+	} //}}}
 
+	//{{{ save() method
 	/**
 	 * Saves this buffer to the specified path name, or the current path
 	 * name if it's null.
@@ -596,8 +589,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean save(View view, String path)
 	{
 		return save(view,path,true);
-	}
+	} //}}}
 
+	//{{{ save() method
 	/**
 	 * Saves this buffer to the specified path name, or the current path
 	 * name if it's null.
@@ -709,9 +703,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		});
 
 		return true;
-	}
+	} //}}}
 
-	// these are only public so that an inner class can access them!
+	//{{{ these are only public so that an inner class can access them!
 	void _writeLock()
 	{
 		writeLock();
@@ -720,25 +714,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	void _writeUnlock()
 	{
 		writeUnlock();
-	}
+	}//}}}
 
-	/**
-	 * Returns the last time jEdit modified the file on disk.
-	 */
-	public long getLastModified()
-	{
-		return modTime;
-	}
-
-	/**
-	 * Sets the last time jEdit modified the file on disk.
-	 * @param modTime The new modification time
-	 */
-	public void setLastModified(long modTime)
-	{
-		this.modTime = modTime;
-	}
-
+	//{{{ checkModTime() method
 	/**
 	 * Check if the buffer has changed on disk.
 	 */
@@ -791,8 +769,31 @@ public class Buffer extends PlainDocument implements EBComponent
 				load(view,true);
 			}
 		}
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Getters/setter methods for various things
+	//{{{ getLastModified() method
+	/**
+	 * Returns the last time jEdit modified the file on disk.
+	 */
+	public long getLastModified()
+	{
+		return modTime;
+	} //}}}
+
+	//{{{ setLastModified() method
+	/**
+	 * Sets the last time jEdit modified the file on disk.
+	 * @param modTime The new modification time
+	 */
+	public void setLastModified(long modTime)
+	{
+		this.modTime = modTime;
+	} //}}}
+
+	//{{{ getVFS() method
 	/**
 	 * Returns the virtual filesystem responsible for loading and
 	 * saving this buffer.
@@ -800,8 +801,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public VFS getVFS()
 	{
 		return vfs;
-	}
+	} //}}}
 
+	//{{{ getFile() method
 	/**
 	 * Returns the file for this buffer. This may be null if the buffer
 	 * is non-local.
@@ -809,8 +811,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final File getFile()
 	{
 		return file;
-	}
+	} //}}}
 
+	//{{{ getAutosaveFile() method
 	/**
 	 * Returns the autosave file for this buffer. This may be null if
 	 * the file is non-local.
@@ -818,24 +821,27 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final File getAutosaveFile()
 	{
 		return autosaveFile;
-	}
+	} //}}}
 
+	//{{{ getName() method
 	/**
 	 * Returns the name of this buffer.
 	 */
 	public final String getName()
 	{
 		return name;
-	}
+	} //}}}
 
+	//{{{ getPath() method
 	/**
 	 * Returns the path name of this buffer.
 	 */
 	public final String getPath()
 	{
 		return path;
-	}
+	} //}}}
 
+	//{{{ isClosed() method
 	/**
 	 * Returns true if this buffer has been closed with
 	 * <code>jEdit.closeBuffer()</code>.
@@ -843,16 +849,18 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final boolean isClosed()
 	{
 		return getFlag(CLOSED);
-	}
+	} //}}}
 
+	//{{{ isLoaded() method
 	/**
 	 * Returns true if the buffer is loaded.
 	 */
 	public final boolean isLoaded()
 	{
 		return !getFlag(LOADING);
-	}
+	} //}}}
 
+	//{{{ isPerformingIO() method
 	/**
 	 * Returns true if the buffer is currently performing I/O.
 	 * @since jEdit 2.7pre1
@@ -860,24 +868,18 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final boolean isPerformingIO()
 	{
 		return getFlag(LOADING) || getFlag(IO);
-	}
+	} //}}}
 
-	/**
-	 * @deprecated Call isPerformingIO() instead
-	 */
-	public final boolean isSaving()
-	{
-		return getFlag(IO);
-	}
-
+	//{{{ isNewFile() method
 	/**
 	 * Returns true if this file doesn't exist on disk.
 	 */
 	public final boolean isNewFile()
 	{
 		return getFlag(NEW_FILE);
-	}
+	} //}}}
 
+	//{{{ setNewFile() method
 	/**
 	 * Sets the new file flag.
 	 * @param newFile The new file flag
@@ -885,16 +887,18 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final void setNewFile(boolean newFile)
 	{
 		setFlag(NEW_FILE,newFile);
-	}
+	} //}}}
 
+	//{{{ isUntitled() method
 	/**
 	 * Returns true if this file is 'untitled'.
 	 */
 	public final boolean isUntitled()
 	{
 		return getFlag(UNTITLED);
-	}
+	} //}}}
 
+	//{{{ isDirty() method
 	/**
 	 * Returns true if this file has changed since last save, false
 	 * otherwise.
@@ -902,16 +906,18 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final boolean isDirty()
 	{
 		return getFlag(DIRTY);
-	}
+	} //}}}
 
+	//{{{ isReadOnly() method
 	/**
 	 * Returns true if this file is read only, false otherwise.
 	 */
 	public final boolean isReadOnly()
 	{
 		return getFlag(READ_ONLY);
-	}
+	} //}}}
 
+	//{{{ isEditable() method
 	/**
 	 * Returns true if this file is editable, false otherwise.
 	 * @since jEdit 2.7pre1
@@ -919,8 +925,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final boolean isEditable()
 	{
 		return !(getFlag(READ_ONLY) || getFlag(IO) || getFlag(LOADING));
-	}
+	} //}}}
 
+	//{{{ isReadOnly() method
 	/**
 	 * Sets the read only flag.
 	 * @param readOnly The read only flag
@@ -928,8 +935,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final void setReadOnly(boolean readOnly)
 	{
 		setFlag(READ_ONLY,readOnly);
-	}
+	} //}}}
 
+	// {{{ setDirty() method
 	/**
 	 * Sets the `dirty' (changed since last save) flag of this buffer.
 	 */
@@ -957,8 +965,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.DIRTY_CHANGED));
 		}
-	}
+	} //}}}
 
+	//{{{ isTemporary() method
 	/**
 	 * Returns if this is a temporary buffer.
 	 * @see jEdit#openTemporary(View,String,String,boolean,boolean)
@@ -968,8 +977,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean isTemporary()
 	{
 		return getFlag(TEMPORARY);
-	}
+	} //}}}
 
+	//{{{ getIcon() method
 	/**
 	 * Returns this buffer's icon.
 	 * @since jEdit 2.6pre6
@@ -984,8 +994,33 @@ public class Buffer extends PlainDocument implements EBComponent
 			return GUIUtilities.NEW_BUFFER_ICON;
 		else
 			return GUIUtilities.NORMAL_BUFFER_ICON;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Text editing methods
+
+	//{{{ getLineCount() method
+	/**
+	 * Returns the number of physical lines in the buffer.
+	 * @since jEdit 3.1pre1
+	 */
+	public int getLineCount()
+	{
+		return lineCount;
+	} //}}}
+
+	//{{{ getVirtualLineCount() method
+	/**
+	 * Returns the number of virtual lines in the buffer.
+	 * @since jEdit 3.1pre1
+	 */
+	public int getVirtualLineCount()
+	{
+		return virtualLineCount;
+	} //}}}
+
+	//{{{ getLineOfOffset() method
 	/**
 	 * Returns the line containing the specified offset.
 	 * @param offset The offset
@@ -994,8 +1029,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final int getLineOfOffset(int offset)
 	{
 		return getDefaultRootElement().getElementIndex(offset);
-	}
+	} //}}}
 
+	//{{{ getLineStartOffset() method
 	/**
 	 * Returns the start offset of the specified line.
 	 * @param line The line
@@ -1011,8 +1047,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			return -1;
 		else
 			return lineElement.getStartOffset();
-	}
+	} //}}}
 
+	//{{{ getLineEndOffset() method
 	/**
 	 * Returns the end offset of the specified line.
 	 * @param line The line
@@ -1028,8 +1065,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			return -1;
 		else
 			return lineElement.getEndOffset();
-	}
+	} //}}}
 
+	//{{{ getLineLength() method
 	/**
 	 * Returns the length of the specified line.
 	 * @param line The line
@@ -1044,8 +1082,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		else
 			return lineElement.getEndOffset()
 				- lineElement.getStartOffset() - 1;
-	}
+	} //}}}
 
+	//{{{ getLineText() method
 	/**
 	 * Returns the text on the specified line.
 	 * @param lineIndex The line
@@ -1064,8 +1103,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			Log.log(Log.ERROR,this,bl);
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ getLineText() method
 	/**
 	 * Copies the text on the specified line into a segment. If the line
 	 * is invalid, the segment will contain a null string.
@@ -1086,8 +1126,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			Log.log(Log.ERROR,this,bl);
 			segment.offset = segment.count = 0;
 		}
-	}
+	} //}}}
 
+	//{{{ undo() method
 	/**
 	 * Undoes the most recent edit.
 	 *
@@ -1119,8 +1160,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
-	}
+	} //}}}
 
+	//{{{ redo() method
 	/**
 	 * Redoes the most recently undone edit. Returns true if the redo was
 	 * successful.
@@ -1153,8 +1195,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
 		}
-	}
+	} //}}}
 
+	//{{{ addUndoableEdit() method
 	/**
 	 * Adds an undoable edit to this document. This is non-trivial
 	 * mainly because the text area adds undoable edits every time
@@ -1185,8 +1228,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 		else
 			undo.addEdit(edit);
-	}
+	} //}}}
 
+	//{{{ beginCompoundEdit() method
 	/**
 	 * Starts a compound edit. All edits from now on until
 	 * <code>endCompoundEdit()</code> are called will be merged
@@ -1209,8 +1253,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			compoundEditNonEmpty = false;
 			compoundEdit = new CompoundEdit();
 		}
-	}
+	} //}}}
 
+	//{{{ endCompoundEdit() method
 	/**
 	 * Ends a compound edit. All edits performed since
 	 * <code>beginCompoundEdit()</code> was called can now
@@ -1234,8 +1279,9 @@ public class Buffer extends PlainDocument implements EBComponent
 				undo.addEdit(compoundEdit);
 			compoundEdit = null;
 		}
-	}
+	}//}}}
 
+	//{{{ insideCompoundEdit() method
 	/**
 	 * Returns if a compound edit is currently active.
 	 * @since jEdit 3.1pre1
@@ -1243,8 +1289,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean insideCompoundEdit()
 	{
 		return compoundEdit != null;
-	}
+	} //}}}
 
+	//{{{ removeTrailingWhiteSpace() method
 	/**
 	 * Removes trailing whitespace from all lines in the specified list.
 	 * @param list The line numbers
@@ -1294,8 +1341,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			endCompoundEdit();
 		}
-	}
+	} //}}}
 
+	//{{{ shiftIndentLeft() method
 	/**
 	 * Shifts the indent of each line in the specified list to the left.
 	 * @param lines The line numbers
@@ -1341,8 +1389,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			endCompoundEdit();
 		}
-	}
+	} //}}}
 
+	//{{{ shiftIndentRight() method
 	/**
 	 * Shifts the indent of each line in the specified list to the right.
 	 * @param lines The line numbers
@@ -1383,8 +1432,45 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			endCompoundEdit();
 		}
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Property methods
+
+	//{{{ propertiesChanged() method
+	/**
+	 * Reloads settings from the properties. This should be called
+	 * after the <code>syntax</code> buffer-local property is
+	 * changed.
+	 */
+	public void propertiesChanged()
+	{
+		if(getBooleanProperty("syntax"))
+			setTokenMarker(mode.getTokenMarker());
+		else
+			setTokenMarker(jEdit.getMode("text").getTokenMarker());
+
+		String folding = (String)getProperty("folding");
+		if("explicit".equals(folding))
+			setFoldHandler(new ExplicitFoldHandler());
+		else if("indent".equals(folding))
+			setFoldHandler(new IndentFoldHandler());
+		else
+			setFoldHandler(new DummyFoldHandler());
+
+		if(undo != null)
+		{
+			undo.setLimit(jEdit.getIntegerProperty(
+				"buffer.undoCount",100));
+		}
+
+		// cache these for improved performance
+		putProperty("tabSize",getProperty("tabSize"));
+		putProperty("maxLineLen",getProperty("maxLineLen"));
+	} //}}}
+
+	//{{{ getTabSize() method
 	/**
 	 * Returns the tab size used in this buffer. This is equivalent
 	 * to calling getProperty("tabSize").
@@ -1392,8 +1478,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public int getTabSize()
 	{
 		return ((Integer)getProperty("tabSize")).intValue();
-	}
+	} //}}}
 
+	//{{{ getIndentSize() method
 	/**
 	 * Returns the indent size used in this buffer. This is equivalent
 	 * to calling getProperty("indentSize").
@@ -1402,8 +1489,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public int getIndentSize()
 	{
 		return ((Integer)getProperty("indentSize")).intValue();
-	}
+	} //}}}
 
+	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property name
@@ -1417,8 +1505,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			return true;
 		else
 			return false;
-	}
+	} //}}}
 
+	//{{{ putBooleanProperty() method
 	/**
 	 * Sets a boolean property.
 	 * @param name The property name
@@ -1427,16 +1516,22 @@ public class Buffer extends PlainDocument implements EBComponent
 	public void putBooleanProperty(String name, boolean value)
 	{
 		putProperty(name,value ? Boolean.TRUE : Boolean.FALSE);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Edit modes, syntax highlighting, auto indent
+
+	//{{{ getMode() method
 	/**
 	 * Returns this buffer's edit mode.
 	 */
 	public final Mode getMode()
 	{
 		return mode;
-	}
+	} //}}}
 
+	//{{{ setMode() method
 	/**
 	 * Sets this buffer's edit mode. Note that calling this before a buffer
 	 * is loaded will have no effect; in that case, set the "mode" property
@@ -1450,8 +1545,10 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(mode == null)
 			throw new NullPointerException("Mode must be non-null");
 
-		if(this.mode == mode)
-			return;
+		// still need to set up new fold handler, etc even if mode not
+		// changed.
+		//if(this.mode == mode)
+		//	return;
 
 		Mode oldMode = this.mode;
 
@@ -1465,8 +1562,9 @@ public class Buffer extends PlainDocument implements EBComponent
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.MODE_CHANGED));
 		}
-	}
+	} //}}}
 
+	//{{{ setMode() method
 	/**
 	 * Sets this buffer's edit mode by calling the accept() method
 	 * of each registered edit mode.
@@ -1518,8 +1616,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(defaultMode == null)
 			defaultMode = jEdit.getMode("text");
 		setMode(defaultMode);
-	}
+	} //}}}
 
+	//{{{ indentLine() method
 	/**
 	 * If auto indent is enabled, this method is called when the `Tab'
 	 * or `Enter' key is pressed to perform mode-specific indentation
@@ -1760,8 +1859,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ indentLines() method
 	/**
 	 * Indents all specified lines.
 	 * @param start The first line to indent
@@ -1774,8 +1874,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		for(int i = start; i <= end; i++)
 			indentLine(i,true,true);
 		endCompoundEdit();
-	}
+	} //}}}
 
+	//{{{ indentLines() method
 	/**
 	 * Indents all specified lines.
 	 * @param lines The line numbers
@@ -1787,13 +1888,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		for(int i = 0; i < lines.length; i++)
 			indentLine(lines[i],true,true);
 		endCompoundEdit();
-	}
+	} //}}}
 
-	/**
-	 * @deprecated Don't call this method.
-	 */
-	public void tokenizeLines() {}
-
+	//{{{ tokenizeLines() method
 	/**
 	 * Reparses the document, by passing the specified lines to the
 	 * token marker. This should be called after a large quantity of
@@ -1807,8 +1904,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		for(int i = 0; i < len; i++)
 			markTokens(start + i);
-	}
+	} //}}}
 
+	//{{{ paintSyntaxLine() method
 	/**
 	 * Paints the specified line onto the graphics context.
 	 * @since jEdit 3.2pre6
@@ -1888,8 +1986,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		return (int)x;
-	}
+	} //}}}
 
+	//{{{ markTokens() method
 	/**
 	 * Returns the syntax tokens for the specified line.
 	 * @param lineIndex The line number
@@ -1904,7 +2003,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		/*
 		 * Else, go up to 100 lines back, looking for a line with
 		 * a valid line context.
-		 * cached tokens. Tokenize from that line to this line.
 		 */
 		int start = Math.max(0,lineIndex - 100) - 1;
 		int end = Math.max(0,lineIndex - 100);
@@ -1982,9 +2080,10 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 
 		return tokenList;
-	}
+	} //}}}
 
-	/*
+	//{{{ isNextLineRequested() method
+	/**
 	 * Returns true if the next line should be repainted. This
 	 * will return true after a line has been tokenized that starts
 	 * a multiline token that continues onto the next line.
@@ -1992,8 +2091,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean isNextLineRequested()
 	{
 		return nextLineRequested;
-	}
+	} //}}}
 
+	//{{{ getLineInfo() method
 	/**
 	 * Returns the line info object for the specified line.
 	 * @since jEdit 3.1pre1
@@ -2001,8 +2101,32 @@ public class Buffer extends PlainDocument implements EBComponent
 	public LineInfo getLineInfo(int line)
 	{
 		return lineInfo[line];
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Deprecated methods
+
+	//{{{ isSaving() method
+	/**
+	 * @deprecated Call isPerformingIO() instead
+	 */
+	public final boolean isSaving()
+	{
+		return getFlag(IO);
+	} //}}}
+
+	//{{{ tokenizeLines() method
+	/**
+	 * @deprecated Don't call this method.
+	 */
+	public void tokenizeLines() {} //}}}
+
+	//}}}
+
+	//{{{ Folding methods
+
+	//{{{ isLineVisible() method
 	/**
 	 * Returns if the specified line is visible.
 	 * @since jEdit 3.1pre1
@@ -2010,8 +2134,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	public boolean isLineVisible(int line)
 	{
 		return lineInfo[line].visible;
-	}
+	} //}}}
 
+	//{{{ isFoldStart() method
 	/**
 	 * Returns if the specified line begins a fold.
 	 * @since jEdit 3.1pre1
@@ -2043,8 +2168,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		return getFoldLevel(line) < getFoldLevel(line + 1);
 			/*|| (line != virtualLines[virtualLineCount - 1]
 			&& !lineInfo[line + 1].visible);*/
-	}
+	} //}}}
 
+	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
 	 * @since jEdit 3.1pre1
@@ -2053,80 +2179,44 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		LineInfo info = lineInfo[line];
 
-		if(info.foldLevel != -1)
+		if(info.foldLevelValid)
 			return info.foldLevel;
 		else
 		{
-			boolean changed = false;
-
-			// make this configurable!
-			int tabSize = getTabSize();
-
-			Element lineElement = getDefaultRootElement()
-				.getElement(line);
-			int start = lineElement.getStartOffset();
-			try
+			int start = 0;
+			for(int i = line - 1; i >= 0; i--)
 			{
-				getText(start,lineElement.getEndOffset() - start - 1,seg);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
-
-			int offset = seg.offset;
-			int count = seg.count;
-
-			int whitespace = 0;
-
-			if(count == 0)
-			{
-				// empty line. inherit previous line's fold level
-				if(line != 0)
-					whitespace = getFoldLevel(line - 1);
-				else
-					whitespace = 0;
-			}
-			else
-			{
-				// this is so that lines consisting of only
-				// whitespace don't cause disruptions
-				boolean seenNonWhitespace = false;
-loop:				for(int i = 0; i < count; i++)
+				LineInfo _info = lineInfo[i];
+				if(_info.foldLevelValid)
 				{
-					switch(seg.array[offset + i])
-					{
-					case ' ':
-						whitespace++;
-						break;
-					case '\t':
-						whitespace += (tabSize - whitespace % tabSize);
-						break;
-					default:
-						seenNonWhitespace = true;
-						break loop;
-					}
-				}
-
-				if(!seenNonWhitespace)
-				{
-					if(line != 0)
-						whitespace = getFoldLevel(line - 1);
-					else
-						whitespace = 0;
+					start = i + 1;
+					break;
 				}
 			}
 
-			if(info.foldLevel != whitespace)
+			int newFoldLevel = 0;
+
+			for(int i = start; i <= line; i++)
 			{
-				info.foldLevel = whitespace;
-				fireFoldLevelsChanged(line - 1,line - 1);
+				LineInfo _info = lineInfo[i];
+				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
+				_info.foldLevel = newFoldLevel;
+				_info.foldLevelValid = true;
 			}
 
-			return whitespace;
+			for(int i = line + 1; i < lineCount; i++)
+			{
+				lineInfo[i].foldLevelValid = false;
+			}
+
+			if(info.foldLevel != newFoldLevel)
+				fireFoldLevelsChanged(start - 1,line - 1);
+
+			return newFoldLevel;
 		}
-	}
+	} //}}}
 
+	//{{{ getPrevVisibleLine() method
 	/**
 	 * Returns the previous visible line before the specified index, or
 	 * -1 if no previous lines are visible.
@@ -2142,8 +2232,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		return -1;
-	}
+	} //}}}
 
+	//{{{ getNextVisibleLine() method
 	/**
 	 * Returns the next visible line after the specified index, or
 	 * -1 if no subsequent lines are visible.
@@ -2159,8 +2250,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		return -1;
-	}
+	} //}}}
 
+	//{{{ virtualToPhysical() method
 	/**
 	 * Maps a virtual line number to a physical line number. To simplify
 	 * matters for text area highlighters, this method maps out-of-bounds
@@ -2178,8 +2270,9 @@ loop:				for(int i = 0; i < count; i++)
 			return lineCount + (lineNo - virtualLineCount);
 
 		return virtualLines[lineNo];
-	}
+	} //}}}
 
+	//{{{ physicalToVirtual() method
 	/**
 	 * Maps a physical line number to a virtual line number.
 	 * @since jEdit 3.1pre1
@@ -2226,8 +2319,9 @@ loop:				for(int i = 0; i < count; i++)
 				break;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ collapseFoldAt() method
 	/**
 	 * Collapse the fold that contains the specified line number.
 	 * @param line The first line number of the fold
@@ -2326,8 +2420,9 @@ loop:				for(int i = 0; i < count; i++)
 		fireFoldStructureChanged();
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ expandFoldAt() method
 	/**
 	 * Expand the fold that begins at the specified line number.
 	 * @param line The first line number of the fold
@@ -2481,8 +2576,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ expandFolds() method
 	/**
 	 * This is intended to be called from actions.xml.
 	 * @since jEdit 3.1pre1
@@ -2496,8 +2592,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 		else
 			expandFolds((int)(digit - '1') + 1);
-	}
+	} //}}}
 
+	//{{{ expandFolds() method
 	/**
 	 * Expand all folds in the buffer up to a specified level.
 	 * @param level All folds less than this level will be expanded,
@@ -2535,8 +2632,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		fireFoldStructureChanged();
-	}
+	} //}}}
 
+	//{{{ expandAllFolds() method
 	/**
 	 * Expand all folds in the specified document.
 	 * @since jEdit 3.1pre1
@@ -2559,8 +2657,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		fireFoldStructureChanged();
-	}
+	} //}}}
 
+	//{{{ narrow() method
 	/**
 	 * Narrows the visible portion of the buffer to the specified
 	 * line range.
@@ -2587,8 +2686,9 @@ loop:				for(int i = 0; i < count; i++)
 			lineInfo[i].visible = false;
 
 		fireFoldStructureChanged();
-	}
+	} //}}}
 
+	//{{{ addFoldListener() method
 	/**
 	 * Adds a fold listener.
 	 * @param listener The listener
@@ -2597,8 +2697,9 @@ loop:				for(int i = 0; i < count; i++)
 	public void addFoldListener(FoldListener l)
 	{
 		foldListeners.addElement(l);
-	}
+	} //}}}
 
+	//{{{ removeFoldListener() method
 	/**
 	 * Removes a fold listener.
 	 * @param listener The listener
@@ -2607,26 +2708,13 @@ loop:				for(int i = 0; i < count; i++)
 	public void removeFoldListener(FoldListener l)
 	{
 		foldListeners.removeElement(l);
-	}
+	} //}}}
 
-	/**
-	 * Returns the number of physical lines in the buffer.
-	 * @since jEdit 3.1pre1
-	 */
-	public int getLineCount()
-	{
-		return lineCount;
-	}
+	//}}}
 
-	/**
-	 * Returns the number of virtual lines in the buffer.
-	 * @since jEdit 3.1pre1
-	 */
-	public int getVirtualLineCount()
-	{
-		return virtualLineCount;
-	}
+	//{{{ Marker methods
 
+	//{{{ getMarkers() method
 	/**
 	 * Returns a vector of markers.
 	 * @since jEdit 3.2pre1
@@ -2634,8 +2722,9 @@ loop:				for(int i = 0; i < count; i++)
 	public final Vector getMarkers()
 	{
 		return markers;
-	}
+	} //}}}
 
+	//{{{ addOrRemoveMarker() method
 	/**
 	 * If a marker is set on the line of the position, it is removed. Otherwise
 	 * a new marker with the specified shortcut is added.
@@ -2651,8 +2740,9 @@ loop:				for(int i = 0; i < count; i++)
 			removeMarker(line);
 		else
 			addMarker(shortcut,pos);
-	}
+	} //}}}
 
+	//{{{ addMarker() method
 	/**
 	 * Adds a marker to this buffer.
 	 * @param pos The position of the marker
@@ -2708,8 +2798,9 @@ loop:				for(int i = 0; i < count; i++)
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.MARKERS_CHANGED));
 		}
-	}
+	} //}}}
 
+	//{{{ getMarkerAtLine() method
 	/**
 	 * Returns the first marker at the specified line.
 	 * @param line The line number
@@ -2727,8 +2818,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ removeMarker() method
 	/**
 	 * Removes all markers at the specified line.
 	 * @param line The line number
@@ -2754,8 +2846,9 @@ loop:				for(int i = 0; i < count; i++)
 
 		EditBus.send(new BufferUpdate(this,null,
 			BufferUpdate.MARKERS_CHANGED));
-	}
+	} //}}}
 
+	//{{{ removeAllMarkers() method
 	/**
 	 * Removes all defined markers.
 	 * @since jEdit 2.6pre1
@@ -2772,8 +2865,9 @@ loop:				for(int i = 0; i < count; i++)
 
 		EditBus.send(new BufferUpdate(this,null,
 			BufferUpdate.MARKERS_CHANGED));
-	}
+	} //}}}
 
+	//{{{ getMarker() method
 	/**
 	 * Returns the marker with the specified shortcut.
 	 * @param shortcut The shortcut
@@ -2789,24 +2883,31 @@ loop:				for(int i = 0; i < count; i++)
 				return marker;
 		}
 		return null;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Miscellaneous methods
+
+	//{{{ getNext() method
 	/**
 	 * Returns the next buffer in the list.
 	 */
 	public final Buffer getNext()
 	{
 		return next;
-	}
+	} //}}}
 
+	//{{{ getPrev() method
 	/**
 	 * Returns the previous buffer in the list.
 	 */
 	public final Buffer getPrev()
 	{
 		return prev;
-	}
+	} //}}}
 
+	//{{{ getIndex() method
 	/**
 	 * Returns the position of this buffer in the buffer list.
 	 */
@@ -2822,8 +2923,9 @@ loop:				for(int i = 0; i < count; i++)
 			buffer = buffer.prev;
 		}
 		return count;
-	}
+	} //}}}
 
+	//{{{ toString() method
 	/**
 	 * Returns a string representation of this buffer.
 	 * This simply returns the path name.
@@ -2831,18 +2933,22 @@ loop:				for(int i = 0; i < count; i++)
 	public String toString()
 	{
 		return name + " (" + vfs.getParentOfPath(path) + ")";
-	}
+	} //}}}
 
+	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
-	}
+	} //}}}
 
-	// package-private members
+	//}}}
+
+	//{{{ Package-private members
 	Buffer prev;
 	Buffer next;
 
+	//{{{ Buffer constructor
 	Buffer(View view, String path, boolean newFile, boolean temp,
 		Hashtable props)
 	{
@@ -2906,14 +3012,16 @@ loop:				for(int i = 0; i < count; i++)
 			EditBus.addToBus(Buffer.this);
 
 		setFlag(NEW_FILE,newFile);
-	}
+	} //}}}
 
+	//{{{ commitTemporary() method
 	void commitTemporary()
 	{
 		setFlag(TEMPORARY,false);
 		EditBus.addToBus(this);
-	}
+	} //}}}
 
+	//{{{ close() method
 	void close()
 	{
 		setFlag(CLOSED,true);
@@ -2922,10 +3030,13 @@ loop:				for(int i = 0; i < count; i++)
 			autosaveFile.delete();
 
 		EditBus.removeFromBus(this);
-	}
+	} //}}}
 
-	// protected members
+	//}}}
 
+	//{{{ Protected members
+
+	//{{{ fireInsertUpdate() method
 	/**
 	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
@@ -2953,8 +3064,9 @@ loop:				for(int i = 0; i < count; i++)
 		super.fireInsertUpdate(evt);
 
 		setDirty(true);
-	}
+	} //}}}
 
+	//{{{ fireRemoveUpdate() method
 	/**
 	 * We overwrite this method to update the line info array
 	 * state immediately so that any event listeners get a
@@ -2981,23 +3093,31 @@ loop:				for(int i = 0; i < count; i++)
 		super.fireRemoveUpdate(evt);
 
 		setDirty(true);
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Flags
+
+	//{{{ setFlag() method
 	private void setFlag(int flag, boolean value)
 	{
 		if(value)
 			flags |= (1 << flag);
 		else
 			flags &= ~(1 << flag);
-	}
+	} //}}}
 
+	//{{{ getFlag() method
 	private boolean getFlag(int flag)
 	{
 		int mask = (1 << flag);
 		return (flags & mask) == mask;
-	}
+	} //}}}
 
+	//{{{ Flag values
 	private static final int CLOSED = 0;
 	private static final int LOADING = 1;
 	private static final int IO = 2;
@@ -3008,8 +3128,13 @@ loop:				for(int i = 0; i < count; i++)
 	private static final int READ_ONLY = 7;
 	private static final int UNDO_IN_PROGRESS = 8;
 	private static final int TEMPORARY = 9;
+	//}}}
 
 	private int flags;
+
+	//}}}
+
+	//{{{ Instance variables
 
 	private long modTime;
 	private File file;
@@ -3037,10 +3162,14 @@ loop:				for(int i = 0; i < count; i++)
 	private TokenList tokenList;
 
 	// Folding
+	private FoldHandler foldHandler;
 	private int[] virtualLines;
 	private int virtualLineCount;
 	private Vector foldListeners;
 
+	//}}}
+
+	//{{{ setPath() method
 	private void setPath(String path)
 	{
 		this.path = path;
@@ -3061,8 +3190,9 @@ loop:				for(int i = 0; i < count; i++)
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
-	}
+	} //}}}
 
+	//{{{ recoverAutosave() method
 	private boolean recoverAutosave(final View view)
 	{
 		if(!autosaveFile.canRead())
@@ -3093,8 +3223,9 @@ loop:				for(int i = 0; i < count; i++)
 		}
 		else
 			return false;
-	}
+	} //}}}
 
+	//{{{ clearProperties() method
 	private void clearProperties()
 	{
 		Object lineSeparator = getProperty(LINESEP);
@@ -3107,8 +3238,9 @@ loop:				for(int i = 0; i < count; i++)
 			putProperty(ENCODING,encoding);
 		else
 			putProperty(ENCODING,System.getProperty("file.encoding"));
-	}
+	} //}}}
 
+	//{{{ parseBufferLocalProperties() method
 	private void parseBufferLocalProperties()
 	{
 		try
@@ -3133,8 +3265,9 @@ loop:				for(int i = 0; i < count; i++)
 		{
 			bl.printStackTrace();
 		}
-	}
+	} //}}}
 
+	//{{{ parseBufferLocalProperty() method
 	private void parseBufferLocalProperty(String prop)
 	{
 		StringBuffer buf = new StringBuffer();
@@ -3199,8 +3332,9 @@ loop:				for(int i = 0; i < count; i++)
 				break;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ setTokenMarker() method
 	private void setTokenMarker(TokenMarker tokenMarker)
 	{
 		this.tokenMarker = tokenMarker;
@@ -3216,8 +3350,18 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		lastTokenizedLine = -1;
-	}
+	} //}}}
 
+	//{{{ setFoldHandler() method
+	private void setFoldHandler(FoldHandler foldHandler)
+	{
+		this.foldHandler = foldHandler;
+
+		for(int i = 0; i < lineCount; i++)
+			lineInfo[i].foldLevelValid = false;
+	} //}}}
+
+	//{{{ addLinesToMap() method
 	/**
 	 * Inserts the specified line range into the virtual to physical
 	 * mapping and line info array.
@@ -3296,8 +3440,9 @@ loop:				for(int i = 0; i < count; i++)
 			info.visible = prev.visible;
 			lineInfo[index + i] = info;
 		}
-	}
+	} //}}}
 
+	//{{{ removeLinesFromMap() method
 	/**
 	 * Deletes the specified line range from the virtual to physical
 	 * mapping and line info array.
@@ -3331,8 +3476,9 @@ loop:				for(int i = 0; i < count; i++)
 		lineCount -= lines;
 		System.arraycopy(lineInfo,length,lineInfo,
 			index,lineInfo.length - length);
-	}
+	} //}}}
 
+	//{{{ linesChanged() method
 	/**
 	 * Called when the specified lines change. This invalidates
 	 * cached syntax tokens and fold level.
@@ -3345,7 +3491,7 @@ loop:				for(int i = 0; i < count; i++)
 		{
 			LineInfo info = lineInfo[index + i];
 			info.contextValid = false;
-			info.foldLevel = -1;
+			info.foldLevelValid = false;
 		}
 
 		if(lastTokenizedLine >= index
@@ -3353,8 +3499,33 @@ loop:				for(int i = 0; i < count; i++)
 		{
 			lastTokenizedLine = -1;
 		}
-	}
+	} //}}}
 
+	//{{{ fireFoldLevelsChanged() method
+	private void fireFoldLevelsChanged(int firstLine, int lastLine)
+	{
+		for(int i = 0; i < foldListeners.size(); i++)
+		{
+			((FoldListener)foldListeners.elementAt(i))
+				.foldLevelsChanged(firstLine,lastLine);
+		}
+	} //}}}
+
+	//{{{ fireFoldStructureChanged() method
+	private void fireFoldStructureChanged()
+	{
+		for(int i = 0; i < foldListeners.size(); i++)
+		{
+			((FoldListener)foldListeners.elementAt(i))
+				.foldStructureChanged();
+		}
+	} //}}}
+
+	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ PrintTabExpander class
 	static class PrintTabExpander implements TabExpander
 	{
 		private int leftMargin;
@@ -3371,36 +3542,9 @@ loop:				for(int i = 0; i < count; i++)
 			int ntabs = ((int)x - leftMargin) / tabSize;
 			return (ntabs + 1) * tabSize + leftMargin;
 		}
-	}
+	} //}}}
 
-	private void fireFoldLevelsChanged(int firstLine, int lastLine)
-	{
-		for(int i = 0; i < foldListeners.size(); i++)
-		{
-			((FoldListener)foldListeners.elementAt(i))
-				.foldLevelsChanged(firstLine,lastLine);
-		}
-	}
-
-	private void fireFoldStructureChanged()
-	{
-		for(int i = 0; i < foldListeners.size(); i++)
-		{
-			((FoldListener)foldListeners.elementAt(i))
-				.foldStructureChanged();
-		}
-	}
-
-	/**
-	 * Only useful for the text area.
-	 */
-	public interface FoldListener
-	{
-		void foldLevelsChanged(int firstLine, int lastLine);
-
-		void foldStructureChanged();
-	}
-
+	//{{{ TokenList class
 	/**
 	 * Encapsulates a token list.
 	 * @since jEdit 4.0pre1
@@ -3465,8 +3609,9 @@ loop:				for(int i = 0; i < count; i++)
 
 		private Token firstToken;
 		private Token lastToken;
-	}
+	} //}}}
 
+	//{{{ LineInfo class
 	/**
 	 * Inner class for storing information about tokenized lines.
 	 */
@@ -3522,7 +3667,8 @@ loop:				for(int i = 0; i < count; i++)
 		}
 
 		// private members
-		int foldLevel = -1;
+		int foldLevel;
+		boolean foldLevelValid;
 		boolean visible;
 
 		// true if the context info is valid.
@@ -3531,11 +3677,13 @@ loop:				for(int i = 0; i < count; i++)
 		private TokenMarker.LineContext context;
 		private ParserRuleSet rules;
 		private ParserRule inRule;
+	} //}}}
 
-	}
-
-	// A dictionary that looks in the mode and editor properties
-	// for default values
+	//{{{ BufferProps class
+	/**
+	 * A dictionary that looks in the mode and editor properties
+	 * for default values.
+	 */
 	class BufferProps extends Hashtable
 	{
 		public Object get(Object key)
@@ -3571,10 +3719,13 @@ loop:				for(int i = 0; i < count; i++)
 				}
 			}
 		}
-	}
+	} //}}}
 
-	// we need to call some protected methods, so override this class
-	// to make them public
+	//{{{ MyUndoManager class
+	/**
+	 * We need to call some protected methods, so override this class
+	 * to make them public.
+	 */
 	class MyUndoManager extends UndoManager
 	{
 		public UndoableEdit editToBeUndone()
@@ -3586,9 +3737,9 @@ loop:				for(int i = 0; i < count; i++)
 		{
 			return super.editToBeRedone();
 		}
-	}
+	} //}}}
 
-	// event handlers
+	//{{{ UndoHandler class
 	class UndoHandler
 	implements UndoableEditListener
 	{
@@ -3596,5 +3747,7 @@ loop:				for(int i = 0; i < count; i++)
 		{
 			addUndoableEdit(evt.getEdit());
 		}
-	}
+	} //}}}
+
+	//}}}
 }
