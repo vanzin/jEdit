@@ -817,7 +817,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ filesActivated() method
-	void filesActivated(boolean newView)
+	// canDoubleClickClose set to false when ENTER pressed
+	void filesActivated(boolean newView, boolean canDoubleClickClose)
 	{
 		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
 
@@ -833,7 +834,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				Buffer buffer = jEdit.getBuffer(file.path);
 				if(buffer == null)
 					buffer = jEdit.openFile(null,file.path);
-				else if(doubleClickClose)
+				else if(doubleClickClose && canDoubleClickClose)
 				{
 					jEdit.closeBuffer(view,buffer);
 					break;

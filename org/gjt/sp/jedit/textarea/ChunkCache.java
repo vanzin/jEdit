@@ -238,38 +238,41 @@ public class ChunkCache
 
 		while(chunks != null)
 		{
-			Font font = chunks.style.getFont();
-			Color bgColor = chunks.style.getBackgroundColor();
-			if(bgColor != null)
+			if(!chunks.inaccessable)
 			{
-				float x2 = (chunks.next == null ? width
-					: _x + chunks.width);
+				Font font = chunks.style.getFont();
+				Color bgColor = chunks.style.getBackgroundColor();
+				if(bgColor != null)
+				{
+					float x2 = (chunks.next == null ? width
+						: _x + chunks.width);
 
-				//LineMetrics lm = font.getLineMetrics(
-				//	chunks.text,gfx.getFontRenderContext());
-				gfx.setXORMode(background);
-				gfx.setColor(bgColor);
+					//LineMetrics lm = font.getLineMetrics(
+					//	chunks.text,gfx.getFontRenderContext());
+					gfx.setXORMode(background);
+					gfx.setColor(bgColor);
 
-				gfx.fill(new Rectangle2D.Float(
-					_x,y - forBackground.getAscent(),
-					x2 - _x,forBackground.getHeight()));
+					gfx.fill(new Rectangle2D.Float(
+						_x,y - forBackground.getAscent(),
+						x2 - _x,forBackground.getHeight()));
 
-				gfx.setPaintMode();
-			}
+					gfx.setPaintMode();
+				}
 
-			if(chunks.text != null)
-			{
-				gfx.setFont(font);
-				gfx.setColor(chunks.style.getForegroundColor());
+				if(chunks.text != null)
+				{
+					gfx.setFont(font);
+					gfx.setColor(chunks.style.getForegroundColor());
 
-				if(glyphVector)
-					gfx.drawGlyphVector(chunks.text,x + _x,y);
-				else
-					gfx.drawString(chunks.str,x + _x,y);
+					if(glyphVector)
+						gfx.drawGlyphVector(chunks.text,x + _x,y);
+					else
+						gfx.drawString(chunks.str,x + _x,y);
 
-				// Useful for debugging purposes
-				//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
-				//	chunks.width,10));
+					// Useful for debugging purposes
+					//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
+					//	chunks.width,10));
+				}
 			}
 
 			//_x += chunks.x + chunks.width;

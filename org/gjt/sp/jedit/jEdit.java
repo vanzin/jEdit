@@ -88,7 +88,7 @@ public class jEdit
 			System.exit(1);
 		}
 
-		//{{{ Set up activity log
+		//{{{ Parse command line
 		int level = Log.WARNING;
 		if(args.length >= 1)
 		{
@@ -101,10 +101,6 @@ public class jEdit
 			}
 		}
 
-		Log.init(true,level);
-		//}}}
-
-		//{{{ Parse command line
 		boolean endOpts = false;
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
@@ -178,6 +174,8 @@ public class jEdit
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
 			portFile = null;
+
+		Log.init(true,level);
 
 		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())

@@ -59,6 +59,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 				if(browser.getMode() == VFSBrowser.BROWSER)
 				{
 					add(createMenuItem("open"));
+					add(createMenuItem("open-view"));
 					add(createMenuItem("insert"));
 					add(createMenuItem("close"));
 				}
@@ -80,10 +81,11 @@ public class BrowserCommandsMenu extends JPopupMenu
 				else
 				{
 					add(createMenuItem("open"));
+					add(createMenuItem("open-view"));
 					add(createOpenEncodingMenu());
 					add(createMenuItem("insert"));
 				}
-	
+
 				if(rename)
 					add(createMenuItem("rename"));
 				if(delete)
@@ -209,10 +211,16 @@ public class BrowserCommandsMenu extends JPopupMenu
 			}
 			else if(actionCommand.equals("open"))
 				jEdit.openFile(view,file.path);
+			else if(actionCommand.equals("open-view"))
+			{
+				Buffer buffer = jEdit.openFile(null,file.path);
+				if(buffer != null)
+					jEdit.newView(view,buffer);
+			}
 			else if(actionCommand.equals("insert"))
 				view.getBuffer().insertFile(view,file.path);
 			else if(actionCommand.equals("choose"))
-				browser.filesActivated(false);
+				browser.filesActivated(false,false);
 			else if(actionCommand.equals("close"))
 			{
 				Buffer buffer = jEdit.getBuffer(file.path);

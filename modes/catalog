@@ -114,6 +114,9 @@
 <MODE NAME="objective-c"	FILE="objective-c.xml"
 				FILE_NAME_GLOB="*.[mh]" />
 
+<MODE NAME="objectrexx"		FILE="objectrexx.xml"
+				FILE_NAME_GLOB="*.{rex,orx}" />
+
 <MODE NAME="occam"		FILE="occam.xml"
 				FILE_NAME_GLOB="*.icc" />
 

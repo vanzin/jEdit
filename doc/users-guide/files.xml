@@ -353,7 +353,7 @@
     widget next to a directory to list its contents in place.
    </para>
    <para>
-    Open files in the file list have a vertical black bar next to their icon.
+    Open files in the file list are shown with their file names underlined.
     Single-clicking an open file will select the appropriate buffer in the current
     view. Unopened files can be opened for editing by double-clicking (or by
     clicking the middle mouse button). If you hold down <keycap>Shift</keycap>
@@ -383,6 +383,14 @@
      sort would have placed these two files in the wrong order.
     </para>
    </tip>
+  </sect2>
+  <sect2><title>The Tool Bar</title>
+   <para>
+    The file system browser has a tool bar containing a number of icons.
+    These buttons correspond to the items in the <guibutton>Commands</guibutton>
+    menu described below; the only menu item that does not have a corresponding
+    tool bar button is <guimenuitem>Show Hidden Files</guimenuitem>.
+   </para>
   </sect2>
   <sect2><title>The Commands Menu</title>
    <para>

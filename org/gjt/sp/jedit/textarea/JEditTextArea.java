@@ -53,6 +53,23 @@ import org.gjt.sp.util.Log;
  */
 public class JEditTextArea extends JComponent
 {
+	//{{{ Undocumented features
+	/**
+	 * Undocumented feature - set to false in a BeanShell script to make
+	 * prev/next-word not eat whitespace.
+	 * @since jEdit 4.0pre5
+	 */
+	public static final boolean wordCommandsEatWhiteSpace = true;
+
+	/**
+	 * Undocumented feature - set to false in a BeanShell script to make
+	 * home/end with selection not move to start/end of first/last selected
+	 * line.
+	 * @since jEdit 4.0pre5
+	 */
+	public static final boolean homeEndSelectionHack = true;
+	//}}}
+
 	//{{{ JEditTextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
@@ -2319,7 +2336,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep,true)
+			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep,
+				wordCommandsEatWhiteSpace)
 				+ lineStart;
 		}
 
@@ -2582,7 +2600,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep,true)
+			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep,
+				wordCommandsEatWhiteSpace)
 				+ lineStart;
 		}
 
@@ -2662,7 +2681,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToStartOfLine(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null ? caretLine : s.startLine);
+		int line = (select || s == null
+			|| !homeEndSelectionHack
+			? caretLine : s.startLine);
 		int newCaret = getLineStartOffset(line);
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2684,7 +2705,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToEndOfLine(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null ? caretLine : s.endLine);
+		int line = (select || s == null
+			|| !homeEndSelectionHack
+			? caretLine : s.endLine);
 		int newCaret = getLineEndOffset(line) - 1;
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2711,7 +2734,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null ? caretLine : s.startLine);
+		int line = (select || s == null
+			|| !homeEndSelectionHack
+			? caretLine : s.startLine);
 
 		int firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
 		int firstOfLine = getLineStartOffset(line);
@@ -2741,7 +2766,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null ? caretLine : s.endLine);
+		int line = (select || s == null
+			|| !homeEndSelectionHack
+			? caretLine : s.endLine);
 
 		int lastIndent = MiscUtilities.getTrailingWhiteSpace(getLineText(line));
 		int lastOfLine = getLineEndOffset(line) - 1;
@@ -3116,7 +3143,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,true);
+			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,
+				wordCommandsEatWhiteSpace);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3321,7 +3349,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep,true);
+				_caret+1,noWordSep,wordCommandsEatWhiteSpace);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);

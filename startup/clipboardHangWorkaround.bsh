@@ -1,9 +1,0 @@
-/* It has been reported that under some Java versions on Linux, jEdit hangs
- * inside AWT code when attempting to use copy and paste.
- *
- * Until a solution to the problem is found, if you experience it, you can
- * uncomment the next line. It will make jEdit not use the system clipboard
- * for copy and paste. It will stop the hangs but prevent you from copying
- * text between jEdit and other applications. */
-
-// Registers.setRegister('$',new Registers.StringRegister(""));
