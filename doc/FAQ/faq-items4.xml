@@ -145,7 +145,7 @@
       take <classname>String</classname> values for the name of the
       property and its value.  If you use
       <userinput>setProperty()</userinput>, the property will remain in
-      jEdit's property store permamently, so if you only need the value
+      jEdit's property store permanently, so if you only need the value
       during the course of a single editing session, use
       <userinput>setTemporaryProperty()</userinput>.
     </para>
@@ -208,7 +208,7 @@
   <answer>
     <para>
       To get a listing of the latest plugins available for downloading from
-      jEdit Plugin Central, use the <guimenuitem>Plugin Manager</guimenuitem>guimenuitem>
+      jEdit Plugin Central, use the <guimenuitem>Plugin Manager</guimenuitem>
       feature on jEdit's <guimenu>Plugin</guimenu> menu. You can also get more
       detailed descriptions of the plugins from the <ulink
       url="http://plugins.jedit.org">Plugin Central</ulink> web site.
@@ -247,6 +247,21 @@
 			which jEdit is installed, or (b) your user settings directory (which you can find
 			by evaluating the BeanShell expression
 			<userinput>jEdit.getSettingsDirectory()</userinput>.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="plugin-loading">
+		<para>
+			Why can't plugins be loaded dynamically (i.e. not having to restart)?
+		</para>
+	</question>
+	<answer>
+		<para>
+			There are plans to support such a feature in jEdit 4.2, however it will
+      likely require a different plugin API, so existing plugins will need to
+      be updated to take advantage of it.
 		</para>
 	</answer>
 </qandaentry>
@@ -337,9 +352,9 @@
 	</question>
 	<answer>
 		<para>
-			A plugin for using CVS with jEdit is currently under development. Under Windows
-			and the WinCVS Open Source package, you can specify <userinput>jedit.exe</userinput>
-			as your default viewer and editor to automate the opening of file.
+			GruntSpud and jEditCvs are two such plugins. Under Windows and the WinCVS
+      Open Source package, you can specify <userinput>jedit.exe</userinput> as your default
+      viewer and editor to automate the opening of file.
 		</para>
 	</answer>
 </qandaentry>
@@ -353,7 +368,8 @@
 	<answer>
 		<para>
 			A plugin based on the version 1.4 of the JSwat debugger application is currently
-			available for download using jEdit's Plugin Manager feature.
+			available for download using jEdit's Plugin Manager feature. The Debugger plugin
+      is also available.
 		</para>
 	</answer>
 </qandaentry>
@@ -385,10 +401,9 @@
 	</question>
 	<answer>
 		<para>
-			There has been no announced effort to develop a plugin for XSL or XSLT. Using
-			command lines tools, either directly through the System shell of the Console
-			plugin, or through an Ant build file using the AntFarm plugin, you can obtain
-			parsed error output that links to buffer text in the ErrorList plugin's display.
+			There is currently one plugin available called XSLT. The XSLT plugin provides
+      features for: transforming XML using XSL transformation stylesheets; evaluating
+      XPath expressions on XML and displaying results; and indenting XML.
 		</para>
 	</answer>
 </qandaentry>
