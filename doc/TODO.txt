@@ -1,6 +1,6 @@
 TO DO
 
-- cvs add tip65.html
+- new view, split view doesn't work
 - might still need brutal undo code to avoid lumping everything together
 - too many lines being made invisible
 - bottom electric scroll

@@ -652,12 +652,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(textArea.getBuffer() == null)
 			return;
 
-		tabSize = fm.charWidth(' ') * ((Integer)textArea
-			.getBuffer().getProperty(
-			PlainDocument.tabSizeAttribute)).intValue();
+		tabSize = fm.charWidth(' ') * textArea.getBuffer().getTabSize();
 
-		int _maxLineLen = ((Integer)textArea.getBuffer()
-			.getProperty("maxLineLen")).intValue();
+		int _maxLineLen = textArea.getBuffer()
+			.getIntegerProperty("maxLineLen",0);
 
 		if(_maxLineLen <= 0)
 			maxLineLen = 0;
