@@ -6,12 +6,12 @@
 		<PROPERTY NAME="indentOpenBrackets" VALUE="["/>
 		<PROPERTY NAME="indentCloseBrackets" VALUE="]"/>
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
-		<PROPERTY NAME="indentNextLines" VALUE="^(\*&lt;&lt;|:).*"/>
+		<PROPERTY NAME="indentNextLines" VALUE="^(\*&lt;&lt;|:|M:|\{).*"/>
 		<PROPERTY NAME="doubleBracketIndent" VALUE="true"/>
 		<PROPERTY NAME="commentStart" VALUE="("/>
 		<PROPERTY NAME="commentEnd" VALUE=")"/>
 		<PROPERTY NAME="lineComment" VALUE="!"/>
-		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,_"/>
+		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,_|"/>
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" ESCAPE="\" NO_WORD_SEP="+-*=&gt;&lt;;.?/'()%,_"
 		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="-?\d+([./]\d+)?">

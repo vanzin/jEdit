@@ -1,5 +1,5 @@
 /*
- * HistoryTextArea.java - Text area with a history
+ * HistoryText.java - Common code for text components with a history
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -130,7 +130,9 @@ public class HistoryText
 			text.setCaretPosition(getDocument().getLength());
 		}
 
-		String t = getText().substring(0,text.getSelectionStart());
+		int start = getInputStart();
+		String t = getText().substring(start,
+			text.getSelectionStart() - start);
 		if(t == null)
 		{
 			historyPrevious();
@@ -143,7 +145,8 @@ public class HistoryText
 			if(item.startsWith(t))
 			{
 				text.replaceSelection(item.substring(t.length()));
-				text.select(t.length(),getDocument().getLength());
+				text.select(getInputStart() + t.length(),
+					getDocument().getLength());
 				index = i;
 				return;
 			}
@@ -163,7 +166,9 @@ public class HistoryText
 			text.setCaretPosition(getDocument().getLength());
 		}
 
-		String t = getText().substring(0,text.getSelectionStart());
+		int start = getInputStart();
+		String t = getText().substring(start,
+			text.getSelectionStart() - start);
 		if(t == null)
 		{
 			historyNext();
@@ -176,7 +181,8 @@ public class HistoryText
 			if(item.startsWith(t))
 			{
 				text.replaceSelection(item.substring(t.length()));
-				text.select(t.length(),getDocument().getLength());
+				text.select(getInputStart() + t.length(),
+					getDocument().getLength());
 				index = i;
 				return;
 			}
@@ -196,14 +202,14 @@ public class HistoryText
 		else if(index == -1)
 		{
 			current = getText();
-			text.setText(historyModel.getItem(0));
+			setText(historyModel.getItem(0));
 			index = 0;
 		}
 		else
 		{
 			// have to do this because setText() sets index to -1
 			int newIndex = index + 1;
-			text.setText(historyModel.getItem(newIndex));
+			setText(historyModel.getItem(newIndex));
 			index = newIndex;
 		}
 	} //}}}
@@ -217,12 +223,12 @@ public class HistoryText
 		if(index == -1)
 			text.getToolkit().beep();
 		else if(index == 0)
-			text.setText(current);
+			setText(current);
 		else
 		{
 			// have to do this because setText() sets index to -1
 			int newIndex = index - 1;
-			text.setText(historyModel.getItem(newIndex));
+			setText(historyModel.getItem(newIndex));
 			index = newIndex;
 		}
 	} //}}}
@@ -234,9 +240,33 @@ public class HistoryText
 	} //}}}
 	
 	//{{{ getText() method
+	/**
+	 * Subclasses can override this to provide funky history behavior,
+	 * for JTextPanes and such.
+	 */
 	public String getText()
 	{
 		return text.getText();
+	} //}}}
+	
+	//{{{ setText() method
+	/**
+	 * Subclasses can override this to provide funky history behavior,
+	 * for JTextPanes and such.
+	 */
+	public void setText(String text)
+	{
+		this.text.setText(text);
+	} //}}}
+
+	//{{{ getInputStart() method
+	/**
+	 * Subclasses can override this to provide funky history behavior,
+	 * for JTextPanes and such.
+	 */
+	public int getInputStart()
+	{
+		return 0;
 	} //}}}
 
 	//{{{ showPopupMenu() method
@@ -280,7 +310,7 @@ public class HistoryText
 	public void showPopupMenu(boolean search)
 	{
 		if(search)
-			showPopupMenu(getText().substring(0,
+			showPopupMenu(getText().substring(getInputStart(),
 				text.getSelectionStart()),0,text.getHeight());
 		else
 			showPopupMenu("",0,text.getHeight());
@@ -304,11 +334,11 @@ public class HistoryText
 			if(ind == -1)
 			{
 				if(index != -1)
-					text.setText(current);
+					setText(current);
 			}
 			else
 			{
-				text.setText(historyModel.getItem(ind));
+				setText(historyModel.getItem(ind));
 				index = ind;
 			}
 			if(instantPopups)

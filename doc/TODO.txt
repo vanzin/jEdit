@@ -3,9 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- more flexible mirror list
-- S+INS, etc in swing controls
-
 typing stuff, soft wrap not updated until save
 
 [error] JEditTextArea: BUG: screenLine=-1,visibleLines=60,physicalLine=0,firstPhysicalLine=7,lastPhysicalLine=66
@@ -20,15 +17,22 @@ typing stuff, soft wrap not updated until save
 
 - even with no edits, scrolling got screwed
 
-- tall caret and tab
-- vfs: a way of running awt requests not all at end
-- CA+PLUS +: bad
-- quicknotepad NPEs
-
 - scrolling up updates some screen lines
 - blank space at end
 - open soft wrap file in new display manager: not wrapping
 - word wrap at wrong place
+
+- modifier change broke stuff
+
+- tabs to spaces with rect select
+- C+a gave NPE
+- more flexible mirror list
+- S+INS, etc in swing controls
+
+- tall caret and tab
+- vfs: a way of running awt requests not all at end
+- CA+PLUS +: bad
+- quicknotepad NPEs
 
 goToBuffer() and 0-height edit panes
 check tips of the day
