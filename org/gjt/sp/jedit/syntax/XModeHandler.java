@@ -62,7 +62,7 @@ public class XModeHandler extends HandlerBase
 			{
 				return new BufferedReader(new InputStreamReader(
 					getClass().getResourceAsStream(
-					"/org/gjt/sp/jedit/xmode.dtd")));
+					"/org/gjt/sp/jedit/syntax/xmode.dtd")));
 			}
 			catch(Exception e)
 			{
