@@ -90,24 +90,41 @@ public class AboutDialog extends EnhancedDialog
 	static class AboutPanel extends JComponent
 	{
 		ImageIcon image;
+		ImageIcon t_fader;
+		ImageIcon b_fader;
 		Vector text;
 		int scrollPosition;
 		AnimationThread thread;
+		int maxWidth;
+		FontMetrics fm;
+
+		public static int TOP = 100;
+		public static int BOTTOM = 30;
 
 		AboutPanel()
 		{
 			setFont(UIManager.getFont("Label.font"));
+			fm = getFontMetrics(getFont());
+
 			setForeground(new Color(96,96,96));
 			image = new ImageIcon(getClass().getResource(
 				"/org/gjt/sp/jedit/icons/about.png"));
-			setBorder(new MatteBorder(1,1,1,1,Color.black));
+			t_fader = new ImageIcon(getClass().getResource(
+				"/org/gjt/sp/jedit/icons/about_top_fader.png"));
+			b_fader = new ImageIcon(getClass().getResource(
+				"/org/gjt/sp/jedit/icons/about_bottom_fader.png"));
+
+			setBorder(new MatteBorder(1,1,1,1,Color.gray));
 
 			text = new Vector(50);
 			StringTokenizer st = new StringTokenizer(
 				jEdit.getProperty("about.text"),"\n");
 			while(st.hasMoreTokens())
 			{
-				text.addElement(st.nextToken());
+				String line = st.nextToken();
+				text.addElement(line);
+				maxWidth = Math.max(maxWidth,
+					fm.stringWidth(line) + 10);
 			}
 
 			scrollPosition = -300;
@@ -127,35 +144,51 @@ public class AboutDialog extends EnhancedDialog
 
 			int firstLineOffset = height - scrollPosition % height;
 			int lastLine = (scrollPosition + getHeight()
-				- 30 - fm.getHeight() * 2) / height;
+				- TOP - BOTTOM) / height - 1;
 
-			int y = 50 + firstLineOffset;
+			int y = TOP + firstLineOffset;
 
 			for(int i = firstLine; i <= lastLine; i++)
 			{
-				if(i >= 0 && i < text.size() / 2)
+				if(i >= 0 && i < (text.size() / 2))
 				{
+					String line2 = " ";
 					if(2 * i + 1 != text.size())
 					{
-						String line2;
 						line2 = (String)text.elementAt(2 * i + 1);
-						int width2 = fm.stringWidth(line2);
-						g.drawString(line2,(getWidth() / 2
-							+ 20),y);
+						if (!line2.equals(" "))
+						{
+							int width2 = fm.stringWidth(line2);
+							g.drawString(line2,(getWidth() / 2
+								+ 10),y);
+						}
 					}
 
-					String line1 = (String)text.elementAt(2 * i);
-					int width1 = fm.stringWidth(line1);
-					g.drawString(line1,(getWidth() / 2
-						- width1 - 20),y);
+					if (line2.equals(" "))
+					{
+						String line1 = (String)text.elementAt(2 * i);
+						g.drawString(line1,(getWidth() - fm.stringWidth(line1))/2,y);
+					}
+					else
+					{
+						String line1 = (String)text.elementAt(2 * i);
+						int width1 = fm.stringWidth(line1);
+						g.drawString(line1,(getWidth() / 2
+							- width1 - 10),y);
+					}
 				}
 				y += fm.getHeight();
 			}
+			
+			/* Draw faders */
+			t_fader.paintIcon(this,g,1,1);
+			b_fader.paintIcon(this,g,1,321);
 
 			String[] args = { jEdit.getVersion() };
 			String version = jEdit.getProperty("about.version",args);
 			g.drawString(version,(getWidth() - fm.stringWidth(version)) / 2,
-				getHeight() - 30);
+				getHeight() - 10);
+			
 		}
 
 		public Dimension getPreferredSize()
@@ -173,15 +206,22 @@ public class AboutDialog extends EnhancedDialog
 		public void removeNotify()
 		{
 			super.removeNotify();
-			thread.stop();
+			thread.kill();
 		}
 
 		class AnimationThread extends Thread
 		{
+			private boolean running = true;
+		
 			AnimationThread()
 			{
 				super("About box animation thread");
 				setPriority(Thread.MIN_PRIORITY);
+			}
+			
+			public void kill()
+			{
+				running = false;
 			}
 
 			public void run()
@@ -189,32 +229,26 @@ public class AboutDialog extends EnhancedDialog
 				FontMetrics fm = getFontMetrics(getFont());
 				int max = text.size() * fm.getHeight();
 
-				for(;;)
+				while (running)
 				{
 					long start = System.currentTimeMillis();
 
-					scrollPosition++;
+					scrollPosition += 2;
 
 					if(scrollPosition > max)
 						scrollPosition = -getHeight();
 
 					try
 					{
-						int delay = (int)Math.max(0,60 -
-							(System.currentTimeMillis() - start));
-						Thread.sleep(delay);
-
-						SwingUtilities.invokeAndWait(new Runnable()
-						{
-							public void run()
-							{
-								repaint();
-							}
-						});
+						Thread.sleep(100);
 					}
 					catch(Exception e)
 					{
 					}
+
+					repaint(getWidth() / 2 - maxWidth,
+						TOP,maxWidth * 2,
+						getHeight() - TOP - BOTTOM);
 				}
 			}
 		}

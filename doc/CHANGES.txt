@@ -102,7 +102,7 @@ contributing to this release.
 - Open buffers are shown with a different icon in the file system
   browser.
 
-- New splash screen. (Kris Kopicki)
+- New splash screen and about box. (Kris Kopicki)
 
 + OS-specific Changes:
 

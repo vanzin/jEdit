@@ -1,7 +1,7 @@
 TO DO
 
 - soft wrap
-- COBOL mode!
+- COBOL, ASP modes!
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
 - background tokens are probably broken

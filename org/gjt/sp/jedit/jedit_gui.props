@@ -729,9 +729,12 @@ about.version=jEdit version {0}
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
-about.text=jEdit is brought to you by:\n\
+about.text=jEdit is brought to you by\n\
+	\ \n\
+	\ \n\
 	\ \n\
 	Slava Pestov\n\
+	\ \n\
 	Alexander Maryanovsky\n\
 	Alfonso Garcia\n\
 	Alwyn Barry\n\
@@ -815,8 +818,13 @@ about.text=jEdit is brought to you by:\n\
 	Will Sargent\n\
 	Wojciech Stryjewski\n\
 	\ \n\
-	I'd also like to thank all the users for their\n\
-	comments, feedback and bug reports.
+	\ \n\
+	\ \n\
+	\ \n\
+	I'd also like to thank the users for their\n\
+	\ \n\
+	comments, feedback and bug reports.\n\
+	\ 
 #}}}
 
 #{{{ Error list dialog, used to report I/O and plugin load errors
