@@ -38,16 +38,18 @@ import org.gjt.sp.util.Log;
 /**
  * Various GUI functions.<p>
  *
- * It provides methods for:
+ * The most frequently used members of this class are:
+ *
  * <ul>
- * <li>Loading menu bars, menus and menu items from the properties
- * <li>Loading popup menus from the properties
- * <li>Loading tool bars and tool bar buttons from the properties
- * <li>Displaying various common dialog boxes
- * <li>Converting string representations of colors to color objects
- * <li>Loading and saving window geometry from the properties
- * <li>Displaying file open and save dialog boxes
- * <li>Loading images and caching them
+ * <li>{@link #loadMenu(String)}</li>
+ * <li>{@link #loadMenuItem(String)}</li>
+ * <li>{@link #loadIcon(String)}</li>
+ * <li>{@link #confirm(Component,String,Object[],int,int)}</li>
+ * <li>{@link #error(Component,String,Object[])}</li>
+ * <li>{@link #message(Component,String,Object[])}</li>
+ * <li>{@link #showVFSFileDialog(View,String,int,boolean)}</li>
+ * <li>{@link #loadGeometry(Window,String)}</li>
+ * <li>{@link #saveGeometry(Window,String)}</li>
  * </ul>
  *
  * @author Slava Pestov

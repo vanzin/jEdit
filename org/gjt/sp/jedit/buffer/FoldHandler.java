@@ -28,7 +28,12 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
 
 /**
- * Interface for obtaining the fold level of a specified label.
+ * Interface for obtaining the fold level of a specified line.<p>
+ *
+ * Plugins can add and remove fold handlers using the
+ * {@link #registerFoldHandler(FoldHandler)} and
+ * {@link #unregisterFoldHandler(FoldHandler)} methods.
+ *
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

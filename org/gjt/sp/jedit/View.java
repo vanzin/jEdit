@@ -317,8 +317,8 @@ public class View extends JFrame implements EBComponent
 	//{{{ getStatus() method
 	/**
 	 * Returns the status bar. The
-	 * {@link org.gjt.sp.jedit.StatusBar#setMessage()} and
-	 * {@link org.gjt.sp.jedit.StatusBar#setMessageAndClear()} methods can
+	 * {@link org.gjt.sp.jedit.gui.StatusBar#setMessage(String)} and
+	 * {@link org.gjt.sp.jedit.gui.StatusBar#setMessageAndClear(String)} methods can
 	 * be called on the return value of this method to display status
 	 * information to the user.
 	 * @since jEdit 3.2pre2

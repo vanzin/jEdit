@@ -34,7 +34,22 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * This class records and runs macros.
+ * This class records and runs macros.<p>
+ *
+ * It also contains a few methods useful for displaying output messages
+ * or obtaining input from a macro:
+ *
+ * <ul>
+ * <li>{@link #confirm(Component,String,int)}</li>
+ * <li>{@link #confirm(Component,String,int,int)}</li>
+ * <li>{@link #error(Component,String)}</li>
+ * <li>{@link #input(Component,String)}</li>
+ * <li>{@link #input(Component,String,String)}</li>
+ * <li>{@link #message(Component,String)}</li>
+ * </ul>
+ *
+ * Note that plugins should not use the above methods. Call
+ * the methods in the {@link GUIUtilities} class instead.
  *
  * @author Slava Pestov
  * @version $Id$
@@ -864,7 +879,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		/**
 		 * Runs the specified macro. This method is optional; it is
 		 * called if the specified macro is a startup script. The
-		 * default behavior is to simply call {@link #runMacro(View,Macro)}.
+		 * default behavior is to simply call {@link #runMacro(View,Macros.Macro)}.
 		 *
 		 * @param view The view - may be null.
 		 * @param macro The macro.

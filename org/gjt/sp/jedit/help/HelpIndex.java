@@ -296,7 +296,7 @@ class HelpIndex
 	//}}}
 
 	//{{{ Word class
-	public static class Word
+	static class Word
 	{
 		// the word
 		String word;

@@ -24,12 +24,16 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 /**
- * This class provides methods for logging events. It has the same
- * purpose as System.out.println() and such, but more powerful.
- * All events are logged to a Swing document and optionally a stream,
+ * This class provides methods for logging events. In terms of functionality,
+ * it is somewhere in between <code>System.out.println()</code> and
+ * full-blown logging packages such as log4j.<p>
+ *
+ * All events are logged to a Swing text document and optionally a stream,
  * and those with a high urgency (warnings and errors) are also printed
- * to the standard error stream. This class can also optionally redirect
- * standard output and error to the log.
+ * to standard output.<p>
+ *
+ * This class can also optionally redirect standard output and error to the log.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
@@ -192,9 +196,21 @@ public class Log
 	}
 
 	/**
-	 * Logs a message. This method is threadsafe.
-	 * @param urgency The urgency
-	 * @param source The object that logged this message.
+	 * Logs a message. This method is thread-safe.<p>
+	 *
+	 * The following code sends a typical debugging message to the activity
+	 * log:
+	 * <pre>Log.log(Log.DEBUG,this,"counter = " + counter);</pre>
+	 * The corresponding activity log entry might read as follows:
+	 * <pre>[debug] JavaParser: counter = 15</pre>
+	 *
+	 * @param urgency The urgency; can be one of
+	 * <code>DEBUG</code>, <code>MESSAGE</code>, <code>NOTICE</code>,
+	 * <code>WARNING</code>, or <code>ERROR</code>.
+	 * @param source The source of the message, either an object or a
+	 * class instance. When writing log messages from macros, set
+	 * this parameter to <code>BeanShell.class</code> to make macro
+	 * errors easier to spot in the activity log.
 	 * @param message The message. This can either be a string or
 	 * an exception
 	 *

@@ -25,13 +25,26 @@ import java.util.Vector;
 import org.gjt.sp.util.Log;
 
 /**
- * A set of option panes shown in one branch in the options dialog.
+ * A set of option panes shown in one branch in the options dialog.<p>
  *
- * @author Slava Pestov
+ * In those cases where a single option pane is inadequate to present all
+ * of a plugin's configuration options, this class can be used to create a
+ * group of options panes. The group will appear as a single node in the
+ * options dialog tree. The member option panes will appear as
+ * leaf nodes under the group's node.
+ *
+ * @author Mike Dillon
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class OptionGroup
 {
+	/**
+	 * Creates an option group.
+	 * @param name The internal name of the option group, used to key a
+	 * property <code>options.<i>name</i>.label</code> which is the
+	 * label displayed in the options dialog.
+	 */
 	public OptionGroup(String name)
 	{
 		this.name = name;

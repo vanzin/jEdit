@@ -5,6 +5,7 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
+- buffer: say exactly which methods are thread-safe
 - loadMenu() properties used
 - dockable .title property
 - action .label property

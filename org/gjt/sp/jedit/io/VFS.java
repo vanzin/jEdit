@@ -210,12 +210,12 @@ public abstract class VFS
 	 *
 	 * Unless you are writing a VFS, this method should not be called
 	 * directly. To ensure correct behavior, you <b>must</b> call
-	 * {@link MiscUtilities#constructPath()} instead.
+	 * {@link org.gjt.sp.jedit.MiscUtilities#constructPath(String,String)}
+	 * instead.
 	 *
 	 * @param parent The parent directory
 	 * @param path The path
 	 * @since jEdit 2.6pre2
-	 * @see org.gjt.sp.jedit.MiscUtilities#constructPath(String,String)
 	 */
 	public String constructPath(String parent, String path)
 	{

@@ -23,6 +23,10 @@ import java.util.*;
 
 /**
  * A set of actions.
+ *
+ * @see jEdit#getActionSets()
+ * @see jEdit#addActionSet()
+ *
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

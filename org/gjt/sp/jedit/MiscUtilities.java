@@ -34,9 +34,38 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * Class with several useful miscellaneous functions.
+ * Path name manipulation, string manipulation, and more.<p>
+ *
+ * The most frequently used members of this class are:<p>
+ *
+ * <b>Some path name methods:</b><p>
+ * <ul>
+ * <li>{@link #getFileName(String)}</li>
+ * <li>{@link #getParentOfPath(String)}</li>
+ * <li>{@link #constructPath(String,String)}</li>
+ * </ul>
+ * <b>String comparison:</b><p>
+ 
+ * A {@link #compareStrings(String,String,boolean)} method that unlike
+ * <function>String.compareTo()</function>, correctly recognizes and handles
+ * embedded numbers.<p>
+ *
+ * This class also defines several inner classes for use with the
+ * sorting features of the Java collections API:
+ *
+ * <ul>
+ * <li>{@link MiscUtilities.StringCompare}</li>
+ * <li>{@link MiscUtilities.StringICaseCompare}</li>
+ * <li>{@link MiscUtilities.MenuItemCompare}</li>
+ * </ul>
+ *
+ * For example, you might call:<p>
+ *
+ * <code>Arrays.sort(myListOfStrings,
+ *     new MiscUtilities.StringICaseCompare());</code>
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class MiscUtilities
@@ -514,7 +543,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ createWhiteSpace() method
 	/**
-	 * Creates a string of white space with the specified length.
+	 * Creates a string of white space with the specified length.<p>
+	 *
+	 * To get a whitespace string tuned to the current buffer's
+	 * settings, call this method as follows:
+	 *
+	 * <pre>myWhitespace = MiscUtilities.createWhiteSpace(myLength,
+	 *     (buffer.getBooleanProperty("noTabs") ? 0
+	 *     : buffer.getTabSize()));</pre>
+	 *
 	 * @param len The length
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
 	 */
@@ -718,9 +755,12 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ compareStrings() method
 	/**
-	 * A more intelligent version of String.compareTo() that handles
-	 * numbers specially. For example, it places "My file 2" before
-	 * "My file 10".
+	 * Compares two strings.<p>
+	 *
+	 * Unlike <function>String.compareTo()</function>,
+	 * this method correctly recognizes and handles embedded numbers.
+	 * For example, it places "My file 2" before "My file 10".<p>
+	 *
 	 * @param str1 The first string
 	 * @param str2 The second string
 	 * @param ignoreCase If true, case will be ignored

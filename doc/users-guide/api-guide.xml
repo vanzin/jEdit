@@ -2196,7 +2196,7 @@ line count of the buffer represented by the gutter's display.  The
 
 <sect2 id="class-buffer-markers"><title>Marker methods</title>
 <para>
-  Buffers may have one or more <glossterm>markers</glossterm> which serve
+  Buffers may contain one or more <glossterm>markers</glossterm> which serve
   as textual bookmarks.  A <classname>Marker</classname> has three key attributes: the
   <classname>Buffer</classname> to which it relates, the line number to which
   the marker refers, and an optional shortcut character.  The shortcut

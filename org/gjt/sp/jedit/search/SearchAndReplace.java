@@ -243,10 +243,11 @@ public class SearchAndReplace
 	//{{{ setSearchMatcher() method
 	/**
 	 * Sets a custom search string matcher. Note that calling
-	 * {@link #setSearchString}, {@link #setReplaceString},
-	 * {@link #setIgnoreCase}, {@link #setRegExp} {@link #setReverseSearch}
-	 * or {@link #setBeanShellReplace} will
-	 * reset the matcher to the default.
+	 * {@link #setSearchString(String)}, {@link #setReplaceString(String)},
+	 * {@link #setIgnoreCase(boolean)}, {@link #setRegexp(boolean)},
+	 * {@link #setReverseSearch(boolean)} or
+	 * {@link #setBeanShellReplace(boolean)} will reset the matcher to the
+	 * default.
 	 */
 	public static void setSearchMatcher(SearchMatcher matcher)
 	{
@@ -567,7 +568,7 @@ loop:			for(;;)
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
 	 * @param firstTime See {@link SearchMatcher#nextMatch(CharIndexed,
-	 * boolean,boolean)}.
+	 * boolean,boolean,boolean,boolean)}.
 	 * @since jEdit 4.1pre7
 	 */
 	public static boolean find(View view, Buffer buffer, int start,

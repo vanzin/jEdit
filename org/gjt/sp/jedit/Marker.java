@@ -25,16 +25,24 @@ package org.gjt.sp.jedit;
 import javax.swing.text.Position;
 
 /**
- * A named location in a buffer.
+ * Buffers may contain one or more <i>markers</i> which serve
+ * as textual bookmarks.<p>
+ *
+ * A <code>Marker</code> has three key attributes: the
+ * <code>Buffer</code> to which it relates, the line number to which
+ * the marker refers, and an optional shortcut character. The shortcut
+ * identifies the the key that can be pressed with the
+ * <b>Markers</b>&gt;<b>Go To Marker</b> command.
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class Marker
 {
 	//{{{ getShortcut() method
 	/**
-	 * Returns the marker's shortcut.
+	 * Returns the marker's shortcut character.
 	 * @since jEdit 3.2pre1
 	 */
 	public char getShortcut()

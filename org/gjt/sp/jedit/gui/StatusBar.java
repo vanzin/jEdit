@@ -43,7 +43,7 @@ import org.gjt.sp.util.*;
  * Currently, it is used for the following:
  * <ul>
  * <li>Displaying caret position information
- * <li>Displaying {@link #readNextChar(String,String)} prompts
+ * <li>Displaying {@link InputHandler#readNextChar(String,String)} prompts
  * <li>Displaying {@link #setMessage(String)} messages
  * <li>Displaying I/O progress
  * <li>Displaying various editor settings
