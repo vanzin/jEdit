@@ -204,6 +204,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					|| file.type == VFS.DirectoryEntry.DIRECTORY)
 				{
 					browser.setDirectory(file.path);
+					if(file.name.equals(filenameField.getText()))
+						filenameField.setText(null);
 					return;
 				}
 				else if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
@@ -387,6 +389,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				if(file.type == VFS.DirectoryEntry.FILESYSTEM
 					|| file.type == VFS.DirectoryEntry.DIRECTORY)
 				{
+					if(file.name.equals(filenameField.getText()))
+						filenameField.setText(null);
+
 					// the browser will list the directory
 					// in question, so just return
 					return;
@@ -411,11 +416,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 				browser.getBrowserView().getTree().processKeyEvent(evt);
-				/* VFS.DirectoryEntry[] files = view.getSelectedFiles();
-				if(files.length == 0)
-					filenameField.setText(null);
-				else
-					filenameField.setText(files[0]. */
 				break;
 			}
 		} //}}}

@@ -32,21 +32,9 @@ DocBook XSL stylesheets are installed, then run the 'docs-html-xalan' or
 
 * A note about JDK versions
 
-If plan on running jEdit under both 1.3 and 1.4, read the below
-information!
+The Jikes compiler from IBM seems to have a problem where code compiled
+against JDK 1.4 does not work under JDK 1.3. Sun's javac does not have
+this problem.
 
-When running under JDK 1.4, jEdit needs to load a few workarounds for
-keyboard shortcuts to work properly; those are found in the source file
-Java14.java. Since this file uses JDK 1.4 APIs, it is not compiled by
-default if Ant detects that JDK 1.3 is being used.
-
-Furthermore, when compiled with JDK 1.4, jEdit does not run under 1.3
-because Sun made some backwards-incompatible changes in the ABI (ABI,
-not API).
-
-Therefore, when compiled under 1.3, jEdit only runs in 1.3, and a when
-compiled under 1.4 it only runs in 1.4.
-
-You may notice that the binaries I release work with both Java versions;
-what I do is compile most of the sources under 1.3, then use 1.4 to
-compile Java14.java.
+If plan on running jEdit under both 1.3 and 1.4, I recommend you compile
+it using javac.
