@@ -597,7 +597,9 @@ of spaces, tabs, and other whitespace characters.
 	</question>
 	<answer>
 		<para>
-			Yes. You can access them by binding a shortcut to the action in question.
+			Yes. You can access them by binding a shortcut to the action in question. You will find
+			a complete list of available commands under the <guimenuitem>Shortcuts</guimenuitem> area
+			in the <guimenuitem>Global Options</guimenuitem>.
 		</para>
 	</answer>
 </qandaentry>
