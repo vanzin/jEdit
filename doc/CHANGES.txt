@@ -231,6 +231,11 @@ contributing to this release.
 
 - Glob patterns of the form {!{a,b,c}} didn't work properly.
 
+- Browser actions were incorrectly written in the resource cache, so for
+  example the FTP plugin's menu in the file system browser did not work.
+
+- The install directory setting of the plugin manager didn't work.
+
 }}}
 {{{ API Changes
 

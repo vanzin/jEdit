@@ -999,8 +999,8 @@ public class PluginJAR
 				i < cache.cachedBrowserActionNames.length;
 				i++)
 			{
-				 cache.cachedBrowserActionNames[i]
-				 	= jEdit.getProperty(
+				 cache.cachedBrowserActionToggleFlags[i]
+				 	= jEdit.getBooleanProperty(
 					cache.cachedBrowserActionNames[i]
 					+ ".toggle");
 			}
