@@ -6293,9 +6293,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			dragged = true;
 
+			resizeSelection(dragStart,dot,rect);
+
 			if(quickCopyDrag)
 			{
-				resizeSelection(dragStart,dot,rect);
 				// just scroll to the dragged location
 				int line = buffer.getLineOfOffset(dot);
 				scrollTo(line,dot - buffer.getLineStartOffset(line),false);
