@@ -1439,6 +1439,9 @@ public class GUIUtilities
 	{
 		for(;;)
 		{
+			if(comp == null)
+				break;
+
 			if(comp instanceof JComponent)
 			{
 				Component real = (Component)((JComponent)comp)
@@ -1456,10 +1459,8 @@ public class GUIUtilities
 				comp = ((FloatingWindowContainer)comp)
 					.getDockableWindowManager();
 			}
-			else if(comp != null)
-				comp = comp.getParent();
 			else
-				break;
+				comp = comp.getParent();
 		}
 		return null;
 	} //}}}
