@@ -78,7 +78,7 @@ void greedyDelete(View view, boolean onlyFullTabs)
 }
 
 if(buffer.isReadOnly())
-	getToolkit().beep();
+	Toolkit.getDefaultToolkit().beep();
 else
 	greedyDelete(view,true);
 

@@ -74,7 +74,7 @@ void greedyBackspace(View view, boolean onlyFullTabs)
 }
 
 if(buffer.isReadOnly())
-	getToolkit().beep();
+	Toolkit.getDefaultToolkit().beep();
 else
 	greedyBackspace(view,true);
 
