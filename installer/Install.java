@@ -58,7 +58,7 @@ public class Install
 		props = new Properties();
 		try
 		{
-			InputStream in = getClass().getResourceAsStream("install.props");
+			InputStream in = getClass().getResourceAsStream("/installer/install.props");
 			props.load(in);
 			in.close();
 		}

@@ -25,6 +25,9 @@
 <MODE NAME="assembly-r2000"	FILE="assembly-r2000.xml"
 				FILE_NAME_GLOB="*.mips" />
 
+<MODE NAME="assembly-parrot"	FILE="assembly-parrot.xml"
+				FILE_NAME_GLOB="*.pasm" />
+
 <MODE NAME="assembly-x86"	FILE="assembly-x86.xml"
 				FILE_NAME_GLOB="*.asm" />
 

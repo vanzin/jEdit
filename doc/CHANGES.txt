@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Bill McMilleon, Kris Kopicki and Ryan Grove for contributing
-to this release.
+Thanks to Bill McMilleon, Kris Kopicki and Oliver Rutherfurd, Ryan Grove
+for contributing to this release.
 
 {{{ Editing
 
@@ -68,6 +68,8 @@ to this release.
 - Improved C pre-processor syntax highlighting.
 
 - Updated NSIS2 syntax highlighting (Ryan Grove).
+
+- Parrot syntax highlighting (Oliver Rutherfurd).
 
 }}}
 {{{ Folding
