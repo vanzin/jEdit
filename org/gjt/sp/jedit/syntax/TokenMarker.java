@@ -164,6 +164,7 @@ public class TokenMarker
 		TokenHandler tokenHandler, Segment line)
 	{
 		this.tokenHandler = tokenHandler;
+		this.line = line;
 		context = new LineContext();
 
 		//{{{ Set up context
