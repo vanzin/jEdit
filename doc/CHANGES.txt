@@ -38,6 +38,8 @@ Thanks to Chris Petersen, Silas Smith for contributing to this release.
 
 - Fixed possible ArrayIndexOutOfBoundsExceptions when deleting text.
 
+- Fixed various minor bugs with the "Format Paragraph" command.
+
 * Version 4.1pre7
 
 Thanks to Chris Kent, Jonathan Revusky and Marcelo Vanzin for
