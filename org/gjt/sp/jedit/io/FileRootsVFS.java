@@ -42,7 +42,9 @@ public class FileRootsVFS extends VFS
 	//{{{ FileRootsVFS constructor
 	public FileRootsVFS()
 	{
-		super("roots");
+		// BROWSE_CAP not set because we don't want the VFS browser
+		// to create an item for this VFS in its 'Plugins' menu
+		super("roots",LOW_LATENCY_CAP);
 
 		// JDK 1.4 adds a method to obtain a drive letter label
 		try
@@ -56,14 +58,6 @@ public class FileRootsVFS extends VFS
 		{
 			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() not detected");
 		}
-	} //}}}
-
-	//{{{ getCapabilities() method
-	public int getCapabilities()
-	{
-		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create an item for this VFS in its 'Plugins' menu
-		return LOW_LATENCY_CAP;
 	} //}}}
 
 	//{{{ getParentOfPath() method

@@ -40,13 +40,7 @@ public class UrlVFS extends VFS
 	//{{{ UrlVFS constructor
 	public UrlVFS()
 	{
-		super("url");
-	} //}}}
-
-	//{{{ getCapabilities() method
-	public int getCapabilities()
-	{
-		return READ_CAP | WRITE_CAP;
+		super("url",READ_CAP | WRITE_CAP);
 	} //}}}
 
 	//{{{ constructPath() method

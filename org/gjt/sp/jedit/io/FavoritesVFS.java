@@ -44,21 +44,15 @@ public class FavoritesVFS extends VFS
 	//{{{ FavoritesVFS constructor
 	public FavoritesVFS()
 	{
-		super("favorites");
+		// BROWSE_CAP not set because we don't want the VFS browser
+		// to create an item for this VFS in its 'Plugins' menu
+		super("favorites",DELETE_CAP | LOW_LATENCY_CAP);
 
 		/* addToFavorites(), which is a static method
 		 * (for convinience) needs an instance of the
 		 * VFS to pass to VFSManager.sendVFSUpdate(),
 		 * hence this hack. */
 		instance = this;
-	} //}}}
-
-	//{{{ getCapabilities() method
-	public int getCapabilities()
-	{
-		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create an item for this VFS in its 'Plugins' menu
-		return DELETE_CAP | LOW_LATENCY_CAP;
 	} //}}}
 
 	//{{{ getParentOfPath() method
