@@ -120,7 +120,7 @@ public class SplashScreen extends Canvas
 			offscreenGfx.setFont(getFont());
 		}
 
-		offscreenGfx.setColor(Color.gray);
+		offscreenGfx.setColor(Color.black);
 		offscreenGfx.drawRect(0,0,size.width - 1,size.height - 1);
 
 		offscreenGfx.drawImage(image,1,1,this);
@@ -132,11 +132,12 @@ public class SplashScreen extends Canvas
 
 		offscreenGfx.setColor(Color.gray);
 
-		String str = "Version " + jEdit.getVersion();
+		String str = "VERSION " + jEdit.getVersion();
 
 		offscreenGfx.drawString(str,
 			(getWidth() - fm.stringWidth(str)) / 2,
-			image.getHeight(this) - fm.getDescent() - 6);
+			image.getHeight(this) + (PROGRESS_HEIGHT
+			+ fm.getAscent() + fm.getDescent()) / 2);
 
 		g.drawImage(offscreenImg,0,0,this);
 

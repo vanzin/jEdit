@@ -83,24 +83,6 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_META:
 				modifiers |= InputEvent.META_MASK;
 				return null;
-			case KeyEvent.VK_NUMPAD0:
-			case KeyEvent.VK_NUMPAD1:
-			case KeyEvent.VK_NUMPAD2:
-			case KeyEvent.VK_NUMPAD3:
-			case KeyEvent.VK_NUMPAD4:
-			case KeyEvent.VK_NUMPAD5:
-			case KeyEvent.VK_NUMPAD6:
-			case KeyEvent.VK_NUMPAD7:
-			case KeyEvent.VK_NUMPAD8:
-			case KeyEvent.VK_NUMPAD9:
-			case KeyEvent.VK_MULTIPLY:
-			case KeyEvent.VK_ADD:
-			/* case KeyEvent.VK_SEPARATOR: */
-			case KeyEvent.VK_SUBTRACT:
-			case KeyEvent.VK_DECIMAL:
-			case KeyEvent.VK_DIVIDE:
-				last = LAST_NUMKEYPAD;
-				return evt;
 			default:
 				if(!evt.isMetaDown())
 				{
@@ -136,11 +118,33 @@ public class KeyEventWorkaround
 						return null;
 				}
 
-				last = LAST_NOTHING;
-				break;
-			}
+				switch(keyCode)
+				{
+				case KeyEvent.VK_NUMPAD0:
+				case KeyEvent.VK_NUMPAD1:
+				case KeyEvent.VK_NUMPAD2:
+				case KeyEvent.VK_NUMPAD3:
+				case KeyEvent.VK_NUMPAD4:
+				case KeyEvent.VK_NUMPAD5:
+				case KeyEvent.VK_NUMPAD6:
+				case KeyEvent.VK_NUMPAD7:
+				case KeyEvent.VK_NUMPAD8:
+				case KeyEvent.VK_NUMPAD9:
+				case KeyEvent.VK_MULTIPLY:
+				case KeyEvent.VK_ADD:
+				/* case KeyEvent.VK_SEPARATOR: */
+				case KeyEvent.VK_SUBTRACT:
+				case KeyEvent.VK_DECIMAL:
+				case KeyEvent.VK_DIVIDE:
+					last = LAST_NUMKEYPAD;
+					break;
+				default:
+					last = LAST_NOTHING;
+					break;
+				}
 
-			return evt;
+				return evt;
+			}
 		//}}}
 		//{{{ KEY_TYPED...
 		case KeyEvent.KEY_TYPED:
