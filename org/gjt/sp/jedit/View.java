@@ -1357,7 +1357,8 @@ public class View extends JFrame implements EBComponent
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
-			status.updateCaretStatus();
+			if(evt.getSource() == getTextArea())
+				status.updateCaretStatus();
 		}
 	} //}}}
 
