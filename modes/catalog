@@ -100,6 +100,9 @@
 <MODE NAME="i4gl"		FILE="i4gl.xml"
 				FILE_NAME_GLOB="*.4gl" />
 
+<MODE NAME="icon"		FILE="icon.xml"
+				FILE_NAME_GLOB="*.icn" />
+
 <MODE NAME="idl"		FILE="idl.xml"
 				FILE_NAME_GLOB="*.idl" />
 

@@ -138,7 +138,6 @@ public class Java14
 	//{{{ WheelScrollListener class
 	static class MouseWheelHandler implements MouseWheelListener
 	{
-		int dbg;
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
 			JEditTextArea textArea = (JEditTextArea)e.getSource();

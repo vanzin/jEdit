@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!-- Icon mode by Silas Smith (smiths@cs.arizona.edu) -->
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" 
+	    HIGHLIGHT_DIGITS="TRUE" 
+	    DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+(e[[:digit:]]*)?)[lLdDfF]?">
+		<!-- comments -->
+		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+
+		<!-- string literals -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<!-- cset literals -->
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">~===</SEQ>
+		<SEQ TYPE="OPERATOR">===</SEQ>
+		<SEQ TYPE="OPERATOR">|||</SEQ> <!-- list concatenation -->
+		
+		<!-- lexical operators -->
+		<SEQ TYPE="OPERATOR">&gt;&gt;=</SEQ> <!-- ">>=" -->
+		<SEQ TYPE="OPERATOR">&gt;&gt;</SEQ> <!-- ">>" -->
+		<SEQ TYPE="OPERATOR">&lt;&lt;=</SEQ> <!-- "<<=" -->
+		<SEQ TYPE="OPERATOR">&lt;&lt;</SEQ> <!-- "<<" -->
+		<SEQ TYPE="OPERATOR">~==</SEQ>
+		<SEQ TYPE="OPERATOR">==</SEQ>
+		<SEQ TYPE="OPERATOR">||</SEQ>
+		
+		<!-- set operators -->
+		<SEQ TYPE="OPERATOR">++</SEQ> <!-- union -->
+		<SEQ TYPE="OPERATOR">**</SEQ> <!-- intersection -->
+		<SEQ TYPE="OPERATOR">--</SEQ> <!-- difference -->
+
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">~=</SEQ>
+		<SEQ TYPE="OPERATOR">:=</SEQ>
+
+
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<SEQ TYPE="OPERATOR">@</SEQ>
+
+		<!-- numerical operators -->
+				<!-- NOTE: '*' defined above -->
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		
+		<!-- Function calls -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
+		<KEYWORDS>
+			<KEYWORD1>break</KEYWORD1> 
+			<KEYWORD1>by</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>create</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>end</KEYWORD1>
+			<KEYWORD1>every</KEYWORD1>
+			<KEYWORD1>fail</KEYWORD1>
+			<KEYWORD1>global</KEYWORD1>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>initial</KEYWORD1>
+			<KEYWORD1>invocable</KEYWORD1>
+			<KEYWORD1>link</KEYWORD1>
+			<KEYWORD1>local</KEYWORD1>
+			<KEYWORD1>next</KEYWORD1>
+			<KEYWORD1>not</KEYWORD1>
+			<KEYWORD1>of</KEYWORD1>
+			<KEYWORD1>procedure</KEYWORD1>
+			<KEYWORD1>record</KEYWORD1>
+			<KEYWORD1>repeat</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>static</KEYWORD1>
+			<KEYWORD1>suspend</KEYWORD1>
+			<KEYWORD1>then</KEYWORD1>
+			<KEYWORD1>to</KEYWORD1>
+			<KEYWORD1>until</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			
+			<KEYWORD2>&amp;allocated</KEYWORD2>
+			<KEYWORD2>&amp;ascii</KEYWORD2>
+			<KEYWORD2>&amp;clock</KEYWORD2>
+			<KEYWORD2>&amp;collections</KEYWORD2>
+			<KEYWORD2>&amp;cset</KEYWORD2>
+			<KEYWORD2>&amp;current</KEYWORD2>
+			<KEYWORD2>&amp;date</KEYWORD2>
+			<KEYWORD2>&amp;dateline</KEYWORD2>
+			<KEYWORD2>&amp;digits</KEYWORD2>
+			<KEYWORD2>&amp;dump</KEYWORD2>
+			<KEYWORD2>&amp;e</KEYWORD2>
+			<KEYWORD2>&amp;error</KEYWORD2>
+			<KEYWORD2>&amp;errornumber</KEYWORD2>
+			<KEYWORD2>&amp;errortext</KEYWORD2>
+			<KEYWORD2>&amp;errorvalue</KEYWORD2>
+			<KEYWORD2>&amp;errout</KEYWORD2>
+			<KEYWORD2>&amp;fail</KEYWORD2>
+			<KEYWORD2>&amp;features</KEYWORD2>
+			<KEYWORD2>&amp;file</KEYWORD2>
+			<KEYWORD2>&amp;host</KEYWORD2>
+			<KEYWORD2>&amp;input</KEYWORD2>
+			<KEYWORD2>&amp;lcase</KEYWORD2>
+			<KEYWORD2>&amp;letters</KEYWORD2>
+			<KEYWORD2>&amp;level</KEYWORD2>
+			<KEYWORD2>&amp;line</KEYWORD2>
+			<KEYWORD2>&amp;main</KEYWORD2>
+			<KEYWORD2>&amp;null</KEYWORD2>
+			<KEYWORD2>&amp;output</KEYWORD2>
+			<KEYWORD2>&amp;phi</KEYWORD2>
+			<KEYWORD2>&amp;pi</KEYWORD2>
+			<KEYWORD2>&amp;pos</KEYWORD2>
+			<KEYWORD2>&amp;progname</KEYWORD2>
+			<KEYWORD2>&amp;random</KEYWORD2>
+			<KEYWORD2>&amp;regions</KEYWORD2> 
+			<KEYWORD2>&amp;source</KEYWORD2>
+			<KEYWORD2>&amp;storage</KEYWORD2>
+			<KEYWORD2>&amp;subject</KEYWORD2>
+			<KEYWORD2>&amp;time</KEYWORD2>
+			<KEYWORD2>&amp;trace</KEYWORD2>
+			<KEYWORD2>&amp;ucase</KEYWORD2>
+			<KEYWORD2>&amp;version</KEYWORD2>
+
+			<!-- preprocessor directives -->
+			<KEYWORD2>$define</KEYWORD2>
+			<KEYWORD2>$else</KEYWORD2>
+			<KEYWORD2>$endif</KEYWORD2>
+			<KEYWORD2>$error</KEYWORD2>
+			<KEYWORD2>$ifdef</KEYWORD2>
+			<KEYWORD2>$ifndef</KEYWORD2>
+			<KEYWORD2>$include</KEYWORD2>
+			<KEYWORD2>$line</KEYWORD2>
+			<KEYWORD2>$undef</KEYWORD2>
+			
+			<!-- predefined prepocessor symbols -->
+			<KEYWORD2>_MACINTOSH</KEYWORD2>
+			<KEYWORD2>_MS_WINDOWS_NT</KEYWORD2>
+			<KEYWORD2>_MS_WINDOWS</KEYWORD2>
+			<KEYWORD2>_MSDOS_386</KEYWORD2>
+			<KEYWORD2>_MSDOS</KEYWORD2>
+			<KEYWORD2>_OS2</KEYWORD2>
+			<KEYWORD2>_PIPES</KEYWORD2>
+			<KEYWORD2>_PRESENTATION_MGR</KEYWORD2>
+			<KEYWORD2>_SYSTEM_FUNCTION</KEYWORD2>
+			<KEYWORD2>_UNIX</KEYWORD2>
+			<KEYWORD2>_VMS</KEYWORD2>
+			<KEYWORD2>_WINDOW_FUNCTIONS</KEYWORD2>
+			<KEYWORD2>_X_WINDOW_SYSTEM</KEYWORD2>
+						
+			<KEYWORD3>co�expression</KEYWORD3>
+			<KEYWORD3>cset</KEYWORD3>
+			<KEYWORD3>file</KEYWORD3>
+			<KEYWORD3>integer</KEYWORD3>
+			<KEYWORD3>list</KEYWORD3>
+			<KEYWORD3>null</KEYWORD3>
+			<KEYWORD3>procedure</KEYWORD3>
+			<KEYWORD3>real</KEYWORD3>
+			<KEYWORD3>set</KEYWORD3>
+			<KEYWORD3>string</KEYWORD3>
+			<KEYWORD3>table</KEYWORD3>
+			<KEYWORD3>window</KEYWORD3>
+		</KEYWORDS>
+	</RULES>
+</MODE>

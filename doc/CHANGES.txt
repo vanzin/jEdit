@@ -2,9 +2,11 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre8
 
-Thanks to Chris Petersen for contributing to this release.
+Thanks to Chris Petersen, Silas Smith for contributing to this release.
 
 + Miscellaneous Changes:
+
+- Icon syntax highlighting (Silas Smith).
 
 - Minor updates to JavaScript and PHP modes (Chris Petersen).
 

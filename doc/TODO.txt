@@ -3,13 +3,37 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- final optimization for OffsetManager: scan to zero or scan to end
+  might be more economical
+- popup menu display & history text field
+- do some profiling
+- global options sizing issues
+- wheel mouse -- option: jEdit mods -vs- system-wide mods
+- format bugs
 - changelog claims roots: lists desktop...
 - wheel mouse page scroll w/ soft wrap
+- rect select and trailing whitespace
+- line 2112 -- isNarrowed() check of moveCaretPosition()
+- user's guide:
+  - vertical paste & rect select insertion
+  - mention whitespace eating word actions
+  - alternative tool bar placement
+  - ESCAPE hides search bar
+  - wheel mouse modifiers
+  - indentOnTab/Enter changes
+  - update shortcuts.xml
+  - S+ENTER in fsb for directories
+- new tips:
+  - indentOnTab/Enter replacements
+  - smartHome replacements
+  - -float actions
+  - alt tool bar placement if not there already
+  - go to text area
+
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - A+# on OS X, need better modifier mapping on OS X
 - change indentPrevLine to indentOneLine and indentSubsequentLines
-- rect select and trailing whitespace
 - scrolling horizontally when dragging into virtual space: a bit quirky
 - eval-for-selected-lines doesn't work with rectangular selection
 - focus problem with hypersearch in floating window
@@ -43,11 +67,9 @@ and quirks that I need to fix eventually.
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
 - motif l&f: shortcuts in menu items
 - fix pg up/down with soft wrap
-- finish roots: hack on Windows
 
 + verify:
 
-- line 2112 -- isNarrowed() check of moveCaretPosition()
 - searching in a buffer w/ narrowed fold
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
@@ -83,21 +105,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   requestDefaultFocus()
 - add dockable window state change msg
 - range-comment & rect select
-- user's guide:
-  - vertical paste & rect select insertion
-  - mention whitespace eating word actions
-  - alternative tool bar placement
-  - ESCAPE hides search bar
-  - wheel mouse modifiers
-  - indentOnTab/Enter changes
-  - update shortcuts.xml
-  - S+ENTER in fsb for directories
-- new tips:
-  - indentOnTab/Enter replacements
-  - smartHome replacements
-  - -float actions
-  - alt tool bar placement if not there already
-  - go to text area
 - support rect start in virtual space too
 
 + performance:
@@ -110,7 +117,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - background tokens are slow
 - backward virtual line scan
 - do not call foldVisibilityManager.getLastVisibleLine() on every change
-  w/ soft wrap. kills performance if also narrowed
+  w/ soft wrap. kills performance if also narrowed.
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
