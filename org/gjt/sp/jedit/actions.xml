@@ -376,6 +376,19 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="insert-newline">
+	<CODE>
+		textArea.setSelectedText("\n");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="insert-newline-indent">
+	<CODE>
+		textArea.setSelectedText("\n");
+		buffer.indentLine(textArea.getCaretLine(),true,false);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="invert-selection">
 	<CODE>
 		textArea.invertSelection();
@@ -516,7 +529,13 @@
 
 <ACTION NAME="next-word">
 	<CODE>
-		textArea.goToNextWord(false);
+		textArea.goToNextWord(false,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-word-std">
+	<CODE>
+		textArea.goToNextWord(false,true);
 	</CODE>
 </ACTION>
 
@@ -629,7 +648,13 @@
 
 <ACTION NAME="prev-word">
 	<CODE>
-		textArea.goToPrevWord(false);
+		textArea.goToPrevWord(false,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-word-std">
+	<CODE>
+		textArea.goToPrevWord(false,true);
 	</CODE>
 </ACTION>
 
@@ -976,7 +1001,13 @@
 
 <ACTION NAME="select-next-word">
 	<CODE>
-		textArea.goToNextWord(true);
+		textArea.goToNextWord(true,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-word-std">
+	<CODE>
+		textArea.goToNextWord(true,true);
 	</CODE>
 </ACTION>
 
@@ -1024,7 +1055,13 @@
 
 <ACTION NAME="select-prev-word">
 	<CODE>
-		textArea.goToPrevWord(true);
+		textArea.goToPrevWord(true,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-word-std">
+	<CODE>
+		textArea.goToPrevWord(true,true);
 	</CODE>
 </ACTION>
 

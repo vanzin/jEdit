@@ -123,7 +123,6 @@ buffer.noTabs=false
 
 # Auto indent
 buffer.indentOnTab=true
-buffer.indentOnEnter=true
 
 # Default edit mode
 buffer.defaultMode=text
@@ -210,9 +209,6 @@ view.blockCaret=false
 
 # Electric borders
 view.electricBorders=3
-
-# Standard go to next/previous word behavior
-view.stdNextPrevWord=false
 
 # Treat consecutive non-alphanumeric characters as one word
 view.joinNonWordChars=true

@@ -26,6 +26,7 @@ import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -81,7 +82,7 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	//{{{ handlePrefs() method
 	public void handlePrefs()
 	{
-		new OptionsDialog(jEdit.getLastView());
+		new GlobalOptions(jEdit.getLastView());
 	}//}}}
 	
 	//{{{ handleOpenFile() method

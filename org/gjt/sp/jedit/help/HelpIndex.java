@@ -28,7 +28,8 @@ import java.net.*;
 import java.util.zip.*;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class HelpIndex
@@ -44,6 +45,26 @@ public class HelpIndex
 	public HelpIndex(String fileListPath, String wordIndexPath)
 	{
 		this();
+	} //}}}
+
+	//{{{ indexEditorHelp() method
+	/**
+	 * Indexes all available help, including the jEdit user's guide, FAQ, and
+	 * plugin documentation.
+	 */
+	public void indexEditorHelp() throws Exception
+	{
+		String jEditHome = jEdit.getJEditHome();
+		if(jEditHome != null)
+			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc"));
+
+		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+		for(int i = 0; i < jars.length; i++)
+		{
+			indexJAR(jars[i].getZipFile());
+		}
+
+		Log.log(Log.DEBUG,this,"Indexed " + words.size() + " words");
 	} //}}}
 
 	//{{{ indexDirectory() method
@@ -69,7 +90,23 @@ public class HelpIndex
 	 */
 	public void indexJAR(ZipFile jar) throws Exception
 	{
-		
+		Enumeration enum = jar.entries();
+		while(enum.hasMoreElements())
+		{
+			ZipEntry entry = (ZipEntry)enum.nextElement();
+			String name = entry.getName();
+			String lname = name.toLowerCase();
+			if(lname.endsWith(".html") || lname.endsWith(".txt"))
+			{
+				// only works for jEdit plugins
+				String url = "jeditresource:/" +
+					MiscUtilities.getFileName(jar.getName())
+					+ "!" + name;
+				Log.log(Log.DEBUG,this,url);
+				files.add(url);
+				indexStream(jar.getInputStream(entry),files.size() - 1);
+			}
+		}
 	} //}}}
 
 	//{{{ indexURL() method
@@ -80,6 +117,8 @@ public class HelpIndex
 	 */
 	public void indexURL(String url) throws Exception
 	{
+		Log.log(Log.DEBUG,this,url);
+
 		files.add(url);
 		int fileIndex = files.size() - 1;
 
@@ -118,41 +157,46 @@ public class HelpIndex
 	{
 		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
 
-		StringBuffer word = new StringBuffer();
-		boolean insideTag = false;
-		boolean insideEntity = false;
-
-		int c;
-		while((c = in.read()) != -1)
+		try
 		{
-			char ch = (char)c;
-			if(insideTag)
-			{
-				if(ch == '>')
-					insideTag = false;
-			}
-			else if(insideEntity)
-			{
-				if(ch == ';')
-					insideEntity = false;
-			}
-			else if(ch == '<')
-				insideTag = true;
-			else if(ch == '&')
-				insideEntity = true;
-			else if(!Character.isLetterOrDigit(ch))
-			{
-				if(word.length() != 0)
-				{
-					addWord(word.toString(),fileIndex);
-					word.setLength(0);
-				}
-			}
-			else
-				word.append(ch);
-		}
+			StringBuffer word = new StringBuffer();
+			boolean insideTag = false;
+			boolean insideEntity = false;
 
-		in.close();
+			int c;
+			while((c = in.read()) != -1)
+			{
+				char ch = (char)c;
+				if(insideTag)
+				{
+					if(ch == '>')
+						insideTag = false;
+				}
+				else if(insideEntity)
+				{
+					if(ch == ';')
+						insideEntity = false;
+				}
+				else if(ch == '<')
+					insideTag = true;
+				else if(ch == '&')
+					insideEntity = true;
+				else if(!Character.isLetterOrDigit(ch))
+				{
+					if(word.length() != 0)
+					{
+						addWord(word.toString(),fileIndex);
+						word.setLength(0);
+					}
+				}
+				else
+					word.append(ch);
+			}
+		}
+		finally
+		{
+			in.close();
+		}
 	} //}}}
 
 	//{{{ addWord() method

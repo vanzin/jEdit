@@ -161,6 +161,10 @@
 				FILE_NAME_GLOB="*.{php3,php4,php,phtml}"
 				FIRST_LINE_GLOB="&lt;?php" />
 
+<MODE NAME="pike"		FILE="pike.xml"
+				FILE_NAME_GLOB="*.pike"
+				FIRST_LINE_GLOB="#!/*pike*"/>
+
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"
 				FILE_NAME_GLOB="*.pls" />
 

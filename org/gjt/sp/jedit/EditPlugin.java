@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 import java.util.Vector;
+import java.util.zip.ZipFile;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.util.Log;
 
@@ -131,6 +132,11 @@ public abstract class EditPlugin
 		public String getPath()
 		{
 			return path;
+		}
+
+		public ZipFile getZipFile()
+		{
+			return classLoader.getZipFile();
 		}
 
 		public JARClassLoader getClassLoader()

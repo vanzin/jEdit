@@ -477,8 +477,19 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 			//{{{ SEQ
 			case ParserRule.SEQ:
-				tokenHandler.handleToken(checkRule.token,
-					pos - line.offset,matchedChars,context);
+				if((checkRule.action & ParserRule.REGEXP) != 0)
+				{
+					handleTokenWithTabs(tokenHandler,
+						checkRule.token,
+						pos - line.offset,
+						matchedChars,
+						context);
+				}
+				else
+				{
+					tokenHandler.handleToken(checkRule.token,
+						pos - line.offset,matchedChars,context);
+				}
 
 				// a DELEGATE attribute on a SEQ changes the
 				// ruleset from the end of the SEQ onwards
@@ -498,11 +509,23 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				delegateSet = checkRule.getDelegateRuleSet(this);
 
-				tokenHandler.handleToken(
-					((checkRule.action & ParserRule.EXCLUDE_MATCH)
+				byte tokenType = ((checkRule.action & ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH
-					? context.rules.getDefault() : checkRule.token),
-					pos - line.offset,matchedChars,context);
+					? context.rules.getDefault() : checkRule.token);
+
+				if((checkRule.action & ParserRule.REGEXP) != 0)
+				{
+					handleTokenWithTabs(tokenHandler,
+						tokenType,
+						pos - line.offset,
+						matchedChars,
+						context);
+				}
+				else
+				{
+					tokenHandler.handleToken(tokenType,
+						pos - line.offset,matchedChars,context);
+				}
 
 				String spanEndSubst = null;
 				// XXX
@@ -604,6 +627,27 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				context.inRule = null;
 			}
 		}
+	} //}}}
+
+	//{{{ handleTokenWithTabs() method
+	private void handleTokenWithTabs(TokenHandler tokenHandler, byte tokenType,
+		int start, int len, LineContext context)
+	{
+		int last = start;
+
+		for(int i = start; i < start + len; i++)
+		{
+			if(line.array[i] == '\t')
+			{
+				if(last != i)
+					tokenHandler.handleToken(tokenType,last,i - last,context);
+				tokenHandler.handleToken(tokenType,i,1,context);
+				last = i + 1;
+			}
+		}
+
+		if(last != len)
+			tokenHandler.handleToken(tokenType,last,len - last,context);
 	} //}}}
 
 	//{{{ markKeyword() method

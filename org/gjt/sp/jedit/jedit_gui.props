@@ -621,6 +621,8 @@ end.label=Smart End
 home.label=Smart Home
 hypersearch-results.label=HyperSearch Results
 insert-literal.label=Insert Next Character Literally
+insert-newline.label=Insert Newline
+insert-newline-indent.label=Insert Newline and Indent
 line-end.label=Go to End of Line
 line-home.label=Go to Start of Line
 next-char.label=Go to Next Character
@@ -628,12 +630,14 @@ next-line.label=Go to Next Line
 next-page.label=Go to Next Page
 next-paragraph.label=Go to Next Paragraph
 next-word.label=Go to Next Word
+next-word-std.label=Go to Next Word (Eat Whitespace)
 overwrite.label=Overwrite Mode
 prev-char.label=Go to Previous Character
 prev-line.label=Go to Previous Line
 prev-page.label=Go to Previous Page
 prev-paragraph.label=Go to Previous Paragraph
 prev-word.label=Go to Previous Word
+prev-word-std.label=Go to Previous Word (Eat Whitespace)
 repeat.label=Repeat Next Command
 select-document-end.label=Select to End of Buffer
 select-document-home.label=Select to Start of Buffer
@@ -646,11 +650,13 @@ select-next-line.label=Select Next Line
 select-next-page.label=Select Next Page
 select-next-paragraph.label=Select Next Paragraph
 select-next-word.label=Select Next Word
+select-next-word-std.label=Select Next Word (Eat Whitespace)
 select-prev-char.label=Select Previous Character
 select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
+select-prev-word-std.label=Select Previous Word (Eat Whitespace)
 select-visible-end.label=Select to Last Visible Line
 select-visible-home.label=Select to First Visible Line
 select-whitespace-end.label=Select to End of White Space
@@ -797,6 +803,7 @@ about.text=jEdit is brought to you by\n\
 	Marc Rummel\n\
 	Marcio Marchini\n\
 	Marco Hunsicker\n\
+	Marco Gotze\n\
 	Marcus Jonason\n\
 	Matija Kejzar\n\
 	Matt Albrecht\n\
@@ -1443,7 +1450,6 @@ options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
 options.editing.indentOnTab=Indent line when Tab key is pressed
-options.editing.indentOnEnter=Indent line when Enter key is pressed
 options.editing.noTabs=Soft (emulated with spaces) tabs
 #}}}
 

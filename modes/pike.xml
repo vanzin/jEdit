@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<!-- Pike mode, contributed by Marco G"otze, <gomar@gmx.net> -->
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+  <PROPS>
+    <PROPERTY NAME="indentOpenBrackets" VALUE="{[<" />
+    <PROPERTY NAME="indentCloseBrackets" VALUE="}]>" />
+    <PROPERTY NAME="indentPrevLine"
+      VALUE="\s*(((if|(for(each)?)|while|catch|gauge)\s*\(|(do|else)\s*|else\s+if\s*\()[^{;]*)" />
+    <!-- set this to 'true' if you want to use GNU coding style -->
+    <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+    <PROPERTY NAME="commentStart" VALUE="/*" />
+    <PROPERTY NAME="commentEnd" VALUE="*/" />
+    <PROPERTY NAME="lineComment" VALUE="//" />
+    <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*`" />
+  </PROPS>
+  <RULES ESCAPE="\"
+    IGNORE_CASE="FALSE"
+    HIGHLIGHT_DIGITS="TRUE"
+    DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
+
+    <!-- comments -->
+    <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
+      <BEGIN>/*</BEGIN>
+      <END>*/</END>
+    </SPAN>
+    <SEQ TYPE="INVALID">*/</SEQ>
+    <EOL_SPAN TYPE="COMMENT1" DELEGATE="COMMENT">//</EOL_SPAN>
+
+    <!-- string, char literals -->
+    <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING_LITERAL">
+      <BEGIN>"</BEGIN>
+      <END>"</END>
+    </SPAN>
+    <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+      <BEGIN>'</BEGIN>
+      <END>'</END>
+    </SPAN>
+
+    <!-- preprocessor statements -->
+    <SEQ_REGEXP TYPE="KEYWORD2"
+      HASH_CHAR="#"
+      AT_LINE_START="TRUE"
+    >#.*?(?=($|/\*|//))</SEQ_REGEXP>
+
+    <!-- operators -->
+    <SEQ TYPE="OPERATOR">({</SEQ>
+    <SEQ TYPE="OPERATOR">})</SEQ>
+    <SEQ TYPE="OPERATOR">([</SEQ>
+    <SEQ TYPE="OPERATOR">])</SEQ>
+    <SEQ TYPE="OPERATOR">(&lt;</SEQ>
+    <SEQ TYPE="OPERATOR">&gt;)</SEQ>
+    <SEQ TYPE="OPERATOR">=</SEQ>
+    <SEQ TYPE="OPERATOR">!</SEQ>
+    <SEQ TYPE="OPERATOR">+</SEQ>
+    <SEQ TYPE="OPERATOR">-</SEQ>
+    <SEQ TYPE="OPERATOR">/</SEQ>
+    <SEQ TYPE="OPERATOR">*</SEQ>
+    <SEQ TYPE="OPERATOR">&gt;</SEQ>
+    <SEQ TYPE="OPERATOR">&lt;</SEQ>
+    <SEQ TYPE="OPERATOR">%</SEQ>
+    <SEQ TYPE="OPERATOR">&amp;</SEQ>
+    <SEQ TYPE="OPERATOR">|</SEQ>
+    <SEQ TYPE="OPERATOR">^</SEQ>
+    <SEQ TYPE="OPERATOR">~</SEQ>
+    <SEQ TYPE="OPERATOR">@</SEQ>
+    <SEQ TYPE="OPERATOR">`</SEQ>
+    <SEQ TYPE="OPERATOR">.</SEQ>
+
+    <!-- function calls -->
+    <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
+    <KEYWORDS>
+      <!-- type modifiers -->
+      <KEYWORD1>constant</KEYWORD1>
+      <KEYWORD1>extern</KEYWORD1>
+      <KEYWORD1>final</KEYWORD1>
+      <KEYWORD1>inline</KEYWORD1>
+      <KEYWORD1>local</KEYWORD1>
+      <KEYWORD1>nomask</KEYWORD1>
+      <KEYWORD1>optional</KEYWORD1>
+      <KEYWORD1>private</KEYWORD1>
+      <KEYWORD1>protected</KEYWORD1>
+      <KEYWORD1>public</KEYWORD1>
+      <KEYWORD1>static</KEYWORD1>
+      <KEYWORD1>variant</KEYWORD1>
+
+      <!-- types -->
+      <KEYWORD3>array</KEYWORD3>
+      <KEYWORD3>class</KEYWORD3>
+      <KEYWORD3>float</KEYWORD3>
+      <KEYWORD3>function</KEYWORD3>
+      <KEYWORD3>int</KEYWORD3>
+      <KEYWORD3>mapping</KEYWORD3>
+      <KEYWORD3>mixed</KEYWORD3>
+      <KEYWORD3>multiset</KEYWORD3>
+      <KEYWORD3>object</KEYWORD3>
+      <KEYWORD3>program</KEYWORD3>
+      <KEYWORD3>string</KEYWORD3>
+      <KEYWORD3>void</KEYWORD3>
+
+      <!-- flow control and block-introducing keywords -->
+      <KEYWORD1>break</KEYWORD1>
+      <KEYWORD1>case</KEYWORD1>
+      <KEYWORD1>catch</KEYWORD1>
+      <KEYWORD1>continue</KEYWORD1>
+      <KEYWORD1>default</KEYWORD1>
+      <KEYWORD1>do</KEYWORD1>
+      <KEYWORD1>else</KEYWORD1>
+      <KEYWORD1>for</KEYWORD1>
+      <KEYWORD1>foreach</KEYWORD1>
+      <KEYWORD1>gauge</KEYWORD1>
+      <KEYWORD1>if</KEYWORD1>
+      <KEYWORD1>lambda</KEYWORD1>
+      <KEYWORD1>return</KEYWORD1>
+      <KEYWORD1>sscanf</KEYWORD1>
+      <KEYWORD1>switch</KEYWORD1>
+      <KEYWORD1>while</KEYWORD1>
+
+      <!-- special instructions -->
+      <KEYWORD2>import</KEYWORD2>
+      <KEYWORD2>inherit</KEYWORD2>
+    </KEYWORDS>
+  </RULES>
+
+  <RULES SET="COMMENT" IGNORE_CASE="FALSE" DEFAULT="COMMENT1">
+    <KEYWORDS>
+      <COMMENT2>FIXME</COMMENT2>
+      <COMMENT2>XXX</COMMENT2>
+    </KEYWORDS>
+  </RULES>
+
+  <RULES SET="STRING_LITERAL" IGNORE_CASE="TRUE" DEFAULT="LITERAL1">
+    <SEQ_REGEXP TYPE="LITERAL2" HASH_CHAR="%"
+      >%([^ a-z]*[a-z]|\[[^\]]*\])</SEQ_REGEXP>
+    <SEQ_REGEXP TYPE="COMMENT2" HASH_CHAR="D">DEBUG:</SEQ_REGEXP>
+  </RULES>
+</MODE>
+

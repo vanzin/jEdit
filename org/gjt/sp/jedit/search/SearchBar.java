@@ -85,8 +85,6 @@ public class SearchBar extends JPanel
 				getClass().getResource(
 				"/org/gjt/sp/jedit/icons/closebox.gif")));
 			close.addActionListener(actionHandler);
-			close.setMargin(margin);
-			close.setRequestFocusEnabled(false);
 			close.setToolTipText(jEdit.getProperty(
 				"view.search.close-tooltip"));
 			add(close);
