@@ -53,8 +53,8 @@ void greedyDelete(View view, boolean onlyFullTabs)
 				// don't wrap to next line
 				if(caret+toTabStop > lineEnd)
 					textArea.delete();
-				int count = 1;
-				for(int i=1; i < toTabStop; i++)
+				int count = 0;
+				for(int i=0; i < toTabStop; i++)
 				{
 					if(!" ".equals(buffer.getText(caret+i,1)))
 						break;
