@@ -415,7 +415,10 @@ public class SearchAndReplace
 		boolean repeat = false;
 		String path = fileset.getNextFile(view,null);
 		if(path == null)
+		{
+			GUIUtilities.error(view,"empty-fileset",null);
 			return false;
+		}
 
 		try
 		{
@@ -778,6 +781,12 @@ loop:			for(;;)
 	{
 		int fileCount = 0;
 		int occurCount = 0;
+
+		if(fileset.getFileCount())
+		{
+			GUIUtilities.error(view,"empty-fileset",null);
+			return false;
+		}
 
 		record(view,"replaceAll(view)",true,true);
 

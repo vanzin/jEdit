@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.View;
 public abstract class BufferListSet implements SearchFileSet
 {
 	//{{{ getFirstFile() method
-	public String getFirstFile(View view)
+	public synchronized String getFirstFile(View view)
 	{
 		if(files == null)
 			files = _getFiles(view);
@@ -47,7 +47,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getNextFile() method
-	public String getNextFile(View view, String file)
+	public synchronized String getNextFile(View view, String file)
 	{
 		if(files == null)
 			files = _getFiles(view);
@@ -81,7 +81,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getFiles() method
-	public String[] getFiles(View view)
+	public synchronized String[] getFiles(View view)
 	{
 		if(files == null)
 			files = _getFiles(view);
@@ -93,7 +93,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getFileCount() method
-	public int getFileCount(View view)
+	public synchronized int getFileCount(View view)
 	{
 		if(files == null)
 			files = _getFiles(view);

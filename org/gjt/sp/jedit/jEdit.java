@@ -1890,14 +1890,17 @@ public class jEdit
 	 */
 	public static Buffer[] getBuffers()
 	{
-		Buffer[] buffers = new Buffer[bufferCount];
-		Buffer buffer = buffersFirst;
-		for(int i = 0; i < bufferCount; i++)
+		synchronized(bufferListLock)
 		{
-			buffers[i] = buffer;
-			buffer = buffer.next;
+			Buffer[] buffers = new Buffer[bufferCount];
+			Buffer buffer = buffersFirst;
+			for(int i = 0; i < bufferCount; i++)
+			{
+				buffers[i] = buffer;
+				buffer = buffer.next;
+			}
+			return buffers;
 		}
-		return buffers;
 	} //}}}
 
 	//{{{ getBufferCount() method

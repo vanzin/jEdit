@@ -732,15 +732,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		boolean ok = true;
 
-		if(fileset.getFileCount(view) == 0)
-		{
-			// oops
-			if(!cancel)
-				GUIUtilities.error(this,"empty-fileset",null);
-			ok = false;
-		}
-		else
-			SearchAndReplace.setSearchFileSet(fileset);
+		SearchAndReplace.setSearchFileSet(fileset);
 
 		if(find.getText().length() != 0)
 		{

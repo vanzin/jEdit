@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import gnu.regexp.*;
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -77,7 +77,7 @@ public class AllBufferSet extends BufferListSet
 	protected String[] _getFiles(Component comp)
 	{
 		Buffer[] buffers = jEdit.getBuffers();
-		Vector vector = new Vector(buffers.length);
+		ArrayList returnValue = new ArrayList(buffers.length);
 
 		RE filter;
 		try
@@ -86,7 +86,7 @@ public class AllBufferSet extends BufferListSet
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,DirectoryListSet.class,e);
+			Log.log(Log.ERROR,this,e);
 			return null;
 		}
 
@@ -94,11 +94,9 @@ public class AllBufferSet extends BufferListSet
 		{
 			Buffer buffer = buffers[i];
 			if(filter.isMatch(buffer.getName()))
-				vector.addElement(buffer.getPath());
+				returnValue.add(buffer.getPath());
 		}
 
-		String[] retVal = new String[vector.size()];
-		vector.copyInto(retVal);
-		return retVal;
+		return (String[])returnValue.toArray(new String[returnValue.size()]);
 	} //}}}
 }

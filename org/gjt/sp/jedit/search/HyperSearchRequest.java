@@ -56,6 +56,19 @@ public class HyperSearchRequest extends WorkRequest
 	public void run()
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+		String[] files = fileset.getFiles(view);
+		if(files == null || files.length == 0)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					GUIUtilities.error(view,"empty-fileset",null);
+				}
+			});
+			return;
+		}
+
 		setProgressMaximum(fileset.getFileCount(view));
 
 		int resultCount = 0;
@@ -67,7 +80,6 @@ public class HyperSearchRequest extends WorkRequest
 		// initially zero, so that we always show the first message
 		long lastStatusTime = 0;
 
-		String[] files = fileset.getFiles(view);
 
 		try
 		{
