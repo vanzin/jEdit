@@ -8,26 +8,18 @@ and quirks that I need to fix eventually.
 I'm releasing 4.2pre1 ASAP.
 
 - finish plugin api updating guide
-- browser: enter with table active
-- box in io progress
+- check dir chooser behavior
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
-- control-drag: rect select back
-- action bar: changing buffer props should update status
-- changing global props should send a dockable props changed
-- plugin unload:
-  - update dockables
-  - dependencies
-  - plugin mgr
 
 ================================
 
+- plugin unload dependencies
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
 - while loading --> scroll bar
 - load help toc in a thread, do help search in a thread
 - update quicknotepad docs
-- don't need property cache if activate=startup
 - quicknotepad: handle no settings dir more gracefully
 - save caret info first
 - caret saving needs to be more flexible w.r.t. split panes
@@ -38,6 +30,7 @@ I'm releasing 4.2pre1 ASAP.
 - operating system activations.
   - port macos
 - new dynamic menu api
+- new macro handler api
 
 - can do perl q|...| etc. using begin/end substitution!
 - perl: q{}, etc.

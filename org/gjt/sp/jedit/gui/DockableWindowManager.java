@@ -33,6 +33,7 @@ package org.gjt.sp.jedit.gui;
  import java.net.URL;
  import java.util.*;
  import org.gjt.sp.jedit.msg.DockableWindowUpdate;
+ import org.gjt.sp.jedit.msg.PluginUpdate;
  import org.gjt.sp.jedit.*;
  import org.gjt.sp.util.Log;
 //}}}
@@ -663,39 +664,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		Iterator entries = dockableWindowFactories.values().iterator();
 
 		while(entries.hasNext())
-		{
-			Factory factory = (Factory)entries.next();
-			Entry e;
-			if(view.isPlainView())
-			{
-				// don't show menu items to dock into a plain view
-				e = new Entry(factory,FLOATING,true);
-			}
-			else
-			{
-				e = new Entry(factory);
-				if(e.position.equals(FLOATING))
-					/* nothing to do */;
-				else if(e.position.equals(TOP))
-					e.container = top;
-				else if(e.position.equals(LEFT))
-					e.container = left;
-				else if(e.position.equals(BOTTOM))
-					e.container = bottom;
-				else if(e.position.equals(RIGHT))
-					e.container = right;
-				else
-				{
-					Log.log(Log.WARNING,this,
-						"Unknown position: "
-						+ e.position);
-				}
-
-				if(e.container != null)
-					e.container.register(e);
-			}
-			windows.put(factory.name,e);
-		}
+			addEntry((Factory)entries.next());
 
 		propertiesChanged();
 	} //}}}
@@ -728,10 +697,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		}
 
 		// create a copy of this dockable window and float it
-		Entry newEntry = new Entry(entry.factory,FLOATING,true);
-		newEntry.open();
+		Entry newEntry = new Entry(entry.factory,FLOATING);
+		newEntry.win = newEntry.factory.createDockableWindow(view,FLOATING);
 		if(newEntry.win != null)
+		{
+			newEntry.container = new FloatingWindowContainer(this,true);
+			newEntry.container.register(newEntry);
 			newEntry.container.show(newEntry);
+		}
+
 		clones.add(newEntry);
 		return newEntry.win;
 	} //}}}
@@ -752,10 +726,23 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		}
 
 		if(entry.win == null)
-			entry.open();
+		{
+			entry.win = entry.factory.createDockableWindow(
+				view,entry.position);
+		}
 
 		if(entry.win != null)
+		{
+			if(entry.position.equals(FLOATING)
+				&& entry.container == null)
+			{
+				entry.container = new FloatingWindowContainer(
+					this,view.isPlainView());
+				entry.container.register(entry);
+			}
+
 			entry.container.show(entry);
+		}
 		else
 			/* an error occurred */;
 	} //}}}
@@ -783,23 +770,14 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
 		{
-			Log.log(Log.ERROR,this,"This DockableWindowManager"
-				+ " does not have a window named " + name);
+			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 			return;
 		}
 
 		if(entry.win == null)
 			return;
 
-		if(entry.container instanceof FloatingWindowContainer)
-		{
-			entry.container.save(entry);
-			entry.container.remove(entry);
-			entry.container = null;
-			entry.win = null;
-		}
-		else
-			entry.container.show(null);
+		entry.container.show(null);
 	} //}}}
 
 	//{{{ removeDockableWindow() method
@@ -896,7 +874,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		if(entry == null)
 			return false;
 		else
-			return (entry.position != FLOATING);
+			return !entry.position.equals(FLOATING);
 	} //}}}
 
 	//{{{ closeCurrentArea() method
@@ -949,7 +927,9 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		{
 			Entry entry = (Entry)iter.next();
 			if(entry.win != null)
-				entry.remove();
+			{
+				entry.container.unregister(entry);
+			}
 		}
 
 		iter = clones.iterator();
@@ -957,7 +937,9 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		{
 			Entry entry = (Entry)iter.next();
 			if(entry.win != null)
-				entry.remove();
+			{
+				entry.container.unregister(entry);
+			}
 		}
 	} //}}}
 
@@ -1118,6 +1100,35 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				== DockableWindowUpdate.PROPERTIES_CHANGED)
 				propertiesChanged();
 		}
+		else if(msg instanceof PluginUpdate)
+		{
+			PluginUpdate pmsg = (PluginUpdate)msg;
+			if(pmsg.getWhat() == PluginUpdate.LOADED)
+			{
+				Iterator iter = dockableWindowFactories
+					.values().iterator();
+
+				while(iter.hasNext())
+				{
+					Factory factory = (Factory)iter.next();
+					if(factory.plugin == pmsg.getPluginJAR())
+						addEntry(factory);
+				}
+
+				propertiesChanged();
+			}
+			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+			{
+				Iterator iter = windows.values().iterator();
+
+				while(iter.hasNext())
+				{
+					Entry entry = (Entry)iter.next();
+					if(entry.factory.plugin == pmsg.getPluginJAR())
+						iter.remove();
+				}
+			}
+		}
 	} //}}}
 
 	//{{{ Package-private members
@@ -1233,7 +1244,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			entry.position = newPosition;
 			if(entry.container != null)
 			{
-				entry.container.remove(entry);
+				entry.container.unregister(entry);
 				entry.container = null;
 				entry.win = null;
 			}
@@ -1269,6 +1280,41 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		revalidate();
 		repaint();
+	} //}}}
+
+	//{{{ addEntry() method
+	private void addEntry(Factory factory)
+	{
+		Entry e;
+		if(view.isPlainView())
+		{
+			// don't show menu items to dock into a plain view
+			e = new Entry(factory,FLOATING);
+		}
+		else
+		{
+			e = new Entry(factory);
+			if(e.position.equals(FLOATING))
+				/* nothing to do */;
+			else if(e.position.equals(TOP))
+				e.container = top;
+			else if(e.position.equals(LEFT))
+				e.container = left;
+			else if(e.position.equals(BOTTOM))
+				e.container = bottom;
+			else if(e.position.equals(RIGHT))
+				e.container = right;
+			else
+			{
+				Log.log(Log.WARNING,this,
+					"Unknown position: "
+					+ e.position);
+			}
+
+			if(e.container != null)
+				e.container.register(e);
+		}
+		windows.put(factory.name,e);
 	} //}}}
 
 	//}}}
@@ -1579,10 +1625,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	class Entry
 	{
 		Factory factory;
+
 		String title;
 		String position;
 		DockableWindowContainer container;
-		boolean clone;
 
 		// only set if open
 		JComponent win;
@@ -1594,57 +1640,19 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		Entry(Factory factory)
 		{
 			this(factory,jEdit.getProperty(factory.name
-				+ ".dock-position",FLOATING),false);
+				+ ".dock-position",FLOATING));
 		} //}}}
 
 		//{{{ Entry constructor
-		Entry(Factory factory, String position, boolean clone)
+		Entry(Factory factory, String position)
 		{
 			this.factory = factory;
 			this.position = position;
-			this.clone = clone;
 
 			// get the title here, not in the factory constructor,
 			// since the factory might be created before a plugin's
 			// props are loaded
 			title = getDockableTitle(factory.name);
-		} //}}}
-
-		//{{{ open() method
-		void open()
-		{
-			win = factory.createDockableWindow(view,position);
-			if(win == null)
-			{
-				// error occurred
-				return;
-			}
-
-			Log.log(Log.DEBUG,this,"Adding " + factory.name + " with position " + position);
-
-			if(position.equals(FLOATING))
-			{
-				container = new FloatingWindowContainer(
-					DockableWindowManager.this,clone);
-				container.register(this);
-			}
-
-			container.add(this);
-		} //}}}
-
-		//{{{ remove() method
-		void remove()
-		{
-			Log.log(Log.DEBUG,this,"Removing " + factory.name + " from "
-				+ container);
-
-			container.save(this);
-			container.remove(this);
-
-			if(container instanceof FloatingWindowContainer)
-				container = null;
-
-			win = null;
 		} //}}}
 	} //}}}
 }

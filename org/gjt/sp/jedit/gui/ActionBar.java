@@ -154,7 +154,10 @@ public class ActionBar extends JPanel
 						propName) + "\",\""
 						+ MiscUtilities.charsToEscapes(
 						propValue) + "\");\n"
-						+ "jEdit.propertiesChanged();";
+						+ "jEdit.propertiesChanged();"
+						+ "EditBus.send(new DockableWindowUpdate(wm,"
+						+ "DockableWindowUpdate."
+						+ "PROPERTIES_CHANGED,null));";
 				}
 
 				Macros.Recorder recorder = view.getMacroRecorder();
