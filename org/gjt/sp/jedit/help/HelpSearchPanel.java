@@ -82,8 +82,27 @@ public class HelpSearchPanel extends JPanel
 
 	//}}}
 
+	//{{{ Result class
+	class Result
+	{
+		int rank;
+		String title;
+		String file;
+
+		Result(String title, String file)
+		{
+			this.title = title;
+			this.file = file;
+		}
+
+		public String toString()
+		{
+			return title;
+		}
+	} //}}}
+
 	//{{{ ActionHandler class
-	public class ActionHandler implements ActionListener
+	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
