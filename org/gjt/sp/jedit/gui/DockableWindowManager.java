@@ -146,24 +146,25 @@ public class DockableWindowManager extends JPanel
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.0pre1
 	 */
-	public static boolean loadDockableWindows(EditPlugin.JAR plugin,
-		String path, Reader in)
+	public static boolean loadDockableWindows(EditPlugin.JAR plugin, URL uri)
 	{
 		try
 		{
 			//Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + path);
 
-			DockableListHandler dh = new DockableListHandler(path,plugin);
+			DockableListHandler dh = new DockableListHandler(uri,plugin);
 			XmlParser parser = new XmlParser();
 			parser.setHandler(dh);
-			parser.parse(null, null, in);
+			parser.parse(null, null, new BufferedReader(
+				new InputStreamReader(
+				uri.openStream())));
 			return true;
 		}
 		catch(XmlException xe)
 		{
 			int line = xe.getLine();
 			String message = xe.getMessage();
-			Log.log(Log.ERROR,DockableWindowManager.class,path + ":" + line
+			Log.log(Log.ERROR,DockableWindowManager.class,uri + ":" + line
 				+ ": " + message);
 		}
 		catch(Exception e)
@@ -191,27 +192,31 @@ public class DockableWindowManager extends JPanel
 		}
 	} //}}}
 
-	//{{{ cacheDockableWindow() method
+	//{{{ cacheDockableWindows() method
 	/**
 	 * @since jEdit 4.2pre1
 	 */
-	public static void cacheDockableWindow(EditPlugin.JAR plugin,
-		String name, URL uri, boolean actions)
+	public static void cacheDockableWindows(EditPlugin.JAR plugin, URL uri,
+		String[] name, boolean[] actions)
 	{
-		Factory factory = new Factory(plugin,name,uri,null,actions);
-		dockableWindowFactories.put(name,factory);
+		for(int i = 0; i < name.length; i++)
+		{
+			Factory factory = new Factory(plugin,
+				name[i],uri,null,actions[i]);
+			dockableWindowFactories.put(name,factory);
+		}
 	} //}}}
 
 	//{{{ registerDockableWindow() method
 	public static void registerDockableWindow(EditPlugin.JAR plugin,
-		String name, String code, boolean actions)
+		URL uri, String name, String code, boolean actions)
 	{
 		Factory factory = (Factory)dockableWindowFactories.get(name);
 		if(factory != null)
 			factory.code = code;
 		else
 		{
-			factory = new Factory(plugin,name,null,code,actions);
+			factory = new Factory(plugin,name,uri,code,actions);
 			dockableWindowFactories.put(name,factory);
 		}
 	} //}}}
@@ -235,9 +240,9 @@ public class DockableWindowManager extends JPanel
 	static class DockableListHandler extends HandlerBase
 	{
 		//{{{ DockableListHandler constructor
-		DockableListHandler(String path, EditPlugin.JAR plugin)
+		DockableListHandler(URL uri, EditPlugin.JAR plugin)
 		{
-			this.path = path;
+			this.uri = uri;
 			this.plugin = plugin;
 			stateStack = new Stack();
 			actions = true;
@@ -289,7 +294,7 @@ public class DockableWindowManager extends JPanel
 			if("DOCKABLES".equals(name))
 				return;
 
-			Log.log(Log.ERROR,this,path + ": DOCTYPE must be DOCKABLES");
+			Log.log(Log.ERROR,this,uri + ": DOCTYPE must be DOCKABLES");
 		} //}}}
 
 		//{{{ charData() method
@@ -322,7 +327,7 @@ public class DockableWindowManager extends JPanel
 			{
 				if(tag == "DOCKABLE")
 				{
-					registerDockableWindow(plugin,
+					registerDockableWindow(plugin,uri,
 						dockableName,code,actions);
 					// make default be true for the next
 					// action
@@ -354,7 +359,7 @@ public class DockableWindowManager extends JPanel
 		//{{{ Private members
 
 		//{{{ Instance variables
-		private String path;
+		private URL uri;
 		private EditPlugin.JAR plugin;
 
 		private String dockableName;
@@ -432,17 +437,7 @@ public class DockableWindowManager extends JPanel
 			if(loaded)
 				return;
 
-			try
-			{
-				loadDockableWindows(plugin,uri.toString(),
-					new BufferedReader(
-					new InputStreamReader(
-					uri.openStream())));
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,DockableWindowManager.class,io);
-			}
+			loadDockableWindows(plugin,uri);
 		} //}}}
 
 		//{{{ createDockableWindow() method

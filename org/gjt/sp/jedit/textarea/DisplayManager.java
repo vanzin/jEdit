@@ -710,7 +710,7 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
-			//XXX
+			/*/XXX
 			int verifyScreenLine = 0;
 			int i = 0;
 
@@ -725,8 +725,12 @@ public class DisplayManager
 				verifyScreenLine += getScreenLineCount(i);
 			}
 			if(verifyScreenLine != scrollLine)
-				new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,new Exception(scrollLine + ":" + verifyScreenLine));
-			//XXX
+			{
+				Exception ex =new Exception(scrollLine + ":" + verifyScreenLine);
+				Log.log(Log.ERROR,this,ex);
+				new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,ex);
+			}
+			*///XXX
 
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
@@ -796,7 +800,8 @@ public class DisplayManager
 			offsetMgr.removeAnchor(this);
 
 			int newScrollLine = scrollLine;
-			for(int i = 0; i < amount; i++)
+			int newPhysicalLine = physicalLine;
+			for(int i = 0; i <= amount; i++)
 			{
 				if(physicalLine + i >= offsetMgr.getLineCount())
 				{
@@ -804,13 +809,16 @@ public class DisplayManager
 					break;
 				}
 				if(isLineVisible(physicalLine + i))
+				{
 					newScrollLine += getScreenLineCount(physicalLine + i);
+					newPhysicalLine = physicalLine + i;
+				}
 			}
 
-			if(newScrollLine != scrollLine)
+			//if(newScrollLine != scrollLine)
 			{
 				scrollLine = newScrollLine;
-				physicalLine += amount;
+				physicalLine = newPhysicalLine;
 				ensurePhysicalLineIsVisible();
 			}
 
@@ -839,7 +847,8 @@ public class DisplayManager
 			offsetMgr.removeAnchor(this);
 
 			int newScrollLine = scrollLine;
-			for(int i = 0; i < amount; i++)
+			int newPhysicalLine = physicalLine;
+			for(int i = 0; i <= amount; i++)
 			{
 				if(physicalLine - i == 0)
 				{
@@ -847,13 +856,16 @@ public class DisplayManager
 					break;
 				}
 				if(isLineVisible(physicalLine - i))
+				{
 					newScrollLine -= getScreenLineCount(physicalLine - i - 1);
+					newPhysicalLine = physicalLine - i;
+				}
 			}
 
-			if(newScrollLine != scrollLine)
+			//if(newScrollLine != scrollLine)
 			{
 				scrollLine = newScrollLine;
-				physicalLine -= amount;
+				physicalLine = newPhysicalLine;
 				ensurePhysicalLineIsVisible();
 			}
 

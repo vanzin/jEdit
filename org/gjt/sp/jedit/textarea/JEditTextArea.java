@@ -701,13 +701,13 @@ public class JEditTextArea extends JComponent
 			setFirstLine(getFirstLine() + _electricScroll - visibleLines + screenLine + (lastLinePartial ? 2 : 1));
 		} //}}}
 
-		// broken
-
-		/*/{{{ Scroll horizontally
+		//{{{ Scroll horizontally
 		Point point = offsetToXY(line,offset,returnValue);
 		if(point == null)
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
-				+ ",visibleLines=" + visibleLines);
+				+ ",visibleLines=" + visibleLines
+				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
+				+ ",lastPhysicalLine=" + getLastPhysicalLine());
 		point.x += extraEndVirt;
 
 		if(point.x < 0)
@@ -720,7 +720,7 @@ public class JEditTextArea extends JComponent
 			setHorizontalOffset(horizontalOffset +
 				(painter.getWidth() - point.x)
 				- charWidth - 5);
-		} //}}}*/
+		} //}}}
 	} //}}}
 
 	//{{{ addScrollListener() method
@@ -6376,7 +6376,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					"view.status.rect-quick-copy"));
 				clearStatus = true;
 			}
-			else
 
 			switch(clickCount)
 			{

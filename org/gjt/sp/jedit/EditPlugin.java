@@ -23,10 +23,10 @@
 package org.gjt.sp.jedit;
 
 import javax.swing.JMenuItem;
+import java.io.*;
 import java.util.*;
-import java.util.zip.ZipFile;
-import org.gjt.sp.jedit.gui.EnhancedMenu;
-import org.gjt.sp.jedit.gui.OptionsDialog;
+import java.util.zip.*;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.util.Log;
 
 /**
@@ -284,16 +284,16 @@ public abstract class EditPlugin
 			return path;
 		} //}}}
 
-		//{{{ getZipFile() method
-		public ZipFile getZipFile()
-		{
-			return classLoader.getZipFile();
-		} //}}}
-
 		//{{{ getClassLoader() method
 		public JARClassLoader getClassLoader()
 		{
 			return classLoader;
+		} //}}}
+
+		//{{{ getZipFile() method
+		public ZipFile getZipFile()
+		{
+			return zipFile;
 		} //}}}
 
 		//{{{ getActions() method
@@ -349,13 +349,36 @@ public abstract class EditPlugin
 
 		//{{{ Package-private members
 
-		//{{{ JAR consructor
-		JAR(String path, JARClassLoader classLoader)
+		//{{{ JAR constructor
+		JAR(String path, JARClassLoader classLoader, ZipFile zipFile)
 		{
 			this.path = path;
 			this.classLoader = classLoader;
+			this.zipFile = zipFile;
 			plugins = new ArrayList();
-			actions = new ActionSet();
+		} //}}}
+
+		//{{{ JAR constructor
+		JAR(String path, JARClassLoader classLoader, ZipFile zipFile,
+			ResourceCache.PluginCacheEntry cache)
+		{
+			this(path,classLoader,zipFile);
+			if(cache != null)
+			{
+				if(cache.actionsURI != null)
+				{
+					actions = new ActionSet(this,
+						cache.actionsURI,
+						cache.cachedActionNames);
+				}
+				if(cache.dockablesURI != null)
+				{
+					DockableWindowManager.cacheDockableWindows(this,
+						cache.dockablesURI,
+						cache.cachedDockableNames,
+						cache.cachedDockableActionFlags);
+				}
+			}
 		} //}}}
 
 		//{{{ getPlugins() method
@@ -367,10 +390,58 @@ public abstract class EditPlugin
 			}
 		} //}}}
 
+		//{{{ generateCache() method
+		void generateCache() throws IOException
+		{
+			Enumeration entries = zipFile.entries();
+			while(entries.hasMoreElements())
+			{
+				ZipEntry entry = (ZipEntry)
+					entries.nextElement();
+				String name = entry.getName();
+				String lname = name.toLowerCase();
+				if(lname.equals("actions.xml"))
+				{
+					actions = new ActionSet(
+						this,
+						classLoader.getResource(name),
+						null);
+					actions.load();
+					jEdit.addActionSet(actions);
+				}
+				else if(lname.equals("dockables.xml"))
+				{
+					DockableWindowManager.loadDockableWindows(this,
+						classLoader.getResource(name));
+				}
+				else if(lname.endsWith(".props"))
+					properties.add(classLoader.getResource(name));
+				else if(name.endsWith(".class"))
+					classes.add(MiscUtilities.fileToClass(name));
+			}
+		} //}}}
+
+		//{{{ getPropertyFiles() method
+		List getPropertyFiles()
+		{
+			return properties;
+		} //}}}
+
+		//{{{ getClassSet() method
+		Set getClassSet()
+		{
+			return classes;
+		} //}}}
+
+		//}}}
+
 		//{{{ Private members
 		private String path;
 		private JARClassLoader classLoader;
-		private ArrayList plugins;
+		private ZipFile zipFile;
+		private List plugins;
+		private List properties;
+		private Set classes;
 		private ActionSet actions;
 		//}}}
 	} //}}}

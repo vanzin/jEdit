@@ -117,6 +117,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public static final int BRACKET_HIGHLIGHT_LAYER = 100;
 
 	/**
+	 * Text layer. Most extensions will be below this layer.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final int TEXT_LAYER = 200;
+
+	/**
+	 * Caret layer. Most extensions will be below this layer.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final int CARET_LAYER = 300;
+
+	/**
 	 * Highest possible layer.
 	 * @since jEdit 4.0pre4
 	 */
@@ -666,12 +678,24 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			boolean updateMaxHorizontalScrollWidth = false;
 
-			for(int line = firstInvalid; line <= lastInvalid; line++)
+			for(int screenLine = firstInvalid;
+				screenLine <= lastInvalid;
+				screenLine++)
 			{
-				ChunkCache.LineInfo lineInfo = textArea.chunkCache
-					.getLineInfo(line);
+				ChunkCache.LineInfo lineInfo = textArea
+					.chunkCache.getLineInfo(screenLine);
 
-				lineInfo.width = paintLine(gfx,buffer,lineInfo,line,x,y) - x;
+				if(lineInfo.physicalLine == -1)
+					extensionMgr.paintInvalidLine(gfx,screenLine,y);
+				else
+				{
+					extensionMgr.paintValidLine(gfx,screenLine,
+						lineInfo.physicalLine,
+						textArea.getScreenLineStartOffset(screenLine),
+						textArea.getScreenLineEndOffset(screenLine),
+						y);
+				}
+
 				if(lineInfo.width > textArea.maxHorizontalScrollWidth)
 					updateMaxHorizontalScrollWidth = true;
 
@@ -747,6 +771,34 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ Package-private members
 
+	//{{{ Instance variables
+	/* package-private since they are accessed by inner classes and we
+	 * want this to be fast */
+	JEditTextArea textArea;
+
+	SyntaxStyle[] styles;
+	Color caretColor;
+	Color selectionColor;
+	Color multipleSelectionColor;
+	Color lineHighlightColor;
+	Color bracketHighlightColor;
+	Color eolMarkerColor;
+	Color wrapGuideColor;
+
+	SyntaxStyle[] foldLineStyle;
+
+	boolean blockCaret;
+	boolean lineHighlight;
+	boolean bracketHighlight;
+	boolean eolMarkers;
+	boolean wrapGuide;
+	boolean antiAlias;
+	boolean fracFontMetrics;
+
+	// should try to use this as little as possible.
+	FontMetrics fm;
+	//}}}
+
 	//{{{ TextAreaPainter constructor
 	/**
 	 * Creates a new painter. Do not create instances of this class
@@ -773,8 +825,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(LINE_BACKGROUND_LAYER,lineBackground
 			= new PaintLineBackground());
 		addExtension(SELECTION_LAYER,new PaintSelection());
-		addExtension(WRAP_GUIDE_LAYER,new WrapGuide());
-		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
+		addExtension(WRAP_GUIDE_LAYER,new PaintWrapGuide());
+		addExtension(BRACKET_HIGHLIGHT_LAYER,new PaintBracketHighlight());
+		addExtension(TEXT_LAYER,new PaintText());
+		addExtension(CARET_LAYER,new PaintCaret());
 	} //}}}
 
 	//}}}
@@ -782,30 +836,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JEditTextArea textArea;
-
-	private SyntaxStyle[] styles;
-	private Color caretColor;
-	private Color selectionColor;
-	private Color multipleSelectionColor;
-	private Color lineHighlightColor;
-	private Color bracketHighlightColor;
-	private Color eolMarkerColor;
-	private Color wrapGuideColor;
-
-	private SyntaxStyle[] foldLineStyle;
-
-	private boolean blockCaret;
-	private boolean lineHighlight;
-	private boolean bracketHighlight;
-	private boolean eolMarkers;
-	private boolean wrapGuide;
-	private boolean antiAlias;
-	private boolean fracFontMetrics;
-
-	// should try to use this as little as possible.
-	private FontMetrics fm;
-
 	private ExtensionManager extensionMgr;
 
 	// we keep a reference to this to obtain the background color and
@@ -843,141 +873,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		renderingHints = new RenderingHints(hints);
 		fontRenderContext = new FontRenderContext(null,antiAlias,
 			fracFontMetrics);
-	} //}}}
-
-	//{{{ paintLine() method
-	private int paintLine(Graphics2D gfx, Buffer buffer,
-		ChunkCache.LineInfo lineInfo, int screenLine,
-		int x, int y)
-	{
-		int physicalLine = lineInfo.physicalLine;
-
-		if(physicalLine == -1)
-			extensionMgr.paintInvalidLine(gfx,screenLine,y);
-		else
-		{
-			int start = textArea.getScreenLineStartOffset(screenLine);
-			int end = textArea.getScreenLineEndOffset(screenLine);
-
-			extensionMgr.paintValidLine(gfx,screenLine,physicalLine,
-				start,end,y);
-
-			Font defaultFont = getFont();
-			Color defaultColor = getForeground();
-
-			gfx.setFont(defaultFont);
-			gfx.setColor(defaultColor);
-
-			float baseLine = y + fm.getHeight()
-				- fm.getLeading() - fm.getDescent();
-
-			if(lineInfo.chunks != null)
-			{
-				x += Chunk.paintChunkList(lineInfo.chunks,
-					gfx,x,baseLine,true);
-			}
-
-			if(!lineInfo.lastSubregion)
-			{
-				gfx.setFont(defaultFont);
-				gfx.setColor(eolMarkerColor);
-				gfx.drawString(":",Math.max(x,
-					textArea.getHorizontalOffset()
-					+ textArea.getDisplayManager().wrapMargin + textArea.charWidth),
-					baseLine);
-				x += textArea.charWidth;
-			}
-			else if(lineBackground.collapsedFold)
-			{
-				Font font = lineBackground.foldLineStyle.getFont();
-				gfx.setFont(font);
-				gfx.setColor(lineBackground.foldLineStyle.getForegroundColor());
-
-				int nextLine;
-				int nextScreenLine = screenLine + 1;
-				if(nextScreenLine < textArea.getVisibleLines())
-				{
-					nextLine = textArea.chunkCache.getLineInfo(nextScreenLine)
-						.physicalLine;
-				}
-				else
-				{
-					nextLine = textArea.displayManager
-						.getNextVisibleLine(physicalLine);
-				}
-
-				if(nextLine == -1)
-					nextLine = buffer.getLineCount();
-
-				int count = nextLine - physicalLine - 1;
-				String str = " [" + count + " lines]";
-
-				float width = (float)font.getStringBounds(
-					str,fontRenderContext).getWidth();
-
-				gfx.drawString(str,x,baseLine);
-				x += width;
-			}
-			else if(eolMarkers)
-			{
-				gfx.setFont(defaultFont);
-				gfx.setColor(eolMarkerColor);
-				gfx.drawString(".",x,baseLine);
-				x += textArea.charWidth;
-			}
-
-			paintCaret(gfx,physicalLine,start,end,y,lineBackground.bgColor);
-		}
-
-		return x;
-	} //}}}
-
-	//{{{ paintCaret() method
-	private void paintCaret(Graphics2D gfx, int physicalLine,
-		int start, int end, int y, Color bgColor)
-	{
-		if(!textArea.isCaretVisible())
-			return;
-
-		int caret = textArea.getCaretPosition();
-		if(caret < start || caret >= end)
-			return;
-
-		int offset = caret - textArea.getLineStartOffset(physicalLine);
-		textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
-		int caretX = textArea.returnValue.x;
-		int height = fm.getHeight();
-
-		gfx.setColor(caretColor);
-
-		if(blockCaret)
-		{
-			// Workaround for bug in Graphics2D in JDK1.4 under
-			// Windows; calling setPaintMode() does not reset
-			// graphics mode.
-			Graphics2D blockgfx = (Graphics2D)gfx.create();
-			blockgfx.setXORMode(bgColor);
-
-			if(textArea.isOverwriteEnabled())
-			{
-				blockgfx.fillRect(caretX,y + height - height / 3,
-					textArea.charWidth,height / 3);
-			}
-			else
-				blockgfx.fillRect(caretX,y,textArea.charWidth,height);
-
-			blockgfx.dispose();
-		}
-		else
-		{
-			if(textArea.isOverwriteEnabled())
-			{
-				gfx.drawLine(caretX,y + height - 1,
-					caretX + textArea.charWidth,y + height - 1);
-			}
-			else
-				gfx.drawLine(caretX,y,caretX,y + height - 1);
-		}
 	} //}}}
 
 	//{{{ getCharWidth() method
@@ -1214,8 +1109,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		} //}}}
 	} //}}}
 
-	//{{{ WrapGuide class
-	class WrapGuide extends TextAreaExtension
+	//{{{ PaintWrapGuide class
+	class PaintWrapGuide extends TextAreaExtension
 	{
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
@@ -1250,8 +1145,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	} //}}}
 
-	//{{{ BracketHighlight class
-	class BracketHighlight extends TextAreaExtension
+	//{{{ PaintBracketHighlight class
+	class PaintBracketHighlight extends TextAreaExtension
 	{
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
@@ -1277,6 +1172,140 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.drawRect(textArea.returnValue.x,y,(int)gfx.getFont().getStringBounds(
 				"(",getFontRenderContext()).getWidth() - 1,
 				fm.getHeight() - 1);
+		}
+	} //}}}
+
+	//{{{ PaintText class
+	class PaintText extends TextAreaExtension
+	{
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache
+				.getLineInfo(screenLine);
+
+			Font defaultFont = getFont();
+			Color defaultColor = getForeground();
+
+			gfx.setFont(defaultFont);
+			gfx.setColor(defaultColor);
+
+			int x = textArea.getHorizontalOffset();
+			int originalX = x;
+
+			float baseLine = y + fm.getHeight()
+				- fm.getLeading() - fm.getDescent();
+
+			if(lineInfo.chunks != null)
+			{
+				x += Chunk.paintChunkList(lineInfo.chunks,
+					gfx,textArea.getHorizontalOffset(),
+					baseLine,true);
+			}
+
+			if(!lineInfo.lastSubregion)
+			{
+				gfx.setFont(defaultFont);
+				gfx.setColor(eolMarkerColor);
+				gfx.drawString(":",Math.max(x,
+					textArea.getHorizontalOffset()
+					+ textArea.getDisplayManager().wrapMargin + textArea.charWidth),
+					baseLine);
+				x += textArea.charWidth;
+			}
+			else if(lineBackground.collapsedFold)
+			{
+				Font font = lineBackground.foldLineStyle.getFont();
+				gfx.setFont(font);
+				gfx.setColor(lineBackground.foldLineStyle.getForegroundColor());
+
+				int nextLine;
+				int nextScreenLine = screenLine + 1;
+				if(nextScreenLine < textArea.getVisibleLines())
+				{
+					nextLine = textArea.chunkCache.getLineInfo(nextScreenLine)
+						.physicalLine;
+				}
+				else
+				{
+					nextLine = textArea.displayManager
+						.getNextVisibleLine(physicalLine);
+				}
+
+				if(nextLine == -1)
+					nextLine = textArea.getLineCount();
+
+				int count = nextLine - physicalLine - 1;
+				String str = " [" + count + " lines]";
+
+				float width = (float)font.getStringBounds(
+					str,fontRenderContext).getWidth();
+
+				gfx.drawString(str,x,baseLine);
+				x += width;
+			}
+			else if(eolMarkers)
+			{
+				gfx.setFont(defaultFont);
+				gfx.setColor(eolMarkerColor);
+				gfx.drawString(".",x,baseLine);
+				x += textArea.charWidth;
+			}
+
+			lineInfo.width = (x - originalX);
+		}
+	} //}}}
+
+	//{{{ PaintCaret class
+	class PaintCaret extends TextAreaExtension
+	{
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			if(!textArea.isCaretVisible())
+				return;
+	
+			int caret = textArea.getCaretPosition();
+			if(caret < start || caret >= end)
+				return;
+	
+			Color bgColor = lineBackground.bgColor;
+	
+			int offset = caret - textArea.getLineStartOffset(physicalLine);
+			textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
+			int caretX = textArea.returnValue.x;
+			int height = fm.getHeight();
+	
+			gfx.setColor(caretColor);
+	
+			if(blockCaret)
+			{
+				// Workaround for bug in Graphics2D in JDK1.4 under
+				// Windows; calling setPaintMode() does not reset
+				// graphics mode.
+				Graphics2D blockgfx = (Graphics2D)gfx.create();
+				blockgfx.setXORMode(bgColor);
+	
+				if(textArea.isOverwriteEnabled())
+				{
+					blockgfx.fillRect(caretX,y + height - height / 3,
+						textArea.charWidth,height / 3);
+				}
+				else
+					blockgfx.fillRect(caretX,y,textArea.charWidth,height);
+	
+				blockgfx.dispose();
+			}
+			else
+			{
+				if(textArea.isOverwriteEnabled())
+				{
+					gfx.drawLine(caretX,y + height - 1,
+						caretX + textArea.charWidth,y + height - 1);
+				}
+				else
+					gfx.drawLine(caretX,y,caretX,y + height - 1);
+			}
 		}
 	} //}}}
 

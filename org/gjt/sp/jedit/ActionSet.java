@@ -103,7 +103,7 @@ public class ActionSet
 {
 	//{{{ ActionSet constructor
 	/**
-	 * Creates a new plugin action set.
+	 * Creates a new action set.
 	 * @param jar The plugin
 	 * @param uri The actions.xml URI
 	 * @param cachedActionNames The list of cached action names
@@ -115,9 +115,12 @@ public class ActionSet
 		this();
 		this.jar = jar;
 		this.uri = uri;
-		for(int i = 0; i < cachedActionNames.length; i++)
+		if(cachedActionNames != null)
 		{
-			actions.put(cachedActionNames[i],placeholder);
+			for(int i = 0; i < cachedActionNames.length; i++)
+			{
+				actions.put(cachedActionNames[i],placeholder);
+			}
 		}
 		loaded = false;
 	} //}}}
@@ -326,6 +329,44 @@ public class ActionSet
 		}
 	} //}}}
 
+	//{{{ load() method
+	/**
+	 * Forces the action set to be loaded. Plugins and macros should not
+	 * call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public void load()
+	{
+		if(loaded)
+			return;
+
+		loaded = true;
+		actions.clear();
+
+		try
+		{
+			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
+
+			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
+			XmlParser parser = new XmlParser();
+			parser.setHandler(ah);
+			parser.parse(null, null, new BufferedReader(
+				new InputStreamReader(
+				uri.openStream())));
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,this,uri + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,uri,e);
+		}
+	} //}}}
+
 	//{{{ Package-private members
 	boolean added;
 
@@ -357,38 +398,6 @@ public class ActionSet
 	private boolean loaded;
 
 	private static final Object placeholder = new Object();
-
-	//{{{ load() method
-	private void load()
-	{
-		if(loaded)
-			return;
-
-		loaded = true;
-
-		try
-		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
-
-			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			XmlParser parser = new XmlParser();
-			parser.setHandler(ah);
-			parser.parse(null, null, new BufferedReader(
-				new InputStreamReader(
-				uri.openStream())));
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,uri + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,uri,e);
-		}
-	} //}}}
 
 	//}}}
 }

@@ -65,7 +65,7 @@ public class JARClassLoader extends ClassLoader
 		zipFile = new JarFile(path);
 		definePackages();
 
-		jar = new EditPlugin.JAR(path,this);
+		jar = new EditPlugin.JAR(path,this,zipFile);
 
 		Enumeration entires = zipFile.entries();
 		while(entires.hasMoreElements())
@@ -286,9 +286,7 @@ public class JARClassLoader extends ClassLoader
 				else if(name.equalsIgnoreCase("dockables.xml"))
 				{
 					DockableWindowManager.loadDockableWindows(jar,
-						path + "!dockables.xml",
-						new BufferedReader(new InputStreamReader(
-						zipFile.getInputStream(entry))));
+						getResource(name));
 				}
 			}
 		}
