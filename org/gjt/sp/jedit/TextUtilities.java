@@ -230,12 +230,16 @@ public class TextUtilities
 	 * @param y The y co-ordinate
 	 * @param width The width of the painting area, used for a token
 	 * background color hack
+	 * @param background The background color of the painting area,
+	 * used for background color hack
 	 * @return The width of the painted text
 	 * @since jEdit 4.0pre4
 	 */
 	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
-		float x, float y, float width)
+		float x, float y, float width, Color background)
 	{
+		FontMetrics forBackground = gfx.getFontMetrics();
+
 		float _x = 0.0f;
 
 		Font lastFont = null;
@@ -250,24 +254,24 @@ public class TextUtilities
 				if(bgColor != null)
 				{
 					float x1 = (_x == 0.0f ? x : x + chunks.x);
-					float x2 = (chunks.next == null
-						? width
-						: x + chunks.x + chunks.width);
+					float x2;
+					if(chunks.next == null)
+						x2 = width;
+					else if(chunks.next.style == chunks.style)
+						x2 = x + chunks.next.x;
+					else
+						x2 = x + chunks.width;
 
 					//LineMetrics lm = font.getLineMetrics(
 					//	chunks.text,gfx.getFontRenderContext());
-					FontMetrics fm = gfx.getFontMetrics();
+					gfx.setXORMode(background);
 					gfx.setColor(bgColor);
 
-					Composite com = gfx.getComposite();
-					gfx.setComposite(AlphaComposite.getInstance(
-						AlphaComposite.SRC_OVER,0.8f));
-
 					gfx.fill(new Rectangle2D.Float(
-						x1,y - fm.getAscent(),
-						x2 - x1,fm.getHeight()));
+						x1,y - forBackground.getAscent(),
+						x2 - x1,forBackground.getHeight()));
 
-					gfx.setComposite(com);
+					gfx.setPaintMode();
 				}
 
 				gfx.setFont(font);

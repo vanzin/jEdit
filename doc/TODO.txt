@@ -2,10 +2,8 @@ TO DO
 
 - nextLineRequested still fucked
 
-- narrowed hack in expand fold considered harmful
 - textArea.getLastVisibleLine() method
 - print should not use so much memory
-- background color for tokens
 
 - better formatting commands:
   - format becomes 'wrap paragraph'

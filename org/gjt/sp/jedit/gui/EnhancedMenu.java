@@ -43,7 +43,8 @@ public class EnhancedMenu extends JMenu
 			mnemonic = '\0';
 
 		setText(label);
-		setMnemonic(mnemonic);
+		if(!OperatingSystem.isMacOS())
+			setMnemonic(mnemonic);
 
 		String menuItems = jEdit.getProperty(name);
 		if(menuItems != null)

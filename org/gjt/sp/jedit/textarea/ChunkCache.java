@@ -53,13 +53,13 @@ class ChunkCache
 	//{{{ setFirstLine() method
 	void setFirstLine(int firstLine)
 	{
-		if(Math.abs(firstLine - this.firstLine) >= lineInfo.length)
-		{
+	//	if(Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+	//	{
 			for(int i = 0; i < lineInfo.length; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
-		}
+	/*	}
 		else if(firstLine > this.firstLine)
 		{
 			System.arraycopy(lineInfo,firstLine - this.firstLine,
@@ -81,7 +81,7 @@ class ChunkCache
 			{
 				lineInfo[i] = new LineInfo();
 			}
-		}
+		}*/
 
 		this.firstLine = firstLine;
 	} //}}}
@@ -111,43 +111,41 @@ class ChunkCache
 		}
 	} //}}}
 
-	//{{{ updateChunkLists() method
-	void updateChunkLists(int firstScreenLine, int lastScreenLine)
+	//{{{ updateChunksUpTo() method
+	void updateChunksUpTo(int lastScreenLine)
 	{
-		// TODO this needs to be sorted out.
-		if(lastScreenLine >= lineInfo.length)
-			System.err.println("foo: " + lastScreenLine
-				+ "::" + (lineInfo.length - 1));
-
 		LineInfo info = null;
+
+		int firstScreenLine = 0;
+
+		for(int i = lastScreenLine; i >= 0; i--)
+		{
+			info = lineInfo[firstScreenLine];
+			if(info.chunksValid)
+			{
+				if(i == lastScreenLine)
+					return;
+				else
+					firstScreenLine = i + 1;
+				break;
+			}
+		}
 
 		int physicalLine;
 
-		for(;;)
+		if(firstScreenLine == 0)
 		{
-			info = lineInfo[firstScreenLine];
-			if(!info.chunksValid)
-			{
-				if(firstScreenLine == 0)
-					physicalLine = textArea.virtualToPhysical(firstLine);
-				else
-				{
-					physicalLine = textArea
-						.getFoldVisibilityManager()
-						.getNextVisibleLine(lineInfo[
-						firstScreenLine - 1]
-						.physicalLine);
-				}
-
-				break;
-			}
-			else if(firstScreenLine == lastScreenLine)
-			{
-				// it's all valid
-				return;
-			}
-			else
-				firstScreenLine++;
+			physicalLine = textArea.virtualToPhysical(firstLine);
+				System.err.println("v2p returns " + physicalLine);
+		}
+		else
+		{
+			physicalLine = textArea
+				.getFoldVisibilityManager()
+				.getNextVisibleLine(lineInfo[
+				firstScreenLine - 1]
+				.physicalLine);
+			System.err.println("next vis of prev: " + physicalLine);
 		}
 
 		System.err.println(firstScreenLine + "::" + physicalLine);
@@ -214,6 +212,7 @@ class ChunkCache
 
 			info.physicalLine = physicalLine;
 			info.subregion = subregion;
+			info.chunks = chunks;
 			info.chunksValid = true;
 		}
 	} //}}}
@@ -252,6 +251,7 @@ class ChunkCache
 			else
 				info.chunks = (TextUtilities.Chunk)out.get(0);
 
+			info.physicalLine = physicalLineIndex;
 			info.chunksValid = true;
 		}
 

@@ -513,8 +513,8 @@ public class BrowserView extends JPanel
 				Rectangle cellRect = getPathBounds(path);
 				if(cellRect != null && !cellRectIsVisible(cellRect))
 				{
-					return new Point(cellRect.x + (showIcons ? 19 : 1),
-						cellRect.y -1);
+					return new Point(cellRect.x + (showIcons ? 14 : - 4),
+						cellRect.y);
 				}
 			}
 			return null;

@@ -262,7 +262,7 @@ public class GUIUtilities
 		else
 			mi = new EnhancedMenuItem(label,action);
 
-		if(setMnemonic && mnemonic != '\0')
+		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
 
 		return mi;
