@@ -627,8 +627,8 @@ public class ManagePanel extends JPanel
 
 		public int compare(Object o1, Object o2)
 		{
-			Entry e1 = (Entry)o1;
-			Entry e2 = (Entry)o2;
+			ManagePanel.Entry e1 = (ManagePanel.Entry)o1;
+			ManagePanel.Entry e2 = (ManagePanel.Entry)o2;
 
 			if (type == NAME)
 				return compareNames(e1,e2);
@@ -641,7 +641,7 @@ public class ManagePanel extends JPanel
 			}
 		}
 
-		private int compareNames(Entry e1, Entry e2)
+		private int compareNames(ManagePanel.Entry e1, ManagePanel.Entry e2)
 		{
 			String s1, s2;
 			if(e1.name == null)

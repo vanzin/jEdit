@@ -1,5 +1,20 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre13
+
+{{{ Bug Fixes
+
+- Fix ClassCastException when changing kill ring size.
+
+- QuickNotepad plugin didn't compile.
+
+- jEdit didn't compile with jikes due to overly pedantic inner class
+  semantics.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre12
 
 Thanks to Lionel Fiol, Nicholas O'Leary, Ollie Rutherfurd and
