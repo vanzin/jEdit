@@ -3091,6 +3091,44 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return markers;
 	} //}}}
 
+	//{{{ getMarkerStatusPrompt() method
+	/**
+	 * Returns the status prompt for the given marker action. Only
+	 * intended to be called from <code>actions.xml</code>.
+	 * @since jEdit 4.2pre2
+	 */
+	public String getMarkerStatusPrompt(String action)
+	{
+		return jEdit.getProperty("view.status." + action,
+			new String[] { getMarkerNameString() });
+	} //}}}
+
+	//{{{ getMarkerNameString() method
+	/**
+	 * Returns a string of all set markers, used by the status bar
+	 * (eg, "a b $ % ^").
+	 * @since jEdit 4.2pre2
+	 */
+	public String getMarkerNameString()
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			if(marker.getShortcut() != '\0')
+			{
+				if(buf.length() != 0)
+					buf.append(' ');
+				buf.append(marker.getShortcut());
+			}
+		}
+
+		if(buf.length() == 0)
+			return jEdit.getProperty("view.status.no-markers");
+		else
+			return buf.toString();
+	} //}}}
+
 	//{{{ addOrRemoveMarker() method
 	/**
 	 * If a marker is set on the line of the position, it is removed. Otherwise

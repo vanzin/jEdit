@@ -757,16 +757,16 @@ view.gutter.marker=Marker: {0}
 #}}}
 
 #{{{ Status messages
-view.status.add-marker=Enter shortcut for new marker
+view.status.add-marker=Enter shortcut for new marker [{0}]
 view.status.auto-wrap=Search string not found; wrapping around!
 view.status.bracket=Matches line {0}: {1}
 view.status.caret-tooltip=Line and column number indicator
-view.status.copy-append-string-register=Enter register name to copy append to
-view.status.copy-string-register=Enter register name to copy to
-view.status.cut-append-string-register=Enter register name to cut append to
-view.status.cut-string-register=Enter register name to cut to
+view.status.copy-append-string-register=Enter register name to copy append to [{0}]
+view.status.copy-string-register=Enter register name to copy to [{0}]
+view.status.cut-append-string-register=Enter register name to cut append to [{0}]
+view.status.cut-string-register=Enter register name to cut to [{0}]
 view.status.expand-folds=Press 1-9 to specify fold level
-view.status.goto-marker=Enter shortcut of marker to go to
+view.status.goto-marker=Enter shortcut of marker to go to [{0}]
 view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
 view.status.insert-literal=Press key to insert literally
 view.status.io-1=I/O: 1 operation in progress
@@ -779,9 +779,11 @@ view.status.mode-tooltip=Current edit mode, fold mode, and encoding
 view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
 view.status.multi-tooltip=Multiple selection indicator (click to change)
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
+view.status.no-markers=no markers set
+view.status.no-registers=no registers defined
 view.status.overwrite-changed=Overwrite mode is {0,choice,0#off|1#on}
 view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
-view.status.paste-string-register=Enter register name to paste from
+view.status.paste-string-register=Enter register name to paste from ([0}]
 view.status.print=Printing page {0}
 view.status.quick-copy=Quick copy mode - marked text will replace selection
 view.status.recording=Macro recording
@@ -789,9 +791,11 @@ view.status.rect-select-changed=Rectangular selection is {0,choice,0#off|1#on}
 view.status.rect-tooltip=Rectangular selection mode (click to change)
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.search-not-found=Search string not found!
-view.status.select-marker=Enter shortcut of marker to select to
-view.status.swap-marker=Enter shortcut of marker to swap caret position with
-view.status.vertical-paste-string-register=Enter register name to vertical paste from
+view.status.select-marker=Enter shortcut of marker to select to [{0}]
+view.status.swap-marker=Enter shortcut of marker to swap caret position with \
+	[{0}]
+view.status.vertical-paste-string-register=Enter register name to vertical paste \
+	from [{0}]
 view.status.wrap-changed=Word wrap mode is now "{0}"
 view.status.wrap-tooltip=Word wrap mode (click to change)
 #}}}
@@ -1904,6 +1908,7 @@ vfs.browser.modified=Last modified
 vfs.browser.browse-window.label=Browse in New Window
 vfs.browser.browse.label=Browse
 vfs.browser.close.label=Close
+vfs.browser.copy-path.label=Copy Path Name
 vfs.browser.delete.label=Delete...
 vfs.browser.home.icon=Home.png
 vfs.browser.home.label=Home Directory

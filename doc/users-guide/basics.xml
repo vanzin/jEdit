@@ -290,10 +290,17 @@
  </sect1>
  <sect1 id="action-bar"><title>The Action Bar</title>
   <para>
-   The action bar provides functionality not usually found in graphical editors.
+   The action bar allows almost any editor feature to be accessed from the keyboard.
   </para>
   <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Action Bar</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Enter</keycap></keycombo>)
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Action Bar</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Enter</keycap></keycombo>) displays the action bar at the bottom of the view and gives it keyboard focus.
+  </para>
+  <para>
+   To use the action bar, input a command and press <keycap>Enter</keycap>.
+   The following commands are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para>
    To repeat a command multiple times, press
    <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>, enter the
    desired repeat count, then invoke the command to repeat (either using a
