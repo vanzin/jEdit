@@ -9,7 +9,7 @@ To compile jEdit, you will need:
 
 - (Optional) To build the HTML version of the documentation:
 
-  - DocBook-XML 4.1.2 DTD and DocBook-XSL 1.53 (or later) stylesheets
+  - DocBook-XML 4.1.2 DTD and DocBook-XSL 1.54.1 (or later) stylesheets
     (<http://docbook.sourceforge.net>).
   - An XSLT processor, such as Xalan (<http://xml.apache.org>) or
     xsltproc (<http://xmlsoft.org/XSLT/>).
