@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,6 @@ import org.gjt.sp.util.*;
  * @version $Id$
  */
 public class VFSFileChooserDialog extends EnhancedDialog
-implements WorkThreadProgressListener
 {
 	//{{{ VFSFileChooserDialog constructor
 	public VFSFileChooserDialog(View view, String path,
@@ -115,14 +114,10 @@ implements WorkThreadProgressListener
 		cancel.addActionListener(new ActionHandler());
 		panel.add(cancel);
 
-		bottomPanel.add(BorderLayout.NORTH,panel);
+		content.add(BorderLayout.SOUTH,panel);
 
-		status = new JLabel(" ");
-		status.setBorder(new EmptyBorder(12,0,0,0));
-		bottomPanel.add(BorderLayout.SOUTH,status);
-		content.add(BorderLayout.SOUTH,bottomPanel);
-
-		VFSManager.getIOThreadPool().addProgressListener(this);
+		VFSManager.getIOThreadPool().addProgressListener(
+			workThreadHandler = new WorkThreadHandler());
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
@@ -133,7 +128,7 @@ implements WorkThreadProgressListener
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
-		VFSManager.getIOThreadPool().removeProgressListener(this);
+		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
 		super.dispose();
 	} //}}}
 
@@ -221,53 +216,16 @@ implements WorkThreadProgressListener
 		}
 	} //}}}
 
-	//{{{ WorkThreadListener implementation
-
-	//{{{ statusUpdate() method
-	public void statusUpdate(final WorkThreadPool threadPool, int threadIndex)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				int requestCount = threadPool.getRequestCount();
-				if(requestCount == 0)
-				{
-					status.setText(jEdit.getProperty(
-						"view.status.io.done"));
-				}
-				else if(requestCount == 1)
-				{
-					status.setText(jEdit.getProperty(
-						"view.status.io-1"));
-				}
-				else
-				{
-					Object[] args = { new Integer(requestCount) };
-					status.setText(jEdit.getProperty(
-						"view.status.io",args));
-				}
-			}
-		});
-	} //}}}
-
-	//{{{ progressUpdate() method
-	public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
-	{
-	} //}}}
-
-	//}}}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
 	private VFSBrowser browser;
 	private JTextField filenameField;
-	private JLabel status;
 	private String filename;
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
+	private WorkThreadHandler workThreadHandler;
 	//}}}
 
 	//{{{ doFileExistsWarning() method
@@ -369,6 +327,36 @@ implements WorkThreadProgressListener
 		public void keyPressed(KeyEvent evt)
 		{
 			browser.getBrowserView().selectNone();
+		} //}}}
+	} //}}}
+
+	//{{{ WorkThreadListener implementation
+	class WorkThreadHandler implements WorkThreadProgressListener
+	{
+		//{{{ statusUpdate() method
+		public void statusUpdate(WorkThreadPool threadPool, int threadIndex)
+		{
+			// synchronize with hide/showWaitCursor()
+			synchronized(VFSFileChooserDialog.this)
+			{
+				int requestCount = threadPool.getRequestCount();
+				if(requestCount == 0)
+				{
+					getContentPane().setCursor(
+						Cursor.getDefaultCursor());
+				}
+				else if(requestCount >= 1)
+				{
+					getContentPane().setCursor(
+						Cursor.getPredefinedCursor(
+						Cursor.WAIT_CURSOR));
+				}
+			}
+		} //}}}
+	
+		//{{{ progressUpdate() method
+		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+		{
 		} //}}}
 	} //}}}
 

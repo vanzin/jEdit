@@ -184,4 +184,7 @@ next-char.shortcut2=A+l
 prev-page.shortcut2=A+q
 end.shortcut2=A+x
 home.shortcut2=A+z
+copy.shortcut2=C+INSERT
+paste.shortcut2=S+INSERT
+cut.shortcut2=S+DELETE
 #}}}
