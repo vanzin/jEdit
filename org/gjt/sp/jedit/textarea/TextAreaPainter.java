@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.*;
 import java.awt.*;
 import java.util.HashMap;
+import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
@@ -459,19 +460,23 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ getFoldLineStyle() method
 	/**
-	 * Returns the fold line style.
+	 * Returns the fold line style. The first element is the style for
+	 * lines with a fold level greater than 3. The remaining elements
+	 * are for fold levels 1 to 3.
 	 */
-	public final SyntaxStyle getFoldLineStyle()
+	public final SyntaxStyle[] getFoldLineStyle()
 	{
 		return foldLineStyle;
 	} //}}}
 
 	//{{{ setFoldLineStyle() method
 	/**
-	 * Sets the fold line style.
+	 * Sets the fold line style. The first element is the style for
+	 * lines with a fold level greater than 3. The remaining elements
+	 * are for fold levels 1 to 3.
 	 * @param foldLineStyle The fold line style
 	 */
-	public final void setFoldLineStyle(SyntaxStyle foldLineStyle)
+	public final void setFoldLineStyle(SyntaxStyle[] foldLineStyle)
 	{
 		this.foldLineStyle = foldLineStyle;
 		repaint();
@@ -786,7 +791,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private Color eolMarkerColor;
 	private Color wrapGuideColor;
 
-	private SyntaxStyle foldLineStyle;
+	private SyntaxStyle[] foldLineStyle;
 
 	private boolean blockCaret;
 	private boolean lineHighlight;
@@ -883,9 +888,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 			else if(lineBackground.collapsedFold)
 			{
-				Font font = foldLineStyle.getFont();
+				Font font = lineBackground.foldLineStyle.getFont();
 				gfx.setFont(font);
-				gfx.setColor(foldLineStyle.getForegroundColor());
+				gfx.setColor(lineBackground.foldLineStyle.getForegroundColor());
 
 				int nextLine = textArea.getFoldVisibilityManager()
 					.getNextVisibleLine(physicalLine);
@@ -1006,10 +1011,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//}}}
 
+	//{{{ Inner classes
+
 	//{{{ PaintLineBackground class
 	class PaintLineBackground extends TextAreaExtension
 	{
 		boolean collapsedFold;
+		SyntaxStyle foldLineStyle;
 		Color bgColor;
 
 		//{{{ paintValidLine() method
@@ -1025,6 +1033,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& buffer.isFoldStart(physicalLine)
 				&& !textArea.getFoldVisibilityManager()
 				.isLineVisible(physicalLine + 1));
+
+			if(collapsedFold)
+			{
+				int level = buffer.getFoldLevel(physicalLine + 1);
+				if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+					level = Math.max(1,level / buffer.getIndentSize());
+				if(level > 3)
+					level = 0;
+				foldLineStyle = TextAreaPainter.this.foldLineStyle[level];
+			}
 
 			int caret = textArea.getCaretPosition();
 			boolean paintLineHighlight = isLineHighlightEnabled()
@@ -1253,4 +1271,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				fm.getHeight() - 1);
 		}
 	} //}}}
+
+	//}}}
 }

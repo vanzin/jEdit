@@ -75,7 +75,7 @@ public class ExplicitFoldHandler extends FoldHandler
 					openingBrackets++;
 					if(openingBrackets == 3)
 					{
-						foldLevel += tabSize;
+						foldLevel++;
 						openingBrackets = 0;
 					}
 					break;
@@ -84,8 +84,8 @@ public class ExplicitFoldHandler extends FoldHandler
 					closingBrackets++;
 					if(closingBrackets == 3)
 					{
-						if(foldLevel >= tabSize)
-							foldLevel -= tabSize;
+						if(foldLevel > 0)
+							foldLevel--;
 						closingBrackets = 0;
 					}
 					break;

@@ -2165,17 +2165,6 @@ public class Buffer implements EBComponent
 		return retVal;
 	} //}}}
 
-	//{{{ getTokenMarker() method
-	/**
-	 * This method is only public so that the <code>OffsetManager</code>
-	 * class can use it.
-	 * @since jEdit 4.0pre1
-	 */
-	public TokenMarker getTokenMarker()
-	{
-		return tokenMarker;
-	} //}}}
-
 	//}}}
 
 	//{{{ Indentation
@@ -3011,6 +3000,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 			end--;
 
 		return new int[] { start, end };
+	} //}}}
+
+	//{{{ getFoldHandler() method
+	/**
+	 * Returns the current buffer's fold handler.
+	 * @since jEdit 4.2pre1
+	 */
+	public FoldHandler getFoldHandler()
+	{
+		return foldHandler;
 	} //}}}
 
 	//}}}

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,7 +327,10 @@ public class DefaultInputHandler extends InputHandler
 			invokeAction((EditAction)o);
 		}
 		else
+		{
+			setCurrentBindings(bindings);
 			userInput(c);
+		}
 	} //}}}
 
 	//{{{ setModifierMapping() method

@@ -779,35 +779,29 @@ public class View extends JFrame implements EBComponent
 		}
 	} //}}}
 
-	//{{{ getSplitConfig() method
+	//{{{ getViewConfig() method
 	/**
-	 * Returns a string that can be passed to the view constructor to
-	 * recreate the current split configuration in a new view.
-	 * @since jEdit 3.2pre2
+	 * @since jEdit 4.2pre1
 	 */
-	public String getSplitConfig()
+	public ViewConfig getViewConfig()
 	{
-		// this code isn't finished yet
-
 		StringBuffer splitConfig = new StringBuffer();
-		//if(splitPane != null)
-		//	getSplitConfig(splitPane,splitConfig);
-		//else
-			splitConfig.append(getBuffer().getPath());
-		return splitConfig.toString();
-	} //}}}
-
-	//{{{ updateGutterBorders() method
-	/**
-	 * Updates the borders of all gutters in this view to reflect the
-	 * currently focused text area.
-	 * @since jEdit 2.6final
-	 */
-	public void updateGutterBorders()
-	{
-		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-			editPanes[i].getTextArea().getGutter().updateBorder();
+		if(splitPane != null)
+			getSplitConfig(splitPane,splitConfig);
+		else
+		{
+			splitConfig.append(getBuffer().getIndex());
+			splitConfig.append(" buffer");
+		}
+		return new ViewConfig(
+			isPlainView(),
+			splitConfig.toString(),
+			getX(),
+			getY(),
+			getWidth(),
+			getHeight(),
+			GUIUtilities.getExtendedState(this)
+		);
 	} //}}}
 
 	//}}}
@@ -969,9 +963,7 @@ public class View extends JFrame implements EBComponent
 		if(actionBar.getParent() == null)
 			addToolBar(BOTTOM_GROUP,ACTION_BAR_LAYER,actionBar);
 
-		actionBar.getField().setText(null);
-		actionBar.getField().requestFocus();
-		actionBar.getField().selectAll();
+		actionBar.goToActionBar();
 	} //}}}
 
 	//{{{ isClosed() method
@@ -1080,6 +1072,8 @@ public class View extends JFrame implements EBComponent
 		addWindowListener(new WindowHandler());
 
 		dockableWindowManager.init();
+
+		pack();
 	} //}}}
 
 	//{{{ close() method
@@ -1090,8 +1084,6 @@ public class View extends JFrame implements EBComponent
 		// save dockable window geometry, and close 'em
 		dockableWindowManager.close();
 
-		GUIUtilities.saveGeometry(this,(plainView ? "plain-view"
-			: "view"));
 		EditBus.removeFromBus(this);
 		dispose();
 
@@ -1201,26 +1193,31 @@ public class View extends JFrame implements EBComponent
 	private void getSplitConfig(JSplitPane splitPane,
 		StringBuffer splitConfig)
 	{
-		Component left = splitPane.getLeftComponent();
-		if(left instanceof JSplitPane)
-			getSplitConfig((JSplitPane)left,splitConfig);
-		else
-		{
-			splitConfig.append('\t');
-			splitConfig.append(((EditPane)left).getBuffer().getPath());
-		}
-
 		Component right = splitPane.getRightComponent();
 		if(right instanceof JSplitPane)
 			getSplitConfig((JSplitPane)right,splitConfig);
 		else
 		{
-			splitConfig.append('\t');
-			splitConfig.append(((EditPane)right).getBuffer().getPath());
+			splitConfig.append(((EditPane)right).getBuffer().getIndex());
+			splitConfig.append(" buffer");
 		}
 
+		splitConfig.append(' ');
+
+		Component left = splitPane.getLeftComponent();
+		if(left instanceof JSplitPane)
+			getSplitConfig((JSplitPane)left,splitConfig);
+		else
+		{
+			splitConfig.append(((EditPane)left).getBuffer().getIndex());
+			splitConfig.append(" buffer");
+		}
+
+		splitConfig.append(' ');
+		splitConfig.append(splitPane.getDividerLocation());
+		splitConfig.append(' ');
 		splitConfig.append(splitPane.getOrientation()
-			== JSplitPane.VERTICAL_SPLIT ? "\tvertical" : "\thorizontal");
+			== JSplitPane.VERTICAL_SPLIT ? "vertical" : "horizontal");
 	} //}}}
 
 	//{{{ restoreSplitConfig() method
@@ -1231,38 +1228,43 @@ public class View extends JFrame implements EBComponent
 		else if(splitConfig == null)
 			return (editPane = createEditPane(jEdit.getFirstBuffer()));
 
+		Buffer[] buffers = jEdit.getBuffers();
+
 		Stack stack = new Stack();
 
-		StringTokenizer st = new StringTokenizer(splitConfig,"\t");
+		StringTokenizer st = new StringTokenizer(splitConfig);
 
 		while(st.hasMoreTokens())
 		{
 			String token = st.nextToken();
-			if(token.equals("vertical"))
+			if(token.equals("vertical") || token.equals("horizontal"))
 			{
+				int orientation = (token.equals("vertical")
+					? JSplitPane.VERTICAL_SPLIT
+					: JSplitPane.HORIZONTAL_SPLIT);
+				int divider = Integer.parseInt((String)stack.pop());
 				stack.push(splitPane = new JSplitPane(
-					JSplitPane.VERTICAL_SPLIT,
+					orientation,
 					(Component)stack.pop(),
 					(Component)stack.pop()));
+				splitPane.setOneTouchExpandable(true);
 				splitPane.setBorder(null);
-				splitPane.setDividerLocation(0.5);
+				splitPane.setMinimumSize(new Dimension(0,0));
+				splitPane.setDividerLocation(divider);
 			}
-			else if(token.equals("horizontal"))
+			else if(token.equals("buffer"))
 			{
-				stack.push(splitPane = new JSplitPane(
-					JSplitPane.HORIZONTAL_SPLIT,
-					(Component)stack.pop(),
-					(Component)stack.pop()));
-				splitPane.setBorder(null);
-				splitPane.setDividerLocation(0.5);
-			}
-			else
-			{
-				buffer = jEdit.getBuffer(token);
+				int index = Integer.parseInt((String)stack.pop());
+				if(index < buffers.length && index > 0)
+					buffer = buffers[index];
 				if(buffer == null)
 					buffer = jEdit.getFirstBuffer();
 
 				stack.push(editPane = createEditPane(buffer));
+			}
+			else
+			{
+				stack.push(token);
 			}
 		}
 
@@ -1400,6 +1402,19 @@ public class View extends JFrame implements EBComponent
 		}
 	} //}}}
 
+	//{{{ updateGutterBorders() method
+	/**
+	 * Updates the borders of all gutters in this view to reflect the
+	 * currently focused text area.
+	 * @since jEdit 2.6final
+	 */
+	private void updateGutterBorders()
+	{
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+			editPanes[i].getTextArea().getGutter().updateBorder();
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -1484,6 +1499,30 @@ public class View extends JFrame implements EBComponent
 		public void windowClosing(WindowEvent evt)
 		{
 			jEdit.closeView(View.this);
+		}
+	} //}}}
+
+	//{{{ ViewConfig class
+	public static class ViewConfig
+	{
+		public boolean plainView;
+		public String splitConfig;
+		public int x, y, width, height, extState;
+
+		public ViewConfig()
+		{
+		}
+
+		public ViewConfig(boolean plainView, String splitConfig,
+			int x, int y, int width, int height, int extState)
+		{
+			this.plainView = plainView;
+			this.splitConfig = splitConfig;
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.extState = extState;
 		}
 	} //}}}
 

@@ -73,8 +73,7 @@ class Autosave implements ActionListener
 			+ "%"); */
 
 		// save list of open files
-		if(jEdit.getFirstView() != null)
-			jEdit.saveOpenFiles(jEdit.getFirstView());
+		PerspectiveManager.savePerspective();
 
 		Buffer[] bufferArray = jEdit.getBuffers();
 		for(int i = 0; i < bufferArray.length; i++)

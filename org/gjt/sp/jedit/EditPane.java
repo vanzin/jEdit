@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.*;
 //}}}
 
@@ -406,14 +407,19 @@ public class EditPane extends JPanel implements EBComponent
 			"view.antiAlias"));
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
-		painter.setStyles(GUIUtilities.loadStyles(
-			jEdit.getProperty("view.font"),
-			jEdit.getIntegerProperty("view.fontsize",12)));
 
-		painter.setFoldLineStyle(GUIUtilities.parseStyle(
-			jEdit.getProperty("view.style.foldLine"),
-			jEdit.getProperty("view.font"),
-			jEdit.getIntegerProperty("view.fontsize",12)));
+		String defaultFont = jEdit.getProperty("view.font");
+		int defaultFontSize = jEdit.getIntegerProperty("view.fontsize",12);
+		painter.setStyles(GUIUtilities.loadStyles(defaultFont,defaultFontSize));
+
+		SyntaxStyle[] foldLineStyle = new SyntaxStyle[4];
+		for(int i = 0; i <= 3; i++)
+		{
+			foldLineStyle[i] = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.foldLine." + i),
+				defaultFont,defaultFontSize);
+		}
+		painter.setFoldLineStyle(foldLineStyle);
 		Gutter gutter = textArea.getGutter();
 		gutter.setExpanded(jEdit.getBooleanProperty(
 			"view.gutter.lineNumbers"));

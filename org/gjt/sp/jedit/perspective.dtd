@@ -1,0 +1,20 @@
+<!ENTITY % att-bool '( TRUE | FALSE )' >
+
+<!-- PERSPECTIVE element -->
+<!ELEMENT PERSPECTIVE ( BUFFER | VIEW )* >
+
+<!-- BUFFER element -->
+<!ELEMENT BUFFER ( #PCDATA ) >
+
+<!-- VIEW element -->
+<!ELEMENT VIEW ( PANES ) >
+<!ATTLIST VIEW
+	PLAIN %att-bool; "FALSE"
+	X CDATA #IMPLIED
+	Y CDATA #IMPLIED
+	WIDTH CDATA #IMPLIED
+	HEIGHT CDATA #IMPLIED
+	EXT_STATE CDATA #IMPLIED >
+
+<!-- PANES element -->
+<!ELEMENT PANES ( #PCDATA ) >

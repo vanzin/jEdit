@@ -300,7 +300,7 @@ public class BeanShell
 				}
 			}
 
-			setupDefaultVariables(interp,view);
+			setupDefaultVariables(namespace,view);
 			interp.set("scriptPath",path);
 
 			running = true;
@@ -334,7 +334,7 @@ public class BeanShell
 				// no need to do this for macros!
 				if(!ownNamespace)
 				{
-					resetDefaultVariables(interp);
+					resetDefaultVariables(namespace);
 					interp.unset("scriptPath");
 				}
 			}
@@ -393,7 +393,7 @@ public class BeanShell
 
 		try
 		{
-			setupDefaultVariables(interp,view);
+			setupDefaultVariables(namespace,view);
 			return interp.eval(command);
 		}
 		catch(Exception e)
@@ -406,7 +406,7 @@ public class BeanShell
 		{
 			try
 			{
-				resetDefaultVariables(interp);
+				resetDefaultVariables(namespace);
 			}
 			catch(EvalError e)
 			{
@@ -469,14 +469,7 @@ public class BeanShell
 
 		try
 		{
-			if(view != null)
-			{
-				namespace.setVariable("view",view);
-				EditPane editPane = view.getEditPane();
-				namespace.setVariable("editPane",editPane);
-				namespace.setVariable("buffer",editPane.getBuffer());
-				namespace.setVariable("textArea",editPane.getTextArea());
-			}
+			setupDefaultVariables(namespace,view);
 
 			Object retVal = method.invoke(useNamespace
 				? new Object[] { namespace }
@@ -500,20 +493,7 @@ public class BeanShell
 		}
 		finally
 		{
-			if(view != null)
-			{
-				try
-				{
-					namespace.setVariable("view",null);
-					namespace.setVariable("editPane",null);
-					namespace.setVariable("buffer",null);
-					namespace.setVariable("textArea",null);
-				}
-				catch(EvalError e)
-				{
-					// can't do much
-				}
-			}
+			resetDefaultVariables(namespace);
 		}
 	} //}}}
 
@@ -628,29 +608,29 @@ public class BeanShell
 	//}}}
 
 	//{{{ setupDefaultVariables() method
-	private static void setupDefaultVariables(Interpreter interp, View view)
+	private static void setupDefaultVariables(NameSpace namespace, View view)
 		throws EvalError
 	{
 		if(view != null)
 		{
 			EditPane editPane = view.getEditPane();
-			interp.set("view",view);
-			interp.set("editPane",editPane);
-			interp.set("buffer",editPane.getBuffer());
-			interp.set("textArea",editPane.getTextArea());
-			interp.set("wm",view.getDockableWindowManager());
+			namespace.setVariable("view",view);
+			namespace.setVariable("editPane",editPane);
+			namespace.setVariable("buffer",editPane.getBuffer());
+			namespace.setVariable("textArea",editPane.getTextArea());
+			namespace.setVariable("wm",view.getDockableWindowManager());
 		}
 	} //}}}
 
 	//{{{ resetDefaultVariables() method
-	private static void resetDefaultVariables(Interpreter interp)
+	private static void resetDefaultVariables(NameSpace namespace)
 		throws EvalError
 	{
-		interp.unset("view");
-		interp.unset("editPane");
-		interp.unset("buffer");
-		interp.unset("textArea");
-		interp.unset("wm");
+		namespace.setVariable("view",null);
+		namespace.setVariable("editPane",null);
+		namespace.setVariable("buffer",null);
+		namespace.setVariable("textArea",null);
+		namespace.setVariable("wm",null);
 	} //}}}
 
 	//{{{ unwrapException() method

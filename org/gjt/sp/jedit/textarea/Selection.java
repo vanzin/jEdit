@@ -443,41 +443,46 @@ public abstract class Selection implements Cloneable
 
 				buffer.remove(rectStart + lineStart,rectEnd - rectStart);
 
-				int index = 2 * (i - startLine);
-
-				int endWhitespace;
-				if(rectEnd == lineLen)
-					endWhitespace = 0;
-				else if(i - startLine >= totalLines)
-					endWhitespace = maxWidth - startColumn;
-				else
-				{
-					endWhitespace = maxWidth
-						- ((Integer)lines.get(index+1))
-						.intValue();
-				}
-
-				String str = (i - startLine >= totalLines
-					? "" : (String)lines.get(index));
 				if(startWhitespace != 0)
 				{
 					buffer.insert(rectStart + lineStart,
 						MiscUtilities.createWhiteSpace(startWhitespace,0));
 				}
 
-				buffer.insert(rectStart + lineStart + startWhitespace,str);
+				int endWhitespace;
+				if(totalLines == 0)
+				{
+					if(rectEnd == lineLen)
+						endWhitespace = 0;
+					else
+						endWhitespace = maxWidth - startColumn;
+				}
+				else
+				{
+					int index = 2 * ((i - startLine) % totalLines);
+					String str = (String)lines.get(index);
+					buffer.insert(rectStart + lineStart + startWhitespace,str);
+					if(rectEnd == lineLen)
+						endWhitespace = 0;
+					else
+					{
+						endWhitespace = maxWidth
+							- ((Integer)lines.get(index+1))
+							.intValue();
+					}
+					startWhitespace += str.length();
+				}
 
 				if(endWhitespace != 0)
 				{
 					buffer.insert(rectStart + lineStart
-						+ startWhitespace + str.length(),
+						+ startWhitespace,
 						MiscUtilities.createWhiteSpace(endWhitespace,0));
 				}
 
 				endOffset = rectStart + lineStart
 					+ startWhitespace
-					+ endWhitespace
-					+ str.length();
+					+ endWhitespace;
 			} //}}}
 
 			//{{{ Move the caret down a line

@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.awt.Toolkit;
-import org.gjt.sp.jedit.buffer.OffsetManager;
+import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -771,7 +771,8 @@ public class FoldVisibilityManager
 			offsetMgr.setVirtualLineCount(index,buffer.getLineCount());
 
 			int newVirtualLineCount = 0;
-			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
 			/* this ensures that the first line is always visible */
 			boolean seenVisibleLine = false;

@@ -3287,9 +3287,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 
 			String str = String.valueOf(ch);
-			if(selection.size() != 0)
+			Selection[] selection = getSelection();
+			if(selection.length != 0)
 			{
-				setSelectedText(str);
+				for(int i = 0; i < selection.length; i++)
+				{
+					Selection s = selection[i];
+					setSelectedText(s,str);
+					/* if(s instanceof Selection.Rect)
+					{
+						addToSelection(new Selection.Rect(
+							s.start + 1,s.end + 1));
+					} */
+				}
 				return;
 			}
 
