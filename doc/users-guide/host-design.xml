@@ -90,7 +90,7 @@ The JARClassLoader</title>
         docking or floating window containing the visible components of
         each plugin contained in the archive. This code is contained in an
         XML file named <filename>dockables.xml</filename> and located at the top
-        level of the archive file. See <xref linkend="api-resources-activiation" />.
+        level of the archive file. <!-- See <xref linkend="api-resources-activation" /> -->.
         This file is required if the plugin provides for a docking or
         floating window.
       </para></listitem>
