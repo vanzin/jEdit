@@ -47,17 +47,18 @@ public class MacOSPlugin extends EBPlugin
 	public void start()
 	{
 		if(osok = osok())
-		{	
+		{
 			delegate = new Delegate();
 			NSApplication app = NSApplication.sharedApplication();
 			
-			// Register handlers
 			Macros.registerHandler(new AppleScriptHandler());
 			Application app2 = new Application();
 			app2.addApplicationListener(delegate);
 			app2.setEnabledPreferencesMenu(true);
+			
 			app.setDelegate(delegate);
 			app.setServicesProvider(delegate);
+			app.setServicesMenu(new NSMenu("jEdit"));
 		}
 	}//}}}
 	
