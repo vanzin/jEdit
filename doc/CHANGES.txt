@@ -38,6 +38,9 @@ JEDIT 4.0 VERSION HISTORY
   the fix for this didn't break AltGR sequences; let me know if it did
 - 'Run Last Macro' and 'Run Other Macro' commands assumed the macro was
   written in BeanShell (Mike Dillon)
+- 'Toggle Line Comment' macro was broken
+- Hard wrap didn't work properly if space was pressed at the end of a
+  line whose length was exactly that of the wrap margin
 
 + API Additions
 
