@@ -86,39 +86,46 @@ public class PositionManager
 			root.contentRemoved(offset,length);
 	} //}}}
 
+	//{{{ removeAll() method
+	void removeAll()
+	{
+		java.util.List all = new java.util.ArrayList();
+		get(root,all);
+		for(int i = 0; i < all.size(); i++)
+		{
+			removePosition((PosBottomHalf)all.get(i));
+		}
+	}
+
+	void get(PosBottomHalf node, java.util.List list)
+	{
+		if(node == null)
+			return;
+		get(node.left,list);
+		list.add(node);
+		get(node.right,list);
+	} //}}}
+
 	//{{{ Private members
 	private PosBottomHalf root;
 
 	//{{{ removePosition() method
 	private synchronized void removePosition(PosBottomHalf bh)
 	{
+		if(Debug.POSITION_DEBUG)
+			Log.log(Log.DEBUG,this,"killing " + bh);
 		PosBottomHalf r, x = bh.parent;
-
-		bh.defunct = true;
-
-		if(bh.parent != null)
-		{
-			if(bh.parent.defunct)
-			{
-				System.err.println("defunct: " +bh.parent);
-				return;
-			}
-			if(bh.parent.parent != null)
-			{
-				if(bh.parent.parent.defunct)
-				{
-					System.err.println("defunct: " +bh.parent.parent);
-					return;
-				}
-			}
-		}
 
 		// if one of the siblings is null, make &this=non null sibling
 		if(bh.left == null)
 		{
 			r = bh.right;
 			if(bh.parent == null)
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"simple/left: setting root to " + bh.right);
 				root = bh.right;
+			}
 			else
 			{
 				if(bh == bh.parent.left)
@@ -127,13 +134,21 @@ public class PositionManager
 					bh.parent.right = bh.right;
 			}
 			if(bh.right != null)
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"134: " + bh.right+":"+bh.parent);
 				bh.right.parent = bh.parent;
+			}
 		}
 		else if(bh.right == null)
 		{
 			r = bh.left;
 			if(bh.parent == null)
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"simple/right: setting root " + bh.left);
 				root = bh.left;
+			}
 			else
 			{
 				if(bh == bh.parent.left)
@@ -142,7 +157,11 @@ public class PositionManager
 					bh.parent.right = bh.left;
 			}
 			if(bh.left != null)
+			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"155: "+bh.left+":" + bh.parent);
 				bh.left.parent = bh.parent;
+			}
 		}
 		// neither is null
 		else
@@ -157,6 +176,8 @@ public class PositionManager
 			// removing the root?
 			if(bh.parent == null)
 			{
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"nextInorder: setting root to " + nextInorder);
 				root = nextInorder;
 			}
 			else
@@ -172,33 +193,33 @@ public class PositionManager
 				nextInorder.parent.left = nextInorder.right;
 				if(nextInorder.right != null)
 				{
+					if(Debug.POSITION_DEBUG)
+						Log.log(Log.DEBUG,this,"182: "+nextInorder.right+":" + nextInorder.parent);
 					nextInorder.right.parent = nextInorder.parent;
 				}
 				nextInorder.right = bh.right;
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"186: "+nextInorder.right+":" + nextInorder);
 				nextInorder.right.parent = nextInorder;
 			}
+			x = nextInorder.parent;
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"189: "+nextInorder+":" + bh.parent);
 			nextInorder.parent = bh.parent;
 			nextInorder.left = bh.left;
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"192: "+nextInorder.left+":" + nextInorder);
 			nextInorder.left.parent = nextInorder;
-			x = nextInorder.parent;
 		}
 
 		if(!bh.red)
 		{
 			if(r != null && r.red)
 				r.red = false;
-			else
+			else if(x != null && r != null)
 			{
-				PosBottomHalf y;
-				if(x == null)
-					y = null;
-				else if(x.left == r)
-					y = x.right;
-				else
-					y = x.left;
-
 				if(!Debug.DISABLE_POSITION_BALANCE)
-					rbalance(r,x,y);
+					rbalance(r,x);
 			}
 		}
 
@@ -212,11 +233,7 @@ public class PositionManager
 		if(bh.parent.red)
 		{
 			PosBottomHalf u = bh.parent.parent;
-			PosBottomHalf w;
-			if(u.left == bh.parent)
-				w = u.right;
-			else
-				w = u.left;
+			PosBottomHalf w = bh.parent.sibling();
 			if(w != null && w.red)
 			{
 				if(Debug.POSITION_DEBUG)
@@ -244,13 +261,31 @@ public class PositionManager
 	} //}}}
 
 	//{{{ rbalance() method
-	private void rbalance(PosBottomHalf r, PosBottomHalf x,
-		PosBottomHalf y)
+	private void rbalance(PosBottomHalf r, PosBottomHalf x)
 	{
+		PosBottomHalf y = r.sibling();
 		PosBottomHalf z;
 
-		if(y != null && !y.red)
+		if(y.red)
 		{
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"case 3");
+			if(x.right == y)
+				z = y.right;
+			else if(x.left == y)
+				z = y.left;
+			else
+				throw new InternalError();
+			PosBottomHalf b = z.restructure();
+			y.red = false;
+			x.red = true;
+
+			// different meaning of x and y
+			rbalance(r,r.sibling());
+		}
+		else
+		{
+			r.red = false;
 			if(y.left != null && y.left.red)
 				z = y.left;
 			else if(y.right != null && y.right.red)
@@ -258,17 +293,12 @@ public class PositionManager
 			else
 			{
 				if(Debug.POSITION_DEBUG)
-					Log.log(Log.DEBUG,this,"case 3");
-				if(x.left == y)
-					z = y.right;
-				else
-					z = y.left;
-				PosBottomHalf b = z.restructure();
-				y.red = false;
-				x.red = true;
-
-				// different meaning of x and y
-				rbalance(r,b.right,b);
+					Log.log(Log.DEBUG,this,"case 2");
+				y.red = true;
+				if(x.red)
+					x.red = false;
+				else if(x.parent != null)
+					rbalance(x,x.parent);
 				return;
 			}
 
@@ -280,17 +310,6 @@ public class PositionManager
 			b.left.red = false;
 			b.right.red = false;
 			b.red = oldXRed;
-		}
-		else if((y.left == null || !y.left.red)
-			&& (y.right != null && y.right.red))
-		{
-			if(Debug.POSITION_DEBUG)
-				Log.log(Log.DEBUG,this,"case 2");
-			y.red = true;
-			if(x.red)
-				x.red = false;
-			else
-				rbalance(r,x,x.parent);
 		}
 	} //}}}
 
@@ -334,7 +353,6 @@ public class PositionManager
 		PosBottomHalf parent;
 		PosBottomHalf left, right;
 		boolean red;
-		boolean defunct;
 
 		//{{{ PosBottomHalf constructor
 		PosBottomHalf(int offset)
@@ -368,6 +386,8 @@ public class PositionManager
 			{
 				if(left == null)
 				{
+					if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"382: "+pos+":" + this);
 					pos.parent = this;
 					left = pos;
 				}
@@ -378,6 +398,8 @@ public class PositionManager
 			{
 				if(right == null)
 				{
+					if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
 					pos.parent = this;
 					right = pos;
 				}
@@ -405,6 +427,17 @@ public class PositionManager
 				else
 					return left.find(offset);
 			}
+		} //}}}
+
+		//{{{ sibling() method
+		PosBottomHalf sibling()
+		{
+			if(parent.left == this)
+				return parent.right;
+			else if(parent.right == this)
+				return parent.left;
+			else
+				throw new InternalError();
 		} //}}}
 
 		//{{{ contentInserted() method
@@ -562,21 +595,28 @@ public class PositionManager
 			}
 			else
 			{
-				System.err.println("setting root to " + nodes[3]);
+				if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"restructure: setting root to " + nodes[3]);
 				root = nodes[3];
 			}
 
 			// Write-only code for constructing a meaningful tree
+			if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"583: "+nodes[1]+":" + nodes[3]);
 			nodes[1].parent = nodes[3];
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
 
 			if(Debug.POSITION_DEBUG)
 				Log.log(Log.DEBUG,this,"setting parent to " + t);
+			if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"590: " + nodes[3]+":" + t);
 			nodes[3].parent = t;
 			nodes[3].left   = nodes[1];
 			nodes[3].right  = nodes[5];
 
+			if(Debug.POSITION_DEBUG)
+Log.log(Log.DEBUG,this,"595: "+nodes[5]+":" + nodes[3]);
 			nodes[5].parent = nodes[3];
 			nodes[5].left   = nodes[4];
 			nodes[5].right  = nodes[6];
