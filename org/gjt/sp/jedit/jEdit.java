@@ -421,8 +421,24 @@ public class jEdit
 					server.start();
 
 				GUIUtilities.hideSplashScreen();
+
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
+
+				//{{{ Report any plugin errors
+				if(pluginErrors != null)
+				{
+					String caption = jEdit.getProperty(
+						"plugin-error.caption" + (pluginErrors.size() == 1
+						? "-1" : ""),new Integer[] {
+						new Integer(pluginErrors.size()) });
+
+					new ErrorListDialog(
+						jEdit.getFirstView(),
+						jEdit.getProperty("plugin-error.title"),
+						caption,pluginErrors,true);
+					pluginErrors.removeAllElements();
+				} //}}}
 			}
 		}); //}}}
 	} //}}}
@@ -2419,26 +2435,6 @@ public class jEdit
 
 		pluginErrors.addElement(new ErrorListDialog.ErrorEntry(
 			path,messageProp,args));
-
-		if(pluginErrors.size() == 1)
-		{
-			final String caption = jEdit.getProperty(
-				"plugin-error.caption" + (pluginErrors.size() == 1
-				? "-1" : ""),new Integer[] {
-				new Integer(pluginErrors.size()) });
-
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					new ErrorListDialog(
-						jEdit.getFirstView(),
-						jEdit.getProperty("plugin-error.title"),
-						caption,pluginErrors,true);
-					pluginErrors.removeAllElements();
-				}
-			});
-		}
 	} //}}}
 
 	//}}}

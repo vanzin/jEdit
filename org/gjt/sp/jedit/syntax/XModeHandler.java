@@ -1,5 +1,8 @@
 /*
  * XModeHandler.java - XML handler for mode files
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999 mike dillon
  * Portions copyright (C) 2000, 2001 Slava Pestov
  *
@@ -20,26 +23,27 @@
 
 package org.gjt.sp.jedit.syntax;
 
+//{{{ Imports
 import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Stack;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}
 
 public class XModeHandler extends HandlerBase
 {
-	// public members
+	//{{{ XModeHandler constructor
 	public XModeHandler (XmlParser parser, String modeName, String path)
 	{
 		this.modeName = modeName;
 		this.parser = parser;
 		this.path = path;
 		stateStack = new Stack();
-	}
+	} //}}}
 
-	// begin HandlerBase implementation
+	//{{{ resolveEntity() method
 	public Object resolveEntity(String publicId, String systemId)
 	{
 		if("xmode.dtd".equals(systemId))
@@ -57,8 +61,9 @@ public class XModeHandler extends HandlerBase
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ attribute() method
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
 		String tag = peekElement();
@@ -136,16 +141,18 @@ public class XModeHandler extends HandlerBase
 		{
 			lastDefaultID = stringToToken(value);
 		}
-	}
+	} //}}}
 
+	//{{{ doctypeDecl() method
 	public void doctypeDecl(String name, String publicId,
 		String systemId) throws Exception
 	{
 		if ("MODE".equalsIgnoreCase(name)) return;
 
 		error("doctype-invalid",name);
-	}
+	} //}}}
 
+	//{{{ charData() method
 	public void charData(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -169,8 +176,9 @@ public class XModeHandler extends HandlerBase
 		{
 			lastKeyword = text;
 		}
-	}
+	} //}}}
 
+	//{{{ startElement() method
 	public void startElement (String tag)
 	{
 		tag = pushElement(tag);
@@ -190,14 +198,15 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (tag == "RULES")
 		{
-			rules = new ParserRuleSet();
+			rules = new ParserRuleSet(mode);
 			rules.setIgnoreCase(lastIgnoreCase);
 			rules.setHighlightDigits(lastHighlightDigits);
 			rules.setEscape(lastEscape);
 			rules.setDefault(lastDefaultID);
 		}
-	}
+	} //}}}
 
+	//{{{ endElement() method
 	public void endElement (String name)
 	{
 		if (name == null) return;
@@ -206,28 +215,34 @@ public class XModeHandler extends HandlerBase
 
 		if (name.equalsIgnoreCase(tag))
 		{
+			//{{{ MODE
 			if (tag == "MODE")
 			{
 				mode.init();
 				mode.setTokenMarker(marker);
-			}
+			} //}}}
+			//{{{ PROPERTY
 			else if (tag == "PROPERTY")
 			{
-				try
-				{
-					mode.setProperty(propName,
-						new Integer(propValue));
-				}
-				catch(NumberFormatException nf)
-				{
-					mode.setProperty(propName,propValue);
-				}
-			}
+				props.put(propName,propValue);
+			} //}}}
+			//{{{ PROPS
+			else if (tag == "PROPS")
+			{
+				if(peekElement().equals("RULES"))
+					rules.setProperties(props);
+				else
+					mode.setProperties(props);
+
+				props = new Hashtable();
+			} //}}}
+			//{{{ KEYWORDS
 			else if (tag == "KEYWORDS")
 			{
 				keywords.setIgnoreCase(lastIgnoreCase);
 				lastIgnoreCase = true;
-			}
+			} //}}}
+			//{{{ RULES
 			else if (tag == "RULES")
 			{
 				rules.setKeywords(keywords);
@@ -239,12 +254,14 @@ public class XModeHandler extends HandlerBase
 				lastHighlightDigits = false;
 				lastDefaultID = Token.NULL;
 				rules = null;
-			}
+			} //}}}
+			//{{{ TERMINATE
 			else if (tag == "TERMINATE")
 			{
-				setTerminateChar(termChar);
+				rules.setTerminateChar(termChar);
 				termChar = -1;
-			}
+			} //}}}
+			//{{{ WHITESPACE
 			else if (tag == "WHITESPACE")
 			{
 				if(lastStart == null)
@@ -253,11 +270,12 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				addRule(ParserRuleFactory.createWhitespaceRule(
+				rules.addRule(ParserRuleFactory.createWhitespaceRule(
 					lastStart));
 				lastStart = null;
 				lastEnd = null;
-			}
+			} //}}}
+			//{{{ EOL_SPAN
 			else if (tag == "EOL_SPAN")
 			{
 				if(lastStart == null)
@@ -266,7 +284,7 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				addRule(ParserRuleFactory.createEOLSpanRule(
+				rules.addRule(ParserRuleFactory.createEOLSpanRule(
 					lastStart,lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
 				lastStart = null;
@@ -274,7 +292,8 @@ public class XModeHandler extends HandlerBase
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
-			}
+			} //}}}
+			//{{{ MARK_PREVIOUS
 			else if (tag == "MARK_PREVIOUS")
 			{
 				if(lastStart == null)
@@ -283,7 +302,7 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				addRule(ParserRuleFactory
+				rules.addRule(ParserRuleFactory
 					.createMarkPreviousRule(lastStart,
 					lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
@@ -292,7 +311,8 @@ public class XModeHandler extends HandlerBase
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
-			}
+			} //}}}
+			//{{{ MARK_FOLLOWING
 			else if (tag == "MARK_FOLLOWING")
 			{
 				if(lastStart == null)
@@ -301,7 +321,7 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				addRule(ParserRuleFactory
+				rules.addRule(ParserRuleFactory
 					.createMarkFollowingRule(lastStart,
 					lastTokenID,lastAtLineStart,
 					lastExcludeMatch));
@@ -310,7 +330,8 @@ public class XModeHandler extends HandlerBase
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastExcludeMatch = false;
-			}
+			} //}}}
+			//{{{ SEQ
 			else if (tag == "SEQ")
 			{
 				if(lastStart == null)
@@ -319,13 +340,14 @@ public class XModeHandler extends HandlerBase
 					return;
 				}
 
-				addRule(ParserRuleFactory.createSequenceRule(
+				rules.addRule(ParserRuleFactory.createSequenceRule(
 					lastStart,lastTokenID,lastAtLineStart));
 				lastStart = null;
 				lastEnd = null;
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
-			}
+			} //}}}
+			//{{{ END
 			else if (tag == "END")
 			{
 				// empty END tags should be supported; see
@@ -338,7 +360,7 @@ public class XModeHandler extends HandlerBase
 
 				if (lastDelegateSet == null)
 				{
-					addRule(ParserRuleFactory
+					rules.addRule(ParserRuleFactory
 						.createSpanRule(lastStart,
 						lastEnd,lastTokenID,
 						lastNoLineBreak,
@@ -353,7 +375,7 @@ public class XModeHandler extends HandlerBase
 						lastDelegateSet = modeName + "::" + lastDelegateSet;
 					}
 
-					addRule(ParserRuleFactory
+					rules.addRule(ParserRuleFactory
 						.createDelegateSpanRule(
 						lastStart,lastEnd,
 						lastDelegateSet,
@@ -370,7 +392,8 @@ public class XModeHandler extends HandlerBase
 				lastExcludeMatch = false;
 				lastNoWordBreak = false;
 				lastDelegateSet = null;
-			}
+			} //}}}
+			//{{{ Keywords
 			else if (tag == "NULL")
 			{
 				addKeyword(lastKeyword,Token.NULL);
@@ -422,25 +445,28 @@ public class XModeHandler extends HandlerBase
 			else if (tag == "DIGIT")
 			{
 				addKeyword(lastKeyword,Token.DIGIT);
-			}
+			} //}}}
 		}
 		else
 		{
 			// can't happen
 			throw new InternalError();
 		}
-	}
+	} //}}}
 
+	//{{{ startDocument() method
 	public void startDocument()
 	{
 		marker = new TokenMarker();
 		marker.setName(modeName);
+		props = new Hashtable();
 
 		pushElement(null);
-	}
-	// end HandlerBase implementation
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private XmlParser parser;
 	private String modeName;
 	private String path;
@@ -451,6 +477,7 @@ public class XModeHandler extends HandlerBase
 	private Stack stateStack;
 	private String propName;
 	private String propValue;
+	private Hashtable props;
 	private String lastStart;
 	private String lastEnd;
 	private String lastKeyword;
@@ -467,7 +494,9 @@ public class XModeHandler extends HandlerBase
 	private boolean lastExcludeMatch;
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;
+	//}}}
 
+	//{{{ stringToToken() method
 	private byte stringToToken(String value)
 	{
 		if (value == "NULL")
@@ -531,8 +560,9 @@ public class XModeHandler extends HandlerBase
 			error("token-invalid",value);
 			return Token.NULL;
 		}
-	}
+	} //}}}
 
+	//{{{ addKeyword() method
 	private void addKeyword(String k, byte id)
 	{
 		if(k == null)
@@ -543,18 +573,9 @@ public class XModeHandler extends HandlerBase
 
 		if (keywords == null) return;
 		keywords.add(k,id);
-	}
+	} //}}}
 
-	private void addRule(ParserRule r)
-	{
-		rules.addRule(r);
-	}
-
-	private void setTerminateChar(int atChar)
-	{
-		rules.setTerminateChar(atChar);
-	}
-
+	//{{{ pushElement() method
 	private String pushElement(String name)
 	{
 		name = (name == null) ? null : name.intern();
@@ -562,39 +583,45 @@ public class XModeHandler extends HandlerBase
 		stateStack.push(name);
 
 		return name;
-	}
+	} //}}}
 
+	//{{{ peekElement() method
 	private String peekElement()
 	{
 		return (String) stateStack.peek();
-	}
+	} //}}}
 
+	//{{{ popElement() method
 	private String popElement()
 	{
 		return (String) stateStack.pop();
-	}
+	} //}}}
 
+	//{{{ error() method
 	private void error(String msg)
 	{
 		_error(jEdit.getProperty("xmode-error." + msg));
-	}
+	} //}}}
 
+	//{{{ error() method
 	private void error(String msg, String subst)
 	{
 		_error(jEdit.getProperty("xmode-error." + msg,new String[] { subst }));
-	}
+	} //}}}
 
+	//{{{ error() method
 	private void error(String msg, Throwable t)
 	{
 		_error(jEdit.getProperty("xmode-error." + msg,new String[] { t.toString() }));
 		Log.log(Log.ERROR,this,t);
-	}
+	} //}}}
 
+	//{{{ _error() method
 	private void _error(String msg)
 	{
 		Object[] args = { path, new Integer(parser.getLineNumber()),
 			new Integer(parser.getColumnNumber()), msg };
 
 		GUIUtilities.error(null,"xmode-error",args);
-	}
+	} //}}}
 }

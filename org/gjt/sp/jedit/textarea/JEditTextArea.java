@@ -3653,7 +3653,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void lineComment()
 	{
-		String comment = buffer.getStringProperty("lineComment");
+		String comment = buffer.getContextSensitiveProperty(caret,"lineComment");
 		if(!buffer.isEditable() || comment == null || comment.length() == 0)
 		{
 			getToolkit().beep();
@@ -3692,8 +3692,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void rangeComment()
 	{
-		String commentStart = buffer.getStringProperty("commentStart");
-		String commentEnd = buffer.getStringProperty("commentEnd");
+		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
+		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
 		if(!buffer.isEditable() || commentStart == null || commentEnd == null
 			|| commentStart.length() == 0 || commentEnd.length() == 0)
 		{

@@ -63,8 +63,6 @@ implements ActionListener, ListSelectionListener, MouseListener
 
 		clips.addMouseListener(this);
 		clips.addListSelectionListener(this);
-		if(clipHistory.getSize() >= 1)
-			clips.setSelectedIndex(0);
 
 		insert = new JButton(jEdit.getProperty("pasteprev.insert"));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
@@ -88,6 +86,9 @@ implements ActionListener, ListSelectionListener, MouseListener
 		panel.add(cancel);
 		panel.add(Box.createGlue());
 		content.add(panel, BorderLayout.SOUTH);
+
+		if(clipHistory.getSize() >= 1)
+			clips.setSelectedIndex(0);
 		updateButtons();
 
 		getRootPane().setDefaultButton(insert);

@@ -211,16 +211,19 @@ public class TokenMarker
 								markKeyword(tokenList,line,lastKeyword,pos);
 
 								tokenList.addToken(pos - lastOffset,
-									context.rules.getDefault());
+									context.rules.getDefault(),
+									context.rules);
 							}
 							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
 							{
 								tokenList.addToken(pos - lastOffset,
-									context.inRule.token);
+									context.inRule.token,
+									context.rules);
 							}
 							else
 							{
-								tokenList.addToken(pos - lastOffset, Token.INVALID);
+								tokenList.addToken(pos - lastOffset, Token.INVALID,
+									context.rules);
 							}
 						}
 
@@ -229,11 +232,14 @@ public class TokenMarker
 						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
 							tokenList.addToken(pattern.count,
-								context.rules.getDefault());
+								context.rules.getDefault(),
+								context.rules);
 						}
 						else
 						{
-							tokenList.addToken(pattern.count,context.inRule.token);
+							tokenList.addToken(pattern.count,
+								context.inRule.token,
+								context.rules);
 						}
 
 						context.inRule = null;
@@ -327,19 +333,23 @@ public class TokenMarker
 			if (context.inRule == null)
 			{
 				tokenList.addToken(lineLength - lastOffset,
-					context.rules.getDefault());
+					context.rules.getDefault(),
+					context.rules);
 			}
 			else if (
 				(context.inRule.action & SPAN) == SPAN &&
 				(context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) != 0
 			)
 			{
-				tokenList.addToken(lineLength - lastOffset,Token.INVALID);
+				tokenList.addToken(lineLength - lastOffset,Token.INVALID,
+					context.rules);
 				context.inRule = null;
 			}
 			else
 			{
-				tokenList.addToken(lineLength - lastOffset,context.inRule.token);
+				tokenList.addToken(lineLength - lastOffset,
+					context.inRule.token,
+					context.rules);
 
 				if((context.inRule.action & MARK_FOLLOWING) == MARK_FOLLOWING)
 				{
@@ -348,7 +358,7 @@ public class TokenMarker
 			}
 		} //}}}
 
-		tokenList.addToken(0,Token.END);
+		tokenList.addToken(0,Token.END,context.rules);
 
 		return context.intern();
 	} //}}}
@@ -425,11 +435,14 @@ public class TokenMarker
 		{
 			if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
 			{
-				tokenList.addToken(pos - lastOffset, Token.INVALID);
+				tokenList.addToken(pos - lastOffset, Token.INVALID,
+					context.rules);
 			}
 			else
 			{
-				tokenList.addToken(pos - lastOffset,context.inRule.token);
+				tokenList.addToken(pos - lastOffset,
+					context.inRule.token,
+					context.rules);
 			}
 			lastOffset = lastKeyword = pos;
 			context.inRule = null;
@@ -465,7 +478,8 @@ public class TokenMarker
 				if (lastOffset < pos)
 				{
 					tokenList.addToken(pos - lastOffset,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 				}
 			}
 
@@ -474,7 +488,8 @@ public class TokenMarker
 			//{{{ SEQ
 			case 0:
 				// this is a plain sequence rule
-				tokenList.addToken(pattern.count,checkRule.token);
+				tokenList.addToken(pattern.count,checkRule.token,
+					context.rules);
 				lastOffset = pos + pattern.count;
 
 				break;
@@ -489,7 +504,8 @@ public class TokenMarker
 					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 					{
 						tokenList.addToken(pattern.count,
-							context.rules.getDefault());
+							context.rules.getDefault(),
+							context.rules);
 						lastOffset = pos + pattern.count;
 					}
 					else
@@ -511,11 +527,14 @@ public class TokenMarker
 						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
 							tokenList.addToken(pattern.count,
-								context.rules.getDefault());
+								context.rules.getDefault(),
+								context.rules);
 						}
 						else
 						{
-							tokenList.addToken(pattern.count,checkRule.token);
+							tokenList.addToken(pattern.count,
+								checkRule.token,
+								context.rules);
 						}
 						lastOffset = pos + pattern.count;
 
@@ -530,14 +549,15 @@ public class TokenMarker
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					tokenList.addToken(pattern.count,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 					tokenList.addToken(lineLength - (pos + pattern.count),
-						checkRule.token);
+						checkRule.token,context.rules);
 				}
 				else
 				{
 					tokenList.addToken(lineLength - pos,
-						checkRule.token);
+						checkRule.token,context.rules);
 				}
 				lastOffset = lineLength;
 				lastKeyword = lineLength;
@@ -550,20 +570,23 @@ public class TokenMarker
 				if (lastKeyword > lastOffset)
 				{
 					tokenList.addToken(lastKeyword - lastOffset,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 					lastOffset = lastKeyword;
 				}
 
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pos - lastOffset, checkRule.token);
+					tokenList.addToken(pos - lastOffset,
+						checkRule.token,context.rules);
 					tokenList.addToken(pattern.count,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 				}
 				else
 				{
 					tokenList.addToken(pos - lastOffset + pattern.count,
-						checkRule.token);
+						checkRule.token,context.rules);
 				}
 				lastOffset = pos + pattern.count;
 
@@ -575,7 +598,8 @@ public class TokenMarker
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					tokenList.addToken(pattern.count,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 					lastOffset = pos + pattern.count;
 				}
 				else
@@ -603,14 +627,16 @@ public class TokenMarker
 				context.inRule = null;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pos - lastOffset,checkRule.token);
+					tokenList.addToken(pos - lastOffset,
+						checkRule.token,context.rules);
 					tokenList.addToken(pattern.count,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 				}
 				else
 				{
 					tokenList.addToken((pos + pattern.count) - lastOffset,
-						checkRule.token);
+						checkRule.token,context.rules);
 				}
 				lastKeyword = lastOffset = pos + pattern.count;
 
@@ -726,9 +752,10 @@ loop:			for(int i = 0; i < len; i++)
 				if(start != lastOffset)
 				{
 					tokenList.addToken(start - lastOffset,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 				}
-				tokenList.addToken(len,Token.DIGIT);
+				tokenList.addToken(len,Token.DIGIT,context.rules);
 				lastKeyword = lastOffset = end;
 
 				return;
@@ -744,9 +771,10 @@ loop:			for(int i = 0; i < len; i++)
 				if(start != lastOffset)
 				{
 					tokenList.addToken(start - lastOffset,
-						context.rules.getDefault());
+						context.rules.getDefault(),
+						context.rules);
 				}
-				tokenList.addToken(len, id);
+				tokenList.addToken(len,id,context.rules);
 				lastKeyword = lastOffset = end;
 			}
 		}

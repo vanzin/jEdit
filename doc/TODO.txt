@@ -1,37 +1,24 @@
 TO DO
 
-+ tomorrow:
-
-- noWordSep in editing option pane
-- fs browser: can get stuck in 'loading' if several requests started
-  - to fix, implement multiple simultaneously loading directories, and
-    better preservation of expansion state
-- document backup every save option
-- plugin manager needs overhauled error reporting
-- hypersearch follows caret position
-- hypersearch in selection: one node for each selection, fucked
-- readNextChar() fucks out with non-alpha characters
-- tags plugin fucks up search settings?
-- C+end/C+home: first/last virtual, not physical line
-- position bug still there
+- XModeHandler: better error reporting
 - documentation to do
+  - rule set property docs in part II
   - new folding
   - add index terms throughout user's guide!
   - changing heap memory docs
-  - tip about compareStrings()
-  - trailing EOL
   - 'evaluate for selected lines'
   - smart case insens replace
-  - write explicit folding tips
-  - API guide: compareStrings(), showPopupMenu()
-  - MiscUtilities path name methods need to be documented
+- fs browser: can get stuck in 'loading' if several requests started
+  - to fix, implement multiple simultaneously loading directories, and
+    better preservation of expansion state
 - search in directory: should not be so slow
-
-+ later:
-
+- plugin manager needs overhauled error reporting
+- hypersearch follows caret position
+- C+end/C+home: first/last virtual, not physical line
+- make text area's buffer event handler faster
+- API guide: compareStrings(), showPopupMenu()
+- MiscUtilities path name methods need to be documented
 - help: tree should have icons
-- browser.getDirectory().equals(path): what if path ends with /? eg in
-  CurrentDirectoryMenu
 - plugin guide: mention fully qualified class names
 - docking buttons not always hidden
 - allegedly redo doesn't redo everything?

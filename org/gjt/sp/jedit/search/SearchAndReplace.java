@@ -756,6 +756,7 @@ loop:			for(;;)
 		// Tags plugin likes to call this method at times other than
 		// startup; so we need to fire a SearchSettingsChanged to
 		// notify the search bar and so on.
+		matcher = null;
 		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
 

@@ -52,6 +52,7 @@ import org.gjt.sp.util.*;
  */
 public class Buffer implements EBComponent
 {
+
 	//{{{ Some constants
 	/**
 	 * Line separator property.
@@ -1100,6 +1101,26 @@ public class Buffer implements EBComponent
 			if(start >= end)
 				System.err.println(i + ":" + start + ":" + end);
 		}
+	}
+
+	public void testPositions(int positions, int inserts)
+	{
+		java.util.Vector v = new Vector();
+		java.util.Random random = new java.util.Random();
+		for(int i = 0; i < positions; i++)
+		{
+			v.addElement(createPosition(Math.abs(random.nextInt()) % getLength()));
+		}
+
+		long start = System.currentTimeMillis();
+
+		for(int i = 0; i < inserts; i++)
+		{
+			int pos = Math.abs(random.nextInt()) % getLength();
+			insert(pos,"a");
+		}
+
+		System.err.println(System.currentTimeMillis() - start);
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -1946,6 +1967,46 @@ public class Buffer implements EBComponent
 	public void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,new Integer(value));
+	} //}}}
+
+	//{{{ getContextSensitiveProperty() method
+	/**
+	 * Some settings, like comment start and end strings, can
+	 * vary between different parts of a buffer (HTML text and inline
+	 * JavaScript, for example).
+	 * @param offset The offset
+	 * @param name The property name
+	 * @since jEdit 4.0pre3
+	 */
+	public String getContextSensitiveProperty(int offset, String name)
+	{
+		int line = getLineOfOffset(offset);
+		offset -= getLineStartOffset(line);
+		if(offset != 0)
+			offset--;
+
+		TokenList tokens = markTokens(line);
+		Token token = TextUtilities.getTokenAtOffset(tokens,offset);
+		ParserRuleSet rules = token.rules;
+
+		Object value = null;
+
+		Hashtable rulesetProps = rules.getProperties();
+		if(rulesetProps != null)
+			value = rulesetProps.get(name);
+
+		if(value == null)
+		{
+			value = rules.getMode().getProperty(name);
+
+			if(value == null)
+				value = mode.getProperty(name);
+		}
+
+		if(value == null)
+			return null;
+		else
+			return String.valueOf(value);
 	} //}}}
 
 	//}}}
@@ -3664,14 +3725,14 @@ public class Buffer implements EBComponent
 		 * Do not call this method. The only reason it is public
 		 * is so that classes in the 'syntax' package can call it.
 		 */
-		public void addToken(int length, byte id)
+		public void addToken(int length, byte id, ParserRuleSet rules)
 		{
 			if(length == 0 && id != Token.END)
 				return;
 
 			if(firstToken == null)
 			{
-				firstToken = new Token(length,id);
+				firstToken = new Token(length,id,rules);
 				lastToken = firstToken;
 			}
 			else if(lastToken == null)
@@ -3679,14 +3740,15 @@ public class Buffer implements EBComponent
 				lastToken = firstToken;
 				firstToken.length = length;
 				firstToken.id = id;
+				firstToken.rules = rules;
 			}
-			else if(lastToken.id == id)
+			else if(lastToken.id == id && lastToken.rules == rules)
 			{
 				lastToken.length += length;
 			}
 			else if(lastToken.next == null)
 			{
-				lastToken.next = new Token(length,id);
+				lastToken.next = new Token(length,id,rules);
 				lastToken.next.prev = lastToken;
 				lastToken = lastToken.next;
 			}
@@ -3695,6 +3757,7 @@ public class Buffer implements EBComponent
 				lastToken = lastToken.next;
 				lastToken.length = length;
 				lastToken.id = id;
+				lastToken.rules = rules;
 			}
 		} //}}}
 

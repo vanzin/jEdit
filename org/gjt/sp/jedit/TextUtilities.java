@@ -31,6 +31,36 @@ import org.gjt.sp.jedit.syntax.*;
  */
 public class TextUtilities
 {
+	//{{{ getTokenAtOffset() method
+	/**
+	 * Returns the token that contains the specified offset.
+	 * @param tokenList The token list
+	 * @param offset The offset
+	 * @since jEdit 4.0pre3
+	 */
+	public static Token getTokenAtOffset(Buffer.TokenList tokenList, int offset)
+	{
+		Token lineTokens = tokenList.getFirstToken();
+
+		if(offset == 0 && lineTokens.id == Token.END)
+			return lineTokens;
+
+		int tokenListOffset = 0;
+		for(;;)
+		{
+			if(lineTokens.id == Token.END)
+				throw new ArrayIndexOutOfBoundsException("offset > line length");
+
+			if(tokenListOffset + lineTokens.length > offset)
+				return lineTokens;
+			else
+			{
+				tokenListOffset += lineTokens.length;
+				lineTokens = lineTokens.next;
+			}
+		}
+	} //}}}
+
 	//{{{ findMatchingBracket() method
 	/**
 	 * Returns the offset of the bracket matching the one at the
@@ -95,7 +125,7 @@ public class TextUtilities
 		// Get the syntax token at 'offset'
 		// only tokens with the same type will be checked for
 		// the corresponding bracket
-		byte idOfBracket = getTokenAtOffset(tokenList,offset);
+		byte idOfBracket = getTokenAtOffset(tokenList,offset).id;
 
 		boolean haveTokens = true;
 
@@ -116,7 +146,7 @@ public class TextUtilities
 							tokenList = buffer.markTokens(line);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						if(getTokenAtOffset(tokenList,i).id == idOfBracket)
 							count++;
 					}
 					else if(ch == cprime)
@@ -126,7 +156,7 @@ public class TextUtilities
 							tokenList = buffer.markTokens(line);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						if(getTokenAtOffset(tokenList,i).id == idOfBracket)
 						{
 							count--;
 							if(count == 0)
@@ -162,7 +192,7 @@ public class TextUtilities
 							tokenList = buffer.markTokens(line);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						if(getTokenAtOffset(tokenList,i).id == idOfBracket)
 							count++;
 					}
 					else if(ch == cprime)
@@ -172,7 +202,7 @@ public class TextUtilities
 							tokenList = buffer.markTokens(line);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						if(getTokenAtOffset(tokenList,i).id == idOfBracket)
 						{
 							count--;
 							if(count == 0)
@@ -690,31 +720,8 @@ loop:		for(int i = pos; i < line.length(); i++)
 	} //}}}
 
 	//{{{ Private members
-
 	private static final int WHITESPACE = 0;
 	private static final int WORD_CHAR = 1;
 	private static final int SYMBOL = 2;
-
-	//{{{ getTokenAtOffset() method
-	private static byte getTokenAtOffset(Buffer.TokenList tokenList, int offset)
-	{
-		Token lineTokens = tokenList.getFirstToken();
-
-		int tokenListOffset = 0;
-		for(;;)
-		{
-			if(lineTokens.id == Token.END)
-				throw new InternalError("offset > line length");
-
-			if(tokenListOffset + lineTokens.length > offset)
-				return lineTokens.id;
-			else
-			{
-				tokenListOffset += lineTokens.length;
-				lineTokens = lineTokens.next;
-			}
-		}
-	} //}}}
-
 	//}}}
 }

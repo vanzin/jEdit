@@ -11,7 +11,19 @@ JEDIT 4.0 VERSION HISTORY
   surrounds selection with {{{ and }}}
 - -noplugins command line switch added
 - Added option to have backups created on every save (default is to only
-  create one backup for each file, until it is closed) (Ollie Rutherfurd)
+  create one backup for each file, until it is closed)
+  (Ollie Rutherfurd)
+- 'Extra word characters' setting added to Editing option pane
+- 'Range Comment' and 'Line Comment' commands now behave correctly when,
+  for example, inserting comments in inline JavaScript in an HTML file.
+  - The new Buffer.getContextSensitiveProperty() method first checks the
+    properties of the parser rule set at the specified offset; then the
+    edit mode that contains that rule set; and finally, the edit mode of
+    the buffer itself.
+  - In mode files, you can now place a PROPS element inside a RULES
+    element to define ruleset-specific properties. Currently, only the
+    'commentStart', 'commentEnd' and 'lineComment' properties can be
+    ruleset-specific.
 
 + Enhancements
 
@@ -30,6 +42,9 @@ JEDIT 4.0 VERSION HISTORY
 - First item in 'Paste Previous' dialog pre-selected when dialog shown
 - Focus is returned to file list in 'Close All' dialog box after one of
   the buttons are clicked
+- Recent Directories menu, Browse System/User Macros commands, and other
+  commands that open directories in the file system browser now work a
+  little better
 
 + Neutral
 
@@ -56,9 +71,17 @@ JEDIT 4.0 VERSION HISTORY
 - Pressing the tab key with a one-line selection would insert a hard tab
   even if soft tabs were enabled
 - Deprecated MiscUtilities.compareVersions() method was an instance
-  method, which made plugins that used to throw VerifyErrors on startup.
+  method, which made plugins that used it throw VerifyErrors on startup.
   These plugins will now work again (but should eventually be updated to
   call non-deprecated methods).
+- Fixed another search and replace bug triggered by the Tags plugin
+- When searching in multiple selections, HyperSearch would create one
+  tree node for each selection
+- InputHandler.readNextChar() didn't work with all characters
+- Floating positions would sometimes be updated incorrectly when text
+  was inserted
+- Fixed another file system browser 'Search in Directory'
+  NullPointerException
 
 + API Changes
 
@@ -77,6 +100,8 @@ JEDIT 4.0 VERSION HISTORY
 
   The message is obtained from the property 'messageProp' (nothing is
   prepended or appended to the property name).
+
+- New method: VFSBrowser.browseDirectory(View view, String path)
 
 * Version 4.0pre2
 
@@ -187,7 +212,7 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed a few bugs in the File System Browser->Colors option pane
 - Compound edits were rather buggy
 - 'Trailing EOL' setting did not work
-- Fixed possible MacOS x keyboard problems (again...)
+- Fixed possible MacOS X keyboard problems (again...)
 - Fixed a buffer corruption bug
 - 'Select Fold' command threw an exception of there were no folds in the
   buffer

@@ -67,19 +67,7 @@ public class HyperSearchRequest extends WorkRequest
 			Buffer buffer = fileset.getFirstBuffer(view);
 
 			if(selection != null)
-			{
-				for(int i = 0; i < selection.length; i++)
-				{
-					Selection s = selection[i];
-					int thisResultCount = doHyperSearch(buffer,matcher,
-						s.getStart(),s.getEnd());
-					if(thisResultCount != 0)
-					{
-						bufferCount = 1;
-						resultCount += thisResultCount;
-					}
-				}
-			}
+				searchInSelection(buffer);
 			else
 			{
 				int current = 0;
@@ -89,7 +77,7 @@ public class HyperSearchRequest extends WorkRequest
 					do
 					{
 						setProgressValue(++current);
-						int thisResultCount = doHyperSearch(buffer,matcher,
+						int thisResultCount = doHyperSearch(buffer,
 							0,buffer.getLength());
 						if(thisResultCount != 0)
 						{
@@ -101,13 +89,17 @@ public class HyperSearchRequest extends WorkRequest
 				}
 			}
 		}
-		catch(Exception e)
+		catch(final Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
-			Object[] args = { e.getMessage() };
-			if(args[0] == null)
-				args[0] = e.toString();
-			VFSManager.error(view,"searcherror",args);
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					GUIUtilities.error(view,"searcherror",
+						new String[] { e.toString() });
+				}
+			});
 		}
 		catch(WorkThread.Abort a)
 		{
@@ -137,17 +129,61 @@ public class HyperSearchRequest extends WorkRequest
 	private Selection[] selection;
 	//}}}
 
+	//{{{ searchInSelection() method
+	private int searchInSelection(Buffer buffer) throws Exception
+	{
+		setAbortable(false);
+
+		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
+			buffer.getPath());
+
+		int resultCount = 0;
+
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			resultCount += doHyperSearch(buffer,s.getStart(),s.getEnd());
+		}
+
+		setAbortable(true);
+
+		return resultCount;
+	} //}}}
+
 	//{{{ doHyperSearch() method
-	private int doHyperSearch(Buffer buffer, SearchMatcher matcher,
-		int start, int end)
+	private int doHyperSearch(Buffer buffer, int start, int end)
 		throws Exception
 	{
 		setAbortable(false);
 
-		int resultCount = 0;
-
 		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
 			buffer.getPath());
+
+		int resultCount = doHyperSearch(buffer,start,end,bufferNode);
+
+		if(resultCount != 0)
+		{
+			resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
+
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					resultTreeModel.reload(resultTreeRoot);
+				}
+			});
+		}
+
+		setAbortable(true);
+
+		return resultCount;
+	} //}}}
+
+	//{{{ doHyperSearch() method
+	private int doHyperSearch(Buffer buffer, int start, int end,
+		DefaultMutableTreeNode bufferNode)
+	{
+		int resultCount = 0;
 
 		try
 		{
@@ -194,21 +230,6 @@ loop:			for(;;)
 		{
 			buffer.readUnlock();
 		}
-
-		if(resultCount != 0)
-		{
-			resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					resultTreeModel.reload(resultTreeRoot);
-				}
-			});
-		}
-
-		setAbortable(true);
 
 		return resultCount;
 	} //}}}

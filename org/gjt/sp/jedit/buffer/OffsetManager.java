@@ -24,10 +24,10 @@ package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
 import javax.swing.text.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -54,7 +54,7 @@ public class OffsetManager
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
 
-		positions = new Vector();
+		positions = new PosBottomHalf[100];
 
 		virtualLineCounts = new int[8];
 		for(int i = 0; i < 8; i++)
@@ -192,15 +192,15 @@ public class OffsetManager
 
 	// I could make Buffer.createPosition() grab a write lock, but then
 	// it would be necessary to implement grabbing write locks within
-	// read locks, since HyperSearch for example does everything insude
+	// read locks, since HyperSearch for example does everything inside
 	// a read lock.
 	public synchronized Position createPosition(int offset)
 	{
 		PosBottomHalf bh = null;
 
-		for(int i = 0; i < positions.size(); i++)
+		for(int i = 0; i < positionCount; i++)
 		{
-			PosBottomHalf _bh = (PosBottomHalf)positions.elementAt(i);
+			PosBottomHalf _bh = positions[i];
 			if(_bh.offset == offset)
 			{
 				bh = _bh;
@@ -209,7 +209,11 @@ public class OffsetManager
 			else if(_bh.offset > offset)
 			{
 				bh = new PosBottomHalf(offset);
-				positions.insertElementAt(bh,i);
+				growPositionArray();
+				System.arraycopy(positions,i,positions,i+1,
+					positionCount - i);
+				positionCount++;
+				positions[i] = bh;
 				break;
 			}
 		}
@@ -217,7 +221,8 @@ public class OffsetManager
 		if(bh == null)
 		{
 			bh = new PosBottomHalf(offset);
-			positions.addElement(bh);
+			growPositionArray();
+			positions[positionCount++] = bh;
 		}
 
 		return new PosTopHalf(bh);
@@ -433,7 +438,8 @@ public class OffsetManager
 
 	private int lineCount;
 
-	private Vector positions;
+	private PosBottomHalf[] positions;
+	private int positionCount;
 
 	private int[] virtualLineCounts;
 	//}}}
@@ -444,14 +450,80 @@ public class OffsetManager
 		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
 	} //}}}
 
+	//{{{ growPositionArray() method
+	private void growPositionArray()
+	{
+		if(positions.length < positionCount + 1)
+		{
+			PosBottomHalf[] newPositions = new PosBottomHalf[
+				(positionCount + 1) * 2];
+			System.arraycopy(positions,0,newPositions,0,positionCount);
+			positions = newPositions;
+		}
+	} //}}}
+
+	//{{{ removePosition() method
+	private synchronized void removePosition(PosBottomHalf bh)
+	{
+		int index = -1;
+
+		for(int i = 0; i < positionCount; i++)
+		{
+			if(positions[i] == bh)
+			{
+				index = i;
+				break;
+			}
+		}
+
+		System.arraycopy(positions,index + 1,positions,index,
+			positionCount - index - 1);
+		positions[--positionCount] = null;
+	} //}}}
+
 	//{{{ updatePositionsForInsert() method
 	private void updatePositionsForInsert(int offset, int length)
 	{
-		if(positions.size() == 0)
+		if(positionCount == 0)
 			return;
 
+		int start = getPositionAtOffset(offset);
+
+		for(int i = start; i < positionCount; i++)
+		{
+			PosBottomHalf bh = positions[i];
+			if(bh.offset < offset)
+				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
+			else
+				bh.offset += length;
+		}
+	} //}}}
+
+	//{{{ updatePositionsForRemove() method
+	private void updatePositionsForRemove(int offset, int length)
+	{
+		if(positionCount == 0)
+			return;
+
+		int start = getPositionAtOffset(offset);
+
+		for(int i = start; i < positionCount; i++)
+		{
+			PosBottomHalf bh = positions[i];
+			if(bh.offset < offset)
+				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
+			else if(bh.offset < offset + length)
+				bh.offset = offset;
+			else
+				bh.offset -= length;
+		}
+	} //}}}
+
+	//{{{ getPositionAtOffset() method
+	private int getPositionAtOffset(int offset)
+	{
 		int start = 0;
-		int end = positions.size() - 1;
+		int end = positionCount - 1;
 
 		PosBottomHalf bh;
 
@@ -460,14 +532,28 @@ loop:		for(;;)
 			switch(end - start)
 			{
 			case 0:
-			case 1:
-				bh = (PosBottomHalf)positions.elementAt(start);
+				bh = positions[start];
 				if(bh.offset < offset)
 					start++;
 				break loop;
+			case 1:
+				bh = positions[end];
+				if(bh.offset < offset)
+				{
+					start = end + 1;
+				}
+				else
+				{
+					bh = positions[start];
+					if(bh.offset < offset)
+					{
+						start++;
+					}
+				}
+				break loop;
 			default:
 				int pivot = (start + end) / 2;
-				bh = (PosBottomHalf)positions.elementAt(pivot);
+				bh = positions[pivot];
 				if(bh.offset > offset)
 					end = pivot - 1;
 				else
@@ -476,55 +562,7 @@ loop:		for(;;)
 			}
 		}
 
-		for(int i = start; i < positions.size(); i++)
-		{
-			bh = (PosBottomHalf)positions.elementAt(i);
-			//if(bh.offset < offset)
-			//	System.err.println("fuck: " + bh.offset);
-			bh.offset += length;
-		}
-	} //}}}
-
-	//{{{ updatePositionsForRemove() method
-	private void updatePositionsForRemove(int offset, int length)
-	{
-		if(positions.size() == 0)
-			return;
-
-		int start = 0;
-		int end = positions.size() - 1;
-
-		PosBottomHalf bh;
-
-loop:		for(;;)
-		{
-			switch(end - start)
-			{
-			case 0:
-			case 1:
-				bh = (PosBottomHalf)positions.elementAt(start);
-				if(bh.offset < offset)
-					start++;
-				break loop;
-			default:
-				int pivot = (start + end) / 2;
-				bh = (PosBottomHalf)positions.elementAt(pivot);
-				if(bh.offset > offset)
-					end = pivot;
-				else
-					start = pivot + 1;
-				break;
-			}
-		}
-
-		for(int i = start; i < positions.size(); i++)
-		{
-			bh = (PosBottomHalf)positions.elementAt(i);
-			if(bh.offset < offset + length)
-				bh.offset = offset;
-			else
-				bh.offset -= length;
-		}
+		return start;
 	} //}}}
 
 	//}}}
@@ -577,9 +615,8 @@ loop:		for(;;)
 		//{{{ unref() method
 		void unref()
 		{
-			ref--;
-			if(ref == 0)
-				positions.removeElement(this);
+			if(--ref == 0)
+				removePosition(this);
 		} //}}}
 	} //}}}
 

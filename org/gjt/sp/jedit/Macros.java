@@ -156,26 +156,13 @@ public class Macros
 	 */
 	public static void browseSystemMacros(View view)
 	{
-		if(userMacroPath == null)
+		if(systemMacroPath == null)
 		{
 			GUIUtilities.error(view,"no-webstart",null);
 			return;
 		}
 
-		DockableWindowManager dockableWindowManager
-			= view.getDockableWindowManager();
-
-		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
-		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockable(VFSBrowser.NAME);
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				browser.setDirectory(systemMacroPath);
-			}
-		});
+		VFSBrowser.browseDirectory(view,systemMacroPath);
 	} //}}}
 
 	//{{{ browseUserMacros() method
@@ -192,20 +179,7 @@ public class Macros
 			return;
 		}
 
-		DockableWindowManager dockableWindowManager
-			= view.getDockableWindowManager();
-
-		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
-		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockable(VFSBrowser.NAME);
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				browser.setDirectory(userMacroPath);
-			}
-		});
+		VFSBrowser.browseDirectory(view,userMacroPath);
 	} //}}}
 
 	//{{{ loadMacros() method

@@ -80,7 +80,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),
 			wordBreakChars = new JTextField());
 
-		addComponent(jEdit.getProperty("options.mode.noWordSep"),
+		addComponent(jEdit.getProperty("options.editing.noWordSep"),
 			noWordSep = new JTextField());
 
 		String[] foldModes = {

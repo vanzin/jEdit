@@ -51,7 +51,8 @@ public class HyperSearchResult
 		if(!buffer.isTemporary())
 			bufferOpened(buffer);
 
-		str = (line + 1) + ": " + buffer.getLineText(line).replace('\t',' ');
+		str = (line + 1) + ": " + buffer.getLineText(line)
+			.replace('\t',' ').trim();
 	} //}}}
 
 	//{{{ bufferOpened() method
