@@ -4,7 +4,7 @@ JEDIT 4.2 VERSION HISTORY
 
 Thanks to Kris Kopicki for contributing to this release.
 
-+ Enhancements:
++ Miscellaneous:
 
 - If regular expressions are enabled, Search->Find Previous now shows a
   dialog box message instead of silently searching forwards.
@@ -24,9 +24,29 @@ Thanks to Kris Kopicki for contributing to this release.
 - Added an option to Appearance option pane to control menu spillover
   (default is 20 items).
 
+- The title bar now indicates if the current buffer has been modified
+  since the last save.
+
 + Syntax Highlighting:
 
 - Improved C pre-processor syntax highlighting.
+
++ Window Docking:
+
+- Floating windows now have a bar across the top with a menu for docking
+  the window.
+
+- Right-clicking on a docked window button shows a menu for undocking
+  the window, opening a cloned instance, and moving it to another
+  docking area.
+
+- Docking pane of Global Options dialog box removed because it is no
+  longer necessary.
+
++ Scripting:
+
+- BeanShell scripts now preset the 'wm' variable to
+  view.getDockableWindowManager(). Useful for actions.xml.
 
 + Optimizations:
 

@@ -54,7 +54,7 @@
 
 <ACTION NAME="bottom-docking-area">
 	<CODE>
-		view.getDockableWindowManager().getBottomDockingArea().showMostRecent();
+		wm.getBottomDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 
@@ -84,7 +84,7 @@
 
 <ACTION NAME="close-docking-area">
 	<CODE>
-		view.getDockableWindowManager().closeCurrentArea();
+		wm.closeCurrentArea();
 	</CODE>
 </ACTION>
 
@@ -420,7 +420,7 @@
 
 <ACTION NAME="left-docking-area">
 	<CODE>
-		view.getDockableWindowManager().getLeftDockingArea().showMostRecent();
+		wm.getLeftDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 
@@ -801,7 +801,7 @@
 
 <ACTION NAME="right-docking-area">
 	<CODE>
-		view.getDockableWindowManager().getRightDockingArea().showMostRecent();
+		wm.getRightDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 
@@ -1183,7 +1183,7 @@
 
 <ACTION NAME="top-docking-area">
 	<CODE>
-		view.getDockableWindowManager().getTopDockingArea().showMostRecent();
+		wm.getTopDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 

@@ -176,8 +176,8 @@ public class DockableWindowManager extends JPanel
 	public static void registerDockableWindow(String name, String code,
 		boolean actions, ActionSet actionSet)
 	{
-		dockableWindowFactories.addElement(new Factory(name,code,
-			actions,actionSet));
+		Factory factory = new Factory(name,code,actions,actionSet);
+		dockableWindowFactories.addElement(factory);
 	} //}}}
 
 	//{{{ getRegisteredDockableWindows() method
@@ -188,7 +188,22 @@ public class DockableWindowManager extends JPanel
 		{
 			retVal[i] = ((Factory)dockableWindowFactories.elementAt(i)).name;
 		}
+		Arrays.sort(retVal,new FactoryCompare());
 		return retVal;
+	} //}}}
+
+	//{{{ FactoryCompare class
+	static class FactoryCompare implements Comparator
+	{
+		public int compare(Object o1, Object o2)
+		{
+			Factory f1 = (Factory)o1;
+			Factory f2 = (Factory)o2;
+			return MiscUtilities.compareStrings(
+				jEdit.getProperty(f1.name + ".title"),
+				jEdit.getProperty(f2.name + ".title"),
+				true);
+		}
 	} //}}}
 
 	//{{{ DockableListHandler class
@@ -885,7 +900,7 @@ public class DockableWindowManager extends JPanel
 		});
 		popup.add(cloneMenuItem);
 
-		if(!clone)
+		if(!(clone || currentPos.equals(FLOATING)))
 		{
 			JMenuItem undockMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-undock"));
 

@@ -1112,6 +1112,8 @@ public class View extends JFrame implements EBComponent
 			Buffer buffer = (Buffer)buffers.elementAt(i);
 			title.append((showFullPath && !buffer.isNewFile())
 				? buffer.getPath() : buffer.getName());
+			if(buffer.isDirty())
+				title.append(jEdit.getProperty("view.title.dirty"));
 		}
 		setTitle(title.toString());
 	} //}}}
@@ -1344,18 +1346,13 @@ public class View extends JFrame implements EBComponent
 		Buffer buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
-			if(!buffer.isDirty())
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
 			{
-				// have to update title after each save
-				// in case it was a 'save as'
-				EditPane[] editPanes = getEditPanes();
-				for(int i = 0; i < editPanes.length; i++)
+				if(editPanes[i].getBuffer() == buffer)
 				{
-					if(editPanes[i].getBuffer() == buffer)
-					{
-						updateTitle();
-						break;
-					}
+					updateTitle();
+					break;
 				}
 			}
 		}

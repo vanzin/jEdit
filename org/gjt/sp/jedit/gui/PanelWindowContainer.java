@@ -122,8 +122,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttonGroup.add(button);
 		buttons.add(button);
 
-		button.addMouseListener(new MouseHandler());
-
 		wm.revalidate();
 	} //}}}
 
@@ -140,7 +138,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			mostRecent = null;
 
 		int index = dockables.indexOf(entry);
-		buttons.remove(index + 2);
+		buttons.remove(index + 1);
 
 		dockables.removeElement(entry);
 		if(entry.win != null)
@@ -599,19 +597,50 @@ public class PanelWindowContainer implements DockableWindowContainer
 				return new Dimension(0,0);
 			}
 
+			Dimension dim = comp[1].getPreferredSize();
+
 			if(position.equals(DockableWindowManager.TOP)
 				|| position.equals(DockableWindowManager.BOTTOM))
 			{
-				return new Dimension(0,
-					comp[1].getPreferredSize().height
-					+ insets.top
-					+ insets.bottom);
+				int width = parent.getWidth() - insets.right;
+				int rowHeight = Math.max(dim.height,closeBox.getPreferredSize().width);
+				int x = rowHeight + insets.left;
+				Dimension returnValue = new Dimension(0,rowHeight
+					+ insets.top + insets.bottom);
+
+				for(int i = 1; i < comp.length; i++)
+				{
+					int btnWidth = comp[i].getPreferredSize().width;
+					if(btnWidth + x > width)
+					{
+						x = btnWidth + insets.left;
+						returnValue.height += rowHeight;
+					}
+					else
+						x += btnWidth;
+				}
+				return returnValue;
 			}
 			else
 			{
-				return new Dimension(
-					comp[1].getPreferredSize().width
+				int height = parent.getHeight() - insets.bottom;
+				int colWidth = Math.max(dim.width,closeBox.getPreferredSize().height);
+				int y = colWidth + insets.top;
+				Dimension returnValue = new Dimension(colWidth
 					+ insets.left + insets.right,0);
+
+				for(int i = 1; i < comp.length; i++)
+				{
+					int btnHeight = comp[i].getPreferredSize().height;
+					if(btnHeight + y > height)
+					{
+						returnValue.width += colWidth;
+						y = insets.top;
+					}
+
+					y += btnHeight;
+				}
+				return returnValue;
 			}
 		} //}}}
 
@@ -628,82 +657,51 @@ public class PanelWindowContainer implements DockableWindowContainer
 				.getBorderInsets((JComponent)parent);
 
 			Component[] comp = parent.getComponents();
-			if(comp.length != 1)
-			{
-				boolean closeBoxSizeSet = false;
-				boolean noMore = false;
+			if(comp.length == 1)
+				return;
 
-				Dimension parentSize = parent.getSize();
-				int pos = (position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM)
-					) ? 0 : insets.left;
+			Dimension dim = comp[1].getPreferredSize();
+
+			if(position.equals(DockableWindowManager.TOP)
+				|| position.equals(DockableWindowManager.BOTTOM))
+			{
+				int width = parent.getWidth() - insets.right;
+				int rowHeight = Math.max(dim.height,closeBox.getPreferredSize().width);
+				int x = rowHeight + insets.left;
+				int y = insets.top;
+				closeBox.setBounds(insets.left,insets.top,rowHeight,rowHeight);
 
 				for(int i = 1; i < comp.length; i++)
 				{
-					Dimension size = comp[i].getPreferredSize();
-					if(position.equals(DockableWindowManager.TOP)
-						|| position.equals(DockableWindowManager.BOTTOM))
+					int btnWidth = comp[i].getPreferredSize().width;
+					if(btnWidth + x > width)
 					{
-						if(!closeBoxSizeSet)
-						{
-							closeBox.setBounds(pos,
-								insets.top,
-								size.height,size.height);
-							pos += size.height;
-							closeBoxSizeSet = true;
-						}
-
-						if(noMore || pos + size.width > parentSize.width
-							- (i == comp.length - 1
-							? 0 : closeBox.getWidth()))
-						{
-							/* popupButton.setBounds(
-								parentSize.width - size.height
-								- insets.right,
-								insets.top,size.height,
-								size.height);
-							popupButton.setVisible(true); */
-							comp[i].setVisible(false);
-							noMore = true;
-						}
-						else
-						{
-							comp[i].setBounds(pos,insets.top,
-								size.width,size.height);
-							comp[i].setVisible(true);
-							pos += size.width;
-						}
+						x = insets.left;
+						y += rowHeight;
 					}
 					else
-					{
-						if(!closeBoxSizeSet)
-						{
-							closeBox.setBounds(insets.left,
-								insets.top,size.width,size.width);
-							pos += size.width;
-							closeBoxSizeSet = true;
-						}
+					comp[i].setBounds(x,y,btnWidth,rowHeight);
+					x += btnWidth;
+				}
+			}
+			else
+			{
+				int height = parent.getHeight() - insets.bottom;
+				int colWidth = Math.max(dim.width,closeBox.getPreferredSize().height);
+				int x = insets.left;
+				int y = colWidth + insets.top;
+				closeBox.setBounds(insets.left,insets.top,colWidth,colWidth);
 
-						if(noMore || pos + size.height > parentSize.height
-							- (i == comp.length - 1
-							? 0 : closeBox.getHeight()))
-						{
-							/* popupButton.setBounds(
-								insets.top,
-								parentSize.height - size.width,
-								size.width,size.width);
-							popupButton.setVisible(true); */
-							comp[i].setVisible(false);
-							noMore = true;
-						}
-						else
-						{
-							comp[i].setBounds(insets.left,
-								pos,size.width,size.height);
-							comp[i].setVisible(true);
-							pos += size.height;
-						}
+				for(int i = 1; i < comp.length; i++)
+				{
+					int btnHeight = comp[i].getPreferredSize().height;
+					if(btnHeight + y > height)
+					{
+						x += colWidth;
+						y = insets.top;
 					}
+					comp[i].setBounds(x,y,colWidth,btnHeight);
+					y += btnHeight;
 				}
 			}
 		} //}}}
