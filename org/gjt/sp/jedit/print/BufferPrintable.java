@@ -232,11 +232,6 @@ print_loop:	for(;;)
 			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
 			(float)(pageY + lm.getAscent()));
 
-		bounds = new Rectangle2D.Double(pageX + (pageWidth - bounds.getWidth()) / 2,
-			pageY + lm.getAscent(),
-			bounds.getWidth(),bounds.getHeight());
-		gfx.draw(bounds);
-
 		return headerBounds.getHeight();
 	}
 	//}}}
