@@ -276,7 +276,8 @@ public class JEditTextArea extends JComponent
 
 			propertiesChanged();
 
-			recalculateLastPhysicalLine();
+			if(buffer.isLoaded())
+				recalculateLastPhysicalLine();
 
 			painter.repaint();
 			gutter.repaint();
@@ -362,7 +363,8 @@ public class JEditTextArea extends JComponent
 
 		chunkCache.setFirstLine(firstLine,physFirstLine,false);
 
-		recalculateLastPhysicalLine();
+		if(buffer.isLoaded())
+			recalculateLastPhysicalLine();
 
 		painter.repaint();
 		gutter.repaint();
@@ -986,6 +988,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateScreenLineRange(int start, int end)
 	{
+		if(!buffer.isLoaded())
+			return;
+
 		//if(start != end)
 		//	System.err.println(start + ":" + end + ":" + chunkCache.needFullRepaint());
 		if(chunkCache.needFullRepaint())
@@ -4554,7 +4559,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		recalculateVisibleLines();
-		recalculateLastPhysicalLine();
+		if(buffer.isLoaded())
+			recalculateLastPhysicalLine();
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -5618,9 +5624,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
-		if(!buffer.isLoaded())
-			return;
-
 		chunkCache.updateChunksUpTo(visibleLines);
 		for(int i = visibleLines; i >= 0; i--)
 		{
