@@ -607,7 +607,6 @@ public class OffsetManager
 	 * one before line n. */
 	public void addAnchor(Anchor anchor)
 	{
-		System.err.println("adding " + anchor);
 		Anchor prev = null;
 		Anchor current = anchors;
 		for(;;)
@@ -632,12 +631,12 @@ public class OffsetManager
 			prev.next = anchor;
 		else
 			anchors = anchor;
+		anchor.next = null;
 	} //}}}
 
 	//{{{ removeAnchor() method
 	public void removeAnchor(Anchor anchor)
 	{
-		System.err.println("removing " + anchor);
 		Anchor current = anchors;
 		Anchor prev = null;
 		while(current != null)
