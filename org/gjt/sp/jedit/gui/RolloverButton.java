@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2002 Kris Kopicki
+ * Portions copyright (C) 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +51,9 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
+		if(OperatingSystem.hasJava15())
+			setContentAreaFilled(false);
+
 		if(method != null)
 		{
 			try
