@@ -31,6 +31,9 @@
 <MODE NAME="beanshell"		FILE="beanshell.xml"
 				FILE_NAME_GLOB="*.bsh" />
 
+<MODE NAME="bbj"		FILE="bbj.xml"
+				FILE_NAME_GLOB="*.bbj" />
+
 <!-- if anyone knows a file name glob that can be used with this mode,
      please let me know -->
 <MODE NAME="bcel"		FILE="bcel.xml" />

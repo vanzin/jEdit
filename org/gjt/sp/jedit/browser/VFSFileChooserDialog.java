@@ -174,10 +174,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		if(filename != null)
 		{
-			String path = browser.getPath();
+			String path = browser.getDirectory();
 			VFS vfs = VFSManager.getVFSForPath(path);
 			return new String[] { vfs.constructPath(
 				path,filename) };
+		}
 		else
 		{
 			Vector vector = new Vector();

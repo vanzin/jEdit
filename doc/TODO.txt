@@ -22,6 +22,7 @@ TO DO
 
 + features:
 
+- complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
 - select-* actions: add to selection in multi-select mode

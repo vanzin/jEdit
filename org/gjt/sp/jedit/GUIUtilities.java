@@ -157,7 +157,7 @@ public class GUIUtilities
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
 		EditAction action = jEdit.getAction(name);
-		String label = action.getLabel();
+		String label = (action == null ? name : action.getLabel());
 		if(label == null)
 			label = name;
 

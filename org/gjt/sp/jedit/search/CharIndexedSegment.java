@@ -36,7 +36,8 @@ public class CharIndexedSegment implements CharIndexed, Serializable
 
 	public char charAt(int index)
 	{
-		return ((m_index + index) < seg.count) ? seg.array[seg.offset
+		return ((m_index + index) < seg.count && m_index + index >= 0)
+			? seg.array[seg.offset
 			+ m_index + index] : CharIndexed.OUT_OF_BOUNDS;
 	}
 
