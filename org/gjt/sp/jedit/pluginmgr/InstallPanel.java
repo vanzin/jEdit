@@ -67,9 +67,9 @@ class InstallPanel extends JPanel
 		TableColumn col4 = table.getColumnModel().getColumn(3);
 		TableColumn col5 = table.getColumnModel().getColumn(4);
 
-		col1.setPreferredWidth(50);
-		col1.setMinWidth(50);
-		col1.setMaxWidth(50);
+		col1.setPreferredWidth(30);
+		col1.setMinWidth(30);
+		col1.setMaxWidth(30);
 		col1.setResizable(false);
 
 		col2.setPreferredWidth(180);

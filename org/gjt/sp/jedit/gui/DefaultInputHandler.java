@@ -113,7 +113,7 @@ public class DefaultInputHandler extends InputHandler
 		while(st.hasMoreTokens())
 		{
 			String keyCodeStr = st.nextToken();
-			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
 			if(keyStroke == null)
 				return;
 
@@ -163,7 +163,7 @@ public class DefaultInputHandler extends InputHandler
 
 		while(st.hasMoreTokens())
 		{
-			KeyStroke keyStroke = parseKeyStroke(st.nextToken());
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyBinding);
 			if(keyStroke == null)
 				return null;
 
@@ -200,34 +200,26 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public void keyPressed(KeyEvent evt)
 	{
-		int keyCode = evt.getKeyCode();
-		int modifiers = evt.getModifiers();
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
 
-		if(!(evt.isControlDown() || evt.isAltDown() || evt.isMetaDown()))
+		if(keyStroke.modifiers != null)
 		{
-			// if modifier active, handle all keys, otherwise
-			// only some
-			if((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
-				|| (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9))
-			{
-				return;
-			}
-			else if(keyCode == KeyEvent.VK_SPACE)
+			if(keyStroke.key == KeyEvent.VK_SPACE)
 			{
 				return;
 			}
 			else if(readNextChar != null)
 			{
-				if(keyCode == KeyEvent.VK_ESCAPE)
+				if(keyStroke.key == KeyEvent.VK_ESCAPE)
 				{
 					readNextChar = null;
 					view.getStatus().setMessage(null);
 				}
-				else if(keyCode == KeyEvent.VK_TAB
-					|| keyCode == KeyEvent.VK_ENTER)
+				else if(keyStroke.key == KeyEvent.VK_TAB
+					|| keyStroke.key == KeyEvent.VK_ENTER)
 				{
 					setCurrentBindings(bindings);
-					invokeReadNextChar((char)keyCode);
+					invokeReadNextChar((char)keyStroke.key);
 					repeatCount = 1;
 					return;
 				}
@@ -237,9 +229,6 @@ public class DefaultInputHandler extends InputHandler
 				// ok even with no modifiers
 			}
 		}
-
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
-			modifiers);
 
 		Object o = currentBindings.get(keyStroke);
 		if(o == null)
@@ -307,42 +296,14 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public void keyTyped(KeyEvent evt)
 	{
-		char c = evt.getKeyChar();
-
-		// ignore
-		if(c == '\b')
-			return;
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
 
 		if(readNextChar != null)
 		{
 			setCurrentBindings(bindings);
-			invokeReadNextChar(c);
+			invokeReadNextChar(keyStroke.input);
 			repeatCount = 1;
 			return;
-		}
-
-		KeyStroke keyStroke;
-
-		// this is a hack. a literal space is impossible to
-		// insert in a key binding string, but you can write
-		// SPACE.
-		switch(c)
-		{
-		case ' ':
-			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
-				evt.getModifiers());
-			break;
-		case '\t':
-			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
-				evt.getModifiers());
-			break;
-		case '\n':
-			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
-				evt.getModifiers());
-			break;
-		default:
-			keyStroke = KeyStroke.getKeyStroke(c);
-			break;
 		}
 
 		Object o = currentBindings.get(keyStroke);
@@ -364,29 +325,8 @@ public class DefaultInputHandler extends InputHandler
 		else
 		{
 			setCurrentBindings(bindings);
-			userInput(c);
+			userInput(keyStroke.input);
 		}
-	} //}}}
-
-	//{{{ setModifierMapping() method
-	/**
-	 * Changes the mapping between symbolic modifier key names
-	 * (<code>C</code>, <code>A</code>, <code>M</code>, <code>S</code>) and
-	 * Java modifier flags.
-	 *
-	 * @param c The modifier to map the <code>C</code> modifier to
-	 * @param a The modifier to map the <code>A</code> modifier to
-	 * @param m The modifier to map the <code>M</code> modifier to
-	 * @param s The modifier to map the <code>S</code> modifier to
-	 *
-	 * @since jEdit 4.1pre3
-	 */
-	public static void setModifierMapping(int c, int a, int m, int s)
-	{
-		DefaultInputHandler.c = c;
-		DefaultInputHandler.a = a;
-		DefaultInputHandler.m = m;
-		DefaultInputHandler.s = s;
 	} //}}}
 
 	//{{{ getSymbolicModifierName() method
@@ -400,18 +340,7 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public static char getSymbolicModifierName(int mod)
 	{
-		// this relies on the fact that if C is mapped to M, then
-		// M will be mapped to C.
-		if(mod == c)
-			return 'C';
-		else if(mod == a)
-			return 'A';
-		else if(mod == m)
-			return 'M';
-		else if(mod == s)
-			return 'S';
-		else
-			return '\0';
+		return KeyEventTranslator.getSymbolicModifierName(mod);
 	} //}}}
 
 	//{{{ getModifierString() method
@@ -425,16 +354,7 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public static String getModifierString(InputEvent evt)
 	{
-		StringBuffer buf = new StringBuffer();
-		if(evt.isControlDown())
-			buf.append(getSymbolicModifierName(InputEvent.CTRL_MASK));
-		if(evt.isAltDown())
-			buf.append(getSymbolicModifierName(InputEvent.ALT_MASK));
-		if(evt.isMetaDown())
-			buf.append(getSymbolicModifierName(InputEvent.META_MASK));
-		if(evt.isShiftDown())
-			buf.append(getSymbolicModifierName(InputEvent.SHIFT_MASK));
-		return buf.toString();
+		return KeyEventTranslator.getModifierString(evt);
 	} //}}}
 
 	//{{{ parseKeyStroke() method
@@ -461,16 +381,16 @@ public class DefaultInputHandler extends InputHandler
 					.charAt(i)))
 				{
 				case 'A':
-					modifiers |= a;
+					modifiers |= KeyEventTranslator.a;
 					break;
 				case 'C':
-					modifiers |= c;
+					modifiers |= KeyEventTranslator.c;
 					break;
 				case 'M':
-					modifiers |= m;
+					modifiers |= KeyEventTranslator.m;
 					break;
 				case 'S':
-					modifiers |= s;
+					modifiers |= KeyEventTranslator.s;
 					break;
 				}
 			}
@@ -515,30 +435,6 @@ public class DefaultInputHandler extends InputHandler
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Class initializer
-	static
-	{
-		if(OperatingSystem.isMacOS())
-		{
-			setModifierMapping(
-				InputEvent.META_MASK,  /* == C+ */
-				InputEvent.CTRL_MASK,  /* == A+ */
-				/* M+ discarded by key event workaround! */
-				InputEvent.ALT_MASK,   /* == M+ */
-				InputEvent.SHIFT_MASK  /* == S+ */);
-		}
-		else
-		{
-			setModifierMapping(
-				InputEvent.CTRL_MASK,
-				InputEvent.ALT_MASK,
-				InputEvent.META_MASK,
-				InputEvent.SHIFT_MASK);
-		}
-	} //}}}
-
-	private static int c, a, m, s;
 
 	// Stores prefix name in bindings hashtable
 	private static Object PREFIX_STR = "PREFIX_STR";
