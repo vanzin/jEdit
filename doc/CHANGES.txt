@@ -196,7 +196,14 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 - Closing a view did not close any cloned dockable windows.
 
+- Page Up/Page Down commands now scroll by the correct amount when soft
+  wrap is on.
+
 }}}
+{{{ API Changes
+
+- Removed deprecated xToOffset() and offsetToX() methods from
+  JEditTextArea.
 
 }}}
 
