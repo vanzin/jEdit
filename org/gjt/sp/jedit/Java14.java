@@ -282,7 +282,7 @@ public class Java14
 						Buffer _buffer = jEdit.openFile(null,
 							file.getPath());
 						if(_buffer != null)
-							buffer = buffer;
+							buffer = _buffer;
 					}
 
 					if(buffer != null)
