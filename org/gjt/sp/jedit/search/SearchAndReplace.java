@@ -291,14 +291,6 @@ public class SearchAndReplace
 		if(search == null || "".equals(search))
 			return null;
 
-		if(beanshell && replace.length() != 0)
-		{
-			replaceMethod = BeanShell.cacheBlock("replace","return ("
-				+ replace + ");",true);
-		}
-		else
-			replaceMethod = null;
-
 		if(regexp)
 			matcher = new RESearchMatcher(search,ignoreCase);
 		else
@@ -698,6 +690,8 @@ loop:			for(;;)
 			if(matcher == null)
 				return false;
 
+			initReplace();
+
 			int retVal = 0;
 
 			for(int i = 0; i < selection.length; i++)
@@ -803,6 +797,8 @@ loop:			for(;;)
 			if(matcher == null)
 				return false;
 
+			initReplace();
+
 			int retVal = 0;
 
 			retVal += _replace(view,buffer,matcher,start,end,
@@ -862,6 +858,8 @@ loop:			for(;;)
 			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 				return false;
+
+			initReplace();
 
 			String path = fileset.getFirstFile(view);
 loop:			while(path != null)
@@ -997,6 +995,21 @@ loop:			while(path != null)
 	private static SearchFileSet fileset;
 	//}}}
 
+	//{{{ initReplace() method
+	/**
+	 * Set up BeanShell replace if necessary.
+	 */
+	private static void initReplace() throws Exception
+	{
+		if(beanshell && replace.length() != 0)
+		{
+			replaceMethod = BeanShell.cacheBlock("replace",
+				"return (" + replace + ");",true);
+		}
+		else
+			replaceMethod = null;
+	} //}}}
+
 	//{{{ record() method
 	private static void record(View view, String action,
 		boolean replaceAction, boolean recordFileSet)
@@ -1116,7 +1129,7 @@ loop:		for(int counter = 0; ; counter++)
 		{
 			if(replaceMethod != null)
 			{
-				for(int i = 0; i <= occur.substitutions.length; i++)
+				for(int i = 0; i < occur.substitutions.length; i++)
 				{
 					replaceNS.setVariable("_" + i,
 						occur.substitutions[i]);

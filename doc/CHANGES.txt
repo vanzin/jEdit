@@ -66,6 +66,13 @@ contributing to this release.
 
 - Fixed a few cosmetic bugs in the Global Options dialog box.
 
+- In some cases changing between text and BeanShell replace mode would
+  not take effect.
+
+- Clicking "Replace and Find" or "Replace All" in Search dialog will now
+  beep if no search string is entered, instead of using the last search
+  string.
+
 }}}
 
 }}}

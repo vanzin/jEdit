@@ -2002,6 +2002,20 @@ forward_scan:		do
 	 */
 	public void setSelectedText(String selectedText)
 	{
+		setSelectedText(selectedText,true);
+	} //}}}
+
+	//{{{ setSelectedText() method
+	/**
+	 * Replaces the selection at the caret with the specified text.
+	 * If there is no selection at the caret, the text is inserted at
+	 * the caret position.
+	 * @param selectedText The new selection
+	 * @param moveCaret Move caret to insertion location if necessary
+	 * @since jEdit 4.2pre5
+	 */
+	public void setSelectedText(String selectedText, boolean moveCaret)
+	{
 		if(!isEditable())
 		{
 			throw new InternalError("Text component"
@@ -2027,7 +2041,8 @@ forward_scan:		do
 					newCaret = selection[i].setText(buffer,selectedText);
 				}
 
-				moveCaretPosition(newCaret);
+				if(moveCaret)
+					moveCaretPosition(newCaret);
 			}
 			finally
 			{
@@ -4824,8 +4839,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		view.processKeyEvent(evt,true);
 
-		/* if(!evt.isConsumed())
-			super.processKeyEvent(evt); */
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
 	} //}}}
 
 	//{{{ addTopComponent() method
