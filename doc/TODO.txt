@@ -3,10 +3,8 @@ TO DO
 - rename MacOS.jar
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
-  ^.* with foo only replaces every second line
-  replace all ^ with something does not replace after blank line
   hypersearch for .* doesn't list blank lines
-- scrollToCaret(): reimplement electric scroll
+- scrollToCaret(): reimplement electric scroll, triple-click drag down
 - rect select and soft wrap
 - save to X:filename on Windows
 - motif l&f: shortcuts in menu items
