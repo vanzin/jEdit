@@ -31,8 +31,15 @@ import org.gjt.sp.jedit.Buffer;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class DummyFoldHandler implements FoldHandler
+public class DummyFoldHandler extends FoldHandler
 {
+	//{{{ DummyFoldHandler constructor
+	public DummyFoldHandler()
+	{
+		super("none");
+	}
+	//}}}
+
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.

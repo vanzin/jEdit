@@ -1555,12 +1555,18 @@ public class Buffer implements EBComponent
 		setTokenMarker(mode.getTokenMarker());
 
 		String folding = getStringProperty("folding");
-		if("explicit".equals(folding))
-			setFoldHandler(new ExplicitFoldHandler());
-		else if("indent".equals(folding))
-			setFoldHandler(new IndentFoldHandler());
+		FoldHandler handler = FoldHandler.getFoldHandler(folding);
+
+		if(handler != null)
+		{
+			setFoldHandler(handler);
+		}
 		else
+		{
+			if (folding != null)
+				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding); 
 			setFoldHandler(new DummyFoldHandler());
+		}
 	} //}}}
 
 	//{{{ getTabSize() method
