@@ -16,6 +16,13 @@ JEDIT 4.0 VERSION HISTORY
   the text area to the caret position if necessary
 - Documentation is now generated using DocBook-XSL 1.49, DocBook-DSSSL
   1.76
+- Some people found it confusing that 'Delete to Start of Line' and
+  'Delete to End of Line' were bound to S+BACK_SPACE and S+DELETE,
+  respectively, because it was easy to accidentally invoke them when
+  you meant to press just BACK_SPACE or DELETE if you were typing some
+  capitalized text. Now the shortcuts of these commands has been changed
+  to CS+BACK_SPACE and CS+DELETE, respectively.
+- BeanShell 1.2b41 included
 
 + Bug Fixes
 

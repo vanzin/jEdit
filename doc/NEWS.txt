@@ -20,6 +20,11 @@ improved performance and reduced memory footprint.
   selected text by default. This can be enabled in the 'Text Area' pane
   of the Utilities->Global Options dialog box.
 
+- Two minor changes to the default shortcuts:
+
+  S+BACK_SPACE is now CS+BACK_SPACE (Delete to Start of Line)
+  S+DELETE is now CS+DELETE (Delete to End of Line)
+
 * Major user-visible changes
 
 - Rewritten buffer code: this results in decreased footprint, faster
