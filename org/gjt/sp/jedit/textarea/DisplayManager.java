@@ -22,12 +22,14 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * Manages low-level text display tasks.
@@ -657,6 +659,9 @@ public class DisplayManager
 					scrollLine += getScreenLineCount(i);
 			}
 			offsetMgr.addAnchor(this);
+
+			firstLine.ensurePhysicalLineIsVisible();
+
 			textArea.recalculateLastPhysicalLine();
 			textArea.updateScrollBars();
 
@@ -684,13 +689,7 @@ public class DisplayManager
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"changed()");
 
-			if(!isLineVisible(physicalLine))
-			{
-				if(physicalLine < getFirstVisibleLine())
-					physicalLine = getNextVisibleLine(physicalLine);
-				else
-					physicalLine = getPrevVisibleLine(physicalLine);
-			}
+			ensurePhysicalLineIsVisible();
 
 			int screenLines = getScreenLineCount(physicalLine);
 			if(skew >= screenLines)
@@ -748,6 +747,8 @@ public class DisplayManager
 			int screenLines = getScreenLineCount(physicalLine);
 			if(skew >= screenLines)
 				skew = screenLines - 1;
+
+			textArea.updateScrollBars();
 		} //}}}
 
 		//{{{ physDown() method
@@ -849,6 +850,8 @@ public class DisplayManager
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"scrollDown()");
 
+			ensurePhysicalLineIsVisible();
+
 			offsetMgr.removeAnchor(this);
 
 			amount += skew;
@@ -868,9 +871,13 @@ public class DisplayManager
 					int nextLine = getNextVisibleLine(physicalLine);
 					if(nextLine == -1)
 						break;
+					boolean visible = isLineVisible(physicalLine);
 					physicalLine = nextLine;
-					amount -= screenLines;
-					scrollLine += screenLines;
+					if(visible)
+					{
+						amount -= screenLines;
+						scrollLine += screenLines;
+					}
 				}
 			}
 
@@ -883,7 +890,9 @@ public class DisplayManager
 		void scrollUp(int amount)
 		{
 			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"scrollDown()");
+				Log.log(Log.DEBUG,this,"scrollUp()");
+
+			ensurePhysicalLineIsVisible();
 
 			offsetMgr.removeAnchor(this);
 
@@ -902,6 +911,7 @@ public class DisplayManager
 					if(prevLine == -1)
 						break;
 					physicalLine = prevLine;
+
 					int screenLines = getScreenLineCount(physicalLine);
 					scrollLine -= screenLines;
 					if(amount < screenLines)
@@ -946,6 +956,24 @@ public class DisplayManager
 			oldSkew = skew;
 
 			changed();
+		} //}}}
+
+		//{{{ ensurePhysicalLineIsVisible() method
+		private void ensurePhysicalLineIsVisible()
+		{
+			if(!isLineVisible(physicalLine))
+			{
+				if(physicalLine > getLastVisibleLine())
+				{
+					physicalLine = getPrevVisibleLine(physicalLine);
+					scrollLine -= getScreenLineCount(physicalLine);
+				}
+				else
+				{
+					physicalLine = getNextVisibleLine(physicalLine);
+					scrollLine += getScreenLineCount(physicalLine);
+				}
+			}
 		} //}}}
 	} //}}}
 }

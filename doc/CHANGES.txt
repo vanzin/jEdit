@@ -65,7 +65,7 @@ release.
 
 - A new default color scheme.
 
-- Added a new more token types: COMMENT3, COMMENT4, LITERAL3, LITERAL4,
+- Added a few more token types: COMMENT3, COMMENT4, LITERAL3, LITERAL4,
   KEYWORD4.
 
 - AT_LINE_START, AT_WORD_START and AT_WHITESPACE_END attributes can now
@@ -251,8 +251,10 @@ release.
 - Background mode is now enabled by default on MacOS, since this is the
   platform convention.
 
-- Added compatibility with Java 1.4.2 beta's GTK look and feel. Note that
-  the look and feel itself has many bugs do 
+- Added compatibility with Java 1.4.2 beta's GTK look and feel. Note
+  that the look and feel itself is quite buggy, at least with the 1.4.2
+  beta.
+
 }}}
 {{{ Bug Fixes
 
@@ -291,13 +293,16 @@ release.
 - Fixed initial position of options dialog box divider.
 
 - If the default edit mode had a tab size of 8, and the global default
-  was 4, a buffer-local property specifying a tab size of 8  would be
+  was 4, a buffer-local property specifying a tab size of 8 would be
   ignored.
 
 - "Spaces To Tabs" didn't work with non-leading tabs.
 
 - C+e v ENTER and C+e v TAB still did auto indent, instead of inserting
   a literal ENTER and TAB like the documentation says.
+
+- Pressing ENTER with nothing selected in the File->Open dialog box no
+  longer closes the dialog box.
 
 }}}
 {{{ API Changes

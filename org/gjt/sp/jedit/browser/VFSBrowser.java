@@ -130,9 +130,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 * Creates a new VFS browser.
 	 * @param view The view to open buffers in by default
 	 */
-	public VFSBrowser(View view)
+	public VFSBrowser(View view, String position)
 	{
-		this(view,null,BROWSER,true,false);
+		this(view,null,BROWSER,true,position);
 	} //}}}
 
 	//{{{ VFSBrowser constructor
@@ -142,10 +142,11 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 * @param path The path to display
 	 * @param mode The browser mode
 	 * @param multipleSelection True if multiple selection should be allowed
-	 * @param floating True if this browser instance is floating
+	 * @param position Where the browser is located
+	 * @since jEdit 4.2pre1
 	 */
 	public VFSBrowser(View view, String path, int mode, boolean multipleSelection,
-		boolean floating)
+		String position)
 	{
 		super(new BorderLayout());
 
@@ -163,24 +164,19 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		Box topBox = new Box(BoxLayout.Y_AXIS);
 
-		// this is tricky, because in BROWSER mode, the menu bar
-		// and tool bar are stacked on top of each other, and
-		// the user can toggle the tool bar. In dialog modes,
-		// the two are side by side and the tool bar is always
-		// visible.
-		toolbarBox = new Box(mode == BROWSER
-			? BoxLayout.Y_AXIS
-			: BoxLayout.X_AXIS);
+		boolean horizontalLayout = (mode != BROWSER
+			|| DockableWindowManager.TOP.equals(position)
+			|| DockableWindowManager.BOTTOM.equals(position));
+
+		toolbarBox = new Box(horizontalLayout
+			? BoxLayout.X_AXIS
+			: BoxLayout.Y_AXIS);
 		JPanel menuBar = createMenuBar();
-		if(mode == BROWSER)
+		if(!horizontalLayout)
 			menuBar.add(Box.createGlue());
 		toolbarBox.add(menuBar);
-		if(mode != BROWSER)
-		{
+		if(horizontalLayout)
 			toolbarBox.add(Box.createHorizontalStrut(6));
-			toolbarBox.add(createToolBar());
-			toolbarBox.add(Box.createGlue());
-		}
 
 		topBox.add(toolbarBox);
 
@@ -257,10 +253,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		topBox.add(pathAndFilterPanel);
 		add(BorderLayout.NORTH,topBox);
 
-		boolean splitHorizontally = false;
-		if(jEdit.getBooleanProperty("vfs.browser.splitHorizontally") && mode != BROWSER)
-			splitHorizontally = true;
-		add(BorderLayout.CENTER,browserView = new BrowserView(this,splitHorizontally));
+		add(BorderLayout.CENTER,browserView = new BrowserView(this,horizontalLayout));
 
 		propertiesChanged();
 
@@ -1011,6 +1004,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		toolBar.add(newDirectory = createToolButton("new-directory"));
 		if(mode == BROWSER)
 			toolBar.add(searchInDirectory = createToolButton("search-in-directory"));
+
+		toolBar.add(Box.createGlue());
 
 		return toolBar;
 	} //}}}

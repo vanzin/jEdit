@@ -87,6 +87,9 @@ class Autosave implements ActionListener
 		Buffer[] bufferArray = jEdit.getBuffers();
 		for(int i = 0; i < bufferArray.length; i++)
 			bufferArray[i].autosave();
+
+		// flush log
+		Log.flushStream();
 	} //}}}
 
 	//{{{ Private members

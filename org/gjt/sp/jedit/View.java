@@ -1565,6 +1565,7 @@ public class View extends JFrame implements EBComponent
 
 		public ViewConfig(boolean plainView)
 		{
+			this.plainView = plainView;
 			String prefix = (plainView ? "plain-view" : "view");
 			x = jEdit.getIntegerProperty(prefix + ".x",0);
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
