@@ -344,6 +344,9 @@ public class Registers
 	 */
 	public static String getRegisterNameString()
 	{
+		if(!loaded)
+			loadRegisters();
+
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < registers.length; i++)
 		{

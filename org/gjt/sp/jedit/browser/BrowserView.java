@@ -271,6 +271,12 @@ class BrowserView extends JPanel
 		return table;
 	} //}}}
 
+	//{{{ getParentDirectoryList() method
+	public JList getParentDirectoryList()
+	{
+		return parentDirectories;
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables

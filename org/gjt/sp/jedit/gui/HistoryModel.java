@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import javax.swing.AbstractListModel;
 import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.jEdit;
@@ -32,11 +33,12 @@ import org.gjt.sp.util.Log;
 
 /**
  * A history list. One history list can be used by several history text
- * fields.
+ * fields. Note that the list model implementation is incomplete; no events
+ * are fired when the history model changes.
  * @author Slava Pestov
  * @version $Id$
  */
-public class HistoryModel
+public class HistoryModel extends AbstractListModel
 {
 	//{{{ HistoryModel constructor
 	/**
@@ -47,7 +49,6 @@ public class HistoryModel
 	{
 		this.name = name;
 
-		max = jEdit.getIntegerProperty("history",25);
 		data = new Vector(max);
 	} //}}}
 
@@ -82,6 +83,19 @@ public class HistoryModel
 	public String getItem(int index)
 	{
 		return (String)data.elementAt(index);
+	} //}}}
+
+	//{{{ getElementAt() method
+	/**
+	 * Returns an item from the history list. This method returns the
+	 * same thing as {@link #getItem(int)} and only exists so that
+	 * <code>HistoryModel</code> instances can be used as list models.
+	 * @param index The index
+	 * @since jEdit 4.2pre2
+	 */
+	public Object getElementAt(int index)
+	{
+		return getItem(index);
 	} //}}}
 
 	//{{{ clear() method
@@ -164,10 +178,17 @@ public class HistoryModel
 		}
 	} //}}}
 
+	//{{{ propertiesChanged() method
+	public static void propertiesChanged()
+	{
+		max = jEdit.getIntegerProperty("history",25);
+	} //}}}
+
 	//{{{ Private members
 	private static final String TO_ESCAPE = "\n\t\\\"'[]";
+	private static int max;
+
 	private String name;
-	private int max;
 	private Vector data;
 	private static Hashtable models;
 

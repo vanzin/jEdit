@@ -25,6 +25,9 @@ contributing to this release.
 - Register commands now list registers, and marker commands now list
   markers with shortcuts in the status bar.
 
+- Added Edit->More Clipboard->Paste Deleted (C+e C+y) command. Similar
+  to Paste Previous, it lists recently deleted strings.
+
 }}}
 {{{ File System Browser
 

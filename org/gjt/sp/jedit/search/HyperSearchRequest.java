@@ -96,10 +96,8 @@ loop:				for(int i = 0; i < files.length; i++)
 					current++;
 
 					long currentTime = System.currentTimeMillis();
-					if(currentTime - lastStatusTime > 500)
+					if(currentTime - lastStatusTime > 250)
 					{
-						setStatus(jEdit.getProperty("hypersearch-status-file",
-							new String[] { file }));
 						setProgressValue(current);
 						lastStatusTime = currentTime;
 					}

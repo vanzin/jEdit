@@ -98,6 +98,7 @@ cut-append.shortcut=C+e C+u
 paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
 regexp.shortcut=C+e C+x
+paste-deleted.shortcut=C+e C+y
 redo.shortcut=C+e C+z
 #}}}
 

@@ -25,6 +25,7 @@ common.cancel=Cancel
 common.close=Close
 common.apply=Apply
 common.more=More
+common.insert=Insert
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
@@ -243,6 +244,7 @@ clipboard=cut-append \
 	  vertical-paste \
 	  - \
 	  paste-previous \
+	  paste-deleted \
 	  - \
 	  cut-string-register \
           copy-string-register \
@@ -259,10 +261,11 @@ cut-append.label=$Cut Append
 copy-append.label=C$opy Append
 vertical-paste.label=$Vertical Paste
 paste-previous.label=Paste Previo$us...
+paste-deleted.label=Paste $Deleted...
 cut-string-register.label=Cu$t to Register
 copy-string-register.label=Co$py to Register
 paste-string-register.label=Paste $Register
-cut-append-string-register.label=Cut Appen$d to Register
+cut-append-string-register.label=Cut Appe$nd to Register
 copy-append-string-register.label=Copy $Append to Register
 vertical-paste-string-register.label=V$ertical Paste Register
 view-registers.label=Vie$w Registers...
@@ -757,18 +760,18 @@ view.gutter.marker=Marker: {0}
 #}}}
 
 #{{{ Status messages
-view.status.add-marker=Enter shortcut for new marker [{0}]
+view.status.add-marker=Shortcut for new marker? [{0}]
 view.status.auto-wrap=Search string not found; wrapping around!
 view.status.bracket=Matches line {0}: {1}
 view.status.caret-tooltip=Line and column number indicator
-view.status.copy-append-string-register=Enter register name to copy append to [{0}]
-view.status.copy-string-register=Enter register name to copy to [{0}]
-view.status.cut-append-string-register=Enter register name to cut append to [{0}]
-view.status.cut-string-register=Enter register name to cut to [{0}]
-view.status.expand-folds=Press 1-9 to specify fold level
-view.status.goto-marker=Enter shortcut of marker to go to [{0}]
+view.status.copy-append-string-register=Register name to copy append to? [{0}]
+view.status.copy-string-register=Register to copy to? [{0}]
+view.status.cut-append-string-register=Register to cut append to? [{0}]
+view.status.cut-string-register=Register to cut to? [{0}]
+view.status.expand-folds=Fold level? [1-9]
+view.status.goto-marker=Shortcut of marker to go to? [{0}]
 view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
-view.status.insert-literal=Press key to insert literally
+view.status.insert-literal=Key to insert literally?
 view.status.io-1=I/O: 1 operation in progress
 view.status.io.done=Input/output complete
 view.status.io=I/O: {0} operations in progress
@@ -783,7 +786,7 @@ view.status.no-markers=no markers set
 view.status.no-registers=no registers defined
 view.status.overwrite-changed=Overwrite mode is {0,choice,0#off|1#on}
 view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
-view.status.paste-string-register=Enter register name to paste from ([0}]
+view.status.paste-string-register=Register to paste from? [{0}]
 view.status.print=Printing page {0}
 view.status.quick-copy=Quick copy mode - marked text will replace selection
 view.status.recording=Macro recording
@@ -791,11 +794,11 @@ view.status.rect-select-changed=Rectangular selection is {0,choice,0#off|1#on}
 view.status.rect-tooltip=Rectangular selection mode (click to change)
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.search-not-found=Search string not found!
-view.status.select-marker=Enter shortcut of marker to select to [{0}]
-view.status.swap-marker=Enter shortcut of marker to swap caret position with \
+view.status.select-marker=Shortcut of marker to select to? [{0}]
+view.status.swap-marker=Shortcut of marker to swap caret position with? \
 	[{0}]
-view.status.vertical-paste-string-register=Enter register name to vertical paste \
-	from [{0}]
+view.status.vertical-paste-string-register=Register to vertical paste \
+	from? [{0}]
 view.status.wrap-changed=Word wrap mode is now "{0}"
 view.status.wrap-tooltip=Word wrap mode (click to change)
 #}}}
@@ -1250,10 +1253,11 @@ remote-dir-search.message=You have elected to search a non-local directory.\n\
 	Are you sure you want to continue?
 #}}}
 
-#{{{ Paste previous dialog
-pasteprev.title=Paste Previous
-pasteprev.caption=Previous clippings:
-pasteprev.insert=Insert
+#{{{ Paste previous and paste deleted dialogs
+paste-previous.title=Paste Previous
+paste-previous.caption=Recently copied and pasted text:
+paste-deleted.title=Paste Deleted
+paste-deleted.caption=Recently deleted text:
 #}}}
 
 #{{{ File changed on disk dialog
