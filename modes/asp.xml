@@ -16,8 +16,8 @@
 		<SEQ TYPE="MARKUP" DELEGATE="ASPJS">&lt;%@LANGUAGE="JAVASCRIPT"%&gt;</SEQ>
 		<SEQ TYPE="MARKUP" DELEGATE="ASPPL">&lt;%@LANGUAGE="PERLSCRIPT"%&gt;</SEQ>
 
-		<!-- Inlined server-side JavaScript(Normally VBScript in ASP) -->
-		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+		<!-- Inlined server-side VBScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
@@ -182,7 +182,7 @@
 	     ****************************************************************** -->
 	<RULES SET="ASPJS" IGNORE_CASE="TRUE">
 		<!-- Inlined server-side Javascript -->
-		<SPAN TYPE="MARKUP" DELEGATE="C">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
@@ -194,12 +194,12 @@
 		</SPAN>
 
 		<!-- Server-side Javascript -->
-		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="jscript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
-		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_CSJS">
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
@@ -349,10 +349,9 @@
 
 	<!-- ******************************************************************
 	     HTML Tags
-		 Added some stuff from the HTML syntax highlighting XML here which
-		 should have been in the ASP mode definition, to highlight literals in HTML tags
 	     ****************************************************************** -->
 	<RULES SET="ASPVB_TAGS" DEFAULT="MARKUP">
+		<!-- Server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -372,6 +371,7 @@
 	</RULES>
 
 	<RULES SET="ASPVB_LIT1" DEFAULT="LITERAL1">
+		<!-- Server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -379,6 +379,7 @@
 	</RULES>
 
 	<RULES SET="ASPJS_TAGS" DEFAULT="MARKUP">
+		<!-- Server-side JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -398,6 +399,7 @@
 	</RULES>
 	
 	<RULES SET="ASPJS_LIT1" DEFAULT="LITERAL1">
+		<!-- Server-side JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -405,6 +407,7 @@
 	</RULES>
 
 	<RULES SET="ASPPL_TAGS" DEFAULT="MARKUP">
+		<!-- Server-side PerlScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -424,6 +427,7 @@
 	</RULES>
 
 	<RULES SET="ASPPL_LIT1" DEFAULT="LITERAL1">
+		<!-- Server-side PerlScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -432,6 +436,7 @@
 	
 	<!-- These three rules sets handle server side scripts being mixed into client side javascript -->
 	<RULES SET="ASPVB_CSJS">
+		<!-- Server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -440,6 +445,7 @@
 	</RULES>
 	
 	<RULES SET="ASPJS_CSJS">
+		<!-- Server-side JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -448,6 +454,7 @@
 	</RULES>
 
 	<RULES SET="ASPPL_CSJS">
+		<!-- Server-side PerlScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -457,6 +464,7 @@
 	
 	<!-- These three rules sets handle server side scripts being mixed into stylesheets -->
 	<RULES SET="ASPVB_STYLE">
+		<!-- Server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -465,6 +473,7 @@
 	</RULES>
 	
 	<RULES SET="ASPJS_STYLE">
+		<!-- Server-side JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -473,6 +482,7 @@
 	</RULES>
 
 	<RULES SET="ASPPL_STYLE">
+		<!-- Server-side PerlScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -482,6 +492,7 @@
 
 	<!-- These three rules sets handle server side scripts being mixed into SGML Comments -->
 	<RULES SET="ASPVB_SGML" DEFAULT="COMMENT1">
+		<!-- Server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -489,6 +500,7 @@
 	</RULES>
 
 	<RULES SET="ASPJS_SGML" DEFAULT="COMMENT1">
+		<!-- Server-side JavaScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
@@ -496,9 +508,11 @@
 	</RULES>
 
 	<RULES SET="ASPPL_SGML" DEFAULT="COMMENT1">
+		<!-- Server-side PerlScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 	</RULES>
 </MODE>
+
