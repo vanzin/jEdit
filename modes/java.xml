@@ -165,13 +165,15 @@
 			<END>--&gt;</END>
 		</SPAN>
 
+		<!-- Javadoc allows this -->
+		<SEQ TYPE="NULL">&lt;=</SEQ>
+		<SEQ TYPE="NULL">&lt; </SEQ>
+
 		<!-- HTML tags -->
-		<!-- Commented out, since people like to use
-		     < and > in their Javadocs -->
-		<!-- SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
-		</SPAN -->
+		</SPAN>
 
 		<KEYWORDS>
 			<LABEL>@author</LABEL>

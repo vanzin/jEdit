@@ -159,9 +159,7 @@ actually a Java bug, or a well-known problem:
 jEdit depends on, and comes bundled with the following libraries:
 
 - gnu.regexp by the Free Software Foundation. jEdit bundles gnu.regexp
-  1.1.3, with the following minor change:
-
-  - REMatch.getSubCount() method added
+  1.1.3.
 
   gnu.regexp is released under the 'GNU Lesser General Public License'.
   The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
@@ -178,21 +176,13 @@ jEdit depends on, and comes bundled with the following libraries:
   The AElfred home page is located at <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2beta1, with the bsh.util package removed.
+  version 1.2beta1, with the bsh.util package removed, and a few
+  performance problems fixed.
 
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
 
-  The version of BeanShell shipped with jEdit differs slightly from the
-  official version. The main change is a few performance improvements.
-
   The BeanShell homepage is located at <http://www.beanshell.org>.
-
-- Kunststoff look and feel. It looks nicer than the Java look and feel,
-  and is used by default when running on Java 2 version 1.2 or later. It
-  is released under the 'GNU Lesser General Public License'.
-
-  The Kunststoff home page can be found at <http://www.incors.com>.
 
 - The Sun Java look and Feel icon collection. The license may be found
   in the ICONS.LICENSE.txt file.
@@ -264,6 +254,7 @@ Romain Guy:         - POVRay edit mode
 Richard Beton:      - Occam edit mode
 Saimon Moore:       - Velocity edit mode
 Tal Davidson:       - First implementation of syntax highlighting engine
+Thomas Bock:        - BBj edit mode
 Tom Locke:          - Reverse search
 Will Sargent:       - JHTML edit mode
                     - RelationalView edit mode

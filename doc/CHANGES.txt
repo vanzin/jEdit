@@ -23,6 +23,7 @@ JEDIT 4.0 VERSION HISTORY
   BeanShell expression for each selected line, replacing the contents of
   that line with the return value of the expression
 - Macros.confirm() method added, for use in macros
+- BBj (Business Basic based on Java) syntax highlighting (Thomas Bock)
 
 + Enhancements
 
@@ -81,6 +82,8 @@ JEDIT 4.0 VERSION HISTORY
 - Entering a file name in the text field of the Open dialog box would
   open that file name relative to jEdit's current working directory, not
   the directory selected in the dialog box
+- Fixed possible ArrayIndexOutOfBounds when searching for regular
+  expressions that start with \<
 
 + API Changes
 
