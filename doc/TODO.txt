@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- autoscroll down is slower than up if !lastLinePartial
+- save messes up; soft wrap switching bug is back
 - out of sync scroll
 - expandFolds is broken
 - "need repaint" line info flags & chunk cache handling invalidation
@@ -40,7 +42,6 @@ and quirks that I need to fix eventually.
   - new bracket matching:
     - use interface to determine match
     - show line number in match status msg
-  - text area: better scroll to
 
 [error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
 [error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)

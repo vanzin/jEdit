@@ -407,12 +407,25 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Sets the vertical scroll bar position.
 	 * @param physFirstLine The first physical line to display
+	 * @param skew A local screen line delta
 	 * @since jEdit 4.2pre1
 	 */
 	public void setFirstPhysicalLine(int physFirstLine)
 	{
+		setFirstPhysicalLine(physFirstLine,0);
+	} //}}}
+
+	//{{{ setFirstPhysicalLine() method
+	/**
+	 * Sets the vertical scroll bar position.
+	 * @param physFirstLine The first physical line to display
+	 * @param skew A local screen line delta
+	 * @since jEdit 4.2pre1
+	 */
+	public void setFirstPhysicalLine(int physFirstLine, int skew)
+	{
 		//{{{ ensure we don't have empty space at the bottom or top, etc
-		int screenLineCount = 0;
+		int screenLineCount = -skew;
 		int physicalLine = displayManager.getLastVisibleLine();
 		for(;;)
 		{
@@ -434,9 +447,9 @@ public class JEditTextArea extends JComponent
 
 		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
 		if(amount > 0)
-			displayManager.firstLine.physDown(amount);
+			displayManager.firstLine.physDown(amount,skew);
 		else if(amount < 0)
-			displayManager.firstLine.physUp(-amount);
+			displayManager.firstLine.physUp(-amount,skew);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -562,6 +575,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
+		//{{{ Get ready
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
 		if(offset > lineLength)
@@ -574,80 +588,46 @@ public class JEditTextArea extends JComponent
 
 		int _electricScroll = (doElectricScroll
 			&& visibleLines > electricScroll * 2
-			? electricScroll : 0);
+			? electricScroll : 0); //}}}
 
-		// visibleLines == 0 before the component is realized
-		// we can't do any proper scrolling then, so we have
-		// this hack...
-		if(visibleLines == 0)
-		{
-			System.err.println("should not be done");
-			//setFirstLine(physicalToVirtual(
-			//	Math.max(0,line - _electricScroll)));
-			return;
-		}
-
+		//{{{ Scroll vertically
 		int firstLine = getFirstLine();
-
-		//{{{ STAGE 1 -- determine if the caret is visible.
 		int screenLine = getScreenLineOfOffset(buffer.getLineStartOffset(line) + offset);
-		Point point;
-		if(screenLine != -1)
+		int visibleLines = getVisibleLines();
+		if(screenLine == -1)
 		{
-			point = offsetToXY(line,offset,returnValue);
-
-			int height = painter.getFontMetrics().getHeight();
-
-			int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
-			int y2 = (firstLine + visibleLines
-				== displayManager.getScrollLineCount()
-				? 0 : height * _electricScroll);
-
-			Rectangle rect = new Rectangle(0,y1,
-				painter.getWidth() - 5,visibleLines * height
-				- y1 - y2);
-
-			point = offsetToXY(line,offset,returnValue);
-			if(point != null)
+			int prevLine = displayManager.getPrevVisibleLine(getFirstPhysicalLine());
+			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
+			if(line == prevLine)
 			{
-				point.x += extraEndVirt;
-				if(rect.contains(point))
-					return;
+				setFirstLine(getFirstLine() - _electricScroll
+					- displayManager.getScreenLineCount(
+					prevLine));
 			}
-		} //}}}
-
-		point = null;
-
-		//{{{ STAGE 2 -- scroll vertically
-		int physFirstLine = line;
-		screenLine = visibleLines / 2;
-		for(int i = line - 1; i >= 0; i--)
-		{
-			screenLine -= displayManager.getScreenLineCount(physFirstLine);
-			if(screenLine <= 0)
-				break;
-			int prevLine = displayManager.getPrevVisibleLine(physFirstLine);
-			if(prevLine == -1)
-				break;
-			physFirstLine = prevLine;
-		}
-
-		setFirstPhysicalLine(physFirstLine);
-		//}}}
-
-		//{{{ STAGE 3 -- scroll horizontally
-		if(point == null)
-		{
-			point = offsetToXY(line,offset,returnValue);
-			if(point == null)
+			else if(line == nextLine)
 			{
-				// a soft wrapped line has more screen lines
-				// than the number of visible lines
-				return;
+				setFirstLine(getFirstLine() + _electricScroll
+					+ displayManager.getScreenLineCount(
+					nextLine));
 			}
 			else
-				point.x += extraEndVirt;
+			{
+				setFirstPhysicalLine(line,-visibleLines / 2);
+			}
 		}
+		else if(screenLine < _electricScroll)
+		{
+			setFirstLine(getFirstLine() - _electricScroll + screenLine);
+		}
+		else if(screenLine > visibleLines - _electricScroll
+			- (lastLinePartial ? 2 : 1))
+		{
+			setFirstLine(getFirstLine() + _electricScroll - visibleLines + screenLine + (lastLinePartial ? 2 : 1));
+		} //}}}
+
+		//{{{ Scroll horizontally
+		Point point = offsetToXY(line,offset,returnValue);
+		point.x += extraEndVirt;
 
 		if(point.x < 0)
 		{
@@ -780,7 +760,7 @@ public class JEditTextArea extends JComponent
 		int height = fm.getHeight();
 		int line = y / height;
 
-		if(line < 0 || line > visibleLines)
+		if(line < 0 || line >= visibleLines)
 			return -1;
 
 		return xToScreenLineOffset(line,x,round);
@@ -6146,8 +6126,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			dragged = true;
 
 			int x = evt.getX();
-			int dot = xyToOffset(x,
-				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
+			int y = evt.getY();
+			if(y < 0)
+				y = 0;
+			else if(y >= painter.getHeight())
+				y = painter.getHeight() - 1;
+
+			int dot = xyToOffset(x,y,
 				(!painter.isBlockCaretEnabled()
 				&& !isOverwriteEnabled())
 				|| quickCopyDrag);
@@ -6161,7 +6146,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(x > dotLineWidth)
 				{
 					extraEndVirt = (int)((x - dotLineWidth) / charWidth);
-					if(x % charWidth  > charWidth / 2)
+					if(x % charWidth > charWidth / 2)
 						extraEndVirt++;
 				}
 			}
