@@ -1,6 +1,9 @@
 /*
  * AboutDialog.java - About jEdit dialog box
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,15 +22,18 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class AboutDialog extends EnhancedDialog
 {
+	//{{{ AboutDialog constructor
 	public AboutDialog(View view)
 	{
 		super(view,jEdit.getProperty("about.title"),true);
@@ -54,29 +60,33 @@ public class AboutDialog extends EnhancedDialog
 		setResizable(false);
 		setLocationRelativeTo(view);
 		show();
-	}
+	} //}}}
 
+	//{{{ ok() method
 	public void ok()
 	{
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
+	} //}}}
 
 	// private members
 	private JButton close;
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
 			dispose();
 		}
-	}
+	} //}}}
 
+	//{{{ AboutPanel class
 	static class AboutPanel extends JComponent
 	{
 		ImageIcon image;
@@ -87,9 +97,9 @@ public class AboutDialog extends EnhancedDialog
 		AboutPanel()
 		{
 			setFont(UIManager.getFont("Label.font"));
-			setForeground(new Color(206,206,229));
+			setForeground(new Color(96,96,96));
 			image = new ImageIcon(getClass().getResource(
-				"/org/gjt/sp/jedit/icons/about.gif"));
+				"/org/gjt/sp/jedit/icons/about.png"));
 			setBorder(new MatteBorder(1,1,1,1,Color.black));
 
 			text = new Vector(50);
@@ -116,25 +126,36 @@ public class AboutDialog extends EnhancedDialog
 			int firstLine = scrollPosition / height;
 
 			int firstLineOffset = height - scrollPosition % height;
-			int lastLine = (scrollPosition + 320) / height - 3;
+			int lastLine = (scrollPosition + getHeight()
+				- 30 - fm.getHeight() * 2) / height;
 
 			int y = 50 + firstLineOffset;
 
 			for(int i = firstLine; i <= lastLine; i++)
 			{
-				if(i >= 0 && i < text.size())
+				if(i >= 0 && i < text.size() / 2)
 				{
-					String line = (String)text.elementAt(i);
-					g.drawString(line,130 + (340
-						- fm.stringWidth(line)) / 2,y);
+					if(2 * i + 1 != text.size())
+					{
+						String line2;
+						line2 = (String)text.elementAt(2 * i + 1);
+						int width2 = fm.stringWidth(line2);
+						g.drawString(line2,(getWidth() / 2
+							+ 20),y);
+					}
+
+					String line1 = (String)text.elementAt(2 * i);
+					int width1 = fm.stringWidth(line1);
+					g.drawString(line1,(getWidth() / 2
+						- width1 - 20),y);
 				}
 				y += fm.getHeight();
 			}
 
 			String[] args = { jEdit.getVersion() };
 			String version = jEdit.getProperty("about.version",args);
-			g.drawString(version,130 + (340 - fm.stringWidth(version)) / 2,
-				370);
+			g.drawString(version,(getWidth() - fm.stringWidth(version)) / 2,
+				getHeight() - 30);
 		}
 
 		public Dimension getPreferredSize()
@@ -175,11 +196,11 @@ public class AboutDialog extends EnhancedDialog
 					scrollPosition++;
 
 					if(scrollPosition > max)
-						scrollPosition = -300;
+						scrollPosition = -getHeight();
 
 					try
 					{
-						int delay = (int)Math.max(0,30 -
+						int delay = (int)Math.max(0,60 -
 							(System.currentTimeMillis() - start));
 						Thread.sleep(delay);
 
@@ -197,5 +218,5 @@ public class AboutDialog extends EnhancedDialog
 				}
 			}
 		}
-	}
+	} //}}}
 }

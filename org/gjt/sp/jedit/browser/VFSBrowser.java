@@ -323,14 +323,17 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ handleMessage() method
-	public void handleMessage(final EBMessage msg)
+	public void handleMessage(EBMessage msg)
 	{
-		if(msg instanceof ViewUpdate)
-			handleViewUpdate((ViewUpdate)msg);
-		else if(msg instanceof BufferUpdate)
-			handleBufferUpdate((BufferUpdate)msg);
-		else if(msg instanceof PropertiesChanged)
+		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
+		else if(msg instanceof BufferUpdate)
+		{
+			BufferUpdate bmsg = (BufferUpdate)msg;
+			if(bmsg.getWhat() == BufferUpdate.CREATED
+				|| bmsg.getWhat() == BufferUpdate.CLOSED)
+				browserView.updateFileView();
+		}
 		else if(msg instanceof VFSUpdate)
 		{
 			// this is a dirty hack and it relies on the fact
@@ -354,17 +357,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 				{
 					requestRunning = true;
 
-					// Have to use invokeLater() because
-					// when using FTP the DirectoryCache
-					// might receive the event after this
-					SwingUtilities.invokeLater(new Runnable()
-					{
-						public void run()
-						{
-							browserView.maybeReloadDirectory(
-								((VFSUpdate)msg).getPath());
-						}
-					});
+					browserView.maybeReloadDirectory(
+						((VFSUpdate)msg).getPath());
 				}
 				finally
 				{
@@ -884,7 +878,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(buffer != null)
 				{
 					if(newView)
-						view = jEdit.newView(null,buffer);
+						jEdit.newView(null,buffer);
 					else
 						view.setBuffer(buffer);
 				}
@@ -1011,30 +1005,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		button.addActionListener(new ActionHandler());
 
 		return button;
-	} //}}}
-
-	//{{{ handleViewUpdate() method
-	private void handleViewUpdate(ViewUpdate vmsg)
-	{
-		if(vmsg.getWhat() == ViewUpdate.CLOSED
-			&& vmsg.getView() == view)
-			view = null;
-	} //}}}
-
-	//{{{ handleBufferUpdate() method
-	private void handleBufferUpdate(BufferUpdate bmsg)
-	{
-		if(bmsg.getWhat() == BufferUpdate.CREATED
-			|| bmsg.getWhat() == BufferUpdate.CLOSED)
-			browserView.updateFileView();
-		else if(bmsg.getWhat() == BufferUpdate.DIRTY_CHANGED)
-		{
-			// if a buffer becomes clean, it means it was
-			// saved. So we repaint the browser view, in
-			// case it was a 'save as'
-			if(!bmsg.getBuffer().isDirty())
-				browserView.updateFileView();
-		}
 	} //}}}
 
 	//{{{ propertiesChanged() method
