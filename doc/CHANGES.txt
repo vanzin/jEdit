@@ -294,17 +294,19 @@ and Ryan Grove for contributing to this release.
   scroll line numbers and physical line numbers, however there is a new
   JEditTextArea.setFirstPhysicalLine() method.
 
-- The following plugins are known to be broken:
-
-  Background
-  JDiff
-  WhiteSpace
-  XML
-
 - Constructor of EBMessage class now takes an Object, not an
   EBComponent, and getSource() now returns an Object, not an
   EBComponent. This could break any plugins that provide custom message
   types.
+
+- The following plugins are known to be broken:
+
+  Background
+  Console
+  JDiff
+  WhiteSpace
+  SideKick
+  XML
 
 }}}
 {{{ API Enhancements

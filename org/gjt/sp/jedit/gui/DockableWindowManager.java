@@ -549,9 +549,8 @@ public class DockableWindowManager extends JPanel
 	//{{{ init() method
 	/**
 	 * Initialises dockable window manager. Do not call this method directly.
-	 * @since jEdit 4.2pre1
 	 */
-	public void init(View.ViewConfig config)
+	public void init()
 	{
 		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
 			new Factory[dockableWindowFactories.size()]);
@@ -569,21 +568,6 @@ public class DockableWindowManager extends JPanel
 			else
 				e = new Entry(factory);
 			windows.put(factory.name,e);
-		}
-
-		if(!view.isPlainView())
-		{
-			if(config.top != null && config.top.length() != 0)
-				showDockableWindow(config.top);
-
-			if(config.left != null && config.left.length() != 0)
-				showDockableWindow(config.left);
-
-			if(config.bottom != null && config.bottom.length() != 0)
-				showDockableWindow(config.bottom);
-
-			if(config.right != null && config.right.length() != 0)
-				showDockableWindow(config.right);
 		}
 	} //}}}
 
@@ -737,11 +721,11 @@ public class DockableWindowManager extends JPanel
 	 */
 	public String getDockableTitle(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
-		if(entry == null)
-			return null;
+		String title = jEdit.getProperty(name + ".title");
+		if(title == null)
+			return "NO TITLE PROPERTY: " + name;
 		else
-			return entry.title;
+			return title;
 	} //}}}
 
 	//{{{ isDockableWindowVisible() method
@@ -954,54 +938,54 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void propertiesChanged()
 	{
+		if(view.isPlainView())
+			return;
+
 		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
 
-		Enumeration enum = windows.elements();
-		while(enum.hasMoreElements())
+		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
+			new Factory[dockableWindowFactories.size()]);
+		Arrays.sort(windowList,new DockableWindowCompare());
+
+		for(int i = 0; i < windowList.length; i++)
 		{
-			Entry entry = (Entry)enum.nextElement();
+			String dockable = windowList[i].name;
+			Entry entry = (Entry)windows.get(dockable);
+			System.err.println(dockable);
 
-			if(!view.isPlainView())
+			String newPosition = jEdit.getProperty(dockable
+				+ ".dock-position");
+			if(FLOATING.equals(newPosition)
+				&& FLOATING.equals(entry.position))
 			{
-				String position = entry.position;
-				String newPosition = jEdit.getProperty(entry.factory.name
-					+ ".dock-position");
-				if(newPosition != null /* ??? */
-					&& !newPosition.equals(position))
-				{
-					entry.position = newPosition;
-					if(entry.container != null)
-					{
-						entry.container.remove(entry);
-						entry.container = null;
-						entry.win = null;
-					}
-
-					if(newPosition.equals(FLOATING))
-						/* do nothing */;
-					else
-					{
-						if(newPosition.equals(TOP))
-							entry.container = top;
-						else if(newPosition.equals(LEFT))
-							entry.container = left;
-						else if(newPosition.equals(BOTTOM))
-							entry.container = bottom;
-						else if(newPosition.equals(RIGHT))
-							entry.container = right;
-						else
-							throw new InternalError("Unknown position: " + newPosition);
-
-						entry.container.register(entry);
-					}
-				}
+				continue;
 			}
 
-			/* if(entry.container instanceof FloatingWindowContainer)
+			entry.position = newPosition;
+			if(entry.container != null)
 			{
-				SwingUtilities.updateComponentTreeUI(((JFrame)entry.container)
-					.getRootPane());
-			} */
+				entry.container.remove(entry);
+				entry.container = null;
+				entry.win = null;
+			}
+
+			if(newPosition.equals(FLOATING))
+				/* do nothing */;
+			else
+			{
+				if(newPosition.equals(TOP))
+					entry.container = top;
+				else if(newPosition.equals(LEFT))
+					entry.container = left;
+				else if(newPosition.equals(BOTTOM))
+					entry.container = bottom;
+				else if(newPosition.equals(RIGHT))
+					entry.container = right;
+				else
+					throw new InternalError("Unknown position: " + newPosition);
+
+				entry.container.register(entry);
+			}
 		}
 
 		revalidate();
@@ -1417,29 +1401,7 @@ public class DockableWindowManager extends JPanel
 			// get the title here, not in the factory constructor,
 			// since the factory might be created before a plugin's
 			// props are loaded
-			title = jEdit.getProperty(factory.name + ".title");
-			if(title == null)
-				title = "NO TITLE PROPERTY: " + factory.name;
-
-			if(position == null)
-				position = FLOATING;
-			else if(position.equals(FLOATING))
-				/* do nothing */;
-			else
-			{
-				if(position.equals(TOP))
-					container = top;
-				else if(position.equals(LEFT))
-					container = left;
-				else if(position.equals(BOTTOM))
-					container = bottom;
-				else if(position.equals(RIGHT))
-					container = right;
-				else
-					throw new InternalError("Unknown position: " + position);
-
-				container.register(this);
-			}
+			title = getDockableTitle(factory.name);
 		} //}}}
 
 		//{{{ open() method
