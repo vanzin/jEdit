@@ -640,7 +640,7 @@ String result = df.format(d);
   </para>
 
   <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate BeanShell
    Expression</guimenuitem> displays a text input dialog
    that asks you to type a single line of BeanShell commands. You can type
    more than one BeanShell statement so long as each of them ends with a
@@ -652,7 +652,7 @@ String result = df.format(d);
   </para>
 
   <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate For Selected
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate For Selected
    Lines</guimenuitem> displays a text input dialog that asks you to
    type a single line of BeanShell commands. The commands are evaluated
    for each line of the selection. In addition to the standard set of
@@ -687,7 +687,7 @@ String result = df.format(d);
   </para>
 
   <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
    evaluates the selected text as a BeanShell script and
    replaces it with the return value of the statement.
   </para>
@@ -702,7 +702,7 @@ String result = df.format(d);
    <para>
     Try typing an expression like <userinput>(3745*856)+74</userinput>
     in the buffer, select it, and choose
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate
     Selection</guimenuitem>. The selected text will be replaced by the
     answer, <userinput>3205794</userinput>.
 

@@ -498,7 +498,7 @@ class BrowserView extends JPanel
 				isSelected,cellHasFocus);
 
 			ParentDirectoryRenderer.this.setBorder(new EmptyBorder(
-				1,index * 10 + 1,1,1));
+				1,index * 5 + 1,1,1));
 
 			if(value instanceof LoadingPlaceholder)
 			{

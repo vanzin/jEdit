@@ -20,15 +20,13 @@
    <listitem><para>If the file should be GZipped on disk
    (see <xref linkend="opening" />)
    </para></listitem>
-   <listitem><para>If the file should be saved with a trailing line break
-   </para></listitem>
    <listitem><para>The edit mode (see <xref linkend="modes" />)</para></listitem>
    <listitem><para>The fold mode (see <xref linkend="folding" />)</para></listitem>
    <listitem><para>The wrap mode and margin (see <xref linkend="word-wrap" />)
    </para></listitem>
    <listitem><para>The tab width (see <xref linkend="indent" />)</para></listitem>
    <listitem><para>The indent width</para></listitem>
-   <listitem><para>If auto indent and soft tabs should be enabled
+   <listitem><para>If soft tabs should be used
    (see <xref linkend="indent" />)
    </para></listitem>
   </itemizedlist>
@@ -160,6 +158,21 @@
    Swing look and feel, as well as the fonts used to display user interface
    controls such as buttons, labels and menus.
   </para>
+  <bridgehead renderas="sect3">The Text Area Pane</bridgehead>
+  <para>
+   The <guibutton>Text Area</guibutton> option pane lets you customize the
+   appearance of the text area.
+  </para>
+  <bridgehead renderas="sect3">The Gutter Pane</bridgehead>
+  <para>
+   The <guibutton>Gutter</guibutton> option pane lets you customize the
+   appearance of the gutter.
+  </para>
+  <bridgehead renderas="sect3">The Syntax Highlighting Pane</bridgehead>
+  <para>
+   The <guibutton>Styles</guibutton> option pane lets you change
+   the text styles and colors used for syntax highlighting.
+  </para>
   <bridgehead renderas="sect3">The Loading and Saving Pane</bridgehead>
   <para>
    The <guibutton>Loading and Saving</guibutton> option pane lets you change
@@ -188,56 +201,6 @@
    in mode files. To find out how to edit mode files directly, see
    <xref linkend="writing-modes-part" />.
   </para>
-  <bridgehead renderas="sect3">The Text Area Pane</bridgehead>
-  <para>
-   The <guibutton>Text Area</guibutton> option pane lets you customize the
-   appearance of the text area.
-  </para>
-  <bridgehead renderas="sect3">The Gutter Pane</bridgehead>
-  <para>
-   The <guibutton>Gutter</guibutton> option pane lets you customize the
-   appearance of the gutter.
-  </para>
-  <bridgehead renderas="sect3">The Colors Pane</bridgehead>
-  <para>
-   The <guibutton>Colors</guibutton> option pane lets you change
-   the text area's color scheme.
-  </para>
-  <bridgehead renderas="sect3">The Styles Pane</bridgehead>
-  <para>
-   The <guibutton>Styles</guibutton> option pane lets you change
-   the text styles and colors used for syntax highlighting.
-  </para>
-  <bridgehead renderas="sect3">The Docking Pane</bridgehead>
-  <para>
-   The <guibutton>Docking</guibutton> option pane lets you specify which
-   dockable windows should be floating, and which should be docked in the view.
-  </para>
-  <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
-  <para>
-   The <guibutton>Context Menu</guibutton> option pane lets you edit the text
-   area's right-click context menu.
-  </para>
-  <bridgehead renderas="sect3">The Tool Bar Pane</bridgehead>
-  <para>
-   The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
-   or disable it completely.
-  </para>
-  <bridgehead renderas="sect3">The Shortcuts Pane</bridgehead>
-  <para>
-   The <guibutton>Shortcuts</guibutton> option pane
-   let you change keyboard shortcuts. Each command can have up to two shortcuts
-   associated with it.
-  </para>
-  <para>
-   The combo box at the top of the option pane selects the shortcut set
-   to edit (command, plugin or macro shortcuts).
-  </para>
-  <para>
-   To change a shortcut, click the appropriate table entry and press the
-   keys you want associated with that command in the resulting dialog box.
-   The dialog box will warn you if the shortcut is already assigned.
-  </para>
   <bridgehead renderas="sect3">The Abbreviations Pane</bridgehead>
   <para>
    The <guibutton>Abbreviations</guibutton> option pane lets you enable or
@@ -265,10 +228,44 @@
    See <xref linkend="positional-params" /> for information about positional
    parameters in abbreviations.
   </para>
+  <bridgehead renderas="sect3">The Shortcuts Pane</bridgehead>
+  <para>
+   The <guibutton>Shortcuts</guibutton> option pane
+   let you change keyboard shortcuts. Each command can have up to two shortcuts
+   associated with it.
+  </para>
+  <para>
+   The combo box at the top of the option pane selects the shortcut set
+   to edit (command, plugin or macro shortcuts).
+  </para>
+  <para>
+   To change a shortcut, click the appropriate table entry and press the
+   keys you want associated with that command in the resulting dialog box.
+   The dialog box will warn you if the shortcut is already assigned.
+  </para>
+  <bridgehead renderas="sect3">The Docking Pane</bridgehead>
+  <para>
+   The <guibutton>Docking</guibutton> option pane lets you specify which
+   dockable windows should be floating, and which should be docked in the view.
+  </para>
+  <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
+  <para>
+   The <guibutton>Context Menu</guibutton> option pane lets you edit the text
+   area's right-click context menu.
+  </para>
+  <bridgehead renderas="sect3">The Tool Bar Pane</bridgehead>
+  <para>
+   The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
+   or disable it completely.
+  </para>
   <bridgehead renderas="sect3">The Printing Pane</bridgehead>
   <para>
    The <guibutton>Printing</guibutton> option pane lets you customize the
    appearance of printed output.
+  </para>
+  <bridgehead renderas="sect3">The Proxy Servers Pane</bridgehead>
+  <para>
+   XXX
   </para>
   <bridgehead renderas="sect3">The File System Browser Panes</bridgehead>
   <para>

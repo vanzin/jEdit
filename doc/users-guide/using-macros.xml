@@ -187,7 +187,7 @@
   <para>
    The <guimenu>Macros</guimenu> menu
    lists all macros stored in two places: the <filename>macros</filename>
-   subdirectory of the jEdit install directory, and the
+   subdirectory of the jEdit home directory, and the
    <filename>macros</filename> subdirectory of the user-specific
    settings directory (see <xref linkend="settings-directory"/> for
    information about the settings directory). Any macros you record will be
@@ -220,15 +220,11 @@
   </para>
 
   <para>
-    <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse System Macros</guimenuitem>
-    displays the <filename>macros</filename> subdirectory of the
-    directory in which jEdit is installed in the file system browser.
-  </para>
-
-  <para>
-    <guimenu>Macros</guimenu>&gt;<guimenuitem>Browse User Macros</guimenuitem>
-    displays the <filename>macros</filename> subdirectory of the
-    user settings directory in the file system browser.
+   You can browse the user and system macro directories by opening the
+   <filename>macros</filename> directory from the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>jEdit Home Directory</guimenuitem>
+   and <guimenu>Utilities</guimenu>&gt;<guimenuitem>Settings Directory</guimenuitem>
+   menus.
   </para>
 
   <para>

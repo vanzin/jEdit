@@ -6106,10 +6106,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 
 				if(!(multi || quickCopyDrag))
-				{
 					selectNone();
+
+				if(!quickCopyDrag)
 					moveCaretPosition(dragStart,false);
-				}
 			}
 		} //}}}
 

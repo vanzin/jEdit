@@ -100,12 +100,10 @@
     <para>
      Rectangular selections are implemented using character offsets,
      not absolute screen positions, so they might not behave as you might
-     expect if a proportional-width font is being used, hard tabs are
-     enabled, or soft wrap is enabled. For information about changing the font
-     used in the text
-     area, see <xref linkend="global-opts" />. For information about
-     tabs and wrapping, see <xref linkend="soft-tabs" /> and
-     <xref linkend="word-wrap" />.
+     expect if a proportional-width font is being used or if soft wrap is
+     enabled. For information about changing the font used in the text
+     area, see <xref linkend="global-opts" />. For information about soft wrap,
+     see <xref linkend="word-wrap" />.
     </para>
    </note>
   </sect2>
@@ -925,7 +923,7 @@
    </para>
    <para>
     Running searches can be stopped in the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O Progress
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O Progress
     Monitor</guimenuitem> dialog box.
    </para>
   </sect2>
@@ -985,7 +983,7 @@
   </sect2>
   <sect2><title>The Search Bar</title>
    <para>
-    The search bar at the top of the view provides a convenient way to
+    The search bar feature provides a convenient way to
     perform simple searches without
     opening the search and replace dialog box first. Neither multiple file
     search nor replacement can be done from the search bar.
@@ -993,20 +991,11 @@
     previously entered strings; see <xref linkend="history" /> for details.
    </para>
    <para>
-    Unless the <guibutton>HyperSearch</guibutton> check box is selected, the
-    search bar will perform an <firstterm>incremental search</firstterm>.
-    In incremental search mode, the first occurrence of the search
-    string is located in the current buffer as it is being typed.
-    Pressing <keycap>Enter</keycap>
-    and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
-    searches for the next and previous occurrence, respectively.
-    Once the desired occurrence has been found, press <keycap>Escape</keycap>
-    to return keyboard focus to the text area.
-   </para>
-   <para>
-    If the <guibutton>HyperSearch</guibutton> check box is selected, entering a
-    search string and pressing <keycap>Enter</keycap> will perform a
-    HyperSearch in the current buffer.
+    By default, the search bar remains hidden until one of the quick search
+    commands (described below) is invoked; however you can choose to have it
+    always visible in the <guibutton>General</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search</guimenuitem>
@@ -1034,9 +1023,21 @@
     for the word under the caret.
    </para>
    <para>
-    The search bar can be disabled in the <guibutton>General</guibutton> pane of
-    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-    Options</guimenuitem> dialog box.
+    Unless the <guibutton>HyperSearch</guibutton> check box is selected, the
+    search bar will perform an <firstterm>incremental search</firstterm>.
+    In incremental search mode, the first occurrence of the search
+    string is located in the current buffer as it is being typed.
+    Pressing <keycap>Enter</keycap>
+    and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+    searches for the next and previous occurrence, respectively.
+    Once the desired occurrence has been found, press <keycap>Escape</keycap>
+    to return keyboard focus to the text area.
+   </para>
+   <para>
+    On the other hand, if the <guibutton>HyperSearch</guibutton> check box is
+    selected, entering a
+    search string and pressing <keycap>Enter</keycap> will perform a
+    HyperSearch in the current buffer.
    </para>
    <note>
     <para>
@@ -1046,5 +1047,29 @@
     </para>
    </note>
   </sect2>
+ </sect1>
+ <sect1 id="repeat"><title>Command Repetition</title>
+  <para>
+   The final feature discussed in this chapter is a means of invoking a command
+   any number of times automatically.
+  </para>
+  <para>
+   To execute a command several times, press
+   <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>, enter the
+   desired repeat count, then the command to repeat (either by pressing its
+   keyboard shortcut, or selecting or from a menu). For example,
+   <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+   <keycap>1</keycap> <keycap>4</keycap>
+   <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></quote> will delete
+   14 lines; <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+   <keycap>9</keycap>
+   <keycap>#</keycap></quote>
+   will have the same effect as inserting <quote>#########</quote> in the buffer.
+  </para>
+  <para>
+   If you specify a repeat count greater than 20, a confirmation dialog box will
+   be displayed, asking if you really want to perform the action. This prevents
+   you from hanging jEdit by executing a command too many times.
+  </para>
  </sect1>
 </chapter>

@@ -299,16 +299,6 @@
     character of each line affects highlighting. 
    </para>
   </sect2>
-  <sect2 id="mode-rule-whitespace"><title>The WHITESPACE Rule</title>
-   <para>
-    The <literal>WHITESPACE</literal> rule specifies characters which are to
-    be treated as keyword delimiters.
-    Most rulesets will have <literal>WHITESPACE</literal> tags for spaces and
-    tabs. Here is an example:
-   </para>
-   <programlisting>&lt;WHITESPACE&gt; &lt;/WHITESPACE&gt;
-&lt;WHITESPACE&gt;        &lt;/WHITESPACE&gt;</programlisting>
-  </sect2>
   <sect2 id="mode-rule-span"><title>The SPAN Rule</title>
    <para>
     The <literal>SPAN</literal> rule highlights text between a start
@@ -342,13 +332,6 @@
     Note that the first (unnamed) ruleset in a mode is called
     <quote>MAIN</quote>.</para></listitem>
    </itemizedlist>
-   <note>
-    <para>
-     Do not delegate to rulesets that define a <literal>TERMINATE</literal> rule
-     (examples of such rulesets include <literal>text::MAIN</literal> and
-     <literal>patch::MAIN</literal>). It won't work.
-    </para>
-   </note>
    <para>
     Here is a <literal>SPAN</literal> that highlights Java string literals,
     which cannot include line breaks:
@@ -491,10 +474,7 @@
     match whole words.
    </para>
    <para>
-    The <literal>KEYWORDS</literal> tag supports only one attribute,
-    <literal>IGNORE_CASE</literal>. If set to <literal>FALSE</literal>, keywords
-    will be case sensitive. Otherwise, case will not matter. Default is
-    <literal>TRUE</literal>.
+    The <literal>KEYWORDS</literal> tag does not define any attributes.
    </para>
    <para>
     Each child element of the <literal>KEYWORDS</literal> tag should be named

@@ -117,6 +117,13 @@
     trailing hash character (<quote>#</quote>) must be entered when expanding an
     abbreviation with parameters.
    </para>
+   <para>
+    If you do not specify the correct number of positional parameters when
+    expanding an abbreviation, any missing parameters will appear
+    blank in the expansion, and extra parameters will be ignored.
+    A status bar message will be shown stating what
+    the correct number of parameters is.
+   </para>
   </sect2>
  </sect1>
  <sect1 id="bracket-matching"><title>Bracket Matching</title>

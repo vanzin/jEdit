@@ -1135,6 +1135,12 @@
 	</IS_SELECTED>
 </ACTION>
 
+<ACTION NAME="toggle-line-separator">
+	<CODE>
+		buffer.toggleLineSeparator(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="toggle-multi-select">
 	<CODE>
 		textArea.toggleMultipleSelectionEnabled();
@@ -1151,6 +1157,12 @@
 	<IS_SELECTED>
 		return view.isSynchroScrollEnabled();
 	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="toggle-word-wrap">
+	<CODE>
+		buffer.toggleWordWrap(view);
+	</CODE>
 </ACTION>
 
 <ACTION NAME="update-log">

@@ -407,49 +407,13 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					new BufferOptions(view,view.getBuffer());
 			}
 			else if(source == wrap)
-			{
-				String wrap = buffer.getStringProperty("wrap");
-				if(wrap.equals("none"))
-					wrap = "soft";
-				else if(wrap.equals("soft"))
-					wrap = "hard";
-				else if(wrap.equals("hard"))
-					wrap = "none";
-				view.getStatus().setMessageAndClear(jEdit.getProperty(
-					"view.status.wrap-changed",new String[] {
-					wrap }));
-				buffer.setProperty("wrap",wrap);
-				buffer.propertiesChanged();
-			}
+				buffer.toggleWordWrap(view);
 			else if(source == multiSelect)
 				view.getTextArea().toggleMultipleSelectionEnabled();
 			else if(source == overwrite)
 				view.getTextArea().toggleOverwriteEnabled();
 			else if(source == lineSep)
-			{
-				String status = null;
-				String lineSep = buffer.getStringProperty("lineSeparator");
-				if("\n".equals(lineSep))
-				{
-					status = "windows";
-					lineSep = "\r\n";
-				}
-				else if("\r\n".equals(lineSep))
-				{
-					status = "mac";
-					lineSep = "\r";
-				}
-				else if("\r".equals(lineSep))
-				{
-					status = "unix";
-					lineSep = "\n";
-				}
-				view.getStatus().setMessageAndClear(jEdit.getProperty(
-					"view.status.linesep-changed",new String[] {
-					jEdit.getProperty("lineSep." + status) }));
-				buffer.setProperty("lineSeparator",lineSep);
-				buffer.propertiesChanged();
-			}
+				buffer.toggleLineSeparator(view);
 			else if(source == memory)
 			{
 				if(evt.getClickCount() == 2)
