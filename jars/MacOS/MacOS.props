@@ -1,6 +1,6 @@
 plugin.macos.MacOSPlugin.activate=startup
 plugin.macos.MacOSPlugin.option-pane=MacOSPlugin
-plugin.macos.MacOSPlugin.menu=
+plugin.macos.MacOSPlugin.menu.code=new macos.menu.MacOSMenu();
 
 #
 # Plugin info
