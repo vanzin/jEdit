@@ -53,6 +53,7 @@ JEDIT 4.0 VERSION HISTORY
 
 + Enhancements
 
+- BeanShell 1.2b3 now included, instead of slightly patched 1.2b1
 - New splash screen and about box (Kris Kopicki)
 - HTML documentation is now generated using DocBook XSL 1.44 stylesheets
 - Option in activity log window to automatically scroll to bottom on
