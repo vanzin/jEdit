@@ -172,19 +172,17 @@ public class DefaultInputHandler extends InputHandler
 		{
 			// if modifier active, handle all keys, otherwise
 			// only some
-			switch(keyCode)
+			if(evt.isActionKey()
+				|| keyCode < KeyEvent.VK_A
+				|| keyCode > KeyEvent.VK_Z
+				|| keyCode < KeyEvent.VK_0
+				|| keyCode > KeyEvent.VK_9)
 			{
-			case KeyEvent.VK_BACK_SPACE:
-			case KeyEvent.VK_DELETE:
-			case KeyEvent.VK_ESCAPE:
-			case KeyEvent.VK_TAB:
-			case KeyEvent.VK_ENTER:
-				break;
-			default:
-				if(!evt.isActionKey())
-					return;
-				else
-					break;
+				// ok, even if no modifiers
+			}
+			else
+			{
+				return;
 			}
 		}
 
