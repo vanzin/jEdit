@@ -55,7 +55,29 @@ implements ActionListener, ListSelectionListener, MouseListener
 
 			public Object getElementAt(int index)
 			{
-				return clipHistory.getItem(index);
+				StringBuffer buf = new StringBuffer();
+				String item = clipHistory.getItem(index);
+				boolean ws = true;
+				for(int i = 0; i < item.length(); i++)
+				{
+					char ch = item.charAt(i);
+					if(Character.isWhitespace(ch))
+					{
+						if(ws)
+							/* do nothing */;
+						else
+						{
+							buf.append(' ');
+							ws = true;
+						}
+					}
+					else
+					{
+						ws = false;
+						buf.append(ch);
+					}
+				}
+				return buf.toString();
 			}
 		});
 

@@ -1032,10 +1032,8 @@ search.choose=Choose...
 search.choose.mnemonic=e
 
 search.findBtn=Find
-search.replaceBtn=Replace
-search.replaceBtn.mnemonic=r
 search.replaceAndFindBtn=Replace & Find
-search.replaceAndFindBtn.mnemonic=p
+search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Replace All
 search.replaceAllBtn.mnemonic=a
 
@@ -1393,7 +1391,7 @@ options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
 options.editing.folding=Folding mode:
 options.editing.collapseFolds=Initially collapse folds with level:
-options.editing.maxLineLen=Wrap lines at column:
+options.editing.maxLineLen=Column position of margin:
 options.editing.softWrap=Soft wrap
 options.editing.syntax=Syntax highlighting
 options.editing.indentOnTab=Indent line when Tab key is pressed
@@ -1799,22 +1797,25 @@ plugin-manager.up-to-date.message=All installed plugins are their latest version
 #{{{ Plugin installation
 install-plugins.title=Install Plugins
 update-plugins.title=Update Plugins
-install-plugins.caption=Click the check box next to plugins you wish to install:
+install-plugins.caption=Click the check box next to plugins you wish to install.
+install-plugins.plugin-info=Plugin info:
 install-plugins.info.name=Name:
 install-plugins.info.author=Author:
+install-plugins.info.size=Download size:
 install-plugins.info.latest-version=Latest version:
 install-plugins.info.obsolete=Obsolete (will be deleted)
 install-plugins.info.installed-version=Installed version:
 install-plugins.info.updated=Last updated:
 install-plugins.info.description=Description:
-install-plugins.info.also-install=\ Installing this plugin will also install \
+install-plugins.info.also-install=\n\nInstalling this plugin will also install \
 	the following plugins: 
 install-plugins.info.obsolete-text=\ This plugin is obsolete and no longer \
 	needed. It will be deleted if you check the box next to its name.
 
+install-plugins.totalSize=Total download size:
+install-plugins.downloadSource=Download source code
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.system=Install in system plugin directory ({0})
-install-plugins.downloadSource=Download source code
 install-plugins.none=none
 install-plugins.install=Install
 #}}}

@@ -501,31 +501,29 @@ public class BeanShell
 	//{{{ init() method
 	static void init()
 	{
-		Log.log(Log.DEBUG,BeanShell.class,"Initializing BeanShell"
-			+ " interpreter");
-
 		BshClassManager.setClassLoader(new JARClassLoader());
 
-		global = new NameSpace("jEdit embedded BeanShell Interpreter");
+		global = new NameSpace("jEdit embedded BeanShell interpreter");
+		global.importPackage("org.gjt.sp.jedit");
+		global.importPackage("org.gjt.sp.jedit");
+		global.importPackage("org.gjt.sp.jedit.browser");
+		global.importPackage("org.gjt.sp.jedit.gui");
+		global.importPackage("org.gjt.sp.jedit.io");
+		global.importPackage("org.gjt.sp.jedit.msg");
+		global.importPackage("org.gjt.sp.jedit.options");
+		global.importPackage("org.gjt.sp.jedit.pluginmgr");
+		global.importPackage("org.gjt.sp.jedit.print");
+		global.importPackage("org.gjt.sp.jedit.search");
+		global.importPackage("org.gjt.sp.jedit.syntax");
+		global.importPackage("org.gjt.sp.jedit.textarea");
+		global.importPackage("org.gjt.sp.util");
+
 		interpForMethods = createInterpreter(global);
 
-		try
-		{
-			Interpreter interp = createInterpreter(global);
+		internal = (NameSpace)eval(null,"__cruft = object();__cruft.namespace;",false);
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-				BeanShell.class.getResourceAsStream("jedit.bsh")));
-
-			interp.eval(in,global,"jedit.bsh");
-		}
-		catch(Throwable t)
-		{
-			Log.log(Log.ERROR,BeanShell.class,t);
-			System.exit(1);
-		}
-
-		// jedit object in global namespace is set up by jedit.bsh
-		internal = (NameSpace)eval(null,"__cruft.namespace;",false);
+		Log.log(Log.DEBUG,BeanShell.class,"BeanShell interpreter version "
+			+ Interpreter.VERSION);
 	} //}}}
 
 	//}}}
@@ -543,8 +541,7 @@ public class BeanShell
 	//{{{ createInterpreter() method
 	private static Interpreter createInterpreter(NameSpace nameSpace)
 	{
-		return new Interpreter(null,System.out,System.err,
-			false,nameSpace);
+		return new Interpreter(null,System.out,System.err,false,nameSpace);
 	} //}}}
 
 	//}}}

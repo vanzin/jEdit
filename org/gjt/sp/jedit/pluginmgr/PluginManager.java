@@ -320,8 +320,8 @@ public class PluginManager extends JDialog
 				}
 
 				Roster roster = new Roster();
-				new InstallPluginsDialog(PluginManager.this,plugins,
-					InstallPluginsDialog.UPDATE)
+				new InstallPluginsDialog(PluginManager.this,
+					plugins,InstallPluginsDialog.UPDATE)
 					.installPlugins(roster);
 
 				if(roster.isEmpty())
@@ -357,8 +357,8 @@ public class PluginManager extends JDialog
 				}
 
 				Roster roster = new Roster();
-				new InstallPluginsDialog(PluginManager.this,plugins,
-					InstallPluginsDialog.INSTALL)
+				new InstallPluginsDialog(PluginManager.this,
+					plugins,InstallPluginsDialog.INSTALL)
 					.installPlugins(roster);
 
 				if(roster.isEmpty())

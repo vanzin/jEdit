@@ -48,6 +48,7 @@ public class JARClassLoader extends ClassLoader
 		zipFile = new ZipFile(path);
 		jar = new EditPlugin.JAR(path,this);
 
+		long start = System.currentTimeMillis();
 		Enumeration entires = zipFile.entries();
 		while(entires.hasMoreElements())
 		{

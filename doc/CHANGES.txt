@@ -19,6 +19,8 @@ defaults.
 - New 'Keyboard Tester' command in Utilities->Troubleshooting menu; it
   displays a 'grab key' dialog and dumps key events into a new buffer
 - Option to split file dialogs vertically (Ollie Rutherfurd)
+- Plugin manager's install plugins dialog box now shows plugin download
+  sizes, and has a slightly improved look
 
 + Enhancements
 
@@ -70,6 +72,7 @@ defaults.
 - Minor search and replace dialog box usability improvements:
   - Keep dialog on by default
   - Somewhat confusing 'Replace' button removed
+- Faster HyperSearch
 
 + Bug Fixes
 
@@ -113,7 +116,7 @@ defaults.
 - Text area syntax highlighting would not always be updated properly
   when switching modes
 
-+ API Changes
++ API Additions
 
 - BufferUpdate.SAVED message type added. Previously, DIRTY_CHANGED could
   be used for this purpose, but since jEdit now clears the dirty flag
@@ -134,6 +137,8 @@ defaults.
   isMacOS()
   isUnix()
   hasJava14()
+
++ API Changes
 
 - Offset conversion API changes. Old methods (xToOffset(), offsetToX(),
   yToLine(), lineToY()) deprecated; you must now use xyToOffset() and

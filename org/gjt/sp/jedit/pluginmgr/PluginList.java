@@ -56,6 +56,7 @@ class PluginList
 	{
 		plugin.checkIfInstalled();
 		plugins.addElement(plugin);
+		System.err.println(plugin.name);
 		pluginHash.put(plugin.name,plugin);
 	}
 

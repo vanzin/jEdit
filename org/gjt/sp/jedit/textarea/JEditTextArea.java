@@ -779,7 +779,7 @@ public class JEditTextArea extends JComponent
 	public Point offsetToXY(int offset)
 	{
 		int line = buffer.getLineOfOffset(offset);
-		offset -= buffer.getLineStartOffset(offset);
+		offset -= buffer.getLineStartOffset(line);
 		Point retVal = new Point();
 		return offsetToXY(line,offset,retVal);
 	} //}}}
@@ -808,8 +808,7 @@ public class JEditTextArea extends JComponent
 
 		FontMetrics fm = painter.getFontMetrics();
 
-		retVal.y = (screenLine * fm.getHeight())
-			- (fm.getLeading() + fm.getDescent());
+		retVal.y = screenLine * fm.getHeight();
 
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 		if(!info.chunksValid)

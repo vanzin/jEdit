@@ -293,11 +293,11 @@ public class jEdit
 		//{{{ Get things rolling
 		initMisc();
 		initSystemProperties();
-		BeanShell.init();
-		GUIUtilities.advanceSplashProgress();
-
 		if(jEditHome != null)
 			initSiteProperties();
+		GUIUtilities.advanceSplashProgress();
+
+		BeanShell.init();
 
 		initUserProperties();
 		initPLAF();
@@ -348,8 +348,6 @@ public class jEdit
 			BufferHistory.load(recent);
 		}
 
-		Abbrevs.load();
-
 		GUIUtilities.advanceSplashProgress();
 
 		// Buffer sort
@@ -361,7 +359,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		SearchAndReplace.load();
-		FavoritesVFS.loadFavorites();
 		Macros.loadMacros();
 
 		GUIUtilities.advanceSplashProgress();
@@ -1437,51 +1434,54 @@ public class jEdit
 		if(!MiscUtilities.isURL(path))
 			path = MiscUtilities.canonPath(path);
 
-		Buffer buffer = getBuffer(path);
-		if(buffer != null)
+		synchronized(bufferListLock)
 		{
-			if(view != null)
-				view.setBuffer(buffer);
-
-			return buffer;
-		}
-
-		if(props == null)
-			props = new Hashtable();
-
-		BufferHistory.Entry entry = BufferHistory.getEntry(path);
-
-		if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
-		{
-			int caret = entry.caret;
-			props.put(Buffer.CARET,new Integer(entry.caret));
-			if(entry.selection != null)
+			Buffer buffer = getBuffer(path);
+			if(buffer != null)
 			{
-				// getSelection() converts from string to
-				// Selection[]
-				props.put(Buffer.SELECTION,entry.getSelection());
+				if(view != null)
+					view.setBuffer(buffer);
+
+				return buffer;
 			}
+
+			if(props == null)
+				props = new Hashtable();
+
+			BufferHistory.Entry entry = BufferHistory.getEntry(path);
+
+			if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
+			{
+				int caret = entry.caret;
+				props.put(Buffer.CARET,new Integer(entry.caret));
+				if(entry.selection != null)
+				{
+					// getSelection() converts from string to
+					// Selection[]
+					props.put(Buffer.SELECTION,entry.getSelection());
+				}
+			}
+
+			if(entry != null && props.get(Buffer.ENCODING) == null)
+			{
+				if(entry.encoding != null)
+					props.put(Buffer.ENCODING,entry.encoding);
+			}
+
+			Buffer newBuffer = new Buffer(view,path,newFile,false,props);
+
+			if(!newBuffer.load(view,false))
+				return null;
+
+			addBufferToList(newBuffer);
+
+			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
+
+			if(view != null)
+				view.setBuffer(newBuffer);
+
+			return newBuffer;
 		}
-
-		if(entry != null && props.get(Buffer.ENCODING) == null)
-		{
-			if(entry.encoding != null)
-				props.put(Buffer.ENCODING,entry.encoding);
-		}
-
-		Buffer newBuffer = new Buffer(view,path,newFile,false,props);
-
-		if(!newBuffer.load(view,false))
-			return null;
-
-		addBufferToList(newBuffer);
-
-		EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
-
-		if(view != null)
-			view.setBuffer(newBuffer);
-
-		return newBuffer;
 	} //}}}
 
 	//{{{ openTemporary() method
@@ -1512,15 +1512,18 @@ public class jEdit
 
 		path = MiscUtilities.constructPath(parent,path);
 
-		Buffer buffer = getBuffer(path);
-		if(buffer != null)
-			return buffer;
+		synchronized(bufferListLock)
+		{
+			Buffer buffer = getBuffer(path);
+			if(buffer != null)
+				return buffer;
 
-		buffer = new Buffer(null,path,newFile,true,new Hashtable());
-		if(!buffer.load(view,false))
-			return null;
-		else
-			return buffer;
+			buffer = new Buffer(null,path,newFile,true,new Hashtable());
+			if(!buffer.load(view,false))
+				return null;
+			else
+				return buffer;
+		}
 	} //}}}
 
 	//{{{ commitTemporary() method
@@ -1534,9 +1537,6 @@ public class jEdit
 	{
 		if(!buffer.isTemporary())
 			return;
-
-		buffer.setMode();
-		buffer.propertiesChanged();
 
 		addBufferToList(buffer);
 		buffer.commitTemporary();
@@ -1836,21 +1836,24 @@ public class jEdit
 		boolean caseInsensitiveFilesystem = (File.separatorChar == '\\'
 			|| File.separatorChar == ':' /* Windows or MacOS */);
 
-		Buffer buffer = buffersFirst;
-		while(buffer != null)
+		synchronized(bufferListLock)
 		{
-			String _path = buffer.getPath();
-			if(caseInsensitiveFilesystem)
+			Buffer buffer = buffersFirst;
+			while(buffer != null)
 			{
-				if(_path.equalsIgnoreCase(path))
-					return buffer;
+				String _path = buffer.getPath();
+				if(caseInsensitiveFilesystem)
+				{
+					if(_path.equalsIgnoreCase(path))
+						return buffer;
+				}
+				else
+				{
+					if(_path.equals(path))
+						return buffer;
+				}
+				buffer = buffer.next;
 			}
-			else
-			{
-				if(_path.equals(path))
-					return buffer;
-			}
-			buffer = buffer.next;
 		}
 
 		return null;
@@ -2507,6 +2510,9 @@ public class jEdit
 	private static Buffer buffersFirst;
 	private static Buffer buffersLast;
 
+	// makes openTemporary() thread-safe
+	private static Object bufferListLock = new Object();
+
 	// view link list
 	private static int viewCount;
 	private static View viewsFirst;
@@ -3096,37 +3102,40 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ removeBufferFromList() method
 	private static void removeBufferFromList(Buffer buffer)
 	{
-		bufferCount--;
+		synchronized(bufferListLock)
+		{
+			bufferCount--;
 
-		if(buffer == buffersFirst && buffer == buffersLast)
-		{
-			buffersFirst = buffersLast = null;
-			return;
-		}
+			if(buffer == buffersFirst && buffer == buffersLast)
+			{
+				buffersFirst = buffersLast = null;
+				return;
+			}
 
-		if(buffer == buffersFirst)
-		{
-			buffersFirst = buffer.next;
-			buffer.next.prev = null;
-		}
-		else
-		{
-			buffer.prev.next = buffer.next;
-		}
+			if(buffer == buffersFirst)
+			{
+				buffersFirst = buffer.next;
+				buffer.next.prev = null;
+			}
+			else
+			{
+				buffer.prev.next = buffer.next;
+			}
 
-		if(buffer == buffersLast)
-		{
-			buffersLast = buffersLast.prev;
-			buffer.prev.next = null;
-		}
-		else
-		{
-			buffer.next.prev = buffer.prev;
-		}
+			if(buffer == buffersLast)
+			{
+				buffersLast = buffersLast.prev;
+				buffer.prev.next = null;
+			}
+			else
+			{
+				buffer.next.prev = buffer.prev;
+			}
 
-		// fixes the hang that can occur if we 'save as' to a new
-		// filename which requires re-sorting
-		buffer.next = buffer.prev = null;
+			// fixes the hang that can occur if we 'save as' to a new
+			// filename which requires re-sorting
+			buffer.next = buffer.prev = null;
+		}
 	} //}}}
 
 	//{{{ addViewToList() method

@@ -225,6 +225,7 @@ class CheckBoxListModel extends AbstractTableModel
 		{
 			((JCheckBoxList.Entry)items.elementAt(row)).checked =
 				(value.equals(Boolean.TRUE));
+			fireTableRowsUpdated(row,row);
 		}
 	}
 }
