@@ -2,6 +2,7 @@
  * GlobalOptions.java - Global options dialog
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -21,23 +22,42 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
+import java.awt.Dialog;
+import java.awt.Frame;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class GlobalOptions extends OptionsDialog
 {
-	public GlobalOptions(View view)
+	//{{{ GlobalOptions constructor
+	public GlobalOptions(Frame frame)
 	{
-		super(view,"options",jEdit.getProperty("options.last"));
-	}
+		super(frame,"options",jEdit.getProperty("options.last"));
+	} //}}}
 
-	public GlobalOptions(View view, String pane)
+	//{{{ GlobalOptions constructor
+	public GlobalOptions(Frame frame, String pane)
 	{
-		super(view,"options",pane);
-	}
+		super(frame,"options",pane);
+	} //}}}
 
+	//{{{ GlobalOptions constructor
+	public GlobalOptions(Dialog dialog)
+	{
+		super(dialog,"options",jEdit.getProperty("options.last"));
+	} //}}}
+
+	//{{{ GlobalOptions constructor
+	public GlobalOptions(Dialog dialog, String pane)
+	{
+		super(dialog,"options",pane);
+	} //}}}
+
+	//{{{ createOptionTreeModel() method
 	protected OptionTreeModel createOptionTreeModel()
 	{
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
@@ -96,14 +116,17 @@ public class GlobalOptions extends OptionsDialog
 		}
 
 		return paneTreeModel;
-	}
+	} //}}}
 
+	//{{{ getDefaultGroup() method
 	protected OptionGroup getDefaultGroup()
 	{
 		return pluginsGroup;
-	}
+	} //}}}
 
+	//{{{ Private members
 	private OptionGroup jEditGroup;
 	private OptionGroup browserGroup;
 	private OptionGroup pluginsGroup;
+	//}}}
 }

@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre7
 
-Thanks to Jonathan Revusky and Marcelo Vanzin for contributing to this
-release.
+Thanks to Chris Kent, Jonathan Revusky and Marcelo Vanzin for
+contributing to this release.
 
 + Syntax Highlighting Changes:
 
@@ -26,6 +26,9 @@ release.
 
 - The Global Options dialog box now opens to display the most recently
   viewed option pane. Also the "overview" pane is gone.
+
+- jEdit now remembers if a window was maximized when saving geometry
+  (Chris Kent).
 
 + Bug Fixes:
 
