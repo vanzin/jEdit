@@ -36,6 +36,17 @@ Cox, Rex Young and Steve Snider for contributing to this release.
 + Platform-Specific Changes:
 
 - Updated MacOS plugin (Kris Kopicki).
+  - Added MacOS menu to the Plugins menu. Provides time saving features
+    like revealing files and folders in the Finder, and running
+    AppleScripts.
+  - You can run AppleScripts (compiled, uncompiled and standalone).
+    Scripts must be located in the scripts folder in the jEdit folder.
+    They can be either plain text or compiled scripts. Scripts must have
+    their type and creator set correctly, have a .scpt (for compiled
+    scripts) or .applescript (for uncompiled scripts) extension, or
+    both. Note: Scripts that require user interaction are not supported.
+  - Added and option to Mac OS Plugin settings to change the script
+    folder search depth.
 
 + Bug Fixes:
 
