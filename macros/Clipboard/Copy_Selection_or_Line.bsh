@@ -3,7 +3,7 @@
 * which copies either the selected text, or the current line 
 * if no text is selected, to the clipboard.
 *
-* Copyright (C) 2003 Ollie Rutherfurd <oliver@rutherfurd.net>
+* Copyright (C) 2003 Ollie Rutherfurd <oliver@jedit.org>
 *
 * $Id$
 */
