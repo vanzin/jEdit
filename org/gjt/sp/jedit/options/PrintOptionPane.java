@@ -74,11 +74,6 @@ public class PrintOptionPane extends AbstractOptionPane
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
 		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
-
-		/* Workaround for incorrect output spacing */
-		workaround = new JCheckBox(jEdit.getProperty("options.print.workaround"));
-		workaround.setSelected(jEdit.getBooleanProperty("print.workaround"));
-		addComponent(workaround);
 	} //}}}
 
 	//{{{ _save() method
@@ -90,7 +85,6 @@ public class PrintOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
 		jEdit.setBooleanProperty("print.color",color.isSelected());
 		jEdit.setProperty("print.tabSize",(String)tabSize.getSelectedItem());
-		jEdit.setBooleanProperty("print.workaround",workaround.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -100,6 +94,5 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JCheckBox printLineNumbers;
 	private JCheckBox color;
 	private JComboBox tabSize;
-	private JCheckBox workaround;
 	//}}}
 }

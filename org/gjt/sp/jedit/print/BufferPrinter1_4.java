@@ -19,20 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- * changed 2002-04-28/Thomas Dilts added print preview and 
- *                    saved all values of pageSetup to disk
- *                    Added java 1.4 functions
  */
 
 package org.gjt.sp.jedit.print;
 
 //{{{ Imports
+import javax.print.attribute.*;
+import javax.print.attribute.standard.*;
+import javax.swing.SwingUtilities;
 import java.awt.print.*;
 import java.awt.*;
 import java.io.*;
-import javax.print.attribute.*;
-import javax.print.attribute.standard.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -40,11 +37,58 @@ import org.gjt.sp.jedit.io.VFSManager;
 
 public class BufferPrinter1_4
 {
+	//{{{ getPrintJob() method
+	private static PrinterJob getPrintJob(String jobName)
+	{
+		job = PrinterJob.getPrinterJob();
+
+		format = new HashPrintRequestAttributeSet();
+
+		String settings = jEdit.getSettingsDirectory();
+		if(settings != null)
+		{
+			String printSpecPath = MiscUtilities.constructPath(
+				settings, "printspec");
+			File filePrintSpec = new File(printSpecPath);
+
+			if (filePrintSpec.exists())
+			{
+				try
+				{
+					FileInputStream fileIn = new FileInputStream(filePrintSpec);
+					ObjectInputStream obIn = new ObjectInputStream(fileIn);
+					format = (HashPrintRequestAttributeSet)obIn.readObject();
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
+				}
+				//for backwards compatibility, the color variable is stored also as a property
+				if(jEdit.getBooleanProperty("print.color"))
+					format.add(Chromaticity.COLOR);
+				else
+					format.add(Chromaticity.MONOCHROME);
+
+				//no need to always keep the same job name for every printout.
+				format.add(new JobName(jobName, null));
+			}
+		}
+
+		return job;
+	} //}}}
+
+	//{{{ pageSetup() method
+	public static void pageSetup(View view)
+	{
+		PrinterJob prnJob = getPrintJob("PageSetupOnly");
+		if(prnJob.pageDialog(format)!=null)
+			savePrintSpec();
+	} //}}}
 
 	//{{{ print() method
 	public static void print(final View view, final Buffer buffer, boolean selection)
 	{
-		job =getPrintJob(buffer.getPath());
+		job = getPrintJob(buffer.getPath());
 
 		boolean header = jEdit.getBooleanProperty("print.header");
 		boolean footer = jEdit.getBooleanProperty("print.footer");
@@ -58,39 +102,38 @@ public class BufferPrinter1_4
 		if(!job.printDialog(format))
 			return;
 		savePrintSpec();
-		
-		buffer.readLock();
-		VFSManager.runInWorkThread(new Runnable()
+
+		/* VFSManager.runInWorkThread(new Runnable()
 		{
 			public void run()
-			{
+			{*/
 				try
 				{
+					 //buffer.readLock();
 					job.print(format);
 				}
 				catch(PrinterAbortException ae)
 				{
 					Log.log(Log.DEBUG,BufferPrinter1_4.class,ae);
-					buffer.readUnlock();
 				}
 				catch(PrinterException e)
 				{
 					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
-					String[] args = { e.toString() };
-					GUIUtilities.error(view,"print-error",args);
-					buffer.readUnlock();
+					final String[] args = { e.toString() };
+					SwingUtilities.invokeLater(new Runnable()
+					{
+						public void run()
+						{
+							GUIUtilities.error(view,"print-error",args);
+						}
+					});
 				}
+				finally
+				{
+					//buffer.readUnlock();
+				}/* 
 			}
-		});
-		buffer.readUnlock();
-	} //}}}
-
-	//{{{ pageSetup() method
-	public static void pageSetup(View view)
-	{
-		PrinterJob prnJob=getPrintJob("PageSetupOnly");
-		if(prnJob.pageDialog(format)!=null)
-			savePrintSpec();
+		}); */
 	} //}}}
 
 	//{{{ getPageFormat() method
@@ -170,48 +213,6 @@ public class BufferPrinter1_4
 		{
 			e.printStackTrace();
 		}
-	}
-	//}}}
-
-	//{{{ getPrintJob() method
-	private static PrinterJob getPrintJob(String jobName)
-	{
-		job = PrinterJob.getPrinterJob();
-
-		format = new HashPrintRequestAttributeSet();
-
-		String settings = jEdit.getSettingsDirectory();
-		if(settings != null)
-		{
-			String printSpecPath = MiscUtilities.constructPath(
-				settings, "printspec");
-			File filePrintSpec = new File(printSpecPath);
-
-			if (filePrintSpec.exists())
-			{
-				try
-				{
-					FileInputStream fileIn=new FileInputStream(filePrintSpec);
-					ObjectInputStream obIn=new ObjectInputStream(fileIn);
-					format=(HashPrintRequestAttributeSet)obIn.readObject();
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,job,e);
-				}
-				//for backwards compatibility, the color variable is stored also as a property
-				if(jEdit.getBooleanProperty("print.color"))
-					format.add(Chromaticity.COLOR);
-				else
-					format.add(Chromaticity.MONOCHROME);
-
-				//no need to always keep the same job name for every printout.
-				format.add(new JobName(jobName, null));
-			}
-		}
-
-		return job;
-
 	}
 	//}}}
 

@@ -46,6 +46,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 		this.wrapMargin = wrapMargin += 2.0f;
 
 		this.out = out;
+		initialSize = out.size();
 	} //}}}
 
 	//{{{ getChunks() method
@@ -80,7 +81,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 
 			addToken(chunk,context,false);
 
-			if(out.size() == 0)
+			if(out.size() == initialSize)
 				out.add(firstToken);
 			else if(id == Token.WHITESPACE)
 			{
@@ -110,5 +111,6 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	private float wrapMargin;
 	private float endX;
 	private Token end;
+	private int initialSize;
 	//}}}
 }

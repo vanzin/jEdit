@@ -48,8 +48,6 @@ public class Chunk extends Token
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
-	 * @param width The width of the painting area, used for a token
-	 * background color hack
 	 * @param background The background color of the painting area,
 	 * used for the background color hack
 	 * @return The width of the painted text
@@ -103,7 +101,7 @@ public class Chunk extends Token
 						gfx.drawString(chunks.str,x + _x,y);
 
 					// Useful for debugging purposes
-					//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
+					//gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
 					//	chunks.width,10));
 				}
 			}
@@ -254,7 +252,6 @@ public class Chunk extends Token
 		else
 		{
 			str = new String(seg.array,seg.offset + offset,length);
-
 			gv = style.getFont().createGlyphVector(
 				fontRenderContext,str);
 			width = (float)gv.getLogicalBounds().getWidth();
