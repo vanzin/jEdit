@@ -60,9 +60,7 @@ class BufferPrintable implements Printable
 			return NO_SUCH_PAGE;
 
 		if(pageIndex == currentPage)
-		{
 			currentLine = currentPageStart;
-		}
 		else
 		{
 			currentPageStart = currentLine;
@@ -100,18 +98,20 @@ class BufferPrintable implements Printable
 			/ Math.log(10)) + 1;
 
 		//{{{ now that we know how many chars there are, get the width.
-		double spaceWidth = font.getStringBounds(" ",frc).getWidth();
-		double lineNumberWidth = lineNumberDigits * spaceWidth;
+		char[] chars = new char[lineNumberDigits];
+		for(int i = 0; i < chars.length; i++)
+			chars[i] = ' ';
+		double lineNumberWidth = font.getStringBounds(chars,
+			0,lineNumberDigits,frc).getWidth();
 		//}}}
 
 		//{{{ calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
-		char[] chars = new char[tabSize];
+		chars = new char[tabSize];
 		for(int i = 0; i < chars.length; i++)
 			chars[i] = ' ';
 		double tabWidth = font.getStringBounds(chars,
 			0,tabSize,frc).getWidth();
-		System.err.println(tabWidth + ":::" + (spaceWidth*tabSize));
 		PrintTabExpander e = new PrintTabExpander(pageX,tabWidth);
 		//}}}
 
@@ -143,14 +143,9 @@ print_loop:	for(;;)
 			if(y >= pageHeight)
 				break print_loop;
 
-			// I hate this, but it's needed for now. See comment
-			// in TextUtilities.java.
-			boolean mungeX = true;
 			Object obj = lineList.get(currentLine++);
 			if(obj instanceof Integer)
 			{
-				mungeX = false;
-
 				//{{{ paint line number
 				if(lineNumbers)
 				{
@@ -170,7 +165,8 @@ print_loop:	for(;;)
 
 				TextUtilities.paintChunkList(line,gfx,
 					(float)(pageX + lineNumberWidth),
-					(float)(pageY + y),mungeX);
+					(float)(pageY + y),
+					(float)(pageWidth - lineNumberWidth));
 			}
 
 			if(currentPhysicalLine == buffer.getLineCount())
@@ -223,6 +219,7 @@ print_loop:	for(;;)
 		gfx.setColor(headerColor);
 
 		Rectangle2D bounds = font.getStringBounds(headerText,frc);
+
 		Rectangle2D headerBounds = new Rectangle2D.Double(
 			pageX,pageY,pageWidth,bounds.getHeight());
 		gfx.fill(headerBounds);
@@ -233,6 +230,11 @@ print_loop:	for(;;)
 		gfx.drawString(headerText,
 			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
 			(float)(pageY + lm.getAscent()));
+
+		bounds = new Rectangle2D.Double(pageX + (pageWidth - bounds.getWidth()) / 2,
+			pageY + lm.getAscent(),
+			bounds.getWidth(),bounds.getHeight());
+		gfx.draw(bounds);
 
 		return headerBounds.getHeight();
 	}
