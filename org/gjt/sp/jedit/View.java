@@ -577,29 +577,30 @@ public class View extends JFrame implements EBComponent
 				comp = comp.getParent();
 			}
 
-			JSplitPane split = (JSplitPane)comp;
-			if(split.getLeftComponent() == editPane)
+			// get rid of any edit pane that is a child
+			// of the current edit pane's parent splitter
+			EditPane[] editPanes = getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
 			{
-				// XXX: close right
-			}
-			else
-			{
-				// XXX: close left
+				EditPane _editPane = editPanes[i];
+				if(GUIUtilities.isAncestorOf(comp,_editPane)
+					&& _editPane != editPane)
+					_editPane.close();
 			}
 
-			JComponent parent = (JComponent)split.getParent();
+			JComponent parent = (JComponent)comp.getParent();
 
 			if(parent instanceof JSplitPane)
 			{
 				JSplitPane parentSplit = (JSplitPane)parent;
-				if(parentSplit.getLeftComponent() == split)
+				if(parentSplit.getLeftComponent() == comp)
 					parentSplit.setLeftComponent(editPane);
 				else
 					parentSplit.setRightComponent(editPane);
 			}
 			else
 			{
-				parent.remove(split);
+				parent.remove(comp);
 				parent.add(editPane);
 				splitPane = null;
 			}

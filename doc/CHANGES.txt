@@ -24,6 +24,13 @@ JEDIT 4.1 VERSION HISTORY
 - The plugin list is only downloaded once per Plugin Manager dialog box
   instance
 
++ Miscellaneous Changes:
+
+- Added an "Unsplit Current" command, bound to C+0 by default. It
+  removes the split pane containing the current edit pane only, as
+  opposed to the "Unsplit All" command (previously "Unsplit", still
+  bound to C+1) which removes all splits from the view.
+
 + Bug Fixes:
 
 - Line numbers in the 'Markers' menu were off by one
@@ -46,6 +53,11 @@ JEDIT 4.1 VERSION HISTORY
 - The MacOS plugin had a version check that looked for an exact MRJ
   version match, rather than an equal or newer version. This broke the
   plugin when running on MacOS X 10.2. (Kris Kopicki)
+- If an action caused the creation of a dockable window, the standard
+  variables (view, buffer, textArea, editPane) would be cleared from the
+  action's namespace from that point on. This has been fixed by making
+  dockable creation and action invocation take place in different
+  namespaces.
 
 * Version 4.1pre4
 

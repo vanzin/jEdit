@@ -141,7 +141,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		moveDown.addActionListener(actionHandler);
 		buttons.add(moveDown);
 		buttons.add(Box.createHorizontalStrut(6));
-		edit = new RolloverButton(GUIUtilities.loadIcon("Save.png"));
+		edit = new RolloverButton(GUIUtilities.loadIcon("ButtonProperties.png"));
 		edit.setToolTipText(jEdit.getProperty("options.toolbar.edit"));
 		edit.addActionListener(actionHandler);
 		buttons.add(edit);

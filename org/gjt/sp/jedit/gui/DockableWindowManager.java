@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import bsh.EvalError;
+import bsh.NameSpace;
 import com.microstar.xml.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.search.HyperSearchResults;
@@ -290,6 +291,11 @@ public class DockableWindowManager extends JPanel
 	//{{{ Factory class
 	static class Factory
 	{
+		// we assume dockable window code is not called
+		// recursively...
+		private static NameSpace nameSpace = new NameSpace(
+			BeanShell.getNameSpace(),"dockable window");
+
 		String name;
 		String code;
 
@@ -319,7 +325,7 @@ public class DockableWindowManager extends JPanel
 				Log.log(Log.ERROR,this,e);
 			}
 			JComponent win = (JComponent)BeanShell.eval(view,
-				BeanShell.getNameSpace(),code);
+				nameSpace,code);
 			return win;
 		} //}}}
 
