@@ -644,6 +644,7 @@ public class PluginJAR
 		}
 
 		EditBus.send(new PluginUpdate(this,PluginUpdate.UNLOADED));
+		EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}
 
 	//{{{ activateIfNecessary() method

@@ -410,7 +410,7 @@ public class BeanShell
 			{
 				resetDefaultVariables(namespace);
 			}
-			catch(EvalError e)
+			catch(UtilEvalError e)
 			{
 				// do nothing
 			}
@@ -574,9 +574,10 @@ public class BeanShell
 	//{{{ init() method
 	static void init()
 	{
-		BshClassManager.setClassLoader(new JARClassLoader());
-
-		global = new NameSpace("jEdit embedded BeanShell interpreter");
+		BshClassManager mgr = new BshClassManager();
+		mgr.setClassLoader(new JARClassLoader());
+		global = new NameSpace(mgr,
+			"jEdit embedded BeanShell interpreter");
 		global.importPackage("org.gjt.sp.jedit");
 		global.importPackage("org.gjt.sp.jedit.browser");
 		global.importPackage("org.gjt.sp.jedit.buffer");
@@ -612,7 +613,7 @@ public class BeanShell
 
 	//{{{ setupDefaultVariables() method
 	private static void setupDefaultVariables(NameSpace namespace, View view)
-		throws EvalError
+		throws UtilEvalError
 	{
 		if(view != null)
 		{
@@ -627,7 +628,7 @@ public class BeanShell
 
 	//{{{ resetDefaultVariables() method
 	private static void resetDefaultVariables(NameSpace namespace)
-		throws EvalError
+		throws UtilEvalError
 	{
 		namespace.setVariable("view",null);
 		namespace.setVariable("editPane",null);

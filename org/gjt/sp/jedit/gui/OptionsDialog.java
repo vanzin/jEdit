@@ -487,7 +487,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 			if (value instanceof OptionGroup)
 			{
-				name = ((OptionGroup)value).getName();
+				setText(((OptionGroup)value).getLabel());
 				this.setFont(groupFont);
 			}
 			else if (value instanceof OptionPane)
@@ -501,11 +501,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 				this.setFont(paneFont);
 			}
 
-			if (name == null)
-			{
-				setText(null);
-			}
-			else
+			if (name != null)
 			{
 				String label = jEdit.getProperty("options." +
 					name + ".label");

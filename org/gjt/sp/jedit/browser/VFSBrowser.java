@@ -23,8 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
-import bsh.EvalError;
-import bsh.NameSpace;
+import bsh.*;
 import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -987,7 +986,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 					action.invoke(browser.getView());
 				}
-				catch(EvalError err)
+				catch(UtilEvalError err)
 				{
 					Log.log(Log.ERROR,this,err);
 				}
@@ -998,7 +997,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						global.setVariable("browser",null);
 						global.setVariable("files",null);
 					}
-					catch(EvalError err)
+					catch(UtilEvalError err)
 					{
 						Log.log(Log.ERROR,this,err);
 					}

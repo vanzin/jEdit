@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- switching syntax modes does not invalidate line contexts
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
 - plugin unload dependencies
@@ -21,7 +22,6 @@ and quirks that I need to fix eventually.
 
 - operating system activations.
   - port macos
-- new dynamic menu api
 - new macro handler api
 
 - can do perl q|...| etc. using begin/end substitution!
@@ -222,6 +222,7 @@ and quirks that I need to fix eventually.
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
 - inserting lines repaints whole text area
+- 30,000 line file performance with syntax, word wrap
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
