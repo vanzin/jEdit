@@ -106,6 +106,8 @@ public abstract class OperatingSystem
 				os = new Windows();
 			else if(osName.indexOf("OS/2") != -1)
 				os = new HalfAnOS();
+			else if(osName.indexOf("VMS") != -1)
+				os = new VMS();
 			else
 				os = new Unix();
 		}
@@ -312,6 +314,14 @@ public abstract class OperatingSystem
 		public String getInstallDirectory(String name, String version)
 		{
 			return "C:\\" + name + " " + version;
+		}
+	}
+
+	public static class VMS extends OperatingSystem
+	{
+		public String getInstallDirectory(String name, String version)
+		{
+			return "./" + name.toLowerCase() + "/" + version);
 		}
 	}
 
