@@ -494,7 +494,8 @@ class InstallPanel extends JPanel
 		{
 			boolean downloadSource = jEdit.getBooleanProperty(
 				"plugin-manager.downloadSource");
-			boolean installUser = true;
+			boolean installUser = jEdit.getBooleanProperty(
+				"plugin-manager.installUser");
 			Roster roster = new Roster();
 			String installDirectory;
 			if(installUser)
