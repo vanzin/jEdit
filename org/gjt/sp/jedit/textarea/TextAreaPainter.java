@@ -700,7 +700,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			firstInvalid,lastInvalid,y,height);
 
 		textArea.updateMaxHorizontalScrollWidth();
-		textArea.displayManager._notifyScreenLineChanges();
 	} //}}}
 
 	//{{{ nextTabStop() method

@@ -4898,7 +4898,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(displayManager != null && !bufferChanging)
 		{
 			displayManager.updateWrapSettings();
-			displayManager._notifyScreenLineChanges();
+			displayManager.notifyScreenLineChanges();
 		}
 
 		gutter.repaint();
