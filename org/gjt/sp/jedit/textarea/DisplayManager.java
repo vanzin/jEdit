@@ -589,6 +589,7 @@ public class DisplayManager
 	void dispose()
 	{
 		offsetMgr.removeAnchor(scrollLineCount);
+		offsetMgr.removeAnchor(firstLine);
 		offsetMgr = null;
 
 		buffer.removeBufferChangeListener(bufferChangeHandler);
