@@ -15,7 +15,7 @@
     lightweight components for running jEdit under the Windows
     group of operating systems. The package is designed to run
     on Windows 95, Windows 98, Windows Me, Windows NT (versions 4.0 and
-    greater) and Windows 2000. <!-- This version is designed to work with
+    greater), Windows 2000 and Windows XP. <!-- This version is designed to work with
     jEdit version 3.2pre4 and later.  It will not work with earlier
     versions. -->
   </para>
@@ -413,6 +413,23 @@ win32gui.MessageBox(0, "The server port is %s." % port,
 path = "C:\\WINNT\\Profiles\\Administrator\\Desktop\\"
 o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
 </programlisting></informalexample>
+
+</sect1>
+
+<!-- open sect1 -->
+<sect1 id="launcher-logging"><title>jEditLauncher Logging</title>
+<para>
+  The jEditLauncher package has alogging facility that is separate from jEdit's
+  Activity Log to provide a record of events occurring outside the Java
+  virtual machine environemnt in which jEdit operates.  The logging
+  facility maintains two log files: <filename>jelaunch.log</filename> for
+  events relating to starting jEdit, loading files and running scripts,
+  and <filename>install.log</filename> for jEditLauncher installation
+  activity.  Both files are maintained in the directory in which jEdit
+  is installed.  They are cumulative from session to seesion, but may be
+  manually deleted at any time without affecting program execution.
+</para>
+
 
 </sect1>
 
