@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@ public class ContentManager
 	private void close(int newStart, int newEnd)
 	{
 		// Optimization
-		if(gapStart == newStart)
+		if(newStart == gapStart)
 		{
 			System.arraycopy(text,gapEnd,text,newEnd,length - gapStart);
 		}
