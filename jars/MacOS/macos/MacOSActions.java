@@ -26,6 +26,7 @@ package macos;
 import java.io.*;
 import javax.swing.*;
 import com.apple.cocoa.application.*;
+import com.apple.cocoa.foundation.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -45,14 +46,28 @@ public class MacOSActions
 	//{{{ runScript() method
 	public static void runScript(String path)
 	{
-		if (new File(path).exists())
+		/*File file = new File(path);
+			
+		if (file.exists())
 		{
 			try {
+				BufferedReader reader = new BufferedReader(new FileReader(file));
+				StringBuffer code = new StringBuffer();
+				String line;
+				
+				while ((line = reader.readLine()) != null)
+					code.append(line);
+				
+				NSAppleScript script = new NSAppleScript(code.toString());
+				script.compile(new NSMutableDictionary());
+				script.execute(new NSMutableDictionary());
+				
+				/*
 				String[] args = {"osascript",path};
 				Process proc = Runtime.getRuntime().exec(args);
 				BufferedReader r = new BufferedReader(
 					new InputStreamReader(proc.getErrorStream()));
-				proc.waitFor();
+				//proc.waitFor();
 				
 				String mesg = new String();
 				String line;
@@ -67,6 +82,39 @@ public class MacOSActions
 					JOptionPane.showMessageDialog(null,mesg,
 						"Script Error",JOptionPane.ERROR_MESSAGE);
 			} catch (Exception ex) {}
-		}
+		}*/
+		new ScriptRunner(path).start();
+		//SwingUtilities.invokeLater(new ScriptRunner(path));
 	} //}}}
+	
+	static class ScriptRunner extends Thread
+	{
+		private String path;
+		
+		public ScriptRunner(String path)
+		{
+			this.path = path;
+		}
+		
+		public void run()
+		{
+			File file = new File(path);
+			
+			if (file.exists())
+			{
+				try {
+					BufferedReader reader = new BufferedReader(new FileReader(file));
+					StringBuffer code = new StringBuffer();
+					String line;
+					
+					while ((line = reader.readLine()) != null)
+						code.append(line);
+					
+					NSAppleScript script = new NSAppleScript(code.toString());
+					script.compile(new NSMutableDictionary());
+					script.execute(new NSMutableDictionary());
+				} catch (Exception ex) {}
+			}
+		}
+	}
 }

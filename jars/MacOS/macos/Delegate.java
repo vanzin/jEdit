@@ -80,16 +80,11 @@ public class Delegate extends ApplicationAdapter
 	public void handleOpenFile(ApplicationEvent event)
 	{
 		File file = new File(event.getFilename());
-		View view = jEdit.getActiveView();
 		Buffer buffer;
 		
-		if (view == null && MacOSPlugin.started)
-		{
-			if (jEdit.getBooleanProperty("restore.cli"))
-				view = jEdit.newView(null,jEdit.restoreOpenFiles());
-			else
-				view = jEdit.newView(null,jEdit.newFile(null));
-		}
+		View view = PerspectiveManager.loadPerspective(true);
+		if(view == null)
+			view = jEdit.newView(null);
 		
 		if ((buffer = jEdit.openFile(view,file.getPath())) != null)
 			lastOpenFile = buffer;
@@ -206,7 +201,7 @@ public class Delegate extends ApplicationAdapter
 			public void run()
 			{
 				if (jEdit.getViewCount() == 0)
-					jEdit.newView(null,jEdit.restoreOpenFiles());
+					jEdit.newView(null);
 			}
 		});
 		
@@ -231,16 +226,18 @@ public class Delegate extends ApplicationAdapter
 	
 	//{{{ Services
 	
+	//{{{ openFile() method
 	public String openFile(NSPasteboard pboard, String userData)
 	{
 		return null;
-	}
+	} //}}}
 	
+	//{{{ openSelection() method
 	public String openSelection(NSPasteboard pboard, String userData)
 	{
 		jEdit.newFile(jEdit.getActiveView()).insert(0,userData);
 		return null;
-	}
+	} //}}}
 	
 	//}}}
 	
@@ -452,8 +449,9 @@ public class Delegate extends ApplicationAdapter
 			{
 				public void run()
 				{
-					if (jEdit.getViewCount() == 0)
-						jEdit.newView(null,jEdit.restoreOpenFiles());
+					View view = PerspectiveManager.loadPerspective(true);
+					if(view == null)
+						jEdit.newView(null);
 					else
 						jEdit.newView(jEdit.getActiveView());
 				}

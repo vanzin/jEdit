@@ -9,7 +9,7 @@ plugin.macos.MacOSPlugin.docs=MacOS.html
 #
 # Dependencies
 #
-plugin.macos.MacOSPlugin.depend.0=jedit 04.00.06.00
+plugin.macos.MacOSPlugin.depend.0=jedit 04.02.01.00
 plugin.macos.MacOSPlugin.depend.1=jdk 1.4.1
 
 MacOSPlugin.depend.os.name=Mac OS X
@@ -62,4 +62,4 @@ MacOSPlugin.menu.recentDir.none=No Recent Folders
 # Misc
 #
 macro-handler.applescript.label=AppleScript
-macro-handler.applescript.glob=*.scpt
+macro-handler.applescript.glob=*.[scpt,applescript]

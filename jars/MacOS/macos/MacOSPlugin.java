@@ -58,7 +58,6 @@ public class MacOSPlugin extends EBPlugin
 			
 			app.setDelegate(delegate);
 			app.setServicesProvider(delegate);
-			app.setServicesMenu(new NSMenu("jEdit"));
 		}
 	}//}}}
 	
