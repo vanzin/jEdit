@@ -87,6 +87,9 @@ public class Java14
 			if(!evt.isConsumed())
 			{
 				Component comp = (Component)evt.getSource();
+				if(!comp.isShowing())
+					return true;
+
 				for(;;)
 				{
 					if(comp instanceof View)
@@ -109,7 +112,7 @@ public class Java14
 	} //}}}
 
 	//{{{ MyFocusTraversalPolicy class
-	static class MyFocusTraversalPolicy extends DefaultFocusTraversalPolicy
+	static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
 	{
 		public Component getDefaultComponent(Container focusCycleRoot)
 		{

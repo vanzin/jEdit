@@ -292,7 +292,8 @@ public class jEdit
 		initUserProperties();
 		initPLAF();
 
-		if(OperatingSystem.hasJava14())
+		if(OperatingSystem.hasJava14()
+			&& System.getProperty("jedit.nojava14") == null)
 		{
 			try
 			{
@@ -349,7 +350,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		SearchAndReplace.load();
-		Macros.loadMacros();
 
 		GUIUtilities.advanceSplashProgress();
 		//}}}
@@ -361,7 +361,9 @@ public class jEdit
 				.startAllPlugins();
 		} //}}}
 
-		//{{{ Run startup scripts, after plugins and settings are loaded
+		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
+		Macros.loadMacros();
+
 		if(!noStartupScripts && jEditHome != null)
 		{
 			String path = MiscUtilities.constructPath(jEditHome,"startup");

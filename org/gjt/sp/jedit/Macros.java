@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Portions copyright (C) 2002 mike dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +24,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import gnu.regexp.RE;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -213,6 +215,54 @@ public class Macros
 		EditBus.send(new MacrosChanged(null));
 	} //}}}
 
+	//{{{ registerHandler() method
+	/**
+	 * Adds a macro handler to the handlers list
+	 * @since jEdit 4.0pre6
+	 */
+	public static void registerHandler(Handler handler)
+	{
+		if (getHandler(handler.getName()) != null)
+		{
+			Log.log(Log.ERROR, Macros.class, "Cannot register more than one macro handler with the same name");
+			return;
+		}
+
+		Log.log(Log.DEBUG,this,"Registered " + handler.getName()
+			+ " macro handler");
+		macroHandlers.add(handler);
+	} //}}}
+
+	//{{{ getHandlers() method
+	/**
+	 * Returns an array containing the list of registered macro handlers
+	 * @since jEdit 4.0pre6
+	 */
+	public static Handler[] getHandlers()
+	{
+		Handler[] handlers = new Handler[macroHandlers.size()];
+		return (Handler[])macroHandlers.toArray(handlers);
+	} //}}}
+
+	//{{{
+	/**
+	 * Returns the macro handler with the specified name, or null if
+	 * there is no registered handler with that name.
+	 * @since jEdit 4.0pre6
+	 */
+	public static Handler getHandler(String name)
+	{
+		Handler handler = null;
+		for (int i = 0; i < macroHandlers.size(); i++)
+		{
+			handler = (Handler)macroHandlers.get(i);
+			if (handler.getName().equals(name)) return handler;
+		}
+
+		return null;
+	}
+	//}}}
+
 	//{{{ getMacroHierarchy() method
 	/**
 	 * Returns a vector hierarchy with all known macros in it.
@@ -256,15 +306,20 @@ public class Macros
 	public static class Macro extends EditAction
 	{
 		//{{{ Macro constructor
-		public Macro(String name, String path)
+		public Macro(Handler handler, String name, String label, String path)
 		{
 			super(name);
+			this.handler = handler;
+			this.label = label;
 			this.path = path;
-
-			int index = name.lastIndexOf('/');
-			label = name.substring(index + 1)
-				.replace('_',' ');
 		} //}}}
+
+		//{{{ getHandler() method
+		public Handler getHandler()
+		{
+			return handler;
+		}
+		//}}}
 
 		//{{{ getLabel() method
 		public String getLabel()
@@ -288,8 +343,7 @@ public class Macros
 			{
 				buffer.beginCompoundEdit();
 
-				BeanShell.runScript(view,path,
-					true,false);
+				handler.runMacro(view, this);
 			}
 			finally
 			{
@@ -313,7 +367,16 @@ public class Macros
 			return "Macros.getMacro(\"" + getName() + "\").invoke(view);";
 		} //}}}
 
+		//{{{ macroNameToLabel() method
+		public static String macroNameToLabel(String macroName)
+		{
+			int index = macroName.lastIndexOf('/');
+			return macroName.substring(index + 1).replace('_', ' ');
+		}
+		//}}}
+
 		//{{{ Private members
+		private Handler handler;
 		private String path;
 		private String label;
 		//}}}
@@ -471,6 +534,8 @@ public class Macros
 	private static String systemMacroPath;
 	private static String userMacroPath;
 
+	private static ArrayList macroHandlers;
+
 	private static ActionSet macroActionSet;
 	private static Vector macroHierarchy;
 	private static Hashtable macroHash;
@@ -480,6 +545,8 @@ public class Macros
 	//{{{ Class initializer
 	static
 	{
+		macroHandlers = new ArrayList();
+		registerHandler(new BeanShellHandler());
 		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
 		jEdit.addActionSet(macroActionSet);
 		macroHierarchy = new Vector();
@@ -490,7 +557,7 @@ public class Macros
 	private static void loadMacros(Vector vector, String path, File directory)
 	{
 		String[] macroFiles = directory.list();
-		if(macroFiles == null)
+		if(macroFiles == null || macroFiles.length == 0)
 			return;
 
 		MiscUtilities.quicksort(macroFiles,new MiscUtilities.StringICaseCompare());
@@ -499,22 +566,40 @@ public class Macros
 		{
 			String fileName = macroFiles[i];
 			File file = new File(directory,fileName);
-			if(fileName.toLowerCase().endsWith(".bsh"))
-			{
-				String label = fileName.substring(0,fileName.length() - 4);
-				String name = path + label;
-				Macro newMacro = new Macro(name,file.getPath());
-				vector.addElement(newMacro);
-				macroActionSet.addAction(newMacro);
-				macroHash.put(name,newMacro);
-			}
-			else if(file.isDirectory())
+			if(file.isDirectory())
 			{
 				Vector submenu = new Vector();
 				submenu.addElement(fileName.replace('_',' '));
 				loadMacros(submenu,path + fileName + '/',file);
 				if(submenu.size() != 1)
 					vector.addElement(submenu);
+			}
+			else
+			{
+				Handler handler;
+				for (int j = 0; j < macroHandlers.size(); j++)
+				{
+					handler = (Handler)macroHandlers.get(j);
+					try
+					{
+						if (handler.accept(fileName))
+						{
+							Macro newMacro = handler.createMacro(
+								path + fileName, file.getPath());
+							vector.addElement(newMacro);
+							macroActionSet.addAction(newMacro);
+							macroHash.put(newMacro.getName(),newMacro);
+							break;
+						}
+					}
+					catch (Exception e)
+					{
+						Log.log(Log.ERROR, Macros.class, e);
+						macroHandlers.remove(handler);
+						j--;
+						continue;
+					}
+				}
 			}
 		}
 	} //}}}
@@ -652,4 +737,93 @@ public class Macros
 			view.getStatus().setMessage(null);
 		} //}}}
 	} //}}}
+
+	//{{{ Handler class
+	/**
+	 * Encapsulates creating and invoking macros in arbitrary scripting languages
+	 * @since jEdit 4.0pre6
+	 */
+	public static abstract class Handler
+	{
+		//{{{ getName() method
+		public String getName()
+		{
+			return name;
+		} //}}}
+
+		//{{{ getLabel() method
+		public String getLabel()
+		{
+			return label;
+		} //}}}
+
+		//{{{ accept() method
+		public boolean accept(String name)
+		{
+			return filter.isMatch(name);
+		} //}}}
+
+		//{{{ createMacro() method
+		public abstract Macro createMacro(String macroName, String path);
+		//}}}
+
+		//{{{ runMacro() method
+		public abstract void runMacro(View view, Macro macro);
+		//}}}
+
+		//{{{ Handler constructor
+		protected Handler(String name)
+		{
+			this.name = name;
+			label = jEdit.getProperty("macro-handler."
+				+ name + ".label", name);
+			try
+			{
+				filter = new RE(MiscUtilities.globToRE(
+					jEdit.getProperty(
+					"macro-handler." + name + ".glob")));
+			}
+			catch (Exception e)
+			{
+				throw new InternalError("Missing or invalid glob for handler " + name);
+			}
+		} //}}}
+
+		//{{{ Private members
+		private String name;
+		private String label;
+		private RE filter;
+		//}}}
+	}
+	//}}}
+
+	//{{{ BeanShellHandler class
+	static class BeanShellHandler extends Handler
+	{
+		//{{{ BeanShellHandler constructor
+		BeanShellHandler()
+		{
+			super("beanshell");
+		}
+		//}}}
+
+		//{{{ createMacro() method
+		public Macro createMacro(String macroName, String path)
+		{
+			// Remove '.bsh'
+			macroName = macroName.substring(0, macroName.length() - 4);
+
+			return new Macro(this, macroName,
+				Macro.macroNameToLabel(macroName), path);
+		}
+		//}}}
+
+		//{{{ runMacro() method
+		public void runMacro(View view, Macro macro)
+		{
+			BeanShell.runScript(view,macro.getPath(),true,false);
+		}
+		//}}}
+	}
+	//}}}
 }

@@ -1,7 +1,7 @@
 TO DO
 
+- paste: not scrolled to caret
 - selection extended when shift not down?
-- splitting is fucked
 - source for existing plugins
 - only one find dialog
 - triple-click-drag down
@@ -21,7 +21,6 @@ TO DO
 - fix up/down arrow keys
 - fix page up/page down
 - fix home home/end end
-- physLastLine wrong with soft wrap
 - use new offset conversion API throughout
 - test dir replace all and save all
 - switching buffers: horiz scroll bar not updated?

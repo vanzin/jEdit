@@ -269,8 +269,6 @@ class InstallPluginsDialog extends EnhancedDialog
 		Object selected = plugins.getSelectedValue();
 		if(selected instanceof PluginList.Plugin)
 		{
-			install.setEnabled(true);
-
 			PluginList.Plugin plugin = (PluginList.Plugin)selected;
 			PluginList.Branch branch = plugin.getCompatibleBranch();
 			name.setText(plugin.name);
@@ -307,8 +305,6 @@ class InstallPluginsDialog extends EnhancedDialog
 		}
 		else
 		{
-			install.setEnabled(false);
-
 			name.setText(null);
 			author.setText(null);
 			latestVersion.setText(null);
@@ -347,6 +343,8 @@ class InstallPluginsDialog extends EnhancedDialog
 		ArrayList selectedPlugins = new ArrayList();
 
 		Object[] selected = plugins.getCheckedValues();
+		install.setEnabled(selected.length != 0);
+
 		for(int i = 0; i < selected.length; i++)
 		{
 			PluginList.Plugin plugin = (PluginList.Plugin)selected[i];

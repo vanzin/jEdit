@@ -10,6 +10,7 @@ JEDIT 4.0 VERSION HISTORY
 
 - Minor tweaks to VFS path code, that should make things a bit smoother
   for the FTP plugin
+- Updated Prolog syntax highlighting (Giulio Piancastelli)
 
 + Bug Fixes
 
@@ -26,6 +27,24 @@ JEDIT 4.0 VERSION HISTORY
   selection, the caret would move inside the selected range
 - On Windows, double-clicking on a drive letter in the drives list of
   the file system browser would open the wrong location
+- Fixed obscure focus manager bug under JDK 1.4 that would manifest when
+  splitting the view
+- The status bar message shown when a bracket is out of bounds was not
+  always being displayed if soft wrap was in use
+- Fixed silly behavior in 'Install Plugins' dialog box
+
++ API Additions
+
+- Support for macros written in other languages (Mike Dillon)
+  - Macros.registerHandler(Macros.Handler handler) method
+  - Macros.Handler interface has these methods:
+
+    public abstract Macro createMacro(String macroName, String path);
+    public abstract void runMacro(View view, Macro macro);
+    protected Handler(String name)
+
+  - 'name' is used to key "macro-handler.<name>.label" and
+    "macro-handler.<name>.glob" properties.
 
 * Version 4.0pre5
 

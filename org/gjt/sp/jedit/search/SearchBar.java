@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Portions copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -318,7 +318,7 @@ public class SearchBar extends JPanel
 					{
 						// reverse regexp search
 						// not supported yet, so
-						// 'sumulate' with restart
+						// 'simulate' with restart
 						timerIncrementalSearch(0,false);
 					}
 					else
@@ -367,7 +367,9 @@ public class SearchBar extends JPanel
 				if(evt.isShiftDown())
 				{
 					evt.consume();
-					find(true);
+					// reverse search with regexps not
+					// supported yet
+					find(regexp.isSelected() ? false : true);
 				}
 				break;
 			}
