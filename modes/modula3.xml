@@ -33,17 +33,9 @@
 			<END>'</END>
 		</SPAN>
 
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">@</SEQ>
 		<SEQ TYPE="OPERATOR">:=</SEQ>
-		<SEQ TYPE="NULL">:</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>

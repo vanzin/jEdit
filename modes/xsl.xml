@@ -94,7 +94,6 @@
 			<END>'</END>
 		</SPAN>
 		
-		<SEQ TYPE="NULL">=</SEQ>
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
@@ -111,7 +110,6 @@
 			<END>'</END>
 		</SPAN>
 		
-		<SEQ TYPE="NULL">=</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
 

@@ -37,32 +37,10 @@
 		<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
 
 		<!-- word separators -->
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">[</SEQ>
 		<SEQ TYPE="OPERATOR">]</SEQ>
-		<SEQ TYPE="NULL">=</SEQ>
-		<SEQ TYPE="NULL">!</SEQ>
-		<SEQ TYPE="NULL">+</SEQ>
-		<SEQ TYPE="NULL">-</SEQ>
-		<SEQ TYPE="NULL">/</SEQ>
-		<SEQ TYPE="NULL">*</SEQ>
-		<SEQ TYPE="NULL">&gt;</SEQ>
-		<SEQ TYPE="NULL">&lt;</SEQ>
-		<SEQ TYPE="NULL">&amp;</SEQ>
-		<SEQ TYPE="NULL">|</SEQ>
-		<SEQ TYPE="NULL">^</SEQ>
-		<SEQ TYPE="NULL">~</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
-		<SEQ TYPE="NULL">:</SEQ>
-		<SEQ TYPE="NULL">'</SEQ>
-		<SEQ TYPE="NULL">"</SEQ>
-		<SEQ TYPE="NULL">`</SEQ>
 	</RULES>
 
 	<RULES SET="MATH" DEFAULT="MARKUP">

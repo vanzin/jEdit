@@ -65,10 +65,18 @@ contributing to this release.
 - SEQ elements can now have DELEGATE attributes. If specified, this rule
   set will be swapped in after the text matched by the sequence rule.
 
+- Delegates to rule sets with TERMINATE rules should work now.
+
 - WHITESPACE rule no longer necessary in mode definitions.
 
 - IGNORE_CASE attribute of KEYWORDS rule removed. This value is now the
   same as the IGNORE_CASE attribute of the parent RULES tag.
+
+- It is no longer necessary to define <SEQ TYPE="NULL"> rules for
+  keyword separator characters. Now, any non-alphanumeric character,
+  that does not appear in a keyword string or the "noWordSep"
+  buffer-local property is automatically treated like it had a sequence
+  rule.
 
 - Added FORTRAN syntax highlighting (Joseph Schroer)
   Added Interilis syntax highlighting (Claude Eisenhut)

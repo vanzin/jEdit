@@ -205,7 +205,7 @@ public class ParserRuleSet
 		}
 	}
 
-	private static final int RULE_BUCKET_COUNT = 32;
+	private static final int RULE_BUCKET_COUNT = 128;
 
 	private String name;
 	private Mode mode;

@@ -43,14 +43,6 @@
                 <SEQ TYPE="OPERATOR">{</SEQ>
                 <SEQ TYPE="OPERATOR">=</SEQ>
 
-                <SEQ TYPE="NULL">,</SEQ>
-                <SEQ TYPE="NULL">)</SEQ>
-                <SEQ TYPE="NULL">;</SEQ>
-                <SEQ TYPE="NULL">]</SEQ>
-                <SEQ TYPE="NULL">[</SEQ>
-                <SEQ TYPE="NULL">:</SEQ>
-
-
                 <!-- Function calls -->
                 <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
@@ -167,12 +159,6 @@
                 -->
                 <SEQ TYPE="OPERATOR">}</SEQ>
                 <SEQ TYPE="OPERATOR">{</SEQ>
-
-                <SEQ TYPE="NULL">.</SEQ>
-                <SEQ TYPE="NULL">)</SEQ>
-                <SEQ TYPE="NULL">]</SEQ>
-                <SEQ TYPE="NULL">[</SEQ>
-                <SEQ TYPE="NULL">,</SEQ>
 
                 <!--
                   Escape colons for full tables

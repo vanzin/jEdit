@@ -7,9 +7,6 @@
 		<PROPERTY NAME="lineComment" VALUE="@c" />
 	</PROPS>
 	<RULES>
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- comments -->
 		<EOL_SPAN TYPE="COMMENT1">@c </EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1">@comment </EOL_SPAN>
@@ -17,33 +14,7 @@
 		<!-- @... commands -->
 		<MARK_FOLLOWING TYPE="KEYWORD1">@</MARK_FOLLOWING>
 
-		<!-- word separators -->
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">=</SEQ>
-		<SEQ TYPE="NULL">!</SEQ>
-		<SEQ TYPE="NULL">+</SEQ>
-		<SEQ TYPE="NULL">-</SEQ>
-		<SEQ TYPE="NULL">/</SEQ>
-		<SEQ TYPE="NULL">*</SEQ>
-		<SEQ TYPE="NULL">&gt;</SEQ>
-		<SEQ TYPE="NULL">&lt;</SEQ>
-		<SEQ TYPE="NULL">&amp;</SEQ>
-		<SEQ TYPE="NULL">|</SEQ>
-		<SEQ TYPE="NULL">^</SEQ>
-		<SEQ TYPE="NULL">~</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
-		<SEQ TYPE="NULL">:</SEQ>
-		<SEQ TYPE="NULL">'</SEQ>
-		<SEQ TYPE="NULL">"</SEQ>
-		<SEQ TYPE="NULL">`</SEQ>
-		<SEQ TYPE="NULL">\</SEQ>
 	</RULES>
 </MODE>

@@ -43,7 +43,6 @@
 		<SEQ TYPE="LABEL">&amp;</SEQ>
 		<SEQ TYPE="LABEL">@</SEQ>
 		<SEQ TYPE="LABEL">!</SEQ>
-		<SEQ TYPE="NULL">?</SEQ>
 
 		<KEYWORDS>
 		<!--KEYWORD1s are standard functions and procedures -->

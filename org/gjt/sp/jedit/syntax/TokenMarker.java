@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1998, 2002 Slava Pestov
  * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -160,12 +160,18 @@ public class TokenMarker
 			return rules;
 	} //}}}
 
+	public static int totalRuleScans;
+	public static int totalRuleChecks;
+	public static int matchedRule;
+	public static int matchedWordSep;
+
 	//{{{ markTokens() method
 	/**
 	 * Do not call this method directly; call Buffer.markTokens() instead.
 	 */
 	public LineContext markTokens(LineContext prevContext,
-		TokenHandler tokenHandler, Segment line)
+		TokenHandler tokenHandler, Segment line,
+		String noWordSep)
 	{
 		//{{{ Set up some instance variables
 		// this is to avoid having to pass around lots and lots of
@@ -187,24 +193,29 @@ public class TokenMarker
 			context.rules = prevContext.rules;
 		}
 
+		keywords = context.rules.getKeywords();
 		escaped = false;
 		//}}}
 
 		//{{{ Main parser loop
 		ParserRule rule;
 		int terminateChar = context.rules.getTerminateChar();
+		boolean terminated = false;
 
 main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		{
-			// check if we have to stop parsing
-			if(terminateChar >= 0 && pos == terminateChar)
+			//{{{ check if we have to stop parsing
+			if(terminateChar >= 0 && pos >= terminateChar
+				&& !terminated)
 			{
+				terminated = true;
 				context = new LineContext(ParserRuleSet
 					.getStandardRuleSet(context.rules
 					.getDefault()),context);
-			}
+				keywords = context.rules.getKeywords();
+			} //}}}
 
-			// check for end of delegate
+			//{{{ check for end of delegate
 			if(context.parent != null)
 			{
 				rule = context.parent.inRule;
@@ -213,18 +224,46 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					if(checkDelegateEnd())
 						continue main_loop;
 				}
-			}
+			} //}}}
 
-			// check every rule
-			rule = context.rules.getRules(line.array[pos]);
+			totalRuleScans++;
+
+			//{{{ check every rule
+			char ch = line.array[pos];
+
+			rule = context.rules.getRules(ch);
 			while(rule != null)
 			{
+				totalRuleChecks++;
 				// stop checking rules if there was a match
 				if (handleRule(rule,false))
+				{
+					matchedRule++;
 					continue main_loop;
+				}
 
 				rule = rule.next;
-			}
+			} //}}}
+
+			//{{{ check if current character is a word separator
+			if(keywords != null)
+			{
+				String noWordSep2 = keywords.getNonAlphaNumericChars();
+
+				if(!Character.isLetterOrDigit(ch)
+					&& noWordSep.indexOf(ch) == -1
+					&& noWordSep2.indexOf(ch) == -1)
+				{
+					markKeyword(true);
+	
+					tokenHandler.handleToken(1,
+						context.rules.getDefault(),
+						context.rules);
+					lastOffset = pos + 1;
+
+					matchedWordSep++;
+				}
+			} //}}}
 
 			escaped = false;
 		} //}}}
@@ -242,6 +281,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				& NO_LINE_BREAK) == NO_LINE_BREAK)
 			{
 				context = context.parent;
+				keywords = context.rules.getKeywords();
 				context.inRule = null;
 			}
 		} //}}}
@@ -264,6 +304,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	private TokenHandler tokenHandler;
 	private Segment line;
 	private LineContext context;
+	private KeywordMap keywords;
 	private Segment pattern = new Segment();
 	private int lastOffset;
 	private int lineLength;
@@ -276,15 +317,18 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	{
 		LineContext tempContext = context;
 		context = context.parent;
+		keywords = context.rules.getKeywords();
 		boolean tempEscaped = escaped;
 		boolean b = handleRule(context.inRule,true);
 		context = tempContext;
+		keywords = context.rules.getKeywords();
 
 		if(b && !tempEscaped)
 		{
 			markKeyword(true);
 
 			context = (LineContext)context.parent.clone();
+			keywords = context.rules.getKeywords();
 
 			tokenHandler.handleToken(pattern.count,
 				(context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH
@@ -359,11 +403,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 			//{{{ SEQ
 			case SEQ:
-				// this is a plain sequence rule
 				tokenHandler.handleToken(pattern.count,
 					checkRule.token,
 					context.rules);
-				lastOffset = pos + pattern.count;
 				break;
 			//}}}
 			//{{{ SPAN, EOL_SPAN, MARK_FOLLOWING
@@ -377,9 +419,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					? context.rules.getDefault() : checkRule.token),
 					context.rules);
 
-				lastOffset = pos + pattern.count;
-
 				context = new LineContext(delegateSet, context);
+				keywords = context.rules.getKeywords();
 
 				break;
 			//}}}
@@ -402,7 +443,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					tokenHandler.handleToken(pos - lastOffset + pattern.count,
 						checkRule.token,context.rules);
 				}
-				lastOffset = pos + pattern.count;
 
 				break;
 			//}}}
@@ -412,6 +452,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			// move pos to last character of match sequence
 			pos += (pattern.count - 1); 
+			lastOffset = pos + 1;
+
 			// break out of inner for loop to check next char
 		} //}}}
 
@@ -444,6 +486,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				lastOffset = pos;
 				context = context.parent;
+				keywords = context.rules.getKeywords();
 				context.inRule = null;
 				return true;
 			}
@@ -515,8 +558,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		} //}}}
 
 		//{{{ Do keywords
-		KeywordMap keywords = context.rules.getKeywords();
-
 		if(keywords != null)
 		{
 			byte id = keywords.lookup(line, lastOffset, len);

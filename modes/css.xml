@@ -16,15 +16,12 @@
 		DIGIT_RE="[[:digit:]]?(px|pt|mm|cm|in|em)">
 
 		<SEQ TYPE="OPERATOR">:</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
 		<SPAN TYPE="NULL" DELEGATE="LITERAL">
 			<BEGIN>(</BEGIN>
 			<END>)</END>
 		</SPAN>
 		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">.</SEQ>
 
 		<SEQ TYPE="OPERATOR">!</SEQ>
 

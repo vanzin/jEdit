@@ -69,14 +69,6 @@
 			<END>'</END>
 		</SPAN>
 
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">)</SEQ>
-		<SEQ TYPE="NULL">[</SEQ>
-		<SEQ TYPE="NULL">]</SEQ>
-		<SEQ TYPE="NULL">,</SEQ>
-		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="NULL">`</SEQ>
-
 		<SEQ TYPE="OPERATOR">..</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;&amp;</SEQ>
 		<SEQ TYPE="OPERATOR">::</SEQ>
@@ -98,7 +90,7 @@
 
 		<!-- Defining this as OPERATOR causes float numbers not to be
 		highlighted... Which is more important? -->
-		<SEQ TYPE="NULL">.</SEQ>
+		<!-- <SEQ TYPE="NULL">.</SEQ> -->
 
 		<KEYWORDS>
 			<!-- Reserved words. -->

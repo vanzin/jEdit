@@ -50,13 +50,6 @@
         <SEQ TYPE="OPERATOR">?</SEQ>
         <SEQ TYPE="OPERATOR">!</SEQ>
 
-        <SEQ TYPE="NULL">(</SEQ>
-        <SEQ TYPE="NULL">)</SEQ>
-        <SEQ TYPE="NULL">{</SEQ>
-        <SEQ TYPE="NULL">}</SEQ>
-        <SEQ TYPE="NULL">[</SEQ>
-        <SEQ TYPE="NULL">]</SEQ>
-
         <!-- Keywords -->
         <KEYWORDS>
             <KEYWORD2>#ADDITIONAL-INFO</KEYWORD2>
