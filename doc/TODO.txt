@@ -1,13 +1,10 @@
 TO DO
 
+- cvs add tip65.html
 - might still need brutal undo code to avoid lumping everything together
-- bizzare undo bug
 - too many lines being made invisible
 - bottom electric scroll
-- folding probs
-- fuckup if last phys line invisible
 - CCW rotated text not drawn correctly
-- tip about smart case replace
 - new goodies need to be documented
 - conventions section in user's guide: mention Enter activating default
   button, Escape activating 'Cancel' or equivalent
@@ -201,6 +198,7 @@ TO DO
   String getToolTipText(int line)
 - Used by ErrorList, HyperSearch, markers
 - use java2d to draw block caret (instead of XOR)
+- cache plugin list in plugin manager
 
 - work thread hang?
 - when a new text area is created, if caret is on a bracket, not matched

@@ -14,6 +14,7 @@ JEDIT 4.0 VERSION HISTORY
 
 - Fixed a memory leak with the search and replace dialog box
 - Undo would be broken after a file was reloaded
+- Some files would appear with only the first line visible
 
 * Version 4.0pre1
 
