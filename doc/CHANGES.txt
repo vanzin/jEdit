@@ -66,6 +66,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   different fold levels. Fold levels 1, 2 and 3 have distinct styles,
   and all higher levels are assigned another style.
 
+- Alt-clicking on a fold triangle in the gutter narrows to that fold.
+
 }}}
 {{{ User Interface
 
