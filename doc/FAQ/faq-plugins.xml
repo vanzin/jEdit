@@ -5,7 +5,7 @@
 <!-- jEdit FAQ                                           -->
 <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
 
-<sect1 id="plugins"><title>Plugins</title>
+<sect1 id="plugins"><title>Plugin Questions</title>
 <para>
   This section deals with questions concerning the use of jEdit's
   plugins.  Plugins are applications that share jEdit's memory space

@@ -484,9 +484,7 @@ scrolling=scroll-to-current-line \
 	  scroll-down-line \
 	  - \
 	  scroll-up-page \
-	  scroll-down-page \
-	  - \
-	  toggle-synchro-scroll
+	  scroll-down-page
 scrolling.label=Scrollin$g
 scroll-to-current-line.label=Scroll $to Current Line
 center-caret.label=$Center Caret on Screen
@@ -494,7 +492,6 @@ scroll-up-line.label=Line Scroll $Up
 scroll-down-line.label=Line Scroll $Down
 scroll-up-page.label=Page Scroll U$p
 scroll-down-page.label=Page Scroll D$own
-toggle-synchro-scroll.label=Sy$nchronized Scrolling
 #}}}
 
 #{{{ Splitting menu
@@ -1578,6 +1575,7 @@ options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
 options.editing.noTabs=Soft (emulated with spaces) tabs
+options.editing.deepIndent=Deep indent
 #}}}
 
 #{{{ General pane

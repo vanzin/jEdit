@@ -931,85 +931,6 @@ public class View extends JFrame implements EBComponent
 
 	//}}}
 
-	//{{{ Synchronized scrolling
-
-	//{{{ isSynchroScrollEnabled() method
-	/**
-	 * Returns if synchronized scrolling is enabled.
-	 * @since jEdit 2.7pre1
-	 */
-	public boolean isSynchroScrollEnabled()
-	{
-		return synchroScroll;
-	} //}}}
-
-	//{{{ toggleSynchroScrollEnabled() method
-	/**
-	 * Toggles synchronized scrolling.
-	 * @since jEdit 2.7pre2
-	 */
-	public void toggleSynchroScrollEnabled()
-	{
-		setSynchroScrollEnabled(!synchroScroll);
-	} //}}}
-
-	//{{{ setSynchroScrollEnabled() method
-	/**
-	 * Sets synchronized scrolling.
-	 * @since jEdit 2.7pre1
-	 */
-	public void setSynchroScrollEnabled(boolean synchroScroll)
-	{
-		this.synchroScroll = synchroScroll;
-		JEditTextArea textArea = getTextArea();
-		int firstLine = textArea.getFirstLine();
-		int horizontalOffset = textArea.getHorizontalOffset();
-		synchroScrollVertical(textArea,firstLine);
-		synchroScrollHorizontal(textArea,horizontalOffset);
-	} //}}}
-
-	//{{{ synchroScrollVertical() method
-	/**
-	 * Sets the first line of all text areas.
-	 * @param textArea The text area that is propagating this change
-	 * @param firstLine The first line
-	 * @since jEdit 2.7pre1
-	 */
-	public void synchroScrollVertical(JEditTextArea textArea, int firstLine)
-	{
-		if(!synchroScroll)
-			return;
-
-		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-		{
-			if(editPanes[i].getTextArea() != textArea)
-				editPanes[i].getTextArea().setFirstLine(firstLine);
-		}
-	} //}}}
-
-	//{{{ synchroScrollHorizontal() method
-	/**
-	 * Sets the horizontal offset of all text areas.
-	 * @param textArea The text area that is propagating this change
-	 * @param horizontalOffset The horizontal offset
-	 * @since jEdit 2.7pre1
-	 */
-	public void synchroScrollHorizontal(JEditTextArea textArea, int horizontalOffset)
-	{
-		if(!synchroScroll)
-			return;
-
-		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-		{
-			if(editPanes[i].getTextArea() != textArea)
-				editPanes[i].getTextArea().setHorizontalOffset(horizontalOffset);
-		}
-	} //}}}
-
-	//}}}
-
 	//{{{ quickIncrementalSearch() method
 	/**
 	 * Quick search.
@@ -1323,8 +1244,6 @@ public class View extends JFrame implements EBComponent
 	private Box toolBar;
 	private SearchBar searchBar;
 	private ActionBar actionBar;
-
-	private boolean synchroScroll;
 
 	private EditPane editPane;
 	private JSplitPane splitPane;

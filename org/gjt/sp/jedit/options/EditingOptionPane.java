@@ -112,6 +112,9 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs")));
 
+		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
+			"options.editing.deepIndent")));
+
 		addComponent(jEdit.getProperty("options.editing.filenameGlob"),
 			filenameGlob = new JTextField());
 
@@ -159,6 +162,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox tabSize;
 	private JComboBox indentSize;
 	private JCheckBox noTabs;
+	private JCheckBox deepIndent;
 	//}}}
 
 	//{{{ saveMode() method
@@ -175,6 +179,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		current.tabSize = (String)tabSize.getSelectedItem();
 		current.indentSize = (String)indentSize.getSelectedItem();
 		current.noTabs = noTabs.isSelected();
+		current.deepIndent = deepIndent.isSelected();
 	} //}}}
 
 	//{{{ selectMode() method
@@ -201,6 +206,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		tabSize.setSelectedItem(current.tabSize);
 		indentSize.setSelectedItem(current.indentSize);
 		noTabs.setSelected(current.noTabs);
+		deepIndent.setSelected(current.deepIndent);
 
 		updateEnabled();
 		revalidate();
@@ -209,35 +215,34 @@ public class EditingOptionPane extends AbstractOptionPane
 	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
+		boolean enabled;
 		if(current == global)
 		{
+			enabled = true;
 			useDefaults.setEnabled(false);
 			filenameGlob.setEnabled(false);
 			firstlineGlob.setEnabled(false);
-			noWordSep.setEnabled(true);
-			folding.setEnabled(true);
-			collapseFolds.setEnabled(true);
-			wrap.setEnabled(true);
-			maxLineLen.setEnabled(true);
-			tabSize.setEnabled(true);
-			indentSize.setEnabled(true);
-			noTabs.setEnabled(true);
 		}
 		else
 		{
+			enabled = !modeProps[mode.getSelectedIndex() - 1]
+				.useDefaults;
 			useDefaults.setEnabled(true);
-			boolean enabled = !modeProps[mode.getSelectedIndex() - 1].useDefaults;
 			filenameGlob.setEnabled(enabled);
 			firstlineGlob.setEnabled(enabled);
-			noWordSep.setEnabled(enabled);
-			folding.setEnabled(enabled);
-			collapseFolds.setEnabled(enabled);
-			wrap.setEnabled(enabled);
-			maxLineLen.setEnabled(enabled);
-			tabSize.setEnabled(enabled);
-			indentSize.setEnabled(enabled);
-			noTabs.setEnabled(enabled);
 		}
+
+		filenameGlob.setEnabled(enabled);
+		firstlineGlob.setEnabled(enabled);
+		noWordSep.setEnabled(enabled);
+		folding.setEnabled(enabled);
+		collapseFolds.setEnabled(enabled);
+		wrap.setEnabled(enabled);
+		maxLineLen.setEnabled(enabled);
+		tabSize.setEnabled(enabled);
+		indentSize.setEnabled(enabled);
+		noTabs.setEnabled(enabled);
+		deepIndent.setEnabled(enabled);
 	} //}}}
 
 	//}}}
@@ -280,6 +285,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		String tabSize;
 		String indentSize;
 		boolean noTabs;
+		boolean deepIndent;
 		//}}}
 
 		//{{{ ModeProperties constructor
@@ -317,6 +323,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				tabSize = mode.getProperty("tabSize").toString();
 				indentSize = mode.getProperty("indentSize").toString();
 				noTabs = mode.getBooleanProperty("noTabs");
+				deepIndent = mode.getBooleanProperty("deepIndent");
 			}
 			else
 			{
@@ -328,6 +335,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				tabSize = jEdit.getProperty("buffer.tabSize");
 				indentSize = jEdit.getProperty("buffer.indentSize");
 				noTabs = jEdit.getBooleanProperty("buffer.noTabs");
+				deepIndent = jEdit.getBooleanProperty("buffer.deepIndent");
 			}
 		} //}}}
 
@@ -361,6 +369,7 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "tabSize");
 					jEdit.resetProperty(prefix + "indentSize");
 					jEdit.resetProperty(prefix + "noTabs");
+					jEdit.resetProperty(prefix + "deepIndent");
 	
 					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
 						(String)mode.getProperty("filenameGlob"))
@@ -399,6 +408,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			jEdit.setProperty(prefix + "tabSize",tabSize);
 			jEdit.setProperty(prefix + "indentSize",indentSize);
 			jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
+			jEdit.setBooleanProperty(prefix + "deepIndent",deepIndent);
 		} //}}}
 	} //}}}
 }

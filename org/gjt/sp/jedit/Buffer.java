@@ -2439,12 +2439,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 			case ' ':
 				currentIndent++;
-				whitespaceChars[0]++;
+				if(whitespaceChars != null)
+					whitespaceChars[0]++;
 				break;
 			case '\t':
 				currentIndent += (tabSize - (currentIndent
 					% tabSize));
-				whitespaceChars[0]++;
+				if(whitespaceChars != null)
+					whitespaceChars[0]++;
 				break;
 			default:
 				break loop;
@@ -2746,7 +2748,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 					while(prevPrevLineIndex != -1)
 					{
 						if(indentNextLineRE.isMatch(getLineText(prevPrevLineIndex)))
-							indent -= indentSize;
+							indent = getCurrentIdentForLine(prevPrevLineIndex,null);
 						else
 							break;
 

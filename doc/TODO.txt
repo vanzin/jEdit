@@ -3,15 +3,51 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- document deep indent
+- scroll line count problems
+- tall caret and tab
+- tall caret and backspace
+- change of AT_WORD_START semantics to fix perl highlighting?
+- kill ring obviously broken
+- some search dialog problems
+- new file: horiz scroll wrong
+- while loading --> scroll bar
+- fsb default size
+- narrow: scrolls one down
+- split view line insert: repainted twice, selection problems
+- vfs browser: open in new view: doesn't focus the new view
+- macro record: doesn't respect overwrite
+- C+ENTER 3 C+2
+- class loading problems
+- numeric keypad with jdk 1.3
+- optional dependencies
+- broken activity log autoscroll
+- bizarre dockable window manager button layout problem
+- wheel mouse -- option: jEdit mods -vs- system-wide mods
+- F2 doesn't work in JTree/JTable, maybe others
+- path shown twice in tree: maybeReloadDirectory()
+- format -- instead of \n\n, what if it has \n   \n?d
+- openFile(): can open two copies of the same buffer if a) remote b)
+  canonPath != path
+- aborts not always fired
+- globalColors setting:
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+- motif l&f: shortcuts in menu items
+- replace with lookahead/lookbehind doesn't work
+- shortcuts: stale shortcuts remain?
+- bad wrap:
+  						MiscUtilities.quicksort(favorites,
+  							new VFS.DirectoryEntryCompare());
+- history text field tweak
+- search dialog: auto-focus fields show last values
+- persistent kill ring
+
 - auto indent: don't de-indent on enter if no leading indent at all?
-- update quicknotepad docs
-- actions/dockables eval: should use own namespace?
 - note about dependencies
 - help:
   - titles in search are fucked
-  - FAQ: better titles
 - new macro handler api
-
 - sidebars: need a border or some sort
 - user's guide:
   - part III
@@ -52,42 +88,6 @@ and quirks that I need to fix eventually.
   - text area caret & scroll listeners
   - status bar messages & readNextChar()
 - vfs javadoc: invokeAndWait() example for createVFSSession()
-- scroll line count problems
-- auto indent:
-  if(foo
-     bar)
-  <--- wrong
-- add config flag for deep indent
-- tall caret and tab
-- tall caret and backspace
-- change of AT_WORD_START semantics to fix perl highlighting?
-
-- kill ring obviously broken
-- some search dialog problems
-- broken activity log autoscroll
-- undo caret pos wrong
-- bizarre dockable window manager button layout problem
-- new file: horiz scroll wrong
-- while loading --> scroll bar
-- fsb default size
-- narrow: scrolls one down
-- synchro scroll needs a rewrite & folding
-- split view line insert: repainted twice, selection problems
-- vfs browser: open in new view: doesn't focus the new view
-- macro record: doesn't respect overwrite
-- wheel mouse -- option: jEdit mods -vs- system-wide mods
-- F2 doesn't work in JTree/JTable, maybe others
-- path shown twice in tree: maybeReloadDirectory()
-- C+ENTER 3 C+2
-- format -- instead of \n\n, what if it has \n   \n?d
-- openFile(): can open two copies of the same buffer if a) remote b)
-  canonPath != path
-- aborts not always fired
-- globalColors setting:
-  - help viewer looks ugly
-  - selected borders in list, tree, table wrong colors
-- motif l&f: shortcuts in menu items
-- replace with lookahead/lookbehind doesn't work
 
 - how to handle S+0-9?
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
@@ -106,10 +106,6 @@ and quirks that I need to fix eventually.
 				{
 					fvmput(starti,endi + 1,null);
 				}
-- shortcuts: stale shortcuts remain?
-- bad wrap:
-  						MiscUtilities.quicksort(favorites,
-  							new VFS.DirectoryEntryCompare());
 - quicknotepad: needs some code cleanup
 - text area mouse handler cleanup
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
@@ -131,8 +127,7 @@ and quirks that I need to fix eventually.
 - bsh = { 2 + 2; }
 - eval-for-selected-lines doesn't work with rectangular selection
 - customizable vfs browser extended attributes
-- new plugin mgr:
-  - ask before selecting dependencies & 'don't show again'
+- new plugin mgr: ask before selecting dependencies & 'don't show again'
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
 - don't rely on browser view for completion
 - adapt vfs filename field for the path display at the top
@@ -170,15 +165,11 @@ and quirks that I need to fix eventually.
 - MARK_PREVIOUS delegate like SEQ; update mail.xml
 - INLINE token type
 - AT_WORD_END match
-- history text field tweak
 - abbrevs need an overhaul
 - hypersearch: "open in..." right click menu
 - hypersearch: remember search settings & "refresh" command
-- search dialog: auto-focus fields show last values
 - eval, eval-selection, etc: do array to string override
 - beanshell: unloading commands when a plugin is unloaded
-- generic matching API used for brackets, tags, etc.
-- persistent kill ring
 
 + performance:
 
@@ -191,7 +182,6 @@ and quirks that I need to fix eventually.
   too much of a hack?
 - replace all in a directory could be faster
 - buffer.setMode() slow
-- positions should be gapped too
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - don't repaint whole selection when resizing
