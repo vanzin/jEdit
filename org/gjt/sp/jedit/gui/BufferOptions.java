@@ -265,9 +265,6 @@ public class BufferOptions extends EnhancedDialog
 		{
 			buffer.setStringProperty(Buffer.ENCODING,encoding);
 			buffer.setDirty(true);
-
-			// XXX this should be moved elsewhere!!!
-			EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.ENCODING_CHANGED));
 		}
 
 		boolean gzippedValue = gzipped.isSelected();
@@ -288,9 +285,7 @@ public class BufferOptions extends EnhancedDialog
 			buffer.setDirty(true);
 		}
 
-		String foldMode = (String)folding.getSelectedItem();
-		String oldFoldMode = buffer.getStringProperty("folding");
-		buffer.setStringProperty("folding",foldMode);
+		buffer.setStringProperty("folding",(String)folding.getSelectedItem());
 
 		buffer.setStringProperty("wrap",(String)wrap.getSelectedItem());
 
@@ -326,18 +321,6 @@ public class BufferOptions extends EnhancedDialog
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 
 		buffer.propertiesChanged();
-
-		View[] views = jEdit.getViews();
-		for(int i = 0; i < views.length; i++)
-		{
-			EditPane[] panes = views[i].getEditPanes();
-			for(int j = 0; j < panes.length; j++)
-			{
-				EditPane pane = panes[j];
-				if(pane.getBuffer() == buffer)
-					pane.getTextArea().propertiesChanged();
-			}
-		}
 
 		dispose();
 	} //}}}

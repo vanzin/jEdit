@@ -1,6 +1,8 @@
 TO DO
 
+- reload: doesn't respect collapseFolds
 - first run on windows -- why is help viewer hidden
+- idea for fixing buffer property issues: BufferProp class
 
 - printer output spacing problem - turn this into a configuration option?
 - make print preview look better
@@ -30,7 +32,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
-- idea for fixing buffer property issues: BufferProp class
 - fix page up/page down
 - don't repaint whole selection when resizing
 - fs browser: scroll to visible after setting divider location

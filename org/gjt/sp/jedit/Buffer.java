@@ -1541,6 +1541,8 @@ public class Buffer implements EBComponent
 				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding); 
 			setFoldHandler(new DummyFoldHandler());
 		}
+
+		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -3410,9 +3412,6 @@ public class Buffer implements EBComponent
 
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			offsetMgr.expandFolds(collapseFolds);
-
-			EditBus.send(new BufferUpdate(this,null,
-				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}
 	} //}}}
 
