@@ -5290,6 +5290,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		if(lineHeight == 0)
 			visibleLines = 0;
+		else if(height <= 0)
+		{
+			visibleLines = 0;
+			lastLinePartial = false;
+		}
 		else
 		{
 			visibleLines = height / lineHeight;

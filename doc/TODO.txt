@@ -3,7 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- docs: no jEditLauncher
+- indent folding: indent triangle not repainted
 - sidekick out of memory error!
+[error] ChunkCache: BUG: skew=1,out.size()=1
 
 [error] EditBus: java.lang.ArrayIndexOutOfBoundsException: 1
 [error] EditBus:  at org.gjt.sp.jedit.buffer.LineManager.isScreenLineCountValid(LineManager.java:145)
