@@ -27,6 +27,10 @@ JEDIT 4.1 VERSION HISTORY
   now VFS._saveComplete(Object session, Buffer buffer, String path,
   Component comp).
 
++ API Additions:
+
+- HyperSearchResults.getTree() method added.
+
 * Version 4.1pre8
 
 Thanks to Carmine Lucarelli, Chris Petersen, Jonathan Revusky,
