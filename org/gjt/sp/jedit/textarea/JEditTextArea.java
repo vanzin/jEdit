@@ -4796,12 +4796,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		visibleLines = height / lineHeight;
 		lastLinePartial = (height % lineHeight != 0);
 
-		// this does the "trick" to eliminate blank space at the end
-		if(displayManager != null)
-			setFirstLine(getFirstLine());
-
 		chunkCache.recalculateVisibleLines();
 		maxHorizontalScrollWidth = 0;
+
+		// this does the "trick" to eliminate blank space at the end
+		if(displayManager != null && buffer != null && buffer.isLoaded())
+			setFirstLine(getFirstLine());
+
 		updateScrollBars();
 	} //}}}
 
