@@ -684,25 +684,20 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		int tokenListOffset = 0;
 
-		StringBuffer buf = new StringBuffer();
 		while(tokens.id != Token.END)
 		{
-			buf.append("<");
-			buf.append(tokens.id);
-			buf.append(">");
 			int flushLen = 0;
 			int flushIndex = tokenListOffset;
 
 			for(int i = 0; i < tokens.length; i++)
 			{
 				char ch = seg.array[seg.offset + tokenListOffset + i];
-				buf.append(ch);
-				if(i == tokens.length - 1)
-					flushLen++;
-				else if(ch != '\t')
+
+				if(ch != '\t')
 				{
 					flushLen++;
-					continue;
+					if(i != tokens.length - 1)
+						continue;
 				}
 
 				// inefficent, but GlyphVector API sucks
@@ -716,9 +711,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 						+ flushIndex,text,0,flushLen);
 				}
 
-				buf.append("|");
 				Chunk newChunk = new Chunk(x,tokens.id,text,
-					tokenListOffset);
+					flushIndex);
 				if(current == null)
 					current = first = newChunk;
 				else
@@ -734,14 +728,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				flushIndex = tokenListOffset + i + 1;
 
 				if(ch == '\t')
+				{
+					current.length++;
 					x = nextTabStop(x,i - seg.offset);
+				}
 			}
 
 			tokenListOffset += tokens.length;
 			tokens = tokens.next;
 		}
 
-		System.err.println(buf.toString());
 		return first;
 	} //}}}
 
@@ -803,27 +799,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fracFontMetrics);
 	} //}}}
 
-	//{{{ paintChunkList() method
-	private float paintChunkList(Graphics2D gfx, float x, float y, Chunk chunks)
-	{
-		float width = 0.0f;
-
-		while(chunks != null)
-		{
-			if(chunks.text != null)
-			{
-				gfx.setFont(chunks.style.getFont());
-				gfx.setColor(chunks.style.getForegroundColor());
-				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
-			}
-
-			width = chunks.x + chunks.width;
-			chunks = chunks.next;
-		}
-
-		return x + width;
-	} //}}}
-
 	//{{{ paintLine() method
 	private int paintLine(Graphics2D gfx, Buffer buffer, boolean valid,
 		int virtualLine, int physicalLine, int x, int y,
@@ -853,7 +828,23 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			buffer.getLineText(physicalLine,seg);
 			Chunk chunks = lineToChunkList(seg,buffer.markTokens(physicalLine)
 				.getFirstToken());
-			x += paintChunkList(gfx,x,baseLine,chunks);
+
+			int _x = 0;
+
+			while(chunks != null)
+			{
+				if(chunks.text != null)
+				{
+					gfx.setFont(chunks.style.getFont());
+					gfx.setColor(chunks.style.getForegroundColor());
+					gfx.drawGlyphVector(chunks.text,x + chunks.x,baseLine);
+				}
+
+				_x = (int)(chunks.x + chunks.width);
+				chunks = chunks.next;
+			}
+
+			x += _x;
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);

@@ -32,6 +32,7 @@ import javax.swing.undo.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.font.*;
+import java.awt.geom.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -702,36 +703,33 @@ public class JEditTextArea extends JComponent
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		return 0;
-		/*
 		getLineText(line,lineSegment);
 
 		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
-		int length = 0;
 		float x = 0.0f;
 
 		while(chunks != null)
 		{
-			if(offset < length + chunks.length)
+			if(offset < chunks.offset + chunks.length)
 			{
 				if(chunks.text == null)
 					return (int)chunks.x;
 				else
 				{
-					TextHitInfo textHit = TextHitInfo.leading(offset - length);
-					float[] caretInfo = chunks.text.getCaretInfo(textHit);
-					return (int)(chunks.x + caretInfo[0] + horizontalOffset);
+					Point2D pos = chunks.text.getGlyphPosition(
+						offset - chunks.offset);
+					return (int)(chunks.x + pos.getX()
+						+ horizontalOffset);
 				}
 			}
 
-			length = chunks.offset + chunks.length;
 			x = chunks.x + chunks.width;
 			chunks = chunks.next;
 		}
 
-		return (int)(x + horizontalOffset);*/
+		return (int)(x + horizontalOffset);
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -755,8 +753,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x, boolean round)
 	{
-		return 0;
-		/*
 		x -= horizontalOffset;
 
 		getLineText(line,lineSegment);
@@ -764,27 +760,53 @@ public class JEditTextArea extends JComponent
 		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
-		int length = 0;
-
 		while(chunks != null)
 		{
 			if(x < chunks.x + chunks.width)
 			{
 				if(chunks.text == null)
-					return length;
+				{
+					if(chunks.next != null
+						&& round
+						&& chunks.next.x - x < x - chunks.x)
+					{
+						return chunks.next.offset;
+					}
+					else
+						return chunks.offset;
+				}
 				else
 				{
-					TextHitInfo textHit = chunks.text.hitTestChar(x,0);
-					return (round ? textHit.getInsertionIndex()
-						: textHit.getCharIndex());
+					float _x = x - chunks.x;
+
+					int count = chunks.text.getNumGlyphs();
+					float[] glyphPos = chunks.text.getGlyphPositions(0,
+						count,null);
+
+					for(int i = 0; i < count; i++)
+					{
+						float glyphX = glyphPos[i*2];
+						float nextX = (i == count - 1
+							? chunks.width
+							: glyphPos[i*2+2]);
+
+						if(nextX > _x)
+						{
+							if(round && nextX - _x > _x - glyphX)
+								return chunks.offset + i;
+							else
+							{
+								return chunks.offset + i + 1;
+							}
+						}
+					}
 				}
 			}
 
-			length = chunks.offset + chunks.length;
 			chunks = chunks.next;
 		}
 
-		return length;*/
+		return lineSegment.count;
 	} //}}}
 
 	//{{{ xyToOffset() method

@@ -105,8 +105,10 @@ public class AboutDialog extends EnhancedDialog
 			thread = new AnimationThread();
 		}
 
-		public void paintComponent(Graphics g)
+		public void paintComponent(Graphics _g)
 		{
+			Graphics2D g = (Graphics2D)_g;
+
 			image.paintIcon(this,g,1,1);
 
 			FontMetrics fm = g.getFontMetrics();
