@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
@@ -1570,82 +1571,22 @@ loop:		for(;;)
 	//{{{ getEncodings() method
 	/**
 	 * Returns a list of supported character encodings.
-	 * On Java 1.3, returns a fixed list.
-	 * On Java 1.4, uses reflection to call an NIO API.
 	 * @since jEdit 4.2pre5
 	 */
 	public static String[] getEncodings()
 	{
 		List returnValue = new ArrayList();
 
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				Class clazz = Class.forName(
-					"java.nio.charset.Charset");
-				Method method = clazz.getMethod(
-					"availableCharsets",
-					new Class[0]);
-				Map map = (Map)method.invoke(null,
-					new Object[0]);
-				Iterator iter = map.keySet().iterator();
+		Map map = Charset.availableCharsets();
+		Iterator iter = map.keySet().iterator();
 
-				returnValue.add(UTF_8_Y);
+		returnValue.add(UTF_8_Y);
 
-				while(iter.hasNext())
-				{
-					returnValue.add(iter.next());
-				}
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,MiscUtilities.class,e);
-			}
-		}
-		else
-		{
-			StringTokenizer st = new StringTokenizer(
-				jEdit.getProperty("encodings"));
-			while(st.hasMoreTokens())
-			{
-				returnValue.add(st.nextToken());
-			}
-		}
+		while(iter.hasNext())
+			returnValue.add(iter.next());
 
 		return (String[])returnValue.toArray(
 			new String[returnValue.size()]);
-	} //}}}
-
-	//{{{ isSupportedEncoding() method
-	/**
-	 * Returns if the given character encoding is supported.
-	 * Uses reflection to call a Java 1.4 API on Java 1.4, and always
-	 * returns true on Java 1.3.
-	 * @since jEdit 4.2pre7
-	 */
-	public static boolean isSupportedEncoding(String encoding)
-	{
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				Class clazz = Class.forName(
-					"java.nio.charset.Charset");
-				Method method = clazz.getMethod(
-					"isSupported",
-					new Class[] { String.class });
-				return ((Boolean)method.invoke(null,
-					new Object[] { encoding }))
-					.booleanValue();
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,MiscUtilities.class,e);
-			}
-		}
-
-		return true;
 	} //}}}
 
 	//{{{ throwableToString() method

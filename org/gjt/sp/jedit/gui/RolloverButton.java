@@ -55,21 +55,7 @@ public class RolloverButton extends JButton
 		if(OperatingSystem.hasJava15())
 			setContentAreaFilled(false);
 
-		if(method != null)
-		{
-			try
-			{
-				method.invoke(this,new Boolean[] { Boolean.TRUE });
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-		}
-		else
-		{
-			addMouseListener(new MouseOverHandler());
-		}
+		addMouseListener(new MouseOverHandler());
 	} //}}}
 
 	//{{{ RolloverButton constructor
@@ -111,11 +97,8 @@ public class RolloverButton extends JButton
 	public void setEnabled(boolean b)
 	{
 		super.setEnabled(b);
-		if(method == null)
-		{
-			setBorderPainted(false);
-			repaint();
-		}
+		setBorderPainted(false);
+		repaint();
 	} //}}}
 
 	//{{{ setBorderPainted() method
@@ -146,7 +129,7 @@ public class RolloverButton extends JButton
 	//{{{ paint() method
 	public void paint(Graphics g)
 	{
-		if(method != null || isEnabled())
+		if(isEnabled())
 			super.paint(g);
 		else
 		{
@@ -160,28 +143,7 @@ public class RolloverButton extends JButton
 	private static AlphaComposite c = AlphaComposite.getInstance(
 		AlphaComposite.SRC_OVER, 0.5f);
 
-	private static Method method;
-
 	private boolean revalidateBlocked;
-
-	static
-	{
-		/* if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				method = RolloverButton.class
-					.getMethod("setRolloverEnabled",new Class[]
-					{ boolean.class });
-				Log.log(Log.DEBUG,RolloverButton.class,
-					"Java 1.4 setRolloverEnabled() method enabled");
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,RolloverButton.class,e);
-			}
-		} */
-	} //}}}
 
 	//{{{ MouseHandler class
 	/**

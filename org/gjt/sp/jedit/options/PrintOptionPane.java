@@ -86,9 +86,7 @@ public class PrintOptionPane extends AbstractOptionPane
 		force13 = new JCheckBox(jEdit.getProperty(
 			"options.print.force13"));
 		force13.setSelected(jEdit.getBooleanProperty("print.force13"));
-
-		if(OperatingSystem.hasJava14())
-			addComponent(force13);
+		addComponent(force13);
 	} //}}}
 
 	//{{{ _save() method

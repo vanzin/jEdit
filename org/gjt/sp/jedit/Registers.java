@@ -499,8 +499,12 @@ public class Registers
 	static
 	{
 		registers = new Register[256];
-		registers['$'] = new ClipboardRegister(Toolkit
-			.getDefaultToolkit().getSystemClipboard());
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		registers['$'] = new ClipboardRegister(
+			toolkit.getSystemClipboard());
+		Clipboard selection = toolkit.getSystemSelection();
+		if(selection != null)
+			registers['%'] = new ClipboardRegister(selection);
 	}
 
 	//{{{ loadRegisters() method

@@ -1068,7 +1068,7 @@ public class View extends JFrame implements EBComponent
 		config.y = getY();
 		config.width = getWidth();
 		config.height = getHeight();
-		config.extState = GUIUtilities.getExtendedState(this);
+		config.extState = getExtendedState();
 
 		config.top = dockableWindowManager.getTopDockingArea().getCurrent();
 		config.left = dockableWindowManager.getLeftDockingArea().getCurrent();
@@ -1213,6 +1213,8 @@ public class View extends JFrame implements EBComponent
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
+
+		setFocusTraversalPolicy(new MyFocusTraversalPolicy());
 
 		EditBus.addToBus(this);
 
@@ -1767,6 +1769,15 @@ loop:		for(;;)
 			this.width = width;
 			this.height = height;
 			this.extState = extState;
+		}
+	} //}}}
+
+	//{{{ MyFocusTraversalPolicy class
+	static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
+	{
+		public Component getDefaultComponent(Container focusCycleRoot)
+		{
+			return GUIUtilities.getView(focusCycleRoot).getTextArea();
 		}
 	} //}}}
 

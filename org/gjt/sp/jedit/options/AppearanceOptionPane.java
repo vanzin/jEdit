@@ -124,17 +124,13 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		decorateFrames = new JCheckBox(jEdit.getProperty(
 			"options.appearance.decorateFrames"));
 		decorateFrames.setSelected(jEdit.getBooleanProperty("decorate.frames"));
+		addComponent(decorateFrames);
 
 		/* Decorate dialogs with look and feel (JDK 1.4 only) */
 		decorateDialogs = new JCheckBox(jEdit.getProperty(
 			"options.appearance.decorateDialogs"));
 		decorateDialogs.setSelected(jEdit.getBooleanProperty("decorate.dialogs"));
-
-		if(OperatingSystem.hasJava14())
-		{
-			addComponent(decorateFrames);
-			addComponent(decorateDialogs);
-		}
+		addComponent(decorateDialogs);
 	} //}}}
 
 	//{{{ _save() method

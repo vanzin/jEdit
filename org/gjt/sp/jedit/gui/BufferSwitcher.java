@@ -1,6 +1,6 @@
 /*
  * BufferSwitcher.java - Status bar
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -26,7 +27,7 @@ import org.gjt.sp.jedit.*;
 
 public class BufferSwitcher extends JComboBox
 {
-	public BufferSwitcher(EditPane editPane)
+	public BufferSwitcher(final EditPane editPane)
 	{
 		this.editPane = editPane;
 
@@ -34,6 +35,22 @@ public class BufferSwitcher extends JComboBox
 		setRenderer(new BufferCellRenderer());
 		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
 		addActionListener(new ActionHandler());
+		addPopupMenuListener(new PopupMenuListener()
+		{
+			public void popupMenuWillBecomeVisible(
+				PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeInvisible(
+				PopupMenuEvent e)
+			{
+				editPane.getTextArea().requestFocus();
+			}
+
+			public void popupMenuCanceled(PopupMenuEvent e)
+			{
+				editPane.getTextArea().requestFocus();
+			}
+		});
 	}
 
 	public void updateBufferList()
