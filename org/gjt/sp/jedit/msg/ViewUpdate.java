@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.*;
  *
  * @since jEdit 2.2pre6
  */
-public class ViewUpdate extends EBMessage.NonVetoable
+public class ViewUpdate extends EBMessage
 {
 	/**
 	 * View created.

@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.EBMessage;
  *
  * @since jEdit 2.2pre6
  */
-public class MacrosChanged extends EBMessage.NonVetoable
+public class MacrosChanged extends EBMessage
 {
 	/**
 	 * Creates a new macros changed message.

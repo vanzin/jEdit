@@ -1,6 +1,9 @@
 /*
  * EBMessage.java - An EditBus message
- * Copyright (C) 1999 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,11 +22,9 @@
 
 package org.gjt.sp.jedit;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 /**
  * The base class of all EditBus messages.
+ *
  * @author Slava Pestov
  * @version $Id$
  *
@@ -31,6 +32,7 @@ import java.util.Vector;
  */
 public abstract class EBMessage
 {
+	//{{{ EBMessage constructor
 	/**
 	 * Creates a new message.
 	 * @param source The message source
@@ -38,57 +40,57 @@ public abstract class EBMessage
 	public EBMessage(EBComponent source)
 	{
 		this.source = source;
-	}
+	} //}}}
 
+	//{{{ getSource() method
 	/**
 	 * Returns the sender of this message.
 	 */
 	public EBComponent getSource()
 	{
 		return source;
-	}
+	} //}}}
 
-	/**
-	 * Vetoes this message. It will not be passed on further
-	 * on the bus, and instead will be returned directly to
-	 * the sender with the vetoed flag on.
-	 */
-	public void veto()
-	{
-		vetoed = true;
-	}
-
-	/**
-	 * Returns if this message has been vetoed by another
-	 * bus component.
-	 */
-	public boolean isVetoed()
-	{
-		return vetoed;
-	}
-
+	//{{{ toString() method
 	/**
 	 * Returns a string representation of this message.
 	 */
 	public String toString()
 	{
 		return getClass().getName() + "[" + paramString() + "]";
-	}
+	} //}}}
 
+	//{{{ paramString() method
 	/**
 	 * Returns a string representation of this message's parameters.
 	 */
 	public String paramString()
 	{
 		return "source=" + source;
+	} //}}}
+
+	//{{{ Private members
+	private EBComponent source;
+	//}}}
+
+	//{{{ Deprecated methods
+	/**
+	 * @deprecated Does nothing.
+	 */
+	public void veto()
+	{
 	}
 
-	// private members
-	private EBComponent source;
-	private boolean vetoed;
+	/**
+	 * @deprecated Returns false.
+	 */
+	public boolean isVetoed()
+	{
+		return false;
+	}
 
 	/**
-	 * A message implementation that cannot be vetoed.
+	 * @deprecated Subclass <code>EBMessage</code> instead.
 	 */
 	public static abstract class NonVetoable extends EBMessage
 	{
@@ -108,61 +110,5 @@ public abstract class EBMessage
 		{
 			throw new InternalError("Can't veto this message");
 		}
-	}
-
-	/**
-	 * A message implementation that allows components to attach return
-	 * values to the message, thus allowing information to be collected
-	 * from others on the bus. Because this type of message is indended
-	 * to collect information from all other members of the bus, it is
-	 * non-vetoable.
-	 */
-// 	public static abstract class ReturnValue extends NonVetoable
-// 	{
-// 		/**
-// 		 * Creates a new return value message.
-// 		 * @param source The message source
-// 		 */
-// 		public ReturnValue(EBComponent source)
-// 		{
-// 			super(source);
-// 		}
-// 
-// 		/**
-// 		 * Adds data to the return value list. Subclasses should
-// 		 * check that the object is of the correct type.
-// 		 * @param obj The object
-// 		 */
-// 		public void addReturn(Object obj)
-// 		{
-// 			if(returnValues == null)
-// 				returnValues = new Vector();
-// 			returnValues.addElement(obj);
-// 		}
-// 
-// 		/**
-// 		 * Returns the values added to the return list by other
-// 		 * handlers of this message. Returns null if no values were
-// 		 * present.
-// 		 */
-// 		public Object[] getReturnValues()
-// 		{
-// 			if(returnValues == null)
-// 				return null;
-// 			Object[] array = new Object[returnValues.size()];
-// 			returnValues.copyInto(array);
-// 			return array;
-// 		}
-// 
-// 		/**
-// 		 * Returns a string representation of this message's parameters.
-// 		 */
-// 		public String paramString()
-// 		{
-// 			return super.paramString() + ",returnValues=" + returnValues;
-// 		}
-// 
-// 		// private members
-// 		private Vector returnValues;
-// 	}
+	} //}}}
 }

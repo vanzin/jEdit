@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.View;
  *
  * @since jEdit 3.1pre4
  */
-public class EditorExitRequested extends EBMessage.NonVetoable
+public class EditorExitRequested extends EBMessage
 {
 	/**
 	 * Creates a new editor exiting started message.
