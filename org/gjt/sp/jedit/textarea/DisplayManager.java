@@ -1468,6 +1468,8 @@ loop:		for(;;)
 				"collapseFolds",0);
 			if(collapseFolds != 0)
 				expandFolds(collapseFolds);
+
+			_notifyScreenLineChanges();
 		} //}}}
 
 		//{{{ wrapModeChanged() method
