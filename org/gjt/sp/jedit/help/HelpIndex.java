@@ -198,7 +198,6 @@ class HelpIndex
 	} //}}}
 
 	//{{{ Private members
-	private static Word.Occurrence[] EMPTY_ARRAY = new Word.Occurrence[0];
 	// used to mark words to ignore (see constructor for the list)
 	private static Object IGNORE = new Object();
 	private HashMap words;

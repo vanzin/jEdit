@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,6 +149,8 @@ class HelpTOCPanel extends JPanel
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 		tocRoot.add(createNode("Apache.LICENSE.txt",
 			jEdit.getProperty("helpviewer.toc.copying-apache")));
+		tocRoot.add(createNode("COPYING.PLUGINS.txt",
+			jEdit.getProperty("helpviewer.toc.copying-plugins")));
 
 		loadTOC(tocRoot,"news42/toc.xml");
 		loadTOC(tocRoot,"users-guide/toc.xml");

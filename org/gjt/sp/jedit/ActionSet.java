@@ -341,7 +341,6 @@ public class ActionSet
 	{
 		LinkedList retVal = new LinkedList();
 		Enumeration e = actions.elements();
-		int i = 0;
 		while(e.hasMoreElements())
 		{
 			Object obj = e.nextElement();

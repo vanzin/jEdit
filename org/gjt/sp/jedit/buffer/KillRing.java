@@ -214,7 +214,6 @@ public class KillRing
 			// compare existing entries' hashcode with this
 			int length = (wrap ? ring.length : count);
 			int kill = -1;
-			boolean duplicate = false;
 
 			for(int i = 0; i < length; i++)
 			{

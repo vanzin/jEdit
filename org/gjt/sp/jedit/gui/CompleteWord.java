@@ -571,7 +571,6 @@ public class CompleteWord extends JWindow
 
 				word = word + ch;
 				int caret = textArea.getCaretPosition();
-				KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
 
 				Completion[] completions = getCompletions(
 					buffer,word,caret);

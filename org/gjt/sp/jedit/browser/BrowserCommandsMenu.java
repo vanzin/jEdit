@@ -262,7 +262,6 @@ public class BrowserCommandsMenu extends JPopupMenu
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			View view = browser.getView();
 			String actionCommand = evt.getActionCommand();
 
 			if(actionCommand.equals("auto-detect"))

@@ -686,8 +686,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(!buffer.isLoaded())
 			return;
 
-		int x = textArea.getHorizontalOffset();
-
 		int height = fm.getHeight();
 		if(height == 0)
 			return;

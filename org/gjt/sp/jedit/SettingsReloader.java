@@ -67,7 +67,7 @@ class SettingsReloader implements EBComponent
 			DirectoryListSet dirset = (DirectoryListSet)fileset;
 			String dir = MiscUtilities.resolveSymlinks(
 				dirset.getDirectory());
-			if(path.startsWith(dirset.getDirectory()))
+			if(path.startsWith(dir))
 				dirset.invalidateCachedList();
 		}
 

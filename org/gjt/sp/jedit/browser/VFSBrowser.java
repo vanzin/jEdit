@@ -1433,7 +1433,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					// if any directories are selected, add
 					// them, otherwise add current directory
-					ArrayList toAdd = new ArrayList();
 					VFS.DirectoryEntry[] selected = getSelectedFiles();
 					if(selected == null || selected.length == 0)
 					{

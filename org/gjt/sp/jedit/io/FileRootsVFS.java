@@ -93,10 +93,7 @@ public class FileRootsVFS extends VFS
 
 		VFS.DirectoryEntry[] rootDE = new VFS.DirectoryEntry[roots.length];
 		for(int i = 0; i < roots.length; i++)
-		{
-			String name = roots[i].getPath();
 			rootDE[i] = new RootsEntry(roots[i]);
-		}
 
 		return rootDE;
 	} //}}}

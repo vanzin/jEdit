@@ -3,6 +3,34 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[error] WorkThread: java.lang.ClassCastException
+[error] WorkThread:  at archive.ArchiveVFS.getDirectories(Unknown Source)
+[error] WorkThread:  at archive.ArchiveVFS.cacheDirectories(Unknown Source)
+[error] WorkThread:  at archive.ArchiveVFS._listDirectory(Unknown Source)
+[error] WorkThread:  at org.gjt.sp.jedit.browser.BrowserIORequest.listDirectory(BrowserIORequest.java:159)
+[error] WorkThread:  at org.gjt.sp.jedit.browser.BrowserIORequest.run(BrowserIORequest.java:90)
+[error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequest(WorkThread.java:194)
+[error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequests(WorkThread.java:161)
+[error] WorkThread:  at org.gjt.sp.util.WorkThread.run(WorkThread.java:135)
+
+[error] WorkThread: java.lang.NullPointerException
+[error] WorkThread:  at org.gjt.sp.jedit.browser.VFSBrowser$DirectoryLoadedAWTRequest.run(VFSBrowser.java:1527)
+[error] WorkThread:  at org.gjt.sp.util.WorkThreadPool.doAWTRequest(WorkThreadPool.java:392)
+[error] WorkThread:  at org.gjt.sp.util.WorkThreadPool.doAWTRequests(WorkThreadPool.java:380)
+[error] WorkThread:  at org.gjt.sp.util.WorkThreadPool.access$200(WorkThreadPool.java:37)
+[error] WorkThread:  at org.gjt.sp.util.WorkThreadPool$RunRequestsInAWTThread.run(WorkThreadPool.java:477)
+[error] WorkThread:  at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:178)
+[error] WorkThread:  at java.awt.EventQueue.dispatchEvent(EventQueue.java:454)
+
+[error] BeanShell: Sourced file: inline evaluation of: ``   new console.Console(view);  ;'' : Cannot access field: Console, on object: console.Console[,0,10,627x301,layout=java.awt.BorderLayout,alignmentX=null,alignmentY=null,border=,flags=9,maximumSize=,minimumSize=,preferredSize=] : at Line: 2 : in file: inline evaluation of: ``   new console.Console(view);  ;'' : console .Console 
+[error] BeanShell:  at bsh.UtilEvalError.toEvalError(UtilEvalError.java:85)
+[error] BeanShell:  at bsh.UtilEvalError.toEvalError(UtilEvalError.java:90)
+[error] BeanShell:  at bsh.BSHAmbiguousName.toObject(BSHAmbiguousName.java:64)
+[error] BeanShell:  at bsh.BSHAllocationExpression.objectAllocation(BSHAllocationExpression.java:86)
+[error] BeanShell:  at bsh.BSHAllocationExpression.eval(BSHAllocationExpression.java:62)
+[error] BeanShell:  at bsh.BSHPrimaryExpression.eval(BSHPrimaryExpression.java:102)
+[error] BeanShell:  at bsh.BSHPrimaryExpression.eval(BSHPrimaryExpression.java:47)
+
 - find next over directory
 
 - metal fonts in jdk 1.5.0beta2

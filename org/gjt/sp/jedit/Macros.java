@@ -707,9 +707,6 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	private static void recordMacro(View view, Buffer buffer, boolean temporary)
 	{
-		Handler handler = getHandler("beanshell");
-		String path = buffer.getPath();
-
 		view.setMacroRecorder(new Recorder(view,buffer,temporary));
 
 		// setting the message to 'null' causes the status bar to check
