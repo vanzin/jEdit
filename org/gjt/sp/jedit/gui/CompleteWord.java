@@ -429,7 +429,10 @@ public class CompleteWord extends JWindow
 				}
 				break;
 			default:
-				if(evt.isActionKey())
+				if(evt.isActionKey()
+					|| evt.isControlDown()
+					|| evt.isAltDown()
+					|| evt.isMetaDown())
 				{
 					dispose();
 					view.processKeyEvent(evt);

@@ -135,6 +135,9 @@ icons=AdjustWidth.png \
 view.search.find=Search for:
 view.search.close-tooltip=Hide search bar
 
+view.action.prompt=Action:
+view.action.no-completions=No matching actions found
+view.action.close-tooltip=Hide action bar
 #}}}
 
 #{{{ Context menu
@@ -515,15 +518,18 @@ utils=vfs.browser \
       %beanshell \
       %troubleshooting \
       - \
+      action-bar \
+      - \
       buffer-options \
       global-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
-recent-directories.label=Recent Directories
-current-directory.label=Current Directory
+recent-directories.label=$Recent Directories
+current-directory.label=$Current Directory
 no-recent-dirs.label=No Recent Directories
-jedit-directory.label=jEdit Home Directory
-settings-directory.label=Settings Directory
+jedit-directory.label=$jEdit Home Directory
+settings-directory.label=$Settings Directory
+action-bar.label=$Action Bar
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -531,7 +537,7 @@ global-options.label=$Global Options...
 beanshell=eval \
        eval-for-selected-lines \
        eval-selection
-beanshell.label=BeanShell
+beanshell.label=B$eanShell
 eval.label=$Evaluate BeanShell Expression...
 eval-for-selected-lines.label=Evaluate $For Selected Lines...
 eval-selection.label=Evaluate $Selection
@@ -545,7 +551,7 @@ troubleshooting=log-viewer \
 		keyboard-tester \
 		memory-status \
 		reload-modes
-troubleshooting.label=Troubleshooting
+troubleshooting.label=$Troubleshooting
 log-viewer.label=$Activity Log
 update-log.label=$Update Activity Log on Disk
 io-progress-monitor.label=$I/O Progress Monitor
@@ -642,7 +648,6 @@ prev-page.label=Go to Previous Page
 prev-paragraph.label=Go to Previous Paragraph
 prev-word.label=Go to Previous Word
 prev-word-std.label=Go to Previous Word (Eat Whitespace)
-repeat.label=Repeat Next Command
 select-document-end.label=Select to End of Buffer
 select-document-home.label=Select to Start of Buffer
 select-end.label=Select to Smart End Position
@@ -702,7 +707,6 @@ view.gutter.marker=Marker: {0}
 
 #{{{ Status messages
 view.status.recording=Macro recording
-view.status.repeat=Enter repeat count: {0}
 view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
 view.status.cut-string-register=Enter register name to cut to
 view.status.copy-string-register=Enter register name to copy to

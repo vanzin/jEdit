@@ -38,16 +38,6 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - If regular expressions are enabled, Search->Find Previous now shows a
   dialog box message instead of silently searching forwards.
 
-- Floating windows now have a bar across the top with a menu for docking
-  the window.
-
-- Right-clicking on a docked window button shows a menu for undocking
-  the window, opening a cloned instance, and moving it to another
-  docking area.
-
-- Docking pane of Global Options dialog box removed because it is no
-  longer necessary.
-
 - Added an option to Appearance option pane to control menu spillover
   (default is 20 items).
 
@@ -55,6 +45,41 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   since the last save.
 
 - Moved plugin option panes to a new Plugins->Plugin Options dialog box.
+
+- Improved window docking.
+
+  - Floating windows now have a bar across the top with a menu for
+    docking the window.
+
+  - Right-clicking on a docked window button shows a menu for undocking
+    the window, opening a cloned instance, and moving it to another
+    docking area.
+
+  - Docking pane of Global Options dialog box removed because it is no
+    longer necessary.
+
+- Utilities->Action Bar (shortcut C+ENTER) shows the action bar, for
+  quickly invoking editor commands and changing settings from the
+  keyboard.
+
+  - Enter an action name (or a substring) to invoke that action.
+
+  - Enter a repeat count then invoke an action using any means to repeat
+    that action.
+
+  - Enter "buffer.<prop>=<value>" to set the buffer-local property
+    <prop> to <value>; for example, "buffer.tabSize=4" changes the
+    curent buffer's tab size to 4.
+
+  - Enter "!buffer.<prop>=<value>" to set a buffer property on a global
+    basis; for example, "!buffer.tabSize=4" changes the default tab size
+    for all buffers to 4.
+
+  - Enter "<prop>=<value>" to set any other global property; for
+    example, "view.showToolbar=false" hides the tool bar.
+
+  - Note that property names are undocumented. You can get a list using
+    the Misc->Properties->jEdit Properties macro.
 
 }}}
 {{{ Scripting
@@ -117,6 +142,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 - Fixed problems with bracket matching not being activated when
   switching between split panes.
+
+- Not all keyboard shortcuts worked in the Complete Word popup.
 
 }}}
 

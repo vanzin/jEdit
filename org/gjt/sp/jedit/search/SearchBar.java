@@ -83,9 +83,7 @@ public class SearchBar extends JPanel
 
 		if(temp)
 		{
-			close = new RolloverButton(new ImageIcon(
-				getClass().getResource(
-				"/org/gjt/sp/jedit/icons/closebox.gif")));
+			close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
 			close.addActionListener(actionHandler);
 			close.setToolTipText(jEdit.getProperty(
 				"view.search.close-tooltip"));
@@ -302,13 +300,7 @@ public class SearchBar extends JPanel
 			else if(source == close)
 			{
 				view.removeToolBar(SearchBar.this);
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						view.getEditPane().focusOnTextArea();
-					}
-				});
+				view.getEditPane().focusOnTextArea();
 			}
 		} //}}}
 	} //}}}
@@ -395,13 +387,7 @@ public class SearchBar extends JPanel
 					}
 
 					evt.consume();
-					SwingUtilities.invokeLater(new Runnable()
-					{
-						public void run()
-						{
-							view.getEditPane().focusOnTextArea();
-						}
-					});
+					view.getEditPane().focusOnTextArea();
 					view.getEditPane().getTextArea()
 						.processKeyEvent(evt);
 				}
@@ -412,13 +398,7 @@ public class SearchBar extends JPanel
 					view.removeToolBar(SearchBar.this);
 				}
 				evt.consume();
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						view.getEditPane().focusOnTextArea();
-					}
-				});
+				view.getEditPane().focusOnTextArea();
 				break;
 			case KeyEvent.VK_ENTER:
 				if(evt.isShiftDown())

@@ -51,6 +51,7 @@ public abstract class InputHandler extends KeyAdapter
 	public InputHandler(View view)
 	{
 		this.view = view;
+		repeatCount = 1;
 	} //}}}
 
 	//{{{ processKeyEvent() method
@@ -109,39 +110,13 @@ public abstract class InputHandler extends KeyAdapter
 		return false;
 	} //}}}
 
-	//{{{ isRepeatEnabled() method
-	/**
-	 * Returns if repeating is enabled. When repeating is enabled,
-	 * actions will be executed multiple times. This is usually
-	 * invoked with a special key stroke in the input handler.
-	 */
-	public boolean isRepeatEnabled()
-	{
-		return repeat;
-	} //}}}
-
-	//{{{ setRepeatEnabled() method
-	/**
-	 * Enables repeating. When repeating is enabled, actions will be
-	 * executed multiple times. Once repeating is enabled, the input
-	 * handler should read a number from the keyboard.
-	 */
-	public void setRepeatEnabled(boolean repeat)
-	{
-		boolean oldRepeat = this.repeat;
-		this.repeat = repeat;
-		repeatCount = 0;
-		if(oldRepeat != repeat)
-			view.getStatus().setMessage(null);
-	} //}}}
-
 	//{{{ getRepeatCount() method
 	/**
 	 * Returns the number of times the next action will be repeated.
 	 */
 	public int getRepeatCount()
 	{
-		return (repeat && repeatCount > 0 ? repeatCount : 1);
+		return repeatCount;
 	} //}}}
 
 	//{{{ setRepeatCount() method
@@ -151,10 +126,9 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void setRepeatCount(int repeatCount)
 	{
-		boolean oldRepeat = this.repeat;
-		repeat = true;
+		int oldRepeatCount = this.repeatCount;
 		this.repeatCount = repeatCount;
-		if(oldRepeat != repeat)
+		if(oldRepeatCount != repeatCount)
 			view.getStatus().setMessage(null);
 	} //}}}
 
@@ -238,8 +212,7 @@ public abstract class InputHandler extends KeyAdapter
 		}
 
 		// remember old values, in case action changes them
-		boolean _repeat = repeat;
-		int _repeatCount = getRepeatCount();
+		int _repeatCount = repeatCount;
 
 		// execute the action
 		if(action.noRepeat() || _repeatCount == 1)
@@ -262,8 +235,7 @@ public abstract class InputHandler extends KeyAdapter
 					JOptionPane.YES_NO_OPTION)
 					!= JOptionPane.YES_OPTION)
 				{
-					repeat = false;
-					repeatCount = 0;
+					repeatCount = 1;
 					view.getStatus().setMessage(null);
 					return;
 				}
@@ -289,15 +261,14 @@ public abstract class InputHandler extends KeyAdapter
 
 		// If repeat was true originally, clear it
 		// Otherwise it might have been set by the action, etc
-		if(_repeat)
+		if(_repeatCount != 1)
 		{
 			// first of all, if this action set a
 			// readNextChar, do not clear the repeat
 			if(readNextChar != null)
 				return;
 
-			repeat = false;
-			repeatCount = 0;
+			repeatCount = 1;
 			view.getStatus().setMessage(null);
 		}
 	} //}}}
@@ -307,7 +278,6 @@ public abstract class InputHandler extends KeyAdapter
 
 	//{{{ Instance variables
 	protected View view;
-	protected boolean repeat;
 	protected int repeatCount;
 
 	protected EditAction lastAction;
@@ -331,16 +301,15 @@ public abstract class InputHandler extends KeyAdapter
 			if(!buffer.insideCompoundEdit())
 				buffer.beginCompoundEdit(); */
 
-			int _repeatCount = getRepeatCount();
-			if(_repeatCount == 1)
+			if(repeatCount == 1)
 				textArea.userInput(ch);
 			else
 			{
 				// stop people doing dumb stuff like C+ENTER 100 C+n
-				if(_repeatCount > REPEAT_COUNT_THRESHOLD)
+				if(repeatCount > REPEAT_COUNT_THRESHOLD)
 				{
 					Object[] pp = { String.valueOf(ch),
-						new Integer(_repeatCount) };
+						new Integer(repeatCount) };
 
 					if(GUIUtilities.confirm(view,
 						"large-repeat-count.user-input",pp,
@@ -348,24 +317,34 @@ public abstract class InputHandler extends KeyAdapter
 						JOptionPane.YES_NO_OPTION)
 						!= JOptionPane.YES_OPTION)
 					{
-						repeat = false;
-						repeatCount = 0;
+						repeatCount = 1;
 						view.getStatus().setMessage(null);
 						return;
 					}
 				}
 
-				for(int i = 0; i < _repeatCount; i++)
-					textArea.userInput(ch);
+				Buffer buffer = view.getBuffer();
+				try
+				{
+					if(repeatCount != 1)
+						buffer.beginCompoundEdit();
+					for(int i = 0; i < repeatCount; i++)
+						textArea.userInput(ch);
+				}
+				finally
+				{
+					if(repeatCount != 1)
+						buffer.endCompoundEdit();
+				}
 			}
 
 			Macros.Recorder recorder = view.getMacroRecorder();
 
 			if(recorder != null)
-				recorder.record(_repeatCount,ch);
+				recorder.record(repeatCount,ch);
 		}
 
-		setRepeatEnabled(false);
+		repeatCount = 1;
 	} //}}}
 
 	//{{{ invokeReadNextChar() method
