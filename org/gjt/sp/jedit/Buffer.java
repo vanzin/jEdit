@@ -1428,6 +1428,43 @@ public class Buffer
 	//}}}
 
 	//{{{ Buffer events
+	public static final int NORMAL_PRIORITY = 0;
+	public static final int HIGH_PRIORITY = 1;
+	static class Listener
+	{
+		BufferChangeListener listener;
+		int priority;
+
+		Listener(BufferChangeListener listener, int priority)
+		{
+			this.listener = listener;
+			this.priority = priority;
+		}
+	}
+
+	//{{{ addBufferChangeListener() method
+	/**
+	 * Adds a buffer change listener.
+	 * @param listener The listener
+	 * @param priority Listeners with HIGH_PRIORITY get the event before
+	 * listeners with NORMAL_PRIORITY
+	 * @since jEdit 4.2pre2
+	 */
+	public void addBufferChangeListener(BufferChangeListener listener,
+		int priority)
+	{
+		Listener l = new Listener(listener,priority);
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			Listener _l = (Listener)bufferListeners.get(i);
+			if(_l.priority < priority)
+			{
+				bufferListeners.insertElementAt(l,i);
+				return;
+			}
+		}
+		bufferListeners.addElement(l);
+	} //}}}
 
 	//{{{ addBufferChangeListener() method
 	/**
@@ -1437,7 +1474,7 @@ public class Buffer
 	 */
 	public void addBufferChangeListener(BufferChangeListener listener)
 	{
-		bufferListeners.addElement(listener);
+		addBufferChangeListener(listener,NORMAL_PRIORITY);
 	} //}}}
 
 	//{{{ removeBufferChangeListener() method
@@ -1448,7 +1485,14 @@ public class Buffer
 	 */
 	public void removeBufferChangeListener(BufferChangeListener listener)
 	{
-		bufferListeners.removeElement(listener);
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			if(((Listener)bufferListeners.get(i)).listener == listener)
+			{
+				bufferListeners.removeElementAt(i);
+				return;
+			}
+		}
 	} //}}}
 
 	//{{{ getBufferChangeListeners() method
@@ -1459,9 +1503,15 @@ public class Buffer
 	 */
 	public BufferChangeListener[] getBufferChangeListeners()
 	{
-		return (BufferChangeListener[])bufferListeners
-			.toArray(new BufferChangeListener[
-			bufferListeners.size()]);
+		BufferChangeListener[] returnValue
+			= new BufferChangeListener[
+			bufferListeners.size()];
+		for(int i = 0; i < returnValue.length; i++)
+		{
+			returnValue[i] = ((Listener)bufferListeners.get(i))
+				.listener;
+		}
+		return returnValue;
 	} //}}}
 
 	//}}}
@@ -3969,6 +4019,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Event firing methods
 
+	//{{{ getListener() method
+	private BufferChangeListener getListener(int index)
+	{
+		return ((Listener)bufferListeners.elementAt(index)).listener;
+	} //}}}
+
 	//{{{ fireFoldLevelChanged() method
 	private void fireFoldLevelChanged(int start, int end)
 	{
@@ -3976,8 +4032,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.foldLevelChanged(this,start,end);
+				getListener(i).foldLevelChanged(this,start,end);
 			}
 			catch(Throwable t)
 			{
@@ -3995,9 +4050,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.contentInserted(this,startLine,offset,
-					numLines,length);
+				getListener(i).contentInserted(this,startLine,
+					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
@@ -4015,9 +4069,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.contentRemoved(this,startLine,offset,
-					numLines,length);
+				getListener(i).contentRemoved(this,startLine,
+					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
@@ -4035,9 +4088,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.preContentRemoved(this,startLine,offset,
-					numLines,length);
+				getListener(i).preContentRemoved(this,startLine,
+					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
@@ -4054,8 +4106,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.transactionComplete(this);
+				getListener(i).transactionComplete(this);
 			}
 			catch(Throwable t)
 			{
@@ -4072,8 +4123,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.foldHandlerChanged(this);
+				getListener(i).foldHandlerChanged(this);
 			}
 			catch(Throwable t)
 			{

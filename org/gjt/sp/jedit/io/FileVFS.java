@@ -131,8 +131,7 @@ public class FileVFS extends VFS
 	public String _canonPath(Object session, String path, Component comp)
 		throws IOException
 	{
-		return MiscUtilities.resolveSymlinks(
-			MiscUtilities.canonPath(path));
+		return MiscUtilities.canonPath(path);
 	} //}}}
 
 	//{{{ LocalDirectoryEntry class
