@@ -82,8 +82,5 @@ void greedyRight(View view, boolean onlyFullTabs)
 		textArea.setCaretPosition(caret+1);
 }
 
-if(buffer.isReadOnly())
-	getToolkit().beep();
-else
-	greedyRight(view,true);
+greedyRight(view,true);
 
