@@ -149,7 +149,7 @@ public class FileVFS extends VFS
 			int permissions = getPermissions(buffer.getPath());
 			Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
 				+ Integer.toString(permissions,8));
-			buffer.putProperty(PERMISSIONS_PROPERTY,new Integer(permissions));
+			buffer.setIntegerProperty(PERMISSIONS_PROPERTY,permissions);
 		} //}}}
 
 		return super.save(view,buffer,path);
@@ -288,7 +288,11 @@ public class FileVFS extends VFS
 		Component comp)
 	{
 		File _to = new File(to);
-		_to.delete();
+
+		// Windows workaround
+		if(!from.equalsIgnoreCase(to))
+			_to.delete();
+
 		boolean retVal = new File(from).renameTo(_to);
 		VFSManager.sendVFSUpdate(this,from,true);
 		VFSManager.sendVFSUpdate(this,to,true);
@@ -376,8 +380,7 @@ public class FileVFS extends VFS
 	//{{{ _saveComplete() method
 	public void _saveComplete(Object session, Buffer buffer, Component comp)
 	{
-		int permissions = ((Integer)buffer.getProperty(PERMISSIONS_PROPERTY))
-			.intValue();
+		int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
 		setPermissions(buffer.getPath(),permissions);
 	} //}}}
 

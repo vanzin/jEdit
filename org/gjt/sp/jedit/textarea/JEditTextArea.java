@@ -243,30 +243,39 @@ public class JEditTextArea extends JComponent
 	{
 		if(this.buffer == buffer)
 			return;
-		if(this.buffer != null)
+
+		try
 		{
-			this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
-			this.buffer.removeBufferChangeListener(bufferHandler);
+			bufferChanging = true;
+
+			if(this.buffer != null)
+			{
+				setCaretPosition(0);
+				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
+				this.buffer.removeBufferChangeListener(bufferHandler);
+			}
+			this.buffer = buffer;
+
+			buffer.addBufferChangeListener(bufferHandler);
+			bufferHandlerInstalled = true;
+
+			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
+
+			painter.updateTabSize();
+
+			for(int i = 0; i < lineWidths.length; i++)
+			{
+				lineWidths[i] = 0;
+			}
+
+			updateScrollBars();
+			painter.repaint();
+			gutter.repaint();
 		}
-		this.buffer = buffer;
-
-		buffer.addBufferChangeListener(bufferHandler);
-		bufferHandlerInstalled = true;
-
-		foldVisibilityManager = buffer._getFoldVisibilityManager(this);
-
-		painter.updateTabSize();
-
-		setCaretPosition(0);
-
-		for(int i = 0; i < lineWidths.length; i++)
+		finally
 		{
-			lineWidths[i] = 0;
+			bufferChanging = false;
 		}
-
-		updateScrollBars();
-		painter.repaint();
-		gutter.repaint();
 	} //}}}
 
 	//{{{ isEditable() method
@@ -4320,6 +4329,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private JScrollBar horizontal;
 	private boolean scrollBarsInitialized;
 
+	private boolean bufferChanging;
 	private Buffer buffer;
 	private FoldVisibilityManager foldVisibilityManager;
 	private BufferChangeHandler bufferHandler;
@@ -4978,7 +4988,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int line, int level)
 		{
-			if(line != 0)
+			if(!bufferChanging && line != 0)
 				invalidateLine(line - 1);
 		} //}}}
 

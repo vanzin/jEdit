@@ -179,6 +179,10 @@ JEDIT 4.0 VERSION HISTORY
     script, in which case a BeanShell execution error would occur.
 - In the help viewer, nodes in the tree were not selected as links were
   followed
+- On Windows, it is now possible to rename a file such that the new name
+  only differs from the old in case
+- Sometimes, the most recently opened files would not be restored if the
+  -background command line switch was used
 
 + API Changes
 

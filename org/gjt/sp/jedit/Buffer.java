@@ -401,6 +401,7 @@ public class Buffer implements EBComponent
 						writeLock();
 
 						contentMgr.insert(0,seg.toString());
+
 						contentInserted(0,seg.count,
 							endOffsets);
 					}
@@ -419,6 +420,17 @@ public class Buffer implements EBComponent
 
 				parseBufferLocalProperties();
 				setMode();
+
+				int collapseFolds = getIntegerProperty("collapseFolds",0);
+				if(collapseFolds != 0)
+				{
+					for(int i = 0; i < inUseFVMs.length; i++)
+					{
+						FoldVisibilityManager mgr = inUseFVMs[i];
+						if(mgr != null)
+							mgr.expandFolds(collapseFolds);
+					}
+				}
 
 				setFlag(LOADING,false);
 
@@ -3314,6 +3326,13 @@ public class Buffer implements EBComponent
 	//{{{ parseBufferLocalProperties() method
 	private void parseBufferLocalProperties()
 	{
+		int lastLine = Math.min(10,getLineCount() - 1);
+		parseBufferLocalProperties(getText(0,getLineEndOffset(lastLine) - 1));
+	} //}}}
+
+	//{{{ parseBufferLocalProperties() method
+	private void parseBufferLocalProperties(String prop)
+	{
 		//{{{ Reset cached properties
 		if(getProperty("tabSize")
 			.equals(mode.getProperty("tabSize")))
@@ -3328,28 +3347,6 @@ public class Buffer implements EBComponent
 			unsetProperty("maxLineLen");
 		//}}}
 
-		Element map = getDefaultRootElement();
-		for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
-		{
-			Element line = map.getElement(i);
-			String text = getText(line.getStartOffset(),
-				line.getEndOffset() - line.getStartOffset() - 1);
-			parseBufferLocalProperty(text);
-		}
-
-		//XXX: Why the fuck is this here???
-
-		// Create marker positions
-		for(int i = 0; i < markers.size(); i++)
-		{
-			((Marker)markers.elementAt(i))
-				.createPosition();
-		}
-	} //}}}
-
-	//{{{ parseBufferLocalProperty() method
-	private void parseBufferLocalProperty(String prop)
-	{
 		StringBuffer buf = new StringBuffer();
 		String name = null;
 		boolean escape = false;
@@ -3411,6 +3408,15 @@ public class Buffer implements EBComponent
 				buf.append(c);
 				break;
 			}
+		}
+
+		//XXX: Why the fuck is this here???
+
+		// Create marker positions
+		for(int i = 0; i < markers.size(); i++)
+		{
+			((Marker)markers.elementAt(i))
+				.createPosition();
 		}
 	} //}}}
 

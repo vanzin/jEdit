@@ -226,7 +226,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				setMessage(null);
+				// so if view is closed in the meantime...
+				if(isShowing())
+					setMessage(null);
 			}
 		});
 

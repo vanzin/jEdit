@@ -247,8 +247,9 @@ public class OffsetManager
 		//{{{ Update remaining line start offsets
 		for(int i = endLine; i < lineCount; i++)
 		{
-			lineInfo[i] = ((getLineEndOffset(i) + length)
-				& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
+			setLineEndOffset(i,getLineEndOffset(i) + length);
+			lineInfo[i] &= ~(FOLD_LEVEL_VALID_MASK
+				| CONTEXT_VALID_MASK);
 		} //}}}
 
 		updatePositionsForInsert(offset,length);

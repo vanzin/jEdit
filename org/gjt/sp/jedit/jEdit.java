@@ -233,6 +233,8 @@ public class jEdit
 			String logPath = MiscUtilities.constructPath(
 				settingsDirectory,"activity.log");
 
+			backupSettingsFile(new File(logPath));
+
 			try
 			{
 				stream = new BufferedWriter(new FileWriter(logPath));

@@ -2,15 +2,16 @@ TO DO
 
 + before 4.0pre1:
 
-- collapseFolds on file load
-- debug collapseFolds
-- inserting line after closed fold issues -- fix in OffsetManager
+- splash screen problem?
 - auto indent: do not indent on {{{
 - undo
 - recompile Firewall.jar before releasing
 
 + pre2:
 
+- investigate wrap around in macros
+- tab: if indent-on-tab on, only indent if in leading whitespace; make
+  indent on tab on by default
 - getFoldLevel(): should not call linesChanged() all the time
 - clean up buffer-local properties, propertiesChanged(), setMode()
 - optimize ContentManager.close()
