@@ -61,3 +61,5 @@ JEDIT 4.1 VERSION HISTORY
 - EBMessage.veto(), isVetoable() methods and EBMessage.NonVetoable class
   deprecated
 - Removed old text area highlighter API
+- Removed BufferUpdate.ENCODING_CHANGED, FOLD_HANDLER_CHANGED messages;
+  replaced with generic BufferUpdate.PROPERTIES_CHANGED
