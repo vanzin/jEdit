@@ -1638,6 +1638,7 @@ helpviewer.back.icon=ArrowL.png
 helpviewer.forward.label=Forward
 helpviewer.forward.icon=ArrowR.png
 
+helpviewer.toc.label=Contents
 helpviewer.toc.welcome=Welcome to jEdit
 helpviewer.toc.readme=Release Notes
 helpviewer.toc.news=What's New in jEdit 4.1

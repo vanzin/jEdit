@@ -67,6 +67,22 @@ public class HelpTOCPanel extends JPanel
 			toc.expandPath(new TreePath(node.getPath()));
 		if(pluginTree != null)
 			toc.expandPath(new TreePath(pluginTree.getPath()));
+
+		add(BorderLayout.CENTER,new JScrollPane(toc));
+	} //}}}
+
+	//{{{ selectNode() method
+	public void selectNode(String shortURL)
+	{
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(shortURL);
+
+		if(node == null)
+			return;
+
+		TreePath path = new TreePath(tocModel.getPathToRoot(node));
+		toc.expandPath(path);
+		toc.setSelectionPath(path);
+		toc.scrollPathToVisible(path);
 	} //}}}
 
 	//{{{ Private members

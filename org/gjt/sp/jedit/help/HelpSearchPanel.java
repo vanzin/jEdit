@@ -35,9 +35,11 @@ import org.gjt.sp.util.Log;
 public class HelpSearchPanel extends JPanel
 {
 	//{{{ HelpSearchPanel constructor
-	public HelpSearchPanel()
+	public HelpSearchPanel(HelpViewer helpViewer)
 	{
 		super(new BorderLayout(6,6));
+
+		this.helpViewer = helpViewer;
 
 		Box box = new Box(BoxLayout.X_AXIS);
 		box.add(new JLabel(jEdit.getProperty("helpviewer.search.caption")));
@@ -52,6 +54,7 @@ public class HelpSearchPanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
+	private HelpViewer helpViewer;
 	private HistoryTextField searchField;
 	private JList results;
 	private HelpIndex index;
@@ -69,8 +72,7 @@ public class HelpSearchPanel extends JPanel
 			{
 				index = null;
 				Log.log(Log.ERROR,this,e);
-				// XXX
-				GUIUtilities.error(null,"helpviewer.search.error",
+				GUIUtilities.error(helpViewer,"helpviewer.search.error",
 					new String[] { e.toString() });
 			}
 		}
