@@ -666,6 +666,24 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.propertiesChanged();
 	} //}}}
 
+	//{{{ getStringWidth() method
+	/**
+	 * Returns the width of the given string, in pixels, using the text
+	 * area's current font.
+	 *
+	 * @since jEdit 4.2final
+	 */
+	public float getStringWidth(String str)
+	{
+		if(textArea.charWidth != 0)
+			return textArea.charWidth * str.length();
+		else
+		{
+			return (float)getFont().getStringBounds(
+				str,getFontRenderContext()).getWidth();
+		}
+	} //}}}
+
 	//{{{ paintComponent() method
 	/**
 	 * Repaints the text.
@@ -733,8 +751,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		char[] foo = new char[80];
 		for(int i = 0; i < foo.length; i++)
 			foo[i] = ' ';
-		dim.width = (int)(getFont().getStringBounds(foo,0,foo.length,
-			fontRenderContext).getWidth());
+		dim.width = (int)getStringWidth(new String(foo));
 		dim.height = fm.getHeight() * 25;
 		return dim;
 	} //}}}
@@ -1115,8 +1132,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				int count = nextLine - physicalLine - 1;
 				String str = " [" + count + " lines]";
 
-				float width = (float)font.getStringBounds(
-					str,fontRenderContext).getWidth();
+				float width = getStringWidth(str);
 
 				gfx.drawString(str,x,baseLine);
 				x += width;
