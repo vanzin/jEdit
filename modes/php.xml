@@ -2246,6 +2246,7 @@
 			<KEYWORD2>sscanf</KEYWORD2>
 			<KEYWORD2>stat</KEYWORD2>
 			<KEYWORD2>str_pad</KEYWORD2>
+			<KEYWORD2>str_rot13</KEYWORD2>
 			<KEYWORD2>str_repeat</KEYWORD2>
 			<KEYWORD2>str_replace</KEYWORD2>
 			<KEYWORD2>strcasecmp</KEYWORD2>

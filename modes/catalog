@@ -13,6 +13,9 @@
 <MODE NAME="ada95"		FILE="ada95.xml"
 				FILE_NAME_GLOB="*.{ada,adb,ads}" />
 
+<MODE NAME="apacheconf"		FILE="apacheconf.xml"
+				FILE_NAME_GLOB="*httpd.conf" />
+
 <MODE NAME="apdl"		FILE="apdl.xml"
 				FILE_NAME_GLOB="*.{ans,inp,mak,mac}" />
 
