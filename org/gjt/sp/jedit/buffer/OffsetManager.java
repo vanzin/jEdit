@@ -248,13 +248,18 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			while(anchor != null)
 			{
+				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
 				if(anchor.physicalLine > line
-					&& (info & (1L << (VISIBLE_SHIFT + anchor.index))) != 0)
+					&& (info & anchorVisibilityMask) != 0)
 				{
-					System.err.println("anchor screen shift from "
-						+ anchor.scrollLine + " to "
-						+ (anchor.scrollLine + (count - oldCount)));
-					anchor.scrollLine += (count - oldCount);
+					//System.err.println("anchor screen shift from "
+					//	+ anchor.scrollLine + " to "
+					//	+ (anchor.scrollLine + (count - oldCount)));
+					if(count != oldCount)
+					{
+						anchor.scrollLine += (count - oldCount);
+						anchor.callChanged = true;
+					}
 				}
 				anchor = anchor.next;
 			}
@@ -490,12 +495,13 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			while(anchor != null)
 			{
+				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
 				if(anchor.physicalLine >= startLine
-					&& (visible & (1L << anchor.index)) != 0)
+					&& (visible & anchorVisibilityMask) != 0)
 				{
-					System.err.println("anchor shift from "
-						+ anchor.physicalLine + " to "
-						+ (anchor.physicalLine + numLines));
+					//System.err.println("anchor shift from "
+					//	+ anchor.physicalLine + " to "
+					//	+ (anchor.physicalLine + numLines));
 					anchor.physicalLine += numLines;
 				}
 				anchor = anchor.next;
@@ -581,12 +587,13 @@ public class OffsetManager
 					{
 						if(isLineVisible(i,anchor.index))
 						{
-							System.err.println("anchor shift from "
-								+ anchor.physicalLine + " to "
-								+ (anchor.physicalLine - 1));
+							//System.err.println("anchor shift from "
+							//	+ anchor.physicalLine + " to "
+							//	+ (anchor.physicalLine - 1));
 
 							anchor.physicalLine--;
 							anchor.scrollLine -= getScreenLineCount(i);
+							anchor.callChanged = true;
 						}
 					}
 				}
@@ -647,6 +654,21 @@ public class OffsetManager
 			}
 			prev = current;
 			current = current.next;
+		}
+	} //}}}
+
+	//{{{ notifyScreenLineChanges() method
+	public void notifyScreenLineChanges()
+	{
+		Anchor anchor = anchors;
+		while(anchor != null)
+		{
+			if(anchor.callChanged)
+			{
+				anchor.callChanged = false;
+				anchor.changed();
+			}
+			anchor = anchor.next;
 		}
 	} //}}}
 
@@ -928,6 +950,7 @@ loop:		for(;;)
 		public int physicalLine;
 		public int scrollLine;
 		public int index;
+		public boolean callChanged;
 
 		public abstract void changed();
 	} //}}}

@@ -491,7 +491,7 @@ class ChunkCache
 		}
 		else
 		{
-			int nextLine = textArea.getFoldVisibilityManager()
+			int nextLine = textArea.getDisplayManager()
 				.getNextVisibleLine(physicalLine);
 
 			if(nextLine == -1)
@@ -525,7 +525,7 @@ class ChunkCache
 		}
 		else
 		{
-			int prevLine = textArea.getFoldVisibilityManager()
+			int prevLine = textArea.getDisplayManager()
 				.getPrevVisibleLine(physicalLine);
 
 			if(prevLine == -1)
@@ -650,7 +650,7 @@ class ChunkCache
 			else
 			{
 				physicalLine = textArea
-					.getFoldVisibilityManager()
+					.getDisplayManager()
 					.getNextVisibleLine(prevPhysLine);
 			}
 		}
@@ -675,7 +675,7 @@ class ChunkCache
 			{
 				if(physicalLine != -1 && i != firstScreenLine)
 				{
-					physicalLine = textArea.getFoldVisibilityManager()
+					physicalLine = textArea.getDisplayManager()
 						.getNextVisibleLine(physicalLine);
 				}
 

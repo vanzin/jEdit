@@ -149,6 +149,8 @@ public class JEditTextArea extends JComponent
 
 	//{{{ getFoldVisibilityManager() method
 	/**
+	 * @deprecated The display engine no longer uses this object.
+	 *
 	 * Returns the fold visibility manager used by this text area.
 	 * @since jEdit 4.0pre1
 	 */
@@ -285,7 +287,7 @@ public class JEditTextArea extends JComponent
 			bufferHandlerInstalled = true;
 
 			firstLine = 0;
-			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
+			physFirstLine = displayManager.getFirstVisibleLine();
 			chunkCache.setBuffer(buffer);
 
 			propertiesChanged();
@@ -655,7 +657,7 @@ public class JEditTextArea extends JComponent
 			{
 				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine++;
-				physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+				physFirstLine = displayManager.getNextVisibleLine(physFirstLine);
 			}
 		}
 		else if(screenLine == -1)
@@ -668,7 +670,7 @@ public class JEditTextArea extends JComponent
 				{
 					count -= chunkCache.getScreenLineCount(physFirstLine);
 					firstLine++;
-					int nextLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+					int nextLine = displayManager.getNextVisibleLine(physFirstLine);
 					if(nextLine == -1)
 						break;
 					else
@@ -691,7 +693,7 @@ public class JEditTextArea extends JComponent
 
 				for(;;)
 				{
-					if(foldVisibilityManager.isLineVisible(physFirstLine))
+					if(displayManager.isLineVisible(physFirstLine))
 					{
 						int incr = chunkCache.getScreenLineCount(physFirstLine);
 						if(count + incr > visibleLines / 2)
@@ -700,7 +702,7 @@ public class JEditTextArea extends JComponent
 							count += incr;
 					}
 
-					int prevLine = foldVisibilityManager
+					int prevLine = displayManager
 						.getPrevVisibleLine(physFirstLine);
 					if(prevLine == -1)
 						break;
@@ -718,7 +720,7 @@ public class JEditTextArea extends JComponent
 			{
 				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine--;
-				physFirstLine = foldVisibilityManager.getPrevVisibleLine(physFirstLine);
+				physFirstLine = displayManager.getPrevVisibleLine(physFirstLine);
 			}
 		}
 		else if(screenLine >= visibleLines - _electricScroll)
@@ -728,7 +730,7 @@ public class JEditTextArea extends JComponent
 			{
 				count -= chunkCache.getScreenLineCount(physFirstLine);
 				firstLine++;
-				physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+				physFirstLine = displayManager.getNextVisibleLine(physFirstLine);
 			}
 		}
 
@@ -916,7 +918,7 @@ public class JEditTextArea extends JComponent
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
 		if(lineInfo.physicalLine == -1)
 		{
-			return getLineEndOffset(foldVisibilityManager
+			return getLineEndOffset(displayManager
 				.getLastVisibleLine()) - 1;
 		}
 		else
@@ -1041,7 +1043,7 @@ public class JEditTextArea extends JComponent
 	{
 		if(!buffer.isLoaded()
 			|| line < physFirstLine || line > physLastLine
-			|| !foldVisibilityManager.isLineVisible(line))
+			|| !displayManager.isLineVisible(line))
 			return;
 
 		int startLine = -1;
@@ -1157,6 +1159,8 @@ public class JEditTextArea extends JComponent
 
 	//{{{ physicalToVirtual() method
 	/**
+	 * @deprecated The display engine no longer uses virtual line numbers.
+	 *
 	 * Converts a physical line number to a virtual line number.
 	 * See {@link FoldVisibilityManager} for details.
 	 * @param line A physical line index
@@ -1169,6 +1173,8 @@ public class JEditTextArea extends JComponent
 
 	//{{{ virtualToPhysical() method
 	/**
+	 * @deprecated The display engine no longer uses virtual line numbers.
+	 *
 	 * Converts a virtual line number to a physical line number.
 	 * See {@link FoldVisibilityManager} for details.
 	 * @param line A virtual line index
@@ -1199,6 +1205,7 @@ public class JEditTextArea extends JComponent
 
 	//{{{ getVirtualLineCount() method
 	/**
+	 * @deprecated Obsolete
 	 * Returns the number of virtual lines in the buffer.
 	 */
 	public final int getVirtualLineCount()
@@ -2141,9 +2148,9 @@ forward_scan:		do
 
 			magicCaret = -1;
 
-			if(!foldVisibilityManager.isLineVisible(newCaretLine))
+			if(!displayManager.isLineVisible(newCaretLine))
 			{
-				if(foldVisibilityManager.isNarrowed())
+				if(displayManager.isNarrowed())
 				{
 					int collapseFolds = buffer.getIntegerProperty(
 						"collapseFolds",0);
@@ -2344,7 +2351,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			int line = foldVisibilityManager.getNextVisibleLine(caretLine);
+			int line = displayManager.getNextVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
@@ -2471,7 +2478,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
-			if(!foldVisibilityManager.isLineVisible(i))
+			if(!displayManager.isLineVisible(i))
 				continue;
 
 			getLineText(i,lineSegment);
@@ -2529,7 +2536,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(newCaret == lineText.length())
 		{
-			int nextLine = foldVisibilityManager.getNextVisibleLine(caretLine);
+			int nextLine = displayManager.getNextVisibleLine(caretLine);
 			if(nextLine == -1)
 			{
 				getToolkit().beep();
@@ -5951,7 +5958,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			// Inserting multiple lines can change the last physical
 			// line due to folds being pushed down and so on
-			if(numLines != 0 || (softWrap && getFoldVisibilityManager()
+			if(numLines != 0 || (softWrap && getDisplayManager()
 				.getLastVisibleLine() - numLines <= getLastPhysicalLine()))
 			{
 				delayedRecalculateLastPhysicalLine = true;
@@ -5988,7 +5995,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 			if(startLine < getFirstPhysicalLine())
 			{
-				if(startLine < getFoldVisibilityManager().getFirstVisibleLine())
+				if(startLine < getDisplayManager().getFirstVisibleLine())
 				{
 					// need to update these two!
 					physFirstLine = virtualToPhysical(firstLine);

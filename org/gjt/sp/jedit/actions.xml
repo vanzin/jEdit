@@ -20,7 +20,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="action-bar" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+<ACTION NAME="action-bar" NO_REPEAT="TRUE" NO_RECORD="TRUE" NO_REMEMBER_LAST="TRUE">
 	<CODE>
 		view.actionBar();
 	</CODE>
