@@ -210,6 +210,7 @@ and quirks that I need to fix eventually.
   - scroll/physUp/Down() simpler
 - inserting lines repaints whole text area
 - 30,000 line file performance with syntax, word wrap
+- FirstLine.reset() not optimal
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

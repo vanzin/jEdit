@@ -1044,16 +1044,22 @@ loop:		for(;;)
 	//{{{ _notifyScreenLineChanges() method
 	private void _notifyScreenLineChanges()
 	{
-		if(firstLine.callReset)
-			firstLine.reset();
-		else if(firstLine.callChanged)
-			firstLine.changed();
-		firstLine.callReset = firstLine.callChanged = false;
+		// when the text area switches to us, it will do
+		// a reset anyway
+		if(textArea.getDisplayManager() == this)
+		{
+			if(firstLine.callReset)
+				firstLine.reset();
+			else if(firstLine.callChanged)
+				firstLine.changed();
 
-		if(scrollLineCount.callReset)
-			scrollLineCount.reset();
-		else if(scrollLineCount.callChanged)
-			scrollLineCount.changed();
+			if(scrollLineCount.callReset)
+				scrollLineCount.reset();
+			else if(scrollLineCount.callChanged)
+				scrollLineCount.changed();
+		}
+
+		firstLine.callReset = firstLine.callChanged = false;
 		scrollLineCount.callReset = scrollLineCount.callChanged = false;
 	} //}}}
 
@@ -1195,6 +1201,7 @@ loop:		for(;;)
 
 			int i = 0;
 
+			//XXX
 			for(; i < buffer.getLineCount(); i++)
 			{
 				if(!isLineVisible(i))
@@ -1549,6 +1556,7 @@ loop:		for(;;)
 			{
 				if(textArea.getDisplayManager() == DisplayManager.this)
 				{
+					//XXX
 					for(int i = delayedUpdateStart;
 						i <= delayedUpdateEnd;
 						i++)
@@ -1556,8 +1564,8 @@ loop:		for(;;)
 						if(isLineVisible(i))
 							getScreenLineCount(i);
 					}
-					_notifyScreenLineChanges();
 				}
+				_notifyScreenLineChanges();
 
 				delayedUpdate = false;
 			}

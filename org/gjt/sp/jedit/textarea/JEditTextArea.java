@@ -4755,13 +4755,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	public void processKeyEvent(KeyEvent evt)
 	{
+		// Ignore
+		if(view.isClosed())
+			return;
+
 		time = System.currentTimeMillis();
 		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
-			return;
-
-		// Ignore
-		if(view.isClosed())
 			return;
 
 		InputHandler inputHandler = view.getInputHandler();
