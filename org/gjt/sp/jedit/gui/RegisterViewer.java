@@ -52,7 +52,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 		registerList.addListSelectionListener(new ListHandler());
 		registerList.addMouseListener(new MouseHandler());
 
-		contentTextArea = new JTextArea(20,120);
+		contentTextArea = new JTextArea(10,20);
 		contentTextArea.setEditable(true);
 		contentTextArea.getDocument().addDocumentListener(
 			new DocumentHandler());

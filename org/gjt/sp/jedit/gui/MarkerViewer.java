@@ -93,6 +93,13 @@ public class MarkerViewer extends JPanel implements EBComponent, ActionListener
 		refreshList();
 	} //}}}
 
+	//{{{ requestDefaultFocus() method
+	public boolean requestDefaultFocus()
+	{
+		markerList.requestFocus();
+		return true;
+	} //}}}
+
 	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{

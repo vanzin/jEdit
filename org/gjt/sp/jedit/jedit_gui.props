@@ -271,7 +271,7 @@ paste-string-register.label=Paste $Register
 cut-append-string-register.label=Cut Appe$nd to Register
 copy-append-string-register.label=Copy $Append to Register
 vertical-paste-string-register.label=V$ertical Paste Register
-view-registers.label=Vie$w Registers...
+view-registers.label=Vie$w Registers
 #}}}
 
 #{{{ More Selection menu
@@ -1986,7 +1986,7 @@ log-viewer.tail.label=Tail
 #}}}
 
 #{{{ Marker Viewer
-view-markers.label=Vie$w Markers...
+view-markers.label=Vie$w Markers
 view-markers.title=Markers
 #}}}
 
