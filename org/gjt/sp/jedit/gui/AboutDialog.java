@@ -42,6 +42,8 @@ public class AboutDialog extends EnhancedDialog
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
 		buttonPanel.setBorder(new EmptyBorder(12,0,0,0));
+		buttonPanel.setBackground(Color.white);
+
 		buttonPanel.add(Box.createGlue());
 		close = new JButton(jEdit.getProperty("common.close"));
 		close.addActionListener(new ActionHandler());
