@@ -64,7 +64,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		miraList = new JList(miraModel = new MirrorModel());
 		miraList.setSelectionModel(new SingleSelectionModel());
-		miraList.setSelectedIndex(0);
 
 		/* Download mirror */
 		add(BorderLayout.NORTH,mirrorLabel);

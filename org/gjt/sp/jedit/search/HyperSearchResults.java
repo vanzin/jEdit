@@ -31,6 +31,7 @@ import java.awt.*;
 import java.awt.event.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
+import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
@@ -55,12 +56,29 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		caption = new JLabel();
 
-		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(BorderLayout.CENTER,caption);
-		multi = new JCheckBox(jEdit.getProperty("hypersearch-results.multi"));
-		topPanel.add(BorderLayout.EAST,multi);
-		multi.addActionListener(new ActionHandler());
-		add(BorderLayout.NORTH, topPanel);
+		Box toolBar = new Box(BoxLayout.X_AXIS);
+		toolBar.add(caption);
+		toolBar.add(Box.createGlue());
+
+		ActionHandler ah = new ActionHandler();
+
+		clear = new RolloverButton(GUIUtilities.loadIcon("Clear.png"));
+		clear.setToolTipText(jEdit.getProperty(
+			"hypersearch-results.clear.label"));
+		clear.addActionListener(ah);
+		toolBar.add(clear);
+
+		multi = new RolloverButton();
+		multi.setToolTipText(jEdit.getProperty(
+			"hypersearch-results.multi.label"));
+		multi.addActionListener(ah);
+		toolBar.add(multi);
+
+		multiStatus = jEdit.getBooleanProperty(
+			"hypersearch-results.multi");
+		updateMultiStatus();
+
+		add(BorderLayout.NORTH, toolBar);
 
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
@@ -250,7 +268,18 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
 
-	private JCheckBox multi;
+	private RolloverButton clear;
+	private RolloverButton multi;
+	private boolean multiStatus;
+
+	//{{{ updateMultiStatus() method
+	private void updateMultiStatus()
+	{
+		if(multiStatus)
+			multi.setIcon(GUIUtilities.loadIcon("SingleResult.png"));
+		else
+			multi.setIcon(GUIUtilities.loadIcon("MultipleResults.png"));
+	} //}}}
 
 	//{{{ goToSelectedNode() method
 	private void goToSelectedNode()
@@ -319,13 +348,25 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(!multi.isSelected())
+			Object source = evt.getSource();
+			if(source == clear)
 			{
-				for(int i = resultTreeRoot.getChildCount() - 2; i >= 0; i--)
+				resultTreeRoot.removeAllChildren();
+				resultTreeModel.reload(resultTreeRoot);
+			}
+			else if(source == multi)
+			{
+				multiStatus = !multiStatus;
+				updateMultiStatus();
+
+				if(!multiStatus)
 				{
-					resultTreeModel.removeNodeFromParent(
-						(MutableTreeNode)resultTreeRoot
-						.getChildAt(i));
+					for(int i = resultTreeRoot.getChildCount() - 2; i >= 0; i--)
+					{
+						resultTreeModel.removeNodeFromParent(
+							(MutableTreeNode)resultTreeRoot
+							.getChildAt(i));
+					}
 				}
 			}
 		}
@@ -418,6 +459,22 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			MutableTreeNode value = (MutableTreeNode)path
 				.getLastPathComponent();
 			resultTreeModel.removeNodeFromParent(value);
+		}
+	}//}}}
+
+	//{{{ RemoveAllTreeNodesAction class
+	class RemoveAllTreeNodesAction extends AbstractAction
+	{
+		public RemoveAllTreeNodesAction()
+		{
+			super(jEdit.getProperty("hypersearch-results.remove-all-nodes"));
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			resultTreeRoot = new DefaultMutableTreeNode();
+			resultTreeModel = new DefaultTreeModel(resultTreeRoot);
+			resultTree.setModel(resultTreeModel);
 		}
 	}//}}}
 

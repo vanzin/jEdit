@@ -41,11 +41,11 @@ unsplit-current.shortcut=C+0
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
+#}}}
+
+#{{{ C+non-alpha
 delete-start-line.shortcut=CS+BACK_SPACE
 delete-end-line.shortcut=CS+DELETE
-recent-buffer.shortcut=C+BACK_QUOTE
-select-block.shortcut=C+OPEN_BRACKET
-match-bracket.shortcut=C+CLOSE_BRACKET
 prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP
@@ -61,30 +61,35 @@ select-prev-word.shortcut=CS+LEFT
 next-word.shortcut=C+RIGHT
 select-next-word.shortcut=CS+RIGHT
 action-bar.shortcut=C+ENTER
+prev-buffer.shortcut=C+PAGE_UP
+next-buffer.shortcut=C+PAGE_DOWN
+last-action.shortcut=C+SPACE
+
+recent-buffer.shortcut=C+BACK_QUOTE
+select-block.shortcut=C+OPEN_BRACKET
+match-bracket.shortcut=C+CLOSE_BRACKET
 expand-abbrev.shortcut=C+SEMICOLON
 quick-search.shortcut=C+COMMA
 hypersearch.shortcut=C+PERIOD
 scroll-up-line.shortcut=C+QUOTE
 scroll-down-line.shortcut=C+SLASH
 toggle-multi-select.shortcut=C+BACK_SLASH
-prev-buffer.shortcut=C+PAGE_UP
-next-buffer.shortcut=C+PAGE_DOWN
-last-action.shortcut=C+SPACE
 #}}}
 
 #{{{ C+e C+X
-# Unused: f, h, n, q, x, y
+# Unused: f, h, q, y
 copy-append.shortcut=C+e C+a
 search-in-open-buffers.shortcut=C+e C+b
 range-comment.shortcut=C+e C+c
 search-in-directory.shortcut=C+e C+d
 goto-textarea.shortcut=C+e C+e
 replace-and-find-next.shortcut=C+e C+g
-center-caret.shortcut=C+e C+i
+ignore-case.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j
 line-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 add-marker.shortcut=C+e C+m
+center-caret.shortcut=C+e C+n
 open-path.shortcut=C+e C+o
 vertical-paste.shortcut=C+e C+p
 replace-in-selection.shortcut=C+e C+r
@@ -93,16 +98,21 @@ toggle-line-numbers.shortcut=C+e C+t
 cut-append.shortcut=C+e C+u
 paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
+regexp.shortcut=C+e C+x
 redo.shortcut=C+e C+z
+#}}}
+
+#{{{ C+e C+non-alpha
+left-docking-area.shortcut=C+e C+LEFT
+top-docking-area.shortcut=C+e C+UP
+right-docking-area.shortcut=C+e C+RIGHT
+bottom-docking-area.shortcut=C+e C+DOWN
+
 prev-marker.shortcut=C+e C+COMMA
 next-marker.shortcut=C+e C+PERIOD
 prev-bracket.shortcut=C+e C+OPEN_BRACKET
 next-bracket.shortcut=C+e C+CLOSE_BRACKET
 close-docking-area.shortcut=C+e C+BACK_QUOTE
-left-docking-area.shortcut=C+e C+LEFT
-top-docking-area.shortcut=C+e C+UP
-right-docking-area.shortcut=C+e C+RIGHT
-bottom-docking-area.shortcut=C+e C+DOWN
 #}}}
 
 #{{{ C+e X
@@ -122,6 +132,9 @@ insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
+#}}}
+
+#{{{ C+e non-alpha
 expand-folds.shortcut=C+e ENTER
 #}}}
 
@@ -142,7 +155,7 @@ paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
 #}}}
 
-#{{{ A+x
+#{{{ A+non-alpha
 prev-fold.shortcut=A+UP
 next-fold.shortcut=A+DOWN
 shift-left.shortcut=A+LEFT
@@ -156,6 +169,7 @@ scroll-up-page.shortcut=A+QUOTE
 scroll-down-page.shortcut=A+SLASH
 prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
+
 show-buffer-switcher.shortcut=A+BACK_QUOTE
 toggle-rect-select.shortcut=A+BACK_SLASH
 #}}}

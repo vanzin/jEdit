@@ -956,19 +956,24 @@ public class View extends JFrame implements EBComponent
 		if(searchBar.getParent() == null)
 			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
 
+		searchBar.setHyperSearch(false);
+
 		JEditTextArea textArea = getTextArea();
 
-		String text = textArea.getSelectedText();
-		if(text == null && word)
+		if(word)
 		{
-			textArea.selectWord();
-			text = textArea.getSelectedText();
-		}
-		else if(text != null && text.indexOf('\n') != -1)
-			text = null;
+			String text = textArea.getSelectedText();
+			if(text == null)
+			{
+				textArea.selectWord();
+				text = textArea.getSelectedText();
+			}
+			else if(text.indexOf('\n') != -1)
+				text = null;
 
-		searchBar.setHyperSearch(false);
-		searchBar.getField().setText(text);
+			searchBar.getField().setText(text);
+		}
+
 		searchBar.getField().requestFocus();
 		searchBar.getField().selectAll();
 	} //}}}
@@ -982,32 +987,35 @@ public class View extends JFrame implements EBComponent
 	{
 		JEditTextArea textArea = getTextArea();
 
-		String text = textArea.getSelectedText();
-		if(text == null && word)
+		if(word)
 		{
-			textArea.selectWord();
-			text = textArea.getSelectedText();
+			String text = textArea.getSelectedText();
+			if(text == null)
+			{
+				textArea.selectWord();
+				text = textArea.getSelectedText();
+			}
+
+			if(text != null && text.indexOf('\n') == -1)
+			{
+				HistoryModel.getModel("find").addItem(text);
+				SearchAndReplace.setSearchString(text);
+				SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+				SearchAndReplace.hyperSearch(this);
+
+				return;
+			}
 		}
 
-		if(text != null && text.indexOf('\n') == -1)
-		{
-			HistoryModel.getModel("find").addItem(text);
-			SearchAndReplace.setSearchString(text);
-			SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-			SearchAndReplace.hyperSearch(this);
-		}
-		else
-		{
-			if(searchBar == null)
-				searchBar = new SearchBar(this,true);
-			if(searchBar.getParent() == null)
-				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
+		if(searchBar == null)
+			searchBar = new SearchBar(this,true);
+		if(searchBar.getParent() == null)
+			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
 
-			searchBar.setHyperSearch(true);
-			searchBar.getField().setText(null);
-			searchBar.getField().requestFocus();
-			searchBar.getField().selectAll();
-		}
+		searchBar.setHyperSearch(true);
+		searchBar.getField().setText(null);
+		searchBar.getField().requestFocus();
+		searchBar.getField().selectAll();
 	} //}}}
 
 	//{{{ actionBar() method

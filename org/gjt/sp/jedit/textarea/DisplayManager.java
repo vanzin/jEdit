@@ -42,6 +42,8 @@ public class DisplayManager
 {
 	//{{{ Static part
 
+	public static long scanCount, scannedLines;
+
 	//{{{ getDisplayManager() method
 	static DisplayManager getDisplayManager(Buffer buffer,
 		JEditTextArea textArea)
@@ -683,6 +685,8 @@ public class DisplayManager
 	private int[] fvm;
 	private int fvmcount;
 
+	private int lastfvmget = -1;
+
 	//{{{ DisplayManager constructor
 	private DisplayManager(Buffer buffer, JEditTextArea textArea)
 	{
@@ -705,24 +709,107 @@ public class DisplayManager
 		buffer.removeBufferChangeListener(bufferChangeHandler);
 	} //}}}
 
+	//{{{ fvmtest() method
+	/**
+	 * Debug.
+	 */
+	private void fvmtest()
+	{
+		boolean[] map = new boolean[buffer.getLineCount()];
+		java.util.Random random = new java.util.Random();
+
+		// randomly show and hide lines, both in the fvm structure and
+		// a simple boolean map
+		for(int i = 0; i < 1000; i++)
+		{
+			int random1 = Math.abs(random.nextInt() % map.length);
+			int random2 = Math.abs(random.nextInt() % map.length);
+			if(random2 < random1)
+			{
+				int tmp = random1;
+				random1 = random2;
+				random2 = tmp;
+			}
+
+			boolean vis = (random1 + random2 % 2 == 0);
+			if(vis)
+				showLineRange(random1,random2);
+			else
+				hideLineRange(random1,random2);
+			for(int j = random1; j <= random2; j++)
+			{
+				map[j] = vis;
+			}
+		}
+
+		// check for the fvm structure is correct
+		for(int i = 0; i < map.length; i++)
+		{
+			if(isLineVisible(i) != map[i])
+				Log.log(Log.ERROR,this,"Mismatch: " + i);
+		}
+	} //}}}
+
 	//{{{ fvmget() method
 	/**
 	 * Returns the fold visibility map index for the given line.
 	 */
 	private int fvmget(int line)
 	{
+		scanCount++;
+
 		if(line < fvm[0])
 			return -1;
 		if(line >= fvm[fvmcount - 1])
 			return fvmcount - 1;
 
-		for(int i = 0; i < fvm.length; i++)
+		if(lastfvmget != -1)
 		{
-			if(fvm[i] <= line && line < fvm[i+1])
-				return i;
+			if(line >= fvm[lastfvmget])
+			{
+				if(lastfvmget == fvmcount - 1
+					|| line < fvm[lastfvmget + 1])
+				{
+					return lastfvmget;
+				}
+			}
 		}
 
-		throw new InternalError("Not supposed to happen");
+		int start = 0;
+		int end = fvmcount - 1;
+
+loop:		for(;;)
+		{
+			scannedLines++;
+			switch(end - start)
+			{
+			case 0:
+				lastfvmget = start;
+				break loop;
+			case 1:
+				int value = fvm[end];
+				if(value <= line)
+					lastfvmget = end;
+				else
+					lastfvmget = start;
+				break loop;
+			default:
+				int pivot = (end + start) / 2;
+				value = fvm[pivot];
+				if(value == line)
+				{
+					lastfvmget = pivot;
+					break loop;
+				}
+				else if(value < line)
+					start = pivot;
+				else
+					end = pivot - 1;
+				break;
+			}
+		}
+
+		return lastfvmget;
 	} //}}}
 
 	//{{{ fvmput() method
@@ -777,7 +864,7 @@ public class DisplayManager
 		}
 		else
 		{
-			if(endi != fvmcount - 2 && fvm[endi + 1]
+			if(endi != fvmcount - 1 && fvm[endi + 1]
 				== end + 1)
 			{
 				fvmput(starti + 1,endi + 2,
@@ -810,6 +897,8 @@ public class DisplayManager
 				scrollLineCount.callChanged = true;
 			}
 		}
+
+		lastfvmget = -1;
 
 		/* update fold visibility map. */
 		int starti = fvmget(start);
@@ -855,6 +944,8 @@ public class DisplayManager
 				scrollLineCount.callChanged = true;
 			}
 		}
+
+		lastfvmget = -1;
 
 		/* update fold visibility map. */
 		int starti = fvmget(start);
@@ -1298,6 +1389,7 @@ public class DisplayManager
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
 		{
+			lastfvmget = -1;
 			fvmcount = 2;
 			fvm[0] = 0;
 			fvm[1] = buffer.getLineCount();

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,9 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import java.awt.Component;
-import java.util.ArrayList;
-import org.gjt.sp.jedit.jEdit;
+import java.util.*;
+import org.gjt.sp.jedit.msg.DynamicMenuChanged;
+import org.gjt.sp.jedit.*;
 //}}}
 
 /**
@@ -65,28 +66,15 @@ public class FavoritesVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
-		synchronized(lock)
-		{
-			if(favorites == null)
-				loadFavorites();
-
-			VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[favorites.size()];
-			for(int i = 0; i < retVal.length; i++)
-			{
-				String favorite = (String)favorites.get(i);
-				retVal[i] = _getDirectoryEntry(session,favorite,comp);
-			}
-			return retVal;
-		}
+		return getFavorites();
 	} //}}}
 
 	//{{{ _getDirectoryEntry() method
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-		return new VFS.DirectoryEntry(path,path,"favorites:" + path,
-					VFS.DirectoryEntry.DIRECTORY,
-					0L,false);
+		// does it matter that this doesn't set the type correctly?
+		return new FavoritesEntry(path,VFS.DirectoryEntry.DIRECTORY);
 	} //}}}
 
 	//{{{ _delete() method
@@ -95,18 +83,29 @@ public class FavoritesVFS extends VFS
 		synchronized(lock)
 		{
 			path = path.substring(PROTOCOL.length() + 1);
-			favorites.remove(path);
 
-			VFSManager.sendVFSUpdate(this,PROTOCOL + ":",false);
+			Iterator iter = favorites.iterator();
+			while(iter.hasNext())
+			{
+				if(((FavoritesEntry)iter.next()).path.equals(path))
+				{
+					iter.remove();
+					VFSManager.sendVFSUpdate(this,PROTOCOL
+						+ ":",false);
+					EditBus.send(new DynamicMenuChanged(
+						"favorites"));
+					return true;
+				}
+			}
 		}
 
-		return true;
+		return false;
 	} //}}}
 
 	//{{{ loadFavorites() method
 	public static void loadFavorites()
 	{
-		favorites = new ArrayList();
+		favorites = new LinkedList();
 
 		synchronized(lock)
 		{
@@ -114,24 +113,34 @@ public class FavoritesVFS extends VFS
 			int i = 0;
 			while((favorite = jEdit.getProperty("vfs.favorite." + i)) != null)
 			{
-				favorites.add(favorite);
+				favorites.add(new FavoritesEntry(favorite,
+					jEdit.getIntegerProperty("vfs.favorite."
+					+ i + ".type",
+					VFS.DirectoryEntry.DIRECTORY)));
 				i++;
 			}
 		}
 	} //}}}
 
 	//{{{ addToFavorites() method
-	public static void addToFavorites(String path)
+	public static void addToFavorites(String path, int type)
 	{
 		synchronized(lock)
 		{
 			if(favorites == null)
 				loadFavorites();
 
-			if(!favorites.contains(path))
-				favorites.add(path);
+			Iterator iter = favorites.iterator();
+			while(iter.hasNext())
+			{
+				if(((FavoritesEntry)iter.next()).path.equals(path))
+					return;
+			}
+
+			favorites.add(new FavoritesEntry(path,type));
 
 			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
+			EditBus.send(new DynamicMenuChanged("favorites"));
 		}
 	} //}}}
 
@@ -143,30 +152,51 @@ public class FavoritesVFS extends VFS
 			if(favorites == null)
 				return;
 
-			for(int i = 0; i < favorites.size(); i++)
+			int i = 0;
+			Iterator iter = favorites.iterator();
+			while(iter.hasNext())
 			{
+				FavoritesEntry e = ((FavoritesEntry)
+					iter.next());
 				jEdit.setProperty("vfs.favorite." + i,
-					(String)favorites.get(i));
+					e.path);
+				jEdit.setIntegerProperty("vfs.favorite." + i
+					+ ".type",e.type);
+
+				i++;
 			}
 			jEdit.unsetProperty("vfs.favorite." + favorites.size());
+			jEdit.unsetProperty("vfs.favorite." + favorites.size()
+				+ ".type");
 		}
 	} //}}}
 
 	//{{{ getFavorites() method
-	public static Object[] getFavorites()
+	public static VFS.DirectoryEntry[] getFavorites()
 	{
 		synchronized(lock)
 		{
 			if(favorites == null)
 				loadFavorites();
 
-			return favorites.toArray();
+			return (VFS.DirectoryEntry[])favorites.toArray(
+				new VFS.DirectoryEntry[favorites.size()]);
 		}
 	} //}}}
 
 	//{{{ Private members
 	private static FavoritesVFS instance;
 	private static Object lock = new Object();
-	private static ArrayList favorites;
+	private static List favorites;
 	//}}}
+
+	//{{{ FavoritesEntry class
+	static class FavoritesEntry extends VFS.DirectoryEntry
+	{
+		FavoritesEntry(String path, int type)
+		{
+			super(MiscUtilities.getFileName(path),path,
+				PROTOCOL + ":" + path,type,0,false);
+		}
+	} //}}}
 }

@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
-Thanks to Matt Albrecht for contributing to this release.
+Thanks to Carmine Lucarelli and Matt Albrecht for contributing to this
+release.
 
 {{{ Editing
 
@@ -14,6 +15,28 @@ Thanks to Matt Albrecht for contributing to this release.
   a text area). Previously this information was retained by the buffer
   itself, which resulted in a limit of 8 text areas per buffer.
 
+- Added Ignore Case (C+e C+i) and Regular Expressions (C+e C+x) commands
+  to Search menu for changing search bar settings from the keyboard.
+
+- Incremental Search Bar and HyperSearch Bar commands now always
+  disregard the selection. Use Incremental Search for Word and
+  HyperSearch for Word commands if you want to search for the selected
+  text.
+
+}}}
+{{{ File System Browser
+
+- The favorites list can contain files now.
+
+- Added a Utilities->Favorites menu.
+
+}}}
+{{{ Syntax Highlighting
+
+- Updated Inform syntax highlighting (Matt Albrecht).
+
+- Added S+ syntax highlighting (Matt Albrecht).
+
 }}}
 {{{ User Interface
 
@@ -24,12 +47,8 @@ Thanks to Matt Albrecht for contributing to this release.
 - "Copy" button in Activity Log window now copies entire log if nothing
   is selected.
 
-}}}
-{{{ Syntax Highlighting
-
-- Updated Inform syntax highlighting (Matt Albrecht).
-
-- Added S+ syntax highlighting (Matt Albrecht).
+- Added "Remove All Nodes" button to HyperSearch Results window
+  (Carmine Lucarelli).
 
 }}}
 {{{ Plugin Loader

@@ -70,6 +70,24 @@ public class VFSDirectoryEntryTable extends JTable
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
+	//{{{ selectFile() method
+	public boolean selectFile(String path)
+	{
+		for(int i = 0; i < getRowCount(); i++)
+		{
+			VFSDirectoryEntryTableModel.Entry entry =
+				(VFSDirectoryEntryTableModel.Entry)
+				getValueAt(i,1);
+			if(entry.dirEntry.path.equals(path))
+			{
+				setSelectedRow(i);
+				return true;
+			}
+		}
+
+		return false;
+	} //}}}
+
 	//{{{ doTypeSelect() method
 	public void doTypeSelect(String str, boolean ignoreCase)
 	{

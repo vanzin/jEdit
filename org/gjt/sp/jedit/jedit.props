@@ -392,7 +392,7 @@ plugin-manager.mirror.id=NONE
 plugin-manager.deleteDownloads=true
 #}}}
 
-#{{{ Hidden settingsgui
+#{{{ Hidden settings
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
 showTooltips=true
