@@ -235,7 +235,7 @@
    </para>
    <programlisting>DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+(e[[:digit:]]*)?)[lLdDfF]?"</programlisting>
    <para>
-    Regular expression syntax is described in <xref linkend="regexp" />.
+    Regular expression syntax is described in <xref linkend="regexps" />.
    </para>
   </sect2>
   
@@ -402,7 +402,7 @@
    which can match more than one character at the start position.
   </para>
   <para>
-   Regular expression syntax is described in <xref linkend="regexp" />.
+   Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
  </sect1>
  <sect1 id="mode-rule-eol-span"><title>The EOL_SPAN Tag</title>
@@ -454,7 +454,7 @@
    which can match more than one character at the start position.
   </para>
   <para>
-   Regular expression syntax is described in <xref linkend="regexp" />.
+   Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
  </sect1>
  <sect1 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Tag</title>
@@ -572,7 +572,7 @@
    which can match more than one character at the start position.
   </para>
   <para>
-   Regular expression syntax is described in <xref linkend="regexp" />.
+   Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
  </sect1>
  <sect1 id="mode-rule-keywords"><title>The KEYWORDS Tag</title>

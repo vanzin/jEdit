@@ -17,6 +17,21 @@ release.
 
 - Updated FreeMarker syntax highlighting (Jonathan Revusky).
 
+- Java mode now highlights "assert" and "strictfp" keywords.
+
++ Auto Indent Changes:
+
+- "indentPrevLine" buffer-local property now named "indentNextLine".
+  Update your modes.
+
+- Added a new "indentNextLines" property that indents all subsequent
+  lines, not just the next line. This finally gives correct auto-indent
+  behavior in Python files.
+
+- Added a new "lineUpClosingBracket" property. If false, then a closing
+  bracket will not unindent the current line, but rather the next line.
+  This gives us semi-correct indent behavior in Lisp and Scheme modes.
+
 + Miscellaneous Changes:
 
 - Plugin manager progress window now only has one progress bar.
@@ -86,6 +101,13 @@ release.
   for the Console plugin.
 
 - Right mouse button should work on MacOS X now.
+
+- Markers menu showed wrong line text (Ollie Rutherfurd).
+
+- "Write HyperSearch Results" macro updated to work with
+  multiple-results code (Rudi Widmann).
+
+- Fixed various auto indent bugs.
 
 + API Additions:
 

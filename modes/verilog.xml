@@ -11,7 +11,7 @@
 		   - Keywords begin, module, task, etc. always indented
 		   - Keywords if, while, etc. indent only if ; not on the same line
 		-->
-		<PROPERTY NAME="indentPrevLine" VALUE="(.*:\s*)|(\s*(begin|fork|task|table|specify|primitive|module|generate|function|case[xz]?)\&gt;.*)|(\s*(always|if|else|for|forever|initial|repeat|while)\&gt;[^;]*)" />
+		<PROPERTY NAME="indentNextLines" VALUE="(.*:\s*)|(\s*(begin|fork|task|table|specify|primitive|module|generate|function|case[xz]?)\&gt;.*)|(\s*(always|if|else|for|forever|initial|repeat|while)\&gt;[^;]*)" />
 
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />

@@ -51,10 +51,6 @@
 
     <!-- FTL markup starts here. -->
 
-    <SEQ TYPE="COMMENT2">_$_</SEQ>
-    <SEQ TYPE="COMMENT2">$_</SEQ>
-    <SEQ TYPE="COMMENT2">_$</SEQ>
-
     <SPAN TYPE="KEYWORD1" DELEGATE="EXPRESSION">
       <BEGIN>${</BEGIN>
       <END>}</END>
@@ -81,7 +77,7 @@
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|return)\&gt;</BEGIN>
+      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|t|rt|lt|return)\&gt;</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 

@@ -4,11 +4,9 @@
 
 <MODE>
   <PROPS>
-    <PROPERTY NAME="indentPrevLine"
+    <PROPERTY NAME="indentNextLines"
       VALUE="\s*(if|loop|do|else|select|otherwise|catch|finally|class|method|properties)(.*)"/>
     <!-- VALUE="\s*(((if|while)\s*\(|else\s*(\{|$)|else\s+if\s*\(|case\s+.+:|default:)[^;]*|for\s*\(.*)" -->
-    <!-- set this to 'true' if you want to use GNU coding style -->
-    <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
     <PROPERTY NAME="commentStart" VALUE="/*" />
     <PROPERTY NAME="commentEnd" VALUE="*/" />
     <PROPERTY NAME="lineComment" VALUE="--" />

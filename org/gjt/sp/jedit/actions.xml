@@ -271,7 +271,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="expand-folds" NO_RECORD="TRUE">
+<ACTION NAME="expand-folds" NO_REPEAT="TRUE"  NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.expand-folds"),

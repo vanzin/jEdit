@@ -4,16 +4,19 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
-		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="indentPrevLine"
-			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
-		<!-- set this to 'true' if you want to use GNU coding style -->
-		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE="//" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+
+		<!-- Auto indent -->
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="indentNextLine"
+			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+		<!-- set this to 'true' if you want to use GNU coding style -->
+		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"
@@ -120,6 +123,9 @@
 			<KEYWORD3>long</KEYWORD3>
 			<KEYWORD3>short</KEYWORD3>
 			<KEYWORD3>void</KEYWORD3>
+
+			<FUNCTION>assert</FUNCTION>
+			<KEYWORD1>strictfp</KEYWORD1>
 
 			<LITERAL2>false</LITERAL2>
 			<LITERAL2>null</LITERAL2>
