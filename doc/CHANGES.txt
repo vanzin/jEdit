@@ -2,8 +2,13 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre1
 
+Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,
+Joseph Schroer, Kris Kopicki, Steve Snider and Thomas Dilts for
+contributing to this release.
+
 + New Features
 
+- FORTRAN syntax highlighting (Joseph Schroer)
 - Interilis syntax highlighting (Claude Eisenhut)
 - Added SOCKS proxy support (Alfonso Garcia)
 - WheelMouse plugin integrated into core -- no need to install a
