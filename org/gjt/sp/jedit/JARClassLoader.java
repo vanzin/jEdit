@@ -28,6 +28,7 @@ import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.*;
 import java.util.*;
+import java.util.jar.*;
 import java.util.zip.*;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.util.Log;
@@ -54,7 +55,9 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
-		zipFile = new ZipFile(path);
+		zipFile = new JarFile(path);
+		definePackages();
+
 		jar = new EditPlugin.JAR(path,this);
 
 		Enumeration entires = zipFile.entries();
@@ -264,7 +267,7 @@ public class JARClassLoader extends ClassLoader
 
 	private EditPlugin.JAR jar;
 	private Vector pluginClasses = new Vector();
-	private ZipFile zipFile;
+	private JarFile zipFile;
 
 	//{{{ loadPluginClass() method
 	private void loadPluginClass(String name)
@@ -508,6 +511,141 @@ public class JARClassLoader extends ClassLoader
 
 			throw new ClassNotFoundException(clazz);
 		}
+	} //}}}
+
+	//{{{ definePackages() method
+	/**
+	 * Defines all packages found in the given Java archive file. The
+	 * attributes contained in the specified Manifest will be used to obtain
+	 * package version and sealing information.
+	 */
+	private void definePackages()
+	{
+		try
+		{
+			Manifest manifest = zipFile.getManifest();
+
+			if(manifest != null)
+			{
+				Map entries = manifest.getEntries();
+				Iterator i = entries.keySet().iterator();
+
+				while(i.hasNext())
+				{
+					String path = (String)i.next();
+
+					if(!path.endsWith(".class"))
+					{
+						String name = path.replace('/', '.');
+
+						if(name.endsWith("."))
+							name = name.substring(0, name.length() - 1);
+
+						// code url not implemented
+						definePackage(path,name,manifest,null);
+					}
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			// should never happen, not severe anyway
+			Log.log(Log.ERROR, this,"Error extracting manifest info "
+				+ "for file " + zipFile);
+			Log.log(Log.ERROR, this, ex);
+		}
+	} //}}}
+
+	//{{{ definePackage() method
+	/**
+	 * Defines a new package by name in this ClassLoader. The attributes
+	 * contained in the specified Manifest will be used to obtain package
+	 * version and sealing information. For sealed packages, the additional
+	 * URL specifies the code source URL from which the package was loaded.
+	 */
+	private Package definePackage(String path, String name, Manifest man,
+		URL url) throws IllegalArgumentException
+	{
+		String specTitle = null;
+		String specVersion = null;
+		String specVendor = null;
+		String implTitle = null;
+		String implVersion = null;
+		String implVendor = null;
+		String sealed = null;
+		URL sealBase = null;
+
+		Attributes attr = man.getAttributes(path);
+
+		if(attr != null)
+		{
+			specTitle = attr.getValue(
+				Attributes.Name.SPECIFICATION_TITLE);
+			specVersion = attr.getValue(
+				Attributes.Name.SPECIFICATION_VERSION);
+			specVendor = attr.getValue(
+				Attributes.Name.SPECIFICATION_VENDOR);
+			implTitle = attr.getValue(
+				Attributes.Name.IMPLEMENTATION_TITLE);
+			implVersion = attr.getValue(
+				Attributes.Name.IMPLEMENTATION_VERSION);
+			implVendor = attr.getValue(
+				Attributes.Name.IMPLEMENTATION_VENDOR);
+			sealed = attr.getValue(Attributes.Name.SEALED);
+		}
+
+		attr = man.getMainAttributes();
+
+		if (attr != null)
+		{
+			if (specTitle == null)
+			{
+				specTitle = attr.getValue(
+					Attributes.Name.SPECIFICATION_TITLE);
+			}
+
+			if (specVersion == null)
+			{
+				specVersion = attr.getValue(
+					Attributes.Name.SPECIFICATION_VERSION);
+			}
+
+			if (specVendor == null)
+			{
+				specVendor = attr.getValue(
+					Attributes.Name.SPECIFICATION_VENDOR);
+			}
+
+			if (implTitle == null)
+			{
+				implTitle = attr.getValue(
+					Attributes.Name.IMPLEMENTATION_TITLE);
+			}
+
+			if (implVersion == null)
+			{
+				implVersion = attr.getValue(
+					Attributes.Name.IMPLEMENTATION_VERSION);
+			}
+
+			if (implVendor == null)
+			{
+				implVendor = attr.getValue(
+					Attributes.Name.IMPLEMENTATION_VENDOR);
+			}
+
+			if (sealed == null)
+			{
+				sealed = attr.getValue(Attributes.Name.SEALED);
+			}
+		}
+
+		//if("true".equalsIgnoreCase(sealed))
+		//	sealBase = url;
+
+		return super.definePackage(name, specTitle, specVersion, specVendor,
+			implTitle, implVersion, implVendor,
+			sealBase);
 	} //}}}
 
 	//}}}
