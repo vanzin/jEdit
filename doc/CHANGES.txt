@@ -1,5 +1,26 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre4
+
++ Enhancements
+
+- Firewall plugin integrated into editor core
+- Global Options dialog box now has an 'Overview' page
+- When running on Java 2 version 1.4, any JAR files named "jaxp.jar" are
+  ignored; on other Java versions, they are loaded. The next version of
+  the XML plugin will split xerces.jar into xerces.jar and jaxp.jar; so
+  it should work better on Java 1.4.
+
++ Bug Fixes
+
+- Next-fold command was slightly broken
+- Fixed possible plugin manager NPE when installing incompatible plugins
+- The 'select text on focus' feature of some text fields should work on
+  JDK 1.4 now
+- On some Java versions, the plugin manager's progress windows would
+  hang until explicitly given focus
+- File system browser's type select should work on JDK 1.4 now
+
 * Version 4.0pre3
 
 jEdit now requires Java 2 version 1.3 or later! Java 2 version 1.2 and

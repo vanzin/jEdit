@@ -1,5 +1,8 @@
 /*
  * PluginManagerProgress.java - Plugin download progress meter
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,19 +22,25 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class PluginManagerProgress extends JDialog
 {
-	public PluginManagerProgress(JDialog dialog, String caption, Roster roster)
+	//{{{ PluginManagerProgress constructor
+	public PluginManagerProgress(JDialog dialog, String type, Roster roster)
 	{
-		super(JOptionPane.getFrameForComponent(dialog),caption,true);
+		super(JOptionPane.getFrameForComponent(dialog),
+			jEdit.getProperty("plugin-manager.progress."
+			+ type + "-task"),true);
 
 		this.roster = roster;
+		this.type = type;
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
@@ -39,7 +48,8 @@ public class PluginManagerProgress extends JDialog
 
 		globalProgress = new JProgressBar();
 		globalProgress.setStringPainted(true);
-		globalProgress.setString(caption);
+		globalProgress.setString(jEdit.getProperty("plugin-manager.progress."
+			+ type + "-task"));
 
 		count = roster.getOperationCount();
 
@@ -70,29 +80,33 @@ public class PluginManagerProgress extends JDialog
 		setLocationRelativeTo(dialog);
 
 		show();
-	}
+	} //}}}
 
+	//{{{ removing() method
 	public void removing(String plugin)
 	{
 		String[] args = { plugin };
 		showMessage(jEdit.getProperty("plugin-manager.progress.removing",args));
 		stop.setEnabled(true);
-	}
+	} //}}}
 
+	//{{{ downloading() method
 	public void downloading(String plugin)
 	{
 		String[] args = { plugin };
 		showMessage(jEdit.getProperty("plugin-manager.progress.downloading",args));
 		stop.setEnabled(true);
-	}
+	} //}}}
 
+	//{{{ installing() method
 	public void installing(String plugin)
 	{
 		String[] args = { plugin };
 		showMessage(jEdit.getProperty("plugin-manager.progress.installing",args));
 		stop.setEnabled(false);
-	}
+	} //}}}
 
+	//{{{ setMaximum() method
 	public void setMaximum(final int total)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -102,8 +116,9 @@ public class PluginManagerProgress extends JDialog
 				localProgress.setMaximum(total);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ setValue() method
 	public void setValue(final int value)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -113,8 +128,9 @@ public class PluginManagerProgress extends JDialog
 				localProgress.setValue(value);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ done() method
 	public void done(final boolean ok)
 	{
 		this.ok |= ok;
@@ -131,7 +147,8 @@ public class PluginManagerProgress extends JDialog
 						if(ok)
 						{
 							GUIUtilities.message(PluginManagerProgress.this,
-								"plugin-manager.done",null);
+								"plugin-manager." + type
+								+ "-done",null);
 						}
 						else
 						{
@@ -158,15 +175,20 @@ public class PluginManagerProgress extends JDialog
 		catch(Exception e)
 		{
 		}
-	}
+	} //}}}
 
+	//{{{ isOK() method
 	public boolean isOK()
 	{
 		return ok;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private Thread thread;
+
+	private String type;
 
 	private JProgressBar globalProgress, localProgress;
 	private JButton stop;
@@ -176,7 +198,9 @@ public class PluginManagerProgress extends JDialog
 	private boolean ok;
 
 	private Roster roster;
+	//}}}
 
+	//{{{ showMessage() method
 	private void showMessage(final String msg)
 	{
 		try
@@ -194,8 +218,9 @@ public class PluginManagerProgress extends JDialog
 		}
 
 		Thread.yield();
-	}
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -206,13 +231,14 @@ public class PluginManagerProgress extends JDialog
 				dispose();
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ WindowHandler class
 	class WindowHandler extends WindowAdapter
 	{
 		boolean done;
 
-		public void windowActivated(WindowEvent evt)
+		public void windowOpened(WindowEvent evt)
 		{
 			if(done)
 				return;
@@ -227,8 +253,9 @@ public class PluginManagerProgress extends JDialog
 			thread.stop();
 			dispose();
 		}
-	}
+	} //}}}
 
+	//{{{ RosterThread class
 	class RosterThread extends Thread
 	{
 		RosterThread()
@@ -240,5 +267,5 @@ public class PluginManagerProgress extends JDialog
 		{
 			roster.performOperations(PluginManagerProgress.this);
 		}
-	}
+	} //}}}
 }

@@ -22,11 +22,6 @@ find macros -name \*.bsh > installer/jedit-macros
 echo -n "jedit-macros: "
 ls -l `cat installer/jedit-macros` | awk 'BEGIN { size=0 } { disk_size+=(int($5/8192+1)*8); size+=$5/1024 } END { print disk_size " " size }'
 
-# jedit-firewall fileset (Java 2 only)
-echo jars/Firewall.jar > installer/jedit-firewall
-echo -n "jedit-firewall: "
-ls -l `cat installer/jedit-firewall` | awk 'BEGIN { size=0 } { disk_size+=(int($5/8192+1)*8); size+=$5/1024 } END { print disk_size " " size }'
-
 # jedit-windows fileset
 echo jedinit.exe > installer/jedit-windows
 echo jedinstl.dll >> installer/jedit-windows

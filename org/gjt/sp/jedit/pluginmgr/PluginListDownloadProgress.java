@@ -117,7 +117,7 @@ class PluginListDownloadProgress extends JDialog
 	{
 		boolean done;
 
-		public void windowActivated(WindowEvent evt)
+		public void windowOpened(WindowEvent evt)
 		{
 			if(done)
 				return;

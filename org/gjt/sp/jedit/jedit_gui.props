@@ -1247,6 +1247,7 @@ buffer-options.props=Corresponding buffer-local properties: (C+c copies)
 
 #{{{ Global options dialog
 options.title=Global Options
+options.overview.label=Overview
 options.jedit.label=jEdit Options
 options.plugins.label=Plugin Options
 
@@ -1772,9 +1773,8 @@ plugin-list.progress.stop=Stop
 plugin-list.ioerror.title=I/O Error
 plugin-list.ioerror.message=An I/O error occurred ({0})\n\
 	\n\
-	If you are using Java 2 and are connected to the Internet\n\
-	through a firewall, you should configure the Firewall plugin\n\
-	in Utilities->Global Options before using the plugin manager.
+	You might need to specify an HTTP proxy in\n\
+	Utilities->Global Options->HTTP Proxy.
 
 plugin-list.xmlerror.title=XML Parser Error
 plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
@@ -1810,17 +1810,29 @@ install-plugins.install=Install
 #}}}
 
 #{{{ Plugin progress
-plugin-manager.progress.removing-task=Removing Plugins
-plugin-manager.progress.updating-task=Updating Plugins
-plugin-manager.progress.installing-task=Installing Plugins
+plugin-manager.progress.remove-task=Removing Plugins
+plugin-manager.progress.update-task=Updating Plugins
+plugin-manager.progress.install-task=Installing Plugins
 plugin-manager.progress.removing=Removing {0}
 plugin-manager.progress.downloading=Downloading {0}
 plugin-manager.progress.installing=Installing {0}
 plugin-manager.progress.stop=Stop
 
-plugin-manager.done.title=Operations Complete
-plugin-manager.done.message=You must restart jEdit for plugin installation\n\
-	and removal to take effect.
+plugin-manager.remove-done.title=Removal Complete
+plugin-manager.remove-done.message=You must restart jEdit for plugin removal take effect.
+
+plugin-manager.update-done.title=Update Complete
+plugin-manager.update-done.message=You must restart jEdit to use the updated plugins.
+
+plugin-manager.install-done.title=Installation Complete
+plugin-manager.install-done.message=You must restart jEdit to use the installed plugins.\n\
+	\n\
+	After jEdit is restarted, documentation for the newly\n\
+	installed plugins can be found in Help->jEdit Help.\n\
+	\n\
+	Remember that most plugins add commands to the 'Plugins' menu;\n\
+	some also have settings that can be changed in the\n\
+	Utilities->Global Options dialog box.
 #}}}
 
 #{{{ Plugin remove error

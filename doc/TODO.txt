@@ -1,12 +1,15 @@
 TO DO
 
-- metal theme and web start
+- finish 'troubleshooting' menu:
+  - about cmd
+  - keytest cmd
+  - make bug report cmd
+  - docs in user's guide
+- more efficent text painting code
 - control clicks on closing brackets suck
-- jdk 1.4: fs browser text fields
-- jdk 1.4: still addToSelection() bug
+- jdk 1.4: shortcuts only work in text area
 - wrap guide: don't use font metrics
 - S+END/S+HOME
-- next-fold when cursor is on a top-level line; find first fold start
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
@@ -15,9 +18,6 @@ TO DO
 - faster hypersearch
 - C+e , and . insert , and . in the buffer
 - narrow: if collapsed fold, expand one level
-- mention linux numlock issue on compatibility page
-- after plugin installation is complete, show dialog with some random info
-- Toggle line comment macro needs to become context-sensitive
 - put package.html everywhere
 - OK_CANCEL_OPTION in confirm() docs
 - finish new complete word

@@ -2580,7 +2580,7 @@ public class jEdit
 	private static void initMisc()
 	{
 		// Add our protocols to java.net.URL's list
-		System.getProperties().put("java.protocol.handler|.pkgs",
+		System.getProperties().put("java.protocol.handler.pkgs",
 			"org.gjt.sp.jedit.proto|" +
 			System.getProperty("java.protocol.handler.pkgs",""));
 
@@ -2619,12 +2619,12 @@ public class jEdit
 			else
 			{
 				// check if web start
-				if(jEdit.class.getResource("/modes/catalog") != null)
+				/* if(jEdit.class.getResource("/modes/catalog") != null)
 				{
 					// modes bundled in; hence web start
 					jEditHome = null;
 				}
-				else
+				else */
 				{
 					// use user.dir as last resort
 					jEditHome = System.getProperty("user.dir");
@@ -2880,7 +2880,7 @@ public class jEdit
 				return;
 
 			System.setProperty("http.proxyHost", host);
-			Log.log(Log.DEBUG, this, "HTTP proxy enabled: " + host);
+			Log.log(Log.DEBUG, jEdit.class, "HTTP proxy enabled: " + host);
 			// set proxy port
 			String port = jEdit.getProperty("firewall.port");
 			if (port != null)
@@ -2895,12 +2895,12 @@ public class jEdit
 			String username = jEdit.getProperty("firewall.user");
 			if (username == null || username.length()==0)
 			{
-				Log.log(Log.DEBUG, this, "HTTP proxy without user");
+				Log.log(Log.DEBUG, jEdit.class, "HTTP proxy without user");
 				Authenticator.setDefault(new FirewallAuthenticator(null));
 			}
 			else
 			{
-				Log.log(Log.DEBUG, this, "HTTP proxy user: " + username);
+				Log.log(Log.DEBUG, jEdit.class, "HTTP proxy user: " + username);
 				PasswordAuthentication pw = new PasswordAuthentication(
 					username,
 					jEdit.getProperty("firewall.password").toCharArray()
@@ -2911,7 +2911,7 @@ public class jEdit
 	} //}}}
 
 	//{{{ FirewallAuthenticator class
-	class FirewallAuthenticator extends Authenticator
+	static class FirewallAuthenticator extends Authenticator
 	{
 		PasswordAuthentication pw;
 
@@ -3223,12 +3223,21 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			if(plugin.equals("EditBuddy.jar")
 				|| plugin.equals("PluginManager.jar")
-				|| plugin.equals("jaxp.jar")
-				|| plugin.equals("crimson.jar")
+				|| plugin.equals("Firewall.jar")
 				|| plugin.equals("Tidy.jar"))
 			{
 				pluginError(path,"plugin-error.obsolete",null);
 				continue;
+			}
+
+			if(plugin.equals("jaxp.jar"))
+			{
+				if(System.getProperty("java.version").compareTo("1.4") >= 0)
+				{
+					Log.log(Log.NOTICE,jEdit.class,"Running on Java 1.4. Ignoring "
+						+ path);
+					continue;
+				}
 			}
 
 			try

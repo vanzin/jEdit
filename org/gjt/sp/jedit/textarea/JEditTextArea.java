@@ -3672,23 +3672,17 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int line = caretLine;
 
-		while(!buffer.isFoldStart(line))
-		{
-			if(line == 0)
-			{
-				getToolkit().beep();
-				return;
-			}
-			else
-				line--;
-		}
+		while(line != 0 && !buffer.isFoldStart(line))
+			line--;
 
-		int level = buffer.getFoldLevel(line);
-		if(level == 0)
+		int level;
+		if(line == 0)
 		{
 			// so that it always just finds the first fold
 			level = Integer.MAX_VALUE;
 		}
+		else
+			level = buffer.getFoldLevel(line);
 
 		int nextFold = -1;
 		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
