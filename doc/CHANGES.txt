@@ -26,6 +26,7 @@ Rex Young for contributing to this release.
 
 - Updated ColdFusion syntax highlighting (Joshua Miller).
 - Added Maple syntax highlighting (John Perry)
+- Updated Fortran syntax highlighting (Yifan Song)
 
 + Platform-Specific Changes:
 
@@ -50,6 +51,10 @@ Rex Young for contributing to this release.
 - Print output would be clipped if the "print header" option was
   switched off.
 - Fixed obscure deadlock condition in ReadWriteLock.java (Rex Young).
+- The drop down box on a history text field was painted in the menu
+  foreground, not the text field foreground. This could look bad if text
+  field colors were customized using the "Use jEdit text area colors in
+  all text components".
 
 * Version 4.1pre5
 
