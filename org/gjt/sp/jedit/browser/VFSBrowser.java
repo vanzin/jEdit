@@ -660,7 +660,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 					}
 				}
 
-				browserView.directoryLoaded(directoryVector);
+				browserView.directoryLoaded(path,directoryVector);
 			}
 		});
 	} //}}}
@@ -957,7 +957,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				{
 					public void run()
 					{
-						browserView.requestFocus();
+						browserView.requestDefaultFocus();
 					}
 				});
 			}
@@ -1018,80 +1018,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 				focusClickFlag = false;
 			}
 		}
-	} //}}}
-
-	//{{{ UpMenuButton class
-	class UpMenuButton extends JButton
-	{
-		//{{{ UpMenuButton constructor
-		UpMenuButton(JButton upButton)
-		{
-			// for a better-looking GUI, we display the popup
-			// as if it is from the 'up' button, not the arrow
-			// to the right of it
-			this.upButton = upButton;
-
-			setIcon(GUIUtilities.loadIcon(
-				jEdit.getProperty("vfs.browser.up-menu.icon")));
-			UpMenuButton.this.setToolTipText(jEdit.getProperty(
-				"vfs.browser.up-menu.label"));
-
-			UpMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(0,0,0,0));
-			UpMenuButton.this.addMouseListener(new MouseHandler());
-		} //}}}
-
-		//{{{ Private members
-		private JButton upButton;
-		private JPopupMenu popup;
-
-		private void createPopup()
-		{
-			popup = new JPopupMenu();
-			ActionHandler actionHandler = new ActionHandler();
-
-			VFS vfs = VFSManager.getVFSForPath(path);
-			String dir = vfs.getParentOfPath(path);
-			for(;;)
-			{
-				JMenuItem menuItem = new JMenuItem(dir);
-				menuItem.addActionListener(actionHandler);
-				popup.add(menuItem);
-				String parentDir = vfs.getParentOfPath(dir);
-				if(parentDir.equals(dir))
-					break;
-				else
-					dir = parentDir;
-			}
-		} //}}}
-
-		//{{{ ActionHandler class
-		class ActionHandler implements ActionListener
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				setDirectory(evt.getActionCommand());
-			}
-		} //}}}
-
-		//{{{ MouseHandler class
-		class MouseHandler extends MouseAdapter
-		{
-			public void mousePressed(MouseEvent evt)
-			{
-				if(popup == null || !popup.isVisible())
-				{
-					createPopup();
-					GUIUtilities.showPopupMenu(popup,
-						upButton,0,upButton.getHeight());
-				}
-				else
-				{
-					popup.setVisible(false);
-					popup = null;
-				}
-			}
-		} //}}}
 	} //}}}
 
 	//{{{ CommandsMenuButton class
@@ -1197,7 +1123,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 			public void actionPerformed(ActionEvent evt)
 			{
 				if(evt.getActionCommand().equals("plugin-manager"))
-					new org.gjt.sp.jedit.pluginmgr.PluginManager(view);
+				{
+					new org.gjt.sp.jedit.pluginmgr.PluginManager(
+						JOptionPane.getFrameForComponent(
+						VFSBrowser.this));
+				}
 				else
 				{
 					VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());

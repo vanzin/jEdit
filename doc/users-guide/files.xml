@@ -4,7 +4,7 @@
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>New File</guimenuitem> (shortcut:
+   <guimenu>File</guimenu>&gt;<guimenuitem>New</guimenuitem> (shortcut:
    <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new
    untitled buffer. When it is saved, a file will be created on disk.
    Another way to create a new file is to specify a non-existent file
@@ -13,14 +13,14 @@
  </sect1>
  <sect1 id="opening"><title>Opening Files</title>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Open File</guimenuitem> (shortcut:
+   <guimenu>File</guimenu>&gt;<guimenuitem>Open</guimenuitem> (shortcut:
    <keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo>) displays
    a file selector dialog box and loads the specified file into a new
    buffer. Multiple files can be opened at once by holding down
    <keycap>Control</keycap> while clicking on them in the file system browser.
   </para>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Insert File</guimenuitem> displays
+   <guimenu>File</guimenu>&gt;<guimenuitem>Insert</guimenuitem> displays
    a file selector dialog box and inserts the specified file into the current
    buffer.
   </para>
@@ -60,7 +60,7 @@
    saves the current buffer to disk.
   </para>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Save All Buffers</guimenuitem>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save All</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) saves all
    open buffers to disk, asking for confirmation first.
@@ -431,7 +431,7 @@
    has unsaved changes.
   </para>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Reload All Buffers</guimenuitem>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Reload All</guimenuitem>
    discards unsaved changes in all open buffers and reload them from disk,
    asking for confirmation first.
   </para>
@@ -487,13 +487,13 @@
  </sect1>
  <sect1 id="closing-exiting"><title>Closing Files and Exiting jEdit</title>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Close Buffer</guimenuitem>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Close</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
    closes the current buffer. If it has unsaved changes, jEdit
    will ask if they should be saved first.
   </para>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Close All Buffers</guimenuitem>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Close All</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
    closes all buffers. If any buffers have unsaved

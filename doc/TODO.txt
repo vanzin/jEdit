@@ -1,5 +1,6 @@
 TO DO
 
+- content manager corruption bug
 - check: backup dir path can contain ~. also, 'choose' button
 - colors opt pane broken
 - fs browser: after dir load, focus in b view
@@ -14,15 +15,12 @@ TO DO
 - style setting for folding line indicator
 - search in directory: should use that file's extension
 - search in directory: should not be so slow
-- test browse ~ while on FTP
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
 - check: pressing Enter on an open file
 - stylesheet: keycap inside keycombo
 - documentation to do
   - miscutils stuff vfs aware
-  - new labels for new-file, open-file, insert-file, reload-all, save-all,
-    close, close-all
   - shifting the indent changes
   - indent on tab enabled by default and behavior change
   - fs browser usability tweaks
@@ -66,7 +64,7 @@ TO DO
   - double click on dockable panel to hide
   - CCW rotated text not drawn correctly
 - file system browser:
-  - Parent dir list in split pane
+  - try 'edit favorites'; list problems?
   - commands->copy path, copy file list, paste path
   - much better autocomplete
   - aliases

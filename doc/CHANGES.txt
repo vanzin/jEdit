@@ -22,13 +22,27 @@ JEDIT 4.0 VERSION HISTORY
 
 + Enhancements
 
+- File system browser improvements:
+  - Parent directories are now listed in a widget at the top of the
+    file system browser
+  - File->Recent Directories menu lists directories that were recently
+    visted in the file system browser
+  - File selection dialog boxes now have a status bar that shows the
+    number of pending I/O requests
+  - Middle mouse button click in file system browser now has the same
+    effect as double-clicking
+  - You can now enter relative paths in the file system browser's path
+    field
+  - 'More' menu split into 'Commands' and 'Plugins' menus
+  - 'Commands' menu and tool bar now have the same set of commands
+  - 'Favorites' menu added for quicker access to favorites
 - Icon added to 'BeanShell Error' dialog box
 - Updated PV-WAVE mode (Ed Stewart)
+- Updated Transact-SQL mode (Ollie Rutherfurd)
+- Updated Omnimark mode (Lionel Fiol)
 - Closing a docked window now returns focus to the text area
 - Memory indicator tooltip now shows used and total Java heap memory in
   kilobytes
-- Updated Transact-SQL mode (Ollie Rutherfurd)
-- Updated Omnimark mode (Lionel Fiol)
 - Option for search and replace to beep on auto wrap (Kenrick Drew)
 - Faster (in theory anyway) file loading as a side effect of some bug
   fixes
@@ -44,18 +58,6 @@ JEDIT 4.0 VERSION HISTORY
 - If indent on tab is enabled, a line will only be indented if Tab is
   pressed inside the leading whitespace of that line. Indent on tab is
   now enabled by default
-- File system browser improvements:
-  - File->Recent Directories menu lists directories that were recently
-    visted in the file system browser
-  - File selection dialog boxes now have a status bar that shows the
-    number of pending I/O requests
-  - Middle mouse button click in file system browser now has the same
-    effect as double-clicking
-  - You can now enter relative paths in the file system browser's path
-    field
-  - 'More' menu split into 'Commands' and 'Plugins' menus
-  - 'Commands' menu and tool bar now have the same set of commands
-  - 'Favorites' menu added for quicker access to favorites
 
 + Bug Fixes
 

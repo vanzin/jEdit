@@ -3086,7 +3086,7 @@ public class Buffer implements EBComponent
 	 */
 	public String toString()
 	{
-		return name + " (" + vfs.getParentOfPath(path) + ")";
+		return name + " (" + MiscUtilities.getParentOfPath(path) + ")";
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -3249,7 +3249,6 @@ public class Buffer implements EBComponent
 	//}}}
 
 	//{{{ Instance variables
-
 	private VFS vfs;
 	private String path;
 	private String name;
@@ -3285,12 +3284,11 @@ public class Buffer implements EBComponent
 	private void setPath(String path)
 	{
 		this.path = path;
+		name = MiscUtilities.getFileName(path);
 
 		vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setReadOnly(true);
-
-		name = vfs.getFileName(path);
 
 		if(vfs instanceof FileVFS)
 		{
