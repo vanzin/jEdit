@@ -45,6 +45,9 @@ JEDIT 4.2 VERSION HISTORY
 
 - -nobackground command-line switch did not actually work.
 
+- Title bar "modified" indicator was not displayed for recovered
+  autosave files.
+
 }}}
 {{{ API Changes
 
@@ -53,6 +56,16 @@ JEDIT 4.2 VERSION HISTORY
   org.gjt.sp.jedit.menu.DynamicMenuProvider
 
 - EditPlugin.start() is always called from the AWT thread now.
+
+- Added a method to bsh.NameSpace:
+
+  addCommandPath(String path, Class clas)
+
+  You can call this on BeanShell.getNameSpace(). BeanShell will search
+  for resources named path + methodName + ".bsh" in the class loader of
+  the given class when an undeclared method is invoked. Plugins can use
+  this to provide additional scripting commands, the Console plugin uses
+  this for example.
 
 }}}
 

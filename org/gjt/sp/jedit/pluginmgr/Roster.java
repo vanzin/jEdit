@@ -144,8 +144,6 @@ class Roster
 	//{{{ finishOperations() method
 	private void finishOperations()
 	{
-		System.err.println(toLoad);
-
 		// add the JARs before checking deps since dep check might
 		// require all JARs to be present
 		for(int i = 0; i < toLoad.size(); i++)
@@ -231,14 +229,16 @@ class Roster
 			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
+			{
 				unloadPluginJAR(jar);
+				String cachePath = jar.getCachePath();
+				if(cachePath != null)
+					new File(cachePath).delete();
+			}
 
 			toLoad.remove(plugin);
 
 			// remove cache file
-			String cachePath = jar.getCachePath();
-			if(cachePath != null)
-				new File(cachePath).delete();
 
 			// move JAR first
 			File jarFile = new File(plugin);

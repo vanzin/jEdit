@@ -40,6 +40,7 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.net.URL;
 
 /**
     A namespace	in which methods, variables, and imports (class names) live.  
@@ -79,6 +80,7 @@ public class NameSpace
     private Hashtable methods;
     private Hashtable importedClasses;
     private Vector importedPackages;
+	private Vector importedCommands;
 	transient private BshClassManager classManager;
 
 	// See notes in getThis()
@@ -400,7 +402,10 @@ public class NameSpace
 
 		// If we are disconnected from root we need to handle the def imports
 		if ( parent == null )
+		{
+			addCommandPath("/bsh/commands/",getClass());
 			loadDefaultImports();
+		}
 	}
 
 	/**
@@ -1154,6 +1159,73 @@ public class NameSpace
 		throw new UtilEvalError ("Can't assign " + rhsType + " to "	+ lhsType);
     }
 
+	static class CommandPathEntry
+	{
+		String path;
+		Class clas;
+
+		CommandPathEntry(String path, Class clas)
+		{
+			this.path = path;
+			this.clas = clas;
+		}
+	}
+
+	/**
+		Adds a URL to the command path.
+	*/
+	public void addCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
+			importedCommands = new Vector();
+
+		importedCommands.addElement(new CommandPathEntry(path,clas));
+	}
+
+	/**
+		Remove a URLfrom the command path.
+	*/
+	public void removeCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
+			return;
+
+		for(int i = 0; i < importedCommands.size(); i++)
+		{
+			CommandPathEntry entry = (CommandPathEntry)importedCommands
+				.elementAt(i);
+			if(entry.path.equals(path) && entry.clas == clas)
+			{
+				importedCommands.removeElementAt(i);
+				return;
+			}
+		}
+	}
+
+	/**
+		Looks up a command.
+	*/
+	public URL getCommand(String name)
+	{
+		if(importedCommands != null)
+		{
+			String extName = name + ".bsh";
+			for(int i = importedCommands.size() - 1; i >= 0; i--)
+			{
+				CommandPathEntry entry = (CommandPathEntry)importedCommands
+					.elementAt(i);
+				URL url = entry.clas.getResource(entry.path + extName);
+				if(url != null)
+					return url;
+			}
+		}
+
+		if(parent == null)
+			return null;
+		else
+			return parent.getCommand(name);
+	}
+
 	public String toString() {
 		return
 			"NameSpace: "
@@ -1347,8 +1419,12 @@ public class NameSpace
 		methods = null;
 		importedClasses = null;
 		importedPackages = null;
+		importedCommands = null;
 		if ( parent == null )
-			loadDefaultImports();	
+		{
+			addCommandPath("/bsh/commands/",getClass());
+			loadDefaultImports();
+		}
     	classCache = null;
 		names = null;
 	}

@@ -3,18 +3,21 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- right-click with empty fsb tree broken
+- clear toExpand list in fsb
+- moving a dir from an expanded branch to root doesn't reload root
+- action bar focus problems with window maker
+- removing a plugin doesn't update install plugins tab
+- isn't fsb dir search supposed to use selected file's extension?
+- quicknotepad: use a box not a tool bar
+- C+b, action bar: insert longest common prefix
 - help viewer: listen for plugin load/unload and update toc
 - log: copy button should copy whole log if nothing is selected
 - editing option pane is not very intuitive
-- recovered autosave not a new file
-- recovering an autosave: not dirty
-- bsh command path
 - beanshell: invokeAction() function
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - up arrow before buffer is loaded
-- check plugin mgr reload
-- ditch plugin mgr's install complete, etc. dialog
 - note about dependencies
 - unloading fold handlers should update buffers
 - split view line insert: repainted twice, selection problems
