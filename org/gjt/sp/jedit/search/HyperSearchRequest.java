@@ -61,6 +61,12 @@ public class HyperSearchRequest extends WorkRequest
 		int resultCount = 0;
 		int bufferCount = 0;
 
+		// to minimise synchronization and stuff like that, we only
+		// show a status message at most twice a second
+
+		// initially zero, so that we always show the first message
+		long lastStatusTime = 0;
+
 		String[] files = fileset.getFiles(view);
 
 		try
@@ -81,9 +87,16 @@ public class HyperSearchRequest extends WorkRequest
 loop:				for(int i = 0; i < files.length; i++)
 				{
 					String file = files[i];
-					setStatus(jEdit.getProperty("hypersearch.status",
-						new String[] { file }));
-					setProgressValue(++current);
+					current++;
+
+					long currentTime = System.currentTimeMillis();
+					if(currentTime - lastStatusTime > 500)
+					{
+						setStatus(jEdit.getProperty("hypersearch.status",
+							new String[] { file }));
+						setProgressValue(current);
+						lastStatusTime = currentTime;
+					}
 
 					Buffer buffer = jEdit.openTemporary(null,null,file,false);
 					if(buffer == null)

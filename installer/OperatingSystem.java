@@ -49,15 +49,18 @@ public abstract class OperatingSystem
 		if(os != null)
 			return os;
 
-		String osName = System.getProperty("os.name");
-		if(osName.indexOf("Windows") != -1)
-			os = new Windows();
-		else if(osName.indexOf("Mac") != -1)
+		if(System.getProperty("mrj.version") != null)
 			os = new MacOS();
-		else if(osName.indexOf("OS/2") != -1)
-			os = new HalfAnOS();
 		else
-			os = new Unix();
+		{
+			String osName = System.getProperty("os.name");
+			if(osName.indexOf("Windows") != -1)
+				os = new Windows();
+			else if(osName.indexOf("OS/2") != -1)
+				os = new HalfAnOS();
+			else
+				os = new Unix();
+		}
 
 		return os;
 	}

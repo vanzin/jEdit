@@ -34,12 +34,12 @@ import org.gjt.sp.jedit.*;
 
 public class FileCellRenderer extends DefaultTreeCellRenderer
 {
-	public static Icon fileIcon = GUIUtilities.loadIcon("file.gif");
-	public static Icon openFileIcon = GUIUtilities.loadIcon("open_file.gif");
-	public static Icon dirIcon = GUIUtilities.loadIcon("closed_folder.gif");
-	public static Icon openDirIcon = GUIUtilities.loadIcon("open_folder.gif");
+	public static Icon fileIcon = GUIUtilities.loadIcon("File.png");
+	public static Icon openFileIcon = GUIUtilities.loadIcon("OpenFile.png");
+	public static Icon dirIcon = GUIUtilities.loadIcon("Folder.png");
+	public static Icon openDirIcon = GUIUtilities.loadIcon("OpenFolder.png");
 	public static Icon filesystemIcon = GUIUtilities.loadIcon("drive.gif");
-	public static Icon loadingIcon = GUIUtilities.loadIcon("drive.gif");
+	public static Icon loadingIcon = GUIUtilities.loadIcon("ReloadSmall.png");
 
 	//{{{ FileCellRenderer constructor
 	public FileCellRenderer()

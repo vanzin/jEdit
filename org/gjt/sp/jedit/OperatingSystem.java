@@ -116,33 +116,36 @@ public class OperatingSystem
 	//{{{ Class initializer
 	static
 	{
-		String osName = System.getProperty("os.name");
-		if(osName.indexOf("Windows 9") != -1
-			|| osName.indexOf("Windows ME") != -1)
+		if(System.getProperty("mrj.version") != null)
 		{
-			os = WINDOWS_9x;
-		}
-		else if(osName.indexOf("Windows") != -1)
-		{
-			os = WINDOWS_NT;
-		}
-		else if(osName.indexOf("OS/2") != -1)
-		{
-			os = OS2;
-		}
-		else if(File.separatorChar == '/'
-			&& new File("/dev").isDirectory())
-		{
-			if(osName.indexOf("Mac OS X") != -1)
-				os = MAC_OS_X;
-			else
-				os = UNIX;
+			os = MAC_OS_X;
 		}
 		else
 		{
-			os = UNKNOWN;
-			Log.log(Log.WARNING,OperatingSystem.class,
-				"Unknown operating system: " + osName);
+			String osName = System.getProperty("os.name");
+			if(osName.indexOf("Windows 9") != -1
+				|| osName.indexOf("Windows ME") != -1)
+			{
+				os = WINDOWS_9x;
+			}
+			else if(osName.indexOf("Windows") != -1)
+			{
+				os = WINDOWS_NT;
+			}
+			else if(osName.indexOf("OS/2") != -1)
+			{
+				os = OS2;
+			}
+			else if(File.separatorChar == '/')
+			{
+				os = UNIX;
+			}
+			else
+			{
+				os = UNKNOWN;
+				Log.log(Log.WARNING,OperatingSystem.class,
+					"Unknown operating system: " + osName);
+			}
 		}
 
 		if(System.getProperty("java.version").compareTo("1.4") >= 0)
