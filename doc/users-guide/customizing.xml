@@ -73,6 +73,18 @@
       See <xref linkend="folding" />.</entry>
      </row>
      <row>
+      <entry><varname>deepIndent</varname></entry>
+      <entry>When set to <quote>true</quote>, multiple-line expressions delimited by parentheses are aligned like so:
+      <programlisting>retVal.x = (int)(horizontalOffset
+    + Chunk.offsetToX(info.chunks,
+                      offset));</programlisting>
+      With this setting disabled, the text would look like so:
+      <programlisting>retVal.x = (int)(horizontalOffset
+    + Chunk.offsetToX(info.chunks,
+    offset));</programlisting>
+      </entry>
+     </row>
+     <row>
       <entry><varname>folding</varname></entry>
       <entry>The fold mode; one of <quote>none</quote>, <quote>indent</quote>,
       <quote>explicit</quote>, or the name of a plugin folding mode.
@@ -168,7 +180,7 @@
   </sect2><sect2 id="appearance-pane"><title>The Appearance Pane</title>
   <para>
    The <guibutton>Appearance</guibutton> pane can be used to change the
-   appearance of user interface controls such as buttons, labels and menus.
+   appearance of user interface controls such as buttons, labels and menus. The number of items retained in history text fields can also be set here; see <xref linkend="history"/>.
   </para>
   <para>
    Note that changes to certain settings such as the Swing look and feel require a restart of jEdit to take effect.
@@ -181,7 +193,7 @@
   </sect2><sect2 id="context-pane"><title>The Context Menu Pane</title>
   <para>
    The <guibutton>Context Menu</guibutton> option pane edits the text
-   area's right-click context menu.
+   area's right-click context menu. See <xref linkend="views"/>.
   </para>
   </sect2>
   <sect2 id="editing-pane"><title>The Editing Pane</title>
@@ -212,7 +224,7 @@
   </sect2><sect2 id="gutter-pane"><title>The Gutter Pane</title>
   <para>
    The <guibutton>Gutter</guibutton> option pane contains settings to
-   customize the appearance of the gutter.
+   customize the appearance of the gutter. See <xref linkend="textarea"/>.
   </para>
   </sect2><sect2 id="printing-pane"><title>The Printing Pane</title>
   <para>
@@ -221,13 +233,13 @@
   </para>
   </sect2><sect2 id="plugin-mgr-pane"><title>The Plugin Manager Pane</title>
   <para>
-   The <guibutton>Plugin Manager</guibutton> pane XXX
+   The <guibutton>Plugin Manager</guibutton> pane contains a chooser for the desired download mirror, as well as various settings such as the directory where plugins are to be installed. See <xref linkend="using-plugins"/>.
   </para>
   </sect2><sect2 id="firewall-pane"><title>The Proxy Servers Pane</title>
   <para>
    The <guibutton>Proxy Servers</guibutton> option pane lets you specify HTTP
-   and SOCKS proxy servers to use when jEdit makes network connections (for
-   example, when the plugin manager downloads plugins).
+   and SOCKS proxy servers to use when jEdit makes network connections, for
+   example when downloading plugins.
   </para>
   </sect2><sect2 id="shortcuts-pane"><title>The Shortcuts Pane</title>
   <para>
@@ -246,22 +258,26 @@
   </sect2><sect2 id="status-bar-pane"><title>The Status Bar Pane</title>
   <para>
    The <guibutton>Status Bar</guibutton> option pane contains settings to customize the
-   status bar, or disable it completely.
+   status bar, or disable it completely. See <xref linkend="status-bar"/>.
   </para>
   </sect2><sect2 id="syntax-hilite-pane"><title>The Syntax Highlighting Pane</title>
   <para>
    The <guibutton>Syntax Highlighting</guibutton> pane can be used to
-   customize the fonts and colors for syntax highlighting.
+   customize the fonts and colors for syntax highlighting. See <xref linkend="syntax-hilite"/>.
   </para>
   </sect2><sect2 id="text-area-pane"><title>The Text Area Pane</title>
   <para>
    The <guibutton>Text Area</guibutton> pane contains settings to customize
-   the appearance of the text area.
+   the appearance of the text area. See <xref linkend="textarea"/>.
   </para>
   </sect2><sect2 id="toolbar-pane"><title>The Tool Bar Pane</title>
   <para>
    The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
-   or disable it completely.
+   or disable it completely. See <xref linkend="views"/>.
+  </para>
+  </sect2><sect2 id="view-pane"><title>The View Pane</title>
+  <para>
+   The <guibutton>View</guibutton> option pane lets you change various settings related to the editor window's appearance, including the arrangement of dockable windows, and if the search bar and buffer switcher should be visible. See <xref linkend="views"/>.
   </para>
   </sect2><sect2 id="vfs-browser-pane"><title>The File System Browser Panes</title>
   <para>
@@ -327,26 +343,29 @@
    </para></listitem>
    <listitem><para><filename>jars</filename> - this directory contains
    plugins. See <xref linkend="using-plugins" />.</para></listitem>
+   <listitem><para><filename>jars-cache</filename> - this directory contains
+   plugin cache files which decrease the time to start jEdit. They are automatically updated when plugins are installed or updated.</para></listitem>
    <listitem><para><filename>macros</filename> - this directory contains
    macros. See <xref linkend="using-macros" />.</para></listitem>
    <listitem><para><filename>modes</filename> - this directory contains custom
    edit modes. See <xref linkend="writing-modes-part" />.
    </para></listitem>
+   <listitem><para><filename>perspective.xml</filename> - an XML file that stores the list of open buffers and views used to maintain editor state between sessions.</para></listitem>
    <listitem><para><filename>PluginManager.download</filename> - this directory
    is usually empty. It only contains files while the plugin manager is
    downloading a plugin. For information about the plugin manager,
    see <xref linkend="using-plugins" />.</para></listitem>
-   <listitem><para><filename>printspec</filename> - a binary file which
+   <listitem><para><filename>printspec</filename> - a binary file that
    stores printing settings when running under Java 2 version 1.4.
    </para></listitem>
-   <listitem><para><filename>properties</filename> - a plain text file which
+   <listitem><para><filename>properties</filename> - a plain text file that
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent.xml</filename> - an XML file which stores
    the list of recently opened files. jEdit remembers the caret position and
    character encoding of each recent file, and
    automatically restores those values when one of the files is opened.
    </para></listitem>
-   <listitem><para><filename>registers.xml</filename> - an XML file which stores
+   <listitem><para><filename>registers.xml</filename> - an XML file that stores
    register contents. See <xref linkend="registers"/> for more information
    about registers.
    </para></listitem>
@@ -354,13 +373,11 @@
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.
    </para></listitem>
-   <listitem><para><filename>session</filename> - a list of files, used when
-   restoring previously open files on startup.</para></listitem>
    <listitem><para><filename>settings-backups</filename> - this directory
    contains numbered backups of all automatically-written settings files
    (<filename>abbrevs</filename>, <filename>activity.log</filename>,
    <filename>history</filename>, <filename>properties</filename>,
-   <filename>recent.xml</filename>, and <filename>session</filename>).
+   <filename>recent.xml</filename>, and <filename>perspective.xml</filename>).
    </para></listitem>
   </itemizedlist>
  </sect1>

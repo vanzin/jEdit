@@ -229,6 +229,8 @@ contributing to this release.
   array offsets if a buffer change resulted in the text area being
   scrolled.
 
+- Glob patterns of the form {!{a,b,c}} didn't work properly.
+
 }}}
 {{{ API Changes
 

@@ -485,11 +485,7 @@
    The <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
    Progress
    Monitor</guimenuitem> command displays a window with more detailed status
-   information and progress meters. This window is floating by default, but
-   it can be set to dock into the view in the
-   <guibutton>Docking</guibutton> pane of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="docking" />. I/O requests can also be aborted in
+   information and progress meters. By default, the <guimenuitem>I/O Progress Monitor</guimenuitem> is shown in a floating window. It can be docked using the commands shown when clicking the popup menu button in the top-left corner; see <xref linkend="docking" />. I/O requests can also be aborted in
    this window, however note that aborting a buffer save can result in data loss.
   </para>
   <!-- <para>
@@ -517,7 +513,7 @@
    The print output
    can be customized in the <guibutton>Printing</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box. The following settings can be changed:
+   Options</guimenuitem> dialog box; see <xref linkend="printing-pane"/>. The following settings can be changed:
   </para>
   <itemizedlist>
    <listitem><para>The font to use when printing.</para></listitem>

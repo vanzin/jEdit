@@ -279,7 +279,7 @@
   </para>
   <para>
    To aid in locating the caret, the current line is drawn with a
-   different background color. To make it clear which lines end with
+   different background color. To make it clear which lines end w,ith
    white space, end of line markers are drawn at the end of each line.
   </para>
   <para>
@@ -364,5 +364,8 @@
   </para>
   </formalpara></listitem>
  </itemizedlist>
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Last Action</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Space</keycap></keycombo>) repeats the most recently invoked editor command.
+  </para>
  </sect1>
 </chapter>

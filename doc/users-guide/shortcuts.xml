@@ -134,9 +134,9 @@
    </tgroup>
   </informaltable>
 
- <bridgehead renderas="sect1">Repeating</bridgehead>
+ <bridgehead renderas="sect1">Action Bar</bridgehead>
   <para>
-   For details, see <xref linkend="repeat" />.
+   For details, see <xref linkend="action-bar" />.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">
@@ -144,10 +144,14 @@
     <tbody>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-      <keycap><replaceable>number</replaceable></keycap>
-      <keycap><replaceable>command</replaceable></keycap></entry>
-      <entry>Repeat the command (it can be a keystroke, menu item selection or
-      tool bar click) the specified number of times.
+      </entry>
+      <entry>Display the action bar and give it keyboard focus.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>Space</keycap></keycombo>
+      </entry>
+      <entry>Repeat last editor action.
       </entry>
      </row>
     </tbody>
@@ -275,6 +279,11 @@
       <entry>Select line range.</entry>
      </row>
      <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>\</keycap></keycombo>
+      </entry>
+      <entry>Switch between range and rectangular selection mode.</entry>
+     </row>
+     <row>
       <entry><keycombo><keycap>Control</keycap><keycap>\</keycap></keycombo>
       </entry>
       <entry>Switch between single and multiple selection mode.</entry>
@@ -294,11 +303,11 @@
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></keycombo></entry>
-      <entry>Ensure current line is visible.</entry>
+      <entry>Ensure current line is visible, and send focus to the text area.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></keycombo></entry>
+      <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo></keycombo></entry>
       <entry>Center caret on screen.</entry>
      </row>
      <row>
@@ -466,6 +475,12 @@
       </keycombo></keycombo></entry>
       <entry>Paste previous.</entry>
      </row>
+     <row>
+      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>Y</keycap>
+      </keycombo></keycombo></entry>
+      <entry>Paste deleted.</entry>
+     </row>
     </tbody>
    </tgroup>
   </informaltable>
@@ -577,6 +592,16 @@
       <entry><keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo></entry>
       <entry>HyperSearch for word under the caret.</entry>
      </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></entry>
+      <entry>Toggle ignore case.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo></entry>
+      <entry>Toggle regular expressions.</entry>
+     </row>
     </tbody>
    </tgroup>
   </informaltable>
@@ -617,12 +642,12 @@
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo></keycombo></entry>
-      <entry>Wing comment selection.</entry>
+      <entry>Range comment selection.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></keycombo></entry>
-      <entry>Box comment selection.</entry>
+      <keycombo><keycap>Control</keycap><keycap>K</keycap></keycombo></keycombo></entry>
+      <entry>Line comment selection.</entry>
      </row>
     </tbody>
    </tgroup>
