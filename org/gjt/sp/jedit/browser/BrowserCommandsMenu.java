@@ -189,11 +189,10 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 		ButtonGroup grp = new ButtonGroup();
 
-		StringTokenizer st = new StringTokenizer(
-			jEdit.getProperty("encodings"));
-		while(st.hasMoreTokens())
+		String[] encodings = MiscUtilities.getEncodings();
+		for(int i = 0; i < encodings.length; i++)
 		{
-			String encoding = st.nextToken();
+			 String encoding = encodings[i];
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(encoding);
 			mi.setActionCommand("encoding@" + encoding);
 			mi.addActionListener(actionHandler);

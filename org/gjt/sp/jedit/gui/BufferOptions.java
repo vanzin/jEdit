@@ -27,7 +27,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.StringTokenizer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -77,14 +76,7 @@ public class BufferOptions extends EnhancedDialog
 		//}}}
 
 		//{{{ Encoding
-		DefaultComboBoxModel encodings = new DefaultComboBoxModel();
-		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
-		while(st.hasMoreTokens())
-		{
-			encodings.addElement(st.nextToken());
-		}
-
-		encoding = new JComboBox(encodings);
+		encoding = new JComboBox(MiscUtilities.getEncodings());
 		encoding.setEditable(true);
 		encoding.setSelectedItem(buffer.getStringProperty(Buffer.ENCODING));
 		panel.addComponent(jEdit.getProperty("buffer-options.encoding"),
