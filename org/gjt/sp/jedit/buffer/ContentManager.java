@@ -50,13 +50,37 @@ public class ContentManager
 	} //}}}
 
 	//{{{ getText() method
+	public String getText(int start, int len)
+	{
+		if(start >= gapStart)
+		{
+			char[] retVal = new char[len];
+			System.arraycopy(text,start + gapEnd - gapStart,retVal,0,len);
+			return new String(retVal);
+		}
+		else if(start + length <= gapStart)
+		{
+			char[] retVal = new char[len];
+			System.arraycopy(text,start,retVal,0,len);
+			return new String(retVal);
+		}
+		else
+		{
+			return new String(text,start,gapStart - start)
+				.concat(new String(text,gapEnd,len + start - gapEnd));
+		}
+	} //}}}
+
+	//{{{ getText() method
 	public void getText(int start, int len, Segment seg)
 	{
-		if(start > gapStart)
-			start += (gapEnd - gapStart);
-
-		// optimization
-		if(start + length <= gapStart || start > gapStart)
+		if(start >= gapStart)
+		{
+			seg.array = text;
+			seg.offset = start + gapEnd - gapStart;
+			seg.count = len;
+		}
+		else if(start + length <= gapStart)
 		{
 			seg.array = text;
 			seg.offset = start;
@@ -66,17 +90,31 @@ public class ContentManager
 		{
 			if(seg.array == null || seg.array.length < len)
 				seg.array = new char[len];
-			System.arraycopy(text,start,seg.array,0,len);
+
+			// copy text before gap
+			System.arraycopy(text,start,seg.array,0,gapStart - start);
+
+			// copy text after gap
+			System.arraycopy(text,gapEnd,seg.array,gapStart - start,
+				len + start - gapEnd);
+
 			seg.offset = 0;
 			seg.count = len;
 		}
 	} //}}}
 
 	//{{{ insert() method
-	public void insert(int start, Segment str)
+	public void insert(int start, String str)
 	{
-		close(start,start + str.count * 2);
-		System.arraycopy(str.array,str.offset,text,start,str.count);
+		close(start,start + str.length() * 2);
+		str.getChars(0,str.length(),text,start);
+	} //}}}
+
+	//{{{ insert() method
+	public void insert(int start, Segment seg)
+	{
+		close(start,start + seg.count * 2);
+		System.arraycopy(seg.array,seg.offset,text,start,seg.count);
 	} //}}}
 
 	//{{{ remove() method

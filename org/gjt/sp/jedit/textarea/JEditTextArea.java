@@ -2161,12 +2161,10 @@ forward_scan:		do
 		invalidateLine(caretLine);
 
 		if(caretLine != newCaretLine)
-		{
 			invalidateLine(newCaretLine);
 
-			if(!foldVisibilityManager.isLineVisible(newCaretLine))
-				foldVisibilityManager.expandFold(newCaretLine,false);
-		}
+		if(!foldVisibilityManager.isLineVisible(newCaretLine))
+			foldVisibilityManager.expandFold(newCaretLine,false);
 
 		caret = newCaret;
 		caretLine = newCaretLine;

@@ -49,7 +49,7 @@ The jEdit homepage, located at <http://www.jedit.org> contains the
 latest version of jEdit, along with plugin downloads. There is also a
 user-oriented site, <http://community.jedit.org>. Check it out.
 
-There are three mailing lists dedicated to jEdit; for details, visit
+There are several mailing lists dedicated to jEdit; for details, visit
 <http://www.jedit.org/index.php?page=lists>. The mailing lists are the
 preferred place to post feature suggestions, questions, and the like.
 

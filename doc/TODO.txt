@@ -2,11 +2,16 @@ TO DO
 
 + before 4.0pre1:
 
+- fucking hell... have to reintroduce BadLocationException
+- optimize ContentManager.close()
+- v2p/p2v: implement from end backward scan
+- stupid rest visible hack in offset manager
+- CVS remove/add IntegerArray.java
+- CVS add ReadWriteLock.java
+- settings files: save to #foo#save# first, then rename to foo
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
 - inserting line after closed fold issues -- fix in OffsetManager
-- check for out-of-bounds access in Buffer class
-- optimize content and offset managers
 - positions
 - new undo
 - narrowing
@@ -30,6 +35,7 @@ TO DO
 - mention Alt-key mnemonics
 - QuickNotepad XSL docs
 - write explicit folding tips
+- Alt-key sequences on OS X
 
 + features:
 
