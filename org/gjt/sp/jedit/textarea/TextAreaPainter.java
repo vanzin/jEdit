@@ -682,71 +682,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Package-private members
 
 	//{{{ lineToChunkList() method
-	Chunk lineToChunkList(Segment seg, Token tokens)
+	TextUtilities.Chunk lineToChunkList(Segment seg, Token tokens)
 	{
-		float x = 0.0f;
-
-		Chunk first = null;
-		Chunk current = null;
-
-		int tokenListOffset = 0;
-
-		while(tokens.id != Token.END)
-		{
-			int flushLen = 0;
-			int flushIndex = tokenListOffset;
-
-			for(int i = 0; i < tokens.length; i++)
-			{
-				char ch = seg.array[seg.offset + tokenListOffset + i];
-
-				if(ch != '\t')
-				{
-					flushLen++;
-					if(i != tokens.length - 1)
-						continue;
-				}
-
-				// inefficent, but GlyphVector API sucks
-				char[] text;
-				if(flushLen == 0)
-					text = null;
-				else
-				{
-					text = new char[flushLen];
-					System.arraycopy(seg.array,seg.offset
-						+ flushIndex,text,0,flushLen);
-				}
-
-				Chunk newChunk = new Chunk(x,tokens.id,text,
-					flushIndex);
-				if(current == null)
-					current = first = newChunk;
-				else
-				{
-					current.next = newChunk;
-					current = newChunk;
-				}
-
-				flushLen = 0;
-
-				x += newChunk.width;
-
-				flushIndex = tokenListOffset + i + 1;
-
-				if(ch == '\t')
-				{
-					current.length++;
-					x = nextTabStop(x,i - seg.offset);
-					current.width = x - current.x;
-				}
-			}
-
-			tokenListOffset += tokens.length;
-			tokens = tokens.next;
-		}
-
-		return first;
+		return TextUtilities.lineToChunkList(seg,tokens,styles,
+			fontRenderContext,this);
 	} //}}}
 
 	//}}}
@@ -829,30 +768,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setFont(defaultFont);
 			gfx.setColor(defaultColor);
 
-			int baseLine = y + fm.getHeight()
+			float baseLine = y + fm.getHeight()
 				- fm.getLeading() - fm.getDescent();
 
 			Segment seg = new Segment();
 			buffer.getLineText(physicalLine,seg);
-			Chunk chunks = lineToChunkList(seg,buffer.markTokens(physicalLine)
-				.getFirstToken());
+			TextUtilities.Chunk chunks = lineToChunkList(seg,buffer.markTokens(
+				physicalLine).getFirstToken());
 
-			int _x = 0;
-
-			while(chunks != null)
-			{
-				if(chunks.text != null)
-				{
-					gfx.setFont(chunks.style.getFont());
-					gfx.setColor(chunks.style.getForegroundColor());
-					gfx.drawGlyphVector(chunks.text,x + chunks.x,baseLine);
-				}
-
-				_x = (int)(chunks.x + chunks.width);
-				chunks = chunks.next;
-			}
-
-			x += _x;
+			x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine);
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);
@@ -1060,30 +984,4 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//}}}
-
-	//{{{ Chunk class
-	class Chunk
-	{
-		float x;
-		float width;
-		SyntaxStyle style;
-		int offset;
-		int length;
-		GlyphVector text;
-
-		Chunk next;
-
-		Chunk(float x, int tokenType, char[] text, int offset)
-		{
-			this.x = x;
-			style = styles[tokenType];
-			if(text != null)
-			{
-				this.text = style.getFont().createGlyphVector(fontRenderContext,text);
-				this.width = (float)this.text.getLogicalBounds().getWidth();
-				this.length = text.length;
-			}
-			this.offset = offset;
-		}
-	} //}}}
 }

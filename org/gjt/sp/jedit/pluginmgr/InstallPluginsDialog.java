@@ -1,5 +1,8 @@
 /*
  * InstallPluginsDialog.java - Plugin install dialog box
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -27,12 +31,14 @@ import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 class InstallPluginsDialog extends EnhancedDialog
 {
 	static final int INSTALL = 0;
 	static final int UPDATE = 1;
 
+	//{{{ InstallPluginsDialog constructor
 	InstallPluginsDialog(JDialog dialog, Vector model, int mode)
 	{
 		super(JOptionPane.getFrameForComponent(dialog),
@@ -53,14 +59,10 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		plugins = new JCheckBoxList(model);
 		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
-		JScrollPane scroller = new JScrollPane(plugins);
-		Dimension dim = scroller.getPreferredSize();
-		dim.height = 120;
-		scroller.setPreferredSize(dim);
-		panel.add(BorderLayout.CENTER,scroller);
+		panel.add(BorderLayout.CENTER,new JScrollPane(plugins));
 
 		JPanel panel2 = new JPanel(new BorderLayout());
-		panel2.setBorder(new EmptyBorder(6,0,0,0));
+		panel2.setBorder(new EmptyBorder(0,6,0,0));
 		JPanel labelBox = new JPanel(new GridLayout(
 			(mode == UPDATE ? 6 : 5),1,0,3));
 		labelBox.setBorder(new EmptyBorder(0,0,3,12));
@@ -155,7 +157,7 @@ class InstallPluginsDialog extends EnhancedDialog
 
 		panel2.add(BorderLayout.SOUTH,panel3);
 
-		panel.add(BorderLayout.SOUTH,panel2);
+		panel.add(BorderLayout.EAST,panel2);
 
 		content.add(BorderLayout.CENTER,panel);
 
@@ -180,22 +182,25 @@ class InstallPluginsDialog extends EnhancedDialog
 		pack();
 		setLocationRelativeTo(dialog);
 		show();
-	}
+	} //}}}
 
+	//{{{ ok() method
 	public void ok()
 	{
 		jEdit.setBooleanProperty("install-plugins.downloadSource.value",
 			downloadSource.isSelected());
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		cancelled = true;
 
 		dispose();
-	}
+	} //}}}
 
+	//{{{ installPlugins() method
 	void installPlugins(Roster roster)
 	{
 		if(cancelled)
@@ -219,9 +224,9 @@ class InstallPluginsDialog extends EnhancedDialog
 			PluginList.Plugin plugin = (PluginList.Plugin)selected[i];
 			plugin.install(roster,installDirectory,downloadSource.isSelected());
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JCheckBoxList plugins;
 	private JLabel name;
 	private JLabel author;
@@ -238,7 +243,9 @@ class InstallPluginsDialog extends EnhancedDialog
 
 	private boolean cancelled;
 	private Thread thread;
+	//}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -248,8 +255,9 @@ class InstallPluginsDialog extends EnhancedDialog
 			else
 				cancel();
 		}
-	}
+	} //}}}
 
+	//{{{ ListHandler class
 	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
@@ -307,5 +315,5 @@ class InstallPluginsDialog extends EnhancedDialog
 				description.setText(null);
 			}
 		}
-	}
+	} //}}}
 }

@@ -6,15 +6,18 @@ JEDIT 4.0 VERSION HISTORY
 
 - Firewall plugin integrated into editor core
 - Global Options dialog box now has an 'Overview' page
-- When running on Java 2 version 1.4, any JAR files named "jaxp.jar" are
-  ignored; on other Java versions, they are loaded. The next version of
-  the XML plugin will split xerces.jar into xerces.jar and jaxp.jar; so
-  it should work better on Java 1.4.
 - Better GZIP file auto-detection; previously, jEdit would check for a
   filename extension of .gz, now it checks for the GZIP magic number at
   the start of the file
 - Unicode files are now automatically detected as being such, and opened
   with the Unicode encoding
+- 'Narrow to Fold' on a collapsed fold now automatically expands the
+  fold
+- The complete word changes started in 4.0pre3 are now complete.
+  - UP/DOWN arrow keys wrap selection around in complete word list
+  - Keywords are now completed (and shown in the list in a bold font)
+  - The popup is updated on the fly if you type or press BACKSPACE while
+    it is showing
 
 + Bug Fixes
 

@@ -705,7 +705,7 @@ public class JEditTextArea extends JComponent
 	{
 		getLineText(line,lineSegment);
 
-		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
+		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
 		float x = 0.0f;
@@ -757,7 +757,7 @@ public class JEditTextArea extends JComponent
 
 		getLineText(line,lineSegment);
 
-		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
+		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
 		while(chunks != null)

@@ -768,6 +768,10 @@ public class FoldVisibilityManager
 	 */
 	public void narrow(int start, int end)
 	{
+		// ideally, this should somehow be rolled into the below loop.
+		if(!buffer._isLineVisible(start + 1,index))
+			expandFold(start,false);
+
 		int virtualLineCount = buffer._getVirtualLineCount(index);
 		for(int i = 0; i < start; i++)
 		{
