@@ -106,13 +106,17 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public void setSearchString(String searchString, int searchIn)
 	{
 		if(searchString == null)
+		{
 			find.setText(null);
+			searchCurrentBuffer.setSelected(true);
+		}
 		else
 		{
 			if(searchString.indexOf('\n') == -1)
 			{
 				find.setText(searchString);
 				find.selectAll();
+				searchCurrentBuffer.setSelected(true);
 			}
 			else if(searchIn == CURRENT_BUFFER)
 			{
@@ -203,7 +207,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	{
 		if(msg instanceof SearchSettingsChanged)
 		{
-			load();
+			if(!saving)
+				load();
 		}
 	} //}}}
 
@@ -242,6 +247,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	// buttons
 	private JButton findBtn, /* replaceBtn, */ replaceAndFindBtn, replaceAllBtn,
 		closeBtn;
+
+	private boolean saving;
 	//}}}
 
 	//{{{ SearchDialog constructor
@@ -596,83 +603,98 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	private boolean save(boolean cancel)
 	{
-		String filter = this.filter.getText();
-		this.filter.addCurrentToHistory();
-		if(filter.length() == 0)
-			filter = "*";
-
-		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-
-		if(searchSelection.isSelected())
-			fileset = new CurrentBufferSet();
-		else if(searchCurrentBuffer.isSelected())
+		try
 		{
-			fileset = new CurrentBufferSet();
+			// prevents us from handling SearchSettingsChanged
+			// as a result of below
+			saving = true;
+			SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
+			SearchAndReplace.setRegexp(regexp.isSelected());
+			SearchAndReplace.setReverseSearch(searchBack.isSelected());
+			SearchAndReplace.setAutoWrapAround(wrap.isSelected());
 
-			jEdit.setBooleanProperty("search.hypersearch.toggle",
-				hyperSearch.isSelected());
-		}
-		else if(searchAllBuffers.isSelected())
-			fileset = new AllBufferSet(filter);
-		else if(searchDirectory.isSelected())
-		{
-			String directory = this.directory.getText();
-			this.directory.addCurrentToHistory();
-			directory = MiscUtilities.constructPath(
-				view.getBuffer().getDirectory(),directory);
+			String filter = this.filter.getText();
+			this.filter.addCurrentToHistory();
+			if(filter.length() == 0)
+				filter = "*";
 
-			if((VFSManager.getVFSForPath(directory).getCapabilities()
-				& VFS.LOW_LATENCY_CAP) == 0)
+			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
+			if(searchSelection.isSelected())
+				fileset = new CurrentBufferSet();
+			else if(searchCurrentBuffer.isSelected())
 			{
-				if(cancel)
-					return false;
+				fileset = new CurrentBufferSet();
 
-				int retVal = GUIUtilities.confirm(
-					SearchDialog.this,"remote-dir-search",
-					null,JOptionPane.YES_NO_OPTION,
-					JOptionPane.WARNING_MESSAGE);
-				if(retVal != JOptionPane.YES_OPTION)
-					return false;
+				jEdit.setBooleanProperty("search.hypersearch.toggle",
+					hyperSearch.isSelected());
 			}
-
-			boolean recurse = searchSubDirectories.isSelected();
-
-			if(fileset instanceof DirectoryListSet)
+			else if(searchAllBuffers.isSelected())
+				fileset = new AllBufferSet(filter);
+			else if(searchDirectory.isSelected())
 			{
-				DirectoryListSet dset = (DirectoryListSet)fileset;
-				dset.setDirectory(directory);
-				dset.setFileFilter(filter);
-				dset.setRecursive(recurse);
-				EditBus.send(new SearchSettingsChanged(null));
+				String directory = this.directory.getText();
+				this.directory.addCurrentToHistory();
+				directory = MiscUtilities.constructPath(
+					view.getBuffer().getDirectory(),directory);
+
+				if((VFSManager.getVFSForPath(directory).getCapabilities()
+					& VFS.LOW_LATENCY_CAP) == 0)
+				{
+					if(cancel)
+						return false;
+
+					int retVal = GUIUtilities.confirm(
+						SearchDialog.this,"remote-dir-search",
+						null,JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+					if(retVal != JOptionPane.YES_OPTION)
+						return false;
+				}
+
+				boolean recurse = searchSubDirectories.isSelected();
+
+				if(fileset instanceof DirectoryListSet)
+				{
+					DirectoryListSet dset = (DirectoryListSet)fileset;
+					dset.setDirectory(directory);
+					dset.setFileFilter(filter);
+					dset.setRecursive(recurse);
+					EditBus.send(new SearchSettingsChanged(null));
+				}
+				else
+					fileset = new DirectoryListSet(directory,filter,recurse);
 			}
 			else
-				fileset = new DirectoryListSet(directory,filter,recurse);
+			{
+				// can't happen
+				fileset = null;
+			}
+
+			jEdit.setBooleanProperty("search.keepDialog.toggle",
+				keepDialog.isSelected());
+
+			boolean ok = true;
+
+			SearchAndReplace.setSearchFileSet(fileset);
+
+			if(find.getText().length() != 0)
+			{
+				find.addCurrentToHistory();
+				SearchAndReplace.setSearchString(find.getText());
+				replace.addCurrentToHistory();
+
+				SearchAndReplace.setReplaceString(replace.getText());
+			}
+			else
+				ok = false;
+
+			return ok;
 		}
-		else
+		finally
 		{
-			// can't happen
-			fileset = null;
+			saving = false;
 		}
-
-		jEdit.setBooleanProperty("search.keepDialog.toggle",
-			keepDialog.isSelected());
-
-		boolean ok = true;
-
-		SearchAndReplace.setSearchFileSet(fileset);
-
-		if(find.getText().length() != 0)
-		{
-			find.addCurrentToHistory();
-			SearchAndReplace.setSearchString(find.getText());
-			replace.addCurrentToHistory();
-
-			SearchAndReplace.setReplaceString(replace.getText());
-		}
-		else
-			ok = false;
-
-		return ok;
 	} //}}}
 
 	//{{{ closeOrKeepDialog() method
@@ -801,21 +823,14 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			Object source = evt.getSource();
 
-			if(source == ignoreCase)
-				SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
-			else if(source == regexp)
-				SearchAndReplace.setRegexp(regexp.isSelected());
-			else if(source == searchBack || source == searchForward)
-				SearchAndReplace.setReverseSearch(searchBack.isSelected());
-			else if(source == wrap)
-				SearchAndReplace.setAutoWrapAround(wrap.isSelected());
-			else if(source == searchCurrentBuffer)
+			if(source == searchCurrentBuffer)
 				hyperSearch.setSelected(false);
 			else if(source == searchSelection
 				|| source == searchAllBuffers
 				|| source == searchDirectory)
 				hyperSearch.setSelected(true);
 
+			save(false);
 			updateEnabled();
 		}
 	} //}}}

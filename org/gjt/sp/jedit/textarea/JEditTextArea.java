@@ -4746,8 +4746,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		view.processKeyEvent(evt,true);
 
-		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
+		/* if(!evt.isConsumed())
+			super.processKeyEvent(evt); */
 	} //}}}
 
 	//{{{ addTopComponent() method
@@ -5585,7 +5585,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.bracket",new Object[] { 
-			new Integer(match.startLine), text }));
+			new Integer(match.startLine + 1), text }));
 	} //}}}
 
 	//{{{ recalculateLastPhysicalLine() method

@@ -84,8 +84,29 @@ public class KeyEventTranslator
 			else
 			{
 				if(keyCode == KeyEvent.VK_TAB)
+				{
 					evt.consume();
-				returnValue = new Key(getModifierString(evt),keyCode,'\0');
+					returnValue = new Key(
+						getModifierString(evt),
+						keyCode,'\0');
+				}
+				else if(keyCode == KeyEvent.VK_SPACE)
+				{
+					if(modifiers == 0)
+						returnValue = null;
+					else
+					{
+						returnValue = new Key(
+							getModifierString(evt),
+							0,' ');
+					}
+				}
+				else
+				{
+					returnValue = new Key(
+						getModifierString(evt),
+						keyCode,'\0');
+				}
 			}
 			break;
 		case KeyEvent.KEY_TYPED:
@@ -96,27 +117,33 @@ public class KeyEventTranslator
 			case '\n':
 			case '\t':
 			case '\b':
-			case ' ':
 				return null;
+			case ' ':
+				if(modifiers != 0)
+					return null;
 			}
 
 			boolean mod;
-			if(System.currentTimeMillis()
-				-  KeyEventWorkaround.lastKeyTime < 750)
+			if(System.currentTimeMillis() -  KeyEventWorkaround
+				.lastKeyTime < 750)
 			{
-				if(modifiers == InputEvent.ALT_GRAPH_MASK)
+				int ignoreMods;
+				if(Debug.ALT_KEY_PRESSED_DISABLED)
 				{
-					mod = false;
-				}
-				else if((KeyEventWorkaround.modifiers
-					& ~(InputEvent.SHIFT_MASK | InputEvent.ALT_GRAPH_MASK)) != 0)
-				{
-					mod = true;
+					/* on MacOS, A+ can be user input */
+					ignoreMods = (InputEvent.SHIFT_MASK
+						| InputEvent.ALT_GRAPH_MASK
+						| InputEvent.ALT_MASK);
 				}
 				else
 				{
-					mod = false;
+					/* on MacOS, A+ can be user input */
+					ignoreMods = (InputEvent.SHIFT_MASK
+						| InputEvent.ALT_GRAPH_MASK);
 				}
+
+				mod = ((KeyEventWorkaround.modifiers
+					& ~ignoreMods) != 0);
 			}
 			else
 			{
@@ -197,6 +224,10 @@ public class KeyEventTranslator
 			Log.log(Log.ERROR,DefaultInputHandler.class,
 				"Invalid key stroke: " + keyStroke);
 			return null;
+		}
+		else if(key.equals("SPACE"))
+		{
+			return new Key(modifiersToString(modifiers),0,' ');
 		}
 		else
 		{

@@ -230,7 +230,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		{
 			public void run()
 			{
-				if(!multi.isSelected())
+				if(!multiStatus)
 				{
 					for(int i = 0; i < resultTreeRoot.getChildCount(); i++)
 					{
@@ -276,9 +276,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	private void updateMultiStatus()
 	{
 		if(multiStatus)
-			multi.setIcon(GUIUtilities.loadIcon("SingleResult.png"));
-		else
 			multi.setIcon(GUIUtilities.loadIcon("MultipleResults.png"));
+		else
+			multi.setIcon(GUIUtilities.loadIcon("SingleResult.png"));
 	} //}}}
 
 	//{{{ goToSelectedNode() method

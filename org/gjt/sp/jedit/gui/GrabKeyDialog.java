@@ -402,7 +402,9 @@ public class GrabKeyDialog extends JDialog
 			if(key.modifiers != null)
 				keyString.append(key.modifiers).append('+');
 
-			if(key.input != '\0')
+			if(key.input == ' ')
+				keyString.append("SPACE");
+			else if(key.input != '\0')
 				keyString.append(key.input);
 			else
 			{
