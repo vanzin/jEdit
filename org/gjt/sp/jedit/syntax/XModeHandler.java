@@ -207,6 +207,7 @@ public class XModeHandler extends HandlerBase
 		String text = new String(c, off, len);
 
 		if (tag == "EOL_SPAN" ||
+			tag == "EOL_SPAN_REGEXP" ||
 			tag == "MARK_PREVIOUS" ||
 			tag == "MARK_FOLLOWING" ||
 			tag == "SEQ" ||
