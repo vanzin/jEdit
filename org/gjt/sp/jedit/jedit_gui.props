@@ -1315,7 +1315,6 @@ options.loadsave.restore.cli=... even if file names were specified on the \
 options.loadsave.newView=Client instances open files in new view
 options.loadsave.persistentMarkers=Save marker positions
 options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
-options.loadsave.parseFully=More accurate syntax highlighting (slows file loading)
 options.loadsave.backupEverySave=Backup on every save
 #}}}
 
@@ -1334,6 +1333,7 @@ options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
+options.textarea.parseFully=More accurate (and slower) syntax highlighting
 #}}}
 
 #{{{ Gutter pane
