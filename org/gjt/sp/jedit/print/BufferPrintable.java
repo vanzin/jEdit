@@ -30,6 +30,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.ChunkCache;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -132,7 +133,7 @@ print_loop:	for(;;)
 
 				lineList.add(new Integer(++currentPhysicalLine));
 
-				TextUtilities.lineToChunkList(seg,tokens,styles,frc,
+				ChunkCache.lineToChunkList(seg,tokens,styles,frc,
 					e,(float)(pageWidth - lineNumberWidth),
 					lineList);
 				if(lineList.size() == currentLine + 1)
@@ -161,9 +162,9 @@ print_loop:	for(;;)
 
 			if(obj != null)
 			{
-				TextUtilities.Chunk line = (TextUtilities.Chunk)obj;
+				ChunkCache.Chunk line = (ChunkCache.Chunk)obj;
 
-				TextUtilities.paintChunkList(line,gfx,
+				ChunkCache.paintChunkList(line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
 					(float)(pageWidth - lineNumberWidth),

@@ -376,7 +376,10 @@ public class OptionsDialog extends EnhancedDialog
 				if (label == null)
 				{
 					// hahaha, suckers!!!
-					setText("NO LABEL PROPERTY! " + name);
+					Log.log(Log.WARNING,this,
+						"options." + name + ".label"
+						+ " property not defined");
+					setText(name);
 				}
 				else
 				{
@@ -545,7 +548,7 @@ public class OptionsDialog extends EnhancedDialog
 			}
 		}
 
-		private OptionGroup root = new OptionGroup("root");
+		private OptionGroup root = new OptionGroup(null);
 		private EventListenerList listenerList = new EventListenerList();
 	}
 }

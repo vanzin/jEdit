@@ -11,8 +11,10 @@ defaults.
 
 + New Features
 
-- Soft wrap: enable it in Global Options, or Buffer Options. Some
-  plugins will need to be updated; see below
+- Soft wrap: enable it in Global Options, or Buffer Options. Note that
+  you can set the 'Margin at column' setting to zero to wrap to the
+  width of the text area. Some plugins will need to be updated; see
+  below
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
   borders using Swing look & feel'. Both are disabled by default.
@@ -149,6 +151,9 @@ defaults.
   respectively, but the documentation claimed that the first parameter
   was a single line index, and the second was a fold level. This was an
   error on the part of the documentation, and has since been fixed.
+- TextAreaExtension API replaces TextAreaHighlights. It now supports the
+  concept of 'layers', so you can for example add an extension that will
+  be painted below the selection (the JDiff plugin wants to do this).
 
 * Version 4.0pre3
 

@@ -265,7 +265,6 @@ public class JEditTextArea extends JComponent
 
 			propertiesChanged();
 
-			updateScrollBars();
 			painter.repaint();
 			gutter.repaint();
 		}
@@ -611,7 +610,9 @@ public class JEditTextArea extends JComponent
 			changed = true;
 		}
 
-		int x = offsetToX(caretLine,offset);
+		// I'll make a proper fix in pre5. hopefully no-one will
+		// notice this temporary hack.
+		int x = (softWrap ? 0 : offsetToX(caretLine,offset));
 
 		if(x < 0)
 		{
@@ -713,7 +714,7 @@ public class JEditTextArea extends JComponent
 		chunkCache.updateChunksUpTo(line);
 		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
 		return buffer.getLineStartOffset(lineInfo.physicalLine)
-			+ lineInfo.offset + lineInfo.length + 1;
+			+ lineInfo.offset + lineInfo.length;
 	} //}}}
 
 	//{{{ xyToOffset() method
@@ -763,10 +764,12 @@ public class JEditTextArea extends JComponent
 		}
 		else
 		{
-			return getLineStartOffset(lineInfo.physicalLine)
-				+ lineInfo.offset
-				+ (int)TextUtilities.xToOffset(lineInfo.chunks,
+			int offset = chunkCache.xToOffset(lineInfo.chunks,
 				x - horizontalOffset,round);
+			if(offset == -1 || offset == lineInfo.offset + lineInfo.length)
+				offset = lineInfo.offset + lineInfo.length - 1;
+
+			return getLineStartOffset(lineInfo.physicalLine) + offset;
 		}
 	} //}}}
 
@@ -814,7 +817,7 @@ public class JEditTextArea extends JComponent
 		if(!info.chunksValid)
 			System.err.println("offset to xy: not valid");
 
-		retVal.x = (int)(horizontalOffset + TextUtilities.offsetToX(
+		retVal.x = (int)(horizontalOffset + chunkCache.offsetToX(
 			info.chunks,offset));
 
 		return retVal;
@@ -4301,10 +4304,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		charWidth = (int)Math.round(painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
+		softWrap = buffer.getBooleanProperty("softWrap");
+
 		int _maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
 
 		if(_maxLineLen <= 0)
-			maxLineLen = 0;
+		{
+			if(softWrap)
+			{
+				wrapToWidth = true;
+				maxLineLen = painter.getWidth() - charWidth * 3;
+			}
+			else
+			{
+				wrapToWidth = false;
+				maxLineLen = 0;
+			}
+		}
 		else
 		{
 			// stupidity
@@ -4318,7 +4334,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				.getWidth();
 		}
 
-		softWrap = buffer.getBooleanProperty("softWrap");
+		maxHorizontalScrollWidth = 0;
+		updateScrollBars();
 
 		chunkCache.invalidateAll();
 		painter.repaint();
@@ -4377,8 +4394,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
+		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		return (int)(horizontalOffset + chunkCache.offsetToX(chunks,offset));
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -4392,8 +4409,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public int xToOffset(int line, int x)
 	{
 		x -= horizontalOffset;
-		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		return TextUtilities.xToOffset(chunks,x,true);
+		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		int offset = chunkCache.xToOffset(chunks,x,true);
+		if(offset == -1)
+			offset = getLineLength(line);
+		return offset;
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -4409,8 +4429,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public int xToOffset(int line, int x, boolean round)
 	{
 		x -= horizontalOffset;
-		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		return TextUtilities.xToOffset(chunks,x,round);
+		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		int offset = chunkCache.xToOffset(chunks,x,round);
+		if(offset == -1)
+			offset = getLineLength(line);
+		return offset;
 	} //}}}
 
 	//{{{ getSelectionStart() method
@@ -4608,6 +4631,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean softWrap;
 	float tabSize;
 	int maxLineLen;
+	boolean wrapToWidth;
 	int charWidth;
 
 	// this is package-private so that the painter can use it without
@@ -4649,11 +4673,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			recalculateLastPhysicalLine();
 		}
 
-		propertiesChanged();
-
 		chunkCache.recalculateVisibleLines();
-
-		updateScrollBars();
+		propertiesChanged();
 	} //}}}
 
 	//{{{ updateMaxHorizontalScrollWidth() method
@@ -5269,6 +5290,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void componentResized(ComponentEvent evt)
 		{
 			recalculateVisibleLines();
+			propertiesChanged();
 			scrollBarsInitialized = true;
 		} //}}}
 	} //}}}
@@ -5289,11 +5311,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
+			if(numLines != 0 && buffer.getLineCount() - numLines - 1 <= physLastLine)
+				recalculateLastPhysicalLine();
+
 			if(!buffer.isLoaded())
 				return;
-
-			if(buffer.getLineCount() - numLines - 1 <= physLastLine)
-				recalculateLastPhysicalLine();
 
 			repaintAndScroll(startLine,numLines);
 
@@ -5337,11 +5359,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(!buffer.isLoaded())
 				return;
 
-			if(buffer.getLineCount() - numLines - 1 <= physLastLine)
-				recalculateLastPhysicalLine();
-
-			// -lineCount because they are removed
+			// -lineCount because they are removed.
+			// IMPORTANT: call this before recalculateLastPhysicalLine(),
+			// so that we repaint up to the old last physical line;
+			// otherwise, removing text from the end of the buffer
+			// would leave stray junk at the end until the next repaint
 			repaintAndScroll(startLine,-numLines);
+
+			if(numLines != 0 && buffer.getLineCount() - numLines - 1 <= physLastLine)
+				recalculateLastPhysicalLine();
 
 			int end = start + length;
 
