@@ -4,7 +4,6 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
- * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,22 +30,50 @@ import java.awt.print.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.io.VFSManager;
 //}}}
 
 public class BufferPrinter1_3
 {
+	//{{{ setDoubleProperty() method
+	public static final void setDoubleProperty(String name, double value)
+	{
+		jEdit.setProperty(name,String.valueOf(value));
+	}
+	//}}}
+
+	//{{{ getDoubleProperty() method
+	public static double getDoubleProperty(String name, double def)
+	{
+		String value = jEdit.getProperty(name);
+		if(value == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Double.parseDouble(value);
+			}
+			catch(NumberFormatException nf)
+			{
+				return def;
+			}
+		}
+	}
+	//}}}
+
 	//{{{ getPrintJob() method
 	private static PrinterJob getPrintJob()
 	{
-		PrinterJob job = PrinterJob.getPrinterJob();
+		job = PrinterJob.getPrinterJob();
 
 		int orientation = jEdit.getIntegerProperty("print.orientation",PageFormat.PORTRAIT);
-		double width = jEdit.getDoubleProperty("print.width",0);
-		double height = jEdit.getDoubleProperty("print.height",0);
-		double x = jEdit.getDoubleProperty("print.x",0);
-		double y = jEdit.getDoubleProperty("print.y",0);
-		double pagewidth = jEdit.getDoubleProperty("print.pagewidth",0);
-		double pageheight = jEdit.getDoubleProperty("print.pageheight",0);
+		double width=getDoubleProperty("print.width",0);
+		double height=getDoubleProperty("print.height",0);
+		double x=getDoubleProperty("print.x",0);
+		double y=getDoubleProperty("print.y",0);
+		double pagewidth=getDoubleProperty("print.pagewidth",0);
+		double pageheight=getDoubleProperty("print.pageheight",0);
 
 		format = job.defaultPage();
 		//format.setOrientation(PageFormat.PORTRAIT);
@@ -72,10 +99,10 @@ public class BufferPrinter1_3
 		Font font = jEdit.getFontProperty("print.font");
 		PrinterJob prnJob=getPrintJob();
 		prnJob.setJobName(buffer.getPath());
-		PrintPreview frame = new PrintPreview(view, buffer,
-			selection,new BufferPrintable(buffer,font,header,footer,
-			lineNumbers,color), prnJob,
-			format);
+		PrintPreview frame = new PrintPreview( view, buffer,
+		                                       selection,new BufferPrintable(view,buffer,font,header,footer,
+		                                                                     lineNumbers,color), prnJob,
+										     format);
 		frame.setVisible(true);
 	}
 	//}}}
@@ -83,7 +110,7 @@ public class BufferPrinter1_3
 	//{{{ pageSetup() method
 	public static void pageSetup(View view)
 	{
-		PrinterJob job =getPrintJob();
+		job =getPrintJob();
 
 		PageFormat newFormat = job.pageDialog(format);
 		if(newFormat != null)
@@ -92,19 +119,19 @@ public class BufferPrinter1_3
 			jEdit.setIntegerProperty("print.orientation",format.getOrientation());
 			Paper paper=format.getPaper();
 
-			jEdit.setDoubleProperty("print.width",paper.getImageableWidth());
-			jEdit.setDoubleProperty("print.height",paper.getImageableHeight());
-			jEdit.setDoubleProperty("print.x",paper.getImageableX());
-			jEdit.setDoubleProperty("print.y",paper.getImageableY());
-			jEdit.setDoubleProperty("print.pagewidth",paper.getWidth());
-			jEdit.setDoubleProperty("print.pageheight",paper.getHeight());
+			setDoubleProperty("print.width",paper.getImageableWidth());
+			setDoubleProperty("print.height",paper.getImageableHeight());
+			setDoubleProperty("print.x",paper.getImageableX());
+			setDoubleProperty("print.y",paper.getImageableY());
+			setDoubleProperty("print.pagewidth",paper.getWidth());
+			setDoubleProperty("print.pageheight",paper.getHeight());
 		}
 	} //}}}
 
 	//{{{ print() method
-	public static void print(View view, Buffer buffer, boolean selection)
+	public static void print(final View view, final Buffer buffer, boolean selection)
 	{
-		PrinterJob job =getPrintJob();
+		job =getPrintJob();
 		job.setJobName(buffer.getPath());
 		boolean header = jEdit.getBooleanProperty("print.header");
 		boolean footer = jEdit.getBooleanProperty("print.footer");
@@ -112,26 +139,36 @@ public class BufferPrinter1_3
 		boolean color = jEdit.getBooleanProperty("print.color");
 		Font font = jEdit.getFontProperty("print.font");
 
-		job.setPrintable(new BufferPrintable(buffer,font,header,footer,
+		job.setPrintable(new BufferPrintable(view,buffer,font,header,footer,
 		                                     lineNumbers,color),format);
 
 		if(!job.printDialog())
 			return;
 
-		try
+		buffer.readLock();
+		VFSManager.runInWorkThread(new Runnable()
 		{
-			job.print();
-		}
-		catch(PrinterAbortException ae)
-		{
-			Log.log(Log.DEBUG,BufferPrinter1_3.class,ae);
-		}
-		catch(PrinterException e)
-		{
-			Log.log(Log.ERROR,BufferPrinter1_3.class,e);
-			String[] args = { e.toString() };
-			GUIUtilities.error(view,"print-error",args);
-		}
+			public void run()
+			{
+				try
+				{
+					job.print();
+				}
+				catch(PrinterAbortException ae)
+				{
+					Log.log(Log.DEBUG,BufferPrinter1_3.class,ae);
+					buffer.readUnlock();
+				}
+				catch(PrinterException e)
+				{
+					Log.log(Log.ERROR,BufferPrinter1_3.class,e);
+					String[] args = { e.toString() };
+					GUIUtilities.error(view,"print-error",args);
+					buffer.readUnlock();
+				}
+			}
+		});
+		buffer.readUnlock();
 	} //}}}
 
 	//{{{ getPageFormat() method
@@ -142,6 +179,7 @@ public class BufferPrinter1_3
 
 	//{{{ Private members
 	private static PageFormat format;
+	private static PrinterJob job;
 	//}}}
 }
 

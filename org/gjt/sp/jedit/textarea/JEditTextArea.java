@@ -1336,6 +1336,8 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//{{{ selectWord() method
+	
+	
 	/**
 	 * Selects the word at the caret position.
 	 * @since jEdit 2.7pre2
@@ -1369,6 +1371,43 @@ public class JEditTextArea extends JComponent
 
 	//{{{ selectToMatchingBracket() method
 	/**
+	 * Selects from the bracket at the specified position to the 
+	 * corresponding bracket. Returns <code>true</code> if successful (i.e.
+	 * there's a bracket at the specified position and there's a matching 
+	 * bracket for it), <code>false</code> otherwise.
+	 * @since jEdit 4.1pre1
+	 */
+	public boolean selectToMatchingBracket(int position)
+	{
+		int positionLine = buffer.getLineOfOffset(position);
+		int lineOffset = position - buffer.getLineStartOffset(positionLine);
+
+		int bracket = TextUtilities.findMatchingBracket(buffer,positionLine,lineOffset);
+		
+		if(bracket != -1)
+		{
+			Selection s;
+
+			if(bracket < position)
+			{
+				moveCaretPosition(position,false);
+				s = new Selection.Range(++bracket,position);
+			}
+			else
+			{
+				moveCaretPosition(position + 1,false);
+				s = new Selection.Range(position + 1,bracket);
+			}
+
+			addToSelection(s);
+			return true;
+		}
+		
+		return false;
+	} //}}}
+
+	//{{{ selectToMatchingBracket() method
+	/**
 	 * Selects from the bracket at the caret position to the corresponding
 	 * bracket.
 	 * @since jEdit 4.0pre2
@@ -1384,31 +1423,9 @@ public class JEditTextArea extends JComponent
 			return;
 
 		if(offset == buffer.getLineLength(caretLine))
-		{
 			caret--;
-			offset--;
-		}
-
-		int bracket = TextUtilities.findMatchingBracket(buffer,caretLine,offset);
-
-		if(bracket != -1)
-		{
-			Selection s;
-
-			if(bracket < caret)
-			{
-				moveCaretPosition(caret,false);
-				s = new Selection.Range(++bracket,caret);
-			}
-			else
-			{
-				moveCaretPosition(caret + 1,false);
-				s = new Selection.Range(caret + 1,bracket);
-			}
-
-			addToSelection(s);
-			return;
-		}
+		
+		selectToMatchingBracket(caret);
 	} //}}}
 
 	//{{{ selectBlock() method
@@ -3125,7 +3142,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			int dot = caret - getLineStartOffset(caretLine);
 
-			int bracket = TextUtilities.findMatchingBracket(
+			int bracket = TextUtilities.findMatchingBracketFuzzy(
 				buffer,caretLine,Math.max(0,dot - 1));
 			if(bracket != -1)
 			{
@@ -5536,7 +5553,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(offset != 0)
 		{
-			int bracketOffset = TextUtilities.findMatchingBracket(
+			int bracketOffset = TextUtilities.findMatchingBracketFuzzy(
 				buffer,caretLine,offset - 1);
 			if(bracketOffset != -1)
 			{

@@ -1,10 +1,9 @@
 /*
- * BufferPrinter1_3.java - Main class that controls printing
+ * BufferPrinter1_4.java - Main class that controls printing
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
- * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,41 +34,54 @@ import javax.print.attribute.*;
 import javax.print.attribute.standard.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.io.VFSManager;
 //}}}
 
 public class BufferPrinter1_4
 {
+
 	//{{{ print() method
-	public static void print(View view, Buffer buffer, boolean selection)
+	public static void print(final View view, final Buffer buffer, boolean selection)
 	{
-		PrinterJob job =getPrintJob(buffer.getPath());
+		job =getPrintJob(buffer.getPath());
+
 		boolean header = jEdit.getBooleanProperty("print.header");
 		boolean footer = jEdit.getBooleanProperty("print.footer");
 		boolean lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
 		boolean color = jEdit.getBooleanProperty("print.color");
 		Font font = jEdit.getFontProperty("print.font");
 
-		job.setPrintable(new BufferPrintable(buffer,font,header,footer,
+		job.setPrintable(new BufferPrintable(view,buffer,font,header,footer,
 		                                     lineNumbers,color));
 
 		if(!job.printDialog(format))
 			return;
 		savePrintSpec();
-
-		try
+		
+		buffer.readLock();
+		VFSManager.runInWorkThread(new Runnable()
 		{
-			job.print(format);
-		}
-		catch(PrinterAbortException ae)
-		{
-			Log.log(Log.DEBUG,BufferPrinter1_4.class,ae);
-		}
-		catch(PrinterException e)
-		{
-			Log.log(Log.ERROR,BufferPrinter1_4.class,e);
-			String[] args = { e.toString() };
-			GUIUtilities.error(view,"print-error",args);
-		}
+			public void run()
+			{
+				try
+				{
+					job.print(format);
+				}
+				catch(PrinterAbortException ae)
+				{
+					Log.log(Log.DEBUG,BufferPrinter1_4.class,ae);
+					buffer.readUnlock();
+				}
+				catch(PrinterException e)
+				{
+					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
+					String[] args = { e.toString() };
+					GUIUtilities.error(view,"print-error",args);
+					buffer.readUnlock();
+				}
+			}
+		});
+		buffer.readUnlock();
 	} //}}}
 
 	//{{{ printPreview() method
@@ -82,9 +94,9 @@ public class BufferPrinter1_4
 		Font font = jEdit.getFontProperty("print.font");
 		PrinterJob prnJob=getPrintJob(buffer.getPath());
 		PrintPreview frame = new PrintPreview( view, buffer,
-			selection,new BufferPrintable(buffer,font,header,footer,
-			lineNumbers,color), prnJob,
-			getPageFormat());
+		                                       selection,new BufferPrintable(view,buffer,font,header,footer,
+		                                                                     lineNumbers,color), prnJob,
+										     getPageFormat());
 		frame.setVisible(true);
 	}
 	//}}}
@@ -152,7 +164,7 @@ public class BufferPrinter1_4
 	private static void savePrintSpec()
 	{
 		String printSpecPath = MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "printspec");
+		                               jEdit.getSettingsDirectory(), "printspec");
 		File filePrintSpec = new File(printSpecPath);
 		
 		if ( filePrintSpec!=null && !filePrintSpec.isDirectory())
@@ -179,7 +191,7 @@ public class BufferPrinter1_4
 	//{{{ getPrintJob() method
 	private static PrinterJob getPrintJob(String jobName)
 	{
-		PrinterJob job = PrinterJob.getPrinterJob();
+		job = PrinterJob.getPrinterJob();
 
 		String printSpecPath = MiscUtilities.constructPath(
 		                               jEdit.getSettingsDirectory(), "printspec");
@@ -215,6 +227,7 @@ public class BufferPrinter1_4
 
 	//{{{ Private members
 	private static PrintRequestAttributeSet format;
+	private static PrinterJob job;
 	//}}}
 }
 
