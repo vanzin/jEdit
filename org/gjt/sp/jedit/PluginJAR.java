@@ -614,13 +614,13 @@ public class PluginJAR
 			din = new DataInputStream(
 				new BufferedInputStream(
 				new FileInputStream(jarCachePath)));
-			if(!cache.read(din))
+			if(cache.read(din))
+				return cache;
+			else
 			{
 				// returns false with outdated cache
 				return null;
 			}
-			else
-				return cache;
 		}
 		catch(FileNotFoundException fnf)
 		{
@@ -661,15 +661,7 @@ public class PluginJAR
 				new BufferedOutputStream(
 				new FileOutputStream(jarCachePath)));
 			cache.write(dout);
-			try
-			{
-				if(dout != null)
-					dout.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,PluginJAR.class,io);
-			}
+			dout.close();
 		}
 		catch(IOException io)
 		{
@@ -888,7 +880,7 @@ public class PluginJAR
 			{
 				cache.actionsURI = classLoader.getResource(name);
 			}
-			if(lname.equals("browser.actions.xml"))
+			else if(lname.equals("browser.actions.xml"))
 			{
 				cache.browserActionsURI = classLoader.getResource(name);
 			}

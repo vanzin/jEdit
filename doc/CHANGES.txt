@@ -110,6 +110,9 @@ this release.
 - Fixed possible NullPointerException in Shortcuts option pane when a
   newly-installed plugin contains dockables but no actions.
 
+- Using the Global Options dialog box or anything else that calls
+  jEdit.propertiesChanged() no longer clears the kill ring.
+
 }}}
 {{{ API Changes
 

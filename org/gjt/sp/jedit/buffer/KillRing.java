@@ -26,6 +26,7 @@ import com.microstar.xml.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.ListModel;
 import java.io.*;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -34,17 +35,24 @@ public class KillRing
 	//{{{ propertiesChanged() method
 	public static void propertiesChanged()
 	{
-		UndoManager.Remove[] newRing = new UndoManager.Remove[
-			jEdit.getIntegerProperty("history",25)];
-		if(ring != null)
+		int newSize = jEdit.getIntegerProperty("history",25);
+		if(ring == null)
+			ring = new UndoManager.Remove[newSize];
+		else if(newSize != ring.length)
 		{
-			/* System.arraycopy(ring,0,newRing,0,
-				Math.min(ring.length */
+			UndoManager.Remove[] newRing = new UndoManager.Remove[
+				newSize];
+			ListModel model = new RingListModel();
+			int newCount = Math.min(model.getSize(),newSize);
+			for(int i = 0; i < newCount; i++)
+			{
+				newRing[i] = (UndoManager.Remove)
+					model.getElementAt(i);
+			}
+			ring = newRing;
+			count = newCount;
+			wrap = false;
 		}
-		ring = newRing;
-		//XXX
-		count = 0;
-		wrap = false;
 	} //}}}
 
 	//{{{ getListModel() method
@@ -104,6 +112,9 @@ public class KillRing
 				Log.log(Log.ERROR,KillRing.class,io);
 			}
 		}
+
+		ring = (UndoManager.Remove[])handler.list.toArray(
+			new UndoManager.Remove[handler.list.size()]);
 	} //}}}
 
 	//{{{ save() method
@@ -335,6 +346,8 @@ public class KillRing
 	//{{{ KillRingHandler class
 	static class KillRingHandler extends HandlerBase
 	{
+		List list = new LinkedList();
+
 		public Object resolveEntity(String publicId, String systemId)
 		{
 			if("killring.dtd".equals(systemId))
@@ -361,7 +374,7 @@ public class KillRing
 		{
 			if(name.equals("ENTRY"))
 			{
-				add(new UndoManager.Remove(null,0,0,charData));
+				list.add(new UndoManager.Remove(null,0,0,charData));
 			}
 		}
 
