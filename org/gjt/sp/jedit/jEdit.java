@@ -847,10 +847,6 @@ public class jEdit
 
 		saveCaret = getBooleanProperty("saveCaret");
 
-		//theme = new JEditMetalTheme();
-		//theme.propertiesChanged();
-		//MetalLookAndFeel.setCurrentTheme(theme);
-
 		UIDefaults defaults = UIManager.getDefaults();
 
 		// give all text areas the same font
@@ -2747,7 +2743,6 @@ public class jEdit
 	private static Vector modes;
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
-	private static MetalTheme theme;
 
 	// buffer link list
 	private static boolean sortBuffers;
@@ -3170,24 +3165,29 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ createMetalTheme() method
-	private static MetalTheme createMetalTheme()
+	//{{{ fontStyleToString() method
+	private static String fontStyleToString(int style)
 	{
-		if(OperatingSystem.hasJava15())
-		{
-			try
-			{
-				return (MetalTheme)
-					Class.forName("JEditMetalTheme15")
-					.newInstance();
-			}
-			catch(Exception e)
-			{
-				return new JEditMetalTheme14();
-			}
-		}
+		if(style == 0)
+			return "PLAIN";
+		else if(style == Font.BOLD)
+			return "BOLD";
+		else if(style == Font.ITALIC)
+			return "ITALIC";
+		else if(style == (Font.BOLD | Font.ITALIC))
+			return "BOLDITALIC";
 		else
-			return new JEditMetalTheme14();
+			throw new RuntimeException("Invalid style: " + style);
+	} //}}}
+
+	//{{{ fontToString() method
+	private static String fontToString(Font font)
+	{
+		return font.getFamily()
+			+ "-"
+			+ fontStyleToString(font.getStyle())
+			+ "-"
+			+ font.getSize();
 	} //}}}
 	
 	//{{{ initPLAF() method
@@ -3196,8 +3196,35 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		theme = createMetalTheme();
-		MetalLookAndFeel.setCurrentTheme(theme);
+		Font primaryFont = jEdit.getFontProperty(
+			"metal.primary.font");
+		if(primaryFont != null)
+		{
+			String primaryFontString =
+				fontToString(primaryFont);
+
+			System.getProperties().put(
+				"swing.plaf.metal.controlFont",
+				primaryFontString);
+			System.getProperties().put(
+				"swing.plaf.metal.menuFont",
+				primaryFontString);
+		}
+
+		Font secondaryFont = jEdit.getFontProperty(
+			"metal.secondary.font");
+		if(secondaryFont != null)
+		{
+			String secondaryFontString =
+				fontToString(secondaryFont);
+
+			System.getProperties().put(
+				"swing.plaf.metal.systemFont",
+				secondaryFontString);
+			System.getProperties().put(
+				"swing.plaf.metal.userFont",
+				secondaryFontString);
+		}
 
 		try
 		{
