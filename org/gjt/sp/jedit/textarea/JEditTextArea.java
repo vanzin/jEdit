@@ -1375,13 +1375,19 @@ public class JEditTextArea extends JComponent
 	 */
 	public void selectToMatchingBracket()
 	{
+		// since we might change it below
+		int caret = this.caret;
+
 		int offset = caret - buffer.getLineStartOffset(caretLine);
 
 		if(buffer.getLineLength(caretLine) == 0)
 			return;
 
 		if(offset == buffer.getLineLength(caretLine))
+		{
+			caret--;
 			offset--;
+		}
 
 		int bracket = TextUtilities.findMatchingBracket(buffer,caretLine,offset);
 
@@ -1390,11 +1396,14 @@ public class JEditTextArea extends JComponent
 			Selection s;
 
 			if(bracket < caret)
+			{
+				moveCaretPosition(caret,false);
 				s = new Selection.Range(++bracket,caret);
+			}
 			else
 			{
 				moveCaretPosition(caret + 1,false);
-				s = new Selection.Range(caret,bracket);
+				s = new Selection.Range(caret + 1,bracket);
 			}
 
 			addToSelection(s);
