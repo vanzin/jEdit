@@ -8,6 +8,17 @@ JEDIT 4.1 VERSION HISTORY
 - Added SOCKS proxy support (Alfonso Garcia)
 - WheelMouse plugin integrated into core -- no need to install a
   separate plugin to get wheel mouse scrolling under Java 2 version 1.4
+- More intelligent highlighting of numbers. Instead of hard-coded
+  heuteristic that only worked for C-like languages, numbers are now
+  highlighted as follows:
+  - A keyword consisting of only digits is automatically marked with the
+    DIGIT token type.
+  - If it has a mix of digits and letters, it is marked as DIGIT of it
+    matches the regexp specified in the rule set's DIGIT_RE attribute.
+    If this attribute is not set, then mixed sequences of digits and
+    letters are not highlighted.
+  - In Java mode, for example, the default value of this regexp is
+    "(0x[[:xdigit:]]+|[[:digit:]]+)[lLdDfF]?".
 
 + Enhancements
 
@@ -67,6 +78,8 @@ JEDIT 4.1 VERSION HISTORY
 - The 'initially collapse folds with level' setting is how honored when
   reloading files
 - A few printing bugs fixed (Thomas Dilts)
+- The help viewer should no longer open behind the view when jEdit is
+  run for the first time on some Java implementations
 
 + API Changes
 
