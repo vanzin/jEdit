@@ -107,7 +107,7 @@ public class FileVFS extends VFS
 	//{{{ load() method
 	public boolean load(View view, Buffer buffer, String path)
 	{
-		File file = buffer.getFile();
+		File file = new File(MiscUtilities.canonPath(path));
 
 		//{{{ Check if file is valid
 		if(!file.exists())
@@ -357,7 +357,8 @@ public class FileVFS extends VFS
 		String backupPrefix = jEdit.getProperty("backup.prefix");
 		String backupSuffix = jEdit.getProperty("backup.suffix");
 
-		String backupDirectory = jEdit.getProperty("backup.directory");
+		String backupDirectory = MiscUtilities.canonPath(
+			jEdit.getProperty("backup.directory"));
 
 		File file = new File(path);
 

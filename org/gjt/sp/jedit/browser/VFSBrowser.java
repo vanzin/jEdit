@@ -74,21 +74,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 * Creates a new VFS browser.
 	 * @param view The view to open buffers in by default
 	 * @param path The path to display
-	 */
-	public VFSBrowser(View view, String path)
-	{
-		this(view,path,BROWSER,false);
-	} //}}}
-
-	//{{{ VFSBrowser constructor
-	/**
-	 * Creates a new VFS browser.
-	 * @param view The view to open buffers in by default
-	 * @param path The path to display
 	 * @param mode The browser mode
 	 * @param multipleSelection True if multiple selection should be allowed
+	 * @param floating True if this browser instance is floating
 	 */
-	public VFSBrowser(View view, String path, int mode, boolean multipleSelection)
+	public VFSBrowser(View view, String path, int mode, boolean multipleSelection,
+		boolean floating)
 	{
 		super(new BorderLayout());
 
@@ -96,6 +87,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		this.mode = mode;
 		this.multipleSelection = multipleSelection;
+		this.floating = floating;
 		this.view = view;
 
 		ActionHandler actionHandler = new ActionHandler();
@@ -119,7 +111,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		pathField = new HistoryTextField("vfs.browser.path",true,false);
 
-		if(mode != BROWSER)
+		if(floating)
 		{
 			label.setDisplayedMnemonic(jEdit.getProperty(
 				"vfs.browser.path.mnemonic").charAt(0));
@@ -285,7 +277,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			if(requestRunning)
 				return;
 
-			browserView.reloadDirectory(((VFSUpdate)msg).getPath());
+			browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
 		}
 	} //}}}
 
@@ -369,13 +361,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		pathField.setText(path);
 
-		loadDirectory(path,true);
+		browserView.loadDirectory(path);
 	} //}}}
 
 	//{{{ reloadDirectory() method
 	public void reloadDirectory()
 	{
-		browserView.reloadDirectory(path);
+		browserView.loadDirectory(path);
 	} //}}}
 
 	//{{{ delete() method
@@ -512,22 +504,33 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 */
 	public void searchInDirectory()
 	{
-		String path;
+		String path, filter;
 
 		VFS.DirectoryEntry[] selected = getSelectedFiles();
 		if(selected.length >= 1)
 		{
 			VFS.DirectoryEntry file = selected[0];
 			if(file.type == VFS.DirectoryEntry.DIRECTORY)
+			{
 				path = file.path;
+				filter = null;
+			}
 			else
 			{
 				VFS vfs = VFSManager.getVFSForPath(file.path);
 				path = vfs.getParentOfPath(file.path);
+				String name = MiscUtilities.getFileName(path);
+				String ext = MiscUtilities.getFileExtension(name);
+				filter = (ext == null || ext.length() == 0
+					? getFilenameFilter()
+					: "*." + ext);
 			}
 		}
 		else
+		{
 			path = this.path;
+			filter = null;
+		}
 
 		if(!(VFSManager.getVFSForPath(path) instanceof FileVFS))
 		{
@@ -536,7 +539,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 
 		SearchAndReplace.setSearchFileSet(new DirectoryListSet(
-			path,getFilenameFilter(),true));
+			path,filter,true));
 		new SearchDialog(view,null,SearchDialog.DIRECTORY);
 	} //}}}
 
@@ -774,6 +777,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ Instance variables
 	private EventListenerList listenerList;
 	private View view;
+	private boolean floating;
 	private String path;
 	private HistoryTextField pathField;
 	private JCheckBox filterCheckbox;
@@ -953,13 +957,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(path != null)
 					setDirectory(path);
 
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						browserView.requestDefaultFocus();
-					}
-				});
+				browserView.requestDefaultFocus();
 			}
 			else if(source == up)
 			{

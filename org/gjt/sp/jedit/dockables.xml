@@ -2,14 +2,13 @@
 
 <!DOCTYPE DOCKABLES SYSTEM "dockables.dtd">
 
-<!-- jEdit dockable windows -->
-
 <DOCKABLES>
 	<DOCKABLE NAME="log-viewer">
 		new LogViewer();
 	</DOCKABLE>
 	<DOCKABLE NAME="vfs.browser">
-		new VFSBrowser(view,null);
+		new VFSBrowser(view,null,VFSBrowser.BROWSER,false,
+			position.equals(DockableWindowManager.FLOATING));
 	</DOCKABLE>
 	<DOCKABLE NAME="hypersearch-results">
 		new HyperSearchResults(view);

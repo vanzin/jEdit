@@ -424,6 +424,11 @@ public class Buffer implements EBComponent
 						writeUnlock();
 					}
 				}
+				else
+				{
+					// have to set mode according to path name only
+					setMode();
+				}
 
 				unsetProperty(BufferIORequest.LOAD_DATA);
 				unsetProperty(BufferIORequest.END_OFFSETS);

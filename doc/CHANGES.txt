@@ -36,6 +36,9 @@ JEDIT 4.0 VERSION HISTORY
   - 'More' menu split into 'Commands' and 'Plugins' menus
   - 'Commands' menu and tool bar now have the same set of commands
   - 'Favorites' menu added for quicker access to favorites
+  - If invoked while a file is selected, the 'Search in Directory'
+    command now sets the search file name filter to that file's
+    extension
 - Icon added to 'BeanShell Error' dialog box
 - Updated PV-WAVE mode (Ed Stewart)
 - Updated Transact-SQL mode (Ollie Rutherfurd)
@@ -94,6 +97,7 @@ JEDIT 4.0 VERSION HISTORY
 - Compound edits were rather buggy
 - 'Trailing EOL' setting did not work
 - Fixed possible MacOS x keyboard problems (again...)
+- Fixed a buffer corruption bug
 
 + API Changes
 

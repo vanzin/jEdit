@@ -1550,7 +1550,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=65
+tip.count=67
 #}}}
 
 #{{{ Activity log
@@ -1601,6 +1601,7 @@ vfs.browser.path.mnemonic=p
 vfs.browser.filter=Filter:
 vfs.browser.default-filter=[^#]*[^~#]
 vfs.browser.filter-enabled=true
+vfs.browser.tree.loading=Loading...
 
 #{{{ Context menu
 vfs.browser.commands.close.label=Close
@@ -1663,8 +1664,6 @@ vfs.browser.files-favorites.message=Only directories can be added to the favorit
 
 vfs.browser.recurse-favorites.title=Cannot Add Favorites to Itself
 vfs.browser.recurse-favorites.message=The favorites list cannot be added to itself.
-
-vfs.browser.tree.loading=Loading...
 
 vfs.browser.delete-confirm.title=Delete File Confirmation
 vfs.browser.delete-confirm.message=Are you sure you want to delete\n\
