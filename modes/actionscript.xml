@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!--
+	ActionScript mode by Ben Glazer <ben@enspire.com>
+	Adapted from JavaScript mode by Andre Kaplan
+-->
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<!-- the ; hack is there so that stuff like if(bob) fred();
+		     does not indent the next line -->
+		<PROPERTY NAME="indentPrevLine" VALUE="\s*(if|while)\s*(|else|case|default:)[^;]*|for\s*\(.*)" />
+		<!-- set this to 'true' if you want to use GNU coding style -->
+		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+	</PROPS>
+
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+
+<!--
+		// Operators
+		// Unary:       ~ ++ --
+		// Arithmetic:  + - * / %
+		// Comparison:  == != < > <= >=
+		// Boolean:     | & ^
+		// Bit Shift:   << >> >>>
+		// Logical:     ! || &&
+		// Assignment:  = += -= *= /= %= |= &= ^= <<= >>= >>>= 
+		// Conditional: ?:
+-->
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">,</SEQ>
+		<SEQ TYPE="OPERATOR">;</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+
+		<KEYWORDS IGNORE_CASE="FALSE">
+			<!-- ActionScript's reserved words (see AS:TDG p.332) -->
+			<KEYWORD1>add</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>and</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>delete</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>eq</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>ge</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>gt</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>ifFrameLoaded</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>in</KEYWORD1>
+			<KEYWORD1>le</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>lt</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>ne</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>not</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>on</KEYWORD1>
+			<KEYWORD1>onClipEvent</KEYWORD1>
+			<KEYWORD1>or</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>return</KEYWORD1>
+			<LITERAL2>this</LITERAL2>
+			<KEYWORD1>tellTarget</KEYWORD1>   <!-- deprecated -->
+			<KEYWORD1>typeof</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD3>void</KEYWORD3>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>with</KEYWORD1>
+
+			<!-- Built-in objects (good idea not to use these names!)-->
+			<KEYWORD3>Array</KEYWORD3>
+			<KEYWORD3>Boolean</KEYWORD3>
+			<KEYWORD3>Color</KEYWORD3>
+			<KEYWORD3>Date</KEYWORD3>
+			<KEYWORD3>Function</KEYWORD3>
+			<KEYWORD3>Key</KEYWORD3>
+			<KEYWORD3>MovieClip</KEYWORD3>
+			<KEYWORD3>Math</KEYWORD3>
+			<KEYWORD3>Mouse</KEYWORD3>
+			<KEYWORD3>Number</KEYWORD3>
+			<KEYWORD3>Object</KEYWORD3>
+			<KEYWORD3>Selection</KEYWORD3>
+			<KEYWORD3>Sound</KEYWORD3>
+			<KEYWORD3>String</KEYWORD3>
+			<KEYWORD3>XML</KEYWORD3>
+			<KEYWORD3>XMLNode</KEYWORD3>
+			<KEYWORD3>XMLSocket</KEYWORD3>
+
+			<!-- Literals -->
+			<LITERAL2>NaN</LITERAL2>
+			<LITERAL2>Infinity</LITERAL2>
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>null</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+			<LITERAL2>undefined</LITERAL2>
+
+			<!-- Global functions -->
+			<LITERAL2>Boolean</LITERAL2>
+			<LITERAL2>call</LITERAL2>
+			<LITERAL2>Date</LITERAL2>
+			<LITERAL2>duplicateMovieClip</LITERAL2>
+			<LITERAL2>escape</LITERAL2>
+			<LITERAL2>eval</LITERAL2>
+			<LITERAL2>fscommand</LITERAL2>
+			<LITERAL2>getProperty</LITERAL2>
+			<LITERAL2>getTimer</LITERAL2>
+			<LITERAL2>getURL</LITERAL2>
+			<LITERAL2>getVersion</LITERAL2>
+			<LITERAL2>gotoAndPlay</LITERAL2>
+			<LITERAL2>gotoAndStop</LITERAL2>
+			<LITERAL2>#include</LITERAL2>
+			<LITERAL2>int</LITERAL2>   <!-- deprecated -->
+			<LITERAL2>isFinite</LITERAL2>
+			<LITERAL2>isNaN</LITERAL2>
+			<LITERAL2>loadMovie</LITERAL2>
+			<LITERAL2>loadMovieNum</LITERAL2>
+			<LITERAL2>loadVariables</LITERAL2>
+			<LITERAL2>loadVariablesNum</LITERAL2>
+			<LITERAL2>maxscroll</LITERAL2>
+			<LITERAL2>newline</LITERAL2>
+			<LITERAL2>nextFrame</LITERAL2>
+			<LITERAL2>nextScene</LITERAL2>
+			<LITERAL2>Number</LITERAL2>
+			<LITERAL2>parseFloat</LITERAL2>
+			<LITERAL2>parseInt</LITERAL2>
+			<LITERAL2>play</LITERAL2>
+			<LITERAL2>prevFrame</LITERAL2>
+			<LITERAL2>prevScene</LITERAL2>
+			<LITERAL2>print</LITERAL2>
+			<LITERAL2>printAsBitmap</LITERAL2>
+			<LITERAL2>printAsBitmapNum</LITERAL2>
+			<LITERAL2>printNum</LITERAL2>
+			<LITERAL2>random</LITERAL2>   <!-- deprecated -->
+			<LITERAL2>removeMovieClip</LITERAL2>
+			<LITERAL2>scroll</LITERAL2>
+			<LITERAL2>setProperty</LITERAL2>
+			<LITERAL2>startDrag</LITERAL2>
+			<LITERAL2>stop</LITERAL2>
+			<LITERAL2>stopAllSounds</LITERAL2>
+			<LITERAL2>stopDrag</LITERAL2>
+			<LITERAL2>String</LITERAL2>
+			<LITERAL2>targetPath</LITERAL2>
+			<LITERAL2>tellTarget</LITERAL2>   <!-- deprecated -->
+			<LITERAL2>toggleHighQuality</LITERAL2>   <!-- deprecated -->
+			<LITERAL2>trace</LITERAL2>
+			<LITERAL2>unescape</LITERAL2>
+			<LITERAL2>unloadMovie</LITERAL2>
+			<LITERAL2>unloadMovieNum</LITERAL2>
+			<LITERAL2>updateAfterEvent</LITERAL2>
+
+			<!--ECMAScript keywords-->
+			<!-- Reserved for future use 
+				(some are already used in some Javascript Engines) 
+			-->
+			<KEYWORD1>abstract</KEYWORD1>
+			<KEYWORD3>boolean</KEYWORD3>
+			<KEYWORD3>byte</KEYWORD3>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD3>char</KEYWORD3>
+			<KEYWORD1>class</KEYWORD1>
+			<KEYWORD1>const</KEYWORD1>
+			<KEYWORD1>debugger</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+
+			<KEYWORD3>double</KEYWORD3>
+			<KEYWORD1>enum</KEYWORD1>
+			<KEYWORD2>export</KEYWORD2>
+			<KEYWORD1>extends</KEYWORD1>
+			<KEYWORD1>final</KEYWORD1>
+			<KEYWORD1>finally</KEYWORD1>
+			<KEYWORD3>float</KEYWORD3>
+			<KEYWORD1>goto</KEYWORD1>
+			<KEYWORD1>implements</KEYWORD1>
+
+			<KEYWORD2>import</KEYWORD2>
+			<KEYWORD1>instanceof</KEYWORD1>
+			<KEYWORD3>int</KEYWORD3>
+			<KEYWORD1>interface</KEYWORD1>
+			<KEYWORD3>long</KEYWORD3>
+			<KEYWORD1>native</KEYWORD1>
+			<KEYWORD2>package</KEYWORD2>
+			<KEYWORD1>private</KEYWORD1>
+			<KEYWORD1>protected</KEYWORD1>
+			<KEYWORD1>public</KEYWORD1>
+
+			<KEYWORD3>short</KEYWORD3>
+			<KEYWORD1>static</KEYWORD1>
+			<LITERAL2>super</LITERAL2>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>synchronized</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>throws</KEYWORD1>
+			<KEYWORD1>transient</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>volatile</KEYWORD1>
+		</KEYWORDS>
+	</RULES>
+</MODE>

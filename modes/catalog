@@ -7,6 +7,9 @@
 
 <MODES>
 
+<MODE NAME="actionscript"	FILE="actionscript.xml"
+				FILE_NAME_GLOB="*.as" />
+
 <MODE NAME="ada95"		FILE="ada95.xml"
 				FILE_NAME_GLOB="*.{ada,adb,ads}" />
 
