@@ -28,6 +28,7 @@ in build.xml.
   sizes, and has a slightly improved look
 - jEdit Frequently Asked Questions is now included in the online help
   (John Gellene)
+- Prolog syntax highlighting (Giulio Piancastelli)
 
 + Enhancements
 
@@ -80,6 +81,7 @@ in build.xml.
   - Keep dialog on by default
   - Somewhat confusing 'Replace' button removed
 - Faster HyperSearch
+- Updated Foxpro mode (Matthew J. Price)
 
 + Neutral
 

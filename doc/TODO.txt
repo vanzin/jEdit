@@ -1,11 +1,8 @@
 TO DO
 
-- pre4:
-
-- scroll gutter not up to date
-- sort out print/glyph vector
-- slower?
 - syntax highlighted files and soft wrap
+- installer: bork if dest dir not writable
+- better handling of oom's when loading buffers
 
 - chunk cache problems after collapsing a fold
 - colon at margin, not eol
