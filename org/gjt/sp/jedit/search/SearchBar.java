@@ -29,7 +29,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.HistoryTextField;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -37,7 +37,7 @@ import org.gjt.sp.util.Log;
 public class SearchBar extends JPanel
 {
 	//{{{ SearchBar constructor
-	public SearchBar(final View view)
+	public SearchBar(final View view, boolean temp)
 	{
 		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
@@ -65,16 +65,32 @@ public class SearchBar extends JPanel
 			"search.case")));
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
+		ignoreCase.setRequestFocusEnabled(false);
 		add(Box.createHorizontalStrut(2));
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
+		regexp.setRequestFocusEnabled(false);
 		add(Box.createHorizontalStrut(2));
 		add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
 		hyperSearch.addActionListener(actionHandler);
 		hyperSearch.setMargin(margin);
+		hyperSearch.setRequestFocusEnabled(false);
+
+		if(temp)
+		{
+			close = new RolloverButton(new ImageIcon(
+				getClass().getResource(
+				"/org/gjt/sp/jedit/icons/closebox.gif")));
+			close.addActionListener(actionHandler);
+			close.setMargin(margin);
+			close.setRequestFocusEnabled(false);
+			close.setToolTipText(jEdit.getProperty(
+				"view.search.close-tooltip"));
+			add(close);
+		}
 
 		update();
 
@@ -98,6 +114,9 @@ public class SearchBar extends JPanel
 				}
 			}
 		}); //}}}
+
+		// if 'temp' is true, hide search bar after user is done with it
+		this.temp = temp;
 	} //}}}
 
 	//{{{ getField() method
@@ -129,8 +148,13 @@ public class SearchBar extends JPanel
 	private HistoryTextField find;
 	private JCheckBox ignoreCase, regexp, hyperSearch;
 	private Timer timer;
+
+	// close button only there if 'temp' is true
+	private RolloverButton close;
+
 	private int searchStart;
 	private boolean searchReverse;
+	private boolean temp;
 	//}}}
 
 	//{{{ find() method
@@ -269,6 +293,11 @@ public class SearchBar extends JPanel
 				SearchAndReplace.setRegexp(regexp
 					.isSelected());
 			}
+			else if(evt.getSource() == close)
+			{
+				view.removeToolBar(SearchBar.this);
+				view.getEditPane().focusOnTextArea();
+			}
 		} //}}}
 	} //}}}
 
@@ -355,6 +384,10 @@ public class SearchBar extends JPanel
 				}
 				break;
 			case KeyEvent.VK_ESCAPE:
+				if(temp)
+				{
+					view.removeToolBar(SearchBar.this);
+				}
 				evt.consume();
 				view.getEditPane().focusOnTextArea();
 				break;
