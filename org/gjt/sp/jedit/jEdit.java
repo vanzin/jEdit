@@ -1823,7 +1823,7 @@ public class jEdit
 		return inputHandler;
 	} //}}}
 
-	public static void newViewTest()
+	/* public static void newViewTest()
 	{
 		long time = System.currentTimeMillis();
 		for(int i = 0; i < 30; i++)
@@ -1833,7 +1833,7 @@ public class jEdit
 			new View(b,null,false);
 		}
 		System.err.println(System.currentTimeMillis() - time);
-	}
+	} */
 
 	//{{{ newView() method
 	/**

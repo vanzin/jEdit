@@ -19,7 +19,7 @@
  </para>
  <sect1 id="xml-primer"><title>An XML Primer</title>
   <para>
-   A very simple XML file (which also happends to be an edit mode) looks like so:
+   A very simple XML file (which also happens to be an edit mode) looks like so:
   </para>
   <programlisting><![CDATA[<?xml version="1.0"?>
 
@@ -650,7 +650,7 @@
    keywords to highlight.
    Keywords are similar to <literal>SEQ</literal>s, except that
    <literal>SEQ</literal>s match anywhere in the text, whereas keywords only
-   match whole words. Words are considered to be runs of text separted by
+   match whole words. Words are considered to be runs of text separated by
    non-alphanumeric characters.
   </para>
   <para>

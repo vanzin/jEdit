@@ -94,7 +94,7 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>New Plain View</guimenuitem> creates
    a new view but without any tool bars or docked windows. This can be used to
-   open a small, unintrusive window for taking notes and so on.
+   open a small, unobtrusive window for taking notes and so on.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
@@ -170,7 +170,7 @@
    </para>
    <sidebar><title>For power users</title>
     <para>
-     Each dockable has three commands assiciated with it; one is part of the
+     Each dockable has three commands associated with it; one is part of the
      menu bar and opens the dockable. The other two commands are:
     </para>
     <itemizedlist>

@@ -475,7 +475,7 @@
     Note that since jEdit only scrolls one whole <quote>physical</quote>
     (newline-delimited) line
     at a time, having lines wrapped into more sections than visible in the
-    text area will render portions of the buffer inaccessable.
+    text area will render portions of the buffer inaccessible.
    </para>
    <tip>
     <para>
@@ -577,7 +577,7 @@
    jEdit provides a rich set of commands for moving and copying text. Commands
    are provided for moving chunks of text from buffers to
    <firstterm>registers</firstterm> and vice-versa. A register is a holding area
-   for an arbitriary length of text, with a single-character name.
+   for an arbitrary length of text, with a single-character name.
    The system clipboard is mapped to the register named <filename>$</filename>.
    jEdit offers clipboard-manipulation commands similar
    to those found in other applications, in addition to a more flexible
@@ -656,7 +656,7 @@
   <sect2><title>General Register Commands</title>
    <para>
     These commands require more keystrokes than the two methods shown above,
-    but they can operate on any register, allowing an arbitriary number of
+    but they can operate on any register, allowing an arbitrary number of
     text chunks to be retained at a time.
    </para>
    <para>
@@ -1026,7 +1026,7 @@
   </sect2>
   <sect2><title>Multiple File Search</title>
    <para>
-    Search and replace commands can be performed over an arbitriary set of files
+    Search and replace commands can be performed over an arbitrary set of files
     in one step. The set of files to search is selected with a set of buttons in
     the search dialog box.
    </para>
