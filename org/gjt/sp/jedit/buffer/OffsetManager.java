@@ -198,7 +198,7 @@ public class OffsetManager
 				lineInfo[startLine + i] =
 					(((offset + endOffsets.get(i) + 1)
 					| (0xffL << VISIBLE_SHIFT))
-					& ~(FOLD_LEVEL_VALID | CONTEXT_VALID));
+					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
 			}
 		} //}}}
 
@@ -207,7 +207,7 @@ public class OffsetManager
 		{
 			lineInfo[i] = (((getLineEndOffset(i) + length)
 				| (0xffL << VISIBLE_SHIFT))
-				& ~(FOLD_LEVEL_VALID | CONTEXT_VALID));
+				& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
 		} //}}}
 
 		// TODO: positions
