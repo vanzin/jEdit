@@ -87,7 +87,7 @@ and performance.
 
 * Syntax highlighting
 
-- Syntax highlighting for 15 new file types has been added. (as of pre9)
+- Syntax highlighting for 15 new file types has been added.
 
 - HTML mode now correctly highlights most <SCRIPT> and <STYLE> tags.
 
