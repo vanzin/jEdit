@@ -263,7 +263,7 @@
 	<question id="smart-quote">
 		<para>
 			Does jEdit know smart quotes? In .tex files I would like to use
-      <userinput>&#147;</userinput> or <userinput>&#148;´</userinput>
+      <userinput>&#147;</userinput> or <userinput>&#148;</userinput>
 			instead of <userinput>&quot;</userinput>.
 		</para>
 	</question>

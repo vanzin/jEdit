@@ -15,8 +15,8 @@
                 exclude-result-prefixes="#default">
 
 <!-- NOTE: path to import file on local instalation follows -->
-<!-- <xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/nochunk.xsl"/> -->
-<xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/chunk.xsl"/>
+<xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/onechunk.xsl"/>
+<!-- <xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/chunk.xsl"/> -->
 <xsl:param name="use.id.as.filename" select="'1'" doc:type="boolean"/>
 <xsl:param name="generate.qandaset.toc" doc:type="boolean">1</xsl:param>
 <xsl:param name="generate.qandaset.div" doc:type="boolean">1</xsl:param>
@@ -112,12 +112,16 @@
   <xsl:call-template name="toc"/>
   <xsl:call-template name="index"/>
 </xsl:template> -->
-<!--
+
+<!-- The next two templates should be commented if   -->
+<!-- navigation headers are desired                  -->
+
 <xsl:template name="header.navigation">
 </xsl:template>
 
 <xsl:template name="footer.navigation">
-</xsl:template> -->
+</xsl:template>
+
 <!--
 <xsl:template name="toc">
   <xsl:apply-templates/>
