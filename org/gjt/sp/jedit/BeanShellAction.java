@@ -49,7 +49,7 @@ public class BeanShellAction extends EditAction
 			try
 			{
 				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-					isSelected);
+					isSelected,false);
 			}
 			catch(Exception e)
 			{
@@ -67,7 +67,7 @@ public class BeanShellAction extends EditAction
 			if(cachedCode == null)
 			{
 				String cachedCodeName = "action_" + sanitizedName;
-				cachedCode = BeanShell.cacheBlock(cachedCodeName,code);
+				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,false);
 			}
 
 			BeanShell.runCachedBlock(cachedCode,view,null);

@@ -50,6 +50,8 @@ Thanks to Gerd Knops for contributing to this release.
   toolbars or dockables. This can be useful for opening up a quick
   window for taking notes, etc.
 
+- File system browser color regexps are now case-insensitive.
+
 + Bug Fixes:
 
 - Fixed default install path settings in installer when running on Unix.
@@ -88,6 +90,9 @@ Thanks to Gerd Knops for contributing to this release.
   with the text "<html>". Swing has a weird feature where any text label
   beginning with <html> is rendered using the Swing HTML engine, and
   this would trip it off.
+
+- HyperSearch inside a selection did not handle ^ and $ in regular
+  expressions correctly on the first or last line of the selection.
 
 + API Changes:
 

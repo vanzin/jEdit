@@ -678,10 +678,13 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
-		top.save();
-		left.save();
-		bottom.save();
-		right.save();
+		if(!view.isPlainView())
+		{
+			top.save();
+			left.save();
+			bottom.save();
+			right.save();
+		}
 
 		Enumeration enum = windows.elements();
 		while(enum.hasMoreElements())

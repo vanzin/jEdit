@@ -374,6 +374,12 @@ vfs.browser.colors.4.glob=*.{gz,jar,zip,tgz,z}
 vfs.browser.colors.4.color=#990000
 vfs.browser.colors.5.glob=tags
 vfs.browser.colors.5.color=#003366
+vfs.browser.colors.6.glob=*.{sh,bat}
+vfs.browser.colors.6.color=#006666
+vfs.browser.colors.7.glob={CHANGELOG,CHANGES,INSTALL,LICENSE,README,TODO}{,.txt}
+vfs.browser.colors.7.color=#990066
+vfs.browser.colors.8.glob=*.{props,properties}
+vfs.browser.colors.8.color=#666666
 
 #}}}
 
