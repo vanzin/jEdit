@@ -2026,7 +2026,7 @@ forward_scan:		do
 	 * Adds a structure matcher.
 	 * @since jEdit 4.2pre3
 	 */
-	public void addStructureMatcher(StructureMatcher.Match matcher)
+	public void addStructureMatcher(StructureMatcher matcher)
 	{
 		structureMatchers.add(matcher);
 	} //}}}
@@ -2036,7 +2036,7 @@ forward_scan:		do
 	 * Removes a structure matcher.
 	 * @since jEdit 4.2pre3
 	 */
-	public void removeStructureMatcher(StructureMatcher.Match matcher)
+	public void removeStructureMatcher(StructureMatcher matcher)
 	{
 		structureMatchers.remove(matcher);
 	} //}}}
