@@ -166,6 +166,15 @@ public class HistoryTextField extends JTextField
 		return selectAllOnFocus;
 	} //}}}
 
+	//{{{ getModel() method
+	/**
+	 * Returns the underlying history model.
+	 */
+	public HistoryModel getModel()
+	{
+		return historyModel;
+	} //}}}
+
 	//{{{ setModel() method
 	/**
 	 * Sets the history list model.
@@ -214,15 +223,6 @@ public class HistoryTextField extends JTextField
 	{
 		super.setText(text);
 		index = -1;
-	} //}}}
-
-	//{{{ getModel() method
-	/**
-	 * Returns the underlying history model.
-	 */
-	public HistoryModel getModel()
-	{
-		return historyModel;
 	} //}}}
 
 	//{{{ fireActionPerformed() method
