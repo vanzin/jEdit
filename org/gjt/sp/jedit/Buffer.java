@@ -203,6 +203,8 @@ public class Buffer
 
 			if(!loadAutosave)
 			{
+				VFS vfs = VFSManager.getVFSForPath(path);
+
 				if(!checkFileForLoad(view,vfs,path))
 				{
 					setFlag(LOADING,false);
@@ -583,8 +585,6 @@ public class Buffer
 				}
 				else
 				{
-					if(!isDirty())
-						load(view,true);
 					return FILE_CHANGED;
 				}
 			}
@@ -624,7 +624,7 @@ public class Buffer
 	 */
 	public VFS getVFS()
 	{
-		return vfs;
+		return VFSManager.getVFSForPath(path);
 	} //}}}
 
 	//{{{ getAutosaveFile() method
@@ -3466,7 +3466,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Instance variables
-	private VFS vfs;
 	private String path;
 	private String symlinkPath;
 	private String name;
@@ -3509,7 +3508,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		this.path = path;
 		this.symlinkPath = path;
-		this.vfs = VFSManager.getVFSForPath(path);
+		VFS vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setReadOnly(true);
 		this.name = vfs.getFileName(path);
@@ -3533,6 +3532,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
 		}
+		else
+		{
+			// I wonder if the lack of this broke anything in the
+			// past?
+			file = null;
+			autosaveFile = null;
+		}
 	} //}}}
 
 	//{{{ recoverAutosave() method
@@ -3550,7 +3556,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		if(result == JOptionPane.YES_OPTION)
 		{
-			vfs.load(view,this,autosaveFile.getPath());
+			VFSManager.getFileVFS().load(view,this,autosaveFile.getPath());
 
 			// show this message when all I/O requests are
 			// complete

@@ -164,12 +164,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		}
 		else
 		{
-			String path = view.getBuffer().getDirectory();
-
-			if(path.endsWith("/") || path.endsWith(File.separator))
-				path = path.substring(0,path.length() - 1);
-
-			directory.setText(path);
+			directory.setText(view.getBuffer().getDirectory());
 
 			if(fileset instanceof AllBufferSet)
 			{

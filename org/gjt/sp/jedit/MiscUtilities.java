@@ -140,7 +140,7 @@ public class MiscUtilities
 	{
 		if(isURL(path))
 			return true;
-		else if(path.startsWith("~/") || path.startsWith("~" + File.separator))
+		else if(path.startsWith("~/") || path.startsWith("~" + File.separator) || path.equals("~"))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
 		{

@@ -66,27 +66,25 @@ public class GlobalOptions extends OptionsDialog
 		// initialize the jEdit branch of the options tree
 		jEditGroup = new OptionGroup("jedit");
 
-		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
-		addOptionPane(new AppearanceOptionPane(), jEditGroup);
-		addOptionPane(new ContextOptionPane(), jEditGroup);
-		addOptionPane(new EditingOptionPane(), jEditGroup);
-		addOptionPane(new GeneralOptionPane(), jEditGroup);
-		addOptionPane(new GutterOptionPane(), jEditGroup);
-		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
-		addOptionPane(new PluginManagerOptionPane(), jEditGroup);
-		addOptionPane(new PrintOptionPane(), jEditGroup);
-		addOptionPane(new FirewallOptionPane(), jEditGroup);
-		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
-		addOptionPane(new StatusBarOptionPane(), jEditGroup);
-		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
-		addOptionPane(new TextAreaOptionPane(), jEditGroup);
-		addOptionPane(new ToolBarOptionPane(), jEditGroup);
-		addOptionGroup(jEditGroup, rootGroup);
+		jEditGroup.addOptionPane("context");
+		jEditGroup.addOptionPane("editing");
+		jEditGroup.addOptionPane("general");
+		jEditGroup.addOptionPane("gutter");
+		jEditGroup.addOptionPane("loadsave");
+		jEditGroup.addOptionPane("print");
+		jEditGroup.addOptionPane("plugin-manager");
+		jEditGroup.addOptionPane("firewall");
+		jEditGroup.addOptionPane("shortcuts");
+		jEditGroup.addOptionPane("status");
+		jEditGroup.addOptionPane("syntax");
+		jEditGroup.addOptionPane("textarea");
+		jEditGroup.addOptionPane("toolbar");
+		rootGroup.addOptionGroup(jEditGroup);
 
 		browserGroup = new OptionGroup("browser");
-		addOptionPane(new BrowserColorsOptionPane(), browserGroup);
-		addOptionPane(new BrowserOptionPane(), browserGroup);
-		addOptionGroup(browserGroup, rootGroup);
+		browserGroup.addOptionPane("browser.general");
+		browserGroup.addOptionPane("browser.colors");
+		rootGroup.addOptionGroup(browserGroup);
 
 		return paneTreeModel;
 	} //}}}

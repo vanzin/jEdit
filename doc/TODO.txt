@@ -7,24 +7,27 @@ and quirks that I need to fix eventually.
 
 I'm releasing 4.2pre1 ASAP.
 
+- browser: enter with table active
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
 - while loading --> scroll bar
 - plugin api:
-  - option panes.
-  - port quicknotepad, errorlist, character map, send buffer,
-      sidekick, xml.
+  - port console, sidekick, xml.
   - plugin errors after startup
   - mouse over text for actions
-- save to symlink: don't overwrite symlink
-- file changed dialog: don't reload files if flag is off
-- save caret info first
 - box in io progress
 - split view line insert: repainted twice, selection problems
 - action bar: wrap around arrow keys
 - bizarre dockable window manager button layout problem
+- control-click: with block caret behaves like block caret is off
+- control-drag: rect select back
 
 ================================
+
+- quicknotepad: handle no settings dir more gracefully
+- save caret info first
+- caret saving needs to be more flexible w.r.t. split panes
+- <edit pane,buffer> --> <caret info> map
 
 - plugin unload:
   - update dockables
@@ -40,13 +43,11 @@ I'm releasing 4.2pre1 ASAP.
 
 - can do perl q|...| etc. using begin/end substitution!
 - perl: q{}, etc.
-- 
-- got a multiple i/o requests thing once
-- browser: /, ~, -
+
 - browser's default size
 - browser: tab: don't insert full path
 - completion: handle full paths
-- file dialog: handle ~ ENTER, - ENTER
+- file dialog: handle - ENTER
 
 - F2 doesn't work in JTree/JTable, maybe others
 - servicemanager javadocs
@@ -200,7 +201,6 @@ I'm releasing 4.2pre1 ASAP.
   <--- cursor here
 - examples of EOL_SPAN_REGEXP matching in docs
 - remember floating & cloned dockables in perspective
-- caret saving needs to be more flexible w.r.t. split panes
 - add dockable window state change msg
 - range-comment & rect select
 - options for recent files list, recent files menu

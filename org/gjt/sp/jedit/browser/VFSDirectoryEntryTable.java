@@ -290,11 +290,26 @@ public class VFSDirectoryEntryTable extends JTable
 			if(evt.isShiftDown() && evt.getKeyChar() == '\n')
 				return;
 
+			VFSBrowser browser = browserView.getBrowser();
+
 			switch(evt.getKeyChar())
 			{
 			case '~':
+				if(browser.getMode() == VFSBrowser.BROWSER)
+					browser.setDirectory(System.getProperty(
+						"user.home"));
+				break;
 			case '/':
+				if(browser.getMode() == VFSBrowser.BROWSER)
+					browser.rootDirectory();
+				break;
 			case '-':
+				if(browser.getMode() == VFSBrowser.BROWSER)
+				{
+					browser.setDirectory(
+						browser.getView().getBuffer()
+						.getDirectory());
+				}
 				break;
 			default:
 				typeSelectBuffer.append(evt.getKeyChar());

@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.util.*;
 
-class PluginManagerOptionPane extends AbstractOptionPane
+public class PluginManagerOptionPane extends AbstractOptionPane
 {
 	//{{{ Constructor
 	public PluginManagerOptionPane()

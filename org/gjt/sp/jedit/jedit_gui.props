@@ -1422,6 +1422,7 @@ options.last=editing
 
 #{{{ Abbreviations pane
 options.abbrevs.label=Abbreviations
+options.abbrevs.code=new AbbrevsOptionPane();
 options.abbrevs.set=Abbrev set:
 options.abbrevs.expandOnInput=Space bar expands abbrevs
 options.abbrevs.abbrev=Abbrev
@@ -1433,6 +1434,7 @@ options.abbrevs.remove=Remove
 
 #{{{ Appearance pane
 options.appearance.label=Appearance
+options.appearance.code=new AppearanceOptionPane();
 options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
@@ -1454,6 +1456,7 @@ options.appearance.decorateDialogs=Draw dialog box borders using Swing look & fe
 
 #{{{ Context Menu pane
 options.context.label=Context Menu
+options.context.code=new ContextOptionPane();
 options.context.caption=Items in text area right click menu:
 options.context.add=Add...
 options.context.remove=Remove
@@ -1467,6 +1470,7 @@ options.context.add.action=Command or macro:
 
 #{{{ Editing pane
 options.editing.label=Editing
+options.editing.code=new EditingOptionPane();
 options.editing.defaultMode=Default edit mode:
 options.editing.undoCount=Number of undos:
 options.editing.mode=Change settings for mode:
@@ -1486,6 +1490,7 @@ options.editing.noTabs=Soft (emulated with spaces) tabs
 
 #{{{ General pane
 options.general.label=General
+options.general.code=new GeneralOptionPane();
 options.general.history=History entries to remember:
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list (takes effect after restart)
@@ -1502,6 +1507,7 @@ options.general.showSplash=Show splash screen on startup
 
 #{{{ Gutter pane
 options.gutter.label=Gutter
+options.gutter.code=new GutterOptionPane();
 options.gutter.lineNumbers=Line numbering
 options.gutter.font=Gutter font:
 options.gutter.foreground=Line number color:
@@ -1528,6 +1534,7 @@ options.gutter.selectFold=Select fold
 
 #{{{ Loading and Saving pane
 options.loadsave.label=Loading & Saving
+options.loadsave.code=new LoadSaveOptionPane();
 options.loadsave.encoding=Default character encoding:
 options.loadsave.autosave=Autosave frequency (secs):
 options.loadsave.backups=Max number of backups:
@@ -1544,8 +1551,21 @@ options.loadsave.backupEverySave=Backup on every save
 options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
+#{{{ Plugin Manager pane
+options.plugin-manager.label=Plugin Manager
+options.plugin-manager.code=new PluginManagerOptionPane();
+options.plugin-manager.updateMirrors=Update mirror list
+options.plugin-manager.downloadSource=Download plugin source code
+options.plugin-manager.mirror=Preferred download mirror:
+options.plugin-manager.location=Install plugins in:
+options.plugin-manager.settings-dir=jEdit settings directory
+options.plugin-manager.app-dir=jEdit application directory
+options.plugin-manager.none=Plugin Central default
+#}}}
+
 #{{{ Printing pane
 options.print.label=Printing
+options.print.code=new PrintOptionPane();
 options.print.font=Print font:
 options.print.fontstyle=Print font style:
 options.print.fontsize=Print font size:
@@ -1556,19 +1576,9 @@ options.print.color=Color printing
 options.print.tabSize=Tab width when printing:
 #}}}
 
-#{{{ Plugin Manager pane
-options.plugin-manager.label=Plugin Manager
-options.plugin-manager.updateMirrors=Update mirror list
-options.plugin-manager.downloadSource=Download plugin source code
-options.plugin-manager.mirror=Preferred download mirror:
-options.plugin-manager.location=Install plugins in:
-options.plugin-manager.settings-dir=jEdit settings directory
-options.plugin-manager.app-dir=jEdit application directory
-options.plugin-manager.none=Plugin Central default
-#}}}
-
 #{{{ Proxy pane
 options.firewall.label=Proxy Servers
+options.firewall.code=new FirewallOptionPane();
 options.firewall.http.enabled=Use HTTP proxy server
 options.firewall.http.host=HTTP proxy host:
 options.firewall.http.port=HTTP proxy port:
@@ -1582,6 +1592,7 @@ options.firewall.socks.port=SOCKS proxy port:
 
 #{{{ Shortcuts pane
 options.shortcuts.label=Shortcuts
+options.shortcuts.code=new ShortcutsOptionPane();
 options.shortcuts.select.label=Edit Shortcuts:
 options.shortcuts.name=Command
 options.shortcuts.shortcut1=Primary shortcut
@@ -1622,6 +1633,7 @@ grab-key.prefix-shortcut.message=\
 
 #{{{ Status bar pane
 options.status.label=Status Bar
+options.status.code=new StatusBarOptionPane();
 options.status.visible=Show status bar
 options.status.show-caret-status=Show caret status
 options.status.show-encoding=Show buffer encoding
@@ -1639,6 +1651,7 @@ options.status.memory.background=Memory indicator background:
 
 #{{{ Syntax Highlighting pane
 options.syntax.label=Syntax Highlighting
+options.syntax.code=new SyntaxHiliteOptionPane();
 options.syntax.object=Token type
 options.syntax.style=Text style
 options.syntax.foldLine.1=Collapsed fold line, level 1
@@ -1649,6 +1662,7 @@ options.syntax.foldLine.0=Collapsed fold line, level > 3
 
 #{{{ Text Area pane
 options.textarea.label=Text Area
+options.textarea.code=new TextAreaOptionPane();
 options.textarea.font=Text font:
 options.textarea.foreground=Text color:
 options.textarea.background=Background color:
@@ -1673,6 +1687,7 @@ options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 
 #{{{ Tool Bar pane
 options.toolbar.label=Tool Bar
+options.toolbar.code=new ToolBarOptionPane();
 options.toolbar.showToolbar=Show tool bar
 options.toolbar.caption=Buttons to display on tool bar:
 options.toolbar.add=Add...
@@ -1694,7 +1709,15 @@ options.toolbar.edit.no-icon=No icon selected
 #{{{ File System Browser panes
 options.browser.label=File System Browser
 
+options.browser.colors.label=Colors
+options.browser.colors.code=new BrowserColorsOptionPane();
+options.browser.colors.glob=File name glob
+options.browser.colors.color=Color
+options.browser.colors.add=Add
+options.browser.colors.remove=Remove
+
 options.browser.general.label=General
+options.browser.general.code=new BrowserOptionPane();
 options.browser.general.defaultPath=Default path:
 options.browser.general.defaultPath.favorites=Favorites
 options.browser.general.defaultPath.home=Home directory
@@ -1710,12 +1733,6 @@ options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
 options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
-
-options.browser.colors.label=Colors
-options.browser.colors.glob=File name glob
-options.browser.colors.color=Color
-options.browser.colors.add=Add
-options.browser.colors.remove=Remove
 #}}}
 
 #{{{ Font selector

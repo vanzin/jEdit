@@ -272,9 +272,11 @@ public abstract class VFS
 		if(path.equals("/"))
 			return path;
 
-		int count = Math.max(0,path.length() - 2);
-		int index = Math.max(path.lastIndexOf('/',count),
-			path.lastIndexOf(File.separatorChar,count));
+		if(path.endsWith("/") || path.endsWith(File.separator))
+			path = path.substring(0,path.length() - 1);
+
+		int index = Math.max(path.lastIndexOf('/'),
+			path.lastIndexOf(File.separatorChar));
 		if(index == -1)
 			index = path.indexOf(':');
 

@@ -43,7 +43,7 @@ public class FileVFS extends VFS
 	//{{{ FileVFS method
 	public FileVFS()
 	{
-		super("file",READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
+		super("file",READ_CAP | WRITE_CAP | DELETE_CAP
 			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP);
 	} //}}}
 
@@ -131,7 +131,8 @@ public class FileVFS extends VFS
 	public String _canonPath(Object session, String path, Component comp)
 		throws IOException
 	{
-		return MiscUtilities.canonPath(path);
+		return MiscUtilities.resolveSymlinks(
+			MiscUtilities.canonPath(path));
 	} //}}}
 
 	//{{{ LocalDirectoryEntry class
@@ -200,11 +201,6 @@ public class FileVFS extends VFS
 			return new VFS.DirectoryEntry(path,path,path,
 				VFS.DirectoryEntry.DIRECTORY,0L,false);
 		}
-
-		// workaround for Java bug where paths with trailing / return
-		// null getName()
-		if(path.endsWith("/") || path.endsWith(File.separator))
-			path = path.substring(0,path.length() - 1);
 
 		File file = new File(path);
 		if(!file.exists())
