@@ -390,7 +390,7 @@ public class GrabKeyDialog extends JDialog
 
 				KeyEventTranslator.Key key = KeyEventTranslator
 					.translateKeyEvent(evt);
-				if(evt != null)
+				if(debugBuffer != null && key != null)
 				{
 					debugBuffer.insert(debugBuffer.getLength(),
 						"Translated to " + key + "\n");

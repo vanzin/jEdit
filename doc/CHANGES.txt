@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre3
 
-Thanks to Brad Mace, Brant Langer Gurganus and Ken Turner for
-contributing to this release.
+Thanks to Brad Mace, Brant Langer Gurganus, Christoph Daniel Schulze,
+Ken Turner and Ollie Rutherfurd for contributing to this release.
 
 {{{ Editing
 
@@ -24,6 +24,9 @@ contributing to this release.
 - The "Format Paragraph" command now shows an error message instead of
   just beeping if the wrap margin is not set.
 
+- The "Paste Previous" and "Paste From List" dialog boxes now show the
+  selected item in a multiple-line text area (Ollie Rutherfurd).
+
 }}}
 {{{ Syntax Highlighting
 
@@ -38,6 +41,8 @@ contributing to this release.
 
 - Added TPL syntax highlighting (Brant Langer Gurganus).
 
+- Added UnrealScript syntax highlighting (Christoph Daniel Schulze)
+
 }}}
 {{{ User Interface
 
@@ -50,6 +55,10 @@ contributing to this release.
   first buffer. The code that does this was actually there all along,
   but it never worked and I didn't notice (it would just go to the first
   buffer).
+
+- On Windows, entering X:\ or X:/ where X is a drive letter will
+  automatically list that drive so that further paths can be completed.
+  This is similar to how on Unix entering / opens the root directory.
 
 }}}
 {{{ Plugin Manager
@@ -264,6 +273,8 @@ contributing to this release.
 
 - Redoing a remove did not clear the buffer's modified flag if
   necessary.
+
+- Fixed status bar display for prefixes longer than three keys.
 
 }}}
 {{{ API Changes

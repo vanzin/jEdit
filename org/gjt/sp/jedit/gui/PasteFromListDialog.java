@@ -59,13 +59,13 @@ public class PasteFromListDialog extends EnhancedDialog
 		content.add(BorderLayout.NORTH,label);
 
 		JScrollPane scroller = new JScrollPane(clips);
-		scroller.setPreferredSize(new Dimension(500,200));
+		scroller.setPreferredSize(new Dimension(500,150));
 		center.add(scroller);
 
-		clipText = new JTextArea(60,12);
+		clipText = new JTextArea();
 		clipText.setEditable(false);
 		scroller = new JScrollPane(clipText);
-		scroller.setPreferredSize(new Dimension(500,200));
+		scroller.setPreferredSize(new Dimension(500,150));
 		center.add(scroller);
 
 		content.add(center, BorderLayout.CENTER);

@@ -300,6 +300,9 @@
 <MODE NAME="transact-sql"	FILE="tsql.xml"
 				FILE_NAME_GLOB="*.sql" />
 
+<MODE NAME="uscript"		FILE="uscript.xml"
+				FILE_NAME_GLOB="*.uc" />
+
 <MODE NAME="vbscript"		FILE="vbscript.xml"
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
 

@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -29,6 +30,8 @@ import java.io.File;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.OperatingSystem;
+//}}}
 
 /**
  * @author Slava Pestov
@@ -134,6 +137,14 @@ class VFSFileNameField extends HistoryTextField
 						return;
 					}
 					path = files[0].path;
+				}
+				else if(OperatingSystem.isDOSDerived()
+					&& path.length() == 3
+					&& path.charAt(1) == ':')
+				{
+					browser.setDirectory(path);
+					VFSManager.waitForRequests();
+					setText(null);
 				}
 
 				VFS vfs = VFSManager.getVFSForPath(path);

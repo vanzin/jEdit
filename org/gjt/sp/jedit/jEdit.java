@@ -1923,12 +1923,25 @@ public class jEdit
 		// so that the write protection is updated if it changes on disk
 		boolean showDialogSetting = getBooleanProperty("view.checkModStatus");
 
-		Buffer[] buffers = jEdit.getBuffers();
-		int[] states = new int[buffers.length];
-		boolean show = false;
-		for(int i = 0; i < buffers.length; i++)
+		// the problem with this is that if we have two edit panes
+		// looking at the same buffer and the file is reloaded both
+		// will jump to the same location
+		View _view = viewsFirst;
+		while(_view != null)
 		{
-			Buffer buffer = buffers[i];
+			EditPane[] editPanes = _view.getEditPanes();
+			for(int i = 0; i < editPanes.length; i++)
+			{
+				editPanes[i].saveCaretInfo();
+			}
+		}
+
+		Buffer buffer = buffersFirst;
+		int[] states = new int[bufferCount];
+		int i = 0;
+		boolean show = false;
+		while(buffer != null)
+		{
 			states[i] = buffer.checkFileStatus(view);
 
 			switch(states[i])
@@ -1941,6 +1954,9 @@ public class jEdit
 				show = true;
 				break;
 			}
+
+			buffer = buffer.next;
+			i++;
 		}
 
 		if(show && showDialogSetting)
@@ -2812,7 +2828,26 @@ public class jEdit
 			{
 				View view = GUIUtilities.getView(
 					(Component)evt.getSource());
+
+				boolean actionBarVisible;
+				if(view.getActionBar() == null)
+					actionBarVisible = false;
+				else
+				{
+					actionBarVisible = view.getActionBar()
+						.isVisible();
+				}
+
 				view.getInputHandler().invokeAction(action);
+
+				if(actionBarVisible)
+				{
+					// XXX: action bar might not be 'temp'
+					ActionBar actionBar = view
+						.getActionBar();
+					if(actionBar != null)
+						view.removeToolBar(actionBar);
+				}
 			}
 		};
 
