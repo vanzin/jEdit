@@ -705,47 +705,6 @@ public class DisplayManager
 		fvm[1] = buffer.getLineCount();
 	} //}}}
 
-	//{{{ fvmtest() method
-	/**
-	 * Debug.
-	 */
-	private void fvmtest()
-	{
-		boolean[] map = new boolean[buffer.getLineCount()];
-		java.util.Random random = new java.util.Random();
-
-		// randomly show and hide lines, both in the fvm structure and
-		// a simple boolean map
-		for(int i = 0; i < 1000; i++)
-		{
-			int random1 = Math.abs(random.nextInt() % map.length);
-			int random2 = Math.abs(random.nextInt() % map.length);
-			if(random2 < random1)
-			{
-				int tmp = random1;
-				random1 = random2;
-				random2 = tmp;
-			}
-
-			boolean vis = (random1 + random2 % 2 == 0);
-			if(vis)
-				showLineRange(random1,random2);
-			else
-				hideLineRange(random1,random2);
-			for(int j = random1; j <= random2; j++)
-			{
-				map[j] = vis;
-			}
-		}
-
-		// check for the fvm structure is correct
-		for(int i = 0; i < map.length; i++)
-		{
-			if(isLineVisible(i) != map[i])
-				Log.log(Log.ERROR,this,"Mismatch: " + i);
-		}
-	} //}}}
-
 	//{{{ fvmget() method
 	/**
 	 * Returns the fold visibility map index for the given line.
@@ -853,6 +812,9 @@ loop:		for(;;)
 		}
 
 		fvmcount += delta;
+
+		fvmdump();
+
 		if(fvmcount == 0)
 			throw new InternalError();
 	} //}}}
@@ -895,6 +857,23 @@ loop:		for(;;)
 					new int[] { start,
 					end + 1 });
 			}
+		}
+	} //}}}
+
+	//{{{ fvmdump() method
+	private void fvmdump()
+	{
+		if(Debug.FOLD_VIS_DEBUG)
+		{
+			StringBuffer buf = new StringBuffer("{");
+			for(int i = 0; i < fvmcount; i++)
+			{
+				if(i != 0)
+					buf.append(',');
+				buf.append(fvm[i]);
+			}
+			buf.append("}");
+			Log.log(Log.DEBUG,this,"fvm = " + buf);
 		}
 	} //}}}
 
@@ -1506,6 +1485,7 @@ loop:		for(;;)
 				/* update fold visibility map. */
 				int starti = fvmget(startLine);
 				int endi = fvmget(startLine + numLines);
+				System.err.println(starti + "," + endi);
 
 				/* both have same visibility; just remove
 				 * anything in between. */
@@ -1526,7 +1506,13 @@ loop:		for(;;)
 						starti++;
 					}
 				}
-				else
+				else if(Math.abs(starti % 2) == 1)
+				{
+					fvmput(starti + 1,endi + 2,null);
+					fvm[starti + 1] = startLine;
+					starti += 2;
+				}
+				else /*if(Math.abs(endi % 2) == 1)*/
 				{
 					fvmput(starti + 1,endi,null);
 					fvm[starti + 1] = startLine;
@@ -1537,6 +1523,7 @@ loop:		for(;;)
 					fvm[i] -= numLines;
 
 				lastfvmget = -1;
+				fvmdump();
 			}
 		} //}}}
 
