@@ -6064,42 +6064,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		} //}}}
 
-		//{{{ mouseReleased() method
-		public void mouseReleased(MouseEvent evt)
-		{
-			if(getSelectionCount() != 0)
-				Registers.setRegister('%',getSelectedText());
-
-			if(dragged)
-			{
-				// middle mouse button drag inserts selection
-				// at caret position
-				if(quickCopyDrag)
-				{
-					String text = getSelectedText();
-					selectNone();
-					setSelectedText(text);
-				}
-			}
-			else if(isQuickCopyEnabled()
-				&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
-			{
-				moveCaretPosition(dragStart,false);
-				if(!isEditable())
-					getToolkit().beep();
-				else
-					Registers.paste(JEditTextArea.this,'%');
-			}
-
-			dragged = false;
-
-			if(clearStatus)
-			{
-				clearStatus = false;
-				view.getStatus().setMessage(null);
-			}
-		} //}}}
-
 		//{{{ doSingleClick() method
 		private void doSingleClick(MouseEvent evt)
 		{
@@ -6155,11 +6119,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					}
 				}
 
-				if(!multi)
+				if(!(multi || quickCopyDrag))
+				{
 					selectNone();
-
-				if(!quickCopyDrag)
 					moveCaretPosition(dragStart,false);
+				}
 			}
 		} //}}}
 
@@ -6390,6 +6354,46 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			resizeSelection(mark,mouse,0,rect);
 			moveCaretPosition(mouse,false);
+		} //}}}
+
+		//{{{ mouseReleased() method
+		public void mouseReleased(MouseEvent evt)
+		{
+			if(dragged)
+			{
+				// middle mouse button drag inserts selection
+				// at caret position
+				Selection sel = getSelectionAtOffset(dragStart);
+				if(sel != null)
+				{
+					if(quickCopyDrag)
+					{
+						Registers.setRegister('%',getSelectedText(sel));
+						removeFromSelection(sel);
+						Registers.paste(JEditTextArea.this,'%',
+							sel instanceof Selection.Rect);
+					}
+					else
+						Registers.setRegister('%',getSelectedText());
+				}
+			}
+			else if(isQuickCopyEnabled()
+				&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+			{
+				moveCaretPosition(dragStart,false);
+				if(!isEditable())
+					getToolkit().beep();
+				else
+					Registers.paste(JEditTextArea.this,'%');
+			}
+
+			dragged = false;
+
+			if(clearStatus)
+			{
+				clearStatus = false;
+				view.getStatus().setMessage(null);
+			}
 		} //}}}
 	} //}}}
 

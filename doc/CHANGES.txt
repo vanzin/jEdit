@@ -278,6 +278,8 @@ contributing to this release.
 - Text area would not automatically scroll to the caret location when
   working with multiple views under certain circumstances.
 
+- Middle mouse button drags now work if there is an existing selection.
+
 + API Changes:
 
 - Two methods added to jEdit class:

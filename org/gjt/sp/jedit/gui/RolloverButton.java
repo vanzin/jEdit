@@ -48,7 +48,7 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
-		if(OperatingSystem.isMacOS())
+		if(OperatingSystem.isMacOSLF())
 			setBorder(new EtchedBorder());
 
 		setBorderPainted(false);
