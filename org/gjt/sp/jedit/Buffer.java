@@ -3119,7 +3119,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
 				if(newFoldLevel != lineMgr.getFoldLevel(i))
+				{
+					if(Debug.FOLD_DEBUG)
+						Log.log(Log.DEBUG,this,i + " fold level changed");
 					changed = true;
+				}
 				lineMgr.setFoldLevel(i,newFoldLevel);
 			}
 
@@ -3128,9 +3132,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 			else
 				lineMgr.setFirstInvalidFoldLevel(line + 1);
 
-			if(changed && !getFlag(TRANSACTION))
+			if(changed)
 			{
-				//System.err.println("fold level changed: " + start + ":" + line);
+				if(Debug.FOLD_DEBUG)
+					Log.log(Log.DEBUG,this,"fold level changed: " + firstInvalidFoldLevel + "," + line);
 				fireFoldLevelChanged(firstInvalidFoldLevel,line);
 			}
 

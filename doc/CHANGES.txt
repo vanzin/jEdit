@@ -47,9 +47,14 @@ for contributing to this release.
 
 - If a plugin creates an ActionSet with a null label (which would be a
   bug in the plugin), the Shortcuts option pane didn't work.
+
+- The folding triangles in the gutter were not always being repainted
+  when using indent folding.
+
 }}}
 
 }}}
+
 {{{ Version 4.2pre13
 
 Thanks to Magnus Henriksson, Nicholas O'Leary, Ollie Rutherfurd and
