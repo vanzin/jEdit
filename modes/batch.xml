@@ -7,16 +7,16 @@
 	this file is based on the original JEdit batch.xml mode.
 	The main upgrade consisting in adding the standard MS-DOS
 	commands as keywords and functions:
-	- keywords =		internal shell commands;
-	-	functions =		standard MS-DOS commands (.exe or .com in DOS or
-									windows\command directory).
+	- keywords =    internal shell commands;
+	- functions =   standard MS-DOS commands (.exe or .com in DOS or
+	  windows\command directory).
 -->
 
 <!-- The keywords and functions here defined are those of MS-DOS 6.22 -->
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE="rem " />
+		<PROPERTY NAME="lineComment" VALUE="rem" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
 		<!-- 'echo off' statements -->
@@ -65,7 +65,7 @@
 			<END>%</END>
 		</SPAN>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<!-- KEYWORD1 are internal MS-DOS shell commands -->
 			<KEYWORD1>cd</KEYWORD1>
 			<KEYWORD1>chdir</KEYWORD1>

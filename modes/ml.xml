@@ -72,7 +72,7 @@
 		<SEQ TYPE="NULL">-&gt;</SEQ>
 		<SEQ TYPE="NULL">#</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- built-in operators -->
 
 			<!-- infix precedence 7 -->

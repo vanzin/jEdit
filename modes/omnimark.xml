@@ -58,7 +58,7 @@
         <SEQ TYPE="NULL">]</SEQ>
 
         <!-- Keywords -->
-        <KEYWORDS IGNORE_CASE="TRUE">
+        <KEYWORDS>
             <KEYWORD2>#ADDITIONAL-INFO</KEYWORD2>
             <KEYWORD2>#APPINFO</KEYWORD2>
             <KEYWORD2>#ARGS</KEYWORD2>

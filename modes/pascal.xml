@@ -67,7 +67,7 @@
         <SEQ TYPE="OPERATOR">/</SEQ>
         <SEQ TYPE="OPERATOR">*</SEQ>
 
-        <KEYWORDS IGNORE_CASE="TRUE">
+        <KEYWORDS>
             <!-- Reserved words. Standard directives are not included, except
                  private, protected, public, published, and automated. -->
             <KEYWORD1>and</KEYWORD1>

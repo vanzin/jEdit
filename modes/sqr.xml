@@ -46,7 +46,7 @@
 		<MARK_FOLLOWING TYPE="LITERAL2">#</MARK_FOLLOWING>
 		<MARK_FOLLOWING TYPE="MARKUP">&amp;</MARK_FOLLOWING>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<!-- Section KeyWords -->
 			<FUNCTION>begin-procedure</FUNCTION> 			 
 			<FUNCTION>end-procedure</FUNCTION>			

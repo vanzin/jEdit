@@ -49,13 +49,13 @@ in either free or fixed form FORTRAN-->
 		<SEQ TYPE="NULL">*</SEQ>
 
 <!-- Highlighted Operators -->
-		<SEQ TYPE="OPERATOR"> &gt; </SEQ>
-		<SEQ TYPE="OPERATOR"> &lt; </SEQ>
-		<SEQ TYPE="OPERATOR"> &amp; </SEQ>
-		<SEQ TYPE="OPERATOR"> &lt;= </SEQ>
-		<SEQ TYPE="OPERATOR"> &gt;= </SEQ>
-		<SEQ TYPE="OPERATOR"> /= </SEQ>
-		<SEQ TYPE="OPERATOR"> == </SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">/=</SEQ>
+		<SEQ TYPE="OPERATOR">==</SEQ>
 		<SEQ TYPE="OPERATOR">.lt.</SEQ>
 		<SEQ TYPE="OPERATOR">.gt.</SEQ>
 		<SEQ TYPE="OPERATOR">.eq.</SEQ>
@@ -65,7 +65,7 @@ in either free or fixed form FORTRAN-->
 		<SEQ TYPE="OPERATOR">.AND.</SEQ>
 		<SEQ TYPE="OPERATOR">.OR.</SEQ>
 
-<KEYWORDS IGNORE_CASE="TRUE">
+<KEYWORDS>
 <!-- unclassified keywords -->
 <KEYWORD1>INCLUDE</KEYWORD1>
 <!-- Program units and calling them -->

@@ -68,7 +68,7 @@
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="NULL">:</SEQ>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<!-- Conditional Statements -->
 			<KEYWORD3>if</KEYWORD3>
 			<KEYWORD3>then</KEYWORD3>

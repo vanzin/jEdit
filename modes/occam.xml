@@ -57,7 +57,7 @@
 		<SEQ TYPE="OPERATOR">\/</SEQ>
 		<SEQ TYPE="OPERATOR">~</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
                         <!-- Structure keywords -->
 			<KEYWORD1>ALT</KEYWORD1>
 			<KEYWORD1>ASM</KEYWORD1>

@@ -135,7 +135,7 @@
 			<END>'</END>
 		</SPAN>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<!-- Reserved words -->
 			<KEYWORD1>entry</KEYWORD1>
 			<KEYWORD1>function</KEYWORD1>

@@ -9,7 +9,7 @@
 		<PROPERTY NAME="label" VALUE="VHDL" />
 		<PROPERTY NAME="lineComment" VALUE="--" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE">
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
@@ -55,7 +55,7 @@
 		<SEQ TYPE="NULL">:</SEQ>
 		<SEQ TYPE="NULL">'</SEQ>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<KEYWORD1>architecture</KEYWORD1>
 			<KEYWORD1>alias</KEYWORD1>
  			<KEYWORD1>assert</KEYWORD1>
