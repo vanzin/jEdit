@@ -360,7 +360,6 @@ public class JEditTextArea extends JComponent
 			return;
 
 		displayManager.setFirstLine(firstLine);
-		chunkCache.setFirstLine(firstLine,displayManager.getFirstPhysicalLine());
 
 		maxHorizontalScrollWidth = 0;
 
@@ -412,7 +411,6 @@ public class JEditTextArea extends JComponent
 			return;
 
 		displayManager.setFirstPhysicalLine(physFirstLine);
-		chunkCache.setFirstLine(displayManager.getFirstLine(),physFirstLine);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -564,32 +562,37 @@ public class JEditTextArea extends JComponent
 		int firstLine = getFirstLine();
 
 		//{{{ STAGE 1 -- determine if the caret is visible.
-		Point point = offsetToXY(line,offset,returnValue);
-
-		int height = painter.getFontMetrics().getHeight();
-
-		int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
-		int y2 = (firstLine + visibleLines
-			== displayManager.getScrollLineCount()
-			? 0 : height * _electricScroll);
-
-		Rectangle rect = new Rectangle(0,y1,
-			painter.getWidth() - 5,visibleLines * height
-			- y1 - y2);
-
-		point = offsetToXY(line,offset,returnValue);
-		if(point != null)
+		int screenLine = getScreenLineOfOffset(buffer.getLineStartOffset(line) + offset);
+		Point point;
+		if(screenLine != -1)
 		{
-			point.x += extraEndVirt;
-			if(rect.contains(point))
-				return;
+			point = offsetToXY(line,offset,returnValue);
+
+			int height = painter.getFontMetrics().getHeight();
+
+			int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
+			int y2 = (firstLine + visibleLines
+				== displayManager.getScrollLineCount()
+				? 0 : height * _electricScroll);
+
+			Rectangle rect = new Rectangle(0,y1,
+				painter.getWidth() - 5,visibleLines * height
+				- y1 - y2);
+
+			point = offsetToXY(line,offset,returnValue);
+			if(point != null)
+			{
+				point.x += extraEndVirt;
+				if(rect.contains(point))
+					return;
+			}
 		} //}}}
 
 		point = null;
 
 		//{{{ STAGE 2 -- scroll vertically
 		int physFirstLine = line;
-		int screenLine = visibleLines / 2;
+		screenLine = visibleLines / 2;
 		for(int i = line - 1; i >= 0; i--)
 		{
 			screenLine -= displayManager.getScreenLineCount(physFirstLine);
@@ -4789,6 +4792,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 		lastLinePartial = (height % lineHeight != 0);
+
+		// this does the "trick" to eliminate blank space at the end
+		if(displayManager != null)
+			setFirstLine(getFirstLine());
 
 		chunkCache.recalculateVisibleLines();
 		maxHorizontalScrollWidth = 0;

@@ -589,8 +589,11 @@ public class DisplayManager
 	void dispose()
 	{
 		offsetMgr.removeAnchor(scrollLineCount);
+		offsetMgr = null;
+
 		buffer.removeBufferChangeListener(bufferChangeHandler);
 		buffer._displayUnlock(index);
+		buffer = null;
 	} //}}}
 
 	//}}}
@@ -653,7 +656,15 @@ public class DisplayManager
 		//{{{ changed() method
 		public void changed()
 		{
+			if(!isLineVisible(physicalLine))
+			{
+				if(physicalLine > getLastVisibleLine())
+					physicalLine = getPrevVisibleLine(physicalLine);
+				else
+					physicalLine = getNextVisibleLine(physicalLine);
+			}
 			textArea.updateScrollBars();
+			textArea.chunkCache.setFirstLine(scrollLine,physicalLine);
 		} //}}}
 
 		//{{{ reset() method
