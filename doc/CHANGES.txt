@@ -10,8 +10,10 @@ JEDIT 4.2 VERSION HISTORY
 
 - Improved MS-DOS batch file syntax highlighting (Mirco Bova).
 
-- MCS51 (8051) microcontroller assembly syntax highlighting
+- Added MCS51 (8051) microcontroller assembly syntax highlighting
   (Mirco Bova).
+
+- Updated XSLT syntax highlighting (Magnus Henriksson).
 
 }}}
 {{{ Miscellaneous

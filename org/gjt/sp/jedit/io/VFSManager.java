@@ -65,6 +65,12 @@ public class VFSManager
 	{
 		int count = jEdit.getIntegerProperty("ioThreadCount",4);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
+		JARClassLoader classLoader = new JARClassLoader();
+		for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
+		{
+			ioThreadPool.getThread(i).setContextClassLoader(
+				classLoader);
+		}
 	} //}}}
 
 	//{{{ start() method

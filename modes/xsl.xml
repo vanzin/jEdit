@@ -1,148 +1,417 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
+<!-- 
+	======================================================================
+	Edit mode for XSLT 1.0 and XSLT 2.0 (W3C Working Draft 2 May 2003)
+	======================================================================
+	Token types:
+
+	COMMENT1		XML comments
+	COMMENT2		XPath 2.0 comments - top or nested within COMMENT3
+	COMMENT3		XPath 2.0 comments - nested within COMMENT2
+	COMMENT4		-
+	DIGIT			Digits
+	FUNCTION		Functions
+	INVALID		-
+	KEYWORD1		XSLT 2.0 tags
+	KEYWORD2		Attribute values and DTD constructs (not CDATA sections)
+	KEYWORD3		Axes specifiers
+	KEYWORD4		CDATA sections
+	LABEL			Namespace prefixes
+	LITERAL1		String literals and CDATA section content
+	LITERAL2		Parameter and variable references
+	LITERAL3		Entity references
+	LITERAL4		Processing instructions
+	MARKUP		Result elements and extension elements
+	OPERATOR		XPath 2.0 keywords + some other stuff
+	======================================================================
+-->
 
 <MODE>
+	
 	<PROPS>
-		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
-		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="noWordSep" VALUE="-" />
-		<PROPERTY NAME="wordBreakChars" VALUE="@:|.[]{},+=&lt;&gt;/?^&amp;*" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--"/>
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;"/>
 	</PROPS>
-	<RULES IGNORE_CASE="TRUE">
-		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;xsl:script</BEGIN>
-			<END>&lt;/xsl:script&gt;</END>
-		</SPAN>
-		
-		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;xsl:eval&gt;</BEGIN>
-			<END>&lt;/xsl:eval&gt;</END>
-		</SPAN>
+	
+	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="FALSE">
 
+		<!-- XML comments -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
 		
-		<SPAN TYPE="COMMENT2">
-			<BEGIN>&lt;xsl:comment&gt;</BEGIN>
-			<END>&lt;/xsl:comment&gt;</END>
+		<!-- CDATA sections -->
+		<SPAN TYPE="KEYWORD4" DELEGATE="CDATA">
+			<BEGIN>&lt;![CDATA[</BEGIN>
+			<END>]]&gt;</END>
 		</SPAN>
-
-		<!-- DTD instructions -->
+		
+		<!-- DTD constructs -->
 		<SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
 			<BEGIN>&lt;!</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<!-- PI directives -->
-		<SPAN TYPE="KEYWORD3">
+		<!-- Processing instructions -->
+		<SPAN TYPE="LITERAL4">
 			<BEGIN>&lt;?</BEGIN>
 			<END>?&gt;</END>
 		</SPAN>
 		
-		<!-- XSL TAGS -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
-			<BEGIN>&lt;xsl</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
-		
-		<!-- XSL TAGS -->
-		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
-			<BEGIN>&lt;/xsl</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
-
-		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="html::JAVASCRIPT">
-			<BEGIN>&lt;SCRIPT</BEGIN>
-			<END>&lt;/SCRIPT&gt;</END>
-		</SPAN>
-
-		<!-- stylesheet -->
-		<SPAN TYPE="MARKUP" DELEGATE="html::CSS">
-			<BEGIN>&lt;STYLE</BEGIN>
-			<END>&lt;/STYLE&gt;</END>
-		</SPAN>
-
-		<!-- HTML TAGS -->
-		<SPAN TYPE="MARKUP" DELEGATE="HTMLTAGS">
+		<!-- Tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
 
-		<!-- ENTITY REFERENCES -->
-		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+		<!-- Entity references -->
+		<SPAN TYPE="LITERAL3" NO_WORD_BREAK="TRUE">
 			<BEGIN>&amp;</BEGIN>
 			<END>;</END>
 		</SPAN>
-		
+	
 	</RULES>
 	
-	<!-- HTML TAGS -->
-	<RULES SET="HTMLTAGS" DEFAULT="MARKUP">
+	<!-- CDATA content. No rules, just highlight as LITERAL1 -->
+	<RULES SET="CDATA" DEFAULT="LITERAL1"/>
+	
+	<!-- All tags -->
+	<RULES DEFAULT="MARKUP" HIGHLIGHT_DIGITS="FALSE" NO_WORD_SEP=".-_:" SET="TAGS">
+	
+		<!-- Assume 'xsl' prefix for XSLT elements -->
+		<SEQ DELEGATE="XSLTAGS" TYPE="LABEL">xsl:</SEQ>
+		
+		<!-- Highlight all AVTs in result attribute values. XPaths in extension elements are not highlighted. -->
+		<SPAN TYPE="MARKUP" DELEGATE="AVT">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="MARKUP" DELEGATE="AVT">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<!-- Namespace declarations -->
+		<SEQ TYPE="OPERATOR">xmlns:</SEQ>
+		<!-- Default namespace declaration. Not really used in XSLT -->
+		<SEQ TYPE="OPERATOR">xmlns</SEQ>
+		
+		<!-- Namespace prefixes -->
+		<MARK_PREVIOUS EXCLUDE_MATCH="FALSE" TYPE="LABEL">:</MARK_PREVIOUS>
+	
+	</RULES>
+	
+	<!-- AVTs -->
+	<RULES DEFAULT="KEYWORD2" HIGHLIGHT_DIGITS="FALSE" NO_WORD_SEP=".-_:" SET="AVT">
+	
+		<!-- Literal curly braces ({}) must be written as {{ or }} -->
+		<SEQ>{{</SEQ>
+		<SEQ>}}</SEQ><!-- Does nothing. Is overridden by the SPAN below. -->
+		
+		<!-- The AVT itself -->
+		<SPAN DELEGATE="XPATH" TYPE="OPERATOR">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
+		
+		<!-- Entity references -->
+		<SPAN TYPE="LITERAL3" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	
+	</RULES>
+	
+	<!-- XSLT tags -->
+	<RULES DEFAULT="MARKUP" HIGHLIGHT_DIGITS="FALSE" NO_WORD_SEP=".-_:" SET="XSLTAGS">
+		
+		<!-- If we spot something that looks like an AVT, assume it is. Lazy, I know... -->
+		<SPAN TYPE="MARKUP" DELEGATE="AVT">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="MARKUP" DELEGATE="AVT">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<!-- XSLT attributes that contains XPath expressions or match patterns -->
+		<!-- count -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="c" DELEGATE="XPATH">
+			<BEGIN>count[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="c" DELEGATE="XPATH">
+			<BEGIN>count[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- from -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="f" DELEGATE="XPATH">
+			<BEGIN>from[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="f" DELEGATE="XPATH">
+			<BEGIN>from[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- group-adjacent -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-adjacent[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-adjacent[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- group-by -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-by[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-by[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- group-ending-with -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-ending-with[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-ending-with[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- group-starting-with -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-starting-with[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="g" DELEGATE="XPATH">
+			<BEGIN>group-starting-with[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- match -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="m" DELEGATE="XPATH">
+			<BEGIN>match[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="m" DELEGATE="XPATH">
+			<BEGIN>match[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- select -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="s" DELEGATE="XPATH">
+			<BEGIN>select[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="s" DELEGATE="XPATH">
+			<BEGIN>select[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- test -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="t" DELEGATE="XPATH">
+			<BEGIN>test[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="t" DELEGATE="XPATH">
+			<BEGIN>test[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		<!-- use -->
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="u" DELEGATE="XPATH">
+			<BEGIN>use[[:space:]]*=[[:space:]]*"</BEGIN>
+			<END>"</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="MARKUP" HASH_CHAR="u" DELEGATE="XPATH">
+			<BEGIN>use[[:space:]]*=[[:space:]]*'</BEGIN>
+			<END>'</END>
+		</SPAN_REGEXP>
+		
+		<!-- XSLT 2.0 element names -->
+		<KEYWORDS>
+			<KEYWORD1>analyze-string</KEYWORD1>
+			<KEYWORD1>apply-imports</KEYWORD1>
+			<KEYWORD1>apply-templates</KEYWORD1>
+			<KEYWORD1>attribute</KEYWORD1>
+			<KEYWORD1>attribute-set</KEYWORD1>
+			<KEYWORD1>call-template</KEYWORD1>
+			<KEYWORD1>character-map</KEYWORD1>
+			<KEYWORD1>choose</KEYWORD1>
+			<KEYWORD1>comment</KEYWORD1>
+			<KEYWORD1>copy</KEYWORD1>
+			<KEYWORD1>copy-of</KEYWORD1>
+			<KEYWORD1>date-format</KEYWORD1>
+			<KEYWORD1>decimal-format</KEYWORD1>
+			<KEYWORD1>element</KEYWORD1>
+			<KEYWORD1>fallback</KEYWORD1>
+			<KEYWORD1>for-each</KEYWORD1>
+			<KEYWORD1>for-each-group</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>import</KEYWORD1>
+			<KEYWORD1>import-schema</KEYWORD1>
+			<KEYWORD1>include</KEYWORD1>
+			<KEYWORD1>key</KEYWORD1>
+			<KEYWORD1>matching-substring</KEYWORD1>
+			<KEYWORD1>message</KEYWORD1>
+			<KEYWORD1>namespace</KEYWORD1>
+			<KEYWORD1>namespace-alias</KEYWORD1>
+			<KEYWORD1>next-match</KEYWORD1>
+			<KEYWORD1>non-matching-substring</KEYWORD1>
+			<KEYWORD1>number</KEYWORD1>
+			<KEYWORD1>otherwise</KEYWORD1>
+			<KEYWORD1>output</KEYWORD1>
+			<KEYWORD1>output-character</KEYWORD1>
+			<KEYWORD1>param</KEYWORD1>
+			<KEYWORD1>preserve-space</KEYWORD1>
+			<KEYWORD1>processing-instruction</KEYWORD1>
+			<KEYWORD1>result-document</KEYWORD1>
+			<KEYWORD1>sequence</KEYWORD1>
+			<KEYWORD1>sort</KEYWORD1>
+			<KEYWORD1>sort-key</KEYWORD1>
+			<KEYWORD1>strip-space</KEYWORD1>
+			<KEYWORD1>stylesheet</KEYWORD1>
+			<KEYWORD1>template</KEYWORD1>
+			<KEYWORD1>text</KEYWORD1>
+			<KEYWORD1>transform</KEYWORD1>
+			<KEYWORD1>value-of</KEYWORD1>
+			<KEYWORD1>variable</KEYWORD1>
+			<KEYWORD1>when</KEYWORD1>
+			<KEYWORD1>with-param</KEYWORD1>
+		</KEYWORDS>
+		
+		<!-- Namespace declarations -->
+		<SEQ TYPE="OPERATOR">xmlns:</SEQ>
+		<!-- Default namespace declaration. Not really used in XSLT -->
+		<SEQ TYPE="OPERATOR">xmlns</SEQ>
+		
+		<!-- Namespace prefixes -->
+		<MARK_PREVIOUS EXCLUDE_MATCH="FALSE" TYPE="LABEL">:</MARK_PREVIOUS>
+	
+	</RULES>
+	
+	<RULES DEFAULT="KEYWORD2" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[[:digit:]]+([[:punct:]][[:digit:]]+)?" NO_WORD_SEP=".-_" SET="XPATH">
+		<!-- String literals -->
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
 		
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
-		<SEQ TYPE="OPERATOR">:</SEQ>
-	</RULES>
-	
-	<!-- XSL TAGS -->
-	<RULES SET="XSLTAGS" DEFAULT="KEYWORD2">
-		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
+		<!-- XPath comments -->
+		<SPAN TYPE="COMMENT2" DELEGATE="XPATHCOMMENT2">
+			<BEGIN>(:</BEGIN>
+			<END>:)</END>
 		</SPAN>
 		
-		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
-		</SPAN>
+		<!-- XPath 2.0 keywords + some other stuff -->
+		<KEYWORDS>
+			<!-- Keywords -->
+			<OPERATOR>and</OPERATOR>
+			<OPERATOR>as</OPERATOR>
+			<OPERATOR>castable</OPERATOR>
+			<OPERATOR>div</OPERATOR>
+			<OPERATOR>else</OPERATOR>
+			<OPERATOR>eq</OPERATOR>
+			<OPERATOR>every</OPERATOR>
+			<OPERATOR>except</OPERATOR>
+			<OPERATOR>for</OPERATOR>
+			<OPERATOR>ge</OPERATOR>
+			<OPERATOR>gt</OPERATOR>
+			<OPERATOR>idiv</OPERATOR>
+			<OPERATOR>if</OPERATOR>
+			<OPERATOR>in</OPERATOR>
+			<OPERATOR>instance</OPERATOR>
+			<OPERATOR>intersect</OPERATOR>
+			<OPERATOR>is</OPERATOR>
+			<OPERATOR>isnot</OPERATOR>
+			<OPERATOR>le</OPERATOR>
+			<OPERATOR>lt</OPERATOR>
+			<OPERATOR>mod</OPERATOR>
+			<OPERATOR>nillable</OPERATOR>
+			<OPERATOR>ne</OPERATOR>
+			<OPERATOR>of</OPERATOR>
+			<OPERATOR>or</OPERATOR>
+			<OPERATOR>return</OPERATOR>
+			<OPERATOR>satisfies</OPERATOR>
+			<OPERATOR>some</OPERATOR>
+			<OPERATOR>then</OPERATOR>
+			<OPERATOR>to</OPERATOR>
+			<OPERATOR>treat</OPERATOR>
+			<OPERATOR>union</OPERATOR>
+			
+			<!-- Subtraction operator -->
+			<OPERATOR>-</OPERATOR>
+			
+		</KEYWORDS>
 		
-		<SEQ TYPE="OPERATOR">:</SEQ>
-	</RULES>
-
-	<RULES SET="XPATH" DEFAULT="LITERAL1" NO_WORD_SEP="-_">
-		<!-- entity refs -->
-		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
-			<BEGIN>&amp;</BEGIN>
-			<END>;</END>
-		</SPAN>
-
+		<!-- Axes specifiers -->
+		<MARK_PREVIOUS TYPE="KEYWORD3" EXCLUDE_MATCH="FALSE">::</MARK_PREVIOUS>
+		<!-- Abbreviated 'attribute::' -->
+		<SEQ TYPE="KEYWORD3">@</SEQ>
+		
+		<!-- XPath 2.0 operators + some other stuff -->
+		<!-- Comparison expressions -->
 		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">!=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;gt;</SEQ><!-- Treat as operator -->
+		<SEQ TYPE="OPERATOR">&amp;lt;</SEQ><!-- Treat as operator -->
+		<!-- Optional occurrence indicator -->
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<!-- Addition operator, one-or-more occurrence indicator-->
 		<SEQ TYPE="OPERATOR">+</SEQ>
-		<SEQ TYPE="OPERATOR">|</SEQ>
-		<SEQ TYPE="OPERATOR">[</SEQ>
-		<SEQ TYPE="OPERATOR">]</SEQ>
-		<SEQ TYPE="OPERATOR">.</SEQ>
-		<SEQ TYPE="OPERATOR">/</SEQ>
-		<SEQ TYPE="OPERATOR">{</SEQ>
-		<SEQ TYPE="OPERATOR">}</SEQ>
-		<SEQ TYPE="OPERATOR">@</SEQ>
+		<!-- Multiplication operator, zero-or-more occurrence indicator, node test -->
 		<SEQ TYPE="OPERATOR">*</SEQ>
+		<!-- Path expression step separator -->
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<!-- Union operator -->
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<!-- Sequence expression item separator -->
+		<SEQ TYPE="OPERATOR">,</SEQ>
+		
+		<!-- Predicates -->
+		<SPAN TYPE="OPERATOR" DELEGATE="XPATH">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+		
+		<!-- Entity references -->
+		<SPAN TYPE="LITERAL3" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
 
-		<!-- axis specifiers (needs '-' as noWordSep) -->
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">::</MARK_PREVIOUS>
-		<!-- functions -->
+		<!-- Namespace prefixes -->
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">:</MARK_PREVIOUS>
+		
+		<!-- Functions -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-		<!-- variables -->
+		
+		<!-- Variables -->
 		<MARK_FOLLOWING TYPE="LITERAL2">$</MARK_FOLLOWING>
-
-		<!-- after axis specifyer, so it doesn't interfere -->
-		<SEQ TYPE="OPERATOR">:</SEQ>
-
+	
+	</RULES>
+	
+	<!-- XPath comments - top or nested within COMMENT3 -->
+	<RULES DEFAULT="COMMENT2" SET="XPATHCOMMENT2">
+		<SPAN TYPE="COMMENT3" DELEGATE="XPATHCOMMENT3">
+			<BEGIN>(:</BEGIN>
+			<END>:)</END>
+		</SPAN>
+	</RULES>
+	
+	<!-- XPath comments - nested within COMMENT2 -->
+	<RULES DEFAULT="COMMENT3" SET="XPATHCOMMENT3">
+		<SPAN TYPE="COMMENT2" DELEGATE="XPATHCOMMENT2">
+			<BEGIN>(:</BEGIN>
+			<END>:)</END>
+		</SPAN>
 	</RULES>
 
 </MODE>
