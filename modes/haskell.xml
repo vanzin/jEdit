@@ -100,7 +100,7 @@
 		highlighted... Which is more important? -->
 		<SEQ TYPE="NULL">.</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- Reserved words. -->
 			<KEYWORD1>case</KEYWORD1>
 			<KEYWORD1>class</KEYWORD1>

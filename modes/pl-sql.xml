@@ -47,7 +47,7 @@
 		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 			<!-- reserved words -->
 			<KEYWORD1>ABORT</KEYWORD1>
 			<KEYWORD1>ACCESS</KEYWORD1>

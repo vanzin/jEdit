@@ -83,7 +83,7 @@
 		<!-- Function calls -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- Types (Standard C) -->
 			<KEYWORD3>char</KEYWORD3>
 			<KEYWORD3>const</KEYWORD3>

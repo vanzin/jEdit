@@ -13,7 +13,7 @@
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="lineComment" VALUE="//" />
 	</PROPS>
-	<RULES ESCAPE="\">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE">
 		<!-- C style comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
@@ -61,7 +61,7 @@
 		<!-- Function calls -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<KEYWORD3>any</KEYWORD3>
 			<KEYWORD1>attribute</KEYWORD1>
 			<KEYWORD3>boolean</KEYWORD3>

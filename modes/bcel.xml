@@ -8,6 +8,8 @@
 
 <MODE>
     <PROPS>
+        <PROPERTY NAME="commentStart" VALUE="/*" />
+        <PROPERTY NAME="commentEnd" VALUE="*/" />
         <PROPERTY NAME="lineComment" VALUE="//" />
     </PROPS>
 
@@ -56,7 +58,7 @@
         <SEQ TYPE="NULL">:</SEQ>
         <SEQ TYPE="NULL">,</SEQ>
 
-        <KEYWORDS IGNORE_CASE="FALSE">
+        <KEYWORDS>
             <!-- Some java keywords -->
             <KEYWORD1>abstract</KEYWORD1>
             <!-- <KEYWORD1>break</KEYWORD1> -->

@@ -70,7 +70,7 @@
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- ActionScript's reserved words (see AS:TDG p.332) -->
 			<KEYWORD1>add</KEYWORD1>   <!-- deprecated -->
 			<KEYWORD1>and</KEYWORD1>   <!-- deprecated -->

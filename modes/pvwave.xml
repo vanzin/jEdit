@@ -9,7 +9,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="lineComment" VALUE=";" />
 	</PROPS>
-	<RULES HIGHLIGHT_DIGITS="TRUE">
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
@@ -45,7 +45,7 @@
 		<SEQ TYPE="LABEL">!</SEQ>
 		<SEQ TYPE="NULL">?</SEQ>
 
-		<KEYWORDS IGNORE_CASE="TRUE">
+		<KEYWORDS>
 		<!--KEYWORD1s are standard functions and procedures -->
 			<KEYWORD1>abs</KEYWORD1>
 			<KEYWORD1>acos</KEYWORD1>

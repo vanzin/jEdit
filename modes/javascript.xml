@@ -69,7 +69,7 @@
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- ECMAScript keywords -->
 			<KEYWORD1>break</KEYWORD1>
 			<KEYWORD1>continue</KEYWORD1>

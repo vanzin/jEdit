@@ -134,7 +134,7 @@
 		<SEQ TYPE="NULL">:</SEQ>
 
 		<!-- Keywords -->
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<KEYWORD1>new</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>until</KEYWORD1>
