@@ -2331,8 +2331,8 @@ public class jEdit
 	 */
 	public static void addMode(Mode mode)
 	{
-		Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
-			+ mode.getName());
+		//Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
+		//	+ mode.getName());
 
 		modes.addElement(mode);
 	} //}}}

@@ -436,6 +436,12 @@ public abstract class EditPlugin
 					//cache.cachedDockableNames = 
 					//cache.cachedDockableActionFlags =
 				}
+				else if(lname.equals("services.xml"))
+				{
+					URL servicesURI = classLoader.getResource(name);
+					ServiceManager.loadServices(this,servicesURI);
+					//XXX: cache
+				}
 				else if(lname.endsWith(".props"))
 					properties.add(classLoader.getResource(name));
 				else if(name.endsWith(".class"))
