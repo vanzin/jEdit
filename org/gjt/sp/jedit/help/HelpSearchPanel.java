@@ -209,7 +209,7 @@ public class HelpSearchPanel extends JPanel
 			{
 				public void run()
 				{
-					StringTokenizer st = new StringTokenizer(text,",.;:- ");
+					StringTokenizer st = new StringTokenizer(text,",.;:-? ");
 
 					// we later use this to compute a relative ranking
 					int maxRank = 0;
@@ -234,7 +234,7 @@ public class HelpSearchPanel extends JPanel
 								if(result.file.equals(file.file))
 								{
 									result.rank += occur.count;
-									result.rank += 30; // multiple files w/ word bonus
+									result.rank += 20; // multiple files w/ word bonus
 									maxRank = Math.max(result.rank,maxRank);
 									ok = true;
 									break;
@@ -249,8 +249,6 @@ public class HelpSearchPanel extends JPanel
 						}
 					}
 
-					Collections.sort(resultModel,new ResultCompare());
-
 					if(maxRank != 0)
 					{
 						// turn the rankings into relative rankings, from 1 to 4
@@ -259,6 +257,8 @@ public class HelpSearchPanel extends JPanel
 							Result result = (Result)resultModel.elementAt(i);
 							result.rank = (int)Math.ceil((double)result.rank * 4 / maxRank);
 						}
+
+						Collections.sort(resultModel,new ResultCompare());
 					}
 				}
 			});
