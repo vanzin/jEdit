@@ -42,6 +42,9 @@ import org.gjt.sp.util.Log;
  */
 class ChunkCache
 {
+	// set this to true at your own risk
+	public static final boolean MONOSPACED_FONT_OPTIMIZATION = false;
+
 	//{{{ ChunkCache constructor
 	ChunkCache(JEditTextArea textArea)
 	{
@@ -241,7 +244,8 @@ class ChunkCache
 			softWrap.init(textArea.lineSegment,painter.getStyles(),
 				painter.getFontRenderContext(),
 				painter,out,textArea.wrapMargin);
-			//softWrap.setMonospacedCharWidth(textArea.charWidth);
+			if(MONOSPACED_FONT_OPTIMIZATION)
+				softWrap.setMonospacedCharWidth(textArea.charWidth);
 			buffer.markTokens(physicalLine,softWrap);
 		}
 		else
@@ -262,7 +266,8 @@ class ChunkCache
 		noWrap.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter);
-		//noWrap.setMonospacedCharWidth(textArea.charWidth);
+		if(MONOSPACED_FONT_OPTIMIZATION)
+			noWrap.setMonospacedCharWidth(textArea.charWidth);
 		buffer.markTokens(physicalLine,noWrap);
 		return noWrap.getChunks();
 	} //}}}
