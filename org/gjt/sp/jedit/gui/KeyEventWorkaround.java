@@ -55,9 +55,6 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
 			case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
 			case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
-			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
-			case KeyEvent.VK_SEPARATOR: case KeyEvent.VK_SUBTRACT:
-			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
 				// if NumLock is on, then ignore the numeric
 				// keypad codes; if NumLock off, ignore the
 				// resulting KeyTyped
@@ -70,8 +67,23 @@ public class KeyEventWorkaround
 				else
 				{
 					last = LAST_NUMKEYPAD;
+					return null;
 				}
-				break;
+			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
+			/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
+			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
+				if(Toolkit.getDefaultToolkit()
+					.getLockingKeyState(
+					KeyEvent.VK_NUM_LOCK))
+				{
+					return null;
+				}
+				else
+				{
+					last = LAST_NUMKEYPAD;
+					lastKeyTime = System.currentTimeMillis();
+					break;
+				}
 			default:
 				if(!OperatingSystem.isMacOS())
 					handleBrokenKeys(evt,keyCode);

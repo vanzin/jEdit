@@ -290,7 +290,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 			if(evt.getSource() == closeBox)
 				show(null);
 			else
-				wm.showDockableWindow(evt.getActionCommand());
+			{
+				if(wm.getDockable(evt.getActionCommand()) != null)
+					show(null);
+				else
+					wm.showDockableWindow(evt.getActionCommand());
+			}
 		}
 	} //}}}
 

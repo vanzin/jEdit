@@ -3877,17 +3877,17 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		if(lineComment != null)
 		{
 			start = lineComment + "{{{ \n";
-			end = " " + lineComment + "}}}";
+			end = lineComment + "}}}";
 		}
 		else if(commentStart != null && commentEnd != null)
 		{
 			start = commentStart + "{{{  " + commentEnd + "\n";
-			end = " " + commentStart + "}}}" + commentEnd;
+			end = commentStart + "}}}" + commentEnd;
 		}
 		else
 		{
 			start = "{{{ \n";
-			end = " }}}";
+			end = "}}}";
 		}
 
 		try
@@ -3899,9 +3899,9 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 				String line = buffer.getLineText(caretLine);
 				String whitespace = line.substring(0,
 					MiscUtilities.getLeadingWhiteSpace(line));
+				int loc = caret + start.length() - 1;
 				start = start + whitespace;
 				buffer.insert(caret,start);
-				int loc = caret - 1;
 				// stupid: caret will automatically be incremented
 				buffer.insert(caret,end);
 				moveCaretPosition(loc,false);
@@ -3918,7 +3918,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 						MiscUtilities.getLeadingWhiteSpace(line));
 					loc = s.start + start.length() - 1;
 					buffer.insert(s.start,start + whitespace);
-					buffer.insert(s.end,end);
+					buffer.insert(s.end," " + end);
 				}
 
 				setCaretPosition(loc,false);

@@ -461,7 +461,7 @@ loop:			for(;;)
 					else
 						start = 0;
 
-					if(find(view,buffer,start))
+					if(find(view,buffer,start,repeat))
 						return true;
 				}
 
@@ -538,8 +538,24 @@ loop:			for(;;)
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
 	 */
-	public static boolean find(final View view, final Buffer buffer, final int start)
+	public static boolean find(View view, Buffer buffer, int start)
 		throws Exception
+	{
+		return find(view,buffer,start,false);
+	} //}}}
+
+	//{{{ find() method
+	/**
+	 * Finds the next instance of the search string in the specified
+	 * buffer.
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param start Location where to start the search
+	 * @param firstTime See <code>SearchMatcher.nextMatch()</code>
+	 * @since jEdit 4.0pre7
+	 */
+	public static boolean find(View view, Buffer buffer, int start,
+		boolean firstTime) throws Exception
 	{
 		SearchMatcher matcher = getSearchMatcher(true);
 
@@ -555,7 +571,8 @@ loop:			for(;;)
 		//
 		// REMIND: fix flags when adding reverse regexp search.
 		int[] match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
-			start == 0,true);
+			start == 0,true,firstTime);
+
 		if(match != null)
 		{
 			jEdit.commitTemporary(buffer);
@@ -917,19 +934,23 @@ loop:			while(path != null)
 
 		Segment text = new Segment();
 		int offset = start;
-loop:		for(;;)
+loop:		for(int counter = 0; ; counter++)
 		{
 			buffer.getText(offset,end - offset,text);
 			int[] occur = matcher.nextMatch(
 				new CharIndexedSegment(text,false),
-				start == 0,end == buffer.getLength());
+				start == 0,end == buffer.getLength(),
+				counter == 0);
 			if(occur == null)
 				break loop;
 			int _start = occur[0];
 			int _length = occur[1] - occur[0];
+			System.err.println("at " + _start + ", length " + _length);
 
 			String found = new String(text.array,text.offset + _start,_length);
+			System.err.println("found=" + found);
 			String subst = matcher.substitute(found);
+			System.err.println("subst=" + subst);
 			if(smartCaseReplace && ignoreCase)
 			{
 				int strCase = TextUtilities.getStringCase(found);
@@ -947,15 +968,8 @@ loop:		for(;;)
 				buffer.insert(offset + _start,subst);
 				occurCount++;
 				offset += _start + subst.length();
-				if(subst.length() == 0 && _length == 0)
-					offset++;
 
 				end += (subst.length() - found.length());
-			}
-			else if(_length == 0)
-			{
-				// avoid infinite loop
-				offset += _start + 1;
 			}
 			else
 				offset += _start + _length;

@@ -77,12 +77,15 @@ public class RESearchMatcher implements SearchMatcher
 	 * @param start True if the start of the segment is the beginning of the
 	 * buffer
 	 * @param end True if the end of the segment is the end of the buffer
+	 * @param firstTime If false and the search string matched at the start
+	 * offset with length zero, automatically find next match
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.0pre3
+	 * @since jEdit 4.0pre7
 	 */
-	public int[] nextMatch(CharIndexed text, boolean start, boolean end)
+	public int[] nextMatch(CharIndexed text, boolean start, boolean end,
+		boolean firstTime)
 	{
 		int flags = 0;
 
@@ -99,7 +102,29 @@ public class RESearchMatcher implements SearchMatcher
 		if(match == null)
 			return null;
 
-		int[] result = { match.getStartIndex(), match.getEndIndex() };
+		int _start = match.getStartIndex();
+		int _end = match.getEndIndex();
+
+		System.err.println("1st attempt found " + _start + ":" + _end);
+		// some regexps (eg ^ by itself) have a length == 0, so we
+		// implement this hack. if you don't understand what's going on
+		// here, then go back to watching MTV
+		if(!firstTime && _start == 0 && _end == 0)
+		{
+			text.move(1);
+
+			match = re.getMatch(text,0,flags | RE.REG_NOTBOL);
+			if(match == null)
+				return null;
+			else
+			{
+				System.err.println("2nd attempt found " + _start + ":" + _end);
+				_start = match.getStartIndex() + 1;
+				_end = match.getEndIndex() + 1;
+			}
+		}
+
+		int[] result = { _start, _end };
 		return result;
 	} //}}}
 

@@ -201,12 +201,13 @@ loop:				for(int i = 0; i < files.length; i++)
 			int length = end;
 			int line = -1;
 
-loop:			for(;;)
+loop:			for(int counter = 0; ; counter++)
 			{
 				buffer.getText(offset,length - offset,text);
 				int[] match = matcher.nextMatch(
 					new CharIndexedSegment(text,false),
-					offset == 0,length == buffer.getLength());
+					offset == 0,length == buffer.getLength(),
+					counter == 0);
 				if(match == null)
 					break loop;
 
