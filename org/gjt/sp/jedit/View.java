@@ -741,6 +741,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	public EditPane split(int orientation)
 	{
+		PerspectiveManager.setPerspectiveDirty(true);
+
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
 		setEditPane(createEditPane(oldEditPane.getBuffer()));
@@ -809,6 +811,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
+			PerspectiveManager.setPerspectiveDirty(true);
+
 			EditPane[] editPanes = getEditPanes();
 			for(int i = 0; i < editPanes.length; i++)
 			{
@@ -841,6 +845,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(splitPane != null)
 		{
+			PerspectiveManager.setPerspectiveDirty(true);
+
 			// find first split pane parenting current edit pane
 			Component comp = editPane;
 			while(!(comp instanceof JSplitPane))

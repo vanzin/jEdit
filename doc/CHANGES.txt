@@ -2,14 +2,25 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre13
 
-Thanks to Nicholas O'Leary and Patrick Tingen for contributing to this
-release.
+Thanks to Magnus Henriksson, Nicholas O'Leary, Ollie Rutherfurd and
+Patrick Tingen for contributing to this release.
 
+{{{ Miscellaneous Changes
+
+- During auto-save, ~/.jedit/perspective.xml is only written if files
+  were opened or closed or views were split or unsplit since the last
+  time it was auto-saved.
+
+- Greedy_Backspace, _Left and _Right macros (Ollie Rutherfurd).
+
+}}}
 {{{ Syntax Highlighting
 
 - Updated Progress syntax highlighting (Patrick Tingen).
 
 - Zope Page Template syntax highlighting (Ollie Rutherfurd).
+
+- Updated XSLT syntax highlighting (Magnus Henriksson).
 
 }}}
 {{{ Bug Fixes
