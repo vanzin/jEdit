@@ -19,6 +19,7 @@
 
 package installer;
 
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -28,7 +29,10 @@ public class Install
 	public static void main(String[] args)
 	{
 		if(args.length == 0)
+		{
+			MetalLookAndFeel.setCurrentTheme(new JEditMetalTheme());
 			new SwingInstall();
+		}
 		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
 		else if(args.length == 3 && args[0].equals("auto"))

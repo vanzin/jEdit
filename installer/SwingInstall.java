@@ -66,8 +66,8 @@ public class SwingInstall extends JFrame
 		content.add(nextButton);
 
 		pages = new Component[] {
-			new TextPanel("installer.readme"),
-			new TextPanel("installer.license"),
+			new TextPanel("app.readme"),
+//			new TextPanel("app.license"),
 			chooseDirectory = new ChooseDirectory(),
 			selectComponents = new SelectComponents(),
 			progress = new SwingProgress(),
@@ -149,6 +149,12 @@ public class SwingInstall extends JFrame
 			nextButton.setText("Next");
 			prevButton.setEnabled(false);
 			break;
+		/*case 1:
+			caption.setText("License");
+
+			nextButton.setText("Next");
+			prevButton.setEnabled(true);
+			break;*/
 		case 1:
 			caption.setText("Specify where " + appName
 				+ " is to be installed");
@@ -170,7 +176,7 @@ public class SwingInstall extends JFrame
 			nextButton.setEnabled(false);
 			install();
 			break;
-		case 4:;
+		case 4:
 			caption.setText("Installation complete");
 
 			nextButton.setText("Finish");
