@@ -58,7 +58,7 @@ public class BeanShellAction extends EditAction
 			{
 				Log.log(Log.ERROR,this,e);
 
-				new BeanShellErrorDialog(null,e.toString());
+				new BeanShellErrorDialog(null,e);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class BeanShellAction extends EditAction
 		{
 			Log.log(Log.ERROR,this,e);
 
-			new BeanShellErrorDialog(view,e.toString());
+			new BeanShellErrorDialog(view,e);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class BeanShellAction extends EditAction
 		{
 			Log.log(Log.ERROR,this,e);
 
-			new BeanShellErrorDialog(view,e.toString());
+			new BeanShellErrorDialog(view,e);
 
 			return false;
 		}
