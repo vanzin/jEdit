@@ -132,7 +132,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 					mi.addActionListener(listener);
 					mi.setIcon(FileCellRenderer.fileIcon);
 
-					if(current.getItemCount() >= 20)
+					if(current.getItemCount() >= 20 && i != list.length - 1)
 					{
 						//current.addSeparator();
 						JMenu newCurrent = new JMenu(
