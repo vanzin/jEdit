@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  * Portions copyright (C) 2002 Kris Kopicki
  * Portions copyright (C) 2002 Carmine Lucarelli
  *
@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
-import java.lang.reflect.*;
 import java.io.File;
 import java.util.LinkedList;
 import org.gjt.sp.jedit.MiscUtilities;
@@ -49,31 +48,6 @@ public class FileRootsVFS extends VFS
 	{
 		super("roots",LOW_LATENCY_CAP,new String[] {
 			EA_TYPE });
-
-		// JDK 1.4 adds methods to obtain a drive letter label and
-		// list the desktop on Windows
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				getSystemDisplayName = FileSystemView.class.getMethod("getSystemDisplayName",
-					new Class[] { java.io.File.class });
-				getRoots = FileSystemView.class.getMethod("getRoots",
-					new Class[0]);
-				isFileSystemRoot = FileSystemView.class.getMethod("isFileSystemRoot",
-					new Class[] { java.io.File.class });
-				isFloppyDrive = FileSystemView.class.getMethod("isFloppyDrive",
-					new Class[] { java.io.File.class });
-				isDrive = FileSystemView.class.getMethod("isDrive",
-					new Class[] { java.io.File.class });
-				fsView = FileSystemView.getFileSystemView();
-				Log.log(Log.DEBUG,this,"Java 1.4 FileSystemView detected");
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.DEBUG,this,"Java 1.4 FileSystemView not detected");
-			}
-		}
 	} //}}}
 
 	//{{{ getParentOfPath() method
@@ -107,11 +81,6 @@ public class FileRootsVFS extends VFS
 
 	//{{{ Private members
 	private static FileSystemView fsView;
-	private static Method getSystemDisplayName;
-	private static Method getRoots;
-	private static Method isFileSystemRoot;
-	private static Method isFloppyDrive;
-	private static Method isDrive;
 
 	//{{{ listRoots() method
 	private static File[] listRoots()
@@ -136,21 +105,7 @@ public class FileRootsVFS extends VFS
 		else
 		{
 			File[] roots = File.listRoots();
-			File[] desktop = null;
-
-			if(getRoots != null)
-			{
-				try
-				{
-					desktop = (File[])getRoots.invoke(fsView,
-						new Object[0]);
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR, FileRootsVFS.class, "Error getting Desktop: " + e.getMessage());
-					desktop = null;
-				}
-			}
+			File[] desktop = fsView.getRoots();
 
 			if(desktop == null)
 				return roots;
@@ -175,45 +130,23 @@ public class FileRootsVFS extends VFS
 			this.path = this.deletePath = this.symlinkPath
 				= file.getPath();
 
-			if(isFloppy(file))
+			if(fsView.isFloppyDrive(file))
 			{
 				type = VFS.DirectoryEntry.FILESYSTEM;
 				name = path;
 			}
-			else if(isDrive(file))
+			else if(fsView.isDrive(file))
 			{
 				type = VFS.DirectoryEntry.FILESYSTEM;
 
-				if(getSystemDisplayName != null)
-				{
-					try
-					{
-						name = path + " " + (String)getSystemDisplayName
-							.invoke(fsView,new Object[] { file });
-					}
-					catch(Exception e)
-					{
-						Log.log(Log.ERROR,this,e);
-						name = path;
-					}
-				}
+				name =  path + " "
+					+ fsView.getSystemDisplayName(file);
 			}
 			else if(file.isDirectory())
 			{
 				type = VFS.DirectoryEntry.FILESYSTEM;
-
-				if(isFileSystemRoot != null)
-				{
-					try
-					{
-						if(Boolean.FALSE.equals(isFileSystemRoot
-							.invoke(fsView,new Object[] { file })))
-						{
-							type = VFS.DirectoryEntry.DIRECTORY;
-						}
-					}
-					catch(Exception e) {}
-				}
+				if(fsView.isFileSystemRoot(file))
+					type = VFS.DirectoryEntry.DIRECTORY;
 
 				if(OperatingSystem.isMacOS())
 					name = MiscUtilities.getFileName(path);
@@ -234,46 +167,6 @@ public class FileRootsVFS extends VFS
 				// etc.
 				return null;
 			}
-		}
-
-		private boolean isFloppy(File file)
-		{
-			// to prevent windows looking for a disk in the floppy drive
-			if(isFloppyDrive != null)
-			{
-				try
-				{
-					return Boolean.TRUE.equals(isFloppyDrive.
-						invoke(fsView, new Object[] { file }));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,e);
-					return false;
-				}
-			}
-			else
-				return path.startsWith("A:") || path.startsWith("B:");
-		}
-
-		private boolean isDrive(File file)
-		{
-			// so an empty cd drive is not reported as a file
-			if(isDrive != null)
-			{
-				try
-				{
-					return Boolean.TRUE.equals(isDrive.
-						invoke(fsView, new Object[] { file }));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,e);
-					return false;
-				}
-			}
-			else
-				return true;
 		}
 	} //}}}
 }

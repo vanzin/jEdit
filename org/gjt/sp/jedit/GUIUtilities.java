@@ -953,7 +953,7 @@ public class GUIUtilities
 		{
 			win.setBounds(desired);
 			if(win instanceof Frame)
-				setExtendedState((Frame)win,extState);
+				((Frame)win).setExtendedState(extState);
 		}
 	} //}}}
 
@@ -1023,7 +1023,7 @@ public class GUIUtilities
 
 			win.setBounds(required);
 			if(win instanceof Frame)
-				setExtendedState((Frame)win,extState);
+				((Frame)win).setExtendedState(extState);
 
 			win.addComponentListener(new ComponentHandler());
 			win.addWindowListener(new WindowHandler());
@@ -1113,7 +1113,7 @@ public class GUIUtilities
 		if(win instanceof Frame)
 		{
 			jEdit.setIntegerProperty(name + ".extendedState",
-				getExtendedState((Frame)win));
+				((Frame)win).getExtendedState());
 		}
 
 		Rectangle bounds = win.getBounds();
@@ -1121,62 +1121,6 @@ public class GUIUtilities
 		jEdit.setIntegerProperty(name + ".y",bounds.y);
 		jEdit.setIntegerProperty(name + ".width",bounds.width);
 		jEdit.setIntegerProperty(name + ".height",bounds.height);
-	} //}}}
-
-	//{{{ getExtendedState() method
-	/**
-	 * On Java 1.4, calls <code>Frame.getExtendedState()</code>.
-	 * On Java 1.3, returns 0.
-	 * @since jEdit 4.2pre1
-	 */
-	public static int getExtendedState(Frame frame)
-	{
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				java.lang.reflect.Method meth =
-					Frame.class.getMethod("getExtendedState",
-					new Class[0]);
-
-				Integer extState = (Integer)meth.invoke(frame,
-					new Object[0]);
-
-				return extState.intValue();
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,e);
-			}
-		}
-
-		return 0;
-	} //}}}
-
-	//{{{ setExtendedState() method
-	/**
-	 * On Java 1.4, calls <code>Frame.setExtendedState()</code>.
-	 * On Java 1.3, does nothing.
-	 * @since jEdit 4.2pre1
-	 */
-	public static void setExtendedState(Frame frame, int extState)
-	{
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				java.lang.reflect.Method meth =
-					Frame.class.getMethod("setExtendedState",
-					new Class[] {int.class});
-
-				meth.invoke(frame, new Object[] {
-					new Integer(extState)});
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,e);
-			}
-		}
 	} //}}}
 
 	//{{{ centerOnScreen() method

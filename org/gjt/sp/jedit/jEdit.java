@@ -26,6 +26,7 @@ import bsh.UtilEvalError;
 import com.microstar.xml.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
@@ -79,13 +80,13 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		//{{{ Check for Java 1.3 or later
+		//{{{ Check for Java 1.4 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.3") < 0)
+		if(javaVersion.compareTo("1.4") < 0)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + ".");
-			System.err.println("jEdit requires Java 1.3 or later.");
+			System.err.println("jEdit requires Java 1.4 or later.");
 			System.exit(1);
 		} //}}}
 
@@ -410,28 +411,6 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 		//}}}
-
-		//{{{ Initialize Java 1.4-specific code
-		if(OperatingSystem.hasJava14())
-		{
-			try
-			{
-				ClassLoader loader = jEdit.class.getClassLoader();
-				Class clazz;
-				if(loader != null)
-					clazz = loader.loadClass("org.gjt.sp.jedit.Java14");
-				else
-					clazz = Class.forName("org.gjt.sp.jedit.Java14");
-				java.lang.reflect.Method meth = clazz
-					.getMethod("init",new Class[0]);
-				meth.invoke(null,new Object[0]);
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,jEdit.class,e);
-				System.exit(1);
-			}
-		} //}}}
 
 		//{{{ Activate plugins that must be activated at startup
 		for(int i = 0; i < jars.size(); i++)
@@ -2176,8 +2155,7 @@ public class jEdit
 				else
 				{
 					newView.setBounds(desired);
-					GUIUtilities.setExtendedState(newView,
-						config.extState);
+					newView.setExtendedState(config.extState);
 				}
 			}
 			else
@@ -3288,6 +3266,14 @@ public class jEdit
 
 		defaults.remove("SplitPane.border");
 		defaults.remove("SplitPaneDivider.border");
+
+		JFrame.setDefaultLookAndFeelDecorated(
+			getBooleanProperty("decorate.frames"));
+		JDialog.setDefaultLookAndFeelDecorated(
+			getBooleanProperty("decorate.dialogs"));
+
+		KeyboardFocusManager.setCurrentKeyboardFocusManager(
+			new MyFocusManager());
 	} //}}}
 
 	//{{{ runStartupScripts() method
@@ -3866,4 +3852,42 @@ loop:		for(int i = 0; i < list.length; i++)
 	} //}}}
 
 	//}}}
+
+	//{{{ MyFocusManager class
+	static class MyFocusManager extends DefaultKeyboardFocusManager
+	{
+		MyFocusManager()
+		{
+			setDefaultFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
+		}
+
+		public boolean postProcessKeyEvent(KeyEvent evt)
+		{
+			if(!evt.isConsumed())
+			{
+				Component comp = (Component)evt.getSource();
+				if(!comp.isShowing())
+					return true;
+
+				for(;;)
+				{
+					if(comp instanceof View)
+					{
+						((View)comp).processKeyEvent(evt,
+							View.VIEW);
+						return true;
+					}
+					else if(comp == null || comp instanceof Window
+						|| comp instanceof JEditTextArea)
+					{
+						break;
+					}
+					else
+						comp = comp.getParent();
+				}
+			}
+
+			return super.postProcessKeyEvent(evt);
+		}
+	} //}}}
 }

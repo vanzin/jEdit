@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TooManyListenersException;
 import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
@@ -124,7 +125,19 @@ public class JEditTextArea extends JComponent
 		painter.addMouseMotionListener(mouseHandler);
 
 		addFocusListener(new FocusHandler());
-		//}}}
+		addMouseWheelListener(new MouseWheelHandler());
+
+		/* Drag and drop */
+		setTransferHandler(new TextAreaTransferHandler());
+		try
+		{
+			getDropTarget().addDropTargetListener(
+				new TextAreaDropHandler(this));
+		}
+		catch(TooManyListenersException e)
+		{
+			Log.log(Log.ERROR,this,e);
+		} //}}}
 
 		// This doesn't seem very correct, but it fixes a problem
 		// when setting the initial caret position for a buffer
@@ -323,34 +336,6 @@ public class JEditTextArea extends JComponent
 	public final boolean isEditable()
 	{
 		return buffer.isEditable();
-	} //}}}
-
-	//{{{ getDragAndDropCallback() method
-	/**
-	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
-	 * however since jEdit must run with Java 1.3, this class only has the
-	 * necessary support to call a hook method via reflection. The method
-	 * is provided by the {@link org.gjt.sp.jedit.Java14} class and handles
-	 * the drag and drop API calls themselves.
-	 * @since jEdit 4.2pre5
-	 */
-	public Method getDragAndDropCallback()
-	{
-		return dndCallback;
-	} //}}}
-
-	//{{{ setDragAndDropCallback() method
-	/**
-	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
-	 * however since jEdit must run with Java 1.3, this class only has the
-	 * necessary support to call a hook method via reflection. The method
-	 * is provided by the {@link org.gjt.sp.jedit.Java14} class and handles
-	 * the drag and drop API calls themselves.
-	 * @since jEdit 4.2pre5
-	 */
-	public void setDragAndDropCallback(Method meth)
-	{
-		dndCallback = meth;
 	} //}}}
 
 	//{{{ isDragInProgress() method
@@ -5634,7 +5619,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	* - a boolean (copy text or move, depending on modifier user held down)
 	*/
 	private boolean dndEnabled;
-	private Method dndCallback;
 	private boolean dndInProgress;
 
 	// see finishCaretUpdate() & _finishCaretUpdate()
@@ -5648,15 +5632,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	// calls dndCallback via reflection
 	private void startDragAndDrop(InputEvent evt, boolean copy)
 	{
-		try
-		{
-			dndCallback.invoke(null,new Object[] { this, evt,
-				new Boolean(copy) });
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-		}
+		Log.log(Log.DEBUG,this,"Drag and drop callback");
+		getTransferHandler().exportAsDrag(this,evt,
+			copy ? TransferHandler.COPY
+			: TransferHandler.MOVE);
 	} //}}}
 
 	//{{{ _addToSelection() method
@@ -6598,7 +6577,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			clickCount = evt.getClickCount();
 
-			if(isDragEnabled() && getDragAndDropCallback() != null
+			if(isDragEnabled()
 				&& insideSelection(x,y)
 				&& clickCount == 1 && !evt.isShiftDown())
 			{
@@ -7023,6 +7002,54 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				view.getStatus().setMessage(null);
 			}
 		} //}}}
+	} //}}}
+
+	//{{{ MouseWheelHandler class
+	class MouseWheelHandler implements MouseWheelListener
+	{
+		public void mouseWheelMoved(MouseWheelEvent e)
+		{
+			/****************************************************
+			 * move caret depending on pressed control-keys:
+			 * - Alt: move cursor, do not select
+			 * - Alt+(shift or control): move cursor, select
+			 * - shift: scroll page
+			 * - control: scroll single line
+			 * - <else>: scroll 3 lines
+			 ****************************************************/
+			if(e.isAltDown())
+			{
+				boolean select = (e.isShiftDown()
+					|| e.isControlDown());
+				if(e.getWheelRotation() < 0)
+					goToPrevLine(select);
+				else
+					goToNextLine(select);
+			}
+			else if(e.isShiftDown())
+			{
+				if(e.getWheelRotation() > 0)
+					scrollDownPage();
+				else
+					scrollUpPage();
+			}
+			else if(e.isControlDown())
+			{
+				setFirstLine(getFirstLine()
+					+ e.getWheelRotation());
+			}
+			else if(e.getScrollType()
+				== MouseWheelEvent.WHEEL_UNIT_SCROLL)
+			{
+				setFirstLine(getFirstLine()
+					+ e.getUnitsToScroll());
+			}
+			else
+			{
+				setFirstLine(getFirstLine()
+					+ 3 * e.getWheelRotation());
+			}
+		}
 	} //}}}
 
 	//}}}
