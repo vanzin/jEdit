@@ -497,7 +497,9 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			oldParent.add(splitPane);
+			this.splitPane = newSplitPane;
+
+			oldParent.add(newSplitPane);
 			oldParent.revalidate();
 
 			Dimension size;
