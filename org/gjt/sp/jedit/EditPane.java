@@ -204,17 +204,17 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void saveCaretInfo()
 	{
-		buffer.putProperty(Buffer.CARET,new Integer(
-			textArea.getCaretPosition()));
+		buffer.setIntegerProperty(Buffer.CARET,
+			textArea.getCaretPosition());
 
 		Selection[] selection = textArea.getSelection();
 		if(selection != null)
-			buffer.putProperty(Buffer.SELECTION,selection);
+			buffer.setProperty(Buffer.SELECTION,selection);
 
-		buffer.putProperty(Buffer.SCROLL_VERT,new Integer(
-			textArea.virtualToPhysical(textArea.getFirstLine())));
-		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
-			textArea.getHorizontalOffset()));
+		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
+			textArea.virtualToPhysical(textArea.getFirstLine()));
+		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
+			textArea.getHorizontalOffset());
 	} //}}}
 
 	//{{{ loadCaretInfo() method

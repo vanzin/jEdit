@@ -109,7 +109,7 @@ public class BufferOptions extends EnhancedDialog
 		String[] tabSizes = { "2", "4", "8" };
 		tabSize = new JComboBox(tabSizes);
 		tabSize.setEditable(true);
-		tabSize.setSelectedItem(buffer.getProperty("tabSize"));
+		tabSize.setSelectedItem(buffer.getStringProperty("tabSize"));
 		tabSize.addActionListener(actionListener);
 		layout.setConstraints(tabSize,cons);
 		panel.add(tabSize);
@@ -130,7 +130,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.insets = nullInsets;
 		indentSize = new JComboBox(tabSizes);
 		indentSize.setEditable(true);
-		indentSize.setSelectedItem(buffer.getProperty("indentSize"));
+		indentSize.setSelectedItem(buffer.getStringProperty("indentSize"));
 		indentSize.addActionListener(actionListener);
 		layout.setConstraints(indentSize,cons);
 		panel.add(indentSize);
@@ -153,7 +153,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.insets = nullInsets;
 		maxLineLen = new JComboBox(lineLengths);
 		maxLineLen.setEditable(true);
-		maxLineLen.setSelectedItem(buffer.getProperty("maxLineLen"));
+		maxLineLen.setSelectedItem(buffer.getStringProperty("maxLineLen"));
 		maxLineLen.addActionListener(actionListener);
 		layout.setConstraints(maxLineLen,cons);
 		panel.add(maxLineLen);
@@ -179,7 +179,7 @@ public class BufferOptions extends EnhancedDialog
 		cons.weightx = 1.0f;
 		cons.insets = nullInsets;
 		folding = new JComboBox(foldModes);
-		String foldMode = (String)buffer.getProperty("folding");
+		String foldMode = buffer.getStringProperty("folding");
 
 		if("indent".equals(foldMode))
 			folding.setSelectedIndex(1);
@@ -209,7 +209,7 @@ public class BufferOptions extends EnhancedDialog
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
-		String lineSep = (String)buffer.getProperty(Buffer.LINESEP);
+		String lineSep = buffer.getStringProperty(Buffer.LINESEP);
 		if(lineSep == null)
 			lineSep = System.getProperty("line.separator");
 		if("\n".equals(lineSep))
@@ -246,7 +246,7 @@ public class BufferOptions extends EnhancedDialog
 
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
-		encoding.setSelectedItem(buffer.getProperty(Buffer.ENCODING));
+		encoding.setSelectedItem(buffer.getStringProperty(Buffer.ENCODING));
 		layout.setConstraints(encoding,cons);
 		panel.add(encoding);
 		//}}}
@@ -356,7 +356,7 @@ public class BufferOptions extends EnhancedDialog
 	{
 		try
 		{
-			buffer.putProperty("tabSize",new Integer(
+			buffer.setProperty("tabSize",new Integer(
 				tabSize.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)
@@ -365,7 +365,7 @@ public class BufferOptions extends EnhancedDialog
 
 		try
 		{
-			buffer.putProperty("indentSize",new Integer(
+			buffer.setProperty("indentSize",new Integer(
 				indentSize.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)
@@ -374,7 +374,7 @@ public class BufferOptions extends EnhancedDialog
 
 		try
 		{
-			buffer.putProperty("maxLineLen",new Integer(
+			buffer.setProperty("maxLineLen",new Integer(
 				maxLineLen.getSelectedItem().toString()));
 		}
 		catch(NumberFormatException nf)
@@ -395,20 +395,20 @@ public class BufferOptions extends EnhancedDialog
 		else
 			throw new InternalError();
 
-		String oldLineSep = (String)buffer.getProperty(Buffer.LINESEP);
+		String oldLineSep = buffer.getStringProperty(Buffer.LINESEP);
 		if(oldLineSep == null)
 			oldLineSep = System.getProperty("line.separator");
 		if(!oldLineSep.equals(lineSep))
 		{
-			buffer.putProperty("lineSeparator",lineSep);
+			buffer.setStringProperty("lineSeparator",lineSep);
 			buffer.setDirty(true);
 		}
 
 		String encoding = (String)this.encoding.getSelectedItem();
-		String oldEncoding = (String)buffer.getProperty(Buffer.ENCODING);
+		String oldEncoding = buffer.getStringProperty(Buffer.ENCODING);
 		if(!oldEncoding.equals(encoding))
 		{
-			buffer.putProperty(Buffer.ENCODING,encoding);
+			buffer.setStringProperty(Buffer.ENCODING,encoding);
 			buffer.setDirty(true);
 
 			// XXX this should be moved elsewhere!!!
@@ -416,32 +416,32 @@ public class BufferOptions extends EnhancedDialog
 		}
 
 		String foldMode = (String)folding.getSelectedItem();
-		String oldFoldMode = (String)buffer.getProperty("folding");
-		buffer.putProperty("folding",foldMode);
+		String oldFoldMode = buffer.getStringProperty("folding");
+		buffer.setStringProperty("folding",foldMode);
 
 		boolean trailingEOLValue = trailingEOL.isSelected();
 		boolean oldTrailingEOL = buffer.getBooleanProperty(
 			Buffer.TRAILING_EOL);
 		if(trailingEOLValue != oldTrailingEOL)
 		{
-			buffer.putBooleanProperty(Buffer.TRAILING_EOL,trailingEOLValue);
+			buffer.setBooleanProperty(Buffer.TRAILING_EOL,trailingEOLValue);
 			buffer.setDirty(true);
 		}
 
-		buffer.putBooleanProperty("syntax",syntax.isSelected());
-		buffer.putBooleanProperty("indentOnTab",indentOnTab.isSelected());
-		buffer.putBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
-		buffer.putBooleanProperty("noTabs",noTabs.isSelected());
+		buffer.setBooleanProperty("syntax",syntax.isSelected());
+		buffer.setBooleanProperty("indentOnTab",indentOnTab.isSelected());
+		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
+		buffer.setBooleanProperty("noTabs",noTabs.isSelected());
 
 		buffer.propertiesChanged();
 		if(!oldFoldMode.equals(foldMode))
 		{
 			FoldVisibilityManager foldVisibilityManager
 				 = view.getTextArea().getFoldVisibilityManager();
-			Integer collapseFolds = (Integer)buffer.getProperty(
-				"collapseFolds");
-			if(collapseFolds != null && collapseFolds.intValue() != 0)
-				foldVisibilityManager.expandFolds(collapseFolds.intValue());
+			int collapseFolds = buffer.getIntegerProperty(
+				"collapseFolds",0);
+			if(collapseFolds != 0)
+				foldVisibilityManager.expandFolds(collapseFolds);
 			else
 				foldVisibilityManager.expandAllFolds();
 		}

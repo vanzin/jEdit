@@ -1,5 +1,8 @@
 /*
  * MarkersMenu.java - Markers menu
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,21 +22,24 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.text.Element;
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class MarkersMenu extends EnhancedMenu
 {
+	//{{{ MarkersMenu constructor
 	public MarkersMenu()
 	{
 		super("markers");
-	}
+	} //}}}
 
+	//{{{ setPopupMenuVisible() method
 	public void setPopupMenuVisible(boolean b)
 	{
 		if(b)
@@ -55,7 +61,6 @@ public class MarkersMenu extends EnhancedMenu
 			}
 
 			Buffer buffer = view.getBuffer();
-			Element map = buffer.getDefaultRootElement();
 
 			Vector markers = buffer.getMarkers();
 
@@ -74,8 +79,7 @@ public class MarkersMenu extends EnhancedMenu
 			for(int i = 0; i < markers.size(); i++)
 			{
 				final Marker marker = (Marker)markers.elementAt(i);
-				int lineNo = map.getElementIndex(
-					marker.getPosition());
+				int lineNo = buffer.getLineOfOffset(marker.getPosition());
 
 				if(current.getItemCount() >= 20)
 				{
@@ -102,27 +106,24 @@ public class MarkersMenu extends EnhancedMenu
 		}
 
 		super.setPopupMenuVisible(b);
-	}
+	} //}}}
 
+	//{{{ MarkersMenuItem class
 	static class MarkersMenuItem extends JMenuItem
 	{
+		//{{{MarkersMenuItem constructor
 		MarkersMenuItem(Buffer buffer, int lineNo, char shortcut)
 		{
-			Element line = buffer.getDefaultRootElement()
-				.getElement(lineNo);
-
-			int start = line.getStartOffset();
-			String text = buffer.getText(start,
-				line.getEndOffset() - start - 1);
-			text = text.trim();
+			String text = buffer.getLineText(lineNo).trim();
 			if(text.length() == 0)
 				text = jEdit.getProperty("markers.blank-line");
 			setText(lineNo + ": " + text);
 
 			shortcutProp = "goto-marker.shortcut";
 			MarkersMenuItem.this.shortcut = shortcut;
-		}
+		} //}}}
 
+		//{{{ getPreferredSize() method
 		public Dimension getPreferredSize()
 		{
 			Dimension d = super.getPreferredSize();
@@ -135,8 +136,9 @@ public class MarkersMenu extends EnhancedMenu
 					.stringWidth(shortcut) + 10);
 			}
 			return d;
-		}
+		} //}}}
 
+		//{{{ paint() method
 		public void paint(Graphics g)
 		{
 			super.paint(g);
@@ -156,15 +158,16 @@ public class MarkersMenu extends EnhancedMenu
 					getFont().getSize() + (insets.top - 1)
 					/* XXX magic number */);
 			}
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private String shortcutProp;
 		private char shortcut;
 		private static Font acceleratorFont;
 		private static Color acceleratorForeground;
 		private static Color acceleratorSelectionForeground;
 
+		//{{{ getShortcut() method
 		private String getShortcut()
 		{
 			if(shortcut == '\0')
@@ -180,8 +183,9 @@ public class MarkersMenu extends EnhancedMenu
 					return shortcutPrefix + " " + shortcut;
 				}
 			}
-		}
+		} //}}}
 
+		//{{{ Class initializer
 		static
 		{
 			acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
@@ -192,6 +196,6 @@ public class MarkersMenu extends EnhancedMenu
 				.getColor("MenuItem.acceleratorForeground");
 			acceleratorSelectionForeground = UIManager
 				.getColor("MenuItem.acceleratorSelectionForeground");
-		}
-	}
+		} //}}}
+	} //}}}
 }

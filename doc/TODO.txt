@@ -2,25 +2,22 @@ TO DO
 
 + before 4.0pre1:
 
-- use improved buffer property code
-- optimize ContentManager.close()
-- v2p/p2v: implement from end backward scan
-- stupid rest visible hack in offset manager
-- switching from narrowed buffer, to one with caret at already zero might
-  cause problems, since physFirstLine won't be updated?
+- collapseFolds on file load
+- debug collapseFolds
 - inserting line after closed fold issues -- fix in OffsetManager
-- undo
-- move away from Swing APIs in the core
-- respect collapseFolds buffer property when:
-  - pasting
-  - narrowing
-  - anything else?
 - auto indent: do not indent on {{{
+- undo
 - recompile Firewall.jar before releasing
 
 + pre2:
 
+- getFoldLevel(): should not call linesChanged() all the time
+- clean up buffer-local properties, propertiesChanged(), setMode()
+- optimize ContentManager.close()
+- v2p/p2v: implement from end backward scan
 - narrowing
+- switching from narrowed buffer, to one with caret at already zero might
+  cause problems, since physFirstLine won't be updated?
 - investigate nextLineRequested() -- replace with a buffer event.
 - gutter scope bracket repaint problems
 - tip about smart case replace
@@ -38,6 +35,7 @@ TO DO
 
 + features:
 
+- incremental search; find all occurrences that are visible
 - -noplugins command line switch
 - if caps lock is pressed during startup, show dialog box for changing
   settings that are currently set on the CLI (settings directory,
@@ -198,9 +196,7 @@ TO DO
   int[] getHighlightedLines()
   String getToolTipText(int line)
 - Used by ErrorList, HyperSearch, markers
-- use java2d:
-  - to draw PanelWindowContainer rotated buttons
-  - to draw block caret (instead of XOR)
+- use java2d to draw block caret (instead of XOR)
 
 + bugs:
 

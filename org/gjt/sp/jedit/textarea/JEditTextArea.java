@@ -27,9 +27,7 @@ package org.gjt.sp.jedit.textarea;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.Element;
 import javax.swing.text.Segment;
-import javax.swing.text.Utilities;
 import javax.swing.undo.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -257,11 +255,14 @@ public class JEditTextArea extends JComponent
 
 		foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
-		maxHorizontalScrollWidth = -1;
-
 		painter.updateTabSize();
 
 		setCaretPosition(0);
+
+		for(int i = 0; i < lineWidths.length; i++)
+		{
+			lineWidths[i] = 0;
+		}
 
 		updateScrollBars();
 		painter.repaint();
@@ -1655,12 +1656,8 @@ forward_scan:		do
 
 			if(s instanceof Selection.Rect)
 			{
-				Element map = buffer.getDefaultRootElement();
-
-				int start = s.start - map.getElement(s.startLine)
-					.getStartOffset();
-				int end = s.end - map.getElement(s.endLine)
-					.getStartOffset();
+				int start = s.start - getLineStartOffset(s.startLine);
+				int end = s.end - getLineStartOffset(s.endLine);
 
 				// Certain rectangles satisfy this condition...
 				if(end < start)
@@ -1675,9 +1672,8 @@ forward_scan:		do
 
 				for(int i = s.startLine; i <= s.endLine; i++)
 				{
-					Element lineElement = map.getElement(i);
-					int lineStart = lineElement.getStartOffset();
-					int lineEnd = lineElement.getEndOffset() - 1;
+					int lineStart = getLineStartOffset(i);
+					int lineEnd = getLineEndOffset(i) - 1;
 					int rectStart = Math.min(lineEnd,lineStart + start);
 
 					buffer.remove(rectStart,Math.min(lineEnd - rectStart,
@@ -1700,8 +1696,7 @@ forward_scan:		do
 				if(selectedText != null &&
 					currNewline != selectedText.length())
 				{
-					int offset = map.getElement(s.endLine)
-						.getEndOffset() - 1;
+					int offset = getLineEndOffset(s.endLine) - 1;
 					buffer.insert(offset,"\n");
 					buffer.insert(offset + 1,selectedText
 						.substring(currNewline + 1));
@@ -2035,18 +2030,15 @@ forward_scan:		do
 	 */
 	public void centerCaret()
 	{
-		Element map = buffer.getDefaultRootElement();
-
 		int gotoLine = virtualToPhysical(firstLine + visibleLines / 2);
 
-		if(gotoLine < 0 || gotoLine >= map.getElementCount())
+		if(gotoLine < 0 || gotoLine >= getLineCount())
 		{
 			getToolkit().beep();
 			return;
 		}
 
-		Element element = map.getElement(gotoLine);
-		setCaretPosition(element.getStartOffset());
+		setCaretPosition(getLineStartOffset(gotoLine));
 	} //}}}
 
 	//{{{ setCaretPosition() method
@@ -3282,10 +3274,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		Element map = buffer.getDefaultRootElement();
-		Element lineElement = map.getElement(caretLine);
-		int start = lineElement.getStartOffset();
-		int end = lineElement.getEndOffset();
+		int start = getLineStartOffset(caretLine);
+		int end = getLineEndOffset(caretLine);
 		if(end > buffer.getLength())
 		{
 			if(start != 0)
@@ -3372,11 +3362,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		Element map = buffer.getDefaultRootElement();
-		Element lineElement = map.getElement(caretLine);
-
-		buffer.remove(lineElement.getStartOffset(),
-			caret - lineElement.getStartOffset());
+		buffer.remove(getLineStartOffset(caretLine),
+			caret - getLineStartOffset(caretLine));
 	} //}}}
 
 	//{{{ deleteWord() method
@@ -3917,20 +3904,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void joinLines()
 	{
-		Element map = buffer.getDefaultRootElement();
-		Element lineElement = map.getElement(caretLine);
-		int start = lineElement.getStartOffset();
-		int end = lineElement.getEndOffset();
+		int start = getLineStartOffset(caretLine);
+		int end = getLineEndOffset(caretLine);
 		if(end > buffer.getLength())
 		{
 			getToolkit().beep();
 			return;
 		}
-		Element nextLineElement = map.getElement(caretLine + 1);
-		int nextStart = nextLineElement.getStartOffset();
-		int nextEnd = nextLineElement.getEndOffset();
 		buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
-			buffer.getText(nextStart,nextEnd - nextStart)) + 1);
+			buffer.getLineText(caretLine + 1)) + 1);
 
 		setCaretPosition(end - 1);
 	} //}}}
@@ -4465,12 +4447,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(s instanceof Selection.Rect)
 		{
 			// Return each row of the selection on a new line
-			Element map = buffer.getDefaultRootElement();
-
-			int start = s.start - map.getElement(s.startLine)
-				.getStartOffset();
-			int end = s.end - map.getElement(s.endLine)
-				.getStartOffset();
+			int start = s.start - getLineStartOffset(s.startLine);
+			int end = s.end - getLineEndOffset(s.endLine);
 
 			// Certain rectangles satisfy this condition...
 			if(end < start)
@@ -4482,9 +4460,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			for(int i = s.startLine; i <= s.endLine; i++)
 			{
-				Element lineElement = map.getElement(i);
-				int lineStart = lineElement.getStartOffset();
-				int lineEnd = lineElement.getEndOffset() - 1;
+				int lineStart = getLineStartOffset(i);
+				int lineEnd = getLineEndOffset(i) - 1;
 				int lineLen = lineEnd - lineStart;
 
 				lineStart = Math.min(lineStart + start,lineEnd);
@@ -4569,10 +4546,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(maxLineLen <= 0)
 			return false;
 
-		Element lineElement = buffer.getDefaultRootElement()
-			.getElement(line);
-		int start = lineElement.getStartOffset();
-		int end = lineElement.getEndOffset();
+		int start = getLineStartOffset(line);
+		int end = getLineEndOffset(line);
 		int len = end - start - 1;
 
 		// don't wrap unless we're at the end of the line
@@ -4585,7 +4560,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		String wordBreakChars = (String)buffer.getProperty("wordBreakChars");
 
-		buffer.getText(start,len,lineSegment);
+		buffer.getLineText(line,lineSegment);
 
 		int lineStart = lineSegment.offset;
 		int logicalLength = 0; // length with tabs expanded

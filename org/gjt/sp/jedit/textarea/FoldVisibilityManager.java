@@ -47,6 +47,10 @@ public class FoldVisibilityManager
 	{
 		this.buffer = buffer;
 		this.textArea = textArea;
+
+		int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
+		if(collapseFolds != 0)
+			expandFolds(collapseFolds);
 	} //}}}
 
 	//{{{ getVirtualLineCount() method
@@ -663,12 +667,17 @@ public class FoldVisibilityManager
 	public final void _grab(int index)
 	{
 		this.index = index;
+
+		if(buffer.getLineCount() == 1)
+			buffer._setLineVisible(0,index,true);
+
 		virtualLineCount = 0;
 		for(int i = 0; i < buffer.getLineCount(); i++)
 		{
 			if(buffer._isLineVisible(i,index))
 				virtualLineCount++;
 		}
+
 		lastPhysical = lastVirtual = 0;
 	} //}}}
 
@@ -699,11 +708,48 @@ public class FoldVisibilityManager
 	 */
 	public void _linesInserted(int startLine, int numLines)
 	{
+		//{{{ Find fold start of this line
+		boolean visible = true;
+		int foldLevel = buffer.getFoldLevel(startLine);
+		for(int i = startLine - 1; i >= 0; i--)
+		{
+			if(buffer.isFoldStart(i) && buffer.getFoldLevel(i) < foldLevel)
+			{
+				visible = buffer._isLineVisible(i,index);
+				break;
+			}
+		} //}}}
+
+		int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
+		if(collapseFolds != 0)
+			collapseFolds = (collapseFolds - 1) * buffer.getIndentSize() + 1;
+
+		int newVirtualLineCount = virtualLineCount;
+
+		boolean seenVisibleLine = (startLine != 0);
 		for(int i = startLine; i < startLine + numLines; i++)
 		{
-			if(buffer._isLineVisible(i,index))
-				virtualLineCount++;
+			boolean _visible;
+			if(collapseFolds == 0)
+				_visible = visible;
+			else if(buffer.getFoldLevel(i) >= collapseFolds)
+				_visible = false;
+			else
+				_visible = visible;
+
+			if(!seenVisibleLine && !visible)
+				_visible = true;
+
+			if(_visible)
+			{
+				seenVisibleLine = true;
+				newVirtualLineCount++;
+			}
+
+			buffer._setLineVisible(i,index,_visible);
 		}
+
+		virtualLineCount = newVirtualLineCount;
 
 		if(lastPhysical >= startLine)
 			lastPhysical = lastVirtual = 0;

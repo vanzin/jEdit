@@ -1,5 +1,8 @@
 /*
  * HyperSearchRequest.java - HyperSearch request, run in I/O thread
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +22,7 @@
 
 package org.gjt.sp.jedit.search;
 
-import javax.swing.text.Element;
+//{{{ Importa
 import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.SwingUtilities;
@@ -30,9 +33,11 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
+//}}}
 
 public class HyperSearchRequest extends WorkRequest
 {
+	//{{{ HyperSearchRequest constructor
 	public HyperSearchRequest(View view, SearchMatcher matcher,
 		HyperSearchResults results, Selection[] selection)
 	{
@@ -45,8 +50,9 @@ public class HyperSearchRequest extends WorkRequest
 			.getRoot();
 
 		this.selection = selection;
-	}
+	} //}}}
 
+	//{{{ run() method
 	public void run()
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
@@ -118,16 +124,20 @@ public class HyperSearchRequest extends WorkRequest
 				}
 			});
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private View view;
 	private SearchMatcher matcher;
 	private HyperSearchResults results;
 	private DefaultTreeModel resultTreeModel;
 	private DefaultMutableTreeNode resultTreeRoot;
 	private Selection[] selection;
+	//}}}
 
+	//{{{ doHyperSearch() method
 	private int doHyperSearch(Buffer buffer, SearchMatcher matcher,
 		int start, int end)
 		throws Exception
@@ -143,7 +153,6 @@ public class HyperSearchRequest extends WorkRequest
 		{
 			buffer.readLock();
 
-			Element map = buffer.getDefaultRootElement();
 			Segment text = new Segment();
 			int offset = start;
 			int length = end;
@@ -164,7 +173,7 @@ loop:			for(;;)
 				if(match[0] - match[1] == 0)
 					offset++;
 
-				int newLine = map.getElementIndex(offset);
+				int newLine = buffer.getLineOfOffset(offset);
 				if(line == newLine)
 				{
 					// already had a result on this
@@ -202,5 +211,7 @@ loop:			for(;;)
 		setAbortable(true);
 
 		return resultCount;
-	}
+	} //}}}
+
+	//}}}
 }

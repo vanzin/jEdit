@@ -1,5 +1,8 @@
 /*
  * HyperSearchResult.java - HyperSearch result
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,10 +22,12 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import javax.swing.text.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class HyperSearchResult
 {
@@ -35,6 +40,7 @@ public class HyperSearchResult
 	public Position endPos;
 	public String str; // cached for speed
 
+	//{{{ HyperSearchResult method
 	public HyperSearchResult(Buffer buffer, int line, int start, int end)
 	{
 		path = buffer.getPath();
@@ -45,47 +51,35 @@ public class HyperSearchResult
 		if(!buffer.isTemporary())
 			bufferOpened(buffer);
 
-		str = (line + 1) + ": " + getLine(buffer,
-			buffer.getDefaultRootElement()
-			.getElement(line));
-	}
+		str = (line + 1) + ": " + buffer.getLineText(line).replace('\t',' ');
+	} //}}}
 
-	String getLine(Buffer buffer, Element elem)
-	{
-		if(elem == null)
-			return "";
-		return buffer.getText(elem.getStartOffset(),
-			elem.getEndOffset() -
-			elem.getStartOffset() - 1)
-			.replace('\t',' ');
-	}
-
+	//{{{ bufferOpened() method
 	public void bufferOpened(Buffer buffer)
 	{
 		this.buffer = buffer;
-		Element map = buffer.getDefaultRootElement();
-		Element elem = map.getElement(line);
-		if(elem == null)
-			elem = map.getElement(map.getElementCount()-1);
 		startPos = buffer.createPosition(start);
 		endPos = buffer.createPosition(end);
-	}
+	} //}}}
 
+	//{{{ bufferClosed() method
 	public void bufferClosed()
 	{
 		buffer = null;
 		startPos = endPos = null;
-	}
+	} //}}}
 
+	//{{{ getBuffer() method
 	public Buffer getBuffer()
 	{
 		if(buffer == null)
 			buffer = jEdit.openFile(null,path);
 		return buffer;
-	}
+	} //}}}
 
+	//{{{ toString() method
 	public String toString()
 	{
 		return str;
-	}
+	} //}}}
 }
