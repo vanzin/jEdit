@@ -1395,6 +1395,16 @@ public class Buffer implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
+		// Need to reset properties that were cached defaults,
+		// since the defaults might have changed.
+		Iterator iter = properties.values().iterator();
+		while(iter.hasNext())
+		{
+			PropValue value = (PropValue)iter.next();
+			if(value.defaultValue)
+				iter.remove();
+		}
+
 		parseFully = (!"text".equals(mode.getName())
 			&& jEdit.getBooleanProperty("parseFully"));
 
@@ -1450,9 +1460,9 @@ public class Buffer implements EBComponent
 	public Object getProperty(Object name)
 	{
 		// First try the buffer-local properties
-		Object o = properties.get(name);
+		PropValue o = (PropValue)properties.get(name);
 		if(o != null)
-			return o;
+			return o.value;
 
 		// For backwards compatibility
 		if(!(name instanceof String))
@@ -1460,7 +1470,14 @@ public class Buffer implements EBComponent
 
 		// Now try mode.<mode>.<property>
 		if(mode != null)
-			return mode.getProperty((String)name);
+		{
+			Object retVal = mode.getProperty((String)name);
+			if(retVal == null)
+				return null;
+
+			properties.put(name,new PropValue(retVal,true));
+			return retVal;
+		}
 		else
 		{
 			// Now try buffer.<property>
@@ -1469,14 +1486,17 @@ public class Buffer implements EBComponent
 				return null;
 
 			// Try returning it as an integer first
+			Object retVal;
 			try
 			{
-				return new Integer(value);
+				retVal = new Integer(value);
 			}
 			catch(NumberFormatException nf)
 			{
-				return value;
+				retVal = value;
 			}
+			properties.put(name,new PropValue(retVal,true));
+			return retVal;
 		}
 	} //}}}
 
@@ -1489,7 +1509,23 @@ public class Buffer implements EBComponent
 	 */
 	public void setProperty(String name, Object value)
 	{
-		putProperty(name,value);
+		if(value == null)
+			properties.remove(name);
+		else
+		{
+			PropValue test = (PropValue)properties.get(name);
+			if(test == null)
+				properties.put(name,new PropValue(value,false));
+			else if(test.value.equals(value))
+			{
+				// do nothing
+			}
+			else
+			{
+				test.value = value;
+				test.defaultValue = false;
+			}
+		}
 	} //}}}
 
 	//{{{ unsetProperty() method
@@ -1663,6 +1699,35 @@ public class Buffer implements EBComponent
 			return String.valueOf(value);
 	} //}}}
 
+	//{{{ Used to store property values
+	static class PropValue
+	{
+		PropValue(Object value, boolean defaultValue)
+		{
+			if(value == null)
+				throw new NullPointerException();
+			this.value = value;
+			this.defaultValue = defaultValue;
+		}
+
+		Object value;
+
+		/**
+		 * If this is true, then this value is cached from the mode
+		 * or global defaults, so when the defaults change this property
+		 * value must be reset.
+		 */
+		boolean defaultValue;
+
+		/**
+		 * For debugging purposes.
+		 */
+		public String toString()
+		{
+			return value.toString();
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Edit modes, syntax highlighting
@@ -1690,32 +1755,7 @@ public class Buffer implements EBComponent
 		if(mode == null)
 			throw new NullPointerException("Mode must be non-null");
 
-		// still need to set up new fold handler, etc even if mode not
-		// changed.
-		//if(this.mode == mode)
-		//	return;
-
-		//{{{ Reset cached properties
-		if(getProperty("tabSize")
-			.equals(mode.getProperty("tabSize")))
-			unsetProperty("tabSize");
-
-		if(getProperty("indentSize")
-			.equals(mode.getProperty("indentSize")))
-			unsetProperty("indentSize");
-
-		if(getProperty("maxLineLen")
-			.equals(mode.getProperty("maxLineLen")))
-			unsetProperty("maxLineLen");
-		//}}}
-
 		this.mode = mode;
-
-		//{{{ Cache these for improved performance
-		putProperty("tabSize",getProperty("tabSize"));
-		putProperty("indentSize",getProperty("indentSize"));
-		putProperty("maxLineLen",getProperty("maxLineLen"));
-		//}}}
 
 		propertiesChanged(); // sets up token marker
 	} //}}}
@@ -2488,10 +2528,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void putProperty(Object name, Object value)
 	{
-		if(value == null)
-			properties.remove(name);
-		else
-			properties.put(name,value);
+		// for backwards compatibility
+		if(!(name instanceof String))
+			return;
+
+		setProperty((String)name,value);
 	} //}}}
 
 	//{{{ putBooleanProperty() method
@@ -3046,14 +3087,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ Buffer constructor
 	Buffer(String path, boolean newFile, boolean temp, Hashtable props)
 	{
-		properties = ((Hashtable)props.clone());
+		// XXX
+		properties = new Hashtable(); //((Hashtable)props.clone());
 
 		// fill in defaults for these from system properties if the
 		// corresponding buffer.XXX properties not set
 		if(getProperty(ENCODING) == null)
-			properties.put(ENCODING,System.getProperty("file.encoding"));
+			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
 		if(getProperty(LINESEP) == null)
-			properties.put(LINESEP,System.getProperty("line.separator"));
+			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 
 		lock = new ReadWriteLock();
 		contentMgr = new ContentManager();
