@@ -1,5 +1,7 @@
 TO DO
 
+- consider using NameSpace.clear() sometimes
+- document clear() bsh command
 - fix stylesheet problem
 - $ doesn't find last -- gnu.regexp bug
 - API guide: compareStrings(), showPopupMenu()
