@@ -10,6 +10,8 @@ contributing to this release.
 - Added gettext mode (primarily used on Unix for translating programs
   to other languages.) (Reinout van Schouwen)
 
+- Added APDL mode (Randolf Mock).
+
 - Updated PHP and Perl syntax highlighting (Chris Petersen).
 
 + Miscellaneous Changes:
@@ -54,6 +56,8 @@ contributing to this release.
 - The jeditshell directory was missing from the source download.
 
 - Plugin properties would override site properties.
+
+- Fixed split pane divider positioning.
 
 + API Changes:
 

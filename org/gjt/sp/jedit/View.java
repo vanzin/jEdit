@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -467,16 +467,17 @@ public class View extends JFrame implements EBComponent
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
+		final JSplitPane newSplitPane = new JSplitPane(orientation,
+			oldEditPane,editPane);
+		newSplitPane.setOneTouchExpandable(true);
+		newSplitPane.setBorder(null);
+
 		if(oldParent instanceof JSplitPane)
 		{
 			JSplitPane oldSplitPane = (JSplitPane)oldParent;
 			int dividerPos = oldSplitPane.getDividerLocation();
 
 			Component left = oldSplitPane.getLeftComponent();
-			final JSplitPane newSplitPane = new JSplitPane(orientation,
-				oldEditPane,editPane);
-			newSplitPane.setOneTouchExpandable(true);
-			newSplitPane.setBorder(null);
 
 			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
@@ -484,37 +485,22 @@ public class View extends JFrame implements EBComponent
 				oldSplitPane.setRightComponent(newSplitPane);
 
 			oldSplitPane.setDividerLocation(dividerPos);
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					newSplitPane.setDividerLocation(0.5);
-					editPane.focusOnTextArea();
-				}
-			});
 		}
 		else
 		{
-			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
-				oldEditPane,editPane);
-			newSplitPane.setOneTouchExpandable(true);
-			newSplitPane.setBorder(null);
+			splitPane = newSplitPane;
 			oldParent.add(splitPane);
 			oldParent.revalidate();
-
-			Dimension size = oldParent.getSize();
-			newSplitPane.setDividerLocation(((orientation
-				== JSplitPane.VERTICAL_SPLIT) ? size.height
-				: size.width) / 2);
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					editPane.focusOnTextArea();
-				}
-			});
 		}
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				newSplitPane.setDividerLocation(0.5);
+				editPane.focusOnTextArea();
+			}
+		});
 
 		return editPane;
 	} //}}}
