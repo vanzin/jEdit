@@ -208,6 +208,10 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   problems (such as garbage being inserted in the text area when certain
   keys are pressed, etc.)
 
+- File dialog's completion was case sensitive when the TAB key was
+  pressed. This was inconsistent with all other completion behavior
+  which was case insensitive.
+
 }}}
 {{{ API Changes
 

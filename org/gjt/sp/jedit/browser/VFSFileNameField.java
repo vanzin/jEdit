@@ -192,7 +192,7 @@ class VFSFileNameField extends HistoryTextField
 	{
 		BrowserView view = browser.getBrowserView();
 		view.selectNone();
-		view.getTable().doTypeSelect(currentText,false);
+		view.getTable().doTypeSelect(currentText,true);
 
 		VFS.DirectoryEntry[] files = view.getSelectedFiles();
 		if(files.length == 0)
