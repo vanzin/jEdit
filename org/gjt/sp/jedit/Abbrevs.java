@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,8 @@ import org.gjt.sp.util.Log;
  */
 public class Abbrevs
 {
+	public static final String ENCODING = "UTF8";
+
 	//{{{ getExpandOnInput() method
 	/**
 	 * Returns if abbreviations should be expanded after the
@@ -157,39 +159,19 @@ public class Abbrevs
 		//{{{ Insert the expansion
 		else
 		{
-			buffer.beginCompoundEdit();
-			try
+			buffer.remove(lineStart + wordStart,
+				pos - wordStart);
+
+			int whitespace = buffer.insertIndented(
+				lineStart + wordStart,
+				expand.text);
+
+			if(expand.caretPosition != -1)
 			{
-				// obtain the leading indent for later use
-				lineText = buffer.getText(lineStart,wordStart);
-				int leadingIndent = MiscUtilities.getLeadingWhiteSpaceWidth(
-					lineText,buffer.getTabSize());
-
-				buffer.remove(lineStart + wordStart,pos - wordStart);
-				buffer.insert(lineStart + wordStart,expand.text);
-				if(expand.caretPosition != -1)
-				{
-					textArea.setCaretPosition(lineStart + wordStart
-						+ expand.caretPosition);
-				}
-
-				String whiteSpace = MiscUtilities.createWhiteSpace(
-					leadingIndent,buffer.getBooleanProperty("noTabs")
-					? 0 : buffer.getTabSize());
-
-				// note that if expand.lineCount is 0, we
-				// don't do any indentation at all
-				for(int i = line + 1; i <= line + expand.lineCount; i++)
-				{
-					buffer.insert(buffer.getLineStartOffset(i),
-						whiteSpace);
-				}
+				textArea.setCaretPosition(lineStart + wordStart
+					+ expand.caretPosition
+					+ whitespace);
 			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-
 			if(expand.posParamCount != pp.size())
 			{
 				view.getStatus().setMessageAndClear(
@@ -313,7 +295,9 @@ public class Abbrevs
 
 				try
 				{
-					saveAbbrevs(new FileWriter(file1));
+					saveAbbrevs(new OutputStreamWriter(
+						new FileOutputStream(file1),
+						ENCODING));
 					file2.delete();
 					file1.renameTo(file2);
 				}
@@ -360,7 +344,8 @@ public class Abbrevs
 
 			try
 			{
-				loadAbbrevs(new FileReader(file));
+				loadAbbrevs(new InputStreamReader(
+					new FileInputStream(file),ENCODING));
 				loaded = true;
 			}
 			catch(FileNotFoundException fnf)
@@ -379,7 +364,8 @@ public class Abbrevs
 			try
 			{
 				loadAbbrevs(new InputStreamReader(Abbrevs.class
-					.getResourceAsStream("default.abbrevs")));
+					.getResourceAsStream("default.abbrevs"),
+					ENCODING));
 			}
 			catch(Exception e)
 			{
@@ -422,9 +408,11 @@ public class Abbrevs
 		String line;
 		while((line = in.readLine()) != null)
 		{
+			int index = line.indexOf('|');
+
 			if(line.length() == 0)
 				continue;
-			else if(line.startsWith("[") && line.indexOf('|') == -1)
+			else if(line.startsWith("[") && index == -1)
 			{
 				if(line.equals("[global]"))
 					currentAbbrevs = globalAbbrevs;
@@ -440,9 +428,8 @@ public class Abbrevs
 					}
 				}
 			}
-			else
+			else if(index != -1)
 			{
-				int index = line.indexOf('|');
 				currentAbbrevs.put(line.substring(0,index),
 					line.substring(index + 1));
 			}

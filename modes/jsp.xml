@@ -19,23 +19,40 @@
 			<BEGIN>&lt;%@</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
-
+		<SPAN TYPE="KEYWORD1" DELEGATE="DIRECTIVES">
+			<BEGIN>&lt;jsp:directive&gt;</BEGIN>
+			<END>&lt;/jsp:directive&gt;</END>
+		</SPAN>
+		
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;jsp:expression&gt;</BEGIN>
+			<END>&lt;/jsp:expression&gt;</END>
+		</SPAN>
+
 		
 		<!-- JSP scriptlet code block -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%!</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;jsp:declaration&gt;</BEGIN>
+			<END>&lt;/jsp:declaration&gt;</END>
+		</SPAN>
 		
 		<!-- JSP scriptlet -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
+		</SPAN>
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;jsp:scriptlet&gt;</BEGIN>
+			<END>&lt;/jsp:scriptlet&gt;</END>
 		</SPAN>
 
 		<!-- SGML comment -->
