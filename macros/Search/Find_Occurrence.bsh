@@ -4,6 +4,7 @@
  * at or immediately to the left of the caret
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +36,9 @@
  * and restores the starting caret position.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
  import javax.swing.SwingUtilities;
@@ -131,7 +135,8 @@ boolean findSearchText()
     jEdit.setTemporaryProperty("temp.findXXX.caretPosition",
         String.valueOf(startPos));
     textArea.selectWord();
-    mark = textArea.getMarkPosition();
+	selections = textArea.getSelection();
+    mark = selections[0].getStart();
     if(!isPosWordChar(mark))
     {
         if( mark > 0)
@@ -141,8 +146,9 @@ boolean findSearchText()
             textArea.setCaretPosition(startPos);
             textArea.goToPrevCharacter(false);
             textArea.selectWord();
+			selections = textArea.getSelection();
         }
-        if( mark == 0 || !isPosWordChar(textArea.getMarkPosition()))
+        if( mark == 0 || !isPosWordChar(selections[0].getStart()))
         {
             resetAfterFailure();
             Macros.error(view, "The caret was not located at a word.");
@@ -255,6 +261,28 @@ startPos = textArea.getCaretPosition();
 doIt();
 grab = grabIt();
 SwingUtilities.invokeLater(grab);
+
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Find_Occurrence.bsh</filename></para>
+    <abstract><para>
+        This macro runs the search routine corresponding to the property set
+        by one of its companion macros.
+    </para></abstract>
+    <para>
+        If the macro is called directly or if the search type property cannot
+        be found, it will find the next occurrence of the word on or to the
+        left of the editing caret. If the search succeeds, the macro sets a
+        bookmark by creating temporary jEdit properties for the buffer name
+        and caret location.
+    </para>
+</listitem>
+
+*/
+
 
 // end Find_Occurrence.bsh
 
