@@ -1311,7 +1311,7 @@ xmode-error.hash-char-invalid=HASH_CHAR must be exactly one character
 
 #{{{ JARClassLoader errors
 plugin-error.title=Plugin Error
-plugin-error.caption=The following {0} plugins could not be loaded:
+plugin-error.caption=The following plugins could not be loaded:
 plugin-error.caption-1=The following plugin could not be loaded:
 
 plugin-error.load-error=Cannot load: {0}\n\
@@ -1695,14 +1695,15 @@ options.browser.general.defaultPath.buffer=Parent directory of current buffer
 options.browser.general.defaultPath.home=Home directory
 options.browser.general.defaultPath.favorites=Favorites
 options.browser.general.defaultPath.last=Most recently visited directory
+options.browser.general.showMenubar=Show menu bar
 options.browser.general.showToolbar=Show tool bar
 options.browser.general.showIcons=Show icons
 options.browser.general.showHiddenFiles=Show hidden files
 options.browser.general.sortIgnoreCase=Ignore case when sorting
 options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
-options.browser.general.splitHorizontally=Hierarchy and browsing panes \
-	side-by-side (in file dialogs only)
+options.browser.general.currentBufferFilter=Filter in file dialogs is \
+	current buffer extension
 
 options.browser.colors.label=Colors
 options.browser.colors.glob=File name glob
@@ -1947,6 +1948,9 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message=One or more plugins you are installing \
 	depend on this plugin.\nAre you sure you don't want to install it?
+
+plugin-manager.status.loaded=Loaded
+plugin-manager.status.error=Error
 
 #{{{ Plugin list download progress
 plugin-list.progress.title=Downloading Plugin List

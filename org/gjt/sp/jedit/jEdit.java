@@ -2574,13 +2574,22 @@ public class jEdit
 			script.append(";\n");
 		}
 
+		script.append("view = jEdit.getLastView();\n");
 		script.append("buffer = EditServer.handleClient("
 			+ restore + "," + newView + "," + newPlainView +
 			",parent,args);\n");
-		script.append("if(buffer != null && " + wait + ")\n");
+		script.append("if(buffer != null && " + wait + ") {\n");
 		script.append("\tbuffer.setWaitSocket(socket);\n");
-		script.append("else\n");
+		script.append("\tsocket = null;\n");
+		script.append("}\n");
+		script.append("if(view != jEdit.getLastView()) {\n");
+		script.append("\tview.setWaitSocket(socket);\n");
+		script.append("\tsocket = null;\n");
+		script.append("}\n");
+		script.append("if(socket != null)\n");
 		script.append("\tsocket.close();\n");
+		/* the script is run in the global namespace */
+		script.append("buffer = null;\n");
 
 		if(scriptFile != null)
 		{
@@ -3086,8 +3095,7 @@ public class jEdit
 				{
 					String caption = jEdit.getProperty(
 						"plugin-error.caption" + (pluginErrors.size() == 1
-						? "-1" : ""),new Integer[] {
-						new Integer(pluginErrors.size()) });
+						? "-1" : ""));
 
 					new ErrorListDialog(
 						jEdit.getFirstView(),

@@ -3405,7 +3405,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(autosaveFile != null)
 			autosaveFile.delete();
 
-		if(waitSocket != null)
+		// notify clients with -wait
+		if(waitSocket != null && !waitSocket.isClosed())
 		{
 			try
 			{

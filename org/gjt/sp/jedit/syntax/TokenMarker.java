@@ -283,11 +283,13 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 		handleNoWordBreak();
 		markKeyword(true);
+		//}}}
 
-		if(context.parent != null)
+		//{{{ Unwind any NO_LINE_BREAK parent delegates
+unwind:		while(context.parent != null)
 		{
 			rule = context.parent.inRule;
-			if((rule != null && (context.parent.inRule.action
+			if((rule != null && (rule.action
 				& ParserRule.NO_LINE_BREAK) == ParserRule.NO_LINE_BREAK)
 				|| terminated)
 			{
@@ -295,6 +297,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				keywords = context.rules.getKeywords();
 				context.inRule = null;
 			}
+			else
+				break unwind;
 		} //}}}
 
 		tokenHandler.handleToken(Token.END,pos - line.offset,0,context);

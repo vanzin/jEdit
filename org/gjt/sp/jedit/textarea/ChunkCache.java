@@ -95,10 +95,7 @@ class ChunkCache
 				if(info.physicalLine > line)
 				{
 					// line is invisible?
-					if(i == 0)
-						screenLine = 0;
-					else
-						screenLine = i - 1;
+					screenLine = i - 1;
 					break;
 				}
 				else if(info.physicalLine == line)
@@ -506,6 +503,11 @@ class ChunkCache
 	private void updateChunksUpTo(int lastScreenLine)
 	{
 		// this method is a nightmare
+
+		if(lastScreenLine >= lineInfo.length)
+		{
+			throw new ArrayIndexOutOfBoundsException(lastScreenLine);
+		}
 
 		// if one line's chunks are invalid, remaining lines are also
 		// invalid
