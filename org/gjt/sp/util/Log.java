@@ -463,7 +463,7 @@ public class Log
 
 		void update(final int lineCount, final boolean oldWrap)
 		{
-			if(lineCount == 0)
+			if(lineCount == 0 || listeners.size() == 0)
 				return;
 
 			SwingUtilities.invokeLater(new Runnable()

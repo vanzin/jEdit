@@ -697,15 +697,14 @@ public class JEditTextArea extends JComponent
 			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
 			if(line == prevLine)
 			{
-				setFirstLine(getFirstLine() - _electricScroll
-					- displayManager.getScreenLineCount(
-					prevLine));
+				setFirstPhysicalLine(prevLine,subregion
+					- _electricScroll);
 			}
 			else if(line == nextLine)
 			{
-				setFirstLine(getFirstLine() + _electricScroll
-					+ displayManager.getScreenLineCount(
-					nextLine));
+				setFirstPhysicalLine(nextLine,
+					subregion + electricScroll
+					- visibleLines - 1);
 			}
 			else
 			{
