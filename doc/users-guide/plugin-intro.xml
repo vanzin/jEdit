@@ -1,4 +1,4 @@
-<!-- jEdit 4.0 Plugin Guide, (C) 2001 John Gellene          -->
+<!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene          -->
 
 <!-- jEdit buffer-local properties:                         -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:     -->
@@ -24,10 +24,13 @@ Introducing the Plugin API</title>
   they perform a wide variety of editing and file management tasks. A
   detailed listing of available plugins is available at the jEdit
   <ulink url="http://plugins.jedit.org">Plugin Central</ulink> web site.
+  You can also find beta versions of new plugins in the
+  <quote>Downloads</quote> area of the <ulink
+  url="http://community.jedit.org">jEdit Community</ulink> site.
 </para>
 
 <para>
-  Using the plugin manager feature of jEdit, users with an
+  Using the <quote>Plugin Manager</quote> feature of jEdit, users with an
   Internet connnection can check for new or updated plugins and install
   and remove them without leaving jEdit. See <xref
   linkend="using-plugins" /> for details.
@@ -136,7 +139,7 @@ Introducing the Plugin API</title>
     efforts are made to maintain or deprecate plugin-related code on a
     trasisional basis. possible. While the majority of plugins are
     unaffected by most changes and will continue working, it is a good idea
-    to monitor the jEdit changelog, the mailing lists or <ulink
+    to monitor the jEdit change log, the mailing lists or <ulink
     url="http://community.jedit.org">jEdit Community</ulink> for API changes
     and update your plugin as necessary.
   </para>
