@@ -492,29 +492,27 @@ options.quicknotepad.filepath=</programlisting></informalexample>
 &lt;ACTIONS&gt;
     &lt;ACTION NAME="quicknotepad.choose-file"&gt;
         &lt;CODE&gt;
-            view.getDockableWindowManager()
-              .getDockable(QuickNotepadPlugin.NAME).chooseFile();
+            wm.getDockable(QuickNotepadPlugin.NAME).chooseFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
     &lt;ACTION NAME="quicknotepad.save-file"&gt;
         &lt;CODE&gt;
-            view.getDockableWindowManager()
-              .getDockable(QuickNotepadPlugin.NAME).saveFile();
+            wm.getDockable(QuickNotepadPlugin.NAME).saveFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
     &lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
         &lt;CODE&gt;
-            view.getDockableWindowManager()
-              .getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
+            wm.getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 &lt;/ACTIONS&gt;</programlisting></informalexample>
 
 <para>
   This file defines three actions. They use the current view's
-  <classname>DockableWindowManager</classname> object and the method
+  <ulink url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
+  <classname>DockableWindowManager</classname></ulink> object and the method
   <filename>getDockable()</filename> to find the QuickNotepad plugin
   window and call the desired method.
 </para>
@@ -522,8 +520,10 @@ options.quicknotepad.filepath=</programlisting></informalexample>
 <para>
   When an action is invoked, the BeanShell scripts address
   the plugin through static methods, or if instance data is needed, the
-  current <classname>View</classname>, its
-  <classname>DockableWindowManager</classname>, and the plugin
+  current <ulink url="../api/org/gjt/sp/jedit/View.html">
+  <classname>View</classname></ulink>, its
+  <ulink url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
+  <classname>DockableWindowManager</classname></ulink>, and the plugin
   object return by the <filename>getDockable()</filename> method.
 </para>
 

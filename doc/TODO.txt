@@ -3,6 +3,9 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- bsh bugs:
+  ; after else if()
+  longs not read correctly if prefixed with 0x
 - VFS browser pathsEqual(): case sensitivity!
 - first line problem solved by reset()
 - latest sftp: permissions not saved!
@@ -40,6 +43,7 @@ it is done in most text editors
 
 + docs:
 
+- addCommandPath()
 -Dsun.java2d.noddraw=true
 - API thread safety
 - document optional dependencies
@@ -52,10 +56,6 @@ it is done in most text editors
 - help:
   - titles in search are fucked
 - sidebars: need a border or some sort
-- user's guide:
-  - part III
-    - describe alternative ways to obtain buffers, edit panes, text areas,
-      in a sidebar about changing them
 - plugin tutorial:
   - plugin build environment docs
   - auto-created actions

@@ -2,7 +2,7 @@
 <!-- :indentSize=1:noTabs=true: -->
 <!-- :xml.root=users-guide.xml: -->
 
-<chapter id="updating-modes"><title>Updating Edit Modes for jEdit 4.1</title>
+<chapter id="updating-modes"><title>Updating Edit Modes for jEdit 4.1/4.2</title>
  <para>
   In jEdit 4.1, the mode file grammar has been cleaned up somewhat. As a result, some
   edit modes written for jEdit 4.0 and earlier need to be updated:
