@@ -164,7 +164,8 @@ public class DefaultInputHandler extends InputHandler
 
 		while(st.hasMoreTokens())
 		{
-			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyBinding);
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(
+				st.nextToken());
 			if(keyStroke == null)
 				return null;
 

@@ -283,11 +283,19 @@ class VFSFileNameField extends HistoryTextField
 
 				String path = getText();
 
-				BrowserView view = browser.getBrowserView();
 				view.selectNone();
+
+				int mode = browser.getMode();
+				// fix for bug #765507
+				// we don't type complete in save dialog
+				// boxes. Press TAB to do an explicit
+				// complete
 				view.getTable().doTypeSelect(path,
-					browser.getMode() == VFSBrowser
-					.CHOOSE_DIRECTORY_DIALOG);
+					mode == VFSBrowser
+					.CHOOSE_DIRECTORY_DIALOG
+					||
+					mode == VFSBrowser
+					.SAVE_DIALOG);
 			}
 		}
 	} //}}}
