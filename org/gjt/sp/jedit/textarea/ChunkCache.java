@@ -69,6 +69,7 @@ public class ChunkCache
 
 		float x = 0.0f;
 		float endX = 0.0f;
+		boolean seenNonWhiteSpace = false;
 		boolean addedNonWhiteSpace = false;
 		boolean lastWasSpace = false;
 		float firstNonWhiteSpace = 0.0f;
@@ -103,8 +104,8 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-						addedNonWhiteSpace = true;
 						lastWasSpace = false;
+						seenNonWhiteSpace = true;
 					}
 
 					if(end != null
@@ -120,7 +121,6 @@ public class ChunkCache
 						end.next = null;
 
 						x = x + firstNonWhiteSpace - endX;
-						addedNonWhiteSpace = false;
 					}
 
 					if(first == null)
@@ -163,9 +163,6 @@ public class ChunkCache
 						current.length = 1;
 					} //}}}
 
-					if(!addedNonWhiteSpace && out.size() == 0)
-						firstNonWhiteSpace = x;
-
 					if(first == null)
 						first = current;
 
@@ -176,6 +173,10 @@ public class ChunkCache
 						flushIndex = i + 1;
 
 					lastWasSpace = true;
+					addedNonWhiteSpace = seenNonWhiteSpace;
+
+					if(!seenNonWhiteSpace)
+						firstNonWhiteSpace = x;
 				}
 				else if(i == tokenListOffset + tokens.length - 1)
 				{
@@ -189,7 +190,7 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-						addedNonWhiteSpace = true;
+						seenNonWhiteSpace = true;
 						lastWasSpace = false;
 					}
 
@@ -205,12 +206,12 @@ public class ChunkCache
 						end.next = null;
 
 						x = x + firstNonWhiteSpace - endX;
-
-						addedNonWhiteSpace = false;
 					}
 
 					if(first == null)
 						first = current;
+
+					addedNonWhiteSpace = seenNonWhiteSpace;
 				}
 			}
 

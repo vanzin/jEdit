@@ -4,7 +4,6 @@ TO DO
 
 - proofread documentation one more time
 - make sure plugin guide is up to date
-- lots of spaces then one word; word should not be wrapped
 - scroll to caret _still_ jumps around
 - rename MacOS.jar
 - fix stylesheet problem
