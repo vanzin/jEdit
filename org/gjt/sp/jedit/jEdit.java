@@ -86,11 +86,16 @@ public class jEdit
 			System.exit(1);
 		}
 
+		settingsDirectory = MiscUtilities.constructPath(
+			System.getProperty("user.home"),".jedit");
+
+		// MacOS users expect the app to keep running after all windows
+		// are closed
+		background = OperatingSystem.isMacOS();
+
 		//{{{ Parse command line
 		boolean endOpts = false;
 		int level = Log.WARNING;
-		settingsDirectory = MiscUtilities.constructPath(
-			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
 		boolean gui = true; // open initial view?
@@ -2218,7 +2223,7 @@ public class jEdit
 
 	//{{{ Package-private members
 
-	Hashtable actionHash;
+	static Hashtable actionHash;
 
 	//{{{ updatePosition() method
 	/**

@@ -126,20 +126,30 @@ public class ActionBar extends JPanel
 			{
 				action.addCurrentToHistory();
 				String propName = cmd.substring(0,index).trim();
-				String propValue = cmd.substring(index + 1);
+				String propValue = cmd.substring(index + 1).trim();
 				String code;
 				/* construct a BeanShell snippet instead of
 				 * invoking directly so that user can record
 				 * property changes in macros. */
 				if(propName.startsWith("buffer."))
 				{
-					code = "buffer.setStringProperty(\""
-						+ MiscUtilities.charsToEscapes(
-						propName.substring("buffer.".length())
-						) + "\",\""
-						+ MiscUtilities.charsToEscapes(
-						propValue) + "\");\n"
-						+ "buffer.propertiesChanged();";
+					if(propName.equals("buffer.mode"))
+					{
+						code = "buffer.setMode(\""
+							+ MiscUtilities.charsToEscapes(
+							propValue) + "\");";
+					}
+					else
+					{
+						code = "buffer.setStringProperty(\""
+							+ MiscUtilities.charsToEscapes(
+							propName.substring("buffer.".length())
+							) + "\",\""
+							+ MiscUtilities.charsToEscapes(
+							propValue) + "\");";
+					}
+
+					code = code + "\nbuffer.propertiesChanged();";
 				}
 				else if(propName.startsWith("!buffer."))
 				{

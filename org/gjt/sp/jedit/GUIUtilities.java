@@ -302,7 +302,7 @@ public class GUIUtilities
 			{
 				String button = st.nextToken();
 				if(button.equals("-"))
-					toolBar.addSeparator();
+					toolBar.add(Box.createHorizontalStrut(12));
 				else
 				{
 					JButton b = loadToolButton(button);

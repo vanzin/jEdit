@@ -2,7 +2,7 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Bill McMilleon, Kris Kopicki and Oliver Rutherfurd, Ryan Grove
+Thanks to Bill McMilleon, Kris Kopicki, Oliver Rutherfurd and Ryan Grove
 for contributing to this release.
 
 {{{ Editing
@@ -194,6 +194,9 @@ for contributing to this release.
 - MacOS plugin version 3.0 now requires Java 1.4.1. All native calls now
   use the Cocoa API, and a dock menu has been added. The dock menu
   provides similar functionality to the plugin menu (Kris Kopicki).
+
+- Background mode is now enabled by default on MacOS, since this is the
+  platform convention.
 
 }}}
 {{{ Bug Fixes

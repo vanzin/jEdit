@@ -3,7 +3,7 @@
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ###
-### Copyright (C) 1998, 2002 Slava Pestov
+### Copyright (C) 1998, 2003 Slava Pestov
 ###
 
 #{{{ Function keys
@@ -126,7 +126,6 @@ expand-folds.shortcut=C+e ENTER
 #}}}
 
 #{{{ C+m C+X
-run-last-macro.shortcut=C+m C+l
 record-temp-macro.shortcut=C+m C+m
 run-temp-macro.shortcut=C+m C+p
 record-macro.shortcut=C+m C+r

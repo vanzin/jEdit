@@ -1532,20 +1532,6 @@ public class Buffer implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
-		// Need to reset properties that were cached defaults,
-		// since the defaults might have changed.
-		Iterator iter = properties.values().iterator();
-		while(iter.hasNext())
-		{
-			PropValue value = (PropValue)iter.next();
-			if(value.defaultValue)
-				iter.remove();
-		}
-
-		textMode = "text".equals(mode.getName());
-
-		setTokenMarker(mode.getTokenMarker());
-
 		String folding = getStringProperty("folding");
 		FoldHandler handler = FoldHandler.getFoldHandler(folding);
 
@@ -2020,6 +2006,19 @@ public class Buffer implements EBComponent
 	 * Sets this buffer's edit mode. Note that calling this before a buffer
 	 * is loaded will have no effect; in that case, set the "mode" property
 	 * to the name of the mode. A bit inelegant, I know...
+	 * @param mode The mode name
+	 * @since jEdit 4.2pre1
+	 */
+	public void setMode(String mode)
+	{
+		setMode(jEdit.getMode(mode));
+	} //}}}
+
+	//{{{ setMode() method
+	/**
+	 * Sets this buffer's edit mode. Note that calling this before a buffer
+	 * is loaded will have no effect; in that case, set the "mode" property
+	 * to the name of the mode. A bit inelegant, I know...
 	 * @param mode The mode
 	 */
 	public void setMode(Mode mode)
@@ -2031,7 +2030,12 @@ public class Buffer implements EBComponent
 
 		this.mode = mode;
 
-		propertiesChanged(); // sets up token marker
+		textMode = "text".equals(mode.getName());
+
+		setTokenMarker(mode.getTokenMarker());
+
+		resetCachedProperties();
+		propertiesChanged();
 	} //}}}
 
 	//{{{ setMode() method
@@ -3315,7 +3319,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof PropertiesChanged)
+		{
+			resetCachedProperties();
 			propertiesChanged();
+		}
 	} //}}}
 
 	//}}}
@@ -3543,6 +3550,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(autosaveFile != null)
 				autosaveFile.delete();
 			autosaveFile = new File(file.getParent(),'#' + name + '#');
+		}
+	} //}}}
+
+	//{{{ resetCachedProperties() method
+	private void resetCachedProperties()
+	{
+		// Need to reset properties that were cached defaults,
+		// since the defaults might have changed.
+		Iterator iter = properties.values().iterator();
+		while(iter.hasNext())
+		{
+			PropValue value = (PropValue)iter.next();
+			if(value.defaultValue)
+				iter.remove();
 		}
 	} //}}}
 
