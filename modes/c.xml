@@ -122,6 +122,13 @@
 			<END>*/</END>
 		</SPAN>
 
+		<!-- Include statements have this -->
+		<!-- Minor fix so that #include <net/if.h> is highlighted -->
+		<SPAN TYPE="KEYWORD2">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
 		<!-- Directives -->
 		<KEYWORDS>
 			<MARKUP>assert</MARKUP>

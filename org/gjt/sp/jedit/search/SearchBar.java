@@ -421,9 +421,7 @@ public class SearchBar extends JPanel
 				if(evt.isShiftDown())
 				{
 					evt.consume();
-					// reverse search with regexps not
-					// supported yet
-					find(regexp.isSelected() ? false : true);
+					find(true);
 				}
 				break;
 			}

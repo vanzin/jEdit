@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- fold functionality of drag and drop plugin
+- chunk cache state during a buffer event is too fragile
 - dnd should call toFront()
 - block caret: left to 1 position
 - quicknotepad help needs to be generated

@@ -11,6 +11,9 @@ contributing to this release.
 
 - Updated Pike syntax highlighting (Peter Lundqvist).
 
+- The "if" in #include <net/if.h> is no longer highlighted in C and C++
+  modes.
+
 }}}
 {{{ Miscellaneous Changes
 
@@ -31,6 +34,11 @@ contributing to this release.
 - If there are several search results in one line, clicking the line in
   the HyperSearch Results window now selects all occurrences, not just
   the first one.
+
+- If regular expressions are on, the search bar now shows an error
+  message instead of silently failing if you attempt a reverse search
+  with S+ENTER (reverse search with regular expressions is not
+  supported).
 
 }}}
 {{{ Bug Fixes
@@ -113,6 +121,10 @@ contributing to this release.
 
 - Various combinations of insertions and removes could mess up the fold
   visibility map.
+
+- The up/down arrow keys, delete line, expand/collapse fold and a few
+  other commands might not have put the caret in the right place if
+  horizontal scrolling was involved.
 
 }}}
 {{{ API Additions
