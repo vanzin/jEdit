@@ -1,16 +1,21 @@
 ###
 ### jEdit keyboard shortcuts
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+###
 ### Copyright (C) 1998, 2001 Slava Pestov
 ###
 
-# Function keys
+#{{{ Function keys
 help.shortcut=F1
+#}}}
 
-# Single key
+#{{{ C+X
 select-all.shortcut=C+a
 complete-word.shortcut=C+b
 copy.shortcut=C+c
 delete-line.shortcut=C+d
+# C+e is a prefix
 find.shortcut=C+f
 find-next.shortcut=C+g
 find-prev.shortcut=C+h
@@ -18,10 +23,12 @@ indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 swap-marker.shortcut=C+k
 goto-line.shortcut=C+l
+# C+m is a prefix
 new-file.shortcut=C+n
 open-file.shortcut=C+o
 print.shortcut=C+p
 exit.shortcut=C+q
+# C+r is a prefix
 save.shortcut=C+s
 add-marker-shortcut.shortcut=C+t
 select-marker.shortcut=C+u
@@ -30,24 +37,12 @@ close-buffer.shortcut=C+w
 cut.shortcut=C+x
 goto-marker.shortcut=C+y
 undo.shortcut=C+z
-recent-buffer.shortcut=C+BACK_QUOTE
 unsplit.shortcut=C+1
 split-horizontal.shortcut=C+2
 split-vertical.shortcut=C+3
-expand-abbrev.shortcut=C+SEMICOLON
-quick-search.shortcut=C+COMMA
-hypersearch.shortcut=C+PERIOD
-scroll-up-page.shortcut=A+QUOTE
-scroll-up-line.shortcut=C+QUOTE
-scroll-down-line.shortcut=C+SLASH
-scroll-down-page.shortcut=A+SLASH
-toggle-multi-select.shortcut=C+BACK_SLASH
-prev-buffer.shortcut=C+PAGE_UP
-next-buffer.shortcut=C+PAGE_DOWN
-prev-textarea.shortcut=A+PAGE_UP
-next-textarea.shortcut=A+PAGE_DOWN
+#}}}
 
-# C+e C+X
+#{{{ C+e C+X
 # Unused: e, f, h, n, p, q, x, y
 copy-append.shortcut=C+e C+a
 search-in-open-buffers.shortcut=C+e C+b
@@ -70,13 +65,15 @@ redo.shortcut=C+e C+z
 expand-folds.shortcut=C+e ENTER
 prev-bracket.shortcut=C+e [
 next-bracket.shortcut=C+e ]
+#}}}
 
-# C+e X
-# Unused: a b e g h j k m o q t u y z
+#{{{ C+e X
+# Unused: b e g h j k m o q t u y z
 close-left-docking-area.shortcut=C+e 1
 close-top-docking-area.shortcut=C+e 2
 close-right-docking-area.shortcut=C+e 3
 close-bottom-docking-area.shortcut=C+e 4
+add-explicit-fold.shortcut=C+e a
 collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
@@ -89,23 +86,27 @@ select-fold.shortcut=C+e s
 insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
 expand-all-folds.shortcut=C+e x
+#}}}
 
-# C+m
+#{{{ C+m C+X
 run-last-macro.shortcut=C+m C+l
 record-temp-macro.shortcut=C+m C+m
 run-temp-macro.shortcut=C+m C+p
 record-macro.shortcut=C+m C+r
 stop-recording.shortcut=C+m C+s
+#}}}
 
-# C+r
+#{{{ C+r C+X
 copy-append-string-register.shortcut=C+r C+a
 copy-string-register.shortcut=C+r C+c
 clear-register.shortcut=C+r C+l
 cut-append-string-register.shortcut=C+r C+u
 paste-string-register.shortcut=C+r C+v
 cut-string-register.shortcut=C+r C+x
+#}}}
 
-# Other keys
+#{{{ Other keys
+recent-buffer.shortcut=C+BACK_QUOTE
 select-block.shortcut=C+[
 match-bracket.shortcut=C+]
 prev-paragraph.shortcut=C+UP
@@ -153,8 +154,21 @@ repeat.shortcut=C+ENTER
 collapse-fold.shortcut=A+BACK_SPACE
 expand-fold.shortcut=AS+ENTER
 expand-one-level.shortcut=A+ENTER
+expand-abbrev.shortcut=C+SEMICOLON
+quick-search.shortcut=C+COMMA
+hypersearch.shortcut=C+PERIOD
+scroll-up-page.shortcut=A+QUOTE
+scroll-up-line.shortcut=C+QUOTE
+scroll-down-line.shortcut=C+SLASH
+scroll-down-page.shortcut=A+SLASH
+toggle-multi-select.shortcut=C+BACK_SLASH
+prev-buffer.shortcut=C+PAGE_UP
+next-buffer.shortcut=C+PAGE_DOWN
+prev-textarea.shortcut=A+PAGE_UP
+next-textarea.shortcut=A+PAGE_DOWN
+#}}}
 
-# Alternative shortcuts for frequently-used commands
+#{{{ Alternative shortcuts for frequently-used commands
 next-page.shortcut2=A+a
 delete.shortcut2=A+d
 prev-line.shortcut2=A+i
@@ -164,3 +178,4 @@ next-char.shortcut2=A+l
 prev-page.shortcut2=A+q
 end.shortcut2=A+x
 home.shortcut2=A+z
+#}}}

@@ -109,13 +109,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
 		//}}}
 
-		//{{{ Syntax highlighting
-		defaultSyntax = new JCheckBox(jEdit.getProperty("options.editing"
-			+ ".syntax"));
-		defaultSyntax.setSelected(jEdit.getBooleanProperty("buffer.syntax"));
-		addComponent(defaultSyntax);
-		//}}}
-
 		//{{{ Indent on tab
 		defaultIndentOnTab = new JCheckBox(jEdit.getProperty("options.editing"
 			+ ".indentOnTab"));
@@ -152,7 +145,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.folding",(String)defaultFolding.getSelectedItem());
 		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
-		jEdit.setBooleanProperty("buffer.syntax",defaultSyntax.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
 			.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnEnter",defaultIndentOnEnter
@@ -171,7 +163,6 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox defaultFolding;
 	private JTextField defaultCollapseFolds;
 	private JTextField undoCount;
-	private JCheckBox defaultSyntax;
 	private JCheckBox defaultIndentOnTab;
 	private JCheckBox defaultIndentOnEnter;
 	private JCheckBox defaultNoTabs;

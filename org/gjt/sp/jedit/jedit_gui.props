@@ -47,6 +47,7 @@ action-set.macros=Macros
 action-set.plugin=Plugin: {0}
 
 view.docking.close-tooltip=Hides the current docked window
+view.docking.menu-tooltip=Shows a list of docked windows
 #}}}
 
 #{{{ Tool bar
@@ -464,6 +465,8 @@ folding=collapse-fold \
 	- \
 	select-fold \
 	- \
+	add-explicit-fold \
+	- \
 	narrow
 folding.label=Folding
 collapse-fold.label=Collapse Fold
@@ -473,6 +476,7 @@ collapse-all-folds.label=Collapse All Folds
 expand-folds.label=Expand Folds With Level
 expand-all-folds.label=Expand All Folds
 select-fold.label=Select Fold
+add-explicit-fold.label=Add Explicit Fold
 narrow.label=Narrow Buffer to Selection
 #}}}
 
@@ -500,6 +504,8 @@ close-left-docking-area.label=Close Left Docking Area
 close-top-docking-area.label=Close Top Docking Area
 close-right-docking-area.label=Close Right Docking Area
 close-bottom-docking-area.label=Close Bottom Docking Area
+#}}}
+
 #}}}
 
 #{{{ Utilities menu
@@ -766,44 +772,67 @@ about.text=jEdit is brought to you by:\n\
 	comments, feedback and bug reports.
 #}}}
 
-#{{{ IO Error dialog, {0}=the error message
-ioerror.title=I/O Error
-# {0} - the error message
-ioerror.message=An I/O error occurred ({0})
+#{{{ Error list dialog, used to report I/O and plugin load errors
+error-list.plugin-manager=Plugin Manager
 #}}}
 
-#{{{ Read error
+#{{{ I/O error dialog box
+ioerror.title=I/O Error
+ioerror.caption=The following {0} I/O operations could not be completed:
+ioerror.caption-1=The following I/O operation could not be completed:
+
+ioerror={0}
+ioerror.no-read=Cannot load: {0}
+ioerror.no-write=Cannot save: {0}
+ioerror.directory-error=Cannot list directory: {0}
+ioerror.directory-error-nomsg=Cannot list directory.
+ioerror.encoding-error=Cannot load with "{0}" encoding:\n\
+	{1}\n\
+	To use a different encoding, try the commands in the\n\
+	File->Open With Encoding menu.\n\
+	If you are really stuck and do not know which encoding\n\
+	to use, try "8859_1".
+ioerror.open-directory=Cannot open directory as a buffer.
+ioerror.save-directory=Cannot save buffer over a directory.
+ioerror.no-read=Insufficent permissions to load file.
+ioerror.no-write=Insufficent permissions to save file.
+ioerror.badurl=Malformed URL: {0}
+ioerror.delete-error=Cannot delete file.
+ioerror.rename-exists=Cannot overwrite existing file {0}.
+ioerror.rename-error=Cannot rename to {0}.
+ioerror.mkdir-error=Cannot create directory.
+
+vfs.not-supported.list=Directories on the "{0}" filesystem cannot be browsed.
+vfs.not-supported.load=Files on the "{0}" filesystem cannot be opened.
+vfs.not-supported.save=Files cannot be saved to the "{0}" filesystem.
+#}}}
+
+#{{{ Old I/O error dialog boxes
+ioerror.message=An I/O error occurred ({0})
+
 read-error.title=Read Error
 # {0} - the path name {1} - the error message
 read-error.message=The file {0}\n\
 	could not be loaded due to an I/O error.\n\
 	({1})
-#}}}
 
-#{{{ Write error
 write-error.title=Write Error
 # {0} - the path name {1} - the error message
 write-error.message=The file {0}\n\
 	could not be saved due to an I/O error.\n\
 	({1})
-#}}}
 
-#{{{ Directory error
 directory-error.title=Directory Error
 # {0} - the path name {1} - the error message
 directory-error.message=The directory {0}\n\
 	could not be listed due to an I/O error.\n\
 	({1})
-#}}}
 
-#{{{ Directory error with no message
 directory-error-nomsg.title=Directory Error
 # {0} - the path name
 directory-error-nomsg.message=The directory {0}\n\
 	could not be listed due to an I/O error.
-#}}}
 
-#{{{ Character conversion error, {0}=path, {1}=current encoding, {2}=error message
 encoding-error.title=Incompatible Encoding
 encoding-error.message=The file {0}\n\
 	could not be loaded with the "{1}" encoding.\n\
@@ -814,33 +843,23 @@ encoding-error.message=The file {0}\n\
 	\n\
 	If you are really stuck and do not know which encoding\n\
 	to use, try "ASCII" or "8859_1".
-#}}}
 
-#{{{ Cannot open directory dialog box
 open-directory.title=Cannot Open Directory
 open-directory.message={0} is a directory.\n\
 	Directories cannot be opened for editing.
-#}}}
 
-#{{{ Cannot save directory dialog box
 save-directory.title=Cannot Save Directory
 save-directory.message={0} is a directory.\n\
 	Buffers cannot be saved over directories.
-#}}}
 
-#{{{ Cannot read dialog box
 no-read.title=Cannot Open File
 no-read.message=Cannot read from {0}.\n\
 	This probably means you have insufficent permissions.
-#}}}
 
-#{{{ Cannot write dialog box
 no-write.title=Cannot Save File
 no-write.message=Cannot save to {0}.\n\
 	This probably means you have insufficent permissions.
-#}}}
 
-#{{{ Malformed URL error
 badurl.title=Invalid URL
 # {0} - the URL
 # {1} - the error
@@ -1107,54 +1126,36 @@ xmode-error.empty-keyword=The keyword text cannot be empty
 #}}}
 
 #{{{ JARClassLoader errors
-plugin.load-error.title=Cannot Load Plugin
-plugin.load-error.message=The plugin {0} cannot be loaded\n\
-	({1}).\n\
+plugin-error.title=Plugin Error
+plugin-error.caption=The following {0} plugins could not be loaded:
+plugin-error.caption-1=The following plugin could not be loaded:
+
+plugin-error.load-error=Cannot load: {0}\n\
 	The most likely reason is that the JAR file is corrupt; try\n\
 	reinstalling it. See the activity log for a full stack trace.
-
-plugin.start-error.title=Cannot Start Plugin
-plugin.start-error.message=The plugin {0} cannot be started\n\
-	({1}).\n\
+plugin-error.start-error=Cannot start: {0}\n\
 	Possible reasons include:\n\
 	- the plugin is incompatible with this jEdit release; try updating\n\
 	the plugin\n\
 	- there is a bug in this plugin. If you suspect this is the case,\n\
 	e-mail the stack trace printed in the activity log to the plugin\n\
 	author.
-
-plugin.already-loaded.title=Plugin Already Loaded
-plugin.already-loaded.message=You have two copies of the {0} plugin.\n\
-	Please remove one of the two copies.
-
-plugin.dep-jdk.title=Unsatisfied Dependency
-plugin.dep-jdk.message=The plugin {0} requires Java {1} or later,\n\
-	but you only have version {2}.
-
-plugin.dep-jedit.title=Unsatisfied Dependency
-plugin.dep-jedit.message=The plugin {0} requires jEdit {1} or later,\n\
-	but you only have version {2}. Download new\n\
+plugin-error.already-loaded=Two copies involved. Please remove one of the\n\
+	two copies.
+plugin-error.dep-jdk=This plugin requires Java {0} or later,\n\
+	but you only have version {1}.
+plugin-error.dep-jedit=This plugin requires jEdit {0} or later,\n\
+	but you only have version {1}. Download new\n\
 	jEdit versions from <http://www.jedit.org>.
-
-plugin.dep-plugin.no-version.title=Unsatisfied Dependency
-plugin.dep-plugin.no-version.message=The plugin {0} requires version {1} or later of {2},\n\
-	but {2} does not appear to be installed.
-
-plugin.dep-plugin.broken.title=Unsatisfied Dependency
-plugin.dep-plugin.broken.message=The plugin {0} requires the plugin {1},\n\
-	but an error prevented {1} from being loaded.
-
-plugin.dep-plugin.title=Unsatisfied Dependency
-plugin.dep-plugin.message=The plugin {0} requires version {1} or later of {2},\n\
-	but you only have {2} version {3}.
-
-plugin.dep-class.title=Unsatisfied Dependency
-plugin.dep-class.message=The plugin {0} requires the class {1}.\n\
+plugin-error.dep-plugin.no-version=This plugin requires version {0}\n\
+	or later of {1}, but {1} does not appear to be installed.
+plugin-error.dep-plugin.broken=This plugin requires the plugin {0},\n\
+	but an error prevented {0} from being loaded.
+plugin-error.dep-plugin=This plugin requires version {0} or later of {1},\n\
+	but you only have {1} version {2}.
+plugin-error.dep-class=This plugin requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
-
-plugin.obsolete.title=Obsolete Plugin
-plugin.obsolete.message=The plugin {0} is obsolete.\n\
-	Please remove it.
+plugin-error.obsolete=The plugin {0} is obsolete. Please remove it.
 #}}}
 
 #{{{ Macro dialogs
@@ -1208,6 +1209,11 @@ large-repeat-count.message=Are you sure you want to invoke "{0}" {1} times?
 large-repeat-count.user-input.title=Large Repeat Count
 large-repeat-count.user-input.message=Are you sure you want to insert "{0}" \
 	{1} times?
+#}}}
+
+#{{{ Wrong fold mode dialog
+folding-not-explicit.title=Wrong Fold Mode
+folding-not-explicit.message=This command can only be used in explicit fold mode.
 #}}}
 
 #}}}
@@ -1478,7 +1484,7 @@ grab-key.prefix-shortcut.message=\
 	Please choose another.
 #}}}
 
-#{{{ File System Browser pane
+#{{{ File System Browser panes
 options.browser.label=File System Browser
 options.browser.general.label=General
 options.browser.general.defaultPath=Default path:
@@ -1486,6 +1492,7 @@ options.browser.general.defaultPath.buffer=Parent directory of current buffer
 options.browser.general.defaultPath.home=Home directory
 options.browser.general.defaultPath.favorites=Favorites
 options.browser.general.defaultPath.last=Most recently visited directory
+options.browser.general.showToolbar=Show tool bar
 options.browser.general.showIcons=Show icons
 options.browser.general.showHiddenFiles=Show hidden files
 options.browser.general.sortFiles=Sort file list
@@ -1494,6 +1501,7 @@ options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
 options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
+
 options.browser.colors.label=Colors
 options.browser.colors.glob=File name glob
 options.browser.colors.color=Color
@@ -1679,26 +1687,11 @@ vfs.browser.delete-favorites.message=Are you sure you want to remove\n\
 	{0}\n\
 	from the favorites?
 
-vfs.browser.delete-error.title=Cannot Delete File
-vfs.browser.delete-error.message=An error occurred while attempting\n\
-	to delete {0}.
-
 vfs.browser.rename.title=Rename File
 vfs.browser.rename.message=Enter a new name for {0}:
 
-vfs.browser.rename-exists.title=Rename Error
-vfs.browser.rename-exists.message=A file named {0} already exists.
-
-vfs.browser.rename-error.title=Rename Error
-vfs.browser.rename-error.message=An error occurred while attempting\n\
-	to rename {0}.
-
 vfs.browser.mkdir.title=New Directory
 vfs.browser.mkdir.message=Name (or path) of new directory:
-
-vfs.browser.mkdir-error.title=Cannot Create Directory
-vfs.browser.mkdir-error.message=An error occurred while attempting\n\
-	to create {0}.
 #}}}
 
 #}}}
@@ -1712,20 +1705,6 @@ vfs.status.autosave=Autosaving {0}
 vfs.status.listing-directory=Listing {0}
 vfs.status.deleting=Deleting {0}
 vfs.status.renaming=Renaming {0} to {1}
-#}}}
-
-#{{{ Unsupported operation errors
-vfs.not-supported.list.title=Operation Not Supported
-vfs.not-supported.list.message=The {0} filesystem does not support\n\
-	directory browsing.
-
-vfs.not-supported.load.title=Operation Not Supported
-vfs.not-supported.load.message=The {0} filesystem does not support\n\
-	file loading.
-
-vfs.not-supported.save.title=Operation Not Supported
-vfs.not-supported.save.message=The {0} filesystem does not support\n\
-	file saving.
 #}}}
 
 #{{{ Plugin manager
@@ -1819,6 +1798,4 @@ plugin-manager.done.message=You must restart jEdit for plugin installation\n\
 plugin-manager.remove-failed.title=Remove Failed
 plugin-manager.remove-failed.message=The plugin {0}\n\
 	could not be removed.
-#}}}
-
 #}}}

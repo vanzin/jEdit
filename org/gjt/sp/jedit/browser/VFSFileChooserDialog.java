@@ -115,9 +115,6 @@ implements WorkThreadProgressListener
 		cancel.addActionListener(new ActionHandler());
 		panel.add(cancel);
 
-		if(mode != VFSBrowser.SAVE_DIALOG)
-			panel.add(Box.createGlue());
-
 		bottomPanel.add(BorderLayout.NORTH,panel);
 
 		status = new JLabel(" ");

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <chapter id="starting"><title>Starting jEdit</title>
  <sect1 id="conventions"><title>Conventions</title>
@@ -259,6 +259,12 @@
       <entry>-nosettings</entry>
       <entry>Starts jEdit without loading user-specific settings.
       See <xref linkend="settings-directory" />.</entry>
+     </row>
+     <row>
+      <entry>-noplugins</entry>
+      <entry>Causes jEdit to not load any plugins.
+      See <xref linkend="using-plugins" />. Has no effect
+      when connecting to another instance via the edit server.</entry>
      </row>
      <row>
       <entry>-nostartupscripts</entry>

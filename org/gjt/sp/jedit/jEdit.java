@@ -99,6 +99,7 @@ public class jEdit
 		String portFile = "server";
 		boolean restore = true;
 		boolean gui = true; // open initial view?
+		boolean noPlugins = false;
 		boolean noStartupScripts = false;
 		String userDir = System.getProperty("user.dir");
 
@@ -144,6 +145,8 @@ public class jEdit
 					gui = false;
 				else if(arg.equals("-norestore"))
 					restore = false;
+				else if(arg.equals("-noplugins"))
+					noPlugins = true;
 				else if(arg.equals("-nostartupscripts"))
 					noStartupScripts = true;
 				else if(arg.startsWith("-run="))
@@ -291,7 +294,9 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		VFSManager.init();
-		initPlugins();
+
+		if(!noPlugins)
+			initPlugins();
 
 		if(settingsDirectory != null)
 		{
@@ -2406,6 +2411,36 @@ public class jEdit
 		return false;
 	} //}}}
 
+	//{{{ pluginError() method
+	static void pluginError(final String path, String messageProp, Object[] args)
+	{
+		if(pluginErrors == null)
+			pluginErrors = new Vector();
+
+		pluginErrors.addElement(new ErrorListDialog.ErrorEntry(
+			path,messageProp,args));
+
+		if(pluginErrors.size() == 1)
+		{
+			final String caption = jEdit.getProperty(
+				"plugin-error.caption" + (pluginErrors.size() == 1
+				? "-1" : ""),new Integer[] {
+				new Integer(pluginErrors.size()) });
+
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					new ErrorListDialog(
+						jEdit.getFirstView(),
+						jEdit.getProperty("plugin-error.title"),
+						caption,pluginErrors,true);
+					pluginErrors.removeAllElements();
+				}
+			});
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -2420,6 +2455,7 @@ public class jEdit
 	private static boolean background;
 	private static Vector actionSets;
 	private static ActionSet builtInActionSet;
+	private static Vector pluginErrors;
 	private static Vector jars;
 	private static Vector modes;
 	private static Vector recent;
@@ -2466,6 +2502,7 @@ public class jEdit
 			+ " settings from <path>");
 		System.out.println("	-nosettings: Don't load user-specific"
 			+ " settings");
+		System.out.println("	-noplugins: Don't load any plugins");
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-version: Print jEdit version and exit");
 		System.out.println("	-usage: Print this message and exit");
@@ -2719,38 +2756,6 @@ public class jEdit
 	{
 		if(jEditHome != null)
 			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
-		/*else
-		{
-			// load firewall plugin 'manually' in web start version
-
-			// this is really bad, but we have to do it because
-			// we need firewall functionality in order for the
-			// user to be able to download and install plugins.
-			try
-			{
-				InputStream in = jEdit.class.getResourceAsStream("Firewall.props");
-				if(in != null)
-				{
-					loadProps(in,true);
-
-					Class clazz;
-					ClassLoader loader = jEdit.class.getClassLoader();
-					if(loader != null)
-						clazz = loader.loadClass("FirewallPlugin");
-					else
-						clazz = Class.forName("FirewallPlugin");
-
-					EditPlugin plugin = (EditPlugin)clazz.newInstance();
-
-					addPlugin(plugin);
-				}
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,jEdit.class,"Could not load firewall plugin:");
-				Log.log(Log.ERROR,jEdit.class,t);
-			}
-		}*/
 
 		if(settingsDirectory != null)
 		{
@@ -3141,8 +3146,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				|| plugin.equals("crimson.jar")
 				|| plugin.equals("Tidy.jar"))
 			{
-				String[] args = { plugin };
-				GUIUtilities.error(null,"plugin.obsolete",args);
+				pluginError(path,"plugin-error.obsolete",null);
 				continue;
 			}
 
@@ -3158,8 +3162,8 @@ loop:		for(int i = 0; i < list.length; i++)
 					+ " plugin " + plugin);
 				Log.log(Log.ERROR,jEdit.class,io);
 
-				String[] args = { plugin, io.toString() };
-				GUIUtilities.error(null,"plugin.load-error",args);
+				String[] args = { io.toString() };
+				pluginError(path,"plugin-error.load-error",args);
 			}
 		}
 	} //}}}

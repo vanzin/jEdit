@@ -120,16 +120,16 @@ public class FileVFS extends VFS
 
 		if(file.isDirectory())
 		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"open-directory",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.open-directory",null);
 			buffer.setNewFile(false);
 			return false;
 		}
 
 		if(!file.canRead())
 		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"no-read",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.no-read",null);
 			buffer.setNewFile(false);
 			return false;
 		} //}}}
@@ -150,8 +150,8 @@ public class FileVFS extends VFS
 		// can mess up directories if they are write()'n to
 		if(file.isDirectory())
 		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"save-directory",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.save-directory",null);
 			return false;
 		}
 
@@ -159,8 +159,8 @@ public class FileVFS extends VFS
 		if((file.exists() && !file.canWrite())
 			|| (!file.exists() && !new File(file.getParent()).canWrite()))
 		{
-			String[] args = { path };
-			GUIUtilities.error(view,"no-write",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.no-write",null);
 			return false;
 		} //}}}
 
@@ -187,15 +187,15 @@ public class FileVFS extends VFS
 
 		if(file.isDirectory())
 		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"open-directory",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.open-directory",null);
 			return false;
 		}
 
 		if(!file.canRead())
 		{
-			String[] args = { file.getPath() };
-			GUIUtilities.error(view,"no-read",args);
+			VFSManager.error(view,file.getPath(),
+				"ioerror.no-read",null);
 			return false;
 		} //}}}
 
@@ -241,8 +241,7 @@ public class FileVFS extends VFS
 		String[] list = directory.list();
 		if(list == null)
 		{
-			String[] pp = { path };
-			VFSManager.error(comp,"directory-error-nomsg",pp);
+			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);
 			return null;
 		}
 

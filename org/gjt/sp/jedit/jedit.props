@@ -112,9 +112,6 @@ buffer.defaultMode=text
 # Undo queue size
 buffer.undoCount=100
 
-# Syntax highlighting
-buffer.syntax=true
-
 # Wrap column
 buffer.maxLineLen=0
 
@@ -322,6 +319,7 @@ print.margin.right=0.5
 
 #{{{ File system browser settings
 
+vfs.browser.showToolbar=true
 vfs.browser.showIcons=true
 vfs.browser.showHiddenFiles=false
 vfs.browser.sortFiles=true

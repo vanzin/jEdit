@@ -157,8 +157,8 @@ public class BrowserIORequest extends WorkRequest
 		catch(IOException io)
 		{
 			setAbortable(false);
-			String[] pp = { path1, io.toString() };
-			VFSManager.error(browser,"directory-error",pp);
+			String[] pp = { io.toString() };
+			VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 		}
 		catch(WorkThread.Abort a)
 		{
@@ -172,8 +172,8 @@ public class BrowserIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				setAbortable(false);
-				String[] pp = { path1, io.toString() };
-				VFSManager.error(browser,"directory-error",pp);
+				String[] pp = { io.toString() };
+				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
 		}
 
@@ -196,12 +196,12 @@ public class BrowserIORequest extends WorkRequest
 
 
 				if(!vfs._delete(session,path1,browser))
-					VFSManager.error(browser,"vfs.browser.delete-error",args);
+					VFSManager.error(browser,path1,"ioerror.delete-error",null);
 			}
 			catch(IOException io)
 			{
-				String[] pp = { path1, io.toString() };
-				VFSManager.error(browser,"directory-error",pp);
+				String[] pp = { io.toString() };
+				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -215,8 +215,8 @@ public class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
-				String[] pp = { path1, io.toString() };
-				VFSManager.error(browser,"directory-error",pp);
+				String[] pp = { io.toString() };
+				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
 		}
 	} //}}}
@@ -238,19 +238,19 @@ public class BrowserIORequest extends WorkRequest
 				VFS.DirectoryEntry file = vfs._getDirectoryEntry(
 					session,path2,browser);
 				if(file != null)
-					VFSManager.error(browser,"vfs.browser.rename-exists",
+					VFSManager.error(browser,path1,"ioerror.rename-exists",
 						new String[] { path2 });
 				else
 				{
 					if(!vfs._rename(session,path1,path2,browser))
-						VFSManager.error(browser,"vfs.browser.rename-error",
-							new String[] { path1 });
+						VFSManager.error(browser,path1,"ioerror.rename-error",
+							new String[] { path2 });
 				}
 			}
 			catch(IOException io)
 			{
-				String[] pp = { path1, io.toString() };
-				VFSManager.error(browser,"directory-error",pp);
+				String[] pp = { io.toString() };
+				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -264,8 +264,8 @@ public class BrowserIORequest extends WorkRequest
 			}
 			catch(IOException io)
 			{
-				String[] pp = { path1, io.toString() };
-				VFSManager.error(browser,"directory-error",pp);
+				String[] pp = { io.toString() };
+				VFSManager.error(browser,path1,"ioerror.directory-error",pp);
 			}
 		}
 	} //}}}
@@ -284,12 +284,12 @@ public class BrowserIORequest extends WorkRequest
 				path1 = vfs._canonPath(session,path1,browser);
 
 				if(!vfs._mkdir(session,path1,browser))
-					VFSManager.error(browser,"vfs.browser.mkdir-error",args);
+					VFSManager.error(browser,path1,"ioerror.mkdir-error",null);
 			}
 			catch(IOException io)
 			{
 				args[0] = io.toString();
-				VFSManager.error(browser,"ioerror",args);
+				VFSManager.error(browser,path1,"ioerror",args);
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -304,7 +304,7 @@ public class BrowserIORequest extends WorkRequest
 			catch(IOException io)
 			{
 				String[] args = { io.toString() };
-				VFSManager.error(browser,"ioerror",args);
+				VFSManager.error(browser,path1,"ioerror",args);
 			}
 		}
 	} //}}}

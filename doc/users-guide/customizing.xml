@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=2: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
  <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
@@ -130,11 +130,6 @@
       <entry>A list of non-alphanumeric characters that are
       <emphasis>not</emphasis> to
       be treated as word separators. Global default is <quote>_</quote>.</entry>
-     </row>
-     <row>
-      <entry>syntax</entry>
-      <entry>If set to <quote>false</quote>, syntax highlighting will be not
-      be performed. See <xref linkend="syntax-hilite" />.</entry>
      </row>
      <row>
       <entry>tabSize</entry>

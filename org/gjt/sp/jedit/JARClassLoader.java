@@ -233,9 +233,9 @@ public class JARClassLoader extends ClassLoader
 				Log.log(Log.ERROR,this,t);
 
 				jar.addPlugin(new EditPlugin.Broken(name));
-				String[] args = { jEdit.getProperty("plugin." + name + ".name",name),
-					t.toString() };
-				GUIUtilities.error(null,"plugin.start-error",args);
+				String[] args = { t.toString() };
+				jEdit.pluginError(jar.getPath(),
+					"plugin-error.start-error",args);
 			}
 		}
 	}
@@ -261,8 +261,8 @@ public class JARClassLoader extends ClassLoader
 		{
 			if(plugins[i].getClass().getName().equals(name))
 			{
-				String[] args = { jEdit.getProperty("plugin." + name + ".name",name) };
-				GUIUtilities.error(null,"plugin.already-loaded",args);
+				jEdit.pluginError(jar.getPath(),
+					"plugin.already-loaded",null);
 				return;
 			}
 		}
@@ -331,11 +331,9 @@ public class JARClassLoader extends ClassLoader
 					System.getProperty("java.version"),
 					arg,false) < 0)
 				{
-					String[] args = {
-						jEdit.getProperty("plugin." + name + ".name"),
-						arg,
+					String[] args = { arg,
 						System.getProperty("java.version") };
-					GUIUtilities.error(null,"plugin.dep-jdk",args);
+					jEdit.pluginError(jar.getPath(),"plugin-error.dep-jdk",args);
 					return false;
 				}
 			}
@@ -345,11 +343,10 @@ public class JARClassLoader extends ClassLoader
 					jEdit.getBuild(),arg,false) < 0)
 				{
 					String needs = MiscUtilities.buildToVersion(arg);
-					String[] args = {
-						jEdit.getProperty("plugin." + name + ".name"),
-						needs,
+					String[] args = { needs,
 						jEdit.getVersion() };
-					GUIUtilities.error(null,"plugin.dep-jedit",args);
+					jEdit.pluginError(jar.getPath(),
+						"plugin-error.dep-jedit",args);
 					return false;
 				}
 			}
@@ -371,29 +368,27 @@ public class JARClassLoader extends ClassLoader
 
 				if(currVersion == null)
 				{
-					String[] args = {
-						jEdit.getProperty("plugin." + name + ".name"),
-						needVersion, plugin };
-					GUIUtilities.error(null,"plugin.dep-plugin.no-version",args);
+					String[] args = { needVersion, plugin };
+					jEdit.pluginError(jar.getPath(),
+						"plugin-error.dep-plugin.no-version",
+						args);
 					return false;
 				}
 
 				if(MiscUtilities.compareStrings(currVersion,
 					needVersion,false) < 0)
 				{
-					String[] args = {
-						jEdit.getProperty("plugin." + name + ".name"),
-						needVersion, plugin, currVersion };
-					GUIUtilities.error(null,"plugin.dep-plugin",args);
+					String[] args = { needVersion, plugin, currVersion };
+					jEdit.pluginError(jar.getPath(),
+						"plugin-error.dep-plugin",args);
 					return false;
 				}
 
 				if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
 				{
-					String[] args = {
-						jEdit.getProperty("plugin." + name + ".name"),
-						plugin };
-					GUIUtilities.error(null,"plugin.dep-plugin.broken",args);
+					String[] args = { plugin };
+					jEdit.pluginError(jar.getPath(),
+						"plugin-error.dep-plugin.broken",args);
 					return false;
 				}
 			}
@@ -405,10 +400,9 @@ public class JARClassLoader extends ClassLoader
 				}
 				catch(Exception e)
 				{
-					String[] args = { 
-						jEdit.getProperty("plugin." + name + ".name"),
-						arg };
-					GUIUtilities.error(null,"plugin.dep-class",args);
+					String[] args = { arg };
+					jEdit.pluginError(jar.getPath(),
+						"plugin-error.dep-class",args);
 					return false;
 				}
 			}

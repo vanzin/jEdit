@@ -20,6 +20,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="add-explicit-fold">
+	<CODE>
+		textArea.addExplicitFold();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="add-marker">
 	<CODE>
 		textArea.addMarker();

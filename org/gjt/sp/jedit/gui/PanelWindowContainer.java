@@ -51,7 +51,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		this.position = position;
 
 		//{{{ Button box setup
-		buttons = new ButtonBox();
+		buttons = new JPanel(new ButtonLayout());
 
 		// the close box must be the same size as the other buttons to look good.
 		// there are two ways to achieve this:
@@ -59,19 +59,20 @@ public class PanelWindowContainer implements DockableWindowContainer
 		// b) when the first button is added, give the close box the proper size
 		// I'm lazy so I chose "b". See register() for details.
 
-		closeBox = new JButton(CLOSE_BOX);
+		closeBox = new JButton(GUIUtilities.loadIcon("closebox.gif"));
 		closeBox.setRequestFocusEnabled(false);
 		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
 		buttons.add(closeBox);
 
-		//{{{ closeBox action listener
-		closeBox.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				show(null);
-			}
-		}); //}}}
+		closeBox.addActionListener(new ActionHandler());
+
+		popupButton = new JButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
+		popupButton.setRequestFocusEnabled(false);
+		popupButton.setToolTipText(jEdit.getProperty("view.docking.menu-tooltip"));
+		buttons.add(popupButton);
+
+		popupButton.addMouseListener(new MouseHandler());
+		popup = new JPopupMenu();
 
 		buttonGroup = new ButtonGroup();
 		//}}}
@@ -112,20 +113,21 @@ public class PanelWindowContainer implements DockableWindowContainer
 			}
 		}); //}}}
 
-		//{{{ this is a hack to give the close box it's proper size
-		if(buttons.getComponentCount() == 1)
-		{
-			Dimension size = button.getPreferredSize();
-			Dimension dim = new Dimension(
-				Math.min(size.width,size.height),
-				Math.min(size.width,size.height));
-			closeBox.setMinimumSize(dim);
-			closeBox.setPreferredSize(dim);
-			closeBox.setMaximumSize(dim);
-		} //}}}
-
 		buttonGroup.add(button);
 		buttons.add(button);
+
+		//{{{ Create menu items
+		JMenuItem menuItem = new JMenuItem(entry.title);
+
+		menuItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				wm.showDockableWindow(entry.name);
+			}
+		}); //}}}
+
+		popup.add(menuItem);
 
 		wm.revalidate();
 	} //}}}
@@ -140,7 +142,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	public void remove(DockableWindowManager.Entry entry)
 	{
 		int index = dockables.indexOf(entry);
-		buttons.remove(index + 1);
+		buttons.remove(index + 2);
 
 		dockables.removeElement(entry);
 		if(entry.win != null)
@@ -182,7 +184,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			dockablePanel.showDockable(entry.name);
 
 			int index = dockables.indexOf(entry);
-			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
+			((JToggleButton)buttons.getComponent(index + 2)).setSelected(true);
 
 			SwingUtilities.invokeLater(new Runnable()
 			{
@@ -235,7 +237,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ getButtonBox() method
-	ButtonBox getButtonBox()
+	JPanel getButtonBox()
 	{
 		return buttons;
 	} //}}}
@@ -248,23 +250,50 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 	//}}}
 
-	//{{[ Private members
-	private static final Icon CLOSE_BOX
-		 = GUIUtilities.loadIcon("closebox.gif");
+	//{{{ Private members
 	private static final int SPLITTER_WIDTH = 10;
 
 	private DockableWindowManager wm;
 	private String position;
-	private ButtonBox buttons;
+	private JPanel buttons;
 	private JButton closeBox;
+	private JButton popupButton;
 	private ButtonGroup buttonGroup;
 	private int dimension;
 	private Vector dockables;
 	private DockablePanel dockablePanel;
 	private DockableWindowManager.Entry current;
+	private JPopupMenu popup;
 	//}}}
 
 	//{{{ Inner classes
+
+	//{{{ ActionHandler class
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			show(null);
+		}
+	} //}}}
+
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseAdapter
+	{
+		public void mousePressed(MouseEvent evt)
+		{
+			if(evt.getSource() == popupButton)
+			{
+				if(popup.isVisible())
+					popup.setVisible(false);
+				else
+				{
+					GUIUtilities.showPopupMenu(popup,
+						popupButton,evt.getX(),evt.getY());
+				}
+			}
+		}
+	} //}}}
 
 	//{{{ DockBorder class
 	static class DockBorder implements Border
@@ -652,25 +681,125 @@ public class PanelWindowContainer implements DockableWindowContainer
 		} //}}}
 	} //}}}
 
-	//{{{ ButtonBox class
-	class ButtonBox extends Box
+	//{{{ ButtonLayout class
+	class ButtonLayout implements LayoutManager
 	{
-		//{{{ ButtonBox constructor
-		ButtonBox()
+		//{{{ addLayoutComponent() method
+		public void addLayoutComponent(String name, Component comp) {} //}}}
+
+		//{{{ removeLayoutComponent() method
+		public void removeLayoutComponent(Component comp) {} //}}}
+
+		//{{{ preferredLayoutSize() method
+		public Dimension preferredLayoutSize(Container parent)
 		{
-			super((position.equals(DockableWindowManager.TOP)
-				|| position.equals(DockableWindowManager.BOTTOM))
-				? BoxLayout.X_AXIS
-				: BoxLayout.Y_AXIS);
+			Component[] comp = parent.getComponents();
+			if(comp.length == 2)
+			{
+				// nothing 'cept close box and popup button
+				return new Dimension(0,0);
+			}
+			else
+			{
+				if(position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM))
+				{
+					return new Dimension(0,comp[2].getPreferredSize().height);
+				}
+				else
+				{
+					return new Dimension(comp[2].getPreferredSize().width,0);
+				}
+			}
 		} //}}}
 
-		//{{{ getPreferredSize() method
-		public Dimension getPreferredSize()
+		//{{{ minimumLayoutSize() method
+		public Dimension minimumLayoutSize(Container parent)
 		{
-			if(dockables.size() == 0)
+			Component[] comp = parent.getComponents();
+			if(comp.length == 2)
+			{
+				// nothing 'cept close box and popup button
 				return new Dimension(0,0);
+			}
 			else
-				return super.getPreferredSize();
+			{
+				if(position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM))
+				{
+					return new Dimension(0,comp[2].getMinimumSize().height);
+				}
+				else
+				{
+					return new Dimension(comp[2].getMinimumSize().width,0);
+				}
+			}
+		} //}}}
+
+		//{{{ layoutContainer() method
+		public void layoutContainer(Container parent)
+		{
+			Component[] comp = parent.getComponents();
+			if(comp.length != 2)
+			{
+				Dimension buttonSize = comp[2].getPreferredSize();
+				int closeBoxDimension;
+				if(position.equals(DockableWindowManager.TOP)
+					|| position.equals(DockableWindowManager.BOTTOM))
+				{
+					closeBoxDimension = comp[2].getMinimumSize().height;
+				}
+				else
+				{
+					closeBoxDimension = comp[2].getMinimumSize().width;
+				}
+				closeBox.setBounds(0,0,closeBoxDimension,closeBoxDimension);
+				popupButton.setVisible(false);
+
+				Dimension parentSize = parent.getSize();
+				int pos = closeBoxDimension;
+				for(int i = 2; i < comp.length; i++)
+				{
+					Dimension size = comp[i].getPreferredSize();
+					if(position.equals(DockableWindowManager.TOP)
+						|| position.equals(DockableWindowManager.BOTTOM))
+					{
+						if(pos + size.width > parentSize.width)
+						{
+							popupButton.setBounds(
+								parentSize.width - closeBoxDimension,
+								0,closeBoxDimension,closeBoxDimension);
+							popupButton.setVisible(true);
+							comp[i].setVisible(false);
+						}
+						else
+						{
+							comp[i].setBounds(pos,0,size.width,size.height);
+							comp[i].setVisible(true);
+						}
+
+						pos += size.width;
+					}
+					else
+					{
+						if(pos + size.height > parentSize.height)
+						{
+							popupButton.setBounds(
+								0,parentSize.height - closeBoxDimension,
+								closeBoxDimension,closeBoxDimension);
+							popupButton.setVisible(true);
+							comp[i].setVisible(false);
+						}
+						else
+						{
+							comp[i].setBounds(0,pos,size.width,size.height);
+							comp[i].setVisible(true);
+						}
+
+						pos += size.height;
+					}
+				}
+			}
 		} //}}}
 	} //}}}
 
