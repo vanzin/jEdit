@@ -109,7 +109,7 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ _notifyScreenLineChanges() method
-	private static void _notifyScreenLineChanges(Buffer buffer)
+	static void _notifyScreenLineChanges(Buffer buffer)
 	{
 		Iterator iter = ((List)bufferMap.get(buffer)).iterator();
 		while(iter.hasNext())
