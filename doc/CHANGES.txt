@@ -2,7 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre9
 
-Thanks to Thomas Galvin for contributing to this release.
+Thanks to Thomas Galvin and Wiktor Adamski for contributing to this
+release.
 
 {{{ Scripting
 
@@ -47,6 +48,13 @@ Thanks to Thomas Galvin for contributing to this release.
   margin.
 
 - Fixed exception when tab size was set to 0.
+
+- Fixed caret being offset too far to the right when dropping text in
+  the text area, due to the gutter's width not being taken into account
+  (Wiktor Adamski).
+
+- Dismissing the buffer switcher popup now sends focus back to the text
+  area.
 
 }}}
 

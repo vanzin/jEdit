@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2002 Slava Pestov
+ * Copyright (C) 2001, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
@@ -31,6 +32,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -131,6 +133,28 @@ public class Java14
 		{
 			Log.log(Log.ERROR,Java14.class,e);
 		}
+	} //}}}
+
+	//{{{ initBufferSwitcher() method
+	public static void initBufferSwitcher(final EditPane pane,
+		BufferSwitcher switcher)
+	{
+		switcher.addPopupMenuListener(new PopupMenuListener()
+		{
+			public void popupMenuWillBecomeVisible(
+				PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeInvisible(
+				PopupMenuEvent e)
+			{
+				pane.getTextArea().requestFocus();
+			}
+
+			public void popupMenuCanceled(PopupMenuEvent e)
+			{
+				pane.getTextArea().requestFocus();
+			}
+		});
 	} //}}}
 
 	//{{{ MyFocusManager class
@@ -235,13 +259,19 @@ public class Java14
 	//{{{ TextAreaTransferHandler class
 	static class TextAreaTransferHandler extends TransferHandler
 	{
+		/* I assume that there can be only one drag operation at the time */
+		private static JEditTextArea dragSource;
+		private static boolean compoundEdit;
+
 		protected Transferable createTransferable(JComponent c)
 		{
+			Log.log(Log.DEBUG,this,"createTransferable()");
 			JEditTextArea textArea = (JEditTextArea)c;
 			if(textArea.getSelectionCount() == 0)
 				return null;
 			else
 			{
+				dragSource = textArea;
 				return new TextAreaSelection(textArea);
 			}
 		}
@@ -257,69 +287,106 @@ public class Java14
 			if(!canImport(c,t.getTransferDataFlavors()))
 				return false;
 
+			boolean returnValue;
+
 			try
 			{
 				if(t.isDataFlavorSupported(
 					DataFlavor.javaFileListFlavor))
 				{
-					Log.log(Log.DEBUG,this,"=> File list");
-					EditPane editPane = (EditPane)
-						GUIUtilities.getComponentParent(
-						c,EditPane.class);
-
-					Buffer buffer = null;
-
-					Object data = t.getTransferData(
-						DataFlavor.javaFileListFlavor);
-
-					Iterator iterator = ((List)data)
-						.iterator();
-
-					while(iterator.hasNext())
-					{
-						File file = (File)
-							iterator.next();
-						Buffer _buffer = jEdit.openFile(null,
-							file.getPath());
-						if(_buffer != null)
-							buffer = _buffer;
-					}
-
-					if(buffer != null)
-						editPane.setBuffer(buffer);
-					editPane.getView().toFront();
-					editPane.getView().requestFocus();
-					editPane.requestFocus();
+					returnValue = importFile(c,t);
 				}
 				else
 				{
-					Log.log(Log.DEBUG,this,"=> String");
-					String str = (String)t.getTransferData(
-						DataFlavor.stringFlavor);
-
-					JEditTextArea textArea = (JEditTextArea)c;
-
-					int caret = textArea.getCaretPosition();
-					Selection s = textArea.getSelectionAtOffset(caret);
-
-					/* if user drops into a selection,
-					replace selection */
-					if(s != null)
-						textArea.setSelectedText(s,str);
-					/* otherwise just insert the text */
-					else
-						textArea.getBuffer().insert(caret,str);
-					textArea.scrollToCaret(true);
+					returnValue = importText(c,t);
 				}
 			}
 			catch(Exception e)
 			{
 				Log.log(Log.ERROR,this,e);
+				returnValue = false;
 			}
 
 			GUIUtilities.getView(c).toFront();
 			GUIUtilities.getView(c).requestFocus();
 			c.requestFocus();
+
+			return returnValue;
+		}
+
+		private boolean importFile(JComponent c, Transferable t)
+			throws Exception
+		{
+			Log.log(Log.DEBUG,this,"=> File list");
+			EditPane editPane = (EditPane)
+				GUIUtilities.getComponentParent(
+				c,EditPane.class);
+
+			Buffer buffer = null;
+
+			Object data = t.getTransferData(
+				DataFlavor.javaFileListFlavor);
+
+			Iterator iterator = ((List)data)
+				.iterator();
+
+			while(iterator.hasNext())
+			{
+				File file = (File)
+					iterator.next();
+				Buffer _buffer = jEdit.openFile(null,
+					file.getPath());
+				if(_buffer != null)
+					buffer = _buffer;
+			}
+
+			if(buffer != null)
+				editPane.setBuffer(buffer);
+			editPane.getView().toFront();
+			editPane.getView().requestFocus();
+			editPane.requestFocus();
+
+			return true;
+		}
+
+		private boolean importText(JComponent c, Transferable t)
+			throws Exception
+		{
+			Log.log(Log.DEBUG,this,"=> String");
+			String str = (String)t.getTransferData(
+				DataFlavor.stringFlavor);
+
+			JEditTextArea textArea = (JEditTextArea)c;
+
+			if(dragSource != null
+				&& textArea.getBuffer()
+				== dragSource.getBuffer())
+			{
+				compoundEdit = true;
+				textArea.getBuffer().beginCompoundEdit();
+			}
+
+			int caret = textArea.getCaretPosition();
+			Selection s = textArea.getSelectionAtOffset(caret);
+
+			/* if user drops into the same
+			selection where they started, do
+			nothing. */
+			if(s != null)
+			{
+				if(textArea == dragSource)
+					return false;
+				/* if user drops into a selection,
+				replace selection */
+				int start = s.getStart();
+				textArea.setSelectedText(s,str);
+				/* textArea.setSelection(new Selection.Range(
+					start,start + str.length())); */
+			}
+			/* otherwise just insert the text */
+			else
+				textArea.getBuffer().insert(caret,str);
+			textArea.scrollToCaret(true);
 
 			return true;
 		}
@@ -329,22 +396,35 @@ public class Java14
 		{
 			Log.log(Log.DEBUG,this,"Export done");
 
-			if(t == null)
+			JEditTextArea textArea = (JEditTextArea)c;
+
+			try
 			{
-				Log.log(Log.DEBUG,this,"=> Null transferrable");
-				JEditTextArea textArea = (JEditTextArea)c;
-				textArea.selectNone();
-			}
-			else if(t.isDataFlavorSupported(
-				DataFlavor.stringFlavor))
-			{
-				Log.log(Log.DEBUG,this,"=> String");
-				JEditTextArea textArea = (JEditTextArea)c;
-				if(action == MOVE)
-					textArea.setSelectedText(null,false);
-				else
+				if(t == null)
+				{
+					Log.log(Log.DEBUG,this,"=> Null transferrable");
 					textArea.selectNone();
+				}
+				else if(t.isDataFlavorSupported(
+					DataFlavor.stringFlavor))
+				{
+					Log.log(Log.DEBUG,this,"=> String");
+					if(action == MOVE)
+						textArea.setSelectedText(null,false);
+					else
+						textArea.selectNone();
+				}
 			}
+			finally
+			{
+				if(compoundEdit)
+				{
+					compoundEdit = false;
+					textArea.getBuffer().endCompoundEdit();
+				}
+			}
+
+			dragSource = null;
 		}
 
 		public boolean canImport(JComponent c, DataFlavor[] flavors)
@@ -370,6 +450,8 @@ public class Java14
 				}
 			}
 
+			Log.log(Log.DEBUG,this,"canImport() returning "
+				+ returnValue);
 			return returnValue;
 		}
 	} //}}}
@@ -396,6 +478,8 @@ public class Java14
 		public void dragOver(DropTargetDragEvent dtde)
 		{
 			Point p = dtde.getLocation();
+			p = SwingUtilities.convertPoint(textArea,p,
+				textArea.getPainter());
 			int pos = textArea.xyToOffset(p.x,p.y,
 				!(textArea.getPainter().isBlockCaretEnabled()
 				|| textArea.isOverwriteEnabled()));
