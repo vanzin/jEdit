@@ -1603,18 +1603,35 @@ public class Buffer implements EBComponent
 	 */
 	public int getIntegerProperty(String name, int defaultValue)
 	{
-		Object obj = getProperty(name);
+		boolean defaultValueFlag;
+		Object obj;
+		PropValue value = (PropValue)properties.get(name);
+		if(value != null)
+		{
+			obj = value.value;
+			defaultValueFlag = value.defaultValue;
+		}
+		else
+		{
+			obj = getProperty(name);
+			// will be cached from now on...
+			defaultValueFlag = true;
+		}
+
 		if(obj == null)
 			return defaultValue;
-		if(obj instanceof Number)
+		else if(obj instanceof Number)
 			return ((Number)obj).intValue();
 		else
 		{
 			try
 			{
-				int value = Integer.parseInt(getStringProperty(name).trim());
-				properties.put(name,new Integer(value));
-				return value;
+				int returnValue = Integer.parseInt(
+					obj.toString().trim());
+				properties.put(name,new PropValue(
+					new Integer(returnValue),
+					defaultValueFlag));
+				return returnValue;
 			}
 			catch(Exception e)
 			{
@@ -3087,8 +3104,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ Buffer constructor
 	Buffer(String path, boolean newFile, boolean temp, Hashtable props)
 	{
-		// XXX
-		properties = new Hashtable(); //((Hashtable)props.clone());
+		properties = new Hashtable();
+
+		//{{{ need to convert entries of 'props' to PropValue instances
+		Enumeration enum = props.keys();
+		while(enum.hasMoreElements())
+		{
+			Object key = enum.nextElement();
+			Object value = props.get(key);
+
+			properties.put(key,new PropValue(value,false));
+		} //}}}
 
 		// fill in defaults for these from system properties if the
 		// corresponding buffer.XXX properties not set

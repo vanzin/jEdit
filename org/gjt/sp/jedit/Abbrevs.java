@@ -196,8 +196,8 @@ public class Abbrevs
 				view.getStatus().setMessageAndClear(
 					jEdit.getProperty(
 					"view.status.incomplete-abbrev",
-					new Integer[] { new Integer(expand.posParamCount),
-					new Integer(pp.size()) }));
+					new Integer[] { new Integer(pp.size()),
+					new Integer(expand.posParamCount) }));
 			}
 
 			return true;
