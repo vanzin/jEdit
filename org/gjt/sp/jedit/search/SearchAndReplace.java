@@ -414,7 +414,7 @@ public class SearchAndReplace
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
-		if(comp == null)
+		if(comp == null || !comp.isShowing())
 			comp = view;
 
 		boolean repeat = false;
