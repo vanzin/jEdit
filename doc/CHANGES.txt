@@ -2,24 +2,29 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre10
 
-Thanks to Barry Carr, Brad Mace, Nahuel Foronda, Trevor Harmon and
-Thomas Galvin for contributing to this release.
+Thanks to Barry Carr, Brad Mace, Ken Turner, Nahuel Foronda,
+Trevor Harmon and Thomas Galvin for contributing to this release.
 
 {{{ Miscellaneous
 
 - Added "Create Constructor" macro, updated "Make Get and Set Methods"
   and "Get Class Name" macros (Thomas Galvin).
 
-- Updated Pascal syntax highlighting (Barry Carr).
-
 - It is now possible to customize the metal look and feel fonts under
   JDK 1.5.
-
-- Updated ActionScript syntax highlighting (Nahuel Foronda).
 
 - Page Up/Page Down restored to jEdit 4.1 behavior: when they are
   invoked at the beginning/end of the buffer, the caret is moved to
   the beginning/end, instead of staying at its current position.
+
+}}}
+{{{ Syntax Highlighting
+
+- Updated Pascal syntax highlighting (Barry Carr).
+
+- Updated ActionScript syntax highlighting (Nahuel Foronda).
+
+- Updated SDL/PR syntax highlighting (Ken Turner).
 
 }}}
 {{{ Bug Fixes
@@ -58,15 +63,16 @@ Thomas Galvin for contributing to this release.
 
   plugin.MyPlugin.depend.0=optional plugin AnotherPlugin 1.3.1
 
-  An optional dependency is ignored; if AnotherPlugin does not exist,
-  MyPlugin will still load. However, if AnotherPlugin is unloaded while
-  jEdit is running, all plugins that depend on it, even ones with
+  On startup, optional dependency are ignored; if AnotherPlugin does not
+  exist, MyPlugin will still load. However, if AnotherPlugin is unloaded
+  while jEdit is running, all plugins that depend on it, even ones with
   optional dependencies, will be reloaded.
 
   If your plugin does a runtime check for the existence of another
-  plugin, and uses its services if it exists, then you *MUST* add an
-  optional dependency on that plugin, otherwise reloading plugins will
-  leave stale classes in the active class loader.
+  plugin, and uses its services if it exists, but can otherwise
+  function fine, then you *MUST* add an optional dependency on that
+  plugin, otherwise reloading plugins will leave stale classes in the
+  active class loader.
 
 }}}
 

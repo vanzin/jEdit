@@ -3,12 +3,12 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
-  sdl_pr.xml	K. J. Turner <kjt@cs.stir.ac.uk>	2nd June 2003
+  sdl_pr.xml	K. J. Turner <kjt@cs.stir.ac.uk>	26th February 2004
 
   SDL (Specification and Description Language) is an ITU standard (Z.100)
   for a formal specification language used in communications and system specification generally.
 
-  This mode handles SDL/PR (Phrase Representation) and does not (yet) deal with SDL 2000.
+  This mode handles SDL/PR (Phrase Representation), but does not (yet) deal with SDL 2000.
 
   Auto-indentation occurs if the following are at the start of a line (ignoring
   leading white space): "block", "channel", "connection", "decision", "generator", "input", "macro", "newtype", "operator", "package", "procedure", "process", "refinement", "service", "start", "state", "substructure", "syntype", "system".
@@ -66,12 +66,12 @@
     <SEQ TYPE="OPERATOR">!</SEQ>
     <SEQ TYPE="OPERATOR">//</SEQ>
 
-    <SEQ TYPE="OPERATOR">and</SEQ>
-    <SEQ TYPE="OPERATOR">mod</SEQ>
-    <SEQ TYPE="OPERATOR">not</SEQ>
-    <SEQ TYPE="OPERATOR">or</SEQ>
-    <SEQ TYPE="OPERATOR">rem</SEQ>
-    <SEQ TYPE="OPERATOR">xor</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">and</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">mod</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">not</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">or</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">rem</SEQ>
+    <SEQ TYPE="OPERATOR" AT_WORD_START="TRUE">xor</SEQ>
 
     <KEYWORDS>
       <!-- Reserved Words -->
@@ -79,7 +79,6 @@
       <KEYWORD1>adding</KEYWORD1>
       <KEYWORD1>all</KEYWORD1>
       <KEYWORD1>alternative</KEYWORD1>
-      <KEYWORD1>and</KEYWORD1>
       <KEYWORD1>any</KEYWORD1>
       <KEYWORD1>as</KEYWORD1>
       <KEYWORD1>atleast</KEYWORD1>
@@ -143,19 +142,16 @@
       <KEYWORD1>macrodefinition</KEYWORD1>
       <KEYWORD1>macroid</KEYWORD1>
       <KEYWORD1>map</KEYWORD1>
-      <KEYWORD1>mod</KEYWORD1>
       <KEYWORD1>nameclass</KEYWORD1>
       <KEYWORD1>newtype</KEYWORD1>
       <KEYWORD1>nextstate</KEYWORD1>
       <KEYWORD1>nodelay</KEYWORD1>
       <KEYWORD1>noequality</KEYWORD1>
       <KEYWORD1>none</KEYWORD1>
-      <KEYWORD1>not</KEYWORD1>
       <KEYWORD1>now</KEYWORD1>
       <KEYWORD1>offspring</KEYWORD1>
       <KEYWORD1>operator</KEYWORD1>
       <KEYWORD1>operators</KEYWORD1>
-      <KEYWORD1>or</KEYWORD1>
       <KEYWORD1>ordering</KEYWORD1>
       <KEYWORD1>out</KEYWORD1>
       <KEYWORD1>output</KEYWORD1>
@@ -168,7 +164,6 @@
       <KEYWORD1>redefined</KEYWORD1>
       <KEYWORD1>referenced</KEYWORD1>
       <KEYWORD1>refinement</KEYWORD1>
-      <KEYWORD1>rem</KEYWORD1>
       <KEYWORD1>remote</KEYWORD1>
       <KEYWORD1>reset</KEYWORD1>
       <KEYWORD1>return</KEYWORD1>
@@ -207,7 +202,6 @@
       <KEYWORD1>viewed</KEYWORD1>
       <KEYWORD1>virtual</KEYWORD1>
       <KEYWORD1>with</KEYWORD1>
-      <KEYWORD1>xor</KEYWORD1>
 
       <!-- Standard Library Sorts -->
       <KEYWORD2>Boolean</KEYWORD2>
