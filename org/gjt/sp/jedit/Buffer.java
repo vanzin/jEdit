@@ -1403,22 +1403,6 @@ public class Buffer implements EBComponent
 					numLines++;
 			}
 
-			if(numLines > 0)
-			{
-				// notify fold visibility managers
-				// BEFORE the line info array is shrunk
-				// so they can update their virtual line
-				// counts properly
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-					{
-						inUseFVMs[i]._linesRemoved(
-							startLine,numLines);
-					}
-				}
-			}
-
 			if(!getFlag(UNDO_IN_PROGRESS))
 			{
 				undoMgr.contentRemoved(offset,length,
@@ -1431,6 +1415,15 @@ public class Buffer implements EBComponent
 				lastTokenizedLine = -1;
 
 			offsetMgr.contentRemoved(startLine,offset,numLines,length);
+
+			if(numLines > 0)
+			{
+				for(int i = 0; i < inUseFVMs.length; i++)
+				{
+					if(inUseFVMs[i] != null)
+						inUseFVMs[i]._invalidate(startLine);
+				}
+			}
 
 			fireContentRemoved(startLine,offset,numLines,length);
 
@@ -2770,13 +2763,7 @@ public class Buffer implements EBComponent
 	public FoldVisibilityManager _getFoldVisibilityManager(
 		JEditTextArea textArea)
 	{
-		FoldVisibilityManager mgr = (FoldVisibilityManager)
-			foldVisibilityManagers.get(textArea);
-		if(mgr == null)
-		{
-			mgr = new FoldVisibilityManager(this,textArea);
-			foldVisibilityManagers.put(textArea,mgr);
-		}
+		FoldVisibilityManager mgr = new FoldVisibilityManager(this,textArea);
 
 		// find it a bit that it can set in line's 'visible' flag sets
 		for(int i = 0; i < inUseFVMs.length; i++)
@@ -2831,6 +2818,28 @@ public class Buffer implements EBComponent
 			throw new ArrayIndexOutOfBoundsException(line);
 
 		offsetMgr.setLineVisible(line,index,visible);
+	} //}}}
+
+	//{{{ _getVirtualLineCount() method
+	/**
+	 * Plugins and macros should call
+	 * <code>textArea.getVirtualLineCount()</code>
+	 * instead of this method.
+	 * @since jEdit 4.0pre1
+	 */
+	public final int _getVirtualLineCount(int index)
+	{
+		return offsetMgr.getVirtualLineCount(index);
+	} //}}}
+
+	//{{{ _setVirtualLineCount() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @since jEdit 4.0pre1
+	 */
+	public final void _setVirtualLineCount(int index, int lineCount)
+	{
+		offsetMgr.setVirtualLineCount(index,lineCount);
 	} //}}}
 
 	//}}}
@@ -3102,7 +3111,6 @@ public class Buffer implements EBComponent
 					.getTextArea();
 				FoldVisibilityManager mgr = textArea
 					.getFoldVisibilityManager();
-				foldVisibilityManagers.remove(mgr);
 
 				for(int i = 0; i < inUseFVMs.length; i++)
 				{
@@ -3140,14 +3148,13 @@ public class Buffer implements EBComponent
 		offsetMgr = new OffsetManager(this);
 		integerArray = new IntegerArray();
 		undoMgr = new UndoManager(this);
+		bufferListeners = new Vector();
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
 		tokenList = new TokenList();
 
-		foldVisibilityManagers = new Hashtable();
 		inUseFVMs = new FoldVisibilityManager[8];
-		bufferListeners = new Vector();
 
 		setFlag(TEMPORARY,temp);
 
@@ -3160,7 +3167,6 @@ public class Buffer implements EBComponent
 		if(defaultMode == null)
 			defaultMode = jEdit.getMode("text");
 		setMode(defaultMode);
-
 
 		/*Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
@@ -3262,6 +3268,7 @@ public class Buffer implements EBComponent
 	private OffsetManager offsetMgr;
 	private IntegerArray integerArray;
 	private UndoManager undoMgr;
+	private Vector bufferListeners;
 
 	private Vector markers;
 
@@ -3274,8 +3281,6 @@ public class Buffer implements EBComponent
 
 	// Folding
 	private FoldHandler foldHandler;
-	private Vector bufferListeners;
-	private Hashtable foldVisibilityManagers;
 	private FoldVisibilityManager[] inUseFVMs;
 
 	//}}}
@@ -3487,10 +3492,7 @@ public class Buffer implements EBComponent
 				for(int i = 0; i < inUseFVMs.length; i++)
 				{
 					if(inUseFVMs[i] != null)
-					{
-						inUseFVMs[i]._linesInserted(
-							startLine,numLines);
-					}
+						inUseFVMs[i]._invalidate(startLine);
 				}
 			}
 

@@ -629,7 +629,6 @@ public class JEditTextArea extends JComponent
 
 		if(changed)
 		{
-			System.err.println("changed");
 			if(firstLine < 0)
 				firstLine = 0;
 

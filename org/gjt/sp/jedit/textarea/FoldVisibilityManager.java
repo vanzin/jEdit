@@ -47,10 +47,6 @@ public class FoldVisibilityManager
 	{
 		this.buffer = buffer;
 		this.textArea = textArea;
-
-		int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
-		if(collapseFolds != 0)
-			expandFolds(collapseFolds);
 	} //}}}
 
 	//{{{ getVirtualLineCount() method
@@ -60,7 +56,7 @@ public class FoldVisibilityManager
 	 */
 	public int getVirtualLineCount()
 	{
-		return virtualLineCount;
+		return buffer._getVirtualLineCount(index);
 	} //}}}
 
 	//{{{ isLineVisible() method
@@ -158,7 +154,7 @@ public class FoldVisibilityManager
 
 			if(lastPhysical == line)
 			{
-				if(lastVirtual < 0 || lastVirtual >= virtualLineCount)
+				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"cached: " + lastVirtual);
@@ -180,7 +176,7 @@ public class FoldVisibilityManager
 						lastPhysical++;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= virtualLineCount)
+				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"fwd scan: " + lastVirtual);
@@ -202,7 +198,7 @@ public class FoldVisibilityManager
 						lastPhysical--;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= virtualLineCount)
+				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"back scan: " + lastVirtual);
@@ -225,7 +221,7 @@ public class FoldVisibilityManager
 						lastPhysical++;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= virtualLineCount)
+				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"zero scan: " + lastVirtual);
@@ -252,7 +248,7 @@ public class FoldVisibilityManager
 		{
 			buffer.readLock();
 
-			if(line < 0 || line >= virtualLineCount)
+			if(line < 0 || line >= buffer._getVirtualLineCount(index))
 				throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
 
 			if(lastVirtual == line)
@@ -427,7 +423,9 @@ public class FoldVisibilityManager
 				return;
 			}
 
-			virtualLineCount -= delta;
+			buffer._setVirtualLineCount(index,
+				buffer._getVirtualLineCount(index)
+				- delta);
 			//}}}
 		}
 		finally
@@ -534,7 +532,9 @@ public class FoldVisibilityManager
 				}
 			}
 
-			virtualLineCount += delta;
+			buffer._setVirtualLineCount(index,
+				buffer._getVirtualLineCount(index)
+				+ delta);
 			//}}}
 
 			if(!fully && !buffer._isLineVisible(line,index))
@@ -572,8 +572,8 @@ public class FoldVisibilityManager
 		{
 			buffer.writeLock();
 
-			virtualLineCount = buffer.getLineCount();
-			for(int i = 0; i < virtualLineCount; i++)
+			buffer._setVirtualLineCount(index,buffer.getLineCount());
+			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
 				buffer._setLineVisible(i,index,true);
 			}
@@ -615,7 +615,7 @@ public class FoldVisibilityManager
 
 			// so that getFoldLevel() calling fireFoldLevelsChanged()
 			// won't break
-			virtualLineCount = buffer.getLineCount() - 1;
+			buffer._setVirtualLineCount(index,buffer.getLineCount());
 
 			int newVirtualLineCount = 0;
 			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
@@ -635,7 +635,7 @@ public class FoldVisibilityManager
 					buffer._setLineVisible(i,index,false);
 			}
 
-			virtualLineCount = newVirtualLineCount;
+			buffer._setVirtualLineCount(index,newVirtualLineCount);
 		}
 		finally
 		{
@@ -667,17 +667,6 @@ public class FoldVisibilityManager
 	public final void _grab(int index)
 	{
 		this.index = index;
-
-		if(buffer.getLineCount() == 1)
-			buffer._setLineVisible(0,index,true);
-
-		virtualLineCount = 0;
-		for(int i = 0; i < buffer.getLineCount(); i++)
-		{
-			if(buffer._isLineVisible(i,index))
-				virtualLineCount++;
-		}
-
 		lastPhysical = lastVirtual = 0;
 	} //}}}
 
@@ -701,80 +690,13 @@ public class FoldVisibilityManager
 		return index;
 	} //}}}
 
-	//{{{ _linesInserted() method
+	//{{{ _invalidate() method
 	/**
 	 * Do not call this method. The only reason it is public is so
 	 * that the <code>Buffer</code> class can call it.
 	 */
-	public void _linesInserted(int startLine, int numLines)
+	public void _invalidate(int startLine)
 	{
-		//{{{ Find fold start of this line
-		int foldLevel = buffer.getFoldLevel(startLine);
-		boolean visible = true;
-		if(startLine != 0)
-		{
-			for(int i = startLine; i > 0; i--)
-			{
-				if(buffer.isFoldStart(i - 1) && buffer.getFoldLevel(i) <= foldLevel)
-				{
-					visible = buffer._isLineVisible(i,index);
-					break;
-				}
-			}
-		} //}}}
-
-		int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
-		if(collapseFolds != 0)
-			collapseFolds = (collapseFolds - 1) * buffer.getIndentSize() + 1;
-
-		int newVirtualLineCount = virtualLineCount;
-
-		boolean seenVisibleLine = (startLine != 0);
-		int threshold = Math.max(foldLevel + 1,collapseFolds);
-		for(int i = startLine; i < startLine + numLines; i++)
-		{
-			boolean _visible;
-			if(collapseFolds == 0)
-				_visible = visible;
-			else if(buffer.getFoldLevel(i) >= threshold)
-				_visible = false;
-			else
-				_visible = visible;
-
-			if(!seenVisibleLine && !_visible)
-				_visible = true;
-
-			if(_visible)
-			{
-				seenVisibleLine = true;
-				newVirtualLineCount++;
-			}
-
-			buffer._setLineVisible(i,index,_visible);
-		}
-
-		virtualLineCount = newVirtualLineCount;
-
-		if(lastPhysical >= startLine)
-			lastPhysical = lastVirtual = 0;
-	} //}}}
-
-	//{{{ _linesRemoved() method
-	/**
-	 * Do not call this method. The only reason it is public is so
-	 * that the <code>Buffer</code> class can call it.
-	 */
-	public void _linesRemoved(int startLine, int numLines)
-	{
-		for(int i = startLine; i < startLine + numLines; i++)
-		{
-			// note that Buffer calls linesRemoved()
-			// of FoldVisibilityManagers before the
-			// line info array is shrunk.
-			if(buffer._isLineVisible(i,index))
-				virtualLineCount--;
-		}
-
 		if(lastPhysical >= startLine)
 			lastPhysical = lastVirtual = 0;
 	} //}}}
@@ -787,7 +709,6 @@ public class FoldVisibilityManager
 	private Buffer buffer;
 	private JEditTextArea textArea;
 	private int index;
-	private int virtualLineCount;
 	private int lastPhysical;
 	private int lastVirtual;
 	//}}}

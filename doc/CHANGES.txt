@@ -19,6 +19,7 @@ JEDIT 4.0 VERSION HISTORY
   properties (tab size, maximum line length, ...)
 - Changing the gutter font didn't update the gutter width
 - Fixed broken scrolling behavior
+- Some files would open with only one line visible
 
 * Version 4.0pre1
 
