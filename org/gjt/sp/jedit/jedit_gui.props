@@ -628,6 +628,7 @@ view.gutter.marker=Marker: {0}
 #{{{ Status messages
 view.status.recording=Macro recording
 view.status.repeat=Enter repeat count: {0}
+view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
 view.status.cut-string-register=Enter register name to cut to
 view.status.copy-string-register=Enter register name to copy to
 view.status.cut-append-string-register=Enter register name to cut append to
@@ -640,8 +641,8 @@ view.status.select-marker=Enter shortcut of marker to select to
 view.status.swap-marker=Enter shortcut of marker to swap caret position with
 view.status.expand-folds=Press 1-9 to specify fold level
 view.status.insert-literal=Press key to insert literally
-view.status.auto-wrap=Search string not found; wrapping around
-view.status.search-not-found=Search string not found
+view.status.auto-wrap=Search string not found; wrapping around!
+view.status.search-not-found=Search string not found!
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.io=I/O: {0} operations in progress
 view.status.io-1=I/O: 1 operation in progress
@@ -760,6 +761,7 @@ about.text=jEdit is brought to you by\n\
 	Rick Gibbs\n\
 	Rick Owen\n\
 	Romain Guy\n\
+	Rudolf Widmann\n\
 	Saimon Moore\n\
 	Satguru Srivastava\n\
 	Scott Willy\n\

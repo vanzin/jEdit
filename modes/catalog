@@ -51,6 +51,9 @@
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.c" />
 
+<MODE NAME="chill"		FILE="chill.xml"
+				FILE_NAME_GLOB="*.{chl,mpol}" />
+
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
 
