@@ -1145,25 +1145,8 @@ public class View extends JFrame implements EBComponent
 		// depending in the 'tool bar alternate layout' setting.
 		propertiesChanged();
 
-		if(!plainView)
-		{
-			if(config.top != null && config.top.length() != 0)
-				dockableWindowManager.showDockableWindow(config.top);
-
-			if(config.left != null && config.left.length() != 0)
-				dockableWindowManager.showDockableWindow(config.left);
-
-			if(config.bottom != null && config.bottom.length() != 0)
-				dockableWindowManager.showDockableWindow(config.bottom);
-
-			if(config.right != null && config.right.length() != 0)
-				dockableWindowManager.showDockableWindow(config.right);
-		}
-
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowHandler());
-
-		pack();
 
 		EditBus.addToBus(this);
 	} //}}}
