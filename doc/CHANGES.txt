@@ -2,6 +2,10 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre5
 
+Thanks to Axel Biernat, Chris Petersen, Eric Benoit, Fan Ho Yin, Kris
+Kopicki, Marco Gotze, Ollie Rutherfurd, and Steve Snider for
+contributing to this release.
+
 + Syntax Highlighting Changes:
 
 - Added NQC syntax highlighting (Fan Ho Yin)
@@ -58,6 +62,10 @@ JEDIT 4.1 VERSION HISTORY
   status of a buffer is still updated if it changes on disk. Also this
   setting now controls the modification check when saving; previously it
   only controlled the check performed when jEdit received focus.
+- jEdit now makes sure that windows are within the bounds of the screen
+  when loading saved geometry. This should improve matters for people
+  who use a laptop with a docking station that has a different
+  resolution, etc. (Kris Kopicki)
 
 + Bug Fixes:
 

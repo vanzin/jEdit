@@ -831,6 +831,7 @@ public class GUIUtilities
 			adjust_height;
 
 		Dimension size = win.getSize();
+		Dimension screen = win.getToolkit().getScreenSize();
 
 		width = jEdit.getIntegerProperty(name + ".width",size.width);
 		height = jEdit.getIntegerProperty(name + ".height",size.height);
@@ -838,7 +839,6 @@ public class GUIUtilities
 		Component parent = win.getParent();
 		if(parent == null)
 		{
-			Dimension screen = win.getToolkit().getScreenSize();
 			x = (screen.width - width) / 2;
 			y = (screen.height - height) / 2;
 		}
@@ -852,6 +852,20 @@ public class GUIUtilities
 		x = jEdit.getIntegerProperty(name + ".x",x);
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
+		// Make sure the window is diaplyed in visible region
+		if ( x < 0 || x+width > screen.width)
+		{
+			if (width > screen.width)
+				width = screen.width;
+			x = (screen.width - width) / 2;
+		}
+		if ( y < 0 || y+height > screen.height)
+		{
+			if (height >= screen.height)
+				height = screen.height;
+			y = (screen.height - height) / 2;
+		}
+		
 		adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
 		adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
 		adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);

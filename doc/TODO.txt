@@ -27,7 +27,6 @@ and quirks that I need to fix eventually.
 - memory indicator color settings lost in limbo
 - rect select somewhat fucked
 - A+# on OS X, need better modifier mapping on OS X
-- load/save geometry: check for out of bounds
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - try typing foo), put cursor after foo, type some more -- slowdown
 - eliminate redundant scans and events when loading buffer
