@@ -27,6 +27,8 @@ Thanks to Ken Turner for contributing to this release.
 - Fixed delays when exiting editor if help viewer and/or plugin manager
   windows were open.
 
+- jEdit.getBuffer() now uses a hashtable instead of a linear scan.
+
 }}}
 {{{ Bug Fixes
 

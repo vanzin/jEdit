@@ -3878,7 +3878,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 				if(!getPath().equals(oldPath))
 				{
-					jEdit.updatePosition(Buffer.this);
+					jEdit.updatePosition(oldPath,Buffer.this);
 					setMode();
 				}
 				else

@@ -197,9 +197,6 @@ and quirks that I need to fix eventually.
 + performance:
 
 - closing lots of files is slow -- esp. with close all dialog box!
-- don't tokenize lines twice
-- jEdit.getBuffer(): use a hashtable, not a linear scan. have the
-  buffer notify jEdit of path changes though.
 - menu drag: slow
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
