@@ -431,6 +431,7 @@ view=new-view \
      new-plain-view \
      close-view \
      - \
+     unsplit-current \
      unsplit \
      split-horizontal \
      split-vertical \
@@ -455,7 +456,8 @@ recent-buffer.label=Go to $Recent Buffer
 toggle-line-numbers.label=$Line Numbers
 split-horizontal.label=Split $Horizontally
 split-vertical.label=Spli$t Vertically
-unsplit.label=$Unsplit
+unsplit-current.label=$Unsplit Current
+unsplit.label=Unsplit $All
 prev-textarea.label=$Go to Previous Text Area
 next-textarea.label=G$o to Next Text Area
 

@@ -1183,6 +1183,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="unsplit-current">
+	<CODE>
+		view.unsplitCurrent();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="vertical-paste">
 	<CODE>
 		Registers.paste(textArea,'$',true);
