@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,9 +44,12 @@ import org.gjt.sp.util.Log;
  *    new <i>MyVFS<i>();
  *&lt;/SERVICE&gt;</pre>
  *
+ * URLs of the form <code><i>name</i>:<i>path</i></code> will then be handled
+ * by the VFS named <code><i>name</i></code>.<p>
+ *
  * See {@link org.gjt.sp.jedit.ServiceManager} for details.<p>
  *
- * <b>Session objects:</b><p>
+ * <h3>Session objects:</h3>
  *
  * A session is used to persist things like login information, any network
  * sockets, etc. File system implementations that do not need this kind of
@@ -64,7 +67,7 @@ import org.gjt.sp.util.Log;
  * When done, the session must be disposed of using
  * {@link #_endVFSSession(Object,Component)}.<p>
  *
- * <b>Thread safety:</b><p>
+ * <h3>Thread safety:</h3>
  *
  * The following methods cannot be called from an I/O thread:
  *
@@ -76,7 +79,13 @@ import org.gjt.sp.util.Log;
  * <li>{@link #showBrowseDialog(Object[],Component)}</li>
  * </ul>
  *
- * All remaining methods are (required to be) thread-safe.
+ * All remaining methods are required to be thread-safe in subclasses.
+ *
+ * <h3>Implementing a VFS</h3>
+ *
+ * You can override as many or as few methods as you want. Make sure
+ * {@link #getCapabilities()} returns a value reflecting the functionality
+ * implemented by your VFS.
  *
  * @see VFSManager#getVFSForPath(String)
  * @see VFSManager#getVFSForProtocol(String)
@@ -101,18 +110,15 @@ public abstract class VFS
 	public static final int WRITE_CAP = 1 << 1;
 
 	/**
-	 * @deprecated Define <code>plugin.<i>class</i>.browser-menu-item</code>
-	 * or <code>plugin.<i>class</i>.browser-menu</code> properties instead.
+	 * @deprecated Do not define this capability.<p>
 	 *
-	 * If set, a menu item for this VFS will appear in the browser's
-	 * <b>Plugins</b> menu. The property <code>vfs.<i>name</i>.label</code>
-	 * is used as a menu item label.<p>
-	 *
-	 * When invoked, the menu item calls the
-	 * {@link #showBrowseDialog(Object[],Component)} method of the VFS,
-	 * and then lists the directory returned by that method.
-	 *
-	 * @since jEdit 2.6pre2
+	 * This was the official API for adding items to a file
+	 * system browser's <b>Plugins</b> menu in jEdit 4.1 and earlier. In
+	 * jEdit 4.2, there is a different way of doing this, you must provide
+	 * a <code>browser.actions.xml</code> file in your plugin JAR, and
+	 * define <code>plugin.<i>class</i>.browser-menu-item</code>
+	 * or <code>plugin.<i>class</i>.browser-menu</code> properties.
+	 * See {@link org.gjt.sp.jedit.EditPlugin} for details.
 	 */
 	public static final int BROWSE_CAP = 1 << 2;
 
@@ -178,8 +184,6 @@ public abstract class VFS
 
 	//{{{ VFS constructor
 	/**
-	 * Creates a new virtual filesystem.
-	 * @param name The name
 	 * @deprecated Use the form where the constructor takes a capability
 	 * list.
 	 */
@@ -477,7 +481,7 @@ public abstract class VFS
 		return true;
 	} //}}}
 
-	// the remaining methods are called from the I/O thread
+	// A method name that starts with _ requires a session object
 
 	//{{{ _canonPath() method
 	/**
@@ -858,8 +862,8 @@ public abstract class VFS
 
 	//{{{ DirectoryEntryCompare class
 	/**
-	 * Implementation of {@link MiscUtilities.Compare} interface that
-	 * compares {@link VFS.DirectoryEntry} instances.
+	 * Implementation of {@link org.gjt.sp.jedit.MiscUtilities.Compare}
+	 * interface that compares {@link VFS.DirectoryEntry} instances.
 	 * @since jEdit 4.2pre1
 	 */
 	public static class DirectoryEntryCompare implements MiscUtilities.Compare

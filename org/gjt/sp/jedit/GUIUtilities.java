@@ -135,6 +135,18 @@ public class GUIUtilities
 	 */
 	public static JMenuBar loadMenuBar(String name)
 	{
+		return loadMenuBar(jEdit.getActionContext(),name);
+	} //}}}
+
+	//{{{ loadMenuBar() method
+	/**
+	 * Creates a menubar. Plugins should not need to call this method.
+	 * @param context An action context
+	 * @param name The menu bar name
+	 * @since jEdit 4.2pre1
+	 */
+	public static JMenuBar loadMenuBar(ActionContext context, String name)
+	{
 		String menus = jEdit.getProperty(name);
 		StringTokenizer st = new StringTokenizer(menus);
 
@@ -142,11 +154,7 @@ public class GUIUtilities
 
 		while(st.hasMoreTokens())
 		{
-			String menu = st.nextToken();
-			if(menu.equals("plugins"))
-				loadPluginsMenu(mbar);
-			else
-				mbar.add(loadMenu(menu));
+			mbar.add(loadMenu(context,st.nextToken()));
 		}
 
 		return mbar;
@@ -1323,91 +1331,5 @@ public class GUIUtilities
 	private static Hashtable icons;
 
 	private GUIUtilities() {}
-
-	//{{{ loadPluginsMenu() method
-	private static void loadPluginsMenu(JMenuBar mbar)
-	{
-		// Query plugins for menu items
-		Vector pluginMenuItems = new Vector();
-
-		PluginJAR[] pluginArray = jEdit.getPluginJARs();
-		for(int i = 0; i < pluginArray.length; i++)
-		{
-			PluginJAR jar = pluginArray[i];
-			EditPlugin plugin = jar.getPlugin();
-			if(plugin == null)
-				continue;
-
-			JMenuItem menuItem = plugin.createMenuItems();
-			if(menuItem != null)
-				pluginMenuItems.add(menuItem);
-			//{{{ old API
-			else if(jEdit.getProperty("plugin."
-				+ plugin.getClassName()
-				+ ".activate") == null)
-			{
-				try
-				{
-					plugin.createMenuItems(pluginMenuItems);
-				}
-				catch(Throwable t)
-				{
-					Log.log(Log.ERROR,GUIUtilities.class,
-						"Error creating menu items"
-						+ " for plugin");
-					Log.log(Log.ERROR,GUIUtilities.class,t);
-				}
-			} //}}}
-		}
-
-		JMenu menu = new EnhancedMenu("plugins");
-		((EnhancedMenu)menu).init();
-
-		if(pluginMenuItems.isEmpty())
-		{
-			JMenuItem menuItem = new JMenuItem(
-				jEdit.getProperty("no-plugins.label"));
-			menuItem.setEnabled(false);
-			menu.add(menuItem);
-			mbar.add(menu);
-			return;
-		}
-
-		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
-
-		// Sort them
-		MiscUtilities.quicksort(pluginMenuItems,
-			new MiscUtilities.MenuItemCompare());
-
-		if(pluginMenuItems.size() < maxItems)
-		{
-			for(int i = 0; i < pluginMenuItems.size(); i++)
-			{
-				menu.add((JMenuItem)pluginMenuItems.get(i));
-			}
-			mbar.add(menu);
-		}
-		else
-		{
-			int menuCount = 1;
-
-			menu.setText(menu.getText() + " " + menuCount);
-
-			for(int i = 0; i < pluginMenuItems.size(); i++)
-			{
-				menu.add((JMenuItem)pluginMenuItems.get(i));
-				if(menu.getMenuComponentCount() == maxItems)
-				{
-					mbar.add(menu);
-					menu = new JMenu(String.valueOf(
-						++menuCount));
-				}
-			}
-
-			if(menu.getMenuComponentCount() != 0)
-				mbar.add(menu);
-		}
-	} //}}}
-
 	//}}}
 }

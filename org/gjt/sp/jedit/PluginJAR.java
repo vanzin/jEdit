@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -31,9 +32,68 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
- * A JAR file.
+ * Loads and unloads plugins.<p>
+ *
+ * <h3>JAR file contents</h3>
+ *
+ * When loading a plugin, jEdit looks for the following resources:
+ *
+ * <ul>
+ * <li>A file named <code>actions.xml</code> defining plugin actions.
+ * Only one such file per plugin is allowed. See {@link ActionSet} for
+ * syntax.</li>
+ * <li>A file named <code>browser.actions.xml</code> defining file system
+ * browser actions.
+ * Only one such file per plugin is allowed. See {@link ActionSet} for
+ * syntax.</li>
+ * <li>A file named <code>dockables.xml</code> defining dockable windows.
+ * Only one such file per plugin is allowed. See {@link
+ * org.gjt.sp.jedit.gui.DockableWindowManager} for
+ * syntax.</li>
+ * <li>A file named <code>services.xml</code> defining additional services
+ * offered by the plugin, such as virtual file systems.
+ * Only one such file per plugin is allowed. See {@link
+ * org.gjt.sp.jedit.ServiceManager} for
+ * syntax.</li>
+ * <li>File with extension <code>.props</code> containing name/value pairs
+ * separated by an equals sign.
+ * A plugin can supply any number of property files. Property files are used
+ * to define plugin men items, plugin option panes, as well as arbitriary
+ * settings and strings used by the plugin. See {@link EditPlugin} for
+ * information about properties used by jEdit. See
+ * <code>java.util.Properties</code> for property file syntax.</li>
+ * </ul>
+ *
+ * For a plugin to actually do something once it is resident in memory,
+ * it must contain a class whose name ends with <code>Plugin</code>.
+ * This class, known as the <i>plugin core class</i> must extend
+ * {@link EditPlugin} and define a few required properties, otherwise it is
+ * ignored.
+ *
+ * <h3>Dynamic and deferred loading</h3>
+ *
+ * Unlike in prior jEdit versions, jEdit 4.2 and later allow
+ * plugins to be added and removed to the resident set at any time using
+ * the {@link jEdit#addPluginJAR(String)} and
+ * {@link jEdit#removePluginJAR(PluginJAR,boolean)} methods. Furthermore, the
+ *  plugin core class might not be loaded until the plugin is first used. See
+ * {@link EditPlugin#start()} for a full description.
+ *
+ * @see org.gjt.sp.jedit.jEdit#getProperty(String)
+ * @see org.gjt.sp.jedit.jEdit#getPlugin(String)
+ * @see org.gjt.sp.jedit.jEdit#getPlugins()
+ * @see org.gjt.sp.jedit.jEdit#getPluginJAR(String)
+ * @see org.gjt.sp.jedit.jEdit#getPluginJARs()
+ * @see org.gjt.sp.jedit.jEdit#addPluginJAR(String)
+ * @see org.gjt.sp.jedit.jEdit#removePluginJAR(PluginJAR,boolean)
+ * @see org.gjt.sp.jedit.ActionSet
+ * @see org.gjt.sp.jedit.gui.DockableWindowManager
+ * @see org.gjt.sp.jedit.OptionPane
+ * @see org.gjt.sp.jedit.PluginJAR
+ * @see org.gjt.sp.jedit.ServiceManager
  *
  * @author Slava Pestov
  * @version $Id$
@@ -41,6 +101,228 @@ import org.gjt.sp.util.Log;
  */
 public class PluginJAR
 {
+	//{{{ getPath() method
+	/**
+	 * Returns the full path name of this plugin's JAR file.
+	 */
+	public String getPath()
+	{
+		return path;
+	} //}}}
+
+	//{{{ getCachePath() method
+	/**
+	 * Returns the full path name of this plugin's summary file.
+	 * The summary file is used to store certain information which allows
+	 * loading of the plugin's resources and core class to be deferred
+	 * until the plugin is first used. As long as a plugin is using the
+	 * jEdit 4.2 plugin API, no extra effort is required to take advantage
+	 * of the summary cache.
+	 */
+	public String getCachePath()
+	{
+		return cachePath;
+	} //}}}
+
+	//{{{ getFile() method
+	/**
+	 * Returns a file pointing to the plugin JAR.
+	 */
+	public File getFile()
+	{
+		return file;
+	} //}}}
+
+	//{{{ getClassLoader() method
+	/**
+	 * Returns the plugin's class loader.
+	 */
+	public JARClassLoader getClassLoader()
+	{
+		return classLoader;
+	} //}}}
+
+	//{{{ getZipFile() method
+	/**
+	 * Returns the plugin's JAR file, opening it if necessary.
+	 * @since jEdit 4.2pre1
+	 */
+	public ZipFile getZipFile() throws IOException
+	{
+		if(zipFile == null)
+		{
+			Log.log(Log.DEBUG,this,"Opening " + path);
+			zipFile = new ZipFile(path);
+		}
+		return zipFile;
+	} //}}}
+
+	//{{{ getActions() method
+	/**
+	 * @deprecated Call getActionSet() instead
+	 */
+	public ActionSet getActions()
+	{
+		return getActionSet();
+	} //}}}
+
+	//{{{ getActionSet() method
+	/**
+	 * Returns the plugin's action set for the jEdit action context
+	 * {@link jEdit#getActionContext()}. These actions are loaded from
+	 * the <code>actions.xml</code> file; see {@link ActionSet}.
+	 *.
+	 * @since jEdit 4.2pre1
+	 */
+	public ActionSet getActionSet()
+	{
+		return actions;
+	} //}}}
+
+	//{{{ getBrowserActionSet() method
+	/**
+	 * Returns the plugin's action set for the file system browser action
+	 * context {@link
+	 * org.gjt.sp.jedit.browser.VFSBrowser#getActionContext()}.
+	 * These actions are loaded from
+	 * the <code>browser.actions.xml</code> file; see {@link ActionSet}.
+	 *.
+	 * @since jEdit 4.2pre1
+	 */
+	public ActionSet getBrowserActionSet()
+	{
+		return browserActions;
+	} //}}}
+
+	//{{{ getPlugin() method
+	/**
+	 * Returns the plugin core class for this JAR file. Note that if the
+	 * plugin has not been activated, this will return an instance of
+	 * {@link EditPlugin.Deferred}. If you need the actual plugin core
+	 * class instance, call {@link #activatePlugin()} first.
+	 *
+	 * @since jEdit 4.2pre1
+	 */
+	public EditPlugin getPlugin()
+	{
+		return plugin;
+	} //}}}
+
+	//{{{ activatePlugin() method
+	/**
+	 * Loads the plugin core class. Does nothing if the plugin core class
+	 * has already been loaded. This method might be called on startup,
+	 * depending on what properties are set. See {@link EditPlugin#start()}.
+	 *
+	 * @since jEdit 4.2pre1
+	 */
+	public void activatePlugin()
+	{
+		synchronized(this)
+		{
+			if(activated)
+			{
+				// recursive call
+				return;
+			}
+
+			activated = true;
+
+			if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+				return;
+		}
+
+		String className = plugin.getClassName();
+
+		try
+		{
+			loadProperties();
+
+			if(!checkDependencies())
+			{
+				plugin = new EditPlugin.Broken(className);
+				plugin.jar = (EditPlugin.JAR)this;
+				return;
+			}
+
+			Class clazz = classLoader.loadClass(className,false);
+			int modifiers = clazz.getModifiers();
+			if(Modifier.isInterface(modifiers)
+				|| Modifier.isAbstract(modifiers)
+				|| !EditPlugin.class.isAssignableFrom(clazz))
+			{
+				// not a real plugin core class
+				plugin = null;
+				return;
+			}
+
+			plugin = (EditPlugin)clazz.newInstance();
+			plugin.jar = (EditPlugin.JAR)this;
+
+			plugin.start();
+
+			if(plugin instanceof EBPlugin)
+			{
+				if(jEdit.getProperty("plugin."
+					+ className + ".activate")
+					== null)
+				{
+					// old plugins expected jEdit 4.1-style
+					// behavior, where a PropertiesChanged
+					// was sent after plugins were started
+					((EBComponent)plugin).handleMessage(
+						new org.gjt.sp.jedit.msg.PropertiesChanged(null));
+				}
+				EditBus.addToBus((EBPlugin)plugin);
+			}
+
+			EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
+		}
+		catch(Throwable t)
+		{
+			plugin = new EditPlugin.Broken(className);
+			plugin.jar = (EditPlugin.JAR)this;
+
+			Log.log(Log.ERROR,this,"Error while starting plugin " + className);
+			Log.log(Log.ERROR,this,t);
+			String[] args = { t.toString() };
+			jEdit.pluginError(path,"plugin-error.start-error",args);
+		}
+	} //}}}
+
+	//{{{ getDockablesURI() method
+	/**
+	 * Returns the location of the plugin's
+	 * <code>dockables.xml</code> file.
+	 * @since jEdit 4.2pre1
+	 */
+	public URL getDockablesURI()
+	{
+		return dockablesURI;
+	} //}}}
+
+	//{{{ getServicesURI() method
+	/**
+	 * Returns the location of the plugin's
+	 * <code>services.xml</code> file.
+	 * @since jEdit 4.2pre1
+	 */
+	public URL getServicesURI()
+	{
+		return servicesURI;
+	} //}}}
+
+	//{{{ toString() method
+	public String toString()
+	{
+		if(plugin == null)
+			return path;
+		else
+			return path + ",class=" + plugin.getClassName();
+	} //}}}
+
+	//{{{ Package-private members
+
 	//{{{ Static methods
 
 	//{{{ getPluginCache() method
@@ -132,186 +414,6 @@ public class PluginJAR
 	} //}}}
 
 	//}}}
-
-	//{{{ getPath() method
-	public String getPath()
-	{
-		return path;
-	} //}}}
-
-	//{{{ getCachePath() method
-	public String getCachePath()
-	{
-		return cachePath;
-	} //}}}
-
-	//{{{ getFile() method
-	public File getFile()
-	{
-		return file;
-	} //}}}
-
-	//{{{ getClassLoader() method
-	/**
-	 * Returns the plugin's class loader.
-	 * @since jEdit 4.2pre1
-	 */
-	public JARClassLoader getClassLoader()
-	{
-		return classLoader;
-	} //}}}
-
-	//{{{ getZipFile() method
-	/**
-	 * Returns the plugin's JAR file, opening it first if necessary.
-	 * @since jEdit 4.2pre1
-	 */
-	public ZipFile getZipFile() throws IOException
-	{
-		if(zipFile == null)
-		{
-			Log.log(Log.DEBUG,this,"Opening " + path);
-			zipFile = new ZipFile(path);
-		}
-		return zipFile;
-	} //}}}
-
-	//{{{ getActions() method
-	/**
-	 * @deprecated Call getActionSet() instead
-	 */
-	public ActionSet getActions()
-	{
-		return getActionSet();
-	} //}}}
-
-	//{{{ getActionSet() method
-	/**
-	 * @since jEdit 4.2pre1
-	 */
-	public ActionSet getActionSet()
-	{
-		return actions;
-	} //}}}
-
-	//{{{ getBrowserActionSet() method
-	/**
-	 * @since jEdit 4.2pre1
-	 */
-	public ActionSet getBrowserActionSet()
-	{
-		return browserActions;
-	} //}}}
-
-	//{{{ getPlugin() method
-	/**
-	 * Returns the plugin core class for this JAR file.
-	 * @since jEdit 4.2pre1
-	 */
-	public EditPlugin getPlugin()
-	{
-		return plugin;
-	} //}}}
-
-	//{{{ activatePlugin() method
-	/**
-	 * Loads the plugin core class if it is not already loaded.
-	 * @since jEdit 4.2pre1
-	 */
-	public void activatePlugin()
-	{
-		synchronized(this)
-		{
-			if(activated)
-			{
-				// recursive call
-				return;
-			}
-
-			activated = true;
-
-			if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
-				return;
-		}
-
-		String className = plugin.getClassName();
-
-		try
-		{
-			loadProperties();
-
-			if(!checkDependencies())
-			{
-				plugin = new EditPlugin.Broken(className);
-				plugin.jar = (EditPlugin.JAR)this;
-				return;
-			}
-
-			Class clazz = classLoader.loadClass(className,false);
-			int modifiers = clazz.getModifiers();
-			if(Modifier.isInterface(modifiers)
-				|| Modifier.isAbstract(modifiers)
-				|| !EditPlugin.class.isAssignableFrom(clazz))
-			{
-				// not a real plugin core class
-				plugin = null;
-				return;
-			}
-
-			plugin = (EditPlugin)clazz.newInstance();
-			plugin.jar = (EditPlugin.JAR)this;
-
-			plugin.start();
-
-			if(plugin instanceof EBPlugin)
-				EditBus.addToBus((EBPlugin)plugin);
-
-			EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
-		}
-		catch(Throwable t)
-		{
-			plugin = new EditPlugin.Broken(className);
-			plugin.jar = (EditPlugin.JAR)this;
-
-			Log.log(Log.ERROR,this,"Error while starting plugin " + className);
-			Log.log(Log.ERROR,this,t);
-			String[] args = { t.toString() };
-			jEdit.pluginError(path,"plugin-error.start-error",args);
-		}
-	} //}}}
-
-	//{{{ getDockablesURI() method
-	/**
-	 * Returns the location of the plugin's
-	 * <code>dockables.xml</code> file.
-	 * @since jEdit 4.2pre1
-	 */
-	public URL getDockablesURI()
-	{
-		return dockablesURI;
-	} //}}}
-
-	//{{{ getServicesURI() method
-	/**
-	 * Returns the location of the plugin's
-	 * <code>services.xml</code> file.
-	 * @since jEdit 4.2pre1
-	 */
-	public URL getServicesURI()
-	{
-		return servicesURI;
-	} //}}}
-
-	//{{{ toString() method
-	public String toString()
-	{
-		if(plugin == null)
-			return path;
-		else
-			return path + ",class=" + plugin.getClassName();
-	} //}}}
-
-	//{{{ Package-private members
 
 	//{{{ PluginJAR constructor
 	PluginJAR(File file)
@@ -502,7 +604,8 @@ public class PluginJAR
 		properties = cache.properties;
 		classes = cache.classes;
 
-		if(cache.actionsURI != null)
+		if(cache.actionsURI != null
+			&& cache.cachedActionNames != null)
 		{
 			actions = new ActionSet(this,
 				cache.cachedActionNames,
@@ -512,7 +615,8 @@ public class PluginJAR
 		else
 			actions = new ActionSet();
 
-		if(cache.browserActionsURI != null)
+		if(cache.browserActionsURI != null
+			&& cache.cachedBrowserActionNames != null)
 		{
 			browserActions = new ActionSet(this,
 				cache.cachedBrowserActionNames,
@@ -520,7 +624,9 @@ public class PluginJAR
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 		}
 
-		if(cache.dockablesURI != null)
+		if(cache.dockablesURI != null
+			&& cache.cachedDockableNames != null
+			&& cache.cachedDockableActionFlags != null)
 		{
 			dockablesURI = cache.dockablesURI;
 			DockableWindowManager.cacheDockableWindows(this,
@@ -528,7 +634,8 @@ public class PluginJAR
 				cache.cachedDockableActionFlags);
 		}
 
-		if(cache.servicesURI != null)
+		if(cache.servicesURI != null
+			&& cache.cachedServices != null)
 		{
 			servicesURI = cache.servicesURI;
 			for(int i = 0; i < cache.cachedServices.length;
@@ -837,15 +944,14 @@ public class PluginJAR
 		jEdit.putProperty(cachedProperties,"plugin." + className + ".jars");
 		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu");
 		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu-item");
-		jEdit.putProperty(cachedProperties,"plugin." + className + ".option-pane");
 
 		String paneProp = "plugin." + className + ".option-pane";
 		String pane = jEdit.getProperty(paneProp);
 		if(pane != null)
 		{
 			cachedProperties.put(paneProp,pane);
-			jEdit.putProperty(cachedProperties,pane + ".label");
-			jEdit.putProperty(cachedProperties,pane + ".code");
+			jEdit.putProperty(cachedProperties,"options." + pane + ".label");
+			jEdit.putProperty(cachedProperties,"options." + pane + ".code");
 		}
 
 		String groupProp = "plugin." + className + ".option-group";

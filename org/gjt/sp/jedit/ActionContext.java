@@ -29,7 +29,8 @@ import java.util.*;
  * in jEdit:
  * <ul>
  * <li>{@link org.gjt.sp.jedit.jEdit#getActionContext()} - editor actions
- * <li>{@link org.gjt.sp.jedit.VFSBrowser#getActionContext()} - browser actions
+ * <li>{@link org.gjt.sp.jedit.browser.VFSBrowser#getActionContext()} - browser
+ * actions
  * </ul>
  *
  * @since jEdit 4.2pre1

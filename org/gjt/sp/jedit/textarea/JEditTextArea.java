@@ -3984,7 +3984,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ collapseFold() method
 	/**
-	 * Like {@link FoldVisibilityManager#collapseFold(int)}, but
+	 * Like {@link DisplayManager#collapseFold(int)}, but
 	 * also moves the caret to the first line of the fold.
 	 * @since jEdit 4.0pre3
 	 */
@@ -4008,7 +4008,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ expandFold() method
 	/**
-	 * Like {@link FoldVisibilityManager#expandFold(int,boolean)}, but
+	 * Like {@link DisplayManager#expandFold(int,boolean)}, but
 	 * also moves the caret to the first sub-fold.
 	 * @since jEdit 4.0pre3
 	 */

@@ -389,6 +389,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			this.path = path;
 
 			jEdit.setTemporaryProperty(getName() + ".label",label);
+			jEdit.setTemporaryProperty(getName() + ".mouse-over",
+				handler.getLabel() + " - " + path);
 		} //}}}
 
 		//{{{ getHandler() method
@@ -397,12 +399,6 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			return handler;
 		}
 		//}}}
-
-		//{{{ getMouseOverText() method
-		public String getMouseOverText()
-		{
-			return handler.getLabel() + " - " + path;
-		} //}}}
 
 		//{{{ getPath() method
 		public String getPath()

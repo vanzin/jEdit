@@ -30,7 +30,6 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 	public MacrosMenu()
 	{
 		super("macros");
-		updateMacrosMenu();
 	}
 
 	public void addNotify()
@@ -48,7 +47,7 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 	public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof MacrosChanged)
-			updateMacrosMenu();
+			initialized = false;
 	}
 
 	public void init()
@@ -59,9 +58,6 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 
 	private void updateMacrosMenu()
 	{
-		if(!initialized)
-			return;
-
 		// Because the macros menu contains normal items as
 		// well as dynamically-generated stuff, we are careful
 		// to only remove the dynamic crap here...

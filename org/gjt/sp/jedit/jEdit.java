@@ -398,6 +398,8 @@ public class jEdit
 			}
 		}
 
+		propertiesChanged();
+
 		GUIUtilities.advanceSplashProgress();
 
 		// Buffer sort
@@ -409,11 +411,12 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 		//}}}
 
-		//{{{ Start plugins
+		//{{{ Activate plugins that must be activated at startup
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((PluginJAR)jars.elementAt(i)).activatePluginIfNecessary();
-		} //}}}
+		}
+		//}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
 		Macros.loadMacros();
@@ -442,9 +445,6 @@ public class jEdit
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			BeanShell.runScript(null,scriptFile,null,false);
 		} //}}}
-
-		// Must be after plugins are started!!!
-		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
@@ -2468,13 +2468,28 @@ public class jEdit
 	} //}}}
 
 	//{{{ pluginError() method
-	static void pluginError(final String path, String messageProp, Object[] args)
+	static void pluginError(String path, String messageProp,
+		Object[] args)
 	{
-		if(pluginErrors == null)
-			pluginErrors = new Vector();
+		synchronized(pluginErrorLock)
+		{
+			if(pluginErrors == null)
+				pluginErrors = new Vector();
+			pluginErrors.addElement(
+				new ErrorListDialog.ErrorEntry(
+				path,messageProp,args));
 
-		pluginErrors.addElement(new ErrorListDialog.ErrorEntry(
-			path,messageProp,args));
+			if(startupDone)
+			{
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						showPluginErrorDialog();
+					}
+				});
+			}
+		}
 	} //}}}
 
 	//{{{ setActiveView() method
@@ -2499,6 +2514,7 @@ public class jEdit
 	private static ActionContext actionContext;
 	private static ActionSet builtInActionSet;
 	private static Vector pluginErrors;
+	private static Object pluginErrorLock = new Object();
 	private static Vector jars;
 	private static Vector modes;
 	private static boolean saveCaret;
@@ -2520,6 +2536,8 @@ public class jEdit
 	private static View viewsFirst;
 	private static View viewsLast;
 	private static View activeView;
+
+	private static boolean startupDone;
 	//}}}
 
 	private jEdit() {}
@@ -3128,16 +3146,10 @@ public class jEdit
 				//{{{ Report any plugin errors
 				if(pluginErrors != null)
 				{
-					String caption = jEdit.getProperty(
-						"plugin-error.caption" + (pluginErrors.size() == 1
-						? "-1" : ""));
-
-					new ErrorListDialog(
-						jEdit.getFirstView(),
-						jEdit.getProperty("plugin-error.title"),
-						caption,pluginErrors,true);
-					pluginErrors.removeAllElements();
+					showPluginErrorDialog();
 				} //}}}
+
+				startupDone = true;
 
 				// in one case not a single AWT class will
 				// have been touched (splash screen off +
@@ -3146,6 +3158,20 @@ public class jEdit
 				Toolkit.getDefaultToolkit();
 			}
 		});
+	} //}}}
+
+	//{{{ showPluginErrorDialog() method
+	private void showPluginErrorDialog()
+	{
+		String caption = jEdit.getProperty(
+			"plugin-error.caption" + (pluginErrors.size() == 1
+			? "-1" : ""));
+
+		new ErrorListDialog(
+			jEdit.getFirstView(),
+			jEdit.getProperty("plugin-error.title"),
+			caption,pluginErrors,true);
+		pluginErrors.removeAllElements();
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method

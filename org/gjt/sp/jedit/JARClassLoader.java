@@ -189,11 +189,7 @@ public class JARClassLoader extends ClassLoader
 	void activate()
 	{
 		String[] classes = jar.getClasses();
-		if(classes == null)
-		{
-			Log.log(Log.WARNING,this,"No classes: " + jar.getPath());
-		}
-		else
+		if(classes != null)
 		{
 			for(int i = 0; i < classes.length; i++)
 			{
