@@ -907,12 +907,11 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			if(isMarkerHighlightEnabled())
 			{
-				int start = textArea.xyToOffset(0,y);
-				if(start == -1)
+				int line = y / textArea.getPainter().getFontMetrics().getHeight();
+				int start = textArea.getScreenLineStartOffset(line);
+				int end = textArea.getScreenLineEndOffset(line);
+				if(start == -1 || end == -1)
 					return null;
-
-				int end = textArea.getScreenLineEndOffset(
-					textArea.getScreenLineOfOffset(start));
 
 				Marker marker = textArea.getBuffer().getMarkerInRange(start,end);
 				if(marker != null)

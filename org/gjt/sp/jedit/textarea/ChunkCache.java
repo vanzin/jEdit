@@ -75,8 +75,13 @@ class ChunkCache
 		}
 		else if(!textArea.softWrap)
 		{
-			return textArea.physicalToVirtual(line)
-				- textArea.getFirstLine();
+			int virtLine = textArea.physicalToVirtual(line);
+			if(virtLine < firstLine)
+			{
+				throw new InternalError("virtLine < firstLine "
+					+ "and line >= physFirstLine");
+			}
+			return virtLine - firstLine;
 		}
 		else
 		{
