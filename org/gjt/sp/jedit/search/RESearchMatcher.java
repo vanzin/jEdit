@@ -49,28 +49,13 @@ public class RESearchMatcher implements SearchMatcher
 	//{{{ RESearchMatcher constructor
 	/**
 	 * Creates a new regular expression string matcher.
+	 * @since jEdit 4.2pre4
 	 */
-	public RESearchMatcher(String search, String replace,
-		boolean ignoreCase, boolean beanshell,
-		BshMethod replaceMethod) throws Exception
+	public RESearchMatcher(String search, boolean ignoreCase)
+		throws REException
 	{
-		if(beanshell && replaceMethod != null && replace.length() != 0)
-		{
-			this.beanshell = true;
-			this.replaceMethod = replaceMethod;
-			replaceNS = new NameSpace(BeanShell.getNameSpace(),
-				"search and replace");
-		}
-		else
-		{
-			// gnu.regexp doesn't seem to support \n and \t in the replace
-			// string, so implement it here
-			this.replace = MiscUtilities.escapesToChars(replace);
-		}
-
 		re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
 			| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);
-
 		returnValue = new Match();
 	} //}}}
 
@@ -109,6 +94,13 @@ public class RESearchMatcher implements SearchMatcher
 		if(match == null)
 			return null;
 
+		returnValue.substitutions = new String[
+			re.getNumSubs()];
+		for(int i = 0; i < returnValue.substitutions.length; i++)
+		{
+			returnValue.substitutions[i] = match.toString(i);
+		}
+
 		int _start = match.getStartIndex();
 		int _end = match.getEndIndex();
 
@@ -140,41 +132,8 @@ public class RESearchMatcher implements SearchMatcher
 		return returnValue;
 	} //}}}
 
-	//{{{ substitute() method
-	/**
-	 * Returns the specified text, with any substitution specified
-	 * within this matcher performed.
-	 * @param text The text
-	 */
-	public String substitute(String text) throws Exception
-	{
-		REMatch match = re.getMatch(text);
-		if(match == null)
-			return null;
-
-		if(beanshell)
-		{
-			int count = re.getNumSubs();
-			for(int i = 0; i <= count; i++)
-				replaceNS.setVariable("_" + i,match.toString(i));
-
-			Object obj = BeanShell.runCachedBlock(replaceMethod,
-				null,replaceNS);
-			if(obj == null)
-				return "";
-			else
-				return obj.toString();
-		}
-		else
-			return match.substituteInto(replace);
-	} //}}}
-
 	//{{{ Private members
-	private String replace;
 	private RE re;
-	private boolean beanshell;
-	private BshMethod replaceMethod;
-	private NameSpace replaceNS;
 	private Match returnValue;
 	//}}}
 }

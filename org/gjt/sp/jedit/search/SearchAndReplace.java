@@ -102,7 +102,6 @@ public class SearchAndReplace
 			return;
 
 		SearchAndReplace.replace = replace;
-		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
@@ -190,8 +189,6 @@ public class SearchAndReplace
 
 		SearchAndReplace.reverse = reverse;
 
-		matcher = null;
-
 		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
 
@@ -218,7 +215,6 @@ public class SearchAndReplace
 			return;
 
 		SearchAndReplace.beanshell = beanshell;
-		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
@@ -266,11 +262,9 @@ public class SearchAndReplace
 	//{{{ setSearchMatcher() method
 	/**
 	 * Sets a custom search string matcher. Note that calling
-	 * {@link #setSearchString(String)}, {@link #setReplaceString(String)},
-	 * {@link #setIgnoreCase(boolean)}, {@link #setRegexp(boolean)},
-	 * {@link #setReverseSearch(boolean)} or
-	 * {@link #setBeanShellReplace(boolean)} will reset the matcher to the
-	 * default.
+	 * {@link #setSearchString(String)},
+	 * {@link #setIgnoreCase(boolean)}, or {@link #setRegexp(boolean)}
+	 * will reset the matcher to the default.
 	 */
 	public static void setSearchMatcher(SearchMatcher matcher)
 	{
@@ -297,10 +291,6 @@ public class SearchAndReplace
 		if(search == null || "".equals(search))
 			return null;
 
-		// replace must not be null
-		String replace = (SearchAndReplace.replace == null ? "" : SearchAndReplace.replace);
-
-		BshMethod replaceMethod;
 		if(beanshell && replace.length() != 0)
 		{
 			replaceMethod = BeanShell.cacheBlock("replace","return ("
@@ -310,12 +300,10 @@ public class SearchAndReplace
 			replaceMethod = null;
 
 		if(regexp)
-			matcher = new RESearchMatcher(search,replace,ignoreCase,
-				beanshell,replaceMethod);
+			matcher = new RESearchMatcher(search,ignoreCase);
 		else
 		{
-			matcher = new BoyerMooreSearchMatcher(search,replace,
-				ignoreCase,beanshell,replaceMethod);
+			matcher = new BoyerMooreSearchMatcher(search,ignoreCase);
 		}
 
 		return matcher;
@@ -995,6 +983,7 @@ loop:			while(path != null)
 	//{{{ Instance variables
 	private static String search;
 	private static String replace;
+	private static BshMethod replaceMethod;
 	private static boolean regexp;
 	private static boolean ignoreCase;
 	private static boolean reverse;
@@ -1087,7 +1076,7 @@ loop:		for(int counter = 0; ; counter++)
 			int _length = occur.end - occur.start;
 
 			String found = new String(text.array,text.offset + _start,_length);
-			String subst = matcher.substitute(found);
+			String subst = _replace(occur,found);
 			if(smartCaseReplace && ignoreCase)
 			{
 				int strCase = TextUtilities.getStringCase(found);
@@ -1113,6 +1102,52 @@ loop:		for(int counter = 0; ; counter++)
 		}
 
 		return occurCount;
+	} //}}}
+
+	//{{{ _replace() method
+	private String _replace(SearchMatcher.Match occur, String found)
+		throws Exception
+	{
+		if(regexp)
+		{
+			if(replaceMethod != null)
+			{
+				for(int i = 0; i <= occur.substitution.length; i++)
+				{
+					replaceNS.setVariable("_" + i,
+						occur.substitution[i]);
+				}
+
+				Object obj = BeanShell.runCachedBlock(
+					replaceMethod,null,replaceNS);
+				if(obj == null)
+					return "";
+				else
+					return obj.toString();
+			}
+			else
+			{
+				
+			}
+		}
+		else
+		{
+			if(replaceMethod != null)
+			{
+				replaceNS.setVariable("_0",text);
+				Object obj = BeanShell.runCachedBlock(
+					replaceMethod,
+					null,replaceNS);
+				if(obj == null)
+					return "";
+				else
+					return obj.toString();
+			}
+			else
+			{
+				return replace;
+			}
+		}
 	} //}}}
 
 	//}}}

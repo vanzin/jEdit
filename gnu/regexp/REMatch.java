@@ -161,7 +161,7 @@ public final class REMatch implements Serializable, Cloneable {
 	if ((sub >= start.length) || (start[sub] == -1)) return "";
 	return (matchedText.substring(start[sub],end[sub]));
     }
-    
+
     /** 
      * Returns the index within the input string used to generate this match
      * where subexpression number <i>sub</i> begins, or <code>-1</code> if

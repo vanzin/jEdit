@@ -50,14 +50,6 @@ public interface SearchMatcher
 	Match nextMatch(CharIndexed text, boolean start, boolean end,
 		boolean firstTime, boolean reverse);
 
-	/**
-	 * Returns the specified text, with any substitution specified
-	 * within this matcher performed.
-	 * @param text The text
-	 * @return The changed string
-	 */
-	String substitute(String text) throws Exception;
-
 	//{{{ Match class
 	public static class Match
 	{
