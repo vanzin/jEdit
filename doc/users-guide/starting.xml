@@ -88,7 +88,7 @@
    <firstterm>clients</firstterm>.
   </para>
   <para>
-   If the <command>-background</command> command line switch is specified,
+   If the <userinput>-background</userinput> command line switch is specified,
    jEdit will continue running and waiting for client requests even
    after all editor windows are closed. When run in background mode,
    you can open and close jEdit any number of times, only having
@@ -124,7 +124,7 @@
    </para>
    <para>
     In environments that demand absolute security, the edit server can be
-    disabled by specifying the <command>-noserver</command> command line switch.
+    disabled by specifying the <userinput>-noserver</userinput> command line switch.
    </para>
   </sidebar>
  </sect1>
@@ -203,23 +203,23 @@
     </thead>
     <tbody>
      <row>
-      <entry><command>-background</command></entry>
+      <entry><userinput>-background</userinput></entry>
       <entry>Runs jEdit in background mode. In background mode,
       the edit server will continue listening for
       client connections even after all views are closed.
       See <xref linkend="starting" />.</entry>
      </row>
      <row>
-      <entry><command>-nogui</command></entry>
+      <entry><userinput>-nogui</userinput></entry>
       <entry>Makes jEdit not open an initial view, and instead only open one
       when the first client connects. Can only be used in combination with
-      the <command>-background</command> switch. You can use this switch to
+      the <userinput>-background</userinput> switch. You can use this switch to
       <quote>pre-load</quote> jEdit when you log in to your computer, for
       example.
       </entry>
      </row>
      <row>
-      <entry><command>-norestore</command></entry>
+      <entry><userinput>-norestore</userinput></entry>
       <entry>Disables automatic restore of previously open files on
       startup. This feature can also be set permanently in the
       <guibutton>Loading and Saving</guibutton> pane of the
@@ -228,30 +228,30 @@
       </entry>
      </row>
      <row>
-      <entry><command>-run=<replaceable>script</replaceable></command></entry>
+      <entry><userinput>-run=<replaceable>script</replaceable></userinput></entry>
       <entry>Runs the specified BeanShell script. There can only be one
       of these parameters on the command line. See
       <xref linkend="scripts-command-line" /> for details.</entry>
      </row>
      <row>
-      <entry><command>-server</command></entry>
+      <entry><userinput>-server</userinput></entry>
       <entry>Stores the server port info in the file named <filename>server</filename>
       inside the settings directory.</entry>
      </row>
      <row>
-      <entry><command>-server=<replaceable>name</replaceable></command></entry>
+      <entry><userinput>-server=<replaceable>name</replaceable></userinput></entry>
       <entry>Stores the server port info in the file named
       <replaceable>name</replaceable>. File names for this
       parameter are relative to the settings directory.</entry>
      </row>
      <row>
-      <entry><command>-noserver</command></entry>
+      <entry><userinput>-noserver</userinput></entry>
       <entry>Does not attempt to
       connect to a running edit server, and does not start one either. For
       information about the edit server, see <xref linkend="starting" />.</entry>
      </row>
      <row>
-      <entry><command>-settings=<replaceable>dir</replaceable></command></entry>
+      <entry><userinput>-settings=<replaceable>dir</replaceable></userinput></entry>
       <entry>Loads and saves the user-specific settings in
       the directory named <replaceable>dir</replaceable>, instead of the
       default <filename><replaceable>user.home</replaceable>/.jedit</filename>.
@@ -259,35 +259,35 @@
       effect when connecting to another instance via the edit server.</entry>
      </row>
      <row>
-      <entry><command>-nosettings</command></entry>
+      <entry><userinput>-nosettings</userinput></entry>
       <entry>Starts jEdit without loading user-specific settings.
       See <xref linkend="settings-directory" />.</entry>
      </row>
      <row>
-      <entry><command>-noplugins</command></entry>
+      <entry><userinput>-noplugins</userinput></entry>
       <entry>Causes jEdit to not load any plugins.
       See <xref linkend="using-plugins" />. Has no effect
       when connecting to another instance via the edit server.</entry>
      </row>
      <row>
-      <entry><command>-nostartupscripts</command></entry>
+      <entry><userinput>-nostartupscripts</userinput></entry>
       <entry>Causes jEdit to not run any startup scripts.
       See <xref linkend="startup-scripts" />.
       Has no effect
       when connecting to another instance via the edit server.</entry>
      </row>
      <row>
-      <entry><command>-usage</command></entry>
+      <entry><userinput>-usage</userinput></entry>
       <entry>Shows a brief command line usage message without starting
       jEdit.
       This message is also shown if an invalid switch was specified.</entry>
      </row>
      <row>
-      <entry><command>-version</command></entry>
+      <entry><userinput>-version</userinput></entry>
       <entry>Shows the version number without starting jEdit.</entry>
      </row>
      <row>
-      <entry><command>- -</command></entry>
+      <entry><userinput>- -</userinput></entry>
       <entry>Specifies the end of the command line switches. Further
       parameters are treated as file names, even if they begin with
       a dash. Can be used to open files whose names start with a

@@ -694,7 +694,7 @@
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycap>U</keycap></keycombo></entry>
-      <entry>Moves caret to the fold containing the one at the caret position.
+      <entry>Moves caret to the parent fold of the one containing the caret.
       </entry>
      </row>
     </tbody>

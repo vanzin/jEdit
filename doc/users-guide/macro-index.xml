@@ -14,11 +14,12 @@
 </para>
 
 <para>
-  Macros from earlier versions of jEdit can be found, as well as
-  a large number of macros contributed by users, can be found in the
-  <quote>Downloads</quote>
-  section of the <ulink url="http://community.jedit.org">jEdit
-  Community</ulink> web site.
+  In addition to the macros included with jEdit,
+  a very large collection of user-contributed macros is available
+  in the <quote>Downloads</quote> section of the
+  <ulink url="http://community.jedit.org">community.jedit.org</ulink>
+  web site. There are detailed descriptions for
+  each macro as well as a search facility.
 </para>
 
 <sect1 id="macros-files"><title>File Management Macros</title>
@@ -304,18 +305,9 @@
     <para><filename>Write_HyperSearch_Results.bsh</filename></para>
     <abstract><para>
         This macro writes the contents of the <quote>HyperSearch
-        Results</quote> window to a new text buffer.
+        Results</quote> window to a new buffer in
+        a simple text report format.
     </para></abstract>
-    <para>
-        The macro employs a simple text report format. Since
-        the HyperSearch window's object does not maintain the search
-        settings that produced the displayed results, the macro examines the
-        current settings in the <classname>SearchAndReplace</classname> object.
-        It confirms that the HyperSearch option is selected before writing
-        the report. However, the only way to be sure that the report's contents
-        are completely accurate is to run the macro immediately after a
-        HyperSearch.
-    </para>
 </listitem>
 
 </itemizedlist>

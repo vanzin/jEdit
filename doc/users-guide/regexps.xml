@@ -56,7 +56,7 @@
   <listitem><para><literal>[[:digit:]]</literal> matches a decimal digit</para></listitem>
   <listitem><para><literal>[[:graph:]]</literal> matches a non-space, non-control character</para></listitem>
   <listitem><para><literal>[[:lower:]]</literal> matches a lowercase letter</para></listitem>
-  <listitem><para><literal>[[:print:]]</literal> same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
+  <listitem><para><literal>[[:print:]]</literal> same as <literal>[[:graph:]]</literal>, but also space and tab</para></listitem>
   <listitem><para><literal>[[:punct:]]</literal> matches a punctuation character</para></listitem>
   <listitem><para><literal>[[:space:]]</literal> matches any whitespace character, including newlines</para></listitem>
   <listitem><para><literal>[[:upper:]]</literal> matches an uppercase letter</para></listitem>

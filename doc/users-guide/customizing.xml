@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
  <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
@@ -66,59 +66,60 @@
     </thead>
     <tbody>
      <row>
-      <entry>collapseFolds</entry>
+      <entry><varname>collapseFolds</varname></entry>
       <entry>Folds with a level of this or higher will be collapsed when the
       buffer is opened. If set to zero, all folds will be expanded initially.
       See <xref linkend="folding" />.</entry>
      </row>
      <row>
-      <entry>folding</entry>
+      <entry><varname>folding</varname></entry>
       <entry>The fold mode; one of <quote>none</quote>, <quote>indent</quote>,
-      or <quote>explicit</quote>. See <xref linkend="folding" />.</entry>
+      <quote>explicit</quote>, or the name of a plugin folding mode.
+      See <xref linkend="folding" />.</entry>
      </row>
      <row>
-      <entry>indentSize</entry>
+      <entry><varname>indentSize</varname></entry>
       <entry>The width, in characters, of one indent.
       Must be an integer greater than 0.
       See <xref linkend="indent" />.</entry>
      </row>
      <row>
-      <entry>maxLineLen</entry>
+      <entry><varname>maxLineLen</varname></entry>
       <entry>The maximum line length and wrap column position.
       Inserting text beyond this column will automatically insert a line
       break at the appropriate position.
       See <xref linkend="entering-text" />.</entry>
      </row>
      <row>
-      <entry>mode</entry>
+      <entry><varname>mode</varname></entry>
       <entry>The default edit mode for the buffer.
       See <xref linkend="modes" />.</entry>
      </row>
      <row>
-      <entry>noTabs</entry>
+      <entry><varname>noTabs</varname></entry>
       <entry>If set to <quote>true</quote>, soft tabs (multiple space characters)
       will be used instead of <quote>real</quote> tabs. See
       <xref linkend="indent" />.</entry>
      </row>
      <row>
-      <entry>noWordSep</entry>
+      <entry><varname>noWordSep</varname></entry>
       <entry>A list of non-alphanumeric characters that are
       <emphasis>not</emphasis> to
       be treated as word separators. Global default is <quote>_</quote>.</entry>
      </row>
      <row>
-      <entry>tabSize</entry>
+      <entry><varname>tabSize</varname></entry>
       <entry>The tab width. Must be an integer greater than 0.
       See <xref linkend="indent" />.</entry>
      </row>
      <row>
-      <entry>wordBreakChars</entry>
+      <entry><varname>wordBreakChars</varname></entry>
       <entry>Characters, in addition to spaces and tabs, at which lines may be
       split when word wrapping.
       See <xref linkend="entering-text" />.</entry>
      </row>
      <row>
-      <entry>wrap</entry>
+      <entry><varname>wrap</varname></entry>
       <entry>The word wrap mode; one of <quote>none</quote>, <quote>soft</quote>,
       or <quote>hard</quote>. See <xref linkend="word-wrap" />.</entry>
      </row>
@@ -136,69 +137,17 @@
    panes, and information about them can be found in the documentation
    for the plugins in question.
   </para>
-  <bridgehead renderas="sect3">The General Pane</bridgehead>
+  <sect2><title>The Abbreviations Pane</title>
   <para>
-   The <guibutton>General</guibutton> option pane lets you change various
-   miscellaneous settings, such as the number of recent files to remember,
-   if the buffer list should be sorted, and so on.
-  </para>
-  <bridgehead renderas="sect3">The Appearance Pane</bridgehead>
-  <para>
-   The <guibutton>Appearance</guibutton> option pane lets you change the
-   Swing look and feel, as well as the fonts used to display user interface
-   controls such as buttons, labels and menus.
-  </para>
-  <bridgehead renderas="sect3">The Text Area Pane</bridgehead>
-  <para>
-   The <guibutton>Text Area</guibutton> option pane lets you customize the
-   appearance of the text area.
-  </para>
-  <bridgehead renderas="sect3">The Gutter Pane</bridgehead>
-  <para>
-   The <guibutton>Gutter</guibutton> option pane lets you customize the
-   appearance of the gutter.
-  </para>
-  <bridgehead renderas="sect3">The Syntax Highlighting Pane</bridgehead>
-  <para>
-   The <guibutton>Styles</guibutton> option pane lets you change
-   the text styles and colors used for syntax highlighting.
-  </para>
-  <bridgehead renderas="sect3">The Loading and Saving Pane</bridgehead>
-  <para>
-   The <guibutton>Loading and Saving</guibutton> option pane lets you change
-   settings such as the autosave frequency, backup settings, file encoding,
-   and so on.
-  </para>
-  <bridgehead renderas="sect3">The Editing Pane</bridgehead>
-  <para>
-   The <guibutton>Editing</guibutton> option pane lets you change settings such
-   as the tab size, syntax highlighting and soft tabs on a global or
-   mode-specific basis.
-  </para>
-  <para>
-   When changing mode-specific settings,
-   the <guibutton>File name glob</guibutton> and <guibutton>First line
-   glob</guibutton> text fields let you specify a glob pattern that names and
-   first lines of buffers will be matched against to determine the edit mode.
-   See <xref linkend="globs"/> for information about glob patterns.
-  </para>
-  <para>
-   This option pane does not change XML mode definition files on disk; it
-   merely writes values to the user properties file which override those set
-   in mode files. To find out how to edit mode files directly, see
-   <xref linkend="writing-modes-part" />.
-  </para>
-  <bridgehead renderas="sect3">The Abbreviations Pane</bridgehead>
-  <para>
-   The <guibutton>Abbreviations</guibutton> option pane lets you enable or
-   disable automatic abbreviation expansion, and edit currently defined
+   The <guibutton>Abbreviations</guibutton> option pane can be used to enable or
+   disable automatic abbreviation expansion, and to edit currently defined
    abbreviations.
   </para>
   <para>
    The combo box labeled <quote>Abbrev set</quote> selects the
    abbreviation set to edit. The first entry, <quote>global</quote>, contains
    abbreviations available in all edit modes. The subsequent
-   entries contain mode-specific abbreviations.
+   entries correspond to each mode's local set of abbreviations.
   </para>
   <para>
    To change an abbreviation or its expansion, either double-click the appropriate
@@ -215,61 +164,111 @@
    See <xref linkend="positional-params" /> for information about positional
    parameters in abbreviations.
   </para>
-  <bridgehead renderas="sect3">The Shortcuts Pane</bridgehead>
+  </sect2><sect2><title>The Appearance Pane</title>
   <para>
-   The <guibutton>Shortcuts</guibutton> option pane
-   let you change keyboard shortcuts. Each command can have up to two shortcuts
+   The <guibutton>Appearance</guibutton> pane can be used to change the
+   appearance of user interface controls such as buttons, labels and menus.
+  </para>
+  </sect2><sect2><title>The Context Menu Pane</title>
+  <para>
+   The <guibutton>Context Menu</guibutton> option pane edits the text
+   area's right-click context menu.
+  </para>
+  </sect2><sect2><title>The Docking Pane</title>
+  <para>
+   The <guibutton>Docking</guibutton> option pane specifies which
+   dockable windows should be floating, and which should be docked in the view.
+  </para>
+  </sect2><sect2><title>The Editing Pane</title>
+  <para>
+   The <guibutton>Editing</guibutton> option pane contains settings such
+   as the tab size, syntax highlighting and soft tabs on a global or
+   mode-specific basis.
+  </para>
+  <para>
+   When changing mode-specific settings,
+   the <guibutton>File name glob</guibutton> and <guibutton>First line
+   glob</guibutton> text fields let you specify a glob pattern that names and
+   first lines of buffers will be matched against to determine the edit mode.
+   See <xref linkend="globs"/> for information about glob patterns.
+  </para>
+  <para>
+   This option pane does not change XML mode definition files on disk; it
+   merely writes values to the user properties file which override those set
+   in mode files. To find out how to edit mode files directly, see
+   <xref linkend="writing-modes-part" />.
+  </para>
+  </sect2><sect2><title>The General Pane</title>
+  <para>
+   The <guibutton>General</guibutton> pane contains various
+   miscellaneous settings, such as the number of recent files to remember,
+   if the buffer list should be sorted, and so on.
+  </para>
+  </sect2><sect2><title>The Gutter Pane</title>
+  <para>
+   The <guibutton>Gutter</guibutton> option pane contains settings to
+   customize the appearance of the gutter.
+  </para>
+  </sect2><sect2><title>The Loading and Saving Pane</title>
+  <para>
+   The <guibutton>Loading and Saving</guibutton> option pane contains settings
+   such as the autosave frequency, backup settings, file encoding,
+   and so on.
+  </para>
+  </sect2><sect2><title>The Printing Pane</title>
+  <para>
+   The <guibutton>Printing</guibutton> option pane contains settings to
+   control the appearance of printed output.
+  </para>
+  </sect2><sect2><title>The Proxy Servers Pane</title>
+  <para>
+   The <guibutton>Proxy Servers</guibutton> option pane lets you specify HTTP
+   and SOCKS proxy servers to use when jEdit makes network connections (for
+   example, when the plugin manager downloads plugins).
+  </para>
+  </sect2><sect2><title>The Shortcuts Pane</title>
+  <para>
+   The <guibutton>Shortcuts</guibutton> option pane associates keyboard shortcuts with commands. Each command can have up to two shortcuts
    associated with it.
   </para>
   <para>
-   The combo box at the top of the option pane selects the shortcut set
-   to edit (command, plugin or macro shortcuts).
+   The combo box at the top of the option pane selects the command set
+   to edit. Command sets include the set of all built-in commands, the commands of each plugin, and the set of macros.
   </para>
   <para>
    To change a shortcut, click the appropriate table entry and press the
    keys you want associated with that command in the resulting dialog box.
    The dialog box will warn you if the shortcut is already assigned.
   </para>
-  <bridgehead renderas="sect3">The Docking Pane</bridgehead>
+  </sect2><sect2><title>The Status Bar Pane</title>
   <para>
-   The <guibutton>Docking</guibutton> option pane lets you specify which
-   dockable windows should be floating, and which should be docked in the view.
+   The <guibutton>Status Bar</guibutton> option pane contains settings to customize the
+   status bar, or disable it completely.
   </para>
-  <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
+  </sect2><sect2><title>The Syntax Highlighting Pane</title>
   <para>
-   The <guibutton>Context Menu</guibutton> option pane lets you edit the text
-   area's right-click context menu.
+   The <guibutton>Syntax Highlighting</guibutton> pane can be used to
+   customize the fonts and colors for syntax highlighting.
   </para>
-  <bridgehead renderas="sect3">The Tool Bar Pane</bridgehead>
+  </sect2><sect2><title>The Text Area Pane</title>
+  <para>
+   The <guibutton>Text Area</guibutton> pane contains settings to customize
+   the appearance of the text area.
+  </para>
+  </sect2><sect2><title>The Tool Bar Pane</title>
   <para>
    The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
    or disable it completely.
   </para>
-  <bridgehead renderas="sect3">The Status Bar Pane</bridgehead>
-  <para>
-   The <guibutton>Status Bar</guibutton> option pane lets you customize the
-   status bar, or disable it completely.
-  </para>
-  <bridgehead renderas="sect3">The Printing Pane</bridgehead>
-  <para>
-   The <guibutton>Printing</guibutton> option pane lets you customize the
-   appearance of printed output.
-  </para>
-  <bridgehead renderas="sect3">The Proxy Servers Pane</bridgehead>
-  <para>
-   The <guibutton>Proxy Servers</guibutton> option pane lets you specify HTTP
-   and SOCKS proxy servers to use when jEdit makes network connections (for
-   example, when the plugin manager downloads plugins).
-  </para>
-  <bridgehead renderas="sect3">The File System Browser Panes</bridgehead>
+  </sect2><sect2><title>The File System Browser Panes</title>
   <para>
    The <guibutton>File System Browser</guibutton> group
    contains two option panes, <guibutton>General</guibutton> and
-   <guibutton>Colors</guibutton>. The former lets you change various file system
-   browser settings. The latter lets you customize glob patterns used for
+   <guibutton>Colors</guibutton>. The former contains various file system
+   browser settings. The latter configures glob patterns used for
    coloring the file list. See <xref linkend="vfs-browser" />
    for more information.
-  </para>
+  </para></sect2>
  </sect1>
  <sect1 id="settings-directory"><title>The jEdit Settings Directory</title>
   <para>
@@ -289,7 +288,7 @@
   </para>
   <screen>[message] jEdit: Settings directory is /home/slava/.jedit</screen>
   <para>
-   Specifying the <command>-settings</command> switch on the command line
+   Specifying the <userinput>-settings</userinput> switch on the command line
    instructs jEdit to store settings in a directory other than the default.
    For example, the following command will instruct jEdit to
    store all settings
@@ -298,7 +297,7 @@
   </para>
   <screen><prompt>C:\jedit&gt;</prompt> <userinput>jedit -settings=C:\jedit</userinput></screen>
   <para>
-   The <command>-nosettings</command> switch will force jEdit to not look for
+   The <userinput>-nosettings</userinput> switch will force jEdit to not look for
    or create a settings directory; default settings will be used instead.
   </para>
   <para>

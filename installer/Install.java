@@ -108,8 +108,8 @@ public class Install
 
 		for(;;)
 		{
-			count = in.read(buf,0,buf.length);
-			if(count == -1)
+			count = in.read(buf,0,Math.min(in.available(),buf.length));
+			if(count == -1 || count == 0)
 				break;
 
 			out.write(buf,0,count);
@@ -117,7 +117,7 @@ public class Install
 				progress.advance(count);
 		}
 
-		in.close();
+		//in.close();
 		out.close();
 	}
 

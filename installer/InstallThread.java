@@ -86,26 +86,27 @@ public class InstallThread extends Thread
 
 	private void installComponent(String name) throws IOException
 	{
-		BufferedReader fileList = new BufferedReader(
-			new InputStreamReader(getClass()
-			.getResourceAsStream(name)));
+		InputStream in = new BufferedInputStream(
+			getClass().getResourceAsStream(name + ".tar.bz2"));
+		// skip header bytes
+		// maybe should check if they're valid or not?
+		in.read();
+		in.read();
 
-		String fileName;
-		while((fileName = fileList.readLine()) != null)
+		TarInputStream tarInput = new TarInputStream(
+			new CBZip2InputStream(in));
+		TarEntry entry;
+		while((entry = tarInput.getNextEntry()) != null)
 		{
+			if(entry.isDirectory())
+				continue;
+			String fileName = entry.getName();
+			//System.err.println(fileName);
 			String outfile = installDir + File.separatorChar
 				+ fileName.replace('/',File.separatorChar);
-
-			InputStream in = new BufferedInputStream(
-				getClass().getResourceAsStream("/" + fileName));
-
-			if(in == null)
-				throw new FileNotFoundException(fileName);
-
-			installer.copy(in,outfile,progress);
-			in.close();
+			installer.copy(tarInput,outfile,progress);
 		}
 
-		fileList.close();
+		tarInput.close();
 	}
 }

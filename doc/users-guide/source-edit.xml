@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>
@@ -63,7 +63,7 @@
    jEdit makes a distinction between the <firstterm>tab width</firstterm>,
    which is is used when displaying hard tab characters, and the <firstterm>indent
    width</firstterm>, which is used when a level of indent is to be added or
-   removed, for example by mode-specific smart indent routines. Both can be
+   removed, for example by mode-specific auto indent routines. Both can be
    changed in one of several ways:
   </para>
   <itemizedlist>
@@ -120,7 +120,7 @@
    </para>
    <itemizedlist>
     <listitem><para>On a global or mode-specific basis in the
-    <guibutton>Editing</guibutton>pane of the
+    <guibutton>Editing</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
     Options</guimenuitem> dialog box.</para></listitem>
     <listitem><para>In the current buffer for
@@ -170,7 +170,7 @@
     be configured in the <guibutton>Shortcuts</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog. box, just as with any other key. The <keycap>Enter</keycap> key can be bound
-    to one of the following commands, for example:
+    to one of the following, or indeed any other command or macro:
    </para>
    <itemizedlist>
     <listitem><para><guimenuitem>Insert Newline</guimenuitem>.</para></listitem>
@@ -178,7 +178,8 @@
     is the default.</para></listitem>
    </itemizedlist>
    <para>
-    The <keycap>TAB</keycap> key can be bound to one of these commands:
+    The <keycap>Tab</keycap> can be bound to one of the following, or again,
+    any other command or macro:
    </para>
    <itemizedlist>
     <listitem><para><guimenuitem>Insert Tab</guimenuitem>.</para></listitem>
@@ -223,8 +224,9 @@
   </para>
   <para>
    Comment strings are mode-specific, and some in some modes such as HTML
-   different parts of a buffer can have different comment strings
-   (in the case of HTML, in HTML text and inline JavaScript).
+   different parts of a buffer can have different comment strings.
+   For example, in HTML files, different comment strings are used for
+   HTML text and inline JavaScript.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
@@ -301,7 +303,7 @@
    moves the caret to the next closing bracket.
   </para>
   <para>
-   Bracket highlighting for the text area and bracket scope display in the
+   Bracket highlighting in the text area and bracket scope display in the
    gutter can be customized in the
    <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
@@ -325,8 +327,10 @@
    <quote>sout</quote> followed by
    <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>.
    An abbreviation can either be global, in which case it can be used in all
-   edit modes, or specific to a single mode. Abbreviations can be edited
-   in the <guibutton>Abbreviations</guibutton> pane of the
+   edit modes, or specific to a single mode.
+  </para>
+  <para>
+   Abbreviations can be edited in the <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />. The Java, VHDL. XML and XSL edit
    modes include some pre-defined abbreviations you might find useful. Other
@@ -470,7 +474,7 @@ With text inside it.
     <keycap>Shift</keycap> while clicking.
    </para>
    <para>
-    The first line of a collapsed fold is also drawn
+    The first line of a collapsed fold is drawn
     with a different background color, and the number of lines in the
     fold is shown to the right of the line's text.
    </para>
@@ -517,7 +521,8 @@ With text inside it.
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Parent
     Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    <keycombo><keycap>Control</keycap><keycap>e</keycap></keycombo>
+    <keycap>u</keycap>) moves
     the caret to the fold containing the one at the caret position.
    </para>
    <para>
@@ -529,7 +534,7 @@ With text inside it.
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Next
     Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>) moves
     the caret to the fold immediately after the caret position.
    </para>
   </sect2>
@@ -564,9 +569,8 @@ With text inside it.
     with a fold level less than that specified, while collapsing all others.
    </para>
    <para>
-    You can have all folds with a fold level higher than that specified
-    be collapsed automatically when a buffer is loaded. This can be configured
-    as follows:
+    Sometimes it is desirable to have files open with folds initially
+    collapsed. This can be configured as follows:
    </para>
    <itemizedlist>
     <listitem><para>On a global or mode-specific
@@ -585,8 +589,8 @@ With text inside it.
    <para>
     The narrowing feature temporarily <quote>narrows</quote> the display
     of a buffer to a specified region. Text outside the region is not
-    shown, but is still present in the buffer. Both folding and
-    narrowing are implemented using the same code internally.
+    shown, but is still present in the buffer. <!-- Both folding and
+    narrowing are implemented using the same code internally. -->
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
@@ -594,10 +598,10 @@ With text inside it.
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>N</keycap> <keycap>N</keycap>) hides all lines the buffer except
     those in the fold containing the caret.
-    When this command is invoked, a message is shown in the
+    <!-- When this command is invoked, a message is shown in the
     status bar reminding you that you need to invoke
     <guimenuitem>Expand All Folds</guimenuitem> to make the rest of the buffer
-    visible again.
+    visible again. -->
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
@@ -610,7 +614,7 @@ With text inside it.
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     All Folds</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>X</keycap>) will make visible any lines hidden by narrowing.
+    <keycap>X</keycap>) shows lines that were hidden as a result of narrowing.
    </para>
   </sect2>
  </sect1>

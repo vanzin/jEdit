@@ -79,7 +79,7 @@ You may also e-mail me directly by e-mailing <slava@jedit.org>.
 
 * Libraries
 
-jEdit depends on, and comes bundled with the following libraries:
+jEdit bundles the following libraries:
 
 - gnu.regexp by the Free Software Foundation. jEdit bundles the
   gnu.regexp 1.1.5 CVS snapshot.
@@ -96,7 +96,7 @@ jEdit depends on, and comes bundled with the following libraries:
   to redistribute AElfred with your modifications, provided that the
   modifications are clearly documented."
 
-  The AElfred home page is located at <http://www.microstar.com>.
+  The AElfred web site is <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
   version 1.2b7 with the bsh.util and bsh.classpath packages removed.
@@ -104,4 +104,16 @@ jEdit depends on, and comes bundled with the following libraries:
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
 
-  The BeanShell homepage is located at <http://www.beanshell.org>.
+  The BeanShell web site is <http://www.beanshell.org>.
+
+The jEdit installer bundles the following libraries:
+
+- com.aftexsw.util.bzip originally by AftexSw <http://www.aftexsw.com>,
+  but now part of the Apache Jakarta project. The original AftexSw
+  version is bundled because it is released under a BSD-style license,
+  as opposed to the Apache license of the newer code.
+
+- com.ice.tar, by Tim Endres. This code is in the public domain.
+
+  The com.ice.tar web site is <http://www.trustice.com/java/tar/>.
+

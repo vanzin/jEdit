@@ -66,26 +66,26 @@ public class GlobalOptions extends OptionsDialog
 		// initialize the jEdit branch of the options tree
 		jEditGroup = new OptionGroup("jedit");
 
-		addOptionPane(new GeneralOptionPane(), jEditGroup);
-		addOptionPane(new AppearanceOptionPane(), jEditGroup);
-		addOptionPane(new TextAreaOptionPane(), jEditGroup);
-		addOptionPane(new GutterOptionPane(), jEditGroup);
-		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
-		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
-		addOptionPane(new EditingOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
-		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
-		addOptionPane(new DockingOptionPane(), jEditGroup);
+		addOptionPane(new AppearanceOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
-		addOptionPane(new ToolBarOptionPane(), jEditGroup);
-		addOptionPane(new StatusBarOptionPane(), jEditGroup);
+		addOptionPane(new DockingOptionPane(), jEditGroup);
+		addOptionPane(new EditingOptionPane(), jEditGroup);
+		addOptionPane(new GeneralOptionPane(), jEditGroup);
+		addOptionPane(new GutterOptionPane(), jEditGroup);
+		addOptionPane(new LoadSaveOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new FirewallOptionPane(), jEditGroup);
+		addOptionPane(new ShortcutsOptionPane(), jEditGroup);
+		addOptionPane(new StatusBarOptionPane(), jEditGroup);
+		addOptionPane(new SyntaxHiliteOptionPane(), jEditGroup);
+		addOptionPane(new TextAreaOptionPane(), jEditGroup);
+		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionGroup(jEditGroup, rootGroup);
 
 		browserGroup = new OptionGroup("browser");
-		addOptionPane(new BrowserOptionPane(), browserGroup);
 		addOptionPane(new BrowserColorsOptionPane(), browserGroup);
+		addOptionPane(new BrowserOptionPane(), browserGroup);
 		addOptionGroup(browserGroup, rootGroup);
 
 		// initialize the Plugins branch of the options tree

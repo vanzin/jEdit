@@ -1,12 +1,12 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>New</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new
-   untitled buffer.
+   <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new,
+   empty, buffer.
    Another way to create a new file is to specify a non-existent file
    name when starting jEdit on the command line.
    A new file will be created on disk when the buffer is saved
@@ -26,10 +26,6 @@
    The file system browser supports auto-completion;
    typing the first few characters of a listed file name will select the
    file.
-  </para>
-  <para>
-   Files that you do not have write access to are opened in read-only
-   mode, where editing is not permitted.
   </para>
   <para>
    More advanced features of the file system browser are described in
@@ -55,6 +51,12 @@
    Selecting a file opens it in a buffer for editing; selecting a directory
    opens it in the file system browser (see <xref linkend="vfs-browser" />).
   </para>
+  <note>
+   <para>
+    Files that you do not have write access to are opened in read-only
+    mode, where editing is not permitted.
+   </para>
+  </note>
   <tip>
    <para>
     jEdit supports transparent editing of GZipped files; if a file begins with
@@ -77,18 +79,17 @@
    saves the current buffer to disk.
   </para>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Save As</guimenuitem> saves the
-   buffer to a different specified file on disk. The buffer is then
-   renamed, and subsequent saves also save to the specified file. Note that
-   using this command to save over an already open buffer will close that
-   buffer, to avoid having two buffers open with the same path name.
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save As</guimenuitem> renames
+   the buffer and saves it in a new location. Note that
+   using this command to save over another open buffer will close the other
+   buffer, to stop two buffers from being able to share the same path name.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save a Copy As</guimenuitem> saves
-   the buffer to a different specified file on disk, but doesn't rename the
-   buffer, and doesn't clear the <quote>modified</quote> flag. Note that using
-   this command to save over an already open buffer will automatically reload
-   that buffer.
+   the buffer to different location but does not rename it., but doesn't rename the
+   buffer, and doesn't clear the <quote>modified</quote> flag. Note that
+   using this command to save over another open buffer will automatically reload
+   the other buffer.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save All</guimenuitem>
@@ -96,7 +97,7 @@
    <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) saves all
    open buffers to disk, asking for confirmation first.
   </para>
-  <sidebar><title>How files are saved</title>
+  <sidebar><title>Two-stage save</title>
    <para>
     To prevent data loss in the unlikely case that jEdit should crash in the
     middle of saving a file, files are first saved to a temporary file named
@@ -148,55 +149,70 @@
     <quote>backed up</quote> under a different file name.
    </para>
    <para>
-    The default behavior is to back up the original contents
-    to the buffer's file name suffixed with a tilde (<quote>~</quote>).
-    For example, <filename>paper.tex</filename> will be backed up to
-    <filename>paper.tex~</filename>.
+    The behavior of the backup feature is specified in the<guibutton>Loading and
+    Saving</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
    </para>
    <para>
-    The backup feature can also be configured in
-    the <guibutton>Loading and Saving</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box. It can be customized to do any of the following:
+    The default behavior is to back up the original contents
+    to the buffer's file name suffixed with a tilde (<quote>~</quote>).
+    For example, a file named <filename>paper.tex</filename> is backed up to
+    <filename>paper.tex~</filename>.
    </para>
    <itemizedlist>
     <listitem><para>
-     Save multiple, numbered backups, named
-     <filename><replaceable>filename</replaceable>~<replaceable>number</replaceable>~</filename>.
+     The <guilabel>Max number of backups</guilabel> setting determines the
+     number of backups to save. Setting this to zero disables the backup
+     feature. Settings this to more than one adds numbered suffixes to file
+     names. By default only one backup is saved.
+    </para>
+    </listitem>
+    <listitem><para>
+     If the <guilabel>Backup directory</guilabel> setting is non-empty, backups
+     are saved in that location. Otherwise, they are saved in the same directory
+     as the original file. The latter is the default behavior.
+    </para>
+    </listitem>
+    <listitem><para>
+     The <guilabel>Backup filename prefix</guilabel> setting is the prefix that
+     is added to the backed-up file name. This is empty by default.
     </para></listitem>
     <listitem><para>
-     Add a prefix to the backed-up file name.
-    </para></listitem>
-    <listitem><para>
-     Adds a suffix to the backed-up file name (the default is <quote>~</quote>).
+     The <guilabel>Backup filename suffix</guilabel> setting is the suffix that
+     is added to the backed-up file name. This is <quote>~</quote> by default.
     </para></listitem>
     <listitem><para>
      Backups can optionally be saved in a specified backup directory, instead of
      the directory of the original file. This can reduce clutter.
     </para></listitem>
     <listitem><para>
-     Backups can also optionally be created every time a buffer is saved;
-     the default is to only create a backup the first
-     time a buffer is saved after being opened.
+     The <guilabel>Backup on every save</guilabel> option is off by default,
+     which results in a backup only being created the first time a buffer is
+     saved in an editing session. If switched on, backups are
+     created every time a buffer is saved.
     </para></listitem>
    </itemizedlist>
   </sect2>
  </sect1>
  <sect1 id="line-separators"><title>Line Separators</title>
   <para>
-   The three major operating systems use different conventions to mark
-   line endings in text files.
-   The MacOS uses Carriage-Return characters (<literal>\r</literal> in
-   Java-speak) for that purpose. Unix
-   uses Newline characters (<literal>\n</literal>). Windows uses both
+   Unix systems use newlines (<literal>\n</literal>) to mark line endings in
+   text files. The MacOS uses carriage-returns (<literal>\r</literal>).
+   Windows uses a carriage-return followed by a newline
    (<literal>\r\n</literal>). jEdit can read and write files in all three formats.
   </para>
   <para>
-   When a file is loaded, the line separator is automatically
-   detected, and is used when saving the file back to disk. The line
-   separator used in the current buffer can be changed in the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-   Options</guimenuitem> dialog box; see <xref linkend="buffer-opts" />.
+   The line separator used by the in-memory representation of file
+   contents is always the newline character.
+   When a file is being loaded, the line separator used in the file on disk
+   is stored in a per-buffer property, and all line-endings are converted to
+   newline characters for the in-memory representation.
+   When the buffer is consequently saved, the value of the property replaces
+   newline characters when the buffer is saved to disk.
+   The line separator used by a buffer can be changed in
+   the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box. See <xref linkend="buffer-opts" />.
   </para>
   <para>
    By default, new files are saved with your operating system's native line
@@ -310,16 +326,6 @@
   </para>
   <sect2><title>Navigating the File System</title>
    <para>
-    To browse a listed directory, double-click it (or if you have a three-button
-    mouse, you can click the middle mouse button as well). Alternatively, click
-    the disclosure
-    widget next to a directory to list its contents in place.
-   </para>
-   <para>
-    To browse higher up in the directory hierarchy, double-click one of the parent
-    directories in the parent directory list.
-   </para>
-   <para>
     The directory to browse is specified in the <guibutton>Path</guibutton> text
     field. Clicking the mouse in the text field automatically selects its
     contents allowing a new path to be quickly typed in. If a relative path is
@@ -328,6 +334,16 @@
     The same list of previously browsed directories is also listed in the
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Recent Directories</guisubmenu>
     menu; selecting one opens it in the file system browser.
+   </para>
+   <para>
+    To browse a listed directory, double-click it (or if you have a three-button
+    mouse, you can click the middle mouse button as well). Alternatively, click
+    the disclosure
+    widget next to a directory to list its contents in place.
+   </para>
+   <para>
+    To browse higher up in the directory hierarchy, double-click one of the parent
+    directories in the parent directory list.
    </para>
    <para>
     Files and directories in the file list are shown in different colors
@@ -342,10 +358,10 @@
     To see a specific set of files only (for example,
     those whose names end with <filename>.java</filename>), enter a glob pattern
     in the <guibutton>Filter</guibutton> text field.
+    This text fields remembers previously entered strings.
    </para>
    <para>
     See <xref linkend="globs" /> for information about glob patterns.
-    This text fields remembers previously entered strings.
    </para>
    <para>
     Unopened files can be opened by double-clicking (or by
@@ -394,10 +410,10 @@
     lists all mounted drives and network shares.</para></listitem>
     <listitem><para><guimenuitem>Home Directory</guimenuitem> - displays your
     home directory.</para></listitem>
-    <listitem><para><guimenuitem>Directory of Current Buffer - displays the
-    directory containing the currently active buffer.</guimenuitem></para></listitem>
-    <listitem><para><guimenuitem>New File</guimenuitem> - opens an
-    <filename>Untitled</filename> file in the current directory. The file will
+    <listitem><para><guimenuitem>Directory of Current Buffer</guimenuitem> - displays the
+    directory containing the currently active buffer.</para></listitem>
+    <listitem><para><guimenuitem>New File</guimenuitem> - opens new, empty,
+    buffer in the current directory. The file will
     not actually be created on disk until the buffer is saved.</para></listitem>
     <listitem><para><guimenuitem>New Directory</guimenuitem> - creates a new
     directory after prompting for the desired name.</para></listitem>
@@ -431,8 +447,8 @@
     <guimenuitem>Add to Favorites</guimenuitem> from this menu. To remove
     a directory from the favorites, invoke
     <guimenuitem>Edit Favorites</guimenuitem>, which will show the favorites
-    list in the file system view, then right-click on the directory in the list
-    and invoke <guimenuitem>Delete</guimenuitem> from the resulting popup menu.
+    list in the file system view; then select <guimenuitem>Delete</guimenuitem>
+    from the appropriate directory's right-click menu.
    </para>
   </sect2>
   <sect2><title>Keyboard Shortcuts</title>
@@ -463,9 +479,9 @@
     </para></listitem>
    </itemizedlist>
    <para>
-    The file system view, and not the <guibutton>Path</guibutton> or
-    <guibutton>Filter</guibutton> text fields must have keyboard focus for these
-    shortcuts to work.
+    The file system tree must have keyboard focus for these
+    shortcuts to work. They are not active in the <guibutton>Path</guibutton> or
+    <guibutton>Filter</guibutton> text fields.
    </para>
   </sect2>
  </sect1>
@@ -473,8 +489,8 @@
   <para>
    If an open buffer is modified on disk by another application, a warning
    dialog box is displayed, offering to either continue editing
-   (and lose changes made by the other application)
-   or reload the buffer from disk (and lose any unsaved changes made in jEdit).
+   and lose changes made by the other application,
+   or to reload the buffer from disk and lose any unsaved changes made in jEdit.
    This warning dialog box can be disabled in the <guibutton>General</guibutton>
    pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>

@@ -77,7 +77,7 @@
           This option can also be triggered by selecting <guilabel>Set
           jEdit Parameters</guilabel> from the <guilabel>jEdit</guilabel>
           section of the Windows Programs menu, or by running the utility program
-          <filename>jedinit.exe</filename>
+          <command>jedinit.exe</command>
         </para>
 
         <para>
@@ -128,8 +128,8 @@
           <application>jEditLauncher</application>,
           platform-independent command line options
           handled by jEdit itself (such as
-          <command>-background</command> and
-          <command>-norestore</command>) must be entered in the
+          <userinput>-background</userinput> and
+          <userinput>-norestore</userinput>) must be entered in the
           <quote>Set jEdit Parameters</quote> dialog box, and cannot be
           specified on the <command>jedit.exe</command> command line
           directly. For information about platform-independent command

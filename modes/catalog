@@ -170,7 +170,7 @@
 				FILE_NAME_GLOB="*.x{om,in}" />
 
 <MODE NAME="pascal"		FILE="pascal.xml"
-				FILE_NAME_GLOB="*.{pas,inc,dpr,dpk}" />
+				FILE_NAME_GLOB="*.{pas,dpr,dpk}" />
 
 <MODE NAME="patch"		FILE="patch.xml"
 				FILE_NAME_GLOB="*.{diff,patch}" />
@@ -180,7 +180,7 @@
 				FIRST_LINE_GLOB="#!/*perl*" />
 
 <MODE NAME="php"		FILE="php.xml"
-				FILE_NAME_GLOB="*.{php3,php4,php,phtml}"
+				FILE_NAME_GLOB="*.{php3,php4,php,phtml,inc}"
 				FIRST_LINE_GLOB="&lt;?php" />
 
 <MODE NAME="pike"		FILE="pike.xml"

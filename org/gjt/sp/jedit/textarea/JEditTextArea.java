@@ -1005,6 +1005,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateScreenLineRange(int start, int end)
 	{
+		//if(start != end)
+		//	System.err.println(start + ":" + end + ":" + chunkCache.needFullRepaint());
 		if(chunkCache.needFullRepaint())
 		{
 			recalculateLastPhysicalLine();
@@ -1746,7 +1748,7 @@ forward_scan:		do
 		fireCaretEvent();
 	} //}}}
 
-	//{{{ removeFromSelection() method
+	/* //{{{ removeFromSelection() method
 	/**
 	 * Deactivates the selection at the specified offset. If there is
 	 * no selection at that offset, does nothing.
@@ -1766,7 +1768,7 @@ forward_scan:		do
 		invalidateLine(caretLine);
 
 		fireCaretEvent();
-	} //}}}
+	} //}}} */
 
 	//{{{ resizeSelection() method
 	/**
@@ -3521,7 +3523,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			end--;
 		}
 		int x = offsetToX(caretLine,caret - start);
-		buffer.remove(start,end - start);
+
+		// otherwise a bunch of consecutive C+d's would be merged
+		// into one edit
+		try
+		{
+			buffer.beginCompoundEdit();
+			buffer.remove(start,end - start);
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
 
 		int lastLine = buffer.getLineCount() - 1;
 		if(caretLine == lastLine)

@@ -1363,6 +1363,9 @@ options.overview.label=Overview
 options.jedit.label=jEdit
 options.plugins.label=Plugins
 
+# Option pane to show by default
+options.last=editing
+
 #{{{ General pane
 options.general.label=General
 options.general.history=History entries to remember:

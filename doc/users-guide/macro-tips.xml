@@ -529,7 +529,7 @@ view.getInputHandler().readNextChar("Enter a character",
     jEdit will show an error dialog box and move on to the next
     startup script. If script bugs are causing jEdit to crash or
     hang on startup, you can use the
-    <command>-nostartupscripts</command> command line option to
+    <userinput>-nostartupscripts</userinput> command line option to
     disable them for that editing session.
   </para>
 
@@ -579,7 +579,7 @@ view.getInputHandler().readNextChar("Enter a character",
 Line</title>
 
 <para>
-  The <command>-run</command> command line switch specifies a BeanShell
+  The <userinput>-run</userinput> command line switch specifies a BeanShell
   script to run on startup:
 </para>
 
