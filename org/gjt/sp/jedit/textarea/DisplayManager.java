@@ -1733,8 +1733,6 @@ loop:		for(;;)
 
 			if(textArea.getDisplayManager() == DisplayManager.this)
 			{
-				int endLine = startLine + numLines;
-
 				//{{{ resize selections if necessary
 				for(int i = 0; i < textArea.selection.size(); i++)
 				{

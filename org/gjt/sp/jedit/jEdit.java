@@ -3597,11 +3597,6 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		synchronized(bufferListLock)
 		{
-			boolean caseInsensitiveFilesystem =
-				OperatingSystem.isDOSDerived()
-				|| OperatingSystem.isMacOS();
-			String path = buffer.getPath();
-
 			String symlinkPath = buffer.getSymlinkPath();
 			if((VFSManager.getVFSForPath(symlinkPath).getCapabilities()
 				& VFS.CASE_INSENSITIVE_CAP) != 0)

@@ -122,8 +122,6 @@ class PluginManagerProgress extends JDialog
 	//{{{ Instance variables
 	private Thread thread;
 
-	private String type;
-
 	private JProgressBar progress;
 	private JButton stop;
 	private int count;

@@ -89,8 +89,6 @@ public class ParserRule
 	public static final ParserRule createSequenceRule(
 		int posMatch, String seq, ParserRuleSet delegate, byte id)
 	{
-		int ruleAction = SEQ;
-
 		return new ParserRule(SEQ, seq.charAt(0),
 			posMatch, seq.toCharArray(), null,
 			0, null, delegate, id);

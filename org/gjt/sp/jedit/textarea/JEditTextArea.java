@@ -763,7 +763,6 @@ public class JEditTextArea extends JComponent
 		}
 
 		//{{{ Scroll vertically
-		int firstLine = getFirstLine();
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
@@ -6612,10 +6611,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				doSingleClick(evt);
 				break;
 			case 2:
-				doDoubleClick(evt);
+				doDoubleClick();
 				break;
 			default: //case 3:
-				doTripleClick(evt);
+				doTripleClick();
 				break;
 			}
 		} //}}}
@@ -6702,7 +6701,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 
 		//{{{ doDoubleClick() method
-		private void doDoubleClick(MouseEvent evt)
+		private void doDoubleClick()
 		{
 			// Ignore empty lines
 			if(getLineLength(dragStartLine) == 0)
@@ -6738,7 +6737,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 
 		//{{{ doTripleClick() method
-		private void doTripleClick(MouseEvent evt)
+		private void doTripleClick()
 		{
 			int newCaret = getLineEndOffset(dragStartLine);
 			if(dragStartLine == buffer.getLineCount() - 1)

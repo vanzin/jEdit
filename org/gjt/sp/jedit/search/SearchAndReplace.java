@@ -771,7 +771,7 @@ loop:			for(;;)
 
 			int retVal = 0;
 
-			retVal += _replace(view,buffer,matcher,start,end,
+			retVal += _replace(buffer,matcher,start,end,
 				smartCaseReplace);
 
 			if(retVal != 0)
@@ -860,7 +860,7 @@ loop:			while(path != null)
 				try
 				{
 					buffer.beginCompoundEdit();
-					retVal = _replace(view,buffer,matcher,
+					retVal = _replace(buffer,matcher,
 						0,buffer.getLength(),
 						smartCaseReplace);
 				}
@@ -1047,7 +1047,7 @@ loop:			while(path != null)
 
 		if(s instanceof Selection.Range)
 		{
-			returnValue = _replace(view,buffer,matcher,
+			returnValue = _replace(buffer,matcher,
 				s.getStart(),s.getEnd(),
 				smartCaseReplace);
 
@@ -1066,8 +1066,7 @@ loop:			while(path != null)
 			returnValue = 0;
 			for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
 			{
-				returnValue += _replace(view,buffer,
-					matcher,
+				returnValue += _replace(buffer,matcher,
 					getColumnOnOtherLine(buffer,j,startCol),
 					getColumnOnOtherLine(buffer,j,endCol),
 					smartCaseReplace);
@@ -1085,7 +1084,6 @@ loop:			while(path != null)
 	/**
 	 * Replaces all occurances of the search string with the replacement
 	 * string.
-	 * @param view The view
 	 * @param buffer The buffer
 	 * @param start The start offset
 	 * @param end The end offset
@@ -1093,7 +1091,7 @@ loop:			while(path != null)
 	 * @param smartCaseReplace See user's guide
 	 * @return The number of occurrences replaced
 	 */
-	private static int _replace(View view, Buffer buffer,
+	private static int _replace(Buffer buffer,
 		SearchMatcher matcher, int start, int end,
 		boolean smartCaseReplace)
 		throws Exception
@@ -1179,22 +1177,22 @@ loop:		for(int counter = 0; ; counter++)
 		if(regexp)
 		{
 			if(replaceMethod != null)
-				return regexpBeanShellReplace(occur,found);
+				return regexpBeanShellReplace(occur);
 			else
 				return regexpReplace(occur,found);
 		}
 		else
 		{
 			if(replaceMethod != null)
-				return literalBeanShellReplace(occur,found);
+				return literalBeanShellReplace(found);
 			else
 				return replace;
 		}
 	} //}}}
 
 	//{{{ regexpBeanShellReplace() method
-	private static String regexpBeanShellReplace(SearchMatcher.Match occur,
-		String found) throws Exception
+	private static String regexpBeanShellReplace(SearchMatcher.Match occur)
+		throws Exception
 	{
 		for(int i = 0; i < occur.substitutions.length; i++)
 		{
@@ -1278,8 +1276,8 @@ loop:		for(int counter = 0; ; counter++)
 	} //}}}
 
 	//{{{ literalBeanShellReplace() method
-	private static String literalBeanShellReplace(SearchMatcher.Match occur,
-		String found) throws Exception
+	private static String literalBeanShellReplace(String found)
+		throws Exception
 	{
 		replaceNS.setVariable("_0",found);
 		Object obj = BeanShell.runCachedBlock(

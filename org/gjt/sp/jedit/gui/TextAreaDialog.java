@@ -38,7 +38,7 @@ public class TextAreaDialog extends EnhancedDialog
 	{
 		super(frame,title,true);
 
-		init(title,caption,icon,text);
+		init(caption,icon,text);
 	} //}}}
 
 	//{{{ TextAreaDialog constructor
@@ -56,7 +56,7 @@ public class TextAreaDialog extends EnhancedDialog
 	{
 		super(frame,title,true);
 
-		init(title,caption,icon,text);
+		init(caption,icon,text);
 	} //}}}
 
 	//{{{ TextAreaDialog constructor
@@ -69,7 +69,7 @@ public class TextAreaDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ init() method
-	private void init(String title, String caption,
+	private void init(String caption,
 		Icon icon, String text)
 	{
 		JPanel content = new JPanel(new BorderLayout(12,12));

@@ -378,10 +378,7 @@ public class Java14
 					return false;
 				/* if user drops into a selection,
 				replace selection */
-				int start = s.getStart();
 				textArea.setSelectedText(s,str);
-				/* textArea.setSelection(new Selection.Range(
-					start,start + str.length())); */
 			}
 			/* otherwise just insert the text */
 			else

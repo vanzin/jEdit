@@ -144,7 +144,6 @@ public class KeyEventTranslator
 					| InputEvent.ALT_GRAPH_MASK);
 			}
 
-			boolean mod;
 			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
 				&& evt.getWhen()
 				-  KeyEventWorkaround.lastKeyTime < 750

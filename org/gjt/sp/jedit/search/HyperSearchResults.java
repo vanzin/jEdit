@@ -483,7 +483,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean hasFocus)
 		{
-			Component comp = super.getTreeCellRendererComponent(tree,value,sel,
+			super.getTreeCellRendererComponent(tree,value,sel,
 				expanded,leaf,row,hasFocus);
 			setIcon(null);
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
