@@ -76,7 +76,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
 		panel.setBorder(new EmptyBorder(12,0,0,0));
 
-		filenameField = new VFSFileNameField(browser);
+		filenameField = new VFSFileNameField(browser,null);
 		filenameField.setText(name);
 		filenameField.selectAll();
 		Box box = new Box(BoxLayout.Y_AXIS);
