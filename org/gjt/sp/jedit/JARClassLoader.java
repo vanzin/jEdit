@@ -206,7 +206,10 @@ public class JARClassLoader extends ClassLoader
 	//{{{ toString() method
 	public String toString()
 	{
-		return jar.getPath() + " (" + id + ")";
+		if(jar == null)
+			return "<anonymous>(" + id + ")";
+		else
+			return jar.getPath() + " (" + id + ")";
 	} //}}}
 
 	//{{{ finalize() method
