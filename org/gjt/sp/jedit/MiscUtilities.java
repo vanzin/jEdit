@@ -86,6 +86,8 @@ public class MiscUtilities
 			path = path.substring("file://".length());
 		else if(path.startsWith("file:"))
 			path = path.substring("file:".length());
+		else if(isURL(path))
+			return path;
 
 		if(File.separatorChar == '\\')
 		{
@@ -128,7 +130,7 @@ public class MiscUtilities
 		}
 	} //}}}
 
-	//{{{ isPathAbsolute() method
+	//{{{ isAbsolutePath() method
 	/**
 	 * Returns if the specified path name is an absolute path or URL.
 	 * @since jEdit 4.1pre11
@@ -136,6 +138,8 @@ public class MiscUtilities
 	public static boolean isAbsolutePath(String path)
 	{
 		if(isURL(path))
+			return true;
+		else if(path.startsWith("~/") || path.startsWith("~" + File.separator))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
 		{
@@ -167,33 +171,48 @@ public class MiscUtilities
 	public static String constructPath(String parent, String path)
 	{
 		if(isAbsolutePath(path))
-			return path;
-		else
+			return canonPath(path);
+
+		// have to handle this case specially on windows.
+		// insert \ between, eg A: and myfile.txt.
+		if(OperatingSystem.isDOSDerived())
 		{
-			// have to handle this case specially on windows.
-			// insert \ between, eg A: and myfile.txt.
-			if(OperatingSystem.isDOSDerived())
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return path;
+			else if(path.length() > 2 && path.charAt(1) == ':'
+				&& path.charAt(2) != '\\')
 			{
-				if(path.length() == 2 && path.charAt(1) == ':')
-					return path;
-				else if(path.length() > 2 && path.charAt(1) == ':'
-					&& path.charAt(2) != '\\')
-				{
-					path = path.substring(0,2) + '\\'
-						+ path.substring(2);
-					return path;
-				}
+				path = path.substring(0,2) + '\\'
+					+ path.substring(2);
+				return canonPath(path);
 			}
 		}
 
+		String dd = ".." + File.separator;
+		String d = "." + File.separator;
+
 		if(parent == null)
 			parent = System.getProperty("user.dir");
+
+		for(;;)
+		{
+			if(path.startsWith(dd) || path.startsWith("../"))
+			{
+				parent = getParentOfPath(parent);
+				path = path.substring(3);
+			}
+			else if(path.startsWith(d))
+				path = path.substring(1);
+			else
+				break;
+		}
 
 		if(OperatingSystem.isDOSDerived() && path.startsWith("\\"))
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
-		return vfs.constructPath(parent,path);
+
+		return canonPath(vfs.constructPath(parent,path));
 	} //}}}
 
 	//{{{ constructPath() method
