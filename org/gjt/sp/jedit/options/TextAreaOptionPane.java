@@ -158,7 +158,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 		/* Strip trailing EOL */
 		stripTrailingEOL = new JCheckBox(jEdit.getProperty(
-			"options.general.stripTrailingEOL"));
+			"options.textArea.stripTrailingEOL"));
 		stripTrailingEOL.setSelected(jEdit.getBooleanProperty("stripTrailingEOL"));
 		addComponent(stripTrailingEOL);
 

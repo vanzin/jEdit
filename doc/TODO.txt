@@ -3,6 +3,12 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- vfs: a way of running awt requests not all at end
+- CA+PLUS +: bad
+- quicknotepad NPEs
+
+- word wrap at wrong place
+
 goToBuffer() and 0-height edit panes
 check tips of the day
 - document optional dependencies
