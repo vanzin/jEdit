@@ -57,19 +57,15 @@ public class TextUtilities
 		if(offset == 0 && tokens.id == Token.END)
 			return tokens;
 
-		int tokenListOffset = 0;
 		for(;;)
 		{
 			if(tokens.id == Token.END)
 				throw new ArrayIndexOutOfBoundsException("offset > line length");
 
-			if(tokenListOffset + tokens.length > offset)
+			if(tokens.offset + tokens.length > offset)
 				return tokens;
 			else
-			{
-				tokenListOffset += tokens.length;
 				tokens = tokens.next;
-			}
 		}
 	} //}}}
 
@@ -136,7 +132,7 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenHandler.reset();
+							tokenHandler.init();
 							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
@@ -147,7 +143,7 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenHandler.reset();
+							tokenHandler.init();
 							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
@@ -184,7 +180,7 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenHandler.reset();
+							tokenHandler.init();
 							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
@@ -195,7 +191,7 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenHandler.reset();
+							tokenHandler.init();
 							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}

@@ -25,9 +25,6 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import javax.swing.text.*;
-import java.awt.font.*;
-import java.awt.geom.*;
-import java.awt.*;
 import java.util.ArrayList;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
@@ -51,6 +48,7 @@ class ChunkCache
 		this.textArea = textArea;
 		out = new ArrayList();
 		noWrap = new NoWrapTokenHandler();
+		softWrap = new SoftWrapTokenHandler();
 	} //}}}
 
 	//{{{ getMaxHorizontalScrollWidth() method
@@ -223,11 +221,18 @@ class ChunkCache
 	//{{{ lineToChunkList() method
 	void lineToChunkList(int physicalLine, ArrayList out)
 	{
-		/* if(textArea.softWrap)
+		if(textArea.softWrap)
 		{
-			
+			TextAreaPainter painter = textArea.getPainter();
+			Buffer buffer = textArea.getBuffer();
+
+			buffer.getLineText(physicalLine,textArea.lineSegment);
+			softWrap.init(textArea.lineSegment,painter.getStyles(),
+				painter.getFontRenderContext(),
+				painter,out,textArea.wrapMargin);
+			buffer.markTokens(physicalLine,softWrap);
 		}
-		else */
+		else
 		{
 			Chunk chunks = lineToChunkList(physicalLine);
 			if(chunks != null)
@@ -243,8 +248,8 @@ class ChunkCache
 
 		buffer.getLineText(physicalLine,textArea.lineSegment);
 		noWrap.init(textArea.lineSegment,painter.getStyles(),
-				painter.getFontRenderContext(),
-				painter);
+			painter.getFontRenderContext(),
+			painter);
 		buffer.markTokens(physicalLine,noWrap);
 		return noWrap.getChunks();
 	} //}}}
@@ -500,6 +505,7 @@ class ChunkCache
 	private boolean needFullRepaint;
 
 	private NoWrapTokenHandler noWrap;
+	private SoftWrapTokenHandler softWrap;
 	//}}}
 
 	//{{{ LineInfo class

@@ -544,6 +544,10 @@ public class BrowserView extends JPanel
 					return;
 				}
 
+				// hack...
+				if(evt.isShiftDown() && evt.getKeyChar() == '\n')
+					return;
+
 				switch(evt.getKeyChar())
 				{
 				case '~':

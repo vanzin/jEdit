@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import javax.swing.text.*;
@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-class NoWrapTokenHandler extends DisplayTokenHandler
+public class NoWrapTokenHandler extends DisplayTokenHandler
 {
 	//{{{ getChunks() method
 	/**
@@ -40,23 +40,6 @@ class NoWrapTokenHandler extends DisplayTokenHandler
 	 */
 	public Chunk getChunks()
 	{
-		return firstChunk;
-	} //}}}
-
-	//{{{ handleToken() method
-	/**
-	 * Called by the token marker when a syntax token has been parsed.
-	 * @param length The number of characters in the token
-	 * @param id The token type (one of the constants in the
-	 * <code>Token</code> class).
-	 * @param context The line context
-	 * @since jEdit 4.1pre1
-	 */
-	public void handleToken(int length, byte id, TokenMarker.LineContext context)
-	{
-		byte defaultID = context.rules.getDefault();
-		Chunk chunk = createChunk(length,id,defaultID);
-		if(chunk != null)
-			addChunk(chunk,defaultID);
+		return (Chunk)firstToken;
 	} //}}}
 }

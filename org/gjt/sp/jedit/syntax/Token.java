@@ -96,25 +96,24 @@ public class Token
 
 	//{{{ Instance variables
 	/**
-	 * The length of this token.
-	 */
-	public int length;
-
-	/**
 	 * The id of this token.
 	 */
 	public byte id;
 
 	/**
+	 * The start offset of this token.
+	 */
+	public int offset;
+
+	/**
+	 * The length of this token.
+	 */
+	public int length;
+
+	/**
 	 * The rule set of this token.
 	 */
 	public ParserRuleSet rules;
-
-	/**
-	 * The previous token in the linked list.
-	 * @since jEdit 2.6pre1
-	 */
-	public Token prev;
 
 	/**
 	 * The next token in the linked list.
@@ -125,14 +124,16 @@ public class Token
 	//{{{ Token constructor
 	/**
 	 * Creates a new token.
-	 * @param length The length of the token
 	 * @param id The id of the token
+	 * @param offset The start offset of the token
+	 * @param length The length of the token
 	 * @param rules The parser rule set that generated this token
 	 */
-	public Token(int length, byte id, ParserRuleSet rules)
+	public Token(byte id, int offset, int length, ParserRuleSet rules)
 	{
-		this.length = length;
 		this.id = id;
+		this.offset = offset;
+		this.length = length;
 		this.rules = rules;
 	} //}}}
 
@@ -142,6 +143,6 @@ public class Token
 	 */
 	public String toString()
 	{
-		return "[id=" + id + ",length=" + length + "]";
+		return "[id=" + id + ",offset=" + offset + ",length=" + length + "]";
 	} //}}}
 }

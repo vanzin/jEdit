@@ -27,14 +27,14 @@
 package org.gjt.sp.jedit.print;
 
 //{{{ Imports
-import javax.swing.text.*;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.Chunk;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -42,8 +42,8 @@ import org.gjt.sp.util.Log;
 class BufferPrintable implements Printable
 {
 	//{{{ BufferPrintable constructor
-	BufferPrintable(org.gjt.sp.jedit.View view, Buffer buffer, Font font, boolean header, boolean footer,
-	                boolean lineNumbers, boolean color)
+	BufferPrintable(View view, Buffer buffer, Font font, boolean header,
+		boolean footer, boolean lineNumbers, boolean color)
 	{
 		this.view = view;
 		this.buffer = buffer;
@@ -65,8 +65,8 @@ class BufferPrintable implements Printable
 	} //}}}
 
 	//{{{ print() method
-	public int print(Graphics _gfx, PageFormat pageFormat,int pageIndex)
-	throws PrinterException
+	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
+		throws PrinterException
 	{
 
 		//{{{ get/calculate all the printing constants
@@ -185,9 +185,11 @@ class BufferPrintable implements Printable
 	}//}}}
 
 	//{{{ renderPage() method
-	private int renderPage(int pageIndex,Graphics2D gfx,FontRenderContext frc,
-	                       boolean justCounting,int linesPerPage,double pageWidth,double lineNumberWidth,
-	                       PrintTabExpander e,double pageX,double pageY)
+	private int renderPage(int pageIndex, Graphics2D gfx,
+		FontRenderContext frc, boolean justCounting,
+		int linesPerPage, double pageWidth,
+		double lineNumberWidth, PrintTabExpander e,
+		double pageX, double pageY)
 	{
 		Segment seg = new Segment();
 		double y = 0.0;
@@ -204,20 +206,19 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 			//{{{ get line text
 			if(lineList.size()==0)
 			{
-				/* buffer.getLineText(currentPhysicalLine,seg);
+				buffer.getLineText(currentPhysicalLine,seg);
 				lm = font.getLineMetrics(seg.array,
-				                         seg.offset,seg.count,frc);
+					seg.offset,seg.count,frc);
 
-				Token tokens = buffer.markTokens(currentPhysicalLine)
-				               .getFirstToken();
+				softWrap.init(seg,styles,frc,e,lineList,
+					(float)(pageWidth - lineNumberWidth));
+
+				buffer.markTokens(currentPhysicalLine,softWrap);
 
 				lineList.add(new Integer(++currentPhysicalLine));
 
-				ChunkCache.lineToChunkList(seg,tokens,styles,frc,
-				                           e,(float)(pageWidth - lineNumberWidth),
-				                           lineList);
 				if(lineList.size() == 1)
-					lineList.add(null); */
+					lineList.add(null);
 			} //}}}
 			y += lm.getHeight();
 			Object obj = lineList.get(0);
@@ -292,6 +293,8 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 	private ArrayList LastPagelineList;
 
 	private boolean glyphVector;
+
+	private SoftWrapTokenHandler softWrap;
 	//}}}
 
 	//{{{ paintHeader() method
