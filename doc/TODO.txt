@@ -18,6 +18,7 @@ and quirks that I need to fix eventually.
   - eval-for-selected-lines doesn't work with rectangular selection
   - rect select aware user input
   - creating selections with virtual start/end with mouse
+  - document in change log
 - don't repaint whole selection when resizing
 - fix print spacing problem
 - fix tom's bugs

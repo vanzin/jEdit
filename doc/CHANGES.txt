@@ -6,7 +6,7 @@ Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,
 Joseph Schroer, Kris Kopicki, Steve Snider and Thomas Dilts for
 contributing to this release.
 
-+ Miscellaneous Changes:
++ Editing Changes:
 
 - Fixed auto-indent behavior when entering constructs like:
   if(foo)
@@ -15,16 +15,6 @@ contributing to this release.
   in Java/C/C++/etc modes. Previously the 'baz();' would get an
   unnecessary level of indent, requiring it to be removed manually.
   (Alexander Maryanovsky)
-
-- WheelMouse plugin integrated into core -- no need to install a
-  separate plugin to get wheel mouse scrolling under Java 2 version 1.4.
-
-- Added SOCKS proxy support. This option will help people trapped behind
-  a Microsoft Proxy Server configured to use NTLM authentication.
-  Normal HTTP connections through the proxy would not be possible since
-  Java does not implement this proprietary protocol; however a little
-  known fact is that MS Proxy Server also usually runs a SOCKS service
-  that does not require a password. (Alfonso Garcia)
 
 - Added an option to the 'Text Area' pane to implement "standard"
   previous/next word behavior, like that in a lot of other programs
@@ -41,33 +31,24 @@ contributing to this release.
   C+INSERT bound to copy
   S+INSERT bound to paste
 
-- Optimized the buffer line management code; this should make 'Replace
-  All' and similar edit-intensive tasks much faster.
+- Optimized the several parts of the buffer code; this should make
+ 'Replace All' and similar edit-intensive tasks much faster.
 
-- BeanShell 1.2b6 included. Changes since 1.2b5 are:
++ Search and Replace Changes:
 
-  - Made bsh.Parser public and added a main() method allowing users to
-    call the parser on files for simple validity checking.
-  - Made a small addition to grammar to provide an option to retain
-    formal (javadoc style) comments in the parse tree.
-  - Fixed accessibility bug in finding fields.
-  - Fixed scoping on catch blocks such that untyped variables in the
-    catch parameter do not leak out of the block. They now act as they
-    would with a declared type in Java (local).
-  - Fixed some thread safety bugs with try/catch blocks.
-  - Fixed Interpreter serialization issue - reset streams.
-  - Fixed bug in accessibility affecting access to package hidden
-    superclasses.
-  - Exposed bsh.BshMethod and added a public invoke() method.
-  - Added getMethods() method to namespace to enumerate methods.
+- HyperSearch now respects rectangular selections. 'Replace All' already
+  supported rectangular selections.
 
-  The fact that BshMethod is now public has facilitated optimizations
-  which improve performance of BeanShell search and replace.
+- Directory search is now VFS-aware; however it shows a confirm dialog
+  before doing a search on a remote filesystem. If your VFS is not
+  affected by network latency, you can have the getCapabilities() method
+  return the new LOW_LATENCY_CAP capability.
 
-- Updated printing code (Thomas Dilts)
-  - Uses Java 2 version 1.4 print dialogs when running on that Java
-    version
-  - Performs printing in a background thread
+- Search bar no longer takes up the full width of the view. This saves
+  some screen space.
+
+- Clicking 'Cancel' or closing the search and replace dialog box no
+  longer shows warnings about empty filesets, etc.
 
 + Syntax Highlighting Changes:
 
@@ -119,22 +100,6 @@ contributing to this release.
 - Improved loading time of plain text files if 'more accurate syntax
   highlighting' is on.
 
-+ Search and Replace Changes:
-
-- HyperSearch now respects rectangular selections. 'Replace All' already
-  supported rectangular selections.
-
-- Directory search is now VFS-aware; however it shows a confirm dialog
-  before doing a search on a remote filesystem. If your VFS is not
-  affected by network latency, you can have the getCapabilities() method
-  return the new LOW_LATENCY_CAP capability.
-
-- Search bar no longer takes up the full width of the view. This saves
-  some screen space.
-
-- Clicking 'Cancel' or closing the search and replace dialog box no
-  longer shows warnings about empty filesets, etc.
-
 + User Interface Changes:
 
 - Status bar looks somewhat different now, and shows the word wrap mode
@@ -158,7 +123,8 @@ contributing to this release.
   lists directories; selecting a directory menu item opens it in the
   file system browser.
 
-- Moved BeanShell evaluation commands from 'Utilities' to 'Macros' menu.
+- Moved BeanShell evaluation commands from 'Utilities' to 'Macros' menu,
+  rearranged 'Edit' menu.
 
 - New splash screen, about box, and tool bar icons. (Kris Kopicki)
 
@@ -182,6 +148,43 @@ contributing to this release.
 
 - On Unix, the installer now defaults to installing in the user's home
   directory when running as a non-root user.
+
++ Miscellaneous Changes:
+
+- WheelMouse plugin integrated into core -- no need to install a
+  separate plugin to get wheel mouse scrolling under Java 2 version 1.4.
+
+- Added SOCKS proxy support. This option will help people trapped behind
+  a Microsoft Proxy Server configured to use NTLM authentication.
+  Normal HTTP connections through the proxy would not be possible since
+  Java does not implement this proprietary protocol; however a little
+  known fact is that MS Proxy Server also usually runs a SOCKS service
+  that does not require a password. (Alfonso Garcia)
+
+ - BeanShell 1.2b6 included. Changes since 1.2b5 are:
+
+  - Made bsh.Parser public and added a main() method allowing users to
+    call the parser on files for simple validity checking.
+  - Made a small addition to grammar to provide an option to retain
+    formal (javadoc style) comments in the parse tree.
+  - Fixed accessibility bug in finding fields.
+  - Fixed scoping on catch blocks such that untyped variables in the
+    catch parameter do not leak out of the block. They now act as they
+    would with a declared type in Java (local).
+  - Fixed some thread safety bugs with try/catch blocks.
+  - Fixed Interpreter serialization issue - reset streams.
+  - Fixed bug in accessibility affecting access to package hidden
+    superclasses.
+  - Exposed bsh.BshMethod and added a public invoke() method.
+  - Added getMethods() method to namespace to enumerate methods.
+
+  The fact that BshMethod is now public has facilitated optimizations
+  which improve performance of BeanShell search and replace.
+
+- Updated printing code (Thomas Dilts)
+  - Uses Java 2 version 1.4 print dialogs when running on that Java
+    version
+  - Performs printing in a background thread
 
 + Bug Fixes:
 
