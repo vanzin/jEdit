@@ -323,7 +323,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	public void handleMessage(final EBMessage msg)
 	{
 		if(msg instanceof ViewUpdate)
 			handleViewUpdate((ViewUpdate)msg);
@@ -354,7 +354,17 @@ public class VFSBrowser extends JPanel implements EBComponent
 				{
 					requestRunning = true;
 
-					browserView.maybeReloadDirectory(((VFSUpdate)msg).getPath());
+					// Have to use invokeLater() because
+					// when using FTP the DirectoryCache
+					// might receive the event after this
+					SwingUtilities.invokeLater(new Runnable()
+					{
+						public void run()
+						{
+							browserView.maybeReloadDirectory(
+								((VFSUpdate)msg).getPath());
+						}
+					});
 				}
 				finally
 				{

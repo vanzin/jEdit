@@ -71,7 +71,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.00.99.01";
+		return "04.01.01.00";
 	} //}}}
 
 	//{{{ main() method
@@ -1613,6 +1613,13 @@ public class jEdit
 			{
 				if(!buffer.save(view,null,true))
 					return false;
+
+				VFSManager.waitForRequests();
+				if(buffer.getBooleanProperty(BufferIORequest
+					.ERROR_OCCURRED))
+				{
+					return false;
+				}
 			}
 			else if(result != JOptionPane.NO_OPTION)
 				return false;

@@ -6250,6 +6250,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		private void doTripleClick(MouseEvent evt)
 		{
 			int newCaret = getLineEndOffset(dragStartLine);
+			if(dragStartLine == buffer.getLineCount() - 1)
+				newCaret--;
+
 			addToSelection(new Selection.Range(
 				getLineStartOffset(dragStartLine),
 				newCaret));
