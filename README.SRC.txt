@@ -22,7 +22,7 @@ $ ant dist
 
 You will need:
 
-- DocBook-XML 4.1.2 DTD and DocBook-XSL 1.60.1 (or later) stylesheets
+- DocBook-XML 4.2 DTD and DocBook-XSL 1.60.1 (or later) stylesheets
   (<http://docbook.sourceforge.net>).
 - An XSLT processor, such as Xalan (<http://xml.apache.org>) or
   xsltproc (<http://xmlsoft.org/XSLT/>).

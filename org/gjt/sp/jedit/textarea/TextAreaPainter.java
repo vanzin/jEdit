@@ -696,14 +696,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		int y = (clipRect.y - clipRect.y % height);
 
-		textArea.updateMaxHorizontalScrollWidth = false;
-
 		extensionMgr.paintScreenLineRange(textArea,gfx,
 			firstInvalid,lastInvalid,y,height);
 
-		if(textArea.updateMaxHorizontalScrollWidth)
-			textArea.updateMaxHorizontalScrollWidth();
-
+		textArea.updateMaxHorizontalScrollWidth();
 		textArea.displayManager._notifyScreenLineChanges();
 	} //}}}
 
@@ -977,115 +973,25 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setColor(textArea.isMultipleSelectionEnabled()
 				? getMultipleSelectionColor()
 				: getSelectionColor());
-			for(int i = textArea.selection.size() - 1;
-				i >= 0; i--)
+			for(int i = textArea.selection.size() - 1; i >= 0; i--)
 			{
-				paintSelection(gfx,screenLine,
-					physicalLine,start,end,y,
-					(Selection)textArea.selection
-					.get(i));
+				paintSelection(gfx,screenLine,physicalLine,y,
+					(Selection)textArea.selection.get(i));
 			}
 		} //}}}
 
 		//{{{ paintSelection() method
 		private void paintSelection(Graphics2D gfx, int screenLine,
-			int physicalLine, int start, int end, int y, Selection s)
+			int physicalLine, int y, Selection s)
 		{
-			if(end <= s.start || start > s.end)
+			int[] selectionStartAndEnd
+				= textArea.getSelectionStartAndEnd(
+				screenLine,physicalLine,s);
+			if(selectionStartAndEnd == null)
 				return;
 
-			int selStartScreenLine;
-			if(textArea.displayManager.isLineVisible(s.startLine))
-				selStartScreenLine = textArea.getScreenLineOfOffset(s.start);
-			else
-				selStartScreenLine = -1;
-
-			int selEndScreenLine;
-			if(textArea.displayManager.isLineVisible(s.endLine))
-				selEndScreenLine = textArea.getScreenLineOfOffset(s.end);
-			else
-				selEndScreenLine = -1;
-
-			Buffer buffer = textArea.getBuffer();
-
-			int lineStart = buffer.getLineStartOffset(physicalLine);
-
-			int x1, x2;
-
-			if(s instanceof Selection.Rect)
-			{
-				start -= lineStart;
-				end -= lineStart;
-
-				Selection.Rect rect = (Selection.Rect)s;
-				int _start = rect.getStartColumn(buffer);
-				int _end = rect.getEndColumn(buffer);
-
-				int lineLen = buffer.getLineLength(physicalLine);
-
-				int[] total = new int[1];
-
-				int rectStart = buffer.getOffsetOfVirtualColumn(
-					physicalLine,_start,total);
-				if(rectStart == -1)
-				{
-					x1 = (_start - total[0]) * textArea.charWidth;
-					rectStart = lineLen;
-				}
-				else
-					x1 = 0;
-
-				int rectEnd = buffer.getOffsetOfVirtualColumn(
-					physicalLine,_end,total);
-				if(rectEnd == -1)
-				{
-					x2 = (_end - total[0]) * textArea.charWidth;
-					rectEnd = lineLen;
-				}
-				else
-					x2 = 0;
-
-				if(end <= rectStart || start > rectEnd)
-					return;
-
-				x1 = (rectStart < start ? 0
-					: x1 + textArea.offsetToXY(physicalLine,rectStart,textArea.returnValue).x);
-				x2 = (rectEnd > end ? getWidth()
-					: x2 + textArea.offsetToXY(physicalLine,rectEnd,textArea.returnValue).x);
-			}
-			else if(selStartScreenLine == selEndScreenLine
-				&& selStartScreenLine != -1)
-			{
-				x1 = textArea.offsetToXY(physicalLine,
-					s.start - lineStart,textArea.returnValue).x;
-				x2 = textArea.offsetToXY(physicalLine,
-					s.end - lineStart,textArea.returnValue).x;
-			}
-			else if(screenLine == selStartScreenLine)
-			{
-				x1 = textArea.offsetToXY(physicalLine,
-					s.start - lineStart,textArea.returnValue).x;
-				x2 = getWidth();
-			}
-			else if(screenLine == selEndScreenLine)
-			{
-				x1 = 0;
-				x2 = textArea.offsetToXY(physicalLine,
-					s.end - lineStart,textArea.returnValue).x;
-			}
-			else
-			{
-				x1 = 0;
-				x2 = getWidth();
-			}
-
-			if(x1 < 0)
-				x1 = 0;
-			if(x2 < 0)
-				x2 = 0;
-
-			if(x1 == x2)
-				x2++;
+			int x1 = selectionStartAndEnd[0];
+			int x2 = selectionStartAndEnd[1];
 
 			gfx.fillRect(x1,y,x2 - x1,fm.getHeight());
 		} //}}}
@@ -1217,8 +1123,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 
 			lineInfo.width = (x - originalX);
-			if(lineInfo.width > textArea.maxHorizontalScrollWidth)
-				textArea.updateMaxHorizontalScrollWidth = true;
 		}
 	} //}}}
 
