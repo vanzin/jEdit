@@ -134,7 +134,7 @@ public class HelpIndex
 				// only works for jEdit plugins
 				String url = "jeditresource:/" +
 					MiscUtilities.getFileName(jar.getName())
-					+ "!" + name;
+					+ "!/" + name;
 				Log.log(Log.DEBUG,this,url);
 				indexStream(jar.getInputStream(entry),url);
 			}
