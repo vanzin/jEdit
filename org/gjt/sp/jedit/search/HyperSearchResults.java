@@ -45,8 +45,6 @@ import org.gjt.sp.util.Log;
  */
 public class HyperSearchResults extends JPanel implements EBComponent
 {
-	public static final String NAME = "hypersearch-results";
-
 	//{{{ HyperSearchResults constructor
 	public HyperSearchResults(View view)
 	{
@@ -179,6 +177,15 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	public void searchFailed()
 	{
 		caption.setText(jEdit.getProperty("hypersearch-results.no-results"));
+
+		// collapse all nodes, as suggested on user mailing list...
+		for(int i = 0; i < resultTreeRoot.getChildCount(); i++)
+		{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				resultTreeRoot.getChildAt(i);
+			resultTree.collapsePath(new TreePath(new Object[] {
+				resultTreeRoot, node }));
+		}
 	} //}}}
 
 	//{{{ searchDone() method

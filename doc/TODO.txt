@@ -68,7 +68,9 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - dockable windows
   - getCenterPoint()
   - popup menus
-- fix GUIUtilities.java to store maximisation state
+- maximisation state bug: open window, resize to size X. close window,
+  open window again, resize to size Y. maximise. close window, open
+  window again, it has size X not size Y.
 - C+ENTER 1 ...
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
