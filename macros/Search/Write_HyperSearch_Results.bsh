@@ -4,6 +4,7 @@
  * "HyperSearch Results" window to a new text buffer
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +33,9 @@
  * after a HyperSearch.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 import java.text.SimpleDateFormat;
@@ -182,6 +186,30 @@ sb = new StringBuffer();
 fileCount = 0;
 hitCount = 0;
 writeHyperSearchResults();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Write_HyperSearch_Results.bsh</filename></para>
+    <abstract><para>
+        This macro writes the contents of the <quote>HyperSearch
+        Results</quote> window to a new text buffer.
+    </para></abstract>
+    <para>
+        The macro employs a simple text report format. Since
+        the HyperSearch window's object does not maintain the search
+        settings that produced the displayed results, the macro examines the
+        current settings in the <classname>SearchAndReplace</classname> object.
+        It confirms that the HyperSearch option is selected before writing
+        the report. However, the only way to be sure that the report's contents
+        are completely accurate is to run the macro immediately after a
+        HyperSearch.
+    </para>
+</listitem>
+
+*/
+
 
 // end Write_HyperSearch_Results.bsh
 
