@@ -54,6 +54,9 @@ class ResourceCache
 
 		DockableWindowManager.loadDockableWindows(null,
 			ResourceCache.class.getResource("dockables.xml"));
+
+		ServiceManager.loadServices(null,
+			ResourceCache.class.getResource("services.xml"));
 	} //}}}
 
 	//{{{ PluginCacheEntry class
