@@ -91,6 +91,10 @@ public interface StructureMatcher
 		public int endLine;
 		public int end;
 
+		public Match()
+		{
+		}
+
 		public Match(int startLine, int start, int endLine, int end)
 		{
 			this.startLine = startLine;
