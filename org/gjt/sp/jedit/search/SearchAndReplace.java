@@ -292,7 +292,7 @@ public class SearchAndReplace
 		if(beanshell && replace.length() != 0)
 		{
 			replaceMethod = BeanShell.cacheBlock("replace","return ("
-				+ replace + ");");
+				+ replace + ");",true);
 		}
 		else
 			replaceMethod = null;

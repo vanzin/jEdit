@@ -396,19 +396,27 @@ public class BeanShell
 	 * runCachedBlock().
 	 * @param id An identifier. If null, a unique identifier is generated
 	 * @param code The code
+	 * @param namespace If true, the namespace will be set
 	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 * @since jEdit 4.1pre1
 	 */
-	public static BshMethod cacheBlock(String id, String code)
+	public static BshMethod cacheBlock(String id, String code, boolean namespace)
 		throws Exception
 	{
 		String name = "__internal_" + id;
 
 		// evaluate a method declaration
-		_eval(null,global,name + "(ns) {\nsetNameSpace(ns);\n" + code + "\n}");
-
-		return global.getMethod(name,new Class[] { NameSpace.class });
+		if(namespace)
+		{
+			_eval(null,global,name + "(ns) {\this.callstack.set(0,ns);\n" + code + "\n}");
+			return global.getMethod(name,new Class[] { NameSpace.class });
+		}
+		else
+		{
+			_eval(null,global,name + "() {\n" + code + "\n}");
+			return global.getMethod(name,new Class[0]);
+		}
 	} //}}}
 
 	//{{{ runCachedBlock() method
@@ -425,8 +433,14 @@ public class BeanShell
 	public static Object runCachedBlock(BshMethod method, View view,
 		NameSpace namespace) throws Exception
 	{
+		boolean useNamespace;
 		if(namespace == null)
+		{
+			useNamespace = false;
 			namespace = global;
+		}
+		else
+			useNamespace = true;
 
 		try
 		{
@@ -439,7 +453,9 @@ public class BeanShell
 				namespace.setVariable("textArea",editPane.getTextArea());
 			}
 
-			Object retVal = method.invoke(new Object[] { namespace },
+			Object retVal = method.invoke(useNamespace
+				? new Object[] { namespace }
+				: NO_ARGS,
 				interpForMethods,new CallStack());
 			if(retVal instanceof Primitive)
 			{
@@ -578,6 +594,7 @@ public class BeanShell
 	//{{{ Private members
 
 	//{{{ Static variables
+	private static final Object[] NO_ARGS = new Object[0];
 	private static Interpreter interpForMethods;
 	private static NameSpace global;
 	private static boolean running;

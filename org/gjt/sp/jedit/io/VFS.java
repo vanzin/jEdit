@@ -388,7 +388,8 @@ public abstract class VFS
 		RE filter;
 		try
 		{
-			filter = new RE(MiscUtilities.globToRE(glob));
+			filter = new RE(MiscUtilities.globToRE(glob),
+				RE.REG_ICASE);
 		}
 		catch(REException e)
 		{

@@ -247,18 +247,22 @@ loop:				for(int i = 0; i < files.length; i++)
 		{
 			buffer.readLock();
 
+			boolean endOfLine = (buffer.getLineEndOffset(
+				buffer.getLineOfOffset(end)) - 1 == end);
+
 			Segment text = new Segment();
 			int offset = start;
-			int length = end;
 			int line = -1;
 
 loop:			for(int counter = 0; ; counter++)
 			{
-				buffer.getText(offset,length - offset,text);
+				boolean startOfLine = (buffer.getLineStartOffset(
+					buffer.getLineOfOffset(offset)) == offset);
+
+				buffer.getText(offset,end - offset,text);
 				int[] match = matcher.nextMatch(
 					new CharIndexedSegment(text,false),
-					offset == 0,length == buffer.getLength(),
-					counter == 0);
+					startOfLine,endOfLine,counter == 0);
 				if(match == null)
 					break loop;
 

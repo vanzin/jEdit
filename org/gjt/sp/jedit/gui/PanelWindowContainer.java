@@ -458,21 +458,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ RotatedTextIcon class
 	public static class RotatedTextIcon implements Icon
 	{
-		static final int NONE = 0;
-		static final int CW = 1;
-		static final int CCW = 2;
-
-		int rotate;
-		Font font;
-		String text;
-		GlyphVector glyphs;
-		float width;
-		float height;
-		float ascent;
-		RenderingHints renderHints;
+		public static final int NONE = 0;
+		public static final int CW = 1;
+		public static final int CCW = 2;
 
 		//{{{ RotatedTextIcon constructor
-		RotatedTextIcon(int rotate, Font font, String text)
+		public RotatedTextIcon(int rotate, Font font, String text)
 		{
 			this.rotate = rotate;
 			this.font = font;
@@ -559,6 +550,17 @@ public class PanelWindowContainer implements DockableWindowContainer
 			g2d.setTransform(oldTransform);
 			g2d.setRenderingHints(oldHints);
 		} //}}}
+
+		//{{{ Private members
+		private int rotate;
+		private Font font;
+		private String text;
+		private GlyphVector glyphs;
+		private float width;
+		private float height;
+		private float ascent;
+		private RenderingHints renderHints;
+		//}}}
 	} //}}}
 
 	//{{{ ButtonLayout class
