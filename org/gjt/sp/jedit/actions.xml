@@ -345,15 +345,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="hypersearch-results">
-	<CODE>
-		view.getDockableWindowManager().toggleDockableWindow("hypersearch-results");
-	</CODE>
-	<IS_SELECTED>
-		return view.getDockableWindowManager().isDockableWindowVisible("hypersearch-results");
-	</IS_SELECTED>
-</ACTION>
-
 <ACTION NAME="indent-lines">
 	<CODE>
 		textArea.indentSelectedLines();
@@ -390,15 +381,6 @@
 	<CODE>
 		textArea.lineComment();
 	</CODE>
-</ACTION>
-
-<ACTION NAME="log-viewer">
-	<CODE>
-		view.getDockableWindowManager().toggleDockableWindow("log-viewer");
-	</CODE>
-	<IS_SELECTED>
-		return view.getDockableWindowManager().isDockableWindowVisible("log-viewer");
-	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="match-bracket">
@@ -1050,15 +1032,6 @@
 	<CODE>
 		view.unsplit();
 	</CODE>
-</ACTION>
-
-<ACTION NAME="vfs-browser">
-	<CODE>
-		view.getDockableWindowManager().toggleDockableWindow("vfs.browser");
-	</CODE>
-	<IS_SELECTED>
-		return view.getDockableWindowManager().isDockableWindowVisible("vfs.browser");
-	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="view-registers">

@@ -146,6 +146,7 @@ public abstract class EditAction
 
 	// private members
 	private String name;
+	private String cachedCode;
 
 	/**
 	 * 'Wrap' EditActions in this class to turn them into AWT

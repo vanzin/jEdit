@@ -132,6 +132,16 @@ public class ActionSet
 		return retVal;
 	}
 
+	/**
+	 * Returns if this action set contains the specified action.
+	 * @param action The action
+	 * @since jEdit 4.0pre1
+	 */
+	public boolean contains(EditAction action)
+	{
+		return actions.contains(action);
+	}
+
 	public String toString()
 	{
 		return label;

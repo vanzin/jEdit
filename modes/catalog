@@ -197,7 +197,7 @@
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
 
 <MODE NAME="velocity"		FILE="velocity.xml"
-				FILE_NAME_GLOB="*.vw" />
+				FILE_NAME_GLOB="*.vm" />
 
 <MODE NAME="verilog"		FILE="verilog.xml"
 				FILE_NAME_GLOB="*.{ver,v}" />
