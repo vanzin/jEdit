@@ -1286,6 +1286,19 @@ style-editor.bgColor=Background color:
 
 # Help viewer
 helpviewer.title=jEdit Help
+helpviewer.url=Location:
+helpviewer.back=Back
+helpviewer.forward=Forward
+
+helpviewer.toc.welcome=Welcome to jEdit
+helpviewer.toc.misc=Miscellaneous Documentation
+helpviewer.toc.readme=jEdit Read Me
+helpviewer.toc.news=Major Changes in jEdit 4.0
+helpviewer.toc.todo=To Do List and Known Bugs
+helpviewer.toc.changes=Version History
+helpviewer.toc.copying=GNU General Public License
+helpviewer.toc.copying-doc=GNU Free Documentation License
+helpviewer.toc.plugins=Plugin Documentation
 
 # Tip of the day window
 tip.title=Tip of the Day
@@ -1297,7 +1310,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=55
+tip.count=56
 
 # Activity log
 log-viewer.title=Activity Log

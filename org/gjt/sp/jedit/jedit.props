@@ -206,7 +206,7 @@ view.gutter.currentLineColor=#d04040
 view.gutter.markerColor=#ccffcc
 
 # Gutter border colors
-view.gutter.focusBorderColor=#202040
+view.gutter.focusBorderColor=#666699
 view.gutter.noFocusBorderColor=#a0a0b4
 
 # Gutter font name
@@ -220,7 +220,7 @@ view.gutter.fontstyle=0
 view.gutter.fontsize=10
 
 # Gutter border width
-view.gutter.borderWidth=3
+view.gutter.borderWidth=2
 
 # Gutter displays line numbers
 view.gutter.lineNumbers=false

@@ -371,8 +371,7 @@ public class EditPane extends JPanel implements EBComponent
 			gutter.setLineNumberAlignment(Gutter.LEFT);
 		}
 
-		gutter.setFont(jEdit.getFontProperty("view.gutter.font",
-			new Font("Monospaced",Font.PLAIN,12)));
+		gutter.setFont(jEdit.getFontProperty("view.gutter.font"));
 
 		int width = jEdit.getIntegerProperty(
 			"view.gutter.borderWidth",3);

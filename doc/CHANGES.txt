@@ -5,14 +5,14 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - Ant is used instead of jmk to compile jEdit
-- JavaHelp library from Sun is now used for the help system. JavaHelp
-  supports full-text search, indexing, and printing.
 - Utilities->Memory Status command to replace 'Show Free Memory' macro
 - General look and feel settings moved to 'Appearance' option pane
 - If you are using the Metal or Kunststoff L&F, the UI control font can
   be changed in Utilities->Global Options->Appearance
+- Kunststoff look and feel bundled with jEdit ,default on Java >= 1.2
 - "Plastic" UI widget theme available in Utilities->Global
-  Options->Appearance (enabled by default)
+  Options->Appearance (this is the color scheme part of the Kunststoff
+  look and feel, and it is enabled by default)
 
 + Enhancements
 
@@ -28,6 +28,13 @@ JEDIT 4.0 VERSION HISTORY
   - Same for the overwrite status; it now shows 'ins' or 'ovr'
   - I/O progress display replaced with a Java heap memory indicator
   - I/O status is now shown in the message area of the status bar
+- New splash screen (Kris Kopicki)
+- New color scheme
+
++ Bug Fixes
+
+- 'Recent Files' menu behaved in a strange manner if there were no
+  recent files
 
 + API Changes
 

@@ -35,8 +35,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		/* Font */
-		font = new FontSelector(jEdit.getFontProperty("print.font",
-			new Font("Monospaced",Font.PLAIN,10)));
+		font = new FontSelector(jEdit.getFontProperty("print.font"));
 		addComponent(jEdit.getProperty("options.print.font"),font);
 
 		/* Header */

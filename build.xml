@@ -13,10 +13,12 @@
 			includeJavaRuntime="yes"
 		>
 			<include name="bsh/**/*.java"/>
-			<include name="com/**/*.java"/>
-			<include name="gnu/**/*.java"/>
-			<include name="installer/**/*.java"/>
-			<include name="org/**/*.java"/>
+			<include name="com/microstar/*.java"/>
+			<include name="com/incors/plaf/kunststoff/*.java"/>
+			<include name="gnu/regexp/*.java"/>
+			<include name="installer/*.java"/>
+			<include name="org/gjt/sp/jedit/**/*.java"/>
+			<include name="org/gjt/sp/util/*.java"/>
 		</javac>
 	</target>
 
@@ -28,9 +30,11 @@
 		>
 			<fileset dir=".">
 				<include name="bsh/**/*.class"/>
-				<include name="bsh/**/*.bsh"/>
+				<include name="bsh/commands/*.bsh"/>
 
-				<include name="com/**/*.class"/>
+				<include name="com/microstar/*.class"/>
+				<include name="com/incors/plaf/kunststoff/*.class"/>
+				<include name="com/incors/plaf/kunststoff/icons/*.gif"/>
 				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 				<include name="javax/help/**/*.class"/>
@@ -38,21 +42,19 @@
 				<include name="org/gjt/sp/jedit/**/*.class"/>
 				<include name="org/gjt/sp/util/**/*.class"/>
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
-				<include name="org/gjt/sp/jedit/**/*.gif"/>
-				<include name="org/gjt/sp/jedit/**/*.html"/>
-				<include name="org/gjt/sp/jedit/**/*.props"/>
+				<include name="org/gjt/sp/jedit/icons/*.gif"/>
+				<include name="org/gjt/sp/jedit/tips/*.html"/>
+				<include name="org/gjt/sp/jedit/*.props"/>
 
 				<include name="org/gjt/sp/jedit/actions.xml"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/jedit.bsh"/>
 
-				<include name="doc/**/*.txt"/>
-				<include name="doc/**/*.html"/>
-				<include name="doc/**/jhelpidx.xml"/>
-				<include name="doc/**/jhelpmap.jhm"/>
-				<include name="doc/**/jhelpset.hs"/>
-				<include name="doc/**/jhelptoc.xml"/>
-				<include name="doc/**/JavaHelpSearch/*"/>
+				<include name="doc/*.txt"/>
+				<include name="doc/welcome.html"/>
+				<include name="doc/users-guide/*.html"/>
+				<include name="doc/users-guide/toc.xml"/>
+				<include name="doc/users-guide/word-index.xml"/>
 			</fileset>
 		</jar>
 	</target>
@@ -74,13 +76,6 @@
 			style="doc/users-guide/jedithtml.xsl"/>
 	</target>
 
-	<!-- Generate JavaHelp full-text search index -->
-	<target name="jhindex">
-		<exec executable="jhindexer" dir="doc/users-guide">
-			<arg value="*.html"/>
-		</exec>
-	</target>
-
 	<target name="clean">
 		<delete>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -93,19 +88,15 @@
 			<fileset dir="." includes="**/.directory"/>
 			<fileset dir=".">
 				<include name="**/*.class"/>
+				<exclude name="com/incors/plaf/kunststoff/*.class"/>
 				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
 				<exclude name="bsh/XThis*.class"/>
 				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
-				<exclude name="com/sun/**/*.class"/>
-				<exclude name="javax/help/**/*.class"/>
 			</fileset>
 
 			<fileset dir="." includes="doc/users-guide/*.html"/>
-			<fileset dir="." includes="doc/users-guide/jhelpidx.xml"/>
-			<fileset dir="." includes="doc/users-guide/jhelpmap.jhm"/>
-			<fileset dir="." includes="doc/users-guide/jhelpset.hs"/>
-			<fileset dir="." includes="doc/users-guide/jhelptoc.xml"/>
-			<fileset dir="." includes="doc/users-guide/JavaHelpSearch/*"/>
+			<fileset dir="." includes="doc/users-guide/toc.xml"/>
+			<fileset dir="." includes="doc/users-guide/word-index.xml"/>
 
 			<fileset dir="." includes="doc/users-guide/*.pdf"/>
 			<fileset dir="." includes="doc/users-guide/*.aux"/>

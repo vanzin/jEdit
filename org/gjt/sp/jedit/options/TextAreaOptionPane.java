@@ -34,8 +34,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		/* Font */
-		font = new FontSelector(jEdit.getFontProperty("view.font",
-			new Font("Monospaced",Font.PLAIN,12)));
+		font = new FontSelector(jEdit.getFontProperty("view.font"));
 
 		addComponent(jEdit.getProperty("options.textarea.font"),font);
 
