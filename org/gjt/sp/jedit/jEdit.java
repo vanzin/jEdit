@@ -2903,7 +2903,7 @@ public class jEdit
 	//{{{ initResources() method
 	private static void initResources()
 	{
-		builtInActionSet = new ActionSet(null,null,
+		builtInActionSet = new ActionSet(null,null,null,
 			jEdit.class.getResource("actions.xml"));
 		builtInActionSet.setLabel(getProperty("action-set.jEdit"));
 		builtInActionSet.load();

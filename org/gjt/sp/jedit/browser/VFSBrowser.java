@@ -1011,7 +1011,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		};
 
-		ActionSet builtInActionSet = new ActionSet(null,null,
+		ActionSet builtInActionSet = new ActionSet(null,null,null,
 			jEdit.class.getResource("browser.actions.xml"));
 		builtInActionSet.load();
 		actionContext.addActionSet(builtInActionSet);
