@@ -1,6 +1,6 @@
 /*
  * InstallThread.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,23 +28,17 @@ import java.util.Vector;
 public class InstallThread extends Thread
 {
 	public InstallThread(Install installer, Progress progress,
-		String installDir, String binDir, int size, Vector components)
+		String installDir, OperatingSystem.OSTask[] osTasks,
+		int size, Vector components)
 	{
 		super("Install thread");
 
 		this.installer = installer;
 		this.progress = progress;
 		this.installDir = installDir;
-		this.binDir = binDir;
+		this.osTasks = osTasks;
 		this.size = size;
 		this.components = components;
-
-		buf = new byte[32768];
-	}
-
-	public void setProgress(Progress progress)
-	{
-		this.progress = progress;
 	}
 
 	public void run()
@@ -53,18 +47,18 @@ public class InstallThread extends Thread
 
 		try
 		{
+			// install user-selected packages
 			for(int i = 0; i < components.size(); i++)
 			{
 				installComponent((String)components.elementAt(i));
 			}
 
-			// create it in case it doesn't already exist
-			if(binDir != null)
-				OperatingSystem.getOperatingSystem().mkdirs(binDir);
-
-			OperatingSystem.getOperatingSystem().createScript(
-				installer,installDir,binDir,
-				installer.getProperty("app.name"));
+			// do operating system specific stuff (creating startup
+			// scripts, installing man pages, etc.)
+			for(int i = 0; i < osTasks.length; i++)
+			{
+				osTasks[i].perform(installDir);
+			}
 		}
 		catch(FileNotFoundException fnf)
 		{
@@ -86,10 +80,9 @@ public class InstallThread extends Thread
 	private Install installer;
 	private Progress progress;
 	private String installDir;
-	private String binDir;
+	private OperatingSystem.OSTask[] osTasks;
 	private int size;
 	private Vector components;
-	private byte[] buf;
 
 	private void installComponent(String name) throws IOException
 	{
@@ -109,35 +102,10 @@ public class InstallThread extends Thread
 			if(in == null)
 				throw new FileNotFoundException(fileName);
 
-			copy(in,outfile);
+			installer.copy(in,outfile,progress);
 			in.close();
 		}
 
 		fileList.close();
-	}
-
-	private void copy(InputStream in, String outfile) throws IOException
-	{
-		File outFile = new File(outfile);
-
-		OperatingSystem.getOperatingSystem().mkdirs(outFile.getParent());
-
-		BufferedOutputStream out = new BufferedOutputStream(
-			new FileOutputStream(outFile));
-
-		int count;
-
-		for(;;)
-		{
-			count = in.read(buf,0,buf.length);
-			if(count == -1)
-				break;
-
-			out.write(buf,0,count);
-			progress.advance(count);
-		}
-
-		in.close();
-		out.close();
 	}
 }

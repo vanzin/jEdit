@@ -15,14 +15,19 @@ app.readme=readme.html
 app.license.title=GNU General Public License
 app.license=gpl.html
 
+# OS-specific stuff
+ostask.unix-script.label=Install shortcut in:
+ostask.unix-man.label=Install manual page in:
+ostask.unix-man.manpage=jedit.1
+
 # Each component must have a name, a size, and a 'fileset'. The fileset is the
 # name of a resource, relative to the root of the JAR, where the list of files
 # is stored, newline delimited
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=3812
-comp.0.real-size=2892
+comp.0.disk-size=4016
+comp.0.real-size=3095
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)

@@ -44,7 +44,7 @@ logd|Log.log(Log.DEBUG,this,\|);
 Cget|($1)$2.get($3)
 CtoArray|($1[])$2.toArray(new $1[$2.size()])
 WI|while($1.hasNext())\n{\n\t|\n}
-IN|($1)$2.next();
+IN|$1 $2 = ($1)$3.next();
 [vhdl]
 sl|std_logic
 slv|std_logic_vector( x downto y )

@@ -8,7 +8,7 @@ contributing to this release.
 + Syntax Highlighting Changes:
 
 - Added gettext mode (primarily used on Unix for translating programs
-  to other languages.) (Reinout van Schouwen)
+  to other languages) (Reinout van Schouwen).
 
 - Added APDL mode (Randolf Mock).
 
@@ -21,6 +21,10 @@ contributing to this release.
 - Much faster auto indent.
 
 - Prefix keys (C+e, C+e n, C+m, C+r) now show a status bar message.
+
++ Installer Changes:
+
+- On Unix systems, a jedit.1 manual page is now installed.
 
 + Bug Fixes:
 
