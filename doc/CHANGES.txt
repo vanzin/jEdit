@@ -4,6 +4,15 @@ JEDIT 4.0 VERSION HISTORY
 
 + New Features
 
+- Enhanced quick copy feature:
+  - Rectangular selections are now created by dragging with the middle
+    mouse button
+  - Control-dragging now creates a selection without moving the caret,
+    when the mouse button is released the selected text is inserted at
+    the caret position and the selection is deactivated
+  - A status bar message is shown while Control-dragging to avoid
+    confusion
+  - This is disabled by default -- enable in Text Area option pane
 - Modula-3 syntax highlighting (Marcio Marchini)
 - Smalltalk syntax highlighting (Marcio Marchini)
 
@@ -28,6 +37,8 @@ JEDIT 4.0 VERSION HISTORY
   (doing this on a save was kind of pointless)
 - Entering a new path in a file dialog box and clicking 'Open' now sets
   the browser's location to that path
+- Home/end commands are now soft-wrap-aware
+- Documentation is now built using DocBook-XSL stylesheets 1.48
 
 + Bug Fixes
 
@@ -67,6 +78,14 @@ JEDIT 4.0 VERSION HISTORY
   moved to the startup sequence
 - Fixed problem with markers returning to their original locations on
   save
+- Removed obsolete option from 'Docking' option pane
+- Fixed possible ArrayIndexOutOfBoundsException when expanding and
+  collapsing folds near the end of the buffer
+- 'Add Explicit Fold' command did not work properly with multiple
+  selections
+- Triple-clicking and dragging would scroll the text area in weird ways
+- Scrolling would not be performed when text was inserted sometimes, due
+  to the last physical line index not being updated properly
 
 + API Additions
 

@@ -17,7 +17,7 @@
   <para>
    When pressed once, the <keycap>Home</keycap> key moves the caret to the first
    non-whitespace character of the current line. Pressing it a second time
-   moves the caret to the beginning of the line. Pressing it a third time
+   moves the caret to the beginning of the current line. Pressing it a third time
    moves the caret to the first visible line.
   </para>
   <para>
@@ -30,6 +30,13 @@
    behave the same as above, except that instead of operating on the current
    line, they move the caret to the first and last lines of the selection,
    respectively.
+  </para>
+  <para>
+   If soft wrap is enabled (see <xref linkend="word-wrap"/>), the first time
+   they are pressed
+   <keycap>Home</keycap> and <keycap>End</keycap> only go to the start and end
+   of the current screen line; the second press moves to the start and end of
+   the physical line.
   </para>
   <para>
    <keycombo><keycap>Control</keycap><keycap>Home</keycap></keycombo> and
@@ -73,11 +80,14 @@
   </para>
   <sect2><title>Rectangular Selection</title>
    <para>
-    Holding down <keycap>Control</keycap> and dragging will create a rectangular
+    Dragging with the middle mouse button will create a rectangular
     selection. Holding down
-    <keycap>Shift</keycap> and <keycap>Control</keycap> while clicking a location in
-    the buffer will create a rectangular selection from the caret position to
+    <keycap>Shift</keycap> while clicking a location in
+    the buffer with the middle mouse button
+    will create a rectangular selection from the caret position to
     the clicked location.
+    If you only have a two-button mouse, you can click the left mouse button
+    while holding down <keycap>Alt</keycap> instead of middle-clicking.
    </para>
    <para>
     It is possible to select a rectangle with zero width but non-zero height.
@@ -93,10 +103,12 @@
     <para>
      Rectangular selections are implemented using character offsets,
      not absolute screen positions, so they might not behave as you might
-     expect if a proportional-width font is being used, or hard tabs are
-     enabled. For information about changing the font used in the text
-     area, see <xref linkend="global-opts" />. For more information about
-     hard and soft tabs, see <xref linkend="soft-tabs" />.
+     expect if a proportional-width font is being used, hard tabs are
+     enabled, or soft wrap is enabled. For information about changing the font
+     used in the text
+     area, see <xref linkend="global-opts" />. For information about
+     tabs and wrapping, see <xref linkend="soft-tabs" /> and
+     <xref linkend="word-wrap" />.
     </para>
    </note>
   </sect2>
@@ -527,13 +539,24 @@
     Quick copy is disabled by default, but it can be enabled in the
     <guibutton>Text Area</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box. When quick copy is enabled,
-    holding down the <keycap>Alt</keycap> key and clicking the left mouse button
-    in the text area inserts the most recently
-    selected text at the clicked location. If you have a three-button mouse, you
-    can simply click the middle mouse button, without holding down
-    <keycap>Alt</keycap>.
+    dialog box. When quick copy is enabled:
    </para>
+   <itemizedlist>
+    <listitem><para>
+     Clicking the middle mouse button in the text area inserts the most recently
+     selected text at the clicked location.
+     If you only have a two-button mouse, you can click the left mouse button
+     while holding down <keycap>Alt</keycap> instead of middle-clicking.
+    </para></listitem>
+    <listitem><para>
+     Dragging with the <keycap>Control</keycap> key held down
+     creates a selection without moving the
+     caret. As soon as the mouse button is released, the selected text is
+     inserted at the caret position and the selection is deactivated.
+     A message is shown in the status bar while text is being selected to
+     remind you that this is not an ordinary selection.
+    </para></listitem>
+   </itemizedlist>
    <para>
     Internally, this is implemented by storing the most recently selected text
     in the <filename>%</filename> register (recall that registers have
