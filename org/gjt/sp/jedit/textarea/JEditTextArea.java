@@ -487,8 +487,8 @@ public class JEditTextArea extends JComponent
 	{
 		if(firstLine > 0)
 			setFirstLine(firstLine - 1);
-		else
-			getToolkit().beep();
+		//else
+		//	getToolkit().beep();
 	} //}}}
 
 	//{{{ scrollUpPage() method
@@ -522,10 +522,10 @@ public class JEditTextArea extends JComponent
 			}
 			setFirstLine(newFirstLine);
 		}
-		else
+		/* else
 		{
 			getToolkit().beep();
-		}
+		} */
 	} //}}}
 
 	//{{{ scrollDownLine() method
@@ -540,8 +540,8 @@ public class JEditTextArea extends JComponent
 		if((softWrap && firstLine + 1 < numLines) ||
 			(firstLine + visibleLines < numLines))
 			setFirstLine(firstLine + 1);
-		else
-			getToolkit().beep();
+		//else
+		//	getToolkit().beep();
 	} //}}}
 
 	//{{{ scrollDownPage() method
@@ -558,8 +558,8 @@ public class JEditTextArea extends JComponent
 		{
 			setFirstLine(physicalToVirtual(physLastLine));
 		}
-		else
-			getToolkit().beep();
+		//else
+		//	getToolkit().beep();
 	} //}}}
 
 	//{{{ scrollToCaret() method
@@ -6247,7 +6247,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int x = evt.getX();
 			int y = evt.getY();
 
-			dragStart = xyToOffset(x,y,!painter.isBlockCaretEnabled());
+			dragStart = xyToOffset(x,y,!(painter.isBlockCaretEnabled()
+				|| isOverwriteEnabled()));
 			dragStartLine = getLineOfOffset(dragStart);
 			dragStartOffset = dragStart - getLineStartOffset(dragStartLine);
 
@@ -6304,23 +6305,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else
 			{
-				if(control)
-				{
-					int offset = xyToOffset(evt.getX(),evt.getY(),false);
-					if(offset != buffer.getLength())
-					{
-						buffer.getText(offset,1,lineSegment);
-						switch(lineSegment.array[lineSegment.offset])
-						{
-						case '(': case '[': case '{':
-						case ')': case ']': case '}':
-							moveCaretPosition(offset,false);
-							selectToMatchingBracket();
-							return;
-						}
-					}
-				}
-
 				if(!(multi || quickCopyDrag))
 					selectNone();
 
@@ -6425,10 +6409,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleDrag() method
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
+			dragged = true;
+
 			int x = evt.getX();
 			int dot = xyToOffset(x,
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
-				!painter.isBlockCaretEnabled());
+				!(painter.isBlockCaretEnabled()
+				|| isOverwriteEnabled()));
 			int dotLine = buffer.getLineOfOffset(dot);
 			int extraEndVirt = 0;
 
@@ -6444,8 +6431,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						extraEndVirt++;
 				}
 			}
-
-			dragged = true;
 
 			resizeSelection(dragStart,dot,extraEndVirt,rect);
 
@@ -6475,7 +6460,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			int pos = xyToOffset(evt.getX(),
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
-				!painter.isBlockCaretEnabled());
+				!(painter.isBlockCaretEnabled() || isOverwriteEnabled()));
 			int line = getLineOfOffset(pos);
 			int lineStart = getLineStartOffset(line);
 			int lineLength = getLineLength(line);
@@ -6572,6 +6557,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseReleased() method
 		public void mouseReleased(MouseEvent evt)
 		{
+			if(control && !dragged)
+			{
+				int offset = xyToOffset(evt.getX(),evt.getY(),false);
+				if(offset != buffer.getLength())
+				{
+					buffer.getText(offset,1,lineSegment);
+					switch(lineSegment.array[lineSegment.offset])
+					{
+					case '(': case '[': case '{':
+					case ')': case ']': case '}':
+						moveCaretPosition(offset,false);
+						selectToMatchingBracket();
+						return;
+					}
+				}
+			}
+
 			// middle mouse button drag inserts selection
 			// at caret position
 			Selection sel = getSelectionAtOffset(dragStart);

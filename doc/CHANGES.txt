@@ -109,6 +109,12 @@ release.
 
 - Fixed various auto indent bugs.
 
+- Wheel mouse page scroll now scrolls the correct amount if soft wrap is
+  on.
+
+- Starting a rectangular selection on a bracket should no longer leave a
+  bogus bracket block selection in place.
+
 + API Additions:
 
 - Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).
