@@ -422,7 +422,7 @@ public class Abbrevs
 
 		try
 		{
-			Hashtable currentAbbrevs = null;
+			Hashtable currentAbbrevs = globalAbbrevs;
 
 			String line;
 			while((line = in.readLine()) != null)
