@@ -35,7 +35,6 @@ and quirks that I need to fix eventually.
   - pressing enter: carry over * from prev line in javadoc
   - javadoc indent: if prev line was /* or *, unindent if prev line is
   */
-- some fastrepaint bugs
 - option to disable buffer local properties
 - option to disable electric keys
 - more configurable file system browser

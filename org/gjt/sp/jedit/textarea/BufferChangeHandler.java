@@ -377,6 +377,8 @@ class BufferChangeHandler extends BufferChangeAdapter
 	private void delayUpdate(int startLine, int endLine)
 	{
 		textArea.chunkCache.invalidateChunksFromPhys(startLine);
+		textArea.repaintMgr.setFastScroll(false);
+
 		if(!delayedUpdate)
 		{
 			delayedUpdateStart = startLine;
