@@ -300,7 +300,13 @@ public class SearchBar extends JPanel
 			else if(evt.getSource() == close)
 			{
 				view.removeToolBar(SearchBar.this);
-				view.getEditPane().focusOnTextArea();
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						view.getEditPane().focusOnTextArea();
+					}
+				});
 			}
 		} //}}}
 	} //}}}
@@ -387,7 +393,13 @@ public class SearchBar extends JPanel
 					}
 
 					evt.consume();
-					view.getEditPane().focusOnTextArea();
+					SwingUtilities.invokeLater(new Runnable()
+					{
+						public void run()
+						{
+							view.getEditPane().focusOnTextArea();
+						}
+					});
 					view.getEditPane().getTextArea()
 						.processKeyEvent(evt);
 				}
@@ -398,7 +410,13 @@ public class SearchBar extends JPanel
 					view.removeToolBar(SearchBar.this);
 				}
 				evt.consume();
-				view.getEditPane().focusOnTextArea();
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						view.getEditPane().focusOnTextArea();
+					}
+				});
 				break;
 			case KeyEvent.VK_ENTER:
 				if(evt.isShiftDown())
