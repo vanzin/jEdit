@@ -606,7 +606,7 @@
    <para>
     The quick copy feature is usually found in Unix text editors.
     Quick copy is disabled by default, but it can be enabled in the
-    <guibutton>Text Area</guibutton> pane of the
+    <guibutton>Mouse</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box.
    </para>

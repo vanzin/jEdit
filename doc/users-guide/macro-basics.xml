@@ -340,28 +340,24 @@ org.gjt.sp.util</programlisting>
 
   <itemizedlist>
    <listitem><para><varname>buffer</varname> -
-    a <ulink url="../api/org/gjt/sp/jedit/Buffer.html">Buffer</ulink> object represents the contents of an open text
-    file. The variable <varname>buffer</varname> is predefined as the
-    current, visible buffer being edited.
+    a <ulink url="../api/org/gjt/sp/jedit/Buffer.html">Buffer</ulink> object represents the contents of the currently visible open text
+    file.
    </para></listitem>
    <listitem><para><varname>view</varname> -
    A <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink>
-   represents a top-level window, extending Java's <classname>JFrame</classname>
+   represents the current top-level editor window, extending Java's <classname>JFrame</classname>
    class, that
    contains the various visible components of the program, including the
    text area, menu bar, toolbar, and any docked windows.
-   The variable <varname>view</varname> is defined
-   as the current, active <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink> object.
    </para>
    <para>
-   This variable has the same value as calling:
+   This variable has the same value as the return value of:
    </para>
    <programlisting>jEdit.getActiveView()</programlisting>
    </listitem>
    <listitem><para><varname>editPane</varname> -
     an <ulink url="../api/org/gjt/sp/jedit/EditPane.html">EditPane</ulink> object contains a text area and
-    buffer switcher. A view can be split to display multiple
-    buffers, each in its own edit pane. Among other things, the
+    buffer switcher. A view can be split to display edit panes. Among other things, the
     <ulink url="../api/org/gjt/sp/jedit/EditPane.html">EditPane</ulink> class contains methods for selecting
     the buffer to edit.
    </para>
@@ -373,22 +369,30 @@ org.gjt.sp.util</programlisting>
     split views.
    </para>
    <para>
-   This variable has the same value as calling:
+   This variable has the same value as the return value of:
    </para>
    <programlisting>view.getEditPane()</programlisting>
    </listitem>
    <listitem><para><varname>textArea</varname> -
     a <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> is the visible component that
-    displays the file being edited. It is derived from the
-    <classname>JComponent</classname> class. The variable
-    <varname>textArea</varname> represents the current
-    <ulink url="../api/org/gjt/sp/jedit/textarea/JEditTextArea.html">JEditTextArea</ulink> object, which in turn displays
-    the current buffer.
+    displays the current buffer.
    </para>
    <para>
-   This variable has the same value as calling:
+   This variable has the same value as the return value of:
    </para>
    <programlisting>editPane.getTextArea()</programlisting></listitem>
+   
+   <listitem><para><varname>wm</varname> -
+    a <ulink url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">DockableWindowManager</ulink> is the visible component that
+    manages dockable windows in the current view. This class is discussed in detail in <xref linkend="writing-plugins-part"/>. This object is useful for writing macros that interface with, open, or close plugin windows.
+   </para>
+   <para>
+   This variable has the same value the return value of:
+   </para>
+   <programlisting>view.getDockableWindowManager()</programlisting></listitem>
+   <listitem><para><varname>scriptPath</varname> - set to the full path
+   of the script currently being executed.
+   </para></listitem>
    <listitem><para><varname>scriptPath</varname> - set to the full path
    of the script currently being executed.
    </para></listitem>
@@ -397,8 +401,8 @@ org.gjt.sp.util</programlisting>
   <para>
    Note that these variables are set at the beginning of macro
    execution. If the macro switches views, buffers or edit panes,
-   the variables will be out of date. In that case, you can use
-   the method calls equivalent to the values of the variables.
+   the variable values will be out of date. In that case, you can use
+   the equivalent method calls.
   </para>
 
  </sect1>

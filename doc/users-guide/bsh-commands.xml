@@ -16,8 +16,7 @@
 
 <note>
  <para>
-  Plugins, because they are written in Java and not BeanShell,
-  cannot make use of BeanShell commands.
+  Java classes in plugins cannot make use of BeanShell commands directly. However, these commands can be called from BeanShell code that is part of a plugin, for example the snippets in <filename>actions.xml</filename>, or any BeanShell scripts shipped with the plugin and loaded on startup.
  </para>
 </note>
 
@@ -100,6 +99,19 @@
       <para>
         Changes the working directory of the BeanShell interpreter
         to <parameter>dirname</parameter>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>void <function>cp</function></funcdef>
+          <paramdef>String <parameter>fromFile</parameter></paramdef>
+          <paramdef>String <parameter>toFile</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        Copy <parameter>fromFile</parameter> to <parameter>toFile</parameter>.
       </para>
     </listitem>
 
@@ -412,6 +424,32 @@
       </para>
     </listitem>
 
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>void <function>setAccessibility</function></funcdef>
+          <paramdef>boolean <parameter>flag</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        If <parameter>flag</parameter> is <literal>true</literal>,
+        BeanShell scripts are allowed to change and modify private variables, and call private methods. The default is <literal>false</literal>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>void <function>setStrictJava</function></funcdef>
+          <paramdef>boolean <parameter>flag</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        If <parameter>flag</parameter> is <literal>true</literal>,
+        BeanShell scripts must follow a much more strict, Java-like syntax, and are not able to use the convinience features described in <xref linkend="macro-tips-BeanShell-convenience" />.
+      </para>
+    </listitem>
+
     <!-- <listitem>
       <funcsynopsis>
         <funcprototype>
@@ -498,6 +536,23 @@
         Creates a new BeanShell <classname>This</classname> scripted object
         that is a child of the parameter <parameter>object</parameter>.
       </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>void <function>importObject</function></funcdef>
+           <paramdef>Object <parameter>object</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        Import an object into this namespace. This is somewhat similar to Java 1.5 static class imports, except you can import the methods and fields of a Java object instance into
+        a BeanShell namespace, for example:
+      </para>
+      <informalexample><programlisting><![CDATA[Map map = new HashMap();
+    importObject( map );
+    put("foo", "bar");
+    print( get("foo") ); // "bar"]]></programlisting></informalexample>
     </listitem>
 
     <listitem>
