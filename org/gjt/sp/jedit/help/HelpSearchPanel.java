@@ -84,33 +84,6 @@ public class HelpSearchPanel extends JPanel
 		return index;
 	} //}}}
 
-	//{{{ Result class
-	class Result
-	{
-		int rank;
-		String title;
-		String file;
-
-		Result(String title, String file)
-		{
-			this.title = title;
-			this.file = file;
-		}
-
-		public String toString()
-		{
-			return rank + ":" + title + ":" + file;
-		}
-
-		public boolean equals(Object o)
-		{
-			if(o instanceof Result)
-				return ((Result)o).file.equals(file);
-			else
-				return false;
-		}
-	} //}}}
-
 	//{{{ ResultRenderer class
 	class ResultRenderer extends DefaultListCellRenderer
 	{
@@ -124,8 +97,13 @@ public class HelpSearchPanel extends JPanel
 			super.getListCellRendererComponent(list,null,index,
 				isSelected,cellHasFocus);
 
-			Result result = (Result)value;
-			setText(result.title);
+			if(value instanceof String)
+				setText((String)value);
+			else
+			{
+				HelpIndex.HelpFile result = (HelpIndex.HelpFile)value;
+				setText(result.title);
+			}
 
 			return this;
 		}
@@ -155,12 +133,10 @@ public class HelpSearchPanel extends JPanel
 					while(st.hasMoreTokens())
 					{
 						String word = st.nextToken().toLowerCase();
-						String[] lookup = index.lookupWord(word);
+						int[] lookup = index.lookupWord(word);
 						for(int i = 0; i < lookup.length; i++)
 						{
-							Result result = new Result(
-								MiscUtilities.getFileName(lookup[i]),
-								lookup[i]);
+							HelpIndex.HelpFile result = index.getFile(lookup[i]);
 							int idx = resultModel.indexOf(result);
 
 							// if not in list, add; otherwise increment
@@ -169,8 +145,8 @@ public class HelpSearchPanel extends JPanel
 								resultModel.addElement(result);
 							else
 							{
-								((Result)resultModel.getElementAt(idx))
-									.rank += 1;
+								/* ((HelpIndex.HelpFile)resultModel.getElementAt(idx))
+									.rank += 1; */
 							}
 						}
 					}
@@ -205,7 +181,8 @@ public class HelpSearchPanel extends JPanel
 			int row = results.locationToIndex(evt.getPoint());
 			if(row != -1)
 			{
-				Result result = (Result)results.getModel()
+				HelpIndex.HelpFile result =
+					(HelpIndex.HelpFile)results.getModel()
 					.getElementAt(row);
 				helpViewer.gotoURL(result.file,true);
 			}

@@ -571,6 +571,8 @@ public class Abbrevs
 							buf.append('$');
 						}
 					}
+					else
+						buf.append('$'); // $ at end is literal
 				} //}}}
 				else
 					buf.append(ch);
