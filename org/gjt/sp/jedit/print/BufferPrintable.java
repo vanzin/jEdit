@@ -60,7 +60,7 @@ class BufferPrintable extends WorkRequest implements Printable
 
 		lineList = new ArrayList();
 
-		softWrap = new SoftWrapTokenHandler();
+		tokenHandler = new DisplayTokenHandler();
 	} //}}}
 
 	//{{{ run() method
@@ -177,7 +177,7 @@ class BufferPrintable extends WorkRequest implements Printable
 	private LineMetrics lm;
 	private ArrayList lineList;
 
-	private SoftWrapTokenHandler softWrap;
+	private DisplayTokenHandler tokenHandler;
 	//}}}
 
 	//{{{ printPage() method
@@ -256,10 +256,10 @@ print_loop:	for(;;)
 			lineList.clear();
 
 			buffer.getLineText(currentPhysicalLine,seg);
-			softWrap.init(seg,styles,frc,e,lineList,
+			tokenHandler.init(seg,styles,frc,e,lineList,
 				(float)(pageWidth - lineNumberWidth));
 
-			buffer.markTokens(currentPhysicalLine,softWrap);
+			buffer.markTokens(currentPhysicalLine,tokenHandler);
 			if(lineList.size() == 0)
 				lineList.add(null);
 

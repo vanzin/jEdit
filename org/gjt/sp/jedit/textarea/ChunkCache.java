@@ -45,8 +45,7 @@ class ChunkCache
 	{
 		this.textArea = textArea;
 		out = new ArrayList();
-		noWrap = new DisplayTokenHandler();
-		softWrap = new SoftWrapTokenHandler();
+		tokenHandler = new DisplayTokenHandler();
 	} //}}}
 
 	//{{{ getMaxHorizontalScrollWidth() method
@@ -72,16 +71,6 @@ class ChunkCache
 		else if(line > textArea.getLastPhysicalLine())
 		{
 			return -1;
-		}
-		else if(!textArea.softWrap)
-		{
-			int virtLine = textArea.physicalToVirtual(line);
-			if(virtLine < firstLine)
-			{
-				throw new InternalError("virtLine < firstLine "
-					+ "and line >= physFirstLine");
-			}
-			return virtLine - firstLine;
 		}
 		else
 		{
@@ -166,9 +155,7 @@ class ChunkCache
 
 		int visibleLines = lineInfo.length;
 		// rely on the fact that when we're called physLastLine not updated yet
-		if(bufferSwitch
-			|| (!textArea.softWrap && Math.abs(firstLine - this.firstLine) >= visibleLines)
-			|| (textArea.softWrap && physFirstLine > textArea.getLastPhysicalLine()))
+		if(bufferSwitch || physFirstLine > textArea.getLastPhysicalLine())
 		{
 			if(DEBUG)
 				System.err.println("too far");
@@ -335,41 +322,40 @@ class ChunkCache
 	//{{{ lineToChunkList() method
 	void lineToChunkList(int physicalLine, List out)
 	{
-		if(textArea.softWrap)
-		{
-			TextAreaPainter painter = textArea.getPainter();
-			Buffer buffer = textArea.getBuffer();
-
-			buffer.getLineText(physicalLine,textArea.lineSegment);
-			softWrap.init(textArea.lineSegment,painter.getStyles(),
-				painter.getFontRenderContext(),
-				painter,out,textArea.wrapMargin);
-			softWrap.setMonospacedCharWidth(textArea.monospacedHack
-				? textArea.charWidth : 0);
-			buffer.markTokens(physicalLine,softWrap);
-		}
-		else
-		{
-			Chunk chunks = lineToChunkList(physicalLine);
-			if(chunks != null)
-				out.add(chunks);
-		}
-	} //}}}
-
-	//{{{ lineToChunkList() method
-	Chunk lineToChunkList(int physicalLine)
-	{
 		TextAreaPainter painter = textArea.getPainter();
 		Buffer buffer = textArea.getBuffer();
 
 		buffer.getLineText(physicalLine,textArea.lineSegment);
-		noWrap.init(textArea.lineSegment,painter.getStyles(),
+		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
-			painter);
-		noWrap.setMonospacedCharWidth(textArea.monospacedHack
+			painter,out,
+			(textArea.softWrap ? textArea.wrapMargin : 0.0f));
+		tokenHandler.setMonospacedCharWidth(textArea.monospacedHack
 			? textArea.charWidth : 0);
-		buffer.markTokens(physicalLine,noWrap);
-		return noWrap.getChunks();
+		buffer.markTokens(physicalLine,tokenHandler);
+	} //}}}
+
+	//{{{ lineToChunkList() method
+	// This will be removed eventually.
+	Chunk lineToChunkList(int physicalLine)
+	{
+		out.clear();
+
+		TextAreaPainter painter = textArea.getPainter();
+		Buffer buffer = textArea.getBuffer();
+
+		buffer.getLineText(physicalLine,textArea.lineSegment);
+		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
+			painter.getFontRenderContext(),
+			painter,out,0.0f);
+		tokenHandler.setMonospacedCharWidth(textArea.monospacedHack
+			? textArea.charWidth : 0);
+		buffer.markTokens(physicalLine,tokenHandler);
+
+		if(out.size() == 0)
+			return null;
+		else
+			return (Chunk)out.get(0);
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
@@ -558,8 +544,7 @@ class ChunkCache
 
 	private boolean needFullRepaint;
 
-	private DisplayTokenHandler noWrap;
-	private SoftWrapTokenHandler softWrap;
+	private DisplayTokenHandler tokenHandler;
 	//}}}
 
 	//{{{ updateChunksForLine() method

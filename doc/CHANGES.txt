@@ -17,6 +17,12 @@ Thanks to Kris Kopicki for contributing to this release.
 
 - Faster activity log.
 
++ Platform-Specific Changes:
+
+- MacOS plugin version 3.0 now requires Java 1.4.1. All native calls now
+  use the Cocoa API, and a dock menu has been added. The dock menu
+  provides similar functionality to the plugin menu (Kris Kopicki).
+
 + Bug Fixes:
 
 - jEdit no longer minimizes and then restores windows when files are

@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.syntax;
 //{{{ Imports
 import javax.swing.text.*;
 import java.awt.font.*;
+import java.util.List;
 import org.gjt.sp.jedit.syntax.*;
 //}}}
 
@@ -36,7 +37,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ init() method
 	public void init(Segment seg, SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
-		TabExpander expander)
+		TabExpander expander, List out,
+		float wrapMargin)
 	{
 		super.init();
 
@@ -46,6 +48,19 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		this.styles = styles;
 		this.fontRenderContext = fontRenderContext;
 		this.expander = expander;
+
+		// SILLY: allow for anti-aliased characters' "fuzz"
+		if(wrapMargin != 0.0f)
+			this.wrapMargin = wrapMargin += 2.0f;
+		else
+			this.wrapMargin = 0.0f;
+
+		this.out = out;
+		initialSize = out.size();
+
+		seenNonWhitespace = addedNonWhitespace = false;
+		endX = endOfWhitespace = 0.0f;
+		end = null;
 	} //}}}
 
 	//{{{ setMonospacedCharWidth() method
@@ -54,23 +69,101 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		this.charWidth = charWidth;
 	} //}}}
 
-	//{{{ getChunks() method
+	//{{{ getChunkList() method
 	/**
-	 * Returns the first chunk.
-	 * @since jEdit 4.1pre1
+	 * Returns the list of chunks.
+	 * @since jEdit 4.1pre7
 	 */
-	public Chunk getChunks()
+	public List getChunkList()
 	{
-		return (Chunk)firstToken;
+		return out;
 	} //}}}
 
-	//{{{ Protected members
-	protected Segment seg;
-	protected SyntaxStyle[] styles;
-	protected FontRenderContext fontRenderContext;
-	protected TabExpander expander;
-	protected float x;
-	protected float charWidth;
+	//{{{ handleToken() method
+	/**
+	 * Called by the token marker when a syntax token has been parsed.
+	 * @param id The token type (one of the constants in the
+	 * {@link Token} class).
+	 * @param offset The start offset of the token
+	 * @param length The number of characters in the token
+	 * @param context The line context
+	 * @since jEdit 4.1pre1
+	 */
+	public void handleToken(byte id, int offset, int length,
+		TokenMarker.LineContext context)
+	{
+		Token token = createToken(id,offset,length,context);
+		if(token != null)
+		{
+			addToken(token,context);
+
+			if(id == Token.WHITESPACE
+				|| id == Token.TAB)
+			{
+				if(!seenNonWhitespace)
+				{
+					endOfWhitespace = x;
+				}
+			}
+			else
+				seenNonWhitespace = true;
+
+			if(out.size() == initialSize)
+				out.add(firstToken);
+			else if(id == Token.WHITESPACE
+				|| id == Token.TAB)
+			{
+				if(out.size() != initialSize)
+				{
+					end = lastToken;
+					endX = x;
+				}
+			}
+			else if(wrapMargin != 0.0f
+				&& x > wrapMargin
+				&& end != null
+				&& addedNonWhitespace)
+			{
+				Chunk blankSpace = new Chunk(endOfWhitespace,
+					end.offset + end.length,
+					getParserRuleSet(context));
+
+				blankSpace.next = end.next;
+				end.next = null;
+
+				x = x - endX + endOfWhitespace;
+
+				out.add(blankSpace);
+
+				end = null;
+				endX = x;
+			}
+
+			addedNonWhitespace = seenNonWhitespace;
+		}
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private Segment seg;
+	private SyntaxStyle[] styles;
+	private FontRenderContext fontRenderContext;
+	private TabExpander expander;
+	private float x;
+	private float charWidth;
+
+	private List out;
+	private float wrapMargin;
+	private float endX;
+	private Token end;
+
+	private boolean seenNonWhitespace;
+	private boolean addedNonWhitespace;
+	private float endOfWhitespace;
+
+	private int initialSize;
+	//}}}
 
 	//{{{ createToken() method
 	protected Token createToken(byte id, int offset, int length,
