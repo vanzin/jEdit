@@ -45,23 +45,28 @@ class CharUnit implements Serializable {
  * and an optional syntax specification (see RESyntax; if not specified,
  * <code>RESyntax.RE_SYNTAX_PERL5</code> is used).
  * <P>
+ * Once compiled, a regular expression object is reusable as well as
+ * threadsafe: multiple threads can use the RE instance simultaneously
+ * to match against different input text.
+ * <P>
  * Various methods attempt to match input text against a compiled
  * regular expression.  These methods are:
- * <LI><code>isMatch</code>: returns true if the input text in its entirety
- * matches the regular expression pattern.
- * <LI><code>getMatch</code>: returns the first match found in the input text,
- * or null if no match is found.
- * <LI><code>getAllMatches</code>: returns an array of all non-overlapping 
- * matches found in the input text.  If no matches are found, the array is
- * zero-length.
- * <LI><code>substitute</code>: substitute the first occurence of the pattern
- * in the input text with a replacement string (which may include
- * metacharacters $0-$9, see REMatch.substituteInto).
- * <LI><code>substituteAll</code>: same as above, but repeat for each match
- * before returning.
- * <LI><code>getMatchEnumeration</code>: returns an REMatchEnumeration object
- * that allows iteration over the matches (see REMatchEnumeration for some
- * reasons why you may want to do this instead of using <code>getAllMatches</code>.
+ * <LI><code>isMatch</code>: returns true if the input text in its
+ * entirety matches the regular expression pattern.
+ * <LI><code>getMatch</code>: returns the first match found in the
+ * input text, or null if no match is found.
+ * <LI><code>getAllMatches</code>: returns an array of all
+ * non-overlapping matches found in the input text.  If no matches are
+ * found, the array is zero-length.
+ * <LI><code>substitute</code>: substitute the first occurence of the
+ * pattern in the input text with a replacement string (which may
+ * include metacharacters $0-$9, see REMatch.substituteInto).
+ * <LI><code>substituteAll</code>: same as above, but repeat for each
+ * match before returning.
+ * <LI><code>getMatchEnumeration</code>: returns an REMatchEnumeration
+ * object that allows iteration over the matches (see
+ * REMatchEnumeration for some reasons why you may want to do this
+ * instead of using <code>getAllMatches</code>.
  * <P>
  *
  * These methods all have similar argument lists.  The input can be a
@@ -93,12 +98,12 @@ class CharUnit implements Serializable {
  * thread-safe manner.
  *
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
- * @version 1.1.4-dev, to be released
+ * @version 1.1.5-dev, to be released
  */
 
 public class RE extends REToken {
   // This String will be returned by getVersion()
-  private static final String VERSION = "1.1.4-dev";
+  private static final String VERSION = "1.1.5-dev";
 
   // The localized strings are kept in a separate file
   private static ResourceBundle messages = PropertyResourceBundle.getBundle("gnu/regexp/MessagesBundle", Locale.getDefault());
@@ -155,11 +160,11 @@ public class RE extends REToken {
    * REMatch m4 = exp.getMatch(s,8,RE.REG_ANCHORINDEX);         <BR>
    * <P>
    * // Results:<BR>
-   * //  m0 = "food"<BR>
-   * //  m1 = "fool"<BR>
-   * //  m2 = null<BR>
-   * //  m3 = null<BR>
-   * //  m4 = "fool"<BR>
+   * //  m0.toString(): "food"<BR>
+   * //  m1.toString(): "fool"<BR>
+   * //  m2.toString(): null<BR>
+   * //  m3.toString(): null<BR>
+   * //  m4.toString(): "fool"<BR>
    * </CODE>
    */
   public static final int REG_NOTBOL = 16;
@@ -1028,6 +1033,14 @@ public class RE extends REToken {
 	  }
       } while (input.move(1));
       
+      // Special handling at end of input for e.g. "$"
+      if (minimumLength == 0) {
+	  if (match(input, mymatch)) {
+	      mymatch.finish(input);
+	      return mymatch;
+	  }
+      }
+
       return null;
   }
 

@@ -1,6 +1,6 @@
 /*
  *  gnu/regexp/RESyntax.java
- *  Copyright (C) 1998-2001 Wes Biggs
+ *  Copyright (C) 1998-2002 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published
@@ -277,7 +277,14 @@ public final class RESyntax implements Serializable {
    * using single line mode (/s modifier).
    */
   public static final RESyntax RE_SYNTAX_PERL5_S;
-  
+
+    /**
+     * Predefined syntax.
+     * Emulates regular expression support in Java 1.4's java.util.regex
+     * package.
+     */
+    public static final RESyntax RE_SYNTAX_JAVA_1_4;
+
   static {
       // Define syntaxes
       
@@ -395,6 +402,10 @@ public final class RESyntax implements Serializable {
       
       RE_SYNTAX_PERL5_S = new RESyntax(RE_SYNTAX_PERL5)
 	  .set(RE_DOT_NEWLINE)
+	  .makeFinal();
+
+      RE_SYNTAX_JAVA_1_4 = new RESyntax(RE_SYNTAX_PERL5)
+	  // XXX
 	  .makeFinal();
   }
 
