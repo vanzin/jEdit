@@ -187,9 +187,8 @@
   </para>
   <para>
    If you are using <application>jEditLauncher</application>
-   to start jEdit on Windows, only file names and marker and line number
-   specifications can be specified on the command line; other parameters
-   must be set as described in <xref
+   to start jEdit on Windows, only file names specifications can be specified
+   on the command line; other parameters must be set as described in <xref
    linkend="launcher-starting" />.
   </para>
   <informaltable>
