@@ -115,6 +115,8 @@ class BufferPrintable extends WorkRequest implements Printable
 			+ ", currentPageStart = " + currentPageStart
 			+ ", currentPhysicalLine = " + currentPhysicalLine
 			+ ", end = " + end);
+		System.err.println(((Graphics2D)_gfx).getFontRenderContext());
+		System.err.println(((Graphics2D)_gfx).getTransform());
 		if(pageIndex != currentPage)
 		{
 			currentPageStart = currentPhysicalLine;
