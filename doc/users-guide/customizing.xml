@@ -328,12 +328,12 @@
    The <userinput>-nosettings</userinput> switch will force jEdit to not look for
    or create a settings directory; default settings will be used instead.
   </para>
-  <para>
+  <!-- para>
    If you are using <application>jEditLauncher</application>
    to start jEdit on Windows, these parameters cannot be specified on the
    MS-DOS prompt command line when starting jEdit; they must be set as described
    in <xref linkend="launcher-starting" />.
-  </para>
+  </para -->
   <para>
    jEdit creates the following files and directories
    inside the settings directory; plugins may add more:

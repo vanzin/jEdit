@@ -90,7 +90,7 @@
  &globs;
  &regexps;
  &macro-index;
- &launcher-guide;
+<!--  &launcher-guide; -->
 </part>
 
 <part id="writing-modes-part"><title>Writing Edit Modes</title>

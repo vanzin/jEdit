@@ -394,21 +394,6 @@ public class SearchBar extends JPanel
 		{
 			switch(evt.getKeyCode())
 			{
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_RIGHT:
-				if(!hyperSearch.isSelected())
-				{
-					if(temp)
-					{
-						view.removeToolBar(SearchBar.this);
-					}
-
-					evt.consume();
-					view.getEditPane().focusOnTextArea();
-					view.getEditPane().getTextArea()
-						.processKeyEvent(evt);
-				}
-				break;
 			case KeyEvent.VK_ESCAPE:
 				if(temp)
 				{

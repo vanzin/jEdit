@@ -29,6 +29,14 @@ Bock for contributing to this release.
 
 - When printing, any syntax styles with a foreground color of white are
   printed as black (Justin Dieters).
+
+- Entering / in the file system browser dialog's text field no longer
+  has any special action if the caret is not at the end of the field.
+
+- Removed the feature that would pass arrow keys to the text area from
+  the search bar, since people didn't like it and it didn't work
+  properly anyway.
+
 }}}
 
 }}}
