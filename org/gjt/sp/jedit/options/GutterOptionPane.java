@@ -41,28 +41,9 @@ public class GutterOptionPane extends AbstractOptionPane
 		addComponent(lineNumbersEnabled);
 
 		/* Font */
-		String _fontFamily = jEdit.getProperty("view.gutter.font");
-
-		int _fontStyle;
-		try
-		{
-			_fontStyle = Integer.parseInt(jEdit.getProperty("view.gutter.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontStyle = Font.PLAIN;
-		}
-
-		int _fontSize;
-		try
-		{
-			_fontSize = Integer.parseInt(jEdit.getProperty("view.gutter.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontSize = 14;
-		}
-		gutterFont = new FontSelector(new Font(_fontFamily,_fontStyle,_fontSize));
+		gutterFont = new FontSelector(
+			jEdit.getFontProperty("view.gutter.font",
+			new Font("Monospaced",Font.PLAIN,10)));
 
 		addComponent(jEdit.getProperty("options.gutter.font"),gutterFont);
 
@@ -105,10 +86,7 @@ public class GutterOptionPane extends AbstractOptionPane
 
 	public void _save()
 	{
-		Font _font = gutterFont.getFont();
-		jEdit.setProperty("view.gutter.font",_font.getFamily());
-		jEdit.setProperty("view.gutter.fontsize",String.valueOf(_font.getSize()));
-		jEdit.setProperty("view.gutter.fontstyle",String.valueOf(_font.getStyle()));
+		jEdit.setFontProperty("view.gutter.font",gutterFont.getFont());
 
 		jEdit.setProperty("view.gutter.borderWidth",
 			gutterBorderWidth.getText());

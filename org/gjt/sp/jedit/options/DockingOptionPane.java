@@ -62,8 +62,8 @@ public class DockingOptionPane extends AbstractOptionPane
 		};
 
 		tabsPos = new JComboBox(positions);
-		tabsPos.setSelectedIndex(Integer.parseInt(jEdit.getProperty(
-			"view.docking.tabsPos")));
+		tabsPos.setSelectedIndex(jEdit.getIntegerProperty(
+			"view.docking.tabsPos",0));
 		addComponent(jEdit.getProperty("options.docking.tabsPos"),tabsPos);
 
 		addComponent(Box.createVerticalStrut(6));
@@ -83,8 +83,8 @@ public class DockingOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("view.docking.alternateLayout",
 			layout2.isSelected());
-		jEdit.setProperty("view.docking.tabsPos",String.valueOf(
-			tabsPos.getSelectedIndex()));
+		jEdit.setIntegerProperty("view.docking.tabsPos",
+			tabsPos.getSelectedIndex());
 		windowModel.save();
 	}
 

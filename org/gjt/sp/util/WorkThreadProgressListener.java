@@ -27,5 +27,9 @@ import java.util.EventListener;
  */
 public interface WorkThreadProgressListener extends EventListener
 {
+	// status message changed, operation started, operation ends, ...
+	void statusUpdate(WorkThreadPool threadPool, int threadIndex);
+
+	// progress bar value change
 	void progressUpdate(WorkThreadPool threadPool, int threadIndex);
 }

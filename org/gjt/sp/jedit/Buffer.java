@@ -87,15 +87,8 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		if(undo != null)
 		{
-			try
-			{
-				undo.setLimit(Integer.parseInt(jEdit.getProperty(
-					"buffer.undoCount")));
-			}
-			catch(NumberFormatException nf)
-			{
-				undo.setLimit(100);
-			}
+			undo.setLimit(jEdit.getIntegerProperty(
+				"buffer.undoCount",100));
 		}
 
 		// cache these for improved performance
@@ -188,34 +181,15 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		Graphics gfx = null;
 
-		String fontFamily = jEdit.getProperty("print.font");
-		int fontSize;
-		try
-		{
-			fontSize = Integer.parseInt(jEdit.getProperty(
-				"print.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			fontSize = 10;
-		}
-		int fontStyle;
-		try
-		{
-			fontStyle = Integer.parseInt(jEdit.getProperty(
-				"print.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			fontStyle = Font.PLAIN;
-		}
+		Font font = jEdit.getFontProperty("print.font",
+			new Font("Monospaced",Font.PLAIN,10));
 
-		SyntaxStyle[] styles = GUIUtilities.loadStyles(fontFamily,fontSize);
+		SyntaxStyle[] styles = GUIUtilities.loadStyles(
+			jEdit.getProperty("print.font"),
+			jEdit.getIntegerProperty("print.fontsize",10));
 
 		boolean style = jEdit.getBooleanProperty("print.style");
 		boolean color = jEdit.getBooleanProperty("print.color");
-
-		Font font = new Font(fontFamily,fontStyle,fontSize);
 
 		FontMetrics fm = null;
 		Dimension pageDimension = job.getPageDimension();
@@ -436,16 +410,8 @@ public class Buffer extends PlainDocument implements EBComponent
 					BufferIORequest.LOAD_DATA);
 
 				undo = new MyUndoManager();
-				try
-				{
-					undo.setLimit(Integer.parseInt(
-						jEdit.getProperty(
-						"buffer.undoCount")));
-				}
-				catch(NumberFormatException nf)
-				{
-					undo.setLimit(100);
-				}
+				undo.setLimit(jEdit.getIntegerProperty(
+					"buffer.undoCount",100));
 
 				setMode();
 
@@ -3346,7 +3312,7 @@ loop:				for(int i = 0; i < count; i++)
 	/**
 	 * Only useful for the text area.
 	 */
-	public static interface FoldListener
+	public interface FoldListener
 	{
 		void foldLevelsChanged(int firstLine, int lastLine);
 

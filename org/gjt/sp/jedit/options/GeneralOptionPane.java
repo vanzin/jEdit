@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.options;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import org.gjt.sp.jedit.*;
@@ -35,26 +36,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		/* Look and feel */
-		addComponent(new JLabel(jEdit.getProperty("options.general.lf.note")));
-
-		lfs = UIManager.getInstalledLookAndFeels();
-		String[] names = new String[lfs.length];
-		String lf = UIManager.getLookAndFeel().getClass().getName();
-		int index = 0;
-		for(int i = 0; i < names.length; i++)
-		{
-			names[i] = lfs[i].getName();
-			if(lf.equals(lfs[i].getClassName()))
-				index = i;
-		}
-
-		lookAndFeel = new JComboBox(names);
-		lookAndFeel.setSelectedIndex(index);
-
-		addComponent(jEdit.getProperty("options.general.lf"),
-			lookAndFeel);
-
 		/* History count */
 		history = new JTextField(jEdit.getProperty("history"));
 		addComponent(jEdit.getProperty("options.general.history"),history);
@@ -120,18 +101,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 		else
 			showSplash.setSelected(!new File(settingsDirectory,"nosplash").exists());
 		addComponent(showSplash);
-
-		/* Global colors */
-		globalColors = new JCheckBox(jEdit.getProperty(
-			"options.general.globalColors"));
-		globalColors.setSelected(jEdit.getBooleanProperty("globalColors"));
-		addComponent(globalColors);
 	}
 
 	protected void _save()
 	{
-		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
-		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setProperty("history",history.getText());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
@@ -169,13 +142,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 				}
 			}
 		}
-
-		jEdit.setBooleanProperty("globalColors",globalColors.isSelected());
 	}
 
 	// private members
-	private UIManager.LookAndFeelInfo[] lfs;
-	private JComboBox lookAndFeel;
 	private JTextField history;
 	private JCheckBox saveCaret;
 	private JCheckBox sortBuffers;
@@ -186,5 +155,4 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox showBufferSwitcher;
 	private JCheckBox showTips;
 	private JCheckBox showSplash;
-	private JCheckBox globalColors;
 }

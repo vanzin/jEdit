@@ -431,6 +431,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="memory-status">
+	<CODE>
+		jEdit.showMemoryDialog(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="narrow">
 	<CODE>
 		buffer.narrow(textArea.getSelectionStartLine(),textArea.getSelectionEndLine());

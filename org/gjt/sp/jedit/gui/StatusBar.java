@@ -35,9 +35,9 @@ import org.gjt.sp.util.*;
  * <ul>
  * <li>Displaying caret position information
  * <li>Displaying readNextChar() prompts
- * <li>Displaying the 'macro recording' message
  * <li>Displaying the status of the overwrite, multi select flags
  * <li>I/O progress
+ * <li>Memory status
  * <li>And so on
  * </ul>
  *
@@ -45,7 +45,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @since jEdit 3.2pre2
  */
-public class StatusBar extends JPanel
+public class StatusBar extends JPanel implements WorkThreadProgressListener
 {
 	public StatusBar(View view)
 	{
@@ -56,8 +56,12 @@ public class StatusBar extends JPanel
 
 		Border border = BorderFactory.createLoweredBevelBorder();
 
+		MouseHandler mouseHandler = new MouseHandler();
+
 		caretStatus = new VICaretStatus();
 		caretStatus.setBorder(border);
+		caretStatus.setToolTipText(jEdit.getProperty("view.status.caret-tooltip"));
+		caretStatus.addMouseListener(mouseHandler);
 		add(BorderLayout.WEST,caretStatus);
 
 		messagePanel = new JPanel();
@@ -67,15 +71,11 @@ public class StatusBar extends JPanel
 		add(BorderLayout.CENTER,messagePanel);
 
 		message = new JLabel();
-		message.setForeground(Color.black);
 		message.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 		setMessageComponent(message);
 
-		MouseHandler mouseHandler = new MouseHandler();
-
 		Box box = new Box(BoxLayout.X_AXIS);
 		mode = new JLabel();
-		mode.setForeground(Color.black);
 		mode.setBorder(border);
 		mode.setToolTipText(jEdit.getProperty("view.status.mode-tooltip"));
 		mode.addMouseListener(mouseHandler);
@@ -83,48 +83,101 @@ public class StatusBar extends JPanel
 		box.add(Box.createHorizontalStrut(3));
 
 		encoding = new JLabel();
-		encoding.setForeground(Color.black);
 		encoding.setBorder(border);
 		encoding.setToolTipText(jEdit.getProperty("view.status.encoding-tooltip"));
 		encoding.addMouseListener(mouseHandler);
 		box.add(encoding);
 		box.add(Box.createHorizontalStrut(3));
 
-		multiSelect = new JLabel("multi");
+		FontMetrics fm = getToolkit().getFontMetrics(
+			UIManager.getFont("Label.font"));
+
+		multiSelect = new JLabel();
 		multiSelect.setBorder(border);
+		multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 		multiSelect.addMouseListener(mouseHandler);
+
+		Dimension dim = multiSelect.getPreferredSize();
+		dim.width += Math.max(fm.stringWidth("single"),
+			fm.stringWidth("multi"));
+		multiSelect.setPreferredSize(dim);
+
 		box.add(multiSelect);
 		box.add(Box.createHorizontalStrut(3));
 
-		overwrite = new JLabel("over");
+		overwrite = new JLabel();
 		overwrite.setBorder(border);
+		overwrite.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
 		overwrite.addMouseListener(mouseHandler);
-		box.add(overwrite);
-		box.add(Box.createHorizontalStrut(3));
 
-		fold = new JLabel("fold");
-		fold.setBorder(border);
-		box.add(fold);
+		dim = overwrite.getPreferredSize();
+		dim.width += Math.max(fm.stringWidth("ovr"),
+			fm.stringWidth("ins"));
+		overwrite.setPreferredSize(dim);
+
+		box.add(overwrite);
 
 		updateBufferStatus();
 		updateMiscStatus();
-		updateFoldStatus();
 
 		box.add(Box.createHorizontalStrut(3));
-		ioProgress = new MiniIOProgress();
-		ioProgress.setBorder(border);
-		ioProgress.addMouseListener(mouseHandler);
-		box.add(ioProgress);
-
+		memory = new MemoryStatus();
+		memory.setBorder(border);
+		memory.setToolTipText(jEdit.getProperty("view.status.memory-tooltip"));
+		memory.addMouseListener(mouseHandler);
+		box.add(memory);
 
 		// UI hack because BoxLayout does not give all components the
 		// same height
-		Dimension dim = multiSelect.getPreferredSize();
-		dim.width = 40;
-		// dim.height = <same as all other components>
-		ioProgress.setPreferredSize(dim);
+		dim = memory.getPreferredSize();
+		dim.width += fm.stringWidth("69Mb/69Mb");
+		dim.height = multiSelect.getPreferredSize().height;
+		memory.setPreferredSize(dim);
 
 		add(BorderLayout.EAST,box);
+	}
+
+	public void addNotify()
+	{
+		super.addNotify();
+		VFSManager.getIOThreadPool().addProgressListener(this);
+	}
+
+	public void removeNotify()
+	{
+		super.removeNotify();
+		VFSManager.getIOThreadPool().removeProgressListener(this);
+	}
+
+	public void statusUpdate(final WorkThreadPool threadPool, int threadIndex)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				int requestCount = threadPool.getRequestCount();
+				if(requestCount == 0)
+				{
+					setMessageAndClear(jEdit.getProperty(
+						"view.status.io.done"));
+				}
+				else if(requestCount == 1)
+				{
+					setMessage(jEdit.getProperty(
+						"view.status.io-1"));
+				}
+				else
+				{
+					Object[] args = { new Integer(requestCount) };
+					setMessage(jEdit.getProperty(
+						"view.status.io",args));
+				}
+			}
+		});
+	}
+
+	public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+	{
 	}
 
 	/**
@@ -205,32 +258,10 @@ public class StatusBar extends JPanel
 	{
 		JEditTextArea textArea = view.getTextArea();
 
-		if(textArea.isMultipleSelectionEnabled())
-			multiSelect.setForeground(Color.black);
-		else
-		{
-			if(textArea.getSelectionCount() > 1)
-			{
-				multiSelect.setForeground(UIManager.getColor(
-					"Label.foreground"));
-			}
-			else
-				multiSelect.setForeground(gray);
-		}
-
-		if(textArea.isOverwriteEnabled())
-			overwrite.setForeground(Color.black);
-		else
-			overwrite.setForeground(gray);
-	}
-
-	public void updateFoldStatus()
-	{
-		Buffer buffer = view.getBuffer();
-		if(buffer.getLineCount() != buffer.getVirtualLineCount())
-			fold.setForeground(Color.black);
-		else
-			fold.setForeground(gray);
+		multiSelect.setText(textArea.isMultipleSelectionEnabled()
+			? "multi" : "single");
+		overwrite.setText(textArea.isOverwriteEnabled()
+			? "ovr" : "ins");
 	}
 
 	// private members
@@ -243,9 +274,7 @@ public class StatusBar extends JPanel
 	private JLabel encoding;
 	private JLabel multiSelect;
 	private JLabel overwrite;
-	private JLabel fold;
-	private MiniIOProgress ioProgress;
-	private Color gray = new Color(142,142,142);
+	private MemoryStatus memory;
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
 
@@ -256,14 +285,25 @@ public class StatusBar extends JPanel
 		public void mouseClicked(MouseEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == mode || source == encoding)
-				new BufferOptions(view,view.getBuffer());
+			if(source == caretStatus)
+			{
+				if(evt.getClickCount() == 2)
+					view.getTextArea().showGoToLineDialog();
+			}
+			else if(source == mode || source == encoding)
+			{
+				if(evt.getClickCount() == 2)
+					new BufferOptions(view,view.getBuffer());
+			}
 			else if(source == multiSelect)
 				view.getTextArea().toggleMultipleSelectionEnabled();
 			else if(source == overwrite)
 				view.getTextArea().toggleOverwriteEnabled();
-			else if(source == ioProgress)
-				new IOProgressMonitor(view);
+			else if(source == memory)
+			{
+				if(evt.getClickCount() == 2)
+					jEdit.showMemoryDialog(view);
+			}
 		}
 	}
 
@@ -271,7 +311,7 @@ public class StatusBar extends JPanel
 	{
 		public VICaretStatus()
 		{
-			VICaretStatus.this.setForeground(UIManager.getColor("Button.foreground"));
+			VICaretStatus.this.setForeground(UIManager.getColor("Label.foreground"));
 			VICaretStatus.this.setBackground(UIManager.getColor("Label.background"));
 			VICaretStatus.this.setFont(UIManager.getFont("Label.font"));
 
@@ -371,86 +411,73 @@ public class StatusBar extends JPanel
 		}
 	}
 
-	class MiniIOProgress extends JComponent
-		implements WorkThreadProgressListener
+	class MemoryStatus extends JComponent implements ActionListener
 	{
-		public MiniIOProgress()
+		public MemoryStatus()
 		{
-			MiniIOProgress.this.setDoubleBuffered(true);
-			MiniIOProgress.this.setForeground(UIManager.getColor("Button.foreground"));
-			MiniIOProgress.this.setBackground(UIManager.getColor("Button.background"));
-
-			icon = GUIUtilities.loadIcon("io.gif");
+			MemoryStatus.this.setDoubleBuffered(true);
+			MemoryStatus.this.setForeground(UIManager.getColor("Label.foreground"));
+			MemoryStatus.this.setBackground(UIManager.getColor("Label.background"));
+			MemoryStatus.this.setFont(UIManager.getFont("Label.font"));
 		}
 
 		public void addNotify()
 		{
 			super.addNotify();
-			VFSManager.getIOThreadPool().addProgressListener(this);
+			timer = new Timer(2000,this);
+			timer.start();
 		}
 
 		public void removeNotify()
 		{
-			super.removeNotify();
-			VFSManager.getIOThreadPool().removeProgressListener(this);
+			timer.stop();
 		}
 
-		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
+		public void actionPerformed(ActionEvent evt)
 		{
-			MiniIOProgress.this.repaint();
+			MemoryStatus.this.repaint();
 		}
 
 		public void paintComponent(Graphics g)
 		{
-			WorkThreadPool ioThreadPool = VFSManager.getIOThreadPool();
-			if(ioThreadPool.getThreadCount() == 0)
-				return;
+			Insets insets = MemoryStatus.this.getBorder().getBorderInsets(this);
 
+			Runtime runtime = Runtime.getRuntime();
+			int freeMemory = (int)(runtime.freeMemory() / 1024 / 1024);
+			int totalMemory = (int)(runtime.totalMemory() / 1024 / 1024);
+			int usedMemory = (totalMemory - freeMemory);
+
+			int width = MemoryStatus.this.getWidth()
+				- insets.left - insets.right;
+
+			Color text = MemoryStatus.this.getForeground();
+			Color status = UIManager.getColor("ProgressBar.foreground");
+			if(status.equals(text))
+				g.setXORMode(MemoryStatus.this.getBackground());
+			else
+				g.setColor(status);
+
+			float fraction = ((float)usedMemory) / totalMemory;
+
+			g.fillRect(insets.left,insets.top,
+				(int)(width * fraction),
+				MemoryStatus.this.getHeight()
+				- insets.top - insets.bottom);
+
+			g.setPaintMode();
+
+			g.setColor(text);
+
+			String str = "" + usedMemory + "Mb/"
+				+ totalMemory + "Mb";
 			FontMetrics fm = g.getFontMetrics();
 
-			if(ioThreadPool.getRequestCount() == 0)
-				return;
-			else
-			{
-				icon.paintIcon(this,g,MiniIOProgress.this.getWidth()
-					- icon.getIconWidth() - 3,
-					(MiniIOProgress.this.getHeight()
-					- icon.getIconHeight()) / 2);
-			}
-
-			Insets insets = MiniIOProgress.this.getBorder().getBorderInsets(this);
-
-			int progressHeight = (MiniIOProgress.this.getHeight() - insets.top - insets.bottom)
-				/ ioThreadPool.getThreadCount();
-			int progressWidth = MiniIOProgress.this.getWidth()
-				- icon.getIconWidth() - insets.left - insets.right - 2;
-
-			for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
-			{
-				WorkThread thread = ioThreadPool.getThread(i);
-				int max = thread.getProgressMaximum();
-				if(!thread.isRequestRunning() || max == 0)
-					continue;
-
-				int value = thread.getProgressValue();
-				double progressRatio = ((double)value / max);
-
-				// when loading gzip files, for example,
-				// progressValue (data read) can be larger
-				// than progressMaximum (file size)
-				progressRatio = Math.min(progressRatio,1.0);
-
-				g.fillRect(insets.left,insets.top + i * progressHeight,
-					(int)(progressRatio * progressWidth),progressHeight);
-			}
-		}
-
-		public Dimension getPreferredSize()
-		{
-			return new Dimension(40,icon.getIconHeight());
+			g.drawString(str,
+				insets.left + (width - fm.stringWidth(str)) / 2,
+				insets.top + fm.getAscent());
 		}
 
 		// private members
-		private Icon icon;
+		private Timer timer;
 	}
 }

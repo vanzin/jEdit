@@ -140,11 +140,6 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
-		if(!(UIManager.getLookAndFeel() instanceof MetalLookAndFeel))
-		{
-			addColorChoice("options.color.dockingBorderColor",
-				"view.docking.borderColor");
-		}
 	}
 
 	public int getColumnCount()
@@ -198,15 +193,14 @@ class ColorTableModel extends AbstractTableModel
 		{
 			ColorChoice ch = (ColorChoice)colorChoices
 				.elementAt(i);
-			jEdit.setProperty(ch.property,
-				GUIUtilities.getColorHexString(ch.color));
+			jEdit.setColorProperty(ch.property,ch.color);
 		}
 	}
 
 	private void addColorChoice(String label, String property)
 	{
 		colorChoices.addElement(new ColorChoice(jEdit.getProperty(label),
-			property,GUIUtilities.parseColor(jEdit.getProperty(property))));
+			property,jEdit.getColorProperty(property)));
 	}
 
 	static class ColorChoice

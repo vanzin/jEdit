@@ -302,66 +302,60 @@ public class EditPane extends JPanel implements EBComponent
 		painter.setFont(UIManager.getFont("TextArea.font"));
 		painter.setBracketHighlightEnabled(jEdit.getBooleanProperty(
 			"view.bracketHighlight"));
-		painter.setBracketHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bracketHighlightColor")));
+		painter.setBracketHighlightColor(
+			jEdit.getColorProperty("view.bracketHighlightColor"));
 		painter.setEOLMarkersPainted(jEdit.getBooleanProperty(
 			"view.eolMarkers"));
-		painter.setEOLMarkerColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.eolMarkerColor")));
+		painter.setEOLMarkerColor(
+			jEdit.getColorProperty("view.eolMarkerColor"));
 		painter.setWrapGuidePainted(jEdit.getBooleanProperty(
 			"view.wrapGuide"));
-		painter.setWrapGuideColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.wrapGuideColor")));
-		painter.setCaretColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.caretColor")));
-		painter.setSelectionColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.selectionColor")));
-		painter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.bgColor")));
-		painter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.fgColor")));
+		painter.setWrapGuideColor(
+			jEdit.getColorProperty("view.wrapGuideColor"));
+		painter.setCaretColor(
+			jEdit.getColorProperty("view.caretColor"));
+		painter.setSelectionColor(
+			jEdit.getColorProperty("view.selectionColor"));
+		painter.setBackground(
+			jEdit.getColorProperty("view.bgColor"));
+		painter.setForeground(
+			jEdit.getColorProperty("view.fgColor"));
 		painter.setBlockCaretEnabled(jEdit.getBooleanProperty(
 			"view.blockCaret"));
 		painter.setLineHighlightEnabled(jEdit.getBooleanProperty(
 			"view.lineHighlight"));
-		painter.setLineHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.lineHighlightColor")));
+		painter.setLineHighlightColor(
+			jEdit.getColorProperty("view.lineHighlightColor"));
 		painter.setAntiAliasEnabled(jEdit.getBooleanProperty(
 			"view.antiAlias"));
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
-		painter.setStyles(GUIUtilities.loadStyles(jEdit.getProperty("view.font"),
-			Integer.parseInt(jEdit.getProperty("view.fontsize"))));
+		painter.setStyles(GUIUtilities.loadStyles(
+			jEdit.getProperty("view.font"),
+			jEdit.getIntegerProperty("view.fontsize",12)));
 
 		Gutter gutter = textArea.getGutter();
 		gutter.setExpanded(jEdit.getBooleanProperty(
 			"view.gutter.lineNumbers"));
-		try
-		{
-			int interval = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.highlightInterval"));
-			gutter.setHighlightInterval(interval);
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default highlight interval
-		}
+		int interval = jEdit.getIntegerProperty(
+			"view.gutter.highlightInterval",5);
+		gutter.setHighlightInterval(interval);
 		gutter.setCurrentLineHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.highlightCurrentLine"));
-		gutter.setBackground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.bgColor")));
-		gutter.setForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.fgColor")));
-		gutter.setHighlightedForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.highlightColor")));
-		gutter.setFoldColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.foldColor")));
-		markerHighlight.setMarkerHighlightColor(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.markerColor")));
+		gutter.setBackground(
+			jEdit.getColorProperty("view.gutter.bgColor"));
+		gutter.setForeground(
+			jEdit.getColorProperty("view.gutter.fgColor"));
+		gutter.setHighlightedForeground(
+			jEdit.getColorProperty("view.gutter.highlightColor"));
+		gutter.setFoldColor(
+			jEdit.getColorProperty("view.gutter.foldColor"));
+		markerHighlight.setMarkerHighlightColor(
+			jEdit.getColorProperty("view.gutter.markerColor"));
 		markerHighlight.setHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.markerHighlight"));
-		gutter.setCurrentLineForeground(GUIUtilities.parseColor(
-			jEdit.getProperty("view.gutter.currentLineColor")));
+		gutter.setCurrentLineForeground(
+			jEdit.getColorProperty("view.gutter.currentLineColor"));
 		String alignment = jEdit.getProperty(
 			"view.gutter.numberAlignment");
 		if ("right".equals(alignment))
@@ -377,47 +371,21 @@ public class EditPane extends JPanel implements EBComponent
 			gutter.setLineNumberAlignment(Gutter.LEFT);
 		}
 
-		try
-		{
-			String fontname = jEdit.getProperty("view.gutter.font");
-			int fontsize = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontsize"));
-			int fontstyle = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.fontstyle"));
-			gutter.setFont(new Font(fontname,fontstyle,fontsize));
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default font
-		}
+		gutter.setFont(jEdit.getFontProperty("view.gutter.font",
+			new Font("Monospaced",Font.PLAIN,12)));
 
-		try
-		{
-			int width = Integer.parseInt(jEdit.getProperty(
-				"view.gutter.borderWidth"));
-			gutter.setBorder(width, GUIUtilities.parseColor(
-				jEdit.getProperty("view.gutter.focusBorderColor")),
-				GUIUtilities.parseColor(jEdit.getProperty(
-				"view.gutter.noFocusBorderColor")),
-				textArea.getPainter().getBackground());
-		}
-		catch(NumberFormatException nf)
-		{
-			// retain the default border
-		}
+		int width = jEdit.getIntegerProperty(
+			"view.gutter.borderWidth",3);
+		gutter.setBorder(width,
+			jEdit.getColorProperty("view.gutter.focusBorderColor"),
+			jEdit.getColorProperty("view.gutter.noFocusBorderColor"),
+			textArea.getPainter().getBackground());
 
 		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
 			"view.caretBlink"));
 
-		try
-		{
-			textArea.setElectricScroll(Integer.parseInt(jEdit
-				.getProperty("view.electricBorders")));
-		}
-		catch(NumberFormatException nf)
-		{
-			textArea.setElectricScroll(0);
-		}
+		textArea.setElectricScroll(jEdit.getIntegerProperty(
+			"view.electricBorders",0));
 
 		// Set up the right-click popup menu
 		textArea.setRightClickPopup(GUIUtilities

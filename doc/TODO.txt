@@ -1,7 +1,14 @@
 TO DO
 
+- find btn no work
+- new goodies need to be documented
+- changing plastic setting doesn't take effect until restart
+- better gutter border colors
+- better fold marker color and appearance (draw triangle)
+
 + features:
 
+- plastic theme for installer
 - installer: show GPL
 - improve next/prev-word commands
 - ant targets to replace installer/mk_installer/mk_source scripts
@@ -27,8 +34,6 @@ TO DO
   String getToolTipText(int line)
 - Used by ErrorList, HyperSearch, markers
 - new document model that uses less memory than the Swing document
-- better default color scheme
-- option to change Swing font
 - improved window docking:
   - close boxes
   - docking option pane changes take effect immediately
@@ -64,7 +69,6 @@ TO DO
   - UNIX_PERMISSIONS_CAP capability
   - VFS.DirectoryEntry: icon and color fields
 - graphical regular expression editor
-- jEdit.get/setInteger/Color/FontProperty()
 - scroll to newly added tool bar button or context menu item in option
   panes
 - select-* actions: add to selection in multi-select mode
@@ -84,16 +88,6 @@ TO DO
 - handle missing modes more gracefully
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
-- status bar:
-  - "over" changes to "ins" instead of being grayed out
-  - ditto for "multi"
-  - remove "fold" indicator
-  - instead of mini i/o progress, show messages in status bar: number
-    of i/o requests pending, and setMessageAndClear("foo") when i/o
-    complete
-  - memory display in status bar, click opens memory display dialog;
-    replaces 'show free memory' macro
-  - double-click on line number opens go to line dialog box
 - use VariableGridLayout to lay out tool bars, not a BoxLayout
 - hypersearch:
   - file names in bold, show number of results in that file
@@ -176,8 +170,8 @@ TO DO
   - restart should not be necessary for 'globalColors' to take effect
 - editing on last line shouldn't cause scrolling
 - 'Stop' in plugin manager needs to be handled more gracefully
-- Open File: focus on text field
 - binding an action to ` doesn't work
+- don't call propertiesChanged() twice on metal theme
 
 + later:
 

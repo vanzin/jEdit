@@ -282,17 +282,7 @@ public class FileVFS extends VFS
 		throws IOException
 	{
 		// Fetch properties
-		int backups;
-		try
-		{
-			backups = Integer.parseInt(jEdit.getProperty(
-				"backups"));
-		}
-		catch(NumberFormatException nf)
-		{
-			Log.log(Log.ERROR,this,nf);
-			backups = 1;
-		}
+		int backups = jEdit.getIntegerProperty("backups",1);
 
 		if(backups == 0)
 			return;

@@ -62,14 +62,7 @@ public class BufferHistory
 
 	public static void load(File file)
 	{
-		try
-		{
-			max = Integer.parseInt(jEdit.getProperty("recentFiles"));
-		}
-		catch(NumberFormatException e)
-		{
-			max = 50;
-		}
+		max = jEdit.getIntegerProperty("recentFiles",50);
 
 		Log.log(Log.MESSAGE,jEdit.class,"Loading recent file list " + file);
 
