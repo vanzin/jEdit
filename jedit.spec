@@ -12,13 +12,13 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 4.0final
+Version: 4.0
 Release: 1
 # REMIND: bump this with each RPM
 Serial: 28
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre9source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit40source.tar.gz
 Source1: jedit.sh.in
 URL: http://www.jedit.org
 Vendor: Slava Pestov <slava@jedit.org>
