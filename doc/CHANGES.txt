@@ -43,6 +43,8 @@ JEDIT 4.2 VERSION HISTORY
 - Toggle menu items did not show up as such when a plugin was
   constructed from the summary cache.
 
+- -nobackground command-line switch did not actually work.
+
 }}}
 {{{ API Changes
 

@@ -520,6 +520,9 @@ public class PluginJAR
 				plugin = new EditPlugin.Deferred(
 					plugin.getClassName());
 				plugin.jar = (EditPlugin.JAR)this;
+
+				EditBus.send(new PluginUpdate(this,
+					PluginUpdate.DEACTIVATED));
 			}
 		}
 	} //}}}

@@ -148,6 +148,30 @@ public class PanelWindowContainer implements DockableWindowContainer
 		}
 	} //}}}
 
+	//{{{ remove() method
+	public void remove(final DockableWindowManager.Entry entry)
+	{
+		if(entry.factory.name.equals(mostRecent))
+			mostRecent = null;
+
+		if(entry.win != null)
+		{
+			dockablePanel.remove(entry.win);
+			entry.win = null;
+		}
+
+		if(current == entry)
+		{
+			current = null;
+			show(null);
+		}
+		else
+		{
+			wm.revalidate();
+			dockablePanel.repaint();
+		}
+	} //}}}
+
 	//{{{ showMostRecent() method
 	public void showMostRecent()
 	{

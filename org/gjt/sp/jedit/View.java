@@ -1362,7 +1362,7 @@ public class View extends JFrame implements EBComponent
 			else if(token.equals("buffer"))
 			{
 				int index = Integer.parseInt((String)stack.pop());
-				if(index < buffers.length && index > 0)
+				if(index < buffers.length && index >= 0)
 					buffer = buffers[index];
 				if(buffer == null)
 					buffer = jEdit.getFirstBuffer();

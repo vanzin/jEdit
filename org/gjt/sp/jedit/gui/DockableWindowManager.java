@@ -1116,9 +1116,24 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 				propertiesChanged();
 			}
-			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
 			{
 				Iterator iter = windows.values().iterator();
+				while(iter.hasNext())
+				{
+					Entry entry = (Entry)iter.next();
+					if(entry.factory.plugin == pmsg.getPluginJAR())
+					{
+						if(entry.container != null
+							&& entry.container
+							.isVisible(entry))
+						{
+							entry.container.remove(entry);
+						}
+					}
+				}
+
+				iter = clones.iterator();
 				while(iter.hasNext())
 				{
 					Entry entry = (Entry)iter.next();
@@ -1129,13 +1144,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 						iter.remove();
 					}
 				}
-
-				iter = clones.iterator();
+			}
+			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+			{
+				Iterator iter = windows.values().iterator();
 				while(iter.hasNext())
 				{
 					Entry entry = (Entry)iter.next();
 					if(entry.factory.plugin == pmsg.getPluginJAR())
-					{if(entry.container != null)
+					{
+						if(entry.container != null)
 							entry.container.unregister(entry);
 						iter.remove();
 					}
