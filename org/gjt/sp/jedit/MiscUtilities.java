@@ -82,6 +82,11 @@ public class MiscUtilities
 	 */
 	public static String canonPath(String path)
 	{
+		if(path.startsWith("file://"))
+			path = path.substring("file://".length());
+		else if(path.startsWith("file:"))
+			path = path.substring("file:".length());
+
 		if(File.separatorChar == '\\')
 		{
 			// get rid of mixed paths on Windows

@@ -58,6 +58,8 @@ and Ryan Grove for contributing to this release.
   rectangular selections can be created from the keyboard using Shift in
   conjunction with a caret movement command.
 
+  A status bar indicator shows when rectangular selection mode is on.
+
 }}}
 {{{ Syntax Highlighting
 

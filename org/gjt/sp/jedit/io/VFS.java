@@ -757,6 +757,7 @@ public abstract class VFS
 				file2.name,sortIgnoreCase);
 		}
 	} //}}}
+
 	//{{{ Private members
 	private String name;
 	private int caps;
@@ -812,6 +813,8 @@ public abstract class VFS
 				{
 					// resolve symlinks to avoid loops
 					String canonPath = _canonPath(session,file.path,comp);
+					if(!MiscUtilities.isURL(canonPath))
+						canonPath = MiscUtilities.resolveSymlinks(canonPath);
 
 					_listDirectory(session,stack,files,
 						canonPath,glob,recursive,

@@ -94,6 +94,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 		multiSelect.addMouseListener(mouseHandler);
 
+		rectSelect = new ToolTipLabel();
+		rectSelect.setHorizontalAlignment(SwingConstants.CENTER);
+		rectSelect.setToolTipText(jEdit.getProperty("view.status.rect-tooltip"));
+		rectSelect.addMouseListener(mouseHandler);
+
 		overwrite = new ToolTipLabel();
 		overwrite.setHorizontalAlignment(SwingConstants.CENTER);
 		overwrite.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
@@ -117,6 +122,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		showEncoding = jEdit.getBooleanProperty("view.status.show-encoding");
 		showWrap = jEdit.getBooleanProperty("view.status.show-wrap");
 		showMultiSelect = jEdit.getBooleanProperty("view.status.show-multi-select");
+		showRectSelect = jEdit.getBooleanProperty("view.status.show-rect-select");
 		showOverwrite = jEdit.getBooleanProperty("view.status.show-overwrite");
 		showLineSeperator = jEdit.getBooleanProperty("view.status.show-line-seperator");
 		showMemory = jEdit.getBooleanProperty("view.status.show-memory");
@@ -134,6 +140,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		wrap.setForeground(painter.getForeground());
 		multiSelect.setBackground(painter.getBackground());
 		multiSelect.setForeground(painter.getForeground());
+		rectSelect.setBackground(painter.getBackground());
+		rectSelect.setForeground(painter.getForeground());
 		overwrite.setBackground(painter.getBackground());
 		overwrite.setForeground(painter.getForeground());
 		lineSep.setBackground(painter.getBackground());
@@ -181,6 +189,16 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			multiSelect.setPreferredSize(dim);
 			multiSelect.setMaximumSize(dim);
 			box.add(multiSelect);
+		}
+
+		if (showRectSelect)
+		{
+			dim = new Dimension(
+				Math.max(fm.charWidth('-'),fm.charWidth('R')) + 1,
+				fm.getHeight());
+			rectSelect.setPreferredSize(dim);
+			rectSelect.setMaximumSize(dim);
+			box.add(rectSelect);
 		}
 
 		if (showOverwrite)
@@ -506,6 +524,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		if (showMultiSelect)
 			multiSelect.setText(textArea.isMultipleSelectionEnabled()
 				? "M" : "-");
+
+		if (showRectSelect)
+			rectSelect.setText(textArea.isRectangularSelectionEnabled()
+				? "R" : "-");
+
 		if (showOverwrite)
 			overwrite.setText(textArea.isOverwriteEnabled()
 				? "O" : "-");
@@ -521,6 +544,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private JLabel mode;
 	private JLabel wrap;
 	private JLabel multiSelect;
+	private JLabel rectSelect;
 	private JLabel overwrite;
 	private JLabel lineSep;
 	private MemoryStatus memory;
@@ -530,15 +554,16 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 	private Segment seg = new Segment();
 
-	private boolean showCaretStatus = jEdit.getBooleanProperty("view.status.show-caret-status");
-	private boolean showEditMode = jEdit.getBooleanProperty("view.status.show-edit-mode");
-	private boolean showFoldMode = jEdit.getBooleanProperty("view.status.show-fold-mode");
-	private boolean showEncoding = jEdit.getBooleanProperty("view.status.show-encoding");
-	private boolean showWrap = jEdit.getBooleanProperty("view.status.show-wrap");
-	private boolean showMultiSelect = jEdit.getBooleanProperty("view.status.show-multi-select");
-	private boolean showOverwrite = jEdit.getBooleanProperty("view.status.show-overwrite");
-	private boolean showLineSeperator = jEdit.getBooleanProperty("view.status.show-line-seperator");
-	private boolean showMemory = jEdit.getBooleanProperty("view.status.show-memory");
+	private boolean showCaretStatus;
+	private boolean showEditMode;
+	private boolean showFoldMode;
+	private boolean showEncoding;
+	private boolean showWrap;
+	private boolean showMultiSelect;
+	private boolean showRectSelect;
+	private boolean showOverwrite;
+	private boolean showLineSeperator;
+	private boolean showMemory;
 	//}}}
 
 	static final String caretTestStr = "9999,999-999 99%";
@@ -566,6 +591,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				buffer.toggleWordWrap(view);
 			else if(source == multiSelect)
 				view.getTextArea().toggleMultipleSelectionEnabled();
+			else if(source == rectSelect)
+				view.getTextArea().toggleRectangularSelectionEnabled();
 			else if(source == overwrite)
 				view.getTextArea().toggleOverwriteEnabled();
 			else if(source == lineSep)
