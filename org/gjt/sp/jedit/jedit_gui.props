@@ -1556,7 +1556,11 @@ options.editing.label=Editing
 options.editing.code=new EditingOptionPane();
 options.editing.defaultMode=Default edit mode:
 options.editing.undoCount=Number of undos:
-options.editing.caption=\
+options.editing.caption-0=\
+	To customize mode-specific settings, select an edit mode\n\
+	from the below menu. Currently, global defaults are being\n\
+	shown.
+options.editing.caption-1=\
 	Uncheck "use default settings" to customize mode-specific\n\
 	settings. Otherwise, settings from the <global defaults>\n\
 	section will be used.

@@ -120,6 +120,11 @@ contributing to this release.
 - Fixed slowdown if activity log was docked and the "tail" option was on
   in Java 1.3.
 
+- Floating positions are now stored in a more efficient data structure
+  allowing operations to be performed in logarithmic time. This improves
+  performance with plugins that create a lot of positions, such as XML
+  and anything using ErrorList.
+
 }}}
 {{{ Bug Fixes
 

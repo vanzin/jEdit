@@ -140,7 +140,7 @@ public class PositionManager
 		root.contentRemoved(p1,p2,p3,gapWidth,bias);
 
 		gapOffset = offset;
-		gapWidth = -length;
+		gapWidth -= length;
 
 	} //}}}
 
@@ -500,23 +500,18 @@ public class PositionManager
 		/* update all nodes between start and end by length */
 		void contentInserted(int start, int end, int length)
 		{
-			System.err.println(this + ": <" + start + "," + end + ">="
-				+ length);
 			if(getOffset() < start)
 			{
-				System.err.println("right");
 				if(right != null)
 					right.contentInserted(start,end,length);
 			}
 			else if(getOffset() > end)
 			{
-				System.err.println("left");
 				if(left != null)
 					left.contentInserted(start,end,length);
 			}
 			else
 			{
-				System.err.println("this");
 				offset += length;
 				if(left != null)
 					left.contentInserted(start,end,length);
@@ -550,9 +545,16 @@ public class PositionManager
 				if(bias)
 				{
 					if(getOffset() > p2)
-						offset = p2;
+					{
+						if(p2 == p3)
+							offset = p2 + length;
+						else
+							offset = p2;
+					}
 					else
+					{
 						offset += length;
+					}
 				}
 				else
 				{
