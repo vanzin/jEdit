@@ -567,7 +567,7 @@ public class HistoryTextField extends JTextField
 			int h2 = h/2;
 			g.setColor(UIManager.getColor(c.isEnabled()
 				&& ((HistoryTextField)c).getModel() != null
-				? "Menu.foreground" : "Menu.disabledForeground"));
+				? "TextField.foreground" : "TextField.disabledForeground"));
 			g.drawLine(w2-5,h2-2,w2+4,h2-2);
 			g.drawLine(w2-4,h2-1,w2+3,h2-1);
 			g.drawLine(w2-3,h2  ,w2+2,h2  );

@@ -145,7 +145,7 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		// search not finished yet so we don't show the search panel
 		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			toc,new JScrollPane(viewer));
+			tabs,new JScrollPane(viewer));
 		splitter.setBorder(null);
 
 		getContentPane().add(BorderLayout.CENTER,splitter);
