@@ -1201,7 +1201,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				x += Chunk.paintChunkList(lineInfo.chunks,
 					gfx,textArea.getHorizontalOffset(),
-					baseLine,true);
+					baseLine,!Debug.DISABLE_GLYPH_VECTOR);
 			}
 
 			if(!lineInfo.lastSubregion)
