@@ -1,7 +1,8 @@
 TO DO
 
+- check ignore case/digit defaults
+
 - first focus: show all files that were modified on disk, in a list
-- first run on windows -- why is help viewer hidden
 - idea for fixing buffer property issues: BufferProp class
 
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:

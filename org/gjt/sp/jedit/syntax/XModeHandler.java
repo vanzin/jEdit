@@ -29,6 +29,7 @@ import gnu.regexp.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -109,12 +110,13 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "IGNORE_CASE")
 		{
-			lastIgnoreCase = (isSpecified) ? (value.equals("FALSE")) :
-				true;
+			lastIgnoreCase = (isSpecified) ? (value.equals("TRUE")) :
+				false;
 		}
 		else if (aname == "HIGHLIGHT_DIGITS")
 		{
-			lastDigitRE = value;
+			lastHighlightDigits = (isSpecified) ? (value.equals("TRUE")) :
+				false;
 		}
 		else if (aname == "DIGIT_RE")
 		{
@@ -215,7 +217,8 @@ public class XModeHandler extends HandlerBase
 				{
 					rules.setDigitRegexp(new RE(lastDigitRE,
 						lastIgnoreCase
-						? RE.REG_ICASE : 0));
+						? RE.REG_ICASE : 0,
+						RESearchMatcher.RE_SYNTAX_JEDIT));
 				}
 				catch(REException e)
 				{

@@ -15,7 +15,11 @@
 		<PROPERTY NAME="lineComment" VALUE="//" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES ESCAPE="\"
+		IGNORE_CASE="FALSE"
+		HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+)[lLdDfF]?">
+
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

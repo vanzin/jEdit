@@ -10,7 +10,11 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="noWordSep" VALUE="-" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES ESCAPE="\"
+		IGNORE_CASE="TRUE"
+		HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="[[:digit:]]?(px|pt|mm|cm|in|em)">
+
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
@@ -106,12 +110,12 @@
 			<KEYWORD3>url</KEYWORD3>
 
 			<!-- measurement units -->
-			<KEYWORD3>px</KEYWORD3>
+			<!-- <KEYWORD3>px</KEYWORD3>
 			<KEYWORD3>pt</KEYWORD3>
 			<KEYWORD3>mm</KEYWORD3>
 			<KEYWORD3>cm</KEYWORD3>
 			<KEYWORD3>in</KEYWORD3>
-			<KEYWORD3>em</KEYWORD3>
+			<KEYWORD3>em</KEYWORD3> -->
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">

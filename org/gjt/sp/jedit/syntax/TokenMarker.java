@@ -665,9 +665,9 @@ public class TokenMarker
 			boolean digit = false;
 			boolean mixed = false;
 
-			for(int i = 0; i < len; i++)
+			for(int i = start; i < end; i++)
 			{
-				char ch = line.array[start + i];
+				char ch = line.array[i];
 				if(Character.isDigit(ch))
 					digit = true;
 				else
@@ -681,7 +681,7 @@ public class TokenMarker
 				// only match against regexp if its not all
 				// digits; if all digits, no point matching
 				if(digit)
-				{
+				{ 
 					if(digitRE == null)
 					{
 						// mixed digit/alpha keyword,
@@ -693,8 +693,14 @@ public class TokenMarker
 					{
 						CharIndexedSegment seg = new CharIndexedSegment(
 							line,false);
+						int oldCount = line.count;
+						int oldOffset = line.offset;
+						line.offset = start;
+						line.count = len;
 						if(!digitRE.isMatch(seg))
 							digit = false;
+						line.offset = oldOffset;
+						line.count = oldCount;
 					}
 				}
 			}
