@@ -17,7 +17,7 @@ Release: 1
 # REMIND: bump this with each RPM
 Serial: 22
 Copyright: GPL
-Group: Application/Editors
+Group: Applications/Editors
 Source0: http://prdownloads.sourceforge.net/jedit/jedit322source.tar.gz
 Source1: jedit.sh.in
 Patch0: jedit32-javac.patch

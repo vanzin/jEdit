@@ -1,6 +1,6 @@
 /*
  * AboutDialog.java - About jEdit dialog box
- * Copyright (C) 2000 Slava Pestov
+ * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ public class AboutDialog extends EnhancedDialog
 		super(view,jEdit.getProperty("about.title"),true);
 
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBackground(Color.white);
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
@@ -42,7 +41,6 @@ public class AboutDialog extends EnhancedDialog
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.X_AXIS));
 		buttonPanel.setBorder(new EmptyBorder(12,0,0,0));
-		buttonPanel.setBackground(Color.white);
 
 		buttonPanel.add(Box.createGlue());
 		close = new JButton(jEdit.getProperty("common.close"));
@@ -102,7 +100,7 @@ public class AboutDialog extends EnhancedDialog
 				text.addElement(st.nextToken());
 			}
 
-			scrollPosition = -300;
+			scrollPosition = -320;
 
 			thread = new AnimationThread();
 		}
@@ -160,6 +158,7 @@ public class AboutDialog extends EnhancedDialog
 			AnimationThread()
 			{
 				super("About box animation thread");
+				setPriority(Thread.MIN_PRIORITY);
 			}
 
 			public void run()

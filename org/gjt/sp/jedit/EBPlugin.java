@@ -23,7 +23,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 
 /**
- * An EditBus plugin
+ * Plugins extending this class are automatically added to the EditBus.
  * @author Slava Pestov
  * @version $Id$
  */

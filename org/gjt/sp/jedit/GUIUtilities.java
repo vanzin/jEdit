@@ -77,7 +77,7 @@ public class GUIUtilities
 		JMenuBar mbar = new JMenuBar();
 
 		while(st.hasMoreTokens())
-			mbar.add(GUIUtilities.loadMenu(st.nextToken()));
+			mbar.add(loadMenu(st.nextToken()));
 
 		return mbar;
 	}
@@ -157,7 +157,9 @@ public class GUIUtilities
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
 		EditAction action = jEdit.getAction(name);
-		String label = (action == null ? name : action.getLabel());
+		String label = (action == null ?
+			jEdit.getProperty(name + ".label")
+			: action.getLabel());
 		if(label == null)
 			label = name;
 
@@ -915,6 +917,58 @@ public class GUIUtilities
 			return evt.isControlDown();
 		else
 			return ((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0);
+	}
+
+	/**
+	 * Shows the specified popup menu, ensuring it is displayed within
+	 * the bounds of the screen.
+	 * @param popup The popup menu
+	 * @param comp The component to show it for
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @since jEdit 4.0pre1
+	 */
+	public static void showPopupMenu(JPopupMenu popup, Component comp,
+		int x, int y)
+	{
+		Point p = new Point(x,y);
+		SwingUtilities.convertPointToScreen(p,comp);
+
+		Dimension size = popup.getPreferredSize();
+
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+		boolean horiz = false;
+		boolean vert = false;
+
+		// might need later
+		int origX = x;
+
+		if(p.x + size.width > screen.width
+			&& size.width < screen.width)
+		{
+			x += (screen.width - p.x - size.width);
+			horiz = true;
+		}
+
+		if(p.y + size.height > screen.height
+			&& size.height < screen.height)
+		{
+			y += (screen.height - p.y - size.height);
+			vert = true;
+		}
+
+		// If popup needed to be moved both horizontally and
+		// vertically, the mouse pointer might end up over a
+		// menu item, which will be invoked when the mouse is
+		// released. This is bad, so move popup to a different
+		// location.
+		if(horiz && vert)
+		{
+			x = origX - size.width - 2;
+		}
+
+		popup.show(comp,x,y);
 	}
 
 	// deprecated APIs

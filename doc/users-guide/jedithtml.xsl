@@ -109,7 +109,7 @@
 <xsl:template match="part|reference|preface|chapter|appendix|article"
               mode="toc">
   <ENTRY>
-   <xsl:attribute name="href">
+   <xsl:attribute name="HREF">
       <xsl:apply-templates mode="chunk-filename" select="."/>
    </xsl:attribute>
    <TITLE>
