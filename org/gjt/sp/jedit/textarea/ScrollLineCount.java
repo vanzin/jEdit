@@ -30,15 +30,11 @@ import org.gjt.sp.util.Log;
  */
 class ScrollLineCount extends Anchor
 {
-	private DisplayManager displayManager;
-	private JEditTextArea textArea;
-
 	//{{{ ScrollLineCount constructor
 	ScrollLineCount(DisplayManager displayManager,
 		JEditTextArea textArea)
 	{
-		this.displayManager = displayManager;
-		this.textArea = textArea;
+		super(displayManager,textArea);
 	} //}}}
 
 	public void changed() {}

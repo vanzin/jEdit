@@ -27,17 +27,68 @@ package org.gjt.sp.jedit.textarea;
  */
 abstract class Anchor
 {
+	DisplayManager displayManager;
+	JEditTextArea textArea;
+
 	int physicalLine;
 	int scrollLine;
 	boolean callChanged;
 	boolean callReset;
 
+	//{{{ Anchor constructor
+	Anchor(DisplayManager displayManager,
+		JEditTextArea textArea)
+	{
+		this.displayManager = displayManager;
+		this.textArea = textArea;
+	} //}}}
+
 	abstract void reset();
 	abstract void changed();
 
+	//{{{ toString() method
 	public String toString()
 	{
 		return getClass().getName() + "[" + physicalLine + ","
 			+ scrollLine + "]";
-	}
+	} //}}}
+
+	//{{{ contentInserted() method
+	void contentInserted(int startLine, int numLines)
+	{
+		if(this.physicalLine >= startLine)
+		{
+			if(this.physicalLine != startLine)
+				this.physicalLine += numLines;
+			this.callChanged = true;
+		}
+	} //}}}
+
+	//{{{ preContentRemoved() method
+	void preContentRemoved(int startLine, int numLines)
+	{
+		if(this.physicalLine >= startLine)
+		{
+			if(this.physicalLine == startLine)
+				this.callChanged = true;
+			else
+			{
+				int end = Math.min(startLine + numLines,
+					this.physicalLine);
+				for(int i = startLine; i < end; i++)
+				{
+					//XXX
+					if(displayManager.isLineVisible(i))
+					{
+						this.scrollLine -=
+							displayManager
+							.screenLineMgr
+							.getScreenLineCount(i);
+					}
+				}
+				this.physicalLine -= (end - startLine);
+				this.callChanged = true;
+			}
+		}
+	} //}}}
 }
