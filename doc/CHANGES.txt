@@ -37,6 +37,9 @@ Thomas Galvin for contributing to this release.
 
 - Fixed highlighting of verbatim environments in LaTeX files.
 
+- Fixed ArrayIndexOutOfBoundsException when invoking "Expand Fold"
+  outside of a narrowed range.
+
 }}}
 {{{ API Changes
 

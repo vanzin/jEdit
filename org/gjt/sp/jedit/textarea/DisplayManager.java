@@ -343,6 +343,12 @@ public class DisplayManager
 			// this line is the start of a fold
 
 			int index = fvmget(line + 1);
+			if(index == -1)
+			{
+				expandAllFolds();
+				return -1;
+			}
+
 			start = fvm[index];
 			if(index != fvmcount - 1)
 				end = fvm[index + 1] - 1;
@@ -364,6 +370,12 @@ public class DisplayManager
 		else
 		{
 			int index = fvmget(line);
+			if(index == -1)
+			{
+				expandAllFolds();
+				return -1;
+			}
+
 			start = fvm[index];
 			if(index != fvmcount - 1)
 				end = fvm[index + 1] - 1;
