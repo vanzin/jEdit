@@ -135,7 +135,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolbarBox = new Box(mode == BROWSER
 			? BoxLayout.Y_AXIS
 			: BoxLayout.X_AXIS);
-		Box menuBar = createMenuBar();
+		JPanel menuBar = createMenuBar();
 		if(mode == BROWSER)
 			menuBar.add(Box.createGlue());
 		toolbarBox.add(menuBar);
@@ -949,9 +949,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//}}}
 
 	//{{{ createMenuBar() method
-	private Box createMenuBar()
+	private JPanel createMenuBar()
 	{
-		Box menuBar = new Box(BoxLayout.X_AXIS);
+		JPanel menuBar = new JPanel();
+		menuBar.setLayout(new BoxLayout(menuBar,BoxLayout.X_AXIS));
+		menuBar.setBorder(new EmptyBorder(0,0,1,0));
 
 		menuBar.add(new CommandsMenuButton());
 		menuBar.add(Box.createHorizontalStrut(3));
@@ -1135,6 +1137,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			CommandsMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(1,1,1,1));
 			CommandsMenuButton.this.addMouseListener(new MouseHandler());
+
+			if(OperatingSystem.isMacOSLF())
+				CommandsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
 		} //}}}
 
 		BrowserCommandsMenu popup;
@@ -1216,6 +1221,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				mi.setEnabled(false);
 				popup.add(mi);
 			}
+
+			if(OperatingSystem.isMacOSLF())
+				PluginsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
 		} //}}}
 
 		JPopupMenu popup;
@@ -1274,6 +1282,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(1,1,1,1));
 			FavoritesMenuButton.this.addMouseListener(new MouseHandler());
+
+			if(OperatingSystem.isMacOSLF())
+				FavoritesMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
 		} //}}}
 
 		JPopupMenu popup;

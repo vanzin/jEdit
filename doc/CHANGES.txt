@@ -219,8 +219,8 @@ contributing to this release.
   normal searches, where an unsuccessful match did not close the dialog
   (so you could correct the search string easier).
 
-- The 'initially collapse folds with level' setting is how honored when
-  reloading files.
+- The 'initially collapse folds with level' setting was not being
+  honored when reloading files.
 
 - A few printing bugs fixed. (Thomas Dilts)
 
@@ -318,6 +318,10 @@ contributing to this release.
   Buffer.markTokens(int lineIndex, TokenHandler tokenHandler) instead,
   with one of the available TokenHandler implementations from
   org.gjt.sp.jedit.syntax.
+
+  The tokenizer now behaves differently with respect to whitespace. Tab
+  characters are always put into separate tokens with type Token.TAB;
+  other whitespace gets token type Token.WHITESPACE.
 
 - Added new jEdit.getActiveView() method.
 
