@@ -132,6 +132,9 @@ and Rudolf Widmann for contributing to this release.
 - If multiple selection mode was enabled, clicking the mouse did not
   move the caret! What a silly bug...
 
+- If a mode file did not contain well-formed XML, the resulting error
+  dialog box would be empty. This has been fixed.
+
 + API Changes:
 
 - Buffer.getFile() method deprecated. Use Buffer.getPath() and the VFS

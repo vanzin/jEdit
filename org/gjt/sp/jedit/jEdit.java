@@ -2445,8 +2445,9 @@ public class jEdit
 				int line = xe.getLine();
 				String message = xe.getMessage();
 
-				Object[] args = { fileName, new Integer(line), message };
-				GUIUtilities.error(null,"xmode-parse",args);
+				Object[] args = { fileName, new Integer(line), null,
+					message };
+				GUIUtilities.error(null,"xmode-error",args);
 			}
 
 			// give it an empty token marker to avoid problems
