@@ -166,11 +166,14 @@ public class Abbrevs
 				lineStart + wordStart,
 				expand.text);
 
+			int newlines = countNewlines(expand.text,
+				expand.caretPosition);
+
 			if(expand.caretPosition != -1)
 			{
 				textArea.setCaretPosition(lineStart + wordStart
 					+ expand.caretPosition
-					+ whitespace);
+					+ newlines * whitespace);
 			}
 			if(expand.posParamCount != pp.size())
 			{
@@ -376,6 +379,20 @@ public class Abbrevs
 		}
 	} //}}}
 
+	//{{{ countNewlines() method
+	private static int countNewlines(String s, int end)
+	{
+		int counter = 0;
+
+		for(int i = 0; i < end; i++)
+		{
+			if(s.charAt(i) == '\n')
+				counter++;
+		}
+
+		return counter;
+	} //}}}
+
 	//{{{ expandAbbrev() method
 	private static Expansion expandAbbrev(String mode, String abbrev,
 		int softTabSize, Vector pp)
@@ -403,39 +420,44 @@ public class Abbrevs
 	{
 		BufferedReader in = new BufferedReader(_in);
 
-		Hashtable currentAbbrevs = null;
-
-		String line;
-		while((line = in.readLine()) != null)
+		try
 		{
-			int index = line.indexOf('|');
+			Hashtable currentAbbrevs = null;
 
-			if(line.length() == 0)
-				continue;
-			else if(line.startsWith("[") && index == -1)
+			String line;
+			while((line = in.readLine()) != null)
 			{
-				if(line.equals("[global]"))
-					currentAbbrevs = globalAbbrevs;
-				else
+				int index = line.indexOf('|');
+
+				if(line.length() == 0)
+					continue;
+				else if(line.startsWith("[") && index == -1)
 				{
-					String mode = line.substring(1,
-						line.length() - 1);
-					currentAbbrevs = (Hashtable)modes.get(mode);
-					if(currentAbbrevs == null)
+					if(line.equals("[global]"))
+						currentAbbrevs = globalAbbrevs;
+					else
 					{
-						currentAbbrevs = new Hashtable();
-						modes.put(mode,currentAbbrevs);
+						String mode = line.substring(1,
+							line.length() - 1);
+						currentAbbrevs = (Hashtable)modes.get(mode);
+						if(currentAbbrevs == null)
+						{
+							currentAbbrevs = new Hashtable();
+							modes.put(mode,currentAbbrevs);
+						}
 					}
 				}
-			}
-			else if(index != -1)
-			{
-				currentAbbrevs.put(line.substring(0,index),
-					line.substring(index + 1));
+				else if(index != -1)
+				{
+					currentAbbrevs.put(line.substring(0,index),
+						line.substring(index + 1));
+				}
 			}
 		}
-
-		in.close();
+		finally
+		{
+			in.close();
+		}
 	} //}}}
 
 	//{{{ saveAbbrevs() method

@@ -127,7 +127,6 @@ loop:		for(int i = 0; i < keyword.length; i++)
 			}
 		}
 
-		noWordSepStr = null;
 		map[key] = new Keyword(keyword,id,map[key]);
 	} //}}}
 
@@ -210,16 +209,7 @@ loop:		for(int i = 0; i < keyword.length; i++)
 	private Keyword[] map;
 	private boolean ignoreCase;
 	private StringBuffer noWordSep;
-	private String noWordSepStr;
 	//}}}
-
-	//{{{ getStringMapKey() method
-	private int getStringMapKey(String s)
-	{
-		return (Character.toUpperCase(s.charAt(0)) +
-				Character.toUpperCase(s.charAt(s.length()-1)))
-				% mapLength;
-	} //}}}
 
 	//{{{ getStringMapKey() method
 	private int getStringMapKey(char[] s)

@@ -129,7 +129,6 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ Instance variables
 	private JTabbedPane tabPane;
 	private JButton done;
-	private JButton cancel;
 	private JButton mgrOptions;
 	private JButton pluginOptions;
 	private InstallPanel installer;
@@ -303,8 +302,6 @@ public class PluginManager extends JFrame implements EBComponent
 			Object source = evt.getSource();
 			if(source == done)
 				ok();
-			else if (source == cancel)
-				cancel();
 			else if (source == mgrOptions)
 				new GlobalOptions(PluginManager.this,"plugin-manager");
 			else if (source == pluginOptions)

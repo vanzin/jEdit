@@ -635,21 +635,26 @@ public class BufferIORequest extends WorkRequest
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
 
-		String line;
-		while((line = in.readLine()) != null)
+		try
 		{
-			// compatibility kludge for jEdit 3.1 and earlier
-			if(!line.startsWith("!"))
-				continue;
+			String line;
+			while((line = in.readLine()) != null)
+			{
+				// compatibility kludge for jEdit 3.1 and earlier
+				if(!line.startsWith("!"))
+					continue;
 
-			char shortcut = line.charAt(1);
-			int start = line.indexOf(';');
-			int end = line.indexOf(';',start + 1);
-			int position = Integer.parseInt(line.substring(start + 1,end));
-			buffer.addMarker(shortcut,position);
+				char shortcut = line.charAt(1);
+				int start = line.indexOf(';');
+				int end = line.indexOf(';',start + 1);
+				int position = Integer.parseInt(line.substring(start + 1,end));
+				buffer.addMarker(shortcut,position);
+			}
 		}
-
-		in.close();
+		finally
+		{
+			in.close();
+		}
 	} //}}}
 
 	//{{{ save() method
@@ -850,52 +855,62 @@ public class BufferIORequest extends WorkRequest
 	private void write(Buffer buffer, OutputStream _out)
 		throws IOException
 	{
-		String encoding = buffer.getStringProperty(Buffer.ENCODING);
-		if(encoding.equals(MiscUtilities.UTF_8_Y))
+		BufferedWriter out = null;
+
+		try
 		{
-			// not supported by Java...
-			_out.write(UTF8_MAGIC_1);
-			_out.write(UTF8_MAGIC_2);
-			_out.write(UTF8_MAGIC_3);
-			_out.flush();
-			encoding = "UTF-8";
-		}
+			String encoding = buffer.getStringProperty(Buffer.ENCODING);
+			if(encoding.equals(MiscUtilities.UTF_8_Y))
+			{
+				// not supported by Java...
+				_out.write(UTF8_MAGIC_1);
+				_out.write(UTF8_MAGIC_2);
+				_out.write(UTF8_MAGIC_3);
+				_out.flush();
+				encoding = "UTF-8";
+			}
 
-		BufferedWriter out = new BufferedWriter(
-			new OutputStreamWriter(_out,encoding),
-			IOBUFSIZE);
+			out = new BufferedWriter(
+				new OutputStreamWriter(_out,encoding),
+				IOBUFSIZE);
 
-		Segment lineSegment = new Segment();
-		String newline = buffer.getStringProperty(Buffer.LINESEP);
-		if(newline == null)
-			newline = System.getProperty("line.separator");
+			Segment lineSegment = new Segment();
+			String newline = buffer.getStringProperty(Buffer.LINESEP);
+			if(newline == null)
+				newline = System.getProperty("line.separator");
 
-		setProgressMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
-		setProgressValue(0);
+			setProgressMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
+			setProgressValue(0);
 
-		int i = 0;
-		while(i < buffer.getLineCount())
-		{
-			buffer.getLineText(i,lineSegment);
-			out.write(lineSegment.array,lineSegment.offset,
-				lineSegment.count);
+			int i = 0;
+			while(i < buffer.getLineCount())
+			{
+				buffer.getLineText(i,lineSegment);
+				out.write(lineSegment.array,lineSegment.offset,
+					lineSegment.count);
 
-			if(i != buffer.getLineCount() - 1)
+				if(i != buffer.getLineCount() - 1)
+				{
+					out.write(newline);
+				}
+
+				if(++i % PROGRESS_INTERVAL == 0)
+					setProgressValue(i / PROGRESS_INTERVAL);
+			}
+
+			if(jEdit.getBooleanProperty("stripTrailingEOL")
+				&& buffer.getBooleanProperty(Buffer.TRAILING_EOL))
 			{
 				out.write(newline);
 			}
-
-			if(++i % PROGRESS_INTERVAL == 0)
-				setProgressValue(i / PROGRESS_INTERVAL);
 		}
-
-		if(jEdit.getBooleanProperty("stripTrailingEOL")
-			&& buffer.getBooleanProperty(Buffer.TRAILING_EOL))
+		finally
 		{
-			out.write(newline);
+			if(out != null)
+				out.close();
+			else
+				_out.close();
 		}
-
-		out.close();
 	} //}}}
 
 	//{{{ writeMarkers() method
@@ -903,21 +918,27 @@ public class BufferIORequest extends WorkRequest
 		throws IOException
 	{
 		Writer o = new BufferedWriter(new OutputStreamWriter(out));
-		Vector markers = buffer.getMarkers();
-		for(int i = 0; i < markers.size(); i++)
+		try
 		{
-			Marker marker = (Marker)markers.elementAt(i);
-			o.write('!');
-			o.write(marker.getShortcut());
-			o.write(';');
+			Vector markers = buffer.getMarkers();
+			for(int i = 0; i < markers.size(); i++)
+			{
+				Marker marker = (Marker)markers.elementAt(i);
+				o.write('!');
+				o.write(marker.getShortcut());
+				o.write(';');
 
-			String pos = String.valueOf(marker.getPosition());
-			o.write(pos);
-			o.write(';');
-			o.write(pos);
-			o.write('\n');
+				String pos = String.valueOf(marker.getPosition());
+				o.write(pos);
+				o.write(';');
+				o.write(pos);
+				o.write('\n');
+			}
 		}
-		o.close();
+		finally
+		{
+			o.close();
+		}
 	} //}}}
 
 	//{{{ insert() method

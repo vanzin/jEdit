@@ -163,7 +163,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		this.mode = mode;
 		this.multipleSelection = multipleSelection;
-		this.floating = floating;
 		this.view = view;
 
 		currentEncoding = jEdit.getProperty("buffer.encoding",
@@ -203,13 +202,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
-
-		if(floating)
-		{
-			label.setDisplayedMnemonic(jEdit.getProperty(
-				"vfs.browser.path.mnemonic").charAt(0));
-			label.setLabelFor(pathField);
-		}
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -572,7 +564,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			VFSManager.runInWorkThread(new BrowserIORequest(
 				BrowserIORequest.DELETE,this,
 				session,vfs,files[i].deletePath,
-				null,null,null));
+				null,null));
 		}
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -607,7 +599,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null,null));
+			session,vfs,from,to,null));
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -654,7 +646,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null,null,null));
+			session,vfs,newDirectory,null,null));
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -828,7 +820,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					Hashtable props = new Hashtable();
 					props.put(Buffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
-						new Boolean(autoDetectEncoding));
+						Boolean.valueOf(autoDetectEncoding));
 					_buffer = jEdit.openFile(null,null,
 						file.path,false,props);
 				}
@@ -987,7 +979,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ Instance variables
 	private EventListenerList listenerList;
 	private View view;
-	private boolean floating;
 	private boolean horizontalLayout;
 	private String path;
 	private HistoryTextField pathField;

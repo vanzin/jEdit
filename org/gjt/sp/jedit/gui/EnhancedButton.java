@@ -38,7 +38,6 @@ public class EnhancedButton extends RolloverButton
 		super(icon);
 
 		this.action = action;
-		this.context = context;
 
 		if(action != null)
 		{
@@ -59,7 +58,6 @@ public class EnhancedButton extends RolloverButton
 	} //}}}
 
 	//{{{ Private members
-	private ActionContext context;
 	private String action;
 	//}}}
 

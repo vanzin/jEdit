@@ -162,7 +162,7 @@ class BrowserView extends JPanel
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,browser,
-			session,vfs,path,null,node,loadInfo));
+			session,vfs,path,null,loadInfo));
 		browser.directoryLoaded(node,loadInfo);
 	} //}}}
 

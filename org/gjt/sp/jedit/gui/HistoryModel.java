@@ -253,10 +253,11 @@ public class HistoryModel extends AbstractListModel
 
 		String lineSep = System.getProperty("line.separator");
 
+		BufferedWriter out = null;
+
 		try
 		{
-			BufferedWriter out = new BufferedWriter(
-				new FileWriter(file1));
+			out = new BufferedWriter(new FileWriter(file1));
 
 			if(models != null)
 			{
@@ -295,6 +296,17 @@ public class HistoryModel extends AbstractListModel
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,HistoryModel.class,io);
+		}
+		finally
+		{
+			try
+			{
+				if(out != null)
+					out.close();
+			}
+			catch(IOException e)
+			{
+			}
 		}
 
 		historyModTime = file2.lastModified();

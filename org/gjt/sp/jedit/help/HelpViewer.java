@@ -268,14 +268,12 @@ public class HelpViewer extends JFrame implements EBComponent
 			if(pmsg.getWhat() == PluginUpdate.LOADED
 				|| pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
-				if(pmsg.isExiting())
+				if(!pmsg.isExiting())
 				{
-					// we don't care
+					if(!queuedTOCReload)
+						queueTOCReload();
+					queuedTOCReload = true;
 				}
-
-				if(!queuedTOCReload)
-					queueTOCReload();
-				queuedTOCReload = true;
 			}
 		}
 	} //}}}

@@ -217,15 +217,17 @@ class HelpIndex
 	 * @param _in The input stream
 	 * @param file The file
 	 */
-	private void indexStream(InputStream _in, String fileName) throws Exception
+	private void indexStream(InputStream _in, String fileName)
+		throws Exception
 	{
 		HelpFile file = new HelpFile(fileName);
 		files.add(file);
 		int index = files.size() - 1;
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
-
 		StringBuffer titleText = new StringBuffer();
+
+		BufferedReader in = new BufferedReader(
+			new InputStreamReader(_in));
 
 		try
 		{
@@ -376,7 +378,6 @@ class HelpIndex
 		HelpFile(String file)
 		{
 			this.file = file;
-			this.title = title;
 		}
 
 		public String toString()

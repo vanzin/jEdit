@@ -129,12 +129,13 @@ public class PerspectiveManager
 		File file2 = new File(MiscUtilities.constructPath(
 			settingsDirectory,"perspective.xml"));
 
+		String lineSep = System.getProperty("line.separator");
+
+		BufferedWriter out = null;
+
 		try
 		{
-			String lineSep = System.getProperty("line.separator");
-
-			BufferedWriter out = new BufferedWriter(new FileWriter(
-				file1));
+			out = new BufferedWriter(new FileWriter(file1));
 
 			out.write("<?xml version=\"1.0\"?>");
 			out.write(lineSep);
@@ -221,15 +222,26 @@ public class PerspectiveManager
 
 			out.write("</PERSPECTIVE>");
 			out.write(lineSep);
-			out.close();
-			file2.delete();
-			file1.renameTo(file2);
 		}
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,PerspectiveManager.class,"Error saving " + file1);
 			Log.log(Log.ERROR,PerspectiveManager.class,io);
 		}
+		finally
+		{
+			try
+			{
+				if(out != null)
+					out.close();
+			}
+			catch(IOException e)
+			{
+			}
+		}
+
+		file2.delete();
+		file1.renameTo(file2);
 	} //}}}
 
 	private static boolean dirty;

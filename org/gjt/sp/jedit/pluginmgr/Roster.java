@@ -456,29 +456,34 @@ class Roster
 			in = new BufferedInputStream(in);
 			out = new BufferedOutputStream(out);
 
-			byte[] buf = new byte[4096];
-			int copied = 0;
-loop:			for(;;)
+			try
 			{
-				int count = in.read(buf,0,buf.length);
-				if(count == -1)
-					break loop;
-
-				copied += count;
-				if(progress != null)
-					progress.setValue(copied);
-
-				out.write(buf,0,count);
-				if(canStop && Thread.interrupted())
+				byte[] buf = new byte[4096];
+				int copied = 0;
+loop:				for(;;)
 				{
-					in.close();
-					out.close();
-					return false;
+					int count = in.read(buf,0,buf.length);
+					if(count == -1)
+						break loop;
+
+					copied += count;
+					if(progress != null)
+						progress.setValue(copied);
+
+					out.write(buf,0,count);
+					if(canStop && Thread.interrupted())
+					{
+						in.close();
+						out.close();
+						return false;
+					}
 				}
 			}
-
-			in.close();
-			out.close();
+			finally
+			{
+				in.close();
+				out.close();
+			}
 			return true;
 		} //}}}
 

@@ -149,7 +149,7 @@ public class WorkThreadPool
 				requestCount++;
 			} //}}}
 
-			lock.notify();
+			lock.notifyAll();
 		}
 	} //}}}
 
@@ -247,8 +247,8 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ Package-private members
-	Object lock = new String("Work thread pool request queue lock");
-	Object waitForAllLock = new String("Work thread pool waitForAll() notifier");
+	Object lock = new Object();
+	Object waitForAllLock = new Object();
 
 	//{{{ fireStatusChanged() method
 	void fireStatusChanged(WorkThread thread)

@@ -169,7 +169,6 @@ public class BrowserCommandsMenu extends JPopupMenu
 	private VFSBrowser browser;
 	private HashMap encodingMenuItems;
 	private JCheckBoxMenuItem autoDetect;
-	private JRadioButtonMenuItem defaultEncoding;
 	private JRadioButtonMenuItem otherEncoding;
 
 	//{{{ createMenuItem() method

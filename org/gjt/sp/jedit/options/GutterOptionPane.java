@@ -214,10 +214,8 @@ public class GutterOptionPane extends AbstractOptionPane
 	private FontSelector gutterFont;
 	private ColorWellButton gutterForeground;
 	private ColorWellButton gutterBackground;
-	private JTextField gutterBorderWidth;
 	private JTextField gutterHighlightInterval;
 	private ColorWellButton gutterHighlightColor;
-	private JComboBox gutterNumberAlignment;
 	private JCheckBox lineNumbersEnabled;
 	private JCheckBox gutterCurrentLineHighlightEnabled;
 	private ColorWellButton gutterCurrentLineHighlight;

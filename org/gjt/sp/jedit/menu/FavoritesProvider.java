@@ -100,8 +100,4 @@ public class FavoritesProvider implements DynamicMenuProvider
 			}
 		}
 	} //}}}
-
-	//{{{ Private members
-	private String dir;
-	//}}}
 }

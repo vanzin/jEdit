@@ -58,7 +58,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			this.wrapMargin = 0.0f;
 
 		this.out = out;
-		initialSize = out.size();
 
 		seenNonWhitespace = false;
 		endX = endOfWhitespace = 0.0f;
@@ -164,8 +163,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 	private boolean seenNonWhitespace;
 	private float endOfWhitespace;
-
-	private int initialSize;
 	//}}}
 
 	//{{{ createChunk() method

@@ -159,15 +159,27 @@ public class AppearanceOptionPane extends AbstractOptionPane
 				file.delete();
 			else
 			{
+				FileOutputStream out = null;
 				try
 				{
-					FileOutputStream out = new FileOutputStream(file);
+					out = new FileOutputStream(file);
 					out.write('\n');
 					out.close();
 				}
 				catch(IOException io)
 				{
 					Log.log(Log.ERROR,this,io);
+				}
+				finally
+				{
+					try
+					{
+						if(out != null)
+							out.close();
+					}
+					catch(IOException e)
+					{
+					}
 				}
 			}
 		}
