@@ -506,7 +506,8 @@ public class JEditTextArea extends JComponent
 			chunkCache.scrollUp(oldFirstLine - firstLine);
 		}
 
-		displayManager.firstLine.changed();
+		// we have to be careful
+		displayManager._notifyScreenLineChanges();
 
 		maxHorizontalScrollWidth = 0;
 
@@ -617,7 +618,8 @@ public class JEditTextArea extends JComponent
 			chunkCache.scrollUp(oldFirstLine - firstLine);
 		}
 
-		displayManager.firstLine.changed();
+		// we have to be careful
+		displayManager._notifyScreenLineChanges();
 
 		maxHorizontalScrollWidth = 0;
 
@@ -799,12 +801,28 @@ public class JEditTextArea extends JComponent
 				offset,infos);
 			int prevLine = displayManager.getPrevVisibleLine(getFirstPhysicalLine());
 			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
-			if(line == prevLine)
+			if(line == getFirstPhysicalLine())
+			{
+				if(Debug.SCROLL_TO_DEBUG)
+					Log.log(Log.DEBUG,this,line + " == " + getFirstPhysicalLine());
+				setFirstPhysicalLine(line,subregion
+					- _electricScroll);
+			}
+			else if(line == prevLine)
 			{
 				if(Debug.SCROLL_TO_DEBUG)
 					Log.log(Log.DEBUG,this,line + " == " + prevLine);
 				setFirstPhysicalLine(prevLine,subregion
 					- _electricScroll);
+			}
+			else if(line == getLastPhysicalLine())
+			{
+				if(Debug.SCROLL_TO_DEBUG)
+					Log.log(Log.DEBUG,this,line + " == " + getLastPhysicalLine());
+				setFirstPhysicalLine(line,
+					subregion + _electricScroll
+					- visibleLines
+					+ (lastLinePartial ? 2 : 1));
 			}
 			else if(line == nextLine)
 			{
@@ -818,9 +836,16 @@ public class JEditTextArea extends JComponent
 			else
 			{
 				if(Debug.SCROLL_TO_DEBUG)
+				{
 					Log.log(Log.DEBUG,this,"neither");
+					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());
+				}
 				setFirstPhysicalLine(line,subregion
 					- visibleLines / 2);
+				if(Debug.SCROLL_TO_DEBUG)
+				{
+					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());
+				}
 			}
 		}
 		else if(screenLine < _electricScroll)

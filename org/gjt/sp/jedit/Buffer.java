@@ -348,36 +348,10 @@ public class Buffer
 
 		VFS vfs = VFSManager.getVFSForPath(path);
 
-		setFlag(IO,true);
-
 		// this returns false if initial sanity
 		// checks (if the file is a directory, etc)
 		// fail
-		if(!vfs.insert(view,this,path))
-		{
-			setFlag(IO,false);
-			return false;
-		}
-
-		// Do some stuff once loading is finished
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				setFlag(IO,false);
-
-				SegmentBuffer sbuf = (SegmentBuffer)getProperty(
-					BufferIORequest.LOAD_DATA);
-				if(sbuf != null)
-				{
-					unsetProperty(BufferIORequest.LOAD_DATA);
-
-					view.getTextArea().setSelectedText(sbuf.toString());
-				}
-			}
-		});
-
-		return true;
+		return vfs.insert(view,this,path);
 	} //}}}
 
 	//{{{ autosave() method

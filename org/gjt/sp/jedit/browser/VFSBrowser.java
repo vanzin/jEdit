@@ -788,6 +788,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	public static final int M_OPEN_NEW_VIEW = 1;
 	public static final int M_OPEN_NEW_PLAIN_VIEW = 2;
 	public static final int M_OPEN_NEW_SPLIT = 3;
+	public static final int M_INSERT = 4;
 
 	/**
 	 * This method does the "double-click" handling. It is public so that
@@ -814,6 +815,13 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
+				if(mode == M_INSERT)
+				{
+					view.getBuffer().insertFile(view,
+						file.path);
+					continue check_selected;
+				}
+
 				Buffer _buffer = jEdit.getBuffer(file.path);
 				if(_buffer == null)
 				{

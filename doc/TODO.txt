@@ -3,25 +3,17 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- undo dirty broken
+- plugin mgr inspection of not-loaded plugins
+- drag and drop: grabbing non-selected areas
 - entering ../.. inside archive
 - remove a plugin with a key binding: null pointer exception
 - vfs updates still broken
 - vfs browser insert with multiple files
 - history text field tweak
 - search in subdirs always off
-- odd scrolling flaw: if a line is wrapped, first subregion invisible,
-  move caret up
 - "downloading plugin list" label in plugin manager
 - delete word: horizontal scroll not updated
-
-[error] Buffer: java.lang.NullPointerException
-[error] Buffer:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollTo(Unknown Source)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollToCaret(Unknown Source)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.JEditTextArea._finishCaretUpdate(Unknown Source)
-[error] Buffer:  at org.gjt.sp.jedit.textarea.DisplayManager$BufferChangeHandler.transactionComplete(Unknown Source)
-[error] Buffer:  at org.gjt.sp.jedit.Buffer.fireTransactionComplete(Unknown Source)
-[error] Buffer:  at org.gjt.sp.jedit.Buffer.endCompoundEdit(Unknown Source)
-
 - choose dir dialog: entering dir name in filename field
 - column reference counting broken
 - gzip & unicode, or gzip & <?xml encoding...
