@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit;
 
+import javax.swing.UIManager;
 import java.io.File;
 import org.gjt.sp.util.Log;
 
@@ -92,6 +93,15 @@ public class OperatingSystem
 	{
 		return os == MAC_OS_X;
 	} //}}}
+
+	//{{{ isMacOSLF() method
+        /**
+         * Returns if we're running MacOS X and using the native L&F.
+         */
+        public static final boolean isMacOSLF()
+        {
+                return (isMacOS() && UIManager.getLookAndFeel().isNativeLookAndFeel());
+        } //}}}
 
 	//{{{ isJava14() method
 	/**

@@ -5,16 +5,19 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- soft wrap
+- tree-based offset manager
+- fix fsb infinite requests problem
+- i/o progress monitor foolishness
+
 - easier way of inserting newlines in replacement string -- or just
   document this?
-- i/o progress monitor foolishness
 - silly bug that creates selections on click -- how is this even possible?
 - scroll to caret _still_ jumps around?
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - add some tips of the day about pre1 features
 - add documentation for pre1 features
-- soft wrap
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
 - focus problem with hypersearch in floating window?
@@ -22,8 +25,6 @@ and quirks that I need to fix eventually.
 - idea for fixing buffer property issues: BufferProp class
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
-- tree-based offset manager
-- fix fsb infinite requests problem
 
 + later:
 

@@ -72,7 +72,7 @@ public class OptionsDialog extends EnhancedDialog
 		paneTree.setCellRenderer(new PaneNameRenderer());
 
 		// looks bad with the OS X L&F, apparently...
-		if(!OperatingSystem.isMacOS())
+		if(!OperatingSystem.isMacOSLF())
 			paneTree.putClientProperty("JTree.lineStyle", "Angled");
 
 		paneTree.setShowsRootHandles(true);

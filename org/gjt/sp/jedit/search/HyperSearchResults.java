@@ -66,7 +66,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		resultTree.setShowsRootHandles(true);
 
 		// looks bad with the OS X L&F, apparently...
-		if(!OperatingSystem.isMacOS())
+		if(!OperatingSystem.isMacOSLF())
 			resultTree.putClientProperty("JTree.lineStyle", "Angled");
 
 		resultTree.setEditable(false);

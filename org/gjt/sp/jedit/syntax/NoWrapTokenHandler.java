@@ -42,4 +42,30 @@ public class NoWrapTokenHandler extends DisplayTokenHandler
 	{
 		return (Chunk)firstToken;
 	} //}}}
+
+	//{{{ handleToken() method
+	/**
+	 * Called by the token marker when a syntax token has been parsed.
+	 * @param id The token type (one of the constants in the
+	 * <code>Token</code> class).
+	 * @param offset The start offset of the token
+	 * @param length The number of characters in the token
+	 * @param context The line context
+	 * @since jEdit 4.1pre1
+	 */
+	public void handleToken(byte id, int offset, int length,
+		TokenMarker.LineContext context)
+	{
+		Token token = createToken(id,offset,length,context);
+		if(token != null)
+		{
+			Token oldLastToken = lastToken;
+			if(addToken(token,context,true))
+			{
+				Chunk oldLastChunk = (Chunk)oldLastToken;
+				oldLastChunk.init(seg,expander,x,styles,
+					fontRenderContext,context.rules.getDefault());
+			}
+		}
+	} //}}}
 }
