@@ -204,7 +204,10 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			else
 			{
 				if(!chunk.initialized)
+				{
 					initChunk(chunk);
+					x += chunk.width;
+				}
 				chunk = next;
 			}
 		}

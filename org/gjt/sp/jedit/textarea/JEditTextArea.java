@@ -460,7 +460,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setHorizontalOffset(int horizontalOffset)
 	{
-		if(horizontalOffset < 0)
+		if(horizontalOffset > 0)
 			horizontalOffset = 0;
 
 		if(horizontalOffset == this.horizontalOffset)
