@@ -170,26 +170,26 @@
       </para></answer>
     </qandaentry>
 
-<qandaentry>
-	<question id="install-noclassdef">
-		<para>
-			After downloading <filename>jeditXXXinstall.jar</filename> (the
-            <filename>XXX</filename> represents the version number), I tried to run
-			<userinput>java jeditXXXinstall.jar</userinput>, but got the error message,
-			<screen>Exception in main(), NoClassDefFoundError: jeditXXXinstall/jar.</screen> What am I doing wrong?
-		</para>
-	</question>
-	<answer>
-
-		<para>
-			You need to specify the <userinput>-jar</userinput> option for the Java
-			application loader so that the loader will search the installation archive
-			for the starting class file. Without the option, it treats the archive as a
-			single class file (which it is not!), thus producing the error. The correct
-			command line would be <userinput>java -jar jeditXXXinstall.jar</userinput>.
-		</para>
-	</answer>
-</qandaentry>
+	<qandaentry>
+		<question id="install-noclassdef">
+			<para>
+				After downloading <filename>jeditXXXinstall.jar</filename> (the
+				<filename>XXX</filename> represents the version number), I tried to run
+				<userinput>java jeditXXXinstall.jar</userinput>, but got the error message,
+				<screen>Exception in main(), NoClassDefFoundError: jeditXXXinstall/jar.</screen> What am I doing wrong?
+			</para>
+		</question>
+		<answer>
+	
+			<para>
+				You need to specify the <userinput>-jar</userinput> option for the Java
+				application loader so that the loader will search the installation archive
+				for the starting class file. Without the option, it treats the archive as a
+				single class file (which it is not!), thus producing the error. The correct
+				command line would be <userinput>java -jar jeditXXXinstall.jar</userinput>.
+			</para>
+		</answer>
+	</qandaentry>
 	
     <qandaentry>
         <question id="jedit-crashed">
@@ -210,6 +210,71 @@
 			</para>
 		</answer>
     </qandaentry>
+	
+	<qandaentry>
+        <question id="general-slowstart">
+			<para>
+					Why is jEdit so slow to start up?
+			</para>
+        </question>
+		<answer>
+			<para>
+				The most likely cause is one or more plugins that are installed. jEdit 4.1
+				displays loading times for plugins in the activity log.
+			</para>
+			<procedure>
+				<step>
+					<para>
+						To go the <guimenu>Utilities</guimenu> menu and select <guimenuitem>Activity Log</guimenuitem>.
+					</para>
+				</step>
+				<step>
+					<para>
+						Scroll to the area where you see lines like <quote>[notice] JARClassLoader: Starting plugin XXX</quote>.
+					</para>
+				</step>
+			</procedure>
+			<para>
+				You should be able to see which (if any) plugins are causing an excesively long delay.
+			</para>
+		</answer>
+    </qandaentry>
+	
+	<qandaentry>
+        <question id="general-slow">
+			<para>
+				Why is jEdit so slow?
+			</para>
+        </question>
+		<answer>
+			<para>
+				There may be many causes for this. Java by nature is more demanding on hardware than native
+				applications. Modern computers should not have much problem with this.
+			</para>
+			<para>
+				The most likely cause is plugins that parse buffers or do other computationally expensive
+				operations. These include XML, SpeedJava and CodeAid. If performance is important to you, installing
+				a whole batch of plugins in one go is probably not a very good idea. Install them one at a time,
+				so you can evaluate the effects of each.
+			</para>
+		</answer>
+    </qandaentry>
+	
+	<qandaentry>
+        <question id="general-docking">
+			<para>
+				Go to left/top/bottom/right docking area does not work for some plugins?
+			</para>
+        </question>
+		<answer>
+			<para>
+				The plugin is missing a <methodname>requestDefautlFocus()</methodname> method.
+				Plugin updates will be available from time to time, or you can email the author
+				of the plugin to let them know of the problem.
+			</para>
+		</answer>
+    </qandaentry>
+	
 </qandadiv>
 
 <!--********************************************************* Mac OS -->
