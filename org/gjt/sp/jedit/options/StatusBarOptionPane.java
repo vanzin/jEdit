@@ -224,6 +224,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		showMemory.setEnabled(enabled);
 		memForegroundColor.setEnabled(enabled && showMemory.isSelected());
 		memBackgroundColor.setEnabled(enabled && showMemory.isSelected());
+		showClock.setEnabled(enabled);
 	}
 	//}}}
 

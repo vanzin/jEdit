@@ -250,13 +250,9 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		macroHierarchy.removeAllElements();
 		macroHash.clear();
 
-		if(jEdit.getJEditHome() != null)
-		{
-			systemMacroPath = MiscUtilities.constructPath(
-				jEdit.getJEditHome(),"macros");
-			loadMacros(macroHierarchy,"",new File(systemMacroPath));
-		}
-
+		// since subsequent macros with the same name are ignored,
+		// load user macros first so that they override the system
+		// macros.
 		String settings = jEdit.getSettingsDirectory();
 
 		if(settings != null)
@@ -264,6 +260,13 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			userMacroPath = MiscUtilities.constructPath(
 				settings,"macros");
 			loadMacros(macroHierarchy,"",new File(userMacroPath));
+		}
+
+		if(jEdit.getJEditHome() != null)
+		{
+			systemMacroPath = MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"macros");
+			loadMacros(macroHierarchy,"",new File(systemMacroPath));
 		}
 
 		EditBus.send(new DynamicMenuChanged("macros"));
@@ -380,17 +383,10 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ Macro constructor
 		public Macro(Handler handler, String name, String label, String path)
 		{
-			// in case macro file name has a space in it.
-			// spaces break the view.toolBar property, for instance,
-			// since it uses spaces to delimit action names.
-			super(name.replace(' ','_'));
+			super(name);
 			this.handler = handler;
 			this.label = label;
 			this.path = path;
-
-			jEdit.setTemporaryProperty(getName() + ".label",label);
-			jEdit.setTemporaryProperty(getName() + ".mouse-over",
-				handler.getLabel() + " - " + path);
 		} //}}}
 
 		//{{{ getHandler() method
@@ -444,7 +440,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ Private members
 		private Handler handler;
 		private String path;
-		private String label;
+		String label;
 		//}}}
 	} //}}}
 
@@ -657,31 +653,47 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 			else
 			{
-				Handler handler = getHandlerForPathName(file.getPath());
-
-				if(handler == null)
-					continue;
-
-				try
-				{
-					Macro newMacro = handler.createMacro(
-						path + fileName, file.getPath());
-					if(macroHash.get(newMacro.getName())
-						!= null)
-					{
-						continue;
-					}
-
-					vector.addElement(newMacro.getName());
-					macroActionSet.addAction(newMacro);
-					macroHash.put(newMacro.getName(),newMacro);
-				}
-				catch (Exception e)
-				{
-					Log.log(Log.ERROR, Macros.class, e);
-					macroHandlers.remove(handler);
-				}
+				addMacro(file,path,vector);
 			}
+		}
+	} //}}}
+
+	//{{{ addMacro() method
+	private static void addMacro(File file, String path, Vector vector)
+	{
+		String fileName = file.getName();
+		Handler handler = getHandlerForPathName(file.getPath());
+
+		if(handler == null)
+			return;
+
+		try
+		{
+			// in case macro file name has a space in it.
+			// spaces break the view.toolBar property, for instance,
+			// since it uses spaces to delimit action names.
+			String macroName = (path + fileName).replace(' ','_');
+			Macro newMacro = handler.createMacro(macroName,
+				file.getPath());
+			// ignore if already added.
+			// see comment in loadMacros().
+			if(macroHash.get(newMacro.getName()) != null)
+				return;
+
+			vector.addElement(newMacro.getName());
+			jEdit.setTemporaryProperty(newMacro.getName()
+				+ ".label",
+				newMacro.label);
+			jEdit.setTemporaryProperty(newMacro.getName()
+				+ ".mouse-over",
+				handler.getLabel() + " - " + file.getPath());
+			macroActionSet.addAction(newMacro);
+			macroHash.put(newMacro.getName(),newMacro);
+		}
+		catch (Exception e)
+		{
+			Log.log(Log.ERROR, Macros.class, e);
+			macroHandlers.remove(handler);
 		}
 	} //}}}
 

@@ -3,16 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- macro override
-
-wrapped dock buttons broken
-
-4.2 plugin guide:
-  - deferred loading mention.
-  
-- bsh bugs:
-  ; after else if()
-  longs not read correctly if prefixed with 0x
+- wrapped dock buttons broken
 - VFS browser pathsEqual(): case sensitivity!
 - first line problem solved by reset()
 - latest sftp: permissions not saved!
@@ -41,6 +32,7 @@ it is done in most text editors
 
 + docs:
 
+- deferred loading mention.
 - FAQ: swing window border problems
 - addCommandPath()
 -Dsun.java2d.noddraw=true
@@ -92,6 +84,9 @@ it is done in most text editors
 
 + obscure:
 
+- bsh bugs:
+  ; after else if()
+  longs not read correctly if prefixed with 0x
 - no need to wait for requests after newFile()
 - class loading problems
 - motif l&f: shortcuts in menu items

@@ -9,9 +9,14 @@ Thanks to Thomas Alspaugh for contributing to this release.
 - Updated BibTeX and LaTeX syntax highlighting (Thomas Alspaugh).
 
 - The Buffer Options and Global Options->Editing panes no longer allow
-  setting the wrap mode to 'soft' with a wrap margin of zero.
+  setting the wrap mode to 'soft' with a wrap margin of zero. Previously
+  this was allowed, but did nothing since the feature was removed in
+  4.2.
 
 - DELETE key works with the tall caret now.
+
+- Macros in the user macros directory now override macros in the system
+  macro directory.
 
 }}}
 {{{ Bug Fixes
@@ -46,6 +51,12 @@ Thanks to Thomas Alspaugh for contributing to this release.
   switching APIs were called in a certain sequence.
 
 - Fixed exception when clicking in one-line-high text area.
+
+- Fixed problems with rectangular selections when changes were being
+  made before the selection in the buffer.
+
+- Disabling the status bar in the Status Bar option pane did not disable
+  the "Show clock" option.
 
 }}}
 
