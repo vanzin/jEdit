@@ -331,8 +331,8 @@ public class LineManager
 	 * In the old document model there were 5 objects per line, for a
 	 * total of about 100 bytes, plus a cached token list, which used
 	 * another 100 or so bytes. */
-	private static final int FOLD_LEVEL_MASK         = 0x00ffff;
-	private static final int SCREEN_LINES_MASK       = 0x7fff00;
+	private static final int FOLD_LEVEL_MASK         = 0x0000ffff;
+	private static final int SCREEN_LINES_MASK       = 0x7fff0000;
 	private static final int SCREEN_LINES_SHIFT      = 16;
 	private static final int SCREEN_LINES_VALID_MASK = 1<<31;
 

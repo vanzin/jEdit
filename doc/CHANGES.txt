@@ -11,6 +11,8 @@ release.
 
 - Updated PL/SQL syntax highlighting (Eric Ladner).
 
+- Updated LaTeX syntax highlighting (Thomas Alspaugh).
+
 }}}
 {{{ Miscellaneous
 
@@ -24,6 +26,8 @@ KeyEventTranslator.setModifierMapping(
     InputEvent.ALT_MASK | InputEvent.META_MASK,
     0,
     InputEvent.SHIFT_MASK);
+
+- "Java File Save" macro (Nicholas O'Leary).
 
 }}}
 {{{ Bug Fixes
@@ -40,6 +44,8 @@ KeyEventTranslator.setModifierMapping(
 
 - File permission preservation code no longer waits for 'chmod' command
   to exit; since on some Java versions, Process.waitFor() would hang.
+
+- Fix problem if a line had more than 127 screen lines.
 
 }}}
 

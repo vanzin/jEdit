@@ -361,6 +361,14 @@
 </listitem>
 
 <listitem>
+      <para><filename>Java_File_Save.bsh</filename></para>
+      <abstract><para>Acts as a wrapper script to the Save As action. If the buffer
+      is a new file, it scans the first 250 lines for a Java class or interface
+      declaration. On finding one, it extracts the appropriate filename to be
+      used in the Save As dialog.</para></abstract>   
+      </listitem>
+
+<listitem>
     <para><filename>Make_Get_and_Set_Methods.bsh</filename></para>
     <para>
         Creates <function>getXXX()</function> or <function>setXXX()</function>
