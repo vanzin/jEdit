@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-		"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
 <article>
 	<articleinfo>
@@ -26,9 +26,57 @@
 	<sect1 id="user-changes"><title>User-Visible Changes</title>
 	
 	<para>
-		Not yet written.
+	        plugin api, option to leave behind zip files
+		
+		soft wrap 0 not supported, synchro scroll gone
+
+		plugin options dialog
+		
+		persistent registers, kill ring
+		
+		text area scrolls by screen lines, drag and drop, fold end in gutter, 
+		
+		deep indent
+		
+		control click beyond eol, rect select from keyboard, status indicator, vertical paste is different, "tall caret"
+		
+		new token types; better background colors for delegates; SPAN_REGEXP substitution, NO_ESCAPE spans, 15 new modes!
+
+		folding: colorized, alt-click, limit of 8 lifted.
+
+		better docking, better status, action bar, repeat last action,
+		persistent splits
+		
+		fs browser table, better completion, favorite files, utilities->favorites, symlink behavior change
+		
+		beanshell 1.3, more macros
+		
+		new cli options
+		
+		better complete word - all visible buffers!
+		
+		search: flag toggle from keyboard, hypersearch selects all on line
+		search bar command change
+		
+		better control over file reload, 
 	</para>
 	
+	<sect2><title>Text Editing</title>
+	
+	<para>
+	 Drag and drop of text is now supported in the text area; it can be disabled in the <guimenuitem>Mouse</guimenuitem> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para>
+	
+	<para>
+	 
+	<sect2><title>File Encodings</title>
+	
+	<para>
+	 A full list of encodings is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. The encoding declaration of XML files is now honoured when loading and saving buffers.
+	</para>
+
+	</sect2>
+
 	</sect1>
 	
 	<sect1 id="scripting-api-changes"><title>BeanShell Scripting API</title>

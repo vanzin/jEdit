@@ -51,7 +51,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	public static final int CURRENT_BUFFER = 0;
 	public static final int ALL_BUFFERS = 1;
-	public static final int DIRECTORY = 2;
+	public static final int DIRECTORY_CURRENT = 2;
+	public static final int DIRECTORY_LAST = 3;
 	//}}}
 
 	//{{{ getSearchDialog() method
@@ -144,11 +145,25 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchAllBuffers.setSelected(true);
 			hyperSearch.setSelected(true);
 		}
-		else if(searchIn == DIRECTORY)
+		else if(searchIn == DIRECTORY_LAST)
 		{
+			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
+			if(fileset instanceof DirectoryListSet)
+			{
+				filter.setText(((DirectoryListSet)fileset)
+					.getFileFilter());
+				directory.setText(((DirectoryListSet)fileset)
+					.getDirectory());
+				searchSubDirectories.setSelected(((DirectoryListSet)fileset)
+					.isRecursive());
+			}
+
 			hyperSearch.setSelected(true);
 			searchDirectory.setSelected(true);
 		}
+		else
+			synchronizeMultiFileSettings();
 
 		updateEnabled();
 	} //}}}
@@ -236,13 +251,14 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	private JCheckBox keepDialog, ignoreCase, regexp, hyperSearch,
 		wrap;
 	private JRadioButton searchBack, searchForward;
-	private JRadioButton searchSelection, searchCurrentBuffer, searchAllBuffers,
-		searchDirectory;
+	private JRadioButton searchSelection, searchCurrentBuffer,
+		searchAllBuffers, searchDirectory;
 
 	// multifile settings
 	private HistoryTextField filter, directory;
 	private JCheckBox searchSubDirectories;
 	private JButton choose;
+	private JButton synchronize;
 
 	// buttons
 	private JButton findBtn, /* replaceBtn, */ replaceAndFindBtn, replaceAllBtn,
@@ -469,10 +485,22 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		layout.setConstraints(label,cons);
 		multifile.add(label);
 
+		cons.gridwidth = 2;
 		cons.insets = new Insets(0,0,3,6);
 		cons.weightx = 1.0f;
 		layout.setConstraints(filter,cons);
 		multifile.add(filter);
+
+		cons.gridwidth = 1;
+		cons.weightx = 0.0f;
+
+		synchronize = new JButton(jEdit.getProperty(
+			"search.synchronize"));
+		synchronize.setMnemonic(jEdit.getProperty(
+			"search.synchronize.mnemonic")
+			.charAt(0));
+		layout.setConstraints(synchronize,cons);
+		multifile.add(synchronize);
 
 		cons.gridy++;
 
@@ -510,14 +538,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		cons.insets = new Insets(0,0,0,0);
 		cons.gridy++;
-		cons.gridwidth = 4;
+		cons.gridwidth = 3;
 
-		searchSubDirectories = new JCheckBox(jEdit.getProperty(
-			"search.subdirs"));
-		searchSubDirectories.setMnemonic(jEdit.getProperty("search.subdirs.mnemonic")
-			.charAt(0));
-		layout.setConstraints(searchSubDirectories,cons);
-		multifile.add(searchSubDirectories);
+ 		searchSubDirectories = new JCheckBox(jEdit.getProperty(
+ 			"search.subdirs"));
+
+ 		layout.setConstraints(searchSubDirectories,cons);
+ 		multifile.add(searchSubDirectories);
 
 		return multifile;
 	} //}}}
@@ -585,11 +612,11 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		filter.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
 
-		boolean directoryEnabled = searchDirectory.isSelected();
-
-		directory.setEnabled(directoryEnabled);
-		choose.setEnabled(directoryEnabled);
-		searchSubDirectories.setEnabled(directoryEnabled);
+		directory.setEnabled(searchDirectory.isSelected());
+		choose.setEnabled(searchDirectory.isSelected());
+		searchSubDirectories.setEnabled(searchDirectory.isSelected());
+		synchronize.setEnabled(searchAllBuffers.isSelected()
+			|| searchDirectory.isSelected());
 
 		findBtn.setEnabled(!searchSelection.isSelected()
 			|| hyperSearch.isSelected());
@@ -676,6 +703,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 			SearchAndReplace.setSearchFileSet(fileset);
 
+			replace.addCurrentToHistory();
+			SearchAndReplace.setReplaceString(replace.getText());
+
 			if(find.getText().length() == 0)
 			{
 				if(!cancel)
@@ -685,14 +715,32 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 			find.addCurrentToHistory();
 			SearchAndReplace.setSearchString(find.getText());
-			replace.addCurrentToHistory();
-			SearchAndReplace.setReplaceString(replace.getText());
 
 			return true;
 		}
 		finally
 		{
 			saving = false;
+		}
+	} //}}}
+
+	//{{{ synchronizeMultiFileSettings() method
+	private void synchronizeMultiFileSettings()
+	{
+		directory.setText(view.getBuffer().getDirectory());
+
+		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+
+		if(fileset instanceof AllBufferSet)
+		{
+			filter.setText(((AllBufferSet)fileset)
+				.getFileFilter());
+		}
+		else
+		{
+			filter.setText("*" + MiscUtilities
+				.getFileExtension(view.getBuffer()
+				.getName()));
 		}
 	} //}}}
 
@@ -746,7 +794,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
-		/* if(fileset instanceof DirectoryListSet)
+		synchronizeMultiFileSettings();
+
+		if(fileset instanceof DirectoryListSet)
 		{
 			filter.setText(((DirectoryListSet)fileset)
 				.getFileFilter());
@@ -755,23 +805,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchSubDirectories.setSelected(((DirectoryListSet)fileset)
 				.isRecursive());
 		}
-		else */
+		else if(fileset instanceof AllBufferSet)
 		{
-			directory.setText(view.getBuffer().getDirectory());
-
-			if(fileset instanceof AllBufferSet)
-			{
-				filter.setText(((AllBufferSet)fileset)
-					.getFileFilter());
-			}
-			else
-			{
-				filter.setText("*" + MiscUtilities
-					.getFileExtension(view.getBuffer()
-					.getName()));
-			}
-
-			searchSubDirectories.setSelected(true);
+			filter.setText(((AllBufferSet)fileset)
+				.getFileFilter());
 		}
 
 		directory.addCurrentToHistory();
@@ -829,7 +866,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 				|| source == searchDirectory)
 				hyperSearch.setSelected(true);
 
-			save(false);
+			save(true);
 			updateEnabled();
 		}
 	} //}}}

@@ -136,9 +136,6 @@ public class HistoryModel extends AbstractListModel
 	 */
 	public static HistoryModel getModel(String name)
 	{
-		if(!loaded)
-			loadHistory();
-
 		if(models == null)
 			models = new Hashtable();
 
@@ -152,10 +149,92 @@ public class HistoryModel extends AbstractListModel
 		return model;
 	} //}}}
 
+	//{{{ loadHistory() method
+	public static void loadHistory()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		history = new File(MiscUtilities.constructPath(
+			settingsDirectory,"history"));
+		if(!history.exists())
+			return;
+
+		historyModTime = history.lastModified();
+
+		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history");
+
+		if(models == null)
+			models = new Hashtable();
+
+		BufferedReader in = null;
+
+		try
+		{
+			in = new BufferedReader(new FileReader(history));
+
+			HistoryModel currentModel = null;
+			String line;
+
+			while((line = in.readLine()) != null)
+			{
+				if(line.startsWith("[") && line.endsWith("]"))
+				{
+					if(currentModel != null)
+					{
+						models.put(currentModel.getName(),
+							currentModel);
+					}
+
+					String modelName = MiscUtilities
+						.escapesToChars(line.substring(
+						1,line.length() - 1));
+					currentModel = new HistoryModel(
+						modelName);
+				}
+				else if(currentModel == null)
+				{
+					throw new IOException("History data starts"
+						+ " before model name");
+				}
+				else
+				{
+					currentModel.data.addElement(MiscUtilities
+						.escapesToChars(line));
+				}
+			}
+
+			if(currentModel != null)
+			{
+				models.put(currentModel.getName(),currentModel);
+			}
+		}
+		catch(FileNotFoundException fnf)
+		{
+			//Log.log(Log.DEBUG,HistoryModel.class,fnf);
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,HistoryModel.class,io);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+			}
+		}
+	} //}}}
+
 	//{{{ saveHistory() method
 	public static void saveHistory()
 	{
-		if(!loaded || !modified)
+		if(!modified)
 			return;
 
 		Log.log(Log.MESSAGE,HistoryModel.class,"Saving history");
@@ -235,94 +314,8 @@ public class HistoryModel extends AbstractListModel
 	private Vector data;
 	private static Hashtable models;
 
-	private static boolean loaded;
 	private static boolean modified;
 	private static File history;
 	private static long historyModTime;
-
-	//{{{ loadHistory() method
-	private static void loadHistory()
-	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
-			return;
-
-		history = new File(MiscUtilities.constructPath(
-			settingsDirectory,"history"));
-		if(!history.exists())
-			return;
-
-		historyModTime = history.lastModified();
-
-		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history");
-
-		loaded = true;
-
-		if(models == null)
-			models = new Hashtable();
-
-		BufferedReader in = null;
-
-		try
-		{
-			in = new BufferedReader(new FileReader(history));
-
-			HistoryModel currentModel = null;
-			String line;
-
-			while((line = in.readLine()) != null)
-			{
-				if(line.startsWith("[") && line.endsWith("]"))
-				{
-					if(currentModel != null)
-					{
-						models.put(currentModel.getName(),
-							currentModel);
-					}
-
-					String modelName = MiscUtilities
-						.escapesToChars(line.substring(
-						1,line.length() - 1));
-					currentModel = new HistoryModel(
-						modelName);
-				}
-				else if(currentModel == null)
-				{
-					throw new IOException("History data starts"
-						+ " before model name");
-				}
-				else
-				{
-					currentModel.data.addElement(MiscUtilities
-						.escapesToChars(line));
-				}
-			}
-
-			if(currentModel != null)
-			{
-				models.put(currentModel.getName(),currentModel);
-			}
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,HistoryModel.class,fnf);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,HistoryModel.class,io);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-			}
-		}
-	} //}}}
-
 	//}}}
 }

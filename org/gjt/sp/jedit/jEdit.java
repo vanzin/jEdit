@@ -395,6 +395,7 @@ public class jEdit
 		if(loadPlugins)
 			initPlugins();
 
+		HistoryModel.loadHistory();
 		BufferHistory.load();
 		KillRing.load();
 		propertiesChanged();

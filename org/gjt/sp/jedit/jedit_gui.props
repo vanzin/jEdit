@@ -1214,6 +1214,8 @@ search.subdirs=Search subdirectories
 search.subdirs.mnemonic=u
 search.choose=Choose...
 search.choose.mnemonic=e
+search.synchronize=Synchronize
+search.synchronize.mnemonic=y
 
 search.findBtn=Find
 search.replaceAndFindBtn=Replace & Find

@@ -269,10 +269,21 @@ public class BufferHistory
 		while(iter.hasNext())
 		{
 			Entry entry = (Entry)iter.next();
-			if(entry.path.equals(path))
+			if(pathsCaseInsensitive)
 			{
-				iter.remove();
-				return;
+				if(entry.path.equalsIgnoreCase(path))
+				{
+					iter.remove();
+					return;
+				}
+			}
+			else
+			{
+				if(entry.path.equals(path))
+				{
+					iter.remove();
+					return;
+				}
 			}
 		}
 	} //}}}
