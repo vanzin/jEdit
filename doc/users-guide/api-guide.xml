@@ -1438,7 +1438,7 @@ JEditTextArea</title>
 </funcsynopsis>
 <para>
     The first version scrolls the text area to ensure that the caret is
-    visible; the second scrolls to ensure that an arbitriary offset
+    visible; the second scrolls to ensure that an arbitrary offset
     (from the start of the buffer) is visible. The
     <parameter>doElectricScroll</parameter> parameter determines whether
     <quote>electric scrolling</quote> will occur. This leaves a minimum
@@ -2122,7 +2122,7 @@ line count of the buffer represented by the gutter's display.  The
      </para>
      <para>
        Using a <classname>Segment</classname> is generally more
-       efficent than using a <classname>String</classname> because it
+       efficient than using a <classname>String</classname> because it
        results in less memory allocation and array copying. However,
        <classname>Segments</classname> are slightly harder to set up and
        use.
@@ -2561,9 +2561,7 @@ line count of the buffer represented by the gutter's display.  The
     Returns the offset of the bracket matching the one at offset
     <parameter>offset</parameter> of line <parameter>line</parameter> of the buffer;
     returns -1 if the bracket is unmatched or if the specified
-    character is not a bracket.  The method throws a
-    <classname>BadLocationException</classname> if the <parameter>line</parameter>
-    or <parameter>offset</parameter> parameters are out of range.
+    character is not a bracket.
 </para>
 </listitem>
 
