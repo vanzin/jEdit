@@ -1822,9 +1822,6 @@ helpviewer.toc.plugins=Plugins
 
 helpviewer.search.label=Search
 helpviewer.search.caption=Search for:
-helpviewer.search.error.title=Indexing Error
-helpviewer.search.error.message=An error occurred while building the help index.\n\
-	({0})
 helpviewer.searching=Searching...
 helpviewer.no-results=No results
 #}}}

@@ -66,6 +66,9 @@ class HelpTOCPanel extends JPanel
 	//{{{ selectNode() method
 	void selectNode(String shortURL)
 	{
+		if(tocModel == null)
+			return;
+
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(shortURL);
 
 		if(node == null)
@@ -173,14 +176,11 @@ class HelpTOCPanel extends JPanel
 			{
 				if(label != null && docs != null)
 				{
-					URL url = plugin.getPluginJAR()
+					String path = plugin.getPluginJAR()
 						.getClassLoader()
-						.getResource(docs);
-					if(url != null)
-					{
-						pluginTree.add(createNode(
-							url.toString(),label));
-					}
+						.getResourceAsPath(docs);
+					pluginTree.add(createNode(
+						path,label));
 				}
 			}
 		}

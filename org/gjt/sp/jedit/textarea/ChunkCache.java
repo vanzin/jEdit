@@ -240,6 +240,19 @@ class ChunkCache
 		return lineInfo[screenLine];
 	} //}}}
 
+	//{{{ getLineSubregionCount() method
+	int getLineSubregionCount(int physicalLine)
+	{
+		out.clear();
+		lineToChunkList(physicalLine,out);
+
+		int size = out.size();
+		if(size == 0)
+			return 1;
+		else
+			return size;
+	} //}}}
+
 	//{{{ getSubregionOfOffset() method
 	/**
 	 * Returns the subregion containing the specified offset. A subregion

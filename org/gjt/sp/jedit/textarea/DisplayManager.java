@@ -173,7 +173,7 @@ public class DisplayManager
 	{
 		int index = fvmget(line);
 		/* in collapsed range */
-		if(index % 2 == 1)
+		if(index % 2 != 0)
 		{
 			/* beyond last visible line */
 			if(fvmcount == index + 1)
@@ -237,7 +237,8 @@ public class DisplayManager
 			return offsetMgr.getScreenLineCount(line);
 		else
 		{
-			int newCount = textArea.chunkCache.getLineInfosForPhysicalLine(line).length;
+			int newCount = textArea.chunkCache
+				.getLineSubregionCount(line);
 
 			setScreenLineCount(line,newCount);
 			return newCount;
@@ -857,6 +858,8 @@ loop:		for(;;)
 		}
 
 		fvmcount += delta;
+		if(fvmcount == 0)
+			throw new InternalError();
 	} //}}}
 
 	//{{{ fvmput2() method
@@ -985,12 +988,12 @@ loop:		for(;;)
 		else
 		{
 			if(endi % 2 == 0)
-				fvmput(starti + 1,endi + 1,null);
-			else
 			{
 				fvmput(starti + 1,endi,null);
 				fvm[starti + 1] = end + 1;
 			}
+			else
+				fvmput(starti + 1,endi + 1,null);
 		}
 	} //}}}
 
