@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- tab w/ one line selection
 - deadlock w/ read/write locks
 - what if dir search requires FTP login to list dir
 - soft wrap: dragging on last visible line throws NPEs

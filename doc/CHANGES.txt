@@ -2,9 +2,9 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
-Thanks to Giulio Piancastelli, John Perry, Joshua Miller, Kris Kopicki,
-Marcelo Vanzin, Peter Cox, Rex Young, Rudolf Widmann and Steve Snider
-for contributing to this release.
+Thanks to Cullen Linn, Giulio Piancastelli, John Perry, Joshua Miller,
+Kris Kopicki, Marcelo Vanzin, Peter Cox, Rex Young, Ryan Grove,
+Rudolf Widmann and Steve Snider for contributing to this release.
 
 + Help System Changes:
 
@@ -37,7 +37,9 @@ for contributing to this release.
 
 + Syntax Highlighting Changes:
 
+- Added .NET CIL syntax highlighting (Cullen Linn).
 - Added Maple syntax highlighting (John Perry).
+- Added NSIS2 syntax highlighting (Ryan Grove).
 - Updated ColdFusion syntax highlighting (Joshua Miller).
 - Updated Fortran syntax highlighting (Yifan Song).
 - Updated PL-SQL syntax highlighting (Steve Snider).
@@ -105,6 +107,8 @@ for contributing to this release.
 - $ at the end of an abbreviation expansion is now treated literally.
 - Fixed an obscure bug that could result in exceptions being thrown by
   the caret status display.
+- Fixed a problem with BeanShell namespace handling that would cause
+  some macros to fail (eg, Add_Prefix_and_Suffix.bsh).
 
 + API Changes
 

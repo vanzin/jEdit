@@ -54,6 +54,9 @@
 <MODE NAME="chill"		FILE="chill.xml"
 				FILE_NAME_GLOB="*.{chl,mpol}" />
 
+<MODE NAME="cil"		FILE="cil.xml"
+				FILE_NAME_GLOB="*.il" />
+
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
 
@@ -137,6 +140,9 @@
 
 <MODE NAME="nqc"		FILE="nqc.xml"
 				FILE_NAME_GLOB="*.nqc" />
+
+<MODE NAME="nsis2"		FILE="nsis2.xml"
+				FILE_NAME_GLOB="*.{nsi,nsh}" />
 
 <MODE NAME="objective-c"	FILE="objective-c.xml"
 				FILE_NAME_GLOB="*.[mh]" />

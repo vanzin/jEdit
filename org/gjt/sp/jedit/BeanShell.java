@@ -296,15 +296,19 @@ public class BeanShell
 
 			try
 			{
-				if(view != null)
+				// no need to do this for macros!
+				if(!ownNamespace)
 				{
-					interp.unset("view");
-					interp.unset("editPane");
-					interp.unset("buffer");
-					interp.unset("textArea");
-				}
+					if(view != null)
+					{
+						interp.unset("view");
+						interp.unset("editPane");
+						interp.unset("buffer");
+						interp.unset("textArea");
+					}
 
-				interp.unset("scriptPath");
+					interp.unset("scriptPath");
+				}
 			}
 			catch(EvalError e)
 			{

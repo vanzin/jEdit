@@ -48,9 +48,11 @@ public class HelpIndex
 		ignoreWord("be");
 		ignoreWord("by");
 		ignoreWord("can");
+		ignoreWord("do");
 		ignoreWord("for");
 		ignoreWord("from");
 		ignoreWord("how");
+		ignoreWord("i");
 		ignoreWord("if");
 		ignoreWord("in");
 		ignoreWord("is");
