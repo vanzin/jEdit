@@ -316,6 +316,8 @@ class InstallPanel extends JPanel
 				return;
 
 			Entry entry = (Entry)obj;
+			entry.install = Boolean.TRUE.equals(aValue);
+
 			if (!entry.install)
 				deselectParents(entry);
 
@@ -343,7 +345,6 @@ class InstallPanel extends JPanel
 				}
 			}
 
-			entry.install = Boolean.TRUE.equals(aValue);
 			fireTableCellUpdated(row,column);
 		} //}}}
 
@@ -450,7 +451,7 @@ class InstallPanel extends JPanel
 			while(iter.hasNext())
 			{
 				Entry entry = (Entry)iter.next();
-				if(!list.contains(entry))
+				if(entry.install && !list.contains(entry))
 				{
 					list.add(entry);
 					entry.getParents(list);

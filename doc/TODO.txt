@@ -16,6 +16,7 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- hypersearch results & folds
 - format: preserve comment chars at start
 - focus workaround:
     view.setAlwaysOnTop(true);
@@ -25,9 +26,6 @@ and quirks that I need to fix eventually.
 - jedit -encoding
 - filled cursor option
 - blink frequency option
-- numeric keypad bindings
-- plugin manager's dependency tracking is broken
-- A+f l -- inserts l
 - why is still added to end of kill ring?
 - goToBuffer() -- if any parent has zero height or zero width...
 - independent text area component
