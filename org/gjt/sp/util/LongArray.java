@@ -1,5 +1,5 @@
 /*
- * IntegerArray.java - Automatically growing array of ints
+ * LongArray.java - Automatically growing array of longs
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -23,22 +23,22 @@
 package org.gjt.sp.util;
 
 /**
- * A simple collection that stores integers and grows automatically.
+ * A simple collection that stores long integers and grows automatically.
  */
-public class IntegerArray
+public class LongArray
 {
-	//{{{ IntegerArray constructor
-	public IntegerArray()
+	//{{{ LongArray constructor
+	public LongArray()
 	{
-		array = new int[1000];
+		array = new long[1000];
 	} //}}}
 
 	//{{{ add() method
-	public void add(int num)
+	public void add(long num)
 	{
 		if(len >= array.length)
 		{
-			int[] arrayN = new int[len * 2];
+			long[] arrayN = new long[len * 2];
 			System.arraycopy(array,0,arrayN,0,len);
 			array = arrayN;
 		}
@@ -47,9 +47,15 @@ public class IntegerArray
 	} //}}}
 
 	//{{{ get() method
-	public final int get(int index)
+	public final long get(int index)
 	{
 		return array[index];
+	} //}}}
+
+	//{{{ getArray() method
+	public final long[] getArray()
+	{
+		return array;
 	} //}}}
 
 	//{{{ getSize() method
@@ -71,7 +77,7 @@ public class IntegerArray
 	} //}}}
 
 	//{{{ Private members
-	private int[] array;
+	private long[] array;
 	private int len;
 	//}}}
 }
