@@ -477,13 +477,16 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <sect1 id="window-implement"><title>Implementing a Dockable Window Class</title>
 
 <para>
- XXX
+ Now we must provide the actual implementation of the dockable window
+ referenced in <filename>dockables.xml</filename> (see
+ <xref linkend="resources-dockables" /> and
+ <xref linkend="resources-implement" />). Here is the
+ <filename>QuickNotepad.java</filename> source file, with some details
+ not related to the dockable window API trimmed:
 </para>
 
-
-
 <informalexample><programlisting>public class QuickNotepad extends JPanel
-    implements EBComponent, QuickNotepadActions
+    implements EBComponent
 {
     private View view;
     private String position;
