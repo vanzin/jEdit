@@ -1448,9 +1448,41 @@ loop:		for(;;)
 				contentInserted(firstLine,startLine,numLines);
 				contentInserted(scrollLineCount,startLine,numLines);
 
+				/* this is a sloppy hack to fix bug
+				   "[ 677902 ] hitting return after collapsed
+				   fold"
+
+				   the idea is that if we extend the range then
+				   the problem described in the bug happends, so
+				   if the insert is at the very end of the range
+				   we don't extend it, instead we push the
+				   insert into the next range, however for this
+				   to work properly we also have to mess with
+				   screen line counts. */
 				int index = fvmget(startLine);
-				for(int i = index + 1; i < fvmcount; i++)
+				int start = index + 1;
+				if(start != fvmcount && fvm[start]
+					== startLine + 1)
+				{
+					if(index % 2 == 0)
+					{
+						scrollLineCount.scrollLine -=
+							lineMgr.getScreenLineCount(
+							startLine + 1);
+					}
+					else
+					{
+						scrollLineCount.scrollLine +=
+							lineMgr.getScreenLineCount(
+							startLine + 1);
+					}
+					start++;
+				}
+
+				for(int i = start; i < fvmcount; i++)
+				{
 					fvm[i] += numLines;
+				}
 
 				lastfvmget = -1;
 			}
