@@ -40,7 +40,7 @@ import org.gjt.sp.util.Log;
  *
  * @author Slava Pestov
  * @version $Id$
- * @since jEdit 4.0pre1
+ * @since jEdit 4.2pre3
  */
 public class LineManager
 {

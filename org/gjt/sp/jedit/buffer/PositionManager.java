@@ -27,6 +27,7 @@ import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 //}}}
@@ -57,155 +58,77 @@ public class PositionManager
 	// a read lock.
 	public synchronized Position createPosition(int offset)
 	{
-		PosBottomHalf bh = null;
+		PosBottomHalf bh;
 
-		for(int i = 0; i < positionCount; i++)
+		if(root == null)
+			root = bh = new PosBottomHalf(offset);
+		else
 		{
-			PosBottomHalf _bh = positions[i];
-			if(_bh.offset == offset)
-			{
-				bh = _bh;
-				break;
-			}
-			else if(_bh.offset > offset)
+			bh = root.find(offset);
+
+			if(bh == null)
 			{
 				bh = new PosBottomHalf(offset);
-				growPositionArray();
-				System.arraycopy(positions,i,positions,i+1,
-					positionCount - i);
-				positionCount++;
-				positions[i] = bh;
-				break;
+				bh.red = true;
+				root.insert(bh);
 			}
-		}
-
-		if(bh == null)
-		{
-			bh = new PosBottomHalf(offset);
-			growPositionArray();
-			positions[positionCount++] = bh;
+			else
+				bh.ref++;
 		}
 
 		return new PosTopHalf(bh);
 	} //}}}
 
 	//{{{ contentInserted() method
-	public void contentInserted(int offset, int length)
+	public synchronized void contentInserted(int offset, int length)
 	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else
-				bh.offset += length;
-		}
+		if(root != null)
+			root.contentInserted(offset,length);
 	} //}}}
 
 	//{{{ contentRemoved() method
-	public void contentRemoved(int offset, int length)
+	public synchronized void contentRemoved(int offset, int length)
 	{
-		if(positionCount == 0)
-			return;
-
-		int start = getPositionAtOffset(offset);
-
-		for(int i = start; i < positionCount; i++)
-		{
-			PosBottomHalf bh = positions[i];
-			if(bh.offset < offset)
-				Log.log(Log.ERROR,this,"Screwed up: " + bh.offset);
-			else if(bh.offset < offset + length)
-				bh.offset = offset;
-			else
-				bh.offset -= length;
-		}
+		if(root != null)
+			root.contentRemoved(offset,length);
 	} //}}}
 
 	//{{{ Private members
-	private PosBottomHalf[] positions;
-	private int positionCount;
-
-	//{{{ growPositionArray() method
-	private void growPositionArray()
-	{
-		if(positions.length < positionCount + 1)
-		{
-			PosBottomHalf[] newPositions = new PosBottomHalf[
-				(positionCount + 1) * 2];
-			System.arraycopy(positions,0,newPositions,0,positionCount);
-			positions = newPositions;
-		}
-	} //}}}
+	private PosBottomHalf root;
 
 	//{{{ removePosition() method
 	private synchronized void removePosition(PosBottomHalf bh)
 	{
-		int index = -1;
-
-		for(int i = 0; i < positionCount; i++)
+		// if one of the siblings is null, make &this=non null sibling
+		if(bh.left == null)
+			bh.removeLeft();
+		else if(bh.right == null)
+			bh.removeRight();
+		// neither is null;
+		else
 		{
-			if(positions[i] == bh)
+			PosBottomHalf nextInorder = bh.right;
+			while(nextInorder.left != null)
+				nextInorder = nextInorder.left;
+			// removing the root?
+			if(bh.parent == null)
 			{
-				index = i;
-				break;
+				root = nextInorder;
 			}
-		}
-
-		System.arraycopy(positions,index + 1,positions,index,
-			positionCount - index - 1);
-		positions[--positionCount] = null;
-	} //}}}
-
-	//{{{ getPositionAtOffset() method
-	private int getPositionAtOffset(int offset)
-	{
-		int start = 0;
-		int end = positionCount - 1;
-
-		PosBottomHalf bh;
-
-loop:		for(;;)
-		{
-			switch(end - start)
+			else
 			{
-			case 0:
-				bh = positions[start];
-				if(bh.offset < offset)
-					start++;
-				break loop;
-			case 1:
-				bh = positions[end];
-				if(bh.offset < offset)
-				{
-					start = end + 1;
-				}
+				if(bh.parent.left == bh)
+					bh.parent.left = nextInorder;
 				else
-				{
-					bh = positions[start];
-					if(bh.offset < offset)
-					{
-						start++;
-					}
-				}
-				break loop;
-			default:
-				int pivot = (start + end) / 2;
-				bh = positions[pivot];
-				if(bh.offset > offset)
-					end = pivot - 1;
-				else
-					start = pivot + 1;
-				break;
+					bh.parent.right = nextInorder;
 			}
-		}
 
-		return start;
+			if(nextInorder.right != null)
+				nextInorder.right.parent = bh.right;
+			nextInorder.left = bh.left;
+			bh.right.left = nextInorder.right;
+			nextInorder.right = bh.right;
+		}
 	} //}}}
 
 	//}}}
@@ -242,6 +165,9 @@ loop:		for(;;)
 	{
 		int offset;
 		int ref;
+		PosBottomHalf parent;
+		PosBottomHalf left, right;
+		boolean red;
 
 		//{{{ PosBottomHalf constructor
 		PosBottomHalf(int offset)
@@ -249,17 +175,270 @@ loop:		for(;;)
 			this.offset = offset;
 		} //}}}
 
+		//{{{ dump() method
+		void dump(int level)
+		{
+			String ws = MiscUtilities.createWhiteSpace(level,0);
+			if(left != null)
+				left.dump(level+1);
+			else
+			{
+				Log.log(Log.DEBUG,this,ws + "[]");
+			}
+			Log.log(Log.DEBUG,this,ws + red + ":" + offset);
+			if(right != null)
+				right.dump(level+1);
+			else
+			{
+				Log.log(Log.DEBUG,this,ws + "[]");
+			}
+		} //}}}
+
+		//{{{ insert() method
+		void insert(PosBottomHalf pos)
+		{
+			if(pos.offset < offset)
+			{
+				if(left == null)
+				{
+					pos.parent = this;
+					left = pos;
+					//pos.ibalance();
+				}
+				else
+					left.insert(pos);
+			}
+			else
+			{
+				if(right == null)
+				{
+					pos.parent = this;
+					right = pos;
+					//pos.ibalance();
+				}
+				else
+					right.insert(pos);
+			}
+		} //}}}
+
+		//{{{ removeLeft() method
+		void removeLeft()
+		{
+			if(parent == null)
+				root = right;
+			else
+			{
+				if(this == parent.left)
+					parent.left = right;
+				else
+					parent.right = right;
+			}
+		} //}}}
+
+		//{{{ removeRight() method
+		void removeRight()
+		{
+			if(parent == null)
+				root = left;
+			else
+			{
+				if(this == parent.left)
+					parent.left = left;
+				else
+					parent.right = left;
+			}
+		} //}}}
+
+		//{{{ find() method
+		PosBottomHalf find(int offset)
+		{
+			if(this.offset == offset)
+				return this;
+			else if(this.offset < offset)
+			{
+				if(right == null)
+					return null;
+				else
+					return right.find(offset);
+			}
+			else
+			{
+				if(left == null)
+					return null;
+				else
+					return left.find(offset);
+			}
+		} //}}}
+
+		//{{{ contentInserted() method
+		void contentInserted(int offset, int length)
+		{
+			if(offset <= this.offset)
+			{
+				this.offset += length;
+				if(left != null)
+					left.contentInserted(offset,length);
+				if(right != null)
+					right.contentInserted(offset,length);
+			}
+			else
+				right.contentInserted(offset,length);
+		} //}}}
+
+		//{{{ contentRemoved() method
+		void contentRemoved(int offset, int length)
+		{
+			if(offset >= this.offset)
+				right.contentRemoved(offset,length);
+			else if(offset + length <= this.offset)
+			{
+				this.offset -= length;
+				if(left != null)
+					left.contentInserted(offset,length);
+				if(right != null)
+					right.contentInserted(offset,length);
+			}
+			else
+			{
+				this.offset = offset;
+				if(left != null)
+					left.contentInserted(offset,length);
+				if(right != null)
+					right.contentInserted(offset,length);
+			}
+		} //}}}
+
 		//{{{ ref() method
-		void ref()
+		synchronized void ref()
 		{
 			ref++;
 		} //}}}
 
 		//{{{ unref() method
-		void unref()
+		synchronized void unref()
 		{
 			if(--ref == 0)
 				removePosition(this);
+		} //}}}
+
+		//{{{ ibalance() method
+		private void ibalance()
+		{
+			if(parent.red)
+			{
+				PosBottomHalf u = parent.parent;
+				PosBottomHalf w;
+				if(u.left == parent)
+					w = u.right;
+				else
+					w = u.left;
+				if(w != null && w.red)
+				{
+					parent.red = false;
+					w.red = false;
+					if(u.parent == null)
+						u.red = false;
+					else
+					{
+						u.red = true;
+						u.ibalance();
+					}
+				}
+				else
+				{
+					irestructure();
+				}
+			}
+		} //}}}
+
+		//{{{ irestructure() method
+		private void irestructure()
+		{
+			// this method looks incomprehensible but really
+			// its quite simple. this node, its parent and its
+			// grandparent are rearranged such that in-ordering
+			// of the tree is preserved, and so that the tree
+			// looks like so:
+			//
+			//           (b)
+			//         /     \
+			//       (a)     (c)
+			//
+			// Where a/b/c are the first, second and third in an
+			// in-order traversal of this node, the parent and the
+			// grandparent.
+
+			// Temporary storage: { al, a, ar, b, cl, c, cr }
+			PosBottomHalf[] nodes;
+
+			// For clarity
+			PosBottomHalf u = parent.parent;
+
+			if(u.left == parent)
+			{
+				if(parent.left == this)
+				{
+					// zl, z, zr, v, vr, u, ur
+					nodes = new PosBottomHalf[] {
+						left, this, right,
+						parent, parent.right,
+						u, u.right
+					};
+				}
+				else
+				{
+					// vl, v, zl, z, zr, u, ur
+					nodes = new PosBottomHalf[] {
+						parent.left, parent, left,
+						this, right, u, u.right
+					};
+				}
+			}
+			else
+			{
+				if(parent.right == this)
+				{
+					// ul, u, vl, v, zl, z, zr
+					nodes = new PosBottomHalf[] {
+						u.left, u, parent.left,
+						parent, left, this, right
+					};
+				}
+				else
+				{
+					// ul, u, zl, z, zr, v, vr
+					nodes = new PosBottomHalf[] {
+						u.left, u, left, this, right,
+						parent, parent.right
+					};
+				}
+			}
+
+			if(u.parent != null)
+			{
+				if(u.parent.left == u)
+					u.parent.left = nodes[3];
+				else
+					u.parent.right = nodes[3];
+			}
+			else
+				root = nodes[3];
+
+			// Write-only code for constructing a meaningful tree
+			nodes[1].parent = nodes[3];
+			nodes[1].red    = true;
+			nodes[1].left   = nodes[0];
+			nodes[1].right  = nodes[2];
+
+			nodes[3].parent = u.parent;
+			nodes[3].red    = false;
+			nodes[3].left   = nodes[1];
+			nodes[3].right  = nodes[5];
+
+			nodes[5].parent = nodes[3];
+			nodes[5].red    = true;
+			nodes[5].left   = nodes[4];
+			nodes[5].right  = nodes[6];
 		} //}}}
 	} //}}}
 
