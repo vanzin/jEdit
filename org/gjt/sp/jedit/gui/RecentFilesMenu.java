@@ -39,6 +39,7 @@ public class RecentFilesMenu extends EnhancedMenu implements MenuListener
 	public RecentFilesMenu()
 	{
 		super("recent-files");
+		addMenuListener(this);
 	} //}}}
 
 	//{{{ menuSelected() method

@@ -118,13 +118,15 @@ class BufferPrintable extends WorkRequest implements Printable
 			+ ", currentPageStart = " + currentPageStart
 			+ ", currentPhysicalLine = " + currentPhysicalLine
 			+ ", end = " + end);
-		System.err.println(gfx.getFontRenderContext());
-		System.err.println(gfx.getTransform());
-		System.err.println(gfx.getFontMetrics().stringWidth(
-			"hello world this is a test string!!!"));
-		System.err.println(gfx.getFont().getStringBounds(
+		Rectangle2D bounds1 = font.getStringBounds(
 			"hello world this is a test string!!!",
-				gfx.getFontRenderContext()).getWidth());
+				gfx.getFontRenderContext());
+		System.err.println(bounds1.getWidth());
+		Rectangle2D bounds2 = gfx.getFont().getStringBounds(
+			"hello world this is a test string!!!",
+				gfx.getFontRenderContext());
+		System.err.println(bounds2.getWidth());
+
 		if(pageIndex != currentPage)
 		{
 			currentPageStart = currentPhysicalLine;

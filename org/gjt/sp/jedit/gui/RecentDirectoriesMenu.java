@@ -39,6 +39,7 @@ public class RecentDirectoriesMenu extends EnhancedMenu implements MenuListener
 	public RecentDirectoriesMenu()
 	{
 		super("recent-directories");
+		addMenuListener(this);
 	} //}}}
 
 	//{{{ menuSelected() method
