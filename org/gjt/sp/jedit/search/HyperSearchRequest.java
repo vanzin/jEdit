@@ -68,7 +68,7 @@ public class HyperSearchRequest extends WorkRequest
 		{
 			if(selection != null)
 			{
-				Buffer buffer = getBuffer(files[0]);
+				Buffer buffer = jEdit.openTemporary(null,null,files[0],false);
 				if(buffer == null)
 					return;
 
@@ -82,7 +82,7 @@ loop:				for(int i = 0; i < files.length; i++)
 				{
 					setProgressValue(++current);
 
-					Buffer buffer = getBuffer(files[i]);
+					Buffer buffer = jEdit.openTemporary(null,null,files[i],false);
 					if(buffer == null)
 						continue loop;
 
@@ -135,30 +135,6 @@ loop:				for(int i = 0; i < files.length; i++)
 	private DefaultMutableTreeNode resultTreeRoot;
 	private Selection[] selection;
 	//}}}
-
-	//{{{ getBuffer() method
-	private Buffer getBuffer(final String path)
-	{
-		final Buffer[] retVal = new Buffer[1];
-
-		try
-		{
-			SwingUtilities.invokeAndWait(new Runnable()
-			{
-				public void run()
-				{
-					retVal[0] = jEdit.openTemporary(null,null,
-						path,false);
-				}
-			});
-			return retVal[0];
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,e);
-			return null;
-		}
-	} //}}}
 
 	//{{{ searchInSelection() method
 	private int searchInSelection(Buffer buffer) throws Exception

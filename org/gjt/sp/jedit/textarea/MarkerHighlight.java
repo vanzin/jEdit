@@ -67,6 +67,9 @@ public class MarkerHighlight extends TextAreaExtension
 		if(textArea.getBuffer().isLoaded() && highlightEnabled)
 		{
 			int start = textArea.xyToOffset(0,y);
+			if(start == -1)
+				return null;
+
 			int end = textArea.getScreenLineEndOffset(
 				textArea.getScreenLineOfOffset(start));
 

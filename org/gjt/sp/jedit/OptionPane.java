@@ -22,21 +22,23 @@ package org.gjt.sp.jedit;
 import java.awt.Component;
 
 /**
- * The interface all option panes must implement.  Internally, jEdit uses
- * option panes to implement the tabs in the "Global Options" dialog box.
- * Plugins can also create option panes for the "Plugin Options" dialog
- * box.<p>
+ * The interface all option panes must implement.
  *
  * The <i>name</i> of an option pane is returned by the <code>getName()</code>
  * method. The label displayed in the option pane's tab is obtained from the
- * <code>options.<i>name</i>.label</code> property.
+ * <code>options.<i>name</i>.label</code> property.<p>
+ *
+ * Note that in most cases it is much easier to extend
+ * <code>AbstractOptionPane</code> instead.
  *
  * @see org.gjt.sp.jedit.AbstractOptionPane
  */
 public interface OptionPane
 {
 	/**
-	 * Returns the internal name of this option pane.
+	 * Returns the internal name of this option pane. The option pane's label
+	 * is set to the value of the property named
+	 * <code>options.<i>name</i>.label</code>.
 	 */
 	String getName();
 
@@ -46,7 +48,9 @@ public interface OptionPane
 	Component getComponent();
 
 	/**
-	 * This method should create the option pane's GUI.
+	 * This method is called every time the option pane is displayed. The
+	 * <code>AbstractOptionPane</code> class uses this to create the option
+	 * pane's GUI only when needed.
 	 */
 	void init();
 

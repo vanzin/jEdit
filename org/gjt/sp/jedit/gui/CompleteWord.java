@@ -73,13 +73,9 @@ public class CompleteWord extends JWindow
 		//{{{ show popup if > 1
 		else
 		{
-			Point location = new Point(
-				textArea.offsetToX(caretLine,
-				caret - buffer.getLineStartOffset(caretLine)
-				- word.length()),
-				textArea.getPainter().getFontMetrics().getHeight()
-				* (textArea.physicalToVirtual(caretLine)
-				- textArea.getFirstLine() + 1));
+			Point location = textArea.offsetToXY(caret - word.length());
+			location.y += textArea.getPainter().getFontMetrics()
+				.getHeight();
 
 			SwingUtilities.convertPointToScreen(location,
 				textArea.getPainter());
@@ -122,9 +118,9 @@ public class CompleteWord extends JWindow
 		show();
 
 		KeyHandler keyHandler = new KeyHandler();
-		addKeyListener(keyHandler);
-		getRootPane().addKeyListener(keyHandler);
-		words.addKeyListener(keyHandler);
+		//addKeyListener(keyHandler);
+		//getRootPane().addKeyListener(keyHandler);
+		//words.addKeyListener(keyHandler);
 		view.setKeyEventInterceptor(keyHandler);
 	} //}}}
 

@@ -1,23 +1,25 @@
 TO DO
 
-- get rid of properties dir: people should write startup scripts instead;
-  expose public api for loading properties
-- hypersearch: pressing enter
-- select word: non-alpha single char
+- soft wrap and syntax highlighted files
+- display 'freezes' when opening a new file
+- one-time selection problem
+- removing a plugin should offer to remove the ones that depend on it too
+- installing source for already installed plugins is not possible: 'hide
+  already installed' checkbox in install plugins dialog box
 - soft wrap to do:
+  - fix scrollToCaret()
   - use new offset conversion API throughout
   - document soft wrap
   - add a tip of the day about soft wrap
-- before pre4:
-  - expand fold still broken
-  - make jEdit.openTemporary() thread-safe
-  - fold vis manager: check for out of bounds line numbers
-  - plugin size reporting, new install plugins dialog UI layout, or wind
-    back old layout
-  - better formatting commands:
-    - format becomes 'wrap paragraph'
-    - 'wrap line'
-    - 'unwrap paragraph'
+- optimise repaining, key insertion
+- wind back hard wrap as a configurable option (remember to handle
+  lines consisting entirely of spaces & word wrap correctly)
+- select word: non-alpha single char
+- better formatting commands:
+  - format becomes 'wrap paragraph'
+  - 'wrap line'
+  - 'unwrap paragraph'
+- don't repaint whole selection when resizing
 - OK_CANCEL_OPTION in confirm() docs
 - rect select and soft wrap
 - chunk cache & scrolling optimization
@@ -28,14 +30,11 @@ TO DO
 - support multi-screen systems properly
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
-- jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
 - docking buttons not always hidden
 - definately repaint problems
 - keyboard navigation of current directory, recent dirs, etc broken
-- keystrokes stop working all of a sudden
-- JDK 1.3 focus bugs
-- allegedly redo doesn't redo everything?
+- JDK 1.4 focus bugs
 - dwm: not always focused correctly
 - stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
@@ -50,7 +49,6 @@ TO DO
 - finish 'troubleshooting' menu:
   - about cmd
   - docs in user's guide
-- faster hypersearch
 - C+d with selection: delete all selected lines
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
@@ -71,12 +69,8 @@ TO DO
 - style setting for folding line indicator
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
-- plugin manager: show all dependencies, not just first-order ones
-- removing a plugin should offer to remove the ones that depend on it too
 - help viewer: two tabs, contents and index. index browser
-- improved window docking:
-  - DockableLayout: handle too large
-  - CCW rotated text not drawn correctly
+- DockableLayout: handle too large
 - file system browser:
   - commands->copy file list
   - much better autocomplete
@@ -118,11 +112,7 @@ TO DO
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
-- installing source for already installed plugins is not possible
-- a line consisting entirely of spaces & word wrap
 - switching option panes real fast
-- tabbing to text area fails
-- zlib decompression errors in plugin manager
 - failed saves should not clear the dirty flag
 - get rid of final blank page of user's guide
 - aborts not always fired
@@ -133,7 +123,6 @@ TO DO
   - selected borders in list, tree, table wrong colors
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
-- 'Stop' in plugin manager needs to be handled more gracefully
 - evalutate for selected lines: > 1 selection per line
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions

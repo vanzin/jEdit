@@ -600,7 +600,10 @@ public class BufferIORequest extends WorkRequest
 				}
 
 				if(twoStageSave)
-					vfs._rename(session,savePath,path,view);
+				{
+					if(!vfs._rename(session,savePath,path,view))
+						throw new IOException(path);
+				}
 
 				// We only save markers to VFS's that support deletion.
 				// Otherwise, we will accumilate stale marks files.

@@ -202,6 +202,9 @@ public class Abbrevs
 	 */
 	public static Hashtable getGlobalAbbrevs()
 	{
+		if(!loaded)
+			load();
+
 		return globalAbbrevs;
 	} //}}}
 
@@ -224,6 +227,9 @@ public class Abbrevs
 	 */
 	public static Hashtable getModeAbbrevs()
 	{
+		if(!loaded)
+			load();
+
 		return modes;
 	} //}}}
 
@@ -248,6 +254,9 @@ public class Abbrevs
 	 */
 	public static void addGlobalAbbrev(String abbrev, String expansion)
 	{
+		if(!loaded)
+			load();
+
 		globalAbbrevs.put(abbrev,expansion);
 		abbrevsChanged = true;
 	} //}}}
@@ -262,6 +271,9 @@ public class Abbrevs
 	 */
 	public static void addModeAbbrev(String mode, String abbrev, String expansion)
 	{
+		if(!loaded)
+			load();
+
 		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
 		if(modeAbbrevs == null)
 		{
@@ -270,55 +282,6 @@ public class Abbrevs
 		}
 		modeAbbrevs.put(abbrev,expansion);
 		abbrevsChanged = true;
-	} //}}}
-
-	//{{{ Package-private members
-
-	//{{{ load() method
-	static void load()
-	{
-		expandOnInput = jEdit.getBooleanProperty("view.expandOnInput");
-
-		globalAbbrevs = new Hashtable();
-		modes = new Hashtable();
-
-		boolean loaded = false;
-
-		String settings = jEdit.getSettingsDirectory();
-		if(settings != null)
-		{
-			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
-			abbrevsModTime = file.lastModified();
-
-			try
-			{
-				loadAbbrevs(new FileReader(file));
-				loaded = true;
-			}
-			catch(FileNotFoundException fnf)
-			{
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,Abbrevs.class,"Error while loading " + file);
-				Log.log(Log.ERROR,Abbrevs.class,e);
-			}
-		}
-
-		// only load global abbrevs if user abbrevs file could not be loaded
-		if(!loaded)
-		{
-			try
-			{
-				loadAbbrevs(new InputStreamReader(Abbrevs.class
-					.getResourceAsStream("default.abbrevs")));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,Abbrevs.class,"Error while loading default.abbrevs");
-				Log.log(Log.ERROR,Abbrevs.class,e);
-			}
-		}
 	} //}}}
 
 	//{{{ save() method
@@ -356,11 +319,10 @@ public class Abbrevs
 		}
 	} //}}}
 
-	//}}}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private static boolean loaded;
 	private static boolean abbrevsChanged;
 	private static long abbrevsModTime;
 	private static boolean expandOnInput;
@@ -371,10 +333,62 @@ public class Abbrevs
 
 	private Abbrevs() {}
 
+	static
+	{
+		expandOnInput = jEdit.getBooleanProperty("view.expandOnInput");
+	}
+
+	//{{{ load() method
+	private static void load()
+	{
+		globalAbbrevs = new Hashtable();
+		modes = new Hashtable();
+
+		String settings = jEdit.getSettingsDirectory();
+		if(settings != null)
+		{
+			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
+			abbrevsModTime = file.lastModified();
+
+			try
+			{
+				loadAbbrevs(new FileReader(file));
+				loaded = true;
+			}
+			catch(FileNotFoundException fnf)
+			{
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,Abbrevs.class,"Error while loading " + file);
+				Log.log(Log.ERROR,Abbrevs.class,e);
+			}
+		}
+
+		// only load global abbrevs if user abbrevs file could not be loaded
+		if(!loaded)
+		{
+			try
+			{
+				loadAbbrevs(new InputStreamReader(Abbrevs.class
+					.getResourceAsStream("default.abbrevs")));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,Abbrevs.class,"Error while loading default.abbrevs");
+				Log.log(Log.ERROR,Abbrevs.class,e);
+			}
+			loaded = true;
+		}
+	} //}}}
+
 	//{{{ expandAbbrev() method
 	private static Expansion expandAbbrev(String mode, String abbrev,
 		int softTabSize, Vector pp)
 	{
+		if(!loaded)
+			load();
+
 		// try mode-specific abbrevs first
 		String expand = null;
 		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);

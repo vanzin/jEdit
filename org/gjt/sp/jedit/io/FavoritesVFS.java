@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import java.awt.Component;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.gjt.sp.jedit.jEdit;
 //}}}
 
@@ -73,10 +73,13 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
+			if(favorites == null)
+				loadFavorites();
+
 			VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[favorites.size()];
 			for(int i = 0; i < retVal.length; i++)
 			{
-				String favorite = (String)favorites.elementAt(i);
+				String favorite = (String)favorites.get(i);
 				retVal[i] = _getDirectoryEntry(session,favorite,comp);
 			}
 			return retVal;
@@ -98,7 +101,7 @@ public class FavoritesVFS extends VFS
 		synchronized(lock)
 		{
 			path = path.substring(PROTOCOL.length() + 1);
-			favorites.removeElement(path);
+			favorites.remove(path);
 
 			VFSManager.sendVFSUpdate(this,PROTOCOL + ":",false);
 		}
@@ -109,13 +112,15 @@ public class FavoritesVFS extends VFS
 	//{{{ loadFavorites() method
 	public static void loadFavorites()
 	{
+		favorites = new ArrayList();
+
 		synchronized(lock)
 		{
 			String favorite;
 			int i = 0;
 			while((favorite = jEdit.getProperty("vfs.favorite." + i)) != null)
 			{
-				favorites.addElement(favorite);
+				favorites.add(favorite);
 				i++;
 			}
 		}
@@ -126,8 +131,11 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
+			if(favorites == null)
+				loadFavorites();
+
 			if(!favorites.contains(path))
-				favorites.addElement(path);
+				favorites.add(path);
 
 			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
 		}
@@ -138,29 +146,33 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
+			if(favorites == null)
+				return;
+
 			for(int i = 0; i < favorites.size(); i++)
 			{
 				jEdit.setProperty("vfs.favorite." + i,
-					(String)favorites.elementAt(i));
+					(String)favorites.get(i));
 			}
 			jEdit.unsetProperty("vfs.favorite." + favorites.size());
 		}
 	} //}}}
 
 	//{{{ getFavorites() method
-	public static String[] getFavorites()
+	public static Object[] getFavorites()
 	{
 		synchronized(lock)
 		{
-			String[] retVal = new String[favorites.size()];
-			favorites.copyInto(retVal);
-			return retVal;
+			if(favorites == null)
+				loadFavorites();
+
+			return favorites.toArray();
 		}
 	} //}}}
 
 	//{{{ Private members
 	private static FavoritesVFS instance;
 	private static Object lock = new Object();
-	private static Vector favorites = new Vector();
+	private static ArrayList favorites;
 	//}}}
 }

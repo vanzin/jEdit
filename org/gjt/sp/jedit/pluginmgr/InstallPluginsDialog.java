@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -31,6 +31,7 @@ import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 class InstallPluginsDialog extends EnhancedDialog
@@ -46,32 +47,33 @@ class InstallPluginsDialog extends EnhancedDialog
 			? jEdit.getProperty("install-plugins.title")
 			: jEdit.getProperty("update-plugins.title")),true);
 
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		JLabel label = new JLabel(jEdit.getProperty("install-plugins.caption"));
-		label.setBorder(new EmptyBorder(0,0,6,0));
 		content.add(BorderLayout.NORTH,label);
-
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(new EmptyBorder(0,0,12,0));
 
 		plugins = new JCheckBoxList(model);
 		plugins.getSelectionModel().addListSelectionListener(new ListHandler());
+		plugins.getModel().addTableModelListener(new TableModelHandler());
 		JScrollPane scroller = new JScrollPane(plugins);
-		scroller.setPreferredSize(new Dimension(0,100));
-		panel.add(BorderLayout.CENTER,scroller);
+		scroller.setPreferredSize(new Dimension(200,0));
+		content.add(BorderLayout.WEST,scroller);
 
-		JPanel panel2 = new JPanel(new BorderLayout());
-		panel2.setBorder(new EmptyBorder(6,0,0,0));
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(new TitledBorder(jEdit.getProperty("install-plugins"
+			+ ".plugin-info")));
+
 		JPanel labelBox = new JPanel(new GridLayout(
-			(mode == UPDATE ? 6 : 5),1,0,3));
+			(mode == UPDATE ? 7 : 6),1,0,3));
 		labelBox.setBorder(new EmptyBorder(0,0,3,12));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.name"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.author"),SwingConstants.RIGHT));
+		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
+			+ ".info.size"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.latest-version"),SwingConstants.RIGHT));
 		if(mode == UPDATE)
@@ -83,32 +85,48 @@ class InstallPluginsDialog extends EnhancedDialog
 			+ ".info.updated"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.description"),SwingConstants.RIGHT));
-		panel2.add(BorderLayout.WEST,labelBox);
+		panel.add(BorderLayout.WEST,labelBox);
 
 		JPanel valueBox = new JPanel(new GridLayout(
-			(mode == UPDATE ? 6 : 5),1,0,3));
+			(mode == UPDATE ? 7 : 6),1,0,3));
 		valueBox.setBorder(new EmptyBorder(0,0,3,0));
 		valueBox.add(name = new JLabel());
 		valueBox.add(author = new JLabel());
+		valueBox.add(size = new JLabel());
 		valueBox.add(latestVersion = new JLabel());
 		if(mode == UPDATE)
-		{
 			valueBox.add(installedVersion = new JLabel());
-		}
 		valueBox.add(updated = new JLabel());
 		valueBox.add(Box.createGlue());
-		panel2.add(BorderLayout.CENTER,valueBox);
+		panel.add(BorderLayout.CENTER,valueBox);
 
-		JPanel panel3 = new JPanel(new BorderLayout(0,3));
-		description = new JTextArea(6,30);
+		description = new JTextArea(6,50);
 		description.setEditable(false);
 		description.setLineWrap(true);
 		description.setWrapStyleWord(true);
-		panel3.add(BorderLayout.NORTH,new JScrollPane(description));
+
+		panel.add(BorderLayout.SOUTH,new JScrollPane(description));
+
+		content.add(BorderLayout.CENTER,panel);
+
+		panel = new JPanel(new BorderLayout(12,0));
+
+		JPanel panel2 = new JPanel(new GridLayout((mode == INSTALL ? 4 : 2),1));
+
+		Box totalSizeBox = new Box(BoxLayout.X_AXIS);
+		totalSizeBox.add(new JLabel(jEdit.getProperty("install-plugins.totalSize")));
+		totalSizeBox.add(Box.createHorizontalStrut(12));
+		totalSizeBox.add(totalSize = new JLabel());
+		panel2.add(totalSizeBox);
+
+		panel2.add(downloadSource = new JCheckBox(
+			jEdit.getProperty("install-plugins.downloadSource")));
+		downloadSource.setSelected(jEdit.getBooleanProperty("install-plugins"
+			+ ".downloadSource.value"));
+		downloadSource.addActionListener(new ActionHandler());
+
 		if(mode == INSTALL)
 		{
-			JPanel panel4 = new JPanel(new BorderLayout(0,3));
-
 			ButtonGroup grp = new ButtonGroup();
 			installUser = new JRadioButton();
 			String settings = jEdit.getSettingsDirectory();
@@ -125,7 +143,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			String[] args = { settings };
 			installUser.setText(jEdit.getProperty("install-plugins.user",args));
 			grp.add(installUser);
-			panel4.add(BorderLayout.CENTER,installUser);
+			panel2.add(installUser);
 
 			installSystem = new JRadioButton();
 			String jEditHome = jEdit.getJEditHome();
@@ -142,26 +160,15 @@ class InstallPluginsDialog extends EnhancedDialog
 			args[0] = jEditHome;
 			installSystem.setText(jEdit.getProperty("install-plugins.system",args));
 			grp.add(installSystem);
-			panel4.add(BorderLayout.SOUTH,installSystem);
+			panel2.add(installSystem);
 
 			if(installUser.isEnabled())
 				installUser.setSelected(true);
 			else
 				installSystem.setSelected(true);
-
-			panel3.add(BorderLayout.CENTER,panel4);
 		}
 
-		panel3.add(BorderLayout.SOUTH,downloadSource = new JCheckBox(
-			jEdit.getProperty("install-plugins.downloadSource")));
-		downloadSource.setSelected(jEdit.getBooleanProperty("install-plugins"
-			+ ".downloadSource.value"));
-
-		panel2.add(BorderLayout.SOUTH,panel3);
-
-		panel.add(BorderLayout.SOUTH,panel2);
-
-		content.add(BorderLayout.CENTER,panel);
+		panel.add(BorderLayout.NORTH,panel2);
 
 		Box box = new Box(BoxLayout.X_AXIS);
 
@@ -179,7 +186,11 @@ class InstallPluginsDialog extends EnhancedDialog
 		box.add(Box.createHorizontalStrut(6));
 		box.add(Box.createGlue());
 
-		content.add(BorderLayout.SOUTH,box);
+		panel.add(BorderLayout.SOUTH,box);
+
+		content.add(BorderLayout.SOUTH,panel);
+
+		updateTotalSize();
 
 		pack();
 		setLocationRelativeTo(dialog);
@@ -229,16 +240,20 @@ class InstallPluginsDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Instance variables
 	private JCheckBoxList plugins;
 	private JLabel name;
 	private JLabel author;
+	private JLabel size;
 	private JLabel latestVersion;
 	private JLabel installedVersion;
 	private JLabel updated;
 	private JTextArea description;
+	private JLabel totalSize;
+	private JCheckBox downloadSource;
 	private JRadioButton installUser;
 	private JRadioButton installSystem;
-	private JCheckBox downloadSource;
 
 	private JButton install;
 	private JButton cancel;
@@ -247,15 +262,118 @@ class InstallPluginsDialog extends EnhancedDialog
 	private Thread thread;
 	//}}}
 
+	//{{{ updateInfo() method
+	private void updateInfo()
+	{
+		Object selected = plugins.getSelectedValue();
+		if(selected instanceof PluginList.Plugin)
+		{
+			install.setEnabled(true);
+
+			PluginList.Plugin plugin = (PluginList.Plugin)selected;
+			PluginList.Branch branch = plugin.getCompatibleBranch();
+			name.setText(plugin.name);
+			author.setText(plugin.author);
+			size.setText(String.valueOf(
+				(downloadSource.isSelected()
+				? branch.downloadSourceSize
+				: branch.downloadSize) / 1024) + " Kb");
+			if(branch.obsolete)
+				latestVersion.setText(jEdit.getProperty(
+					"install-plugins.info.obsolete"));
+			else
+				latestVersion.setText(branch.version);
+			if(installedVersion != null)
+				installedVersion.setText(plugin.installedVersion);
+			updated.setText(branch.date);
+
+			Vector deps = new Vector();
+			createDependencyList(branch.deps,deps);
+			StringBuffer buf = new StringBuffer();
+			for(int i = 0; i < deps.size(); i++)
+			{
+				if(i != 0)
+					buf.append('\n');
+				buf.append("- ");
+				buf.append(deps.get(i));
+			}
+
+			description.setText(plugin.description
+				+ (buf.length() == 0 ? ""
+				: jEdit.getProperty("install-plugins.info"
+				+ ".also-install") + buf.toString()
+				+ (branch.obsolete ? jEdit.getProperty(
+				"install-plugins.info.obsolete-text") : "")));
+			description.setCaretPosition(0);
+		}
+		else
+		{
+			install.setEnabled(false);
+
+			name.setText(null);
+			author.setText(null);
+			latestVersion.setText(null);
+			if(installedVersion != null)
+				installedVersion.setText(null);
+			updated.setText(null);
+			description.setText(null);
+		}
+	} //}}}
+
+	//{{{ createDependencyList() method
+	private void createDependencyList(Vector deps, Vector append)
+	{
+		for(int i = 0; i < deps.size(); i++)
+		{
+			PluginList.Dependency dep = (PluginList.Dependency)
+				deps.elementAt(i);
+			if(dep.what.equals("plugin")
+				&& !dep.isSatisfied())
+			{
+				if(!append.contains(dep.plugin))
+				{
+					append.add(dep.plugin);
+
+					PluginList.Branch branch = dep.plugin
+						.getCompatibleBranch();
+					createDependencyList(branch.deps,append);
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ updateTotalSize() method
+	private void updateTotalSize()
+	{
+		int _totalSize = 0;
+
+		Object[] selected = plugins.getCheckedValues();
+		for(int i = 0; i < selected.length; i++)
+		{
+			PluginList.Plugin plugin = (PluginList.Plugin)selected[i];
+			PluginList.Branch branch = plugin.getCompatibleBranch();
+			_totalSize += (downloadSource.isSelected()
+				? branch.downloadSourceSize
+				: branch.downloadSize);
+		}
+
+		totalSize.setText(String.valueOf(_totalSize / 1024) + " Kb");
+	} //}}}
+
+	//}}}
+
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(evt.getSource() == install)
+			Object source = evt.getSource();
+			if(source == install)
 				ok();
-			else
+			else if(source == cancel)
 				cancel();
+			else if(source == downloadSource)
+				updateTotalSize();
 		}
 	} //}}}
 
@@ -264,58 +382,16 @@ class InstallPluginsDialog extends EnhancedDialog
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
-			Object selected = plugins.getSelectedValue();
-			if(selected instanceof PluginList.Plugin)
-			{
-				install.setEnabled(true);
+			updateInfo();
+		}
+	} //}}}
 
-				PluginList.Plugin plugin = (PluginList.Plugin)selected;
-				PluginList.Branch branch = plugin.getCompatibleBranch();
-				name.setText(plugin.name);
-				author.setText(plugin.author);
-				if(branch.obsolete)
-					latestVersion.setText(jEdit.getProperty(
-						"install-plugins.info.obsolete"));
-				else
-					latestVersion.setText(branch.version);
-				if(installedVersion != null)
-					installedVersion.setText(plugin.installedVersion);
-				updated.setText(branch.date);
-
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < branch.deps.size(); i++)
-				{
-					PluginList.Dependency dep = (PluginList.Dependency)
-						branch.deps.elementAt(i);
-					if(dep.what.equals("plugin")
-						&& !dep.isSatisfied())
-					{
-						if(buf.length() != 0)
-							buf.append(", ");
-
-						buf.append(dep.plugin);
-					}
-				}
-
-				description.setText(plugin.description
-					+ (buf.length() == 0 ? ""
-					: jEdit.getProperty("install-plugins.info"
-					+ ".also-install") + buf.toString()
-					+ (branch.obsolete ? jEdit.getProperty(
-					"install-plugins.info.obsolete-text") : "")));
-			}
-			else
-			{
-				install.setEnabled(false);
-
-				name.setText(null);
-				author.setText(null);
-				latestVersion.setText(null);
-				if(installedVersion != null)
-					installedVersion.setText(null);
-				updated.setText(null);
-				description.setText(null);
-			}
+	//{{{ TableModelHandler class
+	class TableModelHandler implements TableModelListener
+	{
+		public void tableChanged(TableModelEvent e)
+		{
+			updateTotalSize();
 		}
 	} //}}}
 }

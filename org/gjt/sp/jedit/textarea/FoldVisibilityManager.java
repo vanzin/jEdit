@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,12 @@ import org.gjt.sp.jedit.*;
 //}}}
 
 /**
- * Controls fold visibility.
+ * Manages fold visibility.
+ *
+ * This class defines methods for translating between physical and virtual
+ * line numbers, for determining which lines are visible and which aren't,
+ * and for expanding and collapsing folds.<p>
+ *
  * Note that a "physical" line number is a line index, numbered from the
  * start of the buffer. A "virtual" line number is a visible line index;
  * lines after a collapsed fold have a virtual line number that is less
@@ -156,6 +161,9 @@ public class FoldVisibilityManager
 	 */
 	public int getNextVisibleLine(int line)
 	{
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
 		try
 		{
 			buffer.readLock();
@@ -184,6 +192,9 @@ public class FoldVisibilityManager
 	 */
 	public int getPrevVisibleLine(int line)
 	{
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
 		try
 		{
 			buffer.readLock();
@@ -218,7 +229,7 @@ public class FoldVisibilityManager
 
 			if(line < 0)
 				throw new ArrayIndexOutOfBoundsException(line + " < 0");
-			else if(line >= buffer.getLineCount())
+			else if(line >= offsetMgr.getLineCount())
 			{
 				throw new ArrayIndexOutOfBoundsException(line + " > "
 					+ buffer.getLineCount());
@@ -613,7 +624,7 @@ public class FoldVisibilityManager
 				{
 					if((offsetMgr.isLineVisible(i,index) &&
 						buffer.getFoldLevel(i) < initialFoldLevel)
-						|| i == offsetMgr.getVirtualLineCount(index) - 1)
+						|| i == getLastVisibleLine())
 					{
 						end = i - 1;
 						break;
@@ -784,8 +795,12 @@ public class FoldVisibilityManager
 	 */
 	public void narrow(int start, int end)
 	{
+		if(start > end || start < 0 || end >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(start + ", " + end);
+
 		// ideally, this should somehow be rolled into the below loop.
-		if(!offsetMgr.isLineVisible(start + 1,index))
+		if(start != offsetMgr.getLineCount() - 1
+			&& !offsetMgr.isLineVisible(start + 1,index))
 			expandFold(start,false);
 
 		int virtualLineCount = offsetMgr.getVirtualLineCount(index);

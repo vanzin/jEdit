@@ -239,17 +239,12 @@ public class Buffer implements EBComponent
 				unsetProperty(BufferIORequest.END_OFFSETS);
 				unsetProperty(BufferIORequest.NEW_PATH);
 
-				parseBufferLocalProperties();
-				setMode();
-
-				int collapseFolds = getIntegerProperty(
-					"collapseFolds",0);
-				if(collapseFolds != 0)
-					offsetMgr.expandFolds(collapseFolds);
-
 				undoMgr.clear();
 				undoMgr.setLimit(jEdit.getIntegerProperty(
 					"buffer.undoCount",100));
+
+				if(!getFlag(TEMPORARY))
+					finishLoading();
 
 				setFlag(LOADING,false);
 
@@ -271,12 +266,6 @@ public class Buffer implements EBComponent
 				// redundant autosave file
 				if(loadAutosave)
 					setFlag(DIRTY,true);
-
-				if(jEdit.getBooleanProperty("parseFully"))
-				{
-					for(int i = 0; i < offsetMgr.getLineCount(); i++)
-						markTokens(i);
-				}
 
 				// send some EditBus messages
 				if(!getFlag(TEMPORARY))
@@ -1561,7 +1550,9 @@ public class Buffer implements EBComponent
 			EditPane[] editPanes = views[i].getEditPanes();
 			for(int j = 0; j < editPanes.length; j++)
 			{
-				editPanes[j].getTextArea().propertiesChanged();
+				EditPane pane = editPanes[j];
+				if(pane.getBuffer() == this)
+					pane.getTextArea().propertiesChanged();
 			}
 		}
 	} //}}}
@@ -3015,6 +3006,8 @@ public class Buffer implements EBComponent
 	{
 		setFlag(TEMPORARY,false);
 		EditBus.addToBus(this);
+
+		finishLoading();
 	} //}}}
 
 	//{{{ close() method
@@ -3153,6 +3146,23 @@ public class Buffer implements EBComponent
 		}
 		else
 			return false;
+	} //}}}
+
+	//{{{ finishLoading() method
+	private void finishLoading()
+	{
+		parseBufferLocalProperties();
+		setMode();
+
+		int collapseFolds = getIntegerProperty("collapseFolds",0);
+		if(collapseFolds != 0)
+			offsetMgr.expandFolds(collapseFolds);
+
+		if(jEdit.getBooleanProperty("parseFully"))
+		{
+			for(int i = 0; i < offsetMgr.getLineCount(); i++)
+				markTokens(i);
+		}
 	} //}}}
 
 	//{{{ parseBufferLocalProperties() method

@@ -33,7 +33,8 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 {
 	/**
 	 * Creates a new option pane.
-	 * @param name The internal name
+	 * @param name The internal name. The option pane's label is set to the
+	 * value of the property named <code>options.<i>name</i>.label</code>.
 	 */
 	public AbstractOptionPane(String name)
 	{
@@ -42,7 +43,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	}
 
 	/**
-	 * Returns the internal name of this option pane.
+	 * Returns the internal name of this option pane. The option pane's label
+	 * is set to the value of the property named
+	 * <code>options.<i>name</i>.label</code>.
 	 */
 	public String getName()
 	{

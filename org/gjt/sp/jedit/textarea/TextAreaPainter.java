@@ -628,7 +628,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		for(int i = 0; i < foo.length; i++)
 			foo[i] = ' ';
 		dim.width = (int)(getFont().getStringBounds(foo,0,foo.length,
-			fontRenderContext).getWidth() * 80);
+			fontRenderContext).getWidth());
 		dim.height = fm.getHeight() * 25;
 		return dim;
 	} //}}}

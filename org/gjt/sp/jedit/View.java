@@ -265,8 +265,9 @@ public class View extends JFrame implements EBComponent
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
+			// Handled in text area
 			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyTyped(evt);
+				/* keyEventInterceptor.keyTyped(evt) */;
 			else if(inputHandler.isPrefixActive()
 				&& !getTextArea().hasFocus())
 				inputHandler.keyTyped(evt);
