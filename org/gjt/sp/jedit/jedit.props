@@ -213,7 +213,7 @@ view.electricBorders=3
 view.homeEnd=true
 
 # Middle mouse button pastes % register
-view.middleMousePaste=true
+view.middleMousePaste=false
 
 #{{{ Gutter
 

@@ -1,6 +1,9 @@
 /*
  * MarkerHighlight.java - Paints marker highlights in the gutter
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,48 +22,55 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
+//}}}
 
-public class MarkerHighlight implements TextAreaHighlight
+/**
+ * A text area extension that highlights marker locations in the gutter.
+ * Macros and plugins should not create instances of this class.
+ *
+ * @author Slava Pestov
+ * @version $Id$
+ */
+public class MarkerHighlight extends TextAreaExtension
 {
+	//{{{ MarkerHighlight constructor
 	public MarkerHighlight(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
-	}
+	} //}}}
 
-	public void paintHighlight(Graphics gfx, int line, int y)
-	{
-		if(textArea.getBuffer().isLoaded() && highlightEnabled
-			&& line < textArea.getVirtualLineCount())
-		{
-			Buffer buffer = textArea.getBuffer();
-			if(buffer.getMarkerAtLine(textArea.virtualToPhysical(line)) != null)
-			{
-				int firstLine = textArea.getFirstLine();
-				line -= firstLine;
-
-				FontMetrics fm = textArea.getPainter().getFontMetrics();
-				gfx.setColor(markerHighlightColor);
-				gfx.fillRect(0,line * fm.getHeight(),textArea.getGutter()
-					.getWidth(),fm.getHeight());
-			}
-		}
-	}
-
-	public String getToolTipText(MouseEvent evt)
+	//{{{ paintValidLine() method
+	public void paintValidLine(Graphics2D gfx, int physicalLine,
+		int start, int end, int y)
 	{
 		if(textArea.getBuffer().isLoaded() && highlightEnabled)
 		{
-			FontMetrics fm = textArea.getPainter().getFontMetrics();
-			int line = textArea.getFirstLine() + evt.getY() / fm.getHeight();
-			if(line >= textArea.getVirtualLineCount())
-				return null;
-
 			Buffer buffer = textArea.getBuffer();
-			Marker marker = buffer.getMarkerAtLine(textArea.virtualToPhysical(line));
+			if(buffer.getMarkerInRange(start,end) != null)
+			{
+				gfx.setColor(markerHighlightColor);
+				FontMetrics fm = textArea.getPainter().getFontMetrics();
+				gfx.fillRect(0,y,textArea.getGutter()
+					.getWidth(),fm.getHeight());
+			}
+		}
+	} //}}}
+
+	//{{{ getToolTipText() method
+	public String getToolTipText(int x, int y)
+	{
+		if(textArea.getBuffer().isLoaded() && highlightEnabled)
+		{
+			int start = textArea.xyToOffset(0,y);
+			int end = textArea.getScreenLineEndOffset(
+				textArea.getScreenLineOfOffset(start));
+
+			Marker marker = textArea.getBuffer().getMarkerInRange(start,end);
 			if(marker != null)
 			{
 				char shortcut = marker.getShortcut();
@@ -75,30 +85,35 @@ public class MarkerHighlight implements TextAreaHighlight
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getMarkerHighlightColor() method
 	public Color getMarkerHighlightColor()
 	{
 		return markerHighlightColor;
-	}
+	} //}}}
 
+	//{{{ setMarkerHighlightColor() method
 	public void setMarkerHighlightColor(Color markerHighlightColor)
 	{
 		this.markerHighlightColor = markerHighlightColor;
-	}
+	} //}}}
 
+	//{{{ isHighlightEnabled() method
 	public boolean isHighlightEnabled()
 	{
 		return highlightEnabled;
-	}
+	} //}}}
 
+	//{{{ setHighlightEnabled()
 	public void setHighlightEnabled(boolean highlightEnabled)
 	{
 		this.highlightEnabled = highlightEnabled;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JEditTextArea textArea;
 	private boolean highlightEnabled;
 	private Color markerHighlightColor;
+	//}}}
 }

@@ -452,53 +452,19 @@
  </sect1>
  <sect1 id="text-transfer"><title>Transferring Text</title>
   <para>
-   jEdit provides a rich set of commands for moving and copying text
-   using <firstterm>registers</firstterm>. A register is a holding
+   jEdit provides a rich set of commands for moving and copying text.
+   Internally, jEdit stores text in so-called <firstterm>registers</firstterm>.
+   A register is a holding
    area with a single-character name that can hold once piece of text at a time.
-   Registers are global to the editor; all buffers share the same set. With the
-   exception of the clipboard, register contents are only accessable inside
-   jEdit.
+   Registers are global to the editor; all buffers share the same set.
   </para>
   <para>
-   jEdit has three sets of commands for working with registers.
-   The <quote>quick copy</quote> and system clipboard features allow easy
-   access to two specific registers. A third set of commands allows access to
-   all other registers.
+   The system clipboard is mapped to a register named <filename>$</filename>.
+   For convinience, jEdit offers clipboard-manipulation commands similar
+   to those found in other applications, in addition to a more flexible
+   set of commands for working with registers directly.
   </para>
-  <sect2><title>Quick Copy</title>
-   <para>
-    Holding down the <keycap>Alt</keycap> key and clicking the left mouse button
-    in the text area inserts the most recently
-    selected text at the clicked location. If you have a three-button mouse, you
-    can simply click the middle mouse button, without holding down
-    <keycap>Alt</keycap>.
-   </para>
-   <para>
-    Internally, this is implemented by storing the most recently selected text
-    in the <filename>%</filename> register (recall that registers have
-    single-character names).
-   </para>
-   <sidebar><title>X Windows primary selection</title>
-    <para>
-     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
-     able to transfer text with other X Windows applications using the
-     quick copy feature. On other platforms and Java versions, the contents
-     of the quick copy register are only accessable from within jEdit.
-    </para>
-   </sidebar>
-  </sect2>
   <sect2><title>The System Clipboard</title>
-   <para>
-    Quick copy is very useful in many situations, but it has a number of
-    drawbacks; it requires the use of the mouse, it cannot be used to replace an
-    existing selection, and it cannot be used to transfer text between different
-    applications (unless you are using Java 2 version 1.4 on Unix).
-   </para>
-   <para>
-    The system clipboard, internally known as the <filename>$</filename>
-    register, does not have these limitations, but can be slightly less
-    convinient to use.
-   </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Cut</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>)
@@ -534,11 +500,36 @@
     caret position, if there is no selection).
    </para>
   </sect2>
+  <sect2><title>Quick Copy</title>
+   <para>
+    Quick copy is disabled by default, but it can be enabled in the
+    <guibutton>Text Area</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box. When quick copy is enabled,
+    holding down the <keycap>Alt</keycap> key and clicking the left mouse button
+    in the text area inserts the most recently
+    selected text at the clicked location. If you have a three-button mouse, you
+    can simply click the middle mouse button, without holding down
+    <keycap>Alt</keycap>.
+   </para>
+   <para>
+    Internally, this is implemented by storing the most recently selected text
+    in the <filename>%</filename> register (recall that registers have
+    single-character names).
+   </para>
+   <sidebar><title>X Windows primary selection</title>
+    <para>
+     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
+     able to transfer text with other X Windows applications using the
+     quick copy feature. On other platforms and Java versions, the contents
+     of the quick copy register are only accessable from within jEdit.
+    </para>
+   </sidebar>
+  </sect2>
   <sect2><title>General Register Commands</title>
    <para>
     These commands are slightly less convinient to use than the two methods of
-    transferring text described above, but have the advantage that they allow
-    any number of strings to be copied simultaneously.
+    transferring text described above, but are more powerful.
    </para>
    <para>
     These commands all expect a single-character

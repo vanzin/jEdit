@@ -1250,12 +1250,14 @@ folding-not-explicit.message=This command can only be used in explicit fold mode
 
 #{{{ Buffer options dialog
 buffer-options.title=Buffer Options
-buffer-options.mode=Edit mode:
+buffer-options.loading-saving=Loading and Saving
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
 buffer-options.gzipped=GZIP (compress) file on disk
 buffer-options.trailingEOL=Trailing end-of-line at end of file
-buffer-options.props=Corresponding buffer-local properties: (C+c copies)
+buffer-options.editing=Editing
+buffer-options.mode=Edit mode:
+buffer-options.props=Corresponding buffer-local properties:
 #}}}
 
 #{{{ Global options dialog
@@ -1387,14 +1389,14 @@ options.style.invalidStyle=Invalid token
 #{{{ Editing pane
 options.editing.label=Editing
 options.editing.defaultMode=Default edit mode:
+options.editing.undoCount=Number of undos:
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
-options.editing.maxLineLen=Wrap lines at column:
-options.editing.wordBreakChars=Break lines at these characters:
 options.editing.noWordSep=Extra word characters:
 options.editing.folding=Folding mode:
 options.editing.collapseFolds=Initially collapse folds with level:
-options.editing.undoCount=Number of undos:
+options.editing.maxLineLen=Wrap lines at column:
+options.editing.softWrap=Soft wrap
 options.editing.syntax=Syntax highlighting
 options.editing.indentOnTab=Indent line when Tab key is pressed
 options.editing.indentOnEnter=Indent line when Enter key is pressed

@@ -108,7 +108,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 * @param label The label
 	 * @param comp The component
 	 */
-	protected void addComponent(String label, Component comp)
+	public void addComponent(String label, Component comp)
 	{
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
@@ -133,7 +133,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 * added in a vertical fashion, one per row.
 	 * @param comp The component
 	 */
-	protected void addComponent(Component comp)
+	public void addComponent(Component comp)
 	{
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
@@ -152,7 +152,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 * @param label The separator label property
 	 * @since jEdit 2.6pre2
 	 */
-	protected void addSeparator(String label)
+	public void addSeparator(String label)
 	{
 		Box box = new Box(BoxLayout.X_AXIS);
 		Box box2 = new Box(BoxLayout.Y_AXIS);

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,11 @@ public class EditingOptionPane extends AbstractOptionPane
 			defaultMode);
 		//}}}
 
+		//{{{ Undo queue size
+		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
+		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
+		//}}}
+
 		//{{{ Tab size
 		String[] tabSizes = { "2", "4", "8" };
 		defaultTabSize = new JComboBox(tabSizes);
@@ -70,19 +75,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		defaultIndentSize.setEditable(true);
 		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
 		addComponent(jEdit.getProperty("options.editing.indentSize"),defaultIndentSize);
-		//}}}
-
-		//{{{ Max line length
-		String[] lineLens = { "0", "72", "76", "80" };
-		defaultMaxLineLen = new JComboBox(lineLens);
-		defaultMaxLineLen.setEditable(true);
-		defaultMaxLineLen.setSelectedItem(jEdit.getProperty("buffer.maxLineLen"));
-		addComponent(jEdit.getProperty("options.editing.maxLineLen"),defaultMaxLineLen);
-		//}}}
-
-		//{{{ Word break chars
-		defaultWordBreakChars = new JTextField(jEdit.getProperty("buffer.wordBreakChars"));
-		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),defaultWordBreakChars);
 		//}}}
 
 		//{{{ Extra word characters
@@ -107,9 +99,19 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),defaultCollapseFolds);
 		//}}}
 
-		//{{{ Undo queue size
-		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
-		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
+		//{{{ Max line length
+		String[] lineLens = { "0", "72", "76", "80" };
+		defaultMaxLineLen = new JComboBox(lineLens);
+		defaultMaxLineLen.setEditable(true);
+		defaultMaxLineLen.setSelectedItem(jEdit.getProperty("buffer.maxLineLen"));
+		addComponent(jEdit.getProperty("options.editing.maxLineLen"),defaultMaxLineLen);
+		//}}}
+
+		//{{{ Soft wrap
+		defaultSoftWrap = new JCheckBox(jEdit.getProperty("options.editing"
+			+ ".softWrap"));
+		defaultSoftWrap.setSelected(jEdit.getBooleanProperty("buffer.softWrap"));
+		addComponent(defaultSoftWrap);
 		//}}}
 
 		//{{{ Indent on tab
@@ -139,16 +141,17 @@ public class EditingOptionPane extends AbstractOptionPane
 	{
 		jEdit.setProperty("buffer.defaultMode",
 			(String)defaultMode.getSelectedItem());
+		jEdit.setProperty("buffer.undoCount",undoCount.getText());
 		jEdit.setProperty("buffer.tabSize",(String)defaultTabSize
 			.getSelectedItem());
 		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
 			.getSelectedItem());
 		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
-		jEdit.setProperty("buffer.wordBreakChars",defaultWordBreakChars.getText());
 		jEdit.setProperty("buffer.noWordSep",defaultNoWordSep.getText());
 		jEdit.setProperty("buffer.folding",(String)defaultFolding.getSelectedItem());
 		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
-		jEdit.setProperty("buffer.undoCount",undoCount.getText());
+		jEdit.setBooleanProperty("buffer.softWrap",defaultSoftWrap
+			.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
 			.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnEnter",defaultIndentOnEnter
@@ -158,14 +161,14 @@ public class EditingOptionPane extends AbstractOptionPane
 
 	//{{{ Private members
 	private JComboBox defaultMode;
+	private JTextField undoCount;
 	private JComboBox defaultTabSize;
 	private JComboBox defaultIndentSize;
-	private JComboBox defaultMaxLineLen;
-	private JTextField defaultWordBreakChars;
 	private JTextField defaultNoWordSep;
 	private JComboBox defaultFolding;
 	private JTextField defaultCollapseFolds;
-	private JTextField undoCount;
+	private JComboBox defaultMaxLineLen;
+	private JCheckBox defaultSoftWrap;
 	private JCheckBox defaultIndentOnTab;
 	private JCheckBox defaultIndentOnEnter;
 	private JCheckBox defaultNoTabs;
