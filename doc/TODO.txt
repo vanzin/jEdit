@@ -3,6 +3,14 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 319
+	at org.gjt.sp.jedit.textarea.DisplayManager.getNextVisibleLine(DisplayManager.java:121)
+	at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:651)
+	at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.java:342)
+	at org.gjt.sp.jedit.textarea.JEditTextArea.recalculateLastPhysicalLine(JEditTextArea.java:5417)
+	at org.gjt.sp.jedit.textarea.DisplayManager$ScrollLineCount.reset(DisplayManager.java:620)
+- save: new buffer props don't take effect (mode, maybe others)
+- propertiesChanged() closes dockables
 - wrap of
 			if(extraEndVirt < 0)
 			{
