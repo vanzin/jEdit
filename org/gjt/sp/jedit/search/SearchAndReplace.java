@@ -2,6 +2,8 @@
  * SearchAndReplace.java - Search and replace
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 2001 Tom Locke
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +22,7 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
@@ -29,6 +32,7 @@ import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * Class that implements regular expression and literal search within
@@ -38,6 +42,9 @@ import org.gjt.sp.util.Log;
  */
 public class SearchAndReplace
 {
+	//{{{ Getters and setters
+
+	//{{{ setSearchString() method
 	/**
 	 * Sets the current search string.
 	 * @param search The new search string
@@ -51,16 +58,18 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getSearchString() method
 	/**
 	 * Returns the current search string.
 	 */
 	public static String getSearchString()
 	{
 		return search;
-	}
+	} //}}}
 
+	//{{{ setReplaceString() method
 	/**
 	 * Sets the current replacement string.
 	 * @param search The new replacement string
@@ -74,16 +83,18 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getRepalceString() method
 	/**
 	 * Returns the current replacement string.
 	 */
 	public static String getReplaceString()
 	{
 		return replace;
-	}
+	} //}}}
 
+	//{{{ setIgnoreCase() method
 	/**
 	 * Sets the ignore case flag.
 	 * @param ignoreCase True if searches should be case insensitive,
@@ -98,8 +109,9 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getIgnoreCase() method
 	/**
 	 * Returns the state of the ignore case flag.
 	 * @return True if searches should be case insensitive,
@@ -108,8 +120,9 @@ public class SearchAndReplace
 	public static boolean getIgnoreCase()
 	{
 		return ignoreCase;
-	}
+	} //}}}
 
+	//{{{ setRegexp() method
 	/**
 	 * Sets the state of the regular expression flag.
 	 * @param regexp True if regular expression searches should be
@@ -124,8 +137,9 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getRegexp() method
 	/**
 	 * Returns the state of the regular expression flag.
 	 * @return True if regular expression searches should be performed
@@ -133,8 +147,9 @@ public class SearchAndReplace
 	public static boolean getRegexp()
 	{
 		return regexp;
-	}
+	} //}}}
 
+	//{{{ setReverseSearch() method
 	/**
 	 * Sets the reverse search flag. Note that currently, only literal
 	 * reverse searches are supported.
@@ -151,8 +166,9 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getReverseSearch() method
 	/**
 	 * Returns the state of the reverse search flag.
 	 * @return True if searches should go backwards,
@@ -161,8 +177,9 @@ public class SearchAndReplace
 	public static boolean getReverseSearch()
 	{
 		return reverse;
-	}
+	} //}}}
 
+	//{{{ setBeanShellReplace() method
 	/**
 	 * Sets the state of the BeanShell replace flag.
 	 * @param regexp True if the replace string is a BeanShell expression
@@ -177,8 +194,9 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getBeanShellReplace() method
 	/**
 	 * Returns the state of the BeanShell replace flag.
 	 * @return True if the replace string is a BeanShell expression
@@ -187,8 +205,9 @@ public class SearchAndReplace
 	public static boolean getBeanShellReplace()
 	{
 		return beanshell;
-	}
+	} //}}}
 
+	//{{{ setAutoWrap() method
 	/**
 	 * Sets the state of the auto wrap around flag.
 	 * @param wrap If true, the 'continue search from start' dialog
@@ -203,8 +222,9 @@ public class SearchAndReplace
 		SearchAndReplace.wrap = wrap;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getAutoWrap() method
 	/**
 	 * Returns the state of the auto wrap around flag.
 	 * @param wrap If true, the 'continue search from start' dialog
@@ -214,8 +234,9 @@ public class SearchAndReplace
 	public static boolean getAutoWrapAround()
 	{
 		return wrap;
-	}
+	} //}}}
 
+	//{{{ setSearchMatcher() method
 	/**
 	 * Sets the current search string matcher. Note that calling
 	 * <code>setSearchString</code>, <code>setReplaceString</code>,
@@ -227,8 +248,9 @@ public class SearchAndReplace
 		SearchAndReplace.matcher = matcher;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getSearchMatcher() method
 	/**
 	 * Returns the current search string matcher.
 	 * @exception IllegalArgumentException if regular expression search
@@ -238,8 +260,9 @@ public class SearchAndReplace
 		throws Exception
 	{
 		return getSearchMatcher(true);
-	}
+	} //}}}
 
+	//{{{ getSearchMatcher() method
 	/**
 	 * Returns the current search string matcher.
 	 * @param reverseOK Replacement commands need a non-reversed matcher,
@@ -281,8 +304,9 @@ public class SearchAndReplace
 		}
 
 		return matcher;
-	}
+	} //}}}
 
+	//{{{ setSearchFileSet() method
 	/**
 	 * Sets the current search file set.
 	 * @param fileset The file set to perform searches in
@@ -292,16 +316,22 @@ public class SearchAndReplace
 		SearchAndReplace.fileset = fileset;
 
 		EditBus.send(new SearchSettingsChanged(null));
-	}
+	} //}}}
 
+	//{{{ getSearchFileSet() method
 	/**
 	 * Returns the current search file set.
 	 */
 	public static SearchFileSet getSearchFileSet()
 	{
 		return fileset;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Actions
+
+	//{{{ hyperSearch() method
 	/**
 	 * Performs a HyperSearch.
 	 * @param view The view
@@ -310,8 +340,9 @@ public class SearchAndReplace
 	public static boolean hyperSearch(View view)
 	{
 		return hyperSearch(view,false);
-	}
+	} //}}}
 
+	//{{{ hyperSearch() method
 	/**
 	 * Performs a HyperSearch.
 	 * @param view The view
@@ -356,8 +387,9 @@ public class SearchAndReplace
 			GUIUtilities.error(view,"searcherror",args);
 			return false;
 		}
-	}
+	} //}}}
 
+	//{{{ find() method
 	/**
 	 * Finds the next occurance of the search string.
 	 * @param view The view
@@ -400,7 +432,7 @@ loop:			for(;;)
 							start = textArea.getCaretPosition();
 						else if(reverse)
 							start = s.getStart();
-						else 
+						else
 							start = s.getEnd();
 					}
 					else if(reverse)
@@ -466,8 +498,9 @@ loop:			for(;;)
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ find() method
 	/**
 	 * Finds the next instance of the search string in the specified
 	 * buffer.
@@ -506,8 +539,9 @@ loop:			for(;;)
 		}
 		else
 			return false;
-	}
+	} //}}}
 
+	//{{{ replace() method
 	/**
 	 * Replaces the current selection with the replacement string.
 	 * @param view The view
@@ -584,8 +618,9 @@ loop:			for(;;)
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ replace() method
 	/**
 	 * Replaces text in the specified range with the replacement string.
 	 * @param view The view
@@ -623,8 +658,9 @@ loop:			for(;;)
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ replaceAll() method
 	/**
 	 * Replaces all occurances of the search string with the replacement
 	 * string.
@@ -692,8 +728,11 @@ loop:			for(;;)
 		}
 
 		return (fileCount != 0);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ load() method
 	/**
 	 * Loads search and replace state from the properties.
 	 */
@@ -715,8 +754,9 @@ loop:			for(;;)
 
 		if(fileset == null)
 			fileset = new CurrentBufferSet();
-	}
+	} //}}}
 
+	//{{{ save() method
 	/**
 	 * Saves search and replace state to the properties.
 	 */
@@ -735,9 +775,11 @@ loop:			for(;;)
 			jEdit.setProperty("search.fileset.value",code);
 		else
 			jEdit.unsetProperty("search.fileset.value");
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private static String search;
 	private static String replace;
 	private static boolean regexp;
@@ -747,7 +789,9 @@ loop:			for(;;)
 	private static boolean wrap;
 	private static SearchMatcher matcher;
 	private static SearchFileSet fileset;
+	//}}}
 
+	//{{{ record() method
 	private static void record(View view, String action,
 		boolean replaceAction, boolean recordFileSet)
 	{
@@ -787,8 +831,9 @@ loop:			for(;;)
 
 			recorder.record("SearchAndReplace." + action + ";");
 		}
-	}
+	} //}}}
 
+	//{{{ _replace() method
 	/**
 	 * Replaces all occurances of the search string with the replacement
 	 * string.
@@ -825,6 +870,16 @@ loop:		for(;;)
 
 			String found = new String(text.array,text.offset + _start,_length);
 			String subst = matcher.substitute(found);
+			if(ignoreCase)
+			{
+				int strCase = TextUtilities.getStringCase(found);
+				if(strCase == TextUtilities.LOWER_CASE)
+					subst = subst.toLowerCase();
+				else if(strCase == TextUtilities.UPPER_CASE)
+					subst = subst.toUpperCase();
+				else if(strCase == TextUtilities.TITLE_CASE)
+					subst = TextUtilities.toTitleCase(subst);
+			}
 
 			if(subst != null)
 			{
@@ -847,5 +902,7 @@ loop:		for(;;)
 		}
 
 		return occurCount;
-	}
+	} //}}}
+
+	//}}}
 }

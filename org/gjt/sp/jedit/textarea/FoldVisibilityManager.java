@@ -102,26 +102,45 @@ public class FoldVisibilityManager
 		return -1;
 	} //}}}
 
-	//{{{ test() method
+	//{{{ Debugging code
+	boolean counting;
+	int counter;
+
+	public void startCounting()
+	{
+		counter = 0;
+		counting = true;
+	}
+
+	public void stopCounting()
+	{
+		counting = false;
+	}
+
+	public int getCount()
+	{
+		return counter;
+	}
+
 	public void test()
 	{
 		java.util.Random random = new java.util.Random();
+		long start = System.currentTimeMillis();
 		for(int i = 0; i < 10000; i++)
 		{
 			int line = Math.abs(random.nextInt() % virtualLineCount);
-			if(physicalToVirtual(line) != line)
+			int v2p = virtualToPhysical(line);
+			int p2v = physicalToVirtual(v2p);
+			if(p2v != line)
 			{
-				System.err.println("p2v failed: " + line);
-				return;
-			}
-			if(virtualToPhysical(line) != line)
-			{
-				System.err.println("v2p failed: " + line);
+				System.err.println(line + ":" + v2p + ":" + p2v);
 				return;
 			}
 			//System.err.println("--- passed: " + line);
 		}
-	} //}}}
+		System.err.println(System.currentTimeMillis() - start);
+	}
+	//}}}
 
 	//{{{ physicalToVirtual() method
 	/**
@@ -131,8 +150,13 @@ public class FoldVisibilityManager
 	 */
 	public int physicalToVirtual(int line)
 	{
+		//counter++;
+
 		if(line < 0 || line >= buffer.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
+
+		while(!isLineVisible(line))
+			line--;
 
 		if(lastPhysical == line)
 			/* do nothing */;
@@ -148,8 +172,8 @@ public class FoldVisibilityManager
 
 				if(lastPhysical == buffer.getLineCount() - 1)
 					break;
-
-				lastPhysical++;
+				else
+					lastPhysical++;
 			}
 		}
 		else if(line < lastPhysical && lastPhysical - line > line)
@@ -159,13 +183,13 @@ public class FoldVisibilityManager
 				if(lastPhysical == line)
 					break;
 
-				if(isLineVisible(lastVirtual))
+				if(isLineVisible(lastPhysical))
 					lastVirtual--;
 
 				if(lastPhysical == 0)
 					break;
-
-				lastPhysical--;
+				else
+					lastPhysical--;
 			}
 
 		}
@@ -182,11 +206,14 @@ public class FoldVisibilityManager
 
 				if(lastPhysical == buffer.getLineCount() - 1)
 					break;
-
-				lastPhysical++;
+				else
+					lastPhysical++;
 			}
 		}
 
+		if(lastVirtual >= virtualLineCount)
+			System.err.println("P2V: " + lastPhysical
+				+ ":" + lastVirtual + ":" + virtualLineCount);
 		return lastVirtual;
 	} //}}}
 
@@ -198,6 +225,8 @@ public class FoldVisibilityManager
 	 */
 	public int virtualToPhysical(int line)
 	{
+		//counter++;
+
 		if(line < 0 || line >= virtualLineCount)
 			throw new ArrayIndexOutOfBoundsException(String.valueOf(line));
 
@@ -207,32 +236,36 @@ public class FoldVisibilityManager
 		{
 			for(;;)
 			{
-				if(lastVirtual == line)
-					break;
-
 				if(isLineVisible(lastPhysical))
-					lastVirtual++;
+				{
+					if(lastVirtual == line)
+						break;
+					else
+						lastVirtual++;
+				}
 
 				if(lastPhysical == buffer.getLineCount() - 1)
 					break;
-
-				lastPhysical++;
+				else
+					lastPhysical++;
 			}
 		}
 		else if(line < lastVirtual && lastVirtual - line > line)
 		{
 			for(;;)
 			{
-				if(lastVirtual == line)
-					break;
-
 				if(isLineVisible(lastPhysical))
-					lastVirtual--;
+				{
+					if(lastVirtual == line)
+						break;
+					else
+						lastVirtual--;
+				}
 
 				if(lastPhysical == 0)
 					break;
-
-				lastPhysical--;
+				else
+					lastPhysical--;
 			}
 
 		}
@@ -241,19 +274,24 @@ public class FoldVisibilityManager
 			lastPhysical = lastVirtual = 0;
 			for(;;)
 			{
-				if(lastVirtual == line)
-					break;
-
 				if(isLineVisible(lastPhysical))
-					lastVirtual++;
+				{
+					if(lastVirtual == line)
+						break;
+					else
+						lastVirtual++;
+				}
 
 				if(lastPhysical == buffer.getLineCount() - 1)
 					break;
-
-				lastPhysical++;
+				else
+					lastPhysical++;
 			}
 		}
 
+		if(lastPhysical >= buffer.getLineCount())
+			System.err.println("V2P: " + lastVirtual
+				+ ":" + lastPhysical + ":" + buffer.getLineCount());
 		return lastPhysical;
 	} //}}}
 
@@ -285,6 +323,12 @@ public class FoldVisibilityManager
 	 */
 	public void expandAllFolds()
 	{
+		virtualLineCount = buffer.getLineCount();
+		for(int i = 0; i < virtualLineCount; i++)
+		{
+			buffer.getLineInfo(i).setVisible(index,true);
+		}
+		textArea.foldStructureChanged();
 	} //}}}
 
 	//{{{ expandFolds() method
@@ -311,6 +355,30 @@ public class FoldVisibilityManager
 	 */
 	public void expandFolds(int foldLevel)
 	{
+		// so that getFoldLevel() calling fireFoldLevelsChanged()
+		// won't break
+		virtualLineCount = buffer.getLineCount() - 1;
+
+		int newVirtualLineCount = 0;
+		foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+		/* this ensures that the first line is always visible */
+		boolean seenVisibleLine = false;
+
+		for(int i = 0; i < buffer.getLineCount(); i++)
+		{
+			if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+			{
+				seenVisibleLine = true;
+				buffer.getLineInfo(i).setVisible(index,true);
+				newVirtualLineCount++;
+			}
+			else
+				buffer.getLineInfo(i).setVisible(index,false);
+		}
+
+		virtualLineCount = newVirtualLineCount;
+		textArea.foldStructureChanged();
 	} //}}}
 
 	//{{{ narrow() method
@@ -362,7 +430,7 @@ public class FoldVisibilityManager
 	public final int _getIndex()
 	{
 		return index;
-	}
+	} //}}}
 
 	//{{{ _linesInserted() method
 	/**

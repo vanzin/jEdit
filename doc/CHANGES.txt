@@ -111,6 +111,9 @@ JEDIT 4.0 VERSION HISTORY
   - 'All buffers' and 'Directory' radio buttons now pre-select the
     'HyperSearch' check box (it is still possible to do a normal search
     over a set of buffers, by deselecting the check box)
+  - When doing a case-insensitive search and replace, the substituted
+    string's case is converted to the found match case, if the found
+    match is all lower case, all upper case, or title case
 - Multiple selections are now stored in the order they appear in the
   buffer, not the order they were added
 - New MiscUtilities.compareStrings() method compares two strings,

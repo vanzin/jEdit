@@ -247,13 +247,16 @@ public class JEditTextArea extends JComponent
 		if(this.buffer == buffer)
 			return;
 		if(this.buffer != null)
+		{
+			this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
 			this.buffer.removeBufferChangeListener(bufferHandler);
+		}
 		this.buffer = buffer;
 
 		buffer.addBufferChangeListener(bufferHandler);
 		bufferHandlerInstalled = true;
 
-		foldVisibilityManager = buffer.getFoldVisibilityManager(this);
+		foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -326,8 +329,10 @@ public class JEditTextArea extends JComponent
 	//{{{ _setFirstLine() method
 	public void _setFirstLine(int firstLine)
 	{
-		this.firstLine = Math.max(0,firstLine);
-		physFirstLine = virtualToPhysical(this.firstLine);
+		firstLine = Math.max(0,firstLine);
+		this.firstLine = firstLine;
+
+		physFirstLine = virtualToPhysical(firstLine);
 
 		maxHorizontalScrollWidth = 0;
 
@@ -849,8 +854,11 @@ public class JEditTextArea extends JComponent
 	 * Marks a line as needing a repaint.
 	 * @param line The physical line to invalidate
 	 */
-	public final void invalidateLine(int line)
+	public void invalidateLine(int line)
 	{
+		if(line < physFirstLine)
+			return;
+
 		int lineCount = buffer.getLineCount();
 		int virtualLineCount = foldVisibilityManager
 			.getVirtualLineCount();
@@ -860,6 +868,9 @@ public class JEditTextArea extends JComponent
 		else
 			line = foldVisibilityManager.physicalToVirtual(line);
 
+		if(line > firstLine + visibleLines + 1)
+			return;
+
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(line) + fm.getDescent() + fm.getLeading();
 		painter.repaint(0,y,painter.getWidth(),fm.getHeight());
@@ -868,12 +879,15 @@ public class JEditTextArea extends JComponent
 
 	//{{{ invalidateLineRange() method
 	/**
-	 * Marks a range of lines as needing a repaint.
+	 * Marks a range of physical lines as needing a repaint.
 	 * @param firstLine The first line to invalidate
 	 * @param lastLine The last line to invalidate
 	 */
-	public final void invalidateLineRange(int firstLine, int lastLine)
+	public void invalidateLineRange(int firstLine, int lastLine)
 	{
+		if(lastLine < physFirstLine)
+			return;
+
 		int lineCount = buffer.getLineCount();
 		int virtualLineCount = foldVisibilityManager
 			.getVirtualLineCount();
@@ -883,23 +897,22 @@ public class JEditTextArea extends JComponent
 		else
 			firstLine = foldVisibilityManager.physicalToVirtual(firstLine);
 
+		if(firstLine > firstLine + visibleLines + 1)
+			return;
+
 		if(lastLine >= lineCount)
 			lastLine = (lastLine - lineCount) + virtualLineCount;
 		else
 			lastLine = foldVisibilityManager.physicalToVirtual(lastLine);
 
-		FontMetrics fm = painter.getFontMetrics();
-		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
-		int height = (lastLine - firstLine + 1) * fm.getHeight();
-		painter.repaint(0,y,painter.getWidth(),height);
-		gutter.repaint(0,y,gutter.getWidth(),height);
+		invalidateVirtualLineRange(firstLine,lastLine);
 	} //}}}
 
 	//{{{ invalidateSelectedLines() method
 	/**
 	 * Repaints the lines containing the selection.
 	 */
-	public final void invalidateSelectedLines()
+	public void invalidateSelectedLines()
 	{
 		for(int i = 0; i < selection.size(); i++)
 		{
@@ -907,6 +920,22 @@ public class JEditTextArea extends JComponent
 			invalidateLineRange(s.startLine,s.endLine);
 		}
 	} //}}}
+
+	//{{{ invalidateVirtualLineRange() method
+	/**
+	 * Marks a range of virtual lines as needing a repaint.
+	 * @param firstLine The first line to invalidate
+	 * @param lastLine The last line to invalidate
+	 */
+	public void invalidateVirtualLineRange(int firstLine, int lastLine)
+	{
+		FontMetrics fm = painter.getFontMetrics();
+		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
+		int height = (lastLine - firstLine + 1) * fm.getHeight();
+		painter.repaint(0,y,painter.getWidth(),height);
+		gutter.repaint(0,y,gutter.getWidth(),height);
+	} //}}}
+
 
 	//}}}
 
@@ -4351,7 +4380,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		return hasFocus();
 	} //}}}
 
-	//{{{ recalculateVisibleLines()
+	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
 		if(painter == null)
@@ -4360,6 +4389,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 		lineWidths = new int[visibleLines + 1];
+		maxHorizontalScrollWidth = -1;
 		updateScrollBars();
 	} //}}}
 
@@ -4387,6 +4417,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	void foldStructureChanged()
 	{
 		// recalculate first line
+		System.err.println(physFirstLine + ":" + physicalToVirtual(physFirstLine));
 		setFirstLine(physicalToVirtual(physFirstLine));
 
 		// update scroll bars because the number of
@@ -4833,9 +4864,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			endLine = buffer.getLineCount();
 		else
 		{
-			endLine = foldVisibilityManager.virtualToPhysical(Math.min(
-				foldVisibilityManager.getVirtualLineCount() - 1,
-				firstLine + visibleLines));
+			endLine = virtualToPhysical(
+				Math.min(foldVisibilityManager
+				.getVirtualLineCount() - 1,
+				firstLine + visibleLines + 1));
 		}
 
 		int beginLine = Math.min(line,physFirstLine);
@@ -5243,8 +5275,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 			{
 				updateScrollBars();
-				invalidateLineRange(startLine,virtualToPhysical(
-					firstLine + visibleLines));
+
+				invalidateVirtualLineRange(
+					foldVisibilityManager
+					.physicalToVirtual(startLine),
+					firstLine + visibleLines);
 			}
 		} //}}}
 	} //}}}
@@ -5256,6 +5291,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void focusGained(FocusEvent evt)
 		{
 			invalidateLine(caretLine);
+
+			if(bracketLine != -1)
+				invalidateLine(bracketLine);
 
 			// repaint the gutter so that the border color
 			// reflects the focus state
