@@ -71,6 +71,8 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			et.start();
 		else
 			Log.log(Log.DEBUG,this,"ExitThread still alive.");
+		
+		throw new IllegalStateException("Exiting: aborting default exit");
 	}//}}}
 	
 	//{{{ handleAbout() method
@@ -113,20 +115,20 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	public void handleFileCodes(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
+		File bufFile = new File(buffer.getPath());
 		
 		// Set type/creator on save
 		if (!buffer.isDirty() && msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
 			try
 			{
-				MRJFileUtils.setFileTypeAndCreator( buffer.getFile(),
+				MRJFileUtils.setFileTypeAndCreator( bufFile,
 					(MRJOSType)buffer.getProperty("MacOSPlugin.type"),
 					(MRJOSType)buffer.getProperty("MacOSPlugin.creator") );
 			}
 			catch (Exception e)
 			{
-				Log.log(Log.ERROR,this,"Error setting type/creator for "+
-					buffer.getFile().getPath());
+				Log.log(Log.ERROR,this,"Error setting type/creator for "+bufFile.getPath());
 			}
 		}
 		// Add type/creator to local buffer property list on open
@@ -141,8 +143,8 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			{
 				try
 				{
-					MRJOSType	type	= MRJFileUtils.getFileType(buffer.getFile());
-					MRJOSType	creator	= MRJFileUtils.getFileCreator(buffer.getFile());
+					MRJOSType	type	= MRJFileUtils.getFileType(bufFile);
+					MRJOSType	creator	= MRJFileUtils.getFileCreator(bufFile);
 					
 					if (!type.equals(new MRJOSType("")))
 						buffer.setProperty("MacOSPlugin.type",type);
@@ -152,7 +154,7 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 				catch (Exception e) {} // This will happen when a new file is created
 			}
 			Log.log(Log.DEBUG,this,"Assigned MRJOSTypes " + buffer.getProperty("MacOSPlugin.type")
-			+ "/" + buffer.getProperty("MacOSPlugin.creator") + " to " + buffer.getPath());
+			+ "/" + buffer.getProperty("MacOSPlugin.creator") + " to " + bufFile.getPath());
 		}
 	}//}}}
 	
