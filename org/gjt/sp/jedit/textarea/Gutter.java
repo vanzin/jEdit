@@ -702,10 +702,9 @@ public class Gutter extends JComponent implements SwingConstants
 				//{{{ Clicking in bracket scope locates matching bracket
 				else if(bracketHighlight)
 				{
-					int bracketLine = textArea.getBracketLine();
-					if(textArea.isHighlightVisible()
-						&& bracketLine != -1)
+					if(textArea.isBracketHighlightVisible())
 					{
+						int bracketLine = textArea.getBracketLine();
 						int caretLine = textArea.getCaretLine();
 						if(caretLine != bracketLine)
 						{
