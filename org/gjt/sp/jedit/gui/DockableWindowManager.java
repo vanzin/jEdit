@@ -695,7 +695,7 @@ public class DockableWindowManager extends JPanel
 		}
 
 		getToolkit().beep();
-	}
+	} //}}}
 
 	//{{{ close() method
 	/**
@@ -800,8 +800,6 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Instance variables
 	private View view;
 	private Hashtable windows;
 	private boolean alternateLayout;
@@ -809,8 +807,6 @@ public class DockableWindowManager extends JPanel
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
-	//}}}
-
 	//}}}
 
 	//}}}

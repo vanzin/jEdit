@@ -497,6 +497,54 @@ public class Buffer implements EBComponent
 		return true;
 	} //}}}
 
+	//{{{ checkFileStatus() method
+	public static final int FILE_NOT_CHANGED = 0;
+	public static final int FILE_CHANGED = 1;
+	public static final int FILE_DELETED = 2;
+	/**
+	 * Check if the buffer has changed on disk.
+	 * @return One of <code>NOT_CHANGED</code>, <code>CHANGED</code>, or
+	 * <code>DELETED</code>.
+	 *
+	 * @since jEdit 4.1pre3
+	 */
+	public int checkFileStatus()
+	{
+		VFSManager.waitForRequests();
+
+		// only supported on local file system
+		if(file != null)
+		{
+			boolean newReadOnly = (file.exists() && !file.canWrite());
+			if(newReadOnly != getFlag(READ_ONLY))
+			{
+				setFlag(READ_ONLY,newReadOnly);
+				EditBus.send(new BufferUpdate(this,null,
+					BufferUpdate.DIRTY_CHANGED));
+			}
+
+			long oldModTime = modTime;
+			long newModTime = file.lastModified();
+
+			if(newModTime != oldModTime)
+			{
+				modTime = newModTime;
+
+				if(!file.exists())
+				{
+					setFlag(NEW_FILE,true);
+					EditBus.send(new BufferUpdate(this,null,
+						BufferUpdate.DIRTY_CHANGED));
+					return FILE_DELETED;
+				}
+				else
+					return FILE_CHANGED;
+			}
+		}
+
+		return FILE_NOT_CHANGED;
+	} //}}}
+
 	//{{{ checkModTime() method
 	/**
 	 * Check if the buffer has changed on disk.
@@ -506,37 +554,18 @@ public class Buffer implements EBComponent
 		// don't do these checks while a save is in progress,
 		// because for a moment newModTime will be greater than
 		// oldModTime, due to the multithreading
-		if(file == null || getFlag(NEW_FILE) || getFlag(IO))
+		if(file == null || !jEdit.getBooleanProperty("view.checkModStatus"))
 			return;
 
-		boolean newReadOnly = (file.exists() && !file.canWrite());
-		if(newReadOnly != getFlag(READ_ONLY))
+		int status = checkFileStatus();
+
+		if(status == FILE_DELETED)
 		{
-			setFlag(READ_ONLY,newReadOnly);
-			EditBus.send(new BufferUpdate(this,
-				view,BufferUpdate.DIRTY_CHANGED));
+			Object[] args = { path };
+			GUIUtilities.message(view,"filedeleted",args);
 		}
-
-		if(!jEdit.getBooleanProperty("view.checkModStatus"))
-			return;
-
-		long oldModTime = modTime;
-		long newModTime = file.lastModified();
-
-		if(newModTime != oldModTime)
+		else if(status == FILE_CHANGED)
 		{
-			modTime = newModTime;
-
-			if(!file.exists())
-			{
-				setFlag(NEW_FILE,true);
-				EditBus.send(new BufferUpdate(this,
-					view,BufferUpdate.DIRTY_CHANGED));
-				Object[] args = { path };
-				GUIUtilities.message(view,"filedeleted",args);
-				return;
-			}
-
 			String prop = (isDirty() ? "filechanged-dirty"
 				: "filechanged-focus");
 
@@ -583,16 +612,6 @@ public class Buffer implements EBComponent
 	public VFS getVFS()
 	{
 		return vfs;
-	} //}}}
-
-	//{{{ getFile() method
-	/**
-	 * Returns the file for this buffer. This may be null if the buffer
-	 * is non-local.
-	 */
-	public final File getFile()
-	{
-		return file;
 	} //}}}
 
 	//{{{ getAutosaveFile() method
@@ -2619,6 +2638,16 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void insertString(int offset, String str, AttributeSet attr)
 	{
 		insert(offset,str);
+	} //}}}
+
+	//{{{ getFile() method
+	/**
+	 * @deprecated Do not call this method, use <code>getPath()</code>
+	 * instead.
+	 */
+	public final File getFile()
+	{
+		return file;
 	} //}}}
 
 	//}}}

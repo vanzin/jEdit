@@ -180,9 +180,18 @@ class BrowserIORequest extends WorkRequest
 
 				for(;;)
 				{
-					parentList.add(0,vfs._getDirectoryEntry(
-						session,parent,browser));
-					String newParent = vfs.getParentOfPath(parent);
+					VFS _vfs = VFSManager.getVFSForPath(
+						parent);
+					// create a DirectoryEntry manually
+					// instead of using _vfs._getDirectoryEntry()
+					// since so many VFS's have broken
+					// implementations of this method
+					parentList.add(0,new VFS.DirectoryEntry(
+						_vfs.getFileName(parent),
+						parent,parent,
+						VFS.DirectoryEntry.DIRECTORY,
+						0L,false));
+					String newParent = _vfs.getParentOfPath(parent);
 					if(newParent.length() != 1 && (newParent.endsWith("/")
 						|| newParent.endsWith(File.separator)))
 						newParent = newParent.substring(0,newParent.length() - 1);
