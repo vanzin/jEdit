@@ -74,7 +74,10 @@ KeyEventTranslator.setModifierMapping(
 - If jEdit was run with the -background -nogui switches, there was no
   perspective.xml, and then a client instance was started, a
   NullPointerException would be printed.
-  
+
+- On Windows, C:\ was considered an absolute path (which is correct)
+  but C:/ was considered a relative path (which is incorrect).
+
 }}}
 
 }}}

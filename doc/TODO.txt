@@ -13,17 +13,6 @@ and quirks that I need to fix eventually.
 [error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequests(WorkThread.java:161)
 [error] WorkThread:  at org.gjt.sp.util.WorkThread.run(WorkThread.java:135)
 
-[error] BeanShell: Sourced file: inline evaluation of: ``   new console.Console(view);  ;'' : Cannot access field: Console, on object: console.Console[,0,10,627x301,layout=java.awt.BorderLayout,alignmentX=null,alignmentY=null,border=,flags=9,maximumSize=,minimumSize=,preferredSize=] : at Line: 2 : in file: inline evaluation of: ``   new console.Console(view);  ;'' : console .Console 
-[error] BeanShell:  at bsh.UtilEvalError.toEvalError(UtilEvalError.java:85)
-[error] BeanShell:  at bsh.UtilEvalError.toEvalError(UtilEvalError.java:90)
-[error] BeanShell:  at bsh.BSHAmbiguousName.toObject(BSHAmbiguousName.java:64)
-[error] BeanShell:  at bsh.BSHAllocationExpression.objectAllocation(BSHAllocationExpression.java:86)
-[error] BeanShell:  at bsh.BSHAllocationExpression.eval(BSHAllocationExpression.java:62)
-[error] BeanShell:  at bsh.BSHPrimaryExpression.eval(BSHPrimaryExpression.java:102)
-[error] BeanShell:  at bsh.BSHPrimaryExpression.eval(BSHPrimaryExpression.java:47)
-
-- find next over directory
-
 - metal fonts in jdk 1.5.0beta2
 - drag and drop, not at caret position?
 - sidekick out of memory error!

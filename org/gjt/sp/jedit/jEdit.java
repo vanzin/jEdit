@@ -2747,7 +2747,7 @@ public class jEdit
 	private static Vector modes;
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
-	private static JEditMetalTheme theme;
+	private static MetalTheme theme;
 
 	// buffer link list
 	private static boolean sortBuffers;
@@ -3170,75 +3170,34 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ fontStyleToString() method
-	private static String fontStyleToString(int style)
+	//{{{ createMetalTheme() method
+	private static MetalTheme createMetalTheme()
 	{
-		if(style == 0)
-			return "PLAIN";
-		else if(style == Font.BOLD)
-			return "BOLD";
-		else if(style == Font.ITALIC)
-			return "ITALIC";
-		else if(style == (Font.BOLD | Font.ITALIC))
-			return "BOLDITALIC";
+		if(OperatingSystem.hasJava15())
+		{
+			try
+			{
+				return (MetalTheme)
+					Class.forName("JEditMetalTheme15")
+					.newInstance();
+			}
+			catch(Exception e)
+			{
+				return new JEditMetalTheme14();
+			}
+		}
 		else
-			throw new RuntimeException("Invalid style: " + style);
+			return new JEditMetalTheme14();
 	} //}}}
-
+	
 	//{{{ initPLAF() method
 	/**
 	 * Sets the Swing look and feel.
 	 */
 	private static void initPLAF()
 	{
-		if(OperatingSystem.hasJava15())
-		{
-			Font primaryFont = jEdit.getFontProperty(
-				"metal.primary.font");
-			if(primaryFont != null)
-			{
-				String primaryFontString =
-					primaryFont.getFamily()
-					+ "-"
-					+ fontStyleToString(
-					primaryFont.getStyle())
-					+ "-"
-					+ primaryFont.getSize();
-
-				System.getProperties().put(
-					"swing.plaf.metal.controlFont",
-					primaryFontString);
-				System.getProperties().put(
-					"swing.plaf.metal.menuFont",
-					primaryFontString);
-			}
-
-			Font secondaryFont = jEdit.getFontProperty(
-				"metal.secondary.font");
-			if(secondaryFont != null)
-			{
-				String secondaryFontString =
-					secondaryFont.getFamily()
-					+ "-"
-					+ fontStyleToString(
-					secondaryFont.getStyle())
-					+ "-"
-					+ secondaryFont.getSize();
-
-				System.getProperties().put(
-					"swing.plaf.metal.systemFont",
-					secondaryFontString);
-				System.getProperties().put(
-					"swing.plaf.metal.userFont",
-					secondaryFontString);
-			}
-		}
-		else
-		{
-			theme = new JEditMetalTheme();
-			theme.propertiesChanged();
-			MetalLookAndFeel.setCurrentTheme(theme);
-		}
+		theme = createMetalTheme();
+		MetalLookAndFeel.setCurrentTheme(theme);
 
 		try
 		{
@@ -3447,7 +3406,7 @@ public class jEdit
 
 				int count = getBufferCount();
 				if(count == 0)
-					buffer = newFile(null);
+					newFile(null);
 
 				View view = null;
 

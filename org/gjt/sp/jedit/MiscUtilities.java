@@ -183,9 +183,11 @@ public class MiscUtilities
 			if(path.length() == 2 && path.charAt(1) == ':')
 				return true;
 			if(path.length() > 2 && path.charAt(1) == ':'
-				&& path.charAt(2) == '\\')
+				&& (path.charAt(2) == '\\'
+				|| path.charAt(2) == '/'))
 				return true;
-			if(path.startsWith("\\\\"))
+			if(path.startsWith("\\\\")
+				|| path.startsWith("//"))
 				return true;
 		}
 		// not sure if this is correct for OpenVMS.
