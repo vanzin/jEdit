@@ -26,14 +26,21 @@ package org.gjt.sp.jedit.browser;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ * @since jEdit 4.2pre1
+ */
 public class VFSDirectoryEntryTable extends JTable
 {
 	//{{{ VFSDirectoryEntryTable constructor
@@ -43,8 +50,13 @@ public class VFSDirectoryEntryTable extends JTable
 		this.browserView = browserView;
 		setShowGrid(false);
 
+		setIntercellSpacing(new Dimension(0,0));
+
 		TableColumn col1 = getColumnModel().getColumn(0);
+		col1.setMinWidth(20);
+		col1.setMaxWidth(20);
 		col1.setPreferredWidth(20);
+		col1.setResizable(false);
 
 		setDefaultRenderer(VFSDirectoryEntryTableModel.Entry.class,
 			renderer = new FileCellRenderer());
@@ -53,8 +65,8 @@ public class VFSDirectoryEntryTable extends JTable
 		header.setReorderingAllowed(false);
 
 		setRowSelectionAllowed(true);
-		setColumnSelectionAllowed(true);
-		setCellSelectionEnabled(false);
+		//setColumnSelectionAllowed(true);
+		//setCellSelectionEnabled(false);
 	} //}}}
 
 	//{{{ doTypeSelect() method
@@ -102,12 +114,31 @@ public class VFSDirectoryEntryTable extends JTable
 		= (VFSDirectoryEntryTableModel)getModel();
 
 		HashSet returnValue = new HashSet();
-		for(int i = 0; i < model.files.length; i++)
+		if(model.files != null)
 		{
-			if(model.files[i].expanded)
-				returnValue.add(model.files[i].dirEntry.path);
+			for(int i = 0; i < model.files.length; i++)
+			{
+				if(model.files[i].expanded)
+					returnValue.add(model.files[i].dirEntry.path);
+			}
 		}
 		return returnValue;
+	} //}}}
+
+	//{{{ toggleExpanded() method
+	public void toggleExpanded(int row)
+	{
+		VFSDirectoryEntryTableModel model
+		= (VFSDirectoryEntryTableModel)getModel();
+
+		VFSDirectoryEntryTableModel.Entry entry = model.files[row];
+		if(entry.dirEntry.type == VFS.DirectoryEntry.FILE)
+			return;
+
+		if(entry.expanded)
+			model.collapse(row);
+		else
+			browserView.loadDirectory(entry,entry.dirEntry.path);
 	} //}}}
 
 	//{{{ setDirectory() method
@@ -152,7 +183,10 @@ public class VFSDirectoryEntryTable extends JTable
 			"foo","foo","foo",VFS.DirectoryEntry.FILE,0L,false);
 		setRowHeight(renderer.getTableCellRendererComponent(
 			this,new VFSDirectoryEntryTableModel.Entry(template,0),
-			false,false,0,0).getSize().height);
+			false,false,0,1).getPreferredSize().height);
+		Dimension prefSize = getPreferredSize();
+		setPreferredScrollableViewportSize(new Dimension(prefSize.width,
+			getRowHeight() * 12));
 	} //}}}
 
 	//{{{ processKeyEvent() method
@@ -222,7 +256,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 	//}}}
 
-	//{{{ ClearTypeSelect
+	//{{{ ClearTypeSelect class
 	class ClearTypeSelect implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)

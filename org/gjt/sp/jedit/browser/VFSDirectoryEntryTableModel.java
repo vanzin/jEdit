@@ -28,6 +28,11 @@ import java.util.ArrayList;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ * @since jEdit 4.2pre1
+ */
 public class VFSDirectoryEntryTableModel extends AbstractTableModel
 {
 	//{{{ VFSDirectoryEntryTableModel constructor
@@ -40,21 +45,23 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ setRoot() method
-	public void setRoot(ArrayList files)
+	public void setRoot(ArrayList list)
 	{
-		this.files = new Entry[files.size()];
-		for(int i = 0; i < files.size(); i++)
+		if(files != null)
+			fireTableRowsDeleted(0,files.length - 1);
+
+		files = new Entry[list.size()];
+		for(int i = 0; i < files.length; i++)
 		{
-			this.files[i] = new Entry((VFS.DirectoryEntry)files.get(i),0);
+			files[i] = new Entry((VFS.DirectoryEntry)list.get(i),0);
 		}
-		fireTableStructureChanged();
+
+		fireTableRowsInserted(0,files.length - 1);
 	} //}}}
 
 	//{{{ expand() method
 	public void expand(Entry entry, ArrayList list)
 	{
-		entry.expanded = true;
-
 		int startIndex = -1;
 		for(int i = 0; i < files.length; i++)
 		{
@@ -64,10 +71,12 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 		collapse(startIndex);
 
+		entry.expanded = true;
+
 		if(list != null)
 		{
 			Entry[] newFiles = new Entry[files.length + list.size()];
-			System.arraycopy(files,0,newFiles,0,startIndex);
+			System.arraycopy(files,0,newFiles,0,startIndex + 1);
 			for(int i = 0; i < list.size(); i++)
 			{
 				newFiles[startIndex + i + 1] = new Entry(
@@ -91,6 +100,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		if(!entry.expanded)
 			return;
 
+		entry.expanded = false;
+
 		int lastIndex = index + 1;
 		for(;;)
 		{
@@ -104,7 +115,9 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		Entry[] newFiles = new Entry[files.length - (lastIndex - index)];
 		System.arraycopy(files,0,newFiles,0,index + 1);
 		System.arraycopy(files,lastIndex,newFiles,index + 1,
-			lastIndex - index);
+			files.length - lastIndex - 1);
+
+		files = newFiles;
 
 		fireTableRowsDeleted(index + 1,lastIndex);
 	} //}}}
@@ -148,10 +161,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		{
 		case 0:
 			return Icon.class;
-		case 1:
-			return Entry.class;
 		default:
-			return String.class;
+			return Entry.class;
 		}
 	} //}}}
 
@@ -162,6 +173,9 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			return null;
 
 		Entry entry = files[row];
+		if(entry == null)
+			return null;
+
 		VFS.DirectoryEntry dirEntry = entry.dirEntry;
 		switch(col)
 		{
@@ -172,21 +186,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 				return UIManager.getIcon("Tree.expandedIcon");
 			else
 				return UIManager.getIcon("Tree.collapsedIcon");
-		case 1:
-			return entry;
-		case 2:
-			switch(entry.dirEntry.type)
-			{
-			case VFS.DirectoryEntry.FILE:
-				return jEdit.getProperty("vfs.browser.type.file");
-			case VFS.DirectoryEntry.DIRECTORY:
-				return jEdit.getProperty("vfs.browser.type.directory");
-			case VFS.DirectoryEntry.FILESYSTEM:
-				return jEdit.getProperty("vfs.browser.type.filesystem");
-			}
-			throw new InternalError();
 		default:
-			return columns[col - 3].get(entry.dirEntry);
+			return entry;
 		}
 	} //}}}
 
