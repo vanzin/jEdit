@@ -25,8 +25,7 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -43,7 +42,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 
 	//{{{ Private members
 
-	//{{{ Variables
+	//{{{ Instance variables
 	private JLabel locationLabel;
 	private JLabel mirrorLabel;
 
@@ -54,7 +53,6 @@ class PluginManagerOptionPane extends AbstractOptionPane
 
 	private MirrorModel miraModel;
 	private JList miraList;
-	private MirrorList.Mirror noMirror;
 	//}}}
 
 	//{{{ _init() method
@@ -74,9 +72,6 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			jEdit.getSettingsDirectory(),"jars"));
 		appDir.setToolTipText(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"jars"));
-		// A fake mirror for the default
-		noMirror = new MirrorList.Mirror();
-		noMirror.id = "NONE";
 
 		// Start downloading the list nice and early
 		miraList = new JList(miraModel = new MirrorModel());
@@ -127,14 +122,17 @@ class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("plugin-manager.installUser",settingsDir.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
-		
-		String currentMirror = miraModel.getID(miraList.getSelectedIndex());
-		String previousMirror = jEdit.getProperty("plugin-manager.mirror.id");
-		
-		if (!previousMirror.equals(currentMirror))
+
+		if(miraList.getSelectedIndex() != -1)
 		{
-			jEdit.setProperty("plugin-manager.mirror.id",currentMirror);
-			// Insert code to update the plugin managers list here later
+			String currentMirror = miraModel.getID(miraList.getSelectedIndex());
+			String previousMirror = jEdit.getProperty("plugin-manager.mirror.id");
+
+			if (!previousMirror.equals(currentMirror))
+			{
+				jEdit.setProperty("plugin-manager.mirror.id",currentMirror);
+				// Insert code to update the plugin managers list here later
+			}
 		}
 	} //}}}
 
@@ -143,13 +141,12 @@ class PluginManagerOptionPane extends AbstractOptionPane
 	//{{{ MirrorModel class
 	class MirrorModel extends AbstractListModel
 	{
-		private List mirrors;
+		private ArrayList mirrors;
 
 		public MirrorModel()
 		{
 			super();
-			mirrors = new LinkedList();
-			mirrors.add(noMirror);
+			mirrors = new ArrayList();
 			VFSManager.runInWorkThread(new DownloadMirrorsThread());
 		}
 
@@ -171,8 +168,8 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			MirrorList.Mirror mirror = (MirrorList.Mirror)mirrors.get(index);
 			return new String(mirror.continent+": "+mirror.description+" ("+mirror.location+")");
 		}
-		
-		public void addToList(List more)
+
+		public void addToList(ArrayList more)
 		{
 			int size1 = getSize();
 			int size2 = more.size();
@@ -193,7 +190,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 
 		public void removeSelectionInterval(int index0, int index1) {}
 	} //}}}
-	
+
 	//{{{ DownloadMirrorsThread class
 	class DownloadMirrorsThread extends WorkRequest
 	{
@@ -202,22 +199,26 @@ class PluginManagerOptionPane extends AbstractOptionPane
 			setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
 			setProgressMaximum(1);
 			setProgressValue(0);
-			
-			List mirrors = new LinkedList();
-			try {
+
+			ArrayList mirrors = new ArrayList();
+			try
+			{
 				mirrors = new MirrorList().mirrors;
-			} catch (Exception ex) {}
+			}
+			catch (Exception ex)
+			{
+			}
 			miraModel.addToList(mirrors);
-			
+
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
-					String ID = jEdit.getProperty("plugin-manager.mirror.id");
+					String id = jEdit.getProperty("plugin-manager.mirror.id");
 					int size = miraModel.getSize();
 					for (int i=0; i < size; i++)
 					{
-						if (size == 1 || miraModel.getID(i).equals(ID))
+						if (size == 1 || miraModel.getID(i).equals(id))
 						{
 							miraList.setSelectedIndex(i);
 							break;
@@ -225,7 +226,7 @@ class PluginManagerOptionPane extends AbstractOptionPane
 					}
 				}
 			});
-			
+
 			setProgressValue(1);
 		}
 	} //}}}

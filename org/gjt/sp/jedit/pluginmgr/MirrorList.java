@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.options;
+package org.gjt.sp.jedit.pluginmgr;
 
 import com.microstar.xml.*;
 import java.io.*;
@@ -28,12 +28,18 @@ import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 
-class MirrorList
+public class MirrorList
 {
+	public ArrayList mirrors;
+
 	//{{{ Constructor
-	MirrorList() throws Exception
+	public MirrorList() throws Exception
 	{
-		mirrors = new LinkedList();
+		mirrors = new ArrayList();
+
+		Mirror none = new Mirror();
+		none.id = Mirror.NONE;
+		mirrors.add(none);
 
 		String path = jEdit.getProperty("plugin-manager.mirror-url");
 		MirrorListHandler handler = new MirrorListHandler(this,path);
@@ -45,9 +51,7 @@ class MirrorList
 	} //}}}
 
 	//{{{ Private members
-	
-	List mirrors;
-	
+
 	//{{{ add() method
 	void add(Mirror mirror)
 	{
@@ -59,17 +63,23 @@ class MirrorList
 	{
 		Collections.sort(mirrors,new MirrorCompare());
 	} //}}}
-	
+
+	//}}}
+
+	//{{{ Inner classes
+
 	//{{{ Mirror class
-	static class Mirror
+	public static class Mirror
 	{
-		String id;
-		String description;
-		String location;
-		String country;
-		String continent;
+		public static final String NONE = "NONE";
+
+		public String id;
+		public String description;
+		public String location;
+		public String country;
+		public String continent;
 	} //}}}
-	
+
 	//{{{ MirrorCompare class
 	class MirrorCompare implements Comparator
 	{
@@ -77,7 +87,7 @@ class MirrorList
 		{
 			Mirror m1 = (Mirror)o1;
 			Mirror m2 = (Mirror)o2;
-			
+
 			int result;
 			if ((result = m1.continent.compareToIgnoreCase(m2.continent)) == 0)
 				if ((result = m1.country.compareToIgnoreCase(m2.country)) == 0)
@@ -85,12 +95,12 @@ class MirrorList
 						return m1.description.compareToIgnoreCase(m2.description);
 			return result;
 		}
-		
+
 		public boolean equals(Object obj)
 		{
 			return (obj instanceof MirrorCompare);
 		}
 	} //}}}
-	
+
 	//}}}
 }

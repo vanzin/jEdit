@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- enter in browser tree: two i/o requests
+- split view line insert: repainted twice, selection problems
 - action bar: wrap around arrow keys
 - browser: tab: don't insert full path
 - completion: handle full paths

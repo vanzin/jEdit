@@ -52,7 +52,7 @@ class PluginList
 
 		String path = jEdit.getProperty("plugin-manager.export-url");
 		String id = jEdit.getProperty("plugin-manager.mirror.id");
-		if (!id.equals("NONE"))
+		if (!id.equals(MirrorList.Mirror.NONE))
 			path += "?mirror="+id;
 		PluginListHandler handler = new PluginListHandler(this,path);
 		XmlParser parser = new XmlParser();

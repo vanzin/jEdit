@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.options;
+package org.gjt.sp.jedit.pluginmgr;
 
 import com.microstar.xml.*;
 import java.io.*;
