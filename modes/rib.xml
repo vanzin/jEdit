@@ -12,7 +12,6 @@ for TextPad text editor by Kharitonov Konstantin (aqua@sm.bmstu.ru)
         <PROPERTY NAME="lineComment" VALUE="#" />
         <PROPERTY NAME="indentNextLines" VALUE="Begin|WorldBegin|FrameBegin|TransformBegin|AttributeBegin|SolidBegin|ObjectBegin|MotionBegin" />
         <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
     </PROPS>
     <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="([[:digit:]]+(e[[:digit:]]*)?)">
 		<EOL_SPAN AT_WHITESPACE_END="TRUE" TYPE="COMMENT1">#</EOL_SPAN>

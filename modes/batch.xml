@@ -26,7 +26,6 @@
 		<PROPERTY NAME="lineComment" VALUE="rem" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
 		<!-- 'echo off' statements -->

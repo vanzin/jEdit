@@ -276,7 +276,7 @@ public abstract class VFS
 		if(path.equals("/"))
 			return path;
 
-		if(path.endsWith("/") || path.endsWith(File.separator))
+		while(path.endsWith("/") || path.endsWith(File.separator))
 			path = path.substring(0,path.length() - 1);
 
 		int index = Math.max(path.lastIndexOf('/'),
@@ -303,7 +303,15 @@ public abstract class VFS
 	{
 		// ignore last character of path to properly handle
 		// paths like /foo/bar/
-		int count = Math.max(0,path.length() - 2);
+		int lastIndex = path.length() - 1;
+		while(lastIndex > 0
+			&& (path.charAt(lastIndex) == File.separatorChar
+			|| path.charAt(lastIndex) == '/'))
+		{
+			lastIndex--;
+		}
+
+		int count = Math.max(0,lastIndex);
 		int index = path.lastIndexOf(File.separatorChar,count);
 		if(index == -1)
 			index = path.lastIndexOf('/',count);

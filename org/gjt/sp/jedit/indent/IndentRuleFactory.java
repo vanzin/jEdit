@@ -31,7 +31,9 @@ public class IndentRuleFactory
 		throws REException
 	{
 		return new RegexpIndentRule(regexp,
-			null, new IndentAction.Increase(), null);
+			null,
+			new IndentAction.Increase(),
+			null);
 	}
 
 	public static IndentRule indentNextLine(String regexp)

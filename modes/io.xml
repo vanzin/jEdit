@@ -40,7 +40,6 @@
 		<PROPERTY NAME="lineComment" VALUE="//" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
 
 	<!-- Rules____________________________________________________________ -->

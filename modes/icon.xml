@@ -8,7 +8,6 @@
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="wordBreakChars" VALUE="|.\\:,+-*/=?^!@%&lt;&gt;&amp;" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" 

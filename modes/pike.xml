@@ -20,7 +20,6 @@
     <PROPERTY NAME="indentNextLine" VALUE="\s*(((if|(for(each)?)|while|catch|gauge)\s*\(|(do|else)\s*|else\s+if\s*\()[^{;]*)"/>
     <!-- set this to 'true' if you want to use GNU coding style -->
     <PROPERTY NAME="doubleBracketIndent" VALUE="false"/>
-    <PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
   </PROPS>
   <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
 

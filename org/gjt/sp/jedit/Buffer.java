@@ -1538,10 +1538,10 @@ public class Buffer
 		}
 
 		String[] bracketProps = {
-			"unalignedOpenBracket",
-			"unalignedCloseBracket",
 			"indentOpenBracket",
 			"indentCloseBracket",
+			"unalignedOpenBracket",
+			"unalignedCloseBracket",
 		};
 
 		for(int i = 0; i < bracketProps.length; i++)
@@ -1554,7 +1554,7 @@ public class Buffer
 			"unindentNextLines"
 		};
 
-		for(int i = 0; i < regexpProps.length; i++)
+		for(int i = 0; i < finalProps.length; i++)
 		{
 			IndentRule rule = createRegexpIndentRule(finalProps[i]);
 			if(rule != null)
@@ -1572,7 +1572,7 @@ public class Buffer
 		{
 			String prop = getStringProperty(props[i]);
 			if(prop != null)
-				buf.append(props[i]);
+				buf.append(prop);
 		}
 
 		electricKeys = buf.toString();
@@ -2461,18 +2461,28 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int newIndent = oldIndent;
 
 		Iterator rules = indentRules.iterator();
+
+		List actions = new LinkedList();
+
 		while(rules.hasNext())
 		{
 			IndentRule rule = (IndentRule)rules.next();
-			IndentAction action = rule.apply(this,lineIndex,
-				prevLineIndex,prevPrevLineIndex);
-			if(action != null)
-			{
-				newIndent = action.calculateIndent(this,lineIndex,
-					oldIndent,newIndent);
-				if(newIndent < 0)
-					newIndent = 0;
-			}
+			rule.apply(this,lineIndex,prevLineIndex,
+				prevPrevLineIndex,actions);
+		}
+
+		Iterator actionIter = actions.iterator();
+
+		while(actionIter.hasNext())
+		{
+			IndentAction action = (IndentAction)actionIter.next();
+			newIndent = action.calculateIndent(this,lineIndex,
+				oldIndent,newIndent);
+			if(newIndent < 0)
+				newIndent = 0;
+
+			if(!action.keepChecking())
+				break;
 		}
 
 		return newIndent;

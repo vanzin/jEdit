@@ -16,12 +16,34 @@ and quirks that I need to fix eventually.
 
 4.3pre2:
 
+(import '(sys::%format
+          sys::source-transform
+          sys::define-source-transform
+          sys::expand-source-transform))
+
+this is broken:
+if(foo)
+{
+
+}
+- 7000 line lisp file: window resize is slow
+- using up/down arrows with a blank text field and pressing / goes to
+  the root
+- caret position not saved properly when switching buffers
+- there is a comment in browser.actions.xml:
+/* NOTE: I do NOT want plugins creating check box menu items
+ * in jEdit 4.2! The API is not stable, note the _comp hack...
+ * in 4.3 I will finish the full action API refactoring and
+ * IS_SELECTED blocks in browser actions will have access to
+ * the browser variable just like the CODE block above.
+ *
+ * Love, Slava */
 - auto indent:
   - deep indent
   - investigate CL indent
-  - anon inner classes
-  - explicit folds
-  - update existing modes for new auto indent properties
+  - pressing enter: carry over * from prev line in javadoc
+  - javadoc indent: if prev line was /* or *, unindent if prev line is
+  */
 - some fastrepaint bugs
 - option to disable buffer local properties
 - option to disable electric keys
@@ -29,9 +51,6 @@ and quirks that I need to fix eventually.
 - more configurable file system browser
   - at least, preserve column widths
 - CA+PLUS +: bad
-- bsh bugs:
-  ; after else if()
-  longs not read correctly if prefixed with 0x
 - C+b -- click -- keys don't work
 - remove-marker, select-next/prev-marker/bracket
 - expand fold: try to expand even if already expanded
@@ -39,6 +58,9 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- bsh bugs:
+  ; after else if()
+  longs not read correctly if prefixed with 0x
 - auto indent:
   if(foo)
     while(bar)

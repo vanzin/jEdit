@@ -522,7 +522,7 @@ public class DisplayManager
 			{
 				resetAnchors();
 
-				textArea.updateScrollBars();
+				textArea.updateScrollBar();
 				textArea.recalculateLastPhysicalLine();
 			}
 		}
@@ -560,7 +560,7 @@ public class DisplayManager
 				if(!scrollLineCount.callChanged
 					&& !scrollLineCount.callReset)
 				{
-					textArea.updateScrollBars();
+					textArea.updateScrollBar();
 					textArea.recalculateLastPhysicalLine();
 				}
 				else
@@ -576,12 +576,12 @@ public class DisplayManager
 				firstLine.ensurePhysicalLineIsVisible();
 
 				textArea.recalculateLastPhysicalLine();
-				textArea.updateScrollBars();
+				textArea.updateScrollBar();
 			}
 			else if(scrollLineCount.callChanged)
 			{
 				scrollLineCount.changed();
-				textArea.updateScrollBars();
+				textArea.updateScrollBar();
 				textArea.recalculateLastPhysicalLine();
 			}
 		}

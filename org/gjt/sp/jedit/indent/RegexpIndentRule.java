@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.indent;
 
 import gnu.regexp.*;
+import java.util.List;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.Buffer;
 
@@ -41,19 +42,24 @@ public class RegexpIndentRule implements IndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public IndentAction apply(Buffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex)
+	public void apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex,
+		List indentActions)
 	{
-		if(isMatch(buffer.getLineText(thisLineIndex)))
-			return thisAction;
-		else if(prevLineIndex != -1 && isMatch(
-			buffer.getLineText(prevLineIndex)))
-			return prevAction;
-		else if(prevPrevLineIndex != -1 && isMatch(
-			buffer.getLineText(prevPrevLineIndex)))
-			return prevPrevAction;
-		else
-			return null;
+		if(thisAction != null
+			&& isMatch(buffer.getLineText(thisLineIndex)))
+			indentActions.add(thisAction);
+		if(prevAction != null
+			&& prevLineIndex != -1
+			&& isMatch(buffer.getLineText(prevLineIndex)))
+		{
+			indentActions.add(prevAction);
+			indentActions.add(new IndentAction.Collapse());
+		}
+		if(prevPrevAction != null
+			&& prevPrevLineIndex != -1
+			&& isMatch(buffer.getLineText(prevPrevLineIndex)))
+			indentActions.add(prevPrevAction);
 	} //}}}
 
 	//{{{ isMatch() method

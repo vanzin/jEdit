@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.indent;
 
 import gnu.regexp.*;
+import java.util.List;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
@@ -38,8 +39,9 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public IndentAction apply(Buffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex)
+	public void apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex,
+		List indentActions)
 	{
 		int index;
 		if(aligned)
@@ -48,18 +50,38 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			index = prevLineIndex;
 
 		if(index == -1)
-			return null;
+			return;
 
 		String line = buffer.getLineText(index);
 
 		int offset = line.lastIndexOf(closeBracket);
 		if(offset == -1)
-			return null;
+			return;
 
-		if(isMatch(line))
-			return new IndentAction.AlignBracket(index,offset);
-		else
-			return null;
+		if(getBrackets(line).closeCount != 0)
+		{
+			IndentAction.AlignBracket alignBracket
+				= new IndentAction.AlignBracket(
+				buffer,index,offset);
+			/*
+			Consider the following Common Lisp code:
+			
+			(defun emit-push-long (arg)
+			  (cond ((eql arg 0)
+			      (emit 'lconst_0))
+			    ((eql arg 1)
+			      (emit 'lconst_1)))
+			
+			even though we have a closing bracket match on line 3,
+			the next line must be indented relative to the
+			corresponding opening bracket from line 1.
+			*/
+			String openLine = alignBracket.getOpenBracketLine();
+			if(openLine != null && getBrackets(openLine).openCount > 1)
+				alignBracket.setExtraIndent(true);
+			
+			indentActions.add(alignBracket);
+		}
 	} //}}}
 	
 	//{{{ isMatch() method
