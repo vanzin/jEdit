@@ -8,12 +8,13 @@ and quirks that I need to fix eventually.
 - slower if comment open till end?
 - fsb: at roots:; select something; path not prepended
 - BeanShell javadoc: scriptPath
+- plugin build environment docs
 - plugin tutorial:
   - auto-created actions
   - link to jEdit devel page
+  - quicknotepad class -- links to API docs
+  - functions - links to API docs
 - plugin tips and techniques:
-  - libraries
-  - editbus
   - cutting down on startup time
   - canned dialog boxes in GUIUtilities
   - tools.jar

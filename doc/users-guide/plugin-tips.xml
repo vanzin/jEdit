@@ -1,0 +1,29 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
+
+<chapter id="plugin-tips"><title>Plugin Tips and Techniques</title>
+
+<sect1 id="plugin-tips-libraries"><title>Bundling Additional Class Libraries</title>
+
+<para>
+  Recall that any class whose name ends with <classname>Plugin.class</classname>
+  is called a plugin core class.
+  JAR files with no plugin core classes are also loaded by jEdit; 
+  the classes they contain are
+  made available to other plugins.  Many plugins that rely on
+  third-party class libraries ship them as separate JAR files.  The libraries
+  will be available inside the jEdit environment but are not part of a general
+  classpath or library collection when running other Java applications.
+</para>
+
+<para>
+  A plugin that bundles extra JAR files must list them in the
+  <filename>plugin.<replaceable>class name</replaceable>.jars</filename>
+  property. See the documentation for the
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> class for details.
+</para>
+
+</sect1>
+
+</chapter>

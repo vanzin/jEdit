@@ -161,6 +161,32 @@ How Plugins are Loaded</title>
 <sect1 id="plugin-implement-quicknotepadplugin"><title>The QuickNotepadPlugin Class</title>
 
 <para>
+    The major issues encountered when writing a plugin core class arise
+    from the developer's decisions on what features the plugin will make
+    available. These issues have implications for other plugin elements
+    as well.
+</para>
+
+<itemizedlist>
+  <listitem><para>
+    Will the plugin provide for actions that the user can trigger using
+    jEdit's menu items, toolbar buttons and keyboard shortcuts?
+  </para></listitem>
+  <listitem><para>
+    Will the plugin have its own visible interface?
+  </para></listitem>
+  <listitem><para>
+    Will the plugin have settings that the user can configure?
+  </para></listitem>
+  <listitem><para>
+    Will the plugin
+    respond to any messages reflecting changes in the host
+    application's state?
+  </para></listitem>
+
+</itemizedlist>
+
+<para>
   Recall that the plugin core class must extend
   <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
   <classname>EditPlugin</classname></ulink>.
@@ -170,7 +196,7 @@ How Plugins are Loaded</title>
 </para>
 
 <para>
-  The resulting plugin core class is lightweight and straightforward to implement.
+  The resulting plugin core class is lightweight and straightforward to implement:
 </para>
 
 <itemizedlist><listitem><para>
@@ -205,8 +231,8 @@ How Plugins are Loaded</title>
   <classname>EditPlugin.createMenuItems()</classname></ulink> method
   is very typical.
   It uses a jEdit utility function to create the menu, taking the list
-  of actions from the <property>quicknotepad</property> property, and
-  the label from <property>quotenotepad.label</property>.
+  of actions from the <filename>quicknotepad</filename> property, and
+  the label from <filename>quotenotepad.label</filename>.
 </para>
 
 <para>
@@ -242,6 +268,67 @@ How Plugins are Loaded</title>
 </para></listitem>
 
 </itemizedlist>
+
+</sect1>
+
+<sect1 id="plugin-implement-editbus"><title>The EditBus</title>
+
+<para>
+  Plugins register <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
+  <function>EBComponent</function></ulink> instances with the
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html">
+  <classname>EditBus</classname></ulink> to receive messages reflecting
+  changes in jEdit's state.
+</para>
+
+<para>
+  The message
+  classes derived from <ulink url="../api/org/gjt/sp/jedit/EBMessage.html">
+  <classname>EBMessage</classname></ulink> cover the opening
+  and closing of the application, changes in the status of buffers and views,
+  changes in user settings, as well as changes in
+  the state of other program features. A full list of messages can be found in the
+  <ulink url="../api/org/gjt/sp/jedit/msg/package-summary.html">org.gjt.sp.jedit.msg</ulink>
+  package.
+</para>
+
+<para>
+  <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
+  <function>EBComponent</function></ulink>s are added and removed with the
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#addToBus(org.gjt.sp.jedit.EBComponent)">
+  <function>EditBus.addToBus()</function></ulink> and
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#removeFromBus(org.gjt.sp.jedit.EBComponent)">
+  <function>EditBus.removeFromBus()</function></ulink>
+  methods.
+</para>
+
+<para>
+  Typically, the <ulink url="../api/org/gjt/sp/jedit/EBComponent.html#handleMessage(org.gjt.sp.jedit.EBMessage)">
+  <function>EBComponent.handleMessage()</function></ulink> method
+  is implemented with one or more <function>if</function> blocks that test
+	 whether the message is an instance of a derived message class in
+	 which the component has an interest.
+</para>
+
+<programlisting>if(msg instanceof BufferUpdate) {
+    // a buffer's state has changed!
+}
+else if(msg instanceof ViewUpdate) {
+    // a view's state has changed!
+}
+// ... and so on</programlisting>
+
+<para>
+  If a plugin core class will respond to EditBus
+  messages, it can be derived from
+  <ulink url="../api/org/gjt/sp/jedit/EBPlugin.html">
+  <classname>EBPlugin</classname></ulink>, in which case no explicit
+  <function>addToBus()</function> call is necessary.
+  Otherwise,
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> will suffice as a
+  plugin base class. Note that QuickNotepad uses the latter.
+</para>
 
 </sect1>
 

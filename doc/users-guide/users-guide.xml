@@ -37,6 +37,7 @@
 
 <!ENTITY plugin-intro SYSTEM "plugin-intro.xml">
 <!ENTITY plugin-implement SYSTEM "plugin-implement.xml">
+<!ENTITY plugin-tips SYSTEM "plugin-tips.xml">
 
 ]>
 
@@ -161,6 +162,7 @@
 
  &plugin-intro;
  &plugin-implement;
+ &plugin-tips;
 </part>
 
 </book>
