@@ -298,23 +298,3 @@ class WindowTableModel extends AbstractTableModel
 		}
 	}
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2001/09/02 05:37:50  spestov
- * Initial revision
- *
- * Revision 1.4  2001/07/24 08:15:44  sp
- * plugin guide updated
- *
- * Revision 1.3  2000/10/30 07:14:04  sp
- * 2.7pre1 branched, GUI improvements
- *
- * Revision 1.2  2000/09/23 03:01:11  sp
- * pre7 yayayay
- *
- * Revision 1.1  2000/08/17 08:04:10  sp
- * Marker loading bug fixed, docking option pane
- *
- */

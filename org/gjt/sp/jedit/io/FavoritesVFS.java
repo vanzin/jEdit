@@ -137,32 +137,3 @@ public class FavoritesVFS extends VFS
 	private static Object lock = new Object();
 	private static Vector favorites = new Vector();
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2001/09/02 05:38:16  spestov
- * Initial revision
- *
- * Revision 1.7  2000/11/11 02:59:30  sp
- * FTP support moved out of the core into a plugin
- *
- * Revision 1.6  2000/08/29 07:47:13  sp
- * Improved complete word, type-select in VFS browser, bug fixes
- *
- * Revision 1.5  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.4  2000/08/20 07:29:31  sp
- * I/O and VFS browser improvements
- *
- * Revision 1.3  2000/08/06 09:44:27  sp
- * VFS browser now has a tree view, rename command
- *
- * Revision 1.2  2000/08/05 07:16:12  sp
- * Global options dialog box updated, VFS browser now supports right-click menus
- *
- * Revision 1.1  2000/08/03 07:43:42  sp
- * Favorites added to browser, lots of other stuff too
- *
- */

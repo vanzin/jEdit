@@ -68,20 +68,3 @@ public abstract class WorkRequest implements Runnable
 			((WorkThread)thread).setProgressMaximum(value);
 	}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.1  2001/09/02 05:38:25  spestov
- * Initial revision
- *
- * Revision 1.4  2000/10/15 04:10:35  sp
- * bug fixes
- *
- * Revision 1.3  2000/07/26 07:48:46  sp
- * stuff
- *
- * Revision 1.2  2000/07/22 03:27:04  sp
- * threaded I/O improved, autosave rewrite started
- *
- */

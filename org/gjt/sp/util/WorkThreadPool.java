@@ -413,43 +413,4 @@ public class WorkThreadPool
 			doAWTRequests();
 		}
 	}
-
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.1  2001/09/02 05:38:26  spestov
- * Initial revision
- *
- * Revision 1.10  2000/12/06 07:00:41  sp
- * Lotsa bug fixes
- *
- * Revision 1.9  2000/11/21 02:58:04  sp
- * 2.7pre2 finished
- *
- * Revision 1.8  2000/10/15 04:10:35  sp
- * bug fixes
- *
- * Revision 1.7  2000/08/27 02:06:52  sp
- * Filter combo box changed to a text field in VFS browser, passive mode FTP toggle
- *
- * Revision 1.6  2000/08/22 07:25:01  sp
- * Improved abbrevs, bug fixes
- *
- * Revision 1.5  2000/07/26 07:48:46  sp
- * stuff
- *
- * Revision 1.4  2000/07/22 12:37:39  sp
- * WorkThreadPool bug fix, IORequest.load() bug fix, version wound back to 2.6
- *
- * Revision 1.3  2000/07/22 06:22:27  sp
- * I/O progress monitor done
- *
- * Revision 1.2  2000/07/22 03:27:04  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.1  2000/07/21 10:23:49  sp
- * Multiple work threads
- *
- */

@@ -167,29 +167,3 @@ public class ParserRuleSet
 	private boolean highlightDigits;
 	private byte defaultToken;
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.1  2001/09/02 05:38:02  spestov
- * Initial revision
- *
- * Revision 1.7  2000/04/09 10:41:26  sp
- * NO_WORD_BREAK SPANs fixed, action tokens removed
- *
- * Revision 1.6  2000/04/08 09:34:58  sp
- * Documentation updates, minor syntax changes
- *
- * Revision 1.5  2000/04/08 06:57:14  sp
- * Parser rules are now hashed; this dramatically speeds up tokenization
- *
- * Revision 1.4  2000/04/08 06:10:51  sp
- * Digit highlighting, search bar bug fix
- *
- * Revision 1.3  2000/04/07 06:57:26  sp
- * Buffer options dialog box updates, API docs updated a bit in syntax package
- *
- * Revision 1.2  2000/04/01 08:40:55  sp
- * Streamlined syntax highlighting, Perl mode rewritten in XML
- *
- */

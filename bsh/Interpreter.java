@@ -178,9 +178,6 @@ public class Interpreter
 		else
 			this.globalNameSpace = namespace;
 
-		// The classes which are imported by default
-		globalNameSpace.loadDefaultImports();
-
 		/* 
 			Create the root "bsh" system object if it doesn't exist.
 		*/
