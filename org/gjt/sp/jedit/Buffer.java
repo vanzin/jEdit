@@ -437,7 +437,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 				if(jEdit.getBooleanProperty("parseFully"))
 				{
-					for(int i = 0; i < lineCount; i++)
+					for(int i = 0; i < offsetMgr.getLineCount(); i++)
 						markTokens(i);
 				}
 
@@ -998,7 +998,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getLineCount()
 	{
-		return lineCount;
+		return offsetMgr.getLineCount();
 	} //}}}
 
 	//{{{ getVirtualLineCount() method
@@ -1007,7 +1007,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getVirtualLineCount()
 	{
-		return lineCount;
+		return offsetMgr.getLineCount();
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -1916,7 +1916,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void tokenizeLines(int start, int len)
 	{
-		linesChanged(start,len);
+		offsetMgr.linesChanged(start,len);
 
 		for(int i = 0; i < len; i++)
 			markTokens(start + i);
@@ -2025,74 +2025,61 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		for(int i = lineIndex - 1; i > end; i--)
 		{
-			if(lineInfo[i].contextValid)
+			if(offsetMgr.isLineContextValid(i))
 			{
 				start = i;
 				break;
 			}
 		}
 
-		Element map = getDefaultRootElement();
-
 		for(int i = start + 1; i <= lineIndex; i++)
 		{
+			getLineText(i,seg);
+
 			TokenMarker.LineContext prevContext = (i == 0 ? null
-				: lineInfo[i - 1].context);
-			LineInfo info = lineInfo[i];
-			TokenMarker.LineContext context = info.getLineContext();
+				: offsetMgr.getLineContext(i - 1));
 
-			Element lineElement = map.getElement(i);
-			int lineStart = lineElement.getStartOffset();
-			try
-			{
-				getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,seg);
-			}
-			catch(BadLocationException e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-
-			/* Prepare for tokenization */
+			/* Prepare tokenization */
 			tokenList.lastToken = null;
 
-			ParserRule oldRule = context.inRule;
-			TokenMarker.LineContext oldParent = context.parent;
-
-			context = tokenMarker.markTokens(prevContext,context,tokenList,seg);
-			info.setLineContext(context);
-
-			context = info.getLineContext();
-
-			ParserRule newRule = context.inRule;
-			TokenMarker.LineContext newParent = context.parent;
-
-			info.contextValid = true;
-
-			if(i != lastTokenizedLine)
+			TokenMarker.LineContext context = offsetMgr.getLineContext(i);
+			ParserRule oldRule;
+			TokenMarker.LineContext oldParent;
+			if(context == null)
 			{
-				nextLineRequested = false;
-				lastTokenizedLine = i;
+				oldRule = null;
+				oldParent = null;
 			}
+			else
+			{
+				oldRule = context.inRule;
+				oldParent = context.parent;
+			}
+
+			context = tokenMarker.markTokens(prevContext,tokenList,seg);
+			offsetMgr.setLineContext(i,context);
 
 			// Could incorrectly be set to 'false' with
 			// recursive delegates, where the chaning might
 			// have changed but not the rule set in question (?)
-			if(oldRule != newRule)
+			if(oldRule != context.inRule)
 				nextLineRequested = true;
-			else if(oldParent == null && newParent == null)
+			else if(oldParent == null && context.parent == null)
 				nextLineRequested = false;
-			else if(oldParent != null && newParent != null)
-				nextLineRequested = (oldParent.rules != newParent.rules);
-			else /*if(oldParent != null ^ newParent != null)*/
+			else if(oldParent != null && context.parent != null)
+				nextLineRequested = (oldParent.rules != context.parent.rules);
+			else if(oldParent != null ^ context.parent != null)
 				nextLineRequested = true;
-
-			tokenList.addToken(0,Token.END);
+			else if(i != lastTokenizedLine)
+				nextLineRequested = false;
 		}
 
+		lastTokenizedLine = lineIndex;
+
+		int lineCount = offsetMgr.getLineCount();
 		if(nextLineRequested && lineCount - lineIndex > 1)
 		{
-			linesChanged(lineIndex + 1,lineCount - lineIndex - 1);
+			offsetMgr.linesChanged(lineIndex + 1,lineCount - lineIndex - 1);
 		}
 
 		return tokenList;
@@ -2172,7 +2159,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getNextVisibleLine(int lineNo)
 	{
-		if(lineNo >= lineCount - 1)
+		if(lineNo >= offsetMgr.getLineCount() - 1)
 			return -1;
 		else
 			return lineNo + 1;
@@ -2213,7 +2200,8 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean isFoldStart(int line)
 	{
-		return (line != lineCount - 1 && getFoldLevel(line) < getFoldLevel(line + 1));
+		return (line != offsetMgr.getLineCount() - 1
+			&& getFoldLevel(line) < getFoldLevel(line + 1));
 	} //}}}
 
 	//{{{ getFoldLevel() method
@@ -2224,16 +2212,14 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getFoldLevel(int line)
 	{
-		LineInfo info = lineInfo[line];
-
-		if(info.foldLevelValid)
-			return info.foldLevel;
+		if(offsetMgr.isFoldLevelValid(line))
+			return offsetMgr.getFoldLevel(line);
 		else
 		{
 			int start = 0;
 			for(int i = line - 1; i >= 0; i--)
 			{
-				if(lineInfo[i].foldLevelValid)
+				if(offsetMgr.isFoldLevelValid(i))
 				{
 					start = i + 1;
 					break;
@@ -2241,19 +2227,17 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 
 			int newFoldLevel = 0;
+			boolean changed = false;
 
 			for(int i = start; i <= line; i++)
 			{
-				info = lineInfo[i];
 				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
-				info.foldLevelValid = true;
-				if(info.foldLevel != newFoldLevel)
-				{
-					info.foldLevel = (short)newFoldLevel;
-				}
+				offsetMgr.setFoldLevel(i,newFoldLevel);
+				changed = true;
 			}
 
-			fireFoldLevelChanged(start,line);
+			if(changed)
+				fireFoldLevelChanged(start,line);
 
 			return newFoldLevel;
 		}
@@ -2314,7 +2298,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final boolean _isLineVisible(int line, int index)
 	{
-		return lineInfo[line].isVisible(index);
+		return offsetMgr.isLineVisible(line,index);
 	} //}}}
 
 	//{{{ _setLineVisible() method
@@ -2325,7 +2309,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final void _setLineVisible(int line, int index, boolean visible)
 	{
-		lineInfo[line].setVisible(index,visible);
+		offsetMgr.setLineVisible(line,index,visible);
 	} //}}}
 
 	//}}}
@@ -2596,18 +2580,15 @@ public class Buffer extends PlainDocument implements EBComponent
 	Buffer(View view, String path, boolean newFile, boolean temp,
 		Hashtable props)
 	{
-		lineCount = 1;
-		lineInfo = new LineInfo[1];
-		lineInfo[0] = new LineInfo();
-		lineInfo[0].visible = (byte)0xff;
-
-		foldVisibilityManagers = new Hashtable();
-		inUseFVMs = new FoldVisibilityManager[8];
-		bufferListeners = new Vector();
+		offsetMgr = new OffsetManager(this);
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
 		tokenList = new TokenList();
+
+		foldVisibilityManagers = new Hashtable();
+		inUseFVMs = new FoldVisibilityManager[8];
+		bufferListeners = new Vector();
 
 		setDocumentProperties(new BufferProps());
 		clearProperties();
@@ -2634,7 +2615,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		setMode(defaultMode);
 
 
-		/* Magic: UNTITLED is only set if newFile param to
+		/*Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
 		 * doesn't exist on disk.
 		 *
@@ -2692,7 +2673,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
-		int start = evt.getOffset();
+		int offset = evt.getOffset();
 		int length = evt.getLength();
 		int startLine, numLines;
 		if(ch != null)
@@ -2700,60 +2681,31 @@ public class Buffer extends PlainDocument implements EBComponent
 			startLine = ch.getIndex();
 			numLines = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
-
-			if(numLines > 0)
-			{
-				int endLine = startLine + numLines;
-
-				lineCount += numLines;
-
-				if(lineInfo.length <= lineCount)
-				{
-					LineInfo[] lineInfoN = new LineInfo[(lineCount + 1) * 2];
-					System.arraycopy(lineInfo,0,lineInfoN,0,
-							 lineInfo.length);
-					lineInfo = lineInfoN;
-				}
-
-				LineInfo prev = (startLine == 0
-					? null : lineInfo[startLine - 1]);
-
-				System.arraycopy(lineInfo,startLine,lineInfo,endLine,
-					lineInfo.length - endLine);
-
-				ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
-				for(int i = startLine; i < endLine; i++)
-				{
-					LineInfo info = new LineInfo();
-					info.context = null;
-					info.rules = mainSet;
-					info.inRule = null;
-					info.visible = (prev == null
-						? (byte)0xff
-						: prev.visible);
-					lineInfo[i] = info;
-				}
-
-				// notify fold visibility managers
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-					{
-						inUseFVMs[i]._linesInserted(
-							startLine,numLines);
-					}
-				}
-			}
 		}
 		else
 		{
-			startLine = getLineOfOffset(start);
+			startLine = getLineOfOffset(offset);
 			numLines = 0;
 		}
 
-		linesChanged(startLine,lineCount - startLine);
+		// XXX: actually need proper offsets in the array
+		offsetMgr.contentInserted(startLine,offset,numLines,length,
+			new int[numLines]);
 
-		fireContentInserted(startLine,start,numLines,length);
+		if(numLines > 0)
+		{
+			// notify fold visibility managers
+			for(int i = 0; i < inUseFVMs.length; i++)
+			{
+				if(inUseFVMs[i] != null)
+				{
+					inUseFVMs[i]._linesInserted(
+						startLine,numLines);
+				}
+			}
+		}
+
+		fireContentInserted(startLine,offset,numLines,length);
 
 		super.fireInsertUpdate(evt);
 
@@ -2770,7 +2722,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
-		int start = evt.getOffset();
+		int offset = evt.getOffset();
 		int length = evt.getLength();
 		int startLine, numLines;
 
@@ -2779,38 +2731,32 @@ public class Buffer extends PlainDocument implements EBComponent
 			startLine = ch.getIndex();
 			numLines = ch.getChildrenRemoved().length -
 				ch.getChildrenAdded().length;
-
-			if(numLines > 0)
-			{
-				// notify fold visibility managers
-				// BEFORE the line info array is shrunk
-				// so they can update their virtual line
-				// counts properly
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-					{
-						inUseFVMs[i]._linesRemoved(
-							startLine,numLines);
-					}
-				}
-
-				int endLine = startLine + numLines;
-
-				lineCount -= numLines;
-				System.arraycopy(lineInfo,endLine,lineInfo,
-					startLine,lineInfo.length - endLine);
-			}
 		}
 		else
 		{
-			startLine = getLineOfOffset(start);
+			startLine = getLineOfOffset(offset);
 			numLines = 0;
 		}
 
-		linesChanged(startLine,lineCount - startLine);
+		if(numLines > 0)
+		{
+			// notify fold visibility managers
+			// BEFORE the line info array is shrunk
+			// so they can update their virtual line
+			// counts properly
+			for(int i = 0; i < inUseFVMs.length; i++)
+			{
+				if(inUseFVMs[i] != null)
+				{
+					inUseFVMs[i]._linesRemoved(
+						startLine,numLines);
+				}
+			}
+		}
 
-		fireContentRemoved(startLine,start,numLines,length);
+		offsetMgr.contentRemoved(startLine,offset,numLines,length);
+
+		fireContentRemoved(startLine,offset,numLines,length);
 
 		super.fireRemoveUpdate(evt);
 
@@ -2866,19 +2812,19 @@ public class Buffer extends PlainDocument implements EBComponent
 	private String name;
 	private Mode mode;
 
+	private OffsetManager offsetMgr;
+
+	private Vector markers;
+
+	// Undo
 	private MyUndoManager undo;
 	private CompoundEdit compoundEdit;
 	private boolean compoundEditNonEmpty;
 	private int compoundEditCount;
-	private Vector markers;
-	private int savedSelStart;
-	private int savedSelEnd;
 
 	// Syntax highlighting
 	private TokenMarker tokenMarker;
 	private Segment seg;
-	private LineInfo[] lineInfo;
-	private int lineCount;
 	private int lastTokenizedLine;
 	private boolean nextLineRequested;
 	private TokenList tokenList;
@@ -2953,7 +2899,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		Object lineSeparator = getProperty(LINESEP);
 		Object encoding = getProperty(ENCODING);
 		((BufferProps)getDocumentProperties()).clear();
-		putProperty("i18n",Boolean.FALSE);
+		getDocumentProperties().put("i18n",Boolean.FALSE);
 		if(lineSeparator != null)
 			putProperty(LINESEP,lineSeparator);
 		if(encoding != null)
@@ -3059,17 +3005,13 @@ public class Buffer extends PlainDocument implements EBComponent
 	//{{{ setTokenMarker() method
 	private void setTokenMarker(TokenMarker tokenMarker)
 	{
+		TokenMarker oldTokenMarker = this.tokenMarker;
+
 		this.tokenMarker = tokenMarker;
 
-		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
-		for(int i = 0; i < lineCount; i++)
-		{
-			LineInfo info = lineInfo[i];
-			info.context = null;
-			info.inRule = null;
-			info.rules = mainSet;
-			info.contextValid = false;
-		}
+		// don't do this on initial token marker
+		if(oldTokenMarker != null)
+			offsetMgr.linesChanged(0,offsetMgr.getLineCount());
 
 		lastTokenizedLine = -1;
 	} //}}}
@@ -3079,6 +3021,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		FoldHandler oldFoldHandler = this.foldHandler;
 
+		// Will break with possible future plugin fold handlers
 		if(oldFoldHandler != null
 			&& oldFoldHandler.getClass() == foldHandler.getClass())
 			return;
@@ -3088,33 +3031,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		// don't do this on initial fold handler creation
 		if(oldFoldHandler != null)
 		{
-			for(int i = 0; i < lineCount; i++)
-				lineInfo[i].foldLevelValid = false;
+			offsetMgr.linesChanged(0,offsetMgr.getLineCount());
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.FOLD_HANDLER_CHANGED));
-		}
-	} //}}}
-
-	//{{{ linesChanged() method
-	/**
-	 * Called when the specified lines change. This invalidates
-	 * cached syntax tokens and fold level.
-	 * @param index The first line number
-	 * @param lines The number of lines
-	 */
-	private void linesChanged(int index, int lines)
-	{
-		for(int i = 0; i < lines; i++)
-		{
-			LineInfo info = lineInfo[index + i];
-			info.contextValid = false;
-			info.foldLevelValid = false;
-		}
-
-		if(lastTokenizedLine >= index
-			&& lastTokenizedLine < index + lines)
-		{
-			lastTokenizedLine = -1;
 		}
 	} //}}}
 
@@ -3131,25 +3050,25 @@ public class Buffer extends PlainDocument implements EBComponent
 	} //}}}
 
 	//{{{ fireContentInserted() method
-	private void fireContentInserted(int startLine, int start,
+	private void fireContentInserted(int startLine, int offset,
 		int numLines, int length)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
 			((BufferChangeListener)bufferListeners.elementAt(i))
-				.contentInserted(this,startLine,start,
+				.contentInserted(this,startLine,offset,
 				numLines,length);
 		}
 	} //}}}
 
 	//{{{ fireContentRemoved() method
-	private void fireContentRemoved(int startLine, int start,
+	private void fireContentRemoved(int startLine, int offset,
 		int numLines, int length)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
 			((BufferChangeListener)bufferListeners.elementAt(i))
-				.contentRemoved(this,startLine,start,
+				.contentRemoved(this,startLine,offset,
 				numLines,length);
 		}
 	} //}}}
@@ -3166,17 +3085,19 @@ public class Buffer extends PlainDocument implements EBComponent
 		private int leftMargin;
 		private int tabSize;
 
+		//{{{ PrintTabExpander constructor
 		public PrintTabExpander(int leftMargin, int tabSize)
 		{
 			this.leftMargin = leftMargin;
 			this.tabSize = tabSize;
-		}
+		} //}}}
 
+		//{{{ nextTabStop() method
 		public float nextTabStop(float x, int tabOffset)
 		{
 			int ntabs = ((int)x - leftMargin) / tabSize;
 			return (ntabs + 1) * tabSize + leftMargin;
-		}
+		} //}}}
 	} //}}}
 
 	//{{{ TokenList class
@@ -3186,6 +3107,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public static class TokenList
 	{
+		//{{{ getFirstToken() method
 		/**
 		 * Returns the first syntax token.
 		 * @since jEdit 4.0pre1
@@ -3193,8 +3115,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		public Token getFirstToken()
 		{
 			return firstToken;
-		}
+		} //}}}
 
+		//{{{ getLastToken() method
 		/**
 		 * Returns the last syntax token.
 		 * @since jEdit 4.0pre1
@@ -3202,8 +3125,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		public Token getLastToken()
 		{
 			return lastToken;
-		}
+		} //}}}
 
+		//{{{ addToken() method
 		/**
 		 * Do not call this method. The only reason it is public
 		 * is so that classes in the 'syntax' package can call it.
@@ -3240,99 +3164,10 @@ public class Buffer extends PlainDocument implements EBComponent
 				lastToken.length = length;
 				lastToken.id = id;
 			}
-		}
+		} //}}}
 
 		private Token firstToken;
 		private Token lastToken;
-	} //}}}
-
-	//{{{ LineInfo class
-	/**
-	 * Inner class for storing information about tokenized lines.
-	 */
-	public static class LineInfo
-	{
-		static TokenMarker.LineContext SIMPLE_CONTEXT = new TokenMarker.LineContext();
-
-		/**
-		 * Do not use this method. The only reason it is public
-		 * is so that classes in the 'syntax' package can use it.
-		 */
-		public TokenMarker.LineContext getLineContext()
-		{
-			// to avoid creating a line context for each line
-			// (= memory waste) we only create a separate instance
-			// for delegated lines, using the SIMPLE_CONTEXT static
-			// instance for other lines.
-			if(context != null)
-				return context;
-			else
-			{
-				SIMPLE_CONTEXT.inRule = inRule;
-				SIMPLE_CONTEXT.rules = rules;
-				SIMPLE_CONTEXT.parent = null;
-				return SIMPLE_CONTEXT;
-			}
-		}
-
-		/**
-		 * Do not use this method. The only reason it is public
-		 * is so that classes in the 'syntax' package can use it.
-		 */
-		public void setLineContext(TokenMarker.LineContext context)
-		{
-			// to avoid creating a line context for each line
-			// (= memory waste) we only create a separate instance
-			// for delegated lines, using the SIMPLE_CONTEXT static
-			// instance for other lines.
-			if(context.parent != null)
-			{
-				if(context == SIMPLE_CONTEXT)
-					context = (TokenMarker.LineContext)context.clone();
-				this.context = context;
-				inRule = null;
-				rules = null;
-			}
-			else
-			{
-				this.context = null;
-				inRule = context.inRule;
-				rules = context.rules;
-			}
-		}
-
-		/**
-		 * Do not use this method. The only reason it is public is
-		 * so that classes in the 'textarea' package can use it.
-		 */
-		public boolean isVisible(int index)
-		{
-			return (visible & (1<<index)) != 0;
-		}
-
-		/**
-		 * Do not use this method. The only reason it is public is
-		 * so that classes in the 'textarea' package can use it.
-		 */
-		public void setVisible(int index, boolean v)
-		{
-			if(v)
-				visible |= (1<<index);
-			else
-				visible &= ~(1<<index);
-		}
-
-		// private members
-		short foldLevel;
-		boolean foldLevelValid;
-		byte visible;
-
-		// true if the context info is valid.
-		boolean contextValid;
-
-		private TokenMarker.LineContext context;
-		private ParserRuleSet rules;
-		private ParserRule inRule;
 	} //}}}
 
 	//{{{ BufferProps class

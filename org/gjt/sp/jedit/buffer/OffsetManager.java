@@ -49,7 +49,8 @@ public class OffsetManager
 		lineInfo = new long[1];
 		// make first line visible by default
 		lineInfo[0] = (0xff << VISIBLE_SHIFT);
-		lineContext = new Object[1];
+		lineContext = new TokenMarker.LineContext[1];
+		lineCount = 1;
 	} //}}}
 
 	//{{{ getLineCount() method
@@ -62,6 +63,12 @@ public class OffsetManager
 	public final int getLineStartOffset(int line)
 	{
 		return (int)(lineInfo[line] & START_MASK);
+	} //}}}
+
+	//{{{ isFoldLevelValid() method
+	public final boolean isFoldLevelValid(int line)
+	{
+		return (lineInfo[line] & FOLD_LEVEL_VALID_MASK) != 0;
 	} //}}}
 
 	//{{{ getFoldLevel() method
@@ -84,60 +91,38 @@ public class OffsetManager
 	//{{{ isLineVisible() method
 	public final boolean isLineVisible(int line, int index)
 	{
-		return (lineInfo[line] & (index + VISIBLE_SHIFT)) != 0;
+		int mask = 1 << (index + VISIBLE_SHIFT);
+		return (lineInfo[line] & mask) != 0;
 	} //}}}
 
 	//{{{ setLineVisible() method
 	public final void setLineVisible(int line, int index, boolean visible)
 	{
-		int shift = 1 << (index + VISIBLE_SHIFT);
+		int mask = 1 << (index + VISIBLE_SHIFT);
 		if(visible)
-			lineInfo[line] = (lineInfo[line] | shift);
+			lineInfo[line] = (lineInfo[line] | mask);
 		else
-			lineInfo[line] = (lineInfo[line] | ~shift);
+			lineInfo[line] = (lineInfo[line] | ~mask);
+	} //}}}
+
+	//{{{ isLineContextValid() method
+	public final boolean isLineContextValid(int line)
+	{
+		return (lineInfo[line] & CONTEXT_VALID_MASK) != 0;
 	} //}}}
 
 	//{{{ getLineContext() method
-	public TokenMarker.LineContext getLineContext(int line)
+	public final TokenMarker.LineContext getLineContext(int line)
 	{
-		Object obj = lineContext[line];
-
-		// to avoid creating a line context for each line
-		// (= memory waste) we only create a separate instance
-		// for delegated lines, using the SIMPLE_CONTEXT static
-		// instance for other lines.
-		if(obj instanceof TokenMarker.LineContext)
-			return (TokenMarker.LineContext)obj;
-		else if(obj instanceof ParserRule)
-		{
-			SIMPLE_CONTEXT.inRule = (ParserRule)obj;
-			SIMPLE_CONTEXT.rules =
-				buffer.getTokenMarker().getMainRuleSet();
-			SIMPLE_CONTEXT.parent = null;
-			return SIMPLE_CONTEXT;
-		}
-		else
-			return null;
+		return lineContext[line];
 	} //}}}
 
 	//{{{ setLineContext() method
-	// Also sets the 'context valid' flag
-	public void setLineContext(int line, TokenMarker.LineContext context)
+	// Also sets 'context valid' to true
+	public final void setLineContext(int line, TokenMarker.LineContext context)
 	{
-		// to avoid creating a line context for each line
-		// (= memory waste) we only create a separate instance
-		// for delegated lines, using the SIMPLE_CONTEXT static
-		// instance for other lines.
-		if(context.parent != null)
-		{
-			if(context == SIMPLE_CONTEXT)
-				context = (TokenMarker.LineContext)context.clone();
-			lineContext[line] = context;
-		}
-		else
-			lineContext[line] = context.inRule;
-
-		lineInfo[line] = lineInfo[line] |= CONTEXT_VALID_MASK;
+		lineContext[line] = context;
+		lineInfo[line] |= CONTEXT_VALID_MASK;
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -157,26 +142,20 @@ public class OffsetManager
 						 lineInfo.length);
 				lineInfo = lineInfoN;
 
-				Object[] lineContextN = new Object[(lineCount + 1) * 2];
+				TokenMarker.LineContext[] lineContextN
+					= new TokenMarker.LineContext[(lineCount + 1) * 2];
 				System.arraycopy(lineContext,0,lineContextN,0,
 						 lineContext.length);
 				lineContext = lineContextN;
 			}
-
-			long prev = (startLine == 0
-				? 0L : lineInfo[startLine - 1]);
 
 			System.arraycopy(lineInfo,startLine,lineInfo,endLine,
 				lineInfo.length - endLine);
 
 			for(int i = 0; i < numLines; i++)
 			{
-				int start = (i == 0 ? getLineStartOffset(startLine)
-					+ startOffsets[0]
-					: startOffsets[i]);
-
-				lineInfo[startLine + i] = (startOffsets[i]
-					| (prev & VISIBLE_MASK));
+				lineInfo[startLine + i] = ((offset + startOffsets[i])
+					| (0xff << VISIBLE_SHIFT));
 			}
 		}
 
@@ -215,11 +194,7 @@ public class OffsetManager
 
 	//{{{ Private members
 
-	//{{{ Static variables
-	private static final TokenMarker.LineContext SIMPLE_CONTEXT
-		= new TokenMarker.LineContext();
-
-	/* {{{ Format of entires in this array:
+	/* {{{ Format of entires in line info array:
 	 * 0-31: start
 	 * 32-47: fold level
 	 * 48-55: visibility bit flags
@@ -230,8 +205,13 @@ public class OffsetManager
 	 * Having all the info packed into a long is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
 	 *
-	 * jEdit has 12 bytes of overhead per line; with objects, that would be
-	 * about 30, plus the garbage collector overhead.
+	 * The new document model has just 12 bytes of overhead per line.
+	 * LineContext instances are now internalized, so only a few should
+	 * actually be in the heap.
+	 *
+	 * In the old document model there were 5 objects per line, for a
+	 * total of about 100 bytes, plus a cached token list, which used
+	 * another 100 or so bytes.
 	 * }}}*/
 	private static final long START_MASK = 0x00000000ffffffffL;
 	private static final long FOLD_LEVEL_MASK = 0x0000ffff00000000L;
@@ -241,20 +221,16 @@ public class OffsetManager
 	private static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
 	private static final long CONTEXT_VALID_MASK = (1L<<57);
 
-	//}}}
-
 	//{{{ Instance variables
 	private Buffer buffer;
 	private long[] lineInfo;
-
-	// entries in this array are either ParserRule or LineContext instances
-	private Object[] lineContext;
+	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;
 	//}}}
 
 	//{{{ setLineStartOffset() method
-	public final void setLineStartOffset(int line, int start)
+	private final void setLineStartOffset(int line, int start)
 	{
 		lineInfo[line] = ((lineInfo[line] & ~START_MASK) | start);
 	} //}}}

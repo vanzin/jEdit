@@ -737,6 +737,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				int nextLine = textArea.getFoldVisibilityManager()
 					.getNextVisibleLine(physicalLine);
+				if(nextLine == -1)
+					nextLine = buffer.getLineCount();
+
 				int count = nextLine - physicalLine - 1;
 				String str = " [" + count + " lines]";
 				gfx.drawString(str,x,baseLine);
