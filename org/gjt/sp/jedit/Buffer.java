@@ -928,6 +928,10 @@ public class Buffer extends PlainDocument implements EBComponent
 	public final void setReadOnly(boolean readOnly)
 	{
 		setFlag(READ_ONLY,readOnly);
+
+		// XXX: need a new message type?
+		EditBus.send(new BufferUpdate(this,null,
+			BufferUpdate.DIRTY_CHANGED));
 	}
 
 	/**
@@ -1771,6 +1775,8 @@ public class Buffer extends PlainDocument implements EBComponent
 				{
 					tokenBackground = styles[id].getBackgroundColor();
 					tokenForeground = styles[id].getForegroundColor();
+					if(tokenForeground == null)
+						tokenForeground = foreground;
 				}
 				else
 					tokenForeground = foreground;

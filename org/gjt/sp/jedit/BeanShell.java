@@ -78,7 +78,7 @@ public class BeanShell
 			}
 			catch(Throwable t)
 			{
-				// BeanShell error occured, abort execution
+				// BeanShell error occurred, abort execution
 			}
 
 			if(returnValue != null)
@@ -117,6 +117,11 @@ public class BeanShell
 					Selection s = selection[i];
 					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
 					{
+						// if selection ends on the start of a
+						// line, don't filter that line
+						if(s.getEnd() == textArea.getLineStartOffset(j))
+							break;
+
 						global.setVariable("line",new Integer(j));
 						global.setVariable("index",new Integer(
 							j - s.getStartLine()));
@@ -143,7 +148,7 @@ public class BeanShell
 			}
 			catch(Throwable e)
 			{
-				// BeanShell error occured, abort execution
+				// BeanShell error occurred, abort execution
 			}
 			finally
 			{

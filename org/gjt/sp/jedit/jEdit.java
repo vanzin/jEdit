@@ -66,7 +66,6 @@ public class jEdit
 
 	/**
 	 * The main method of the jEdit application.
-	 * <p>
 	 * This should never be invoked directly.
 	 * @param args The command line arguments
 	 */
@@ -91,6 +90,7 @@ public class jEdit
 			System.getProperty("user.home"),".jedit");
 		String portFile = "server";
 		boolean restore = true;
+		boolean gui = true; // open initial view?
 		boolean noStartupScripts = false;
 		String userDir = System.getProperty("user.dir");
 
@@ -132,6 +132,8 @@ public class jEdit
 					portFile = arg.substring(8);
 				else if(arg.startsWith("-background"))
 					background = true;
+				else if(arg.equals("-nogui"))
+					gui = false;
 				else if(arg.equals("-norestore"))
 					restore = false;
 				else if(arg.equals("-nostartupscripts"))
@@ -353,6 +355,12 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		Buffer buffer = openFiles(null,userDir,args);
+		if(buffer != null)
+		{
+			// files specified on command line; force initial view
+			// to open
+			gui = true;
+		}
 
 		String splitConfig = null;
 
@@ -363,33 +371,29 @@ public class jEdit
 			splitConfig = restoreOpenFiles();
 		}
 
+		if(bufferCount == 0 && gui)
+			newFile(null);
+
 		// Create the view and hide the splash screen.
 		final Buffer _buffer = buffer;
 		final String _splitConfig = splitConfig;
+		final boolean _gui = gui;
 
 		GUIUtilities.advanceSplashProgress();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
-				if(bufferCount == 0)
-					newFile(null);
-
 				EditBus.send(new EditorStarted(null));
 
-				View view;
-				if(_buffer != null)
-					view = newView(null,_buffer);
-				else
-					view = newView(null,_splitConfig);
-
-				// show tip of the day
-				if(jEdit.getBooleanProperty("firstTime"))
-					new HelpViewer("jeditresource:/doc/welcome.html");
-				else if(jEdit.getBooleanProperty("tip.show"))
-					new TipOfTheDay(view);
-
-				setBooleanProperty("firstTime",false);
+				if(_gui)
+				{
+					View view;
+					if(_buffer != null)
+						view = newView(null,_buffer);
+					else
+						view = newView(null,_splitConfig);
+				}
 
 				// Start I/O threads
 				VFSManager.start();
@@ -894,6 +898,7 @@ public class jEdit
 	 */
 	public static void addPluginJAR(EditPlugin.JAR plugin)
 	{
+		addActionSet(plugin.getActions());
 		jars.addElement(plugin);
 	}
 
@@ -1801,6 +1806,18 @@ public class jEdit
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
+		// show tip of the day
+		if(newView == viewsFirst)
+		{
+			if(getBooleanProperty("firstTime"))
+				new HelpViewer("jeditresource:/doc/welcome.html");
+			else if(jEdit.getBooleanProperty("tip.show"))
+				new TipOfTheDay(newView);
+
+			setBooleanProperty("firstTime",false);
+		}
+
+		GUIUtilities.requestFocus(newView,newView.getTextArea());
 		newView.show();
 
 		return newView;
@@ -1850,6 +1867,18 @@ public class jEdit
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
+		// show tip of the day
+		if(newView == viewsFirst)
+		{
+			if(getBooleanProperty("firstTime"))
+				new HelpViewer("jeditresource:/doc/welcome.html");
+			else if(jEdit.getBooleanProperty("tip.show"))
+				new TipOfTheDay(newView);
+
+			setBooleanProperty("firstTime",false);
+		}
+
+		GUIUtilities.requestFocus(newView,newView.getTextArea());
 		newView.show();
 
 		return newView;
@@ -2262,6 +2291,8 @@ public class jEdit
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
 		System.out.println("	-background: Run in background mode");
+		System.out.println("	-nogui: Only if running in background mode;"
+			+ " don't open initial view");
 		System.out.println("	-norestore: Don't restore previously open files");
 		System.out.println("	-run=<script>: Run the specified BeanShell script");
 		System.out.println("	-server: Read/write server"
@@ -2396,6 +2427,10 @@ public class jEdit
 		//	Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
 		jars = new Vector();
+
+		// Add an EditBus component that will reload edit modes and
+		// macros if they are changed from within the editor
+		EditBus.addToBus(new SettingsReloader());
 	}
 
 	/**

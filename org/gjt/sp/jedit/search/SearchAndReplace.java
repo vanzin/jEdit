@@ -315,7 +315,7 @@ public class SearchAndReplace
 			HyperSearchResults.NAME);
 		final HyperSearchResults results = (HyperSearchResults)
 			view.getDockableWindowManager()
-			.getDockableWindow(HyperSearchResults.NAME);
+			.getDockable(HyperSearchResults.NAME);
 		results.searchStarted();
 
 		try

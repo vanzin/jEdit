@@ -38,9 +38,8 @@ public class EditAbbrevDialog extends JDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		content.add(BorderLayout.NORTH,new JLabel(jEdit.getProperty(
-			"edit-abbrev.caption", new String[] { abbrev })));
 		editor = new AbbrevEditor();
+		editor.setAbbrev(abbrev);
 		editor.setExpansion(expansion);
 		editor.setBorder(new EmptyBorder(0,0,12,0));
 		content.add(BorderLayout.CENTER,editor);
@@ -70,6 +69,14 @@ public class EditAbbrevDialog extends JDialog
 		show();
 	}
 
+	public String getAbbrev()
+	{
+		if(!isOK)
+			return null;
+
+		return editor.getAbbrev();
+	}
+
 	public String getExpansion()
 	{
 		if(!isOK)
@@ -90,7 +97,16 @@ public class EditAbbrevDialog extends JDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
+			{
+				if(editor.getAbbrev() == null
+					|| editor.getAbbrev().length() == 0)
+				{
+					getToolkit().beep();
+					return;
+				}
+
 				isOK = true;
+			}
 
 			dispose();
 		}

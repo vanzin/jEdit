@@ -1986,6 +1986,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void setOverwriteEnabled(boolean overwrite)
 	{
+		blink = true;
+		caretTimer.restart();
+
 		this.overwrite = overwrite;
 		invalidateLine(caretLine);
 		if(view.getStatus() != null)
@@ -1998,10 +2001,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void toggleOverwriteEnabled()
 	{
-		overwrite = !overwrite;
-		invalidateLine(caretLine);
-		if(view.getStatus() != null)
-			view.getStatus().updateMiscStatus();
+		setOverwriteEnabled(!overwrite);
 	}
 
 	/**

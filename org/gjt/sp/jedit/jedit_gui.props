@@ -991,15 +991,14 @@ close.discard.mnemonic=d
 
 # Add abbrev dialog
 add-abbrev.title=Add Abbreviation
-add-abbrev.caption=Enter an expansion for abbreviation "{0}":
 add-abbrev.mode=Add mode-specific
 add-abbrev.global=Add global
 
 # Edit abbrev dialog
 edit-abbrev.title=Edit Abbreviation
-edit-abbrev.caption=Enter an expansion for abbreviation "{0}":
 
 # Abbrev editor control
+abbrev-editor.abbrev=Abbreviation:
 abbrev-editor.before=Text to insert before caret:
 abbrev-editor.after=Text to insert after caret:
 
@@ -1119,8 +1118,13 @@ buffer-options.title=Buffer Options
 buffer-options.mode=Edit mode:
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
+buffer-options.readOnly=Read only
 buffer-options.trailingEOL=Trailing end-of-line at end of file
 buffer-options.props=Corresponding buffer-local properties: (C+c copies)
+
+buffer-options.readOnly.title=Cannot Make Read Only
+buffer-options.readOnly.message=This buffer has unsaved changes. It cannot be\n\
+	made read only.
 
 # Global options dialog
 options.title=Global Options
@@ -1306,6 +1310,9 @@ options.abbrevs.set=Abbrev set:
 options.abbrevs.expandOnInput=Space bar expands abbrevs
 options.abbrevs.abbrev=Abbrev
 options.abbrevs.expand=Expansion
+options.abbrevs.add=Add...
+options.abbrevs.edit=Edit...
+options.abbrevs.remove=Remove
 
 options.shortcuts.label=Shortcuts
 options.shortcuts.select.label=Edit Shortcuts:

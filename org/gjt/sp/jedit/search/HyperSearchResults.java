@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.search;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.tree.*;
 import java.awt.*;
@@ -66,6 +67,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		resultTree.putClientProperty("JTree.lineStyle", "Angled");
 		resultTree.setEditable(false);
 
+		resultTree.addTreeSelectionListener(new TreeSelectionHandler());
 		resultTree.addMouseListener(new MouseHandler());
 
 		JScrollPane scrollPane = new JScrollPane(resultTree);
@@ -171,6 +173,51 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
 
+	private void goToSelectedNode()
+	{
+		TreePath path = resultTree.getSelectionPath();
+		if(path == null)
+			return;
+
+		Object value = ((DefaultMutableTreeNode)path
+			.getLastPathComponent()).getUserObject();
+
+		if(value instanceof String)
+		{
+			Buffer buffer = jEdit.openFile(view,(String)value);
+			if(buffer == null)
+				return;
+
+			view.setBuffer(buffer);
+			view.toFront();
+			view.requestFocus();
+		}
+		else
+		{
+			final HyperSearchResult result = (HyperSearchResult)value;
+			final Buffer buffer = result.getBuffer();
+
+			if(buffer == null)
+				return;
+
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					int pos = result.linePos.getOffset();
+					view.setBuffer(buffer);
+					JEditTextArea textArea = view.getTextArea();
+					if(textArea.isMultipleSelectionEnabled())
+						textArea.moveCaretPosition(pos);
+					else
+						textArea.setCaretPosition(pos);
+					view.toFront();
+					view.requestFocus();
+				}
+			});
+		}
+	}
+
 	private void updateCaption(int resultCount, int bufferCount)
 	{
 		Object[] pp = { new Integer(resultCount), new Integer(bufferCount) };
@@ -181,51 +228,29 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			TreePath path = resultTree.getPathForLocation(
+			TreePath path1 = resultTree.getPathForLocation(
 				evt.getX(),evt.getY());
-			if(path == null)
+			if(path1 == null)
 				return;
 
-			Object value = ((DefaultMutableTreeNode)path
-				.getLastPathComponent()).getUserObject();
-
-			if(value instanceof String)
+			TreePath path2 = resultTree.getSelectionPath();
+			// if same thing selected twice, another selection event
+			// is not sent, so we handle it in the mouse event
+			if(path1.equals(path2))
 			{
-				Buffer buffer = jEdit.openFile(view,(String)value);
-				if(buffer == null)
-					return;
-
-				view.setBuffer(buffer);
-				view.toFront();
-				view.requestFocus();
-			}
-			else
-			{
-				final HyperSearchResult result = (HyperSearchResult)value;
-				final Buffer buffer = result.getBuffer();
-
-				if(buffer == null)
-					return;
-
-				VFSManager.runInAWTThread(new Runnable()
-				{
-					public void run()
-					{
-						int pos = result.linePos.getOffset();
-						view.setBuffer(buffer);
-						JEditTextArea textArea = view.getTextArea();
-						if(textArea.isMultipleSelectionEnabled())
-							textArea.moveCaretPosition(pos);
-						else
-							textArea.setCaretPosition(pos);
-						view.toFront();
-						view.requestFocus();
-					}
-				});
+				resultTree.setSelectionPath(path1);
+				goToSelectedNode();
 			}
 		}
 	}
 
+	class TreeSelectionHandler implements TreeSelectionListener
+	{
+		public void valueChanged(TreeSelectionEvent evt)
+		{
+			goToSelectedNode();
+		}
+	}
 
 	class ResultCellRenderer extends DefaultTreeCellRenderer
 	{

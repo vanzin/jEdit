@@ -1012,16 +1012,8 @@ public class View extends JFrame implements EBComponent
 
 	class WindowHandler extends WindowAdapter
 	{
-		boolean gotFocus;
-
 		public void windowActivated(WindowEvent evt)
 		{
-			if(!gotFocus)
-			{
-				editPane.focusOnTextArea();
-				gotFocus = true;
-			}
-
 			final Vector buffers = new Vector();
 			EditPane[] editPanes = getEditPanes();
 			for(int i = 0; i < editPanes.length; i++)

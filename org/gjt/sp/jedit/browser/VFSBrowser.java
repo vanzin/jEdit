@@ -790,14 +790,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 				setDirectory(System.getProperty("user.home"));
 			else if(source == synchronize)
 			{
-				if(view != null)
-				{
-					Buffer buffer = view.getBuffer();
-					setDirectory(buffer.getVFS().getParentOfPath(
-						buffer.getPath()));
-				}
-				else
-					getToolkit().beep();
+				Buffer buffer = view.getBuffer();
+				setDirectory(buffer.getVFS().getParentOfPath(
+					buffer.getPath()));
 			}
 		}
 	}

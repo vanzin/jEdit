@@ -139,7 +139,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowser.NAME);
+			.getDockable(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -168,7 +168,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowser.NAME);
+			.getDockable(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -449,7 +449,6 @@ public class Macros
 
 	static
 	{
-		EditBus.addToBus(new MacrosEBComponent());
 		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
 		jEdit.addActionSet(macroActionSet);
 		macroHierarchy = new Vector();
@@ -503,48 +502,6 @@ public class Macros
 		// setting the message to 'null' causes the status bar to check
 		// if a recording is in progress
 		view.getStatus().setMessage(null);
-	}
-
-	static class MacrosEBComponent implements EBComponent
-	{
-		public void handleMessage(EBMessage msg)
-		{
-			if(msg instanceof BufferUpdate)
-			{
-				BufferUpdate bmsg = (BufferUpdate)msg;
-				if(bmsg.getWhat() == BufferUpdate.DIRTY_CHANGED
-					&& !bmsg.getBuffer().isDirty())
-					maybeReloadMacros(bmsg.getBuffer().getPath());
-			}
-			else if(msg instanceof VFSUpdate)
-			{
-				maybeReloadMacros(((VFSUpdate)msg).getPath());
-			}
-		}
-
-		private void maybeReloadMacros(String path)
-		{
-			// On Windows and MacOS, path names are case insensitive
-			if(File.separatorChar == '\\' || File.separatorChar == ':')
-			{
-				path = path.toLowerCase();
-				if(systemMacroPath != null && path.startsWith(
-					systemMacroPath.toLowerCase()))
-					loadMacros();
-
-				if(userMacroPath != null && path.startsWith(
-					userMacroPath.toLowerCase()))
-					loadMacros();
-			}
-			else
-			{
-				if(systemMacroPath != null && path.startsWith(systemMacroPath))
-					loadMacros();
-
-				if(userMacroPath != null && path.startsWith(userMacroPath))
-					loadMacros();
-			}
-		}
 	}
 
 	public static class Recorder implements EBComponent

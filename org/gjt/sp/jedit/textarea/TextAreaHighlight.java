@@ -1,6 +1,6 @@
 /*
  * TextAreaHighlight.java - Paints custom highlights in the text area
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,13 +32,6 @@ import java.awt.event.MouseEvent;
  */
 public interface TextAreaHighlight
 {
-	/**
-	 * Called after the highlight painter has been added.
-	 * @param textArea The text area
-	 * @param next The painter this one should delegate to
-	 */
-	void init(JEditTextArea textArea, TextAreaHighlight next);
-
 	/**
 	 * This should paint the highlight and delgate to the
 	 * next highlight painter.

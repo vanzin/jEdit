@@ -264,7 +264,7 @@ public class EditPane extends JPanel implements EBComponent
 		textArea = new JEditTextArea(view);
 
 		add(BorderLayout.CENTER,textArea);
-		markerHighlight = new MarkerHighlight();
+		markerHighlight = new MarkerHighlight(textArea);
 		textArea.getGutter().addCustomHighlight(markerHighlight);
 
 		propertiesChanged();

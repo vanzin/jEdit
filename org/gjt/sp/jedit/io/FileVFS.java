@@ -130,10 +130,13 @@ public class FileVFS extends VFS
 		}
 
 		// On Unix, preserve permissions
-		int permissions = getPermissions(buffer.getPath());
-		Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
-			+ Integer.toString(permissions,8));
-		buffer.putProperty(PERMISSIONS_PROPERTY,new Integer(permissions));
+		if(isUnix)
+		{
+			int permissions = getPermissions(buffer.getPath());
+			Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
+				+ Integer.toString(permissions,8));
+			buffer.putProperty(PERMISSIONS_PROPERTY,new Integer(permissions));
+		}
 
 		return super.save(view,buffer,path);
 	}
