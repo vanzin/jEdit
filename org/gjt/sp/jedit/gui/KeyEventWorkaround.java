@@ -219,7 +219,6 @@ public class KeyEventWorkaround
 			{
 			case KeyEvent.VK_ALT:
 				modifiers &= ~InputEvent.ALT_MASK;
-				last = LAST_ALT;
 				lastKeyTime = System.currentTimeMillis();
 				return null;
 			case KeyEvent.VK_ALT_GRAPH:
@@ -234,6 +233,13 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_META:
 				modifiers &= ~InputEvent.META_MASK;
 				return null;
+			case KeyEvent.VK_LEFT:
+			case KeyEvent.VK_RIGHT:
+				/* workaround for A+LEFT/RIGHT producing
+				 * garbage on Windows */
+				if(modifiers == InputEvent.ALT_MASK)
+					last = LAST_ALT;
+				break;
 			}
 			return evt;
 		//}}}

@@ -48,6 +48,7 @@ public class PositionManager
 	//{{{ createPosition() method
 	public synchronized Position createPosition(int offset)
 	{
+		//System.err.println(this + ": create " + offset);
 		PosBottomHalf bh;
 
 		if(root == null)
@@ -66,12 +67,33 @@ public class PositionManager
 			}
 		}
 
-		if(Debug.POSITION_DEBUG)
-			root.dump(0);
+		if(root != null)
+		check(root,new java.util.Vector());
+		/* if(Debug.POSITION_DEBUG)
+			root.dump(0); */
 
+		//check(root,new java.util.Vector());
 		return new PosTopHalf(bh);
 	} //}}}
 
+	void check(PosBottomHalf bh, java.util.Vector vec)
+	{
+		if(vec.contains(bh))
+			throw new InternalError("Foo!");
+		vec.add(bh);
+		if(bh.left != null)
+		{
+			if(bh.left.parent != bh)
+				throw new InternalError("bitch");
+			check(bh.left,vec);
+		}
+		if(bh.right != null)
+		{
+			if(bh.right.parent != bh)
+				throw new InternalError("nigga");
+			check(bh.right,vec);
+		}
+	}
 	//{{{ contentInserted() method
 	public synchronized void contentInserted(int offset, int length)
 	{
@@ -694,10 +716,13 @@ public class PositionManager
 			// Write-only code for constructing a meaningful tree
 			if(Debug.POSITION_DEBUG)
 				Log.log(Log.DEBUG,this,"583: "+nodes[1]+":" + nodes[3]);
+			if(nodes[0] != null)
+				nodes[0].parent = nodes[1];
 			nodes[1].parent = nodes[3];
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
-
+			if(nodes[2] != null)
+				nodes[2].parent = nodes[1];
 			if(Debug.POSITION_DEBUG)
 				Log.log(Log.DEBUG,this,"setting parent to " + t);
 			if(Debug.POSITION_DEBUG)
@@ -708,9 +733,13 @@ public class PositionManager
 
 			if(Debug.POSITION_DEBUG)
 				Log.log(Log.DEBUG,this,"595: "+nodes[5]+":" + nodes[3]);
+			if(nodes[4] != null)
+				nodes[4].parent = nodes[5];
 			nodes[5].parent = nodes[3];
 			nodes[5].left   = nodes[4];
 			nodes[5].right  = nodes[6];
+			if(nodes[6] != null)
+				nodes[6].parent = nodes[5];
 
 			return nodes[3];
 		} //}}}

@@ -83,6 +83,14 @@ Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
 - Added an option for the "deep indent" setting to the Editing option
   pane.
 
+- "Save as" did not update the buffer map properly if buffer sorting was
+  switched off, or if symbolic links were involved.
+
+- Heredocs in PHP are <<< not <<.
+
+- Position code was incorrectly balancing the tree, and this caused
+  various problems such as hangs and various exceptions.
+
 }}}
 {{{ API Changes
 

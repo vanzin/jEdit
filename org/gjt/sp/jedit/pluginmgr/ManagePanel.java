@@ -171,7 +171,7 @@ public class ManagePanel extends JPanel
 	class PluginTableModel extends AbstractTableModel
 	{
 		private List entries;
-		private int sortType = EntryCompare.JAR;
+		private int sortType = EntryCompare.NAME;
 
 		//{{{ Constructor
 		public PluginTableModel()
@@ -480,7 +480,6 @@ public class ManagePanel extends JPanel
 	//{{{ EntryCompare class
 	static class EntryCompare implements Comparator
 	{
-		public static final int JAR = 0;
 		public static final int NAME = 1;
 		public static final int STATUS = 2;
 
@@ -496,16 +495,19 @@ public class ManagePanel extends JPanel
 			Entry e1 = (Entry)o1;
 			Entry e2 = (Entry)o2;
 
-			if (type == JAR)
-				return e1.jar.compareToIgnoreCase(e2.jar);
-			else if (type == NAME)
+			if (type == NAME)
 			{
-				if(e1.name == null && e2.name != null)
-					return 1;
-				else if(e1.name != null && e2.name == null)
-					return -1;
+				String s1, s2;
+				if(e1.name == null)
+					s1 = e1.jar;
 				else
-					return e1.name.compareToIgnoreCase(e2.name);
+					s1 = e1.name;
+				if(e2.name == null)
+					s2 = e2.jar;
+				else
+					s2 = e2.name;
+
+				return s1.compareToIgnoreCase(s2);
 			}
 			else
 			{
@@ -525,12 +527,9 @@ public class ManagePanel extends JPanel
 			switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
 			{
 				case 1:
-					pluginModel.setSortType(EntryCompare.JAR);
-					break;
-				case 2:
 					pluginModel.setSortType(EntryCompare.NAME);
 					break;
-				case 3:
+				case 2:
 					pluginModel.setSortType(EntryCompare.STATUS);
 					break;
 				default:

@@ -3,10 +3,10 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Progress v9.1d mode by Patrick Tingen          -->
-<!-- ---------------------------------------------- -->
+<!--                                                -->
 <!-- 2002-10-08 Gerben Wieringa added some keywords -->
 <!-- 2003-02-18 Patrick Tingen  added some keywords -->
-<!-- ---------------------------------------------- -->
+<!--                                                -->
 
 <MODE>
 	<PROPS>
@@ -16,8 +16,6 @@
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 
 		<!-- Normal comments. -->
 		<SPAN TYPE="COMMENT1">
