@@ -1,5 +1,8 @@
 /*
  * OptionsDialog.java - Tree options dialog
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -29,6 +33,7 @@ import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * An abstract tabbed options dialog box.
@@ -38,7 +43,8 @@ import org.gjt.sp.util.Log;
 public abstract class OptionsDialog extends EnhancedDialog
 	implements ActionListener, TreeSelectionListener
 {
-	public OptionsDialog(View view, String name)
+	//{{{ OptionsDialog constructor
+	public OptionsDialog(View view, String name, String pane)
 	{
 		super(view, jEdit.getProperty(name + ".title"), true);
 
@@ -62,7 +68,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		stage.add(cardPanel, BorderLayout.CENTER);
 
 		paneTree = new JTree(createOptionTreeModel());
-
+		paneTree.setVisibleRowCount(1);
 		paneTree.setCellRenderer(new PaneNameRenderer());
 
 		// looks bad with the OS X L&F, apparently...
@@ -72,11 +78,11 @@ public abstract class OptionsDialog extends EnhancedDialog
 		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
 
-		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			new JScrollPane(paneTree,
+		JScrollPane scroller = new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
-			stage);
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+			scroller,stage);
 		content.add(splitter, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -111,38 +117,43 @@ public abstract class OptionsDialog extends EnhancedDialog
 			new Object[] { rootNode, rootNode.getMember(i) }));
 		}
 
-		paneTree.setSelectionRow(0);
+		if(pane == null || !selectPane(rootNode,pane))
+			selectPane(rootNode,firstPane);
 
 		view.hideWaitCursor();
 
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
+	} //}}}
 
+	//{{{ addOptionGroup() method
 	public void addOptionGroup(OptionGroup group)
 	{
 		addOptionGroup(group, getDefaultGroup());
-	}
+	} //}}}
 
+	//{{{ addOptionPane() method
 	public void addOptionPane(OptionPane pane)
 	{
 		addOptionPane(pane, getDefaultGroup());
-	}
+	} //}}}
 
-	// EnhancedDialog implementation
+	//{{{ ok() method
 	public void ok()
 	{
+		jEdit.setProperty(name + ".last",currentPane);
 		ok(true);
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
-		GUIUtilities.saveGeometry(this,name);
+		jEdit.setProperty(name + ".last",currentPane);
 		dispose();
-	}
-	// end EnhancedDialog implementation
+	} //}}}
 
+	//{{{ ok() method
 	public void ok(boolean dispose)
 	{
 		OptionTreeModel m = (OptionTreeModel) paneTree
@@ -158,8 +169,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 		// get rid of this dialog if necessary
 		if(dispose)
 			dispose();
-	}
+	} //}}}
 
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
@@ -176,8 +188,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 		{
 			ok(false);
 		}
-	}
+	} //}}}
 
+	//{{{ valueChanged() method
 	public void valueChanged(TreeSelectionEvent evt)
 	{
 		TreePath path = evt.getPath();
@@ -235,21 +248,14 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		pack();
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
-	}
+		currentPane = name;
+	} //}}}
 
+	//{{{ Protected members
 	protected abstract OptionTreeModel createOptionTreeModel();
 	protected abstract OptionGroup getDefaultGroup();
 
-	// private members
-	private String name;
-	private Hashtable panes;
-	private JTree paneTree;
-	private JPanel cardPanel;
-	private JLabel currentLabel;
-	private JButton ok;
-	private JButton cancel;
-	private JButton apply;
-
+	//{{{ addOptionGroup() method
 	protected void addOptionGroup(OptionGroup child, OptionGroup parent)
 	{
 		Enumeration enum = child.getMembers();
@@ -269,17 +275,90 @@ public abstract class OptionsDialog extends EnhancedDialog
 		}
 
 		parent.addOptionGroup(child);
-	}
+	} //}}}
 
+	//{{{ addOptionPane() method
 	protected void addOptionPane(OptionPane pane, OptionGroup parent)
 	{
 		String name = pane.getName();
+		if(firstPane == null)
+			firstPane = name;
 
 		cardPanel.add(pane.getComponent(), name);
 
 		parent.addOptionPane(pane);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private String name;
+	private JTree paneTree;
+	private JPanel cardPanel;
+	private JLabel currentLabel;
+	private JButton ok;
+	private JButton cancel;
+	private JButton apply;
+	private String currentPane;
+	private String firstPane;
+	//}}}
+
+	//{{{ selectPane() method
+	private boolean selectPane(OptionGroup node, String name)
+	{
+		return selectPane(node,name,new ArrayList());
+	} //}}}
+
+	//{{{ selectPane() method
+	private boolean selectPane(OptionGroup node, String name, ArrayList path)
+	{
+		path.add(node);
+
+		Enumeration enum = node.getMembers();
+		while(enum.hasMoreElements())
+		{
+			Object obj = enum.nextElement();
+			if(obj instanceof OptionGroup)
+			{
+				OptionGroup grp = (OptionGroup)obj;
+				if(grp.getName().equals(name))
+				{
+					path.add(grp);
+					path.add(grp.getMember(0));
+					TreePath treePath = new TreePath(
+						path.toArray());
+					paneTree.scrollPathToVisible(treePath);
+					paneTree.setSelectionPath(treePath);
+					return true;
+				}
+				else if(selectPane((OptionGroup)obj,name,path))
+					return true;
+			}
+			else
+			{
+				OptionPane pane = (OptionPane)obj;
+				if(pane.getName().equals(name))
+				{
+					path.add(pane);
+					TreePath treePath = new TreePath(
+						path.toArray());
+					paneTree.scrollPathToVisible(treePath);
+					paneTree.setSelectionPath(treePath);
+					return true;
+				}
+			}
+		}
+
+		path.remove(node);
+
+		return false;
+	} //}}}
+
+	//}}}
+
+	//{{{ PaneNameRenderer class
 	class PaneNameRenderer extends DefaultTreeCellRenderer
 	{
 		public PaneNameRenderer()
@@ -334,8 +413,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		private Font paneFont;
 		private Font groupFont;
-	}
+	} //}}}
 
+	//{{{ OptionTreeModel class
 	public class OptionTreeModel implements TreeModel
 	{
 		public void addTreeModelListener(TreeModelListener l)
@@ -490,5 +570,5 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		private OptionGroup root = new OptionGroup(null);
 		private EventListenerList listenerList = new EventListenerList();
-	}
+	} //}}}
 }

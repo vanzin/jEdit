@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- some min. width and height for global options?
 - clean up the way macro hierarchy is stored
 - dialog parenting for fsb colors pane, vfs browser dialog
 - docs incorrect w.r.t. C+e C+j
