@@ -7,8 +7,8 @@ easily. -->
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
-		<PROPERTY NAME="indentNextLines" VALUE="^:[^;]*"/>
+		<PROPERTY NAME="indentNextLines" VALUE="^:[^;]*"/>>
+		<PROPERTY NAME="unindentNextLines" VALUE="^.*;$"/>
 		<PROPERTY NAME="commentStart" VALUE="("/>
 		<PROPERTY NAME="commentEnd" VALUE=")"/>
 		<PROPERTY NAME="lineComment" VALUE="|"/>

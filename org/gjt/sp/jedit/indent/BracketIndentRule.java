@@ -26,15 +26,11 @@ import gnu.regexp.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.Buffer;
 
-public abstract class BracketIndentRule extends IndentRule
+public abstract class BracketIndentRule implements IndentRule
 {
 	//{{{ BracketIndentRule constructor
-	public BracketIndentRule(char openBracket, char closeBracket,
-		IndentAction prevPrev, IndentAction prev,
-		IndentAction thisLine)
+	public BracketIndentRule(char openBracket, char closeBracket)
 	{
-		super(prevPrev,prev,thisLine);
-
 		this.openBracket = openBracket;
 		this.closeBracket = closeBracket;
 	} //}}}

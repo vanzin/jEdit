@@ -16,21 +16,36 @@ and quirks that I need to fix eventually.
 
 4.3pre2:
 
+- jedit -nosettings test.java; new file: fucks up
+- file size not in list
 - auto indent:
-  - align close bracket
-  - lisp close bracket rule
-  - don't indent >= 1
   - deep indent
   - investigate CL indent
+  - electric keys property
 - some fastrepaint bugs
 - option to disable buffer local properties
+- option to disable electric keys
 - hypersearch results & folds
 - more configurable file system browser
   - at least, preserve column widths
 - CA+PLUS +: bad
+- bsh bugs:
+  ; after else if()
+  longs not read correctly if prefixed with 0x
+- C+b -- click -- keys don't work
+- remove-marker, select-next/prev-marker/bracket
+- expand fold: try to expand even if already expanded
+- don't show 'new directory' in favorites:
 
 + 4.3 drivers:
 
+- auto indent:
+  if(foo)
+    while(bar)
+    {
+      //
+    }
+  <--- cursor here
 - backspace with virtual caret: needs tweaks
 - new file: explicit folding: type {{{: fold marker doesn't appear
 - finish code to hide caret on user input; enter is a problem
@@ -150,7 +165,6 @@ dragOver() method)
 - complete word not wide enough
 - test keyboard completion with expanded/collapsed tree
 - test keyboard completion with high latency VFS
-- option to disable context menu
 - plugin mgr inspection of not-loaded plugins
 - history text field tweak
 - printing: check default printer setting
@@ -158,33 +172,18 @@ dragOver() method)
 
 + obscure:
 
-- bsh bugs:
-  ; after else if()
-  longs not read correctly if prefixed with 0x
 - no need to wait for requests after newFile()
 - class loading problems
 - motif l&f: shortcuts in menu items
 - some JLists do not auto-scroll on keystroke
-- C+b -- click -- keys don't work
 - how to handle S+0-9?
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- auto indent: don't de-indent on enter if no leading indent at all?
-- remove-marker, select-next/prev-marker/bracket
 - invoking action bar command twice
 - backup time distance setting
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- expand fold: try to expand even if already expanded
 - format -- instead of \n\n, what if it has \n   \n?
 - C+ENTER 3 C+2
-- don't show 'new directory' in favorites:
-- auto indent:
-  if(foo)
-    while(bar)
-    {
-      //
-    }
-  <--- cursor here
 
 + performance:
 
@@ -196,7 +195,6 @@ dragOver() method)
 - replace all in a directory could be faster
 - buffer.setMode() slow
 - eliminate redundant scans and events when loading buffer
-- make vfs listing faster
 - don't repaint whole selection when resizing
 - could make non-soft wrap chunk merge even faster!
 - syntax SPAN::END substitution: String --> char[] --> String

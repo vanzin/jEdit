@@ -1527,9 +1527,7 @@ public class Buffer
 
 		String[] regexpProps = {
 			"indentNextLine",
-			"indentNextLines",
-			"unindentThisLine",
-			"unindentNextLines"
+			"indentNextLines"
 		};
 
 		for(int i = 0; i < regexpProps.length; i++)
@@ -1540,13 +1538,27 @@ public class Buffer
 		}
 
 		String[] bracketProps = {
-			"indentOpenBrackets",
-			"indentCloseBrackets",
+			"unalignedOpenBracket",
+			"unalignedCloseBracket",
+			"indentOpenBracket",
+			"indentCloseBracket",
 		};
 
 		for(int i = 0; i < bracketProps.length; i++)
 		{
 			indentRules.addAll(createBracketIndentRules(bracketProps[i]));
+		}
+
+		String[] finalProps = {
+			"unindentThisLine",
+			"unindentNextLines"
+		};
+
+		for(int i = 0; i < regexpProps.length; i++)
+		{
+			IndentRule rule = createRegexpIndentRule(finalProps[i]);
+			if(rule != null)
+				indentRules.add(rule);
 		}
 
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
@@ -2422,19 +2434,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getIdealIndentForLine(int lineIndex)
 	{
-		String line = getLineText(lineIndex);
-
 		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
-		String prevLine = (prevLineIndex < 0 ? null
-			: getLineText(prevLineIndex));
-
 		int prevPrevLineIndex = prevLineIndex < 0 ? -1
 			: getPriorNonEmptyLine(prevLineIndex);
-		String prevPrevLine = (prevPrevLineIndex < 0 ? null
-			: getLineText(prevPrevLineIndex));
 
-		int oldIndent = (prevLine == null ? 0 :
-			MiscUtilities.getLeadingWhiteSpaceWidth(prevLine,
+		int oldIndent = (prevLineIndex == -1 ? 0 :
+			MiscUtilities.getLeadingWhiteSpaceWidth(
+			getLineText(prevLineIndex),
 			getTabSize()));
 		int newIndent = oldIndent;
 
@@ -2442,8 +2448,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		while(rules.hasNext())
 		{
 			IndentRule rule = (IndentRule)rules.next();
-			IndentAction action = rule.apply(this,line,
-				prevLine,prevPrevLine,lineIndex);
+			IndentAction action = rule.apply(this,lineIndex,
+				prevLineIndex,prevPrevLineIndex);
 			if(action != null)
 			{
 				newIndent = action.calculateIndent(this,lineIndex,

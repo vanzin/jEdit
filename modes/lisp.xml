@@ -8,9 +8,8 @@
 		<PROPERTY NAME="commentEnd" VALUE=" |#" />
 		<PROPERTY NAME="lineComment" VALUE=";" />
 		<PROPERTY NAME="noWordSep" VALUE="_-+?:" />
-		<PROPERTY NAME="indentOpenBrackets" VALUE="(" />
-		<PROPERTY NAME="indentCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="lineUpClosingBracket" VALUE="false" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="FALSE"

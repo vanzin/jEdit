@@ -30,19 +30,32 @@ import org.gjt.sp.jedit.TextUtilities;
 public class OpenBracketIndentRule extends BracketIndentRule
 {
 	//{{{ OpenBracketIndentRule constructor
-	public OpenBracketIndentRule(char openBracket,
-		IndentAction prevPrev, IndentAction prev,
-		IndentAction thisLine)
+	public OpenBracketIndentRule(char openBracket, boolean aligned)
 	{
 		super(openBracket,
 			TextUtilities.getComplementaryBracket(openBracket,
-			new boolean[1]),
-			prevPrev,prev,thisLine);
+			new boolean[1]));
+		this.aligned = aligned;
 	} //}}}
-	
+
+	//{{{ apply() method
+	public IndentAction apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex)
+	{
+		if(aligned && isMatch(buffer.getLineText(thisLineIndex)))
+			return new IndentAction.Reset();
+		else if(prevLineIndex != -1 && isMatch(
+			buffer.getLineText(prevLineIndex)))
+			return new IndentAction.Increase();
+		else
+			return null;
+	} //}}}
+
 	//{{{ isMatch() method
 	public boolean isMatch(String line)
 	{
 		return getBrackets(line).openCount != 0;
 	} //}}}
+	
+	private boolean aligned;
 }
