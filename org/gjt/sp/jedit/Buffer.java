@@ -211,15 +211,10 @@ public class Buffer
 					return false;
 				}
 
-				if(isNewFile())
-					/* ie, checkFileForLoad() set this */;
-				else
+				if(!vfs.load(view,this,path))
 				{
-					if(!vfs.load(view,this,path))
-					{
-						setFlag(LOADING,false);
-						return false;
-					}
+					setFlag(LOADING,false);
+					return false;
 				}
 			}
 		}
@@ -749,7 +744,7 @@ public class Buffer
 			|| getFlag(IO) || getFlag(LOADING));
 	} //}}}
 
-	//{{{ isReadOnly() method
+	//{{{ setReadOnly() method
 	/**
 	 * Sets the read only flag.
 	 * @param readOnly The read only flag
@@ -3645,14 +3640,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(vfs instanceof FileVFS)
 		{
 			file = new File(path);
-			try
-			{
-				symlinkPath = file.getCanonicalPath();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-			}
+			symlinkPath = MiscUtilities.resolveSymlinks(path);
 
 			// if we don't do this, the autosave file won't be
 			// deleted after a save as

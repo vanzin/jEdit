@@ -955,6 +955,7 @@ public class jEdit
 				{
 					plugin.getPluginJAR().activatePlugin();
 					plugin = plugin.getPluginJAR().getPlugin();
+					break;
 				}
 			}
 		}

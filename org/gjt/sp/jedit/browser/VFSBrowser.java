@@ -563,6 +563,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				session,vfs,files[i].deletePath,
 				null,null,null));
 		}
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				endRequest();
+			}
+		});
 	} //}}}
 
 	//{{{ rename() method
@@ -589,6 +597,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
 			session,vfs,from,to,null,null));
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				endRequest();
+			}
+		});
 	} //}}}
 
 	//{{{ mkdir() method
@@ -628,6 +644,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
 			session,vfs,newDirectory,null,null,null));
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				endRequest();
+			}
+		});
 	} //}}}
 
 	//{{{ newFile() method

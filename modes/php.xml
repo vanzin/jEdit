@@ -1387,6 +1387,7 @@
 			<KEYWORD2>mcrypt_enc_self_test</KEYWORD2>
 			<KEYWORD2>mcrypt_encrypt</KEYWORD2>
 			<KEYWORD2>mcrypt_generic</KEYWORD2>
+			<KEYWORD2>mcrypt_generic_deinit</KEYWORD2>
 			<KEYWORD2>mcrypt_generic_end</KEYWORD2>
 			<KEYWORD2>mcrypt_generic_init</KEYWORD2>
 			<KEYWORD2>mcrypt_get_block_size</KEYWORD2>
