@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -32,7 +33,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class RecentDirectoriesMenu extends EnhancedMenu
+public class RecentDirectoriesMenu extends EnhancedMenu implements MenuListener
 {
 	//{{{ RecentDirectoriesMenu constructor
 	public RecentDirectoriesMenu()
@@ -40,82 +41,80 @@ public class RecentDirectoriesMenu extends EnhancedMenu
 		super("recent-directories");
 	} //}}}
 
-	//{{{ setPopupMenuVisible() method
-	public void setPopupMenuVisible(boolean b)
+	//{{{ menuSelected() method
+	public void menuSelected(MenuEvent evt)
 	{
-		if(b)
+		final View view = GUIUtilities.getView(this);
+
+		if(getMenuComponentCount() != 0)
+			removeAll();
+
+		//{{{ ActionListener...
+		ActionListener actionListener = new ActionListener()
 		{
-			final View view = GUIUtilities.getView(this);
-
-			if(getMenuComponentCount() != 0)
-				removeAll();
-
-			//{{{ ActionListener...
-			ActionListener actionListener = new ActionListener()
+			public void actionPerformed(ActionEvent evt)
 			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					VFSBrowser.browseDirectory(view,evt.getActionCommand());
+				VFSBrowser.browseDirectory(view,evt.getActionCommand());
 
-					view.getStatus().setMessage(null);
-				}
-			}; //}}}
+				view.getStatus().setMessage(null);
+			}
+		}; //}}}
 
-			//{{{ MouseListener...
-			MouseListener mouseListener = new MouseAdapter()
+		//{{{ MouseListener...
+		MouseListener mouseListener = new MouseAdapter()
+		{
+			public void mouseEntered(MouseEvent evt)
 			{
-				public void mouseEntered(MouseEvent evt)
-				{
-					view.getStatus().setMessage(
-						((JMenuItem)evt.getSource())
-						.getActionCommand());
-				}
-
-				public void mouseExited(MouseEvent evt)
-				{
-					view.getStatus().setMessage(null);
-				}
-			}; //}}}
-
-			HistoryModel model = HistoryModel.getModel("vfs.browser.path");
-			if(model.getSize() == 0)
-			{
-				add(GUIUtilities.loadMenuItem("no-recent-dirs"));
-				super.setPopupMenuVisible(b);
-				return;
+				view.getStatus().setMessage(
+					((JMenuItem)evt.getSource())
+					.getActionCommand());
 			}
 
-			boolean sort = jEdit.getBooleanProperty("sortRecent");
-
-			Vector menuItems = new Vector();
-
-			for(int i = 0; i < model.getSize(); i++)
+			public void mouseExited(MouseEvent evt)
 			{
-				String path = model.getItem(i);
-				VFS vfs = VFSManager.getVFSForPath(path);
-				JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
-				menuItem.setActionCommand(path);
-				menuItem.addActionListener(actionListener);
-				menuItem.addMouseListener(mouseListener);
-				menuItem.setIcon(FileCellRenderer.dirIcon);
-
-				if(sort)
-					menuItems.addElement(menuItem);
-				else
-					add(menuItem);
+				view.getStatus().setMessage(null);
 			}
+		}; //}}}
 
-			if(sort)
-			{
-				MiscUtilities.quicksort(menuItems,
-					new MiscUtilities.MenuItemCompare());
-				for(int i = 0; i < menuItems.size(); i++)
-				{
-					add((JMenuItem)menuItems.elementAt(i));
-				}
-			}
+		HistoryModel model = HistoryModel.getModel("vfs.browser.path");
+		if(model.getSize() == 0)
+		{
+			add(GUIUtilities.loadMenuItem("no-recent-dirs"));
+			return;
 		}
 
-		super.setPopupMenuVisible(b);
+		boolean sort = jEdit.getBooleanProperty("sortRecent");
+
+		Vector menuItems = new Vector();
+
+		for(int i = 0; i < model.getSize(); i++)
+		{
+			String path = model.getItem(i);
+			VFS vfs = VFSManager.getVFSForPath(path);
+			JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
+			menuItem.setActionCommand(path);
+			menuItem.addActionListener(actionListener);
+			menuItem.addMouseListener(mouseListener);
+			menuItem.setIcon(FileCellRenderer.dirIcon);
+
+			if(sort)
+				menuItems.addElement(menuItem);
+			else
+				add(menuItem);
+		}
+
+		if(sort)
+		{
+			MiscUtilities.quicksort(menuItems,
+				new MiscUtilities.MenuItemCompare());
+			for(int i = 0; i < menuItems.size(); i++)
+			{
+				add((JMenuItem)menuItems.elementAt(i));
+			}
+		}
 	} //}}}
+
+	public void menuDeselected(MenuEvent e) {}
+
+	public void menuCanceled(MenuEvent e) {}
 }

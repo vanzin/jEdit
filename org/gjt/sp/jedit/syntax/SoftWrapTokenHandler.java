@@ -47,6 +47,10 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 
 		this.out = out;
 		initialSize = out.size();
+
+		seenNonWhitespace = false;
+		endX = endOfWhitespace = 0.0f;
+		end = null;
 	} //}}}
 
 	//{{{ getChunks() method
@@ -82,22 +86,34 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 				context.rules.getDefault());
 			addToken(chunk,context,false);
 
+			if(id == Token.WHITESPACE)
+			{
+				if(!seenNonWhitespace)
+					endOfWhitespace = x + chunk.width;
+			}
+			else
+				seenNonWhitespace = true;
+
 			if(out.size() == initialSize)
 				out.add(firstToken);
 			else if(id == Token.WHITESPACE)
 			{
-				end = lastToken;
-				endX = x;
+				if(out.size() != initialSize)
+				{
+					end = lastToken;
+					endX = x;
+				}
 			}
-			else if(x > wrapMargin && end != null)
+			else if(x + chunk.width > wrapMargin && end != null)
 			{
-				Chunk blankSpace = new Chunk(0.0f,end.offset,
+				Chunk blankSpace = new Chunk(endOfWhitespace,
+					end.offset + end.length,
 					getParserRuleSet(context));
 
 				blankSpace.next = end.next;
 				end.next = null;
 
-				x = x - endX;
+				x = x - endX + endOfWhitespace;
 
 				out.add(blankSpace);
 
@@ -112,6 +128,10 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	private float wrapMargin;
 	private float endX;
 	private Token end;
+
+	private boolean seenNonWhitespace;
+	private float endOfWhitespace;
+
 	private int initialSize;
 	//}}}
 }
