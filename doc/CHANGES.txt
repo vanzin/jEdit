@@ -2,12 +2,10 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre12
 
-Thanks to Ollie Rutherfurd and Thomas Alspaugh for contributing to this
-release.
+Thanks to Lionel Fiol, Ollie Rutherfurd and Thomas Alspaugh for
+contributing to this release.
 
 {{{ Miscellaneous Changes
-
-- Updated BibTeX and LaTeX syntax highlighting (Thomas Alspaugh).
 
 - The Buffer Options and Global Options->Editing panes no longer allow
   setting the wrap mode to 'soft' with a wrap margin of zero. Previously
@@ -25,7 +23,14 @@ release.
 - Pressing A+DOWN in a history text field now shows the field's popup
   menu (Joerg Spieler).
 
+}}}
+{{{ Syntax Highlighting
+
+- Updated BibTeX and LaTeX syntax highlighting (Thomas Alspaugh).
+
 - PHP mode now recognizes <script language="PHP">...</script>.
+
+- Updated Omnimark syntax highlighting (Lionel Fiol).
 
 }}}
 {{{ Bug Fixes
