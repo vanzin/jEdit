@@ -20,8 +20,7 @@
 package installer;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.io.InputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 public class Install
@@ -47,9 +46,7 @@ public class Install
 		else if((args.length == 2 || args.length == 3)
 			&& args[0].equals("auto"))
 		{
-			new NonInteractiveInstall(args[1],
-				(args.length == 3 ? args[2]
-				: ""));
+			new NonInteractiveInstall(args[1]);
 		}
 		else
 		{
@@ -57,7 +54,7 @@ public class Install
 			System.err.println("java -jar <installer JAR>");
 			System.err.println("java -jar <installer JAR> text");
 			System.err.println("java -jar <installer JAR> auto"
-				+ " <install dir> [<shortcut dir>]");
+				+ " <install dir>");
 			System.err.println("text parameter starts installer in text-only mode.");
 			System.err.println("auto parameter starts installer in non-interactive mode.");
 		}
@@ -77,6 +74,8 @@ public class Install
 			System.err.println("Error loading 'install.props':");
 			io.printStackTrace();
 		}
+
+		buf = new byte[32768];
 	}
 
 	public String getProperty(String name)
@@ -84,7 +83,7 @@ public class Install
 		return props.getProperty(name);
 	}
 
-	public int getIntProperty(String name)
+	public int getIntegerProperty(String name)
 	{
 		try
 		{
@@ -96,6 +95,34 @@ public class Install
 		}
 	}
 
+	public void copy(InputStream in, String outfile, Progress progress)
+		throws IOException
+	{
+		File outFile = new File(outfile);
+
+		OperatingSystem.getOperatingSystem().mkdirs(outFile.getParent());
+
+		BufferedOutputStream out = new BufferedOutputStream(
+			new FileOutputStream(outFile));
+
+		int count;
+
+		for(;;)
+		{
+			count = in.read(buf,0,buf.length);
+			if(count == -1)
+				break;
+
+			out.write(buf,0,count);
+			if(progress != null)
+				progress.advance(count);
+		}
+
+		in.close();
+		out.close();
+	}
+
 	// private members
 	private Properties props;
+	private byte[] buf;
 }

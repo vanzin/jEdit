@@ -1,6 +1,6 @@
 /*
  * SwingInstall.java
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.util.Vector;
+import java.util.*;
 
 /*
  * Graphical front-end to installer.
@@ -34,6 +34,7 @@ public class SwingInstall extends JFrame
 	public SwingInstall()
 	{
 		installer = new Install();
+		osTasks = OperatingSystem.getOperatingSystem().getOSTasks(installer);
 
 		appName = installer.getProperty("app.name");
 		appVersion = installer.getProperty("app.version");
@@ -93,7 +94,9 @@ public class SwingInstall extends JFrame
 	}
 
 	// package-private members
+	// package-private, not private, for speedy access by inner classes
 	Install installer;
+	OperatingSystem.OSTask[] osTasks;
 	String appName;
 	String appVersion;
 
@@ -124,20 +127,28 @@ public class SwingInstall extends JFrame
 			if(((JCheckBox)comp.getComponent(i))
 				.getModel().isSelected())
 			{
-				size += installer.getIntProperty(
+				size += installer.getIntegerProperty(
 					"comp." + ids.elementAt(i) + ".real-size");
 				components.addElement(installer.getProperty(
 					"comp." + ids.elementAt(i) + ".fileset"));
 			}
 		}
 
-		JTextField binDir = chooseDirectory.binDir;
 		String installDir = chooseDirectory.installDir.getText();
+
+		Map osTaskDirs = chooseDirectory.osTaskDirs;
+		Iterator keys = osTaskDirs.keySet().iterator();
+		while(keys.hasNext())
+		{
+			OperatingSystem.OSTask osTask = (OperatingSystem.OSTask)keys.next();
+			String dir = ((JTextField)osTaskDirs.get(osTask)).getText();
+			if(dir != null && dir.length() != 0)
+				osTask.setDirectory(dir);
+		}
 
 		InstallThread thread = new InstallThread(
 			installer,progress,
-			(installDir == null ? null : installDir),
-			(binDir == null ? null : binDir.getText()),
+			installDir,osTasks,
 			size,components);
 		progress.setThread(thread);
 		thread.start();
@@ -343,91 +354,80 @@ public class SwingInstall extends JFrame
 	}
 
 	class ChooseDirectory extends JPanel
-	implements ActionListener
 	{
 		JTextField installDir;
-		JButton chooseInstall;
-		JTextField binDir;
-		JButton chooseBin;
+		Map osTaskDirs;
 
 		ChooseDirectory()
 		{
 			super(new BorderLayout());
 
-			String _binDir = OperatingSystem.getOperatingSystem()
-				.getShortcutDirectory(appName,appVersion);
+			osTaskDirs = new HashMap();
 
-			JPanel directoryPanel = new JPanel();
-			GridBagLayout layout = new GridBagLayout();
-			directoryPanel.setLayout(layout);
-			GridBagConstraints cons = new GridBagConstraints();
-			cons.anchor = GridBagConstraints.WEST;
-			cons.fill = GridBagConstraints.HORIZONTAL;
-			cons.gridy = 1;
-			cons.insets = new Insets(0,0,6,0);
+			JPanel directoryPanel = new JPanel(new VariableGridLayout(
+				VariableGridLayout.FIXED_NUM_COLUMNS,3,12,12));
 
-			JLabel label = new JLabel("Install program in: ",SwingConstants.RIGHT);
-			label.setBorder(new EmptyBorder(0,0,0,12));
-			layout.setConstraints(label,cons);
-			directoryPanel.add(label);
-
-			cons.weightx = 1.0f;
-			installDir = new JTextField();
-			installDir.setText(OperatingSystem.getOperatingSystem()
+			installDir = addField(directoryPanel,"Install program in:",
+				OperatingSystem.getOperatingSystem()
 				.getInstallDirectory(appName,appVersion));
-			layout.setConstraints(installDir,cons);
-			directoryPanel.add(installDir);
 
-			if(_binDir != null)
+			for(int i = 0; i < osTasks.length; i++)
 			{
-				cons.gridy = 2;
-				cons.weightx = 0.0f;
-				cons.insets = new Insets(0,0,0,0);
-				label = new JLabel("Install shortcut in: ",SwingConstants.RIGHT);
-				label.setBorder(new EmptyBorder(0,0,0,12));
-				layout.setConstraints(label,cons);
-				directoryPanel.add(label);
-
-				cons.weightx = 1.0f;
-				binDir = new JTextField(_binDir);
-				layout.setConstraints(binDir,cons);
-				directoryPanel.add(binDir);
+				OperatingSystem.OSTask osTask = osTasks[i];
+				String label = osTask.getLabel();
+				if(label != null)
+				{
+					JTextField field = addField(directoryPanel,label,
+						osTask.getDirectory());
+					osTaskDirs.put(osTask,field);
+				}
 			}
-
 			ChooseDirectory.this.add(BorderLayout.NORTH,directoryPanel);
-
-			Box buttons = new Box(BoxLayout.X_AXIS);
-			buttons.add(Box.createGlue());
-			chooseInstall = new JButton("Choose Install Directory...");
-			chooseInstall.setRequestFocusEnabled(false);
-			chooseInstall.addActionListener(this);
-			buttons.add(chooseInstall);
-			if(_binDir != null)
-			{
-				buttons.add(Box.createHorizontalStrut(6));
-				chooseBin = new JButton("Choose Shortcut Directory...");
-				chooseBin.setRequestFocusEnabled(false);
-				chooseBin.addActionListener(this);
-				buttons.add(chooseBin);
-			}
-			buttons.add(Box.createGlue());
-
-			ChooseDirectory.this.add(BorderLayout.SOUTH,buttons);
 		}
 
-		public void actionPerformed(ActionEvent evt)
+		private JTextField addField(JPanel directoryPanel, String label,
+			String defaultText)
 		{
-			JTextField field = (evt.getSource() == chooseInstall
-				? installDir : binDir);
+			JTextField field = new JTextField(defaultText);
 
-			File directory = new File(field.getText());
-			JFileChooser chooser = new JFileChooser(directory.getParent());
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			chooser.setSelectedFile(directory);
+			directoryPanel.add(new JLabel(label,SwingConstants.RIGHT));
 
-			if(chooser.showOpenDialog(SwingInstall.this)
-				== JFileChooser.APPROVE_OPTION)
-				field.setText(chooser.getSelectedFile().getPath());
+			Box fieldBox = new Box(BoxLayout.Y_AXIS);
+			fieldBox.add(Box.createGlue());
+			Dimension dim = field.getPreferredSize();
+			dim.width = Integer.MAX_VALUE;
+			field.setMaximumSize(dim);
+			fieldBox.add(field);
+			fieldBox.add(Box.createGlue());
+			directoryPanel.add(fieldBox);
+			JButton choose = new JButton("Choose...");
+			choose.setRequestFocusEnabled(false);
+			choose.addActionListener(new ActionHandler(field));
+			directoryPanel.add(choose);
+
+			return field;
+		}
+
+		class ActionHandler implements ActionListener
+		{
+			JTextField field;
+
+			ActionHandler(JTextField field)
+			{
+				this.field = field;
+			}
+
+			public void actionPerformed(ActionEvent evt)
+			{
+				File directory = new File(field.getText());
+				JFileChooser chooser = new JFileChooser(directory.getParent());
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setSelectedFile(directory);
+
+				if(chooser.showOpenDialog(SwingInstall.this)
+					== JFileChooser.APPROVE_OPTION)
+					field.setText(chooser.getSelectedFile().getPath());
+			}
 		}
 	}
 
@@ -460,7 +460,7 @@ public class SwingInstall extends JFrame
 		{
 			filesets = new Vector();
 
-			int count = installer.getIntProperty("comp.count");
+			int count = installer.getIntegerProperty("comp.count");
 			JPanel panel = new JPanel(new GridLayout(count,1));
 
 			String osClass = OperatingSystem.getOperatingSystem()
@@ -503,7 +503,7 @@ public class SwingInstall extends JFrame
 				if(((JCheckBox)comp.getComponent(i))
 					.getModel().isSelected())
 				{
-					size += installer.getIntProperty("comp."
+					size += installer.getIntegerProperty("comp."
 						+ filesets.elementAt(i)
 						+ ".disk-size");
 				}

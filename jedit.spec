@@ -14,8 +14,8 @@ Summary: Programmer's text editor written in Java
 Name: jedit
 Version: 4.1pre9
 Release: 1
-# REMIND: bump this with each RPM
-Serial: 31
+# REMIND: bump this with each RPM; 32 == 4.1pre9
+Serial: 32
 Copyright: GPL
 Group: Applications/Editors
 Source0: http://prdownloads.sourceforge.net/jedit/jedit41pre9source.tar.gz
@@ -59,13 +59,14 @@ sh installer/mk_filelist.sh
 
 export CLASSPATH="."
 
-java installer.Install auto $RPM_BUILD_ROOT%{_datadir}/jedit/%{version} \
-	$RPM_BUILD_ROOT%{_bindir}
+java installer.Install auto $RPM_BUILD_ROOT%{_datadir}/jedit/%{version}
 
 sed -e "s^@JEDIT_HOME@^"%{_datadir}"/jedit/"%{version}"^g" < %{SOURCE1} > \
 	$RPM_BUILD_ROOT%{_bindir}/jedit
 
 chmod +x $RPM_BUILD_ROOT%{_bindir}/jedit
+
+cp jedit.1 %{_mandir}/man1/jedit.1
 
 %clean
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
@@ -73,3 +74,4 @@ chmod +x $RPM_BUILD_ROOT%{_bindir}/jedit
 %files
 %{_bindir}/jedit
 %{_datadir}/jedit/%{version}
+%{_mandir}/man1/jedit.1

@@ -1,6 +1,6 @@
 /*
  * ConsoleInstall.java
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,26 +43,33 @@ public class ConsoleInstall
 
 		String installDir = os.getInstallDirectory(appName,appVersion);
 
-		System.out.print("Installation directory [" + installDir + "]: ");
+		System.out.print("Installation directory: [" + installDir + "] ");
 		System.out.flush();
 
 		String _installDir = readLine(in);
 		if(_installDir.length() != 0)
 			installDir = _installDir;
 
-		String binDir = os.getShortcutDirectory(appName,appVersion);
+		OperatingSystem.OSTask[] osTasks = os.getOSTasks(installer);
 
-		if(binDir != null)
+		for(int i = 0; i < osTasks.length; i++)
 		{
-			System.out.print("Shortcut directory [" + binDir + "]: ");
-			System.out.flush();
+			OperatingSystem.OSTask osTask = osTasks[i];
+			String label = osTask.getLabel();
+			// label == null means no configurable options
+			if(label != null)
+			{
+				String dir = osTask.getDirectory();
+				System.out.print(label + " [" + dir + "] ");
+				System.out.flush();
 
-			String _binDir = readLine(in);
-			if(_binDir.length() != 0)
-				binDir = _binDir;
+				dir = readLine(in);
+				if(dir.length() != 0)
+					osTask.setDirectory(dir);
+			}
 		}
 
-		int compCount = installer.getIntProperty("comp.count");
+		int compCount = installer.getIntegerProperty("comp.count");
 		Vector components = new Vector(compCount);
 
 		System.out.println("*** Program components to install");
@@ -94,7 +101,7 @@ public class ConsoleInstall
 		System.out.println("*** Starting installation...");
 		ConsoleProgress progress = new ConsoleProgress();
 		InstallThread thread = new InstallThread(
-			installer,progress,installDir,binDir,
+			installer,progress,installDir,osTasks,
 			0 /* XXX */,components);
 		thread.start();
 	}

@@ -1,6 +1,6 @@
 /*
  * NonInteractiveInstall.java
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,13 +26,13 @@ import java.util.Vector;
  */
 public class NonInteractiveInstall
 {
-	public NonInteractiveInstall(String installDir, String binDir)
+	public NonInteractiveInstall(String installDir)
 	{
 		installer = new Install();
 
 		OperatingSystem os = OperatingSystem.getOperatingSystem();
 
-		int compCount = installer.getIntProperty("comp.count");
+		int compCount = installer.getIntegerProperty("comp.count");
 		Vector components = new Vector(compCount);
 
 		for(int i = 0; i < compCount; i++)
@@ -51,9 +51,11 @@ public class NonInteractiveInstall
 			components.addElement(fileset);
 		}
 
+		//OperatingSystem.OSTask[] osTasks = os.getOSTasks(installer);
+
 		ConsoleProgress progress = new ConsoleProgress();
 		InstallThread thread = new InstallThread(
-			installer,progress,installDir,binDir,
+			installer,progress,installDir,null,
 			0 /* XXX */,components);
 		thread.start();
 	}
