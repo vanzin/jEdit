@@ -2032,14 +2032,14 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 		}
 
-		LineInfo info = null, prev = null;
-
 		Element map = getDefaultRootElement();
 
 		for(int i = start + 1; i <= lineIndex; i++)
 		{
-			prev = (i == 0 ? null : lineInfo[i - 1]);
-			info = lineInfo[i];
+			TokenMarker.LineContext prevContext = (i == 0 ? null
+				: lineInfo[i - 1].context);
+			LineInfo info = lineInfo[i];
+			TokenMarker.LineContext context = info.getLineContext();
 
 			Element lineElement = map.getElement(i);
 			int lineStart = lineElement.getStartOffset();
@@ -2056,13 +2056,14 @@ public class Buffer extends PlainDocument implements EBComponent
 			/* Prepare for tokenization */
 			tokenList.lastToken = null;
 
-			TokenMarker.LineContext context = info.getLineContext();
 			ParserRule oldRule = context.inRule;
 			TokenMarker.LineContext oldParent = context.parent;
 
-			tokenMarker.markTokens(prev,info,tokenList,seg);
+			context = tokenMarker.markTokens(prevContext,context,tokenList,seg);
+			info.setLineContext(context);
 
 			context = info.getLineContext();
+
 			ParserRule newRule = context.inRule;
 			TokenMarker.LineContext newParent = context.parent;
 
@@ -2108,14 +2109,15 @@ public class Buffer extends PlainDocument implements EBComponent
 		return nextLineRequested;
 	} //}}}
 
-	//{{{ getLineInfo() method
+	//{{{ getTokenMarker() method
 	/**
-	 * Returns the line info object for the specified line.
-	 * @since jEdit 3.1pre1
+	 * This method is only public so that the <code>OffsetManager</code>
+	 * class can use it.
+	 * @since jEdit 4.0pre1
 	 */
-	public LineInfo getLineInfo(int line)
+	public TokenMarker getTokenMarker()
 	{
-		return lineInfo[line];
+		return tokenMarker;
 	} //}}}
 
 	//}}}
@@ -2259,9 +2261,9 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	//{{{ _getFoldVisibilityManager() method
 	/**
-	 * Returns the fold visibility method for the specified text area.
-	 * Instead of calling this method, call
-	 * <code>textArea.getFoldVisibilityManager()</code>.
+	 * Plugins and macros should call
+	 * <code>textArea.getFoldVisibilityManager()</code>
+	 * instead of this method.
 	 * @param textArea The text area
 	 * @since jEdit 4.0pre1
 	 */
@@ -2292,10 +2294,38 @@ public class Buffer extends PlainDocument implements EBComponent
 	} //}}}
 
 	//{{{ _releaseFoldVisibilityManager() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @param mgr The fold visibility manager
+	 * @since jEdit 4.0pre1
+	 */
 	public void _releaseFoldVisibilityManager(FoldVisibilityManager mgr)
 	{
 		inUseFVMs[mgr._getIndex()] = null;
 		mgr._release();
+	} //}}}
+
+	//{{{ _isLineVisible() method
+	/**
+	 * Plugins and macros should call
+	 * <code>textArea.getFoldVisibilityManager().isLineVisible()</code>
+	 * instead of this method.
+	 * @since jEdit 4.0pre1
+	 */
+	public final boolean _isLineVisible(int line, int index)
+	{
+		return lineInfo[line].isVisible(index);
+	} //}}}
+
+	//{{{ _setLineVisible() method
+	/**
+	 * Plugins and macros should not call this method.
+	 * @param mgr The fold visibility manager
+	 * @since jEdit 4.0pre1
+	 */
+	public final void _setLineVisible(int line, int index, boolean visible)
+	{
+		lineInfo[line].setVisible(index,visible);
 	} //}}}
 
 	//}}}

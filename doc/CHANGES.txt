@@ -128,6 +128,8 @@ JEDIT 4.0 VERSION HISTORY
 - The buffer-local noWordSep property now has a default value of "_".
   Previously, there was no default, but most modes specified a value of
   "_".
+- jEdit now backs up files it saves to the settings directory to
+  $HOME/.jedit/settings-backups
 
 + Bug Fixes
 

@@ -178,7 +178,7 @@ view.search.find=Search for:
 #{{{ Context menu
 view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - view-registers - to-upper to-lower - \
-	hypersearch - unsplit split-horizontal narrow - eval-selection - \
+	hypersearch - unsplit split-horizontal - eval-selection - \
 	buffer-options global-options
 #}}}
 

@@ -1,5 +1,8 @@
 /*
  * MiscUtilities.java - Various miscallaneous utility functions
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
@@ -21,48 +24,25 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import javax.swing.JMenuItem;
 import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
- * Class with several useful miscellaneous functions.<p>
- *
- * It provides methods for converting file names to class names, for
- * constructing path names, and for various indentation calculations.
- * A quicksort implementation is also available.
+ * Class with several useful miscellaneous functions.
  *
  * @author Slava Pestov
  * @version $Id$
  */
 public class MiscUtilities
 {
-	/**
-	 * Converts a file name to a class name. All slash characters are
-	 * replaced with periods and the trailing '.class' is removed.
-	 * @param name The file name
-	 */
-	public static String fileToClass(String name)
-	{
-		char[] clsName = name.toCharArray();
-		for(int i = clsName.length - 6; i >= 0; i--)
-			if(clsName[i] == '/')
-				clsName[i] = '.';
-		return new String(clsName,0,clsName.length - 6);
-	}
+	//{{{ Path name methods. Mostly for local files only
 
-	/**
-	 * Converts a class name to a file name. All periods are replaced
-	 * with slashes and the '.class' extension is added.
-	 * @param name The class name
-	 */
-	public static String classToFile(String name)
-	{
-		return name.replace('.','/').concat(".class");
-	}
-
+	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from a directory and another
 	 * path name.
@@ -90,8 +70,9 @@ public class MiscUtilities
 			return canonPath(parent + path);
 		else
 			return canonPath(parent + File.separator + path);
-	}
+	} //}}}
 
+	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from three path components.
 	 * @param parent The parent directory
@@ -102,8 +83,9 @@ public class MiscUtilities
 		String path1, String path2)
 	{
 		return constructPath(constructPath(parent,path1),path2);
-	}
+	} //}}}
 
+	//{{{ concatPath() method
 	/**
 	 * Like constructPath(), except <code>path</code> will be
 	 * appended to <code>parent</code> even if it is absolute.
@@ -125,8 +107,9 @@ public class MiscUtilities
 			return parent + path;
 		else
 			return parent + File.separator + path;
-	}
-	
+	} //}}}
+
+	//{{{ getFileExtension() method
 	/**
 	 * Returns the extension of the specified filename, or an empty
 	 * string if there is none.
@@ -139,8 +122,9 @@ public class MiscUtilities
 			return "";
 		else
 			return name.substring(index);
-	}
+	} //}}}
 
+	//{{{ getFileName() method
 	/**
 	 * For use with local files only - returns the last component
 	 * of the specified path.
@@ -153,16 +137,18 @@ public class MiscUtilities
 		int index2 = path.lastIndexOf('/',count);
 
 		return path.substring(Math.max(index1,index2) + 1);
-	}
+	} //}}}
 
+	//{{{ getFileParent() method
 	/**
 	 * @deprecated Call getParentOfPath() instead
 	 */
 	public static String getFileParent(String path)
 	{
 		return getParentOfPath(path);
-	}
+	} //}}}
 
+	//{{{ getParentOfPath() method
 	/**
 	 * For use with local files only - returns the parent of the
 	 * specified path.
@@ -185,16 +171,18 @@ public class MiscUtilities
 		}
 
 		return path.substring(0,index + 1);
-	}
+	} //}}}
 
+	//{{{ getFileProtocol() method
 	/**
 	 * @deprecated Call getProtocolOfURL() instead
 	 */
 	public static String getFileProtocol(String url)
 	{
 		return getProtocolOfURL(url);
-	}
+	} //}}}
 
+	//{{{ getProtocolOfURL() method
 	/**
 	 * Returns the protocol specified by a URL.
 	 * @param url The URL
@@ -203,8 +191,9 @@ public class MiscUtilities
 	public static String getProtocolOfURL(String url)
 	{
 		return url.substring(0,url.indexOf(':'));
-	}
+	} //}}}
 
+	//{{{ isURL() method
 	/**
 	 * Checks if the specified string is a URL.
 	 * @param str The string to check
@@ -226,8 +215,66 @@ public class MiscUtilities
 			return false;
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ saveBackup() method
+	/**
+	 * Saves a backup (optionally numbered) of a file.
+	 * @param file A local file
+	 * @param backups The number of backups. Must be >= 1. If > 1, backup
+	 * files will be numbered.
+	 * @param backupPrefix The backup file name prefix
+	 * @param backupSuffix The backup file name suffix
+	 * @param backupDirectory The directory where to save backups; if null,
+	 * they will be saved in the same directory as the file itself.
+	 * @since jEdit 4.0pre1
+	 */
+	public static void saveBackup(File file, int backups,
+		String backupPrefix, String backupSuffix,
+		String backupDirectory)
+	{
+		if(backupPrefix == null)
+			backupPrefix = "";
+		if(backupSuffix == null)
+			backupSuffix = "";
+
+		String name = file.getName();
+
+		// If backups is 1, create ~ file
+		if(backups == 1)
+		{
+			file.renameTo(new File(backupDirectory,
+				backupPrefix + name + backupSuffix));
+		}
+		// If backups > 1, move old ~n~ files, create ~1~ file
+		else
+		{
+			new File(backupDirectory,
+				backupPrefix + name + backupSuffix
+				+ backups + backupSuffix).delete();
+
+			for(int i = backups - 1; i > 0; i--)
+			{
+				File backup = new File(backupDirectory,
+					backupPrefix + name + backupSuffix
+					+ i + backupSuffix);
+
+				backup.renameTo(new File(backupDirectory,
+					backupPrefix + name + backupSuffix
+					+ (i+1) + backupSuffix));
+			}
+
+			file.renameTo(new File(backupDirectory,
+				backupPrefix + name + backupSuffix
+				+ "1" + backupSuffix));
+		}
+	} //}}}
+
+	//}}}
+
+	//{{{ Text methods
+
+	//{{{ getLeadingWhiteSpace() method
 	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
@@ -248,8 +295,9 @@ loop:		for(;whitespace < str.length();)
 			}
 		}
 		return whitespace;
-	}
+	} //}}}
 
+	//{{{ getTrailingWhiteSpace() method
 	/**
 	 * Returns the number of trailing whitespace characters in the
 	 * specified string.
@@ -271,8 +319,9 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 			}
 		}
 		return whitespace;
-	}
+	} //}}}
 
+	//{{{ getLeadingWhiteSpaceWidth() method
 	/**
 	 * Returns the width of the leading white space in the specified
 	 * string.
@@ -297,8 +346,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 		}
 		return whitespace;
-	}
+	} //}}}
 
+	//{{{ createWhiteSpace() method
 	/**
 	 * Creates a string of white space with the specified length.
 	 * @param len The length
@@ -312,7 +362,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			while(len-- > 0)
 				buf.append(' ');
 		}
-		else		
+		else
 		{
 			int count = len / tabSize;
 			while(count-- > 0)
@@ -322,8 +372,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 				buf.append(' ');
 		}
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ globToRE() method
 	/**
 	 * Converts a Unix-style glob to a regular expression.
 	 * ? becomes ., * becomes .*, {aa,bb} becomes (aa|bb).
@@ -380,8 +431,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ escapesToChars() method
 	/**
 	 * Converts "\n" and "\t" escapes in the specified string to
 	 * newlines and tabs.
@@ -421,8 +473,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 		}
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ charsToEscapes() method
 	/**
 	 * Escapes newlines, tabs, backslashes, quotes in the specified
 	 * string.
@@ -432,8 +485,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	public static String charsToEscapes(String str)
 	{
 		return charsToEscapes(str,false);
-	}
+	} //}}}
 
+	//{{{ charsToEscapes() method
 	/**
 	 * Escapes newlines, tabs, backslashes, quotes in the specified
 	 * string.
@@ -488,8 +542,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 		}
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ compareStrings() method
 	/**
 	 * A more intelligent version of String.compareTo() that handles
 	 * numbers specially. For example, it places "My file 2" before
@@ -561,8 +616,13 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 
 		return char1.length - char2.length;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Sorting methods
+
+	//{{{ quicksort() method
 	/**
 	 * Sorts the specified array.
 	 * @param obj The array
@@ -574,8 +634,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return;
 
 		quicksort(obj,0,obj.length - 1,compare);
-	}
+	} //}}}
 
+	//{{{ quicksort() method
 	/**
 	 * Sorts the specified vector.
 	 * @param vector The vector
@@ -587,16 +648,18 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return;
 
 		quicksort(vector,0,vector.size() - 1,compare);
-	}
+	} //}}}
 
+	//{{{ Compare interface
 	/**
 	 * An interface for comparing objects.
 	 */
 	public interface Compare
 	{
 		int compare(Object obj1, Object obj2);
-	}
+	} //}}}
 
+	//{{{ StringCompare class
 	/**
 	 * Compares strings.
 	 */
@@ -607,8 +670,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return compareStrings(obj1.toString(),
 				obj2.toString(),false);
 		}
-	}
+	} //}}}
 
+	//{{{ StringICaseCompare class
 	/**
 	 * Compares strings ignoring case.
 	 */
@@ -619,8 +683,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return compareStrings(obj1.toString(),
 				obj2.toString(),true);
 		}
-	}
+	} //}}}
 
+	//{{{ MenuItemCompare class
 	public static class MenuItemCompare implements Compare
 	{
 		public int compare(Object obj1, Object obj2)
@@ -628,8 +693,37 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return compareStrings(((JMenuItem)obj1).getText(),
 				((JMenuItem)obj2).getText(),true);
 		}
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ fileToClass() method
+	/**
+	 * Converts a file name to a class name. All slash characters are
+	 * replaced with periods and the trailing '.class' is removed.
+	 * @param name The file name
+	 */
+	public static String fileToClass(String name)
+	{
+		char[] clsName = name.toCharArray();
+		for(int i = clsName.length - 6; i >= 0; i--)
+			if(clsName[i] == '/')
+				clsName[i] = '.';
+		return new String(clsName,0,clsName.length - 6);
+	} //}}}
+
+	//{{{ classToFile() method
+	/**
+	 * Converts a class name to a file name. All periods are replaced
+	 * with slashes and the '.class' extension is added.
+	 * @param name The class name
+	 */
+	public static String classToFile(String name)
+	{
+		return name.replace('.','/').concat(".class");
+	} //}}}
+
+	//{{{ buildToVersion() method
 	/**
 	 * Converts an internal version number (build) into a
 	 * `human-readable' form.
@@ -651,8 +745,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return "" + major + "." + minor
 			+ (beta != 99 ? "pre" + beta :
 			(bugfix != 0 ? "." + bugfix : "final"));
-	}
+	} //}}}
 
+	//{{{ isToolsJarAvailable() method
 	/**
 	 * If on JDK 1.2 or higher, make sure that tools.jar is available.
 	 * This method should be called by plugins requiring the classes
@@ -687,7 +782,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 		Vector paths = new Vector();
 
-		// 1. Check whether tools.jar is in the system classpath:
+		//{{{ 1. Check whether tools.jar is in the system classpath:
 		paths.addElement("System classpath: "
 			+ System.getProperty("java.class.path"));
 
@@ -711,9 +806,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 		{
 			//Log.log(Log.DEBUG, MiscUtilities.class,
 			//	"- is not in system classpath.");
-		}
+		} //}}}
 
-		// 2. Check whether it is in the jEdit user settings jars folder:
+		//{{{ 2. Check whether it is in the jEdit user settings jars folder:
 		String settingsDir = jEdit.getSettingsDirectory();
 		if(settingsDir != null)
 		{
@@ -727,9 +822,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 				// jEdit will load it automatically
 				return true;
 			}
-		}
+		} //}}}
 
-		// 3. Check whether it is in jEdit's system jars folder:
+		//{{{ 3. Check whether it is in jEdit's system jars folder:
 		String jEditDir = jEdit.getJEditHome();
 		String toolsPath = constructPath(jEditDir, "jars", "tools.jar");
 		paths.addElement(toolsPath);
@@ -739,9 +834,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 				"- is in jEdit's system jars folder. Fine.");
 			// jEdit will load it automatically
 			return true;
-		}
+		} //}}}
 
-		// 4. Check whether it is in <java.home>/lib:
+		//{{{ 4. Check whether it is in <java.home>/lib:
 		toolsPath = System.getProperty("java.home");
 		if(toolsPath.toLowerCase().endsWith(File.separator + "jre"))
 			toolsPath = toolsPath.substring(0, toolsPath.length() - 4);
@@ -755,9 +850,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 				+ "I checked the following locations:\n"
 				+ paths.toString());
 			return false;
-		}
+		} //}}}
 
-		// Load it, if not yet done:
+		//{{{ Load it, if not yet done:
 		EditPlugin.JAR jar = jEdit.getPluginJAR(toolsPath);
 		if(jar == null)
 		{
@@ -779,12 +874,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 		else
 			Log.log(Log.DEBUG, MiscUtilities.class,
 				"- has been loaded before.");
-		return true;
-	}
+		//}}}
 
-	// private members
+		return true;
+	} //}}}
+
+	//{{{ Private members
 	private MiscUtilities() {}
 
+	//{{{ canonPath() method
 	private static String canonPath(String path)
 	{
 		if(File.separatorChar == '\\')
@@ -801,8 +899,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 		{
 			return path;
 		}
-	}
+	} //}}}
 
+	//{{{ quicksort() method
 	private static void quicksort(Object[] obj, int _start, int _end,
 		Compare compare)
 	{
@@ -838,8 +937,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 		if(start < _end)
 			quicksort(obj,start,_end,compare);
-	}
+	} //}}}
 
+	//{{{ quicksort() method
 	private static void quicksort(Vector obj, int _start, int _end,
 		Compare compare)
 	{
@@ -875,5 +975,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 		if(start < _end)
 			quicksort(obj,start,_end,compare);
-	}
+	} //}}}
+
+	//}}}
 }

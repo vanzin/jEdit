@@ -1179,6 +1179,8 @@ public class jEdit
 		File session = new File(MiscUtilities.constructPath(
 			settingsDirectory,"session"));
 
+		backupSettingsFile(session);
+
 		try
 		{
 			String lineSep = System.getProperty("line.separator");
@@ -1985,6 +1987,30 @@ public class jEdit
 	}
 
 	/**
+	 * Backs up the specified file in the settings directory.
+	 * You should call this on any settings files your plugin
+	 * writes.
+	 * @param file The file
+	 * @since jEdit 4.0pre1
+	 */
+	public static void backupSettingsFile(File file)
+	{
+		if(settingsDirectory == null)
+			return;
+
+		String backupDir = MiscUtilities.constructPath(
+			settingsDirectory,"settings-backup");
+		File dir = new File(backupDir);
+		if(!dir.exists())
+			dir.mkdirs();
+
+		// ... sweet. saveBackup() will create backupDir if it
+		// doesn't exist.
+
+		MiscUtilities.saveBackup(file,5,null,"~",backupDir);
+	}
+
+	/**
 	 * Saves all user preferences to disk.
 	 */
 	public static void saveSettings()
@@ -2001,6 +2027,8 @@ public class jEdit
 			}
 			else
 			{
+				backupSettingsFile(file);
+
 				BufferHistory.save(file);
 			}
 			recentModTime = file.lastModified();
@@ -2014,6 +2042,8 @@ public class jEdit
 			}
 			else
 			{
+				backupSettingsFile(file);
+
 				HistoryModel.saveHistory(file);
 			}
 			historyModTime = file.lastModified();
@@ -2031,6 +2061,8 @@ public class jEdit
 			}
 			else
 			{
+				backupSettingsFile(file);
+
 				try
 				{
 					OutputStream out = new FileOutputStream(file);
