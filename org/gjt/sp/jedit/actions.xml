@@ -619,9 +619,17 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="paste-deleted">
+	<CODE>
+		new PasteFromListDialog("paste-deleted",view,
+			KillRing.getListModel());
+	</CODE>
+</ACTION>
+
 <ACTION NAME="paste-previous">
 	<CODE>
-		new PastePrevious(view);
+		new PasteFromListDialog("paste-previous",view,
+			HistoryModel.getModel("clipboard"));
 	</CODE>
 </ACTION>
 

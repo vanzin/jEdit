@@ -212,6 +212,8 @@ public class UndoManager
 			compoundEdit.undos.add(rem);
 		else
 			addEdit(rem);
+
+		KillRing.add(rem);
 	} //}}}
 
 	//{{{ bufferSaved() method

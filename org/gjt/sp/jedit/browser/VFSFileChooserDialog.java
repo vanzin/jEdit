@@ -69,8 +69,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 
 		browser = new VFSBrowser(view,path,mode,multipleSelection,null);
+		browser.getBrowserView().getTable().setRequestFocusEnabled(false);
+		browser.getBrowserView().getParentDirectoryList()
+			.setRequestFocusEnabled(false);
+		/* browser.getBrowserView().getTable().addKeyListener(new KeyHandler()); */
 		browser.addBrowserListener(new BrowserHandler());
-		browser.getBrowserView().getTable().addKeyListener(new KeyHandler());
 		content.add(BorderLayout.CENTER,browser);
 
 		JPanel panel = new JPanel();

@@ -3,11 +3,32 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- C+b -- click -- keys don't wokr
-- 1-9 broken in C+b
-- C+e C+c broken in php
-- closing view prints processKeyEvent() npe
-- control-shift-click broken in text area
+- SERIOUS PROBLEMS
+  - C+b -- click -- keys don't wokr
+  - 1-9 broken in C+b
+  - C+e C+c broken in php
+  - closing view prints processKeyEvent() npe
+  - control-shift-click broken in text area
+  - finish vfs browser extended attributes
+  - new file: horiz scroll wrong
+  - scroll to with invisible caret
+  - block caret: not very good
+  - files in favorites: selection is broken
+  - sometimes foo and foo/ both appear in browser history
+  - bad wrap:
+  						MiscUtilities.quicksort(favorites,
+  							new VFS.DirectoryEntryCompare());
+  - delete: no vfs update
+  - isn't fsb dir search supposed to use selected file's extension?
+  - bizarre dockable window manager button layout problem
+  - while loading --> scroll bar
+  - auto reload - save caret info first
+  - file dialog: plugin mgr/opts
+  - shortcuts: stale shortcuts remain?
+  - narrow: scrolls one down
+  - eval-for-selected-lines doesn't work with rectangular selection
+  - recording 'evaluate for selected lines'
+  - evalutate for selected lines: > 1 selection per line
 
 - tips:
   - persistent registers
@@ -16,42 +37,20 @@ and quirks that I need to fix eventually.
   - quick copy shift click
   - various action bar hacks
   - persistent views
-- finish vfs browser extended attributes
-- new file: horiz scroll wrong
-- scroll to with invisible caret
 - actions/dockables eval: should use own namespace?
-- block caret: not very good
-- files in favorites: selection is broken
-- sometimes foo and foo/ both appear in browser history
-- bad wrap:
-						MiscUtilities.quicksort(favorites,
-							new VFS.DirectoryEntryCompare());
 - vfs dialog: browser should send focus back to text field
 - dir search: no progress msg!
-- delete: no vfs update
-- isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - note about dependencies
 - split view line insert: repainted twice, selection problems
-- bizarre dockable window manager button layout problem
-- while loading --> scroll bar
 - update quicknotepad docs
-- auto reload - save caret info first
 - quicknotepad: handle no settings dir more gracefully
-- shortcuts: stale shortcuts remain?
-- port macos
 - browser's default size
-- completion: handle full paths
-- file dialog: plugin mgr/opts
 - F2 doesn't work in JTree/JTable, maybe others
-- narrow: scrolls one down
 - path shown twice in tree: maybeReloadDirectory()
 - vfs browser: open in new view: doesn't focus the new view
-- eval-for-selected-lines doesn't work with rectangular selection
-- recording 'evaluate for selected lines'
-- evalutate for selected lines: > 1 selection per line
 - searching in a buffer w/ narrowed fold
 - macro record: doesn't respect overwrite
 - rect select and trailing whitespace
@@ -107,11 +106,9 @@ and quirks that I need to fix eventually.
 - format should show an error if the line len is 0, not beep
 - shortcut editor: restore default button
 - new macro handler api
-- plugin manager: load/unload in right-click menu
 - can do perl q|...| etc. using begin/end substitution!
 - perl: q{}, etc.
 - do help search in a thread
-- beanshell: invokeAction() function
 - caret saving needs to be more flexible w.r.t. split panes
 - <edit pane,buffer> --> <caret info> map
 - vfs browser right click menu: plugins & favorites

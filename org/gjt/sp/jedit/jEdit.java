@@ -32,6 +32,7 @@ import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
+import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.help.HelpViewer;
@@ -875,6 +876,9 @@ public class jEdit
 			buffer.propertiesChanged();
 			buffer = buffer.next;
 		}
+
+		HistoryModel.propertiesChanged();
+		KillRing.propertiesChanged();
 
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
