@@ -6,15 +6,16 @@ and quirks that I need to fix eventually.
 + before 4.1pre1:
 
 - fix fsb infinite requests problem
+- add documentation for pre1 features
+- focus problem with hypersearch in floating window?
+- problem with MARK_FOLLOWING
+
+- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
+  keeping INVALID? report errors in some other manner?
 - silly bug that creates selections on click -- how is this even possible?
 - scroll to caret _still_ jumps around?
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
-- add some tips of the day about pre1 features
-- add documentation for pre1 features
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
-- focus problem with hypersearch in floating window?
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
 - v2p/p2v: implement from end backward scan

@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Portions copyright (C) 2002 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.lang.reflect.*;
 import java.io.File;
+import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -70,7 +72,7 @@ public class FileRootsVFS extends VFS
 	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
-		File[] roots = File.listRoots();
+		File[] roots = listRoots();
 
 		if(roots == null)
 			return null;
@@ -89,7 +91,8 @@ public class FileRootsVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-		String name = path;
+		String name = (OperatingSystem.isMacOS() ?
+			getFileName(path) : path);
 
 		if(method != null && !name.startsWith("A:") && !name.startsWith("B:"))
 		{
@@ -103,6 +106,30 @@ public class FileRootsVFS extends VFS
 
 		return new VFS.DirectoryEntry(name,path,path,VFS.DirectoryEntry
 			.FILESYSTEM,0L,false);
+	} //}}}
+
+	//{{{ listRoots() method
+	public static File[] listRoots()
+	{
+		if (OperatingSystem.isMacOS())
+		{
+			// Nasty hardcoded values
+			File[] volumes = new File("/Volumes").listFiles();
+			File[] roots = new File[volumes.length+1];
+			
+			roots[0] = new File("/");
+			
+			for (int i=0; i<volumes.length; i++)
+			{
+				// Make sure people don't do stupid things like putting files in /Volumes
+				if (volumes[i].isDirectory())
+					roots[i+1] = volumes[i];
+			}
+			
+			return roots;
+		}
+		else
+			return File.listRoots();
 	} //}}}
 
 	//{{{ Private members

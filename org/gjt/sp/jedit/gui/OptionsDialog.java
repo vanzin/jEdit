@@ -49,8 +49,6 @@ public class OptionsDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		content.setLayout(new BorderLayout());
-
 		JPanel stage = new JPanel(new BorderLayout(6,6));
 		content.add(stage, BorderLayout.CENTER);
 
