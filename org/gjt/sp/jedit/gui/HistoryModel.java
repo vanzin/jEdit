@@ -179,31 +179,29 @@ public class HistoryModel extends AbstractListModel
 			BufferedWriter out = new BufferedWriter(
 				new FileWriter(file1));
 
-			if(models == null)
+			if(models != null)
 			{
-				out.close();
-				return;
-			}
-
-			Enumeration modelEnum = models.elements();
-			while(modelEnum.hasMoreElements())
-			{
-				HistoryModel model = (HistoryModel)modelEnum
-					.nextElement();
-				if(model.getSize() == 0)
-					continue;
-
-				out.write('[');
-				out.write(model.getName());
-				out.write(']');
-				out.write(lineSep);
-
-				for(int i = 0; i < model.getSize(); i++)
+				Enumeration modelEnum = models.elements();
+				while(modelEnum.hasMoreElements())
 				{
+					HistoryModel model = (HistoryModel)modelEnum
+						.nextElement();
+					if(model.getSize() == 0)
+						continue;
+	
+					out.write('[');
 					out.write(MiscUtilities.charsToEscapes(
-						model.getItem(i),
-						TO_ESCAPE));
+						model.getName(),TO_ESCAPE));
+					out.write(']');
 					out.write(lineSep);
+	
+					for(int i = 0; i < model.getSize(); i++)
+					{
+						out.write(MiscUtilities.charsToEscapes(
+							model.getItem(i),
+							TO_ESCAPE));
+						out.write(lineSep);
+					}
 				}
 			}
 
@@ -230,7 +228,7 @@ public class HistoryModel extends AbstractListModel
 	} //}}}
 
 	//{{{ Private members
-	private static final String TO_ESCAPE = "\n\t\\\"'[]";
+	private static final String TO_ESCAPE = "\r\n\t\\\"'[]";
 	private static int max;
 
 	private String name;
@@ -256,16 +254,18 @@ public class HistoryModel extends AbstractListModel
 
 		historyModTime = history.lastModified();
 
-		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history.xml");
+		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history");
 
 		loaded = true;
 
 		if(models == null)
 			models = new Hashtable();
 
+		BufferedReader in = null;
+
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(history));
+			in = new BufferedReader(new FileReader(history));
 
 			HistoryModel currentModel = null;
 			String line;
@@ -279,8 +279,12 @@ public class HistoryModel extends AbstractListModel
 						models.put(currentModel.getName(),
 							currentModel);
 					}
-					currentModel = new HistoryModel(line
-						.substring(1,line.length() - 1));
+
+					String modelName = MiscUtilities
+						.escapesToChars(line.substring(
+						1,line.length() - 1));
+					currentModel = new HistoryModel(
+						modelName);
 				}
 				else if(currentModel == null)
 				{
@@ -298,8 +302,6 @@ public class HistoryModel extends AbstractListModel
 			{
 				models.put(currentModel.getName(),currentModel);
 			}
-
-			in.close();
 		}
 		catch(FileNotFoundException fnf)
 		{
@@ -308,6 +310,17 @@ public class HistoryModel extends AbstractListModel
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,HistoryModel.class,io);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+			}
 		}
 	} //}}}
 

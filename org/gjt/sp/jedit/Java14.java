@@ -355,8 +355,12 @@ public class Java14
 
 			for(int i = 0; i < flavors.length; i++)
 			{
-				if(DataFlavor.stringFlavor.equals(flavors[i]) ||
-					DataFlavor.javaFileListFlavor.equals(flavors[i]))
+				if(DataFlavor.stringFlavor.equals(flavors[i]))
+				{
+					return textArea.isEditable();
+				}
+				else if(DataFlavor.javaFileListFlavor
+					.equals(flavors[i]))
 				{
 					return true;
 				}

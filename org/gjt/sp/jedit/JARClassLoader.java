@@ -202,6 +202,9 @@ public class JARClassLoader extends ClassLoader
 	void deactivate()
 	{
 		String[] classes = jar.getClasses();
+		if(classes == null)
+			return;
+
 		for(int i = 0; i < classes.length; i++)
 		{
 			Object loader = classHash.get(classes[i]);

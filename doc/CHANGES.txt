@@ -1,5 +1,56 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre7
+
+{{{ Miscellaneous
+
+- The list of modes in various dialog boxes is now sorted (this does not
+  affect the order that buffer names are matched against modes).
+
+}}}
+{{{ Syntax Highlighting
+
+- MoinMoin syntax highlighting (Ollie Rutherfurd).
+
+- Relax NG compact syntax highlighting (Randy Hudson).
+
+- Minor fix to Perl heredoc syntax highlighting (Chris Petersen).
+
+}}}
+{{{ Bug Fixes
+
+- Fixed NullPointerException on startup which prevented jEdit from
+  loading if a corrupted JAR file was present in one of the jars
+  directories.
+
+- Dropping a file onto the text area did not work if the text area was
+  read-only.
+
+- On Windows, MiscUtilities.constructPath() would fail if the parent
+  path was a URL and the child path started with a \.
+
+- On Windows, MiscUtilities.constructPath() would return a path with a
+  double backslash if the parent used / as a separator, and ended with a
+  /.
+
+- UTF16 files with a byte order mark were not being detected due to a
+  regression in pre6.
+
+- The history code now tries very hard not to write a malformed
+  ~/.jedit/history file.
+
+- Fixed a slowdown of 5-7 seconds on startup in some cases that results
+  fromcalling GraphicsDevice.getConfigurations().
+
+- The list of words in the "Complete Word" window was not sorted.
+
+- Fixed a race condition where the text area would throw a
+  NullPointerException if EditPane.setBuffer() was called twice in a row
+  with buffers that were not yet loaded.
+
+}}}
+
+}}}
 {{{ Version 4.2pre6
 
 Thanks to Magnus Henriksson, Mirco Bova, Ollie Rutherfurd, and
@@ -57,6 +108,8 @@ Stephen Bartlett for contributing to this release.
 
 - jEdit will now refuse to load a plugin if some of the JAR files listed
   in its 'jars' property are missing.
+
+- Added a few macros to the base distribution (Ollie Rutherfurd).
 
 }}}
 {{{ Bug Fixes

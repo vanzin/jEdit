@@ -171,6 +171,9 @@
 <MODE NAME="modula3"		FILE="modula3.xml"
 				FILE_NAME_GLOB="*.[im]3" />
 
+<MODE NAME="moin"		FILE="moin.xml"
+				FILE_NAME_GLOB="*.moin" />
+
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
 
@@ -243,6 +246,9 @@
 <MODE NAME="redcode"		FILE="redcode.xml"
 				FILE_NAME_GLOB="*.{red,rc}" />
 
+<MODE NAME="relax-ng-compact"	FILE="relax-ng-compact.xml"
+				FILE_NAME_GLOB="*.rnc" />
+
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
 
@@ -272,7 +278,7 @@
 				FIRST_LINE_GLOB="#!/*sh*" />
 
 <MODE NAME="shtml"		FILE="shtml.xml"
-				FILE_NAME_GLOB="*.{shtml,shtm}" />
+				FILE_NAME_GLOB="*.{shtml,shtm,ssi}" />
 
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />

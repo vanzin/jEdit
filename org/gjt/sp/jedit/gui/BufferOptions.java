@@ -94,18 +94,9 @@ public class BufferOptions extends EnhancedDialog
 
 		//{{{ Edit mode
 		modes = jEdit.getModes();
-		String bufferMode = buffer.getMode().getName();
-		int index = 0;
-		String[] modeNames = new String[modes.length];
-		for(int i = 0; i < modes.length; i++)
-		{
-			Mode mode = modes[i];
-			modeNames[i] = mode.getName();
-			if(bufferMode.equals(mode.getName()))
-				index = i;
-		}
-		mode = new JComboBox(modeNames);
-		mode.setSelectedIndex(index);
+		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
+		mode = new JComboBox(modes);
+		mode.setSelectedItem(buffer.getMode());
 		mode.addActionListener(actionListener);
 		panel.addComponent(jEdit.getProperty("buffer-options.mode"),mode);
 		//}}}

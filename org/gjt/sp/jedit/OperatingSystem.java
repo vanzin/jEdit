@@ -88,26 +88,24 @@ public class OperatingSystem
 	{
 		GraphicsDevice[] gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		Vector intersects = new Vector();
-		
+
 		// Get available screens
 		// O(n^3), this is nasty, but since we aren't dealling with
 		// many items it should be fine
 		for (int i=0; i < gd.length; i++)
 		{
-			GraphicsConfiguration[] gc = gd[i].getConfigurations();
-L2:			for (int j=0; j < gc.length; j++)
+			GraphicsConfiguration gc = gd[i]
+				.getDefaultConfiguration();
+			// Don't add duplicates
+			if (window.intersects(gc.getBounds()))
 			{
-				// Don't add duplicates
-				if (window.intersects(gc[j].getBounds()))
+				for (Enumeration e = intersects.elements(); e.hasMoreElements();)
 				{
-					for (Enumeration e = intersects.elements(); e.hasMoreElements();)
-					{
-						GraphicsConfiguration gcc = (GraphicsConfiguration)e.nextElement();
-						if (gcc.getBounds().equals(gc[j].getBounds()))
-							continue L2;
-					}
-					intersects.add(gc[j]);
+					GraphicsConfiguration gcc = (GraphicsConfiguration)e.nextElement();
+					if (gcc.getBounds().equals(gc.getBounds()))
+						break;
 				}
+				intersects.add(gc);
 			}
 		}
 		
