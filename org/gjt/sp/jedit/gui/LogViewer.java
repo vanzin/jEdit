@@ -1,5 +1,8 @@
 /*
  * LogViewer.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -28,9 +32,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class LogViewer extends JPanel
 {
+	//{{{ LogViewer constructor
 	public LogViewer()
 	{
 		super(new BorderLayout());
@@ -63,12 +69,22 @@ public class LogViewer extends JPanel
 
 		add(BorderLayout.NORTH,captionBox);
 		add(BorderLayout.CENTER,new JScrollPane(textArea));
-	}
+	} //}}}
 
+	//{{{ requestDefaultFocus() method
+	public boolean requestDefaultFocus()
+	{
+		textArea.requestFocus();
+		return true;
+	} //}}}
+
+	//{{{ Private members
 	private JTextArea textArea;
 	private JCheckBox tail;
 	private boolean tailIsOn;
+	//}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -79,8 +95,9 @@ public class LogViewer extends JPanel
 				textArea.setCaretPosition(
 					textArea.getDocument().getLength());
 		}
-	}
+	} //}}}
 
+	//{{{ DocumentHandler class
 	class DocumentHandler implements DocumentListener
 	{
 		public void insertUpdate(DocumentEvent e)
@@ -92,5 +109,5 @@ public class LogViewer extends JPanel
 
 		public void changedUpdate(DocumentEvent e) {}
 		public void removeUpdate(DocumentEvent e) {}
-	}
+	} //}}}
 }

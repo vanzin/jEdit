@@ -7,14 +7,18 @@ and quirks that I need to fix eventually.
 
 - fix print spacing problem
 - fix tom's bugs
-- change indentPrevLine to indentOneLine and indentSubsequentLines
-- fix fsb infinite requests problem, in fact fsb tree expansion state
-  preservation seems to be broken
 - minor quicknotepad changes -- update docs
 - add documentation for pre1 features
+- debug rectangular selection
 
 + later:
 
+- fix fsb infinite requests problem, in fact fsb tree expansion state
+  preservation seems to be broken
+- change indentPrevLine to indentOneLine and indentSubsequentLines
+- rect select: support shift-left/right
+- scroll horizontally when dragging into virtual space
+- support start in virtual space too
 - eval-for-selected-lines doesn't work with rectangular selection
 - searching in a buffer w/ narrowed fold
 - range-comment & rect select

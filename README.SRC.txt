@@ -9,14 +9,14 @@ To compile jEdit, you will need:
 
 - (Optional) To build the HTML version of the documentation:
 
-  - DocBook-XML 1.4.3 DTD and DocBook-XSL 1.49 (or later) stylesheets
+  - DocBook-XML 4.1.2 DTD and DocBook-XSL 1.51.1 (or later) stylesheets
     (<http://docbook.sourceforge.net>).
   - An XSLT processor, such as Xalan (<http://xml.apache.org>) or
     xsltproc (<http://xmlsoft.org/XSLT/>).
 
 - (Optional) To build the PDF version of the documentation:
 
-  - DocBook-XML 1.4.3 DTD and DocBook-DSSSL 1.74b (or later) stylesheets
+  - DocBook-XML 4.1.2 DTD and DocBook-DSSSL 1.76 (or later) stylesheets
     (<http://docbook.sourceforge.net>).
 
   - OpenJade 1.3 and OpenSP 1.3.4 (or later)
