@@ -2476,7 +2476,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				if(line.regionMatches(false,
 					i,EXPLICIT_START,0,3))
 					i += 2;
-				else
+				else if(lineBrackets >= 0)
 					lineBrackets++;
 			}
 		} //}}}

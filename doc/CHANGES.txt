@@ -67,6 +67,9 @@ Reinout van Schouwen for contributing to this release.
 
 - Editing option pane's "Use default settings" check box was broken.
 
+- Fixed an auto-indent bug that would give lines incorrect indent if
+  they contained both a closing and an opening bracket.
+
 + API Changes:
 
 - VFS._saveComplete(Object session, Buffer buffer, Component comp) is
