@@ -752,6 +752,11 @@ loop:			for(;;)
 		wrap = jEdit.getBooleanProperty("search.wrap.toggle");
 
 		fileset = new CurrentBufferSet();
+
+		// Tags plugin likes to call this method at times other than
+		// startup; so we need to fire a SearchSettingsChanged to
+		// notify the search bar and so on.
+		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
 
 	//{{{ save() method

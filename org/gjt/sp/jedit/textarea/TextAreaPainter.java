@@ -798,7 +798,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(bracketHighlight
 				&& physicalLine == textArea.getBracketLine()
-				&& textArea.isHighlightVisible())
+				&& textArea.isBracketHighlightVisible())
 				paintBracketHighlight(gfx,physicalLine,y);
 		}
 

@@ -535,6 +535,8 @@ public class GUIUtilities
 	public static String[] showVFSFileDialog(View view, String path,
 		int type, boolean multipleSelection)
 	{
+		hideSplashScreen();
+
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
 			view,path,type,multipleSelection);
 		String[] selectedFiles = fileChooser.getSelectedFiles();

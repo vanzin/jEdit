@@ -675,7 +675,8 @@ view.status.fold-tooltip=Fold mode (click to change)
 view.status.multi-tooltip=Multiple selection indicator (click to change)
 view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
-view.status.narrow=Invoke "Expand All Folds" to make all text visible again.
+view.status.narrow=Invoke "Expand All Folds" to make all text visible again
+view.status.bracket=Matches "{0}"
 #}}}
 
 #}}}

@@ -138,31 +138,40 @@
    to make brackets easier to deal with.
   </para>
   <para>
-   If the character immediately before the caret position is a bracket, the
-   matching one will be highlighted (assuming it is visible on the
-   screen) and a scope indicator will be drawn in the gutter between the
-   current line and the line containing the bracket. Bracket highlighting
-   can be disabled in the
-   <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   Positioning the caret immediately after a bracket will highlight the
+   corresponding closing or opening bracket (assuming it is visible)
+   and draw a scope indicator in the gutter. If the highlighted bracket is
+   not visible, the text of the matching line will be shown in the status
+   bar. If the matching line consists of only whitespace and the bracket
+   itself, the <emphasis>line before</emphasis> is shown instead. This
+   feature is very useful for code with bracketes indented like so:
   </para>
+  <programlisting>public void someMethod()
+{
+    if(isOK)
+    {
+        doSomething();
+    }
+}</programlisting>
   <para>
+   Invoking
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guimenuitem>Go to Matching
    Bracket</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo>)
-   goes to the bracket matching the one before the caret.
-  </para>
-  <para>
-   Double-clicking on a bracket in the text area will select all text
-   between the bracket and the one matching it.
+   <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo>), or
+   clicking the scope indicator in the gutter moves the caret to the
+   highlighted bracket.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guimenuitem>Select Code Block</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo>)
-   selects all text between the two brackets nearest to the caret.
+   selects all text between the two brackets surrounding the caret.
+  </para>
+  <para>
+   Holding down <keycap>Control</keycap> while clicking the scope indicator
+   or a bracket in the text area will select all text
+   between the two matching brackets.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
@@ -176,6 +185,13 @@
    Code</guisubmenu>&gt;<guimenuitem>Go to Next Bracket</guimenuitem> (shortcut:
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>]</keycap>)
    moves the caret to the next closing bracket.
+  </para>
+  <para>
+   Bracket highlighting for the text area and gutter, respectively,
+   can be disabled in the
+   <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
   </para>
   <note>
    <para>

@@ -23,18 +23,18 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=6
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=2480
-comp.0.real-size=2127
+comp.0.disk-size=2536
+comp.0.real-size=2179
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
-comp.1.disk-size=360
-comp.1.real-size=131
+comp.1.disk-size=280
+comp.1.real-size=122
 comp.1.fileset=jedit-macros
 
 comp.2.name=HTTP firewall support (Java 2 only)
 comp.2.disk-size=8
-comp.2.real-size=5
+comp.2.real-size=6
 comp.2.fileset=jedit-firewall
 
 comp.3.name=Windows launcher and context menu addition (Windows only)
@@ -45,7 +45,7 @@ comp.3.os=Windows
 
 comp.4.name=Improved MacOS integration (MacOS only)
 comp.4.disk-size=8
-comp.4.real-size=2
+comp.4.real-size=6
 comp.4.fileset=jedit-mac
 comp.4.os=MacOS
 

@@ -531,7 +531,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		else
 		{
 			path = this.path;
-			filter = null;
+			filter = jEdit.getProperty("vfs.browser.default-filter");
 		}
 
 		if(!(VFSManager.getVFSForPath(path) instanceof FileVFS))
