@@ -86,6 +86,8 @@ Thomas Galvin and Wiktor Adamski for contributing to this release.
 - Commands in the right-click menu of the parent directories list
   operated on the files currently selected in the file listing table.
 
+- Fixed NullPointerException in GUIUtilities.getComponentParent().
+
 }}}
 {{{ API Changes
 
