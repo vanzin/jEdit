@@ -157,7 +157,7 @@ textColors=false
 view.showToolbar=true
 
 # Show searchbar?
-view.showSearchbar=true
+view.showSearchbar=false
 
 # Show buffer switcher?
 view.showBufferSwitcher=true

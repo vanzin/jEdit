@@ -37,7 +37,7 @@ import org.gjt.sp.util.WorkThread;
  * @author Slava Pestov
  * @version $Id$
  */
-public class BrowserIORequest extends WorkRequest
+class BrowserIORequest extends WorkRequest
 {
 	//{{{ Request types
 	/**
@@ -69,10 +69,11 @@ public class BrowserIORequest extends WorkRequest
 	 * @param path1 The first path name to operate on
 	 * @param path2 The second path name to operate on
 	 * @param node Only used for type == LIST_DIRECTORY
+	 * @param loadingRoot Is this the root node?
 	 */
 	public BrowserIORequest(int type, VFSBrowser browser,
 		Object session, VFS vfs, String path1, String path2,
-		DefaultMutableTreeNode node)
+		DefaultMutableTreeNode node, boolean loadingRoot)
 	{
 		this.type = type;
 		this.browser = browser;
@@ -81,6 +82,7 @@ public class BrowserIORequest extends WorkRequest
 		this.path1 = path1;
 		this.path2 = path2;
 		this.node = node;
+		this.loadingRoot = loadingRoot;
 	} //}}}
 
 	//{{{ run() method
@@ -144,6 +146,7 @@ public class BrowserIORequest extends WorkRequest
 	private String path1;
 	private String path2;
 	private DefaultMutableTreeNode node;
+	private boolean loadingRoot;
 	//}}}
 
 	//{{{ listDirectory() method
@@ -186,7 +189,7 @@ public class BrowserIORequest extends WorkRequest
 		}
 
 		setAbortable(false);
-		browser.directoryLoaded(node,canonPath,directory);
+		browser.directoryLoaded(node,loadingRoot,canonPath,directory);
 	} //}}}
 
 	//{{{ delete() method

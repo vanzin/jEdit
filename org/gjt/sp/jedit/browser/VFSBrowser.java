@@ -308,7 +308,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ requestDefaultFocus() method
 	public boolean requestDefaultFocus()
 	{
-		return browserView.requestDefaultFocus();
+		browserView.focusOnFileView();
+		return true;
 	} //}}}
 
 	//{{{ addNotify() method
@@ -461,7 +462,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
-
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 
@@ -473,10 +473,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 			strippedPath = path;
 
 		pathField.setText(strippedPath);
+		this.path = strippedPath;
 
 		if(!startRequest())
 			return;
 
+		updateFilenameFilter();
 		browserView.loadDirectory(path);
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -507,6 +509,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		// used by FTP plugin to clear directory cache
 		VFSManager.getVFSForPath(path).reloadDirectory(path);
 
+		updateFilenameFilter();
 		browserView.loadDirectory(path);
 	} //}}}
 
@@ -546,7 +549,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.DELETE,this,
-			session,vfs,path,null,null));
+			session,vfs,path,null,null,false));
 	} //}}}
 
 	//{{{ rename() method
@@ -572,7 +575,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
+			session,vfs,from,to,null,false));
 	} //}}}
 
 	//{{{ mkdir() method
@@ -611,7 +614,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null,null));
+			session,vfs,newDirectory,null,null,false));
 	} //}}}
 
 	//{{{ newFile() method
@@ -706,11 +709,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	//{{{ Package-private members
 
-	//{{{ loadDirectory() method
-	void loadDirectory(DefaultMutableTreeNode node, String path, boolean root)
+	//{{{ updateFilenameFilter() method
+	void updateFilenameFilter()
 	{
-		loadingRoot = root;
-
 		try
 		{
 			String filter = filterField.getText();
@@ -725,21 +726,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 				e.getMessage() };
 			GUIUtilities.error(this,"vfs.browser.bad-filter",args);
 		}
-
-		path = MiscUtilities.constructPath(this.path,path);
-		VFS vfs = VFSManager.getVFSForPath(path);
-
-		Object session = vfs.createVFSSession(path,this);
-		if(session == null)
-			return;
-
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.LIST_DIRECTORY,this,
-			session,vfs,path,null,node));
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(final DefaultMutableTreeNode node, final String path,
+	void directoryLoaded(final DefaultMutableTreeNode node,
+		final boolean loadingRoot, final String path,
 		final VFS.DirectoryEntry[] list)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -955,7 +946,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private boolean doubleClickClose;
 
 	private boolean requestRunning;
-	private boolean loadingRoot;
 	//}}}
 
 	//{{{ createMenuBar() method
@@ -1104,7 +1094,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(path != null)
 					setDirectory(path);
 
-				browserView.requestDefaultFocus();
+				browserView.focusOnFileView();
 			}
 			else if(source == up)
 			{
