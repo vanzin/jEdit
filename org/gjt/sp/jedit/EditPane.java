@@ -598,6 +598,7 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
+				textArea.getDisplayManager().bufferLoaded();
 				textArea.repaint();
 				if(bufferSwitcher != null)
 					bufferSwitcher.updateBufferList();
