@@ -1,7 +1,6 @@
 TO DO
 
 - consider using NameSpace.clear() sometimes
-- document clear() bsh command
 - fix stylesheet problem
 - $ doesn't find last -- gnu.regexp bug
 - API guide: compareStrings(), showPopupMenu()
@@ -52,8 +51,6 @@ TO DO
 - v2p/p2v: implement from end backward scan
 - loading and saving opt pane: 'choose' button for backup directory
 - style setting for folding line indicator
-- inefficencies: lots of File objects created for the sake of
-  isAbsolute().
 - help viewer: two tabs, contents and index. index browser
 - file system browser:
   - commands->copy file list
