@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.gui.*;
  *
  * @author John Gellene
  */
-public class QuickNotepadPlugin extends EBPlugin
+public class QuickNotepadPlugin extends EditPlugin
 {
     public static final String NAME = "quicknotepad";
 	public static final String MENU = "quicknotepad.menu";
