@@ -87,7 +87,7 @@ public class DockableWindowManager extends JPanel
 	{
 		try
 		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + path);
+			//Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + path);
 
 			DockableListHandler dh = new DockableListHandler(path,actionSet);
 			XmlParser parser = new XmlParser();

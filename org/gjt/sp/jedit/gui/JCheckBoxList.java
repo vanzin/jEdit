@@ -86,6 +86,18 @@ public class JCheckBoxList extends JTable
 		return retVal;
 	}
 
+	public void selectAll()
+	{
+		CheckBoxListModel model = (CheckBoxListModel)getModel();
+		for(int i = 0; i < model.items.size(); i++)
+		{
+			Entry entry = (Entry)model.items.elementAt(i);
+			entry.checked = true;
+		}
+
+		model.fireTableStructureChanged();
+	}
+
 	public Entry[] getValues()
 	{
 		CheckBoxListModel model = (CheckBoxListModel)getModel();

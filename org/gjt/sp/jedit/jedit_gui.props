@@ -762,6 +762,7 @@ about.text=jEdit is brought to you by\n\
 	Dominic Stolerman\n\
 	Ed Stewart\n\
 	Eric Benoit\n\
+	Fan Ho Yin\n\
 	Francesc Roses\n\
 	George Hovey\n\
 	George Latkiewicz\n\
@@ -770,6 +771,7 @@ about.text=jEdit is brought to you by\n\
 	Giulio Piancastelli\n\
 	Greg Cooper\n\
 	Greg Merrill\n\
+	Giulio Piancastelli\n\
 	Ian Maclean\n\
 	Israel Olalla\n\
 	Jamie LaScolea\n\
@@ -1867,6 +1869,7 @@ install-plugins.downloadSource=Download source code
 install-plugins.user=Install in user plugin directory ({0})
 install-plugins.system=Install in system plugin directory ({0})
 install-plugins.none=none
+install-plugins.select-all=Select All
 install-plugins.install=Install
 #}}}
 

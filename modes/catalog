@@ -132,6 +132,9 @@
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
 
+<MODE NAME="nqc"		FILE="nqc.xml"
+				FILE_NAME_GLOB="*.nqc" />
+
 <MODE NAME="objective-c"	FILE="objective-c.xml"
 				FILE_NAME_GLOB="*.[mh]" />
 

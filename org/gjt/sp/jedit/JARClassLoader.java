@@ -330,9 +330,8 @@ public class JARClassLoader extends ClassLoader
 			jar.getActions().setLabel(jEdit.getProperty(
 				"action-set.plugin",
 				new String[] { label }));
-
 			Log.log(Log.NOTICE,this,"Starting plugin " + label
-					+ " (version " + version + ")");
+				+ " (version " + version + ")");
 
 			jar.addPlugin((EditPlugin)clazz.newInstance());
 		}
