@@ -16,6 +16,9 @@ JEDIT 4.0 VERSION HISTORY
     intuitive than filled/not-filled boxes
   - View->Folding->Collapse All Folds command, equivalent to invoking
     'Expand Folds With Level' and specifying a level of 1
+  - Different text areas editing the same buffer can now have different
+    folds collapsed and expanded. Previously, fold visibility was stored
+    at the buffer level
 - Utilities->Memory Status command to replace 'Show Free Memory' macro
 - General look and feel settings moved to 'Appearance' option pane
 - If you are using the Metal or Kunststoff L&F, the UI control font can

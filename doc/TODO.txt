@@ -2,18 +2,14 @@ TO DO
 
 + before 4.0pre1:
 
-- exceptions still thrown when collapsing/expanding folds
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
-- cvs add tip64.html
-- fix rotated text on java 2
 - new document and fold engine.
-  - collapseFolds property
+  - collapseFolds property -- handle at _insertLines() level?
+    or in Buffer.fireInsertUpdate()
   - fold visibility manager
     - return after //}}} issue
-    - should not need crappy while(!visible) hack in moveCaretPosition().
-    - expand fold
-    - collapse fold
+    - narrowing
   - OffsetManager manages LineInfos.
   - ogs.util.ReadWriteLock -- reuse code from j.
   - ContentManager
@@ -22,12 +18,16 @@ TO DO
   - compatibility APIs
   - undo
   - move away from Swing APIs in the core
+- respect collapseFolds buffer property when:
+  - pasting
+  - narrowing
+  - anything else?
 - auto indent: do not indent on {{{
 - investigate nextLineRequested() -- replace with a buffer event.
 - recompile Firewall.jar before releasing
-
-+ features:
-
+- tip about smart case replace
+- gutter scope bracket repaint problems
+- geometry workaround from j
 - update macros for API changes
 - macro guide entry for Andre's Vertical Paste macro
 - new goodies need to be documented
@@ -35,20 +35,18 @@ TO DO
   button, Escape activating 'Cancel' or equivalent
 - mention Alt-key mnemonics
 - QuickNotepad XSL docs
+- write explicit folding tips
+
++ features:
+
 - <file>?line= or ?marker=
 - keyboard select file in fs browser!
-- write explicit folding tips
-- collapse fold: scroll to fold line
 - wacky bracket matching stuff: only on }, ), ]
 - read up on JDK 1.4 focus API
 - mmb click in fs browser == double click
 - persistent fold visibility
 - next-fold/prev-fold actions
 - clickable stack traces in activity log?
-- respect collapseFolds buffer property when:
-  - pasting
-  - narrowing
-  - anything else?
 - fold navigator to browse fold tree in explicit fold mode
 - command to surround selection with explicit fold markers
 - search & replace: option to skip folded lines
