@@ -1188,8 +1188,12 @@ public class jEdit
 			Buffer buffer = buffersFirst;
 			while(buffer != null)
 			{
-				out.write(buffer.getPath());
-				out.write(lineSep);
+				if(!buffer.isUntitled())
+				{
+					out.write(buffer.getPath());
+					out.write(lineSep);
+				}
+
 				buffer = buffer.next;
 			}
 

@@ -2,31 +2,18 @@ TO DO
 
 + before 4.0pre1:
 
+- 'welcome' node not pre-selected
+- tool tip for panel window container close box
+- inserting {{{ doesn't update subsequent line's fold levels properly
+- update macros for API changes
 - blank line after }}}: part of fold
-- collapse fold: scroll to collapsed fold
 - auto indent: do not indent on {{{
 - investigate nextLineRequested()
-- text are painter: indicate lines with collapsed folds differently
-  (diff background color?)
-- gutter: instead of border, change background to indicate focus status
-- fold mode in buffer options
-- dockable window manager: requestDefaultFocus()
-- CVS add ogsj.buffer
 - per-text area fold visibility
 - when a new text area is created, if caret is on a bracket, not matched
   initially
-- word wrap off by default
-- folding off by default
-- 'welcome' node not pre-selected
-- complete word: update on the fly as chars typed
-- test style editor
 - recompile Firewall.jar before releasing
 - <file>#line: or #marker:
-- editing on last line shouldn't cause scrolling
-- improved window docking:
-  - do something about there being more buttons than can fit
-  - DockableLayout: handle too large
-- JDK 1.3: about box broken
 - (String)buffer.getProperty(): bad
   buffer.getIntegerProperty(),
   buffer.getStringProperty()?
@@ -38,9 +25,26 @@ TO DO
   button, Escape activating 'Cancel' or equivalent
 - mention Alt-key mnemonics
 - QuickNotepad XSL docs
+- keyboard select file in fs browser!
 
 + features:
 
+- clickable stack traces in activity log?
+- respect collapseFolds buffer property when:
+  - pasting
+  - narrowing
+  - anything else?
+- command to surround selection with explicit fold markers
+- mention OS X Apple+q issue in README.txt
+- for hex plugin: vetoing document events
+- expand fold at caret: if caret at level 1, don't expand sub level 2
+  folds
+- search & replace: option to skip folded lines
+- complete word: update on the fly as chars typed
+- improved window docking:
+  - do something about there being more buttons than can fit
+  - DockableLayout: handle too large
+- if caret inside hidden line, don't show bracket highlight
 - bracket matching:
   - if not on screen, do matching in background thread and show matching
     line in status bar
@@ -169,6 +173,8 @@ TO DO
 
 + bugs:
 
+- editing on last line shouldn't cause scrolling
+- JDK 1.3: about box broken
 - find next with $ or ^
 - Shift+TAB on Java 1.1
 - find btn no work

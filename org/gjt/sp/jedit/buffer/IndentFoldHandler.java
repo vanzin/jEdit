@@ -1,6 +1,7 @@
 /*
  * IndentFoldHandler.java - Indent-based fold handler
- * :tabSize=8:indentSize=8:folding=explicit:collapseFolds=1:
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
  *

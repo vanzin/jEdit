@@ -557,7 +557,7 @@ public class SearchDialog extends EnhancedDialog
 
 		if(searchSelection.isSelected())
 			fileset = new CurrentBufferSet();
-		if(searchCurrentBuffer.isSelected())
+		else if(searchCurrentBuffer.isSelected())
 		{
 			fileset = new CurrentBufferSet();
 

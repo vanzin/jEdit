@@ -141,7 +141,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 	public void show(DockableWindowManager.Entry entry)
 	{
 		if(current == entry)
+		{
+			if(entry != null)
+				entry.win.requestDefaultFocus();
 			return;
+		}
 
 		if(current == null)
 		{
@@ -158,7 +162,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int index = dockables.indexOf(entry);
 			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
 
-			entry.win.requestFocus();
+			entry.win.requestDefaultFocus();
 		}
 		else
 		{
@@ -409,7 +413,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			RotationFilter(int rotation)
 			{
 				this.rotation = rotation;
-				indexModel = new IndexColorModel(32,2,
+				indexModel = new IndexColorModel(8,2,
 					new byte[] { 0, 0 },
 					new byte[] { 0, 0 },
 					new byte[] { 0, 0 },

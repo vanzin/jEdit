@@ -5,6 +5,9 @@
 <!-- jEdit action table                                                      -->
 <!-- Copyright (C) 2000, 2001 Slava Pestov                                   -->
 
+<!-- :tabSize=8:indentSize=8:noTabs=false:                                   -->
+<!-- :folding=indent:collapseFolds=1:                                        -->
+
 <!-- Actions are the 'glue' that binds menu item selections and keystrokes   -->
 <!-- to jEdit's APIs. For simplicity and compactness, they are written in    -->
 <!-- the BeanShell scripting language.                                       -->
@@ -93,7 +96,7 @@
 
 <ACTION NAME="collapse-fold">
 	<CODE>
-		buffer.collapseFoldAt(textArea.getCaretLine());
+		buffer.collapseFoldAt(textArea.getCaretLine(),textArea);
 	</CODE>
 </ACTION>
 

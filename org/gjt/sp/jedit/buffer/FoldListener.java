@@ -1,6 +1,7 @@
 /*
  * FoldListener.java - Fold listener interface
- * :tabSize=8:indentSize=8:folding=explicit:collapseFolds=1:
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
  *
@@ -26,6 +27,8 @@ package org.gjt.sp.jedit.buffer;
  */
 public interface FoldListener
 {
+	void foldHandlerChanged();
+
 	void foldLevelsChanged(int firstLine, int lastLine);
 
 	void foldStructureChanged();

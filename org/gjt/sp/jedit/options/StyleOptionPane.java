@@ -1,5 +1,8 @@
 /*
  * StyleOptionPane.java - Style option pane
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -30,7 +34,9 @@ import java.util.Vector;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
+//}}}
 
+//{{{ StyleOptionPane class
 /**
  * Style option pane.
  * @author Slava Pestov
@@ -40,27 +46,35 @@ public class StyleOptionPane extends AbstractOptionPane
 {
 	public static final EmptyBorder noFocusBorder = new EmptyBorder(1,1,1,1);
 
+	//{{{ StyleOptionPane constructor
 	public StyleOptionPane()
 	{
 		super("style");
 	}
+	//}}}
 
-	// protected members
+	//{{{ Protected members
+
+	//{{{ _init() method
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
 		add(BorderLayout.CENTER,createStyleTableScroller());
-	}
+	} //}}}
 
+	//{{{ _save() method
 	protected void _save()
 	{
 		styleModel.save();
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private StyleTableModel styleModel;
 	private JTable styleTable;
 
+	//{{{ createStyleTableScroller() method
 	private JScrollPane createStyleTableScroller()
 	{
 		styleModel = createStyleTableModel();
@@ -78,13 +92,17 @@ public class StyleOptionPane extends AbstractOptionPane
 		JScrollPane scroller = new JScrollPane(styleTable);
 		scroller.setPreferredSize(d);
 		return scroller;
-	}
+	} //}}}
 
+	//{{{ createStyleTableModel() method
 	private StyleTableModel createStyleTableModel()
 	{
 		return new StyleTableModel();
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
@@ -100,13 +118,15 @@ public class StyleOptionPane extends AbstractOptionPane
 			if(style != null)
 				styleModel.setValueAt(style,row,1);
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ StyleTableModel class
 class StyleTableModel extends AbstractTableModel
 {
 	private Vector styleChoices;
 
+	//{{{ StyleTableModel constructor
 	StyleTableModel()
 	{
 		styleChoices = new Vector(13);
@@ -123,18 +143,21 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice("options.style.operatorStyle","view.style.operator");
 		addStyleChoice("options.style.digitStyle","view.style.digit");
 		addStyleChoice("options.style.invalidStyle","view.style.invalid");
-	}
+	} //}}}
 
+	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
 		return 2;
-	}
+	} //}}}
 
+	//{{{ getRowCount() method
 	public int getRowCount()
 	{
 		return styleChoices.size();
-	}
+	} //}}}
 
+	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
 		StyleChoice ch = (StyleChoice)styleChoices.elementAt(row);
@@ -147,16 +170,18 @@ class StyleTableModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
 		StyleChoice ch = (StyleChoice)styleChoices.elementAt(row);
 		if(col == 1)
 			ch.style = (SyntaxStyle)value;
 		fireTableRowsUpdated(row,row);
-	}
+	} //}}}
 
+	//{{{ getColumnName() method
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -168,8 +193,9 @@ class StyleTableModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save()
 	{
 		for(int i = 0; i < styleChoices.size(); i++)
@@ -179,16 +205,18 @@ class StyleTableModel extends AbstractTableModel
 			jEdit.setProperty(ch.property,
 				GUIUtilities.getStyleString(ch.style));
 		}
-	}
+	} //}}}
 
+	//{{{ addStyleChoice() method
 	private void addStyleChoice(String label, String property)
 	{
 		styleChoices.addElement(new StyleChoice(jEdit.getProperty(label),
 			property,
 			GUIUtilities.parseStyle(jEdit.getProperty(property),
 			"Dialog",12)));
-	}
+	} //}}}
 
+	//{{{ StyleChoice class
 	static class StyleChoice
 	{
 		String label;
@@ -201,19 +229,21 @@ class StyleTableModel extends AbstractTableModel
 			this.property = property;
 			this.style = style;
 		}
-	}
+	} //}}}
 
+	//{{{ StyleRenderer class
 	static class StyleRenderer extends JLabel
 		implements TableCellRenderer
 	{
+		//{{{ StyleRenderer constructor
 		public StyleRenderer()
 		{
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
 			setText("Hello World");
-		}
-	
-		// TableCellRenderer implementation
+		} //}}}
+
+		//{{{ getTableCellRendererComponent() method
 		public Component getTableCellRendererComponent(
 			JTable table,
 			Object value,
@@ -241,13 +271,14 @@ class StyleTableModel extends AbstractTableModel
 				"Table.focusCellHighlightBorder")
 				: StyleOptionPane.noFocusBorder);
 			return this;
-		}
-		// end TableCellRenderer implementation
-	}
-}
+		} //}}}
+	} //}}}
+} //}}}
 
+//{{{ StyleEditor class
 class StyleEditor extends EnhancedDialog implements ActionListener
 {
+	//{{{ StyleEditor constructor
 	StyleEditor(Component comp, SyntaxStyle style)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
@@ -273,15 +304,18 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		layout.setConstraints(italics,cons);
 		panel.add(italics);
 
+		cons.gridy++;
 		bold = new JCheckBox(jEdit.getProperty("style-editor.bold"));
 		bold.setSelected(style.getFont().isBold());
 		layout.setConstraints(bold,cons);
 		panel.add(bold);
 
+		cons.gridy++;
 		cons.gridwidth = 1;
 		Color fg = style.getForegroundColor();
 		fgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.fgColor"));
 		fgColorCheckBox.setSelected(fg != null);
+		fgColorCheckBox.addActionListener(this);
 		layout.setConstraints(fgColorCheckBox,cons);
 		panel.add(fgColorCheckBox);
 
@@ -303,6 +337,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		Color bg = style.getBackgroundColor();
 		bgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.bgColor"));
 		bgColorCheckBox.setSelected(bg != null);
+		bgColorCheckBox.addActionListener(this);
 		layout.setConstraints(bgColorCheckBox,cons);
 		panel.add(bgColorCheckBox);
 
@@ -337,8 +372,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		pack();
 		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
-	}
+	} //}}}
 
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
@@ -359,20 +395,22 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 			fgColor.setEnabled(fgColorCheckBox.isSelected());
 		else if(source == bgColorCheckBox)
 			bgColor.setEnabled(bgColorCheckBox.isSelected());
-	}
+	} //}}}
 
-	// EnhancedDialog implementation
+	//{{{ ok() method
 	public void ok()
 	{
 		okClicked = true;
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
+	} //}}}
 
+	//{{{ getStyle() method
 	public SyntaxStyle getStyle()
 	{
 		if(!okClicked)
@@ -391,9 +429,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 				(italics.isSelected() ? Font.ITALIC : 0)
 				| (bold.isSelected() ? Font.BOLD : 0),
 				12));
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JCheckBox italics;
 	private JCheckBox bold;
 	private JCheckBox fgColorCheckBox;
@@ -403,4 +441,5 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 	private JButton ok;
 	private JButton cancel;
 	private boolean okClicked;
-}
+	//}}}
+} //}}}
