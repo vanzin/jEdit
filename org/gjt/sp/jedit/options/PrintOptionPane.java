@@ -73,6 +73,22 @@ public class PrintOptionPane extends AbstractOptionPane
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
 		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
+
+		addSeparator("options.print.workarounds");
+
+		/* Spacing workaround */
+		glyphVector = new JCheckBox(jEdit.getProperty(
+			"options.print.glyphVector"));
+		glyphVector.setSelected(jEdit.getBooleanProperty("print.glyphVector"));
+		addComponent(glyphVector);
+
+		/* Force 1.3 print dialog */
+		force13 = new JCheckBox(jEdit.getProperty(
+			"options.print.force13"));
+		force13.setSelected(jEdit.getBooleanProperty("print.force13"));
+
+		if(OperatingSystem.hasJava14())
+			addComponent(force13);
 	} //}}}
 
 	//{{{ _save() method
@@ -84,6 +100,8 @@ public class PrintOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());
 		jEdit.setBooleanProperty("print.color",color.isSelected());
 		jEdit.setProperty("print.tabSize",(String)tabSize.getSelectedItem());
+		jEdit.setBooleanProperty("print.glyphVector",glyphVector.isSelected());
+		jEdit.setBooleanProperty("print.force13",force13.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -93,5 +111,7 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JCheckBox printLineNumbers;
 	private JCheckBox color;
 	private JComboBox tabSize;
+	private JCheckBox glyphVector;
+	private JCheckBox force13;
 	//}}}
 }

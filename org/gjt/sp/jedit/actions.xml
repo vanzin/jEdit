@@ -722,7 +722,8 @@
 <ACTION NAME="print">
 	<CODE>
 
-	if(OperatingSystem.hasJava14())
+	if(OperatingSystem.hasJava14() &amp;&amp;
+		!jEdit.getBooleanProperty("print.force13"))
 		BufferPrinter1_4.print(view,buffer,false);
 	else
 		BufferPrinter1_3.print(view,buffer,false);

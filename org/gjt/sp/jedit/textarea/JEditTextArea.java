@@ -335,7 +335,7 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//}}}
-
+	
 	//{{{ Scrolling
 
 	//{{{ Debugging code
@@ -4750,8 +4750,30 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			super.processKeyEvent(evt);
 	} //}}}
 
-	//}}}
+	//{{{ addTopComponent() method
+	/**
+	 * Adds a component above the gutter, text area, and vertical scroll bar.
+	 *
+	 * @since jEdit 4.2pre3
+	 */
+	public void addTopComponent(Component comp)
+	{
+		add(TOP,comp);
+	} //}}}
 
+	//{{{ removeTopComponent() method
+	/**
+	 * Removes a component from above the gutter, text area, and vertical scroll bar.
+	 *
+	 * @since jEdit 4.2pre3
+	 */
+	public void removeTopComponent(Component comp)
+	{
+		remove(comp);
+	} //}}}
+	
+	//}}}
+	
 	//{{{ propertiesChanged() method
 	/**
 	 * Called by jEdit when necessary. Plugins should not call this method.
@@ -5135,6 +5157,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private static String RIGHT = "right";
 	private static String LEFT = "left";
 	private static String BOTTOM = "bottom";
+	private static String TOP = "top";
 
 	private static Timer caretTimer;
 	private static Timer bracketTimer;
@@ -5704,6 +5727,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				left = comp;
 			else if(name.equals(BOTTOM))
 				bottom = comp;
+			else if(name.equals(TOP))
+				top = comp;
 		} //}}}
 
 		//{{{ removeLayoutComponent() method
@@ -5717,6 +5742,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				left = null;
 			else if(bottom == comp)
 				bottom = null;
+			else if(top == comp)
+				top = null;
 		} //}}}
 
 		//{{{ preferredLayoutSize() method
@@ -5745,6 +5772,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			dim.width += rightPref.width;
 			Dimension bottomPref = bottom.getPreferredSize();
 			dim.height += bottomPref.height;
+			if(top != null)
+			{
+				Dimension topPref = top.getPreferredSize();
+				dim.height += topPref.height;
+			}
 
 			return dim;
 		} //}}}
@@ -5775,7 +5807,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			dim.width += rightPref.width;
 			Dimension bottomPref = bottom.getMinimumSize();
 			dim.height += bottomPref.height;
-
+			if(top != null)
+			{
+				Dimension topPref = top.getMinimumSize();
+				dim.height += topPref.height;
+			}
+			
 			return dim;
 		} //}}}
 
@@ -5800,33 +5837,42 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			int rightWidth = right.getPreferredSize().width;
 			int leftWidth = left.getPreferredSize().width;
+			int topHeight;
+			if(top != null)
+			{
+				topHeight = top.getPreferredSize().height;
+			}
+			else
+			{
+				topHeight = 0;
+			}
 			int bottomHeight = bottom.getPreferredSize().height;
 			int centerWidth = Math.max(0,size.width - leftWidth
 				- rightWidth - ileft - iright);
-			int centerHeight = Math.max(0,size.height
+			int centerHeight = Math.max(0,size.height - topHeight
 				- bottomHeight - itop - ibottom);
-
+				
 			left.setBounds(
 				ileft,
-				itop,
+				itop+topHeight,
 				leftWidth,
 				centerHeight);
 
 			center.setBounds(
 				ileft + leftWidth,
-				itop,
+				itop+topHeight,
 				centerWidth,
 				centerHeight);
 
 			right.setBounds(
 				ileft + leftWidth + centerWidth,
-				itop,
+				itop+topHeight,
 				rightWidth,
 				centerHeight);
 
 			bottom.setBounds(
 				ileft,
-				itop + centerHeight,
+				itop + topHeight + centerHeight,
 				/* silly that we reference the vertical
 				   scroll bar here directly. we do this so
 				   that the horizontal scroll bar is flush
@@ -5834,12 +5880,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				Math.max(0,size.width - vertical.getWidth()
 					- ileft - iright),
 				bottomHeight);
+			if(top != null)
+			{
+				top.setBounds(
+					ileft,
+					itop,
+					leftWidth+centerWidth+rightWidth,
+					topHeight);
+			}
 		} //}}}
 
 		Component center;
 		Component left;
 		Component right;
 		Component bottom;
+		Component top;
 	} //}}}
 
 	//{{{ CaretBlinker class
@@ -6565,7 +6620,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		} //}}}
 	} //}}}
-
+	
 	//}}}
 
 	//{{{ Class initializer

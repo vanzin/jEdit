@@ -656,12 +656,16 @@ loop:		for(int i = 0; i < str.length(); i++)
 			while(len-- > 0)
 				buf.append(' ');
 		}
+		else if(len == 1)
+			buf.append(' ');
 		else
 		{
 			int count = (len + start % tabSize) / tabSize;
+			if(count != 0)
+				len += start;
 			while(count-- > 0)
 				buf.append('\t');
-			count = (len + start) % tabSize;
+			count = len % tabSize;
 			while(count-- > 0)
 				buf.append(' ');
 		}
