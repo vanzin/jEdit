@@ -382,9 +382,21 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="insert-tab">
+	<CODE>
+		textArea.userInput('\t');
+	</CODE>
+</ACTION>
+
 <ACTION NAME="insert-newline-indent">
 	<CODE>
 		textArea.insertEnterAndIndent();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="insert-tab-indent">
+	<CODE>
+		textArea.insertTabAndIndent();
 	</CODE>
 </ACTION>
 

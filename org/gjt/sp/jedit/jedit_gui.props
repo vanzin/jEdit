@@ -623,6 +623,8 @@ hypersearch-results.label=HyperSearch Results
 insert-literal.label=Insert Next Character Literally
 insert-newline.label=Insert Newline
 insert-newline-indent.label=Insert Newline and Indent
+insert-tab.label=Insert Tab
+insert-tab-indent.label=Insert Tab and Indent
 line-end.label=Go to End of Line
 line-home.label=Go to Start of Line
 next-char.label=Go to Next Character
@@ -789,6 +791,7 @@ about.text=jEdit is brought to you by\n\
 	Jiger Patel\n\
 	Jim Wissner\n\
 	John Gellene\n\
+	John Perry\n\
 	Jonathan Revusky\n\
 	Jorg Winter\n\
 	Joseph Schroer\n\
@@ -1452,7 +1455,6 @@ options.editing.maxLineLen=Wrap margin:
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
-options.editing.indentOnTab=Indent line when Tab key is pressed
 options.editing.noTabs=Soft (emulated with spaces) tabs
 #}}}
 

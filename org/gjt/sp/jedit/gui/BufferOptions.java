@@ -175,13 +175,6 @@ public class BufferOptions extends EnhancedDialog
 		panel.addComponent(noTabs);
 		//}}}
 
-		//{{{ Indent on tab
-		indentOnTab = new JCheckBox(jEdit.getProperty(
-			"options.editing.indentOnTab"));
-		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
-		panel.addComponent(indentOnTab);
-		//}}}
-
 		content.add(BorderLayout.NORTH,panel);
 
 		//{{{ Buttons
@@ -278,7 +271,6 @@ public class BufferOptions extends EnhancedDialog
 		}
 
 		buffer.setBooleanProperty("noTabs",noTabs.isSelected());
-		buffer.setBooleanProperty("indentOnTajb",indentOnTab.isSelected());
 
 		index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
@@ -308,7 +300,6 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox tabSize;
 	private JComboBox indentSize;
 	private JCheckBox noTabs;
-	private JCheckBox indentOnTab;
 	private JButton ok;
 	private JButton cancel;
 	//}}}
@@ -338,8 +329,6 @@ public class BufferOptions extends EnhancedDialog
 					"tabSize"));
 				indentSize.setSelectedItem(_mode.getProperty(
 					"indentSize"));
-				indentOnTab.setSelected(_mode.getBooleanProperty(
-					"indentOnTab"));
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
 			}

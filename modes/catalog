@@ -123,6 +123,9 @@
 <MODE NAME="makefile"		FILE="makefile.xml"
 				FILE_NAME_GLOB="*{makefile,.mak}" />
 
+<MODE NAME="maple"		FILE="maple.xml"
+				FILE_NAME_GLOB="*.{mpl,mws}" />
+
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
 

@@ -2,12 +2,30 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
-Thanks to Joshua Miller and Marcelo Vanzin for contributing to this
-release.
+Thanks to John Perry, Joshua Miller and Marcelo Vanzin for contributing
+to this release.
+
++ Editing Changes:
+
+- The "Indent on Enter" and "Indent on Tab" options are no longer.
+  (Actually, the former was removed in pre5, but I forgot to mention it
+  in the changelog).
+
+  The new way to change these options is to just rebind the ENTER and
+  TAB keys in the Shortcuts option pane. There are several actions they
+  can be bound to:
+
+  Insert Enter
+  Insert Enter and Indent
+  Insert Tab
+  Insert Tab and Indent
+  Indent Line (if you want TAB to indent anywhere in a line, not just in
+  the leading whitespace, like in emacs).
 
 + Syntax Highlighting Changes:
 
 - Updated ColdFusion syntax highlighting (Joshua Miller).
+- Added Maple syntax highlighting (John Perry)
 
 + Bug Fixes
 
