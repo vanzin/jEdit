@@ -11,6 +11,8 @@ JEDIT 4.0 VERSION HISTORY
   to happen
 - The text area will no longer scroll up and then down again on input if
   it is smaller than about six lines vertically
+- Added workaround for search dialog box losing focus after 'keep
+  searching' message shown
 
 * Version 4.0pre7
 
