@@ -392,14 +392,14 @@ public class OffsetManager
 		updatePositionsForRemove(offset,length);
 	} //}}}
 
-	//{{{ linesChanged() method
-	public void linesChanged(int startLine, int numLines)
+	//{{{ lineInfoChangedFrom() method
+	public void lineInfoChangedFrom(int startLine)
 	{
-		for(int i = 0; i < numLines; i++)
+		for(int i = startLine; i < lineCount; i++)
 		{
-			lineInfo[startLine + i] &= ~(FOLD_LEVEL_VALID_MASK
+			lineInfo[i] &= ~(FOLD_LEVEL_VALID_MASK
 				| CONTEXT_VALID_MASK);
-			lineContext[startLine + i] = null;
+			lineContext[i] = null;
 		}
 	} //}}}
 

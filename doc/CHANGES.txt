@@ -107,6 +107,8 @@ JEDIT 4.0 VERSION HISTORY
 - Removing text from the middle of a line with soft wrap on might not
   repaint the text area properly
 - Added missing 'read error' and 'write error' I/O error strings
+- Workaround for Graphics2D.setPaintMode() bug on Windows placed in
+  background token painting code as well
 
 + API Additions
 

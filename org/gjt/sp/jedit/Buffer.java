@@ -1256,7 +1256,7 @@ public class Buffer implements EBComponent
 	//{{{ removeTrailingWhiteSpace() method
 	/**
 	 * Removes trailing whitespace from all lines in the specified list.
-	 * @param list The line numbers
+	 * @param lines The line numbers
 	 * @since jEdit 3.2pre1
 	 */
 	public void removeTrailingWhiteSpace(int[] lines)
@@ -1540,9 +1540,9 @@ public class Buffer implements EBComponent
 	 * @param listener The listener
 	 * @since jEdit 4.0pre1
 	 */
-	public void addBufferChangeListener(BufferChangeListener l)
+	public void addBufferChangeListener(BufferChangeListener listener)
 	{
-		bufferListeners.addElement(l);
+		bufferListeners.addElement(listener);
 	} //}}}
 
 	//{{{ removeBufferChangeListener() method
@@ -1551,9 +1551,9 @@ public class Buffer implements EBComponent
 	 * @param listener The listener
 	 * @since jEdit 4.0pre1
 	 */
-	public void removeBufferChangeListener(BufferChangeListener l)
+	public void removeBufferChangeListener(BufferChangeListener listener)
 	{
-		bufferListeners.removeElement(l);
+		bufferListeners.removeElement(listener);
 	} //}}}
 
 	//}}}
@@ -2294,7 +2294,7 @@ public class Buffer implements EBComponent
 			int lineCount = offsetMgr.getLineCount();
 			if(nextLineRequested && lineCount - lineIndex > 1)
 			{
-				offsetMgr.linesChanged(lineIndex + 1,lineCount - lineIndex - 1);
+				offsetMgr.lineInfoChangedFrom(lineIndex + 1);
 			}
 
 			return tokenList;
@@ -2983,8 +2983,7 @@ public class Buffer implements EBComponent
 	Buffer next;
 
 	//{{{ Buffer constructor
-	Buffer(View view, String path, boolean newFile, boolean temp,
-		Hashtable props)
+	Buffer(String path, boolean newFile, boolean temp, Hashtable props)
 	{
 		properties = ((Hashtable)props.clone());
 
@@ -3334,7 +3333,7 @@ public class Buffer implements EBComponent
 		// don't do this on initial token marker
 		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
 		{
-			offsetMgr.linesChanged(0,offsetMgr.getLineCount());
+			offsetMgr.lineInfoChangedFrom(0);
 			lastTokenizedLine = -1;
 		}
 	} //}}}
@@ -3354,7 +3353,7 @@ public class Buffer implements EBComponent
 		// don't do this on initial fold handler creation
 		if(oldFoldHandler != null)
 		{
-			offsetMgr.linesChanged(0,offsetMgr.getLineCount());
+			offsetMgr.lineInfoChangedFrom(0);
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}

@@ -55,14 +55,14 @@
 
  <sect1 id="single-macros"><title>Single Execution Macros</title>
   <para>
-   There are two ways jEdit lets you use BeanShell quickly on a
-   <quote>one time only</quote> basis. You will find both of them in the
+   There are three ways jEdit lets you use BeanShell quickly on a
+   <quote>one time only</quote> basis. You will find them in the
    <guimenu>Utilities</guimenu> menu.
   </para>
 
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-   Expression</guimenuitem> causes jEdit to display a text input dialog
+   Expression</guimenuitem> displays a text input dialog
    that asks you to type a single line of BeanShell commands. You can type
    more than one BeanShell statement so long as each of them ends with a
    semicolon. If BeanShell successfully interprets your input, a message
@@ -73,10 +73,36 @@
   </para>
 
   <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate For Selected
+   Lines</guimenuitem> displays a text input dialog that asks you to
+   type a single line of BeanShell commands. The commands are evaluated
+   for each line of the selection. In addition to the standard set of
+   variables, this command defines the following:
+  </para>
+
+  <itemizedlist>
+   <listitem><para><varname>line</varname> - the line number, from the
+   start of the buffer. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>index</varname> - the line number, from the
+   start of the selection. The first line is numbered 0.
+   </para></listitem>
+   <listitem><para><varname>text</varname> - the text of the line.
+   </para></listitem>
+  </itemizedlist>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(line + 1) + ": " + text</userinput>
+    in the <guimenuitem>Evaluate For Selected Lines</guimenuitem> dialog
+    box. This will add a line number to each selected line.
+   </para>
+  </informalexample>
+
+  <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
    evaluates the selected text as a BeanShell script and
-   replaces the selected text with the return value of the last BeanShell
-   statement.
+   replaces it with the return value of the statement.
   </para>
 
   <para>
@@ -94,6 +120,13 @@
     answer, <userinput>3205794</userinput>.
    </para>
   </informalexample>
+
+  <para>
+    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
+    easy way to do arithmetic calculations inline while editing. BeanShell
+    uses numbers and arithmetic operations in an ordinary, intuitive way.
+  </para>
+
  </sect1>
 
 </chapter>

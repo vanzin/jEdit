@@ -135,12 +135,15 @@ public abstract class EditPlugin
 		{
 			plugin.jar = JAR.this;
 
+			// must be before the below two so that if an error
+			// occurs during start, the plugin is not listed as
+			// being active
+			plugin.start();
+
 			if(plugin instanceof EBPlugin)
 				EditBus.addToBus((EBPlugin)plugin);
 
 			plugins.addElement(plugin);
-
-			plugin.start();
 		}
 
 		public EditPlugin[] getPlugins()
