@@ -77,12 +77,12 @@ public class ColorWellButton extends JButton
 
 		public int getIconWidth()
 		{
-			return 25;
+			return 35;
 		}
 
 		public int getIconHeight()
 		{
-			return 13;
+			return 10;
 		}
 
 		public void paintIcon(Component c, Graphics g, int x, int y)

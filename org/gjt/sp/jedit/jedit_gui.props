@@ -478,15 +478,21 @@ toggle-synchro-scroll.label=Synchronized Scrolling
 #}}}
 
 #{{{ Docking menu
-docking=close-left-docking-area \
-	close-top-docking-area \
-	close-right-docking-area \
-	close-bottom-docking-area
+docking=left-docking-area \
+	top-docking-area \
+	right-docking-area \
+	bottom-docking-area \
+	- \
+	close-docking-area \
+	- \
+	goto-textarea
 docking.label=Docking
-close-left-docking-area.label=Close Left Docking Area
-close-top-docking-area.label=Close Top Docking Area
-close-right-docking-area.label=Close Right Docking Area
-close-bottom-docking-area.label=Close Bottom Docking Area
+left-docking-area.label=Go to Left Docking Area
+top-docking-area.label=Go to Top Docking Area
+right-docking-area.label=Go to Right Docking Area
+bottom-docking-area.label=Go to Bottom Docking Area
+close-docking-area.label=Close Current Docking Area
+goto-textarea.label=Go to Text Area
 #}}}
 
 #}}}

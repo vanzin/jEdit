@@ -25,15 +25,41 @@ contributing to this release.
 - CHILL (CCITT recommendation language) syntax highlighting added
   (Rudolf Widmann)
 
-+ User Interface Changes:
++ Global Options Dialog Changes:
 
 - Added an option to Utilities->Global Options->Docking for
   jEdit 4.0-style tool bar placement.
+
+- Text area and gutter color settings have been moved to the Text Area
+  and Gutter panes of the Global Options dialog box; the Colors pane is
+  no longer.
+
+- The "smart home" and "smart end" settings are now much more flexible.
+  Instead of them being flags in the Text Area pane, the various
+  behaviors of the Home and End keys have been split into multiple
+  actions, all of which can be bound to any shortcut key (including HOME
+  and END of course) in the Shortcuts pane.
+
++ Window Docking Changes:
+
+- 'Close Top/Left/Bottom/Right Docking Area' commands all merged into a
+  single 'Close Current Docking Area' command, bound by default to
+  C+e C+BACK_QUOTE.
+
+- 'Go to Top/Left/Bottom/Right Docking Area' commands added, bound by
+  default to C+e UP/LEFT/DOWN/RIGHT. It opens the docking area in
+  question if it is closed, and sends keyboard focus to the selected
+  dockable window.
+
+- 'Go to Text Area' command added, bound by default to C+e C+e. It sends
+  keyboard focus to the text area.
 
 - The popup menu shown when right-clicking on the strip of buttons in a
   dockable window container now contains a new sub-menu, labelled "New
   Floating Instance". This menu contains items which open new floating
   instances of the windows docked in this area.
+
++ User Interface Changes:
 
 - A few more menu bar rearrangements:
   - 'Recent Directories' moved from File to Utilities menu.
