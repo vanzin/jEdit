@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre9 -- 4.1 release candidate 1
 
-Thanks to Chris Petersen, Kris Kopicki and Reinout van Schouwen for
-contributing to this release.
+Thanks to Chris Petersen, Kris Kopicki, Randolf Mock and
+Reinout van Schouwen for contributing to this release.
 
 + Syntax Highlighting Changes:
 
@@ -64,6 +64,8 @@ contributing to this release.
 - Fixed split pane divider positioning.
 
 - Various modes were missing a "lineUpClosingBracket" property.
+
+- Editing option pane's "Use default settings" check box was broken.
 
 + API Changes:
 
