@@ -331,14 +331,31 @@ public class ManagePanel extends JPanel
 		{
 			entries.clear();
 
+			String systemJarDir = MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"jars");
+			String userJarDir;
+			if(jEdit.getSettingsDirectory() == null)
+				userJarDir = null;
+			else
+			{
+				userJarDir = MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"jars");
+			}
+
 			PluginJAR[] plugins = jEdit.getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{
-				Entry e = new Entry(plugins[i]);
-				if(!hideLibraries.isSelected()
-					|| e.clazz != null)
+				String path = plugins[i].getPath();
+				if(path.startsWith(systemJarDir)
+					|| (userJarDir != null
+					&& path.startsWith(userJarDir)))
 				{
-					entries.add(e);
+					Entry e = new Entry(plugins[i]);
+					if(!hideLibraries.isSelected()
+						|| e.clazz != null)
+					{
+						entries.add(e);
+					}
 				}
 			}
 

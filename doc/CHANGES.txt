@@ -9,6 +9,16 @@ JEDIT 4.2 VERSION HISTORY
 
 - Bundled some macros from various sources (Ollie Rutherfurd).
 
+- The plugin manager no longer lists the JDK's "tools.jar" if it is
+  loaded.
+
+- The "Search in Directory" command now always selects the most recently
+  searched in directory. To search in the current directory with the
+  filter based on the current buffer's file name, click the
+  "Synchronize" button.
+
+- Updated "Preview Javadoc of Current Buffer" macro (Tom Gutwin).
+
 }}}
 {{{ Syntax Highlighting
 
@@ -21,6 +31,8 @@ JEDIT 4.2 VERSION HISTORY
 - Updated ADPL syntax highlighting (Randolf Mock)
 
 - Added Renderman-RIB syntax highlighting (Alessandro Falappa).
+
+- Added PowerDynamo syntax highlighting (Ben Williams).
 
 }}}
 {{{ Bug Fixes
@@ -59,6 +71,11 @@ JEDIT 4.2 VERSION HISTORY
 
 - History lists were not being saved at all unless the history file
   existed in the first place!
+
+- The "Shortcuts" option pane will no longer refuse to display with
+  various malformed plugins.
+
+- An entry for inform.xml was missing from the mode catalog file.
 
 }}}
 {{{ API Changes

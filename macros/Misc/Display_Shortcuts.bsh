@@ -1,6 +1,10 @@
 /*
  * Display_shortcuts.bsh - a BeanShell macro script for the
  * jEdit text editor - displays all shortcut key assignments
+ * Copyright (C) 2003 Russell Inman
+ * email: RInman@csustan.edu
+ *
+ * Code based on Display_Shortcuts.bsh, 1.3
  * Copyright (C) 2001 John Gellene
  * email: jgellene@nyc.rr.com
  * http://community.jedit.org
@@ -20,7 +24,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *
- * $Id$
+ * Display_Shortcuts.bsh, v1.3.1 2003-11-13
+ *
  *
  * requires jEdit3.1pre5
  *
@@ -42,8 +47,7 @@
  * routine.  Sorting by keyname would require a second custom sorting routine.
  * There is also a hack in the code creating the table.
  *
- * Checked for jEdit 4.0 API
- *
+ * Checked for jEdit 4.2pre6 API
  */
 
 import javax.swing.table.*;
@@ -52,17 +56,15 @@ import javax.swing.table.*;
  * method for creating vectors of row data describing shortcuts.
  */
 
-Vector makeShortcutsVector()
+void makeShortcutsVector(Vector p_v)
 {
-	v = new Vector();
-
-	EditAction[] actions = jEdit.getActions();
-	for(int i = 0; i < actions.length; i++)
+	String[] actionNames = jEdit.getActionNames();
+	for(int i = 0; i < actionNames.length; i++)
 	{
-		EditAction action = actions[i];
+		EditAction action = jEdit.getAction(actionNames[i]);
 		String name = action.getName();
 		String label = action.getLabel();
-		if(label == null)
+	if(label == null)
 			label = name;
 		else label = GUIUtilities.prettifyMenuLabel(label);
 		String shortcut1 = jEdit.getProperty(name + ".shortcut");
@@ -73,11 +75,9 @@ Vector makeShortcutsVector()
 			shortcut2 = "";
 		if(shortcut1.length() != 0 || shortcut2.length() != 0)
 		{
-			v.addElement(makeRow(label,shortcut1,shortcut2));
+			p_v.addElement(makeRow(label,shortcut1,shortcut2));
 		}
 	}
-
-	return v;
 }
 
 /*
@@ -138,11 +138,11 @@ void writeLine(Vector row)
 
 /*
  *  main routine
- *
  */
 void showShortcuts()
 {
-	v = makeShortcutsVector();
+	Vector v = new Vector();
+	makeShortcutsVector(v);
 	MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
 
 	table = new JTable(v, makeRow( "Name", "Shortcut-1", "Shortcut-2"));
@@ -239,7 +239,8 @@ void showShortcuts()
 	{
 		ch = Character.toUpperCase(ch);
 		int row = 0;
-		for(int i = (ch > 'L' ? data_midpoint : 0); i < v.size(); ++i)
+		int fix_err = ch > 'L' ? data_midpoint : 0;
+		for(int i = fix_err; i < v.size(); ++i)
 		{
 			String name = ((Vector)v.elementAt(i)).elementAt(0);
 			char ch_test = Character.toUpperCase(name.charAt(0));
@@ -284,6 +285,20 @@ showShortcuts();
     </para>
 </listitem>
 
+*/
+
+/*
+	Changes from v1.3
+	- Since makeShortcutsVector() had no return statement, the return type was
+	  changed to void.
+	- Removed deprecated jEdit.getEditActions() call from makeShortcutsVector
+	- The original makeShortcutsVector method referenced a variable v, 
+	  presumably from showShortcuts(), which was outside of its scope.  
+	  I don't know if some new scoping rule in BeanShell broke this or not.
+	  At any rate, the method has been updated so that it takes a 
+	  Vector as a parameter.
+	- Added an explicit declaration for Vector v to showShortcuts in order to
+	  pass it to makeShortcutsVector
 */
 
 // end Display_Shortcuts.bsh

@@ -905,19 +905,21 @@ public class PluginJAR
 			}
 			else
 			{
-				if(actions != null)
-				{
-					String label = jEdit.getProperty(
-						"plugin." + cache.pluginClass
-						+ ".name");
-					actions.setLabel(jEdit.getProperty(
-						"action-set.plugin",
-						new String[] { label }));
-				}
+				String label = jEdit.getProperty(
+					"plugin." + cache.pluginClass
+					+ ".name");
+				actions.setLabel(jEdit.getProperty(
+					"action-set.plugin",
+					new String[] { label }));
 				plugin = new EditPlugin.Deferred(
 					cache.pluginClass);
 				plugin.jar = (EditPlugin.JAR)this;
 			}
+		}
+		else
+		{
+			Log.log(Log.WARNING,this,getPath() + " has an actions.xml but no plugin core class");
+			actions.setLabel("MISSING PLUGIN CORE CLASS");
 		}
 	} //}}}
 
@@ -999,7 +1001,7 @@ public class PluginJAR
 				+ className + ".version");
 			if(_label == null || version == null)
 			{
-				Log.log(Log.NOTICE,this,"Ignoring: "
+				Log.log(Log.WARNING,this,"Ignoring: "
 					+ className);
 			}
 			else
