@@ -69,9 +69,8 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 			setMnemonic(mnemonic);
 
 		providerCode = jEdit.getProperty(name + ".code");
-
+		dynamicMenuOutOfDate = true;
 		addMenuListener(this);
-		//init();
 	} //}}}
 
 	//{{{ menuSelected() method
