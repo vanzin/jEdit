@@ -191,6 +191,12 @@ public abstract class FoldHandler
 	}
 	//}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		return name;
+	} //}}}
+
 	//{{{ Private members
 	private String name;
 
