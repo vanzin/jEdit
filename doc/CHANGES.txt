@@ -2,8 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre5
 
-Thanks to Ollie Rutherfurd for contributing to this release.
+Thanks to Ollie Rutherfurd and Silas Smith for contributing to this
+release.
 
+{{{ Syntax Highlighting
+
+- Updated Icon syntax highlighting (Silas Smith).
+
+}}}
 {{{ Miscellaneous Changes
 
 - Files that don't exist on disk are no longer saved in the perspective
@@ -37,6 +43,9 @@ Thanks to Ollie Rutherfurd for contributing to this release.
 
 - Pressing ENTER at the end of a collapsed fold line now properly
   expands the fold.
+
+- Setting indentOpenBrackets and indentCloseBrackets to ( and ) didn't
+  work, this broke Lisp auto indent.
 
 }}}
 

@@ -2557,17 +2557,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 						% tabSize));
 				}
 				break;
-			case '(':
-				openParens.push(new Integer(i));
-				break;
-			case ')':
-				if(openParens.size() > 0)
-				{
-					openParens.pop();
-				}
-				break;
 			default:
 				prevLineStart = false;
+
+				// for deep indent
+				if(c == '(')
+					openParens.push(new Integer(i));
+				else if(c == ')')
+				{
+					if(openParens.size() > 0)
+						openParens.pop();
+				}
 
 				if(closeBrackets.indexOf(c) != -1)
 				{
