@@ -45,6 +45,8 @@ import org.gjt.sp.util.Log;
  */
 public class HyperSearchResults extends JPanel implements EBComponent
 {
+	public static final String NAME = "hypersearch-results";
+
 	//{{{ HyperSearchResults constructor
 	public HyperSearchResults(View view)
 	{
@@ -53,7 +55,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 		this.view = view;
 
 		caption = new JLabel();
-		updateCaption(0,0);
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(BorderLayout.CENTER,caption);
@@ -227,8 +228,9 @@ public class HyperSearchResults extends JPanel implements EBComponent
 					resultTree.expandPath(lastNode);
 				}
 
-				if(lastNode != null)
-					resultTree.scrollPathToVisible(lastNode);
+				resultTree.scrollPathToVisible(
+					new TreePath(new Object[] {
+					resultTreeRoot,searchNode }));
 			}
 		});
 	} //}}}
@@ -301,13 +303,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 				}
 			});
 		}
-	} //}}}
-
-	//{{{ updateCaption() method
-	private void updateCaption(int resultCount, int bufferCount)
-	{
-		Object[] pp = { new Integer(resultCount), new Integer(bufferCount) };
-		caption.setText(jEdit.getProperty("hypersearch-results.caption",pp));
 	} //}}}
 
 	//}}}

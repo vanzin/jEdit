@@ -213,24 +213,17 @@ class ChunkCache
 	{
 		for(int i = 0; i < lineInfo.length; i++)
 		{
-			if(lineInfo[i].physicalLine >= physicalLine)
+			LineInfo info = lineInfo[i];
+			if(!info.chunksValid)
+				break;
+
+			if(info.physicalLine >= physicalLine)
 			{
 				invalidateChunksFrom(i);
 				break;
 			}
 		}
 	} //}}}
-
-	void test()
-	{
-		long start = System.currentTimeMillis();
-		int lineCount = textArea.getBuffer().getLineCount();
-		for(int i = 0; i < lineCount; i++)
-		{
-			lineToChunkList(i,out);
-		}
-		System.err.println(System.currentTimeMillis() - start);
-	}
 
 	//{{{ lineToChunkList() method
 	void lineToChunkList(int physicalLine, ArrayList out)

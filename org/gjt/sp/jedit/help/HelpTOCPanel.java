@@ -306,7 +306,7 @@ public class HelpTOCPanel extends JPanel
 		} //}}}
 
 		//{{{ getToolTipLocation() method
-		public final Point getToolTipLocation(MouseEvent evt)
+		/* public final Point getToolTipLocation(MouseEvent evt)
 		{
 			TreePath path = getPathForLocation(evt.getX(), evt.getY());
 			if(path != null)
@@ -318,7 +318,7 @@ public class HelpTOCPanel extends JPanel
 				}
 			}
 			return null;
-		} //}}}
+		} */ //}}}
 
 		//{{{ processMouseEvent() method
 		protected void processMouseEvent(MouseEvent evt)
@@ -327,7 +327,7 @@ public class HelpTOCPanel extends JPanel
 
 			switch(evt.getID())
 			{
-			case MouseEvent.MOUSE_ENTERED:
+			/* case MouseEvent.MOUSE_ENTERED:
 				toolTipInitialDelay = ttm.getInitialDelay();
 				toolTipReshowDelay = ttm.getReshowDelay();
 				ttm.setInitialDelay(200);
@@ -338,7 +338,7 @@ public class HelpTOCPanel extends JPanel
 				ttm.setInitialDelay(toolTipInitialDelay);
 				ttm.setReshowDelay(toolTipReshowDelay);
 				super.processMouseEvent(evt);
-				break;
+				break; */
 			case MouseEvent.MOUSE_CLICKED:
 				TreePath path = getPathForLocation(evt.getX(),evt.getY());
 				if(path != null)

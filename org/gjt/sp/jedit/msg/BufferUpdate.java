@@ -83,7 +83,7 @@ public class BufferUpdate extends EBMessage
 	public static final Object PROPERTIES_CHANGED = "PROPERTIES_CHANGED";
 
 	/**
-	 * Mode changed.
+	 * @deprecated No longer sent. Listen for PROPERTIES_CHANGED instead.
 	 */
 	public static final Object MODE_CHANGED = "MODE_CHANGED";
 	//}}}

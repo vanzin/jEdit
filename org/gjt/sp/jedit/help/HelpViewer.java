@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ import javax.swing.text.Document;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -96,24 +97,20 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		ActionHandler actionListener = new ActionHandler();
 
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.addTab(jEdit.getProperty("helpviewer.toc.label"),
+			toc = new HelpTOCPanel(this));
+		tabs.addTab(jEdit.getProperty("helpviewer.search.label"),
+			new HelpSearchPanel(this));
+		tabs.setMinimumSize(new Dimension(0,0));
+
+		JPanel rightPanel = new JPanel(new BorderLayout());
+
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
-		JLabel label = new JLabel(jEdit.getProperty("helpviewer.url"));
-		label.setBorder(new EmptyBorder(0,12,0,12));
-		toolBar.add(label);
-		Box box = new Box(BoxLayout.Y_AXIS);
-		box.add(Box.createGlue());
-		urlField = new JTextField();
-		urlField.addKeyListener(new KeyHandler());
-		Dimension dim = urlField.getPreferredSize();
-		dim.width = Integer.MAX_VALUE;
-		urlField.setMaximumSize(dim);
-		box.add(urlField);
-		box.add(Box.createGlue());
-		toolBar.add(box);
-
-		toolBar.add(Box.createHorizontalStrut(6));
+		toolBar.add(title = new JLabel());
+		toolBar.add(Box.createGlue());
 
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
@@ -130,22 +127,18 @@ public class HelpViewer extends JFrame implements EBComponent
 		toolBar.add(forward);
 		back.setPreferredSize(forward.getPreferredSize());
 
-		getContentPane().add(BorderLayout.NORTH,toolBar);
+		rightPanel.add(BorderLayout.NORTH,toolBar);
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
 		viewer.addHyperlinkListener(new LinkHandler());
 		viewer.setFont(new Font("Monospaced",Font.PLAIN,12));
+		viewer.addPropertyChangeListener(new PropertyChangeHandler());
 
-		JTabbedPane tabs = new JTabbedPane();
-		tabs.addTab(jEdit.getProperty("helpviewer.toc.label"),
-			toc = new HelpTOCPanel(this));
-		tabs.addTab(jEdit.getProperty("helpviewer.search.label"),
-			new HelpSearchPanel(this));
+		rightPanel.add(BorderLayout.CENTER,new JScrollPane(viewer));
 
-		// search not finished yet so we don't show the search panel
-		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			tabs,new JScrollPane(viewer));
+		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+			tabs,rightPanel);
 		splitter.setBorder(null);
 
 		getContentPane().add(BorderLayout.CENTER,splitter);
@@ -167,7 +160,9 @@ public class HelpViewer extends JFrame implements EBComponent
 		{
 			public void run()
 			{
-				splitter.setDividerLocation(250);
+				splitter.setDividerLocation(jEdit.getIntegerProperty(
+					"helpviewer.splitter",250));
+				viewer.requestFocus();
 			}
 		});
 	} //}}}
@@ -181,6 +176,8 @@ public class HelpViewer extends JFrame implements EBComponent
 	 */
 	public void gotoURL(String url, boolean addToHistory)
 	{
+		title.setText(jEdit.getProperty("helpviewer.loading"));
+
 		String shortURL;
 		if(MiscUtilities.isURL(url))
 		{
@@ -215,7 +212,6 @@ public class HelpViewer extends JFrame implements EBComponent
 		{
 			_url = new URL(url);
 
-			urlField.setText(_url.toString());
 			viewer.setPage(_url);
 			if(addToHistory)
 			{
@@ -254,6 +250,8 @@ public class HelpViewer extends JFrame implements EBComponent
 	public void dispose()
 	{
 		EditBus.removeFromBus(this);
+		jEdit.setIntegerProperty("helpviewer.splitter",
+			splitter.getDividerLocation());
 		GUIUtilities.saveGeometry(this,"helpviewer");
 		super.dispose();
 	} //}}}
@@ -276,7 +274,8 @@ public class HelpViewer extends JFrame implements EBComponent
 	private JButton back;
 	private JButton forward;
 	private JEditorPane viewer;
-	private JTextField urlField;
+	private JLabel title;
+	private JSplitPane splitter;
 	private String[] history;
 	private int historyPos;
 	private HelpTOCPanel toc;
@@ -350,17 +349,23 @@ public class HelpViewer extends JFrame implements EBComponent
 		} //}}}
 	} //}}}
 
-	//{{{ KeyHandler class
-	class KeyHandler extends KeyAdapter
+	//{{{ PropertyChangeHandler class
+	class PropertyChangeHandler implements PropertyChangeListener
 	{
-		//{{{ keyPressed() method
-		public void keyPressed(KeyEvent evt)
+		public void propertyChange(PropertyChangeEvent evt)
 		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			if("page".equals(evt.getPropertyName()))
 			{
-				gotoURL(urlField.getText(),true);
+				String titleStr = (String)viewer.getDocument()
+					.getProperty("title");
+				if(titleStr == null)
+				{
+					titleStr = MiscUtilities.getFileName(
+						viewer.getPage().toString());
+				}
+				title.setText(titleStr);
 			}
-		} //}}}
+		}
 	} //}}}
 
 	//}}}

@@ -1,32 +1,94 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 4.0 AND 4.1
 
-XXX: Need to go into more detail and clean this up!!!
+jEdit 4.1 improves on many aspects of jEdit 4.0. It fills in some gaps
+in 4.0's feature set, and significantly improves usability, stability
+and performance.
+
+* Incompatible changes
+
+- Older versions of some plugins might be incompatible with jEdit 4.1.
+  Ensure you are running the latest set.
+
+- Wheel mouse scrolling support for Java 1.4 is now built-in; if you
+  previously installed the WheelMouse plugin, remove it.
+
+- Changes to indent on tab, indent on enter
+
+- Next/prev word flag change
+
+- smart home/end change
+
+* User interface
+
+- Improved menu bar layout and Utilities->Global Options dialog box
+  usability.
+
+- jEdit now remembers if windows were maximized across sessions when
+  running on Java 1.4.
+
+- The View->Unsplit Current command removes the currently focused split
+  from the view. Other splits are left intact (unlike View->Unsplit All).
+
+- The View->New Plain View command opens a new view without any tool
+  bars or docked windows.
+
+- The View->Docking menu now contains commands for moving keyboard focus
+  to the four docking areas and the text area.
+
+  The commands for closing each of the four docking areas have been
+  merged into a single command that closes the currently focused docking
+  area.
+
+- -float actions for dockables
+
+- The status bar now displays the word wrap mode and the line separator.
+
+  The contents of the status bar can be customized in the Status Bar
+  pane of the Utilities->Global Options dialog box.
+
+- The online help is now fully searchable.
+
+* Text editing
 
 - 10 new syntax modes (as of 4.1pre6)
-- Categorized plugin manager, select all
-- Help search
-- Changes to indent on tab, indent on enter
-- Multiple results in hypersearch, rect select for hypersearch
-- Customizable status bar
-- Better OS X support
-- Next/prev word flag change
-- unsplit current
 - regexp syntax matching, AT_WORD_START, AT_WHITESPACE_END, digit
   changes, EOL_SPAN delegates, SEQ delegates, mention fixed Perl & HTML
+- better Java auto indent
+- better rect select
+
+* Search and replace
+
+- Directory search can now be performed over virtual file systems.
+
+- The HyperSearch Results window can optionally retain previous search
+  results.
+
+- HyperSearch within a rectangular selection is now supported.
+
+- The search bar is now hidden by default. The quick search commands
+  make it visible, and pressing ESCAPE hides it.
+
+  If you prefer the old behavior where the search bar was always
+  visible, specify so in the General pane of the Utilities->Global
+  Options dialog box.
+
+* File system browser
+
 - fsb browser: dialog field auto-complete, parent dir right click,
   multi select, open in new view/new split, better encoding handling
-- smart home/end change
-- view->docking commands
-- toggle line sep/toggle word wrap actions
+
+* Macro system
+
 - updated BSH to 1.2b6, scriptPath variable, user & system macro dir
   merge
 - startup scripts in any language
-- plain views
-- -float actions for dockables
-- better rect select
-- better Java auto indent
-- directory search over VFS's
-- search bar auto hide
-- WheelMouse in core
-- SOCKS proxy support
-- window maximization state is now remembered
+
+* Plugin manager
+
+- Categorized plugin manager, select all
+- SOCKS proxy support.
+
+And of course, there is much, much more; see the CHANGES.txt file for a
+full list.
+
+:wrap=hard:

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <!-- jEdit user's guide -->
-<!-- (C) 1999, 2000, 2001, 2002 Slava Pestov -->
+<!-- (C) 1999, 2002 Slava Pestov -->
 <!-- (C) 2001, 2002 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
@@ -28,6 +28,7 @@
 
 <!ENTITY writing-modes SYSTEM "writing-modes.xml">
 <!ENTITY installing-modes SYSTEM "installing-modes.xml">
+<!ENTITY updating-modes SYSTEM "updating-modes.xml">
 
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
 <!ENTITY simple-macros SYSTEM "simple-macros.xml">
@@ -113,6 +114,7 @@
 
  &writing-modes;
  &installing-modes;
+ &updating-modes;
 </part>
 
 <part id="writing-macros-part"><title>Writing Macros</title>

@@ -158,7 +158,8 @@ public class OperatingSystem
 			}
 		}
 
-		if(System.getProperty("java.version").compareTo("1.4") >= 0)
+		if(System.getProperty("java.version").compareTo("1.4") >= 0
+			&& System.getProperty("jedit.nojava14") == null)
 			java14 = true;
 	} //}}}
 

@@ -150,6 +150,7 @@ view.context=insert-file reload - paste-previous view-registers - \
 	invert-selection select-block to-upper to-lower - hypersearch-word - \
 	add-marker - narrow-to-fold - \
 	unsplit split-horizontal - buffer-options global-options
+view.context.customize=Customize This Menu...
 #}}}
 
 #{{{ Menu bar
@@ -366,10 +367,10 @@ search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
-quick-search.label=$Incremental Search
-hypersearch.label=Quick $HyperSearch
+quick-search.label=$Incremental Search Bar
+hypersearch.label=$HyperSearch Bar
 quick-search-word.label=Incremental Search for $Word
-hypersearch-word.label=$Quick HyperSearch for Word
+hypersearch-word.label=H$yperSearch for Word
 #}}}
 
 #{{{ Markers menu
@@ -1125,7 +1126,6 @@ keepsearching.message=No more matches were found. Continue search from\n\
 hypersearch-results.title=HyperSearch Results
 hypersearch-results.result-caption={0} ({1} occurrence(s) in {2} file(s))
 hypersearch-results.remove-node=Remove Node
-hypersearch-results.caption=Found {0} occurrence(s) in {1} file(s).
 hypersearch-results.multi=Multiple results
 hypersearch-results.file-caption={0} ({1} occurrences)
 hypersearch-results.file-caption1={0} (1 occurrence)
@@ -1394,7 +1394,7 @@ options.textarea.blinkCaret=blinking
 options.textarea.blockCaret=block
 options.textarea.selection=Selection:
 options.textarea.lineHighlight=Highlight current line:
-options.textarea.bracketHighlight=Highlight matching bracket:
+options.textarea.bracketHighlight=Highlight matching brackets:
 options.textarea.eolMarkers=End of line markers:
 options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
@@ -1492,6 +1492,11 @@ options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 options.editing.label=Editing
 options.editing.defaultMode=Default edit mode:
 options.editing.undoCount=Number of undos:
+options.editing.mode=Change settings for mode:
+options.editing.global=<global defaults>
+options.editing.useDefaults=Use default settings
+options.editing.filenameGlob=File name glob:
+options.editing.firstlineGlob=First line glob:
 options.editing.folding=Folding mode:
 options.editing.collapseFolds=Initially collapse folds with level:
 options.editing.wrap=Word wrap:
@@ -1500,14 +1505,6 @@ options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
 options.editing.noTabs=Soft (emulated with spaces) tabs
-#}}}
-
-#{{{ Mode-Specific pane
-options.mode.label=Mode-Specific
-options.mode.mode=Edit mode:
-options.mode.useDefaults=Use default settings
-options.mode.filenameGlob=File name glob:
-options.mode.firstlineGlob=First line glob:
 #}}}
 
 #{{{ Abbreviations pane
@@ -1683,7 +1680,7 @@ style-editor.bgColor=Background color:
 
 #{{{ Help viewer
 helpviewer.title=jEdit Help
-helpviewer.url=Location:
+helpviewer.loading=Loading...
 helpviewer.back.label=Back
 helpviewer.back.icon=ArrowL.png
 helpviewer.forward.label=Forward
@@ -1786,7 +1783,7 @@ vfs.browser.commands.delete.label=Delete...
 vfs.browser.commands.rename.label=Rename...
 vfs.browser.commands.up.label=Parent Directory
 vfs.browser.commands.reload.label=Reload Directory
-vfs.browser.commands.roots.label=Local Drives
+vfs.browser.commands.roots.label=Root Directory
 vfs.browser.commands.home.label=Home Directory
 vfs.browser.commands.synchronize.label=Directory of Current Buffer
 vfs.browser.commands.new-file.label=New File
@@ -1840,7 +1837,7 @@ vfs.browser.delete-confirm.message=Are you sure you want to delete the following
 	{0}
 
 vfs.browser.delete-favorites.title=Delete From Favorites
-vfs.browser.delete-favorites.message=Are you sure you want to remove the following files \
+vfs.browser.delete-favorites.message=Are you sure you want to remove the following directories \
 	from the favorites?\n\n\
 	{0}
 
@@ -1898,10 +1895,13 @@ plugin-list.progress.stop=Stop
 
 #{{{ Error while loading plugin list
 plugin-list.ioerror.title=I/O Error
-plugin-list.ioerror.message=An I/O error occurred ({0})\n\
+plugin-list.ioerror.message=Could not download the plugin list.\n\
+	({0})\n\
 	\n\
-	You might need to specify an HTTP proxy in\n\
-	Utilities->Global Options->HTTP Proxy.
+	If you are behind an HTTP or SOCKS proxy, click\n\
+	"Proxy Servers" to configure proxy server settings\n\
+	and try again.
+plugin-list.ioerror.proxy-servers=Proxy Servers...
 
 plugin-list.xmlerror.title=XML Parser Error
 plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\

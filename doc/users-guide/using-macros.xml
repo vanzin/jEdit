@@ -20,8 +20,8 @@
 
   <para>
      The simplest use of macros is to record a series of key strokes and
-     menu commands as a BeanShell script, and play them back at a later
-     time. While this doesn't let you take advantage of the full power of
+     menu commands as a BeanShell script, and play them back later.
+     While this doesn't let you take advantage of the full power of
      BeanShell, it is still a great time saver and can even be used to
      <quote>prototype</quote> more complicated macros.
   </para>
@@ -44,7 +44,7 @@
     <listitem><para>Key strokes</para></listitem>
     <listitem><para>Menu item commands</para></listitem>
     <listitem><para>Tool bar clicks</para></listitem>
-    <listitem><para>All search and replace operations except incremental
+    <listitem><para>All search and replace operations, except incremental
     search</para></listitem>
   </itemizedlist>
 
@@ -125,16 +125,6 @@
   </para>
 
   <para>
-    There is a very large collection of additional macros available at the
-    <ulink url="http://community.jedit.org">jEdit
-    community</ulink> web site in the <quote>Downloads</quote> section.  The
-    collection includes macros distributed with earlier versions of jEdit
-    as well as many macros contributed by members of the jEdit
-    development team and other users. There are detailed descriptions for
-    each entry as well as a search facility.
-  </para>
-
-  <para>
     To run a macro, choose the <guimenu>Macros</guimenu> menu,
     navigate through the hierarchy of submenus, and select the name
     of the macro to execute.  You can also assign execution of a
@@ -156,17 +146,14 @@
     runs the last macro run by jEdit again.
   </para>
 
-  <sidebar><title>XInsert plugin</title>
-   <para>
-    The <application>XInsert</application> plugin has a feature that
-    lists the title of macros, organized by subdirectories, as part of
-    its tree list display.  Clicking on the leaf of the tree
-    corresponding to a macro name causes jEdit to execute the macro
-    immediately.  The plugin allows you to keep a list of macros and
-    cut-and-paste text fragments available while editing
-    without opening menus. For information about installing plugins, see
-    <xref linkend="using-plugins"/>.
-   </para>
+  <sidebar><title>Contributed macros</title>
+  <para>
+    A very large collection of macros contributed users of jEdit is available
+    in the <quote>Downloads</quote> section of the
+    <ulink url="http://community.jedit.org">jEdit
+    community</ulink> web site. There are detailed descriptions for
+    each macro as well as a search facility.
+  </para>
   </sidebar>
 
 </sect1>

@@ -346,6 +346,9 @@ public abstract class Selection implements Cloneable
 				if(rectEnd == -1)
 					rectEnd = lineLen;
 
+				if(rectEnd < rectStart)
+					System.err.println(i + ":::" + start + ":" + end
+						+ " ==> " + rectStart + ":" + rectEnd);
 				buf.append(buffer.getText(lineStart + rectStart,
 					rectEnd - rectStart));
 

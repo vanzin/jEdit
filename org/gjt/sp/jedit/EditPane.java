@@ -25,10 +25,12 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import javax.swing.event.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -429,8 +431,19 @@ public class EditPane extends JPanel implements EBComponent
 			"view.electricBorders",0));
 
 		// Set up the right-click popup menu
-		textArea.setRightClickPopup(GUIUtilities
-			.loadPopupMenu("view.context"));
+		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context");
+		JMenuItem customize = new JMenuItem(jEdit.getProperty(
+			"view.context.customize"));
+		customize.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				new GlobalOptions(view,"context");
+			}
+		});
+		popup.addSeparator();
+		popup.add(customize);
+		textArea.setRightClickPopup(popup);
 
 		// use old property name for backwards compatibility
 		textArea.setQuickCopyEnabled(jEdit.getBooleanProperty(

@@ -501,7 +501,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 			else
 			{
-				if(virtualPosition == column)
+				if(virtualPosition >= column)
 					return i;
 				else
 					++virtualPosition;

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2002 Slava Pestov
  * Portions copyright (C) 2002 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
@@ -49,17 +49,25 @@ public class FileRootsVFS extends VFS
 		// to create an item for this VFS in its 'Plugins' menu
 		super("roots",LOW_LATENCY_CAP);
 
-		// JDK 1.4 adds a method to obtain a drive letter label
-		try
+		// JDK 1.4 adds methods to obtain a drive letter label and
+		// list the desktop on Windows
+		if(OperatingSystem.hasJava14())
 		{
-			method = FileSystemView.class.getMethod("getSystemDisplayName",
-				new Class[] { java.io.File.class });
-			fsView = FileSystemView.getFileSystemView();
-			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() detected");
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() not detected");
+			try
+			{
+				getSystemDisplayName = FileSystemView.class.getMethod("getSystemDisplayName",
+					new Class[] { java.io.File.class });
+				getRoots = FileSystemView.class.getMethod("getRoots",
+					new Class[0]);
+				isFileSystemRoot = FileSystemView.class.getMethod("isFileSystemRoot",
+					new Class[] { java.io.File.class });
+				fsView = FileSystemView.getFileSystemView();
+				Log.log(Log.DEBUG,this,"Java 1.4 FileSystemView detected");
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.DEBUG,this,"Java 1.4 FileSystemView not detected");
+			}
 		}
 	} //}}}
 
@@ -92,50 +100,96 @@ public class FileRootsVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-		String name = (OperatingSystem.isMacOS() ?
-			getFileName(path) : path);
 
-		if(method != null && !name.startsWith("A:") && !name.startsWith("B:"))
+		File file = new File(path);
+
+		int type;
+
+		if(file.isDirectory())
+		{
+			type = VFS.DirectoryEntry.FILESYSTEM;
+
+			if(isFileSystemRoot != null)
+			{
+				try
+				{
+					if(Boolean.FALSE.equals(isFileSystemRoot
+						.invoke(fsView,new Object[] { file })))
+					{
+						type = VFS.DirectoryEntry.DIRECTORY;
+					}
+				}
+				catch(Exception e) {}
+			}
+		}
+		else
+			type = VFS.DirectoryEntry.FILE;
+
+		String name;
+
+		if(getSystemDisplayName != null && !path.startsWith("A:")
+			&& !path.startsWith("B:"))
 		{
 			try
 			{
-				name = name + " " + (String)method.invoke(fsView,
-					new Object[] { new File(path) });
+				name = path + " " + (String)getSystemDisplayName
+					.invoke(fsView,new Object[] { file });
 			}
-			catch(Exception e) {}
+			catch(Exception e)
+			{
+				name = path;
+			}
 		}
+		else if(OperatingSystem.isMacOS())
+			name = getFileName(path);
+		else
+			name = path;
 
-		return new VFS.DirectoryEntry(name,path,path,VFS.DirectoryEntry
-			.FILESYSTEM,0L,false);
+		return new VFS.DirectoryEntry(name,path,path,type,0L,false);
 	} //}}}
 
 	//{{{ Private members
-	private FileSystemView fsView;
-	private Method method;
+	private static FileSystemView fsView;
+	private static Method getSystemDisplayName;
+	private static Method getRoots;
+	private static Method isFileSystemRoot;
 
 	//{{{ listRoots() method
 	private static File[] listRoots()
 	{
-		if (OperatingSystem.isMacOS())
+		if(getRoots != null)
+		{
+			try
+			{
+				File[] roots = (File[])getRoots.invoke(fsView,
+					new Object[0]);
+				return roots;
+			}
+			catch(Exception e)
+			{
+				return null;
+			}
+		}
+		else if (OperatingSystem.isMacOS())
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
 			LinkedList roots = new LinkedList();
-			
+
 			roots.add(new File("/"));
-			
+
 			for (int i=0; i<volumes.length; i++)
 			{
 				// Make sure people don't do stupid things like putting files in /Volumes
 				if (volumes[i].isDirectory())
 					roots.add(volumes[i]);
 			}
-			
+
 			return (File[])roots.toArray(new File[0]);
 		}
 		else
 			return File.listRoots();
 	} //}}}
-	
+
 	//}}}
 }
