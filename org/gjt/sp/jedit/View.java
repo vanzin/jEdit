@@ -439,29 +439,29 @@ public class View extends JFrame implements EBComponent
 	//{{{ splitHorizontally() method
 	/**
 	 * Splits the view horizontally.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 4.1pre2
 	 */
-	public void splitHorizontally()
+	public EditPane splitHorizontally()
 	{
-		split(JSplitPane.VERTICAL_SPLIT);
+		return split(JSplitPane.VERTICAL_SPLIT);
 	} //}}}
 
 	//{{{ splitVertically() method
 	/**
 	 * Splits the view vertically.
-	 * @since jEdit 2.7pre2
+	 * @since jEdit 4.1pre2
 	 */
-	public void splitVertically()
+	public EditPane splitVertically()
 	{
-		split(JSplitPane.HORIZONTAL_SPLIT);
+		return split(JSplitPane.HORIZONTAL_SPLIT);
 	} //}}}
 
 	//{{{ split() method
 	/**
 	 * Splits the view.
-	 * @since jEdit 2.3pre2
+	 * @since jEdit 4.1pre2
 	 */
-	public void split(int orientation)
+	public EditPane split(int orientation)
 	{
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
@@ -519,6 +519,8 @@ public class View extends JFrame implements EBComponent
 				}
 			});
 		}
+
+		return editPane;
 	} //}}}
 
 	//{{{ unsplit() method

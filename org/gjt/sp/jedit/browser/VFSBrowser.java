@@ -66,6 +66,10 @@ public class VFSBrowser extends JPanel implements EBComponent
 	/**
 	 * Choose directory dialog mode.
 	 */
+	public static final int BROWSER_DIALOG = 4;
+	/**
+	 * Choose directory dialog mode.
+	 */
 	public static final int CHOOSE_DIRECTORY_DIALOG = 3;
 
 	/**
@@ -73,6 +77,25 @@ public class VFSBrowser extends JPanel implements EBComponent
 	 */
 	public static final int BROWSER = 2;
 	//}}}
+
+	//{{{ browseDirectoryInNewWindow() method
+	/**
+	 * Opens the specified directory in a new, floating, file system browser.
+	 * @param view The view
+	 * @param path The directory's path
+	 * @since jEdit 4.1pre2
+	 */
+	public static void browseDirectoryInNewWindow(View view, String path)
+	{
+		DockableWindowManager wm = view.getDockableWindowManager();
+		if(path != null)
+		{
+			// this is such a bad way of doing it, but oh well...
+			jEdit.setTemporaryProperty("vfs.browser.path.tmp",path);
+		}
+		wm.floatDockableWindow("vfs.browser");
+		jEdit.unsetProperty("vfs.browser.path.tmp");
+	} //}}}
 
 	//{{{ browseDirectory() method
 	/**
@@ -100,6 +123,16 @@ public class VFSBrowser extends JPanel implements EBComponent
 			wm.addDockableWindow("vfs.browser");
 			jEdit.unsetProperty("vfs.browser.path.tmp");
 		}
+	} //}}}
+
+	//{{{ VFSBrowser constructor
+	/**
+	 * Creates a new VFS browser.
+	 * @param view The view to open buffers in by default
+	 */
+	public VFSBrowser(View view)
+	{
+		this(view,null,BROWSER,true,false);
 	} //}}}
 
 	//{{{ VFSBrowser constructor
@@ -514,42 +547,54 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ delete() method
-	public void delete(String path)
+	/**
+	 * Note that all files must be on the same VFS.
+	 */
+	public void delete(VFS.DirectoryEntry[] files)
 	{
-		if(MiscUtilities.isURL(path) && FavoritesVFS.PROTOCOL.equals(
-			MiscUtilities.getProtocolOfURL(path)))
+		String dialogType;
+
+		if(MiscUtilities.isURL(files[0].deletePath)
+			&& FavoritesVFS.PROTOCOL.equals(
+			MiscUtilities.getProtocolOfURL(files[0].deletePath)))
 		{
-			Object[] args = { path.substring(FavoritesVFS.PROTOCOL.length() + 1) };
-			int result = GUIUtilities.confirm(this,
-				"vfs.browser.delete-favorites",args,
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE);
-			if(result != JOptionPane.YES_OPTION)
-				return;
+			dialogType = "vfs.browser.delete-favorites";
 		}
 		else
 		{
-			Object[] args = { path };
-			int result = GUIUtilities.confirm(this,
-				"vfs.browser.delete-confirm",args,
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE);
-			if(result != JOptionPane.YES_OPTION)
-				return;
+			dialogType = "vfs.browser.delete-confirm";
 		}
 
-		VFS vfs = VFSManager.getVFSForPath(path);
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < files.length; i++)
+		{
+			buf.append(files[i].path);
+			buf.append('\n');
+		}
 
-		Object session = vfs.createVFSSession(path,this);
-		if(session == null)
+		Object[] args = { buf.toString() };
+		int result = GUIUtilities.confirm(this,dialogType,args,
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.WARNING_MESSAGE);
+		if(result != JOptionPane.YES_OPTION)
 			return;
+
+		VFS vfs = VFSManager.getVFSForPath(files[0].deletePath);
 
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.DELETE,this,
-			session,vfs,path,null,null,false));
+		for(int i = 0; i < files.length; i++)
+		{
+			Object session = vfs.createVFSSession(files[i].deletePath,this);
+			if(session == null)
+				continue;
+
+			VFSManager.runInWorkThread(new BrowserIORequest(
+				BrowserIORequest.DELETE,this,
+				session,vfs,files[i].deletePath,
+				null,null,false));
+		}
 	} //}}}
 
 	//{{{ rename() method
@@ -854,9 +899,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 	//{{{ filesActivated() method
 	// canDoubleClickClose set to false when ENTER pressed
-	void filesActivated(boolean newView, boolean canDoubleClickClose)
+	static final int M_OPEN = 0;
+	static final int M_OPEN_NEW_VIEW = 1;
+	static final int M_OPEN_NEW_PLAIN_VIEW = 2;
+	static final int M_OPEN_NEW_SPLIT = 3;
+	void filesActivated(int mode, boolean canDoubleClickClose)
 	{
 		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+
+		Buffer buffer = null;
 
 check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
@@ -865,39 +916,55 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			if(file.type == VFS.DirectoryEntry.DIRECTORY
 				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
 				setDirectory(file.path);
-			else if(mode == BROWSER)
+			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
-				Buffer buffer = jEdit.getBuffer(file.path);
-				if(buffer == null)
-					buffer = jEdit.openFile(null,file.path);
-				else if(doubleClickClose && canDoubleClickClose)
+				Buffer _buffer = jEdit.getBuffer(file.path);
+				if(_buffer == null)
+					_buffer = jEdit.openFile(null,file.path);
+				else if(doubleClickClose && canDoubleClickClose
+					&& this.mode != BROWSER_DIALOG
+					&& selectedFiles.length == 1)
 				{
 					// close if this buffer is currently
 					// visible in the view.
 					EditPane[] editPanes = view.getEditPanes();
 					for(int j = 0; j < editPanes.length; j++)
 					{
-						if(editPanes[j].getBuffer() == buffer)
+						if(editPanes[j].getBuffer() == _buffer)
 						{
-							jEdit.closeBuffer(view,buffer);
-							break check_selected;
+							jEdit.closeBuffer(view,_buffer);
+							return;
 						}
 					}
 				}
 
-				if(buffer != null)
-				{
-					if(newView)
-						jEdit.newView(null,buffer);
-					else
-						view.setBuffer(buffer);
-				}
+				if(_buffer != null)
+					buffer = _buffer;
 			}
 			else
 			{
 				// if a file is selected in OPEN_DIALOG or
 				// SAVE_DIALOG mode, just let the listener(s)
 				// handle it
+			}
+		}
+
+		if(buffer != null)
+		{
+			switch(mode)
+			{
+			case M_OPEN:
+				view.setBuffer(buffer);
+				break;
+			case M_OPEN_NEW_VIEW:
+				jEdit.newView(view,buffer,false);
+				break;
+			case M_OPEN_NEW_PLAIN_VIEW:
+				jEdit.newView(view,buffer,true);
+				break;
+			case M_OPEN_NEW_SPLIT:
+				view.splitHorizontally().setBuffer(buffer);
+				break;
 			}
 		}
 
