@@ -5,7 +5,9 @@ JEDIT 4.0 VERSION HISTORY
 + Enhancements
 
 - Yet-another-optimization to file loading. Directory search should be
-  even faster.
+  even faster
+- Added a hack to prevent the WheelMouse plugin version 0.5 from being
+  loaded under JDK 1.4
 
 + Bug Fixes
 

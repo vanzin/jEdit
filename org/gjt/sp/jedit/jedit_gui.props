@@ -1189,6 +1189,8 @@ plugin-error.dep-plugin=Requires version {0} or later of {1}, \
 plugin-error.dep-class=Requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
 plugin-error.obsolete=This plugin is obsolete. Please remove it.
+plugin-error.update=This plugin is incompatible with your Java version.\n\
+	Please update to a newer version of the plugin.
 #}}}
 
 #{{{ Macro dialogs
