@@ -38,10 +38,12 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ VFSDirectoryEntryTableModel constructor
 	public VFSDirectoryEntryTableModel()
 	{
-		columns = new Column[3];
-		columns[0] = new Column("status");
-		columns[1] = new Column("size");
-		columns[2] = new Column("modified");
+		extAttrs = new String[] {
+			VFS.EA_TYPE,
+			VFS.EA_STATUS,
+			VFS.EA_SIZE,
+			VFS.EA_MODIFIED
+		};
 	} //}}}
 
 	//{{{ setRoot() method
@@ -125,7 +127,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
-		return 3 + columns.length;
+		return 2 + extAttrs.length;
 	} //}}}
 
 	//{{{ getRowCount() method
@@ -140,30 +142,13 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getColumnName() method
 	public String getColumnName(int col)
 	{
-		switch(col)
-		{
-		case 0:
-			return null;
-		case 1:
-			return jEdit.getProperty("vfs.browser.name");
-		case 2:
-			return jEdit.getProperty("vfs.browser.type");
-		default:
-			return jEdit.getProperty("vfs.browser."
-				+ columns[col - 3].name);
-		}
+		return null;
 	} //}}}
 
 	//{{{ getColumnClass() method
 	public Class getColumnClass(int col)
 	{
-		switch(col)
-		{
-		case 0:
-			return Icon.class;
-		default:
-			return Entry.class;
-		}
+		return Entry.class;
 	} //}}}
 
 	//{{{ getValueAt() method
@@ -171,24 +156,14 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	{
 		if(files == null)
 			return null;
+		else
+			return files[row];
+	} //}}}
 
-		Entry entry = files[row];
-		if(entry == null)
-			return null;
-
-		VFS.DirectoryEntry dirEntry = entry.dirEntry;
-		switch(col)
-		{
-		case 0:
-			if(entry.dirEntry.type == VFS.DirectoryEntry.FILE)
-				return null;
-			else if(entry.expanded)
-				return UIManager.getIcon("Tree.expandedIcon");
-			else
-				return UIManager.getIcon("Tree.collapsedIcon");
-		default:
-			return entry;
-		}
+	//{{{ getExtendedAttribute() method
+	public String getExtendedAttribute(int index)
+	{
+		return extAttrs[index - 2];
 	} //}}}
 
 	//{{{ Package-private members
@@ -196,10 +171,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//}}}
 
 	//{{{ Private members
-	private Column[] columns;
+	private String[] extAttrs;
 	//}}}
-
-	//{{{ Inner classes
 
 	//{{{ Entry class
 	static class Entry
@@ -215,22 +188,4 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			this.level = level;
 		}
 	} //}}}
-
-	//{{{ Column class
-	class Column
-	{
-		String name;
-
-		Column(String name)
-		{
-			this.name = name;
-		}
-
-		String get(VFS.DirectoryEntry entry)
-		{
-			return "foo bar";
-		}
-	} //}}}
-
-	//}}}
 }

@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import java.awt.Component;
 import java.io.*;
+import java.util.Date;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -191,6 +192,29 @@ public class FileVFS extends VFS
 		return MiscUtilities.canonPath(path);
 	} //}}}
 
+	//{{{ LocalDirectoryEntry class
+	public static class LocalDirectoryEntry extends VFS.DirectoryEntry
+	{
+		public long modified;
+
+		public LocalDirectoryEntry(File file)
+		{
+			super(file.getName(),file.getPath(),
+				file.getPath(),file.isDirectory() ? DIRECTORY : FILE,file.length(),file.isHidden());
+			this.modified = file.lastModified();
+			this.canRead = file.canRead();
+			this.canWrite = file.canWrite();
+		}
+
+		public String getExtendedAttribute(String name)
+		{
+			if(name.equals(EA_MODIFIED))
+				return new Date(modified).toString();
+			else
+				return super.getExtendedAttribute(name);
+		}
+	} //}}}
+
 	//{{{ _listDirectory() method
 	public VFS.DirectoryEntry[] _listDirectory(Object session, String path,
 		Component comp)
@@ -220,19 +244,7 @@ public class FileVFS extends VFS
 
 		VFS.DirectoryEntry[] list2 = new VFS.DirectoryEntry[list.length];
 		for(int i = 0; i < list.length; i++)
-		{
-			File file = list[i];
-
-			int type;
-			if(file.isDirectory())
-				type = VFS.DirectoryEntry.DIRECTORY;
-			else
-				type = VFS.DirectoryEntry.FILE;
-
-			list2[i] = new VFS.DirectoryEntry(file.getName(),
-				file.getPath(),file.getPath(),type,
-				file.length(),file.isHidden());
-		}
+			list2[i] = new LocalDirectoryEntry(list[i]);
 
 		return list2;
 	} //}}}
@@ -256,14 +268,7 @@ public class FileVFS extends VFS
 		if(!file.exists())
 			return null;
 
-		int type;
-		if(file.isDirectory())
-			type = VFS.DirectoryEntry.DIRECTORY;
-		else
-			type = VFS.DirectoryEntry.FILE;
-
-		return new VFS.DirectoryEntry(file.getName(),path,path,type,
-			file.length(),file.isHidden());
+		return new LocalDirectoryEntry(file);
 	} //}}}
 
 	//{{{ _delete() method

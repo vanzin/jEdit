@@ -137,10 +137,38 @@ public abstract class VFS
 
 	//}}}
 
+	//{{{ Extended attributes
+	/**
+	 * File type.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String EA_TYPE = "type";
+
+	/**
+	 * File status (read only, read write, etc).
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String EA_STATUS = "status";
+
+	/**
+	 * File size.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String EA_SIZE = "size";
+
+	/**
+	 * File last modified date.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String EA_MODIFIED = "modified";
+	//}}}
+
 	//{{{ VFS constructor
 	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
+	 * @deprecated Use the form where the constructor takes a capability
+	 * list.
 	 */
 	public VFS(String name)
 	{
@@ -157,6 +185,22 @@ public abstract class VFS
 	{
 		this.name = name;
 		this.caps = caps;
+		this.extAttrs = new String[] { EA_TYPE, EA_STATUS, EA_SIZE, EA_MODIFIED };
+	} //}}}
+
+	//{{{ VFS constructor
+	/**
+	 * Creates a new virtual filesystem.
+	 * @param name The name
+	 * @param caps The capabilities
+	 * @param extAttrs The extended attributes
+	 * @since jEdit 4.2pre1
+	 */
+	public VFS(String name, int caps, String[] extAttrs)
+	{
+		this.name = name;
+		this.caps = caps;
+		this.extAttrs = extAttrs;
 	} //}}}
 
 	//{{{ getName() method
@@ -178,6 +222,16 @@ public abstract class VFS
 	public int getCapabilities()
 	{
 		return caps;
+	} //}}}
+
+	//{{{ getExtendedAttributes() method
+	/**
+	 * Returns the extended attributes supported by this VFS.
+	 * @since jEdit 4.2pre1
+	 */
+	public String[] getExtendedAttributes()
+	{
+		return extAttrs;
 	} //}}}
 
 	//{{{ showBrowseDialog() method
@@ -527,6 +581,8 @@ public abstract class VFS
 		public int type;
 		public long length;
 		public boolean hidden;
+		public boolean canRead;
+		public boolean canWrite;
 		//}}}
 
 		//{{{ DirectoryEntry constructor
@@ -539,11 +595,67 @@ public abstract class VFS
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;
+			VFS vfs = VFSManager.getVFSForPath(path);
+			canRead = ((vfs.getCapabilities() & READ_CAP) != 0);
+			canWrite = ((vfs.getCapabilities() & WRITE_CAP) != 0);
 		} //}}}
 
 		protected boolean colorCalculated;
 		protected Color color;
 
+		//{{{ getExtendedAttribute() method
+		/**
+		 * Returns the value of an extended attribute. Note that this
+		 * returns formatted strings (eg, "10 Mb" for a file size of
+		 * 1048576 bytes). If you need access to the raw data, access
+		 * fields and methods of this class.
+		 * @param name The extended attribute name
+		 * @since jEdit 4.2pre1
+		 */
+		public String getExtendedAttribute(String name)
+		{
+			if(name.equals(EA_TYPE))
+			{
+				switch(type)
+				{
+				case FILE:
+					return jEdit.getProperty("vfs.browser.type.file");
+				case DIRECTORY:
+					return jEdit.getProperty("vfs.browser.type.directory");
+				case FILESYSTEM:
+					return jEdit.getProperty("vfs.browser.type.filesystem");
+				default:
+					throw new IllegalArgumentException();
+				}
+			}
+			else if(name.equals(EA_STATUS))
+			{
+				if(canRead)
+				{
+					if(canWrite)
+						return jEdit.getProperty("vfs.browser.status.rw");
+					else
+						return jEdit.getProperty("vfs.browser.status.ro");
+				}
+				else
+				{
+					if(canWrite)
+						return jEdit.getProperty("vfs.browser.status.append");
+					else
+						return jEdit.getProperty("vfs.brower.status.no");
+				}
+			}
+			else if(name.equals(EA_SIZE))
+			{
+				if(type != FILE)
+					return null;
+				else
+					return MiscUtilities.formatFileSize(length);
+			}
+			else
+				return null;
+		} //}}}
+	
 		//{{{ getColor() method
 		public Color getColor()
 		{
@@ -761,6 +873,7 @@ public abstract class VFS
 	//{{{ Private members
 	private String name;
 	private int caps;
+	private String[] extAttrs;
 	private static Vector colors;
 	private static Object lock = new Object();
 

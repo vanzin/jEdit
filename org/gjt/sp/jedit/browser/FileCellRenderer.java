@@ -76,7 +76,19 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 					: color);
 			}
 
-			if(column == 1)
+			if(column == 0)
+			{
+				underlined = false;
+				if(file.type == VFS.DirectoryEntry.FILE)
+					setIcon(null);
+				else if(entry.expanded)
+					setIcon(UIManager.getIcon("Tree.expandedIcon"));
+				else
+					setIcon(UIManager.getIcon("Tree.collapsedIcon"));
+				setText(null);
+				setBorder(new EmptyBorder(1,1,1,1));
+			}
+			else if(column == 1)
 			{
 				underlined = (jEdit.getBuffer(file.path) != null);
 
@@ -86,22 +98,14 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				setText(file.name);
 				setBorder(new EmptyBorder(1,entry.level * 10,1,1));
 			}
-			else if(column == 2)
+			else
 			{
+				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
+				String extAttr = model.getExtendedAttribute(column);
+
 				underlined = false;
 				setIcon(null);
-				switch(entry.dirEntry.type)
-				{
-				case VFS.DirectoryEntry.FILE:
-					setText(jEdit.getProperty("vfs.browser.type.file"));
-					break;
-				case VFS.DirectoryEntry.DIRECTORY:
-					setText(jEdit.getProperty("vfs.browser.type.directory"));
-					break;
-				case VFS.DirectoryEntry.FILESYSTEM:
-					setText(jEdit.getProperty("vfs.browser.type.filesystem"));
-					break;
-				}
+				setText(file.getExtendedAttribute(extAttr));
 				setBorder(new EmptyBorder(1,1,1,1));
 			}
 		}

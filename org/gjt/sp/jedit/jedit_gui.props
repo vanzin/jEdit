@@ -1841,9 +1841,10 @@ vfs.browser.type.file=File
 vfs.browser.type.directory=Directory
 vfs.browser.type.filesystem=File system
 vfs.browser.status=Status
-vfs.browser.status.no-access=No access
-vfs.browser.status.read-only=Read only
-vfs.browser.status.read-write=Read/write
+vfs.browser.status.no=No access
+vfs.browser.status.ro=Read only
+vfs.browser.status.append=Append only
+vfs.browser.status.rw=Read/write
 vfs.browser.size=Size
 vfs.browser.modified=Last modified
 
