@@ -12,13 +12,13 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 3.2.1
+Version: 3.2.2
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 21
+Serial: 22
 Copyright: GPL
 Group: Application/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit321source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit322source.tar.gz
 Source1: jedit.sh.in
 Patch0: jedit32-javac.patch
 URL: http://www.jedit.org

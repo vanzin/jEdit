@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<project name="latestversion" default="dist" basedir=".">
+
+	<property name="jedit.install.dir"  value="../.."/>
+	<property name="jar.name"  value="LatestVersion.jar"/>
+
+	<property name="install.dir"  value=".."/>
+
+
+	<path id="project.class.path">
+		<pathelement location="${jedit.install.dir}/jedit.jar"/>
+		<pathelement location="."/>
+	</path>
+
+
+	<target name="compile">
+		<javac
+			srcdir="."
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<classpath refid="project.class.path"/>
+		</javac>
+	</target>
+
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${install.dir}"/>
+		<jar jarfile="${install.dir}/${jar.name}">
+			<fileset dir=".">
+				<include name="**/*.class"/>
+				<include name="**/*.props"/>
+				<include name="**/*.html"/>
+				<include name="**/*.gif"/>
+				<include name="actions.xml"/>
+			</fileset>
+		</jar>
+	</target>
+</project>

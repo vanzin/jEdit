@@ -249,6 +249,8 @@ public class StatusBar extends JPanel
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
 
+	static final String testStr = "9999,999-999 99%";
+
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
@@ -339,8 +341,6 @@ public class StatusBar extends JPanel
 		}
 
 		// private members
-		private static final String testStr = "9999,999-999 99%";
-
 		private Segment seg = new Segment();
 
 		private int getVirtualPosition(int dot, Buffer buffer, JEditTextArea textArea)

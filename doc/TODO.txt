@@ -2,12 +2,19 @@ TO DO
 
 + features:
 
+- installer: show GPL
+- improve next/prev-word commands
+- ant targets to replace installer/mk_installer/mk_source scripts
+- plugins and javahelp
+- mention javahelp in README.txt
+- hackish jhindex target
+- ant build file: pdf output target
+- QuickNotepad XSL docs
+- option on JDK 1.4 to have the LnF decorate windows and dialogs
 - different prompts on setting/going to markers
 - different prompts for different register commands
 - search and replace: scroll text area so selection is visible despite
   dialog position
-- maybe use JavaHelp for help, because it has some nice features, like
-  searching
 - better auto indent
 - improve folding:
   - explicit folding with {{{ and }}} markers in text
