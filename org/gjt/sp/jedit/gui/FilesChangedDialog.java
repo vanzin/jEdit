@@ -114,6 +114,7 @@ public class FilesChangedDialog extends EnhancedDialog
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
 		JButton close = new JButton(jEdit.getProperty("common.close"));
+		getRootPane().setDefaultButton(close);
 		buttons.add(close);
 		close.addActionListener(new ActionHandler());
 		buttons.add(Box.createGlue());

@@ -240,7 +240,6 @@ class BufferPrintable extends WorkRequest implements Printable
 		PrintTabExpander e = new PrintTabExpander(tabWidth);
 		//}}}
 
-		Segment seg = new Segment();
 		double y = 0.0;
 
 		lm = font.getLineMetrics("gGyYX",frc);
@@ -255,8 +254,7 @@ print_loop:	for(;;)
 
 			lineList.clear();
 
-			buffer.getLineText(currentPhysicalLine,seg);
-			tokenHandler.init(seg,styles,frc,e,lineList,
+			tokenHandler.init(styles,frc,e,lineList,
 				(float)(pageWidth - lineNumberWidth));
 
 			buffer.markTokens(currentPhysicalLine,tokenHandler);

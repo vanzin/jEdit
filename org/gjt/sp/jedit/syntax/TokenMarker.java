@@ -170,14 +170,15 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				if(lastOffset != pos)
 				{
-					tokenHandler.handleToken(
+					tokenHandler.handleToken(line,
 						context.rules.getDefault(),
 						lastOffset - line.offset,
 						pos - lastOffset,
 						context);
 				}
 
-				tokenHandler.handleToken(context.rules.getDefault(),
+				tokenHandler.handleToken(line,
+					context.rules.getDefault(),
 					pos - line.offset,1,context);
 				lastOffset = pos + 1;
 
@@ -199,7 +200,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 						markKeyword(true);
 
-						tokenHandler.handleToken(
+						tokenHandler.handleToken(line,
 							context.rules.getDefault(),
 							lastOffset - line.offset,1,
 							context);
@@ -238,7 +239,8 @@ unwind:		while(context.parent != null)
 				break unwind;
 		} //}}}
 
-		tokenHandler.handleToken(Token.END,pos - line.offset,0,context);
+		tokenHandler.handleToken(line,Token.END,
+			pos - line.offset,0,context);
 
 		return context.intern();
 	} //}}}
@@ -288,7 +290,7 @@ unwind:		while(context.parent != null)
 
 			context = (LineContext)context.parent.clone();
 
-			tokenHandler.handleToken(
+			tokenHandler.handleToken(line,
 				(context.inRule.action & ParserRule.EXCLUDE_MATCH)
 				== ParserRule.EXCLUDE_MATCH
 				? context.rules.getDefault()
@@ -440,8 +442,10 @@ unwind:		while(context.parent != null)
 				}
 				else
 				{
-					tokenHandler.handleToken(checkRule.token,
-						pos - line.offset,matchedChars,context);
+					tokenHandler.handleToken(line,
+						checkRule.token,
+						pos - line.offset,
+						matchedChars,context);
 				}
 
 				// a DELEGATE attribute on a SEQ changes the
@@ -474,8 +478,9 @@ unwind:		while(context.parent != null)
 				}
 				else
 				{
-					tokenHandler.handleToken(tokenType,
-						pos - line.offset,matchedChars,context);
+					tokenHandler.handleToken(line,tokenType,
+						pos - line.offset,
+						matchedChars,context);
 				}
 
 				String spanEndSubst = null;
@@ -504,7 +509,7 @@ unwind:		while(context.parent != null)
 			//}}}
 			//{{{ MARK_FOLLOWING
 			case ParserRule.MARK_FOLLOWING:
-				tokenHandler.handleToken((checkRule.action
+				tokenHandler.handleToken(line,(checkRule.action
 					& ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH ?
 					context.rules.getDefault()
@@ -524,21 +529,22 @@ unwind:		while(context.parent != null)
 				{
 					if(pos != lastOffset)
 					{
-						tokenHandler.handleToken(
+						tokenHandler.handleToken(line,
 							checkRule.token,
 							lastOffset - line.offset,
 							pos - lastOffset,
 							context);
 					}
 
-					tokenHandler.handleToken(
+					tokenHandler.handleToken(line,
 						context.rules.getDefault(),
 						pos - line.offset,pattern.count,
 						context);
 				}
 				else
 				{
-					tokenHandler.handleToken(checkRule.token,
+					tokenHandler.handleToken(line,
+						checkRule.token,
 						lastOffset - line.offset,
 						pos - lastOffset + pattern.count,
 						context);
@@ -561,7 +567,7 @@ unwind:		while(context.parent != null)
 		{
 			if(pos != lastOffset)
 			{
-				tokenHandler.handleToken(
+				tokenHandler.handleToken(line,
 					context.inRule.token,
 					lastOffset - line.offset,
 					pos - lastOffset,context);
@@ -585,7 +591,8 @@ unwind:		while(context.parent != null)
 			{
 				if(pos != lastOffset)
 				{
-					tokenHandler.handleToken(rule.token,
+					tokenHandler.handleToken(line,
+						rule.token,
 						lastOffset - line.offset,
 						pos - lastOffset,context);
 				}
@@ -610,14 +617,20 @@ unwind:		while(context.parent != null)
 			if(line.array[i] == '\t')
 			{
 				if(last != i)
-					tokenHandler.handleToken(tokenType,last,i - last,context);
-				tokenHandler.handleToken(tokenType,i,1,context);
+				{
+					tokenHandler.handleToken(line,
+					tokenType,last,i - last,context);
+				}
+				tokenHandler.handleToken(line,tokenType,i,1,context);
 				last = i + 1;
 			}
 		}
 
 		if(last != end)
-			tokenHandler.handleToken(tokenType,last,end - last,context);
+		{
+			tokenHandler.handleToken(line,tokenType,last,
+				end - last,context);
+		}
 	} //}}}
 
 	//{{{ markKeyword() method
@@ -675,7 +688,7 @@ unwind:		while(context.parent != null)
 
 			if(digit)
 			{
-				tokenHandler.handleToken(Token.DIGIT,
+				tokenHandler.handleToken(line,Token.DIGIT,
 					lastOffset - line.offset,
 					len,context);
 				lastOffset = pos;
@@ -691,7 +704,7 @@ unwind:		while(context.parent != null)
 
 			if(id != Token.NULL)
 			{
-				tokenHandler.handleToken(id,
+				tokenHandler.handleToken(line,id,
 					lastOffset - line.offset,
 					len,context);
 				lastOffset = pos;
@@ -702,7 +715,7 @@ unwind:		while(context.parent != null)
 		//{{{ Handle any remaining crud
 		if(addRemaining)
 		{
-			tokenHandler.handleToken(context.rules.getDefault(),
+			tokenHandler.handleToken(line,context.rules.getDefault(),
 				lastOffset - line.offset,len,context);
 			lastOffset = pos;
 		} //}}}

@@ -38,7 +38,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	public static final int MAX_CHUNK_LEN = 100;
 
 	//{{{ init() method
-	public void init(Segment seg, SyntaxStyle[] styles,
+	public void init(SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
 		TabExpander expander, List out,
 		float wrapMargin)
@@ -47,7 +47,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 		x = 0.0f;
 
-		this.seg = seg;
 		this.styles = styles;
 		this.fontRenderContext = fontRenderContext;
 		this.expander = expander;
@@ -79,20 +78,21 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ handleToken() method
 	/**
 	 * Called by the token marker when a syntax token has been parsed.
+	 * @param seg The segment containing the text
 	 * @param id The token type (one of the constants in the
 	 * {@link Token} class).
 	 * @param offset The start offset of the token
 	 * @param length The number of characters in the token
 	 * @param context The line context
-	 * @since jEdit 4.1pre1
+	 * @since jEdit 4.2pre3
 	 */
-	public void handleToken(byte id, int offset, int length,
+	public void handleToken(Segment seg, byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
 		if(id == Token.END)
 		{
 			if(firstToken != null)
-				out.add(merge((Chunk)firstToken));
+				out.add(merge((Chunk)firstToken,seg));
 			return;
 		}
 
@@ -104,7 +104,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 			if(wrapMargin != 0.0f)
 			{
-				initChunk(chunk);
+				initChunk(chunk,seg);
 				x += chunk.width;
 
 				if(Character.isWhitespace(seg.array[
@@ -127,13 +127,13 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 						Chunk nextLine = new Chunk(endOfWhitespace,
 							end.offset + end.length,
 							getParserRuleSet(context));
-						initChunk(nextLine);
+						initChunk(nextLine,seg);
 
 						nextLine.next = end.next;
 						end.next = null;
 
 						if(firstToken != null)
-							out.add(merge((Chunk)firstToken));
+							out.add(merge((Chunk)firstToken,seg));
 
 						firstToken = nextLine;
 
@@ -152,7 +152,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private Segment seg;
 	private SyntaxStyle[] styles;
 	private FontRenderContext fontRenderContext;
 	private TabExpander expander;
@@ -179,13 +178,13 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	protected void initChunk(Chunk chunk)
+	protected void initChunk(Chunk chunk, Segment seg)
 	{
 		chunk.init(seg,expander,x,fontRenderContext);
 	} //}}}
 
 	//{{{ merge() method
-	private Chunk merge(Chunk first)
+	private Chunk merge(Chunk first, Segment seg)
 	{
 		if(first == null)
 			return null;
@@ -194,7 +193,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		while(chunk.next != null)
 		{
 			Chunk next = (Chunk)chunk.next;
-			if(canMerge(chunk,next))
+			if(canMerge(chunk,next,seg))
 			{
 				// in case already initialized; un-initialize it
 				chunk.initialized = false;
@@ -206,7 +205,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				if(!chunk.initialized)
 				{
-					initChunk(chunk);
+					initChunk(chunk,seg);
 					if(wrapMargin == 0.0f)
 						x += chunk.width;
 				}
@@ -215,13 +214,13 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		}
 
 		if(!chunk.initialized)
-			initChunk(chunk);
+			initChunk(chunk,seg);
 
 		return first;
 	} //}}}
 
 	//{{{ canMerge() method
-	private boolean canMerge(Chunk c1, Chunk c2)
+	private boolean canMerge(Chunk c1, Chunk c2, Segment seg)
 	{
 		if(!c1.accessable || !c2.accessable)
 			return false;

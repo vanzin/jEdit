@@ -29,6 +29,9 @@ Thanks to Ken Turner for contributing to this release.
 
 - jEdit.getBuffer() now uses a hashtable instead of a linear scan.
 
+- Optimized away some redundant code in the display manager, which
+  should result in improved performance.
+
 }}}
 {{{ Bug Fixes
 
@@ -58,6 +61,14 @@ Thanks to Ken Turner for contributing to this release.
 
 - Plugins that failed to load were not marked as such, and showed up as
   "Loaded" in the plugin manager.
+
+}}}
+{{{ API Changes
+
+- TokenHandler.handleToken() method now takes a Segment instance as
+  the first parameter.
+
+}}}
 
 }}}
 

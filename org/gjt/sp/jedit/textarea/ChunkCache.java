@@ -726,8 +726,7 @@ class ChunkCache
 	{
 		TextAreaPainter painter = textArea.getPainter();
 
-		buffer.getLineText(physicalLine,textArea.lineSegment);
-		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
+		tokenHandler.init(painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter,out,
 			(textArea.displayManager.softWrap

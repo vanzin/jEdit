@@ -222,8 +222,6 @@ and quirks that I need to fix eventually.
 - figure out a way to write the autosave without needing a read lock the
   whole time
 - scrollTo() wiggle adds 4 seconds to scroll time on 120,000 line file!
-- TokenHandlers: have the token marker give them a segment to avoid
-  two redundant getLineText()s
 - see if getLineOfOffset() can be optimized
 - wrap guide: paint using new API
 - resizeColumnsAppropriately() kills performance!
