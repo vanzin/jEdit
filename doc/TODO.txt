@@ -3,10 +3,20 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- recovering an autosave: not dirty
+- bsh command path
+- beanshell: invokeAction() function
+- if A depends on B but A is loaded before B and B breaks, A ends up
+  being loaded. Solution: load plugins in order of dependencies?
+- plugin manager: install plugins, no restart, install another: deps bad
+- up arrow before buffer is loaded
+- toggle menu items broken when loading from cache
+- check plugin mgr reload
+- ditch plugin mgr's install complete, etc. dialog
+- note about dependencies
 - unloading fold handlers should update buffers
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
-- plugin unload dependencies
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
 - while loading --> scroll bar
@@ -59,7 +69,6 @@ and quirks that I need to fix eventually.
   - FAQ: better titles
 - new plugin mgr:
   - ask before selecting dependencies & 'don't show again'
-- update horizontal scroll width immediately on buffer switch
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
 - C+ENTER 3 C+2
@@ -71,10 +80,6 @@ and quirks that I need to fix eventually.
   know mod status
 - some JLists do not auto-scroll on keystroke
 - format -- instead of \n\n, what if it has \n   \n?
-- if A depends on B but A is loaded before B and B breaks, A ends up
-  being loaded. Solution: load plugins in order of dependencies?
-- plugin manager: install plugins, no restart, install another: deps bad
-- plugin deps need JAR name, not plugin name
 - maximisation state bug: open window, resize to size X. close window,
   open window again, resize to size Y. maximise. close window, open
   window again, it has size X not size Y.
@@ -111,16 +116,12 @@ and quirks that I need to fix eventually.
 
 - vfs browser right click menu: plugins & favorites
 - don't show 'new directory' in favorites:
-  - new bracket matching:
-    - use interface to determine match
+- new bracket matching; use interface to determine match
 - add option for confirm.save-all
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible
-- HTML mode: use new token types
 - hypersearch: open in new split
-- new bsh and bsh command path
-- beanshell: invokeAction() function
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
 - need a new jEditLauncher

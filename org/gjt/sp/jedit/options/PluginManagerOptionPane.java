@@ -41,21 +41,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		super("plugin-manager");
 	} //}}}
 
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private JLabel locationLabel;
-	private JLabel mirrorLabel;
-
-	private ButtonGroup locGrp;
-	private JRadioButton settingsDir;
-	private JRadioButton appDir;
-	private JCheckBox downloadSource;
-
-	private MirrorModel miraModel;
-	private JList miraList;
-	//}}}
-
 	//{{{ _init() method
 	protected void _init()
 	{
@@ -107,6 +92,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		buttonPanel.add(Box.createVerticalStrut(6));
 
+		/* Delete downloaded files */
+		deleteDownloads = new JCheckBox(jEdit.getProperty(
+			"options.plugin-manager.deleteDownloads"));
+		deleteDownloads.setSelected(jEdit.getBooleanProperty("plugin-manager.deleteDownloads"));
+		buttonPanel.add(deleteDownloads);
+
+		buttonPanel.add(Box.createVerticalStrut(6));
+
 		/* Install location */
 		locGrp = new ButtonGroup();
 		if(jEdit.getSettingsDirectory() != null)
@@ -139,6 +132,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("plugin-manager.installUser",settingsDir.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
+		jEdit.setBooleanProperty("plugin-manager.deleteDownloads",deleteDownloads.isSelected());
 
 		if(miraList.getSelectedIndex() != -1)
 		{
@@ -152,6 +146,22 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			}
 		}
 	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private JLabel locationLabel;
+	private JLabel mirrorLabel;
+
+	private ButtonGroup locGrp;
+	private JRadioButton settingsDir;
+	private JRadioButton appDir;
+	private JCheckBox downloadSource;
+	private JCheckBox deleteDownloads;
+
+	private MirrorModel miraModel;
+	private JList miraList;
+	//}}}
 
 	//}}}
 

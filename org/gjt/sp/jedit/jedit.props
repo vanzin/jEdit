@@ -389,9 +389,10 @@ plugin-manager.downloadSource=false
 plugin-manager.installUser=true
 plugin-manager.showAll=true
 plugin-manager.mirror.id=NONE
+plugin-manager.deleteDownloads=true
 #}}}
 
-#{{{ Hidden settings
+#{{{ Hidden settingsgui
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
 showTooltips=true

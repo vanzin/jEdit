@@ -135,9 +135,9 @@ class PluginManagerProgress extends JDialog
 						dispose();
 						if(ok)
 						{
-							GUIUtilities.message(dialog,
-								"plugin-manager." + type
-								+ "-done",null);
+							//GUIUtilities.message(dialog,
+							//	"plugin-manager." + type
+							//	+ "-done",null);
 						}
 						else
 						{

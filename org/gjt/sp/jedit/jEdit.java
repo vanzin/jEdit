@@ -1005,6 +1005,9 @@ public class jEdit
 		jars.addElement(jar);
 		jar.init();
 
+		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED));
+		EditBus.send(new DynamicMenuChanged("plugins"));
+
 		return jar;
 	} //}}}
 
@@ -1070,6 +1073,9 @@ public class jEdit
 			jar.uninit(false);
 			jars.removeElement(jar);
 		}
+
+		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED));
+		EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}
 
 	//}}}

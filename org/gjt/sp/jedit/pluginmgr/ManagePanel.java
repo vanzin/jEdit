@@ -124,7 +124,7 @@ public class ManagePanel extends JPanel
 						if(buf.length() != 0)
 							buf.append('\n');
 						buf.append(jar);
-						roster.addOperation(new Roster.Remove(jar));
+						roster.addRemove(jar);
 					}
 				}
 
@@ -362,7 +362,7 @@ public class ManagePanel extends JPanel
 					if(buf.length() != 0)
 						buf.append('\n');
 					buf.append(jar);
-					roster.addOperation(new Roster.Remove(jar));
+					roster.addRemove(jar);
 				}
 			}
 
@@ -414,7 +414,8 @@ public class ManagePanel extends JPanel
 					Entry entry = pluginModel.getEntry(table.getSelectedRow());
 					String label = entry.clazz;
 					String docs = entry.docs;
-					PluginJAR jar = jEdit.getPlugin(label).getJAR();
+					PluginJAR jar = jEdit.getPlugin(label)
+						.getPluginJAR();
 					if(jar != null && label != null && docs != null)
 					{
 						URL url = jar.getClassLoader()
