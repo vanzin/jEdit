@@ -864,6 +864,16 @@ public class View extends JFrame implements EBComponent
 		return closed;
 	} //}}}
 
+	//{{{ isPlainView() method
+	/**
+	 * Returns true if this is an auxilliary view with no dockable windows.
+	 * @since jEdit 4.1pre2
+	 */
+	public boolean isPlainView()
+	{
+		return plainView;
+	} //}}}
+
 	//{{{ getNext() method
 	/**
 	 * Returns the next view in the list.
@@ -909,8 +919,10 @@ public class View extends JFrame implements EBComponent
 	View next;
 
 	//{{{ View constructor
-	View(Buffer buffer, String splitConfig)
+	View(Buffer buffer, String splitConfig, boolean plainView)
 	{
+		this.plainView = plainView;
+
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
 		setIconImage(GUIUtilities.getEditorIcon());
@@ -964,7 +976,8 @@ public class View extends JFrame implements EBComponent
 		// save dockable window geometry, and close 'em
 		dockableWindowManager.close();
 
-		GUIUtilities.saveGeometry(this,"view");
+		GUIUtilities.saveGeometry(this,(plainView ? "plain-view"
+			: "view"));
 		EditBus.removeFromBus(this);
 		dispose();
 
@@ -1040,6 +1053,8 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
+
+	private boolean plainView;
 	//}}}
 
 	//{{{ getEditPanes() method
@@ -1155,7 +1170,7 @@ public class View extends JFrame implements EBComponent
 	//{{{ loadToolBars() method
 	private void loadToolBars()
 	{
-		if(jEdit.getBooleanProperty("view.showToolbar"))
+		if(jEdit.getBooleanProperty("view.showToolbar") && !plainView)
 		{
 			if(toolBar != null)
 				toolBarManager.removeToolBar(toolBar);
@@ -1170,7 +1185,7 @@ public class View extends JFrame implements EBComponent
 			toolBar = null;
 		}
 
-		if(jEdit.getBooleanProperty("view.showSearchbar"))
+		if(jEdit.getBooleanProperty("view.showSearchbar") && !plainView)
 		{
 			if(searchBar != null)
 				removeToolBar(searchBar);

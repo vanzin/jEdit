@@ -92,6 +92,18 @@ public abstract class FoldHandler
 	}
 	//}}}
 
+	//{{{ unregisterFoldHandler() method
+	/**
+	 * Removes a fold handler from the list of registered handlers
+	 * @param handler The fold handler to add
+	 * @since jEdit 4.1pre2
+	 */
+	public static void unregisterFoldHandler(FoldHandler handler)
+	{
+		foldHandlers.remove(handler);
+	}
+	//}}}
+
 	//{{{ getFoldHandlers() method
 	/**
 	 * Returns an array containing the list of registered fold handlers

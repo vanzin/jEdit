@@ -1101,23 +1101,24 @@ public class GUIUtilities
 		{
 			Dimension size = popup.getPreferredSize();
 
-			Dimension winSize = win.getSize();
+			Rectangle screenSize = win.getGraphicsConfiguration()
+				.getBounds();
 
-			if(newX + size.width > winSize.width
-				&& newX >= size.width)
+			if(newX + size.width + win.getX() > screenSize.width
+				&& newX + win.getX() >= size.width)
 			{
-				newX = (winSize.width - size.width + extraOffset);
+				newX -= (size.width + extraOffset);
 			}
 			else
 			{
 				newX += extraOffset;
 			}
 
-			if(newY + size.height > winSize.height
+			if(newY + size.height > win.getHeight()
 				&& newY >= size.height)
 			{
 				if(point)
-					newY -= (size.height + extraOffset);
+					newY = (win.getHeight() - size.height + extraOffset);
 				else
 					newY -= (size.height + extraOffset + comp.getHeight());
 			}

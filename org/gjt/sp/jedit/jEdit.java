@@ -1956,13 +1956,28 @@ public class jEdit
 	 */
 	public static View newView(View view, Buffer buffer)
 	{
+		return newView(view,buffer,false);
+	} //}}}
+
+	//{{{ newView() method
+	/**
+	 * Creates a new view of a buffer.
+	 * @param view An existing view
+	 * @param buffer The buffer
+	 * @param plainView If true, the view will not have dockable windows or
+	 * tool bars.
+	 *
+	 * @since 4.1pre2
+	 */
+	public static View newView(View view, Buffer buffer, boolean plainView)
+	{
 		if(view != null)
 		{
 			view.showWaitCursor();
 			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(buffer,null);
+		View newView = new View(buffer,null,plainView);
 
 		// Do this crap here so that the view is created
 		// and added to the list before it is shown
@@ -1973,11 +1988,13 @@ public class jEdit
 		// sized views, for some reason...
 		if(view != null)
 		{
-			GUIUtilities.saveGeometry(view,"view");
+			GUIUtilities.saveGeometry(view,(view.isPlainView()
+				? "plain-view" : "view"));
 			view.hideWaitCursor();
 		}
 
-		GUIUtilities.loadGeometry(newView,"view");
+		GUIUtilities.loadGeometry(newView,(plainView
+				? "plain-view" : "view"));
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
@@ -2012,7 +2029,7 @@ public class jEdit
 	 */
 	public static View newView(View view)
 	{
-		return newView(view,view.getSplitConfig());
+		return newView(view,view.getSplitConfig(),false);
 	} //}}}
 
 	//{{{ newView() method
@@ -2024,13 +2041,27 @@ public class jEdit
 	 */
 	public static View newView(View view, String splitConfig)
 	{
+		return newView(view,splitConfig,false);
+	} //}}}
+
+	//{{{ newView() method
+	/**
+	 * Creates a new view.
+	 * @param view An existing view
+	 * @param splitConfig The split configuration
+	 * @param plainView If true, the view will not have dockable windows or
+	 * tool bars.
+	 * @since jEdit 4.1pre2
+	 */
+	public static View newView(View view, String splitConfig, boolean plainView)
+	{
 		if(view != null)
 		{
 			view.showWaitCursor();
 			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(null,splitConfig);
+		View newView = new View(null,splitConfig,plainView);
 
 		// Do this crap here so that the view is created
 		// and added to the list before it is shown
@@ -2041,11 +2072,13 @@ public class jEdit
 		// sized views, for some reason...
 		if(view != null)
 		{
-			GUIUtilities.saveGeometry(view,"view");
+			GUIUtilities.saveGeometry(view,(view.isPlainView()
+				? "plain-view" : "view"));
 			view.hideWaitCursor();
 		}
 
-		GUIUtilities.loadGeometry(newView,"view");
+		GUIUtilities.loadGeometry(newView,(plainView ? "plain-view"
+				: "view"));
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));

@@ -436,6 +436,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="new-plain-view">
+	<CODE>
+		jEdit.newView(view,buffer,true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="new-view">
 	<CODE>
 		jEdit.newView(view);

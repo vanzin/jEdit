@@ -474,24 +474,32 @@ public class DockableWindowManager extends JPanel
 		{
 			Factory factory = (Factory)
 				dockableWindowFactories.elementAt(i);
-			windows.put(factory.name,new Entry(factory));
+			Entry e;
+			if(view.isPlainView())
+				e = new Entry(factory,FLOATING);
+			else
+				e = new Entry(factory);
+			windows.put(factory.name,e);
 		}
 
-		String lastTop = jEdit.getProperty("view.dock.top.last");
-		if(lastTop != null)
-			showDockableWindow(lastTop);
+		if(!view.isPlainView())
+		{
+			String lastTop = jEdit.getProperty("view.dock.top.last");
+			if(lastTop != null)
+				showDockableWindow(lastTop);
 
-		String lastLeft = jEdit.getProperty("view.dock.left.last");
-		if(lastLeft != null)
-			showDockableWindow(lastLeft);
+			String lastLeft = jEdit.getProperty("view.dock.left.last");
+			if(lastLeft != null)
+				showDockableWindow(lastLeft);
 
-		String lastBottom = jEdit.getProperty("view.dock.bottom.last");
-		if(lastBottom != null)
-			showDockableWindow(lastBottom);
+			String lastBottom = jEdit.getProperty("view.dock.bottom.last");
+			if(lastBottom != null)
+				showDockableWindow(lastBottom);
 
-		String lastRight = jEdit.getProperty("view.dock.right.last");
-		if(lastRight != null)
-			showDockableWindow(lastRight);
+			String lastRight = jEdit.getProperty("view.dock.right.last");
+			if(lastRight != null)
+				showDockableWindow(lastRight);
+		}
 	} //}}}
 
 	//{{{ getView() method
