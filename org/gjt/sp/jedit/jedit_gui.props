@@ -739,7 +739,7 @@ view.gutter.marker=Marker: {0}
 #{{{ Status messages
 view.status.add-marker=Enter shortcut for new marker
 view.status.auto-wrap=Search string not found; wrapping around!
-view.status.bracket=Matches "{0}"
+view.status.bracket=Matches {0}: {1}
 view.status.caret-tooltip=Line and column number indicator
 view.status.copy-append-string-register=Enter register name to copy append to
 view.status.copy-string-register=Enter register name to copy to

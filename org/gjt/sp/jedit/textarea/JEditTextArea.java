@@ -582,8 +582,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		//if(Debug.SCROLL_DEBUG)
+		if(Debug.SCROLL_DEBUG)
 			Log.log(Log.DEBUG,this,"scrollTo(), " + physLastLine);
+
 		//{{{ Get ready
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
@@ -5462,7 +5463,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		text = text.replace('\t',' ');
 
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
-			"view.status.bracket",new String[] { text }));
+			"view.status.bracket",new Object[] { 
+			new Integer(bracketLine), text }));
 	} //}}}
 
 	//{{{ recalculateLastPhysicalLine() method
@@ -5878,9 +5880,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					if(displayManager.isLineVisible(i))
 						displayManager.getScreenLineCount(i);
 				}
-				System.err.println("notify, " + physLastLine);
 				displayManager.notifyScreenLineChanges();
-				System.err.println(physLastLine);
 
 				if(delayedMultilineUpdate)
 				{

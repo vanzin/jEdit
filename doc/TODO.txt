@@ -3,12 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- chunk cache corruption: when collapse of a fold causes first line to
-  change
 - log viewer scrolling
-- lastPhysLine recalculation broken on insert
-- removing lines broken
-- insert-literal broken with \n and \t
 - magic up/down is broken with select
 - closing lots of files is slow
 - autoscroll down is slower than up if !lastLinePartial
@@ -22,7 +17,6 @@ and quirks that I need to fix eventually.
   - rect select and trailing whitespace
   - new bracket matching:
     - use interface to determine match
-    - show line number in match status msg
 
 [error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
 [error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)

@@ -686,10 +686,10 @@ public class DisplayManager
 
 			if(!isLineVisible(physicalLine))
 			{
-				if(physicalLine > getLastVisibleLine())
-					physicalLine = getPrevVisibleLine(physicalLine);
-				else
+				if(physicalLine < getFirstVisibleLine())
 					physicalLine = getNextVisibleLine(physicalLine);
+				else
+					physicalLine = getPrevVisibleLine(physicalLine);
 			}
 
 			int screenLines = getScreenLineCount(physicalLine);

@@ -235,12 +235,6 @@ public class DefaultInputHandler extends InputHandler
 				evt.consume();
 				setCurrentBindings(bindings);
 			}
-			else if(modifiers == 0 && (keyCode == KeyEvent.VK_ENTER
-				|| keyCode == KeyEvent.VK_TAB))
-			{
-				userInput((char)keyCode);
-				evt.consume();
-			}
 		}
 
 		if(readNextChar != null)
@@ -290,6 +284,13 @@ public class DefaultInputHandler extends InputHandler
 		// ignore
 		if(c == '\b')
 			return;
+
+		if(readNextChar != null)
+		{
+			invokeReadNextChar(c);
+			repeatCount = -1;
+			return;
+		}
 
 		KeyStroke keyStroke;
 
