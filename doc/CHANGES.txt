@@ -71,6 +71,10 @@ release.
   an EditBus message handler for BufferUpdate.CREATED or
   EditPaneUpdate.BUFFER_CHANGED.
 
+- The new PropertyManager in pre10 broke handling of site properties;
+  they would be overriden by plugin properties, which is not intended
+  behavior.
+
 }}}
 
 }}}

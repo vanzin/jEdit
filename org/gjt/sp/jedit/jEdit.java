@@ -3059,7 +3059,7 @@ public class jEdit
 				Log.log(Log.DEBUG,jEdit.class,
 					"Loading site snippet: " + path);
 
-				propMgr.loadSystemProps(new FileInputStream(new File(path)));
+				propMgr.loadSiteProps(new FileInputStream(new File(path)));
 			}
 			catch(FileNotFoundException fnf)
 			{
