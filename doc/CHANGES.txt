@@ -2,14 +2,16 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1final
 
-Thanks to Andreas Mross, Kris Kopicki, and Patrick Tingen for
-contributing to this release.
+Thanks to Alex Jacoby, Andreas Mross, Kris Kopicki, and Patrick Tingen
+for contributing to this release.
 
 + Enhancements:
 
 - Updated Progress syntax highlighting (Patrick Tingen).
 
 - Updated FAQ (Kris Kopicki).
+
+- Updated batch file syntax highlighting (Alex Jacoby).
 
 + Bug Fixes:
 
@@ -26,6 +28,9 @@ contributing to this release.
 - Minor fix for XML syntax highlighting.
 
 - Fixed "Preview Javadoc of Buffer" macro (Andreas Mross).
+
+- The file system browser's completion no longer breaks when entering
+  paths not in the current directory.
 
 * Version 4.1pre11
 

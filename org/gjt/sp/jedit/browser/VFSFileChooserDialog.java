@@ -435,8 +435,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				{
 					String currentText = filenameField.getText();
 					int caret = filenameField.getCaretPosition();
-					if(MiscUtilities.isAbsolutePath(currentText))
-						caret -= MiscUtilities.getParentOfPath(currentText).length();
 
 					BrowserView view = browser.getBrowserView();
 					view.selectNone();
@@ -455,17 +453,26 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 						String newText;
 						if(MiscUtilities.isAbsolutePath(currentText)
-							&& !currentText.startsWith(browser.getPath()))
+							&& !currentText.startsWith(browser.getDirectory()))
+						{
 							newText = path;
-						else if(parent.equals(browser.getDirectory()))
-							newText = name;
+						}
 						else
-							newText = path;
+						{
+							if(MiscUtilities.isAbsolutePath(currentText))
+								caret -= MiscUtilities.getParentOfPath(currentText).length();
+							if(parent.equals(browser.getDirectory()))
+								newText = name;
+							else
+							{
+								caret += parent.length() + 1;
+								newText = path;
+							}
+						}
+
 						filenameField.setText(newText);
 						filenameField.setCaretPosition(
 							newText.length());
-						if(MiscUtilities.isAbsolutePath(newText))
-							caret += parent.length() + 1;
 						filenameField.moveCaretPosition(
 							caret);
 					}
