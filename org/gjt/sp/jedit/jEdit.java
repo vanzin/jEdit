@@ -2477,7 +2477,7 @@ public class jEdit
 
 		bufferHash.remove(oldPath);
 
-		String path = buffer.getPath();
+		String path = buffer.getSymlinkPath();
 		if((VFSManager.getVFSForPath(path).getCapabilities()
 			& VFS.CASE_INSENSITIVE_CAP) != 0)
 		{

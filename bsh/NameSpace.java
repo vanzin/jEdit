@@ -40,6 +40,7 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.net.URL;
 
 /**
     A namespace	in which methods, variables, and imports (class names) live.  
@@ -258,7 +259,12 @@ public class NameSpace
 
 		// primitives should have been wrapped
 		if ( value == null )
-			throw new InterpreterError("null variable value");
+		{
+			// no! this breaks the ABI
+			//throw new InterpreterError("null variable value");
+			unsetVariable(name);
+			return;
+		}
 
 		// Locate the variable definition if it exists.
 		Variable existing = getVariableImpl( name, recurse );
@@ -776,34 +782,74 @@ public class NameSpace
 		nameSpaceChanged();
     }
 
+    static class CommandPathEntry
+	{
+		String path;
+		Class clas;
+
+		CommandPathEntry(String path, Class clas)
+		{
+			this.path = path;
+			this.clas = clas;
+		}
+	}
+
 	/**
-		Import scripted or compiled BeanShell commands in the following package
-		in the classpath.  You may use either "/" path or "." package notation.
-		e.g. importCommands("/bsh/commands") or importCommands("bsh.commands")
-		are equivalent.  If a relative path style specifier is used then it is
-		made into an absolute path by prepending "/".
+		Adds a URL to the command path.
 	*/
-    public void	importCommands( String name )
-    {
-		if ( importedCommands == null )
+	public void addCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
 			importedCommands = new Vector();
 
-		// dots to slashes
-		name = name.replace('.','/');
-		// absolute
-		if ( !name.startsWith("/") )
-			name = "/"+name;
-		// remove trailing (but preserve case of simple "/")
-		if ( name.length() > 1 && name.endsWith("/") )
-			name = name.substring( 0, name.length()-1 );
+		if(!path.endsWith("/"))
+			path = path + "/";
+		importedCommands.addElement(new CommandPathEntry(path,clas));
+	}
 
-		// If it exists, remove it and add it at the end (avoid memory leak)
-		if ( importedCommands.contains( name ) )
-			importedCommands.remove( name );
+	/**
+		Remove a URLfrom the command path.
+	*/
+	public void removeCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
+			return;
 
-		importedCommands.addElement(name);
-		nameSpaceChanged();
-    }
+		for(int i = 0; i < importedCommands.size(); i++)
+		{
+			CommandPathEntry entry = (CommandPathEntry)importedCommands
+				.elementAt(i);
+			if(entry.path.equals(path) && entry.clas == clas)
+			{
+				importedCommands.removeElementAt(i);
+				return;
+			}
+		}
+	}
+
+	/**
+		Looks up a command.
+	*/
+	public InputStream getCommand(String name)
+	{
+		if(importedCommands != null)
+		{
+			String extName = name + ".bsh";
+			for(int i = importedCommands.size() - 1; i >= 0; i--)
+			{
+				CommandPathEntry entry = (CommandPathEntry)importedCommands
+					.elementAt(i);
+				InputStream in = entry.clas.getResourceAsStream(entry.path + extName);
+				if(in != null)
+					return in;
+			}
+		}
+
+		if(parent == null)
+			return null;
+		else
+			return parent.getCommand(name);
+	}
 
 	/**
 		A command is a scripted method or compiled command class implementing a 
@@ -839,40 +885,22 @@ public class NameSpace
 		if (Interpreter.DEBUG) Interpreter.debug("getCommand: "+name);
 		BshClassManager bcm = interpreter.getClassManager();
 
-		if ( importedCommands != null )
-		{
-			// loop backwards for precedence
-			for(int i=importedCommands.size()-1; i>=0; i--)
-			{
-				String path = (String)importedCommands.elementAt(i);
+		InputStream in = getCommand( name );
 
-				String scriptPath; 
-				if ( path.equals("/") )
-					scriptPath = path + name +".bsh";
-				else
-					scriptPath = path +"/"+ name +".bsh";
+		if ( in != null )
+			return loadScriptedCommand( 
+				in, name, argTypes, name, interpreter );
 
-				Interpreter.debug("searching for script: "+scriptPath );
+		/* // Chop leading "/" and change "/" to "."
+		String className;
+		if ( path.equals("/") )
+			className = name;
+		else
+			className = path.substring(1).replace('/','.') +"."+name;
 
-        		InputStream in = bcm.getResourceAsStream( scriptPath );
-
-				if ( in != null )
-					return loadScriptedCommand( 
-						in, name, argTypes, scriptPath, interpreter );
-
-				// Chop leading "/" and change "/" to "."
-				String className;
-				if ( path.equals("/") )
-					className = name;
-				else
-					className = path.substring(1).replace('/','.') +"."+name;
-
-				Interpreter.debug("searching for class: "+className);
-        		Class clas = bcm.classForName( className );
-				if ( clas != null )
-					return clas;
-			}
-		}
+		Class clas = bcm.classForName( className );
+		if ( clas != null )
+			return clas; */
 
 		if ( parent != null )
 			return parent.getCommand( name, argTypes, interpreter );
@@ -1486,7 +1514,7 @@ public class NameSpace
 		importPackage("java.util");
 		importPackage("java.io");
 		importPackage("java.lang");
-		importCommands("/bsh/commands");
+		addCommandPath("/bsh/commands",getClass());
     }
 
 	/**
