@@ -3,19 +3,22 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
-	Compiled by Mirco Bova on 04-12-2001
+	09-10-2003 - Mirco Bova
+	Added some new batch commands using win2K help as reference.
+
+	04-12-2001 - Mirco Bova
 	this file is based on the original JEdit batch.xml mode.
 	The main upgrade consisting in adding the standard MS-DOS
 	commands as keywords and functions:
-	- keywords =    internal shell commands;
-	- functions =   standard MS-DOS commands (.exe or .com in DOS or
-	  windows\command directory).
+	- keywords =		internal shell commands;
+	-	functions =		standard MS-DOS commands (.exe or .com in DOS or
+									windows\command directory).
 
 	Minor enhancements by Alex Jacoby on 28-feb-2003
 -->
 
 <!-- The keywords and functions here defined are those of MS-DOS 6.22,
-     plus a few as of Windows XP.
+		 plus a few as of Windows XP.
  -->
 
 <MODE>
@@ -23,6 +26,9 @@
 		<PROPERTY NAME="lineComment" VALUE="rem" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
+		<!-- 'echo off' statements -->
+		<SEQ TYPE="KEYWORD3">@</SEQ>
+
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>
@@ -35,11 +41,6 @@
 
 		<!-- comments -->
 		<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="R" TYPE="COMMENT1">REM\s</EOL_SPAN_REGEXP>
-		<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="@" TYPE="COMMENT1">@REM\s</EOL_SPAN_REGEXP>
-		<EOL_SPAN AT_WHITESPACE_END="TRUE" TYPE="COMMENT1">::</EOL_SPAN>
-
-		<!-- 'echo off' statements -->
-		<SEQ TYPE="KEYWORD3">@</SEQ>
 
 		<!-- literals -->
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
@@ -60,9 +61,9 @@
 		<SEQ TYPE="KEYWORD2">%9</SEQ>
 		<!-- for-loop variable (one char after %%) -->
 		<SEQ_REGEXP TYPE="KEYWORD2"
-		      HASH_CHAR="%"
-		      AT_WORD_START="TRUE"
-		      >%%[[:alpha:]]</SEQ_REGEXP>
+					HASH_CHAR="%"
+					AT_WORD_START="TRUE"
+					>%%[[:alpha:]]</SEQ_REGEXP>
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>%</BEGIN>
 			<END>%</END>
@@ -77,10 +78,8 @@
 
 			<KEYWORD1>cls</KEYWORD1>
 
-			<KEYWORD1>do</KEYWORD1>
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
-			<KEYWORD1>in</KEYWORD1>
 
 			<KEYWORD1>echo</KEYWORD1>
 			<KEYWORD1>echo.</KEYWORD1>
@@ -92,18 +91,30 @@
 			<KEYWORD1>del</KEYWORD1>
 			<KEYWORD1>set</KEYWORD1>
 
+			<!-- new KEYWORDS from Win2K help -->
 			<KEYWORD1>call</KEYWORD1>
 			<KEYWORD1>exit</KEYWORD1>
+			<KEYWORD1>setlocal</KEYWORD1>
+			<KEYWORD1>shift</KEYWORD1>
+			<KEYWORD1>endlocal</KEYWORD1>
+			<KEYWORD1>pause</KEYWORD1>
 
-			<!-- KEYWORD2 are commands options and special devices -->
+			<!-- KEYWORD2 are commands options -->
 
 			<KEYWORD2>defined</KEYWORD2>
 			<KEYWORD2>exist</KEYWORD2>
 			<KEYWORD2>errorlevel</KEYWORD2>
 
+			<!-- new KEYWORD options from Win2K help -->
+			<KEYWORD2>else</KEYWORD2>
+
+			<KEYWORD2>in</KEYWORD2>
+			<KEYWORD2>do</KEYWORD2>
+
 			<KEYWORD2>NUL</KEYWORD2>
 			<KEYWORD2>AUX</KEYWORD2>
 			<KEYWORD2>PRN</KEYWORD2>
+
 			<KEYWORD1>not</KEYWORD1>
 
 			<!-- goto is a special case we want to distinguish it -->

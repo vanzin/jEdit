@@ -352,49 +352,44 @@ public class DisplayManager
 			&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
-			start = line + 1;
 
-			for(int i = line + 1; i < lineCount; i++)
+			int index = fvmget(line + 1);
+			start = fvm[index];
+			if(index != fvmcount - 1)
+				end = fvm[index + 1] - 1;
+			else
 			{
-				if(/* isLineVisible(i) && */
-					buffer.getFoldLevel(i) <= initialFoldLevel)
+				start = line + 1;
+
+				for(int i = line + 1; i < lineCount; i++)
 				{
-					end = i - 1;
-					break;
+					if(/* isLineVisible(i) && */
+						buffer.getFoldLevel(i) <= initialFoldLevel)
+					{
+						end = i - 1;
+						break;
+					}
 				}
 			}
 		}
 		else
 		{
-			boolean ok = false;
-
-			// scan backwards looking for the start
-			for(int i = line - 1; i >= 0; i--)
+			int index = fvmget(line);
+			start = fvm[index];
+			if(index != fvmcount - 1)
+				end = fvm[index + 1] - 1;
+			else
 			{
-				//XXX
-				if(isLineVisible(i) && buffer.getFoldLevel(i) < initialFoldLevel)
+				for(int i = line + 1; i < lineCount; i++)
 				{
-					start = i + 1;
-					ok = true;
-					break;
-				}
-			}
-
-			if(!ok)
-			{
-				// no folds in buffer
-				return -1;
-			}
-
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				//XXX
-				if((isLineVisible(i) &&
-					buffer.getFoldLevel(i) < initialFoldLevel)
-					|| i == getLastVisibleLine())
-				{
-					end = i - 1;
-					break;
+					//XXX
+					if((isLineVisible(i) &&
+						buffer.getFoldLevel(i) < initialFoldLevel)
+						|| i == getLastVisibleLine())
+					{
+						end = i - 1;
+						break;
+					}
 				}
 			}
 		} //}}}

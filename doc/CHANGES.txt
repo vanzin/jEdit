@@ -2,19 +2,29 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre6
 
-{{{ Text Editing
+{{{ Syntax Highlighting
 
-- Pressing TAB with a rectangular selection now inserts a tab at the
-  appropriate column, instead of shifting indent to the right.
+- Added Apache httpd.conf syntax highlighting (Ollie Rutherfurd).
+
+- Improved Scheme syntax highlighting (Stephen Bartlett).
+
+- Improved MS-DOS batch file syntax highlighting (Mirco Bova).
+
+- MCS51 (8051) microcontroller assembly syntax highlighting
+  (Mirco Bova).
 
 }}}
 {{{ Miscellaneous
+
+- Pressing TAB with a rectangular selection now inserts a tab at the
+  appropriate column, instead of shifting indent to the right.
 
 - Added Up/Down arrows to the file system browser's colors option pane.
   This lets you change the order that file names are matched against the
   patterns in the list.
 
-- Improved Scheme syntax highlighting (Stephen Bartlett).
+- Collapsed/expanded arrow icons in file system browser should now look
+  good with a dark background as well (Kris Kopicki).
 
 }}}
 {{{ Bug Fixes
@@ -75,6 +85,8 @@ JEDIT 4.2 VERSION HISTORY
 
 - Changing the buffer sorting options, or having untitled files would
   would cause the wrong buffers to be restored on startup.
+
+- Fixed a problem with inserting text at the beginning of a fold line.
 
 }}}
 
