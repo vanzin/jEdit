@@ -298,7 +298,18 @@ implements WorkThreadProgressListener
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
+			{
+				System.err.println(browser.getDirectory());
+				System.err.println(browser.getDirectoryField().getText());
+				if(!browser.getDirectory().equals(
+					browser.getDirectoryField().getText()))
+				{
+					browser.setDirectory(browser.getDirectoryField().getText());
+					return;
+				}
+
 				ok();
+			}
 			else if(evt.getSource() == cancel)
 				cancel();
 		} //}}}

@@ -3307,10 +3307,11 @@ public class Buffer implements EBComponent
 		this.tokenMarker = tokenMarker;
 
 		// don't do this on initial token marker
-		if(oldTokenMarker != null)
+		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
+		{
 			offsetMgr.linesChanged(0,offsetMgr.getLineCount());
-
-		lastTokenizedLine = -1;
+			lastTokenizedLine = -1;
+		}
 	} //}}}
 
 	//{{{ setFoldHandler() method

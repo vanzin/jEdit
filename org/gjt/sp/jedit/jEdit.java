@@ -823,40 +823,6 @@ public class jEdit
 
 		UIDefaults defaults = UIManager.getDefaults();
 
-		// give all Swing components our colors
-		if(jEdit.getBooleanProperty("textColors"))
-		{
-			Color background = new javax.swing.plaf.ColorUIResource(
-				jEdit.getColorProperty("view.bgColor"));
-			Color foreground = new javax.swing.plaf.ColorUIResource(
-				jEdit.getColorProperty("view.fgColor"));
-			Color caretColor = new javax.swing.plaf.ColorUIResource(
-				jEdit.getColorProperty("view.caretColor"));
-			Color selectionColor = new javax.swing.plaf.ColorUIResource(
-				jEdit.getColorProperty("view.selectionColor"));
-
-			String[] prefixes = { "TextField", "TextArea", "List", "Table" };
-			for(int i = 0; i < prefixes.length; i++)
-			{
-				String prefix = prefixes[i];
-				defaults.put(prefix + ".disabledBackground",background);
-				defaults.put(prefix + ".background",background);
-				defaults.put(prefix + ".disabledForeground",foreground);
-				defaults.put(prefix + ".foreground",foreground);
-				defaults.put(prefix + ".caretForeground",caretColor);
-				defaults.put(prefix + ".selectionForeground",foreground);
-				defaults.put(prefix + ".selectionBackground",selectionColor);
-				//defaults.put(prefix + ".inactiveForeground",foreground);
-			}
-
-			defaults.put("Tree.background",background);
-			defaults.put("Tree.foreground",foreground);
-			defaults.put("Tree.textBackground",background);
-			defaults.put("Tree.textForeground",foreground);
-			defaults.put("Tree.selectionForeground",foreground);
-			defaults.put("Tree.selectionBackground",selectionColor);
-		}
-
 		// give all text areas the same font
 		Font font = getFontProperty("view.font");
 
@@ -2894,6 +2860,44 @@ public class jEdit
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
+
+		UIDefaults defaults = UIManager.getDefaults();
+
+		// give all Swing components our colors
+		if(jEdit.getBooleanProperty("textColors"))
+		{
+			Color background = new javax.swing.plaf.ColorUIResource(
+				jEdit.getColorProperty("view.bgColor"));
+			Color foreground = new javax.swing.plaf.ColorUIResource(
+				jEdit.getColorProperty("view.fgColor"));
+			Color caretColor = new javax.swing.plaf.ColorUIResource(
+				jEdit.getColorProperty("view.caretColor"));
+			Color selectionColor = new javax.swing.plaf.ColorUIResource(
+				jEdit.getColorProperty("view.selectionColor"));
+
+			String[] prefixes = { "TextField", "TextArea", "List", "Table" };
+			for(int i = 0; i < prefixes.length; i++)
+			{
+				String prefix = prefixes[i];
+				defaults.put(prefix + ".disabledBackground",background);
+				defaults.put(prefix + ".background",background);
+				defaults.put(prefix + ".disabledForeground",foreground);
+				defaults.put(prefix + ".foreground",foreground);
+				defaults.put(prefix + ".caretForeground",caretColor);
+				defaults.put(prefix + ".selectionForeground",foreground);
+				defaults.put(prefix + ".selectionBackground",selectionColor);
+				//defaults.put(prefix + ".inactiveForeground",foreground);
+			}
+
+			defaults.put("Tree.background",background);
+			defaults.put("Tree.foreground",foreground);
+			defaults.put("Tree.textBackground",background);
+			defaults.put("Tree.textForeground",foreground);
+			defaults.put("Tree.selectionForeground",foreground);
+			defaults.put("Tree.selectionBackground",selectionColor);
+		}
+
+		defaults.remove("SplitPane.border");
 	} //}}}
 
 	//{{{ runStartupScripts() method

@@ -84,7 +84,11 @@ public class Marker
 	void removePosition()
 	{
 		// forget the cached Position instance
-		position = null;
+		if(position != null)
+		{
+			pos = position.getOffset();
+			position = null;
+		}
 	} //}}}
 
 	//{{{ setPosition() method
