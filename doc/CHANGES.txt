@@ -87,6 +87,7 @@ JEDIT 4.0 VERSION HISTORY
 - If a very long string is selected, the Search and Replace dialog will
   not be unacceptably wide when 'Find' is invoked
 - Fixed broken soft wrap in syntax highlighted files
+- Made sure that all XML mode files now validate against the xmode.dtd
 
 * Version 4.0pre4
 

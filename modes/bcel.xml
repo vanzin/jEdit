@@ -6,7 +6,7 @@
     Java bytecode mode. Used by Andre Kaplan's JavaInsight plugin.
 -->
 
-<MODE NAME="bcel">
+<MODE>
     <PROPS>
         <PROPERTY NAME="lineComment" VALUE="//" />
     </PROPS>

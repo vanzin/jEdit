@@ -560,6 +560,18 @@ view.getInputHandler().readNextChar("Enter a character",
   </para>
 
   <informalexample><programlisting>doSomethingWithView(view, "something");</programlisting></informalexample>
+
+  <sidebar><title>Reloading startup scripts without restarting</title>
+   <para>
+    It is actually possible to reload startup scripts without restarting
+    jEdit, using a BeanShell statement like the following:
+   </para>
+   <programlisting>BeanShell.runScript(view,<replaceable>path</replaceable>,false,false);</programlisting>
+   <para>
+    For <replaceable>path</replaceable>, you can substitute any string,
+    or a method call such as <method>buffer.getPath()</method>.
+   </para>
+  </sidebar>
 </sect1>
 
 <sect1 id="scripts-command-line"><title>Running Scripts from the Command

@@ -46,17 +46,6 @@
 		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
 
-<!--
-		// Operators
-		// Unary:       ~ ++ --
-		// Arithmetic:  + - * / %
-		// Comparison:  == != < > <= >=
-		// Boolean:     | & ^
-		// Bit Shift:   << >> >>>
-		// Logical:     ! || &&
-		// Assignment:  = += -= *= /= %= |= &= ^= <<= >>= >>>= 
-		// Conditional: ?:
--->
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
