@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- finish regexp syntax rules -- SPAN::END substitution
+- why is binding F2 to 'build last target' broken?
+- narrow to one line: select all: blows up
 - C+[ -vs- C+OPEN_BRACKET
 - close current area doesn't work
 - favorites menu position of too far to the right

@@ -33,6 +33,17 @@ public class CharIndexedSegment implements CharIndexed, Serializable
 	//{{{ CharIndexedSegment constructor
 	/**
 	 * Creates a new <code>CharIndexedSegment</code>.
+	 * @since jEdit 4.1pre3
+	 */
+	public CharIndexedSegment(Segment seg, int index)
+	{
+		this.seg = seg;
+		m_index = index;
+	} //}}}
+
+	//{{{ CharIndexedSegment constructor
+	/**
+	 * Creates a new <code>CharIndexedSegment</code>.
 	 * @since jEdit 4.1pre1
 	 */
 	public CharIndexedSegment(Segment seg, boolean reverse)

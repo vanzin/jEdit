@@ -77,12 +77,6 @@
 
 		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
 
-		<!-- RegExps -->
-		<!-- <SPAN TYPE="LITERAL2" DELEGATE="REGEXP" NO_LINE_BREAK="TRUE" >
-			<BEGIN>/</BEGIN>
-			<END>/</END>
-		</SPAN> -->
-
 		<!-- Literals -->
 		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN>"</BEGIN>
@@ -107,7 +101,38 @@
 
 		<!-- jEdit 4.1 adds regular expression syntax rules so we can
 		     highlight this sort of crap. -->
-		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m">m([[:punct:]]).+?\1</SEQ_REGEXP>
+
+		<!-- // -->
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="/"
+			AT_WORD_START="TRUE"
+		>/[^[:blank:]]*?/</SEQ_REGEXP>
+
+		<!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="q"
+			AT_WORD_START="TRUE"
+		>q(?:|[qrx])([[:punct:]]).*?\1</SEQ_REGEXP>
+
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="t"
+			AT_WORD_START="TRUE"
+		>tr([[:punct:]]).*?\1.*?\1</SEQ_REGEXP>
+
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="y"
+			AT_WORD_START="TRUE"
+		>y([[:punct:]]).*?\1.*?\1</SEQ_REGEXP>
+
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="m"
+			AT_WORD_START="TRUE"
+		>m([[:punct:]]).*?\1</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="s"
+			AT_WORD_START="TRUE"
+		>s([[:punct:]]).*?\1.*?\1</SEQ_REGEXP>
 
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">|</SEQ>
@@ -127,6 +152,8 @@
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
 
 		<!-- Keywords -->
 		<KEYWORDS>
@@ -161,7 +188,7 @@
 
 				Certain keywords have been commented out where they appear more
 				than once, and the y///, qx//, etc. functions have been removed,
-				since they would not be colorized as keywords, but with separate
+				since they would are colorized not as keywords, but with separate
 				rules.
 			-->
 
@@ -523,28 +550,27 @@
 		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
 	</RULES>
 
-	<RULES SET="REGEXP" DEFAULT="LITERAL2" ESCAPE="\">
-		<!-- Variables -->
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-			<BEGIN>${</BEGIN>
+	<RULES SET="REGEXP" DEFAULT="MARKUP" ESCAPE="\">
+		<SEQ TYPE="MARKUP">)(</SEQ>
+		<SEQ TYPE="MARKUP">)[</SEQ>
+		<SEQ TYPE="MARKUP">){</SEQ>
+		<SEQ TYPE="MARKUP">](</SEQ>
+		<SEQ TYPE="MARKUP">][</SEQ>
+		<SEQ TYPE="MARKUP">]{</SEQ>
+		<SEQ TYPE="MARKUP">}(</SEQ>
+		<SEQ TYPE="MARKUP">}[</SEQ>
+		<SEQ TYPE="MARKUP">}{</SEQ>
+		<SPAN TYPE="MARKUP" DELEGATE="REGEXP">
+			<BEGIN>(</BEGIN>
+			<END>)</END>
+		</SPAN>
+		<SPAN TYPE="MARKUP" DELEGATE="REGEXP">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+		<SPAN TYPE="MARKUP" DELEGATE="REGEXP">
+			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-
-		<MARK_FOLLOWING TYPE="KEYWORD2">$#</MARK_FOLLOWING>
-		<MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
-
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-			<BEGIN>@{</BEGIN>
-			<END>}</END>
-		</SPAN>
-
-		<MARK_FOLLOWING TYPE="KEYWORD2">@</MARK_FOLLOWING>
-
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-			<BEGIN>%{</BEGIN>
-			<END>}</END>
-		</SPAN>
-
-		<MARK_FOLLOWING TYPE="KEYWORD2">%</MARK_FOLLOWING>
 	</RULES>
 </MODE>

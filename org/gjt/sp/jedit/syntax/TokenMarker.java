@@ -385,6 +385,12 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Some rules can only match in certain locations
 		if(!end)
 		{
+			if(Character.toUpperCase(checkRule.hashChar)
+				!= Character.toUpperCase(line.array[pos]))
+			{
+				return false;
+			}
+
 			if((checkRule.action & ParserRule.AT_LINE_START)
 				== ParserRule.AT_LINE_START)
 			{
@@ -397,6 +403,13 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
 					lastOffset : pos) != whitespaceEnd)
+					return false;
+			}
+			else if((checkRule.action & ParserRule.AT_WORD_START)
+				== ParserRule.AT_WORD_START)
+			{
+				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
+					lastOffset : pos) != lastOffset)
 					return false;
 			}
 		} //}}}
@@ -422,23 +435,18 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 			else
 			{
-				System.err.println("matching " + checkRule.startRegexp
-					+ " against " + line);
 				// note that all regexps start with \A so they only
 				// match the start of the string
 				int matchStart = pos - line.offset;
 				REMatch match = checkRule.startRegexp.getMatch(
-					new CharIndexedSegment(line,false),
-					matchStart,RE.REG_ANCHORINDEX);
-				if(match == null || match.getStartIndex() != matchStart)
-				{
-					System.err.println("false positive");
+					new CharIndexedSegment(line,matchStart),
+					0,RE.REG_ANCHORINDEX);
+				if(match == null)
 					return false;
-				}
+				else if(match.getStartIndex() != 0)
+					throw new InternalError("Can't happen");
 				else
-				{
-					System.err.println(match.getStartIndex() + ":" + match.getEndIndex() + ":" + pos);
-				}
+					matchedChars = match.getEndIndex();
 			}
 		} //}}}
 
@@ -470,7 +478,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			//{{{ SEQ
 			case ParserRule.SEQ:
 				tokenHandler.handleToken(checkRule.token,
-					pos - line.offset,pattern.count,context);
+					pos - line.offset,matchedChars,context);
 
 				// a DELEGATE attribute on a SEQ changes the
 				// ruleset from the end of the SEQ onwards
@@ -494,7 +502,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					((checkRule.action & ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH
 					? context.rules.getDefault() : checkRule.token),
-					pos - line.offset,pattern.count,context);
+					pos - line.offset,matchedChars,context);
 
 				String spanEndSubst = null;
 				// XXX
@@ -551,7 +559,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 
 			// move pos to last character of match sequence
-			pos += (pattern.count - 1); 
+			pos += (matchedChars - 1);
 			lastOffset = pos + 1;
 
 			// break out of inner for loop to check next char
