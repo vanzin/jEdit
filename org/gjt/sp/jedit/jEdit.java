@@ -3419,10 +3419,12 @@ loop:		for(int i = 0; i < list.length; i++)
 				OperatingSystem.isDOSDerived()
 				|| OperatingSystem.isMacOS();
 			String path = buffer.getPath();
-			if((VFSManager.getVFSForPath(path).getCapabilities()
+
+			String symlinkPath = buffer.getSymlinkPath();
+			if((VFSManager.getVFSForPath(symlinkPath).getCapabilities()
 				& VFS.CASE_INSENSITIVE_CAP) != 0)
 			{
-				path = path.toLowerCase();
+				symlinkPath = symlinkPath.toLowerCase();
 			}
 
 			// if only one, clean, 'untitled' buffer is open, we
@@ -3440,13 +3442,13 @@ loop:		for(int i = 0; i < list.length; i++)
 
 				bufferHash.clear();
 
-				bufferHash.put(path,buffer);
+				bufferHash.put(symlinkPath,buffer);
 				return;
 			}
 
 			bufferCount++;
 
-			bufferHash.put(path,buffer);
+			bufferHash.put(symlinkPath,buffer);
 
 			if(buffersFirst == null)
 			{
