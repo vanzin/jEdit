@@ -1598,7 +1598,7 @@ forward_scan:		do
 	{
 		// invalidate the old selection
 		selectionManager.setSelection(selection);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ setSelection() method
@@ -1611,7 +1611,7 @@ forward_scan:		do
 	public void setSelection(Selection selection)
 	{
 		selectionManager.setSelection(selection);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ addToSelection() method
@@ -1624,7 +1624,7 @@ forward_scan:		do
 	public void addToSelection(Selection[] selection)
 	{
 		selectionManager.addToSelection(selection);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ addToSelection() method
@@ -1637,7 +1637,7 @@ forward_scan:		do
 	public void addToSelection(Selection selection)
 	{
 		selectionManager.addToSelection(selection);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ getSelectionAtOffset() method
@@ -1661,7 +1661,7 @@ forward_scan:		do
 	public void removeFromSelection(Selection sel)
 	{
 		selectionManager.removeFromSelection(sel);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ removeFromSelection() method
@@ -1678,7 +1678,7 @@ forward_scan:		do
 			return;
 
 		selectionManager.removeFromSelection(sel);
-		finishCaretUpdate(caretLine,false,true);
+		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
 	//{{{ resizeSelection() method
@@ -2087,12 +2087,7 @@ forward_scan:		do
 		int oldCaretLine = caretLine;
 
 		if(caret == newCaret)
-		{
-			if(scrollMode == NORMAL_SCROLL)
-				finishCaretUpdate(oldCaretLine,false,false);
-			else if(scrollMode == ELECTRIC_SCROLL)
-				finishCaretUpdate(oldCaretLine,true,false);
-		}
+			finishCaretUpdate(oldCaretLine,scrollMode,false);
 		else
 		{
 			caret = newCaret;
@@ -2100,10 +2095,7 @@ forward_scan:		do
 
 			magicCaret = -1;
 
-			if(scrollMode == NORMAL_SCROLL)
-				finishCaretUpdate(oldCaretLine,false,true);
-			else if(scrollMode == ELECTRIC_SCROLL)
-				finishCaretUpdate(oldCaretLine,true,true);
+			finishCaretUpdate(oldCaretLine,scrollMode,true);
 		}
 	} //}}}
 
@@ -2424,6 +2416,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 			extendSelection(caret,newCaret);
 		else if(!multi)
 			selectNone();
+
 		moveCaretPosition(newCaret,false);
 
 		setMagicCaretPosition(magic);
@@ -5184,7 +5177,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					displayManager.expandFold(caretLine,false);
 			}
 
-			scrollToCaret(queuedScrollToElectric);
+			if(queuedScrollMode == ELECTRIC_SCROLL)
+				scrollToCaret(true);
+			else if(queuedScrollMode == NORMAL_SCROLL)
+				scrollToCaret(false);
+
 			updateBracketHighlightWithDelay();
 			if(queuedFireCaretEvent)
 				fireCaretEvent();
@@ -5193,8 +5190,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		// clear these flags.
 		finally
 		{
-			queuedCaretUpdate = queuedScrollToElectric
-				= queuedFireCaretEvent = false;
+			queuedCaretUpdate = queuedFireCaretEvent = false;
+			queuedScrollMode = NO_SCROLL;
 		}
 	} //}}}
 
@@ -5277,7 +5274,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	// see finishCaretUpdate() & _finishCaretUpdate()
 	private boolean queuedCaretUpdate;
-	private boolean queuedScrollToElectric;
+	private int queuedScrollMode;
 	private boolean queuedFireCaretEvent;
 	private int oldCaretLine;
 
@@ -5306,10 +5303,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * greatly speeds up replace-all.
 	 */
 	private void finishCaretUpdate(int oldCaretLine,
-		boolean doElectricScroll, boolean fireCaretEvent)
+		int scrollMode, boolean fireCaretEvent)
 	{
-		this.queuedScrollToElectric |= doElectricScroll;
 		this.queuedFireCaretEvent |= fireCaretEvent;
+		this.queuedScrollMode = Math.max(scrollMode,queuedScrollMode);
 
 		if(queuedCaretUpdate)
 			return;

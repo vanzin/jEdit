@@ -535,9 +535,7 @@ class ChunkCache
 		for(int i = firstInvalidLine - 1; i >= 0; i--)
 		{
 			if(lineInfo[i].lastSubregion)
-			{
 				return i + 1;
-			}
 		}
 
 		return 0;
