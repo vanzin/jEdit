@@ -345,15 +345,12 @@ public class SearchBar extends JPanel
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
-		//{{{ keyPressed() method
 		public void keyPressed(KeyEvent evt)
 		{
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_DOWN:
 				if(!hyperSearch.isSelected())
 				{
 					evt.consume();
@@ -374,7 +371,7 @@ public class SearchBar extends JPanel
 				}
 				break;
 			}
-		} //}}}
+		}
 	} //}}}
 
 	//}}}

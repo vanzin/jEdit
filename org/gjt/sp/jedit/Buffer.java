@@ -3482,27 +3482,6 @@ public class Buffer implements EBComponent
 
 	//}}}
 
-	//{{{ PrintTabExpander class
-	static class PrintTabExpander implements TabExpander
-	{
-		private int leftMargin;
-		private int tabSize;
-
-		//{{{ PrintTabExpander constructor
-		public PrintTabExpander(int leftMargin, int tabSize)
-		{
-			this.leftMargin = leftMargin;
-			this.tabSize = tabSize;
-		} //}}}
-
-		//{{{ nextTabStop() method
-		public float nextTabStop(float x, int tabOffset)
-		{
-			int ntabs = ((int)x - leftMargin) / tabSize;
-			return (ntabs + 1) * tabSize + leftMargin;
-		} //}}}
-	} //}}}
-
 	//{{{ TokenList class
 	/**
 	 * Encapsulates a token list.

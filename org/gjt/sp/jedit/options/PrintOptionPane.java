@@ -67,6 +67,13 @@ public class PrintOptionPane extends AbstractOptionPane
 			+ ".color"));
 		color.setSelected(jEdit.getBooleanProperty("print.color"));
 		addComponent(color);
+
+		/* Tab size */
+		String[] tabSizes = { "2", "4", "8" };
+		tabSize = new JComboBox(tabSizes);
+		tabSize.setEditable(true);
+		tabSize.setSelectedItem(jEdit.getProperty("print.tabSize"));
+		addComponent(jEdit.getProperty("options.print.tabSize"),tabSize);
 	} //}}}
 
 	//{{{ _save() method
@@ -85,5 +92,6 @@ public class PrintOptionPane extends AbstractOptionPane
 	private JCheckBox printFooter;
 	private JCheckBox printLineNumbers;
 	private JCheckBox color;
+	private JComboBox tabSize;
 	//}}}
 }

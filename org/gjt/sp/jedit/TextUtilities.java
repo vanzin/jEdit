@@ -24,6 +24,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.awt.font.*;
 import java.awt.*;
+import java.util.*;
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 import org.gjt.sp.jedit.syntax.*;
@@ -66,20 +67,26 @@ public class TextUtilities
 
 	//{{{ lineToChunkList() method
 	/**
-	 * Converts a line of text into a chunk list.
+	 * Converts a line of text into one or more chunk lists. There will be
+	 * one chunk list if soft wrap is disabled, more than one otherwise.
 	 * @param seg The segment containing line text
 	 * @param tokens The line's syntax tokens
 	 * @param styles The styles to highlight the line with
 	 * @param fontRenderContext Text transform, anti-alias, fractional font
 	 * metrics
 	 * @param e Used for calculating tab offsets
+	 * @param wrapMargin The wrap margin width, in pixels. 0 disables
+	 * @param out All resulting chunk lists will be appended to this list
 	 * @since jEdit 4.0pre4
 	 */
-	public static Chunk lineToChunkList(Segment seg, Token tokens,
+	public static void lineToChunkList(Segment seg, Token tokens,
 		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
-		TabExpander e)
+		TabExpander e, float wrapMargin, java.util.List out)
 	{
 		float x = 0.0f;
+
+		float spaceWidth = (float)styles[Token.NULL].getFont()
+			.getStringBounds(" ",fontRenderContext).getWidth();
 
 		Chunk first = null;
 		Chunk current = null;
@@ -95,7 +102,12 @@ public class TextUtilities
 			{
 				char ch = seg.array[seg.offset + tokenListOffset + i];
 
-				if(ch != '\t')
+				if(ch == ' ')
+				{
+					if(i + tokenListOffset == seg.count - 1)
+						flushLen++;
+				}
+				else if(ch != '\t')
 				{
 					flushLen++;
 					if(i != tokens.length - 1)
@@ -134,6 +146,13 @@ public class TextUtilities
 					current.length++;
 					x = e.nextTabStop(x,i - seg.offset);
 					current.width = x - current.x;
+					current.canWrap = true;
+				}
+				else if(ch == ' ')
+				{
+					current.length++;
+					x += spaceWidth;
+					current.canWrap = true;
 				}
 			}
 
@@ -141,7 +160,34 @@ public class TextUtilities
 			tokens = tokens.next;
 		}
 
-		return first;
+		if(wrapMargin != 0)
+		{
+			Chunk iter = first;
+			Chunk prev = null;
+			float width = 0.0f;
+			while(iter != null)
+			{
+				iter.x -= width;
+
+				if(iter.x + iter.width > wrapMargin)
+				{
+					out.add(first);
+					first = iter;
+					if(prev != null)
+						prev.next = null;
+
+					width = (iter.next == null
+						? iter.x
+						: iter.next.x);
+				}
+
+				prev = iter;
+				iter = iter.next;
+			}
+		}
+
+		if(first != null)
+			out.add(first);
 	} //}}}
 
 	//{{{ paintChunkList() method
@@ -189,6 +235,8 @@ public class TextUtilities
 		public int offset;
 		public int length;
 		public GlyphVector text;
+
+		public boolean canWrap;
 
 		public Chunk next;
 

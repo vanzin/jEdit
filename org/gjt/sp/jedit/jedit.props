@@ -303,7 +303,7 @@ view.docking.tabsPos=0
 
 # Font
 print.font=Monospaced
-print.fontsize=10
+print.fontsize=9
 print.fontstyle=0
 
 # Print header?
@@ -317,6 +317,9 @@ print.lineNumbers=true
 
 # Print in color, or black and white?
 print.color=false
+
+# Print tab size
+print.tabSize=2
 
 #}}}
 

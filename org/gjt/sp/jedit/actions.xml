@@ -530,11 +530,15 @@
 	</CODE>
 </ACTION>
 
+<!-- disabled, since it's broken right now
+
 <ACTION NAME="page-setup">
 	<CODE>
 		BufferPrinter.pageSetup(view);
 	</CODE>
 </ACTION>
+
+-->
 
 <ACTION NAME="parent-fold">
 	<CODE>

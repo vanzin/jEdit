@@ -2,6 +2,8 @@ TO DO
 
 + bugs:
 
+- xToOffset() needs a rewrite
+- bracket match: boxes in status msg
 - getCenterPoint()
 - support multi-screen systems properly
 - fs browser: scroll to visible after setting divider location
@@ -38,7 +40,6 @@ TO DO
   - use line metrics
   - use float co-ordinates
   - cache chunk lists
-- Java 2 printing
 - document changed handling of compressed files
 - soft wrap
 - finish 'troubleshooting' menu:
