@@ -228,8 +228,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				handleNoWordBreak();
 
-				if(keywords != null)
-					markKeyword(false);
+				markKeyword(false);
 
 				if(lastOffset != pos)
 				{

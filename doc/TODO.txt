@@ -3,11 +3,12 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- document renamed quick search commands
++ before pre7:
+
+- verify roots: on Windows & mention in NEWS.txt
 
 - wheel mouse page scroll w/ soft wrap
 - S+ENTER in fsb for directories
-- verify roots: on Windows & mention in NEWS.txt
 - left arrow in filename field
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
