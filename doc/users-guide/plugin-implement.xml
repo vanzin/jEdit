@@ -107,12 +107,12 @@
     Will the plugin have its own visible interface?
   </para></listitem>
   <listitem><para>
+    Will the plugin have settings that the user can configure?
+  </para></listitem>
+  <listitem><para>
     Will the plugin
     respond to any EditBus messages reflecting changes in the host
     application's state?
-  </para></listitem>
-  <listitem><para>
-    Will the plugin have settings that the user can configure?
   </para></listitem>
 
 </itemizedlist>
@@ -133,75 +133,13 @@
   classes derived from <classname>EBMessage</classname> cover the opening
   and closing of the application, changes in the status of text buffers
   and their container and changes in user settings, as well as changes in
-  the state of other program features. Specific message classes of potential
-  interest to a plugin include the following:
+  the state of other program features. XXX -- link to msg package ---
 </para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <classname>EditorStarted</classname>, sent during the
-      application's startup routine, just prior to the creation of the
-      initial <classname>View</classname>;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>EditorExitRequested</classname>, sent when a request to
-      exit has been made, but before saving open buffers and writing user
-      settings to storage;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>EditorExiting</classname>, sent just before jEdit
-      actually exits;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>EditPaneUpdate</classname>, sent when an edit pane
-      containing a text area (including a pane created by splitting
-      an existing window) has been created or destroyed, or when a
-      buffer displayed in an edit pane has been changed;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>BufferUpdate</classname>, sent when a text buffer is
-      created, loaded, or being saved, or when its editing mode or
-      markers have changed;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>ViewUpdate</classname>, sent when a <classname>View</classname>
-      is created or closed; and
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <classname>PropertiesChanged</classname>, sent when the properties
-      of the application or a plugin has been changed through the
-      <guimenuitem>General Options</guimenuitem> dialog;
-    </para>
-  </listitem>
-</itemizedlist>
-
-<para>
-  XXX <!-- Detailed documentation for each message class can be found in <xref
-  linkend="api-message" />. -->
-</para>
-
-<!-- TODO: include data members of derived message classes in appendix -->
 
 </sect2>
 
 <sect2 id="plugin-implement-base-methods">
 <title>Implementing Base Class Methods</title>
-
-<sect3 id="plugin-implement-base-general">
-<title>General Considerations</title>
 
 <para>
   Whether <classname>EditPlugin</classname> or <classname>EBPlugin</classname>
@@ -211,63 +149,6 @@
   be trivial, or not present at all (in which case they will be
   <quote>no-ops</quote> inherited from <classname>EditPlugin</classname>).
 </para>
-
-<!--
-<para>
-  If the plugin is to use the dockable window API, the
-  <quote> internal names</quote> of any dockable windows must be
-  registered with the EditBus component.
-  The EditBus stores such information in one of a number of
-  <quote>named lists</quote>. Here is how the QuickNotepad plugin
-  registers its dockable window:
-</para>
-
-<informalexample>
-<programlisting>EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);</programlisting>
-</informalexample>
-
-<para>
-  The first parameter is a <classname>String</classname> constant
-  identifying the dockable window list. The second is a static
-  <classname>String</classname> constant which is initialized in the
-  plugin core class as the dockable window's internal name.
-</para>
- -->
-<para>
-  The plugin core class can include <literal>static
-  final String</literal> data members containing information to be registered
-  with the EditBus or key names for certain types of plugin properties.
-  This makes it easier to refer to the
-  information when a method such as <function>handleMessage()</function>
-  examines the contents of a message. The kind of data that can be handled
-  in this fashion include the following:
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>the name of the plugin;</para>
-  </listitem>
-  <listitem>
-    <para>
-      a label for identifying the plugin's menu;
-    </para>
-  </listitem>
-  <listitem>
-  <para>
-     a prefix for labeling properties required by the plugin API; and
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      a prefix to be used in labeling items used in the plugin's option pane
-    </para>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3 id="plugin-implement-base-example">
-<title>Example Plugin Core Class</title>
 
 <para>
   We will derive the plugin core class for QuickNotepad from
@@ -310,6 +191,7 @@
 
 
 <para>
+  XXX -- links to loadMenu(), etc javadocs --
   The implementations of <function>createMenuItems()</function> and
   <function>createOptionPane()</function>
   are typically trivial, because the real work will be done using other
@@ -326,13 +208,12 @@
   in the next section.
 </para>
 
-</sect3>
-
 </sect2>
 
-<sect2 id="plugin-implement-resources">
-<title>Resources for the Plugin Core Class</title>
-<sect3 id="plugin-implement-actions"><title>Actions</title>
+</sect1>
+
+<sect1 id="plugin-implement-actions"><title>Defining Plugin Actions</title>
+
 <para>
   The plugin's user action catalog, <filename>actions.xml</filename>, is
   the resource used by the plugin API to get the names and definitions of
@@ -341,7 +222,9 @@
   provide a model:
 </para>
 
-<informalexample><programlisting>&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
+<informalexample><programlisting>&lt;?xml version="1.0"?&gt;
+
+&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
 
 &lt;ACTIONS&gt;
     &lt;ACTION NAME="quicknotepad.choose-file"&gt;
@@ -365,8 +248,6 @@
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 &lt;/ACTIONS&gt;</programlisting></informalexample>
-
-
 
 <para>
   This file defines three actions. They use the current view's
@@ -407,119 +288,51 @@
 </para>
 
 <para>
-  A formal description of each element of the
+  XXX -- link to ActionSet, or?
+  <!-- A formal description of each element of the
   <filename>actions.xml</filename> file can be found in
-  <xref linkend="resources-action" />.
-</para>
-
-</sect3>
-
-<sect3 id="plugin-implement-menu"><title>Action Labels and Menu Items</title>
-<para>
-  Now that we have named and defined actions for the plugin, we have to
-  put them to work. To do so, we must first give them labels that can be
-  used in menu items and in the sections of jEdit's options dialog that
-  deal with toolbar buttons, keyboard shortcuts and context menu items. We
-  supply this information to jEdit through entries in the plugin's
-  properties file. A call to
-  <function>GUIUtilities.loadMenu()</function> or
-  <function>GUIUtilities.loadMenuItem()</function> will read and extract
-  the necessary labels from the contents of a properties file.
-</para>
-
-
-
-<para>
-  The following excerpt from <filename>QuickNotepad.props</filename>
-  illustrates the format required for action labels and menu items:
-</para>
-
-<informalexample><programlisting># action labels
-quicknotepad.toggle.label=QuickNotepad
-quicknotepad-to-front.label=Bring QuickNotepad to front
-quicknotepad.choose-file.label=Choose notepad file
-quicknotepad.save-file.label=Save notepad file
-quicknotepad.copy-to-buffer.label=Copy notepad to buffer
-
-# application menu items
-quicknotepad.menu.label=QuickNotepad
-quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
-    quicknotepad.save-file quicknotepad.copy-to-buffer
-</programlisting></informalexample>
-
-<para>
-  <function>GUIUtilities.loadMenuItem()</function> and
-  <function>GUIUtilites.loadMenu()</function> use special conventions
-  for the value of a menu property to specify menu layout. In
-  <function>loadMenu()</function>, the use of the dash, as in the second
-  item in the example menu list, signifies the placement of a separator.
-  In addition,
-  the character <userinput>'%'</userinput> used as a prefix on a
-  label causes <function>loadMenu()</function> to call itself recursively
-  with the prefixed label as the source of submenu data. Most plugins
-  will not need to define menus that contain other submenus.
-</para>
-
-<para>
-  Note also that <function>quicknotepad-to-front</function> is not
-  included in the menu listing. It will appear, however, on the
-  <guilabel>Shortcuts</guilabel> pane of the <guimenuitem>Global
-  Options</guimenuitem> dialog,
-  so that the action can be associated with a keyboard shortcut.
-</para>
-
-</sect3>
-
-</sect2>
-
-</sect1>
-
-<sect1 id="window-implement"><title>Implementing a Dockable Window Class</title>
-
-<para>
- Now we must provide the actual implementation of the dockable window
- referenced in <filename>dockables.xml</filename> (see
- <xref linkend="resources-dockables" /> and
- <xref linkend="resources-implement" />). Here is the
- <filename>QuickNotepad.java</filename> source file, with some details
- not related to the dockable window API trimmed:
-</para>
-
-<informalexample><programlisting>public class QuickNotepad extends JPanel
-    implements EBComponent
-{
-    private View view;
-    private String position;
-    ...
-    public QuickNotepad(View view, String position) {
-      this.view = view;
-      this.position = position;
-      ...
-    }
-
-    ...
-
-    public void handleMessage(EBMessage message) {
-        if (message instanceof PropertiesChanged) {
-            propertiesChanged();
-        }
-    }
-
-    ...
-
-}</programlisting></informalexample>
-
-<para>
-  This excerpt does not set forth the layout of the plugin's visible
-  components, nor does it show how our user actions will be implemented.
-  Both these matters are covered in the full source code.
+  <xref linkend="resources-action" />. -->
 </para>
 
 </sect1>
 
-<sect1 id="window-visible-implement">
+<sect1 id="plugin-implement-dockables"><title>Defining Plugin Dockables</title>
 
-<title>The Plugin's Visible Window</title>
+<para>
+
+Just as a file named <filename>actions.xml</filename> contains action definitions,
+<filename>dockables.xml</filename> defines the plugin's dockable windows.
+
+</para>
+
+<informalexample><programlisting><![CDATA[<?xml version="1.0"?>
+
+<!DOCTYPE DOCKABLES SYSTEM "dockables.dtd">
+
+<DOCKABLES>
+	<DOCKABLE NAME="quicknotepad">
+		new QuickNotepad(view, position);
+	</DOCKABLE>
+</DOCKABLES>]]></programlisting></informalexample>
+
+<para>
+
+In this example, the <classname>&lt;DOCKABLE&gt;</classname> element has
+a single attribute, the dockable window's identifier. This attribute is
+used to key a property where the window title is stored; see
+<xref linkend="plugin-implement-properties"/>.
+
+</para>
+
+<para>
+
+The contents of the <classname>&lt;DOCKABLE&gt;</classname> element itself is a
+BeanShell expression that constructs a new <classname>QuickNotepad</classname>
+object.  The <varname>view</varname> and <varname>position</varname> are
+predefined by the plugin API as the view in which the plugin window will reside,
+and the docking position of the plugin.
+
+</para>
 
 <sect2 id="example-window-class"><title>Class QuickNotepad</title>
 
@@ -774,7 +587,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
 </sect1>
 
-<sect1 id="option-implement"><title>Designing an Option Pane</title>
+<sect1 id="plugin-implement-options"><title>Designing an Option Pane</title>
 
 <para>
   Using the default implementation provided by
@@ -894,17 +707,9 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   properties. They do not require discussion here.
 </para>
 
-
 </sect1>
 
-<sect1 id="resources-implement"><title>Creating Other Plugin Resources</title>
-
-<para>
-  We have already covered in some detail one of the three types of resources
-  that plugins include with their class files - the user action catalog - and
-  the need for help documentation does not require extended discussion.  The
-  remaining resource is the properties file.
-</para>
+<sect1 id="plugin-implement-properties"><title>The Property File</title>
 
 <para>
   The first type of property data is information about the plugin itself.
@@ -915,7 +720,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <informalexample><programlisting># general plugin information
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
-plugin.QuickNotepadPlugin.version=2.0
+plugin.QuickNotepadPlugin.version=4.1
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
 plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00</programlisting></informalexample>
 <para>
@@ -941,14 +746,13 @@ quicknotepad.title=QuickNotepad</programlisting></informalexample>
 </para>
 
 <informalexample><programlisting># action labels
-quicknotepad.toggle.label=QuickNotepad
-quicknotepad-to-front.label=Bring QuickNotepad to front
+quicknotepad.label=QuickNotepad
 quicknotepad.choose-file.label=Choose notepad file
 quicknotepad.save-file.label=Save notepad file
 quicknotepad.copy-to-buffer.label=Copy notepad to buffer
 
 # application menu items
-quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
+quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
   quicknotepad.save-file quicknotepad.copy-to-buffer</programlisting></informalexample>
 
 <para>
@@ -957,12 +761,12 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 </para>
 
 <informalexample><programlisting># plugin toolbar buttons
-quicknotepad.choose-file.icon=Open.gif
-quicknotepad.save-file.icon=Save.gif
-quicknotepad.copy-to-buffer.icon=Edit.gif</programlisting></informalexample>
+quicknotepad.choose-file.icon=Open.png
+quicknotepad.save-file.icon=Save.png
+quicknotepad.copy-to-buffer.icon=Edit.png</programlisting></informalexample>
 
 <para>
-  The menu labels corresponding to these icons will also serve as tooltip
+  The menu item labels corresponding to these icons will also serve as tooltip
   text.
 </para>
 
@@ -988,17 +792,9 @@ options.quicknotepad.fontsize=14
 # Setting not defined but supplied for completeness
 options.quicknotepad.filepath=</programlisting></informalexample>
 
-<para>
-  We do not define a default setting for the <literal>filepath</literal>
-  property because of
-  differences among operating systems.  We will define a default file
-  programatically that will reside in the directory jEdit designates for
-  user settings.
-</para>
-
 </sect1>
 
-<sect1 id="example-building"><title>Compiling the Plugin</title>
+<sect1 id="plugin-implement-building"><title>Compiling the Plugin</title>
 
 <para>
   We have already outlined the contents of the user action catalog, the
@@ -1048,7 +844,6 @@ options.quicknotepad.filepath=</programlisting></informalexample>
         <include name="**/*.class"/>
         <include name="**/*.props"/>
         <include name="**/*.html"/>
-        <include name="**/*.gif"/>
         <include name="actions.xml"/>
         <include name="dockables.xml"/>
       </fileset>

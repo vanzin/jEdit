@@ -11,7 +11,6 @@ plugin.QuickNotepadPlugin.depend.0=jedit 04.01.01.00
 
 # action labels for actions supplied by dockables.xml
 quicknotepad.label=QuickNotepad
-quicknotepad-toggle.label=QuickNotepad
 
 # action labels for actions supplied by actions.xml
 quicknotepad.choose-file.label=Choose notepad file
