@@ -171,12 +171,12 @@
  <partintro>
   <para>
    This part of the user's guide covers the jEdit <firstterm>application
-   programmer interface</firstterm>. The information in this part is only useful
+   programming interface</firstterm>. The information in this part is only useful
    to macro and plugin developers; you do not need to read it if you only want to
    use jEdit.
   </para>
   <para>
-   The first two chapter covers BeanShell commands, which are can only
+   The first chapter covers BeanShell commands, which can only
    be used in macros. The second chapter covers APIs useful to both macros and
    plugins.
    The final chapter covers the EditBus message system, which is typically

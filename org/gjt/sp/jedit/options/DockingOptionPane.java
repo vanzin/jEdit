@@ -104,13 +104,10 @@ public class DockingOptionPane extends AbstractOptionPane
 		windowTable.setCellSelectionEnabled(false);
 
 		DockPositionCellRenderer comboBox = new DockPositionCellRenderer();
-		comboBox.setRequestFocusEnabled(false);
 		windowTable.setRowHeight(comboBox.getPreferredSize().height);
 		TableColumn column = windowTable.getColumnModel().getColumn(1);
 		column.setCellRenderer(comboBox);
-		comboBox = new DockPositionCellRenderer();
-		comboBox.setRequestFocusEnabled(false);
-		column.setCellEditor(new DefaultCellEditor(comboBox));
+		column.setCellEditor(new DefaultCellEditor(new DockPositionCellRenderer()));
 
 		Dimension d = windowTable.getPreferredSize();
 		d.height = Math.min(d.height,200);
@@ -140,6 +137,7 @@ public class DockingOptionPane extends AbstractOptionPane
 				DockableWindowManager.BOTTOM,
 				DockableWindowManager.RIGHT
 			});
+			setRequestFocusEnabled(false);
 		}
 
 		public Component getTableCellRendererComponent(JTable table,

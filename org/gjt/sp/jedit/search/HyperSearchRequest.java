@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,8 +215,6 @@ loop:			for(int counter = 0; ; counter++)
 				int matchEnd = offset + match[1];
 
 				offset += match[1];
-				if(match[0] - match[1] == 0)
-					offset++;
 
 				int newLine = buffer.getLineOfOffset(offset);
 				if(line == newLine)

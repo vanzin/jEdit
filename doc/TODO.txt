@@ -3,13 +3,11 @@ TO DO
 + before 4.0pre9:
 
 - investigate I/O threads
-- aiob in findMatchingBracket() -- offset >= seg.offset+seg.count? or
-  offset == -1?
 - scroll to caret _still_ jumps around
 - proofread documentation one more time
 - make sure plugin guide is up to date
+- make sure API guide is up to date
 - API guide: compareStrings(), showPopupMenu()
-- MiscUtilities path name methods need to be documented
 - appendix in plugin guide on contributing plugins
 
 + in 4.1:

@@ -320,7 +320,7 @@ are useful in some situations. They include the following:</para>
 </para>
 </listitem>
 
-<listitem>
+<!-- <listitem>
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static Mode <function>getMode</function></funcdef>
@@ -331,7 +331,7 @@ are useful in some situations. They include the following:</para>
     Returns the editing mode named by <varname>name</varname>, or
     <constant>null</constant> if such a mode does not exist.
 </para>
-</listitem>
+</listitem> -->
 
 <listitem>
 <funcsynopsis>
@@ -684,17 +684,28 @@ are useful in some situations. They include the following:</para>
       <listitem>
         <funcsynopsis>
           <funcprototype>
-            <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
+            <funcdef>public JComponent <function>getDockable</function></funcdef>
             <paramdef>String <parameter>name</parameter></paramdef>
           </funcprototype>
         </funcsynopsis>
         <para>
-          This method returns the <classname>DockableWindow</classname>
-          object named by the <varname>name</varname> parameter.  The name of a
-          <classname>DockableWindow</classname> is a required property of the
-          plugin.  If there is no <classname>DockableWindow</classname> bearing the
+          This method returns the dockable window
+          named by the <varname>name</varname> parameter. If there is no
+          dockable window bearing the
           requested name, the method returns <constant>null</constant>.
         </para>
+        <note>
+         <para>
+          You might wonder why this method is not named
+          <function>getDockableWindow()</function>. A method with that
+          name already exists, but it is deprecated since it returns
+          instances of the <classname>DockableWindow</classname>
+          interface, which should no longer be used.
+         </para>
+         <para>
+          Always call <function>getDockable()</function> instead.
+         </para>
+        </note>
        </listitem>
 
        <listitem>
@@ -705,10 +716,9 @@ are useful in some situations. They include the following:</para>
           </funcprototype>
         </funcsynopsis>
         <para>
-          If the <classname>DockableWindow</classname> named by the
-          <varname>name</varname> parameter does not exist, a message is
-          sent to the associated plugin to create it.  The
-          <classname>DockableWindow</classname> is then made visible.
+          If the dockable window named by the
+          <varname>name</varname> parameter does not exist, it is
+          created. The dockable window is then made visible.
         </para>
        </listitem>
 
@@ -739,13 +749,13 @@ are useful in some situations. They include the following:</para>
         </funcsynopsis>
        <para>
          These methods, respectively show, hide and toggle the visibility
-         of the <classname>DockableWindow</classname> object named by
+         of the dockable window object named by
          the <varname>name</varname> parameter.  If the
          <classname>DockableWindowManager</classname> does not contain a
          reference to the window, these methods send an error message to the
          activity log and have no other effect.  Only
          <function>addDockableWindow()</function> can cause the creation
-         of a <classname>DockableWindow</classname>.
+         of a dockable window.
          </para>
        </listitem>
     </itemizedlist>
@@ -756,7 +766,8 @@ are useful in some situations. They include the following:</para>
 
 <para>
     This class is the visible component that displays the file
-    being edited. It is derived from Java's <classname>JComponent</classname> class.
+    being edited. It is derived from Java's
+    <classname>JComponent</classname> class.
 </para>
 
 <para>
@@ -800,9 +811,8 @@ are useful in some situations. They include the following:</para>
     can be created by specifying its starting and ending caret positions:
   </para>
 
-  <informalexample><programlisting>    selRange = new Selection.Range(start, end);
-
-    setRect = new Selection.Rect(start, end);</programlisting></informalexample>
+  <informalexample><programlisting>selRange = new Selection.Range(start, end);
+setRect = new Selection.Rect(start, end);</programlisting></informalexample>
 
   <para>
     Both classes inherit or implement the following methods of the parent
@@ -1515,15 +1525,27 @@ JEditTextArea</title>
 <listitem>
 <funcsynopsis>
  <funcprototype>
+  <funcdef>public void <function>scrollTo</function></funcdef>
+  <paramdef>int <parameter>location</parameter></paramdef>
+  <paramdef>boolean <parameter>doElectricScroll</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
   <funcdef>public void <function>scrollToCaret</function></funcdef>
   <paramdef>boolean <parameter>doElectricScroll</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Scrolls the text area to ensure that the caret is visible. The
+    The first version scrolls the text area to ensure that the caret is
+    visible; the second scrolls to ensure that an arbitriary offset
+    (from the start of the buffer) is visible. The
     <parameter>doElectricScroll</parameter> parameter determines whether
     <quote>electric scrolling</quote> will occur. This leaves a minimum
-    number of lines between the caret line and the top and bottom of the
+    number of lines between the target line and the top and bottom of the
     editing pane.
 </para>
 </listitem>
@@ -1572,135 +1594,9 @@ JEditTextArea</title>
   </para>
 </listitem>
 
-<listitem>
- <funcsynopsis>
-  <funcprototype>
-    <funcdef>public void <function>setElectricScroll</function></funcdef>
-     <paramdef>int <parameter>electricScroll</parameter></paramdef>
-   </funcprototype>
- </funcsynopsis>
-</listitem>
-
-<listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public int <function>getElectricScroll</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
-  <para>
-    The <quote>electric scroll</quote> attribute is the number of lines
-    above and below the editing caret that always remain visible when
-    scrolling.
-  </para>
-</listitem>
 </itemizedlist>
 
 </sect3>
-
-<sect3 id="class-jedittextarea-position">
-<title>Methods for calculating editing positions</title>
-
-
-<itemizedlist>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineOfOffset</function></funcdef>
-  <paramdef>int <parameter>offset</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the line on which the given offset is found.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineStartOffset</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineEndOffset</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the offset of the beginning or end of the given line.
-</para>
-</listitem>
-
-</itemizedlist>
-</sect3>
-
-<sect3 id="class-jedittextarea-gettext">
-<title>Other methods for retrieving text</title>
-
-<para>
-    These methods can retrieve buffer text without regard
-    to a selection or the position of the editing caret.
-</para>
-
-<itemizedlist>
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getText</function></funcdef>
-  <paramdef>int <parameter>start</parameter></paramdef>
-  <paramdef>int <parameter>len</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the text located between buffer offset positions.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getLineText</function></funcdef>
-  <paramdef>int <parameter>lineIndex</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the text on the given line.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getText</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the entire text in the text area.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>setText</function></funcdef>
-  <paramdef>String <parameter>text</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Sets (and replaces) the entire text of the text area.
-</para>
-</listitem>
-
-</itemizedlist>
-</sect3>
-
 
 <sect3 id="class-jedittextarea-delete">
 <title>Methods for deleting text</title>
@@ -1885,69 +1781,6 @@ JEditTextArea</title>
 </itemizedlist>
 </sect3>
 
-<sect3 id="class-jedittextarea-statistics">
-<title>Methods for getting buffer statistics</title>
-
-<itemizedlist>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getBufferLength</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the number of characters in the buffer.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineCount</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the number of lines in the buffer being edited.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getVirtualLineCount</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the number of <quote>virtual</quote> or visible lines in the
-    buffer being edited, which may be less than the total number of
-    lines because of folding or narrowing.
-</para>
-<para>
-  To convert a virtual line count to a physical count or vice versa,
-  see <xref linkend="class-buffer-virtual-lines" />.
-</para>
-
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineLength</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Returns the length of the line number <varname>line</varname> (using a
-    zero-based count).
-</para>
-</listitem>
-
-</itemizedlist>
-</sect3>
 </sect2>
 
 </sect1>
@@ -1993,7 +1826,9 @@ JEditTextArea</title>
  This method may return <literal>null</literal> if the file is stored on
  a remote file system (for example, if the <application>FTP</application>
  or <application>Archive</application> plugins are in use). This method
- should be avoided if possible.
+ should be avoided unless you really need to use the
+ <classname>java.io.File</classname> APIs and you are sure the buffer in
+ question is a local file.
 </para>
 </listitem>
 
@@ -2037,6 +1872,67 @@ JEditTextArea</title>
   <void/>
  </funcprototype>
 </funcsynopsis>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="class-buffer-io"><title>Input/output methods</title>
+
+<itemizedlist>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public void <function>reload</function></funcdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+  Reloads the buffer from disk into <parameter>view</parameter>, asking
+  for confirmation if the buffer has unsaved changes.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public boolean <function>save</function></funcdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>String <parameter>path</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public boolean <function>save</function></funcdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>String <parameter>path</parameter></paramdef>
+  <paramdef>boolean <parameter>rename</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    The <parameter>rename</parameter> parameter causes a buffer's name to
+    change if set to <parameter>true</parameter>; if
+    <parameter>false</parameter>, a copy is saved to
+    <parameter>path</parameter>.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public boolean <function>saveAs</function></funcdef>
+  <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>boolean <parameter>rename</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Prompts the user for a new name for saving the file.
+</para>
 </listitem>
 
 </itemizedlist>
@@ -2102,32 +1998,41 @@ JEditTextArea</title>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public void <function>putProperty</function></funcdef>
-        <paramdef>Object <parameter>key</parameter></paramdef>
+        <funcdef>public void <function>setProperty</function></funcdef>
+        <paramdef>String <parameter>key</parameter></paramdef>
         <paramdef>Object <parameter>value</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
+    <para>
+      The <classname>Buffer</classname> object maintains a table of
+      properties that describe a broad range of attributes. The value of each
+      property is stored using a
+      <classname>String</classname> that names the particular property.
+      Most of these properties are documented in <xref
+      linkend="buffer-local" />.
+    </para>
   </listitem>
 
   <listitem>
     <funcsynopsis>
       <funcprototype>
         <funcdef>public Object <function>getProperty</function></funcdef>
-        <paramdef>Object <parameter>key</parameter></paramdef>
+        <paramdef>String <parameter>key</parameter></paramdef>
       </funcprototype>
     </funcsynopsis>
     <para>
-      The <classname>Buffer</classname> object maintains a table of
-      properties that describe a broad range of attributes. The value of each
-      property is stored using a key for indexing purposes, usually a
-      <classname>String</classname> that names the particular property.
-      Property values can be set and retrieved using these two methods.
-      The <classname>Object</classname> returned by
-      <function>getProperty()</function> usually has to be cast to a derived type
-      to be useful. Most of these properties are documented in <xref
-      linkend="buffer-local" />.
+      Using this method is generally discouraged, because it returns an
+      <classname>Object</classname> which must be cast to another type
+      in order to be useful, and this can cause problems if the object
+      is of a different type than what your plugin or macro expects.
+    </para>
+    <para>
+      jEdit 4.0 added a number of <quote>wrapper</quote> methods,
+      documented below; you are strongly encouraged to use them
+      instead.
     </para>
   </listitem>
+
 </itemizedlist>
 
 <para>
@@ -2171,63 +2076,9 @@ JEditTextArea</title>
 
 </sect2>
 
-<sect2 id="class-buffer-editing-action"><title>Editing action methods</title>
-<sect3 id="class-buffer-editing-general"><title>General editing methods</title>
+<sect2 id="class-buffer-editing-general"><title>General editing methods</title>
 
 <itemizedlist>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>reload</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-  Reloads the buffer from disk into <parameter>view</parameter>, asking
-  for confirmation if the buffer has unsaved changes.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>save</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>save</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
-  <paramdef>boolean <parameter>rename</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    The <parameter>rename</parameter> parameter causes a buffer's name to
-    change if set to <parameter>true</parameter>; if
-    <parameter>false</parameter>, a copy is saved to
-    <parameter>path</parameter>.
-</para>
-</listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>saveAs</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>boolean <parameter>rename</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Prompts the user for a new name for saving the file.
-</para>
-</listitem>
 
 <listitem>
 <funcsynopsis>
@@ -2250,28 +2101,6 @@ JEditTextArea</title>
     be dealt with by a single <guimenuitem>Undo</guimenuitem> command.
 </para>
 </listitem>
-
-<listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>removeTrailingWhiteSpace</function></funcdef>
-  <paramdef>int[] <parameter>lines</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
-<para>
-    Removes trailing whitespace in the lines referenced by the index numbers
-    in <parameter>lines</parameter> array.
-</para>
-</listitem>
-
-</itemizedlist>
-
-  <para>
-    The following methods are inherited by <classname>Buffer</classname>
-    from its parent class.
-  </para>
-
-  <itemizedlist>
 
     <listitem>
       <funcsynopsis>
@@ -2305,40 +2134,140 @@ JEditTextArea</title>
        <function>toString()</function> on the <classname>Segment</classname>
        will create a new object suitable for manipulation.
      </para>
+     <para>
+       Using a <classname>Segment</classname> is generally more
+       efficent than using a <classname>String</classname> because it
+       results in less memory allocation and array copying. However,
+       <classname>Segments</classname> are slightly harder to set up and
+       use.
+     </para>
+    </listitem>
+
+    <listitem>
+    <funcsynopsis>
+    <funcprototype>
+    <funcdef>public String <function>getLineText</function></funcdef>
+    <paramdef>int <parameter>lineIndex</parameter></paramdef>
+    </funcprototype>
+    </funcsynopsis>
+    </listitem>
+
+    <listitem>
+    <funcsynopsis>
+    <funcprototype>
+    <funcdef>public String <function>getLineText</function></funcdef>
+    <paramdef>int <parameter>lineIndex</parameter></paramdef>
+          <paramdef>Segment <parameter>text</parameter></paramdef>
+    </funcprototype>
+    </funcsynopsis>
+    <para>
+      Returns the text of the given line. Just as with
+      <function>getText()</function>, there are two forms of this
+      method; the first returns a <classname>String</classname>, the
+      second copies into a <classname>Segment</classname>.
+    </para>
     </listitem>
 
     <listitem>
       <funcsynopsis>
         <funcprototype>
-          <funcdef>public void <function>insertString</function></funcdef><!--
+          <funcdef>public void <function>insert</function></funcdef><!--
           --><paramdef>int <parameter>offset</parameter></paramdef>
           <paramdef>String <parameter>text</parameter></paramdef>
-          <paramdef>AttributeSet <parameter>attr</parameter></paramdef>
         </funcprototype>
       </funcsynopsis>
      <para>
        This method inserts the string <varname>text</varname> at offset
-       <varname>offset</varname> in the buffer. The attribute
-       <varname>attr</varname> is not used by jEdit and should be left
-       as <constant>null</constant>.
+       <varname>offset</varname> in the buffer.
      </para>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getLength</function></funcdef><void/>
-        </funcprototype>
-      </funcsynopsis>
-     <para>
-       This method returns the number of characters in the buffer.
-     </para>
-    </listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public void <function>removeTrailingWhiteSpace</function></funcdef>
+  <paramdef>int[] <parameter>lines</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Removes trailing whitespace in the lines referenced by the index numbers
+    in <parameter>lines</parameter> array.
+</para>
+</listitem>
 
-    </itemizedlist>
-</sect3>
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getLineOfOffset</function></funcdef>
+  <paramdef>int <parameter>offset</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns the line on which the given offset is found.
+</para>
+</listitem>
 
-<sect3 id="class-buffer-editing-marker"><title>Marker methods</title>
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getLineStartOffset</function></funcdef>
+  <paramdef>int <parameter>line</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getLineEndOffset</function></funcdef>
+  <paramdef>int <parameter>line</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns the offset of the beginning or end of the given line.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getLineLength</function></funcdef>
+  <paramdef>int <parameter>line</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns the length of the line number <varname>line</varname> (using a
+    zero-based count).
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public int <function>getLineCount</function></funcdef>
+  <void/>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    Returns the number of lines in the buffer being edited.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+<funcprototype>
+<funcdef>public int <function>getLength</function></funcdef><void/>
+</funcprototype>
+</funcsynopsis>
+<para>
+This method returns the number of characters in the buffer.
+</para>
+</listitem>
+
+</itemizedlist>
+</sect2>
+
+<sect2 id="class-buffer-editing-marker"><title>Marker methods</title>
 <para>
   Buffers may have one or more <glossterm>markers</glossterm> which serve
   as textual bookmarks.  A <classname>Marker</classname> has three key attributes: the
@@ -2440,139 +2369,6 @@ JEditTextArea</title>
   </listitem>
 
 </itemizedlist>
-</sect3>
-
-<sect3 id="class-buffer-editing-folding"><title>Folding methods</title>
-
-<para>
-  The <quote>folding</quote> features of jEdit allow sections of source
-  code with a given indentation level to be hidden, creating
-  <quote>folds</quote> that can be hidden and expanded, as well as a
-  virtual line numbering scheme that skips hidden, folded lines.  The
-  following methods in the <classname>Buffer</classname> class deal with
-  the folding mechanism.
-</para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public boolean <function>collapseFoldAt</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Collapses the fold that contains the specified line number.  The
-      method returns <constant>false</constant> if there are no folds in
-      the buffer for the indicated line.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public boolean <function>expandFoldAt</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-        <paramdef>boolean <parameter>fully</parameter></paramdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Expands the fold that contains the specified line number.  If
-      <parameter>fully</parameter> is true, all folds at the line will be
-      expanded, otherwise only one level of folding will be expanded. The
-      <parameter>textArea</parameter> parameter is provided to the method
-      to facilitiate scrolling after folds are expanded.
-    </para>
-    <para>
-      The method returns <constant>false</constant> if there are no folds in
-      the buffer for the indicated line.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>expandFolds</function></funcdef>
-        <paramdef>int <parameter>level</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      This method expands all folds in the buffer up to
-      <parameter>level</parameter> and collapses all folds with a
-      higher level.  The <parameter>level</parameter> parameter
-      represents the number of indentations, not the actual number
-      of indented spaces.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>expandAllFolds</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Expands all folds in the buffer.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>narrow</function></funcdef>
-        <paramdef>int <parameter>start</parameter></paramdef>
-        <paramdef>int <parameter>end</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Narrows the visible portion of the buffer to the specified
-      line range. To undo the narrowing, call the
-      <function>Buffer.expandAllFolds()</function> method.
-    </para>
-  </listitem>
-
-</itemizedlist>
-
-</sect3>
-
-<sect3 id="class-buffer-virtual-lines">
-<title>Virtual and physical line indices</title>
-
-<para>
-  When jEdit's folding or narrowing features are used to hide
-  portions of a buffer, the <quote>virtual</quote> line count visible
-  in the text area is generally not equal to the <quote>physical</quote>
-  line count of the buffer represented by the gutter's display.  The
-  following pair of methods translate one enumeration to the other.
-</para>
-
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>virtualToPhysical</function></funcdef>
-        <paramdef>int <parameter>lineNo</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>physicalToVirtual</function></funcdef>
-        <paramdef>int <parameter>lineNo</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-</itemizedlist>
-
-</sect3>
 
 </sect2>
 
@@ -3007,12 +2803,14 @@ JEditTextArea</title>
  <funcprototype>
   <funcdef>public static boolean <function>hyperSearch</function></funcdef>
   <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>boolean <parameter>selection</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 <para>
-    This collects all instances of matching text in the members of the
-    <classname>SearchFileSet</classname> and displays them in a dedicated window.
-    Text selection is ignored.
+    Performs a HyperSearch either in the current selection (if
+    <varname>selection</varname> is true) or in the current
+    <classname>SearchFileSet</classname> (if <varname>selection</varname>
+    is false).
 </para>
 </listitem>
 
@@ -3232,6 +3030,15 @@ This class is another collection of <classname>static</classname> utility method
 <listitem>
 <funcsynopsis>
  <funcprototype>
+  <funcdef>public static String <function>getFileNameNoExtension</function></funcdef>
+  <paramdef>String <parameter>path</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
   <funcdef>public static String <function>getFileExtension</function></funcdef>
   <paramdef>String <parameter>name</parameter></paramdef>
  </funcprototype>
@@ -3247,6 +3054,22 @@ This class is another collection of <classname>static</classname> utility method
 </funcsynopsis>
 <para>
     Returns the directory containing the specified local file.
+</para>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static String <function>constructPath</function></funcdef>
+  <paramdef>String <parameter>parent</parameter></paramdef>
+  <paramdef>String <parameter>path</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+<para>
+    If <varname>path</varname> is absolute, it is returned. Otherwise,
+    an absolute path is constructed from it and the <varname>parent</varname>.
+    If <varname>parent</varname> is <literal>null</literal>, the current
+    working directory is assumed.
 </para>
 </listitem>
 
@@ -3279,8 +3102,9 @@ This class is another collection of <classname>static</classname> utility method
 </itemizedlist>
 
 <para>
-    Here are two sorting methods, one for simple arrays and one for
-    Java <classname>Vector</classname> objects:
+    Here are three sorting-related methods; the first compares strings,
+    the second and third sort arrays and <classname>java.util.List</classname>
+    instances, respectively.
 </para>
 
 <itemizedlist>
@@ -3288,9 +3112,9 @@ This class is another collection of <classname>static</classname> utility method
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static void <function>quicksort</function></funcdef>
-  <paramdef>Object[] <parameter>obj</parameter></paramdef>
-  <paramdef>Compare <parameter>compare</parameter></paramdef>
+  <funcdef>public static void <function>compareStrings</function></funcdef>
+  <paramdef>String <parameter>str1</parameter></paramdef>
+  <paramdef>String <parameter>str2</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -3299,8 +3123,18 @@ This class is another collection of <classname>static</classname> utility method
 <funcsynopsis>
  <funcprototype>
   <funcdef>public static void <function>quicksort</function></funcdef>
-  <paramdef>Vector <parameter>vector</parameter></paramdef>
-  <paramdef>Compare <parameter>compare</parameter></paramdef>
+  <paramdef>Object[] <parameter>obj</parameter></paramdef>
+  <paramdef>Comparator <parameter>compare</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
+</listitem>
+
+<listitem>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public static void <function>quicksort</function></funcdef>
+  <paramdef>List <parameter>list</parameter></paramdef>
+  <paramdef>Comparator <parameter>compare</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 </listitem>
@@ -3309,10 +3143,10 @@ This class is another collection of <classname>static</classname> utility method
 
 <para>
     The type of the second parameter in both methods is a Java
-    <glossterm>interface</glossterm> defined inside the
-    <classname>MiscUtilities</classname> class. Any Java class implementing
+    <glossterm>interface</glossterm>. Any Java class implementing
     an interface must implement each of the methods set forth
-    in the interface's abstract specification.  The <classname>Compare</classname>
+    in the interface's abstract specification.  The
+    <classname>java.util.Comparator</classname>
     interface consists of a single method:
 </para>
 
@@ -3336,28 +3170,21 @@ This class is another collection of <classname>static</classname> utility method
 </para>
 
 <para>
-    When writing macros, keep in mind that
-    under Java versions earlier than 1.3, BeanShell cannot implement
-    arbitrary interfaces
-    such as <classname>Compare</classname> (although, as we have noted
-    in <xref linkend="macro-tips-BeanShell-interface" />,
-    a BeanShell method can
-    implement a number of specific listener interfaces).  Fortunately,
-    jEdit provides a number of classes implementing <classname>Compare</classname>
+    jEdit provides a number of classes implementing <classname>Comparator</classname>
     for sorting purposes. Among them are <classname>StringCompare</classname> and
     <classname>StringICaseCompare</classname>. Both classes compare
     <classname>String</classname>
-    object; the latter class compares two strings on a case-insensitive basis.
+    objects; the latter class compares two strings on a case-insensitive basis.
 </para>
 
 <para>
-    Calling <function>quicksort</function> on a <classname>Vector</classname> of
+    Calling <function>quicksort</function> on a <classname>List</classname> of
     <classname>String</classname> objects could therefore take the following form:
 </para>
-<informalexample><programlisting>MiscUtilities.quicksort(myVectorOfStrings,
-    new StringICaseCompare());</programlisting></informalexample>
+<informalexample><programlisting>MiscUtilities.quicksort(myListOfStrings,
+    new MiscUtilities.StringICaseCompare());</programlisting></informalexample>
 <para>
-    There is no return value, but the <classname>Vector</classname> provided
+    There is no return value, but the <classname>List</classname> provided
     as the first parameter will be now be sorted on a case-insensitive basis.
 </para>
 
@@ -3378,22 +3205,21 @@ This class is another collection of <classname>static</classname> utility method
 <funcprototype>
   <funcdef>public static void <function>runScript</function></funcdef>
   <paramdef>View <parameter>view</parameter></paramdef>
+  <paramdef>Reader <parameter>in</parameter></paramdef>
   <paramdef>String <parameter>path</parameter></paramdef>
   <paramdef>boolean <parameter>ownNamespace</parameter></paramdef>
-  <paramdef>boolean <parameter>rethrowBshErrors</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>
 </listitem>
 </itemizedlist>
 
 <para>
-    This method runs the script file identified by <parameter>path</parameter>.  Within
+    If the <varname>in</varname> parameter is non-null, the script is
+    read from that stream; otherwise it is read from the file identified
+    by <parameter>path</parameter>.  Within
     that script, references to <parameter>buffer</parameter>, <parameter>textArea</parameter>
     and <parameter>editPane</parameter> are
-    determined with reference to the <parameter>view</parameter> parameter.  If
-    <parameter>rethrowBshErrors</parameter> is set to true, any runtime exception thrown
-    by the child script will be rethrown to the parent script for
-    additional handling.
+    determined with reference to the <parameter>view</parameter> parameter.
 </para>
 
 <para>
