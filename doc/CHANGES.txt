@@ -39,6 +39,14 @@ contributing to this release.
   the 4.0 pre-releases, but now it's back as a configurable option.
   (Alexander Maryanovsky)
 
+- Added two new methods to the Utilities menu, 'jEdit Home Directory'
+  and 'Settings Directory'. These two work in a similar fashion to the
+  'Current Directory' menu.
+
+  Also the 'Current Directory' menu (and these two new menus) now also
+  lists directories; selecting a directory menu item opens it in the
+  file system browser.
+
 - Added a few extra key bindings for Windows users:
   S+DELETE bound to cut
   C+INSERT bound to copy
@@ -192,6 +200,10 @@ contributing to this release.
   workaround minimises and then restores the view, so a minimise
   animation might be visible for a brief period of time. However,
   there is no other way of fixing this. (Alexander Maryanovsky)
+
+- The plugin manager did not delete downloaded files from the
+  'PluginManager.download' directory on some operating systems, due to a
+  missing close() call.
 
 + API Changes:
 
