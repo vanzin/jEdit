@@ -2,7 +2,7 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Kris Kopicki for contributing to this release.
+Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 {{{ Editing
 
@@ -29,6 +29,8 @@ Thanks to Kris Kopicki for contributing to this release.
 {{{ Syntax Highlighting
 
 - Improved C pre-processor syntax highlighting.
+
+- Updated NSIS2 syntax highlighting (Ryan Grove).
 
 }}}
 {{{ User Interface
@@ -72,7 +74,14 @@ Thanks to Kris Kopicki for contributing to this release.
   when eg, inserting a number of characters before an unclosed bracket
   near the beginning of a large source file.
 
-+ Platform-Specific Changes:
+- Consecutive "chunks" with the same style attributes were previously
+  merged when a line was being painted, for improved performance. Now we
+  take this one step further and merge them when putting a line's chunk
+  list in the cache. This should improve scrolling performance,
+  especially when smooth text is on.
+
+}}}
+{{{ Platform-Specific Changes:
 
 - MacOS plugin version 3.0 now requires Java 1.4.1. All native calls now
   use the Cocoa API, and a dock menu has been added. The dock menu

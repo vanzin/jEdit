@@ -61,36 +61,19 @@ public class Chunk extends Token
 
 		float _x = 0.0f;
 
-		for(;;)
+		while(chunks != null)
 		{
-			if(chunks == null)
-				return _x;
-
-			//{{{ find run of chunks with the same token type
-			Chunk start = chunks;
-			float width = 0.0f;
-			int length = 0;
-			while(chunks != null
-				&& start.style == chunks.style
-				&& (start.visible == chunks.visible)
-				&& (start.accessable == chunks.accessable))
-			{
-				length += chunks.length;
-				width += chunks.width;
-				chunks = (Chunk)chunks.next;
-			} //}}}
-
 			// Useful for debugging purposes
 			if(DEBUG)
 			{
 				gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
-					width,10));
+					chunks.width,10));
 			}
 
-			if(start.accessable)
+			if(chunks.accessable)
 			{
 				//{{{ Paint token background color if necessary
-				Color bgColor = start.style.getBackgroundColor();
+				Color bgColor = chunks.style.getBackgroundColor();
 				if(bgColor != null)
 				{
 					// Workaround for bug in Graphics2D in
@@ -103,34 +86,35 @@ public class Chunk extends Token
 
 					xorGfx.fill(new Rectangle2D.Float(
 						x + _x,y - forBackground.getAscent(),
-						_x + width - _x,forBackground.getHeight()));
+						_x + chunks.width - _x,forBackground.getHeight()));
 
 					xorGfx.dispose();
 				} //}}}
 
 				//{{{ If there is text in this chunk, paint it
-				if(start.visible)
+				if(chunks.visible)
 				{
-					gfx.setFont(start.style.getFont());
-					gfx.setColor(start.style.getForegroundColor());
+					gfx.setFont(chunks.style.getFont());
+					gfx.setColor(chunks.style.getForegroundColor());
 
-					if(glyphVector && start.gv != null
-						&& start.next == chunks)
-						gfx.drawGlyphVector(start.gv,x + _x,y);
+					if(glyphVector && chunks.gv != null)
+						gfx.drawGlyphVector(chunks.gv,x + _x,y);
 					else
 					{
 						gfx.drawChars(lineText.array,
 							lineText.offset
-							+ start.offset,length,
+							+ chunks.offset,
+							chunks.length,
 							(int)(x + _x),(int)y);
 					}
 				} //}}}
 			}
 
-			_x += width;
+			_x += chunks.width;
+			chunks = (Chunk)chunks.next;
 		}
 
-		// for return statement see top of for() loop...
+		return _x;
 	} //}}}
 
 	//{{{ offsetToX() method
@@ -191,6 +175,7 @@ public class Chunk extends Token
 	//{{{ Instance variables
 	public boolean accessable;
 	public boolean visible;
+	public boolean initialized;
 
 	public boolean monospaced;
 	public float charWidth;
@@ -209,10 +194,13 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ Chunk constructor
-	public Chunk(byte id, int offset, int length, ParserRuleSet rules)
+	public Chunk(byte id, int offset, int length, ParserRuleSet rules,
+		SyntaxStyle[] styles, byte defaultID)
 	{
 		super(id,offset,length,rules);
 		accessable = true;
+		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
+			? defaultID : id];
 	} //}}}
 
 	//{{{ getPositions() method
@@ -284,13 +272,15 @@ public class Chunk extends Token
 
 	//{{{ init() method
 	public void init(Segment seg, TabExpander expander, float x,
-		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
-		byte defaultID, float charWidth)
+		FontRenderContext fontRenderContext, float charWidth)
 	{
-		style = styles[(id == Token.WHITESPACE || id == Token.TAB)
-			? defaultID : id];
+		initialized = true;
 
-		if(length == 1 && seg.array[seg.offset + offset] == '\t')
+		if(!accessable)
+		{
+			// do nothing
+		}
+		else if(length == 1 && seg.array[seg.offset + offset] == '\t')
 		{
 			visible = false;
 			float newX = expander.nextTabStop(x,offset + length);
