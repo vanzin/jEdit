@@ -47,6 +47,7 @@ it is done in most text editors
 
 + docs:
 
+- FAQ: swing window border problems
 - addCommandPath()
 -Dsun.java2d.noddraw=true
 - API thread safety

@@ -215,4 +215,7 @@ void parseSelection()
   textArea.indentSelectedLines();
 }
 
-parseSelection();
+if( buffer.isReadOnly() )
+	Macros.error( view, "Buffer is read-only." );
+else
+	parseSelection();

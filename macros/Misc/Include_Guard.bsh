@@ -69,7 +69,10 @@ void includeGuard()
 	textArea.setCaretPosition(pos);
 }
 
-includeGuard();
+if( buffer.isReadOnly() )
+	Macros.error(view, "Buffer is read-only.");
+else
+	includeGuard();
 
 /*
 	Macro index data (in DocBook format)

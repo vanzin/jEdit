@@ -1,0 +1,75 @@
+/*
+ * Delete_Current.bsh - Deletes the current
+ * buffer's file on disk, but doesn't close 
+ * the buffer.
+ *
+ * Copyright (C) 2003-2004 Ollie Rutherfurd <oliver@rutherfurd.net>
+ *
+ * $Id$
+ */
+
+import javax.swing.SwingUtilities;
+import org.gjt.sp.jedit.io.*;
+
+
+BufferStatusChecker(View view){
+	run(){
+		jEdit.checkBufferStatus(view);
+	}
+	return this;
+}
+
+
+void deleteCurrentBuffer(View view){
+	Buffer buffer = view.getBuffer();
+
+	// don't bother deleting new buffers (don't exist on disk)
+	if(buffer.isNewFile()){
+		Macros.error(view, "Buffer doesn't exist on disk.");
+		return;
+	}
+
+	try{
+		String path = buffer.getPath();
+		VFS vfs = VFSManager.getVFSForPath(path);
+		int caps = vfs.getCapabilities();
+		int del = VFS.DELETE_CAP;
+		int res = caps & del;
+		if(res == 0){
+			Macros.error(view, "VFS " + vfs.getName() 
+						 + " doesn't support deleting.");
+			return;
+		}
+	
+		Object session = null;
+		try{
+			session = vfs.createVFSSession(path,view);
+			if(vfs._delete(session,path,view)){
+				view.getStatus().setMessageAndClear("Deleted: " + path);
+			}
+			// invoke buffer status check
+			SwingUtilities.invokeLater(BufferStatusChecker(view));
+		}
+		finally{
+			if(session != null)
+				vfs._endVFSSession(session,view);
+		}
+	}
+	catch(Exception e){
+		Macros.error(view, e.toString());
+	}
+}
+
+deleteCurrentBuffer(view);
+
+/*
+
+	<listitem>
+		<para><filename>Delete_Current.bsh</filename></para>
+		<abstract><para>
+		Deletes the current buffer's file on disk, but 
+		doesn't close the buffer.
+		</para></abstract>
+	</listitem>
+
+*/

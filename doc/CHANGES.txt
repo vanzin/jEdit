@@ -21,8 +21,12 @@ this release.
 - File system browser now uses locale's short date format, not a
   hard-coded DD/MM/YYYY hh:mm (Ollie Rutherfurd).
 
-- Many macros updated, new Keywords_to_Uppercase.bsh macro added
-  (Ollie Rutherfurd).
+- Many macros updated, new Keywords_to_Uppercase.bsh,
+  Emacs_Next_Line.bsh, Emacs_Previous_Line.bsh, Buffer_Switcher.bsh,
+  Delete_Current.bsh, Glob_Close.bsh, Reverse_Lines.bsh,
+  Single_Space_Buffer.bsh macros added (Ollie Rutherfurd).
+
+- Documentation updates.
 
 }}}
 {{{ Syntax Highlighting
