@@ -599,9 +599,13 @@ public class DisplayManager
 			fvm = new int[2];
 			if(buffer.isLoaded())
 				bufferChangeHandler.foldHandlerChanged(buffer);
+			else
+				fvmreset();
+			_notifyScreenLineChanges();
 		}
 		else
 		{
+			_notifyScreenLineChanges();
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
 		}
@@ -709,6 +713,15 @@ public class DisplayManager
 	private void dispose()
 	{
 		buffer.removeBufferChangeListener(bufferChangeHandler);
+	} //}}}
+
+	//{{{ fvmreset() method
+	private void fvmreset()
+	{
+		lastfvmget = -1;
+		fvmcount = 2;
+		fvm[0] = 0;
+		fvm[1] = buffer.getLineCount();
 	} //}}}
 
 	//{{{ fvmtest() method
@@ -1098,14 +1111,14 @@ loop:		for(;;)
 
 			updateWrapSettings();
 
-			physicalLine = 0;
+			physicalLine = getFirstVisibleLine();
 			scrollLine = 0;
-			//XXX
-			for(int i = 0; i < buffer.getLineCount(); i++)
+			while(physicalLine != -1)
 			{
-				if(isLineVisible(i))
-					scrollLine += getScreenLineCount(i);
+				scrollLine += getScreenLineCount(physicalLine);
+				physicalLine = getNextVisibleLine(physicalLine);
 			}
+
 			physicalLine = buffer.getLineCount();
 
 			firstLine.ensurePhysicalLineIsVisible();
@@ -1200,18 +1213,20 @@ loop:		for(;;)
 
 			scrollLine = 0;
 
-			int i = 0;
+			int i = getFirstVisibleLine();
 
-			//XXX
-			for(; i < buffer.getLineCount(); i++)
+			for(;;)
 			{
-				if(!isLineVisible(i))
-					continue;
-
 				if(i >= physicalLine)
 					break;
 
 				scrollLine += getScreenLineCount(i);
+
+				int nextLine = getNextVisibleLine(i);
+				if(nextLine == -1)
+					break;
+				else
+					i = nextLine;
 			}
 
 			physicalLine = i;
@@ -1444,15 +1459,11 @@ loop:		for(;;)
 		//{{{ foldHandlerChanged() method
 		public void foldHandlerChanged(Buffer buffer)
 		{
-			lastfvmget = -1;
-			fvmcount = 2;
-			fvm[0] = 0;
-			fvm[1] = buffer.getLineCount();
-			if(textArea.getDisplayManager() == DisplayManager.this)
-			{
-				firstLine.reset();
-				scrollLineCount.reset();
-			}
+			fvmreset();
+
+			firstLine.callReset = true;
+			scrollLineCount.callReset = true;
+
 			int collapseFolds = buffer.getIntegerProperty(
 				"collapseFolds",0);
 			if(collapseFolds != 0)
@@ -1518,9 +1529,7 @@ loop:		for(;;)
 						// we're removing from before
 						// the first visible to after
 						// the last visible
-						fvmcount = 2;
-						fvm[0] = 0;
-						fvm[1] = buffer.getLineCount();
+						fvmreset();
 						firstLine.callReset = true;
 						scrollLineCount.callReset = true;
 					}

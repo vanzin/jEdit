@@ -457,7 +457,9 @@ class ChunkCache
 	LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
 	{
 		out.clear();
-		lineToChunkList(physicalLine,out);
+
+		if(buffer.isLoaded())
+			lineToChunkList(physicalLine,out);
 
 		if(out.size() == 0)
 			out.add(null);

@@ -7,6 +7,7 @@ and quirks that I need to fix eventually.
   
   { <-- wrong
 
+- C+e n n in search bar breaks
 - SERIOUS PROBLEMS
   - finish vfs browser extended attributes
   - new file: horiz scroll wrong
@@ -33,7 +34,6 @@ and quirks that I need to fix eventually.
   - various action bar hacks
   - persistent views
 - actions/dockables eval: should use own namespace?
-- vfs dialog: browser should send focus back to text field
 - dir search: no progress msg!
 - quicknotepad: use a box not a tool bar
 - if A depends on B but A is loaded before B and B breaks, A ends up
@@ -90,6 +90,7 @@ and quirks that I need to fix eventually.
 
 + features:
 
+- windows: fsb browser, type c:
 - new plugin mgr:
   - ask before selecting dependencies & 'don't show again'
 - need to get rid of endsWith("/") || endsWith(File.separator) bullshit
@@ -192,6 +193,7 @@ and quirks that I need to fix eventually.
 - eval, eval-selection, etc: do array to string override
 - beanshell: unloading commands when a plugin is unloaded
 - generic matching API used for brackets, tags, etc.
+- persistent kill ring
 
 + performance:
 
@@ -225,7 +227,7 @@ and quirks that I need to fix eventually.
   - scroll/physUp/Down() simpler
 - inserting lines repaints whole text area
 - 30,000 line file performance with syntax, word wrap
-- FirstLine.reset() not optimal
+- better data structure for undo queue
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
