@@ -67,6 +67,10 @@ contributing to this release.
   (C+e C+j) now sends focus to the text area, and also expands the
   current fold if the caret is not visible.
 
+- The block caret is now drawn as a hollow box. Previously it was drawn
+  as a filled box using XOR paint mode, but the XOR paint mode caused
+  problems on some Java versions and was slightly slower.
+
 }}}
 {{{ Plugin Loader
 
@@ -168,6 +172,8 @@ contributing to this release.
   back to the original owner when the prefix is finished.
 
 - Fixed various file system browser completion problems.
+
+- PHP mode's inline script ruleset was missing a commentEnd property.
 
 }}}
 {{{ API Changes

@@ -1261,7 +1261,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					caretX + textArea.charWidth,y + height - 1);
 			}
 			else if(blockCaret)
-				gfx.fillRect(caretX,y,textArea.charWidth,height);
+				gfx.drawRect(caretX,y,textArea.charWidth - 1,height - 1);
 			else
 				gfx.drawLine(caretX,y,caretX,y + height - 1);
 		}
