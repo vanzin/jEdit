@@ -380,7 +380,7 @@
     <userinput>wscript <replaceable>script_path</replaceable></userinput>.
   </para>
 
-<informalexample><programlisting>' Example VBSscript using jEditLauncher interface
+<informalexample><programlisting>' Example VBScript using jEditLauncher interface
 dim launcher
 set launcher = CreateObject("JEdit.JEditLauncher")
 a = Array("I:\Source Code Files\shellext\jeditshell\*.h", _
@@ -442,7 +442,7 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
 <para>
   The jEditLauncher package has a logging facility that is separate from jEdit's
   Activity Log to provide a record of events occurring outside the Java
-  virtual machine environemnt in which jEdit operates.  The logging
+  virtual machine environment in which jEdit operates.  The logging
   facility maintains two log files: <filename>jelaunch.log</filename> for
   events relating to starting jEdit, loading files and running scripts,
   and <filename>install.log</filename> for jEditLauncher installation

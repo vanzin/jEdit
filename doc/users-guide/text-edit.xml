@@ -149,7 +149,7 @@
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Invert Selection</guimenuitem>
     (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>I</keycap>) selects a set of text chunks such that all text
-    that was formely part of a selection is now unselected, and all text that
+    that was formerly part of a selection is now unselected, and all text that
     wasn't, is selected.
    </para>
    <tip>
@@ -491,7 +491,7 @@
   </para>
   <para>
    The system clipboard is mapped to a register named <filename>$</filename>.
-   For convinience, jEdit offers clipboard-manipulation commands similar
+   For convenience, jEdit offers clipboard-manipulation commands similar
    to those found in other applications, in addition to a more flexible
    set of commands for working with registers directly.
   </para>
@@ -554,7 +554,7 @@
      If jEdit is being run under Java 2 version 1.4 on Unix, you will be
      able to transfer text with other X Windows applications using the
      quick copy feature. On other platforms and Java versions, the contents
-     of the quick copy register are only accessable from within jEdit.
+     of the quick copy register are only accessible from within jEdit.
     </para></listitem>
     <listitem><para>
      Dragging with the middle mouse button
@@ -568,7 +568,7 @@
   </sect2>
   <sect2><title>General Register Commands</title>
    <para>
-    These commands are slightly less convinient to use than the two methods of
+    These commands are slightly less convenient to use than the two methods of
     transferring text described above, but are more powerful.
    </para>
    <para>
@@ -774,7 +774,7 @@
     sequences of text if the <guibutton>Regular expressions</guibutton> check
     box is selected; see <xref linkend="regexps" /> for more information about
     regular expressions. Note that regular expressions can only be used when
-    searching forwards.
+    searching forward.
    </para>
    <para>
     Clicking <guibutton>Find</guibutton> will locate the next (or previous, if
@@ -946,7 +946,7 @@
     Note that clicking the <guibutton>All Buffers</guibutton> or
     <guibutton>Directory</guibutton> radio buttons also selects the
     <guibutton>HyperSearch</guibutton> check box. This is merely for
-    convinience, however; normal searching is supported for multiple files as well.
+    convenience, however; normal searching is supported for multiple files as well.
    </para> -->
    <para>
     Two convenience commands are provided for performing multiple file searches.

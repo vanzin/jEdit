@@ -448,7 +448,7 @@ are useful in some situations. They include the following:</para>
  </funcprototype>
 </funcsynopsis>
 <para>
-    Eeach <classname>View</classname> displays a
+    Each <classname>View</classname> displays a
     <classname>StatusBar</classname> at its bottom edge. It shows the
     current cursor position, the editing mode of the current buffer and
     other information. The method <function>setMessage(String
@@ -568,7 +568,7 @@ are useful in some situations. They include the following:</para>
     <parameter>cut</parameter> parameter is not specified, the selected text
     remains in the text area. If the <parameter>separator</parameter>
     parameter is not specified, a newline character is used to separate the
-    appended text from any existng register text.
+    appended text from any existing register text.
   </para>
   </listitem>
 
@@ -991,7 +991,7 @@ JEditTextArea</title>
     <para>
       Adds a single <classname>Selection</classname> or an array of
       <classname>Selection</classname> objects to the existing collection
-      maintined by the <classname>JEditTextArea</classname>.  Nested or
+      maintained by the <classname>JEditTextArea</classname>.  Nested or
       overlapping selections will be merged where possible.
     </para>
   </listitem>
@@ -1521,7 +1521,7 @@ JEditTextArea</title>
 </funcsynopsis>
 <para>
     Scrolls the text area to ensure that the caret is visible. The
-    <parameter>doElectricScroll</parameter> parameter detemines whether
+    <parameter>doElectricScroll</parameter> parameter determines whether
     <quote>electric scrolling</quote> will occur. This leaves a minimum
     number of lines between the caret line and the top and bottom of the
     editing pane.
@@ -1957,8 +1957,7 @@ JEditTextArea</title>
 <para>
     A <classname>Buffer</classname> represents the contents of an open text
     file as it is maintained in the computer's memory (as opposed to
-    how it may be stored on a disk). It is derived from Java's
-    <classname>PlainDocument</classname> class.
+    how it may be stored on a disk).
 </para>
 
 <sect2 id="class-buffer-file"><title>File attribute methods</title>
@@ -2122,7 +2121,7 @@ JEditTextArea</title>
       properties that describe a broad range of attributes. The value of each
       property is stored using a key for indexing purposes, usually a
       <classname>String</classname> that names the particular property.
-      Property values can be set and retreived using these two methods.
+      Property values can be set and retrieved using these two methods.
       The <classname>Object</classname> returned by
       <function>getProperty()</function> usually has to be cast to a derived type
       to be useful. Most of these properties are documented in <xref
@@ -2132,7 +2131,7 @@ JEditTextArea</title>
 </itemizedlist>
 
 <para>
-  These two methods provide shortcuts for getting snd setting <classname>boolean</classname>
+  These two methods provide shortcuts for getting and setting <classname>boolean</classname>
   properties.
 </para>
 
@@ -3348,7 +3347,7 @@ This class is another collection of <classname>static</classname> utility method
     for sorting purposes. Among them are <classname>StringCompare</classname> and
     <classname>StringICaseCompare</classname>. Both classes compare
     <classname>String</classname>
-    object; the latter class compares two strings on a case-insentive basis.
+    object; the latter class compares two strings on a case-insensitive basis.
 </para>
 
 <para>

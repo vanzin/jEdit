@@ -122,7 +122,7 @@
 <listitem>
     <para><filename>Next_Char.bsh</filename></para>
     <abstract><para>
-        Finds next occurence of character on current line.
+        Finds next occurrence of character on current line.
     </para></abstract>
     <para>
         The macro takes the next character typed after macro execution
@@ -151,7 +151,6 @@
      a closing token. If the editing mode does not provide for line
      comments (for example, text or XML modes), the macro will
      display an error message.
-     be dsi
 	</para>
 </listitem>
 
@@ -229,7 +228,7 @@
    </para></abstract>
    <para>
       The macro includes configuration variables for using
-      different doclets for generating javadocs and for genreating
+      different doclets for generating javadocs and for generating
       javadocs of the package of which the current buffer is a part.
       Details for use are included in the note accompanying the macro's
       source code.

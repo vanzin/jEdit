@@ -250,7 +250,7 @@
    abbreviations.
   </para>
   <para>
-   The combo box labelled <quote>Abbrev set</quote> selects the
+   The combo box labeled <quote>Abbrev set</quote> selects the
    abbreviation set to edit. The first entry, <quote>global</quote>, contains
    abbreviations available in all edit modes. The subsequent
    entries contain mode-specific abbreviations.

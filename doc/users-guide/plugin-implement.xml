@@ -254,12 +254,12 @@
   </listitem>
   <listitem>
   <para>
-     a prefix for labelling properties required by the plugin API; and
+     a prefix for labeling properties required by the plugin API; and
     </para>
   </listitem>
   <listitem>
     <para>
-      a prefix to be used in labelling items used in the plugin's option pane
+      a prefix to be used in labeling items used in the plugin's option pane
     </para>
   </listitem>
 </itemizedlist>
@@ -448,11 +448,12 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
 <para>
   <function>GUIUtilities.loadMenuItem()</function> and
-  <function>GUIUtilites.loadMenu()</function> use syntatical conventions
-  for the value of a menu property that simplifies menu layout. In
+  <function>GUIUtilites.loadMenu()</function> use special conventions
+  for the value of a menu property to specify menu layout. In
   <function>loadMenu()</function>, the use of the dash, as in the second
   item in the example menu list, signifies the placement of a separator.
-  Finally, the character <userinput>'%'</userinput> used as a prefix on a
+  In addition,
+  the character <userinput>'%'</userinput> used as a prefix on a
   label causes <function>loadMenu()</function> to call itself recursively
   with the prefixed label as the source of submenu data. Most plugins
   will not need to define menus that contain other submenus.
@@ -488,7 +489,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
   class that will create and hold the top-level window component. We will
 
-  ilustrate both approaches.
+  illustrate both approaches.
 
 </para>
 
@@ -1072,7 +1073,7 @@ options.quicknotepad.filepath=</programlisting></informalexample>
 
 <para>
   We have already outlined the contents of the user action catalog, the
-  properties file and the documentation file in our earlier dicusssion.
+  properties file and the documentation file in our earlier discussion.
   The final step is to compile the source file and build the archive file
   that will hold the class files and the plugin's other resources.
 </para>

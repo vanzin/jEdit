@@ -30,7 +30,7 @@
   <para>
    Plugins can be installed in two ways; manually, and from the plugin manager.
    In most cases, plugins should be installed from the plugin manager. It is
-   easier and more convinient.
+   easier and more convenient.
   </para>
   <para>
    To install plugins manually, go to <ulink
@@ -51,7 +51,7 @@
   <para>
    The <guibutton>Total download size</guibutton> field shows the total size
    of all plugins chosen for installation, along with any plugins that will be
-   automatically downloaded in order to fulfil dependencies. The
+   automatically downloaded in order to fulfill dependencies. The
    <guibutton>Download size</guibutton> field in the plugin information area
    only shows the size of the currently selected plugin.
   </para>
