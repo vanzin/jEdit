@@ -2604,7 +2604,7 @@ public class jEdit
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			script.append("BeanShell.runScript(null,\""
 				+ MiscUtilities.charsToEscapes(scriptFile)
-				+ "\",false);\n");
+				+ "\",null,false);\n");
 		}
 
 		return script.toString();

@@ -86,7 +86,7 @@ public class BeanShell
 			{
 				Log.log(Log.ERROR,BeanShell.class,e);
 
-				new BeanShellErrorDialog(view,e.toString());
+				handleException(view,null,e);
 			}
 
 			if(returnValue != null)
@@ -126,8 +126,6 @@ public class BeanShell
 		{
 			buffer.beginCompoundEdit();
 
-			
-
 			for(int i = 0; i < selection.length; i++)
 			{
 				Selection s = selection[i];
@@ -161,7 +159,7 @@ public class BeanShell
 		{
 			Log.log(Log.ERROR,BeanShell.class,e);
 
-			new BeanShellErrorDialog(view,e.toString());
+			handleException(view,null,e);
 		}
 		finally
 		{
@@ -203,7 +201,7 @@ public class BeanShell
 		{
 			Log.log(Log.ERROR,BeanShell.class,e);
 
-			new BeanShellErrorDialog(view,e.toString());
+			handleException(view,path,e);
 		}
 	} //}}}
 
@@ -261,8 +259,8 @@ public class BeanShell
 				else
 				{
 					in = new BufferedReader(new InputStreamReader(
-						vfs._createInputStream(session,path,
-						true,view)));
+						vfs._createInputStream(session,
+						path,false,view)));
 				}
 			}
 
@@ -281,7 +279,7 @@ public class BeanShell
 		}
 		catch(Exception e)
 		{
-			handleException(e);
+			unwrapException(e);
 		}
 		finally
 		{
@@ -322,7 +320,7 @@ public class BeanShell
 		{
 			Log.log(Log.ERROR,BeanShell.class,e);
 
-			new BeanShellErrorDialog(view,e.toString());
+			handleException(view,null,e);
 		}
 
 		return null;
@@ -360,7 +358,7 @@ public class BeanShell
 		}
 		catch(Exception e)
 		{
-			handleException(e);
+			unwrapException(e);
 			// never called
 			return null;
 		}
@@ -444,7 +442,7 @@ public class BeanShell
 		}
 		catch(Exception e)
 		{
-			handleException(e);
+			unwrapException(e);
 			// never called
 			return null;
 		}
@@ -575,8 +573,12 @@ public class BeanShell
 	private static int cachedBlockCounter;
 	//}}}
 
-	//{{{ handleException() method
-	private static void handleException(Exception e) throws Exception
+	//{{{ unwrapException() method
+	/**
+	 * This extracts an exception from a 'wrapping' exception, as BeanShell
+	 * sometimes throws. This gives the user a more accurate error traceback
+	 */
+	private static void unwrapException(Exception e) throws Exception
 	{
 		if(e instanceof TargetError)
 		{
@@ -597,7 +599,20 @@ public class BeanShell
 		}
 
 		throw e;
-	}
+	} //}}}
+
+	//{{{ handleException() method
+	private static void handleException(View view, String path, Throwable t)
+	{
+		if(t instanceof IOException)
+		{
+			VFSManager.error(view,path,"ioerror.read-error",
+				new String[] { t.toString() });
+		}
+		else
+			new BeanShellErrorDialog(view,t.toString());
+	} //}}}
+
 	//{{{ createInterpreter() method
 	private static Interpreter createInterpreter(NameSpace nameSpace)
 	{
