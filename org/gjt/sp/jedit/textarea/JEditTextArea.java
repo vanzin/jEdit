@@ -65,6 +65,7 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Initialize some misc. stuff
 		selection = new Vector();
+		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		bufferHandler = new BufferChangeHandler();
@@ -352,6 +353,8 @@ public class JEditTextArea extends JComponent
 		//if(bracketPosition == -1)
 		//	updateBracketHighlight();
 
+		chunkCache.setFirstLine(firstLine);
+
 		if(this.firstLine != vertical.getValue())
 			updateScrollBars();
 
@@ -630,6 +633,8 @@ public class JEditTextArea extends JComponent
 				firstLine = 0;
 
 			physFirstLine = virtualToPhysical(firstLine);
+
+			chunkCache.setFirstLine(firstLine);
 
 			updateScrollBars();
 			painter.repaint();
@@ -4424,6 +4429,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	MouseHandler mouseHandler;
 	int[] lineWidths;
 	int maxHorizontalScrollWidth;
+	ChunkCache chunkCache;
 
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
@@ -4460,6 +4466,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		visibleLines = height / lineHeight;
 		lineWidths = new int[visibleLines + 1];
 		maxHorizontalScrollWidth = -1;
+
+		chunkCache.recalculateVisibleLines();
+
 		updateScrollBars();
 	} //}}}
 

@@ -4,6 +4,8 @@ short term plan:
 
 before soft wrap, must fix all the document bugs:
 
+- browserView.directoryLoaded() npe
+- textArea.getLastVisibleLine() method
 - narrow: insert line after first fucked
 - when loading a file with collapsedFolds property, last line always
   visible
@@ -12,6 +14,10 @@ before soft wrap, must fix all the document bugs:
 - print should not use so much memory
 - background color for tokens
 
+- better formatting commands:
+  - format becomes 'wrap paragraph'
+  - 'wrap line'
+  - 'unwrap paragraph'
 - DoS in edit server
 - idea for fixing buffer property issues: BufferProp class
 - getCenterPoint()
