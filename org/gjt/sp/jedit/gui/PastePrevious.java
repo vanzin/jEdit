@@ -1,6 +1,9 @@
 /*
  * PastePrevious.java - Paste previous dialog
- * Copyright (C) 1998, 1999 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -26,10 +30,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class PastePrevious extends EnhancedDialog
 implements ActionListener, ListSelectionListener, MouseListener
 {
+	//{{{ PastePrevious constructor
 	public PastePrevious(View view)
 	{
 		super(view,jEdit.getProperty("pasteprev.title"),true);
@@ -57,6 +63,9 @@ implements ActionListener, ListSelectionListener, MouseListener
 
 		clips.addMouseListener(this);
 		clips.addListSelectionListener(this);
+		if(clipHistory.getSize() >= 1)
+			clips.setSelectedIndex(0);
+
 		insert = new JButton(jEdit.getProperty("pasteprev.insert"));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
 
@@ -90,9 +99,9 @@ implements ActionListener, ListSelectionListener, MouseListener
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
+	} //}}}
 
-	// EnhancedDialog implementation
+	//{{{ ok() method
 	public void ok()
 	{
 		int selected = clips.getSelectedIndex();
@@ -107,14 +116,15 @@ implements ActionListener, ListSelectionListener, MouseListener
 		view.getTextArea().setSelectedText(clip);
 
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
-	// end EnhancedDialog implementation
+	} //}}}
 
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
 		Object source = evt.getSource();
@@ -122,34 +132,43 @@ implements ActionListener, ListSelectionListener, MouseListener
 			ok();
 		else if(source == cancel)
 			cancel();
-	}
+	} //}}}
 
+	//{{{ mouseClicked() method
 	public void mouseClicked(MouseEvent evt)
 	{
 		if(evt.getClickCount() == 2)
 			ok();
-	}
+	} //}}}
 
+	//{{{ Crap
 	public void mouseEntered(MouseEvent evt) {}
 	public void mouseExited(MouseEvent evt) {}
 	public void mousePressed(MouseEvent evt) {}
-	public void mouseReleased(MouseEvent evt) {}
+	public void mouseReleased(MouseEvent evt) {} //}}}
 
+	//{{{ valueChanged() method
 	public void valueChanged(ListSelectionEvent evt)
 	{
 		updateButtons();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private View view;
 	private JList clips;
 	private HistoryModel clipHistory;
 	private JButton insert;
 	private JButton cancel;
+	//}}}
 
+	//{{{ updateButtons() method
 	private void updateButtons()
 	{
 		int selected = clips.getSelectedIndex();
 		insert.setEnabled(selected != -1);
-	}
+	} //}}}
+
+	//}}}
 }

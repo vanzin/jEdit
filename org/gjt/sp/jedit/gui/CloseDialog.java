@@ -164,6 +164,7 @@ public class CloseDialog extends EnhancedDialog
 				{
 					selectAllFlag = false;
 				}
+				bufferList.requestFocus();
 			}
 			else if(source == save)
 			{
@@ -181,6 +182,7 @@ public class CloseDialog extends EnhancedDialog
 				}
 
 				updateButtons();
+				bufferList.requestFocus();
 
 				if(bufferModel.getSize() == 0)
 				{
@@ -201,6 +203,7 @@ public class CloseDialog extends EnhancedDialog
 				}
 
 				updateButtons();
+				bufferList.requestFocus();
 
 				if(bufferModel.getSize() == 0)
 				{
