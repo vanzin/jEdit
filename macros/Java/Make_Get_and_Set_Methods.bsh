@@ -30,92 +30,130 @@ GNU General Public License for more details.
 */
 
 boolean JAVA_MODE = buffer.getMode().getName().equals("java");
+boolean createGetMethods = true;
+boolean createSetMethods = true;
 
-String getFunctionText(String text)
+void setCaret(int selectionStart, int selectionEnd)
 {
-  if( text != null && !text.equals("") )
+  textArea.setCaretPosition(selectionStart);
+  textArea.moveCaretPosition(selectionEnd);
+}
+
+String getClassName()
+{
+  int selectionStart = textArea.getSelectionStart();
+  int selectionEnd = textArea.getSelectionEnd();
+  
+  String text = textArea.getText();
+  int index = text.lastIndexOf("class", selectionStart);
+  if(index != -1)
   {
-    text = text.trim();
-    if( text.endsWith(";") )
-    {
-      text = text.substring( 0, text.length() -1 );
-    }
+    textArea.setCaretPosition(index);
+    int lineNumber = textArea.getCaretLine();
+    int lineEnd = textArea.getLineEndOffset(lineNumber);
+    String lineText = text.substring(index, lineEnd);
     
-    StringTokenizer tokenizer = new StringTokenizer(text);
-    int tokenCount = tokenizer.countTokens();
-    if(tokenCount >= 2)
+    StringTokenizer tokenizer = new StringTokenizer(lineText);
+    tokenizer.nextToken(); //eat "class"
+    if(tokenizer.hasMoreTokens())
     {
-      int numGarbage = tokenCount - 2;
-      for (int i = 0; i < numGarbage; i++)
-      {
-        tokenizer.nextToken();
-      }
-      
-      String type = tokenizer.nextToken();
-      String variable = tokenizer.nextToken();
-      String uppperVariable = Character.toUpperCase(variable.charAt(0)) + variable.substring(1, variable.length());
-      String setVariable;
-      if(JAVA_MODE)
-      {
-        setVariable = variable;
-      }
-      else
-      {
-        setVariable = type + "Value";
-      }
-      
-      if(JAVA_MODE)
-      {
-        text = "\n" + 
-        "/**\n" + 
-        "Function: get" + uppperVariable + "()\n" +
-        "Returns the value of " + variable + ".\n" + 
-        "*/\n" + 
-        "public " + type + " get" + uppperVariable + "()" + "\n" +
-        "{" + "\n" + 
-          "  return " + variable + ";" + "\n" + 
-        "}" + 
-        "\n\n" + 
-        
-        "/**\n" + 
-        "Function: set" + uppperVariable + "()\n" +
-        "Sets the value of " + variable + ".\n" + 
-        "@param " + setVariable + " The value to assign " + variable + ".\n" +
-        "*/\n" + 
-        "public void set" + uppperVariable + "(" + type + " " + setVariable + ")\n" + 
-        "{" + "\n" + 
-          "  this." + variable + " = " + setVariable + ";" + "\n" +
-        "}" + "\n";
-      }
-      else
-      {
-        text = "\n" + 
-        "/*\n" + 
-        "function: get" + uppperVariable + "()\n" +
-        "Returns the value of " + variable + ".\n" + 
-        "*/\n" + 
-        "public " + type + " get" + uppperVariable + "()" + "\n" +
-        "{" + "\n" + 
-          "  return " + variable + ";" + "\n" + 
-        "}" + 
-        "\n\n" + 
-        
-        "/*\n" + 
-        "function: set" + uppperVariable + "()\n" +
-        "Sets the value of " + variable + ".\n" + 
-        "Input: " + setVariable + " The value to assign " + variable + ".\n" +
-        "*/\n" + 
-        "public void set" + uppperVariable + "(" + type + " " + setVariable + ")\n" + 
-        "{" + "\n" + 
-          "  " + variable + " = " + setVariable + ";" + "\n" +
-        "}" + "\n";
-      }
-      
-      return text;
+      setCaret(selectionStart, selectionEnd);
+      return tokenizer.nextToken();
+    }
+  }
+  setCaret(selectionStart, selectionEnd);
+  
+  String fileClassName = buffer.getName();
+  int index = fileClassName.lastIndexOf('.');
+  if(index != -1)
+  {
+    fileClassName = fileClassName.substring(0, index);
+    if(fileClassName.toLowerCase().indexOf("untitled") == -1)
+    {
+      return fileClassName;
     }
   }
   
   return "";
+}
+
+String createJavaGetMethod(String type, String variableName)
+{
+  String uppperVariable = Character.toUpperCase(variableName.charAt(0)) + variableName.substring(1, variableName.length());
+  String result = 
+  "/**\n" + 
+  "Function: get" + uppperVariable + "()\n" +
+  "Returns the value of " + variableName + ".\n" + 
+  "*/\n" + 
+  "public " + type + " get" + uppperVariable + "()" + "\n" +
+  "{" + "\n" + 
+    "  return " + variableName + ";" + "\n" + 
+  "}\n";
+  
+  return result;
+}
+
+String createJavaSetMethod(String type, String variableName)
+{
+  String uppperVariable = Character.toUpperCase(variableName.charAt(0)) + variableName.substring(1, variableName.length());
+  String result = 
+  "/**\n" + 
+  "Function: set" + uppperVariable + "()\n" +
+  "Sets the value of " + variableName + ".\n" + 
+  "@param " + variableName + " The value to assign " + variable + ".\n" +
+  "*/\n" + 
+  "public void set" + uppperVariable + "(" + type + " " + variableName + ")\n" + 
+  "{" + "\n" + 
+    "  this." + variableName + " = " + variableName + ";" + "\n" +
+  "}\n";
+  
+  return result;
+}
+
+String createCppGetMethod(String className, String type, String variableName)
+{
+  String scopeIndicator = "";
+  if(className != null && className.compareTo("") != 0)
+  {
+    scopeIndicator = className + "::";
+  }
+  
+  String uppperVariable = Character.toUpperCase(variableName.charAt(0)) + variableName.substring(1, variableName.length());
+  String result = 
+  "/*\n" + 
+  "function: get" + uppperVariable + "()\n" +
+  "Returns the value of " + variableName + ".\n" + 
+  "*/\n" + 
+  type + " " + scopeIndicator + "get" + uppperVariable + "()" + "\n" +
+  "{" + "\n" + 
+    "  return " + variableName + ";" + "\n" + 
+  "}\n";
+  
+  return result;
+}
+
+String createCppSetMethod(String className, String type, String variableName)
+{
+  String scopeIndicator = "";
+  if(className != null && className.compareTo("") != 0)
+  {
+    scopeIndicator = className + "::";
+  }
+  
+  String uppperVariable = Character.toUpperCase(variableName.charAt(0)) + variableName.substring(1, variableName.length());
+  String setVariable = variableName + "Value";
+  String result = 
+  "/*\n" + 
+  "function: set" + uppperVariable + "()\n" +
+  "Sets the value of " + variableName + ".\n" + 
+  "Input: " + setVariable + " The value to assign " + variableName + ".\n" +
+  "*/\n" + 
+  "void " + scopeIndicator + "set" + uppperVariable + "(const " + type + "& " + setVariable + ")\n" + 
+  "{" + "\n" + 
+    "  " + variableName + " = " + setVariable + ";" + "\n" +
+  "}\n";
+  
+  return result;
 }
 
 void parseSelection()
@@ -130,14 +168,68 @@ void parseSelection()
   int endLine = textArea.getCaretLine();
   
   StringBuffer code = new StringBuffer();
+  String className = getClassName();
   
   for(int i = startLine; i <= endLine; i++)
   {
     String lineText = textArea.getLineText(i);
-    String tmp = getFunctionText(lineText);
-    if(tmp != null && tmp.compareTo("") != 0)
+    if( lineText != null && !lineText.equals("") )
     {
-      code.append(tmp);
+      lineText = lineText.trim();
+      if( lineText.endsWith(";") )
+      {
+        lineText = lineText.substring( 0, lineText.length() -1 );
+      }
+      
+      StringTokenizer tokenizer = new StringTokenizer(lineText);
+      int tokenCount = tokenizer.countTokens();
+      if(tokenCount >= 2)
+      {
+        int numGarbage = tokenCount - 2;
+        for (int i = 0; i < numGarbage; i++)
+        {
+          tokenizer.nextToken();
+        }
+        
+        String type = tokenizer.nextToken();
+        String variable = tokenizer.nextToken();
+        
+        if(createGetMethods)
+        {
+          String tmp = "";
+          if(JAVA_MODE)
+          {
+            tmp =  createJavaGetMethod(type, variable);
+          }
+          else
+          {
+            tmp =  createCppGetMethod(className, type, variable);
+          }
+          
+          if(tmp != null && tmp.compareTo("") != 0)
+          {
+            code.append(tmp + "\n");
+          }
+        }
+        
+        if(createSetMethods && lineText.indexOf("final ") == -1 && lineText.indexOf("const ") == -1)
+        {
+          String tmp = "";
+          if(JAVA_MODE)
+          {
+            tmp =  createJavaSetMethod(type, variable);
+          }
+          else
+          {
+            tmp =  createCppSetMethod(className, type, variable);
+          }
+          
+          if(tmp != null && tmp.compareTo("") != 0)
+          {
+            code.append(tmp + "\n");
+          }
+        }
+      }
     }
   }
   
@@ -149,4 +241,56 @@ void parseSelection()
   textArea.indentSelectedLines();
 }
 
-parseSelection();
+void displayPrompt()
+{
+  String DONE = "Generate Code";
+  String CANCEL = "   Cancel   ";
+  
+  JCheckBox getCheckbox = new JCheckBox("Create Get Methods", true);
+  JCheckBox setCheckbox = new JCheckBox("Create Set Methods", true);
+  
+  JPanel checkBoxPanel = new JPanel();
+  checkBoxPanel.setLayout(new BorderLayout());
+  checkBoxPanel.add(getCheckbox, BorderLayout.NORTH);
+  checkBoxPanel.add(setCheckbox, BorderLayout.SOUTH);
+  
+  JButton createButton = new JButton(DONE);
+  JButton cancelButton = new JButton(CANCEL);
+  
+  JPanel buttonPanel = new JPanel();
+  buttonPanel.setLayout(new BorderLayout());
+  buttonPanel.add(createButton, BorderLayout.WEST);
+  buttonPanel.add(cancelButton, BorderLayout.EAST);
+  
+  JPanel mainPanel = new JPanel();
+  mainPanel.setLayout(new BorderLayout());
+  mainPanel.add(checkBoxPanel, BorderLayout.NORTH);
+  mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+  
+  String title = "Create Get and Set Methods";
+  JDialog dialog = new JDialog(view, title, false);
+  dialog.setContentPane(mainPanel);
+  
+  actionPerformed(ActionEvent e)
+  {
+    if(e.getSource() == createButton)
+    {
+      createGetMethods = getCheckbox.isSelected();
+      createSetMethods = setCheckbox.isSelected();
+      parseSelection(); 
+    }
+    this.dialog.dispose();
+    return;
+  }
+  
+  createButton.addActionListener(this);
+  cancelButton.addActionListener(this);
+  
+  dialog.pack();
+  dialog.setLocationRelativeTo(view);
+  dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+  dialog.setVisible(true);
+  createButton.requestFocus();
+}
+
+displayPrompt();
