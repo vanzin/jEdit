@@ -217,6 +217,9 @@ public class Mode
 	 */
 	public void setProperties(Hashtable props)
 	{
+		if(props == null)
+			props = new Hashtable();
+
 		// need to carry over file name and first line globs because they are
 		// not given to us by the XMode handler, but instead are filled in by
 		// the catalog loader.

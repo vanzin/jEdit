@@ -3,6 +3,22 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- save file --> collapse to < visibleLines -- click beyond last line
+  --> exception
+
+- plugin api:
+
+  - option panes.
+    - port quicknotepad, errorlist, character map, send buffer,
+      sidekick, xml.
+  - browser actions.
+    - port ftp
+  - operating system activations.
+    - port macos
+  - plugin errors after startup
+  - mouse over text for actions
+  - cache
+
 - can do perl q|...| etc. using begin/end substitution!
 - means of overriding escape to fix C# @"..." issue
 - perl: q{}, etc.
@@ -14,10 +30,6 @@ and quirks that I need to fix eventually.
 - browser: tab: don't insert full path
 - completion: handle full paths
 - file dialog: handle ~ ENTER, - ENTER
-
-- plugin errors after startup
-
-- mouse over text for actions
 
 - F2 doesn't work in JTree/JTable, maybe others
 - servicemanager javadocs

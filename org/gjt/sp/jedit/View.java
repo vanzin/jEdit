@@ -57,9 +57,9 @@ import org.gjt.sp.util.Log;
  *
  * <ul>
  * <li>When a view is being created, its initialization routine
- * iterates through the collection of loaded plugins and calls
- * the {@link EditPlugin#createMenuItems(Vector)} method of
- * each plugin core class.</li>
+ * iterates through the collection of loaded plugins and constructs the
+ * <b>Plugins</b> menu using the properties as specified in the
+ * {@link EditPlugin} class.</li>
  * <li>The view also creates and initializes a
  * {@link org.gjt.sp.jedit.gui.DockableWindowManager}
  * object.  This object is

@@ -76,7 +76,7 @@ public class DefaultTokenHandler implements TokenHandler
 	{
 		while(context != null)
 		{
-			if(context.rules.getMode() != null)
+			if(!context.rules.isBuiltIn())
 				return context.rules;
 
 			context = context.parent;

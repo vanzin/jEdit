@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.CharIndexedSegment;
 import org.gjt.sp.util.Log;
 //}}}
 

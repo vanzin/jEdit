@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.gjt.sp.jedit.search;
+package org.gjt.sp.util;
 
 //{{{ Imports
 import java.io.Serializable;

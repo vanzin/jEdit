@@ -28,22 +28,20 @@ import com.microstar.xml.*;
 import gnu.regexp.*;
 import java.io.*;
 import java.util.*;
-import org.gjt.sp.jedit.search.RESearchMatcher;
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
 /**
  * XML handler for mode definition files.
  */
-public class XModeHandler extends HandlerBase
+public abstract class XModeHandler extends HandlerBase
 {
 	//{{{ XModeHandler constructor
-	public XModeHandler (XmlParser parser, String modeName, String path)
+	public XModeHandler (String modeName)
 	{
 		this.modeName = modeName;
-		this.parser = parser;
-		this.path = path;
+		marker = new TokenMarker();
+		marker.addRuleSet(new ParserRuleSet(modeName,"MAIN"));
 		stateStack = new Stack();
 
 		// default value
@@ -166,11 +164,39 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "DELEGATE")
 		{
-			lastDelegateSet = value;
-			if (lastDelegateSet != null
-				&& lastDelegateSet.indexOf("::") == -1)
+			String delegateMode, delegateSetName;
+
+			if(value != null)
 			{
-				lastDelegateSet = modeName + "::" + lastDelegateSet;
+				int index = value.indexOf("::");
+
+				if(index != -1)
+				{
+					delegateMode = value.substring(0,index);
+					delegateSetName = value.substring(index + 2);
+				}
+				else
+				{
+					delegateMode = modeName;
+					delegateSetName = value;
+				}
+
+				TokenMarker delegateMarker = getTokenMarker(delegateMode);
+				lastDelegateSet = delegateMarker
+					.getRuleSet(delegateSetName);
+				if(delegateMarker == marker
+					&& lastDelegateSet == null)
+				{
+					// stupid hack to handle referencing
+					// a rule set that is defined later!
+					lastDelegateSet = new ParserRuleSet(
+						delegateMode,
+						delegateSetName);
+					lastDelegateSet.setDefault(Token.INVALID);
+					marker.addRuleSet(lastDelegateSet);
+				}
+				else if(lastDelegateSet == null)
+					error("delegate-invalid",value);
 			}
 		}
 		else if (aname == "DEFAULT")
@@ -249,17 +275,8 @@ public class XModeHandler extends HandlerBase
 
 		if (tag == "WHITESPACE")
 		{
-			Log.log(Log.WARNING,this,path + ": WHITESPACE rule "
+			Log.log(Log.WARNING,this,modeName + ": WHITESPACE rule "
 				+ "no longer needed");
-		}
-		else if (tag == "MODE")
-		{
-			mode = jEdit.getMode(modeName);
-			if (mode == null)
-			{
-				mode = new Mode(modeName);
-				jEdit.addMode(mode);
-			}
 		}
 		else if (tag == "KEYWORDS")
 		{
@@ -267,7 +284,14 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (tag == "RULES")
 		{
-			rules = new ParserRuleSet(lastSetName,mode);
+			if(lastSetName == null)
+				lastSetName = "MAIN";
+			rules = marker.getRuleSet(lastSetName);
+			if(rules == null)
+			{
+				rules = new ParserRuleSet(modeName,lastSetName);
+				marker.addRuleSet(rules);
+			}
 			rules.setIgnoreCase(lastIgnoreCase);
 			rules.setHighlightDigits(lastHighlightDigits);
 			if(lastDigitRE != null)
@@ -277,7 +301,7 @@ public class XModeHandler extends HandlerBase
 					rules.setDigitRegexp(new RE(lastDigitRE,
 						lastIgnoreCase
 						? RE.REG_ICASE : 0,
-						RESearchMatcher.RE_SYNTAX_JEDIT));
+						ParserRule.RE_SYNTAX_JEDIT));
 				}
 				catch(REException e)
 				{
@@ -301,15 +325,8 @@ public class XModeHandler extends HandlerBase
 
 		if (name.equals(tag))
 		{
-			//{{{ MODE
-			if (tag == "MODE")
-			{
-				// no need for this anymore
-				//mode.init();
-				mode.setTokenMarker(marker);
-			} //}}}
 			//{{{ PROPERTY
-			else if (tag == "PROPERTY")
+			if (tag == "PROPERTY")
 			{
 				props.put(propName,propValue);
 			} //}}}
@@ -319,7 +336,7 @@ public class XModeHandler extends HandlerBase
 				if(peekElement().equals("RULES"))
 					rules.setProperties(props);
 				else
-					mode.setProperties(props);
+					modeProps = props;
 
 				props = new Hashtable();
 			} //}}}
@@ -327,7 +344,6 @@ public class XModeHandler extends HandlerBase
 			else if (tag == "RULES")
 			{
 				rules.setKeywords(keywords);
-				marker.addRuleSet(lastSetName, rules);
 				keywords = null;
 				lastSetName = null;
 				lastEscape = null;
@@ -530,33 +546,66 @@ public class XModeHandler extends HandlerBase
 	//{{{ startDocument() method
 	public void startDocument()
 	{
-		marker = new TokenMarker();
-		marker.setName(modeName);
 		props = new Hashtable();
 
 		pushElement(null);
 	} //}}}
 
+	//{{{ getTokenMarker() method
+	public TokenMarker getTokenMarker()
+	{
+		return marker;
+	} //}}}
+
+	//{{{ getModeProperties() method
+	public Hashtable getModeProperties()
+	{
+		return modeProps;
+	} //}}}
+
+	//{{{ Protected members
+
+	//{{{ error() method
+	/**
+	 * Reports an error.
+	 * You must override this method so that the mode loader can do error
+	 * reporting.
+	 * @param msg The error type
+	 * @param subst A <code>String</code> or a <code>Throwable</code>
+	 * containing specific information
+	 * @since jEdit 4.2pre1
+	 */
+	protected abstract void error(String msg, Object subst);
+	//}}}
+
+	//{{{ getTokenMarker() method
+	/**
+	 * Returns the token marker for the given mode.
+	 * You must override this method so that the mode loader can resolve
+	 * delegate targets.
+	 * @param mode The mode name
+	 * @since jEdit 4.2pre1
+	 */
+	protected abstract TokenMarker getTokenMarker(String mode);
+	//}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private XmlParser parser;
 	private String modeName;
-	private String path;
-
 	private TokenMarker marker;
 	private KeywordMap keywords;
-	private Mode mode;
 	private Stack stateStack;
 	private String propName;
 	private String propValue;
 	private Hashtable props;
+	private Hashtable modeProps;
 	private String lastStart;
 	private String lastEnd;
 	private String lastKeyword;
 	private String lastSetName;
 	private String lastEscape;
-	private String lastDelegateSet;
+	private ParserRuleSet lastDelegateSet;
 	private String lastNoWordSep;
 	private ParserRuleSet rules;
 	private byte lastDefaultID = Token.NULL;
@@ -596,7 +645,7 @@ public class XModeHandler extends HandlerBase
 	{
 		if(k == null)
 		{
-			error("empty-keyword");
+			error("empty-keyword",null);
 			return;
 		}
 
@@ -624,34 +673,6 @@ public class XModeHandler extends HandlerBase
 	private String popElement()
 	{
 		return (String) stateStack.pop();
-	} //}}}
-
-	//{{{ error() method
-	private void error(String msg)
-	{
-		_error(jEdit.getProperty("xmode-error." + msg));
-	} //}}}
-
-	//{{{ error() method
-	private void error(String msg, String subst)
-	{
-		_error(jEdit.getProperty("xmode-error." + msg,new String[] { subst }));
-	} //}}}
-
-	//{{{ error() method
-	private void error(String msg, Throwable t)
-	{
-		_error(jEdit.getProperty("xmode-error." + msg,new String[] { t.toString() }));
-		Log.log(Log.ERROR,this,t);
-	} //}}}
-
-	//{{{ _error() method
-	private void _error(String msg)
-	{
-		Object[] args = { path, new Integer(parser.getLineNumber()),
-			new Integer(parser.getColumnNumber()), msg };
-
-		GUIUtilities.error(null,"xmode-error",args);
 	} //}}}
 
 	//}}}

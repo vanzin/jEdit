@@ -1851,7 +1851,8 @@ public class Buffer
 
 		if(value == null)
 		{
-			value = rules.getMode().getProperty(name);
+			value = jEdit.getMode(rules.getModeName())
+				.getProperty(name);
 
 			if(value == null)
 				value = mode.getProperty(name);

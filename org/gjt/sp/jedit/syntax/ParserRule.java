@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit.syntax;
 
 import gnu.regexp.*;
-import org.gjt.sp.jedit.search.RESearchMatcher;
 
 /**
  * A parser rule.
@@ -33,6 +32,17 @@ import org.gjt.sp.jedit.search.RESearchMatcher;
  */
 public class ParserRule
 {
+	/**
+	 * Perl5 syntax with character classes enabled.
+	 * @since jEdit 4.2pre1
+	 */
+	// copy and paste from RESyntaxMatcher to make syntax package
+	// independent of jEdit itself
+	public static final RESyntax RE_SYNTAX_JEDIT
+		= new RESyntax(RESyntax.RE_SYNTAX_PERL5)
+		.set(RESyntax.RE_CHAR_CLASSES)
+		.setLineSeparator("\n");
+
 	//{{{ Major actions
 	public static final int MAJOR_ACTIONS = 0x000000FF;
 	public static final int SEQ = 0;
@@ -69,43 +79,14 @@ public class ParserRule
 	public final int action;
 	public final byte token;
 
+	public ParserRuleSet delegate;
+
 	public ParserRule next;
 	//}}}
 
-	//{{{ getDelegateRuleSet() method
-	/**
-	 * Returns the parser rule set used to highlight text matched by this
-	 * rule. Only applicable for <code>SEQ</code>, <code>SPAN</code>,
-	 * <code>EOL_SPAN</code>, and <code>MARK_FOLLOWING</code> rules.
-	 *
-	 * @param tokenMarker The token marker
-	 */
-	public ParserRuleSet getDelegateRuleSet(TokenMarker tokenMarker)
-	{
-		// don't worry
-		if(delegate == null)
-		{
-			if((action & MAJOR_ACTIONS) == SEQ)
-				return null;
-			else
-				return ParserRuleSet.getStandardRuleSet(token);
-		}
-		else
-		{
-			ParserRuleSet delegateSet = tokenMarker.getRuleSet(delegate);
-			if(delegateSet == null)
-			{
-				return ParserRuleSet.getStandardRuleSet(
-					Token.NULL);
-			}
-			else
-				return delegateSet;
-		}
-	} //}}}
-
 	//{{{ createSequenceRule() method
 	public static final ParserRule createSequenceRule(
-		int posMatch, String seq, String delegate, byte id)
+		int posMatch, String seq, ParserRuleSet delegate, byte id)
 	{
 		int ruleAction = SEQ;
 
@@ -117,19 +98,19 @@ public class ParserRule
 	//{{{ createRegexpSequenceRule() method
 	public static final ParserRule createRegexpSequenceRule(
 		char hashChar, int posMatch, String seq,
-		String delegate, byte id, boolean ignoreCase)
+		ParserRuleSet delegate, byte id, boolean ignoreCase)
 		throws REException
 	{
 		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
 			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT), 0,
+			RE_SYNTAX_JEDIT), 0,
 			null, delegate, id);
 	} //}}}
 
 	//{{{ createSpanRule() method
 	public static final ParserRule createSpanRule(
 		int startPosMatch, String start, int endPosMatch, String end,
-		String delegate, byte id, boolean excludeMatch, boolean noLineBreak,
+		ParserRuleSet delegate, byte id, boolean excludeMatch, boolean noLineBreak,
 		boolean noWordBreak)
 	{
 		int ruleAction = SPAN |
@@ -146,7 +127,7 @@ public class ParserRule
 	//{{{ createRegexpSpanRule() method
 	public static final ParserRule createRegexpSpanRule(
 		char hashChar, int startPosMatch, String start,
-		int endPosMatch, String end, String delegate, byte id,
+		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		boolean excludeMatch, boolean noLineBreak, boolean noWordBreak,
 		boolean ignoreCase)
 		throws REException
@@ -158,13 +139,13 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, hashChar, startPosMatch, null,
 			new RE("\\A" + start,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT), endPosMatch,
+			RE_SYNTAX_JEDIT), endPosMatch,
 			end.toCharArray(), delegate, id);
 	} //}}}
 
 	//{{{ createEOLSpanRule() method
 	public static final ParserRule createEOLSpanRule(
-		int posMatch, String seq, String delegate, byte id,
+		int posMatch, String seq, ParserRuleSet delegate, byte id,
 		boolean excludeMatch)
 	{
 		int ruleAction = EOL_SPAN |
@@ -178,7 +159,7 @@ public class ParserRule
 
 	//{{{ createRegexpEOLSpanRule() method
 	public static final ParserRule createRegexpEOLSpanRule(
-		char hashChar, int posMatch, String seq, String delegate,
+		char hashChar, int posMatch, String seq, ParserRuleSet delegate,
 		byte id, boolean excludeMatch, boolean ignoreCase)
 		throws REException
 	{
@@ -188,7 +169,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, hashChar, posMatch,
 			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RESearchMatcher.RE_SYNTAX_JEDIT), 0, null,
+			RE_SYNTAX_JEDIT), 0, null,
 			delegate, id);
 	} //}}}
 
@@ -225,12 +206,10 @@ public class ParserRule
 	} //}}}
 
 	//{{{ Private members
-	private String delegate;
-
 	private ParserRule(int action, char hashChar,
 		int startPosMatch, char[] start, RE startRegexp,
 		int endPosMatch, char[] end,
-		String delegate, byte token)
+		ParserRuleSet delegate, byte token)
 	{
 		this.action = action;
 		this.hashChar = hashChar;
@@ -241,5 +220,13 @@ public class ParserRule
 		this.end = end;
 		this.delegate = delegate;
 		this.token = token;
+
+		if(this.delegate == null)
+		{
+			if((action & MAJOR_ACTIONS) != SEQ)
+			{
+				this.delegate = ParserRuleSet.getStandardRuleSet(token);
+			}
+		}
 	} //}}}
 }

@@ -423,6 +423,10 @@ release.
   an array of extended attribute names. Override getExtendedAttribute()
   method of VFS.DirectoryEntry to return attribute values.
 
+- The org.gjt.sp.jedit.syntax package can now be used from other
+  applications. All you need to provide is error handling and locating
+  the XML mode files. See the package javadoc for details.
+
 }}}
 
 }}}
