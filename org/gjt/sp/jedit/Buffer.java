@@ -1538,7 +1538,11 @@ public class Buffer
 	 */
 	public int getTabSize()
 	{
-		return getIntegerProperty("tabSize",8);
+		int tabSize = getIntegerProperty("tabSize",8);
+		if(tabSize <= 0)
+			return 8;
+		else
+			return tabSize;
 	} //}}}
 
 	//{{{ getIndentSize() method
@@ -1550,7 +1554,11 @@ public class Buffer
 	 */
 	public int getIndentSize()
 	{
-		return getIntegerProperty("indentSize",8);
+		int indentSize = getIntegerProperty("indentSize",8);
+		if(indentSize <= 0)
+			return 8;
+		else
+			return indentSize;
 	} //}}}
 
 	//{{{ getProperty() method

@@ -2,6 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre9
 
+Thanks to Thomas Galvin for contributing to this release.
+
 {{{ Scripting
 
 - Includes new "Create Get/Set Methods" macro (Thomas Galvin).
@@ -34,6 +36,17 @@ JEDIT 4.2 VERSION HISTORY
 - Collapsing a folder node in the file system browser that is
   immediately followed by an expanded folder node would remove all
   columns from the view.
+
+- This change was advertised in the pre8 change log but didn't actually
+  make it in:
+
+  - Fixed possible deadlock in VFSFileChooserDialog when changing the
+    cursor.
+
+- Hard wrap would wrap one word too early when inserting beyond the wrap
+  margin.
+
+- Fixed exception when tab size was set to 0.
 
 }}}
 

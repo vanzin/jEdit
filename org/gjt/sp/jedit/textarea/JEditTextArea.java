@@ -5793,6 +5793,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		String wordBreakChars = buffer.getStringProperty("wordBreakChars");
 
+		int lastInLine = 0; // last character before wrap
 		int logicalLength = 0; // length with tabs expanded
 		int lastWordOffset = -1;
 		boolean lastWasSpace = true;
@@ -5804,6 +5805,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				logicalLength += tabSize - (logicalLength % tabSize);
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
+					lastInLine = i;
 					lastWordOffset = i;
 					lastWasSpace = true;
 				}
@@ -5811,8 +5813,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else if(ch == ' ')
 			{
 				logicalLength++;
-				if(!lastWasSpace && logicalLength <= maxLineLen)
+				if(!lastWasSpace &&
+					logicalLength <= maxLineLen + 1)
 				{
+					lastInLine = i;
 					lastWordOffset = i;
 					lastWasSpace = true;
 				}
@@ -5822,47 +5826,46 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				logicalLength++;
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
+					lastInLine = i;
 					lastWordOffset = i;
 					lastWasSpace = true;
 				}
 			}
 			else
 			{
+				lastInLine = i;
 				logicalLength++;
 				lastWasSpace = false;
 			}
-
-			int insertNewLineAt;
-			if(spaceInserted && logicalLength == maxLineLen
-				&& i == caretPos - 1)
-			{
-				insertNewLineAt = caretPos;
-				returnValue = true;
-			}
-			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
-				insertNewLineAt = lastWordOffset;
-			else
-				continue;
-
-			try
-			{
-				buffer.beginCompoundEdit();
-				buffer.insert(start + insertNewLineAt,"\n");
-				// caretLine would have been incremented
-				// since insertNewLineAt <= caretPos
-				buffer.indentLine(caretLine,true);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-
-			/* only ever return true if space was pressed
-			 * with logicalLength == maxLineLen */
-			return returnValue;
 		}
 
-		return false;
+		int insertNewLineAt;
+		if(spaceInserted && logicalLength == maxLineLen
+			&& lastInLine == caretPos - 1)
+		{
+			insertNewLineAt = caretPos;
+		}
+		else if(logicalLength >= maxLineLen && lastWordOffset != -1)
+			insertNewLineAt = lastWordOffset;
+		else
+			return false;
+
+		try
+		{
+			buffer.beginCompoundEdit();
+			buffer.insert(start + insertNewLineAt,"\n");
+			// caretLine would have been incremented
+			// since insertNewLineAt <= caretPos
+			buffer.indentLine(caretLine,true);
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+
+		/* only ever return true if space was pressed
+		 * with logicalLength == maxLineLen */
+		return true;
 	} //}}}
 
 	//{{{ doWordCount() method
