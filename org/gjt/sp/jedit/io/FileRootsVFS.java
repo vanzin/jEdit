@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,9 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
+import java.lang.reflect.*;
 import java.io.File;
 import org.gjt.sp.util.Log;
 //}}}
@@ -41,6 +43,18 @@ public class FileRootsVFS extends VFS
 	public FileRootsVFS()
 	{
 		super("roots");
+
+		// JDK 1.4 adds a method to obtain a drive letter label
+		try
+		{
+			method = FileSystemView.class.getMethod("getSystemDisplayName",new Class[0]);
+			fsView = FileSystemView.getFileSystemView();
+			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() detected");
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() not detected");
+		}
 	} //}}}
 
 	//{{{ getCapabilities() method
@@ -80,7 +94,24 @@ public class FileRootsVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-		return new VFS.DirectoryEntry(path,path,path,VFS.DirectoryEntry
+		String name = path;
+
+		if(method != null)
+		{
+			try
+			{
+				name = (String)method.invoke(fsView,new Object[] {
+					new File(path) });
+			}
+			catch(Exception e) {}
+		}
+
+		return new VFS.DirectoryEntry(name,path,path,VFS.DirectoryEntry
 			.FILESYSTEM,0L,false);
 	} //}}}
+
+	//{{{ Private members
+	private FileSystemView fsView;
+	private Method method;
+	//}}}
 }
