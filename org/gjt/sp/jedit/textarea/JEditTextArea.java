@@ -232,7 +232,7 @@ public class JEditTextArea extends JComponent
 	//{{{ setBuffer() method
 	/**
 	 * Sets the buffer this text area is editing. Do not call this method -
-	 * use <code>EditPane.setBuffer()</code> instead.
+	 * use {@link org.gjt.sp.jedit.EditPane#setBuffer(Buffer)} instead.
 	 * @param buffer The buffer
 	 */
 	public void setBuffer(Buffer buffer)
@@ -3872,7 +3872,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ collapseFold() method
 	/**
-	 * Like <code>FoldVisibilityManager.collapseFold()</code>, but
+	 * Like {@link FoldVisibilityManager#collapseFold()}, but
 	 * also moves the caret to the first line of the fold.
 	 * @see FoldVisibilityManager#collapseFold(int)
 	 * @since jEdit 4.0pre3
@@ -3895,7 +3895,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ expandFold() method
 	/**
-	 * Like <code>FoldVisibilityManager.expandFold()</code>, but
+	 * Like {@link FoldVisibilityManager#expandFold()}, but
 	 * also moves the caret to the first sub-fold.
 	 * @see FoldVisibilityManager#expandFold(int,boolean)
 	 * @since jEdit 4.0pre3
@@ -4659,8 +4659,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ propertiesChanged() method
 	/**
-	 * Called by the <code>Buffer</code> class when necessary. Plugins
-	 * should not call this method.
+	 * Called by jEdit when necessary. Plugins should not call this method.
 	 */
 	public void propertiesChanged()
 	{
@@ -5080,7 +5079,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	/**
 	 * Returns the subregion containing the specified offset. A subregion
 	 * is a subset of a physical line. Each screen line corresponds to one
-	 * subregion. Unlike the <code>getScreenLineOfOffset()</code> method,
+	 * subregion. Unlike the {@link #getScreenLineOfOffset()} method,
 	 * this method works with non-visible lines too.
 	 * @since jEdit 4.0pre6
 	 */

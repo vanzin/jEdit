@@ -26,9 +26,9 @@ import org.gjt.sp.jedit.Buffer;
 
 /**
  * A interface for notification of changes to buffer text. While the
- * <code>BufferUpdate</code> EditBus message is used for general buffer
- * state changes, this interface is used for events which are fired
- * frequently, or for which performance is essential.<p>
+ * {@link org.gjt.sp.jedit.msg.BufferUpdate} EditBus message is used for
+ * general buffer state changes, this interface is used for events which are
+ * fired frequently, or for which performance is essential.<p>
  *
  * Because this interface is subject to change in the future, you
  * should subclass <code>BufferChangeAdapter</code> instead of

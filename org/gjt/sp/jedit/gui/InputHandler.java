@@ -55,8 +55,8 @@ public abstract class InputHandler extends KeyAdapter
 
 	//{{{ processKeyEvent() method
 	/**
-	 * Utility method, calls one of <code>keyPressed()</code>,
-	 * <code>keyReleased()</code>, or <code>keyTyped()</code>.
+	 * Utility method, calls one of {@link #keyPressed(KeyEvent)},
+	 * {@link #keyReleased(KeyEvent)}, or {@link #keyTyped(KeyEvent)}.
 	 * @since jEdit 4.0pre4
 	 */
 	public void processKeyEvent(KeyEvent evt)

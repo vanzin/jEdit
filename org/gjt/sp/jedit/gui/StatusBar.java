@@ -43,8 +43,8 @@ import org.gjt.sp.util.*;
  * Currently, it is used for the following:
  * <ul>
  * <li>Displaying caret position information
- * <li>Displaying <code>readNextChar()</code> prompts
- * <li>Displaying <code>setMessage()</code> messages
+ * <li>Displaying {@link #readNextChar(String,String)} prompts
+ * <li>Displaying {@link #setMessage(String)} messages
  * <li>Displaying I/O progress
  * <li>Displaying various editor settings
  * <li>Displaying memory status
@@ -316,6 +316,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	} //}}}
 
 	//{{{ setMessage() method
+	/**
+	 * Displays a status message.
+	 */
 	public void setMessage(String message)
 	{
 		if(tempTimer != null)

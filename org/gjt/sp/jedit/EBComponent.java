@@ -23,6 +23,8 @@ package org.gjt.sp.jedit;
  * A component on the EditBus. Every plugin class that uses the EditBus for
  * receiving messages must implement this interface.
  *
+ * @see org.gjt.sp.jedit.EBMessage
+ *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
  * @version $Id$
@@ -35,7 +37,7 @@ public interface EBComponent
 	 * Handles a message sent on the EditBus.
 	 *
 	 * This method must specify the type of responses the plugin will have
-	 * for various subclasses of the <code>EBMessage</code> class. Typically
+	 * for various subclasses of the {@link EBMessage} class. Typically
 	 * this is done with one or more <code>if</code> blocks that test
 	 * whether the message is an instance of a derived message class in
 	 * which the plugin has an interest. For example:

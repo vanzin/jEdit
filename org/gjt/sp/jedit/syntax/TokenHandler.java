@@ -35,7 +35,7 @@ public interface TokenHandler
 	/**
 	 * Called by the token marker when a syntax token has been parsed.
 	 * @param id The token type (one of the constants in the
-	 * <code>Token</code> class).
+	 * {@link Token} class).
 	 * @param offset The start offset of the token
 	 * @param length The number of characters in the token
 	 * @param context The line context

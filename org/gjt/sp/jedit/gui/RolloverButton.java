@@ -33,11 +33,11 @@ import javax.swing.border.*;
  * If you wish to have rollovers on your buttons, use this class.
  *
  * Unlike the Swing rollover support, this class works outside of
- * <code>JToolBars</code>, and does not require undocumented client
+ * <code>JToolBar</code>s, and does not require undocumented client
  * property hacks or JDK1.4-specific API calls.<p>
  *
- * Note: You should not call setBorder() on your buttons, as they probably
- * won't work properly.
+ * Note: You should not call <code>setBorder()</code> on your buttons,
+ * as they probably won't work properly.
  */
 public class RolloverButton extends JButton
 {

@@ -26,7 +26,7 @@ import org.gjt.sp.jedit.Buffer;
 
 /**
  * An adapter you can subclass to avoid having to implement all the methods
- * of the <code>BufferChangeListener</code> interface.
+ * of the {@link BufferChangeListener} interface.
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

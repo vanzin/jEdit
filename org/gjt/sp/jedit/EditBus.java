@@ -36,28 +36,27 @@ import org.gjt.sp.util.Log;
  * The EditBus maintains a list of objects that have requested to receive
  * messages. When a message is sent using this class, all registered
  * components receive it in turn. Classes for objects that subscribe to
- * the EditBus must implement the <code>EBComponent</code> interface, which
- * defines the single method <code>handleMessage()</code>.<p>
+ * the EditBus must implement the {@link EBComponent} interface, which
+ * defines the single method {@link EBComponent#handleMessage(EBMessage)}.<p>
  *
  * A plugin core class that extends the
- * <code>EBPlugin<code> abstract class (and whose name ends with
+ * {@link EBPlugin} abstract class (and whose name ends with
  * <code>Plugin<code> for identification purposes) will automatically be
  * added to the EditBus during jEdit's startup routine.  Any other
  * class - for example, a dockable window that needs to receive
  * notification of buffer changes - must perform its own registration by calling
- * <code>EditBus.addToBus(this)<code> during its initialization.
+ * {@link #addToBus(EBComponent)} during its initialization.
  * A convenient place to register in a class derived from <code>JComponent</code>
  * would be in an implementation of the <code>JComponent<code> method
  * <code>addNotify()<code>.<p>
  *
  * Message types sent by jEdit can be found in the
- * <code>org.gjt.sp.jedit.msg</code> package.<p>
+ * {@link org.gjt.sp.jedit.msg} package.<p>
  *
  * Plugins can also send their own messages - any object can send a message to
- * the EditBus by calling the static method <code>EditBus.send()</code>.
- * This method takes a single parameter, an <code>EBMessage</code>
- * object that is the message being sent. Most plugins, however,
- * only concern themselves with receiving, not sending, messages.
+ * the EditBus by calling the static method {@link #send(EBMessage)}.
+ * Most plugins, however, only concern themselves with receiving, not
+ * sending, messages.
  *
  * @see org.gjt.sp.jedit.EBComponent
  * @see org.gjt.sp.jedit.EBMessage
