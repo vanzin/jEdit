@@ -15,7 +15,7 @@ release.
 - Minor updates to JavaScript, PHP and ShellScript modes
   (Chris Petersen).
 
-- Updated Freemaker syntax highlighting (Jonathan Revusky).
+- Updated FreeMarker syntax highlighting (Jonathan Revusky).
 
 + Miscellaneous Changes:
 
@@ -74,10 +74,18 @@ release.
   on a remote server using, say, the FTP plugin and the plugin displayed
   a modal dialog box.
 
-- A "Save As" didn't update the file system browser if "two stage save"
-  was disabled.
+- If "two stage save" was disabled, saving a file did not send VFS
+  update messages, so features that relied on that message didn't work
+  (reload of file system browser, reload of edit modes).
 
 - Fixed minor XSLT syntax highlighting glitch.
+
+- Fixed minor CSS syntax highlighting glitch.
+
+- jEdit would misdetect Windows ME as Windows NT. This caused problems
+  for the Console plugin.
+
+- Right mouse button should work on MacOS X now.
 
 + API Additions:
 
@@ -90,7 +98,7 @@ contributing to this release.
 
 + Syntax Highlighting Changes:
 
-- Freemaker syntax highlighting (Jonathan Revusky).
+- FreeMarker syntax highlighting (Jonathan Revusky).
 
 + User Interface Changes:
 

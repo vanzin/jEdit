@@ -965,8 +965,8 @@
     </para>
     <informalexample>
      <para>
-      To turn each occurrence of <quote>Windows</quote> to <quote>Linux</quote>,
-      and turn each occurrence of <quote>Linux</quote> to <quote>Windows</quote>,
+      To replace each occurrence of <quote>Windows</quote> with <quote>Linux</quote>,
+      and each occurrence of <quote>Linux</quote> with <quote>Windows</quote>,
       search for the following regular expression:
      </para>
      <programlisting>(Windows|Linux)</programlisting>
@@ -999,7 +999,7 @@
      <programlisting><![CDATA[eval(_1)]]></programlisting>
     </informalexample>
     <para>
-     These two examples only scratch the surface; the possibilities are endless.
+     These examples only scratch the surface; the possibilities are endless.
     </para>
    </sect3>
   </sect2>

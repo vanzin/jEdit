@@ -1006,7 +1006,10 @@ public class GUIUtilities
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
 		if(OperatingSystem.isMacOS())
-			return evt.isControlDown();
+		{
+			return (evt.isControlDown() || ((evt.getModifiers()
+				& InputEvent.BUTTON2_MASK) != 0));
+		}
 		else
 			return ((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0);
 	} //}}}

@@ -134,7 +134,7 @@ public class OperatingSystem
 		{
 			String osName = System.getProperty("os.name");
 			if(osName.indexOf("Windows 9") != -1
-				|| osName.indexOf("Windows ME") != -1)
+				|| osName.indexOf("Windows M") != -1)
 			{
 				os = WINDOWS_9x;
 			}
