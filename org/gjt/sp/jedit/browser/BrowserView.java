@@ -53,14 +53,16 @@ class BrowserView extends JPanel
 
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
 		parentDirectories.setVisibleRowCount(5);
-		parentDirectories.addMouseListener(new MouseHandler());
+		parentDirectories.addMouseListener(new ParentMouseHandler());
 
 		final JScrollPane parentScroller = new JScrollPane(parentDirectories);
 		parentScroller.setMinimumSize(new Dimension(0,0));
 
 		table = new VFSDirectoryEntryTable(this);
+		table.addMouseListener(new TableMouseHandler());
 		JScrollPane tableScroller = new JScrollPane(table);
 		tableScroller.setMinimumSize(new Dimension(0,0));
+		tableScroller.getViewport().setBackground(table.getBackground());
 		splitPane = new JSplitPane(
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
@@ -257,6 +259,16 @@ class BrowserView extends JPanel
 		splitPane.setBorder(null);
 	} //}}}
 
+	//{{{ getBrowser() method
+	/**
+	 * Returns the associated <code>VFSBrowser</code> instance.
+	 * @since jEdit 4.2pre1
+	 */
+	public VFSBrowser getBrowser()
+	{
+		return browser;
+	} //}}}
+
 	//{{{ getTable() method
 	public VFSDirectoryEntryTable getTable()
 	{
@@ -352,8 +364,8 @@ class BrowserView extends JPanel
 		}
 	} //}}}
 
-	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
+	//{{{ ParentMouseHandler class
+	class ParentMouseHandler extends MouseAdapter
 	{
 		public void mousePressed(MouseEvent evt)
 		{
@@ -484,143 +496,96 @@ class BrowserView extends JPanel
 				super.processKeyEvent(evt);
 		} //}}}
 
-		//{{{ processMouseEvent() method
-		protected void processMouseEvent(MouseEvent evt)
-		{
-			//ToolTipManager ttm = ToolTipManager.sharedInstance();
-
-			TreePath path = getPathForLocation(evt.getX(),evt.getY());
-
-			switch(evt.getID())
-			{
-			/* //{{{ MOUSE_ENTERED...
-			case MouseEvent.MOUSE_ENTERED:
-				toolTipInitialDelay = ttm.getInitialDelay();
-				toolTipReshowDelay = ttm.getReshowDelay();
-				ttm.setInitialDelay(200);
-				ttm.setReshowDelay(0);
-				super.processMouseEvent(evt);
-				break; //}}}
-			//{{{ MOUSE_EXITED...
-			case MouseEvent.MOUSE_EXITED:
-				ttm.setInitialDelay(toolTipInitialDelay);
-				ttm.setReshowDelay(toolTipReshowDelay);
-				super.processMouseEvent(evt);
-				break; //}}}
-			//{{{ MOUSE_CLICKED...
-			case MouseEvent.MOUSE_CLICKED:
-				if(path != null)
-				{
-					// A double click is not only when clickCount == 2
-					// because every other click can open a new directory
-					if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0
-						&& evt.getClickCount() % 2 == 0)
-					{
-						setSelectionPath(path);
-
-						// don't pass double-clicks to tree, otherwise
-						// directory nodes will be expanded and we don't
-						// want that
-						browser.filesActivated((evt.isShiftDown()
-							? VFSBrowser.M_OPEN_NEW_VIEW
-							: VFSBrowser.M_OPEN),true);
-						break;
-					}
-					else if(GUIUtilities.isMiddleButton(evt.getModifiers()))
-					{
-						browser.filesActivated((evt.isShiftDown()
-							? VFSBrowser.M_OPEN_NEW_VIEW
-							: VFSBrowser.M_OPEN),true);
-					}
-					else if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-					{
-						if(!isPathSelected(path))
-							setSelectionPath(path);
-					}
-
-					super.processMouseEvent(evt);
-					break;
-				}
-				else if(GUIUtilities.isPopupTrigger(evt))
-					break;
-			//}}}
-			//{{{ MOUSE_PRESSED...
-			case MouseEvent.MOUSE_PRESSED:
-				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-				{
-					if(evt.getClickCount() % 2 == 0)
-						break;
-				}
-
-				if(GUIUtilities.isMiddleButton(evt.getModifiers()))
-				{
-					if(!isPathSelected(path))
-						setSelectionPath(path);
-				}
-				else if(GUIUtilities.isPopupTrigger(evt))
-				{
-					if(popup != null && popup.isVisible())
-					{
-						popup.setVisible(false);
-						popup = null;
-						break;
-					}
-
-					if(path == null)
-						showFilePopup(null,this,evt.getPoint());
-					else
-					{
-						if(!isPathSelected(path))
-							setSelectionPath(path);
-
-						showFilePopup(getSelectedFiles(),this,evt.getPoint());
-					}
-
-					break;
-				}
-
-				super.processMouseEvent(evt);
-				break;
-			//}}}
-			//{{{ MOUSE_RELEASED...
-			case MouseEvent.MOUSE_RELEASED:
-				if(!GUIUtilities.isPopupTrigger(evt)
-					&& path != null)
-				{
-					browser.filesSelected();
-				}
-
-				if(evt.getClickCount() % 2 != 0)
-					super.processMouseEvent(evt);
-
-				break;
-			//}}}
-			default:
-				super.processMouseEvent(evt);
-				break;
-			}
-		} //}}}
-
 		//}}}
 	}*/ //}}}
 
-	//{{{ TreeHandler class
-	/*class TreeHandler implements TreeExpansionListener
+	//{{{ TableMouseHandler class
+	class TableMouseHandler extends MouseAdapter
 	{
-		//{{{ treeExpanded() method
-		public void treeExpanded(TreeExpansionEvent evt)
+		//{{{ mouseClicked() method
+		public void mouseClicked(MouseEvent evt)
 		{
-			TreePath path = evt.getPath();
-			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)
-				path.getLastPathComponent();
-			Object userObject = treeNode.getUserObject();
-			if(userObject instanceof VFS.DirectoryEntry)
+			Point p = evt.getPoint();
+			int row = table.rowAtPoint(p);
+			int column = table.columnAtPoint(p);
+			if(row == -1)
+				return;
+			if(column == 0)
+				return;
+
+			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0
+				&& evt.getClickCount() % 2 == 0)
 			{
-				loadDirectory(treeNode,((VFS.DirectoryEntry)
-					userObject).path,true);
+				browser.filesActivated((evt.isShiftDown()
+					? VFSBrowser.M_OPEN_NEW_VIEW
+					: VFSBrowser.M_OPEN),true);
+			}
+			else if(GUIUtilities.isMiddleButton(evt.getModifiers()))
+			{
+				if(evt.isShiftDown())
+					table.getSelectionModel().addSelectionInterval(row,row);
+				else
+					table.getSelectionModel().setSelectionInterval(row,row);
+				browser.filesActivated((evt.isShiftDown()
+					? VFSBrowser.M_OPEN_NEW_VIEW
+					: VFSBrowser.M_OPEN),true);
 			}
 		} //}}}
-	}*/ //}}}
+
+		//{{{ mousePressed() method
+		public void mousePressed(MouseEvent evt)
+		{
+			Point p = evt.getPoint();
+			int row = table.rowAtPoint(p);
+			int column = table.columnAtPoint(p);
+			if(row == -1)
+				return;
+			if(column == 0)
+			{
+				table.toggleExpanded(row);
+				return;
+			}
+
+			if(GUIUtilities.isMiddleButton(evt.getModifiers()))
+			{
+				if(evt.isShiftDown())
+					table.getSelectionModel().addSelectionInterval(row,row);
+				else
+					table.getSelectionModel().setSelectionInterval(row,row);
+			}
+			else if(GUIUtilities.isPopupTrigger(evt))
+			{
+				if(popup != null && popup.isVisible())
+				{
+					popup.setVisible(false);
+					popup = null;
+					return;
+				}
+
+				if(evt.isShiftDown())
+					table.getSelectionModel().addSelectionInterval(row,row);
+				else
+					table.getSelectionModel().setSelectionInterval(row,row);
+
+				if(table.getSelectedRow() == -1)
+					showFilePopup(null,table,evt.getPoint());
+				else
+				{
+					showFilePopup(getSelectedFiles(),table,evt.getPoint());
+				}
+			}
+		} //}}}
+
+		//{{{ mouseReleased() method
+		public void mouseReleased(MouseEvent evt)
+		{
+			if(!GUIUtilities.isPopupTrigger(evt)
+				&& table.getSelectedRow() != -1)
+			{
+				browser.filesSelected();
+			}
+		} //}}}
+	} //}}}
 
 	static class LoadingPlaceholder {}
 	//}}}

@@ -48,7 +48,6 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		if(plainFont == null)
 			plainFont = jEdit.getFontProperty("metal.secondary.font");
 		boldFont = plainFont.deriveFont(Font.BOLD);
-		setBorder(new EmptyBorder(1,0,1,0));
 	} //}}}
 
 	//{{{ getTableCellRendererComponent() method
@@ -65,15 +64,8 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				(VFSDirectoryEntryTableModel.Entry)value;
 			VFS.DirectoryEntry file = entry.dirEntry;
 
-			underlined = (jEdit.getBuffer(file.path) != null);
-
-			setIcon(showIcons
-				? getIconForFile(file,entry.expanded)
-				: null);
 			setFont(file.type == VFS.DirectoryEntry.FILE
 				? plainFont : boldFont);
-			setText(file.name);
-			setBorder(new EmptyBorder(0,entry.level * 5,0,0));
 
 			if(!isSelected)
 			{
@@ -82,6 +74,35 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				setForeground(color == null
 					? UIManager.getColor("Tree.foreground")
 					: color);
+			}
+
+			if(column == 1)
+			{
+				underlined = (jEdit.getBuffer(file.path) != null);
+
+				setIcon(showIcons
+					? getIconForFile(file,entry.expanded)
+					: null);
+				setText(file.name);
+				setBorder(new EmptyBorder(1,entry.level * 10,1,1));
+			}
+			else if(column == 2)
+			{
+				underlined = false;
+				setIcon(null);
+				switch(entry.dirEntry.type)
+				{
+				case VFS.DirectoryEntry.FILE:
+					setText(jEdit.getProperty("vfs.browser.type.file"));
+					break;
+				case VFS.DirectoryEntry.DIRECTORY:
+					setText(jEdit.getProperty("vfs.browser.type.directory"));
+					break;
+				case VFS.DirectoryEntry.FILESYSTEM:
+					setText(jEdit.getProperty("vfs.browser.type.filesystem"));
+					break;
+				}
+				setBorder(new EmptyBorder(1,1,1,1));
 			}
 		}
 
