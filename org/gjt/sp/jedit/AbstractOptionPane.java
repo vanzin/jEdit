@@ -246,7 +246,6 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	//{{{ addSeparator() method
 	/**
 	 * Adds a separator component.
-	 * @param label The separator label property
 	 * @since jEdit 4.1pre7
 	 */
 	public void addSeparator()

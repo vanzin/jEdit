@@ -65,7 +65,7 @@ public class PluginUpdate extends EBMessage
 	//{{{ PluginUpdate constructor
 	/**
 	 * Creates a new plugin update message.
-	 * @param buffer The buffer
+	 * @param jar The plugin
 	 * @param what What happened
 	 * @param exit Is the editor exiting?
 	 * @since jEdit 4.2pre3

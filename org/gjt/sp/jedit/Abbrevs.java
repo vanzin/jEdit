@@ -51,8 +51,8 @@ public class Abbrevs
 	/**
 	 * Sets if abbreviations should be expanded after the
 	 * user finishes typing a word.
-	 * @param true If true, typing a non-alphanumeric characater will
-	 * automatically attempt to expand the current abbrev
+	 * @param expandOnInput If true, typing a non-alphanumeric character
+	 * will automatically attempt to expand the current abbrev
 	 */
 	public static void setExpandOnInput(boolean expandOnInput)
 	{
@@ -244,7 +244,7 @@ public class Abbrevs
 	//{{{ setModeAbbrevs() method
 	/**
 	 * Sets the mode-specific abbreviation set.
-	 * @param globalAbbrevs The new global abbrev set
+	 * @param modes The new mode abbrev set
 	 * @since jEdit 2.3pre1
 	 */
 	public static void setModeAbbrevs(Hashtable modes)

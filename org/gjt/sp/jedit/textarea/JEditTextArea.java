@@ -529,7 +529,6 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Sets the vertical scroll bar position.
 	 * @param physFirstLine The first physical line to display
-	 * @param skew A local screen line delta
 	 * @since jEdit 4.2pre1
 	 */
 	public void setFirstPhysicalLine(int physFirstLine)
@@ -1799,7 +1798,7 @@ forward_scan:		do
 	//{{{ removeFromSelection() method
 	/**
 	 * Deactivates the specified selection.
-	 * @param s The selection
+	 * @param sel The selection
 	 * @since jEdit 3.2pre1
 	 */
 	public void removeFromSelection(Selection sel)
@@ -2221,7 +2220,7 @@ forward_scan:		do
 	//{{{ setCaretPosition() method
 	/**
 	 * Sets the caret position and deactivates the selection.
-	 * @param caret The caret position
+	 * @param newCaret The caret position
 	 */
 	public void setCaretPosition(int newCaret)
 	{
@@ -2233,7 +2232,7 @@ forward_scan:		do
 	//{{{ setCaretPosition() method
 	/**
 	 * Sets the caret position and deactivates the selection.
-	 * @param caret The caret position
+	 * @param newCaret The caret position
 	 * @param doElectricScroll Do electric scrolling?
 	 */
 	public void setCaretPosition(int newCaret, boolean doElectricScroll)
@@ -2246,7 +2245,7 @@ forward_scan:		do
 	//{{{ moveCaretPosition() method
 	/**
 	 * Sets the caret position without deactivating the selection.
-	 * @param caret The caret position
+	 * @param newCaret The caret position
 	 */
 	public void moveCaretPosition(int newCaret)
 	{
@@ -2256,7 +2255,7 @@ forward_scan:		do
 	//{{{ moveCaretPosition() method
 	/**
 	 * Sets the caret position without deactivating the selection.
-	 * @param caret The caret position
+	 * @param newCaret The caret position
 	 * @param doElectricScroll Do electric scrolling?
 	 */
 	public void moveCaretPosition(int newCaret, boolean doElectricScroll)
@@ -2271,7 +2270,7 @@ forward_scan:		do
 	public static int ELECTRIC_SCROLL = 2;
 	/**
 	 * Sets the caret position without deactivating the selection.
-	 * @param caret The caret position
+	 * @param newCaret The caret position
 	 * @param scrollMode The scroll mode (NO_SCROLL, NORMAL_SCROLL, or
 	 * ELECTRIC_SCROLL).
 	 * @since jEdit 4.2pre1
@@ -3863,7 +3862,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ deleteWord() method
 	/**
-	 * Deletes the word in front of the caret
+	 * Deletes the word in front of the caret.
+	 *
 .	 * @param eatWhitespace If true, will eat whitespace
 	 * @since jEdit 4.2pre5
 	 */
@@ -3980,14 +3980,16 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	/**
 	 * Set rectangular selection on or off according to the value of
 	 * <code>rectangularSelectionMode</code>. This only affects the ability
-	 * to make multiple selections from the keyboard. A rectangular selection
-	 * can always be created by dragging with the mouse by holding down
-	 * <b>Control</b>, regardless of the state of this flag.
+	 * to make multiple selections from the keyboard. A rectangular
+	 * selection can always be created by dragging with the mouse by holding
+	 * down <b>Control</b>, regardless of the state of this flag.
 	 *
-	 * @param multi Should rectangular selection be enabled?
+	 * @param rectangularSelectionMode Should rectangular selection be
+	 * enabled?
 	 * @since jEdit 4.2pre1
 	 */
-	public final void setRectangularSelectionEnabled(boolean rectangularSelectionMode)
+	public final void setRectangularSelectionEnabled(
+		boolean rectangularSelectionMode)
 	{
 		this.rectangularSelectionMode = rectangularSelectionMode;
 		if(view.getStatus() != null)
@@ -5920,6 +5922,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				break;
 			}
 		}
+
+		// Fix bug #922951 Off-by-one error in Word Count
+		if(!word)
+			words--;
+
 		Object[] args = { new Integer(characters), new Integer(words),
 			new Integer(lines) };
 		GUIUtilities.message(view,"wordcount",args);

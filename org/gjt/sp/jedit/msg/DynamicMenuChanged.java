@@ -38,7 +38,7 @@ public class DynamicMenuChanged extends EBMessage
 	//{{{ DynamicMenuChanged constructor
 	/**
 	 * Creates a new dynamic menu changed message.
-	 * @param menu The menu name. All dynamic menus with this name will be
+	 * @param name The menu name. All dynamic menus with this name will be
 	 * recreated next time they are displayed.
 	 */
 	public DynamicMenuChanged(String name)

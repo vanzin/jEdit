@@ -44,8 +44,8 @@ public interface BufferChangeListener
 	/**
 	 * Called when line fold levels change.
 	 * @param buffer The buffer in question
-	 * @param start The start line number
-	 * @param end The end line number
+	 * @param startLine The start line number
+	 * @param endLine The end line number
 	 * @since jEdit 4.0pre1
 	 */
 	void foldLevelChanged(Buffer buffer, int startLine, int endLine);

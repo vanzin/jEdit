@@ -6,23 +6,6 @@ and quirks that I need to fix eventually.
 -bsh replace error: use bsh error dialog
 - soft wrap + control click beyond EOL
 
-[error] AWT-EventQueue-0: java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 29
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:539)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.java:248)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea$MouseHandler.doSingleClick(JEditTextArea.java:6542)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea$MouseHandler.mousePressed(JEditTextArea.java:6523)
-[error] AWT-EventQueue-0:  at java.awt.AWTEventMulticaster.mousePressed(AWTEventMulticaster.java:222)
-[error] AWT-EventQueue-0:  at java.awt.AWTEventMulticaster.mousePressed(AWTEventMulticaster.java:221)
-[error] AWT-EventQueue-0:  at java.awt.AWTEventMulticaster.mousePressed(AWTEventMulticaster.java:221)
-
-[error] main: java.lang.NullPointerException
-[error] main:  at org.gjt.sp.jedit.PluginJAR.setPluginCache(PluginJAR.java:721)
-[error] main:  at org.gjt.sp.jedit.PluginJAR.init(PluginJAR.java:767)
-[error] main:  at org.gjt.sp.jedit.jEdit.addPluginJAR(jEdit.java:1036)
-[error] main:  at org.gjt.sp.jedit.jEdit.addPluginJARsFromDirectory(jEdit.java:1083)
-[error] main:  at org.gjt.sp.jedit.jEdit.initPlugins(jEdit.java:3090)
-[error] main:  at org.gjt.sp.jedit.jEdit.main(jEdit.java:396)
-
 wrapped dock buttons broken
 
 4.2 plugin guide:

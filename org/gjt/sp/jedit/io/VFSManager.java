@@ -308,7 +308,7 @@ public class VFSManager
 	 *
 	 * @param comp The component
 	 * @param path The path name that caused the error
-	 * @param message The error message property name
+	 * @param messageProp The error message property name
 	 * @param args Positional parameters
 	 * @since jEdit 4.0pre3
 	 */

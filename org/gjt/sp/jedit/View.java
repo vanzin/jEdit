@@ -470,7 +470,7 @@ public class View extends JFrame implements EBComponent
 	 * view. For example, the complete word command uses this so
 	 * that all key events are passed to the word list popup while
 	 * it is visible.
-	 * @param comp The component
+	 * @param listener The key event interceptor.
 	 */
 	public void setKeyEventInterceptor(KeyListener listener)
 	{

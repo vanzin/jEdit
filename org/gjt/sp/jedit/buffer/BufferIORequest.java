@@ -91,8 +91,8 @@ public class BufferIORequest extends WorkRequest
 	public static final int UTF8_MAGIC_3 = 0xbf;
 
 	/**
-	 * Length of longest XML PI used for encoding detection.
-	 * <?xml version="1.0" encoding="................"?>
+	 * Length of longest XML PI used for encoding detection.<p>
+	 * &lt;?xml version="1.0" encoding="................"?&gt;
 	 */
 	public static final int XML_PI_LENGTH = 50;
 	//}}}

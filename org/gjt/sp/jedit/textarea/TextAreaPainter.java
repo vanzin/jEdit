@@ -659,13 +659,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		super.setFont(font);
 		fm = getFontMetrics(font);
 		textArea.recalculateVisibleLines();
+		if(textArea.getBuffer() != null
+			&& textArea.getBuffer().isLoaded())
+			textArea.recalculateLastPhysicalLine();
 		textArea.propertiesChanged();
 	} //}}}
 
 	//{{{ paintComponent() method
 	/**
 	 * Repaints the text.
-	 * @param g The graphics context
+	 * @param _gfx The graphics context
 	 */
 	public void paintComponent(Graphics _gfx)
 	{

@@ -48,7 +48,7 @@ public abstract class WorkRequest implements Runnable
 
 	/**
 	 * Sets the progress value.
-	 * @param status The progress value.
+	 * @param value The progress value.
 	 */
 	public void setProgressValue(int value)
 	{
@@ -59,7 +59,7 @@ public abstract class WorkRequest implements Runnable
 
 	/**
 	 * Sets the maximum progress value.
-	 * @param status The progress value.
+	 * @param value The progress value.
 	 */
 	public void setProgressMaximum(int value)
 	{
