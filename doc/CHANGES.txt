@@ -1,10 +1,10 @@
 JEDIT 4.2 VERSION HISTORY
 
-* Version 4.2pre1
+{{{ Version 4.2pre1
 
 Thanks to Kris Kopicki for contributing to this release.
 
-+ Editing:
+{{{ Editing
 
 - Quick copy now more consistent with usual mouse behavior:
 
@@ -18,11 +18,20 @@ Thanks to Kris Kopicki for contributing to this release.
 - Register contents are now saved across editing sessions in
   ~/.jedit/registers.xml.
 
-+ Syntax Highlighting:
+}}}
+{{{ Input
+
+- Entering a prefix while a JTextComponent has focus will move focus to
+  the text area. This allows shortcuts like C+e n n to be used from the
+  search bar and such without having to prefix them with C+e C+e first.
+
+}}}
+{{{ Syntax Highlighting
 
 - Improved C pre-processor syntax highlighting.
 
-+ User Interface:
+}}}
+{{{ User Interface
 
 - If regular expressions are enabled, Search->Find Previous now shows a
   dialog box message instead of silently searching forwards.
@@ -44,13 +53,15 @@ Thanks to Kris Kopicki for contributing to this release.
   since the last save.
 
 - Moved plugin option panes to a new Plugins->Plugin Options dialog box.
- 
-+ Scripting:
+
+}}}
+{{{ Scripting
 
 - BeanShell scripts now preset the 'wm' variable to
   view.getDockableWindowManager(). Useful for actions.xml.
 
-+ Optimizations:
+}}}
+{{{ Optimizations
 
 - Faster buffer loading.
 
@@ -67,7 +78,8 @@ Thanks to Kris Kopicki for contributing to this release.
   use the Cocoa API, and a dock menu has been added. The dock menu
   provides similar functionality to the plugin menu (Kris Kopicki).
 
-+ Bug Fixes:
+}}}
+{{{ Bug Fixes
 
 - jEdit no longer minimizes and then restores windows when files are
   opened through the edit server on windows. This was done to work
@@ -87,5 +99,12 @@ Thanks to Kris Kopicki for contributing to this release.
   directory in the parent directories list would search in the wrong
   directory.
 
+- Fixed problems with bracket matching not being activated when
+  switching between split panes.
+
+}}}
+
+}}}
+
 jEdit buffer local properties:
-:wrap=hard:maxLineLen=72:indentSize=2:
+:wrap=hard:folding=explicit:maxLineLen=72:indentSize=2:
