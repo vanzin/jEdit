@@ -78,6 +78,7 @@ effect.
 
 Syntax highlighting for the following file types has been added:
 
+- JHTML
 - MIPS R2000 assembly
 - Objective C
 - Occam

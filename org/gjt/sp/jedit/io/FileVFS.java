@@ -20,8 +20,8 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
+import java.lang.reflect.Method;
 import java.io.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -40,7 +40,6 @@ public class FileVFS extends VFS
 	public FileVFS()
 	{
 		super("file");
-		fsView = FileSystemView.getFileSystemView();
 	}
 
 	public int getCapabilities()
@@ -62,13 +61,6 @@ public class FileVFS extends VFS
 
 		if(path.equals("/"))
 			return FileRootsVFS.PROTOCOL + ":";
-
-		/* File[] roots = fsView.getRoots();
-		for(int i = 0; i < roots.length; i++)
-		{
-			if(roots[i].getPath().equals(path))
-				return FileRootsVFS.PROTOCOL + ":";
-		} */
 
 		return MiscUtilities.getParentOfPath(path);
 	}
@@ -208,19 +200,10 @@ public class FileVFS extends VFS
 			else
 				_path = path + File.separatorChar + name;
 
-			File file = new File(_path);
+			VFS.DirectoryEntry entry = _getDirectoryEntry(null,_path,null);
 
-			int type;
-			if(file.isDirectory())
-				type = VFS.DirectoryEntry.DIRECTORY;
-			else
-				type = VFS.DirectoryEntry.FILE;
-
-			VFS.DirectoryEntry entry = new VFS.DirectoryEntry(
-				name,_path,_path,type,file.length(),
-				fsView.isHiddenFile(file));
-
-			list2.addElement(entry);
+			if(entry != null)
+				list2.addElement(entry);
 		}
 
 		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[list2.size()];
@@ -246,8 +229,27 @@ public class FileVFS extends VFS
 		else
 			type = VFS.DirectoryEntry.FILE;
 
+		boolean hidden;
+		if(method != null)
+		{
+			try
+			{
+				hidden = Boolean.TRUE.equals(method.invoke(
+					file,new Object[0]));
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+				hidden = false;
+			}
+		}
+		else if(isUnix)
+			hidden = (file.getName().charAt(0) == '.');
+		else
+			hidden = false;
+
 		return new VFS.DirectoryEntry(file.getName(),path,path,type,
-			file.length(),fsView.isHiddenFile(file));
+			file.length(),hidden);
 	}
 
 	public boolean _delete(Object session, String path, Component comp)
@@ -497,8 +499,8 @@ public class FileVFS extends VFS
 	}
 	
 	// private members
-	private FileSystemView fsView;
 	private static boolean isUnix;
+	private static Method method;
 
 	static
 	{
@@ -507,7 +509,7 @@ public class FileVFS extends VFS
 		if(File.separatorChar == '/')
 		{
 			String osName = System.getProperty("os.name");
-			if(osName.indexOf("MacOS") != -1)
+			if(osName.indexOf("Mac") != -1)
 			{
 				if(osName.indexOf("X") != -1)
 				{
@@ -530,5 +532,17 @@ public class FileVFS extends VFS
 		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
 			+ (isUnix ? "detected; will" : "not detected; will not")
 			+ " use permission-preserving code");
+
+		try
+		{
+			method = File.class.getMethod("isHidden",new Class[0]);
+			Log.log(Log.DEBUG,FileVFS.class,"File.isHidden() method"
+				+ " detected");
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.DEBUG,FileVFS.class,"File.isHidden() method"
+				+ " not detected");
+		}
 	}
 }
