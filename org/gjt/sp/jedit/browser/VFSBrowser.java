@@ -975,61 +975,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	static
 	{
-		actionContext = new ActionContext()
-		{
-			public void invokeAction(EventObject evt,
-				EditAction action)
-			{
-				VFSBrowser browser = (VFSBrowser)
-					GUIUtilities.getComponentParent(
-					(Component)evt.getSource(),
-					VFSBrowser.class);
-
-				// in the future we will want something better,
-				// eg. having an 'evt' object passed to
-				// EditAction.invoke().
-
-				// for now, since all browser actions are
-				// written in beanshell we set the 'browser'
-				// variable directly.
-				NameSpace global = BeanShell.getNameSpace();
-				try
-				{
-					global.setVariable("browser",
-						browser);
-					global.setVariable("files",
-						browser.getSelectedFiles());
-
-					View view = browser.getView();
-					// I guess ideally all browsers
-					// should have views, but since they
-					// don't, we just use the active view
-					// in that case, since some actions
-					// depend on a view being there and
-					// I don't want to add checks to
-					// them all
-					if(view == null)
-						view = jEdit.getActiveView();
-					action.invoke(view);
-				}
-				catch(UtilEvalError err)
-				{
-					Log.log(Log.ERROR,this,err);
-				}
-				finally
-				{
-					try
-					{
-						global.setVariable("browser",null);
-						global.setVariable("files",null);
-					}
-					catch(UtilEvalError err)
-					{
-						Log.log(Log.ERROR,this,err);
-					}
-				}
-			}
-		};
+		actionContext = new BrowserActionContext();
 
 		ActionSet builtInActionSet = new ActionSet(null,null,null,
 			jEdit.class.getResource("browser.actions.xml"));
@@ -1331,11 +1277,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			ArrayList vec = new ArrayList();
 
 			//{{{ old API
-			Enumeration enum = VFSManager.getFilesystems();
+			Enumeration e = VFSManager.getFilesystems();
 
-			while(enum.hasMoreElements())
+			while(e.hasMoreElements())
 			{
-				VFS vfs = (VFS)enum.nextElement();
+				VFS vfs = (VFS)e.nextElement();
 				if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 					continue;
 
@@ -1662,6 +1608,92 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		public String toString()
 		{
 			return (String)loadInfo[0];
+		}
+	} //}}}
+
+	//{{{ BrowserActionContext class
+	static class BrowserActionContext extends ActionContext
+	{
+		/**
+		 * If event source hierarchy contains a VFSDirectoryEntryTable,
+		 * this is the currently selected files there. Otherwise, this
+		 * is the currently selected item in the parent directory list.
+		 */
+		private VFS.DirectoryEntry[] getSelectedFiles(EventObject evt,
+			VFSBrowser browser)
+		{
+			Component source = (Component)evt.getSource();
+
+			if(GUIUtilities.getComponentParent(source,JList.class)
+				!= null)
+			{
+				Object[] selected = browser.getBrowserView()
+					.getParentDirectoryList()
+					.getSelectedValues();
+				VFS.DirectoryEntry[] returnValue
+					= new VFS.DirectoryEntry[
+					selected.length];
+				System.arraycopy(selected,0,returnValue,0,
+					selected.length);
+				return returnValue;
+			}
+			else
+			{
+				return browser.getSelectedFiles();
+			}
+		}
+
+		public void invokeAction(EventObject evt, EditAction action)
+		{
+			VFSBrowser browser = (VFSBrowser)
+				GUIUtilities.getComponentParent(
+				(Component)evt.getSource(),
+				VFSBrowser.class);
+
+			VFS.DirectoryEntry[] files = getSelectedFiles(evt,
+				browser);
+
+			// in the future we will want something better,
+			// eg. having an 'evt' object passed to
+			// EditAction.invoke().
+
+			// for now, since all browser actions are
+			// written in beanshell we set the 'browser'
+			// variable directly.
+			NameSpace global = BeanShell.getNameSpace();
+			try
+			{
+				global.setVariable("browser",browser);
+				global.setVariable("files",files);
+
+				View view = browser.getView();
+				// I guess ideally all browsers
+				// should have views, but since they
+				// don't, we just use the active view
+				// in that case, since some actions
+				// depend on a view being there and
+				// I don't want to add checks to
+				// them all
+				if(view == null)
+					view = jEdit.getActiveView();
+				action.invoke(view);
+			}
+			catch(UtilEvalError err)
+			{
+				Log.log(Log.ERROR,this,err);
+			}
+			finally
+			{
+				try
+				{
+					global.setVariable("browser",null);
+					global.setVariable("files",null);
+				}
+				catch(UtilEvalError err)
+				{
+					Log.log(Log.ERROR,this,err);
+				}
+			}
 		}
 	} //}}}
 

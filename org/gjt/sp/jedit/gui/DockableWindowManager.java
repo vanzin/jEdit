@@ -1510,7 +1510,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			int bottomButtonHeight = -1;
 			int leftButtonWidth = -1;
 			int rightButtonWidth = -1;
-			int _width, _height;
 
 			Dimension _top = top.getPreferredSize();
 			Dimension _left = left.getPreferredSize();
@@ -1521,6 +1520,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			int bottomHeight = _bottom.height;
 			int leftWidth = _left.width;
 			int rightWidth = _right.width;
+
+			boolean topEmpty = ((Container)topButtons)
+				.getComponentCount() <= 2;
+			boolean leftEmpty = ((Container)leftButtons)
+				.getComponentCount() <= 2;
+			boolean bottomEmpty = ((Container)bottomButtons)
+				.getComponentCount() <= 2;
+			boolean rightEmpty = ((Container)rightButtons)
+				.getComponentCount() <= 2;
 
 			Dimension closeBoxSize;
 			if(((Container)topButtons).getComponentCount() == 0)
@@ -1537,28 +1545,32 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			if(alternateLayout)
 			{
 				//{{{ Lay out independent buttons
-				_width = size.width;
+				int _width = size.width;
+
+				int padding = (leftEmpty&&rightEmpty)
+					? 0 : closeBoxWidth;
 
 				topButtonHeight = DockableWindowManager.this.
 					top.getWrappedDimension(_width
 					- closeBoxWidth * 2);
 				topButtons.setBounds(
-					closeBoxWidth,
+					padding,
 					0,
-					size.width - closeBoxWidth * 2,
+					size.width - padding * 2,
 					topButtonHeight);
 
 				bottomButtonHeight = DockableWindowManager.this.
 					bottom.getWrappedDimension(_width);
 				bottomButtons.setBounds(
-					closeBoxWidth,
+					padding,
 					size.height - bottomButtonHeight,
-					size.width - closeBoxWidth * 2,
+					size.width - padding * 2,
 					bottomButtonHeight);
 
-				_height = size.height
+				int _height = size.height
 					- topButtonHeight
-					- bottomButtonHeight; //}}}
+					- bottomButtonHeight;
+				//}}}
 
 				//{{{ Lay out dependent buttons
 				leftButtonWidth = DockableWindowManager.this.
@@ -1626,27 +1638,32 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			else
 			{
 				//{{{ Lay out independent buttons
-				_height = size.height;
+				int _height = size.height;
+
+				int padding = (topEmpty && bottomEmpty
+					? 0 : closeBoxWidth);
 
 				leftButtonWidth = DockableWindowManager.this.
 					left.getWrappedDimension(_height
 					- closeBoxWidth * 2);
 				leftButtons.setBounds(
 					0,
-					closeBoxWidth,
+					padding,
 					leftButtonWidth,
-					_height - closeBoxWidth * 2);
+					_height - padding * 2);
 
 				rightButtonWidth = DockableWindowManager.this.
 					right.getWrappedDimension(_height);
 				rightButtons.setBounds(
 					size.width - rightButtonWidth,
-					closeBoxWidth,
+					padding,
 					rightButtonWidth,
-					_height - closeBoxWidth * 2);
+					_height - padding * 2);
 
-				_width = size.width - leftButtonWidth
-					- rightButtonWidth; //}}}
+				int _width = size.width
+					- leftButtonWidth
+					- rightButtonWidth;
+				//}}}
 
 				//{{{ Lay out dependent buttons
 				topButtonHeight = DockableWindowManager.this.

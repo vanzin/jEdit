@@ -3417,10 +3417,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public Marker getMarker(char shortcut)
 	{
-		Enumeration enum = markers.elements();
-		while(enum.hasMoreElements())
+		Enumeration e = markers.elements();
+		while(e.hasMoreElements())
 		{
-			Marker marker = (Marker)enum.nextElement();
+			Marker marker = (Marker)e.nextElement();
 			if(marker.getShortcut() == shortcut)
 				return marker;
 		}
@@ -3522,10 +3522,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 		properties = new HashMap();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
-		Enumeration enum = props.keys();
-		while(enum.hasMoreElements())
+		Enumeration e = props.keys();
+		while(e.hasMoreElements())
 		{
-			Object key = enum.nextElement();
+			Object key = e.nextElement();
 			Object value = props.get(key);
 
 			properties.put(key,new PropValue(value,false));

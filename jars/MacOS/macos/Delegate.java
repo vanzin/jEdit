@@ -87,7 +87,8 @@ public class Delegate extends ApplicationAdapter
 		// Add type/creator to local buffer property list on open
 		else if (msg.getWhat() == BufferUpdate.CREATED)
 		{			
-			if (jEdit.getProperty("MacOSPlugin.preserveCodes").equals("true"))
+			if ("true".equals(
+				jEdit.getProperty("MacOSPlugin.preserveCodes")))
 			{
 				try {
 					int type = FileManager.getFileType(buffer.getPath());

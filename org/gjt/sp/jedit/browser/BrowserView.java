@@ -321,8 +321,19 @@ class BrowserView extends JPanel
 
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
 			{
-				int index = parentDirectories.getModel().getSize() - 1;
-				parentDirectories.setSelectedIndex(index);
+				// we use SwingUtilities.invokeLater()
+				// so that the action is executed before
+				// the popup is hidden.
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						int index = parentDirectories
+							.getModel()
+							.getSize() - 1;
+						parentDirectories.setSelectedIndex(index);
+					}
+				});
 			}
 		});
 		GUIUtilities.showPopupMenu(popup,comp,point.x,point.y);

@@ -324,11 +324,11 @@ public class GrabKeyDialog extends JDialog
 			return null;
 
 		String spacedShortcut = shortcut + " ";
-		Enumeration enum = allBindings.elements();
+		Enumeration e = allBindings.elements();
 
-		while(enum.hasMoreElements())
+		while(e.hasMoreElements())
 		{
-			KeyBinding kb = (KeyBinding)enum.nextElement();
+			KeyBinding kb = (KeyBinding)e.nextElement();
 
 			if(!kb.isAssigned())
 				continue;
