@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.OperatingSystem;
  *
  * Unlike the Swing rollover support, this class works outside of
  * <code>JToolBars</code>, and does not require undocumented client
- * property hacks (or JDK1.4-specific API calls).<p>
+ * property hacks or JDK1.4-specific API calls.<p>
  *
  * Note: You should not call setBorder() on your buttons, as they probably
  * won't work properly.
@@ -48,9 +48,7 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
-		if(OperatingSystem.isMacOSLF())
-			setBorder(new EtchedBorder());
-
+		setBorder(new EtchedBorder());
 		setBorderPainted(false);
 
 		addMouseListener(new MouseOverHandler());
@@ -67,6 +65,42 @@ public class RolloverButton extends JButton
 		setIcon(icon);
 	} //}}}
 
+	//{{{ setEnabled() method
+	/**
+	 * @overrides javax.swing.AbstractButton.setEnabled()
+	 * @since jEdit 4.0pre3
+	 * @param b true to enable the button, otherwise false
+	 */
+	public void setEnabled(boolean b)
+	{
+		super.setEnabled(b);
+		setBorderPainted(false);
+		repaint();
+	} //}}}
+
+	//{{{ paint() method
+	/**
+	 * Custom paint method for fading the button when
+	 * it is disabled
+	 * @overrides javax.swing.JComponent.paint()
+	 * @since jEdit 4.0pre3
+	 * @param g the graphics context
+	 */
+	public void paint(Graphics g)
+	{
+		if (isEnabled())
+			super.paint(g);
+		else
+		{
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setComposite(c);
+			super.paint(g2);
+		}
+	} //}}}
+
+	private static AlphaComposite c = AlphaComposite.getInstance(
+		AlphaComposite.SRC_OVER, 0.5f);
+
 	//{{{ MouseHandler class
 	/**
 	 * Make the border visible/invisible on rollovers
@@ -75,7 +109,8 @@ public class RolloverButton extends JButton
 	{
 		public void mouseEntered(MouseEvent e)
 		{
-			setBorderPainted(true);
+			if (isEnabled())
+				setBorderPainted(true);
 		}
 
 		public void mouseExited(MouseEvent e)

@@ -82,6 +82,14 @@ public class Mode
 				+ " globs in mode " + name);
 			Log.log(Log.ERROR,this,re);
 		}
+
+		// Fix for this bug:
+		// -- Put a mode into the user dir with the same name as one
+		//    on the system dir.
+		// -- Reload edit modes.
+		// -- Old mode from system dir still used for highlighting
+		//    until jEdit restart.
+		marker = null;
 	} //}}}
 
 	//{{{ getTokenMarker() method
