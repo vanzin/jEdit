@@ -36,6 +36,20 @@ Thanks to Ken Turner for contributing to this release.
   where if you press C+f and type a search string really quickly,
   characters would be inserted in the text area.
 
+- Undo queue is now stored in a linked list, rather than an array. As
+  offensive as it might sound, the array was being shifted along one
+  position for each (non-compound) edit! Especially if the undo limit
+  was set to a large value this could cause slowdowns.
+
+- The buffer no longer grabs a write lock when calculating a fold level
+  or syntax tokens for a line. This should prevent the text area from
+  stalling if the buffer is being saved in an I/O thread.
+
+- Fixed a performance regression from pre2. If all line contexts were
+  valid, a subsequent request for a line's syntax tokens would
+  invalidate all contexts from that line onwards. This did not happen if
+  for example all but one context was valid.
+
 }}}
 {{{ Bug Fixes
 
@@ -81,13 +95,18 @@ Thanks to Ken Turner for contributing to this release.
 - The "Abbreviations" option pane now correctly handles expansions with
   duplicate abbreviations.
 
+- An undoable edit is no longer merged if there is a pending redo. This
+  would cause the undo queue to become inconsistent.
+
 }}}
 {{{ API Changes
 
 - TokenHandler.handleToken() method now takes a Segment instance as
   the first parameter.
 
-}}}
+- Direct construction of SearchDialog no longer possible due to internal
+  changes. The SearchDialog.showSearchDialog() method that has been
+  recommended since jEdit 4.0 still works.
 
 }}}
 

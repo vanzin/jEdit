@@ -3,10 +3,12 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- style editor dialog box needs ui work
+- print & markTokens()
+- dockables for unloaded plugins
 - 'remove plugins' dialog: use a text area
 - tall caret and tab
 - tall caret and backspace
-- why are { undone individually?
 - is this bogus?
 				else if(fvm[endi] == startLine + numLines)
 				{
@@ -221,14 +223,8 @@ and quirks that I need to fix eventually.
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
 - inserting lines repaints whole text area
-- better data structure for undo queue
-- figure out a way to write the autosave without needing a read lock the
-  whole time
-- scrollTo() wiggle adds 4 seconds to scroll time on 120,000 line file!
 - see if getLineOfOffset() can be optimized
-- wrap guide: paint using new API
 - resizeColumnsAppropriately() kills performance!
-- use less write locks for better multithreaded performance
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

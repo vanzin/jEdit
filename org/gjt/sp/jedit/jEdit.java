@@ -1719,6 +1719,7 @@ public class jEdit
 
 		// zero it here so that BufferTabs doesn't have any problems
 		buffersFirst = buffersLast = null;
+		bufferHash.clear();
 		bufferCount = 0;
 
 		while(buffer != null)
