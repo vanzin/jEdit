@@ -16,8 +16,8 @@
   file to be re-parsed as soon it is saved.
  </para>
  <para>
-  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-  can be used to reload edit modes after changes to mode files are made
+  The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
+  command can be used to reload edit modes after changes to mode files are made
   outside jEdit.
  </para>
  <sect1 id="xml-primer"><title>An XML Primer</title>
@@ -58,8 +58,8 @@
    (for example, inside an attribute value), you must write it as
    an <firstterm>entity</firstterm>. An
    entity consists of the character's symbolic name enclosed with
-   <quote>&amp;</quote> and <quote>;</quote>. A full list of entities is out of
-   the scope of this section, but the most important are:
+   <quote>&amp;</quote> and <quote>;</quote>. The most frequently used entities
+   are:
   </para>
   <itemizedlist>
    <listitem><para><literal>&amp;lt;</literal> - The less-than (&lt;)
@@ -95,9 +95,9 @@
    <literal>MODE</literal> tag does not have any defined attributes.
    Here is an example:
   </para>
-  <programlisting><![CDATA[<MODE>
+  <programlisting><![CDATA[<MODE>]]>
     <replaceable>... mode definition goes here ...</replaceable>
-</MODE>]]></programlisting>
+<![CDATA[</MODE>]]></programlisting>
  </sect1>
  <sect1 id="mode-tag-props"><title>The PROPS Tag</title>
   <para>

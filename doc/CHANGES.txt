@@ -58,6 +58,9 @@ JEDIT 4.0 VERSION HISTORY
 - When doing a BeanShell replace, the last subexpression would not be
   stored in a variable
 - 'Write HyperSearch Results' macro did not work
+- Caret event would not be fired if inside a compound edit, a portion of
+  text was changed after the caret, then a change was made before the
+  caret
 
 + API Additions
 

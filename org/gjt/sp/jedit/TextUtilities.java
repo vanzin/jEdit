@@ -114,6 +114,12 @@ public class TextUtilities
 		Segment lineText = new Segment();
 		buffer.getLineText(line,lineText);
 
+		if(offset < 0 || offset >= lineText.count)
+		{
+			throw new ArrayIndexOutOfBoundsException(offset + ":"
+				+ lineText.count);
+		}
+
 		char c = lineText.array[lineText.offset + offset];
 		char cprime; // corresponding character
 		boolean direction; // false - backwards, true - forwards
