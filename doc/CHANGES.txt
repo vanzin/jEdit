@@ -156,6 +156,9 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 - Fix possible ArrayIndexOutOfBoundsException when deleting text after
   decreasing the number of history elements.
 
+- Double clicking the middle mouse button now pastes twice, instead of
+  pasting and selecting a word.
+
 }}}
 {{{ API Changes
 
