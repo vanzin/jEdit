@@ -104,6 +104,7 @@ public class jEdit
 		boolean loadPlugins = true;
 		boolean runStartupScripts = true;
 		boolean quit = false;
+		boolean wait = false;
 		String userDir = System.getProperty("user.dir");
 
 		// script to run
@@ -181,6 +182,8 @@ public class jEdit
 					runStartupScripts = false;
 				else if(arg.startsWith("-run="))
 					scriptFile = arg.substring(5);
+				else if(arg.equals("-wait"))
+					wait = true;
 				else if(arg.equals("-quit"))
 					quit = true;
 				else
@@ -209,12 +212,11 @@ public class jEdit
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
 				String check = in.readLine();
-				if(!check.equals("c"))
+				if(!check.equals("b"))
 					throw new Exception("Wrong port file format");
 
 				port = Integer.parseInt(in.readLine());
 				key = Integer.parseInt(in.readLine());
-				in.close();
 
 				Socket socket = new Socket(InetAddress.getByName("127.0.0.1"),port);
 				DataOutputStream out = new DataOutputStream(
@@ -225,10 +227,21 @@ public class jEdit
 				if(quit)
 					script = "jEdit.exit(null,true);";
 				else
-					script = makeServerScript(restore,newView,newPlainView,args,scriptFile);
+					script = makeServerScript(wait,restore,newView,newPlainView,args,scriptFile);
 
 				out.writeUTF(script);
 
+				Log.log(Log.DEBUG,jEdit.class,"Waiting for server");
+				// block until its closed
+				try
+				{
+					socket.getInputStream().read();
+				}
+				catch(Exception e)
+				{
+				}
+
+				in.close();
 				out.close();
 
 				System.exit(0);
@@ -2466,9 +2479,10 @@ public class jEdit
 	/**
 	 * Creates a BeanShell script that can be sent to a running edit server.
 	 */
-	private static String makeServerScript(boolean restore,
-		boolean newView, boolean newPlainView,
-		String[] args, String scriptFile)
+	private static String makeServerScript(boolean wait,
+		boolean restore, boolean newView,
+		boolean newPlainView, String[] args,
+		String scriptFile)
 	{
 		StringBuffer script = new StringBuffer();
 
@@ -2500,9 +2514,13 @@ public class jEdit
 			script.append(";\n");
 		}
 
-		script.append("EditServer.handleClient(" + restore +
-			"," + newView + "," + newPlainView +
+		script.append("buffer = EditServer.handleClient("
+			+ restore + "," + newView + "," + newPlainView +
 			",parent,args);\n");
+		script.append("if(buffer != null && " + wait + ")\n");
+		script.append("\tbuffer.setWaitSocket(socket);\n");
+		script.append("else\n");
+		script.append("\tsocket.close();\n");
 
 		if(scriptFile != null)
 		{

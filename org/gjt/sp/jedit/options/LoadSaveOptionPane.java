@@ -114,12 +114,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		restoreCLI.setEnabled(restore.isSelected());
 		addComponent(restoreCLI);
 
-		/* Clients open files in new view */
-		newView = new JCheckBox(jEdit.getProperty(
-			"options.loadsave.newView"));
-		newView.setSelected(jEdit.getBooleanProperty("client.newView"));
-		addComponent(newView);
-
 		/* Persistent markers */
 		persistentMarkers = new JCheckBox(jEdit.getProperty(
 			"options.loadsave.persistentMarkers"));
@@ -174,7 +168,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			encoding.getSelectedItem());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
-		jEdit.setBooleanProperty("client.newView",newView.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
