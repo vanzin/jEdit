@@ -75,10 +75,11 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 		Chunk chunk = (Chunk)createToken(id,offset,length,context);
 		if(chunk != null)
 		{
+			Chunk oldLastChunk = (Chunk)lastToken;
+
 			chunk.init(seg,expander,x,styles,
 				fontRenderContext,
 				context.rules.getDefault());
-
 			addToken(chunk,context,false);
 
 			if(out.size() == initialSize)

@@ -288,7 +288,6 @@ public class GUIUtilities
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
