@@ -106,6 +106,22 @@ public class DockableWindowManager extends JPanel
 				windows.put(name,entry);
 			}
 		}
+
+		String lastTop = jEdit.getProperty("view.docking.last-top");
+		if(lastTop != null)
+			showDockableWindow(lastTop);
+
+		String lastLeft = jEdit.getProperty("view.docking.last-left");
+		if(lastLeft != null)
+			showDockableWindow(lastLeft);
+
+		String lastBottom = jEdit.getProperty("view.docking.last-bottom");
+		if(lastBottom != null)
+			showDockableWindow(lastBottom);
+
+		String lastRight = jEdit.getProperty("view.docking.last-right");
+		if(lastRight != null)
+			showDockableWindow(lastRight);
 	}
 
 	/**
@@ -124,8 +140,8 @@ public class DockableWindowManager extends JPanel
 
 		if(entry.win == null)
 			entry.open();
-		else
-			entry.container.show(entry);
+
+		entry.container.show(entry);
 	}
 
 	/**
@@ -140,7 +156,7 @@ public class DockableWindowManager extends JPanel
 	}
 
 	/**
-	 * Removes the specified dockable window from this dockable window manager.
+	 * Removes the specified dockable window.
 	 * @param name The dockable window name
 	 * @since jEdit 2.6pre3
 	 */
@@ -157,35 +173,10 @@ public class DockableWindowManager extends JPanel
 		if(entry.win == null)
 			return;
 
-		entry.remove();
-		windows.remove(name);
-	}
-
-	/**
-	 * Removes the specified dockable window from this dockable window manager.
-	 * @param comp The dockable window's component
-	 * @since jEdit 4.0pre1
-	 */
-	public void removeDockableWindow(Component comp)
-	{
-		Enumeration enum = windows.elements();
-		while(enum.hasMoreElements())
-		{
-			Entry entry = (Entry)enum.nextElement();
-			if(entry.win.getComponent() == comp)
-			{
-				String name = entry.win.getName();
-				Log.log(Log.DEBUG,this,"Removing " + name + " from "
-					+ entry.container);
-
-				entry.remove();
-				windows.remove(name);
-				return;
-			}
-		}
-
-		Log.log(Log.ERROR,this,"This DockableWindowManager"
-			+ " does not have a window " + comp);
+		if(entry.container instanceof FloatingWindowContainer)
+			entry.container.remove(entry);
+		else
+			entry.container.show(null);
 	}
 
 	/**
@@ -232,17 +223,26 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
+		top.saveDimension();
+		if(top.getCurrent() != null)
+			jEdit.setProperty("view.docking.last-top",top.getCurrent().name);
+		left.saveDimension();
+		if(left.getCurrent() != null)
+			jEdit.setProperty("view.docking.last-left",left.getCurrent().name);
+		bottom.saveDimension();
+		if(bottom.getCurrent() != null)
+			jEdit.setProperty("view.docking.last-bottom",bottom.getCurrent().name);
+		right.saveDimension();
+		if(right.getCurrent() != null)
+			jEdit.setProperty("view.docking.last-right",right.getCurrent().name);
+
 		Enumeration enum = windows.elements();
 		while(enum.hasMoreElements())
 		{
 			Entry entry = (Entry)enum.nextElement();
-			entry.remove();
+			if(entry.win != null)
+				entry.remove();
 		}
-
-		top.saveDimension();
-		left.saveDimension();
-		bottom.saveDimension();
-		right.saveDimension();
 
 		windows = null;
 		top = left = bottom = right = null;
@@ -457,7 +457,7 @@ public class DockableWindowManager extends JPanel
 				else
 					throw new InternalError("Unknown position: " + position);
 
-				container.add(this);
+				container.register(this);
 			}
 		}
 
@@ -480,10 +480,10 @@ public class DockableWindowManager extends JPanel
 			{
 				container = new FloatingWindowContainer(
 					DockableWindowManager.this);
-				container.add(this);
+				container.register(this);
 			}
 
-			container.show(this);
+			container.add(this);
 		}
 
 		void remove()

@@ -118,8 +118,8 @@ public class SplashScreen extends Canvas
 		offscreenGfx.drawImage(image,1,1,this);
 
 		// XXX: This should not be hardcoded
-		offscreenGfx.setColor(new Color(225,225,239));
-		offscreenGfx.fillRect(8,198,(436 * progress) / 7,16);
+		offscreenGfx.setColor(new Color(206,206,229));
+		offscreenGfx.fillRect(9,199,(384 * progress) / 7,14);
 
 		g.drawImage(offscreenImg,0,0,this);
 

@@ -35,9 +35,10 @@ import org.gjt.sp.jedit.*;
  */
 public interface DockableWindowContainer
 {
+	void register(DockableWindowManager.Entry entry);
 	void add(DockableWindowManager.Entry entry);
-	void save(DockableWindowManager.Entry entry);
 	void remove(DockableWindowManager.Entry entry);
+	void save(DockableWindowManager.Entry entry);
 	void show(DockableWindowManager.Entry entry);
 	boolean isVisible(DockableWindowManager.Entry entry);
 }

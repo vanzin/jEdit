@@ -41,7 +41,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
-	public void add(DockableWindowManager.Entry entry)
+	public void register(DockableWindowManager.Entry entry)
 	{
 		this.entry = entry;
 		setTitle(entry.title);
@@ -51,6 +51,10 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		pack();
 		GUIUtilities.loadGeometry(this,entry.name);
 		show();
+	}
+
+	public void add(DockableWindowManager.Entry entry)
+	{
 	}
 
 	public void save(DockableWindowManager.Entry entry)

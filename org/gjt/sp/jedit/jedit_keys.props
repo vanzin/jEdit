@@ -72,10 +72,6 @@ expand-folds.shortcut=C+e ENTER
 prev-bracket.shortcut=C+e [
 next-bracket.shortcut=C+e ]
 
-docking-top-expanded.shortcut=C+e 1
-docking-bottom-expanded.shortcut=C+e 2
-docking-left-expanded.shortcut=C+e 3
-docking-right-expanded.shortcut=C+e 4
 collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
