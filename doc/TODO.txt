@@ -7,7 +7,6 @@ pre2 on thursday!!!
 
 - change of AT_WORD_START semantics to fix perl highlighting?
 - still file reload problems
-- key typed in complete word broken again
 - auto indent: don't de-indent on enter if no leading indent at all?
 - if(...)
   

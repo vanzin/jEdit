@@ -456,9 +456,10 @@ public class View extends JFrame implements EBComponent
 				}
 			}
 
-			if(keyEventInterceptor == null
-				&& (inputHandler.isPrefixActive()
-				|| getTextArea().hasFocus()))
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else if(inputHandler.isPrefixActive()
+				|| getTextArea().hasFocus())
 			{
 				inputHandler.keyTyped(evt);
 			}
