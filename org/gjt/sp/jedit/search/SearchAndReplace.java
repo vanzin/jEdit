@@ -905,12 +905,14 @@ loop:			while(path != null)
 	//{{{ escapeRegexp() method
 	/**
 	 * Escapes characters with special meaning in a regexp.
+	 * @param multiline Should \n be escaped?
 	 * @since jEdit 4.3pre1
 	 */
-	public static String escapeRegexp(String str)
+	public static String escapeRegexp(String str, boolean multiline)
 	{
 		return MiscUtilities.charsToEscapes(str,
-			"\n\r\t\\()[]{}$^*+?|.");
+			"\r\t\\()[]{}$^*+?|."
+			+ (multiline ? "" : "\n"));
 	} //}}}
 
 	//{{{ load() method
