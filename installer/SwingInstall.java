@@ -66,7 +66,8 @@ public class SwingInstall extends JFrame
 		content.add(nextButton);
 
 		pages = new Component[] {
-			new About(),
+			new TextPanel("installer.readme"),
+			new TextPanel("installer.license"),
 			chooseDirectory = new ChooseDirectory(),
 			selectComponents = new SelectComponents(),
 			progress = new SwingProgress(),
@@ -304,23 +305,23 @@ public class SwingInstall extends JFrame
 		}
 	}
 
-	class About extends JPanel
+	class TextPanel extends JPanel
 	{
-		About()
+		TextPanel(String prop)
 		{
 			super(new BorderLayout());
 
 			JEditorPane text = new JEditorPane();
 
-			String readme = installer.getProperty("app.readme");
+			String file = installer.getProperty(prop);
 
 			try
 			{
-				text.setPage(About.this.getClass().getResource(readme));
+				text.setPage(TextPanel.this.getClass().getResource(file));
 			}
 			catch(Exception e)
 			{
-				text.setText("Error loading '" + readme + "'");
+				text.setText("Error loading '" + file + "'");
 				e.printStackTrace();
 			}
 
@@ -330,7 +331,7 @@ public class SwingInstall extends JFrame
 			Dimension dim = new Dimension();
 			dim.height = 200;
 			scrollPane.setPreferredSize(dim);
-			About.this.add(BorderLayout.CENTER,scrollPane);
+			TextPanel.this.add(BorderLayout.CENTER,scrollPane);
 		}
 	}
 

@@ -2,41 +2,38 @@ TO DO
 
 + before 4.0pre1:
 
+- fs browser: colors option pane
+- eval for selected lines: if selection ends on start of a line
 - JDK 1.3: about box broken
 - version number in splash screen
 - broken bracket matching
-- update tool bar, context option panes for action set API
+- update tool bar option pane for action set API
 - (String)buffer.getProperty(): bad
   buffer.getIntegerProperty(),
   buffer.getStringProperty()?
 - macro guide entry for Andre's Vertical Paste macro
 - new goodies need to be documented
-- installer: show GPL
 - improved window docking:
-  - docking option pane changes take effect immediately
   - action shown in menu bar is not a toggle action
   - '<name>-toggle' and '<name>-to-front' actions, not in menus
   - maybe dockables.xml, a la actions.xml
+  - do something about there being more buttons than can fit
+  - DockableLayout: handle too large
+  - transparency
 - new document model that uses less memory than the Swing document
 - prev line fold gutter bug
 - folding paint up bug
 - expand-fold too aggressive
 - editing on last line shouldn't cause scrolling
 
-+ later:
-
-- frame.setState(Frame.NORMAL);
-- plugin size reporting
-- Shift+TAB on Java 1.1
-- line-uncomment command
-- find btn no work
-- custom stylesheet: no xmlns
-- JComponent.requestDefaultFocus(): new 1.4 method
-- eval-for-selected-lines doesn't work with rectangular selection
-- fs browser colors not loaded initially sometimes?
-
 + features:
 
+- conventions section in user's guide: mention Enter activating default
+  button, Escape activating 'Cancel' or equivalent
+- frame.setState(Frame.NORMAL);
+- plugin size reporting
+- line-uncomment command
+- JComponent.requestDefaultFocus(): new 1.4 method
 - search and replace of specific token types only
 - complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
@@ -133,9 +130,30 @@ TO DO
   - treat a tab like n spaces, not one character
   - replace in selection with rectangular selections
 - JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
+- keymaps replace .shortcut properties
+  - loaded from $HOME/.jedit/keymaps, and jedit.jar
+  - one keymap can 'extend' another
+  - keymaps are XML files with <bind>, <unbind> tags
+  - jEdit, emacs, keymaps included, maybe others
+  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
+- dockable view registers window
+  - RegisterChanged message added
+  - update display when shown register changes
+  - use a timer to update display of $ register every 5 seconds or so
+  - use a timer to update display of % register if it is a ClipboardRegister
+- ScrollBarHighlight interface:
+  Color getColor()
+  int[] getHighlightedLines()
+  String getToolTipText(int line)
+- Used by ErrorList, HyperSearch, markers
 
 + bugs:
 
+- Shift+TAB on Java 1.1
+- find btn no work
+- custom stylesheet: no xmlns
+- eval-for-selected-lines doesn't work with rectangular selection
+- fs browser colors not loaded initially sometimes?
 - how to handle S+0-9?
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
@@ -154,7 +172,6 @@ TO DO
 - see if new beanshell fixes trailing \n bug
 - get rid of final blank page of user's guide
 - aborts not always fired
-- fix dragStart handling in DockableWindowContainer.TabbedPane
 - macro guide: JOptionPane not a good idea for getting user input?
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
@@ -166,22 +183,3 @@ TO DO
 - 'Stop' in plugin manager needs to be handled more gracefully
 - binding an action to ` doesn't work
 - evalutate for selected lines: > 1 selection per line
-
-+ later:
-
-- keymaps replace .shortcut properties
-  - loaded from $HOME/.jedit/keymaps, and jedit.jar
-  - one keymap can 'extend' another
-  - keymaps are XML files with <bind>, <unbind> tags
-  - jEdit, emacs, keymaps included, maybe others
-  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
-- dockable view registers window
-  - RegisterChanged message added
-  - update display when shown register changes
-  - use a timer to update display of $ register every 5 seconds or so
-  - use a timer to update display of % register if it is a ClipboardRegister
-- ScrollBarHighlight interface:
-  Color getColor()
-  int[] getHighlightedLines()
-  String getToolTipText(int line)
-- Used by ErrorList, HyperSearch, markers

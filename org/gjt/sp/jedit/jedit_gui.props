@@ -654,7 +654,6 @@ about.text=jEdit was brought to you by:\n\
 	Carlos Quiroz\n\
 	Carmine Lucarelli\n\
 	Chris Scott\n\
-	Chris Sequin\n\
 	Danny Dig\n\
 	Dante Fabrizio\n\
 	David Taylor\n\
@@ -714,7 +713,7 @@ about.text=jEdit was brought to you by:\n\
 	comments, feedback and bug reports.\n\
 	\ \n\
 	Message to Sun: Open Source Java!
-
+	
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error
 # {0} - the error message
@@ -1296,8 +1295,7 @@ options.context.moveDown=Move Down
 options.context.add.title=Add Item
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
-options.context.add.action=Command:
-options.context.add.macro=Macro:
+options.context.add.action=Command or macro:
 
 options.abbrevs.label=Abbreviations
 options.abbrevs.set=Abbrev set:

@@ -132,6 +132,11 @@ public class ActionSet
 		return retVal;
 	}
 
+	public String toString()
+	{
+		return label;
+	}
+
 	// package-private members
 	void getActions(Vector vec)
 	{
