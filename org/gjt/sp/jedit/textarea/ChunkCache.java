@@ -306,8 +306,11 @@ public class ChunkCache
 	 */
 	public static float offsetToX(Chunk chunks, int offset)
 	{
-		if(offset < 0)
-			throw new ArrayIndexOutOfBoundsException(offset + " < 0");
+		if(chunks != null && offset < chunks.offset)
+		{
+			throw new ArrayIndexOutOfBoundsException(offset + " < "
+				+ chunks.offset);
+		}
 
 		float x = 0.0f;
 

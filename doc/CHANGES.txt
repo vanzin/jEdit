@@ -18,6 +18,11 @@ JEDIT 4.0 VERSION HISTORY
 - Browser view didn't check key events for modifiers so if the browser
   had focus and a shortcut key was pressed a semi-random item would be
   selected in the file list
+- Added workaround for JDistro desktop
+- Fixed possible ArrayIndexOutOfBoundsException if a line is
+  soft-wrapped to more screen lines than can be displayed at once. Note
+  that this case still won't be handled very well, but at least jEdit
+  will no longer throw a fit when it occurs
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
