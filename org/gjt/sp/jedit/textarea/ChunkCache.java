@@ -57,7 +57,7 @@ class ChunkCache
 		{
 			for(int i = 0; i < lineInfo.length; i++)
 			{
-				lineInfo[i] = new LineInfo();
+				lineInfo[i].chunksValid = false;
 			}
 		}
 		else if(firstLine > this.firstLine)
@@ -111,6 +111,119 @@ class ChunkCache
 		}
 	} //}}}
 
+	//{{{ updateChunkLists() method
+	void updateChunkLists(int firstScreenLine, int lastScreenLine)
+	{
+		// TODO this needs to be sorted out.
+		if(lastScreenLine >= lineInfo.length)
+			System.err.println("foo: " + lastScreenLine
+				+ "::" + (lineInfo.length - 1));
+
+		LineInfo info = null;
+
+		int physicalLine;
+
+		for(;;)
+		{
+			info = lineInfo[firstScreenLine];
+			if(!info.chunksValid)
+			{
+				if(firstScreenLine == 0)
+					physicalLine = textArea.virtualToPhysical(firstLine);
+				else
+				{
+					physicalLine = textArea
+						.getFoldVisibilityManager()
+						.getNextVisibleLine(lineInfo[
+						firstScreenLine - 1]
+						.physicalLine);
+				}
+
+				break;
+			}
+			else if(firstScreenLine == lastScreenLine)
+			{
+				// it's all valid
+				return;
+			}
+			else
+				firstScreenLine++;
+		}
+
+		System.err.println(firstScreenLine + "::" + physicalLine);
+
+		// TODO: Assumptions...
+
+		// Note that we rely on the fact that when a line is
+		// invalidated, all screen lines/subregions are
+		// invalidated as well.
+
+		Buffer buffer = textArea.getBuffer();
+		TextAreaPainter painter = textArea.getPainter();
+
+		out.clear();
+
+		int subregion = 0;
+
+		for(int i = firstScreenLine; i <= lastScreenLine; i++)
+		{
+			info = lineInfo[i];
+
+			TextUtilities.Chunk chunks;
+
+			if(out.size() == 0)
+			{
+				if(physicalLine != -1 && i != firstScreenLine)
+				{
+					physicalLine = textArea.getFoldVisibilityManager()
+						.getNextVisibleLine(physicalLine);
+				}
+
+				if(physicalLine == -1)
+				{
+					info.chunks = null;
+					info.chunksValid = true;
+					info.physicalLine = -1;
+					continue;
+				}
+
+				subregion = 0;
+
+				buffer.getLineText(physicalLine,textArea.lineSegment);
+
+				TextUtilities.lineToChunkList(textArea.lineSegment,
+					buffer.markTokens(physicalLine).getFirstToken(),
+					painter.getStyles(),painter.getFontRenderContext(),
+					painter,0.0f,out);
+
+				if(out.size() == 0)
+					chunks = null;
+				else
+				{
+					chunks = (TextUtilities.Chunk)out.get(0);
+					out.remove(0);
+				}
+			}
+			else
+			{
+				subregion++;
+
+				chunks = (TextUtilities.Chunk)out.get(0);
+				out.remove(0);
+			}
+
+			info.physicalLine = physicalLine;
+			info.subregion = subregion;
+			info.chunksValid = true;
+		}
+	} //}}}
+
+	//{{{ getLineInfoForScreenLine() method
+	LineInfo getLineInfoForScreenLine(int screenLine)
+	{
+		return lineInfo[screenLine];
+	} //}}}
+
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int virtualLineIndex, int physicalLineIndex)
 	{
@@ -146,10 +259,14 @@ class ChunkCache
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Instance variables
 	private JEditTextArea textArea;
 	private int firstLine;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
+	//}}}
+
 	//}}}
 
 	//{{{ LineInfo class

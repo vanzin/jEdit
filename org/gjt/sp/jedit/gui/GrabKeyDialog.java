@@ -1,6 +1,9 @@
 /*
  * GrabKeyDialog.java - Grabs keys from the keyboard
- * Copyright (C) 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -27,27 +31,65 @@ import java.lang.reflect.Field;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A dialog for getting shortcut keys.
  */
 public class GrabKeyDialog extends JDialog
 {
+	//{{{ keyboardTest() method
+	public static void keyboardTest(View view)
+	{
+		Buffer buffer = jEdit.newFile(view);
+		new GrabKeyDialog(view,null,null,buffer);
+	} //}}}
+
+	//{{{ GrabKeyDialog constructor
 	/**
 	 * Create and show a new modal dialog.
 	 *
 	 * @param  comp  center dialog on this component.
 	 * @param  binding  the action/macro that should get a binding.
 	 * @param  allBindings  all other key bindings.
-	 * @since jEdit 3.2pre9
 	 */
 	public GrabKeyDialog(Component comp, KeyBinding binding,
 		Vector allBindings)
+	{
+		this(comp,binding,allBindings,null);
+	} //}}}
+
+	//{{{ GrabKeyDialog constructor
+	/**
+	 * Create and show a new modal dialog.
+	 *
+	 * @param  comp  center dialog on this component.
+	 * @param  debugBuffer  debug info will be dumped to this buffer
+	 * (may be null)
+	 */
+	public GrabKeyDialog(Component comp, Buffer debugBuffer)
+	{
+		this(comp,null,null,debugBuffer);
+	} //}}}
+
+	//{{{ GrabKeyDialog constructor
+	/**
+	 * Create and show a new modal dialog.
+	 *
+	 * @param  comp  center dialog on this component.
+	 * @param  binding  the action/macro that should get a binding.
+	 * @param  allBindings  all other key bindings.
+	 * @param  debugBuffer  debug info will be dumped to this buffer
+	 * (may be null)
+	 */
+	public GrabKeyDialog(Component comp, KeyBinding binding,
+		Vector allBindings, Buffer debugBuffer)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
 			jEdit.getProperty("grab-key.title"),true);
 		this.binding = binding;
 		this.allBindings = allBindings;
+		this.debugBuffer = debugBuffer;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
@@ -76,8 +118,10 @@ public class GrabKeyDialog extends JDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JLabel label = new JLabel(jEdit.getProperty(
-			"grab-key.caption",new String[] { binding.label }));
+		JLabel label = new JLabel(
+			debugBuffer == null ? jEdit.getProperty(
+			"grab-key.caption",new String[] { binding.label })
+			: jEdit.getProperty("grab-key.keyboard-test"));
 
 		Box input = Box.createHorizontalBox();
 
@@ -90,22 +134,26 @@ public class GrabKeyDialog extends JDialog
 		input.add(clear);
 
 		assignedTo = new JLabel();
-		updateAssignedTo(null);
+		if(debugBuffer == null)
+			updateAssignedTo(null);
 
 		Box buttons = Box.createHorizontalBox();
 		buttons.add(Box.createGlue());
 
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(new ActionHandler());
-		buttons.add(ok);
-		buttons.add(Box.createHorizontalStrut(12));
-
-		if(binding.isAssigned()) {
-			// show "remove" button
-			remove = new JButton(jEdit.getProperty("grab-key.remove"));
-			remove.addActionListener(new ActionHandler());
-			buttons.add(remove);
+		if(debugBuffer == null)
+		{
+			ok = new JButton(jEdit.getProperty("common.ok"));
+			ok.addActionListener(new ActionHandler());
+			buttons.add(ok);
 			buttons.add(Box.createHorizontalStrut(12));
+
+			if(binding.isAssigned()) {
+				// show "remove" button
+				remove = new JButton(jEdit.getProperty("grab-key.remove"));
+				remove.addActionListener(new ActionHandler());
+				buttons.add(remove);
+				buttons.add(Box.createHorizontalStrut(12));
+			}
 		}
 
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
@@ -115,7 +163,8 @@ public class GrabKeyDialog extends JDialog
 
 		content.add(label);
 		content.add(input);
-		content.add(assignedTo);
+		if(debugBuffer == null)
+			content.add(assignedTo);
 		content.add(buttons);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -124,8 +173,9 @@ public class GrabKeyDialog extends JDialog
 		setLocationRelativeTo(comp);
 		setResizable(false);
 		show();
-	}
+	} //}}}
 
+	//{{{ getShortcut() method
 	/**
 	 * Returns the shortcut, or null if the current shortcut should be
 	 * removed or the dialog either has been cancelled. Use isOK()
@@ -137,8 +187,9 @@ public class GrabKeyDialog extends JDialog
 			return shortcut.getText();
 		else
 			return null;
-	}
+	} //}}}
 
+	//{{{ isOK() method
 	/**
 	 * Returns true, if the dialog has not been cancelled.
 	 * @since jEdit 3.2pre9
@@ -146,8 +197,9 @@ public class GrabKeyDialog extends JDialog
 	public boolean isOK()
 	{
 		return isOK;
-	}
+	} //}}}
 
+	//{{{ isManagingFocus() method
 	/**
 	 * Returns if this component can be traversed by pressing the
 	 * Tab key. This returns false.
@@ -155,8 +207,9 @@ public class GrabKeyDialog extends JDialog
 	public boolean isManagingFocus()
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ getFocusTraversalKeysEnabled() method
 	/**
 	 * Makes the tab key work in Java 1.4.
 	 * @since jEdit 3.2pre4
@@ -164,16 +217,17 @@ public class GrabKeyDialog extends JDialog
 	public boolean getFocusTraversalKeysEnabled()
 	{
 		return false;
-	}
+	} //}}}
 
-	// protected members
+	//{{{ processKeyEvent() method
 	protected void processKeyEvent(KeyEvent evt)
 	{
 		shortcut.processKeyEvent(evt);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 
+	//{{{ Instance variables
 	private InputPane shortcut; // this is a bad hack
 	private JLabel assignedTo;
 	private JButton ok;
@@ -183,7 +237,10 @@ public class GrabKeyDialog extends JDialog
 	private boolean isOK;
 	private KeyBinding binding;
 	private Vector allBindings;
+	private Buffer debugBuffer;
+	//}}}
 
+	//{{{ getSymbolicName() method
 	private String getSymbolicName(int keyCode)
 	{
 		if(keyCode == KeyEvent.VK_UNDEFINED)
@@ -216,8 +273,9 @@ public class GrabKeyDialog extends JDialog
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ updateAssignedTo() method
 	private void updateAssignedTo(String shortcut)
 	{
 		String text = jEdit.getProperty("grab-key.assigned-to.none");
@@ -237,8 +295,9 @@ public class GrabKeyDialog extends JDialog
 		assignedTo.setText(
 			jEdit.getProperty("grab-key.assigned-to",
 				new String[] { text }));
-	}
+	} //}}}
 
+	//{{{ getKeyBinding() method
 	private KeyBinding getKeyBinding(String shortcut)
 	{
 		if(shortcut == null || shortcut.length() == 0)
@@ -271,8 +330,11 @@ public class GrabKeyDialog extends JDialog
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ KeyBinding class
 	/**
 	 * A jEdit action or macro with its two possible shortcuts.
 	 * @since jEdit 3.2pre8
@@ -297,10 +359,12 @@ public class GrabKeyDialog extends JDialog
 		{
 			return shortcut != null && shortcut.length() > 0;
 		}
-	}
+	} //}}}
 
+	//{{{ InputPane class
 	class InputPane extends JTextField
 	{
+		//{{{ getFocusTraversalKeysEnabled() method
 		/**
 		 * Makes the tab key work in Java 1.4.
 		 * @since jEdit 3.2pre4
@@ -308,18 +372,23 @@ public class GrabKeyDialog extends JDialog
 		public boolean getFocusTraversalKeysEnabled()
 		{
 			return false;
-		}
+		} //}}}
 
+		//{{{ processKeyEvent() method
 		protected void processKeyEvent(KeyEvent _evt)
 		{
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
 			if(evt == null)
 			{
-				Log.log(Log.DEBUG,this,"Event " + _evt + " filtered");
+				debugBuffer.insert(debugBuffer.getLength(),
+					"Event " + _evt + " filtered\n");
 				return;
 			}
 			else
-				Log.log(Log.DEBUG,this,"Event " + _evt + " passed");
+			{
+				debugBuffer.insert(debugBuffer.getLength(),
+					"Event " + _evt + " passed\n");
+			}
 
 			evt.consume();
 
@@ -395,12 +464,15 @@ public class GrabKeyDialog extends JDialog
 				return;
 
 			setText(keyString.toString());
-			updateAssignedTo(keyString.toString());
-		}
-	}
+			if(debugBuffer == null)
+				updateAssignedTo(keyString.toString());
+		} //}}}
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
+		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
@@ -419,10 +491,12 @@ public class GrabKeyDialog extends JDialog
 			else if(evt.getSource() == clear)
 			{
 				shortcut.setText(null);
-				updateAssignedTo(null);
+				if(debugBuffer == null)
+					updateAssignedTo(null);
 			}
-		}
+		} //}}}
 
+		//{{{ canClose() method
 		private boolean canClose()
 		{
 			String shortcutString = shortcut.getText();
@@ -494,6 +568,6 @@ public class GrabKeyDialog extends JDialog
 				return false;
 
 			return true;
-		}
-	}
+		} //}}}
+	} //}}}
 }

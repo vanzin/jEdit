@@ -410,6 +410,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="keyboard-tester">
+	<CODE>
+		GrabKeyDialog.keyboardTest(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="line-comment">
 	<CODE>
 		textArea.lineComment();
