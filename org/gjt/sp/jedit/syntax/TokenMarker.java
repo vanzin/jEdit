@@ -163,7 +163,8 @@ public class TokenMarker
 	public LineContext markTokens(LineContext prevContext,
 		TokenHandler tokenHandler, Segment line)
 	{
-		this.context = new LineContext();
+		this.tokenHandler = tokenHandler;
+		context = new LineContext();
 
 		//{{{ Set up context
 		if(prevContext == null)
@@ -179,163 +180,16 @@ public class TokenMarker
 		lineLength = line.count + line.offset;
 
 		int terminateChar = context.rules.getTerminateChar();
-		int searchLimit = (terminateChar >= 0 && terminateChar < line.count)
-			? line.offset + terminateChar : lineLength;
+		int searchLimit = (terminateChar >= 0
+			&& terminateChar < line.count)
+			? terminateChar + line.offset
+			: line.count + line.offset;
 
-		escaped = false;
-
-		boolean b;
-		boolean tempEscaped;
-		Segment tempPattern;
-		ParserRule rule;
-		LineContext tempContext;
-
-		for(pos = line.offset; pos < searchLimit; pos++)
-		{
-			//{{{ if we are not in the top level context, we are delegated
-			if (context.parent != null)
-			{
-				tempContext = context;
-
-				context = context.parent;
-
-				pattern.array = context.inRule.searchChars;
-				pattern.count = context.inRule.sequenceLengths[1];
-				pattern.offset = context.inRule.sequenceLengths[0];
-
-				b = handleRule(tokenHandler, line, context.inRule);
-
-				context = tempContext;
-
-				if (!b)
-				{
-					if (escaped)
-					{
-						escaped = false;
-					}
-					else
-					{
-						if (pos != lastOffset)
-						{
-							if (context.inRule == null)
-							{
-								markKeyword(tokenHandler,line,lastKeyword,pos);
-
-								tokenHandler.handleToken(pos - lastOffset,
-									context.rules.getDefault(),
-									context.rules);
-							}
-							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
-							{
-								tokenHandler.handleToken(pos - lastOffset,
-									context.inRule.token,
-									context.rules);
-							}
-							else
-							{
-								tokenHandler.handleToken(pos - lastOffset, Token.INVALID,
-									context.rules);
-							}
-						}
-
-						context = (LineContext)context.parent.clone();
-
-						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-						{
-							tokenHandler.handleToken(pattern.count,
-								context.rules.getDefault(),
-								context.rules);
-						}
-						else
-						{
-							tokenHandler.handleToken(pattern.count,
-								context.inRule.token,
-								context.rules);
-						}
-
-						context.inRule = null;
-
-						lastKeyword = lastOffset = pos + pattern.count;
-					}
-
-					pos += (pattern.count - 1); // move pos to last character of match sequence
-
-					continue;
-				}
-			} //}}}
-
-			//{{{ check the escape rule for the current context, if there is one
-			if ((rule = context.rules.getEscapeRule()) != null)
-			{
-				// assign tempPattern to mutable "buffer" pattern
-				tempPattern = pattern;
-
-				// swap in the escape pattern
-				pattern = context.rules.getEscapePattern();
-
-				tempEscaped = escaped;
-
-				b = handleRule(tokenHandler, line, rule);
-
-				// swap back the buffer pattern
-				pattern = tempPattern;
-
-				if (!b)
-				{
-					if (tempEscaped) escaped = false;
-					continue;
-				}
-			} //}}}
-
-			//{{{ if we are inside a span, check for its end sequence
-			rule = context.inRule;
-			if(rule != null && (rule.action & SPAN) == SPAN)
-			{
-				pattern.array = rule.searchChars;
-				pattern.count = rule.sequenceLengths[1];
-				pattern.offset = rule.sequenceLengths[0];
-
-				// if we match the end of the span, or if this is a "hard" span,
-				// we continue to the next character; otherwise, we check all
-				// applicable rules below
-				if (!handleRule(tokenHandler,line,rule)
-					|| (rule.action & SOFT_SPAN) == 0)
-				{
-					escaped = false;
-					continue;
-				}
-			} //}}}
-
-			//{{{ now check every rule
-			rule = context.rules.getRules(line.array[pos]);
-			while(rule != null)
-			{
-				pattern.array = rule.searchChars;
-
-				if (context.inRule == rule && (rule.action & SPAN) == SPAN)
-				{
-					pattern.count = rule.sequenceLengths[1];
-					pattern.offset = rule.sequenceLengths[0];
-				}
-				else
-				{
-					pattern.count = rule.sequenceLengths[0];
-					pattern.offset = 0;
-				}
-
-				// stop checking rules if there was a match and go to next pos
-				if (!handleRule(tokenHandler,line,rule))
-					break;
-
-				rule = rule.next;
-			} //}}}
-
-			escaped = false;
-		}
+		mainLoop(line,searchLimit);
 
 		//{{{ check for keywords at the line's end
 		if(context.inRule == null)
-			markKeyword(tokenHandler, line, lastKeyword, lineLength);
+			markKeyword(line, lastKeyword, lineLength);
 		//}}}
 
 		//{{{ mark all remaining characters
@@ -383,6 +237,9 @@ public class TokenMarker
 	private String rulePfx;
 	private ParserRuleSet mainRuleSet;
 
+	// Instead of passing these around to each method, we just store them
+	// as instance variables. Note that this is not thread-safe.
+	private TokenHandler tokenHandler;
 	private LineContext context;
 	private Segment pattern = new Segment(new char[0],0,0);
 	private int lastOffset;
@@ -392,14 +249,157 @@ public class TokenMarker
 	private boolean escaped;
 	//}}}
 
+	//{{{ mainLoop() method
+	private void mainLoop(Segment line, int searchLimit)
+	{
+		boolean b;
+		boolean tempEscaped;
+		ParserRule rule;
+		LineContext tempContext;
+
+		escaped = false;
+
+		for(pos = line.offset; pos < searchLimit; pos++)
+		{
+			//{{{ if we are not in the top level context, we are delegated
+			if (context.parent != null)
+			{
+				tempContext = context;
+
+				context = context.parent;
+
+				b = handleRule(line,context.inRule,true);
+
+				context = tempContext;
+
+				if (!b)
+				{
+					if (escaped)
+					{
+						escaped = false;
+					}
+					else
+					{
+						if (pos != lastOffset)
+						{
+							if (context.inRule == null)
+							{
+								markKeyword(line,lastKeyword,pos);
+
+								tokenHandler.handleToken(pos - lastOffset,
+									context.rules.getDefault(),
+									context.rules);
+							}
+							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
+							{
+								tokenHandler.handleToken(pos - lastOffset,
+									context.inRule.token,
+									context.rules);
+							}
+							else
+							{
+								tokenHandler.handleToken(pos - lastOffset,
+									Token.INVALID,
+									context.rules);
+							}
+						}
+
+						context = (LineContext)context.parent.clone();
+
+						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+						{
+							tokenHandler.handleToken(pattern.count,
+								context.rules.getDefault(),
+								context.rules);
+						}
+						else
+						{
+							tokenHandler.handleToken(pattern.count,
+								context.inRule.token,
+								context.rules);
+						}
+
+						context.inRule = null;
+
+						lastKeyword = lastOffset = pos + pattern.count;
+					}
+
+					// move pos to last character of match sequence
+					pos += (pattern.count - 1);
+
+					continue;
+				}
+			} //}}}
+
+			//{{{ check the escape rule for the current context, if there is one
+			if ((rule = context.rules.getEscapeRule()) != null)
+			{
+				tempEscaped = escaped;
+
+				b = handleRule(line,rule,false);
+
+				if (!b)
+				{
+					if (tempEscaped)
+						escaped = false;
+					continue;
+				}
+			} //}}}
+
+			//{{{ if we are inside a span, check for its end sequence
+			rule = context.inRule;
+			if(rule != null && (rule.action & SPAN) == SPAN)
+			{
+				// if we match the end of the span, or if this is a "hard" span,
+				// we continue to the next character; otherwise, we check all
+				// applicable rules below
+				if (!handleRule(line,rule,true)
+					|| (rule.action & SOFT_SPAN) == 0)
+				{
+					escaped = false;
+					continue;
+				}
+			} //}}}
+
+			//{{{ now check every rule
+			rule = context.rules.getRules(line.array[pos]);
+			while(rule != null)
+			{
+				// stop checking rules if there was a match and go to next pos
+				if (!handleRule(line,rule,context.inRule == rule
+					&& (rule.action & SPAN) == SPAN))
+				{
+					break;
+				}
+
+				rule = rule.next;
+			} //}}}
+
+			escaped = false;
+		}
+	} //}}}
+
 	//{{{ handleRule() method
 	/**
 	 * Checks if the rule matches the line at the current position
 	 * and handles the rule if it does match
 	 */
-	private boolean handleRule(TokenHandler tokenHandler, Segment line,
-		ParserRule checkRule)
+	private boolean handleRule(Segment line, ParserRule checkRule,
+		boolean end)
 	{
+		pattern.array = checkRule.searchChars;
+
+		if(end)
+		{
+			pattern.offset = checkRule.sequenceLengths[0];
+			pattern.count = checkRule.sequenceLengths[1];
+		}
+		else
+		{
+			pattern.offset = 0;
+			pattern.count = checkRule.sequenceLengths[0];
+		}
+
 		if (pattern.count == 0) return true;
 
 		if (lineLength - pos < pattern.count) return true;
@@ -470,7 +470,7 @@ public class TokenMarker
 				}
 			}
 
-			markKeyword(tokenHandler, line, lastKeyword, pos);
+			markKeyword(line, lastKeyword, pos);
 
 			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
 			{
@@ -618,8 +618,7 @@ public class TokenMarker
 	} //}}}
 
 	//{{{ markKeyword() method
-	private void markKeyword(TokenHandler tokenHandler, Segment line,
-		int start, int end)
+	private void markKeyword(Segment line, int start, int end)
 	{
 		KeywordMap keywords = context.rules.getKeywords();
 

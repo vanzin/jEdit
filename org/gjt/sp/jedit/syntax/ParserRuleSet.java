@@ -166,17 +166,6 @@ public class ParserRuleSet
 		return escapeRule;
 	} //}}}
 
-	//{{{ getEscapePattern() method
-	public Segment getEscapePattern()
-	{
-		if (escapePattern == null && escapeRule != null)
-		{
-			escapePattern = new Segment(escapeRule.searchChars, 0,
-				escapeRule.sequenceLengths[0]);
-		}
-		return escapePattern;
-	} //}}}
-
 	//{{{ setEscape() method
 	public void setEscape(String esc)
 	{
