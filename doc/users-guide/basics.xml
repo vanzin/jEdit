@@ -317,6 +317,7 @@
    If you specify a repeat count greater than 20, a confirmation dialog box will
    be displayed, asking if you really want to perform the action. This prevents
    you from hanging jEdit by executing a command too many times.
-  </para>
+  </para></listitem>
+ </itemizedlist>
  </sect1>
 </chapter>

@@ -3,9 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- update man page
-- update cli docs in user's guide
-
 - bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
 - auto indent: don't de-indent on enter if no leading indent at all?
