@@ -2,6 +2,12 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre3
 
++ New Features
+
+- Two-stage save (where a file is first saved to #filename#save#, then
+  renamed to the actual file name) can be disabled in the 'Loading and
+  Saving' option pane
+
 + Bug Fixes
 
 - JEditTextArea now uses type-safe buffer property accessors, so there
@@ -9,6 +15,17 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed stack overflow if attempting to use URL filesystem (to open an
   http:// URL, for instance)
 - Fixed stupid bug in installer that affected MacOS X installation
+- File system browser's parent directory view could not be completely
+  hidden by dragging the split pane
+- Pressing the left arrow key in the file system browser didn't always
+  work
+- Bracket matching would sometimes show a status bar message even if the
+  bracket was visible
+- Fixed another minor bracket repaint problem that would occur if the
+  matched bracket was not visible and the text area lost focus
+- Select Line, Select Word, Select Paragraph actions were slightly
+  broken
+- Fixed minor undo modified flag clearing bug
 
 * Version 4.0pre2
 

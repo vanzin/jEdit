@@ -214,6 +214,16 @@ public class UndoManager
 			addEdit(rem);
 	} //}}}
 
+	//{{{ bufferSaved() method
+	public void bufferSaved()
+	{
+		if(clearDirtyEdit != null)
+		{
+			clearDirtyEdit.clearDirty = false;
+			clearDirtyEdit = null;
+		}
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables

@@ -160,7 +160,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//}}}
 
 	//{{{ show() method
-	public void show(DockableWindowManager.Entry entry)
+	public void show(final DockableWindowManager.Entry entry)
 	{
 		if(current == entry)
 		{
@@ -184,7 +184,13 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int index = dockables.indexOf(entry);
 			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
 
-			entry.win.requestDefaultFocus();
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					entry.win.requestDefaultFocus();
+				}
+			});
 		}
 		else
 		{

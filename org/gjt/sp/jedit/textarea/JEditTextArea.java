@@ -1152,7 +1152,11 @@ public class JEditTextArea extends JComponent
 		int caretLine = getCaretLine();
 		int start = getLineStartOffset(caretLine);
 		int end = getLineEndOffset(caretLine) - 1;
-		extendSelection(start,end);
+		Selection s = new Selection.Range(start,end);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
 		moveCaretPosition(end);
 	} //}}}
 
@@ -1192,7 +1196,11 @@ public class JEditTextArea extends JComponent
 
 		int selectionStart = getLineStartOffset(start + 1);
 		int selectionEnd = getLineEndOffset(end - 1) - 1;
-		extendSelection(selectionStart,selectionEnd);
+		Selection s = new Selection.Range(selectionStart,selectionEnd);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
 		moveCaretPosition(selectionEnd);
 	} //}}}
 
@@ -1219,7 +1227,12 @@ public class JEditTextArea extends JComponent
 		int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
 		int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
 
-		extendSelection(lineStart + wordStart,lineStart + wordEnd);
+		Selection s = new Selection.Range(lineStart + wordStart,
+			lineStart + wordEnd);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
 		moveCaretPosition(lineStart + wordEnd);
 	} //}}}
 
@@ -1236,16 +1249,16 @@ public class JEditTextArea extends JComponent
 
 		if(bracket != -1)
 		{
-			// Hack
-			if(bracket < caret)
-			{
-				extendSelection(bracket + 1,caret - 1);
-			}
-			else
-			{
-				extendSelection(caret,bracket);
-			}
+			Selection s;
 
+			if(bracket < caret)
+				s = new Selection.Range(bracket + 1,caret - 1);
+			else
+				s = new Selection.Range(caret,bracket);
+			if(multi)
+				addToSelection(s);
+			else
+				setSelection(s);
 			return;
 		}
 	} //}}}
@@ -1329,7 +1342,11 @@ forward_scan:		do
 			while(++end < buffer.getLength());
 		}
 
-		extendSelection(start,end);
+		s = new Selection.Range(start,end);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
 		moveCaretPosition(end);
 	} //}}}
 
@@ -1393,7 +1410,11 @@ forward_scan:		do
 		}
 
 		int newCaret = getLineEndOffset(end) - 1;
-		extendSelection(getLineStartOffset(start),newCaret);
+		Selection s = new Selection.Range(getLineStartOffset(start),newCaret);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
 		moveCaretPosition(newCaret);
 	} //}}}
 
@@ -4819,7 +4840,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				endLine = virtualToPhysical(
 					Math.min(foldVisibilityManager
 					.getVirtualLineCount() - 1,
-					firstLine + visibleLines + 1));
+					firstLine + visibleLines));
 			}
 
 			// performance hack: don't scan forward too far, so that
@@ -4834,7 +4855,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				invalidateLineRange(bracketLine,caretLine);
 
 				if(bracketLine < physFirstLine
-					|| bracketLine >= endLine)
+					|| bracketLine > endLine)
 				{
 					showBracketStatusMessage(bracketLine < caretLine);
 				}
@@ -5263,10 +5284,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ focusGained() method
 		public void focusGained(FocusEvent evt)
 		{
-			invalidateLine(caretLine);
-
 			if(bracketLine != -1)
-				invalidateLine(bracketLine);
+				invalidateLineRange(bracketLine,caretLine);
+			else
+				invalidateLine(caretLine);
 
 			// repaint the gutter so that the border color
 			// reflects the focus state
@@ -5277,9 +5298,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void focusLost(FocusEvent evt)
 		{
 			if(bracketLine != -1)
-				invalidateLine(bracketLine);
-
-			invalidateLine(caretLine);
+				invalidateLineRange(bracketLine,caretLine);
+			else
+				invalidateLine(caretLine);
 		} //}}}
 	} //}}}
 

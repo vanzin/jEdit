@@ -1,17 +1,18 @@
 TO DO
 
+- C+d with selection: delete all selected lines
 - position bug still there
 - either fix recent files/recent directories/current dir icon issue, or
   ditch icons
 - changing folding mode using buffer-local props: doesn't take effect on
-  save
+  save (?) -- removing doesn't work, but setting to none works
 - read up on JDK 1.4 focus API
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 - {: only re-indent line if prev matches the regexp
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
-- dwm: not always focused correctly?
+- dwm: not always focused correctly
 - documentation to do
   - new folding
   - add index terms throughout user's guide!
@@ -23,7 +24,7 @@ TO DO
   - write explicit folding tips
   - API guide: compareStrings(), showPopupMenu()
   - MiscUtilities path name methods need to be documented
-- still fold at end expand bug
+- still fold at end expand bug -- last line always visible?
 - investigate nextLineRequested() -- replace with a buffer event.
 - investigate wrap around in macros
 - still collapseFolds behavior problems

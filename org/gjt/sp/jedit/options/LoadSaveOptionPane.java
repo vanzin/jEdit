@@ -1,6 +1,9 @@
 /*
  * LoadSaveOptionPane.java - Loading and saving options panel
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,19 +22,23 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class LoadSaveOptionPane extends AbstractOptionPane
 {
+	//{{{ LoadSaveOptionPane constructor
 	public LoadSaveOptionPane()
 	{
 		super("loadsave");
-	}
+	} //}}}
 
+	//{{{ _init() method
 	public void _init()
 	{
 		/* Autosave interval */
@@ -126,13 +133,21 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			"persistentMarkers"));
 		addComponent(persistentMarkers);
 
+		/* Two-stage save */
+		twoStageSave = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.twoStageSave"));
+		twoStageSave.setSelected(jEdit.getBooleanProperty(
+			"twoStageSave"));
+		addComponent(twoStageSave);
+
 		/* Parse fully */
 		parseFully = new JCheckBox(jEdit.getProperty(
 			"options.loadsave.parseFully"));
 		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
 		addComponent(parseFully);
-	}
+	} //}}}
 
+	//{{{ _save() method
 	public void _save()
 	{
 		jEdit.setProperty("autosave",autosave.getText());
@@ -162,10 +177,11 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("client.newView",newView.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
+		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JTextField autosave;
 	private JTextField backups;
 	private JTextField backupDirectory;
@@ -178,5 +194,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox newView;
 	private JCheckBox persistentMarkers;
+	private JCheckBox twoStageSave;
 	private JCheckBox parseFully;
+	//}}}
 }

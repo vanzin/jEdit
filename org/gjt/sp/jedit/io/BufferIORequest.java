@@ -541,7 +541,9 @@ public class BufferIORequest extends WorkRequest
 				 * data will not be lost */
 				String savePath;
 
-				if((vfs.getCapabilities() & VFS.RENAME_CAP) != 0)
+				boolean twoStageSave = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0
+					&& jEdit.getBooleanProperty("twoStageSave");
+				if(twoStageSave)
 				{
 					savePath = vfs.getParentOfPath(path)
 						+ '#' + vfs.getFileName(path)
@@ -566,7 +568,7 @@ public class BufferIORequest extends WorkRequest
 					buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 				}
 
-				if((vfs.getCapabilities() & VFS.RENAME_CAP) != 0)
+				if(twoStageSave)
 					vfs._rename(session,savePath,path,view);
 
 				// We only save markers to VFS's that support deletion.

@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=2: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>
@@ -75,6 +75,24 @@
    the buffer to a different specified file on disk, but doesn't rename the
    buffer, and doesn't clear the <quote>modified</quote> flag.
   </para>
+  <sidebar><title>How files are saved</title>
+   <para>
+    To prevent data loss in the unlikely case that jEdit should crash in the
+    middle of saving a file, files are first saved to
+    <filename>#<replaceable>filename</replaceable>#save#</filename>. If this
+    operation is successful, the original file is replaced with the temporary
+    file.
+   </para>
+   <para>
+    However, in some situations, this behavior is undesirable. For example,
+    on Unix saving files this way will result in the owner and group of the
+    file being reset. If this bothers you, you can disable this so-called
+    <quote>two-stage save</quote> in the <guibutton>Loading and Saving</guibutton>
+    pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box.
+   </para>
+  </sidebar>
   <sect2><title>Autosave and Crash Recovery</title>
    <para>
     The autosave feature protects your work from computer crashes and

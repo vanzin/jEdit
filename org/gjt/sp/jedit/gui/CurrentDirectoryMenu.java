@@ -41,7 +41,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 	{
 		if(b)
 		{
-			final View view = EditAction.getView(this);
+			final View view = GUIUtilities.getView(this);
 
 			if(getMenuComponentCount() != 0)
 				removeAll();

@@ -48,6 +48,9 @@ client.newView=false
 # Persistent markers
 persistentMarkers=true
 
+# Two-stage save (save to #filename#save# first, then filename)
+twoStageSave=true
+
 # Caret saving toggle
 saveCaret=true
 

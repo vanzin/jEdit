@@ -686,6 +686,11 @@ public class Buffer implements EBComponent
 						setFlag(NEW_FILE,false);
 						setFlag(UNTITLED,false);
 						setFlag(DIRTY,false);
+
+						// this ensures that undo can clear
+						// the dirty flag properly when all
+						// edits up to a save are undone
+						undoMgr.bufferSaved();
 					}
 					finally
 					{
@@ -957,6 +962,10 @@ public class Buffer implements EBComponent
 		{
 			setFlag(DIRTY,false);
 			setFlag(AUTOSAVE_DIRTY,false);
+
+			// this ensures that undo can clear the dirty flag properly
+			// when all edits up to a save are undone
+			undoMgr.bufferSaved();
 		}
 
 		if(d != old_d)
