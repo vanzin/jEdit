@@ -700,7 +700,10 @@ public class PluginJAR
 	{
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
+		{
 			loadCache(cache);
+			classLoader.activate();
+		}
 		else
 		{
 			try
@@ -848,7 +851,6 @@ public class PluginJAR
 		{
 			// Check if a plugin with the same name
 			// is already loaded
-			System.err.println("Check " + cache.pluginClass);
 			if(jEdit.getPlugin(cache.pluginClass) != null)
 			{
 				jEdit.pluginError(path,
