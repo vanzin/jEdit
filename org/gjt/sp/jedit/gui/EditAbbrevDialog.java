@@ -27,23 +27,29 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
 public class EditAbbrevDialog extends JDialog
 {
 	//{{{ EditAbbrevDialog constructor
-	public EditAbbrevDialog(Frame frame, String abbrev, String expansion)
+	/**
+	 * @since jEdit 4.2pre3
+	 */
+	public EditAbbrevDialog(Frame frame, String abbrev, String expansion,
+		Map abbrevs)
 	{
 		super(frame,jEdit.getProperty("edit-abbrev.title"),true);
-		init(abbrev, expansion);
+		init(abbrev, expansion, abbrevs);
 	} //}}}
 
 	//{{{ EditAbbrevDialog constructor
-	public EditAbbrevDialog(Dialog dialog, String abbrev, String expansion)
+	public EditAbbrevDialog(Dialog dialog, String abbrev, String expansion,
+		Map abbrevs)
 	{
 		super(dialog,jEdit.getProperty("edit-abbrev.title"),true);
-		init(abbrev, expansion);
+		init(abbrev, expansion, abbrevs);
 	} //}}}
 
 	//{{{ getAbbrev() method
@@ -69,10 +75,16 @@ public class EditAbbrevDialog extends JDialog
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
+	private String originalAbbrev;
+	private Map abbrevs;
 
 	//{{{ init() method
-	private void init(String abbrev, String expansion)
+	private void init(String abbrev, String expansion, Map abbrevs)
 	{
+		this.abbrevs = abbrevs;
+
+		this.originalAbbrev = abbrev;
+
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -107,6 +119,25 @@ public class EditAbbrevDialog extends JDialog
 		show();
 	} //}}}
 
+	//{{{ checkForExistingAbbrev() method
+	private boolean checkForExistingAbbrev()
+	{
+		String abbrev = editor.getAbbrev();
+		if(abbrevs.get(abbrev) != null)
+		{
+			if(abbrev.equals(originalAbbrev))
+				return true;
+
+			int result = GUIUtilities.confirm(this,
+				"edit-abbrev.duplicate",null,
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.WARNING_MESSAGE);
+			return (result == JOptionPane.YES_OPTION);
+		}
+
+		return true;
+	} //}}}
+
 	//}}}
 
 	//{{{ ActionHandler class
@@ -122,6 +153,9 @@ public class EditAbbrevDialog extends JDialog
 					getToolkit().beep();
 					return;
 				}
+
+				if(!checkForExistingAbbrev())
+					return;
 
 				isOK = true;
 			}

@@ -1214,6 +1214,8 @@ public class View extends JFrame implements EBComponent
 		addWindowListener(new WindowHandler());
 
 		EditBus.addToBus(this);
+
+		SearchDialog.preloadSearchDialog(this);
 	} //}}}
 
 	//{{{ close() method

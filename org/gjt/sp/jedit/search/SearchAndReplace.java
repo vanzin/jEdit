@@ -73,9 +73,6 @@ public class SearchAndReplace
 	 */
 	public static void setSearchString(String search)
 	{
-		if(!init)
-			load();
-
 		if(search.equals(SearchAndReplace.search))
 			return;
 
@@ -91,9 +88,6 @@ public class SearchAndReplace
 	 */
 	public static String getSearchString()
 	{
-		if(!init)
-			load();
-
 		return search;
 	} //}}}
 
@@ -104,9 +98,6 @@ public class SearchAndReplace
 	 */
 	public static void setReplaceString(String replace)
 	{
-		if(!init)
-			load();
-
 		if(replace.equals(SearchAndReplace.replace))
 			return;
 
@@ -122,9 +113,6 @@ public class SearchAndReplace
 	 */
 	public static String getReplaceString()
 	{
-		if(!init)
-			load();
-
 		return replace;
 	} //}}}
 
@@ -136,9 +124,6 @@ public class SearchAndReplace
 	 */
 	public static void setIgnoreCase(boolean ignoreCase)
 	{
-		if(!init)
-			load();
-
 		if(ignoreCase == SearchAndReplace.ignoreCase)
 			return;
 
@@ -156,9 +141,6 @@ public class SearchAndReplace
 	 */
 	public static boolean getIgnoreCase()
 	{
-		if(!init)
-			load();
-
 		return ignoreCase;
 	} //}}}
 
@@ -170,9 +152,6 @@ public class SearchAndReplace
 	 */
 	public static void setRegexp(boolean regexp)
 	{
-		if(!init)
-			load();
-
 		if(regexp == SearchAndReplace.regexp)
 			return;
 
@@ -192,9 +171,6 @@ public class SearchAndReplace
 	 */
 	public static boolean getRegexp()
 	{
-		if(!init)
-			load();
-
 		return regexp;
 	} //}}}
 
@@ -209,9 +185,6 @@ public class SearchAndReplace
 	 */
 	public static void setReverseSearch(boolean reverse)
 	{
-		if(!init)
-			load();
-
 		if(reverse == SearchAndReplace.reverse)
 			return;
 
@@ -230,9 +203,6 @@ public class SearchAndReplace
 	 */
 	public static boolean getReverseSearch()
 	{
-		if(!init)
-			load();
-
 		return reverse;
 	} //}}}
 
@@ -244,9 +214,6 @@ public class SearchAndReplace
 	 */
 	public static void setBeanShellReplace(boolean beanshell)
 	{
-		if(!init)
-			load();
-
 		if(beanshell == SearchAndReplace.beanshell)
 			return;
 
@@ -264,9 +231,6 @@ public class SearchAndReplace
 	 */
 	public static boolean getBeanShellReplace()
 	{
-		if(!init)
-			load();
-
 		return beanshell;
 	} //}}}
 
@@ -279,9 +243,6 @@ public class SearchAndReplace
 	 */
 	public static void setAutoWrapAround(boolean wrap)
 	{
-		if(!init)
-			load();
-
 		if(wrap == SearchAndReplace.wrap)
 			return;
 
@@ -299,9 +260,6 @@ public class SearchAndReplace
 	 */
 	public static boolean getAutoWrapAround()
 	{
-		if(!init)
-			load();
-
 		return wrap;
 	} //}}}
 
@@ -316,9 +274,6 @@ public class SearchAndReplace
 	 */
 	public static void setSearchMatcher(SearchMatcher matcher)
 	{
-		if(!init)
-			load();
-
 		SearchAndReplace.matcher = matcher;
 
 		EditBus.send(new SearchSettingsChanged(null));
@@ -336,9 +291,6 @@ public class SearchAndReplace
 	public static SearchMatcher getSearchMatcher()
 		throws Exception
 	{
-		if(!init)
-			load();
-
 		if(matcher != null)
 			return matcher;
 
@@ -379,9 +331,6 @@ public class SearchAndReplace
 	 */
 	public static void setSearchFileSet(SearchFileSet fileset)
 	{
-		if(!init)
-			load();
-
 		SearchAndReplace.fileset = fileset;
 
 		EditBus.send(new SearchSettingsChanged(null));
@@ -393,9 +342,6 @@ public class SearchAndReplace
 	 */
 	public static SearchFileSet getSearchFileSet()
 	{
-		if(!init)
-			load();
-
 		return fileset;
 	} //}}}
 
@@ -425,9 +371,6 @@ public class SearchAndReplace
 	 */
 	public static boolean hyperSearch(View view, boolean selection)
 	{
-		if(!init)
-			load();
-
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
 		if(comp == null)
@@ -489,9 +432,6 @@ public class SearchAndReplace
 	 */
 	public static boolean find(View view)
 	{
-		if(!init)
-			load();
-
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
 		if(comp == null)
@@ -672,9 +612,6 @@ loop:			for(;;)
 	public static boolean find(View view, Buffer buffer, int start,
 		boolean firstTime, boolean reverse) throws Exception
 	{
-		if(!init)
-			load();
-
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
 		{
@@ -731,9 +668,6 @@ loop:			for(;;)
 	 */
 	public static boolean replace(View view)
 	{
-		if(!init)
-			load();
-
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
 		if(comp == null)
@@ -860,9 +794,6 @@ loop:			for(;;)
 		if(!buffer.isEditable())
 			return false;
 
-		if(!init)
-			load();
-
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
 		if(comp == null)
@@ -912,9 +843,6 @@ loop:			for(;;)
 	 */
 	public static boolean replaceAll(View view)
 	{
-		if(!init)
-			load();
-
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
 		if(comp == null)
@@ -1028,7 +956,6 @@ loop:			while(path != null)
 	 */
 	public static void load()
 	{
-		init = true;
 		search = jEdit.getProperty("search.find.value");
 		replace = jEdit.getProperty("search.replace.value");
 		ignoreCase = jEdit.getBooleanProperty("search.ignoreCase.toggle");
@@ -1051,9 +978,6 @@ loop:			while(path != null)
 	 */
 	public static void save()
 	{
-		if(!init)
-			return;
-
 		jEdit.setProperty("search.find.value",search);
 		jEdit.setProperty("search.replace.value",replace);
 		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
@@ -1065,8 +989,6 @@ loop:			while(path != null)
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private static boolean init;
-
 	private static String search;
 	private static String replace;
 	private static boolean regexp;

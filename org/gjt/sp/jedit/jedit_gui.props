@@ -1317,6 +1317,12 @@ add-abbrev.global=Add global
 
 edit-abbrev.title=Edit Abbreviation
 
+edit-abbrev.duplicate.title=Duplicate Abbreviation
+edit-abbrev.duplicate.message=\
+	Another expansion already exists with this abbreviation.\n\
+	\n\
+	Do you want to override the existing expansion?
+
 abbrev-editor.abbrev=Abbreviation:
 abbrev-editor.before=Text to insert before caret:
 abbrev-editor.after=Text to insert after caret:
@@ -2041,8 +2047,11 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 	{0}
 
 plugin-manager.dependency.title=Plugin Dependency
-plugin-manager.dependency.message=One or more plugins you are installing \
-	depend on this plugin.\nAre you sure you don't want to install it?
+plugin-manager.dependency.message={0} is required by the following plugins:\n\
+	\n\
+	{1}\n\
+	\n\
+	Deselecting {0} will also deselect the above plugins.
 
 plugin-manager.status.loaded=Loaded
 plugin-manager.status.not-loaded=Not loaded

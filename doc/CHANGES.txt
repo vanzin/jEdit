@@ -32,6 +32,10 @@ Thanks to Ken Turner for contributing to this release.
 - Optimized away some redundant code in the display manager, which
   should result in improved performance.
 
+- Search dialog should open a little bit faster. This fixes the issue
+  where if you press C+f and type a search string really quickly,
+  characters would be inserted in the text area.
+
 }}}
 {{{ Bug Fixes
 
@@ -61,6 +65,21 @@ Thanks to Ken Turner for contributing to this release.
 
 - Plugins that failed to load were not marked as such, and showed up as
   "Loaded" in the plugin manager.
+
+- Added a workaround for a MacOS X Java bug where renaming a file to
+  contain a path to a non-existent directory would delete the file.
+
+- It is now possible to rename a file to another name that only differs
+  in case on Windows.
+
+- If "Ignore Case" was on, searching for strings containing certain
+  characters (such as Unicode 0x00df) did not work since
+  String.toUpperCase() sometimes mangles the string in various ways.
+  Processing the string with Character.toUpperCase() doesn't seem to do
+  this.
+
+- The "Abbreviations" option pane now correctly handles expansions with
+  duplicate abbreviations.
 
 }}}
 {{{ API Changes

@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- 'remove plugins' dialog: use a text area
+- tall caret and tab
+- tall caret and backspace
 - why are { undone individually?
 - is this bogus?
 				else if(fvm[endi] == startLine + numLines)

@@ -390,6 +390,8 @@ public class jEdit
 
 		initResources();
 
+		SearchAndReplace.load();
+
 		GUIUtilities.advanceSplashProgress();
 
 		if(loadPlugins)

@@ -44,10 +44,15 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	public BoyerMooreSearchMatcher(String pattern, String replace,
 		boolean ignoreCase, boolean beanshell, BshMethod replaceMethod)
 	{
-		if (ignoreCase)
-			this.pattern = pattern.toUpperCase().toCharArray();
-		else
-			this.pattern = pattern.toCharArray();
+		this.pattern = pattern.toCharArray();
+		if(ignoreCase)
+		{
+			for(int i = 0; i < this.pattern.length; i++)
+			{
+				this.pattern[i] = Character.toUpperCase(
+					this.pattern[i]);
+			}
+		}
 
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
