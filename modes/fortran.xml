@@ -18,6 +18,8 @@ platform or vendor specific keywords (in paticular COMPAQ(Digital) FORTRAN).
     <PROPS>
          <PROPERTY NAME="blockComment" VALUE="C" />
          <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+	 <PROPERTY NAME="indentPrevLine"
+			VALUE="\s*((if\s*\(.*\)\s*then|else\s*|do\s*)*)" />
     </PROPS>
 
     <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
@@ -58,7 +60,6 @@ in either free or fixed form FORTRAN-->
 		<SEQ TYPE="OPERATOR">.ge.</SEQ>
 		<SEQ TYPE="OPERATOR">.AND.</SEQ>
 		<SEQ TYPE="OPERATOR">.OR.</SEQ>
-		<SEQ TYPE="OPERATOR">.NOT.</SEQ>
 
 <KEYWORDS>
 <!-- unclassified keywords -->
@@ -91,7 +92,6 @@ in either free or fixed form FORTRAN-->
 <KEYWORD1>CHARACTER</KEYWORD1> 
 <KEYWORD1>DIMENSION</KEYWORD1>
 <KEYWORD1>KIND</KEYWORD1>
-<KEYWORD1>COMMON</KEYWORD1>
 <!-- FORTRAN Statements -->
 <KEYWORD1>CASE</KEYWORD1>
 <KEYWORD1>SELECT</KEYWORD1>
@@ -102,6 +102,8 @@ in either free or fixed form FORTRAN-->
 <KEYWORD1>WHILE</KEYWORD1>
 <KEYWORD1>ELSE</KEYWORD1>
 <KEYWORD1>IF</KEYWORD1>
+<KEYWORD1>ELSEIF</KEYWORD1>
+<KEYWORD1>THEN</KEYWORD1>
 <KEYWORD1>ELSEWHERE</KEYWORD1>
 <KEYWORD1>END</KEYWORD1>
 <KEYWORD1>ENDIF</KEYWORD1>
