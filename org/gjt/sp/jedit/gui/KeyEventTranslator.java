@@ -174,6 +174,9 @@ public class KeyEventTranslator
 			return null;
 		}
 
+		/* I guess translated events do not have the 'evt' field set
+		so consuming won't work. I don't think this is a problem as
+		nothing uses translation anyway */
 		Key trans = (Key)transMap.get(returnValue);
 		if(trans == null)
 			return returnValue;

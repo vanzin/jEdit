@@ -287,6 +287,7 @@ public class FileVFS extends VFS
 
 		String backupDirectory = jEdit.getProperty("backup.directory");
 
+		int backupTimeDistance = jEdit.getIntegerProperty("backup.minTime",0);
 		File file = new File(path);
 
 		// Check for backup.directory, and create that
@@ -310,7 +311,7 @@ public class FileVFS extends VFS
 		}
 
 		MiscUtilities.saveBackup(file,backups,backupPrefix,
-			backupSuffix,backupDirectory);
+			backupSuffix,backupDirectory,backupTimeDistance);
 	} //}}}
 
 	//{{{ _createInputStream() method

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.JOptionPane;
-import java.awt.event.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -41,7 +40,7 @@ import org.gjt.sp.jedit.*;
  * @version $Id$
  * @see org.gjt.sp.jedit.gui.DefaultInputHandler
  */
-public abstract class InputHandler extends KeyAdapter
+public abstract class InputHandler
 {
 	//{{{ InputHandler constructor
 	/**
@@ -52,28 +51,6 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		this.view = view;
 		repeatCount = 1;
-	} //}}}
-
-	//{{{ processKeyEvent() method
-	/**
-	 * Utility method, calls one of {@link #keyPressed(KeyEvent)},
-	 * {@link #keyReleased(KeyEvent)}, or {@link #keyTyped(KeyEvent)}.
-	 * @since jEdit 4.0pre4
-	 */
-	public void processKeyEvent(KeyEvent evt)
-	{
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			keyTyped(evt);
-			break;
-		case KeyEvent.KEY_PRESSED:
-			keyPressed(evt);
-			break;
-		case KeyEvent.KEY_RELEASED:
-			keyReleased(evt);
-			break;
-		}
 	} //}}}
 
 	//{{{ addKeyBinding() method
@@ -119,6 +96,15 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		return false;
 	} //}}}
+
+	//{{{ handleKey() method
+	/**
+	 * Handles a keystroke.
+	 * @param keyStroke The key stroke.
+	 * @since jEdit 4.2pre5
+	 */
+	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke);
+	//}}}
 
 	//{{{ getRepeatCount() method
 	/**

@@ -433,7 +433,7 @@ public class ActionBar extends JPanel
 				{
 					view.getTextArea().requestFocus();
 					view.getInputHandler().setRepeatCount(repeatCount);
-					view.getInputHandler().processKeyEvent(evt);
+					view.processKeyEvent(evt);
 				}
 			});
 		}

@@ -28,6 +28,9 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -286,9 +289,48 @@ public class Java14
 			int action)
 		{
 			Log.log(Log.DEBUG,this,"Export done");
-			JEditTextArea textArea = (JEditTextArea)c;
-			if(action == MOVE)
-				textArea.setSelectedText(null,false);
+
+			if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+			{
+				EditPane editPane = (EditPane)GUIUtilities
+					.getComponentParent(c,EditPane.class);
+
+				Buffer buffer = null;
+
+				Object data = null;
+				try
+				{
+					data = t.getTransferData(
+						DataFlavor.javaFileListFlavor);
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,e);
+				}
+
+				Iterator iterator = ((List)data).iterator();
+
+				while(iterator.hasNext())
+				{
+					File file = (File)iterator.next();
+					Buffer _buffer = jEdit.openFile(null,
+						file.getPath());
+					if(_buffer != null)
+						buffer = buffer;
+				}
+
+				if(buffer != null)
+					editPane.setBuffer(buffer);
+				editPane.getView().toFront();
+				editPane.getView().requestFocus();
+				editPane.requestFocus();
+			}
+			else if(t.isDataFlavorSupported(DataFlavor.stringFlavor))
+			{
+				JEditTextArea textArea = (JEditTextArea)c;
+				if(action == MOVE)
+					textArea.setSelectedText(null,false);
+			}
 		}
 
 		public boolean canImport(JComponent c, DataFlavor[] flavors)
@@ -299,8 +341,11 @@ public class Java14
 
 			for(int i = 0; i < flavors.length; i++)
 			{
-				if(DataFlavor.stringFlavor.equals(flavors[i]))
+				if(DataFlavor.stringFlavor.equals(flavors[i]) ||
+					DataFlavor.javaFileListFlavor.equals(flavors[i]))
+				{
 					return true;
+				}
 			}
 			return false;
 		}
