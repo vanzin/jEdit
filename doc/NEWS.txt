@@ -4,6 +4,139 @@ jEdit 4.1 improves on many aspects of jEdit 4.0. It fills in some gaps
 in 4.0's feature set, and significantly improves usability, stability
 and performance.
 
+* User interface
+
+- Improved menu bar layout and Utilities->Global Options dialog box
+  usability.
+
+- jEdit now remembers if windows were maximized across sessions when
+  running on Java 1.4.
+
+- The View->Unsplit Current command removes the currently focused split
+  from the view. Other splits are left intact (unlike View->Unsplit All).
+
+- The View->New Plain View command opens a new view without any tool
+  bars or docked windows.
+
+- The View->Docking menu now contains commands for moving keyboard focus
+  to the four docking areas and the text area.
+
+  The commands for closing each of the four docking areas have been
+  merged into a single command that closes the currently focused docking
+  area.
+
+- All dockables now automatically have commands created for them for
+  opening a new floating instance of that dockable, regardless of the
+  docking configuration. The commands are named after the dockable name
+  with "(New Floating Instance)" appended.
+
+  Another way to open a new floating instance of a docked window is to
+  select the appropriate command from a dockable button's right-click
+  menu.
+
+- The status bar now displays the word wrap mode and the line separator.
+
+- The contents of the status bar can be customized in the Status Bar
+  pane of the Utilities->Global Options dialog box.
+
+- The online help is now fully searchable.
+
+* Text editing
+
+- Rectangular selection now respects hard tabs, inserting text into
+  columns has been much improved, and a there is now a "Vertical Paste"
+  command.
+
+- Auto indent in Java mode and similar file types now inserts indent
+  after "if", "while", "for", and such.
+
+- By rebinding commands in the Shortcuts pane of the Global Options
+  dialog box, the C+LEFT/C+RIGHT commands can be reconfigured to skip
+  whitespace, like they do in some other text editors.
+
+  The standard commands are named "Go to Previous/Next Word"; the
+  alternative versions are named "Go to Previous/Next Word (Eat
+  Whitespace)". Corresponding "Select to..." commands exist for
+  CS+LEFT/RIGHT.
+
+* Search and replace
+
+- Directory search can now be performed over virtual file systems.
+
+- The HyperSearch Results window can optionally retain previous search
+  results.
+
+- HyperSearch within a rectangular selection is now supported.
+
+- The search bar is now hidden by default. The quick search commands
+  make it visible, and pressing ESCAPE hides it.
+
+  If you prefer the old behavior where the search bar was always
+  visible, specify so in the General pane of the Utilities->Global
+  Options dialog box.
+
+* File system browser
+
+- The File->Open With Encoding menu has been removed. Files can now be
+  opened in a different encoding by selecting the encoding from the file
+  system browser's Commands->Encoding menu.
+
+- The popup menu shown when right-clicking on a file now has commands
+  for opening the file in a new horizontal split, and a new plain view.
+
+- The text field in file system browser dialog boxes now auto-completes
+  the currently entered file name.
+
+* Syntax highlighting
+
+- Syntax highlighting for 15 new file types has been added. (as of pre9)
+
+- HTML mode now correctly highlights most <SCRIPT> and <STYLE> tags.
+
+- Perl mode now correctly highlights various esoteric constructions such
+  as s/.../.../, m#...#, and so on.
+
+- Added regular expression matching with SEQ_REGEXP, SPAN_REGEXP and
+  EOL_SPAN_REGEXP rules.
+
+- EOL_SPAN rules can now delegate to another rule set.
+
+- SEQ rules can now specify a delegate -- this will switch the rule set
+  for the remainder of the SEQ's context.
+
+- Rules can now specify AT_WORD_START and AT_WHITESPACE_END attributes
+  for more exact control of where they should match.
+
+- Digit highlighting is now more flexible. Rulesets can specify a
+  regular expression that matches numeric expressions in a DIGIT_RE
+  attribute.
+
+* Macro system
+
+- jEdit now includes BeanShell 1.2b7, which features a number of minor
+  improvements over version 1.2b6, which was shipped with jEdit 4.0.
+
+- The "scriptPath" variable is now set to the full path of the currently
+  running macro or script.
+
+- If the system and user macro directories have a sub-directory with the
+  same name, the contents of the sub-directory is merged into a single
+  sub-menu of the Macros menu. Previously, two sub-menus with the same
+  name would be created.
+
+- Startup scripts can be written in any scripting language supported by
+  an installed plugin, not just BeanShell. This lets you write startup
+  scripts in Jython if the JythonInterpreter plugin is installed, for
+  example.
+
+* Plugin manager
+
+- A SOCKS proxy server can now be specified in the Proxy Servers pane of
+  the Global Options dialog box.
+
+- The "Install Plugins" and "Update Plugins" dialog boxes now categorize
+  the plugin list.
+
 * Incompatible changes
 
 - Older versions of some plugins might be incompatible with jEdit 4.1.
@@ -53,145 +186,6 @@ and performance.
 
   There are corresponding "Select to..." commands that can be bound to
   S+HOME and S+END too.
-
-* User interface
-
-- Improved menu bar layout and Utilities->Global Options dialog box
-  usability.
-
-- jEdit now remembers if windows were maximized across sessions when
-  running on Java 1.4.
-
-- The View->Unsplit Current command removes the currently focused split
-  from the view. Other splits are left intact (unlike View->Unsplit All).
-
-- The View->New Plain View command opens a new view without any tool
-  bars or docked windows.
-
-- The View->Docking menu now contains commands for moving keyboard focus
-  to the four docking areas and the text area.
-
-  The commands for closing each of the four docking areas have been
-  merged into a single command that closes the currently focused docking
-  area.
-
-- All dockables now automatically have commands created for them for
-  opening a new floating instance of that dockable, regardless of the
-  docking configuration. The commands are named after the dockable name
-  with "(New Floating Instance)" appended.
-
-  Another way to open a new floating instance of a docked window is to
-  select the appropriate command from a dockable button's right-click
-  menu.
-
-- The status bar now displays the word wrap mode and the line separator.
-
-  The contents of the status bar can be customized in the Status Bar
-  pane of the Utilities->Global Options dialog box.
-
-- The online help is now fully searchable.
-
-* Text editing
-
-- Rectangular selection now respects hard tabs, inserting text into
-  columns has been much improved, and a there is now a "Vertical Paste"
-  command.
-
-- Auto indent in Java mode and similar file types now inserts indent
-  after "if", "while", "for", and such.
-
-- By rebinding commands in the Shortcuts pane of the Global Options
-  dialog box, the C+LEFT/C+RIGHT commands can be reconfigured to skip
-  whitespace, like they do in some other text editors.
-
-  The standard commands are named "Go to Previous/Next Word"; the
-  alternative versions are named "Go to Previous/Next Word (Eat
-  Whitespace)". Corresponding "Select to..." commands exist for
-  CS+LEFT/RIGHT.
-
-* Syntax highlighting
-
-- Syntax highlighting for 15 new file types has been added. (as of pre9)
-
-- HTML mode now correctly highlights most <SCRIPT> and <STYLE> tags.
-
-- Perl mode now correctly highlights various esoteric constructions such
-  as s/.../.../, m#...#, and so on.
-
-- The syntax highlighting engine has been improved:
-
-  Added regular expression matching with SEQ_REGEXP, SPAN_REGEXP and
-  EOL_SPAN_REGEXP rules.
-
-  EOL_SPAN rules can now delegate to another rule set.
-
-  SEQ rules can now specify a delegate -- this will switch the rule set
-  for the remainder of the SEQ's context.
-
-  Rules can now specify AT_WORD_START and AT_WHITESPACE_END attributes
-  for more exact control of where they should match.
-
-  Digit highlighting is now more flexible. Rulesets can specify a
-  regular expression that matches numeric expressions in a DIGIT_RE
-  attribute.
-
-- Some edit modes will need to be updated to work with jEdit 4.1. See
-  the "Updating Edit Modes for jEdit 4.1" section of the user's guide
-  for details.
-
-* Search and replace
-
-- Directory search can now be performed over virtual file systems.
-
-- The HyperSearch Results window can optionally retain previous search
-  results.
-
-- HyperSearch within a rectangular selection is now supported.
-
-- The search bar is now hidden by default. The quick search commands
-  make it visible, and pressing ESCAPE hides it.
-
-  If you prefer the old behavior where the search bar was always
-  visible, specify so in the General pane of the Utilities->Global
-  Options dialog box.
-
-* File system browser
-
-- The File->Open With Encoding menu has been removed. Files can now be
-  opened in a different encoding by selecting the encoding from the file
-  system browser's Commands->Encoding menu.
-
-- The popup menu shown when right-clicking on a file now has commands
-  for opening the file in a new horizontal split, and a new plain view.
-
-- The text field in file system browser dialog boxes now auto-completes
-  the currently entered file name.
-
-* Macro system
-
-- jEdit now includes BeanShell 1.2b7, which features a number of minor
-  improvements over version 1.2b6, which was shipped with jEdit 4.0.
-
-- The "scriptPath" variable is now set to the full path of the currently
-  running macro or script.
-
-- If the system and user macro directories have a sub-directory with the
-  same name, the contents of the sub-directory is merged into a single
-  sub-menu of the Macros menu. Previously, two sub-menus with the same
-  name would be created.
-
-- Startup scripts can be written in any scripting language supported by
-  an installed plugin, not just BeanShell. This lets you write startup
-  scripts in Jython if the JythonInterpreter plugin is installed, for
-  example.
-
-* Plugin manager
-
-- A SOCKS proxy server can now be specified in the Proxy Servers pane of
-  the Global Options dialog box.
-
-- The "Install Plugins" and "Update Plugins" dialog boxes now categorize
-  the plugin list.
 
 And of course, there is much, much more; see the CHANGES.txt file for a
 full list.

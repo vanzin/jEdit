@@ -53,9 +53,14 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ JARClassLoader constructor
+	public static long scanTime;
+	public static long startTime;
+
 	public JARClassLoader(String path)
 		throws IOException
 	{
+		long time = System.currentTimeMillis();
+
 		this.path = path;
 		zipFile = new JarFile(path);
 		definePackages();
@@ -84,6 +89,8 @@ public class JARClassLoader extends ClassLoader
 		}
 
 		jEdit.addPluginJAR(jar);
+
+		scanTime += (System.currentTimeMillis() - time);
 	} //}}}
 
 	//{{{ loadClass() method
@@ -226,6 +233,8 @@ public class JARClassLoader extends ClassLoader
 	//{{{ startAllPlugins() method
 	void startAllPlugins()
 	{
+		long time = System.currentTimeMillis();
+
 		boolean ok = true;
 
 		for(int i = 0; i < pluginClasses.size(); i++)
@@ -250,6 +259,9 @@ public class JARClassLoader extends ClassLoader
 					"plugin-error.start-error",args);
 			}
 		}
+
+		startTime += (System.currentTimeMillis() - time);
+		time = System.currentTimeMillis();
 
 		if(!ok)
 		{
@@ -290,6 +302,8 @@ public class JARClassLoader extends ClassLoader
 			String[] args = { io.toString() };
 			jEdit.pluginError(path,"plugin-error.load-error",args);
 		}
+
+		scanTime += (System.currentTimeMillis() - time);
 	} //}}}
 
 	//{{{ Private members

@@ -120,7 +120,23 @@
 	</answer>
 </qandaentry>
 
+<qandaentry>
+        <question id="java-web-start">
+                <para>
+                        Why is there no Java Web Start version of jEdit?
+                </para>
+        </question>
+        <answer>
+                <para>
+                        In Java Web Start, dynamically-loaded classes (ie, plugins) run in a sandbox
+                        unless they are explicitly signed. Also, the protocol handler API prevents
+                        protocol handlers from being added if they are not loaded via the system
+                        class loader (i.e via the Java Web Start class loader). So the lack of plugin
+                        support and jeditresource protocol makes it useless.
 
+                </para>
+        </answer>
+</qandaentry>
 
   </qandadiv>
 
@@ -230,6 +246,42 @@
         <step><para>Double-click on your icon to launch jEdit.</para></step>
        </procedure>
      </answer>
+   </qandaentry>
+   <qandaentry>
+        <question id="blurry-tabs">
+                <para>
+                        Why are the tabs for docked windows blurry under OS X 10.2
+                </para>
+        </question>
+        <answer>
+                <para>
+                        In Mac OS X 10.2 Apple enabled Hardware Acceleration for Java by default.
+                        Unfortunately it had some bugs. This is the result of one of these bugs.
+                        The only way to avoid this problem is to disable hardware acceleration for
+                        jEdit or your whole system. <step>To disable it in jEdit you will need to edit
+                        the following file:</step>
+                        jEdit/jEdit.app/Contents/Resources/MRJApp.properties
+                        
+                        You will need to add the line <userinput>com.apple.hwaccel=false</userinput>.
+                        This is done for you in the Mac OS X package of jEdit 4.1.
+                </para>
+        </answer>
+   </qandaentry>
+   <qandaentry>
+        <question id="not-in-menubar">
+                <para>
+                        Why are the menus not in the menubar?
+                </para>
+        </question>
+        <answer>
+                <para>
+                        You can enable the use of OS X's menubar in the Mac OS Plugin settings.
+                        You should note that the reason this is off by default is because of numerous
+                        problems with using the Mac OS X menubar. For example dynamic menus, shortcuts
+                        and check box menu items do not work correctly or at all. All bar the shortcut
+                        issue is resolved in Java 1.4.1 (currently in beta).
+                </para>
+        </answer>
    </qandaentry>
 
 </qandadiv>
@@ -528,6 +580,25 @@
         which will capture and display the output of the external process and in
         many cases parse the output for error information.
       </para></answer>
+    </qandaentry>
+    <qandaentry>
+        <question id="jedit-crashed">
+                <para>
+                        jEdit crashed the JVM, what gives?
+                </para>
+        </question>
+        <answer>
+                <para>
+                        It's important to realise that java applications should never do this.
+                        The problem is almost certainly a bug in the JVM. Problems of this
+                        nature are often tricky to solve. Depending ony your platform, there
+                        should be information logged about what caused the crash to occur. For
+                        Unix type systems you will likely get an error in the console (and for
+                        Mac OS X you may also get a report in ~/Library/Logs/CrashReporter/JavaApplicationStub.crash.log).
+                        Some recent problems with Java 1.4.x and Windows were the result of a
+                        bug in the JVM and certain graphics card drivers.
+                </para>
+        </answer>
     </qandaentry>
   </qandadiv>
 

@@ -34,8 +34,17 @@ import org.gjt.sp.jedit.textarea.*;
 //}}}
 
 /**
- * A panel containing a text area. Each edit pane can edit one buffer at
- * a time.
+ * A panel containing a text area.<p>
+ *
+ * In a BeanShell script, you can obtain the current edit pane from the
+ * <code>editPane</code> variable.<p>
+ *
+ * This class does not have a public constructor.
+ * Edit panes can be created and destroyed using methods in the <code>View</code>
+ * class.<p>
+ *
+ * Each edit pane can edit one buffer at a time.
+ *
  * @author Slava Pestov
  * @version $Id$
  */

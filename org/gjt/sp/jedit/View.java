@@ -36,8 +36,13 @@ import org.gjt.sp.jedit.textarea.*;
 //}}}
 
 /**
- * A window that edits buffers. There is no public constructor in the
- * View class. Views are created and destroyed by the <code>jEdit</code>
+ * A window that edits buffers.<p>
+ *
+ * In a BeanShell script, you can obtain the current view instance from the
+ * <code>view</code> variable.<p>
+ *
+ * This class does not have a public constructor.
+ * Views can be opened and closed using methods in the <code>jEdit</code>
  * class.
  *
  * @author Slava Pestov
