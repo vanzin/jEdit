@@ -554,32 +554,29 @@ public class DisplayManager
 			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
 				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
-			hideLineRange(0,buffer.getLineCount() - 1);
+			showLineRange(0,buffer.getLineCount() - 1);
 
 			/* this ensures that the first line is always visible */
 			boolean seenVisibleLine = false;
 
-			int firstVisible = 0;
+			int firstInvisible = 0;
 
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
 				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
 				{
-					seenVisibleLine = true;
-				}
-				else
-				{
-					if(firstVisible != i)
+					if(firstInvisible != i)
 					{
-						showLineRange(firstVisible,
+						hideLineRange(firstInvisible,
 							i - 1);
 					}
-					firstVisible = i + 1;
+					firstInvisible = i + 1;
+					seenVisibleLine = true;
 				}
 			}
 
-			if(firstVisible != buffer.getLineCount())
-				showLineRange(firstVisible,buffer.getLineCount() - 1);
+			if(firstInvisible != buffer.getLineCount())
+				hideLineRange(firstInvisible,buffer.getLineCount() - 1);
 		}
 		finally
 		{
@@ -635,26 +632,12 @@ public class DisplayManager
 		{
 			initialized = true;
 			if(buffer.isLoaded())
-			{
-				firstLine.reset();
-				scrollLineCount.reset();
-				textArea.recalculateLastPhysicalLine();
-			}
+				bufferChangeHandler.foldHandlerChanged(buffer);
 		}
-	} //}}}
-
-	//{{{ notifyScreenLineChanges() method
-	void notifyScreenLineChanges()
-	{
-		if(firstLine.callChanged)
+		else
 		{
-			firstLine.callChanged = false;
-			firstLine.changed();
-		}
-		if(scrollLineCount.callChanged)
-		{
-			scrollLineCount.callChanged = false;
-			scrollLineCount.changed();
+			textArea.updateScrollBars();
+			textArea.recalculateLastPhysicalLine();
 		}
 	} //}}}
 
@@ -808,14 +791,14 @@ public class DisplayManager
 	{
 		if(firstLine.callChanged)
 		{
-			firstLine.changed();
 			firstLine.callChanged = false;
+			firstLine.changed();
 		}
 
 		if(scrollLineCount.callChanged)
 		{
-			scrollLineCount.changed();
 			scrollLineCount.callChanged = false;
+			scrollLineCount.changed();
 		}
 	} //}}}
 
@@ -852,13 +835,13 @@ public class DisplayManager
 
 			updateWrapSettings();
 
-			physicalLine = offsetMgr.getLineCount();
 			scrollLine = 0;
-			for(int i = 0; i < physicalLine; i++)
+			for(int i = 0; i < offsetMgr.getLineCount(); i++)
 			{
 				if(isLineVisible(i))
 					scrollLine += getScreenLineCount(i);
 			}
+			physicalLine = offsetMgr.getLineCount();
 
 			firstLine.ensurePhysicalLineIsVisible();
 
@@ -875,11 +858,12 @@ public class DisplayManager
 		//{{{ changed() method
 		public void changed()
 		{
+			//{{{ Debug code
 			if(Debug.SCROLL_DEBUG)
 			{
 				Log.log(Log.DEBUG,this,"changed() before: "
 					+ physicalLine + ":" + scrollLine);
-			}
+			} //}}}
 
 			ensurePhysicalLineIsVisible();
 
@@ -887,6 +871,7 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
+			//{{{ Debug code
 			if(Debug.VERIFY_FIRST_LINE)
 			{
 				int verifyScrollLine = 0;
@@ -914,7 +899,7 @@ public class DisplayManager
 			{
 				Log.log(Log.DEBUG,this,"changed() after: "
 					+ physicalLine + ":" + scrollLine);
-			}
+			} //}}}
 
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
