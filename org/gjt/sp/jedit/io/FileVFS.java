@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import java.awt.Component;
-import java.lang.reflect.Method;
 import java.io.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
@@ -285,29 +284,8 @@ public class FileVFS extends VFS
 		else
 			type = VFS.DirectoryEntry.FILE;
 
-		//{{{ Determine if this is a hidden file
-		boolean hidden;
-		if(isHiddenMethod != null)
-		{
-			try
-			{
-				hidden = Boolean.TRUE.equals(isHiddenMethod.invoke(
-					file,new Object[0]));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-				hidden = false;
-			}
-		}
-		else if(isUnix)
-			hidden = (file.getName().charAt(0) == '.');
-		else
-			hidden = false;
-		//}}}
-
 		return new VFS.DirectoryEntry(file.getName(),path,path,type,
-			file.length(),hidden);
+			file.length(),file.isHidden());
 	} //}}}
 
 	//{{{ _delete() method
@@ -538,7 +516,6 @@ public class FileVFS extends VFS
 
 	//{{{ Pivate members
 	private static boolean isUnix;
-	private static Method isHiddenMethod;
 
 	//{{{ Class initializer
 	static
@@ -572,19 +549,6 @@ public class FileVFS extends VFS
 		Log.log(Log.DEBUG,FileVFS.class,"Unix operating system "
 			+ (isUnix ? "detected; will" : "not detected; will not")
 			+ " use permission-preserving code");
-
-		//{{{ Check if isHidden() method on Java 2
-		try
-		{
-			isHiddenMethod = File.class.getMethod("isHidden",new Class[0]);
-			Log.log(Log.DEBUG,FileVFS.class,"File.isHidden() method"
-				+ " detected");
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.DEBUG,FileVFS.class,"File.isHidden() method"
-				+ " not detected");
-		} //}}}
 	} //}}}
 
 	//}}}

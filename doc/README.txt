@@ -6,15 +6,14 @@ JEDIT 4.0 README
 - License
 - jEdit on the Internet
 - Common problems
-- Problems that occur with older Java versions
 - Libraries
 
 * About jEdit
 
 jEdit is a cross platform programmer's text editor written in Java.
 
-jEdit requires Java 2 (or Java 1.1 with Swing 1.1). The recommended Java
-version for running jEdit is Java 2 version 1.3.
+jEdit requires Java 2 version 1.3. It should also work with version 1.4,
+but has not been tested as extensively with that version.
 
 jEdit comes with full online help; to read it, select 'jEdit Help' from
 jEdit's 'Help' menu.
@@ -22,9 +21,9 @@ jEdit's 'Help' menu.
 A PDF (Adobe Acrobat) version of the user's guide be downloaded from
 <http://www.jedit.org>.
 
-A list of credits, which includes those who contributed to the core or
-had developed plugins, can be found in the 'About jEdit' dialog box,
-also from jEdit's 'Help' menu.
+A list of people who contributed to jEdit, either by submitting code or
+edit modes to the core, or writing plugins can be viewed by selecting
+'About jEdit' from jEdit's 'Help' menu.
 
 * License
 
@@ -53,12 +52,12 @@ latest version of jEdit, along with plugin downloads. There is also a
 user-oriented site, <http://community.jedit.org>. Check it out.
 
 There are several mailing lists dedicated to jEdit; for details, visit
-<http://www.jedit.org/index.php?page=lists>. The mailing lists are the
-preferred place to post feature suggestions, questions, and the like.
+<http://www.jedit.org/?page=lists>. The mailing lists are the preferred
+place to post feature suggestions, questions, and the like.
 
 If you would like to report a bug, first read the `Common Problems'
 section below. If that doesn't answer your question, report a bug with
-our bug tracker, located at <http://www.jedit.org/index.php?page=bugs>.
+our bug tracker, located at <http://www.jedit.org/?page=bugs>.
 
 When writing a bug report, please try to be as specific as possible. You
 should specify your jEdit version, Java version, operating system, any
@@ -66,7 +65,8 @@ relevant output from the activity log, and an e-mail address, in case we
 need further information from you to fix the bug.
 
 The 'Make Bug Report' macro included with jEdit, which can be found in
-Macros->Misc, might be useful when preparing a bug report.
+the 'Misc' submenu of the 'Macros' menu, might be useful when preparing
+a bug report.
 
 If you would like to discuss the BeanShell scripting language,
 subscribe to one of the BeanShell mailing lists by visiting
@@ -104,9 +104,9 @@ actually a Java bug, or a well-known problem:
   For best results, use a heap size of about 2.5 times the largest file
   size you plan to edit.
 
-- Printing doesn't work very well, especially on Java 2. There isn't
-  much I can do about this until Sun fixes several outstanding bugs in
-  Java.
+- Printing doesn't work very well on some Java implementations. There
+  isn't much I can do about this until Sun fixes several outstanding
+  bugs in Java.
 
 - With Java versions older than 1.4 on Unix, you might not be able to
   copy and paste between jEdit and other programs. This is mainly
@@ -135,25 +135,7 @@ actually a Java bug, or a well-known problem:
 
 - Because jEdit is written in Java, it will always be slower than a
   native application. For best performance, use a recent Java version,
-  such as Java 2 version 1.3.
-
-* Problems that occur with older Java versions
-
-- If you are having problems such as Alt-key mnemonics not working, or
-  keystrokes inserting garbage into the text area, make sure you are
-  running the very latest Java version for your platform. Some older
-  Java versions, especially on Linux, had buggy key handling.
-
-- If you are using Java 1.1 and get a `ClassNotFoundException:
-  javax/swing/JWindow' or similar exception when starting jEdit,
-  chances are you don't have Swing installed properly. Download Swing
-  from <http://java.sun.com/products/jfc>. Alternatively, upgrade to
-  Java 2, which doesn't require you to install Swing separately.
-
-- The jEdit source code will not compile under Java 1.1. If you want to
-  compile the source yourself, you must do so under at least Java 2
-  version 1.3, even if you plan on running jEdit under an earlier Java
-  version.
+  such as Java 2 version 1.4.
 
 * Libraries
 

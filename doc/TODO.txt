@@ -2,13 +2,19 @@ TO DO
 
 + before pre3:
 
+- S+END/S+HOME
+- next-fold when cursor is on a top-level line; find first fold start
+- set read only flag of files if vfs doesn't have WRITE_CAP
+- if loadMode() throws error, save of a mode file fails?
+- jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
 - when loading a file with collapsedFolds property, last line always
   visible
 - faster hypersearch
 - C+e , and . insert , and . in the buffer
+- narrow: if collapsed fold, expand one level
+- mention linux numlock issue on compatibility page
 
-- narrow: expand a fold
 - after plugin installation is complete, show dialog with some random info
 - Toggle line comment macro needs to become context-sensitive
 - put package.html everywhere
