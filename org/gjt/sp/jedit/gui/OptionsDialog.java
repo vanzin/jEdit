@@ -45,26 +45,22 @@ public class OptionsDialog extends EnhancedDialog
 
 		view.showWaitCursor();
 
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		content.setLayout(new BorderLayout());
 
-		JPanel stage = new JPanel(new BorderLayout());
-		stage.setBorder(new EmptyBorder(0,6,0,0));
+		JPanel stage = new JPanel(new BorderLayout(6,6));
 		content.add(stage, BorderLayout.CENTER);
 
 		// currentLabel displays the path of the currently selected
 		// OptionPane at the top of the stage area
 		currentLabel = new JLabel();
 		currentLabel.setHorizontalAlignment(JLabel.LEFT);
-		currentLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1,
-			0, Color.black));
 		stage.add(currentLabel, BorderLayout.NORTH);
 
 		cardPanel = new JPanel(new CardLayout());
-		cardPanel.setBorder(new EmptyBorder(5,0,0,0));
 		stage.add(cardPanel, BorderLayout.CENTER);
 
 		paneTree = new JTree(createOptionTreeModel());
@@ -82,9 +78,7 @@ public class OptionsDialog extends EnhancedDialog
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
 			BorderLayout.WEST);
 
-		JPanel buttons = new JPanel();
-		buttons.setBorder(new EmptyBorder(12,0,0,0));
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
 
 		ok = new JButton(jEdit.getProperty("common.ok"));
