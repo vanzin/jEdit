@@ -302,58 +302,53 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		lastActionCount = 0;
 
-		if(readNextChar != null)
-			invokeReadNextChar(ch);
+		JEditTextArea textArea = view.getTextArea();
+
+		/* Buffer buffer = view.getBuffer();
+		if(!buffer.insideCompoundEdit())
+			buffer.beginCompoundEdit(); */
+
+		if(repeatCount == 1)
+			textArea.userInput(ch);
 		else
 		{
-			JEditTextArea textArea = view.getTextArea();
-
-			/* Buffer buffer = view.getBuffer();
-			if(!buffer.insideCompoundEdit())
-				buffer.beginCompoundEdit(); */
-
-			if(repeatCount == 1)
-				textArea.userInput(ch);
-			else
+			// stop people doing dumb stuff like C+ENTER 100 C+n
+			if(repeatCount > REPEAT_COUNT_THRESHOLD)
 			{
-				// stop people doing dumb stuff like C+ENTER 100 C+n
-				if(repeatCount > REPEAT_COUNT_THRESHOLD)
-				{
-					Object[] pp = { String.valueOf(ch),
-						new Integer(repeatCount) };
+				Object[] pp = { String.valueOf(ch),
+					new Integer(repeatCount) };
 
-					if(GUIUtilities.confirm(view,
-						"large-repeat-count.user-input",pp,
-						JOptionPane.WARNING_MESSAGE,
-						JOptionPane.YES_NO_OPTION)
-						!= JOptionPane.YES_OPTION)
-					{
-						repeatCount = 1;
-						view.getStatus().setMessage(null);
-						return;
-					}
-				}
-
-				Buffer buffer = view.getBuffer();
-				try
+				if(GUIUtilities.confirm(view,
+					"large-repeat-count.user-input",pp,
+					JOptionPane.WARNING_MESSAGE,
+					JOptionPane.YES_NO_OPTION)
+					!= JOptionPane.YES_OPTION)
 				{
-					if(repeatCount != 1)
-						buffer.beginCompoundEdit();
-					for(int i = 0; i < repeatCount; i++)
-						textArea.userInput(ch);
-				}
-				finally
-				{
-					if(repeatCount != 1)
-						buffer.endCompoundEdit();
+					repeatCount = 1;
+					view.getStatus().setMessage(null);
+					return;
 				}
 			}
 
-			Macros.Recorder recorder = view.getMacroRecorder();
-
-			if(recorder != null)
-				recorder.record(repeatCount,ch);
+			Buffer buffer = view.getBuffer();
+			try
+			{
+				if(repeatCount != 1)
+					buffer.beginCompoundEdit();
+				for(int i = 0; i < repeatCount; i++)
+					textArea.userInput(ch);
+			}
+			finally
+			{
+				if(repeatCount != 1)
+					buffer.endCompoundEdit();
+			}
 		}
+
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		if(recorder != null)
+			recorder.record(repeatCount,ch);
 
 		repeatCount = 1;
 	} //}}}

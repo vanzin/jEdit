@@ -292,6 +292,9 @@ release.
 
 - "Spaces To Tabs" didn't work with non-leading tabs.
 
+- C+e v ENTER and C+e v TAB still did auto indent, instead of inserting
+  a literal ENTER and TAB like the documentation says.
+
 }}}
 {{{ API Changes
 
