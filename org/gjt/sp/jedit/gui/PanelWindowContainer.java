@@ -861,26 +861,26 @@ public class PanelWindowContainer implements DockableWindowContainer
 				//{{{ Top...
 				if(position.equals(DockableWindowManager.TOP))
 				{
-					wm.setResizePos(PanelWindowContainer.this,
-						evt.getY() - (getHeight() - dragStart.y));
+					resizePos = evt.getY() - (getHeight() - dragStart.y);
+					wm.setResizePos(PanelWindowContainer.this,resizePos);
 				} //}}}
 				//{{{ Left...
 				else if(position.equals(DockableWindowManager.LEFT))
 				{
-					wm.setResizePos(PanelWindowContainer.this,
-						evt.getX() - (getWidth() - dragStart.x));
+					resizePos = evt.getX() - (getWidth() - dragStart.x);
+					wm.setResizePos(PanelWindowContainer.this,resizePos);
 				} //}}}
 				//{{{ Bottom...
 				else if(position.equals(DockableWindowManager.BOTTOM))
 				{
-					wm.setResizePos(PanelWindowContainer.this,
-						(getHeight() - evt.getY()));
+					resizePos = (getHeight() - evt.getY());
+					wm.setResizePos(PanelWindowContainer.this,resizePos);
 				} //}}}
 				//{{{ Right...
 				else if(position.equals(DockableWindowManager.RIGHT))
 				{
-					wm.setResizePos(PanelWindowContainer.this,
-						(getWidth() - evt.getX()));
+					resizePos = (getWidth() - evt.getX());
+					wm.setResizePos(PanelWindowContainer.this,resizePos);
 				} //}}}
 			} //}}}
 

@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- redo/undo dirty restore is broken.
 - consistent formatting for mode files
 - foo = bar does not work
 - bufferResponseDockable API?
@@ -213,11 +214,10 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
-- jEdit.getAction(): is a linear scan through up to 100+ action sets
-- jEdit.getBuffer(): same
+- jEdit.getBuffer(): use a hashtable, not a linear scan. have the
+  buffer notify jEdit of path changes though.
 - action bar's completion
 - display manager should not be O(n^2) with text areas
-- to paint collapsed lines counter: use chunk cached value if possible
 - menu drag: slow
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end

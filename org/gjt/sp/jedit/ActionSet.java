@@ -1,6 +1,9 @@
 /*
  * ActionSet.java - A set of actions
- * Copyright (C) 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +96,7 @@ import java.util.*;
  */
 public class ActionSet
 {
+	//{{{ ActionSet constructor
 	/**
 	 * Creates a new action set.
 	 * @since jEdit 4.0pre1
@@ -100,8 +104,9 @@ public class ActionSet
 	public ActionSet()
 	{
 		this(null);
-	}
+	} //}}}
 
+	//{{{ ActionSet constructor
 	/**
 	 * Creates a new action set.
 	 * @param label The label, shown in the shortcuts option pane
@@ -111,8 +116,9 @@ public class ActionSet
 	{
 		this.label = label;
 		actions = new Hashtable();
-	}
+	} //}}}
 
+	//{{{ getLabel() method
 	/**
 	 * Return the action source label.
 	 * @since jEdit 4.0pre1
@@ -120,8 +126,9 @@ public class ActionSet
 	public String getLabel()
 	{
 		return label;
-	}
+	} //}}}
 
+	//{{{ setLabel() method
 	/**
 	 * Sets the action source label.
 	 * @param label The label
@@ -130,8 +137,9 @@ public class ActionSet
 	public void setLabel(String label)
 	{
 		this.label = label;
-	}
+	} //}}}
 
+	//{{{ addAction() method
 	/**
 	 * Adds an action to the action set.
 	 * @param action The action
@@ -140,8 +148,11 @@ public class ActionSet
 	public void addAction(EditAction action)
 	{
 		actions.put(action.getName(),action);
-	}
+		if(added)
+			jEdit.actionHash.put(action.getName(),action);
+	} //}}}
 
+	//{{{ removeAction() method
 	/**
 	 * Removes an action from the action set.
 	 * @param name The action name
@@ -150,17 +161,26 @@ public class ActionSet
 	public void removeAction(String name)
 	{
 		actions.remove(name);
-	}
+		if(added)
+			jEdit.actionHash.remove(action.getName());
+	} //}}}
 
+	//{{{ removeAllActions() method
 	/**
 	 * Removes all actions from the action set.
 	 * @since jEdit 4.0pre1
 	 */
 	public void removeAllActions()
 	{
+		EditAction[] actions = getActions();
+		for(int i = 0; i < actions.length; i++)
+		{
+			jEdit.actionHash.remove(actions[i].getName());
+		}
 		actions.clear();
-	}
+	} //}}}
 
+	//{{{ getAction() method
 	/**
 	 * Returns an action with the specified name.
 	 * @param name The action name
@@ -169,8 +189,9 @@ public class ActionSet
 	public EditAction getAction(String name)
 	{
 		return (EditAction)actions.get(name);
-	}
+	} //}}}
 
+	//{{{ getActionCount() method
 	/**
 	 * Returns the number of actions in the set.
 	 * @since jEdit 4.0pre1
@@ -178,8 +199,9 @@ public class ActionSet
 	public int getActionCount()
 	{
 		return actions.size();
-	}
+	} //}}}
 
+	//{{{ getActions() method
 	/**
 	 * Returns an array of all actions in this action set.
 	 * @since jEdit 4.0pre1
@@ -194,8 +216,9 @@ public class ActionSet
 			retVal[i++] = (EditAction)enum.nextElement();
 		}
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ contains() method
 	/**
 	 * Returns if this action set contains the specified action.
 	 * @param action The action
@@ -204,22 +227,26 @@ public class ActionSet
 	public boolean contains(EditAction action)
 	{
 		return actions.contains(action);
-	}
+	} //}}}
 
+	//{{{ toString() method
 	public String toString()
 	{
 		return label;
-	}
+	} //}}}
 
-	// package-private members
+	//{{{ Package-private members
+	boolean added;
+
 	void getActions(Vector vec)
 	{
 		Enumeration enum = actions.elements();
 		while(enum.hasMoreElements())
 			vec.addElement(enum.nextElement());
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private String label;
 	private Hashtable actions;
+	//}}}
 }

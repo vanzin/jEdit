@@ -817,12 +817,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="run-last-macro" NO_RECORD="TRUE">
-	<CODE>
-		Macros.runLastMacro(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="run-other-macro">
 	<CODE>
 		Macros.showRunScriptDialog(view);

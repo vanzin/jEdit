@@ -182,9 +182,12 @@ public class OffsetManager
 			{
 				int screenLines = getScreenLineCount(line);
 				Anchor anchor = anchors;
-				while(anchor != null)
+				for(;;)
 				{
-					if(anchor.physicalLine > line && anchor.index == index)
+					if(anchor == null || anchor.physicalLine < line)
+						break;
+
+					if(anchor.index == index)
 					{
 						anchor.scrollLine += screenLines;
 						anchor.callChanged = true;
@@ -200,9 +203,12 @@ public class OffsetManager
 			{
 				int screenLines = getScreenLineCount(line);
 				Anchor anchor = anchors;
-				while(anchor != null)
+				for(;;)
 				{
-					if(anchor.physicalLine > line && anchor.index == index)
+					if(anchor == null || anchor.physicalLine < line)
+						break;
+
+					if(anchor.index == index)
 					{
 						anchor.scrollLine -= screenLines;
 						anchor.callChanged = true;
@@ -235,11 +241,13 @@ public class OffsetManager
 		if(oldCount != count)
 		{
 			Anchor anchor = anchors;
-			while(anchor != null)
+			for(;;)
 			{
+				if(anchor == null || anchor.physicalLine < line)
+					break;
+
 				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
-				if(anchor.physicalLine > line
-					&& (info & anchorVisibilityMask) != 0)
+				if((info & anchorVisibilityMask) != 0)
 				{
 					//System.err.println("anchor screen shift from "
 					//	+ anchor.scrollLine + " to "
@@ -480,17 +488,13 @@ public class OffsetManager
 			}
 
 			Anchor anchor = anchors;
-			while(anchor != null)
+			for(;;)
 			{
-				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
-				if(anchor.physicalLine > startLine
-					&& (visible & anchorVisibilityMask) != 0)
-				{
-					//System.err.println("anchor shift from "
-					//	+ anchor.physicalLine + " to "
-					//	+ (anchor.physicalLine + numLines));
-					anchor.physicalLine += numLines;
-				}
+				if(anchor == null || anchor.physicalLine <= startLine)
+					break;
+
+				anchor.physicalLine += numLines;
+				anchor.callChanged = true;
 				anchor = anchor.next;
 			}
 		} //}}}
@@ -522,24 +526,18 @@ public class OffsetManager
 			// if anchor's physical line > startLine,
 			// count screen lines from startLine to Math.min(startLine + numLines,line)
 			Anchor anchor = anchors;
-			while(anchor != null)
+			for(;;)
 			{
-				if(anchor.physicalLine > startLine)
-				{
-					int end = Math.min(endLine,anchor.physicalLine);
-					for(int i = startLine; i < end; i++)
-					{
-						if(isLineVisible(i,anchor.index))
-						{
-							//System.err.println("anchor shift from "
-							//	+ anchor.physicalLine + " to "
-							//	+ (anchor.physicalLine - 1));
+				if(anchor == null || anchor.physicalLine <= startLine)
+					break;
 
-							anchor.physicalLine--;
-							anchor.scrollLine -= getScreenLineCount(i);
-							anchor.callChanged = true;
-						}
-					}
+				int end = Math.min(endLine,anchor.physicalLine);
+				for(int i = startLine; i < end; i++)
+				{
+					if(isLineVisible(i,anchor.index))
+						anchor.scrollLine -= getScreenLineCount(i);
+					anchor.physicalLine--;
+					anchor.callChanged = true;
 				}
 
 				anchor = anchor.next;
@@ -575,10 +573,27 @@ public class OffsetManager
 	} //}}}
 
 	//{{{ addAnchor() method
+	/* note the suttle optimization: this method sorts anchors in decreasing
+	 * order so a change on line n can stop checking anchors once reaching
+	 * one before line n. */
 	public void addAnchor(Anchor anchor)
 	{
-		anchor.next = anchors;
-		anchors = anchor;
+		Anchor prev = null;
+		Anchor current = anchors;
+		for(;;)
+		{
+			if(current == null || current.physicalLine < anchor.physicalLine)
+			{
+				if(prev != null)
+					prev.next = anchor;
+				else
+					anchors = anchor;
+				anchor.next = current;
+				return;
+			}
+			prev = current;
+			current = current.next;
+		}
 	} //}}}
 
 	//{{{ removeAnchor() method
