@@ -33,7 +33,6 @@ public class MacOSOptionPane extends AbstractOptionPane
 	//{{{ Variables
 	private JCheckBox menuBox;
 	private JCheckBox preserveBox;
-	private JCheckBox liveResizeBox;
 	private JCheckBox selectionBox;
 	//}}}
 	
@@ -60,12 +59,6 @@ public class MacOSOptionPane extends AbstractOptionPane
 		
 		addComponent(new Box.Filler(d,d,d));
 		
-		liveResizeBox = new JCheckBox(jEdit.getProperty("options.MacOSPlugin.liveResize.label"));
-		addComponent(liveResizeBox);
-		addComponent(new JLabel("(Requires restart for changes to take effect)"));
-		
-		addComponent(new Box.Filler(d,d,d));
-		
 		selectionBox = new JCheckBox(jEdit.getProperty("options.MacOSPlugin.useSelection.label"));
 		addComponent(selectionBox);
 		
@@ -77,7 +70,6 @@ public class MacOSOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("MacOSPlugin.useScreenMenuBar", menuBox.isSelected());
 		jEdit.setBooleanProperty("MacOSPlugin.preserveCodes", preserveBox.isSelected());
-		jEdit.setBooleanProperty("MacOSPlugin.liveResize", liveResizeBox.isSelected());
 		jEdit.setBooleanProperty("MacOSPlugin.useSelection", selectionBox.isSelected());
 	}//}}}
 
@@ -88,8 +80,6 @@ public class MacOSOptionPane extends AbstractOptionPane
 			jEdit.getBooleanProperty("MacOSPlugin.default.useScreenMenuBar")));
 		preserveBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.preserveCodes",
 			jEdit.getBooleanProperty("MacOSPlugin.default.preserveCodes")));
-		liveResizeBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.liveResize",
-			jEdit.getBooleanProperty("MacOSPlugin.default.liveResize")));
 		selectionBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.useSelection",
 			jEdit.getBooleanProperty("MacOSPlugin.default.useSelection")));
 	}//}}}

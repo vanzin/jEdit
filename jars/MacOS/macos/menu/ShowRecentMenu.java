@@ -25,7 +25,7 @@ package macos.menu;
 //{{{ Imports
 import java.awt.event.*;
 import java.io.File;
-import java.util.Vector;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
@@ -45,7 +45,7 @@ public class ShowRecentMenu extends JMenu implements MenuListener
 	//{{{ construct() method
 	private void construct()
 	{
-		Vector recent = BufferHistory.getBufferHistory();
+		List recent = BufferHistory.getHistory();
 		JMenuItem item;
 		File file;
 		int max = recent.size();
