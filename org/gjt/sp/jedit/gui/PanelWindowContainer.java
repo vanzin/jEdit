@@ -77,16 +77,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttons.add(closeBox);
 
 		closeBox.addActionListener(new ActionHandler());
-		closeBox.addMouseListener(new MouseHandler());
-
-		popupButton = new JButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
-		popupButton.setRequestFocusEnabled(false);
-		popupButton.setToolTipText(jEdit.getProperty("view.docking.menu-tooltip"));
-		if(OperatingSystem.isMacOSLF())
-			popupButton.putClientProperty("JButton.buttonType","toolbar");
-		buttons.add(popupButton);
-
-		popupButton.addMouseListener(new MouseHandler());
 
 		buttonGroup = new ButtonGroup();
 		// JDK 1.4 workaround
@@ -98,8 +88,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		dimension = jEdit.getIntegerProperty(
 			"view.dock." + position + ".dimension",0);
-
-		buttons.addMouseListener(new MouseHandler());
 	} //}}}
 
 	//{{{ register() method
@@ -126,6 +114,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			entry.title));
 		button.setActionCommand(entry.factory.name);
 		button.addActionListener(new ActionHandler());
+		button.addMouseListener(new MouseHandler());
 		if(OperatingSystem.isMacOSLF())
 			button.putClientProperty("JButton.buttonType","toolbar");
 		//}}}
@@ -303,7 +292,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private String position;
 	private JPanel buttons;
 	private JButton closeBox;
-	private JButton popupButton;
 	private ButtonGroup buttonGroup;
 	private JToggleButton nullButton;
 	private int dimension;
@@ -340,70 +328,19 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		public void mousePressed(MouseEvent evt)
 		{
-			if(evt.getSource() == popupButton
-				|| GUIUtilities.isPopupTrigger(evt))
+			if(GUIUtilities.isPopupTrigger(evt))
 			{
 				if(popup != null && popup.isVisible())
 					popup.setVisible(false);
 				else
 				{
-					popup = createPopupMenu();
+					AbstractButton btn = (AbstractButton)evt.getSource();
+					String dockable = btn.getActionCommand();
+					popup = wm.createPopupMenu(dockable);
 					GUIUtilities.showPopupMenu(popup,
-						(Component)evt.getSource(),
-						evt.getX(),evt.getY());
+						btn,evt.getX(),evt.getY());
 				}
 			}
-		}
-
-		private JPopupMenu createPopupMenu()
-		{
-			JPopupMenu popup = new JPopupMenu();
-			JMenu floatMenu = new JMenu(jEdit.getProperty("view.docking.menu-float"));
-
-			String[] dockables = getDockables();
-			for(int i = 0; i < dockables.length; i++)
-			{
-				final String entry = dockables[i];
-				JMenuItem selectMenuItem = new JMenuItem(wm.getDockableTitle(entry));
-
-				selectMenuItem.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent evt)
-					{
-						wm.showDockableWindow(entry);
-					}
-				});
-
-				JMenuItem floatMenuItem = new JMenuItem(wm.getDockableTitle(entry));
-
-				floatMenuItem.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent evt)
-					{
-						wm.floatDockableWindow(entry);
-					}
-				});
-
-				popup.add(selectMenuItem);
-				floatMenu.add(floatMenuItem);
-			}
-
-			popup.addSeparator();
-			popup.add(floatMenu);
-
-			popup.addSeparator();
-			JMenuItem config = new JMenuItem(jEdit.getProperty("view.docking.menu-config"));
-			config.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					new org.gjt.sp.jedit.options.GlobalOptions(
-						wm.getView(),"docking");
-				}
-			});
-			popup.add(config);
-
-			return popup;
 		}
 	} //}}}
 
@@ -695,7 +632,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				boolean closeBoxSizeSet = false;
 				boolean noMore = false;
-				popupButton.setVisible(false);
 
 				Dimension parentSize = parent.getSize();
 				int pos = (position.equals(DockableWindowManager.TOP)
@@ -721,12 +657,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 							- (i == comp.length - 1
 							? 0 : closeBox.getWidth()))
 						{
-							popupButton.setBounds(
+							/* popupButton.setBounds(
 								parentSize.width - size.height
 								- insets.right,
 								insets.top,size.height,
 								size.height);
-							popupButton.setVisible(true);
+							popupButton.setVisible(true); */
 							comp[i].setVisible(false);
 							noMore = true;
 						}
@@ -752,11 +688,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 							- (i == comp.length - 1
 							? 0 : closeBox.getHeight()))
 						{
-							popupButton.setBounds(
+							/* popupButton.setBounds(
 								insets.top,
 								parentSize.height - size.width,
 								size.width,size.width);
-							popupButton.setVisible(true);
+							popupButton.setVisible(true); */
 							comp[i].setVisible(false);
 							noMore = true;
 						}
