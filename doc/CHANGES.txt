@@ -5,6 +5,13 @@ JEDIT 4.2 VERSION HISTORY
 Thanks to Marcelo Vanzin, Nicholas O'Leary and Trevor Harmon for
 contributing to this release.
 
+{{{ Search and Replace
+
+- When invoking "Find", "Incremental Search for Word" or "HyperSearch
+  for Word" actions, if regular expression search is on, any special
+  characters in the selection are automatically escaped.
+
+}}}
 {{{ Miscellaneous
 
 - jEdit no longer runs with Java 2 version 1.3. Java 2 version 1.4 or

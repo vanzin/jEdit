@@ -902,6 +902,17 @@ loop:			while(path != null)
 
 	//}}}
 
+	//{{{ escapeRegexp() method
+	/**
+	 * Escapes characters with special meaning in a regexp.
+	 * @since jEdit 4.3pre1
+	 */
+	public static String escapeRegexp(String str)
+	{
+		return MiscUtilities.charsToEscapes(str,
+			"\n\r\t\\()[]{}$^*+?|.");
+	} //}}}
+
 	//{{{ load() method
 	/**
 	 * Loads search and replace state from the properties.
