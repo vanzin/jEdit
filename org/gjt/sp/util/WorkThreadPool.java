@@ -208,7 +208,7 @@ public class WorkThreadPool
 	 * Adds a progress listener to this thread pool.
 	 * @param listener The listener
 	 */
-	public final void addProgressListener(WorkThreadProgressListener listener)
+	public void addProgressListener(WorkThreadProgressListener listener)
 	{
 		listenerList.add(WorkThreadProgressListener.class,listener);
 	}
@@ -217,7 +217,7 @@ public class WorkThreadPool
 	 * Removes a progress listener from this thread pool.
 	 * @param listener The listener
 	 */
-	public final void removeProgressListener(WorkThreadProgressListener listener)
+	public void removeProgressListener(WorkThreadProgressListener listener)
 	{
 		listenerList.remove(WorkThreadProgressListener.class,listener);
 	}
@@ -225,6 +225,32 @@ public class WorkThreadPool
 	// package-private members
 	Object lock = new String("Work thread pool request queue lock");
 	Object waitForAllLock = new String("Work thread pool waitForAll() notifier");
+
+	void fireStatusChanged(WorkThread thread)
+	{
+		final Object[] listeners = listenerList.getListenerList();
+		if(listeners.length != 0)
+		{
+			int index = 0;
+			for(int i = 0; i < threads.length; i++)
+			{
+				if(threads[i] == thread)
+				{
+					index = i;
+					break;
+				}
+			}
+
+			for(int i = listeners.length - 2; i >= 0; i--)
+			{
+				if(listeners[i] == WorkThreadProgressListener.class)
+				{
+					((WorkThreadProgressListener)listeners[i+1])
+						.statusUpdate(WorkThreadPool.this,index);
+				}
+			}
+		}
+	}
 
 	void fireProgressChanged(WorkThread thread)
 	{
@@ -241,21 +267,14 @@ public class WorkThreadPool
 				}
 			}
 
-			final int _index = index;
-			SwingUtilities.invokeLater(new Runnable()
+			for(int i = listeners.length - 2; i >= 0; i--)
 			{
-				public void run()
+				if(listeners[i] == WorkThreadProgressListener.class)
 				{
-					for(int i = listeners.length - 2; i >= 0; i--)
-					{
-						if(listeners[i] == WorkThreadProgressListener.class)
-						{
-							((WorkThreadProgressListener)listeners[i+1])
-								.progressUpdate(WorkThreadPool.this,_index);
-						}
-					}
+					((WorkThreadProgressListener)listeners[i+1])
+						.progressUpdate(WorkThreadPool.this,index);
 				}
-			});
+			}
 		}
 	}
 

@@ -149,12 +149,12 @@ public class jEdit
 			}
 		}
 
+		Log.init(true,level);
+
 		if(settingsDirectory != null && portFile != null)
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
 			portFile = null;
-
-		Log.init(true,level);
 
 		// Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
@@ -196,6 +196,12 @@ public class jEdit
 			}
 		}
 
+		// don't show splash screen if there is a file named
+		// 'nosplash' in the settings directory
+		boolean showSplash = true;
+		if(new File(settingsDirectory,"nosplash").exists())
+			showSplash = false;
+
 		// MacOS X GUI hacks
 		if(System.getProperty("os.name").indexOf("Mac") != -1)
 		{
@@ -204,9 +210,11 @@ public class jEdit
 			System.getProperties().put("com.apple.macos.useScreenMenuBar","true");
 		}
 
-		// Initialize activity log and settings directory
-		boolean showSplash = true;
+		// Show the kool splash screen
+		if(showSplash)
+			GUIUtilities.showSplashScreen();
 
+		// Initialize activity log and settings directory
 		Writer stream;
 		if(settingsDirectory != null)
 		{
@@ -229,20 +237,11 @@ public class jEdit
 				e.printStackTrace();
 				stream = null;
 			}
-
-			// don't show splash screen if there is a file named
-			// 'nosplash' in the settings directory
-			if(new File(settingsDirectory,"nosplash").exists())
-				showSplash = false;
 		}
 		else
 		{
 			stream = null;
 		}
-
-		// Show the kool splash screen
-		if(showSplash)
-			GUIUtilities.showSplashScreen();
 
 		Log.setLogWriter(stream);
 
@@ -277,6 +276,8 @@ public class jEdit
 			initSiteProperties();
 
 		initUserProperties();
+		initPLAF();
+
 		initActions();
 		initPlugins();
 
@@ -303,7 +304,6 @@ public class jEdit
 		sortBuffers = getBooleanProperty("sortBuffers");
 		sortByName = getBooleanProperty("sortByName");
 
-		initPLAF();
 		reloadModes();
 
 		GUIUtilities.advanceSplashProgress();
@@ -488,6 +488,114 @@ public class jEdit
 	}
 
 	/**
+	 * Returns the value of an integer property.
+	 * @param name The property
+	 * @param def The default value
+	 * @since jEdit 4.0pre1
+	 */
+	public static final int getIntegerProperty(String name, int def)
+	{
+		String value = getProperty(name);
+		if(value == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Integer.parseInt(value);
+			}
+			catch(NumberFormatException nf)
+			{
+				return def;
+			}
+		}
+	}
+
+	/**
+	 * Returns the value of a font property. The family is stored
+	 * in the <code><i>name</i></code> property, the font size is stored
+	 * in the <code><i>name</i>size</code> property, and the font style is
+	 * stored in <code><i>name</i>style</code>. For example, if
+	 * <code><i>name</i></code> is <code>view.gutter.font</code>, the
+	 * properties will be named <code>view.gutter.font</code>,
+	 * <code>view.gutter.fontsize</code>, and
+	 * <code>view.gutter.fontstyle</code>.
+	 *
+	 * @param name The property
+	 * @param def The default value
+	 * @since jEdit 4.0pre1
+	 */
+	public static final Font getFontProperty(String name, Font def)
+	{
+		String family = getProperty(name);
+		String sizeString = getProperty(name + "size");
+		String styleString = getProperty(name + "style");
+
+		if(family == null || sizeString == null || styleString == null)
+			return def;
+		else
+		{
+			int size, style;
+
+			try
+			{
+				size = Integer.parseInt(sizeString);
+			}
+			catch(NumberFormatException nf)
+			{
+				return def;
+			}
+
+			try
+			{
+				style = Integer.parseInt(styleString);
+			}
+			catch(NumberFormatException nf)
+			{
+				return def;
+			}
+
+			return new Font(family,style,size);
+		}
+	}
+
+	/**
+	 * Returns the value of a color property.
+	 * @param name The property name
+	 * @since jEdit 4.0pre1
+	 */
+	public static Color getColorProperty(String name)
+	{
+		return getColorProperty(name,Color.black);
+	}
+
+	/**
+	 * Returns the value of a color property.
+	 * @param name The property name
+	 * @param def The default value
+	 * @since jEdit 4.0pre1
+	 */
+	public static Color getColorProperty(String name, Color def)
+	{
+		String value = getProperty(name);
+		if(value == null)
+			return def;
+		else
+			return GUIUtilities.parseColor(value,def);
+	}
+
+	/**
+	 * Sets the value of a color property.
+	 * @param name The property name
+	 * @param value The value
+	 * @since jEdit 4.0pre1
+	 */
+	public static void setColorProperty(String name, Color value)
+	{
+		setProperty(name,GUIUtilities.getColorHexString(value));
+	}
+
+	/**
 	 * Sets a property to a new value.
 	 * @param name The property
 	 * @param value The new value
@@ -552,6 +660,38 @@ public class jEdit
 	}
 
 	/**
+	 * Sets the value of an integer property.
+	 * @param name The property
+	 * @param value The value
+	 * @since jEdit 4.0pre1
+	 */
+	public static final void setIntegerProperty(String name, int value)
+	{
+		setProperty(name,String.valueOf(value));
+	}
+
+	/**
+	 * Sets the value of a font property. The family is stored
+	 * in the <code><i>name</i></code> property, the font size is stored
+	 * in the <code><i>name</i>size</code> property, and the font style is
+	 * stored in <code><i>name</i>style</code>. For example, if
+	 * <code><i>name</i></code> is <code>view.gutter.font</code>, the
+	 * properties will be named <code>view.gutter.font</code>,
+	 * <code>view.gutter.fontsize</code>, and
+	 * <code>view.gutter.fontstyle</code>.
+	 *
+	 * @param name The property
+	 * @param value The value
+	 * @since jEdit 4.0pre1
+	 */
+	public static final void setFontProperty(String name, Font value)
+	{
+		setProperty(name,value.getFamily());
+		setIntegerProperty(name + "size",value.getSize());
+		setIntegerProperty(name + "style",value.getStyle());
+	}
+
+	/**
 	 * Unsets (clears) a property.
 	 * @param name The property
 	 */
@@ -581,37 +721,27 @@ public class jEdit
 	{
 		initKeyBindings();
 
-		int interval;
-		try
-		{
-			interval = Integer.parseInt(getProperty("autosave"));
-		}
-		catch(NumberFormatException nf)
-		{
-			//Log.log(Log.ERROR,jEdit.class,nf);
-			interval = 30;
-		}
-		Autosave.setInterval(interval);
+		Autosave.setInterval(getIntegerProperty("autosave",30));
 
 		saveCaret = getBooleanProperty("saveCaret");
+
+		theme = new JEditMetalTheme();
+		theme.propertiesChanged();
+		MetalLookAndFeel.setCurrentTheme(theme);
 
 		UIDefaults defaults = UIManager.getDefaults();
 
 		// give all Swing components our colors
-		if(jEdit.getBooleanProperty("globalColors"))
+		if(jEdit.getBooleanProperty("textColors"))
 		{
 			Color background = new javax.swing.plaf.ColorUIResource(
-				GUIUtilities.parseColor(
-				jEdit.getProperty("view.bgColor")));
+				jEdit.getColorProperty("view.bgColor"));
 			Color foreground = new javax.swing.plaf.ColorUIResource(
-				GUIUtilities.parseColor(
-				jEdit.getProperty("view.fgColor")));
+				jEdit.getColorProperty("view.fgColor"));
 			Color caretColor = new javax.swing.plaf.ColorUIResource(
-				GUIUtilities.parseColor(
-				jEdit.getProperty("view.caretColor")));
+				jEdit.getColorProperty("view.caretColor"));
 			Color selectionColor = new javax.swing.plaf.ColorUIResource(
-				GUIUtilities.parseColor(
-				jEdit.getProperty("view.selectionColor")));
+				jEdit.getColorProperty("view.selectionColor"));
 
 			String[] prefixes = { "TextField", "TextArea", "List", "Table" };
 			for(int i = 0; i < prefixes.length; i++)
@@ -635,29 +765,9 @@ public class jEdit
 			defaults.put("Tree.selectionBackground",selectionColor);
 		}
 
-		// give all text fields and text areas the same font
-		String family = jEdit.getProperty("view.font");
-		int size;
-		try
-		{
-			size = Integer.parseInt(jEdit.getProperty(
-				"view.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			size = 14;
-		}
-		int style;
-		try
-		{
-			style = Integer.parseInt(jEdit.getProperty(
-				"view.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			style = Font.PLAIN;
-		}
-		Font font = new Font(family,style,size);
+		// give all text areas the same font
+		Font font = getFontProperty("view.font",
+			new Font("Monospaced",Font.PLAIN,12));
 
 		//defaults.put("TextField.font",font);
 		defaults.put("TextArea.font",font);
@@ -1749,6 +1859,39 @@ public class jEdit
 	}
 
 	/**
+	 * Performs garbage collection and displays a dialog box showing
+	 * memory status.
+	 * @param view The view
+	 * @since jEdit 4.0pre1
+	 */
+	public static void showMemoryDialog(View view)
+	{
+		Runtime rt = Runtime.getRuntime();
+		int before = (int) (rt.freeMemory() / 1024);
+		System.gc();
+		int after = (int) (rt.freeMemory() / 1024);
+		int total = (int) (rt.totalMemory() / 1024);
+
+		JProgressBar progress = new JProgressBar(0,total);
+		progress.setValue(total - after);
+		progress.setStringPainted(true);
+		progress.setString(jEdit.getProperty("memory-status.use",
+			new Object[] { new Integer(total - after),
+			new Integer(total) }));
+
+		Object[] message = new Object[4];
+		message[0] = getProperty("memory-status.gc",
+			new Object[] { new Integer(after - before) });
+		message[1] = Box.createVerticalStrut(12);
+		message[2] = progress;
+		message[3] = Box.createVerticalStrut(6);
+
+		JOptionPane.showMessageDialog(view,message,
+			jEdit.getProperty("memory-status.title"),
+			JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
 	 * Returns the user settings directory.
 	 */
 	public static String getSettingsDirectory()
@@ -2052,6 +2195,7 @@ public class jEdit
 	private static Vector recent;
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
+	private static JEditMetalTheme theme;
 
 	// buffer link list
 	private static boolean sortBuffers;
@@ -2390,39 +2534,9 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		/* // People seem to hate the default Metal fonts because they are bold
-		MetalLookAndFeel.setCurrentTheme(new DefaultMetalTheme()
-		{
-			FontUIResource plain12 = new FontUIResource(new Font(
-				"Dialog",Font.PLAIN,12));
-			FontUIResource mono12 = new FontUIResource(new Font(
-				"Monospaced",Font.PLAIN,12));
-
-			public String getName()
-			{
-				return "jEdit";
-			}
-
-			public FontUIResource getControlTextFont()
-			{
-				return plain12;
-			}
-
-			public FontUIResource getSystemTextFont()
-			{
-				return mono12;
-			}
-
-			public FontUIResource getUserTextFont()
-			{
-				return plain12;
-			}
-
-			public FontUIResource getMenuTextFont()
-			{
-				return plain12;
-			}
-		}); */
+		theme = new JEditMetalTheme();
+		theme.propertiesChanged();
+		MetalLookAndFeel.setCurrentTheme(theme);
 
 		String lf = getProperty("lookAndFeel");
 		try

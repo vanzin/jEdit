@@ -4911,10 +4911,6 @@ forward_scan:		do
 
 			// repaint gutter and painter
 			gutter.repaint();
-
-			// this should really go elsewhere!!!
-			if(view.getTextArea() == JEditTextArea.this)
-				view.getStatus().updateFoldStatus();
 		}
 	}
 

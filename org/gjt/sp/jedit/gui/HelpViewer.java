@@ -47,9 +47,8 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		try
 		{
-			helpSet = new HelpSet();
-			helpSet.add(new HelpSet(HelpViewer.class.getClassLoader(),
-				new URL("jeditresource:/doc/jhelpset.hs")));
+			helpSet = new HelpSet(HelpViewer.class.getClassLoader(),
+				new URL("jeditresource:/doc/jhelpset.hs"));
 			helpSet.add(new HelpSet(HelpViewer.class.getClassLoader(),
 				new URL("jeditresource:/doc/users-guide/jhelpset.hs")));
 		}

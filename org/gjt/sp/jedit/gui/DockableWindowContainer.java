@@ -44,7 +44,7 @@ public interface DockableWindowContainer
 	/**
 	 * Tabbed pane container.
 	 */
-	public class TabbedPane extends JTabbedPane implements DockableWindowContainer
+	class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
 		public static final int SPLITTER_WIDTH = 10;
 
@@ -56,15 +56,8 @@ public interface DockableWindowContainer
 		{
 			this.position = position;
 
-			try
-			{
-				dimension = Integer.parseInt(jEdit.getProperty(
-					"view.dock." + position + ".dimension"));
-			}
-			catch(NumberFormatException nf)
-			{
-				dimension = -1;
-			}
+			dimension = jEdit.getIntegerProperty(
+				"view.dock." + position + ".dimension",-1);
 
 			if(dimension <= SPLITTER_WIDTH)
 				collapsed = true;
@@ -103,8 +96,8 @@ public interface DockableWindowContainer
 
 		public void saveDimension()
 		{
-			jEdit.setProperty("view.dock." + position + ".dimension",
-				String.valueOf(dimension));
+			jEdit.setIntegerProperty("view.dock." + position + ".dimension",
+				dimension);
 			jEdit.setBooleanProperty("view.dock." + position
 				+ ".collapsed",collapsed);
 		}
@@ -113,8 +106,8 @@ public interface DockableWindowContainer
 		{
 			setBorder(new DockBorder(position));
 
-			int tabsPos = Integer.parseInt(jEdit.getProperty(
-				"view.docking.tabsPos"));
+			int tabsPos = jEdit.getIntegerProperty(
+				"view.docking.tabsPos",0);
 			if(tabsPos == 0)
 				setTabPlacement(JTabbedPane.TOP);
 			else if(tabsPos == 1)
@@ -318,13 +311,6 @@ public interface DockableWindowContainer
 					color2 = MetalLookAndFeel.getControlDarkShadow();
 					color3 = MetalLookAndFeel.getControl();
 				}
-				else
-				{
-					color1 = color2 = null;
-					color3 = GUIUtilities.parseColor(
-						jEdit.getProperty(
-						"view.docking.borderColor"));
-				}
 
 				this.position = position;
 				insets = new Insets(
@@ -341,6 +327,9 @@ public interface DockableWindowContainer
 			public void paintBorder(Component c, Graphics g,
 				int x, int y, int width, int height)
 			{
+				if(color1 == null || color2 == null || color3 == null)
+					return;
+
 				if(position.equals(DockableWindowManager.BOTTOM))
 					paintHorizBorder(g,x,y,width);
 				else if(position.equals(DockableWindowManager.RIGHT))
@@ -372,9 +361,6 @@ public interface DockableWindowContainer
 				g.setColor(color3);
 				g.fillRect(x,y,width,SPLITTER_WIDTH);
 
-				if(color1 == null || color2 == null)
-					return;
-
 				for(int i = 0; i < width / 4 - 1; i++)
 				{
 					g.setColor(color1);
@@ -396,9 +382,6 @@ public interface DockableWindowContainer
 			{
 				g.setColor(color3);
 				g.fillRect(x,y,SPLITTER_WIDTH,height);
-
-				if(color1 == null || color2 == null)
-					return;
 
 				for(int i = 0; i < height / 4 - 1; i++)
 				{
@@ -422,7 +405,7 @@ public interface DockableWindowContainer
 	/**
 	 * Floating container.
 	 */
-	public class Floating extends JFrame implements DockableWindowContainer
+	class Floating extends JFrame implements DockableWindowContainer
 	{
 		public Floating(DockableWindowManager dockableWindowManager)
 		{

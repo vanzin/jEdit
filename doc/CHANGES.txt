@@ -7,7 +7,35 @@ JEDIT 4.0 VERSION HISTORY
 - Ant is used instead of jmk to compile jEdit
 - JavaHelp library from Sun is now used for the help system. JavaHelp
   supports full-text search, indexing, and printing.
+- Utilities->Memory Status command to replace 'Show Free Memory' macro
+- General look and feel settings moved to 'Appearance' option pane
+- If you are using the Metal or Kunststoff L&F, the UI control font can
+  be changed in Utilities->Global Options->Appearance
+- "Plastic" UI widget theme available in Utilities->Global
+  Options->Appearance (enabled by default)
 
 + Enhancements
 
 - HTML documentation is now generated using DocBook XSL 1.44 stylesheets
+- Option in activity log window to automatically scroll to bottom on
+  output (Dirk Moebius)
+- Status bar improvements:
+  - Tool tips for all controls
+  - Double-click on caret status shows the 'go to line' dialog box
+  - Instead of showing 'multi' in gray of multiple selection was
+    disabled, and in black if it was enabled, the display now
+    alternates between 'multi' and 'single'
+  - Same for the overwrite status; it now shows 'ins' or 'ovr'
+  - I/O progress display replaced with a Java heap memory indicator
+  - I/O status is now shown in the message area of the status bar
+
++ API Changes
+
+- New methods in jEdit class for accessing properties:
+
+  jEdit.getIntegerProperty(String name, int def);
+  jEdit.setIntegerProperty(String name, int value);
+  jEdit.getFontProperty(String name, Font def);
+  jEdit.setFontProperty(String name, Font value);
+  jEdit.getColorProperty(String name, Color def);
+  jEdit.setColorProperty(String name, Color value);

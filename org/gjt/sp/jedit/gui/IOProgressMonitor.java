@@ -86,10 +86,28 @@ public class IOProgressMonitor extends JDialog
 
 	class WorkThreadHandler implements WorkThreadProgressListener
 	{
-		public void progressUpdate(WorkThreadPool pool, int index)
+		public void statusUpdate(final WorkThreadPool pool, final int index)
 		{
-			updateCaption();
-			threads[index].update();
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					updateCaption();
+					threads[index].update();
+				}
+			});
+		}
+
+		public void progressUpdate(final WorkThreadPool pool, final int index)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					updateCaption();
+					threads[index].update();
+				}
+			});
 		}
 	}
 

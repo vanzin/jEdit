@@ -10,6 +10,19 @@
 # Swing look and feel
 #lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel
 
+# Metal control and menu font
+metal.primary.font=Dialog
+metal.primary.fontsize=12
+metal.primary.fontstyle=0
+
+# Metal system and user text font
+metal.secondary.font=Dialog
+metal.secondary.fontsize=12
+metal.secondary.fontstyle=0
+
+# Funky color scheme
+plasticColors=true
+
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
 firstTime=true
@@ -113,7 +126,7 @@ buffer.collapseFolds=0
 ###
 
 # Apply jEdit colors to Swing text fields, text areas, lists, tables and trees?
-globalColors=false
+textColors=false
 
 # Show toolbar?
 view.showToolbar=true
@@ -142,7 +155,7 @@ view.fgColor=#000000
 
 # Line highlighting
 view.lineHighlight=true
-view.lineHighlightColor=#e0e0e0
+view.lineHighlightColor=#ffffe0
 
 # Bracket highlighting
 view.bracketHighlight=true
@@ -160,7 +173,7 @@ view.wrapGuideColor=#8080ff
 view.caretColor=#ff0000
 
 # Selection color
-view.selectionColor=#ccccff
+view.selectionColor=#c8c8e0
 
 # Caret blinking
 view.caretBlink=true
@@ -184,7 +197,7 @@ view.gutter.bgColor=#ffffff
 view.gutter.fgColor=#000000
 
 # Gutter highlight color
-view.gutter.highlightColor=#8080ff
+view.gutter.highlightColor=#000066
 
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040
@@ -193,8 +206,8 @@ view.gutter.currentLineColor=#d04040
 view.gutter.markerColor=#ccffcc
 
 # Gutter border colors
-view.gutter.focusBorderColor=#8080ff
-view.gutter.noFocusBorderColor=#808080
+view.gutter.focusBorderColor=#202040
+view.gutter.noFocusBorderColor=#a0a0b4
 
 # Gutter font name
 view.gutter.font=Monospaced
@@ -224,21 +237,18 @@ view.gutter.highlightCurrentLine=true
 # Marker highlight
 view.gutter.markerHighlight=true
 
-# Docking border color (non-Metal L&F only)
-view.docking.borderColor=#ccccff
-
 # Expand abbrevs when space bar pressed
 view.expandOnInput=false
 
 # Syntax styles
-view.style.comment1=color:#009900 style:i
+view.style.comment1=color:#006666 style:i
 view.style.comment2=color:#990033 style:i
-view.style.digit=color:#009191
-view.style.function=color:#000099
-view.style.invalid=color:#ff0000 style:b
+view.style.digit=color:#666600
+view.style.function=color:#000066
+view.style.invalid=color:#ff0000
 view.style.keyword1=color:#000000 style:b
-view.style.keyword2=style:b
-view.style.keyword3=style:b
+view.style.keyword2=color:#660066 style:b
+view.style.keyword3=color:#000066 style:b
 view.style.label=color:#990033 style:ib
 view.style.literal1=color:#404040
 view.style.literal2=color:#404040

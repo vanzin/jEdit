@@ -42,15 +42,7 @@ public class HistoryModel
 	{
 		this.name = name;
 
-		try
-		{
-			max = Integer.parseInt(jEdit.getProperty("history"));
-		}
-		catch(NumberFormatException nf)
-		{
-			max = 25;
-		}
-
+		max = jEdit.getIntegerProperty("history",25);
 		data = new Vector(max);
 	}
 

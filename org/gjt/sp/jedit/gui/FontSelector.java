@@ -202,7 +202,7 @@ class FontSelectorDialog extends EnhancedDialog
 		}
 		catch(Exception e)
 		{
-			size = 14;
+			size = 12;
 		}
 
 		return new Font(familyField.getText(),styleList
@@ -313,7 +313,7 @@ class FontSelectorDialog extends EnhancedDialog
 		}
 		catch(Exception e)
 		{
-			size = 14;
+			size = 12;
 		}
 		int style = styleList.getSelectedIndex();
 

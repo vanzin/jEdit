@@ -97,7 +97,6 @@ public class Log
 		}
 
 		Log.level = level;
-		Log.stream = stream;
 
 		// Log some stuff
 		log(MESSAGE,Log.class,"When reporting bugs, please"

@@ -80,7 +80,7 @@ public class RecentFilesMenu extends EnhancedMenu
 			 * long)
 			 */
 			int recentFileCount = Math.min(recentVector.size(),
-				Integer.parseInt(jEdit.getProperty("history")));
+				jEdit.getIntegerProperty("history",25));
 
 			for(int i = recentVector.size() - 1;
 				i >= recentVector.size() - recentFileCount;

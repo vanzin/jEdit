@@ -178,6 +178,7 @@ public class SearchDialog extends EnhancedDialog
 			if(!save())
 				return;
 
+			System.err.println("calling find()");
 			if(hyperSearch.isSelected())
 			{
 				if(SearchAndReplace.hyperSearch(view));

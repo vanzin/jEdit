@@ -34,26 +34,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		/* Font */
-		String _fontFamily = jEdit.getProperty("view.font");
-		int _fontStyle;
-		try
-		{
-			_fontStyle = Integer.parseInt(jEdit.getProperty("view.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontStyle = Font.PLAIN;
-		}
-		int _fontSize;
-		try
-		{
-			_fontSize = Integer.parseInt(jEdit.getProperty("view.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontSize = 14;
-		}
-		font = new FontSelector(new Font(_fontFamily,_fontStyle,_fontSize));
+		font = new FontSelector(jEdit.getFontProperty("view.font",
+			new Font("Monospaced",Font.PLAIN,12)));
 
 		addComponent(jEdit.getProperty("options.textarea.font"),font);
 
@@ -134,10 +116,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 	public void _save()
 	{
-		Font _font = font.getFont();
-		jEdit.setProperty("view.font",_font.getFamily());
-		jEdit.setProperty("view.fontsize",String.valueOf(_font.getSize()));
-		jEdit.setProperty("view.fontstyle",String.valueOf(_font.getStyle()));
+		jEdit.setFontProperty("view.font",font.getFont());
 
 		jEdit.setBooleanProperty("view.lineHighlight",lineHighlight
 			.isSelected());
@@ -149,8 +128,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.isSelected());
 		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
-		jEdit.setProperty("view.electricBorders",electricBorders
-			.isSelected() ? "3" : "0");
+		jEdit.setIntegerProperty("view.electricBorders",electricBorders
+			.isSelected() ? 3 : 0);
 		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
 		jEdit.setBooleanProperty("view.middleMousePaste",
 			middleMousePaste.isSelected());

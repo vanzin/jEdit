@@ -295,15 +295,7 @@ public class VFSManager
 
 	static
 	{
-		int count;
-		try
-		{
-			count = Integer.parseInt(jEdit.getProperty("ioThreadCount"));
-		}
-		catch(NumberFormatException nf)
-		{
-			count = 4;
-		}
+		int count = jEdit.getIntegerProperty("ioThreadCount",4);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		fileVFS = new FileVFS();
 		urlVFS = new UrlVFS();

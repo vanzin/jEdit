@@ -743,52 +743,32 @@ public class GUIUtilities
 		int x, y, width, height, adjust_x, adjust_y, adjust_width,
 			adjust_height;
 
-		try
+		Dimension size = win.getSize();
+
+		width = jEdit.getIntegerProperty(name + ".width",size.width);
+		height = jEdit.getIntegerProperty(name + ".height",size.height);
+
+		Component parent = win.getParent();
+		if(parent == null)
 		{
-			width = Integer.parseInt(jEdit.getProperty(name + ".width"));
-			height = Integer.parseInt(jEdit.getProperty(name + ".height"));
+			Dimension screen = win.getToolkit().getScreenSize();
+			x = (screen.width - width) / 2;
+			y = (screen.height - height) / 2;
 		}
-		catch(NumberFormatException nf)
+		else
 		{
-			Dimension size = win.getSize();
-			width = size.width;
-			height = size.height;
+			Rectangle bounds = parent.getBounds();
+			x = bounds.x + (bounds.width - width) / 2;
+			y = bounds.y + (bounds.height - height) / 2;
 		}
 
-		try
-		{
-			x = Integer.parseInt(jEdit.getProperty(name + ".x"));
-			y = Integer.parseInt(jEdit.getProperty(name + ".y"));
-		}
-		catch(NumberFormatException nf)
-		{
-			Component parent = win.getParent();
-			if(parent == null)
-			{
-				Dimension screen = win.getToolkit().getScreenSize();
-				x = (screen.width - width) / 2;
-				y = (screen.height - height) / 2;
-			}
-			else
-			{
-				Rectangle bounds = parent.getBounds();
-				x = bounds.x + (bounds.width - width) / 2;
-				y = bounds.y + (bounds.height - height) / 2;
-			}
-		}
+		x = jEdit.getIntegerProperty(name + ".x",x);
+		y = jEdit.getIntegerProperty(name + ".y",y);
 
-		try
-		{
-			adjust_x = Integer.parseInt(jEdit.getProperty(name + ".dx"));
-			adjust_y = Integer.parseInt(jEdit.getProperty(name + ".dy"));
-			adjust_width = Integer.parseInt(jEdit.getProperty(name + ".d-width"));
-			adjust_height = Integer.parseInt(jEdit.getProperty(name + ".d-height"));
-		}
-		catch(NumberFormatException nf)
-		{
-			adjust_x = adjust_y = 0;
-			adjust_width = adjust_height = 0;
-		}
+		adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
+		adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
+		adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);
+		adjust_height = jEdit.getIntegerProperty(name + ".d-height",0);
 
 		Rectangle desired = new Rectangle(x,y,width,height);
 		Rectangle required = new Rectangle(x - adjust_x,
@@ -880,7 +860,6 @@ public class GUIUtilities
 			{
 				windowOpened = true;
 
-				
 				Rectangle r = win.getBounds();
 // 				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
 // 					+ name + ": bounds after opening: " + r);
@@ -889,14 +868,14 @@ public class GUIUtilities
 					|| r.width != desired.width
 					|| r.height != desired.height)
 				{
-					jEdit.setProperty(name + ".dx",String.valueOf(
-						r.x - required.x));
-					jEdit.setProperty(name + ".dy",String.valueOf(
-						r.y - required.y));
-					jEdit.setProperty(name + ".d-width",String.valueOf(
-						r.width - required.width));
-					jEdit.setProperty(name + ".d-height",String.valueOf(
-						r.height - required.height));
+					jEdit.setIntegerProperty(name + ".dx",
+						r.x - required.x);
+					jEdit.setIntegerProperty(name + ".dy",
+						r.y - required.y);
+					jEdit.setIntegerProperty(name + ".d-width",
+						r.width - required.width);
+					jEdit.setIntegerProperty(name + ".d-height",
+						r.height - required.height);
 				}
 
 				win.removeWindowListener(this);
@@ -915,10 +894,10 @@ public class GUIUtilities
 	public static void saveGeometry(Window win, String name)
 	{
 		Rectangle bounds = win.getBounds();
-		jEdit.setProperty(name + ".x",String.valueOf(bounds.x));
-		jEdit.setProperty(name + ".y",String.valueOf(bounds.y));
-		jEdit.setProperty(name + ".width",String.valueOf(bounds.width));
-		jEdit.setProperty(name + ".height",String.valueOf(bounds.height));
+		jEdit.setIntegerProperty(name + ".x",bounds.x);
+		jEdit.setIntegerProperty(name + ".y",bounds.y);
+		jEdit.setIntegerProperty(name + ".width",bounds.width);
+		jEdit.setIntegerProperty(name + ".height",bounds.height);
 	}
 
 	/**

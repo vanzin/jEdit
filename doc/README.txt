@@ -205,7 +205,6 @@ Dirk Moebius:       - HTTP firewall plugin
 		    - Improved history text fields
                     - EditorExitRequested message code
                     - VariableGridLayout code
-                    - Show Free Memory macro
 Dominic Stolerman:  - ML edit mode
 Ed Stewart:         - PV-WAVE edit mode
 Francesc Roses:     - Duplicate Line macro
@@ -221,7 +220,8 @@ John Gellene:       - 'Writing macros' section of user's guide
                     - ... and more
 Jonathan Revusky:   - Python edit mode
 Juha Lindfors:      - IDL edit mode
-Kris Kopicki:       - Objective C syntax highlighting
+Kris Kopicki:       - MacOS X downloads
+                    - Objective C syntax highlighting
 Kristian Ovaska:    - Intel x86 Assembly, Haskell, Pascal edit modes
 Lionel Fiol:        - Omnimark edit mode
 Marc Rummel:        - MIPS R2000 Assembly edit mode

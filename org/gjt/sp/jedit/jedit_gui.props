@@ -484,6 +484,8 @@ utils=vfs-browser \
       - \
       reload-modes \
       - \
+      memory-status \
+      - \
       buffer-options \
       global-options
 utils.label=$Utilities
@@ -494,6 +496,7 @@ update-log.label=Update Activity $Log on Disk
 eval.label=$Evaluate BeanShell Expression...
 eval-selection.label=E$valuate Selection
 reload-modes.label=$Reload Edit Modes
+memory-status.label=$Memory Status...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 
@@ -613,8 +616,15 @@ view.status.expand-folds=Press 0-9 to specify fold level:
 view.status.insert-literal=Press key to insert literally:
 view.status.auto-wrap=Search text not found; restarting search
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
+view.status.io={0} input/output operations in progress
+view.status.io-1=1 input/output operation in progress
+view.status.io.done=Input/output complete
+view.status.caret-tooltip=Column and line number indicator
 view.status.mode-tooltip=Current edit mode
 view.status.encoding-tooltip=Current encoding
+view.status.multi-tooltip=Multiple selection indicator
+view.status.overwrite-tooltip=Overwrite/insert mode indicator
+view.status.memory-tooltip=Used/total Java heap memory
 
 # Printing
 print.page=Page {0}
@@ -1016,8 +1026,6 @@ options.jedit.label=jEdit Options
 options.plugins.label=Plugin Options
 
 options.general.label=General
-options.general.lf.note=Restart jEdit for look & feel changes to take effect
-options.general.lf=Swing look & feel:
 options.general.history=History entries to remember:
 options.general.saveCaret=Save caret positions in recent file list
 options.general.sortBuffers=Sort buffer list
@@ -1028,7 +1036,14 @@ options.general.showSearchbar=Show search bar
 options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup
 options.general.showSplash=Show splash screen on startup
-options.general.globalColors=Use jEdit colors in all text components (experimental)
+
+options.appearance.label=Appearance
+options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
+options.appearance.lf=Swing look & feel:
+options.appearance.primaryFont=Button, menu, label font:
+options.appearance.secondaryFont=List, tree, table, text field font:
+options.appearance.plasticColors=Alternative "plastic" widget theme
+options.appearance.textColors=Use jEdit text area color scheme in all text components
 
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=Default character encoding:
@@ -1090,7 +1105,6 @@ options.color.gutterMarkerColor=Markers in gutter
 options.color.gutterFoldColor=Fold markers in gutter
 options.color.gutterFocusBorderColor=Focused gutter border
 options.color.gutterNoFocusBorderColor=Unfocused gutter border
-options.color.dockingBorderColor=Docked window border
 
 options.style.label=Styles
 options.style.object=Object
@@ -1283,13 +1297,17 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=54
+tip.count=55
 
 # Activity log
 log-viewer.title=Activity Log
 log-viewer.caption=Full text of log is stored in {0}.
 log-viewer.tail.label=Tail
 
+# Memory status dialog box
+memory-status.title=Java Heap Memory
+memory-status.gc=Garbage collection released {0} Kb.
+memory-status.use={0} Kb used, {1} Kb total
 
 ###
 ### VFS STRINGS

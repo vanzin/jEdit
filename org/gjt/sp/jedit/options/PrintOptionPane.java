@@ -35,26 +35,8 @@ public class PrintOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		/* Font */
-		String _fontFamily = jEdit.getProperty("print.font");
-		int _fontStyle;
-		try
-		{
-			_fontStyle = Integer.parseInt(jEdit.getProperty("print.fontstyle"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontStyle = Font.PLAIN;
-		}
-		int _fontSize;
-		try
-		{
-			_fontSize = Integer.parseInt(jEdit.getProperty("print.fontsize"));
-		}
-		catch(NumberFormatException nf)
-		{
-			_fontSize = 14;
-		}
-		font = new FontSelector(new Font(_fontFamily,_fontStyle,_fontSize));
+		font = new FontSelector(jEdit.getFontProperty("print.font",
+			new Font("Monospaced",Font.PLAIN,10)));
 		addComponent(jEdit.getProperty("options.print.font"),font);
 
 		/* Header */
@@ -101,11 +83,7 @@ public class PrintOptionPane extends AbstractOptionPane
 
 	protected void _save()
 	{
-		Font _font = font.getFont();
-		jEdit.setProperty("print.font",_font.getFamily());
-		jEdit.setProperty("print.fontsize",String.valueOf(_font.getSize()));
-		jEdit.setProperty("print.fontstyle",String.valueOf(_font.getStyle()));
-
+		jEdit.setFontProperty("print.font",font.getFont());
 		jEdit.setBooleanProperty("print.header",printHeader.isSelected());
 		jEdit.setBooleanProperty("print.footer",printFooter.isSelected());
 		jEdit.setBooleanProperty("print.lineNumbers",printLineNumbers.isSelected());

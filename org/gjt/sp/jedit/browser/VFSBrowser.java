@@ -129,11 +129,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DockableWindow
 		filterCheckbox.setSelected(mode != BROWSER ||
 			jEdit.getBooleanProperty("vfs.browser.filter-enabled"));
 
-		// we ensure that the foreground color is not an UIResource
-		// so that updateUI() does not reset the color back to the
-		// default...
-		filterCheckbox.setForeground(new Color(
-			UIManager.getColor("Label.foreground").getRGB()));
 		filterCheckbox.addActionListener(actionHandler);
 		cons.gridx = 0;
 		cons.weightx = 0.0f;

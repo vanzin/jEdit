@@ -112,7 +112,7 @@ public class TipOfTheDay extends EnhancedDialog
 
 		private void nextTip()
 		{
-			int count = Integer.parseInt(jEdit.getProperty("tip.count"));
+			int count = jEdit.getIntegerProperty("tip.count",0);
 			// so that we don't see the same tip again if the user
 			// clicks 'Next Tip'
 			int tipToShow = currentTip;
