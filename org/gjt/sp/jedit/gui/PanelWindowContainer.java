@@ -104,7 +104,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			throw new InternalError("Invalid position: " + position);
 
 		JToggleButton button = new JToggleButton();
-		button.setMargin(new Insets(0,0,0,0));
+		button.setMargin(new Insets(1,1,1,1));
 		button.setRequestFocusEnabled(false);
 		button.setIcon(new RotatedTextIcon(rotation,button.getFont(),
 			entry.title));

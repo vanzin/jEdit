@@ -39,6 +39,12 @@ contributing to this release.
 
 - Fixed a few dockable window layout problems.
 
+- Fix for numeric keypad not working after switch virtual desktops with
+  various keyboard sequences on Linux.
+
+- Fixed a performance regression -- the entire text area was being
+  repainted on every edit.
+
 }}}
 
 }}}
