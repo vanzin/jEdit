@@ -1,8 +1,8 @@
 <!-- jEdit buffer-local properties:                           -->
 <!-- :tabSize=2:indentSize=1:noTabs=true:maxLineLen=72:       -->
 
-<!-- jEditLauncher 3.2 (R2) Quick Guide                       -->
-<!-- Copyright (C) 2001 John Gellene                          -->
+<!-- jEditLauncher 4.0 (R2) Quick Guide                       -->
+<!-- Copyright (C) 2001, 2002 John Gellene                          -->
 
 <!-- $Id$
 -->
@@ -55,9 +55,9 @@
     </para>
 
     <para>
-      <command>jedit.exe</command> supports four command-line
+      <command>jedit.exe</command> supports five command-line
       options.
-      If any of these options
+      Except for the <userinput>/1</userinput> option, if any of these options
       are invoked correctly, the application will not load files or
       execute jEdit.
     </para>
@@ -139,6 +139,33 @@
 
       <listitem>
         <para>
+          The option <userinput>/1</userinput> is intended for use in
+          circumstances where a single file name is passed to jEdit for opening,
+          and quotation marks cannot be used to delimit file names containing
+          whitespace.  The launcher reads the entire command line following
+          the <userinput>/1</userinput> options as a single file path,
+          regardless of the presence of whitespace, and passes the resulting
+          string as a single file name parameter to jEdit.
+        </para>
+        <para>
+          This option allows jEdit
+          to be used with version 5 or greater of Internet Explorer as an
+          alternate text editor or as the target of the <guimenuitem>View
+          Source</guimenuitem> command.  Included with the jEditLauncher
+          distribution is a file named <filename>jEdit_IE.reg.txt</filename>
+          containing an example of a Window registry file that you can use
+          to register jEdit as a HTML editor with Internet Explorer. Instructions
+          for the file's use are included in the text.
+        </para>
+        <para>
+          The use of the <userinput>/1</userinput>
+          option with multiple file names or other parameters will lead to
+          program errors or unpredictable results.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
           The option <userinput>/i</userinput> is not mentioned in the help window
           for <filename>jedit.exe</filename>. It is intended primarily to be used
           in conjunction with jEdit's Java installer, but it can also be used to
@@ -196,7 +223,19 @@
   </para>
 </sect1>
 
-
+<!-- open sect1 -->
+<sect1 id="launcher-jedidiff"><title>Using jEdit and jEditLauncher as a Diff Utility</title>
+  <para>
+    As noted above, you can create a graphical diff display comparing the
+    contents of two text files by selecting the two files in an Explorer window,
+    right-clicking to produce a context menu, and selecting the
+    <guimenuitem>Show diff in jEdit</guimenuitem> menu item.  The utility
+    <filename>jedidiff.exe</filename> allows you to perform this operation
+    from a command line.  The command takes the two files to be compared
+    as parameters; they should be delimited by quotation marks if their
+    paths contain whitespace.
+  </para>
+</sect1>
 
 <sect1 id="launcher-uninstall"><title>Uninstalling jEdit and jEditLauncher</title>
   <para>
