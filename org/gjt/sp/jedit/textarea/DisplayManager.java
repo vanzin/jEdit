@@ -1581,12 +1581,19 @@ loop:		for(;;)
 			{
 				if(textArea.getDisplayManager() == DisplayManager.this)
 				{
+					int firstLine = textArea.getFirstPhysicalLine();
+					int lastLine = textArea.getLastPhysicalLine();
+
 					int line = delayedUpdateStart;
 					if(!isLineVisible(line))
 						line = getNextVisibleLine(line);
 					while(line != -1 && line <= delayedUpdateEnd)
 					{
-						getScreenLineCount(line);
+						if(line < firstLine
+							|| line > lastLine)
+						{
+							getScreenLineCount(line);
+						}
 						line = getNextVisibleLine(line);
 					}
 				}

@@ -1844,30 +1844,16 @@ public class jEdit
 		if(!MiscUtilities.isURL(path))
 			path = MiscUtilities.resolveSymlinks(path);
 
-		boolean caseInsensitiveFilesystem = (File.separatorChar == '\\'
-			|| File.separatorChar == ':' /* Windows or MacOS */);
+		boolean caseInsensitiveFilesystem =
+			OperatingSystem.isDOSDerived()
+			|| OperatingSystem.isMacOS();
+		if(caseInsensitiveFilesystem)
+			path = path.toLowerCase();
 
 		synchronized(bufferListLock)
 		{
-			Buffer buffer = buffersFirst;
-			while(buffer != null)
-			{
-				String _path = buffer.getSymlinkPath();
-				if(caseInsensitiveFilesystem)
-				{
-					if(_path.equalsIgnoreCase(path))
-						return buffer;
-				}
-				else
-				{
-					if(_path.equals(path))
-						return buffer;
-				}
-				buffer = buffer.next;
-			}
+			return (Buffer)bufferHash.get(path);
 		}
-
-		return null;
 	} //}}}
 
 	//{{{ getBuffers() method
@@ -2438,8 +2424,22 @@ public class jEdit
 	/**
 	 * If buffer sorting is enabled, this repositions the buffer.
 	 */
-	static void updatePosition(Buffer buffer)
+	static void updatePosition(String oldPath, Buffer buffer)
 	{
+		boolean caseInsensitiveFilesystem =
+			OperatingSystem.isDOSDerived()
+			|| OperatingSystem.isMacOS();
+		if(caseInsensitiveFilesystem)
+			oldPath = oldPath.toLowerCase();
+
+		bufferHash.remove(oldPath);
+
+		String path = buffer.getPath();
+		if(caseInsensitiveFilesystem)
+			path = path.toLowerCase();
+
+		bufferHash.put(path,buffer);
+
 		if(sortBuffers)
 		{
 			removeBufferFromList(buffer);
@@ -2637,6 +2637,7 @@ public class jEdit
 	private static int bufferCount;
 	private static Buffer buffersFirst;
 	private static Buffer buffersLast;
+	private static Map bufferHash;
 
 	// makes openTemporary() thread-safe
 	private static Object bufferListLock = new Object();
@@ -2779,6 +2780,8 @@ public class jEdit
 				view.getInputHandler().invokeAction(action);
 			}
 		};
+
+		bufferHash = new HashMap();
 
 		inputHandler = new DefaultInputHandler(null);
 
@@ -3380,78 +3383,93 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ addBufferToList() method
 	private static void addBufferToList(Buffer buffer)
 	{
-		// if only one, clean, 'untitled' buffer is open, we
-		// replace it
-		if(viewCount <= 1 && buffersFirst != null
-			&& buffersFirst == buffersLast
-			&& buffersFirst.isUntitled()
-			&& !buffersFirst.isDirty())
+		synchronized(bufferListLock)
 		{
-			Buffer oldBuffersFirst = buffersFirst;
-			buffersFirst = buffersLast = buffer;
-			DisplayManager.bufferClosed(oldBuffersFirst);
-			EditBus.send(new BufferUpdate(oldBuffersFirst,null,
-				BufferUpdate.CLOSED));
-			return;
-		}
+			boolean caseInsensitiveFilesystem =
+				OperatingSystem.isDOSDerived()
+				|| OperatingSystem.isMacOS();
+			String path = buffer.getPath();
+			if(caseInsensitiveFilesystem)
+				path = path.toLowerCase();
 
-		bufferCount++;
+			// if only one, clean, 'untitled' buffer is open, we
+			// replace it
+			if(viewCount <= 1 && buffersFirst != null
+				&& buffersFirst == buffersLast
+				&& buffersFirst.isUntitled()
+				&& !buffersFirst.isDirty())
+			{
+				Buffer oldBuffersFirst = buffersFirst;
+				buffersFirst = buffersLast = buffer;
+				DisplayManager.bufferClosed(oldBuffersFirst);
+				EditBus.send(new BufferUpdate(oldBuffersFirst,null,
+					BufferUpdate.CLOSED));
 
-		if(buffersFirst == null)
-		{
-			buffersFirst = buffersLast = buffer;
-			return;
-		}
-		//{{{ Sort buffer list
-		else if(sortBuffers)
-		{
-			String str11, str12;
-			if(sortByName)
-			{
-				str11 = buffer.getName();
-				str12 = buffer.getDirectory();
-			}
-			else
-			{
-				str11 = buffer.getDirectory();
-				str12 = buffer.getName();
+				bufferHash.clear();
+				bufferHash.put(path,buffer);
+				return;
 			}
 
-			Buffer _buffer = buffersFirst;
-			while(_buffer != null)
+			bufferCount++;
+
+			bufferHash.put(path,buffer);
+
+			if(buffersFirst == null)
 			{
-				String str21, str22;
+				buffersFirst = buffersLast = buffer;
+				return;
+			}
+			//{{{ Sort buffer list
+			else if(sortBuffers)
+			{
+				String str11, str12;
 				if(sortByName)
 				{
-					str21 = _buffer.getName();
-					str22 = _buffer.getDirectory();
+					str11 = buffer.getName();
+					str12 = buffer.getDirectory();
 				}
 				else
 				{
-					str21 = _buffer.getDirectory();
-					str22 = _buffer.getName();
+					str11 = buffer.getDirectory();
+					str12 = buffer.getName();
 				}
 
-				int comp = MiscUtilities.compareStrings(str11,str21,true);
-				if(comp < 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) < 0))
+				Buffer _buffer = buffersFirst;
+				while(_buffer != null)
 				{
-					buffer.next = _buffer;
-					buffer.prev = _buffer.prev;
-					_buffer.prev = buffer;
-					if(_buffer != buffersFirst)
-						buffer.prev.next = buffer;
+					String str21, str22;
+					if(sortByName)
+					{
+						str21 = _buffer.getName();
+						str22 = _buffer.getDirectory();
+					}
 					else
-						buffersFirst = buffer;
-					return;
+					{
+						str21 = _buffer.getDirectory();
+						str22 = _buffer.getName();
+					}
+
+					int comp = MiscUtilities.compareStrings(str11,str21,true);
+					if(comp < 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) < 0))
+					{
+						buffer.next = _buffer;
+						buffer.prev = _buffer.prev;
+						_buffer.prev = buffer;
+						if(_buffer != buffersFirst)
+							buffer.prev.next = buffer;
+						else
+							buffersFirst = buffer;
+						return;
+					}
+
+					_buffer = _buffer.next;
 				}
+			} //}}}
 
-				_buffer = _buffer.next;
-			}
-		} //}}}
-
-		buffer.prev = buffersLast;
-		buffersLast.next = buffer;
-		buffersLast = buffer;
+			buffer.prev = buffersLast;
+			buffersLast.next = buffer;
+			buffersLast = buffer;
+		}
 	} //}}}
 
 	//{{{ removeBufferFromList() method
@@ -3460,6 +3478,15 @@ loop:		for(int i = 0; i < list.length; i++)
 		synchronized(bufferListLock)
 		{
 			bufferCount--;
+
+			boolean caseInsensitiveFilesystem =
+				OperatingSystem.isDOSDerived()
+				|| OperatingSystem.isMacOS();
+			String path = buffer.getPath();
+			if(caseInsensitiveFilesystem)
+				path = path.toLowerCase();
+
+			bufferHash.remove(path);
 
 			if(buffer == buffersFirst && buffer == buffersLast)
 			{
