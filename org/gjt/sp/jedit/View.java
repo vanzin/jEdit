@@ -1257,14 +1257,15 @@ public class View extends JFrame implements EBComponent
 		dockableWindowManager.propertiesChanged();
 		status.propertiesChanged();
 
+		removeToolBar(status);
+		getContentPane().remove(status);
+
 		if(jEdit.getBooleanProperty("view.toolbar.alternateLayout"))
 		{
 			getContentPane().add(BorderLayout.NORTH,topToolBars);
 			getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
 			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
 				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
-			else
-				removeToolBar(status);
 		}
 		else
 		{
@@ -1273,12 +1274,7 @@ public class View extends JFrame implements EBComponent
 			dockableWindowManager.add(DockableWindowManager.DockableLayout
 				.BOTTOM_TOOLBARS,bottomToolBars);
 			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
-			{
-				removeToolBar(status);
 				getContentPane().add(BorderLayout.SOUTH,status);
-			}
-			else
-				getContentPane().remove(status);
 		}
 
 		getRootPane().revalidate();
