@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="indentOpenBrackets" VALUE="["/>
+		<PROPERTY NAME="indentCloseBrackets" VALUE="]"/>
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
+		<PROPERTY NAME="indentNextLines" VALUE="^(\*<<|:).*"/>
+		<PROPERTY NAME="doubleBracketIndent" VALUE="true"/>
+		<PROPERTY NAME="commentStart" VALUE="("/>
+		<PROPERTY NAME="commentEnd" VALUE=")"/>
+		<PROPERTY NAME="lineComment" VALUE="!"/>
+	</PROPS>
+	<RULES IGNORE_CASE="FALSE" ESCAPE="\" NO_WORD_SEP="+-*=><;.?">
+		<EOL_SPAN TYPE="COMMENT4">!!!</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT2">#!</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1">!</EOL_SPAN>
+
+		<!-- colon definitions -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR=":">:\s+(\S+)</SEQ_REGEXP>
+		
+		<SPAN TYPE="COMMENT3">
+			<BEGIN>( </BEGIN>
+			<END>)</END>
+		</SPAN>
+		<SPAN NO_ESCAPE="TRUE" TYPE="LITERAL1">
+			<BEGIN>#"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="INVALID">
+			<BEGIN>#&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<KEYWORDS>
+			<OPERATOR>[</OPERATOR>
+			<OPERATOR>]</OPERATOR>
+			<OPERATOR>|</OPERATOR>
+
+			<MARKUP>;</MARKUP>
+
+			<LABEL>~&lt;&lt;</LABEL>
+			<LABEL>--</LABEL>
+			<LABEL>&gt;&gt;~</LABEL>
+
+			<LITERAL1>t</LITERAL1>
+			<LITERAL3>f</LITERAL3>
+		</KEYWORDS>
+
+	</RULES>
+</MODE>
