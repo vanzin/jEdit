@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
-Thanks to John Perry, Joshua Miller, Kris Kopicki, Marcelo Vanzin and
-Rex Young for contributing to this release.
+Thanks to John Perry, Joshua Miller, Kris Kopicki, Marcelo Vanzin, Peter
+Cox, Rex Young and Steve Snider for contributing to this release.
 
 + Editing Changes:
 
@@ -22,11 +22,16 @@ Rex Young for contributing to this release.
   Indent Line (if you want TAB to indent anywhere in a line, not just in
   the leading whitespace, like in emacs).
 
+- The "HyperSearch Results" window now remembers old search results.
+  They can be cleared out by right-clicking and selecting "Remove Node"
+  from the resulting popup menu (Peter Cox).
+
 + Syntax Highlighting Changes:
 
+- Added Maple syntax highlighting (John Perry).
 - Updated ColdFusion syntax highlighting (Joshua Miller).
-- Added Maple syntax highlighting (John Perry)
-- Updated Fortran syntax highlighting (Yifan Song)
+- Updated Fortran syntax highlighting (Yifan Song).
+- Updated PL-SQL syntax highlighting (Steve Snider).
 
 + Platform-Specific Changes:
 

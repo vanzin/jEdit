@@ -820,6 +820,7 @@ about.text=jEdit is brought to you by\n\
 	Nitsan Vardi\n\
 	Ollie Rutherfurd\n\
 	Patrick Tingen\n\
+	Peter Cox\n\
 	Peter Graves\n\
 	Phillip Mateescu\n\
 	Ralf Engels\n\
@@ -1100,14 +1101,16 @@ keepsearching.message=No more matches were found. Continue search from\n\
 
 #{{{ HyperSearch results dialog
 hypersearch-results.title=HyperSearch Results
+hypersearch-results.result-caption={0} ({1} occurrence(s) in {2} file(s))
+hypersearch-results.remove-node=Remove Node
 hypersearch-results.caption=Found {0} occurrence(s) in {1} file(s).
 hypersearch-results.file-caption={0} ({1} occurrences)
 hypersearch-results.file-caption1={0} (1 occurrence)
-hypersearch-status=Searching...
-hypersearch-status-file=Searching in {0}
+hypersearch-results.searching=Searching...
+hypersearch-results.no-results=No occurrences of the search string were found.
+hypersearch-results.done=Search done.
 
-hypersearch-no-results.title=HyperSearch Complete
-hypersearch-no-results.message=No occurrences of the search string were found.
+hypersearch-status=Searching
 #}}}
 
 #{{{ Search and replace error dialog
