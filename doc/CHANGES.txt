@@ -24,6 +24,13 @@ JEDIT 4.0 VERSION HISTORY
 - Changed tip of the day that mentioned an obsolete version of
   WheelMouse
 - Fixed possible ArrayIndexOutOfBoundsException in findMatchingBracket()
+- Fixed some bugs in HyperSearch when searching for .*, .*$ and $
+  regular expressions
+- Removed custom quicksort implementation from MiscUtilities (the
+  methods are still there, but they just call
+  java.util.Collections.sort())
+- Fixed a few more possible ClassCastExceptions due to use of
+  non-typesafe buffer property accessors
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 

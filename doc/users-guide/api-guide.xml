@@ -7,7 +7,7 @@
 <!-- This file contains the jEdit API Quick Reference            -->
 
 
-<chapter id="api-macro"><title>General jEdit Classes</title>
+<chapter id="api-guide"><title>General jEdit Classes</title>
 
 <sect1 id="class-jedit"><title>Class jEdit</title>
 
