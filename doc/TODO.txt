@@ -5,7 +5,6 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- soft wrap: create inaccessable chunk of proper width
 - fix tom's bugs
 - soft wrap is still slow
 - change indentPrevLine to indentOneLine and indentSubsequentLines
