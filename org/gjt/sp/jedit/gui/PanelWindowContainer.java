@@ -142,7 +142,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 			show(null);
 		}
 		else
+		{
 			wm.revalidate();
+			dockablePanel.repaint();
+		}
 	} //}}}
 
 	//{{{ showMostRecent() method
