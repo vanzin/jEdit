@@ -85,13 +85,12 @@ The JARClassLoader</title>
         the extension <filename>.props</filename> that are contained
         in the archive. See <xref linkend="api-resource-properties" />.
       </para></listitem>
-      <!-- adding xref api-resource-activation here -->
       <listitem><para>
         Loads as stored BeanShell code the routine for creating a
         docking or floating window containing the visible components of
         each plugin contained in the archive. This code is contained in an
         XML file named <filename>dockables.xml</filename> and located at the top
-        level of the archive file. See <xref linkend="api-resource-activiation" />.
+        level of the archive file. See <xref linkend="api-resources-activiation" />.
         This file is required if the plugin provides for a docking or
         floating window.
       </para></listitem>

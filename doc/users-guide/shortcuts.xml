@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <appendix id="shortcuts"><title>Keyboard Shortcuts</title>
  <para>
@@ -528,11 +528,19 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo></entry>
-      <entry>Quick incremental search.</entry>
+      <entry>Incremental search.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
       <entry>Quick HyperSearch.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>,</keycap></keycombo></entry>
+      <entry>Incremental search for word under the caret.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo></entry>
+      <entry>Quick HyperSearch for word under the caret.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -612,22 +620,28 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>
-      </entry>
-      <entry>Expand folds with level less than <replaceable>key</replaceable>,
-      collapse all others.
-      </entry>
-     </row>
-     <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycap>X</keycap></entry>
       <entry>Expand all folds.
       </entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycap>A</keycap></entry>
+      <entry>Add explicit fold.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycap>S</keycap></entry>
       <entry>Select fold.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>
+      </entry>
+      <entry>Expand folds with level less than <replaceable>key</replaceable>,
+      collapse all others.
       </entry>
      </row>
      <row>

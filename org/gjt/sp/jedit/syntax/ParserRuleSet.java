@@ -35,8 +35,9 @@ import javax.swing.text.Segment;
 public class ParserRuleSet
 {
 	//{{{ ParserRuleSet constructor
-	public ParserRuleSet(Mode mode)
+	public ParserRuleSet(String name, Mode mode)
 	{
+		this.name = name;
 		this.mode = mode;
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
@@ -173,9 +174,17 @@ public class ParserRuleSet
 		defaultToken = def;
 	} //}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		return getClass().getName() + "[" + mode.getName() + "::"
+			+ name + "]";
+	} //}}}
+
 	//{{{ Private members
 	private static final int RULE_BUCKET_COUNT = 32;
 
+	private String name;
 	private Mode mode;
 	private Hashtable props;
 

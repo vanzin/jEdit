@@ -59,7 +59,7 @@ public class BrowserView extends JPanel
 		parentDirectories.setVisibleRowCount(5);
 		parentDirectories.addMouseListener(new MouseHandler());
 
-		currentlyLoadingTreeNode = rootNode = new DefaultMutableTreeNode(null,true);
+		rootNode = new DefaultMutableTreeNode(null,true);
 		model = new DefaultTreeModel(rootNode,true);
 
 		tree = new BrowserJTree(model);
@@ -114,7 +114,12 @@ public class BrowserView extends JPanel
 				int loc = jEdit.getIntegerProperty(
 					"vfs.browser.splitter",0);
 				if(loc != 0)
+				{
 					splitPane.setDividerLocation(loc);
+					parentDirectories.ensureIndexIsVisible(
+						parentDirectories.getModel()
+						.getSize());
+				}
 			}
 		});
 	} //}}}
@@ -159,25 +164,28 @@ public class BrowserView extends JPanel
 	//{{{ directoryLoaded() method
 	public void directoryLoaded(String path, Vector directory)
 	{
-		parentModel.removeAllElements();
-		String parent = path;
-		for(;;)
+		if(currentlyLoadingTreeNode == rootNode)
 		{
-			parentModel.insertElementAt(parent,0);
-			String newParent = MiscUtilities.getParentOfPath(parent);
-			if(newParent.length() != 1 && (newParent.endsWith("/")
-				|| newParent.endsWith(File.separator)))
-				newParent = newParent.substring(0,newParent.length() - 1);
+			parentModel.removeAllElements();
+			String parent = path;
+			for(;;)
+			{
+				parentModel.insertElementAt(parent,0);
+				String newParent = MiscUtilities.getParentOfPath(parent);
+				if(newParent.length() != 1 && (newParent.endsWith("/")
+					|| newParent.endsWith(File.separator)))
+					newParent = newParent.substring(0,newParent.length() - 1);
 
-			if(newParent == null || parent.equals(newParent))
-				break;
-			else
-				parent = newParent;
+				if(newParent == null || parent.equals(newParent))
+					break;
+				else
+					parent = newParent;
+			}
+
+			int index = parentModel.getSize() - 1;
+			parentDirectories.setSelectedIndex(index);
+			parentDirectories.ensureIndexIsVisible(parentModel.getSize() - 1);
 		}
-
-		int index = parentModel.getSize() - 1;
-		parentDirectories.setSelectedIndex(index);
-		parentDirectories.ensureIndexIsVisible(parentModel.getSize() - 1);
 
 		currentlyLoadingTreeNode.removeAllChildren();
 
@@ -193,7 +201,7 @@ public class BrowserView extends JPanel
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(file,allowsChildren);
 				currentlyLoadingTreeNode.add(node);
 				if(tmpExpanded.get(file.path) != null)
-					toExpand.addElement(node.getPath());
+					toExpand.addElement(new TreePath(node.getPath()));
 			}
 		}
 
@@ -209,16 +217,6 @@ public class BrowserView extends JPanel
 			TreePath treePath = (TreePath)toExpand.elementAt(i);
 			tree.expandPath(treePath);
 		}
-
-		/* If the user expands a tree node manually, the tree
-		 * listener sets currentlyLoadingTreeNode to that.
-		 * But if VFSBrowser.setDirectory() is called, we want
-		 * the root node to be updated.
-		 *
-		 * Since the browser view receives no prior notification
-		 * to a setDirectory(), we set the currentlyLoadingTreeNode
-		 * to null here. */
-		currentlyLoadingTreeNode = rootNode;
 
 		timer.stop();
 		typeSelectBuffer.setLength(0);
@@ -374,6 +372,7 @@ public class BrowserView extends JPanel
 		{
 			node.removeAllChildren();
 			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
+			model.reload(currentlyLoadingTreeNode);
 		}
 
 		tmpExpanded.clear();
@@ -391,9 +390,6 @@ public class BrowserView extends JPanel
 				tmpExpanded.put(file.path,file.path);
 			}
 		}
-
-		// fire events
-		model.reload(currentlyLoadingTreeNode);
 
 		browser.loadDirectory(path,node == rootNode);
 	} //}}}
@@ -675,6 +671,11 @@ public class BrowserView extends JPanel
 				}
 
 				super.processMouseEvent(evt);
+				break; //}}}
+			//{{{ MOUSE_RELEASED:
+			case MouseEvent.MOUSE_RELEASED:
+				if(evt.getClickCount() != 2)
+					super.processMouseEvent(evt);
 				break; //}}}
 			default:
 				super.processMouseEvent(evt);

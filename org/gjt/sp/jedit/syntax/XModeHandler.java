@@ -198,7 +198,7 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (tag == "RULES")
 		{
-			rules = new ParserRuleSet(mode);
+			rules = new ParserRuleSet(lastSetName,mode);
 			rules.setIgnoreCase(lastIgnoreCase);
 			rules.setHighlightDigits(lastHighlightDigits);
 			rules.setEscape(lastEscape);

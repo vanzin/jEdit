@@ -180,7 +180,7 @@ view.search.find=Search for:
 #{{{ Context menu
 view.context=undo redo - cut copy paste paste-previous - select-all \
 	select-none - view-registers - to-upper to-lower - \
-	hypersearch - unsplit split-horizontal - eval-selection - \
+	hypersearch hypersearch-word - unsplit split-horizontal - \
 	buffer-options global-options
 #}}}
 
@@ -321,6 +321,8 @@ source=range-comment \
        line-comment \
        - \
        indent-lines \
+       shift-left \
+       shift-right \
        - \
        select-block \
        match-bracket \
@@ -330,6 +332,8 @@ source.label=Source
 range-comment.label=Range Comment
 line-comment.label=Line Comment
 indent-lines.label=Indent Selected Lines
+shift-left.label=Shift Indent Left
+shift-right.label=Shift Indent Right
 select-block.label=Select Code Block
 match-bracket.label=Go to Matching Bracket
 prev-bracket.label=Go to Previous Bracket
@@ -369,8 +373,8 @@ search=find \
        - \
        quick-search \
        hypersearch \
-       - \
-       hypersearch-results
+       quick-search-word \
+       hypersearch-word
 search.label=$Search
 find.label=$Find...
 find-next.label=Fi$nd Next
@@ -380,9 +384,10 @@ search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
-quick-search.label=Quick $Incremental Search
-hypersearch.label=$Quick HyperSearch
-hypersearch-results.label=$HyperSearch Results
+quick-search.label=$Incremental Search
+hypersearch.label=Quick $HyperSearch
+quick-search-word.label=Incremental Search for $Word
+hypersearch-word.label=$Quick HyperSearch for Word
 #}}}
 
 #{{{ Markers menu
@@ -636,13 +641,11 @@ select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
-shift-left.label=Shift Indent Left
-shift-right.label=Shift Indent Right
 toggle-multi-select.label=Multiple Selection
-hypersearch-results-toggle=HyperSearch Results Toggle
+hypersearch-results.label=HyperSearch Results
+hypersearch-results-toggle.label=HyperSearch Results Toggle
 vfs.browser-toggle.label=File System Browser Toggle
 log-viewer-toggle.label=Activity Log Toggle
-
 #}}}
 
 #{{{ View stuff
@@ -724,6 +727,7 @@ about.text=jEdit is brought to you by:\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jerry McBride\n\
+	Jim Wissner\n\
 	John Gellene\n\
 	Jonathan Revusky\n\
 	Juha Lindfors\n\
@@ -1134,28 +1138,21 @@ plugin-error.load-error=Cannot load: {0}\n\
 	The most likely reason is that the JAR file is corrupt; try\n\
 	reinstalling it. See the activity log for a full stack trace.
 plugin-error.start-error=Cannot start: {0}\n\
-	Possible reasons include:\n\
-	- the plugin is incompatible with this jEdit release; try updating\n\
-	the plugin\n\
-	- there is a bug in this plugin. If you suspect this is the case,\n\
-	e-mail the stack trace printed in the activity log to the plugin\n\
-	author.
-plugin-error.already-loaded=Two copies loaded. Please remove one of the\n\
+	Try updating to a newer version of the plugin.
+plugin-error.already-loaded=Two copies installed. Please remove one of the \
 	two copies.
-plugin-error.dep-jdk=This plugin requires Java {0} or later,\n\
-	but you only have version {1}.
-plugin-error.dep-jedit=This plugin requires jEdit {0} or later,\n\
-	but you only have version {1}. Download new\n\
-	jEdit versions from <http://www.jedit.org>.
-plugin-error.dep-plugin.no-version=This plugin requires version {0}\n\
-	or later of {1}, but {1} does not appear to be installed.
-plugin-error.dep-plugin.broken=This plugin requires the plugin {0},\n\
+plugin-error.dep-jdk=Requires Java {0} or later, but you only have version {1}.
+plugin-error.dep-jedit=Requires jEdit {0} or later, but you only have version {1}.\n\
+	Download new jEdit versions from <http://www.jedit.org>.
+plugin-error.dep-plugin.no-version=Requires version {0} \
+	or later of {1}, but {1} is not installed.
+plugin-error.dep-plugin.broken=Requires {0}, but {0} could not be loaded.
 	but an error prevented {0} from being loaded.
-plugin-error.dep-plugin=This plugin requires version {0} or later of {1},\n\
+plugin-error.dep-plugin=Requires version {0} or later of {1}, \
 	but you only have {1} version {2}.
-plugin-error.dep-class=This plugin requires the class {0}.\n\
+plugin-error.dep-class=Requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
-plugin-error.obsolete=The plugin {0} is obsolete. Please remove it.
+plugin-error.obsolete=This plugin is obsolete. Please remove it.
 #}}}
 
 #{{{ Macro dialogs
@@ -1564,7 +1561,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=68
+tip.count=70
 #}}}
 
 #{{{ Activity log

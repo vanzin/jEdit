@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
  <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
@@ -18,10 +18,11 @@
    <listitem><para>The indent width</para></listitem>
    <listitem><para>The wrap column (see <xref linkend="entering-text" />)
    </para></listitem>
+   <listitem><para>The folding mode (see <xref linkend="folding" />)
+   </para></listitem>
    <listitem><para>The line separator (see <xref linkend="line-separators" />)
    </para></listitem>
-   <listitem><para>If syntax highlighting should be enabled
-   (see <xref linkend="syntax-hilite" />)
+   <listitem><para>The character encoding (see <xref linkend="encodings" />)
    </para></listitem>
    <listitem><para>If auto indent and soft tabs should be enabled
    (see <xref linkend="indent" />)
@@ -72,18 +73,6 @@
       See <xref linkend="folding" />.</entry>
      </row>
      <row>
-      <entry>commentEnd</entry>
-      <entry>The range comment end string. For example, in Java mode
-      the default value is <quote>*/</quote>. See <xref linkend="commenting" />.
-      </entry>
-     </row>
-     <row>
-      <entry>commentStart</entry>
-      <entry>The range comment start string. For example, in Java mode
-      the default value is <quote>/*</quote>. See <xref linkend="commenting" />.
-      </entry>
-     </row>
-     <row>
       <entry>indentOnEnter</entry>
       <entry>If set to <quote>true</quote>, pressing <keycap>Enter</keycap> will
       insert a line break and automatically indent the new line. See
@@ -100,12 +89,6 @@
       <entry>The width, in characters, of one indent.
       Must be an integer greater than 0.
       See <xref linkend="indent" />.</entry>
-     </row>
-     <row>
-      <entry>lineComment</entry>
-      <entry>The line comment string. For example, in Java mode the
-      default value is <quote>//</quote>. See <xref linkend="commenting" />.
-      </entry>
      </row>
      <row>
       <entry>maxLineLen</entry>
