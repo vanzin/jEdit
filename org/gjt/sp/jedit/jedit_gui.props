@@ -365,7 +365,10 @@ search=find \
        quick-search \
        hypersearch \
        quick-search-word \
-       hypersearch-word
+       hypersearch-word \
+       - \
+       ignore-case \
+       regexp
 search.label=$Search
 find.label=$Find...
 find-next.label=Fi$nd Next
@@ -379,6 +382,8 @@ quick-search.label=$Incremental Search Bar
 hypersearch.label=$HyperSearch Bar
 quick-search-word.label=Incremental Search for $Word
 hypersearch-word.label=H$yperSearch for Word
+ignore-case.label=Ignore $Case
+regexp.label=Regular E$xpressions
 #}}}
 
 #{{{ Markers menu
@@ -529,6 +534,7 @@ goto-textarea.label=$Go to Text Area
 utils=vfs.browser \
       %recent-directories \
       - \
+      %favorites \
       %current-directory \
       %jedit-directory \
       %settings-directory \
@@ -552,6 +558,15 @@ global-options.label=$Global Options...
 recent-directories.label=$Recent Directories
 recent-directories.code=new RecentDirectoriesProvider();
 no-recent-dirs.label=No Recent Directories
+#}}}
+
+#{{{ Favorites menu
+favorites=add-buffer-to-favorites add-dir-to-favorites edit-favorites -
+favorites.label=Fa$vorites
+favorites.code=new FavoritesProvider();
+add-buffer-to-favorites.label=Add Buffer to Favorites
+add-dir-to-favorites.label=Add Directory to Favorites
+edit-favorites.label=Edit Favorites
 #}}}
 
 #{{{ Current Directory menu
@@ -1195,7 +1210,8 @@ keepsearching.message=No more matches were found. Continue search from\n\
 hypersearch-results.title=HyperSearch Results
 hypersearch-results.result-caption={0} ({1} occurrence(s) in {2} file(s))
 hypersearch-results.remove-node=Remove Node
-hypersearch-results.multi=Multiple results
+hypersearch-results.clear.label=Remove All Nodes
+hypersearch-results.multi.label=Toggle Multiple Results
 hypersearch-results.file-caption={0} ({1} occurrences)
 hypersearch-results.file-caption1={0} (1 occurrence)
 hypersearch-results.searching=Searching...

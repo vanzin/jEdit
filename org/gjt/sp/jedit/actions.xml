@@ -32,6 +32,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="add-buffer-to-favorites">
+	<CODE>
+		FavoritesVFS.addToFavorites(buffer.getPath(),VFS.DirectoryEntry.FILE);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="add-dir-to-favorites">
+	<CODE>
+		FavoritesVFS.addToFavorites(buffer.getDirectory(),VFS.DirectoryEntry.DIRECTORY);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="add-marker">
 	<CODE>
 		textArea.addMarker();
@@ -222,6 +234,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="edit-favorites">
+	<CODE>
+		VFSBrowser.browseDirectory(view,"favorites:");
+	</CODE>
+</ACTION>
+
 <ACTION NAME="end" NO_RECORD="TRUE">
 	<CODE>
 		textArea.smartEnd(false);
@@ -360,6 +378,15 @@
 	<CODE>
 		view.quickHyperSearch(true);
 	</CODE>
+</ACTION>
+
+<ACTION NAME="ignore-case">
+	<CODE>
+		SearchAndReplace.setIgnoreCase(!SearchAndReplace.getIgnoreCase());
+	</CODE>
+	<IS_SELECTED>
+		SearchAndReplace.getIgnoreCase();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="indent-lines">
@@ -748,6 +775,15 @@
 	<CODE>
 		buffer.redo(textArea);
 	</CODE>
+</ACTION>
+
+<ACTION NAME="regexp">
+	<CODE>
+		SearchAndReplace.setRegexp(!SearchAndReplace.getRegexp());
+	</CODE>
+	<IS_SELECTED>
+		SearchAndReplace.getRegexp();
+	</IS_SELECTED>
 </ACTION>
 
 <ACTION NAME="reload">

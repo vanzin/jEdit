@@ -715,6 +715,27 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		return browserView.getSelectedFiles();
 	} //}}}
 
+	//{{{ locateFile() method
+	/**
+	 * Goes to the given file's directory and selects the file in the list.
+	 * @param path The file
+	 * @since jEdit 4.2pre2
+	 */
+	public void locateFile(final String path)
+	{
+		if(!filenameFilter.isMatch(MiscUtilities.getFileName(path)))
+			setFilenameFilter(null);
+
+		setDirectory(MiscUtilities.getParentOfPath(path));
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				browserView.getTable().selectFile(path);
+			}
+		});
+	} //}}}
+
 	//{{{ addBrowserListener() method
 	public void addBrowserListener(BrowserListener l)
 	{
@@ -1029,6 +1050,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private JCheckBox filterCheckbox;
 	private HistoryTextField filterField;
 	private Box toolbarBox;
+	private FavoritesMenuButton favorites;
 	private BrowserView browserView;
 	private RE filenameFilter;
 	private int mode;
@@ -1053,7 +1075,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		menuBar.add(Box.createHorizontalStrut(3));
 		menuBar.add(new PluginsMenuButton());
 		menuBar.add(Box.createHorizontalStrut(3));
-		menuBar.add(new FavoritesMenuButton());
+		menuBar.add(favorites = new FavoritesMenuButton());
 
 		return menuBar;
 	} //}}}
@@ -1107,6 +1129,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				toolbarBox.add(menubar);
 			}
 		}
+		else
+			favorites = null;
 
 		toolbarBox.add(Box.createGlue());
 
@@ -1146,6 +1170,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ maybeReloadDirectory() method
 	private void maybeReloadDirectory(String dir)
 	{
+		if(MiscUtilities.isURL(dir)
+			&& MiscUtilities.getProtocolOfURL(dir).equals(
+			FavoritesVFS.PROTOCOL))
+		{
+			if(favorites != null)
+				favorites.popup = null;
+		}
+
 		// this is a dirty hack and it relies on the fact
 		// that updates for parents are sent before updates
 		// for the changed nodes themselves (if this was not
@@ -1380,6 +1412,66 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		JPopupMenu popup;
 
+		//{{{ createPopupMenu() method
+		void createPopupMenu()
+		{
+			popup = new JPopupMenu();
+			ActionHandler actionHandler = new ActionHandler();
+
+			JMenuItem mi = new JMenuItem(
+				jEdit.getProperty(
+				"vfs.browser.favorites"
+				+ ".add-to-favorites.label"));
+			mi.setActionCommand("add-to-favorites");
+			mi.addActionListener(actionHandler);
+			popup.add(mi);
+
+			mi = new JMenuItem(
+				jEdit.getProperty(
+				"vfs.browser.favorites"
+				+ ".edit-favorites.label"));
+			mi.setActionCommand("dir@favorites:");
+			mi.addActionListener(actionHandler);
+			popup.add(mi);
+
+			popup.addSeparator();
+
+			VFS.DirectoryEntry[] favorites
+				= FavoritesVFS.getFavorites();
+			if(favorites.length == 0)
+			{
+				mi = new JMenuItem(
+					jEdit.getProperty(
+					"vfs.browser.favorites"
+					+ ".no-favorites.label"));
+				mi.setEnabled(false);
+				popup.add(mi);
+			}
+			else
+			{
+				MiscUtilities.quicksort(favorites,
+					new VFS.DirectoryEntryCompare(
+					sortMixFilesAndDirs,
+					sortIgnoreCase));
+				for(int i = 0; i < favorites.length; i++)
+				{
+					VFS.DirectoryEntry favorite
+						= favorites[i];
+					mi = new JMenuItem(favorite.path);
+					mi.setIcon(FileCellRenderer
+						.getIconForFile(
+						favorite,false));
+					String cmd = (favorite.type ==
+						VFS.DirectoryEntry.FILE
+						? "file@" : "dir@")
+						+ favorite.path;
+					mi.setActionCommand(cmd);
+					mi.addActionListener(actionHandler);
+					popup.add(mi);
+				}
+			}
+		} //}}}
+
 		//{{{ ActionHandler class
 		class ActionHandler implements ActionListener
 		{
@@ -1392,26 +1484,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					// them, otherwise add current directory
 					ArrayList toAdd = new ArrayList();
 					VFS.DirectoryEntry[] selected = getSelectedFiles();
-					for(int i = 0; i < selected.length; i++)
-					{
-						VFS.DirectoryEntry file = selected[i];
-						if(file.type == VFS.DirectoryEntry.FILE)
-						{
-							toAdd.add(MiscUtilities
-								.getParentOfPath(file.path));
-						}
-						else
-							toAdd.add(file.path);
-					}
-
-					if(toAdd.size() != 0)
-					{
-						for(int i = 0; i < toAdd.size(); i++)
-						{
-							FavoritesVFS.addToFavorites((String)toAdd.get(i));
-						}
-					}
-					else
+					if(selected == null)
 					{
 						if(path.equals(FavoritesVFS.PROTOCOL + ":"))
 						{
@@ -1421,12 +1494,36 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						}
 						else
 						{
-							FavoritesVFS.addToFavorites(path);
+							FavoritesVFS.addToFavorites(path,
+								VFS.DirectoryEntry.DIRECTORY);
+						}
+					}
+					else
+					{
+						for(int i = 0; i < selected.length; i++)
+						{
+							VFS.DirectoryEntry file
+								= selected[i];
+							FavoritesVFS.addToFavorites(file.path,file.type);
 						}
 					}
 				}
-				else
-					setDirectory(actionCommand);
+				else if(actionCommand.startsWith("dir@"))
+				{
+					setDirectory(actionCommand.substring(4));
+				}
+				else if(actionCommand.startsWith("file@"))
+				{
+					switch(getMode())
+					{
+					case BROWSER:
+						jEdit.openFile(view,actionCommand.substring(5));
+						break;
+					default:
+						locateFile(actionCommand.substring(5));
+						break;
+					}
+				}
 			}
 		} //}}}
 
@@ -1435,62 +1532,19 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			public void mousePressed(MouseEvent evt)
 			{
-				if(popup == null || !popup.isVisible())
-				{
-					popup = new JPopupMenu();
-					ActionHandler actionHandler = new ActionHandler();
-
-					JMenuItem mi = new JMenuItem(
-						jEdit.getProperty(
-						"vfs.browser.favorites"
-						+ ".add-to-favorites.label"));
-					mi.setActionCommand("add-to-favorites");
-					mi.addActionListener(actionHandler);
-					popup.add(mi);
-
-					mi = new JMenuItem(
-						jEdit.getProperty(
-						"vfs.browser.favorites"
-						+ ".edit-favorites.label"));
-					mi.setActionCommand("favorites:");
-					mi.addActionListener(actionHandler);
-					popup.add(mi);
-
-					popup.addSeparator();
-
-					Object[] favorites = FavoritesVFS.getFavorites();
-					if(favorites.length == 0)
-					{
-						mi = new JMenuItem(
-							jEdit.getProperty(
-							"vfs.browser.favorites"
-							+ ".no-favorites.label"));
-						mi.setEnabled(false);
-						popup.add(mi);
-					}
-					else
-					{
-						MiscUtilities.quicksort(favorites,
-							new MiscUtilities.StringICaseCompare());
-						for(int i = 0; i < favorites.length; i++)
-						{
-							mi = new JMenuItem(favorites[i].toString());
-							mi.setIcon(FileCellRenderer.dirIcon);
-							mi.addActionListener(actionHandler);
-							popup.add(mi);
-						}
-					}
-
-					GUIUtilities.showPopupMenu(
-						popup,FavoritesMenuButton.this,0,
-						FavoritesMenuButton.this.getHeight(),
-						false);
-				}
-				else
+				if(popup != null && popup.isVisible())
 				{
 					popup.setVisible(false);
-					popup = null;
+					return;
 				}
+
+				if(popup == null)
+					createPopupMenu();
+
+				GUIUtilities.showPopupMenu(
+					popup,FavoritesMenuButton.this,0,
+					FavoritesMenuButton.this.getHeight(),
+					false);
 			}
 		} //}}}
 	} //}}}
