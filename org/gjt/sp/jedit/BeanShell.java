@@ -583,10 +583,6 @@ public class BeanShell
 		global.importPackage("org.gjt.sp.util");
 
 		interpForMethods = createInterpreter(global);
-
-		Log.log(Log.DEBUG,BeanShell.class,
-			"BeanShell interpreter version "
-			+ Interpreter.VERSION);
 	} //}}}
 
 	//{{{ resetClassManager() method
