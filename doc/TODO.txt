@@ -5,7 +5,6 @@ TO DO
 - fs browser: after dir load, focus in b view
 - fs browser: only one level expanded. need drastic new algorithm.
 - C+e s broken
-- investigate alleged MacOS X keyboard problems
 - still fold at end expand bug
 - investigate nextLineRequested() -- replace with a buffer event.
 - investigate wrap around in macros

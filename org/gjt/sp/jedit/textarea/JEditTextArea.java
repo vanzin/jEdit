@@ -3687,7 +3687,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 			return;
 		}
-		int maxLineLength = (buffer.getIntegerProperty("maxLineLen",0);
+		int maxLineLength = buffer.getIntegerProperty("maxLineLen",0);
 		if(maxLineLength <= 0)
 		{
 			getToolkit().beep();

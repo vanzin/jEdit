@@ -28,7 +28,9 @@ import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
