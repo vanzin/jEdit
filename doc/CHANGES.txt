@@ -37,6 +37,8 @@ and Randy Hudson for contributing to this release.
 
 - Added "Display Actions" macro (Lee Turner).
 
+- Wrote "What's new in jEdit 4.2" document.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -158,6 +160,9 @@ and Randy Hudson for contributing to this release.
 - Scrolling would jump if electric scrolling was off when moving the
   caret past the first or last visible line, if they were only partially
   visible due to soft wrapping.
+
+- Fixed scrolling inconsistencies after collapsing a fold with soft wrap
+  switched on.
 
 }}}
 {{{ API Changes

@@ -951,21 +951,23 @@ loop:		for(;;)
 				+ "," + end + ")");
 		}
 
-		for(int i = start; i <= end; i++)
+		int i = start;
+		if(!isLineVisible(i))
+			i = getNextVisibleLine(i);
+		while(i != -1 && i <= end)
 		{
-			//XXX
-			if(isLineVisible(i))
+			int screenLines = lineMgr.getScreenLineCount(i);
+			if(i < firstLine.physicalLine)
 			{
-				int screenLines = lineMgr
-					.getScreenLineCount(i);
-				if(firstLine.physicalLine >= i)
-				{
-					firstLine.scrollLine -= screenLines;
-					firstLine.callChanged = true;
-				}
-				scrollLineCount.scrollLine -= screenLines;
-				scrollLineCount.callChanged = true;
+				firstLine.scrollLine -= screenLines;
+				firstLine.skew = 0;
+				firstLine.callChanged = true;
 			}
+
+			scrollLineCount.scrollLine -= screenLines;
+			scrollLineCount.callChanged = true;
+
+			i = getNextVisibleLine(i);
 		}
 
 		/* update fold visibility map. */
@@ -994,6 +996,27 @@ loop:		for(;;)
 		}
 
 		lastfvmget = -1;
+
+		if(!isLineVisible(firstLine.physicalLine))
+		{
+			int firstVisible = getFirstVisibleLine();
+			if(firstLine.physicalLine < firstVisible)
+			{
+				firstLine.physicalLine = firstVisible;
+				firstLine.scrollLine = 0;
+			}
+			else
+			{
+				firstLine.physicalLine = getPrevVisibleLine(
+					firstLine.physicalLine);
+				firstLine.scrollLine -=
+					lineMgr.getScreenLineCount(
+					firstLine.physicalLine);
+			}
+			firstLine.callChanged = true;
+		}
+
+		System.err.println(firstLine);
 	} //}}}
 
 	//{{{ _setScreenLineCount() method
@@ -1029,6 +1052,12 @@ loop:		for(;;)
 
 		abstract void reset();
 		abstract void changed();
+
+		public String toString()
+		{
+			return getClass().getName() + "[" + physicalLine + ","
+				+ scrollLine + "]";
+		}
 	} //}}}
 
 	//{{{ ScrollLineCount class
