@@ -278,8 +278,8 @@ public class EditPane extends JPanel implements EBComponent
 		/*if(selection != null)
 			textArea.setSelection(selection);*/
 
-		if(firstLine != null)
-			textArea.setFirstLine(textArea.physicalToVirtual(firstLine.intValue()));
+		//if(firstLine != null)
+		//	textArea.setFirstLine(textArea.physicalToVirtual(firstLine.intValue()));
 
 		if(horizontalOffset != null)
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
@@ -610,8 +610,8 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			if(_buffer == buffer)
 			{
-				textArea.getFoldVisibilityManager()
-					.foldStructureChanged();
+				//textArea.getFoldVisibilityManager()
+				//	.foldStructureChanged();
 				textArea.propertiesChanged();
 				textArea.repaint();
 

@@ -276,13 +276,6 @@ public class Buffer implements EBComponent
 					writeUnlock();
 				}
 
-				// notify fold visibility managers
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-						inUseFVMs[i]._invalidate(0);
-				}
-
 				setFlag(READ_ONLY,readOnly);
 
 				unsetProperty(BufferIORequest.LOAD_DATA);
@@ -1322,15 +1315,6 @@ public class Buffer implements EBComponent
 			contentMgr.remove(offset,length);
 
 			offsetMgr.contentRemoved(startLine,offset,numLines,length);
-
-			if(numLines > 0)
-			{
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-						inUseFVMs[i]._invalidate(startLine);
-				}
-			}
 
 			fireContentRemoved(startLine,offset,numLines,length);
 
@@ -2928,12 +2912,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void invalidateCachedFoldLevels()
 	{
 		offsetMgr.lineInfoChangedFrom(0);
-		for(int i = 0; i < inUseFVMs.length; i++)
-		{
-			if(inUseFVMs[i] != null)
-				inUseFVMs[i]._invalidate(0);
-		}
-
 		fireFoldLevelChanged(0,getLineCount());
 	} //}}}
 
@@ -3338,31 +3316,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
-		else if(msg instanceof EditPaneUpdate)
-		{
-			EditPaneUpdate emsg = (EditPaneUpdate)msg;
-			if(emsg.getWhat() == EditPaneUpdate.CREATED)
-			{
-				// see getFoldVisibilityManager()
-			}
-			else if(emsg.getWhat() == EditPaneUpdate.DESTROYED)
-			{
-				JEditTextArea textArea = emsg.getEditPane()
-					.getTextArea();
-				FoldVisibilityManager mgr = textArea
-					.getFoldVisibilityManager();
-
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(mgr == inUseFVMs[i])
-					{
-						mgr._release();
-						inUseFVMs[i] = null;
-						break;
-					}
-				}
-			}
-		}
 	} //}}}
 
 	//}}}
@@ -3409,54 +3362,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		displayLock &= ~(1 << index);
 	} //}}}
 
-	//{{{ OBSOLETE
-
-	//{{{ _getFoldVisibilityManager() method
-	/**
-	 * Plugins and macros should not call this method. Call
-	 * {@link org.gjt.sp.jedit.textarea.JEditTextArea#getFoldVisibilityManager()}
-	 * instead.
-	 * @param textArea The text area
-	 * @since jEdit 4.0pre1
-	 */
-	public FoldVisibilityManager _getFoldVisibilityManager(
-		JEditTextArea textArea)
-	{
-		//System.err.println("_getFoldVisibilityManager() called for "
-		//	+ this);
-
-		FoldVisibilityManager mgr = new FoldVisibilityManager(this,
-			offsetMgr,textArea);
-
-		// find it a bit that it can set in line's 'visible' flag sets
-		for(int i = 0; i < inUseFVMs.length; i++)
-		{
-			if(inUseFVMs[i] == null)
-			{
-				inUseFVMs[i] = mgr;
-				mgr._grab(i);
-				return mgr;
-			}
-		}
-
-		//XXX
-		throw new InternalError("Too many text areas editing this buffer");
-	} //}}}
-
-	//{{{ _releaseFoldVisibilityManager() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @param mgr The fold visibility manager
-	 * @since jEdit 4.0pre1
-	 */
-	public void _releaseFoldVisibilityManager(FoldVisibilityManager mgr)
-	{
-		inUseFVMs[mgr._getIndex()] = null;
-		mgr._release();
-	} //}}}
-
-	//}}}
-
 	//}}}
 
 	//{{{ Package-private members
@@ -3474,7 +3379,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();
 		seg = new Segment();
-		inUseFVMs = new FoldVisibilityManager[8];
 		markers = new Vector();
 		properties = new HashMap();
 
@@ -3615,9 +3519,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean nextLineRequested;
 	private FoldHandler foldHandler;
 	private int displayLock;
-
-	// OBSOLETE
-	private FoldVisibilityManager[] inUseFVMs;
 
 	// Minimise EditBus message traffic...
 	private boolean firstTimeDone;
@@ -3959,16 +3860,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			offsetMgr.contentInserted(startLine,offset,numLines,length,
 				endOffsets);
-
-			if(numLines > 0)
-			{
-				// notify fold visibility managers
-				for(int i = 0; i < inUseFVMs.length; i++)
-				{
-					if(inUseFVMs[i] != null)
-						inUseFVMs[i]._invalidate(startLine);
-				}
-			}
 
 			setDirty(true);
 

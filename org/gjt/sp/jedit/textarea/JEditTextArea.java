@@ -147,18 +147,6 @@ public class JEditTextArea extends JComponent
 		return gutter;
 	} //}}}
 
-	//{{{ getFoldVisibilityManager() method
-	/**
-	 * @deprecated The display engine no longer uses this object.
-	 *
-	 * Returns the fold visibility manager used by this text area.
-	 * @since jEdit 4.0pre1
-	 */
-	public FoldVisibilityManager getFoldVisibilityManager()
-	{
-		return foldVisibilityManager;
-	} //}}}
-
 	//{{{ getDisplayManager() method
 	/**
 	 * Returns the display manager used by this text area.
@@ -271,23 +259,16 @@ public class JEditTextArea extends JComponent
 				caretLine = caret = caretScreenLine = 0;
 				bracketLine = bracketPosition = -1;
 
-				// OBSOLETE
-				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
-
 				displayManager.dispose();
 				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
 			this.buffer = buffer;
 
-			// OBSOLETE
-			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 			displayManager = new DisplayManager(buffer,this);
 
 			buffer.addBufferChangeListener(bufferHandler);
 			bufferHandlerInstalled = true;
 
-			firstLine = 0;
-			physFirstLine = displayManager.getFirstVisibleLine();
 			chunkCache.setBuffer(buffer);
 
 			propertiesChanged();
@@ -341,25 +322,23 @@ public class JEditTextArea extends JComponent
 
 	//{{{ getFirstLine() method
 	/**
-	 * Returns the line displayed at the text area's origin. This is
-	 * a virtual, not a physical, line number. See
-	 * {@link FoldVisibilityManager#virtualToPhysical(int)}.
+	 * Returns the vertical scroll bar position.
+	 * @since jEdit 4.2pre1
 	 */
 	public final int getFirstLine()
 	{
-		return firstLine;
+		return displayManager.getFirstLine();
 	} //}}}
 
 	//{{{ setFirstLine() method
 	/**
-	 * Sets the line displayed at the text area's origin.
+	 * Sets the vertical scroll bar position
 	 *
-	 * @param firstLine A virtual, not a physical, line number. See
-	 * {@link FoldVisibilityManager#physicalToVirtual(int)}.
+	 * @param firstLine The scroll bar position
 	 */
 	public void setFirstLine(int firstLine)
 	{
-		if(firstLine == this.firstLine)
+		if(firstLine == displayManager.getFirstLine())
 			return;
 
 		_setFirstLine(firstLine);
@@ -370,22 +349,17 @@ public class JEditTextArea extends JComponent
 	//{{{ _setFirstLine() method
 	public void _setFirstLine(int firstLine)
 	{
-		firstLine = Math.max(0,Math.min(getVirtualLineCount() - 1,firstLine));
-		this.firstLine = firstLine;
-
-		physFirstLine = virtualToPhysical(firstLine);
+		displayManager.setFirstLine(firstLine);
+		chunkCache.setFirstLine(firstLine,displayManager.getFirstPhysicalLine());
 
 		maxHorizontalScrollWidth = 0;
-
-		chunkCache.setFirstLine(firstLine,physFirstLine);
 
 		if(buffer.isLoaded())
 			recalculateLastPhysicalLine();
 
-		painter.repaint();
-		gutter.repaint();
+		repaint();
 
-		if(this.firstLine != vertical.getValue())
+		if(firstLine != vertical.getValue())
 			updateScrollBars();
 
 		fireScrollEvent(true);
@@ -407,7 +381,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public final int getFirstPhysicalLine()
 	{
-		return physFirstLine;
+		return displayManager.getFirstPhysicalLine();
 	} //}}}
 
 	//{{{ getLastPhysicalLine() method
@@ -467,11 +441,8 @@ public class JEditTextArea extends JComponent
 		{
 			// don't display stuff past the end of the buffer if
 			// we can help it
-			int lineCount = getVirtualLineCount();
-
-			// very stupid but proper fix will go in later
-			if(softWrap)
-				lineCount += visibleLines - 1;
+			int lineCount = displayManager.getScrollLineCount();
+			int firstLine = displayManager.getFirstLine();
 
 			if(lineCount < firstLine + visibleLines)
 			{
@@ -509,8 +480,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollUpLine()
 	{
-		if(firstLine > 0)
-			setFirstLine(firstLine - 1);
+		//if(firstLine > 0)
+		//	setFirstLine(firstLine - 1);
 		//else
 		//	getToolkit().beep();
 	} //}}}
@@ -522,7 +493,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollUpPage()
 	{
-		if(firstLine > 0)
+		/* if(firstLine > 0)
 		{
 			int newFirstLine = firstLine;
 			int screenLineCount = 0;
@@ -535,7 +506,7 @@ public class JEditTextArea extends JComponent
 					screenLineCount += lines;
 			}
 			setFirstLine(newFirstLine);
-		}
+		} */
 		/* else
 		{
 			getToolkit().beep();
@@ -549,11 +520,11 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollDownLine()
 	{
-		int numLines = getVirtualLineCount();
+		/* int numLines = getVirtualLineCount();
 
 		if((softWrap && firstLine + 1 < numLines) ||
 			(firstLine + visibleLines < numLines))
-			setFirstLine(firstLine + 1);
+			setFirstLine(firstLine + 1); */
 		//else
 		//	getToolkit().beep();
 	} //}}}
@@ -565,13 +536,13 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollDownPage()
 	{
-		int numLines = getVirtualLineCount();
+		/* int numLines = getVirtualLineCount();
 
 		if((softWrap && firstLine + 1 < numLines) ||
 			(firstLine + visibleLines < numLines))
 		{
 			setFirstLine(physicalToVirtual(physLastLine));
-		}
+		} */
 		//else
 		//	getToolkit().beep();
 	} //}}}
@@ -598,7 +569,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		int extraEndVirt;
+		/* int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
 		if(offset > lineLength)
 		{
@@ -775,7 +746,7 @@ public class JEditTextArea extends JComponent
 		// fire events for both a horizontal and vertical scroll
 		fireScrollEvent(true);
 		fireScrollEvent(false);
-		//}}}
+		//}}} */
 	} //}}}
 
 	//{{{ addScrollListener() method
@@ -964,7 +935,7 @@ public class JEditTextArea extends JComponent
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		if(screenLine == -1)
 		{
-			if(line < physFirstLine)
+			if(line < displayManager.getFirstPhysicalLine())
 				return null;
 			// must have >= here because the last physical line
 			// might only be partially visible (some offsets would
@@ -977,7 +948,7 @@ public class JEditTextArea extends JComponent
 				throw new InternalError("line=" + line
 					+ ",offset=" + offset
 					+ ",screenLine=" + screenLine
-					+ ",physFirstLine=" + physFirstLine
+					+ ",physFirstLine=" + displayManager.getFirstPhysicalLine()
 					+ ",physLastLine=" + physLastLine);
 			}
 		}
@@ -1042,7 +1013,8 @@ public class JEditTextArea extends JComponent
 	public void invalidateLine(int line)
 	{
 		if(!buffer.isLoaded()
-			|| line < physFirstLine || line > physLastLine
+			|| line < displayManager.getFirstPhysicalLine()
+			|| line > physLastLine
 			|| !displayManager.isLineVisible(line))
 			return;
 
@@ -1099,7 +1071,7 @@ public class JEditTextArea extends JComponent
 			start = tmp;
 		}
 
-		if(end < physFirstLine || start > physLastLine)
+		if(end < displayManager.getFirstPhysicalLine() || start > physLastLine)
 			return;
 
 		int startScreenLine = -1;
@@ -1157,34 +1129,6 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Convenience methods
 
-	//{{{ physicalToVirtual() method
-	/**
-	 * @deprecated The display engine no longer uses virtual line numbers.
-	 *
-	 * Converts a physical line number to a virtual line number.
-	 * See {@link FoldVisibilityManager} for details.
-	 * @param line A physical line index
-	 * @since jEdit 4.0pre1
-	 */
-	public int physicalToVirtual(int line)
-	{
-		return foldVisibilityManager.physicalToVirtual(line);
-	} //}}}
-
-	//{{{ virtualToPhysical() method
-	/**
-	 * @deprecated The display engine no longer uses virtual line numbers.
-	 *
-	 * Converts a virtual line number to a physical line number.
-	 * See {@link FoldVisibilityManager} for details.
-	 * @param line A virtual line index
-	 * @since jEdit 4.0pre1
-	 */
-	public int virtualToPhysical(int line)
-	{
-		return foldVisibilityManager.virtualToPhysical(line);
-	} //}}}
-
 	//{{{ getBufferLength() method
 	/**
 	 * Returns the length of the buffer.
@@ -1201,16 +1145,6 @@ public class JEditTextArea extends JComponent
 	public final int getLineCount()
 	{
 		return buffer.getLineCount();
-	} //}}}
-
-	//{{{ getVirtualLineCount() method
-	/**
-	 * @deprecated Obsolete
-	 * Returns the number of virtual lines in the buffer.
-	 */
-	public final int getVirtualLineCount()
-	{
-		return foldVisibilityManager.getVirtualLineCount();
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -2156,14 +2090,14 @@ forward_scan:		do
 						"collapseFolds",0);
 					if(collapseFolds != 0)
 					{
-						foldVisibilityManager.expandFolds(collapseFolds);
-						foldVisibilityManager.expandFold(newCaretLine,false);
+						displayManager.expandFolds(collapseFolds);
+						displayManager.expandFold(newCaretLine,false);
 					}
 					else
-						foldVisibilityManager.expandAllFolds();
+						displayManager.expandAllFolds();
 				}
 				else
-					foldVisibilityManager.expandFold(newCaretLine,false);
+					displayManager.expandFold(newCaretLine,false);
 			}
 
 			if(bracketLine != -1)
@@ -2632,7 +2566,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		if(caret == getLineStartOffset(caretLine))
 		{
-			int line = foldVisibilityManager.getPrevVisibleLine(caretLine);
+			int line = displayManager.getPrevVisibleLine(caretLine);
 			if(line == -1)
 			{
 				getToolkit().beep();
@@ -2756,7 +2690,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
-			if(!foldVisibilityManager.isLineVisible(i))
+			if(!displayManager.isLineVisible(i))
 				continue;
 
 			getLineText(i,lineSegment);
@@ -2819,7 +2753,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 			else
 			{
-				int prevLine = foldVisibilityManager.getPrevVisibleLine(caretLine);
+				int prevLine = displayManager.getPrevVisibleLine(caretLine);
 				if(prevLine == -1)
 				{
 					getToolkit().beep();
@@ -3044,11 +2978,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToFirstVisibleLine(boolean select)
 	{
-		int firstVisibleLine = firstLine == 0 ? 0 : electricScroll;
+		int firstVisibleLine = getFirstLine() == 0 ? 0 : electricScroll;
 		int firstVisible = getScreenLineStartOffset(firstVisibleLine);
 		if(firstVisible == -1)
 		{
-			firstVisible = getLineStartOffset(foldVisibilityManager
+			firstVisible = getLineStartOffset(displayManager
 				.getFirstVisibleLine());
 		}
 
@@ -3068,9 +3002,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		int lastVisible;
 
-		if(firstLine + visibleLines >= getVirtualLineCount())
+		if(displayManager.getFirstLine() + visibleLines >=
+			displayManager.getScrollLineCount())
 		{
-			lastVisible = getLineEndOffset(foldVisibilityManager
+			lastVisible = getLineEndOffset(displayManager
 				.getLastVisibleLine()) - 1;
 		}
 		else
@@ -3079,7 +3014,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				- electricScroll - 1) - 1;
 			if(lastVisible == -1)
 			{
-				lastVisible = getLineEndOffset(foldVisibilityManager
+				lastVisible = getLineEndOffset(displayManager
 					.getLastVisibleLine()) - 1;
 			}
 		}
@@ -3099,7 +3034,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void goToBufferStart(boolean select)
 	{
 		int start = buffer.getLineStartOffset(
-			foldVisibilityManager.getFirstVisibleLine());
+			displayManager.getFirstVisibleLine());
 		if(select)
 			extendSelection(caret,start);
 		else if(!multi)
@@ -3115,7 +3050,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void goToBufferEnd(boolean select)
 	{
 		int end = buffer.getLineEndOffset(
-			foldVisibilityManager.getLastVisibleLine()) - 1;
+			displayManager.getLastVisibleLine()) - 1;
 		if(select)
 			extendSelection(caret,end);
 		else if(!multi)
@@ -3479,7 +3414,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.endCompoundEdit();
 		}
 
-		int lastLine = foldVisibilityManager.getLastVisibleLine();
+		int lastLine = displayManager.getLastVisibleLine();
 		if(caretLine == lastLine)
 		{
 			int offset = chunkCache.xToSubregionOffset(lastLine,0,x,true);
@@ -3510,7 +3445,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 loop:		for(int i = caretLine - 1; i >= 0; i--)
 		{
-			//if(!foldVisibilityManager.isLineVisible(i))
+			//if(!displayManager.isLineVisible(i))
 			//	continue loop;
 
 			getLineText(i,lineSegment);
@@ -3533,7 +3468,7 @@ loop:		for(int i = caretLine - 1; i >= 0; i--)
 
 loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
-			//if(!foldVisibilityManager.isLineVisible(i))
+			//if(!displayManager.isLineVisible(i))
 			//	continue loop;
 
 			getLineText(i,lineSegment);
@@ -3791,7 +3726,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
 		{
 			if(buffer.isFoldStart(i)
-				&& foldVisibilityManager.isLineVisible(i))
+				&& displayManager.isLineVisible(i))
 			{
 				nextFold = i;
 				break;
@@ -3828,7 +3763,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		for(int i = caretLine - 1; i >= 0; i--)
 		{
 			if(buffer.isFoldStart(i)
-				&& foldVisibilityManager.isLineVisible(i))
+				&& displayManager.isLineVisible(i))
 			{
 				prevFold = i;
 				break;
@@ -3865,12 +3800,12 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		int x = chunkCache.subregionOffsetToX(caretLine,
 			caret - getLineStartOffset(caretLine));
 
-		foldVisibilityManager.collapseFold(caretLine);
+		displayManager.collapseFold(caretLine);
 
-		if(foldVisibilityManager.isLineVisible(caretLine))
+		if(displayManager.isLineVisible(caretLine))
 			return;
 
-		int line = foldVisibilityManager.getPrevVisibleLine(caretLine);
+		int line = displayManager.getPrevVisibleLine(caretLine);
 
 		if(!multi)
 			selectNone();
@@ -3889,7 +3824,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		int x = chunkCache.subregionOffsetToX(caretLine,
 			caret - getLineStartOffset(caretLine));
 
-		int line = foldVisibilityManager.expandFold(caretLine,fully);
+		int line = displayManager.expandFold(caretLine,fully);
 
 		if(!fully && line != -1)
 		{
@@ -3940,7 +3875,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		if(lines[0] == 0 && lines[1] == buffer.getLineCount() - 1)
 			getToolkit().beep();
 		else
-			foldVisibilityManager.narrow(lines[0],lines[1]);
+			displayManager.narrow(lines[0],lines[1]);
 	} //}}}
 
 	//{{{ narrowToSelection() method
@@ -3957,7 +3892,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 
 		Selection sel = (Selection)selection.elementAt(0);
-		foldVisibilityManager.narrow(sel.getStartLine(),sel.getEndLine());
+		displayManager.narrow(sel.getStartLine(),sel.getEndLine());
 
 		selectNone();
 	} //}}}
@@ -4901,6 +4836,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	Segment lineSegment;
 	MouseHandler mouseHandler;
 	ChunkCache chunkCache;
+	boolean bufferChanging;
 
 	int maxHorizontalScrollWidth;
 
@@ -4949,8 +4885,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		return bracketLine != -1
 			&& hasFocus()
-			&& foldVisibilityManager.isLineVisible(bracketLine)
-			&& foldVisibilityManager.isLineVisible(caretLine);
+			&& displayManager.isLineVisible(bracketLine)
+			&& displayManager.isLineVisible(caretLine);
 	} //}}}
 
 	//{{{ updateMaxHorizontalScrollWidth() method
@@ -4991,14 +4927,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ foldStructureChanged() method
 	void foldStructureChanged()
 	{
-		chunkCache.invalidateAll();
+		/* chunkCache.invalidateAll();
 
-		int firstVisibleLine = foldVisibilityManager.getFirstVisibleLine();
+		int firstVisibleLine = displayManager.getFirstVisibleLine();
 
 		if(physFirstLine < firstVisibleLine)
 			physFirstLine = firstVisibleLine;
-		else if(!foldVisibilityManager.isLineVisible(physFirstLine))
-			physFirstLine = foldVisibilityManager.getPrevVisibleLine(physFirstLine);
+		else if(!displayManager.isLineVisible(physFirstLine))
+			physFirstLine = displayManager.getPrevVisibleLine(physFirstLine);
 
 		setFirstLine(physicalToVirtual(physFirstLine));
 
@@ -5010,7 +4946,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		// repaint gutter and painter
 		gutter.repaint();
-		painter.repaint();
+		painter.repaint(); */
 	} //}}}
 
 	//}}}
@@ -5041,8 +4977,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean caretBlinks;
 	private boolean blink;
 
-	private int firstLine;
-	private int physFirstLine;
 	private int physLastLine;
 	private int screenLastLine;
 	private boolean lastLinePartial;
@@ -5057,9 +4991,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
 
-	private boolean bufferChanging;
 	private Buffer buffer;
-	private FoldVisibilityManager foldVisibilityManager;
 	private DisplayManager displayManager;
 	private BufferChangeHandler bufferHandler;
 	private boolean bufferHandlerInstalled;
@@ -5414,7 +5346,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					- getLineStartOffset(bracketLine);
 				invalidateLineRange(bracketLine,caretLine);
 
-				if(bracketLine < physFirstLine
+				if(bracketLine < displayManager.getFirstPhysicalLine()
 					|| bracketLine > physLastLine)
 				{
 					showBracketStatusMessage(bracketLine < caretLine);
@@ -5713,7 +5645,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 *
 	 * There is still work to do; see TODO.txt.
 	 */
-	class BufferChangeHandler implements BufferChangeListener
+	class BufferChangeHandler extends BufferChangeAdapter
 	{
 		boolean delayedUpdate;
 		boolean delayedMultilineUpdate;
@@ -5724,15 +5656,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		// them to scroll us down or up. so we store the first line
 		// position at the start of the transaction.
 		Position holdPosition;
-
-		//{{{ foldLevelChanged() method
-		public void foldLevelChanged(Buffer buffer, int start, int end)
-		{
-			if(!bufferChanging && end != 0 && buffer.isLoaded())
-			{
-				invalidateLineRange(start - 1,getLastPhysicalLine());
-			}
-		} //}}}
 
 		//{{{ contentInserted() method
 		public void contentInserted(Buffer buffer, int startLine, int start,
@@ -5799,11 +5722,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 		//}}}
-
-		//{{{ preContentRemoved() method
-		public void preContentRemoved(Buffer buffer, int startLine, int start,
-			int numLines, int length)
-		{} //}}}
 
 		//{{{ contentRemoved() method
 		public void contentRemoved(Buffer buffer, int startLine, int start,
@@ -5913,17 +5831,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				//chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
 
-				if(holdPosition != null)
+				/* if(holdPosition != null)
 				{
 					setFirstLine(physicalToVirtual(
 						getBuffer().getLineOfOffset(
 						holdPosition.getOffset())));
 					holdPosition = null;
-				}
+				} */
 
 				if(delayedMultilineUpdate)
 				{
-					updateScrollBars();
 					invalidateScreenLineRange(chunkCache
 						.getScreenLineOfOffset(
 						delayedRepaintStart,0),
@@ -5968,7 +5885,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
-			if(numLines != 0)
+			/* if(numLines != 0)
 				delayedMultilineUpdate = true;
 
 			if(!delayedUpdate)
@@ -6021,7 +5938,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 
 				holdPosition = buffer.createPosition(pos);
-			}
+			} */
 		} //}}}
 	} //}}}
 

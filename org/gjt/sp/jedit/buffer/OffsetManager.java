@@ -72,7 +72,6 @@ public class OffsetManager
 		this.buffer = buffer;
 
 		positions = new PosBottomHalf[100];
-		virtualLineCounts = new int[8];
 	} //}}}
 
 	//{{{ getLineCount() method
@@ -80,22 +79,6 @@ public class OffsetManager
 	{
 		return lineCount;
 	} //}}}
-
-	//{{{ OBSOLETE
-
-	//{{{ getVirtualLineCount() method
-	public final int getVirtualLineCount(int index)
-	{
-		return virtualLineCounts[index];
-	} //}}}
-
-	//{{{ setVirtualLineCount() method
-	public final void setVirtualLineCount(int index, int lineCount)
-	{
-		virtualLineCounts[index] = lineCount;
-	} //}}}
-
-	//}}}
 
 	//{{{ getLineOfOffset() method
 	public int getLineOfOffset(int offset)
@@ -383,11 +366,6 @@ public class OffsetManager
 					lineInfo[i] &= ~VISIBLE_MASK;
 			}
 		}
-
-		for(int i = 0; i < virtualLineCounts.length; i++)
-		{
-			virtualLineCounts[i] = newVirtualLineCount;
-		}
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
@@ -417,14 +395,10 @@ public class OffsetManager
 		for(int i = 0; i < positionCount; i++)
 			positions[i].offset = 0;
 
-		//{{{ OBSOLETE
-		for(int i = 0; i < virtualLineCounts.length; i++)
-			virtualLineCounts[i] = lineCount; //}}}
-
 		Anchor anchor = anchors;
 		while(anchor != null)
 		{
-			anchor.physicalLine = anchor.scrollLine = lineCount;
+			anchor.reset();
 			anchor = anchor.next;
 		}
 	} //}}}
@@ -496,7 +470,7 @@ public class OffsetManager
 			while(anchor != null)
 			{
 				long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
-				if(anchor.physicalLine >= startLine
+				if(anchor.physicalLine > startLine
 					&& (visible & anchorVisibilityMask) != 0)
 				{
 					//System.err.println("anchor shift from "
@@ -506,25 +480,6 @@ public class OffsetManager
 				}
 				anchor = anchor.next;
 			}
-
-			//{{{ OBSOLETE
-			if((visible & (1L << (VISIBLE_SHIFT + 0))) != 0)
-				virtualLineCounts[0] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 1))) != 0)
-				virtualLineCounts[1] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 2))) != 0)
-				virtualLineCounts[2] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 3))) != 0)
-				virtualLineCounts[3] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 4))) != 0)
-				virtualLineCounts[4] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 5))) != 0)
-				virtualLineCounts[5] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 6))) != 0)
-				virtualLineCounts[6] += numLines;
-			if((visible & (1L << (VISIBLE_SHIFT + 7))) != 0)
-				virtualLineCounts[7] += numLines;
-			//}}}
 		} //}}}
 
 		moveGap(endLine,length,"contentInserted");
@@ -538,30 +493,6 @@ public class OffsetManager
 	{
 		int endLine = startLine + numLines;
 		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
-
-		//{{{ OBSOLETE
-		for(int i = 0; i < numLines; i++)
-		{
-			long info = lineInfo[startLine + i];
-
-			// Unrolled for max efficency
-			if((info & (1L << (VISIBLE_SHIFT + 0))) != 0)
-				virtualLineCounts[0]--;
-			if((info & (1L << (VISIBLE_SHIFT + 1))) != 0)
-				virtualLineCounts[1]--;
-			if((info & (1L << (VISIBLE_SHIFT + 2))) != 0)
-				virtualLineCounts[2]--;
-			if((info & (1L << (VISIBLE_SHIFT + 3))) != 0)
-				virtualLineCounts[3]--;
-			if((info & (1L << (VISIBLE_SHIFT + 4))) != 0)
-				virtualLineCounts[4]--;
-			if((info & (1L << (VISIBLE_SHIFT + 5))) != 0)
-				virtualLineCounts[5]--;
-			if((info & (1L << (VISIBLE_SHIFT + 6))) != 0)
-				virtualLineCounts[6]--;
-			if((info & (1L << (VISIBLE_SHIFT + 7))) != 0)
-				virtualLineCounts[7]--;
-		} //}}}
 
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
@@ -683,10 +614,6 @@ public class OffsetManager
 
 	private PosBottomHalf[] positions;
 	private int positionCount;
-
-	//{{{ OBSOLETE
-	private int[] virtualLineCounts;
-	//}}}
 
 	private Anchor anchors;
 
@@ -938,10 +865,8 @@ loop:		for(;;)
 	 */
 	public static abstract class Anchor
 	{
-		public Anchor(int physicalLine, int scrollLine, int index)
+		public Anchor(int index)
 		{
-			this.physicalLine = physicalLine;
-			this.scrollLine = scrollLine;
 			this.index = index;
 		}
 
@@ -952,6 +877,7 @@ loop:		for(;;)
 		public int index;
 		public boolean callChanged;
 
+		public abstract void reset();
 		public abstract void changed();
 	} //}}}
 

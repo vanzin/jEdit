@@ -162,7 +162,7 @@ class ChunkCache
 	 */
 	void setFirstLine(int firstLine, int physFirstLine)
 	{
-		if(DEBUG)
+		/* if(DEBUG)
 		{
 			System.err.println("old: " + this.firstLine + ",new: " +
 				firstLine + ",phys: " + physFirstLine);
@@ -287,7 +287,7 @@ class ChunkCache
 		}
 
 		lastScreenLine = lastScreenLineP = -1;
-		this.firstLine = firstLine;
+		this.firstLine = firstLine; */
 	} //}}}
 
 	//{{{ invalidateAll() method

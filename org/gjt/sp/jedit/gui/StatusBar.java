@@ -413,7 +413,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			int firstLine = textArea.getFirstLine();
 			int visible = textArea.getVisibleLines();
-			int lineCount = textArea.getVirtualLineCount();
+			int lineCount = textArea.getDisplayManager().getScrollLineCount();
 
 			if (visible >= lineCount)
 			{
