@@ -3687,8 +3687,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 			return;
 		}
-		int maxLineLength = ((Integer)buffer.getProperty("maxLineLen"))
-			.intValue();
+		int maxLineLength = (buffer.getIntegerProperty("maxLineLen",0);
 		if(maxLineLength <= 0)
 		{
 			getToolkit().beep();
@@ -4582,8 +4581,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ doWordWrap() method
 	private boolean doWordWrap(int line, boolean spaceInserted)
 	{
-		int maxLineLen = ((Integer)buffer.getProperty("maxLineLen"))
-			.intValue();
+		int maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
 
 		if(maxLineLen <= 0)
 			return false;
