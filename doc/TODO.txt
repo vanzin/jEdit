@@ -12,8 +12,6 @@ and quirks that I need to fix eventually.
   - option panes.
     - port quicknotepad, errorlist, character map, send buffer,
       sidekick, xml.
-  - browser actions.
-    - port ftp
   - operating system activations.
     - port macos
   - plugin errors after startup
