@@ -5,6 +5,7 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - Added syntax highlighting for output of Hex plugin (Andre Kaplan)
+- IBM Informix 4GL syntax highlighting (Vicente Salvador)
 
 + Enhancements
 
