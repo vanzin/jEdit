@@ -92,6 +92,12 @@ contributing to this release.
 - Various combinations of insertions and removes could mess up floating
   positions.
 
+- "Run Temporary Macro" no longer runs the temporary macro file from
+  disk if the buffer is not open.
+
+- Inserting text at the end of the buffer did not update the vertical
+  scroll bar in other text areas viewing the same buffer.
+
 }}}
 {{{ API Additions
 

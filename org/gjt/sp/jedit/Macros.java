@@ -555,13 +555,19 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 
 		if(settings == null)
 		{
-			GUIUtilities.error(view,"no-settings",new String[0]);
+			GUIUtilities.error(view,"no-settings",null);
 			return;
 		}
 
 		String path = MiscUtilities.constructPath(
 			jEdit.getSettingsDirectory(),"macros",
 			"Temporary_Macro.bsh");
+
+		if(jEdit.getBuffer(path) == null)
+		{
+			GUIUtilities.error(view,"no-temp-macro",null);
+			return;
+		}
 
 		Handler handler = getHandler("beanshell");
 		Macro temp = handler.createMacro(path,path);
