@@ -1185,9 +1185,6 @@ public class Buffer implements EBComponent
 
 			contentMgr.remove(offset,length);
 
-			if(lastTokenizedLine >= startLine)
-				lastTokenizedLine = -1;
-
 			offsetMgr.contentRemoved(startLine,offset,numLines,length);
 
 			if(numLines > 0)
@@ -2248,15 +2245,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 			prevLineIndent += indentSize;
 
 		return prevLineIndent;
-	}
+	} //}}}
 
 	//{{{ markTokens() method
 	/**
 	 * Returns the syntax tokens for the specified line.
 	 * @param lineIndex The line number
-	 * @since jEdit 4.0pre1
+	 * @param tokenHandler The token handler that will receive the syntax
+	 * tokens
+	 * @since jEdit 4.1pre1
 	 */
-	public TokenList markTokens(int lineIndex)
+	public void markTokens(int lineIndex, TokenHandler tokenHandler)
 	{
 		try
 		{
@@ -2265,12 +2264,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
 				throw new ArrayIndexOutOfBoundsException(lineIndex);
 
-			/* If cached tokens are valid, return 'em */
-			if(lastTokenizedLine == lineIndex)
-				return tokenList;
-
 			/*
-			 * Else, go up back, looking for a line with
+			 * Scan backwards, looking for a line with
 			 * a valid line context.
 			 */
 			int start, end;
@@ -2301,9 +2296,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 				TokenMarker.LineContext prevContext = (i == 0 ? null
 					: offsetMgr.getLineContext(i - 1));
 
-				/* Prepare tokenization */
-				tokenList.lastToken = null;
-
 				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
 				ParserRule oldRule;
 				ParserRuleSet oldRules;
@@ -2318,7 +2310,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 					oldRules = context.rules;
 				}
 
-				context = tokenMarker.markTokens(prevContext,tokenList,seg);
+				context = tokenMarker.markTokens(prevContext,
+					(i == lineIndex ? tokenHandler
+					: DummyTokenHandler.INSTANCE),seg);
 				offsetMgr.setLineContext(i,context);
 
 				// Could incorrectly be set to 'false' with
@@ -2332,15 +2326,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 				//	nextLineRequested = false;
 			}
 
-			lastTokenizedLine = lineIndex;
-
 			int lineCount = offsetMgr.getLineCount();
 			if(nextLineRequested && lineCount - lineIndex > 1)
 			{
 				offsetMgr.lineInfoChangedFrom(lineIndex + 1);
 			}
-
-			return tokenList;
 		}
 		finally
 		{
@@ -2438,6 +2428,24 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void tokenizeLines(int start, int len)
 	{
+	} //}}}
+
+	//{{{ markTokens() method
+	/**
+	 * @deprecated Use org.gjt.sp.jedit.syntax.DefaultTokenHandler instead
+	 */
+	public static class TokenList extends DefaultTokenHandler
+	{
+	}
+
+	/**
+	 * @deprecated Use the other form of <code>markTokens()</code> instead
+	 */
+	public TokenList markTokens(int lineIndex)
+	{
+		TokenList list = new TokenList();
+		markTokens(lineIndex,list);
+		return list;
 	} //}}}
 
 	//{{{ isLineVisible() method
@@ -3049,8 +3057,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		bufferListeners = new Vector();
 
 		seg = new Segment();
-		lastTokenizedLine = -1;
-		tokenList = new TokenList();
 
 		inUseFVMs = new FoldVisibilityManager[8];
 
@@ -3171,9 +3177,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean parseFully;
 	private TokenMarker tokenMarker;
 	private Segment seg;
-	private int lastTokenizedLine;
 	private boolean nextLineRequested;
-	private TokenList tokenList;
 
 	// Folding
 	private FoldHandler foldHandler;
@@ -3259,7 +3263,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(parseFully)
 		{
 			for(int i = 0; i < offsetMgr.getLineCount(); i++)
-				markTokens(i);
+				markTokens(i,DummyTokenHandler.INSTANCE);
 		}
 	} //}}}
 
@@ -3488,7 +3492,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
 		{
 			offsetMgr.lineInfoChangedFrom(0);
-			lastTokenizedLine = -1;
 		}
 	} //}}}
 
@@ -3536,9 +3539,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 				}
 			}
 
-			if(lastTokenizedLine >= startLine)
-				lastTokenizedLine = -1;
-
 			setDirty(true);
 
 			if(!getFlag(LOADING))
@@ -3558,7 +3558,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(offset != 0)
 			offset--;
 
-		TokenList tokens = markTokens(line);
+		DefaultTokenHandler tokens = new DefaultTokenHandler();
+		markTokens(line,tokens);
 		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
 		return token.rules;
 	} //}}}
@@ -3644,76 +3645,4 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//}}}
-
-	//{{{ TokenList class
-	/**
-	 * Encapsulates a token list.
-	 * @since jEdit 4.0pre1
-	 */
-	public static class TokenList
-	{
-		//{{{ getFirstToken() method
-		/**
-		 * Returns the first syntax token.
-		 * @since jEdit 4.0pre1
-		 */
-		public Token getFirstToken()
-		{
-			return firstToken;
-		} //}}}
-
-		//{{{ getLastToken() method
-		/**
-		 * Returns the last syntax token.
-		 * @since jEdit 4.0pre1
-		 */
-		public Token getLastToken()
-		{
-			return lastToken;
-		} //}}}
-
-		//{{{ addToken() method
-		/**
-		 * Do not call this method. The only reason it is public
-		 * is so that classes in the 'syntax' package can call it.
-		 */
-		public void addToken(int length, byte id, ParserRuleSet rules)
-		{
-			if(length == 0 && id != Token.END)
-				return;
-
-			if(firstToken == null)
-			{
-				firstToken = new Token(length,id,rules);
-				lastToken = firstToken;
-			}
-			else if(lastToken == null)
-			{
-				lastToken = firstToken;
-				firstToken.length = length;
-				firstToken.id = id;
-				firstToken.rules = rules;
-			}
-			else if(lastToken.id == id && lastToken.rules == rules)
-			{
-				lastToken.length += length;
-			}
-			else if(lastToken.next == null)
-			{
-				lastToken.next = new Token(length,id,rules);
-				lastToken.next.prev = lastToken;
-				lastToken = lastToken.next;
-			}
-			else
-			{
-				lastToken = lastToken.next;
-				lastToken.length = length;
-				lastToken.id = id;
-				lastToken.rules = rules;
-			}
-		} //}}}
-
-		private Token firstToken;
-		private Token lastToken;
-	} //}}}
 }
