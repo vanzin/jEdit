@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre15
 
-Thanks to Eric Ladner and Justin Hagstrom for contributing to this
-release.
+Thanks to Eric Ladner, Justin Hagstrom, Ollie Rutherfurd and
+Thomas Alspaugh for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -16,6 +16,10 @@ release.
 - Added Lilypond syntax highlighting (Bertalan Fodor).
 
 - Updated Omnimark syntax highlighting (Lionel Fiol).
+
+- Added Groovy syntax highlighting (Ollie Rutherfurd).
+
+- Added PTL syntax highlighting (Ollie Rutherfurd).
 
 }}}
 {{{ Miscellaneous
@@ -56,6 +60,10 @@ KeyEventTranslator.setModifierMapping(
 
 - The dirty flag was not cleared if 'redo' was invoked when the redone
   edit was created as part of a compound edit.
+
+- Fix a possible ArrayIndexOutOfBoundsException with zero-height text
+  areas.
+
 }}}
 
 }}}
