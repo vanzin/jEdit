@@ -28,8 +28,8 @@ import org.gjt.sp.jedit.Buffer;
 //}}}
 
 /**
- * A class internal to jEdit's document model. You should not use it
- * directly.
+ * @deprecated Used to implement backwards-compatibility with jEdit 3.2.2-style
+ * document model.
  *
  * @author Slava Pestov
  * @version $Id$

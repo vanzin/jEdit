@@ -5,6 +5,14 @@ and quirks that I need to fix eventually.
 
 - need a new jEditLauncher before the 4.1final release
 - fsb: at roots:; select something; path not prepended
+- faq:
+  - several places - latest jEdit is 4.1 not 4.0
+  - no longer exists - file-open with encoding menu
+  - gt; instead of &gt;
+  - community macros - mention inline instead of providing external
+    links
+  - mention macro manager
+  - don't mention obsolete codeaid cdb's
 
 + later:
 
