@@ -306,8 +306,7 @@ class ChunkCache
 	int xToSubregionOffset(LineInfo info, int x,
 		boolean round)
 	{
-		int offset = Chunk.xToOffset(info.chunks,
-			x - textArea.getHorizontalOffset(),round);
+		int offset = Chunk.xToOffset(info.chunks,x,round);
 		if(offset == -1 || offset == info.offset + info.length)
 			offset = info.offset + info.length - 1;
 
@@ -335,8 +334,7 @@ class ChunkCache
 	 */
 	int subregionOffsetToX(LineInfo info, int offset)
 	{
-		return (int)(textArea.getHorizontalOffset() + Chunk.offsetToX(
-			info.chunks,offset));
+		return (int)Chunk.offsetToX(info.chunks,offset);
 	} //}}}
 
 	//{{{ getSubregionStartOffset() method

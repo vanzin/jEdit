@@ -970,6 +970,8 @@ loop:		for(;;)
 			}
 		}
 
+		System.err.println(firstLine.scrollLine + ":" + firstLine.physicalLine);
+
 		/* update fold visibility map. */
 		int starti = fvmget(start);
 		int endi = fvmget(end);
@@ -1374,7 +1376,7 @@ loop:		for(;;)
 				if(physicalLine > getLastVisibleLine())
 				{
 					physicalLine = getLastVisibleLine();
-					scrollLine = getScrollLineCount();
+					scrollLine = getScrollLineCount() - 1;
 				}
 				else if(physicalLine < getFirstVisibleLine())
 				{
