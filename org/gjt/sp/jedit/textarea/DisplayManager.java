@@ -530,8 +530,10 @@ public class DisplayManager
 		if(start < getFirstVisibleLine() || end > getLastVisibleLine())
 			expandAllFolds();
 
-		hideLineRange(0,start - 1);
-		hideLineRange(end + 1,buffer.getLineCount() - 1);
+		if(start != 0)
+			hideLineRange(0,start - 1);
+		if(end != buffer.getLineCount() - 1)
+			hideLineRange(end + 1,buffer.getLineCount() - 1);
 
 		// if we narrowed to a single collapsed fold
 		if(start != buffer.getLineCount() - 1
@@ -1371,8 +1373,13 @@ loop:		for(;;)
 			{
 				if(physicalLine > getLastVisibleLine())
 				{
-					physicalLine = getPrevVisibleLine(physicalLine);
-					//scrollLine -= getScreenLineCount(physicalLine);
+					physicalLine = getLastVisibleLine();
+					scrollLine = getScrollLineCount();
+				}
+				else if(physicalLine < getFirstVisibleLine())
+				{
+					physicalLine = getFirstVisibleLine();
+					scrollLine = 0;
 				}
 				else
 				{
@@ -1464,6 +1471,7 @@ loop:		for(;;)
 				}
 
 				lastfvmget = -1;
+				fvmdump();
 			}
 		} //}}}
 
@@ -1479,9 +1487,11 @@ loop:		for(;;)
 				preContentRemoved(firstLine,startLine,numLines);
 				preContentRemoved(scrollLineCount,startLine,numLines);
 
+				int endLine = startLine + numLines;
+
 				/* update fold visibility map. */
 				int starti = fvmget(startLine);
-				int endi = fvmget(startLine + numLines);
+				int endi = fvmget(endLine);
 
 				/* both have same visibility; just remove
 				 * anything in between. */
@@ -1502,19 +1512,23 @@ loop:		for(;;)
 						starti++;
 					}
 				}
-				else if(Math.abs(starti % 2) == 1)
+				/* collapse 2 */
+				else if(fvm[starti] == startLine)
 				{
-					fvmput(starti + 1,endi + 2,null);
-					fvm[starti + 1] = startLine;
-					starti += 2;
+					int newStart = fvm[endi + 1] - 1;
+					fvmput(starti,endi + 1,null);
+					fvm[starti] = newStart;
+					starti++;
 				}
-				else /*if(Math.abs(endi % 2) == 1)*/
+				/* shift */
+				else
 				{
 					fvmput(starti + 1,endi,null);
 					fvm[starti + 1] = startLine;
 					starti += 2;
 				}
 
+				/* update */
 				for(int i = starti; i < fvmcount; i++)
 					fvm[i] -= numLines;
 
@@ -1530,6 +1544,9 @@ loop:		for(;;)
 		{
 			if(delayedUpdate)
 			{
+				textArea.chunkCache.invalidateChunksFromPhys(
+					delayedUpdateStart);
+
 				if(textArea.getDisplayManager() == DisplayManager.this)
 				{
 					int firstLine = textArea.getFirstPhysicalLine();

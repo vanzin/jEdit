@@ -251,7 +251,6 @@ public class KeyEventWorkaround
 	 */
 	public static void numericKeypadKey()
 	{
-		System.err.println("yank");
 		last = LAST_NOTHING;
 	} //}}}
 

@@ -3,6 +3,22 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- macos international keys
+- plugin mgr UI - kill modal dialog
+- win xp my documents
+- fsb date
+- plugin options btn
+- preserve 2 spaces after . w/ format
+- preserve caret pos w/ format
+- toggle caret scroll to when not in vis region?
+- complete word: non-word inserts first
+- print selection
+- show context w/ S+F10
+- drop in same place: cancel
+- adding to icons prop
+- control auto reload
+
+- test inserts with fold vis map
 - new file close messes up perspective
 - document lack of C+e C+e
 - control drag doesn't kill existing selection
