@@ -58,6 +58,7 @@ for future extension.
   - ActionScript
   - BBj
   - BibTeX
+  - Informix 4-GL
   - Modula-3
   - ObjectRexx
   - Prolog
