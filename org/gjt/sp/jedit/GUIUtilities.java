@@ -58,14 +58,26 @@ import org.gjt.sp.util.Log;
 public class GUIUtilities
 {
 	//{{{ Some predefined icons
-	public static final Icon NEW_BUFFER_ICON = loadIcon("new.gif");
-	public static final Icon DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
-	public static final Icon READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
-	public static final Icon NORMAL_BUFFER_ICON = loadIcon("normal.gif");
-	public static final Icon WINDOW_ICON = loadIcon("jedit-icon.gif");
+	public static Icon NEW_BUFFER_ICON;
+	public static Icon DIRTY_BUFFER_ICON;
+	public static Icon READ_ONLY_BUFFER_ICON;
+	public static Icon NORMAL_BUFFER_ICON;
+	public static Icon WINDOW_ICON;
 	//}}}
 
 	//{{{ Icon methods
+
+	//{{{ setIconPath() method
+	/**
+	 * Sets the path where jEdit looks for icons.
+	 * @since jEdit 4.2pre5
+	 */
+	public static void setIconPath(String iconPath)
+	{
+		GUIUtilities.iconPath = iconPath;
+		if(icons != null)
+			icons.clear();
+	} //}}}
 
 	//{{{ loadIcon() method
 	/**
@@ -90,16 +102,26 @@ public class GUIUtilities
 		}
 		else
 		{
-			URL url = GUIUtilities.class.getResource(
-				"/org/gjt/sp/jedit/icons/" + iconName);
-			if(url == null)
+			try
 			{
-				Log.log(Log.ERROR,GUIUtilities.class,
-					"Icon not found: " + iconName);
-				return null;
+				URL url = new URL(iconPath + iconName);
+				icon = new ImageIcon(url);
 			}
-
-			icon = new ImageIcon(url);
+			catch(Exception e)
+			{
+				try
+				{
+					URL url = new URL(defaultIconPath + iconName);
+					icon = new ImageIcon(url);
+				}
+				catch(Exception ex)
+				{
+					Log.log(Log.ERROR,GUIUtilities.class,
+						"Icon not found: " + iconName);
+					Log.log(Log.ERROR,GUIUtilities.class,ex);
+					return null;
+				}
+			}
 		}
 
 		icons.put(iconName,icon);
@@ -1446,6 +1468,18 @@ public class GUIUtilities
 
 	//{{{ Package-private members
 
+	//{{{ init() method
+	static void init()
+	{
+		// don't do this in static{} since we need jEdit.initMisc()
+		// run first so we have the jeditresource: protocol
+		NEW_BUFFER_ICON = loadIcon("new.gif");
+		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
+		READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
+		NORMAL_BUFFER_ICON = loadIcon("normal.gif");
+		WINDOW_ICON = loadIcon("jedit-icon.gif");
+	} //}}}
+
 	//{{{ showSplashScreen() method
 	static void showSplashScreen()
 	{
@@ -1464,6 +1498,8 @@ public class GUIUtilities
 	//{{{ Private members
 	private static SplashScreen splash;
 	private static Hashtable icons;
+	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
+	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 
 	private GUIUtilities() {}
 	//}}}

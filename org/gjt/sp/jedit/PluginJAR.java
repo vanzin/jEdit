@@ -791,6 +791,10 @@ public class PluginJAR
 	{
 		classes = cache.classes;
 
+		/* this should be before dockables are initialized */
+		if(cache.cachedProperties != null)
+			jEdit.addProperties(cache.cachedProperties);
+
 		if(cache.actionsURI != null
 			&& cache.cachedActionNames != null)
 		{
@@ -835,9 +839,6 @@ public class PluginJAR
 				ServiceManager.registerService(d);
 			}
 		}
-
-		if(cache.cachedProperties != null)
-			jEdit.addProperties(cache.cachedProperties);
 
 		if(cache.pluginClass != null)
 		{
