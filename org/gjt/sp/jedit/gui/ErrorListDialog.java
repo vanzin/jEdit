@@ -94,7 +94,12 @@ public class ErrorListDialog extends EnhancedDialog
 		JList errors = new JList(messages);
 		errors.setCellRenderer(new ErrorListCellRenderer());
 		errors.setVisibleRowCount(Math.min(messages.size(),4));
+
 		JScrollPane scrollPane = new JScrollPane(errors);
+		Dimension size = scrollPane.getPreferredSize();
+		size.width = Math.min(size.width,400);
+		scrollPane.setPreferredSize(size);
+
 		centerPanel.add(BorderLayout.CENTER,scrollPane);
 
 		content.add(BorderLayout.CENTER,centerPanel);

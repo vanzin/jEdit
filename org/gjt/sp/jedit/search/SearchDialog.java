@@ -304,6 +304,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public void dispose()
 	{
 		EditBus.removeFromBus(this);
+		viewHash.remove(view);
 		super.dispose();
 	} //}}}
 

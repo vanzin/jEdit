@@ -1,5 +1,6 @@
 TO DO
 
+- search dialog does not get focus when 'find' invoked while its open
 - paste: not scrolled to caret
 - selection extended when shift not down?
 - source for existing plugins
