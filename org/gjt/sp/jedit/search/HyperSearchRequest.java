@@ -240,17 +240,17 @@ loop:			for(int counter = 0; ; counter++)
 					buffer.getLineOfOffset(offset)) == offset);
 
 				buffer.getText(offset,end - offset,text);
-				int[] match = matcher.nextMatch(
+				SearchMatcher.Match match = matcher.nextMatch(
 					new CharIndexedSegment(text,false),
 					startOfLine,endOfLine,counter == 0,
 					false);
 				if(match == null)
 					break loop;
 
-				int matchStart = offset + match[0];
-				int matchEnd = offset + match[1];
+				int matchStart = offset + match.start;
+				int matchEnd = offset + match.end;
 
-				offset += match[1];
+				offset += match.end;
 
 				int newLine = buffer.getLineOfOffset(offset);
 				if(line == newLine)

@@ -147,8 +147,7 @@ public abstract class OperatingSystem
 			public void perform(String installDir,
 				Vector filesets) throws IOException
 			{
-				if(!enabled
-					|| !filesets.contains("jedit-windows"))
+				if(!enabled)
 					return;
 
 				mkdirs(directory);
@@ -289,7 +288,8 @@ public abstract class OperatingSystem
 			public void perform(String installDir,
 				Vector filesets)
 			{
-				if(!enabled)
+				if(!enabled
+					|| !filesets.contains("jedit-windows"))
 					return;
 
 				// run jEditLauncher installation

@@ -1,5 +1,8 @@
 /*
  * SearchMatcher.java - Abstract string matcher interface
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -42,9 +45,9 @@ public interface SearchMatcher
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.1pre7
+	 * @since jEdit 4.2pre4
 	 */
-	int[] nextMatch(CharIndexed text, boolean start, boolean end,
+	Match nextMatch(CharIndexed text, boolean start, boolean end,
 		boolean firstTime, boolean reverse);
 
 	/**
@@ -54,4 +57,12 @@ public interface SearchMatcher
 	 * @return The changed string
 	 */
 	String substitute(String text) throws Exception;
+
+	//{{{ Match class
+	public static class Match
+	{
+		public int start;
+		public int end;
+		public String[] substitutions;
+	} //}}}
 }

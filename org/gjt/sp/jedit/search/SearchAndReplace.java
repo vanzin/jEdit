@@ -630,7 +630,7 @@ loop:			for(;;)
 		// support reverse search yet.
 		//
 		// REMIND: fix flags when adding reverse regexp search.
-		int[] match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
+		SearchMatcher.Match match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
 			start == 0,true,firstTime,reverse);
 
 		if(match != null)
@@ -642,20 +642,20 @@ loop:			for(;;)
 			if(reverse)
 			{
 				textArea.setSelection(new Selection.Range(
-					start - match[1],
-					start - match[0]));
+					start - match.end,
+					start - match.start));
 				// make sure end of match is visible
-				textArea.scrollTo(start - match[0],false);
-				textArea.moveCaretPosition(start - match[1]);
+				textArea.scrollTo(start - match.start,false);
+				textArea.moveCaretPosition(start - match.end);
 			}
 			else
 			{
 				textArea.setSelection(new Selection.Range(
-					start + match[0],
-					start + match[1]));
-				textArea.moveCaretPosition(start + match[1]);
+					start + match.start,
+					start + match.end));
+				textArea.moveCaretPosition(start + match.end);
 				// make sure start of match is visible
-				textArea.scrollTo(start + match[0],false);
+				textArea.scrollTo(start + match.start,false);
 			}
 
 			return true;
@@ -1077,14 +1077,14 @@ loop:		for(int counter = 0; ; counter++)
 			boolean startOfLine = (buffer.getLineStartOffset(
 				buffer.getLineOfOffset(offset)) == offset);
 
-			int[] occur = matcher.nextMatch(
+			SearchMatcher.Match occur = matcher.nextMatch(
 				new CharIndexedSegment(text,false),
 				startOfLine,endOfLine,counter == 0,
 				false);
 			if(occur == null)
 				break loop;
-			int _start = occur[0];
-			int _length = occur[1] - occur[0];
+			int _start = occur.start;
+			int _length = occur.end - occur.start;
 
 			String found = new String(text.array,text.offset + _start,_length);
 			String subst = matcher.substitute(found);

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public class RESearchMatcher implements SearchMatcher
 		re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
 			| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);
 
-		returnValue = new int[2];
+		returnValue = new Match();
 	} //}}}
 
 	//{{{ nextMatch() method
@@ -89,10 +89,10 @@ public class RESearchMatcher implements SearchMatcher
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.1pre7
+	 * @since jEdit 4.2pre4
 	 */
-	public int[] nextMatch(CharIndexed text, boolean start, boolean end,
-		boolean firstTime, boolean reverse)
+	public SearchMatcher.Match nextMatch(CharIndexed text, boolean start,
+		boolean end, boolean firstTime, boolean reverse)
 	{
 		int flags = 0;
 
@@ -135,8 +135,8 @@ public class RESearchMatcher implements SearchMatcher
 			}
 		}
 
-		returnValue[0] = _start;
-		returnValue[1] = _end;
+		returnValue.start = _start;
+		returnValue.end = _end;
 		return returnValue;
 	} //}}}
 
@@ -175,6 +175,6 @@ public class RESearchMatcher implements SearchMatcher
 	private boolean beanshell;
 	private BshMethod replaceMethod;
 	private NameSpace replaceNS;
-	private int[] returnValue;
+	private Match returnValue;
 	//}}}
 }

@@ -67,7 +67,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 
 		pattern_end = this.pattern.length - 1;
 
-		returnValue = new int[2];
+		returnValue = new Match();
 	} //}}}
 
 	//{{{ nextMatch() method
@@ -85,10 +85,11 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.1pre7
+	 * @since jEdit 4.2pre4
 	 */
-	public int[] nextMatch(CharIndexed text, boolean start, boolean end,
-		boolean firstTime, boolean reverse)
+	public SearchMatcher.Match nextMatch(CharIndexed text,
+		boolean start, boolean end, boolean firstTime,
+		boolean reverse)
 	{
 		int pos = match(text,reverse);
 
@@ -98,8 +99,8 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		}
 		else
 		{
-			returnValue[0] = pos;
-			returnValue[1] = pos + pattern.length;
+			returnValue.start = pos;
+			returnValue.end = pos + pattern.length;
 			return returnValue;
 		}
 	} //}}}
@@ -244,7 +245,7 @@ SEARCH:
 	private int[] back_skip;
 	private int[] back_suffix;
 
-	private int[] returnValue;
+	private Match returnValue;
 	//}}}
 
 	// Boyer-Moore helper methods

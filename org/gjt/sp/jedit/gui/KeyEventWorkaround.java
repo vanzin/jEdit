@@ -102,30 +102,29 @@ public class KeyEventWorkaround
 				last = LAST_NUMKEYPAD;
 				return evt;
 			default:
-				if(!evt.isControlDown()
-					&& !evt.isAltDown()
-					&& !evt.isMetaDown())
-				// if((modifiers & (InputEvent.CTRL_MASK
-					// | InputEvent.ALT_MASK
-					// | InputEvent.META_MASK)) == 0)
+				if(!evt.isMetaDown())
 				{
-					// key pressed with no modifiers does
-					// not seem to happen. note, if you
-					// run jEdit with your clock set to
-					// the 70's you'll get broken keyboard
-					// handling.
-					lastKeyTime = 0L;
-
-					if(keyCode >= KeyEvent.VK_0
-						&& keyCode <= KeyEvent.VK_9)
+					if(evt.isControlDown()
+						&& evt.isAltDown())
 					{
-						return null;
+						lastKeyTime = 0L;
 					}
-
-					if(keyCode >= KeyEvent.VK_A
-						&& keyCode <= KeyEvent.VK_Z)
+					else if(!evt.isControlDown()
+						&& !evt.isAltDown())
 					{
-						return null;
+						lastKeyTime = 0L;
+
+						if(keyCode >= KeyEvent.VK_0
+							&& keyCode <= KeyEvent.VK_9)
+						{
+							return null;
+						}
+
+						if(keyCode >= KeyEvent.VK_A
+							&& keyCode <= KeyEvent.VK_Z)
+						{
+							return null;
+						}
 					}
 				}
 
@@ -157,8 +156,8 @@ public class KeyEventWorkaround
 			{
 				if(!Debug.ALTERNATIVE_DISPATCHER)
 				{
-					if(((modifiers & InputEvent.CTRL_MASK) != 0
-						^ (modifiers & InputEvent.ALT_MASK) != 0)
+					if((modifiers & InputEvent.CTRL_MASK) != 0
+						|| (modifiers & InputEvent.ALT_MASK) != 0
 						|| (modifiers & InputEvent.META_MASK) != 0)
 					{
 						return null;
