@@ -611,6 +611,13 @@ public class Registers
 				String line;
 				while((line = in.readLine()) != null)
 				{
+					// broken Eclipse workaround!
+					// 24 Febuary 2004
+					if(line.endsWith("\0"))
+					{
+						line = line.substring(0,
+							line.length() - 1);
+					}
 					buf.append(line);
 					buf.append('\n');
 				}

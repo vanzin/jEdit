@@ -17,6 +17,10 @@ Thomas Galvin for contributing to this release.
 
 - Updated ActionScript syntax highlighting (Nahuel Foronda).
 
+- Page Up/Page Down restored to jEdit 4.1 behavior: when they are
+  invoked at the beginning/end of the buffer, the caret is moved to
+  the beginning/end, instead of staying at its current position.
+
 }}}
 {{{ Bug Fixes
 
@@ -42,6 +46,10 @@ Thomas Galvin for contributing to this release.
 
 - Fixed problem where any dialogs boxes shown by the search and replace
   code would force the search and replace dialog to be shown on OS X.
+
+- Fixed a performance regression since 4.2pre7 on MacOS X.
+
+- More deep indent fixes (Brad Mace).
 
 }}}
 {{{ API Changes

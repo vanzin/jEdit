@@ -172,7 +172,12 @@ public class DefaultInputHandler extends InputHandler
 			{
 				Object o = current.get(keyStroke);
 				if(o instanceof Hashtable)
-					current = (Hashtable)o;
+				{
+					if(!st.hasMoreTokens())
+						return o;
+					else
+						current = (Hashtable)o;
+				}
 				else
 					return o;
 			}
