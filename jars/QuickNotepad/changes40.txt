@@ -13,7 +13,7 @@ the getName() and getComponent() methods of that interface in the plugin class.
 
 (2) A new file, dockables.xml, was created containing XML markup for the
 constructor of a plugin component. Under the new plugin API, this file is read
-to determine the method call or calls for construcuting a new instance of a
+to determine the method call or calls for constructing a new instance of a
 dockable plugin component. The file is quite short:
 
 <?xml version="1.0"?>
@@ -33,37 +33,58 @@ constructor. Both "view" and "position" are defined by the new plugin API in the
 namespace in which the constructor is called. The value of position is taken
 from optional properties set by the user. In the absence of a user setting, the
 position parameter is set to place the plugin component in a floating window.
+
 The NAME attribute is taken to conform to the value of the static variable
 QuickNotepadPlugin.NAME, which is also used to identify the plugin in the user
 action code contained in actions.xml.
 
-There is one other, optional attribute of the <DOCKABLE> element: a NO_ACTIONS
-attribute that can take a value of either "true" or "false". It is "false" by
-default: this signifies that the plugin does in fact define user actions in an
-actions.xml file. Most plugins will therefore use the default value.
+By default, the plugin API adds two actions for a plugin. The first is entitled
+[name of plugin] (in this case, "quicknotepad"), and simply activates the plugin
+by executing the code contained in the DOCKABLE element. The second action
+toggles the plugin's visible component, the title of the action is [name of
+plugin]-toggle (in this case, "quicknotepad-toggle"). The plugin API handles
+this action internally.
 
-(3) The user action definitions contained in actions.xml were revised to call
+To prevent these actions from being created, you can add a NO_ACTIONS="true"
+attribute to the DOCKABLE element. The NAME and NO_ACTIONS attributes are the
+only attributes defined for a DOCKABLE entry. A NAME is required; NO_ACTIONS is
+set to "false" by default.
+
+(3) In the actions.xml file, the user action definitions were revised to call
 DockableWindowManager.getDockable() instead of
-DockableManager.getDockableWindow().
+DockableManager.getDockableWindow(). In addition, the actions for toggling the
+plugin docking window and bringing the QuickNotepad window to the foreground
+were eliminated. The toggle action was duplicative of the built-in action
+supplied through dockables.xml, and the "bring to front" action had become
+redundant.
 
 (4) There were two deletions made in QuickNotepadPlugin, the main plugin class.
+
 The handleMessage() method was eliminated because it was only necessary for the
 plugin to listen for the CreateDockableWindow message. As a result, it is no
 longer necessary for this plugin to connect to the EditBus, so its derivation
 was changed from EBPlugin to EditPlugin. Individual instances of the
 QuickNotepad class still need to listen for a PropertiesChanged message, so that
-class continues to implement EBComponent. In addition, since the EditBus no
-longer maintains an active list of windows, the call to EditBus.addToNamedList()
-is no longer needed in the class's start() method and so was eliminated, leaving
-an empty start() method.
+class continues to implement EBComponent.
+
+In addition, since the EditBus no longer maintains an active list of windows,
+the call to EditBus.addToNamedList() is no longer needed in the class's start()
+method and so was eliminated, leaving an empty start() method.
 
 (5) No changes were required in the option pane class, QuickNotepadOptionsPane,
 or the other other classes defining components of the plugin.
 
-(6) Finally, the plugin's dependency properties were changed to make the plugin
-dependent upon version 4.0 or greater of jEdit:
+(6) Finally, several changes were made to the propoerties file of the plugin,
+QuickNotepad.props. First, the plugin's dependency properties were changed to
+make the plugin dependent upon version 4.0 or greater of jEdit:
 
 plugin.QuickNotepadPlugin.depend.1=jedit 04.00.00.00
+
+Next, the quicknotepad.title property was eliminated, and the "label" properties
+for the docking window and plugin menu were reorganized into two categories:
+labels for action created by dockable.xml (quicknotepad.label and
+quicknotepad-toggle.label), and labels for actions created by actions.xml (the
+remaining user actions: "choose-file", "save-file" and "copy-to-buffer").
 
 The plugin was built using the standard build.xml supplied for plugins,
 after checking to make sure that the name of the plugin and the location of
