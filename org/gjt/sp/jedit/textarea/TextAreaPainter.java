@@ -580,12 +580,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		int x = textArea.getHorizontalOffset();
 
 		int height = fm.getHeight();
-		int firstLine = textArea.getFirstLine();
-		int firstInvalid = firstLine + clipRect.y / height;
+		int firstInvalid = clipRect.y / height;
 		// Because the clipRect's height is usually an even multiple
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
-		int lastInvalid = firstLine + (clipRect.y + clipRect.height - 1) / height;
+		int lastInvalid = (clipRect.y + clipRect.height - 1) / height;
+
+		textArea.chunkCache.updateChunksUpTo(lastInvalid);
 
 		FoldVisibilityManager foldVisibilityManager
 			= textArea.getFoldVisibilityManager();
@@ -598,47 +599,35 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			boolean updateMaxHorizontalScrollWidth = false;
 
-			int physicalLine = 0;
-
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
+				ChunkCache.LineInfo lineInfo = textArea.chunkCache
+					.getLineInfoForScreenLine(line);
+				int physicalLine = lineInfo.physicalLine;
+
 				boolean valid = buffer.isLoaded()
-					&& line >= 0 && line < lineCount;
+					&& physicalLine != -1;
 
 				boolean collapsedFold;
 
 				if(valid)
 				{
-					physicalLine = textArea.virtualToPhysical(line);
 					collapsedFold = (physicalLine < buffer.getLineCount() - 1
 						&& buffer.isFoldStart(physicalLine)
 						&& !foldVisibilityManager
-						.isLineVisible(physicalLine + 1));
+						.isLineVisible(physicalLine + 1)
+						&& lineInfo.subregion == 0);
 				}
 				else
 				{
-					physicalLine = -1;
 					collapsedFold = false;
 				}
 
-				int width = paintLine(gfx,buffer,valid,line,
-					physicalLine,x,y,collapsedFold) - x;
-
-				if(valid)
-				{
-					// it seems we are repainted before a
-					// component event is received
-					// (read: recalculateVisibleLines()
-					// called)
-					int screenLine = line - textArea.getFirstLine();
-					if(screenLine < textArea.lineWidths.length)
-						textArea.lineWidths[line - textArea.getFirstLine()] = width;
-					if(width > textArea.maxHorizontalScrollWidth)
-						updateMaxHorizontalScrollWidth = true;
-
-					physicalLine = foldVisibilityManager
-						.getNextVisibleLine(physicalLine);
-				}
+				lineInfo.width = paintLine(gfx,buffer,valid,
+					lineInfo,physicalLine,x,y,collapsedFold)
+					- x;
+				if(lineInfo.width > textArea.maxHorizontalScrollWidth)
+					updateMaxHorizontalScrollWidth = true;
 
 				y += height;
 			}
@@ -646,7 +635,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(buffer.isNextLineRequested())
 			{
 				int h = clipRect.y + clipRect.height;
-				textArea.chunkCache.invalidateLineRange(lastInvalid,
+				textArea.chunkCache.invalidateLineRange(
+					lastInvalid + textArea.getFirstLine(),
 					textArea.getVirtualLineCount() - 1);
 
 				repaint(0,h,getWidth(),getHeight() - h);
@@ -764,15 +754,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ paintLine() method
 	private int paintLine(Graphics2D gfx, Buffer buffer, boolean valid,
-		int virtualLine, int physicalLine, int x, int y,
+		ChunkCache.LineInfo lineInfo, int physicalLine, int x, int y,
 		boolean collapsedFold)
 	{
-		paintHighlight(gfx,virtualLine,physicalLine,y,valid,collapsedFold);
+		paintHighlight(gfx,physicalLine,y,valid,collapsedFold);
 
 		Color bgColor;
 		if(collapsedFold)
 			bgColor = foldedLineColor;
-		else if(textArea.selection == null && lineHighlight)
+		else if(textArea.selection == null && lineHighlight
+			&& physicalLine == textArea.getCaretLine())
 			bgColor = lineHighlightColor;
 		else
 			bgColor = getBackground();
@@ -795,13 +786,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			float baseLine = y + fm.getHeight()
 				- fm.getLeading() - fm.getDescent();
 
-			TextUtilities.Chunk chunks = textArea.chunkCache
-				.getLineInfo(virtualLine,physicalLine).chunks;
-
-			if(chunks != null)
+			if(lineInfo.chunks != null)
 			{
-				x += TextUtilities.paintChunkList(chunks,gfx,x,
-					baseLine,getWidth(),bgColor);
+				x += TextUtilities.paintChunkList(
+					lineInfo.chunks,gfx,x,baseLine,
+					getWidth(),bgColor);
 			}
 
 			gfx.setFont(defaultFont);
@@ -836,8 +825,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintHighlight() method
-	private void paintHighlight(Graphics2D gfx, int virtualLine,
-		int physicalLine, int y, boolean valid, boolean collapsedFold)
+	private void paintHighlight(Graphics2D gfx, int physicalLine, int y,
+		boolean valid, boolean collapsedFold)
 	{
 		if(valid)
 		{
@@ -878,6 +867,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				paintBracketHighlight(gfx,physicalLine,y);
 		}
 
+		/* //{{{ Paint plugin highlights
 		if(highlights.size() != 0)
 		{
 			for(int i = 0; i < highlights.size(); i++)
@@ -899,7 +889,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					i--;
 				}
 			}
-		}
+		} //}}} */
 	} //}}}
 
 	//{{{ paintBracketHighlight() method

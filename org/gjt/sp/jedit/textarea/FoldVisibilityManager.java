@@ -22,8 +22,11 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import java.awt.Toolkit;
+import org.gjt.sp.jedit.buffer.OffsetManager;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * Controls fold visibility.
@@ -43,9 +46,11 @@ import org.gjt.sp.jedit.*;
 public class FoldVisibilityManager
 {
 	//{{{ FoldVisibilityManager constructor
-	public FoldVisibilityManager(Buffer buffer, JEditTextArea textArea)
+	public FoldVisibilityManager(Buffer buffer, OffsetManager offsetMgr,
+		JEditTextArea textArea)
 	{
 		this.buffer = buffer;
+		this.offsetMgr = offsetMgr;
 		this.textArea = textArea;
 	} //}}}
 
@@ -66,7 +71,7 @@ public class FoldVisibilityManager
 	 */
 	public int getVirtualLineCount()
 	{
-		return buffer._getVirtualLineCount(index);
+		return offsetMgr.getVirtualLineCount(index);
 	} //}}}
 
 	//{{{ isLineVisible() method
@@ -77,10 +82,13 @@ public class FoldVisibilityManager
 	 */
 	public final boolean isLineVisible(int line)
 	{
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
 		try
 		{
 			buffer.readLock();
-			return buffer._isLineVisible(line,index);
+			return offsetMgr.isLineVisible(line,index);
 		}
 		finally
 		{
@@ -101,7 +109,7 @@ public class FoldVisibilityManager
 
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
-				if(isLineVisible(i))
+				if(offsetMgr.isLineVisible(i,index))
 					return i;
 			}
 		}
@@ -127,7 +135,7 @@ public class FoldVisibilityManager
 
 			for(int i = buffer.getLineCount() - 1; i >= 0; i--)
 			{
-				if(isLineVisible(i))
+				if(offsetMgr.isLineVisible(i,index))
 					return i;
 			}
 		}
@@ -157,7 +165,7 @@ public class FoldVisibilityManager
 
 			for(int i = line + 1; i < buffer.getLineCount(); i++)
 			{
-				if(buffer._isLineVisible(i,index))
+				if(offsetMgr.isLineVisible(i,index))
 					return i;
 			}
 			return -1;
@@ -185,7 +193,7 @@ public class FoldVisibilityManager
 
 			for(int i = line - 1; i >= 0; i--)
 			{
-				if(buffer._isLineVisible(i,index))
+				if(offsetMgr.isLineVisible(i,index))
 					return i;
 			}
 			return -1;
@@ -216,10 +224,10 @@ public class FoldVisibilityManager
 					+ buffer.getLineCount());
 			}
 
-			while(!buffer._isLineVisible(line,index) && line > 0)
+			while(!offsetMgr.isLineVisible(line,index) && line > 0)
 				line--;
 
-			if(line == 0 && !buffer._isLineVisible(line,index))
+			if(line == 0 && !offsetMgr.isLineVisible(line,index))
 			{
 				// inside the top narrow.
 				return 0;
@@ -227,7 +235,7 @@ public class FoldVisibilityManager
 
 			if(lastPhysical == line)
 			{
-				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
+				if(lastVirtual < 0 || lastVirtual >= offsetMgr.getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"cached: " + lastVirtual);
@@ -240,7 +248,7 @@ public class FoldVisibilityManager
 					if(lastPhysical == line)
 						break;
 
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 						lastVirtual++;
 
 					if(lastPhysical == buffer.getLineCount() - 1)
@@ -249,7 +257,7 @@ public class FoldVisibilityManager
 						lastPhysical++;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
+				if(lastVirtual < 0 || lastVirtual >= offsetMgr.getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"fwd scan: " + lastVirtual);
@@ -262,7 +270,7 @@ public class FoldVisibilityManager
 					if(lastPhysical == line)
 						break;
 
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 						lastVirtual--;
 
 					if(lastPhysical == 0)
@@ -271,7 +279,7 @@ public class FoldVisibilityManager
 						lastPhysical--;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
+				if(lastVirtual < 0 || lastVirtual >= offsetMgr.getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"back scan: " + lastVirtual);
@@ -281,7 +289,7 @@ public class FoldVisibilityManager
 			{
 				lastPhysical = 0;
 				// find first visible line
-				while(!buffer._isLineVisible(lastPhysical,index))
+				while(!offsetMgr.isLineVisible(lastPhysical,index))
 					lastPhysical++;
 
 				lastVirtual = 0;
@@ -290,7 +298,7 @@ public class FoldVisibilityManager
 					if(lastPhysical == line)
 						break;
 
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 						lastVirtual++;
 
 					if(lastPhysical == buffer.getLineCount() - 1)
@@ -299,7 +307,7 @@ public class FoldVisibilityManager
 						lastPhysical++;
 				}
 
-				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
+				if(lastVirtual < 0 || lastVirtual >= offsetMgr.getVirtualLineCount(index))
 				{
 					throw new ArrayIndexOutOfBoundsException(
 						"zero scan: " + lastVirtual);
@@ -328,10 +336,10 @@ public class FoldVisibilityManager
 
 			if(line < 0)
 				throw new ArrayIndexOutOfBoundsException(line + " < 0");
-			else if(line >= buffer._getVirtualLineCount(index))
+			else if(line >= offsetMgr.getVirtualLineCount(index))
 			{
 				throw new ArrayIndexOutOfBoundsException(line + " > "
-					+ buffer._getVirtualLineCount(index));
+					+ offsetMgr.getVirtualLineCount(index));
 			}
 
 			if(lastVirtual == line)
@@ -346,7 +354,7 @@ public class FoldVisibilityManager
 			{
 				for(;;)
 				{
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
 							break;
@@ -370,7 +378,7 @@ public class FoldVisibilityManager
 			{
 				for(;;)
 				{
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
 							break;
@@ -394,13 +402,13 @@ public class FoldVisibilityManager
 			{
 				lastPhysical = 0;
 				// find first visible line
-				while(!buffer._isLineVisible(lastPhysical,index))
+				while(!offsetMgr.isLineVisible(lastPhysical,index))
 					lastPhysical++;
 
 				lastVirtual = 0;
 				for(;;)
 				{
-					if(buffer._isLineVisible(lastPhysical,index))
+					if(offsetMgr.isLineVisible(lastPhysical,index))
 					{
 						if(lastVirtual == line)
 							break;
@@ -450,7 +458,7 @@ public class FoldVisibilityManager
 			if(line != 0
 				&& line != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(line)
-				&& !buffer._isLineVisible(line + 1,index))
+				&& !offsetMgr.isLineVisible(line + 1,index))
 			{
 				line--;
 			}
@@ -509,8 +517,8 @@ public class FoldVisibilityManager
 
 			for(int i = start; i <= end; i++)
 			{
-				if(buffer._isLineVisible(i,index))
-					buffer._setLineVisible(i,index,false);
+				if(offsetMgr.isLineVisible(i,index))
+					offsetMgr.setLineVisible(i,index,false);
 				else
 					delta--;
 			}
@@ -521,8 +529,8 @@ public class FoldVisibilityManager
 				return;
 			}
 
-			buffer._setVirtualLineCount(index,
-				buffer._getVirtualLineCount(index)
+			offsetMgr.setVirtualLineCount(index,
+				offsetMgr.getVirtualLineCount(index)
 				- delta);
 			//}}}
 		}
@@ -563,8 +571,8 @@ public class FoldVisibilityManager
 
 			//{{{ Find fold start and fold end...
 			if(line != lineCount - 1
-				&& buffer._isLineVisible(line,index)
-				&& !buffer._isLineVisible(line + 1,index)
+				&& offsetMgr.isLineVisible(line,index)
+				&& !offsetMgr.isLineVisible(line + 1,index)
 				&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
 			{
 				// this line is the start of a fold
@@ -572,7 +580,7 @@ public class FoldVisibilityManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
-					if(/* buffer._isLineVisible(i,index) && */
+					if(/* offsetMgr.isLineVisible(i,index) && */
 						buffer.getFoldLevel(i) <= initialFoldLevel)
 					{
 						end = i - 1;
@@ -587,7 +595,7 @@ public class FoldVisibilityManager
 				// scan backwards looking for the start
 				for(int i = line - 1; i >= 0; i--)
 				{
-					if(buffer._isLineVisible(i,index) && buffer.getFoldLevel(i) < initialFoldLevel)
+					if(offsetMgr.isLineVisible(i,index) && buffer.getFoldLevel(i) < initialFoldLevel)
 					{
 						start = i + 1;
 						ok = true;
@@ -603,9 +611,9 @@ public class FoldVisibilityManager
 
 				for(int i = line + 1; i < lineCount; i++)
 				{
-					if((buffer._isLineVisible(i,index) &&
+					if((offsetMgr.isLineVisible(i,index) &&
 						buffer.getFoldLevel(i) < initialFoldLevel)
-						|| i == buffer._getVirtualLineCount(index) - 1)
+						|| i == offsetMgr.getVirtualLineCount(index) - 1)
 					{
 						end = i - 1;
 						break;
@@ -634,25 +642,25 @@ public class FoldVisibilityManager
 						returnValue = i - 1;
 					}
 
-					if(!buffer._isLineVisible(i,index) && fully)
+					if(!offsetMgr.isLineVisible(i,index) && fully)
 					{
 						delta++;
-						buffer._setLineVisible(i,index,true);
+						offsetMgr.setLineVisible(i,index,true);
 					}
 				}
-				else if(!buffer._isLineVisible(i,index))
+				else if(!offsetMgr.isLineVisible(i,index))
 				{
 					delta++;
-					buffer._setLineVisible(i,index,true);
+					offsetMgr.setLineVisible(i,index,true);
 				}
 			}
 
-			buffer._setVirtualLineCount(index,
-				buffer._getVirtualLineCount(index)
+			offsetMgr.setVirtualLineCount(index,
+				offsetMgr.getVirtualLineCount(index)
 				+ delta);
 			//}}}
 
-			if(!fully && !buffer._isLineVisible(line,index))
+			if(!fully && !offsetMgr.isLineVisible(line,index))
 			{
 				// this is a hack, and really needs to be done better.
 				expandFold(line,false);
@@ -691,10 +699,10 @@ public class FoldVisibilityManager
 
 			narrowed = false;
 
-			buffer._setVirtualLineCount(index,buffer.getLineCount());
+			offsetMgr.setVirtualLineCount(index,buffer.getLineCount());
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
-				buffer._setLineVisible(i,index,true);
+				offsetMgr.setLineVisible(i,index,true);
 			}
 			foldStructureChanged();
 		}
@@ -736,7 +744,7 @@ public class FoldVisibilityManager
 
 			// so that getFoldLevel() calling fireFoldLevelsChanged()
 			// won't break
-			buffer._setVirtualLineCount(index,buffer.getLineCount());
+			offsetMgr.setVirtualLineCount(index,buffer.getLineCount());
 
 			int newVirtualLineCount = 0;
 			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
@@ -749,14 +757,14 @@ public class FoldVisibilityManager
 				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
 				{
 					seenVisibleLine = true;
-					buffer._setLineVisible(i,index,true);
+					offsetMgr.setLineVisible(i,index,true);
 					newVirtualLineCount++;
 				}
 				else
-					buffer._setLineVisible(i,index,false);
+					offsetMgr.setLineVisible(i,index,false);
 			}
 
-			buffer._setVirtualLineCount(index,newVirtualLineCount);
+			offsetMgr.setVirtualLineCount(index,newVirtualLineCount);
 		}
 		finally
 		{
@@ -777,29 +785,29 @@ public class FoldVisibilityManager
 	public void narrow(int start, int end)
 	{
 		// ideally, this should somehow be rolled into the below loop.
-		if(!buffer._isLineVisible(start + 1,index))
+		if(!offsetMgr.isLineVisible(start + 1,index))
 			expandFold(start,false);
 
-		int virtualLineCount = buffer._getVirtualLineCount(index);
+		int virtualLineCount = offsetMgr.getVirtualLineCount(index);
 		for(int i = 0; i < start; i++)
 		{
-			if(buffer._isLineVisible(i,index))
+			if(offsetMgr.isLineVisible(i,index))
 			{
 				virtualLineCount--;
-				buffer._setLineVisible(i,index,false);
+				offsetMgr.setLineVisible(i,index,false);
 			}
 		}
 
 		for(int i = end + 1; i < buffer.getLineCount(); i++)
 		{
-			if(buffer._isLineVisible(i,index))
+			if(offsetMgr.isLineVisible(i,index))
 			{
 				virtualLineCount--;
-				buffer._setLineVisible(i,index,false);
+				offsetMgr.setLineVisible(i,index,false);
 			}
 		}
 
-		buffer._setVirtualLineCount(index,virtualLineCount);
+		offsetMgr.setVirtualLineCount(index,virtualLineCount);
 
 		narrowed = true;
 
@@ -861,6 +869,7 @@ public class FoldVisibilityManager
 
 	//{{{ Instance variables
 	private Buffer buffer;
+	private OffsetManager offsetMgr;
 	private JEditTextArea textArea;
 	private int index;
 	private int lastPhysical;

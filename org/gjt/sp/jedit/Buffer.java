@@ -895,52 +895,6 @@ public class Buffer implements EBComponent
 		return offsetMgr.getLineCount();
 	} //}}}
 
-	//{{{ Debugging
-	public void testOffsetManager()
-	{
-		java.util.Random random = new java.util.Random();
-		for(int i = 0; i < 10000; i++)
-		{
-			int next = Math.abs(random.nextInt()) % getLength();
-			int line = getLineOfOffset(next);
-			int start = getLineStartOffset(line);
-			int end = getLineEndOffset(line);
-			if(next < start || next >= end)
-			{
-				System.err.println(next + ":" + line);
-				break;
-			}
-		}
-
-		for(int i = 0; i < getLineCount(); i++)
-		{
-			int start = getLineStartOffset(i);
-			int end = getLineEndOffset(i);
-			if(start >= end)
-				System.err.println(i + ":" + start + ":" + end);
-		}
-	}
-
-	public void testPositions(int positions, int inserts)
-	{
-		java.util.Vector v = new Vector();
-		java.util.Random random = new java.util.Random();
-		for(int i = 0; i < positions; i++)
-		{
-			v.addElement(createPosition(Math.abs(random.nextInt()) % getLength()));
-		}
-
-		long start = System.currentTimeMillis();
-
-		for(int i = 0; i < inserts; i++)
-		{
-			int pos = Math.abs(random.nextInt()) % getLength();
-			insert(pos,"a");
-		}
-
-		System.err.println(System.currentTimeMillis() - start);
-	} //}}}
-
 	//{{{ getLineOfOffset() method
 	/**
 	 * Returns the line containing the specified offset.
@@ -2660,7 +2614,8 @@ public class Buffer implements EBComponent
 	public FoldVisibilityManager _getFoldVisibilityManager(
 		JEditTextArea textArea)
 	{
-		FoldVisibilityManager mgr = new FoldVisibilityManager(this,textArea);
+		FoldVisibilityManager mgr = new FoldVisibilityManager(this,
+			offsetMgr,textArea);
 
 		// find it a bit that it can set in line's 'visible' flag sets
 		for(int i = 0; i < inUseFVMs.length; i++)
@@ -2687,56 +2642,6 @@ public class Buffer implements EBComponent
 	{
 		inUseFVMs[mgr._getIndex()] = null;
 		mgr._release();
-	} //}}}
-
-	//{{{ _isLineVisible() method
-	/**
-	 * Plugins and macros should call
-	 * <code>textArea.getFoldVisibilityManager().isLineVisible()</code>
-	 * instead of this method.
-	 * @since jEdit 4.0pre1
-	 */
-	public final boolean _isLineVisible(int line, int index)
-	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
-			throw new ArrayIndexOutOfBoundsException(line);
-
-		return offsetMgr.isLineVisible(line,index);
-	} //}}}
-
-	//{{{ _setLineVisible() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.0pre1
-	 */
-	public final void _setLineVisible(int line, int index, boolean visible)
-	{
-		if(line < 0 || line >= offsetMgr.getLineCount())
-			throw new ArrayIndexOutOfBoundsException(line);
-
-		offsetMgr.setLineVisible(line,index,visible);
-	} //}}}
-
-	//{{{ _getVirtualLineCount() method
-	/**
-	 * Plugins and macros should call
-	 * <code>textArea.getVirtualLineCount()</code>
-	 * instead of this method.
-	 * @since jEdit 4.0pre1
-	 */
-	public final int _getVirtualLineCount(int index)
-	{
-		return offsetMgr.getVirtualLineCount(index);
-	} //}}}
-
-	//{{{ _setVirtualLineCount() method
-	/**
-	 * Plugins and macros should not call this method.
-	 * @since jEdit 4.0pre1
-	 */
-	public final void _setVirtualLineCount(int index, int lineCount)
-	{
-		offsetMgr.setVirtualLineCount(index,lineCount);
 	} //}}}
 
 	//}}}
