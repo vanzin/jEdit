@@ -71,14 +71,14 @@ class VFSFileNameField extends HistoryTextField
 				break;
 			case KeyEvent.VK_LEFT:
 				if(getCaretPosition() == 0)
-					browser.getBrowserView().getTree().processKeyEvent(evt);
+					browser.getBrowserView().getTable().processKeyEvent(evt);
 				break;
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:
 			case KeyEvent.VK_ENTER:
-				browser.getBrowserView().getTree().processKeyEvent(evt);
+				browser.getBrowserView().getTable().processKeyEvent(evt);
 				break;
 			default:
 				super.processKeyEvent(evt);
@@ -156,7 +156,7 @@ class VFSFileNameField extends HistoryTextField
 
 				BrowserView view = browser.getBrowserView();
 				view.selectNone();
-				view.getTree().doTypeSelect(path,true);
+				view.getTable().doTypeSelect(path,true);
 			}
 			else
 				super.processKeyEvent(evt);
@@ -171,7 +171,7 @@ class VFSFileNameField extends HistoryTextField
 	{
 		BrowserView view = browser.getBrowserView();
 		view.selectNone();
-		view.getTree().doTypeSelect(currentText,false);
+		view.getTable().doTypeSelect(currentText,false);
 
 		VFS.DirectoryEntry[] files = view.getSelectedFiles();
 		if(files.length == 0)
@@ -224,7 +224,7 @@ class VFSFileNameField extends HistoryTextField
 		{
 			VFSManager.waitForRequests();
 			setText(name);
-			browser.getBrowserView().getTree().doTypeSelect(
+			browser.getBrowserView().getTable().doTypeSelect(
 				name,true);
 		}
 	} //}}}

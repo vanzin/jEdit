@@ -1554,6 +1554,7 @@ options.print.tabSize=Tab width when printing:
 
 #{{{ Plugin Manager pane
 options.plugin-manager.label=Plugin Manager
+options.plugin-manager.updateMirrors=Update mirror list
 options.plugin-manager.downloadSource=Download plugin source code
 options.plugin-manager.mirror=Preferred download mirror:
 options.plugin-manager.location=Install plugins in:

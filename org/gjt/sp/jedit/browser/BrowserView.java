@@ -25,14 +25,11 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
-import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -52,36 +49,22 @@ class BrowserView extends JPanel
 		parentDirectories = new JList();
 
 		parentDirectories.getSelectionModel().setSelectionMode(
-			TreeSelectionModel.SINGLE_TREE_SELECTION);
+			ListSelectionModel.SINGLE_SELECTION);
 
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
 		parentDirectories.setVisibleRowCount(5);
 		parentDirectories.addMouseListener(new MouseHandler());
 
-		rootNode = new DefaultMutableTreeNode(null,true);
-		model = new DefaultTreeModel(rootNode,true);
-
-		tree = new BrowserJTree(model);
-		tree.setCellRenderer(renderer);
-		tree.setEditable(false);
-		tree.addTreeExpansionListener(new TreeHandler());
-
-		// looks bad with the OS X L&F, apparently...
-		if(!OperatingSystem.isMacOSLF())
-			tree.putClientProperty("JTree.lineStyle", "Angled");
-
-		tree.setRootVisible(false);
-		tree.setShowsRootHandles(true);
-		tree.setVisibleRowCount(12);
-
 		final JScrollPane parentScroller = new JScrollPane(parentDirectories);
 		parentScroller.setMinimumSize(new Dimension(0,0));
-		JScrollPane treeScroller = new JScrollPane(tree);
-		treeScroller.setMinimumSize(new Dimension(0,0));
+
+		table = new VFSDirectoryEntryTable(this);
+		JScrollPane tableScroller = new JScrollPane(table);
+		tableScroller.setMinimumSize(new Dimension(0,0));
 		splitPane = new JSplitPane(
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
-			parentScroller,treeScroller);
+			parentScroller,tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -100,14 +83,12 @@ class BrowserView extends JPanel
 			}
 		});
 
-		tmpExpanded = new Hashtable();
-
 		if(browser.isMultipleSelectionEnabled())
-			tree.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+			table.getSelectionModel().setSelectionMode(
+				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		else
-			tree.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.SINGLE_TREE_SELECTION);
+			table.getSelectionModel().setSelectionMode(
+				ListSelectionModel.SINGLE_SELECTION);
 
 		setLayout(new BorderLayout());
 
@@ -119,7 +100,7 @@ class BrowserView extends JPanel
 	//{{{ focusOnFileView() method
 	public void focusOnFileView()
 	{
-		tree.requestFocus();
+		table.requestFocus();
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -134,44 +115,43 @@ class BrowserView extends JPanel
 	//{{{ getSelectedFiles() method
 	public VFS.DirectoryEntry[] getSelectedFiles()
 	{
-		Vector selected = new Vector(tree.getSelectionCount());
-		TreePath[] paths = tree.getSelectionPaths();
-		if(paths == null)
-			return new VFS.DirectoryEntry[0];
-
-		for(int i = 0; i < paths.length; i++)
-		{
-			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)
-				paths[i].getLastPathComponent();
-			Object obj = treeNode.getUserObject();
-			if(obj instanceof VFS.DirectoryEntry)
-				selected.addElement(obj);
-		}
-
-		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[selected.size()];
-		selected.copyInto(retVal);
-		return retVal;
+		return table.getSelectedFiles();
 	} //}}}
 
 	//{{{ selectNone() method
 	public void selectNone()
 	{
-		tree.setSelectionPaths(new TreePath[0]);
+		table.clearSelection();
 	} //}}}
 
 	//{{{ loadDirectory() method
-	public void loadDirectory(String path)
+	public void loadDirectory(Object node, String path)
 	{
-		// called by VFSBrowser.setDirectory()
-		tmpExpanded.clear();
-		loadDirectory(rootNode,path,false);
+		tmpExpanded = table.getExpandedDirectories();
+
+		path = MiscUtilities.constructPath(browser.getDirectory(),path);
+		VFS vfs = VFSManager.getVFSForPath(path);
+
+		Object session = vfs.createVFSSession(path,this);
+		if(session == null)
+			return;
+
+		if(node == null)
+		{
+			parentDirectories.setListData(new Object[] {
+				new LoadingPlaceholder() });
+		}
+
+		VFSManager.runInWorkThread(new BrowserIORequest(
+			BrowserIORequest.LIST_DIRECTORY,browser,
+			session,vfs,path,null,node));
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	public void directoryLoaded(DefaultMutableTreeNode node,
-		String path, Vector directory)
+	public void directoryLoaded(Object node, String path, ArrayList directory)
 	{
-		if(node == rootNode)
+		//{{{ If reloading root, update parent directory list
+		if(node == null)
 		{
 			DefaultListModel parentList = new DefaultListModel();
 
@@ -209,54 +189,38 @@ class BrowserView extends JPanel
 			int index = parentList.getSize() - 1;
 			parentDirectories.setSelectedIndex(index);
 			parentDirectories.ensureIndexIsVisible(index);
-		}
+		} //}}}
 
-		node.removeAllChildren();
+		LinkedList toExpand = new LinkedList();
 
-		Vector toExpand = new Vector();
+		table.setDirectory(node,directory);
 
 		if(directory != null)
 		{
 			for(int i = 0; i < directory.size(); i++)
 			{
 				VFS.DirectoryEntry file = (VFS.DirectoryEntry)
-					directory.elementAt(i);
+					directory.get(i);
 				boolean allowsChildren = (file.type != VFS.DirectoryEntry.FILE);
-				DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file,allowsChildren);
-				node.add(newNode);
-				if(tmpExpanded.get(file.path) != null)
-				{
-					tmpExpanded.remove(file.path);
-					toExpand.addElement(new TreePath(newNode.getPath()));
-				}
+				if(tmpExpanded != null && tmpExpanded.contains(file.path))
+					loadDirectory(null,file.path);
 			}
 		}
-
-		// fire events
-		model.reload(node);
-		tree.expandPath(new TreePath(node.getPath()));
-
-		// expand branches that were expanded before
-		for(int i = 0; i < toExpand.size(); i++)
-		{
-			TreePath treePath = (TreePath)toExpand.elementAt(i);
-			tree.expandPath(treePath);
-		}
-
-		timer.stop();
-		typeSelectBuffer.setLength(0);
 	} //}}}
 
 	//{{{ updateFileView() method
 	public void updateFileView()
 	{
-		tree.repaint();
+		table.repaint();
 	} //}}}
 
 	//{{{ maybeReloadDirectory() method
 	public void maybeReloadDirectory(String path)
 	{
-		tmpExpanded.clear();
+		String browserDir = browser.getDirectory();
+
+		if(path.equals(browserDir))
+			loadDirectory(null,path);
 
 		// because this method is called for *every* VFS update,
 		// we don't want to scan the tree all the time. So we
@@ -269,42 +233,34 @@ class BrowserView extends JPanel
 		//   favorites list
 		// - if the browser's directory is 'roots:' and path is on
 		//   the local filesystem, do a tree scan
-		String browserDir = browser.getDirectory();
-		if(browserDir.startsWith(FavoritesVFS.PROTOCOL))
-			maybeReloadDirectory(rootNode,path);
-		else if(browserDir.startsWith(FileRootsVFS.PROTOCOL))
-		{
-			if(!MiscUtilities.isURL(path) || MiscUtilities.getProtocolOfURL(path)
-				.equals("file"))
-				maybeReloadDirectory(rootNode,path);
-		}
-		else if(path.startsWith(browserDir))
-			maybeReloadDirectory(rootNode,path);
-	} //}}}
 
-	//{{{ getDefaultFocusComponent() method
-	public Component getDefaultFocusComponent()
-	{
-		return tree;
+		if(!browserDir.startsWith(FavoritesVFS.PROTOCOL)
+			&& !browserDir.startsWith(FileRootsVFS.PROTOCOL)
+			&& !path.startsWith(browserDir))
+			return;
+
+		if(browserDir.startsWith(FileRootsVFS.PROTOCOL)
+			&& MiscUtilities.isURL(path)
+			&& !MiscUtilities.getProtocolOfURL(path)
+			.equals("file"))
+			return;
+
+		table.maybeReloadDirectory(path);
 	} //}}}
 
 	//{{{ propertiesChanged() method
 	public void propertiesChanged()
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
-		renderer.propertiesChanged();
-
-		tree.setRowHeight(renderer.getTreeCellRendererComponent(
-			tree,new DefaultMutableTreeNode("foo"),
-			false,false,false,0,false).getSize().height);
+		table.propertiesChanged();
 
 		splitPane.setBorder(null);
 	} //}}}
 
-	//{{{ getTree() method
-	public BrowserJTree getTree()
+	//{{{ getTable() method
+	public VFSDirectoryEntryTable getTable()
 	{
-		return tree;
+		return table;
 	} //}}}
 
 	//{{{ Private members
@@ -314,116 +270,11 @@ class BrowserView extends JPanel
 
 	private JSplitPane splitPane;
 	private JList parentDirectories;
-	private BrowserJTree tree;
-	private Hashtable tmpExpanded;
-	private DefaultTreeModel model;
-	private DefaultMutableTreeNode rootNode;
+	private VFSDirectoryEntryTable table;
+	private Set tmpExpanded;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
-
-	private FileCellRenderer renderer = new FileCellRenderer();
-
-	private StringBuffer typeSelectBuffer = new StringBuffer();
-	private Timer timer = new Timer(0,new ClearTypeSelect());
 	//}}}
-
-	//{{{ maybeReloadDirectory() method
-	private boolean maybeReloadDirectory(DefaultMutableTreeNode node, String path)
-	{
-		// nodes which are not expanded need not be checked
-		if(!tree.isExpanded(new TreePath(node.getPath())))
-			return false;
-
-		if(node == rootNode && path.equals(browser.getDirectory()))
-		{
-			loadDirectory(rootNode,path,false);
-			return true;
-		}
-
-		Object userObject = node.getUserObject();
-		if(userObject instanceof VFS.DirectoryEntry)
-		{
-			VFS.DirectoryEntry file = (VFS.DirectoryEntry)userObject;
-
-			// we don't need to do anything with files!
-			if(file.type == VFS.DirectoryEntry.FILE)
-				return false;
-
-			if(path.equals(file.path))
-			{
-				loadDirectory(node,path,false);
-				return true;
-			}
-		}
-
-		if(node.getChildCount() != 0)
-		{
-			Enumeration children = node.children();
-			while(children.hasMoreElements())
-			{
-				DefaultMutableTreeNode child = (DefaultMutableTreeNode)
-					children.nextElement();
-				if(maybeReloadDirectory(child,path))
-					return true;
-			}
-		}
-
-		return false;
-	} //}}}
-
-	//{{{ loadDirectory() method
-	private void loadDirectory(DefaultMutableTreeNode node, String path,
-		boolean showLoading)
-	{
-		saveExpansionState(node);
-
-		path = MiscUtilities.constructPath(browser.getDirectory(),path);
-		VFS vfs = VFSManager.getVFSForPath(path);
-
-		Object session = vfs.createVFSSession(path,this);
-		if(session == null)
-			return;
-
-		if(node == rootNode)
-		{
-			setListModel(parentDirectories,new Object[] {
-				new LoadingPlaceholder() });
-		}
-
-		if(showLoading)
-		{
-			node.removeAllChildren();
-			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
-			model.reload(node);
-		}
-
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.LIST_DIRECTORY,browser,
-			session,vfs,path,null,node,node == rootNode));
-	} //}}}
-
-	//{{{ saveExpansionState() method
-	private void saveExpansionState(DefaultMutableTreeNode node)
-	{
-		for(int i = 0; i < node.getChildCount(); i++)
-		{
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode)
-				node.getChildAt(i);
-
-			TreePath treePath = new TreePath(child.getPath());
-
-			if(tree.isExpanded(treePath))
-			{
-				VFS.DirectoryEntry file = ((VFS.DirectoryEntry)
-					child.getUserObject());
-
-				tmpExpanded.put(file.path,file.path);
-
-				if(file.type != VFS.DirectoryEntry.FILE)
-					saveExpansionState(child);
-			}
-		}
-	} //}}}
 
 	//{{{ showFilePopup() method
 	private void showFilePopup(VFS.DirectoryEntry[] files, Component comp,
@@ -448,32 +299,9 @@ class BrowserView extends JPanel
 		GUIUtilities.showPopupMenu(popup,comp,point.x,point.y);
 	} //}}}
 
-	//{{{ setListModel() method
-	/**
-	 * This should be in the JDK API.
-	 */
-	private void setListModel(JList list, final Object[] model)
-	{
-		list.setModel(new AbstractListModel()
-		{
-			public int getSize() { return model.length; }
-			public Object getElementAt(int i) { return model[i]; }
-		});
-	} //}}}
-
 	//}}}
 
-	//{{{ Inner classesf
-
-	//{{{ ClearTypeSelect
-	class ClearTypeSelect implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			typeSelectBuffer.setLength(0);
-			browser.filesSelected();
-		}
-	} //}}}
+	//{{{ Inner classes
 
 	//{{{ ParentDirectoryRenderer class
 	class ParentDirectoryRenderer extends DefaultListCellRenderer
@@ -581,44 +409,8 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ BrowserJTree class
-	class BrowserJTree extends JTree
+	/*class BrowserJTree extends JTree
 	{
-		//{{{ BrowserJTree constructor
-		BrowserJTree(TreeModel model)
-		{
-			super(model);
-			ToolTipManager.sharedInstance().registerComponent(this);
-		} //}}}
-
-		//{{{ getToolTipText() method
-		public final String getToolTipText(MouseEvent evt)
-		{
-			TreePath path = getPathForLocation(evt.getX(), evt.getY());
-			if(path != null)
-			{
-				Rectangle cellRect = getPathBounds(path);
-				if(cellRect != null && !cellRectIsVisible(cellRect))
-					return path.getLastPathComponent().toString();
-			}
-			return null;
-		} //}}}
-
-		/* //{{{ getToolTipLocation() method
-		public final Point getToolTipLocation(MouseEvent evt)
-		{
-			TreePath path = getPathForLocation(evt.getX(), evt.getY());
-			if(path != null)
-			{
-				Rectangle cellRect = getPathBounds(path);
-				if(cellRect != null && !cellRectIsVisible(cellRect))
-				{
-					return new Point(cellRect.x + (showIcons ? 14 : - 4),
-						cellRect.y);
-				}
-			}
-			return null;
-		} //}}} */
-
 		//{{{ processKeyEvent() method
 		public void processKeyEvent(KeyEvent evt)
 		{
@@ -685,15 +477,6 @@ class BrowserView extends JPanel
 					}
 					else
 						break;
-				default:
-					typeSelectBuffer.append(evt.getKeyChar());
-					doTypeSelect(typeSelectBuffer.toString(),true);
-
-					timer.stop();
-					timer.setInitialDelay(750);
-					timer.setRepeats(false);
-					timer.start();
-					return;
 				}
 			}
 
@@ -723,7 +506,7 @@ class BrowserView extends JPanel
 				ttm.setInitialDelay(toolTipInitialDelay);
 				ttm.setReshowDelay(toolTipReshowDelay);
 				super.processMouseEvent(evt);
-				break; //}}} */
+				break; //}}}
 			//{{{ MOUSE_CLICKED...
 			case MouseEvent.MOUSE_CLICKED:
 				if(path != null)
@@ -818,73 +601,11 @@ class BrowserView extends JPanel
 			}
 		} //}}}
 
-		//{{{ Private members
-		private int toolTipInitialDelay = -1;
-		private int toolTipReshowDelay = -1;
-
-		//{{{ cellRectIsVisible() method
-		private boolean cellRectIsVisible(Rectangle cellRect)
-		{
-			Rectangle vr = BrowserJTree.this.getVisibleRect();
-			return vr.contains(cellRect.x,cellRect.y) &&
-				vr.contains(cellRect.x + cellRect.width,
-				cellRect.y + cellRect.height);
-		} //}}}
-
-		//{{{ doTypeSelect() method
-		void doTypeSelect(String str, boolean ignoreCase)
-		{
-			if(str.length() == 0)
-				setSelectionPaths(new TreePath[0]);
-			else if(getSelectionCount() == 0)
-				doTypeSelect(str,0,getRowCount(),ignoreCase);
-			else
-			{
-				int start = getMaxSelectionRow();
-				boolean retVal = doTypeSelect(str,start,getRowCount(),
-					ignoreCase);
-
-				if(!retVal)
-				{
-					// scan from selection to end failed, so
-					// scan from start to selection
-					doTypeSelect(str,0,start,ignoreCase);
-				}
-			}
-		} //}}}
-
-		//{{{ doTypeSelect() method
-		private boolean doTypeSelect(String str, int start, int end,
-			boolean ignoreCase)
-		{
-			for(int i = start; i < end; i++)
-			{
-				DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)
-					getPathForRow(i).getLastPathComponent();
-				Object obj = treeNode.getUserObject();
-				if(obj instanceof VFS.DirectoryEntry)
-				{
-					VFS.DirectoryEntry file = (VFS.DirectoryEntry)obj;
-					String matchAgainst = (MiscUtilities.isAbsolutePath(str)
-						? file.path : file.name);
-					if(matchAgainst.regionMatches(ignoreCase,
-						0,str,0,str.length()))
-					{
-						setSelectionRow(i);
-						scrollRowToVisible(i);
-						return true;
-					}
-				}
-			}
-
-			return false;
-		} //}}}
-
 		//}}}
-	} //}}}
+	}*/ //}}}
 
 	//{{{ TreeHandler class
-	class TreeHandler implements TreeExpansionListener
+	/*class TreeHandler implements TreeExpansionListener
 	{
 		//{{{ treeExpanded() method
 		public void treeExpanded(TreeExpansionEvent evt)
@@ -899,24 +620,7 @@ class BrowserView extends JPanel
 					userObject).path,true);
 			}
 		} //}}}
-
-		//{{{ treeCollapsed() method
-		public void treeCollapsed(TreeExpansionEvent evt)
-		{
-			TreePath path = evt.getPath();
-			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)
-				path.getLastPathComponent();
-			if(treeNode.getUserObject() instanceof VFS.DirectoryEntry)
-			{
-				// we add the placeholder so that the node has
-				// 1 child (otherwise the user won't be able to
-				// expand it again)
-				treeNode.removeAllChildren();
-				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
-				model.reload(treeNode);
-			}
-		} //}}}
-	} //}}}
+	}*/ //}}}
 
 	static class LoadingPlaceholder {}
 	//}}}
