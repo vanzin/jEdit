@@ -267,12 +267,14 @@
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Spaces
     to Tabs</guimenuitem>
-    converts soft tabs to hard tabs in the current selection.
+    converts soft tabs to hard tabs in the current selection, or the entire
+    buffer if nothing is selected.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Tabs
      to Spaces</guimenuitem>
-    converts hard tabs to soft tabs in the current selection.
+    converts hard tabs to soft tabs in the current selection, or the entire
+    buffer if nothing is selected.
    </para>
   </sect2>
   <sect2 id="autoindent"><title>Automatic Indent</title>

@@ -1,20 +1,28 @@
 TO DO
 
-- more accurate syntax option: when on, instead of scanning back 100,
-  scan to last valid
-- test dir replace all and save all
-- macro that calls saveAllBuffers() results in unbalanced
-  begin/endCompoundEdit() calls?
+- s&r: ensure its not too wide
 - syntax highlighted files and soft wrap
-- switch buffers: bracket matching status msg
-- switching buffers: horiz scroll bar not updated?
 - vertical scrollbar w/ soft wrap wrong
 - fix scrollToCaret()
 - use new offset conversion API throughout
+- select word: non-alpha single char
+- idea for fixing buffer property issues: BufferProp class
+- getCenterPoint()
+- support multi-screen systems properly
+- finish 'troubleshooting' menu:
+  - about cmd
+  - docs in user's guide
+- document 'evaluate for selected lines'
+- rule set property docs in part II
+- changing heap memory docs
+- rollover toolbar buttons option
+- replace in selection with rectangular selections
+
+- test dir replace all and save all
+- switching buffers: horiz scroll bar not updated?
 - save to X:filename on Windows
 - chunk cache & scrolling optimization
 - jdk 1.4: popups in wrong location
-- FAQ: toc needs to include individual q and a's
 - updateChunksUpTo() called too many times
 - sort mode list and put xml near the start so that xhtml files with the
   .html extension are opened in xml mode
@@ -24,7 +32,6 @@ TO DO
 - installing source for already installed plugins is not possible: 'hide
   already installed' checkbox in install plugins dialog box
 - optimise repaining, key insertion
-- select word: non-alpha single char
 - better formatting commands: - document in 'manual wrap' subsect of
   'word wrap'
   - format becomes 'wrap paragraph'
@@ -33,14 +40,9 @@ TO DO
 - don't repaint whole selection when resizing
 - rect select and soft wrap
 - print should not use so much memory
-- idea for fixing buffer property issues: BufferProp class
-- getCenterPoint()
-- support multi-screen systems properly
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
 - expand fold: try to expand even if already expanded
-- docking buttons not always hidden
-- definately repaint problems
 - keyboard navigation of current directory, recent dirs, etc broken
 - JDK 1.4 focus bugs
 - dwm: not always focused correctly
@@ -54,18 +56,10 @@ TO DO
 - text area painter:
   - use line metrics
   - use float co-ordinates
-- finish 'troubleshooting' menu:
-  - about cmd
-  - docs in user's guide
 - C+d with selection: delete all selected lines
-- isToolsJarAvailable(): prompt for location in a file dialog box. Need
-  some way of showing arbitriary message in VFS file chooser.
 - last focused dockable cmd
 - XModeHandler: better error reporting
-- document 'evaluate for selected lines'
-- rule set property docs in part II
 - add index terms throughout user's guide!
-- changing heap memory docs
 - plugin manager needs overhauled error reporting
 - make text area's buffer event handler faster
 - API guide: compareStrings(), showPopupMenu()
@@ -92,7 +86,6 @@ TO DO
 - saving a read-only file: show a confirmation dialog box
 - tool bar option pane: editing existing entries
 - recording 'evaluate for selected lines'
-- rollover toolbar buttons option
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - better auto indent
@@ -103,14 +96,12 @@ TO DO
   - better <script>/<style> handling using nested delegates
 - save markers when a buffer is closed, adding/removing markers shouldn't
   set the dirty flag
-- replace in selection with rectangular selections
 - keymaps replace .shortcut properties
   - loaded from $HOME/.jedit/keymaps, and jedit.jar
   - one keymap can 'extend' another
   - keymaps are XML files with <bind>, <unbind> tags
   - jEdit, emacs, keymaps included, maybe others
   - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
-- resizing doesn't update horizontal scroll bar
 - find next with $ or ^
 - custom stylesheet: no xmlns
 - eval-for-selected-lines doesn't work with rectangular selection
@@ -118,9 +109,7 @@ TO DO
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
-- switching option panes real fast
 - failed saves should not clear the dirty flag
-- get rid of final blank page of user's guide
 - aborts not always fired
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit

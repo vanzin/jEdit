@@ -2,7 +2,6 @@
 
 <!-- jEdit buffer-local properties:                    -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
-<!-- :folding=indent:collapseFolds=1:                  -->
 
 <!-- covers index to installed macro set               -->
 
@@ -36,7 +35,7 @@
 </listitem>
 
 <listitem>
-    <para><filename>Close_Except_Active.bsh</filename></para>
+    <para><filename>Close_All_Except_Active.bsh</filename></para>
     <abstract><para>
         Closes all files except the current buffer.
     </para></abstract>
@@ -113,7 +112,8 @@
 <listitem>
     <para><filename>Insert_Tag.bsh</filename></para>
     <abstract><para>
-        Inserts a balanced pair of markup tags as supplied in a input dialog.
+        Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
+        in a input dialog.
     </para></abstract>
 </listitem>
 
@@ -183,7 +183,7 @@
         classpath being used by the jEdit session.  An error message will be
         displayed if no suitable package name is found. This macro will not
         work if jEdit is being run as a JAR file without specifying a
-        classpath.  In that case the classpath seen by the macro consists
+        classpath; in that case the classpath seen by the macro consists
         solely of the JAR file.
     </para>
 </listitem>
@@ -381,6 +381,13 @@
     Runs script using interpreter based upon buffer's editing mode
     (by default, determined using file extension).
   </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Show_Threads.bsh</filename></para>
+    <abstract><para>
+      Displays all running Java threads in a tree.
+    </para></abstract>
 </listitem>
 
 <listitem>

@@ -210,6 +210,13 @@ public class GUIUtilities
 				{
 					if(menuItemName.startsWith("%"))
 						menu.add(loadMenu(menuItemName.substring(1)));
+					// for backwards compatibility with
+					// 3.2.2 properties
+					else if(menuItemName.startsWith("play-macro@"))
+					{
+						menu.add(loadMenuItem(menuItemName
+							.substring(11),false));
+					}
 					else
 						menu.add(loadMenuItem(menuItemName,false));
 				}
@@ -288,6 +295,15 @@ public class GUIUtilities
 				String button = st.nextToken();
 				if(button.equals("-"))
 					toolBar.addSeparator();
+				// for backwards compatibility with
+				// 3.2.2 properties
+				else if(button.startsWith("play-macro@"))
+				{
+					button = button.substring(11);
+					JButton b = loadToolButton(button);
+					if(b != null)
+						toolBar.add(b);
+				}
 				else
 				{
 					JButton b = loadToolButton(button);

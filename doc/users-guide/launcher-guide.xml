@@ -170,7 +170,7 @@
     <application>JDiff</application> plugin.  The file selected first will
     be treated as the base for comparison purposes. If the plugin is not
     installed, an error message will be displayed in jEdit. See <xref
-    linkend="using-plugins" /> for more information and installing
+    linkend="using-plugins" /> for more information about installing
     plugins.
   </para>
 </sect1>
@@ -419,7 +419,7 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
 <!-- open sect1 -->
 <sect1 id="launcher-logging"><title>jEditLauncher Logging</title>
 <para>
-  The jEditLauncher package has alogging facility that is separate from jEdit's
+  The jEditLauncher package has a logging facility that is separate from jEdit's
   Activity Log to provide a record of events occurring outside the Java
   virtual machine environemnt in which jEdit operates.  The logging
   facility maintains two log files: <filename>jelaunch.log</filename> for

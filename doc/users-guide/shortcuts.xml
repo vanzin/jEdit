@@ -474,7 +474,8 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>,</keycap>; <keycap>.</keycap></entry>
+      <keycombo><keycap>Control</keycap> <keycap>,</keycap></keycombo>;
+      <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
       <entry>Move caret to previous; next marker.</entry>
      </row>
     </tbody>
@@ -500,11 +501,6 @@
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo></entry>
       <entry>Find previous.</entry>
-     </row>
-     <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></entry>
-      <entry>Find selection.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -589,11 +585,6 @@
       <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></entry>
       <entry>Box comment selection.</entry>
      </row>
-     <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>K</keycap></keycombo></entry>
-      <entry>Block comment selection.</entry>
-     </row>
     </tbody>
    </tgroup>
   </informaltable>
@@ -657,7 +648,8 @@
       </entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>
+      <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></entry>
       <entry>Moves caret to previous; next fold.
       </entry>
      </row>
@@ -710,7 +702,7 @@
  <bridgehead renderas="sect1">Alternative Shortcuts</bridgehead>
   <para>
    A few frequently-used commands have alternative shortcuts intended to
-   help you keep your fingers on the home row.
+   help you keep your hands from moving all over the keyboard.
   </para>
   <informaltable frame="none">
    <tgroup cols="2">

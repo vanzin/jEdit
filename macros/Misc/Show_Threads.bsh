@@ -140,7 +140,7 @@ Macro index data (in DocBook format)
   <listitem>
     <para><filename>Show_Threads.bsh</filename></para>
     <abstract><para>
-      Displays all threads in a tree.
+      Displays all running Java threads in a tree.
     </para></abstract>
   </listitem>
 
