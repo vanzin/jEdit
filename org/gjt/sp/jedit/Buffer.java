@@ -2184,6 +2184,12 @@ public class Buffer implements EBComponent
 			}
 		}
 
+		// This is a hack so that auto indent does not go haywire
+		// with explicit folding. Proper fix will be done later,
+		// when the auto indent is rewritten.
+		if(prevLineBrackets == 3)
+			prevLineBrackets = 0;
+
 		/*
 		 * On the current line,
 		 * } --> -1
@@ -2235,6 +2241,15 @@ public class Buffer implements EBComponent
 
 				break;
 			}
+		}
+
+		// This is a hack so that auto indent does not go haywire
+		// with explicit folding. Proper fix will be done later,
+		// when the auto indent is rewritten.
+		if(lineBrackets == 3)
+		{
+			closeBracketIndex = 0;
+			lineBrackets = 0;
 		}
 
 		if(closeBracketIndex != -1)

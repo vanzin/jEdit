@@ -34,7 +34,7 @@ lineSep.mac=MacOS (\\r)
 
 #{{{ A list of common file encodings used in various places
 encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
-	KOI8_R SJIS Unicode UTF8 
+	KOI8_R SJIS Unicode UTF8
 #}}}
 
 #{{{ Miscellaneous
@@ -1750,7 +1750,7 @@ install-plugins.info.installed-version=Installed version:
 install-plugins.info.updated=Last updated:
 install-plugins.info.description=Description:
 install-plugins.info.also-install=\ Installing this plugin will also install \
-	the following plugins:\ 
+	the following plugins: 
 install-plugins.info.obsolete-text=\ This plugin is obsolete and no longer \
 	needed. It will be deleted if you check the box next to its name.
 
