@@ -22,6 +22,7 @@
 			deprecation="on"
 			destdir="${build.dir}"
 			includeJavaRuntime="yes"
+			debug="yes"
 		>
 			<classpath refid="project.class.path"/>
 		</javac>
