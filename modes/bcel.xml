@@ -3,13 +3,12 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
-    Java bytecode mode. Used by Andre Kaplan's ByteCode plugin.
+    Java bytecode mode. Used by Andre Kaplan's JavaInsight plugin.
 -->
 
 <MODE NAME="bcel">
     <PROPS>
         <PROPERTY NAME="lineComment" VALUE="//" />
-        <PROPERTY NAME="noWordSep" VALUE="_" />
     </PROPS>
 
 

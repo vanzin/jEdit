@@ -141,12 +141,14 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		}
 	}
 
-	class ButtonCompare implements MiscUtilities.Compare
+	static class ButtonCompare implements MiscUtilities.Compare
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return ((Button)obj1).label.compareTo(
-				((Button)obj2).label);
+			return MiscUtilities.compareStrings(
+				((Button)obj1).label,
+				((Button)obj2).label,
+				true);
 		}
 	}
 
@@ -197,12 +199,12 @@ public class ToolBarOptionPane extends AbstractOptionPane
 			this.actionName = actionName;
 			this.iconName = iconName;
 			this.icon = icon;
-			this.label = label;
+			this.label = GUIUtilities.prettifyMenuLabel(label);
 		}
 
 		public String toString()
 		{
-			return GUIUtilities.prettifyMenuLabel(label);
+			return label;
 		}
 	}
 
@@ -502,12 +504,12 @@ class ToolBarEditDialog extends EnhancedDialog
 	private void updateList()
 	{
 		ActionSet actionSet = (ActionSet)combo.getSelectedItem();
-		DefaultListModel listModel = new DefaultListModel();
 		EditAction[] actions = actionSet.getActions();
+		Vector listModel = new Vector(actions.length);
 
-		for(int j = 0; j < actions.length; j++)
+		for(int i = 0; i < actions.length; i++)
 		{
-			EditAction action = actions[j];
+			EditAction action = actions[i];
 			String label = action.getLabel();
 			if(label == null)
 				continue;
@@ -516,7 +518,8 @@ class ToolBarEditDialog extends EnhancedDialog
 				action.getName(),null,null,label));
 		}
 
-		list.setModel(listModel);
+		MiscUtilities.quicksort(listModel,new ToolBarOptionPane.ButtonCompare());
+		list.setListData(listModel);
 	}
 
 	class ActionHandler implements ActionListener

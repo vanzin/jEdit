@@ -115,27 +115,76 @@ public class Gutter extends JComponent implements SwingConstants
 			// calculate the physical line
 			int physicalLine = buffer.virtualToPhysical(line);
 
-			if(physicalLine != buffer.getLineCount() - 1)
+			if(physicalLine != buffer.getLineCount() - 1
+				&& buffer.isFoldStart(physicalLine))
 			{
-				if(buffer.isFoldStart(physicalLine))
+				int _y = y + lineHeight / 2;
+				gfx.setColor(foldColor);
+				if(buffer.isLineVisible(physicalLine + 1))
 				{
-					int _y = y + lineHeight / 2;
-					gfx.setColor(foldColor);
-					if(buffer.isLineVisible(physicalLine + 1))
+					gfx.drawLine(1,_y - 3,10,_y - 3);
+					gfx.drawLine(2,_y - 2,9,_y - 2);
+					gfx.drawLine(3,_y - 1,8,_y - 1);
+					gfx.drawLine(4,_y,7,_y);
+					gfx.drawLine(5,_y + 1,6,_y + 1);
+				}
+				else
+				{
+					gfx.drawLine(4,_y - 5,4,_y + 4);
+					gfx.drawLine(5,_y - 4,5,_y + 3);
+					gfx.drawLine(6,_y - 3,6,_y + 2);
+					gfx.drawLine(7,_y - 2,7,_y + 1);
+					gfx.drawLine(8,_y - 1,8,_y);
+				}
+			}
+			else
+			{
+				int bracketLine = textArea.getBracketLine();
+				if(bracketLine != -1)
+				{
+					int caretLine = textArea.getCaretLine();
+					if(caretLine != bracketLine)
 					{
-						gfx.drawLine(1,_y - 3,10,_y - 3);
-						gfx.drawLine(2,_y - 2,9,_y - 2);
-						gfx.drawLine(3,_y - 1,8,_y - 1);
-						gfx.drawLine(4,_y,7,_y);
-						gfx.drawLine(5,_y + 1,6,_y + 1);
-					}
-					else
-					{
-						gfx.drawLine(4,_y - 5,4,_y + 4);
-						gfx.drawLine(5,_y - 4,5,_y + 3);
-						gfx.drawLine(6,_y - 3,6,_y + 2);
-						gfx.drawLine(7,_y - 2,7,_y + 1);
-						gfx.drawLine(8,_y - 1,8,_y);
+						if(caretLine > bracketLine)
+						{
+							int tmp = caretLine;
+							caretLine = bracketLine;
+							bracketLine = tmp;
+						}
+
+						gfx.setColor(bracketHighlightColor);
+						if(physicalLine == caretLine)
+						{
+							gfx.fillRect(5,
+								y
+								+ lineHeight / 2,
+								5,
+								2);
+							gfx.fillRect(5,
+								y
+								+ lineHeight / 2,
+								2,
+								lineHeight - lineHeight / 2);
+						}
+						else if(physicalLine == bracketLine)
+						{
+							gfx.fillRect(5,
+								y,
+								2,
+								lineHeight / 2);
+							gfx.fillRect(5,
+								y + lineHeight / 2,
+								5,
+								2);
+						}
+						else if(physicalLine > caretLine
+							&& physicalLine < bracketLine)
+						{
+							gfx.fillRect(5,
+								y,
+								2,
+								lineHeight);
+						}
 					}
 				}
 			}
@@ -453,6 +502,50 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	}
 
+	/**
+	 * Returns the bracket highlight color.
+	 */
+	public final Color getBracketHighlightColor()
+	{
+		return bracketHighlightColor;
+	}
+
+	/**
+	 * Sets the bracket highlight color.
+	 * @param bracketHighlightColor The bracket highlight color
+	 * @since jEdit 4.0pre1
+	 */
+	public final void setBracketHighlightColor(Color bracketHighlightColor)
+	{
+		this.bracketHighlightColor = bracketHighlightColor;
+		repaint();
+	}
+
+	/**
+	 * Returns true if bracket highlighting is enabled, false otherwise.
+	 * When bracket highlighting is enabled, the bracket matching the
+	 * one before the caret (if any) is highlighted.
+	 * @since jEdit 4.0pre1
+	 */
+	public final boolean isBracketHighlightEnabled()
+	{
+		return bracketHighlight;
+	}
+
+	/**
+	 * Enables or disables bracket highlighting.
+	 * When bracket highlighting is enabled, the bracket matching the
+	 * one before the caret (if any) is highlighted.
+	 * @param bracketHighlight True if bracket highlighting should be
+	 * enabled, false otherwise
+	 * @since jEdit 4.0pre1
+	 */
+	public final void setBracketHighlightEnabled(boolean bracketHighlight)
+	{
+		this.bracketHighlight = bracketHighlight;
+		repaint();
+	}
+
 	// private members
 	private static final int FOLD_MARKER_SIZE = 12;
 
@@ -477,6 +570,9 @@ public class Gutter extends JComponent implements SwingConstants
 	private int interval;
 	private boolean currentLineHighlightEnabled;
 	private boolean expanded;
+
+	private boolean bracketHighlight;
+	private Color bracketHighlightColor;
 
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;

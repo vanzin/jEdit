@@ -7,7 +7,6 @@
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE="--" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<WHITESPACE> </WHITESPACE>

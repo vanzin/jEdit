@@ -7,7 +7,6 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	</PROPS>

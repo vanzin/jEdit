@@ -139,7 +139,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockable(VFSBrowser.NAME);
+			.getDockableWindow(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -168,7 +168,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockable(VFSBrowser.NAME);
+			.getDockableWindow(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -279,6 +279,13 @@ public class Macros
 			{
 				buffer.endCompoundEdit();
 			}
+		}
+
+		public String getCode()
+		{
+			return "Macros.getMacro(\""
+				+ getName().substring("play-macro@".length())
+				+ "\").invoke(view);";
 		}
 
 		// private members

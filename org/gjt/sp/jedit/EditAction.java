@@ -133,11 +133,7 @@ public abstract class EditAction
 	 * Returns the BeanShell code that will replay this action.
 	 * @since jEdit 2.7pre2
 	 */
-	public String getCode()
-	{
-		return "view.getInputHandler().invokeAction("
-			+ "jEdit.getAction(\"" + name + "\"))";
-	}
+	public abstract String getCode();
 
 	public String toString()
 	{
@@ -146,7 +142,6 @@ public abstract class EditAction
 
 	// private members
 	private String name;
-	private String cachedCode;
 
 	/**
 	 * 'Wrap' EditActions in this class to turn them into AWT

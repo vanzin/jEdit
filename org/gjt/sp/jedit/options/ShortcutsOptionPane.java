@@ -325,7 +325,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				String label2 = k2[0].label.toLowerCase();
 
 				if(col == 0)
-					return label1.compareTo(label2);
+					return MiscUtilities.compareStrings(
+						label1,label2,true);
 				else
 				{
 					String shortcut1, shortcut2;
@@ -346,9 +347,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					else if(shortcut2 == null && shortcut1 != null)
 						return -1;
 					else if(shortcut1 == null && shortcut2 == null)
-						return label1.compareTo(label2);
+						return MiscUtilities.compareStrings(label1,label2,true);
 					else
-						return shortcut1.compareTo(shortcut2);
+						return MiscUtilities.compareStrings(shortcut1,shortcut2,true);
 				}
 			}
 		}

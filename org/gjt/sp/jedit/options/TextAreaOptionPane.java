@@ -106,7 +106,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		fracFontMetrics.setSelected(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 
-		if(System.getProperty("java.version").compareTo("1.2") >= 0)
+		if(MiscUtilities.compareStrings(
+			System.getProperty("java.version"),
+			"1.2",false) >= 0)
 		{
 			addComponent(antiAlias);
 			addComponent(fracFontMetrics);

@@ -2,35 +2,42 @@ TO DO
 
 + before 4.0pre1:
 
-- jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
-  optimized? Also faster scrolling.
-- JDK 1.3: about box broken
-- version number in splash screen
-- broken bracket matching
-- tool bar option pane: editing existing entries
-- (String)buffer.getProperty(): bad
-  buffer.getIntegerProperty(),
-  buffer.getStringProperty()?
-- macro guide entry for Andre's Vertical Paste macro
-- new goodies need to be documented
+- recompile Firewall.jar before releasing
+- <file>#line: or #marker:
+- editing on last line shouldn't cause scrolling
 - improved window docking:
   - do something about there being more buttons than can fit
   - DockableLayout: handle too large
-  - transparency
+- JDK 1.3: about box broken
+- (String)buffer.getProperty(): bad
+  buffer.getIntegerProperty(),
+  buffer.getStringProperty()?
 - new document model that uses less memory than the Swing document
-- prev line fold gutter bug
 - expand-fold too aggressive
-- editing on last line shouldn't cause scrolling
+- macro guide entry for Andre's Vertical Paste macro
+- new goodies need to be documented
 - conventions section in user's guide: mention Enter activating default
   button, Escape activating 'Cancel' or equivalent
 - mention Alt-key mnemonics
-- plugin size reporting, new install plugins dialog UI layout
-- saving a read-only file: show a confirmation dialog box
-- ant targets to replace mk_installer/mk_source scripts
 - QuickNotepad XSL docs
 
 + features:
 
+- bracket matching:
+  - if not on screen, do matching in background thread and show matching
+    line in status bar
+  - fix bug
+- Alt-key alternatives for arrow keys and home and end
+- select file + search in directory in fsb: should use that file's extension
+- reintroduce -bshclient command line switch
+- complete word: custom WrapAroundJList control
+- jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
+  optimized? Also faster scrolling.
+- plugin size reporting, new install plugins dialog UI layout
+- saving a read-only file: show a confirmation dialog box
+- ant targets to replace mk_installer/mk_source scripts
+- tool bar option pane: editing existing entries
+- version number in splash screen
 - mode-specific context menu and maybe even tool bar
 - when a dockable is being opened, focus on default component
 - frame.setState(Frame.NORMAL);
@@ -44,6 +51,10 @@ TO DO
 - select-* actions: add to selection in multi-select mode
 - when loading plugins and such, check for settingsDir == jEditHome
 - file system browser:
+  - path field:
+    - select all when gets focus
+    - completion
+  - show wait cursor while directory is loading
   - new UI layout:
     [Up][V][Commands V][Favorites V]
     [Reload][Drives][Home][Curr Buf]
@@ -134,6 +145,9 @@ TO DO
   int[] getHighlightedLines()
   String getToolTipText(int line)
 - Used by ErrorList, HyperSearch, markers
+- use java2d:
+  - to draw PanelWindowContainer rotated buttons
+  - to draw block caret (instead of XOR)
 
 + bugs:
 
@@ -142,7 +156,6 @@ TO DO
 - find btn no work
 - custom stylesheet: no xmlns
 - eval-for-selected-lines doesn't work with rectangular selection
-- fs browser colors not loaded initially sometimes?
 - how to handle S+0-9?
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
@@ -173,3 +186,4 @@ TO DO
 - binding an action to ` doesn't work
 - evalutate for selected lines: > 1 selection per line
 - folding paint up bug
+- prev line fold gutter bug

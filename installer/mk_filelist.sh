@@ -8,6 +8,7 @@ echo jedit.jar > installer/jedit-program
 echo jars/LatestVersion.jar >> installer/jedit-program
 echo properties/README.txt >> installer/jedit-program
 echo startup/README.txt >> installer/jedit-program
+echo startup/*.bsh >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc -type f -name \*.txt >> installer/jedit-program
@@ -17,7 +18,6 @@ ls -l `cat installer/jedit-program` | awk 'BEGIN { size=0 } { disk_size+=(int($5
 
 # jedit-macros fileset
 find macros -name \*.bsh > installer/jedit-macros
-echo startup/changeUIFonts.bsh >> installer/jedit-macros
 
 echo -n "jedit-macros: "
 ls -l `cat installer/jedit-macros` | awk 'BEGIN { size=0 } { disk_size+=(int($5/4096+1)*4); size+=$5/1024 } END { print disk_size " " size }'

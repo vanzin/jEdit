@@ -21,7 +21,6 @@
 	<PROPS>
 		<PROPERTY NAME="indentPrevLine" VALUE="\s*.{3,}:\s*(#.*)?" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

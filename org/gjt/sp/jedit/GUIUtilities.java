@@ -737,7 +737,9 @@ public class GUIUtilities
 		win.setBounds(required);
 
 		if(File.separatorChar == '/'
-			&& System.getProperty("java.version").compareTo("1.2") < 0)
+			&& MiscUtilities.compareStrings(
+			System.getProperty("java.version"),
+			"1.2",false) < 0)
 		{
 			win.setBounds(required);
 			new UnixWorkaround(win,name,desired,required);

@@ -308,8 +308,8 @@ public class PluginManager extends JDialog
 
 					if(branch != null
 						&& plugin.installedVersion != null
-						&& MiscUtilities.compareVersions(branch.version,
-						plugin.installedVersion) > 0)
+						&& MiscUtilities.compareStrings(branch.version,
+						plugin.installedVersion,false) > 0)
 						plugins.addElement(plugin);
 				}
 

@@ -6,7 +6,6 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

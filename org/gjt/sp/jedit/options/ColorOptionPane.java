@@ -132,6 +132,8 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.highlightColor");
 		addColorChoice("options.color.gutterCurrentLineColor",
 			"view.gutter.currentLineColor");
+		addColorChoice("options.color.gutterBracketHighlightColor",
+			"view.bracketHighlightColor");
 		addColorChoice("options.color.gutterMarkerColor",
 			"view.gutter.markerColor");
 		addColorChoice("options.color.gutterFoldColor",

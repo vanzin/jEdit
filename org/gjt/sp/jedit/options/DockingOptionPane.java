@@ -294,7 +294,8 @@ class WindowTableModel extends AbstractTableModel
 			Entry e1 = (Entry)obj1;
 			Entry e2 = (Entry)obj2;
 
-			return e1.title.compareTo(e2.title);
+			return MiscUtilities.compareStrings(
+				e1.title,e2.title,true);
 		}
 	}
 }
