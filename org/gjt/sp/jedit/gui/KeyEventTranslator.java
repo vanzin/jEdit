@@ -92,7 +92,13 @@ public class KeyEventTranslator
 				}
 				else if(keyCode == KeyEvent.VK_SPACE)
 				{
-					if(modifiers == 0)
+					// for SPACE or S+SPACE we pass the
+					// key typed since international
+					// keyboards sometimes produce a
+					// KEY_PRESSED SPACE but not a
+					// KEY_TYPED SPACE, eg if you have to
+					// do a "<space> to insert ".
+					if((modifiers & ~InputEvent.SHIFT_MASK) == 0)
 						returnValue = null;
 					else
 					{
@@ -119,7 +125,7 @@ public class KeyEventTranslator
 			case '\b':
 				return null;
 			case ' ':
-				if(modifiers != 0)
+				if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
 					return null;
 			}
 

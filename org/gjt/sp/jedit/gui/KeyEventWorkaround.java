@@ -201,7 +201,6 @@ public class KeyEventWorkaround
 					{
 					case '\n':
 					case '\t':
-					case ' ':
 						return null;
 					}
 				}
