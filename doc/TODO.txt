@@ -2,10 +2,8 @@ TO DO
 
 + before 4.0pre1:
 
-- gnu.regexp 1.1.4
 - roll linesChanged() into contentInserted()/contentRemoved()
 - if a buffer listener throws an exception, don't break down
-- CVS add SegmentBuffer.java
 - use improved buffer property code
 - read write lock hangs
 - optimize ContentManager.close()

@@ -57,14 +57,14 @@ public class REMatchEnumeration implements Enumeration, Serializable {
   private RE expr;
   private CharIndexed input;
   private int eflags;
-  private StringBuffer buffer;
+    private int index;
 
   // Package scope constructor is used by RE.getMatchEnumeration()
   REMatchEnumeration(RE expr, CharIndexed input, int index, int eflags) {
     more = MAYBE;
     this.expr = expr;
     this.input = input;
-    input.move(index);
+    this.index = index;
     this.eflags = eflags;
   }
 
@@ -84,9 +84,11 @@ public class REMatchEnumeration implements Enumeration, Serializable {
    */
   public boolean hasMoreMatches(StringBuffer buffer) {
     if (more == MAYBE) {
-	match = expr.getMatchImpl(input,0,eflags,buffer);
+	match = expr.getMatchImpl(input,index,eflags,buffer);
 	if (match != null) {
 	    input.move((match.end[0] > 0) ? match.end[0] : 1);
+	    
+	    index = (match.end[0] > 0) ? match.end[0] + match.offset : index + 1;
 	    more = YES;
 	} else more = NO;
     }

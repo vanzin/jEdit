@@ -33,12 +33,20 @@ public final class REMatch implements Serializable, Cloneable {
 
     // These variables are package scope for fast access within the engine
     int eflags; // execution flags this match was made using
-    int offset; // offset in source text where match was tried
-    int anchor; // anchor position, for ANCHORINDEX option
 
+    // Offset in source text where match was tried.  This is zero-based;
+    // the actual position in the source text is given by (offset + anchor).
+    int offset;
+
+    // Anchor position refers to the index into the source input
+    // at which the matching operation began.
+    // This is also useful for the ANCHORINDEX option.
+    int anchor;
+
+    // Package scope; used by RE.
+    int index; // used while matching to mark current match position in input
     int[] start; // start positions (relative to offset) for each (sub)exp.
     int[] end;   // end positions for the same
-    int index; // used while matching to mark current match position in input
     REMatch next; // other possibility (to avoid having to use arrays)
 
     public Object clone() {
@@ -63,12 +71,12 @@ public final class REMatch implements Serializable, Cloneable {
 	next = other.next;
     }
 
-    REMatch(int subs, int index, int eflags) {
+    REMatch(int subs, int anchor, int eflags) {
 	start = new int[subs+1];
 	end = new int[subs+1];
-	anchor = index;
+	this.anchor = anchor;
 	this.eflags = eflags;
-	clear(index);
+	clear(anchor);
     }
 
     void finish(CharIndexed text) {
@@ -208,7 +216,7 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = end[sub];
 	return (x == -1) ? x : offset + x;
     }
-
+    
     /**
      * Substitute the results of this match to create a new string.
      * This is patterned after PERL, so the tokens to watch out for are

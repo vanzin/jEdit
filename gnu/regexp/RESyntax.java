@@ -159,7 +159,7 @@ public final class RESyntax implements Serializable {
 
   /**
    * Syntax bit. Allow use of (?=xxx) and (?!xxx) apply the subexpression
-   * to the text following the current position without cousuming that text.
+   * to the text following the current position without consuming that text.
    */
   public static final int RE_LOOKAHEAD                 = 21;
 
@@ -169,7 +169,7 @@ public final class RESyntax implements Serializable {
   public static final int RE_STRING_ANCHORS            = 22;
 
   /**
-   * Syntax bit. Allow embedded comments, (#comment), as in Perl5.
+   * Syntax bit. Allow embedded comments, (?#comment), as in Perl5.
    */
   public static final int RE_COMMENTS                  = 23;
 
@@ -387,7 +387,7 @@ public final class RESyntax implements Serializable {
       RE_SYNTAX_PERL5 = new RESyntax(RE_SYNTAX_PERL4)
 	  .set(RE_PURE_GROUPING)          // (?:)
 	  .set(RE_STINGY_OPS)             // *?,??,+?,{}?
-	  .set(RE_LOOKAHEAD)              // (?=)(?!) not implemented
+	  .set(RE_LOOKAHEAD)              // (?=)(?!)
 	  .set(RE_STRING_ANCHORS)         // \A,\Z
 	  .set(RE_CHAR_CLASS_ESC_IN_LISTS)// \d,\D,\w,\W,\s,\S within []
 	  .set(RE_COMMENTS)              // (?#)
