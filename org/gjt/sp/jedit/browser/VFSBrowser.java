@@ -1514,6 +1514,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		public void run()
 		{
 			String path = (String)loadInfo[0];
+			if(path == null)
+			{
+				// there was an error
+				return;
+			}
+
 			VFS.DirectoryEntry[] list = (VFS.DirectoryEntry[])
 				loadInfo[1];
 

@@ -5,6 +5,12 @@ JEDIT 4.2 VERSION HISTORY
 Thanks to Eric Ladner, Justin Hagstrom, Ollie Rutherfurd and
 Thomas Alspaugh for contributing to this release.
 
+{{{ License Change
+
+A small amendment has been added to jEdit's license. It formally allows
+development of non-GPL jEdit plugins.
+
+}}}
 {{{ Syntax Highlighting
 
 - Updated PHP syntax highlighting for PHP5 and PHPDoc (Justin Hagstrom).
@@ -37,8 +43,6 @@ KeyEventTranslator.setModifierMapping(
 
 - "Java File Save", "Move Line Up", "Move Line Down" macros
   (Nicholas O'Leary).
-
-- Removed usages of show() method deprecated in JDK 1.5.
 
 }}}
 {{{ Bug Fixes
