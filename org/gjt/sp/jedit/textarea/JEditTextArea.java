@@ -1660,10 +1660,25 @@ forward_scan:		do
 	 * selection in question, instead of replacing it.
 	 * @param offset The offset
 	 * @param end The new selection end
-	 * @param rect Make the selection rectangular?
 	 * @since jEdit 3.2pre1
 	 */
 	public void extendSelection(int offset, int end)
+	{
+		extendSelection(offset,end,0);
+	} //}}}
+
+	//{{{ extendSelection() method
+	/**
+	 * Extends the selection at the specified offset, or creates a new
+	 * one if there is no selection at the specified offset. This is
+	 * different from resizing in that the new chunk is added to the
+	 * selection in question, instead of replacing it.
+	 * @param offset The offset
+	 * @param end The new selection end
+	 * @param extraEndVirt Extra virtual space at the end
+	 * @since jEdit 4.2pre1
+	 */
+	public void extendSelection(int offset, int end, int extraEndVirt)
 	{
 		boolean rect;
 		Selection s = getSelectionAtOffset(offset);
@@ -1694,7 +1709,10 @@ forward_scan:		do
 		}
 
 		if(rect)
+		{
 			s = new Selection.Rect(offset,end);
+			((Selection.Rect)s).extraEndVirt = extraEndVirt;
+		}
 		else
 			s = new Selection.Range(offset,end);
 		_addToSelection(s);
@@ -2158,9 +2176,10 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextCharacter(boolean select)
 	{
+		Selection s = getSelectionAtOffset(caret);
+
 		if(!select && selection.size() != 0)
 		{
-			Selection s = getSelectionAtOffset(caret);
 			if(s != null)
 			{
 				if(multi)
@@ -2179,27 +2198,45 @@ loop:		for(int i = 0; i < text.length(); i++)
 			}
 		}
 
+		int extraEndVirt;
+		if(s instanceof Selection.Rect)
+			extraEndVirt = ((Selection.Rect)s).extraEndVirt;
+		else
+			extraEndVirt = 0;
+
+		int newCaret = caret;
+
 		if(caret == buffer.getLength())
-			getToolkit().beep();
-
-		int newCaret;
-
-		if(caret == getLineEndOffset(caretLine) - 1)
 		{
-			int line = displayManager.getNextVisibleLine(caretLine);
-			if(line == -1)
+			if(s instanceof Selection.Rect)
+				extraEndVirt++;
+			else
 			{
 				getToolkit().beep();
 				return;
 			}
-
-			newCaret = getLineStartOffset(line);
+		}
+		else if(caret == getLineEndOffset(caretLine) - 1)
+		{
+			if(s instanceof Selection.Rect)
+				extraEndVirt++;
+			else
+			{
+				int line = displayManager.getNextVisibleLine(caretLine);
+				if(line == -1)
+				{
+					getToolkit().beep();
+					return;
+				}
+				else
+					newCaret = getLineStartOffset(line);
+			}
 		}
 		else
 			newCaret = caret + 1;
 
 		if(select)
-			extendSelection(caret,newCaret);
+			extendSelection(caret,newCaret,extraEndVirt);
 		else if(!multi)
 			selectNone();
 
@@ -2229,7 +2266,27 @@ loop:		for(int i = 0; i < text.length(); i++)
 		}
 
 		if(select)
-			extendSelection(caret,newCaret);
+		{
+			int extraEndVirt;
+			Selection s = getSelectionAtOffset(caret);
+			if(s instanceof Selection.Rect)
+			{
+				int virtualWidth = buffer.getVirtualWidth(
+					s.endLine,s.end - getLineStartOffset(
+					s.endLine)) + ((Selection.Rect)s).extraEndVirt;
+				int newLine = getLineOfOffset(newCaret);
+				int[] totalVirtualWidth = new int[1];
+				int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
+					virtualWidth,totalVirtualWidth);
+				if(newOffset == -1)
+					extraEndVirt = virtualWidth - totalVirtualWidth[0];
+				else
+					extraEndVirt = 0;
+			}
+			else
+				extraEndVirt = 0;
+			extendSelection(caret,newCaret,extraEndVirt);
+		}
 		else if(!multi)
 			selectNone();
 
@@ -2442,9 +2499,10 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevCharacter(boolean select)
 	{
+		Selection s = getSelectionAtOffset(caret);
+
 		if(!select && selection.size() != 0)
 		{
-			Selection s = getSelectionAtOffset(caret);
 			if(s != null)
 			{
 				if(multi)
@@ -2463,9 +2521,23 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			}
 		}
 
-		int newCaret;
+		int extraEndVirt = 0;
+		int newCaret = caret;
 
-		if(caret == getLineStartOffset(caretLine))
+		if(caret == getLineEndOffset(caretLine) - 1)
+		{
+			if(s instanceof Selection.Rect)
+			{
+				extraEndVirt = ((Selection.Rect)s).extraEndVirt;
+				if(extraEndVirt == 0)
+					newCaret = caret - 1;
+				else
+					extraEndVirt--;
+			}
+			else
+				newCaret = caret - 1;
+		}
+		else if(caret == getLineStartOffset(caretLine))
 		{
 			int line = displayManager.getPrevVisibleLine(caretLine);
 			if(line == -1)
@@ -2479,7 +2551,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			newCaret = caret - 1;
 
 		if(select)
-			extendSelection(caret,newCaret);
+			extendSelection(caret,newCaret,extraEndVirt);
 		else if(!multi)
 			selectNone();
 		moveCaretPosition(newCaret);

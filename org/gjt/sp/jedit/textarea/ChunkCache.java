@@ -700,6 +700,8 @@ class ChunkCache
 						physicalLine,out.size());
 					if(skew >= out.size())
 					{
+						Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
+						skew = 0;
 						needFullRepaint = true;
 						lastScreenLine = lineInfo.length - 1;
 					}

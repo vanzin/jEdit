@@ -648,9 +648,9 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
+			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,skew);
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
-			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,skew);
 		} //}}}
 
 		//{{{ reset() method
