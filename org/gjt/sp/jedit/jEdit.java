@@ -297,8 +297,6 @@ public class jEdit
 		//{{{ Get things rolling
 		initMisc();
 		initSystemProperties();
-		if(jEditHome != null)
-			initSiteProperties();
 		GUIUtilities.advanceSplashProgress();
 
 		BeanShell.init();
@@ -336,6 +334,9 @@ public class jEdit
 
 		if(!noPlugins)
 			initPlugins();
+
+		if(jEditHome != null)
+			initSiteProperties();
 
 		if(settingsDirectory != null)
 		{
