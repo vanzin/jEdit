@@ -4140,8 +4140,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.wrapModeChanged(this);
+				getListener(i).wrapModeChanged(this);
 			}
 			catch(Throwable t)
 			{

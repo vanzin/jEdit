@@ -231,18 +231,27 @@ public class ActionBar extends JPanel
 	} //}}}
 
 	//{{{ complete() method
-	private void complete()
+	private void complete(boolean insertLongestPrefix)
 	{
 		String text = action.getText().trim();
 		if(text.length() != 0)
 		{
 			String[] completions = getCompletions(text);
-			if(completions.length == 1 && completions[0].equals(text))
+			if(completions.length == 1)
 			{
-				// do nothing
+				if(insertLongestPrefix)
+					action.setText(completions[0]);
 			}
 			else if(completions.length != 0)
 			{
+				if(insertLongestPrefix)
+				{
+					String prefix = MiscUtilities.getLongestPrefix(
+						completions);
+					if(prefix.indexOf(text) != -1)
+						action.setText(prefix);
+				}
+
 				if(popup != null)
 					popup.setModel(completions);
 				else
@@ -281,14 +290,14 @@ public class ActionBar extends JPanel
 		public void insertUpdate(DocumentEvent evt)
 		{
 			if(popup != null)
-				complete();
+				complete(false);
 		} //}}}
 
 		//{{{ removeUpdate() method
 		public void removeUpdate(DocumentEvent evt)
 		{
 			if(popup != null)
-				complete();
+				complete(false);
 		} //}}}
 
 		//{{{ changedUpdate() method
@@ -363,7 +372,7 @@ public class ActionBar extends JPanel
 					}
 					else if(keyCode == KeyEvent.VK_TAB)
 					{
-						complete();
+						complete(true);
 					}
 					else if(keyCode == KeyEvent.VK_ESCAPE)
 					{

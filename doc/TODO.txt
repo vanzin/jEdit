@@ -6,66 +6,37 @@ and quirks that I need to fix eventually.
 - close dockable fucks up because C+e sends focus to the text area
 - isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
-- C+b, action bar: insert longest common prefix
-- beanshell: invokeAction() function
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - up arrow before buffer is loaded
 - note about dependencies
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
-- save file --> collapse to < visibleLines -- click beyond last line
-  --> exception
 - while loading --> scroll bar
-- do help search in a thread
 - update quicknotepad docs
+- auto reload - save caret info first
 - quicknotepad: handle no settings dir more gracefully
-- save caret info first
-- caret saving needs to be more flexible w.r.t. split panes
-- <edit pane,buffer> --> <caret info> map
-
 - shortcuts: stale shortcuts remain?
-
-- operating system activations.
-  - port macos
-- new macro handler api
-
-- can do perl q|...| etc. using begin/end substitution!
-- perl: q{}, etc.
-
+- port macos
 - browser's default size
 - browser: tab: don't insert full path
 - completion: handle full paths
 - file dialog: handle - ENTER
 - file dialog: plugin mgr/opts
-
 - F2 doesn't work in JTree/JTable, maybe others
 - narrow: scrolls one down
-- update man page
-- make gutter fully painted by extensions just like text area
-- format should show an error if the line len is 0, not beep
-- shortcut editor: restore default button
 - path shown twice in tree: maybeReloadDirectory()
-- don't rely on browser view for completion
-- adapt vfs filename field for the path display at the top
-- vfs dialogs: only one field?
-- vfs.isValidPath()
-- need to get rid of endsWith("/") || endsWith(File.separator) bullshit
 - vfs browser: open in new view: doesn't focus the new view
 - eval-for-selected-lines doesn't work with rectangular selection
 - recording 'evaluate for selected lines'
 - evalutate for selected lines: > 1 selection per line
 - searching in a buffer w/ narrowed fold
 - macro record: doesn't respect overwrite
-- save file resulting in fold collapse -- scroll to 0
-- closing lots of files is slow
 - rect select and trailing whitespace
 - synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked
   - FAQ: better titles
-- new plugin mgr:
-  - ask before selecting dependencies & 'don't show again'
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
 - C+ENTER 3 C+2
@@ -89,12 +60,6 @@ and quirks that I need to fix eventually.
   - selected borders in list, tree, table wrong colors
 - motif l&f: shortcuts in menu items
 
-+ verify:
-
-- focus problem with hypersearch in floating window
-- dwm: not always focused correctly
-- JDK 1.4 focus bugs
-
 + cleanups:
 
 - text area mouse handler cleanup
@@ -109,6 +74,25 @@ and quirks that I need to fix eventually.
 
 + features:
 
+- new plugin mgr:
+  - ask before selecting dependencies & 'don't show again'
+- need to get rid of endsWith("/") || endsWith(File.separator) bullshit
+- don't rely on browser view for completion
+- adapt vfs filename field for the path display at the top
+- vfs dialogs: only one field?
+- vfs.isValidPath()
+- update man page
+- make gutter fully painted by extensions just like text area
+- format should show an error if the line len is 0, not beep
+- shortcut editor: restore default button
+- new macro handler api
+- plugin manager: load/unload in right-click menu
+- can do perl q|...| etc. using begin/end substitution!
+- perl: q{}, etc.
+- do help search in a thread
+- beanshell: invokeAction() function
+- caret saving needs to be more flexible w.r.t. split panes
+- <edit pane,buffer> --> <caret info> map
 - vfs browser right click menu: plugins & favorites
 - don't show 'new directory' in favorites:
 - new bracket matching; use interface to determine match
@@ -186,6 +170,7 @@ and quirks that I need to fix eventually.
 
 + performance:
 
+- closing lots of files is slow
 - don't tokenize lines twice
 - line delete: gap optimization
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the

@@ -1009,6 +1009,71 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return MB_FORMAT.format((double)length / 1024 / 1024);
 	} //}}}
 
+	//{{{ getLongestPrefix() method
+	/**
+	 * Returns the longest common prefix in the given set of strings.
+	 * @param str The strings
+	 * @since jEdit 4.2pre2
+	 */
+	public static String getLongestPrefix(List str)
+	{
+		if(str.size() == 0)
+			return "";
+
+		int prefixLength = 0;
+
+loop:		for(;;)
+		{
+			String s = str.get(0).toString();
+			if(prefixLength >= s.length())
+				break loop;
+			char ch = s.charAt(prefixLength);
+			for(int i = 1; i < str.size(); i++)
+			{
+				s = str.get(i).toString();
+				if(prefixLength >= s.length())
+					break loop;
+				if(s.charAt(prefixLength) != ch)
+					break loop;
+			}
+			prefixLength++;
+		}
+
+		return str.get(0).toString().substring(0,prefixLength);
+	} //}}}
+
+	//{{{ getLongestPrefix() method
+	/**
+	 * Returns the longest common prefix in the given set of strings.
+	 * @param str The strings
+	 * @since jEdit 4.2pre2
+	 */
+	public static String getLongestPrefix(String[] str)
+	{
+		if(str.length == 0)
+			return "";
+
+		int prefixLength = 0;
+
+loop:		for(;;)
+		{
+			if(prefixLength >= str[0].length())
+				break loop;
+			char ch = str[0].charAt(prefixLength);
+			for(int i = 1; i < str.length; i++)
+			{
+				String s = str[i];
+				if(prefixLength >= s.length())
+					break loop;
+				if(s.charAt(prefixLength) != ch)
+					break loop;
+			}
+			prefixLength++;
+		}
+
+		return str[0].substring(0,prefixLength);
+	} //}}}
+
 	//}}}
 
 	//{{{ Sorting methods
