@@ -1,9 +1,11 @@
 TO DO
 
+- MacOS X plugin
+- help: expand user's guide -> using jEdit by default
+- MacOS X status bar hack
 - new view, split view doesn't work
 - might still need brutal undo code to avoid lumping everything together
 - too many lines being made invisible
-- bottom electric scroll
 - CCW rotated text not drawn correctly
 - new goodies need to be documented
 - conventions section in user's guide: mention Enter activating default
