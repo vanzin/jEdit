@@ -20,6 +20,12 @@
     first line is <quote>#!/bin/sh</quote> are edited in shell script mode.
    </para>
    <para>
+    File name and first line globs can be changed in the
+    <guibutton>Mode-Specific</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box (see <xref linkend="global-opts"/>).
+   </para>
+   <para>
     If automatic mode selection is not appropriate, the edit mode can
     be specified manually. The current buffer's edit mode can be set
     on a one-time basis in the
@@ -31,6 +37,11 @@
     mode:
    </para>
    <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
+   <para>
+    A list of edit modes can be found in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box.
+   </para>
   </sect2>
   <sect2 id="syntax-hilite"><title>Syntax Highlighting</title>
    <para>
@@ -60,9 +71,8 @@
    edit modes, or mode-specific. Abbreviations can be edited
    in the <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />. The Java, SGML and VHDL edit
-   modes include some pre-defined
-   abbreviations you might find useful.
+   dialog box; see <xref linkend="global-opts" />. The Java, VHDL and XSL edit
+   modes include some pre-defined abbreviations you might find useful.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Expand Abbreviation</guimenuitem>
@@ -394,7 +404,7 @@ With text inside it.
    requires no changes to be made to a buffer's text and does a decent
    job with most program source. Explicit folding requires <quote>fold
    markers</quote> to be inserted into the text, but is more flexible in
-   exactly what to fold away than indent folding.
+   exactly what to fold away.
   </para>
   <para>
    Folding can be enabled in one of several ways:
@@ -419,19 +429,23 @@ With text inside it.
   </itemizedlist>
   <sect2><title>Collapsing and Expanding Folds</title>
    <para>
-    When folding is enabled, the first line of each fold has a triangle
+    The first line of each fold has a triangle
     drawn next to it in the gutter (see <xref linkend="textarea"/> for
     more information about the gutter). The triangle points towards the
     line when the fold is collapsed, and downwards when the fold is
-    expanded. The first line of a collapsed fold is also drawn
+    expanded.
+    Clicking the triangle collapses and
+    expands the fold. To expand all sub-folds as well, hold down the
+    <keycap>Shift</keycap> while clicking.
+   </para>
+   <para>
+    The first line of a collapsed fold is also drawn
     with a different background color, and the number of lines in the
     fold is shown to the right of the line's text.
    </para>
    <para>
-    Clicking a fold expansion triangle in the gutter collapses and
-    expands the fold. Expanding a fold does not expand any sub-folds
-    it contains unless the <keycap>Shift</keycap> key is held down
-    while clicking.
+    Folds can also be collapsed and expanded using menu item commands and
+    keyboard shortcuts.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
@@ -444,7 +458,8 @@ With text inside it.
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     Fold One Level</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Alt</keycap><keycap>Enter</keycap></keycombo>) expands the
-    fold containing the caret position. Nested folds will remain collapsed.
+    fold containing the caret position. Nested folds will remain collapsed,
+    and the caret is positioned on the first nested fold (if any).
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
@@ -487,7 +502,7 @@ With text inside it.
     the caret to the fold immediately after the caret position.
    </para>
   </sect2>
-  <sect2><title>Miscellaneous Folding Features</title>
+  <sect2><title>Miscellaneous Folding Commands</title>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Add
     Explicit Fold</guimenuitem> (keyboard shortcut:
@@ -506,7 +521,7 @@ With text inside it.
     <keycap>S</keycap>)
     selects all lines within the fold containing the caret position.
     <keycap>Control</keycap>-clicking a fold expansion triangle
-    in the gutter on the left of the text area has the same effect.
+    in the gutter has the same effect.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
@@ -514,7 +529,7 @@ With text inside it.
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>)
     reads the next character entered at the keyboard, and
-    expands all folds in the buffer
+    expands folds in the buffer
     with a fold level less than that specified, while collapsing all others.
    </para>
    <para>
@@ -550,7 +565,9 @@ With text inside it.
     <keycap>N</keycap> <keycap>N</keycap>) hides all lines the buffer except
     those in the fold containing the caret.
     When this command is invoked, a message is shown in the
-    status bar explaining how to make the entire buffer visible again.
+    status bar reminding you that you need to invoke
+    <guimenuitem>Expand All Folds</guimenuitem> to make the rest of the buffer
+    visible again.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow

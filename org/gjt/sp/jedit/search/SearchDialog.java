@@ -114,9 +114,15 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchForward.setSelected(true);
 
 		if(SearchAndReplace.getBeanShellReplace())
+		{
+			replace.setModel("replace.script");
 			beanShellReplace.setSelected(true);
+		}
 		else
+		{
+			replace.setModel("replace");
 			stringReplace.setSelected(true);
+		}
 
 		if(searchIn == CURRENT_BUFFER)
 		{

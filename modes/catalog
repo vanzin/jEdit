@@ -124,7 +124,7 @@
 				FILE_NAME_GLOB="*.x{om,in}" />
 
 <MODE NAME="pascal"		FILE="pascal.xml"
-				FILE_NAME_GLOB="*.pas" />
+				FILE_NAME_GLOB="*.{pas,inc,dpr,dpk}" />
 
 <MODE NAME="patch"		FILE="patch.xml"
 				FILE_NAME_GLOB="*.{diff,patch}" />

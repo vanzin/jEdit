@@ -351,7 +351,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 				}
 				finally
 				{
-					requestRunning = false;
+					VFSManager.runInAWTThread(new Runnable()
+					{
+						public void run()
+						{
+							requestRunning = false;
+						}
+					});
 				}
 			}
 		}

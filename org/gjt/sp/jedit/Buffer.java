@@ -2094,7 +2094,7 @@ public class Buffer implements EBComponent
 		// when the auto indent is rewritten.
 		if(lineBrackets == 3)
 		{
-			closeBracketIndex = 0;
+			closeBracketIndex = -1;
 			lineBrackets = 0;
 		}
 

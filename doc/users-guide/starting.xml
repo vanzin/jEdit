@@ -134,7 +134,7 @@
   <para>
    The jEditLauncher package provides three shortcuts for running jEdit:  one in
    the desktop's <guilabel>Start</guilabel> menu, a entry in the Programs menu, and
-   a second shortcut on your desktop.  Any of these may be deleted or moved without
+   a third shortcut on your desktop.  Any of these may be deleted or moved without
    affecting jEdit's operation.  To launch jEdit, simply select one of these shortcuts
    as you would for any Windows application.
   </para>
@@ -152,11 +152,11 @@
   </para>
 
   <para>
-   The package also add menu items to the context or <quote>right-click</quote>
+   The package also adds menu items to the context or <quote>right-click</quote>
    menu displayed by the Windows shell when you click on a file item in the
    desktop window, a Windows Explorer window or a standard file selection dialog.
    The menu entries allow  you to open selected files in jEdit, starting the
-   aplication if necessary. It will also allow you to open all files in a
+   application if necessary. It will also allow you to open all files in a
    directory with a given extension with a single menu selection. If a BeanShell
    macro script with a <filename>.bsh</filename> extension is selected, the menu
    includes the option of running that script within jEdit. If you have the
@@ -176,6 +176,12 @@
    various arguments to control its behavior.
   </para>
   <para>
+   If you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, only file names can be specified
+   on the command line; the parameters documented below must be set as described
+   in <xref linkend="launcher-starting" />.
+  </para>
+  <para>
    When opening files from the command line, a line number or marker to
    position the caret on can be specified like so:
   </para>
@@ -184,12 +190,6 @@
   <para>
    A number of options can also be specified to control several obscure features.
    They are listed in the following table.
-  </para>
-  <para>
-   If you are using <application>jEditLauncher</application>
-   to start jEdit on Windows, only file names specifications can be specified
-   on the command line; other parameters must be set as described in <xref
-   linkend="launcher-starting" />.
   </para>
   <informaltable>
    <tgroup cols="2">
@@ -207,7 +207,7 @@
      </row>
      <row>
       <entry>-nogui</entry>
-      <entry>jEdit will not open an initial view, and instead only open one
+      <entry>Makes jEdit not open an initial view, and instead only open one
       when the first client connects. Can only be used in combination with
       the <command>-background</command> switch. You can use this switch to
       <quote>pre-load</quote> jEdit when you log in to your computer, for
@@ -216,7 +216,7 @@
      </row>
      <row>
       <entry>-norestore</entry>
-      <entry>jEdit will not attempt to restore previously open files on
+      <entry>Disables automatic restore of previously open files on
       startup. This feature can also be set permanently in the
       <guibutton>Loading and Saving</guibutton> pane of the
       <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>

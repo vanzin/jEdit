@@ -751,6 +751,7 @@ about.text=jEdit is brought to you by:\n\
 	Dominic Stolerman\n\
 	Ed Stewart\n\
 	Francesc Roses\n\
+	George Hovey\n\
 	George Latkiewicz\n\
 	Gili Tzabari\n\
 	Giulio Piancastelli\n\
@@ -1842,9 +1843,9 @@ plugin-manager.install-done.message=You must restart jEdit to use the installed 
 	After jEdit is restarted, documentation for the newly\n\
 	installed plugins can be found in Help->jEdit Help.\n\
 	\n\
-	Remember that most plugins add commands to the 'Plugins' menu;\n\
-	some also have settings that can be changed in the\n\
-	Utilities->Global Options dialog box.
+	Remember that most plugins add commands to the\n\
+	'Plugins' menu; some also have settings that can be\n\
+	changed in the Utilities->Global Options dialog box.
 #}}}
 
 #{{{ Plugin remove error

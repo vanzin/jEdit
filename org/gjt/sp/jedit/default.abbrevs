@@ -41,14 +41,14 @@ logw|Log.log(Log.WARNING,this,\|);
 logn|Log.log(Log.NOTICE,this,\|);
 logm|Log.log(Log.MESSAGE,this,\|);
 logd|Log.log(Log.DEBUG,this,\|);
-[sgml]
-Ykeycap|<keycap>\|</>
-Ykeycombo|<keycombo><keycap>$1</><keycap>$2</></keycombo>
 [vhdl]
 sl|std_logic
 slv|std_logic_vector( x downto y )
 var|variable
 sig|signal
+[xml]
+Ykeycap|<keycap>\|</>
+Ykeycombo|<keycombo><keycap>$1</><keycap>$2</></keycombo>
 [xsl]
 ai|<xsl:apply-imports/>
 an|<xsl:attribute name="\|"></xsl:attribute>

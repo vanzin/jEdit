@@ -210,8 +210,15 @@ public class HyperSearchResults extends JPanel implements EBComponent
 				return;
 
 			view.setBuffer(buffer);
-			view.toFront();
-			view.requestFocus();
+
+			// fuck me dead
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					resultTree.requestFocus();
+				}
+			});
 		}
 		else
 		{
@@ -236,8 +243,6 @@ public class HyperSearchResults extends JPanel implements EBComponent
 						textArea.setSelection(s);
 
 					textArea.moveCaretPosition(start);
-					view.toFront();
-					view.requestFocus();
 				}
 			});
 		}
@@ -281,17 +286,21 @@ public class HyperSearchResults extends JPanel implements EBComponent
 				resultTree.setSelectionPath(path1);
 				goToSelectedNode();
 			}
+			else
+			{
+				view.toFront();
+				view.requestFocus();
+			}
 		} //}}}
 	} //}}}
 
 	//{{{ TreeSelectionHandler class
 	class TreeSelectionHandler implements TreeSelectionListener
 	{
-		//{{{ valueChanged() method
 		public void valueChanged(TreeSelectionEvent evt)
 		{
 			goToSelectedNode();
-		} //}}}
+		}
 	} //}}}
 
 	//{{{ ResultCellRenderer class

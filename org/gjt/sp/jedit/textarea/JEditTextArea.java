@@ -274,7 +274,9 @@ public class JEditTextArea extends JComponent
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
-			// just in case, maybe not necessary?...
+			maxHorizontalScrollWidth = 0;
+
+			chunkCache.setFirstLine(0);
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
 			propertiesChanged();

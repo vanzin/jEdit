@@ -234,7 +234,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		File directory = new File(path);
-		String[] list = directory.list();
+		File[] list = directory.listFiles();
 		if(list == null)
 		{
 			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);
@@ -244,17 +244,17 @@ public class FileVFS extends VFS
 		Vector list2 = new Vector();
 		for(int i = 0; i < list.length; i++)
 		{
-			String name = list[i];
-			String _path;
-			if(path.endsWith(File.separator))
-				_path = path + name;
+			File file = list[i];
+
+			int type;
+			if(file.isDirectory())
+				type = VFS.DirectoryEntry.DIRECTORY;
 			else
-				_path = path + File.separatorChar + name;
+				type = VFS.DirectoryEntry.FILE;
 
-			VFS.DirectoryEntry entry = _getDirectoryEntry(null,_path,null);
-
-			if(entry != null)
-				list2.addElement(entry);
+			list2.add(new VFS.DirectoryEntry(file.getName(),
+				file.getPath(),file.getPath(),type,
+				file.length(),file.isHidden()));
 		}
 
 		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[list2.size()];
