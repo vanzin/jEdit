@@ -370,6 +370,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
+		GUIUtilities.init();
 		BeanShell.init();
 		initUserProperties();
 		initPLAF();

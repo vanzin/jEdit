@@ -83,6 +83,15 @@ contributing to this release.
   the node. This was a usability problem since pressing LEFT or RIGHT
   should not deselect anything.
 
+- The labels of -toggle and -float actions for dockables were not being
+  set correctly.
+
+}}}
+{{{ API Additions
+
+- Icon theme support. Pass a URL to GUIUtilities.setIconPath() and all
+  icons will be loaded from that URL prepended to the icon name.
+
 }}}
 
 }}}
