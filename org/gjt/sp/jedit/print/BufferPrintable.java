@@ -107,48 +107,35 @@ class BufferPrintable extends WorkRequest implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
+
+		if(end)
+		{
+			view.getStatus().setMessage(null);
+			return NO_SUCH_PAGE;
+		}
+
 		lineList.clear();
 		currentLine = 0;
-
-		Graphics2D gfx = (Graphics2D)_gfx;
-		gfx.setFont(font);
-
-		System.err.println("getting pageIndex = " + pageIndex
-			+ ", currentPage = " + currentPage
-			+ ", currentPageStart = " + currentPageStart
-			+ ", currentPhysicalLine = " + currentPhysicalLine
-			+ ", end = " + end);
-		Rectangle2D bounds1 = font.getStringBounds(
-			"hello world this is a test string!!!",
-				gfx.getFontRenderContext());
-		System.err.println(bounds1.getWidth());
-		Rectangle2D bounds2 = gfx.getFont().getStringBounds(
-			"hello world this is a test string!!!",
-				gfx.getFontRenderContext());
-		System.err.println(bounds2.getWidth());
 
 		if(pageIndex != currentPage)
 		{
 			currentPageStart = currentPhysicalLine;
 			currentPage = pageIndex;
-
-			if(end)
-			{
-				view.getStatus().setMessage(null);
-				return NO_SUCH_PAGE;
-			}
-			else
-				return PAGE_EXISTS;
 		}
 		else
+		{
 			currentPhysicalLine = currentPageStart;
 
-		// show the message in both the view's status bar, and the
-		// I/O progress monitor
-		Object[] args = new Object[] { new Integer(pageIndex + 1) };
-		String message = jEdit.getProperty("view.status.print",args);
-		view.getStatus().setMessage(message);
-		setStatus(message);
+			// show the message in both the view's status bar, and the
+			// I/O progress monitor
+			Object[] args = new Object[] { new Integer(pageIndex + 1) };
+			String message = jEdit.getProperty("view.status.print",args);
+			view.getStatus().setMessage(message);
+			setStatus(message);
+		}
+
+		Graphics2D gfx = (Graphics2D)_gfx;
+		gfx.setFont(font);
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
