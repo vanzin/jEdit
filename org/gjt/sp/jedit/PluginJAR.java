@@ -1205,6 +1205,8 @@ public class PluginJAR
 		// remove action sets, dockables, etc so that user doesn't
 		// see the broken plugin
 		uninit(false);
+		// but we want properties to hang around
+		jEdit.addPluginProps(properties);
 	} //}}}
 
 	//}}}

@@ -190,7 +190,7 @@ public class ActionSet
 	public ActionSet(String label)
 	{
 		this();
-		this.label = label;
+		setLabel(label);
 	} //}}}
 
 	//{{{ getLabel() method
@@ -211,6 +211,8 @@ public class ActionSet
 	 */
 	public void setLabel(String label)
 	{
+		if(label == null)
+			throw new NullPointerException();
 		this.label = label;
 	} //}}}
 

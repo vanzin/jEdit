@@ -1154,45 +1154,24 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			}
 			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
 			{
-				Iterator iter = windows.values().iterator();
+				Iterator iter = getAllPluginEntries(
+					pmsg.getPluginJAR(),false);
 				while(iter.hasNext())
 				{
 					Entry entry = (Entry)iter.next();
-					if(entry.factory.plugin == pmsg.getPluginJAR())
-					{
-						if(entry.container != null
-							&& entry.container
-							.isVisible(entry))
-						{
-							entry.container.remove(entry);
-						}
-					}
-				}
-
-				iter = clones.iterator();
-				while(iter.hasNext())
-				{
-					Entry entry = (Entry)iter.next();
-					if(entry.factory.plugin == pmsg.getPluginJAR())
-					{
-						if(entry.container != null)
-							entry.container.unregister(entry);
-						iter.remove();
-					}
+					entry.container.remove(entry);
 				}
 			}
 			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
-				Iterator iter = windows.values().iterator();
+				Iterator iter = getAllPluginEntries(
+					pmsg.getPluginJAR(),true);
 				while(iter.hasNext())
 				{
 					Entry entry = (Entry)iter.next();
-					if(entry.factory.plugin == pmsg.getPluginJAR())
-					{
-						if(entry.container != null)
-							entry.container.unregister(entry);
-						iter.remove();
-					}
+					entry.container.unregister(entry);
+					entry.win = null;
+					entry.container = null;
 				}
 			}
 		}
@@ -1384,6 +1363,40 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				e.container.register(e);
 		}
 		windows.put(factory.name,e);
+	} //}}}
+
+	//{{{ getAllPluginEntries() method
+	/**
+	 * If remove is false, only remove from clones list, otherwise remove
+	 * from both entries and clones.
+	 */
+	private Iterator getAllPluginEntries(PluginJAR plugin, boolean remove)
+	{
+		java.util.List returnValue = new LinkedList();
+		Iterator iter = windows.values().iterator();
+		while(iter.hasNext())
+		{
+			Entry entry = (Entry)iter.next();
+			if(entry.factory.plugin == plugin)
+			{
+				returnValue.add(entry);
+				if(remove)
+					iter.remove();
+			}
+		}
+
+		iter = clones.iterator();
+		while(iter.hasNext())
+		{
+			Entry entry = (Entry)iter.next();
+			if(entry.factory.plugin == plugin)
+			{
+				returnValue.add(entry);
+				iter.remove();
+			}
+		}
+
+		return returnValue.iterator();
 	} //}}}
 
 	//}}}
