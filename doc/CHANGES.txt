@@ -42,6 +42,9 @@ JEDIT 4.0 VERSION HISTORY
 - The file system browser's divider position would not be remembered if
   it was collapsed all the way
 - Layout of 'Install Plugins' dialog box was a bit broken
+- Added a workaround for bug on Windows where a few Alt-key sequences
+  (Alt-Left, Alt-Right, Alt-Up, Alt-Down, Alt-PageUp, Alt-PageDown)
+  inserted garbage in the text area
 
 + API Changes
 
