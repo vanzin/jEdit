@@ -80,32 +80,53 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 
 			if(out.size() == 0)
 			{
-				addToken(chunk,context);
+				addToken(chunk,context,false);
 				out.add(chunk);
 			}
 			else
 			{
-				if(id == Token.WHITESPACE && x + chunk.width > wrapMargin)
+				if(id == Token.WHITESPACE)
 				{
-					if(!addToken(chunk,context))
+					if(x + chunk.width > wrapMargin && end != null)
 					{
-						// re-init widened chunk
-						((Chunk)lastToken).init(seg,expander,x,styles,
-							fontRenderContext,
-							context.rules.getDefault());
+						if(!addToken(chunk,context,false))
+						{
+							// re-init widened chunk
+							((Chunk)lastToken).init(seg,expander,x,styles,
+								fontRenderContext,
+								context.rules.getDefault());
+						}
+
+						Chunk blankSpace = new Chunk(0.0f,offset + length,
+							getParserRuleSet(context));
+
+						lastToken = end.next;
+						blankSpace.next = end.next;
+						end.next = null;
+						x = x - endX;
+
+						out.add(blankSpace);
+
+						end = null;
+						endX = x;
 					}
+					else
+					{
+						if(!addToken(chunk,context,false))
+						{
+							// re-init widened chunk
+							((Chunk)lastToken).init(seg,expander,x,styles,
+								fontRenderContext,
+								context.rules.getDefault());
+						}
 
-					Chunk blankSpace = new Chunk(0.0f,offset + length,
-						getParserRuleSet(context));
-
-					firstToken = lastToken = blankSpace;
-					x = 0.0f;
-
-					out.add(blankSpace);
+						end = lastToken;
+						endX = x;
+					}
 				}
 				else
 				{
-					if(!addToken(chunk,context))
+					if(!addToken(chunk,context,false))
 					{
 						// re-init widened chunk
 						((Chunk)lastToken).init(seg,expander,x,styles,
