@@ -699,14 +699,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
 			repaint(0,h,getWidth(),getHeight() - h);
 		}
-
-		if(Debug.KEY_DELAY_TIMER && textArea.time != 0L)
-		{
-			Log.log(Log.DEBUG,this,"Key delay: "
-				+ (System.currentTimeMillis() - textArea.time)
-				+ " ms");
-			textArea.time = 0L;
-		}
 	} //}}}
 
 	//{{{ nextTabStop() method

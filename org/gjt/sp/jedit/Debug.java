@@ -90,11 +90,6 @@ public class Debug
 	public static boolean EB_TIMER = false;
 
 	/**
-	 * Show time from receiving a key event and the resulting repaint.
-	 */
-	public static boolean KEY_DELAY_TIMER = false;
-
-	/**
 	 * Disable monospaced font optimization.
 	 */
 	public static boolean DISABLE_MONOSPACE_HACK = false;

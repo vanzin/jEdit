@@ -50,6 +50,10 @@ release.
 - Added "Remove All Nodes" button to HyperSearch Results window
   (Carmine Lucarelli).
 
+- Removed "Go to Text Area" (C+e C+e) action. "Scroll to Current Line"
+  (C+e C+j) now sends focus to the text area, and also expands the
+  current fold if the caret is not visible.
+
 }}}
 {{{ Plugin Loader
 
@@ -137,6 +141,15 @@ release.
 
 - Collapsing a directory in a file system browser threw an exception if
   it was the last item in the list.
+
+- Using C+e C+` shortcut to close dockables didn't work because the view
+  would send focus to the text area after C+e was pressed. This was done
+  to correctly handle shortcuts like C+e n n while a text field had
+  focus (previously "nn" would be inserted in the field). Now, if the
+  focus was sent to the text area as a result of a prefix, it is sent
+  back to the original owner when the prefix is finished.
+
+- Fixed various file system browser completion problems.
 
 }}}
 {{{ API Changes

@@ -4749,17 +4749,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ processKeyEvent() method
-
-	// debug code to measure key delay
-	long time;
-
 	public void processKeyEvent(KeyEvent evt)
 	{
 		// Ignore
 		if(view.isClosed())
 			return;
 
-		time = System.currentTimeMillis();
+		view.processKeyEvent(evt,true);
+
+		/* time = System.currentTimeMillis();
 		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
 			return;
@@ -4787,7 +4785,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 				inputHandler.keyReleased(evt);
 			break;
-		}
+		} */
 
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);

@@ -153,7 +153,8 @@ class VFSFileNameField extends HistoryTextField
 			}
 			else if(ch == '\b')
 			{
-				if(getCaretPosition() == 0)
+				if(getSelectionStart() == 0
+					&& getSelectionEnd() == 0)
 				{
 					goToParent();
 

@@ -13,11 +13,9 @@ and quirks that I need to fix eventually.
 - bad wrap:
 						MiscUtilities.quicksort(favorites,
 							new VFS.DirectoryEntryCompare());
-- merge C+e C+e & C+e C+j
 - vfs dialog: browser should send focus back to text field
 - dir search: no progress msg!
 - delete: no vfs update
-- close dockable fucks up because C+e sends focus to the text area
 - isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
 - if A depends on B but A is loaded before B and B breaks, A ends up
@@ -32,9 +30,7 @@ and quirks that I need to fix eventually.
 - shortcuts: stale shortcuts remain?
 - port macos
 - browser's default size
-- browser: tab: don't insert full path
 - completion: handle full paths
-- file dialog: handle - ENTER
 - file dialog: plugin mgr/opts
 - F2 doesn't work in JTree/JTable, maybe others
 - narrow: scrolls one down
