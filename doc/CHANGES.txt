@@ -1,5 +1,20 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre12
+
+{{{ Bug Fixes
+
+- Fixed a possible deadlock on startup when loading the SQL plugin. In
+  fact this would happen with any plugin that attempted to load icons
+  from its class initializer.
+
+- Fixed NullPointerException when unloading a plugin which has at least
+  one floating window that is not docked.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre11
 
 This release fixes a show-stopper bug in pre10. The JAR file included in
