@@ -90,15 +90,13 @@ public class AboutDialog extends EnhancedDialog
 	static class AboutPanel extends JComponent
 	{
 		ImageIcon image;
-		ImageIcon t_fader;
-		ImageIcon b_fader;
 		Vector text;
 		int scrollPosition;
 		AnimationThread thread;
 		int maxWidth;
 		FontMetrics fm;
 
-		public static int TOP = 100;
+		public static int TOP = 120;
 		public static int BOTTOM = 30;
 
 		AboutPanel()
@@ -109,10 +107,6 @@ public class AboutDialog extends EnhancedDialog
 			setForeground(new Color(96,96,96));
 			image = new ImageIcon(getClass().getResource(
 				"/org/gjt/sp/jedit/icons/about.png"));
-			t_fader = new ImageIcon(getClass().getResource(
-				"/org/gjt/sp/jedit/icons/about_top_fader.png"));
-			b_fader = new ImageIcon(getClass().getResource(
-				"/org/gjt/sp/jedit/icons/about_bottom_fader.png"));
 
 			setBorder(new MatteBorder(1,1,1,1,Color.gray));
 
@@ -132,10 +126,9 @@ public class AboutDialog extends EnhancedDialog
 			thread = new AnimationThread();
 		}
 
-		public void paintComponent(Graphics _g)
+		public void paintComponent(Graphics g)
 		{
-			Graphics2D g = (Graphics2D)_g;
-
+			g.setColor(new Color(96,96,96));
 			image.paintIcon(this,g,1,1);
 
 			FontMetrics fm = g.getFontMetrics();
@@ -144,9 +137,9 @@ public class AboutDialog extends EnhancedDialog
 
 			int firstLineOffset = height - scrollPosition % height;
 			int lastLine = (scrollPosition + getHeight()
-				- TOP - BOTTOM) / height - 1;
+				- TOP - BOTTOM) / height - 3;
 
-			int y = TOP + firstLineOffset;
+			int y = TOP + firstLineOffset + fm.getHeight();
 
 			for(int i = firstLine; i <= lastLine; i++)
 			{
@@ -179,16 +172,11 @@ public class AboutDialog extends EnhancedDialog
 				}
 				y += fm.getHeight();
 			}
-			
-			/* Draw faders */
-			t_fader.paintIcon(this,g,1,1);
-			b_fader.paintIcon(this,g,1,321);
 
 			String[] args = { jEdit.getVersion() };
 			String version = jEdit.getProperty("about.version",args);
 			g.drawString(version,(getWidth() - fm.stringWidth(version)) / 2,
 				getHeight() - 10);
-			
 		}
 
 		public Dimension getPreferredSize()
@@ -236,7 +224,7 @@ public class AboutDialog extends EnhancedDialog
 					scrollPosition += 2;
 
 					if(scrollPosition > max)
-						scrollPosition = -getHeight();
+						scrollPosition = -300;
 
 					try
 					{
