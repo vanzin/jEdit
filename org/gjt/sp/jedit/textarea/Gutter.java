@@ -113,6 +113,13 @@ public class Gutter extends JComponent implements SwingConstants
 
 		int y = (clip.y - clip.y % lineHeight);
 
+		int[] physicalLines = new int[lastLine - firstLine + 1];
+		int[] start = new int[physicalLines.length];
+		int[] end = new int[physicalLines.length];
+
+		extensionMgr.paintScreenLineRange(textArea,gfx,
+			firstLine,lastLine,y,lineHeight);
+
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
@@ -554,18 +561,6 @@ public class Gutter extends JComponent implements SwingConstants
 
 		ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
 		int physicalLine = info.physicalLine;
-
-		//{{{ Paint text area extensions
-		if(physicalLine != -1)
-		{
-			int start = textArea.getScreenLineStartOffset(line);
-			int end = textArea.getScreenLineEndOffset(line);
-
-			extensionMgr.paintValidLine(gfx,line,physicalLine,start,end,y);
-		}
-		else
-			extensionMgr.paintInvalidLine(gfx,line,y);
-		//}}}
 
 		// Skip lines beyond EOF
 		if(physicalLine == -1)

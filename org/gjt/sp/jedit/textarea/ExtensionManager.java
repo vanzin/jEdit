@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2002 Slava Pestov
+ * Copyright (C) 2002, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.Graphics2D;
-import java.util.ArrayList;
+import java.util.*;
 import org.gjt.sp.util.Log;
 
 class ExtensionManager
@@ -33,14 +33,17 @@ class ExtensionManager
 	{
 		Entry entry = new Entry(layer,ext);
 
-		for(int i = 0; i < extensions.size(); i++)
+		int i = 0;
+		Iterator iter = extensions.iterator();
+		while(iter.hasNext())
 		{
-			int _layer = ((Entry)extensions.get(i)).layer;
+			int _layer = ((Entry)iter.next()).layer;
 			if(layer < _layer)
 			{
 				extensions.add(i,entry);
 				return;
 			}
+			i++;
 		}
 
 		extensions.add(entry);
@@ -49,12 +52,12 @@ class ExtensionManager
 	//{{{ removeExtension() method
 	void removeExtension(TextAreaExtension ext)
 	{
-		for(int i = 0; i < extensions.size(); i++)
+		Iterator iter = extensions.iterator();
+		while(iter.hasNext())
 		{
-			Entry entry = (Entry)extensions.get(i);
-			if(entry.ext == ext)
+			if(((Entry)iter.next()).ext == ext)
 			{
-				extensions.remove(i);
+				iter.remove();
 				return;
 			}
 		}
@@ -63,59 +66,45 @@ class ExtensionManager
 	//{{{ getExtensions() method
 	TextAreaExtension[] getExtensions()
 	{
-		TextAreaExtension[] retVal = new TextAreaExtension[
-			extensions.size()];
-		for(int i = 0; i < extensions.size(); i++)
-		{
-			retVal[i] = ((Entry)extensions.get(i)).ext;
-		}
-		return retVal;
+		return (TextAreaExtension[])extensions.toArray(
+			new TextAreaExtension[extensions.size()]);
 	} //}}}
 
-	//{{{ paintValidLine() method
-	void paintValidLine(Graphics2D gfx, int screenLine,
-		int physicalLine, int start, int end, int y)
+	//{{{ paintScreenLineRange() method
+	void paintScreenLineRange(JEditTextArea textArea, Graphics2D gfx,
+		int firstLine, int lastLine, int y, int lineHeight)
 	{
-		for(int i = 0; i < extensions.size(); i++)
+		try
 		{
-			TextAreaExtension ext = ((Entry)extensions.get(i)).ext;
-			try
-			{
-				ext.paintValidLine(gfx,screenLine,
-					physicalLine,start,end,y);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,t);
+			int[] physicalLines = new int[lastLine - firstLine + 1];
+			int[] start = new int[physicalLines.length];
+			int[] end = new int[physicalLines.length];
 
-				// remove it so editor can continue
-				// functioning
-				extensions.remove(i);
-				i--;
+			for(int i = 0; i < physicalLines.length; i++)
+			{
+				int screenLine = i + firstLine;
+				ChunkCache.LineInfo lineInfo = textArea
+					.chunkCache.getLineInfo(screenLine);
+
+				if(lineInfo.physicalLine == -1)
+					physicalLines[i] = -1;
+				else
+				{
+					physicalLines[i] = lineInfo.physicalLine;
+					start[i] = textArea.getScreenLineStartOffset(screenLine);
+					end[i] = textArea.getScreenLineEndOffset(screenLine);
+				}
 			}
+
+			paintScreenLineRange(gfx,firstLine,lastLine,physicalLines,
+				start,end,y,lineHeight);
 		}
-	} //}}}
-
-	//{{{ paintInvalidLine() method
-	void paintInvalidLine(Graphics2D gfx, int screenLine,
-		int y)
-	{
-		for(int i = 0; i < extensions.size(); i++)
+		catch(Exception e)
 		{
-			TextAreaExtension ext = ((Entry)extensions.get(i)).ext;
-			try
-			{
-				ext.paintInvalidLine(gfx,screenLine,y);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,t);
-
-				// remove it so editor can continue
-				// functioning
-				extensions.remove(i);
-				i--;
-			}
+			Log.log(Log.ERROR,this,"Error repainting line"
+				+ " range {" + firstLine + ","
+				+ lastLine + "}:");
+			Log.log(Log.ERROR,this,e);
 		}
 	} //}}}
 
@@ -134,7 +123,34 @@ class ExtensionManager
 	} //}}}
 
 	//{{{ Private members
-	private ArrayList extensions = new ArrayList();
+	private List extensions = new LinkedList();
+
+	//{{{ paintScreenLineRange() method
+	private void paintScreenLineRange(Graphics2D gfx, int firstLine,
+		int lastLine, int[] physicalLines, int[] start, int[] end,
+		int y, int lineHeight)
+	{
+		Iterator iter = extensions.iterator();
+		while(iter.hasNext())
+		{
+			TextAreaExtension ext = ((Entry)iter.next()).ext;
+			try
+			{
+				ext.paintScreenLineRange(gfx,firstLine,lastLine,
+					physicalLines,start,end,y,lineHeight);
+			}
+			
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,t);
+
+				// remove it so editor can continue
+				// functioning
+				iter.remove();
+			}
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Entry class

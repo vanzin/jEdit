@@ -144,6 +144,18 @@ release.
   this to provide additional scripting commands, the Console plugin uses
   this for example.
 
+- Added a new method to TextAreaExtension class:
+
+  public void paintScreenLineRange(Graphics2D gfx, int firstLine,
+    int lastLine, int[] physicalLines, int[] start, int[] end,
+    int y, int lineHeight)
+
+  This method paints a whole bunch of lines at once, instead of one at a
+  time, so it should be more efficient for plugins like Background and
+  ErrorList.
+
+  See javadoc for parameter documentation.
+
 }}}
 
 }}}
