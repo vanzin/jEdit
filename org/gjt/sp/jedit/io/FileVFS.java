@@ -81,38 +81,13 @@ public class FileVFS extends VFS
 	//{{{ save() method
 	public boolean save(View view, Buffer buffer, String path)
 	{
-		// can't call buffer.getFile() here because this
-		// method is called *before* setPath()
-		File file = new File(path);
-
-		//{{{ Check if file is valid
-
-		// Apparently, certain broken OSes (like Micro$oft Windows)
-		// can mess up directories if they are write()'n to
-		if(file.isDirectory())
-		{
-			VFSManager.error(view,file.getPath(),
-				"ioerror.save-directory",null);
-			return false;
-		}
-
-		// Check that we can actually write to the file
-		if((file.exists() && !file.canWrite())
-			|| (!file.exists() && !new File(file.getParent()).canWrite()))
-		{
-			VFSManager.error(view,file.getPath(),
-				"ioerror.no-write",null);
-			return false;
-		} //}}}
-
-		//{{{ On Unix, preserve permissions
 		if(OperatingSystem.isUnix())
 		{
 			int permissions = getPermissions(buffer.getPath());
 			Log.log(Log.DEBUG,this,buffer.getPath() + " has permissions 0"
 				+ Integer.toString(permissions,8));
 			buffer.setIntegerProperty(PERMISSIONS_PROPERTY,permissions);
-		} //}}}
+		}
 
 		return super.save(view,buffer,path);
 	} //}}}

@@ -513,6 +513,12 @@ public class Buffer
 
 		VFS vfs = VFSManager.getVFSForPath(newPath);
 
+		if(!checkFileForSave(view,vfs,newPath))
+		{
+			setFlag(IO,false);
+			return false;
+		}
+
 		if(!vfs.save(view,this,newPath))
 		{
 			setFlag(IO,false);
@@ -3593,6 +3599,52 @@ loop:		for(int i = 0; i < seg.count; i++)
 					VFSManager.error(view,path,
 						"ioerror.open-directory",null);
 					setNewFile(false);
+					return false;
+				}
+			}
+			catch(IOException io)
+			{
+				VFSManager.error(view,path,"ioerror",
+					new String[] { io.toString() });
+				return false;
+			}
+			finally
+			{
+				try
+				{
+					vfs._endVFSSession(session,view);
+				}
+				catch(IOException io)
+				{
+					VFSManager.error(view,path,"ioerror",
+						new String[] { io.toString() });
+					return false;
+				}
+			}
+		}
+
+		return true;
+	} //}}}
+
+	//{{{ checkFileForSave() method
+	private boolean checkFileForSave(View view, VFS vfs, String path)
+	{
+		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+		{
+			Object session = vfs.createVFSSession(path,view);
+			if(session == null)
+				return false;
+
+			try
+			{
+				VFS.DirectoryEntry file = vfs._getDirectoryEntry(session,path,view);
+				if(file == null)
+					return true;
+
+				if(file.type != VFS.DirectoryEntry.FILE)
+				{
+					VFSManager.error(view,path,
+						"ioerror.save-directory",null);
 					return false;
 				}
 			}

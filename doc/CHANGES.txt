@@ -273,6 +273,8 @@ release.
   that the look and feel itself is quite buggy, at least with the 1.4.2
   beta.
 
+- The installer should now work on VMS.
+
 }}}
 {{{ Bug Fixes
 
