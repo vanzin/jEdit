@@ -164,6 +164,18 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			if(cache != null)
 			{
 				cache.cachedDockableNames = dh.getCachedDockableNames();
+				for(int i = 0;
+					i < cache.cachedDockableNames.length;
+					i++)
+				{
+					String name = cache.cachedDockableNames[i];
+					jEdit.putProperty(
+						cache.cachedProperties,
+						name + ".label");
+					jEdit.putProperty(
+						cache.cachedProperties,
+						name + ".title");
+				}
 				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
 			}
 		}
