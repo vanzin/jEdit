@@ -3258,7 +3258,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * This socket is closed when the buffer is closed.
 	 */
-	public void setWaitSocket(Socket socket)
+	public void setWaitSocket(Socket waitSocket)
 	{
 		this.waitSocket = waitSocket;
 	} //}}}
@@ -3448,7 +3448,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			try
 			{
-				waitSocket.getOutputStream().write('<');
+				waitSocket.getOutputStream().write('\0');
 				waitSocket.getOutputStream().flush();
 				waitSocket.getInputStream().close();
 				waitSocket.getOutputStream().close();
