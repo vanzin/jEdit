@@ -60,16 +60,20 @@ class ChunkCache
 	int getScreenLineOfOffset(int line, int offset)
 	{
 		int screenLine;
-		if(line == lastScreenLineP
-			&& offset >= lineInfo[lastScreenLine].offset
-			&& (lastScreenLine == lineInfo.length - 1
-			|| lineInfo[lastScreenLine + 1].subregion == 0
-			|| offset < lineInfo[lastScreenLine + 1].offset))
+
+		if(line == lastScreenLineP)
 		{
-			updateChunksUpTo(lastScreenLine);
-			screenLine = lastScreenLine;
+			LineInfo last = lineInfo[lastScreenLine];
+
+			if(offset >= last.offset
+				&& offset < last.offset + last.length)
+			{
+				updateChunksUpTo(lastScreenLine);
+				return lastScreenLine;
+			}
 		}
-		else if(line < textArea.getFirstPhysicalLine())
+
+		if(line < textArea.getFirstPhysicalLine())
 		{
 			return -1;
 		}
@@ -84,7 +88,7 @@ class ChunkCache
 			// Find the screen line containing this offset
 			for(int i = 0; i < lineInfo.length - 1; i++)
 			{
-				updateChunksUpTo(i + 1);
+				updateChunksUpTo(i);
 
 				LineInfo info = lineInfo[i];
 				if(info.physicalLine > line)
@@ -98,15 +102,11 @@ class ChunkCache
 				}
 				else if(info.physicalLine == line)
 				{
-					if(offset >= info.offset)
+					if(offset >= info.offset
+						&& offset < info.offset + info.length)
 					{
-						LineInfo next = lineInfo[i + 1];
-						if(next.subregion == 0
-							|| offset < next.offset)
-						{
-							screenLine = i;
-							break;
-						}
+						screenLine = i;
+						break;
 					}
 				}
 			}
@@ -226,6 +226,7 @@ class ChunkCache
 
 		int subregion = 0;
 		int offset = 0;
+		int length = 0;
 
 		for(int i = firstScreenLine; i <= lastScreenLine; i++)
 		{
@@ -264,12 +265,17 @@ class ChunkCache
 				{
 					chunks = null;
 					offset = 0;
+					length = 0;
 				}
 				else
 				{
 					chunks = (TextUtilities.Chunk)out.get(0);
 					out.remove(0);
 					offset = 0;
+					if(out.size() != 0)
+						length = ((TextUtilities.Chunk)out.get(0)).offset - offset;
+					else
+						length = buffer.getLineLength(physicalLine);
 				}
 			}
 			else
@@ -279,11 +285,16 @@ class ChunkCache
 				chunks = (TextUtilities.Chunk)out.get(0);
 				out.remove(0);
 				offset = chunks.offset;
+				if(out.size() != 0)
+					length = ((TextUtilities.Chunk)out.get(0)).offset - offset;
+				else
+					length = buffer.getLineLength(physicalLine);
 			}
 
 			info.physicalLine = physicalLine;
 			info.subregion = subregion;
 			info.offset = offset;
+			info.length = length;
 			info.chunks = chunks;
 			info.chunksValid = true;
 		}
@@ -338,6 +349,7 @@ class ChunkCache
 	{
 		int physicalLine;
 		int offset;
+		int length;
 		int subregion;
 		boolean chunksValid;
 		TextUtilities.Chunk chunks;

@@ -1,22 +1,27 @@
 TO DO
 
-- expand fold still broken
-- make jEdit.openTemporary() thread-safe
+- soft wrap to do:
+  - text area: invalidate line and friends
+  - text area: do not use deprecated offset conversion methods
+  - use new offset conversion API throughout
+  - document soft wrap
+  - add a tip of the day about soft wrap
+  - a word longer than maxLineLen
+- before pre4:
+  - expand fold still broken
+  - make jEdit.openTemporary() thread-safe
+  - fold vis manager: check for out of bounds line numbers
+  - plugin size reporting, new install plugins dialog UI layout, or wind
+    back old layout
+  - better formatting commands:
+    - format becomes 'wrap paragraph'
+    - 'wrap line'
+    - 'unwrap paragraph'
+- OK_CANCEL_OPTION in confirm() docs
 - rect select and soft wrap
 - chunk cache & scrolling optimization
-- text area: do not use deprecated offset conversion methods
-- fold vis manager: check for out of bounds line numbers
-- new highlighter API
-- use new offset conversion API throughout
-- soft wrap landing
-- gutter and text area mouse handlers
-- plugin size reporting, new install plugins dialog UI layout
 - nextLineRequested still fucked
 - print should not use so much memory
-- better formatting commands:
-  - format becomes 'wrap paragraph'
-  - 'wrap line'
-  - 'unwrap paragraph'
 - idea for fixing buffer property issues: BufferProp class
 - getCenterPoint()
 - support multi-screen systems properly
@@ -45,7 +50,6 @@ TO DO
   - about cmd
   - docs in user's guide
 - faster hypersearch
-- OK_CANCEL_OPTION in confirm() docs
 - C+d with selection: delete all selected lines
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
