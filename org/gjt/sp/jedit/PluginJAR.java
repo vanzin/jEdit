@@ -718,7 +718,8 @@ public class PluginJAR
 			Log.log(Log.ERROR,PluginJAR.class,io);
 			try
 			{
-				dout.close();
+				if(dout != null)
+					dout.close();
 			}
 			catch(IOException io2)
 			{

@@ -11,6 +11,18 @@ JEDIT 4.2 VERSION HISTORY
 - Fixed NullPointerException when unloading a plugin which has at least
   one floating window that is not docked.
 
+- Fixed problems immediately after changing the font size due to a
+  missing recalculateLastPhysicalLine() call.
+
+- Fixed NullPointerException in PluginJAR on startup if settings
+  directory can not be written to.
+
+- File->Save All would ask for confirmation even if "Confirm Save All
+  Buffers" was switched off.
+
+- Fixed off-by-one error in Edit->Word Count if the selection ended with
+  whitespace.
+
 }}}
 
 }}}

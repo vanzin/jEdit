@@ -64,7 +64,7 @@ public class HistoryTextField extends JTextField
 	/**
 	 * Creates a new history text field.
 	 * @param name The history model name
-	 * @param instantPopup If true, selecting a value from the history
+	 * @param instantPopups If true, selecting a value from the history
 	 * popup will immediately fire an ActionEvent. If false, the user
 	 * will have to press 'Enter' first
 	 *

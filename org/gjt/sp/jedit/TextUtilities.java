@@ -564,7 +564,8 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 * Formats the specified text by merging and breaking lines to the
 	 * specified width.
 	 * @param text The text
-	 * @param maxLineLen The maximum line length
+	 * @param maxLineLength The maximum line length
+	 * @param tabSize The tab size
 	 */
 	public static String format(String text, int maxLineLength, int tabSize)
 	{

@@ -58,8 +58,9 @@ public class DockableWindowUpdate extends EBMessage
 	//{{{ DockableWindowUpdate constructor
 	/**
 	 * Creates a new dockable window update message.
-	 * @param buffer The buffer
+	 * @param wm The dockable window manager
 	 * @param what What happened
+	 * @param dockable The dockable window in question
 	 */
 	public DockableWindowUpdate(DockableWindowManager wm, Object what,
 		String dockable)

@@ -904,7 +904,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Escapes the specified characters in the specified string.
 	 * @param str The string
-	 * @param extra Any characters that require escaping
+	 * @param toEscape Any characters that require escaping
 	 * @since jEdit 4.1pre3
 	 */
 	public static String charsToEscapes(String str, String toEscape)
@@ -1452,7 +1452,7 @@ loop:		for(;;)
 	//{{{ parsePermissions() method
 	/**
 	 * Parse a Unix-style permission string (rwxrwxrwx).
-	 * @param str The string (must be 9 characters long).
+	 * @param s The string (must be 9 characters long).
 	 * @since jEdit 4.1pre8
 	 */
 	public static int parsePermissions(String s)

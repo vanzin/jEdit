@@ -87,7 +87,8 @@ class InstallPanel extends JPanel
 		split.setTopComponent(scrollpane);
 
 		/* Create description */
-		JScrollPane infoPane = new JScrollPane(new PluginInfoBox());
+		JScrollPane infoPane = new JScrollPane(
+			infoBox = new PluginInfoBox());
 		infoPane.setPreferredSize(new Dimension(500,100));
 		split.setBottomComponent(infoPane);
 
@@ -110,12 +111,14 @@ class InstallPanel extends JPanel
 	//{{{ updateModel() method
 	public void updateModel()
 	{
-		pluginModel.showLoadingMessage();
+		pluginModel.clear();
+		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
 			{
+				infoBox.setText(null);
 				pluginModel.update();
 			}
 		});
@@ -127,6 +130,7 @@ class InstallPanel extends JPanel
 	private JTable table;
 	private PluginTableModel pluginModel;
 	private PluginManager window;
+	private PluginInfoBox infoBox;
 
 	private boolean updates;
 	//}}}
@@ -342,11 +346,10 @@ class InstallPanel extends JPanel
 			return (entries.size() == 1 && entries.get(0) instanceof String);
 		} //}}}
 
-		//{{{ showLoadingMessage() method
-		public void showLoadingMessage()
+		//{{{ clear() method
+		public void clear()
 		{
 			entries = new ArrayList();
-			entries.add(jEdit.getProperty("plugin-manager.list-download"));
 			fireTableChanged(new TableModelEvent(this));
 		} //}}}
 

@@ -175,7 +175,6 @@ public class ServiceManager
 	 *
 	 * @param clazz The service class
 	 * @param name The service name
-	 * @param code BeanShell code to create an instance of this
 	 *
 	 * @since jEdit 4.2pre1
 	 */

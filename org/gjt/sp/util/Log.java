@@ -95,7 +95,6 @@ public class Log
 	 * sent to the log
 	 * @param level Messages with this log level or higher will
 	 * be printed to the system console
-	 * @param stream The stream to save log data to
 	 * @since jEdit 3.2pre4
 	 */
 	public static void init(boolean stdio, int level)

@@ -882,7 +882,7 @@
 
 <ACTION NAME="save-all">
 	<CODE>
-		jEdit.saveAllBuffers(view,true);
+		jEdit.saveAllBuffers(view);
 	</CODE>
 </ACTION>
 

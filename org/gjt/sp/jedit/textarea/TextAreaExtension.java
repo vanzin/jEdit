@@ -43,7 +43,8 @@ public abstract class TextAreaExtension
 	//{{{ paintScreenLineRange() method
 	/**
 	 * Paints a range of screen lines. The default implementation calls
-	 * {@link #paintValidLine()} and {@link paintInvalidLine()}.
+	 * {@link #paintValidLine(Graphics2D,int,int,int,int,int)} and
+	 * {@link #paintInvalidLine(Graphics2D,int,int)}.
 	 * @param gfx A graphics context
 	 * @param firstLine The first screen line
 	 * @param lastLine The last screen line
