@@ -26,82 +26,44 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.*;
 
 /**
- * Sending this message will cause the specified dynamic menu to be
+ * Sending this message will cause the specified dynamic menu to be recreated.
+ *
  * @author Slava Pestov
  * @version $Id$
  *
- * @since jEdit 4.2pre1
+ * @since jEdit 4.2pre2
  */
-public class DockableWindowUpdate extends EBMessage
+public class DynamicMenuChanged extends EBMessage
 {
-	//{{{ Message types
+	//{{{ DynamicMenuChanged constructor
 	/**
-	 * Properties changed. Fired instead of global
-	 * <code>PropertiesChanged</code> for improved performance.
-	 * @since jEdit 4.2pre1
+	 * Creates a new dynamic menu changed message.
+	 * @param menu The menu name. All dynamic menus with this name will be
+	 * recreated next time they are displayed.
 	 */
-	public static final Object PROPERTIES_CHANGED = "PROPERTIES_CHANGED";
-
-	/**
-	 * Dockable activated. This is sent when the dockable is made visible.
-	 * @since jEdit 4.2pre1
-	 */
-	public static final Object ACTIVATED = "ACTIVATED";
-
-	/**
-	 * Dockable deactivated. This is sent when the dockable is hidden.
-	 * @since jEdit 4.2pre1
-	 */
-	public static final Object DEACTIVATED = "DEACTIVATED";
-	//}}}
-
-	//{{{ DockableWindowUpdate constructor
-	/**
-	 * Creates a new dockable window update message.
-	 * @param buffer The buffer
-	 * @param what What happened
-	 */
-	public DockableWindowUpdate(DockableWindowManager wm, Object what,
-		String dockable)
+	public DynamicMenuChanged(String name)
 	{
-		super(wm);
+		super(null);
 
-		if(what == null)
-			throw new NullPointerException("What must be non-null");
-
-		this.what = what;
-		this.dockable = dockable;
+		this.name = name;
 	} //}}}
 
-	//{{{ getWhat() method
+	//{{{ getMenuName() method
 	/**
-	 * Returns what caused this dockable update.
+	 * Returns the name of the menu in question.
 	 */
-	public Object getWhat()
+	public String getMenuName()
 	{
-		return what;
-	} //}}}
-
-	//{{{ getDockable() method
-	/**
-	 * Returns the dockable in question, or null if the message type is
-	 * <code>PROPERTIES_CHANGED</code>.
-	 */
-	public String getDockable()
-	{
-		return dockable;
+		return name;
 	} //}}}
 
 	//{{{ paramString() method
 	public String paramString()
 	{
-		return "what=" + what
-			+ ",dockable=" + dockable
-			+ "," + super.paramString();
+		return "menu=" + name + "," + super.paramString();
 	} //}}}
 
 	//{{{ Private members
-	private Object what;
-	private String dockable;
+	private String name;
 	//}}}
 }
