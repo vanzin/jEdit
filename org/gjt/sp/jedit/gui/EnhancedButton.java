@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.GUIUtilities;
 //}}}
 
-public class EnhancedButton extends JButton
+public class EnhancedButton extends RolloverButton
 {
 	//{{{ EnhancedButton constructor
 	public EnhancedButton(Icon icon, String toolTip, EditAction action)

@@ -110,16 +110,17 @@ public class DefaultTokenHandler implements TokenHandler
 		{
 			if(merge)
 			{
-				if((lastToken.id == context.rules.getDefault()
-					&& token.id == Token.WHITESPACE)
-					|| (lastToken.id == token.id
-					&& lastToken.rules == token.rules))
+				byte token1 = lastToken.id;
+				if(token1 == Token.WHITESPACE)
+					token1 = context.rules.getDefault();
+				byte token2 = token.id;
+				if(token2 == Token.WHITESPACE)
+					token2 = context.rules.getDefault();
+
+				if(token1 == token2 && token.id != Token.TAB)
 				{
-					if(token.id != Token.TAB)
-					{
-						lastToken.length += token.length;
-						return false;
-					}
+					lastToken.length += token.length;
+					return false;
 				}
 			}
 

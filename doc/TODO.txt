@@ -5,6 +5,7 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- soft wrap: create inaccessable chunk of proper width
 - fix tom's bugs
 - color printing doesn't work
 - soft wrap is still slow

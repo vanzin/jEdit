@@ -90,6 +90,10 @@ public class Chunk extends Token
 					xorGfx.dispose();
 				}
 
+				// Useful for debugging purposes
+				//gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
+				//	chunks.width,10));
+
 				if(chunks.str != null)
 				{
 					gfx.setFont(font);
@@ -99,10 +103,6 @@ public class Chunk extends Token
 						gfx.drawGlyphVector(chunks.gv,x + _x,y);
 					else
 						gfx.drawString(chunks.str,x + _x,y);
-
-					// Useful for debugging purposes
-					//gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
-					//	chunks.width,10));
 				}
 			}
 

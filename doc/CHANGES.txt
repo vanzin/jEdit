@@ -162,6 +162,16 @@ contributing to this release.
 
 - New splash screen, about box, and tool bar icons. (Kris Kopicki)
 
+- Added ColorWellButton control. Under Mac OS X, changing the background
+  color of a JButton doesn't work if the MacOS Adaptive look and feel is
+  in use... so I wrote a custom control. It looks better and eliminates
+  duplicated code anyway. Plugin developers, please use this instead of
+  the widely-copied and pasted JButton trick. (Kris Kopicki)
+
+- Added RolloverButton control. Use this instead of the JToolBar
+  "isRollover" client property (which only works in the Metal L&F unless
+  you're running Java 2 version 1.4). (Kris Kopicki)
+
 + OS-specific Changes:
 
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
@@ -172,12 +182,6 @@ contributing to this release.
 
 - On Unix, the installer now defaults to installing in the user's home
   directory when running as a non-root user.
-
-- Added ColorWellButton control. Under Mac OS X, changing the background
-  color of a JButton doesn't work if the MacOS Adaptive look and feel is
-  in use... so I wrote a custom control. It looks better and eliminates
-  duplicated code anyway. Plugin developers, please use this instead of
-  the widely-copied and pasted JButton trick.
 
 + Bug Fixes:
 

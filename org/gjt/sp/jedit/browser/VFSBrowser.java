@@ -963,7 +963,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
+		//toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		toolBar.add(new CommandsMenuButton());
 		toolBar.add(Box.createHorizontalStrut(3));
@@ -979,7 +979,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	{
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		toolBar.add(up = createToolButton("up"));
 		toolBar.add(reload = createToolButton("reload"));
@@ -998,7 +997,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ createToolButton() method
 	private JButton createToolButton(String name)
 	{
-		JButton button = new JButton();
+		JButton button = new RolloverButton();
 		String prefix = "vfs.browser.commands.";
 
 		String iconName = jEdit.getProperty(
@@ -1146,7 +1145,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
 
 			CommandsMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(0,0,0,0));
+			setMargin(new Insets(1,1,1,1));
 			CommandsMenuButton.this.addMouseListener(new MouseHandler());
 		} //}}}
 
@@ -1185,7 +1184,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			PluginsMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(0,0,0,0));
+			setMargin(new Insets(1,1,1,1));
 			PluginsMenuButton.this.addMouseListener(new MouseHandler());
 
 			popup = new JPopupMenu();
@@ -1285,7 +1284,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);
-			setMargin(new Insets(0,0,0,0));
+			setMargin(new Insets(1,1,1,1));
 			FavoritesMenuButton.this.addMouseListener(new MouseHandler());
 		} //}}}
 

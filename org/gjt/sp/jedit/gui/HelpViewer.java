@@ -98,7 +98,6 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
 
 		JLabel label = new JLabel(jEdit.getProperty("helpviewer.url"));
 		label.setBorder(new EmptyBorder(0,12,0,12));
@@ -119,14 +118,14 @@ public class HelpViewer extends JFrame implements EBComponent
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		buttons.setBorder(new EmptyBorder(0,12,0,0));
-		back = new JButton(GUIUtilities.loadIcon(
+		back = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("helpviewer.back.icon")));
 		back.setToolTipText(jEdit.getProperty("helpviewer.back.label"));
 		back.addActionListener(actionListener);
 		back.setRequestFocusEnabled(false);
 		back.setMargin(new Insets(0,0,0,0));
 		toolBar.add(back);
-		forward = new JButton(GUIUtilities.loadIcon(
+		forward = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("helpviewer.forward.icon")));
 		forward.addActionListener(actionListener);
 		forward.setToolTipText(jEdit.getProperty("helpviewer.forward.label"));
