@@ -472,7 +472,13 @@ public abstract class Selection implements Cloneable
 			{
 				int offset = buffer.getOffsetOfVirtualColumn(
 					lastLine + 1,startColumn,null);
-				return buffer.getLineStartOffset(lastLine + 1) + offset;
+				if(offset == -1)
+				{
+					buffer.insertAtColumn(lastLine + 1,startColumn,"");
+					return buffer.getLineEndOffset(lastLine + 1) - 1;
+				}
+				else
+					return buffer.getLineStartOffset(lastLine + 1) + offset;
 			}
 			else
 				return endOffset;

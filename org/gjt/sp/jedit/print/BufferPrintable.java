@@ -184,7 +184,6 @@ class BufferPrintable extends WorkRequest implements Printable
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex,
 		boolean actuallyPaint)
 	{
-		System.err.println("printing page " + pageIndex);
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 
