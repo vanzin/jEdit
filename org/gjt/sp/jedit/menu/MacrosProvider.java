@@ -1,6 +1,9 @@
 /*
- * MacrosMenu.java - Macros menu
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * MacrosProvider.java - Macros menu
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,67 +20,42 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
+//{{{ Imports
 import javax.swing.*;
 import java.util.Collections;
 import java.util.Vector;
-import org.gjt.sp.jedit.msg.MacrosChanged;
 import org.gjt.sp.jedit.*;
+//}}}
 
-public class MacrosMenu extends EnhancedMenu implements EBComponent
+public class MacrosProvider implements DynamicMenuProvider
 {
-	public MacrosMenu()
+	//{{{ updateEveryTime() method
+	public boolean updateEveryTime()
 	{
-		super("macros");
-	}
+		return false;
+	} //}}}
 
-	public void addNotify()
+	//{{{ update() method
+	public void update(JMenu menu)
 	{
-		super.addNotify();
-		EditBus.addToBus(this);
-	}
-
-	public void removeNotify()
-	{
-		super.removeNotify();
-		EditBus.removeFromBus(this);
-	}
-
-	public void handleMessage(EBMessage msg)
-	{
-		if(msg instanceof MacrosChanged)
-			initialized = false;
-	}
-
-	public void init()
-	{
-		super.init();
-		updateMacrosMenu();
-	}
-
-	private void updateMacrosMenu()
-	{
-		// Because the macros menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				remove(i);
-		}
-
-		int count = getMenuComponentCount();
-
 		Vector macroVector = Macros.getMacroHierarchy();
-		createMacrosMenu(this,macroVector,0);
 
-		if(count == getMenuComponentCount())
-			add(GUIUtilities.loadMenuItem("no-macros"));
-	}
+		int count = menu.getMenuComponentCount();
 
+		createMacrosMenu(menu,macroVector,0);
+
+		if(count == menu.getMenuComponentCount())
+		{
+			JMenuItem mi = new JMenuItem(jEdit.getProperty(
+				"no-macros.label"));
+			mi.setEnabled(false);
+			menu.add(mi);
+		}
+	} //}}}
+
+	//{{{ createMacrosMenu() method
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
 		Vector menuItems = new Vector();
@@ -107,5 +85,5 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 		{
 			menu.add((JMenuItem)menuItems.get(i));
 		}
-	}
+	} //}}}
 }

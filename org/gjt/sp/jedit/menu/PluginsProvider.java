@@ -1,5 +1,5 @@
 /*
- * PluginsMenu.java - Plugins menu
+ * PluginsProvider.java - Plugins menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -20,66 +20,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
 import javax.swing.*;
 import java.util.*;
-import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
-public class PluginsMenu extends EnhancedMenu implements EBComponent
+public class PluginsProvider implements DynamicMenuProvider
 {
-	//{{{ PluginsMenu constructor
-	public PluginsMenu()
+	//{{{ updateEveryTime() method
+	public boolean updateEveryTime()
 	{
-		super("plugins");
+		return false;
 	} //}}}
 
-	//{{{ addNotify() method
-	public void addNotify()
+	//{{{ update() method
+	public void update(JMenu menu)
 	{
-		super.addNotify();
-		EditBus.addToBus(this);
-	} //}}}
-
-	//{{{ removeNotify() method
-	public void removeNotify()
-	{
-		super.removeNotify();
-		EditBus.removeFromBus(this);
-	} //}}}
-
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
-	{
-		if(msg instanceof PluginUpdate)
-		{
-			Object what = ((PluginUpdate)msg).getWhat();
-			if(what == PluginUpdate.LOADED
-				|| what == PluginUpdate.UNLOADED)
-			{
-				initialized = false;
-			}
-		}
-	} //}}}
-
-	//{{{ init() method
-	public void init()
-	{
-		super.init();
-
-		// Because the plugins menu contains normal items as
-		// well as dynamically-generated stuff, we are careful
-		// to only remove the dynamic crap here...
-		for(int i = getMenuComponentCount() - 1; i >= 0; i--)
-		{
-			if(getMenuComponent(i) instanceof JSeparator)
-				break;
-			else
-				remove(i);
-		}
-
 		// We build a set of lists, each list contains plugin menu
 		// items that begin with a given letter.
 		int count = 0;
@@ -139,7 +97,7 @@ public class PluginsMenu extends EnhancedMenu implements EBComponent
 			JMenuItem menuItem = new JMenuItem(
 				jEdit.getProperty("no-plugins.label"));
 			menuItem.setEnabled(false);
-			add(menuItem);
+			menu.add(menuItem);
 			return;
 		}
 
@@ -161,7 +119,7 @@ public class PluginsMenu extends EnhancedMenu implements EBComponent
 				Iterator iter = letters[i].iterator();
 				while(iter.hasNext())
 				{
-					add((JMenuItem)iter.next());
+					menu.add((JMenuItem)iter.next());
 				}
 			}
 
@@ -172,7 +130,7 @@ public class PluginsMenu extends EnhancedMenu implements EBComponent
 		count = 0;
 		char first = 'A';
 		JMenu submenu = new JMenu();
-		add(submenu);
+		menu.add(submenu);
 
 		for(int i = 0; i < letters.length; i++)
 		{
@@ -196,7 +154,7 @@ public class PluginsMenu extends EnhancedMenu implements EBComponent
 				if(submenu == null)
 				{
 					submenu = new JMenu();
-					add(submenu);
+					menu.add(submenu);
 				}
 				submenu.add((JMenuItem)iter.next());
 			}

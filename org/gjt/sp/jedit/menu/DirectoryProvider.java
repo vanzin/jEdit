@@ -1,9 +1,9 @@
 /*
- * DirectoryMenu.java - File list menu
+ * DirectoryProvider.java - File list menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
 import javax.swing.event.*;
@@ -32,24 +32,24 @@ import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class DirectoryMenu extends EnhancedMenu
+public class DirectoryProvider implements DynamicMenuProvider
 {
-	//{{{ DirectoryMenu constructor
-	public DirectoryMenu(String name, String dir)
+	//{{{ DirectoryProvider constructor
+	public DirectoryProvider(String dir)
 	{
-		super(name);
 		this.dir = dir;
 	} //}}}
 
-	//{{{ menuSelected() method
-	public void menuSelected(MenuEvent evt)
+	//{{{ updateEveryTime() method
+	public boolean updateEveryTime()
 	{
-		super.menuSelected(evt);
+		return true;
+	} //}}}
 
-		final View view = GUIUtilities.getView(this);
-
-		if(getMenuComponentCount() != 0)
-			removeAll();
+	//{{{ update() method
+	public void update(JMenu menu)
+	{
+		final View view = GUIUtilities.getView(menu);
 
 		final String path;
 		if(dir == null)
@@ -83,21 +83,21 @@ public class DirectoryMenu extends EnhancedMenu
 
 		mi.addActionListener(dirListener);
 
-		add(mi);
-		addSeparator();
+		menu.add(mi);
+		menu.addSeparator();
 
 		if(dir == null && !(view.getBuffer().getVFS() instanceof FileVFS))
 		{
 			mi = new JMenuItem(jEdit.getProperty(
 				"directory.not-local"));
 			mi.setEnabled(false);
-			add(mi);
+			menu.add(mi);
 			return;
 		}
 
 		File directory = new File(path);
 
-		JMenu current = this;
+		JMenu current = menu;
 
 		// for filtering out backups
 		String backupPrefix = jEdit.getProperty("backup.prefix");
@@ -109,7 +109,7 @@ public class DirectoryMenu extends EnhancedMenu
 			mi = new JMenuItem(jEdit.getProperty(
 				"directory.no-files"));
 			mi.setEnabled(false);
-			add(mi);
+			menu.add(mi);
 		}
 		else
 		{
@@ -164,10 +164,6 @@ public class DirectoryMenu extends EnhancedMenu
 			}
 		}
 	} //}}}
-
-	public void menuDeselected(MenuEvent e) {}
-
-	public void menuCanceled(MenuEvent e) {}
 
 	//{{{ Private members
 	private String dir;

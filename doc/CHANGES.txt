@@ -253,7 +253,7 @@ release.
 - A funky little display optimization with monospaced fonts is now
   performed. In jEdit 4.1 this could be enabled with a hidden property,
   but now we detect if a monospaced font is actually in use. If this
-  causes display problems, please let me know about put this in a
+  causes display problems, please let me know about it and put this in a
   startup script:
 
   Debug.DISABLE_MONOSPACE_HACK = true;

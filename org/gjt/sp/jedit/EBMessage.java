@@ -44,8 +44,19 @@ public abstract class EBMessage
 	/**
 	 * Creates a new message.
 	 * @param source The message source
+	 * @since jEdit 4.2pre1
 	 */
 	public EBMessage(Object source)
+	{
+		this.source = source;
+	} //}}}
+
+	//{{{ EBMessage constructor
+	/**
+	 * Creates a new message.
+	 * @param source The message source
+	 */
+	public EBMessage(EBComponent source)
 	{
 		this.source = source;
 	} //}}}
