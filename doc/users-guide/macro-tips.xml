@@ -79,15 +79,16 @@ insertTag();
 
   <itemizedlist>
     <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><type>int</type>
-        <methodname>showConfirmDialog</methodname>
-        <methodparam><type>Component</type><parameter>parentComponent</parameter></methodparam>
-        <methodparam><type>Object</type><parameter>message</parameter></methodparam>
-        <methodparam><type>String</type><parameter>title</parameter></methodparam>
-        <methodparam><type>int</type><parameter>optionType</parameter></methodparam>
-        <methodparam><type>int</type><parameter>messageType</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static int <function>showConfirmDialog</function></funcdef>
+          <paramdef>Component <parameter>parentComponent</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+          <paramdef>String <parameter>title</parameter></paramdef>
+          <paramdef>int <parameter>optionType</parameter></paramdef>
+          <paramdef>int <parameter>messageType</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
     </listitem>
   </itemizedlist>
 
@@ -273,16 +274,18 @@ if( JOptionPane.OK_OPTION !=
 
   <itemizedlist>
     <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><type>Object</type>
-        <methodname>showInputDialog</methodname>
-        <methodparam><type>Component</type><parameter>parentComponent</parameter></methodparam>
-        <methodparam><type>Object</type><parameter>message</parameter></methodparam>
-        <methodparam><type>String</type><parameter>title</parameter></methodparam>
-        <methodparam><type>int</type><parameter>messageType</parameter></methodparam>
-        <methodparam><type>Icon</type><parameter>icon</parameter></methodparam>
-        <methodparam><type>Object</type><parameter>initialSelectionValue</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static Object <function>showInputDialog</function></funcdef>
+          <paramdef>Component <parameter>parentComponent</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+          <paramdef>String <parameter>title</parameter></paramdef>
+          <paramdef>int <parameter>messageType</parameter></paramdef>
+          <paramdef>Icon <parameter>icon</parameter></paramdef>
+          <paramdef>Object[] <parameter>selectionValues</parameter></paramdef>
+          <paramdef>Object <parameter>initialSelectionValue</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
     </listitem>
   </itemizedlist>
 
@@ -387,12 +390,13 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
 
   <itemizedlist>
     <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><void/>
-        <methodname>readNextChar</methodname>
-        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
-        <methodparam><type>String</type><parameter>code</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public void <function>readNextChar</function></funcdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+          <paramdef>String <parameter>code</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
     </listitem>
   </itemizedlist>
 
@@ -904,13 +908,14 @@ bottom</screen>
 
   <itemizedlist>
     <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><void/>
-        <methodname>log</methodname>
-        <methodparam><type>int</type><parameter>urgency</parameter></methodparam>
-        <methodparam><type>Object</type><parameter>source</parameter></methodparam>
-        <methodparam><type>Object</type><parameter>message</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static void <function>log</function></funcdef>
+          <paramdef>int <parameter>urgency</parameter></paramdef>
+          <paramdef>Object <parameter>source</parameter></paramdef>
+          <paramdef>Object <parameter>message</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
     </listitem>
   </itemizedlist>
 

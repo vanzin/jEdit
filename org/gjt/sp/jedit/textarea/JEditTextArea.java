@@ -602,7 +602,15 @@ public class JEditTextArea extends JComponent
 			// line in question is only partially visible
 			else if(line == physLastLine)
 			{
-				
+				System.err.println("fool!");
+				int count = chunkCache.getLineInfosForPhysicalLine(physLastLine).length;
+				while(count > 0)
+				{
+					count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+					physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+				}
+				firstLine = foldVisibilityManager.physicalToVirtual(physFirstLine);
+				System.err.println("pfl=" + physFirstLine + ":fl=" + firstLine);
 			}
 			else if(line == physLastLine + 1)
 			{

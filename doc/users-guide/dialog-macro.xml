@@ -391,11 +391,12 @@ suffixField.addActionListener(this);</programlisting></informalexample>
     be implemented:
   </para>
 
-<methodsynopsis>
- <modifier>public</modifier><void/>
- <methodname>actionPerformed</methodname>
- <methodparam><type>ActionEvent</type><parameter>e</parameter></methodparam>
-</methodsynopsis>
+<funcsynopsis>
+ <funcprototype>
+  <funcdef>public void <function>actionPerformed</function></funcdef>
+  <paramdef>ActionEvent <parameter>e</parameter></paramdef>
+ </funcprototype>
+</funcsynopsis>
 
   <para>
     BeanShell does not permit a script to create derived classes.

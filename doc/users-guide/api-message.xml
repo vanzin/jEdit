@@ -25,40 +25,44 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><modifier>static</modifier><void/>
-      <methodname>addToBus</methodname>
-      <methodparam><type>EBComponent</type><parameter>component</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>addToBus</function></funcdef>
+        <paramdef>EBComponent <parameter>component</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><modifier>static</modifier><void/>
-      <methodname>removeFromBus</methodname>
-      <methodparam><type>EBComponent</type><parameter>component</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>removeFromBus</function></funcdef>
+        <paramdef>EBComponent <parameter>component</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
 	<para>
 		Adds or removes a subscribing component.
 	</para>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><modifier>static</modifier><void/>
-      <methodname>addToNamedList</methodname>
-      <methodparam><type>Object</type><parameter>tag</parameter></methodparam>
-      <methodparam><type>Object</type><parameter>entry</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>addToNamedList</function></funcdef>
+        <paramdef>Object <parameter>tag</parameter></paramdef>
+        <paramdef>Object <parameter>entry</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><modifier>static</modifier><void/>
-      <methodname>removeFromNamedList</methodname>
-      <methodparam><type>Object</type><parameter>tag</parameter></methodparam>
-      <methodparam><type>Object</type><parameter>entry</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public static void <function>removeFromNamedList</function></funcdef>
+        <paramdef>Object <parameter>tag</parameter></paramdef>
+        <paramdef>Object <parameter>entry</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
 	<para>
 		Manages arbitriary lists of objects. Used by jEdit to manage
     dockable windows. The
@@ -68,22 +72,24 @@
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>EBComponent[]</type>
-      <methodname>getComponents</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EBComponent[] <function>getComponents</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
 	<para>
 		Returns an array of all components connected to the EditBus.
 	</para>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><void/>
-      <methodname>send</methodname>
-      <methodparam><type>EBMessage</type><parameter>message</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>send</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
     <para>
         Send the specified message to all subscribers on the EditBus.
     </para>
@@ -101,11 +107,12 @@
 
 <itemizedlist>
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><void/>
-      <methodname>handleMessage</methodname>
-      <methodparam><type>EBMessage</type><parameter>message</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 </itemizedlist>
 
@@ -120,27 +127,30 @@
 
 <itemizedlist>
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>Component</type>
-      <methodname>getSource</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Component <function>getSource</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>boolean</type>
-      <methodname>isVetoed</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public boolean <function>isVetoed</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><void/>
-      <methodname>veto</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>veto</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
         This sets the <parameter>vetoed</parameter> state to
         <constant>true</constant>, which terminates circulation of the
@@ -172,30 +182,33 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>Buffer</type>
-      <methodname>getBuffer</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Buffer <function>getBuffer</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>View</type>
-      <methodname>getView</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       This may be <literal>null</literal> with some message types.
     </para>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>Object</type>
-      <methodname>getWhat</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Returns one of the following constants defined in the
       <classname>BufferUpdate</classname> class:
@@ -228,19 +241,21 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>View</type>
-      <methodname>getView</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>String</type>
-      <methodname>getDockableWindowName</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getDockableWindowName</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Returns the internal name of the requested dockable window. Your plugin
       should check if this is the name of one of the dockables it provides,
@@ -250,11 +265,12 @@
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>String</type>
-      <methodname>getPosition</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getPosition</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Returns one of the following constants defined in the
       <classname>DockableWindowManager</classname> class:
@@ -269,11 +285,12 @@
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><void/>
-      <methodname>setDockableWindow</methodname>
-      <methodparam><type>DockableWindow</type><parameter>window</parameter></methodparam>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>setDockableWindow</function></funcdef>
+        <paramdef>DockableWindow <parameter>window</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Attaches a dockable window to the message. This prevents the
       message from being passed on to further subscribers.
@@ -304,11 +321,12 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>View</type>
-      <methodname>getView</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
 </itemizedlist>
@@ -334,19 +352,21 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>EditPane</type>
-      <methodname>getEditPane</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPane <function>getEditPane</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>Object</type>
-      <methodname>getWhat</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Returns one of the following constants defined in the
       <classname>EditPaneUpdate</classname> class:
@@ -404,11 +424,12 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>String</type>
-      <methodname>getPath</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getPath</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
 </itemizedlist>
@@ -425,19 +446,21 @@
 <itemizedlist>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>View</type>
-      <methodname>getView</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public View <function>getView</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
   </listitem>
 
   <listitem>
-    <methodsynopsis>
-      <modifier>public</modifier><type>Object</type>
-      <methodname>getWhat</methodname>
-      <void/>
-    </methodsynopsis>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public Object <function>getWhat</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
     <para>
       Returns one of the following constants defined in the
       <classname>ViewUpdate</classname> class:

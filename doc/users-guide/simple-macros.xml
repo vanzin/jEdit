@@ -223,50 +223,55 @@ org.gjt.sp.util</programlisting>
   <itemizedlist>
 
     <listitem>
-      <methodsynopsis>
-         <modifier>public</modifier><modifier>static</modifier><void/>
-         <methodname>message</methodname>
-         <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
-         <methodparam><type>String</type><parameter>message</parameter></methodparam>
-       </methodsynopsis>
+      <funcsynopsis>
+         <funcprototype>
+           <funcdef>public static void <function>message</function></funcdef>
+           <paramdef>Component <parameter>comp</parameter></paramdef>
+           <paramdef>String <parameter>message</parameter></paramdef>
+         </funcprototype>
+       </funcsynopsis>
      </listitem>
 
      <listitem>
-       <methodsynopsis>
-         <modifier>public</modifier><modifier>static</modifier><void/>
-         <methodname>error</methodname>
-         <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
-         <methodparam><type>String</type><parameter>message</parameter></methodparam>
-       </methodsynopsis>
+       <funcsynopsis>
+         <funcprototype>
+          <funcdef>public static void <function>error</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+          <paramdef>String <parameter>message</parameter></paramdef>
+         </funcprototype>
+       </funcsynopsis>
      </listitem>
 
      <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><type>String</type>
-        <methodname>input</methodname>
-        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
-        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static String <function>input</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
      </listitem>
 
      <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><type>String</type>
-        <methodname>input</methodname>
-        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
-        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
-        <methodparam><type>String</type><parameter>defaultValue</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static String <function>input</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+          <paramdef>String <parameter>defaultValue</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
      </listitem>
 
      <listitem>
-      <methodsynopsis>
-        <modifier>public</modifier><modifier>static</modifier><type>int</type>
-        <methodname>confirm</methodname>
-        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
-        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
-        <methodparam><type>int</type><parameter>buttons</parameter></methodparam>
-      </methodsynopsis>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>public static int <function>confirm</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+          <paramdef>String <parameter>prompt</parameter></paramdef>
+          <paramdef>int <parameter>buttons</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
      </listitem>
 
   </itemizedlist>
