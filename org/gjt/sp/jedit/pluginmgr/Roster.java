@@ -112,7 +112,7 @@ class Roster
 				}
 			});
 		}
-		catch(InterruptedException e)
+		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
 		}
