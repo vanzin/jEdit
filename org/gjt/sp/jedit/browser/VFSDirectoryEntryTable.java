@@ -145,7 +145,7 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ toggleExpanded() method
-	public void toggleExpanded(int row)
+	public void toggleExpanded(final int row)
 	{
 		VFSDirectoryEntryTableModel model
 		= (VFSDirectoryEntryTableModel)getModel();
@@ -165,6 +165,14 @@ public class VFSDirectoryEntryTable extends JTable
 			browserView.clearExpansionState();
 			browserView.loadDirectory(entry,entry.dirEntry.path);
 		}
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				setSelectedRow(row);
+			}
+		});
 	} //}}}
 
 	//{{{ setDirectory() method
