@@ -45,6 +45,11 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   background but MARKUP does not, HTML markup in Javadocs now has the
   same background as the rest of the comment.
 
+- Any groups matched by a SPAN_REGEXP's BEGIN sequence are substituted
+  into any positional parameters in the END sequence. This allows
+  read-ins to be properly handled in languages like Shell Script, PHP,
+  and Perl.
+
 }}}
 {{{ User Interface
 

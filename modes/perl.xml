@@ -95,10 +95,10 @@
 		</SPAN>
 
 		<!-- Readins -->
-		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
-			<BEGIN>&lt;&lt;EOF</BEGIN>
-			<END>EOF</END>
-		</SPAN>
+		<SPAN_REGEXP HASH_CHAR="<" TYPE="LITERAL1" DELEGATE="LITERAL">
+			<BEGIN><![CDATA[<<[[:space:]'"]*([[:alnum:]_]+)[[:space:]'"]*]]></BEGIN>
+			<END>$1</END>
+		</SPAN_REGEXP>
 
 		<!-- jEdit 4.1 adds regular expression syntax rules so we can
 		     highlight this sort of crap. -->

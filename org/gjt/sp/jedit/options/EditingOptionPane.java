@@ -352,9 +352,9 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "indentSize");
 					jEdit.resetProperty(prefix + "noTabs");
 	
-					if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
+					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
 						(String)mode.getProperty("filenameGlob"))
-						&& MiscUtilities.stringsEqual(oldFirstlineGlob,
+						&& MiscUtilities.objectsEqual(oldFirstlineGlob,
 						(String)mode.getProperty("firstlineGlob"))))
 					{
 						mode.init();
@@ -367,9 +367,9 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.setProperty(prefix + "filenameGlob",filenameGlob);
 					jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
 
-					if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
+					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
 						filenameGlob)
-						&& MiscUtilities.stringsEqual(oldFirstlineGlob,
+						&& MiscUtilities.objectsEqual(oldFirstlineGlob,
 						firstlineGlob)))
 					{
 						mode.init();

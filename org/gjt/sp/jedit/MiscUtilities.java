@@ -867,23 +867,32 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ stringsEqual() method
 	/**
-	 * Returns if two strings are equal. This correctly handles null pointers,
-	 * as opposed to calling <code>s1.equals(s2)</code>.
-	 * @since jEdit 4.1pre5
+	 * @deprecated Call <code>objectsEqual()</code> instead.
 	 */
 	public static boolean stringsEqual(String s1, String s2)
 	{
-		if(s1 == null)
+		return objectsEqual(s1,s2);
+	} //}}}
+
+	//{{{ objectsEqual() method
+	/**
+	 * Returns if two strings are equal. This correctly handles null pointers,
+	 * as opposed to calling <code>o1.equals(o2)</code>.
+	 * @since jEdit 4.2pre1
+	 */
+	public static boolean objectsEqual(Object o1, Object o2)
+	{
+		if(o1 == null)
 		{
-			if(s2 == null)
+			if(o2 == null)
 				return true;
 			else
 				return false;
 		}
-		else if(s2 == null)
+		else if(o2 == null)
 			return false;
 		else
-			return s1.equals(s2);
+			return o1.equals(o2);
 	} //}}}
 
 	//}}}

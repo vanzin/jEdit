@@ -2090,16 +2090,21 @@ public class Buffer implements EBComponent
 				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
 				ParserRule oldRule;
 				ParserRuleSet oldRules;
+				String oldSpanEndSubst;
 				if(context == null)
 				{
 					//System.err.println(i + ": null context");
 					oldRule = null;
 					oldRules = null;
+					oldSpanEndSubst = null;
 				}
 				else
 				{
 					oldRule = context.inRule;
 					oldRules = context.rules;
+					oldSpanEndSubst = (context.parent != null
+						? context.parent.spanEndSubst
+						: null);
 				}
 
 				// this should be null if the line in question does
@@ -2122,16 +2127,17 @@ public class Buffer implements EBComponent
 				// have changed but not the rule set in question (?)
 				if(oldRule != context.inRule)
 				{
-					//System.err.println(i + ": rules don't match" + oldRule + "," + context.inRule);
 					nextLineRequested = true;
 				}
 				else if(oldRules != context.rules)
 				{
-					//System.err.println(i + ": rule sets don't match: " + oldRules + "," + context.rules);
 					nextLineRequested = true;
 				}
-				//else if(i != lastTokenizedLine)
-				//	nextLineRequested = false;
+				else if(!MiscUtilities.objectsEqual(oldSpanEndSubst,
+					context.spanEndSubst))
+				{
+					nextLineRequested = true;
+				}
 			}
 
 			int lineCount = offsetMgr.getLineCount();

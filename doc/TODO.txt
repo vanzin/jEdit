@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- buffer.mode=foo in action bar does not work
 - fold handlers should not have to multiply levels by the tab size
 - different colors for collapsed fold lines of different levels
 - action bar: only move focus to text area if it is still in the text
@@ -192,6 +193,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   seem to affect performance that much.
 - could make non-soft wrap chunk merge even faster!
 - could make long lines even faster
+- syntax SPAN::END substitution: String --> char[] --> String
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

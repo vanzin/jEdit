@@ -299,7 +299,7 @@ public class XModeHandler extends HandlerBase
 
 		String tag = popElement();
 
-		if (name.equalsIgnoreCase(tag))
+		if (name.equals(tag))
 		{
 			//{{{ MODE
 			if (tag == "MODE")
@@ -386,7 +386,7 @@ public class XModeHandler extends HandlerBase
 			{
 				if(lastStart == null)
 				{
-					error("empty-tag","START");
+					error("empty-tag","BEGIN");
 					return;
 				}
 
@@ -412,7 +412,7 @@ public class XModeHandler extends HandlerBase
 			{
 				if(lastStart == null)
 				{
-					error("empty-tag","START");
+					error("empty-tag","BEGIN");
 					return;
 				}
 
@@ -587,6 +587,8 @@ public class XModeHandler extends HandlerBase
 		lastDelegateSet = null;
 		lastTokenID = Token.NULL;
 		lastExcludeMatch = false;
+		lastNoLineBreak = false;
+		lastNoWordBreak = false;
 	} //}}}
 
 	//{{{ addKeyword() method
