@@ -93,7 +93,7 @@ public class CompleteWord extends JWindow
 	{
 		super(view);
 
-		setContentPane(new JPanel(BorderLayout())
+		setContentPane(new JPanel(new BorderLayout())
 		{
 			/**
 			 * Returns if this component can be traversed by pressing the
