@@ -55,10 +55,15 @@ class FastRepaintManager
 		if(gfx != null)
 			gfx.dispose();
 
+		int width = painter.getWidth();
+		int height = painter.getHeight();
+		/* A little hack */
+		if(width == 0)
+			width = 1;
+		if(height == 0)
+			height = 1;
 		img = painter.getGraphicsConfiguration()
-			.createCompatibleImage(
-			painter.getWidth(),
-			painter.getHeight(),
+			.createCompatibleImage(width,height,
 			Transparency.OPAQUE);
 		gfx = (Graphics2D)img.getGraphics();
 		gfx.clipRect(0,0,painter.getWidth(),painter.getHeight());

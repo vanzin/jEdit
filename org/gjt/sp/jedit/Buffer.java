@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2004 Slava Pestov
+ * Copyright (C) 1998, 2005 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -30,10 +30,12 @@ import javax.swing.text.*;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.*;
 import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
+import org.gjt.sp.jedit.indent.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
@@ -1521,6 +1523,32 @@ public class Buffer
 			setFoldHandler(new DummyFoldHandler());
 		}
 
+		indentRules.clear();
+
+		String[] regexpProps = {
+			"indentNextLine",
+			"indentNextLines",
+			"unindentThisLine",
+			"unindentNextLines"
+		};
+
+		for(int i = 0; i < regexpProps.length; i++)
+		{
+			IndentRule rule = createRegexpIndentRule(regexpProps[i]);
+			if(rule != null)
+				indentRules.add(rule);
+		}
+
+		String[] bracketProps = {
+			"indentOpenBrackets",
+			"indentCloseBrackets",
+		};
+
+		for(int i = 0; i < bracketProps.length; i++)
+		{
+			indentRules.addAll(createBracketIndentRules(bracketProps[i]));
+		}
+
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
@@ -2394,345 +2422,38 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getIdealIndentForLine(int lineIndex)
 	{
-		final String EXPLICIT_START = "{{{";
-		final String EXPLICIT_END = "}}}";
-
-		if(lineIndex == 0)
-			return -1;
-
-		//{{{ Get properties
-		String openBrackets = getStringProperty("indentOpenBrackets");
-		if(openBrackets == null)
-			openBrackets = "";
-
-		String closeBrackets = getStringProperty("indentCloseBrackets");
-		if(closeBrackets == null)
-			closeBrackets = "";
-
-		RE indentNextLineRE;
-		try
-		{
-			indentNextLineRE = getRegexpProperty("indentNextLine",
-				RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
-		}
-		catch(REException re)
-		{
-			indentNextLineRE = null;
-			Log.log(Log.ERROR,this,"Invalid indentNextLine regexp");
-			Log.log(Log.ERROR,this,re);
-		}
-
-		RE indentNextLinesRE;
-		try
-		{
-			indentNextLinesRE = getRegexpProperty("indentNextLines",
-				RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
-		}
-		catch(REException re)
-		{
-			indentNextLinesRE = null;
-			Log.log(Log.ERROR,this,"Invalid indentNextLines regexp");
-			Log.log(Log.ERROR,this,re);
-		}
-
-		boolean doubleBracketIndent = getBooleanProperty("doubleBracketIndent");
-		boolean lineUpClosingBracket = getBooleanProperty("lineUpClosingBracket");
-
-		int tabSize = getTabSize();
-		int indentSize = getIndentSize();
-		//}}}
-
-		//{{{ Get indent attributes of previous line
-		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
-		if(prevLineIndex == -1)
-			return -1;
-
-		String prevLine = getLineText(prevLineIndex);
-
-		/*
-		 * On the previous line,
-		 * if(bob) { --> +1
-		 * if(bob) { } --> 0
-		 * } else if(bob) { --> +1
-		 */
-		boolean prevLineStart = true; // False after initial indent
-		int indent = 0; // Indent width (tab expanded)
-		int prevLineBrackets = 0; // Additional bracket indent
-		int prevLineCloseBracketIndex = -1; // For finding whether we're in
-						    // this kind of construct:
-						    // if (cond1)
-						    //   while (cond2)
-						    //     if (cond3){
-						    //
-						    //     }
-						    // So we know to indent the next line under the 1st if.
-		int prevLineUnclosedParenIndex = -1; // Index of the last unclosed parenthesis
-		int prevLineParenWeight = 0; // (openParens - closeParens)
-		Stack openParens = new Stack();
-
-		for(int i = 0; i < prevLine.length(); i++)
-		{
-			char c = prevLine.charAt(i);
-			switch(c)
-			{
-			case ' ':
-				if(prevLineStart)
-					indent++;
-				break;
-			case '\t':
-				if(prevLineStart)
-				{
-					indent += (tabSize
-						- (indent
-						% tabSize));
-				}
-				break;
-			default:
-				prevLineStart = false;
-
-				if(closeBrackets.indexOf(c) != -1)
-				{
-					if(prevLine.regionMatches(false,
-						i,EXPLICIT_END,0,3))
-						i += 2;
-					else
-					{
-						prevLineBrackets--;
-						if(prevLineBrackets < 0)
-						{
-							if(lineUpClosingBracket)
-								prevLineBrackets = 0;
-							prevLineCloseBracketIndex = i;
-						}
-					}
-				}
-				else if(openBrackets.indexOf(c) != -1)
-				{
-					if(prevLine.regionMatches(false,
-						i,EXPLICIT_START,0,3))
-						i += 2;
-					else
-						prevLineBrackets++;
-				} 
-				else if (c == '(')
-				{
-					openParens.push(new Integer(i));
-					prevLineParenWeight++;
-				}
-				else if (c == ')')
-				{
-					if(openParens.size() > 0)
-						openParens.pop();
-					prevLineParenWeight--;
-				}
-						 
-				break;
-			}
-		}
-
-		if(openParens.size() > 0)
-		{
-			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
-		} //}}}
-
-		if(Debug.INDENT_DEBUG)
-		{
-			Log.log(Log.DEBUG,this,"Determined previous line");
-			Log.log(Log.DEBUG,this,"indent=" + indent
-				+ ",prevLineBrackets=" + prevLineBrackets
-				+ ",prevLineCloseBracketIndex="
-				+ prevLineCloseBracketIndex);
-		}
-
-		//{{{ Get indent attributes for current line
 		String line = getLineText(lineIndex);
 
-		/*
-		 * On the current line,
-		 * } --> -1
-		 * } else if(bob) { --> -1
-		 * if(bob) { } --> 0
-		 */
-		int lineBrackets = 0; // Additional bracket indent
-		int closeBracketIndex = -1; // For lining up closing
-			// and opening brackets
-		for(int i = 0; i < line.length(); i++)
-		{
-			char c = line.charAt(i);
-			if(closeBrackets.indexOf(c) != -1)
-			{
-				if(line.regionMatches(false,
-					i,EXPLICIT_END,0,3))
-					i += 2;
-				else
-				{
-					closeBracketIndex = i;
-					lineBrackets--;
-				}
-			}
-			else if(openBrackets.indexOf(c) != -1)
-			{
-				if(line.regionMatches(false,
-					i,EXPLICIT_START,0,3))
-					i += 2;
-				else if(lineBrackets >= 0)
-					lineBrackets++;
-			}
-		} //}}}
+		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
+		String prevLine = (prevLineIndex < 0 ? null
+			: getLineText(prevLineIndex));
 
-		if(Debug.INDENT_DEBUG)
+		int prevPrevLineIndex = prevLineIndex < 0 ? -1
+			: getPriorNonEmptyLine(prevLineIndex);
+		String prevPrevLine = (prevPrevLineIndex < 0 ? null
+			: getLineText(prevPrevLineIndex));
+
+		int oldIndent = (prevLine == null ? 0 :
+			MiscUtilities.getLeadingWhiteSpaceWidth(prevLine,
+			getTabSize()));
+		int newIndent = oldIndent;
+
+		Iterator rules = indentRules.iterator();
+		while(rules.hasNext())
 		{
-			Log.log(Log.DEBUG,this,"Determined current line");
-			Log.log(Log.DEBUG,this,"lineBrackets=" + lineBrackets
-				+ ",closeBracketIndex=" + closeBracketIndex);
+			IndentRule rule = (IndentRule)rules.next();
+			IndentAction action = rule.apply(this,line,
+				prevLine,prevPrevLine,lineIndex);
+			if(action != null)
+			{
+				newIndent = action.calculateIndent(this,lineIndex,
+					oldIndent,newIndent);
+				if(newIndent < 0)
+					newIndent = 0;
+			}
 		}
 
-		//{{{ Deep indenting
-		if(getBooleanProperty("deepIndent"))
-		{
-			if(prevLineParenWeight > 0)
-			{
-				indent = prevLineUnclosedParenIndex+1;
-				for (int i = 0; i < prevLine.length(); i++) {
-					if (prevLine.charAt(i) == '\t')
-						indent += tabSize-1;
-				}
-				return indent;
-			}
-			else if(prevLineParenWeight < 0)
-			{
-				int openParenOffset = TextUtilities.findMatchingBracket(this,prevLineIndex,prevLine.lastIndexOf(")"));
-				if(openParenOffset >= 0)
-				{
-					int startLine = getLineOfOffset(openParenOffset);
-					int startLineParenWeight = getLineParenWeight(startLine);
-					
-					if(startLineParenWeight == 1)
-						indent = getCurrentIndentForLine(startLine,null);
-					else
-						indent = getOpenParenIndent(startLine,lineIndex);
-				}
-			}
-			// no parenthesis on previous line (prevLineParenWeight == 0) so the normal indenting rules are used
-		}
-		//}}}
-		
-		//{{{ Handle brackets
-		if(prevLineBrackets > 0)
-			indent += (indentSize * prevLineBrackets);
-
-		if(lineUpClosingBracket)
-		{
-			if(lineBrackets < 0)
-			{
-				int openBracketIndex = TextUtilities.findMatchingBracket(
-					this,lineIndex,closeBracketIndex);
-				if(openBracketIndex != -1)
-				{
-					int openLineIndex = getLineOfOffset(openBracketIndex);
-					String openLine = getLineText(openLineIndex);
-					Log.log(Log.DEBUG,this,"parenWeight of "+openLine+" is "+getLineParenWeight(openLineIndex));
-					if (getLineParenWeight(openLineIndex) < 0)
-					{
-						openBracketIndex = TextUtilities.findMatchingBracket(this,openLineIndex,openLine.indexOf(")"));
-						Log.log(Log.DEBUG,this,"openBracketIndex: "+openBracketIndex);
-						if(openBracketIndex == -1)
-							return -1;
-					}
-					openLine = getLineText(getLineOfOffset(openBracketIndex));
-					Log.log(Log.DEBUG,this,"openLine: "+openLine);
-					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
-						openLine,tabSize);
-					Log.log(Log.DEBUG,this,"indent: "+indent);
-				}
-				else
-					return -1;
-			}
-		}
-		else
-		{
-			if(prevLineBrackets < 0)
-			{
-				int offset = TextUtilities.findMatchingBracket(
-					this,prevLineIndex,prevLineCloseBracketIndex);
-				if(offset != -1)
-				{
-					String closeLine = getLineText(getLineOfOffset(offset));
-					indent = MiscUtilities.getLeadingWhiteSpaceWidth(
-						closeLine,tabSize);
-				}
-				else
-					return -1;
-			}
-		}//}}}
-
-		//{{{ Handle regexps
-		if(lineBrackets >= 0)
-		{
-			// If the previous line matches indentNextLine or indentNextLines,
-			// add a level of indent
-			if((lineBrackets == 0 || doubleBracketIndent)
-				&& indentNextLinesRE != null
-				&& indentNextLinesRE.isMatch(prevLine))
-			{
-				if(Debug.INDENT_DEBUG)
-				{
-					Log.log(Log.DEBUG,this,"Matches indentNextLines");
-				}
-				indent += indentSize;
-			}
-			else if(indentNextLineRE != null)
-			{
-				if((lineBrackets == 0 || doubleBracketIndent)
-					&& indentNextLineRE.isMatch(prevLine))
-					indent += indentSize;
-
-				// we don't want
-				// if(foo)
-				// {
-				// <--- decreased indent
-				else if(prevLineBrackets == 0)
-				{
-					// While prior lines match indentNextLine, remove a level of indent
-					// this correctly handles constructs like:
-					// if(foo)
-					//     if(bar)
-					//         if(baz)
-					// <--- put indent here
-					int prevPrevLineIndex;
-					/* if(prevLineCloseBracketIndex != -1)
-					{
-						int offset = TextUtilities.findMatchingBracket(
-							this,prevLineIndex,prevLineCloseBracketIndex);
-						if(offset == -1)
-							return -1;
-						prevPrevLineIndex = getLineOfOffset(offset);
-					}
-					else */
-						prevPrevLineIndex = getPriorNonEmptyLine(prevLineIndex);
-
-					while(prevPrevLineIndex != -1)
-					{
-						if(indentNextLineRE.isMatch(getLineText(prevPrevLineIndex)))
-							indent = getCurrentIndentForLine(prevPrevLineIndex,null);
-						else
-							break;
-
-						if(Debug.INDENT_DEBUG)
-						{
-							Log.log(Log.DEBUG,this,
-								prevPrevLineIndex
-								+ " matches " +
-								"indentNextLine");
-						}
-
-						prevPrevLineIndex = getPriorNonEmptyLine(prevPrevLineIndex);
-					}
-				}
-			}
-		} //}}}
-
-		return indent;
+		return newIndent;
 	} //}}}
 
 	//{{{ getLineParenWeight() method
@@ -3524,6 +3245,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		seg = new Segment();
 		markers = new Vector();
 		properties = new HashMap();
+		indentRules = new ArrayList();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Enumeration e = props.keys();
@@ -3682,6 +3404,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private TokenMarker tokenMarker;
 	private Segment seg;
 	private FoldHandler foldHandler;
+
+	// Auto indent
+	private List indentRules;
 
 	private Socket waitSocket;
 	//}}}
@@ -4291,6 +4016,63 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
+
+	//{{{ createRegexpIndentRule() method
+	private IndentRule createRegexpIndentRule(String prop)
+	{
+		String value = getStringProperty(prop);
+
+		try
+		{
+			if(value != null)
+			{
+				Method m = IndentRuleFactory.class.getMethod(
+					prop,new Class[] { String.class });
+				return (IndentRule)m.invoke(null,
+					new String[] { value });
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,"Bad indent rule " + prop
+				+ "=" + value + ":");
+			Log.log(Log.ERROR,this,e);
+		}
+
+		return null;
+	} //}}}
+
+	//{{{ createBracketIndentRules() method
+	private List createBracketIndentRules(String prop)
+	{
+		List returnValue = new ArrayList();
+		String value = getStringProperty(prop + "s");
+
+		try
+		{
+			if(value != null)
+			{
+				for(int i = 0; i < value.length(); i++)
+				{
+					char ch = value.charAt(i);
+
+					Method m = IndentRuleFactory.class.getMethod(
+						prop,new Class[] { char.class });
+					returnValue.add(
+						m.invoke(null,new Character[]
+						{ new Character(ch) }));
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,"Bad indent rule " + prop
+				+ "=" + value + ":");
+			Log.log(Log.ERROR,this,e);
+		}
+
+		return returnValue;
+	} //}}}
 
 	//}}}
 }

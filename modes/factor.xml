@@ -7,6 +7,7 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="]}"/>
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
 		<PROPERTY NAME="indentNextLines" VALUE="^(:|M:|C:|PREDICATE:)[^;]*"/>
+		<PROPERTY NAME="unindentNextLines" VALUE="^.*;$"/>
 		<PROPERTY NAME="doubleBracketIndent" VALUE="true"/>
 		<PROPERTY NAME="commentStart" VALUE="("/>
 		<PROPERTY NAME="commentEnd" VALUE=")"/>
@@ -57,22 +58,14 @@
 			<END>;</END>
 		</SPAN>
 
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+
 		<KEYWORDS>
 			<KEYWORD1>&gt;r</KEYWORD1>
 			<KEYWORD1>r&gt;</KEYWORD1>
-
-			<OPERATOR>[</OPERATOR>
-			<OPERATOR>]</OPERATOR>
-			<OPERATOR>|</OPERATOR>
-
-			<OPERATOR>{</OPERATOR>
-			<OPERATOR>}</OPERATOR>
-
-			<OPERATOR>{{</OPERATOR>
-			<OPERATOR>}}</OPERATOR>
-
-			<OPERATOR>#{</OPERATOR>
-			<OPERATOR>}#</OPERATOR>
 
 			<MARKUP>;</MARKUP>
 
