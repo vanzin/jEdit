@@ -1078,10 +1078,10 @@ loop:		for(;;)
 				scrollLineCount.reset();
 			else if(scrollLineCount.callChanged)
 				scrollLineCount.changed();
-		}
 
-		firstLine.callReset = firstLine.callChanged = false;
-		scrollLineCount.callReset = scrollLineCount.callChanged = false;
+			firstLine.callReset = firstLine.callChanged = false;
+			scrollLineCount.callReset = scrollLineCount.callChanged = false;
+		}
 	} //}}}
 
 	//}}}
@@ -1570,6 +1570,9 @@ loop:		for(;;)
 		public void contentRemoved(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
+			if(!buffer.isLoaded())
+				return;
+
 			delayedUpdate(startLine,startLine);
 
 			if(!buffer.isTransactionInProgress())

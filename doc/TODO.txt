@@ -3,17 +3,13 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-pre2 on thursday!!!
+- fix complete word
+- bizarre dockable window manager button layout problem
 
 - change of AT_WORD_START semantics to fix perl highlighting?
-- still file reload problems
 - auto indent: don't de-indent on enter if no leading indent at all?
 - new file: horiz scroll wrong
-- scroll to with invisible caret
-- bizarre dockable window manager button layout problem
 - while loading --> scroll bar
-- review tips
-
 - fsb default size
 - bind key to C+e F2 F3: status bar
 - update docs
@@ -222,6 +218,8 @@ pre2 on thursday!!!
 - inserting lines repaints whole text area
 - 30,000 line file performance with syntax, word wrap
 - better data structure for undo queue
+- figure out a way to write the autosave without needing a read lock the
+  whole time
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

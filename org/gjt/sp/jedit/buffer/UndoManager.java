@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2002 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,17 +118,12 @@ public class UndoManager
 		}
 		else if(compoundEditCount == 1)
 		{
-			switch(compoundEdit.undos.size())
-			{
-			case 0:
+			if(compoundEdit.first == null)
 				/* nothing done between begin/end calls */;
-				break;
-			case 1:
-				addEdit((Edit)compoundEdit.undos.get(0));
-				break;
-			default:
+			else if(compoundEdit.first == compoundEdit.last)
+				addEdit(compoundEdit.first);
+			else
 				addEdit(compoundEdit);
-			}
 
 			compoundEdit = null;
 		}
@@ -173,7 +168,7 @@ public class UndoManager
 		}
 
 		if(compoundEdit != null)
-			compoundEdit.undos.add(ins);
+			compoundEdit.add(ins);
 		else
 			addEdit(ins);
 	} //}}}
@@ -209,7 +204,7 @@ public class UndoManager
 		}
 
 		if(compoundEdit != null)
-			compoundEdit.undos.add(rem);
+			compoundEdit.add(rem);
 		else
 			addEdit(rem);
 
@@ -226,11 +221,7 @@ public class UndoManager
 		{
 			Edit edit = (Edit)undos.get(undoPos);
 			if(edit instanceof CompoundEdit)
-			{
-				undoClearDirty = (Edit)
-					((CompoundEdit)edit)
-					.undos.get(0);
-			}
+				undoClearDirty = ((CompoundEdit)edit).first;
 			else
 				undoClearDirty = edit;
 		}
@@ -275,20 +266,14 @@ public class UndoManager
 	private Edit getLastEdit()
 	{
 		if(compoundEdit != null)
-		{
-			int size = compoundEdit.undos.size();
-			if(size != 0)
-				return (Edit)compoundEdit.undos.get(size - 1);
-			else
-				return null;
-		}
+			return compoundEdit.last;
 		else if(undoCount != 0 && undoPos != 0)
 		{
 			Edit e = (Edit)undos.get(undoPos - 1);
 			if(e instanceof CompoundEdit)
 			{
 				CompoundEdit c = (CompoundEdit)e;
-				return (Edit)c.undos.get(c.undos.size() - 1);
+				return c.last;
 			}
 		}
 
@@ -305,6 +290,8 @@ public class UndoManager
 	//{{{ Edit class
 	abstract class Edit
 	{
+		Edit prev, next;
+
 		//{{{ undo() method
 		abstract int undo();
 		//}}}
@@ -389,9 +376,11 @@ public class UndoManager
 		public int undo()
 		{
 			int retVal = -1;
-			for(int i = undos.size() - 1; i >= 0; i--)
+			Edit edit = last;
+			while(edit != null)
 			{
-				retVal = ((Edit)undos.get(i)).undo();
+				retVal = edit.undo();
+				edit = edit.prev;
 			}
 			return retVal;
 		} //}}}
@@ -400,14 +389,29 @@ public class UndoManager
 		public int redo()
 		{
 			int retVal = -1;
-			for(int i = 0; i < undos.size(); i++)
+			Edit edit = first;
+			while(edit != null)
 			{
-				retVal = ((Edit)undos.get(i)).redo();
+				retVal = edit.redo();
+				edit = edit.next;
 			}
 			return retVal;
 		} //}}}
 
-		ArrayList undos = new ArrayList();
+		//{{{ add() method
+		public void add(Edit edit)
+		{
+			if(first == null)
+				first = last = edit;
+			else
+			{
+				edit.prev = last;
+				last.next = edit;
+				last = edit;
+			}
+		} //}}}
+
+		Edit first, last;
 	} //}}}
 
 	//}}}
