@@ -2,9 +2,15 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 
++ New Features
+
+- Added syntax highlighting for output of Hex plugin (Andre Kaplan)
+
 + Enhancements
 
 - Documentation updates
+- 'Quick HyperSearch' with a selection, and 'Quick HyperSearch for Word'
+  commands will now work even if the search bar is disabled
 
 + Bug Fixes
 

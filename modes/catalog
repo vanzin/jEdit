@@ -75,6 +75,9 @@
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 
+<!-- Used by Andre Kaplan's Hex plugin -->
+<MODE NAME="hex"		FILE="hex.xml" />
+
 <MODE NAME="html"		FILE="html.xml"
 				FILE_NAME_GLOB="*.{html,htm}" />
 
