@@ -838,6 +838,131 @@ The DockableWindowManager</title>
 
 </sect1>
 
+<sect1 id="host-design-editbus"><title>The EditBus</title>
+
+<para>
+  The
+  EditBus maintains a list of objects that have requested to receive
+  messages. When a message is sent using this class, all registered
+  components receive it in turn.
+</para>
+
+<para>
+  Plugins register with the EditBus to receive messages reflecting
+  changes in the application's state, including changes in buffers,
+  views and editing panes, changes in the set of properties maintained
+  by the application, and the closing of the application.  A full list
+  of message classes used by the EditBus are summarized beginning with
+  <xref linkend="class-ebmessage"/>.
+</para>
+
+<para>
+<indexterm>
+  <primary>Plugin API</primary>
+  <secondary>EBComponent class</secondary>
+</indexterm>
+  Classes for objects that subscribe to the EditBus must implement the
+  <classname>EBComponent</classname> interface, which defines the single
+  method <function>handleMessage()</function>. A
+  <classname>View</classname>, for example, can receive and handle EditBus
+  messages because it also implements <classname>EBComponent</classname>.
+</para>
+
+<para>
+  Any class in a plugin can receive messages by implementing
+  the <classname>EBComponent</classname>
+  interface.  A <quote>plugin core class</quote> that extends the
+  <classname>EBPlugin</classname> abstract class (and whose name ends with
+  <quote>Plugin</quote> for identification purposes) will automatically be
+  added to the EditBus during jEdit's startup routine.  Any other
+  class - for example, a docking window component that needs to receive
+  notification of buffer changes - must perform its own registration by calling
+  <function>EditBus.addToBus(this)</function> during its initialization.
+  If this class if derived from <classname>JComponent</classname>, a
+  convenient place to register would be in an implementation of the
+  <classname>JComponent</classname> method
+  <function>addNotify()</function>.
+</para>
+
+<sect2 id="class-ebcomponent"><title>Class EBMessage</title>
+
+<para>
+  Every plugin class that uses the EditBus for receiving
+  messages
+  must implement this interface.
+</para>
+
+<para>
+  The <classname>EBComponent</classname> interface contains a single
+  method that an implementing class (including any class derived from
+  <classname>EBPlugin</classname>) must provide:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The parameter's type, <classname>EBMessage</classname>, is another
+  abstract class which establishes the core elements of any message that
+  is published to the EditBus. It has two attributes: an
+  <classname>EBComponent</classname> that is the source of the message
+  (the source will be <classname>null</classname> in some cases),
+  and a <classname>boolean</classname> data member, <varname>vetoed</varname>. This
+  flag indicates whether a prior recipient of the message has determined
+  that the message has been handled and need not be passed on to other
+  subscribers. The flag is set by a call
+  to the <function>veto()</function> method of the
+  <classname>EBMessage</classname>. Some message classes, however,
+  are configured so that they cannot be vetoed, to ensure they are
+  received by all subscribers.
+</para>
+
+<para>
+  Message classes extending <classname>EBMessage</classname> typically add
+  other data members and methods to provide subscribers with whatever is
+  needed to handle the message appropriately. Descriptions of specific
+  message classes can be found in <xref linkend="api-message"/>.
+</para>
+
+<para>
+  The <function>handleMessage()</function> method
+  must specify the type of responses
+  the plugin will have for various subclasses of the
+  <classname>EBMessage</classname> class. Typically this is done with
+  one or more <function>if</function> blocks that test whether the message
+  is an instance of a derived message class in which the plugin has an
+  interest, as in the following example:
+</para>
+
+<informalexample><programlisting>if(msg instanceof BufferUpdate) {
+    // a buffer's state has changed!
+}
+else if(msg instanceof ViewUpdate) {
+    // a view's state has changed!
+}
+// ... and so on</programlisting></informalexample>
+
+<para>
+  Note that any object, whether or not derived from
+  <classname>EBComponent</classname>, can send a message to the EditBus
+  by calling the static method <function>EditBus.send()</function>.
+  This method takes a single parameter, an <classname>EBMessage</classname>
+  object that is the message being sent. Most plugins, however, will
+  only concern themselves with receiving, not sending, messages.
+</para>
+
+</sect2>
+
+</sect1>
+
 <sect1 id="host-design-conclusion"><title>Conclusion</title>
 
 <para>
