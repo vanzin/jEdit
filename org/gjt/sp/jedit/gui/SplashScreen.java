@@ -34,7 +34,7 @@ public class SplashScreen extends Canvas
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		setBackground(Color.white);
 
-		Font font = new Font("Dialog",Font.PLAIN,12);
+		Font font = new Font("Dialog",Font.PLAIN,10);
 		setFont(font);
 		fm = getFontMetrics(font);
 
@@ -56,7 +56,7 @@ public class SplashScreen extends Canvas
 
 		Dimension screen = getToolkit().getScreenSize();
 		Dimension size = new Dimension(image.getWidth(this) + 2,
-			image.getHeight(this) + 2 + fm.getHeight());
+			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
 		win.setSize(size);
 
 		win.setLayout(new BorderLayout());
@@ -124,18 +124,17 @@ public class SplashScreen extends Canvas
 		offscreenGfx.drawImage(image,1,1,this);
 
 		// XXX: This should not be hardcoded
-		offscreenGfx.setColor(new Color(206,206,229));
+		offscreenGfx.setColor(new Color(168,173,189));
 		offscreenGfx.fillRect(1,image.getHeight(this) + 1,
-			((win.getWidth() - 2) * progress) / 7,fm.getHeight());
+			((win.getWidth() - 2) * progress) / 7,PROGRESS_HEIGHT);
 
-		offscreenGfx.setColor(Color.black);
+		offscreenGfx.setColor(Color.gray);
 
 		String str = "Version " + jEdit.getVersion();
 
 		offscreenGfx.drawString(str,
 			(getWidth() - fm.stringWidth(str)) / 2,
-			getHeight() - fm.getDescent()
-			- fm.getLeading());
+			image.getHeight(this)+1 - fm.getDescent() - 10);
 
 		g.drawImage(offscreenImg,0,0,this);
 
@@ -149,4 +148,5 @@ public class SplashScreen extends Canvas
 	private Image offscreenImg;
 	private Graphics offscreenGfx;
 	private int progress;
+	private static final int PROGRESS_HEIGHT = 20;
 }

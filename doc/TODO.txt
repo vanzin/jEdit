@@ -11,12 +11,19 @@ and quirks that I need to fix eventually.
 - better trailing EOL handling
 - when deleting vertical text, etc new caret position is somewhat
   counter-intuitive
+- minor quicknotepad changes -- update docs
+- add documentation for pre1 features
+
+- do something 'bout tip 33
+- add dockable window state change msg
+- action system overhaul
+- console: sync fsb current dir & console current dir, + better favorites
+  support in console, & jconsole in console, & hyperlinks, & dir changes
+  in console tool bar don't show console window
 
 + later:
 
-- add tip/doc about drag-scroll behavior with range and rect selections
-- minor quicknotepad changes -- update docs
-- add documentation for pre1 features
+- option to silence beeps
 - rect select: support shift-left/right
 - scroll horizontally when dragging into virtual space
 - support start in virtual space too

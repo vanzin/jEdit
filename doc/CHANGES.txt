@@ -110,6 +110,16 @@ contributing to this release.
 - Status bar looks somewhat different now, and shows the word wrap mode
   and line separator status.
 
+- The search bar commands now show the search bar if it is hidden.
+  Search bars that come into existence as a result of this have an
+  extra close box button on the right. Pressing ESCAPE in the text field
+  or clicking the button hides the search bar.
+
+  I have renamed the search bar setting in the General option pane to
+  "Always show search bar", and made it be switched off by default.
+  You can revert to the old behavior simply by switching this setting
+  back on.
+
 - The text color and style used to show the "[n lines]" string can now
   be set independently of the EOL marker color.
 

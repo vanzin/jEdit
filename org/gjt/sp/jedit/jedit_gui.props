@@ -117,6 +117,7 @@ icons=ArrowL.png \
 #}}}
 
 view.search.find=Search for:
+view.search.close-tooltip=Hide search bar
 
 #}}}
 
@@ -661,7 +662,7 @@ view.status.linesep-changed=Line separator set to {0}
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
 view.status.bracket=Matches "{0}"
-view.status.quick-copy=Quick copy mode - selected text will be inserted at the caret
+view.status.quick-copy=Quick copy mode - marked text will replace selection
 view.status.rect-select=Rectangular selection mode
 view.status.print=Printing page {0}
 #}}}
@@ -1262,7 +1263,7 @@ options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.sortRecent=Sort recent file list
 options.general.checkModStatus=Warn if file is modified on disk by another program
 options.general.showFullPath=Show full path of buffer in title bar
-options.general.showSearchbar=Show search bar
+options.general.showSearchbar=Always show search bar
 options.general.beepOnSearchAutoWrap=Beep when searching automatically wraps
 options.general.showBufferSwitcher=Show buffer switcher
 options.general.showTips=Show tips on startup

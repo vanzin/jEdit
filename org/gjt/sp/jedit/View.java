@@ -202,6 +202,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void addToolBar(int group, int layer, Component toolBar)
 	{
+		if(toolBar instanceof SearchBar)
+			searchBar = (SearchBar)toolBar;
+
 		toolBarManager.addToolBar(group, layer, toolBar);
 		getRootPane().revalidate();
 	} //}}}
@@ -213,6 +216,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void removeToolBar(Component toolBar)
 	{
+		if(toolBar == searchBar)
+			searchBar = null;
+
 		toolBarManager.removeToolBar(toolBar);
 		getRootPane().revalidate();
 	} //}}}
@@ -794,8 +800,8 @@ public class View extends JFrame implements EBComponent
 	{
 		if(searchBar == null)
 		{
-			getToolkit().beep();
-			return;
+			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
+				new SearchBar(this,true));
 		}
 
 		JEditTextArea textArea = getTextArea();
@@ -842,8 +848,8 @@ public class View extends JFrame implements EBComponent
 		{
 			if(searchBar == null)
 			{
-				getToolkit().beep();
-				return;
+				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
+					new SearchBar(this,true));
 			}
 
 			searchBar.setHyperSearch(true);
@@ -1167,8 +1173,8 @@ public class View extends JFrame implements EBComponent
 		{
 			if(searchBar == null)
 			{
-				searchBar = new SearchBar(this);
-				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
+				addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,
+					new SearchBar(this,false));
 			}
 		}
 		else if(searchBar != null)
