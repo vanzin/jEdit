@@ -26,6 +26,9 @@ and quirks that I need to fix eventually.
 - split long lines
 - rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold
+- global options: don't use card layout
+- option to disable floating window dock bar
+- alt-click on fold narrows
 
 - delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work

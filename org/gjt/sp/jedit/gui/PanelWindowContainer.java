@@ -679,7 +679,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 						x = insets.left;
 						y += rowHeight;
 					}
-					else
 					comp[i].setBounds(x,y,btnWidth,rowHeight);
 					x += btnWidth;
 				}
