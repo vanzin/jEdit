@@ -285,7 +285,6 @@ view.gutter.gutterClick=toggleFold
 view.gutter.gutterShiftClick=toggleFoldFully
 view.gutter.gutterControlClick=selectFold
 view.gutter.gutterAltClick=toggleFold
-
 #}}}
 
 # Expand abbrevs when space bar pressed

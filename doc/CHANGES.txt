@@ -46,6 +46,10 @@ Thanks to Gerd Knops for contributing to this release.
 - jEdit.get{Integer,Double}Property and Buffer.getIntegerProperty() no
   longer barf if the property contains leading or trailing whitespace.
 
+- Added View->New Plain View command that opens a new view without
+  toolbars or dockables. This can be useful for opening up a quick
+  window for taking notes, etc.
+
 + Bug Fixes:
 
 - Fixed default install path settings in installer when running on Unix.
@@ -79,6 +83,11 @@ Thanks to Gerd Knops for contributing to this release.
 
 - The 'gutter bracket highlight' setting in the Color option pane didn't
   work.
+
+- Fixed possible ClassCastException if a 'paste previous' string started
+  with the text "<html>". Swing has a weird feature where any text label
+  beginning with <html> is rendered using the Swing HTML engine, and
+  this would trip it off.
 
 + API Changes:
 

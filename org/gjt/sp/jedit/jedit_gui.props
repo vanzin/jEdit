@@ -366,11 +366,11 @@ hypersearch-word.label=$Quick HyperSearch for Word
 markers=add-marker \
 	  add-marker-shortcut \
 	  - \
+	  remove-all-markers \
+	  - \
 	  goto-marker \
 	  select-marker \
 	  swap-marker \
-	  - \
-	  remove-all-markers \
 	  - \
 	  prev-marker \
 	  next-marker \
@@ -378,10 +378,10 @@ markers=add-marker \
 markers.label=$Markers
 add-marker.label=$Add/Remove Marker
 add-marker-shortcut.label=Add Marker $With Shortcut
+remove-all-markers.label=Re$move All Markers
 goto-marker.label=$Go to Marker
 select-marker.label=$Select to Marker
 swap-marker.label=Swa$p Caret and Marker
-remove-all-markers.label=Re$move All Markers
 prev-marker.label=Go to $Previous Marker
 next-marker.label=Go to $Next Marker
 no-markers.label=No Markers
@@ -425,6 +425,7 @@ next-fold.label=Go to $Next Fold
 
 #{{{ View menu
 view=new-view \
+     new-plain-view \
      close-view \
      - \
      prev-buffer \
@@ -443,6 +444,7 @@ view=new-view \
      %docking
 view.label=$View
 new-view.label=New $View
+new-plain-view.label=Ne$w Plain View
 close-view.label=$Close View
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
