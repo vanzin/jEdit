@@ -103,68 +103,68 @@ public class BeanShell
 	public static void showEvaluateLinesDialog(View view)
 	{
 		String command = GUIUtilities.input(view,"beanshell-eval-line",null);
-		if(command != null)
+
+		JEditTextArea textArea = view.getTextArea();
+		Buffer buffer = view.getBuffer();
+
+		Selection[] selection = textArea.getSelection();
+		if(selection.length == 0 || command == null || command.length() == 0)
 		{
-			if(!command.endsWith(";"))
-				command = command + ";";
+			view.getToolkit().beep();
+			return;
+		}
 
-			if(view.getMacroRecorder() != null)
-				view.getMacroRecorder().record(1,command);
+		if(!command.endsWith(";"))
+			command = command + ";";
 
-			JEditTextArea textArea = view.getTextArea();
-			Buffer buffer = view.getBuffer();
+		if(view.getMacroRecorder() != null)
+			view.getMacroRecorder().record(1,command);
 
-			try
+		try
+		{
+			buffer.beginCompoundEdit();
+
+			
+
+			for(int i = 0; i < selection.length; i++)
 			{
-				buffer.beginCompoundEdit();
-
-				Selection[] selection = textArea.getSelection();
-				if(selection == null)
+				Selection s = selection[i];
+				for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
 				{
-					view.getToolkit().beep();
-					return;
-				}
+					// if selection ends on the start of a
+					// line, don't filter that line
+					if(s.getEnd() == textArea.getLineStartOffset(j))
+						break;
 
-				for(int i = 0; i < selection.length; i++)
-				{
-					Selection s = selection[i];
-					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
+					global.setVariable("line",new Integer(j));
+					global.setVariable("index",new Integer(
+						j - s.getStartLine()));
+					int start = s.getStart(buffer,j);
+					int end = s.getEnd(buffer,j);
+					String text = buffer.getText(start,
+						end - start);
+					global.setVariable("text",text);
+
+					Object returnValue = eval(view,command,true);
+					if(returnValue != null)
 					{
-						// if selection ends on the start of a
-						// line, don't filter that line
-						if(s.getEnd() == textArea.getLineStartOffset(j))
-							break;
-
-						global.setVariable("line",new Integer(j));
-						global.setVariable("index",new Integer(
-							j - s.getStartLine()));
-						int start = s.getStart(buffer,j);
-						int end = s.getEnd(buffer,j);
-						String text = buffer.getText(start,
-							end - start);
-						global.setVariable("text",text);
-
-						Object returnValue = eval(view,command,true);
-						if(returnValue != null)
-						{
-							buffer.remove(start,end - start);
-							buffer.insert(start,
-								returnValue.toString());
-						}
+						buffer.remove(start,end - start);
+						buffer.insert(start,
+							returnValue.toString());
 					}
 				}
 			}
-			catch(Throwable e)
-			{
-				// BeanShell error occurred, abort execution
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-
-			textArea.selectNone();
 		}
+		catch(Throwable e)
+		{
+			// BeanShell error occurred, abort execution
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+
+		textArea.selectNone();
 	} //}}}
 
 	//{{{ showRunScriptDialog() method

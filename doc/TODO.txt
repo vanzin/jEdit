@@ -1,10 +1,14 @@
 TO DO
 
+- rect select and soft wrap
+- still problem with last phys line repainting
+- search dialog does not get focus when 'find' invoked while its open
+- source for existing plugins
+
 - motif l&f: shortcuts in menu items
 
 - documentation:
 
-- changing heap memory docs
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
@@ -12,10 +16,6 @@ TO DO
 
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
-- rect select and soft wrap
-- still problem with last phys line repainting
-- search dialog does not get focus when 'find' invoked while its open
-- source for existing plugins
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
 - getCenterPoint()

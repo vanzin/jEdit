@@ -71,6 +71,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		if(dialog != null)
 		{
 			dialog.setSearchString(searchString,searchIn);
+			GUIUtilities.requestFocus(dialog,dialog.find);
 			dialog.toFront();
 			dialog.requestFocus();
 		}

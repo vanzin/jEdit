@@ -842,7 +842,11 @@ vfs.not-supported.load=Files on the "{0}" filesystem cannot be opened.
 vfs.not-supported.save=Files cannot be saved to the "{0}" filesystem.
 
 out-of-memory-error=There was insufficent Java heap memory to complete\n\
-	this request. Try increasing the maximum heap size.
+	this request. Try increasing the maximum heap size.\n\
+	\n\
+	Documentation on changing the Java heap size can be found in\n\
+	the "Buffers" section of the "jEdit Basics" chapter of the\n\
+	user guide.
 #}}}
 
 #{{{ Old I/O error dialog boxes
