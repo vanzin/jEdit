@@ -84,7 +84,7 @@ public class KillRing
 			if(wrap)
 			{
 				if(index < ring.length - count)
-					rem = ring[ring.length - index + count];
+					rem = ring[ring.length + index - count];
 				else
 					rem = ring[index + count];
 			}

@@ -52,6 +52,8 @@ public class OffsetManager
 		endOffsets[0] = 1;
 		lineInfo = new short[1];
 		lineInfo[0] = (short)(1 << SCREEN_LINES_SHIFT);
+		lineContext = new TokenMarker.LineContext[1];
+		lineCount = 1;
 	} //}}}
 
 	//{{{ getLineCount() method
