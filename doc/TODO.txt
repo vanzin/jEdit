@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- test vertical paste
 - format should show an error if the line len is 0, not beep
 - tree table: expansion state save broken
 - shortcut editor: restore default button
@@ -35,7 +36,6 @@ and quirks that I need to fix eventually.
 - save file resulting in fold collapse -- scroll to 0
 - closing lots of files is slow
 - today:
-  - finish rect select content inserted with virtual space
   - rect select and trailing whitespace
 - redo/undo dirty restore is broken.
 - synchro scroll needs a rewrite & folding

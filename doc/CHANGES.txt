@@ -44,6 +44,20 @@ release.
 }}}
 {{{ Rectangular Selection
 
+- Edit->More Selection->Rectangular Selection (A+\) enables rectangular
+  selection mode:
+
+  - Dragging with the mouse or using keyboard selection commands creates
+    rectangular selections.
+
+  - Clicking beyond the end of a line inserts the appropriate amount of
+    white space and moves the caret there (Rudi Widmann).
+
+  - A status bar indicator has been added for this mode.
+
+  - Control-dragging and Control-Shift-clicking to create rectangular
+    selections is no longer supported.
+
 - Changed vertical paste behavior. Now if the rectangle we are inserting
   into has more lines than the pasted text, the pasted text cycles
   through the rectangle. Previously, it would be inserted at the top
@@ -51,14 +65,8 @@ release.
   for example, you can select a zero-width rectangle and paste "final"
   to mark a set of variables in Java source as being final.
 
-- Control-clicking in virtual space inserts the appropriate amount of
-  white space and moves the caret there (Rudi Widmann).
-
-- After invoking Edit->More Selection->Rectangular Selection,
-  rectangular selections can be created from the keyboard using Shift in
-  conjunction with a caret movement command.
-
-  A status bar indicator shows when rectangular selection mode is on.
+- Entering text while a zero-width rectangular selection is active now
+  shifts the selection horizontally.
 
 }}}
 {{{ Syntax Highlighting
