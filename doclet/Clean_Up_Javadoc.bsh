@@ -2,7 +2,7 @@ fileDialogReturnValue = GUIUtilities.showVFSFileDialog(view,null,
 	VFSBrowser.CHOOSE_DIRECTORY_DIALOG,false);
 if(fileDialogReturnValue != null)
 {
-	SearchAndReplace.setSearchString("<SCRIPT>(.|\n)*?</SCRIPT>");
+	SearchAndReplace.setSearchString("(<SCRIPT>(.|\n)*?</SCRIPT>|onload=\".*\")");
 	SearchAndReplace.setReplaceString("");
 	SearchAndReplace.setRegexp(true);
 	SearchAndReplace.setSearchFileSet(new DirectoryListSet(

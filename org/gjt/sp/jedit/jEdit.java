@@ -3238,13 +3238,13 @@ loop:		for(int i = 0; i < list.length; i++)
 				String str21, str22;
 				if(sortByName)
 				{
-					str21 = buffer.getName();
-					str22 = buffer.getDirectory();
+					str21 = _buffer.getName();
+					str22 = _buffer.getDirectory();
 				}
 				else
 				{
-					str21 = buffer.getDirectory();
-					str22 = buffer.getName();
+					str21 = _buffer.getDirectory();
+					str22 = _buffer.getName();
 				}
 
 				int comp = MiscUtilities.compareStrings(str11,str21,true);
