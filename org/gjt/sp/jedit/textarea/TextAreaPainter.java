@@ -599,8 +599,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
-		long start = System.currentTimeMillis();
-
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -664,9 +662,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				+ lastInvalid + "}:");
 			Log.log(Log.ERROR,this,e);
 		}
-
-		System.err.println((System.currentTimeMillis() - start) +
-			"ms to paint " + (lastInvalid - firstInvalid + 1) + " lines");
 	} //}}}
 
 	//{{{ nextTabStop() method
