@@ -615,7 +615,11 @@ public class JEditTextArea extends JComponent
 				{
 					count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
 					firstLine++;
-					physFirstLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+					int nextLine = foldVisibilityManager.getNextVisibleLine(physFirstLine);
+					if(nextLine == -1)
+						break;
+					else
+						physFirstLine = nextLine;
 				}
 			}
 
