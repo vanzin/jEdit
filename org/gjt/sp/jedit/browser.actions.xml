@@ -91,6 +91,7 @@
 		browser.filesActivated(VFSBrowser.M_OPEN_NEW_PLAIN_VIEW,false);
 	</CODE>
 </ACTION>
+
 <ACTION NAME="vfs.browser.open-split">
 	<CODE>
 		browser.filesActivated(VFSBrowser.M_OPEN_NEW_SPLIT,false);

@@ -271,33 +271,40 @@ public class PluginJAR
 					continue;
 				}
 
-				String plugin = arg.substring(0,index2);
+				String pluginName = arg.substring(0,index2);
 				String needVersion = arg.substring(index2 + 1);
 				String currVersion = jEdit.getProperty("plugin." 
-					+ plugin + ".version");
+					+ pluginName + ".version");
 
-				if(currVersion == null)
+				EditPlugin plugin = jEdit.getPlugin(pluginName);
+				if(plugin == null)
 				{
-					String[] args = { needVersion, plugin };
+					String[] args = { needVersion,
+						pluginName };
 					jEdit.pluginError(path,
 						"plugin-error.dep-plugin.no-version",
 						args);
 					ok = false;
 				}
-				else if(MiscUtilities.compareStrings(currVersion,
-					needVersion,false) < 0)
+				else if(MiscUtilities.compareStrings(
+					currVersion,needVersion,false) < 0)
 				{
-					String[] args = { needVersion, plugin, currVersion };
+					String[] args = { needVersion,
+						pluginName, currVersion };
 					jEdit.pluginError(path,
 						"plugin-error.dep-plugin",args);
 					ok = false;
 				}
-				else if(jEdit.getPlugin(plugin) instanceof EditPlugin.Broken)
+				else if(plugin instanceof EditPlugin.Broken)
 				{
-					String[] args = { plugin };
+					String[] args = { pluginName };
 					jEdit.pluginError(path,
 						"plugin-error.dep-plugin.broken",args);
 					ok = false;
+				}
+				else
+				{
+					plugin.getPluginJAR().theseRequireMe.add(path);
 				}
 			}
 			else if(what.equals("class"))
@@ -323,12 +330,20 @@ public class PluginJAR
 		}
 
 		if(!ok)
-		{
-			plugin = new EditPlugin.Broken(name);
-			plugin.jar = (EditPlugin.JAR)this;
-		}
+			breakPlugin();
 
 		return ok;
+	} //}}}
+
+	//{{{ getDependentPlugins() method
+	/**
+	 * Returns an array of all plugins that depend on this one.
+	 * @since jEdit 4.2pre2
+	 */
+	public String[] getDependentPlugins()
+	{
+		return (String[])theseRequireMe.toArray(
+			new String[theseRequireMe.size()]);
 	} //}}}
 
 	//{{{ getPlugin() method
@@ -381,8 +396,7 @@ public class PluginJAR
 				{
 					Log.log(Log.ERROR,this,"Plugin has properties but does not extend EditPlugin: "
 						+ className);
-					plugin = new EditPlugin.Broken(className);
-					plugin.jar = (EditPlugin.JAR)this;
+					breakPlugin();
 					return;
 				}
 
@@ -391,8 +405,7 @@ public class PluginJAR
 			}
 			catch(Throwable t)
 			{
-				plugin = new EditPlugin.Broken(className);
-				plugin.jar = (EditPlugin.JAR)this;
+				breakPlugin();
 	
 				Log.log(Log.ERROR,this,"Error while starting plugin " + className);
 				Log.log(Log.ERROR,this,t);
@@ -415,6 +428,62 @@ public class PluginJAR
 		}
 
 		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
+	} //}}}
+
+	//{{{ activateIfNecessary() method
+	/**
+	 * Should be called after a new plugin is installed.
+	 * @since jEdit 4.2pre2
+	 */
+	public void activatePluginIfNecessary()
+	{
+		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+			return;
+
+		String className = plugin.getClassName();
+
+		// default for plugins that don't specify this property (ie,
+		// 4.1-style plugins) is to load them on startup
+		String activate = jEdit.getProperty("plugin."
+			+ className + ".activate");
+
+		if(activate == null)
+		{
+			// 4.1 plugin
+			if(!jEdit.isMainThread())
+			{
+				breakPlugin();
+
+				jEdit.pluginError(path,"plugin-error.not-42",null);
+			}
+			else
+				activatePlugin();
+		}
+		else
+		{
+			// 4.2 plugin
+
+			// if at least one property listed here is true,
+			// load the plugin
+			boolean load = false;
+
+			StringTokenizer st = new StringTokenizer(activate);
+			while(st.hasMoreTokens())
+			{
+				String prop = st.nextToken();
+				boolean value = jEdit.getBooleanProperty(prop);
+				if(value)
+				{
+					Log.log(Log.DEBUG,this,"Activating "
+						+ className + " because of " + prop);
+					load = true;
+					break;
+				}
+			}
+
+			if(load)
+				activatePlugin();
+		}
 	} //}}}
 
 	//{{{ deactivatePlugin() method
@@ -620,9 +689,6 @@ public class PluginJAR
 		}
 
 		classLoader.activate();
-
-		EditBus.send(new PluginUpdate(this,PluginUpdate.LOADED));
-		EditBus.send(new DynamicMenuChanged("plugins"));
 	} //}}}
 
 	//{{{ uninit() method
@@ -656,43 +722,6 @@ public class PluginJAR
 				Log.log(Log.ERROR,this,io);
 			}
 		}
-
-		EditBus.send(new PluginUpdate(this,PluginUpdate.UNLOADED));
-		EditBus.send(new DynamicMenuChanged("plugins"));
-	} //}}}
-
-	//{{{ activateIfNecessary() method
-	void activatePluginIfNecessary()
-	{
-		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
-			return;
-
-		String className = plugin.getClassName();
-
-		// default for plugins that don't specify this property (ie,
-		// 4.1-style plugins) is to load them on startup
-		String activate = jEdit.getProperty("plugin."
-			+ className + ".activate","startup");
-		// if at least one property listed here is true, load the
-		// plugin
-		boolean load = false;
-
-		StringTokenizer st = new StringTokenizer(activate);
-		while(st.hasMoreTokens())
-		{
-			String prop = st.nextToken();
-			boolean value = jEdit.getBooleanProperty(prop);
-			if(value)
-			{
-				Log.log(Log.DEBUG,this,"Activating "
-					+ className + " because of " + prop);
-				load = true;
-				break;
-			}
-		}
-
-		if(load)
-			activatePlugin();
 	} //}}}
 
 	//{{{ getClasses() method
@@ -722,6 +751,8 @@ public class PluginJAR
 	private URL servicesURI;
 
 	private boolean activated;
+
+	private List theseRequireMe = new LinkedList();
 	//}}}
 
 	//{{{ loadCache() method
@@ -797,8 +828,6 @@ public class PluginJAR
 
 		LinkedList classes = new LinkedList();
 
-		//XXX: need to unload action set, dockables, services
-		// if plugin core class didn't load.
 		ZipFile zipFile = getZipFile();
 
 		List plugins = new LinkedList();
@@ -937,10 +966,7 @@ public class PluginJAR
 		}
 		catch(Throwable t)
 		{
-			plugin = new EditPlugin.Broken(
-				plugin.getClassName());
-			plugin.jar = (EditPlugin.JAR)
-				PluginJAR.this;
+			breakPlugin();
 
 			Log.log(Log.ERROR,PluginJAR.this,
 				"Error while starting plugin " + plugin.getClassName());
@@ -978,6 +1004,17 @@ public class PluginJAR
 				startPlugin();
 			}
 		});
+	} //}}}
+
+	//{{{ breakPlugin() method
+	private void breakPlugin()
+	{
+		plugin = new EditPlugin.Broken(plugin.getClassName());
+		plugin.jar = (EditPlugin.JAR)this;
+
+		// remove action sets, dockables, etc so that user doesn't
+		// see the broken plugin
+		uninit(false);
 	} //}}}
 
 	//}}}

@@ -614,7 +614,7 @@
 
 <ACTION NAME="plugin-manager">
 	<CODE>
-		PluginManager.showPluginManager(view)
+		PluginManager.showPluginManager(view);
 	</CODE>
 </ACTION>
 

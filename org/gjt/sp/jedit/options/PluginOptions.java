@@ -71,6 +71,9 @@ public class PluginOptions extends OptionsDialog
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin ep = plugins[i];
+			if(ep instanceof EditPlugin.Broken)
+				continue;
+
 			String className = ep.getClassName();
 			if(jEdit.getProperty("plugin." + className + ".activate") == null)
 			{

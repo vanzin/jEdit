@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2002 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,19 +37,20 @@ class Roster
 	//{{{ Roster constructor
 	Roster()
 	{
-		operations = new Vector();
+		operations = new ArrayList();
+		toLoad = new ArrayList();
 	} //}}}
 
-	//{{{ addOperation() method
-	void addOperation(Operation op)
+	//{{{ addRemove() method
+	void addRemove(String plugin)
 	{
-		for(int i = 0; i < operations.size(); i++)
-		{
-			if(operations.elementAt(i).equals(op))
-				return;
-		}
+		addOperation(new Remove(plugin));
+	} //}}}
 
-		operations.addElement(op);
+	//{{{ addInstall() method
+	void addInstall(String url, String installDirectory, int size)
+	{
+		addOperation(new Install(url,installDirectory,size));
 	} //}}}
 
 	//{{{ getOperation() method
@@ -75,7 +76,7 @@ class Roster
 	{
 		for(int i = 0; i < operations.size(); i++)
 		{
-			Operation op = (Operation)operations.elementAt(i);
+			Operation op = (Operation)operations.get(i);
 			if(op.perform(progress))
 				progress.done(true);
 			else
@@ -88,41 +89,163 @@ class Roster
 				return false;
 		}
 
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
+				{
+					finishOperations();
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+
 		return true;
 	} //}}}
 
 	//{{{ Private members
-	private Vector operations;
+	private static File downloadDir;
+
+	private List operations;
+	private List toLoad;
+
+	//{{{ addOperation() method
+	private void addOperation(Operation op)
+	{
+		for(int i = 0; i < operations.size(); i++)
+		{
+			if(operations.get(i).equals(op))
+				return;
+		}
+
+		operations.add(op);
+	} //}}}
+
+	//{{{ getDownloadDir() method
+	private static String getDownloadDir()
+	{
+		if(downloadDir == null)
+		{
+			String settings = jEdit.getSettingsDirectory();
+			if(settings == null)
+				settings = System.getProperty("user.home");
+			downloadDir = new File(MiscUtilities.constructPath(
+				settings,"PluginManager.download"));
+			downloadDir.mkdirs();
+		}
+
+		return downloadDir.getPath();
+	} //}}}
+
+	//{{{ finishOperations() method
+	private void finishOperations()
+	{
+		// add the JARs before checking deps since dep check might
+		// require all JARs to be present
+		for(int i = 0; i < toLoad.size(); i++)
+		{
+			String pluginName = (String)toLoad.get(i);
+			if(jEdit.getPluginJAR(pluginName) != null)
+			{
+				Log.log(Log.WARNING,this,"Already loaded: "
+					+ pluginName);
+			}
+			else
+				jEdit.addPluginJAR(pluginName);
+		}
+
+		for(int i = 0; i < toLoad.size(); i++)
+		{
+			String pluginName = (String)toLoad.get(i);
+			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
+			if(plugin != null)
+				plugin.checkDependencies();
+		}
+
+		// now activate the plugins
+		for(int i = 0; i < toLoad.size(); i++)
+		{
+			String pluginName = (String)toLoad.get(i);
+			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
+			if(plugin != null)
+				plugin.activatePluginIfNecessary();
+		}
+	} //}}}
+
 	//}}}
 
+	//{{{ Operation interface
 	static interface Operation
 	{
 		boolean perform(PluginManagerProgress progress);
 		boolean equals(Object o);
 		int getMaximum();
-	}
+	} //}}}
 
 	//{{{ Remove class
-	static class Remove implements Operation
+	class Remove implements Operation
 	{
+		//{{{ Remove constructor
 		Remove(String plugin)
 		{
 			this.plugin = plugin;
-		}
+		} //}}}
 
+		//{{{ getMaximum() method
 		public int getMaximum()
 		{
 			return 1;
-		}
+		} //}}}
 
-		public boolean perform(PluginManagerProgress progress)
+		//{{{ perform() method
+		public boolean perform(final PluginManagerProgress progress)
 		{
+			final boolean[] retVal = new boolean[1];
 			progress.removing(MiscUtilities.getFileName(plugin));
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						retVal[0] = performSafely(progress);
+					}
+				});
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+			return retVal[0];
+		} //}}}
 
-			// close JAR file
+		//{{{ performSafely() method
+		private boolean performSafely(PluginManagerProgress progress)
+		{
+			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
+			{
+				String[] dependents = jar.getDependentPlugins();
+				for(int i = 0; i < dependents.length; i++)
+				{
+					PluginJAR _jar = jEdit.getPluginJAR(
+						dependents[i]);
+					if(_jar != null)
+					{
+						toLoad.add(dependents[i]);
+						jEdit.removePluginJAR(_jar,false);
+					}
+				}
+
 				jEdit.removePluginJAR(jar,false);
+			}
+
+			toLoad.remove(plugin);
 
 			// remove cache file
 			String cachePath = jar.getCachePath();
@@ -145,8 +268,9 @@ class Roster
 			if(!ok)
 				GUIUtilities.error(progress,"plugin-manager.remove-failed",args);
 			return ok;
-		}
+		} //}}}
 
+		//{{{ equals() method
 		public boolean equals(Object o)
 		{
 			if(o instanceof Remove
@@ -154,9 +278,9 @@ class Roster
 				return true;
 			else
 				return false;
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private String plugin;
 
 		private boolean deleteRecursively(File file)
@@ -178,14 +302,15 @@ class Roster
 			ok &= file.delete();
 
 			return ok;
-		}
+		} //}}}
 	} //}}}
 
 	//{{{ Install class
-	static class Install implements Operation
+	class Install implements Operation
 	{
 		int size;
 
+		//{{{ Install constructor
 		Install(String url, String installDirectory, int size)
 		{
 			// catch those hooligans passing null urls
@@ -195,30 +320,134 @@ class Roster
 			this.url = url;
 			this.installDirectory = installDirectory;
 			this.size = size;
-		}
+		} //}}}
 
+		//{{{ getMaximum() method
 		public int getMaximum()
 		{
 			return size;
-		}
+		} //}}}
 
+		//{{{ perform() method
 		public boolean perform(final PluginManagerProgress progress)
+		{
+			String fileName = MiscUtilities.getFileName(url);
+			progress.downloading(fileName);
+
+			final String path = download(progress,fileName,url);
+			if(path == null)
+			{
+				// interrupted download
+				return false;
+			}
+
+			progress.installing(fileName);
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						install(progress,path,installDirectory);
+					}
+				});
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+
+			return true;
+		} //}}}
+
+		//{{{ equals() method
+		public boolean equals(Object o)
+		{
+			if(o instanceof Install
+				&& ((Install)o).url.equals(url))
+			{
+				/* even if installDirectory is different */
+				return true;
+			}
+			else
+				return false;
+		} //}}}
+
+		//{{{ Private members
+		private String url;
+		private String installDirectory;
+
+		//{{{ download() method
+		private String download(PluginManagerProgress progress,
+			String fileName, String url)
 		{
 			try
 			{
-				String fileName = MiscUtilities.getFileName(url);
-				progress.downloading(fileName);
-				String path = download(progress,fileName,url);
-				if(path == null)
+				URLConnection conn = new URL(url).openConnection();
+
+				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
+
+				if(!copy(progress,conn.getInputStream(),
+					new FileOutputStream(path),true,true))
+					return null;
+
+				return path;
+			}
+			catch(InterruptedIOException iio)
+			{
+				// do nothing, user clicked 'Stop'
+				return null;
+			}
+			catch(final IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+
+				SwingUtilities.invokeLater(new Runnable()
 				{
-					// interrupted download
-					return false;
+					public void run()
+					{
+						String[] args = { io.getMessage() };
+						GUIUtilities.error(null,"ioerror",args);
+					}
+				});
+
+				return null;
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+
+				return null;
+			}
+		} //}}}
+
+		//{{{ install() method
+		private boolean install(PluginManagerProgress progress,
+			String path, String dir)
+		{
+			ZipFile zipFile = null;
+
+			try
+			{
+				zipFile = new ZipFile(path);
+
+				Enumeration enum = zipFile.entries();
+				while(enum.hasMoreElements())
+				{
+					ZipEntry entry = (ZipEntry)enum.nextElement();
+					String name = entry.getName().replace('/',File.separatorChar);
+					File file = new File(dir,name);
+					if(entry.isDirectory())
+						file.mkdirs();
+					else
+					{
+						new File(file.getParent()).mkdirs();
+						copy(progress,zipFile.getInputStream(entry),
+							new FileOutputStream(file),false,false);
+						if(file.getName().toLowerCase().endsWith(".jar"))
+							toLoad.add(file.getPath());
+					}
 				}
-
-				progress.installing(fileName);
-				install(progress,path,installDirectory);
-
-				return true;
 			}
 			catch(InterruptedIOException iio)
 			{
@@ -246,72 +475,31 @@ class Roster
 
 				return false;
 			}
-		}
-
-		public boolean equals(Object o)
-		{
-			if(o instanceof Install
-				&& ((Install)o).url.equals(url))
-			{
-				/* even if installDirectory is different */
-				return true;
-			}
-			else
-				return false;
-		}
-
-		// private members
-		private String url;
-		private String installDirectory;
-
-		private String download(PluginManagerProgress progress,
-			String fileName, String url) throws Exception
-		{
-			URLConnection conn = new URL(url).openConnection();
-
-			String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
-
-			if(!copy(progress,conn.getInputStream(),
-				new FileOutputStream(path),true,true))
-				return null;
-
-			return path;
-		}
-
-		private boolean install(PluginManagerProgress progress,
-			String path, String dir) throws Exception
-		{
-			ZipFile zipFile = new ZipFile(path);
-
-			try
-			{
-				Enumeration enum = zipFile.entries();
-				while(enum.hasMoreElements())
-				{
-					ZipEntry entry = (ZipEntry)enum.nextElement();
-					String name = entry.getName().replace('/',File.separatorChar);
-					File file = new File(dir,name);
-					if(entry.isDirectory())
-						file.mkdirs();
-					else
-					{
-						new File(file.getParent()).mkdirs();
-						copy(progress,zipFile.getInputStream(entry),
-							new FileOutputStream(file),false,false);
-					}
-				}
-			}
 			finally
 			{
-				zipFile.close();
-				new File(path).delete();
+				try
+				{
+					if(zipFile != null)
+						zipFile.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,this,io);
+				}
+
+				if(jEdit.getBooleanProperty(
+					"plugin-manager.deleteDownloads"))
+				{
+					new File(path).delete();
+				}
 			}
 
 			progress.setValue(1);
 
 			return true;
-		}
+		} //}}}
 
+		//{{{ copy() method
 		private boolean copy(PluginManagerProgress progress,
 			InputStream in, OutputStream out, boolean canStop,
 			boolean doProgress) throws Exception
@@ -345,23 +533,8 @@ loop:			for(;;)
 			in.close();
 			out.close();
 			return true;
-		}
+		} //}}}
 
-		static File downloadDir;
-
-		static String getDownloadDir()
-		{
-			if(downloadDir == null)
-			{
-				String settings = jEdit.getSettingsDirectory();
-				if(settings == null)
-					settings = System.getProperty("user.home");
-				downloadDir = new File(MiscUtilities.constructPath(
-					settings,"PluginManager.download"));
-				downloadDir.mkdirs();
-			}
-
-			return downloadDir.getPath();
-		}
+		//}}}
 	} //}}}
 }

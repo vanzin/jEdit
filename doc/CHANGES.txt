@@ -2,6 +2,19 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
+{{{ Plugin Loader
+
+- The plugin manager now loads plugins immediately after they are
+  installed, and unloads plugins when removing and updating. Note that
+  plugins not updated for the 4.2 API might not fully load.
+
+- Added an option to Global Options->Plugin Manager to leave the
+  downloaded ZIP archives in ~/.jedit/PluginManager.download.
+
+- If a plugin failed to load, its actions, dockables, etc are no longer
+  visible from the UI.
+
+}}}
 {{{ Scripting Changes
 
 - BeanShell 1.3a1 included. This release features improved error
@@ -24,6 +37,8 @@ JEDIT 4.2 VERSION HISTORY
 
 - Changing from a syntax highlighting mode to text mode did not
   invalidate line contexts.
+
+- The file system browser's "Open in" menu didn't work.
 
 }}}
 {{{ API Changes

@@ -1340,6 +1340,8 @@ plugin-error.dep-plugin=Requires version {0} or later of {1}, \
 plugin-error.dep-class=Requires the class {0}.\n\
 	Try installing the appropriate plugin or class library.
 plugin-error.obsolete=This plugin is obsolete. Please remove it.
+plugin-error.not-42=This plugin does not support dynamic loading.\n\
+	Restart jEdit to use this plugin.
 #}}}
 
 #{{{ Macro dialogs
@@ -1557,6 +1559,8 @@ options.plugin-manager.label=Plugin Manager
 options.plugin-manager.code=new PluginManagerOptionPane();
 options.plugin-manager.updateMirrors=Update mirror list
 options.plugin-manager.downloadSource=Download plugin source code
+options.plugin-manager.deleteDownloads=Delete archives from download \
+	directory after install
 options.plugin-manager.mirror=Preferred download mirror:
 options.plugin-manager.location=Install plugins in:
 options.plugin-manager.settings-dir=jEdit settings directory

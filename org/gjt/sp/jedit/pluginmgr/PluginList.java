@@ -200,7 +200,7 @@ class PluginList
 		void install(Roster roster, String installDirectory, boolean downloadSource)
 		{
 			if(installed != null)
-				roster.addOperation(new Roster.Remove(installed));
+				roster.addRemove(installed);
 	
 			Branch branch = getCompatibleBranch();
 			if(branch.obsolete)
@@ -215,10 +215,10 @@ class PluginList
 					installed);
 			}
 	
-			roster.addOperation(new Roster.Install(
+			roster.addInstall(
 				(downloadSource ? branch.downloadSource : branch.download),
 				installDirectory,
-				(downloadSource ? branch.downloadSourceSize : branch.downloadSize)));
+				(downloadSource ? branch.downloadSourceSize : branch.downloadSize));
 	
 		}
 	

@@ -725,6 +725,104 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		listenerList.remove(BrowserListener.class,l);
 	} //}}}
 
+	//{{{ filesActivated() method
+	// canDoubleClickClose set to false when ENTER pressed
+	public static final int M_OPEN = 0;
+	public static final int M_OPEN_NEW_VIEW = 1;
+	public static final int M_OPEN_NEW_PLAIN_VIEW = 2;
+	public static final int M_OPEN_NEW_SPLIT = 3;
+
+	/**
+	 * This method does the "double-click" handling. It is public so that
+	 * <code>browser.actions.xml</code> can bind to it.
+	 * @since jEdit 4.2pre2
+	 */
+	public void filesActivated(int mode, boolean canDoubleClickClose)
+	{
+		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+
+		Buffer buffer = null;
+
+check_selected: for(int i = 0; i < selectedFiles.length; i++)
+		{
+			VFS.DirectoryEntry file = selectedFiles[i];
+
+			if(file.type == VFS.DirectoryEntry.DIRECTORY
+				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+			{
+				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
+					browseDirectoryInNewWindow(view,file.path);
+				else
+					setDirectory(file.path);
+			}
+			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
+			{
+				Buffer _buffer = jEdit.getBuffer(file.path);
+				if(_buffer == null)
+				{
+					Hashtable props = new Hashtable();
+					props.put(Buffer.ENCODING,currentEncoding);
+					_buffer = jEdit.openFile(null,null,file.path,
+						false,props);
+				}
+				else if(doubleClickClose && canDoubleClickClose
+					&& this.mode != BROWSER_DIALOG
+					&& selectedFiles.length == 1)
+				{
+					// close if this buffer is currently
+					// visible in the view.
+					EditPane[] editPanes = view.getEditPanes();
+					for(int j = 0; j < editPanes.length; j++)
+					{
+						if(editPanes[j].getBuffer() == _buffer)
+						{
+							jEdit.closeBuffer(view,_buffer);
+							return;
+						}
+					}
+				}
+
+				if(_buffer != null)
+					buffer = _buffer;
+			}
+			else
+			{
+				// if a file is selected in OPEN_DIALOG or
+				// SAVE_DIALOG mode, just let the listener(s)
+				// handle it
+			}
+		}
+
+		if(buffer != null)
+		{
+			switch(mode)
+			{
+			case M_OPEN:
+				view.setBuffer(buffer);
+				break;
+			case M_OPEN_NEW_VIEW:
+				jEdit.newView(view,buffer,false);
+				break;
+			case M_OPEN_NEW_PLAIN_VIEW:
+				jEdit.newView(view,buffer,true);
+				break;
+			case M_OPEN_NEW_SPLIT:
+				view.splitHorizontally().setBuffer(buffer);
+				break;
+			}
+		}
+
+		Object[] listeners = listenerList.getListenerList();
+		for(int i = 0; i < listeners.length; i++)
+		{
+			if(listeners[i] == BrowserListener.class)
+			{
+				BrowserListener l = (BrowserListener)listeners[i+1];
+				l.filesActivated(this,selectedFiles);
+			}
+		}
+	} //}}}
+
 	//{{{ Package-private members
 	String currentEncoding;
 
@@ -849,98 +947,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			{
 				BrowserListener l = (BrowserListener)listeners[i+1];
 				l.filesSelected(this,selectedFiles);
-			}
-		}
-	} //}}}
-
-	//{{{ filesActivated() method
-	// canDoubleClickClose set to false when ENTER pressed
-	static final int M_OPEN = 0;
-	static final int M_OPEN_NEW_VIEW = 1;
-	static final int M_OPEN_NEW_PLAIN_VIEW = 2;
-	static final int M_OPEN_NEW_SPLIT = 3;
-	void filesActivated(int mode, boolean canDoubleClickClose)
-	{
-		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
-
-		Buffer buffer = null;
-
-check_selected: for(int i = 0; i < selectedFiles.length; i++)
-		{
-			VFS.DirectoryEntry file = selectedFiles[i];
-
-			if(file.type == VFS.DirectoryEntry.DIRECTORY
-				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
-			{
-				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
-					browseDirectoryInNewWindow(view,file.path);
-				else
-					setDirectory(file.path);
-			}
-			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
-			{
-				Buffer _buffer = jEdit.getBuffer(file.path);
-				if(_buffer == null)
-				{
-					Hashtable props = new Hashtable();
-					props.put(Buffer.ENCODING,currentEncoding);
-					_buffer = jEdit.openFile(null,null,file.path,
-						false,props);
-				}
-				else if(doubleClickClose && canDoubleClickClose
-					&& this.mode != BROWSER_DIALOG
-					&& selectedFiles.length == 1)
-				{
-					// close if this buffer is currently
-					// visible in the view.
-					EditPane[] editPanes = view.getEditPanes();
-					for(int j = 0; j < editPanes.length; j++)
-					{
-						if(editPanes[j].getBuffer() == _buffer)
-						{
-							jEdit.closeBuffer(view,_buffer);
-							return;
-						}
-					}
-				}
-
-				if(_buffer != null)
-					buffer = _buffer;
-			}
-			else
-			{
-				// if a file is selected in OPEN_DIALOG or
-				// SAVE_DIALOG mode, just let the listener(s)
-				// handle it
-			}
-		}
-
-		if(buffer != null)
-		{
-			switch(mode)
-			{
-			case M_OPEN:
-				view.setBuffer(buffer);
-				break;
-			case M_OPEN_NEW_VIEW:
-				jEdit.newView(view,buffer,false);
-				break;
-			case M_OPEN_NEW_PLAIN_VIEW:
-				jEdit.newView(view,buffer,true);
-				break;
-			case M_OPEN_NEW_SPLIT:
-				view.splitHorizontally().setBuffer(buffer);
-				break;
-			}
-		}
-
-		Object[] listeners = listenerList.getListenerList();
-		for(int i = 0; i < listeners.length; i++)
-		{
-			if(listeners[i] == BrowserListener.class)
-			{
-				BrowserListener l = (BrowserListener)listeners[i+1];
-				l.filesActivated(this,selectedFiles);
 			}
 		}
 	} //}}}
