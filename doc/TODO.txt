@@ -16,6 +16,7 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- goToBuffer() -- if any parent has zero height or zero width...
 - independent text area component
 - better auto indent
 - save selection between buffer switch
