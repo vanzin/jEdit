@@ -2901,6 +2901,7 @@ public class jEdit
 		}
 
 		defaults.remove("SplitPane.border");
+		defaults.remove("SplitPaneDivider.border");
 	} //}}}
 
 	//{{{ runStartupScripts() method

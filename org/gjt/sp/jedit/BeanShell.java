@@ -119,6 +119,12 @@ public class BeanShell
 				buffer.beginCompoundEdit();
 
 				Selection[] selection = textArea.getSelection();
+				if(selection == null)
+				{
+					view.getToolkit().beep();
+					return;
+				}
+
 				for(int i = 0; i < selection.length; i++)
 				{
 					Selection s = selection[i];

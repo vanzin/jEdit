@@ -1,12 +1,9 @@
 TO DO
 
-- eval for selected lines: use getSelectedLines()?
-- test save as and reload stuff
-
+- windows l&f: memory indicator
+- motif l&f: shortcuts in menu items
 - documentation:
 
-- mention view, editPane, textArea, buffer vars in the 'eval' command
-  docs
 - changing heap memory docs
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented

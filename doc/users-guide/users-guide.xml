@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 
 <!-- jEdit user's guide -->
-<!-- (C) 1999, 2000, 2001 Slava Pestov -->
-<!-- (C) 2001 John Gellene -->
+<!-- (C) 1999, 2000, 2001, 2002 Slava Pestov -->
+<!-- (C) 2001, 2002 John Gellene -->
 
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
@@ -30,7 +30,6 @@
 <!ENTITY installing-modes SYSTEM "installing-modes.xml">
 
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
-<!ENTITY simple-macros SYSTEM "simple-macros.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
 
@@ -48,8 +47,8 @@
 <bookinfo>
  <title>jEdit 4.0 User's Guide</title>
 
- <copyright><year>1998</year><year>2001</year><holder>Slava Pestov</holder></copyright>
- <copyright><year>2001</year><holder>John Gellene</holder></copyright>
+ <copyright><year>1999</year><year>2002</year><holder>Slava Pestov</holder></copyright>
+ <copyright><year>2001</year><year>2002</year><holder>John Gellene</holder></copyright>
  <legalnotice><title>Legal Notice</title>
   <para>
    Permission is granted to copy, distribute and/or modify this document
@@ -137,7 +136,6 @@
  </partintro>
 
  &macro-basics;
- &simple-macros;
  &dialog-macro;
  &macro-tips;
 </part>

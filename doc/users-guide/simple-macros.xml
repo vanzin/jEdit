@@ -44,8 +44,8 @@
     <para>
      A <glossterm>class</glossterm> is a specification of what data an object
      contains and what methods can be used to work with the data. A Java
-     application consists of one or more classes (in the case of jEdit over
-     200 classes) written by the programmer that defines the application's
+     application consists of one or more classes (in the case of jEdit ,over
+     500 classes) written by the programmer that defines the application's
      behavior. A BeanShell macro uses these classes, along with built-in
      classes that are supplied with the Java platform, to define its own
      behavior.
