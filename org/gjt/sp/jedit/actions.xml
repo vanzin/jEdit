@@ -606,7 +606,7 @@
 
 <ACTION NAME="redo">
 	<CODE>
-		buffer.redo();
+		buffer.redo(textArea);
 	</CODE>
 </ACTION>
 
@@ -1027,7 +1027,7 @@
 
 <ACTION NAME="undo">
 	<CODE>
-		buffer.undo();
+		buffer.undo(textArea);
 	</CODE>
 </ACTION>
 

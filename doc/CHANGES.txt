@@ -137,6 +137,7 @@ JEDIT 4.0 VERSION HISTORY
 - Settings files are now saved to #filename#save#, then renamed to the
   actual file name. This prevents settings from being lost if jEdit
   crashes in the middle of saving them
+- PL/SQL mode updates (Steve Snider)
 
 + Bug Fixes
 
