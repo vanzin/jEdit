@@ -37,6 +37,7 @@ per-text area basis.
 Note that folding is now disabled by default; you must enable it either
 in the Global Options or Buffer Options dialog boxes.
 
+- FAQ
 - more reliable setting saving
 - better sorting
 - search and replace usability improved/word search commands
