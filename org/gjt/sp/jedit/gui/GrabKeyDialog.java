@@ -412,48 +412,19 @@ public class GrabKeyDialog extends JDialog
 			}
 			else if(evt.getID() == KeyEvent.KEY_PRESSED)
 			{
-				boolean appendPlus = false;
-
-				// On MacOS, C+ is command, M+ is control
-				// so that jEdit's default shortcuts are
-				// mapped to the Command
-				if(evt.isControlDown())
+				String modifiers = DefaultInputHandler
+					.getModifierString(evt);
+				if(modifiers.length() != 0)
 				{
-					keyString.append(OperatingSystem.isMacOS()
-						? 'M' : 'C');
-					appendPlus = true;
-				}
-
-				if(evt.isAltDown())
-				{
-					keyString.append('A');
-					appendPlus = true;
-				}
-
-				if(evt.isMetaDown())
-				{
-					keyString.append(OperatingSystem.isMacOS()
-						? 'C' : 'M');
-					appendPlus = true;
-				}
-
-				if(evt.isShiftDown())
-				{
-					keyString.append('S');
-					appendPlus = true;
-				}
-
-				if(appendPlus)
+					keyString.append(modifiers);
 					keyString.append('+');
+				}
 
 				int keyCode = evt.getKeyCode();
 
 				if(((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
 					|| (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9))
-					&& !evt.isAltDown()
-					&& !evt.isControlDown()
-					&& !evt.isMetaDown()
-					&& !evt.isShiftDown())
+					&& modifiers.length() == 0)
 				{
 					// will be handled by KEY_TYPED
 					return;

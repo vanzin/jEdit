@@ -50,8 +50,7 @@ class BrowserView extends JPanel
 		this.browser = browser;
 		this.splitHorizontally = splitHorizontally;
 
-		parentModel = new DefaultListModel();
-		parentDirectories = new JList(parentModel);
+		parentDirectories = new JList();
 
 		parentDirectories.getSelectionModel().setSelectionMode(
 			TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -170,34 +169,15 @@ class BrowserView extends JPanel
 
 	//{{{ directoryLoaded() method
 	public void directoryLoaded(DefaultMutableTreeNode node,
-		String path, Vector directory)
+		String path, VFS.DirectoryEntry[] parents,
+		Vector directory)
 	{
 		if(node == rootNode)
 		{
-			parentModel.removeAllElements();
-			String parent = path;
-
-			if(parent.length() != 1 && (parent.endsWith("/")
-				|| parent.endsWith(File.separator)))
-				parent = parent.substring(0,parent.length() - 1);
-
-			for(;;)
-			{
-				parentModel.insertElementAt(parent,0);
-				String newParent = MiscUtilities.getParentOfPath(parent);
-				if(newParent.length() != 1 && (newParent.endsWith("/")
-					|| newParent.endsWith(File.separator)))
-					newParent = newParent.substring(0,newParent.length() - 1);
-
-				if(newParent == null || parent.equals(newParent))
-					break;
-				else
-					parent = newParent;
-			}
-
-			int index = parentModel.getSize() - 1;
+			setListModel(parentDirectories,parents);
+			int index = parentDirectories.getModel().getSize() - 1;
 			parentDirectories.setSelectedIndex(index);
-			parentDirectories.ensureIndexIsVisible(parentModel.getSize() - 1);
+			parentDirectories.ensureIndexIsVisible(index);
 		}
 
 		node.removeAllChildren();
@@ -303,7 +283,6 @@ class BrowserView extends JPanel
 
 	private JSplitPane splitPane;
 	private JList parentDirectories;
-	private DefaultListModel parentModel;
 	private BrowserJTree tree;
 	private Hashtable tmpExpanded;
 	private DefaultTreeModel model;
@@ -370,8 +349,8 @@ class BrowserView extends JPanel
 
 		if(node == rootNode)
 		{
-			parentModel.removeAllElements();
-			parentModel.addElement(new LoadingPlaceholder());
+			setListModel(parentDirectories,new Object[] {
+				new LoadingPlaceholder() });
 		}
 
 		if(showLoading)
@@ -417,10 +396,39 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ showFilePopup() method
-	private void showFilePopup(VFS.DirectoryEntry[] files, Point point)
+	private void showFilePopup(VFS.DirectoryEntry[] files, Component comp,
+		Point point)
 	{
 		popup = new BrowserCommandsMenu(browser,files);
-		GUIUtilities.showPopupMenu(popup,tree,point.x,point.y);
+		// for the parent directory right-click; on the click we select
+		// the clicked item, but when the popup goes away we select the
+		// currently showing directory.
+		popup.addPopupMenuListener(new PopupMenuListener()
+		{
+			public void popupMenuCanceled(PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e)
+			{
+				int index = parentDirectories.getModel().getSize() - 1;
+				parentDirectories.setSelectedIndex(index);
+			}
+		});
+		GUIUtilities.showPopupMenu(popup,comp,point.x,point.y);
+	} //}}}
+
+	//{{{ setListModel() method
+	/**
+	 * This should be in the JDK API.
+	 */
+	private void setListModel(JList list, final Object[] model)
+	{
+		list.setModel(new AbstractListModel()
+		{
+			public int getSize() { return model.length; }
+			public Object getElementAt(int i) { return model[i]; }
+		});
 	} //}}}
 
 	//}}}
@@ -468,13 +476,17 @@ class BrowserView extends JPanel
 				setIcon(showIcons ? FileCellRenderer.loadingIcon : null);
 				setText(jEdit.getProperty("vfs.browser.tree.loading"));
 			}
-			else
+			else if(value instanceof VFS.DirectoryEntry)
 			{
+				VFS.DirectoryEntry dirEntry = (VFS.DirectoryEntry)value;
 				ParentDirectoryRenderer.this.setFont(boldFont);
 
-				setIcon(showIcons ? FileCellRenderer.openDirIcon : null);
-				setText(MiscUtilities.getFileName(value.toString()));
+				setIcon(showIcons ? FileCellRenderer.getIconForFile(dirEntry,true)
+					: null);
+				setText(dirEntry.name);
 			}
+			else if(value == null)
+				setText("VFS does not follow VFS API");
 
 			return this;
 		}
@@ -483,6 +495,35 @@ class BrowserView extends JPanel
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
+		public void mousePressed(MouseEvent evt)
+		{
+			int row = parentDirectories.locationToIndex(evt.getPoint());
+			if(row != -1)
+			{
+				Object obj = parentDirectories.getModel()
+					.getElementAt(row);
+				if(obj instanceof VFS.DirectoryEntry)
+				{
+					VFS.DirectoryEntry dirEntry = ((VFS.DirectoryEntry)obj);
+					if(GUIUtilities.isPopupTrigger(evt))
+					{
+						if(popup != null && popup.isVisible())
+						{
+							popup.setVisible(false);
+							popup = null;
+						}
+						else
+						{
+							parentDirectories.setSelectedIndex(row);
+							showFilePopup(new VFS.DirectoryEntry[] {
+								dirEntry },parentDirectories,
+								evt.getPoint());
+						}
+					}
+				}
+			}
+		}
+
 		public void mouseClicked(MouseEvent evt)
 		{
 			// ignore double clicks
@@ -492,11 +533,16 @@ class BrowserView extends JPanel
 			int row = parentDirectories.locationToIndex(evt.getPoint());
 			if(row != -1)
 			{
-				Object obj = parentModel.getElementAt(row);
-				if(obj instanceof String)
+				Object obj = parentDirectories.getModel()
+					.getElementAt(row);
+				if(obj instanceof VFS.DirectoryEntry)
 				{
-					browser.setDirectory((String)obj);
-					focusOnFileView();
+					VFS.DirectoryEntry dirEntry = ((VFS.DirectoryEntry)obj);
+					if(!GUIUtilities.isPopupTrigger(evt))
+					{
+						browser.setDirectory(dirEntry.path);
+						focusOnFileView();
+					}
 				}
 			}
 		}
@@ -686,9 +732,6 @@ class BrowserView extends JPanel
 			case MouseEvent.MOUSE_PRESSED:
 				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 				{
-					if(popup != null && popup.isVisible())
-						popup.setVisible(false);
-
 					if(evt.getClickCount() % 2 == 0)
 						break;
 				}
@@ -697,17 +740,18 @@ class BrowserView extends JPanel
 					if(popup != null && popup.isVisible())
 					{
 						popup.setVisible(false);
+						popup = null;
 						break;
 					}
 
 					if(path == null)
-						showFilePopup(null,evt.getPoint());
+						showFilePopup(null,this,evt.getPoint());
 					else
 					{
 						if(!isPathSelected(path))
 							setSelectionPath(path);
 
-						showFilePopup(getSelectedFiles(),evt.getPoint());
+						showFilePopup(getSelectedFiles(),this,evt.getPoint());
 					}
 
 					break;

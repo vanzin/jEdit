@@ -48,12 +48,14 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		/* Text color */
 		addComponent(jEdit.getProperty("options.textarea.foreground"),
 			foregroundColor = new ColorWellButton(
-			jEdit.getColorProperty("view.fgColor")));
+			jEdit.getColorProperty("view.fgColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Background color */
 		addComponent(jEdit.getProperty("options.textarea.background"),
 			backgroundColor = new ColorWellButton(
-			jEdit.getColorProperty("view.bgColor")));
+			jEdit.getColorProperty("view.bgColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Caret color, caret blink, block caret */
 		blinkCaret = new JCheckBox(jEdit.getProperty("options.textarea"
@@ -72,19 +74,22 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		caretSettings.add(blockCaret);
 
 		addComponent(caretSettings,caretColor = new ColorWellButton(
-			jEdit.getColorProperty("view.caretColor")));
+			jEdit.getColorProperty("view.caretColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Selection color */
 		addComponent(jEdit.getProperty("options.textarea.selection"),
 			selectionColor = new ColorWellButton(
-			jEdit.getColorProperty("view.selectionColor")));
+			jEdit.getColorProperty("view.selectionColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Line highlight */
 		lineHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".lineHighlight"));
 		lineHighlight.setSelected(jEdit.getBooleanProperty("view.lineHighlight"));
 		addComponent(lineHighlight,lineHighlightColor = new ColorWellButton(
-			jEdit.getColorProperty("view.lineHighlightColor")));
+			jEdit.getColorProperty("view.lineHighlightColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Bracket highlight */
 		bracketHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
@@ -92,21 +97,24 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		bracketHighlight.setSelected(jEdit.getBooleanProperty(
 			"view.bracketHighlight"));
 		addComponent(bracketHighlight,bracketHighlightColor = new ColorWellButton(
-			jEdit.getColorProperty("view.bracketHighlightColor")));
+			jEdit.getColorProperty("view.bracketHighlightColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* EOL markers */
 		eolMarkers = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".eolMarkers"));
 		eolMarkers.setSelected(jEdit.getBooleanProperty("view.eolMarkers"));
 		addComponent(eolMarkers,eolMarkerColor =new ColorWellButton(
-			jEdit.getColorProperty("view.eolMarkerColor")));
+			jEdit.getColorProperty("view.eolMarkerColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Wrap guide */
 		wrapGuide = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".wrapGuide"));
 		wrapGuide.setSelected(jEdit.getBooleanProperty("view.wrapGuide"));
 		addComponent(wrapGuide,wrapGuideColor = new ColorWellButton(
-			jEdit.getColorProperty("view.wrapGuideColor")));
+			jEdit.getColorProperty("view.wrapGuideColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Electric borders */
 		electricBorders = new JCheckBox(jEdit.getProperty("options.textarea"

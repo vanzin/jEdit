@@ -340,6 +340,75 @@ public class DefaultInputHandler extends InputHandler
 		}
 	} //}}}
 
+	//{{{ setModifierMapping() method
+	/**
+	 * Changes the mapping between symbolic modifier key names
+	 * (<code>C</code>, <code>A</code>, <code>M</code>, <code>S</code>) and
+	 * Java modifier flags.
+	 *
+	 * @param c The modifier to map the <code>C</code> modifier to
+	 * @param a The modifier to map the <code>A</code> modifier to
+	 * @param m The modifier to map the <code>M</code> modifier to
+	 * @param s The modifier to map the <code>S</code> modifier to
+	 *
+	 * @since jEdit 4.1pre3
+	 */
+	public static void setModifierMapping(int c, int a, int m, int s)
+	{
+		DefaultInputHandler.c = c;
+		DefaultInputHandler.a = a;
+		DefaultInputHandler.m = m;
+		DefaultInputHandler.s = s;
+	} //}}}
+
+	//{{{ getSymbolicModifierName() method
+	/**
+	 * Returns a the symbolic modifier name for the specified Java modifier
+	 * flag.
+	 *
+	 * @param mod A modifier constant from <code>InputEvent</code>
+	 *
+	 * @since jEdit 4.1pre3
+	 */
+	public static char getSymbolicModifierName(int mod)
+	{
+		// this relies on the fact that if C is mapped to M, then
+		// M will be mapped to C.
+		if(mod == c)
+			return 'C';
+		else if(mod == a)
+			return 'A';
+		else if(mod == m)
+			return 'M';
+		else if(mod == s)
+			return 'S';
+		else
+			return '\0';
+	} //}}}
+
+	//{{{ getModifierString() method
+	/**
+	 * Returns a string containing symbolic modifier names set in the
+	 * specified event.
+	 *
+	 * @param evt The event
+	 *
+	 * @since jEdit 4.1pre3
+	 */
+	public static String getModifierString(InputEvent evt)
+	{
+		StringBuffer buf = new StringBuffer();
+		if(evt.isControlDown())
+			buf.append(getSymbolicModifierName(InputEvent.CTRL_MASK));
+		if(evt.isAltDown())
+			buf.append(getSymbolicModifierName(InputEvent.ALT_MASK));
+		if(evt.isMetaDown())
+			buf.append(getSymbolicModifierName(InputEvent.META_MASK));
+		if(evt.isShiftDown())
+			buf.append(getSymbolicModifierName(InputEvent.SHIFT_MASK));
+		return buf.toString();
+	} //}}}
+
 	//{{{ parseKeyStroke() method
 	/**
 	 * Converts a string to a keystroke. The string should be of the
@@ -364,22 +433,16 @@ public class DefaultInputHandler extends InputHandler
 					.charAt(i)))
 				{
 				case 'A':
-					modifiers |= InputEvent.ALT_MASK;
+					modifiers |= a;
 					break;
 				case 'C':
-					if(OperatingSystem.isMacOS())
-						modifiers |= InputEvent.META_MASK;
-					else
-						modifiers |= InputEvent.CTRL_MASK;
+					modifiers |= c;
 					break;
 				case 'M':
-					if(OperatingSystem.isMacOS())
-						modifiers |= InputEvent.CTRL_MASK;
-					else
-						modifiers |= InputEvent.META_MASK;
+					modifiers |= m;
 					break;
 				case 'S':
-					modifiers |= InputEvent.SHIFT_MASK;
+					modifiers |= s;
 					break;
 				}
 			}
@@ -424,6 +487,28 @@ public class DefaultInputHandler extends InputHandler
 	} //}}}
 
 	//{{{ Private members
+	static
+	{
+		if(OperatingSystem.isMacOS())
+		{
+			setModifierMapping(
+				InputEvent.META_MASK,
+				InputEvent.ALT_MASK,
+				InputEvent.CTRL_MASK,
+				InputEvent.SHIFT_MASK);
+		}
+		else
+		{
+			setModifierMapping(
+				InputEvent.CTRL_MASK,
+				InputEvent.ALT_MASK,
+				InputEvent.META_MASK,
+				InputEvent.SHIFT_MASK);
+		}
+	}
+
+	private static int c, a, m, s;
+
 	private Hashtable bindings;
 	private Hashtable currentBindings;
 	//}}}
