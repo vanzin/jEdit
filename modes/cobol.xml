@@ -2,7 +2,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- COBOL mode, by Matthias Schneider -->
+<!-- COBOL mode, by Matthias M. Schneider -->
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="*" />
