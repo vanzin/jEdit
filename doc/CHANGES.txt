@@ -2,7 +2,7 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre11
 
-Thanks to Stefan Kost for contributing to this release.
+Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
 
 + Enhancements:
 
@@ -11,6 +11,7 @@ Thanks to Stefan Kost for contributing to this release.
 
 - Some minor optimizations.
 
+- FAQ updates (Kris Kopicki).
 + Bug Fixes:
 
 - Minor fix to BibTeX syntax highlighting (Stefan Kost).
@@ -21,6 +22,12 @@ Thanks to Stefan Kost for contributing to this release.
 
 - FileVFS._mkdir() did not send the correct VFSUpdates if more than one
   nested directory had to be created.
+
+- Fixed some obscure problems with file system browser dialog box
+  completion.
+
+- Narrowing would display the wrong text if the text area was scrolled
+  to the start of the buffer.
 
 + API Additions:
 
