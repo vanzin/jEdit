@@ -48,6 +48,7 @@ BufferLocalPropertiesDialog(View view){
 	props = new Hashtable();
 	props.put("mode","");
 	props.put("indentSize","int");
+	props.put("tabSize","int");
 	props.put("noTabs","bool");
 	props.put("indentOnTab","bool");
 	props.put("indentOnEnter","bool");

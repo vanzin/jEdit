@@ -32,17 +32,11 @@
 
 		plugin options dialog
 		
-		persistent registers, kill ring
-		
-		text area scrolls by screen lines, drag and drop, fold end in gutter, 
+		text area scrolls by screen lines, fold end in gutter, 
 		
 		deep indent
 		
-		control click beyond eol, rect select from keyboard, status indicator, vertical paste is different, "tall caret"
-		
 		new token types; better background colors for delegates; SPAN_REGEXP substitution, NO_ESCAPE spans, 15 new modes!
-
-		folding: colorized, alt-click, limit of 8 lifted.
 
 		better docking, better status, action bar, repeat last action,
 		persistent splits
@@ -52,8 +46,6 @@
 		beanshell 1.3, more macros
 		
 		new cli options
-		
-		better complete word - all visible buffers!
 		
 		search: flag toggle from keyboard, hypersearch selects all on line
 		search bar command change
@@ -65,10 +57,41 @@
 	
 	<para>
 	 Drag and drop of text is now supported in the text area; it can be disabled in the <guimenuitem>Mouse</guimenuitem> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+
+	<para>
+	 The <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> command (shortcut:  <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) now looks in all visible buffers for completions.
+	</para>
+
+	<para>
+	 <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Vertical Paste</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering chracters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection caw now act like a <quote>tall caret</quote>.
 	</para>
 	
 	<para>
+	 The new <guimenu>Edit</guimenu>&gt;<guimenuitem>More Selection</guimenuitem>&gt;<guimenuitem>Rectangular Selection</guimenuitem> command (shortcut: <keycombo><keycap>Alt</keycap><keycap>\</keycap></keycombo>) permits rectangular selections to be created using the keyboard. A static bar indicator is shown when rectangular selection mode is active. Clicking beyond the end of a line in rectangular selection mode (or <keycap>Control</keycap>-clicking otherwise) inserts the appropriate amount of whitespace and moves the caret to the clicked location.
+	</para>
+
+	<para>
+	 The new <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Paste Deleted</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+	 <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>) lists the 20 most recently deleted strings of text. This list of deleted strings is also persistent.
+	</para>
+	
+	<para>
+	 Register contents are now saved between editing sessions.
+	</para>
+
+	<para>
+	 The limit of 8 text areas editing a single buffer has been lifted.
+	</para>
+
+	<para>
+	 Fold start lines are now colored according to their nesting level in the text area. The colors can be customized in the <guilabel>Syntax Highlighting</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box. <keycap>Alt</keycap>-clicking on a fold in the gutter (or clicking with the middle mouse button) now narrows to that fold.
+	</para>
+
+	<para>
 	 
+	</sect2>
+
 	<sect2><title>File Encodings</title>
 	
 	<para>

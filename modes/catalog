@@ -124,6 +124,9 @@
 <MODE NAME="idl"		FILE="idl.xml"
 				FILE_NAME_GLOB="*.idl" />
 
+<MODE NAME="inform"		FILE="inform.xml"
+				FILE_NAME_GLOB="*.inf" />
+
 <MODE NAME="ini"		FILE="ini.xml"
 				FILE_NAME_GLOB="*.{ini,reg}" />
 
@@ -217,6 +220,9 @@
 
 <MODE NAME="postscript"		FILE="postscript.xml"
 				FILE_NAME_GLOB="*.{ps,eps}" />
+
+<MODE NAME="powerdynamo"	FILE="powerdynamo.xml"
+				FILE_NAME_GLOB="*.{ssc,stm}" />
 
 <MODE NAME="povray"		FILE="povray.xml"
 				FILE_NAME_GLOB="*.{pov,povray}" />

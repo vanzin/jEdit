@@ -211,6 +211,7 @@ public class ActionSet
 	 */
 	public void setLabel(String label)
 	{
+		System.err.println(this + " set label " + label);
 		this.label = label;
 	} //}}}
 
