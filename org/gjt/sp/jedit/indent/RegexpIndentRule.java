@@ -26,17 +26,34 @@ import gnu.regexp.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.Buffer;
 
-public class RegexpIndentRule extends IndentRule
+public class RegexpIndentRule implements IndentRule
 {
 	//{{{ RegexpIndentRule constructor
 	public RegexpIndentRule(String regexp, IndentAction prevPrev,
 		IndentAction prev, IndentAction thisLine)
 		throws REException
 	{
-		super(prevPrev,prev,thisLine);
-
+		this.prevPrevAction = prevPrev;
+		this.prevAction = prev;
+		this.thisAction = thisLine;
 		this.regexp = new RE(regexp,RE.REG_ICASE,
 			RESearchMatcher.RE_SYNTAX_JEDIT);
+	} //}}}
+
+	//{{{ apply() method
+	public IndentAction apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex)
+	{
+		if(isMatch(buffer.getLineText(thisLineIndex)))
+			return thisAction;
+		else if(prevLineIndex != -1 && isMatch(
+			buffer.getLineText(prevLineIndex)))
+			return prevAction;
+		else if(prevPrevLineIndex != -1 && isMatch(
+			buffer.getLineText(prevPrevLineIndex)))
+			return prevPrevAction;
+		else
+			return null;
 	} //}}}
 
 	//{{{ isMatch() method
@@ -51,5 +68,6 @@ public class RegexpIndentRule extends IndentRule
 		return getClass().getName() + "[" + regexp + "]";
 	} //}}}
 
+	private IndentAction prevPrevAction, prevAction, thisAction;
 	private RE regexp;
 }

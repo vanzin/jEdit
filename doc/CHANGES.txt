@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre2
 
-Thanks to Bertalan Fodor, Jarek Tuszynski, Nicholas O'Leary, and
-Simon Ruggier for contributing to this release.
+Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski,
+Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -84,10 +84,20 @@ Simon Ruggier for contributing to this release.
 
 - Changing the font size did not update the vertical scrollbar.
 
+- JSwat plugin did not work when running under Java 5 due to a bug in
+  jEdit's JARClassLoader (Dirk Moebius).
+
 }}}
 {{{ API Changes
 
 - View.updateTitle() is now public.
+
+- VFS.DirectoryEntry has been deprecated because its interface is not
+  conductive to lazy initialization. Virtual file systems should now
+  return instances of org.gjt.sp.jedit.io.VFSFile, and instead of
+  reading/writing the public fields of that class (they are public but
+  deprecated for VFS.DirectoryEntry compatibility), you should call the
+  accessor/mutator methods.
 
 }}}
 

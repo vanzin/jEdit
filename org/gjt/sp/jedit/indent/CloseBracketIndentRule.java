@@ -30,12 +30,36 @@ import org.gjt.sp.jedit.TextUtilities;
 public class CloseBracketIndentRule extends BracketIndentRule
 {
 	//{{{ CloseBracketIndentRule constructor
-	public CloseBracketIndentRule(char closeBracket,
-		IndentAction prevPrev, IndentAction prev,
-		IndentAction thisLine)
+	public CloseBracketIndentRule(char closeBracket, boolean aligned)
 	{
 		super(TextUtilities.getComplementaryBracket(closeBracket,
-			new boolean[1]),closeBracket,prevPrev,prev,thisLine);
+			new boolean[1]),closeBracket);
+		this.aligned = aligned;
+	} //}}}
+
+	//{{{ apply() method
+	public IndentAction apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex)
+	{
+		int index;
+		if(aligned)
+			index = thisLineIndex;
+		else
+			index = prevLineIndex;
+
+		if(index == -1)
+			return null;
+
+		String line = buffer.getLineText(index);
+
+		int offset = line.lastIndexOf(closeBracket);
+		if(offset == -1)
+			return null;
+
+		if(isMatch(line))
+			return new IndentAction.AlignBracket(index,offset);
+		else
+			return null;
 	} //}}}
 	
 	//{{{ isMatch() method
@@ -43,4 +67,6 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	{
 		return getBrackets(line).closeCount != 0;
 	} //}}}
+	
+	private boolean aligned;
 }

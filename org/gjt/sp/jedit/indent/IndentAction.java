@@ -22,13 +22,14 @@
 
 package org.gjt.sp.jedit.indent;
 
-import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.*;
 
 public interface IndentAction
 {
 	/**
 	 * @param buffer The buffer
-	 * @param line The line number
+	 * @param line The line number that matched the rule; not necessarily
+	 * the line being indented.
 	 * @param oldIndent Original indent.
 	 * @param newIndent The new indent -- ie, indent returned by previous
 	 * indent action.
@@ -50,7 +51,9 @@ public interface IndentAction
 		public int calculateIndent(Buffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
-			return newIndent + buffer.getIndentSize();
+			/* this is intentional -- we never want to
+			increase indent > 1 */
+			return oldIndent + buffer.getIndentSize();
 		}
 	}
 
@@ -60,6 +63,32 @@ public interface IndentAction
 			int newIndent)
 		{
 			return newIndent - buffer.getIndentSize();
+		}
+	}
+
+	public class AlignBracket implements IndentAction
+	{
+		private int line, offset;
+
+		public AlignBracket(int line, int offset)
+		{
+			this.line = line;
+			this.offset = offset;
+		}
+
+		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+			int newIndent)
+		{
+			int openBracketIndex = TextUtilities.findMatchingBracket(
+				buffer,this.line,this.offset);
+			if(openBracketIndex == -1)
+				return newIndent;
+
+			int openLineIndex = buffer.getLineOfOffset(openBracketIndex);
+			String openLine = buffer.getLineText(openLineIndex);
+
+			return MiscUtilities.getLeadingWhiteSpaceWidth(
+				openLine,buffer.getTabSize());
 		}
 	}
 }

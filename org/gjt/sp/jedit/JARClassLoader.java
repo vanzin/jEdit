@@ -212,6 +212,40 @@ public class JARClassLoader extends ClassLoader
 			return jar.getPath() + " (" + id + ")";
 	} //}}}
 
+	//{{{ findResources() method
+	protected Enumeration findResources(String name) throws IOException
+	{
+		class SingleElementEnumeration implements Enumeration
+		{
+			private Object element;
+
+			public SingleElementEnumeration(Object element)
+			{
+				this.element = element;
+			}
+
+			public boolean hasMoreElements()
+			{
+				return (element != null);
+			}
+
+			public Object nextElement()
+			{
+				if(element != null)
+				{
+					Object retval = element;
+					element = null;
+					return retval;
+				}
+				else
+					throw new NoSuchElementException();
+			}
+		}
+
+		URL resource = getResource(name);
+		return new SingleElementEnumeration(resource);
+	} //}}}
+
 	//{{{ finalize() method
 	protected void finalize()
 	{

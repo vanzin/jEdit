@@ -64,18 +64,24 @@ public class IndentRuleFactory
 	public static IndentRule indentOpenBracket(char bracket)
 		throws REException
 	{
-		return new OpenBracketIndentRule(bracket,
-			null,
-			new IndentAction.Increase(),
-			new IndentAction.Reset());
+		return new OpenBracketIndentRule(bracket,true);
 	}
 
 	public static IndentRule indentCloseBracket(char bracket)
 		throws REException
 	{
-		return new CloseBracketIndentRule(bracket,
-			null,
-			null,
-			new IndentAction.Decrease());
+		return new CloseBracketIndentRule(bracket,true);
+	}
+
+	public static IndentRule unalignedOpenBracket(char bracket)
+		throws REException
+	{
+		return new OpenBracketIndentRule(bracket,false);
+	}
+
+	public static IndentRule unalignedCloseBracket(char bracket)
+		throws REException
+	{
+		return new CloseBracketIndentRule(bracket,false);
 	}
 }

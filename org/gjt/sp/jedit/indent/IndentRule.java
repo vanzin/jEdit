@@ -24,46 +24,11 @@ package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.Buffer;
 
-public abstract class IndentRule
+public interface IndentRule
 {
-	//{{{ IndentRule constructor
-	public IndentRule(IndentAction prevPrev, IndentAction prev,
-		IndentAction thisLine)
-	{
-		this.prevPrevAction = prevPrev;
-		this.prevAction = prev;
-		this.thisAction = thisLine;
-	} //}}}
-
-	//{{{ apply() method
 	/**
 	 * Apply the indent rule to this line, and return an indent action.
 	 */
-	public IndentAction apply(Buffer buffer, int line)
-	{
-		String thisLine = buffer.getLineText(line);
-		String prev = (line == 0 ? null : buffer.getLineText(line - 1));
-		String prevPrev = (line <= 1 ? null : buffer.getLineText(line - 2));
-		return apply(buffer,thisLine,prev,prevPrev,line);
-	} //}}}
-
-	//{{{ apply() method
-	public IndentAction apply(Buffer buffer, String thisLine,
-		String prev, String prevPrev, int line)
-	{
-		if(isMatch(thisLine))
-			return thisAction;
-		else if(prev != null && isMatch(prev))
-			return prevAction;
-		else if(prevPrev != null && isMatch(prevPrev))
-			return prevPrevAction;
-		else
-			return null;
-	} //}}}
-
-	public abstract boolean isMatch(String line);
-
-	//{{{ Protected members
-	protected IndentAction prevPrevAction, prevAction, thisAction;
-	//}}}
+	public IndentAction apply(Buffer buffer, int thisLineIndex,
+		int prevLineIndex, int prevPrevLineIndex);
 }
