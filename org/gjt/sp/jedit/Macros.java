@@ -266,7 +266,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			loadMacros(macroHierarchy,"",new File(userMacroPath));
 		}
 
-		EditBus.send(new MacrosChanged(null));
+		EditBus.send(new DynamicMenuChanged("macros"));
 	} //}}}
 
 	//{{{ registerHandler() method

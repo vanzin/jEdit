@@ -1,5 +1,23 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre2
+
+{{{ Bug Fixes
+
+- It was possible to open multiple plugin manager instances from the
+  "Plugin Error" dialog box.
+
+}}}
+{{{ API Changes
+
+- Added a new dynamic menu API, so that plugins using the 4.2 plugin API
+  can provide dynamic menus. Simply write an implementation of
+  org.gjt.sp.jedit.menu.DynamicMenuProvider
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre1
 
 Thanks to Bill McMilleon, Kasper Graversen, Kris Kopicki,

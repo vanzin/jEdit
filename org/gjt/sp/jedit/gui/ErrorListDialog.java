@@ -164,8 +164,9 @@ public class ErrorListDialog extends EnhancedDialog
 				dispose();
 			else if(evt.getSource() == pluginMgr)
 			{
-				new org.gjt.sp.jedit.pluginmgr.PluginManager(
-					JOptionPane.getFrameForComponent(
+				org.gjt.sp.jedit.pluginmgr.PluginManager
+					.showPluginManager(JOptionPane
+					.getFrameForComponent(
 					ErrorListDialog.this));
 			}
 		} //}}}
