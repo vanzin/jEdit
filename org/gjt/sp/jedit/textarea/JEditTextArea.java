@@ -847,11 +847,18 @@ public class JEditTextArea extends JComponent
 	//{{{ invalidateLine() method
 	/**
 	 * Marks a line as needing a repaint.
-	 * @param line The line to invalidate
+	 * @param line The physical line to invalidate
 	 */
 	public final void invalidateLine(int line)
 	{
-		line = physicalToVirtual(line);
+		int lineCount = buffer.getLineCount();
+		int virtualLineCount = foldVisibilityManager
+			.getVirtualLineCount();
+
+		if(line >= lineCount)
+			line = (line - lineCount) + virtualLineCount;
+		else
+			line = foldVisibilityManager.physicalToVirtual(line);
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(line) + fm.getDescent() + fm.getLeading();
@@ -867,17 +874,19 @@ public class JEditTextArea extends JComponent
 	 */
 	public final void invalidateLineRange(int firstLine, int lastLine)
 	{
-		firstLine = physicalToVirtual(firstLine);
+		int lineCount = buffer.getLineCount();
+		int virtualLineCount = foldVisibilityManager
+			.getVirtualLineCount();
 
-		// all your bugs are belong to us
-		if(lastLine > virtualToPhysical(
-			getVirtualLineCount() - 1))
-		{
-			lastLine = (lastLine - buffer.getLineCount())
-				+ getVirtualLineCount();
-		}
+		if(firstLine >= lineCount)
+			firstLine = (firstLine - lineCount) + virtualLineCount;
 		else
-			lastLine = physicalToVirtual(lastLine);
+			firstLine = foldVisibilityManager.physicalToVirtual(firstLine);
+
+		if(lastLine >= lineCount)
+			lastLine = (lastLine - lineCount) + virtualLineCount;
+		else
+			lastLine = foldVisibilityManager.physicalToVirtual(lastLine);
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = lineToY(firstLine) + fm.getDescent() + fm.getLeading();
@@ -922,7 +931,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int virtualToPhysical(int line)
 	{
-		return foldVisibilityManager.physicalToVirtual(line);
+		return foldVisibilityManager.virtualToPhysical(line);
 	} //}}}
 
 	//{{{ getBufferLength() method
@@ -4824,8 +4833,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			endLine = buffer.getLineCount();
 		else
 		{
-			endLine = Math.min(buffer.getLineCount(),
-				virtualToPhysical(
+			endLine = foldVisibilityManager.virtualToPhysical(Math.min(
+				foldVisibilityManager.getVirtualLineCount() - 1,
 				firstLine + visibleLines));
 		}
 
@@ -5099,9 +5108,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	class BufferChangeHandler implements BufferChangeListener
 	{
 		//{{{ foldLevelChanged() method
-		public void foldLevelChanged(Buffer buffer, int line)
+		public void foldLevelChanged(Buffer buffer, int line, int level)
 		{
-			invalidateLine(line - 1);
+			if(line != 0)
+				invalidateLine(line - 1);
 		} //}}}
 
 		//{{{ contentInserted() method

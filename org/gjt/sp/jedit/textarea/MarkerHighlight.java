@@ -33,7 +33,8 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	public void paintHighlight(Graphics gfx, int line, int y)
 	{
-		if(textArea.getBuffer().isLoaded() && highlightEnabled)
+		if(textArea.getBuffer().isLoaded() && highlightEnabled
+			&& line < textArea.getVirtualLineCount())
 		{
 			Buffer buffer = textArea.getBuffer();
 			if(buffer.getMarkerAtLine(textArea.virtualToPhysical(line)) != null)

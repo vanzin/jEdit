@@ -212,7 +212,7 @@ public class EditPane extends JPanel implements EBComponent
 			buffer.putProperty(Buffer.SELECTION,selection);
 
 		buffer.putProperty(Buffer.SCROLL_VERT,new Integer(
-			buffer.virtualToPhysical(textArea.getFirstLine())));
+			textArea.virtualToPhysical(textArea.getFirstLine())));
 		buffer.putProperty(Buffer.SCROLL_HORIZ,new Integer(
 			textArea.getHorizontalOffset()));
 	} //}}}
@@ -240,7 +240,7 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.setSelection(selection);
 
 		if(firstLine != null)
-			textArea.setFirstLine(buffer.physicalToVirtual(firstLine.intValue()));
+			textArea.setFirstLine(textArea.physicalToVirtual(firstLine.intValue()));
 
 		if(horizontalOffset != null)
 			textArea.setHorizontalOffset(horizontalOffset.intValue());

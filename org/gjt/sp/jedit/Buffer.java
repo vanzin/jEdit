@@ -1439,7 +1439,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		bufferListeners.addElement(l);
 	} //}}}
 
-	//{{{ addBufferChangeListener() method
+	//{{{ removeBufferChangeListener() method
 	/**
 	 * Removes a buffer change listener.
 	 * @param listener The listener
@@ -2212,7 +2212,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean isFoldStart(int line)
 	{
-		return (line != 0 && getFoldLevel(line) > getFoldLevel(line - 1));
+		return (line != lineCount - 1 && getFoldLevel(line) < getFoldLevel(line + 1));
 	} //}}}
 
 	//{{{ getFoldLevel() method
@@ -2232,8 +2232,7 @@ public class Buffer extends PlainDocument implements EBComponent
 			int start = 0;
 			for(int i = line - 1; i >= 0; i--)
 			{
-				LineInfo _info = lineInfo[i];
-				if(_info.foldLevelValid)
+				if(lineInfo[i].foldLevelValid)
 				{
 					start = i + 1;
 					break;
@@ -2249,10 +2248,11 @@ public class Buffer extends PlainDocument implements EBComponent
 				info.foldLevelValid = true;
 				if(info.foldLevel != newFoldLevel)
 				{
-					info.foldLevel = newFoldLevel;
-					fireFoldLevelChanged(i);
+					info.foldLevel = (short)newFoldLevel;
 				}
 			}
+
+			fireFoldLevelChanged(start,line);
 
 			return newFoldLevel;
 		}
@@ -2269,21 +2269,34 @@ public class Buffer extends PlainDocument implements EBComponent
 	public FoldVisibilityManager getFoldVisibilityManager(
 		JEditTextArea textArea)
 	{
-		FoldVisibilityManager foldVisibilityManager
-			 = (FoldVisibilityManager)foldVisibilityManagers
-			.get(textArea);
-		if(foldVisibilityManager == null)
+		FoldVisibilityManager mgr = (FoldVisibilityManager)
+			foldVisibilityManagers.get(textArea);
+		if(mgr == null)
 		{
-			// in the EditPane constructor, we need a
-			// visibility manager before the
-			// EditPane.CREATED message.
-			foldVisibilityManager = new FoldVisibilityManager(
-				this,textArea);
-			addBufferChangeListener(foldVisibilityManager);
-			foldVisibilityManagers.put(textArea,foldVisibilityManager);
+			mgr = new FoldVisibilityManager(this,textArea);
+			foldVisibilityManagers.put(textArea,mgr);
 		}
 
-		return foldVisibilityManager;
+		// find it a bit that it can set in line's 'visible' flag sets
+		for(int i = 0; i < inUseFVMs.length; i++)
+		{
+			if(inUseFVMs[i] == null)
+			{
+				inUseFVMs[i] = mgr;
+				mgr._grab(i);
+				return mgr;
+			}
+		}
+
+		//XXX
+		throw new InternalError("Too many text areas editing this buffer");
+	} //}}}
+
+	//{{{ releaseFoldVisibilityManager() method
+	public void releaseFoldVisibilityManager(FoldVisibilityManager mgr)
+	{
+		mgr._release();
+		inUseFVMs[mgr._getIndex()] = null;
 	} //}}}
 
 	//{{{ Marker methods
@@ -2520,20 +2533,24 @@ public class Buffer extends PlainDocument implements EBComponent
 			if(emsg.getWhat() == EditPaneUpdate.CREATED)
 			{
 				// see getFoldVisibilityManager()
-
-				/*JEditTextArea textArea = emsg.getEditPane()
-					.getTextArea();
-				foldVisibilityManagers.put(textArea,
-					new FoldVisibilityManager());*/
 			}
 			else if(emsg.getWhat() == EditPaneUpdate.DESTROYED)
 			{
 				JEditTextArea textArea = emsg.getEditPane()
 					.getTextArea();
-				removeBufferChangeListener(
-					(FoldVisibilityManager)
-					foldVisibilityManagers
-					.remove(textArea));
+				FoldVisibilityManager mgr = textArea
+					.getFoldVisibilityManager();
+				foldVisibilityManagers.remove(mgr);
+
+				for(int i = 0; i < inUseFVMs.length; i++)
+				{
+					if(mgr == inUseFVMs[i])
+					{
+						mgr._release();
+						inUseFVMs[i] = null;
+						break;
+					}
+				}
 			}
 		}
 	} //}}}
@@ -2551,8 +2568,10 @@ public class Buffer extends PlainDocument implements EBComponent
 		lineCount = 1;
 		lineInfo = new LineInfo[1];
 		lineInfo[0] = new LineInfo();
+		lineInfo[0].visible = (byte)0xff;
 
 		foldVisibilityManagers = new Hashtable();
+		inUseFVMs = new FoldVisibilityManager[8];
 		bufferListeners = new Vector();
 
 		seg = new Segment();
@@ -2665,6 +2684,9 @@ public class Buffer extends PlainDocument implements EBComponent
 					lineInfo = lineInfoN;
 				}
 
+				LineInfo prev = (startLine == 0
+					? null : lineInfo[startLine - 1]);
+
 				System.arraycopy(lineInfo,startLine,lineInfo,endLine,
 					lineInfo.length - endLine);
 
@@ -2675,7 +2697,20 @@ public class Buffer extends PlainDocument implements EBComponent
 					info.context = null;
 					info.rules = mainSet;
 					info.inRule = null;
+					info.visible = (prev == null
+						? (byte)0xff
+						: prev.visible);
 					lineInfo[i] = info;
+				}
+
+				// notify fold visibility managers
+				for(int i = 0; i < inUseFVMs.length; i++)
+				{
+					if(inUseFVMs[i] != null)
+					{
+						inUseFVMs[i]._linesInserted(
+							startLine,numLines);
+					}
 				}
 			}
 		}
@@ -2716,6 +2751,19 @@ public class Buffer extends PlainDocument implements EBComponent
 
 			if(numLines > 0)
 			{
+				// notify fold visibility managers
+				// BEFORE the line info array is shrunk
+				// so they can update their virtual line
+				// counts properly
+				for(int i = 0; i < inUseFVMs.length; i++)
+				{
+					if(inUseFVMs[i] != null)
+					{
+						inUseFVMs[i]._linesRemoved(
+							startLine,numLines);
+					}
+				}
+
 				int endLine = startLine + numLines;
 
 				lineCount -= numLines;
@@ -2808,6 +2856,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	private FoldHandler foldHandler;
 	private Vector bufferListeners;
 	private Hashtable foldVisibilityManagers;
+	private FoldVisibilityManager[] inUseFVMs;
 
 	//}}}
 
@@ -3041,12 +3090,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	//{{{ Event firing methods
 
 	//{{{ fireFoldLevelChanged() method
-	private void fireFoldLevelChanged(int line)
+	private void fireFoldLevelChanged(int line, int level)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
 			((BufferChangeListener)bufferListeners.elementAt(i))
-				.foldLevelChanged(this,line);
+				.foldLevelChanged(this,line,level);
 		}
 	} //}}}
 
@@ -3221,9 +3270,31 @@ public class Buffer extends PlainDocument implements EBComponent
 			}
 		}
 
+		/**
+		 * Do not use this method. The only reason it is public is
+		 * so that classes in the 'textarea' package can use it.
+		 */
+		public boolean isVisible(int index)
+		{
+			return (visible & (1<<index)) != 0;
+		}
+
+		/**
+		 * Do not use this method. The only reason it is public is
+		 * so that classes in the 'textarea' package can use it.
+		 */
+		public void setVisible(int index, boolean v)
+		{
+			if(v)
+				visible |= (1<<index);
+			else
+				visible &= ~(1<<index);
+		}
+
 		// private members
-		int foldLevel;
+		short foldLevel;
 		boolean foldLevelValid;
+		byte visible;
 
 		// true if the context info is valid.
 		boolean contextValid;
