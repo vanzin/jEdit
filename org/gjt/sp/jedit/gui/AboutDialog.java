@@ -178,7 +178,7 @@ public class AboutDialog extends EnhancedDialog
 
 					try
 					{
-						Thread.sleep(Math.max(0,50 -
+						Thread.sleep(Math.max(0,25 -
 							(System.currentTimeMillis() - start)));
 					}
 					catch(InterruptedException ie)

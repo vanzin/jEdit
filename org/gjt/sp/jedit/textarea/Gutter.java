@@ -175,52 +175,77 @@ public class Gutter extends JComponent implements SwingConstants
 			//{{{ Paint bracket scope
 			else if(bracketHighlight)
 			{
-				if(textArea.isBracketHighlightVisible())
-				{
-					int bracketLine = textArea.getBracketLine();
-					int caretLine = textArea.getCaretLine();
-					if(caretLine != bracketLine)
-					{
-						if(caretLine > bracketLine)
-						{
-							int tmp = caretLine;
-							caretLine = bracketLine;
-							bracketLine = tmp;
-						}
+				int bracketLine = textArea.getBracketLine();
+				int caretLine = textArea.getCaretLine();
 
-						gfx.setColor(bracketHighlightColor);
-						if(physicalLine == caretLine)
-						{
-							gfx.fillRect(5,
-								y
-								+ lineHeight / 2,
-								5,
-								2);
-							gfx.fillRect(5,
-								y
-								+ lineHeight / 2,
-								2,
-								lineHeight - lineHeight / 2);
-						}
-						else if(physicalLine == bracketLine)
-						{
-							gfx.fillRect(5,
-								y,
-								2,
-								lineHeight / 2);
-							gfx.fillRect(5,
-								y + lineHeight / 2,
-								5,
-								2);
-						}
-						else if(physicalLine > caretLine
-							&& physicalLine < bracketLine)
-						{
-							gfx.fillRect(5,
-								y,
-								2,
-								lineHeight);
-						}
+				if(textArea.isBracketHighlightVisible()
+					&& physicalLine >= Math.min(caretLine,bracketLine)
+					&& physicalLine <= Math.max(caretLine,bracketLine))
+				{
+					int caretScreenLine;
+					if(caretLine > textArea.getLastPhysicalLine())
+						caretScreenLine = Integer.MAX_VALUE;
+					else
+					{
+						caretScreenLine = textArea
+							.getScreenLineOfOffset(
+							textArea.getCaretPosition());
+					}
+
+					int bracketScreenLine;
+					if(bracketLine > textArea.getLastPhysicalLine())
+						bracketScreenLine = Integer.MAX_VALUE;
+					else
+					{
+						bracketScreenLine = textArea.chunkCache
+							.getScreenLineOfOffset(
+							bracketLine,
+							textArea.getBracketPosition());
+					}
+
+					if(caretScreenLine > bracketScreenLine)
+					{
+						int tmp = caretScreenLine;
+						caretScreenLine = bracketScreenLine;
+						bracketScreenLine = tmp;
+					}
+
+					gfx.setColor(bracketHighlightColor);
+					if(bracketScreenLine == caretScreenLine)
+					{
+						// do nothing
+					}
+					else if(line == caretScreenLine)
+					{
+						gfx.fillRect(5,
+							y
+							+ lineHeight / 2,
+							5,
+							2);
+						gfx.fillRect(5,
+							y
+							+ lineHeight / 2,
+							2,
+							lineHeight - lineHeight / 2);
+					}
+					else if(line == bracketScreenLine)
+					{
+						gfx.fillRect(5,
+							y,
+							2,
+							lineHeight / 2);
+						gfx.fillRect(5,
+							y + lineHeight / 2,
+							5,
+							2);
+					}
+					else if(line > caretScreenLine
+						&& line < bracketScreenLine)
+					{
+						gfx.fillRect(5,
+							y,
+							2,
+							lineHeight);
 					}
 				}
 			} //}}}

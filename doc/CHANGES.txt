@@ -36,7 +36,7 @@ JEDIT 4.0 VERSION HISTORY
   (doing this on a save was kind of pointless)
 - Entering a new path in a file dialog box and clicking 'Open' now sets
   the browser's location to that path
-- Home/end commands are now soft-wrap-aware
+- Home/end commands, up/down arrows are now soft-wrap-aware
 - Documentation is now built using DocBook-XSL stylesheets 1.48
 - jEdit's build.xml now automatically detects if it is running on Java
   version 1.4, and doesn't build the Java14.java otherwise
@@ -106,6 +106,7 @@ JEDIT 4.0 VERSION HISTORY
   worked though)
 - Removing text from the middle of a line with soft wrap on might not
   repaint the text area properly
+- Added missing 'read error' and 'write error' I/O error strings
 
 + API Additions
 
