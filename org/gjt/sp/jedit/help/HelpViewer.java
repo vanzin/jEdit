@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.gui;
+package org.gjt.sp.jedit.help;
 
 //{{{ Imports
 import com.microstar.xml.*;
@@ -36,6 +36,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
+import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -92,7 +93,6 @@ public class HelpViewer extends JFrame implements EBComponent
 		}
 
 		history = new String[25];
-		nodes = new Hashtable();
 
 		ActionHandler actionListener = new ActionHandler();
 
@@ -131,26 +131,6 @@ public class HelpViewer extends JFrame implements EBComponent
 		back.setPreferredSize(forward.getPreferredSize());
 
 		getContentPane().add(BorderLayout.NORTH,toolBar);
-
-		createTOC();
-
-		toc = new TOCTree(tocModel);
-
-		// looks bad with the OS X L&F, apparently...
-		if(!OperatingSystem.isMacOSLF())
-			toc.putClientProperty("JTree.lineStyle", "Angled");
-
-		toc.setCellRenderer(new TOCCellRenderer());
-		toc.setEditable(false);
-		toc.setRootVisible(false);
-		toc.setShowsRootHandles(true);
-
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-			nodes.get("users-guide/using-jedit-part.html");
-		if(node != null)
-			toc.expandPath(new TreePath(node.getPath()));
-		if(pluginTree != null)
-			toc.expandPath(new TreePath(pluginTree.getPath()));
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
@@ -288,339 +268,23 @@ public class HelpViewer extends JFrame implements EBComponent
 			SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}
 
-	//{{{ Package-private members
-
-	//{{{ createNode() method
-	DefaultMutableTreeNode createNode(String href, String title)
+	//{{{ getBaseURL() method
+	public String getBaseURL()
 	{
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-			new HelpNode(href,title),true);
-		nodes.put(href,node);
-		return node;
+		return baseURL;
 	} //}}}
 
-	//}}}
-
 	//{{{ Private members
-
-	//{{{ Instance variables
 	private String baseURL;
 	private JButton back;
 	private JButton forward;
-	private DefaultTreeModel tocModel;
-	private JTree toc;
-	private DefaultMutableTreeNode pluginTree;
-	// this makes gotoURL()'s tree updating simpler
-	private Hashtable nodes;
 	private JEditorPane viewer;
 	private JTextField urlField;
 	private String[] history;
 	private int historyPos;
 	//}}}
 
-	//{{{ createTOC() method
-	private void createTOC()
-	{
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-
-		root.add(createNode("welcome.html",
-			jEdit.getProperty("helpviewer.toc.welcome")));
-
-		root.add(createNode("README.txt",
-			jEdit.getProperty("helpviewer.toc.readme")));
-		root.add(createNode("NEWS.txt",
-			jEdit.getProperty("helpviewer.toc.news")));
-		root.add(createNode("TODO.txt",
-			jEdit.getProperty("helpviewer.toc.todo")));
-		root.add(createNode("CHANGES.txt",
-			jEdit.getProperty("helpviewer.toc.changes")));
-		root.add(createNode("COPYING.txt",
-			jEdit.getProperty("helpviewer.toc.copying")));
-		root.add(createNode("COPYING.DOC.txt",
-			jEdit.getProperty("helpviewer.toc.copying-doc")));
-
-		loadTOC(root,"users-guide/toc.xml");
-		loadTOC(root,"FAQ/toc.xml");
-
-		pluginTree = new DefaultMutableTreeNode(jEdit.getProperty(
-			"helpviewer.toc.plugins"),true);
-
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			EditPlugin plugin = plugins[i];
-			EditPlugin.JAR jar = plugin.getJAR();
-			if(jar == null)
-				continue;
-
-			String name = plugin.getClassName();
-
-			String docs = jEdit.getProperty("plugin." + name + ".docs");
-			String label = jEdit.getProperty("plugin." + name + ".name");
-			if(docs != null)
-			{
-				if(label != null && docs != null)
-				{
-					URL url = jar.getClassLoader()
-						.getResource(docs);
-					if(url != null)
-					{
-						pluginTree.add(createNode(
-							url.toString(),label));
-					}
-				}
-			}
-		}
-
-		if(pluginTree.getChildCount() != 0)
-			root.add(pluginTree);
-		else
-		{
-			// so that HelpViewer constructor doesn't try to expand
-			pluginTree = null;
-		}
-
-		tocModel = new DefaultTreeModel(root);
-	} //}}}
-
-	//{{{ loadTOC() method
-	private void loadTOC(DefaultMutableTreeNode root, String path)
-	{
-		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
-		XmlParser parser = new XmlParser();
-		parser.setHandler(h);
-
-		try
-		{
-			parser.parse(null, null, new InputStreamReader(
-				new URL(baseURL + '/' + path).openStream()));
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,path + ':' + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.NOTICE,this,e);
-		}
-	} //}}}
-
-	//}}}
-
 	//{{{ Inner classes
-
-	//{{{ HelpNode class
-	static class HelpNode
-	{
-		String href, title;
-
-		//{{{ HelpNode constructor
-		HelpNode(String href, String title)
-		{
-			this.href = href;
-			this.title = title;
-		} //}}}
-
-		//{{{ toString() method
-		public String toString()
-		{
-			return title;
-		} //}}}
-	} //}}}
-
-	//{{{ TOCHandler class
-	class TOCHandler extends HandlerBase
-	{
-		String dir;
-
-		//{{{ TOCHandler constructor
-		TOCHandler(DefaultMutableTreeNode root, String dir)
-		{
-			nodes = new Stack();
-			node = root;
-			this.dir = dir;
-		} //}}}
-
-		//{{{ attribute() method
-		public void attribute(String aname, String value, boolean isSpecified)
-		{
-			if(aname.equals("HREF"))
-				href = value;
-		} //}}}
-
-		//{{{ charData() method
-		public void charData(char[] c, int off, int len)
-		{
-			if(tag.equals("TITLE"))
-			{
-				StringBuffer buf = new StringBuffer();
-				for(int i = 0; i < len; i++)
-				{
-					char ch = c[off + i];
-					if(ch == ' ' || !Character.isWhitespace(ch))
-						buf.append(ch);
-				}
-				title = buf.toString();
-			}
-		} //}}}
-
-		//{{{ startElement() method
-		public void startElement(String name)
-		{
-			tag = name;
-		} //}}}
-
-		//{{{ endElement() method
-		public void endElement(String name)
-		{
-			if(name == null)
-				return;
-
-			if(name.equals("TITLE"))
-			{
-				DefaultMutableTreeNode newNode = createNode(
-					dir + href,title);
-				node.add(newNode);
-				nodes.push(node);
-				node = newNode;
-			}
-			else if(name.equals("ENTRY"))
-				node = (DefaultMutableTreeNode)nodes.pop();
-		} //}}}
-
-		//{{{ Private members
-		private String tag;
-		private String title;
-		private String href;
-		private DefaultMutableTreeNode node;
-		private Stack nodes;
-		//}}}
-	} //}}}
-
-	//{{{ TOCTree class
-	class TOCTree extends JTree
-	{
-		//{{{ TOCTree constructor
-		TOCTree(TreeModel model)
-		{
-			super(model);
-			ToolTipManager.sharedInstance().registerComponent(this);
-		} //}}}
-
-		//{{{ getToolTipText() method
-		public final String getToolTipText(MouseEvent evt)
-		{
-			TreePath path = getPathForLocation(evt.getX(), evt.getY());
-			if(path != null)
-			{
-				Rectangle cellRect = getPathBounds(path);
-				if(cellRect != null && !cellRectIsVisible(cellRect))
-					return path.getLastPathComponent().toString();
-			}
-			return null;
-		} //}}}
-
-		//{{{ getToolTipLocation() method
-		public final Point getToolTipLocation(MouseEvent evt)
-		{
-			TreePath path = getPathForLocation(evt.getX(), evt.getY());
-			if(path != null)
-			{
-				Rectangle cellRect = getPathBounds(path);
-				if(cellRect != null && !cellRectIsVisible(cellRect))
-				{
-					return new Point(cellRect.x + 14, cellRect.y);
-				}
-			}
-			return null;
-		} //}}}
-
-		//{{{ processMouseEvent() method
-		protected void processMouseEvent(MouseEvent evt)
-		{
-			ToolTipManager ttm = ToolTipManager.sharedInstance();
-
-			switch(evt.getID())
-			{
-			case MouseEvent.MOUSE_ENTERED:
-				toolTipInitialDelay = ttm.getInitialDelay();
-				toolTipReshowDelay = ttm.getReshowDelay();
-				ttm.setInitialDelay(200);
-				ttm.setReshowDelay(0);
-				super.processMouseEvent(evt);
-				break;
-			case MouseEvent.MOUSE_EXITED:
-				ttm.setInitialDelay(toolTipInitialDelay);
-				ttm.setReshowDelay(toolTipReshowDelay);
-				super.processMouseEvent(evt);
-				break;
-			case MouseEvent.MOUSE_CLICKED:
-				TreePath path = getPathForLocation(evt.getX(),evt.getY());
-				if(path != null)
-				{
-					if(!isPathSelected(path))
-						setSelectionPath(path);
-
-					Object obj = ((DefaultMutableTreeNode)
-						path.getLastPathComponent())
-						.getUserObject();
-					if(!(obj instanceof HelpNode))
-					{
-						toc.expandPath(path);
-						return;
-					}
-
-					HelpNode node = (HelpNode)obj;
-
-					gotoURL(node.href,true);
-				}
-
-				super.processMouseEvent(evt);
-				break;
-			default:
-				super.processMouseEvent(evt);
-				break;
-			}
-		} //}}}
-
-		//{{{ Private members
-		private int toolTipInitialDelay = -1;
-		private int toolTipReshowDelay = -1;
-
-		//{{{ cellRectIsVisible() method
-		private boolean cellRectIsVisible(Rectangle cellRect)
-		{
-			Rectangle vr = TOCTree.this.getVisibleRect();
-			return vr.contains(cellRect.x,cellRect.y) &&
-				vr.contains(cellRect.x + cellRect.width,
-				cellRect.y + cellRect.height);
-		} //}}}
-
-		//}}}
-	} //}}}
-
-	//{{{ TOCCellRenderer class
-	class TOCCellRenderer extends DefaultTreeCellRenderer
-	{
-		EmptyBorder border = new EmptyBorder(1,0,1,1);
-
-		public Component getTreeCellRendererComponent(JTree tree,
-			Object value, boolean sel, boolean expanded,
-			boolean leaf, int row, boolean focus)
-		{
-			super.getTreeCellRendererComponent(tree,value,sel,
-				expanded,leaf,row,focus);
-			setIcon(leaf ? FileCellRenderer.fileIcon
-				: (expanded ? FileCellRenderer.openDirIcon
-				: FileCellRenderer.dirIcon));
-			setBorder(border);
-
-			return this;
-		}
-	} //}}}
 
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener

@@ -1646,6 +1646,12 @@ helpviewer.toc.changes=Version History
 helpviewer.toc.copying=GNU General Public License
 helpviewer.toc.copying-doc=GNU Free Documentation License
 helpviewer.toc.plugins=Plugins
+
+helpviewer.search.label=Search
+helpviewer.search.caption=Search for:
+helpviewer.search.error.title=Indexing Error
+helpviewer.search.error.message=An error occurred while building the help index.\n\
+	({0})
 #}}}
 
 #{{{ Tip of the day window

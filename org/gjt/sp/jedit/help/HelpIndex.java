@@ -132,10 +132,10 @@ public class HelpIndex
 		indexStream(_in,fileIndex);
 	} //}}}
 
-	//{{{ getWords() method
-	public HashMap getWords()
+	//{{{ getWord() method
+	public Word getWord(String word)
 	{
-		return words;
+		return (Word)words.get(word);
 	} //}}}
 
 	//{{{ Private members
