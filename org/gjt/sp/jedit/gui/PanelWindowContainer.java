@@ -68,7 +68,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		menuBtn.setRequestFocusEnabled(false);
 		menuBtn.setToolTipText(jEdit.getProperty("view.docking.menu-tooltip"));
 		if(OperatingSystem.isMacOSLF())
-			closeBox.putClientProperty("JButton.buttonType","toolbar");
+			menuBtn.putClientProperty("JButton.buttonType","toolbar");
 
 		menuBtn.setMargin(new Insets(0,0,0,0));
 

@@ -114,7 +114,7 @@ public class GutterOptionPane extends AbstractOptionPane
 
 		addComponent(gutterHighlightBox,gutterHighlightColor
 			= new ColorWellButton(jEdit.getColorProperty(
-			"view.gutter.bracketHighlightColor")),
+			"view.gutter.highlightColor")),
 			GridBagConstraints.VERTICAL);
 
 		/* Bracket highlight */

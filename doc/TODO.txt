@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- broken activity log autoscroll
+- undo caret pos wrong
 - bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
 - auto indent: don't de-indent on enter if no leading indent at all?
@@ -213,7 +215,6 @@ and quirks that I need to fix eventually.
 - optimize for no folding & no soft wrap case:
   - reset() and changed() don't need to scan
   - scroll/physUp/Down() simpler
-  - getLineSubregionCount() can return 1
 - inserting lines repaints whole text area
 - better data structure for undo queue
 - figure out a way to write the autosave without needing a read lock the
@@ -223,6 +224,8 @@ and quirks that I need to fix eventually.
   two redundant getLineText()s
 - see if getLineOfOffset() can be optimized
 - wrap guide: paint using new API
+- resizeColumnsAppropriately() kills performance!
+- use less write locks for better multithreaded performance
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

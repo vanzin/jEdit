@@ -30,7 +30,13 @@ public class IntegerArray
 	//{{{ IntegerArray constructor
 	public IntegerArray()
 	{
-		array = new int[2000];
+		this(2000);
+	} //}}}
+
+	//{{{ IntegerArray constructor
+	public IntegerArray(int initialSize)
+	{
+		array = new int[initialSize];
 	} //}}}
 
 	//{{{ add() method

@@ -17,7 +17,7 @@ echo startup/README.txt >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc \( -name \*.txt -o -name \*.png \) >> installer/jedit-program
-find doc/users-guide doc/FAQ doc/tips \( -name \*.html -o -name toc.xml \) >> installer/jedit-program
+find doc/users-guide doc/FAQ doc/news42 doc/tips \( -name \*.html -o -name toc.xml \) >> installer/jedit-program
 echo doc/welcome.html >> installer/jedit-program
 
 print_size jedit-program

@@ -172,6 +172,8 @@ public class PluginManager extends JFrame implements EBComponent
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+		setIconImage(GUIUtilities.getPluginIcon());
+
 		pack();
 		GUIUtilities.loadGeometry(this,"plugin-manager");
 		show();
