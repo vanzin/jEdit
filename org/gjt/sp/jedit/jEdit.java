@@ -186,6 +186,10 @@ public class jEdit
 			try
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
+				String check = in.readLine();
+				if(!check.equals("b"))
+					throw new Exception("Wrong port file format");
+
 				port = Integer.parseInt(in.readLine());
 				key = Integer.parseInt(in.readLine());
 				in.close();
