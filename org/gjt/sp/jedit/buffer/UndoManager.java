@@ -189,14 +189,18 @@ public class UndoManager
 			if(rem.offset == offset)
 			{
 				rem.str = rem.str.concat(text);
+				rem.hashcode = rem.str.hashCode();
 				rem.length += length;
+				KillRing.changed(rem);
 				return;
 			}
 			else if(offset + length == rem.offset)
 			{
 				rem.str = text.concat(rem.str);
+				rem.hashcode = rem.str.hashCode();
 				rem.length += length;
 				rem.offset = offset;
+				KillRing.changed(rem);
 				return;
 			}
 		}
@@ -348,6 +352,7 @@ public class UndoManager
 			this.offset = offset;
 			this.length = length;
 			this.str = str;
+			hashcode = str.hashCode();
 		} //}}}
 
 		//{{{ undo() method
@@ -371,6 +376,8 @@ public class UndoManager
 		int offset;
 		int length;
 		String str;
+		int hashcode;
+		boolean inKillRing;
 	} //}}}
 
 	//{{{ CompoundEdit class

@@ -55,14 +55,114 @@ public class KillRing
 	static int count;
 	static boolean wrap;
 
+	//{{{ changed() method
+	static void changed(UndoManager.Remove rem)
+	{
+		if(rem.inKillRing)
+		{
+			// compare existing entries' hashcode with this
+			int length = (wrap ? ring.length : count);
+			int kill = -1;
+			boolean duplicate = false;
+
+			for(int i = 0; i < length; i++)
+			{
+				if(ring[i] != rem
+					&& ring[i].hashcode == rem.hashcode
+					&& ring[i].str.equals(rem.str))
+				{
+					// we don't want duplicate
+					// entries in the kill ring
+					kill = i;
+					break;
+				}
+			}
+
+			if(kill != -1)
+				remove(kill);
+		}
+		else
+			add(rem);
+	} //}}}
+
 	//{{{ add() method
 	static void add(UndoManager.Remove rem)
 	{
+		// compare existing entries' hashcode with this
+		int length = (wrap ? ring.length : count);
+		for(int i = 0; i < length; i++)
+		{
+			if(ring[i].hashcode == rem.hashcode)
+			{
+				// strings might be equal!
+				if(ring[i].str.equals(rem.str))
+				{
+					// we don't want duplicate entries
+					// in the kill ring
+					return;
+				}
+			}
+		}
+
+		// no duplicates, check for all-whitespace string
+		boolean allWhitespace = true;
+		for(int i = 0; i < rem.str.length(); i++)
+		{
+			if(!Character.isWhitespace(rem.str.charAt(i)))
+			{
+				allWhitespace = false;
+				break;
+			}
+		}
+
+		if(allWhitespace)
+			return;
+
+		rem.inKillRing = true;
+
+		if(ring[count] != null)
+			ring[count].inKillRing = false;
+
 		ring[count] = rem;
 		if(++count >= ring.length)
 		{
 			wrap = true;
 			count = 0;
+		}
+	} //}}}
+
+	//{{{ remove() method
+	static void remove(int i)
+	{
+		if(wrap)
+		{
+			UndoManager.Remove[] newRing = new UndoManager.Remove[
+				ring.length];
+			int newCount = 0;
+			for(int j = 0; j < ring.length; j++)
+			{
+				int index;
+				if(j < count)
+					index = count - j - 1;
+				else
+					index = count + ring.length - j - 1;
+
+				if(i == index)
+				{
+					ring[index].inKillRing = false;
+					continue;
+				}
+
+				newRing[newCount++] = ring[index];
+			}
+			ring = newRing;
+			count = newCount;
+			wrap = false;
+		}
+		else
+		{
+			System.arraycopy(ring,i + 1,ring,i,count - i - 1);
+			count--;
 		}
 	} //}}}
 
