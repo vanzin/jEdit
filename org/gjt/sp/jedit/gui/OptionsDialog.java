@@ -184,9 +184,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 			Math.max(currentSize.width,requestedSize.width),
 			Math.max(currentSize.height,requestedSize.height)
 		);
-		if(newSize.width < 300)
+		if(newSize.width < 400)
 			newSize.width = 400;
-		if(newSize.height < 200)
+		if(newSize.height < 300)
 			newSize.height = 300;
 		setSize(newSize);
 		validate();
