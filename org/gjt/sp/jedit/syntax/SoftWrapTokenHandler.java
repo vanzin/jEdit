@@ -77,9 +77,9 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 			chunk.init(seg,expander,x,styles,
 				fontRenderContext,
 				context.rules.getDefault());
+			x += chunk.width;
 
 			addToken(chunk,context,false);
-			x += chunk.width;
 
 			if(out.size() == 0)
 				out.add(firstToken);

@@ -189,9 +189,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			if(context.parent != null)
 			{
 				rule = context.parent.inRule;
-				if(rule != null && rule.end != null)
+				if(rule != null)
 				{
-					if(checkDelegateEnd())
+					if(checkDelegateEnd(rule))
 						continue main_loop;
 				}
 			} //}}}
@@ -205,14 +205,17 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				// stop checking rules if there was a match
 				if (handleRule(rule,false))
 					continue main_loop;
-
+	
 				rule = rule.next;
 			} //}}}
 
 			//{{{ check if current character is a word separator
 			if(Character.isWhitespace(ch))
 			{
-				handleSoftSpan();
+				if(context.inRule != null)
+					handleRule(context.inRule,true);
+
+				handleNoWordBreak();
 
 				if(keywords != null)
 					markKeyword(false);
@@ -243,11 +246,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					&& noWordSep.indexOf(ch) == -1
 					&& noWordSep2.indexOf(ch) == -1)
 				{
-					// if this returns true then the escape
-					// rule was handled, otherwise clear the
-					// flag
-					if(!handleSoftSpan())
-						escaped = false;
+					if(context.inRule != null)
+						handleRule(context.inRule,true);
+
+					handleNoWordBreak();
 
 					markKeyword(true);
 	
@@ -270,7 +272,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Mark all remaining characters
 		pos = lineLength;
 
-		handleSoftSpan();
+		if(context.inRule != null)
+			handleRule(context.inRule,true);
+
+		handleNoWordBreak();
 		markKeyword(true);
 
 		if(context.parent != null)
@@ -313,18 +318,24 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	//}}}
 
 	//{{{ checkDelegateEnd() method
-	private boolean checkDelegateEnd()
+	private boolean checkDelegateEnd(ParserRule rule)
 	{
+		if(rule.end == null)
+			return false;
+
 		LineContext tempContext = context;
 		context = context.parent;
 		keywords = context.rules.getKeywords();
 		boolean tempEscaped = escaped;
-		boolean b = handleRule(context.inRule,true);
+		boolean b = handleRule(rule,true);
 		context = tempContext;
 		keywords = context.rules.getKeywords();
 
 		if(b && !tempEscaped)
 		{
+			if(context.inRule != null)
+				handleRule(context.inRule,true);
+
 			markKeyword(true);
 
 			tokenHandler.handleToken(
@@ -346,7 +357,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		}
 
 		// check escape rule of parent
-		ParserRule rule = context.parent.rules.getEscapeRule();
+		rule = context.parent.rules.getEscapeRule();
 		if(rule != null && handleRule(rule,false))
 			return true;
 
@@ -360,29 +371,35 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	 */
 	private boolean handleRule(ParserRule checkRule, boolean end)
 	{
-		pattern.array = (end ? checkRule.end : checkRule.start);
-		pattern.offset = 0;
-		pattern.count = pattern.array.length;
-
-		if(!TextUtilities.regionMatches(context.rules.getIgnoreCase(),
-			line,pos,pattern.array))
+		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
 		{
-			return false;
+			pattern.array = (end ? checkRule.end : checkRule.start);
+			pattern.offset = 0;
+			pattern.count = pattern.array.length;
+
+			if(!TextUtilities.regionMatches(context.rules
+				.getIgnoreCase(),line,pos,pattern.array))
+			{
+				return false;
+			}
 		}
 
 		//{{{ Check for an escape sequence
-		if ((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
+		if((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
 		{
+			if(context.inRule != null)
+				handleRule(context.inRule,true);
+
 			escaped = !escaped;
 			pos += pattern.count - 1;
 		}
-		else if (escaped)
+		else if(escaped)
 		{
 			escaped = false;
 			pos += pattern.count - 1;
 		} //}}}
-		//{{{ Not inside a rule
-		else if (context.inRule == null)
+		//{{{ Handle start of rule
+		else if(!end)
 		{
 			if((checkRule.action & ParserRule.AT_LINE_START)
 				== ParserRule.AT_LINE_START)
@@ -393,6 +410,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					return false;
 				}
 			}
+
+			if(context.inRule != null)
+				handleRule(context.inRule,true);
 
 			markKeyword((checkRule.action & ParserRule.MARK_PREVIOUS)
 				!= ParserRule.MARK_PREVIOUS);
@@ -415,10 +435,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				}
 				break;
 			//}}}
-			//{{{ SPAN, EOL_SPAN, MARK_FOLLOWING
+			//{{{ SPAN, EOL_SPAN
 			case ParserRule.SPAN:
 			case ParserRule.EOL_SPAN:
-			case ParserRule.MARK_FOLLOWING:
 				context.inRule = checkRule;
 
 				delegateSet = checkRule.getDelegateRuleSet(this);
@@ -432,6 +451,18 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				context = new LineContext(delegateSet, context);
 				keywords = context.rules.getKeywords();
 
+				break;
+			//}}}
+			//{{{ MARK_FOLLOWING
+			case ParserRule.MARK_FOLLOWING:
+				tokenHandler.handleToken((checkRule.action
+					& ParserRule.EXCLUDE_MATCH)
+					== ParserRule.EXCLUDE_MATCH ?
+					context.rules.getDefault()
+					: checkRule.token,pos - line.offset,
+					pattern.count,context);
+
+				context.inRule = checkRule;
 				break;
 			//}}}
 			//{{{ MARK_PREVIOUS
@@ -473,41 +504,46 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			// break out of inner for loop to check next char
 		} //}}}
+		//{{{ Handle end of MARK_FOLLOWING
+		else if((context.inRule.action & ParserRule.MARK_FOLLOWING) != 0)
+		{
+			if(pos != lastOffset)
+			{
+				tokenHandler.handleToken(
+					context.inRule.token,
+					lastOffset - line.offset,
+					pos - lastOffset,context);
+			}
+
+			lastOffset = pos;
+			context.inRule = null;
+		} //}}}
 
 		return true;
 	} //}}}
 
-	//{{{ handleSoftSpan() method
-	private boolean handleSoftSpan()
+	//{{{ handleNoWordBreak() method
+	private void handleNoWordBreak()
 	{
-		if (context.parent != null)
+		if(context.parent != null)
 		{
 			ParserRule rule = context.parent.inRule;
 			if(rule != null && (context.parent.inRule.action
-				& (ParserRule.NO_WORD_BREAK
-				| ParserRule.MARK_FOLLOWING)) != 0)
+				& ParserRule.NO_WORD_BREAK) != 0)
 			{
-				// flip escape flag if necessary, otherwise stuff
-				// like $FOO\n$BAR won't get highlighted correctly
-				// if there is a MARK_FOLLOWING for $ and IS_ESCAPE
-				// for \
-				ParserRule escape = context.parent.rules.getEscapeRule();
-				if(escape != null)
-					handleRule(escape,false);
-
-				tokenHandler.handleToken(rule.token,
-					lastOffset - line.offset,
-					pos - lastOffset,context);
+				if(pos != lastOffset)
+				{
+					tokenHandler.handleToken(rule.token,
+						lastOffset - line.offset,
+						pos - lastOffset,context);
+				}
 
 				lastOffset = pos;
 				context = context.parent;
 				keywords = context.rules.getKeywords();
 				context.inRule = null;
-				return true;
 			}
 		}
-
-		return false;
 	} //}}}
 
 	//{{{ markKeyword() method

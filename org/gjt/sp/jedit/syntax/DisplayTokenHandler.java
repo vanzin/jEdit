@@ -67,6 +67,7 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 				lastChunk.init(seg,expander,x,styles,
 					fontRenderContext,
 					context.rules.getDefault());
+				x += lastChunk.width;
 			}
 
 			return null;
@@ -85,10 +86,12 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 		Chunk oldLastChunk = (Chunk)lastToken;
 		if(super.addToken(token,context,
 			merge && (oldLastChunk == null
-			|| !((Chunk)oldLastChunk).inaccessable)))
+			|| !oldLastChunk.inaccessable
+			|| oldLastChunk.str != null)))
 		{
 			oldLastChunk.init(seg,expander,x,styles,
 				fontRenderContext,context.rules.getDefault());
+			x += oldLastChunk.width;
 			return true;
 		}
 		else
