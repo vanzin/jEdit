@@ -45,6 +45,7 @@ JEDIT 4.0 VERSION HISTORY
 - Hard wrap didn't work properly if space was pressed at the end of a
   line whose length was exactly that of the wrap margin
 - Searching for .*, ^ by itself and $ by itself should now work
+- Fixed another problem with soft wrapping syntax highlighted buffers
 
 + API Additions
 
