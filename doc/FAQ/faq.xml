@@ -98,6 +98,11 @@
       <date>Feb. 17, 2002</date>
       <revremark>Additional revisions for jEdit 4.0 release</revremark>
     </revision>
+    <revision>
+      <revnumber>0.9</revnumber>
+      <date>Feb. 9, 2003</date>
+      <revremark>Additional revisions for jEdit 4.1 release</revremark>
+    </revision>
     </revhistory>
 	<releaseinfo>
 		<emphasis>Note: </emphasis>

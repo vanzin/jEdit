@@ -89,7 +89,7 @@
       jEdit's <guimenu>Macros</guimenu> menu under the name you have
       given to the macro's source code file.  The
       <filename>.bsh</filename> will be deleted in the macro entry, and
-      undercore characters will be converted to whitespace, so that the
+      underscore characters will be converted to whitespace, so that the
       file <filename>My_New_Macro.bsh</filename> will be displayed as
       <guimenuitem>My New Macro</guimenuitem>.
     </para>
@@ -404,6 +404,21 @@
 			There is currently one plugin available called XSLT. The XSLT plugin provides
       features for: transforming XML using XSL transformation stylesheets; evaluating
       XPath expressions on XML and displaying results; and indenting XML.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="plugins-ssh">
+		<para>
+			Is there a plugin to enable opening of files across networks using SSH?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Yes, the FTP plugin privides this functionality as of version 0.5. You will
+      need to have Java 1.4 or newer to use it. Prior versions of java can still be
+      used with the plugin, however you will only be able to use the FTP protocol.
 		</para>
 	</answer>
 </qandaentry>
