@@ -214,6 +214,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			mi.setActionCommand("encoding@" + browser.currentEncoding);
 			grp.add(mi);
 			encodingMenuItems.put(browser.currentEncoding,mi);
+			encodingMenu.add(mi);
 		}
 
 		String systemEncoding = System.getProperty("file.encoding");
@@ -224,6 +225,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			mi.setActionCommand("encoding@" + systemEncoding);
 			grp.add(mi);
 			encodingMenuItems.put(systemEncoding,mi);
+			encodingMenu.add(mi);
 		}
 
 		encodingMenu.addSeparator();
