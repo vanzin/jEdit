@@ -1,7 +1,7 @@
 <!-- jEdit buffer-local properties:                     -->
-<!-- :indentSize=1:noTabs=true:maxLineLen=72:tab Size=2: -->
+<!-- :indentSize=1:noTabs=true:maxLineLen=72:tabSize=2: -->
 
-<!-- jEdit FAQ									        -->
+<!-- jEdit FAQ									                        -->
 <!-- Copyright (C) 2002 John Gellene                    -->
 
 <!-- $Id$
@@ -224,6 +224,25 @@
         </para></answer>
       </qandaentry>
 
+<qandaentry>
+	<question id="smart-quote">
+		<para>
+			Does jEdit know smart quotes? I would like that in .tex files I get `` or ´´
+			instead of \".
+		</para>
+	</question>
+	<answer>
+		<para>
+			While jEdit can display any character provided by a supported encoding set and
+			enter any character supported by a keyboard driver, it does not have the ability
+			to insert <quote>smart quote</quote> pairs automatically as some word processors
+			do. This would require a BeanShell macro to modify quoted text.
+		</para>
+	</answer>
+</qandaentry>
+
+
+
     </qandadiv>
 
     <qandadiv id="text-abbrev"><title>Abbreviations</title>
@@ -274,13 +293,13 @@
         </para></question>
         <answer><para>
             The <guimenuitem>Cut Append</guimenuitem>
-            (<keycombo action="seq"><keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
-            <keycombo action="simul"><keycap>CTRL</keycap><keycap>U</keycap></keycombo></keycombo>)
+            (<keycombo
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>&nbsp;
+            <keycombo action="simul"><keycap>CTRL</keycap><keycap>U</keycap></keycombo>)
             and <guimenuitem>Copy
-            Append</guimenuitem> (<keycombo action="seq"><keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
-            <keycombo action="simul"><keycap>CTRL</keycap><keycap>A</keycap></keycombo></keycombo>)
+            Append</guimenuitem> (<keycombo
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>&nbsp;
+            <keycombo action="simul"><keycap>CTRL</keycap><keycap>A</keycap></keycombo>)
             both add the selected text to the existing contents of the Clipboard. A single
             <guimenuitem>Paste</guimenuitem>
             (<keycombo action="simul"><keycap>CTRL</keycap><keycap>V</keycap></keycombo>)
@@ -297,8 +316,39 @@
 
 <sect1 id="working-source-code"><title>Working with Source Code</title>
 <para>
-  [Introduction, followed by question and answer set]
+  This section deals with features that work with source code.
 </para>
+
+<qandaset>
+
+<qandadiv id="source-compile"><title>Compiling source code</title>
+<qandaentry>
+	<question id="compile-java">
+		<para>
+			How do I compile my Java source in JEdit?
+		</para>
+	</question>
+	<answer>
+		<para>
+			There are a number of plugins that you can use to compile Java source code. You
+			can run a Java compiler on the command line in the <quote>System</quote> shell
+			of the <application>Console</application> plugin. If you are using the
+			JCompiler plugin, you	will have a <quote>JCompiler</quote> shell in the
+			<application>Console</application> plugin, and you can run the
+			<userinput>compile</userinput> command for the current file, or the
+			<userinput>compilepkg</userinput> command on all of the current directory's
+			source code files. You can also use the <quote>Ant</quote> shell in the
+			<application>Console</application> plugin or the
+			<application>AntFarm</application> plugin to run complex builds on a project of
+			source code files, using a <filename>build.xml</filename> file to specify build
+			commands and dependencies.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
+
+</qandaset>
 
 </sect1>
 
@@ -306,35 +356,11 @@
 <para>
   [Introduction, followed by question and answer set]
 </para>
-
 </sect1>
 
 <sect1 id="abbreviations"><title>Abbreviations</title>
 <para>
   [Introduction, followed by question and answer set]
 </para>
-
 </sect1>
-
-<sect1 id="other-customizing"><title>Other Ways to Customize jEdit</title>
-<para>
-  [Introduction, followed by question and answer set]
-</para>
-
-</sect1>
-
-<sect1 id="macros"><title>Working with Macros</title>
-<para>
-  [Introduction, followed by question and answer set]
-</para>
-
-</sect1>
-
-<sect1 id="plugins"><title>Working with Plugins</title>
-<para>
-  [Introduction, followed by question and answer set]
-</para>
-
-</sect1>
-
 

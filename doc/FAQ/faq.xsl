@@ -1,6 +1,7 @@
 <?xml version='1.0'?>
 
-<!-- You should use this XSL stylesheet to create plugin documentation.
+<!-- This customization file is based upon the customization file used
+	 for plugin help files.
 
      If you want all output in a single HTML file, specify the path to
      your DocBook-XSL "html/docbook.xsl" file in the <xsl:import>
@@ -13,9 +14,9 @@
                 xmlns="http://www.w3.org/TR/xhtml1/transitional"
                 exclude-result-prefixes="#default">
 
-<!-- NOTE: path to onechunk.xsl on local instalation follows -->
-<!-- <xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/docbook.xsl"/> -->
-<xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/chunk.xsl"/>
+<!-- NOTE: path to import file on local instalation follows -->
+<xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/docbook.xsl"/>
+<!-- <xsl:import href="file:///I:/sgml/docbook-xsl-1.45/html/chunk.xsl"/> -->
 <xsl:param name="use.id.as.filename" select="'1'" doc:type="boolean"/>
 <xsl:param name="generate.qandaset.toc" doc:type="boolean">1</xsl:param>
 <xsl:param name="generate.qandaset.div" doc:type="boolean">1</xsl:param>
