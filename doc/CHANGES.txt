@@ -19,6 +19,8 @@ JEDIT 4.0 VERSION HISTORY
 - Memory indicator tooltip now shows used and total Java heap memory in
   kilobytes
 - Updated Transact-SQL mode (Ollie Rutherfurd)
+- Updated Omnimark mode (Lionel Fiol)
+- Option for search and replace to beep on auto wrap (Kenrick Drew)
 
 + Bug Fixes
 

@@ -161,6 +161,11 @@ public class SearchBar extends JPanel
 					// inform user search restarted
 					view.getStatus().setMessageAndClear(
 						jEdit.getProperty("view.status.auto-wrap"));
+					// beep if beep property set
+					if(jEdit.getBooleanProperty("search.beepOnSearchAutoWrap"))
+					{
+						getToolkit().beep();
+					}
 				}
 			}
 		} //}}}
