@@ -315,15 +315,8 @@ print.footer=true
 # Print line numbers?
 print.lineNumbers=true
 
-# Use style and color info from defined SyntaxStyles?
-print.style=true
+# Print in color, or black and white?
 print.color=false
-
-# Margins
-print.margin.top=0.5
-print.margin.left=0.5
-print.margin.bottom=0.5
-print.margin.right=0.5
 
 #}}}
 

@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.print;
 import java.awt.print.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class BufferPrinter
@@ -49,13 +50,35 @@ public class BufferPrinter
 		if(format == null)
 			format = job.defaultPage();
 
-		Book book = new Book();
-		job.setPageable(book);
+		Font font = jEdit.getFontProperty("print.font");
+		boolean header = jEdit.getBooleanProperty("print.header");
+		boolean footer = jEdit.getBooleanProperty("print.footer");
+		boolean lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
+		boolean color = jEdit.getBooleanProperty("print.color");
+
+		job.setJobName(jEdit.getProperty("print.header",
+			new String[] { buffer.getPath() }));
+
+		job.setPrintable(new BufferPrintable(buffer,font,header,footer,
+			lineNumbers,color),format);
 
 		if(!job.printDialog())
 			return;
 
-		job.print();
+		try
+		{
+			job.print();
+		}
+		catch(PrinterAbortException ae)
+		{
+			Log.log(Log.DEBUG,BufferPrinter.class,ae);
+		}
+		catch(PrinterException e)
+		{
+			Log.log(Log.ERROR,BufferPrinter.class,e);
+			String[] args = { e.toString() };
+			GUIUtilities.error(view,"print-error",args);
+		}
 	} //}}}
 
 	//{{{ Private members

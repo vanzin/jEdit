@@ -40,8 +40,6 @@ encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
 #{{{ Miscellaneous
 history.caption=Previously entered strings:
 
-print.page=Page {0}
-
 action-set.jEdit=Built-in Commands
 action-set.macros=Macros
 action-set.plugin=Plugin: {0}
@@ -207,7 +205,6 @@ file=new-file \
      save-a-copy-as \
      save-all \
      - \
-     page-setup \
      print \
      print-selection \
      - \
@@ -235,6 +232,7 @@ save.label=$Save
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll...
+# Page setup disabled for now, since the settings don't seem to be persistent
 page-setup.label=Pa$ge Setup...
 print.label=$Print...
 print-selection.label=Prin$t Selection...
@@ -713,6 +711,15 @@ view.status.bracket=Matches "{0}"
 #}}}
 
 #}}}
+
+#{{{ Printing
+
+print.headerText=jEdit - {0}
+print.footerText={0} :: page {1}
+
+print-error.title=Print Error
+print-error.message=An error occurred while trying to print:\n\
+	{0}
 
 #{{{ Various dialog boxes
 
@@ -1409,13 +1416,7 @@ options.print.fontsize=Print font size:
 options.print.header=Print a header with the file name
 options.print.footer=Print a footer with the date, time and page number
 options.print.lineNumbers=Print line numbers
-options.print.style=Use syntax styles in output
-options.print.color=Use syntax colors in output
-options.print.margins=Margins (in inches)
-options.print.margin.top=Top:
-options.print.margin.left=Left:
-options.print.margin.bottom=Bottom:
-options.print.margin.right=Right:
+options.print.color=Color printing
 #}}}
 
 #{{{ Docking pane

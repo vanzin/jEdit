@@ -632,6 +632,23 @@ public class GUIUtilities
 	public static SyntaxStyle parseStyle(String str, String family, int size)
 		throws IllegalArgumentException
 	{
+		return parseStyle(str,family,size,true);
+	} //}}}
+
+	//{{{ parseStyle() method
+	/**
+	 * Converts a style string to a style object.
+	 * @param str The style string
+	 * @param family Style strings only specify font style, not font family
+	 * @param size Style strings only specify font style, not font family
+	 * @param color If false, the styles will be monochrome
+	 * @exception IllegalArgumentException if the style is invalid
+	 * @since jEdit 4.0pre4
+	 */
+	public static SyntaxStyle parseStyle(String str, String family, int size,
+		boolean color)
+		throws IllegalArgumentException
+	{
 		Color fgColor = Color.black;
 		Color bgColor = null;
 		boolean italic = false;
@@ -642,11 +659,13 @@ public class GUIUtilities
 			String s = st.nextToken();
 			if(s.startsWith("color:"))
 			{
-				fgColor = GUIUtilities.parseColor(s.substring(6), Color.black);
+				if(color)
+					fgColor = GUIUtilities.parseColor(s.substring(6), Color.black);
 			}
 			else if(s.startsWith("bgColor:"))
 			{
-				bgColor = GUIUtilities.parseColor(s.substring(8), null);
+				if(color)
+					bgColor = GUIUtilities.parseColor(s.substring(8), null);
 			}
 			else if(s.startsWith("style:"))
 			{
@@ -704,49 +723,67 @@ public class GUIUtilities
 	 */
 	public static SyntaxStyle[] loadStyles(String family, int size)
 	{
+		return loadStyles(family,size,true);
+	} //}}}
+
+	//{{{ loadStyles() method
+	/**
+	 * Loads the syntax styles from the properties, giving them the specified
+	 * base font family and size.
+	 * @param family The font family
+	 * @param size The font size
+	 * @param color If false, the styles will be monochrome
+	 * @since jEdit 4.0pre4
+	 */
+	public static SyntaxStyle[] loadStyles(String family, int size, boolean color)
+	{
 		SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
 
 		try
 		{
+			styles[Token.NULL] = new SyntaxStyle(
+				jEdit.getColorProperty("view.fgColor"),
+				jEdit.getColorProperty("view.bgColor"),
+				jEdit.getFontProperty("view.font"));
 			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.comment1"),
-				family,size);
+				family,size,color);
 			styles[Token.COMMENT2] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.comment2"),
-				family, size);
+				family, size,color);
 			styles[Token.LITERAL1] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.literal1"),
-				family,size);
+				family,size,color);
 			styles[Token.LITERAL2] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.literal2"),
-				family,size);
+				family,size,color);
 			styles[Token.LABEL] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.label"),
-				family,size);
+				family,size,color);
 			styles[Token.KEYWORD1] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword1"),
-				family,size);
+				family,size,color);
 			styles[Token.KEYWORD2] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword2"),
-				family,size);
+				family,size,color);
 			styles[Token.KEYWORD3] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.keyword3"),
-				family,size);
+				family,size,color);
 			styles[Token.FUNCTION] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.function"),
-				family,size);
+				family,size,color);
 			styles[Token.MARKUP] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.markup"),
-				family,size);
+				family,size,color);
 			styles[Token.OPERATOR] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.operator"),
-				family,size);
+				family,size,color);
 			styles[Token.DIGIT] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.digit"),
-				family,size);
+				family,size,color);
 			styles[Token.INVALID] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.invalid"),
-				family,size);
+				family,size,color);
 		}
 		catch(Exception e)
 		{

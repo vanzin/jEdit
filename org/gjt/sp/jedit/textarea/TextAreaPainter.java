@@ -142,9 +142,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setStyles(SyntaxStyle[] styles)
 	{
 		this.styles = styles;
-		styles[0] = new SyntaxStyle(getForeground(),
-			null,getFont());
-
 		repaint();
 	} //}}}
 
