@@ -83,7 +83,7 @@ public class ActionBar extends JPanel
 	{
 		repeatCount = view.getInputHandler().getRepeatCount();
 		action.setText(null);
-		action.grabFocus();
+		action.requestFocus();
 	} //}}}
 
 	//{{{ actionListChanged()
@@ -216,7 +216,7 @@ public class ActionBar extends JPanel
 		{
 			public void run()
 			{
-				view.getTextArea().grabFocus();
+				view.getTextArea().requestFocus();
 				if(act == null)
 				{
 					if(finalCmd != null)
@@ -430,7 +430,7 @@ public class ActionBar extends JPanel
 			{
 				public void run()
 				{
-					view.getTextArea().grabFocus();
+					view.getTextArea().requestFocus();
 					view.getInputHandler().setRepeatCount(repeatCount);
 					view.getInputHandler().processKeyEvent(evt);
 				}

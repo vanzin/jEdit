@@ -4711,40 +4711,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
-	//{{{ hasFocus() method
-	/**
-	 * Bug workarounds.
-	 * @since jEdit 2.7pre1
-	 */
-	public boolean hasFocus()
-	{
-		Component c = this;
-		while(!(c instanceof Window))
-		{
-			if(c == null)
-				return false;
-			c = c.getParent();
-		}
-
-		Component focusOwner = ((Window)c).getFocusOwner();
-		boolean hasFocus = (focusOwner == this);
-		if(hasFocus)
-			focusedComponent = this;
-		return hasFocus;
-	} //}}}
-
-	//{{{ grabFocus() method
-	/**
-	 * Bug workarounds.
-	 * @since jEdit 2.7pre1
-	 */
-	public void grabFocus()
-	{
-		super.grabFocus();
-		// ensure that focusedComponent is set correctly
-		hasFocus();
-	} //}}}
-
 	//{{{ getFocusTraversalKeysEnabled() method
 	/**
 	 * Java 1.4 compatibility fix to make Tab key work.
@@ -5972,13 +5938,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(caret >= start)
 			{
-				int scrollMode = (focusedComponent == JEditTextArea.this
+				int scrollMode = (hasFocus()
 					? ELECTRIC_SCROLL : NO_SCROLL);
 				moveCaretPosition(caret + length,scrollMode);
 			}
 			else
 			{
-				int scrollMode = (focusedComponent == JEditTextArea.this
+				int scrollMode = (hasFocus()
 					? NORMAL_SCROLL : NO_SCROLL);
 				moveCaretPosition(caret,scrollMode);
 			}
@@ -6019,7 +5985,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
-			int scrollMode = (focusedComponent == JEditTextArea.this
+			int scrollMode = (hasFocus()
 				? NORMAL_SCROLL : NO_SCROLL);
 
 			if(caret > start)
@@ -6104,6 +6070,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				invalidateLineRange(bracketLine,caretLine);
 			else
 				invalidateLine(caretLine);
+
+			focusedComponent = JEditTextArea.this;
 		} //}}}
 
 		//{{{ focusLost() method
@@ -6146,7 +6114,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(!quickCopyDrag)
 			{
-				grabFocus();
+				requestFocus();
 				focusedComponent = JEditTextArea.this;
 			}
 
@@ -6547,13 +6515,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					Registers.paste(focusedComponent,
 						'%',sel instanceof Selection.Rect);
 
-					focusedComponent.grabFocus();
+					focusedComponent.requestFocus();
 				}
 			}
 			else if(isQuickCopyEnabled()
 				&& GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
-				JEditTextArea.this.grabFocus();
+				JEditTextArea.this.requestFocus();
 				focusedComponent = JEditTextArea.this;
 
 				setCaretPosition(dragStart,false);

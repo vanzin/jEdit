@@ -738,7 +738,7 @@ public class Gutter extends JComponent implements SwingConstants
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent e)
 		{
-			textArea.grabFocus();
+			textArea.requestFocus();
 
 			if(GUIUtilities.isPopupTrigger(e)
 				|| e.getX() >= getWidth() - borderWidth * 2)
