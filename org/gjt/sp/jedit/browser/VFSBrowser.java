@@ -546,7 +546,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		if(to == null)
 			return;
 
-		to = vfs.constructPath(vfs.getParentOfPath(from),to);
+		to = MiscUtilities.constructPath(vfs.getParentOfPath(from),to);
 
 		Object session = vfs.createVFSSession(from,this);
 		if(session == null)
@@ -585,7 +585,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		VFS vfs = VFSManager.getVFSForPath(parent);
 
 		// path is the currently viewed directory in the browser
-		newDirectory = vfs.constructPath(parent,newDirectory);
+		newDirectory = MiscUtilities.constructPath(parent,newDirectory);
 
 		Object session = vfs.createVFSSession(newDirectory,this);
 		if(session == null)
