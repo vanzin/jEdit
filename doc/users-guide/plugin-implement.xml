@@ -326,16 +326,6 @@
   in the next section.
 </para>
 
-<para>
-  The constructor for <classname>QuickNotepadDockable</classname> takes
-  the values of the <classname>View</classname> object and the docking
-  position contained in the <classname>CreateDockableWindow</classname>
-  message. This will enable the plugin to <quote>know</quote> where it is
-  located and modify its behavior accordingly. In another plugin, it could
-  enable the plugin to obtain and manipulate various data that are
-  available through a <classname>View</classname> object.
-</para>
-
 </sect3>
 
 </sect2>
@@ -356,25 +346,24 @@
 &lt;ACTIONS&gt;
     &lt;ACTION NAME="quicknotepad.choose-file"&gt;
         &lt;CODE&gt;
-        view.getDockableWindowManager()
-				  .getDockable(QuickNotepadPlugin.NAME).chooseFile();
+            view.getDockableWindowManager()
+              .getDockable(QuickNotepadPlugin.NAME).chooseFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
     &lt;ACTION NAME="quicknotepad.save-file"&gt;
         &lt;CODE&gt;
-        view.getDockableWindowManager()
-				  .getDockable(QuickNotepadPlugin.NAME).saveFile();
+            view.getDockableWindowManager()
+              .getDockable(QuickNotepadPlugin.NAME).saveFile();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
 
     &lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
         &lt;CODE&gt;
-        view.getDockableWindowManager()
-				  .getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
+            view.getDockableWindowManager()
+              .getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
         &lt;/CODE&gt;
     &lt;/ACTION&gt;
-
 &lt;/ACTIONS&gt;</programlisting></informalexample>
 
 
@@ -384,6 +373,18 @@
   <classname>DockableWindowManager</classname> object and the method
   <filename>getDockable()</filename> to find the QuickNotepad plugin
   window and call the desired method.
+</para>
+
+<para>
+  When an action is invoked, program control must pass to the
+  component responsible for executing the action. The use of an internal
+  table of BeanShell scripts that implement actions avoids the need for
+  plugins to implement <classname>ActionListener</classname> or similar
+  objects to respond to actions. Instead, the BeanShell scripts address
+  the plugin through static methods, or if instance data is needed, the
+  current <classname>View</classname>, its
+  <classname>DockableWindowManager</classname>, and the plugin
+  object return by the <filename>getDockable()</filename> method.
 </para>
 
 <para>
@@ -476,49 +477,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 <sect1 id="window-implement"><title>Implementing a Dockable Window Class</title>
 
 <para>
-  The <application>QuickNotepad</application> plugin uses the dockable
-  window API and provides one dockable window. Dockable window classes
-
-  must implement the
-
-  <classname>DockableWindow</classname> interface. There are basically two
-
-  approaches to doing this. One is to have the top-level visible component
-
-  also serve as the plugin window. The other is to derive a lightweight
-
-  class that will create and hold the top-level window component. We will
-
-  illustrate both approaches.
-
-</para>
-
-
-
-<sect2 id="window-implement-single"><title>Using a Single Window Class</title>
-
-
-
-<para>
-
-  A single window class must implement the
-
-  <classname>DockableWindow</classname> interface as well as provide for
-
-  the creation and layout of the plugin's visible components, and
-
-  execution of user actions. The window for QuickNotepad will also
-
-  implement the <classname>EBComponent</classname> so it can receive
-
-  messages from the EditBus whenever the user has changed the plugin's
-
-  settings in the <guimenuitem>Global Options</guimenuitem> dialog. Here
-
-  is an excerpt from a class
-
-  definition showing the implementation of both interfaces:
-
+ XXX
 </para>
 
 
@@ -553,39 +512,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   Both these matters are covered in the full source code.
 </para>
 
-</sect2>
-
-<sect2 id="window-implement-actions"><title>An Action Interface</title>
-
-<para>
-  When an action is invoked, program control must pass to the
-  component responsible for executing the action. The use of an internal
-  table of BeanShell scripts that implement actions avoids the need for
-  plugins to implement <classname>ActionListener</classname> or similar
-  objects to respond to actions. Instead, the BeanShell scripts address
-  the plugin through static methods, or if instance data is needed, the
-  current <classname>View</classname>, its
-  <classname>DockableWindowManager</classname>, and the plugin
-  object return by the <filename>getDockable()</filename> method.
-</para>
-
-<para>
-  As an organizational device, we will employ a
-  <classname>QuickNotepadActions</classname> to define the
-  actions that QuickNotepad will implement:
-</para>
-
-
-<informalexample><programlisting>public interface QuickNotepadActions {
-    void chooseFile();
-    void saveFile();
-    void copyToBuffer();
-}</programlisting></informalexample>
-
-</sect2>
-
 </sect1>
-
 
 <sect1 id="window-visible-implement">
 
@@ -603,8 +530,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 </para>
 
 <para>
-  We have identified three user actions in the
-  <classname>QuickNotepadActions</classname> interface that need
+  We have identified three user actions that need
   implementation here: <function>chooseFile()</function>,
   <function>saveFile()</function>, and
   <function>copyToBuffer()</function>. As noted earlier, we also want the
@@ -631,9 +557,9 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
   <classname>EBComponent</classname> interface does not deal with the
   component's actual subscribing and unsubscribing to the EditBus.  To
   accomplish this, we use a pair of methods inherited from the
-  Java platform's <classname>JComponent</classname> that are called when
-  the visible window becomes is assigned and unassigned to its
-  <classname>DockableWindowContainer</classname>.  These two methods,
+  Java platform's <classname>JComponent</classname> class
+  that are called when the window is made visible, and when it is hidden.
+  These two methods,
   <function>addNotify()</function> and
   <function>removeNotify()</function>, are overridden to add and remove
   the visible window from the list of EditBus subscribers.
@@ -656,7 +582,7 @@ quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
 
 
 <informalexample><programlisting>public class QuickNotepad extends JPanel
-    implements EBComponent, QuickNotepadActions
+    implements EBComponent
 {
     private String filename;
     private String defaultFilename;
@@ -1087,117 +1013,45 @@ options.quicknotepad.filepath=</programlisting></informalexample>
   plugins:
 </para>
 
-<informalexample><programlisting><![CDATA[<?xml version="1.0"?>
+<informalexample><programlisting><![CDATA[<project name="QuickNotepad" default="dist" basedir=".">
 
-<!--
-     This is a build.xml file for building the QuickNotepad plugin.
+  <property name="jedit.install.dir"  value="../.."/>
+  <property name="jar.name"  value="QuickNotepad.jar"/>
 
-     The 'dist' target compiles the plugin and creates the JAR file.
-     Before running the 'dist' target, you will need to generate the
-     documentation using one of these two targets:
-
-     - 'docs-xalan': Creates documentation using the Xalan XSLT processor
-     - 'docs-xsltproc': Creates documentation using the xsltproc tool
-
-     To use it for building your own plugin, make these changes:
-
-     - Change definition of 'jedit.install.dir' to point to the directory
-       containing jedit.jar
-     - Change definition of 'jar.name' to the name of your plugin's JAR file
-     - If necessary, add any dependencies to the 'project.class.path'
-       definition
-     - If necessary, change the list of files in the 'dist' targtet
-     - If your plugin has documentation generated using the DocBook XSL
-       stylesheets, change the 'docs-xalan' and 'docs-xsltproc' targets
-       accordingly.
--->
-
-<project name="QuickNotepad" default="dist" basedir=".">
-
-	<property name="jedit.install.dir"  value="G:\\Program Files\\jEdit 4.0pre1"/>
-	<property name="jar.name"  value="QuickNotepad.jar"/>
-
-	<property name="src.dir" value="."/>
-	<property name="build.dir" value="build"/>
-	<property name="install.dir"  value=".."/>
+  <property name="install.dir"  value=".."/>
 
 
-	<path id="project.class.path">
-		<pathelement location="${jedit.install.dir}/jedit.jar"/>
-		<pathelement location="."/>
-	</path>
+  <path id="project.class.path">
+    <pathelement location="${jedit.install.dir}/jedit.jar"/>
+    <pathelement location="."/>
+  </path>
 
 
-	<target name="init">
-		<mkdir dir="${build.dir}"/>
-	</target>
+  <target name="compile">
+    <javac
+      srcdir="."
+      deprecation="on"
+      includeJavaRuntime="yes"
+    >
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
 
 
-	<target name="compile" depends="init">
-		<javac
-			srcdir="${src.dir}"
-			destdir="${build.dir}"
-			deprecation="on"
-			includeJavaRuntime="yes"
-		>
-			<classpath refid="project.class.path"/>
-		</javac>
-	</target>
-
-
-	<target name="dist" depends="compile">
-		<mkdir dir="${install.dir}"/>
-		<jar jarfile="${install.dir}/${jar.name}">
-			<fileset dir="${build.dir}"/>
-			<fileset dir="${src.dir}">
-				<include name="actions.xml"/>
-				<include name="dockables.xml"/>
-				<include name="**/*.props"/>
-				<include name="**/*.html"/>
-				<include name="**/*.gif"/>
-			</fileset>
-		</jar>
-	</target>
-
-	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
-	<!-- NOTE: the "o" or "output" options do not appear to be working.     -->
-	<!-- To customize the title of an HTML output file, set the	     -->
-	<!-- 'use.id.as.filename' variable in your XSL customization file       -->
-	<!-- and provide the file name (without extension) as the 'id'	  -->
-	<!-- attribute of the element that constitutes a 'chunk' of output. For -->
-	<!-- a plugin help file, there should usually be only one chunk, so the -->
-	<!-- top-level element (<article> or <book>) should have the 'id'       -->
-	<!-- attribute.							 -->
-	<target name="docs-xsltproc">
-		<exec executable="xsltproc">
-			<arg value="--catalogs"/>
-			<arg value="--nonet"/>
-			<arg value="users-guide.xsl"/>
-			<arg value="users-guide.xml"/>
-		</exec>
-	</target>
-
-	<!-- Generate docs with Xalan tool from xml.apache.org -->
-	<!-- NOTE: build target does not work -->
-	<target name="docs-xalan">
-		<style
-			processor="xalan"
-			style="users-guide.xsl"
-			in="users-guide.xml"
-			out="QuickNotepad.html"
-			destdir="."/>
-	</target>
-
-	<target name="clean">
-		<delete dir="${build.dir}"/>
-		<delete>
-			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
-			<fileset dir="." includes="**/*.html" defaultexcludes="no"/>
-		</delete>
-	</target>
-
-</project>
-]]></programlisting></informalexample>
+  <target name="dist" depends="compile">
+    <mkdir dir="${install.dir}"/>
+    <jar jarfile="${install.dir}/${jar.name}">
+      <fileset dir=".">
+        <include name="**/*.class"/>
+        <include name="**/*.props"/>
+        <include name="**/*.html"/>
+        <include name="**/*.gif"/>
+        <include name="actions.xml"/>
+        <include name="dockables.xml"/>
+      </fileset>
+    </jar>
+  </target>
+</project>]]></programlisting></informalexample>
 
 <para>
   For a full discussion of the <filename>Ant</filename> file format and

@@ -1,12 +1,5 @@
 TO DO
 
-+ before 4.0final:
-
-- make sure plugin guide is up to date:
-  - finish option pane docs
-  - mention editbus
-  - mention automatically created dockable actions
-
 + 4.0.1:
 
 - need to investigate:
