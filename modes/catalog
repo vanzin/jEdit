@@ -22,6 +22,9 @@
 <MODE NAME="asp"		FILE="asp.xml"
 				FILE_NAME_GLOB="*.{asp,asa}" />
 
+<MODE NAME="aspect-j"	FILE="aspect-j.xml"
+				FILE_NAME_GLOB="*.aj" />
+
 <MODE NAME="assembly-r2000"	FILE="assembly-r2000.xml"
 				FILE_NAME_GLOB="*.mips" />
 

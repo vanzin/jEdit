@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- closing lots of files is slow
+- protect all uses of show/hideWaitCursor() in try/finally
+- document all uses of show/hideWaitCursor() in try/finally
 - autoscroll down is slower than up if !lastLinePartial
 - soft wrap switching bug is back
 - propertiesChanged() closes dockables
@@ -20,11 +23,6 @@ and quirks that I need to fix eventually.
   - markTokens() immediately returns
 - left-bias rects broken with up/down
 - loaded flag cleared before loading finished
-- display manager transaction handler
-  - only one per buffer -- should buffer keep track of display mgrs,
-    ask one of them for screen line counts?
-  - display manager should not be O(n^2) with text areas
-  - this will fix the getLastPhysicalLine()/scrollTo() bug
 - inserting lines repaints twice
 - vfs browser: re-add option to base filter on filename extension
 - today:

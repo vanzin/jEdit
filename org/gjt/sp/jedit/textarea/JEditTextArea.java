@@ -362,6 +362,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setFirstLine(int firstLine)
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"setFirstLine()");
+
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		int max = displayManager.getScrollLineCount() - visibleLines
 			+ (lastLinePartial ? 1 : 0);
@@ -424,9 +427,13 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setFirstPhysicalLine(int physFirstLine, int skew)
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"setFirstPhysicalLine()");
+
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		int screenLineCount = -skew;
 		int physicalLine = displayManager.getLastVisibleLine();
+		int visibleLines = this.visibleLines - (lastLinePartial ? 1 : 0);
 		for(;;)
 		{
 			screenLineCount += displayManager.getScreenLineCount(physicalLine);
@@ -438,14 +445,19 @@ public class JEditTextArea extends JComponent
 			physicalLine = prevLine;
 		}
 
+		System.err.println("current first line is " + getFirstLine());
+		System.err.println("was: " + physFirstLine);
 		if(physFirstLine > physicalLine)
 			physFirstLine = physicalLine;
+		System.err.println("now: " + physFirstLine);
+		System.err.println("skew: " + skew);
 		//}}}
 
 		if(physFirstLine == displayManager.firstLine.physicalLine)
 			return;
 
 		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
+		System.err.println("amount is " + amount);
 		if(amount > 0)
 			displayManager.firstLine.physDown(amount,skew);
 		else if(amount < 0)
@@ -575,6 +587,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"scrollTo()");
 		//{{{ Get ready
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
@@ -589,6 +603,13 @@ public class JEditTextArea extends JComponent
 		int _electricScroll = (doElectricScroll
 			&& visibleLines > electricScroll * 2
 			? electricScroll : 0); //}}}
+
+		if(visibleLines == 0)
+		{
+			setFirstPhysicalLine(line,_electricScroll);
+			// it will figure itself out after being added...
+			return;
+		}
 
 		//{{{ Scroll vertically
 		int firstLine = getFirstLine();
@@ -627,6 +648,9 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Scroll horizontally
 		Point point = offsetToXY(line,offset,returnValue);
+		if(point == null)
+			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
+				+ ",visibleLines=" + visibleLines);
 		point.x += extraEndVirt;
 
 		if(point.x < 0)
@@ -4436,7 +4460,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		verticalBox.add(comp,verticalBox.getComponentCount() - 1);
 	} //}}}
 
-	
 	//{{{ removeLeftOfScrollBar() method
 	/**
 	 * Removes a component from the box left of the vertical scroll bar.
@@ -4945,8 +4968,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(buffer == null)
 			return;
 
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"updateScrollBars()");
+
 		if(vertical != null && visibleLines != 0)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"Vertical ok");
 			// don't display stuff past the end of the buffer if
 			// we can help it
 			int lineCount = displayManager.getScrollLineCount();
@@ -4961,6 +4989,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int width = painter.getWidth();
 		if(horizontal != null && width != 0)
 		{
+			if(Debug.SCROLL_DEBUG)
+				Log.log(Log.DEBUG,this,"Horizontal ok");
 			maxHorizontalScrollWidth = 0;
 			painter.repaint();
 
@@ -5031,6 +5061,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean rectangularSelectionMode;
 
 	private int maxLineLen;
+
+	private boolean delayedScrollTo;
 	//}}}
 
 	//{{{ _addToSelection() method
@@ -5696,6 +5728,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int delayedRepaintStart;
 		int delayedRepaintEnd;
 
+		//{{{ foldLevelChanged() method
+		public void foldLevelChanged(Buffer buffer, int start, int end)
+		{
+			if(!bufferChanging && end != 0
+				&& buffer.isLoaded())
+			{
+				invalidateLineRange(start - 1,
+					getLastPhysicalLine());
+			}
+		} //}}}
+
 		//{{{ contentInserted() method
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
@@ -5708,7 +5751,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(!buffer.isLoaded())
 				return;
 
-			repaintAndScroll(startLine,numLines);
+			if(numLines != 0)
+				delayedMultilineUpdate = true;
+
+			int endLine = startLine + numLines;
+
+			delayedRepaint(startLine,endLine);
 
 			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
@@ -5718,12 +5766,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(s.contentInserted(buffer,startLine,start,
 					numLines,length))
 				{
-					delayedRepaintStart = Math.min(
-						delayedRepaintStart,
-						s.startLine);
-					delayedRepaintEnd = Math.max(
-						delayedRepaintEnd,
-						s.endLine);
+					delayedRepaint(s.startLine,s.endLine);
 				}
 			} //}}}
 
@@ -5754,8 +5797,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(!buffer.isLoaded())
 				return;
 
+			if(numLines != 0)
+				delayedMultilineUpdate = true;
+
 			// -numLines because they are removed.
-			repaintAndScroll(startLine,-numLines);
+			delayedRepaint(startLine,startLine);
 
 			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
@@ -5770,22 +5816,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(s.start == s.end)
 				{
 					selection.removeElement(s);
-					delayedRepaintStart = Math.min(
-						delayedRepaintStart,
-						oldStartLine);
-					delayedRepaintEnd = Math.max(
-						delayedRepaintEnd,
-						oldEndLine);
+					delayedRepaint(oldStartLine,oldEndLine);
 					i--;
 				}
 				else if(changed)
 				{
-					delayedRepaintStart = Math.min(
-						delayedRepaintStart,
-						s.startLine);
-					delayedRepaintEnd = Math.max(
-						delayedRepaintEnd,
-						s.endLine);
+					delayedRepaint(s.startLine,s.endLine);
 				}
 			} //}}}
 
@@ -5834,6 +5870,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						delayedRepaintEnd);
 				}
 
+				for(int i = delayedRepaintStart;
+					i <= delayedRepaintEnd;
+					i++)
+				{
+					if(displayManager.isLineVisible(i))
+						displayManager.getScreenLineCount(i);
+					displayManager.notifyScreenLineChanges();
+				}
 				delayedUpdate = false;
 			}
 
@@ -5842,16 +5886,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			runnables.clear();
 		} //}}}
 
-		//{{{ repaintAndScroll() method
-		private void repaintAndScroll(int startLine, int numLines)
+		//{{{ delayedRepaint() method
+		private void delayedRepaint(int startLine, int endLine)
 		{
-			if(numLines != 0)
-				delayedMultilineUpdate = true;
-
 			if(!delayedUpdate)
 			{
 				delayedRepaintStart = startLine;
-				delayedRepaintEnd = startLine;
+				delayedRepaintEnd = endLine;
 				delayedUpdate = true;
 			}
 			else
@@ -5861,7 +5902,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					startLine);
 				delayedRepaintEnd = Math.max(
 					delayedRepaintEnd,
-					startLine);
+					endLine);
 			}
 		} //}}}
 	} //}}}

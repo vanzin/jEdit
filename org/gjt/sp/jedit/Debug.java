@@ -23,18 +23,53 @@
 package org.gjt.sp.jedit;
 
 /**
- * This class contains various debugging methods and flags.
+ * This class contains various debugging flags mainly useful for core
+ * development.
  * @since jEdit 4.2pre1
  * @author Slava Pestov
  * @version $Id$
  */
 public class Debug
 {
-	public static boolean CHUNK_CACHE_DEBUG = false;
-	public static boolean CHUNK_PAINT_DEBUG = false;
-	public static boolean EB_TIMER = false;
-	public static boolean KEY_DELAY_TIMER = false;
+	/**
+	 * Print messages when the gap moves, and other offset manager state
+	 * changes.
+	 */
 	public static boolean OFFSET_DEBUG = false;
-	public static boolean PAINT_TIMER = false;
+
+	/**
+	 * Print messages when text area and display manager perform scroll
+	 * updates.
+	 */
+	public static boolean SCROLL_DEBUG = false;
+
+	/**
+	 * For checking context, etc.
+	 */
 	public static boolean TOKEN_MARKER_DEBUG = false;
+
+	/**
+	 * For checking invalidation, etc.
+	 */
+	public static boolean CHUNK_CACHE_DEBUG = false;
+
+	/**
+	 * Paints boxes around chunks.
+	 */
+	public static boolean CHUNK_PAINT_DEBUG = false;
+
+	/**
+	 * Show time taken to repaint text area painter.
+	 */
+	public static boolean PAINT_TIMER = false;
+
+	/**
+	 * Show time taken for each EBComponent.
+	 */
+	public static boolean EB_TIMER = false;
+
+	/**
+	 * Show time from receiving a key event and the resulting repaint.
+	 */
+	public static boolean KEY_DELAY_TIMER = false;
 }

@@ -25,11 +25,16 @@
 
 void openSelection()
 {
-	String path = textArea.getSelectedText();
-	if(path == null)
+	Selection[] selection = textArea.getSelection();
+	if(selection == null)
 		view.getToolkit().beep();
 	else
-		jEdit.openFile(view,path);
+	{
+		for(i = 0; i < selection.length; i++)
+			buffer = jEdit.openFile(null,textArea.getSelectedText(selection[i]));
+		if(buffer != null)
+			view.setBuffer(buffer);
+	}
 }
 
 openSelection();

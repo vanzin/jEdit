@@ -446,12 +446,6 @@ public class OffsetManager
 		{
 			//moveGap(-1,0,"contentInserted");
 
-			if(startLine < gapLine)
-				gapLine += numLines;
-
-			if(startLine < lastValidLineContext)
-				lastValidLineContext += numLines;
-
 			lineCount += numLines;
 
 			if(lineInfo.length <= lineCount)
@@ -476,29 +470,21 @@ public class OffsetManager
 			System.arraycopy(lineContext,startLine,lineContext,
 				endLine,lineCount - endLine);
 
-			//{{{ Find fold start of this line
-			int foldLevel = buffer.getFoldLevel(startLine);
-			long visible = (0xffL << VISIBLE_SHIFT);
-			if(startLine != 0)
-			{
-				for(int i = startLine; i > 0; i--)
-				{
-					if(/* buffer.isFoldStart(i - 1)
-						&& */ buffer.getFoldLevel(i) <= foldLevel)
-					{
-						visible = (lineInfo[i] & VISIBLE_MASK);
-						break;
-					}
-				}
-			} //}}}
+			if(startLine <= gapLine)
+				gapLine += numLines;
+			else if(gapLine != -1)
+				offset -= gapWidth;
+
+			if(startLine < lastValidLineContext)
+				lastValidLineContext += numLines;
+
+			long visible = (lineInfo[startLine] & VISIBLE_MASK);
 
 			for(int i = 0; i < numLines; i++)
 			{
-				long off = offset + endOffsets.get(i);
-				if(i >= gapLine)
-					off -= gapWidth;
-				lineInfo[startLine + i] = off | visible;
+				lineInfo[startLine + i] = (offset + endOffsets.get(i)) | visible;
 			}
+
 
 			Anchor anchor = anchors;
 			for(;;)
@@ -527,6 +513,8 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
+			moveGap(-1,0,"contentRemoved");
+
 			if(startLine + numLines < gapLine)
 				gapLine -= numLines;
 			else if(startLine < gapLine)
