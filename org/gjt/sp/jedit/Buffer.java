@@ -1244,13 +1244,15 @@ public class Buffer
 					numLines++;
 			}
 
-			firePreContentRemoved(startLine,offset,numLines,length);
+			/* nothing can go here since we re-use the 'seg'! */
 
 			if(!getFlag(UNDO_IN_PROGRESS))
 			{
 				undoMgr.contentRemoved(offset,length,
 					seg.toString(),!getFlag(DIRTY));
 			}
+
+			firePreContentRemoved(startLine,offset,numLines,length);
 
 			contentMgr.remove(offset,length);
 
