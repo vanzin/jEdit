@@ -88,8 +88,8 @@ You may also e-mail me directly by e-mailing <slava@jedit.org>.
 
 jEdit depends on, and comes bundled with the following libraries:
 
-- gnu.regexp by the Free Software Foundation. jEdit bundles gnu.regexp
-  1.1.4.
+- gnu.regexp by the Free Software Foundation. jEdit bundles the
+  gnu.regexp 1.1.5 CVS snapshot.
 
   gnu.regexp is released under the 'GNU Lesser General Public License'.
   The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.

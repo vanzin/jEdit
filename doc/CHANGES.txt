@@ -32,6 +32,11 @@ JEDIT 4.0 VERSION HISTORY
 - Cleaned up handling of changing fold handlers and 'collapsedFolds'
   property. This should fix a few obscure bugs
 - Consecutive backspaces of characters would not be merged into one undo
+- Updated to a gnu.regexp 1.1.5 CVS snapshot. This fixes the bug where
+  replacing the regular expression $ with a string did not change the
+  last line of the buffer
+- The file system browser's divider position would not be remembered if
+  it was collapsed all the way
 
 + API Changes
 

@@ -890,6 +890,8 @@ public class View extends JFrame implements EBComponent
 			handleBufferUpdate((BufferUpdate)msg);
 		else if(msg instanceof EditPaneUpdate)
 			handleEditPaneUpdate((EditPaneUpdate)msg);
+		else if(msg instanceof MultiSelectStatusChanged)
+			status.updateMiscStatus();
 	} //}}}
 
 	//{{{ Package-private members
