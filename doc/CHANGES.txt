@@ -27,7 +27,6 @@ JEDIT 4.1 VERSION HISTORY
 
 - The tool bar option pane now has an "Edit" button for modifying the
   currently selected tool bar entry.
-- The location and size of the dialog box is now persistent.
 - Now org.gjt.sp.jedit.gui.OptionsDialog is an abstract class, with a
   concrete org.gjt.sp.jedit.options.GlobalOptions subclass with the
   Global Options-specific code. This allows plugins to create paned

@@ -37,7 +37,6 @@ public class HelpIndex
 	//{{{ HelpIndex constructor
 	public HelpIndex()
 	{
-		files = new ArrayList();
 		words = new HashMap();
 	} //}}}
 
@@ -103,8 +102,7 @@ public class HelpIndex
 					MiscUtilities.getFileName(jar.getName())
 					+ "!" + name;
 				Log.log(Log.DEBUG,this,url);
-				files.add(url);
-				indexStream(jar.getInputStream(entry),files.size() - 1);
+				indexStream(jar.getInputStream(entry),url);
 			}
 		}
 	} //}}}
@@ -119,9 +117,6 @@ public class HelpIndex
 	{
 		Log.log(Log.DEBUG,this,url);
 
-		files.add(url);
-		int fileIndex = files.size() - 1;
-
 		InputStream _in;
 
 		if(MiscUtilities.isURL(url))
@@ -129,7 +124,7 @@ public class HelpIndex
 		else
 			_in = new FileInputStream(url);
 
-		indexStream(_in,fileIndex);
+		indexStream(_in,url);
 	} //}}}
 
 	//{{{ getWord() method
@@ -139,11 +134,6 @@ public class HelpIndex
 	} //}}}
 
 	//{{{ Private members
-
-	// URLs of HTML files (either file:/ or jeditresource:/)
-	private ArrayList files;
-
-	// The indexed words themselves
 	private HashMap words;
 
 	//{{{ indexStream() method
@@ -151,9 +141,9 @@ public class HelpIndex
 	 * Reads the specified HTML file and adds all words defined therein to the
 	 * index.
 	 * @param _in The input stream
-	 * @param fileIndex The file index
+	 * @param file The file
 	 */
-	private void indexStream(InputStream _in, int fileIndex) throws Exception
+	private void indexStream(InputStream _in, String file) throws Exception
 	{
 		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
 
@@ -185,7 +175,7 @@ public class HelpIndex
 				{
 					if(word.length() != 0)
 					{
-						addWord(word.toString(),fileIndex);
+						addWord(word.toString(),file);
 						word.setLength(0);
 					}
 				}
@@ -200,15 +190,15 @@ public class HelpIndex
 	} //}}}
 
 	//{{{ addWord() method
-	private void addWord(String word, int index)
+	private void addWord(String word, String file)
 	{
 		word = word.toLowerCase();
 
 		Word w = (Word)words.get(word);
 		if(w == null)
-			words.put(word,new Word(word,index));
+			words.put(word,new Word(word,file));
 		else
-			w.addOccurrence(index);
+			w.addOccurrence(file);
 	} //}}}
 
 	//}}}
@@ -221,16 +211,16 @@ public class HelpIndex
 
 		// files it occurs in
 		int fileCount = 0;
-		int[] files;
+		String[] files;
 
-		Word(String word, int file)
+		Word(String word, String file)
 		{
 			this.word = word;
-			files = new int[5];
+			files = new String[5];
 			addOccurrence(file);
 		}
 
-		void addOccurrence(int file)
+		void addOccurrence(String file)
 		{
 			for(int i = 0; i < fileCount; i++)
 			{
@@ -240,7 +230,7 @@ public class HelpIndex
 
 			if(fileCount >= files.length)
 			{
-				int[] newFiles = new int[files.length * 2];
+				String[] newFiles = new String[files.length * 2];
 				System.arraycopy(files,0,newFiles,0,fileCount);
 				files = newFiles;
 			}
