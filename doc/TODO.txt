@@ -3,9 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-before pre2:
-- scrolling problem
-
 - bizarre dockable window manager button layout problem
 - change of AT_WORD_START semantics to fix perl highlighting?
 - auto indent: don't de-indent on enter if no leading indent at all?
@@ -76,6 +73,10 @@ before pre2:
 
 + features:
 
+- plugin mgr: don't remove a plugin if downloading the update failed
+- plugin mgr: show non-plugin JARs
+- plugin mgr: note about restarting jEdit if doing upgrade of 4.1 to 4.2
+  plugin
 - bsh = { 2 + 2; }
 - eval-for-selected-lines doesn't work with rectangular selection
 - customizable vfs browser extended attributes
@@ -221,6 +222,7 @@ before pre2:
 - TokenHandlers: have the token marker give them a segment to avoid
   two redundant getLineText()s
 - see if getLineOfOffset() can be optimized
+- wrap guide: paint using new API
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
