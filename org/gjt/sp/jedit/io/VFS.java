@@ -625,12 +625,15 @@ public abstract class VFS
 	 * Called after a file has been saved.
 	 * @param session The VFS session
 	 * @param buffer The buffer
+	 * @param path The path the buffer was saved to (can be different from
+	 * <code>buffer.getPath()</code> if the user invoked the
+	 * <b>Save a Copy As</b> command, for example).
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
-	 * @since jEdit 3.1pre1
+	 * @since jEdit 4.1pre9
 	 */
-	public void _saveComplete(Object session, Buffer buffer, Component comp)
-		throws IOException {} //}}}
+	public void _saveComplete(Object session, Buffer buffer, String path,
+		Component comp) throws IOException {} //}}}
 
 	//{{{ _endVFSSession() method
 	/**

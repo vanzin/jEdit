@@ -1,5 +1,20 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre9 -- 4.0 release candidate 1
+
++ Bug Fixes:
+
+- Saving a file from one file system to another using the "Save a Copy
+  As" command could cause problems if the destination VFS implemented
+  the _saveComplete() method. This method was only passed a buffer
+  instance, and there was no way to obtain the destination path.
+
++ API Changes:
+
+- VFS._saveComplete(Object session, Buffer buffer, Component comp) is
+  now VFS._saveComplete(Object session, Buffer buffer, String path,
+  Component comp).
+
 * Version 4.1pre8
 
 Thanks to Carmine Lucarelli, Chris Petersen, Jonathan Revusky,
