@@ -57,8 +57,8 @@ public class FavoritesVFS extends VFS
 	public int getCapabilities()
 	{
 		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create the default 'favorites' button on the tool bar
-		return /* BROWSE_CAP | */ DELETE_CAP;
+		// to create an item for this VFS in its 'Plugins' menu
+		return DELETE_CAP | LOW_LATENCY_CAP;
 	} //}}}
 
 	//{{{ getParentOfPath() method

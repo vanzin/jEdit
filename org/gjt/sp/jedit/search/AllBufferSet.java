@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import gnu.regexp.*;
+import java.awt.Component;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -73,7 +74,7 @@ public class AllBufferSet extends BufferListSet
 	//}}}
 
 	//{{{ _getFiles() method
-	protected String[] _getFiles()
+	protected String[] _getFiles(Component comp)
 	{
 		Buffer[] buffers = jEdit.getBuffers();
 		Vector vector = new Vector(buffers.length);

@@ -50,7 +50,7 @@ public class FileVFS extends VFS
 	public int getCapabilities()
 	{
 		return READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
-			| RENAME_CAP | MKDIR_CAP;
+			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP;
 	} //}}}
 
 	//{{{ getParentOfPath() method

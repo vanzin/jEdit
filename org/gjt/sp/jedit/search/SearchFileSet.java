@@ -50,7 +50,7 @@ public interface SearchFileSet
 	/**
 	 * Returns the number of files in this file set.
 	 */
-	int getFileCount();
+	int getFileCount(View view);
 
 	/**
 	 * Returns the BeanShell code that will recreate this file set.

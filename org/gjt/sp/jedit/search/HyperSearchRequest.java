@@ -56,7 +56,7 @@ public class HyperSearchRequest extends WorkRequest
 	public void run()
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
-		setProgressMaximum(fileset.getFileCount());
+		setProgressMaximum(fileset.getFileCount(view));
 		setStatus(jEdit.getProperty("hypersearch.status"));
 
 		int resultCount = 0;
