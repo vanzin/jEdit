@@ -660,6 +660,8 @@ public class FoldVisibilityManager
 		{
 			buffer.writeLock();
 
+			narrowed = false;
+
 			buffer._setVirtualLineCount(index,buffer.getLineCount());
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
@@ -700,6 +702,8 @@ public class FoldVisibilityManager
 		try
 		{
 			buffer.writeLock();
+
+			narrowed = false;
 
 			// so that getFoldLevel() calling fireFoldLevelsChanged()
 			// won't break

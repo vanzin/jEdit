@@ -2,19 +2,22 @@ TO DO
 
 + before pre3:
 
+- when loading a file with collapsedFolds property, last line always
+  visible
+- faster hypersearch
+
+- Toggle line comment macro needs to become context-sensitive
+- put package.html everywhere
+- OK_CANCEL_OPTION in confirm() docs
 - finish new complete word
   - fix bug that was fixed before
   - better list control
   - better cell renderer
   - update on the fly
-- last focused dockable cmd
-- when loading a file with collapsedFolds property, last line always
-  visible
 - C+d with selection: delete all selected lines
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need
   some way of showing arbitriary message in VFS file chooser.
-- faster hypersearch
-
+- last focused dockable cmd
 - docking buttons not always hidden
 - definately repaint problems
 - nextLineRequested still fucked
@@ -51,7 +54,6 @@ TO DO
 - style setting for folding line indicator
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
-- next-fold/prev-fold actions
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
 - help viewer: two tabs, contents and index. index browser
@@ -69,7 +71,7 @@ TO DO
   - keyboard select file should activate open files -- or Enter press
 - drop LatestVersion plugin
 - roll Firewall plugin into core
-- web start version
+- web start version & submit to http://java.sun.com/getjava/showcase.html
 - <file>?line= or ?marker=
 - fold navigator to browse fold tree in explicit fold mode
 - reintroduce -bshclient command line switch

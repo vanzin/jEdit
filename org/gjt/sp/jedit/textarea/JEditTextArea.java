@@ -759,7 +759,7 @@ public class JEditTextArea extends JComponent
 	//{{{ xToOffset() method
 	/**
 	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The line
+	 * @param line The physical line index
 	 * @param x The x co-ordinate
 	 */
 	public int xToOffset(int line, int x)
@@ -770,7 +770,7 @@ public class JEditTextArea extends JComponent
 	//{{{ xToOffset() method
 	/**
 	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The line
+	 * @param line The physical line index
 	 * @param x The x co-ordinate
 	 * @param round Round up to next letter if past the middle of a letter?
 	 * @since jEdit 3.2pre6
@@ -1348,74 +1348,6 @@ forward_scan:		do
 		else
 			setSelection(s);
 		moveCaretPosition(end);
-	} //}}}
-
-	//{{{ selectFold() method
-	/**
-	 * Selects the fold that contains the caret line number.
-	 * @since jEdit 3.1pre3
-	 */
-	public void selectFold()
-	{
-		selectFold(caretLine);
-	} //}}}
-
-	//{{{ selectFold() method
-	/**
-	 * Selects the fold that contains the specified line number.
-	 * @param line The line number
-	 * @since jEdit 4.0pre1
-	 */
-	public void selectFold(int line)
-	{
-		int start;
-		int end;
-
-		if(buffer.isFoldStart(line))
-		{
-			start = line;
-			int foldLevel = buffer.getFoldLevel(line);
-
-			line++;
-
-			while(buffer.getFoldLevel(line) > foldLevel)
-			{
-				if(line == buffer.getLineCount() - 1)
-					break;
-				else
-					line++;
-			}
-			end = line;
-		}
-		else
-		{
-			start = line;
-			int foldLevel = buffer.getFoldLevel(line);
-			while(buffer.getFoldLevel(start) >= foldLevel)
-			{
-				if(start == 0)
-					break;
-				else
-					start--;
-			}
-
-			end = line;
-			while(buffer.getFoldLevel(end) >= foldLevel)
-			{
-				if(end == buffer.getLineCount() - 1)
-					break;
-				else
-					end++;
-			}
-		}
-
-		int newCaret = getLineEndOffset(end) - 1;
-		Selection s = new Selection.Range(getLineStartOffset(start),newCaret);
-		if(multi)
-			addToSelection(s);
-		else
-			setSelection(s);
-		moveCaretPosition(newCaret);
 	} //}}}
 
 	//{{{ invertSelection() method
@@ -2209,7 +2141,14 @@ forward_scan:		do
 		if(!foldVisibilityManager.isLineVisible(newCaretLine))
 		{
 			if(foldVisibilityManager.isNarrowed())
-				foldVisibilityManager.expandAllFolds();
+			{
+				int collapseFolds = buffer.getIntegerProperty(
+					"collapseFolds",0);
+				if(collapseFolds != 0)
+					foldVisibilityManager.expandFolds(collapseFolds);
+				else
+					foldVisibilityManager.expandAllFolds();
+			}
 			else
 				foldVisibilityManager.expandFold(newCaretLine,false);
 		}
@@ -3686,6 +3625,321 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//}}}
 
+	//{{{ Folding
+
+	//{{{ goToParentFold() method
+	/**
+	 * Moves the caret to the fold containing the one at the caret
+	 * position.
+	 * @since jEdit 4.0pre3
+	 */
+	public void goToParentFold()
+	{
+		int line = -1;
+		int level = buffer.getFoldLevel(caretLine);
+		for(int i = caretLine; i >= 0; i--)
+		{
+			if(buffer.getFoldLevel(i) < level)
+			{
+				line = i;
+				break;
+			}
+		}
+
+		if(line == -1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int magic = getMagicCaretPosition();
+
+		int newCaret = buffer.getLineStartOffset(line)
+			+ xToOffset(line,magic + 1);
+		if(!multi)
+			selectNone();
+
+		moveCaretPosition(line);
+		setMagicCaretPosition(magic);
+	} //}}}
+
+	//{{{ goToNextFold() method
+	/**
+	 * Moves the caret to the next fold.
+	 * @since jEdit 4.0pre3
+	 */
+	public void goToNextFold(boolean select)
+	{
+		int line = caretLine;
+
+		while(!buffer.isFoldStart(line))
+		{
+			if(line == 0)
+			{
+				getToolkit().beep();
+				return;
+			}
+			else
+				line--;
+		}
+
+		int level = buffer.getFoldLevel(line);
+		int nextFold = -1;
+		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
+		{
+			if(buffer.getFoldLevel(i) <= level
+				&& buffer.isFoldStart(i))
+			{
+				nextFold = i;
+				break;
+			}
+		}
+
+		if(nextFold == -1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int magic = getMagicCaretPosition();
+
+		int newCaret = buffer.getLineStartOffset(nextFold)
+			+ xToOffset(nextFold,magic + 1);
+		if(select)
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
+		setMagicCaretPosition(magic);
+	} //}}}
+
+	//{{{ goToPrevFold() method
+	/**
+	 * Moves the caret to the previous fold.
+	 * @since jEdit 4.0pre3
+	 */
+	public void goToPrevFold(boolean select)
+	{
+		int line = caretLine;
+
+		while(!buffer.isFoldStart(line))
+		{
+			if(line == 0)
+			{
+				getToolkit().beep();
+				return;
+			}
+			else
+				line--;
+		}
+
+		int level = buffer.getFoldLevel(line);
+		int prevFold = -1;
+		for(int i = caretLine - 1; i >= 0; i--)
+		{
+			if(buffer.getFoldLevel(i) <= level
+				&& buffer.isFoldStart(i))
+			{
+				prevFold = i;
+				break;
+			}
+		}
+
+		if(prevFold == -1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int magic = getMagicCaretPosition();
+
+		int newCaret = buffer.getLineStartOffset(prevFold)
+			+ xToOffset(prevFold,magic + 1);
+		if(select)
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
+		setMagicCaretPosition(magic);
+	} //}}}
+
+	//{{{ collapseFold() method
+	/**
+	 * Like <code>FoldVisibilityManager.collapseFold()</code>, but
+	 * also moves the caret to the first line of the fold.
+	 * @see FoldVisibilityManager#collapseFold(int)
+	 * @since jEdit 4.0pre3
+	 */
+	public void collapseFold()
+	{
+		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
+
+		foldVisibilityManager.collapseFold(caretLine);
+		int line = virtualToPhysical(physicalToVirtual(caretLine));
+		if(line == caretLine)
+			return;
+
+		if(!multi)
+			selectNone();
+		moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+	} //}}}
+
+	//{{{ expandFold() method
+	/**
+	 * Like <code>FoldVisibilityManager.expandFold()</code>, but
+	 * also moves the caret to the first sub-fold.
+	 * @see FoldVisibilityManager#expandFold(int)
+	 * @since jEdit 4.0pre3
+	 */
+	public void expandFold(boolean fully)
+	{
+		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
+
+		foldVisibilityManager.expandFold(caretLine,fully);
+		int line = caretLine + 1;
+		while(!buffer.isFoldStart(line) && line < buffer.getLineCount())
+			line++;
+
+		if(!multi)
+			selectNone();
+		moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+	} //}}}
+
+	//{{{ selectFold() method
+	/**
+	 * Selects the fold that contains the caret line number.
+	 * @since jEdit 3.1pre3
+	 */
+	public void selectFold()
+	{
+		selectFold(caretLine);
+	} //}}}
+
+	//{{{ selectFold() method
+	/**
+	 * Selects the fold that contains the specified line number.
+	 * @param line The line number
+	 * @since jEdit 4.0pre1
+	 */
+	public void selectFold(int line)
+	{
+		int[] lines = buffer.getFoldAtLine(line);
+
+		int newCaret = getLineEndOffset(lines[1]) - 1;
+		Selection s = new Selection.Range(getLineStartOffset(lines[0]),newCaret);
+		if(multi)
+			addToSelection(s);
+		else
+			setSelection(s);
+		moveCaretPosition(newCaret);
+	} //}}}
+
+	//{{{ narrowToFold() method
+	/**
+	 * Hides all lines except those in the fold containing the caret.
+	 * @since jEdit 4.0pre1
+	 */
+	public void narrowToFold()
+	{
+		int[] lines = buffer.getFoldAtLine(caretLine);
+		foldVisibilityManager.narrow(lines[0],lines[1]);
+	} //}}}
+
+	//{{{ narrowToSelection() method
+	/**
+	 * Hides all lines except those in the selection.
+	 * @since jEdit 4.0pre1
+	 */
+	public void narrowToSelection()
+	{
+		if(selection.size() != 1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		Selection sel = (Selection)selection.elementAt(0);
+		foldVisibilityManager.narrow(sel.getStartLine(),sel.getEndLine());
+
+		selectNone();
+	} //}}}
+
+	//{{{ addExplicitFold() method
+	/**
+	 * Surrounds the selection with explicit fold markers.
+	 * @since jEdit 4.0pre3
+	 */
+	public void addExplicitFold()
+	{
+		if(!buffer.getStringProperty("folding").equals("explicit"))
+		{
+			GUIUtilities.error(view,"folding-not-explicit",null);
+			return;
+		}
+
+		// BUG: if there are multiple selections in different
+		// contexts, the wrong comment strings will be inserted.
+		String lineComment = buffer.getContextSensitiveProperty(caret,"lineComment");
+		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
+		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
+
+		String start, end;
+		if(lineComment != null)
+		{
+			start = lineComment + "{{{\n";
+			end = " " + lineComment + "}}}";
+		}
+		else if(commentStart != null && commentEnd != null)
+		{
+			start = commentStart + "{{{" + commentEnd + "\n";
+			end = " " + commentStart + "}}}" + commentEnd;
+		}
+		else
+		{
+			start = "{{{\n";
+			end = " }}}";
+		}
+
+		try
+		{
+			buffer.beginCompoundEdit();
+
+			if(selection.size() == 0)
+			{
+				String line = buffer.getLineText(caretLine);
+				String whitespace = line.substring(0,
+					MiscUtilities.getLeadingWhiteSpace(line));
+				start = start + whitespace;
+				buffer.insert(caret,start);
+				// stupid: caret will automatically be incremented
+				buffer.insert(caret,end);
+			}
+			else
+			{
+				for(int i = 0; i < selection.size(); i++)
+				{
+					Selection s = (Selection)selection.elementAt(i);
+					String line = buffer.getLineText(s.startLine);
+					String whitespace = line.substring(0,
+						MiscUtilities.getLeadingWhiteSpace(line));
+					start = start + whitespace;
+					buffer.insert(s.start,start);
+					buffer.insert(s.end,end);
+				}
+
+				selectNone();
+			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+	} //}}}
+
+	//}}}
+
 	//{{{ Text editing
 
 	//{{{ lineComment() method
@@ -4092,95 +4346,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		doWordCount(view,buffer.getText(0,buffer.getLength()));
-	} //}}}
-
-	//{{{ narrowToSelection() method
-	/**
-	 * Hides all lines except those in the selection.
-	 * @since jEdit 4.0pre1
-	 */
-	public void narrowToSelection()
-	{
-		if(selection.size() != 1)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		Selection sel = (Selection)selection.elementAt(0);
-		foldVisibilityManager.narrow(sel.getStartLine(),sel.getEndLine());
-	} //}}}
-
-	//{{{ addExplicitFold() method
-	/**
-	 * Surrounds the selection with explicit fold markers.
-	 * @since jEdit 4.0pre3
-	 */
-	public void addExplicitFold()
-	{
-		if(!buffer.getStringProperty("folding").equals("explicit"))
-		{
-			GUIUtilities.error(view,"folding-not-explicit",null);
-			return;
-		}
-
-		// BUG: if there are multiple selections in different
-		// contexts, the wrong comment strings will be inserted.
-		String lineComment = buffer.getContextSensitiveProperty(caret,"lineComment");
-		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
-		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
-
-		String start, end;
-		if(lineComment != null)
-		{
-			start = lineComment + "{{{\n";
-			end = " " + lineComment + "}}}";
-		}
-		else if(commentStart != null && commentEnd != null)
-		{
-			start = commentStart + "{{{" + commentEnd + "\n";
-			end = " " + commentStart + "}}}" + commentEnd;
-		}
-		else
-		{
-			start = "{{{\n";
-			end = " }}}";
-		}
-
-		try
-		{
-			buffer.beginCompoundEdit();
-
-			if(selection.size() == 0)
-			{
-				String line = buffer.getLineText(caretLine);
-				String whitespace = line.substring(0,
-					MiscUtilities.getLeadingWhiteSpace(line));
-				start = start + whitespace;
-				buffer.insert(caret,start);
-				// stupid: caret will automatically be incremented
-				buffer.insert(caret,end);
-			}
-			else
-			{
-				for(int i = 0; i < selection.size(); i++)
-				{
-					Selection s = (Selection)selection.elementAt(i);
-					String line = buffer.getLineText(s.startLine);
-					String whitespace = line.substring(0,
-						MiscUtilities.getLeadingWhiteSpace(line));
-					start = start + whitespace;
-					buffer.insert(s.start,start);
-					buffer.insert(s.end,end);
-				}
-
-				selectNone();
-			}
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
 	} //}}}
 
 	//}}}
@@ -4829,7 +4994,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// performance hack: don't scan forward too far, so that
 			// typing a new { for example doesn't parse entire buffer
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,caretLine,offset - 1);
+				buffer,caretLine,offset - 1,0,Math.max(
+				endLine,Math.min(buffer.getLineCount() - 1,
+				caretLine + 500)));
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);

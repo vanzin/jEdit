@@ -691,13 +691,15 @@
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Previous
    Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) goes
-   to the nearest marker before the caret position.
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>,</keycap>) goes
+   to the marker immediately before the caret position.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Next Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>)
-   goes to the nearest marker after the caret position.
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>.</keycap>)
+   goes to the marker immediately after the caret position.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Remove All Markers</guimenuitem>

@@ -37,7 +37,7 @@
     The maximum number of open buffers depends on available <firstterm>Java
     heap memory</firstterm>. Each buffer requires the memory of
     approximately two and a half it's size on disk. This overhead is caused
-    by the file being stored internally in Unicode (see
+    by the file being stored internally as Unicode (see
     <xref linkend="encodings" />), and the fact that additional information,
     such as line numbers, also needs to be stored.
    </para>
@@ -73,19 +73,19 @@
    about starting jEdit in background mode.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Split
+   <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Horizontally</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo>)
    splits the view into two text areas, above each other.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Split
+   <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Vertically</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo>)
    splits the view into two text areas, next to each other.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Unsplit</guimenuitem>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo>)
    removes all but the current text area from the view.
   </para>
@@ -95,13 +95,13 @@
    with the mouse, or use the following commands.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Go to
+   <guimenu>View</guimenu>&gt;<guimenuitem>Go to
    Previous Text Area</guimenuitem>
    (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo>)
    shifts keyboard focus to the previous text area.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Go to
+   <guimenu>View</guimenu>&gt;<guimenuitem>Go to
    Next Text Area</guimenuitem>
    (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo>)
    shifts keyboard focus to the next text area.

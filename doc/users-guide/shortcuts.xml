@@ -473,8 +473,8 @@
       move the marker to the previous caret position.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycap>,</keycap>; <keycap>.</keycap></entry>
       <entry>Move caret to previous; next marker.</entry>
      </row>
     </tbody>
@@ -646,8 +646,25 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>N</keycap></entry>
+      <keycap>N</keycap> <keycap>N</keycap></entry>
+      <entry>Narrow to fold.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycap>N</keycap> <keycap>S</keycap></entry>
       <entry>Narrow to selection.
+      </entry>
+     </row>
+     <row>
+      <entry><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
+      <entry>Moves caret to previous; next fold.
+      </entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+      <keycap>U</keycap></entry>
+      <entry>Moves caret to the fold containing the one at the caret position.
       </entry>
      </row>
     </tbody>

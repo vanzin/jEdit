@@ -68,7 +68,7 @@ next-bracket.shortcut=C+e ]
 #}}}
 
 #{{{ C+e X
-# Unused: b e g h j k m o q t u y z
+# Unused: b e g h j k m o q t y z
 close-left-docking-area.shortcut=C+e 1
 close-top-docking-area.shortcut=C+e 2
 close-right-docking-area.shortcut=C+e 3
@@ -79,13 +79,17 @@ delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
 invert-selection.shortcut=C+e i
 select-line.shortcut=C+e l
-narrow.shortcut=C+e n
+narrow-to-fold.shortcut=C+e n n
+narrow-to-selection.shortcut=C+e n s
 select-paragraph.shortcut=C+e p
 remove-trailing-ws.shortcut=C+e r
 select-fold.shortcut=C+e s
 insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
+parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
+prev-marker.shortcut=C+e COMMA
+next-marker.shortcut=C+e PERIOD
 #}}}
 
 #{{{ C+m C+X
@@ -114,8 +118,8 @@ next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP
 select-next-paragraph.shortcut=CS+DOWN
 shift-left.shortcut2=S+TAB
-prev-marker.shortcut=A+UP
-next-marker.shortcut=A+DOWN
+prev-fold.shortcut=A+UP
+next-fold.shortcut=A+DOWN
 shift-left.shortcut=A+LEFT
 shift-right.shortcut=A+RIGHT
 select-none.shortcut=ESCAPE

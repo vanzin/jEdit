@@ -7,8 +7,6 @@ JEDIT 4.0 VERSION HISTORY
 - Two-stage save (where a file is first saved to #filename#save#, then
   renamed to the actual file name) can be disabled in the 'Loading and
   Saving' option pane
-- View->Folding->Add Explicit Fold (shortcut: C+e a) command added;
-  surrounds selection with {{{ and }}}
 - -noplugins command line switch added
 - Added option to have backups created on every save (default is to only
   create one backup for each file, until it is closed)
@@ -28,6 +26,19 @@ JEDIT 4.0 VERSION HISTORY
   caret in the search bar
 - 'Search->HyperSearch for Word' performs a HyperSearch for the word
   under the caret
+- View->Folding submenu is now a top-level Folding menu. A few commands
+  have been added:
+  - Add Explicit Fold (C+e a): surrounds the selection with explicit
+    fold markers ({{{ and }}})
+  - Go to Previous/Next Fold (A+UP, A+DOWN): self-explanatory. Go to
+    Previous/Next Marker, which were formely bound to A+UP/DOWN, are now
+    bound to C+e COMMA and C+e PERIOD.
+  - Go to Parent Fold (C+e u): moves caret to fold with a higher level
+    than the one containing the caret
+  - Narrow to Fold (C+e n n): equivalent to invoking 'Select Fold', then
+    'Narrow to Selection'
+  - Narrow to Selection (C+e n s): this command is the same as before,
+    but has a new shortcut
 
 + Enhancements
 
@@ -63,6 +74,7 @@ JEDIT 4.0 VERSION HISTORY
   multi-file search, the search will continue; previously it would have
   been aborted. Any errors will be listed in a dialog box after the
   search is complete.
+- Commands in View->Splitting menu moved to top level of View menu
 
 + Neutral
 
