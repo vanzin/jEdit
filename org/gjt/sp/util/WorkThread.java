@@ -29,7 +29,8 @@ public class WorkThread extends Thread
 	public WorkThread(WorkThreadPool pool, ThreadGroup group, String name)
 	{
 		super(group, name);
-		setDaemon(true);
+		// so that jEdit doesn't exit with no views open automatically
+		//setDaemon(true);
 		setPriority(4);
 
 		this.pool = pool;

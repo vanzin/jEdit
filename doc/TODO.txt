@@ -2,13 +2,12 @@ TO DO
 
 + 4.0.1:
 
-- try painting using drawString(), not drawGF() to fix slow X performance
-
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:
 [error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
 [error] AWT-EventQueue-0:       at
 org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
+- SOCKS proxy
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - make fs color regexp error more intuitive
@@ -26,7 +25,9 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + in 4.1:
 
-- SOCKS proxy
+- fsb: indicate current buffer
+- double click on _current_ buffer: close
+- double click on other open: select
 - rect select hypersearch
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state

@@ -202,12 +202,6 @@ public class UndoManager
 				rem.length += length;
 				return;
 			}
-			else if(rem.offset + rem.length == offset)
-			{
-				rem.str = text.concat(rem.str);
-				rem.length += length;
-				return;
-			}
 			else if(offset + length == rem.offset)
 			{
 				rem.str = text.concat(rem.str);

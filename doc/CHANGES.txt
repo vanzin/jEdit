@@ -5,6 +5,7 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - Interilis syntax highlighting (Claude Eisenhut)
+- Added SOCKS proxy support (Alfonso Garcia)
 
 + Enhancements
 
@@ -15,6 +16,10 @@ JEDIT 4.0 VERSION HISTORY
 
 - Select Open File; press Enter first; then choose a file to open. Bang,
   an error message. Now fixed
+- Fixed a bug in the undo code that would occur sometimes when multiple
+  removes were performed in a row
+- If the splash screen was disabled, running jEdit with the -nogui and
+  -nobackground command line arguments didn't work
 
 * Version 4.0final
 
