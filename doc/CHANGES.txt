@@ -163,6 +163,8 @@ JEDIT 4.0 VERSION HISTORY
   - The RESearchMatcher class converted \t to the tab character and \n
     to the newline character, even if the replace string was a BeanShell
     script, in which case a BeanShell execution error would occur.
+- In the help viewer, nodes in the tree were not selected as links were
+  followed
 
 + API Changes
 
@@ -210,5 +212,5 @@ JEDIT 4.0 VERSION HISTORY
   method removed. Use compareStrings() instead
 - Sometimes, Untitled buffers would not be replaced when another file
   was opened
-- Buffer.collapseFoldAt(int) is now
-  Buffer.collapseFoldAt(int,JEditTextArea)
+- Buffer.markTokens() now returns instance of Buffer.TokenList class
+- New BufferUpdate message type: FOLD_HANDLER_CHANGED

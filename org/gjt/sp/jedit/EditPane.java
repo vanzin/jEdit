@@ -547,6 +547,16 @@ public class EditPane extends JPanel implements EBComponent
 					view.getStatus().updateBufferStatus();
 			}
 		}
+		else if(msg.getWhat() == BufferUpdate.FOLD_HANDLER_CHANGED)
+		{
+			if(_buffer == buffer)
+			{
+				textArea.repaint();
+
+				if(view.getEditPane() == this)
+					view.getStatus().updateMiscStatus();
+			}
+		}
 	} //}}}
 
 	//}}}

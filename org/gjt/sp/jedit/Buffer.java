@@ -94,6 +94,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	//}}}
 
 	//{{{ Input/output methods
+
 	//{{{ showInsertFileDialog() method
 	/**
 	 * Displays the 'insert file' dialog box and inserts the selected file
@@ -440,18 +441,6 @@ public class Buffer extends PlainDocument implements EBComponent
 						markTokens(i);
 				}
 
-				try
-				{
-					int collapseFolds = ((Integer)
-						getProperty("collapseFolds"))
-						.intValue();
-					if(collapseFolds != 0)
-						expandFolds(collapseFolds);
-				}
-				catch(Exception e)
-				{
-				}
-
 				// send some EditBus messages
 				if(!getFlag(TEMPORARY))
 				{
@@ -775,6 +764,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	//}}}
 
 	//{{{ Getters/setter methods for various things
+
 	//{{{ getLastModified() method
 	/**
 	 * Returns the last time jEdit modified the file on disk.
@@ -938,7 +928,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		setFlag(READ_ONLY,readOnly);
 	} //}}}
 
-	// {{{ setDirty() method
+	//{{{ setDirty() method
 	/**
 	 * Sets the `dirty' (changed since last save) flag of this buffer.
 	 */
@@ -1013,12 +1003,11 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	//{{{ getVirtualLineCount() method
 	/**
-	 * Returns the number of virtual lines in the buffer.
-	 * @since jEdit 3.1pre1
+	 * @deprecated
 	 */
 	public int getVirtualLineCount()
 	{
-		return virtualLineCount;
+		return lineCount;
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -1433,6 +1422,32 @@ public class Buffer extends PlainDocument implements EBComponent
 		{
 			endCompoundEdit();
 		}
+	} //}}}
+
+	//}}}
+
+	//{{{ Buffer events
+
+	//{{{ addBufferChangeListener() method
+	/**
+	 * Adds a buffer change listener.
+	 * @param listener The listener
+	 * @since jEdit 4.0pre1
+	 */
+	public void addBufferChangeListener(BufferChangeListener l)
+	{
+		bufferListeners.addElement(l);
+	} //}}}
+
+	//{{{ addBufferChangeListener() method
+	/**
+	 * Removes a buffer change listener.
+	 * @param listener The listener
+	 * @since jEdit 4.0pre1
+	 */
+	public void removeBufferChangeListener(BufferChangeListener l)
+	{
+		bufferListeners.removeElement(l);
 	} //}}}
 
 	//}}}
@@ -2123,19 +2138,72 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void tokenizeLines() {} //}}}
 
-	//}}}
-
-	//{{{ Folding methods
-
 	//{{{ isLineVisible() method
 	/**
-	 * Returns if the specified line is visible.
-	 * @since jEdit 3.1pre1
+	 * @deprecated Fold visibility is now stored on a per-text area
+	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
+	 * to get a visibility manager, and call the
+	 * <code>isLineVisible()</code> method on that object instead.
 	 */
 	public boolean isLineVisible(int line)
 	{
-		return lineInfo[line].visible;
+		return true;
 	} //}}}
+
+	//{{{ getPrevVisibleLine() method
+	/**
+	 * @deprecated Fold visibility is now stored on a per-text area
+	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
+	 * to get a visibility manager, and call the
+	 * <code>getPrevVisibleLine()</code> method on that object instead.
+	 */
+	public int getPrevVisibleLine(int lineNo)
+	{
+		return lineNo - 1;
+	} //}}}
+
+	//{{{ getNextVisibleLine() method
+	/**
+	 * @deprecated Fold visibility is now stored on a per-text area
+	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
+	 * to get a visibility manager, and call the
+	 * <code>getNextVisibleLine()</code> method on that object instead.
+	 */
+	public int getNextVisibleLine(int lineNo)
+	{
+		if(lineNo >= lineCount - 1)
+			return -1;
+		else
+			return lineNo + 1;
+	} //}}}
+
+	//{{{ virtualToPhysical() method
+	/**
+	 * @deprecated Fold visibility is now stored on a per-text area
+	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
+	 * to get a visibility manager, and call the
+	 * <code>virtualToPhysical()</code> method on that object instead.
+	 */
+	public int virtualToPhysical(int lineNo)
+	{
+		return lineNo;
+	} //}}}
+
+	//{{{ physicalToVirtual() method
+	/**
+	 * @deprecated Fold visibility is now stored on a per-text area
+	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
+	 * to get a visibility manager, and call the
+	 * <code>physicalToVirtual()</code> method on that object instead.
+	 */
+	public int physicalToVirtual(int lineNo)
+	{
+		return lineNo;
+	} //}}}
+
+	//}}}
+
+	//{{{ Folding methods
 
 	//{{{ isFoldStart() method
 	/**
@@ -2144,36 +2212,13 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public boolean isFoldStart(int line)
 	{
-		if(line == lineCount - 1)
-			return false;
-
-		// how it works:
-
-		// - if a line has a greater fold level than the next,
-		//   it is a fold
-
-		// - if a line is invisible, it is also a fold, even
-		//   if the fold level is the same (rationale: changing
-		//   indent levels while folds are collapsed shouldn't
-		//   create pernamently inaccessable sections)
-
-		// - exception to the above: if the line is the last
-		//   virtual line, don't report it as a fold if the
-		//   fold levels are the same and the next is invisible,
-		//   otherwise the last narrowed line will always be
-		//   a fold start which is silly
-
-		// note that the last two cases are temporarily disabled
-		// in 3.1pre3 because expandFoldAt() doesn't handle them
-		// properly.
-		return getFoldLevel(line) < getFoldLevel(line + 1);
-			/*|| (line != virtualLines[virtualLineCount - 1]
-			&& !lineInfo[line + 1].visible);*/
+		return (line != 0 && getFoldLevel(line) > getFoldLevel(line - 1));
 	} //}}}
 
 	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
+	 * @param line A physical line index
 	 * @since jEdit 3.1pre1
 	 */
 	public int getFoldLevel(int line)
@@ -2199,524 +2244,47 @@ public class Buffer extends PlainDocument implements EBComponent
 
 			for(int i = start; i <= line; i++)
 			{
-				LineInfo _info = lineInfo[i];
+				info = lineInfo[i];
 				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
-				_info.foldLevel = newFoldLevel;
-				_info.foldLevelValid = true;
-			}
-
-			if(info.foldLevel != newFoldLevel)
-			{
-				for(int i = line + 1; i < lineCount; i++)
-					lineInfo[i].foldLevelValid = false;
-
-				fireFoldLevelsChanged(start - 1,line - 1);
+				info.foldLevelValid = true;
+				if(info.foldLevel != newFoldLevel)
+				{
+					info.foldLevel = newFoldLevel;
+					fireFoldLevelChanged(i);
+				}
 			}
 
 			return newFoldLevel;
 		}
 	} //}}}
 
-	//{{{ getPrevVisibleLine() method
+	//{{{ getFoldVisibilityManager() method
 	/**
-	 * Returns the previous visible line before the specified index, or
-	 * -1 if no previous lines are visible.
-	 * @param lineNo The line
-	 * @since jEdit 3.1pre1
+	 * Returns the fold visibility method for the specified text area.
+	 * Instead of calling this method, call
+	 * <code>textArea.getFoldVisibilityManager()</code>.
+	 * @param textArea The text area
+	 * @since jEdit 4.0pre1
 	 */
-	public int getPrevVisibleLine(int lineNo)
+	public FoldVisibilityManager getFoldVisibilityManager(
+		JEditTextArea textArea)
 	{
-		for(int i = lineNo - 1; i >= 0; i--)
+		FoldVisibilityManager foldVisibilityManager
+			 = (FoldVisibilityManager)foldVisibilityManagers
+			.get(textArea);
+		if(foldVisibilityManager == null)
 		{
-			if(lineInfo[i].visible)
-				return i;
+			// in the EditPane constructor, we need a
+			// visibility manager before the
+			// EditPane.CREATED message.
+			foldVisibilityManager = new FoldVisibilityManager(
+				this,textArea);
+			addBufferChangeListener(foldVisibilityManager);
+			foldVisibilityManagers.put(textArea,foldVisibilityManager);
 		}
 
-		return -1;
+		return foldVisibilityManager;
 	} //}}}
-
-	//{{{ getNextVisibleLine() method
-	/**
-	 * Returns the next visible line after the specified index, or
-	 * -1 if no subsequent lines are visible.
-	 * @param lineNo The line
-	 * @since jEdit 3.1pre1
-	 */
-	public int getNextVisibleLine(int lineNo)
-	{
-		for(int i = lineNo + 1; i < lineCount; i++)
-		{
-			if(lineInfo[i].visible)
-				return i;
-		}
-
-		return -1;
-	} //}}}
-
-	//{{{ virtualToPhysical() method
-	/**
-	 * Maps a virtual line number to a physical line number. To simplify
-	 * matters for text area highlighters, this method maps out-of-bounds
-	 * line numbers as well.
-	 * @since jEdit 3.1pre1
-	 */
-	public int virtualToPhysical(int lineNo)
-	{
-		// debugging code
-		if((lineNo < virtualLineCount && lineNo >= virtualLines.length)
-			|| lineNo < 0)
-			throw new RuntimeException("lineNo = " + lineNo);
-
-		if(lineNo >= virtualLineCount)
-			return lineCount + (lineNo - virtualLineCount);
-
-		return virtualLines[lineNo];
-	} //}}}
-
-	//{{{ physicalToVirtual() method
-	/**
-	 * Maps a physical line number to a virtual line number.
-	 * @since jEdit 3.1pre1
-	 */
-	public int physicalToVirtual(int lineNo)
-	{
-		int start = 0;
-		int end = virtualLineCount - 1;
-
-		if(lineNo < virtualLines[start])
-			return start;
-		else if(lineNo > virtualLines[end])
-			return end;
-
-		// funky binary search
-		for(;;)
-		{
-			switch(end - start)
-			{
-			case 0:
-				if(virtualLines[start] < lineNo)
-					return start + 1;
-				else
-					return start;
-			case 1:
-				if(virtualLines[start] < lineNo)
-				{
-					if(virtualLines[end] < lineNo)
-						return end + 1;
-					else
-						return end;
-				}
-				else
-					return start;
-			default:
-				int pivot = start + (end - start) / 2;
-				int value = virtualLines[pivot];
-				if(value == lineNo)
-					return pivot;
-				else if(value < lineNo)
-					start = pivot + 1;
-				else
-					end = pivot - 1;
-				break;
-			}
-		}
-	} //}}}
-
-	//{{{ collapseFoldAt() method
-	/**
-	 * Collapse the fold that contains the specified line number.
-	 * @param line The first line number of the fold
-	 * @param textArea Text area for scrolling purposes
-	 * @return False if there are no folds in the buffer
-	 * @since jEdit 3.1pre1
-	 */
-	public boolean collapseFoldAt(int line, JEditTextArea textArea)
-	{
-		int initialFoldLevel = getFoldLevel(line);
-
-		int start = 0;
-		int end = lineCount - 1;
-
-		if(line != lineCount - 1
-			&& getFoldLevel(line + 1) > initialFoldLevel)
-		{
-			// this line is the start of a fold
-			start = line + 1;
-
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				if(getFoldLevel(i) <= initialFoldLevel)
-				{
-					end = i - 1;
-					break;
-				}
-			}
-		}
-		else
-		{
-			boolean ok = false;
-
-			// scan backwards looking for the start
-			for(int i = line - 1; i >= 0; i--)
-			{
-				if(getFoldLevel(i) < initialFoldLevel)
-				{
-					start = i + 1;
-					ok = true;
-					break;
-				}
-			}
-
-			if(!ok)
-			{
-				// no folds in buffer
-				return false;
-			}
-
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				if(getFoldLevel(i) < initialFoldLevel)
-				{
-					end = i - 1;
-					break;
-				}
-			}
-		}
-
-		int delta = (end - start + 1);
-
-		for(int i = start; i <= end; i++)
-		{
-			LineInfo info = lineInfo[i];
-			if(info.visible)
-				info.visible = false;
-			else
-				delta--;
-		}
-
-		if(delta == 0)
-		{
-			// user probably pressed A+BACK_SPACE twice
-			return false;
-		}
-
-		//System.err.println("collapse from " + start + " to " + end);
-
-		// I forgot to do this at first and it took me ages to
-		// figure out
-		start = physicalToVirtual(start);
-
-		//System.err.println("virtualized start is " + start);
-
-		// update virtual -> physical map
-		virtualLineCount -= delta;
-
-		//System.err.println("new virtual line count is " + virtualLineCount);
-
-		System.arraycopy(virtualLines,start + delta,virtualLines,start,
-			virtualLines.length - start - delta);
-
-		//System.err.println("copy from " + (start + delta)
-		//	+ " to " + start);
-
-		int firstLine = textArea.getFirstLine();
-		if(start < firstLine)
-			textArea.setFirstLine(start);
-
-		fireFoldStructureChanged();
-
-		return true;
-	} //}}}
-
-	//{{{ expandFoldAt() method
-	/**
-	 * Expand the fold that begins at the specified line number.
-	 * @param line The first line number of the fold
-	 * @param fully If true, fold will be expanded fully, otherwise
-	 * only one level will be expanded
-	 * @param textArea Text area for scrolling purposes
-	 * @return False if there are no folds in the buffer
-	 * @since jEdit 3.3pre3
-	 */
-	public boolean expandFoldAt(int line, boolean fully, JEditTextArea textArea)
-	{
-		int initialFoldLevel = getFoldLevel(line);
-
-		int start = 0;
-		int end = lineCount - 1;
-
-		if(line != lineCount - 1
-			&& lineInfo[line].visible
-			&& !lineInfo[line + 1].visible
-			&& getFoldLevel(line + 1) > initialFoldLevel)
-		{
-			// this line is the start of a fold
-			start = line + 1;
-
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				if(lineInfo[i].visible && getFoldLevel(i) <= initialFoldLevel)
-				{
-					end = i - 1;
-					break;
-				}
-			}
-		}
-		else
-		{
-			/* if(lineInfo[line].visible)
-			{
-				// the user probably pressed A+ENTER twice
-				return false;
-			} */
-
-			boolean ok = false;
-
-			// scan backwards looking for the start
-			for(int i = line - 1; i >= 0; i--)
-			{
-				if(lineInfo[i].visible && getFoldLevel(i) < initialFoldLevel)
-				{
-					start = i + 1;
-					ok = true;
-					break;
-				}
-			}
-
-			if(!ok)
-			{
-				// no folds in buffer
-				return false;
-			}
-
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				if(lineInfo[i].visible && getFoldLevel(i) < initialFoldLevel)
-				{
-					end = i - 1;
-					break;
-				}
-			}
-		}
-
-		int delta = 0;
-		int tmpMapLen = 0;
-		int[] tmpVirtualMap = new int[end - start + 1];
-
-		// we need a different value of initialFoldLevel here!
-		initialFoldLevel = getFoldLevel(start);
-
-		for(int i = start; i <= end; i++)
-		{
-			LineInfo info = lineInfo[i];
-			if(info.visible)
-			{
-				// user will be confused if 'expand fold'
-				// hides lines
-				tmpVirtualMap[tmpMapLen++] = i;
-			}
-			else if(!fully && getFoldLevel(i) > initialFoldLevel)
-			{
-				// don't expand lines with higher fold
-				// levels
-			}
-			else
-			{
-				// System.err.println("adding to map: " + i);
-				tmpVirtualMap[tmpMapLen++] = i;
-				delta++;
-				info.visible = true;
-			}
-		}
-
-		// I forgot to do this at first and it took me ages to
-		// figure out
-		int virtualLine;
-		if(start > virtualLines[virtualLineCount - 1])
-			virtualLine = virtualLineCount;
-		else
-			virtualLine = physicalToVirtual(start);
-
-		//System.err.println("virtual start is " + virtualLine
-		//	+ ", physical start is " + start);
-		//System.err.println("end=" + end + ",delta=" + delta);
-
-		// update virtual -> physical map
-		virtualLineCount += delta;
-
-		//System.err.println("virtual line count is " + virtualLineCount);
-
-		if(virtualLines.length <= virtualLineCount)
-		{
-			int[] virtualLinesN = new int[(virtualLineCount + 1) * 2];
-			System.arraycopy(virtualLines,0,
-				virtualLinesN,0,virtualLines.length);
-			virtualLines = virtualLinesN;
-		}
-
-		//System.err.println("copy from " + (virtualLine)
-		//	+ " to " + (virtualLine + delta));
-		//System.err.println("foo: " + virtualLines[virtualLine]);
-
-		System.arraycopy(virtualLines,virtualLine,virtualLines,
-			virtualLine + delta,virtualLines.length
-			- virtualLine - delta);
-
-		for(int j = 0; j < tmpMapLen; j++)
-		{
-			//System.err.println((virtualLine + j) + " maps to " + tmpVirtualMap[j]);
-			virtualLines[virtualLine + j] = tmpVirtualMap[j];
-		}
-
-		fireFoldStructureChanged();
-
-		if(textArea != null)
-		{
-			int firstLine = textArea.getFirstLine();
-			int visibleLines = textArea.getVisibleLines();
-			if(virtualLine + delta >= firstLine + visibleLines
-				&& delta < visibleLines - 1)
-			{
-				textArea.setFirstLine(virtualLine + delta - visibleLines + 1);
-			}
-		}
-
-		return true;
-	} //}}}
-
-	//{{{ expandFolds() method
-	/**
-	 * This is intended to be called from actions.xml.
-	 * @since jEdit 3.1pre1
-	 */
-	public void expandFolds(char digit)
-	{
-		if(digit < '1' || digit > '9')
-		{
-			Toolkit.getDefaultToolkit().beep();
-			return;
-		}
-		else
-			expandFolds((int)(digit - '1') + 1);
-	} //}}}
-
-	//{{{ expandFolds() method
-	/**
-	 * Expand all folds in the buffer up to a specified level.
-	 * @param level All folds less than this level will be expanded,
-	 * others will be collapsed. This is not the actual fold level;
-	 * it is multiplied by the indent size first
-	 * @since jEdit 3.1pre1
-	 */
-	public void expandFolds(int level)
-	{
-		if(virtualLines.length <= lineCount)
-		{
-			int[] virtualLinesN = new int[(lineCount + 1) * 2];
-			System.arraycopy(virtualLines,0,
-				virtualLinesN,0,virtualLines.length);
-			virtualLines = virtualLinesN;
-		}
-
-		level = (level - 1) * getIndentSize() + 1;
-
-		/* this ensures that the first line is always visible */
-		boolean seenVisibleLine = false;
-
-		virtualLineCount = 0;
-
-		for(int i = 0; i < lineCount; i++)
-		{
-			if(!seenVisibleLine || getFoldLevel(i) < level)
-			{
-				seenVisibleLine = true;
-				lineInfo[i].visible = true;
-				virtualLines[virtualLineCount++] = i;
-			}
-			else
-				lineInfo[i].visible = false;
-		}
-
-		fireFoldStructureChanged();
-	} //}}}
-
-	//{{{ expandAllFolds() method
-	/**
-	 * Expand all folds in the specified document.
-	 * @since jEdit 3.1pre1
-	 */
-	public void expandAllFolds()
-	{
-		if(virtualLines.length <= lineCount)
-		{
-			int[] virtualLinesN = new int[(lineCount + 1) * 2];
-			System.arraycopy(virtualLines,0,
-				virtualLinesN,0,virtualLines.length);
-			virtualLines = virtualLinesN;
-		}
-
-		virtualLineCount = lineCount;
-		for(int i = 0; i < lineCount; i++)
-		{
-			virtualLines[i] = i;
-			lineInfo[i].visible = true;
-		}
-
-		fireFoldStructureChanged();
-	} //}}}
-
-	//{{{ narrow() method
-	/**
-	 * Narrows the visible portion of the buffer to the specified
-	 * line range.
-	 * @param start The first line
-	 * @param end The last line
-	 * @since jEdit 3.1pre3
-	 */
-	public void narrow(int start, int end)
-	{
-		virtualLineCount = end - start + 1;
-		virtualLines = new int[virtualLineCount];
-
-		for(int i = 0; i < start; i++)
-			lineInfo[i].visible = false;
-
-		for(int i = start; i <= end; i++)
-		{
-			LineInfo info = lineInfo[i];
-			info.visible = true;
-			virtualLines[i - start] = i;
-		}
-
-		for(int i = end + 1; i < lineCount; i++)
-			lineInfo[i].visible = false;
-
-		fireFoldStructureChanged();
-	} //}}}
-
-	//{{{ addFoldListener() method
-	/**
-	 * Adds a fold listener.
-	 * @param listener The listener
-	 * @since jEdit 3.1pre1
-	 */
-	public void addFoldListener(FoldListener l)
-	{
-		foldListeners.addElement(l);
-	} //}}}
-
-	//{{{ removeFoldListener() method
-	/**
-	 * Removes a fold listener.
-	 * @param listener The listener
-	 * @since jEdit 3.1pre1
-	 */
-	public void removeFoldListener(FoldListener l)
-	{
-		foldListeners.removeElement(l);
-	} //}}}
-
-	//}}}
 
 	//{{{ Marker methods
 
@@ -2946,6 +2514,28 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		if(msg instanceof PropertiesChanged)
 			propertiesChanged();
+		else if(msg instanceof EditPaneUpdate)
+		{
+			EditPaneUpdate emsg = (EditPaneUpdate)msg;
+			if(emsg.getWhat() == EditPaneUpdate.CREATED)
+			{
+				// see getFoldVisibilityManager()
+
+				/*JEditTextArea textArea = emsg.getEditPane()
+					.getTextArea();
+				foldVisibilityManagers.put(textArea,
+					new FoldVisibilityManager());*/
+			}
+			else if(emsg.getWhat() == EditPaneUpdate.DESTROYED)
+			{
+				JEditTextArea textArea = emsg.getEditPane()
+					.getTextArea();
+				removeBufferChangeListener(
+					(FoldVisibilityManager)
+					foldVisibilityManagers
+					.remove(textArea));
+			}
+		}
 	} //}}}
 
 	//}}}
@@ -2961,11 +2551,9 @@ public class Buffer extends PlainDocument implements EBComponent
 		lineCount = 1;
 		lineInfo = new LineInfo[1];
 		lineInfo[0] = new LineInfo();
-		lineInfo[0].visible = true;
 
-		virtualLineCount = 1;
-		virtualLines = new int[1];
-		foldListeners = new Vector();
+		foldVisibilityManagers = new Hashtable();
+		bufferListeners = new Vector();
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
@@ -2987,12 +2575,14 @@ public class Buffer extends PlainDocument implements EBComponent
 			putProperty(keys.nextElement(),values.nextElement());
 		}
 
+		// this must be called before any EditBus messages are sent
+		setPath(path);
+
 		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
 		if(defaultMode == null)
 			defaultMode = jEdit.getMode("text");
 		setMode(defaultMode);
 
-		setPath(path);
 
 		/* Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
@@ -3052,20 +2642,52 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
+		int start = evt.getOffset();
+		int length = evt.getLength();
+		int startLine, numLines;
 		if(ch != null)
 		{
-			int index = ch.getIndex();
-			int len = ch.getChildrenAdded().length -
+			startLine = ch.getIndex();
+			numLines = ch.getChildrenAdded().length -
 				ch.getChildrenRemoved().length;
-			addLinesToMap(ch.getIndex() + 1,len);
-			linesChanged(index,lineCount - index);
-			index += (len + 1);
+
+			if(numLines > 0)
+			{
+				int endLine = startLine + numLines;
+
+				lineCount += numLines;
+
+				if(lineInfo.length <= lineCount)
+				{
+					LineInfo[] lineInfoN = new LineInfo[(lineCount + 1) * 2];
+					System.arraycopy(lineInfo,0,lineInfoN,0,
+							 lineInfo.length);
+					lineInfo = lineInfoN;
+				}
+
+				System.arraycopy(lineInfo,startLine,lineInfo,endLine,
+					lineInfo.length - endLine);
+
+				ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
+				for(int i = startLine; i < endLine; i++)
+				{
+					LineInfo info = new LineInfo();
+					info.context = null;
+					info.rules = mainSet;
+					info.inRule = null;
+					lineInfo[i] = info;
+				}
+			}
 		}
 		else
 		{
-			linesChanged(getDefaultRootElement()
-				.getElementIndex(evt.getOffset()),1);
+			startLine = getLineOfOffset(start);
+			numLines = 0;
 		}
+
+		linesChanged(startLine,lineCount - startLine);
+
+		fireContentInserted(startLine,start,numLines,length);
 
 		super.fireInsertUpdate(evt);
 
@@ -3082,19 +2704,34 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		DocumentEvent.ElementChange ch = evt.getChange(
 			getDefaultRootElement());
+		int start = evt.getOffset();
+		int length = evt.getLength();
+		int startLine, numLines;
+
 		if(ch != null)
 		{
-			int index = ch.getIndex();
-			int len = ch.getChildrenRemoved().length -
+			startLine = ch.getIndex();
+			numLines = ch.getChildrenRemoved().length -
 				ch.getChildrenAdded().length;
-			removeLinesFromMap(index,len);
-			linesChanged(index,lineCount - index);
+
+			if(numLines > 0)
+			{
+				int endLine = startLine + numLines;
+
+				lineCount -= numLines;
+				System.arraycopy(lineInfo,endLine,lineInfo,
+					startLine,lineInfo.length - endLine);
+			}
 		}
 		else
 		{
-			linesChanged(getDefaultRootElement()
-				.getElementIndex(evt.getOffset()),1);
+			startLine = getLineOfOffset(start);
+			numLines = 0;
 		}
+
+		linesChanged(startLine,lineCount - startLine);
+
+		fireContentRemoved(startLine,start,numLines,length);
 
 		super.fireRemoveUpdate(evt);
 
@@ -3169,9 +2806,8 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	// Folding
 	private FoldHandler foldHandler;
-	private int[] virtualLines;
-	private int virtualLineCount;
-	private Vector foldListeners;
+	private Vector bufferListeners;
+	private Hashtable foldVisibilityManagers;
 
 	//}}}
 
@@ -3361,133 +2997,22 @@ public class Buffer extends PlainDocument implements EBComponent
 	//{{{ setFoldHandler() method
 	private void setFoldHandler(FoldHandler foldHandler)
 	{
-		if(this.foldHandler != null
-			&& this.foldHandler.getClass() == foldHandler.getClass())
+		FoldHandler oldFoldHandler = this.foldHandler;
+
+		if(oldFoldHandler != null
+			&& oldFoldHandler.getClass() == foldHandler.getClass())
 			return;
 
 		this.foldHandler = foldHandler;
 
-		for(int i = 0; i < lineCount; i++)
-			lineInfo[i].foldLevelValid = false;
-
-		fireFoldHandlerChanged();
-	} //}}}
-
-	//{{{ addLinesToMap() method
-	/**
-	 * Inserts the specified line range into the virtual to physical
-	 * mapping and line info array.
-	 * @param index The first line number
-	 * @param lines The number of lines
-	 */
-	private void addLinesToMap(int index, int lines)
-	{
-		//System.err.println("adding " + index + ":" + lines + " to map");
-		if(lines <= 0)
-			return;
-
-		LineInfo prev = lineInfo[index - 1];
-
-		int virtualLine;
-		// special case
-		if(index == lineCount)
-			virtualLine = virtualLineCount;
-		else
-			virtualLine = physicalToVirtual(index);
-
-		int virtualLength;
-
-		/* update the virtual -> physical mapping if the newly
-		 * inserted lines are actually visible */
-		if(prev.visible)
+		// don't do this on initial fold handler creation
+		if(oldFoldHandler != null)
 		{
-			virtualLineCount += lines;
-
-			if(virtualLines.length <= virtualLineCount)
-			{
-				int[] virtualLinesN = new int[
-					(virtualLineCount + 1) * 2];
-				System.arraycopy(virtualLines,0,
-					virtualLinesN,0,
-					virtualLines.length);
-				virtualLines = virtualLinesN;
-			}
-
-			virtualLength = virtualLine + lines;
-
-			System.arraycopy(virtualLines,virtualLine,
-				virtualLines,virtualLength,
-				virtualLines.length - virtualLength);
-
-			for(int i = 0; i < lines; i++)
-				virtualLines[virtualLine + i] = index + i;
+			for(int i = 0; i < lineCount; i++)
+				lineInfo[i].foldLevelValid = false;
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}
-		else
-			virtualLength = virtualLine /* + 1 */;
-
-		for(int i = virtualLength; i < virtualLineCount; i++)
-			virtualLines[i] += lines;
-
-		lineCount += lines;
-
-		if(lineInfo.length <= lineCount)
-		{
-			LineInfo[] lineInfoN = new LineInfo[(lineCount + 1) * 2];
-			System.arraycopy(lineInfo,0,lineInfoN,0,
-					 lineInfo.length);
-			lineInfo = lineInfoN;
-		}
-
-		int length = index + lines;
-		System.arraycopy(lineInfo,index,lineInfo,length,
-			lineInfo.length - length);
-
-		ParserRuleSet mainSet = tokenMarker.getMainRuleSet();
-		for(int i = 0; i < lines; i++)
-		{
-			LineInfo info = new LineInfo();
-			info.context = null;
-			info.rules = mainSet;
-			info.inRule = null;
-			info.visible = prev.visible;
-			lineInfo[index + i] = info;
-		}
-	} //}}}
-
-	//{{{ removeLinesFromMap() method
-	/**
-	 * Deletes the specified line range from the virtual to physical
-	 * mapping and line info array.
-	 * @param index The first line number
-	 * @param lines The number of lines
-	 */
-	private void removeLinesFromMap(int index, int lines)
-	{
-		if (lines <= 0)
-			return;
-
-		int length = index + lines;
-		int virtualLine = physicalToVirtual(index);
-		int virtualLength = physicalToVirtual(length);
-
-		if(length <= virtualLines[virtualLineCount - 1])
-		{
-			System.arraycopy(virtualLines,virtualLength,
-				virtualLines,virtualLine,
-				virtualLines.length - virtualLength);
-
-			for(int i = virtualLine;
-				i < virtualLineCount
-				- (virtualLength - virtualLine);
-				i++)
-				virtualLines[i] -= lines;
-		}
-
-		virtualLineCount -= (virtualLength - virtualLine);
-
-		lineCount -= lines;
-		System.arraycopy(lineInfo,length,lineInfo,
-			index,lineInfo.length - length);
 	} //}}}
 
 	//{{{ linesChanged() method
@@ -3513,35 +3038,43 @@ public class Buffer extends PlainDocument implements EBComponent
 		}
 	} //}}}
 
-	//{{{ fireFoldHandlerChanged() method
-	private void fireFoldHandlerChanged()
+	//{{{ Event firing methods
+
+	//{{{ fireFoldLevelChanged() method
+	private void fireFoldLevelChanged(int line)
 	{
-		for(int i = 0; i < foldListeners.size(); i++)
+		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((FoldListener)foldListeners.elementAt(i))
-				.foldHandlerChanged();
+			((BufferChangeListener)bufferListeners.elementAt(i))
+				.foldLevelChanged(this,line);
 		}
 	} //}}}
 
-	//{{{ fireFoldLevelsChanged() method
-	private void fireFoldLevelsChanged(int firstLine, int lastLine)
+	//{{{ fireContentInserted() method
+	private void fireContentInserted(int startLine, int start,
+		int numLines, int length)
 	{
-		for(int i = 0; i < foldListeners.size(); i++)
+		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((FoldListener)foldListeners.elementAt(i))
-				.foldLevelsChanged(firstLine,lastLine);
+			((BufferChangeListener)bufferListeners.elementAt(i))
+				.contentInserted(this,startLine,start,
+				numLines,length);
 		}
 	} //}}}
 
-	//{{{ fireFoldStructureChanged() method
-	private void fireFoldStructureChanged()
+	//{{{ fireContentRemoved() method
+	private void fireContentRemoved(int startLine, int start,
+		int numLines, int length)
 	{
-		for(int i = 0; i < foldListeners.size(); i++)
+		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((FoldListener)foldListeners.elementAt(i))
-				.foldStructureChanged();
+			((BufferChangeListener)bufferListeners.elementAt(i))
+				.contentRemoved(this,startLine,start,
+				numLines,length);
 		}
 	} //}}}
+
+	//}}}
 
 	//}}}
 
@@ -3691,7 +3224,6 @@ public class Buffer extends PlainDocument implements EBComponent
 		// private members
 		int foldLevel;
 		boolean foldLevelValid;
-		boolean visible;
 
 		// true if the context info is valid.
 		boolean contextValid;

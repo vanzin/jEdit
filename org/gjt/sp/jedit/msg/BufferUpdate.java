@@ -1,5 +1,8 @@
 /*
  * BufferUpdate.java - Buffer update message
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +33,7 @@ import org.gjt.sp.jedit.*;
  */
 public class BufferUpdate extends EBMessage.NonVetoable
 {
+	//{{{ Message types
 	/**
 	 * Buffer created.
 	 */
@@ -67,16 +71,24 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	public static final Object MODE_CHANGED = "MODE_CHANGED";
 
 	/**
-	 * Character ncoding changed.
+	 * Character encoding changed.
 	 * @since jEdit 3.2pre4
 	 */
 	public static final Object ENCODING_CHANGED = "ENCODING_CHANGED";
 
 	/**
+	 * Fold handler changed.
+	 * @since jEdit 4.0pre1
+	 */
+	public static final Object FOLD_HANDLER_CHANGED = "FOLD_HANDLER_CHANGED";
+
+	/**
 	 * Buffer saving.
 	 */
 	public static final Object SAVING = "SAVING";
+	//}}}
 
+	//{{{ BufferUpdate constructor
 	/**
 	 * Creates a new buffer update message.
 	 * @param buffer The buffer
@@ -92,39 +104,44 @@ public class BufferUpdate extends EBMessage.NonVetoable
 			throw new NullPointerException("What must be non-null");
 
 		this.what = what;
-	}
+	} //}}}
 
+	//{{{ getWhat() method
 	/**
 	 * Returns what caused this buffer update.
 	 */
 	public Object getWhat()
 	{
 		return what;
-	}
+	} //}}}
 
+	//{{{ getBuffer() method
 	/**
 	 * Returns the buffer involved.
 	 */
 	public Buffer getBuffer()
 	{
 		return (Buffer)getSource();
-	}
+	} //}}}
 
+	//{{{ getView() method
 	/**
 	 * Returns the view involved, which may be null.
 	 */
 	public View getView()
 	{
 		return view;
-	}
+	} //}}}
 
+	//{{{ paramString() method
 	public String paramString()
 	{
 		return super.paramString() + ",what=" + what
 			+ ",view=" + view;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private Object what;
 	private View view;
+	//}}}
 }

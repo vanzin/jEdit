@@ -52,6 +52,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		closeBox = new JButton(CLOSE_BOX);
 		closeBox.setRequestFocusEnabled(false);
+		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
 		buttons.add(closeBox);
 
 		closeBox.addActionListener(new ActionListener()
