@@ -41,6 +41,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.*;
