@@ -66,6 +66,20 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @see #addExtension(int,TextAreaExtension)
 	 * @since jEdit 4.0pre4
 	 */
+	public static final int BACKGROUND_LAYER = -60;
+
+	/**
+	 * The line highlight and collapsed fold highlight layer.
+	 * @see #addExtension(int,TextAreaExtension)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int LINE_BACKGROUND_LAYER = -50;
+
+	/**
+	 * Below selection layer.
+	 * @see #addExtension(int,TextAreaExtension)
+	 * @since jEdit 4.0pre4
+	 */
 	public static final int BELOW_SELECTION_LAYER = -40;
 
 	/**
@@ -131,6 +145,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		fontRenderContext = new FontRenderContext(null,false,false);
 
+		addExtension(LINE_BACKGROUND_LAYER,lineBackground
+			= new PaintLineBackground());
 		addExtension(SELECTION_LAYER,new PaintSelection());
 		addExtension(WRAP_GUIDE_LAYER,new WrapGuide());
 		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
@@ -755,6 +771,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private ExtensionManager extensionMgr;
 
+	// we keep a reference to this to obtain the background color and
+	// collapsed fold state of the last painted line
+	private PaintLineBackground lineBackground;
+
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
 	//}}}
@@ -797,33 +817,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			extensionMgr.paintInvalidLine(gfx,screenLine,y);
 		else
 		{
-			boolean collapsedFold = (physicalLine < buffer.getLineCount() - 1
-				&& buffer.isFoldStart(physicalLine)
-				&& !textArea.getFoldVisibilityManager()
-				.isLineVisible(physicalLine + 1)
-				&& lineInfo.firstSubregion);
 			int start = textArea.getScreenLineStartOffset(screenLine);
 			int end = textArea.getScreenLineEndOffset(screenLine);
-
-			int caret = textArea.getCaretPosition();
-			boolean paintLineHighlight = lineHighlight
-				&& caret >= start && caret < end
-				&& textArea.selection.size() == 0;
-
-			Color bgColor;
-
-			if(paintLineHighlight)
-				bgColor = lineHighlightColor;
-			else if(collapsedFold)
-				bgColor = foldedLineColor;
-			else
-				bgColor = getBackground();
-
-			if(paintLineHighlight || collapsedFold)
-			{
-				gfx.setColor(bgColor);
-				gfx.fillRect(0,y,getWidth(),fm.getHeight());
-			}
 
 			extensionMgr.paintValidLine(gfx,screenLine,physicalLine,
 				start,end,y);
@@ -841,7 +836,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				x += ChunkCache.paintChunkList(
 					lineInfo.chunks,gfx,x,baseLine,
-					bgColor,true);
+					lineBackground.bgColor,true);
 			}
 
 			gfx.setFont(defaultFont);
@@ -855,7 +850,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					baseLine);
 				x += textArea.charWidth;
 			}
-			else if(collapsedFold)
+			else if(lineBackground.collapsedFold)
 			{
 				int nextLine = textArea.getFoldVisibilityManager()
 					.getNextVisibleLine(physicalLine);
@@ -875,7 +870,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				x += textArea.charWidth;
 			}
 
-			paintCaret(gfx,physicalLine,start,end,y,bgColor);
+			paintCaret(gfx,physicalLine,start,end,y,lineBackground.bgColor);
 		}
 
 		return x;
@@ -930,6 +925,45 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//}}}
+
+	//{{{ PaintLineBackground class
+	class PaintLineBackground extends TextAreaExtension
+	{
+		boolean collapsedFold;
+		Color bgColor;
+
+		//{{{ paintValidLine() method
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			// minimise access$ methods
+			JEditTextArea textArea = TextAreaPainter.this.textArea;
+			Buffer buffer = textArea.getBuffer();
+
+			collapsedFold = (physicalLine < buffer.getLineCount() - 1
+				&& buffer.isFoldStart(physicalLine)
+				&& !textArea.getFoldVisibilityManager()
+				.isLineVisible(physicalLine + 1));
+
+			int caret = textArea.getCaretPosition();
+			boolean paintLineHighlight = isLineHighlightEnabled()
+				&& caret >= start && caret < end
+				&& textArea.selection.size() == 0;
+
+			if(paintLineHighlight)
+				bgColor = lineHighlightColor;
+			else if(collapsedFold)
+				bgColor = foldedLineColor;
+			else
+				bgColor = getBackground();
+
+			if(paintLineHighlight || collapsedFold)
+			{
+				gfx.setColor(bgColor);
+				gfx.fillRect(0,y,getWidth(),fm.getHeight());
+			}
+		} //}}}
+	} //}}}
 
 	//{{{ PaintSelection class
 	class PaintSelection extends TextAreaExtension

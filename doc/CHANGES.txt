@@ -60,6 +60,12 @@ JEDIT 4.0 VERSION HISTORY
     lets you define the approximate position, from the top or bottom of
     the view, of the tool bar
 
++ API Changes
+
+- The current line highlight and collapsed fold highlight is painted as
+  a text area extension now, so plugin extensions can now paint stuff
+  below this highlight
+
 * Version 4.0pre6
 
 + New Features
