@@ -68,6 +68,10 @@ JEDIT 4.0 VERSION HISTORY
 - 'Range Comment' command didn't work properly with a rectangular
   selection
 - Control-Shift clicks in the text area didn't work
+- Rectangular selections are now drawn correctly when soft wrap is
+  active. Note they are still rather non-intuitive when used with soft
+  wrap, as they rely on character offsets within physical lines, not
+  screen positions in screen lines.
 
 + API Additions
 
