@@ -156,6 +156,12 @@ public class SearchBar extends JPanel
 					// not found at all. beep.
 					getToolkit().beep();
 				}
+				else
+				{
+					// inform user search restarted
+					view.getStatus().setMessageAndClear(
+						jEdit.getProperty("view.status.auto-wrap"));
+				}
 			}
 		} //}}}
 	} //}}}

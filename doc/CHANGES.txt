@@ -1,5 +1,20 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre2
+
++ Enhancements
+
+- Icon added to 'BeanShell Error' dialog box
+- Updated PV-WAVE mode (Ed Stewart)
+- Closing a docked window now returns focus to the text area
+- Memory indicator tooltip now shows used and total Java heap memory in
+  kilobytes
+
++ Bug Fixes
+
+- Fixed a memory leak with the search and replace dialog box
+- Undo would be broken after a file was reloaded
+
 * Version 4.0pre1
 
 + New Features
@@ -94,7 +109,6 @@ JEDIT 4.0 VERSION HISTORY
 - jEdit now makes an effort to display popup menus on-screen. If you
   want your plugin to do this, use the new GUIUtilities.showPopupMenu()
   method.
-- GNU General Public License now shown in installer
 - Editing and saving a mode file, or mode catalog file within jEdit will
   automatically reload that mode, or all edit modes
 - A few keyboard shortcuts added to file system browser:
