@@ -782,7 +782,7 @@ loop:			for(;;)
 		int fileCount = 0;
 		int occurCount = 0;
 
-		if(fileset.getFileCount())
+		if(fileset.getFileCount(view) == 0)
 		{
 			GUIUtilities.error(view,"empty-fileset",null);
 			return false;
