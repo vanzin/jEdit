@@ -164,6 +164,7 @@
 		</SPAN>
 
 		<!-- Javadoc allows this -->
+		<SEQ TYPE="COMMENT2">&lt;&lt;</SEQ>
 		<SEQ TYPE="COMMENT2">&lt;=</SEQ>
 		<SEQ TYPE="COMMENT2">&lt; </SEQ>
 

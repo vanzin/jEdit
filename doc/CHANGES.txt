@@ -19,6 +19,7 @@ JEDIT 4.0 VERSION HISTORY
   boxes
 - Status bar message shown while mouse was hovering over a macro menu
   item wasn't hidden after the menu item was selected
+- Fixed another soft wrap bug with syntax highlighting
 
 + API Changes
 
