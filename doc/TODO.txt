@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- removing a plugin doesn't update install plugins tab
 - isn't fsb dir search supposed to use selected file's extension?
 - quicknotepad: use a box not a tool bar
 - C+b, action bar: insert longest common prefix
@@ -12,7 +11,6 @@ and quirks that I need to fix eventually.
   being loaded. Solution: load plugins in order of dependencies?
 - up arrow before buffer is loaded
 - note about dependencies
-- unloading fold handlers should update buffers
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
 - save file --> collapse to < visibleLines -- click beyond last line
@@ -38,6 +36,7 @@ and quirks that I need to fix eventually.
 - browser: tab: don't insert full path
 - completion: handle full paths
 - file dialog: handle - ENTER
+- file dialog: plugin mgr/opts
 
 - F2 doesn't work in JTree/JTable, maybe others
 - narrow: scrolls one down

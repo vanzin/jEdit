@@ -312,20 +312,22 @@ class InstallPanel extends JPanel
 					PluginList.Plugin plugin = (PluginList.Plugin)
 						pluginList.pluginHash.get(set.plugins.get(j));
 					PluginList.Branch branch = plugin.getCompatibleBranch();
+					String installedVersion =
+						plugin.getInstalledVersion();
 					if (updates)
 					{
 						if(branch != null
 							&& branch.canSatisfyDependencies()
-							&& plugin.installedVersion != null
+							&& installedVersion != null
 							&& MiscUtilities.compareStrings(branch.version,
-							plugin.installedVersion,false) > 0)
+							installedVersion,false) > 0)
 						{
 							entries.add(new Entry(plugin,set.name));
 						}
 					}
 					else
 					{
-						if(plugin.installed == null && plugin.canBeInstalled())
+						if(installedVersion == null && plugin.canBeInstalled())
 							entries.add(new Entry(plugin,set.name));
 					}
 				}

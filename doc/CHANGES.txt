@@ -15,8 +15,10 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Plugin Loader
 
 - The plugin manager now loads plugins immediately after they are
-  installed, and unloads plugins when removing and updating. Note that
-  plugins not updated for the 4.2 API might not fully load.
+  installed if they are using the jEdit 4.2 plugin API, and unloads
+  plugins when removing and updating. Note that a restart is still
+  required after updating from a jEdit 4.1 version of a plugin to the
+  4.2 plugin, but future updates do not require a restart.
 
 - Added an option to Global Options->Plugin Manager to leave the
   downloaded ZIP archives in ~/.jedit/PluginManager.download.
@@ -71,6 +73,9 @@ JEDIT 4.2 VERSION HISTORY
   moving a file from one expanded branch to the root.
 
 - Right-clicks in the empty space below the file list should work now.
+
+- Fixed possible NullPointerException on MacOS X in the OperatingSystem
+  class.
 
 }}}
 {{{ API Changes

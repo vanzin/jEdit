@@ -2998,6 +2998,29 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return foldHandler;
 	} //}}}
 
+	//{{{ setFoldHandler() method
+	/**
+	 * Sets the buffer's fold handler.
+	 * @since jEdit 4.2pre2
+	 */
+	public void setFoldHandler(FoldHandler foldHandler)
+	{
+		FoldHandler oldFoldHandler = this.foldHandler;
+
+		if(foldHandler.equals(oldFoldHandler))
+			return;
+
+		this.foldHandler = foldHandler;
+
+		offsetMgr.setFirstInvalidFoldLevel(0);
+
+		int collapseFolds = getIntegerProperty("collapseFolds",0);
+		offsetMgr.expandFolds(collapseFolds);
+
+		if(isLoaded())
+			offsetMgr.resetAnchors();
+	} //}}}
+
 	//}}}
 
 	//{{{ Position methods
@@ -3927,25 +3950,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			offsetMgr.setFirstInvalidLineContext(0);
 		}
-	} //}}}
-
-	//{{{ setFoldHandler() method
-	private void setFoldHandler(FoldHandler foldHandler)
-	{
-		FoldHandler oldFoldHandler = this.foldHandler;
-
-		if(foldHandler.equals(oldFoldHandler))
-			return;
-
-		this.foldHandler = foldHandler;
-
-		offsetMgr.setFirstInvalidFoldLevel(0);
-
-		int collapseFolds = getIntegerProperty("collapseFolds",0);
-		offsetMgr.expandFolds(collapseFolds);
-
-		if(isLoaded())
-			offsetMgr.resetAnchors();
 	} //}}}
 
 	//{{{ getPriorNonEmptyLine() method
