@@ -1,0 +1,34 @@
+/*
+* Open_Context_Menu.bsh - a BeanShell macro script for
+* the jEdit text editor - Opens the editor context menu
+* just below and to the right of the cursor.
+*
+* Copyright (C) 2003 Nitsan Vardi
+*
+* $Id$
+*/
+
+openContextMenu(){
+	// Get the caret's position
+	caretOffset = textArea.getCaretPosition();
+	caretPos = textArea.offsetToXY(caretOffset);
+	// Open the context menu near the caret
+	GUIUtilities.showPopupMenu(textArea.getRightClickPopup(),
+		textArea,caretPos.x+10,caretPos.y+20);
+}
+
+openContextMenu();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Open_Context_Menu.bsh</filename></para>
+    <abstract><para>
+        Opens the editor context menu just below and to 
+		the right of the cursor.
+    </para></abstract>
+</listitem>
+
+*/
+
