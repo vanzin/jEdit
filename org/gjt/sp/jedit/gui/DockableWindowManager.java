@@ -965,7 +965,6 @@ public class DockableWindowManager extends JPanel
 		{
 			String dockable = windowList[i].name;
 			Entry entry = (Entry)windows.get(dockable);
-			System.err.println(dockable);
 
 			String newPosition = jEdit.getProperty(dockable
 				+ ".dock-position",FLOATING);

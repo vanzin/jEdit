@@ -151,6 +151,7 @@ class ChunkCache
 	{
 		this.buffer = buffer;
 		lastScreenLine = lastScreenLineP = -1;
+		firstLine = 0;
 		skew = 0;
 	} //}}}
 
@@ -160,20 +161,19 @@ class ChunkCache
 	 * scrolling doesn't cause all visible lines, only newly exposed
 	 * ones, to be retokenized.
 	 */
-	void setFirstLine(int firstLine, int physFirstLine, int skew)
+	void setFirstLine(int firstLine)
 	{
-		/* if(Debug.CHUNK_CACHE_DEBUG)
+		if(Debug.CHUNK_CACHE_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"old: " + this.firstLine + ",new: " +
-				firstLine + ",phys: " + physFirstLine);
-		} */
+				firstLine);
+		}
 
-		//int visibleLines = textArea.getVisibleLines();
-		//if(firstLine == this.firstLine)
-		//	/* do nothing */;
-		// rely on the fact that when we're called physLastLine not updated yet
-		//else if(firstLine >= this.firstLine + visibleLines
-		//	|| firstLine <= this.firstLine - visibleLines)
+		int visibleLines = textArea.getVisibleLines();
+		if(firstLine == this.firstLine)
+			/* do nothing */;
+		else if(firstLine >= this.firstLine + visibleLines
+			|| firstLine <= this.firstLine - visibleLines)
 		{
 			if(Debug.CHUNK_CACHE_DEBUG)
 				Log.log(Log.DEBUG,this,"too far");
@@ -182,66 +182,19 @@ class ChunkCache
 				lineInfo[i].chunksValid = false;
 			}
 		}
-		/* else if(firstLine > this.firstLine)
+		else if(firstLine > this.firstLine)
 		{
-			boolean invalidateAll = false;
+			int firstScreenLine = firstLine - this.firstLine;
 
-			int firstScreenLine = 0;
-			for(int i = 0; i < visibleLines; i++)
+			System.arraycopy(lineInfo,firstScreenLine,
+				lineInfo,0,visibleLines - firstScreenLine);
+
+			for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
 			{
-				// can't do much if the physical line we are
-				// looking for isn't in the cache... so in
-				// that case just invalidate everything.
-				if(!lineInfo[i].chunksValid)
-				{
-					invalidateAll = true;
-					break;
-				}
-
-				if(lineInfo[i].physicalLine == physFirstLine)
-				{
-					firstScreenLine = i;
-					break;
-				}
+				lineInfo[i] = new LineInfo();
 			}
 
-			if(invalidateAll)
-			{
-				invalidateAll();
-			}
-			else
-			{
-				int lastValidLine = -1;
-
-				// chunk cache does not allow only the last
-				// (visibleLines - lastValidLine) lines to
-				// be invalid; only entire physical lines can
-				// be invalidated.
-				for(int i = visibleLines - 1; i >= 0; i--)
-				{
-					if(Debug.CHUNK_CACHE_DEBUG)
-					{
-						System.err.println("Scan " + i);
-					}
-					if(lineInfo[i].lastSubregion)
-						break;
-					else
-						lineInfo[i].chunksValid = false;
-				}
-
-				if(firstScreenLine != visibleLines)
-				{
-					System.arraycopy(lineInfo,firstScreenLine,
-						lineInfo,0,visibleLines - firstScreenLine);
-				}
-
-				for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
-				{
-					lineInfo[i] = new LineInfo();
-				}
-			}
-
-			if(DEBUG)
+			if(Debug.CHUNK_CACHE_DEBUG)
 			{
 				System.err.println("f > t.f: only " + firstScreenLine
 					+ " need updates");
@@ -249,48 +202,22 @@ class ChunkCache
 		}
 		else if(this.firstLine > firstLine)
 		{
-			LinkedList list = new LinkedList();
-			for(int i = firstLine; i < this.firstLine; i++)
+			int firstScreenLine = this.firstLine - firstLine;
+
+			System.arraycopy(lineInfo,0,lineInfo,firstScreenLine,
+				visibleLines - firstScreenLine);
+
+			for(int i = 0; i < firstScreenLine; i++)
 			{
-				if(list.size() >= visibleLines)
-				{
-					break;
-				}
-
-				out.clear();
-				lineToChunkList(physFirstLine,out);
-				if(out.size() == 0)
-					out.add(null);
-
-				getLineInfosForPhysicalLine(physFirstLine,list);
-				int nextLine = textArea.displayManager
-					.getNextVisibleLine(physFirstLine);
-				if(nextLine == -1)
-					break;
-				else
-					physFirstLine = nextLine;
+				lineInfo[i] = new LineInfo();
 			}
 
-			if(list.size() < visibleLines)
+			if(Debug.CHUNK_CACHE_DEBUG)
 			{
-				System.arraycopy(lineInfo,0,lineInfo,list.size(),
-					visibleLines - list.size());
-			}
-
-			int firstScreenLine = Math.min(list.size(),visibleLines);
-
-			Iterator iter = list.iterator();
-			for(int i = 0; i < visibleLines && iter.hasNext(); i++)
-			{
-				lineInfo[i] = (LineInfo)iter.next();
-			}
-
-			if(DEBUG)
-			{
-				System.err.println("t.f > f: only " + firstScreenLine
+				System.err.println("f > t.f: only " + firstScreenLine
 					+ " need updates");
 			}
-		} */
+		}
 
 		lastScreenLine = lastScreenLineP = -1;
 		this.skew = skew;
@@ -559,6 +486,7 @@ class ChunkCache
 	//{{{ Instance variables
 	private JEditTextArea textArea;
 	private Buffer buffer;
+	private int firstLine;
 	private int skew;
 	private LineInfo[] lineInfo;
 	private ArrayList out;

@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+<<<<<<< TODO.txt
+=======
 java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 319
 	at org.gjt.sp.jedit.textarea.DisplayManager.getNextVisibleLine(DisplayManager.java:121)
 	at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:651)
@@ -56,7 +58,6 @@ java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 319
 - expand: scroll to end of fold if possible
 - goToBuffer(): need to focus edit pane in question
 - display:
-  - last physical line cleanup
   - synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked

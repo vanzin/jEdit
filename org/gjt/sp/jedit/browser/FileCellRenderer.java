@@ -45,6 +45,8 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 	public FileCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
+		if(plainFont == null)
+			plainFont = jEdit.getFontProperty("metal.secondary.font");
 		boldFont = plainFont.deriveFont(Font.BOLD);
 		setBorder(new EmptyBorder(1,0,1,0));
 	} //}}}
