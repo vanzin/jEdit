@@ -699,7 +699,7 @@ public class DisplayManager
 
 		//{{{ physDown() method
 		// scroll down by physical line amount
-		void physDown(int amount)
+		void physDown(int amount, int screenAmount)
 		{
 			skew = 0;
 
@@ -724,12 +724,25 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
+
+			// JEditTextArea.scrollTo() needs this to simplify
+			// its code
+			if(screenAmount != 0)
+			{
+				if(screenAmount < 0)
+					scrollUp(-screenAmount);
+				else
+					scrollDown(screenAmount);
+				return;
+				// since scrollUp/Down() call changed()
+			}
+
 			changed();
 		} //}}}
 
 		//{{{ physUp() method
 		// scroll up by physical line amount
-		void physUp(int amount)
+		void physUp(int amount, int screenAmount)
 		{
 			skew = 0;
 
@@ -754,6 +767,19 @@ public class DisplayManager
 			}
 
 			offsetMgr.addAnchor(this);
+
+			// JEditTextArea.scrollTo() needs this to simplify
+			// its code
+			if(screenAmount != 0)
+			{
+				if(screenAmount < 0)
+					scrollUp(-screenAmount);
+				else
+					scrollDown(screenAmount);
+				return;
+				// since scrollUp/Down() call changed()
+			}
+
 			changed();
 		} //}}}
 
