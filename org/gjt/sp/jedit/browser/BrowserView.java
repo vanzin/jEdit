@@ -323,13 +323,30 @@ public class BrowserView extends JPanel
 			}
 			else if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
-				typeSelectBuffer.append(evt.getKeyChar());
-				doTypeSelect(typeSelectBuffer.toString());
+				switch(evt.getKeyChar())
+				{
+				case '~':
+					browser.setDirectory(System.getProperty("user.home"));
+					break;
+				case '/':
+					browser.setDirectory("roots:");
+					break;
+				case '-':
+					View view = browser.getView();
+					Buffer buffer = view.getBuffer();
+					browser.setDirectory(buffer.getVFS().getParentOfPath(
+						buffer.getPath()));
+					break;
+				default:
+					typeSelectBuffer.append(evt.getKeyChar());
+					doTypeSelect(typeSelectBuffer.toString());
 
-				timer.stop();
-				timer.setInitialDelay(500);
-				timer.setRepeats(false);
-				timer.start();
+					timer.stop();
+					timer.setInitialDelay(500);
+					timer.setRepeats(false);
+					timer.start();
+					break;
+				}
 			}
 
 			if(!evt.isConsumed())

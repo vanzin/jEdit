@@ -23,6 +23,8 @@ import javax.swing.text.*;
 import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import java.awt.*;
+import java.lang.reflect.Method;
+import java.util.Vector;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
@@ -47,6 +49,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			| AWTEvent.MOUSE_EVENT_MASK);
 
 		this.textArea = textArea;
+
+		highlights = new Vector();
 
 		setAutoscrolls(true);
 		setDoubleBuffered(true);
@@ -353,8 +357,39 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void addCustomHighlight(TextAreaHighlight highlight)
 	{
-		highlight.init(textArea,highlights);
-		highlights = highlight;
+		highlights.addElement(highlight);
+
+		// handle old highlighters
+		Class clazz = highlight.getClass();
+		try
+		{
+			Method method = clazz.getMethod("init",
+				new Class[] { JEditTextArea.class,
+				TextAreaHighlight.class });
+			if(method != null)
+			{
+				Log.log(Log.WARNING,this,clazz.getName()
+					+ " uses old highlighter API");
+				method.invoke(highlight,new Object[] { textArea, null });
+			}
+		}
+		catch(Exception e)
+		{
+			// ignore
+		}
+
+		repaint();
+	}
+
+	/**
+	 * Removes a custom highlight painter.
+	 * @param highlight The highlight
+	 * @since jEdit 4.0pre1
+	 */
+	public void removeCustomHighlight(TextAreaHighlight highlight)
+	{
+		highlights.removeElement(highlight);
+		repaint();
 	}
 
 	/**
@@ -373,10 +408,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 		}
 
-		if(highlights != null)
-			return highlights.getToolTipText(evt);
-		else
-			return null;
+		for(int i = 0; i < highlights.size(); i++)
+		{
+			TextAreaHighlight highlight =
+				(TextAreaHighlight)
+				highlights.elementAt(i);
+			String toolTip = highlight.getToolTipText(evt);
+			if(toolTip != null)
+				return toolTip;
+		}
+
+		return null;
 	}
 
 	/**
@@ -559,7 +601,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private int maxLineLen;
 	private FontMetrics fm;
 
-	private TextAreaHighlight highlights;
+	private Vector highlights;
 
 	private int paintLine(Graphics gfx, Buffer buffer, boolean valid,
 		int virtualLine, int physicalLine, int x, int y)
@@ -650,10 +692,27 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				paintBracketHighlight(gfx,physicalLine,y);
 		}
 
-		if(highlights != null)
+		if(highlights.size() != 0)
 		{
-			highlights.paintHighlight(gfx,virtualLine,
-				y - fm.getLeading() - fm.getDescent());
+			for(int i = 0; i < highlights.size(); i++)
+			{
+				TextAreaHighlight highlight = (TextAreaHighlight)
+					highlights.elementAt(i);
+				try
+				{
+					highlight.paintHighlight(gfx,virtualLine,
+						y - fm.getLeading() - fm.getDescent());
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,this,t);
+
+					// remove it so editor can continue
+					// functioning
+					highlights.removeElementAt(i);
+					i--;
+				}
+			}
 		}
 	}
 

@@ -33,6 +33,8 @@ JEDIT 4.0 VERSION HISTORY
     message) will continue to work, but the new API is much simpler
   - All you have to do is write a dockables.xml file, and it will even
     create the actions to open your dockable windows for you
+- -nogui switch is back. If specified when jEdit is being run in
+  background mode, the initial view will not be opened
 
 + Enhancements
 
@@ -78,6 +80,16 @@ JEDIT 4.0 VERSION HISTORY
   want your plugin to do this, use the new GUIUtilities.showPopupMenu()
   method.
 - GNU General Public License now shown in installer
+- Editing and saving a mode file, or mode catalog file within jEdit will
+  automatically reload that mode, or all edit modes
+- Read only status of a buffer can be changed in 'Buffer Options' dialog
+  box
+- A few keyboard shortcuts added to file system browser:
+  ~ - goes to home directory
+  / - goes to file system roots list
+  - - goes to current buffer's directory
+- Improved Abbreviations option pane
+- Improved Styles option pane
 
 + Bug Fixes
 
@@ -146,3 +158,7 @@ JEDIT 4.0 VERSION HISTORY
   dockables and ErrorList's error sources. To register dockables, use
   the new dockables.xml API. To register error sources, use the relevant
   APIs in the ErrorList plugin.
+- TextAreaHighlight.init() method removed. If it exists, it will be
+  called via reflection so that old plugins can continue to work, but
+  new plugins should pass a text area instance to the constructor of the
+  highlighter.

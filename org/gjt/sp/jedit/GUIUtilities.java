@@ -24,6 +24,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -898,7 +899,20 @@ public class GUIUtilities
 		{
 			public void windowActivated(WindowEvent evt)
 			{
-				comp.requestFocus();
+				if(requestDefaultFocus != null)
+				{
+					try
+					{
+						requestDefaultFocus.invoke(comp,
+							new Object[0]);
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.ERROR,this,e);
+					}
+				}
+				else
+					comp.requestFocus();
 				win.removeWindowListener(this);
 			}
 		});
@@ -997,11 +1011,24 @@ public class GUIUtilities
 	private static SplashScreen splash;
 	private static boolean macOS;
 	private static Hashtable icons;
+	private static Method requestDefaultFocus;
 
 	private GUIUtilities() {}
 
 	static
 	{
 		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
+		try
+		{
+			requestDefaultFocus = JComponent.class.getMethod(
+				"requestDefaultFocus",new Class[0]);
+			Log.log(Log.DEBUG,GUIUtilities.class,"JComponent.requestDefaultFocus()"
+				+ " detected");
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.DEBUG,GUIUtilities.class,"JComponent.requestDefaultFocus()"
+				+ " detected");
+		}
 	}
 }

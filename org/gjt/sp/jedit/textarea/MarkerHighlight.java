@@ -26,10 +26,9 @@ import org.gjt.sp.jedit.*;
 
 public class MarkerHighlight implements TextAreaHighlight
 {
-	public void init(JEditTextArea textArea, TextAreaHighlight next)
+	public MarkerHighlight(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
-		this.next = next;
 	}
 
 	public void paintHighlight(Graphics gfx, int line, int y)
@@ -48,9 +47,6 @@ public class MarkerHighlight implements TextAreaHighlight
 					.getWidth(),fm.getHeight());
 			}
 		}
-
-		if(next != null)
-			next.paintHighlight(gfx,line,y);
 	}
 
 	public String getToolTipText(MouseEvent evt)
@@ -75,10 +71,7 @@ public class MarkerHighlight implements TextAreaHighlight
 			}
 		}
 
-		if(next != null)
-			return next.getToolTipText(evt);
-		else
-			return null;
+		return null;
 	}
 
 	public Color getMarkerHighlightColor()
@@ -103,7 +96,6 @@ public class MarkerHighlight implements TextAreaHighlight
 
 	// private members
 	private JEditTextArea textArea;
-	private TextAreaHighlight next;
 	private boolean highlightEnabled;
 	private Color markerHighlightColor;
 }

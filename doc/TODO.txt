@@ -2,9 +2,10 @@ TO DO
 
 + before 4.0pre1:
 
-- -nogui switch for -background
+- get confirmation that requestDefaultFocus() works
+- jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
+  optimized? Also faster scrolling.
 - fs browser: colors option pane
-- eval for selected lines: if selection ends on start of a line
 - JDK 1.3: about box broken
 - version number in splash screen
 - broken bracket matching
@@ -20,18 +21,13 @@ TO DO
   - transparency
 - new document model that uses less memory than the Swing document
 - prev line fold gutter bug
-- folding paint up bug
 - expand-fold too aggressive
 - editing on last line shouldn't cause scrolling
-- new text area highlighter API
 - conventions section in user's guide: mention Enter activating default
   button, Escape activating 'Cancel' or equivalent
 - mention Alt-key mnemonics
 - plugin size reporting, new install plugins dialog UI layout
-- after a VFSUpdate for a mode file is received, reload that mode automatically
-- after a VFSUpdate for a mode catalog is received, reload all modes
 - saving a read-only file: show a confirmation dialog box
-- JComponent.requestDefaultFocus(): new 1.4 method
 - ant targets to replace mk_installer/mk_source scripts
 - QuickNotepad XSL docs
 
@@ -40,12 +36,13 @@ TO DO
 - frame.setState(Frame.NORMAL);
 - line-uncomment command
 - search and replace of specific token types only
+- replace: automatically change case, depending on case of insert string
+  (all lower, all upper, title)
 - complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
 - select-* actions: add to selection in multi-select mode
 - when loading plugins and such, check for settingsDir == jEditHome
-- changing read-only flag in buffer options
 - file system browser:
   - option pane for changing colorization settings
   - new UI layout:
@@ -56,10 +53,6 @@ TO DO
   - Two-pane 'file system commander' window, with copy/move buttons
   - recursive directory delete
   - right-click menu: show all toolbar options
-  - some additional keyboard shortcuts:
-    - ~ goes to home directory
-    - / goes to roots:
-    - - goes to buffer directory
   - easier way for plugins to add right-click menu commands
   - some means of redirecting double-clicks on a file to a VFS
   - new VFS methods:
@@ -82,7 +75,6 @@ TO DO
 - when loading a file: if the stream supports a mark, read first 16 bytes,
   check for unicode byte order mark, push back, if one is found, set
   encoding to Unicode automatically
-- handle missing modes more gracefully
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
 - hypersearch:
@@ -90,9 +82,6 @@ TO DO
   - new search results window for each search, no 'search results' menu
     item
 - smarter/better userInput() that accepts strings, not just characters
-- style editor: check boxes next to fg, bg; if off, use default
-- abbrevs option pane: add, remove, edit buttons, don't show abbrev
-  expansion in table
 - option pane API changes:
   - boolean validate() method added; if returns false, user is not allowed
     to close dialog with 'OK' button, have to either fix values or cancel.
@@ -184,3 +173,4 @@ TO DO
 - 'Stop' in plugin manager needs to be handled more gracefully
 - binding an action to ` doesn't work
 - evalutate for selected lines: > 1 selection per line
+- folding paint up bug

@@ -60,9 +60,6 @@ public class BufferOptions extends EnhancedDialog
 		cons.insets = labelInsets;
 
 		// Edit mode
-		cons.gridx = 0;
-		cons.weightx = 0.0f;
-		cons.insets = labelInsets;
 		JLabel label = new JLabel(jEdit.getProperty(
 			"buffer-options.mode"),SwingConstants.RIGHT);
 		layout.setConstraints(label,cons);
@@ -90,7 +87,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Tab size
 		cons.gridx = 0;
-		cons.gridy = 1;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
@@ -111,7 +108,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Indent size
 		cons.gridx = 0;
-		cons.gridy = 2;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
@@ -131,7 +128,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Max line length
 		cons.gridx = 0;
-		cons.gridy = 3;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty(
@@ -153,7 +150,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Line separator
 		cons.gridx = 0;
-		cons.gridy = 4;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty("buffer-options.lineSeparator"),
@@ -183,7 +180,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Encoding
 		cons.gridx = 0;
-		cons.gridy = 5;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.insets = labelInsets;
 		label = new JLabel(jEdit.getProperty("buffer-options.encoding"),
@@ -208,9 +205,23 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(encoding,cons);
 		panel.add(encoding);
 
+		// Read only setting
+		cons.gridx = 0;
+		cons.gridy++;
+		cons.weightx = 0.0f;
+		cons.gridwidth = cons.REMAINDER;
+		cons.fill = GridBagConstraints.NONE;
+		cons.anchor = GridBagConstraints.WEST;
+		readOnly = new JCheckBox(jEdit.getProperty(
+			"buffer-options.readOnly"));
+		readOnly.setSelected(buffer.isReadOnly());
+		readOnly.addActionListener(actionListener);
+		layout.setConstraints(readOnly,cons);
+		panel.add(readOnly);
+
 		// Trailing EOL setting
 		cons.gridx = 0;
-		cons.gridy = 6;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -224,7 +235,7 @@ public class BufferOptions extends EnhancedDialog
 
 		// Syntax highlighting
 		cons.gridx = 0;
-		cons.gridy = 7;
+		cons.gridy++;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -237,7 +248,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(syntax);
 
 		// Indent on tab
-		cons.gridy = 8;
+		cons.gridy++;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
@@ -246,7 +257,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnTab);
 
 		// Indent on enter
-		cons.gridy = 9;
+		cons.gridy++;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
@@ -255,7 +266,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnEnter);
 
 		// Soft tabs
-		cons.gridy = 10;
+		cons.gridy++;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
@@ -264,7 +275,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(noTabs);
 
 		// Props label
-		cons.gridy = 11;
+		cons.gridy++;
 		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
@@ -362,6 +373,7 @@ public class BufferOptions extends EnhancedDialog
 			EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.ENCODING_CHANGED));
 		}
 
+		buffer.setReadOnly(readOnly.isSelected());
 		buffer.putBooleanProperty(Buffer.TRAILING_EOL,trailingEOL.isSelected());
 		buffer.putBooleanProperty("syntax",syntax.isSelected());
 		buffer.putBooleanProperty("indentOnTab",indentOnTab.isSelected());
@@ -391,6 +403,7 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox mode;
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JCheckBox readOnly;
 	private JCheckBox trailingEOL;
 	private JCheckBox syntax;
 	private JCheckBox indentOnTab;
@@ -416,6 +429,8 @@ public class BufferOptions extends EnhancedDialog
 
 	class ActionHandler implements ActionListener
 	{
+		boolean doNotShowDialog = false;
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -442,6 +457,18 @@ public class BufferOptions extends EnhancedDialog
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
 				updatePropsField();
+			}
+			else if(!doNotShowDialog && source == readOnly)
+			{
+				if(readOnly.isSelected()
+					&& buffer.isDirty())
+				{
+					doNotShowDialog = true;
+					readOnly.setSelected(false);
+					doNotShowDialog = false;
+					GUIUtilities.error(BufferOptions.this,
+						"buffer-options.readOnly",null);
+				}
 			}
 			else
 				updatePropsField();

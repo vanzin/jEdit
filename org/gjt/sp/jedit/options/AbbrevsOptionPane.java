@@ -20,6 +20,7 @@
 package org.gjt.sp.jedit.options;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -77,8 +78,10 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			sets[i+1] = name;
 			modeAbbrevs.put(name,new AbbrevsModel((Hashtable)_modeAbbrevs.get(name)));
 		}
+
 		setsComboBox = new JComboBox(sets);
-		setsComboBox.addActionListener(new ActionHandler());
+		ActionHandler actionHandler = new ActionHandler();
+		setsComboBox.addActionListener(actionHandler);
 		panel3.add(setsComboBox);
 		panel.add(panel3,BorderLayout.SOUTH);
 
@@ -86,14 +89,38 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		globalAbbrevs = new AbbrevsModel(Abbrevs.getGlobalAbbrevs());
 		abbrevsTable = new JTable(globalAbbrevs);
+		abbrevsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		abbrevsTable.getTableHeader().setReorderingAllowed(false);
 		abbrevsTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
-		abbrevsTable.addMouseListener(new TableMouseHandler());
+		abbrevsTable.getSelectionModel().addListSelectionListener(
+			new SelectionHandler());
 		Dimension d = abbrevsTable.getPreferredSize();
 		d.height = Math.min(d.height,200);
 		JScrollPane scroller = new JScrollPane(abbrevsTable);
 		scroller.setPreferredSize(d);
 		add(BorderLayout.CENTER,scroller);
+
+		JPanel buttons = new JPanel();
+		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
+		buttons.setBorder(new EmptyBorder(6,0,0,0));
+
+		buttons.add(Box.createGlue());
+		add = new JButton(jEdit.getProperty("options.abbrevs.add"));
+		add.addActionListener(actionHandler);
+		buttons.add(add);
+		buttons.add(Box.createHorizontalStrut(6));
+		edit = new JButton(jEdit.getProperty("options.abbrevs.edit"));
+		edit.addActionListener(actionHandler);
+		buttons.add(edit);
+		buttons.add(Box.createHorizontalStrut(6));
+		remove = new JButton(jEdit.getProperty("options.abbrevs.remove"));
+		remove.addActionListener(actionHandler);
+		buttons.add(remove);
+		buttons.add(Box.createGlue());
+
+		add(BorderLayout.SOUTH,buttons);
+
+		updateEnabled();
 	}
 
 	protected void _save()
@@ -122,6 +149,16 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	private JTable abbrevsTable;
 	private AbbrevsModel globalAbbrevs;
 	private Hashtable modeAbbrevs;
+	private JButton add;
+	private JButton edit;
+	private JButton remove;
+
+	private void updateEnabled()
+	{
+		int selectedRow = abbrevsTable.getSelectedRow();
+		edit.setEnabled(selectedRow != -1);
+		remove.setEnabled(selectedRow != -1);
+	}
 
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -139,23 +176,11 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		}
 	}
 
-	class TableMouseHandler extends MouseAdapter
+	class SelectionHandler implements ListSelectionListener
 	{
-		public void mouseClicked(MouseEvent evt)
+		public void valueChanged(ListSelectionEvent evt)
 		{
-			if(abbrevsTable.getSelectedColumn() == 1)
-			{
-				TableModel abbrevsModel = abbrevsTable.getModel();
-				int row = abbrevsTable.getSelectedRow();
-
-				String abbrev = (String)abbrevsModel.getValueAt(row,0);
-				String expansion = (String)abbrevsModel.getValueAt(row,1);
-
-				expansion = new EditAbbrevDialog(AbbrevsOptionPane.this,
-					abbrev,expansion).getExpansion();
-				if(expansion != null)
-					abbrevsModel.setValueAt(expansion,row,1);
-			}
+			updateEnabled();
 		}
 	}
 
@@ -163,6 +188,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
+			AbbrevsModel abbrevsModel = (AbbrevsModel)abbrevsTable.getModel();
+
 			Object source = evt.getSource();
 			if(source == setsComboBox)
 			{
@@ -176,6 +203,52 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 					abbrevsTable.setModel((AbbrevsModel)
 						modeAbbrevs.get(selected));
 				}
+				updateEnabled();
+			}
+			else if(source == add)
+			{
+				EditAbbrevDialog dialog = new EditAbbrevDialog(
+					AbbrevsOptionPane.this,
+					null,null);
+				String abbrev = dialog.getAbbrev();
+				String expansion = dialog.getExpansion();
+				if(abbrev != null && abbrev.length() != 0
+					&& expansion != null
+					&& expansion.length() != 0)
+				{
+					abbrevsModel.add(abbrev,expansion);
+					int index = abbrevsModel.getRowCount() - 1;
+					abbrevsTable.getSelectionModel()
+						.setSelectionInterval(index,index);
+					Rectangle rect = abbrevsTable.getCellRect(
+						index,0,true);
+					abbrevsTable.scrollRectToVisible(rect);
+					updateEnabled();
+				}
+			}
+			else if(source == edit)
+			{
+				int row = abbrevsTable.getSelectedRow();
+
+				String abbrev = (String)abbrevsModel.getValueAt(row,0);
+				String expansion = (String)abbrevsModel.getValueAt(row,1);
+
+				EditAbbrevDialog dialog = new EditAbbrevDialog(
+					AbbrevsOptionPane.this,
+					abbrev,expansion);
+				abbrev = dialog.getAbbrev();
+				expansion = dialog.getExpansion();
+				if(abbrev != null && expansion != null)
+				{
+					abbrevsModel.setValueAt(abbrev,row,0);
+					abbrevsModel.setValueAt(expansion,row,1);
+				}
+			}
+			else if(source == remove)
+			{
+				int selectedRow = abbrevsTable.getSelectedRow();
+				abbrevsModel.remove(selectedRow);
+				updateEnabled();
 			}
 		}
 	}
@@ -209,10 +282,22 @@ class AbbrevsModel extends AbstractTableModel
 		}
 	}
 
-	public void sort(int col)
+	void sort(int col)
 	{
 		MiscUtilities.quicksort(abbrevs,new AbbrevCompare(col));
 		fireTableDataChanged();
+	}
+
+	void add(String abbrev, String expansion)
+	{
+		abbrevs.addElement(new Abbrev(abbrev,expansion));
+		fireTableStructureChanged();
+	}
+
+	void remove(int index)
+	{
+		abbrevs.removeElementAt(index);
+		fireTableStructureChanged();
 	}
 
 	public Hashtable toHashtable()
@@ -237,14 +322,11 @@ class AbbrevsModel extends AbstractTableModel
 
 	public int getRowCount()
 	{
-		return abbrevs.size() + 1;
+		return abbrevs.size();
 	}
 
 	public Object getValueAt(int row, int col)
 	{
-		if(row == abbrevs.size())
-			return null;
-
 		Abbrev abbrev = (Abbrev)abbrevs.elementAt(row);
 		switch(col)
 		{
@@ -259,7 +341,7 @@ class AbbrevsModel extends AbstractTableModel
 
 	public boolean isCellEditable(int row, int col)
 	{
-		return (col == 0);
+		return false;
 	}
 
 	public void setValueAt(Object value, int row, int col)
@@ -267,21 +349,14 @@ class AbbrevsModel extends AbstractTableModel
 		if(value == null)
 			value = "";
 
-		Abbrev abbrev;
-		if(row == abbrevs.size())
-		{
-			abbrev = new Abbrev();
-			abbrevs.addElement(abbrev);
-		}
-		else
-			abbrev = (Abbrev)abbrevs.elementAt(row);
+		Abbrev abbrev = (Abbrev)abbrevs.elementAt(row);
 
 		if(col == 0)
 			abbrev.abbrev = (String)value;
 		else
 			abbrev.expand = (String)value;
 
-		fireTableRowsUpdated(row,row + 1);
+		fireTableRowsUpdated(row,row);
 	}
 
 	public String getColumnName(int index)

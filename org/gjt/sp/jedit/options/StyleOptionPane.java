@@ -1,6 +1,6 @@
 /*
  * StyleOptionPane.java - Style option pane
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -257,35 +257,67 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(0,0,12,0));
-		panel.add(italics = new JCheckBox(
-			jEdit.getProperty("style-editor.italics")));
+		GridBagLayout layout = new GridBagLayout();
+		JPanel panel = new JPanel(layout);
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridx = cons.gridy = 0;
+		cons.gridwidth = 2;
+		cons.gridheight = 1;
+		cons.fill = GridBagConstraints.BOTH;
+		cons.weightx = 0.0f;
+		cons.insets = new Insets(0,0,12,0);
+
+		italics = new JCheckBox(jEdit.getProperty("style-editor.italics"));
 		italics.setSelected(style.getFont().isItalic());
-		panel.add(Box.createHorizontalStrut(2));
-		panel.add(bold = new JCheckBox(
-			jEdit.getProperty("style-editor.bold")));
+		layout.setConstraints(italics,cons);
+		panel.add(italics);
+
+		bold = new JCheckBox(jEdit.getProperty("style-editor.bold"));
 		bold.setSelected(style.getFont().isBold());
-		panel.add(Box.createHorizontalStrut(12));
-		panel.add(new JLabel(jEdit.getProperty("style-editor.fgColor")));
-		panel.add(Box.createHorizontalStrut(12));
-		panel.add(fgColor = new JButton("    "));
-		fgColor.setBackground(style.getForegroundColor());
+		layout.setConstraints(bold,cons);
+		panel.add(bold);
+
+		cons.gridwidth = 1;
+		Color fg = style.getForegroundColor();
+		fgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.fgColor"));
+		fgColorCheckBox.setSelected(fg != null);
+		layout.setConstraints(fgColorCheckBox,cons);
+		panel.add(fgColorCheckBox);
+
+		cons.gridx++;
+		fgColor = new JButton("    ");
+		fgColor.setEnabled(fg != null);
 		fgColor.setRequestFocusEnabled(false);
 		fgColor.addActionListener(this);
 		fgColor.setMargin(new Insets(0,0,0,0));
-		panel.add(Box.createHorizontalStrut(12));
-		panel.add(new JLabel(jEdit.getProperty("style-editor.bgColor")));
-		panel.add(Box.createHorizontalStrut(12));
-		panel.add(bgColor = new JButton("    "));
-		if(style.getBackgroundColor() == null)
-			bgColor.setBackground(jEdit.getColorProperty("view.bgColor"));
+		if(fg == null)
+			fgColor.setBackground(jEdit.getColorProperty("view.fgColor"));
 		else
-			bgColor.setBackground(style.getBackgroundColor());
+			fgColor.setBackground(fg);
+		layout.setConstraints(fgColor,cons);
+		panel.add(fgColor);
+
+		cons.gridx = 0;
+		cons.gridy++;
+		Color bg = style.getBackgroundColor();
+		bgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.bgColor"));
+		bgColorCheckBox.setSelected(bg != null);
+		layout.setConstraints(bgColorCheckBox,cons);
+		panel.add(bgColorCheckBox);
+
+		cons.gridx++;
+		bgColor = new JButton("    ");
+		bgColor.setEnabled(bg != null);
 		bgColor.setRequestFocusEnabled(false);
 		bgColor.addActionListener(this);
 		bgColor.setMargin(new Insets(0,0,0,0));
+		if(bg == null)
+			bgColor.setBackground(jEdit.getColorProperty("view.bgColor"));
+		else
+			bgColor.setBackground(bg);
+		layout.setConstraints(bgColor,cons);
+		panel.add(bgColor);
 
 		content.add(BorderLayout.CENTER,panel);
 
@@ -314,7 +346,7 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 			ok();
 		else if(source == cancel)
 			cancel();
-		else if (source == fgColor || source == bgColor)
+		else if(source == fgColor || source == bgColor)
 		{
 			JButton b = (JButton)source;
 			Color c = JColorChooser.showDialog(this,
@@ -323,6 +355,10 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 			if(c != null)
 				b.setBackground(c);
 		}
+		else if(source == fgColorCheckBox)
+			fgColor.setEnabled(fgColorCheckBox.isSelected());
+		else if(source == bgColorCheckBox)
+			bgColor.setEnabled(bgColorCheckBox.isSelected());
 	}
 
 	// EnhancedDialog implementation
@@ -342,12 +378,15 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		if(!okClicked)
 			return null;
 
-		Color background = bgColor.getBackground();
+		Color foreground = (fgColorCheckBox.isSelected()
+			? fgColor.getBackground()
+			: null);
 
-		if (background.equals(jEdit.getColorProperty("view.bgColor")))
-			background = null;
+		Color background = (bgColorCheckBox.isSelected()
+			? bgColor.getBackground()
+			: null);
 
-		return new SyntaxStyle(fgColor.getBackground(),background,
+		return new SyntaxStyle(foreground,background,
 				new Font("Dialog",
 				(italics.isSelected() ? Font.ITALIC : 0)
 				| (bold.isSelected() ? Font.BOLD : 0),
@@ -357,7 +396,9 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 	// private members
 	private JCheckBox italics;
 	private JCheckBox bold;
+	private JCheckBox fgColorCheckBox;
 	private JButton fgColor;
+	private JCheckBox bgColorCheckBox;
 	private JButton bgColor;
 	private JButton ok;
 	private JButton cancel;

@@ -35,11 +35,27 @@ public class AbbrevEditor extends JPanel
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.anchor = cons.WEST;
 		cons.fill = cons.BOTH;
-		cons.weightx = 1.0f;
+		cons.weightx = 0.0f;
 		cons.gridx = 1;
 		cons.gridy = 1;
 
-		JLabel label = new JLabel(jEdit.getProperty("abbrev-editor.before"));
+		JLabel label = new JLabel(jEdit.getProperty("abbrev-editor.abbrev"),
+			SwingConstants.RIGHT);
+		label.setBorder(new EmptyBorder(0,0,0,12));
+		layout.setConstraints(label,cons);
+		add(label);
+		cons.gridx++;
+		cons.weightx = 1.0f;
+		abbrev = new JTextField();
+		layout.setConstraints(abbrev,cons);
+		add(abbrev);
+
+		cons.gridx = 1;
+		cons.weightx = 0.0f;
+		cons.gridwidth = 2;
+
+		cons.gridy++;
+		label = new JLabel(jEdit.getProperty("abbrev-editor.before"));
 		label.setBorder(new EmptyBorder(6,0,3,0));
 		layout.setConstraints(label,cons);
 		add(label);
@@ -64,6 +80,16 @@ public class AbbrevEditor extends JPanel
 		scroller = new JScrollPane(afterCaret);
 		layout.setConstraints(scroller,cons);
 		add(scroller);
+	}
+
+	public String getAbbrev()
+	{
+		return abbrev.getText();
+	}
+
+	public void setAbbrev(String abbrev)
+	{
+		this.abbrev.setText(abbrev);
 	}
 
 	public String getExpansion()
@@ -182,5 +208,6 @@ public class AbbrevEditor extends JPanel
 	}
 
 	// private members
+	private JTextField abbrev;
 	private JTextArea beforeCaret, afterCaret;
 }

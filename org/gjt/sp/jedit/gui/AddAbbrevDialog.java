@@ -32,16 +32,14 @@ public class AddAbbrevDialog extends JDialog
 		super(view,jEdit.getProperty("add-abbrev.title"),true);
 
 		this.view = view;
-		this.abbrev = abbrev;
 
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		content.add(BorderLayout.NORTH,new JLabel(jEdit.getProperty(
-			"add-abbrev.caption", new String[] { abbrev })));
 		editor = new AbbrevEditor();
-		editor.setBorder(new EmptyBorder(0,0,12,0));
+		editor.setAbbrev(abbrev);
+		editor.setBorder(new EmptyBorder(6,0,12,0));
 		content.add(BorderLayout.CENTER,editor);
 
 		Box box = new Box(BoxLayout.X_AXIS);
@@ -74,7 +72,6 @@ public class AddAbbrevDialog extends JDialog
 
 	// private members
 	private View view;
-	private String abbrev;
 	private AbbrevEditor editor;
 	private JButton global;
 	private JButton modeSpecific;
@@ -87,13 +84,25 @@ public class AddAbbrevDialog extends JDialog
 			Object source = evt.getSource();
 			if(source == global)
 			{
-				Abbrevs.addGlobalAbbrev(abbrev,editor.getExpansion());
+				String _abbrev = editor.getAbbrev();
+				if(_abbrev == null || _abbrev.length() == 0)
+				{
+					getToolkit().beep();
+					return;
+				}
+				Abbrevs.addGlobalAbbrev(_abbrev,editor.getExpansion());
 				Abbrevs.expandAbbrev(view,false);
 			}
 			else if(source == modeSpecific)
 			{
+				String _abbrev = editor.getAbbrev();
+				if(_abbrev == null || _abbrev.length() == 0)
+				{
+					getToolkit().beep();
+					return;
+				}
 				Abbrevs.addModeAbbrev(view.getBuffer().getMode().getName(),
-					abbrev,editor.getExpansion());
+					_abbrev,editor.getExpansion());
 				Abbrevs.expandAbbrev(view,false);
 			}
 

@@ -257,13 +257,13 @@
     it only affects subsequently-inserted tabs.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
-    Code</guisubmenu>&gt;<guimenuitem>Spaces to Tabs</guimenuitem>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Spaces
+    to Tabs</guimenuitem>
     converts soft tabs to hard tabs in the current selection.
    </para>
    <para>
-    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
-    Code</guisubmenu>&gt;<guimenuitem>Tabs to Spaces</guimenuitem>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Tabs
+     to Spaces</guimenuitem>
     converts hard tabs to soft tabs in the current selection.
    </para>
   </sect2>
