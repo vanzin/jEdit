@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import java.awt.Component;
 import java.io.*;
+import java.text.*;
 import java.util.Date;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -44,7 +45,9 @@ public class FileVFS extends VFS
 	public FileVFS()
 	{
 		super("file",READ_CAP | WRITE_CAP | DELETE_CAP
-			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP);
+			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP,
+			new String[] { EA_TYPE, EA_SIZE, EA_STATUS,
+			EA_MODIFIED });
 	} //}}}
 
 	//{{{ getParentOfPath() method
@@ -137,6 +140,9 @@ public class FileVFS extends VFS
 	//{{{ LocalDirectoryEntry class
 	public static class LocalDirectoryEntry extends VFS.DirectoryEntry
 	{
+		public static DateFormat DATE_FORMAT
+			= new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+
 		public long modified;
 
 		public LocalDirectoryEntry(File file)
@@ -151,7 +157,7 @@ public class FileVFS extends VFS
 		public String getExtendedAttribute(String name)
 		{
 			if(name.equals(EA_MODIFIED))
-				return new Date(modified).toString();
+				return DATE_FORMAT.format(new Date(modified));
 			else
 				return super.getExtendedAttribute(name);
 		}

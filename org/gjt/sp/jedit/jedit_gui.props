@@ -1893,7 +1893,7 @@ vfs.browser.filter-enabled=true
 vfs.browser.tree.loading=Loading...
 
 vfs.browser.name=Name
-vfs.browser.type=Use EA_SIZE_OR_TYPE instead
+vfs.browser.type=Type
 vfs.browser.type.file=File
 vfs.browser.type.directory=Directory
 vfs.browser.type.filesystem=File system
@@ -1902,8 +1902,7 @@ vfs.browser.status.no=No access
 vfs.browser.status.ro=Read only
 vfs.browser.status.append=Append only
 vfs.browser.status.rw=Read/write
-vfs.browser.size=Use EA_SIZE_OR_TYPE instead
-vfs.browser.size-type=Size/Type
+vfs.browser.size=Size
 vfs.browser.modified=Last modified
 
 #{{{ Actions

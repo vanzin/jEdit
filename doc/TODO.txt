@@ -5,6 +5,7 @@ and quirks that I need to fix eventually.
 
 pre2 on thursday!!!
 
+- key typed in complete word broken again
 - auto indent: don't de-indent on enter if no leading indent at all?
 - soft wrap: one line file, editing at end
 - bind key to C+e F2 F3: status bar
@@ -12,7 +13,6 @@ pre2 on thursday!!!
   
   { <-- wrong
 
-- finish vfs browser extended attributes
 - new file: horiz scroll wrong
 - scroll to with invisible caret
 - bad wrap:
@@ -85,6 +85,7 @@ pre2 on thursday!!!
 
 + features:
 
+- customizable vfs browser extended attributes
 - windows: fsb browser, type c:
 - new plugin mgr:
   - ask before selecting dependencies & 'don't show again'
