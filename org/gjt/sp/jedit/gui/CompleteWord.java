@@ -274,6 +274,13 @@ public class CompleteWord extends JWindow
 		textArea.setSelectedText(words.getSelectedValue().toString()
 			.substring(word.length()));
 		dispose();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				textArea.requestFocus();
+			}
+		});
 	} //}}}
 
 	//}}}
