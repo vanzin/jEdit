@@ -1280,6 +1280,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			mi.setActionCommand("plugin-manager");
 			mi.addActionListener(actionHandler);
 
+			mi = new JMenuItem(jEdit.getProperty(
+				"vfs.browser.plugins.plugin-options.label"));
+			mi.setActionCommand("plugin-options");
+			mi.addActionListener(actionHandler);
+
 			popup.add(mi);
 			popup.addSeparator();
 
@@ -1328,6 +1333,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(evt.getActionCommand().equals("plugin-manager"))
 				{
 					new org.gjt.sp.jedit.pluginmgr.PluginManager(
+						JOptionPane.getFrameForComponent(
+						VFSBrowser.this));
+				}
+				else if(evt.getActionCommand().equals("plugin-options"))
+				{
+					new org.gjt.sp.jedit.options.PluginOptions(
 						JOptionPane.getFrameForComponent(
 						VFSBrowser.this));
 				}

@@ -173,7 +173,7 @@ public abstract class FoldHandler
 			+ newApi.length];
 		System.arraycopy(newApi,0,foldModes,0,newApi.length);
 
-		for (int i = 0; i < foldModes.length; i++)
+		for (int i = 0; i < handlers.length; i++)
 		{
 			foldModes[i + newApi.length] = handlers[i].getName();
 		}

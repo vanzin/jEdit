@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ package org.gjt.sp.jedit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
+import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -68,7 +70,7 @@ public abstract class EditAction
 	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.label</code>.
 	 */
-	public String getLabel()
+	public final String getLabel()
 	{
 		return jEdit.getProperty(name + ".label");
 	} //}}}
@@ -110,9 +112,9 @@ public abstract class EditAction
 	 * in menus.
 	 * @since jEdit 2.2pre4
 	 */
-	public boolean isToggle()
+	public final boolean isToggle()
 	{
-		return false;
+		return jEdit.getBooleanProperty(name + ".toggle");
 	} //}}}
 
 	//{{{ isSelected() method
@@ -184,6 +186,11 @@ public abstract class EditAction
 	 */
 	public static class Wrapper implements ActionListener
 	{
+		public Wrapper(String actionName)
+		{
+			this.actionName = actionName;
+		}
+
 		public Wrapper(EditAction action)
 		{
 			this.action = action;
@@ -199,9 +206,17 @@ public abstract class EditAction
 		 */
 		public void actionPerformed(ActionEvent evt)
 		{
-			jEdit.getActiveView().getInputHandler().invokeAction(action);
+			InputHandler ih = jEdit.getActiveView()
+				.getInputHandler();
+			if(actionName != null)
+				ih.invokeAction(actionName);
+			else if(action != null)
+				ih.invokeAction(action);
+			else
+				Log.log(Log.WARNING,this,"Nothing to do");
 		}
 
+		private String actionName;
 		private EditAction action;
 	} //}}}
 }

@@ -27,8 +27,7 @@ import java.util.*;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 
 /**
- * Caches various built-in and plugin resources so we don't have to load them
- * each time.
+ * Caches various plugin resources so we don't have to load them each time.
  * @since jEdit 4.2pre1
  * @author Slava Pestov
  * @version $Id$
@@ -44,28 +43,21 @@ class ResourceCache
 	//{{{ generateCache() method
 	static void generateCache()
 	{
-		ActionSet builtInActionSet = new ActionSet(null,
-			ResourceCache.class.getResource("actions.xml"),
-			null);
-		builtInActionSet.load();
-
-		jEdit.addActionSet(builtInActionSet);
-		jEdit.setBuiltInActionSet(builtInActionSet);
-
-		DockableWindowManager.loadDockableWindows(null,
-			ResourceCache.class.getResource("dockables.xml"));
-
-		ServiceManager.loadServices(null,
-			ResourceCache.class.getResource("services.xml"));
+		
 	} //}}}
 
 	//{{{ PluginCacheEntry class
 	static class PluginCacheEntry
 	{
-		URL       actionsURI;
-		String[]  cachedActionNames;
-		URL       dockablesURI;
-		String[]  cachedDockableNames;
+		List properties;
+		Set classes;
+
+		URL actionsURI;
+		String[] cachedActionNames;
+		URL dockablesURI;
+		String[] cachedDockableNames;
 		boolean[] cachedDockableActionFlags;
+		URL servicesURI;
+		ServiceManager.Descriptor[] cachedServices;
 	} //}}}
 }

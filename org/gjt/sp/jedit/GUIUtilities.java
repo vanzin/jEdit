@@ -243,10 +243,7 @@ public class GUIUtilities
 		if(name.startsWith("%"))
 			return loadMenu(name.substring(1));
 
-		EditAction action = jEdit.getAction(name);
-		String label = (action == null ?
-			jEdit.getProperty(name + ".label")
-			: action.getLabel());
+		String label = jEdit.getProperty(name + ".label");
 		if(label == null)
 			label = name;
 
@@ -261,10 +258,10 @@ public class GUIUtilities
 			mnemonic = '\0';
 
 		JMenuItem mi;
-		if(action != null && action.isToggle())
-			mi = new EnhancedCheckBoxMenuItem(label,action);
+		if(jEdit.getBooleanProperty(name + ".toggle"))
+			mi = new EnhancedCheckBoxMenuItem(label,name);
 		else
-			mi = new EnhancedMenuItem(label,action);
+			mi = new EnhancedMenuItem(label,name);
 
 		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
 			mi.setMnemonic(mnemonic);
@@ -314,10 +311,7 @@ public class GUIUtilities
 	 */
 	public static EnhancedButton loadToolButton(String name)
 	{
-		EditAction action = jEdit.getAction(name);
-		String label = (action == null
-			? jEdit.getProperty(name + ".label")
-			: action.getLabel());
+		String label = jEdit.getProperty(name + ".label");
 
 		if(label == null)
 			label = name;
@@ -348,7 +342,7 @@ public class GUIUtilities
 				: "") + ")";
 		}
 
-		return new EnhancedButton(icon,toolTip,action);
+		return new EnhancedButton(icon,toolTip,name);
 	} //}}}
 
 	//{{{ prettifyMenuLabel() method
@@ -1204,6 +1198,12 @@ public class GUIUtilities
 				return (View)comp;
 			else if(comp instanceof JPopupMenu)
 				comp = ((JPopupMenu)comp).getInvoker();
+			else if(comp instanceof FloatingWindowContainer)
+			{
+				return ((FloatingWindowContainer)comp)
+					.getDockableWindowManager()
+					.getView();
+			}
 			else if(comp != null)
 				comp = comp.getParent();
 			else

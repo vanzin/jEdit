@@ -3,30 +3,35 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- listing empty dirs breaks stuff
-- servicemanager javadocs
+- can do perl q|...| etc. using begin/end substitution!
+- means of overriding escape to fix C# @"..." issue
+- perl: q{}, etc.
+
+- already loaded check needs to go somewhere
+- 
+- got a multiple i/o requests thing once
 - browser: /, ~, -
 - save to symlink: don't overwrite symlink
+- browser's default size
+- browser: tab: don't insert full path
+- completion: handle full paths
+- file dialog: handle ~ ENTER, - ENTER
+
+- mouse over text for actions
+
+- F2 doesn't work in JTree/JTable, maybe others
+- servicemanager javadocs
 - file changed dialog: don't reload files if flag is off
 - save caret info first
-- tree table: expansion state save broken
 - electric scroll inconsistent w.r.t. deletes
-- expand collapse lose sync
-- scrollTo() after expand folds still npe's
 - narrow: scrolls one down
 - update man page
 - make gutter fully painted by extensions just like text area
-- test vertical paste
 - format should show an error if the line len is 0, not beep
 - shortcut editor: restore default button
-- fsb plugins menu: plugin options
-- browser's default size
 - path shown twice in tree: maybeReloadDirectory()
 - box in io progress
-- browser: tab: don't insert full path
-- completion: handle full paths
 - don't rely on browser view for completion
-- file dialog: handle ~ ENTER, - ENTER
 - adapt vfs filename field for the path display at the top
 - vfs dialogs: only one field?
 - vfs.isValidPath()
@@ -38,7 +43,6 @@ and quirks that I need to fix eventually.
 - evalutate for selected lines: > 1 selection per line
 - split view line insert: repainted twice, selection problems
 - action bar: wrap around arrow keys
-- means of overriding escape to fix C# @"..." issue
 - searching in a buffer w/ narrowed fold
 - macro record: doesn't respect overwrite
 - save file resulting in fold collapse -- scroll to 0
@@ -133,7 +137,6 @@ and quirks that I need to fix eventually.
 - hypersearch: open in new split
 - new bsh and bsh command path
 - beanshell: invokeAction() function
-- perl: q{}, etc.
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
 - need a new jEditLauncher

@@ -42,7 +42,7 @@ public class EnhancedMenuItem extends JMenuItem
 	 * @param action The edit action
 	 * @param actionCommand The action command
 	 */
-	public EnhancedMenuItem(String label, EditAction action)
+	public EnhancedMenuItem(String label, String action)
 	{
 		this.action = action;
 		this.shortcut = getShortcut();
@@ -108,7 +108,7 @@ public class EnhancedMenuItem extends JMenuItem
 
 	//{{{ Instance variables
 	private String shortcut;
-	private EditAction action;
+	private String action;
 	//}}}
 
 	//{{{ getShortcut() method
@@ -118,8 +118,8 @@ public class EnhancedMenuItem extends JMenuItem
 			return null;
 		else
 		{
-			String shortcut1 = jEdit.getProperty(action.getName() + ".shortcut");
-			String shortcut2 = jEdit.getProperty(action.getName() + ".shortcut2");
+			String shortcut1 = jEdit.getProperty(action + ".shortcut");
+			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
 
 			if(shortcut1 == null || shortcut1.length() == 0)
 			{
@@ -176,33 +176,33 @@ public class EnhancedMenuItem extends JMenuItem
 
 		public void mouseReleased(MouseEvent evt)
 		{
-			if(msgSet)
+			/* if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			}
+			} */
 		}
 
 		public void mouseEntered(MouseEvent evt)
 		{
-			String msg = action.getMouseOverText();
+			/* String msg = action.getMouseOverText();
 			if(msg != null)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(msg);
 				msgSet = true;
-			}
+			} */
 		}
 
 		public void mouseExited(MouseEvent evt)
 		{
-			if(msgSet)
+			/* if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			}
+			} */
 		}
 	} //}}}
 }
