@@ -6,7 +6,7 @@ and quirks that I need to fix eventually.
 - scroll jump on click is a real problem
 - store anchors in sorted order for factor of two improvement
 - expand: scroll to end of fold if possible
-- docking panels: rubber band resize
+- docking panels: better rubber band resize
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
