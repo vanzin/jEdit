@@ -94,7 +94,6 @@ public class ActionBar extends JPanel
 	public void goToActionBar()
 	{
 		repeatCount = view.getInputHandler().getRepeatCount();
-		System.err.println("go to action bar " + repeatCount);
 		action.setText(null);
 		action.grabFocus();
 	} //}}}

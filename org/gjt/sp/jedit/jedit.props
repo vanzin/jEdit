@@ -268,7 +268,7 @@ view.gutter.markerHighlight=true
 view.gutter.gutterClick=toggleFold
 view.gutter.gutterShiftClick=toggleFoldFully
 view.gutter.gutterControlClick=selectFold
-view.gutter.gutterAltClick=toggleFold
+view.gutter.gutterAltClick=narrowToFold
 #}}}
 
 # Expand abbrevs when space bar pressed

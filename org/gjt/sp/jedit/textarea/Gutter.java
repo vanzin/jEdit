@@ -765,7 +765,7 @@ public class Gutter extends JComponent implements SwingConstants
 				FoldVisibilityManager foldVisibilityManager
 					= textArea.getFoldVisibilityManager();
 
-				//{{{ Clicking on fold triangle does various things
+				//{{{ Clicking on folds does various things
 				if(buffer.isFoldStart(line))
 				{
 					StringBuffer property = new StringBuffer(
@@ -794,6 +794,11 @@ public class Gutter extends JComponent implements SwingConstants
 						foldVisibilityManager
 							.expandFold(line,true);
 						textArea.selectFold(line);
+					}
+					else if(action.equals("narrowToFold"))
+					{
+						int[] lines = buffer.getFoldAtLine(line);
+						foldVisibilityManager.narrow(lines[0],lines[1]);
 					}
 					else if(foldVisibilityManager
 						.isLineVisible(line + 1))
@@ -841,6 +846,7 @@ public class Gutter extends JComponent implements SwingConstants
 									textArea.selectToMatchingBracket();
 								else
 									textArea.goToMatchingBracket();
+								return;
 							}
 						}
 					}
