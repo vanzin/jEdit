@@ -715,10 +715,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			if(fileset instanceof DirectoryListSet)
 			{
 				DirectoryListSet dset = (DirectoryListSet)fileset;
-				if(!dset.getDirectory().equals(directory)
-					|| !dset.getFileFilter().equals(filter)
-					|| !dset.isRecursive() == recurse)
-					fileset = new DirectoryListSet(directory,filter,recurse);
+				dset.setDirectory(directory);
+				dset.setFileFilter(filter);
+				dset.setRecursive(recurse);
+				EditBus.send(new SearchSettingsChanged(null));
 			}
 			else
 				fileset = new DirectoryListSet(directory,filter,recurse);
