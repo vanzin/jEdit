@@ -5219,11 +5219,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			public void run()
 			{
-				queuedScrollTo = queuedScrollToElectric = false;
 				scrollToCaret(queuedScrollToElectric);
 				updateBracketHighlight();
 				if(fireCaretEvent)
 					fireCaretEvent();
+				queuedScrollTo = queuedScrollToElectric = false;
 			}
 		};
 

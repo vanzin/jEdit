@@ -533,10 +533,13 @@ utils=vfs.browser \
       - \
       memory-status \
       - \
-      buffer-options \
-      global-options \
+      log-viewer \
+      update-log \
       - \
-      %troubleshooting
+      keyboard-tester \
+      - \
+      buffer-options \
+      global-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
@@ -545,20 +548,11 @@ eval-for-selected-lines.label=Evaluate For Selected $Lines...
 eval-selection.label=E$valuate Selection
 reload-modes.label=$Reload Edit Modes
 memory-status.label=$Memory Status...
-buffer-options.label=$Buffer Options...
-global-options.label=$Global Options...
-
-#{{{ Troubleshooting menu
-troubleshooting=log-viewer \
-		update-log \
-		- \
-		keyboard-tester
-troubleshooting.label=Troubleshooting
 log-viewer.label=Activity Log
 update-log.label=Update Activity Log on Disk
-keyboard-tester.label=Keyboard Tester
-#}}}
-
+keyboard-tester.label=Keyboard Tester...
+buffer-options.label=$Buffer Options...
+global-options.label=$Global Options...
 #}}}
 
 #{{{ Macros menu

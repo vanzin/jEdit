@@ -1,5 +1,18 @@
 TO DO
 
+- eval for selected lines: use getSelectedLines()?
+- test save as and reload stuff
+
+- documentation:
+
+- mention view, editPane, textArea, buffer vars in the 'eval' command
+  docs
+- changing heap memory docs
+- API guide: compareStrings(), showPopupMenu()
+- MiscUtilities path name methods need to be documented
+- plugin guide: mention fully qualified class names
+- appendix in plugin guide on contributing plugins
+
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - rect select and soft wrap
@@ -8,10 +21,6 @@ TO DO
 - source for existing plugins
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
-- 'troubleshooting' menu: docs in user's guide
-- document 'evaluate for selected lines'
-- rule set property docs in part II
-- changing heap memory docs
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
@@ -53,9 +62,6 @@ TO DO
 - XModeHandler: better error reporting
 - add index terms throughout user's guide!
 - plugin manager needs overhauled error reporting
-- API guide: compareStrings(), showPopupMenu()
-- MiscUtilities path name methods need to be documented
-- plugin guide: mention fully qualified class names
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 - loading and saving opt pane: 'choose' button for backup directory
@@ -80,7 +86,6 @@ TO DO
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - better auto indent
-- appendix in plugin guide on contributing plugins
 - HTML mode:
   - inside tags, delegate on*="..." to JavaScript mode,
     style="..." to CSS mode

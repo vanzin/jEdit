@@ -1429,7 +1429,7 @@ public class jEdit
 					props.put(Buffer.ENCODING,entry.encoding);
 			}
 
-			Buffer newBuffer = new Buffer(view,path,newFile,false,props);
+			Buffer newBuffer = new Buffer(path,newFile,false,props);
 
 			if(!newBuffer.load(view,false))
 				return null;
@@ -1479,7 +1479,7 @@ public class jEdit
 			if(buffer != null)
 				return buffer;
 
-			buffer = new Buffer(null,path,newFile,true,new Hashtable());
+			buffer = new Buffer(path,newFile,true,new Hashtable());
 			if(!buffer.load(view,false))
 				return null;
 			else

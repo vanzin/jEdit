@@ -113,21 +113,15 @@
    properties have no buffer-local equivalent:
   </para>
   <itemizedlist>
-   <listitem><para><literal>indentCloseBrackets</literal> -
-   A list of characters (usually brackets) that subtract indent from
-   the <emphasis>current</emphasis> line. For example, in Java mode this
-   property is set to <quote>}</quote>.</para></listitem>
-   <listitem><para><literal>indentOpenBrackets</literal> -
-   A list of characters (usually brackets) that add indent to
-   the <emphasis>next</emphasis> line. For example, in Java mode this
-   property is set to <quote>{</quote>.</para></listitem>
-   <listitem><para><literal>indentPrevLine</literal> -
-   When indenting a line, jEdit checks if the previous line matches
-   the regular expression stored in this property. If it does, a level
-   of indent is added. For example, in Java mode this regular expression
-   matches language constructs such as
-   <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
-   </listitem>
+   <listitem><para><literal>commentEnd</literal> - the comment end
+   string, used by the <guimenuitem>Range Comment</guimenuitem> command.
+   </para></listitem>
+   <listitem><para><literal>commentStart</literal> - the comment start
+   string, used by the <guimenuitem>Range Comment</guimenuitem> command.
+   </para></listitem>
+   <listitem><para><literal>lineComment</literal> - the line comment
+   string, used by the <guimenuitem>Line Comment</guimenuitem> command.
+   </para></listitem>
    <listitem><para><literal>doubleBracketIndent</literal> -
    If a line matches the <literal>indentPrevLine</literal> regular
    expression and the next line contains an opening bracket,
@@ -147,6 +141,21 @@
         {
                 ((Drawable)objects.nextElement()).draw();
         }</programlisting></listitem>
+   <listitem><para><literal>indentCloseBrackets</literal> -
+   A list of characters (usually brackets) that subtract indent from
+   the <emphasis>current</emphasis> line. For example, in Java mode this
+   property is set to <quote>}</quote>.</para></listitem>
+   <listitem><para><literal>indentOpenBrackets</literal> -
+   A list of characters (usually brackets) that add indent to
+   the <emphasis>next</emphasis> line. For example, in Java mode this
+   property is set to <quote>{</quote>.</para></listitem>
+   <listitem><para><literal>indentPrevLine</literal> -
+   When indenting a line, jEdit checks if the previous line matches
+   the regular expression stored in this property. If it does, a level
+   of indent is added. For example, in Java mode this regular expression
+   matches language constructs such as
+   <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
+   </listitem>
   </itemizedlist>
   <para>
    Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java mode:
@@ -206,7 +215,7 @@
   <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
     <replaceable>... parser rules go here ...</replaceable>
 &lt;/RULES&gt;</programlisting>
-  <sidebar><title>Rule Ordering Requirements</title>
+  <sect2><title>Rule Ordering Requirements</title>
    <para>
     You might encounter this very common pitfall when writing your own modes.
    </para>
@@ -253,7 +262,30 @@
     to match. However, if you write <quote>[FOO]</quote>, it will be highlighted
     using the second rule, which is exactly what you would expect.
    </para>
-  </sidebar>
+  </sect2>
+  <sect2><title>Per-Ruleset Properties</title>
+   <para>
+    The <literal>PROPS</literal> tag (described in <xref linkend="mode-tag-props"/>)
+    can also be placed inside the <literal>RULES</literal> tag to define
+    ruleset-specific properties. Only the following properties can
+    be set on a per-ruleset basis:
+   </para>
+   <itemizedlist>
+    <listitem><para><literal>commentEnd</literal> - the comment end
+    string.
+    </para></listitem>
+    <listitem><para><literal>commentStart</literal> - the comment start
+    string.
+    </para></listitem>
+    <listitem><para><literal>lineComment</literal> - the line comment
+    string.
+    </para></listitem>
+   </itemizedlist>
+   <para>
+    These properties are used by the commenting commands to implement
+    context-sensitive comments; see <xref linkend="commenting"/>.
+   </para>
+  </sect2>
   <sect2 id="mode-rule-terminate"><title>The TERMINATE Rule</title>
    <para>
     The <literal>TERMINATE</literal> rule specifies that parsing should stop
