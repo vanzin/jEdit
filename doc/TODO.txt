@@ -1,14 +1,11 @@
 TO DO
 
 - status bar: show status msg when a setting is changed
-- check permissions of the server file on Unix
 - reload: doesn't respect collapseFolds
 - first run on windows -- why is help viewer hidden
 - idea for fixing buffer property issues: BufferProp class
 
-- printer output spacing problem - turn this into a configuration option?
 - make print preview look better
-- paginate in background thread
 
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:
 [error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton

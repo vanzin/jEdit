@@ -41,7 +41,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.msg.MultiSelectStatusChanged;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -3335,6 +3334,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public final void toggleOverwriteEnabled()
 	{
 		setOverwriteEnabled(!overwrite);
+		if(view.getStatus() != null)
+		{
+			view.getStatus().setMessageAndClear(
+				jEdit.getProperty("view.status.overwrite-changed",
+				new Integer[] { new Integer(overwrite ? 1 : 0) }));
+		}
 	} //}}}
 
 	//{{{ backspace() method
@@ -3629,9 +3634,13 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public final void toggleMultipleSelectionEnabled()
 	{
-		multi = !multi;
+		setMultipleSelectionEnabled(!multi);
 		if(view.getStatus() != null)
-			view.getStatus().updateMiscStatus();
+		{
+			view.getStatus().setMessageAndClear(
+				jEdit.getProperty("view.status.multi-changed",
+				new Integer[] { new Integer(multi ? 1 : 0) }));
+		}
 	} //}}}
 
 	//{{{ setMultipleSelectionEnabled() method
@@ -3642,10 +3651,10 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public final void setMultipleSelectionEnabled(boolean multi)
 	{
-		JEditTextArea.multi = multi;
-		EditBus.send(new MultiSelectStatusChanged(null));
-	}
-	//}}}
+		this.multi = multi;
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
+	} //}}}
 
 	//}}}
 
@@ -5175,7 +5184,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private int magicCaret;
 
-	private static boolean multi;
+	private boolean multi;
 	private boolean overwrite;
 
 	private int maxLineLen;

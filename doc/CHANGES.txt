@@ -80,3 +80,4 @@ JEDIT 4.1 VERSION HISTORY
 - Removed old text area highlighter API
 - Removed BufferUpdate.ENCODING_CHANGED, FOLD_HANDLER_CHANGED messages;
   replaced with generic BufferUpdate.PROPERTIES_CHANGED
+- MultiSelectStatusChanged message removed
