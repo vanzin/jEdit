@@ -8,7 +8,6 @@ JEDIT 4.0 README
 - Common problems
 - Problems that occur with older Java versions
 - Libraries
-- Credits
 
 * About jEdit
 
@@ -22,6 +21,10 @@ jEdit's 'Help' menu.
 
 A PDF (Adobe Acrobat) version of the user's guide be downloaded from
 <http://www.jedit.org>.
+
+A list of credits, which includes those who contributed to the core or
+had developed plugins, can be found in the 'About jEdit' dialog box,
+also from jEdit's 'Help' menu.
 
 * License
 
@@ -134,11 +137,6 @@ actually a Java bug, or a well-known problem:
   native application. For best performance, use a recent Java version,
   such as Java 2 version 1.3.
 
-- On MacOS X, the Java runtime grabs the Apple+Q key combo and
-  immediately quits the VM, without giving the running application a
-  chance to handle the keystroke. Do not use the Apple+Q keyboard
-  shortcut to exit jEdit, or you will lose unsaved changes.
-
 * Problems that occur with older Java versions
 
 - If you are having problems such as Alt-key mnemonics not working, or
@@ -179,7 +177,7 @@ jEdit depends on, and comes bundled with the following libraries:
   The AElfred home page is located at <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2beta2 with the bsh.util package removed.
+  version 1.2b3 with the bsh.util and bsh.classpath packages removed.
 
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
@@ -188,8 +186,3 @@ jEdit depends on, and comes bundled with the following libraries:
 
 - The Sun Java look and Feel icon collection. The license may be found
   in the ICONS.LICENSE.txt file.
-
-* Credits
-
-The list of credits can now be found in the 'About jEdit' dialog box,
-which can be found in jEdit's Help menu.

@@ -1,5 +1,8 @@
 /*
  * GUIUtilities.java - Various GUI utility functions
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import gnu.regexp.REException;
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +38,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * Class with several useful GUI functions.<p>
@@ -55,15 +60,79 @@ import org.gjt.sp.util.Log;
  */
 public class GUIUtilities
 {
-	// some icons
-
+	//{{{ Some predefined icons
 	public static final Icon NEW_BUFFER_ICON = loadIcon("new.gif");
 	public static final Icon DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
 	public static final Icon READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
 	public static final Icon NORMAL_BUFFER_ICON = loadIcon("normal.gif");
 	public static final Icon EDITOR_WINDOW_ICON = loadIcon("jedit_icon1.gif");
 	public static final Icon PLUGIN_WINDOW_ICON = loadIcon("jedit_icon2.gif");
+	//}}}
 
+	//{{{ Icon methods
+
+	//{{{ loadIcon() method
+	/**
+	 * Loads an icon.
+	 * @param iconName The icon name
+	 * @since jEdit 2.6pre7
+	 */
+	public static Icon loadIcon(String iconName)
+	{
+		if(icons == null)
+			icons = new Hashtable();
+
+		// check if there is a cached version first
+		Icon icon = (Icon)icons.get(iconName);
+		if(icon != null)
+			return icon;
+
+		// get the icon
+		if(iconName.startsWith("file:"))
+		{
+			icon = new ImageIcon(iconName.substring(5));
+		}
+		else
+		{
+			URL url = GUIUtilities.class.getResource(
+				"/org/gjt/sp/jedit/icons/" + iconName);
+			if(url == null)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,
+					"Icon not found: " + iconName);
+				return null;
+			}
+
+			icon = new ImageIcon(url);
+		}
+
+		icons.put(iconName,icon);
+		return icon;
+	} //}}}
+
+	//{{{ getEditorIcon() method
+	/**
+	 * Returns the default editor window image.
+	 */
+	public static Image getEditorIcon()
+	{
+		return ((ImageIcon)EDITOR_WINDOW_ICON).getImage();
+	} //}}}
+
+	//{{{ getPluginIcon() method
+	/**
+	 * Returns the default plugin window image.
+	 */
+	public static Image getPluginIcon()
+	{
+		return ((ImageIcon)PLUGIN_WINDOW_ICON).getImage();
+	} //}}}
+
+	//}}}
+
+	//{{{ Menus, tool bars
+
+	//{{{ loadMenuBar() method
 	/**
 	 * Creates a menubar. Plugins should not need to call this method.
 	 * @param name The menu bar name
@@ -80,8 +149,18 @@ public class GUIUtilities
 			mbar.add(loadMenu(st.nextToken()));
 
 		return mbar;
-	}
+	} //}}}
 
+	//{{{ loadMenu() method
+	/**
+	 * @deprecated Use loadMenu(name) instead
+	 */
+	public static JMenu loadMenu(View view, String name)
+	{
+		return loadMenu(name);
+	} //}}}
+
+	//{{{ loadMenu() method
 	/**
 	 * Creates a menu. This form of loadMenu() does not need to be used
 	 * by plugins; use the other form instead.
@@ -105,8 +184,9 @@ public class GUIUtilities
 			return new PluginsMenu();
 		else
 			return new EnhancedMenu(name);
-	}
+	} //}}}
 
+	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
 	 * @param name The menu name
@@ -136,8 +216,9 @@ public class GUIUtilities
 		}
 
 		return menu;
-	}
+	} //}}}
 
+	//{{{ loadMenuItem() method
 	/**
 	 * Creates a menu item.
 	 * @param name The menu item name
@@ -146,8 +227,9 @@ public class GUIUtilities
 	public static JMenuItem loadMenuItem(String name)
 	{
 		return loadMenuItem(name,true);
-	}
+	} //}}}
 
+	//{{{ loadMenuItem() method
 	/**
 	 * Creates a menu item.
 	 * @param name The menu item name
@@ -183,8 +265,9 @@ public class GUIUtilities
 			mi.setMnemonic(mnemonic);
 
 		return mi;
-	}
+	} //}}}
 
+	//{{{ loadToolBar() method
 	/**
 	 * Creates a toolbar.
 	 * @param name The toolbar name
@@ -214,8 +297,9 @@ public class GUIUtilities
 		}
 
 		return toolBar;
-	}
+	} //}}}
 
+	//{{{ loadToolButton() method
 	/**
 	 * Loads a tool bar button. The tooltip is constructed from
 	 * the <code><i>name</i>.label</code> and
@@ -240,7 +324,7 @@ public class GUIUtilities
 				return null;
 		}
 
-		String toolTip = label;
+		String toolTip = prettifyMenuLabel(label);
 		String shortcut1 = jEdit.getProperty(name + ".shortcut");
 		String shortcut2 = jEdit.getProperty(name + ".shortcut2");
 		if(shortcut1 != null || shortcut2 != null)
@@ -255,46 +339,9 @@ public class GUIUtilities
 		}
 
 		return new EnhancedButton(icon,toolTip,action);
-	}
+	} //}}}
 
-	/**
-	 * Loads a tool bar icon.
-	 * @param iconName The icon name
-	 * @since jEdit 2.6pre7
-	 */
-	public static Icon loadIcon(String iconName)
-	{
-		if(icons == null)
-			icons = new Hashtable();
-
-		// check if there is a cached version first
-		Icon icon = (Icon)icons.get(iconName);
-		if(icon != null)
-			return icon;
-
-		// get the icon
-		if(iconName.startsWith("file:"))
-		{
-			icon = new ImageIcon(iconName.substring(5));
-		}
-		else
-		{
-			URL url = GUIUtilities.class.getResource(
-				"/org/gjt/sp/jedit/icons/" + iconName);
-			if(url == null)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,
-					"Icon not found: " + iconName);
-				return null;
-			}
-
-			icon = new ImageIcon(url);
-		}
-
-		icons.put(iconName,icon);
-		return icon;
-	}
-
+	//{{{ prettifyMenuLabel() method
 	/**
 	 * `Prettifies' a menu item label by removing the `$' sign. This
 	 * can be used to process the contents of an <i>action</i>.label
@@ -309,8 +356,13 @@ public class GUIUtilities
 				.concat(label.substring(index + 1));
 		}
 		return label;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Canned dialog boxes
+
+	//{{{ message() method
 	/**
 	 * Displays a dialog box.
 	 * The title of the dialog is fetched from
@@ -331,8 +383,9 @@ public class GUIUtilities
 			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title"),args),
 			JOptionPane.INFORMATION_MESSAGE);
-	}
+	} //}}}
 
+	//{{{ error() method
 	/**
 	 * Displays an error dialog box.
 	 * The title of the dialog is fetched from
@@ -353,8 +406,9 @@ public class GUIUtilities
 			jEdit.getProperty(name.concat(".message"),args),
 			jEdit.getProperty(name.concat(".title"),args),
 			JOptionPane.ERROR_MESSAGE);
-	}
+	} //}}}
 
+	//{{{ input() method
 	/**
 	 * Displays an input dialog box and returns any text the user entered.
 	 * The title of the dialog is fetched from
@@ -367,8 +421,9 @@ public class GUIUtilities
 	public static String input(Component comp, String name, Object def)
 	{
 		return input(comp,name,null,def);
-	}
+	} //}}}
 
+	//{{{ inputProperty() method
 	/**
 	 * Displays an input dialog box and returns any text the user entered.
 	 * The title of the dialog is fetched from
@@ -382,8 +437,9 @@ public class GUIUtilities
 		String def)
 	{
 		return inputProperty(comp,name,null,def);
-	}
+	} //}}}
 
+	//{{{ input() method
 	/**
 	 * Displays an input dialog box and returns any text the user entered.
 	 * The title of the dialog is fetched from
@@ -406,8 +462,9 @@ public class GUIUtilities
 			jEdit.getProperty(name.concat(".title")),
 			JOptionPane.QUESTION_MESSAGE,null,null,def);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ inputProperty() method
 	/**
 	 * Displays an input dialog box and returns any text the user entered.
 	 * The title of the dialog is fetched from
@@ -433,8 +490,9 @@ public class GUIUtilities
 		if(retVal != null)
 			jEdit.setProperty(def,retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ confirm() method
 	/**
 	 * Displays a confirm dialog box and returns the button pushed by the
 	 * user. The title of the dialog is fetched from the
@@ -458,8 +516,9 @@ public class GUIUtilities
 		return JOptionPane.showConfirmDialog(comp,
 			jEdit.getProperty(name + ".message",args),
 			jEdit.getProperty(name + ".title"),buttons,type);
-	}
+	} //}}}
 
+	//{{{ showVFSFileDialog() method
 	/**
 	 * Displays a VFS file selection dialog box.
 	 * @param view The view
@@ -479,8 +538,13 @@ public class GUIUtilities
 			return null;
 
 		return selectedFiles;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Colors and styles
+
+	//{{{ parseColor() method
 	/**
 	 * Converts a color name to a color object. The name must either be
 	 * a known string, such as `red', `green', etc (complete list is in
@@ -491,8 +555,9 @@ public class GUIUtilities
 	public static Color parseColor(String name)
 	{
 		return parseColor(name, Color.black);
-	}
+	} //}}}
 
+	//{{{ parseColor() method
 	public static Color parseColor(String name, Color defaultColor)
 	{
 		if(name == null)
@@ -536,8 +601,9 @@ public class GUIUtilities
 			return Color.pink;
 		else
 			return defaultColor;
-	}
+	} //}}}
 
+	//{{{ getColorHexString() method
 	/**
 	 * Converts a color object to its hex value. The hex value
 	 * prefixed is with `#', for example `#ff0088'.
@@ -547,8 +613,9 @@ public class GUIUtilities
 	{
 		String colString = Integer.toHexString(c.getRGB() & 0xffffff);
 		return "#000000".substring(0,7 - colString.length()).concat(colString);
-	}
+	} //}}}
 
+	//{{{ parseStyle() method
 	/**
 	 * Converts a style string to a style object.
 	 * @param str The style string
@@ -597,8 +664,9 @@ public class GUIUtilities
 			new Font(family,
 			(italic ? Font.ITALIC : 0) | (bold ? Font.BOLD : 0),
 			size));
-	}
+	} //}}}
 
+	//{{{ getStyleString() method
 	/**
 	 * Converts a style into it's string representation.
 	 * @param style The style
@@ -619,8 +687,9 @@ public class GUIUtilities
 		}
 
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ loadStyles() method
 	/**
 	 * Loads the syntax styles from the properties, giving them the specified
 	 * base font family and size.
@@ -680,8 +749,13 @@ public class GUIUtilities
 		}
 
 		return styles;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Loading, saving window geometry
+
+	//{{{ loadGeometry() method
 	/**
 	 * Loads a windows's geometry from the properties.
 	 * The geometry is loaded from the <code><i>name</i>.x</code>,
@@ -746,8 +820,9 @@ public class GUIUtilities
 		}
 		else
 			win.setBounds(desired);
-	}
+	} //}}}
 
+	//{{{ UnixWorkaround class
 	static class UnixWorkaround
 	{
 		Window win;
@@ -757,6 +832,7 @@ public class GUIUtilities
 		long start;
 		boolean windowOpened;
 
+		//{{{ UnixWorkaround constructor
 		UnixWorkaround(Window win, String name, Rectangle desired,
 			Rectangle required)
 		{
@@ -769,10 +845,12 @@ public class GUIUtilities
 
 			win.addComponentListener(new ComponentHandler());
 			win.addWindowListener(new WindowHandler());
-		}
+		} //}}}
 
+		//{{{ ComponentHandler class
 		class ComponentHandler extends ComponentAdapter
 		{
+			//{{{ componentMoved() method
 			public void componentMoved(ComponentEvent evt)
 			{
 				if(System.currentTimeMillis() - start < 1000)
@@ -790,8 +868,9 @@ public class GUIUtilities
 				}
 				else
 					win.removeComponentListener(this);
-			}
+			} //}}}
 
+			//{{{ componentResized() method
 			public void componentResized(ComponentEvent evt)
 			{
 				if(System.currentTimeMillis() - start < 1000)
@@ -809,11 +888,13 @@ public class GUIUtilities
 				}
 				else
 					win.removeComponentListener(this);
-			}
-		}
+			} //}}}
+		} //}}}
 
+		//{{{ WindowHandler class
 		class WindowHandler extends WindowAdapter
 		{
+			//{{{ windowOpened() method
 			public void windowOpened(WindowEvent evt)
 			{
 				windowOpened = true;
@@ -837,10 +918,11 @@ public class GUIUtilities
 				}
 
 				win.removeWindowListener(this);
-			}
-		}
-	}
+			} //}}}
+		} //}}}
+	} //}}}
 
+	//{{{ saveGeometry() method
 	/**
 	 * Saves a window's geometry to the properties.
 	 * The geometry is saved to the <code><i>name</i>.x</code>,
@@ -856,8 +938,11 @@ public class GUIUtilities
 		jEdit.setIntegerProperty(name + ".y",bounds.y);
 		jEdit.setIntegerProperty(name + ".width",bounds.width);
 		jEdit.setIntegerProperty(name + ".height",bounds.height);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ hideSplashScreen() method
 	/**
 	 * Ensures that the splash screen is not visible. This should be
 	 * called before displaying any dialog boxes or windows at
@@ -870,24 +955,9 @@ public class GUIUtilities
 			splash.dispose();
 			splash = null;
 		}
-	}
+	} //}}}
 
-	/**
-	 * Returns the default editor window image.
-	 */
-	public static Image getEditorIcon()
-	{
-		return ((ImageIcon)EDITOR_WINDOW_ICON).getImage();
-	}
-
-	/**
-	 * Returns the default plugin window image.
-	 */
-	public static Image getPluginIcon()
-	{
-		return ((ImageIcon)PLUGIN_WINDOW_ICON).getImage();
-	}
-
+	//{{{ requestFocus() method
 	/**
 	 * Focuses on the specified component as soon as the window becomes
 	 * active.
@@ -904,8 +974,9 @@ public class GUIUtilities
 				win.removeWindowListener(this);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ isPopupTrigger() method
 	/**
 	 * Returns if the specified event is the popup trigger event.
 	 * This implements precisely defined behavior, as opposed to
@@ -919,8 +990,9 @@ public class GUIUtilities
 			return evt.isControlDown();
 		else
 			return ((evt.getModifiers() & InputEvent.BUTTON3_MASK) != 0);
-	}
+	} //}}}
 
+	//{{{ showPopupMenu() method
 	/**
 	 * Shows the specified popup menu, ensuring it is displayed within
 	 * the bounds of the screen.
@@ -971,31 +1043,26 @@ public class GUIUtilities
 		}
 
 		popup.show(comp,x,y);
-	}
+	} //}}}
 
-	// deprecated APIs
+	//{{{ Package-private members
 
-	/**
-	 * @deprecated Use loadMenu(name) instead
-	 */
-	public static JMenu loadMenu(View view, String name)
-	{
-		return loadMenu(name);
-	}
-
-	// package-private members
+	//{{{ showSplashScreen() method
 	static void showSplashScreen()
 	{
 		splash = new SplashScreen();
-	}
+	} //}}}
 
+	//{{{ advanceSplashProgress() method
 	static void advanceSplashProgress()
 	{
 		if(splash != null)
 			splash.advance();
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private static SplashScreen splash;
 	private static boolean macOS;
 	private static Hashtable icons;
@@ -1005,5 +1072,5 @@ public class GUIUtilities
 	static
 	{
 		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
-	}
+	} //}}}
 }

@@ -326,7 +326,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		new HelpViewer("jeditresource:/doc/users-guide/index.html");
+		new HelpViewer("jeditresource:/doc/welcome.html");
 	</CODE>
 </ACTION>
 

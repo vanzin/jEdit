@@ -1,19 +1,65 @@
 TO DO
 
-- eliminate second pass when loading files
+- double click on dockable panel to hide
+- saving: show with indent fold, with explicit fold changes not take
+  effect?
+- user's guide and help viewer problems:
+  - toc.xml: for sect2, etc anchor not included in href
+  - xref labels are fucked
+  - <quote>: inserts '...'
+- help viewer: two tabs, contents and index. index browser
+- new goodies need to be documented
+  - add index terms throughout user's guide!
+  - changing heap memory docs
+  - new folding
+  - global options changes: appearance pane, changing mental font,
+    shortcuts option pane, abbrevs option pane, styles option pane
+  - fs browser: colors
+  - fs browser: extra shortcuts
+  - tip about compareStrings()
+  - trailing EOL
+  - 'evaluate for selected lines'
+  - Macros.confirm(); other method sig changes
+  - bracket matching: scope indicator
+  - indent shifting: Tab/S+Tab
+  - better window docking
+  - search and replace:
+    - HyperSearch in selection
+    - hypersearch results: match selected
+    - Search in Selection
+    - find selection axed
+    - all/dir: pre-selecting hypersearch
+    - smart case insens replace
+  - API guide: compareStrings(), showPopupMenu()
+  - settings backups
 - might still need brutal undo code to avoid lumping everything together
 - still fold at end expand bug
-- help: expand user's guide -> using jEdit by default
-- too many lines being made invisible
-- new goodies need to be documented
-- conventions section in user's guide: mention Enter activating default
-  button, Escape activating 'Cancel' or equivalent
-- mention Alt-key mnemonics
 - QuickNotepad XSL docs
-- help viewer: more informative welcome screen with quick links to some
-  parts of the user's guide. always shown initially when help viewer
-  opened.
 
+- file system browser:
+  - File->Recent Directories menu
+  - Browser: one text field for dirs and files
+  - Parent dir list in split pane
+  - split 'more' menu into 'commands', 'plugins', 'favorites'
+  - commands->copy path, copy file list
+  - much better autocomplete
+  - aliases
+  - pre-load open and search dialogs in background thread, and cache
+    them
+  - only on demand color calculation
+  - better permissions API
+  - text field: select all on focus
+  - show wait cursor while directory is loading
+  - Two-pane 'file system commander' window, with copy/move buttons
+  - recursive directory delete
+  - right-click menu: show all toolbar options
+  - easier way for plugins to add right-click menu commands
+  - FTP plugin: after connect, need to give browser a new directory.
+    _listDirectory(): returns VFS.Directory class, which contains a
+    VFS.DirectoryEntry array, and a path name.
+    backwards compatibility -- maybe instead,
+    _listDirectory(...,String[] newPath)
+    -- but that is a bit hackish. _listDirectoryEx() is a bit hackish too.
 - CCW rotated text not drawn correctly
 - write explicit folding tips
 - investigate nextLineRequested() -- replace with a buffer event.
@@ -46,10 +92,6 @@ TO DO
 - narrowing
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
-- update macros for API changes
-- macro guide entry for Andre's Vertical Paste macro
-- include Kris's MacOS plugin
-- Alt-key sequences on OS X
 
 - incremental search; find all occurrences that are visible
 - if caps lock is pressed during startup, show dialog box for changing
@@ -102,31 +144,7 @@ TO DO
 - rollover toolbar buttons option
 - select-* actions: add to selection in multi-select mode
 - when loading plugins and such, check for settingsDir == jEditHome
-- file system browser:
-  - path field:
-    - select all when gets focus
-    - completion
-  - show wait cursor while directory is loading
-  - new UI layout:
-    [Up][V][Commands V][Favorites V]
-    [Reload][Drives][Home][Curr Buf]
-    Path:       [__________________]
-    [ ] Filter: [__________________]
-  - Two-pane 'file system commander' window, with copy/move buttons
-  - recursive directory delete
-  - right-click menu: show all toolbar options
-  - easier way for plugins to add right-click menu commands
-  - some means of redirecting double-clicks on a file to a VFS
-  - new VFS methods:
-    int getUnixPermissions()
-    void setUnixPermissions()
-  - UNIX_PERMISSIONS_CAP capability
-  - FTP plugin: after connect, need to give browser a new directory.
-    _listDirectory(): returns VFS.Directory class, which contains a
-    VFS.DirectoryEntry array, and a path name.
-    backwards compatibility -- maybe instead,
-    _listDirectory(...,String[] newPath)
-    -- but that is a bit hackish. _listDirectoryEx() is a bit hackish too.
+- some means of redirecting double-clicks on a file to a VFS
 - improve next/prev-word commands
 - delete line: leave cursor in same column
 - option on JDK 1.4 to have the LnF decorate windows and dialogs

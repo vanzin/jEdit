@@ -21,6 +21,9 @@ JEDIT 4.0 VERSION HISTORY
 - Updated Transact-SQL mode (Ollie Rutherfurd)
 - Updated Omnimark mode (Lionel Fiol)
 - Option for search and replace to beep on auto wrap (Kenrick Drew)
+- Faster (in theory anyway) file loading as a side effect of some bug
+  fixes
+- Improved help viewer welcome screen
 
 + Bug Fixes
 
@@ -34,6 +37,7 @@ JEDIT 4.0 VERSION HISTORY
 - MiscUtilities.compareStrings() would throw exceptions with strings
   that contained embedded numbers larger than 2^31
 - Creating a new view or splitting the view didn't work
+- Tool bar tooltips were broken
 
 * Version 4.0pre1
 

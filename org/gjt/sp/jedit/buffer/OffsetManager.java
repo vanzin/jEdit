@@ -280,10 +280,17 @@ public class OffsetManager
 
 			for(int i = 0; i < numLines; i++)
 			{
+				// need the line end offset to be in place
+				// for following fold level calculations
+				lineInfo[startLine + i] =
+					((offset + endOffsets.get(i) + 1)
+					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
+
 				long _visible;
 				if(collapseFolds == 0)
 					_visible = visible;
-				else if(buffer.getFoldLevel(i) >= threshold)
+				else if(buffer.getFoldLevel(startLine + i)
+					>= threshold)
 					_visible = 0L;
 				else
 					_visible = visible;
@@ -314,10 +321,7 @@ public class OffsetManager
 						newVirtualLineCounts[7]++;
 				}
 
-				lineInfo[startLine + i] =
-					(((offset + endOffsets.get(i) + 1)
-					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK))
-					| _visible);
+				lineInfo[startLine + i] |= _visible;
 			}
 
 			virtualLineCounts = newVirtualLineCounts;
