@@ -37,6 +37,15 @@ import org.gjt.sp.util.Log;
 /**
  * A virtual filesystem implementation.<p>
  *
+ * Plugins can provide virtual file systems by defining entries in their
+ * <code>services.xml</code> files like so:
+ *
+ * <pre>&lt;SERVICE CLASS="org.gjt.sp.jedit.io.VFS" NAME="<i>name</i>"&gt;
+ *    new <i>MyVFS<i>();
+ *&lt;/SERVICE&gt;</pre>
+ *
+ * See {@link org.gjt.sp.jedit.ServiceManager} for details.<p>
+ *
  * <b>Session objects:</b><p>
  *
  * A session is used to persist things like login information, any network
@@ -69,8 +78,6 @@ import org.gjt.sp.util.Log;
  *
  * All remaining methods are (required to be) thread-safe.
  *
- * @see VFSManager#registerVFS(String,VFS)
- * @see VFSManager#getVFSByName(String)
  * @see VFSManager#getVFSForPath(String)
  * @see VFSManager#getVFSForProtocol(String)
  *

@@ -39,12 +39,19 @@ import org.gjt.sp.util.WorkThreadPool;
 /**
  * jEdit's virtual filesystem allows it to transparently edit files
  * stored elsewhere than the local filesystem, for example on an FTP
- * site.
+ * site. See the {@link VFS} class for implementation details.
+ *
  * @author Slava Pestov
  * @version $Id$
  */
 public class VFSManager
 {
+	/**
+	 * The service type. See {@link org.gjt.sp.jedit.ServiceManager}.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String SERVICE = "org.gjt.sp.jedit.io.VFS";
+
 	//{{{ init() method
 	/**
 	 * Do not call.
@@ -53,9 +60,6 @@ public class VFSManager
 	{
 		int count = jEdit.getIntegerProperty("ioThreadCount",4);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
-		registerVFS(FavoritesVFS.PROTOCOL,new FavoritesVFS());
-		if(OperatingSystem.isDOSDerived() || OperatingSystem.isMacOS())
-			registerVFS(FileRootsVFS.PROTOCOL,new FileRootsVFS());
 	} //}}}
 
 	//{{{ start() method
@@ -91,13 +95,16 @@ public class VFSManager
 
 	//{{{ getVFSByName() method
 	/**
-	 * Returns the VFS for the specified name.
-	 * @param name The VFS name
-	 * @since jEdit 2.6pre4
+	 * @deprecated Use <code>getVFSForProtocol()</code> instead.
 	 */
 	public static VFS getVFSByName(String name)
 	{
-		return (VFS)vfsHash.get(name);
+		// in new api, protocol always equals name
+		VFS vfs = (VFS)ServiceManager.getService(SERVICE,name);
+		if(vfs == null)
+			return (VFS)vfsHash.get(name);
+		else
+			return vfs;
 	} //}}}
 
 	//{{{ getVFSForProtocol() method
@@ -112,7 +119,10 @@ public class VFSManager
 			return fileVFS;
 		else
 		{
-			VFS vfs = (VFS)protocolHash.get(protocol);
+			VFS vfs = (VFS)ServiceManager.getService(SERVICE,protocol);
+			if(vfs == null)
+				vfs = (VFS)protocolHash.get(protocol);
+
 			if(vfs != null)
 				return vfs;
 			else
@@ -136,10 +146,8 @@ public class VFSManager
 
 	//{{{ registerVFS() method
 	/**
-	 * Registers a virtual filesystem.
-	 * @param protocol The protocol
-	 * @param vfs The VFS
-	 * @since jEdit 2.5pre1
+	 * @deprecated Write a <code>services.xml</code> file instead;
+	 * see {@link org.gjt.sp.jedit.ServiceManager}.
 	 */
 	public static void registerVFS(String protocol, VFS vfs)
 	{
@@ -152,12 +160,36 @@ public class VFSManager
 
 	//{{{ getFilesystems() method
 	/**
-	 * Returns an enumeration of all registered filesystems.
-	 * @since jEdit 2.5pre1
+	 * @deprecated Use <code>getVFSs()</code> instead.
 	 */
 	public static Enumeration getFilesystems()
 	{
 		return vfsHash.elements();
+	} //}}}
+
+	//{{{ getVFSs() method
+	/**
+	 * Returns a list of all registered filesystems.
+	 * @since jEdit 4.2pre1
+	 */
+	public static String[] getVFSs()
+	{
+		// the sooner ppl move to the new api, the less we'll need
+		// crap like this
+		Vector returnValue = new Vector();
+		String[] newAPI = ServiceManager.getServiceNames(SERVICE);
+		if(newAPI != null)
+		{
+			for(int i = 0; i < newAPI.length; i++)
+			{
+				returnValue.add(newAPI[i]);
+			}
+		}
+		Enumeration oldAPI = vfsHash.keys();
+		while(oldAPI.hasMoreElements())
+			returnValue.add(oldAPI.nextElement());
+		return (String[])returnValue.toArray(new String[
+			returnValue.size()]);
 	} //}}}
 
 	//}}}
