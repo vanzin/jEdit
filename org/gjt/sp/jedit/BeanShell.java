@@ -394,6 +394,8 @@ public class BeanShell
 		try
 		{
 			setupDefaultVariables(namespace,view);
+			if(Debug.BEANSHELL_DEBUG)
+				Log.log(Log.DEBUG,BeanShell.class,command);
 			return interp.eval(command);
 		}
 		catch(Exception e)

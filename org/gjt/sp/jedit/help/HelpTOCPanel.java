@@ -118,6 +118,8 @@ class HelpTOCPanel extends JPanel
 			jEdit.getProperty("helpviewer.toc.copying")));
 		tocRoot.add(createNode("COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
+		tocRoot.add(createNode("Apache.LICENSE.txt",
+			jEdit.getProperty("helpviewer.toc.copying-apache")));
 
 		loadTOC(tocRoot,"news42/toc.xml");
 		loadTOC(tocRoot,"users-guide/toc.xml");

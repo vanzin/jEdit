@@ -167,14 +167,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 		else
 		{
+			if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+			{
+				isOK = true;
+				dispose();
+				return;
+			}
+
 			String filename = filenameField.getText();
 			if(filename == null || filename.length() == 0)
 			{
-				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
-				{
-					dispose();
-					return;
-				}
 				getToolkit().beep();
 				return;
 			}

@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import bsh.NameSpace;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -88,6 +89,9 @@ public class ActionBar extends JPanel
 	} //}}}
 
 	//{{{ Private members
+
+	private static NameSpace namespace = new NameSpace(
+		BeanShell.getNameSpace(),"action bar namespace");
 
 	//{{{ Instance variables
 	private View view;
@@ -163,7 +167,7 @@ public class ActionBar extends JPanel
 				Macros.Recorder recorder = view.getMacroRecorder();
 				if(recorder != null)
 					recorder.record(code);
-				BeanShell.eval(view,BeanShell.getNameSpace(),code);
+				BeanShell.eval(view,namespace,code);
 				cmd = null;
 			}
 			else if(cmd.length() != 0)
