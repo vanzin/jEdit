@@ -1101,6 +1101,12 @@ empty-fileset.message=The specified search file set contains no files.\n\
 	(if applicable) are set correctly.
 #}}}
 
+#{{{ Can only search local directories dialog
+remote-dir-search.title=Cannot Search Non-Local Directories
+remote-dir-search.message=Only directories on the local filesystem\n\
+	may be searched.
+#}}}
+
 #{{{ Paste previous dialog
 pasteprev.title=Paste Previous
 pasteprev.caption=Previous clippings:
@@ -1737,6 +1743,7 @@ vfs.browser.favorites.no-favorites.label=No Favorites
 
 vfs.browser.dialog.open=Open
 vfs.browser.dialog.save=Save
+vfs.browser.dialog.choose-dir=Choose
 vfs.browser.dialog.filename=File name:
 vfs.browser.dialog.filename.mnemonic=f
 

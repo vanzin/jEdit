@@ -72,17 +72,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
 		panel.setBorder(new EmptyBorder(12,0,0,0));
 
-		JLabel label = new JLabel(jEdit.getProperty("vfs.browser.dialog.filename"));
-		panel.add(label);
-		panel.add(Box.createHorizontalStrut(12));
-
 		filenameField = new JTextField();
 		filenameField.setText(name);
 		filenameField.addKeyListener(new KeyHandler());
 		filenameField.selectAll();
-		label.setDisplayedMnemonic(jEdit.getProperty(
-			"vfs.browser.dialog.filename.mnemonic").charAt(0));
-		label.setLabelFor(filenameField);
 		Dimension dim = filenameField.getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		filenameField.setMaximumSize(dim);
@@ -90,11 +83,25 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		box.add(Box.createGlue());
 		box.add(filenameField);
 		box.add(Box.createGlue());
-		panel.add(box);
 
-		panel.add(Box.createHorizontalStrut(12));
+		if(mode != VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+		{
+			JLabel label = new JLabel(jEdit.getProperty("vfs.browser.dialog.filename"));
+			label.setDisplayedMnemonic(jEdit.getProperty(
+				"vfs.browser.dialog.filename.mnemonic").charAt(0));
+			label.setLabelFor(filenameField);
+			panel.add(label);
+			panel.add(Box.createHorizontalStrut(12));
 
-		if(mode == VFSBrowser.BROWSER || mode == VFSBrowser.OPEN_DIALOG)
+			panel.add(box);
+
+			panel.add(Box.createHorizontalStrut(12));
+		}
+		else
+			panel.add(Box.createGlue());
+
+		if(mode == VFSBrowser.BROWSER || mode == VFSBrowser.OPEN_DIALOG
+			|| mode == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 		{
 			GUIUtilities.requestFocus(this,browser.getBrowserView()
 				.getDefaultFocusComponent());
@@ -104,10 +111,26 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			GUIUtilities.requestFocus(this,filenameField);
 		}
 
-		ok = new JButton(jEdit.getProperty("vfs.browser.dialog."
-			+ (mode == VFSBrowser.OPEN_DIALOG ? "open" : "save")));
-		ok.addActionListener(new ActionHandler());
+		ok = new JButton();
 		getRootPane().setDefaultButton(ok);
+
+		switch(mode)
+		{
+		case VFSBrowser.OPEN_DIALOG:
+			ok.setText(jEdit.getProperty("vfs.browser.dialog.open"));
+			break;
+		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
+			ok.setText(jEdit.getProperty("vfs.browser.dialog.choose-dir"));
+			// so that it doesn't resize...
+			dim = ok.getPreferredSize();
+			ok.setPreferredSize(dim);
+			break;
+		case VFSBrowser.SAVE_DIALOG:
+			ok.setText(jEdit.getProperty("vfs.browser.dialog.save"));
+			break;
+		}
+
+		ok.addActionListener(new ActionHandler());
 		panel.add(ok);
 		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
@@ -141,12 +164,19 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		if(files.length == 0)
 		{
-			filename = filenameField.getText();
-
-			if(filename.length() == 0)
+			if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
 			{
-				getToolkit().beep();
-				return;
+				filename = browser.getDirectory();
+			}
+			else
+			{
+				filename = filenameField.getText();
+
+				if(filename.length() == 0)
+				{
+					getToolkit().beep();
+					return;
+				}
 			}
 		}
 		else
@@ -207,8 +237,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			for(int i = 0; i < selectedFiles.length; i++)
 			{
 				VFS.DirectoryEntry file =  selectedFiles[i];
-				if(file.type == VFS.DirectoryEntry.FILE)
-					vector.addElement(file.path);
+				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+				{
+					if(file.type != VFS.DirectoryEntry.FILE)
+						vector.addElement(file.path);
+				}
+				else
+				{
+					if(file.type == VFS.DirectoryEntry.FILE)
+						vector.addElement(file.path);
+				}
 			}
 			String[] retVal = new String[vector.size()];
 			vector.copyInto(retVal);
@@ -277,9 +315,22 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		public void filesSelected(VFSBrowser browser, VFS.DirectoryEntry[] files)
 		{
 			if(files.length == 0)
+			{
+				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+				{
+					ok.setText(jEdit.getProperty(
+						"vfs.browser.dialog.choose-dir"));
+				}
 				return;
+			}
 			else if(files.length == 1)
 			{
+				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+				{
+					ok.setText(jEdit.getProperty(
+						"vfs.browser.dialog.open"));
+				}
+
 				VFS.DirectoryEntry file = files[0];
 				if(file.type == VFS.DirectoryEntry.FILE)
 				{
@@ -297,6 +348,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			else
 			{
+				if(browser.getMode() == VFSBrowser.CHOOSE_DIRECTORY_DIALOG)
+				{
+					ok.setText(jEdit.getProperty(
+						"vfs.browser.dialog.open"));
+				}
+
 				filenameField.setText(null);
 			}
 		} //}}}
@@ -307,8 +364,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			for(int i = 0; i < files.length; i++)
 			{
 				VFS.DirectoryEntry file = files[i];
-				if(file.type == VFS.DirectoryEntry.FILESYSTEM
-					|| file.type == VFS.DirectoryEntry.DIRECTORY)
+				if(browser.getMode() != VFSBrowser.CHOOSE_DIRECTORY_DIALOG
+					&& (file.type == VFS.DirectoryEntry.FILESYSTEM
+					|| file.type == VFS.DirectoryEntry.DIRECTORY))
 				{
 					// the browser will list the directory
 					// in question, so just return
