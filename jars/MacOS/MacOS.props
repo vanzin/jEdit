@@ -17,14 +17,14 @@ plugin.macos.MacOSPlugin.depend.0=jedit 04.02.01.00
 plugin.macos.MacOSPlugin.depend.1=jdk 1.4.1
 
 MacOSPlugin.depend.os.name=Mac OS X
-MacOSPlugin.depend.mrj.version=3.2
+MacOSPlugin.depend.mrj.version=99
 
 #
 # Default settings
 #
 MacOSPlugin.default.type=1413830740
 MacOSPlugin.default.creator=1246057296
-MacOSPlugin.default.useScreenMenuBar=false
+MacOSPlugin.default.useScreenMenuBar=true
 MacOSPlugin.default.preserveCodes=true
 MacOSPlugin.default.useSelection=false
 

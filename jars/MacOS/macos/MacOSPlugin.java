@@ -58,7 +58,7 @@ public class MacOSPlugin extends EBPlugin
 			app2.setEnabledAboutMenu(true);
 			
 			app.setDelegate(delegate);
-			app.setServicesProvider(delegate);
+			//app.setServicesProvider(delegate);
 		}
 	} //}}}
 	
