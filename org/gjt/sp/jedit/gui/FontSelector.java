@@ -1,5 +1,8 @@
 /*
  * FontSelector.java - Font selector
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 Jason Ginchereau
  *
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
@@ -27,7 +31,9 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.jEdit;
+//}}}
 
+//{{{ FontSelector class
 /**
  * A font chooser widget.
  * @author Slava Pestov
@@ -35,6 +41,7 @@ import org.gjt.sp.jedit.jEdit;
  */
 public class FontSelector extends JButton
 {
+	//{{{ FontSelector constructor
 	public FontSelector(Font font)
 	{
 		setFont(font);
@@ -44,9 +51,9 @@ public class FontSelector extends JButton
 		setRequestFocusEnabled(false);
 
 		addActionListener(new ActionHandler());
-	}
+	} //}}}
 
-	// private members
+	//{{{ updateText() method
 	private void updateText()
 	{
 		Font font = getFont();
@@ -70,9 +77,10 @@ public class FontSelector extends JButton
 			break;
 		}
 
-		setText(font.getFamily() + " " + font.getSize() + " " + styleString);
-	}
+		setText(font.getName() + " " + font.getSize() + " " + styleString);
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -85,11 +93,13 @@ public class FontSelector extends JButton
 				updateText();
 			}
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ FontSelectorDialog class
 class FontSelectorDialog extends EnhancedDialog
 {
+	//{{{ FontSelectorDialog constructor
 	public FontSelectorDialog(Component comp, Font font)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
@@ -177,19 +187,22 @@ class FontSelectorDialog extends EnhancedDialog
 		pack();
 		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
 		show();
-	}
+	} //}}}
 
+	//{{{ ok() method
 	public void ok()
 	{
 		isOK = true;
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
+	} //}}}
 
+	//{{{ getSelectedFont() method
 	public Font getSelectedFont()
 	{
 		if(!isOK)
@@ -207,9 +220,11 @@ class FontSelectorDialog extends EnhancedDialog
 
 		return new Font(familyField.getText(),styleList
 			.getSelectedIndex(),size);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private boolean isOK;
 	private JTextField familyField;
 	private JList familyList;
@@ -220,6 +235,7 @@ class FontSelectorDialog extends EnhancedDialog
 	private JLabel preview;
 	private JButton ok;
 	private JButton cancel;
+	//}}}
 
 	/**
 	 * For some reason the default Java fonts show up in the
@@ -230,39 +246,32 @@ class FontSelectorDialog extends EnhancedDialog
 		".italic"
 	};
 
+	//{{{ getFontList() method
 	private String[] getFontList()
 	{
-		try
+		String[] nameArray = GraphicsEnvironment
+			.getLocalGraphicsEnvironment()
+			.getAvailableFontFamilyNames();
+		Vector nameVector = new Vector(nameArray.length);
+
+		for(int i = 0, j; i < nameArray.length; i++)
 		{
-			Class GEClass = Class.forName("java.awt.GraphicsEnvironment");
-			Object GEInstance = GEClass.getMethod("getLocalGraphicsEnvironment", null).invoke(null, null);
-
-			String[] nameArray = (String[])
-			GEClass.getMethod("getAvailableFontFamilyNames", null).invoke(GEInstance, null);
-			Vector nameVector = new Vector(nameArray.length);
-
-			for(int i = 0, j; i < nameArray.length; i++)
+			for(j = 0; j < HIDEFONTS.length; j++)
 			{
-				for(j = 0; j < HIDEFONTS.length; j++)
-				{
-					if(nameArray[i].indexOf(HIDEFONTS[j]) >= 0)
-						break;
-				}
-
-				if(j == HIDEFONTS.length)
-					nameVector.addElement(nameArray[i]);
+				if(nameArray[i].indexOf(HIDEFONTS[j]) >= 0)
+					break;
 			}
 
-			String[] _array = new String[nameVector.size()];
-			nameVector.copyInto(_array);
-			return _array;
+			if(j == HIDEFONTS.length)
+				nameVector.addElement(nameArray[i]);
 		}
-		catch(Exception ex)
-		{
-			return Toolkit.getDefaultToolkit().getFontList();
-		}
-	}
 
+		String[] _array = new String[nameVector.size()];
+		nameVector.copyInto(_array);
+		return _array;
+	} //}}}
+
+	//{{{ createTextFieldAndListPanel() method
 	private JPanel createTextFieldAndListPanel(String label,
 		JTextField textField, JList list)
 	{
@@ -301,8 +310,9 @@ class FontSelectorDialog extends EnhancedDialog
 		panel.add(scroller);
 
 		return panel;
-	}
+	} //}}}
 
+	//{{{ updatePreview() method
 	private void updatePreview()
 	{
 		String family = familyField.getText();
@@ -318,8 +328,11 @@ class FontSelectorDialog extends EnhancedDialog
 		int style = styleList.getSelectedIndex();
 
 		preview.setFont(new Font(family,style,size));
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -329,8 +342,9 @@ class FontSelectorDialog extends EnhancedDialog
 			else if(evt.getSource() == cancel)
 				cancel();
 		}
-	}
+	} //}}}
 
+	//{{{ ListHandler class
 	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
@@ -357,5 +371,5 @@ class FontSelectorDialog extends EnhancedDialog
 
 			updatePreview();
 		}
-	}
+	} //}}}
 }

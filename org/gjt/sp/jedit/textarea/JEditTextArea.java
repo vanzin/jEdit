@@ -62,7 +62,7 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Initialize some misc. stuff
 		selection = new Vector();
-		renderer = TextRenderer.createTextRenderer();
+		renderer = new TextRenderer();
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		bufferHandler = new BufferChangeHandler();

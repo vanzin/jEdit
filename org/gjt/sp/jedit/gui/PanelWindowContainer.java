@@ -93,15 +93,19 @@ public class PanelWindowContainer implements DockableWindowContainer
 		int rotation;
 		if(position.equals(DockableWindowManager.TOP)
 			|| position.equals(DockableWindowManager.BOTTOM))
-			rotation = CustomButton.NONE;
+			rotation = RotatedTextIcon.NONE;
 		else if(position.equals(DockableWindowManager.LEFT))
-			rotation = CustomButton.CCW;
+			rotation = RotatedTextIcon.CCW;
 		else if(position.equals(DockableWindowManager.RIGHT))
-			rotation = CustomButton.CW;
+			rotation = RotatedTextIcon.CW;
 		else
 			throw new InternalError("Invalid position: " + position);
 
-		CustomButton button = new CustomButton(rotation,entry.title);
+		JToggleButton button = new JToggleButton();
+		button.setMargin(new Insets(0,0,0,0));
+		button.setRequestFocusEnabled(false);
+		button.setIcon(new RotatedTextIcon(rotation,button.getFont(),
+			entry.title));
 		button.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
@@ -408,276 +412,107 @@ public class PanelWindowContainer implements DockableWindowContainer
 		} //}}}
 	} //}}}
 
-	//{{{ CustomButton class
-	static class CustomButton extends JToggleButton
+	//{{{ RotatedTextIcon class
+	class RotatedTextIcon implements Icon
 	{
 		static final int NONE = 0;
 		static final int CW = 1;
 		static final int CCW = 2;
 
-		//{{{ CustomButton constructor
-		public CustomButton(int rotate, String text)
+		int rotate;
+		Font font;
+		String text;
+		int width;
+		int height;
+		RenderingHints renderHints;
+
+		//{{{ RotatedTextIcon constructor
+		RotatedTextIcon(int rotate, Font font, String text)
 		{
-			setMargin(new Insets(0,0,0,0));
-			setRequestFocusEnabled(false);
-			if(MiscUtilities.compareStrings(
-				System.getProperty("java.version"),
-				"1.2",false) >= 0)
-			{
-				setIcon(new RotatedTextIcon2D(rotate,text));
-			}
-			else
-			{
-				setIcon(new RotatedTextIcon(rotate,text));
-			}
+			this.rotate = rotate;
+			this.font = font;
+			this.text = text;
+
+			FontRenderContext fontRenderContext
+				= new FontRenderContext(null,true,
+				true);
+			GlyphVector glyphs = font.createGlyphVector(
+				fontRenderContext,text);
+			width = (int)glyphs.getLogicalBounds().getWidth();
+			height = (int)glyphs.getLogicalBounds().getHeight();
+
+			renderHints = new RenderingHints(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+			renderHints.put(RenderingHints.KEY_FRACTIONALMETRICS,
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+			renderHints.put(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
 		} //}}}
 
-		//{{{ RotatedTextIcon class
-		class RotatedTextIcon implements Icon
+		//{{{ getIconWidth() method
+		public int getIconWidth()
 		{
-			int rotate;
-			String text;
-			int width;
-			int height;
-			Image rotated;
-
-			//{{{ RotatedTextIcon constructor
-			RotatedTextIcon(int rotate, String text)
-			{
-				this.rotate = rotate;
-				this.text = text;
-				FontMetrics fm = getFontMetrics(getFont());
-				width = fm.stringWidth(text);
-				height = fm.getHeight();
-			} //}}}
-
-			//{{{ getIconWidth() method
-			public int getIconWidth()
-			{
-				return (rotate == CW || rotate == CCW
-					? height : width);
-			} //}}}
-
-			//{{{ getIconHeight() method
-			public int getIconHeight()
-			{
-				return (rotate == CW || rotate == CCW
-					? width : height);
-			} //}}}
-
-			//{{{ paintIcon() method
-			public void paintIcon(Component c, Graphics g, int x, int y)
-			{
-				FontMetrics fm = g.getFontMetrics();
-
-				if(rotate == NONE)
-				{
-					g.setColor(getForeground());
-					g.drawString(text,x,y + fm.getAscent());
-					return;
-				}
-
-				if(rotated == null)
-				{
-					Image rotImg = c.createImage(width,height);
-					Graphics rotGfx = rotImg.getGraphics();
-					rotGfx.setColor(getBackground());
-					rotGfx.fillRect(0,0,getWidth(),getHeight());
-					rotGfx.setColor(Color.black);
-
-					rotGfx.drawString(text,0,fm.getAscent());
-
-					ImageFilter filter = new RotationFilter(rotate);
-					rotated = createImage(new FilteredImageSource(
-						rotImg.getSource(),filter));
-				}
-
-				g.drawImage(rotated,x,y,c);
-			} //}}}
+			return (rotate == RotatedTextIcon.CW
+				|| rotate == RotatedTextIcon.CCW
+				? height : width);
 		} //}}}
 
-		//{{{ RotationFilter class
-		static class RotationFilter extends ImageFilter
+		//{{{ getIconHeight() method
+		public int getIconHeight()
 		{
-			int rotation;
-			int width;
-			int height;
-			IndexColorModel indexModel;
-
-			//{{{ RotationFilter constructor
-			RotationFilter(int rotation)
-			{
-				this.rotation = rotation;
-				indexModel = new IndexColorModel(8,2,
-					new byte[] { 0, 0 },
-					new byte[] { 0, 0 },
-					new byte[] { 0, 0 },
-					1);
-			} //}}}
-
-			//{{{ setDimensions() method
-			public void setDimensions(int width, int height)
-			{
-				this.width = height;
-				this.height = width;
-				super.setDimensions(height,width);
-			} //}}}
-
-			//{{{ setColorModel() method
-			public void setColorModel(ColorModel model)
-			{
-				super.setColorModel(indexModel);
-			} //}}}
-
-			// Fuck all the retards at Sun who made it impossible to
-			// write polymorphic array-access code.
-
-			//{{{ setPixels() method
-			public void setPixels(int x, int y, int w, int h,
-				ColorModel model, byte pixels[], int off,
-				int scansize)
-			{
-				byte[] retVal = new byte[h * w];
-
-				for(int i = 0; i < w; i++)
-				{
-					for(int j = 0; j < h; j++)
-					{
-						byte value = pixels[j * scansize
-							+ (rotation == CW
-							? i : scansize - i - 1) + off];
-
-						retVal[i * h + (h - j - 1)]
-							= (byte)(value == 0 ? 0 : 1);
-					}
-				}
-
-				super.setPixels((rotation == CCW
-					? y : width - y - 1),
-					x,h,w,indexModel,retVal,0,h);
-			} //}}}
-
-			//{{{ setPixels() method
-			public void setPixels(int x, int y, int w, int h,
-				ColorModel model, int pixels[], int off,
-				int scansize)
-			{
-				byte[] retVal = new byte[h * w];
-
-				for(int i = 0; i < w; i++)
-				{
-					for(int j = 0; j < h; j++)
-					{
-						int value = pixels[j * scansize
-							+ (rotation == CW
-							? i : scansize - i - 1) + off];
-
-						retVal[i * h + (h - j - 1)]
-							= (byte)(value == 0 ? 0 : 1);
-					}
-				}
-
-				super.setPixels((rotation == CCW
-					? y : width - y - h),
-					(rotation == CW
-					? x : height - x - w),h,w,
-					indexModel,retVal,0,h);
-			} //}}}
+			return (rotate == RotatedTextIcon.CW
+				|| rotate == RotatedTextIcon.CCW
+				? width : height);
 		} //}}}
 
-		//{{{ RotatedTextIcon2D class
-		class RotatedTextIcon2D implements Icon
+		//{{{ paintIcon() method
+		public void paintIcon(Component c, Graphics g, int x, int y)
 		{
-			int rotate;
-			String text;
-			int width;
-			int height;
-			RenderingHints renderHints;
+			FontMetrics fm = c.getFontMetrics(font);
 
-			//{{{ RotatedTextIcon2D constructor
-			RotatedTextIcon2D(int rotate, String text)
+			Graphics2D g2d = (Graphics2D)g;
+			g2d.setFont(font);
+			AffineTransform oldTransform = g2d.getTransform();
+			RenderingHints oldHints = g2d.getRenderingHints();
+
+			g2d.setRenderingHints(renderHints);
+			g2d.setColor(c.getForeground());
+
+			//{{{ No rotation
+			if(rotate == RotatedTextIcon.NONE)
 			{
-				this.rotate = rotate;
-				this.text = text;
-
-				FontRenderContext fontRenderContext
-					= new FontRenderContext(null,true,
-					true);
-				GlyphVector glyphs = getFont().createGlyphVector(
-					fontRenderContext,text);
-				width = (int)glyphs.getLogicalBounds().getWidth();
-				height = (int)glyphs.getLogicalBounds().getHeight();
-
-				renderHints = new RenderingHints(
-					RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-				renderHints.put(RenderingHints.KEY_FRACTIONALMETRICS,
-					RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-				renderHints.put(RenderingHints.KEY_RENDERING,
-					RenderingHints.VALUE_RENDER_QUALITY);
+				g2d.drawString(text,x,y + fm.getAscent());
+			} //}}}
+			//{{{ Clockwise rotation
+			else if(rotate == RotatedTextIcon.CW)
+			{
+				AffineTransform trans = new AffineTransform();
+				trans.concatenate(oldTransform);
+				trans.translate(x,y);
+				trans.rotate(Math.PI / 2,
+					height / 2, width / 2);
+				g2d.setTransform(trans);
+				g2d.drawString(text,(height - width) / 2,
+					(width - height) / 2
+					+ fm.getAscent());
+			} //}}}
+			//{{{ Counterclockwise rotation
+			else if(rotate == RotatedTextIcon.CCW)
+			{
+				AffineTransform trans = new AffineTransform();
+				trans.concatenate(oldTransform);
+				trans.translate(x,y);
+				trans.rotate(Math.PI * 3 / 2,
+					height / 2, width / 2);
+				g2d.setTransform(trans);
+				g2d.drawString(text,(height - width) / 2,
+					(width - height) / 2
+					+ fm.getAscent());
 			} //}}}
 
-			//{{{ getIconWidth() method
-			public int getIconWidth()
-			{
-				return (rotate == CW || rotate == CCW
-					? height : width);
-			} //}}}
-
-			//{{{ getIconHeight() method
-			public int getIconHeight()
-			{
-				return (rotate == CW || rotate == CCW
-					? width : height);
-			} //}}}
-
-			//{{{ paintIcon() method
-			public void paintIcon(Component c, Graphics g, int x, int y)
-			{
-				FontMetrics fm = g.getFontMetrics();
-
-				Graphics2D g2d = (Graphics2D)g;
-				AffineTransform oldTransform = g2d.getTransform();
-				RenderingHints oldHints = g2d.getRenderingHints();
-
-				g2d.setRenderingHints(renderHints);
-				g2d.setColor(getForeground());
-
-				//{{{ No rotation
-				if(rotate == NONE)
-				{
-					g2d.drawString(text,x,y + fm.getAscent());
-				} //}}}
-				//{{{ Clockwise rotation
-				else if(rotate == CW)
-				{
-					AffineTransform trans = new AffineTransform();
-					trans.concatenate(oldTransform);
-					trans.translate(x,y);
-					trans.rotate(Math.PI / 2,
-						height / 2, width / 2);
-					g2d.setTransform(trans);
-					g2d.drawString(text,(height - width) / 2,
-						(width - height) / 2
-						+ fm.getAscent());
-				} //}}}
-				//{{{ Counterclockwise rotation
-				else if(rotate == CCW)
-				{
-					AffineTransform trans = new AffineTransform();
-					trans.concatenate(oldTransform);
-					trans.translate(x,y);
-					trans.rotate(Math.PI * 3 / 2,
-						height / 2, width / 2);
-					g2d.setTransform(trans);
-					g2d.drawString(text,(height - width) / 2,
-						(width - height) / 2
-						+ fm.getAscent());
-				} //}}}
-
-				g2d.setTransform(oldTransform);
-				g2d.setRenderingHints(oldHints);
-			} //}}}
+			g2d.setTransform(oldTransform);
+			g2d.setRenderingHints(oldHints);
 		} //}}}
 	} //}}}
 

@@ -203,7 +203,7 @@ public class Buffer implements EBComponent
 
 		int lineNumberWidth = 0;
 
-		TextRenderer renderer = TextRenderer.createPrintTextRenderer();
+		TextRenderer renderer = new TextRenderer();
 
 		renderer.configure(false,false);
 

@@ -1,5 +1,8 @@
 /*
- * TextRenderer.java - Abstract differences between AWT and Java 2D
+ * TextRenderer.java - Draws text
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,59 +22,54 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import javax.swing.text.TabExpander;
+import java.awt.font.*;
+import java.awt.geom.*;
 import java.awt.*;
+import java.util.Hashtable;
 import org.gjt.sp.util.Log;
+//}}}
 
-/**
- * Java 1.1 and Java 2 have different APIs for drawing and measuring text.
- * Using the Java 1.1 API in Java 2 can result in incorrect caret placement,
- * etc. So we abstract away the differences with this class.
- */
-public abstract class TextRenderer
+public class TextRenderer
 {
-	static final String JAVA2D_RENDER_CLASS = "org.gjt.sp.jedit.textarea.TextRenderer2D";
-
-	public static TextRenderer createTextRenderer()
+	//{{{ setupGraphics() method
+	public void setupGraphics(Graphics g)
 	{
-		if(java2d)
+		((Graphics2D)g).setRenderingHints(renderingHints);
+	} //}}}
+
+	//{{{ configure() method
+	public void configure(boolean antiAlias, boolean fracFontMetrics)
+	{
+		Hashtable hints = new Hashtable();
+
+		if(antiAlias)
 		{
-			try
-			{
-				ClassLoader loader = TextRenderer.class
-					.getClassLoader();
-
-				Class clazz;
-				if(loader == null)
-					clazz = Class.forName(JAVA2D_RENDER_CLASS);
-				else
-					clazz = loader.loadClass(JAVA2D_RENDER_CLASS);
-
-				return (TextRenderer)clazz.newInstance();
-			}
-			catch(Exception e)
-			{
-				throw new NoClassDefFoundError(JAVA2D_RENDER_CLASS);
-			}
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			hints.put(RenderingHints.KEY_FRACTIONALMETRICS,
+				fracFontMetrics ?
+					RenderingHints.VALUE_FRACTIONALMETRICS_ON
+					: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 		}
 		else
-			return new TextRendererAWT();
-	}
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
-	public static TextRenderer createPrintTextRenderer()
-	{
-		return new TextRendererAWT();
-	}
+		renderingHints = new RenderingHints(hints);
+		fontRenderContext = new FontRenderContext(null,antiAlias,
+			fracFontMetrics);
+	} //}}}
 
-	public void setupGraphics(Graphics g) {}
-
-	public void configure(boolean antiAlias, boolean fracFontMetrics) {}
-
-	public float drawChars(char[] text, int off, int len, Graphics g,
+	//{{{ drawChars() method
+	public float drawChars(char[] text, int off, int len, Graphics _g,
 		float x, float y, TabExpander e, Color foreground,
 		Color tokenBackground, Color componentBackground)
 	{
-		// this probably should be moved elsewhere
+		Graphics2D g = (Graphics2D)_g;
+
+		//{{{ this probably should be moved elsewhere
 		if(tokenBackground != null)
 		{
 			float width = charsWidth(text,off,len,g.getFont(),x,e);
@@ -87,7 +85,7 @@ public abstract class TextRenderer
 				(int)width,(int)height);
 
 			g.setPaintMode();
-		}
+		} //}}}
 
 		g.setColor(foreground);
 
@@ -119,8 +117,9 @@ public abstract class TextRenderer
 			x += _drawChars(text,flushIndex,flushLen,g,x,y);
 
 		return x;
-	}
+	} //}}}
 
+	//{{{ charsWidth() method
 	public float charsWidth(char[] text, int off, int len, Font font, float x,
 		TabExpander e)
 	{
@@ -153,8 +152,9 @@ public abstract class TextRenderer
 			newX += _getWidth(text,flushIndex,flushLen,font);
 
 		return newX - x;
-	}
+	} //}}}
 
+	//{{{ xToOffset() method
 	public int xToOffset(char[] text, int off, int len, Font font, float x,
 		TabExpander e, boolean round, float[] widthArray)
 	{
@@ -216,38 +216,49 @@ public abstract class TextRenderer
 
 		widthArray[0] = width;
 		return -1;
-	}
+	} //}}}
 
-	abstract float _drawChars(char[] text, int start, int len, Graphics g,
-		float x, float y);
+	//{{{ Private members
+	private RenderingHints renderingHints;
+	private FontRenderContext fontRenderContext;
 
-	abstract float _getWidth(char[] text, int start, int len, Font font);
-
-	abstract int _xToOffset(char[] text, int start, int len, Font font,
-		float x, boolean round);
-
-	static boolean java2d;
-
-	static
+	//{{{ _drawChars() method
+	private float _drawChars(char[] text, int start, int len, Graphics2D g,
+		float x, float y)
 	{
-		try
-		{
-			ClassLoader loader = TextRenderer.class.getClassLoader();
+		Font font = g.getFont();
 
-			if(loader == null)
-				Class.forName("java.awt.Graphics2D");
-			else
-				loader.loadClass("java.awt.Graphics2D");
+		// update it just in case
+		fontRenderContext = g.getFontRenderContext();
 
-			Log.log(Log.DEBUG,TextRenderer.class,
-				"Java2D detected; will use new text rendering code");
-			java2d = true;
-		}
-		catch(ClassNotFoundException cnf)
-		{
-			Log.log(Log.DEBUG,TextRenderer.class,
-				"Java2D not detected; will use old text rendering code");
-			java2d = false;
-		}
-	}
+		GlyphVector glyphs = font.createGlyphVector(fontRenderContext,
+			new String(text,start,len));
+
+		g.drawGlyphVector(glyphs,x,y);
+
+		return (float)glyphs.getLogicalBounds().getWidth();
+	} //}}}
+
+	//{{{ _getWidth() method
+	private float _getWidth(char[] text, int start, int len, Font font)
+	{
+		GlyphVector glyphs = font.createGlyphVector(fontRenderContext,
+			new String(text,start,len));
+
+		return (float)glyphs.getLogicalBounds().getWidth();
+	} //}}}
+
+	//{{{ _xToOffset() method
+	private int _xToOffset(char[] text, int start, int len, Font font,
+		float x, boolean round)
+	{
+		// this is slow!
+		TextLayout layout = new TextLayout(new String(text,start,len),font,
+			fontRenderContext);
+
+		TextHitInfo info = layout.hitTestChar(x,0);
+		return (round ? info.getInsertionIndex() : info.getCharIndex());
+	} //}}}
+
+	//}}}
 }

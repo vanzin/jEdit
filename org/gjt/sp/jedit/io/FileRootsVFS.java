@@ -1,5 +1,8 @@
 /*
  * FileRootsVFS.java - Local root filesystems VFS
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,11 +22,11 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.filechooser.FileSystemView;
+//{{{ Imports
 import java.awt.Component;
-import java.lang.reflect.*;
 import java.io.File;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * A VFS that lists local root filesystems.
@@ -34,54 +37,31 @@ public class FileRootsVFS extends VFS
 {
 	public static final String PROTOCOL = "roots";
 
+	//{{{ FileRootsVFS constructor
 	public FileRootsVFS()
 	{
 		super("roots");
+	} //}}}
 
-		// try using Java 2 method first
-		try
-		{
-			method = File.class.getMethod("listRoots",new Class[0]);
-			Log.log(Log.DEBUG,this,"File.listRoots() detected");
-		}
-		catch(Exception e)
-		{
-			fsView = FileSystemView.getFileSystemView();
-			Log.log(Log.DEBUG,this,"File.listRoots() not detected");
-		}
-	}
-
+	//{{{ getCapabilities() method
 	public int getCapabilities()
 	{
 		// BROWSE_CAP not set because we don't want the VFS browser
 		// to create the default 'favorites' item in the 'More' menu
 		return 0 /* BROWSE_CAP | */;
-	}
+	} //}}}
 
+	//{{{ getParentOfPath() method
 	public String getParentOfPath(String path)
 	{
 		return PROTOCOL + ":";
-	}
+	} //}}}
 
+	//{{{ _listDirectory() method
 	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
 		Component comp)
 	{
-		File[] roots;
-
-		if(method == null)
-			roots = fsView.getRoots();
-		else
-		{
-			try
-			{
-				roots = (File[])method.invoke(null,new Object[0]);
-			}
-			catch(Exception e)
-			{
-				roots = null;
-				Log.log(Log.ERROR,this,e);
-			}
-		}
+		File[] roots = File.listRoots();
 
 		if(roots == null)
 			return null;
@@ -94,16 +74,13 @@ public class FileRootsVFS extends VFS
 		}
 
 		return rootDE;
-	}
+	} //}}}
 
+	//{{{ _getDirectoryEntry() method
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
 		return new VFS.DirectoryEntry(path,path,path,VFS.DirectoryEntry
 			.FILESYSTEM,0L,false);
-	}
-
-	// private members
-	private FileSystemView fsView;
-	private Method method;
+	} //}}}
 }
