@@ -1,14 +1,21 @@
 TO DO
 
+- text area painter:
+  - use line metrics
+  - use float co-ordinates
+  - horizontal scrolling is fucked
+  - cache chunk lists
+  - wrap guide: don't use font metrics
+  - repaint problems in jdk1.4
+  - trailing tabs not drawn
+- soft wrap
 - finish 'troubleshooting' menu:
   - about cmd
   - keytest cmd
   - make bug report cmd
   - docs in user's guide
-- more efficent text painting code
 - control clicks on closing brackets suck
 - jdk 1.4: shortcuts only work in text area
-- wrap guide: don't use font metrics
 - S+END/S+HOME
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
