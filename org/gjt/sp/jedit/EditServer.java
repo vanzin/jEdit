@@ -83,6 +83,7 @@ public class EditServer extends Thread
 			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
+			out.write("b\n");
 			out.write(String.valueOf(port));
 			out.write("\n");
 			out.write(String.valueOf(authKey));
