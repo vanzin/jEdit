@@ -263,76 +263,67 @@ public class DisplayManager
 		int start = 0;
 		int end = lineCount - 1;
 
-		try
+		// if the caret is on a collapsed fold, collapse the
+		// parent fold
+		if(line != 0
+			&& line != buffer.getLineCount() - 1
+			&& buffer.isFoldStart(line)
+			&& !isLineVisible(line + 1))
 		{
-			buffer.writeLock();
+			line--;
+		}
 
-			// if the caret is on a collapsed fold, collapse the
-			// parent fold
-			if(line != 0
-				&& line != buffer.getLineCount() - 1
-				&& buffer.isFoldStart(line)
-				&& !isLineVisible(line + 1))
+		int initialFoldLevel = buffer.getFoldLevel(line);
+
+		//{{{ Find fold start and end...
+		if(line != lineCount - 1
+			&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
+		{
+			// this line is the start of a fold
+			start = line + 1;
+
+			for(int i = line + 1; i < lineCount; i++)
 			{
-				line--;
-			}
-
-			int initialFoldLevel = buffer.getFoldLevel(line);
-
-			//{{{ Find fold start and end...
-			if(line != lineCount - 1
-				&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
-			{
-				// this line is the start of a fold
-				start = line + 1;
-
-				for(int i = line + 1; i < lineCount; i++)
+				if(buffer.getFoldLevel(i) <= initialFoldLevel)
 				{
-					if(buffer.getFoldLevel(i) <= initialFoldLevel)
-					{
-						end = i - 1;
-						break;
-					}
+					end = i - 1;
+					break;
 				}
 			}
-			else
-			{
-				boolean ok = false;
-
-				// scan backwards looking for the start
-				for(int i = line - 1; i >= 0; i--)
-				{
-					if(buffer.getFoldLevel(i) < initialFoldLevel)
-					{
-						start = i + 1;
-						ok = true;
-						break;
-					}
-				}
-
-				if(!ok)
-				{
-					// no folds in buffer
-					return;
-				}
-
-				for(int i = line + 1; i < lineCount; i++)
-				{
-					if(buffer.getFoldLevel(i) < initialFoldLevel)
-					{
-						end = i - 1;
-						break;
-					}
-				}
-			} //}}}
-
-			// Collapse the fold...
-			hideLineRange(start,end);
 		}
-		finally
+		else
 		{
-			buffer.writeUnlock();
-		}
+			boolean ok = false;
+
+			// scan backwards looking for the start
+			for(int i = line - 1; i >= 0; i--)
+			{
+				if(buffer.getFoldLevel(i) < initialFoldLevel)
+				{
+					start = i + 1;
+					ok = true;
+					break;
+				}
+			}
+
+			if(!ok)
+			{
+				// no folds in buffer
+				return;
+			}
+
+			for(int i = line + 1; i < lineCount; i++)
+			{
+				if(buffer.getFoldLevel(i) < initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
+			}
+		} //}}}
+
+		// Collapse the fold...
+		hideLineRange(start,end);
 
 		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
@@ -354,67 +345,63 @@ public class DisplayManager
 		int start = 0;
 		int end = lineCount - 1;
 
-		try
+		int initialFoldLevel = buffer.getFoldLevel(line);
+
+		//{{{ Find fold start and fold end...
+		if(line != lineCount - 1
+			&& isLineVisible(line)
+			&& !isLineVisible(line + 1)
+			&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
-			buffer.writeLock();
+			// this line is the start of a fold
+			start = line + 1;
 
-			int initialFoldLevel = buffer.getFoldLevel(line);
-
-			//{{{ Find fold start and fold end...
-			if(line != lineCount - 1
-				&& isLineVisible(line)
-				&& !isLineVisible(line + 1)
-				&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
+			for(int i = line + 1; i < lineCount; i++)
 			{
-				// this line is the start of a fold
-				start = line + 1;
-
-				for(int i = line + 1; i < lineCount; i++)
+				if(/* isLineVisible(i) && */
+					buffer.getFoldLevel(i) <= initialFoldLevel)
 				{
-					if(/* isLineVisible(i) && */
-						buffer.getFoldLevel(i) <= initialFoldLevel)
-					{
-						end = i - 1;
-						break;
-					}
+					end = i - 1;
+					break;
 				}
 			}
-			else
+		}
+		else
+		{
+			boolean ok = false;
+
+			// scan backwards looking for the start
+			for(int i = line - 1; i >= 0; i--)
 			{
-				boolean ok = false;
-
-				// scan backwards looking for the start
-				for(int i = line - 1; i >= 0; i--)
+				//XXX
+				if(isLineVisible(i) && buffer.getFoldLevel(i) < initialFoldLevel)
 				{
-					//XXX
-					if(isLineVisible(i) && buffer.getFoldLevel(i) < initialFoldLevel)
-					{
-						start = i + 1;
-						ok = true;
-						break;
-					}
+					start = i + 1;
+					ok = true;
+					break;
 				}
+			}
 
-				if(!ok)
+			if(!ok)
+			{
+				// no folds in buffer
+				return -1;
+			}
+
+			for(int i = line + 1; i < lineCount; i++)
+			{
+				//XXX
+				if((isLineVisible(i) &&
+					buffer.getFoldLevel(i) < initialFoldLevel)
+					|| i == getLastVisibleLine())
 				{
-					// no folds in buffer
-					return -1;
+					end = i - 1;
+					break;
 				}
+			}
+		} //}}}
 
-				for(int i = line + 1; i < lineCount; i++)
-				{
-					//XXX
-					if((isLineVisible(i) &&
-						buffer.getFoldLevel(i) < initialFoldLevel)
-						|| i == getLastVisibleLine())
-					{
-						end = i - 1;
-						break;
-					}
-				}
-			} //}}}
-
-			//{{{ Expand the fold...
+		//{{{ Expand the fold...
 			if(fully)
 			{
 				showLineRange(start,end);
@@ -455,11 +442,6 @@ public class DisplayManager
 					return returnValue;
 				}
 			} //}}}
-		}
-		finally
-		{
-			buffer.writeUnlock();
-		}
 
 		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
@@ -474,17 +456,7 @@ public class DisplayManager
 	 */
 	public void expandAllFolds()
 	{
-		try
-		{
-			buffer.writeLock();
-
-			showLineRange(0,buffer.getLineCount() - 1);
-		}
-		finally
-		{
-			buffer.writeUnlock();
-		}
-
+		showLineRange(0,buffer.getLineCount() - 1);
 		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
@@ -513,41 +485,32 @@ public class DisplayManager
 	 */
 	public void expandFolds(int foldLevel)
 	{
-		try
+		if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+		showLineRange(0,buffer.getLineCount() - 1);
+
+		/* this ensures that the first line is always visible */
+		boolean seenVisibleLine = false;
+
+		int firstInvisible = 0;
+
+		for(int i = 0; i < buffer.getLineCount(); i++)
 		{
-			buffer.writeLock();
-
-			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
-				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
-
-			showLineRange(0,buffer.getLineCount() - 1);
-
-			/* this ensures that the first line is always visible */
-			boolean seenVisibleLine = false;
-
-			int firstInvisible = 0;
-
-			for(int i = 0; i < buffer.getLineCount(); i++)
+			if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
 			{
-				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+				if(firstInvisible != i)
 				{
-					if(firstInvisible != i)
-					{
-						hideLineRange(firstInvisible,
-							i - 1);
-					}
-					firstInvisible = i + 1;
-					seenVisibleLine = true;
+					hideLineRange(firstInvisible,
+						i - 1);
 				}
+				firstInvisible = i + 1;
+				seenVisibleLine = true;
 			}
+		}
 
-			if(firstInvisible != buffer.getLineCount())
-				hideLineRange(firstInvisible,buffer.getLineCount() - 1);
-		}
-		finally
-		{
-			buffer.writeUnlock();
-		}
+		if(firstInvisible != buffer.getLineCount())
+			hideLineRange(firstInvisible,buffer.getLineCount() - 1);
 
 		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
@@ -621,23 +584,15 @@ public class DisplayManager
 	 */
 	void setScreenLineCount(int line, int count)
 	{
-		try
-		{
-			buffer.writeLock();
-			int oldCount = offsetMgr.getScreenLineCount(line);
-			// still have to call this even if it equals the
-			// old one so that the offset manager sets the
-			// validity flag!
-			offsetMgr.setScreenLineCount(line,count);
-			// this notifies each display manager editing this
-			// buffer of the screen line count change
-			if(count != oldCount)
-				_setScreenLineCount(buffer,line,oldCount,count);
-		}
-		finally
-		{
-			buffer.writeUnlock();
-		}
+		int oldCount = offsetMgr.getScreenLineCount(line);
+		// still have to call this even if it equals the
+		// old one so that the offset manager sets the
+		// validity flag!
+		offsetMgr.setScreenLineCount(line,count);
+		// this notifies each display manager editing this
+		// buffer of the screen line count change
+		if(count != oldCount)
+			_setScreenLineCount(buffer,line,oldCount,count);
 	} //}}}
 
 	//{{{ updateWrapSettings() method

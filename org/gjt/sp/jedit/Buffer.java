@@ -1297,8 +1297,11 @@ public class Buffer
 			writeLock();
 
 			setFlag(UNDO_IN_PROGRESS,true);
-			if(!undoMgr.undo(textArea))
+			int caret = undoMgr.undo();
+			if(caret == -1)
 				textArea.getToolkit().beep();
+			else
+				textArea.setCaretPosition(caret);
 
 			fireTransactionComplete();
 		}
@@ -1312,8 +1315,7 @@ public class Buffer
 
 	//{{{ redo() method
 	/**
-	 * Redoes the most recently undone edit. Returns true if the redo was
-	 * successful.
+	 * Redoes the most recently undone edit.
 	 *
 	 * @since jEdit 2.7pre2
 	 */
@@ -1333,8 +1335,11 @@ public class Buffer
 			writeLock();
 
 			setFlag(UNDO_IN_PROGRESS,true);
-			if(!undoMgr.redo(textArea))
+			int caret = undoMgr.redo();
+			if(caret == -1)
 				textArea.getToolkit().beep();
+			else
+				textArea.setCaretPosition(caret);
 
 			fireTransactionComplete();
 		}
@@ -2095,93 +2100,88 @@ public class Buffer
 		else
 			seg = new Segment();
 
-		try
+		writeLock();
+
+		if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(lineIndex);
+
+		int firstInvalidLineContext = offsetMgr.getFirstInvalidLineContext();
+		int start;
+		if(textMode || firstInvalidLineContext == -1)
 		{
-			writeLock();
+			start = lineIndex;
+		}
+		else
+		{
+			start = Math.min(firstInvalidLineContext,
+				lineIndex);
+		}
 
-			if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(lineIndex);
+		if(Debug.TOKEN_MARKER_DEBUG)
+			Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
+		for(int i = start; i <= lineIndex; i++)
+		{
+			getLineText(i,seg);
 
-			int firstInvalidLineContext = offsetMgr.getFirstInvalidLineContext();
-			int start;
-			if(textMode || firstInvalidLineContext == -1)
+			TokenMarker.LineContext context = offsetMgr.getLineContext(i);
+			ParserRule oldRule;
+			ParserRuleSet oldRules;
+			String oldSpanEndSubst;
+			if(context == null)
 			{
-				start = lineIndex;
+				//System.err.println(i + ": null context");
+				oldRule = null;
+				oldRules = null;
+				oldSpanEndSubst = null;
 			}
 			else
 			{
-				start = Math.min(firstInvalidLineContext,
-					lineIndex);
+				oldRule = context.inRule;
+				oldRules = context.rules;
+				oldSpanEndSubst = (context.parent != null
+					? context.parent.spanEndSubst
+					: null);
 			}
 
-			if(Debug.TOKEN_MARKER_DEBUG)
-				Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
-			for(int i = start; i <= lineIndex; i++)
+			TokenMarker.LineContext prevContext = (
+				(i == 0 || textMode) ? null
+				: offsetMgr.getLineContext(i - 1)
+			);
+
+			context = tokenMarker.markTokens(prevContext,
+				(i == lineIndex ? tokenHandler
+				: DummyTokenHandler.INSTANCE),seg);
+			offsetMgr.setLineContext(i,context);
+
+			// Could incorrectly be set to 'false' with
+			// recursive delegates, where the chaining might
+			// have changed but not the rule set in question (?)
+			if(oldRule != context.inRule)
 			{
-				getLineText(i,seg);
-
-				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
-				ParserRule oldRule;
-				ParserRuleSet oldRules;
-				String oldSpanEndSubst;
-				if(context == null)
-				{
-					//System.err.println(i + ": null context");
-					oldRule = null;
-					oldRules = null;
-					oldSpanEndSubst = null;
-				}
-				else
-				{
-					oldRule = context.inRule;
-					oldRules = context.rules;
-					oldSpanEndSubst = (context.parent != null
-						? context.parent.spanEndSubst
-						: null);
-				}
-
-				TokenMarker.LineContext prevContext = (
-					(i == 0 || textMode) ? null
-					: offsetMgr.getLineContext(i - 1)
-				);
-
-				context = tokenMarker.markTokens(prevContext,
-					(i == lineIndex ? tokenHandler
-					: DummyTokenHandler.INSTANCE),seg);
-				offsetMgr.setLineContext(i,context);
-
-				// Could incorrectly be set to 'false' with
-				// recursive delegates, where the chaining might
-				// have changed but not the rule set in question (?)
-				if(oldRule != context.inRule)
-				{
-					nextLineRequested = true;
-				}
-				else if(oldRules != context.rules)
-				{
-					nextLineRequested = true;
-				}
-				else if(!MiscUtilities.objectsEqual(oldSpanEndSubst,
-					context.spanEndSubst))
-				{
-					nextLineRequested = true;
-				}
+				nextLineRequested = true;
 			}
-
-			int lineCount = offsetMgr.getLineCount();
-			if(lineCount - 1 == lineIndex)
-				offsetMgr.setFirstInvalidLineContext(-1);
-			else if(nextLineRequested)
-				offsetMgr.setFirstInvalidLineContext(lineIndex + 1);
-			else
+			else if(oldRules != context.rules)
 			{
-				offsetMgr.setFirstInvalidLineContext(Math.max(
-					firstInvalidLineContext,lineIndex + 1));
+				nextLineRequested = true;
+			}
+			else if(!MiscUtilities.objectsEqual(oldSpanEndSubst,
+				context.spanEndSubst))
+			{
+				nextLineRequested = true;
 			}
 		}
-		finally
+
+		int lineCount = offsetMgr.getLineCount();
+		if(lineCount - 1 == lineIndex)
+			offsetMgr.setFirstInvalidLineContext(-1);
+		else if(nextLineRequested)
+			offsetMgr.setFirstInvalidLineContext(lineIndex + 1);
+		else if(firstInvalidLineContext == -1)
+			/* do nothing */;
+		else
 		{
-			writeUnlock();
+			offsetMgr.setFirstInvalidLineContext(Math.max(
+				firstInvalidLineContext,lineIndex + 1));
 		}
 	} //}}}
 
@@ -2938,54 +2938,45 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getFoldLevel(int line)
 	{
-		try
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		if(foldHandler instanceof DummyFoldHandler)
+			return 0;
+
+		int firstInvalidFoldLevel = offsetMgr.getFirstInvalidFoldLevel();
+		if(firstInvalidFoldLevel == -1 || line < firstInvalidFoldLevel)
 		{
-			writeLock();
-
-			if(line < 0 || line >= offsetMgr.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(line);
-
-			if(foldHandler instanceof DummyFoldHandler)
-				return 0;
-
-			int firstInvalidFoldLevel = offsetMgr.getFirstInvalidFoldLevel();
-			if(firstInvalidFoldLevel == -1 || line < firstInvalidFoldLevel)
-			{
-				return offsetMgr.getFoldLevel(line);
-			}
-			else
-			{
-				if(Debug.FOLD_DEBUG)
-					Log.log(Log.DEBUG,this,"Invalid fold levels from " + firstInvalidFoldLevel + " to " + line);
-
-				int newFoldLevel = 0;
-				boolean changed = false;
-
-				for(int i = firstInvalidFoldLevel; i <= line; i++)
-				{
-					newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
-					if(newFoldLevel != offsetMgr.getFoldLevel(i))
-						changed = true;
-					offsetMgr.setFoldLevel(i,newFoldLevel);
-				}
-
-				if(line == offsetMgr.getLineCount() - 1)
-					offsetMgr.setFirstInvalidFoldLevel(-1);
-				else
-					offsetMgr.setFirstInvalidFoldLevel(line + 1);
-
-				if(changed && !getFlag(INSIDE_INSERT))
-				{
-					//System.err.println("fold level changed: " + start + ":" + line);
-					fireFoldLevelChanged(firstInvalidFoldLevel,line);
-				}
-
-				return newFoldLevel;
-			}
+			return offsetMgr.getFoldLevel(line);
 		}
-		finally
+		else
 		{
-			writeUnlock();
+			if(Debug.FOLD_DEBUG)
+				Log.log(Log.DEBUG,this,"Invalid fold levels from " + firstInvalidFoldLevel + " to " + line);
+
+			int newFoldLevel = 0;
+			boolean changed = false;
+
+			for(int i = firstInvalidFoldLevel; i <= line; i++)
+			{
+				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
+				if(newFoldLevel != offsetMgr.getFoldLevel(i))
+					changed = true;
+				offsetMgr.setFoldLevel(i,newFoldLevel);
+			}
+
+			if(line == offsetMgr.getLineCount() - 1)
+				offsetMgr.setFirstInvalidFoldLevel(-1);
+			else
+				offsetMgr.setFirstInvalidFoldLevel(line + 1);
+
+			if(changed && !getFlag(INSIDE_INSERT))
+			{
+				//System.err.println("fold level changed: " + start + ":" + line);
+				fireFoldLevelChanged(firstInvalidFoldLevel,line);
+			}
+
+			return newFoldLevel;
 		}
 	} //}}}
 

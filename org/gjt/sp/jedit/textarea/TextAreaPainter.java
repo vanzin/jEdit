@@ -1077,19 +1077,19 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintWrapGuide class
 	class PaintWrapGuide extends TextAreaExtension
 	{
-		public void paintValidLine(Graphics2D gfx, int screenLine,
-			int physicalLine, int start, int end, int y)
+		public void paintScreenLineRange(Graphics2D gfx, int firstLine,
+			int lastLine, int[] physicalLines, int[] start,
+			int[] end, int y, int lineHeight)
 		{
-			paintInvalidLine(gfx,screenLine,y);
-		}
-
-		public void paintInvalidLine(Graphics2D gfx, int screenLine, int y)
-		{
-			if(textArea.getDisplayManager().wrapMargin != 0 && isWrapGuidePainted())
+			if(textArea.getDisplayManager().wrapMargin != 0
+				&& isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
-				int x = textArea.getHorizontalOffset() + textArea.getDisplayManager().wrapMargin;
-				gfx.drawLine(x,y,x,y + fm.getHeight());
+				int x = textArea.getHorizontalOffset()
+					+ textArea.getDisplayManager()
+					.wrapMargin;
+				gfx.drawLine(x,y,x,y + (lastLine - firstLine
+					+ 1) * lineHeight);
 			}
 		}
 

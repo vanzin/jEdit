@@ -68,8 +68,6 @@ class BufferPrintable extends WorkRequest implements Printable
 	{
 		try
 		{
-			// can't use a read lock here since Buffer.markTokens()
-			// grabs a write lock
 			//buffer.readLock();
 
 			if(format == null)
