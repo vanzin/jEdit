@@ -478,6 +478,8 @@ public class View extends JFrame implements EBComponent
 			Component left = oldSplitPane.getLeftComponent();
 			final JSplitPane newSplitPane = new JSplitPane(orientation,
 				oldEditPane,editPane);
+			newSplitPane.setOneTouchExpandable(true);
+			newSplitPane.setBorder(null);
 
 			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
@@ -499,15 +501,12 @@ public class View extends JFrame implements EBComponent
 		{
 			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
 				oldEditPane,editPane);
+			newSplitPane.setOneTouchExpandable(true);
 			newSplitPane.setBorder(null);
 			oldParent.add(splitPane);
 			oldParent.revalidate();
 
-			Dimension size;
-			if(oldParent instanceof JSplitPane)
-				size = oldParent.getSize();
-			else
-				size = oldEditPane.getSize();
+			Dimension size = oldParent.getSize();
 			newSplitPane.setDividerLocation(((orientation
 				== JSplitPane.VERTICAL_SPLIT) ? size.height
 				: size.width) / 2);
