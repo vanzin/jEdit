@@ -2,11 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre4
 
-Thanks to Ryan Grove for contributing to this release.
+Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
 
 {{{ Syntax Highlighting
 
 - Updated NSIS2 syntax highlighting (Ryan Grove).
+
+- Modes from the user catalog file are checked first for a matching
+  first line or file name glob (Ryan Fowler).
 
 }}}
 {{{ Scripting
@@ -62,6 +65,7 @@ Thanks to Ryan Grove for contributing to this release.
 }}}
 
 }}}
+
 {{{ Version 4.2pre3
 
 Thanks to Brad Mace, Brant Langer Gurganus, Christoph Daniel Schulze,
