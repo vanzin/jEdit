@@ -334,8 +334,9 @@ public class GUIUtilities
 		{
 			toolTip = toolTip + " ("
 				+ (shortcut1 != null
-				? shortcut1 + " or "
-				: "")
+				? shortcut1 : "")
+				+ ((shortcut1 != null && shortcut2 != null)
+				? " or " : "")
 				+ (shortcut2 != null
 				? shortcut2
 				: "") + ")";

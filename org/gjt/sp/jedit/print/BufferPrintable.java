@@ -125,7 +125,7 @@ print_loop:	for(;;)
 			if(currentLine == lineList.size())
 			{
 				buffer.getLineText(currentPhysicalLine,seg);
-				LineMetrics lm = font.getLineMetrics(seg.array,
+				lm = font.getLineMetrics(seg.array,
 					seg.offset,seg.count,frc);
 
 				Token tokens = buffer.markTokens(currentPhysicalLine)

@@ -234,7 +234,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			else if(actionCommand.equals("reload"))
 				browser.reloadDirectory();
 			else if(actionCommand.equals("roots"))
-				browser.setDirectory(FileRootsVFS.PROTOCOL + ":");
+				browser.rootDirectory();
 			else if(actionCommand.equals("home"))
 				browser.setDirectory(System.getProperty("user.home"));
 			else if(actionCommand.equals("synchronize"))

@@ -28,6 +28,7 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
@@ -287,7 +288,7 @@ class InstallPluginsDialog extends EnhancedDialog
 				installedVersion.setText(plugin.installedVersion);
 			updated.setText(branch.date);
 
-			Vector deps = new Vector();
+			ArrayList deps = new ArrayList();
 			createDependencyList(branch.deps,deps);
 			StringBuffer buf = new StringBuffer();
 			for(int i = 0; i < deps.size(); i++)
@@ -319,7 +320,7 @@ class InstallPluginsDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ createDependencyList() method
-	private void createDependencyList(Vector deps, Vector append)
+	private void createDependencyList(Vector deps, ArrayList append)
 	{
 		for(int i = 0; i < deps.size(); i++)
 		{
@@ -343,13 +344,24 @@ class InstallPluginsDialog extends EnhancedDialog
 	//{{{ updateTotalSize() method
 	private void updateTotalSize()
 	{
-		int _totalSize = 0;
+		ArrayList selectedPlugins = new ArrayList();
 
 		Object[] selected = plugins.getCheckedValues();
 		for(int i = 0; i < selected.length; i++)
 		{
 			PluginList.Plugin plugin = (PluginList.Plugin)selected[i];
-			PluginList.Branch branch = plugin.getCompatibleBranch();
+			if(!selectedPlugins.contains(plugin))
+				selectedPlugins.add(plugin);
+
+			createDependencyList(plugin.getCompatibleBranch().deps,
+				selectedPlugins);
+		}
+
+		int _totalSize = 0;
+		for(int i = 0; i < selectedPlugins.size(); i++)
+		{
+			PluginList.Branch branch = ((PluginList.Plugin)
+				selectedPlugins.get(i)).getCompatibleBranch();
 			_totalSize += (downloadSource.isSelected()
 				? branch.downloadSourceSize
 				: branch.downloadSize);
@@ -371,7 +383,10 @@ class InstallPluginsDialog extends EnhancedDialog
 			else if(source == cancel)
 				cancel();
 			else if(source == downloadSource)
+			{
+				updateInfo();
 				updateTotalSize();
+			}
 		}
 	} //}}}
 

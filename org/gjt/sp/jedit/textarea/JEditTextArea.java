@@ -243,6 +243,7 @@ public class JEditTextArea extends JComponent
 
 			if(this.buffer != null)
 			{
+				selectNone();
 				caretLine = caret = 0;
 				bracketLine = bracketPosition = -1;
 
@@ -4306,6 +4307,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
+		for(int i = 0; i < foo.length; i++)
+		{
+			foo[i] = ' ';
+		}
+
 		tabSize = (float)painter.getFont().getStringBounds(foo,0,_tabSize,
 			painter.getFontRenderContext()).getWidth();
 

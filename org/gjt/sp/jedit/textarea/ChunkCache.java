@@ -352,7 +352,7 @@ public class ChunkCache
 
 						if(nextX > xInChunk)
 						{
-							if(round && nextX - xInChunk > xInChunk - glyphX)
+							if(!round || nextX - xInChunk > xInChunk - glyphX)
 								return chunks.offset + i;
 							else
 								return chunks.offset + i + 1;
