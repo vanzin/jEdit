@@ -7,7 +7,7 @@ plugin.macos.MacOSPlugin.menu.code=new macos.menu.MacOSMenu();
 #
 plugin.macos.MacOSPlugin.name=Mac OS Plugin
 plugin.macos.MacOSPlugin.author=Kris Kopicki
-plugin.macos.MacOSPlugin.version=3.0a
+plugin.macos.MacOSPlugin.version=3.0b
 plugin.macos.MacOSPlugin.docs=MacOS.html
 
 #
@@ -22,11 +22,10 @@ MacOSPlugin.depend.mrj.version=3.2
 #
 # Default settings
 #
-MacOSPlugin.default.type=TEXT
-MacOSPlugin.default.creator=JESP
+MacOSPlugin.default.type=1413830740
+MacOSPlugin.default.creator=1246057296
 MacOSPlugin.default.useScreenMenuBar=false
 MacOSPlugin.default.preserveCodes=true
-MacOSPlugin.default.liveResize=false
 MacOSPlugin.default.useSelection=false
 
 #
@@ -34,9 +33,8 @@ MacOSPlugin.default.useSelection=false
 #
 options.MacOSPlugin.code=new macos.MacOSOptionPane();
 options.MacOSPlugin.label=Mac OS Settings
-options.MacOSPlugin.menubar.label=Enable Mac OS style menubar (not recommended)
+options.MacOSPlugin.menubar.label=Enable Mac OS style menubar
 options.MacOSPlugin.preserve.label=Preserve existing file/creator codes on save
-options.MacOSPlugin.liveResize.label=Enable live resizing of windows
 options.MacOSPlugin.scripts.label=Script folder search depth:
 options.MacOSPlugin.useSelection.label=Use system highlight colour for Text Area
 

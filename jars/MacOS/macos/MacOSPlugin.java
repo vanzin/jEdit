@@ -55,6 +55,7 @@ public class MacOSPlugin extends EBPlugin
 			Application app2 = new Application();
 			app2.addApplicationListener(delegate);
 			app2.setEnabledPreferencesMenu(true);
+			app2.setEnabledAboutMenu(true);
 			
 			app.setDelegate(delegate);
 			app.setServicesProvider(delegate);

@@ -2,9 +2,13 @@ Mac OS Plugin 3.0
 - All native calls now use the Cocoa API. (Java 1.4.1 is required)
 - Old MRJ methods replaced with com.apple.eawt.
 - Added a Dock Menu. Dock Menu provides similar functionality to the plugin menu.
+	- You can now insert text into a buffer from any application
+	- You can open a file in jEdit from any application
 - Added services menu (bundle needs to be updated)
 - Opening a directory by drag and drop or with open -a will
   set the file browser to the directory.
+- Closing all windows will no longer quit jEdit
+- Clicking the jEdit dock icon when there are no views will create one.
 
 Mac OS Plugin 2.0.4
 

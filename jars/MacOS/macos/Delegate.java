@@ -3,7 +3,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Delegate.java - A delegate for NSApplication
- * Copyright (C) 2002 Kris Kopicki
+ * Copyright (C) 2003 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package macos;
 
 //{{{ Imports
 import com.apple.eawt.*;
+import com.apple.eio.*;
 import com.apple.cocoa.application.*;
 import com.apple.cocoa.foundation.*;
 import java.util.*;
@@ -42,7 +43,7 @@ public class Delegate extends ApplicationAdapter
 	//{{{ Variables
 	private final NSSelector actionSel = new NSSelector("doAction", new Class[] {});
 	
-	private Buffer lastOpenFile;
+	private List filenames = new LinkedList();
 	//}}}
 	
 	//{{{ Constructor
@@ -54,13 +55,6 @@ public class Delegate extends ApplicationAdapter
 			System.setProperty("apple.laf.useScreenMenuBar","true");
 		else
 			System.setProperty("apple.laf.useScreenMenuBar","false");
-		
-		if (jEdit.getBooleanProperty("MacOSPlugin.liveResize",
-			jEdit.getBooleanProperty("MacOSPlugin.default.liveResize"))
-		)
-			System.setProperty("com.apple.mrj.application.live-resize","true");
-		else
-			System.setProperty("com.apple.mrj.application.live-resize","false");
 	} //}}}
 	
 	//{{{ Handlers
@@ -68,34 +62,53 @@ public class Delegate extends ApplicationAdapter
 	//{{{ handleAbout() method
 	public void handleAbout(ApplicationEvent event)
 	{
+		event.setHandled(true);
 		new AboutDialog(jEdit.getActiveView());
 	} //}}}
 
 	//{{{ handleFileCodes() method
 	public void handleFileCodes(BufferUpdate msg)
 	{
+		Buffer buffer = msg.getBuffer();
+		
+		// Set type/creator on save
+		if (!buffer.isDirty() && msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+		{
+			try {
+				FileManager.setFileTypeAndCreator(buffer.getPath(),
+					buffer.getIntegerProperty("MacOSPlugin.type",
+						jEdit.getIntegerProperty("MacOSPlugin.default.type",0)),
+					buffer.getIntegerProperty("MacOSPlugin.creator",
+						jEdit.getIntegerProperty("MacOSPlugin.default.creator",0)));
+			} catch (Exception e) {
+				// Fail silently, since we may be using UFS
+			}
+		}
+		// Add type/creator to local buffer property list on open
+		else if (msg.getWhat() == BufferUpdate.CREATED)
+		{			
+			if (jEdit.getProperty("MacOSPlugin.preserveCodes").equals("true"))
+			{
+				try {
+					int type = FileManager.getFileType(buffer.getPath());
+					int creator = FileManager.getFileCreator(buffer.getPath());
+					
+					if (type != 0)
+						buffer.setIntegerProperty("MacOSPlugin.type",type);
+					if (creator != 0)
+						buffer.setIntegerProperty("MacOSPlugin.creator",creator);
+				} catch (Exception e) {
+					// This will happen when a new file is created
+				}
+			}
+		}
 	} //}}}
 	
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(ApplicationEvent event)
 	{
-		File file = new File(event.getFilename());
-		Buffer buffer;
-		
-		View view = jEdit.getActiveView();
-		if(view == null)
-			view = PerspectiveManager.loadPerspective(true);
-		
-		if (file.isDirectory())
-		{
-			VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
-			return;
-		}
-		
-		if ((buffer = jEdit.openFile(view,file.getPath())) != null)
-			lastOpenFile = buffer;
-		else
-			Log.log(Log.ERROR,this,"Error opening file.");
+		filenames.add(event.getFilename());
+		event.setHandled(true);
 	} //}}}
 
 	//{{{ handleOpenFile() method
@@ -103,8 +116,9 @@ public class Delegate extends ApplicationAdapter
 	{
 		if(msg.getWhat() == ViewUpdate.CREATED)
 		{
-			if(lastOpenFile != null)
-				msg.getView().setBuffer(lastOpenFile);
+			Iterator i = filenames.iterator();
+			while (i.hasNext())
+				jEdit.openFile(msg.getView(),(String)i.next());
 			MacOSPlugin.started = true;
 		}
 	} //}}}
@@ -112,6 +126,7 @@ public class Delegate extends ApplicationAdapter
 	//{{{ handlePreferences() method
 	public void handlePreferences(ApplicationEvent event)
 	{
+		event.setHandled(true);
 		new GlobalOptions(jEdit.getActiveView());
 	} //}}}
 	
@@ -119,11 +134,11 @@ public class Delegate extends ApplicationAdapter
 	/**
 	 * This never seems to be called when used with a delegate
 	 */
-	public void handleQuit(ApplicationEvent event)
-	{
-		event.setHandled(false);
-		jEdit.exit(jEdit.getActiveView(),true);
-	} //}}}
+	//public void handleQuit(ApplicationEvent event)
+	//{
+	//	event.setHandled(false);
+	//	jEdit.exit(jEdit.getActiveView(),true);
+	//} //}}}
 
 	//}}}
 	
@@ -170,8 +185,8 @@ public class Delegate extends ApplicationAdapter
 		dockMenu.addItem(miBuff);
 		dockMenu.addItem(miRec);
 		dockMenu.addItem(miDir);
-		dockMenu.addItem(new NSMenuItem().separatorItem());
-		dockMenu.addItem(miMac);
+		//dockMenu.addItem(new NSMenuItem().separatorItem());
+		//dockMenu.addItem(miMac);
 		if (jEdit.getViewCount() == 0)
 			miMac.setEnabled(false);
 		
@@ -199,17 +214,41 @@ public class Delegate extends ApplicationAdapter
 		return dockMenu;
 	} //}}}
 	
+	//{{{ applicationOpenFiles() method
+	public void applicationOpenFiles(NSApplication sender, NSArray filenames)
+	{
+		int count = filenames.count();
+		for (int i=0; i<count; i++)
+		{
+			File file = new File((String)filenames.objectAtIndex(i));
+			Buffer buffer;
+			
+			View view = jEdit.getActiveView();
+			if(view == null)
+				view = PerspectiveManager.loadPerspective(true);
+			
+			if (file.isDirectory())
+			{
+				VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
+				return;
+			}
+			
+			if (jEdit.openFile(view,file.getPath()) == null)
+				Log.log(Log.ERROR,this,"Error opening file.");
+		}
+	} //}}}
+	
 	//{{{ applicationShouldHandleReopen() method
 	public boolean applicationShouldHandleReopen(NSApplication theApplication, boolean flag)
 	{
-		/*SwingUtilities.invokeLater(new Runnable()
+		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
 				if (jEdit.getViewCount() == 0)
-					jEdit.newView(null);
+					new NewViewAction().doAction();
 			}
-		});*/
+		});
 		
 		return false;
 	} //}}}
@@ -235,13 +274,42 @@ public class Delegate extends ApplicationAdapter
 	//{{{ openFile() method
 	public String openFile(NSPasteboard pboard, String userData)
 	{
+		if (jEdit.getViewCount() == 0)
+			return null;
+		
+		NSData data = pboard.dataForType("NSFilenamesPboardType");
+		String[] error = new String[1];
+		int[] format = new int[1];
+		NSArray filenames = (NSArray)NSPropertyListSerialization.propertyListFromData(data,
+			NSPropertyListSerialization.PropertyListImmutable,
+			format,
+			error);
+		int count = filenames.count();
+		for (int i=0; i<count; i++)
+			jEdit.openFile(jEdit.getActiveView(),(String)filenames.objectAtIndex(i));
+		
+		return null;
+	} //}}}
+	
+	//{{{ insertSelection() method
+	public String insertSelection(NSPasteboard pboard, String userData)
+	{
+		String string = pboard.stringForType("NSStringPboardType");
+		if (jEdit.getViewCount() > 0)
+		{
+			View view = jEdit.getActiveView();
+			view.getBuffer().insert(view.getTextArea().getCaretPosition(),string);
+		}
 		return null;
 	} //}}}
 	
 	//{{{ openSelection() method
 	public String openSelection(NSPasteboard pboard, String userData)
 	{
-		jEdit.newFile(jEdit.getActiveView()).insert(0,userData);
+		String string = pboard.stringForType("NSStringPboardType");
+		if (jEdit.getViewCount() == 0)
+			new NewViewAction().doAction();
+		jEdit.newFile(jEdit.getActiveView()).insert(0,pboard.stringForType("NSStringPboardType"));
 		return null;
 	} //}}}
 	
@@ -382,7 +450,6 @@ public class Delegate extends ApplicationAdapter
 				file = new File(((BufferHistory.Entry)recent.get(i)).path);
 				item = new NSMenuItem(file.getName(),actionSel,"");
 				item.setTarget(new ShowFileAction(file.getPath()));
-				//item.setImage(NSWorkspace.sharedWorkspace().iconForFile(file.getPath()));
 				if (!file.exists())
 					item.setEnabled(false);
 				addItem(item);
@@ -422,7 +489,6 @@ public class Delegate extends ApplicationAdapter
 				file = new File(model.getItem(i));
 				item = new NSMenuItem(file.getName(),actionSel,"");
 				item.setTarget(new ShowFileAction(file.getPath()));
-				//item.setImage(NSWorkspace.sharedWorkspace().iconForFile(file.getPath()));
 				if (!file.exists())
 					item.setEnabled(false);
 				addItem(item);
@@ -455,9 +521,8 @@ public class Delegate extends ApplicationAdapter
 			{
 				public void run()
 				{
-					View view = PerspectiveManager.loadPerspective(true);
-					if(view == null)
-						jEdit.newView(null);
+					if (jEdit.getViewCount() == 0)
+						PerspectiveManager.loadPerspective(true);
 					else
 						jEdit.newView(jEdit.getActiveView());
 				}

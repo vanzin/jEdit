@@ -87,6 +87,7 @@ public class MacOSActions
 		//SwingUtilities.invokeLater(new ScriptRunner(path));
 	} //}}}
 	
+	//{{{ ScriptRunner class
 	static class ScriptRunner extends Thread
 	{
 		private String path;
@@ -116,5 +117,5 @@ public class MacOSActions
 				} catch (Exception ex) {}
 			}
 		}
-	}
+	} //}}}
 }
