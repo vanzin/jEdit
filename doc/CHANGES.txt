@@ -2,7 +2,7 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre9
 
-Thanks to Chris Petersen, Kris Kopicki, Randolf Mock and
+Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and
 Reinout van Schouwen for contributing to this release.
 
 + Syntax Highlighting Changes:
@@ -74,6 +74,9 @@ Reinout van Schouwen for contributing to this release.
 - Fixed a problem with undo -- after undoing the full undo queue,
   further edits were not being added. This problem has been there since
   the 4.0 pre-releases, damn.
+
+- Fixed problem with grabbing keystrokes with the Shift modifier set and
+  all other modifiers unset (Iain Hewson).
 
 + API Changes:
 
