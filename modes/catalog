@@ -31,6 +31,8 @@
 <MODE NAME="aspect-j"		FILE="aspect-j.xml"
 				FILE_NAME_GLOB="*.aj" />
 
+<MODE NAME="assembly-m68k"	FILE="assembly-M68k.xml" />
+
 <MODE NAME="assembly-macro32"	FILE="assembly-macro32.xml"
 				FILE_NAME_GLOB="*.mar" />
 
