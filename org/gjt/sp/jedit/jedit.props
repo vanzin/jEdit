@@ -216,6 +216,9 @@ view.electricBorders=3
 # Smart home/end
 view.homeEnd=true
 
+# Standard go to next/previous word behavior
+view.stdNextPrevWord=false
+
 # Middle mouse button pastes % register
 view.middleMousePaste=false
 
