@@ -87,23 +87,21 @@ public class PositionManager
 			return;
 		}
 
-		int newGapOffset;
-		PosBottomHalf highest = root.findHighest(offset);
-		if(highest == null)
-			newGapOffset = 0;
-		else
-			newGapOffset = highest.getOffset() + 1;
+		PosBottomHalf lowest = root.findLowest(offset);
+		if(lowest == null)
+			return;
 
-		if(gapWidth != 0)
+		if(gapStartsAt != null)
 		{
-			if(gapOffset < offset)
-				root.contentInserted(gapOffset,offset,gapWidth);
+			if(gapStartsAt.offset < offset)
+				root.contentInserted(gapStartsAt.offset,offset,gapWidth);
 			else
-				root.contentInserted(offset,gapOffset,-gapWidth);
+				root.contentInserted(offset,gapStartsAt.offset,-gapWidth);
 		}
 
-		gapOffset = newGapOffset;
+		//offset==some pos offset XXX
 
+		gapStartsAt = lowest;
 		gapWidth += length;
 	} //}}}
 
@@ -116,13 +114,13 @@ public class PositionManager
 			return;
 		}
 
-		if(gapWidth != 0 && gapOffset < offset)
+		/* if(gapWidth != 0 && gapOffset < offset)
 		{
 			root.contentRemoved(gapOffset,offset,offset + length,
 				gapWidth,true);
 		}
 		else if(gapWidth != 0 && gapOffset > offset + length)
-		{
+		{		if(gapWidth != 0 && gapOffset < offset)
 			root.contentRemoved(offset,offset + length,gapOffset,
 				gapWidth,false);
 		}
@@ -133,13 +131,13 @@ public class PositionManager
 		}
 
 		gapOffset = offset;
-		gapWidth -= length;
+		gapWidth -= length; */
 
 	} //}}}
 
 	//{{{ Package-private members
 	/* so that PosBottomHalf can access without access$ methods */
-	int gapOffset;
+	PosBottomHalf gapStartsAt;
 	int gapWidth;
 
 	//{{{ removePosition() method
@@ -401,10 +399,13 @@ public class PositionManager
 		//{{{ getOffset() method
 		int getOffset()
 		{
-			if(offset >= gapOffset)
-				return offset + gapWidth;
-			else
-				return offset;
+			if(gapStartsAt != null)
+			{
+				if(offset >= gapStartsAt.offset)
+					return offset + gapWidth;
+			}
+
+			return offset;
 		} //}}}
 
 		//{{{ dump() method
@@ -477,21 +478,21 @@ public class PositionManager
 			}
 		} //}}}
 
-		//{{{ findHighest() method
-		/* find node with highest pos <= offset */
-		PosBottomHalf findHighest(int offset)
+		//{{{ findLowest() method
+		/* find node with lowest pos >= offset */
+		PosBottomHalf findLowest(int offset)
 		{
-			if(getOffset() > offset)
+			if(getOffset() < offset)
 			{
-				if(left != null)
-					return left.findHighest(offset);
+				if(right != null)
+					return right.findLowest(offset);
 				else
 					return null;
 			}
 			else
 			{
-				if(right != null && right.getOffset() <= offset)
-					return right.findHighest(offset);
+				if(left != null && left.getOffset() >= offset)
+					return left.findLowest(offset);
 				else
 					return this;
 			}
