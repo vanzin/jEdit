@@ -473,6 +473,7 @@ public class PluginJAR
 			else
 			{
 				plugin = new EditPlugin.Deferred(className);
+				plugin.jar = (EditPlugin.JAR)this;
 				generateCacheForPluginCoreClass(className,cache);
 				label = _label;
 				break;

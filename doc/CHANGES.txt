@@ -386,6 +386,10 @@ release.
 
   addKeyBinding(String keyBinding, String action);
 
+- Removed some deprecated GUIUtilities methods:
+
+  loadMenu(View,String)
+
 - These two methods are now final and must be specified using
   "<name>.label" and "<name>.toggle" properties (use
   jEdit.setTemporaryProperty() for dynamic actions):

@@ -1334,26 +1334,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				if(evt.getActionCommand().equals("plugin-manager"))
-				{
-					new org.gjt.sp.jedit.pluginmgr.PluginManager(
-						JOptionPane.getFrameForComponent(
-						VFSBrowser.this));
-				}
-				else if(evt.getActionCommand().equals("plugin-options"))
-				{
-					new org.gjt.sp.jedit.options.PluginOptions(
-						JOptionPane.getFrameForComponent(
-						VFSBrowser.this));
-				}
-				else
-				{
-					VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());
-					String directory = vfs.showBrowseDialog(null,
-						VFSBrowser.this);
-					if(directory != null)
-						setDirectory(directory);
-				}
+				VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());
+				String directory = vfs.showBrowseDialog(null,
+					VFSBrowser.this);
+				if(directory != null)
+					setDirectory(directory);
 			}
 		} //}}}
 
@@ -1362,6 +1347,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			public void mousePressed(MouseEvent evt)
 			{
+				createPopupMenu();
+
 				if(!popup.isVisible())
 				{
 					GUIUtilities.showPopupMenu(
