@@ -128,9 +128,10 @@ public interface IndentAction
 	public class AlignBracket implements IndentAction
 	{
 		private int line, offset;
-		private int openLineIndex;
-		private String openLine;
-		private boolean extraIndent;
+		private int openBracketLine;
+		private int openBracketColumn;
+		private String openBracketLineText;
+		private int extraIndent;
 
 		public AlignBracket(Buffer buffer, int line, int offset)
 		{
@@ -140,39 +141,46 @@ public interface IndentAction
 			int openBracketIndex = TextUtilities.findMatchingBracket(
 				buffer,this.line,this.offset);
 			if(openBracketIndex == -1)
-				openLineIndex = -1;
+				openBracketLine = -1;
 			else
 			{
-				openLineIndex = buffer.getLineOfOffset(openBracketIndex);
-				openLine = buffer.getLineText(openLineIndex);
+				openBracketLine = buffer.getLineOfOffset(openBracketIndex);
+				openBracketColumn = openBracketIndex -
+					buffer.getLineStartOffset(openBracketLine);
+				openBracketLineText = buffer.getLineText(openBracketLine);
 			}
 		}
 
-		public boolean getExtraIndent()
+		public int getExtraIndent()
 		{
 			return extraIndent;
 		}
 		
-		public void setExtraIndent(boolean extraIndent)
+		public void setExtraIndent(int extraIndent)
 		{
 			this.extraIndent = extraIndent;
 		}
 		
+		public int getOpenBracketColumn()
+		{
+			return openBracketColumn;
+		}
+		
 		public String getOpenBracketLine()
 		{
-			return openLine;
+			return openBracketLineText;
 		}
 
 		public int calculateIndent(Buffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
-			if(openLine == null)
+			if(openBracketLineText == null)
 				return newIndent;
 			else
 			{
 				return MiscUtilities.getLeadingWhiteSpaceWidth(
-					openLine,buffer.getTabSize())
-					+ (extraIndent ? buffer.getIndentSize() : 0);
+					openBracketLineText,buffer.getTabSize())
+					+ (extraIndent * buffer.getIndentSize());
 			}
 		}
 		

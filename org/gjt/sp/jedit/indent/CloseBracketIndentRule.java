@@ -58,7 +58,8 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		if(offset == -1)
 			return;
 
-		if(getBrackets(line).closeCount != 0)
+		int closeCount = getBrackets(line).closeCount;
+		if(closeCount != 0)
 		{
 			IndentAction.AlignBracket alignBracket
 				= new IndentAction.AlignBracket(
@@ -77,8 +78,13 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			corresponding opening bracket from line 1.
 			*/
 			String openLine = alignBracket.getOpenBracketLine();
-			if(openLine != null && getBrackets(openLine).openCount > 1)
-				alignBracket.setExtraIndent(true);
+			int column = alignBracket.getOpenBracketColumn();
+			if(openLine != null)
+			{
+				String leadingBrackets = openLine.substring(0,column);
+				alignBracket.setExtraIndent(getBrackets(leadingBrackets)
+					.openCount);
+			}
 			
 			indentActions.add(alignBracket);
 		}
