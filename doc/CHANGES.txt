@@ -2,6 +2,13 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre4
 
+Thanks to Ryan Grove for contributing to this release.
+
+{{{ Syntax Highlighting
+
+- Updated NSIS2 syntax highlighting (Ryan Grove).
+
+}}}
 {{{ Bug Fixes
 
 - Changing the no modifier click action for the gutter didn't work.

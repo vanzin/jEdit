@@ -41,8 +41,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	/**
 	 * Creates a new string literal matcher.
 	 */
-	public BoyerMooreSearchMatcher(String pattern, String replace,
-		boolean ignoreCase, boolean beanshell, BshMethod replaceMethod)
+	public BoyerMooreSearchMatcher(String pattern, boolean ignoreCase)
 	{
 		this.pattern = pattern.toCharArray();
 		if(ignoreCase)
@@ -56,14 +55,6 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
-
-		if(beanshell && replaceMethod != null && replace.length() != 0)
-		{
-			this.beanshell = true;
-			this.replaceMethod = replaceMethod;
-			replaceNS = new NameSpace(BeanShell.getNameSpace(),
-				"search and replace");
-		}
 
 		pattern_end = this.pattern.length - 1;
 
@@ -103,28 +94,6 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 			returnValue.end = pos + pattern.length;
 			return returnValue;
 		}
-	} //}}}
-
-	//{{{ substitute() method
-	/**
-	 * Returns the specified text, with any substitution specified
-	 * within this matcher performed.
-	 * @param text The text
-	 */
-	public String substitute(String text) throws Exception
-	{
-		if(beanshell)
-		{
-			replaceNS.setVariable("_0",text);
-			Object obj = BeanShell.runCachedBlock(replaceMethod,
-				null,replaceNS);
-			if(obj == null)
-				return "";
-			else
-				return obj.toString();
-		}
-		else
-			return replace;
 	} //}}}
 
 	//{{{ match() method
@@ -235,9 +204,6 @@ SEARCH:
 	private int pattern_end;
 	private String replace;
 	private boolean ignoreCase;
-	private boolean beanshell;
-	private BshMethod replaceMethod;
-	private NameSpace replaceNS;
 
 	// Boyer-Moore member fields
 	private int[] fwd_skip;
