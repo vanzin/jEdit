@@ -32,19 +32,20 @@ import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class DirectoryMenu extends EnhancedMenu implements MenuListener
+public class DirectoryMenu extends EnhancedMenu
 {
 	//{{{ DirectoryMenu constructor
 	public DirectoryMenu(String name, String dir)
 	{
 		super(name);
 		this.dir = dir;
-		addMenuListener(this);
 	} //}}}
 
 	//{{{ menuSelected() method
 	public void menuSelected(MenuEvent evt)
 	{
+		super.menuSelected(evt);
+
 		final View view = GUIUtilities.getView(this);
 
 		if(getMenuComponentCount() != 0)

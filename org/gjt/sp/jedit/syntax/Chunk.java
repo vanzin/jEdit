@@ -38,6 +38,8 @@ import org.gjt.sp.jedit.syntax.*;
  */
 public class Chunk extends Token
 {
+	public static boolean DEBUG = false;
+
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
@@ -79,8 +81,11 @@ public class Chunk extends Token
 			} //}}}
 
 			// Useful for debugging purposes
-			//gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
-			//	width,10));
+			if(DEBUG)
+			{
+				gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
+					width,10));
+			}
 
 			if(start.accessable)
 			{

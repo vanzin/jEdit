@@ -1,6 +1,9 @@
 /*
  * EnhancedMenu.java - jEdit menu
- * Copyright (C) 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,14 +22,19 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
+import javax.swing.event.*;
 import javax.swing.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
+//}}}
 
-public class EnhancedMenu extends JMenu
+public class EnhancedMenu extends JMenu implements MenuListener
 {
+	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name)
 	{
+		this._name = name;
 		String label = jEdit.getProperty(name.concat(".label"));
 		if(label == null)
 			label = name;
@@ -45,7 +53,29 @@ public class EnhancedMenu extends JMenu
 		if(!OperatingSystem.isMacOS())
 			setMnemonic(mnemonic);
 
-		String menuItems = jEdit.getProperty(name);
+		addMenuListener(this);
+		//init();
+	} //}}}
+
+	//{{{ menuSelected() method
+	public void menuSelected(MenuEvent evt)
+	{
+		init();
+	} //}}}
+
+	public void menuDeselected(MenuEvent e) {}
+
+	public void menuCanceled(MenuEvent e) {}
+
+	//{{{ init() method
+	public void init()
+	{
+		if(initialized)
+			return;
+
+		initialized = true;
+
+		String menuItems = jEdit.getProperty(_name);
 		if(menuItems != null)
 		{
 			StringTokenizer st = new StringTokenizer(menuItems);
@@ -63,5 +93,8 @@ public class EnhancedMenu extends JMenu
 				}
 			}
 		}
-	}
+	} //}}}
+
+	protected String _name;
+	protected boolean initialized;
 }

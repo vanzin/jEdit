@@ -1283,7 +1283,7 @@ public class View extends JFrame implements EBComponent
 
 		getRootPane().revalidate();
 
-		SwingUtilities.updateComponentTreeUI(getRootPane());
+		//SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}
 
 	//{{{ loadToolBars() method

@@ -1261,6 +1261,7 @@ public class GUIUtilities
 		}
 
 		JMenu menu = new EnhancedMenu("plugins");
+		((EnhancedMenu)menu).init();
 
 		if(pluginMenuItems.isEmpty())
 		{
