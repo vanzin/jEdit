@@ -3603,13 +3603,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
-		parseBufferLocalProperties();
+		//parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this
 		FoldHandler oldFoldHandler = foldHandler;
-		setMode();
+		//setMode();
 
-		if(foldHandler == oldFoldHandler)
+		/* if(foldHandler == oldFoldHandler)
 		{
 			// on a reload, the fold handler doesn't change, but
 			// we still need to re-collapse folds.
@@ -3623,7 +3623,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 			else
 				offsetMgr.expandFolds(collapseFolds);
-		}
+		} */
 
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
@@ -3770,15 +3770,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 				}
 				if(name != null)
 				{
-					String value = buf.toString();
-					try
-					{
-						setProperty(name,new Integer(value));
-					}
-					catch(NumberFormatException nf)
-					{
-						setProperty(name,value);
-					}
+					// use the low-level property setting code
+					// so that if we have a buffer-local
+					// property with the same value as a default,
+					// later changes in the default don't affect
+					// the buffer-local property
+					properties.put(name,new PropValue(buf.toString(),false));
 					name = null;
 				}
 				buf.setLength(0);

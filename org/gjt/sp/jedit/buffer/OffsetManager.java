@@ -490,7 +490,7 @@ public class OffsetManager
 			Anchor anchor = anchors;
 			for(;;)
 			{
-				if(anchor == null || anchor.physicalLine <= startLine)
+				if(anchor == null || anchor.physicalLine < startLine)
 					break;
 
 				anchor.physicalLine += numLines;

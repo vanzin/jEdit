@@ -235,6 +235,10 @@ for contributing to this release.
 
 - Fixed initial position of options dialog box divider.
 
+- If the default edit mode had a tab size of 8, and the global default
+  was 4, a buffer-local property specifying a tab size of 8  would be
+  ignored.
+
 }}}
 {{{ API Changes
 
@@ -257,6 +261,13 @@ for contributing to this release.
   into account. Currently, no public API exists to covert between
   scroll line numbers and physical line numbers, however there is a new
   JEditTextArea.setFirstPhysicalLine() method.
+
+- The following plugins are known to be broken:
+
+  Background
+  JDiff
+  WhiteSpace
+  XML
 
 }}}
 {{{ API Enhancements

@@ -350,7 +350,8 @@ public class JEditTextArea extends JComponent
 	public void setFirstLine(int firstLine)
 	{
 		//{{{ ensure we don't have empty space at the bottom or top, etc
-		int max = displayManager.getScrollLineCount() - visibleLines;
+		int max = displayManager.getScrollLineCount() - visibleLines
+			+ (lastLinePartial ? 1 : 0);
 		if(firstLine > max)
 			firstLine = max;
 		if(firstLine < 0)
@@ -359,8 +360,6 @@ public class JEditTextArea extends JComponent
 
 		if(firstLine == displayManager.getFirstLine())
 			return;
-
-		trace = new Exception();
 
 		displayManager.setFirstLine(firstLine);
 
@@ -492,7 +491,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollUpPage()
 	{
-		setFirstLine(getFirstLine() - getVisibleLines());
+		setFirstLine(getFirstLine() - getVisibleLines()
+			- (lastLinePartial ? 1 : 0));
 	} //}}}
 
 	//{{{ scrollDownLine() method
@@ -512,7 +512,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollDownPage()
 	{
-		setFirstLine(getFirstLine() + getVisibleLines());
+		setFirstLine(getFirstLine() + getVisibleLines()
+			- (lastLinePartial ? 1 : 0));
 	} //}}}
 
 	//{{{ scrollToCaret() method
@@ -4832,10 +4833,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// we can help it
 			int lineCount = displayManager.getScrollLineCount();
 			int firstLine = displayManager.getFirstLine();
+			int visible = visibleLines - (lastLinePartial ? 1 : 0);
 
-			vertical.setValues(firstLine,visibleLines,0,lineCount);
+			vertical.setValues(firstLine,visible,0,lineCount);
 			vertical.setUnitIncrement(2);
-			vertical.setBlockIncrement(visibleLines);
+			vertical.setBlockIncrement(visible);
 		}
 
 		int width = painter.getWidth();
@@ -5284,7 +5286,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
-		for(int i = visibleLines; i >= 0; i--)
+		for(int i = visibleLines - 1; i >= 0; i--)
 		{
 			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
 			if(info.physicalLine != -1)
