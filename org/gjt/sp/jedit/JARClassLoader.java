@@ -51,6 +51,7 @@ public class JARClassLoader extends ClassLoader
 	{
 		// for debugging
 		id = INDEX++;
+		live++;
 	} //}}}
 
 	//{{{ loadClass() method
@@ -182,6 +183,10 @@ public class JARClassLoader extends ClassLoader
 	 */
 	public static void dump()
 	{
+		Log.log(Log.DEBUG,JARClassLoader.class,
+			"Total instances created: " + INDEX);
+		Log.log(Log.DEBUG,JARClassLoader.class,
+			"Live instances: " + live);
 		synchronized(classHash)
 		{
 			Iterator entries = classHash.entrySet().iterator();
@@ -202,6 +207,12 @@ public class JARClassLoader extends ClassLoader
 	public String toString()
 	{
 		return jar.getPath() + " (" + id + ")";
+	} //}}}
+
+	//{{{ finalize() method
+	protected void finalize()
+	{
+		live--;
 	} //}}}
 
 	//{{{ Package-private members
@@ -254,6 +265,7 @@ public class JARClassLoader extends ClassLoader
 	private static final Object NO_CLASS = new Object();
 
 	private static int INDEX;
+	private static int live;
 	private static Hashtable classHash = new Hashtable();
 
 	private int id;
