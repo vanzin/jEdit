@@ -634,8 +634,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		int start, int len, LineContext context)
 	{
 		int last = start;
+		int end = start + len;
 
-		for(int i = start; i < start + len; i++)
+		for(int i = start; i < end; i++)
 		{
 			if(line.array[i] == '\t')
 			{
@@ -646,8 +647,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 		}
 
-		if(last != len)
-			tokenHandler.handleToken(tokenType,last,len - last,context);
+		if(last != end)
+			tokenHandler.handleToken(tokenType,last,end - last,context);
 	} //}}}
 
 	//{{{ markKeyword() method

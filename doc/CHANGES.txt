@@ -1,5 +1,23 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre6
+
++ Syntax Highlighting Changes:
+
+- Updated ColdFusion syntax highlighting (Joshua Miller).
+
++ Bug Fixes
+
+- Removed erronous check box from Buffer Options dialog box.
+- Changed the code that makes sure windows are always displayed in the
+  visible region of the screen. It now only moves windows if their
+  top-left corner is invisible; windows with other parts obscured are
+  not moved.
+- Fixed possible ArrayIndexOutOfBoundsException with regular expression
+  syntax rules.
+- Plugin manager's dialog boxes are now parented by the plugin manager,
+  not the view (Marcelo Vanzin).
+
 * Version 4.1pre5
 
 Thanks to Axel Biernat, Chris Petersen, Eric Benoit, Fan Ho Yin, Kris

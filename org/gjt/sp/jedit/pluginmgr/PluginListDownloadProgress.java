@@ -32,7 +32,7 @@ class PluginListDownloadProgress extends JDialog
 {
 	PluginListDownloadProgress(PluginManager window)
 	{
-		super(JOptionPane.getFrameForComponent(window),
+		super(window,
 			jEdit.getProperty("plugin-list.progress.title"),true);
 
 		this.window = window;

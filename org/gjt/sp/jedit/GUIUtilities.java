@@ -852,14 +852,14 @@ public class GUIUtilities
 		x = jEdit.getIntegerProperty(name + ".x",x);
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
-		// Make sure the window is diaplyed in visible region
-		if ( x < 0 || x+width > screen.width)
+		// Make sure the window is displayed in visible region
+		if ( x + width < 0 || x > screen.width)
 		{
 			if (width > screen.width)
 				width = screen.width;
 			x = (screen.width - width) / 2;
 		}
-		if ( y < 0 || y+height > screen.height)
+		if ( y + height < 0 || y > screen.height)
 		{
 			if (height >= screen.height)
 				height = screen.height;

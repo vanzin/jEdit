@@ -43,7 +43,7 @@ class InstallPluginsDialog extends EnhancedDialog
 	//{{{ InstallPluginsDialog constructor
 	InstallPluginsDialog(JDialog dialog, Vector model, int mode)
 	{
-		super(JOptionPane.getFrameForComponent(dialog),
+		super(dialog,
 			(mode == INSTALL
 			? jEdit.getProperty("install-plugins.title")
 			: jEdit.getProperty("update-plugins.title")),true);
