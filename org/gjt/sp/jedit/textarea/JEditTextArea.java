@@ -4794,13 +4794,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		boolean invalidateScreenLineCounts = false;
 
 		int oldWrapMargin = wrapMargin;
+		String oldWrap = wrap;
 
 		wrap = buffer.getStringProperty("wrap");
 		hardWrap = wrap.equals("hard");
 		softWrap = wrap.equals("soft");
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
 
-		if(oldWrapMargin != wrapMargin || !wrap.equals(this.wrap))
+		if(oldWrapMargin != wrapMargin || !wrap.equals(oldWrap))
 		{
 			if(displayManager != null && !bufferChanging)
 			{

@@ -1194,7 +1194,8 @@ public class View extends JFrame implements EBComponent
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
-		dockableWindowManager = new DockableWindowManager(this,config);
+		dockableWindowManager = new DockableWindowManager(this,
+			DockableWindowFactory.getInstance(),config);
 
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
@@ -1570,11 +1571,9 @@ loop:		for(;;)
 		else
 		{
 			dockableWindowManager.add(topToolBars,
-				DockableWindowManager.DockableLayout
-				.TOP_TOOLBARS,0);
+				DockableLayout.TOP_TOOLBARS,0);
 			dockableWindowManager.add(bottomToolBars,
-				DockableWindowManager.DockableLayout
-				.BOTTOM_TOOLBARS,0);
+				DockableLayout.BOTTOM_TOOLBARS,0);
 			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}

@@ -3083,7 +3083,8 @@ public class jEdit
 
 		actionContext.addActionSet(builtInActionSet);
 
-		DockableWindowManager.loadDockableWindows(null,
+		DockableWindowFactory.getInstance()
+			.loadDockableWindows(null,
 			jEdit.class.getResource("dockables.xml"),
 			null);
 

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2004 Slava Pestov
+ * Copyright (C) 2000, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,17 +23,17 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
- import bsh.*;
- import com.microstar.xml.*;
- import javax.swing.*;
- import java.awt.event.*;
- import java.awt.*;
- import java.io.*;
- import java.net.URL;
- import java.util.*;
- import org.gjt.sp.jedit.msg.*;
- import org.gjt.sp.jedit.*;
- import org.gjt.sp.util.Log;
+import bsh.*;
+import com.microstar.xml.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -107,8 +107,6 @@ package org.gjt.sp.jedit.gui;
  */
 public class DockableWindowManager extends JPanel implements EBComponent
 {
-	//{{{ Static part of class
-
 	//{{{ Constants
 	/**
 	 * Floating position.
@@ -141,511 +139,32 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	public static final String RIGHT = "right";
 	//}}}
 
-	//{{{ loadDockableWindows() method
-	/**
-	 * Plugins shouldn't need to call this method.
-	 * @since jEdit 4.2pre1
-	 */
-	public static void loadDockableWindows(PluginJAR plugin, URL uri,
-		PluginJAR.PluginCacheEntry cache)
-	{
-		Reader in = null;
-
-		try
-		{
-			Log.log(Log.DEBUG,DockableWindowManager.class,
-				"Loading dockables from " + uri);
-
-			DockableListHandler dh = new DockableListHandler(plugin,uri);
-			in = new BufferedReader(
-				new InputStreamReader(
-				uri.openStream()));
-			XmlParser parser = new XmlParser();
-			parser.setHandler(dh);
-			parser.parse(null, null, in);
-			if(cache != null)
-			{
-				cache.cachedDockableNames = dh.getCachedDockableNames();
-				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
-			}
-		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,DockableWindowManager.class,uri + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,DockableWindowManager.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,DockableWindowManager.class,io);
-			}
-		}
-	} //}}}
-
-	//{{{ unloadDockableWindows() method
-	/**
-	 * Plugins shouldn't need to call this method.
-	 * @since jEdit 4.2pre1
-	 */
-	public static void unloadDockableWindows(PluginJAR plugin)
-	{
-		Iterator entries = dockableWindowFactories.entrySet().iterator();
-		while(entries.hasNext())
-		{
-			Map.Entry entry = (Map.Entry)entries.next();
-			Factory factory = (Factory)entry.getValue();
-			if(factory.plugin == plugin)
-				entries.remove();
-		}
-	} //}}}
-
-	//{{{ cacheDockableWindows() method
-	/**
-	 * @since jEdit 4.2pre1
-	 */
-	public static void cacheDockableWindows(PluginJAR plugin,
-		String[] name, boolean[] actions)
-	{
-		for(int i = 0; i < name.length; i++)
-		{
-			Factory factory = new Factory(plugin,
-				name[i],null,actions[i]);
-			dockableWindowFactories.put(name[i],factory);
-		}
-	} //}}}
-
-	//{{{ registerDockableWindow() method
-	public static void registerDockableWindow(PluginJAR plugin,
-		String name, String code, boolean actions)
-	{
-		Factory factory = (Factory)dockableWindowFactories.get(name);
-		if(factory != null)
-		{
-			factory.code = code;
-			factory.loaded = true;
-		}
-		else
-		{
-			factory = new Factory(plugin,name,code,actions);
-			dockableWindowFactories.put(name,factory);
-		}
-	} //}}}
-
 	//{{{ getRegisteredDockableWindows() method
+	/**
+	 * @since jEdit 4.3pre2
+	 */
 	public static String[] getRegisteredDockableWindows()
 	{
-		String[] retVal = new String[dockableWindowFactories.size()];
-		Iterator entries = dockableWindowFactories.values().iterator();
-		int i = 0;
-		while(entries.hasNext())
-		{
-			Factory factory = (Factory)entries.next();
-			retVal[i++] = factory.name;
-		}
-
-		return retVal;
+		return DockableWindowFactory.getInstance()
+			.getRegisteredDockableWindows();
 	} //}}}
-
-	//{{{ DockableListHandler class
-	static class DockableListHandler extends HandlerBase
-	{
-		//{{{ DockableListHandler constructor
-		DockableListHandler(PluginJAR plugin, URL uri)
-		{
-			this.plugin = plugin;
-			this.uri = uri;
-			stateStack = new Stack();
-			actions = true;
-
-			cachedDockableNames = new LinkedList();
-			cachedDockableActionFlags = new LinkedList();
-		} //}}}
-
-		//{{{ resolveEntity() method
-		public Object resolveEntity(String publicId, String systemId)
-		{
-			if("dockables.dtd".equals(systemId))
-			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-
-				/* try
-				{
-					return new BufferedReader(new InputStreamReader(
-						getClass().getResourceAsStream
-						("/org/gjt/sp/jedit/dockables.dtd")));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,"Error while opening"
-						+ " dockables.dtd:");
-					Log.log(Log.ERROR,this,e);
-				} */
-			}
-
-			return null;
-		} //}}}
-
-		//{{{ attribute() method
-		public void attribute(String aname, String value, boolean isSpecified)
-		{
-			aname = (aname == null) ? null : aname.intern();
-			value = (value == null) ? null : value.intern();
-
-			if(aname == "NAME")
-				dockableName = value;
-			else if(aname == "NO_ACTIONS")
-				actions = (value == "FALSE");
-		} //}}}
-
-		//{{{ doctypeDecl() method
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
-		{
-			if("DOCKABLES".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,uri + ": DOCTYPE must be DOCKABLES");
-		} //}}}
-
-		//{{{ charData() method
-		public void charData(char[] c, int off, int len)
-		{
-			String tag = peekElement();
-			String text = new String(c, off, len);
-
-			if (tag == "DOCKABLE")
-			{
-				code = text;
-			}
-		} //}}}
-
-		//{{{ startElement() method
-		public void startElement(String tag)
-		{
-			tag = pushElement(tag);
-		} //}}}
-
-		//{{{ endElement() method
-		public void endElement(String name)
-		{
-			if(name == null)
-				return;
-
-			String tag = peekElement();
-
-			if(name.equals(tag))
-			{
-				if(tag == "DOCKABLE")
-				{
-					registerDockableWindow(plugin,
-						dockableName,code,actions);
-					cachedDockableNames.add(dockableName);
-					cachedDockableActionFlags.add(
-						new Boolean(actions));
-					// make default be true for the next
-					// action
-					actions = true;
-				}
-
-				popElement();
-			}
-			else
-			{
-				// can't happen
-				throw new InternalError();
-			}
-		} //}}}
-
-		//{{{ startDocument() method
-		public void startDocument()
-		{
-			try
-			{
-				pushElement(null);
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		} //}}}
-
-		//{{{ getCachedDockableNames() method
-		public String[] getCachedDockableNames()
-		{
-			return (String[])cachedDockableNames.toArray(new String[cachedDockableNames.size()]);
-		} //}}}
-
-		//{{{ getCachedDockableActionFlags() method
-		public boolean[] getCachedDockableActionFlags()
-		{
-			boolean[] returnValue = new boolean[
-				cachedDockableActionFlags.size()];
-			Iterator iter = cachedDockableActionFlags.iterator();
-			int i = 0;
-			while(iter.hasNext())
-			{
-				boolean flag = ((Boolean)iter.next())
-					.booleanValue();
-				returnValue[i++] = flag;
-			}
-
-			return returnValue;
-		} //}}}
-
-		//{{{ Private members
-
-		//{{{ Instance variables
-		private PluginJAR plugin;
-		private URL uri;
-
-		private java.util.List cachedDockableNames;
-		private java.util.List cachedDockableActionFlags;
-
-		private String dockableName;
-		private String code;
-		private boolean actions;
-
-		private Stack stateStack;
-		//}}}
-
-		//{{{ pushElement() method
-		private String pushElement(String name)
-		{
-			name = (name == null) ? null : name.intern();
-
-			stateStack.push(name);
-
-			return name;
-		} //}}}
-
-		//{{{ peekElement() method
-		private String peekElement()
-		{
-			return (String) stateStack.peek();
-		} //}}}
-
-		//{{{ popElement() method
-		private String popElement()
-		{
-			return (String) stateStack.pop();
-		} //}}}
-
-		//}}}
-	} //}}}
-
-	//{{{ Factory class
-	static class Factory
-	{
-		PluginJAR plugin;
-		String name;
-		String code;
-		boolean loaded;
-
-		//{{{ Factory constructor
-		Factory(PluginJAR plugin, String name, String code,
-			boolean actions)
-		{
-			this.plugin = plugin;
-			this.name = name;
-			this.code = code;
-
-			if(code != null)
-				loaded = true;
-
-			if(actions)
-			{
-				ActionSet actionSet = (plugin == null
-					? jEdit.getBuiltInActionSet()
-					: plugin.getActionSet());
-				actionSet.addAction(new OpenAction(name));
-				actionSet.addAction(new ToggleAction(name));
-				actionSet.addAction(new FloatAction(name));
-
-				String label = jEdit.getProperty(name
-					+ ".label");
-				if(label == null)
-					label = "NO LABEL PROPERTY: " + name;
-
-				String[] args = { label };
-				jEdit.setTemporaryProperty(name + ".label",
-					label);
-				jEdit.setTemporaryProperty(name
-					+ "-toggle.label",
-					jEdit.getProperty(
-					"view.docking.toggle.label",args));
-				jEdit.setTemporaryProperty(name
-					+ "-toggle.toggle","true");
-				jEdit.setTemporaryProperty(name
-					+ "-float.label",
-					jEdit.getProperty(
-					"view.docking.float.label",args));
-			}
-		} //}}}
-
-		//{{{ load() method
-		void load()
-		{
-			if(loaded)
-				return;
-
-			loadDockableWindows(plugin,plugin.getDockablesURI(),null);
-		} //}}}
-
-		//{{{ createDockableWindow() method
-		JComponent createDockableWindow(View view, String position)
-		{
-			load();
-
-			if(!loaded)
-			{
-				Log.log(Log.WARNING,this,"Outdated cache");
-				return null;
-			}
-
-			NameSpace nameSpace = new NameSpace(
-				BeanShell.getNameSpace(),
-				"DockableWindowManager.Factory"
-				+ ".createDockableWindow()");
-			try
-			{
-				nameSpace.setVariable(
-					"position",position);
-			}
-			catch(UtilEvalError e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-			JComponent win = (JComponent)BeanShell.eval(view,
-				nameSpace,code);
-			return win;
-		} //}}}
-
-		//{{{ OpenAction class
-		static class OpenAction extends EditAction
-		{
-			private String dockable;
-
-			//{{{ OpenAction constructor
-			OpenAction(String name)
-			{
-				super(name);
-				this.dockable = name;
-			} //}}}
-
-			//{{{ invoke() method
-			public void invoke(View view)
-			{
-				view.getDockableWindowManager()
-					.showDockableWindow(dockable);
-			} //}}}
-
-			//{{{ getCode() method
-			public String getCode()
-			{
-				return "view.getDockableWindowManager()"
-					+ ".showDockableWindow(\"" + dockable + "\");";
-			} //}}}
-		} //}}}
-
-		//{{{ ToggleAction class
-		static class ToggleAction extends EditAction
-		{
-			private String dockable;
-
-			//{{{ ToggleAction constructor
-			ToggleAction(String name)
-			{
-				super(name + "-toggle");
-				this.dockable = name;
-			} //}}}
-
-			//{{{ invoke() method
-			public void invoke(View view)
-			{
-				view.getDockableWindowManager()
-					.toggleDockableWindow(dockable);
-			} //}}}
-
-			//{{{ isSelected() method
-			public boolean isSelected(View view)
-			{
-				return view.getDockableWindowManager()
-					.isDockableWindowVisible(dockable);
-			} //}}}
-
-			//{{{ getCode() method
-			public String getCode()
-			{
-				return "view.getDockableWindowManager()"
-					+ ".toggleDockableWindow(\"" + dockable + "\");";
-			} //}}}
-		} //}}}
-
-		//{{{ FloatAction class
-		static class FloatAction extends EditAction
-		{
-			private String dockable;
-
-			//{{{ FloatAction constructor
-			FloatAction(String name)
-			{
-				super(name + "-float");
-				this.dockable = name;
-			} //}}}
-
-			//{{{ invoke() method
-			public void invoke(View view)
-			{
-				view.getDockableWindowManager()
-					.floatDockableWindow(dockable);
-			} //}}}
-
-			//{{{ getCode() method
-			public String getCode()
-			{
-				return "view.getDockableWindowManager()"
-					+ ".floatDockableWindow(\"" + dockable + "\");";
-			} //}}}
-		} //}}}
-	} //}}}
-
-	private static HashMap dockableWindowFactories;
-
-	//{{{ Static initializer
-	static
-	{
-		dockableWindowFactories = new HashMap();
-	} //}}}
-
-	//}}}
-
-	//{{{ Instance part of class
-
+	
 	//{{{ DockableWindowManager constructor
 	/**
 	 * Creates a new dockable window manager.
 	 * @param view The view
+	 * @param factory A {@link DockableWindowFactory}, usually
+	 * <code>DockableWindowFactory.getInstance()</code>.
+	 * @param config A docking configuration
 	 * @since jEdit 2.6pre3
 	 */
-	public DockableWindowManager(View view, View.ViewConfig config)
+	public DockableWindowManager(View view, DockableWindowFactory factory,
+		View.ViewConfig config)
 	{
 		setLayout(new DockableLayout());
 		this.view = view;
+		this.factory = factory;
+
 		windows = new Hashtable();
 		clones = new ArrayList();
 
@@ -673,10 +192,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		EditBus.addToBus(this);
 
-		Iterator entries = dockableWindowFactories.values().iterator();
+		Iterator entries = factory.getDockableWindowIterator();
 
 		while(entries.hasNext())
-			addEntry((Factory)entries.next());
+			addEntry((DockableWindowFactory.Window)entries.next());
 
 		propertiesChanged();
 	} //}}}
@@ -919,12 +438,11 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				while(comp != null)
 				{
 					//System.err.println(comp.getClass());
-					if(comp instanceof PanelWindowContainer
-						.DockablePanel)
+					if(comp instanceof DockablePanel)
 					{
 						PanelWindowContainer container =
-							((PanelWindowContainer.DockablePanel)
-							comp).getWindowContainer();
+							((DockablePanel)comp)
+							.getWindowContainer();
 						container.show(null);
 						return;
 					}
@@ -1136,14 +654,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			PluginUpdate pmsg = (PluginUpdate)msg;
 			if(pmsg.getWhat() == PluginUpdate.LOADED)
 			{
-				Iterator iter = dockableWindowFactories
-					.values().iterator();
+				Iterator iter = factory.getDockableWindowIterator();
 
 				while(iter.hasNext())
 				{
-					Factory factory = (Factory)iter.next();
-					if(factory.plugin == pmsg.getPluginJAR())
-						addEntry(factory);
+					DockableWindowFactory.Window w = (DockableWindowFactory.Window)iter.next();
+					if(w.plugin == pmsg.getPluginJAR())
+						addEntry(w);
 				}
 
 				propertiesChanged();
@@ -1263,8 +780,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//{{{ Private members
 	private View view;
+	private DockableWindowFactory factory;
 	private Hashtable windows;
-	private boolean alternateLayout;
 	private PanelWindowContainer left;
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
@@ -1277,9 +794,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		if(view.isPlainView())
 			return;
 
-		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
+		((DockableLayout)getLayout()).setAlternateLayout(
+			jEdit.getBooleanProperty("view.docking.alternateLayout"));
 
-		String[] windowList = getRegisteredDockableWindows();
+		String[] windowList = factory.getRegisteredDockableWindows();
 
 		for(int i = 0; i < windowList.length; i++)
 		{
@@ -1335,7 +853,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ addEntry() method
-	private void addEntry(Factory factory)
+	private void addEntry(DockableWindowFactory.Window factory)
 	{
 		Entry e;
 		if(view.isPlainView())
@@ -1405,468 +923,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//}}}
 
-	//}}}
-
-	//{{{ DockableLayout class
-	public class DockableLayout implements LayoutManager2
-	{
-		// for backwards compatibility with plugins that fiddle with
-		// jEdit's UI layout
-		static final String CENTER = BorderLayout.CENTER;
-
-		public static final String TOP_TOOLBARS = "top-toolbars";
-		public static final String BOTTOM_TOOLBARS = "bottom-toolbars";
-
-		static final String TOP_BUTTONS = "top-buttons";
-		static final String LEFT_BUTTONS = "left-buttons";
-		static final String BOTTOM_BUTTONS = "bottom-buttons";
-		static final String RIGHT_BUTTONS = "right-buttons";
-
-		Component topToolbars, bottomToolbars;
-		Component center;
-		Component top, left, bottom, right;
-		Component topButtons, leftButtons, bottomButtons, rightButtons;
-
-		//{{{ addLayoutComponent() method
-		public void addLayoutComponent(String name, Component comp)
-		{
-			addLayoutComponent(comp,name);
-		} //}}}
-
-		//{{{ addLayoutComponent() method
-		public void addLayoutComponent(Component comp, Object cons)
-		{
-			if(cons == null || CENTER.equals(cons))
-				center = comp;
-			else if(TOP_TOOLBARS.equals(cons))
-				topToolbars = comp;
-			else if(BOTTOM_TOOLBARS.equals(cons))
-				bottomToolbars = comp;
-			else if(TOP.equals(cons))
-				top = comp;
-			else if(LEFT.equals(cons))
-				left = comp;
-			else if(BOTTOM.equals(cons))
-				bottom = comp;
-			else if(RIGHT.equals(cons))
-				right = comp;
-			else if(TOP_BUTTONS.equals(cons))
-				topButtons = comp;
-			else if(LEFT_BUTTONS.equals(cons))
-				leftButtons = comp;
-			else if(BOTTOM_BUTTONS.equals(cons))
-				bottomButtons = comp;
-			else if(RIGHT_BUTTONS.equals(cons))
-				rightButtons = comp;
-		} //}}}
-
-		//{{{ removeLayoutComponent() method
-		public void removeLayoutComponent(Component comp)
-		{
-			if(center == comp)
-				center = null;
-			if(comp == topToolbars)
-				topToolbars = null;
-			if(comp == bottomToolbars)
-				bottomToolbars = null;
-			{
-				// none of the others are ever meant to be
-				// removed. retarded, eh? this needs to be
-				// fixed eventually, for plugins might
-				// want to do weird stuff to jEdit's UI
-			}
-		} //}}}
-
-		//{{{ preferredLayoutSize() method
-		public Dimension preferredLayoutSize(Container parent)
-		{
-			Dimension prefSize = new Dimension(0,0);
-			Dimension _top = top.getPreferredSize();
-			Dimension _left = left.getPreferredSize();
-			Dimension _bottom = bottom.getPreferredSize();
-			Dimension _right = right.getPreferredSize();
-			Dimension _topButtons = topButtons.getPreferredSize();
-			Dimension _leftButtons = leftButtons.getPreferredSize();
-			Dimension _bottomButtons = bottomButtons.getPreferredSize();
-			Dimension _rightButtons = rightButtons.getPreferredSize();
-			Dimension _center = (center == null
-				? new Dimension(0,0)
-				: center.getPreferredSize());
-			Dimension _topToolbars = (topToolbars == null
-				? new Dimension(0,0)
-				: topToolbars.getPreferredSize());
-			Dimension _bottomToolbars = (bottomToolbars == null
-				? new Dimension(0,0)
-				: bottomToolbars.getPreferredSize());
-
-			prefSize.height = _top.height + _bottom.height + _center.height
-				+ _topButtons.height + _bottomButtons.height
-				+ _topToolbars.height + _bottomToolbars.height;
-			prefSize.width = _left.width + _right.width
-				+ Math.max(_center.width,
-				Math.max(_topToolbars.width,_bottomToolbars.width))
-				+ _leftButtons.width + _rightButtons.width;
-
-			return prefSize;
-		} //}}}
-
-		//{{{ minimumLayoutSize() method
-		public Dimension minimumLayoutSize(Container parent)
-		{
-			// I'm lazy
-			return preferredLayoutSize(parent);
-		} //}}}
-
-		//{{{ maximumLayoutSize() method
-		public Dimension maximumLayoutSize(Container parent)
-		{
-			return new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE);
-		} //}}}
-
-		//{{{ layoutContainer() method
-		public void layoutContainer(Container parent)
-		{
-			Dimension size = parent.getSize();
-
-			Dimension _topToolbars = (topToolbars == null
-				? new Dimension(0,0)
-				: topToolbars.getPreferredSize());
-			Dimension _bottomToolbars = (bottomToolbars == null
-				? new Dimension(0,0)
-				: bottomToolbars.getPreferredSize());
-
-			int topButtonHeight = -1;
-			int bottomButtonHeight = -1;
-			int leftButtonWidth = -1;
-			int rightButtonWidth = -1;
-
-			Dimension _top = top.getPreferredSize();
-			Dimension _left = left.getPreferredSize();
-			Dimension _bottom = bottom.getPreferredSize();
-			Dimension _right = right.getPreferredSize();
-
-			int topHeight = _top.height;
-			int bottomHeight = _bottom.height;
-			int leftWidth = _left.width;
-			int rightWidth = _right.width;
-
-			boolean topEmpty = ((Container)topButtons)
-				.getComponentCount() <= 2;
-			boolean leftEmpty = ((Container)leftButtons)
-				.getComponentCount() <= 2;
-			boolean bottomEmpty = ((Container)bottomButtons)
-				.getComponentCount() <= 2;
-			boolean rightEmpty = ((Container)rightButtons)
-				.getComponentCount() <= 2;
-
-			Dimension closeBoxSize;
-			if(((Container)topButtons).getComponentCount() == 0)
-				closeBoxSize = new Dimension(0,0);
-			else
-			{
-				closeBoxSize = ((Container)topButtons)
-					.getComponent(0).getPreferredSize();
-			}
-
-			int closeBoxWidth = Math.max(closeBoxSize.width,
-				closeBoxSize.height) + 1;
-
-			if(alternateLayout)
-			{
-				//{{{ Lay out independent buttons
-				int _width = size.width;
-
-				int padding = (leftEmpty&&rightEmpty)
-					? 0 : closeBoxWidth;
-
-				topButtonHeight = DockableWindowManager.this.
-					top.getWrappedDimension(_width
-					- closeBoxWidth * 2);
-				topButtons.setBounds(
-					padding,
-					0,
-					size.width - padding * 2,
-					topButtonHeight);
-
-				bottomButtonHeight = DockableWindowManager.this.
-					bottom.getWrappedDimension(_width);
-				bottomButtons.setBounds(
-					padding,
-					size.height - bottomButtonHeight,
-					size.width - padding * 2,
-					bottomButtonHeight);
-
-				int _height = size.height
-					- topButtonHeight
-					- bottomButtonHeight;
-				//}}}
-
-				//{{{ Lay out dependent buttons
-				leftButtonWidth = DockableWindowManager.this.
-					left.getWrappedDimension(_height);
-				leftButtons.setBounds(
-					0,
-					topHeight + topButtonHeight,
-					leftButtonWidth,
-					_height - topHeight - bottomHeight);
-
-				rightButtonWidth = DockableWindowManager.this.
-					right.getWrappedDimension(_height);
-				rightButtons.setBounds(
-					size.width - rightButtonWidth,
-					topHeight + topButtonHeight,
-					rightButtonWidth,
-					_height - topHeight - bottomHeight);
-				//}}}
-
-				int[] dimensions = adjustDockingAreasToFit(
-					size,
-					topHeight,
-					leftWidth,
-					bottomHeight,
-					rightWidth,
-					topButtonHeight,
-					leftButtonWidth,
-					bottomButtonHeight,
-					rightButtonWidth,
-					_topToolbars,
-					_bottomToolbars);
-
-				topHeight = dimensions[0];
-				leftWidth = dimensions[1];
-				bottomHeight = dimensions[2];
-				rightWidth = dimensions[3];
-
-				//{{{ Lay out docking areas
-				top.setBounds(
-					0,
-					topButtonHeight,
-					size.width,
-					topHeight);
-
-				bottom.setBounds(
-					0,
-					size.height
-					- bottomHeight
-					- bottomButtonHeight,
-					size.width,
-					bottomHeight);
-
-				left.setBounds(
-					leftButtonWidth,
-					topButtonHeight + topHeight,
-					leftWidth,
-					_height - topHeight - bottomHeight);
-
-				right.setBounds(
-					_width - rightButtonWidth - rightWidth,
-					topButtonHeight + topHeight,
-					rightWidth,
-					_height - topHeight - bottomHeight); //}}}
-			}
-			else
-			{
-				//{{{ Lay out independent buttons
-				int _height = size.height;
-
-				int padding = (topEmpty && bottomEmpty
-					? 0 : closeBoxWidth);
-
-				leftButtonWidth = DockableWindowManager.this.
-					left.getWrappedDimension(_height
-					- closeBoxWidth * 2);
-				leftButtons.setBounds(
-					0,
-					padding,
-					leftButtonWidth,
-					_height - padding * 2);
-
-				rightButtonWidth = DockableWindowManager.this.
-					right.getWrappedDimension(_height);
-				rightButtons.setBounds(
-					size.width - rightButtonWidth,
-					padding,
-					rightButtonWidth,
-					_height - padding * 2);
-
-				int _width = size.width
-					- leftButtonWidth
-					- rightButtonWidth;
-				//}}}
-
-				//{{{ Lay out dependent buttons
-				topButtonHeight = DockableWindowManager.this.
-					top.getWrappedDimension(_width);
-				topButtons.setBounds(
-					leftButtonWidth + leftWidth,
-					0,
-					_width - leftWidth - rightWidth,
-					topButtonHeight);
-
-				bottomButtonHeight = DockableWindowManager.this.
-					bottom.getWrappedDimension(_width);
-				bottomButtons.setBounds(
-					leftButtonWidth + leftWidth,
-					_height - bottomButtonHeight,
-					_width - leftWidth - rightWidth,
-					bottomButtonHeight); //}}}
-
-				int[] dimensions = adjustDockingAreasToFit(
-					size,
-					topHeight,
-					leftWidth,
-					bottomHeight,
-					rightWidth,
-					topButtonHeight,
-					leftButtonWidth,
-					bottomButtonHeight,
-					rightButtonWidth,
-					_topToolbars,
-					_bottomToolbars);
-
-				topHeight = dimensions[0];
-				leftWidth = dimensions[1];
-				bottomHeight = dimensions[2];
-				rightWidth = dimensions[3];
-
-				//{{{ Lay out docking areas
-				top.setBounds(
-					leftButtonWidth + leftWidth,
-					topButtonHeight,
-					_width - leftWidth - rightWidth,
-					topHeight);
-
-				bottom.setBounds(
-					leftButtonWidth + leftWidth,
-					size.height - bottomHeight - bottomButtonHeight,
-					_width - leftWidth - rightWidth,
-					bottomHeight);
-
-				left.setBounds(
-					leftButtonWidth,
-					0,
-					leftWidth,
-					_height);
-
-				right.setBounds(
-					size.width - rightWidth - rightButtonWidth,
-					0,
-					rightWidth,
-					_height); //}}}
-			}
-
-			//{{{ Position tool bars if they are managed by us
-			if(topToolbars != null)
-			{
-				topToolbars.setBounds(
-					leftButtonWidth + leftWidth,
-					topButtonHeight + topHeight,
-					size.width - leftWidth - rightWidth
-					- leftButtonWidth - rightButtonWidth,
-					_topToolbars.height);
-			}
-
-			if(bottomToolbars != null)
-			{
-				bottomToolbars.setBounds(
-					leftButtonWidth + leftWidth,
-					size.height - bottomHeight
-					- bottomButtonHeight
-					- _bottomToolbars.height
-					+ topButtonHeight
-					+ topHeight,
-					size.width - leftWidth - rightWidth
-					- leftButtonWidth - rightButtonWidth,
-					_bottomToolbars.height);
-			} //}}}
-
-			//{{{ Position center (edit pane, or split pane)
-			if(center != null)
-			{
-				center.setBounds(
-					leftButtonWidth + leftWidth,
-					topButtonHeight + topHeight
-					+ _topToolbars.height,
-					size.width
-					- leftWidth
-					- rightWidth
-					- leftButtonWidth
-					- rightButtonWidth,
-					size.height
-					- topHeight
-					- topButtonHeight
-					- bottomHeight
-					- bottomButtonHeight
-					- _topToolbars.height
-					- _bottomToolbars.height);
-			} //}}}
-		} //}}}
-
-		//{{{ adjustDockingAreasToFit() method
-		private int[] adjustDockingAreasToFit(
-			Dimension size,
-			int topHeight,
-			int leftWidth,
-			int bottomHeight,
-			int rightWidth,
-			int topButtonHeight,
-			int leftButtonWidth,
-			int bottomButtonHeight,
-			int rightButtonWidth,
-			Dimension _topToolbars,
-			Dimension _bottomToolbars)
-		{
-			int maxTopHeight = size.height - bottomHeight
-				- topButtonHeight - bottomButtonHeight
-				- _topToolbars.height - _bottomToolbars.height;
-			topHeight = Math.min(Math.max(0,maxTopHeight),
-				topHeight);
-			leftWidth = Math.min(Math.max(0,
-				size.width - leftButtonWidth
-				- rightButtonWidth - rightWidth),leftWidth);
-			int maxBottomHeight = size.height - topHeight
-				- topButtonHeight - bottomButtonHeight
-				- _topToolbars.height - _bottomToolbars.height;
-			bottomHeight = Math.min(Math.max(0,maxBottomHeight),
-				bottomHeight);
-			rightWidth = Math.min(Math.max(0,
-				size.width - leftButtonWidth
-				- rightButtonWidth - leftWidth),rightWidth);
-
-			DockableWindowManager.this.top.setDimension(topHeight);
-			DockableWindowManager.this.left.setDimension(leftWidth);
-			DockableWindowManager.this.bottom.setDimension(bottomHeight);
-			DockableWindowManager.this.right.setDimension(rightWidth);
-
-			return new int[] {
-				topHeight,
-				leftWidth,
-				bottomHeight,
-				rightWidth
-			};
-		} //}}}
-
-		//{{{ getLayoutAlignmentX() method
-		public float getLayoutAlignmentX(Container target)
-		{
-			return 0.5f;
-		} //}}}
-
-		//{{{ getLayoutAlignmentY() method
-		public float getLayoutAlignmentY(Container target)
-		{
-			return 0.5f;
-		} //}}}
-
-		//{{{ invalidateLayout() method
-		public void invalidateLayout(Container target) {}
-		//}}}
-	} //}}}
-
 	//{{{ Entry class
 	class Entry
 	{
-		Factory factory;
+		DockableWindowFactory.Window factory;
 
 		String title;
 		String position;
@@ -1879,14 +939,14 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		AbstractButton btn;
 
 		//{{{ Entry constructor
-		Entry(Factory factory)
+		Entry(DockableWindowFactory.Window factory)
 		{
 			this(factory,jEdit.getProperty(factory.name
 				+ ".dock-position",FLOATING));
 		} //}}}
 
 		//{{{ Entry constructor
-		Entry(Factory factory, String position)
+		Entry(DockableWindowFactory.Window factory, String position)
 		{
 			this.factory = factory;
 			this.position = position;

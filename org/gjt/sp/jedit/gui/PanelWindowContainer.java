@@ -81,11 +81,20 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		dockables = new ArrayList();
 		buttons = new ArrayList();
-		dockablePanel = new DockablePanel();
+		dockablePanel = new DockablePanel(this);
 
 		this.dimension = dimension;
 	} //}}}
 
+	//{{{ getDockableWindowManager() method
+	/**
+	 * @since jEdit 4.3pre2
+	 */
+	public DockableWindowManager getDockableWindowManager()
+	{
+		return wm;
+	} //}}}
+	
 	//{{{ register() method
 	public void register(final DockableWindowManager.Entry entry)
 	{
@@ -284,6 +293,15 @@ public class PanelWindowContainer implements DockableWindowContainer
 		return dimension;
 	} //}}}
 
+	//{{{ getPosition() method
+	/**
+	 * @since jEdit 4.3pre2
+	 */
+	public String getPosition()
+	{
+		return position;
+	} //}}}
+
 	//{{{ getDockables() method
 	public String[] getDockables()
 	{
@@ -319,7 +337,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ setDimension() method
 	void setDimension(int dimension)
 	{
-		if(dimension != 0)
+		if(dimension > 0)
 			this.dimension = dimension - SPLITTER_WIDTH;
 	} //}}}
 
@@ -895,234 +913,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 					((JComponent)parent).revalidate();
 				} */
 			}
-		} //}}}
-	} //}}}
-
-	//{{{ DockablePanel class
-	class DockablePanel extends JPanel
-	{
-		//{{{ DockablePanel constructor
-		DockablePanel()
-		{
-			super(new CardLayout());
-
-			ResizeMouseHandler resizeMouseHandler = new ResizeMouseHandler();
-			addMouseListener(resizeMouseHandler);
-			addMouseMotionListener(resizeMouseHandler);
-		} //}}}
-
-		//{{{ getWindowContainer() method
-		PanelWindowContainer getWindowContainer()
-		{
-			return PanelWindowContainer.this;
-		} //}}}
-
-		//{{{ showDockable() method
-		void showDockable(String name)
-		{
-			((CardLayout)getLayout()).show(this,name);
-		} //}}}
-
-		//{{{ getMinimumSize() method
-		public Dimension getMinimumSize()
-		{
-			return new Dimension(0,0);
-		} //}}}
-
-		//{{{ getPreferredSize() method
-		public Dimension getPreferredSize()
-		{
-			if(current == null)
-				return new Dimension(0,0);
-			else
-			{
-				if(position.equals(DockableWindowManager.TOP)
-					|| position.equals(DockableWindowManager.BOTTOM))
-				{
-					if(dimension <= 0)
-					{
-						int height = super.getPreferredSize().height;
-						dimension = height - SPLITTER_WIDTH;
-					}
-					return new Dimension(0,
-						dimension + SPLITTER_WIDTH);
-				}
-				else
-				{
-					if(dimension <= 0)
-					{
-						int width = super.getPreferredSize().width;
-						dimension = width - SPLITTER_WIDTH;
-					}
-					return new Dimension(dimension + SPLITTER_WIDTH,
-						0);
-				}
-			}
-		} //}}}
-
-		//{{{ setBounds() method
-		public void setBounds(int x, int y, int width, int height)
-		{
-			if(position.equals(DockableWindowManager.TOP) ||
-				position.equals(DockableWindowManager.BOTTOM))
-			{
-				if(dimension != 0 && height <= SPLITTER_WIDTH)
-					PanelWindowContainer.this.show(null);
-				else
-					dimension = height - SPLITTER_WIDTH;
-			}
-			else
-			{
-				if(dimension != 0 && width <= SPLITTER_WIDTH)
-					PanelWindowContainer.this.show(null);
-				else
-					dimension = width - SPLITTER_WIDTH;
-			}
-
-			super.setBounds(x,y,width,height);
-		} //}}}
-
-		//{{{ ResizeMouseHandler class
-		class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
-		{
-			boolean canDrag;
-			Point dragStart;
-
-			//{{{ mousePressed() method
-			public void mousePressed(MouseEvent evt)
-			{
-				if(canDrag)
-				{
-					wm.setResizePos(dimension,PanelWindowContainer.this);
-					dragStart = evt.getPoint();
-				}
-			} //}}}
-
-			//{{{ mouseReleased() method
-			public void mouseReleased(MouseEvent evt)
-			{
-				if(canDrag)
-				{
-					dimension = wm.resizePos;
-					wm.finishResizing();
-					dragStart = null;
-					wm.revalidate();
-				}
-			} //}}}
-
-			//{{{ mouseMoved() method
-			public void mouseMoved(MouseEvent evt)
-			{
-				Border border = getBorder();
-				if(border == null)
-				{
-					// collapsed
-					return;
-				}
-
-				Insets insets = border.getBorderInsets(DockablePanel.this);
-				canDrag = false;
-				//{{{ Top...
-				if(position.equals(DockableWindowManager.TOP))
-				{
-					if(evt.getY() >= getHeight() - insets.bottom)
-						canDrag = true;
-				} //}}}
-				//{{{ Left...
-				else if(position.equals(DockableWindowManager.LEFT))
-				{
-					if(evt.getX() >= getWidth() - insets.right)
-						canDrag = true;
-				} //}}}
-				//{{{ Bottom...
-				else if(position.equals(DockableWindowManager.BOTTOM))
-				{
-					if(evt.getY() <= insets.top)
-						canDrag = true;
-				} //}}}
-				//{{{ Right...
-				else if(position.equals(DockableWindowManager.RIGHT))
-				{
-					if(evt.getX() <= insets.left)
-						canDrag = true;
-				} //}}}
-
-				if(canDrag)
-				{
-					wm.setCursor(Cursor.getPredefinedCursor(
-						getAppropriateCursor()));
-				}
-				else
-				{
-					wm.setCursor(Cursor.getPredefinedCursor(
-						Cursor.DEFAULT_CURSOR));
-				}
-			} //}}}
-
-			//{{{ mouseDragged() method
-			public void mouseDragged(MouseEvent evt)
-			{
-				if(!canDrag)
-					return;
-
-				if(dragStart == null) // can't happen?
-					return;
-
-				wm.setCursor(Cursor.getPredefinedCursor(
-					getAppropriateCursor()));
-
-				//{{{ Top...
-				if(position.equals(DockableWindowManager.TOP))
-				{
-					wm.setResizePos(
-						evt.getY() - dragStart.y
-						+ dimension,
-						PanelWindowContainer.this);
-				} //}}}
-				//{{{ Left...
-				else if(position.equals(DockableWindowManager.LEFT))
-				{
-					wm.setResizePos(evt.getX() - dragStart.x
-						+ dimension,
-						PanelWindowContainer.this);
-				} //}}}
-				//{{{ Bottom...
-				else if(position.equals(DockableWindowManager.BOTTOM))
-				{
-					wm.setResizePos(dimension - evt.getY()
-						+ dragStart.y,
-						PanelWindowContainer.this);
-				} //}}}
-				//{{{ Right...
-				else if(position.equals(DockableWindowManager.RIGHT))
-				{
-					wm.setResizePos(dimension - evt.getX()
-						+ dragStart.x,
-						PanelWindowContainer.this);
-				} //}}}
-			} //}}}
-
-			//{{{ mouseExited() method
-			public void mouseExited(MouseEvent evt)
-			{
-				wm.setCursor(Cursor.getPredefinedCursor(
-					Cursor.DEFAULT_CURSOR));
-			} //}}}
-
-			//{{{ getCursor() method
-			private int getAppropriateCursor()
-			{
-				if(position.equals(DockableWindowManager.TOP))
-					return Cursor.N_RESIZE_CURSOR;
-				else if(position.equals(DockableWindowManager.LEFT))
-					return Cursor.W_RESIZE_CURSOR;
-				else if(position.equals(DockableWindowManager.BOTTOM))
-					return Cursor.S_RESIZE_CURSOR;
-				else if(position.equals(DockableWindowManager.RIGHT))
-					return Cursor.E_RESIZE_CURSOR;
-				else
-					throw new InternalError();
-			} //}}}
 		} //}}}
 	} //}}}
 

@@ -55,6 +55,12 @@ Simon Ruggier for contributing to this release.
 - The plugin manager did not select a plugin's dependencies when the
   plugin was selected for installation.
 
+- Invoking 'Expand Fold' when the fold is expanded would move the caret
+  to the wrong place.
+
+- Changing the wrap mode didn't update screen line counts, causing
+  various problems.
+
 }}}
 
 }}}
