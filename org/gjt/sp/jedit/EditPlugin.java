@@ -1,5 +1,8 @@
 /*
- * EditPlugin.java - Interface all plugins must implement
+ * EditPlugin.java - Abstract class all plugins must implement
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -21,6 +24,7 @@ package org.gjt.sp.jedit;
 
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.OptionsDialog;
+import org.gjt.sp.util.Log;
 
 /**
  * The interface between jEdit and a plugin.
@@ -31,6 +35,7 @@ import org.gjt.sp.jedit.gui.OptionsDialog;
  */
 public abstract class EditPlugin
 {
+	//{{{ getClassName() method
 	/**
 	 * Returns the plugin's class name.
 	 *
@@ -39,23 +44,26 @@ public abstract class EditPlugin
 	public String getClassName()
 	{
 		return getClass().getName();
-	}
+	} //}}}
 
+	//{{{ start() method
 	/**
 	 * Method called by jEdit to initialize the plugin.
 	 * Actions and edit modes should be registered here, along
 	 * with any EditBus paraphinalia.
 	 * @since jEdit 2.1pre1
 	 */
-	public void start() {}
+	public void start() {} //}}}
 
+	//{{{ stop() method
 	/**
 	 * Method called by jEdit before exiting. Usually, nothing
 	 * needs to be done here.
 	 * @since jEdit 2.1pre1
 	 */
-	public void stop() {}
+	public void stop() {} //}}}
 
+	//{{{ createMenuItems() method
 	/**
 	 * Method called every time a view is created to set up the
 	 * Plugins menu. Menus and menu items should be loaded using the
@@ -67,8 +75,9 @@ public abstract class EditPlugin
 	 *
 	 * @since jEdit 2.6pre5
 	 */
-	public void createMenuItems(Vector menuItems) {}
+	public void createMenuItems(Vector menuItems) {} //}}}
 
+	//{{{ createOptionPanes() method
 	/**
 	 * Method called every time the plugin options dialog box is
 	 * displayed. Any option panes created by the plugin should be
@@ -80,8 +89,9 @@ public abstract class EditPlugin
 	 *
 	 * @since jEdit 2.1pre1
 	 */
-	public void createOptionPanes(OptionsDialog optionsDialog) {}
+	public void createOptionPanes(OptionsDialog optionsDialog) {} //}}}
 
+	//{{{ getJAR() method
 	/**
 	 * Returns the JAR file containing this plugin.
 	 * @since jEdit 3.1pre5
@@ -89,8 +99,9 @@ public abstract class EditPlugin
 	public EditPlugin.JAR getJAR()
 	{
 		return jar;
-	}
+	} //}}}
 
+	//{{{ Broken class
 	/**
 	 * A placeholder for a plugin that didn't load.
 	 */
@@ -109,8 +120,9 @@ public abstract class EditPlugin
 
 		// private members
 		private String clazz;
-	}
+	} //}}}
 
+	//{{{ JAR class
 	/**
 	 * A JAR file.
 	 */
@@ -135,10 +147,21 @@ public abstract class EditPlugin
 		{
 			plugin.jar = JAR.this;
 
-			// must be before the below two so that if an error
-			// occurs during start, the plugin is not listed as
-			// being active
-			plugin.start();
+			long start = System.currentTimeMillis();
+
+			try
+			{
+				// must be before the below two so that if an error
+				// occurs during start, the plugin is not listed as
+				// being active
+				plugin.start();
+			}
+			finally
+			{
+				Log.log(Log.DEBUG,this,"-- startup took " +
+					(System.currentTimeMillis() - start)
+					+ " milliseconds");
+			}
 
 			if(plugin instanceof EBPlugin)
 				EditBus.addToBus((EBPlugin)plugin);
@@ -175,8 +198,9 @@ public abstract class EditPlugin
 		private JARClassLoader classLoader;
 		private Vector plugins;
 		private ActionSet actions;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private EditPlugin.JAR jar;
+	//}}}
 }

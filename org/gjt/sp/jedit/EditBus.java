@@ -84,6 +84,36 @@ public class EditBus
 		}
 	} //}}}
 
+	//{{{ timeTest() method
+	/*static long timeTest(int msgCount)
+	{
+		EBMessage msg = new EBMessage(null) {};
+
+		// To avoid any problems if components are added or removed
+		// while the message is being sent
+		EBComponent[] comps = getComponents();
+
+		long start = System.currentTimeMillis();
+		for(int i = 0; i < msgCount; i++)
+		{
+			for(int j = 0; j < comps.length; j++)
+			{
+				try
+				{
+					comps[j].handleMessage(msg);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,EditBus.class,"Exception"
+						+ " while sending message on EditBus:");
+					Log.log(Log.ERROR,EditBus.class,t);
+				}
+			}
+		}
+
+		return System.currentTimeMillis() - start;
+	}*/ //}}}
+
 	//{{{ send() method
 	/**
 	 * Sends a message to all components on the bus.

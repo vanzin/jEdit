@@ -4,8 +4,15 @@ JEDIT 4.1 VERSION HISTORY
 
 + Syntax Highlighting Changes:
 
+- Added NQC syntax highlighting (Fan Ho Yin)
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
-- Updated C-Sharp mode (Ollie Rutherfurd)
+- Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
+
++ Plugin Manager Changes:
+
+- Added "Select All" button to Install and Update Plugins dialogs
+- The plugin list is only downloaded once per Plugin Manager dialog box
+  instance
 
 + Bug Fixes:
 

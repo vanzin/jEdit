@@ -144,8 +144,20 @@ public class PluginManager extends EnhancedDialog
 	private JButton update;
 	private JButton install;
 	private JButton close;
+	private PluginList pluginList;
 	//}}}
 
+	//{{{ getPluginList() method
+	private PluginList getPluginList()
+	{
+		if(pluginList == null)
+		{
+			pluginList = new PluginListDownloadProgress(PluginManager.this)
+				.getPluginList();
+		}
+
+		return pluginList;
+	}
 	//{{{ updateTree() method
 	private void updateTree()
 	{
@@ -312,17 +324,16 @@ public class PluginManager extends EnhancedDialog
 			}
 			else if(source == update)
 			{
-				PluginList list = new PluginListDownloadProgress(PluginManager.this)
-					.getPluginList();
-				if(list == null)
-					return;
-
 				if(jEdit.getSettingsDirectory() == null)
 				{
 					GUIUtilities.error(PluginManager.this,
 						"no-settings",null);
 					return;
 				}
+
+				PluginList list = getPluginList();
+				if(list == null)
+					return;
 
 				Vector plugins = new Vector();
 				for(int i = 0; i < list.plugins.size(); i++)
@@ -361,17 +372,16 @@ public class PluginManager extends EnhancedDialog
 			}
 			else if(source == install)
 			{
-				PluginList list = new PluginListDownloadProgress(PluginManager.this)
-					.getPluginList();
-				if(list == null)
-					return;
-
 				if(jEdit.getSettingsDirectory() == null
 					&& jEdit.getJEditHome() == null)
 				{
 					GUIUtilities.error(PluginManager.this,"no-settings",null);
 					return;
 				}
+
+				PluginList list = getPluginList();
+				if(list == null)
+					return;
 
 				Vector plugins = new Vector();
 				for(int i = 0; i < list.plugins.size(); i++)

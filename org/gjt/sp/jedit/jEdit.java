@@ -2487,7 +2487,7 @@ public class jEdit
 	{
 		try
 		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
+			//Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
 
 			ActionListHandler ah = new ActionListHandler(path,actionSet);
 			XmlParser parser = new XmlParser();
