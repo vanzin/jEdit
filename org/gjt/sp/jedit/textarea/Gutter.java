@@ -729,7 +729,14 @@ public class Gutter extends JComponent implements SwingConstants
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent e)
 		{
-			if(e.getX() < getWidth() - borderWidth * 2)
+			if(GUIUtilities.isPopupTrigger(e)
+				|| e.getX() >= getWidth() - borderWidth * 2)
+			{
+				e.translatePoint(-getWidth(),0);
+				textArea.mouseHandler.mousePressed(e);
+				drag = true;
+			}
+			else
 			{
 				Buffer buffer = textArea.getBuffer();
 
@@ -795,12 +802,6 @@ public class Gutter extends JComponent implements SwingConstants
 						}
 					}
 				} //}}}
-			}
-			else
-			{
-				e.translatePoint(-getWidth(),0);
-				textArea.mouseHandler.mousePressed(e);
-				drag = true;
 			}
 		} //}}}
 

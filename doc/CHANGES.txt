@@ -28,6 +28,7 @@ JEDIT 4.0 VERSION HISTORY
   when editing PHP files with very long embedded scripts, you should
   never see the highlighting mess up
 - Documentation updates
+- Tweaked word and line selection behavior
 
 + Bug Fixes
 
@@ -80,6 +81,12 @@ JEDIT 4.0 VERSION HISTORY
 - Disabling anti-aliasing might work now on MacOS X
 - Macros that switch buffers should no longer result in an error being
   printed to the activity log when they finish executing
+- Fixed long-standing docked window button layout bug
+- Triple-click drag didn't support selective selection of the trailing
+  line feed due to some changes in pre4
+- If a very long string is selected, the Search and Replace dialog will
+  not be unacceptably wide when 'Find' is invoked
+- Fixed broken soft wrap in syntax highlighted files
 
 * Version 4.0pre4
 

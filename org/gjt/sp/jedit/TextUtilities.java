@@ -337,10 +337,10 @@ loop:		for(int i = pos; i >= 0; i--)
 				else
 				{
 					// next word?
-					if(seenWhiteSpace)
-						return i + 1;
-					else
-						break;
+					//if(seenWhiteSpace)
+						return i;
+					//else
+					//	break;
 				} //}}}
 			}
 		}
@@ -445,10 +445,10 @@ loop:		for(int i = pos; i < line.length(); i++)
 				else
 				{
 					// next word?
-					if(seenWhiteSpace)
-						return i;
-					else
-						break;
+					// if(seenWhiteSpace)
+						return i + 1;
+					// else
+					//	break;
 				} //}}}
 			}
 		}

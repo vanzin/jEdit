@@ -340,6 +340,15 @@ public class BufferOptions extends EnhancedDialog
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 
 		buffer.propertiesChanged();
+		View[] views = jEdit.getViews();
+		for(int i = 0; i < views.length; i++)
+		{
+			EditPane[] panes = views[i].getEditPanes();
+			for(int j = 0; j < panes.length; j++)
+			{
+				panes[j].getTextArea().propertiesChanged();
+			}
+		}
 
 		dispose();
 	} //}}}

@@ -298,6 +298,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
 			.charAt(0));
 		find = new HistoryTextField("find");
+
+		// don't want it to be too wide due to long strings
+		Dimension size = find.getPreferredSize();
+		size.width = find.getFontMetrics(find.getFont())
+			.charWidth('a') * 25;
+		find.setPreferredSize(size);
+
 		find.addActionListener(actionHandler);
 		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));

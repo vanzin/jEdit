@@ -119,6 +119,7 @@
 
 			<!--   Keyword 2's -->
 			<KEYWORD2>require</KEYWORD2>
+			<KEYWORD2>include</KEYWORD2>
 
 			<!--
 			<KEYWORD3>short</KEYWORD3>

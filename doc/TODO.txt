@@ -1,23 +1,19 @@
 TO DO
 
-- s&r: ensure its not too wide
-- syntax highlighted files and soft wrap
 - vertical scrollbar w/ soft wrap wrong
 - fix scrollToCaret()
-- use new offset conversion API throughout
-- select word: non-alpha single char
+- fix up/down arrow keys
 - idea for fixing buffer property issues: BufferProp class
-- getCenterPoint()
-- support multi-screen systems properly
-- finish 'troubleshooting' menu:
-  - about cmd
-  - docs in user's guide
+- replace in selection with rectangular selections
+- 'troubleshooting' menu: docs in user's guide
 - document 'evaluate for selected lines'
 - rule set property docs in part II
 - changing heap memory docs
+- getCenterPoint()
+- support multi-screen systems properly
 - rollover toolbar buttons option
-- replace in selection with rectangular selections
 
+- use new offset conversion API throughout
 - test dir replace all and save all
 - switching buffers: horiz scroll bar not updated?
 - save to X:filename on Windows

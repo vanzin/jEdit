@@ -3218,7 +3218,7 @@ This class is another collection of <type>static</type> utility methods.
 <listitem>
 <funcsynopsis>
  <funcprototype>
-  <funcdef>public static String <function>getParentOfFile</function></funcdef>
+  <funcdef>public static String <function>getParentOfPath</function></funcdef>
   <paramdef>String <parameter>path</parameter></paramdef>
  </funcprototype>
 </funcsynopsis>

@@ -828,7 +828,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(!lineInfo.lastSubregion)
 			{
-				gfx.drawString(":",Math.max(x,textArea.wrapMargin),
+				gfx.drawString(":",Math.max(x,
+					textArea.getHorizontalOffset()
+					+ textArea.wrapMargin),
 					baseLine);
 				x += textArea.charWidth;
 			}
