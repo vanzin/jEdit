@@ -883,93 +883,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(final Object node,
-		final String path,
-		final VFS.DirectoryEntry[] list)
+	void directoryLoaded(Object node, String path,
+		VFS.DirectoryEntry[] list)
 	{
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				if(node == null)
-				{
-					// This is the new, canonical path
-					VFSBrowser.this.path = path;
-					if(!pathField.getText().equals(path))
-						pathField.setText(path);
-					if(path.endsWith("/") ||
-						path.endsWith(File.separator))
-					{
-						// ensure consistent history;
-						// eg we don't want both
-						// foo/ and foo
-						path = path.substring(0,
-							path.length() - 1);
-					}
-
-					HistoryModel.getModel("vfs.browser.path")
-						.addItem(path);
-				}
-
-				boolean filterEnabled = filterCheckbox.isSelected();
-
-				ArrayList directoryVector = new ArrayList();
-
-				int directories = 0;
-				int files = 0;
-				int invisible = 0;
-
-				if(list != null)
-				{
-					for(int i = 0; i < list.length; i++)
-					{
-						VFS.DirectoryEntry file = list[i];
-						if(file.hidden && !showHiddenFiles)
-						{
-							invisible++;
-							continue;
-						}
-
-						if(file.type == VFS.DirectoryEntry.FILE
-							&& filterEnabled
-							&& filenameFilter != null
-							&& !filenameFilter.isMatch(file.name))
-						{
-							invisible++;
-							continue;
-						}
-
-						if(file.type == VFS.DirectoryEntry.FILE)
-							files++;
-						else
-							directories++;
-
-						directoryVector.add(file);
-					}
-
-					MiscUtilities.quicksort(directoryVector,
-						new VFS.DirectoryEntryCompare(
-						sortMixFilesAndDirs,
-						sortIgnoreCase));
-				}
-
-				browserView.directoryLoaded(node,path,
-					directoryVector);
-
-				// to notify listeners that any existing
-				// selection has been deactivated
-
-				// turns out under some circumstances this
-				// method can switch the current buffer in
-				// BROWSER mode.
-
-				// in any case, this is only needed for the
-				// directory chooser (why?), so we add a
-				// check. otherwise poor Rick will go insane.
-				if(mode == CHOOSE_DIRECTORY_DIALOG)
-					filesSelected();
-			}
-		});
+		VFSManager.runInAWTThread(new DirectoryLoadedAWTRequest(
+			node,path,list));
 	} //}}}
 
 	//{{{ filesSelected() method
@@ -1579,5 +1497,101 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		} //}}}
 	} //}}}
 
+	//{{{ DirectoryLoadedAWTRequest class
+	class DirectoryLoadedAWTRequest implements Runnable
+	{
+		Object node;
+		String path;
+		VFS.DirectoryEntry[] list;
+
+		DirectoryLoadedAWTRequest(Object node, String path,
+			VFS.DirectoryEntry[] list)
+		{
+			this.node = node;
+			this.path = path;
+			this.list = list;
+		}
+
+		public void run()
+		{
+			if(node == null)
+			{
+				// This is the new, canonical path
+				VFSBrowser.this.path = path;
+				if(!pathField.getText().equals(path))
+					pathField.setText(path);
+				if(path.endsWith("/") ||
+					path.endsWith(File.separator))
+				{
+					// ensure consistent history;
+					// eg we don't want both
+					// foo/ and foo
+					path = path.substring(0,
+						path.length() - 1);
+				}
+
+				HistoryModel.getModel("vfs.browser.path")
+					.addItem(path);
+			}
+
+			boolean filterEnabled = filterCheckbox.isSelected();
+
+			ArrayList directoryVector = new ArrayList();
+
+			int directories = 0;
+			int files = 0;
+			int invisible = 0;
+
+			if(list != null)
+			{
+				for(int i = 0; i < list.length; i++)
+				{
+					VFS.DirectoryEntry file = list[i];
+					if(file.hidden && !showHiddenFiles)
+					{
+						invisible++;
+						continue;
+					}
+
+					if(file.type == VFS.DirectoryEntry.FILE
+						&& filterEnabled
+						&& filenameFilter != null
+						&& !filenameFilter.isMatch(file.name))
+					{
+						invisible++;
+						continue;
+					}
+
+					if(file.type == VFS.DirectoryEntry.FILE)
+						files++;
+					else
+						directories++;
+
+					directoryVector.add(file);
+				}
+
+				MiscUtilities.quicksort(directoryVector,
+					new VFS.DirectoryEntryCompare(
+					sortMixFilesAndDirs,
+					sortIgnoreCase));
+			}
+
+			browserView.directoryLoaded(node,path,
+				directoryVector);
+
+			// to notify listeners that any existing
+			// selection has been deactivated
+
+			// turns out under some circumstances this
+			// method can switch the current buffer in
+			// BROWSER mode.
+
+			// in any case, this is only needed for the
+			// directory chooser (why?), so we add a
+			// check. otherwise poor Rick will go insane.
+			if(mode == CHOOSE_DIRECTORY_DIALOG)
+				filesSelected();
+		}
+	}
 	//}}}
 }
