@@ -3,6 +3,10 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[warning] Roster: Already loaded: /usr/home/slava/.jedit/jars/bcel.jar
+[warning] Roster: Already loaded: /usr/home/slava/.jedit/jars/commons-logging.jar
+[warning] Roster: Already loaded: /usr/home/slava/.jedit/jars/log4j.jar
+
 - nop file
 - action bar & bottom dockable btns
 - complete word not wide enough
