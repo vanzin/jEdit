@@ -379,4 +379,5 @@ vfs.browser.colors.5.color=#003366
 #{{{ Hidden settings
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
+showTooltips=true
 #}}}
