@@ -1,6 +1,6 @@
 Mac OS Plugin 3.0
 - All native calls now use the Cocoa API. (Java 1.4.1 is required)
-- Old MRJ methods replaced with import com.apple.eawt.
+- Old MRJ methods replaced with com.apple.eawt.
 - Added a Dock Menu. Dock Menu provides similar functionality to the plugin menu.
 - Added services menu (bundle needs to be updated)
 

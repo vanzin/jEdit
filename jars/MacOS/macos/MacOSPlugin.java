@@ -38,7 +38,7 @@ import com.apple.eawt.Application;
 public class MacOSPlugin extends EBPlugin
 {
 	//{{{ Variables
-	private boolean started = false;
+	static boolean started = false;
 	private boolean osok;
 	private Delegate delegate;
 	//}}}
@@ -96,21 +96,6 @@ public class MacOSPlugin extends EBPlugin
 			else if (!started && message instanceof ViewUpdate)
 				delegate.handleOpenFile((ViewUpdate)message);
 		}
-	}//}}}
-	
-	//{{{ started() method
-	/**
-	 * Returns true once all initialisations have been done
-	 */
-	public boolean started()
-	{
-		return started;
-	}//}}}
-	
-	//{{{ started() method
-	public void setStarted(boolean v)
-	{
-		started = v;
 	}//}}}
 	
 	//{{{ osok() method
