@@ -184,6 +184,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchSubDirectories.setSelected(true);
 		}
 
+		directory.addCurrentToHistory();
+
 		keepDialog.setSelected(jEdit.getBooleanProperty(
 			"search.keepDialog.toggle"));
 

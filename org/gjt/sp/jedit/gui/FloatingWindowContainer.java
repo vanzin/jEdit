@@ -67,10 +67,17 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		super.dispose();
 	}
 
-	public void show(DockableWindowManager.Entry entry)
+	public void show(final DockableWindowManager.Entry entry)
 	{
 		toFront();
 		requestFocus();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				entry.win.requestDefaultFocus();
+			}
+		});
 	}
 
 	public boolean isVisible(DockableWindowManager.Entry entry)
