@@ -53,9 +53,6 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _save()
 	{
 		windowModel.save();
-		EditBus.send(new DockableWindowUpdate(null,
-			DockableWindowUpdate.PROPERTIES_CHANGED,
-			null));
 	} //}}}
 
 	//{{{ Private members

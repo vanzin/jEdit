@@ -2,8 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre8
 
-Thanks to Scott Allen for contributing to this release.
+Thanks to Kris Kopicki, Ollie Rutherfurd, Philipp Janda, Scott Allen for
+contributing to this release.
 
+{{{ Miscellaneous
+
+- New splash screen (Kris Kopicki).
+
+}}}
 {{{ Syntax Highlighting
 
 - Lua syntax highlighting (Philipp Janda)
@@ -27,6 +33,11 @@ Thanks to Scott Allen for contributing to this release.
 
 - "Remove" button in Tool Bar pane of the Global Options dialog box now
   selects the next item after removing the currently selected item.
+
+- Changing the view layout in the View pane of the Global Options dialog
+  box did not take effect for currently opened views.
+
+- Fixed a few dockable window layout problems.
 
 }}}
 
