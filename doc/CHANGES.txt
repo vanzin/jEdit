@@ -6,6 +6,10 @@ JEDIT 4.0 VERSION HISTORY
 
 - Updated POV-Ray syntax highlighting (Jan Schäfer)
 
++ Bug Fixes
+
+- roots: filesystem tweak didn't work (Carmine Lucarelli)
+
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
 + Enhancements

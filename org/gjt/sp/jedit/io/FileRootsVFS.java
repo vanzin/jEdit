@@ -47,7 +47,8 @@ public class FileRootsVFS extends VFS
 		// JDK 1.4 adds a method to obtain a drive letter label
 		try
 		{
-			method = FileSystemView.class.getMethod("getSystemDisplayName",new Class[0]);
+			method = FileSystemView.class.getMethod("getSystemDisplayName",
+				new Class[] { java.io.File.class });
 			fsView = FileSystemView.getFileSystemView();
 			Log.log(Log.DEBUG,this,"FileSystemView.getSystemDisplayName() detected");
 		}
@@ -96,12 +97,12 @@ public class FileRootsVFS extends VFS
 	{
 		String name = path;
 
-		if(method != null)
+		if(method != null && !name.startsWith("A:") && !name.startsWith("B:"))
 		{
 			try
 			{
-				name = (String)method.invoke(fsView,new Object[] {
-					new File(path) });
+				name = name + " " + (String)method.invoke(fsView,
+					new Object[] { new File(path) });
 			}
 			catch(Exception e) {}
 		}
