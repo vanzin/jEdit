@@ -27,6 +27,8 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 - Fixed digit highlighting regexp since it didn't pick up 0xff00 (and
   various other combinations) properly.
 
+- Installer didn't work on OS/2.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and

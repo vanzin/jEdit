@@ -85,7 +85,7 @@ public abstract class OperatingSystem
 
 	public OSTask[] getOSTasks(Install installer)
 	{
-		return null;
+		return new OSTask[0];
 	}
 
 	public void mkdirs(String directory) throws IOException
