@@ -87,7 +87,11 @@ public class JEditTextArea extends JComponent
 		setLayout(new ScrollLayout());
 		add(LEFT,gutter);
 		add(CENTER,painter);
-		add(RIGHT,vertical = new JScrollBar(JScrollBar.VERTICAL));
+
+		// some plugins add stuff in a "right-hand" gutter
+		verticalBox = new Box(BoxLayout.Y_AXIS);
+		verticalBox.add(vertical = new JScrollBar(JScrollBar.VERTICAL));
+		add(RIGHT,verticalBox);
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
 
 		horizontal.setValues(0,0,0,0);
@@ -875,13 +879,6 @@ public class JEditTextArea extends JComponent
 
 		//if(start != end)
 		//	System.err.println(start + ":" + end + ":" + chunkCache.needFullRepaint());
-		if(chunkCache.needFullRepaint())
-		{
-			//recalculateLastPhysicalLine();
-			gutter.repaint();
-			painter.repaint();
-			return;
-		}
 
 		if(start > end)
 		{
@@ -889,6 +886,9 @@ public class JEditTextArea extends JComponent
 			end = start;
 			start = tmp;
 		}
+
+		if(chunkCache.needFullRepaint())
+			end = visibleLines;
 
 		FontMetrics fm = painter.getFontMetrics();
 		int y = start * fm.getHeight();
@@ -932,12 +932,7 @@ public class JEditTextArea extends JComponent
 			}
 		}
 
-		if(chunkCache.needFullRepaint())
-		{
-			//recalculateLastPhysicalLine();
-			endLine = visibleLines;
-		}
-		else if(endLine == -1)
+		if(chunkCache.needFullRepaint() || endLine == -1)
 			endLine = visibleLines;
 
 		//if(startLine != endLine)
@@ -991,12 +986,7 @@ public class JEditTextArea extends JComponent
 		if(startScreenLine == -1)
 			startScreenLine = 0;
 
-		if(chunkCache.needFullRepaint())
-		{
-			//recalculateLastPhysicalLine();
-			endScreenLine = visibleLines;
-		}
-		else if(endScreenLine == -1)
+		if(chunkCache.needFullRepaint() || endScreenLine == -1)
 			endScreenLine = visibleLines;
 
 		invalidateScreenLineRange(startScreenLine,endScreenLine);
@@ -4452,6 +4442,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ AWT stuff
 
+	//{{{ addLeftOfScrollBar() method
+	/**
+	 * Adds a component to the box left of the scroll bar. The
+	 * ErrorList plugin uses this to show a global error overview, for
+	 * example.
+	 *
+	 * @param comp The component
+	 * @since jEdit 4.2pre1
+	 */
+	public void addLeftOfScrollBar(Component comp)
+	{
+		verticalBox.add(comp,0);
+	} //}}}
+
 	//{{{ addNotify() method
 	/**
 	 * Called by the AWT when this component is added to a parent.
@@ -5011,6 +5015,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private boolean quickCopy;
 
+	// JDiff, error list add stuff here
+	private Box verticalBox;
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
 
@@ -5826,7 +5832,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					invalidateScreenLineRange(chunkCache
 						.getScreenLineOfOffset(
 						delayedRepaintStart,0),
-						screenLastLine);
+						visibleLines);
 					delayedMultilineUpdate = false;
 				}
 				else

@@ -228,6 +228,8 @@ and Ryan Grove for contributing to this release.
 - Background mode is now enabled by default on MacOS, since this is the
   platform convention.
 
+- Added compatibility with Java 1.4.2 beta's GTK look and feel. Note that
+  the look and feel itself has many bugs do 
 }}}
 {{{ Bug Fixes
 

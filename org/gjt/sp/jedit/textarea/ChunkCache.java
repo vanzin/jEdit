@@ -151,76 +151,49 @@ class ChunkCache
 	{
 		this.buffer = buffer;
 		lastScreenLine = lastScreenLineP = -1;
-		firstLine = 0;
-		skew = 0;
 	} //}}}
 
-	//{{{ setFirstLine() method
-	/**
-	 * This method takes care of shifting the cached tokens so that
-	 * scrolling doesn't cause all visible lines, only newly exposed
-	 * ones, to be retokenized.
-	 */
-	void setFirstLine(int firstLine)
+	//{{{ scrollUp() method
+	void scrollDown(int amount)
 	{
+		int visibleLines = textArea.getVisibleLines();
+
+		System.arraycopy(lineInfo,amount,lineInfo,0,visibleLines - amount);
+
+		for(int i = visibleLines - amount; i < visibleLines; i++)
+		{
+			lineInfo[i] = new LineInfo();
+		}
+                
 		if(Debug.CHUNK_CACHE_DEBUG)
 		{
-			Log.log(Log.DEBUG,this,"old: " + this.firstLine + ",new: " +
-				firstLine);
-		}
-
-		int visibleLines = textArea.getVisibleLines();
-		if(firstLine == this.firstLine)
-			/* do nothing */;
-		else if(firstLine >= this.firstLine + visibleLines
-			|| firstLine <= this.firstLine - visibleLines)
-		{
-			if(Debug.CHUNK_CACHE_DEBUG)
-				Log.log(Log.DEBUG,this,"too far");
-			for(int i = 0; i < lineInfo.length; i++)
-			{
-				lineInfo[i].chunksValid = false;
-			}
-		}
-		else if(firstLine > this.firstLine)
-		{
-			int firstScreenLine = firstLine - this.firstLine;
-
-			System.arraycopy(lineInfo,firstScreenLine,
-				lineInfo,0,visibleLines - firstScreenLine);
-
-			for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
-			{
-				lineInfo[i] = new LineInfo();
-			}
-
-			if(Debug.CHUNK_CACHE_DEBUG)
-			{
-				System.err.println("f > t.f: only " + firstScreenLine
-					+ " need updates");
-			}
-		}
-		else if(this.firstLine > firstLine)
-		{
-			int firstScreenLine = this.firstLine - firstLine;
-
-			System.arraycopy(lineInfo,0,lineInfo,firstScreenLine,
-				visibleLines - firstScreenLine);
-
-			for(int i = 0; i < firstScreenLine; i++)
-			{
-				lineInfo[i] = new LineInfo();
-			}
-
-			if(Debug.CHUNK_CACHE_DEBUG)
-			{
-				System.err.println("f > t.f: only " + firstScreenLine
-					+ " need updates");
-			}
+			System.err.println("f > t.f: only " + amount
+				+ " need updates");
 		}
 
 		lastScreenLine = lastScreenLineP = -1;
-		this.skew = skew;
+	} //}}}
+
+	//{{{ scrollUp() method
+	void scrollUp(int amount)
+	{
+		System.arraycopy(lineInfo,0,lineInfo,amount,
+			textArea.getVisibleLines() - amount);
+
+		for(int i = 0; i < amount; i++)
+		{
+			lineInfo[i] = new LineInfo();
+		}
+
+		updateChunksUpTo(amount);
+
+		if(Debug.CHUNK_CACHE_DEBUG)
+		{
+			System.err.println("f > t.f: only " + amount
+				+ " need updates");
+		}
+
+		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateAll() method
@@ -247,7 +220,8 @@ class ChunkCache
 			lineInfo[i].chunksValid = false;
 		}
 
-		lastScreenLine = lastScreenLineP = -1;
+		if(screenLine <= lastScreenLine)
+			lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateChunksFromPhys() method
@@ -486,8 +460,6 @@ class ChunkCache
 	//{{{ Instance variables
 	private JEditTextArea textArea;
 	private Buffer buffer;
-	private int firstLine;
-	private int skew;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
 
@@ -636,10 +608,10 @@ class ChunkCache
 						physicalLine,1);
 					if(i == 0)
 					{
-						if(skew > 0)
+						if(textArea.displayManager.firstLine.skew > 0)
 						{
-							Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
-							skew = 0;
+							Log.log(Log.ERROR,this,"BUG: skew=" + textArea.displayManager.firstLine.skew + ",out.size()=" + out.size());
+							textArea.displayManager.firstLine.skew = 0;
 							needFullRepaint = true;
 							lastScreenLine = lineInfo.length - 1;
 						}
@@ -655,6 +627,7 @@ class ChunkCache
 						physicalLine,out.size());
 					if(i == 0)
 					{
+						int skew = textArea.displayManager.firstLine.skew;
 						if(skew >= out.size())
 						{
 							Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());

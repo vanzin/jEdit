@@ -625,6 +625,7 @@ public class DisplayManager
 	//{{{ FirstLine class
 	class FirstLine extends OffsetManager.Anchor
 	{
+		int oldScrollLine;
 		int skew;
 
 		//{{{ FirstLine constructor
@@ -648,7 +649,25 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
-			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,skew);
+			int visibleLines = textArea.getVisibleLines();
+
+			if(oldScrollLine == scrollLine)
+				/* do nothing */;
+			else if(scrollLine >= oldScrollLine + visibleLines
+				|| scrollLine <= oldScrollLine - visibleLines)
+			{
+				textArea.chunkCache.invalidateAll();
+			}
+			else if(scrollLine > oldScrollLine)
+			{
+				textArea.chunkCache.scrollDown(scrollLine - oldScrollLine);
+			}
+			else if(scrollLine < oldScrollLine)
+			{
+				textArea.chunkCache.scrollUp(oldScrollLine - scrollLine);
+			}
+
+			oldScrollLine = scrollLine;
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
 		} //}}}
