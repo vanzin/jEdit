@@ -3,8 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre7
 
 Thanks to Aaron Bell, Alessandro Falappa, Ben Williams, Chris Petersen,
-Lee Turner, Ollie Rutherfurd, Mike Dillon, Randolf Mock, and
-Randy Hudson for contributing to this release.
+Kris Kopicki, Lee Turner, Ollie Rutherfurd, Mike Dillon, Randolf Mock,
+and Randy Hudson for contributing to this release.
 
 {{{ Miscellaneous
 
@@ -54,10 +54,12 @@ Randy Hudson for contributing to this release.
 
 - Added WebSphere MQ scripting syntax highlighting (Aaron Bell).
 
+- Added squid.conf syntax highlighting (Kris Kopicki).
+
 }}}
 {{{ Platform Specific
 
-- MacOS plugin now supports services.
+- MacOS plugin now supports services (Kris Kopicki).
 
 }}}
 {{{ Bug Fixes

@@ -301,6 +301,9 @@
 <MODE NAME="sqr"                FILE="sqr.xml"
                                 FILE_NAME_GLOB="*.{sqr,sqc}" />
 
+<MODE NAME="squidconf"		FILE="squidconf.xml"
+				FILE_NAME_GLOB="squid.conf" />
+
 <MODE NAME="tcl"		FILE="tcl.xml"
 				FILE_NAME_GLOB="*.{tcl,tsh}" />
 
