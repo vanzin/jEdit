@@ -25,12 +25,31 @@
 
 <sect1 id="macros-editing"><title>Editing Macros</title>
 <para>
-    Description.
+    These macros automate various text editing tasks.
 </para>
 
 <itemizedlist>
 
+<listitem>
+	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
+	<abstract><para>
+		If no text is selected, the current line is copied to 
+		the clipboard, otherwise the selected text is copied 
+		to the clipboard. Some editors have this has the default copy behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para></abstract>
+</listitem>
+
+<listitem>
 <para><filename>Copy_Visible_Lines.bsh</filename></para>        <abstract><para>Copies the visible lines from the current                buffer to the Clipboard.  Lines that are not visible                becuase they are folded are not copied.        </para></abstract>
+</listitem>
+
+<listitem>
+	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
+	<abstract><para>
+		If no text is selected, the current line is cut to the clipboard,
+		otherwise the selected text is cut to the clipboard. Some editors have this has the default cut behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para></abstract>
+</listitem>
 
 
 <listitem>
@@ -51,6 +70,25 @@
    </para></abstract>
  </listitem>
 
+
+<listitem>
+    <para><filename>Go_to_Column.bsh</filename></para>
+    <abstract><para>
+		Prompts the user for a column position on the 
+		current line, then moves the caret there.
+    </para></abstract>
+</listitem>
+
+ <listitem>        <para><filename>Greedy_Backspace.bsh</filename></para>        <abstract><para>If buffer is using soft tabs,                this macro will backspace to the previous tab stop,                if all characters between the caret and the tab stop                are spaces.  In all other cases a single character is                removed.</para></abstract></listitem>
+
+
+<listitem>
+    <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
+    <abstract><para>
+        Converts all keywords in the current buffer to upper case.
+    </para></abstract>
+</listitem>
+ 
 </itemizedlist>
 
 </sect1>
@@ -96,23 +134,6 @@
 <listitem>        <para><filename>Copy_Name_to_Clipboad.bsh</filename></para>        <abstract><para>Copies the current buffer's filename                to the clipboard.        </para></abstract></listitem>
 
 <listitem>
-	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
-		If no text is selected, the current line is copied to 
-		the clipboard, otherwise the selected text is copied 
-		to the clipboard. Some editors have this has the default copy behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
-</listitem>
-
-<listitem>
-	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
-		If no text is selected, the current line is cut to the clipboard,
-		otherwise the selected text is cut to the clipboard. Some editors have this has the default cut behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
-</listitem>
-
-<listitem>
    <para><filename>Delete_Current.bsh</filename></para>
    <abstract><para>
     Deletes the current buffer's file on disk, but 
@@ -127,20 +148,9 @@
 	</para></abstract>
 </listitem>
 
-<listitem>
-    <para><filename>Go_to_Column.bsh</filename></para>
-    <abstract><para>
-		Prompts the user for a column position on the 
-		current line, then moves the caret there.
-    </para></abstract>
-</listitem>
+<listitem>        <para><filename>Insert_Selection.bsh</filename></para>        <abstract><para>Assumes the current selection is         file path and tries replaces the selection with the        contents of the file.  Does nothing if no text is         selected or the selection spans multiple lines.        </para></abstract></listitem>
 
-<listitem>
-    <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
-    <abstract><para>
-        Converts all keywords in the current buffer to upper case.
-    </para></abstract>
-</listitem>
+<listitem>        <para><filename>Next_Dirty_Buffer.bsh</filename></para>        <abstract><para>Switches to the next dirty buffer, if there is one.        </para></abstract></listitem>
 
 <listitem>
     <para><filename>Open_Path.bsh</filename></para>

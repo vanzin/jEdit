@@ -10,7 +10,7 @@
 void copyBufferPathToClipboard(Buffer buffer)
 {
 	Registers.setRegister('$',buffer.getPath());
-	HistoryModel.getModel('clipboard').addItem(buffer.getPath());
+	HistoryModel.getModel("clipboard").addItem(buffer.getPath());
 }
 
 copyBufferPathToClipboard(buffer);

@@ -1,0 +1,96 @@
+/*
+ * Greedy_Backspace.bsh - If buffer is using soft tabs,
+ * this macro will backspace to the previous tab stop,
+ * if all characters between the caret and the tab stop
+ * are spaces.  In all other cases a single character is
+ * removed.
+ *
+ * Copyright (C) 2002-2004 Ollie Rutherfurd <oliver@jedit.org>
+ *
+ * $Id$
+ */
+
+/**
+ * @param onlyFullTabs if true, multiple spaces are only
+ *                     removed if they would constitute
+ *                     a 'complete' tab.  This prevents
+ *                     the nuisance of removing 2 spaces
+ *                     and stopping at a word when you
+ *                     just wanted to backspace 1 because
+ *                     the macro is going as far as it can.
+ */
+void greedyBackspace(View view, boolean onlyFullTabs)
+{
+	JEditTextArea textArea = view.getTextArea();
+	Buffer buffer = textArea.getBuffer();
+	int caret = textArea.getCaretPosition();
+	int caretLine = textArea.getCaretLine();
+	int lineStart = textArea.getLineStartOffset(caretLine);
+
+	if(buffer.getBooleanProperty("noTabs") == true)
+	{
+		// if anything is selected, use standard 
+		if(textArea.getSelection().length != 0)
+		{
+			textArea.backspace();
+		}
+		// if anything is selected, use standard
+		else if(caret == lineStart)
+		{
+			textArea.backspace();
+		}
+		else
+		{
+			int col = caret - lineStart;
+			int tabSize = buffer.getIntegerProperty("tabSize",8);
+
+			// unlikely, but just in case
+			if(tabSize <= 0)
+			{
+				buffer.remove(caret-1,1);
+			}
+			else
+			{
+				int toTabStop = ((col-1) % tabSize) + 1;
+				int count = 1;
+				for(int i=1; i < toTabStop; i++)
+				{
+					// only backspace over spaces
+					if(!" ".equals(buffer.getText(caret-(i+1),1)))
+						break;
+					count += 1;
+				}
+
+				// if onlyFullTabs must be only spaces to
+				// the tabStop and must have tabSize number 
+				// of spaces to remove them all.
+				if(onlyFullTabs == false || count == tabSize){
+					buffer.remove(caret-count,count);
+				}
+				else{
+					buffer.remove(caret-1,1);
+				}
+			}
+		}
+	}
+	else
+		textArea.backspace();
+}
+
+if(buffer.isReadOnly())
+	getToolkit().beep();
+else
+	greedyBackspace(view,true);
+
+/*
+
+<listitem>
+	<para><filename>Greedy_Backspace.bsh</filename></para>
+	<abstract><para>If buffer is using soft tabs,
+		this macro will backspace to the previous tab stop,
+		if all characters between the caret and the tab stop
+		are spaces.  In all other cases a single character is
+		removed.</para></abstract>
+</listitem>
+
+*/

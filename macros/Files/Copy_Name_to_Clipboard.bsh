@@ -10,7 +10,7 @@
 void copyBufferNameToClipboard(Buffer buffer)
 {
 	Registers.setRegister('$',buffer.getName());
-	HistoryModel.getModel('clipboard').addItem(buffer.getName());
+	HistoryModel.getModel("clipboard").addItem(buffer.getName());
 }
 
 copyBufferNameToClipboard(buffer);
@@ -25,3 +25,4 @@ copyBufferNameToClipboard(buffer);
 </listitem>
 
 */
+
