@@ -45,44 +45,7 @@ public class MacOSActions
 	
 	//{{{ runScript() method
 	public static void runScript(String path)
-	{
-		/*File file = new File(path);
-			
-		if (file.exists())
-		{
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader(file));
-				StringBuffer code = new StringBuffer();
-				String line;
-				
-				while ((line = reader.readLine()) != null)
-					code.append(line);
-				
-				NSAppleScript script = new NSAppleScript(code.toString());
-				script.compile(new NSMutableDictionary());
-				script.execute(new NSMutableDictionary());
-				
-				/*
-				String[] args = {"osascript",path};
-				Process proc = Runtime.getRuntime().exec(args);
-				BufferedReader r = new BufferedReader(
-					new InputStreamReader(proc.getErrorStream()));
-				//proc.waitFor();
-				
-				String mesg = new String();
-				String line;
-				while ((line = r.readLine()) != null)
-				{
-					if (!line.startsWith("##"))
-						mesg += line;
-				}
-				r.close();
-				
-				if (proc.exitValue() != 0)
-					JOptionPane.showMessageDialog(null,mesg,
-						"Script Error",JOptionPane.ERROR_MESSAGE);
-			} catch (Exception ex) {}
-		}*/
+	{			
 		new ScriptRunner(path).start();
 		//SwingUtilities.invokeLater(new ScriptRunner(path));
 	} //}}}
@@ -109,11 +72,28 @@ public class MacOSActions
 					String line;
 					
 					while ((line = reader.readLine()) != null)
-						code.append(line);
+						code.append(line+"\n");
 					
 					NSAppleScript script = new NSAppleScript(code.toString());
-					script.compile(new NSMutableDictionary());
-					script.execute(new NSMutableDictionary());
+					NSMutableDictionary compileErrInfo = new NSMutableDictionary();
+					NSMutableDictionary execErrInfo = new NSMutableDictionary();
+					if (script.compile(compileErrInfo))
+					{
+						if (script.execute(execErrInfo) == null)
+						{
+							JOptionPane.showMessageDialog(null,
+								execErrInfo.objectForKey("NSAppleScriptErrorBriefMessage"),
+								jEdit.getProperty("MacOSPlugin.dialog.script.title"),
+								JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,
+							compileErrInfo.objectForKey("NSAppleScriptErrorBriefMessage"),
+							jEdit.getProperty("MacOSPlugin.dialog.script.title"),
+							JOptionPane.ERROR_MESSAGE);
+					}
 				} catch (Exception ex) {}
 			}
 		}

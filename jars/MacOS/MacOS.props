@@ -44,6 +44,7 @@ options.MacOSPlugin.useSelection.label=Use system highlight colour for Text Area
 MacOSPlugin.dialog.osname.message=Mac OS Plugin can only be used with Mac OS X.
 MacOSPlugin.dialog.mrjversion.title=error
 MacOSPlugin.dialog.mrjversion.message=Mac OS Plugin requires a newer version of Java (MRJ {0}).
+MacOSPlugin.dialog.script.title=Script Error
 
 #
 # Menus
