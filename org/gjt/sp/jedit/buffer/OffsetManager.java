@@ -250,7 +250,12 @@ public class OffsetManager
 			{
 				if(anchor.physicalLine > line
 					&& (info & (1L << (VISIBLE_SHIFT + anchor.index))) != 0)
+				{
+					System.err.println("anchor screen shift from "
+						+ anchor.scrollLine + " to "
+						+ (anchor.scrollLine + (count - oldCount)));
 					anchor.scrollLine += (count - oldCount);
+				}
 				anchor = anchor.next;
 			}
 		}
@@ -488,6 +493,9 @@ public class OffsetManager
 				if(anchor.physicalLine >= startLine
 					&& (visible & (1L << anchor.index)) != 0)
 				{
+					System.err.println("anchor shift from "
+						+ anchor.physicalLine + " to "
+						+ (anchor.physicalLine + numLines));
 					anchor.physicalLine += numLines;
 				}
 				anchor = anchor.next;
@@ -573,6 +581,10 @@ public class OffsetManager
 					{
 						if(isLineVisible(i,anchor.index))
 						{
+							System.err.println("anchor shift from "
+								+ anchor.physicalLine + " to "
+								+ (anchor.physicalLine - 1));
+
 							anchor.physicalLine--;
 							anchor.scrollLine -= getScreenLineCount(i);
 						}

@@ -44,13 +44,38 @@ The following switches are supported:
 .TP
 \fB\-background\fR
 Runs jEdit in background mode. In background mode, the edit server will continue
-listening for client connections even after all views are closed.
+listening for client connections even after all views are closed. Has no effect
+when connecting to another instance via the edit server.
+.TP
+\fB\-nobackground\fR
+Disables background mode. This is the default. Has no effect when connecting to 
+another instance via the edit server.
+.TP
+\fB\-gui\fR
+Makes jEdit open an initial view if running in background mode. This is the
+default. Has no effect when connecting to 
+another instance via the edit server.
 .TP
 \fB\-nogui\fR
 Makes jEdit not open an initial view, and instead only open one when the first 
 client connects. Can only be used in combination with the -background switch. 
 You can use this switch to "pre-load" jEdit when you log in to your computer, 
-for example.
+for example. Has no effect when connecting to 
+another instance via the edit server.
+.TP
+\fB\-log=level\fR
+Sets the minimum log level to an integer between 1 and 9. Default is 7.
+Has no effect when connecting to 
+another instance via the edit server.
+.TP
+\fB\-plugins\fR
+Enables loading of plugins. This is the default.
+.TP
+\fB\-noplugins\fR
+Disables loading of plugins.
+.TP
+\fB\-restore\fR
+Restores previously open files on startup. This is the default.
 .TP
 \fB\-norestore\fR
 Disables automatic restore of previously open files on startup. This feature 
@@ -63,7 +88,7 @@ on the command line.
 .TP
 \fB\-server\fR
 Stores the server port info in the file named "server" inside the settings 
-directory.
+directory. This is the default.
 .TP
 \fB\-server=name\fR
 Stores the server port info in the file named "name". File names for this 
@@ -82,11 +107,12 @@ the edit server.
 \fB\-nosettings\fR
 Starts jEdit without loading user-specific settings.
 .TP
-\fB\-noplugins\fR
-Causes jEdit to not load any plugins.
+\fB\-startupscripts\fR
+Enables startup scripts. This is the default. Has no effect when connecting to 
+another instance via the edit server.
 .TP
 \fB\-nostartupscripts\fR
-Causes jEdit to not run any startup scripts. Has no effect when connecting to 
+Disables startup scripts. Has no effect when connecting to 
 another instance via the edit server.
 .TP
 \fB\-usage\fR
@@ -100,15 +126,12 @@ Shows the version number without starting jEdit.
 Specifies the end of the command line switches. Further parameters are treated
 as file names, even if they begin with a dash. Can be used to open files whose 
 names start with a dash, and so on.
-.PP
-To set minimum activity log level, specify a number as the first
-command line parameter (1-9, 1 = print everything, 9 = fatal errors only).
 
 .SH "SEE ALSO"
 .BR java (1)
 
 .SH VERSION
-jEdit 4.1
+jEdit 4.2
 
 .SH BUG REPORT
 Report any bugs to slava@jedit.org.
