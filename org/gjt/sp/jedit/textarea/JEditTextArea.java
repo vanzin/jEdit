@@ -1419,27 +1419,31 @@ public class JEditTextArea extends JComponent
 	 * corresponding bracket. Returns <code>true</code> if successful (i.e.
 	 * there's a bracket at the specified position and there's a matching 
 	 * bracket for it), <code>false</code> otherwise.
-	 * @since jEdit 4.1pre1
+	 * @since jEdit 4.2pre1
 	 */
-	public boolean selectToMatchingBracket(int position)
+	public Selection selectToMatchingBracket(int position, boolean moveCaret)
 	{
 		int positionLine = buffer.getLineOfOffset(position);
 		int lineOffset = position - buffer.getLineStartOffset(positionLine);
+		if(lineOffset == getLineLength(positionLine))
+			position--;
 
 		int bracket = TextUtilities.findMatchingBracket(buffer,positionLine,lineOffset);
-		
+
 		if(bracket != -1)
 		{
 			Selection s;
 
 			if(bracket < position)
 			{
-				moveCaretPosition(position,false);
+				if(moveCaret)
+					moveCaretPosition(position,false);
 				s = new Selection.Range(++bracket,position);
 			}
 			else
 			{
-				moveCaretPosition(position + 1,false);
+				if(moveCaret)
+					moveCaretPosition(position + 1,false);
 				s = new Selection.Range(position + 1,bracket);
 			}
 
@@ -1447,10 +1451,10 @@ public class JEditTextArea extends JComponent
 				selectNone();
 
 			addToSelection(s);
-			return true;
+			return s;
 		}
-		
-		return false;
+
+		return null;
 	} //}}}
 
 	//{{{ selectToMatchingBracket() method
@@ -1461,18 +1465,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void selectToMatchingBracket()
 	{
-		// since we might change it below
-		int caret = this.caret;
-
-		int offset = caret - buffer.getLineStartOffset(caretLine);
-
-		if(buffer.getLineLength(caretLine) == 0)
-			return;
-
-		if(offset == buffer.getLineLength(caretLine))
-			caret--;
-		
-		selectToMatchingBracket(caret);
+		selectToMatchingBracket(caret,true);
 	} //}}}
 
 	//{{{ selectBlock() method
@@ -6327,6 +6320,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				dragStart = getMarkPosition();
 				dragStartOffset = dragStart
 					- getLineStartOffset(dragStartLine);
+
+				// so that quick copy works
+				dragged = true;
 			}
 			else
 			{
@@ -6589,6 +6585,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseReleased() method
 		public void mouseReleased(MouseEvent evt)
 		{
+			Selection sel = null;
+
 			if(control && !dragged)
 			{
 				int offset = xyToOffset(evt.getX(),evt.getY(),false);
@@ -6599,16 +6597,19 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					{
 					case '(': case '[': case '{':
 					case ')': case ']': case '}':
-						moveCaretPosition(offset,false);
-						selectToMatchingBracket();
-						return;
+						if(!quickCopyDrag)
+							moveCaretPosition(offset,false);
+						sel = selectToMatchingBracket(offset,false);
+						dragged = true;
+						break;
 					}
 				}
 			}
 
 			// middle mouse button drag inserts selection
 			// at caret position
-			Selection sel = getSelectionAtOffset(dragStart);
+			if(sel == null)
+				sel = getSelectionAtOffset(dragStart);
 			if(dragged && sel != null)
 			{
 				Registers.setRegister('%',getSelectedText(sel));
@@ -6618,8 +6619,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					Registers.paste(JEditTextArea.this,'%',
 						sel instanceof Selection.Rect);
 				}
-				else
-					Registers.setRegister('%',getSelectedText());
 			}
 			else if(isQuickCopyEnabled()
 				&& GUIUtilities.isMiddleButton(evt.getModifiers()))

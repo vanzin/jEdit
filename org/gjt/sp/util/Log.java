@@ -273,7 +273,13 @@ public class Log
 				{
 					_log(urgency,_source,st.nextToken());
 				}
-				listModel.fireChanged();
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						listModel.fireChanged();
+					}
+				});
 			}
 		}
 	} //}}}

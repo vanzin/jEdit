@@ -11,6 +11,15 @@ Thanks to Kris Kopicki for contributing to this release.
 
 - Improved C pre-processor syntax highlighting.
 
+- Quick copy now more consistent with usual mouse behavior:
+
+  - Control-middle-clicking on a bracket will insert the contents of the
+    bracketed block at the caret position.
+
+  - Shift-middle-clicking at a point will insert text from the caret to
+    the point at the caret position. Can be used to duplicate a line,
+    for example.
+
 + Optimizations:
 
 - Faster buffer loading.
