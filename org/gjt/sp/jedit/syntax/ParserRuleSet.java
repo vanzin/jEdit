@@ -87,7 +87,7 @@ public class ParserRuleSet
 	{
 		ruleCount++;
 
-		int key = Character.toUpperCase(r.start[0])
+		int key = Character.toUpperCase(r.hashChar)
 			% RULE_BUCKET_COUNT;
 		ParserRule last = ruleMapLast[key];
 		if(last == null)
