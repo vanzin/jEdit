@@ -49,7 +49,8 @@ class InstallPanel extends JPanel
 
 		setBorder(new EmptyBorder(12,12,12,12));
 
-		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,true);
+		final JSplitPane split = new JSplitPane(
+			JSplitPane.VERTICAL_SPLIT,true);
 
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());
@@ -92,7 +93,13 @@ class InstallPanel extends JPanel
 		infoPane.setPreferredSize(new Dimension(500,100));
 		split.setBottomComponent(infoPane);
 
-		split.setDividerLocation(200);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				split.setDividerLocation(0.75);
+			}
+		});
 
 		add(BorderLayout.CENTER,split);
 

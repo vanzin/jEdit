@@ -39,6 +39,13 @@ Patrick Tingen for contributing to this release.
   file would be visible.
 
 }}}
+{{{ API Changes
+
+- A few methods added to JEditTextArea for Gestures plugin:
+
+  isRightClickPopupEnabled()
+  setRightClickPopupEnabled(boolean)
+  handlePopupTrigger(MouseEvent)
 
 }}}
 
