@@ -25,6 +25,11 @@
       </para></question>
       <answer><para>
         First, make sure you have a working installation of the Java platform.
+        To run jEdit, you will a platform package having a version number of at least 1.3.
+        Versions 1.3, 1.3.1 or 1.4 will all work. If you do not have the Java platform,
+        we recommend downloading the larger <quote>Software Development Kit</quote> (SDK), instead of
+        the smaller <quote>Java Runtime Environment</quote> (JRE), because you will need
+        the tools supplied with the SDK if you will be using Java for development.
         You will need to know the path of the Java application launcher, which is
         called <filename>java.exe</filename> on Windows systems and simply
         <filename>java</filename> on others.
@@ -62,7 +67,7 @@
         If this is your first download of jEdit, you should definitely install
         the set of macros that come with the application. Many of them are
         useful for all programmers, and even the ones you don't use can
-        serve as models for when you eventually begin writing your own macros.
+        serve as models when you eventually begin writing your own macros.
       </para>
       <para>
         The installation process is very short. If you are installing the
@@ -97,19 +102,20 @@
 <qandaentry>
 	<question id="install-noclassdef">
 		<para>
-			After downloading <filename>jedit322install.jar</filename>, I tried to run
-			<userinput>java jedit322install.jar</userinput>, but got the error message,
-			<screen>Exception in main(), NoClassDefFoundError: jedit322install/jar.</screen> What am I doing wrong?
+			After downloading <filename>jeditXXXinstall.jar</filename> (the
+            <filename>XXX</filename> represents the version number), I tried to run
+			<userinput>java jeditXXXinstall.jar</userinput>, but got the error message,
+			<screen>Exception in main(), NoClassDefFoundError: jeditXXXinstall/jar.</screen> What am I doing wrong?
 		</para>
 	</question>
 	<answer>
-  
+
 		<para>
 			You need to specify the <userinput>-jar</userinput> option for the Java
 			application loader so that the loader will search the installation archive
 			for the starting class file. Without the option, it treats the archive as a
 			single class file (which it is not!), thus producing the error. The correct
-			command line would be <userinput>java -jar jedit322install.jar</userinput>.
+			command line would be <userinput>java -jar jeditXXXinstall.jar</userinput>.
 		</para>
 	</answer>
 </qandaentry>
@@ -133,8 +139,8 @@
 	<answer>
 		<para>
 			Your <filename>jedit</filename> shell script should
-			be modified to have the <userinput>JAVA_HOME</userinput> variable
-			defined as the directory containing	the executables of
+			be modified to set the <userinput>JAVA_HOME</userinput> variable
+			to the directory containing	the executables of
 			your desired Java runtime environment (JRE).
 		</para>
 	</answer>
@@ -153,13 +159,10 @@
 	<answer>
 	  	<para>
 			This version of Mandrake Linux uses the Open Source Kaffe package as its default
-			Java virtual machine. The jEdit application requires Sun's Swing package, which
-			is not included with Kaffe. However, the developers of Kaffe claim that Kaffe
-			and Swing are fully compatible. You therefore have two choices. You can obtain a
-			copy of Sun's Swing package (version 1.1.1 is known to work with Kaffe) and
-			place it on the classpath used by Kaffe. Alternatively, you can install Sun's
-			JDK for Linux and modify the script used to launch jEdit to point to Sun's
-			application loader instead of Kaffe. This is likely to be a simpler operation.
+			Java virtual machine. Kaffe is compliant with version 1.1 (and to a limited extent,
+            version 1.2) of the Java platform.  However, the latest version of jEdit, version 4.0, requires
+            at least version 1.3. You will need to install another Java package for Linux
+            (either Blackdown, IBM or Sun) that complies with at least version 1.3.
 		</para>
 	</answer>
 </qandaentry>
@@ -187,42 +190,47 @@
 
 <qandadiv id="install-mac">
   <title>Install jEdit on MacOS</title>
-  <qandaentry> 
+  <qandaentry>
     <question id="install.mac9-basic">
       <para>How do I install jEdit on MacOS 8 or MacOS 9?</para>
     </question>
     <answer>
       <para>
-        To install Jedit on Mac OS 9.1 and earlier download JBinary which 
-        is part of the MRJ SDK 2.2 package available from Apple. Once 
-        you have installed JBinary do the following:
-      </para>  
+        The latest version of jEdit, version 4.0, requires MacOS X, because the
+        Java platforms of earlier MacOS version out outdated.
+      </para>
+      <para>
+        The followng steps outline how to install jEdit 3.2.2 on Mac OS 9.1
+        and earlier.
+      </para>
       <procedure>
-        <step><para>Drag the jEdit installer to JBinary and JBinary 
-        will launch.</para></step>
-        <step><para>In the Command window in the Class path box replace 
-        <userinput>jedit322install,</userinput> with 
+        <step><para>Download and install JBinary which
+        is part of the MRJ SDK 2.2 package available from Apple.</para></step>
+        <step><para>Once jBinary is installed, drag the jEdit installer to
+        JBinary and JBinary will launch.</para></step>
+        <step><para>In the Command window in the Class path box replace
+        <userinput>jedit322install,</userinput> with
         <userinput>installer.Install</userinput>.</para></step>
-        <step><para>Then click the Run button. The installer will 
+        <step><para>Then click the Run button. The installer will
         install jEdit on your system.</para></step>
       </procedure>
       <para>
-        Once you have completed installing jEdit locate the jedit.jar 
+        Once you have completed installing jEdit locate the jedit.jar
         file and do the following:
-      </para>  
+      </para>
       <procedure>
-        <step><para>Drag the <filename>jedit.jar</filename> to JBinary 
+        <step><para>Drag the <filename>jedit.jar</filename> to JBinary
         and JBinary will launch.</para></step>
-        <step><para>In the Command window in the Class path box replace 
-        <userinput>jedit</userinput> with 
+        <step><para>In the Command window in the Class path box replace
+        <userinput>jedit</userinput> with
         <userinput>org.gjt.sp.jedit.jEdit</userinput>.</para></step>
-        <step><para>Then click the Save settings button. It will ask 
-        for an application name and will create a double-clickable icon 
+        <step><para>Then click the Save settings button. It will ask
+        for an application name and will create a double-clickable icon
         on your desktop.</para></step>
         <step><para>Double-click on your icon to launch jEdit.</para></step>
        </procedure>
      </answer>
-   </qandaentry>  
+   </qandaentry>
 
 </qandadiv>
 
@@ -274,8 +282,8 @@
         Regardless of the version of Windows that you use, if you have kept it
         reasonably up-to-date with service packs or component upgrades from
         Microsoft, you should have no trouble running jEditLauncher.
-        Users of Windows 98, Windows ME, Windows NT (version 4.0) or
-        Windows 2000 have not reported problems involving missing
+        Users of Windows 98, Windows ME, Windows NT (version 4.0),
+        Windows 2000 and Windows XP have not reported problems involving missing
         components.
       </para>
       <para>
@@ -295,8 +303,13 @@
             Can I run jEdit on Microsoft's virtual machine?
         </para></question>
         <answer>
+           <para>
+                The latest version of jEdit, version 4.0, requires at least
+                version 1.3 of the Java 2 platform, and therefore will not
+                be compatible with Microsoft's virtual machine.
+           </para>
           <para>
-             You can run version 3.2.2 if you put Sun's Swing 1.1.1
+             You can run jEdit version 3.2.2 if you put Sun's Swing 1.1.1
              package in the classpath of Microsoft's Java application loaders
              <command>jview</command> or <command>wjview</command>.
              An article describing the advantages and disadvantages
@@ -305,11 +318,6 @@
              url="http://community.jedit.org/article.php?sid=14&amp;mode=&amp;order=0">jEdit
              Community</ulink> web site.
          </para>
-           <para>
-                The forthcoming new version of jEdit, version 4.0, will require
-                the Java 2 platform, and therefore will not be compatible with
-                Microsoft's virtual machine.
-            </para>
         </answer>
     </qandaentry>
 
@@ -318,19 +326,19 @@
 	<question id="install-windows-badcommand">
 		<para>
 			When trying to install jEdit on Windows Me with an MS-DOS prompt, after entering
-			<userinput>java -jar jedit322install.jar</userinput> I get the message
-			<userinput>bad command or file	name</userinput>.
+			<userinput>java -jar jeditXXXinstall.jar</userinput> I get the message
+			<userinput>bad command or file name</userinput>.
 			I have tried various alternatives but still cannot install.
 		</para>
 	</question>
 	<answer>
 		<para>
 			You should confirm that you have a Java runtime environment installed, which
-			will include <filename>java.exe</filename>. Make sure that the directory
-			containing <filename>java.exe</filename> is found
+			will include <filename>java.exe</filename> and the version that omits a separate
+            terminal window, <filename>javaw.exe</filename>. Make sure that the directory
+			containing <filename>java.exe</filename> or <filename>javaw.exe</filename>is found
 			in the value of your <filename>PATH</filename> environment variable.
-			Otherwise you should give the full path to <filename>java.exe</filename>
-			on your command line.
+			Otherwise you should give the full path to the chosen loader on your command line.
 		</para>
 	</answer>
 </qandaentry>
@@ -371,7 +379,8 @@
 			The problem is not with jEdit but may be caused by your installation of the Java
 			runtime environment. Under Windows, Sun's Java application loader relies on
 			entries in the Windows registry to find the files that create the runtime
-			environment and a Java virtual machine. The loader (java.exe or javaw.exe) is
+			environment and a Java virtual machine. The loader (<filename>java.exe</filename>e or
+            <filename>javaw.exe</filename>) is
 			unable to find the necessary registration entry and therefore sends the error
 			message. The best approach to fixing this is to uninstall and reinstall the JDK.
 		</para>
@@ -391,8 +400,8 @@
       <answer><para>
         If you don't have a clue as to why you cannot run jEdit, it's
         best to perform a step-by-step diagnosis.  Begin by finding the
-        Java application loader you are using: <userinput>java.exe</userinput>,
-        <userinput>javaw.exe</userinput> or <userinput>java</userinput>. Make sure
+        Java application loader you are using: <filename>java.exe</filename>,
+        <filename>javaw.exe</filename> or <filename>java</filename>. Make sure
         it is running by entering its full path with the <userinput>-h</userinput>
         parameter in a terminal or console window.  If you can't find
         the Java application loader, your Java runtime environment package
@@ -423,7 +432,7 @@
         script's commands target the correct files and locations, and that
         variables like <filename>JAVA_HOME</filename> are either defined in the
         script or elsewhere in your shell's environment. Don't forget to make
-        sure that the script's file permissions allow you to execute it.
+        sure that the script's file permissions allow you to execute it as a shell script.
       </para>
       <para>
           On Windows, if you are using a batch script to run jEdit, the
@@ -433,7 +442,9 @@
           installation directory from a command line to get the custom
           loader's setup dialog.  Here you can check the paths for both
           the Java application loader and jEdit as well as any command
-          line parameters for both programs.  If the parameters seems correct
+          line parameters for both programs.  Make sure that you have
+          placed Java and jEdit options in the correct input fields.
+          If the parameters seems correct
           but jEdit will not load with the Windows launcher, try
           uninstalling and reinstalling the launcher by running
           <userinput>jedit /u</userinput> followed by
@@ -467,7 +478,7 @@
       </para>
       <para>
           The settings directory can be changed by using the
-          <userinput>-settings</userinput> userinput line parameter. If you change the
+          <userinput>-settings</userinput> command line parameter. If you change the
           location of the settings directory with this parameter, jEdit will not
           be able to find plugin archive files in the old location.
           If you use or change the <userinput>-settings</userinput>
