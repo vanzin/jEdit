@@ -24,6 +24,14 @@
  * $Id$
  */
 
+boolean testClassPath()
+{
+	classpath = System.getProperty("java.class.path");
+	classSeparator = (File.separatorChar == '/' ? ':' : ';');
+	return (classpath.indexOf(classSeparator) != -1)
+		|| (!classpath.endsWith("jedit.jar"));
+}
+
 
 File getCanonicalFile(File file)
 {
@@ -80,10 +88,17 @@ String determinePackageName(String path)
 }
 
 // main routine
-result = determinePackageName(buffer.getPath());
-if(result == null)
+if(!testClassPath())
 {
-    Macros.error(view, "Could not find a package name.");
+	Macros.error(view, "This macro will not work when the Java interpreter\n"
+		+ "loads jEdit with the '-jar' command line option.");
 }
-else textArea.setSelectedText(result);
-
+else
+{
+	result = determinePackageName(buffer.getPath());
+	if(result == null)
+	{
+		Macros.error(view, "Could not find a package name.");
+	}
+	else textArea.setSelectedText(result);
+}
