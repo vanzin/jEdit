@@ -805,9 +805,14 @@ public class Buffer implements EBComponent
 			if(autosaveFile != null)
 				autosaveFile.delete();
 
-			// this ensures that undo can clear the dirty flag properly
-			// when all edits up to a save are undone
-			undoMgr.bufferSaved();
+			// fixes dirty flag not being reset on
+			// save/insert/undo/redo/undo
+			if(!getFlag(UNDO_IN_PROGRESS))
+			{
+				// this ensures that undo can clear the dirty flag properly
+				// when all edits up to a save are undone
+				undoMgr.bufferSaved();
+			}
 		}
 
 		if(d != old_d)
@@ -1569,46 +1574,49 @@ public class Buffer implements EBComponent
 	 * @param name The property name. For backwards compatibility, this
 	 * is an <code>Object</code>, not a <code>String</code>.
 	 */
-	public synchronized Object getProperty(Object name)
+	public Object getProperty(Object name)
 	{
-		// First try the buffer-local properties
-		PropValue o = (PropValue)properties.get(name);
-		if(o != null)
-			return o.value;
-
-		// For backwards compatibility
-		if(!(name instanceof String))
-			return null;
-
-		// Now try mode.<mode>.<property>
-		if(mode != null)
+		synchronized(propertyLock)
 		{
-			Object retVal = mode.getProperty((String)name);
-			if(retVal == null)
+			// First try the buffer-local properties
+			PropValue o = (PropValue)properties.get(name);
+			if(o != null)
+				return o.value;
+
+			// For backwards compatibility
+			if(!(name instanceof String))
 				return null;
 
-			properties.put(name,new PropValue(retVal,true));
-			return retVal;
-		}
-		else
-		{
-			// Now try buffer.<property>
-			String value = jEdit.getProperty("buffer." + name);
-			if(value == null)
-				return null;
+			// Now try mode.<mode>.<property>
+			if(mode != null)
+			{
+				Object retVal = mode.getProperty((String)name);
+				if(retVal == null)
+					return null;
 
-			// Try returning it as an integer first
-			Object retVal;
-			try
-			{
-				retVal = new Integer(value);
+				properties.put(name,new PropValue(retVal,true));
+				return retVal;
 			}
-			catch(NumberFormatException nf)
+			else
 			{
-				retVal = value;
+				// Now try buffer.<property>
+				String value = jEdit.getProperty("buffer." + name);
+				if(value == null)
+					return null;
+
+				// Try returning it as an integer first
+				Object retVal;
+				try
+				{
+					retVal = new Integer(value);
+				}
+				catch(NumberFormatException nf)
+				{
+					retVal = value;
+				}
+				properties.put(name,new PropValue(retVal,true));
+				return retVal;
 			}
-			properties.put(name,new PropValue(retVal,true));
-			return retVal;
 		}
 	} //}}}
 
@@ -1773,34 +1781,37 @@ public class Buffer implements EBComponent
 	 * @param syntax Regular expression syntax
 	 * @since jEdit 4.1pre9
 	 */
-	public synchronized RE getRegexpProperty(String name, int cflags,
+	public RE getRegexpProperty(String name, int cflags,
 		RESyntax syntax) throws REException
 	{
-		boolean defaultValueFlag;
-		Object obj;
-		PropValue value = (PropValue)properties.get(name);
-		if(value != null)
+		synchronized(propertyLock)
 		{
-			obj = value.value;
-			defaultValueFlag = value.defaultValue;
-		}
-		else
-		{
-			obj = getProperty(name);
-			// will be cached from now on...
-			defaultValueFlag = true;
-		}
+			boolean defaultValueFlag;
+			Object obj;
+			PropValue value = (PropValue)properties.get(name);
+			if(value != null)
+			{
+				obj = value.value;
+				defaultValueFlag = value.defaultValue;
+			}
+			else
+			{
+				obj = getProperty(name);
+				// will be cached from now on...
+				defaultValueFlag = true;
+			}
 
-		if(obj == null)
-			return null;
-		else if(obj instanceof RE)
-			return (RE)obj;
-		else
-		{
-			RE re = new RE(obj.toString(),cflags,syntax);
-			properties.put(name,new PropValue(re,
-				defaultValueFlag));
-			return re;
+			if(obj == null)
+				return null;
+			else if(obj instanceof RE)
+				return (RE)obj;
+			else
+			{
+				RE re = new RE(obj.toString(),cflags,syntax);
+				properties.put(name,new PropValue(re,
+					defaultValueFlag));
+				return re;
+			}
 		}
 	} //}}}
 
@@ -3352,7 +3363,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ Buffer constructor
 	Buffer(String path, boolean newFile, boolean temp, Hashtable props)
 	{
-		properties = new Hashtable();
+		lock = new ReadWriteLock();
+		propertyLock = new Object();
+		contentMgr = new ContentManager();
+		offsetMgr = new OffsetManager(this);
+		integerArray = new LongArray();
+		undoMgr = new UndoManager(this);
+		bufferListeners = new Vector();
+		seg = new Segment();
+		inUseFVMs = new FoldVisibilityManager[8];
+		markers = new Vector();
+		properties = new HashMap();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Enumeration enum = props.keys();
@@ -3371,20 +3392,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if(getProperty(LINESEP) == null)
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 
-		lock = new ReadWriteLock();
-		contentMgr = new ContentManager();
-		offsetMgr = new OffsetManager(this);
-		integerArray = new LongArray();
-		undoMgr = new UndoManager(this);
-		bufferListeners = new Vector();
-
-		seg = new Segment();
-
-		inUseFVMs = new FoldVisibilityManager[8];
-
 		setFlag(TEMPORARY,temp);
-
-		markers = new Vector();
 
 		// this must be called before any EditBus messages are sent
 		setPath(path);
@@ -3485,9 +3493,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private File autosaveFile;
 	private long modTime;
 	private Mode mode;
-	private Hashtable properties;
+	private HashMap properties;
 
 	private ReadWriteLock lock;
+	private Object propertyLock;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 	private LongArray integerArray;

@@ -329,6 +329,8 @@ public class UndoManager
 		int redo()
 		{
 			buffer.insert(offset,str);
+			if(clearDirty)
+				buffer.setDirty(false);
 			return offset + length;
 		} //}}}
 
@@ -362,6 +364,8 @@ public class UndoManager
 		int redo()
 		{
 			buffer.remove(offset,length);
+			if(clearDirty)
+				buffer.setDirty(false);
 			return offset;
 		} //}}}
 

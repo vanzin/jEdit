@@ -31,7 +31,7 @@ public class WorkThread extends Thread
 		super(group, name);
 		// so that jEdit doesn't exit with no views open automatically
 		//setDaemon(true);
-		setPriority(4);
+		setPriority(Thread.MIN_PRIORITY);
 
 		this.pool = pool;
 	}
