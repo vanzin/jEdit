@@ -12,7 +12,8 @@ release.
 
 - Redcode syntax highlighting (Will Varfar).
 
-- Minor updates to JavaScript and PHP modes (Chris Petersen).
+- Minor updates to JavaScript, PHP and ShellScript modes
+  (Chris Petersen).
 
 - Updated Freemaker syntax highlighting (Jonathan Revusky).
 

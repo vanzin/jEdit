@@ -23,12 +23,13 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
+import javax.swing.*;
+import javax.swing.border.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class ErrorListDialog extends EnhancedDialog
@@ -46,6 +47,9 @@ public class ErrorListDialog extends EnhancedDialog
 			String message = jEdit.getProperty(messageProp,args);
 			if(message == null)
 				message = "Undefined property: " + messageProp;
+
+			Log.log(Log.ERROR,this,path + ":");
+			Log.log(Log.ERROR,this,message);
 
 			Vector tokenizedMessage = new Vector();
 			int lastIndex = -1;
