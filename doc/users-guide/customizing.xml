@@ -171,11 +171,6 @@
    The <guibutton>Editing</guibutton> option pane lets you change settings such
    as the tab size, syntax highlighting and soft tabs on a global basis.
   </para>
-  <para>
-   Due to the design of jEdit's properties implementation,
-   changes to some settings in this option pane only take effect
-   in subsequently opened files.
-  </para>
   <bridgehead renderas="sect3">The Mode-Specific Pane</bridgehead>
   <para>
    The <guibutton>Mode-Specific</guibutton> option pane lets you change settings

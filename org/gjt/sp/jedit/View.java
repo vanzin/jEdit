@@ -931,23 +931,16 @@ public class View extends JFrame implements EBComponent
 
 		dockableWindowManager = new DockableWindowManager(this);
 
-		JPanel topToolBars = new JPanel(new VariableGridLayout(
+		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
-		dockableWindowManager.add(DockableWindowManager.DockableLayout
-			.TOP_TOOLBARS,topToolBars);
-		JPanel bottomToolBars = new JPanel(new VariableGridLayout(
+		bottomToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
-		dockableWindowManager.add(DockableWindowManager.DockableLayout
-			.BOTTOM_TOOLBARS,bottomToolBars);
 
 		toolBarManager = new ToolBarManager(topToolBars, bottomToolBars);
 
-		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
-
 		status = new StatusBar(this);
-		getContentPane().add(BorderLayout.SOUTH,status);
 
 		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
 
@@ -962,6 +955,10 @@ public class View extends JFrame implements EBComponent
 
 		EditBus.addToBus(this);
 
+		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
+
+		// tool bar and status bar gets added in propertiesChanged()
+		// depending in the 'tool bar alternate layout' setting.
 		propertiesChanged();
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -1036,6 +1033,8 @@ public class View extends JFrame implements EBComponent
 
 	private DockableWindowManager dockableWindowManager;
 
+	private JPanel topToolBars;
+	private JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
 
 	private JToolBar toolBar;
@@ -1165,6 +1164,24 @@ public class View extends JFrame implements EBComponent
 
 		dockableWindowManager.propertiesChanged();
 		status.propertiesChanged();
+
+		if(jEdit.getBooleanProperty("view.toolbar.alternateLayout"))
+		{
+			getContentPane().add(BorderLayout.NORTH,topToolBars);
+			getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
+			addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+		}
+		else
+		{
+			dockableWindowManager.add(DockableWindowManager.DockableLayout
+				.TOP_TOOLBARS,topToolBars);
+			dockableWindowManager.add(DockableWindowManager.DockableLayout
+				.BOTTOM_TOOLBARS,bottomToolBars);
+			removeToolBar(status);
+			getContentPane().add(BorderLayout.SOUTH,status);
+		}
+
+		getRootPane().revalidate();
 
 		SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}

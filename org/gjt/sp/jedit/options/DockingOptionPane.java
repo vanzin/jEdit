@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.table.*;
 import javax.swing.*;
+import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
@@ -43,30 +44,52 @@ public class DockingOptionPane extends AbstractOptionPane
 	//{{{ _init() method
 	public void _init()
 	{
-		Box box = new Box(BoxLayout.X_AXIS);
-		ButtonGroup grp = new ButtonGroup();
+		addSeparator("options.docking.viewLayout");
 
-		layout1 = new JToggleButton(GUIUtilities.loadIcon("dock_layout1.gif"));
-		grp.add(layout1);
-		box.add(layout1);
+		layoutIcon1 = GUIUtilities.loadIcon("dock_layout1.png");
+		layoutIcon2 = GUIUtilities.loadIcon("dock_layout2.png");
+		layoutIcon3 = GUIUtilities.loadIcon("dock_layout3.png");
+		layoutIcon4 = GUIUtilities.loadIcon("dock_layout4.png");
 
-		box.add(Box.createHorizontalStrut(6));
-
-		layout2 = new JToggleButton(GUIUtilities.loadIcon("dock_layout2.gif"));
-		grp.add(layout2);
-		box.add(layout2);
+		JPanel layoutPanel = new JPanel(new VariableGridLayout(
+			VariableGridLayout.FIXED_NUM_COLUMNS,1,
+			6,6));
 
 		if(jEdit.getBooleanProperty("view.docking.alternateLayout"))
-			layout2.setSelected(true);
+		{
+			layout = new JLabel(jEdit.getBooleanProperty(
+				"view.toolbar.alternateLayout")
+				? layoutIcon4 : layoutIcon2);
+		}
 		else
-			layout1.setSelected(true);
+		{
+			layout = new JLabel(jEdit.getBooleanProperty(
+				"view.toolbar.alternateLayout")
+				? layoutIcon3 : layoutIcon1);
+		}
 
-		addComponent(jEdit.getProperty("options.docking.layout"),box);
+		layoutPanel.add(layout);
 
-		addComponent(Box.createVerticalStrut(6));
+		layoutPanel.add(alternateDockingLayout = new JButton(jEdit.getProperty(
+			"options.docking.alternateDockingLayout")));
+		alternateDockingLayout.addActionListener(new ActionHandler());
+		layoutPanel.add(alternateToolBarLayout = new JButton(jEdit.getProperty(
+			"options.docking.alternateToolBarLayout")));
+		alternateToolBarLayout.addActionListener(new ActionHandler());
 
+		// center the layout panel
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridy = 3;
+		cons.gridy = y++;
+		cons.gridwidth = GridBagConstraints.REMAINDER;
+		cons.fill = GridBagConstraints.BOTH;
+		cons.weightx = 1.0f;
+		gridBag.setConstraints(layoutPanel,cons);
+		add(layoutPanel);
+
+		addSeparator("options.docking.windowDocking");
+
+		cons = new GridBagConstraints();
+		cons.gridy = y++;
 		cons.gridwidth = cons.gridheight = GridBagConstraints.REMAINDER;
 		cons.fill = GridBagConstraints.BOTH;
 		cons.weightx = cons.weighty = 1.0f;
@@ -80,15 +103,20 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _save()
 	{
 		jEdit.setBooleanProperty("view.docking.alternateLayout",
-			layout2.isSelected());
+			layout.getIcon() == layoutIcon2
+			|| layout.getIcon() == layoutIcon4);
+		jEdit.setBooleanProperty("view.toolbar.alternateLayout",
+			layout.getIcon() == layoutIcon3
+			|| layout.getIcon() == layoutIcon4);
 		windowModel.save();
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JToggleButton layout1;
-	private JToggleButton layout2;
+	private JLabel layout;
+	private Icon layoutIcon1, layoutIcon2, layoutIcon3, layoutIcon4;
+	private JButton alternateDockingLayout, alternateToolBarLayout;
 	private JTable windowTable;
 	private WindowTableModel windowModel;
 	//}}}
@@ -110,7 +138,7 @@ public class DockingOptionPane extends AbstractOptionPane
 		column.setCellEditor(new DefaultCellEditor(new DockPositionCellRenderer()));
 
 		Dimension d = windowTable.getPreferredSize();
-		d.height = Math.min(d.height,200);
+		d.height = Math.min(d.height,50);
 		JScrollPane scroller = new JScrollPane(windowTable);
 		scroller.setPreferredSize(d);
 		return scroller;
@@ -123,6 +151,36 @@ public class DockingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//}}}
+
+	//{{{ ActionHandler class
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			if(evt.getSource() == alternateDockingLayout)
+			{
+				if(layout.getIcon() == layoutIcon1)
+					layout.setIcon(layoutIcon2);
+				else if(layout.getIcon() == layoutIcon2)
+					layout.setIcon(layoutIcon1);
+				else if(layout.getIcon() == layoutIcon3)
+					layout.setIcon(layoutIcon4);
+				else if(layout.getIcon() == layoutIcon4)
+					layout.setIcon(layoutIcon3);
+			}
+			else if(evt.getSource() == alternateToolBarLayout)
+			{
+				if(layout.getIcon() == layoutIcon1)
+					layout.setIcon(layoutIcon3);
+				else if(layout.getIcon() == layoutIcon3)
+					layout.setIcon(layoutIcon1);
+				else if(layout.getIcon() == layoutIcon2)
+					layout.setIcon(layoutIcon4);
+				else if(layout.getIcon() == layoutIcon4)
+					layout.setIcon(layoutIcon2);
+			}
+		}
+	} //}}}
 
 	//{{{ DockPositionCellRenderer class
 	class DockPositionCellRenderer extends JComboBox
