@@ -100,10 +100,11 @@
 		</SPAN>
 
 		<!-- Heredoc -->
-		<SPAN_REGEXP HASH_CHAR="<" TYPE="LITERAL2" DELEGATE="LITERAL">
-		<BEGIN><![CDATA[<<[:space:]*(['"])([[:space:][:alnum:]_]*)\1;?\s*]]></BEGIN>        <END>$2</END>
+		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
+		<BEGIN><![CDATA[<<[:space:]*(['"])([[:space:][:alnum:]_]*)\1;?\s*]]></BEGIN>
+		<END>$2</END>
 		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="<" TYPE="LITERAL2" DELEGATE="LITERAL">
+		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
 		<BEGIN><![CDATA[<<([[:alpha:]_][[:alnum:]_]*);?\s*]]></BEGIN>
 		<END>$1</END>
 		</SPAN_REGEXP>
@@ -117,10 +118,10 @@
                 >/[^[:blank:]]*?[^\\]/</SEQ_REGEXP>
 
                 <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="q"
-                        AT_WORD_START="TRUE"
-                >q(?:|[qrx])([[:punct:]])(?:.*?[^\\])*?\1</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+                	HASH_CHAR="q"
+                	AT_WORD_START="TRUE"
+		>q(?:|[qrx])\{(?:.*?[^\\])*?\}</SEQ_REGEXP>
 
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="t"

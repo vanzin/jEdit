@@ -52,6 +52,12 @@ Bock for contributing to this release.
 
 - The activity log set an incorrect list row height.
 
+- File names containing & and < were not properly being escaped when
+  perspective.xml was being written.
+
+- Some file names could not be opened because jEdit would mistake them
+  for URLs (for example, "foo.bar:baz").
+
 }}}
 
 }}}

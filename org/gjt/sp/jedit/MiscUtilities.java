@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
  *
@@ -29,6 +29,8 @@ import javax.swing.text.Segment;
 import javax.swing.JMenuItem;
 import java.lang.reflect.Method;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
@@ -408,23 +410,20 @@ public class MiscUtilities
 		int cIndex = str.indexOf(':');
 		if(cIndex <= 1) // D:\WINDOWS, or doesn't contain : at all
 			return false;
-		else if(fsIndex != -1 && cIndex > fsIndex) // /tmp/RTF::read.pm
-			return false;
-		else if(cIndex == str.length() - 1)
-		{
-			String protocol = str.substring(0,cIndex);
-			if(VFSManager.getVFSForProtocol(protocol) == null)
-			{
-				// maybe protocol is http: or other built-in,
-				// but if file name is just protocol plus :
-				// then no Java URL handler will recognize it!
-				// this allows user to use file names like
-				// foobar:
-				return false;
-			}
-		}
 
-		return true;
+		String protocol = str.substring(0,cIndex);
+		if(VFSManager.getVFSForProtocol(protocol) != null)
+			return true;
+
+		try
+		{
+			new URL(str);
+			return true;
+		}
+		catch(MalformedURLException mf)
+		{
+			return false;
+		}
 	} //}}}
 
 	//{{{ saveBackup() method

@@ -179,7 +179,8 @@ public class PerspectiveManager
 
 				out.write("<PANES>");
 				out.write(lineSep);
-				out.write(config.splitConfig);
+				out.write(MiscUtilities.charsToEntities(
+					config.splitConfig));
 				out.write(lineSep);
 				out.write("</PANES>");
 				out.write(lineSep);
