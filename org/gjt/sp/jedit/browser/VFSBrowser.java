@@ -473,7 +473,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			return;
 
 		updateFilenameFilter();
-		browserView.loadDirectory(path);
+		browserView.loadDirectory(null,path);
 		this.path = strippedPath;
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -505,7 +505,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		VFSManager.getVFSForPath(path).reloadDirectory(path);
 
 		updateFilenameFilter();
-		browserView.loadDirectory(path);
+		browserView.loadDirectory(null,path);
 	} //}}}
 
 	//{{{ delete() method
