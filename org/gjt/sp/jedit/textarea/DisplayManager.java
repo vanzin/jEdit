@@ -702,7 +702,10 @@ public class DisplayManager
 		public void changed()
 		{
 			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"changed()");
+			{
+				Log.log(Log.DEBUG,this,"changed() before: "
+					+ physicalLine + ":" + scrollLine);
+			}
 
 			ensurePhysicalLineIsVisible();
 
@@ -710,27 +713,34 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
-			/*/XXX
-			int verifyScreenLine = 0;
-			int i = 0;
-
-			for(; i < buffer.getLineCount(); i++)
+			if(Debug.VERIFY_FIRST_LINE)
 			{
-				if(!isLineVisible(i))
-					continue;
+				int verifyScrollLine = 0;
 
-				if(i >= physicalLine)
-					break;
+				for(int i = 0; i < buffer.getLineCount(); i++)
+				{
+					if(!isLineVisible(i))
+						continue;
+	
+					if(i >= physicalLine)
+						break;
+	
+					verifyScrollLine += getScreenLineCount(i);
+				}
 
-				verifyScreenLine += getScreenLineCount(i);
+				if(verifyScrollLine != scrollLine)
+				{
+					Exception ex = new Exception(scrollLine + ":" + verifyScrollLine);
+					Log.log(Log.ERROR,this,ex);
+					new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,ex);
+				}
 			}
-			if(verifyScreenLine != scrollLine)
+
+			if(Debug.SCROLL_DEBUG)
 			{
-				Exception ex =new Exception(scrollLine + ":" + verifyScreenLine);
-				Log.log(Log.ERROR,this,ex);
-				new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,ex);
+				Log.log(Log.DEBUG,this,"changed() after: "
+					+ physicalLine + ":" + scrollLine);
 			}
-			*///XXX
 
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
@@ -793,36 +803,52 @@ public class DisplayManager
 		void physDown(int amount, int screenAmount)
 		{
 			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"physDown()");
+			{
+				Log.log(Log.DEBUG,this,"physDown() start: "
+					+ physicalLine + ":" + scrollLine);
+			}
 
 			skew = 0;
 
 			offsetMgr.removeAnchor(this);
 
-			int newScrollLine = scrollLine;
-			int newPhysicalLine = physicalLine;
-			for(int i = 0; i <= amount; i++)
+			if(!isLineVisible(physicalLine))
 			{
-				if(physicalLine + i >= offsetMgr.getLineCount())
+				int lastVisibleLine = getLastVisibleLine();
+				if(physicalLine > lastVisibleLine)
+					physicalLine = lastVisibleLine;
+				else
 				{
-					amount = i;
-					break;
-				}
-				if(isLineVisible(physicalLine + i))
-				{
-					newScrollLine += getScreenLineCount(physicalLine + i);
-					newPhysicalLine = physicalLine + i;
+					int nextPhysicalLine = getNextVisibleLine(physicalLine);
+					amount -= (nextPhysicalLine - physicalLine);
+					physicalLine = nextPhysicalLine;
+					scrollLine += getScreenLineCount(physicalLine);
 				}
 			}
 
-			//if(newScrollLine != scrollLine)
+			for(;;)
 			{
-				scrollLine = newScrollLine;
-				physicalLine = newPhysicalLine;
-				ensurePhysicalLineIsVisible();
+				int nextPhysicalLine = getNextVisibleLine(
+					physicalLine);
+				if(nextPhysicalLine == -1)
+					break;
+				else if(nextPhysicalLine > physicalLine + amount)
+					break;
+				else
+				{
+					scrollLine += getScreenLineCount(physicalLine);
+					amount -= (nextPhysicalLine - physicalLine);
+					physicalLine = nextPhysicalLine;
+				}
 			}
 
 			offsetMgr.addAnchor(this);
+
+			if(Debug.SCROLL_DEBUG)
+			{
+				Log.log(Log.DEBUG,this,"physDown() end: "
+					+ physicalLine + ":" + scrollLine);
+			}
 
 			// JEditTextArea.scrollTo() needs this to simplify
 			// its code
@@ -840,36 +866,51 @@ public class DisplayManager
 		void physUp(int amount, int screenAmount)
 		{
 			if(Debug.SCROLL_DEBUG)
-				Log.log(Log.DEBUG,this,"physUp()");
+			{
+				Log.log(Log.DEBUG,this,"physUp() start: "
+					+ physicalLine + ":" + scrollLine);
+			}
 
 			skew = 0;
 
 			offsetMgr.removeAnchor(this);
 
-			int newScrollLine = scrollLine;
-			int newPhysicalLine = physicalLine;
-			for(int i = 0; i <= amount; i++)
+			if(!isLineVisible(physicalLine))
 			{
-				if(physicalLine - i == 0)
+				int firstVisibleLine = getFirstVisibleLine();
+				if(physicalLine < firstVisibleLine)
+					physicalLine = firstVisibleLine;
+				else
 				{
-					amount = i;
-					break;
-				}
-				if(isLineVisible(physicalLine - i))
-				{
-					newScrollLine -= getScreenLineCount(physicalLine - i - 1);
-					newPhysicalLine = physicalLine - i;
+					int prevPhysicalLine = getPrevVisibleLine(physicalLine);
+					amount -= (physicalLine - prevPhysicalLine);
 				}
 			}
 
-			//if(newScrollLine != scrollLine)
+			for(;;)
 			{
-				scrollLine = newScrollLine;
-				physicalLine = newPhysicalLine;
-				ensurePhysicalLineIsVisible();
+				int prevPhysicalLine = getPrevVisibleLine(
+					physicalLine);
+				if(prevPhysicalLine == -1)
+					break;
+				else if(prevPhysicalLine < physicalLine - amount)
+					break;
+				else
+				{
+					scrollLine -= getScreenLineCount(
+						prevPhysicalLine);
+					amount -= (physicalLine - prevPhysicalLine);
+					physicalLine = prevPhysicalLine;
+				}
 			}
 
 			offsetMgr.addAnchor(this);
+
+			if(Debug.SCROLL_DEBUG)
+			{
+				Log.log(Log.DEBUG,this,"physUp() end: "
+					+ physicalLine + ":" + scrollLine);
+			}
 
 			// JEditTextArea.scrollTo() needs this to simplify
 			// its code

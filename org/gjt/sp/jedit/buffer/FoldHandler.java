@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.buffer;
 import java.util.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.util.Log;
 
 /**
@@ -40,6 +41,12 @@ import org.gjt.sp.util.Log;
  */
 public abstract class FoldHandler
 {
+	/**
+	 * The service type. See {@link org.gjt.sp.jedit.ServiceManager}.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final String SERVICE = "org.gjt.sp.jedit.buffer.FoldHandler";
+
 	//{{{ getName() method
 	/**
 	 * Returns the internal name of this FoldHandler
@@ -81,11 +88,8 @@ public abstract class FoldHandler
 
 	//{{{ registerFoldHandler() method
 	/**
-	 * Adds a fold handler to the list of registered handlers.
-	 * Typically this will be called from a plugin's
-	 * {@link org.gjt.sp.jedit.EditPlugin#start()} method.
-	 * @param handler The fold handler to add
-	 * @since jEdit 4.0pre6
+	 * @deprecated Write a <code>services.xml</code> file instead;
+	 * see {@link org.gjt.sp.jedit.ServiceManager}.
 	 */
 	public static void registerFoldHandler(FoldHandler handler)
 	{
@@ -101,11 +105,8 @@ public abstract class FoldHandler
 
 	//{{{ unregisterFoldHandler() method
 	/**
-	 * Removes a fold handler from the list of registered handlers.
-	 * Typically this will be called from a plugin's
-	 * {@link org.gjt.sp.jedit.EditPlugin#stop()} method.
-	 * @param handler The fold handler to add
-	 * @since jEdit 4.1pre2
+	 * @deprecated Write a <code>services.xml</code> file instead;
+	 * see {@link org.gjt.sp.jedit.ServiceManager}.
 	 */
 	public static void unregisterFoldHandler(FoldHandler handler)
 	{
@@ -115,8 +116,10 @@ public abstract class FoldHandler
 
 	//{{{ getFoldHandlers() method
 	/**
-	 * Returns an array containing the list of registered fold handlers
-	 * @since jEdit 4.0pre6
+	 * @deprecated Call
+	 * <code>ServiceManager.getServiceNames(
+	 * "org.gjt.sp.jedit.buffer.FoldHandler" );</code> instead. See
+	 * {@link org.gjt.sp.jedit.ServiceManager}.
 	 */
 	public static FoldHandler[] getFoldHandlers()
 	{
@@ -134,7 +137,10 @@ public abstract class FoldHandler
 	 */
 	public static FoldHandler getFoldHandler(String name)
 	{
-		FoldHandler handler;
+		FoldHandler handler = (FoldHandler)ServiceManager
+			.getService(SERVICE,name);
+		if(handler != null)
+			return handler;
 
 		Iterator i = foldHandlers.iterator();
 		while (i.hasNext())
@@ -149,17 +155,22 @@ public abstract class FoldHandler
 
 	//{{{ getFoldModes() method
 	/**
-	 * Returns an array containing the names of all registered fold handlers
+	 * Returns an array containing the names of all registered fold
+	 * handlers.
+	 *
 	 * @since jEdit 4.0pre6
 	 */
 	public static String[] getFoldModes()
 	{
 		FoldHandler[] handlers = getFoldHandlers();
-		String[] foldModes = new String[handlers.length];
+		String[] newApi = ServiceManager.getServiceNames(SERVICE);
+		String[] foldModes = new String[handlers.length
+			+ newApi.length];
+		System.arraycopy(newApi,0,foldModes,0,newApi.length);
 
 		for (int i = 0; i < foldModes.length; i++)
 		{
-			foldModes[i] = handlers[i].getName();
+			foldModes[i + newApi.length] = handlers[i].getName();
 		}
 
 		return foldModes;
@@ -176,6 +187,9 @@ public abstract class FoldHandler
 	//{{{ Private members
 	private String name;
 
+	/**
+	 * @deprecated
+	 */
 	private static ArrayList foldHandlers;
 	//}}}
 
@@ -183,9 +197,6 @@ public abstract class FoldHandler
 	static
 	{
 		foldHandlers = new ArrayList();
-		registerFoldHandler(new DummyFoldHandler());
-		registerFoldHandler(new IndentFoldHandler());
-		registerFoldHandler(new ExplicitFoldHandler());
 	}
 	//}}}
 }
