@@ -162,7 +162,7 @@ actually a Java bug, or a well-known problem:
 jEdit depends on, and comes bundled with the following libraries:
 
 - gnu.regexp by the Free Software Foundation. jEdit bundles gnu.regexp
-  1.1.3.
+  1.1.4.
 
   gnu.regexp is released under the 'GNU Lesser General Public License'.
   The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.

@@ -132,6 +132,7 @@ JEDIT 4.0 VERSION HISTORY
   "_".
 - jEdit now backs up files it saves to the settings directory to
   $HOME/.jedit/settings-backups
+- gnu.regexp 1.1.4 now included
 
 + Bug Fixes
 

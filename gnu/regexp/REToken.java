@@ -26,8 +26,8 @@ abstract class REToken implements Serializable {
   protected REToken uncle = null;
   protected int subIndex;
 
-  protected REToken(int aSubIndex) {
-      subIndex = aSubIndex;
+  protected REToken(int subIndex) {
+      this.subIndex = subIndex;
   }
 
   int getMinimumLength() {
@@ -59,8 +59,7 @@ abstract class REToken implements Serializable {
       return true; // Token was accepted
   }
 
-  void dump(StringBuffer os) { 
-  }
+    abstract void dump(StringBuffer os);
 
   void dumpAll(StringBuffer os) {
     dump(os);

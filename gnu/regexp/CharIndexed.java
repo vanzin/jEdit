@@ -26,6 +26,8 @@ package gnu.regexp;
  * block of text.  The cursor must be able to be advanced via the move()
  * method.  The charAt() method returns the character at the cursor position
  * plus a given offset.
+ *
+ * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
  */
 public interface CharIndexed {
     /**
@@ -33,7 +35,7 @@ public interface CharIndexed {
      * that can be returned by the charAt() function indicating that
      * the specified index is out of range.
      */
-    public static final char OUT_OF_BOUNDS = '\uFFFF';
+    char OUT_OF_BOUNDS = '\uFFFF';
 
     /**
      * Returns the character at the given offset past the current cursor
@@ -42,18 +44,22 @@ public interface CharIndexed {
      * This happens when using the '^' operator in multiline matching mode
      * or the '\b' or '\<' word boundary operators.  In any case, the lower
      * bound is currently fixed at -2 (for '^' with a two-character newline).
+     *
+     * @param index the offset position in the character field to examine
+     * @return the character at the specified index, or the OUT_OF_BOUNDS
+     *   character defined by this interface.
      */
-    public char charAt(int index);
+    char charAt(int index);
 
     /**
      * Shifts the input buffer by a given number of positions.  Returns
      * true if the new cursor position is valid.
      */
-    public boolean move(int index);
+    boolean move(int index);
 
     /**
      * Returns true if the most recent move() operation placed the cursor
      * position at a valid position in the input.
      */
-    public boolean isValid();
+    boolean isValid();
 }
