@@ -72,8 +72,6 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		ListModel model = Log.getLogListModel();
 		model.addListDataListener(new ListHandler());
 		list = new LogList(model);
-		list.setFixedCellHeight(list.getFontMetrics(list.getFont())
-			.getHeight());
 
 		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
@@ -129,6 +127,8 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	private void propertiesChanged()
 	{
 		list.setFont(jEdit.getFontProperty("view.font"));
+		list.setFixedCellHeight(list.getFontMetrics(list.getFont())
+			.getHeight());
 	} //}}}
 
 	//}}}

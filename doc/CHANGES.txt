@@ -50,6 +50,8 @@ Bock for contributing to this release.
 - The caret position of the current buffer was not saved when closing
   all buffers.
 
+- The activity log set an incorrect list row height.
+
 }}}
 
 }}}
