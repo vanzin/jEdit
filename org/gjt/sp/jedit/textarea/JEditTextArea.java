@@ -243,6 +243,9 @@ public class JEditTextArea extends JComponent
 
 			if(this.buffer != null)
 			{
+				setCaretPosition(0);
+				setFirstLine(0);
+
 				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
 				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
@@ -254,7 +257,6 @@ public class JEditTextArea extends JComponent
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
 			chunkCache.invalidateAll();
-			setCaretPosition(0);
 
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
@@ -614,18 +616,17 @@ public class JEditTextArea extends JComponent
 		}
 
 		int x = offsetToX(caretLine,offset);
-		int width = painter.getFontMetrics().charWidth('w');
 
 		if(x < 0)
 		{
 			horizontalOffset = Math.min(0,horizontalOffset
-				- x + width + 5);
+				- x + charWidth + 5);
 			changed = true;
 		}
-		else if(x >= painter.getWidth() - width - 5)
+		else if(x >= painter.getWidth() - charWidth - 5)
 		{
 			horizontalOffset = horizontalOffset +
-				(painter.getWidth() - x) - width - 5;
+				(painter.getWidth() - x) - charWidth - 5;
 			changed = true;
 		}
 
@@ -829,6 +830,12 @@ public class JEditTextArea extends JComponent
 		if(!info.chunksValid)
 			System.err.println("offset to xy: not valid");
 
+		if(line == buffer.getLineCount() - 1)
+		{
+			System.err.println("last line: " + offset);
+			System.err.println(info.length);
+		}
+
 		retVal.x = (int)(horizontalOffset + TextUtilities.offsetToX(
 			info.chunks,offset));
 
@@ -904,7 +911,7 @@ public class JEditTextArea extends JComponent
 		{
 			int tmp = end;
 			end = start;
-			start = end;
+			start = tmp;
 		}
 
 		if(end < physFirstLine || start > physLastLine)
@@ -5430,6 +5437,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ focusGained() method
 		public void focusGained(FocusEvent evt)
 		{
+			if(bufferChanging)
+				return;
+
 			if(bracketLine != -1)
 				invalidateLineRange(bracketLine,caretLine);
 			else
@@ -5488,9 +5498,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int x = evt.getX();
 			int y = evt.getY();
 
-			dragStartLine = virtualToPhysical(yToLine(y));
-			dragStartOffset = xToOffset(dragStartLine,x);
 			dragStart = xyToOffset(x,y,!painter.isBlockCaretEnabled());
+			dragStartLine = getLineOfOffset(dragStart);
+			dragStartOffset = dragStart - getLineStartOffset(dragStartLine);
 
 			clickCount = evt.getClickCount();
 			switch(clickCount)
@@ -5639,10 +5649,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int markLineLength = getLineLength(dragStartLine);
 			int mark = dragStartOffset;
 
-			int line = virtualToPhysical(yToLine(evt.getY()));
+			int pos = xyToOffset(evt.getX(),evt.getY(),
+				!painter.isBlockCaretEnabled());
+			int line = getLineOfOffset(pos);
 			int lineStart = getLineStartOffset(line);
 			int lineLength = getLineLength(line);
-			int offset = xToOffset(line,evt.getX());
+			int offset = pos - lineStart;
 
 			String lineText = getLineText(line);
 			String markLineText = getLineText(dragStartLine);
@@ -5687,8 +5699,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doTripleDrag() method
 		private void doTripleDrag(MouseEvent evt, boolean rect)
 		{
-			int mouseLine = virtualToPhysical(yToLine(evt.getY()));
-			int offset = xToOffset(mouseLine,evt.getX());
+			int offset = xyToOffset(evt.getX(),evt.getY());
+			int mouseLine = getLineOfOffset(offset);
 			int mark;
 			int mouse;
 			if(dragStartLine > mouseLine)

@@ -1,12 +1,12 @@
 TO DO
 
+- make sure there aren't any blatant slowdowns in the soft-wrap code
+- bizarre wrap-around bug
+- select word: non-alpha single char
 - soft wrap to do:
-  - text area: invalidate line and friends
-  - text area: do not use deprecated offset conversion methods
   - use new offset conversion API throughout
   - document soft wrap
   - add a tip of the day about soft wrap
-  - a word longer than maxLineLen
 - before pre4:
   - expand fold still broken
   - make jEdit.openTemporary() thread-safe

@@ -800,7 +800,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ filesActivated() method
-	void filesActivated()
+	void filesActivated(boolean newView)
 	{
 		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
 
@@ -824,7 +824,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 				if(buffer != null)
 				{
-					if(view == null)
+					if(newView)
 						view = jEdit.newView(null,buffer);
 					else
 						view.setBuffer(buffer);

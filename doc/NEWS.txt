@@ -1,5 +1,6 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
 
+- soft wrap
 - requires java 2
 - more reliable setting saving
 - better sorting
@@ -10,6 +11,7 @@ OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
   - colorized file listings
   - ~ is now home dir
   - new ui
+  - mmb click + shift click
 - saving modes automatically reloads
 - better window docking
 - tab/s+tab to shift selection
@@ -23,5 +25,4 @@ OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
 - context-sensitive editing commands
 - complete word: completes keywords, updated on the fly
 - auto detect gzip, unicode files
-- on jdk 1.4, decorate frames/dialogs option
 - better jdk 1.4 support

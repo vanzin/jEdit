@@ -528,7 +528,7 @@ public class BrowserView extends JPanel
 				switch(evt.getKeyCode())
 				{
 				case KeyEvent.VK_ENTER:
-					browser.filesActivated();
+					browser.filesActivated(evt.isShiftDown());
 					evt.consume();
 					break;
 				case KeyEvent.VK_LEFT:
@@ -608,7 +608,7 @@ public class BrowserView extends JPanel
 					if(!isPathSelected(path))
 						setSelectionPath(path);
 
-					browser.filesActivated();
+					browser.filesActivated(evt.isShiftDown());
 					break;
 				}
 				else if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
@@ -633,7 +633,7 @@ public class BrowserView extends JPanel
 						// don't pass double-clicks to tree, otherwise
 						// directory nodes will be expanded and we don't
 						// want that
-						browser.filesActivated();
+						browser.filesActivated(evt.isShiftDown());
 						break;
 					}
 				}
@@ -685,7 +685,7 @@ public class BrowserView extends JPanel
 
 				super.processMouseEvent(evt);
 				break; //}}}
-			//{{{ MOUSE_RELEASED:
+			//{{{ MOUSE_RELEASED...
 			case MouseEvent.MOUSE_RELEASED:
 				if(evt.getClickCount() != 2)
 					super.processMouseEvent(evt);
