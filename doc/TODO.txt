@@ -2,8 +2,7 @@ TO DO
 
 + before 4.0pre1:
 
-- cvs remove FoldListener, add BufferChangeListener
-- cvs add FoldVisibilityManager
+- fix rotated text on java 2
 - new document and fold engine.
   - collapseFolds property
   - fold visibility manager
@@ -57,9 +56,14 @@ TO DO
 - keyboard select file in fs browser!
 - write explicit folding tips
 - mention OS X Apple+q issue in README.txt
+- mention IRC channel in README.txt
 
 + features:
 
+- read up on JDK 1.4 focus API
+- mmb click in fs browser == double click
+- persistent fold visibility
+- next-fold/prev-fold actions
 - clickable stack traces in activity log?
 - respect collapseFolds buffer property when:
   - pasting

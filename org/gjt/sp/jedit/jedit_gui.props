@@ -721,6 +721,7 @@ about.text=jEdit is brought to you by:\n\
 	Ollie Rutherfurd\n\
 	Patrick Tingen\n\
 	Peter Graves\n\
+	Phillip Mateescu\n\
 	Ralf Engels\n\
 	Richard Ashwell\n\
 	Richard Beton\n\
@@ -1270,6 +1271,7 @@ options.gutter.numberAlignment=Line number alignment:
 options.gutter.interval=Line highlight interval:
 options.gutter.lineNumbers=Line numbering
 options.gutter.currentLineHighlight=Current line highlighting
+options.gutter.bracketHighlight=Show bracket scope
 options.gutter.markerHighlight=Indicate marker positions
 #}}}
 

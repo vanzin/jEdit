@@ -41,13 +41,6 @@
 </listitem>
 
 <listitem>
-    <para><filename>Go_to_File_System_Browser.bsh</filename></para>
-    <abstract><para>
-        Sets the input focus to the file system browser.
-    </para></abstract>
-</listitem>
-
-<listitem>
     <para><filename>Open_Path.bsh</filename></para>
     <abstract><para>
         Opens the file supplied by the user in an input dialog.
