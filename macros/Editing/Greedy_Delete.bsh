@@ -1,11 +1,11 @@
 /*
- * Greedy_Backspace.bsh - If buffer is using soft tabs,
- * this macro will backspace to the previous tab stop,
- * if all characters between the caret and the tab stop
- * are spaces.  In all other cases a single character is
- * removed.
+ * Greedy_Delete.bsh - If a buffer is using soft tabs,
+ * this macro will delete tabSize number of spaces, if
+ * all the characters between the caret and the next tab
+ * stop are spaces.  In all other cases a single character
+ * is deleted.
  *
- * Copyright (C) 2002-2004 Ollie Rutherfurd <oliver@jedit.org>
+ * Copyright (C) 2004 Ollie Rutherfurd <oliver@jedit.org>
  *
  * $Id$
  */
@@ -15,25 +15,27 @@
  *                     removed if they would constitute
  *                     a 'complete' tab.
  */
-void greedyBackspace(View view, boolean onlyFullTabs)
+void greedyDelete(View view, boolean onlyFullTabs)
 {
 	JEditTextArea textArea = view.getTextArea();
 	Buffer buffer = textArea.getBuffer();
 	int caret = textArea.getCaretPosition();
 	int caretLine = textArea.getCaretLine();
 	int lineStart = textArea.getLineStartOffset(caretLine);
+	int lineEnd = textArea.getLineEndOffset(caretLine);
 
 	if(buffer.getBooleanProperty("noTabs") == true)
 	{
 		// if anything is selected, use standard 
 		if(textArea.getSelection().length != 0)
 		{
-			textArea.backspace();
+			textArea.delete();
 		}
-		// if at the start of the line, use standard
-		else if(caret == lineStart)
+		// if at the end of the line, go to the 
+		// start of the next line (+1 for \n)
+		else if(caret+1 >= lineEnd)
 		{
-			textArea.backspace();
+			textArea.delete();
 		}
 		else
 		{
@@ -43,16 +45,18 @@ void greedyBackspace(View view, boolean onlyFullTabs)
 			// unlikely, but just in case
 			if(tabSize <= 0)
 			{
-				buffer.remove(caret-1,1);
+				textArea.delete();
 			}
 			else
 			{
-				int toTabStop = ((col-1) % tabSize) + 1;
+				int toTabStop = (((col+tabSize)-1) % tabSize) + 1;
+				// don't wrap to next line
+				if(caret+toTabStop > lineEnd)
+					textArea.delete();
 				int count = 1;
 				for(int i=1; i < toTabStop; i++)
 				{
-					// only backspace over spaces
-					if(!" ".equals(buffer.getText(caret-(i+1),1)))
+					if(!" ".equals(buffer.getText(caret+i,1)))
 						break;
 					count += 1;
 				}
@@ -61,20 +65,20 @@ void greedyBackspace(View view, boolean onlyFullTabs)
 				// the tabStop and must have tabSize number 
 				// of spaces to remove them all.
 				if(onlyFullTabs == false || count == tabSize){
-					buffer.remove(caret-count,count);
+					buffer.remove(caret,count);
 				}
 				else{
-					buffer.remove(caret-1,1);
+					textArea.delete();
 				}
 			}
 		}
 	}
 	else
-		textArea.backspace();
+		textArea.delete();
 }
 
 if(buffer.isReadOnly())
 	getToolkit().beep();
 else
-	greedyBackspace(view,true);
+	greedyDelete(view,true);
 
