@@ -1,5 +1,6 @@
 TO DO
 
+- numpad problems
 - scroll to caret _still_ jumps around
 - rename MacOS.jar
 - fix stylesheet problem
