@@ -7,7 +7,12 @@
 <!-- $Id$
 -->
 
-<chapter id="plugin-intro"> <title>Introducing the Plugin API</title>
+<chapter id="plugin-intro"> <title>
+<indexterm>
+	<primary>Plugin API</primary>
+	<secondary>introduction</secondary>
+</indexterm>
+Introducing the Plugin API</title>
 
 <para>
   The <firstterm>jEdit Plugin API</firstterm> provides a framework for
