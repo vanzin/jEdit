@@ -206,26 +206,99 @@ public class TextUtilities
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
+		return findWordStart(line,pos,noWordSep,false);
+	} //}}}
+
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param whiteSpace If true, any whitespace at the start of the
+	 * word is also included
+	 * @since jEdit 4.0pre3
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep,
+		boolean whiteSpace)
+	{
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
 			noWordSep = "";
-		boolean selectNoLetter = (!Character.isLetterOrDigit(ch)
-			&& noWordSep.indexOf(ch) == -1);
 
-		int wordStart = 0;
-		for(int i = pos; i >= 0; i--)
+		//{{{ the character under the cursor changes how we behave.
+		int type;
+		if(Character.isWhitespace(ch))
+			type = WHITESPACE;
+		else if(Character.isLetterOrDigit(ch)
+			|| noWordSep.indexOf(ch) != -1)
+			type = WORD_CHAR;
+		else
+			type = SYMBOL;
+		//}}}
+
+		boolean seenWhiteSpace = false;
+loop:		for(int i = pos; i >= 0; i--)
 		{
 			ch = line.charAt(i);
-			if(selectNoLetter ^ (!Character.isLetterOrDigit(ch) &&
-				noWordSep.indexOf(ch) == -1))
+			switch(type)
 			{
-				wordStart = i + 1;
-				break;
+			//{{{ Whitespace...
+			case WHITESPACE:
+				// only select other whitespace in this case
+				if(Character.isWhitespace(ch))
+					break;
+				else
+					return i + 1; //}}}
+			//{{{ Word character...
+			case WORD_CHAR:
+				// if we see whitespace, set flag.
+				if(Character.isWhitespace(ch) && whiteSpace)
+				{
+					seenWhiteSpace = true;
+					break;
+				}
+				else if(Character.isLetterOrDigit(ch) ||
+					noWordSep.indexOf(ch) != -1)
+				{
+					// next word?
+					if(seenWhiteSpace)
+						return i + 1;
+					else
+						break;
+				}
+				else
+					return i + 1; //}}}
+			//{{{ Symbol...
+			case SYMBOL:
+				// if we see whitespace, set flag.
+				if(Character.isWhitespace(ch))
+				{
+					if(whiteSpace)
+					{
+						seenWhiteSpace = true;
+						break;
+					}
+					else
+						return i + 1;
+				}
+				else if(Character.isLetterOrDigit(ch) ||
+					noWordSep.indexOf(ch) != -1)
+					return i + 1;
+				else
+				{
+					// next word?
+					if(seenWhiteSpace)
+						return i + 1;
+					else
+						break;
+				} //}}}
 			}
 		}
 
-		return wordStart;
+		return 0;
 	} //}}}
 
 	//{{{ findWordEnd() method
@@ -238,6 +311,23 @@ public class TextUtilities
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep)
 	{
+		return findWordEnd(line,pos,noWordSep,false);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param whiteSpace If true, any whitespace at the start of the
+	 * word is also included
+	 * @since jEdit 4.0pre3
+	 */
+	public static int findWordEnd(String line, int pos, String noWordSep,
+		boolean whiteSpace)
+	{
 		if(pos != 0)
 			pos--;
 
@@ -245,21 +335,78 @@ public class TextUtilities
 
 		if(noWordSep == null)
 			noWordSep = "";
-		boolean selectNoLetter = (!Character.isLetterOrDigit(ch)
-			&& noWordSep.indexOf(ch) == -1);
 
-		int wordEnd = line.length();
-		for(int i = pos; i < line.length(); i++)
+		//{{{ the character under the cursor changes how we behave.
+		int type;
+		if(Character.isWhitespace(ch))
+			type = WHITESPACE;
+		else if(Character.isLetterOrDigit(ch)
+			|| noWordSep.indexOf(ch) != -1)
+			type = WORD_CHAR;
+		else
+			type = SYMBOL;
+		//}}}
+
+		boolean seenWhiteSpace = false;
+loop:		for(int i = pos; i < line.length(); i++)
 		{
 			ch = line.charAt(i);
-			if(selectNoLetter ^ (!Character.isLetterOrDigit(ch) &&
-				noWordSep.indexOf(ch) == -1))
+			switch(type)
 			{
-				wordEnd = i;
-				break;
+			//{{{ Whitespace...
+			case WHITESPACE:
+				// only select other whitespace in this case
+				if(Character.isWhitespace(ch))
+					break;
+				else
+					return i; //}}}
+			//{{{ Word character...
+			case WORD_CHAR:
+				// if we see whitespace, set flag.
+				if(Character.isWhitespace(ch) && whiteSpace)
+				{
+					seenWhiteSpace = true;
+					break;
+				}
+				else if(Character.isLetterOrDigit(ch) ||
+					noWordSep.indexOf(ch) != -1)
+				{
+					// next word?
+					if(seenWhiteSpace)
+						return i;
+					else
+						break;
+				}
+				else
+					return i; //}}}
+			//{{{ Symbol...
+			case SYMBOL:
+				// if we see whitespace, set flag.
+				if(Character.isWhitespace(ch))
+				{
+					if(whiteSpace)
+					{
+						seenWhiteSpace = true;
+						break;
+					}
+					else
+						return i;
+				}
+				else if(Character.isLetterOrDigit(ch) ||
+					noWordSep.indexOf(ch) != -1)
+					return i;
+				else
+				{
+					// next word?
+					if(seenWhiteSpace)
+						return i;
+					else
+						break;
+				} //}}}
 			}
 		}
-		return wordEnd;
+
+		return line.length();
 	} //}}}
 
 	//{{{ regionMatches() method
@@ -543,6 +690,10 @@ public class TextUtilities
 	} //}}}
 
 	//{{{ Private members
+
+	private static final int WHITESPACE = 0;
+	private static final int WORD_CHAR = 1;
+	private static final int SYMBOL = 2;
 
 	//{{{ getTokenAtOffset() method
 	private static byte getTokenAtOffset(Buffer.TokenList tokenList, int offset)

@@ -2566,7 +2566,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep)
+			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep,true)
 				+ lineStart;
 		}
 
@@ -2825,7 +2825,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep)
+			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep,true)
 				+ lineStart;
 		}
 
@@ -4846,7 +4846,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// performance hack: don't scan forward too far, so that
 			// typing a new { for example doesn't parse entire buffer
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,caretLine,offset - 1,0,endLine);
+				buffer,caretLine,offset - 1);
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);
