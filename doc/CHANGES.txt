@@ -91,6 +91,8 @@ release.
   but the count was never incremented, so the "Paste Deleted" dialog
   would always be blank after a jEdit restart.
 
+- Fixed a possible deadlock when unloading the ProjectViewer plugin.
+
 }}}
 
 }}}
