@@ -1031,12 +1031,10 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getLineStartOffset(int line)
 	{
-		Element lineElement = getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
-		else
-			return lineElement.getStartOffset();
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		return offsetMgr.getLineStartOffset(line);
 	} //}}}
 
 	//{{{ getLineEndOffset() method
@@ -1049,12 +1047,13 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getLineEndOffset(int line)
 	{
-		Element lineElement = getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		if(line == offsetMgr.getLineCount() - 1)
+			return getLength() + 1;
 		else
-			return lineElement.getEndOffset();
+			return offsetMgr.getLineStartOffset(line + 1);
 	} //}}}
 
 	//{{{ getLineLength() method
@@ -1065,13 +1064,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public int getLineLength(int line)
 	{
-		Element lineElement = getDefaultRootElement()
-			.getElement(line);
-		if(lineElement == null)
-			return -1;
-		else
-			return lineElement.getEndOffset()
-				- lineElement.getStartOffset() - 1;
+		return getLineEndOffset(line) - getLineStartOffset(line) - 1;
 	} //}}}
 
 	//{{{ getLineText() method
@@ -1083,10 +1076,9 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final String getLineText(int lineIndex)
 	{
-		int start = getLineStartOffset(lineIndex);
 		try
 		{
-			return getText(start,getLineEndOffset(lineIndex) - start - 1);
+			return getText(getLineStartOffset(lineIndex),getLineLength(lineIndex));
 		}
 		catch(BadLocationException bl)
 		{
@@ -1104,12 +1096,10 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final void getLineText(int lineIndex, Segment segment)
 	{
-		Element lineElement = getDefaultRootElement()
-			.getElement(lineIndex);
-		int start = lineElement.getStartOffset();
 		try
 		{
-			getText(start,lineElement.getEndOffset() - start - 1,segment);
+			getText(getLineStartOffset(lineIndex),
+				getLineLength(lineIndex),segment);
 		}
 		catch(BadLocationException bl)
 		{
@@ -1126,7 +1116,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void undo()
 	{
-		if(undo == null)
+		/* if(undo == null)
 			return;
 
 		if(!isEditable())
@@ -1149,7 +1139,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		finally
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
-		}
+		} */
 	} //}}}
 
 	//{{{ redo() method
@@ -1161,7 +1151,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public void redo()
 	{
-		if(undo == null)
+		/* if(undo == null)
 			return;
 
 		if(!isEditable())
@@ -1184,7 +1174,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		finally
 		{
 			setFlag(UNDO_IN_PROGRESS,false);
-		}
+		} */
 	} //}}}
 
 	//{{{ addUndoableEdit() method
@@ -2589,6 +2579,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	Buffer(View view, String path, boolean newFile, boolean temp,
 		Hashtable props)
 	{
+		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
 
 		seg = new Segment();
@@ -2680,26 +2671,24 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	protected void fireInsertUpdate(DocumentEvent evt)
 	{
-		DocumentEvent.ElementChange ch = evt.getChange(
-			getDefaultRootElement());
 		int offset = evt.getOffset();
 		int length = evt.getLength();
-		int startLine, numLines;
-		if(ch != null)
+		int startLine = getLineOfOffset(offset);
+
+		try
 		{
-			startLine = ch.getIndex();
-			numLines = ch.getChildrenAdded().length -
-				ch.getChildrenRemoved().length;
+			getText(offset,length,seg);
 		}
-		else
+		catch(BadLocationException bl)
 		{
-			startLine = getLineOfOffset(offset);
-			numLines = 0;
+			Log.log(Log.ERROR,this,bl);
 		}
 
-		// XXX: actually need proper offsets in the array
+		int[] newlines = parseForNewlines(seg);
+		int numLines = newlines.length;
+
 		offsetMgr.contentInserted(startLine,offset,numLines,length,
-			new int[numLines]);
+			newlines);
 
 		if(numLines > 0)
 		{
@@ -2827,6 +2816,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	private String name;
 	private Mode mode;
 
+	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
 
 	private Vector markers;
@@ -3050,6 +3040,21 @@ public class Buffer extends PlainDocument implements EBComponent
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}
+	} //}}}
+
+	//{{{ parseForNewlines() method
+	private int[] parseForNewlines(Segment seg)
+	{
+		IntegerArray array = new IntegerArray();
+		array.add(0);
+
+		for(int i = 0; i < seg.count; i++)
+		{
+			if(seg.array[seg.offset + i] == '\n')
+				array.add(i + 1);
+		}
+
+		return array.toArray();
 	} //}}}
 
 	//{{{ Event firing methods
