@@ -51,11 +51,13 @@ this release.
   // after the dockable is closed
 
 }}}
-{{{ User Interface
+{{{ Miscellaneous
 
 - Removed the "synchronized scrolling" option which hasn't actually
   worked since 4.2pre1 or 4.2pre2. If you liked this feature, you can
   write a plugin that does the same thing pretty easily.
+
+- The kill ring is saved between editing sessions.
 
 }}}
 {{{ Optimizations
@@ -93,6 +95,11 @@ this release.
 
 - Position code was incorrectly balancing the tree, and this caused
   various problems such as hangs and various exceptions.
+
+- jEdit would do a two-stage save for settings files, but it would still
+  delete the old file if the save failed, thus settings could be lost of
+  the disk is almost full, etc. Now, files are only overwritten if the
+  new settings are saved successfully.
 
 }}}
 {{{ API Changes

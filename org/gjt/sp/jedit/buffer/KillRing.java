@@ -22,9 +22,12 @@
 
 package org.gjt.sp.jedit.buffer;
 
+import com.microstar.xml.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.ListModel;
-import org.gjt.sp.jedit.jEdit;
+import java.io.*;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 public class KillRing
 {
@@ -48,6 +51,124 @@ public class KillRing
 	public static ListModel getListModel()
 	{
 		return new RingListModel();
+	} //}}}
+
+	//{{{ load() method
+	public static void load()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File killRing = new File(MiscUtilities.constructPath(
+			settingsDirectory,"killring.xml"));
+		if(!killRing.exists())
+			return;
+
+		killRingModTime = killRing.lastModified();
+		Log.log(Log.MESSAGE,KillRing.class,"Loading killring.xml");
+
+		KillRingHandler handler = new KillRingHandler();
+		XmlParser parser = new XmlParser();
+		Reader in = null;
+		parser.setHandler(handler);
+		try
+		{
+			in = new BufferedReader(new FileReader(killRing));
+			parser.parse(null, null, in);
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,KillRing.class,killRing + ":" + line
+				+ ": " + message);
+		}
+		catch(FileNotFoundException fnf)
+		{
+			//Log.log(Log.DEBUG,BufferHistory.class,fnf);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,KillRing.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,KillRing.class,io);
+			}
+		}
+	} //}}}
+
+	//{{{ save() method
+	public static void save()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File file1 = new File(MiscUtilities.constructPath(
+			settingsDirectory, "#killring.xml#save#"));
+		File file2 = new File(MiscUtilities.constructPath(
+			settingsDirectory, "killring.xml"));
+		if(file2.exists() && file2.lastModified() != killRingModTime)
+		{
+			Log.log(Log.WARNING,KillRing.class,file2
+				+ " changed on disk; will not save recent"
+				+ " files");
+			return;
+		}
+
+		jEdit.backupSettingsFile(file2);
+
+		Log.log(Log.MESSAGE,KillRing.class,"Saving killring.xml");
+
+		String lineSep = System.getProperty("line.separator");
+
+		try
+		{
+			BufferedWriter out = new BufferedWriter(
+				new FileWriter(file1));
+
+			out.write("<?xml version=\"1.0\"?>");
+			out.write(lineSep);
+			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
+			out.write(lineSep);
+			out.write("<KILLRING>");
+			out.write(lineSep);
+
+			ListModel model = getListModel();
+			for(int i = 0; i < model.getSize(); i++)
+			{
+				out.write("<ENTRY>");
+				out.write(MiscUtilities.charsToEntities(
+					(String)model.getElementAt(i)));
+				out.write("</ENTRY>");
+				out.write(lineSep);
+			}
+
+			out.write("</KILLRING>");
+			out.write(lineSep);
+
+			out.close();
+
+			/* to avoid data loss, only do this if the above
+			 * completed successfully */
+			file2.delete();
+			file1.renameTo(file2);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,KillRing.class,e);
+		}
+
+		killRingModTime = file2.lastModified();
 	} //}}}
 
 	//{{{ Package-private members
@@ -166,6 +287,14 @@ public class KillRing
 		}
 	} //}}}
 
+	//}}}
+
+	//{{{ Private members
+	private static long killRingModTime;
+
+	private KillRing() {}
+	//}}}
+
 	//{{{ RingListModel class
 	static class RingListModel implements ListModel
 	{
@@ -203,5 +332,44 @@ public class KillRing
 		}
 	} //}}}
 
-	//}}}
+	//{{{ KillRingHandler class
+	static class KillRingHandler extends HandlerBase
+	{
+		public Object resolveEntity(String publicId, String systemId)
+		{
+			if("killring.dtd".equals(systemId))
+			{
+				// this will result in a slight speed up, since we
+				// don't need to read the DTD anyway, as AElfred is
+				// non-validating
+				return new StringReader("<!-- -->");
+			}
+
+			return null;
+		}
+
+		public void doctypeDecl(String name, String publicId,
+			String systemId) throws Exception
+		{
+			if("KILLRING".equals(name))
+				return;
+
+			Log.log(Log.ERROR,this,"killring.xml: DOCTYPE must be KILLRING");
+		}
+
+		public void endElement(String name)
+		{
+			if(name.equals("ENTRY"))
+			{
+				add(new UndoManager.Remove(null,0,0,charData));
+			}
+		}
+
+		public void charData(char[] ch, int start, int length)
+		{
+			charData = new String(ch,start,length);
+		}
+
+		private String charData;
+	} //}}}
 }

@@ -93,9 +93,20 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ load() method
-	public static void load(File file)
+	public static void load()
 	{
-		Log.log(Log.MESSAGE,BufferHistory.class,"Loading " + file);
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File recent = new File(MiscUtilities.constructPath(
+			settingsDirectory,"recent.xml"));
+		if(!recent.exists())
+			return;
+
+		recentModTime = recent.lastModified();
+
+		Log.log(Log.MESSAGE,BufferHistory.class,"Loading recent.xml");
 
 		RecentHandler handler = new RecentHandler();
 		XmlParser parser = new XmlParser();
@@ -103,14 +114,14 @@ public class BufferHistory
 		parser.setHandler(handler);
 		try
 		{
-			in = new BufferedReader(new FileReader(file));
+			in = new BufferedReader(new FileReader(recent));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
 		{
 			int line = xe.getLine();
 			String message = xe.getMessage();
-			Log.log(Log.ERROR,BufferHistory.class,file + ":" + line
+			Log.log(Log.ERROR,BufferHistory.class,recent + ":" + line
 				+ ": " + message);
 		}
 		catch(FileNotFoundException fnf)
@@ -136,16 +147,34 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ save() method
-	public static void save(File file)
+	public static void save()
 	{
-		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + file);
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File file1 = new File(MiscUtilities.constructPath(
+			settingsDirectory, "#recent.xml#save#"));
+		File file2 = new File(MiscUtilities.constructPath(
+			settingsDirectory, "recent.xml"));
+		if(file2.exists() && file2.lastModified() != recentModTime)
+		{
+			Log.log(Log.WARNING,BufferHistory.class,file2
+				+ " changed on disk; will not save recent"
+				+ " files");
+			return;
+		}
+
+		jEdit.backupSettingsFile(file2);
+
+		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + file1);
 
 		String lineSep = System.getProperty("line.separator");
 
 		try
 		{
 			BufferedWriter out = new BufferedWriter(
-				new FileWriter(file));
+				new FileWriter(file1));
 
 			out.write("<?xml version=\"1.0\"?>");
 			out.write(lineSep);
@@ -197,16 +226,24 @@ public class BufferHistory
 			out.write(lineSep);
 
 			out.close();
+
+			/* to avoid data loss, only do this if the above
+			 * completed successfully */
+			file2.delete();
+			file1.renameTo(file2);
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
 		}
+
+		recentModTime = file2.lastModified();
 	} //}}}
 
 	//{{{ Private members
 	private static LinkedList history;
 	private static boolean pathsCaseInsensitive;
+	private static long recentModTime;
 
 	//{{{ Class initializer
 	static
@@ -301,6 +338,8 @@ public class BufferHistory
 		selection.copyInto(returnValue);
 		return returnValue;
 	} //}}}
+
+	//}}}
 
 	//{{{ Entry class
 	/**

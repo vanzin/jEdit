@@ -154,28 +154,72 @@ public class HistoryModel extends AbstractListModel
 	//{{{ saveHistory() method
 	public static void saveHistory()
 	{
-		if(loaded && modified)
+		if(!loaded || !modified)
+			return;
+
+		Log.log(Log.MESSAGE,HistoryModel.class,"Saving history");
+		File file1 = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(), "#history#save#"));
+		File file2 = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(), "history"));
+		if(file2.exists() && file2.lastModified() != historyModTime)
 		{
-			Log.log(Log.MESSAGE,HistoryModel.class,"Saving " + history);
-			File file1 = new File(MiscUtilities.constructPath(
-				jEdit.getSettingsDirectory(), "#history#save#"));
-			File file2 = new File(MiscUtilities.constructPath(
-				jEdit.getSettingsDirectory(), "history"));
-			if(file2.exists() && file2.lastModified() != historyModTime)
+			Log.log(Log.WARNING,HistoryModel.class,file2
+				+ " changed on disk; will not save history");
+			return;
+		}
+
+		jEdit.backupSettingsFile(file2);
+
+		String lineSep = System.getProperty("line.separator");
+
+		try
+		{
+			BufferedWriter out = new BufferedWriter(
+				new FileWriter(file1));
+
+			if(models == null)
 			{
-				Log.log(Log.WARNING,HistoryModel.class,file2 + " changed"
-					+ " on disk; will not save history");
+				out.close();
+				return;
 			}
-			else
+
+			Enumeration modelEnum = models.elements();
+			while(modelEnum.hasMoreElements())
 			{
-				jEdit.backupSettingsFile(file2);
-				saveHistory(file1);
-				file2.delete();
-				file1.renameTo(file2);
+				HistoryModel model = (HistoryModel)modelEnum
+					.nextElement();
+				if(model.getSize() == 0)
+					continue;
+
+				out.write('[');
+				out.write(model.getName());
+				out.write(']');
+				out.write(lineSep);
+
+				for(int i = 0; i < model.getSize(); i++)
+				{
+					out.write(MiscUtilities.charsToEscapes(
+						model.getItem(i),
+						TO_ESCAPE));
+					out.write(lineSep);
+				}
 			}
-			historyModTime = file2.lastModified();
+
+			out.close();
+
+			/* to avoid data loss, only do this if the above
+			 * completed successfully */
+			file2.delete();
+			file1.renameTo(file2);
 			modified = false;
 		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,HistoryModel.class,io);
+		}
+
+		historyModTime = file2.lastModified();
 	} //}}}
 
 	//{{{ propertiesChanged() method
@@ -200,31 +244,25 @@ public class HistoryModel extends AbstractListModel
 	//{{{ loadHistory() method
 	private static void loadHistory()
 	{
-		history = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(),"history"));
-		if(history.exists())
-			historyModTime = history.lastModified();
-		loadHistory(history);
-		loaded = true;
-	} //}}}
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
 
-	//{{{ loadHistory() method
-	/**
-	 * Loads the history from the specified file.
-	 *
-	 * jEdit calls this method on startup.
-	 * @param The file
-	 */
-	private static void loadHistory(File file)
-	{
-		Log.log(Log.MESSAGE,HistoryModel.class,"Loading " + file);
+		history = new File(MiscUtilities.constructPath(
+			settingsDirectory,"history"));
+		if(!history.exists())
+			return;
+
+		historyModTime = history.lastModified();
+
+		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history.xml");
 
 		if(models == null)
 			models = new Hashtable();
 
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(file));
+			BufferedReader in = new BufferedReader(new FileReader(history));
 
 			HistoryModel currentModel = null;
 			String line;
@@ -263,57 +301,6 @@ public class HistoryModel extends AbstractListModel
 		catch(FileNotFoundException fnf)
 		{
 			//Log.log(Log.DEBUG,HistoryModel.class,fnf);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,HistoryModel.class,io);
-		}
-	} //}}}
-
-	//{{{ saveHistory() method
-	/**
-	 * Saves the history to the specified file.
-	 *
-	 * jEdit calls this method when it is exiting.
-	 * @param file The file
-	 */
-	private static void saveHistory(File file)
-	{
-		String lineSep = System.getProperty("line.separator");
-		try
-		{
-			BufferedWriter out = new BufferedWriter(
-				new FileWriter(file));
-
-			if(models == null)
-			{
-				out.close();
-				return;
-			}
-
-			Enumeration modelEnum = models.elements();
-			while(modelEnum.hasMoreElements())
-			{
-				HistoryModel model = (HistoryModel)modelEnum
-					.nextElement();
-				if(model.getSize() == 0)
-					continue;
-
-				out.write('[');
-				out.write(model.getName());
-				out.write(']');
-				out.write(lineSep);
-
-				for(int i = 0; i < model.getSize(); i++)
-				{
-					out.write(MiscUtilities.charsToEscapes(
-						model.getItem(i),
-						TO_ESCAPE));
-					out.write(lineSep);
-				}
-			}
-
-			out.close();
 		}
 		catch(IOException io)
 		{

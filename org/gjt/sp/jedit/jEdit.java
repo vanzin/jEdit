@@ -77,8 +77,7 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		mainThread = Thread.currentThread();
-
+		//{{{ Check for Java 1.3 or later
 		String javaVersion = System.getProperty("java.version");
 		if(javaVersion.compareTo("1.3") < 0)
 		{
@@ -86,7 +85,11 @@ public class jEdit
 				+ javaVersion + ".");
 			System.err.println("jEdit requires Java 1.3 or later.");
 			System.exit(1);
-		}
+		} //}}}
+
+		// later on we need to know if certain code is called from
+		// the main thread
+		mainThread = Thread.currentThread();
 
 		settingsDirectory = ".jedit";
 
@@ -198,6 +201,7 @@ public class jEdit
 			}
 		} //}}}
 
+		//{{{ We need these initializations very early on
 		if(settingsDirectory != null)
 		{
 			settingsDirectory = MiscUtilities.constructPath(
@@ -211,6 +215,7 @@ public class jEdit
 			portFile = null;
 
 		Log.init(true,level);
+		//}}}
 
 		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
@@ -275,14 +280,14 @@ public class jEdit
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
 			}
-		} //}}}
+		}
 
 		if(quit)
 		{
 			// if no server running and user runs jedit -quit,
 			// just exit
 			System.exit(0);
-		}
+		} //}}}
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
@@ -362,13 +367,41 @@ public class jEdit
 		//{{{ Get things rolling
 		initMisc();
 		initSystemProperties();
+
 		GUIUtilities.advanceSplashProgress();
 
 		BeanShell.init();
-
 		initUserProperties();
 		initPLAF();
 
+		VFSManager.init();
+		initResources();
+		SearchAndReplace.load();
+
+		GUIUtilities.advanceSplashProgress();
+
+		if(loadPlugins)
+			initPlugins();
+
+		if(jEditHome != null)
+			initSiteProperties();
+
+		BufferHistory.load();
+		KillRing.load();
+		propertiesChanged();
+
+		GUIUtilities.advanceSplashProgress();
+
+		// Buffer sort
+		sortBuffers = getBooleanProperty("sortBuffers");
+		sortByName = getBooleanProperty("sortByName");
+
+		reloadModes();
+
+		GUIUtilities.advanceSplashProgress();
+		//}}}
+
+		//{{{ Initialize Java 1.4-specific code
 		if(OperatingSystem.hasJava14())
 		{
 			try
@@ -388,52 +421,13 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 				System.exit(1);
 			}
-		}
-
-		VFSManager.init();
-
-		initResources();
-
-		SearchAndReplace.load();
-
-		GUIUtilities.advanceSplashProgress();
-
-		if(loadPlugins)
-			initPlugins();
-
-		if(jEditHome != null)
-			initSiteProperties();
-
-		if(settingsDirectory != null)
-		{
-			File recent = new File(MiscUtilities.constructPath(
-				settingsDirectory,"recent.xml"));
-			if(recent.exists())
-			{
-				recentModTime = recent.lastModified();
-				BufferHistory.load(recent);
-			}
-		}
-
-		propertiesChanged();
-
-		GUIUtilities.advanceSplashProgress();
-
-		// Buffer sort
-		sortBuffers = getBooleanProperty("sortBuffers");
-		sortByName = getBooleanProperty("sortByName");
-
-		reloadModes();
-
-		GUIUtilities.advanceSplashProgress();
-		//}}}
+		} //}}}
 
 		//{{{ Activate plugins that must be activated at startup
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((PluginJAR)jars.elementAt(i)).activatePluginIfNecessary();
-		}
-		//}}}
+		} //}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
 		Macros.loadMacros();
@@ -2325,29 +2319,12 @@ public class jEdit
 			HistoryModel.saveHistory();
 			Registers.saveRegisters();
 			SearchAndReplace.save();
+			BufferHistory.save();
+			KillRing.save();
 
-			// Save the recent file list
 			File file1 = new File(MiscUtilities.constructPath(
-				settingsDirectory, "#recent.xml#save#"));
-			File file2 = new File(MiscUtilities.constructPath(
-				settingsDirectory, "recent.xml"));
-			if(file2.exists() && file2.lastModified() != recentModTime)
-			{
-				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
-					+ " on disk; will not save recent files");
-			}
-			else
-			{
-				backupSettingsFile(file2);
-				BufferHistory.save(file1);
-				file2.delete();
-				file1.renameTo(file2);
-			}
-			recentModTime = file2.lastModified();
-
-			file1 = new File(MiscUtilities.constructPath(
 				settingsDirectory,"#properties#save#"));
-			file2 = new File(MiscUtilities.constructPath(
+			File file2 = new File(MiscUtilities.constructPath(
 				settingsDirectory,"properties"));
 			if(file2.exists() && file2.lastModified() != propsModTime)
 			{
@@ -2363,16 +2340,16 @@ public class jEdit
 					OutputStream out = new FileOutputStream(file1);
 					props.store(out,"jEdit properties");
 					out.close();
+					file2.delete();
+					file1.renameTo(file2);
 				}
 				catch(IOException io)
 				{
 					Log.log(Log.ERROR,jEdit.class,io);
 				}
 
-				file2.delete();
-				file1.renameTo(file2);
+				propsModTime = file2.lastModified();
 			}
-			propsModTime = file2.lastModified();
 		}
 	} //}}}
 
@@ -2674,7 +2651,7 @@ public class jEdit
 	private static String jEditHome;
 	private static String settingsDirectory;
 	private static String jarCacheDirectory;
-	private static long propsModTime, recentModTime;
+	private static long propsModTime;
 	private static Properties defaultProps;
 	private static Properties props;
 	private static EditServer server;
