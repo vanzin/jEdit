@@ -10,7 +10,6 @@ wrapped dock buttons broken
 4.2 plugin guide:
   - deferred loading mention.
   
-- wrap margin set to 0 -- change wrap setting to 'none'
 - bsh bugs:
   ; after else if()
   longs not read correctly if prefixed with 0x

@@ -84,11 +84,13 @@ public class EditingOptionPane extends AbstractOptionPane
 		};
 		addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap = new JComboBox(wrapModes));
+		wrap.addActionListener(new ActionHandler());
 
 		String[] lineLens = { "0", "72", "76", "80" };
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"),
 			maxLineLen = new JComboBox(lineLens));
 		maxLineLen.setEditable(true);
+		maxLineLen.addActionListener(new ActionHandler());
 
 		String[] tabSizes = { "2", "4", "8" };
 		addComponent(jEdit.getProperty("options.editing.tabSize"),
@@ -251,16 +253,39 @@ public class EditingOptionPane extends AbstractOptionPane
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(evt.getSource() == mode)
+			Object source = evt.getSource();
+			if(source == mode)
 			{
 				saveMode();
 				selectMode();
 			}
-			else if(evt.getSource() == useDefaults)
+			else if(source == useDefaults)
 			{
 				modeProps[mode.getSelectedIndex() - 1].useDefaults =
 					useDefaults.isSelected();
 				updateEnabled();
+			}
+			else if(source == wrap)
+			{
+				if(!wrap.getSelectedItem().equals("none"))
+				{
+					if(maxLineLen.getSelectedItem()
+						.equals("0"))
+					{
+						maxLineLen.setSelectedItem("80");
+					}
+				}
+			}
+			else if(source == maxLineLen)
+			{
+				if(!wrap.getSelectedItem().equals("none"))
+				{
+					if(maxLineLen.getSelectedItem()
+						.equals("0"))
+					{
+						wrap.setSelectedItem("none");
+					}
+				}
 			}
 		}
 	} //}}}

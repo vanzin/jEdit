@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,6 +124,7 @@ public class BufferOptions extends EnhancedDialog
 		wrap.setSelectedItem(buffer.getStringProperty("wrap"));
 		panel.addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap);
+		wrap.addActionListener(new ActionHandler());
 		//}}}
 
 		//{{{ Max line length
@@ -132,6 +133,7 @@ public class BufferOptions extends EnhancedDialog
 		maxLineLen = new JComboBox(lineLengths);
 		maxLineLen.setEditable(true);
 		maxLineLen.setSelectedItem(buffer.getStringProperty("maxLineLen"));
+		maxLineLen.addActionListener(new ActionHandler());
 		panel.addComponent(jEdit.getProperty("options.editing.maxLineLen"),
 			maxLineLen);
 		//}}}
@@ -315,6 +317,28 @@ public class BufferOptions extends EnhancedDialog
 					"indentSize"));
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
+			}
+			else if(source == wrap)
+			{
+				if(!wrap.getSelectedItem().equals("none"))
+				{
+					if(maxLineLen.getSelectedItem()
+						.equals("0"))
+					{
+						maxLineLen.setSelectedItem("80");
+					}
+				}
+			}
+			else if(source == maxLineLen)
+			{
+				if(!wrap.getSelectedItem().equals("none"))
+				{
+					if(maxLineLen.getSelectedItem()
+						.equals("0"))
+					{
+						wrap.setSelectedItem("none");
+					}
+				}
 			}
 		} //}}}
 	} //}}}
