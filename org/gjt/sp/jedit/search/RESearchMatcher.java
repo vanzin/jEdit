@@ -99,7 +99,7 @@ public class RESearchMatcher implements SearchMatcher
 
 		if(beanshell)
 		{
-			int count = match.getSubCount();
+			int count = re.getNumSubs();
 			for(int i = 0; i < count; i++)
 				replaceNS.setVariable("_" + i,match.toString(i));
 

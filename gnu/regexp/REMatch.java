@@ -210,15 +210,6 @@ public final class REMatch implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the number of subexpressions in this match.
-     * @author Slava Pestov
-     */
-    public int getSubCount()
-    {
-        return start.length;
-    }
-
-    /**
      * Substitute the results of this match to create a new string.
      * This is patterned after PERL, so the tokens to watch out for are
      * <code>$0</code> through <code>$9</code>.  <code>$0</code> matches

@@ -34,14 +34,14 @@ public class KeyEventWorkaround
 
 		switch(evt.getID())
 		{
-		case KeyEvent.KEY_PRESSED:
-			// get rid of keys we never need to handle
-			if(keyCode == KeyEvent.VK_CONTROL ||
-				keyCode == KeyEvent.VK_SHIFT ||
-				keyCode == KeyEvent.VK_ALT ||
-				keyCode == KeyEvent.VK_META ||
-				keyCode == '\0')
-				return null;
+			case KeyEvent.KEY_PRESSED:
+				// get rid of keys we never need to handle
+				if(keyCode == KeyEvent.VK_CONTROL ||
+					keyCode == KeyEvent.VK_SHIFT ||
+					keyCode == KeyEvent.VK_ALT ||
+					keyCode == KeyEvent.VK_META ||
+					keyCode == '\0')
+					return null;
 
 			handleBrokenKeys(evt,keyCode);
 
@@ -89,7 +89,6 @@ public class KeyEventWorkaround
 	}
 
 	// private members
-	private static boolean java14;
 	private static boolean mac;
 	private static long lastKeyTime;
 
@@ -101,7 +100,6 @@ public class KeyEventWorkaround
 
 	static
 	{
-		java14 = (System.getProperty("java.version").compareTo("1.4") >= 0);
 		mac = (System.getProperty("os.name").indexOf("Mac OS") != -1);
 	}
 
@@ -113,7 +111,7 @@ public class KeyEventWorkaround
 			last = LAST_ALTGR;
 			return;
 		}
-		else if(!(evt.isControlDown() || evt.isMetaDown()))
+		else if(!(evt.isAltDown() || evt.isControlDown() || evt.isMetaDown()))
 		{
 			last = LAST_NOTHING;
 			return;

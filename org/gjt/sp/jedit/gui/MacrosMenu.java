@@ -81,13 +81,7 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 			if(obj instanceof Macros.Macro)
 			{
 				Macros.Macro macro = (Macros.Macro)obj;
-				String label = macro.name;
-				int index = label.lastIndexOf('/');
-				label = label.substring(index + 1)
-					.replace('_',' ');
-
-				menu.add(new EnhancedMenuItem(label,
-					macro.action));
+				menu.add(new EnhancedMenuItem(macro.getLabel(),macro));
 			}
 			else if(obj instanceof Vector)
 			{

@@ -156,35 +156,10 @@ public class GUIUtilities
 	 */
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
-		String label;
-		EditAction action;
-
-		// HACK
-		if(name.startsWith("play-macro@"))
-		{
-			Macros.Macro macro = Macros.getMacro(name.substring(11));
-			if(macro != null)
-			{
-				label = macro.name;
-				int index = label.lastIndexOf('/');
-				label = label.substring(index + 1)
-					.replace('_',' ');
-				action = macro.action;
-			}
-			else
-			{
-				label = name.substring(11);
-				action = null;
-			}
-		}
-		else
-		{
-			action = jEdit.getAction(name);
-
-			label = action.getLabel();
-			if(label == null)
-				label = name;
-		}
+		EditAction action = jEdit.getAction(name);
+		String label = action.getLabel();
+		if(label == null)
+			label = name;
 
 		char mnemonic;
 		int index = label.indexOf('$');
@@ -249,54 +224,33 @@ public class GUIUtilities
 	 */
 	public static EnhancedButton loadToolButton(String name)
 	{
-		String label;
-		EditAction action;
-
-		// HACK
-		if(name.startsWith("play-macro@"))
-		{
-			Macros.Macro macro = Macros.getMacro(name.substring(11));
-
-			if(macro != null)
-			{
-				label = macro.name;
-				int index = label.lastIndexOf('/');
-				label = label.substring(index + 1)
-					.replace('_',' ');
-				action = macro.action;
-			}
-			else
-			{
-				label = name.substring(11);
-				action = null;
-			}
-		}
-		else
-		{
-			action = jEdit.getAction(name);
-
-			label = action.getLabel();
-			if(label == null)
-				label = name;
-			else
-				label = prettifyMenuLabel(label);
-		}
+		EditAction action = jEdit.getAction(name);
+		String label = action.getLabel();
 
 		Icon icon;
 		String iconName = jEdit.getProperty(name + ".icon");
-		if(iconName != null)
+		if(iconName == null)
+			return null;
+		else
 		{
 			icon = loadIcon(iconName);
 			if(icon == null)
 				return null;
 		}
-		else
-			return null;
 
 		String toolTip = label;
-		String shortcut = jEdit.getProperty(name + ".shortcut");
-		if(shortcut != null)
-			toolTip = toolTip + " (" + shortcut + ")";
+		String shortcut1 = jEdit.getProperty(name + ".shortcut");
+		String shortcut2 = jEdit.getProperty(name + ".shortcut2");
+		if(shortcut1 != null || shortcut2 != null)
+		{
+			toolTip = toolTip + " ("
+				+ (shortcut1 != null
+				? shortcut1 + " or "
+				: "")
+				+ (shortcut2 != null
+				? shortcut2
+				: "") + ")";
+		}
 
 		return new EnhancedButton(icon,toolTip,action);
 	}

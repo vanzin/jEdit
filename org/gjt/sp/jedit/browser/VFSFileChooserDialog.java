@@ -81,14 +81,14 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		panel.add(Box.createHorizontalStrut(12));
 
-		if(mode == VFSBrowser.SAVE_DIALOG)
-		{
-			GUIUtilities.requestFocus(this,filenameField);
-		}
-		else
+		if(mode == VFSBrowser.BROWSER)
 		{
 			GUIUtilities.requestFocus(this,browser.getBrowserView()
 				.getDefaultFocusComponent());
+		}
+		else
+		{
+			GUIUtilities.requestFocus(this,filenameField);
 		}
 
 		ok = new JButton(jEdit.getProperty("vfs.browser.dialog."
@@ -173,7 +173,11 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			return null;
 
 		if(filename != null)
-			return new String[] { filename };
+		{
+			String path = browser.getPath();
+			VFS vfs = VFSManager.getVFSForPath(path);
+			return new String[] { vfs.constructPath(
+				path,filename) };
 		else
 		{
 			Vector vector = new Vector();

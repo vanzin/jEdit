@@ -24,10 +24,8 @@ import javax.swing.text.Element;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.*;
@@ -45,52 +43,82 @@ public class Macros
 {
 	/**
 	 * Utility method that can be used to display a message dialog in a macro.
-	 * @param view The view
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
 	 * @param message The message
 	 * @since jEdit 2.7pre2
 	 */
-	public static void message(View view, String message)
+	public static void message(Component comp, String message)
 	{
-		JOptionPane.showMessageDialog(view,message,
+		GUIUtilities.hideSplashScreen();
+
+		JOptionPane.showMessageDialog(comp,message,
 			jEdit.getProperty("macro-message.title"),
 			JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
 	 * Utility method that can be used to display an error dialog in a macro.
-	 * @param view The view
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
 	 * @param message The message
 	 * @since jEdit 2.7pre2
 	 */
-	public static void error(View view, String message)
+	public static void error(Component comp, String message)
 	{
-		JOptionPane.showMessageDialog(view,message,
+		GUIUtilities.hideSplashScreen();
+
+		JOptionPane.showMessageDialog(comp,message,
 			jEdit.getProperty("macro-message.title"),
 			JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
 	 * Utility method that can be used to prompt for input in a macro.
-	 * @param view The view
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
 	 * @param prompt The prompt string
 	 * @since jEdit 2.7pre2
 	 */
-	public static String input(View view, String prompt)
+	public static String input(Component comp, String prompt)
 	{
-		return input(view,prompt,null);
+		GUIUtilities.hideSplashScreen();
+
+		return input(comp,prompt,null);
 	}
 
 	/**
 	 * Utility method that can be used to prompt for input in a macro.
-	 * @param view The view
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
 	 * @param prompt The prompt string
 	 * @since jEdit 3.1final
 	 */
-	public static String input(View view, String prompt, String defaultValue)
+	public static String input(Component comp, String prompt, String defaultValue)
 	{
-		return (String)JOptionPane.showInputDialog(view,prompt,
+		GUIUtilities.hideSplashScreen();
+
+		return (String)JOptionPane.showInputDialog(comp,prompt,
 			jEdit.getProperty("macro-input.title"),
 			JOptionPane.QUESTION_MESSAGE,null,null,defaultValue);
+	}
+
+	/**
+	 * Utility method that can be used to ask for confirmation in a macro.
+	 * @param comp The component to show the dialog on behalf of, this
+	 * will usually be a view instance
+	 * @param prompt The prompt string
+	 * @param buttons The buttons to display - for example,
+	 * JOptionPane.YES_NO_CANCEL_OPTION
+	 * @param type The dialog type - for example,
+	 * JOptionPane.WARNING_MESSAGE
+	 */
+	public static int confirm(Component comp, String prompt, int buttons, int type)
+	{
+		GUIUtilities.hideSplashScreen();
+
+		return JOptionPane.showConfirmDialog(comp,prompt,
+			jEdit.getProperty("macro-confirm.title"),buttons,type);
 	}
 
 	/**
@@ -158,9 +186,9 @@ public class Macros
 	 */
 	public static void loadMacros()
 	{
-		macroList = new Vector();
-		macroHierarchy = new Vector();
-		macroHash = new Hashtable();
+		macroActionSet.removeAllActions();
+		macroHierarchy.removeAllElements();
+		macroHash.clear();
 
 		if(jEdit.getJEditHome() != null)
 		{
@@ -177,9 +205,6 @@ public class Macros
 				settings,"macros");
 			loadMacros(macroHierarchy,"",new File(userMacroPath));
 		}
-
-		// sort macro list
-		MiscUtilities.quicksort(macroList,new MiscUtilities.StringICaseCompare());
 
 		EditBus.send(new MacrosChanged(null));
 	}
@@ -198,12 +223,12 @@ public class Macros
 	}
 
 	/**
-	 * Returns a single vector with all known macros in it.
-	 * @since jEdit 3.1pre3
+	 * Returns an action set with all known macros in it.
+	 * @since jEdit 4.0pre1
 	 */
-	public static Vector getMacroList()
+	public static ActionSet getMacroActionSet()
 	{
-		return macroList;
+		return macroActionSet;
 	}
 
 	/**
@@ -220,43 +245,45 @@ public class Macros
 	 * Encapsulates the macro's label, name and path.
 	 * @since jEdit 2.2pre4
 	 */
-	public static class Macro
+	public static class Macro extends EditAction
 	{
-		public String name;
-		public String path;
-		public EditAction action;
-
-		public Macro(String name, final String path)
+		public Macro(String name, String path)
 		{
-			this.name = name;
+			// stupid name for backwards compatibility
+			super("play-macro@" + name);
 			this.path = path;
 
-			action = new EditAction(name,false)
-			{
-				public void invoke(View view)
-				{
-					lastMacro = path;
-					Buffer buffer = view.getBuffer();
-
-					try
-					{
-						buffer.beginCompoundEdit();
-
-						BeanShell.runScript(view,path,
-							true,false);
-					}
-					finally
-					{
-						buffer.endCompoundEdit();
-					}
-				}
-			};
+			int index = name.lastIndexOf('/');
+			label = name.substring(index + 1)
+				.replace('_',' ');
 		}
 
-		public String toString()
+		public String getLabel()
 		{
-			return name;
+			return label;
 		}
+
+		public void invoke(View view)
+		{
+			lastMacro = path;
+			Buffer buffer = view.getBuffer();
+
+			try
+			{
+				buffer.beginCompoundEdit();
+
+				BeanShell.runScript(view,path,
+					true,false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
+
+		// private members
+		private String path;
+		private String label;
 	}
 
 	/**
@@ -415,7 +442,7 @@ public class Macros
 	private static String systemMacroPath;
 	private static String userMacroPath;
 
-	private static Vector macroList;
+	private static ActionSet macroActionSet;
 	private static Vector macroHierarchy;
 	private static Hashtable macroHash;
 	private static String lastMacro;
@@ -423,6 +450,10 @@ public class Macros
 	static
 	{
 		EditBus.addToBus(new MacrosEBComponent());
+		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
+		jEdit.addActionSet(macroActionSet);
+		macroHierarchy = new Vector();
+		macroHash = new Hashtable();
 	}
 
 	private static void loadMacros(Vector vector, String path, File directory)
@@ -443,7 +474,7 @@ public class Macros
 				String name = path + label;
 				Macro newMacro = new Macro(name,file.getPath());
 				vector.addElement(newMacro);
-				macroList.addElement(newMacro);
+				macroActionSet.addAction(newMacro);
 				macroHash.put(name,newMacro);
 			}
 			else if(file.isDirectory())

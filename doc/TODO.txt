@@ -1,5 +1,9 @@
 TO DO
 
+- option to sort recents by file name
+- broken bracket matching
+- reload doesn't scroll to caret properly
+- update tool bar, context option panes for action set API
 - Shift+TAB on Java 1.1
 - (String)buffer.getProperty(): bad
   buffer.getIntegerProperty(),
@@ -21,7 +25,6 @@ TO DO
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
 - select-* actions: add to selection in multi-select mode
-- Macros.confirm()
 - saving a read-only file: show a confirmation dialog box
 - when loading plugins and such, check for settingsDir == jEditHome
 - changing read-only flag in buffer options
@@ -33,7 +36,6 @@ TO DO
   - action shown in menu bar is not a toggle action
   - '<name>-toggle' and '<name>-to-front' actions, not in menus
   - maybe dockables.xml, a la actions.xml
-
 - file system browser:
   - option pane for changing colorization settings
   - new UI layout:
@@ -54,7 +56,6 @@ TO DO
     int getUnixPermissions()
     void setUnixPermissions()
   - UNIX_PERMISSIONS_CAP capability
-- 'evaluate for each line' command
 - improve next/prev-word commands
 - ant targets to replace installer/mk_installer/mk_source scripts
 - QuickNotepad XSL docs
@@ -77,14 +78,11 @@ TO DO
 - handle missing modes more gracefully
 - plugin manager: show all dependencies, not just first-order ones
 - removing a plugin should offer to remove the ones that depend on it too
-- use VariableGridLayout to lay out tool bars, not a BoxLayout
 - hypersearch:
   - show replace results in search results window
   - new search results window for each search, no 'search results' menu
     item
 - smarter/better userInput() that accepts strings, not just characters
-- shortcuts option pane: one category for each plugin, to avoid
-  lumping all plugin actions in one list
 - style editor: check boxes next to fg, bg; if off, use default
 - abbrevs option pane: add, remove, edit buttons, don't show abbrev
   expansion in table
@@ -125,6 +123,7 @@ TO DO
   - selection past end of line
   - treat a tab like n spaces, not one character
   - replace in selection with rectangular selections
+- JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
 
 + bugs:
 
