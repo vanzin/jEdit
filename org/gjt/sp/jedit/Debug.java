@@ -93,4 +93,9 @@ public class Debug
 	 * Disable monospaced font optimization.
 	 */
 	public static boolean DISABLE_MONOSPACE_HACK = false;
+
+	/**
+	 * Paint strings instead of glyph vectors.
+	 */
+	public static boolean DISABLE_GLYPH_VECTOR = false;
 }
