@@ -5,7 +5,7 @@
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
 <!-- :xml.root=users-guide.xml:                                  -->
 
-<chapter id="beanshell-commands"><title>BeanShell Commands</title>
+<chapter id="bsh-commands"><title>BeanShell Commands</title>
 
 <para>
   BeanShell includes a set of <firstterm>commands</firstterm>;
@@ -21,7 +21,7 @@
  </para>
 </note>
 
-<sect1 id="beanshell-commands-output"><title>Output Commands</title>
+<sect1 id="bsh-commands-output"><title>Output Commands</title>
 
   <itemizedlist>
 
@@ -86,7 +86,7 @@
 
 </sect1>
 
-<sect1 id="beanshell-commands-file"><title>File Management Commands</title>
+<sect1 id="bsh-commands-file"><title>File Management Commands</title>
 
   <itemizedlist>
 
@@ -174,7 +174,7 @@
   </itemizedlist>
 
 </sect1>
-<sect1 id="beanshell-commands-serial"><title>Component Commands</title>
+<sect1 id="bsh-commands-serial"><title>Component Commands</title>
 
   <itemizedlist>
 
@@ -238,7 +238,7 @@
 </sect1>
 
 
-<sect1 id="beanshell-commands-resource">
+<sect1 id="bsh-commands-resource">
 <title>Resource Management Commands</title>
 
   <itemizedlist>
@@ -252,7 +252,7 @@
       </funcsynopsis>
       <para>
         Returns the resource specified by <parameter>path</parameter>.
-        A absolute path must be used to return any resource available in
+        An absolute path must be used to return any resource available in
         the current classpath.
       </para>
     </listitem>
@@ -350,7 +350,7 @@
 
 </sect1>
 
-<sect1 id="beanshell-commands-script"><title>Script Execution Commands</title>
+<sect1 id="bsh-commands-script"><title>Script Execution Commands</title>
 
   <itemizedlist>
 
@@ -454,7 +454,7 @@
 
 </sect1>
 
-<sect1 id="beanshell-commands-object">
+<sect1 id="bsh-commands-object">
 <title>BeanShell Object Management Commands</title>
 
   <itemizedlist>
@@ -565,7 +565,7 @@ crufties.counter = 5;
 
 </sect1>
 
-<sect1 id="beanshell-commands-other"><title>Other Commands</title>
+<sect1 id="bsh-commands-other"><title>Other Commands</title>
 
   <itemizedlist>
     <!-- <listitem>

@@ -44,7 +44,7 @@
         <answer><para>
           Select <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
           Options</guimenuitem>, then select the <guimenuitem>Abbreviations</guimenuitem>
-          option pane. You will see an checkbox option for <quote>Space bar expands
+          option pane. You will see a checkbox option for <quote>Space bar expands
           abbrevs</quote>.  Here you can also add, modify and delete abbreviations on
           a global basis or for individual editing modes.
         </para></answer>

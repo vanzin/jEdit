@@ -71,10 +71,8 @@
   </para>
 
   <para>
-   The jEditLauncher package provides three shortcuts for running jEdit:  one in
-   the desktop's <guilabel>Start</guilabel> menu, a entry in the Programs menu, and
-   a third shortcut on your desktop.  Any of these may be deleted or moved without
-   affecting jEdit's operation.  To launch jEdit, simply select one of these shortcuts
+   The jEditLauncher package installs three shortcuts for running jEdit:  one at the top-level of the <guilabel>Start</guilabel> menu, another in the <guilabel>Programs</guilabel> submenu, and a third on your desktop.  Any of these may be deleted or moved without
+   affecting jEdit's operation.  To launch jEdit, simply double-click one of these shortcuts
    as you would for any Windows application.
   </para>
 

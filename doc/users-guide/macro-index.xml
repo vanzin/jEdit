@@ -479,7 +479,7 @@
     <para><filename>Insert_Tag.bsh</filename></para>
     <abstract><para>
         Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
-        in a input dialog.  The tags will surround any selected text.
+        in an input dialog.  The tags will surround any selected text.
     </para></abstract>
 </listitem>
 

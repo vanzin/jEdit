@@ -112,7 +112,7 @@
 
     <qandaentry>
       <question id="problems-out-of-memory"><para>
-        During an editing session I get a error message about an
+        During an editing session I get an error message about an
         <quote>OutOfMemoryError</quote> while working with a large file or
         performing a lengthy operation. The message reappears every time
         I retry the operation.  How can I prevent this?

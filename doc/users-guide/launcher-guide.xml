@@ -348,7 +348,7 @@
 
     <listitem>
       <para>
-        <function>OpenFiles</function> - this method takes a array of file names
+        <function>OpenFiles</function> - this method takes an array of file names
         (with or without wild card characters) as a parameter. The form of the
         array is that which is used for arrays in the scripting environment. In
         JScript, for example the data type of the <classname>VARIANT</classname> holding
