@@ -160,6 +160,12 @@ public class OptionGroup
 					+ name + ".label","NO LABEL PROPERTY: "
 					+ name);
 			}
+			else if(obj instanceof String)
+			{
+				label = jEdit.getProperty("options."
+					+ obj + ".label","NO LABEL PROPERTY: "
+					+ obj);
+			}
 			else if(obj instanceof OptionGroup)
 				label = ((OptionGroup)obj).getLabel();
 			else
