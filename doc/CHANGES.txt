@@ -1,7 +1,804 @@
-JEDIT 4.0 VERSION HISTORY
+JEDIT 3.2 VERSION HISTORY
 
-* Version 4.0pre1
+* Version 3.2.2
 
 + New Features
 
 - JHTML syntax highlighting (Will Sargent)
+
++ Bug Fixes
+
+- 'Welcome' link in help didn't work
+
+* Version 3.2.1
+
++ New Features
+
+- 'Color Picker' macro added
+- Objective-C syntax highlighting (Kris Kopicki)
+
++ Enhancements
+
+- Updated PV-WAVE edit mode (Ed Stewart)
+- Updated 'Write HyperSearch Results' macro (John Gellene)
+- Updated jEditLauncher (John Gellene)
+
++ Bug Fixes
+
+- Clicks in table of contents in help viewer didn't work
+- A few actions didn't record a trailing ; when recording a macro
+- Fixed another BeanShell performance problem
+- Fixed a few minor problems if a plugin threw an exception in its
+  start() method (Dirk Moebius)
+- MRJ on MacOS 8/9 returns an os.name of "Mac OS", but jEdit was
+  checking for "MacOS".
+- Fixed minor grab key dialog box bug
+
++ API Changes
+
+- View.getToolBar() method added
+- Status bar change necessary for upcoming Vimulator plugin (Mike Dillon)
+
+* Version 3.2final
+
++ Enhancements
+
+- Improvements to plugin resource handling, needed by XML plugin 0.4
+- Changes to BeanShellAction to improve performance
+- jedit.spec file for creating RPM improved (Mike Dillon)
+- Documentation changes (John Gellene)
+- jEditLauncher updates (John Gellene)
+
++ Bug Fixes
+
+- Removed debug message from JEditTextArea.java
+- 'Go to Previous Bracket' command didn't work
+
+* Version 3.2pre10
+
++ New Features
+
+- PL-SQL syntax highlighting (Rick Owen)
+
++ Enhancements
+
+- Documentation updates
+- The jedit.spec file for creating the Linux RPM package can now be used
+  to compile and build jEdit from scratch
+- Improved RPM spec syntax highlighting
+- Read-only flag is automatically set when loading files from read-only
+  filesystems, like the Archive plugin VFS
+- Improved JSP syntax highlighting (Daiji Takamori)
+- Nicer looking history text fields (Dirk Moebius)
+- C+Home and C+End no longer deactivate selections in multiple selection
+  mode
+
++ Bug Fixes
+
+- C+. and C+, bug fix, again
+- Help viewer tree would showed tooltips in wrong place
+- Replacing text with multiple selections active caused the text to be
+  inserted in the wrong place
+- Reverse search didn't work sometimes
+- AltGR key works on JDK 1.4 again
+- The plugin manager now only uses the first three characters of the
+  java.version property when checking plugin dependencies. This solves
+  the problem of the WheelMouse plugin not appearing on JDK 1.3.1, because
+  one version was listed as needing Java >= 1.2, <= 1.3, and the other
+  needing Java >= 1.4.
+
++ API Changes
+
+- BeanShell.eval() no longer creates a new namespace
+- jEdit.openFile(View,String,String,boolean,boolean) deprecated
+  jEdit.openFile(View,String,String,boolean,boolean,Hashtable) depreacted
+  The 'readOnly' parameter should no longer be specified. Use
+  jEdit.openFile(View,String,String,boolean,Hashtable) instead.
+- Most plugins probably use openFile(View,String), which is still the
+  same as ever.
+- jEdit.addPluginJAR() is now public, for plugins that want to load the
+  JDK's tools.jar or whatever
+- EditPlugin.JAR constructor is now public, for the same reason as above
+
+* Version 3.2pre9
+
++ New Features
+
+- Keys can now be bound to letter keys without modifiers; eg you can
+  bind a macro to '>' that in HTML mode inserts the appropriate closing
+  tag automatically. Note that the actual character is not inserted, so
+  the macro would need to insert '>' first itself.
+- 'Make Bug Report' macro (John Gellene)
+
++ Enhancements
+
+- Documentation updates
+- Improved Python syntax highlighting (Ollie Rutherfurd)
+
++ Bug Fixes
+
+- Fixed a few bugs in the shortcuts option pane (Dirk Moebius)
+- Fixed typo in a tip of the day
+- If the text area was too small, it would report a negative number of
+  visible lines, which caused problems
+- Disabled non-working persistent splits feature, which could have
+  caused problems
+- Invoking menus using Alt-key mnemonics would insert the mnemonic
+  character into the buffer on JDK 1.4
+- Fixed long-standing bug in scroll-to-caret code
+- C+. and C+, didn't set the history model of the search bar
+- Possible fix for jEdit hanging on JDK 1.4 when file modified on disk
+  by another program
+
++ API Changes
+
+- FileVFS.getPermissions() and setPermissions() methods get and set file
+  permissions on Unix. These methods were formely private, now they are
+  public and static. They do nothing if jEdit is not being run on a Unix
+  platform.
+- Minor change to marker behavior to facilitate AStyle and JavaStyle
+  plugins (Dirk Moebius)
+- JCheckBoxList class moved to org.gjt.sp.jedit.gui package
+
+* Version 3.2pre8
+
++ New Features
+
+- PV-WAVE syntax highlighting (Ed Stewart)
+
++ Enhancements
+
+- Improved XSL abbrevs (Ollie Rutherfurd)
+- jEditLauncher updates (John Gellene)
+- Updated Duplicate_Line and Next_Char macros (John Gellene)
+- Improved shortcuts option pane (Dirk Moebius)
+- Improved PHP mode
+- Middle mouse button paste can now be disabled in the Global Options
+  dialog box
+
++ Neutral
+
+- Only selections created with the mouse are stored in the % register
+
++ Bug Fixes
+
+- Right mouse button clicks didn't work on all platforms
+- Printing didn't work due to a change in 3.2pre7
+- Fixed exception printed when trying to use the file chooser dialog box
+- jEditLauncher didn't work due to an EditServer change in pre7
+- jEdit might hang if an error was shown while downloading the plugin
+  list in the plugin manager
+
+* Version 3.2pre7
+
++ New Features
+
+- BeanShell 1.2beta1 included
+- When running on Unix with Java 2 version 1.4, clicking the middle
+  mouse button in the text area now pastes the primary selection. This
+  obsoletes the XClipboard plugin
+- Visual Foxpro syntax highlighting (Matt Price)
+- SQR syntax highlighting (Richard Ashwell)
+- Cruddy -bshclient command-line switch replaced with -run=<script>
+  parameter; it will run the specified script file, and works in both
+  the initial and client instances of jEdit.
+  - The script is run in the global namespace, so variables and
+    functions defined within will be available for the rest of the
+    editing session. Just like a startup script.
+  - The 'view', 'buffer', 'editPane' and 'textArea' variables are not
+    set in this script; if it is being run at startup, it will also be
+    run before the first view is even initialized. Just like a startup
+    script
+- Just for fun, a sample startup script, named changeUIFonts.bsh is
+  included. This is an undocumented feature and will be replaced with
+  a setting in the global options dialog box in the next major release.
+
++ Enhancements
+
+- Improved jEditLauncher (John Gellene):
+   - executes scripts and runs JDiff from Windows shell menu or from
+     scripting interface.
+   - launcher waits for extended timeout period for jEdit to load.
+   - multiple requests to run jEdit, launch files or run scripts are
+     queued by the launcher while jEdit is loading.
+   - javaw.exe is default interpreter for launching, subject to change
+     by configuation utility.
+   - automatic reboot when installation replaces in-memory modules.
+   - fixes for all reported bugs.
+- Improved PHP syntax highlighting (Ben Sarsgard)
+- Minor change to plugin manager error reporting
+- Console_Plugin macros removed, Console 3.0 incorporates all relevant
+  features
+- Transient status messages (replace all results, for example) are now
+  shown for 10 seconds, instead of 2
+- Updated 'Writing Plugins' section of user's guide (John Gellene)
+- isPopupTrigger() is now used, instead of explicitly checking for
+  Button 3 being pressed. This change was because on the Mac,
+  Control-clicking is used to simulate a right mouse button click.
+- History text fields previously used a Control click to display a menu
+  of completions; this has been changed to a Shift click
+- To be consistent with the above change, the search up and search down
+  shortcuts in history text fields have been changed from C+Up and
+  C+Down to S+Up and S+Down
+- You can now press Enter in the 'Directory' and 'Filter' fields of the
+  search and replace dialog box to begin a search
+- Clicking on the mode and encoding display in the status bar opens the
+  Buffer Options dialog box, clicking the overwrite and multiple
+  selection display toggles those settings
+- When running on Unix with Java 2, the installer writes a shorter shell
+  script that uses the -jar command line switch, instead of setting the
+  class path
+- -newview command line switch is now a property that can be set in the
+  Loading and Saving pane of the Global Options dialog box
+- New method for use in macros:
+  SearchAndReplace.replace(View view, Buffer buffer, int start, int end)
+
++ Bug Fixes
+
+- Help viewer will no longer print an exception if the toc.xml file
+  could not be found
+- Token backgrounds were not being drawn
+- Trying to print threw an exception with Java 2. This has been fixed,
+  but the other problems with printing on Java 2, such as huge spool
+  files being created, remain.
+- GrabKeyDialog bug fix for JDK 1.4 (Alan Moore)
+- roots: virtual filesystem didn't list all filesystem roots on JDK 1.4
+- Possible workaround for window positioning bugs on Unix with KDE 2
+- jEditLauncher used a Windows API call only available on Windows 98 and
+  2000
+- All files in the search set would be listed in the HyperSearch results
+  window, even files which do not contain the search string
+- AltGR key didn't work with Java 2 version 1.4 (Vicente Salvador)
+- Global options dialog box looked a bit dodgy with the 'global colors'
+  setting
+- Could paste into read-only buffers
+- Commands which used readNextChar() were not recorded properly
+- The grab key dialog box would record the Control and Command keys
+  swapped on MacOS
+- PHP mode was missing a SEQ rule for '=', so sequences like $var=TRUE
+  would be highlighted incorrectly
+- Deleted files no longer become read only
+- INVALID token type could not be used in edit mode definitions
+- jEdit wouldn't ask for confirmation when saving over an existing file
+  in some circumstances
+- 'OS/2 startup script' fileset was never shown in the installer on OS/2
+
+* Version 3.2pre6
+
++ New Features
+
+- jEditLauncher is a Windows native launcher for jEdit. It has an
+  EditServer client written in native code for improved performance,
+  and adds a command for starting jEdit to the Windows Explorer
+  right-click menu (John Gellene)
+- When running on Java 2, anti-aliasing can be enabled in the Text
+  Area pane of Global Options dialog box. Replaces AntiAlias plugin,
+  and works better, because Java2D text measurement code is used to
+  calculate offsets
+- Progress 4GL syntax highlighting (Patrick Tingen)
+
++ Enhancements
+
+- PHP mode now highlights variables in string literals
+- Repeating an action more than 20 times displayed a confirmation
+  dialog, but character input could be repeated any number of times.
+  Now, a confirmation dialog is displayed for large character inputs
+  too.
+- Documentation updates
+- Updated set of sample macros (John Gellene)
+- More XSL abbreviation updates (Ollie Rutherfurd)
+- The functionality of the following macros has been moved to the
+  corresponding plugins:
+  - Go_to_Clipper (to Clipper plugin)
+  - Go_to_Console (to Console plugin)
+  - Show_Dual_Diff (to JDiff plugin)
+- The Replace All command now shows the replacement results in the
+  status bar, not in a dialog box
+- The HyperSearch command now shows the number of matches found in the
+  HyperSearch Results window, not in a dialog box
+- The 'Reload' and 'Reload All Buffers' commands now save the caret
+  position
+
++ Bug Fixes
+
+- README.txt, CHANGES.txt, etc. were missing from jedit.jar
+- Setting the file system browser's default path to 'favorites' didn't
+  work
+- In an abbrev expansion, $$1 will now be replaced by a dollar, followed
+  by the value of the first positional parameter. Previously, the first
+  dollar sign would cause problems
+- 'Quick HyperSearch' command didn't work
+- When running on Java 2, jEdit uses Java2D text rendering and
+  measurement code. This should finally fix the 'caret drawn in wrong
+  place' bug, even when anti-aliasing is enabled
+- jEdit.openFiles() didn't setBuffer(), so when jEdit connected to
+  another instance, the new instance opened the necessary files, but
+  never displayed them
+- 'Default edit mode' setting didn't work
+
+* Version 3.2pre5
+
++ New Features
+
+- BeanShell 1.1a18:
+  - Better error reporting
+  - Cleaned up internals
+  - Performance improvements
+  - You can now access JavaBeans properties using bean.prop or
+    bean{"prop"} syntax
+  - 'import' statements can be used in any block scope, not just top
+    level. This means you can have import statements in actions.xml, for
+    example.
+  - Some jEdit code dealing with BeanShell has been cleaned up
+- The three sample 'Hello' plugins included with the source download
+  have been replaced with a single, more comprehensive demonstration
+  plugin written by John Gellene named 'QuickNotepad'
+- Omnimark syntax highlighting (Lionel Fiol)
+- Velocity syntax highlighting (Saimon Moore)
+
++ Enhancements
+
+- Updated XSL mode (Ollie Rutherfurd)
+- A set of XSL abbreviations is now included in the default abbreviation
+  set
+- The 'Update Plugins' dialog box now deletes obsolete plugins
+- Minor improvement to Javadoc highlighting in Java source
+- Improved 'BeanShell Error' dialog box
+- Text fields no longer get the text area font
+- 'Add Marker' and 'Remove Marker from Current Line' commands merged
+  into an 'Add/Remove Marker' command that toggles the marker on the
+  current line
+- 'Search and Replace' dialog box has a new look
+- If auto wrap around is enabled, a message will be shown in the status
+  bar when the search is restarted
+- The shortcut to toggle multiple selection has been changed from
+  Caps Lock to C+\
+- The HyperSearch settings in the search bar is now independent of the
+  HyperSearch setting in the search and replace dialog box
+- Documentation updates
+
++ Bug Fixes
+
+- The -version and -usage command line parameters produced no output
+- The 'caret not being drawn in the right place' but that occured with
+  certain Java versions should now be fixed, because of the following
+  two bug fixes:
+  - SyntaxStyle.getFontMetrics() didn't call deriveFont() on Java 2
+  - jEdit now uses Component.getFontMetrics() instead of
+    Toolkit.getFontMetrics() throughout
+- Opening a recent file could create a pseudo-random selection, due to a
+  bug in the recent file handler
+- Replace all was a bit buggy
+- Ruby mode filename extension was wrong
+- Fixed typo in one of the tips of the day
+- The local file VFS now displays an error message if a directory could
+  not be listed, instead of silently failing
+- Manipulating markers will no longer set the 'dirty' flag if the
+  persistent markers feature is disabled
+- Fixed another recent file list bug
+- 'Paste' command displayed a cryptic exception if the buffer was read
+  only. Now it just beeps
+- jEdit ran startup scripts in the settings directory twice, and startup
+  scripts in the jEdit home directory weren't being run at all
+- JEditTextArea._addToSelection() method didn't merge selections
+  properly, as a result triple-clicks to select lines didn't work too
+  well
+- When adding or removing a marker, the 'dirty' flag would be set
+  if persistent markers were enabled, and would not be set otherwise.
+  This is the opposite of the correct behavior.
+
++ API Changes
+
+- GUIUtilities.loadMenu(view,name) deprecated; use loadMenu(name)
+  instead
+- The Console plugin's "BeanShell" shell was broken by an API change.
+  The upcoming version 3.0 of the Console plugin will fix the problem.
+
+* Version 3.2pre4
+
++ New Features
+
+- Improved support for editing files with different character encodings:
+  - The encoding used to load a file is remembered in the buffer history
+  - File->Open With Encoding menu
+  - Encoding can be changed for open buffers in Utilities->Buffer
+    Options
+  - Editor default can be changed in Utilities->Global Options->Loading
+    and saving
+  - In stand-alone file system browser, an 'Open With Encoding' submenu
+    appears in the right-click context menu
+- Occam syntax highlighting (Richard Beton)
+- MIPS R2000 assembly syntax highlighting (Marc Rummel)
+- The icons in the file system browser can be toggled on and off
+- A dialog box is now displayed after a HyperSearch has been performed,
+  showing the number of results found
+- 'Toggle Line Comment' macro (John Gellene)
+- Swing text fields and text areas now have the same font as the text
+  area
+- gnu.regexp 1.1.3 bundled. Positive lookaheads (?=...) and negative
+  lookaheads (?!=...) are now supported
+- Non-working 'narrow' indicator in status has been replaced with a
+  working 'fold' indicator that is on if portions of the buffer are
+  hidden from view
+- Experimental option to use jEdit text area colors in all text
+  components. It doesn't work too well yet; see the to do list for a
+  list of known issues
+- Startup macro feature replaced with startup scripts, which must have
+  a .bsh extension and can be put in the 'startup' subdirectory of the
+  user settings or jEdit home directories
+- The EditServer can now run arbitriary BeanShell code sent by clients.
+  Note that an authorization key is still required so this is not a
+  security risk. jEditLauncher, jEditOpener and other code that
+  interfaces with the edit server will need to be updated.
+- Running jEdit with the -bshclient switch will read a BeanShell script
+  from standard input and send it to an already running instance of
+  jEdit for evaluation.
+- The feature to fully parse files for syntax information when loading
+  has been added again
+
++ Enhancements
+
+- You can now choose if you want to download plugin source, or only
+  binaries
+- NEWS.txt written
+- Updated macro guide (John Gellene)
+- SGML documentation has been converted to XML. You now need the
+  DocBook-XML 4.1.2 DTD to parse it
+- Source code for three sample plugins now included with the jEdit
+  source download
+- Updated set of sample macros (John Gellene)
+- Improved XML and XSL modes (Ollie Rutherfurd)
+- The edit server now explicitly uses the UTF8 encoding when reading
+  and writing from/to the socket, instead of using the JVM default
+- Improved reporting of I/O errors throughout the editor
+- The buffer history (formely $HOME/.jedit/recent) is now written to
+  $HOME/.jedit/recent.xml, as XML
+- Minor improvement to magic caret code
+
++ Bug Fixes
+
+- Searching for certain regular expressions (like (), ^, or $ by itself,
+  etc) would hang jEdit
+- Some of the links in the help viewer table of contents didn't work
+- Tab key didn't work in Java 1.4
+- jEdit would throw an exception upon loading a buffer if the first line
+  had a leading indent and an initial fold level was specified
+- Possible fix for Tab key and C+i not working with some Java versions
+  in 'grab key' dialog box used by shortcut option panes
+- Double-clicks to select bracketed blocks now work better
+- If jEdit was running in background mode and a client instance was
+  started with the -norestore switch, a NullPointerException could be
+  printed
+- A few bugs that could occur with obscure combinations of command-line
+  parameters have been fixed. A side-effect of this is that the -nogui
+  command line switch is no longer available.
+- The default size of the file system browser was wrong
+- Fixed edit server bug that occured on some systems (probably only
+  Windows?) (John Gellene)
+- Both 'Browse System Macros' and 'Browse User Macros' commands opened
+  the user macro directory (Ollie Rutherfurd)
+- Errors connecting to the server were never written to the activity.log
+  file, nor were they written to standard output, even if the default
+  log level was changed
+- Dollar signs followed by a non-digit character would disappear without
+  trace when the abbrev is expanded. Now, they are left as-is unless a
+  digit follows
+- Setting the CARET property by passing a Hashtable to the openFile()
+  method should now work even if the buffer is already open.
+
++ API Changes
+
+- New method: BeanShell.runScript(View, String path, Reader in, boolean,
+  boolean); like the other form of runScript() but reads the script from
+  the Reader and only uses the path for error reporting purposes. This
+  means plugins can load arbitriary code on startup. Console 3.0 uses
+  this.
+- The runCommandInConsole() method has been moved from the 'Console
+  Plugin' macros to the Console plugin itself. Install Console 3.0 or
+  later for these macros to work.
+
+* Version 3.2pre3
+
++ New Features
+
+- 'Include Guard' macro (John Gellene)
+- Positional parameters in abbrevs: if you enter something like, for
+  example, F#j#array.length# in Java mode where 'F' is defined to
+  expand to 'for(int $1 = 0; $1 < $2; $1++)\n{\n\t\|\n}', the following
+  will be inserted in the buffer, with the caret positioned between the
+  two curly braces:
+
+  for(int j = 0; j < array.length; j++)
+  {
+
+  }
+
++ Enhancements
+
+- Improved progress bar window in plugin manager
+- Specifying a repeat count greater than 20 displays a confirmation
+  dialog box
+- C+ENTER displays a prompt now
+- On MacOS X, jEdit's menus are now placed into the system menu bar,
+  not in a fake 'menu bar' inside views
+- Status bar has a new look
+- jEdit no longer uses hard-coded fonts for the buffer switcher, search
+  bar and status bar
+- -nosplash command line switch removed, splash screen can now be
+  enabled and disabled in the Utilities->Global Options dialog box
+- Expanding a fold will now attempt to scroll the text area in order to
+  make the fold visible, if possible
+- The current buffer's edit mode is now shown in the status bar
+- Java mode has a new set of default abbrevs
+
++ Neutral
+
+- User's guide has been moved into the jedit.jar JAR file
+
++ Bug Fixes
+
+- plugins.dtd was missing from jedit.jar, thus the new plugin manager
+  didn't work
+- FileVFS._rename() didn't work if the destination file already exists
+  on Windows. This caused problems when saving files, for example,
+  because #<filename>#save# would never be renamed to <filename>
+- Fixed several bugs in the 'scroll to caret' code
+- Keyboard shortcuts might work in Java 1.4 now
+- The recent file list was being reversed each time jEdit was run!!!
+- Improved handling of 'Stop' button in plugin manager progress dialog
+  boxes
+- Modes in the system mode directory no longer always shadow the modes
+  in the user specific mode directory
+- Fixed obscure bug in Buffer.addToMap() that could result in an invalid
+  line map when expading certain folds
+- Slightly faster regular expression search
+
+* Version 3.2pre2
+
++ New Features
+
+- New plugin manager. The major changes are:
+  - Now part of the jEdit core, not a plugin
+  - Uses new server-side backend, courtesy of Mike Dillon
+  - Removing a plugin consisting of multiple JARs (Archive, JavaInsight)
+    removes all JARs, not just the main one
+  - Dependencies are now resolved automatically, eg installing the
+    JCompiler plugin will automatically install or update, if necessary,
+    the EditBus, ErrorList and Console plugins
+  - Many parts of the code have been rewritten from scratch and as a
+    result it is much cleaner
+- This was actually added in 3.2pre1, not 3.2pre2, but I forgot to
+  mention it to the change log. 'BeanShell search and replace' lets you
+  replace occurences of a search string (or regexp) with the result of a
+  BeanShell code snippet. For example, you can use it to convert all
+  tags in an HTML file to lower case.
+- Verilog syntax highlighting (Wojciech Stryjewski)
+- Utilities->Reload Edit Modes command
+- 'Search in Directory' command added to file system browser right click
+  menu
+- Views once again have a status bar which displays caret position info,
+  prompts issued by register and marker commands, I/O status, and so on.
+  The status bar now displays caret location information in the same
+  style as VI, courtesy of Mike Dillon
+
++ Enhancements
+
+- The current selection state is preserved in the buffer history (along
+  with the caret position)
+- Improved PHP syntax highlighting (Daniel Beckham)
+- Files are now saved to #<filename>#save#, then renamed to <filename>.
+  This prevents data loss if, for example, the disk is full or jEdit
+  crashes while saving.
+- Search->Find always selects current buffer set.
+  Search->Search in Open Buffers (C+e C+b) selects 'All Buffers' file set.
+  Search->Search in Directory (C+e C+d) selects 'Directory' file set
+- 'Search Buffer' and 'Search Directory Tree' macros removed
+- The File->Recent Files menu no longer displays path names, due to a
+  Swing bug that would display the menu in the wrong place if it was too
+  long. If you want to find out the full path name, move the mouse over
+  the relevant menu item, and the full path will be shown in the status
+  bar.
+- jEdit now restore previously open files on startup, even if file names
+  were specifed on the command line. This can be disabled in
+  Utilities->Global Options->Loading and Saving
+- The 'Escape' key can now be used in the 'Add Abbreviation' dialog box
+- On MacOS and MacOS X, the primary modifier is Command, not Control now
+- The activity log is now dockable
+
++ Neutral
+
+- Modes no longer define a 'boxComment' property
+- 'Delete Marker at Caret' macro removed because the 'Remove Marker from
+  Current Line' command does the same thing
+
++ Bug Fixes
+
+- Fixed a compile error with Java 1.3
+- 'Line Comment' threw an ArrayIndexOutOfBounds exception
+- jEdit formely cached the find dialog for each view after it had been
+  displayed once, reusing the dialog box subsequent times. However, some
+  Java versions seem to have rather buggy code for showing and hiding
+  windows. So this feature has been removed.
+- Current line highlight was not painted in the gutter
+- Plugin shortcuts didn't work due to a change in 3.2pre1
+- Ugly workaround for the bug where BeanShell would barf if a script did
+  not end with a newline
+- JSP mode now highlights JSP comments correctly (<%-- ... --%>)
+- New files can now be reloaded
+- Fixed minor gutter mouse bug
+- Edit->Select None didn't work at all
+- Fixed minor bug in prev-char and next-char commands with multiple
+  selections
+- InputHandler.readNextChar() now substitutes every occurrence of
+  "__char__" with the typed character. Previously, it only substituted
+  the first occurrence
+- The edit server was supposed to bind to 127.0.0.1, but instead it
+  bound to the machine's network address
+- Possible fix for the NullPointerException some people have experienced
+  with the tip of the day dialog box
+- Moving the mouse into the gutter while a buffer containing markers
+  was being loaded would throw a NullPointerException
+- Fixed bogus "The url filesystem does not support directory browsing"
+  error message displayed when loading http:// URLs
+- An exception would be printed if the 'BeanShell' radio button was
+  selected in the search and replace dialog box, but nothing was entered
+  in the text field
+- CS+DOWN (select next paragraph) didn't work properly
+- print() in BeanShell didn't work for non-string arguments
+- jEdit will no longer attempt to recover an autosave file that you do
+  not have read access for
+
++ API Changes
+
+- SearchAndReplace.showSearchDialog() method removed. Simply create a
+  new SearchDialog instance instead
+- InputHandler.readNextChar(String code) deprecated. Use the new form
+  instead:
+
+  readNextChar(String prompt, String code).
+
+  'prompt' will be shown in the status bar.
+- JEditTextArea.isSelectionRectangular() method was removed in 3.2pre1,
+  but I have added it again (marking it deprecated) so that JDiff can
+  continue working until it is updated for the new API.
+
+* Version 3.2pre1
+
++ New Features
+
+- Pressing Caps Lock toggles multiple selection on and off. In multiple
+  selection mode, any number of chunks can be selected, and the caret
+  position is independent of the selection. All jEdit built-in commands
+  support multiple selections. If they don't, it's a bug
+- Caret registers and markers merged:
+  - 'Markers' top level menu contains commands for manipulating markers.
+  - Markers can no longer be named -- the menu just shows the line of
+    text containing the marker, along with the line number.
+  - Markers can have single-character 'shortcuts'. To add a marker with
+    a shortcut, use the 'Add Marker With Shortcut' command.
+  - Key strokes for dealing with markers with shortcuts are the same as
+    the old register command keystrokes (C+t, C+y, C+u, C+k)
+  - Unlike caret registers, which were global to the editor, markers are
+    buffer-specific.
+  - Registers are now only used to store text.
+  - Note that adding a marker with a shortcut of an existing one does
+    not delete the existing marker, it merely clears its shortcut.
+  - Registers and marker shortcuts are stored in a different namespace,
+    so you can have text in register 'a' and a marker with shortcut 'a'
+    at the same time
+- X-Windows style copy and paste now supported: most recently selected
+  text is stored in the '%' register, middle mouse button click (or
+  Alt-click if you only have a 2 button mouse) inserts contents of that
+  register.
+- New 'Copy Append' (C+e C+a), 'Cut Append' (C+e C+u) commands append
+  selected text to clipboard.
+- New 'Cut Append to Register' (C+r C+u) command append selected text to
+  specified register and removes it from the buffer.
+
++ Enhancements
+
+- 'Auto wrap around' option in search and replace dialog box
+- Edit server now binds to local host only (so that remote attackers
+  can't compromise jEdit) and accepts no more than 2 simultaneous
+  connection attempts (Mike Dillon)
+- The 'Run Other Macro' command no longer uses the obsolete Swing file
+  chooser dialog box
+- Marker saving can now be toggled in Utilities->Global Options->Loading
+  and Saving
+- View->Scrolling->Scroll to Caret (C+e C+j) now expands the fold
+  containing the caret, if necessary
+- -nostartupmacro command line switch
+- Improved 'View Registers' dialog box
+- The gutter now shows marker tooltips immediately
+- Installer has a new look
+- Installer now installs jedit.cmd file for starting jEdit on OS/2
+
++ Neutral
+
+- 'Append to Register' command renamed 'Copy Append to Register'
+- 'Replace All' no longer bound to C+e C+a
+- 'site-props' directory renamed to 'properties'
+- 'Rectangular Selection' command removed. Now, the only way to create
+  a rectangular selection is to either Control-drag or
+  Control-Shift-click
+- 'Box Comment' command removed (it might reappear later. I just can't
+  be bothered updating it for the new selection code right now.)
+- 'Wing Comment' renamed 'Range Comment', 'Block Comment' renamed 'Line
+  Comment'
+- Startup macro is now run before the first view is created (so the
+  Swing font hack script floating around can now work without the
+  view.splitVertically()/view.unsplit() hackery)
+
++ Bug Fixes
+
+- print() should now work in BeanShell:
+  - if invoked from Console plugin, prints output to console
+  - otherwise, prints the specified string to the activity log, with log
+    level 'warning' (so that it is also printed to the standard error
+    stream)
+- If a view was split and several buffers were visible, only one of them
+  would be checked when the view gains focus for modification by another
+  program
+- The setting of the reverse search flag wasn't fully saved and restored
+- The setting of the HyperSearch flag wasn't handled properly by the
+  search bar
+- Notepad macro threw an exception when its window was closed
+- The 'Search in Current Buffer' and 'Search in Directory' macros didn't
+  work
+- If the caret was at the beginning of the line, prev-word would move it
+  to the beginning of the previous line, not the end of the previous
+  line as you would expect
+- Fixed possible NPE when closing files due to jEdit.removeBufferFromList()
+  being called twice
+
++ API Changes
+
+- As jEdit now handles middle mouse button clicks itself, the XClipboard
+  plugin will have to be modified to set a custom implementation of the
+  '%' register, instead of trapping middle mouse clicks directly.
+- Plugins are now loaded after the buffer history and macros are
+  initialised
+- org.gjt.sp.jedit.msg.RegistersChanged message removed
+- Old text selection methods in JEditTextArea deprecated:
+  getSelectionStart()
+  getSelectionEnd()
+  getSelectionStartLine()
+  getSelectionEndLine()
+  getMarkPosition()
+  getMarkLine()
+  select()
+
+- New text selection API:
+  Selection[] getSelection()
+  setSelection(Selection[] selection)
+  setSelection(Selection selection)
+  addToSelection(Selection[] selection)
+  addToSelection(Selection selection)
+  removeFromSelection(Selection selection)
+  getSelectionAtOffset(int offset)
+  getSelectedText(Selection s)
+  setSelectedText(Selection s, String text)
+  getSelectedText(String separator) (returns all selections, separated
+    by the separator string)
+  getSelectedText() (returns all selections, separated by newlines)
+  moveCaretPosition() (moves caret without affecting selection)
+  setCaretPosition() (deactivates selection and moves caret)
+  resizeSelection(int offset, int end) (resizes the selection at
+    'offset' to 'end')
+  extendSelection(int offset, int end) (adds a selection spanning
+    'offset' to 'end', performing various tricks if there already is a
+    selection at 'offset')
+
+  org.gjt.sp.jedit.textarea.Selection is an abstract class. The two
+  concrete implementations are Selection.Range and Selection.Rect.
+  
+  Methods in Selection class:
+  Selection() (empty constructor)
+  Selection(Selection sel) (copy start/end from this selection)
+  Selection(int start, int end)
+  int getStart()
+  int getEnd()
+  int getStartLine()
+  int getEndLine()
+  int getStart(Buffer buffer, int line) (only useful with Selection.Rect)
+  int getEnd(Buffer buffer, int line) (ditto)

@@ -61,7 +61,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.00.01.00";
+		return "03.02.99.02";
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class jEdit
 
 				// show tip of the day
 				if(jEdit.getBooleanProperty("firstTime"))
-					new HelpViewer("welcome.html");
+					new HelpViewer("jeditresource:/doc/welcome.html");
 				else if(jEdit.getBooleanProperty("tip.show"))
 					new TipOfTheDay(view);
 

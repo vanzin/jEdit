@@ -1,7 +1,11 @@
 TO DO
 
+- slow electric scroll
+
 + features:
 
+- scroll to newly added tool bar button or context menu item in option
+  panes
 - instead of mini i/o progress, show messages in status bar: number
   of i/o requests pending, and setMessageAndClear("foo") when i/o
   complete
