@@ -70,7 +70,7 @@ public class PositionManager
 			{
 				bh = new PosBottomHalf(offset);
 				bh.red = true;
-				//root.insert(bh);
+				root.insert(bh);
 			}
 			else
 				bh.ref++;
@@ -108,15 +108,33 @@ public class PositionManager
 		{
 			r = bh.right;
 			x = bh.parent;
-			bh.removeLeft();
+			if(bh.parent == null)
+				root = bh.right;
+			else
+			{
+				if(bh == bh.parent.left)
+					bh.parent.left = bh.right;
+				else
+					bh.parent.right = bh.right;
+			}
+			bh.right.parent = bh.parent;
 		}
 		else if(bh.right == null)
 		{
 			r = bh.left;
 			x = bh.parent;
-			bh.removeRight();
+			if(bh.parent == null)
+				root = bh.left;
+			else
+			{
+				if(bh == bh.parent.left)
+					bh.parent.left = bh.left;
+				else
+					bh.parent.right = bh.left;
+			}
+			bh.left.parent = bh.parent;
 		}
-		// neither is null;
+		// neither is null
 		else
 		{
 			PosBottomHalf nextInorder = bh.right;
@@ -139,13 +157,19 @@ public class PositionManager
 					bh.parent.right = nextInorder;
 			}
 
-			if(nextInorder.right != null)
-				nextInorder.right.parent = bh.right;
-			nextInorder.left = bh.left;
-			nextInorder.parent.left = nextInorder.right;
-			if(bh.right != nextInorder)
-				nextInorder.right = bh.right;
 			nextInorder.parent = bh.parent;
+			nextInorder.left = bh.left;
+			nextInorder.left.parent = nextInorder;
+			if(nextInorder != bh.right)
+			{
+				if(nextInorder.right != null)
+				{
+					nextInorder.parent.left = nextInorder.right;
+					nextInorder.right.parent = nextInorder.parent;
+				}
+				nextInorder.right = bh.right;
+				nextInorder.right.parent = nextInorder;
+			}
 			x = nextInorder.parent;
 		}
 
@@ -277,36 +301,6 @@ public class PositionManager
 				else
 					right.insert(pos);
 			}
-		} //}}}
-
-		//{{{ removeLeft() method
-		void removeLeft()
-		{
-			if(parent == null)
-				root = right;
-			else
-			{
-				if(this == parent.left)
-					parent.left = right;
-				else
-					parent.right = right;
-			}
-			right.parent = parent;
-		} //}}}
-
-		//{{{ removeRight() method
-		void removeRight()
-		{
-			if(parent == null)
-				root = left;
-			else
-			{
-				if(this == parent.left)
-					parent.left = left;
-				else
-					parent.right = left;
-			}
-			right.parent = parent;
 		} //}}}
 
 		//{{{ find() method
