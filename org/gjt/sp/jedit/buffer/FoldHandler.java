@@ -31,7 +31,7 @@ import org.gjt.sp.util.Log;
 /**
  * Interface for obtaining the fold level of a specified line.<p>
  *
- * Plugins can add and remove fold handlers by defining entries in their
+ * Plugins can provide fold handlers by defining entries in their
  * <code>services.xml</code> files like so:
  *
  * <pre>&lt;SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="<i>name</i>"&gt;
