@@ -140,7 +140,6 @@ public class EditServer extends Thread
 
 				DataInputStream in = new DataInputStream(
 					client.getInputStream());
-				OutputStream out = client.getOutputStream();
 
 				if(!handleClient(client,in))
 					abort = true;

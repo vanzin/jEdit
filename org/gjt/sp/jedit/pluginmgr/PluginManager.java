@@ -97,7 +97,7 @@ public class PluginManager extends JFrame implements EBComponent
 	public static void showPluginManager(Frame frame)
 	{
 		if (instance == null)
-			instance = new PluginManager(frame);
+			instance = new PluginManager();
 		else
 		{
 			instance.toFront();
@@ -140,7 +140,7 @@ public class PluginManager extends JFrame implements EBComponent
 	//}}}
 
 	//{{{ PluginManager constructor
-	private PluginManager(Frame frame)
+	private PluginManager()
 	{
 		super(jEdit.getProperty("plugin-manager.title"));
 

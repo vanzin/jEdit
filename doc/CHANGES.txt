@@ -22,6 +22,11 @@ Bock for contributing to this release.
   D modes. (Jim Lawton)
 
 }}}
+{{{ Scripting
+
+- Some new clipboard macros (Ollie Rutherfurd).
+
+}}}
 {{{ Bug Fixes
 
 - Fix a roundoff error in the monospaced font optimization that would
