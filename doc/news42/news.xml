@@ -205,7 +205,7 @@
 	<sect1 id="encodings"><title>Handling of Multiple Encodings</title>
 	
 	<para>
-	 A full list of encodings is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. The encoding declaration of XML files is now honoured when loading and saving buffers.
+	 A full list of encodings supported by your Java implementation is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. Previously only a small list of common encodings was shown.
 	</para>
 
 	<para>
