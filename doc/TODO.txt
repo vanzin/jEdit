@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- split pane wiggles
+- global options: split pane position suboptimal
 - perl: q{}, etc.
 - bracket matching with split view -- not updated properly on switching
 - position hold still doesn't work
@@ -10,7 +12,6 @@ and quirks that I need to fix eventually.
 - jedit -background -nogui && jedit -norestore opens "Untitled 2"
 - plugin error dialog -- if > 1 error per plugin
 - C+ENTER 1 ...
-- undo: redo doesn't clear dirty flag if necessary
 - A+# on OS X, need better modifier mapping on OS X
 - first focus: show all files that were modified on disk, in a list
 - how to handle S+0-9?
@@ -19,6 +20,8 @@ and quirks that I need to fix eventually.
 - bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
+- options for recent files list, recent files menu
+- autosave recent file list?
 - hypersearch refresh
 - activity log: log viewer needs copy, tabs in log entries need to be
   replaced

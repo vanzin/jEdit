@@ -866,6 +866,7 @@ public class DockableWindowManager extends JPanel
 		JPopupMenu popup = new JPopupMenu();
 		JMenuItem caption = new JMenuItem(jEdit.getProperty(dockable + ".title",
 			"NO TITLE PROPERTY: " + dockable));
+		caption.setEnabled(false);
 		popup.add(caption);
 		popup.addSeparator();
 		String currentPos = jEdit.getProperty(dockable + ".dock-position");
@@ -877,10 +878,10 @@ public class DockableWindowManager extends JPanel
 				final String pos = positions[i];
 				if(pos.equals(currentPos))
 					continue;
-	
+
 				JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
 					+ pos));
-	
+
 				moveMenuItem.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent evt)

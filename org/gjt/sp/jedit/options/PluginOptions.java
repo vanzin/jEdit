@@ -86,8 +86,8 @@ public class PluginOptions extends OptionsDialog
 		// only add the Plugins branch if there are OptionPanes
 		if (pluginsGroup.getMemberCount() == 0)
 			addOptionPane(new NoPluginsPane(),pluginsGroup);
-		else
-			addOptionGroup(pluginsGroup,rootGroup);
+
+		addOptionGroup(pluginsGroup,rootGroup);
 
 		return paneTreeModel;
 	} //}}}
