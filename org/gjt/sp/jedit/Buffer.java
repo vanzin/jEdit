@@ -2835,7 +2835,7 @@ public class Buffer implements EBComponent
 			if(offset < 0 || offset > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset);
 
-			return null;
+			return offsetMgr.createPosition(offset);
 		}
 		finally
 		{

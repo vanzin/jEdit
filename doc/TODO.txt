@@ -6,12 +6,10 @@ TO DO
 - optimize ContentManager.close()
 - v2p/p2v: implement from end backward scan
 - stupid rest visible hack in offset manager
-- settings files: save to #foo#save# first, then rename to foo
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
 - inserting line after closed fold issues -- fix in OffsetManager
-- positions
-- new undo
+- undo
 - move away from Swing APIs in the core
 - respect collapseFolds buffer property when:
   - pasting

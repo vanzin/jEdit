@@ -73,20 +73,19 @@ public class Abbrevs
 	public static boolean expandAbbrev(View view, boolean add)
 	{
 		//{{{ Figure out some minor things
+		Buffer buffer = view.getBuffer();
 		JEditTextArea textArea = view.getTextArea();
-		if(!textArea.isEditable())
+		if(!buffer.isEditable())
 		{
 			view.getToolkit().beep();
 			return false;
 		}
 
-		Buffer buffer = view.getBuffer();
-
 		int line = textArea.getCaretLine();
-		int lineStart = textArea.getLineStartOffset(line);
+		int lineStart = buffer.getLineStartOffset(line);
 		int caret = textArea.getCaretPosition();
 
-		String lineText = textArea.getLineText(line);
+		String lineText = buffer.getLineText(line);
 		if(lineText.length() == 0)
 		{
 			if(add)
@@ -113,7 +112,7 @@ public class Abbrevs
 		{
 			wordStart = lineText.indexOf('#');
 			wordStart = TextUtilities.findWordStart(lineText,wordStart,
-				(String)buffer.getProperty("noWordSep") + '#');
+				buffer.getStringProperty("noWordSep") + '#');
 
 			abbrev = lineText.substring(wordStart,pos - 1);
 
@@ -139,7 +138,7 @@ public class Abbrevs
 		else
 		{
 			wordStart = TextUtilities.findWordStart(lineText,pos - 1,
-				(String)buffer.getProperty("noWordSep"));
+				buffer.getStringProperty("noWordSep"));
 
 			abbrev = lineText.substring(wordStart,pos);
 		} //}}}
@@ -168,7 +167,7 @@ public class Abbrevs
 					lineText,buffer.getTabSize());
 
 				buffer.remove(lineStart + wordStart,pos - wordStart);
-				buffer.insertString(lineStart + wordStart,expand.text,null);
+				buffer.insert(lineStart + wordStart,expand.text);
 				if(expand.caretPosition != -1)
 				{
 					textArea.setCaretPosition(lineStart + wordStart
@@ -179,15 +178,12 @@ public class Abbrevs
 					leadingIndent,buffer.getBooleanProperty("noTabs")
 					? 0 : buffer.getTabSize());
 
-				Element map = buffer.getDefaultRootElement();
-
 				// note that if expand.lineCount is 0, we
 				// don't do any indentation at all
 				for(int i = line + 1; i <= line + expand.lineCount; i++)
 				{
-					Element elem = map.getElement(i);
-					buffer.insertString(elem.getStartOffset(),
-						whiteSpace,null);
+					buffer.insert(buffer.getLineStartOffset(i),
+						whiteSpace);
 				}
 			}
 			finally
@@ -333,26 +329,29 @@ public class Abbrevs
 		String settings = jEdit.getSettingsDirectory();
 		if(abbrevsChanged && settings != null)
 		{
-			File file = new File(MiscUtilities.constructPath(settings,"abbrevs"));
-			if(file.exists() && file.lastModified() != abbrevsModTime)
+			File file1 = new File(MiscUtilities.constructPath(settings,"#abbrevs#save#"));
+			File file2 = new File(MiscUtilities.constructPath(settings,"abbrevs"));
+			if(file2.exists() && file2.lastModified() != abbrevsModTime)
 			{
-				Log.log(Log.WARNING,Abbrevs.class,file + " changed on disk;"
+				Log.log(Log.WARNING,Abbrevs.class,file2 + " changed on disk;"
 					+ " will not save abbrevs");
 			}
 			else
 			{
-				jEdit.backupSettingsFile(file);
+				jEdit.backupSettingsFile(file2);
 
 				try
 				{
-					saveAbbrevs(new FileWriter(file));
+					saveAbbrevs(new FileWriter(file1));
 				}
 				catch(Exception e)
 				{
-					Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + file);
+					Log.log(Log.ERROR,Abbrevs.class,"Error while saving " + file1);
 					Log.log(Log.ERROR,Abbrevs.class,e);
 				}
-				abbrevsModTime = file.lastModified();
+				file2.delete();
+				file1.renameTo(file2);
+				abbrevsModTime = file2.lastModified();
 			}
 		}
 	} //}}}

@@ -2124,54 +2124,62 @@ public class jEdit
 		if(settingsDirectory != null)
 		{
 			// Save the recent file list
-			File file = new File(MiscUtilities.constructPath(
+			File file1 = new File(MiscUtilities.constructPath(
+				settingsDirectory, "#recent.xml#save#"));
+			File file2 = new File(MiscUtilities.constructPath(
 				settingsDirectory, "recent.xml"));
-			if(file.exists() && file.lastModified() != recentModTime)
+			if(file2.exists() && file2.lastModified() != recentModTime)
 			{
-				Log.log(Log.WARNING,jEdit.class,file + " changed"
+				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
 					+ " on disk; will not save recent files");
 			}
 			else
 			{
-				backupSettingsFile(file);
-
-				BufferHistory.save(file);
+				backupSettingsFile(file2);
+				BufferHistory.save(file1);
+				file2.delete();
+				file1.renameTo(file2);
 			}
-			recentModTime = file.lastModified();
+			recentModTime = file2.lastModified();
 
-			file = new File(MiscUtilities.constructPath(
+			file1 = new File(MiscUtilities.constructPath(
+				settingsDirectory, "#history#save#"));
+			file2 = new File(MiscUtilities.constructPath(
 				settingsDirectory, "history"));
-			if(file.exists() && file.lastModified() != historyModTime)
+			if(file2.exists() && file2.lastModified() != historyModTime)
 			{
-				Log.log(Log.WARNING,jEdit.class,file + " changed"
+				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
 					+ " on disk; will not save history");
 			}
 			else
 			{
-				backupSettingsFile(file);
-
-				HistoryModel.saveHistory(file);
+				backupSettingsFile(file2);
+				HistoryModel.saveHistory(file1);
+				file2.delete();
+				file1.renameTo(file2);
 			}
-			historyModTime = file.lastModified();
+			historyModTime = file2.lastModified();
 
 			SearchAndReplace.save();
 			Abbrevs.save();
 			FavoritesVFS.saveFavorites();
 
-			file = new File(MiscUtilities.constructPath(
+			file1 = new File(MiscUtilities.constructPath(
+				settingsDirectory,"#properties#save#"));
+			file2 = new File(MiscUtilities.constructPath(
 				settingsDirectory,"properties"));
-			if(file.exists() && file.lastModified() != propsModTime)
+			if(file2.exists() && file2.lastModified() != propsModTime)
 			{
-				Log.log(Log.WARNING,jEdit.class,file + " changed"
+				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
 					+ " on disk; will not save user properties");
 			}
 			else
 			{
-				backupSettingsFile(file);
+				backupSettingsFile(file2);
 
 				try
 				{
-					OutputStream out = new FileOutputStream(file);
+					OutputStream out = new FileOutputStream(file1);
 					props.save(out,"jEdit properties");
 					out.close();
 				}
@@ -2180,8 +2188,10 @@ public class jEdit
 					Log.log(Log.ERROR,jEdit.class,io);
 				}
 
-				propsModTime = file.lastModified();
+				file2.delete();
+				file1.renameTo(file2);
 			}
+			propsModTime = file2.lastModified();
 		}
 	} //}}}
 
@@ -2880,9 +2890,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					try
 					{
 						int line = Integer.parseInt(marker.substring(6));
-						Element lineElement = buffer.getDefaultRootElement()
-							.getElement(line - 1);
-						pos = lineElement.getStartOffset();
+						pos = buffer.getLineStartOffset(line - 1);
 					}
 					catch(Exception e)
 					{
@@ -2907,7 +2915,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				if(view != null && view.getBuffer() == buffer)
 					view.getTextArea().setCaretPosition(pos);
 				else
-					buffer.putProperty(Buffer.CARET,new Integer(pos));
+					buffer.setIntegerProperty(Buffer.CARET,pos);
 			}
 		});
 	} //}}}

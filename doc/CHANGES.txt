@@ -133,6 +133,9 @@ JEDIT 4.0 VERSION HISTORY
   "_".
 - jEdit now backs up files it saves to the settings directory to
   $HOME/.jedit/settings-backups
+- Settings files are now saved to #filename#save#, then renamed to the
+  actual file name. This prevents settings from being lost if jEdit
+  crashes in the middle of saving them
 
 + Bug Fixes
 

@@ -23,7 +23,8 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import javax.swing.text.Segment;
+import javax.swing.text.*;
+import java.util.Vector;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.IntegerArray;
@@ -52,6 +53,8 @@ public class OffsetManager
 		lineInfo[0] = 1L | (0xffL << VISIBLE_SHIFT);
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
+
+		positions = new Vector();
 	} //}}}
 
 	//{{{ getLineCount() method
@@ -164,6 +167,36 @@ public class OffsetManager
 		lineInfo[line] |= CONTEXT_VALID_MASK;
 	} //}}}
 
+	//{{{ createPosition() method
+	public Position createPosition(int offset)
+	{
+		PosBottomHalf bh = null;
+
+		for(int i = 0; i < positions.size(); i++)
+		{
+			PosBottomHalf _bh = (PosBottomHalf)positions.elementAt(i);
+			if(_bh.offset == offset)
+			{
+				bh = _bh;
+				break;
+			}
+			else if(_bh.offset > offset)
+			{
+				bh = new PosBottomHalf(offset);
+				positions.insertElementAt(bh,i);
+				break;
+			}
+		}
+
+		if(bh == null)
+		{
+			bh = new PosBottomHalf(offset);
+			positions.addElement(bh);
+		}
+
+		return new PosTopHalf(bh);
+	} //}}}
+
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
 		int numLines, int length, IntegerArray endOffsets)
@@ -210,7 +243,7 @@ public class OffsetManager
 				& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
 		} //}}}
 
-		// TODO: positions
+		updatePositionsForInsert(offset,length);
 	} //}}}
 
 	//{{{ contentRemoved() method
@@ -235,7 +268,7 @@ public class OffsetManager
 				| CONTEXT_VALID_MASK);
 		} //}}}
 
-		// TODO: positions
+		updatePositionsForRemove(offset,length);
 	} //}}}
 
 	//{{{ linesChanged() method
@@ -283,6 +316,8 @@ public class OffsetManager
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;
+
+	private Vector positions;
 	//}}}
 
 	//{{{ setLineEndOffset() method
@@ -291,5 +326,142 @@ public class OffsetManager
 		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
 	} //}}}
 
+	//{{{ updatePositionsForInsert() method
+	private void updatePositionsForInsert(int offset, int length)
+	{
+		if(positions.size() == 0)
+			return;
+
+		int start = 0;
+		int end = positions.size() - 1;
+
+		PosBottomHalf bh;
+
+loop:		for(;;)
+		{
+			switch(end - start)
+			{
+			case 0:
+				break loop;
+			case 1:
+				bh = (PosBottomHalf)positions.elementAt(start);
+				if(bh.offset < offset)
+					start++;
+				break loop;
+			default:
+				int pivot = (start + end) / 2;
+				bh = (PosBottomHalf)positions.elementAt(pivot);
+				if(bh.offset > offset)
+					end = pivot - 1;
+				else
+					start = pivot + 1;
+				break;
+			}
+		}
+
+		for(int i = start; i < positions.size(); i++)
+		{
+			bh = (PosBottomHalf)positions.elementAt(i);
+			bh.offset += length;
+		}
+	} //}}}
+
+	//{{{ updatePositionsForRemove() method
+	private void updatePositionsForRemove(int offset, int length)
+	{
+		if(positions.size() == 0)
+			return;
+
+		int start = 0;
+		int end = positions.size() - 1;
+
+		PosBottomHalf bh;
+
+loop:		for(;;)
+		{
+			switch(end - start)
+			{
+			case 0:
+				break loop;
+			case 1:
+				bh = (PosBottomHalf)positions.elementAt(start);
+				if(bh.offset < offset)
+					start++;
+				break loop;
+			default:
+				int pivot = (start + end) / 2;
+				bh = (PosBottomHalf)positions.elementAt(pivot);
+				if(bh.offset > offset)
+					end = pivot - 1;
+				else
+					start = pivot + 1;
+				break;
+			}
+		}
+
+		for(int i = start; i < positions.size(); i++)
+		{
+			bh = (PosBottomHalf)positions.elementAt(i);
+			if(bh.offset < offset + length)
+				bh.offset = offset;
+			else
+				bh.offset -= length;
+		}
+	} //}}}
+
 	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ PosTopHalf class
+	static class PosTopHalf implements Position
+	{
+		PosBottomHalf bh;
+
+		//{{{ PosTopHalf constructor
+		PosTopHalf(PosBottomHalf bh)
+		{
+			this.bh = bh;
+			bh.ref();
+		} //}}}
+
+		//{{{ getOffset() method
+		public int getOffset()
+		{
+			return bh.offset;
+		} //}}}
+
+		//{{{ finalize() method
+		public void finalize()
+		{
+			bh.unref();
+		} //}}}
+	} //}}}
+
+	//{{{ PosBottomHalf class
+	class PosBottomHalf
+	{
+		int offset;
+		int ref;
+
+		//{{{ PosBottomHalf constructor
+		PosBottomHalf(int offset)
+		{
+			this.offset = offset;
+		} //}}}
+
+		//{{{ ref() method
+		void ref()
+		{
+			ref++;
+		} //}}}
+
+		//{{{ unref() method
+		void unref()
+		{
+			ref--;
+			if(ref == 0)
+				positions.removeElement(this);
+		} //}}}
+	} //}}}
 }

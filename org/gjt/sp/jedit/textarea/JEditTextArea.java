@@ -257,7 +257,7 @@ public class JEditTextArea extends JComponent
 
 		foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
-		maxHorizontalScrollWidth = 0;
+		maxHorizontalScrollWidth = -1;
 
 		painter.updateTabSize();
 
