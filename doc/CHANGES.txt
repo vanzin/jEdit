@@ -25,6 +25,7 @@ JEDIT 4.0 VERSION HISTORY
 - Macros.confirm() method added, for use in macros
 - BBj (Business Basic based on Java) syntax highlighting (Thomas Bock)
 - BibTeX syntax highlighting (Nils Krahnstoever)
+- Option added to sort recent file list by name
 
 + Enhancements
 
@@ -91,7 +92,6 @@ JEDIT 4.0 VERSION HISTORY
 + API Changes
 
 - New methods in jEdit class for accessing properties:
-
   jEdit.getIntegerProperty(String name, int def);
   jEdit.setIntegerProperty(String name, int value);
   jEdit.getFontProperty(String name);
@@ -100,9 +100,6 @@ JEDIT 4.0 VERSION HISTORY
   jEdit.getColorProperty(String name);
   jEdit.getColorProperty(String name, Color def);
   jEdit.setColorProperty(String name, Color value);
-
-- jEdit.addAction() method removed. Plugins not using the jEdit 3.0
-  action API will need to be updated.
 - VariableGridLayout is now used to lay out tool bars, instead of
   BoxLayout. This means it is no longer necessary to add a
   Box.createGlue() to the tool bar to prevent it from being centered.
@@ -113,3 +110,9 @@ JEDIT 4.0 VERSION HISTORY
   instead)
   GUIUtilities.loadToolBarIcon() (use loadIcon instead)
   GUIUtilities.showFileDialog() (use showVFSFileDialog() instead)
+- Removed these APIs, which have been deprecated since jEdit 3.0:
+  jEdit.addAction()
+  EditAction.actionPerformed()
+  EditAction.isSelected(Component)
+  EditAction.getView(EventObject)
+  EditAction.getBuffer(EventObject)

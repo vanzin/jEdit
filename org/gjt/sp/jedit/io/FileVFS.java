@@ -34,7 +34,6 @@ import org.gjt.sp.util.Log;
  */
 public class FileVFS extends VFS
 {
-	public static final String BACKED_UP_PROPERTY = "FileVFS__backedUp";
 	public static final String PERMISSIONS_PROPERTY = "FileVFS__perms";
 
 	public FileVFS()

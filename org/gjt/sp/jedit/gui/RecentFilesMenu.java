@@ -75,6 +75,9 @@ public class RecentFilesMenu extends EnhancedMenu
 				return;
 			}
 
+			Vector menuItems = new Vector();
+			boolean sort = jEdit.getBooleanProperty("sortRecent");
+
 			/*
 			 * While recentVector has 50 entries or so, we only display
 			 * a few of those in the menu (otherwise it will be way too
@@ -94,7 +97,21 @@ public class RecentFilesMenu extends EnhancedMenu
 				menuItem.setActionCommand(path);
 				menuItem.addActionListener(actionListener);
 				menuItem.addMouseListener(mouseListener);
-				add(menuItem);
+
+				if(sort)
+					menuItems.addElement(menuItem);
+				else
+					add(menuItem);
+			}
+
+			if(sort)
+			{
+				MiscUtilities.quicksort(menuItems,
+					new MiscUtilities.MenuItemCompare());
+				for(int i = 0; i < menuItems.size(); i++)
+				{
+					add((JMenuItem)menuItems.elementAt(i));
+				}
 			}
 		}
 

@@ -50,13 +50,28 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortBuffers = new JCheckBox(jEdit.getProperty(
 			"options.general.sortBuffers"));
 		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
+		sortBuffers.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				sortByName.setEnabled(sortBuffers.isSelected());
+			}
+		});
+
 		addComponent(sortBuffers);
 
 		/* Sort buffers by names */
 		sortByName = new JCheckBox(jEdit.getProperty(
 			"options.general.sortByName"));
 		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
+		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
+
+		/* Sort recent file list */
+		sortRecent = new JCheckBox(jEdit.getProperty(
+			"options.general.sortRecent"));
+		sortRecent.setSelected(jEdit.getBooleanProperty("sortRecent"));
+		addComponent(sortRecent);
 
 		/* Check mod status on focus */
 		checkModStatus = new JCheckBox(jEdit.getProperty(
@@ -109,6 +124,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
+		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus
 			.isSelected());
 		jEdit.setBooleanProperty("view.showFullPath",showFullPath
@@ -149,6 +165,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox saveCaret;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
+	private JCheckBox sortRecent;
 	private JCheckBox checkModStatus;
 	private JCheckBox showFullPath;
 	private JCheckBox showSearchbar;
