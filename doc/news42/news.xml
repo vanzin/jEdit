@@ -123,8 +123,8 @@
 
 	<sect1 id="syntax"><title>Syntax Highlighting</title>
 	 <para>
-	 <!-- as of pre7, -->
-	  22 new syntax highlighting modes were added, and many existing ones were enhanced.
+	 <!-- as of pre9, -->
+	  27 new syntax highlighting modes were added, and many existing ones were enhanced. jEdit now supports syntax highlighting for 118 languages.
 	 </para>
 	 <para>
 	  The following new token types were added:
@@ -138,7 +138,7 @@
 	 </itemizedlist>
 	 <para>
 	  Any capture groups defined in the <literal>SPAN_REGEXP</literal>
-	  element's <literal>BEGIN</literal> child are now substituted into the <literal>END</literal> child for matching purposes. This allows here-docs in langauges such as Perl to be highlighted correctly.
+	  element's <literal>BEGIN</literal> child are now substituted into the <literal>END</literal> child for matching purposes. This allows here-docs in languages such as Perl to be highlighted correctly.
 	 </para>
 	 <para>
 	  A new <literal>NO_ESCAPE</literal> attribute has been added to the <literal>SPAN</literal> and <literal>SPAN_REGEXP</literal> elements.
