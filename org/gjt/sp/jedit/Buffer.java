@@ -124,22 +124,6 @@ public class Buffer
 
 	//{{{ Input/output methods
 
-	//{{{ showInsertFileDialog() method
-	/**
-	 * Displays the 'insert file' dialog box and inserts the selected file
-	 * into the buffer.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public void showInsertFileDialog(View view)
-	{
-		String[] files = GUIUtilities.showVFSFileDialog(view,null,
-			VFSBrowser.OPEN_DIALOG,false);
-
-		if(files != null)
-			insertFile(view,files[0]);
-	} //}}}
-
 	//{{{ reload() method
 	/**
 	 * Reloads the buffer from disk, asking for confirmation if the buffer

@@ -105,9 +105,7 @@ public class FileRootsVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-		File file = new File(path);
-
-		return new RootsEntry(file);
+		return new RootsEntry(new File(path));
 	} //}}}
 
 	//{{{ Private members
@@ -174,47 +172,35 @@ public class FileRootsVFS extends VFS
 	{
 		RootsEntry(File file)
 		{
-			this.path = file.getPath();
+			// REMIND: calling isDirectory() on a floppy drive
+			// displays stupid I/O error dialog box on Windows
 
-			boolean isFloppy;
-			boolean isDirectory;
+			this.path = this.deletePath = file.getPath();
 
-			// to prevent windows looking for a disk in the floppy drive
-			if(isFloppyDrive != null)
+			if(isFloppy(file))
 			{
-				try
-				{
-					isFloppy = Boolean.TRUE.equals(isFloppyDrive.
-						invoke(fsView, new Object[] { file }));
-				}
-				catch(Exception e)
-				{
-					isFloppy = false;
-				}
-			}
-			else
-				isFloppy = path.startsWith("A:") || path.startsWith("B:");
-
-			// so an empty cd drive is not reported as a file
-			if(isDrive != null && !isFloppy)
-			{
-				try
-				{
-					isDirectory = Boolean.TRUE.equals(isDrive.
-						invoke(fsView, new Object[] { file }))
-						|| file.isDirectory();
-				}
-				catch(Exception e)
-				{
-					isDirectory = file.isDirectory();
-				}
-			}
-			else
-				isDirectory = file.isDirectory();
-
-			if(isFloppy)
 				type = VFS.DirectoryEntry.FILESYSTEM;
-			else if(isDirectory)
+				name = path;
+			}
+			else if(isDrive(file))
+			{
+				type = VFS.DirectoryEntry.FILESYSTEM;
+
+				if(getSystemDisplayName != null)
+				{
+					try
+					{
+						name = path + " " + (String)getSystemDisplayName
+							.invoke(fsView,new Object[] { file });
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.ERROR,this,e);
+						name = path;
+					}
+				}
+			}
+			else if(file.isDirectory())
 			{
 				type = VFS.DirectoryEntry.FILESYSTEM;
 
@@ -230,26 +216,14 @@ public class FileRootsVFS extends VFS
 					}
 					catch(Exception e) {}
 				}
+
+				if(OperatingSystem.isMacOS())
+					name = MiscUtilities.getFileName(path);
+				else
+					name = path;
 			}
 			else
 				type = VFS.DirectoryEntry.FILE;
-
-			if(getSystemDisplayName != null && !isFloppy)
-			{
-				try
-				{
-					name = path + " " + (String)getSystemDisplayName
-						.invoke(fsView,new Object[] { file });
-				}
-				catch(Exception e)
-				{
-					name = path;
-				}
-			}
-			else if(OperatingSystem.isMacOS())
-				name = MiscUtilities.getFileName(path);
-			else
-				name = path;
 		}
 
 		public String getExtendedAttribute(String name)
@@ -262,6 +236,46 @@ public class FileRootsVFS extends VFS
 				// etc.
 				return null;
 			}
+		}
+
+		private boolean isFloppy(File file)
+		{
+			// to prevent windows looking for a disk in the floppy drive
+			if(isFloppyDrive != null)
+			{
+				try
+				{
+					return Boolean.TRUE.equals(isFloppyDrive.
+						invoke(fsView, new Object[] { file }));
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,e);
+					return false;
+				}
+			}
+			else
+				return path.startsWith("A:") || path.startsWith("B:");
+		}
+
+		private boolean isDrive(File file)
+		{
+			// so an empty cd drive is not reported as a file
+			if(isDrive != null)
+			{
+				try
+				{
+					return Boolean.TRUE.equals(isDrive.
+						invoke(fsView, new Object[] { file }));
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,this,e);
+					return false;
+				}
+			}
+			else
+				return true;
 		}
 	} //}}}
 }

@@ -121,7 +121,7 @@ public class PositionManager
 		} //}}}
 
 		//{{{ finalize() method
-		public void finalize()
+		protected void finalize()
 		{
 			synchronized(PositionManager.this)
 			{

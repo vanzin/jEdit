@@ -57,7 +57,6 @@ public class ExplicitFoldHandler extends FoldHandler
 			return 0;
 		else
 		{
-			int tabSize = buffer.getTabSize();
 			int foldLevel = buffer.getFoldLevel(lineIndex - 1);
 
 			buffer.getLineText(lineIndex - 1,seg);

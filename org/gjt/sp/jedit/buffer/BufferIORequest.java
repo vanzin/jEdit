@@ -139,6 +139,8 @@ public class BufferIORequest extends WorkRequest
 		case INSERT:
 			insert();
 			break;
+		default:
+			throw new InternalError();
 		}
 	} //}}}
 

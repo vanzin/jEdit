@@ -136,6 +136,16 @@ public class MiscUtilities
 		// 2 aug 2003: OS/2 Java has a broken getCanonicalPath()
 		if(OperatingSystem.isOS2())
 			return path;
+		// 18 nov 2003: calling this on a drive letter on Windows causes
+		// drive access
+		if(OperatingSystem.isDOSDerived())
+		{
+			if(path.length() == 2 || path.length() == 3)
+			{
+				if(path.charAt(1) == ':')
+					return path;
+			}
+		}
 		try
 		{
 			return new File(path).getCanonicalPath();

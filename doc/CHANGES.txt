@@ -2,6 +2,9 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre7
 
+Thanks to Ollie Rutherfurd, Randy Hudson, Chris Petersen, Randolf Mock,
+Alessandro Falappa and Ben Williams for contributing to this release.
+
 {{{ Miscellaneous
 
 - The list of modes in various dialog boxes is now sorted (this does not
@@ -26,6 +29,10 @@ JEDIT 4.2 VERSION HISTORY
   is a three-byte signature (0xEFBBBF) at the beginning of the file.
   See http://oss.software.ibm.com/icu/docs/papers/forms_of_unicode/#t2.
   UTF-8Y files are automatically detected, just like UTF-16.
+
+- Removed File->Insert File command. As before, you can still invoke
+  File->Open and select "Insert" from a file's right-click menu in the
+  file system browser.
 
 }}}
 {{{ Syntax Highlighting
@@ -119,10 +126,21 @@ JEDIT 4.2 VERSION HISTORY
 - Changing the wrap mode didn't invalidate screen line counts, this
   could result in scrolling getting messed up.
 
+- Fixed NullPointerException when right-clicking on a drive root in the
+  file system browser on Windows.
+
+- Fixed floppy drive access when selecting a floppy drive in the drives
+  list on Windows.
+
+- Fixed a problem on some Windows versions where going to the drives
+  list would display an error message from the OS.
+
 }}}
 {{{ API Changes
 
 - MiscUtilities.getFileExtension() now works with path names too.
+
+- Removed BufferListener.wrapModeChanged() method.
 
 }}}
 

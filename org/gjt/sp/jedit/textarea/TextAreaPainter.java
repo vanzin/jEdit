@@ -33,7 +33,6 @@ import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
 //}}}
 

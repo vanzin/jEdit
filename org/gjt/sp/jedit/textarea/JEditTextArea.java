@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +37,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.Position;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.*;
@@ -5350,11 +5348,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static String CENTER = "center";
-	private static String RIGHT = "right";
-	private static String LEFT = "left";
-	private static String BOTTOM = "bottom";
-	private static String TOP = "top";
+	private static final String CENTER = "center";
+	private static final String RIGHT = "right";
+	private static final String LEFT = "left";
+	private static final String BOTTOM = "bottom";
+	private static final String TOP = "top";
 
 	private static Timer caretTimer;
 	private static Timer structureTimer;
@@ -5892,8 +5890,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ TextAreaBorder class
 	static class TextAreaBorder extends AbstractBorder
 	{
-		private static final Insets insets = new Insets(1, 1, 2, 2);
-
 		//{{{ paintBorder() method
 		public void paintBorder(Component c, Graphics g, int x, int y,
 			int width, int height)

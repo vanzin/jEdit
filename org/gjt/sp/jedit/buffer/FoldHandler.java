@@ -92,6 +92,12 @@ public abstract class FoldHandler
 			return getClass() == o.getClass();
 	} //}}}
 
+	//{{{ hashCode() method
+	public int hashCode()
+	{
+		return getClass().hashCode();
+	} //}}}
+
 	//{{{ registerFoldHandler() method
 	/**
 	 * @deprecated Write a <code>services.xml</code> file instead;
