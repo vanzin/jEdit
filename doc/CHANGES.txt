@@ -43,6 +43,9 @@ Thanks to Gerd Knops for contributing to this release.
 
 - Improved popup menu positioning code.
 
+- jEdit.get{Integer,Double}Property and Buffer.getIntegerProperty() no
+  longer barf if the property contains leading or trailing whitespace.
+
 + Bug Fixes:
 
 - Fixed default install path settings in installer when running on Unix.
@@ -73,6 +76,9 @@ Thanks to Gerd Knops for contributing to this release.
   Swing L&F was enabled.
 
 - 'Expand Fold Fully' command didn't work.
+
+- The 'gutter bracket highlight' setting in the Color option pane didn't
+  work.
 
 + API Changes:
 

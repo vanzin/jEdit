@@ -6143,10 +6143,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(dragStartOffset == getLineLength(dragStartLine))
 				dragStartOffset--;
 
+			boolean joinNonWordChars =
+				jEdit.getBooleanProperty("view.joinNonWordChars");
 			int wordStart = TextUtilities.findWordStart(lineText,
-				dragStartOffset,noWordSep);
+				dragStartOffset,noWordSep,joinNonWordChars);
 			int wordEnd = TextUtilities.findWordEnd(lineText,
-				dragStartOffset+1,noWordSep);
+				dragStartOffset+1,noWordSep,joinNonWordChars);
 
 			int lineStart = getLineStartOffset(dragStartLine);
 			addToSelection(new Selection.Range(lineStart + wordStart,
