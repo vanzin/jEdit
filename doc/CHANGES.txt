@@ -2,6 +2,16 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre9 -- 4.1 release candidate 1
 
+Thanks to Chris Petersen, Kris Kopicki and Reinout van Schouwen for
+contributing to this release.
+
++ Syntax Highlighting Changes:
+
+- Added gettext mode (primarily used on Unix for translating programs
+  to other languages.) (Reinout van Schouwen)
+
+- Updated PHP and Perl syntax highlighting (Chris Petersen).
+
 + Performance Enhancements:
 
 - Much faster auto indent.

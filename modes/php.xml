@@ -4,8 +4,8 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="indentOpenBrackets" VALUE="{(" />
-		<PROPERTY NAME="indentCloseBrackets" VALUE="})" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
@@ -202,6 +202,7 @@
 			<KEYWORD1>global</KEYWORD1>
 			<KEYWORD1>static</KEYWORD1>
 			<KEYWORD1>foreach</KEYWORD1>
+			<KEYWORD1>as</KEYWORD1>
 			<KEYWORD1>endforeach</KEYWORD1>
 			<KEYWORD1>extends</KEYWORD1>
 			<KEYWORD1>empty</KEYWORD1>
