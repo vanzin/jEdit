@@ -1241,16 +1241,21 @@ public class GUIUtilities
 		// Query plugins for menu items
 		Vector pluginMenuItems = new Vector();
 
-		EditPlugin[] pluginArray = jEdit.getPlugins();
+		PluginJAR[] pluginArray = jEdit.getPluginJARs();
 		for(int i = 0; i < pluginArray.length; i++)
 		{
-			EditPlugin plugin = pluginArray[i];
+			PluginJAR jar = pluginArray[i];
+			EditPlugin plugin = jar.getPlugin();
+			if(plugin == null)
+				continue;
 
 			JMenuItem menuItem = plugin.createMenuItems();
 			if(menuItem != null)
 				pluginMenuItems.add(menuItem);
 			//{{{ old API
-			else
+			else if(jEdit.getProperty("plugin."
+				+ plugin.getClassName()
+				+ ".activate") == null)
 			{
 				try
 				{
@@ -1271,7 +1276,10 @@ public class GUIUtilities
 
 		if(pluginMenuItems.isEmpty())
 		{
-			menu.add(GUIUtilities.loadMenuItem("no-plugins"));
+			JMenuItem menuItem = new JMenuItem(
+				jEdit.getProperty("no-plugins.label"));
+			menuItem.setEnabled(false);
+			menu.add(menuItem);
 			mbar.add(menu);
 			return;
 		}

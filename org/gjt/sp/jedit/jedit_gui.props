@@ -44,6 +44,10 @@ action-set.plugin=Plugin: {0}
 
 macro-handler.beanshell.label=BeanShell script
 macro-handler.beanshell.glob=*.bsh
+
+# Plugin activation hooks
+defer=false
+startup=true
 #}}}
 
 #{{{ Tool bar

@@ -1,6 +1,6 @@
 /*
  * LatestVersionPlugin.java - Latest Version Check Plugin
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,16 +20,10 @@
 import javax.swing.JOptionPane;
 import java.io.*;
 import java.net.URL;
-import java.util.Vector;
 import org.gjt.sp.jedit.*;
 
 public class LatestVersionPlugin extends EditPlugin
 {
-	public void createMenuItems(Vector menuItems)
-	{
-		menuItems.addElement(GUIUtilities.loadMenuItem("version-check"));
-	}
-
 	public static void doVersionCheck(View view)
 	{
 		view.showWaitCursor();

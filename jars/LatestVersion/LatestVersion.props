@@ -1,9 +1,13 @@
+plugin.LatestVersionPlugin.activate=defer
+
 plugin.LatestVersionPlugin.name=Latest Version Check
 plugin.LatestVersionPlugin.author=Slava Pestov
-plugin.LatestVersionPlugin.version=1.3.8
+plugin.LatestVersionPlugin.version=1.4
 plugin.LatestVersionPlugin.docs=LatestVersion.html
 
-plugin.LatestVersionPlugin.depend.0=jedit 03.01.03.00
+plugin.LatestVersionPlugin.depend.0=jedit 04.02.01.00
+
+plugin.LatestVersionPlugin.menu-item=version-check
 
 version-check.label=Check jEdit Version
 
