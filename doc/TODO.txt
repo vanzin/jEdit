@@ -18,20 +18,16 @@ and quirks that I need to fix eventually.
 [error] 	at java.lang.reflect.Method.invoke(Method.java:324)
 
 - finish regexp syntax rules -- SPAN::END substitution
-- why is binding F2 to 'build last target' broken?
 - narrow to one line: select all: blows up
 - C+[ -vs- C+OPEN_BRACKET
 - close current area doesn't work
-- favorites menu position of too far to the right
 - use createMultilineLabel()
 - memory indicator color settings lost in limbo
 - rect select somewhat fucked
 - A+# on OS X, need better modifier mapping on OS X
 - load/save geometry: check for out of bounds
-- ${ in Perl
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - try typing foo), put cursor after foo, type some more -- slowdown
-- fsb: rename in place
 - eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks
