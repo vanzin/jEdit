@@ -130,6 +130,8 @@ public class JEditTextArea extends JComponent
 		// when setting the initial caret position for a buffer
 		// (eg, from the recent file list)
 		focusedComponent = this;
+
+		popupEnabled = true;
 	} //}}}
 
 	//{{{ dispose() method
@@ -321,25 +323,6 @@ public class JEditTextArea extends JComponent
 	public final boolean isEditable()
 	{
 		return buffer.isEditable();
-	} //}}}
-
-	//{{{ getRightClickPopup() method
-	/**
-	 * Returns the right click popup menu.
-	 */
-	public final JPopupMenu getRightClickPopup()
-	{
-		return popup;
-	} //}}}
-
-	//{{{ setRightClickPopup() method
-	/**
-	 * Sets the right click popup menu.
-	 * @param popup The popup
-	 */
-	public final void setRightClickPopup(JPopupMenu popup)
-	{
-		this.popup = popup;
 	} //}}}
 
 	//{{{ getDragAndDropCallback() method
@@ -4791,6 +4774,76 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//}}}
 
+	//{{{ Right click popup
+
+	//{{{ isRightClickPopupEnabled() method
+	/**
+	 * Returns if the right click popup menu is enabled. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public boolean isRightClickPopupEnabled()
+	{
+		return popupEnabled;
+	} //}}}
+
+	//{{{ setRightClickPopupEnabled() method
+	/**
+	 * Sets if the right click popup menu is enabled. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public void setRightClickPopupEnabled(boolean popupEnabled)
+	{
+		this.popupEnabled = popupEnabled;
+	} //}}}
+
+	//{{{ getRightClickPopup() method
+	/**
+	 * Returns the right click popup menu.
+	 */
+	public final JPopupMenu getRightClickPopup()
+	{
+		return popup;
+	} //}}}
+
+	//{{{ setRightClickPopup() method
+	/**
+	 * Sets the right click popup menu.
+	 * @param popup The popup
+	 */
+	public final void setRightClickPopup(JPopupMenu popup)
+	{
+		this.popup = popup;
+	} //}}}
+
+	//{{{ handlePopupTrigger() method
+	/**
+	 * Do the same thing as right-clicking on the text area. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public void handlePopupTrigger(MouseEvent evt)
+	{
+		if(popup.isVisible())
+			popup.setVisible(false);
+		else
+		{
+			int x = evt.getX();
+			int y = evt.getY();
+
+			int dragStart = xyToOffset(x,y,
+				!(painter.isBlockCaretEnabled()
+				|| isOverwriteEnabled()));
+
+			if(getSelectionCount() == 0 || multi)
+				moveCaretPosition(dragStart,false);
+			GUIUtilities.showPopupMenu(popup,painter,x,y);
+		}
+	} //}}}
+
+	//}}}
+
 	//{{{ AWT stuff
 
 	//{{{ addLeftOfScrollBar() method
@@ -5508,6 +5561,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private TextAreaPainter painter;
 
 	private JPopupMenu popup;
+	private boolean popupEnabled;
 
 	private EventListenerList listenerList;
 	private MutableCaretEvent caretEvent;
@@ -6504,15 +6558,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(GUIUtilities.isPopupTrigger(evt) && popup != null)
 			{
-				if(popup.isVisible())
-					popup.setVisible(false);
-				else
-				{
-					if(getSelectionCount() == 0 || multi)
-						moveCaretPosition(dragStart,false);
-					GUIUtilities.showPopupMenu(popup,painter,
-						evt.getX(),evt.getY());
-				}
+				if(popupEnabled)
+					handlePopupTrigger(evt);
 				return;
 			}
 
