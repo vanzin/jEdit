@@ -110,13 +110,21 @@ class BufferPrintable extends WorkRequest implements Printable
 		lineList.clear();
 		currentLine = 0;
 
+		Graphics2D gfx = (Graphics2D)_gfx;
+		gfx.setFont(font);
+
 		System.err.println("getting pageIndex = " + pageIndex
 			+ ", currentPage = " + currentPage
 			+ ", currentPageStart = " + currentPageStart
 			+ ", currentPhysicalLine = " + currentPhysicalLine
 			+ ", end = " + end);
-		System.err.println(((Graphics2D)_gfx).getFontRenderContext());
-		System.err.println(((Graphics2D)_gfx).getTransform());
+		System.err.println(gfx.getFontRenderContext());
+		System.err.println(gfx.getTransform());
+		System.err.println(gfx.getFontMetrics().stringWidth(
+			"hello world this is a test string!!!"));
+		System.err.println(gfx.getFont().getStringBounds(
+			"hello world this is a test string!!!",
+				gfx.getFontRenderContext()).getWidth());
 		if(pageIndex != currentPage)
 		{
 			currentPageStart = currentPhysicalLine;
@@ -144,10 +152,6 @@ class BufferPrintable extends WorkRequest implements Printable
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
-
-		Graphics2D gfx = (Graphics2D)_gfx;
-
-		gfx.setFont(font);
 
 		if(header)
 		{
