@@ -132,6 +132,16 @@ int getExpandedLength(String text, int virtualLineOffset) {
 
 
 void verticalPaste() {
+	/*
+	 * Guard for readonly files becuase Buffer.insert()
+	 * ignores the flag
+	 *
+	 */
+	if(buffer.isReadOnly())
+	{
+		Macros.error(view, "This file is read only.");
+		return;
+	}
     String verticalText = Registers.getRegister('$').toString();
 
     final int firstLine = textArea.getCaretLine();
