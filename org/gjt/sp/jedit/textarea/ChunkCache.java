@@ -26,7 +26,9 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.util.*;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -148,11 +150,11 @@ class ChunkCache
 	void setBuffer(Buffer buffer)
 	{
 		this.buffer = buffer;
-		this.firstLine = 0;
+		lastScreenLine = lastScreenLineP = -1;
+		skew = 0;
 	} //}}}
 
 	//{{{ setFirstLine() method
-	public static boolean DEBUG = false;
 	/**
 	 * This method takes care of shifting the cached tokens so that
 	 * scrolling doesn't cause all visible lines, only newly exposed
@@ -160,27 +162,27 @@ class ChunkCache
 	 */
 	void setFirstLine(int firstLine, int physFirstLine, int skew)
 	{
-		if(DEBUG)
+		/* if(Debug.CHUNK_CACHE_DEBUG)
 		{
-			System.err.println("old: " + this.firstLine + ",new: " +
+			Log.log(Log.DEBUG,this,"old: " + this.firstLine + ",new: " +
 				firstLine + ",phys: " + physFirstLine);
-		}
+		} */
 
-		int visibleLines = textArea.getVisibleLines();
-		if(firstLine == this.firstLine)
-			/* do nothing */;
+		//int visibleLines = textArea.getVisibleLines();
+		//if(firstLine == this.firstLine)
+		//	/* do nothing */;
 		// rely on the fact that when we're called physLastLine not updated yet
-		else if(firstLine >= this.firstLine + visibleLines
-			|| firstLine <= this.firstLine - visibleLines)
+		//else if(firstLine >= this.firstLine + visibleLines
+		//	|| firstLine <= this.firstLine - visibleLines)
 		{
-			if(DEBUG)
-				System.err.println("too far");
-			for(int i = 0; i < visibleLines; i++)
+			if(Debug.CHUNK_CACHE_DEBUG)
+				Log.log(Log.DEBUG,this,"too far");
+			for(int i = 0; i < lineInfo.length; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
 		}
-		else if(firstLine > this.firstLine)
+		/* else if(firstLine > this.firstLine)
 		{
 			boolean invalidateAll = false;
 
@@ -217,7 +219,7 @@ class ChunkCache
 				// be invalidated.
 				for(int i = visibleLines - 1; i >= 0; i--)
 				{
-					if(DEBUG)
+					if(Debug.CHUNK_CACHE_DEBUG)
 					{
 						System.err.println("Scan " + i);
 					}
@@ -288,10 +290,9 @@ class ChunkCache
 				System.err.println("t.f > f: only " + firstScreenLine
 					+ " need updates");
 			}
-		}
+		} */
 
 		lastScreenLine = lastScreenLineP = -1;
-		this.firstLine = firstLine;
 		this.skew = skew;
 	} //}}}
 
@@ -558,7 +559,6 @@ class ChunkCache
 	//{{{ Instance variables
 	private JEditTextArea textArea;
 	private Buffer buffer;
-	private int firstLine;
 	private int skew;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
@@ -616,7 +616,7 @@ class ChunkCache
 
 		for(int i = lastScreenLine; i >= 0; i--)
 		{
-			if(lineInfo[i].chunksValid)
+			if(lineInfo[i].chunksValid && lineInfo[i].lastSubregion)
 			{
 				firstScreenLine = i + 1;
 				break;
@@ -642,6 +642,12 @@ class ChunkCache
 					.displayManager
 					.getNextVisibleLine(prevPhysLine);
 			}
+		}
+
+		if(Debug.CHUNK_CACHE_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"Updating chunks from " + firstScreenLine
+				+ " to " + lastScreenLine);
 		}
 
 		// Note that we rely on the fact that when a physical line is
@@ -692,9 +698,19 @@ class ChunkCache
 				{
 					buffer.setScreenLineCount(
 						physicalLine,out.size());
+					if(skew > out.size())
+					{
+						needFullRepaint = true;
+						lastScreenLine = lineInfo.length - 1;
+					}
+					else if(skew != 0 && i == firstScreenLine)
+					{
+						for(int j = 0; j < skew; j++)
+							out.remove(0);
+					}
 					chunks = (Chunk)out.get(0);
 					out.remove(0);
-					offset = 0;
+					offset = chunks.offset;
 					if(out.size() != 0)
 						length = ((Chunk)out.get(0)).offset - offset;
 					else

@@ -225,10 +225,11 @@ public class ActionBar extends JPanel
 	//{{{ getCompletions() method
 	private EditAction[] getCompletions(String str)
 	{
+		str = str.toLowerCase();
 		ArrayList returnValue = new ArrayList(actions.length);
 		for(int i = 0; i < actions.length; i++)
 		{
-			if(actions[i].getName().indexOf(str) != -1)
+			if(actions[i].getName().toLowerCase().indexOf(str) != -1)
 				returnValue.add(actions[i]);
 		}
 

@@ -265,6 +265,7 @@ selection=select-none \
 	  - \
 	  invert-selection \
 	  toggle-multi-select \
+	  toggle-rect-select \
 	  - \
           select-line-range
 selection.label=More $Selection
@@ -274,7 +275,8 @@ select-line.label=Select $Line
 select-paragraph.label=Select $Paragraph
 invert-selection.label=$Invert Selection
 toggle-multi-select.label=$Multiple Selection
-select-line-range.label=Select Line $Range...
+toggle-rect-select.label=$Rectangular Selection
+select-line-range.label=Sele$ct Line Range...
 #}}}
 
 #{{{ Text menu
@@ -710,43 +712,43 @@ view.gutter.marker=Marker: {0}
 #}}}
 
 #{{{ Status messages
-view.status.recording=Macro recording
-view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
-view.status.cut-string-register=Enter register name to cut to
+view.status.add-marker=Enter shortcut for new marker
+view.status.auto-wrap=Search string not found; wrapping around!
+view.status.bracket=Matches "{0}"
+view.status.caret-tooltip=Line and column number indicator
+view.status.copy-append-string-register=Enter register name to copy append to
 view.status.copy-string-register=Enter register name to copy to
 view.status.cut-append-string-register=Enter register name to cut append to
-view.status.copy-append-string-register=Enter register name to copy append to
-view.status.paste-string-register=Enter register name to paste from
-view.status.vertical-paste-string-register=Enter register name to vertical paste from
-view.status.add-marker=Enter shortcut for new marker
-view.status.goto-marker=Enter shortcut of marker to go to
-view.status.select-marker=Enter shortcut of marker to select to
-view.status.swap-marker=Enter shortcut of marker to swap caret position with
+view.status.cut-string-register=Enter register name to cut to
 view.status.expand-folds=Press 1-9 to specify fold level
+view.status.goto-marker=Enter shortcut of marker to go to
+view.status.incomplete-abbrev={0} parameter(s) specified, but {1} required!
 view.status.insert-literal=Press key to insert literally
-view.status.auto-wrap=Search string not found; wrapping around!
-view.status.search-not-found=Search string not found!
-view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
-view.status.io=I/O: {0} operations in progress
 view.status.io-1=I/O: 1 operation in progress
 view.status.io.done=Input/output complete
-view.status.caret-tooltip=Line and column number indicator
-view.status.mode-tooltip=Current edit mode, fold mode, and encoding
-view.status.wrap-tooltip=Word wrap mode (click to change)
-view.status.wrap-changed=Word wrap mode is now "{0}"
-view.status.multi-tooltip=Multiple selection indicator (click to change)
-view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
-view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
-view.status.overwrite-changed=Overwrite mode is {0,choice,0#off|1#on}
-view.status.linesep-tooltip=Line separator (click to change)
+view.status.io=I/O: {0} operations in progress
 view.status.linesep-changed=Line separator set to {0}
+view.status.linesep-tooltip=Line separator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
+view.status.mode-tooltip=Current edit mode, fold mode, and encoding
+view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
+view.status.multi-tooltip=Multiple selection indicator (click to change)
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
-view.status.bracket=Matches "{0}"
+view.status.overwrite-changed=Overwrite mode is {0,choice,0#off|1#on}
+view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
+view.status.paste-string-register=Enter register name to paste from
+view.status.print=Printing page {0}
 view.status.quick-copy=Quick copy mode - marked text will replace selection
+view.status.recording=Macro recording
 view.status.rect-quick-copy=Rectangular quick copy mode - marked text will replace selection
 view.status.rect-select=Rectangular selection mode
-view.status.print=Printing page {0}
+view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
+view.status.search-not-found=Search string not found!
+view.status.select-marker=Enter shortcut of marker to select to
+view.status.swap-marker=Enter shortcut of marker to swap caret position with
+view.status.vertical-paste-string-register=Enter register name to vertical paste from
+view.status.wrap-changed=Word wrap mode is now "{0}"
+view.status.wrap-tooltip=Word wrap mode (click to change)
 #}}}
 
 #{{{ Status bar component visibility

@@ -29,6 +29,7 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.Debug;
 //}}}
 
 /**
@@ -38,21 +39,17 @@ import org.gjt.sp.jedit.syntax.*;
  */
 public class Chunk extends Token
 {
-	public static boolean DEBUG = false;
-	public static boolean PAINT_MODE_WORKAROUND = false;
-
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
-	 * @param lineText The line text
 	 * @param chunks The chunk list
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
 	 * @return The width of the painted text
-	 * @since jEdit 4.1pre1
+	 * @since jEdit 4.2pre1
 	 */
-	public static float paintChunkList(Segment lineText, Chunk chunks,
+	public static float paintChunkList(Chunk chunks,
 		Graphics2D gfx, float x, float y, boolean glyphVector)
 	{
 		Rectangle clipRect = gfx.getClipBounds();
@@ -66,7 +63,7 @@ public class Chunk extends Token
 				&& x + _x < clipRect.x + clipRect.width)
 			{
 				// Useful for debugging purposes
-				if(DEBUG)
+				if(Debug.CHUNK_PAINT_DEBUG)
 				{
 					gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
 						chunks.width,10));
@@ -76,15 +73,12 @@ public class Chunk extends Token
 				{
 					gfx.setFont(chunks.style.getFont());
 					gfx.setColor(chunks.style.getForegroundColor());
-                                        
+
 					if(glyphVector && chunks.gv != null)
 						gfx.drawGlyphVector(chunks.gv,x + _x,y);
-					else
+					else if(chunks.str != null)
 					{
-						gfx.drawChars(lineText.array,
-							lineText.offset
-							+ chunks.offset,
-							chunks.length,
+						gfx.drawString(chunks.str,
 							(int)(x + _x),(int)y);
 					}
 				}
@@ -218,6 +212,7 @@ public class Chunk extends Token
 	public Color background;
 	public float width;
 	public GlyphVector gv;
+	public String str;
 	//}}}
 
 	//{{{ Chunk constructor
@@ -327,12 +322,13 @@ public class Chunk extends Token
 		else if(charWidth != 0)
 		{
 			visible = monospaced = true;
+			str = new String(seg.array,seg.offset + offset,length);
 			width = charWidth * length;
 		}
 		else
 		{
 			visible = true;
-			String str = new String(seg.array,seg.offset + offset,length);
+			str = new String(seg.array,seg.offset + offset,length);
 			gv = style.getFont().createGlyphVector(
 				fontRenderContext,str);
 			width = (float)gv.getLogicalBounds().getWidth();

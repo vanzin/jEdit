@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.buffer;
 import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.LongArray;
 import org.gjt.sp.util.Log;
 //}}}
@@ -679,8 +680,8 @@ public class OffsetManager
 		{
 			//if(gapWidth != 0)
 			{
-				//if(DEBUG && gapLine != lineCount)
-				//	System.err.println(method + ": update from " + gapLine + " to " + lineCount);
+				if(Debug.OFFSET_DEBUG && gapLine != lineCount)
+					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + lineCount);
 				for(int i = gapLine; i < lineCount; i++)
 					setLineEndOffset(i,getLineEndOffset(i));
 			}
@@ -691,8 +692,8 @@ public class OffsetManager
 		{
 			//if(gapWidth != 0)
 			{
-				//if(DEBUG && newGapLine != gapLine)
-				//	System.err.println(method + ": update from " + newGapLine + " to " + gapLine);
+				if(Debug.OFFSET_DEBUG && newGapLine != gapLine)
+					Log.log(Log.DEBUG,this,method + ": update from " + newGapLine + " to " + gapLine);
 				for(int i = newGapLine; i < gapLine; i++)
 					setLineEndOffset(i,getLineEndOffset(i) - gapWidth);
 			}
@@ -702,8 +703,8 @@ public class OffsetManager
 		{
 			//if(gapWidth != 0)
 			{
-				//if(DEBUG && gapLine != newGapLine)
-				//	System.err.println(method + ": update from " + gapLine + " to " + newGapLine);
+				if(Debug.OFFSET_DEBUG && gapLine != newGapLine)
+					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + newGapLine);
 				for(int i = gapLine; i < newGapLine; i++)
 					setLineEndOffset(i,getLineEndOffset(i));
 			}

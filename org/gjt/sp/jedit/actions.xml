@@ -1217,6 +1217,15 @@
 	</IS_SELECTED>
 </ACTION>
 
+<ACTION NAME="toggle-rect-select">
+	<CODE>
+		textArea.toggleRectangularSelectionEnabled();
+	</CODE>
+	<IS_SELECTED>
+		return textArea.isRectangularSelectionEnabled();
+	</IS_SELECTED>
+</ACTION>
+
 <ACTION NAME="toggle-synchro-scroll">
 	<CODE>
 		view.toggleSynchroScrollEnabled();

@@ -274,12 +274,11 @@ public class JEditTextArea extends JComponent
 			}
 			this.buffer = buffer;
 
-			displayManager = new DisplayManager(buffer,this);
-
 			buffer.addBufferChangeListener(bufferHandler);
 			bufferHandlerInstalled = true;
 
 			chunkCache.setBuffer(buffer);
+			displayManager = new DisplayManager(buffer,this);
 
 			propertiesChanged();
 
@@ -1645,9 +1644,11 @@ forward_scan:		do
 	 */
 	public void extendSelection(int offset, int end)
 	{
+		boolean rect;
 		Selection s = getSelectionAtOffset(offset);
 		if(s != null)
 		{
+			rect = (s instanceof Selection.Rect);
 			invalidateLineRange(s.startLine,s.endLine);
 			selection.removeElement(s);
 
@@ -1661,6 +1662,8 @@ forward_scan:		do
 				offset = s.start;
 			}
 		}
+		else
+			rect = rectangularSelectionMode;
 
 		if(end < offset)
 		{
@@ -1669,7 +1672,11 @@ forward_scan:		do
 			offset = tmp;
 		}
 
-		_addToSelection(new Selection.Range(offset,end));
+		if(rect)
+			s = new Selection.Rect(offset,end);
+		else
+			s = new Selection.Range(offset,end);
+		_addToSelection(s);
 		fireCaretEvent();
 	} //}}}
 
@@ -3470,6 +3477,51 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		painter.repaint();
 	} //}}}
 
+	//{{{ isRectangularSelectionEnabled() method
+	/**
+	 * Returns if rectangular selection is enabled.
+	 * @since jEdit 4.2pre1
+	 */
+	public final boolean isRectangularSelectionEnabled()
+	{
+		return rectangularSelectionMode;
+	} //}}}
+
+	//{{{ toggleRectangularSelectionEnabled() method
+	/**
+	 * Toggles rectangular selection.
+	 * @since jEdit 4.2pre1
+	 */
+	public final void toggleRectangularSelectionEnabled()
+	{
+		setRectangularSelectionEnabled(!rectangularSelectionMode);
+		if(view.getStatus() != null)
+		{
+			view.getStatus().setMessageAndClear(
+				jEdit.getProperty("view.status.rect-select",
+				new Integer[] { new Integer(rectangularSelectionMode ? 1 : 0) }));
+		}
+	} //}}}
+
+	//{{{ setRectangularSelectionEnabled() method
+	/**
+	 * Set rectangular selection on or off according to the value of
+	 * <code>rectangularSelectionMode</code>. This only affects the ability
+	 * to make multiple selections from the keyboard. A rectangular selection
+	 * can always be created by dragging with the mouse by holding down
+	 * <b>Control</b>, regardless of the state of this flag.
+	 *
+	 * @param multi Should rectangular selection be enabled?
+	 * @since jEdit 4.2pre1
+	 */
+	public final void setRectangularSelectionEnabled(boolean rectangularSelectionMode)
+	{
+		this.rectangularSelectionMode = rectangularSelectionMode;
+		if(view.getStatus() != null)
+			view.getStatus().updateMiscStatus();
+		painter.repaint();
+	} //}}}
+
 	//}}}
 
 	//{{{ Markers
@@ -4407,9 +4459,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ processKeyEvent() method
+
 	// debug code to measure key delay
 	long time;
-	boolean timing;
 
 	public void processKeyEvent(KeyEvent evt)
 	{
@@ -4892,6 +4944,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private boolean multi;
 	private boolean overwrite;
+	private boolean rectangularSelectionMode;
 
 	private int maxLineLen;
 	//}}}
@@ -5556,26 +5609,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				Selection s = (Selection)selection.elementAt(i);
 
-				boolean changed = false;
-
-				if((s instanceof Selection.Rect && s.start > start)
-					|| (s instanceof Selection.Range && s.start >= start))
-				{
-					s.start += length;
-					if(numLines != 0)
-						s.startLine = getLineOfOffset(s.start);
-					changed = true;
-				}
-
-				if(s.end >= start)
-				{
-					s.end += length;
-					if(numLines != 0)
-						s.endLine = getLineOfOffset(s.end);
-					changed = true;
-				}
-
-				if(changed)
+				if(s.contentInserted(buffer,startLine,start,
+					numLines,length))
 				{
 					delayedRepaintStart = Math.min(
 						delayedRepaintStart,
@@ -5617,55 +5652,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			repaintAndScroll(startLine,-numLines);
 			_recalculateLastPhysicalLine(-numLines);
 
-			int end = start + length;
-
 			//{{{ resize selections if necessary
 			for(int i = 0; i < selection.size(); i++)
 			{
 				Selection s = (Selection)selection.elementAt(i);
 
-				boolean changed = false;
-
-				if(s.start > start && s.start <= end)
-				{
-					s.start = start;
-					changed = true;
-				}
-				else if(s.start > end)
-				{
-					s.start -= length;
-					changed = true;
-				}
-
-				if(s.end > start && s.end <= end)
-				{
-					s.end = start;
-					changed = true;
-				}
-				else if(s.end > end)
-				{
-					s.end -= length;
-					changed = true;
-				}
+				int oldStartLine = s.startLine;
+				int oldEndLine = s.endLine;
+				boolean changed = s.contentRemoved(buffer,
+					startLine,start,numLines,length);
 
 				if(s.start == s.end)
 				{
 					selection.removeElement(s);
 					delayedRepaintStart = Math.min(
 						delayedRepaintStart,
-						s.startLine);
+						oldStartLine);
 					delayedRepaintEnd = Math.max(
 						delayedRepaintEnd,
-						s.endLine);
+						oldEndLine);
 					i--;
 				}
 				else if(changed)
 				{
-					if(numLines != 0)
-					{
-						s.startLine = getLineOfOffset(s.start);
-						s.endLine = getLineOfOffset(s.end);
-					}
 					delayedRepaintStart = Math.min(
 						delayedRepaintStart,
 						s.startLine);
@@ -5680,10 +5689,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// text area caret position is invalid.
 			int oldFirstLine = getFirstLine();
 
-			if(caret > start && caret <= end)
-				moveCaretPosition(start,false);
-			else if(caret > end)
-				moveCaretPosition(caret - length,false);
+			if(caret > start)
+			{
+				if(caret <= start + length)
+					moveCaretPosition(start,false);
+				else
+					moveCaretPosition(caret - length,false);
+			}
 			else
 			{
 				// will update bracket highlight
@@ -5823,23 +5835,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			grabFocus();
 			focusedComponent = JEditTextArea.this;
 
-			if(GUIUtilities.isPopupTrigger(evt) && popup != null)
-			{
-				if(popup.isVisible())
-					popup.setVisible(false);
-				else
-				{
-					GUIUtilities.showPopupMenu(popup,painter,
-						evt.getX(),evt.getY());
-				}
-				return;
-			}
-
 			quickCopyDrag = (isQuickCopyEnabled()
 				&& GUIUtilities.isMiddleButton(evt.getModifiers()));
-			blink = true;
-			invalidateLine(caretLine);
-
 			int x = evt.getX();
 			int y = evt.getY();
 
@@ -5848,7 +5845,24 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			dragStartLine = getLineOfOffset(dragStart);
 			dragStartOffset = dragStart - getLineStartOffset(dragStartLine);
 
+			if(GUIUtilities.isPopupTrigger(evt) && popup != null)
+			{
+				if(popup.isVisible())
+					popup.setVisible(false);
+				else
+				{
+					if(getSelectionCount() == 0 || multi)
+						moveCaretPosition(dragStart,false);
+					GUIUtilities.showPopupMenu(popup,painter,
+						evt.getX(),evt.getY());
+				}
+				return;
+			}
+
 			dragged = false;
+
+			blink = true;
+			invalidateLine(caretLine);
 
 			clickCount = evt.getClickCount();
 
@@ -5872,22 +5886,22 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			/* if(buffer.insideCompoundEdit())
 				buffer.endCompoundEdit(); */
 
+			float dragStartLineWidth = offsetToXY(dragStartLine,
+				getLineLength(dragStartLine),returnValue).x;
+			int extraEndVirt;
+			int x = evt.getX();
+			if(x > dragStartLineWidth)
+			{
+				extraEndVirt = (int)((x - dragStartLineWidth)
+					/ charWidth);
+				if(x % charWidth  > charWidth / 2)
+					extraEndVirt++;
+			}
+			else
+				extraEndVirt = 0;
+
 			if(evt.isShiftDown())
 			{
-				float dragStartLineWidth = offsetToXY(dragStartLine,
-					getLineLength(dragStartLine),returnValue).x;
-				int extraEndVirt;
-				int x = evt.getX();
-				if(x > dragStartLineWidth)
-				{
-					extraEndVirt = (int)((x - dragStartLineWidth)
-						/ charWidth);
-					if(x % charWidth  > charWidth / 2)
-						extraEndVirt++;
-				}
-				else
-					extraEndVirt = 0;
-
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
 
@@ -5902,15 +5916,25 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 				// so that quick copy works
 				dragged = true;
-			}
-			else
-			{
-				if(!(multi || quickCopyDrag))
-					selectNone();
 
-				if(!quickCopyDrag)
-					moveCaretPosition(dragStart,false);
+				return;
 			}
+			else if(control)
+			{
+				// control-click in virtual space inserts
+				// whitespace and moves caret
+				String whitespace = MiscUtilities
+					.createWhiteSpace(extraEndVirt,0);
+				buffer.insert(dragStart,whitespace);
+
+				dragStart += whitespace.length();
+			}
+
+			if(!quickCopyDrag)
+				moveCaretPosition(dragStart,false);
+
+			if(!(multi || quickCopyDrag))
+				selectNone();
 		} //}}}
 
 		//{{{ doDoubleClick() method

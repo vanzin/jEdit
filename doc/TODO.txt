@@ -3,10 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- chunk cache:
-  updateChunksUpTo(): support first half valid, rest invalid.
-  text area: pass meaningful skew parameter.
-- inserting lines repaints twice
+- status bar rect display
 - redo/undo dirty restore is broken.
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
@@ -16,22 +13,13 @@ and quirks that I need to fix eventually.
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
-- after new display: optimize & match old performance
 - switching between soft wrap and not needs to update anchors, etc
 - disable bracket match: gutter highlight not hidden
 - display:
   - scrollTo() with 0 visibleLines
-  - use isLastLinePartial business
   - last physical line cleanup
-  - text area: buffer scroll to
+  - text area: better scroll to
   - synchro scroll needs a rewrite & folding
-  - subregion display:
-    chunk cache, first line
-    chunk cache, screen line translation
-    scroll up/down line
-    setFirstPhysicalLine(int,int)
-    getFirstSubregion()
-    scrollTo()
 - help:
   - titles in search are fucked
   - title adds more to the relevance
@@ -203,6 +191,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
+- inserting lines repaints twice
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the
   buffer notify jEdit of path changes though.
 - action bar's completion
