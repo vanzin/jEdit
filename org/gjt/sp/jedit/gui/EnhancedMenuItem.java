@@ -46,7 +46,7 @@ public class EnhancedMenuItem extends JMenuItem
 	{
 		this.action = action;
 		this.shortcut = getShortcut();
-		if(OperatingSystem.isMacOSLF() && shortcut != null)
+		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
 		{
 			setText(label + " (" + shortcut + ")");
 			shortcut = null;

@@ -40,7 +40,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		this.action = action;
 		this.shortcut = getShortcut();
-		if(OperatingSystem.isMacOSLF() && shortcut != null)
+		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
 		{
 			setText(label + " (" + shortcut + ")");
 			shortcut = null;
@@ -128,6 +128,8 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			}
 		}
 	} //}}}
+
+	//}}}
 
 	//{{{ Model class
 	class Model extends DefaultButtonModel
