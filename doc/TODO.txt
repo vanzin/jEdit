@@ -108,7 +108,6 @@ TO DO
 - rollover toolbar buttons option
 - when loading plugins and such, check for settingsDir == jEditHome
 - some means of redirecting double-clicks on a file to a VFS
-- improve next/prev-word commands
 - option on JDK 1.4 to have the LnF decorate windows and dialogs
 - search and replace: scroll text area so selection is visible despite
   dialog position

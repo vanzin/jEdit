@@ -8,6 +8,11 @@ JEDIT 4.0 VERSION HISTORY
   renamed to the actual file name) can be disabled in the 'Loading and
   Saving' option pane
 
++ Enhancements
+
+- C+LEFT/C+RIGHT are now more intelligent. Tell me if you like the new
+  behavior.
+
 + Bug Fixes
 
 - JEditTextArea now uses type-safe buffer property accessors, so there
