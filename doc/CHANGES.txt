@@ -2,6 +2,16 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre13
 
+Thanks to Nicholas O'Leary and Patrick Tingen for contributing to this
+release.
+
+{{{ Syntax Highlighting
+
+- Updated Progress syntax highlighting (Patrick Tingen).
+
+- Zope Page Template syntax highlighting (Ollie Rutherfurd).
+
+}}}
 {{{ Bug Fixes
 
 - Fix ClassCastException when changing kill ring size.
@@ -10,6 +20,12 @@ JEDIT 4.2 VERSION HISTORY
 
 - jEdit didn't compile with jikes due to overly pedantic inner class
   semantics.
+
+- Pressing "Reload" after "Select All" in the files changed dialog
+  didn't work (Nicholas O'Leary).
+
+- Fix a problem where sometimes after loading, only the first line of a
+  file would be visible.
 
 }}}
 
