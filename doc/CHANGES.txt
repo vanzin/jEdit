@@ -88,6 +88,9 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
 
 - Faster directory listing in the file system browser.
 
+- Fixed slowdown if activity log was docked and the "tail" option was on
+  in Java 1.3.
+
 }}}
 {{{ Bug Fixes
 
@@ -218,6 +221,10 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
 
 - Docking areas can no longer be resized beyond visible bounds if the
   "alternate tool bar layout" setting is off.
+
+- Fixed a problem where the status bar would fire errors about negative
+  array offsets if a buffer change resulted in the text area being
+  scrolled.
 
 }}}
 {{{ API Changes
