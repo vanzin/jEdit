@@ -883,7 +883,7 @@
       To replace arithmetic expressions between curly braces with their result,
       search for the following regular expression:
      </para>
-     <programlisting><![CDATA[\{(.+)\}]]></programlisting>
+     <programlisting><![CDATA[\{(.+?)\}]]></programlisting>
      <para>
       Replacing it with the following BeanShell snippet:
      </para>

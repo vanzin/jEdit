@@ -147,7 +147,7 @@ public class RESearchMatcher implements SearchMatcher
 		if(beanshell)
 		{
 			int count = re.getNumSubs();
-			for(int i = 0; i < count; i++)
+			for(int i = 0; i <= count; i++)
 				replaceNS.setVariable("_" + i,match.toString(i));
 
 			Object obj = BeanShell.runCachedBlock(replaceMethod,

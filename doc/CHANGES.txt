@@ -54,6 +54,8 @@ JEDIT 4.0 VERSION HISTORY
   inserted garbage in the text area
 - Firewall code would throw a NullPointerException on startup if the
   user name was non-null, but the password was empty
+- When doing a BeanShell replace, the last subexpression would not be
+  stored in a variable
 
 + API Changes
 
