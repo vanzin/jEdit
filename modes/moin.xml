@@ -26,7 +26,7 @@
 			HASH_CHAR=' '
 			AT_LINE_START='TRUE'
 			TYPE="LABEL"
-		>\s+\w[[:alnum:][:blank:]]+::</SEQ_REGEXP>
+		>\s+\w[[:alnum:][:blank:].]+::</SEQ_REGEXP>
 
 		<!-- smileys -->
 		<!-- not on by default because it slows things down a bit

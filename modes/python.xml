@@ -26,6 +26,9 @@
 		<!-- Comment -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
+		<!-- decorator -->
+		<MARK_FOLLOWING TYPE="KEYWORD4" AT_WORD_START="TRUE">@</MARK_FOLLOWING>
+
 		<!-- Triple-quotes -->
 		<SPAN TYPE="LITERAL2">
 			<BEGIN>"""</BEGIN>
@@ -95,6 +98,8 @@
 			<KEYWORD1>print</KEYWORD1>
 			<KEYWORD1>raise</KEYWORD1>
 			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>reversed</KEYWORD1>
+			<KEYWORD1>sorted</KEYWORD1>
 			<KEYWORD1>try</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
 			<KEYWORD1>yield</KEYWORD1>
@@ -121,6 +126,7 @@
 			<KEYWORD2>file</KEYWORD2>
 			<KEYWORD2>filter</KEYWORD2>
 			<KEYWORD2>float</KEYWORD2>
+			<KEYWORD2>frozenset</KEYWORD2>
 			<KEYWORD2>getattr</KEYWORD2>
 			<KEYWORD2>globals</KEYWORD2>
 			<KEYWORD2>hasattr</KEYWORD2>
@@ -152,6 +158,7 @@
 			<KEYWORD2>reload</KEYWORD2>
 			<KEYWORD2>repr</KEYWORD2>
 			<KEYWORD2>round</KEYWORD2>
+			<KEYWORD2>set</KEYWORD2>
 			<KEYWORD2>setattr</KEYWORD2>
 			<KEYWORD2>slice</KEYWORD2>
 			<KEYWORD2>staticmethod</KEYWORD2>
