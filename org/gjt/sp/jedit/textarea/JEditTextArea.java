@@ -5298,6 +5298,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private void finishCaretUpdate(boolean doElectricScroll,
 		boolean fireCaretEvent)
 	{
+		if(queuedScrollTo)
+			return;
+
 		this.queuedScrollToElectric |= doElectricScroll;
 		this.queuedFireCaretEvent |= fireCaretEvent;
 
@@ -5321,11 +5324,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(buffer.isTransactionInProgress())
 		{
-			if(!queuedScrollTo)
-			{
-				queuedScrollTo = true;
-				runnables.add(r);
-			}
+			queuedScrollTo = true;
+			runnables.add(r);
 		}
 		else
 			r.run();
@@ -5954,6 +5954,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
+			// ... otherwise,buffer will call transactionComplete()
+			// later on
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
+
 			if(caret >= start)
 				moveCaretPosition(caret + length,true);
 			else
@@ -5961,11 +5966,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret);
 			}
-
-			// ... otherwise,buffer will call transactionComplete()
-			// later on
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
 		}
 		//}}}
 
@@ -6043,6 +6043,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
+			// ... otherwise, it will be called by the buffer
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
+
 			if(caret > start && caret <= end)
 				moveCaretPosition(start,false);
 			else if(caret > end)
@@ -6052,10 +6056,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret);
 			}
-
-			// ... otherwise, it will be called by the buffer
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
 		}
 		//}}}
 
@@ -6093,9 +6093,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 
 			for(int i = 0; i < runnables.size(); i++)
-			{
 				((Runnable)runnables.get(i)).run();
-			}
 			runnables.clear();
 		} //}}}
 
@@ -6148,9 +6146,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// with folding.
 			if(holdPosition != null)
 				return;
-			int virtStartLine = physicalToVirtual(startLine);
-			if(virtStartLine < getFirstLine())
+			if(startLine < getFirstPhysicalLine())
 			{
+				int virtStartLine = physicalToVirtual(startLine);
+
 				int pos;
 
 				int virtLine = getFirstLine() + physicalToVirtual(
