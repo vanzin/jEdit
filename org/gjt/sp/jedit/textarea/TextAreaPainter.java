@@ -53,6 +53,7 @@ import org.gjt.sp.util.Log;
  */
 public class TextAreaPainter extends JComponent implements TabExpander
 {
+	//{{{ Layers
 	/**
 	 * The lowest possible layer.
 	 * @see #addExtension(int,TextAreaExtension)
@@ -65,7 +66,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @see #addExtension(int,TextAreaExtension)
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int BELOW_SELECTION_LAYER = 0;
+	public static final int BELOW_SELECTION_LAYER = -40;
 
 	/**
 	 * Selection layer. Most extensions will be above this layer, but some
@@ -73,39 +74,40 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @see #addExtension(int,TextAreaExtension)
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int SELECTION_LAYER = 10;
+	public static final int SELECTION_LAYER = -30;
 
 	/**
 	 * Wrap guide layer. Most extensions will be above this layer.
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int WRAP_GUIDE_LAYER = 20;
+	public static final int WRAP_GUIDE_LAYER = -20;
 
 	/**
 	 * Below most extensions layer.
 	 * @see #addExtension(int,TextAreaExtension)
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int BELOW_MOST_EXTENSIONS_LAYER = 30;
+	public static final int BELOW_MOST_EXTENSIONS_LAYER = -10;
 
 	/**
 	 * Default extension layer. This is above the wrap guide but below the
 	 * bracket highlight.
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int DEFAULT_LAYER = 40;
+	public static final int DEFAULT_LAYER = 0;
 
 	/**
 	 * Bracket highlight layer. Most extensions will be below this layer.
 	 * @since jEdit 4.0pre4
 	 */
-	public static final int BRACKET_HIGHLIGHT_LAYER = 50;
+	public static final int BRACKET_HIGHLIGHT_LAYER = 100;
 
 	/**
 	 * Highest possible layer.
 	 * @since jEdit 4.0pre4
 	 */
 	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
+	//}}}
 
 	//{{{ TextAreaPainter constructor
 	/**
@@ -552,7 +554,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void removeExtension(TextAreaExtension extension)
 	{
-		extensionMgr.remove(extension);
+		extensionMgr.removeExtension(extension);
 		repaint();
 	} //}}}
 

@@ -1,5 +1,6 @@
 TO DO
 
+- gutter needs some default layer values
 - chunk cache problems after collapsing a fold
 - binding stuff to SPACE doesn't work, allegedly
 - removing a plugin should offer to remove the ones that depend on it too
