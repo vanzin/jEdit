@@ -463,7 +463,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			FontRenderContext fontRenderContext
 				= new FontRenderContext(null,true,true);
 			glyphs = font.createGlyphVector(fontRenderContext,text);
-			width = (int)glyphs.getLogicalBounds().getWidth() + 2;
+			width = (int)glyphs.getLogicalBounds().getWidth() + 4;
 			//height = (int)glyphs.getLogicalBounds().getHeight();
 
 			LineMetrics lineMetrics = font.getLineMetrics(text,fontRenderContext);
@@ -509,14 +509,14 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ No rotation
 			if(rotate == RotatedTextIcon.NONE)
 			{
-				g2d.drawGlyphVector(glyphs,x + 1,y + ascent);
+				g2d.drawGlyphVector(glyphs,x + 2,y + ascent);
 			} //}}}
 			//{{{ Clockwise rotation
 			else if(rotate == RotatedTextIcon.CW)
 			{
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
-				trans.translate(x,y + 1);
+				trans.translate(x,y + 2);
 				trans.rotate(Math.PI / 2,
 					height / 2, width / 2);
 				g2d.setTransform(trans);
@@ -529,7 +529,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
-				trans.translate(x,y - 1);
+				trans.translate(x,y - 2);
 				trans.rotate(Math.PI * 3 / 2,
 					height / 2, width / 2);
 				g2d.setTransform(trans);

@@ -187,6 +187,8 @@ public class Registers
 
 			// preserve magic pos for easy insertion of the
 			// same string at the start of multiple lines
+
+			// XXX: getMagicCaretPosition() is deprecated
 			int magic = textArea.getMagicCaretPosition();
 			textArea.setSelectedText(selection);
 

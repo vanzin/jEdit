@@ -72,6 +72,8 @@ JEDIT 4.0 VERSION HISTORY
   active. Note they are still rather non-intuitive when used with soft
   wrap, as they rely on character offsets within physical lines, not
   screen positions in screen lines.
+- If a save operation fails, the buffer's modified flag is no longer
+  cleared, and if it was a 'save as' the buffer is not renamed either
 
 + API Additions
 

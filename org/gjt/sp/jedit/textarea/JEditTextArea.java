@@ -675,7 +675,7 @@ public class JEditTextArea extends JComponent
 		}
 		else if(screenLine >= visibleLines - _electricScroll)
 		{
-			int count = _electricScroll - visibleLines + screenLine;
+			int count = _electricScroll - visibleLines + screenLine + 1;
 			while(count > 0 && firstLine <= getVirtualLineCount())
 			{
 				count -= chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;

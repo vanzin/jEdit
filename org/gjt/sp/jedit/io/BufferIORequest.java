@@ -54,6 +54,11 @@ public class BufferIORequest extends WorkRequest
 	public static final String NEW_PATH = "BufferIORequest__newPath";
 
 	/**
+	 * Buffer boolean property set when an error occurs.
+	 */
+	public static final String ERROR_OCCURRED = "BufferIORequest__error";
+
+	/**
 	 * A file load request.
 	 */
 	public static final int LOAD = 0;
@@ -222,17 +227,23 @@ public class BufferIORequest extends WorkRequest
 				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
 					ch.toString() };
 				VFSManager.error(view,path,"ioerror.encoding-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
 				Object[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			catch(OutOfMemoryError oom)
 			{
 				Log.log(Log.ERROR,this,oom);
 				VFSManager.error(view,path,"out-of-memory-error",null);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 
 			if(jEdit.getBooleanProperty("persistentMarkers"))
@@ -265,6 +276,8 @@ public class BufferIORequest extends WorkRequest
 				{
 				}
 			}
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
 		{
@@ -277,9 +290,12 @@ public class BufferIORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			catch(WorkThread.Abort a)
 			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
 	} //}}}
@@ -632,6 +648,8 @@ public class BufferIORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.write-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			finally
 			{
@@ -650,6 +668,8 @@ public class BufferIORequest extends WorkRequest
 				{
 				}
 			}
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
 		{
@@ -663,9 +683,12 @@ public class BufferIORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.write-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			catch(WorkThread.Abort a)
 			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
 	} //}}}
@@ -817,6 +840,8 @@ public class BufferIORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
 		catch(WorkThread.Abort a)
@@ -831,6 +856,8 @@ public class BufferIORequest extends WorkRequest
 				{
 				}
 			}
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
 		{
@@ -843,9 +870,12 @@ public class BufferIORequest extends WorkRequest
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 			catch(WorkThread.Abort a)
 			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
 	} //}}}

@@ -156,6 +156,8 @@ public class Buffer implements EBComponent
 			return false;
 		}
 
+		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
+
 		setFlag(LOADING,true);
 
 		// view text areas temporarily blank out while a buffer is
@@ -320,6 +322,8 @@ public class Buffer implements EBComponent
 			return false;
 		}
 
+		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
+
 		path = MiscUtilities.constructPath(this.path,path);
 
 		Buffer buffer = jEdit.getBuffer(path);
@@ -436,6 +440,8 @@ public class Buffer implements EBComponent
 			return false;
 		}
 
+		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
+
 		if(path == null && getFlag(NEW_FILE))
 			return saveAs(view,rename);
 
@@ -458,55 +464,15 @@ public class Buffer implements EBComponent
 		setFlag(IO,true);
 		EditBus.send(new BufferUpdate(this,view,BufferUpdate.SAVING));
 
-		if(path == null)
-			path = this.path;
+		final String oldPath = this.path;
+		final String newPath = (path == null ? this.path : path);
 
-		// can't call setPath() here because we don't want a failed
-		// 'save as' to change the buffer's path, so obtain the VFS
-		// instance 'manually'
-		VFS vfs = VFSManager.getVFSForPath(path);
+		VFS vfs = VFSManager.getVFSForPath(newPath);
 
-		if(!vfs.save(view,this,path))
+		if(!vfs.save(view,this,newPath))
 		{
 			setFlag(IO,false);
 			return false;
-		}
-
-		final String oldPath = this.path;
-
-		// I've finally decided to fix the 'two buffers with same path'
-		// bug...
-		if(!path.equals(oldPath))
-		{
-			Buffer buffer = jEdit.getBuffer(path);
-
-			if(rename)
-			{
-				/* if we save a file with the same name as one
-				 * that's already open, we presume that we can
-				 * close the existing file, since the user
-				 * would have confirmed the overwrite in the
-				 * 'save as' dialog box anyway */
-				if(buffer != null && /* can't happen? */
-					!buffer.getPath().equals(oldPath))
-				{
-					buffer.setDirty(false);
-					jEdit.closeBuffer(view,buffer);
-				}
-
-				setPath(path);
-			}
-			else
-			{
-				/* if we saved over an already open file using
-				 * 'save a copy as', then reload the existing
-				 * buffer */
-				if(buffer != null && /* can't happen? */
-					!buffer.getPath().equals(oldPath))
-				{
-					buffer.load(view,true);
-				}
-			}
 		}
 
 		// Once save is complete, do a few other things
@@ -514,63 +480,10 @@ public class Buffer implements EBComponent
 		{
 			public void run()
 			{
-				// Saving a NEW_FILE will create a file on
-				// disk, thus file system browsers must reload
-				if(getFlag(NEW_FILE) || !getPath().equals(oldPath))
-					VFSManager.sendVFSUpdate(getVFS(),getPath(),true);
-
 				setFlag(IO,false);
-
-				if(rename)
-				{
-					// we do a write lock so that the
-					// autosave, which grabs a read lock,
-					// is not executed between the
-					// deletion of the autosave file
-					// and clearing of the dirty flag
-					try
-					{
-						writeLock();
-
-						if(autosaveFile != null)
-							autosaveFile.delete();
-
-						setFlag(AUTOSAVE_DIRTY,false);
-						setFlag(READ_ONLY,false);
-						setFlag(NEW_FILE,false);
-						setFlag(UNTITLED,false);
-						setFlag(DIRTY,false);
-
-						// this ensures that undo can clear
-						// the dirty flag properly when all
-						// edits up to a save are undone
-						undoMgr.bufferSaved();
-					}
-					finally
-					{
-						writeUnlock();
-					}
-
-					parseBufferLocalProperties();
-
-					if(!getPath().equals(oldPath))
-					{
-						jEdit.updatePosition(Buffer.this);
-						setMode();
-					}
-					else
-						propertiesChanged();
-
-					if(file != null)
-						modTime = file.lastModified();
-
-					EditBus.send(new BufferUpdate(Buffer.this,
-						view,BufferUpdate.DIRTY_CHANGED));
-
-					// new message type introduced in 4.0pre4
-					EditBus.send(new BufferUpdate(Buffer.this,
-						view,BufferUpdate.SAVED));
-				}
+				finishSaving(view,oldPath,newPath,rename,
+					getBooleanProperty(BufferIORequest
+					.ERROR_OCCURRED));
 			}
 		});
 
@@ -3244,6 +3157,102 @@ public class Buffer implements EBComponent
 			for(int i = 0; i < offsetMgr.getLineCount(); i++)
 				markTokens(i);
 		}
+	} //}}}
+
+	//{{{ finishSaving() method
+	private void finishSaving(View view, String oldPath, String path,
+		boolean rename, boolean error)
+	{
+		//{{{ Set the buffer's path
+		// Caveat: won't work if save() called with a relative path.
+		// But I don't think anyone calls it like that anyway.
+		if(!error && !path.equals(oldPath))
+		{
+			Buffer buffer = jEdit.getBuffer(path);
+
+			if(rename)
+			{
+				/* if we save a file with the same name as one
+				 * that's already open, we presume that we can
+				 * close the existing file, since the user
+				 * would have confirmed the overwrite in the
+				 * 'save as' dialog box anyway */
+				if(buffer != null && /* can't happen? */
+					!buffer.getPath().equals(oldPath))
+				{
+					buffer.setDirty(false);
+					jEdit.closeBuffer(view,buffer);
+				}
+
+				setPath(path);
+			}
+			else
+			{
+				/* if we saved over an already open file using
+				 * 'save a copy as', then reload the existing
+				 * buffer */
+				if(buffer != null && /* can't happen? */
+					!buffer.getPath().equals(oldPath))
+				{
+					buffer.load(view,true);
+				}
+			}
+		} //}}}
+
+		//{{{ Update this buffer for the new path
+		if(rename)
+		{
+			if(file != null)
+				modTime = file.lastModified();
+
+			if(!error)
+			{
+				// we do a write lock so that the
+				// autosave, which grabs a read lock,
+				// is not executed between the
+				// deletion of the autosave file
+				// and clearing of the dirty flag
+				try
+				{
+					writeLock();
+
+					if(autosaveFile != null)
+						autosaveFile.delete();
+
+					setFlag(AUTOSAVE_DIRTY,false);
+					setFlag(READ_ONLY,false);
+					setFlag(NEW_FILE,false);
+					setFlag(UNTITLED,false);
+					setFlag(DIRTY,false);
+
+					// this ensures that undo can clear
+					// the dirty flag properly when all
+					// edits up to a save are undone
+					undoMgr.bufferSaved();
+				}
+				finally
+				{
+					writeUnlock();
+				}
+
+				parseBufferLocalProperties();
+
+				if(!getPath().equals(oldPath))
+				{
+					jEdit.updatePosition(Buffer.this);
+					setMode();
+				}
+				else
+					propertiesChanged();
+
+				EditBus.send(new BufferUpdate(Buffer.this,
+					view,BufferUpdate.DIRTY_CHANGED));
+
+				// new message type introduced in 4.0pre4
+				EditBus.send(new BufferUpdate(Buffer.this,
+					view,BufferUpdate.SAVED));
+			}
+		} //}}}
 	} //}}}
 
 	//{{{ parseBufferLocalProperties() method

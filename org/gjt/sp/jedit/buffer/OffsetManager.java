@@ -425,7 +425,7 @@ public class OffsetManager
 	 * 48-55: visibility bit flags
 	 * 56: fold level valid flag
 	 * 57: context valid flag
-	 * 58-62: number of screen lines (currently unused, reserved for 4.1)
+	 * 58-62: number of screen lines (currently unused, reserved for jEdit 4.1)
 	 * 63: reserved
 	 *
 	 * Having all the info packed into a long is not very OO and makes the
