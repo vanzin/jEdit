@@ -424,7 +424,7 @@ else
 
         // Construct the command which will be executed
         StringBuffer command = new StringBuffer(java_home);
-        if (java_home.endsWith("jre"))
+        if (java_home.toLowerCase().endsWith("jre"))
           command.append(File.separator).append("..");
         command.append(File.separator).append("bin");
         command.append(File.separator).append("javadoc ");

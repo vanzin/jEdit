@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- don't show 'new directory' in favorites:
 - jedit -background -nogui && jedit -norestore opens "Untitled 2"
 - need a new jEditLauncher
 - plugin error dialog -- if > 1 error per plugin

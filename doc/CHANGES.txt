@@ -2,9 +2,14 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1final
 
+Thanks to Andreas Mross, Kris Kopicki, and Patrick Tingen for
+contributing to this release.
+
 + Enhancements:
 
 - Updated Progress syntax highlighting (Patrick Tingen).
+
+- Updated FAQ (Kris Kopicki).
 
 + Bug Fixes:
 
@@ -16,7 +21,11 @@ JEDIT 4.1 VERSION HISTORY
   modes due to a regression from pre10.
 
 - MacOS plugin 2.0.4 fixes a few bugs when opening files from the
-  finder.
+  Finder.
+
+- Minor fix for XML syntax highlighting.
+
+- Fixed "Preview Javadoc of Buffer" macro (Andreas Mross).
 
 * Version 4.1pre11
 
