@@ -36,12 +36,15 @@ public interface SearchMatcher
 	 * @param start True if the start of the segment is the beginning of the
 	 * buffer
 	 * @param end True if the end of the segment is the end of the buffer
+	 * @param firstTime If false and the search string matched at the start
+	 * offset with length zero, automatically find next match
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
 	 * @since jEdit 4.0pre3
 	 */
-	int[] nextMatch(CharIndexed text, boolean start, boolean end);
+	int[] nextMatch(CharIndexed text, boolean start, boolean end,
+		boolean firstTime);
 
 	/**
 	 * Returns the specified text, with any substitution specified

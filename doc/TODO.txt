@@ -1,5 +1,10 @@
 TO DO
 
+- regexp search:
+  $ doesn't find last -- gnu.regexp bug
+  replace all .* with foo breaks
+  ^.* with foo only replaces every second line
+- scrollToCaret() still "jumps around"
 - if first chunk if a line is a syntax chunk, getScreenLineOfOffset()
   broken (?)
 - rect select and soft wrap
