@@ -13,7 +13,9 @@ contributing to this release.
   of the last line. A new 'Vertical Paste' command has been added (it
   behaves in a similar manner to the 'Virtual Paste' macro, which has
   now been removed). When inserting text into a rectangle, the inserted
-  text is left-justified with spaces.
+  text is left-justified with spaces. The quick copy feature has been
+  extended to support this -- a Control-middle click vertically pastes
+  the most recently selected text.
 
 - Fixed auto-indent behavior when entering constructs like:
   if(foo)
@@ -155,8 +157,8 @@ contributing to this release.
 
 + OS-specific Changes:
 
-- MacOS plugin version 1.2 adds an option pane with a few settings, and
-  some bug fixes and cleanups. (Kris Kopicki)
+- MacOS plugin version 1.2.1 adds an option pane with a few settings,
+  and some bug fixes and cleanups. (Kris Kopicki)
 
 - When running on MacOS, the roots: filesystem now lists all disks
   mounted under /Volumes. (Kris Kopicki)
