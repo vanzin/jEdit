@@ -2,6 +2,12 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre10
 
+{{{ Miscellaneous
+
+- Added "Create Constructor" macro, updated "Make Get and Set Methods"
+  and "Get Class Name" macros (Thomas Galvin).
+
+}}}
 {{{ Bug Fixes
 
 - Fixed another NullPointerException in the file system browser when

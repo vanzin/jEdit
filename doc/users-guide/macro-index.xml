@@ -159,6 +159,13 @@
 <itemizedlist>
 
 <listitem>
+    <para><filename>Create_Constructor.bsh</filename></para>
+    <abstract><para>
+        Inserts constructor for the class at the current caret position.
+    </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Get_Class_Name.bsh</filename></para>
     <abstract><para>
         Inserts a Java class name based upon the buffer's file name.

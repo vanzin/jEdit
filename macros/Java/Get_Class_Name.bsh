@@ -1,53 +1,90 @@
-/*
- * Get_Class_Name.bsh - a BeanShell macro script for the
- * jEdit text editor -  gets class name from buffer name
- * Copyright (C) 2001 John Gellene
- * jgellene@nyc.rr.com
- * http://community.jedit.org
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the jEdit program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- * $Id$
- *
- * Checked for jEdit 4.0 API
- *
- */
+/**
+Get_Class_Name.bsh - a BeanShell macro for the jEdit text editor replaces the 
+selected text with the current class name.
 
+This macro walks though several steps in an attempt to guess the correct class
+name.
 
-void getClassName()
-{
-	name = buffer.getName();
-	index = name.lastIndexOf('.');
-	textArea.setSelectedText( index != -1 ?
-		name.substring(0, index) : name);
-}
+First, it searches backwards for the nearest occurance of the keyword 'class,'
+so it should work for inner class definitions.  It does not, however, do any 
+fancy code parsing, so if you run this macro at any point after an inner class 
+definition, it will return the name of the inner class, not the parent class.
 
-getClassName();
+If that fails, it attempts to guess the class name from the file name; i.e. it 
+would return "FooBar" if the buffer was named "FooBar.cc."  If this fails (if, 
+for example, the buffer is untitled), it returns an empty string.
 
-/*
-	Macro index data (in DocBook format)
+Copyright (C)  2004 Thomas Galvin - software@thomas-galvin.com
 
-<listitem>
-    <para><filename>Get_Class_Name.bsh</filename></para>
-    <abstract><para>
-        Inserts a Java class name based upon the buffer's file name.
-    </para></abstract>
-</listitem>
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or any later version.
 
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 */
 
+void setCaret(int selectionStart, int selectionEnd)
+{
+  textArea.setCaretPosition(selectionStart);
+  textArea.moveCaretPosition(selectionEnd);
+}
 
-// end Get_Class_Name.bsh
+String getClassName()
+{
+  int selectionStart = textArea.getSelectionStart();
+  int selectionEnd = textArea.getSelectionEnd();
+  
+  String text = textArea.getText();
+  int index = text.lastIndexOf("class", selectionStart);
+  if(index != -1)
+  {
+    textArea.setCaretPosition(index);
+    int lineNumber = textArea.getCaretLine();
+    int lineEnd = textArea.getLineEndOffset(lineNumber);
+    String lineText = text.substring(index, lineEnd);
+    
+    StringTokenizer tokenizer = new StringTokenizer(lineText);
+    tokenizer.nextToken(); //eat "class"
+    if(tokenizer.hasMoreTokens())
+    {
+      setCaret(selectionStart, selectionEnd);
+      return tokenizer.nextToken();
+    }
+  }
+  
+  
+  String fileClassName = buffer.getName();
+  int index = fileClassName.lastIndexOf('.');
+  if(index != -1)
+  {
+    fileClassName = fileClassName.substring(0, index);
+    if(fileClassName.toLowerCase().indexOf("untitled") == -1)
+    {
+      return fileClassName;
+    }
+  }
+  setCaret(selectionStart, selectionEnd);
+  
+  String className = buffer.getName();
+  int index = name.lastIndexOf('.');
+  if(index != -1)
+  {
+    className = className.substring(0, index);
+    if(className.toLowerCase().indexOf("untitled") == -1)
+    {
+      return className;
+    }
+  }
+  
+  return "";
+}
 
+String className = getClassName();
+if( className != null && !className.equals("") )
+{
+  textArea.setSelectedText(className);
+}
