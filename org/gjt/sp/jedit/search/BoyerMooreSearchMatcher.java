@@ -65,10 +65,10 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
 		this.reverseSearch = reverseSearch;
-		this.beanshell = beanshell;
 
-		if(beanshell)
+		if(beanshell && replace != null && replace.length() != 0)
 		{
+			this.beanshell = true;
 			this.replaceMethod = replaceMethod;
 			replaceNS = new NameSpace(BeanShell.getNameSpace(),
 				"search and replace");
