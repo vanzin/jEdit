@@ -73,8 +73,15 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 			if(column == 0)
 			{
-				openBuffer = (jEdit._getBuffer(
-					file.symlinkPath) != null);
+				// while its broken to have a null
+				// symlinkPath, some older plugins
+				// might...
+				String path;
+				if(file.symlinkPath == null)
+					path = file.path;
+				else
+					path = file.symlinkPath;
+				openBuffer = (jEdit._getBuffer(path) != null);
 
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded,
