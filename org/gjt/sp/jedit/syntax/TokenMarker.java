@@ -252,20 +252,15 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					handleNoWordBreak();
 
 					markKeyword(true);
-	
+
 					tokenHandler.handleToken(
 						context.rules.getDefault(),
 						lastOffset - line.offset,1,
 						context);
 					lastOffset = pos + 1;
 				}
-				else
-				{
-					// a character which is not a word
-					// separator... nor did it match any
-					// rule. so \ has no effect
-					escaped = false;
-				}
+
+				escaped = false;
 			} //}}}
 		} //}}}
 
