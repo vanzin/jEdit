@@ -188,18 +188,13 @@ edit=undo \
      - \
      cut \
      copy \
-     cut-append \
-     copy-append \
      paste \
-     paste-previous \
-     %registers \
+     %clipboard \
      - \
      select-all \
-     select-none \
-     invert-selection \
+     %selection \
      - \
      word-count \
-     - \
      complete-word \
      expand-abbrev \
      - \
@@ -207,103 +202,126 @@ edit=undo \
      select-line-range \
      - \
      %text \
+     %indent \
      %source
 edit.label=$Edit
 undo.label=$Undo
 redo.label=$Redo
 cut.label=$Cut
 copy.label=C$opy
-cut-append.label=Cu$t Append
-copy-append.label=Copy $Append
 paste.label=$Paste
-paste-previous.label=Paste Pre$vious...
-select-all.label=$Select All
-select-none.label=Select $None
-invert-selection.label=$Invert Selection
+select-all.label=Select $All
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
 expand-abbrev.label=E$xpand Abbreviation
 goto-line.label=$Go to Line...
 select-line-range.label=Se$lect Line Range...
 
-#{{{ Registers menu
-registers=view-registers \
+#{{{ More Clipboard menu
+clipboard=cut-append \
+	  copy-append \
+	  vertical-paste \
+	  - \
+	  paste-previous \
 	  - \
 	  cut-string-register \
           copy-string-register \
+	  paste-string-register \
+	  - \
 	  cut-append-string-register \
 	  copy-append-string-register \
-	  paste-string-register
-registers.label=Registers
-cut-string-register.label=Cut to Register
-copy-string-register.label=Copy to Register
-cut-append-string-register.label=Cut Append to Register
-copy-append-string-register.label=Copy Append to Register
-paste-string-register.label=Paste Register
-view-registers.label=View Registers...
+	  vertical-paste-string-register \
+	  - \
+	  view-registers
+
+clipboard.label=More Clip$board
+cut-append.label=$Cut Append
+copy-append.label=C$opy Append
+vertical-paste.label=$Vertical Paste
+paste-previous.label=Paste Previo$us...
+cut-string-register.label=Cu$t to Register
+copy-string-register.label=Co$py to Register
+paste-string-register.label=Paste $Register
+cut-append-string-register.label=Cut Appen$d to Register
+copy-append-string-register.label=Copy $Append to Register
+vertical-paste-string-register.label=V$ertical Paste Register
+view-registers.label=Vie$w Registers...
+#}}}
+
+#{{{ More Selection menu
+selection=select-none \
+	  select-word \
+	  select-line \
+	  select-paragraph \
+	  - \
+	  invert-selection \
+	  toggle-multi-select
+
+selection.label=More $Selection
+select-none.label=Select $None
+select-word.label=Select $Word
+select-line.label=Select $Line
+select-paragraph.label=Select $Paragraph
+invert-selection.label=$Invert Selection
+toggle-multi-select.label=$Multiple Selection
 #}}}
 
 #{{{ Text menu
-text=select-word \
-     - \
-     select-line \
-     delete-line \
+text=delete-line \
      delete-start-line \
      delete-end-line \
-     remove-trailing-ws \
      join-lines \
      - \
-     select-paragraph \
      format-paragraph \
      delete-paragraph \
      - \
      to-lower \
      to-upper
-text.label=Text
-select-word.label=Select Word
-select-line.label=Select Line
-delete-line.label=Delete Line
-delete-start-line.label=Delete to Start of Line
-delete-end-line.label=Delete to End of Line
-remove-trailing-ws.label=Remove Trailing Whitespace
-join-lines.label=Join Lines
-select-paragraph.label=Select Paragraph
-delete-paragraph.label=Delete Paragraph
-format-paragraph.label=Format Paragraph
-to-lower.label=To Lower Case
-to-upper.label=To Upper Case
+text.label=$Text
+delete-line.label=$Delete Line
+delete-start-line.label=Delete to $Start of Line
+delete-end-line.label=Delete to $End of Line
+join-lines.label=$Join Lines
+delete-paragraph.label=Delete $Paragraph
+format-paragraph.label=$Format Paragraph
+to-lower.label=To $Lower Case
+to-upper.label=To $Upper Case
+#}}}
+
+#{{{ Indent menu
+indent=indent-lines \
+       shift-left \
+       shift-right \
+       - \
+       remove-trailing-ws \
+       spaces-to-tabs \
+       tabs-to-spaces
+
+indent.label=$Indent
+indent-lines.label=$Indent Selected Lines
+shift-left.label=Shift Indent $Left
+shift-right.label=Shift Indent $Right
+remove-trailing-ws.label=Remove Trailing $Whitespace
+spaces-to-tabs.label=$Spaces to Tabs
+tabs-to-spaces.label=$Tabs to Spaces
 #}}}
 
 #{{{ Source menu
 source=range-comment \
        line-comment \
        - \
-       indent-lines \
-       shift-left \
-       shift-right \
-       - \
        select-block \
        match-bracket \
        prev-bracket \
-       next-bracket \
-       - \
-       spaces-to-tabs \
-       tabs-to-spaces
+       next-bracket
 
-source.label=Source
-range-comment.label=Range Comment
-line-comment.label=Line Comment
-indent-lines.label=Indent Selected Lines
-shift-left.label=Shift Indent Left
-shift-right.label=Shift Indent Right
-select-block.label=Select Code Block
-match-bracket.label=Go to Matching Bracket
-prev-bracket.label=Go to Previous Bracket
-next-bracket.label=Go to Next Bracket
-spaces-to-tabs.label=Spaces to Tabs
-tabs-to-spaces.label=Tabs to Spaces
-#}}}
-
+source.label=Sourc$e
+range-comment.label=$Range Comment
+line-comment.label=$Line Comment
+select-block.label=$Select Code Block
+match-bracket.label=Go to $Matching Bracket
+prev-bracket.label=Go to $Previous Bracket
+next-bracket.label=Go to $Next Bracket
 #}}}
 
 #{{{ Search menu
@@ -592,7 +610,6 @@ select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
-toggle-multi-select.label=Multiple Selection
 hypersearch-results.label=HyperSearch Results
 log-viewer-toggle.label=Activity Log Toggle
 vfs.browser-toggle.label=File System Browser Toggle
@@ -618,6 +635,7 @@ view.status.copy-string-register=Enter register name to copy to
 view.status.cut-append-string-register=Enter register name to cut append to
 view.status.copy-append-string-register=Enter register name to copy append to
 view.status.paste-string-register=Enter register name to paste from
+view.status.vertical-paste-string-register=Enter register name to vertical paste from
 view.status.add-marker=Enter shortcut for new marker
 view.status.goto-marker=Enter shortcut of marker to go to
 view.status.select-marker=Enter shortcut of marker to select to

@@ -554,7 +554,7 @@ public class Buffer implements EBComponent
 
 	//}}}
 
-	//{{{ Getters/setter methods for various things
+	//{{{ Getters/setter methods for various buffer meta-data
 
 	//{{{ getLastModified() method
 	/**
@@ -832,7 +832,7 @@ public class Buffer implements EBComponent
 
 	//}}}
 
-	//{{{ Text reading methods
+	//{{{ Line offset methods
 
 	//{{{ getLength() method
 	/**
@@ -955,6 +955,10 @@ public class Buffer implements EBComponent
 		}
 	} //}}}
 
+	//}}}
+
+	//{{{ Text getters are setters
+
 	//{{{ getLineText() method
 	/**
 	 * Returns the text on the specified line.
@@ -1048,10 +1052,6 @@ public class Buffer implements EBComponent
 			readUnlock();
 		}
 	} //}}}
-
-	//}}}
-
-	//{{{ Text writing methods
 
 	//{{{ insert() method
 	/**
@@ -1203,132 +1203,6 @@ public class Buffer implements EBComponent
 		finally
 		{
 			writeUnlock();
-		}
-	} //}}}
-
-	//{{{ removeTrailingWhiteSpace() method
-	/**
-	 * Removes trailing whitespace from all lines in the specified list.
-	 * @param lines The line numbers
-	 * @since jEdit 3.2pre1
-	 */
-	public void removeTrailingWhiteSpace(int[] lines)
-	{
-		try
-		{
-			beginCompoundEdit();
-
-			for(int i = 0; i < lines.length; i++)
-			{
-				int pos, lineStart, lineEnd, tail;
-
-				getLineText(lines[i],seg);
-
-				// blank line
-				if (seg.count == 0) continue;
-
-				lineStart = seg.offset;
-				lineEnd = seg.offset + seg.count - 1;
-
-				for (pos = lineEnd; pos >= lineStart; pos--)
-				{
-					if (!Character.isWhitespace(seg.array[pos]))
-						break;
-				}
-
-				tail = lineEnd - pos;
-
-				// no whitespace
-				if (tail == 0) continue;
-
-				remove(getLineEndOffset(lines[i]) - 1 - tail,tail);
-			}
-		}
-		finally
-		{
-			endCompoundEdit();
-		}
-	} //}}}
-
-	//{{{ shiftIndentLeft() method
-	/**
-	 * Shifts the indent of each line in the specified list to the left.
-	 * @param lines The line numbers
-	 * @since jEdit 3.2pre1
-	 */
-	public void shiftIndentLeft(int[] lines)
-	{
-		int tabSize = getTabSize();
-		int indentSize = getIndentSize();
-		boolean noTabs = getBooleanProperty("noTabs");
-
-		try
-		{
-			beginCompoundEdit();
-
-			for(int i = 0; i < lines.length; i++)
-			{
-				int lineStart = getLineStartOffset(lines[i]);
-				String line = getLineText(lines[i]);
-				int whiteSpace = MiscUtilities
-					.getLeadingWhiteSpace(line);
-				if(whiteSpace == 0)
-					continue;
-				int whiteSpaceWidth = Math.max(0,MiscUtilities
-					.getLeadingWhiteSpaceWidth(line,tabSize)
-					- indentSize);
-	
-				insert(lineStart + whiteSpace,MiscUtilities
-					.createWhiteSpace(whiteSpaceWidth,
-					(noTabs ? 0 : tabSize)));
-				remove(lineStart,whiteSpace);
-			}
-
-		}
-		finally
-		{
-			endCompoundEdit();
-		}
-	} //}}}
-
-	//{{{ shiftIndentRight() method
-	/**
-	 * Shifts the indent of each line in the specified list to the right.
-	 * @param lines The line numbers
-	 * @since jEdit 3.2pre1
-	 */
-	public void shiftIndentRight(int[] lines)
-	{
-		try
-		{
-			beginCompoundEdit();
-
-			int tabSize = getTabSize();
-			int indentSize = getIndentSize();
-			boolean noTabs = getBooleanProperty("noTabs");
-			for(int i = 0; i < lines.length; i++)
-			{
-				int lineStart = getLineStartOffset(lines[i]);
-				String line = getLineText(lines[i]);
-				int whiteSpace = MiscUtilities
-					.getLeadingWhiteSpace(line);
-
-				// silly usability hack
-				//if(lines.length != 1 && whiteSpace == 0)
-				//	continue;
-
-				int whiteSpaceWidth = MiscUtilities
-					.getLeadingWhiteSpaceWidth(
-					line,tabSize) + indentSize;
-				insert(lineStart + whiteSpace,MiscUtilities
-					.createWhiteSpace(whiteSpaceWidth,
-					(noTabs ? 0 : tabSize)));
-				remove(lineStart,whiteSpace);
-			}
-		}
-		finally
-		{
-			endCompoundEdit();
 		}
 	} //}}}
 
@@ -1793,7 +1667,7 @@ public class Buffer implements EBComponent
 
 	//}}}
 
-	//{{{ Edit modes, syntax highlighting, auto indent
+	//{{{ Edit modes, syntax highlighting
 
 	//{{{ getMode() method
 	/**
@@ -1885,6 +1759,258 @@ public class Buffer implements EBComponent
 		if(defaultMode == null)
 			defaultMode = jEdit.getMode("text");
 		setMode(defaultMode);
+	} //}}}
+
+	//{{{ markTokens() method
+	/**
+	 * Returns the syntax tokens for the specified line.
+	 * @param lineIndex The line number
+	 * @param tokenHandler The token handler that will receive the syntax
+	 * tokens
+	 * @since jEdit 4.1pre1
+	 */
+	public void markTokens(int lineIndex, TokenHandler tokenHandler)
+	{
+		Segment seg;
+		if(SwingUtilities.isEventDispatchThread())
+			seg = this.seg;
+		else
+			seg = new Segment();
+
+		try
+		{
+			writeLock();
+
+			if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
+				throw new ArrayIndexOutOfBoundsException(lineIndex);
+
+			/*
+			 * Scan backwards, looking for a line with
+			 * a valid line context.
+			 */
+			int start, end;
+			if(parseFully)
+			{
+				start = -1;
+				end = 0;
+			}
+			else
+			{
+				start = Math.max(0,lineIndex - 100) - 1;
+				end = Math.max(0,lineIndex - 100);
+			}
+
+			for(int i = lineIndex - 1; i > end; i--)
+			{
+				if(offsetMgr.isLineContextValid(i))
+				{
+					start = i;
+					break;
+				}
+			}
+
+			for(int i = start + 1; i <= lineIndex; i++)
+			{
+				getLineText(i,seg);
+
+				TokenMarker.LineContext prevContext = (i == 0 ? null
+					: offsetMgr.getLineContext(i - 1));
+
+				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
+				ParserRule oldRule;
+				ParserRuleSet oldRules;
+				if(context == null)
+				{
+					oldRule = null;
+					oldRules = null;
+				}
+				else
+				{
+					oldRule = context.inRule;
+					oldRules = context.rules;
+				}
+
+				context = tokenMarker.markTokens(prevContext,
+					(i == lineIndex ? tokenHandler
+					: DummyTokenHandler.INSTANCE),seg,
+					noWordSep);
+				offsetMgr.setLineContext(i,context);
+
+				// Could incorrectly be set to 'false' with
+				// recursive delegates, where the chaining might
+				// have changed but not the rule set in question (?)
+				if(oldRule != context.inRule)
+					nextLineRequested = true;
+				else if(oldRules != context.rules)
+					nextLineRequested = true;
+				//else if(i != lastTokenizedLine)
+				//	nextLineRequested = false;
+			}
+
+			int lineCount = offsetMgr.getLineCount();
+			if(nextLineRequested && lineCount - lineIndex > 1)
+			{
+				offsetMgr.lineInfoChangedFrom(lineIndex + 1);
+			}
+		}
+		finally
+		{
+			writeUnlock();
+		}
+	} //}}}
+
+	//{{{ isNextLineRequested() method
+	/**
+	 * Returns true if the next line should be repainted. This
+	 * will return true after a line has been tokenized that starts
+	 * a multiline token that continues onto the next line.
+	 */
+	public boolean isNextLineRequested()
+	{
+		boolean retVal = nextLineRequested;
+		nextLineRequested = false;
+		return retVal;
+	} //}}}
+
+	//{{{ getTokenMarker() method
+	/**
+	 * This method is only public so that the <code>OffsetManager</code>
+	 * class can use it.
+	 * @since jEdit 4.0pre1
+	 */
+	public TokenMarker getTokenMarker()
+	{
+		return tokenMarker;
+	} //}}}
+
+	//}}}
+
+	//{{{ Indentation
+
+	//{{{ removeTrailingWhiteSpace() method
+	/**
+	 * Removes trailing whitespace from all lines in the specified list.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
+	 */
+	public void removeTrailingWhiteSpace(int[] lines)
+	{
+		try
+		{
+			beginCompoundEdit();
+
+			for(int i = 0; i < lines.length; i++)
+			{
+				int pos, lineStart, lineEnd, tail;
+
+				getLineText(lines[i],seg);
+
+				// blank line
+				if (seg.count == 0) continue;
+
+				lineStart = seg.offset;
+				lineEnd = seg.offset + seg.count - 1;
+
+				for (pos = lineEnd; pos >= lineStart; pos--)
+				{
+					if (!Character.isWhitespace(seg.array[pos]))
+						break;
+				}
+
+				tail = lineEnd - pos;
+
+				// no whitespace
+				if (tail == 0) continue;
+
+				remove(getLineEndOffset(lines[i]) - 1 - tail,tail);
+			}
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+	} //}}}
+
+	//{{{ shiftIndentLeft() method
+	/**
+	 * Shifts the indent of each line in the specified list to the left.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
+	 */
+	public void shiftIndentLeft(int[] lines)
+	{
+		int tabSize = getTabSize();
+		int indentSize = getIndentSize();
+		boolean noTabs = getBooleanProperty("noTabs");
+
+		try
+		{
+			beginCompoundEdit();
+
+			for(int i = 0; i < lines.length; i++)
+			{
+				int lineStart = getLineStartOffset(lines[i]);
+				String line = getLineText(lines[i]);
+				int whiteSpace = MiscUtilities
+					.getLeadingWhiteSpace(line);
+				if(whiteSpace == 0)
+					continue;
+				int whiteSpaceWidth = Math.max(0,MiscUtilities
+					.getLeadingWhiteSpaceWidth(line,tabSize)
+					- indentSize);
+	
+				insert(lineStart + whiteSpace,MiscUtilities
+					.createWhiteSpace(whiteSpaceWidth,
+					(noTabs ? 0 : tabSize)));
+				remove(lineStart,whiteSpace);
+			}
+
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+	} //}}}
+
+	//{{{ shiftIndentRight() method
+	/**
+	 * Shifts the indent of each line in the specified list to the right.
+	 * @param lines The line numbers
+	 * @since jEdit 3.2pre1
+	 */
+	public void shiftIndentRight(int[] lines)
+	{
+		try
+		{
+			beginCompoundEdit();
+
+			int tabSize = getTabSize();
+			int indentSize = getIndentSize();
+			boolean noTabs = getBooleanProperty("noTabs");
+			for(int i = 0; i < lines.length; i++)
+			{
+				int lineStart = getLineStartOffset(lines[i]);
+				String line = getLineText(lines[i]);
+				int whiteSpace = MiscUtilities
+					.getLeadingWhiteSpace(line);
+
+				// silly usability hack
+				//if(lines.length != 1 && whiteSpace == 0)
+				//	continue;
+
+				int whiteSpaceWidth = MiscUtilities
+					.getLeadingWhiteSpaceWidth(
+					line,tabSize) + indentSize;
+				insert(lineStart + whiteSpace,MiscUtilities
+					.createWhiteSpace(whiteSpaceWidth,
+					(noTabs ? 0 : tabSize)));
+				remove(lineStart,whiteSpace);
+			}
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
 	} //}}}
 
 	//{{{ indentLine() method
@@ -2263,91 +2389,91 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return prevLineIndent;
 	} //}}}
 
-	//{{{ markTokens() method
+	//{{{ getVirtualWidth() method
 	/**
-	 * Returns the syntax tokens for the specified line.
-	 * @param lineIndex The line number
-	 * @param tokenHandler The token handler that will receive the syntax
-	 * tokens
+	 * Returns the virtual column number (taking tabs into account) of the
+	 * specified position.
+	 *
+	 * @param line The line number
+	 * @param column The column number
 	 * @since jEdit 4.1pre1
 	 */
-	public void markTokens(int lineIndex, TokenHandler tokenHandler)
+	public int getVirtualWidth(int line, int column)
+	{
+		try
+		{
+			readLock();
+
+			int start = getLineStartOffset(line);
+			getText(start,column,seg);
+
+			return MiscUtilities.getVirtualWidth(seg,getTabSize());
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
+	//{{{ getOffsetOfVirtualColumn() method
+	/**
+	 * Returns the array offset of a virtual column number (taking tabs
+	 * into account) in the segment.
+	 *
+	 * @param line The line number
+	 * @param column The virtual column number
+	 * @param totalVirtualWidth If this array is non-null, the total
+	 * virtual width will be stored in its first location if this method
+	 * returns -1.
+	 *
+	 * @return A negative number if the column is out of bounds
+	 *
+	 * @since jEdit 4.1pre1
+	 */
+	public int getOffsetOfVirtualColumn(int line, int column,
+		int[] totalVirtualWidth)
+	{
+		try
+		{
+			readLock();
+
+			getLineText(line,seg);
+
+			return MiscUtilities.getOffsetOfVirtualColumn(seg,
+				getTabSize(),column,totalVirtualWidth);
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
+	//{{{ insertAtColumn()
+	/**
+	 * Like the <code>insert()</code> method, but inserts the string at
+	 * the specified virtual column. Inserts spaces as appropriate if
+	 * the line is shorter than the column.
+	 * @param line The line number
+	 * @param col The virtual column number
+	 * @param str The string
+	 */
+	public void insertAtColumn(int line, int col, String str)
 	{
 		try
 		{
 			writeLock();
 
-			if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(lineIndex);
-
-			/*
-			 * Scan backwards, looking for a line with
-			 * a valid line context.
-			 */
-			int start, end;
-			if(parseFully)
+			int[] total = new int[1];
+			int offset = getOffsetOfVirtualColumn(line,col,total);
+			if(offset == -1)
 			{
-				start = -1;
-				end = 0;
+				offset = getLineEndOffset(line) - 1;
+				str = MiscUtilities.createWhiteSpace(total[0],0) + str;
 			}
 			else
-			{
-				start = Math.max(0,lineIndex - 100) - 1;
-				end = Math.max(0,lineIndex - 100);
-			}
+				offset += getLineStartOffset(line);
 
-			for(int i = lineIndex - 1; i > end; i--)
-			{
-				if(offsetMgr.isLineContextValid(i))
-				{
-					start = i;
-					break;
-				}
-			}
-
-			for(int i = start + 1; i <= lineIndex; i++)
-			{
-				getLineText(i,seg);
-
-				TokenMarker.LineContext prevContext = (i == 0 ? null
-					: offsetMgr.getLineContext(i - 1));
-
-				TokenMarker.LineContext context = offsetMgr.getLineContext(i);
-				ParserRule oldRule;
-				ParserRuleSet oldRules;
-				if(context == null)
-				{
-					oldRule = null;
-					oldRules = null;
-				}
-				else
-				{
-					oldRule = context.inRule;
-					oldRules = context.rules;
-				}
-
-				context = tokenMarker.markTokens(prevContext,
-					(i == lineIndex ? tokenHandler
-					: DummyTokenHandler.INSTANCE),seg,
-					noWordSep);
-				offsetMgr.setLineContext(i,context);
-
-				// Could incorrectly be set to 'false' with
-				// recursive delegates, where the chaining might
-				// have changed but not the rule set in question (?)
-				if(oldRule != context.inRule)
-					nextLineRequested = true;
-				else if(oldRules != context.rules)
-					nextLineRequested = true;
-				//else if(i != lastTokenizedLine)
-				//	nextLineRequested = false;
-			}
-
-			int lineCount = offsetMgr.getLineCount();
-			if(nextLineRequested && lineCount - lineIndex > 1)
-			{
-				offsetMgr.lineInfoChangedFrom(lineIndex + 1);
-			}
+			insert(offset,str);
 		}
 		finally
 		{
@@ -2355,53 +2481,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ isNextLineRequested() method
-	/**
-	 * Returns true if the next line should be repainted. This
-	 * will return true after a line has been tokenized that starts
-	 * a multiline token that continues onto the next line.
-	 */
-	public boolean isNextLineRequested()
-	{
-		boolean retVal = nextLineRequested;
-		nextLineRequested = false;
-		return retVal;
-	} //}}}
-
-	//{{{ getTokenMarker() method
-	/**
-	 * This method is only public so that the <code>OffsetManager</code>
-	 * class can use it.
-	 * @since jEdit 4.0pre1
-	 */
-	public TokenMarker getTokenMarker()
-	{
-		return tokenMarker;
-	} //}}}
-
 	//}}}
 
 	//{{{ Deprecated methods
-
-	//{{{ addDocumentListener() method
-	/**
-	 * @deprecated Write a <code>BufferChangeListener</code> instead
-	 */
-	public void addDocumentListener(DocumentListener l)
-	{
-		Log.log(Log.WARNING,this,"Document listeners not supported: "
-			+ l.getClass().getName());
-	} //}}}
-
-	//{{{ removeDocumentListener() method
-	/**
-	 * @deprecated Write a <code>BufferChangeListener</code> instead
-	 */
-	public void removeDocumentListener(DocumentListener l)
-	{
-		Log.log(Log.WARNING,this,"Document listeners not supported: "
-			+ l.getClass().getName());
-	} //}}}
 
 	//{{{ putProperty() method
 	/**
@@ -2424,29 +2506,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		setBooleanProperty(name,value);
 	} //}}}
 
-	//{{{ isSaving() method
-	/**
-	 * @deprecated Call isPerformingIO() instead
-	 */
-	public final boolean isSaving()
-	{
-		return getFlag(IO);
-	} //}}}
-
-	//{{{ tokenizeLines() method
-	/**
-	 * @deprecated Don't call this method.
-	 */
-	public void tokenizeLines() {} //}}}
-
-	//{{{ tokenizeLines() method
-	/**
-	 * @deprecated
-	 */
-	public void tokenizeLines(int start, int len)
-	{
-	} //}}}
-
 	//{{{ markTokens() method
 	/**
 	 * @deprecated Use org.gjt.sp.jedit.syntax.DefaultTokenHandler instead
@@ -2467,78 +2526,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		TokenList list = new TokenList();
 		markTokens(lineIndex,list);
 		return list;
-	} //}}}
-
-	//{{{ isLineVisible() method
-	/**
-	 * @deprecated Fold visibility is now stored on a per-text area
-	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
-	 * to get a visibility manager, and call the
-	 * <code>isLineVisible()</code> method on that object instead.
-	 */
-	public boolean isLineVisible(int line)
-	{
-		return true;
-	} //}}}
-
-	//{{{ getVirtualLineCount() method
-	/**
-	 * @deprecated
-	 */
-	public int getVirtualLineCount()
-	{
-		return offsetMgr.getLineCount();
-	} //}}}
-
-	//{{{ getPrevVisibleLine() method
-	/**
-	 * @deprecated Fold visibility is now stored on a per-text area
-	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
-	 * to get a visibility manager, and call the
-	 * <code>getPrevVisibleLine()</code> method on that object instead.
-	 */
-	public int getPrevVisibleLine(int lineNo)
-	{
-		return lineNo - 1;
-	} //}}}
-
-	//{{{ getNextVisibleLine() method
-	/**
-	 * @deprecated Fold visibility is now stored on a per-text area
-	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
-	 * to get a visibility manager, and call the
-	 * <code>getNextVisibleLine()</code> method on that object instead.
-	 */
-	public int getNextVisibleLine(int lineNo)
-	{
-		if(lineNo >= offsetMgr.getLineCount() - 1)
-			return -1;
-		else
-			return lineNo + 1;
-	} //}}}
-
-	//{{{ virtualToPhysical() method
-	/**
-	 * @deprecated Fold visibility is now stored on a per-text area
-	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
-	 * to get a visibility manager, and call the
-	 * <code>virtualToPhysical()</code> method on that object instead.
-	 */
-	public int virtualToPhysical(int lineNo)
-	{
-		return lineNo;
-	} //}}}
-
-	//{{{ physicalToVirtual() method
-	/**
-	 * @deprecated Fold visibility is now stored on a per-text area
-	 * basis. Call <code>textArea.getFoldVisibilityManager()</code>
-	 * to get a visibility manager, and call the
-	 * <code>physicalToVirtual()</code> method on that object instead.
-	 */
-	public int physicalToVirtual(int lineNo)
-	{
-		return lineNo;
 	} //}}}
 
 	//{{{ getRootElements() method

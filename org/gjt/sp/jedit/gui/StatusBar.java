@@ -489,9 +489,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			JEditTextArea textArea = view.getTextArea();
 
 			int currLine = textArea.getCaretLine();
-			int dot = textArea.getCaretPosition()
-				- textArea.getLineStartOffset(currLine);
-			int virtualPosition = getVirtualPosition(dot,buffer,textArea);
+			int start = textArea.getLineStartOffset(currLine);
+			int dot = textArea.getCaretPosition() - start;
+			buffer.getText(start,dot,seg);
+			int virtualPosition = MiscUtilities.getVirtualWidth(seg,
+				buffer.getTabSize());
 
 			buf.setLength(0);
 			buf.append(Integer.toString(currLine + 1));
@@ -540,35 +542,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		//{{{ Private members
 		private Segment seg = new Segment();
-
-		//{{{ getVirtualPosition() method
-		private int getVirtualPosition(int dot, Buffer buffer, JEditTextArea textArea)
-		{
-			int line = textArea.getCaretLine();
-
-			textArea.getLineText(line, seg);
-
-			int virtualPosition = 0;
-			int tabSize = buffer.getTabSize();
-
-			for (int i = 0; i < seg.count && i < dot; ++i)
-			{
-				char ch = seg.array[seg.offset + i];
-
-				if (ch == '\t')
-				{
-					virtualPosition += tabSize
-						- (virtualPosition % tabSize);
-				}
-				else
-				{
-					++virtualPosition;
-				}
-			}
-
-			return virtualPosition;
-		} //}}}
-
 		//}}}
 	} //}}}
 

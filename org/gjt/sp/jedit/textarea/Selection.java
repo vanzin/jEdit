@@ -22,7 +22,9 @@
 
 package org.gjt.sp.jedit.textarea;
 
+import javax.swing.text.Segment;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.MiscUtilities;
 
 /**
  * An interface representing a portion of the current selection.
@@ -50,6 +52,28 @@ public abstract class Selection implements Cloneable
 		return end;
 	} //}}}
 
+	//{{{ getStart() method
+	/**
+	 * Returns the start offset of this selection on the specified
+	 * line.
+	 * @param buffer The buffer
+	 * @param line The line number
+	 * @since jEdit 4.1pre1
+	 */
+	public abstract int getStart(Buffer buffer, int line);
+	//}}}
+
+	//{{{ getEnd() method
+	/**
+	 * Returns the end offset of this selection on the specified
+	 * line.
+	 * @param buffer The buffer
+	 * @param line The line number
+	 * @since jEdit 4.1pre1
+	 */
+	public abstract int getEnd(Buffer buffer, int line);
+	//}}}
+
 	//{{{ getStartLine() method
 	/**
 	 * Returns the starting line number of this selection.
@@ -67,26 +91,6 @@ public abstract class Selection implements Cloneable
 	{
 		return endLine;
 	} //}}}
-
-	//{{{ getStart() method
-	/**
-	 * Returns the start offset of this selection on the specified
-	 * line.
-	 * @param buffer The buffer
-	 * @param line The line number
-	 */
-	public abstract int getStart(Buffer buffer, int line);
-	//}}}
-
-	//{{{ getEnd() method
-	/**
-	 * Returns the end offset of this selection on the specified
-	 * line.
-	 * @param buffer The buffer
-	 * @param line The line number
-	 */
-	public abstract int getEnd(Buffer buffer, int line);
-	//}}}
 
 	//{{{ toString() method
 	public String toString()
@@ -112,32 +116,26 @@ public abstract class Selection implements Cloneable
 	} //}}}
 
 	//{{{ Package-private members
-	int start, end, startLine, endLine;
-	//}}}
-
-	//{{{ Protected members
+	int start, end;
+	int startLine, endLine;
 
 	//{{{ Selection constructor
-	protected Selection()
+	Selection()
 	{
 	} //}}}
 
-	//{{{ Selection constructor
-	protected Selection(Selection copy)
+	//{{{ Range constructor
+	Selection(Selection sel)
 	{
-		start = copy.start;
-		end = copy.end;
+		this.start = sel.start;
+		this.end = sel.end;
 	} //}}}
 
 	//{{{ Selection constructor
-	protected Selection(int start, int end)
+	Selection(int start, int end)
 	{
 		this.start = start;
 		this.end = end;
-
-		// setting these is handled by textArea._addToSelection();
-		//this.startLine = startLine;
-		//this.endLine = endLine;
 	} //}}}
 
 	//}}}
@@ -152,7 +150,6 @@ public abstract class Selection implements Cloneable
 		//{{{ Range constructor
 		public Range()
 		{
-			super();
 		} //}}}
 
 		//{{{ Range constructor
@@ -191,6 +188,7 @@ public abstract class Selection implements Cloneable
 	 * A rectangular selection.
 	 * @since jEdit 3.2pre1
 	 */
+	// this class is not very fast...
 	public static class Rect extends Selection
 	{
 		//{{{ Rect constructor
@@ -211,36 +209,69 @@ public abstract class Selection implements Cloneable
 			super(start,end);
 		} //}}}
 
+		//{{{ Rect constructor
+		/**
+		 * Special constructor for "Vertical Paste" command.
+		 */
+		public Rect(int start, int end, int startLine, int endLine)
+		{
+			super(start,end);
+			this.startLine = startLine;
+			this.endLine = endLine;
+		} //}}}
+
+		//{{{ getStartColumn() method
+		public int getStartColumn(Buffer buffer)
+		{
+			int virtColStart = buffer.getVirtualWidth(startLine,
+				start - buffer.getLineStartOffset(startLine));
+			int virtColEnd = buffer.getVirtualWidth(endLine,
+				end - buffer.getLineStartOffset(endLine));
+			return Math.min(virtColStart,virtColEnd) + extraStartVirt;
+		} //}}}
+
+		//{{{ getEndColumn() method
+		public int getEndColumn(Buffer buffer)
+		{
+			int virtColStart = buffer.getVirtualWidth(startLine,
+				start - buffer.getLineStartOffset(startLine));
+			int virtColEnd = buffer.getVirtualWidth(endLine,
+				end - buffer.getLineStartOffset(endLine));
+			return Math.max(virtColStart,virtColEnd) + extraEndVirt;
+		} //}}}
+
 		//{{{ getStart() method
 		public int getStart(Buffer buffer, int line)
 		{
-			if(line == startLine)
-				return start;
-			else
-			{
-				int _start = start - buffer.getLineStartOffset(startLine);
-				int _end = end - buffer.getLineStartOffset(endLine);
-
-				return Math.min(buffer.getLineEndOffset(line) - 1,
-					buffer.getLineStartOffset(line)
-					+ Math.min(_start,_end));
-			}
+			return getColumnOnOtherLine(buffer,startLine,line,
+				getStartColumn(buffer));
 		} //}}}
 
 		//{{{ getEnd() method
 		public int getEnd(Buffer buffer, int line)
 		{
-			if(line == endLine)
-				return end;
-			else
-			{
-				int _start = start - buffer.getLineStartOffset(startLine);
-				int _end = end - buffer.getLineStartOffset(endLine);
-
-				return Math.min(buffer.getLineEndOffset(line) - 1,
-					buffer.getLineStartOffset(line)
-					+ Math.max(_start,_end));
-			}
+			return getColumnOnOtherLine(buffer,startLine,line,
+				getEndColumn(buffer));
 		} //}}}
+
+		//{{{ Package-private members
+		int extraStartVirt;
+		int extraEndVirt;
+
+		//{{{ Private members
+
+		//{{{ getColumnOnOtherLine() method
+		private int getColumnOnOtherLine(Buffer buffer, int line1,
+			int line2, int col)
+		{
+			int returnValue = buffer.getOffsetOfVirtualColumn(
+				line2,col,null);
+			if(returnValue == -1)
+				return buffer.getLineEndOffset(line2) - 1;
+			else
+				return buffer.getLineStartOffset(line2) + returnValue;
+		} //}}}
+
+		//}}}
 	} //}}}
 }
