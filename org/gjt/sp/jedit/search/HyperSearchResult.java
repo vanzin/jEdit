@@ -175,7 +175,7 @@ public class HyperSearchResult
 			this.start = start;
 			this.end = end;
 
-			if(!buffer.isTemporary())
+			if(buffer != null && !buffer.isTemporary())
 				bufferOpened();
 		} //}}}
 
