@@ -218,6 +218,15 @@ class BrowserView extends JPanel
 	public void maybeReloadDirectory(String path)
 	{
 		String browserDir = browser.getDirectory();
+		String symlinkBrowserDir;
+		if(MiscUtilities.isURL(browserDir))
+		{
+			symlinkBrowserDir = browserDir;
+		}
+		else
+		{
+			MiscUtilities.resolveSymlinks(browserDir);
+		}
 
 		if(VFSBrowser.pathsEqual(path,browserDir))
 		{

@@ -226,7 +226,7 @@ public class VFSDirectoryEntryTable extends JTable
 			if(!e.expanded || e.dirEntry.type == VFS.DirectoryEntry.FILE)
 				continue;
 
-			if(VFSBrowser.pathsEqual(path,e.dirEntry.path))
+			if(VFSBrowser.pathsEqual(path,e.dirEntry.symlinkPath))
 			{
 				browserView.saveExpansionState();
 				browserView.loadDirectory(e,path);

@@ -596,6 +596,12 @@ public abstract class VFS
 		//{{{ Instance variables
 		public String name;
 		public String path;
+
+		/**
+		 * @since jEdit 4.2pre5
+		 */
+		public String symlinkPath;
+
 		public String deletePath;
 		public int type;
 		public long length;
@@ -619,6 +625,7 @@ public abstract class VFS
 			this.name = name;
 			this.path = path;
 			this.deletePath = deletePath;
+			this.symlinkPath = path;
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;

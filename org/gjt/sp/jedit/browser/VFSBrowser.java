@@ -382,7 +382,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 		else if(msg instanceof VFSUpdate)
 		{
-			maybeReloadDirectory(((VFSUpdate)msg).getPath());
+			maybeReloadDirectory(
+				MiscUtilities.resolveSymlinks(
+				((VFSUpdate)msg).getPath()));
 		}
 	} //}}}
 

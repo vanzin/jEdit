@@ -4703,7 +4703,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public void joinLines()
 	{
 		int end = getLineEndOffset(caretLine);
-		if(end > buffer.getLength())
+		if(!buffer.isEditable() || end > buffer.getLength())
 		{
 			getToolkit().beep();
 			return;

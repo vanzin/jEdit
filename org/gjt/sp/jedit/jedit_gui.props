@@ -371,7 +371,9 @@ search=find \
        hypersearch-word \
        - \
        ignore-case \
-       regexp
+       regexp \
+       - \
+       hypersearch-results
 search.label=$Search
 find.label=$Find...
 find-next.label=Fi$nd Next
@@ -387,6 +389,7 @@ quick-search-word.label=Incremental Search for $Word
 hypersearch-word.label=H$yperSearch for Word
 ignore-case.label=Ignore $Case
 regexp.label=Regular E$xpressions
+hypersearch-results.label=HyperSearch Results
 #}}}
 
 #{{{ Markers menu
@@ -679,7 +682,6 @@ document-end.label=Go to End of Buffer
 document-home.label=Go to Start of Buffer
 end.label=Smart End
 home.label=Smart Home
-hypersearch-results.label=HyperSearch Results
 insert-literal.label=Insert Next Character Literally
 insert-newline.label=Insert Newline
 insert-newline-indent.label=Insert Newline and Indent
