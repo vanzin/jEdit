@@ -117,7 +117,7 @@ defaults.
 - "Insert File" was broken since 4.0pre1
 - Text area syntax highlighting would not always be updated properly
   when switching modes
-
+-
 + API Additions
 
 - BufferUpdate.SAVED message type added. Previously, DIRTY_CHANGED could

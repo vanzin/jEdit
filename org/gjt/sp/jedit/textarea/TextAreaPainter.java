@@ -600,10 +600,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
-		Buffer buffer = textArea.getBuffer();
-		if(!buffer.isLoaded())
-			return;
-
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -612,6 +608,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		gfx.setColor(getBackground());
 		gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+
+		Buffer buffer = textArea.getBuffer();
+		if(!buffer.isLoaded())
+			return;
 
 		int x = textArea.getHorizontalOffset();
 
