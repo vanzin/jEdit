@@ -278,26 +278,43 @@ public abstract class EditPlugin
 	 */
 	public static class JAR
 	{
+		//{{{ getPath() method
 		public String getPath()
 		{
 			return path;
-		}
+		} //}}}
 
+		//{{{ getZipFile() method
 		public ZipFile getZipFile()
 		{
 			return classLoader.getZipFile();
-		}
+		} //}}}
 
+		//{{{ getClassLoader() method
 		public JARClassLoader getClassLoader()
 		{
 			return classLoader;
-		}
+		} //}}}
 
+		//{{{ getActions() method
+		/**
+		 * @deprecated Call getActionSet() instead
+		 */
 		public ActionSet getActions()
 		{
+			return getActionSet();
+		} //}}}
+	
+		//{{{ getActionSet() method
+		/**
+		 * @since jEdit 4.2pre1
+		 */
+		public ActionSet getActionSet()
+		{
 			return actions;
-		}
+		} //}}}
 
+		//{{{ addPlugin() method
 		public void addPlugin(EditPlugin plugin)
 		{
 			plugin.jar = JAR.this;
@@ -321,38 +338,41 @@ public abstract class EditPlugin
 			if(plugin instanceof EBPlugin)
 				EditBus.addToBus((EBPlugin)plugin);
 
-			plugins.addElement(plugin);
-		}
+			plugins.add(plugin);
+		} //}}}
 
+		//{{{ getPlugins() method
 		public EditPlugin[] getPlugins()
 		{
-			EditPlugin[] array = new EditPlugin[plugins.size()];
-			plugins.copyInto(array);
-			return array;
-		}
+			return (EditPlugin[])plugins.toArray(new EditPlugin[plugins.size()]);
+		} //}}}
 
-		public JAR(String path, JARClassLoader classLoader)
+		//{{{ Package-private members
+
+		//{{{ JAR consructor
+		JAR(String path, JARClassLoader classLoader)
 		{
 			this.path = path;
 			this.classLoader = classLoader;
-			plugins = new Vector();
+			plugins = new ArrayList();
 			actions = new ActionSet();
-		}
+		} //}}}
 
-		// package-private members
+		//{{{ getPlugins() method
 		void getPlugins(Vector vector)
 		{
 			for(int i = 0; i < plugins.size(); i++)
 			{
-				vector.addElement(plugins.elementAt(i));
+				vector.addElement(plugins.get(i));
 			}
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private String path;
 		private JARClassLoader classLoader;
-		private Vector plugins;
+		private ArrayList plugins;
 		private ActionSet actions;
+		//}}}
 	} //}}}
 
 	//{{{ Private members

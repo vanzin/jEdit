@@ -22,7 +22,12 @@
 
 package org.gjt.sp.jedit;
 
+import com.microstar.xml.*;
+import java.io.*;
+import java.net.URL;
 import java.util.*;
+import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.util.Log;
 
 /**
  * A set of actions.<p>
@@ -98,12 +103,34 @@ public class ActionSet
 {
 	//{{{ ActionSet constructor
 	/**
+	 * Creates a new plugin action set.
+	 * @param jar The plugin
+	 * @param uri The actions.xml URI
+	 * @param cachedActionNames The list of cached action names
+	 * @since jEdit 4.2pre1
+	 */
+	public ActionSet(EditPlugin.JAR jar, URL uri,
+		String[] cachedActionNames)
+	{
+		this();
+		this.jar = jar;
+		this.uri = uri;
+		for(int i = 0; i < cachedActionNames.length; i++)
+		{
+			actions.put(cachedActionNames[i],placeholder);
+		}
+		loaded = false;
+	} //}}}
+
+	//{{{ ActionSet constructor
+	/**
 	 * Creates a new action set.
 	 * @since jEdit 4.0pre1
 	 */
 	public ActionSet()
 	{
-		this(null);
+		actions = new Hashtable();
+		loaded = true;
 	} //}}}
 
 	//{{{ ActionSet constructor
@@ -114,8 +141,8 @@ public class ActionSet
 	 */
 	public ActionSet(String label)
 	{
+		this();
 		this.label = label;
-		actions = new Hashtable();
 	} //}}}
 
 	//{{{ getLabel() method
@@ -149,7 +176,7 @@ public class ActionSet
 	{
 		actions.put(action.getName(),action);
 		if(added)
-			jEdit.actionHash.put(action.getName(),action);
+			jEdit.actionHash.put(action.getName(),this);
 	} //}}}
 
 	//{{{ removeAction() method
@@ -172,23 +199,38 @@ public class ActionSet
 	 */
 	public void removeAllActions()
 	{
-		EditAction[] actions = getActions();
+		String[] actions = getActionNames();
 		for(int i = 0; i < actions.length; i++)
 		{
-			jEdit.actionHash.remove(actions[i].getName());
+			jEdit.actionHash.remove(actions[i]);
 		}
 		this.actions.clear();
 	} //}}}
 
 	//{{{ getAction() method
 	/**
-	 * Returns an action with the specified name.
+	 * Returns an action with the specified name.<p>
+	 *
+	 * <b>Deferred loading:</b> this will load the action set if necessary.
+	 *
 	 * @param name The action name
 	 * @since jEdit 4.0pre1
 	 */
 	public EditAction getAction(String name)
 	{
-		return (EditAction)actions.get(name);
+		Object obj = actions.get(name);
+		if(obj == placeholder)
+		{
+			load();
+			obj = actions.get(name);
+			if(obj == placeholder)
+			{
+				Log.log(Log.WARNING,this,"Outdated cache");
+				obj = null;
+			}
+		}
+
+		return (EditAction)obj;
 	} //}}}
 
 	//{{{ getActionCount() method
@@ -201,13 +243,35 @@ public class ActionSet
 		return actions.size();
 	} //}}}
 
+	//{{{ getActionNames() method
+	/**
+	 * Returns an array of all action names in this action set.
+	 * @since jEdit 4.2pre1
+	 */
+	public String[] getActionNames()
+	{
+		String[] retVal = new String[actions.size()];
+		Enumeration enum = actions.keys();
+		int i = 0;
+		while(enum.hasMoreElements())
+		{
+			retVal[i++] = (String)enum.nextElement();
+		}
+		return retVal;
+	} //}}}
+
 	//{{{ getActions() method
 	/**
-	 * Returns an array of all actions in this action set.
+	 * Returns an array of all actions in this action set.<p>
+	 *
+	 * <b>Deferred loading:</b> this will load the action set if necessary.
+	 *
 	 * @since jEdit 4.0pre1
 	 */
 	public EditAction[] getActions()
 	{
+		load();
+
 		EditAction[] retVal = new EditAction[actions.size()];
 		Enumeration enum = actions.elements();
 		int i = 0;
@@ -222,11 +286,11 @@ public class ActionSet
 	/**
 	 * Returns if this action set contains the specified action.
 	 * @param action The action
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.2pre1
 	 */
-	public boolean contains(EditAction action)
+	public boolean contains(String action)
 	{
-		return actions.contains(action);
+		return actions.containsKey(action);
 	} //}}}
 
 	//{{{ toString() method
@@ -235,18 +299,96 @@ public class ActionSet
 		return label;
 	} //}}}
 
+	//{{{ initKeyBindings() method
+	/**
+	 * Initializes the action set's key bindings. Plugins and macros do not
+	 * need to call this method, since jEdit calls it automatically for
+	 * known action sets.
+	 * @since jEdit 4.2pre1
+	 */
+	public void initKeyBindings()
+	{
+		InputHandler inputHandler = jEdit.getInputHandler();
+
+		Iterator iter = actions.entrySet().iterator();
+		while(iter.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)iter.next();
+			String name = (String)entry.getKey();
+
+			String shortcut1 = jEdit.getProperty(name + ".shortcut");
+			if(shortcut1 != null)
+				inputHandler.addKeyBinding(shortcut1,name);
+
+			String shortcut2 = jEdit.getProperty(name + ".shortcut2");
+			if(shortcut2 != null)
+				inputHandler.addKeyBinding(shortcut2,name);
+		}
+	} //}}}
+
 	//{{{ Package-private members
 	boolean added;
 
-	void getActions(Vector vec)
+	//{{{ getActions() method
+	void getActions(ArrayList vec)
 	{
+		load();
+
 		Enumeration enum = actions.elements();
 		while(enum.hasMoreElements())
-			vec.addElement(enum.nextElement());
+			vec.add(enum.nextElement());
 	} //}}}
+
+	//{{{ getActionNames() method
+	void getActionNames(ArrayList vec)
+	{
+		Enumeration enum = actions.keys();
+		while(enum.hasMoreElements())
+			vec.add(enum.nextElement());
+	} //}}}
+
+	//}}}
 
 	//{{{ Private members
 	private String label;
 	private Hashtable actions;
+	private EditPlugin.JAR jar;
+	private URL uri;
+	private boolean loaded;
+
+	private static final Object placeholder = new Object();
+
+	//{{{ load() method
+	private void load()
+	{
+		if(loaded)
+			return;
+
+		loaded = true;
+
+		try
+		{
+			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
+
+			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
+			XmlParser parser = new XmlParser();
+			parser.setHandler(ah);
+			parser.parse(null, null, new BufferedReader(
+				new InputStreamReader(
+				uri.openStream())));
+		}
+		catch(XmlException xe)
+		{
+			int line = xe.getLine();
+			String message = xe.getMessage();
+			Log.log(Log.ERROR,this,uri + ":" + line
+				+ ": " + message);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,uri,e);
+		}
+	} //}}}
+
 	//}}}
 }

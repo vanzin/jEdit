@@ -83,6 +83,16 @@ public abstract class InputHandler extends KeyAdapter
 	 * input-handler specific)
 	 * @param action The action
 	 */
+	public abstract void addKeyBinding(String keyBinding, String action);
+	//}}}
+
+	//{{{ addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler.
+	 * @param keyBinding The key binding (the format of this is
+	 * input-handler specific)
+	 * @param action The action
+	 */
 	public abstract void addKeyBinding(String keyBinding, EditAction action);
 	//}}}
 
@@ -185,6 +195,18 @@ public abstract class InputHandler extends KeyAdapter
 	public void resetLastActionCount()
 	{
 		lastActionCount = 0;
+	} //}}}
+
+	//{{{ invokeAction() method
+	/**
+	 * Invokes the specified action, repeating and recording it as
+	 * necessary.
+	 * @param action The action
+	 * @since jEdit 4.2pre1
+	 */
+	public void invokeAction(String action)
+	{
+		invokeAction(jEdit.getAction(action));
 	} //}}}
 
 	//{{{ invokeAction() method

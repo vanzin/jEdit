@@ -500,7 +500,7 @@ class ToolBarEditDialog extends EnhancedDialog
 			{
 				action.setSelected(true);
 				ActionSet set = jEdit.getActionSetForAction(
-					jEdit.getAction(current.actionName));
+					current.actionName);
 				combo.setSelectedItem(set);
 				updateList();
 				list.setSelectedValue(current,true);

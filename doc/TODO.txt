@@ -5,6 +5,8 @@ and quirks that I need to fix eventually.
 
 - files changed dialog: visible row count
 - save file resulting in fold collapse -- scroll line count broken
+
+- browser: different layout when top or bottom
 - vfs browser: re-add option to base filter on filename extension
 - enter with browser view focused; hides dialog
 - browser field completion: fills out full path
@@ -165,6 +167,7 @@ of bounds, etc.
 
 + cleanups:
 
+- text area mouse handler cleanup
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - finish persistent splits code
