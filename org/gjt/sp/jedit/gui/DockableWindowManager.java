@@ -843,11 +843,11 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ createPopupMenu() method
-	public JPopupMenu createPopupMenu(PanelWindowContainer container,
+	public JPopupMenu createPopupMenu(DockableWindowContainer container,
 		final String dockable, boolean clone)
 	{
 		JPopupMenu popup = new JPopupMenu();
-		if(dockable == null)
+		if(dockable == null && container instanceof PanelWindowContainer)
 		{
 			ActionListener listener = new ActionListener()
 			{
@@ -857,7 +857,8 @@ public class DockableWindowManager extends JPanel
 				}
 			};
 
-			String[] dockables = container.getDockables();
+			String[] dockables = ((PanelWindowContainer)
+				container).getDockables();
 			for(int i = 0; i < dockables.length; i++)
 			{
 				String name = dockables[i];

@@ -2178,23 +2178,20 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		Selection s = getSelectionAtOffset(caret);
 
-		if(!select && selection.size() != 0)
+		if(!select && s instanceof Selection.Range)
 		{
-			if(s != null)
+			if(multi)
 			{
-				if(multi)
+				if(caret != s.end)
 				{
-					if(caret != s.end)
-					{
-						moveCaretPosition(s.end);
-						return;
-					}
-				}
-				else
-				{
-					setCaretPosition(s.end);
+					moveCaretPosition(s.end);
 					return;
 				}
+			}
+			else
+			{
+				setCaretPosition(s.end);
+				return;
 			}
 		}
 
@@ -2206,7 +2203,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		int newCaret = caret;
 
-		if(caret == buffer.getLength())
+		if(select && caret == buffer.getLength())
 		{
 			if(s instanceof Selection.Rect)
 				extraEndVirt++;
@@ -2245,7 +2242,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 	//{{{ goToNextLine() method
 	/**
-	 * Movse the caret to the next line.
+	 * Move the caret to the next line.
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToNextLine(boolean select)
@@ -2268,7 +2265,13 @@ loop:		for(int i = 0; i < text.length(); i++)
 		if(select)
 		{
 			int extraEndVirt = getExtraEndVirt(caret,newCaret);
+			if(extraEndVirt < 0)
+			{
+				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - extraEndVirt - 1;
+				extraEndVirt = 0;
+			}
 			extendSelection(caret,newCaret,extraEndVirt);
+			magic = -1;
 		}
 		else if(!multi)
 			selectNone();
@@ -2484,30 +2487,27 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		Selection s = getSelectionAtOffset(caret);
 
-		if(!select && selection.size() != 0)
+		if(!select && s instanceof Selection.Range)
 		{
-			if(s != null)
+			if(multi)
 			{
-				if(multi)
+				if(caret != s.start)
 				{
-					if(caret != s.start)
-					{
-						moveCaretPosition(s.start);
-						return;
-					}
-				}
-				else
-				{
-					setCaretPosition(s.start);
+					moveCaretPosition(s.start);
 					return;
 				}
+			}
+			else
+			{
+				setCaretPosition(s.start);
+				return;
 			}
 		}
 
 		int extraEndVirt = 0;
 		int newCaret = caret;
 
-		if(caret == getLineEndOffset(caretLine) - 1)
+		if(select && caret == getLineEndOffset(caretLine) - 1)
 		{
 			if(s instanceof Selection.Rect)
 			{
@@ -2566,7 +2566,13 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		if(select)
 		{
 			int extraEndVirt = getExtraEndVirt(caret,newCaret);
+			if(extraEndVirt < 0)
+			{
+				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - extraEndVirt - 1;
+				extraEndVirt = 0;
+			}
 			extendSelection(caret,newCaret,extraEndVirt);
+			magic = -1;
 		}
 		else if(!multi)
 			selectNone();
@@ -5431,7 +5437,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(newOffset == -1)
 				return virtualWidth - totalVirtualWidth[0];
 			else
-				return 0;
+				return -newOffset;
 		}
 		else
 			return 0;
