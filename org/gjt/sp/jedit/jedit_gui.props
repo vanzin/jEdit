@@ -533,6 +533,8 @@ memory-status.label=$Memory Status...
 reload-modes.label=$Reload Edit Modes
 #}}}
 
+#}}}
+
 #{{{ Macros menu
 macros=record-macro \
        record-temp-macro \
@@ -1295,25 +1297,6 @@ options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 #}}}
 
-#{{{ Loading and Saving pane
-options.loadsave.label=Loading & Saving
-options.loadsave.encoding=Default character encoding:
-options.loadsave.autosave=Autosave frequency (secs):
-options.loadsave.backups=Max number of backups:
-options.loadsave.backupDirectory=Backup directory:
-options.loadsave.backupPrefix=Backup filename prefix:
-options.loadsave.backupSuffix=Backup filename suffix:
-options.loadsave.lineSeparator=Default line separator:
-options.loadsave.restore=Restore previously open files on startup
-options.loadsave.restore.cli=... even if file names were specified on the \
-	command line
-options.loadsave.newView=Client instances open files in new view
-options.loadsave.persistentMarkers=Save marker positions
-options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
-options.loadsave.backupEverySave=Backup on every save
-options.loadsave.stripTrailingEOL=Hide final end of line (if any)
-#}}}
-
 #{{{ Text Area pane
 options.textarea.label=Text Area
 options.textarea.font=Text font:
@@ -1379,7 +1362,7 @@ options.color.memoryForegroundColor=Memory indicator foreground
 options.color.memoryBackgroundColor=Memory indicator background
 #}}}
 
-#{{{ Syntax highlighting pane
+#{{{ Syntax Highlighting pane
 options.syntax.label=Syntax Highlighting
 options.syntax.parseFully=More accurate (and slower) syntax highlighting
 options.syntax.object=Token type
@@ -1398,6 +1381,25 @@ options.syntax.operatorStyle=Operator
 options.syntax.digitStyle=Digit
 options.syntax.invalidStyle=Invalid token
 options.syntax.foldLine=Collapsed fold line
+#}}}
+
+#{{{ Loading and Saving pane
+options.loadsave.label=Loading & Saving
+options.loadsave.encoding=Default character encoding:
+options.loadsave.autosave=Autosave frequency (secs):
+options.loadsave.backups=Max number of backups:
+options.loadsave.backupDirectory=Backup directory:
+options.loadsave.backupPrefix=Backup filename prefix:
+options.loadsave.backupSuffix=Backup filename suffix:
+options.loadsave.lineSeparator=Default line separator:
+options.loadsave.restore=Restore previously open files on startup
+options.loadsave.restore.cli=... even if file names were specified on the \
+	command line
+options.loadsave.newView=Client instances open files in new view
+options.loadsave.persistentMarkers=Save marker positions
+options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
+options.loadsave.backupEverySave=Backup on every save
+options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Editing pane
@@ -1422,61 +1424,6 @@ options.mode.mode=Edit mode:
 options.mode.useDefaults=Use default settings
 options.mode.filenameGlob=File name glob:
 options.mode.firstlineGlob=First line glob:
-#}}}
-
-#{{{ Printing pane
-options.print.label=Printing
-options.print.font=Print font:
-options.print.fontstyle=Print font style:
-options.print.fontsize=Print font size:
-options.print.header=Print a header with the file name
-options.print.footer=Print a footer with the date, time and page number
-options.print.lineNumbers=Print line numbers
-options.print.color=Color printing
-options.print.tabSize=Tab width when printing:
-#}}}
-
-#{{{ Docking pane
-options.docking.label=Docking
-options.docking.viewLayout=View layout
-options.docking.alternateDockingLayout=Alternate docked window placement
-options.docking.alternateToolBarLayout=Alternate tool bar placement
-options.docking.windowDocking=Window docking
-options.docking.title=Window
-options.docking.dockPosition=Docking position
-#}}}
-
-#{{{ Tool Bar pane
-options.toolbar.label=Tool Bar
-options.toolbar.showToolbar=Show tool bar
-options.toolbar.caption=Buttons to display on tool bar:
-options.toolbar.add=Add...
-options.toolbar.edit=Edit...
-options.toolbar.remove=Remove
-options.toolbar.moveUp=Move Up
-options.toolbar.moveDown=Move Down
-options.toolbar.edit.title=Edit Tool Bar Entry
-options.toolbar.edit.caption=Type:
-options.toolbar.edit.separator=Separator
-options.toolbar.edit.action=Command or macro:
-options.toolbar.edit.icon=Icon:
-options.toolbar.edit.builtin=Use built-in icon:
-options.toolbar.edit.file=Load icon from file:
-options.toolbar.edit.choose=Choose
-options.toolbar.edit.no-icon=No icon selected
-#}}}
-
-#{{{ Context Menu pane
-options.context.label=Context Menu
-options.context.caption=Items in text area right click menu:
-options.context.add=Add...
-options.context.remove=Remove
-options.context.moveUp=Move Up
-options.context.moveDown=Move Down
-options.context.add.title=Add to Context Menu
-options.context.add.caption=Add to context menu:
-options.context.add.separator=Separator
-options.context.add.action=Command or macro:
 #}}}
 
 #{{{ Abbreviations pane
@@ -1528,6 +1475,61 @@ grab-key.prefix-shortcut.message=\
 	You cannot use this shortcut, because\n\
 	it is a prefix to other shortcuts.\n\
 	Please choose another.
+#}}}
+
+#{{{ Docking pane
+options.docking.label=Docking
+options.docking.viewLayout=View layout
+options.docking.alternateDockingLayout=Alternate docked window placement
+options.docking.alternateToolBarLayout=Alternate tool bar placement
+options.docking.windowDocking=Window docking
+options.docking.title=Window
+options.docking.dockPosition=Docking position
+#}}}
+
+#{{{ Context Menu pane
+options.context.label=Context Menu
+options.context.caption=Items in text area right click menu:
+options.context.add=Add...
+options.context.remove=Remove
+options.context.moveUp=Move Up
+options.context.moveDown=Move Down
+options.context.add.title=Add to Context Menu
+options.context.add.caption=Add to context menu:
+options.context.add.separator=Separator
+options.context.add.action=Command or macro:
+#}}}
+
+#{{{ Tool Bar pane
+options.toolbar.label=Tool Bar
+options.toolbar.showToolbar=Show tool bar
+options.toolbar.caption=Buttons to display on tool bar:
+options.toolbar.add=Add...
+options.toolbar.edit=Edit...
+options.toolbar.remove=Remove
+options.toolbar.moveUp=Move Up
+options.toolbar.moveDown=Move Down
+options.toolbar.edit.title=Edit Tool Bar Entry
+options.toolbar.edit.caption=Type:
+options.toolbar.edit.separator=Separator
+options.toolbar.edit.action=Command or macro:
+options.toolbar.edit.icon=Icon:
+options.toolbar.edit.builtin=Use built-in icon:
+options.toolbar.edit.file=Load icon from file:
+options.toolbar.edit.choose=Choose
+options.toolbar.edit.no-icon=No icon selected
+#}}}
+
+#{{{ Printing pane
+options.print.label=Printing
+options.print.font=Print font:
+options.print.fontstyle=Print font style:
+options.print.fontsize=Print font size:
+options.print.header=Print a header with the file name
+options.print.footer=Print a footer with the date, time and page number
+options.print.lineNumbers=Print line numbers
+options.print.color=Color printing
+options.print.tabSize=Tab width when printing:
 #}}}
 
 #{{{ Proxy pane

@@ -18,11 +18,6 @@ release.
 - CHILL (CCITT recommendation language) syntax highlighting added
   (Rudolf Widmann)
 
-+ Plugin Loader Changes:
-
-- The JARClassLoader now registers plugin packages and manifest files.
-  (Marco Hunsicker)
-
 + User Interface Changes:
 
 - Added an option to Utilities->Global Options->Docking for
@@ -41,6 +36,16 @@ release.
     Utilities->BeanShell.
   - Various troubleshooting-related commands moved from Utilities to
     Utilities->Troubleshooting (like they were in 4.1pre1).
+
++ Miscellaneous Changes:
+
+- The JARClassLoader now registers plugin packages and manifest files.
+  (Marco Hunsicker)
+
+- Because a lot of people send me their .jedit/activity.log files
+  without invoking 'Update Activity Log on Disk' first, I have added a
+  notice to this file, stating that you must invoke the above command
+  otherwise the file will be incomplete.
 
 + Bug Fixes:
 

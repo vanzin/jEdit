@@ -127,6 +127,23 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addComponent(String label, Component comp)
 	{
+		JLabel l = new JLabel(label);
+		l.setBorder(new EmptyBorder(0,0,0,12));
+		addComponent(l,comp);
+	} //}}}
+
+	//{{{ addComponent() method
+	/**
+	 * Adds a labeled component to the option pane. Components are
+	 * added in a vertical fashion, one per row. The label is
+	 * displayed to the left of the component.
+	 * @param comp1 The label
+	 * @param comp2 The component
+	 *
+	 * @since jEdit 4.1pre3
+	 */
+	public void addComponent(Component comp1, Component comp2)
+	{
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
 		cons.gridheight = 1;
@@ -135,15 +152,13 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		cons.insets = new Insets(1,0,1,0);
 		cons.fill = GridBagConstraints.BOTH;
 
-		JLabel l = new JLabel(label,SwingConstants.RIGHT);
-		l.setBorder(new EmptyBorder(0,0,0,12));
-		gridBag.setConstraints(l,cons);
-		add(l);
+		gridBag.setConstraints(comp1,cons);
+		add(comp1);
 
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
-		gridBag.setConstraints(comp,cons);
-		add(comp);
+		gridBag.setConstraints(comp2,cons);
+		add(comp2);
 	} //}}}
 
 	//{{{ addComponent() method
