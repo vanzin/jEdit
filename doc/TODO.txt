@@ -3,8 +3,21 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+ok [error] ExtensionManager: java.lang.NullPointerException
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.getOffsets(StructureMatcher.java:181)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintHighlight(StructureMatcher.java:207)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintValidLine(StructureMatcher.java:147)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
+
 + text area:
 
+  - ruleset importing trick
+  - file system browser column widths are not saved
+  - soft warp problems
+  - see if save file can avoid a full reset of everything
   - deleting at end of file leaves empty space
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
@@ -48,6 +61,7 @@ and quirks that I need to fix eventually.
     }
   <--- cursor here
   - option to disable electric keys
+  - unindentThisAndFollowing
 
 + vfs browser:
 
@@ -55,7 +69,6 @@ and quirks that I need to fix eventually.
     the root
   - only traverse hierarchy on TAB, do nothing special on backsapce
   - more configurable file system browser
-    - at least, preserve column widths
   - test keyboard completion with expanded/collapsed tree
   - test keyboard completion with high latency VFS
   - fsb default size
