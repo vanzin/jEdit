@@ -31,8 +31,7 @@ package org.gjt.sp.jedit.gui;
  import java.io.*;
  import java.net.URL;
  import java.util.*;
- import org.gjt.sp.jedit.msg.DockableWindowUpdate;
- import org.gjt.sp.jedit.msg.PluginUpdate;
+ import org.gjt.sp.jedit.msg.*;
  import org.gjt.sp.jedit.*;
  import org.gjt.sp.util.Log;
 //}}}
@@ -1118,6 +1117,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				== DockableWindowUpdate.PROPERTIES_CHANGED)
 				propertiesChanged();
 		}
+		else if(msg instanceof PropertiesChanged)
+			propertiesChanged();
 		else if(msg instanceof PluginUpdate)
 		{
 			PluginUpdate pmsg = (PluginUpdate)msg;
@@ -1496,26 +1497,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		{
 			Dimension size = parent.getSize();
 
-			Dimension _topButtons = topButtons.getPreferredSize();
-			topButtons.setSize(topButtons.getWidth(),
-				_topButtons.height);
-			_topButtons = topButtons.getPreferredSize();
-
-			Dimension _leftButtons = leftButtons.getPreferredSize();
-			leftButtons.setSize(_leftButtons.width,
-				leftButtons.getHeight());
-			_leftButtons = leftButtons.getPreferredSize();
-
-			Dimension _bottomButtons = bottomButtons.getPreferredSize();
-			bottomButtons.setSize(bottomButtons.getWidth(),
-				_bottomButtons.height);
-			_bottomButtons = bottomButtons.getPreferredSize();
-
-			Dimension _rightButtons = rightButtons.getPreferredSize();
-			rightButtons.setSize(_rightButtons.width,
-				rightButtons.getHeight());
-			_rightButtons = rightButtons.getPreferredSize();
-
 			Dimension _topToolbars = (topToolbars == null
 				? new Dimension(0,0)
 				: topToolbars.getPreferredSize());
@@ -1523,135 +1504,201 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				? new Dimension(0,0)
 				: bottomToolbars.getPreferredSize());
 
-			int _width = size.width - _leftButtons.width - _rightButtons.width;
-			int _height = size.height - _topButtons.height - _bottomButtons.height;
+			int topButtonHeight = -1;
+			int bottomButtonHeight = -1;
+			int leftButtonWidth = -1;
+			int rightButtonWidth = -1;
+			int _width, _height;
 
 			Dimension _top = top.getPreferredSize();
 			Dimension _left = left.getPreferredSize();
 			Dimension _bottom = bottom.getPreferredSize();
 			Dimension _right = right.getPreferredSize();
 
-			int maxTopHeight = _height - _bottom.height
+			int topHeight = _top.height;
+			int bottomHeight = _bottom.height;
+			int leftWidth = _left.width;
+			int rightWidth = _right.width;
+
+			Dimension closeBoxSize = ((Container)topButtons)
+				.getComponent(0).getPreferredSize();
+			int closeBoxWidth = Math.max(closeBoxSize.width,
+				closeBoxSize.height) + 1;
+
+			if(alternateLayout)
+			{
+				//{{{ Lay out independent buttons
+				_width = size.width;
+
+				topButtonHeight = DockableWindowManager.this.
+					top.getWrappedDimension(_width
+					- closeBoxWidth * 2);
+				topButtons.setBounds(
+					closeBoxWidth,
+					0,
+					size.width - closeBoxWidth * 2,
+					topButtonHeight);
+
+				bottomButtonHeight = DockableWindowManager.this.
+					bottom.getWrappedDimension(_width);
+				bottomButtons.setBounds(
+					closeBoxWidth,
+					size.height - bottomButtonHeight,
+					size.width - closeBoxWidth * 2,
+					bottomButtonHeight);
+
+				_height = size.height
+					- topButtonHeight
+					- bottomButtonHeight; //}}}
+			}
+			else
+			{
+				//{{{ Lay out independent buttons
+				_height = size.height;
+
+				leftButtonWidth = DockableWindowManager.this.
+					left.getWrappedDimension(_height
+					- closeBoxWidth * 2);
+				leftButtons.setBounds(
+					0,
+					closeBoxWidth,
+					leftButtonWidth,
+					_height - closeBoxWidth * 2);
+
+				rightButtonWidth = DockableWindowManager.this.
+					right.getWrappedDimension(_height);
+				rightButtons.setBounds(
+					size.width - rightButtonWidth,
+					closeBoxWidth,
+					rightButtonWidth,
+					_height - closeBoxWidth * 2);
+
+				_width = size.width - leftButtonWidth
+					- rightButtonWidth; //}}}
+			}
+
+			//{{{ Adjust docking area dimensions so that they fit
+			int maxTopHeight = size.height - bottomHeight
+				- topButtonHeight - bottomButtonHeight
 				- _topToolbars.height - _bottomToolbars.height;
-			int topHeight = Math.min(Math.max(0,maxTopHeight),
-				_top.height);
-			int leftWidth = Math.min(Math.max(0,_width - _right.width),_left.width);
-			int maxBottomHeight = _height - topHeight
+			topHeight = Math.min(Math.max(0,maxTopHeight),
+				topHeight);
+			leftWidth = Math.min(Math.max(0,
+				size.width - leftButtonWidth
+				- rightButtonWidth - rightWidth),leftWidth);
+			int maxBottomHeight = size.height - topHeight
+				- topButtonHeight - bottomButtonHeight
 				- _topToolbars.height - _bottomToolbars.height;
-			int bottomHeight = Math.min(Math.max(0,maxBottomHeight),
-				_bottom.height);
-			int rightWidth = Math.min(Math.max(0,_width - leftWidth),_right.width);
+			bottomHeight = Math.min(Math.max(0,maxBottomHeight),
+				bottomHeight);
+			rightWidth = Math.min(Math.max(0,
+				size.width - leftButtonWidth
+				- rightButtonWidth - leftWidth),rightWidth);
 
 			DockableWindowManager.this.top.setDimension(topHeight);
 			DockableWindowManager.this.left.setDimension(leftWidth);
 			DockableWindowManager.this.bottom.setDimension(bottomHeight);
 			DockableWindowManager.this.right.setDimension(rightWidth);
+			//}}}
 
 			if(alternateLayout)
 			{
-				topButtons.setBounds(
-					_leftButtons.width,
-					0,
-					_width,
-					_topButtons.height);
-
+				//{{{ Lay out dependent buttons
+				leftButtonWidth = DockableWindowManager.this.
+					left.getWrappedDimension(_height);
 				leftButtons.setBounds(
 					0,
-					_topButtons.height + _top.height,
-					_leftButtons.width,
-					_height - _top.height - _bottom.height);
+					topHeight + topButtonHeight,
+					leftButtonWidth,
+					_height - topHeight - bottomHeight);
 
-				bottomButtons.setBounds(
-					_leftButtons.width,
-					size.height - _bottomButtons.height,
-					_width,
-					_bottomButtons.height);
-
+				rightButtonWidth = DockableWindowManager.this.
+					right.getWrappedDimension(_height);
 				rightButtons.setBounds(
-					size.width - _rightButtons.width,
-					_topButtons.height + _top.height,
-					_rightButtons.width,
-					_height - _top.height - _bottom.height);
+					size.width - rightButtonWidth,
+					topHeight + topButtonHeight,
+					rightButtonWidth,
+					_height - topHeight - bottomHeight);
+				//}}}
 
+				//{{{ Lay out docking areas
 				top.setBounds(
-					_leftButtons.width,
-					_topButtons.height,
-					_width,
+					0,
+					topButtonHeight,
+					size.width,
 					topHeight);
 
 				bottom.setBounds(
-					_leftButtons.width,
-					size.height - bottomHeight - _bottomButtons.height,
-					_width,
+					0,
+					size.height
+					- bottomHeight
+					- bottomButtonHeight,
+					size.width,
 					bottomHeight);
 
 				left.setBounds(
-					_leftButtons.width,
-					_topButtons.height + topHeight,
+					leftButtonWidth,
+					topButtonHeight + topHeight,
 					leftWidth,
 					_height - topHeight - bottomHeight);
 
 				right.setBounds(
-					size.width - rightWidth - _rightButtons.width,
-					_topButtons.height + topHeight,
+					_width - rightButtonWidth - rightWidth,
+					topButtonHeight + topHeight,
 					rightWidth,
-					_height - topHeight - bottomHeight);
+					_height - topHeight - bottomHeight); //}}}
 			}
 			else
 			{
+				//{{{ Lay out dependent buttons
+				topButtonHeight = DockableWindowManager.this.
+					top.getWrappedDimension(_width);
 				topButtons.setBounds(
-					_leftButtons.width + leftWidth,
+					leftButtonWidth + leftWidth,
 					0,
 					_width - leftWidth - rightWidth,
-					_topButtons.height);
+					topButtonHeight);
 
-				leftButtons.setBounds(
-					0,
-					_topButtons.height,
-					_leftButtons.width,
-					_height);
-
+				bottomButtonHeight = DockableWindowManager.this.
+					bottom.getWrappedDimension(_width);
 				bottomButtons.setBounds(
-					_leftButtons.width + leftWidth,
-					size.height - _bottomButtons.height,
+					leftButtonWidth + leftWidth,
+					_height - bottomButtonHeight,
 					_width - leftWidth - rightWidth,
-					_bottomButtons.height);
+					bottomButtonHeight); //}}}
 
-				rightButtons.setBounds(
-					size.width - _rightButtons.width,
-					_topButtons.height,
-					_rightButtons.width,
-					_height);
-
+				//{{{ Lay out docking areas
 				top.setBounds(
-					_leftButtons.width + leftWidth,
-					_topButtons.height,
+					leftButtonWidth + leftWidth,
+					topButtonHeight,
 					_width - leftWidth - rightWidth,
 					topHeight);
+
 				bottom.setBounds(
-					_leftButtons.width + leftWidth,
-					size.height - bottomHeight - _bottomButtons.height,
+					leftButtonWidth + leftWidth,
+					size.height - bottomHeight - bottomButtonHeight,
 					_width - leftWidth - rightWidth,
 					bottomHeight);
 
 				left.setBounds(
-					_leftButtons.width,
-					_topButtons.height,
+					leftButtonWidth,
+					0,
 					leftWidth,
 					_height);
 
 				right.setBounds(
-					size.width - rightWidth - _rightButtons.width,
-					_topButtons.height,
+					size.width - rightWidth - rightButtonWidth,
+					0,
 					rightWidth,
-					_height);
-			}
+					_height); //}}}
+			} //}}}
 
+			//{{{ Position tool bars if they are managed by us
 			if(topToolbars != null)
 			{
 				topToolbars.setBounds(
-					_leftButtons.width + leftWidth,
-					_topButtons.height + topHeight,
+					leftButtonWidth + leftWidth,
+					topButtonHeight + topHeight,
 					_width - leftWidth - rightWidth,
 					_topToolbars.height);
 			}
@@ -1659,25 +1706,34 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			if(bottomToolbars != null)
 			{
 				bottomToolbars.setBounds(
-					_leftButtons.width + leftWidth,
+					leftButtonWidth + leftWidth,
 					_height - bottomHeight
 					- _bottomToolbars.height
-					+ _topButtons.height,
+					+ topButtonHeight,
 					_width - leftWidth - rightWidth,
 					_bottomToolbars.height);
-			}
+			} //}}}
 
+			//{{{ Position center (edit pane, or split pane)
 			if(center != null)
 			{
 				center.setBounds(
-					_leftButtons.width + leftWidth,
-					_topButtons.height + topHeight
+					leftButtonWidth + leftWidth,
+					topButtonHeight + topHeight
 					+ _topToolbars.height,
-					_width - leftWidth - rightWidth,
-					_height - topHeight - bottomHeight
+					size.width
+					- leftWidth
+					- rightWidth
+					- leftButtonWidth
+					- rightButtonWidth,
+					size.height
+					- topHeight
+					- topButtonHeight
+					- bottomHeight
+					- bottomButtonHeight
 					- _topToolbars.height
 					- _bottomToolbars.height);
-			}
+			} //}}}
 		} //}}}
 
 		//{{{ getLayoutAlignmentX() method
