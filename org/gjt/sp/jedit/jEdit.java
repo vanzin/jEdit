@@ -2038,15 +2038,15 @@ public class jEdit
 				if(config.top != null
 					&& config.top.length() != 0)
 					wm.showDockableWindow(config.top);
-	
+
 				if(config.left != null
 					&& config.left.length() != 0)
 					wm.showDockableWindow(config.left);
-	
+
 				if(config.bottom != null
 					&& config.bottom.length() != 0)
 					wm.showDockableWindow(config.bottom);
-	
+
 				if(config.right != null
 					&& config.right.length() != 0)
 					wm.showDockableWindow(config.right);
@@ -2060,7 +2060,7 @@ public class jEdit
 					config.width,config.height,config.extState);
 			}
 			else
-				newView.setLocationRelativeTo(view);
+				GUIUtilities.centerOnScreen(newView);
 
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 

@@ -2082,8 +2082,6 @@ plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
 #{{{ Plugin management
 manage-plugins.title=Manage
 
-manage-plugins.info.enabled=Enabled
-manage-plugins.info.jar=File
 manage-plugins.info.name=Name
 manage-plugins.info.version=Version
 manage-plugins.info.status=Status

@@ -3479,7 +3479,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			autosaveFile.delete();
 
 		// notify clients with -wait
-		if(waitSocket != null && !waitSocket.isClosed())
+		if(waitSocket != null)
 		{
 			try
 			{

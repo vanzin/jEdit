@@ -66,13 +66,11 @@ public class ManagePanel extends JPanel
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
 		TableColumn col4 = table.getColumnModel().getColumn(3);
-		TableColumn col5 = table.getColumnModel().getColumn(4);
 
-		col1.setPreferredWidth(50);
-		col2.setPreferredWidth(200);
-		col3.setPreferredWidth(200);
+		col1.setPreferredWidth(30);
+		col2.setPreferredWidth(300);
+		col3.setPreferredWidth(100);
 		col4.setPreferredWidth(100);
-		col5.setPreferredWidth(100);
 
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
@@ -181,7 +179,7 @@ public class ManagePanel extends JPanel
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
-			return 5;
+			return 4;
 		} //}}}
 
 		//{{{ getColumnClass() method
@@ -200,14 +198,12 @@ public class ManagePanel extends JPanel
 			switch (column)
 			{
 				case 0:
-					return jEdit.getProperty("manage-plugins.info.enabled");
+					return "";
 				case 1:
-					return jEdit.getProperty("manage-plugins.info.jar");
-				case 2:
 					return jEdit.getProperty("manage-plugins.info.name");
-				case 3:
+				case 2:
 					return jEdit.getProperty("manage-plugins.info.version");
-				case 4:
+				case 3:
 					return jEdit.getProperty("manage-plugins.info.status");
 				default:
 					throw new Error("Column out of range");
@@ -237,12 +233,15 @@ public class ManagePanel extends JPanel
 						!entry.status.equals(
 						Entry.NOT_LOADED));
 				case 1:
-					return MiscUtilities.getFileName(entry.jar);
+					if(entry.name == null)
+					{
+						return MiscUtilities.getFileName(entry.jar);
+					}
+					else
+						return entry.name;
 				case 2:
-					return entry.name;
-				case 3:
 					return entry.version;
-				case 4:
+				case 3:
 					return jEdit.getProperty("plugin-manager.status."
 						+ entry.status);
 				default:

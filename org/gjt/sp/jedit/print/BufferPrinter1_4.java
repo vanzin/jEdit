@@ -31,7 +31,6 @@ import java.awt.*;
 import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.jedit.io.VFSManager;
 //}}}
 
 public class BufferPrinter1_4
@@ -104,7 +103,7 @@ public class BufferPrinter1_4
 
 		savePrintSpec();
 
-		VFSManager.runInWorkThread(printable);
+		printable.print();
 	} //}}}
 
 	//{{{ getPageFormat() method
