@@ -4,7 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999 mike dillon
- * Portions copyright (C) 2001 Slava Pestov
+ * Portions copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,12 @@
 
 package org.gjt.sp.jedit.syntax;
 
+//{{{ Imports
+import gnu.regexp.RE;
 import java.util.*;
 import org.gjt.sp.jedit.Mode;
 import javax.swing.text.Segment;
+//}}}
 
 /**
  * A set of parser rules.
@@ -131,6 +134,18 @@ public class ParserRuleSet
 		this.highlightDigits = highlightDigits;
 	} //}}}
 
+	//{{{ getDigitRegexp() method
+	public RE getDigitRegexp()
+	{
+		return digitRE;
+	} //}}}
+
+	//{{{ setDigitRegexp() method
+	public void setDigitRegexp(RE digitRE)
+	{
+		this.digitRE = digitRE;
+	} //}}}
+
 	//{{{ getEscapeRule() method
 	public ParserRule getEscapeRule()
 	{
@@ -197,7 +212,9 @@ public class ParserRuleSet
 	private Segment escapePattern;
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;
-	private boolean highlightDigits;
 	private byte defaultToken;
+
+	private boolean highlightDigits;
+	private RE digitRE;
 	//}}}
 }

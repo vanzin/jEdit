@@ -538,15 +538,14 @@
 	</CODE>
 </ACTION>
 
-<!-- disabled, since it's broken right now
-
 <ACTION NAME="page-setup">
 	<CODE>
-		BufferPrinter.pageSetup(view);
+		if("1.4".compareTo(System.getProperty("java.version")) > 0)
+			BufferPrinter1_3.pageSetup(view);
+		else
+			BufferPrinter1_4.pageSetup(view);
 	</CODE>
 </ACTION>
-
--->
 
 <ACTION NAME="parent-fold">
 	<CODE>
@@ -647,24 +646,6 @@
 		BufferPrinter1_3.print(view,buffer,false);
 	else
 		BufferPrinter1_4.print(view,buffer,false);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="page-setup">
-	<CODE>
-		if("1.4".compareTo(System.getProperty("java.version")) > 0)
-			BufferPrinter1_3.pageSetup(view);
-		else
-			BufferPrinter1_4.pageSetup(view);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="print-preview">
-	<CODE>
-		if("1.4".compareTo(System.getProperty("java.version")) > 0)
-			BufferPrinter1_3.printPreview(view,buffer,false);
-		else
-			BufferPrinter1_4.printPreview(view,buffer,false);
 	</CODE>
 </ACTION>
 

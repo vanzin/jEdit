@@ -25,12 +25,13 @@ package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import com.microstar.xml.*;
+import gnu.regexp.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
-//}}
+//}}}
 
 public class XModeHandler extends HandlerBase
 {
@@ -73,7 +74,6 @@ public class XModeHandler extends HandlerBase
 	{
 		String tag = peekElement();
 		aname = (aname == null) ? null : aname.intern();
-		value = (value == null) ? null : value.intern();
 
 		if (aname == "NAME")
 		{
@@ -89,33 +89,36 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "AT_LINE_START")
 		{
-			lastAtLineStart = (isSpecified) ? (value == "TRUE") :
+			lastAtLineStart = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
 		else if (aname == "NO_LINE_BREAK")
 		{
-			lastNoLineBreak = (isSpecified) ? (value == "TRUE") :
+			lastNoLineBreak = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
 		else if (aname == "NO_WORD_BREAK")
 		{
-			lastNoWordBreak = (isSpecified) ? (value == "TRUE") :
+			lastNoWordBreak = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
 		else if (aname == "EXCLUDE_MATCH")
 		{
-			lastExcludeMatch = (isSpecified) ? (value == "TRUE") :
+			lastExcludeMatch = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
 		else if (aname == "IGNORE_CASE")
 		{
-			lastIgnoreCase = (isSpecified) ? (value != "FALSE") :
+			lastIgnoreCase = (isSpecified) ? (value.equals("FALSE")) :
 				true;
 		}
 		else if (aname == "HIGHLIGHT_DIGITS")
 		{
-			lastHighlightDigits = (isSpecified) ? (value != "FALSE") :
-				false;
+			lastDigitRE = value;
+		}
+		else if (aname == "DIGIT_RE")
+		{
+			lastDigitRE = value;
 		}
 		else if (aname == "AT_CHAR")
 		{
@@ -206,6 +209,20 @@ public class XModeHandler extends HandlerBase
 			rules = new ParserRuleSet(lastSetName,mode);
 			rules.setIgnoreCase(lastIgnoreCase);
 			rules.setHighlightDigits(lastHighlightDigits);
+			if(lastDigitRE != null)
+			{
+				try
+				{
+					rules.setDigitRegexp(new RE(lastDigitRE,
+						lastIgnoreCase
+						? RE.REG_ICASE : 0));
+				}
+				catch(REException e)
+				{
+					error("regexp",e);
+				}
+			}
+
 			rules.setEscape(lastEscape);
 			rules.setDefault(lastDefaultID);
 		}
@@ -257,6 +274,7 @@ public class XModeHandler extends HandlerBase
 				lastEscape = null;
 				lastIgnoreCase = true;
 				lastHighlightDigits = false;
+				lastDigitRE = null;
 				lastDefaultID = Token.NULL;
 				rules = null;
 			} //}}}
@@ -499,6 +517,7 @@ public class XModeHandler extends HandlerBase
 	private boolean lastExcludeMatch;
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;
+	private String lastDigitRE;
 	//}}}
 
 	//{{{ stringToToken() method
@@ -629,4 +648,6 @@ public class XModeHandler extends HandlerBase
 
 		GUIUtilities.error(null,"xmode-error",args);
 	} //}}}
+
+	//}}}
 }

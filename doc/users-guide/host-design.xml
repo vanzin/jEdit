@@ -884,7 +884,7 @@ The DockableWindowManager</title>
   <function>addNotify()</function>.
 </para>
 
-<sect2 id="class-ebcomponent"><title>Class EBMessage</title>
+<sect2 id="class-ebcomponent"><title>Class EBComponent</title>
 
 <para>
   Every plugin class that uses the EditBus for receiving
