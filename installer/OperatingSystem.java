@@ -35,6 +35,7 @@ public abstract class OperatingSystem
 		protected String name;
 		protected String label;
 		protected String directory;
+		protected boolean enabled;
 
 		public OSTask(Install installer, String name)
 		{
@@ -42,6 +43,11 @@ public abstract class OperatingSystem
 			this.name = name;
 			this.label = installer.getProperty("ostask." + name + ".label");
 			this.directory = getDefaultDirectory(installer);
+		}
+
+		public String getName()
+		{
+			return name;
 		}
 
 		public String getLabel()
@@ -57,6 +63,16 @@ public abstract class OperatingSystem
 		public String getDirectory()
 		{
 			return directory;
+		}
+
+		public boolean isEnabled()
+		{
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled)
+		{
+			this.enabled = enabled;
 		}
 
 		public void setDirectory(String directory)
@@ -129,6 +145,9 @@ public abstract class OperatingSystem
 
 			public void perform(String installDir) throws IOException
 			{
+				if(!enabled)
+					return;
+
 				mkdirs(directory);
 
 				String name = installer.getProperty("app.name");
@@ -181,6 +200,9 @@ public abstract class OperatingSystem
 
 			public void perform(String installDir) throws IOException
 			{
+				if(!enabled)
+					return;
+
 				mkdirs(directory);
 
 				String name = installer.getProperty("app.name");
@@ -256,6 +278,9 @@ public abstract class OperatingSystem
 
 			public void perform(String installDir)
 			{
+				if(!enabled)
+					return;
+
 				// run jEditLauncher installation
 				File executable = new File(installDir,"jedit.exe");
 				if(!executable.exists())

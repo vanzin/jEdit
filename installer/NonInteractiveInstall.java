@@ -26,11 +26,44 @@ import java.util.Vector;
  */
 public class NonInteractiveInstall
 {
-	public NonInteractiveInstall(String installDir)
+	public NonInteractiveInstall(String[] args)
 	{
+		String installDir = args[1];
+
 		installer = new Install();
 
 		OperatingSystem os = OperatingSystem.getOperatingSystem();
+		OperatingSystem.OSTask[] osTasks = os.getOSTasks(installer);
+
+		for(int i = 2; i < args.length; i++)
+		{
+			String arg = args[i];
+			int index = arg.indexOf('=');
+			if(index == -1)
+			{
+				System.err.println("Invalid parameter: " + arg);
+				continue;
+			}
+
+			String taskName = arg.substring(0,index);
+			String taskDir = arg.substring(index + 1);
+			for(int j = 0; j < osTasks.length; j++)
+			{
+				OperatingSystem.OSTask osTask = osTasks[j];
+				if(osTask.getName().equals(taskName))
+				{
+					System.out.println(arg);
+					if(taskDir.equals("off"))
+						osTask.setEnabled(false);
+					else
+					{
+						osTask.setEnabled(true);
+						osTask.setDirectory(taskDir);
+					}
+					break;
+				}
+			}
+		}
 
 		int compCount = installer.getIntegerProperty("comp.count");
 		Vector components = new Vector(compCount);
@@ -51,11 +84,11 @@ public class NonInteractiveInstall
 			components.addElement(fileset);
 		}
 
-		//OperatingSystem.OSTask[] osTasks = os.getOSTasks(installer);
+		//
 
 		ConsoleProgress progress = new ConsoleProgress();
 		InstallThread thread = new InstallThread(
-			installer,progress,installDir,null,
+			installer,progress,installDir,osTasks,
 			0 /* XXX */,components);
 		thread.start();
 	}

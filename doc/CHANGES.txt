@@ -1,5 +1,19 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre10
+
++ Bug Fixes:
+
+- The Format Praragraph command was once again broken on Java 1.3.
+
+- Installer's "auto" mode works now. The command line syntax has
+  changed:
+
+  java installer.Install auto <install directory>
+    unix-script=<bin directory> unix-man=<man directory>
+
+  The last two parameters are optional.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and
