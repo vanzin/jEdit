@@ -251,23 +251,29 @@ public class OffsetManager
 	public void expandFolds(int foldLevel)
 	{
 		int newVirtualLineCount = 0;
-		foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
-		/* this ensures that the first line is always visible */
-		boolean seenVisibleLine = false;
-
-		for(int i = 0; i < getLineCount(); i++)
+		if(foldLevel == 0)
 		{
-			if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+			newVirtualLineCount = lineCount;
+		}
+		else
+		{
+			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+			/* this ensures that the first line is always visible */
+			boolean seenVisibleLine = false;
+
+			for(int i = 0; i < lineCount; i++)
 			{
-				seenVisibleLine = true;
-				// Since only called on load, it already has
-				// the VISIBLE_MASK set
-				//lineInfo[i] |= VISIBLE_MASK;
-				newVirtualLineCount++;
+				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+				{
+					seenVisibleLine = true;
+					lineInfo[i] |= VISIBLE_MASK;
+					newVirtualLineCount++;
+				}
+				else
+					lineInfo[i] &= ~VISIBLE_MASK;
 			}
-			else
-				lineInfo[i] &= ~VISIBLE_MASK;
 		}
 
 		for(int i = 0; i < virtualLineCounts.length; i++)

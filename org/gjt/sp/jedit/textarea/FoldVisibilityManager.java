@@ -719,6 +719,9 @@ public class FoldVisibilityManager
 
 			narrowed = false;
 
+			if(offsetMgr.getVirtualLineCount(index) == buffer.getLineCount())
+				return;
+
 			offsetMgr.setVirtualLineCount(index,buffer.getLineCount());
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
@@ -884,10 +887,22 @@ public class FoldVisibilityManager
 	public void _invalidate(int startLine)
 	{
 		if(lastPhysical >= startLine)
-			lastPhysical = lastVirtual = 0;
+			lastPhysical = lastVirtual = -1;
 	} //}}}
 
 	//}}}
+
+	//{{{ foldStructureChanged() method
+	/**
+	 * This method is only public so that the EditPane class can call it in
+	 * response to a buffer's fold handler change.
+	 * @since jEdit 4.0pre8
+	 */
+	public void foldStructureChanged()
+	{
+		lastPhysical = lastVirtual = -1;
+		textArea.foldStructureChanged();
+	} //}}}
 
 	//{{{ Private members
 
@@ -900,13 +915,6 @@ public class FoldVisibilityManager
 	private int lastVirtual;
 	private boolean narrowed;
 	//}}}
-
-	//{{{ foldStructureChanged() method
-	private void foldStructureChanged()
-	{
-		lastPhysical = lastVirtual = -1;
-		textArea.foldStructureChanged();
-	} //}}}
 
 	//}}}
 }
