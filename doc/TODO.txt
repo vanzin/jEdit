@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- files changed dialog: visible row count
+- save file resulting in fold collapse -- scroll line count broken
 - vfs browser: re-add option to base filter on filename extension
 - enter with browser view focused; hides dialog
 - browser field completion: fills out full path
