@@ -170,6 +170,11 @@ public class BrowserView extends JPanel
 		{
 			parentModel.removeAllElements();
 			String parent = path;
+
+			if(parent.length() != 1 && (parent.endsWith("/")
+				|| parent.endsWith(File.separator)))
+				parent = parent.substring(0,parent.length() - 1);
+
 			for(;;)
 			{
 				parentModel.insertElementAt(parent,0);

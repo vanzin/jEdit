@@ -593,6 +593,7 @@ loop:			for(;;)
 	{
 		JEditTextArea textArea = view.getTextArea();
 
+		int caret = textArea.getCaretPosition();
 		Selection[] selection = textArea.getSelection();
 		if(selection.length == 0)
 		{
@@ -637,6 +638,8 @@ loop:			for(;;)
 						start,s.getEnd()));
 				}
 			}
+
+			textArea.moveCaretPosition(caret);
 
 			if(retVal == 0)
 			{

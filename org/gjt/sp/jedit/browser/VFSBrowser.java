@@ -284,7 +284,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 		}
 
-		setDirectory(path);
+		final String _path = path;
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				setDirectory(_path);
+			}
+		});
 	} //}}}
 
 	//{{{ requestDefaultFocus() method
@@ -433,15 +441,18 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
-		// have to do this hack until VFSPath class is written
-		if(path.length() != 1 && (path.endsWith("/")
-			|| path.endsWith(java.io.File.separator)))
-			path = path.substring(0,path.length() - 1);
 
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 
-		pathField.setText(path);
+		String strippedPath;
+		if(path.length() != 1 && (path.endsWith("/")
+			|| path.endsWith(java.io.File.separator)))
+			strippedPath = path.substring(0,path.length() - 1);
+		else
+			strippedPath = path;
+
+		pathField.setText(strippedPath);
 
 		if(!startRequest())
 			return;

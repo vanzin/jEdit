@@ -61,8 +61,12 @@ public class CompleteWord extends JWindow
 		Vector completions = getCompletions(buffer,word,keywordMap,
 			noWordSep,caret);
 
-		if(completions.size() == 0)
+		if(completions.size() == 0
+			|| (completions.size() == 1 &&
+			((Completion)completions.get(0)).text.equals(word)))
+		{
 			textArea.getToolkit().beep();
+		}
 		//{{{ if there is only one competion, insert in buffer
 		else if(completions.size() == 1)
 		{
@@ -219,14 +223,11 @@ public class CompleteWord extends JWindow
 			if(line.startsWith(word) && caret != start + word.length())
 			{
 				String _word = completeWord(line,0,noWordSep);
-				if(_word.length() != wordLen)
-				{
-					Completion comp = new Completion(_word,false);
+				Completion comp = new Completion(_word,false);
 
-					// remove duplicates
-					if(completions.indexOf(comp) == -1)
-						completions.addElement(comp);
-				}
+				// remove duplicates
+				if(completions.indexOf(comp) == -1)
+					completions.addElement(comp);
 			}
 
 			// check for match inside line
@@ -240,14 +241,11 @@ public class CompleteWord extends JWindow
 						&& caret != start + j + word.length() + 1)
 					{
 						String _word = completeWord(line,j + 1,noWordSep);
-						if(_word.length() != wordLen)
-						{
-							Completion comp = new Completion(_word,false);
+						Completion comp = new Completion(_word,false);
 
-							// remove duplicates
-							if(completions.indexOf(comp) == -1)
-								completions.addElement(comp);
-						}
+						// remove duplicates
+						if(completions.indexOf(comp) == -1)
+							completions.addElement(comp);
 					}
 				}
 			}
