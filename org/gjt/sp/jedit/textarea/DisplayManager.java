@@ -1512,14 +1512,17 @@ loop:		for(;;)
 		{
 			if(delayedUpdate)
 			{
-				for(int i = delayedUpdateStart;
-					i <= delayedUpdateEnd;
-					i++)
+				if(textArea.getDisplayManager() == DisplayManager.this)
 				{
-					if(isLineVisible(i))
-						getScreenLineCount(i);
+					for(int i = delayedUpdateStart;
+						i <= delayedUpdateEnd;
+						i++)
+					{
+						if(isLineVisible(i))
+							getScreenLineCount(i);
+					}
+					_notifyScreenLineChanges();
 				}
-				_notifyScreenLineChanges();
 
 				delayedUpdate = false;
 			}
