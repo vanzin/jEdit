@@ -26,9 +26,15 @@
         <!-- Silly comment -->
         <SEQ TYPE="COMMENT1">/**/</SEQ>
 
-        <!-- Javadoc comment -->
-        <SPAN TYPE="COMMENT3" DELEGATE="java::JAVADOC">
+        <!-- Doxygen comment, Javadoc style -->
+        <SPAN TYPE="COMMENT3" DELEGATE="doxygen::DOXYGEN">
             <BEGIN>/**</BEGIN>
+            <END>*/</END>
+        </SPAN>
+
+        <!-- Doxygen comment, Qt style -->
+        <SPAN TYPE="COMMENT3" DELEGATE="doxygen::DOXYGEN">
+            <BEGIN>/*!</BEGIN>
             <END>*/</END>
         </SPAN>
 

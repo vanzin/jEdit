@@ -95,6 +95,9 @@
 <MODE NAME="d"			FILE="d.xml"
 				FILE_NAME_GLOB="*.d" />
 
+<MODE NAME="doxygen"		FILE="doxygen.xml"
+				FILE_NAME_GLOB="doxyfile*" />
+
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />
 

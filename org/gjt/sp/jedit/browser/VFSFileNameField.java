@@ -116,7 +116,9 @@ class VFSFileNameField extends HistoryTextField
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			char ch = evt.getKeyChar();
-			if(ch == '/' || ch == File.separatorChar)
+			if((ch == '/' || ch == File.separatorChar)
+				&& getCaretPosition()
+				== getDocument().getLength())
 			{
 				super.processKeyEvent(evt);
 				String path = getText();
