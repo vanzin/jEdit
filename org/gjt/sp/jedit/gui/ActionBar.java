@@ -365,7 +365,11 @@ public class ActionBar extends JPanel
 				{
 					nonDigit = true;
 					if(repeat)
+					{
+						if(ch == ' ')
+							System.err.println("typed space");
 						passToView(evt);
+					}
 					else
 						super.processKeyEvent(evt);
 				}
@@ -385,6 +389,8 @@ public class ActionBar extends JPanel
 					nonDigit = true;
 					if(repeat)
 					{
+						if(keyCode == KeyEvent.VK_SPACE)
+							System.err.println("pressed space");
 						passToView(evt);
 						break;
 					}
@@ -427,13 +433,15 @@ public class ActionBar extends JPanel
 		{
 			if(temp)
 				view.removeToolBar(ActionBar.this);
+			view.getTextArea().requestFocus();
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
 					view.getTextArea().requestFocus();
 					view.getInputHandler().setRepeatCount(repeatCount);
-					view.processKeyEvent(evt);
+					view.processKeyEvent(evt,
+						View.ACTION_BAR);
 				}
 			});
 		}

@@ -225,13 +225,14 @@ class BrowserView extends JPanel
 		}
 		else
 		{
-			MiscUtilities.resolveSymlinks(browserDir);
+			symlinkBrowserDir = MiscUtilities.resolveSymlinks(
+				browserDir);
 		}
 
-		if(VFSBrowser.pathsEqual(path,browserDir))
+		if(VFSBrowser.pathsEqual(path,symlinkBrowserDir))
 		{
 			saveExpansionState();
-			loadDirectory(null,path);
+			loadDirectory(null,browserDir);
 		}
 
 		// because this method is called for *every* VFS update,
@@ -248,7 +249,7 @@ class BrowserView extends JPanel
 
 		if(!browserDir.startsWith(FavoritesVFS.PROTOCOL)
 			&& !browserDir.startsWith(FileRootsVFS.PROTOCOL)
-			&& !path.startsWith(browserDir))
+			&& !path.startsWith(symlinkBrowserDir))
 			return;
 
 		if(browserDir.startsWith(FileRootsVFS.PROTOCOL)

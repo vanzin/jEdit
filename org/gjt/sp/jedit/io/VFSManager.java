@@ -23,12 +23,16 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import java.util.Enumeration;
-import java.util.Hashtable;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Frame;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
@@ -177,7 +181,7 @@ public class VFSManager
 	{
 		// the sooner ppl move to the new api, the less we'll need
 		// crap like this
-		Vector returnValue = new Vector();
+		List returnValue = new LinkedList();
 		String[] newAPI = ServiceManager.getServiceNames(SERVICE);
 		if(newAPI != null)
 		{
@@ -370,7 +374,7 @@ public class VFSManager
 				for(int i = 0; i < vfsUpdates.size(); i++)
 				{
 					VFSUpdate msg = (VFSUpdate)vfsUpdates
-						.elementAt(i);
+						.get(i);
 					if(msg.getPath().equals(path))
 					{
 						// don't send two updates
@@ -379,7 +383,7 @@ public class VFSManager
 					}
 				}
 
-				vfsUpdates.addElement(new VFSUpdate(path));
+				vfsUpdates.add(new VFSUpdate(path));
 
 				if(vfsUpdates.size() == 1)
 				{
@@ -409,10 +413,10 @@ public class VFSManager
 				);
 				for(int i = 0; i < vfsUpdates.size(); i++)
 				{
-					EditBus.send((VFSUpdate)vfsUpdates.elementAt(i));
+					EditBus.send((VFSUpdate)vfsUpdates.get(i));
 				}
 
-				vfsUpdates.removeAllElements();
+				vfsUpdates.clear();
 			}
 		}
 	} //}}}
@@ -429,7 +433,7 @@ public class VFSManager
 	private static Object errorLock;
 	private static Vector errors;
 	private static Object vfsUpdateLock;
-	private static Vector vfsUpdates;
+	private static List vfsUpdates;
 	//}}}
 
 	//{{{ Class initializer
@@ -442,7 +446,7 @@ public class VFSManager
 		vfsHash = new Hashtable();
 		protocolHash = new Hashtable();
 		vfsUpdateLock = new Object();
-		vfsUpdates = new Vector();
+		vfsUpdates = new ArrayList(10);
 	} //}}}
 
 	private VFSManager() {}

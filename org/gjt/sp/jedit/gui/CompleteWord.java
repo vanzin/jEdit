@@ -488,7 +488,7 @@ public class CompleteWord extends JWindow
 			if(ch != '\b' && ch != '\t')
 			{
 				/* eg, foo<C+b>, will insert foobar, */
-				if(!Character.isLetter(ch) && noWordSep.indexOf(ch) == -1)
+				if(!Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1)
 				{
 					insertSelected();
 					textArea.userInput(ch);

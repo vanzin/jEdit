@@ -382,9 +382,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 		else if(msg instanceof VFSUpdate)
 		{
-			maybeReloadDirectory(
-				MiscUtilities.resolveSymlinks(
-				((VFSUpdate)msg).getPath()));
+			maybeReloadDirectory(((VFSUpdate)msg).getPath());
 		}
 	} //}}}
 
@@ -1039,6 +1037,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private boolean doubleClickClose;
 
 	private boolean requestRunning;
+	private boolean maybeReloadRequestRunning;
 	//}}}
 
 	//{{{ createMenuBar() method
@@ -1163,8 +1162,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		//
 		// to avoid causing '> 1 request' errors, don't reload
 		// directory if request already active
-		if(requestRunning)
+		if(maybeReloadRequestRunning)
+		{
+			Log.log(Log.WARNING,this,"VFS update: request already in progress");
 			return;
+		}
 
 		// save a file -> sends vfs update. if a VFS file dialog box
 		// is shown from the same event frame as the save, the
@@ -1174,7 +1176,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			try
 			{
-				requestRunning = true;
+				maybeReloadRequestRunning = true;
 
 				browserView.maybeReloadDirectory(dir);
 			}
@@ -1184,7 +1186,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					public void run()
 					{
-						requestRunning = false;
+						maybeReloadRequestRunning = false;
 					}
 				});
 			}

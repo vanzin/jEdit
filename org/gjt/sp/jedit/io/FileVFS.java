@@ -221,9 +221,22 @@ public class FileVFS extends VFS
 	//{{{ _delete() method
 	public boolean _delete(Object session, String path, Component comp)
 	{
-		boolean retVal = new File(path).delete();
+		File file = new File(path);
+		// do some platforms throw exceptions if the file does not exist
+		// when we ask for the canonical path?
+		String canonPath;
+		try
+		{
+			canonPath = file.getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			canonPath = path;
+		}
+
+		boolean retVal = file.delete();
 		if(retVal)
-			VFSManager.sendVFSUpdate(this,path,true);
+			VFSManager.sendVFSUpdate(this,canonPath,true);
 		return retVal;
 	} //}}}
 
@@ -232,6 +245,16 @@ public class FileVFS extends VFS
 		Component comp)
 	{
 		File _to = new File(to);
+
+		String toCanonPath;
+		try
+		{
+			toCanonPath = _to.getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			toCanonPath = to;
+		}
 
 		// this is needed because on OS X renaming to a non-existent
 		// directory causes problems
@@ -248,13 +271,25 @@ public class FileVFS extends VFS
 				return false;
 		}
 
+		File _from = new File(from);
+
+		String fromCanonPath;
+		try
+		{
+			fromCanonPath = _from.getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			fromCanonPath = from;
+		}
+
 		// Case-insensitive fs workaround
-		if(!from.equalsIgnoreCase(to))
+		if(!fromCanonPath.equalsIgnoreCase(toCanonPath))
 			_to.delete();
 
-		boolean retVal = new File(from).renameTo(_to);
-		VFSManager.sendVFSUpdate(this,from,true);
-		VFSManager.sendVFSUpdate(this,to,true);
+		boolean retVal = _from.renameTo(_to);
+		VFSManager.sendVFSUpdate(this,fromCanonPath,true);
+		VFSManager.sendVFSUpdate(this,toCanonPath,true);
 		return retVal;
 	} //}}}
 
@@ -268,8 +303,19 @@ public class FileVFS extends VFS
 				return false;
 		}
 
-		boolean retVal = new File(directory).mkdir();
-		VFSManager.sendVFSUpdate(this,directory,true);
+		File file = new File(directory);
+
+		boolean retVal = file.mkdir();
+		String canonPath;
+		try
+		{
+			canonPath = file.getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			canonPath = directory;
+		}
+		VFSManager.sendVFSUpdate(this,canonPath,true);
 		return retVal;
 	} //}}}
 
@@ -336,12 +382,7 @@ public class FileVFS extends VFS
 	public OutputStream _createOutputStream(Object session, String path,
 		Component comp) throws IOException
 	{
-		OutputStream retVal = new FileOutputStream(path);
-
-		// commented out for now, because updating VFS browsers
-		// every time file is saved gets annoying
-		//VFSManager.sendVFSUpdate(this,path,true);
-		return retVal;
+		return new FileOutputStream(path);
 	} //}}}
 
 	//{{{ _saveComplete() method
