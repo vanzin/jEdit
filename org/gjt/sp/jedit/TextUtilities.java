@@ -254,7 +254,7 @@ public class TextUtilities
 	{
 		return findWordStart(line, pos, noWordSep, true);
 	} //}}}
-		
+
 	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.

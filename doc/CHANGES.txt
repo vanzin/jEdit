@@ -2,6 +2,9 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
+Thanks to Joshua Miller and Marcelo Vanzin for contributing to this
+release.
+
 + Syntax Highlighting Changes:
 
 - Updated ColdFusion syntax highlighting (Joshua Miller).
@@ -17,6 +20,9 @@ JEDIT 4.1 VERSION HISTORY
   syntax rules.
 - Plugin manager's dialog boxes are now parented by the plugin manager,
   not the view (Marcelo Vanzin).
+- Fixed repaint problems in tool bar option pane's buttons (and possibly
+  other places) by making RolloverButton's isOpaque() method return
+  false.
 
 * Version 4.1pre5
 

@@ -68,6 +68,12 @@ public class RolloverButton extends JButton
 		setIcon(icon);
 	} //}}}
 
+	//{{{ isOpaque() method
+	public boolean isOpaque()
+	{
+		return false;
+	} //}}}
+
 	//{{{ setEnabled() method
 	/**
 	 * @overrides javax.swing.AbstractButton.setEnabled()
