@@ -387,6 +387,14 @@ public class GrabKeyDialog extends JDialog
 						"Event " + toString(_evt)
 						+ " passed\n");
 				}
+
+				KeyEventTranslator.Key key = KeyEventTranslator
+					.translateKeyEvent(evt);
+				if(evt != null)
+				{
+					debugBuffer.insert(debugBuffer.getLength(),
+						"Translated to " + key + "\n");
+				}
 			}
 
 			evt.consume();
@@ -465,7 +473,7 @@ public class GrabKeyDialog extends JDialog
 				+ Integer.toString(evt.getKeyChar(),16)
 				+ ",modifiers=0x"
 				+ Integer.toString(evt.getModifiers(),16);
-		}
+		}//}}}
 	} //}}}
 
 	//{{{ ActionHandler class

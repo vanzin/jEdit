@@ -201,6 +201,8 @@ public class DefaultInputHandler extends InputHandler
 	public void keyPressed(KeyEvent evt)
 	{
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
+		if(keyStroke == null)
+			return;
 
 		if(keyStroke.modifiers != null)
 		{

@@ -1,5 +1,5 @@
 // Slava Pestov's startup script. Doesn't have much in it yet.
-// :folding=explicit:expandFolds=0:
+// :folding=explicit:expandFolds=1:
 
 //Most of the file is commented out. Note that the hacks here are
 //not guaranteed to work, might break various features in odd ways,
