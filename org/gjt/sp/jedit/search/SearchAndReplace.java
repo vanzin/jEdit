@@ -57,7 +57,8 @@ import org.gjt.sp.util.Log;
  *
  * If you are not using the dialog to undertake a search or replace, you may
  * call any of the search and replace methods (including
- * {@link #hyperSearch(View)}) without concern for the value of these properties.
+ * {@link #hyperSearch(View)}) without concern for the value of these
+ * properties.
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)

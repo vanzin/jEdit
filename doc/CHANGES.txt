@@ -40,6 +40,8 @@ Thanks to Thomas Alspaugh for contributing to this release.
 - Fixed NullPointerException from syntax highlighting code when buffer
   switching APIs were called in a certain sequence.
 
+- Fixed exception when clicking in one-line-high text area.
+
 }}}
 
 }}}
