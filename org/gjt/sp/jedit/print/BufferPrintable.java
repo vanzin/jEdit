@@ -25,21 +25,27 @@ package org.gjt.sp.jedit.print;
 //{{{ Imports
 import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
+import javax.swing.SwingUtilities;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.*;
 //}}}
 
-class BufferPrintable implements Printable
+class BufferPrintable extends WorkRequest implements Printable
 {
 	//{{{ BufferPrintable constructor
-	BufferPrintable(View view, Buffer buffer, Font font, boolean header,
+	BufferPrintable(PrinterJob job, Object format,
+		View view, Buffer buffer, Font font, boolean header,
 		boolean footer, boolean lineNumbers, boolean color)
 	{
+		this.job = job;
+		this.format = format;
 		this.view = view;
 		this.buffer = buffer;
 		this.font = font;
@@ -56,6 +62,47 @@ class BufferPrintable implements Printable
 		softWrap = new SoftWrapTokenHandler();
 	} //}}}
 
+	//{{{ run() method
+	public void run()
+	{
+		try
+		{
+			// can't use a read lock here since Buffer.markTokens()
+			// grabs a write lock
+			//buffer.readLock();
+
+			if(format == null)
+				job.print();
+			else
+			{
+				Method method = PrinterJob.class.getMethod(
+					"print",new Class[] { Class.forName(
+					"javax.print.attribute.PrintRequestAttributeSet") });
+				method.invoke(job,new Object[] { format });
+			}
+		}
+		catch(PrinterAbortException ae)
+		{
+			Log.log(Log.DEBUG,this,ae);
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+			final String[] args = { e.toString() };
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					GUIUtilities.error(view,"print-error",args);
+				}
+			});
+		}
+		finally
+		{
+			//buffer.readUnlock();
+		}
+	} //}}}
+
 	//{{{ print() method
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
@@ -69,16 +116,22 @@ class BufferPrintable implements Printable
 			currentPage = pageIndex;
 
 			if(end)
+			{
+				view.getStatus().setMessage(null);
 				return NO_SUCH_PAGE;
+			}
 			else
 				return PAGE_EXISTS;
 		}
 		else
 			currentPhysicalLine = currentPageStart;
 
+		// show the message in both the view's status bar, and the
+		// I/O progress monitor
 		Object[] args = new Object[] { new Integer(pageIndex + 1) };
-		view.getStatus().setMessageAndClear(jEdit.getProperty(
-			"view.status.print",args));
+		String message = jEdit.getProperty("view.status.print",args);
+		view.getStatus().setMessage(message);
+		setStatus(message);
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -105,28 +158,35 @@ class BufferPrintable implements Printable
 
 		FontRenderContext frc = gfx.getFontRenderContext();
 
-		// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
-		// and so on.
-		int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
-			/ Math.log(10)) + 1;
+		double lineNumberWidth;
 
-		//{{{ now that we know how many chars there are, get the width.
-		char[] chars = new char[lineNumberDigits];
-		for(int i = 0; i < chars.length; i++)
-			chars[i] = ' ';
-		double lineNumberWidth = font.getStringBounds(chars,
-			0,lineNumberDigits,frc).getWidth();
+		//{{{ determine line number width
+		if(lineNumbers)
+		{
+			// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
+			// and so on.
+			int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
+				/ Math.log(10)) + 1;
+
+			// now that we know how many chars there are, get the width.
+			char[] chars = new char[lineNumberDigits];
+			for(int i = 0; i < chars.length; i++)
+				chars[i] = ' ';
+			lineNumberWidth = font.getStringBounds(chars,
+				0,lineNumberDigits,frc).getWidth();
+		}
+		else
+			lineNumberWidth = 0.0;
 		//}}}
 
 		//{{{ calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
-		chars = new char[tabSize];
+		char[] chars = new char[tabSize];
 		for(int i = 0; i < chars.length; i++)
 			chars[i] = ' ';
 		double tabWidth = font.getStringBounds(chars,
 			0,tabSize,frc).getWidth();
-		PrintTabExpander e = new PrintTabExpander(pageX
-			+ (lineNumbers ? lineNumberWidth : 0),tabWidth);
+		PrintTabExpander e = new PrintTabExpander(tabWidth);
 		//}}}
 
 		Segment seg = new Segment();
@@ -207,6 +267,9 @@ print_loop:	for(;;)
 	//}}}
 
 	//{{{ Instance variables
+	private PrinterJob job;
+	private Object format;
+
 	private View view;
 	private Buffer buffer;
 	private Font font;
@@ -286,21 +349,19 @@ print_loop:	for(;;)
 	//{{{ PrintTabExpander class
 	static class PrintTabExpander implements TabExpander
 	{
-		private double pageX;
 		private double tabWidth;
 
 		//{{{ PrintTabExpander constructor
-		public PrintTabExpander(double pageX, double tabWidth)
+		public PrintTabExpander(double tabWidth)
 		{
-			this.pageX = pageX;
 			this.tabWidth = tabWidth;
 		} //}}}
 
 		//{{{ nextTabStop() method
 		public float nextTabStop(float x, int tabOffset)
 		{
-			int ntabs = (int)((x - pageX) / tabWidth);
-			return (float)((ntabs + 1) * tabWidth + pageX);
+			int ntabs = (int)((x + 1) / tabWidth);
+			return (float)((ntabs + 1) * tabWidth);
 		} //}}}
 	} //}}}
 }

@@ -96,44 +96,16 @@ public class BufferPrinter1_4
 		boolean color = jEdit.getBooleanProperty("print.color");
 		Font font = jEdit.getFontProperty("print.font");
 
-		job.setPrintable(new BufferPrintable(view,buffer,font,header,footer,
-		                                     lineNumbers,color));
+		BufferPrintable printable = new BufferPrintable(job,format,view,
+			buffer,font,header,footer,lineNumbers,color);
+		job.setPrintable(printable);
 
 		if(!job.printDialog(format))
 			return;
+
 		savePrintSpec();
 
-		VFSManager.runInWorkThread(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					 //buffer.readLock();
-					job.print(format);
-				}
-				catch(PrinterAbortException ae)
-				{
-					Log.log(Log.DEBUG,BufferPrinter1_4.class,ae);
-				}
-				catch(PrinterException e)
-				{
-					Log.log(Log.ERROR,BufferPrinter1_4.class,e);
-					final String[] args = { e.toString() };
-					SwingUtilities.invokeLater(new Runnable()
-					{
-						public void run()
-						{
-							GUIUtilities.error(view,"print-error",args);
-						}
-					});
-				}
-				finally
-				{
-					//buffer.readUnlock();
-				}
-			}
-		});
+		VFSManager.runInWorkThread(printable);
 	} //}}}
 
 	//{{{ getPageFormat() method
