@@ -10,11 +10,6 @@ release.
 - "Complete Word" now inserts the longest common prefix if there is more
   than one possible completion (the popup is still displayed as well).
 
-- Fold visibility information is now stored in each individual display
-  manager instance (a display manager is the layer between a buffer and
-  a text area). Previously this information was retained by the buffer
-  itself, which resulted in a limit of 8 text areas per buffer.
-
 - Added Ignore Case (C+e C+i) and Regular Expressions (C+e C+x) commands
   to Search menu for changing search bar settings from the keyboard.
 
@@ -36,6 +31,8 @@ release.
 - Updated Inform syntax highlighting (Matt Albrecht).
 
 - Added S+ syntax highlighting (Matt Albrecht).
+
+- Added Io syntax highlighting (Sebastien Pierre).
 
 }}}
 {{{ User Interface
@@ -70,6 +67,13 @@ release.
 
 - BeanShell 1.3a1 included. This release features improved error
   reporting, code cleanups and minor bug fixes.
+
+}}}
+{{{ Optimizations
+
+- Fold visibility information is now stored in a more efficient manner.
+  Folding should be faster and more robust. Also, the limit of 8 text
+  areas editing the same buffer has been lifted.
 
 }}}
 {{{ Bug Fixes
@@ -158,6 +162,8 @@ release.
   ErrorList.
 
   See javadoc for parameter documentation.
+
+- Added long-missing DefaultInputHandler.removeKeyBinding() method.
 
 }}}
 

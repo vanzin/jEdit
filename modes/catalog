@@ -124,6 +124,9 @@
 <MODE NAME="interlis"		FILE="interlis.xml"
 				FILE_NAME_GLOB="*.ili" />
 
+<MODE NAME="io"			FILE="io.xml"
+				FILE_NAME_GLOB="*.io" />
+
 <MODE NAME="java"		FILE="java.xml"
 				FILE_NAME_GLOB="*.java" />
 

@@ -107,7 +107,37 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public void removeKeyBinding(String keyBinding)
 	{
-		throw new InternalError("Not yet implemented");
+		Hashtable current = bindings;
+
+		StringTokenizer st = new StringTokenizer(keyBinding);
+		while(st.hasMoreTokens())
+		{
+			String keyCodeStr = st.nextToken();
+			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
+			if(keyStroke == null)
+				return;
+
+			if(st.hasMoreTokens())
+			{
+				Object o = current.get(keyStroke);
+				if(o instanceof Hashtable)
+					current = ((Hashtable)o);
+				else if(o != null)
+				{
+					// we have binding foo
+					// but user asks to remove foo bar?
+					current.remove(keyStroke);
+					return;
+				}
+				else
+				{
+					// user asks to remove non-existent
+					return;
+				}
+			}
+			else
+				current.remove(keyStroke);
+		}
 	} //}}}
 
 	//{{{ removeAllKeyBindings() method

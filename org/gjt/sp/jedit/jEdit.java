@@ -1093,6 +1093,9 @@ public class jEdit
 		}
 		else
 		{
+			jar.uninit(false);
+			jars.removeElement(jar);
+
 			// buffers retain a reference to the fold handler in
 			// question... and the easiest way to handle fold
 			// handler unloading is this...
@@ -1108,9 +1111,6 @@ public class jEdit
 				}
 				buffer = buffer.getNext();
 			}
-
-			jar.uninit(false);
-			jars.removeElement(jar);
 		}
 
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED));

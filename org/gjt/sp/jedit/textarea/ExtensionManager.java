@@ -66,8 +66,15 @@ class ExtensionManager
 	//{{{ getExtensions() method
 	TextAreaExtension[] getExtensions()
 	{
-		return (TextAreaExtension[])extensions.toArray(
-			new TextAreaExtension[extensions.size()]);
+		TextAreaExtension[] retVal = new TextAreaExtension[
+			extensions.size()];
+		Iterator iter = extensions.iterator();
+		int i = 0;
+		while(iter.hasNext())
+		{
+			retVal[i++] = ((Entry)iter.next()).ext;
+		}
+		return retVal;
 	} //}}}
 
 	//{{{ paintScreenLineRange() method
