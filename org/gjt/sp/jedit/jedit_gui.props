@@ -1377,7 +1377,8 @@ buffer-options.mode=Edit mode:
 #}}}
 
 #{{{ Global options dialog
-options.title=Global Options
+options.title=Options
+options.title-template={0}: {1}
 options.jedit.label=jEdit
 
 # Option pane to show by default
@@ -1643,6 +1644,16 @@ options.firewall.socks.host=SOCKS proxy host:
 options.firewall.socks.port=SOCKS proxy port:
 #}}}
 
+#{{{ Plugin Manager pane
+options.plugin-manager.label=Plugin Manager
+options.plugin-manager.downloadSource=Download plugin source code
+options.plugin-manager.mirror=Preferred download mirror:
+options.plugin-manager.location=Install plugins in:
+options.plugin-manager.settings-dir=jEdit settings directory
+options.plugin-manager.app-dir=jEdit application directory
+options.plugin-manager.none=Plugin Central default
+#}}}
+
 #{{{ File System Browser panes
 options.browser.label=File System Browser
 
@@ -1696,7 +1707,7 @@ style-editor.bgColor=Background color:
 #}}}
 
 #{{{ Plugin options dialog
-plugin-options.title=Plugin Options
+plugin-options.title=Options
 options.plugins.label=Plugins
 options.no-plugins.label=No Plugin Options
 #}}}
@@ -1890,20 +1901,10 @@ vfs.status.renaming=Renaming {0} to {1}
 plugin-manager.title=Plugin Manager
 
 plugin-manager.url=http://plugins.jedit.org/export/gzip_plugin_manager.php
+plugin-manager.mirror-url=http://plugins.jedit.org/export/mirror_list.php
 
-plugin-manager.caption=Installed plugins:
-
-plugin-manager.not-loaded=Not loaded due to errors
-plugin-manager.loaded=Loaded plugins
-plugin-manager.new=Newly installed plugins
-
-plugin-manager.info.name=Plugin name:
-plugin-manager.info.author=Author:
-plugin-manager.info.version=Version:
-
-plugin-manager.remove=Remove Plugins
-plugin-manager.update=Update Plugins
-plugin-manager.install=Install Plugins
+plugin-manager.options=Options...
+plugin-manager.done=Close
 
 plugin-manager.remove-confirm.title=Remove Plugins
 plugin-manager.remove-confirm.message=Are you sure you want to remove the \
@@ -1911,10 +1912,14 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 	\n\
 	{0}
 
+plugin-manager.dependency.title=Plugin Depenency	
+plugin-manager.dependency.message=One or more plugins you are installing \
+	depend on this plugin.\nAre you sure you don't want to install it?
+
 #{{{ Plugin list download progress
 plugin-list.progress.title=Downloading Plugin List
-plugin-list.progress.caption=Downloading plugin list from plugins.jedit.org...
-plugin-list.progress.stop=Stop
+plugin-list.progress.caption=Downloading list of available plugins...
+plugin-list.progress.stop=Cancel
 #}}}
 
 #{{{ Error while loading plugin list
@@ -1932,36 +1937,41 @@ plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
 	{2}
 #}}}
 
-#{{{ Plugin update
-plugin-manager.up-to-date.title=Plugins Up to Date
-plugin-manager.up-to-date.message=All installed plugins are their latest versions.
+#{{{ Plugin management
+manage-plugins.title=Manage
+
+manage-plugins.info.enabled=
+manage-plugins.info.name= Name
+manage-plugins.info.version= Version
+manage-plugins.info.status= Status
+
+manage-plugins.remove=Remove...
+manage-plugins.help=Help...
 #}}}
 
 #{{{ Plugin installation
-install-plugins.title=Install Plugins
-update-plugins.title=Update Plugins
-install-plugins.caption=Click the check box next to plugins you wish to install.
-install-plugins.plugin-info=Plugin info
-install-plugins.info.name=Name:
-install-plugins.info.author=Author:
-install-plugins.info.size=Download size:
-install-plugins.info.latest-version=Latest version:
-install-plugins.info.obsolete=Obsolete (will be deleted)
-install-plugins.info.installed-version=Installed version:
-install-plugins.info.updated=Last updated:
-install-plugins.info.description=Description:
-install-plugins.info.also-install=\n\nInstalling this plugin will also install \
-	the following plugins: 
-install-plugins.info.obsolete-text=\ This plugin is obsolete and no longer \
-	needed. It will be deleted if you check the box next to its name.
+install-plugins.title=Install
 
-install-plugins.totalSize=Total download size:
-install-plugins.downloadSource=Download source code
-install-plugins.user=Install in user plugin directory ({0})
-install-plugins.system=Install in system plugin directory ({0})
-install-plugins.none=none
+install-plugins.info.name=Name
+install-plugins.info.size=Size
+install-plugins.info.version=Version
+install-plugins.info.install=Install
+install-plugins.info.category=Category
+
+install-plugins.totalSize=Total Size: 
 install-plugins.select-all=Select All
 install-plugins.install=Install
+install-plugins.show-updates=Show Updates
+
+install-plugins.info.html=<html>\n\
+	<body>\n\
+	<em><font size=\"2\" face=\"Arial, Helvetica, sans-serif\">Author: {0}<br>\n\
+	Released: {1}</em><br></font><br>\n\
+	<font size=\"2\" face=\"Arial, Helvetica, sans-serif\">{2}</font>\n
+	</body>\n\
+	</html>
+
+update-plugins.title=Update
 #}}}
 
 #{{{ Plugin progress
