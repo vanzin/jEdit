@@ -28,7 +28,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
 import java.util.*;
-import org.gjt.sp.jedit.buffer.BufferIORequest;
+import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -415,8 +415,8 @@ public abstract class VFS
 		if((getCapabilities() & WRITE_CAP) == 0)
 			buffer.setReadOnly(true);
 
-		BufferIORequest request = new BufferIORequest(
-			BufferIORequest.LOAD,view,buffer,session,this,path);
+		BufferIORequest request = new BufferLoadRequest(
+			view,buffer,session,this,path);
 		if(buffer.isTemporary())
 			// this makes HyperSearch much faster
 			request.run();
@@ -454,8 +454,8 @@ public abstract class VFS
 		if(!path.equals(buffer.getPath()))
 			buffer.unsetProperty(Buffer.BACKED_UP);
 
-		VFSManager.runInWorkThread(new BufferIORequest(
-			BufferIORequest.SAVE,view,buffer,session,this,path));
+		VFSManager.runInWorkThread(new BufferSaveRequest(
+			view,buffer,session,this,path));
 		return true;
 	} //}}}
 
@@ -479,8 +479,8 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new BufferIORequest(
-			BufferIORequest.INSERT,view,buffer,session,this,path));
+		VFSManager.runInWorkThread(new BufferInsertRequest(
+			view,buffer,session,this,path));
 		return true;
 	} //}}}
 

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2004 Slava Pestov
+ * Copyright (C) 2000, 2005 Slava Pestov
  * Portions copyright (C) 2002 Kris Kopicki
  * Portions copyright (C) 2002 Carmine Lucarelli
  *

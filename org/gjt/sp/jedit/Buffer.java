@@ -372,9 +372,9 @@ public class Buffer
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.runInWorkThread(new BufferIORequest(
-			BufferIORequest.AUTOSAVE,null,this,null,
-			VFSManager.getFileVFS(),autosaveFile.getPath()));
+		VFSManager.runInWorkThread(new BufferAutosaveRequest(
+			null,this,null,VFSManager.getFileVFS(),
+			autosaveFile.getPath()));
 	} //}}}
 
 	//{{{ saveAs() method

@@ -38,9 +38,27 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class BufferIORequest extends WorkRequest
+public abstract class BufferIORequest extends WorkRequest
 {
 	//{{{ Constants
+	public static final int UTF8_MAGIC_1 = 0xef;
+	public static final int UTF8_MAGIC_2 = 0xbb;
+	public static final int UTF8_MAGIC_3 = 0xbf;
+
+	/**
+	 * Magic numbers used for auto-detecting Unicode and GZIP files.
+	 */
+	public static final int GZIP_MAGIC_1 = 0x1f;
+	public static final int GZIP_MAGIC_2 = 0x8b;
+	public static final int UNICODE_MAGIC_1 = 0xfe;
+	public static final int UNICODE_MAGIC_2 = 0xff;
+
+	/**
+	 * Length of longest XML PI used for encoding detection.<p>
+	 * &lt;?xml version="1.0" encoding="................"?&gt;
+	 */
+	public static final int XML_PI_LENGTH = 50;
+
 	/**
 	 * Size of I/O buffers.
 	 */
@@ -60,42 +78,6 @@ public class BufferIORequest extends WorkRequest
 	 */
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
-	/**
-	 * A file load request.
-	 */
-	public static final int LOAD = 0;
-
-	/**
-	 * A file save request.
-	 */
-	public static final int SAVE = 1;
-
-	/**
-	 * An autosave request. Only supported for local files.
-	 */
-	public static final int AUTOSAVE = 2;
-
-	/**
-	 * An insert file request.
-	 */
-	public static final int INSERT = 3;
-
-	/**
-	 * Magic numbers used for auto-detecting Unicode and GZIP files.
-	 */
-	public static final int GZIP_MAGIC_1 = 0x1f;
-	public static final int GZIP_MAGIC_2 = 0x8b;
-	public static final int UNICODE_MAGIC_1 = 0xfe;
-	public static final int UNICODE_MAGIC_2 = 0xff;
-	public static final int UTF8_MAGIC_1 = 0xef;
-	public static final int UTF8_MAGIC_2 = 0xbb;
-	public static final int UTF8_MAGIC_3 = 0xbf;
-
-	/**
-	 * Length of longest XML PI used for encoding detection.<p>
-	 * &lt;?xml version="1.0" encoding="................"?&gt;
-	 */
-	public static final int XML_PI_LENGTH = 50;
 	//}}}
 
 	//{{{ BufferIORequest constructor
@@ -108,10 +90,9 @@ public class BufferIORequest extends WorkRequest
 	 * @param vfs The VFS
 	 * @param path The path
 	 */
-	public BufferIORequest(int type, View view, Buffer buffer,
+	public BufferIORequest(View view, Buffer buffer,
 		Object session, VFS vfs, String path)
 	{
-		this.type = type;
 		this.view = view;
 		this.buffer = buffer;
 		this.session = session;
@@ -123,186 +104,22 @@ public class BufferIORequest extends WorkRequest
 			+ ".marks";
 	} //}}}
 
-	//{{{ run() method
-	public void run()
-	{
-		switch(type)
-		{
-		case LOAD:
-			load();
-			break;
-		case SAVE:
-			save();
-			break;
-		case AUTOSAVE:
-			autosave();
-			break;
-		case INSERT:
-			insert();
-			break;
-		default:
-			throw new InternalError();
-		}
-	} //}}}
-
 	//{{{ toString() method
 	public String toString()
 	{
-		String typeString;
-		switch(type)
-		{
-		case LOAD:
-			typeString = "LOAD";
-			break;
-		case SAVE:
-			typeString = "SAVE";
-			break;
-		case AUTOSAVE:
-			typeString = "AUTOSAVE";
-			break;
-		default:
-			typeString = "UNKNOWN!!!";
-		}
-
-		return getClass().getName() + "[type=" + typeString
-			+ ",buffer=" + buffer + "]";
+		return getClass().getName() + "[" + buffer + "]";
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private int type;
-	private View view;
-	private Buffer buffer;
-	private Object session;
-	private VFS vfs;
-	private String path;
-	private String markersPath;
+	protected View view;
+	protected Buffer buffer;
+	protected Object session;
+	protected VFS vfs;
+	protected String path;
+	protected String markersPath;
 	//}}}
-
-	//{{{ load() method
-	private void load()
-	{
-		InputStream in = null;
-
-		try
-		{
-			try
-			{
-				String[] args = { vfs.getFileName(path) };
-				setAbortable(true);
-				if(!buffer.isTemporary())
-				{
-					setStatus(jEdit.getProperty("vfs.status.load",args));
-					setProgressValue(0);
-				}
-
-				path = vfs._canonPath(session,path,view);
-
-				VFSFile entry = vfs._getFile(
-					session,path,view);
-				long length;
-				if(entry != null)
-					length = entry.getLength();
-				else
-					length = 0L;
-
-				in = vfs._createInputStream(session,path,
-					false,view);
-				if(in == null)
-					return;
-
-				read(autodetect(in),length,false);
-				buffer.setNewFile(false);
-			}
-			catch(CharConversionException ch)
-			{
-				Log.log(Log.ERROR,this,ch);
-				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
-					ch.toString() };
-				VFSManager.error(view,path,"ioerror.encoding-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(UnsupportedEncodingException uu)
-			{
-				Log.log(Log.ERROR,this,uu);
-				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
-					uu.toString() };
-				VFSManager.error(view,path,"ioerror.encoding-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				Object[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(OutOfMemoryError oom)
-			{
-				Log.log(Log.ERROR,this,oom);
-				VFSManager.error(view,path,"out-of-memory-error",null);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-
-			if(jEdit.getBooleanProperty("persistentMarkers"))
-			{
-				try
-				{
-					String[] args = { vfs.getFileName(path) };
-					if(!buffer.isTemporary())
-						setStatus(jEdit.getProperty("vfs.status.load-markers",args));
-					setAbortable(true);
-
-					in = vfs._createInputStream(session,markersPath,true,view);
-					if(in != null)
-						readMarkers(buffer,in);
-				}
-				catch(IOException io)
-				{
-					// ignore
-				}
-			}
-		}
-		catch(WorkThread.Abort a)
-		{
-			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
-		finally
-		{
-			try
-			{
-				vfs._endVFSSession(session,view);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-		}
-	} //}}}
 
 	//{{{ getXMLEncoding() method
 	/**
@@ -339,7 +156,7 @@ public class BufferIORequest extends WorkRequest
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
 	 * specified with an XML PI.
 	 */
-	private Reader autodetect(InputStream in) throws IOException
+	protected Reader autodetect(InputStream in) throws IOException
 	{
 		in = new BufferedInputStream(in);
 
@@ -353,28 +170,7 @@ public class BufferIORequest extends WorkRequest
 			int b2 = in.read();
 			int b3 = in.read();
 
-			if(encoding.equals(MiscUtilities.UTF_8_Y))
-			{
-				// Java does not support this encoding so
-				// we have to handle it manually.
-				if(b1 != UTF8_MAGIC_1 || b2 != UTF8_MAGIC_2
-					|| b3 != UTF8_MAGIC_3)
-				{
-					// file does not begin with UTF-8-Y
-					// signature. reset stream, read as
-					// UTF-8.
-					in.reset();
-				}
-				else
-				{
-					// file begins with UTF-8-Y signature.
-					// discard the signature, and read
-					// the remainder as UTF-8.
-				}
-
-				encoding = "UTF-8";
-			}
-			else if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 			{
 				in.reset();
 				in = new GZIPInputStream(in);
@@ -424,6 +220,9 @@ public class BufferIORequest extends WorkRequest
 					buffer.setProperty(Buffer.ENCODING,encoding);
 				}
 
+				if(encoding.equals(MiscUtilities.UTF_8_Y))
+					encoding = "UTF-8";
+
 				in.reset();
 			}
 		}
@@ -432,7 +231,7 @@ public class BufferIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ read() method
-	private SegmentBuffer read(Reader in, long length,
+	protected SegmentBuffer read(Reader in, long length,
 		boolean insert) throws IOException
 	{
 		/* we guess an initial size for the array */
@@ -641,240 +440,8 @@ public class BufferIORequest extends WorkRequest
 		return seg;
 	} //}}}
 
-	//{{{ readMarkers() method
-	private void readMarkers(Buffer buffer, InputStream _in)
-		throws IOException
-	{
-		// For `reload' command
-		buffer.removeAllMarkers();
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
-
-		try
-		{
-			String line;
-			while((line = in.readLine()) != null)
-			{
-				// compatibility kludge for jEdit 3.1 and earlier
-				if(!line.startsWith("!"))
-					continue;
-
-				char shortcut = line.charAt(1);
-				int start = line.indexOf(';');
-				int end = line.indexOf(';',start + 1);
-				int position = Integer.parseInt(line.substring(start + 1,end));
-				buffer.addMarker(shortcut,position);
-			}
-		}
-		finally
-		{
-			in.close();
-		}
-	} //}}}
-
-	//{{{ save() method
-	private void save()
-	{
-		OutputStream out = null;
-
-		try
-		{
-			String[] args = { vfs.getFileName(path) };
-			setStatus(jEdit.getProperty("vfs.status.save",args));
-
-			// the entire save operation can be aborted...
-			setAbortable(true);
-
-			path = vfs._canonPath(session,path,view);			if(!MiscUtilities.isURL(path))
-				path = MiscUtilities.resolveSymlinks(path);
-
-			// Only backup once per session
-			if(buffer.getProperty(Buffer.BACKED_UP) == null
-				|| jEdit.getBooleanProperty("backupEverySave"))
-			{
-				vfs._backup(session,path,view);
-				buffer.setBooleanProperty(Buffer.BACKED_UP,true);
-			}
-
-			/* if the VFS supports renaming files, we first
-			 * save to #<filename>#save#, then rename that
-			 * to <filename>, so that if the save fails,
-			 * data will not be lost.
-			 *
-			 * as of 4.1pre7 we now call vfs.getTwoStageSaveName()
-			 * instead of constructing the path directly
-			 * since some VFS's might not allow # in filenames.
-			 */
-			String savePath;
-
-			boolean twoStageSave = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0
-				&& jEdit.getBooleanProperty("twoStageSave");
-			if(twoStageSave)
-			{
-				savePath = vfs.getTwoStageSaveName(path);
-				if (savePath == null)
-				{
-					twoStageSave = false;
-					savePath = path;
-				}
-			}
-			else
-				savePath = path;
-
-			out = vfs._createOutputStream(session,savePath,view);
-
-			try
-			{
-				// this must be after the stream is created or
-				// we deadlock with SSHTools.
-				buffer.readLock();
-				if(out != null)
-				{
-					// Can't use buffer.getName() here because
-					// it is not changed until the save is
-					// complete
-					if(savePath.endsWith(".gz"))
-						buffer.setBooleanProperty(Buffer.GZIPPED,true);
-
-					if(buffer.getBooleanProperty(Buffer.GZIPPED))
-						out = new GZIPOutputStream(out);
-
-					write(buffer,out);
-
-					if(twoStageSave)
-					{
-						if(!vfs._rename(session,savePath,path,view))
-							throw new IOException("Rename failed: " + savePath);
-					}
-
-					// We only save markers to VFS's that support deletion.
-					// Otherwise, we will accumilate stale marks files.
-					if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
-					{
-						if(jEdit.getBooleanProperty("persistentMarkers")
-							&& buffer.getMarkers().size() != 0)
-						{
-							setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-							setProgressValue(0);
-							out = vfs._createOutputStream(session,markersPath,view);
-							if(out != null)
-								writeMarkers(buffer,out);
-						}
-						else
-							vfs._delete(session,markersPath,view);
-					}
-				}
-				else
-					buffer.setBooleanProperty(ERROR_OCCURRED,true);
-
-				if(!twoStageSave)
-					VFSManager.sendVFSUpdate(vfs,path,true);
-			}
-			finally
-			{
-				buffer.readUnlock();
-			}
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			String[] pp = { io.toString() };
-			VFSManager.error(view,path,"ioerror.write-error",pp);
-
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
-		catch(WorkThread.Abort a)
-		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
-		finally
-		{
-			try
-			{
-				vfs._saveComplete(session,buffer,path,view);
-				vfs._endVFSSession(session,view);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.write-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-		}
-	} //}}}
-
-	//{{{ autosave() method
-	private void autosave()
-	{
-		OutputStream out = null;
-
-		try
-		{
-			String[] args = { vfs.getFileName(path) };
-			setStatus(jEdit.getProperty("vfs.status.autosave",args));
-
-			// the entire save operation can be aborted...
-			setAbortable(true);
-
-			try
-			{
-				//buffer.readLock();
-
-				if(!buffer.isDirty())
-				{
-					// buffer has been saved while we
-					// were waiting.
-					return;
-				}
-
-				out = vfs._createOutputStream(session,path,view);
-				if(out == null)
-					return;
-
-				write(buffer,out);
-			}
-			catch(Exception e)
-			{
-			}
-			finally
-			{
-				//buffer.readUnlock();
-			}
-		}
-		catch(WorkThread.Abort a)
-		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-		}
-	} //}}}
-
 	//{{{ write() method
-	private void write(Buffer buffer, OutputStream _out)
+	protected void write(Buffer buffer, OutputStream _out)
 		throws IOException
 	{
 		BufferedWriter out = null;
@@ -932,120 +499,6 @@ public class BufferIORequest extends WorkRequest
 				out.close();
 			else
 				_out.close();
-		}
-	} //}}}
-
-	//{{{ writeMarkers() method
-	private void writeMarkers(Buffer buffer, OutputStream out)
-		throws IOException
-	{
-		Writer o = new BufferedWriter(new OutputStreamWriter(out));
-		try
-		{
-			Vector markers = buffer.getMarkers();
-			for(int i = 0; i < markers.size(); i++)
-			{
-				Marker marker = (Marker)markers.elementAt(i);
-				o.write('!');
-				o.write(marker.getShortcut());
-				o.write(';');
-
-				String pos = String.valueOf(marker.getPosition());
-				o.write(pos);
-				o.write(';');
-				o.write(pos);
-				o.write('\n');
-			}
-		}
-		finally
-		{
-			o.close();
-		}
-	} //}}}
-
-	//{{{ insert() method
-	private void insert()
-	{
-		InputStream in = null;
-
-		try
-		{
-			try
-			{
-				String[] args = { vfs.getFileName(path) };
-				setStatus(jEdit.getProperty("vfs.status.load",args));
-				setAbortable(true);
-
-				path = vfs._canonPath(session,path,view);
-
-				VFSFile entry = vfs._getFile(
-					session,path,view);
-				long length;
-				if(entry != null)
-					length = entry.getLength();
-				else
-					length = 0L;
-
-				in = vfs._createInputStream(session,path,false,view);
-				if(in == null)
-					return;
-
-				final SegmentBuffer seg = read(
-					autodetect(in),length,true);
-
-				/* we don't do this in Buffer.insert() so that
-				   we can insert multiple files at once */
-				VFSManager.runInAWTThread(new Runnable()
-				{
-					public void run()
-					{
-						view.getTextArea().setSelectedText(
-							seg.toString());
-					}
-				});
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-		}
-		catch(WorkThread.Abort a)
-		{
-			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
-		}
-		finally
-		{
-			try
-			{
-				vfs._endVFSSession(session,view);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
-			catch(WorkThread.Abort a)
-			{
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
 		}
 	} //}}}
 
