@@ -160,6 +160,7 @@ public class TokenMarker
 			context.parent = prevContext.parent;
 			context.inRule = prevContext.inRule;
 			context.rules = prevContext.rules;
+			context.spanEndSubst = prevContext.spanEndSubst;
 		}
 
 		keywords = context.rules.getKeywords();
@@ -193,7 +194,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				rule = context.parent.inRule;
 				if(rule != null)
 				{
-					if(checkDelegateEnd(rule))
+					if(checkDelegateEnd(rule)) //XXX
 					{
 						seenWhitespaceEnd = true;
 						continue main_loop;
@@ -213,7 +214,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					seenWhitespaceEnd = true;
 					continue main_loop;
 				}
-	
+
 				rule = rule.next;
 			} //}}}
 
@@ -416,6 +417,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		} //}}}
 
 		int matchedChars = 1;
+		CharIndexedSegment charIndexed = null;
 
 		//{{{ See if the rule's start or end sequence matches here
 		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
@@ -423,7 +425,15 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			// the end cannot be a regular expression
 			if((checkRule.action & ParserRule.REGEXP) == 0 || end)
 			{
-				pattern.array = (end ? checkRule.end : checkRule.start);
+				if(end)
+				{
+					if(context.spanEndSubst != null)
+						pattern.array = context.spanEndSubst.toCharArray();
+					else
+						pattern.array = checkRule.end;
+				}
+				else
+					pattern.array = checkRule.start;
 				pattern.offset = 0;
 				pattern.count = pattern.array.length;
 				matchedChars = pattern.count;
@@ -439,9 +449,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				// note that all regexps start with \A so they only
 				// match the start of the string
 				int matchStart = pos - line.offset;
+				charIndexed = new CharIndexedSegment(line,matchStart);
 				REMatch match = checkRule.startRegexp.getMatch(
-					new CharIndexedSegment(line,matchStart),
-					0,RE.REG_ANCHORINDEX);
+					charIndexed,0,RE.REG_ANCHORINDEX);
 				if(match == null)
 					return false;
 				else if(match.getStartIndex() != 0)
@@ -478,6 +488,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 			//{{{ SEQ
 			case ParserRule.SEQ:
+				context.spanEndSubst = null;
+
 				if((checkRule.action & ParserRule.REGEXP) != 0)
 				{
 					handleTokenWithTabs(tokenHandler,
@@ -528,10 +540,23 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						pos - line.offset,matchedChars,context);
 				}
 
-				// XXX
-				/* String spanEndSubst = null;
-				if((checkRule.action & ParserRule.REGEXP) == ParserRule.REGEXP)
-					spanEndSubst = checkRule.startRegexp... */
+				String spanEndSubst = null;
+				/* substitute result of matching the rule start
+				 * into the end string.
+				 *
+				 * eg, in shell script mode, <<\s*(\w+) is
+				 * matched into \<$1\> to construct rules for
+				 * highlighting read-ins like this <<EOF
+				 * ...
+				 * EOF
+				 */
+				if(charIndexed != null)
+				{
+					spanEndSubst = checkRule.startRegexp.substitute(
+						charIndexed,new String(checkRule.end));
+				}
+
+				context.spanEndSubst = spanEndSubst;
 				context = new LineContext(delegateSet, context);
 				keywords = context.rules.getKeywords();
 
@@ -546,11 +571,14 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					: checkRule.token,pos - line.offset,
 					pattern.count,context);
 
+				context.spanEndSubst = null;
 				context.inRule = checkRule;
 				break;
 			//}}}
 			//{{{ MARK_PREVIOUS
 			case ParserRule.MARK_PREVIOUS:
+				context.spanEndSubst = null;
+
 				if ((checkRule.action & ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH)
 				{
@@ -757,15 +785,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		public String spanEndSubst;
 
 		//{{{ LineContext constructor
-		public LineContext(ParserRule r, ParserRuleSet rs,
-			String spanEndSubst)
-		{
-			inRule = r;
-			rules = rs;
-			this.spanEndSubst = spanEndSubst;
-		} //}}}
-
-		//{{{ LineContext constructor
 		public LineContext(ParserRuleSet rs, LineContext lc)
 		{
 			rules = rs;
@@ -807,33 +826,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			if(obj instanceof LineContext)
 			{
 				LineContext lc = (LineContext)obj;
-				if(lc.parent == null)
-				{
-					if(parent != null)
-						return false;
-				}
-				else //if(lc.parent != null)
-				{
-					if(parent == null)
-						return false;
-					else if(!lc.parent.equals(parent))
-						return false;
-				}
-
-				if(lc.spanEndSubst == null)
-				{
-					if(spanEndSubst != null)
-						return false;
-				}
-				else
-				{
-					if(spanEndSubst == null)
-						return false;
-					else if(!lc.spanEndSubst.equals(spanEndSubst))
-						return false;
-				}
-
-				return lc.inRule == inRule && lc.rules == rules;
+				return lc.inRule == inRule && lc.rules == rules
+					&& MiscUtilities.objectsEqual(parent,lc.parent)
+					&& MiscUtilities.objectsEqual(spanEndSubst,lc.spanEndSubst);
 			}
 			else
 				return false;

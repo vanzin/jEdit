@@ -154,13 +154,6 @@ public class View extends JFrame implements EBComponent
 	public static final int SEARCH_BAR_LAYER = 75;
 
 	/**
-	 * Action bar layer.
-	 * @see #addToolBar(int,int,java.awt.Component)
-	 * @since jEdit 4.2pre1
-	 */
-	public static final int ACTION_BAR_LAYER = 60;
-
-	/**
 	 * Below search bar layer.
 	 * @see #addToolBar(int,int,java.awt.Component)
 	 * @since jEdit 4.0pre7
@@ -171,15 +164,26 @@ public class View extends JFrame implements EBComponent
 	/**
 	 * @deprecated Status bar no longer added as a tool bar.
 	 */
-	public static final int ABOVE_STATUS_BAR_LAYER = -50;
+	public static final int ABOVE_ACTION_BAR_LAYER = -50;
 
 	/**
-	 * @deprecated Status bar no longer added as a tool bar.
+	 * Action bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.2pre1
+	 */
+	public static final int ACTION_BAR_LAYER = -75;
+
+	/**
+	 * Status bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.2pre1
 	 */
 	public static final int STATUS_BAR_LAYER = -100;
 
 	/**
-	 * @deprecated Status bar no longer added as a tool bar.
+	 * Status bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.2pre1
 	 */
 	public static final int BELOW_STATUS_BAR_LAYER = -150;
 	//}}}
@@ -963,7 +967,7 @@ public class View extends JFrame implements EBComponent
 		if(actionBar == null)
 			actionBar = new ActionBar(this,true);
 		if(actionBar.getParent() == null)
-			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,actionBar);
+			addToolBar(BOTTOM_GROUP,ACTION_BAR_LAYER,actionBar);
 
 		actionBar.getField().setText(null);
 		actionBar.getField().requestFocus();
