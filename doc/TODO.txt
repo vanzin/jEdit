@@ -3,9 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- edits above first line still cause problems
 - files with names of the form foo: are not handled very well in some
   cases since jEdit thinks they are URLs.
-- vfs updates invalidate directory search cached list
 - <script> in javadoc
 - javadocs:
   - gui: better descriptions

@@ -25,12 +25,13 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import bsh.BshMethod;
-import javax.swing.text.Segment;
+import java.awt.Component;
 import javax.swing.JOptionPane;
+import javax.swing.text.Segment;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -342,6 +343,11 @@ public class SearchAndReplace
 	 */
 	public static boolean hyperSearch(View view, boolean selection)
 	{
+		// component that will parent any dialog boxes
+		Component comp = SearchDialog.getSearchDialog(view);
+		if(comp == null)
+			comp = view;
+
 		record(view,"hyperSearch(view," + selection + ")",false,
 			!selection);
 
@@ -385,7 +391,7 @@ public class SearchAndReplace
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 			return false;
 		}
 	} //}}}
@@ -398,11 +404,16 @@ public class SearchAndReplace
 	 */
 	public static boolean find(View view)
 	{
+		// component that will parent any dialog boxes
+		Component comp = SearchDialog.getSearchDialog(view);
+		if(comp == null)
+			comp = view;
+
 		boolean repeat = false;
 		String path = fileset.getNextFile(view,null);
 		if(path == null)
 		{
-			GUIUtilities.error(view,"empty-fileset",null);
+			GUIUtilities.error(comp,"empty-fileset",null);
 			return false;
 		}
 
@@ -500,7 +511,7 @@ loop:			for(;;)
 				else
 				{
 					Integer[] args = { new Integer(_reverse ? 1 : 0) };
-					int result = GUIUtilities.confirm(view,
+					int result = GUIUtilities.confirm(comp,
 						"keepsearching",args,
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE);
@@ -523,7 +534,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{
@@ -616,6 +627,11 @@ loop:			for(;;)
 	 */
 	public static boolean replace(View view)
 	{
+		// component that will parent any dialog boxes
+		Component comp = SearchDialog.getSearchDialog(view);
+		if(comp == null)
+			comp = view;
+
 		JEditTextArea textArea = view.getTextArea();
 
 		Buffer buffer = view.getBuffer();
@@ -712,7 +728,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{
@@ -735,6 +751,11 @@ loop:			for(;;)
 	{
 		if(!buffer.isEditable())
 			return false;
+
+		// component that will parent any dialog boxes
+		Component comp = SearchDialog.getSearchDialog(view);
+		if(comp == null)
+			comp = view;
 
 		boolean smartCaseReplace = (replace != null
 			&& TextUtilities.getStringCase(replace)
@@ -762,7 +783,7 @@ loop:			for(;;)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{
@@ -780,12 +801,17 @@ loop:			for(;;)
 	 */
 	public static boolean replaceAll(View view)
 	{
+		// component that will parent any dialog boxes
+		Component comp = SearchDialog.getSearchDialog(view);
+		if(comp == null)
+			comp = view;
+
 		int fileCount = 0;
 		int occurCount = 0;
 
 		if(fileset.getFileCount(view) == 0)
 		{
-			GUIUtilities.error(view,"empty-fileset",null);
+			GUIUtilities.error(comp,"empty-fileset",null);
 			return false;
 		}
 
@@ -859,7 +885,7 @@ loop:			while(path != null)
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)
 				args[0] = e.toString();
-			GUIUtilities.error(view,"searcherror",args);
+			GUIUtilities.error(comp,"searcherror",args);
 		}
 		finally
 		{

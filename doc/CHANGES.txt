@@ -14,6 +14,9 @@ release.
 
 - Divider position in Global Options dialog box is now saved.
 
+- Saving a file within jEdit will refresh the directory search file list
+  if necessary.
+
 + Bug Fixes:
 
 - The Format Paragraph command was once again broken on Java 1.3.
@@ -48,6 +51,9 @@ release.
   closing some of the buffers touched by the "Replace All".
 
 - Fixed display of docking buttons on Mac OS X (Kris Kopicki).
+
+- Dialog boxes shown by search and replace are now parented by a
+  search dialog, if one is open.
 
 * Version 4.1pre9
 

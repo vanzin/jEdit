@@ -21,6 +21,7 @@ package org.gjt.sp.jedit;
 
 import java.io.File;
 import org.gjt.sp.jedit.msg.VFSUpdate;
+import org.gjt.sp.jedit.search.*;
 
 class SettingsReloader implements EBComponent
 {
@@ -35,6 +36,15 @@ class SettingsReloader implements EBComponent
 
 	private void maybeReload(String path)
 	{
+		// XXX: does this really belong here?
+		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
+		if(fileset instanceof DirectoryListSet)
+		{
+			DirectoryListSet dirset = (DirectoryListSet)fileset;
+			if(path.startsWith(dirset.getDirectory()))
+				dirset.invalidateCachedList();
+		}
+
 		String jEditHome = jEdit.getJEditHome();
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		// On Windows and MacOS, path names are case insensitive
