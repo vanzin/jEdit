@@ -91,9 +91,9 @@ import java.io.*;
 public class Interpreter 
 	implements Runnable, ConsoleInterface,Serializable
 {
-	/* --- Begin static stuff --- */
+	/* --- Begin static members --- */
 
-	public static final String VERSION = "1.2.7";
+	public static final String VERSION = "1.3a1";
 	/* 
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).
@@ -106,17 +106,21 @@ public class Interpreter
 
 	// This should be per instance
     transient static PrintStream debug;
+
 	static { 
 		staticInit();
 	}
 
 	/** Shared system object visible under bsh.system */
-	static This systemObject;
+	static This sharedObject;
 
-	/** Strict Java mode */
-	public static boolean strictJava = false;
+	/** 
+		Strict Java mode 
+		@see setStrictJava( boolean )
+	*/
+	private boolean strictJava = false;
 
-	/* --- end static stuff --- */
+	/* --- End static members --- */
 
 	/* --- Instance data --- */
 
@@ -135,7 +139,7 @@ public class Interpreter
 
 	/** 
 		Specify whether we override exit on EOF as normally done in 
-		iteractive mode.  (This is used by Sessiond)
+		iteractive mode.  (e.g. as used by Sessiond)
 	*/
 	public boolean noExitOnEOF;
 
@@ -153,7 +157,8 @@ public class Interpreter
 		root namespace will be set to the one provided.  If it is null a new 
 		one will be created for it.
 		@param parent The parent interpreter if this interpreter is a child 
-			of another.  May be null.
+			of another.  May be null.  Children share a BshClassManager with
+			their parent instance.
 		@param sourceFileInfo An informative string holding the filename 
 		or other description of the source from which this interpreter is
 		reading... used for debugging.  May be null.
@@ -171,10 +176,13 @@ public class Interpreter
         this.interactive = interactive;
 		debug = err;
 		this.parent = parent;
+		if ( parent != null )
+			setStrictJava( parent.getStrictJava() );
 		this.sourceFileInfo = sourceFileInfo;
 
 		if ( namespace == null )
-        	this.globalNameSpace = new NameSpace("global");
+        	this.globalNameSpace = new NameSpace( 
+				BshClassManager.createClassManager(), "global");
 		else
 			this.globalNameSpace = namespace;
 
@@ -257,19 +265,22 @@ public class Interpreter
 
 	private void initRootSystemObject() 
 	{
+		BshClassManager bcm = getClassManager();
+//System.out.println("init root bcm ="+bcm);
 		// bsh
-		setu("bsh", new NameSpace( "Bsh Object" ).getThis( this ) );
+		setu("bsh", new NameSpace( bcm, "Bsh Object" ).getThis( this ) );
 
-		// init the static shared systemObject if it's not there yet
-		if ( systemObject == null )
-			systemObject = new NameSpace( 
-				"Bsh System Object" ).getThis( this );
+		// init the static shared sharedObject if it's not there yet
+		if ( sharedObject == null )
+			sharedObject = new NameSpace( 
+				bcm, "Bsh Shared System Object" ).getThis( this );
 		// bsh.system
-		setu( "bsh.system", systemObject );
+		setu( "bsh.system", sharedObject );
+		setu( "bsh.shared", sharedObject ); // alias
 
 		// bsh.help
 		This helpText = new NameSpace( 
-			"Bsh Command Help Text" ).getThis( this );
+			bcm, "Bsh Command Help Text" ).getThis( this );
 		setu( "bsh.help", helpText );
 
 		// bsh.cwd
@@ -400,8 +411,7 @@ public class Interpreter
         boolean eof = false;
 
 		// init the callstack.  
-		CallStack callstack = new CallStack();
-		callstack.push( globalNameSpace );
+		CallStack callstack = new CallStack( globalNameSpace );
 
         while(!eof)
         {
@@ -434,7 +444,7 @@ public class Interpreter
                         ret = ((ReturnControl)ret).value;
                     if(ret != Primitive.VOID)
                     {
-                        setVariable("$_", ret);
+                        setu("$_", ret);
                         Object show = getu("bsh.show");
                         if(show instanceof Boolean &&
                             ((Boolean)show).booleanValue() == true)
@@ -466,23 +476,26 @@ public class Interpreter
 					e.printStackTrace( DEBUG, err );
                 if(!interactive)
                     eof = true;
-				setVariable("$_e", e.getTarget());
+				setu("$_e", e.getTarget());
             }
             catch (EvalError e)
             {
 				if ( interactive )
-					error( e.toString() );
+					error( "EvalError: "+e.toString() );
 				else
-					error( e.getMessage() );
+					error( "EvalError: "+e.getMessage() );
+
                 if(DEBUG)
                     e.printStackTrace();
+
                 if(!interactive)
                     eof = true;
             }
             catch(Exception e)
             {
                 error("Unknown error: " + e);
-                e.printStackTrace();
+				if ( DEBUG )
+                	e.printStackTrace();
                 if(!interactive)
                     eof = true;
             }
@@ -582,8 +595,7 @@ public class Interpreter
 			new Interpreter( 
 				in, out, err, false, nameSpace, this, sourceFileInfo  );
 
-		CallStack callstack = new CallStack();
-		callstack.push( nameSpace );
+		CallStack callstack = new CallStack( nameSpace );
 
         boolean eof = false;
         while(!eof)
@@ -617,7 +629,7 @@ public class Interpreter
 				/*
                 throw new EvalError(
 					"Sourced file: "+sourceFileInfo+" parser Error: " 
-					+ e.getMessage( DEBUG ), node );
+					+ e.getMessage( DEBUG ), node, callstack );
 				*/
 				if ( DEBUG )
 					// show extra "expecting..." info
@@ -627,32 +639,33 @@ public class Interpreter
 				e.setErrorSourceFile( sourceFileInfo );
 				throw e;
 
-            } catch(InterpreterError e) {
+            } catch ( InterpreterError e ) {
                 e.printStackTrace();
                 throw new EvalError(
 					"Sourced file: "+sourceFileInfo+" internal Error: " 
-					+ e.getMessage(), node);
-            } catch( TargetError e ) {
+					+ e.getMessage(), node, callstack);
+            } catch ( TargetError e ) {
 				// failsafe, set the Line as the origin of the error.
 				if ( e.getNode()==null )
 					e.setNode( node );
 				e.reThrow("Sourced file: "+sourceFileInfo);
-            } catch(EvalError e) {
-                if(DEBUG)
+            } catch ( EvalError e) {
+                if ( DEBUG)
                     e.printStackTrace();
 				// failsafe, set the Line as the origin of the error.
 				if ( e.getNode()==null )
 					e.setNode( node );
 				e.reThrow( "Sourced file: "+sourceFileInfo );
-            } catch(Exception e) {
-                e.printStackTrace();
+            } catch ( Exception e) {
+                if ( DEBUG)
+                	e.printStackTrace();
                 throw new EvalError(
 					"Sourced file: "+sourceFileInfo+" unknown error: " 
-					+ e.getMessage(), node);
+					+ e.getMessage(), node, callstack);
             } catch(TokenMgrError e) {
                 throw new EvalError(
 					"Sourced file: "+sourceFileInfo+" Token Parsing Error: " 
-					+ e.getMessage(), node );
+					+ e.getMessage(), node, callstack );
             } finally {
                 localInterpreter.get_jjtree().reset();
 
@@ -769,8 +782,12 @@ public class Interpreter
 		name may be any value. e.g. a variable or field
 	*/
     public Object get( String name ) throws EvalError {
-		Object ret = globalNameSpace.get( name, this );
-		return Primitive.unwrap( ret );
+		try {
+			Object ret = globalNameSpace.get( name, this );
+			return Primitive.unwrap( ret );
+		} catch ( UtilEvalError e ) { 
+			throw e.toEvalError( SimpleNode.JAVACODE, new CallStack() ); 
+		}
 	}
 
 	/**
@@ -788,7 +805,7 @@ public class Interpreter
 		Assign the value to the name.	
 		name may evaluate to anything assignable. e.g. a variable or field.
 	*/
-    public void set(String name, Object value) 
+    public void set( String name, Object value )
 		throws EvalError 
 	{
 		// map null to Primtive.NULL coming in...
@@ -796,9 +813,17 @@ public class Interpreter
 			value = Primitive.NULL;
 
 		CallStack callstack = new CallStack();
-		LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
-			callstack, this );
-		lhs.assign( value );
+		try {
+			if ( Name.isCompound( name ) ) 
+			{
+				LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
+					callstack, this );
+				lhs.assign( value, false );
+			} else // optimization for common case
+				globalNameSpace.setVariable( name, value, false );
+		} catch ( UtilEvalError e ) { 
+			throw e.toEvalError( SimpleNode.JAVACODE, callstack ); 
+		}
 	}
 
 	/**
@@ -836,67 +861,28 @@ public class Interpreter
 		throws EvalError 
 	{
 		CallStack callstack = new CallStack();
-		LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
-			callstack, this );
+		LHS lhs;
+		try {
+			lhs = globalNameSpace.getNameResolver( name ).toLHS( 
+				callstack, this );
 
-		if ( lhs.type != LHS.VARIABLE )
-			throw new EvalError("Can't unset, not a variable: "+name);
+			if ( lhs.type != LHS.VARIABLE )
+				throw new EvalError("Can't unset, not a variable: "+name, 
+					SimpleNode.JAVACODE, new CallStack() );
 
-		// null means remove it
-		lhs.assign( null );
+			// null means remove it
+			lhs.assign( null, false );
+		} catch ( UtilEvalError e ) {
+			throw new EvalError( e.getMessage(), 
+				SimpleNode.JAVACODE, new CallStack() );
+		}
 	}
-
-
-	/**
-		@deprecated does not properly evaluate compound names
-	*/
-    public Object getVariable(String name)
-    {
-        Object obj = globalNameSpace.getVariable(name);
-		return Primitive.unwrap( obj );
-    }
-
-	/**
-		@deprecated does not properly evaluate compound names
-	*/
-    public void setVariable(String name, Object value)
-    {
-        try { globalNameSpace.setVariable(name, value); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-	/**
-		@deprecated does not properly evaluate compound names
-	*/
-    public void setVariable(String name, int value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-	/**
-		@deprecated does not properly evaluate compound names
-	*/
-    public void setVariable(String name, float value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
-
-	/**
-		@deprecated does not properly evaluate compound names
-	*/
-    public void setVariable(String name, boolean value)
-    {
-        try { globalNameSpace.setVariable(name, new Primitive(value)); }
-        catch(EvalError e) { error(e.toString()); }
-    }
 
 	// end primary set and get methods
 
 	/**
-		Fetch a reference to the interpreter (global namespace), and cast it 
-		to the specified type of interface type.  Assuming the appropriate 
+		Get a reference to the interpreter (global namespace), cast 
+		to the specified interface type.  Assuming the appropriate 
 		methods of the interface are defined in the interpreter, then you may 
 		use this interface from Java, just like any other Java object.
 		<p>
@@ -946,7 +932,11 @@ public class Interpreter
 	*/
 	public Object getInterface( Class interf ) throws EvalError
 	{
-		return globalNameSpace.getThis( this ).getInterface( interf );
+		try {
+			return globalNameSpace.getThis( this ).getInterface( interf );
+		} catch ( UtilEvalError e ) {
+			throw e.toEvalError( SimpleNode.JAVACODE, new CallStack() );
+		}
 	}
 
 	/*	Methods for interacting with Parser */
@@ -992,6 +982,8 @@ public class Interpreter
 			file = new File( cwd + File.separator + fileName );
 		}
 
+		// The canonical file name is also absolute.
+		// No need for getAbsolutePath() here...
 		return new File( file.getCanonicalPath() );
 	}
 
@@ -1026,10 +1018,52 @@ public class Interpreter
 		@see BshClassManager#setClassLoader( ClassLoader )
 	*/
 	public void setClassLoader( ClassLoader externalCL ) {
-		BshClassManager.setClassLoader( externalCL );
+		getClassManager().setClassLoader( externalCL );
 	}
 
-	static void staticInit() {
+	/**
+		Get the class manager associated with this interpreter
+		(the BshClassManager of this interpreter's global namespace).
+		This is primarily a convenience method.
+	*/
+	public BshClassManager getClassManager() 
+	{
+		return getNameSpace().getClassManager();
+	}
+	
+	/**
+		Set the class manager.
+	public setClassManager( BshClassManager manager ) 
+	{
+		this.classManager = manager;
+	}
+	*/
+
+	/**
+		Set strict Java mode on or off.  
+		This mode attempts to make BeanShell syntax behave as Java
+		syntax, eliminating conveniences like loose variables, etc.
+		When enabled, variables are required to be declared or initialized 
+		before use and method arguments are reqired to have types. 
+		<p>
+
+		This mode will become more strict in a future release when 
+		classes are interpreted and there is an alternative to scripting
+		objects as method closures.
+	*/
+	public void setStrictJava( boolean b ) { 
+		this.strictJava = b; 
+	}
+
+	/**
+		@see #setStrictJava( boolean )
+	*/
+	public boolean getStrictJava() { 
+		return this.strictJava;
+	}
+
+	static void staticInit() 
+	{
 	/* 
 		Apparently in some environments you can't catch the security exception
 		at all...  e.g. as an applet in IE  ... will probably have to work 
@@ -1066,14 +1100,23 @@ public class Interpreter
 			return "<unknown source>";
 	}
 
+	/**
+		Get the parent Interpreter of this interpreter, if any.
+		Currently this relationship implies the following:
+			1) Parent and child share a BshClassManager
+			2) Children indicate the parent's source file information in error
+			reporting.
+		When created as part of a source() / eval() the child also shares
+		the parent's namespace.  But that is not necessary in general.
+	*/
 	public Interpreter getParent() {
 		return parent;
 	}
-	
+
 	public void setOut( PrintStream out ) {
 		this.out = out;
 	}
-	public void setErr( PrintStream out ) {
+	public void setErr( PrintStream err ) {
 		this.err = err;
 	}
 

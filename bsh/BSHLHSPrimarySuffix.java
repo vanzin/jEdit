@@ -82,12 +82,12 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		}
 		catch(ReflectError e)
 		{
-			throw new EvalError("reflection error: " + e, this);
+			throw new EvalError("reflection error: " + e, this, callstack );
 		}
 		catch(InvocationTargetException e)
 		{
 			throw new TargetError(
-				"target exception", e.getTargetException(), this, true);
+				"target exception", e.getTargetException(), this, callstack, true);
 		}
 	}
 
@@ -95,21 +95,27 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		Object obj, CallStack callstack, Interpreter interpreter) 
 		throws EvalError, ReflectError, InvocationTargetException 
 	{
+try {
 		if (jjtGetNumChildren() == 0)
 			// simple field access
 			return Reflect.getLHSObjectField(obj, field);
 		else {
+throw new EvalError( "method invocation in suffix evaluation - broken", this, callstack );
+/*
 			// intermediate method invocation, and field access
+//System.out.println("here: "+obj);
 			Object[] oa = ((BSHArguments)jjtGetChild(0)).getArguments(
 				callstack, interpreter);
-			try {
-				obj = Reflect.invokeObjectMethod(interpreter, obj, method, oa, this);
-			} catch ( EvalError ee ) {
-				// catch and re-throw to get line number right
-				throw new EvalError( ee.getMessage(), this );
-			}
+			// replace obj with result of method invocation
+			obj = Reflect.invokeObjectMethod( 
+				obj, method, oa, interpreter, callstack, this );
+//System.out.println("here2: "+obj);
 			return Reflect.getLHSObjectField(obj, field);
+*/
 		}
+} catch ( UtilEvalError e ) {
+	throw e.toEvalError( this, callstack );
+}
 	}
 
 	private LHS doIndex(
@@ -126,16 +132,20 @@ class BSHLHSPrimarySuffix extends SimpleNode
 		throws EvalError, ReflectError
 	{
 		if(obj == Primitive.VOID)
-			throw new EvalError("Attempt to access property on a void type", this);
+			throw new EvalError("Attempt to access property on a void type", 
+				this, callstack );
 
 		else if(obj instanceof Primitive)
-			throw new EvalError("Attempt to access property on a primitive", this);
+			throw new EvalError("Attempt to access property on a primitive", 
+				this, callstack );
 
 		Object value = ((SimpleNode)jjtGetChild(0)).eval(
 			callstack, interpreter);
 
 		if(!(value instanceof String))
-			throw new EvalError("Property expression must be a String or identifier.", this);
+			throw new EvalError(
+				"Property expression must be a String or identifier.", 
+				this, callstack );
 
 		if ( Interpreter.DEBUG ) Interpreter.debug("LHS property access: ");
 		return new LHS(obj, (String)value);

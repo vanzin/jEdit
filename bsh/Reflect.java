@@ -51,64 +51,97 @@ import java.util.Vector;
 	searching.  This has to be inefficient...  I wish they would add a more
 	normal Java API for locating fields.
 */
-class Reflect {
-
+class Reflect 
+{
     /**
-		Invoke method on object.
+		Invoke method on arbitrary object.
 		invocation may be static (through the object instance) or dynamic.
-		Object may be This type.
-		
-		The This handling is necessary here (previously thought it might 
-		not be).
-		@param callerInfo will be passed along in the caes where the method
-		is a bsh scripted method.  It may be null to indicate no caller info.
+		Object may be a bsh scripted object (This type).
 	*/
-/*
-	In the case where this method calls a bsh scripted method the callstack
-	is currently lost
-*/
     public static Object invokeObjectMethod(
-		Interpreter interpreter, Object object, String methodName, 
-		Object[] args, SimpleNode callerInfo 
-	) 
-		throws ReflectError, InvocationTargetException, EvalError 
+		Object object, String methodName, Object[] args, 
+		Interpreter interpreter, CallStack callstack, SimpleNode callerInfo ) 
+		throws ReflectError, EvalError, InvocationTargetException
 	{
-        /*
-		if ( Interpreter.DEBUG ) 
-			Interpreter.debug("invoke Method " + methodName + " on object " 
-			+ object + " with args (");
-		*/
-
-		if ( object instanceof This && !showThisMethod( methodName) ) {
-			// This .invokeMethod() just calls the namespace invokeMethod
+		// Bsh scripted object
+		if ( object instanceof This && !passThisMethod( methodName) ) 
 			return ((This)object).invokeMethod( 
-				methodName, args, interpreter, null, callerInfo );
-        } else
-			return invokeMethod( 
-				object.getClass(), object, methodName, args, false );
+				methodName, args, interpreter, callstack, callerInfo );
+		else 
+		// Java object
+		{ 
+			// find the java method
+			try {
+				// Check to see if we've resolve this method before
+				Class clas = object.getClass();
+				BshClassManager bcm = callstack.top().getClassManager();
+				Method method = bcm.getResolvedMethod( clas, methodName, args );
+
+				if ( method == null )
+					method = resolveJavaMethod( 
+						clas, object, methodName, args, false );
+
+				// Succeeded.  Cache the resolved method.
+				bcm.cacheResolvedMethod( clas, methodName, args, method );
+
+				return invokeOnMethod( method, object, args );
+			} catch ( UtilEvalError e ) {
+				throw e.toEvalError( callerInfo, callstack );
+			}
+		}
     }
+
+    /** 
+		Invoke a method known to be static.
+		No object instance is needed and there is no possibility of the 
+		method being a bsh scripted method.
+	*/
+    public static Object invokeStaticMethod(
+		Class clas, String methodName, Object [] args)
+        throws ReflectError, UtilEvalError, InvocationTargetException
+    {
+        Interpreter.debug("invoke static Method");
+        Method method = resolveJavaMethod( clas, null, methodName, args, true );
+		return invokeOnMethod( method, null, args );
+    }
+
+	private static Object invokeOnMethod( 
+		Method method, Object object, Object[] args ) 
+		throws ReflectError, InvocationTargetException
+	{
+		try {
+			Object returnValue =  method.invoke(object, args);
+			if ( returnValue == null )
+				returnValue = Primitive.NULL;
+			Class returnType = method.getReturnType();
+
+			return wrapPrimitive( returnValue, returnType );
+		} catch( IllegalAccessException e ) {
+			throw new ReflectError( "Cannot access method " 
+				+ StringUtil.methodString(
+					method.getName(), method.getParameterTypes() ) 
+				+ " in '" + method.getDeclaringClass() + "' :" + e );
+		}
+	}
 
 	/**
 		Allow invocations of these method names on This type objects.
 		Don't give bsh.This a chance to override their behavior.
+		<p>
+
+		If the method is passed here the invocation will actually happen on
+		the bsh.This object via the regular reflective method invocation 
+		mechanism.  If not, then the method is evaluated by bsh.This itself
+		as a scripted method call.
 	*/
-	private static boolean showThisMethod( String name ) {
-		return ( name.equals("getClass") || name.equals("invokeMethod") );
+	private static boolean passThisMethod( String name ) {
+		return name.equals("getClass") 
+			|| name.equals("invokeMethod")
+			|| name.equals("getInterface");
 	}
 
-    /** 
-		Invoke a static method.  No object instance is provided.
-	*/
-    public static Object invokeStaticMethod(
-		Class clas, String methodName, Object [] args)
-        throws ReflectError, InvocationTargetException, EvalError
-    {
-        Interpreter.debug("invoke static Method");
-        return invokeMethod( clas, null, methodName, args, true );
-    }
-
     public static Object getIndex(Object array, int index)
-        throws ReflectError, TargetError
+        throws ReflectError, UtilTargetError
     {
 		if ( Interpreter.DEBUG ) 
 			Interpreter.debug("getIndex: "+array+", index="+index);
@@ -117,23 +150,23 @@ class Reflect {
             return wrapPrimitive(val, array.getClass().getComponentType());
         }
         catch( ArrayIndexOutOfBoundsException  e1 ) {
-			throw new TargetError( "Array Index", e1 );
+			throw new UtilTargetError( e1 );
         } catch(Exception e) {
             throw new ReflectError("Array access:" + e);
         }
     }
 
     public static void setIndex(Object array, int index, Object val)
-        throws ReflectError, TargetError
+        throws ReflectError, UtilTargetError
     {
         try {
             val = unwrapPrimitive(val);
             Array.set(array, index, val);
         }
         catch( ArrayStoreException e2 ) {
-			throw new TargetError( "Array store exception", e2 );
+			throw new UtilTargetError( e2 );
         } catch( IllegalArgumentException e1 ) {
-			throw new TargetError( "Illegal Argument", 
+			throw new UtilTargetError( 
 				new ArrayStoreException( e1.toString() ) );
         } catch(Exception e) {
             throw new ReflectError("Array access:" + e);
@@ -141,13 +174,13 @@ class Reflect {
     }
 
     public static Object getStaticField(Class clas, String fieldName)
-        throws ReflectError
+        throws UtilEvalError, ReflectError
     {
         return getFieldValue(clas, null, fieldName);
     }
 
     public static Object getObjectField(Object object, String fieldName)
-        throws ReflectError
+        throws UtilEvalError, ReflectError
     {
 		if ( object instanceof This )
 			return ((This)object).namespace.getVariable( fieldName );
@@ -166,7 +199,7 @@ class Reflect {
     }
 
     static LHS getLHSStaticField(Class clas, String fieldName)
-        throws ReflectError
+        throws UtilEvalError, ReflectError
     {
         Field f = getField(clas, fieldName);
         return new LHS(f);
@@ -179,7 +212,7 @@ class Reflect {
 		In the field does not exist we check for a property setter.
 	*/
     static LHS getLHSObjectField(Object object, String fieldName)
-        throws ReflectError
+        throws UtilEvalError, ReflectError
     {
 		if ( object instanceof This )
 			return new LHS(((This)object).namespace, fieldName );
@@ -198,7 +231,8 @@ class Reflect {
     }
 
     private static Object getFieldValue(
-		Class clas, Object object, String fieldName) throws ReflectError
+		Class clas, Object object, String fieldName) 
+		throws UtilEvalError, ReflectError
     {
         try {
             Field f = getField(clas, fieldName);
@@ -225,7 +259,7 @@ class Reflect {
 		i.e. this method owns Class getField();
 	*/
     private static Field getField(Class clas, String fieldName)
-        throws ReflectError
+        throws UtilEvalError, ReflectError
     {
         try
         {
@@ -254,7 +288,7 @@ class Reflect {
 		there is no real syntax for specifying which class scope to use...
 	*/
 	private static Field findAccessibleField( Class clas, String fieldName ) 
-		throws NoSuchFieldException
+		throws UtilEvalError, NoSuchFieldException
 	{
 		// Quick check catches public fields include those in interfaces
 		try {
@@ -288,8 +322,8 @@ class Reflect {
 	}
 
     /**
-        The full blown invoke method.  Everybody should come here.
-		The invoked method may be static or dynamic unless onlyStatic is set
+        The full blown resolver method.  Everybody should come here.
+		The method may be static or dynamic unless onlyStatic is set
 		(in which case object may be null).
 
 		@param onlyStatic 
@@ -298,18 +332,19 @@ class Reflect {
 		Note: Method invocation could probably be speeded up if we eliminated
 		the throwing of exceptions in the search for the proper method.
 		We could probably cache our knowledge of method structure as well.
+		(working on this for 1.3... check back)
     */
-    private static Object invokeMethod(
+    static Method resolveJavaMethod (
 		Class clas, Object object, String name, Object[] args,
 		boolean onlyStatic
 	)
-        throws ReflectError, InvocationTargetException, EvalError
+        throws ReflectError, UtilEvalError
     {
 		if ( object == Primitive.NULL )
-			throw new TargetError("Attempt to invoke method "
-				+name+" on null value", new NullPointerException() );
+			throw new UtilTargetError( new NullPointerException(
+				"Attempt to invoke method " +name+" on null value" ) );
 		if ( object == Primitive.VOID )
-			throw new EvalError("Attempt to invoke method "
+			throw new UtilEvalError("Attempt to invoke method "
 				+name+" on undefined variable or class name" );
 
         if (args == null)
@@ -322,81 +357,68 @@ class Reflect {
                 throw new ReflectError("Attempt to pass void argument " +
                     "(position " + i + ") to method: " + name);
 
-        Class returnType = null;
-        Object returnValue = null;
-
         Class[] types = getTypes(args);
         unwrapPrimitives(args);
 
-        try
-        {
-			// Try the easy case: Look for an accessible version of the 
-			// direct match.
+		// Begin -This used to be wrapped in a try/catch for IllegalAccess
 
-			Method m = null;
-			try {
-				m  = findAccessibleMethod(clas, name, types, onlyStatic);
-			} catch ( SecurityException e ) { }
+		// Try the easy case: Look for an accessible version of the 
+		// direct match.
 
-			if ( m == null )
-				if ( Interpreter.DEBUG ) 
-					Interpreter.debug("Exact method " + 
+		Method m = null;
+		try {
+			m  = findAccessibleMethod(clas, name, types, onlyStatic);
+		} catch ( SecurityException e ) { }
+
+		if ( m == null )
+			if ( Interpreter.DEBUG )
+				Interpreter.debug("Exact method " + 
 					StringUtil.methodString(name, types) +
 					" not found in '" + clas.getName() + "'" );
 
-			// Next look for an assignable match
-            if ( m == null ) {
+		// Next look for an assignable match
+		if ( m == null ) {
 
-				// If no args stop here
-				if ( types.length == 0 )
-					throw new ReflectError(
-						"No args "+ ( onlyStatic ? "static " : "" )
-						+"method " + StringUtil.methodString(name, types) + 
-						" not found in class'" + clas.getName() + "'");
-
-				// try to find an assignable method
-				Method[] methods = clas.getMethods();
-				if ( onlyStatic )
-					// only try the static methods
-					methods = retainStaticMethods( methods );
-
-				m = findMostSpecificMethod(name, types, methods);
-
-				// try to find an extended method
-				methods = clas.getMethods();
-				if ( m == null )
-					m = findExtendedMethod(name, args, methods);
-
-				// If we found an assignable method, make sure it's accessible
-				if ( m != null ) {
-					try {
-						m = findAccessibleMethod( clas, m.getName(), 
-							m.getParameterTypes(), onlyStatic);
-					} catch ( SecurityException e ) { }
-				}
-            }
-
-			// Found something?
-			if (m == null )
+			// If no args stop here
+			if ( types.length == 0 )
 				throw new ReflectError(
-					( onlyStatic ? "Static method " : "Method " )
-					+ StringUtil.methodString(name, types) + 
+					"No args "+ ( onlyStatic ? "static " : "" )
+					+"method " + StringUtil.methodString(name, types) + 
 					" not found in class'" + clas.getName() + "'");
 
-			// Invoke it
-            returnValue =  m.invoke(object, args);
-            if(returnValue == null)
-                returnValue = Primitive.NULL;
-            returnType = m.getReturnType();
+			// try to find an assignable method
+			Method[] methods = clas.getMethods();
+			if ( onlyStatic )
+				// only try the static methods
+				methods = retainStaticMethods( methods );
 
-        } catch(IllegalAccessException e) {
-            throw new ReflectError( 
-				"Cannot access method " + StringUtil.methodString(name, types) +
-                " in '" + clas.getName() + "' :" + e);
-        }
+			m = findMostSpecificMethod(name, types, methods);
 
-        return wrapPrimitive(returnValue, returnType);
-    }
+			// try to find an extended method
+			methods = clas.getMethods();
+			if ( m == null )
+				m = findExtendedMethod(name, args, methods);
+
+			// If we found an assignable method, make sure it's accessible
+			if ( m != null ) {
+				try {
+					m = findAccessibleMethod( clas, m.getName(), 
+						m.getParameterTypes(), onlyStatic);
+				} catch ( SecurityException e ) { }
+			}
+		}
+
+		// Found something?
+		if (m == null )
+			throw new ReflectError(
+				( onlyStatic ? "Static method " : "Method " )
+				+ StringUtil.methodString(name, types) + 
+				" not found in class'" + clas.getName() + "'");
+
+		// End - This used to be wrapped in a try/catch for IllegalAccess
+			
+		return m;
+	}
 
 	/**
 		Return only the static methods
@@ -427,6 +449,7 @@ class Reflect {
 	*/
 	static Method findAccessibleMethod( 
 		Class clas, String name, Class [] types, boolean onlyStatic ) 
+		throws UtilEvalError
 	{
 		Method meth = null;
 		Vector classQ = new Vector();
@@ -533,7 +556,7 @@ System.out.println("findAcc: "
                 return value;
     }
 
-    public static Class[] getTypes( Object[] args)
+    public static Class[] getTypes( Object[] args )
     {
         if(args == null)
             return new Class[0];
@@ -542,10 +565,12 @@ System.out.println("findAcc: "
 
         for(int i=0; i<args.length; i++)
         {
-			if ( args[i] == null )
-				throw new InterpreterError("Null arg in getTypes()");
+			//if ( args[i] == null )
+				//throw new InterpreterError("Null arg in getTypes()");
 
-            if(args[i] instanceof Primitive)
+			if ( args[i] == null )
+				types[i] = null;
+            else if ( args[i] instanceof Primitive )
                 types[i] = ((Primitive)args[i]).getType();
             else
                 types[i] = args[i].getClass();
@@ -575,7 +600,8 @@ System.out.println("findAcc: "
             return arg;
     }
 
-    static Object constructObject(String clas, Object[] args)
+	/*
+    static Object constructObject( String clas, Object[] args )
         throws ReflectError, InvocationTargetException
     {
 		Class c = BshClassManager.classForName( clas );
@@ -584,6 +610,7 @@ System.out.println("findAcc: "
 
 		return constructObject( c, args );
 	}
+	*/
 
 	/**
 		Primary object constructor
@@ -645,7 +672,6 @@ System.out.println("findAcc: "
 
     /**
         Implement JLS 15.11.2 for method resolution
-		@param onlyStatic  only static methods will be considered.
 		@return null on no match
     */
     static Method findMostSpecificMethod(
@@ -702,7 +728,7 @@ System.out.println("findAcc: "
                     // if you get here, all the arguments were assignable
                     System.arraycopy(tempArgs, 0, args, 0, args.length);
                     return currentMethod;
-                } catch(EvalError e) {
+                } catch(UtilEvalError e) {
                     // do nothing (exception breaks you out of the for loop).
                 }
             }
@@ -756,7 +782,7 @@ System.out.println("findAcc: "
                 System.arraycopy(tempArgs, 0, args, 0, args.length);
                 return currentConstructor;
             }
-            catch(EvalError e)
+            catch(UtilEvalError e)
             {
                 // do nothing (exception breaks you out of the for loop).
             }
@@ -813,7 +839,7 @@ System.out.println("findAcc: "
 	/**
 		Determine if the 'from' signature is assignable to the 'to' signature
 		'from' arg types, 'to' candidate types
-		null value in 'to' type parameter indicates loose type.
+		null value in 'from' or 'to' type parameter indicates loose type.
 
 		null value in either arg is considered empty array
 	*/
@@ -941,10 +967,10 @@ System.out.println("findAcc: "
         Interpreter.debug("property access: ");
         try {
 			try {
-            	// null interpreter, accessor doesn't need to know
-				// null callerInfo
-				return invokeObjectMethod(null, obj, accessorName, args, null);
-			} catch ( EvalError e ) {
+				Method method = resolveJavaMethod( 
+					obj.getClass(), obj, accessorName, args, false );
+				return invokeOnMethod( method, obj, args );
+			} catch ( UtilEvalError e ) {
 				// what does this mean?
 				throw new ReflectError("getter: "+e);
 			}
@@ -958,20 +984,22 @@ System.out.println("findAcc: "
 
     public static void setObjectProperty(
 		Object obj, String propName, Object value)
-        throws ReflectError, EvalError
+        throws ReflectError, UtilEvalError
     {
         String accessorName = accessorName( "set", propName );
         Object[] args = new Object[] { value };
 
         Interpreter.debug("property access: ");
         try {
-            // null interpreter, accessor doesn't need to know
-			// null callerInfo
-            invokeObjectMethod(null, obj, accessorName, args, null);
+			// This cast to JavaMethod allows us to call the simple args
+			// invoke... need to clean this up somehow.
+			Method method = resolveJavaMethod( 
+				obj.getClass(), obj, accessorName, args, false );
+			invokeOnMethod( method, obj, args );
         }
         catch(InvocationTargetException e)
         {
-            throw new EvalError("Property accessor threw exception!");
+            throw new UtilEvalError("Property accessor threw exception!");
         }
     }
 
@@ -1023,4 +1051,5 @@ System.out.println("findAcc: "
     }
 
 }
+
 

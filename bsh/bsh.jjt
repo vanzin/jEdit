@@ -58,9 +58,40 @@ options {
 PARSER_BEGIN(Parser)
 package bsh;
 
-import java.io.Reader;
+import java.io.*;
 
-class Parser { 
+/**
+	This is the BeanShell parser.  It is used internally by the Interpreter
+	class (which is probably what you are looking for).  The parser knows
+	only how to parse the structure of the language, it does not understand
+	names, commands, etc.
+	<p>
+	You can use the Parser from the command line to do basic structural 
+	validation of BeanShell files without actually executing them. e.g.
+	<code><pre>
+		java bsh.Parser [ -p ] file [ file ] [ ... ]
+	</pre></code>
+	<p>
+	The -p option causes the abstract syntax to be printed.
+	<p>
+
+	From code you'd use the Parser like this:
+	<p
+	<code><pre>
+		Parser parser = new Parser(in);
+		while( !(eof=parser.Line()) ) {
+			SimpleNode node = parser.popNode();
+			// use the node, etc. (See bsh.BSH* classes)
+		}
+	</pre></code>
+*/
+public class Parser 
+{ 
+	boolean retainComments = false;
+	
+	public void setRetainComments( boolean b ) {
+		retainComments = b;
+	}
 
 	void jjtreeOpenNodeScope(Node n) {
 		((SimpleNode)n).firstToken = getToken(1);
@@ -77,6 +108,14 @@ class Parser {
 		ReInit(in);
 	}
 
+	public SimpleNode popNode() 
+	{
+		if ( jjtree.nodeArity() > 0)  // number of child nodes 
+			return (SimpleNode)jjtree.popNode();
+		else
+			return null;
+	}
+
 	/**
 		Explicitly re-initialize just the token reader.
 		This seems to be necessary to avoid certain looping errors when
@@ -86,6 +125,25 @@ class Parser {
 		jj_input_stream.ReInit( in, 
 			jj_input_stream.getEndLine(), 
 			jj_input_stream.getEndColumn() );
+	}
+
+	public static void main( String [] args ) 
+		throws IOException, ParseException
+	{
+		boolean print = false;
+		int i=0;
+		if ( args[0].equals("-p") ) {
+			i++;
+			print=true;
+		}
+		for(; i< args.length; i++) {
+			Reader in = new FileReader(args[i]);
+			Parser parser = new Parser(in);
+			parser.setRetainComments(true);
+			while( !parser.Line()/*eof*/ )
+				if ( print )
+					System.out.println( parser.popNode() );
+		}
 	}
 
 }
@@ -108,9 +166,13 @@ SPECIAL_TOKEN : /* COMMENTS */
 	spec, but comes up often enough to warrant it... (especially in eval()).
 */
   <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")? >
+
 | <HASH_BANG_COMMENT: "#!" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
-| <FORMAL_COMMENT: "/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
-| <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+
+ /* Moved FORMAL_COMMENT to a real token.  Modified MULTI_LINE_COMMENT to not 
+    catch formal comments (require no star after star) */
+| <MULTI_LINE_COMMENT: 
+	"/*" (~["*"])+ "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
 TOKEN : /* RESERVED WORDS AND LITERALS */
@@ -204,6 +266,10 @@ TOKEN : /* LITERALS */
       )*
       "\""
   >
+|
+   < FORMAL_COMMENT: 
+		"/**" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/"
+	>
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -745,24 +811,14 @@ void PrimaryPrefix() : { }
 |
   AllocationExpression()
 |
-  // Careful about the parens here... they are important
-  // lookahead must apply to the correct choice points
-(
-	/*
-		The MethodInvocation node here simplifies the prefix/suffix parsing a 
-		bit by forcing the prefix to an object...  That was the idea anyway... 
-		should probably just move it to the suffix
-	*/
-    // SYNTACTIC_LOOKAHEAD
-    LOOKAHEAD( MethodInvocation() ) MethodInvocation()
-  |
-    (
-      LOOKAHEAD( Type() "." "class" ) 
-      Type()
-    |
-	  AmbiguousName()
-	)
-)
+  // SYNTACTIC_LOOKAHEAD
+  LOOKAHEAD( MethodInvocation() ) 
+	MethodInvocation()
+|
+  LOOKAHEAD( Type() "." "class" ) 
+	Type()
+|
+  AmbiguousName()
 
 /*
 |
@@ -816,10 +872,12 @@ void PrimarySuffix() #PrimarySuffix :
 */
 void LHSPrimaryPrefix() : { }
 {
+/*
   // SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( MethodInvocation() )
   MethodInvocation()
 |
+*/
   AmbiguousName()
 }
 
@@ -838,6 +896,11 @@ void LHSPrimarySuffix() #LHSPrimarySuffix :
         jjtThis.operation = BSHLHSPrimarySuffix.INDEX;
     }
 |
+/*
+	Broken - return to this...
+	Look at PrimarySuffix... why can't we do it right, as there?
+	See BSHLHSPrimarySuffix.java
+*/
     // Field access or method invocation followed by field access
   "." t1 = <IDENTIFIER> [ Arguments() "." t2 = <IDENTIFIER> ] {
         jjtThis.operation = BSHLHSPrimarySuffix.NAME;
@@ -1036,7 +1099,8 @@ void Block() #Block :
 }
 
 void BlockStatement() :
-{}
+{
+}
 {
 // SYNTACTIC_LOOKAHEAD
   LOOKAHEAD( MethodDeclarationLookahead() ) MethodDeclaration()
@@ -1047,11 +1111,23 @@ void BlockStatement() :
 |
   Statement()
 
-/* end */
+/* end */ // ??
 
 |  
   // Allow BeanShell imports in any block
   ImportDeclaration()
+|
+  FormalComment()
+}
+
+void FormalComment() #FormalComment( retainComments ) :
+{
+	Token t;
+}
+{
+	t=<FORMAL_COMMENT>  {
+		jjtThis.text=t.image;
+	}
 }
 
 void EmptyStatement() :
@@ -1196,12 +1272,15 @@ void ThrowStatement() #ThrowStatement :
 
 void TryStatement() #TryStatement:
 /*
- * Semantic check required here to make sure that at least one
- * finally/catch is present.
+	Semantic check required here to make sure that at least one
+	finally/catch is present.  (You can have a try with finally and no catch).
  */
-{}
+{ boolean closed = false; }
 {
-  "try" Block()
-  ( "catch" "(" FormalParameter() ")" Block() )*
-  [ "finally" Block() ]
+	"try" Block()
+	( "catch" "(" FormalParameter() ")" Block() { closed = true; } )*
+	[ "finally" Block() { closed = true; } ]
+	{ 	
+		if ( !closed ) throw generateParseException();
+	}
 }
