@@ -130,7 +130,7 @@ begin
 	// if we didn't find a JDK "javaw.exe", try for a JRE one
 	if Length(path) = 0 then begin
 		Log('(JRE) JDK not found, looking for JRE');
-		javaVersion := getJDKVersion();
+		javaVersion := getJREVersion();
 		if (Length(javaVersion) > 0) and ((javaVersion) >= '1.3.0') then begin
 			RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion, 'JavaHome', javaHome);
 			path := javaHome + '\bin\' + 'javaw.exe';
