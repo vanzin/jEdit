@@ -191,7 +191,9 @@ public class TextUtilities
 						if(first != null)
 							out.add(first);
 						first = null;
-						x = newChunk.width;
+						newChunk.x = firstNonWhiteSpace;
+						x = firstNonWhiteSpace
+							+ newChunk.width;
 					}
 					else
 					{
@@ -206,6 +208,8 @@ public class TextUtilities
 						current.next = newChunk;
 						current = newChunk;
 					}
+
+					seenNonWhiteSpace = true;
 				}
 			}
 
