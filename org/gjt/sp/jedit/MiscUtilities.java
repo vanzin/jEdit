@@ -90,6 +90,9 @@ public class MiscUtilities
 	 */
 	public static String canonPath(String path)
 	{
+		if(path.length() == 0)
+			return path;
+
 		if(path.startsWith("file://"))
 			path = path.substring("file://".length());
 		else if(path.startsWith("file:"))
@@ -101,6 +104,11 @@ public class MiscUtilities
 		{
 			// get rid of mixed paths on Windows
 			path = path.replace('/','\\');
+			// also get rid of trailing spaces on Windows
+			int trim = path.length();
+			while(path.charAt(trim - 1) == ' ')
+				trim--;
+			path = path.substring(0,trim);
 		}
 		else if(OperatingSystem.isMacOS())
 		{

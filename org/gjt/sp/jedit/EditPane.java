@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,14 @@ package org.gjt.sp.jedit;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.lang.reflect.Method;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -375,6 +377,26 @@ public class EditPane extends JPanel implements EBComponent
 
 	//{{{ Private members
 
+	private static Method initBufferSwitcher;
+
+	static
+	{
+		if(OperatingSystem.hasJava14())
+		{
+			try
+			{
+				initBufferSwitcher = Java14.class
+					.getMethod("initBufferSwitcher",
+					new Class[] { EditPane.class,
+					BufferSwitcher.class });
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,EditPane.class,e);
+			}
+		}
+	}
+
 	//{{{ Instance variables
 	private boolean init;
 	private View view;
@@ -524,6 +546,21 @@ public class EditPane extends JPanel implements EBComponent
 			if(bufferSwitcher == null)
 			{
 				bufferSwitcher = new BufferSwitcher(this);
+				if(initBufferSwitcher != null)
+				{
+					try
+					{
+						initBufferSwitcher.invoke(
+							null,new Object[] {
+								EditPane.this,
+								bufferSwitcher
+							});
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.ERROR,this,e);
+					}
+				}
 				add(BorderLayout.NORTH,bufferSwitcher);
 				bufferSwitcher.updateBufferList();
 				revalidate();
