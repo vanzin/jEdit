@@ -422,7 +422,6 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//{{{ setFirstLine() method
-	public Exception trace;
 	/**
 	 * Sets the vertical scroll bar position
 	 *
@@ -430,12 +429,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setFirstLine(int firstLine)
 	{
-		if(Debug.SCROLL_DEBUG)
-		{
-			Log.log(Log.DEBUG,this,"setFirstLine() from "
-				+ getFirstLine() + " to " + firstLine);
-		}
-
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		int max = displayManager.getScrollLineCount() - visibleLines
 			+ (lastLinePartial ? 1 : 0);
@@ -444,6 +437,12 @@ public class JEditTextArea extends JComponent
 		if(firstLine < 0)
 			firstLine = 0;
 		//}}}
+
+		if(Debug.SCROLL_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"setFirstLine() from "
+				+ getFirstLine() + " to " + firstLine);
+		}
 
 		int oldFirstLine = getFirstLine();
 		if(firstLine == oldFirstLine)
@@ -3822,6 +3821,23 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	public final void toggleRectangularSelectionEnabled()
 	{
 		setRectangularSelectionEnabled(!rectangularSelectionMode);
+
+		if(getSelectionCount() == 1)
+		{
+			Selection s = (Selection)selection.elementAt(0);
+			removeFromSelection(s);
+			if(rectangularSelectionMode)
+			{
+				addToSelection(new Selection.Rect(
+					s.getStart(),s.getEnd()));
+			}
+			else
+			{
+				addToSelection(new Selection.Range(
+					s.getStart(),s.getEnd()));
+			}
+		}
+
 		if(view.getStatus() != null)
 		{
 			view.getStatus().setMessageAndClear(
