@@ -159,4 +159,4 @@ begin
 	end;
 end;
 
-// :noTabs=false:lineSeparator=\r\n:tabSize=4:
+// :noTabs=false:tabSize=4:
