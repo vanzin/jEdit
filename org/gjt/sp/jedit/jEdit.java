@@ -965,6 +965,29 @@ public class jEdit
 	public static void addActionSet(ActionSet actionSet)
 	{
 		actionSets.addElement(actionSet);
+		actionSet.added = true;
+		EditAction[] actions = actionSet.getActions();
+		for(int i = 0; i < actions.length; i++)
+		{
+			actionHash.put(actions[i].getName(),actions[i]);
+		}
+	} //}}}
+
+	//{{{ removeActionSet() method
+	/**
+	 * Removes an action set from jEdit's list. Plugins probably won't
+	 * need to call this method.
+	 * @since jEdit 4.2pre1
+	 */
+	public static void removeActionSet(ActionSet actionSet)
+	{
+		actionSets.removeElement(actionSet);
+		actionSet.added = false;
+		EditAction[] actions = actionSet.getActions();
+		for(int i = 0; i < actions.length; i++)
+		{
+			actionHash.remove(actions[i].getName());
+		}
 	} //}}}
 
 	//{{{ getActionSets() method
@@ -986,15 +1009,7 @@ public class jEdit
 	 */
 	public static EditAction getAction(String name)
 	{
-		for(int i = 0; i < actionSets.size(); i++)
-		{
-			EditAction action = ((ActionSet)actionSets.elementAt(i))
-				.getAction(name);
-			if(action != null)
-				return action;
-		}
-
-		return null;
+		return (EditAction)actionHash.get(name);
 	} //}}}
 
 	//{{{ getActionSetForAction() method
@@ -2203,6 +2218,8 @@ public class jEdit
 
 	//{{{ Package-private members
 
+	Hashtable actionHash;
+
 	//{{{ updatePosition() method
 	/**
 	 * If buffer sorting is enabled, this repositions the buffer.
@@ -2658,6 +2675,7 @@ public class jEdit
 	 */
 	private static void initActions()
 	{
+		actionHash = new Hashtable();
 		actionSets = new Vector();
 
 		Reader in = new BufferedReader(new InputStreamReader(

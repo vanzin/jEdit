@@ -434,13 +434,6 @@ view=new-view \
      new-plain-view \
      close-view \
      - \
-     unsplit-current \
-     unsplit \
-     split-horizontal \
-     split-vertical \
-     prev-textarea \
-     next-textarea \
-     - \
      prev-buffer \
      next-buffer \
      recent-buffer \
@@ -448,6 +441,7 @@ view=new-view \
      - \
      toggle-line-numbers \
      - \
+     %splitting \
      %scrolling \
      %docking
 view.label=$View
@@ -459,12 +453,22 @@ next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
 show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
+
+#{{{ Splitting menu
+splitting=unsplit-current \
+          unsplit \
+          split-horizontal \
+          split-vertical \
+          prev-textarea \
+          next-textarea
+splitting.label=$Splitting
 split-horizontal.label=Split $Horizontally
-split-vertical.label=Spli$t Vertically
+split-vertical.label=Split $Vertically
 unsplit-current.label=$Unsplit Current
 unsplit.label=Unsplit $All
-prev-textarea.label=$Go to Previous Text Area
-next-textarea.label=G$o to Next Text Area
+prev-textarea.label=Go to $Previous Text Area
+next-textarea.label=Go to $Next Text Area
+#}}}
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
@@ -477,7 +481,7 @@ scrolling=scroll-to-current-line \
 	  scroll-down-page \
 	  - \
 	  toggle-synchro-scroll
-scrolling.label=$Scrolling
+scrolling.label=Scrollin$g
 scroll-to-current-line.label=Scroll $to Current Line
 center-caret.label=$Center Caret on Screen
 scroll-up-line.label=Line Scroll $Up
@@ -566,13 +570,12 @@ reload-modes.label=$Reload Edit Modes
 
 #{{{ Macros menu
 macros=record-macro \
-       record-temp-macro \
        stop-recording \
        - \
+       record-temp-macro \
        run-temp-macro \
-       run-last-macro \
-       run-other-macro \
        - \
+       run-other-macro \
        rescan-macros \
        -
 macros.label=Ma$cros
@@ -580,7 +583,6 @@ record-macro.label=$Record Macro...
 record-temp-macro.label=Record $Temporary Macro
 stop-recording.label=$Stop Recording
 run-temp-macro.label=Run Tem$porary Macro
-run-last-macro.label=Run $Last Macro
 run-other-macro.label=Run $Other Macro...
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
