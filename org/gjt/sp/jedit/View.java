@@ -29,6 +29,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.msg.*;
@@ -936,8 +938,10 @@ public class View extends JFrame implements EBComponent
 			getSplitConfig(splitPane,splitConfig);
 		else
 		{
-			splitConfig.append(getBuffer().getIndex());
-			splitConfig.append(" buffer");
+			splitConfig.append('"');
+			splitConfig.append(MiscUtilities.charsToEscapes(
+				getBuffer().getPath()));
+			splitConfig.append("\" buffer");
 		}
 
 		ViewConfig config = new ViewConfig();
@@ -1167,8 +1171,16 @@ public class View extends JFrame implements EBComponent
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
-		Component comp = restoreSplitConfig(buffer,config.splitConfig);
-		dockableWindowManager.add(comp,0);
+		try
+		{
+			Component comp = restoreSplitConfig(buffer,config.splitConfig);
+			dockableWindowManager.add(comp,0);
+		}
+		catch(IOException e)
+		{
+			// this should never throw an exception.
+			throw new InternalError();
+		}
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
@@ -1322,8 +1334,10 @@ public class View extends JFrame implements EBComponent
 			getSplitConfig((JSplitPane)right,splitConfig);
 		else
 		{
-			splitConfig.append(((EditPane)right).getBuffer().getIndex());
-			splitConfig.append(" buffer");
+			splitConfig.append('"');
+			splitConfig.append(MiscUtilities.charsToEscapes(
+				((EditPane)right).getBuffer().getPath()));
+			splitConfig.append("\" buffer");
 		}
 
 		splitConfig.append(' ');
@@ -1333,8 +1347,10 @@ public class View extends JFrame implements EBComponent
 			getSplitConfig((JSplitPane)left,splitConfig);
 		else
 		{
-			splitConfig.append(((EditPane)left).getBuffer().getIndex());
-			splitConfig.append(" buffer");
+			splitConfig.append('"');
+			splitConfig.append(MiscUtilities.charsToEscapes(
+				((EditPane)left).getBuffer().getPath()));
+			splitConfig.append("\" buffer");
 		}
 
 		splitConfig.append(' ');
@@ -1346,6 +1362,9 @@ public class View extends JFrame implements EBComponent
 
 	//{{{ restoreSplitConfig() method
 	private Component restoreSplitConfig(Buffer buffer, String splitConfig)
+		throws IOException
+	// this is where checked exceptions piss me off. this method only uses
+	// a StringReader which can never throw an exception...
 	{
 		if(buffer != null)
 			return (editPane = createEditPane(buffer));
@@ -1356,39 +1375,71 @@ public class View extends JFrame implements EBComponent
 
 		Stack stack = new Stack();
 
-		StringTokenizer st = new StringTokenizer(splitConfig);
+		// we create a stream tokenizer for parsing a simple
+		// stack-based language
+		StreamTokenizer st = new StreamTokenizer(new StringReader(
+			splitConfig));
+		st.whitespaceChars(0,' ');
+		/* all printable ASCII characters */
+		st.wordChars('#','~');
+		st.commentChar('!');
+		st.quoteChar('"');
+		st.eolIsSignificant(false);
 
-		while(st.hasMoreTokens())
+loop:		for(;;)
 		{
-			String token = st.nextToken();
-			if(token.equals("vertical") || token.equals("horizontal"))
+			switch(st.nextToken())
 			{
-				int orientation = (token.equals("vertical")
-					? JSplitPane.VERTICAL_SPLIT
-					: JSplitPane.HORIZONTAL_SPLIT);
-				int divider = Integer.parseInt((String)stack.pop());
-				stack.push(splitPane = new JSplitPane(
-					orientation,
-					(Component)stack.pop(),
-					(Component)stack.pop()));
-				splitPane.setOneTouchExpandable(true);
-				splitPane.setBorder(null);
-				splitPane.setMinimumSize(new Dimension(0,0));
-				splitPane.setDividerLocation(divider);
-			}
-			else if(token.equals("buffer"))
-			{
-				int index = Integer.parseInt((String)stack.pop());
-				if(index < buffers.length && index >= 0)
-					buffer = buffers[index];
-				if(buffer == null)
-					buffer = jEdit.getFirstBuffer();
+			case StreamTokenizer.TT_EOF:
+				break loop;
+			case StreamTokenizer.TT_WORD:
+				if(st.sval.equals("vertical") ||
+					st.sval.equals("horizontal"))
+				{
+					int orientation
+						= (st.sval.equals("vertical")
+						? JSplitPane.VERTICAL_SPLIT
+						: JSplitPane.HORIZONTAL_SPLIT);
+					int divider = ((Integer)stack.pop())
+						.intValue();
+					stack.push(splitPane = new JSplitPane(
+						orientation,
+						(Component)stack.pop(),
+						(Component)stack.pop()));
+					splitPane.setOneTouchExpandable(true);
+					splitPane.setBorder(null);
+					splitPane.setMinimumSize(
+						new Dimension(0,0));
+					splitPane.setDividerLocation(divider);
+				}
+				else if(st.sval.equals("buffer"))
+				{
+					Object obj = stack.pop();
+					if(obj instanceof Integer)
+					{
+						int index = ((Integer)obj).intValue();
+						if(index >= 0 && index < buffers.length)
+							buffer = buffers[index];
+					}
+					else if(obj instanceof String)
+					{
+						String path = (String)obj;
+						buffer = jEdit.getBuffer(path);
+					}
 
-				stack.push(editPane = createEditPane(buffer));
-			}
-			else
-			{
-				stack.push(token);
+					if(buffer == null)
+						buffer = jEdit.getFirstBuffer();
+
+					stack.push(editPane = createEditPane(
+						buffer));
+				}
+				break;
+			case StreamTokenizer.TT_NUMBER:
+				stack.push(new Integer((int)st.nval));
+				break;
+			case '"':
+				stack.push(st.sval);
+				break;
 			}
 		}
 
