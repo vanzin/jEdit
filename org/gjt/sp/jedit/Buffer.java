@@ -2100,8 +2100,6 @@ public class Buffer
 		else
 			seg = new Segment();
 
-		writeLock();
-
 		if(lineIndex < 0 || lineIndex >= offsetMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(lineIndex);
 
