@@ -646,6 +646,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
+			boolean recurse = searchSubDirectories.isSelected();
+
 			if(searchSelection.isSelected())
 				fileset = new CurrentBufferSet();
 			else if(searchCurrentBuffer.isSelected())
@@ -678,8 +680,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 						return false;
 				}
 
-				boolean recurse = searchSubDirectories.isSelected();
-
 				if(fileset instanceof DirectoryListSet)
 				{
 					DirectoryListSet dset = (DirectoryListSet)fileset;
@@ -697,6 +697,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 				fileset = null;
 			}
 
+			jEdit.setBooleanProperty("search.subdirs.toggle",
+				recurse);
 			jEdit.setBooleanProperty("search.keepDialog.toggle",
 				keepDialog.isSelected());
 
@@ -807,6 +809,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			directory.setText(model.getItem(0));
 		else
 			directory.setText(view.getBuffer().getDirectory());
+
+		searchSubDirectories.setSelected(jEdit.getBooleanProperty(
+			"search.subdirs.toggle"));
 
 		if(fileset instanceof DirectoryListSet)
 		{

@@ -785,7 +785,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			timer.setInitialDelay((int)(
 				millisecondsPerMinute
 				- System.currentTimeMillis()
-				% millisecondsPerMinute));
+				% millisecondsPerMinute) + 500);
 			timer.start();
 			ToolTipManager.sharedInstance().registerComponent(this);
 		} //}}}
