@@ -453,24 +453,6 @@ public class ActionSet
 			vec.add(enum.nextElement());
 	} //}}}
 
-	//{{{ cacheProperties() method
-	void cacheProperties(Map cachedProperties)
-	{
-		Enumeration enum = actions.keys();
-		while(enum.hasMoreElements())
-		{
-			String name = (String)enum.nextElement();
-			jEdit.putProperty(cachedProperties,
-				name + ".label");
-			/*jEdit.putProperty(cachedProperties,
-				name + ".shortcut");
-			jEdit.putProperty(cachedProperties,
-				name + ".shortcut2");*/
-			jEdit.putProperty(cachedProperties,
-				name + ".toggle");
-		}
-	} //}}}
-
 	//}}}
 
 	//{{{ Private members
