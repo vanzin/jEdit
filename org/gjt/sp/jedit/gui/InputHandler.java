@@ -370,7 +370,10 @@ public abstract class InputHandler extends KeyAdapter
 		Macros.Recorder recorder = view.getMacroRecorder();
 
 		if(recorder != null)
-			recorder.record(repeatCount,ch);
+		{
+			recorder.recordInput(repeatCount,ch,
+				textArea.isOverwriteEnabled());
+		}
 
 		repeatCount = 1;
 	} //}}}

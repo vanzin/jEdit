@@ -52,7 +52,7 @@ startup=true
 #}}}
 
 #{{{ Tool bar
-view.toolbar=new-file open-file save - print page-setup - \
+view.toolbar=new-file open-file close-buffer save - print page-setup - \
 	undo redo cut copy paste - find find-next - new-view unsplit \
 	split-horizontal split-vertical - buffer-options global-options - \
 	plugin-manager - help
@@ -60,6 +60,7 @@ view.toolbar=new-file open-file save - print page-setup - \
 new-file.icon=New.png
 open-file.icon=Open.png
 save.icon=Save.png
+close-buffer.icon=Cancel.png
 print.icon=Print.png
 page-setup.icon=PageSetup.png
 undo.icon=Undo.png
@@ -148,10 +149,9 @@ view.action.close-tooltip=Hide action bar
 #}}}
 
 #{{{ Context menu
-view.context=insert-file reload - paste-previous view-registers - \
-	invert-selection select-block to-upper to-lower - hypersearch-word - \
-	add-marker - narrow-to-fold - \
-	unsplit split-horizontal - buffer-options global-options
+view.context=cut copy paste paste-previous paste-deleted - insert-file - \
+	select-block to-upper to-lower - hypersearch-word - \
+	add-marker - collapse-fold expand-fold narrow-to-fold
 view.context.customize=Customize This Menu...
 #}}}
 

@@ -589,7 +589,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="overwrite">
+<ACTION NAME="overwrite" NO_RECORD="TRUE">
 	<CODE>
 		textArea.toggleOverwriteEnabled();
 	</CODE>
