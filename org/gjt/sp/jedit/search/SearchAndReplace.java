@@ -381,6 +381,7 @@ public class SearchAndReplace
 		}
 		catch(Exception e)
 		{
+			results.searchFailed();
 			Log.log(Log.ERROR,SearchAndReplace.class,e);
 			Object[] args = { e.getMessage() };
 			if(args[0] == null)

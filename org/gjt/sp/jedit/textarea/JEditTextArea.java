@@ -573,6 +573,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
+		System.err.println("scroll to");
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
 		if(offset > lineLength)

@@ -907,7 +907,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 			if(file.type == VFS.DirectoryEntry.DIRECTORY
 				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
-				setDirectory(file.path);
+			{
+				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
+					browseDirectoryInNewWindow(view,file.path);
+				else
+					setDirectory(file.path);
+			}
 			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
 				Buffer _buffer = jEdit.getBuffer(file.path);

@@ -4,7 +4,6 @@ Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
 - wheel mouse page scroll w/ soft wrap
-- S+ENTER in fsb for directories
 - left arrow in filename field
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
@@ -92,6 +91,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - wheel mouse modifiers
   - indentOnTab/Enter changes
   - update shortcuts.xml
+  - S+ENTER in fsb for directories
 - new tips:
   - indentOnTab/Enter replacements
   - smartHome replacements
@@ -114,3 +114,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
+
+jEdit buffer local properties:
+:wrap=hard:maxLineLen=72:indentSize=2:
