@@ -405,10 +405,6 @@ class HelpTOCPanel extends JPanel
 			}
 		} //}}}
 
-		//{{{ Private members
-		private int toolTipInitialDelay = -1;
-		private int toolTipReshowDelay = -1;
-
 		//{{{ cellRectIsVisible() method
 		private boolean cellRectIsVisible(Rectangle cellRect)
 		{
@@ -417,8 +413,6 @@ class HelpTOCPanel extends JPanel
 				vr.contains(cellRect.x + cellRect.width,
 				cellRect.y + cellRect.height);
 		} //}}}
-
-		//}}}
 	} //}}}
 
 	//{{{ TOCCellRenderer class

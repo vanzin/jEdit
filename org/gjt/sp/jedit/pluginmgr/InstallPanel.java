@@ -224,7 +224,7 @@ class InstallPanel extends JPanel
 				switch (columnIndex)
 				{
 					case 0:
-						return new Boolean(
+						return Boolean.valueOf(
 							entry.install);
 					case 1:
 						return entry.name;
@@ -256,7 +256,7 @@ class InstallPanel extends JPanel
 			for (int i = 0; i < length; i++)
 			{
 				if (b)
-					setValueAt(new Boolean(true),i,0);
+					setValueAt(Boolean.TRUE,i,0);
 				else
 				{
 					Entry entry = (Entry)entries.get(i);
@@ -323,7 +323,7 @@ class InstallPanel extends JPanel
 							if (value)
 							{
 								temp.parents.add(entry);
-								setValueAt(new Boolean(true),j,0);
+								setValueAt(Boolean.TRUE,j,0);
 							}
 							else
 								temp.parents.remove(entry);

@@ -5648,7 +5648,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		try
 		{
 			dndCallback.invoke(null,new Object[] { this, evt,
-				new Boolean(copy) });
+				Boolean.valueOf(copy) });
 		}
 		catch(Exception e)
 		{

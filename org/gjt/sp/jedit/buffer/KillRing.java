@@ -148,10 +148,11 @@ public class KillRing
 
 		String lineSep = System.getProperty("line.separator");
 
+		BufferedWriter out = null;
+
 		try
 		{
-			BufferedWriter out = new BufferedWriter(
-				new FileWriter(file1));
+			out = new BufferedWriter(new FileWriter(file1));
 
 			out.write("<?xml version=\"1.0\"?>");
 			out.write(lineSep);
@@ -184,6 +185,17 @@ public class KillRing
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,KillRing.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(out != null)
+					out.close();
+			}
+			catch(IOException e)
+			{
+			}
 		}
 
 		killRingModTime = file2.lastModified();

@@ -86,19 +86,26 @@ public class EditServer extends Thread
 			int port = socket.getLocalPort();
 
 			FileWriter out = new FileWriter(portFile);
-			out.write("b\n");
-			out.write(String.valueOf(port));
-			out.write("\n");
-			out.write(String.valueOf(authKey));
-			out.write("\n");
-			out.close();
+
+			try
+			{
+				out.write("b\n");
+				out.write(String.valueOf(port));
+				out.write("\n");
+				out.write(String.valueOf(authKey));
+				out.write("\n");
+			}
+			finally
+			{
+				out.close();
+			}
+
+			ok = true;
 
 			Log.log(Log.DEBUG,this,"jEdit server started on port "
 				+ socket.getLocalPort());
 			Log.log(Log.DEBUG,this,"Authorization key is "
 				+ authKey);
-
-			ok = true;
 		}
 		catch(IOException io)
 		{

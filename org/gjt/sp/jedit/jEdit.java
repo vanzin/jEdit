@@ -1264,15 +1264,27 @@ public class jEdit
 			if(!userCatalog.exists())
 			{
 				// create dummy catalog
+				FileWriter out = null;
 				try
 				{
-					FileWriter out = new FileWriter(userCatalog);
+					out = new FileWriter(userCatalog);
 					out.write(jEdit.getProperty("defaultCatalog"));
 					out.close();
 				}
 				catch(IOException io)
 				{
 					Log.log(Log.ERROR,jEdit.class,io);
+				}
+				finally
+				{
+					try
+					{
+						if(out != null)
+							out.close();
+					}
+					catch(IOException e)
+					{
+					}
 				}
 			}
 

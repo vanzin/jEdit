@@ -53,7 +53,6 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 			}
 		}
 
-		this.replace = replace;
 		this.ignoreCase = ignoreCase;
 
 		pattern_end = this.pattern.length - 1;
@@ -200,7 +199,6 @@ SEARCH:
 	//{{{ Private members
 	private char[] pattern;
 	private int pattern_end;
-	private String replace;
 	private boolean ignoreCase;
 
 	// Boyer-Moore member fields

@@ -37,7 +37,6 @@ class PluginManagerProgress extends JDialog
 	{
 		super(dialog,jEdit.getProperty("plugin-manager.progress"),true);
 
-		this.dialog = dialog;
 		this.roster = roster;
 
 		JPanel content = new JPanel(new BorderLayout(12,12));
@@ -121,8 +120,6 @@ class PluginManagerProgress extends JDialog
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private PluginManager dialog;
-
 	private Thread thread;
 
 	private String type;
@@ -134,8 +131,6 @@ class PluginManagerProgress extends JDialog
 
 	// progress value as of start of current task
 	private int valueSoFar;
-
-	private boolean ok;
 
 	private Roster roster;
 	//}}}

@@ -45,7 +45,6 @@ public class EnhancedMenuItem extends JMenuItem
 	 */
 	public EnhancedMenuItem(String label, String action, ActionContext context)
 	{
-		this.context = context;
 		this.action = action;
 		this.shortcut = getShortcut();
 		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
@@ -109,7 +108,6 @@ public class EnhancedMenuItem extends JMenuItem
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private ActionContext context;
 	private String shortcut;
 	private String action;
 	//}}}

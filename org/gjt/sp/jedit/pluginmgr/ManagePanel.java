@@ -108,8 +108,6 @@ public class ManagePanel extends JPanel
 	private JCheckBox hideLibraries;
 	private JTable table;
 	private PluginTableModel pluginModel;
-	private JButton remove;
-	private JButton help;
 	private PluginManager window;
 
 	//{{{ showListConfirm() method
@@ -258,7 +256,7 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return new Boolean(
+					return Boolean.valueOf(
 						!entry.status.equals(
 						Entry.NOT_LOADED));
 				case 1:
