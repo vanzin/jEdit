@@ -1461,7 +1461,7 @@ loop:		for(;;)
 				   screen line counts. */
 				int index = fvmget(startLine);
 				int start = index + 1;
-				if(start != fvmcount && fvm[start]
+				if(start + 1 < fvmcount && fvm[start]
 					== startLine + 1)
 				{
 					if(index % 2 == 0)

@@ -565,9 +565,7 @@ public class Gutter extends JComponent implements SwingConstants
 			return;
 
 		//{{{ Paint fold triangles
-		if(info.firstSubregion
-			&& physicalLine != buffer.getLineCount() - 1
-			&& buffer.isFoldStart(physicalLine))
+		if(info.firstSubregion && buffer.isFoldStart(physicalLine))
 		{
 			int _y = y + lineHeight / 2;
 			gfx.setColor(foldColor);
@@ -588,6 +586,13 @@ public class Gutter extends JComponent implements SwingConstants
 				gfx.drawLine(7,_y - 2,7,_y + 1);
 				gfx.drawLine(8,_y - 1,8,_y);
 			}
+		}
+		else if(info.lastSubregion && buffer.isFoldEnd(physicalLine))
+		{
+			gfx.setColor(foldColor);
+			int _y = y + lineHeight / 2;
+			gfx.drawLine(4,_y,4,_y + 3);
+			gfx.drawLine(4,_y + 3,7,_y + 3);
 		} //}}}
 		//{{{ Paint bracket scope
 		else if(structureHighlight)

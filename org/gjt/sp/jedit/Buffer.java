@@ -2965,6 +2965,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 			&& getFoldLevel(line) < getFoldLevel(line + 1));
 	} //}}}
 
+	//{{{ isFoldEnd() method
+	/**
+	 * Returns if the specified line ends a fold.
+	 * @since jEdit 4.2pre5
+	 */
+	public boolean isFoldEnd(int line)
+	{
+		return (line != getLineCount() - 1
+			&& getFoldLevel(line) > getFoldLevel(line + 1));
+	} //}}}
+
 	//{{{ invalidateCachedFoldLevels() method
 	/**
 	 * Invalidates all cached fold level information.

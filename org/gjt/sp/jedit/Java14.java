@@ -25,6 +25,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.datatransfer.*;
+import java.awt.dnd.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.msg.*;
@@ -41,7 +42,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-class Java14
+public class Java14
 {
 	//{{{ init() method
 	public static void init()
@@ -72,9 +73,8 @@ class Java14
 					EditPaneUpdate eu = (EditPaneUpdate)msg;
 					if(eu.getWhat() == EditPaneUpdate.CREATED)
 					{
-						eu.getEditPane().getTextArea()
-							.addMouseWheelListener(
-							new MouseWheelHandler());
+						initTextArea(eu.getEditPane()
+							.getTextArea());
 					}
 				}
 			}
@@ -86,6 +86,48 @@ class Java14
 			Log.log(Log.DEBUG,Java14.class,"Setting % register"
 				+ " to system selection");
 			Registers.setRegister('%',new Registers.ClipboardRegister(selection));
+		}
+	} //}}}
+
+	//{{{ dragAndDropCallback() method
+	/**
+	 * Called by the text area via reflection to initiate a text drag and
+	 * drop operation using the JDK 1.4 API.
+	 * @since jEdit 4.2pre5
+	 */
+	public static void dragAndDropCallback(JEditTextArea textArea,
+		InputEvent evt, boolean copy)
+	{
+		Log.log(Log.DEBUG,Java14.class,"Drag and drop callback");
+		TransferHandler handler = textArea.getTransferHandler();
+		handler.exportAsDrag(textArea,evt,
+			copy ? TransferHandler.COPY
+			: TransferHandler.MOVE);
+	} //}}}
+
+	//{{{ initTextArea() method
+	static void initTextArea(JEditTextArea textArea)
+	{
+		textArea.addMouseWheelListener(new MouseWheelHandler());
+
+		// drag and drop support
+		// I'd just move the code to
+		// JEditTextArea but it
+		// depends on JDK 1.4 APIs
+		textArea.setTransferHandler(new TextAreaTransferHandler());
+
+		try
+		{
+			textArea.getDropTarget().addDropTargetListener(
+				new DropHandler(textArea));
+			textArea.setDragAndDropCallback(
+				Java14.class.getMethod("dragAndDropCallback",
+				new Class[] { JEditTextArea.class,
+				InputEvent.class, boolean.class }));
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,Java14.class,e);
 		}
 	} //}}}
 
@@ -135,7 +177,7 @@ class Java14
 		}
 	} //}}}
 
-	//{{{ WheelScrollListener class
+	//{{{ MouseWheelHandler class
 	static class MouseWheelHandler implements MouseWheelListener
 	{
 		public void mouseWheelMoved(MouseWheelEvent e)
@@ -184,6 +226,123 @@ class Java14
 				textArea.goToPrevLine(select);
 			else
 				textArea.goToNextLine(select);
+		}
+	} //}}}
+
+	//{{{ TextAreaTransferHandler class
+	static class TextAreaTransferHandler extends TransferHandler
+	{
+		protected Transferable createTransferable(JComponent c)
+		{
+			JEditTextArea textArea = (JEditTextArea)c;
+			if(textArea.getSelectionCount() == 0)
+				return null;
+			else
+			{
+				return new TextAreaSelection(textArea);
+			}
+		}
+
+		public int getSourceActions(JComponent c)
+		{
+			return COPY_OR_MOVE;
+		}
+
+		public boolean importData(JComponent c, Transferable t)
+		{
+			if(canImport(c,t.getTransferDataFlavors())) 
+			{
+				try
+				{
+					String str = (String)t.getTransferData(
+						DataFlavor.stringFlavor);
+					JEditTextArea textArea = (JEditTextArea)c;
+					textArea.setSelectedText(str);
+					return true;
+				}
+				catch(Exception e)
+				{
+				}
+			}
+
+			return false;
+		}
+
+		protected void exportDone(JComponent c, Transferable data,
+			int action)
+		{
+			JEditTextArea textArea = (JEditTextArea)c;
+			if(action == MOVE)
+				textArea.setSelectedText(null);
+		}
+
+		public boolean canImport(JComponent c, DataFlavor[] flavors)
+		{
+			JEditTextArea textArea = (JEditTextArea)c;
+			if(!textArea.isEditable())
+				return false;
+
+			for(int i = 0; i < flavors.length; i++)
+			{
+				if(DataFlavor.stringFlavor.equals(flavors[i]))
+					return true;
+			}
+			return false;
+		}
+	} //}}}
+
+	//{{{ DropHandler class
+	static class DropHandler extends DropTargetAdapter
+	{
+		JEditTextArea textArea;
+		int savedCaret;
+
+		DropHandler(JEditTextArea textArea)
+		{
+			this.textArea = textArea;
+		}
+
+		public void dragEnter(DropTargetDragEvent dtde)
+		{
+			textArea.setDragInProgress(true);
+			savedCaret = textArea.getCaretPosition();
+		}
+
+		public void dragOver(DropTargetDragEvent dtde)
+		{
+			Point p = dtde.getLocation();
+			int pos = textArea.xyToOffset(p.x,p.y,
+				!(textArea.getPainter().isBlockCaretEnabled()
+				|| textArea.isOverwriteEnabled()));
+			if(pos != -1)
+			{
+				textArea.moveCaretPosition(pos,
+					JEditTextArea.NO_SCROLL);
+			}
+		}
+
+		public void dragExit(DropTargetEvent dtde)
+		{
+			textArea.setDragInProgress(false);
+			textArea.moveCaretPosition(savedCaret,
+				JEditTextArea.NO_SCROLL);
+		}
+
+		public void drop(DropTargetDropEvent dtde)
+		{
+			textArea.setDragInProgress(false);
+		}
+	} //}}}
+
+	//{{{ TextAreaSelection class
+	static class TextAreaSelection extends StringSelection
+	{
+		JEditTextArea textArea;
+
+		TextAreaSelection(JEditTextArea textArea)
+		{
+			super(textArea.getSelectedText());
+			this.textArea = textArea;
 		}
 	} //}}}
 }

@@ -65,6 +65,7 @@ class HyperSearchRequest extends WorkRequest
 				public void run()
 				{
 					GUIUtilities.error(view,"empty-fileset",null);
+					results.searchDone(rootSearchNode);
 				}
 			});
 			return;
