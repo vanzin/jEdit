@@ -115,14 +115,16 @@ public class HelpIndex
 	 */
 	public void indexURL(String url) throws Exception
 	{
-		Log.log(Log.DEBUG,this,url);
-
 		InputStream _in;
 
 		if(MiscUtilities.isURL(url))
 			_in =  new URL(url).openStream();
 		else
+		{
 			_in = new FileInputStream(url);
+			// hack since HelpViewer needs a URL...
+			url = "file:" + url;
+		}
 
 		indexStream(_in,url);
 	} //}}}
@@ -222,6 +224,9 @@ public class HelpIndex
 
 		void addOccurrence(String file)
 		{
+			if(file == null)
+				throw new NullPointerException();
+
 			for(int i = 0; i < fileCount; i++)
 			{
 				if(files[i] == file)

@@ -50,6 +50,9 @@ public class HelpSearchPanel extends JPanel
 		add(BorderLayout.NORTH,box);
 
 		results = new JList();
+		results.addMouseListener(new MouseHandler());
+		results.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		results.setCellRenderer(new ResultRenderer());
 		add(BorderLayout.CENTER,new JScrollPane(results));
 	} //}}}
 
@@ -97,7 +100,35 @@ public class HelpSearchPanel extends JPanel
 
 		public String toString()
 		{
-			return title;
+			return rank + ":" + title + ":" + file;
+		}
+
+		public boolean equals(Object o)
+		{
+			if(o instanceof Result)
+				return ((Result)o).file.equals(file);
+			else
+				return false;
+		}
+	} //}}}
+
+	//{{{ ResultRenderer class
+	class ResultRenderer extends DefaultListCellRenderer
+	{
+		public Component getListCellRendererComponent(
+			JList list,
+			Object value,
+			int index,
+			boolean isSelected,
+			boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list,null,index,
+				isSelected,cellHasFocus);
+
+			Result result = (Result)value;
+			setText(result.title);
+
+			return this;
 		}
 	} //}}}
 
@@ -111,7 +142,7 @@ public class HelpSearchPanel extends JPanel
 				return;
 
 			StringTokenizer st = new StringTokenizer(
-				searchField.getText(),",.;:-");
+				searchField.getText(),",.;:- ");
 
 			DefaultListModel resultModel = new DefaultListModel();
 
@@ -121,7 +152,23 @@ public class HelpSearchPanel extends JPanel
 				HelpIndex.Word lookup = index.getWord(word);
 				if(lookup != null)
 				{
-					resultModel.addElement(lookup);
+					for(int i = 0; i < lookup.fileCount; i++)
+					{
+						Result result = new Result(
+							MiscUtilities.getFileName(lookup.files[i]),
+							lookup.files[i]);
+						int idx = resultModel.indexOf(result);
+
+						// if not in list, add; otherwise increment
+						// rank
+						if(idx == -1)
+							resultModel.addElement(result);
+						else
+						{
+							((Result)resultModel.getElementAt(idx))
+								.rank += 1;
+						}
+					}
 				}
 			}
 
@@ -129,6 +176,21 @@ public class HelpSearchPanel extends JPanel
 
 			if(resultModel.getSize() == 0)
 				getToolkit().beep();
+		}
+	} //}}}
+
+	//{{{ MouseHandler class
+	public class MouseHandler extends MouseAdapter
+	{
+		public void mouseReleased(MouseEvent evt)
+		{
+			int row = results.locationToIndex(evt.getPoint());
+			if(row != -1)
+			{
+				Result result = (Result)results.getModel()
+					.getElementAt(row);
+				helpViewer.gotoURL(result.file,true);
+			}
 		}
 	} //}}}
 }

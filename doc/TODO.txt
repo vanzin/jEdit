@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- enter: should check read only first
 - soft wrap: dragging on last visible line throws NPEs
 - delayed caret updating: breaks status bar perhaps -- no, some other
   reason
