@@ -771,12 +771,11 @@ public class JEditTextArea extends JComponent
 			&& visibleLines - 1 > electricScroll * 2
 			? electricScroll : 0); //}}}
 
-		if(visibleLines == 0)
+		if(visibleLines <= 1)
 		{
 			if(Debug.SCROLL_TO_DEBUG)
-				Log.log(Log.DEBUG,this,"visibleLines == 0");
+				Log.log(Log.DEBUG,this,"visibleLines <= 0");
 			setFirstPhysicalLine(line,_electricScroll);
-			// it will figure itself out after being added...
 			return;
 		}
 
