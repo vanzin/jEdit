@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
-Thanks to Carmine Lucarelli, Matt Albrecht and Sebastien Pierre for
-contributing to this release.
+Thanks to Carmine Lucarelli, Matt Albrecht, Ollie Rutherfurd and
+Sebastien Pierre for contributing to this release.
 
 {{{ Editing
 
@@ -51,6 +51,10 @@ contributing to this release.
 - Added S+ syntax highlighting (Matt Albrecht).
 
 - Added Io syntax highlighting (Sebastien Pierre).
+
+- Added Pyrex syntax highlighting (Ollie Rutherfurd).
+
+- Added Erlang syntax highlighting (Ollie Rutherfurd).
 
 }}}
 {{{ User Interface
