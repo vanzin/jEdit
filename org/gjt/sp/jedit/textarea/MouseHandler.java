@@ -102,7 +102,7 @@ class MouseHandler extends MouseInputAdapter
 		clickCount = evt.getClickCount();
 
 		if(textArea.isDragEnabled()
-			&& textArea.insideSelection(x,y)
+			&& textArea.selectionManager.insideSelection(x,y)
 			&& clickCount == 1 && !evt.isShiftDown())
 		{
 			maybeDragAndDrop = true;

@@ -987,7 +987,7 @@
 
 <ACTION NAME="select-line-range">
 	<CODE>
-		textArea.showSelectLineRangeDialog();
+		new SelectLineRange(view);
 	</CODE>
 </ACTION>
 
