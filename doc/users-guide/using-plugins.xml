@@ -74,11 +74,11 @@
    downloaded and installed, a dialog box is shown advising that jEdit must be
    restarted before plugins can be used.
   </para>
-  <sidebar><title>Firewalls</title>
+  <sidebar><title>Proxy Servers and Firewalls</title>
    <para>
-    If you are connected to the Internet through a firewall or proxy, you will
-    need to enter the proxy host (and username and password, if necessary)
-    in the <guibutton>Firewall</guibutton> pane of the
+    If you are connected to the Internet through an HTTP proxy or SOCKS firewall
+    or proxy, you will need to specify some details in the
+    <guibutton>Proxy Servers</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box.
    </para>

@@ -175,7 +175,10 @@ public class Java14
 
 		private void scrollPage(JEditTextArea textArea, int amt)
 		{
-			scrollLine(textArea,amt * textArea.getVisibleLines());
+			if(amt > 0)
+				textArea.scrollDownPage();
+			else
+				textArea.scrollUpPage();
 		}
 
 		private void moveCaret(JEditTextArea textArea, int amt, boolean select)

@@ -106,8 +106,10 @@
   </para>
   <para>
    All buffer-local properties listed in <xref linkend="buffer-local" />
-   may be given values in edit modes. In addition, the following mode
-   properties have no buffer-local equivalent:
+   may be given values in edit modes.
+  </para>
+  <para>
+   The following mode properties specify commenting strings:
   </para>
   <itemizedlist>
    <listitem><para><literal>commentEnd</literal> - the comment end
@@ -119,55 +121,97 @@
    <listitem><para><literal>lineComment</literal> - the line comment
    string, used by the <guimenuitem>Line Comment</guimenuitem> command.
    </para></listitem>
-   <listitem><para><literal>doubleBracketIndent</literal> -
-   If a line matches the <literal>indentPrevLine</literal> regular
-   expression and the next line contains an opening bracket,
-   a level of indent will not be added to the next line, unless
-   this property is set to <quote>true</quote>. For example, with this
-   property set to <quote>false</quote>, Java code will be indented like so:
+  </itemizedlist>
+  <para>
+   When performing auto indent, a number of mode properties determine the
+   resulting indent level:
+  </para>
+  <itemizedlist>
+   <listitem><para>The line and the one before it are scanned for brackets
+   listed in the <literal>indentCloseBrackets</literal> and
+   <literal>indentOpenBrackets</literal> properties.
+   Opening brackets in the previous line increase indent.
+  </para>
+  <para>
+   If <literal>lineUpClosingBracket</literal> is set to <literal>true</literal>,
+   then closing brackets on the current line will line up with
+   the line containing the matching opening bracket. For example, in Java mode
+   <literal>lineUpClosingBracket</literal> is set to <literal>true</literal>,
+   resulting in brackets being indented like so:
+  </para>
+  <programlisting>{
+    // Code
+    {
+        // More code
+    }
+}</programlisting>
+   <para>
+    If <literal>lineUpClosingBracket</literal> is set to <literal>false</literal>,
+    the line <emphasis>after</emphasis> a closing bracket will be lined up with
+    the line containing the matching opening bracket. For example, in Lisp mode
+    <literal>lineUpClosingBracket</literal> is set to <literal>false</literal>,
+    resulting in brackets being indented like so:
    </para>
-   <programlisting>while(objects.hasMoreElements())
+   <programlisting>(foo 'a-parameter
+    (crazy-p)
+    (bar baz ()))
+(print "hello world")</programlisting>
+   </listitem>
+   <listitem>
+    <para>If the previous line contains no opening brackets, or if the
+     <literal>doubleBracketIndent</literal> property is set to <literal>true</literal>,
+     the previous line is checked against the regular expressions in the
+     <literal>indentNextLine</literal> and <literal>indentNextLines</literal>
+     properties. If the previous line matches the former, the indent of the
+     current line is increased and the subsequent line is shifted back again.
+     If the previous line matches the latter, the indent of the current
+     and subsequent lines is increased.
+    </para>
+    <para>
+     In Java mode, for example, the <literal>indentNextLine</literal>
+     property is set to match control structures such as <quote>if</quote>,
+     <quote>else</quote>, <quote>while</quote>, and so on.
+    </para>
+    <para>
+     The
+     <literal>doubleBracketIndent</literal> property, if set to the default of
+     <literal>false</literal>, results in code indented like so:
+    </para>
+    <programlisting>while(objects.hasNext())
 {
-        ((Drawable)objects.nextElement()).draw();
+    Object next = objects.hasNext();
+    if(next instanceof Paintable)
+        next.paint(g);
 }</programlisting>
    <para>
      On the other hand, settings this property to <quote>true</quote> will
      give the following result:
    </para>
-     <programlisting>while(objects.hasMoreElements())
-        {
-                ((Drawable)objects.nextElement()).draw();
-        }</programlisting></listitem>
-   <listitem><para><literal>indentCloseBrackets</literal> -
-   A list of characters (usually brackets) that subtract indent from
-   the <emphasis>current</emphasis> line. For example, in Java mode this
-   property is set to <quote>}</quote>.</para></listitem>
-   <listitem><para><literal>indentOpenBrackets</literal> -
-   A list of characters (usually brackets) that add indent to
-   the <emphasis>next</emphasis> line. For example, in Java mode this
-   property is set to <quote>{</quote>.</para></listitem>
-   <listitem><para><literal>indentPrevLine</literal> -
-   When indenting a line, jEdit checks if the previous line matches
-   the regular expression stored in this property. If it does, a level
-   of indent is added. For example, in Java mode this regular expression
-   matches language constructs such as
-   <quote>if</quote>, <quote>else</quote>, <quote>while</quote>, etc.</para>
-   </listitem>
+     <programlisting>while(objects.hasNext())
+    {
+        Object next = objects.hasNext();
+        if(next instanceof Paintable)
+            next.paint(g);
+    }</programlisting></listitem>
   </itemizedlist>
   <para>
    Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java mode:
   </para>
-  <programlisting>&lt;PROPS&gt;
-    &lt;PROPERTY NAME="indentOpenBrackets" VALUE="{" /&gt;
-    &lt;PROPERTY NAME="indentCloseBrackets" VALUE="}" /&gt;
-    &lt;PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)
-        \s*\(|else|case|default)[^;]*|for\s*\(.*)" /&gt;
-    &lt;PROPERTY NAME="doubleBracketIndent" VALUE="false" /&gt;
-    &lt;PROPERTY NAME="commentStart" VALUE="/*" /&gt;
-    &lt;PROPERTY NAME="commentEnd" VALUE="*/" /&gt;
-    &lt;PROPERTY NAME="blockComment" VALUE="//" /&gt;
-    &lt;PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" /&gt;
-&lt;/PROPS&gt;</programlisting>
+  <programlisting><![CDATA[<PROPS>
+    <PROPERTY NAME="commentStart" VALUE="/*" />
+    <PROPERTY NAME="commentEnd" VALUE="*/" />
+    <PROPERTY NAME="lineComment" VALUE="//" />
+    <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+
+    <!-- Auto indent -->
+    <PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+    <PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+    <PROPERTY NAME="indentNextLine"
+    	VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+    <!-- set this to 'true' if you want to use GNU coding style -->
+    <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+    <PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
+</PROPS>]]></programlisting>
  </sect1>
  <sect1 id="mode-tag-rules"><title>The RULES Tag</title>
   <para>
@@ -344,14 +388,11 @@
    sequence occurs at the beginning of a line.</para></listitem>
    <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
    <literal>TRUE</literal>, the span will only be highlighted if the
-   start sequence is the first non-whitespace text of the line</para>
+   start sequence is the first non-whitespace text in the line.</para>
    </listitem>
    <listitem><para><literal>AT_WORD_START</literal> - If set to
    <literal>TRUE</literal>, the span will only be highlighted if the start
    sequence occurs at the beginning of a word.</para></listitem>
-   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-   <literal>TRUE</literal>, the start and end sequences will not be highlighted,
-   only the text between them will.</para></listitem>
    <listitem><para><literal>DELEGATE</literal> - text inside the span will be
    highlighted with the specified ruleset. To delegate to a ruleset defined
    in the current mode, just specify its name. To delegate to a ruleset
@@ -359,6 +400,9 @@
    <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
    Note that the first (unnamed) ruleset in a mode is called
    <quote>MAIN</quote>.</para></listitem>
+   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+   <literal>TRUE</literal>, the start and end sequences will not be highlighted,
+   only the text between them will.</para></listitem>
    <listitem><para><literal>NO_LINE_BREAK</literal> - If set to
    <literal>TRUE</literal>, the span will not cross line breaks.</para></listitem>
    <listitem><para><literal>NO_WORD_BREAK</literal> - If set to
@@ -396,8 +440,9 @@
    The <literal>SPAN_REGEXP</literal> rule is similar to the
    <literal>SPAN</literal> rule except the start sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>SPAN</literal> tag, there is one more, required, attribute
-   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the <literal>SPAN</literal> tag, the
+   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
+   the first character that
    the regular expression matches. Note that this disallows regular expressions
    which can match more than one character at the start position.
   </para>
@@ -422,14 +467,11 @@
   sequence occurs at the beginning of a line.</para></listitem>
   <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
   <literal>TRUE</literal>, the span will only be highlighted if the
-   sequence is the first non-whitespace text of the line</para>
+   sequence is the first non-whitespace text in the line.</para>
   </listitem>
   <listitem><para><literal>AT_WORD_START</literal> - If set to
   <literal>TRUE</literal>, the span will only be highlighted if the start
   sequence occurs at the beginning of a word.</para></listitem>
-  <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-  <literal>TRUE</literal>, the start and end sequences will not be highlighted,
-  only the text between them will.</para></listitem>
   <listitem><para><literal>DELEGATE</literal> - text inside the span will be
   highlighted with the specified ruleset. To delegate to a ruleset defined
   in the current mode, just specify its name. To delegate to a ruleset
@@ -437,6 +479,9 @@
   <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
   Note that the first (unnamed) ruleset in a mode is called
   <quote>MAIN</quote>.</para></listitem>
+  <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+  <literal>TRUE</literal>, the start and end sequences will not be highlighted,
+  only the text between them will.</para></listitem>
   </itemizedlist>
   <para>
    Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
@@ -448,8 +493,9 @@
    The <literal>EOL_SPAN_REGEXP</literal> rule is similar to the
    <literal>EOL_SPAN</literal> rule except the match sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>EOL_SPAN</literal> tag, there is one more, required, attribute
-   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the <literal>EOL_SPAN</literal> tag, the
+   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
+   the first character that
    the regular expression matches. Note that this disallows regular expressions
    which can match more than one character at the start position.
   </para>
@@ -470,16 +516,15 @@
    text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
    types.</para></listitem>
    <listitem><para><literal>AT_LINE_START</literal> - If set to
-   <literal>TRUE</literal>,
-   the text will only be highlighted if it occurs at the beginning of
-   the line.</para></listitem>
+   <literal>TRUE</literal>, the sequence will only be highlighted if it occurs
+   at the beginning of a line.</para></listitem>
    <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
-   <literal>TRUE</literal>, the text will only be highlighted if the
-   sequence is the first non-whitespace text of the line.</para>
+   <literal>TRUE</literal>, the sequence will only be highlighted if it is
+   the first non-whitespace text in the line.</para>
    </listitem>
    <listitem><para><literal>AT_WORD_START</literal> - If set to
-   <literal>TRUE</literal>, the text will only be highlighted if the
-   sequence occurs at the beginning of a word.</para></listitem>
+   <literal>TRUE</literal>, the sequence will only be highlighted if
+   it occurs at the beginning of a word.</para></listitem>
    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
    <literal>TRUE</literal>, the match will not be highlighted,
    only the text before it will.</para></listitem>
@@ -504,15 +549,15 @@
    text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
    types.</para></listitem>
    <listitem><para><literal>AT_LINE_START</literal> - If set to
-   <literal>TRUE</literal>, the text will only be highlighted if the start
-   sequence occurs at the beginning of a line</para></listitem>
+   <literal>TRUE</literal>, the sequence will only be highlighted if it occurs
+   at the beginning of a line.</para></listitem>
    <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
-   <literal>TRUE</literal>, the text will only be highlighted if the
-   sequence is the first non-whitespace text of the line</para>
+   <literal>TRUE</literal>, the sequence will only be highlighted if it is
+   the first non-whitespace text in the line.</para>
    </listitem>
    <listitem><para><literal>AT_WORD_START</literal> - If set to
-   <literal>TRUE</literal>, the text will only be highlighted if the
-   sequence occurs at the beginning of a word.</para></listitem>
+   <literal>TRUE</literal>, the sequence will only be highlighted if
+   it occurs at the beginning of a word.</para></listitem>
    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
    <literal>TRUE</literal>, the match will not be highlighted,
    only the text after it will.</para></listitem>
@@ -539,7 +584,7 @@
    at the beginning of a line.</para></listitem>
    <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
    <literal>TRUE</literal>, the sequence will only be highlighted if it is
-   the first non-whitespace text of the line.</para>
+   the first non-whitespace text in the line.</para>
    </listitem>
    <listitem><para><literal>AT_WORD_START</literal> - If set to
    <literal>TRUE</literal>, the sequence will only be highlighted if
@@ -566,20 +611,30 @@
    The <literal>SEQ_REGEXP</literal> rule is similar to the
    <literal>SEQ</literal> rule except the match sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>SEQ</literal> tag, there is one more, required, attribute
-   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the <literal>SEQ</literal> tag, the
+   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
+   the first character that
    the regular expression matches. Note that this disallows regular expressions
    which can match more than one character at the start position.
   </para>
+  <para>
+   Here is an example of a <literal>SEQ_REGEXP</literal> rule that highlights
+   Perl's matcher constructions such as <literal>m/(.+):(\d+):(.+)/</literal>:
+  </para>
+  <programlisting><![CDATA[<SEQ_REGEXP TYPE="MARKUP"
+                        HASH_CHAR="m"
+                        AT_WORD_START="TRUE"
+                >m([[:punct:]])(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>]]></programlisting>
+
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
  </sect1>
  <sect1 id="mode-rule-keywords"><title>The KEYWORDS Tag</title>
   <para>
-   There can only be one <literal>KEYWORDS</literal> tag per ruleset.
-   The <literal>KEYWORDS</literal> rule, which must be placed inside a
-   <literal>RULES</literal> tag, defines keywords to highlight.
+   The <literal>KEYWORDS</literal> tag, which must be placed inside a
+   <literal>RULES</literal> tag and can only appear once, specifies a list of
+   keywords to highlight.
    Keywords are similar to <literal>SEQ</literal>s, except that
    <literal>SEQ</literal>s match anywhere in the text, whereas keywords only
    match whole words.
@@ -615,10 +670,10 @@
   </para></listitem>
   <listitem><para><literal>FUNCTION</literal>
   </para></listitem>
-  <listitem><para><literal>INVALID</literal> - tokens of this type are
+  <listitem><para><literal>INVALID</literal><!--  - tokens of this type are
   automatically added if a <literal>NO_WORD_BREAK</literal> or
   <literal>NO_LINE_BREAK</literal> <literal>SPAN</literal> spans more than
-  one word or line, respectively.
+  one word or line, respectively. -->
   </para></listitem>
   <listitem><para><literal>KEYWORD1</literal>
   </para></listitem>

@@ -64,7 +64,8 @@ class SettingsReloader implements EBComponent
 
 		if(path.startsWith("macros"))
 			Macros.loadMacros();
-		else if(path.endsWith(".xml") || path.endsWith("modes" + File.separator + "catalog"))
+		else if(path.startsWith("modes") && (path.endsWith(".xml")
+			|| path.endsWith("catalog")))
 			jEdit.reloadModes();
 	}
 }

@@ -90,7 +90,6 @@ public class PluginResURLConnection extends URLConnection
 					+ resource);
 			}
 
-			System.err.println("Input stream is : " + in);
 			connected = true;
 		}
 	}

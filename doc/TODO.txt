@@ -3,27 +3,19 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- mouse pressed ignored sometimes?
-- poor performance sometimes
-- control-drag on bracket
-- overwrite cursor: behave like block
-- popups still positioned poorly
-- final optimization for OffsetManager: scan to zero or scan to end
-  might be more economical
 - do some profiling
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
-- wheel mouse page scroll w/ soft wrap
 - rect select and trailing whitespace
 - user's guide:
   - vertical paste & rect select insertion
   - mention word splitting mechanism
   - updating-modes.xml - see above
-  - examples of regexp matching
-  - document new auto indent
   - part III
   - part IV
   - part V
 
+- examples of SPAN_REGEXP, EOL_SPAN_REGEXP matching in docs
+- final optimization for OffsetManager: scan to zero or scan to end
 - auto indent:
   if(foo)
     while(bar)
@@ -76,6 +68,9 @@ and quirks that I need to fix eventually.
 
 + verify:
 
+- popups still positioned poorly
+- mouse pressed ignored sometimes?
+- poor performance sometimes
 - searching in a buffer w/ narrowed fold
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer

@@ -1,4 +1,4 @@
-<!-- jEdit 3.1 Plugin Guide, (C) 2001 John Gellene -->
+<!-- jEdit 4.1 Plugin Guide, (C) 2001 John Gellene -->
 
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
@@ -10,7 +10,8 @@
     itself, as well as the abstract <classname>EBMessage</classname>
     class and all classes that derive from it.
     See <xref linkend="host-display-manager" /> for an overview
-    of how the EditBus works.
+    of how the EditBus works, as well as information on the
+    <classname>EBComponent</classname> interface.
 </para>
 
 <sect1 id="class-editbus"><title>Class EditBus</title>
@@ -69,25 +70,6 @@
     </para>
   </listitem>
 
-</itemizedlist>
-
-</sect1>
-
-<sect1 id="class-ebcomponent"><title>Interface EBComponent</title>
-<para>
-  This interface is required for any class that subscribes to messages
-  published on the EditBus. It contains a single method.
-</para>
-
-<itemizedlist>
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>handleMessage</function></funcdef>
-        <paramdef>EBMessage <parameter>message</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
 </itemizedlist>
 
 </sect1>
