@@ -22,10 +22,12 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class ToolBarManager
 {
@@ -83,30 +85,7 @@ public class ToolBarManager
 
 		// Place the toolbar at the bottom of the group
 		toolbars.add(entry);
-
-		Component comp = entry.toolbar;
-		// Leave some room for OS X grow box
-		if(OperatingSystem.isMacOS() && group == bottom)
-		{
-			Box box = new Box(BoxLayout.X_AXIS);
-			box.add(comp);
-			box.add(Box.createHorizontalStrut(18));
-			group.add(box);
-
-			// If there were other toolbars, remove the previously
-			// lowest component from its Box
-			int nComps = group.getComponentCount();
-			if(nComps > 1)
-			{
-				box = (Box)group.getComponent(nComps - 2);
-				group.remove(nComps - 2);
-				group.add(box.getComponent(0),nComps - 2);
-			}
-		}
-		else
-		{
-			group.add(comp);
-		}
+		group.add(entry.toolbar);
 	} //}}}
 
 	//{{{ removeToolBar() method
@@ -117,34 +96,7 @@ public class ToolBarManager
 		{
 			if(toolbar == ((Entry)toolbars.get(i)).toolbar)
 			{
-				if(OperatingSystem.isMacOS() && group == bottom
-					&& i == toolbars.size() - 1)
-				{
-					// Remove the Box
-					Box box = (Box)group.getComponent(i);
-					group.remove(i);
-
-					if (toolbars.size() > 1)
-					{
-						// Remove ToolBar from Box
-						box.remove(0);
-
-						// Get the penultimate tool bar
-						toolbar = group.getComponent(i - 1);
-						group.remove(i - 1);
-
-						// Put it in the box
-						box.add(toolbar,0);
-
-						// Put the box back
-						group.add(box);
-					}
-				}
-				else
-				{
-					group.remove(toolbar);
-				}
-
+				group.remove(toolbar);
 				toolbars.remove(i);
 
 				return;

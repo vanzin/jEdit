@@ -1044,7 +1044,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			{
 				toolbar = createToolBar();
 				toolbar.add(Box.createGlue());
-				toolbarBox.add(toolbar);
+				toolbarBox.add(toolbar,0);
 				revalidate();
 			}
 			else if(!showToolbar && toolbar != null)
