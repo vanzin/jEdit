@@ -654,7 +654,8 @@ public class NameSpace
 		}
 
 		// Not found
-		Interpreter.debug("getClass(): " + name	+ " not	found in "+this);
+		if ( Interpreter.DEBUG ) 
+			Interpreter.debug("getClass(): " + name	+ " not	found in "+this);
 		return null;
     }
 
@@ -691,7 +692,7 @@ public class NameSpace
 						clas = getNameResolver( fullname ).toClass();
 					} catch ( EvalError e ) { /* not a class */ }
 				else 
-					Interpreter.debug(
+					if ( Interpreter.DEBUG ) Interpreter.debug(
 						"imported unpackaged name not found:" +fullname);
 
 				// If found cache the full name in BshClassManager

@@ -58,7 +58,7 @@ class BSHArrayDimensions extends SimpleNode
 			Class type, CallStack callstack, Interpreter interpreter ) 
 		throws EvalError 
 	{
-		Interpreter.debug("array base type = "+type);
+		if ( Interpreter.DEBUG ) Interpreter.debug("array base type = "+type);
 		baseType = type;
 		return eval( callstack, interpreter );
 	}

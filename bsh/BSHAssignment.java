@@ -62,7 +62,6 @@ if ( lhsNode == null )
         {
             case ASSIGN:
 				try {
-					//Interpreter.debug("lhs assign: "+rhs);
 					return lhs.assign(rhs);
 				} catch ( EvalError e ) {
 					e.reThrow(this);

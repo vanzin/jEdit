@@ -87,8 +87,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   requestDefaultFocus()
 - add dockable window state change msg
 - range-comment & rect select
-- some min. width and height for global options?
-- update docs for 4.1, from source-edit onwards.
 - user's guide:
   - vertical paste & rect select insertion
   - mention whitespace eating word actions

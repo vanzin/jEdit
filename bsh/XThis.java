@@ -129,7 +129,8 @@ class XThis extends This
 				return invokeImpl( proxy, method, args );
 			} catch ( EvalError ee ) {
 				// Ease debugging...
-				Interpreter.debug( "EvalError in scripted interface: "
+				if ( Interpreter.DEBUG ) 
+					Interpreter.debug( "EvalError in scripted interface: "
 					+ XThis.this.toString() + ": "+ ee );
 				throw ee;
 			}
