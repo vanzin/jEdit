@@ -74,7 +74,7 @@ class Roster
 	//{{{ performOperations() method
 	boolean performOperations(PluginManagerProgress progress)
 	{
-		for(int i = 0; i < operations.size(); i++)
+		/* for(int i = 0; i < operations.size(); i++)
 		{
 			Operation op = (Operation)operations.get(i);
 			if(op.perform(progress))
@@ -102,7 +102,7 @@ class Roster
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
-		}
+		} */
 
 		return true;
 	} //}}}
@@ -179,15 +179,23 @@ class Roster
 	//}}}
 
 	//{{{ Operation interface
-	static interface Operation
+	static abstract class Operation
 	{
-		boolean perform(PluginManagerProgress progress);
-		boolean equals(Object o);
-		int getMaximum();
+		public boolean runInWorkThread(PluginManagerProgress progress)
+		{
+			return true;
+		}
+
+		public boolean runInAWTThread(PluginManagerProgress progress)
+		{
+			return true;
+		}
+
+		public abstract int getMaximum();
 	} //}}}
 
 	//{{{ Remove class
-	class Remove implements Operation
+	class Remove extends Operation
 	{
 		//{{{ Remove constructor
 		Remove(String plugin)
@@ -201,30 +209,8 @@ class Roster
 			return 1;
 		} //}}}
 
-		//{{{ perform() method
-		public boolean perform(final PluginManagerProgress progress)
-		{
-			final boolean[] retVal = new boolean[1];
-			progress.removing(MiscUtilities.getFileName(plugin));
-			try
-			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						retVal[0] = performSafely(progress);
-					}
-				});
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-			return retVal[0];
-		} //}}}
-
-		//{{{ performSafely() method
-		private boolean performSafely(PluginManagerProgress progress)
+		//{{{ runInAWTThread() method
+		public boolean runInAWTThread(PluginManagerProgress progress)
 		{
 			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
@@ -315,7 +301,7 @@ class Roster
 	} //}}}
 
 	//{{{ Install class
-	class Install implements Operation
+	class Install extends Operation
 	{
 		int size;
 
@@ -337,103 +323,27 @@ class Roster
 			return size;
 		} //}}}
 
-		//{{{ perform() method
-		public boolean perform(final PluginManagerProgress progress)
+		//{{{ runInWorkThread() method
+		public boolean runInWorkThread(PluginManagerProgress progress)
 		{
 			String fileName = MiscUtilities.getFileName(url);
 			progress.downloading(fileName);
 
-			final String path = download(progress,fileName,url);
+			path = download(progress,fileName,url);
 			if(path == null)
 			{
 				// interrupted download
 				return false;
 			}
-
-			progress.installing(fileName);
-			try
-			{
-				SwingUtilities.invokeAndWait(new Runnable()
-				{
-					public void run()
-					{
-						install(progress,path,installDirectory);
-					}
-				});
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
-
-			return true;
-		} //}}}
-
-		//{{{ equals() method
-		public boolean equals(Object o)
-		{
-			if(o instanceof Install
-				&& ((Install)o).url.equals(url))
-			{
-				/* even if installDirectory is different */
-				return true;
-			}
 			else
-				return false;
+				return true;
 		} //}}}
 
-		//{{{ Private members
-		private String url;
-		private String installDirectory;
-
-		//{{{ download() method
-		private String download(PluginManagerProgress progress,
-			String fileName, String url)
+		//{{{ runInAWTThread() method
+		public boolean runInAWTThread(PluginManagerProgress progress)
 		{
-			try
-			{
-				URLConnection conn = new URL(url).openConnection();
+			progress.installing(MiscUtilities.getFileName(path));
 
-				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
-
-				if(!copy(progress,conn.getInputStream(),
-					new FileOutputStream(path),true,true))
-					return null;
-
-				return path;
-			}
-			catch(InterruptedIOException iio)
-			{
-				// do nothing, user clicked 'Stop'
-				return null;
-			}
-			catch(final IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						String[] args = { io.getMessage() };
-						GUIUtilities.error(null,"ioerror",args);
-					}
-				});
-
-				return null;
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-
-				return null;
-			}
-		} //}}}
-
-		//{{{ install() method
-		private boolean install(PluginManagerProgress progress,
-			String path, String dir)
-		{
 			ZipFile zipFile = null;
 
 			try
@@ -445,7 +355,7 @@ class Roster
 				{
 					ZipEntry entry = (ZipEntry)enum.nextElement();
 					String name = entry.getName().replace('/',File.separatorChar);
-					File file = new File(dir,name);
+					File file = new File(installDirectory,name);
 					if(entry.isDirectory())
 						file.mkdirs();
 					else
@@ -506,6 +416,68 @@ class Roster
 			progress.setValue(1);
 
 			return true;
+		} //}}}
+
+		//{{{ equals() method
+		public boolean equals(Object o)
+		{
+			if(o instanceof Install
+				&& ((Install)o).url.equals(url))
+			{
+				/* even if installDirectory is different */
+				return true;
+			}
+			else
+				return false;
+		} //}}}
+
+		//{{{ Private members
+		private String url;
+		private String installDirectory;
+		private String path;
+
+		//{{{ download() method
+		private String download(PluginManagerProgress progress,
+			String fileName, String url)
+		{
+			try
+			{
+				URLConnection conn = new URL(url).openConnection();
+
+				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
+
+				if(!copy(progress,conn.getInputStream(),
+					new FileOutputStream(path),true,true))
+					return null;
+
+				return path;
+			}
+			catch(InterruptedIOException iio)
+			{
+				// do nothing, user clicked 'Stop'
+				return null;
+			}
+			catch(final IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						String[] args = { io.getMessage() };
+						GUIUtilities.error(null,"ioerror",args);
+					}
+				});
+
+				return null;
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+
+				return null;
+			}
 		} //}}}
 
 		//{{{ copy() method

@@ -62,10 +62,12 @@ public class ManagePanel extends JPanel
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
+		TableColumn col4 = table.getColumnModel().getColumn(3);
 
-		col1.setPreferredWidth(300);
-		col2.setPreferredWidth(100);
+		col1.setPreferredWidth(50);
+		col2.setPreferredWidth(300);
 		col3.setPreferredWidth(100);
+		col4.setPreferredWidth(100);
 
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
@@ -148,17 +150,20 @@ public class ManagePanel extends JPanel
 	{
 		static final String ERROR = "error";
 		static final String LOADED = "loaded";
+		static final String NOT_LOADED = "not-loaded";
 
 		String clazz;
 		String name, version, author, status, docs;
 		Vector jars;
+		String path;
 		boolean broken;
 
 		Entry(String path, String clazz, boolean broken)
 		{
 			Entry.this.clazz = clazz;
 			Entry.this.broken = broken;
-			docs = "welcome.html";
+
+			this.path = path;
 
 			jars = new Vector();
 			jars.addElement(path);
@@ -166,7 +171,7 @@ public class ManagePanel extends JPanel
 			if(clazz == null)
 			{
 				this.name = new File(path).getName();
-				this.status = "Not loaded";
+				this.status = NOT_LOADED;
 			}
 			else
 			{
@@ -211,7 +216,7 @@ public class ManagePanel extends JPanel
 	class PluginTableModel extends AbstractTableModel
 	{
 		private ArrayList entries;
-		private int sortType = EntryCompare.STATUS;
+		private int sortType = EntryCompare.NAME;
 
 		//{{{ Constructor
 		public PluginTableModel()
@@ -222,7 +227,20 @@ public class ManagePanel extends JPanel
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
-			return 3;
+			return 4;
+		} //}}}
+
+		//{{{ getColumnClass() method
+		public Class getColumnClass(int columnIndex)
+		{
+			switch (columnIndex)
+			{
+				case 0: return Boolean.class;
+				case 1:
+				case 2:
+				case 3: return Object.class;
+				default: throw new Error("Column out of range");
+			}
 		} //}}}
 
 		//{{{ getColumnName() method
@@ -230,10 +248,16 @@ public class ManagePanel extends JPanel
 		{
 			switch (column)
 			{
-				case 0: return " "+jEdit.getProperty("manage-plugins.info.name");
-				case 1: return " "+jEdit.getProperty("manage-plugins.info.version");
-				case 2: return " "+jEdit.getProperty("manage-plugins.info.status");
-				default: throw new Error("Column out of range");
+				case 0:
+					return jEdit.getProperty("manage-plugins.info.enabled");
+				case 1:
+					return jEdit.getProperty("manage-plugins.info.name");
+				case 2:
+					return jEdit.getProperty("manage-plugins.info.version");
+				case 3:
+					return jEdit.getProperty("manage-plugins.info.status");
+				default:
+					throw new Error("Column out of range");
 			}
 		} //}}}
 
@@ -256,15 +280,58 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return entry.name;
+					return new Boolean(
+						!entry.status.equals(
+						Entry.NOT_LOADED));
 				case 1:
-					return entry.version;
+					return entry.name;
 				case 2:
+					return entry.version;
+				case 3:
 					return jEdit.getProperty("plugin-manager.status."
 						+ entry.status);
 				default:
 					throw new Error("Column out of range");
 			}
+		} //}}}
+
+		//{{{ isCellEditable() method
+		public boolean isCellEditable(int rowIndex, int columnIndex)
+		{
+			return columnIndex == 0;
+		} //}}}
+
+		//{{{ setValueAt() method
+		public void setValueAt(Object value, int rowIndex,
+			int columnIndex)
+		{
+			Entry entry = (Entry)entries.get(rowIndex);
+			if(columnIndex == 0)
+			{
+				PluginJAR jar = jEdit.getPluginJAR(entry.path);
+				if(jar == null)
+				{
+					if(!value.equals(Boolean.TRUE))
+						return;
+
+					jEdit.addPluginJAR(entry.path);
+					jar = jEdit.getPluginJAR(entry.path);
+					if(jar != null)
+					{
+						jar.checkDependencies();
+						jar.activatePluginIfNecessary();
+					}
+				}
+				else
+				{
+					if(!value.equals(Boolean.FALSE))
+						return;
+
+					unloadPluginJAR(jar);
+				}
+			}
+
+			update();
 		} //}}}
 
 		//{{{ setSortType() method
@@ -311,6 +378,26 @@ public class ManagePanel extends JPanel
 			sort(sortType);
 
 			fireTableChanged(new TableModelEvent(this));
+		} //}}}
+
+		//{{{ unloadPluginJAR() method
+		/**
+		 * This should go into a public method somewhere.
+		 */
+		private void unloadPluginJAR(PluginJAR jar)
+		{
+			String[] dependents = jar.getDependentPlugins();
+			for(int i = 0; i < dependents.length; i++)
+			{
+				PluginJAR _jar = jEdit.getPluginJAR(
+					dependents[i]);
+				if(_jar != null)
+				{
+					unloadPluginJAR(_jar);
+				}
+			}
+
+			jEdit.removePluginJAR(jar,false);
 		} //}}}
 	} //}}}
 
@@ -437,7 +524,7 @@ public class ManagePanel extends JPanel
 	static class EntryCompare implements Comparator
 	{
 		public static final int NAME = 0;
-		public static final int STATUS = 1;
+		public static final int STATUS = 2;
 
 		private int type;
 
@@ -470,7 +557,7 @@ public class ManagePanel extends JPanel
 		{
 			switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
 			{
-				case 0:
+				case 1:
 					pluginModel.setSortType(EntryCompare.NAME);
 					break;
 				case 2:
@@ -480,8 +567,6 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
-
-	//}}}
 
 	//}}}
 }

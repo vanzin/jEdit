@@ -104,6 +104,8 @@ Thanks to Matt Albrecht for contributing to this release.
 - Changing the plugin download mirror had no effect on an open plugin
   manager window.
 
+- Fixed popup menu positioning.
+
 }}}
 {{{ API Changes
 
