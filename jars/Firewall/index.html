@@ -1,0 +1,74 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dirk Moebius">
+   <meta name="GENERATOR" content="Mozilla/4.7 [de] (X11; I; Linux 2.2.13 i586) [Netscape]">
+   <title>Firewall Plugin</title>
+</head>
+<body>
+&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=5 WIDTH="100%" NOSAVE >
+<tr NOSAVE>
+<td VALIGN=CENTER BGCOLOR="#CCCCFF" NOSAVE><b><font size=+3>Firewall Plugin</font></b></td>
+
+<td VALIGN=CENTER BGCOLOR="#CCCCFF">
+<div align=right><font size=-1>By Dirk M&ouml;bius</font>
+<br><i><font size=-1><a href="mailto:dmoebius@gmx.net">dmoebius@gmx.net</a></font></i></div>
+</td>
+</tr>
+</table>
+
+<p><a href="#intro">Introduction</a>
+<br><a href="#config">Configuration</a>
+<br><a href="#faq">Frequently Asked Questions</a>
+<br><a href="CHANGELOG.txt">Change Log</a>
+<br><a href="LICENSE.txt">License Information</a>
+<br>
+<hr ALIGN=CENTER WIDTH="100%" SIZE="2">
+<h2>
+Introduction<a NAME="intro"></a></h2>
+The <b>Firewall Plugin </b>allows users behind a proxy/firewall to make
+use of all HTTP-related functionality in jEdit, namely:
+<ul>
+<li>
+Latest Version Check</li>
+
+<li>
+PluginManager (Update or Install new Plugins)</li>
+
+<li>
+Open an (HTTP-) URL</li>
+
+<li>
+InfoViewer / Online help</li>
+</ul>
+Since the HTTP proxy stuff is a JDK 1.2 feature, 1.2 or higher is required.
+<h2>
+Configuration<a NAME="config"></a></h2>
+After installation, there is a new option pane "Proxy/Firewall"
+in the "Utilties->Global Options" dialog under "Plugin Options". It should
+be pretty self-explanatory.
+<h2>
+Frequently Asked Questions<a NAME="faq"></a></h2>
+
+<h3>
+I installed the plugin and nothing happens! I don't get the option pane
+"Proxy/Firewall" in the Global Options.</h3>
+You need a JDK 1.2 or higher. It won't run on JDK 1.1, sorry.
+<br>If you <i>have</i> JDK 1.2, open the activity log, look for any errors
+and email me.
+<h3>
+Are there any security issues?</h3>
+Yes. The proxy password is stored <b><i>in clear text</i></b> in the file
+"$HOME/.jedit/properties" under
+the entry "firewall.password". You must take care of proper protection
+of this file.
+<br>Furthermore, at runtime the password is possibly stored in various
+String instances, that probably can be spied out by a memory monitor in
+some occasions.
+<p>
+<hr WIDTH="100%"><font size=-2>All contents copyright (c) 1999 Dirk M&ouml;bius
+&lt;<a href="mailto:dmoebius@gmx.net">dmoebius@gmx.net</a>></font>
+</body>
+</html>

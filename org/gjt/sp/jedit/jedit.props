@@ -1,0 +1,297 @@
+###
+### jEdit global properties
+### Copyright (C) 1998, 2001 Slava Pestov
+###
+
+###
+### GLOBAL SETTINGS
+###
+
+# Swing look and feel
+#lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel
+
+# If true, welcome screen will be displayed.
+# Set to false after initial startup.
+firstTime=true
+
+# Autosave interval in seconds, 0=off
+autosave=30
+
+# Maximum number of elements in a history list
+history=20
+
+# Number of files for which to remember caret positions
+recentFiles=50
+
+# Restore open files on startup?
+restore=true
+
+# Restore even if file names specified on command line?
+restore.cli=false
+
+# Client instances open new views?
+client.newView=false
+
+# Persistent markers
+persistentMarkers=true
+
+# Caret saving toggle
+saveCaret=true
+
+# Parse files fully when loading for syntax info
+parseFully=false
+
+# I/O thread count
+ioThreadCount=4
+
+# Number of backups to make, 0=no backups
+backups=1
+
+# Backup directory
+backup.directory=
+
+# Backup filename prefix and suffix
+backup.prefix=
+backup.suffix=~
+
+# Sort buffer list
+sortBuffers=true
+sortByName=true
+
+###
+### BUFFER SETTINGS
+### These can also be specified as buffer-local properties
+###
+
+# Line separator
+# The OS default will be used if this is not specified
+# Unix=\n
+# Windows=\r\n
+# MacOS=\r
+#buffer.lineSeparator=\n
+
+# Encoding
+# The OS default will be used if this is not specified
+#buffer.encoding=ISO8859_1
+
+# Tab width
+buffer.tabSize=8
+
+# Indent width
+buffer.indentSize=8
+
+# Soft tabs
+buffer.noTabs=false
+
+# Auto indent
+buffer.indentOnTab=false
+buffer.indentOnEnter=true
+
+# Default edit mode
+buffer.defaultMode=text
+
+# Undo queue size
+buffer.undoCount=100
+
+# Syntax highlighting
+buffer.syntax=true
+
+# Wrap column
+buffer.maxLineLen=80
+
+# Word break characters
+buffer.wordBreakChars=
+
+# Non-alphanumeric word characters
+buffer.noWordSep=
+
+# Folds with a level equal to or higher than this will be collapsed
+buffer.collapseFolds=0
+
+###
+### VIEW SETTINGS
+###
+
+# Apply jEdit colors to Swing text fields, text areas, lists, tables and trees?
+globalColors=false
+
+# Show toolbar?
+view.showToolbar=true
+
+# Show searchbar?
+view.showSearchbar=true
+
+# Show buffer switcher?
+view.showBufferSwitcher=true
+
+# Show full path in title bar?
+view.showFullPath=false
+
+# Check modification status on focus?
+view.checkModStatus=true
+
+# Font
+view.font=Monospaced
+view.fontsize=12
+# 0=plain, 1=bold, 2=italic, 3=boldItalic
+view.fontstyle=0
+
+# Background and foreground colors (for the text area)
+view.bgColor=#ffffff
+view.fgColor=#000000
+
+# Line highlighting
+view.lineHighlight=true
+view.lineHighlightColor=#e0e0e0
+
+# Bracket highlighting
+view.bracketHighlight=true
+view.bracketHighlightColor=#000000
+
+# EOL markers
+view.eolMarkers=true
+view.eolMarkerColor=#009999
+
+# Wrap guide
+view.wrapGuide=true
+view.wrapGuideColor=#8080ff
+
+# Caret color
+view.caretColor=#ff0000
+
+# Selection color
+view.selectionColor=#ccccff
+
+# Caret blinking
+view.caretBlink=true
+
+# Block caret
+view.blockCaret=false
+
+# Electric borders
+view.electricBorders=3
+
+# Smart home/end
+view.homeEnd=true
+
+# Middle mouse button pastes % register
+view.middleMousePaste=true
+
+# Gutter background color
+view.gutter.bgColor=#ffffff
+
+# Gutter foreground color
+view.gutter.fgColor=#000000
+
+# Gutter highlight color
+view.gutter.highlightColor=#8080ff
+
+# Gutter current line highlight color
+view.gutter.currentLineColor=#d04040
+
+# Gutter marker highlight color
+view.gutter.markerColor=#ccffcc
+
+# Gutter border colors
+view.gutter.focusBorderColor=#8080ff
+view.gutter.noFocusBorderColor=#808080
+
+# Gutter font name
+view.gutter.font=Monospaced
+
+# Gutter font style
+# 0=plain, 1=bold, 2=italic, 3=boldItalic
+view.gutter.fontstyle=0
+
+# Gutter font size
+view.gutter.fontsize=10
+
+# Gutter border width
+view.gutter.borderWidth=3
+
+# Gutter displays line numbers
+view.gutter.lineNumbers=false
+
+# Line numbers are drawn with this alignment (left, center, right)
+view.gutter.numberAlignment=right
+
+# Gutter line numbers are highlighted at this interval
+view.gutter.highlightInterval=5
+
+# Gutter current line highlighting
+view.gutter.highlightCurrentLine=true
+
+# Marker highlight
+view.gutter.markerHighlight=true
+
+# Docking border color (non-Metal L&F only)
+view.docking.borderColor=#ccccff
+
+# Expand abbrevs when space bar pressed
+view.expandOnInput=false
+
+# Syntax styles
+view.style.comment1=color:#009900 style:i
+view.style.comment2=color:#990033 style:i
+view.style.digit=color:#009191
+view.style.function=color:#000099
+view.style.invalid=color:#ff0000 style:b
+view.style.keyword1=color:#000000 style:b
+view.style.keyword2=style:b
+view.style.keyword3=style:b
+view.style.label=color:#990033 style:ib
+view.style.literal1=color:#404040
+view.style.literal2=color:#404040
+view.style.markup=color:#5e5e5e style:b
+view.style.operator=style:b
+
+# Java 2 only
+view.antiAlias=false
+view.fracFontMetrics=false
+
+# Docking
+view.docking.alternateLayout=false
+view.docking.tabsPos=0
+
+###
+### PRINTING
+###
+
+# Font
+print.font=Monospaced
+print.fontsize=10
+print.fontstyle=0
+
+# Print header?
+print.header=true
+
+# Print footer?
+print.footer=true
+
+# Print line numbers?
+print.lineNumbers=true
+
+# Use style and color info from defined SyntaxStyles?
+print.style=true
+print.color=false
+
+# Margins
+print.margin.top=0.5
+print.margin.left=0.5
+print.margin.bottom=0.5
+print.margin.right=0.5
+
+###
+### FILE SYSTEM BROWSER SETTINGS
+###
+
+vfs.browser.showIcons=true
+vfs.browser.showHiddenFiles=false
+vfs.browser.sortFiles=true
+vfs.browser.sortMixFilesAndDirs=false
+vfs.browser.sortIgnoreCase=true
+vfs.browser.doubleClickClose=false
+vfs.browser.currentBufferFilter=true
+
+# Can be one of: buffer, home, favorites, last
+vfs.browser.defaultPath=buffer

@@ -1,0 +1,891 @@
+<!-- <<<<<<< plugin-api.xml -->
+<!-- jEdit 3.2 Plugin Guide, (C) 2001 John Gellene            -->
+
+<!-- jEdit buffer-local properties:                           -->
+<!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
+
+<!-- Sat Jun 23 08:54:21 EDT 2001 @579 /Internet Time/        -->
+
+<!-- This chapter of the jEdit 3.2 Plugin Guide               -->
+<!-- describes the principal elements of the jEdit Plugin API -->
+
+
+<chapter id="plugin-api"><title>The jEdit Plugin API</title>
+
+<sect1 id="plugin-classes"><title>Plugin Core Classes</title>
+
+<para>
+    As mentioned earlier, a plugin must provide a
+    <quote>plugin core class</quote>, otherwise it will not do anything
+    useful (but recall that a class library intended for use by other
+    plugins need not provide a plugin core class).
+    That class must extend
+    either <classname>EditPlugin</classname> or its convinience subclass,
+    <classname>EBPlugin</classname>. We begin our review of the jEdit
+    plugin API with these two classes.
+</para>
+
+<sect2 id="class-EditPlugin"><title>Class EditPlugin</title>
+
+<para>
+  This abstract class is the base for every plugin core class.  Its methods
+  provide for basic interaction between the plugin and jEdit. The class
+  has four methods which are called by jEdit at various times. None of
+  these methods are required to be implemented, but most plugins will
+  override at least one.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>start</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The jEdit startup routine calls this method for each loaded
+      plugin.  Plugins typically use this method to register information
+      with the EditBus and perform other initialization.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>stop</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When jEdit is exiting, it calls this method on each plugin. If a
+      plugin uses
+      or creates state information or other persistent data that should
+      be stored in a special format, this would be a good place to write
+      the data to storage. Note that most plugins will use jEdit's
+      properties API to save settings, and the persistance of properties
+      is handled automatically by jEdit and requires no special
+      processing in the <function>stop()</function> method.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createMenuItems</function></funcdef>
+        <paramdef>Vector <parameter>menuItems</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      When a <classname>View</classname> object is created, it calls this
+      method on each plugin to obtain entries to be displayed in the view's
+      <guimenu>Plugins</guimenu> menu. The
+      <parameter>menuItems</parameter> parameter is a
+      <classname>Vector</classname> that accumilates menu items and
+      menus as it is passed from plugin to plugin.
+    </para>
+    <para>
+      jEdit does not require a plugin to supply menu items. If menu
+      items are desired, the easiest way to provide for them is to
+      package the desired menu items as entries in the plugin's property
+      file and implement <function>createMenuItems()</function> with a
+      call to jEdit's <function>GUIUtilities.loadMenu()</function>
+      method; for example:
+    </para>
+<informalexample><programlisting>public void createMenuItems(Vector menuItems)
+{
+    menuItems.addElement(GUIUtilities.loadMenu(
+        "myplugin.menu"));
+}</programlisting></informalexample>
+
+    <para>
+      The parameter passed to <function>loadMenu()</function> is
+      the name of a property containing menu data.  We will explain the format
+      of the menu data in <xref linkend="plugin-implement-menu"/>
+    </para>
+
+    <para>
+      The <function>GUIUtilities.loadMenuItem()</function> method is also
+      available for plugins that only wish to add a single menu item to
+      the <guimenu>Plugins</guimenu> menu.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>createOptionPanes</function></funcdef>
+        <paramdef>OptionsDialog <parameter>dialog</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method is called for each plugin during the creation of
+      the <guilabel>Global Options</guilabel> dialog box.
+      To show an option pane, the plugin should define an
+      option pane class and implement <function>createOptionPane()</function>
+      as follows:
+    </para>
+<informalexample><programlisting>dialog.addOptionPane(new MyPluginOptionPane());</programlisting></informalexample>
+    <para>
+      Plugins can also define more than one option pane, grouped in an
+      <quote>option group</quote>.
+      We will discuss the design and elements of the option pane API
+      in <xref linkend="api-option-classes"/>.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>
+ This class defines two other methods which may be useful to some
+ plugins, but are mainly of use to the jEdit core:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public String <function>getClassName</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This shortcut method returns <function>getClass().getName()</function>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
+        <void/>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method returns the <classname>EditPlugin.JAR</classname> data
+      object associated with the plugin.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="class-EBPlugin"><title>Class EBPlugin</title>
+
+<para>
+  Every plugin core class class that uses the EditBus for receiving
+  messages
+  must extend this class. This class implements the
+  <classname>EBComponent</classname> interface, required for any
+  object that wishes to receive EditBus messages.
+</para>
+
+<para>
+  The <classname>EBComponent</classname> interface contains a single
+  method that an implementing class (including any class derived from
+  <classname>EBPlugin</classname>) must provide:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>handleMessage</function></funcdef>
+        <paramdef>EBMessage <parameter>message</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+</itemizedlist>
+
+<para>
+  The parameter's type, <classname>EBMessage</classname>, is another
+  abstract class which establishes the core elements of any message that
+  is published to the EditBus. It has two attributes: an
+  <classname>EBComponent</classname> that is the source of the message
+  (the source will be <type>null</type> in some cases),
+  and a <type>boolean</type> data member, <varname>vetoed</varname>. This
+  flag indicates whether a prior recipient of the message has determined
+  that the message has been handled and need not be passed on to other
+  subscribers. The flag is set by a call
+  to the <function>veto()</function> method of the
+  <classname>EBMessage</classname>. Some message classes, however,
+  are configured so that they cannot be vetoed, to ensure they are
+  received by all subscribers.
+</para>
+
+<para>
+  Message classes extending <classname>EBMessage</classname> typically add
+  other data members and methods to provide subscribers with whatever is
+  needed to handle the message appropriately. Descriptions of specific
+  message classes can be found in <xref linkend="api-message"/>.
+</para>
+
+<para>
+  The <function>handleMessage()</function> method
+  must specify the type of responses
+  the plugin will have for various subclasses of the
+  <classname>EBMessage</classname> class. Typically this is done with
+  one or more <function>if</function> blocks that test whether the message
+  is an instance of a derived message class in which the plugin has an
+  interest, for example like so:
+</para>
+
+<informalexample><programlisting>if(msg instanceof CreateDockableWindow)
+    // create dockable window, if necessary
+else if(msg instanceof BufferUpdate)
+    // a buffer's state has changed!
+else if(msg instanceof ViewUpdate)
+    // a view's state has changed!
+// ... and so on</programlisting></informalexample>
+
+<para>
+  If a plugin defines dockable windows, it should respond to a
+  <classname>CreateDockableWindow</classname> message by creating the
+  appropriate user interface objects and setting the relevant data
+  field in the message, for example like so:
+</para>
+
+<informalexample><programlisting>if(msg instanceof CreateDockableWindow)
+{
+    CreateDockableWindow cmsg = (CreateDockableWindow)msg;
+    if(cmsg.getDockableWindowName().equals("myplugin"))
+        cmsg.setDockableWindow(new MyPluginWindow());
+}</programlisting></informalexample>
+<para>
+  Note that any object, whether or not derived from
+  <classname>EBComponent</classname>, can send a message to the EditBus
+  by calling the static method <function>EditBus.send()</function>.
+  This method takes a single parameter, an <classname>EBMessage</classname>
+  object that is the message being sent. Most plugins, however, will
+  only concern themselves with receiving, not sending, messages.
+</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="class-dockablewindow"><title>Interface DockableWindow</title>
+
+<para>
+  The dockable plugin API consists of a single interface,
+  <classname>DockableWindow</classname>. It links the visible
+  components of a plugin with the dockable window management facility. The
+  interface gives developers flexibility and minimizes code refactoring,
+  for it can be implemented as part of the plugin's top-level display
+  window or in a separate lightweight class. The dockable window API
+  handles the display of windows as either docked or floating
+  without specific direction from the plugin.
+</para>
+
+<!-- <para>
+  The <classname>DockableWindowContainer</classname> class is also used
+  by the API behind the scenes. Most plugins will not need to know about this
+  class.
+</para>
+
+<sect2 id="class-DockableWindow"><title>Interface DockableWindow</title> -->
+
+<para>
+  This interface provides the connection between the plugin's visible
+  components and a top-level <classname>View</classname> object of the
+  host application. As mentioned earlier, the plugin window class
+  implementing this interface must be created by the plugin core class in
+  response to a <classname>CreateDockableWindow</classname> message.
+  After its creation, the plugin window object is attached to the
+  message for routing back to jEdit.
+</para>
+
+<para>
+  The <classname>DockableWindow</classname> interface contains two
+  methods that must be implemented by a derived plugin window class:
+</para>
+
+<itemizedlist>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>String <function>getName</function></funcdef>
+      <paramdef></paramdef>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    This method should return the internal working name of the
+    plugin window, used to key various properties.
+  </para>
+</listitem>
+
+<listitem>
+  <funcsynopsis>
+    <funcprototype>
+      <funcdef>Component <function>getComponent</function></funcdef>
+      <paramdef></paramdef>
+    </funcprototype>
+  </funcsynopsis>
+  <para>
+    This method should return the top-level visible component of the
+    plugin.
+    Typically this component is a <classname>JPanel</classname> containing
+    other components, but any object derived from the Java
+    <classname>Component</classname> class will suffice. If the
+    top-level component implements the <classname>DockableWindow</classname>
+    interface, so that the plugin window and the top-level visible window
+    are implemented in the same class, the implementation of
+    <function>getComponent()</function> would simply return
+    <varname>this</varname>.
+  </para>
+</listitem>
+
+</itemizedlist>
+
+<!-- <sect2 id="class-DockableDindowContainer">
+<title>Interface DockableWindowContainer</title>
+
+<para>
+  Depending upon the settings chosen by the user, the jEdit Plugin API
+  will place the <classname>Component</classname> returned by the
+  <function>DockableWindow.getComponent()</function> method in a floating frame
+  window or in a tabbed window at the designated docking location. Both
+  types of containing windows implement the interface
+  <classname>DockableWindowContainer</classname> and are managed entirely
+  by the host application.
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.Floating</classname> class is
+      derived from <classname>JFrame</classname> and uses a
+      <classname>BorderLayout</classname>.  The plugin window's component is
+      placed in the center position of the frame's content pane.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The <classname>DockableWindowContainer.TabbedPane</classname> class is
+      derived from <classname>JTabbedPane</classname>. Here the plugin
+      window's component is added to the container's collection of tabbed
+      components.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2> -->
+
+</sect1>
+
+<sect1 id="api-option-classes"><title>Plugin Option Pane Classes</title>
+
+<para>
+  The plugin API provides a mechanism for displaying a plugin's
+  configuration options in the <guilabel>Global
+  Options</guilabel> dialog. A plugin that allows user configuration
+  should provide one or more implementations of
+  jEdit's <classname>OptionPane</classname> interface to have
+  configuration options displayed in a manner consistent wth the rest of
+  the application.
+</para>
+
+<sect2 id="class-AbstractOptionPane"><title>Class AbstractOptionPane</title>
+
+<para>
+  Most plugin option panes extend this implementation of
+  <classname>OptionPane</classname>, instead of implementing
+  <classname>OptionPane</classname> directly. It provides
+  a convenient default framework for laying out configuration options in
+  a manner similar to the option panes created by jEdit itself.
+  It is derived from Java's <classname>JPanel</classname> class and
+  contains a <classname>GridBagLayout</classname> object for component
+  management. It also contains shortcut methods to simplify layout.
+</para>
+
+<para>
+  The constructor for a class derived from
+  <classname>AbstractOptionPane</classname> should
+  call the parent constructor and pass the option pane's <quote>internal
+  name</quote> as a
+  parameter. The internal name is used to key a property where the
+  option pane's label is stored; see
+  <xref linkend="api-resource-properties" />.
+  It should also implement two methods:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_init</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should create and arrange the components of the option pane
+      and initialize the option data displayed to the user. This method
+      is called when the option pane is first displayed, and is not
+      called again for the lifetime of the object.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>protected void <function>_save</function></funcdef>
+        <paramdef></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This method should save any settings, to the jEdit properties or
+      other data store.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>
+  <classname>AbstractOptionPane</classname> also contains three shortcut
+  methods, typically called from <function>_init()</function>,
+  for adding components to the option pane:
+</para>
+
+<itemizedlist>
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addComponent</function></funcdef>
+          <paramdef>Component <parameter>comp</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        These shortcut methods add components to the option pane in a
+        single vertical column, running top to bottom.  The first
+        displays the text of the <parameter>label</parameter> parameter
+        to the left of the <classname>Component</classname> represented
+        by <parameter>comp</parameter>.
+      </para>
+    </listitem>
+
+    <listitem>
+      <funcsynopsis>
+        <funcprototype>
+          <funcdef>protected void <function>addSeparator</function></funcdef>
+          <paramdef>String <parameter>label</parameter></paramdef>
+        </funcprototype>
+      </funcsynopsis>
+      <para>
+        This is another shortcut method that adds a text label between
+        two horizontal separators to the option pane.
+        The <parameter>label</parameter> parameter represents the name
+        of a property (typically a property defined in the plugin's
+        property file) whose value will be used as the separator text.
+      </para>
+    </listitem>
+
+</itemizedlist>
+
+
+</sect2>
+
+<sect2 id="class-OptionGroup"><title>Class OptionGroup</title>
+
+<para>
+  In those cases where a single option pane is inadequate to present all
+  of a plugin's configuration options, this class can be used to create a
+  group of options panes. The group will appear as a single node in the
+  options dialog tree-based index. The member option panes will appear as
+  leaf nodes under the group's node.  Threee simple methods create and
+  populate an option pane:
+</para>
+
+<itemizedlist>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public <function>OptionGroup</function></funcdef>
+        <paramdef>String <parameter>name</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      The constructor's single parameter represents the internal
+      name of the option group. The internal name is used to key a
+      property where the option group's label is stored; see
+      <xref linkend="api-resource-properties" />.
+    </para>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionPane</function></funcdef>
+        <paramdef>OptionPane <parameter>pane</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+  </listitem>
+
+  <listitem>
+    <funcsynopsis>
+      <funcprototype>
+        <funcdef>public void <function>addOptionGroup</function></funcdef>
+        <paramdef>OptionGroup <parameter>group</parameter></paramdef>
+      </funcprototype>
+    </funcsynopsis>
+    <para>
+      This pair of methods adds members to the option group.  The second
+      method enables option groups to be nested, for plugins with a
+      particularly large set of configurable options.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="api-other-resources"><title>Other Plugin Resources</title>
+
+<para>
+  There are three other types of files containing resources used by a
+  plugin:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      a catalog of the plugin's user actions in a specified XML format,
+      contained in a file named <filename>actions.xml</filename>;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      one or more properties files named with a <filename>.props</filename>
+      extension, each containing key-value pairs in conventional Java
+      format; and
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a help file written in HTML format. The name of this file must be
+      specified in a property; see <xref
+      linkend="api-resource-properties" />.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<sect2 id="api-resources-action"><title>The Action Catalog</title>
+
+<para>
+  Actions define procedures that can be bound to a menu
+  item, a toolbar button or a keyboard shortcut. They can perform any
+  task encompassed in a public method of any class currently loaded in
+  jEdit, including plugin classes and classes of the host application.
+  Among other things, they can cause the appearance and disappearance of
+  plugin windows.
+</para>
+
+<para>
+  To manage user actions, jEdit maintains a lookup table of actions
+  using descriptive strings as keys.  The values in the table are
+  sets of statements written in BeanShell, jEdit's macro scripting
+  language.  These scripts either direct the action themselves,
+  delegate to a method in one of the plugin's classes that
+  encapsulates the action, or do a little of both.  The scripts are
+  usually short; elaborate action protocols are usually contained in
+  compiled code, rather than an interpreted macro script, to speed
+  execution.
+</para>
+
+<para>
+  Actions are defined by creating an XML file entitled
+  <filename>actions.xml</filename> at the top level of the plugin JAR
+  file. A sample action catalog looks like so:
+</para>
+
+<informalexample><programlisting>&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
+
+&lt;ACTIONS&gt;
+    &lt;ACTION NAME="quicknotepad.toggle"&gt;
+        &lt;CODE&gt;
+            view.getDockableWindowManager()
+                .toggleDockableWindow(QuickNotepadPlugin.NAME);
+        &lt;/CODE&gt;
+        &lt;IS_SELECTED&gt;
+            return view.getDockableWindowManager()
+                .isDockableWindowVisible(QuickNotepadPlugin.NAME);
+        &lt;/IS_SELECTED&gt;
+    &lt;/ACTION&gt;
+
+    &lt;ACTION NAME="quicknotepad-to-front"&gt;
+    &lt;CODE&gt;
+      view.getDockableWindowManager()
+                .addDockableWindow(QuickNotepadPlugin.NAME);
+        &lt;/CODE&gt;
+    &lt;/ACTION&gt;
+&lt;/ACTIONS&gt;</programlisting></informalexample>
+
+<para>
+  The defined elements have the following functions:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <varname>ACTIONS</varname> is the top-level element and refers
+      to the set of actions used by the plugin.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      An <varname>ACTION</varname> contains the data for a particular action.
+      It has three attributes: a required <varname>NAME</varname>; 
+      an optional <varname>NO_REPEAT</varname>, which is a flag
+      indicating whether the action should not be repeated with the
+      <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+      command (see <xref linkend="repeat" />); and an optional
+      <varname>NO_RECORD</varname> which is a a flag indicating whether the
+      action should be recorded if it is invoked while a user is recording a
+      macro. The two flag attributes
+      can have two possible values, <quote>TRUE</quote> or
+      <quote>FALSE</quote>. In both cases, <quote>FALSE</quote> is the
+      default if the attribute is not specified.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      An <varname>ACTION</varname> can have two child elements
+      within it: a required <varname>CODE</varname> element which
+      specifies the
+      BeanShell code that will be executed when the action is invoked,
+      and an optional <varname>IS_SELECTED</varname> element, used for
+      checkbox
+      menu items.  The <varname>IS_SELECTED</varname> element contains
+      BeanShell code that returns a boolean flag that will
+      determine the state of the checkbox.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+ More discussion of the action catalog can be found in <xref
+ linkend="plugin-implement-actions" />.
+</para>
+
+</sect2>
+
+<sect2 id="api-resource-properties"><title>Plugin Properties</title>
+
+<para>
+  jEdit maintains a list of <quote>properties</quote>, which are
+  name/value pairs used to store human-readable strings, user settings,
+  and various other forms of meta-data. During startup, jEdit loads the
+  default set of properties, followed by plugin properties stored in
+  plugin JAR files, finally followed by user properties. Plugins can
+  access properties from all three sources.
+</para>
+
+<para>
+  Property files contained in plugin JARs must end with the filename
+  extension <filename>.props</filename>, and have a very simple syntax,
+  which the following example suffices to describe:
+</para>
+
+<informalexample><programlisting># Lines starting with '#' are ignored.
+name=value
+another.name=another value
+long.property=Long property value, split over \
+    several lines
+escape.property=Newlines and tabs can be inserted \
+    using the \t and \n escapes
+backslash.property=A backslash can be inserted by writing \\.</programlisting>
+</informalexample>
+
+<para>
+  The following types of plugin information
+  are supplied using properties:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      Information regarding the name, author, and version of the plugin.
+      This information is required. Here is an example:
+    </para>
+    <informalexample><programlisting>plugin.MyPlugin.name=My Plugin
+plugin.MyPlugin.author=Joe Random Hacker
+plugin.MyPlugin.version=1.0.3</programlisting></informalexample>
+    <para>
+      Note that each property is prefixed with
+      <literal>plugin.</literal>, followed by the fully qualified name
+      of the plugin core class (including a package name, if there is
+      one).
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Identification of any dependencies the plugin may have on a
+      particular version of a Java runtime environment, the jEdit
+      application, or other plugins.
+    </para>
+    <para>
+      Each dependency is defined in a property prefixed with
+      <literal>plugin.<replaceable>class name</replaceable>.depend.</literal>,
+      followed by a number. Dependencies must be numbered in order,
+      starting from zero.
+    </para>
+    <para>
+      The value of a dependency property is one of the words
+      <literal>jdk</literal>, <literal>jedit</literal>, 
+      <literal>class</literal> or <literal>plugin</literal>,
+      followed by a Java version number, a jEdit build number, a class
+      name, or plugin class name and plugin version number,
+      respectively.
+    </para>
+    <para>
+      Here are some examples:
+    </para>
+    <informalexample><programlisting>plugin.MyPlugin.depend.0=jdk 1.2
+plugin.MyPlugin.depend.1=jedit 03.02.97.00
+plugin.MyPlugin.depend.2=class com.ice.tar.tar
+plugin.MyPlugin.depend.3=plugin console.ConsolePlugin 3.0</programlisting>
+</informalexample>
+
+  </listitem>
+
+  <listitem>
+    <para>
+      A list of external class library JARs shipped with the plugin.
+      If your plugin bundles extra JARs, this property is required
+      for the plugin manager to be able to remove the plugin completely.
+    </para>
+    <para>
+      The property is a space-separated list of filenames. Here is an
+      example:
+    </para>
+    <informalexample><programlisting>plugin.AntFarmPlugin.jars=crimson.jar jaxp.jar</programlisting></informalexample>
+  </listitem>
+
+  <listitem>
+    <para>
+      The titles of dockable windows, as displayed in a tabbed or
+      floating container.
+    </para>
+    <para>
+      These labels are specified in properties named by the return value
+      of the dockable window's <function>getName()</function> method,
+      suffixed with <literal>.title</literal>. For example:
+    </para>
+<informalexample><programlisting>quick-notepad.title=QuickNotepad</programlisting>
+</informalexample>
+  </listitem>
+  <listitem>
+    <para>
+      Labels for user actions for inclusion in menus and option panes
+      relating to toolbars and keyboard shortcuts.
+    </para>
+    <para>
+      Action labels are defined in properties named by the
+      action's internal name as specified in the action catalog,
+      followed by <literal>.label</literal>:
+    </para>
+<informalexample><programlisting>myplugin.label=My Plugin
+myplugin-grok.label=Grok Current Buffer</programlisting>
+</informalexample>
+  </listitem>
+  <listitem>
+    <para>
+      The list of menu items contained in plugin menus, if any.
+    </para>
+    <para>
+      This is discussed in detail in <xref
+      linkend="plugin-implement-menu" />.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Labels and other information regarding the controls contained in
+      the plugin's windows. These properties can be named any way you
+      like, however take care not to choose names which may conflict
+      with those in other plugins.
+    </para>
+  </listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="api-resources-help"><title>Plugin Documentation</title>
+
+<para>
+  While not required by the plugin API, a help file is an essential
+  element of any plugin written for public release. A single web page is
+  often all that is required. There are no specific requirements on
+  layout, but because of the design of jEdit's help viewer, the use of
+  frames should be avoided. Topics that would be useful include
+  the following:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      a description of the purpose of the plugin;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      an explanation of the type of input the user can supply through its
+      visible interface (such as mouse action or text entry in controls);
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a listing of available user actions that can be taken when the
+      plugin does not have input focus;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a summary of configuration options;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      information on development of the plugin (such as a change log,
+      a list of <quote>to do</quote> items, and contact information for
+      the plugin's author); and
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      licensing information, including acknowledgements for any library
+      software used by the plugin.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>
+ The location of the plugin's help file should be stored in the
+ <literal>plugin.<replaceable>class name</replaceable>.docs</literal>
+ property.
+</para>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+

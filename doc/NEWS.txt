@@ -1,0 +1,3 @@
+OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
+
+Not yet written.

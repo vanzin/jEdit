@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+	</PROPS>
+	<RULES IGNORE_CASE="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<!-- JSP comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;%--</BEGIN>
+			<END>--%&gt;</END>
+		</SPAN>
+
+		<!-- markup tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+		
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<!-- JavaScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- DTD instructions -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
+			<BEGIN>&lt;!</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="MARKUP" DELEGATE="TAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- SGML entities -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+	</RULES>
+	<RULES SET="TAGS" DEFAULT="MARKUP">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="MARKUP">/</SEQ>
+		<SEQ TYPE="NULL">=</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
+	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		<!-- JSP tags -->
+		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+	</RULES>
+</MODE>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="#| " />
+		<PROPERTY NAME="commentEnd" VALUE=" |#" />
+		<PROPERTY NAME="lineComment" VALUE=";" />
+		<PROPERTY NAME="noWordSep" VALUE="_-+?:" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE=")" />
+	</PROPS>
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>#|</BEGIN>
+			<END>|#</END>
+		</SPAN>
+		<SEQ TYPE="NULL">'(</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="NULL">)</SEQ>
+		<MARK_FOLLOWING TYPE="LITERAL1">'</MARK_FOLLOWING>
+		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<KEYWORDS>
+			<KEYWORD1>and</KEYWORD1>
+			<KEYWORD1>cond</KEYWORD1>
+			<KEYWORD1>define</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>lambda</KEYWORD1>
+			<KEYWORD1>or</KEYWORD1>
+			<KEYWORD1>quote</KEYWORD1>
+
+			<KEYWORD2>car</KEYWORD2>
+			<KEYWORD2>cdr</KEYWORD2>
+			<KEYWORD2>cons</KEYWORD2>
+
+			<KEYWORD3>eq?</KEYWORD3>
+			<KEYWORD3>null?</KEYWORD3>
+			<KEYWORD3>pair?</KEYWORD3>
+			<KEYWORD3>zero?</KEYWORD3>
+		</KEYWORDS>
+	</RULES>
+</MODE>

@@ -1,0 +1,260 @@
+/*
+ * Find_occurrence.bsh - a BeanShell macro script
+ * for the jEdit text editor - searches for the full word
+ * at or immediately to the left of the caret
+ * Copyright (C) 2001 John Gellene
+ * jgellene@nyc.rr.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the jEdit program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Notes on usage:
+ *
+ * This script searches for the word at or immediately to the left of the
+ * caret; the buffer name and starting caret position are stored in temporary
+ * jEdit properties for later retrieval during the editing session.
+ *
+ * To determine the kind of search, this macro looks for a temporary property
+ * that is set in one of three companion macros:  Find_first_occurrence.bsh,
+ * Find_next_occurrence.bsh, and Find_last_occurrence.bsh.  If it cannot find
+ * the property, it will search for the next occurrence of the search term.
+ *
+ * This macro is designed to work with Return_from_find.bsh,
+ * which opens (if necessary) the buffer in which the search commenced
+ * and restores the starting caret position.
+ *
+ * $Id$
+ */
+
+ import javax.swing.SwingUtilities;
+
+
+ /* unicodeQuotemeta()
+ *
+ * this quotes non-alphanumeric characters
+ * in the fashion of perl's quotemeta command
+ * for their inclusion in a regular expression
+ */
+String unicodeQuotemeta( String text)
+{
+    StringBuffer sb = new StringBuffer();
+    char [] chars = text.toCharArray();
+    for( int i = 0; i < chars.length; ++i)
+    {
+        char ch = chars[i];
+        if(!(Character.isLetterOrDigit(ch) || (ch == '_')))
+        {
+            sb.append('\\');
+        }
+        sb.append(ch);
+    }
+    return sb.toString();
+}
+
+
+/* makeModeWordRE()
+ *
+ * This creates a regular expression that will match
+ * the given text as a whole word, taking into account
+ * the characters that are considered part of a word
+ * under the buffer's current mode.
+ *
+ * The regular expression is written to compile
+ * under the gnu.regexp package (version 1.0.8)
+ * currently used by jEdit.
+ */
+String makeModeWordRE(String text)
+{
+    qmNoWordSep = unicodeQuotemeta(noWordSep);
+    StringBuffer sb = new StringBuffer();
+    sb.append("(?:^|[^\\w");
+    sb.append(qmNoWordSep);
+    sb.append("])");
+    sb.append(text);
+    sb.append("(?:$|[^\\w");
+    sb.append(qmNoWordSep);
+    sb.append("])");
+    return sb.toString();
+}
+
+
+/* resetAfterFailure()
+ *
+ * this cleans up the temporary properties and
+ * resets the caret position if a search fails
+ */
+void resetAfterFailure()
+{
+    jEdit.setTemporaryProperty("temp.findXXX.bufferName", "");
+    jEdit.setTemporaryProperty("temp.findXXX.caretPosition", "");
+    textArea.setCaretPosition(startPos);
+}
+
+
+/* isPosWordChar()
+ *
+ * this determines if the character at the given position
+ * in the text area is a 'word' character, taking
+ * into account the characters that are considered
+ * part of a word in the buffer's current edit mode
+ */
+boolean isPosWordChar( int pos)
+{
+    charMark = textArea.getText(pos, 1);
+    ch = charMark.charAt(0);
+    return Character.isLetterOrDigit(ch) ||
+        noWordSep.indexOf(ch) != -1;
+}
+
+
+/* findSearchText()
+ *
+ * this will select the word on or immediately to
+ * the left of the caret; it returns false if the caret
+ * is not on or next to a word
+ */
+boolean findSearchText()
+{
+    jEdit.setTemporaryProperty("temp.findXXX.bufferName",
+        buffer.getPath());
+    jEdit.setTemporaryProperty("temp.findXXX.caretPosition",
+        String.valueOf(startPos));
+    textArea.selectWord();
+    mark = textArea.getMarkPosition();
+    if(!isPosWordChar(mark))
+    {
+        if( mark > 0)
+        {
+            // try one character to the left; the caret may
+            // be next to a word instead of on top of it
+            textArea.setCaretPosition(startPos);
+            textArea.goToPrevCharacter(false);
+            textArea.selectWord();
+        }
+        if( mark == 0 || !isPosWordChar(textArea.getMarkPosition()))
+        {
+            resetAfterFailure();
+            Macros.error(view, "The caret was not located at a word.");
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/* doIt()
+ *
+ * this is the main routine that searches for and
+ * highlights the first occurrence of the word
+ * found by findSearchText()
+ */
+
+void doIt()
+{
+    if(buffer.getLength() < 2)
+    {
+        Macros.message(view, "Nothing to search.");
+        return;
+    }
+    if( !findSearchText()) return;
+    text = textArea.getSelectedText();
+    searchType = jEdit.getProperty("temp.findXXX.type");
+    if( searchType == null || searchType.length() == 0)
+        searchType = "next";
+    // Find_first_occurrence or Find_previous_occurrence -
+    // set caret to beginning of buffer
+    if(searchType.equals("first") || searchType.equals("previous"))
+        textArea.setCaretPosition(0);
+    // make sure you are searching for the full word
+    searchText = makeModeWordRE(text);
+    ignoreCase = SearchAndReplace.getIgnoreCase();
+    regexp = SearchAndReplace.getRegexp();
+    SearchAndReplace.setSearchString(searchText );
+    SearchAndReplace.setReplaceString("");
+    SearchAndReplace.setIgnoreCase(false);
+    SearchAndReplace.setRegexp(true);
+    SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+    matches = 0;
+    newPos = 0;
+    // Find_last_occurrence - search until failure,
+    // Find_previous_occurrence - search until at or past startPos,
+    // else do a single search
+    singleSearch = searchType.equals("first") || searchType.equals("next");
+    if(singleSearch)
+        matches = SearchAndReplace.find(view) ? 1 : 0;
+    else
+    {
+        doPrev = searchType.equals("previous");
+        while(SearchAndReplace.find(view))
+        {
+            if(doPrev && textArea.getCaretPosition() >= startPos)
+                break;
+            newPos = textArea.getMarkPosition();
+            ++matches;
+        }
+    }
+    if(matches == 0)
+    {
+        resetAfterFailure();
+        Macros.error(view, "The search for '" + text + "' failed.");
+    }
+    else
+    {
+        // search succeeded; now do a second search so that only
+        // the search term is highlighted
+        if(singleSearch)
+            newPos = textArea.getMarkPosition();
+        // move the caret to the beginning of the highlighted text
+        textArea.setCaretPosition(newPos);
+        SearchAndReplace.setSearchString(text);
+        SearchAndReplace.setRegexp(false);
+        SearchAndReplace.find(view);
+    }
+    // cleanup:  reset changed flags in SearchAndReplace dialog
+    SearchAndReplace.setIgnoreCase(ignoreCase);
+    SearchAndReplace.setRegexp(regexp);
+    // reset find flag
+    jEdit.setTemporaryProperty("temp.findXXX.type", "");
+
+}
+
+
+/* grabIt()
+ *
+ * creates Runnable object for event dispatch thread to make sure
+ * that the text area regains focus after search completes
+ * (otherwise a problem if macro is called from menu)
+ */
+grabIt()
+{
+    run()
+    {
+        textArea.grabFocus();
+    }
+    return this;
+}
+
+
+/* execution begins here;
+ * defines global variables and invokes main routine
+ */
+
+noWordSep = buffer.getProperty("noWordSep");
+startPos = textArea.getCaretPosition();
+doIt();
+grab = grabIt();
+SwingUtilities.invokeLater(grab);
+
+// end Find_Occurrence.bsh
+

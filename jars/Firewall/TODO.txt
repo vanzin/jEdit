@@ -1,0 +1,6 @@
+TODO for Firewall plugin
+========================
+
+* support for password protected sites (this is not really neccessary,
+  because all the jEdit functions with HTTP access don't use password
+  protected sites, but, well, just in case...) 

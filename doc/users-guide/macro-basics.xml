@@ -1,0 +1,99 @@
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
+<!-- Revised Tue Jun 19 18:02:08 EDT 2001 @959 /Internet Time/   -->
+<!--                                                             -->
+<!-- jEdit buffer-local properties:                              -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
+<!--                                                             -->
+<!-- This file cover the introductory section of the macro guide -->
+
+<chapter id="macro-basics"><title>Introducing BeanShell</title>
+
+  <para>
+   Here is how BeanShell's author, Pat Niemeyer, describes his creation:
+  </para>
+
+  <blockquote>
+   <para>
+    <quote>BeanShell is a small, free, embeddable, Java source
+    interpreter with object scripting language features, written in
+    Java. BeanShell executes standard Java statements and
+    expressions, in addition to obvious scripting commands and
+    syntax. BeanShell supports scripted objects as simple method
+    closures like those in Perl and JavaScript.</quote>
+   </para>
+  </blockquote>
+
+  <para>
+   As you might gather from this short quote, BeanShell is very similar to
+   Java and is designed to be easy for Java programmers to learn. If you
+   know how to program in Java, you already know how to write BeanShell
+   macros. Nonetheless, the premise of this guide is that you should not
+   have to know anything about Java to begin writing your own macros for
+   jEdit.
+  </para>
+
+  <para>
+   If you are not a Java programmer, you will have to learn a
+   little about Java classes and syntax, but that's not a bad thing.
+   You will also have to learn a little (but not too much) about
+   some of the classes that are defined and used by the jEdit
+   program itself. That is in fact the major strength of using
+   BeanShell with a program written in Java: it allows the user to
+   customize the program's behavior by employing the same interfaces
+   designed and used by the program's developer. Thus, BeanShell can
+   turn a well-designed application into a powerful toolkit.
+  </para>
+
+  <para>
+   This guide focuses on using BeanShell in macros. If you are interested
+   in learning more about BeanShell generally, consult the <ulink
+   url="http://www.beanshell.org">BeanShell web site</ulink>. Information
+   on how to run and organize macros, whether included with the jEdit
+   installation or written by you, can be found in
+   <xref linkend="using-macros"/>.
+  </para>
+
+ <sect1 id="single-macros"><title>Single Execution Macros</title>
+  <para>
+   There are two ways jEdit lets you use BeanShell quickly on a
+   <quote>one time only</quote> basis. You will find both of them in the
+   <guimenu>Utilities</guimenu> menu.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
+   Expression</guimenuitem> causes jEdit to display a text input dialog
+   that asks you to type a single line of BeanShell commands. You can type
+   more than one BeanShell statement so long as each of them ends with a
+   semicolon. If BeanShell successfully interprets your input, a message
+   box will appear with the return value of the last statement. You can do
+   the same thing using the BeanShell interpreter provided with the
+   <application>Console</application> plugin; the return value will appear
+   in the output window.
+  </para>
+
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate Selection</guimenuitem>
+   evaluates the selected text as a BeanShell script and
+   replaces the selected text with the return value of the last BeanShell
+   statement.
+  </para>
+
+  <para>
+    Using <guimenuitem>Evaluate Selection</guimenuitem> is an
+    easy way to do arithmetic calculations inline while editing. BeanShell
+    uses numbers and arithmetic operations in an ordinary, intuitive way.
+  </para>
+
+  <informalexample>
+   <para>
+    Try typing an expression like <userinput>(3745*856)+74</userinput>
+    in the buffer, select it, and choose
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
+    Selection</guimenuitem>. The selected text will be replaced by the
+    answer, <userinput>3205794</userinput>.
+   </para>
+  </informalexample>
+ </sect1>
+
+</chapter>

@@ -1,0 +1,56 @@
+/*
+ * ChangeUIFonts.bsh -- changes display fonts used by jEdit and most
+ * dockable plugins
+ *
+ * based on startup macro code prepared by Dirk Mobius
+ * Copyright (C) 2001 Dirk Mobius
+ *
+ * Portions copyright (C) 2001 John Gellene
+ *
+ * Requires jEdit 3.2
+ *
+ * jEdit 4.0 will add an option pane to change the Swing UI font, but
+ * lots of people don't like the default font so here is a quick fix for
+ * the meantime.
+ *
+ * Just edit the changeUIFonts() call at the end of this script to set
+ * the font used for most UI controls (excluding the text area).
+ */
+
+changeUIFonts(String fontName, int fontStyle, int fontSize)
+{
+	javax.swing.plaf.FontUIResource defaultFont =
+		new javax.swing.plaf.FontUIResource(fontName, fontStyle, fontSize);
+	javax.swing.plaf.FontUIResource defaultBoldFont =
+		new javax.swing.plaf.FontUIResource(fontName, Font.BOLD, fontSize);
+
+	// change some of these to defaultBoldFont if you want
+	javax.swing.UIManager.put("Button.font", defaultFont);
+	javax.swing.UIManager.put("Label.font", defaultFont);
+	javax.swing.UIManager.put("MenuItem.font", defaultFont);
+	javax.swing.UIManager.put("Menu.font", defaultFont);
+	javax.swing.UIManager.put("PopupMenu.font", defaultFont);
+	javax.swing.UIManager.put("MenuBar.font", defaultFont);
+	javax.swing.UIManager.put("ComboBox.font", defaultFont);
+	javax.swing.UIManager.put("Table.font", defaultFont);
+	javax.swing.UIManager.put("Border.font", defaultFont);
+	javax.swing.UIManager.put("RadioButton.font", defaultFont);
+	javax.swing.UIManager.put("InternalFrameTitlePane.font", defaultFont);
+	javax.swing.UIManager.put("OptionPane.font", defaultFont);
+	javax.swing.UIManager.put("TabbedPane.font", defaultFont);
+	javax.swing.UIManager.put("ColorChooser.font", defaultFont);
+	javax.swing.UIManager.put("ToggleButton.font", defaultFont);
+	javax.swing.UIManager.put("CheckBoxMenuItem.font", defaultFont);
+	javax.swing.UIManager.put("CheckBox.font", defaultFont);
+	javax.swing.UIManager.put("TitledBorder.font", defaultFont);
+	javax.swing.UIManager.put("DesktopIcon.font", defaultFont);
+	javax.swing.UIManager.put("Tree.font", defaultFont);
+	javax.swing.UIManager.put("List.font", defaultFont);
+	javax.swing.UIManager.put("ToolTip.font", defaultFont);
+	javax.swing.UIManager.put("TextField.font", defaultFont);
+}
+
+// On Windows, you might want to try something like:
+// changeUIFonts("Microsoft Sans Serif", Font.PLAIN, 10);
+// On other platforms, try something like this:
+// changeUIFonts("SansSerif", Font.PLAIN, 12);

@@ -1,0 +1,162 @@
+TO DO
+
++ features:
+
+- instead of mini i/o progress, show messages in status bar: number
+  of i/o requests pending, and setMessageAndClear("foo") when i/o
+  complete
+- Jext-style undo to replace CaretUndo crap
+- select-* actions: add to selection in multi-select mode
+- appendix in plugin guide on contributing plugins
+- Macros.confirm()
+- saving a read-only file: show a confirmation dialog box
+- jEdit.get/setInteger/Color/FontProperty()
+- new document model
+- when loading plugins and such, check for settingsDir == jEditHome
+- collapse-all-folds action that calls expandFolds(1)
+- docking:
+  - each tab has a close box
+  - registerDockableWindow(name,multi) instead of named lists
+  - <name>-to-front action for multi dockables
+  - toggle-<name> action for toggling
+  - <name> action calls addDockableWindow(), no longer a toggle
+- hypersearch:
+  - in selection option
+  - new search results window for each search
+  - keyboard navigation of search results
+  - file names in bold, show number of results in that file
+  - expand all branches
+  - remove 'hypersearch results' menu item
+  - select lines with matches capability
+- smarter/better userInput() that accepts strings, not just characters
+- command to reset edit server
+- memory display in status bar, click opens memory display dialog;
+  replaces 'show free memory' macro
+- changing read-only flag in buffer options
+- configurable metal font
+- changing key bindings for ENTER, TAB, C+TAB, S+TAB, etc.
+- keymaps replace .shortcut properties
+  - loaded from $HOME/.jedit/keymaps, and jedit.jar
+  - one keymap can 'extend' another
+  - keymaps are XML files with <bind>, <unbind> tags
+  - jEdit, emacs, keymaps included, maybe others
+  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
+- shortcuts option pane: one category for each plugin, to avoid
+  lumping all plugin actions in one list
+- syntax styles:
+  - optional underline, color can be changed
+  - style editor: check boxes next to fg, bg, underline flags; if off,
+    use default
+- abbrevs option pane: add, remove, edit buttons, don't show abbrev
+  expansion in table
+- trailingEOL property, set on load if file has a trailing newline, when
+  saving, only write a trailing newline if property is set
+- file system browser:
+  - right-click menu: show all toolbar options
+  - parent directory, parent directories menu, reload, local drives, home,
+    go to buffer directory
+  - back, forward menu items
+  - option to disable tool bar in stand-alone browser
+  - some additional keyboard shortcuts:
+    - ~ goes to home directory
+    - / goes to roots:
+    - - goes to buffer directory
+  - show directories in boldface
+  - if icons disabled, no longer append / to directory names
+  - smaller 16x16 icons
+- shift-left/shift-right: behave differently with rectangular selection
+- docking option pane: changes take effect immediately
+- option pane API changes:
+  - boolean validate() method added; if returns false, user is not allowed
+    to close dialog with 'OK' button, have to either fix values or cancel.
+  - OptionsDialog handles selective initialization of option panes;
+    AbstractOptionPane's _init() and _save() methods no longer necessary
+    and deprecated.
+- dockable view registers window
+  - RegisterChanged message added
+  - update display when shown register changes
+  - use a timer to update display of $ register every 5 seconds or so
+  - use a timer to update display of % register if it is a ClipboardRegister
+- new token types:
+  - MARKUP renamed MARKUP1
+  - MARKUP2
+  - MARKUP3
+  - MARKUP4
+  - KEYWORD4 (in addition to KEYWORD[123])
+  - LINK (highlighted with blue underline, for HTML mode and friends)
+  - INLINE (for inline scripts)
+- HTML mode:
+  - inside tags, delegate on*="..." to JavaScript mode,
+    style="..." to CSS mode
+  - better <script>/<style> handling using nested delegates
+  - inside tags: coloring different types of tags using different MARKUP
+    token types
+  - SPAN:<a:/a> delegates to A_TAG_MIX rule
+  - A_TAG_MIX rule defines normal tag rules, along with SPAN:>:< which
+    delegates to A_CONTENT_MIX rule, with default token type LINK and all
+    other usual HTML rules for tags, entities, etc.
+  - xml.mix file, can be included in other modes, defines rules for tags,
+    entities, <!, <?, and so on.
+    html.mix file, for inclusion in html, php, jsp, etc. defines rules for
+    tags, entities, <script>, <style>, <a>, etc.
+- this might be too hard: DELEGATE_TYPE attribute of SPAN rule, defines
+  token type from which default attributes are obtained for all tokens
+  inside the SPAN. eg, if a rule delegates to the javascript mode, with a
+  DELEGATE_TYPE of INLINE, and INLINE is defined as a light-gray background,
+  all tokens in the JavaScript source that do not define a background color
+  will be drawn with a light-gray background.
+- if last token of a line has a background color, remainder of line will
+  be drawn with that color
+- 'Invert Selection' command
+- after a VFSUpdate for a mode file is received, reload that mode automatically
+- after a VFSUpdate for a mode catalog is received, reload all modes
+- save markers when a buffer is closed, adding/removing markers shouldn't
+  set the dirty flag
+- per-mode encodings and line separators, to optionally override those
+  auto-detected when a buffer is loaded
+- they should be overridable on a global basis too
+- when loading a file: if the stream supports a mark, read first 16 bytes,
+  check for unicode byte order mark, push back, if one is found, set
+  encoding to Unicode automatically
+- handle missing modes more gracefully
+- better XMode entity handling (necessary for HTML mode changes described
+  above)
+- folding:
+  - needs to be improved, but I haven't thought about it yet
+- plugin manager: show all dependencies, not just first-order ones
+- removing a plugin should offer to remove the ones that depend on it too
+
++ bugs:
+
+- if start is at the end of a line, .* always matches an empty string
+- formatting problems in user's guide in table cells
+- finish persistent splits code
+- complete word: keys to navigate don't work with some Java versions
+- don't do #save# stuff if destination directory is not writeable
+- installing source for already installed plugins is not possible
+- directory search: continue even if a file can't be loaded
+- a line consisting entirely of spaces & word wrap
+- switching option panes real fast
+- fix '... is not a function name' when running openjade
+- GUIUtilities method that makes sure popups appear within the screen
+  bounds
+- vfs browser: >1 request error when clicking 'up'?
+- prev line fold gutter bug
+- tabbing to text area fails
+- zlib decompression errors in plugin manager
+- failed saves should not clear the dirty flag
+- see if new beanshell fixes trailing \n bug
+- get rid of final blank page of user's guide
+- aborts not always fired
+- fix dragStart handling in DockableWindowContainer.TabbedPane
+- folding paint up bug
+- expand-fold too aggressive
+- replace in sel doesn't work if rect
+- macro guide: JOptionPane not a good idea for getting user input?
+- globalColors setting:
+  - tree controls, file system browser icons, tool bar icons look a bit
+    ugly with different backgrounds
+  - help viewer looks ugly
+  - selected borders in list, tree, table wrong colors
+  - updateUI doesn't update tree colors
+  - restart should not be necessary for 'globalColors' to take effect
