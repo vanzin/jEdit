@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to James Turk, Loren Charnley, Matthieu Casanova and
-Nicholas O'Leary for contributing to this release.
+Thanks to James Turk, Loren Charnley, Matthieu Casanova, Michael Macnair
+and Nicholas O'Leary for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -42,7 +42,11 @@ Nicholas O'Leary for contributing to this release.
 
 - Registers dockable window had a few problems (Nicholas O'Leary).
 
-- Word count would show -1 for an empty buffer
+- Word count would show -1 for an empty buffer (Michael Macnair).
+
+- Fixed corrupted cursor image problem on Mac OS X.
+
+- Complete word popup is now always positioned within the screen bounds.
 
 }}}
 

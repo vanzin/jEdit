@@ -4699,7 +4699,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		
 		hiddenCursor = getToolkit().createCustomCursor(
 			getGraphicsConfiguration()
-			.createCompatibleImage(1,1,
+			.createCompatibleImage(16,16,
 			Transparency.BITMASK),
 			new Point(0,0),"Hidden");
 	} //}}}
