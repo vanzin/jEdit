@@ -39,49 +39,42 @@ public class SearchBar extends JPanel
 	//{{{ SearchBar constructor
 	public SearchBar(final View view)
 	{
-		super(new BorderLayout());
+		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
 		this.view = view;
 
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
-		label.setBorder(new EmptyBorder(0,2,0,12));
-		add(label,BorderLayout.WEST);
-		Box box = new Box(BoxLayout.Y_AXIS);
-		box.add(Box.createGlue());
-		box.add(find = new HistoryTextField("find"));
+		add(label);
+		add(Box.createHorizontalStrut(12));
+		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
-		Dimension min = find.getPreferredSize();
-		min.width = Integer.MAX_VALUE;
-		find.setMaximumSize(min);
+		Dimension max = find.getPreferredSize();
+		max.width = Integer.MAX_VALUE;
+		find.setMaximumSize(max);
 		ActionHandler actionHandler = new ActionHandler();
 		find.addKeyListener(new KeyHandler());
 		find.addActionListener(actionHandler);
 		find.getDocument().addDocumentListener(new DocumentHandler());
-		box.add(Box.createGlue());
-		add(box,BorderLayout.CENTER);
 
 		Insets margin = new Insets(1,1,1,1);
 
-		Box buttons = new Box(BoxLayout.X_AXIS);
-		buttons.add(Box.createHorizontalStrut(12));
-		buttons.add(ignoreCase = new JCheckBox(jEdit.getProperty(
+		add(Box.createHorizontalStrut(12));
+		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(2));
-		buttons.add(regexp = new JCheckBox(jEdit.getProperty(
+		add(Box.createHorizontalStrut(2));
+		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
-		buttons.add(Box.createHorizontalStrut(2));
-		buttons.add(hyperSearch = new JCheckBox(jEdit.getProperty(
+		add(Box.createHorizontalStrut(2));
+		add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
 		hyperSearch.addActionListener(actionHandler);
 		hyperSearch.setMargin(margin);
 
 		update();
-
-		add(buttons,BorderLayout.EAST);
 
 		//{{{ Create the timer used by incremental search
 		timer = new Timer(0,new ActionListener()
