@@ -2124,6 +2124,8 @@ public class Buffer
 				lineIndex);
 		}
 
+		nextLineRequested = false;
+
 		if(Debug.TOKEN_MARKER_DEBUG)
 			Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
 		for(int i = start; i <= lineIndex; i++)
@@ -2200,9 +2202,10 @@ public class Buffer
 	 */
 	public boolean isNextLineRequested()
 	{
-		boolean retVal = nextLineRequested;
+		return nextLineRequested;
+		/*boolean retVal = nextLineRequested;
 		nextLineRequested = false;
-		return retVal;
+		return retVal;*/
 	} //}}}
 
 	//}}}

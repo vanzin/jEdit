@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
+import com.microstar.xml.XmlException;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -31,9 +32,12 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.WorkRequest;
 //}}}
 
 public class PluginManager extends JFrame implements EBComponent
@@ -65,17 +69,11 @@ public class PluginManager extends JFrame implements EBComponent
 		if (message instanceof PropertiesChanged)
 		{
 			pluginList = null;
+			updatePluginList();
 			if(tabPane.getSelectedIndex() != 0)
 			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						updatePluginList();
-						installer.updateModel();
-						updater.updateModel();
-					}
-				});
+				installer.updateModel();
+				updater.updateModel();
 			}
 		}
 		else if (message instanceof PluginUpdate)
@@ -139,6 +137,7 @@ public class PluginManager extends JFrame implements EBComponent
 	private ManagePanel manager;
 	private PluginList pluginList;
 	private boolean queuedUpdate;
+	private boolean downloadingPluginList;
 	//}}}
 
 	//{{{ PluginManager constructor
@@ -204,12 +203,92 @@ public class PluginManager extends JFrame implements EBComponent
 			&& jEdit.getJEditHome() == null)
 		{
 			GUIUtilities.error(this,"no-settings",null);
+			return;
 		}
-		else if(pluginList == null)
+		else if(pluginList != null || downloadingPluginList)
 		{
-			pluginList = new PluginListDownloadProgress(this)
-				.getPluginList();
+			return;
 		}
+
+		final Exception[] exception = new Exception[1];
+
+		VFSManager.runInWorkThread(new WorkRequest()
+		{
+			public void run()
+			{
+				try
+				{
+					downloadingPluginList = true;
+					setStatus(jEdit.getProperty(
+						"plugin-manager.list-download"));
+					pluginList = new PluginList();
+				}
+				catch(Exception e)
+				{
+					exception[0] = e;
+				}
+				finally
+				{
+					downloadingPluginList = false;
+				}
+			}
+		});
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				if(exception[0] instanceof XmlException)
+				{
+					XmlException xe = (XmlException)
+						exception[0];
+
+					int line = xe.getLine();
+					String path = jEdit.getProperty(
+						"plugin-manager.export-url");
+					String message = xe.getMessage();
+					Log.log(Log.ERROR,this,path + ":" + line
+						+ ": " + message);
+					String[] pp = { path,
+						String.valueOf(line),
+						message };
+					GUIUtilities.error(PluginManager.this,
+						"plugin-list.xmlerror",pp);
+				}
+				else if(exception[0] != null)
+				{
+					Exception e = exception[0];
+
+					Log.log(Log.ERROR,this,e);
+					String[] pp = { e.toString() };
+
+					String ok = jEdit.getProperty(
+						"common.ok");
+					String proxyButton = jEdit.getProperty(
+						"plugin-list.ioerror.proxy-servers");
+					int retVal =
+						JOptionPane.showOptionDialog(
+						PluginManager.this,
+						jEdit.getProperty("plugin-list.ioerror.message",pp),
+						jEdit.getProperty("plugin-list.ioerror.title"),
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.ERROR_MESSAGE,
+						null,
+						new Object[] {
+							proxyButton,
+							ok
+						},
+						ok);
+
+					if(retVal == 0)
+					{
+						new GlobalOptions(
+							PluginManager.this,
+							"firewall");
+					}
+				}
+			}
+		});
 	} //}}}
 
 	//}}}
@@ -241,15 +320,9 @@ public class PluginManager extends JFrame implements EBComponent
 			final Component selected = tabPane.getSelectedComponent();
 			if(selected == installer || selected == updater)
 			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						updatePluginList();
-						installer.updateModel();
-						updater.updateModel();
-					}
-				});
+				updatePluginList();
+				installer.updateModel();
+				updater.updateModel();
 			}
 			else if(selected == manager)
 				manager.update();

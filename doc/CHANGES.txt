@@ -28,6 +28,17 @@ JEDIT 4.2 VERSION HISTORY
 - Collapsed/expanded arrow icons in file system browser should now look
   good with a dark background as well (Kris Kopicki).
 
+- The option for what to do when files change on disk in the General
+  pane of the Utilities->Global Options dialog box is now tri-state:
+
+  - Do nothing
+  - Prompt
+  - Automatically reload
+
+  The first and last options correspond to the previous setting in
+  4.2pre5. The second option is similar to the behavior in jEdit 4.1,
+  except all changed buffers are listed in one dialog box.
+
 }}}
 {{{ Bug Fixes
 
@@ -92,6 +103,20 @@ JEDIT 4.2 VERSION HISTORY
 
 - The behaviour of shift-clicking inside an existing selection did not
   work in 4.2pre5.
+
+- Selecting the "Install" or "Update" tab in the plugin manager no
+  longer shows a modal dialog, since on some systems this would cause a
+  beep.
+
+- After opening a new file, the scroll bars would still reflect the
+  previous buffer's state while the new file was being loaded.
+
+- If a Replace All failed (for example, because the regular expression
+  was invalid) the wait cursor would linger in the search and replace
+  dialog box.
+
+- If a buffer listed in the 'files on changed' dialog box was closed,
+  clicking it in the list would cause problems.
 
 }}}
 

@@ -893,6 +893,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 				if(!save(false))
 				{
+					setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 					getToolkit().beep();
 					return;
 				}

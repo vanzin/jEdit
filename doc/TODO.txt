@@ -3,69 +3,59 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- C+e a: no ' '}}} at end if no comments
-- replace all: doesnt hide wait cursor
-- encoding menu with "More"
+- VERIFY:
+  - removing property from mode does not take effect until restart
+  - new file: horiz scroll wrong
+  - shortcuts: stale shortcuts remain?
+
++ bugs:
+
 - nextLineRequested broken
 - no need to wait for requests after newFile()
 - C+` inserts ` again
-- removing property from mode does not take effect until restart
-- -reuseview in help
 - control drag can leave cursor in odd place
 - plugin mgr install doesn't update existing plugins
-- backup time distance setting
-- chunk cache state during a buffer event is too fragile, unnecessary
-invalidation being performed
-- quicknotepad help needs to be generated
 - macos international keys
-- plugin mgr UI - kill modal dialog
-- fsb date
-- preserve 2 spaces after . w/ format
-- preserve caret pos w/ format
-- toggle caret scroll to when not in vis region?
-- print selection
-- adding to icons prop
-- control auto reload
 - test inserts with fold vis map
-- document lack of C+e C+e
 - control drag doesn't kill existing selection
 - drag and drop: do a compound edit if same buffer
 - fix double slash in path bug
 - thread safety problem in VFSManager.waitForRequests()
 - print qq{ $key="$attributes->{$key}"}; in perl
 - if a plugin's stop() throws an exception, infinite loop?
-- option for b&w print
-- document deep indent
-- tall caret and tab
-- tall caret and backspace
-- new file: horiz scroll wrong
-- while loading --> scroll bar
-- fsb default size
 - vfs browser: open in new view: doesn't focus the new view
-- C+ENTER 3 C+2
 - class loading problems
-- optional dependencies
 - broken activity log autoscroll
 - bizarre dockable window manager button layout problem
-- wheel mouse -- option: jEdit mods -vs- system-wide mods
 - F2 doesn't work in JTree/JTable, maybe others
 - path shown twice in tree: maybeReloadDirectory()
-- format -- instead of \n\n, what if it has \n   \n?
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-- shortcuts: stale shortcuts remain?
-- bad wrap:
-  						MiscUtilities.quicksort(favorites,
-  							new VFS.DirectoryEntryCompare());
-- history text field tweak
-
 - aborts not always fired
 - globalColors setting:
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
 - motif l&f: shortcuts in menu items
 - replace with lookahead/lookbehind doesn't work
+- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
+- BrowserView.reloadDirectory(): hardcoded design decisions
+- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
+  keeping INVALID? report errors in some other manner?
+- dialog parenting for fsb colors pane, vfs browser dialog
+- how to handle S+0-9?
+- C+e , and . insert , and . in the buffer, ditto for [ and ]
+- return after collapsed fold: insert line after end of fold
+- some JLists do not auto-scroll on keystroke
+- maximisation state bug: open window, resize to size X. close window,
+  open window again, resize to size Y. maximise. close window, open
+  window again, it has size X not size Y.
+- C+b -- click -- keys don't work
 
++ docs:
+
+- -reuseview in help
+- quicknotepad help needs to be generated
+- document lack of C+e C+e
 - auto indent: don't de-indent on enter if no leading indent at all?
 - note about dependencies
 - help:
@@ -112,35 +102,28 @@ invalidation being performed
   - status bar messages & readNextChar()
 - vfs javadoc: invokeAndWait() example for createVFSSession()
 
-- how to handle S+0-9?
-- C+e , and . insert , and . in the buffer, ditto for [ and ]
-- return after collapsed fold: insert line after end of fold
-- some JLists do not auto-scroll on keystroke
-- maximisation state bug: open window, resize to size X. close window,
-  open window again, resize to size Y. maximise. close window, open
-  window again, it has size X not size Y.
-- C+b -- click -- keys don't work
-
-+ cleanups:
-
-- delete line magic caret w/ block caret
-- is this bogus?
-				else if(fvm[endi] == startLine + numLines)
-				{
-					fvmput(starti,endi + 1,null);
-				}
-- quicknotepad: needs some code cleanup
-- text area mouse handler cleanup
-- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- BrowserView.reloadDirectory(): hardcoded design decisions
-- custom stylesheet: no xmlns
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
-- clean up the way macro hierarchy is stored
-- dialog parenting for fsb colors pane, vfs browser dialog
-
 + features:
 
+- unindentCurrentLine property
+- need timeouts for plugin manager list download.
+- encoding menu with "More"
+- backup time distance setting
+- fsb date
+- preserve 2 spaces after . w/ format
+- preserve caret pos w/ format
+- toggle caret scroll to when not in vis region?
+- print selection
+- adding to icons prop
+- option for b&w print
+- document deep indent
+- tall caret and tab
+- tall caret and backspace
+- fsb default size
+- C+ENTER 3 C+2
+- optional dependencies
+- wheel mouse -- option: jEdit mods -vs- system-wide mods
+- format -- instead of \n\n, what if it has \n   \n?
+- history text field tweak
 - do all modifier handling through the modifier mapping
 - perm to string for FTP plugin
 - if A depends on B but A is loaded before B and B breaks, A ends up
@@ -182,7 +165,6 @@ invalidation being performed
 - add dockable window state change msg
 - range-comment & rect select
 - autosave recent file list?
-- hypersearch refresh
 - option to disable floating window dock bar
 - MARK_PREVIOUS delegate like SEQ; update mail.xml
 - INLINE token type
