@@ -269,12 +269,15 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		for(int i = 0; i < paths.length; i++)
 		{
-			 TreePath path = paths[i];
-			 DefaultMutableTreeNode node
-				= (DefaultMutableTreeNode)
+			TreePath path = paths[i];
+
+			// is it a header?
+			if(path.getPathCount() == 2)
+				continue;
+
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 				path.getLastPathComponent();
-			if(!(node.getUserObject() instanceof
-				String))
+			if(!(node.getUserObject() instanceof String))
 			{
 				return;
 			}

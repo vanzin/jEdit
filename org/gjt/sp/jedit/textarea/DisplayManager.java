@@ -1500,7 +1500,10 @@ loop:		for(;;)
 			int offset, int numLines, int length)
 		{
 			if(!buffer.isLoaded())
+			{
+				fvmreset();
 				return;
+			}
 
 			int endLine = startLine + numLines;
 
