@@ -120,7 +120,7 @@ public class PositionManager
 		else
 		{
 			PosBottomHalf nextInorder = bh.right;
-			r = null;
+			r = nextInorder;
 			while(nextInorder.left != null)
 			{
 				nextInorder = nextInorder.left;
@@ -142,14 +142,16 @@ public class PositionManager
 			if(nextInorder.right != null)
 				nextInorder.right.parent = bh.right;
 			nextInorder.left = bh.left;
-			bh.right.left = nextInorder.right;
-			nextInorder.right = bh.right;
+			nextInorder.parent.left = nextInorder.right;
+			if(bh.right != nextInorder)
+				nextInorder.right = bh.right;
 			nextInorder.parent = bh.parent;
 			x = nextInorder.parent;
 		}
 
 		root.dump(0);
 
+		Log.log(Log.DEBUG,this,"w=" + w + ",r=" + r + ",x=" + x);
 		if(bh.red)
 			/* do nothing */;
 		else if(r != null && r.red)
@@ -185,7 +187,6 @@ public class PositionManager
 				System.err.println("case 2");
 			}
 		}
-		System.err.println("w=" + w + ",r=" + r + ",x=" + x);
 	} //}}}
 
 	//}}}
