@@ -5754,16 +5754,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 	} //}}}
 
-	//{{{ ComponentHandler class
-	class ComponentHandler extends ComponentAdapter
-	{
-		//{{{ componentResized() method
-		public void componentResized(ComponentEvent evt)
-		{
-			
-		} //}}}
-	} //}}}
-
 	//{{{ BufferChangeHandler class
 	class BufferChangeHandler implements BufferChangeListener
 	{

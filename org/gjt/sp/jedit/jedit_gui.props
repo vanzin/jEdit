@@ -101,6 +101,7 @@ icons=AdjustWidth.png \
 	Find.png \
 	Help.png \
 	Home.png \
+	Minus.png \
 	NewDir.png \
 	New.png \
 	NewView.png \
@@ -112,11 +113,13 @@ icons=AdjustWidth.png \
 	Pause.png \
 	Play.png \
 	Plugins.png \
+	Plus.png \
 	Preferences.png \
 	Print.png \
 	Properties.png \
 	Redo.png \
 	Reload.png \
+	Run.png \
 	Save.png \
 	SaveAll.png \
 	SaveAs.png \
@@ -1713,6 +1716,7 @@ vfs.browser.commands.search-in-directory.label=Search in Directory...
 vfs.browser.commands.show-hidden-files.label=Show Hidden Files
 vfs.browser.commands.encoding.label=Encoding
 vfs.browser.commands.other-encoding.label=Other...
+vfs.browser.commands.other-encoding-2.label=Other ({0})...
 #}}}
 
 #{{{ Plugins menu

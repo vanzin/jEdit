@@ -233,6 +233,15 @@ public class BufferIORequest extends WorkRequest
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
+			catch(UnsupportedEncodingException uu)
+			{
+				Log.log(Log.ERROR,this,uu);
+				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
+					uu.toString() };
+				VFSManager.error(view,path,"ioerror.encoding-error",pp);
+
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			}
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
