@@ -32,6 +32,8 @@ for contributing to this release.
 - The file system browser's completion no longer breaks when entering
   paths not in the current directory.
 
+- EditServer class no longer uses deprecated Thread.stop() method.
+
 * Version 4.1pre11
 
 Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
