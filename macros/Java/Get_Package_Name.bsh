@@ -91,20 +91,25 @@ String determinePackageName(String path)
     return packagePath;
 }
 
-// main routine
-if(!testClassPath())
-{
-	Macros.error(view, "This macro will not work when the Java interpreter\n"
-		+ "loads jEdit with the '-jar' command line option.");
-}
+if( buffer.isReadOnly() )
+	Macros.error( view, "Buffer is read-only." );
 else
 {
-	result = determinePackageName(buffer.getPath());
-	if(result == null)
+	// main routine
+	if(!testClassPath())
 	{
-		Macros.error(view, "Could not find a package name.");
+		Macros.error(view, "This macro will not work when the Java interpreter\n"
+			+ "loads jEdit with the '-jar' command line option.");
 	}
-	else textArea.setSelectedText(result);
+	else
+	{
+		result = determinePackageName(buffer.getPath());
+		if(result == null)
+		{
+			Macros.error(view, "Could not find a package name.");
+		}
+		else textArea.setSelectedText(result);
+	}
 }
 
 /*
