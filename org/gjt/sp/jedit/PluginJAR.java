@@ -102,18 +102,21 @@ public class PluginJAR
 	 * Loads the plugin core class if it is not already loaded.
 	 * @since jEdit 4.2pre1
 	 */
-	public synchronized void activatePlugin()
+	public void activatePlugin()
 	{
-		if(activated)
+		synchronized(this)
 		{
-			// recursive call
-			return;
+			if(activated)
+			{
+				// recursive call
+				return;
+			}
+
+			activated = true;
+
+			if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+				return;
 		}
-
-		activated = true;
-
-		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
-			return;
 
 		String className = plugin.getClassName();
 
