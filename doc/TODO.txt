@@ -15,7 +15,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 + text area:
 
   - ruleset importing trick
-  - file system browser column widths are not saved
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
   - independent text area component
@@ -26,7 +25,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
     - mouse handler: registers
     - text area transfer handler: opening files dependency
   - new file: explicit folding: type {{{: fold marker doesn't appear
-  - finish code to hide caret on user input; enter is a problem
+  - finish code to hide caret on user input; enter/backspace is a problem
     maybe listen for KeyTyped instead
   - indent folding: fold marker not always updated
   - format: preserve comment chars at start
@@ -70,6 +69,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - test keyboard completion with high latency VFS
   - fsb default size
   - don't show 'new directory' in favorites:
+  - file system browser column widths are not saved
   
 + misc:
 
