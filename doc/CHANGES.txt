@@ -25,6 +25,8 @@ JEDIT 4.1 VERSION HISTORY
 - Search bar no longer takes up the full width of the view. This saves
   some screen space
 - Status bar looks somewhat better now
+- The text color and style used to show the "[n lines]" string can now
+  be set independently of the EOL marker color
 
 + Bug Fixes
 
@@ -57,3 +59,4 @@ JEDIT 4.1 VERSION HISTORY
   pane receives focus
 - EBMessage.veto(), isVetoable() methods and EBMessage.NonVetoable class
   deprecated
+- Removed old text area highlighter API
