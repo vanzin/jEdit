@@ -302,7 +302,7 @@
       <para>
           The jEdit Community site also has an <quote>Interactive FAQ</quote>
           facility that allows you to post questions to be answered by
-          other users, and a screenshot gallery containg images
+          other users, and a screenshot gallery containing images
           submitted by users.
       </para></answer>
     </qandaentry>
@@ -496,7 +496,7 @@
 <qandaentry>
 	<question id="jedit-compile">
 		<para>
-			How do you set the classpath and compile the java files in jEdit?
+			How do you set the classpath and compile the Java files in jEdit?
 		</para>
 	</question>
 	<answer>

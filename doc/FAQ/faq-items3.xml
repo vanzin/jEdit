@@ -60,7 +60,7 @@
             context menu handler.  It will provide menu items for
             using jEdit any time you right-click on a file icon in
             Windows Explorer or a Windows file menu.  This feature does
-            not interfere with any existing file assocations.
+            not interfere with any existing file associations.
         </para></answer>
      </qandaentry>
 
@@ -172,7 +172,7 @@
             Encoding</guimenuitem>, you can open a file with a specified encoding.
             You can also designate a default encoding in the <guimenuitem>Loading
             &amp; Saving</guimenuitem> pane of the Global Options dialog; if you do
-            not, jEdit adopts your operating's system default encoding as its own
+            not, jEdit adopts your operating system's default encoding as its own
             default. You can change the encoding used to save an individual file by
             selecting <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
             Options</guimenuitem> and changing the current buffer's properties.
@@ -202,7 +202,7 @@
           There is a startup script in the <quote>Downloads</quote> area of
           <ulink url="http://community.jedit.org">jEdit Community</ulink>
           named <filename>euro.bsh</filename> that can be used as a startup script to
-          help simplfy the insertion of the Euro symbol if your keyboard currently lacks
+          help simplify the insertion of the Euro symbol if your keyboard currently lacks
           a dedicated key.
         </para></answer>
       </qandaentry>
@@ -308,7 +308,7 @@
       In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Textgt;Format
 			Paragraph</guimenuitem> command insert <quote>hard</quote> end of line
 			characters.  This <quote>hard wrap</quote> feature remains available as an option
-      for bufers and editing modes.
+      for buffers and editing modes.
 		</para>
 	</answer>
 </qandaentry>
@@ -373,7 +373,7 @@ of spaces, tabs, and other whitespace characters.
 			Prior to release of version 1.4 of the Java Development Kit (JDK), printing
       has been one of the weak
       areas of the Java platform. If you are using JDK version 1.3, here
-      are a few suggestions on improving pritning performance.
+      are a few suggestions on improving printing performance.
     </para>
     <para>
 			One simple way to improve printing is to use the InfoViewer plugin to display and
