@@ -153,6 +153,10 @@ for contributing to this release.
 - Added -nobackground, -restore, -gui, -startupscripts, -plugins
   parameters. Previously only the negations of these existed.
 
+- Symbolic links are no longer resolved in buffer path names. Opening
+  two buffers both pointing to the same file on disk is still not
+  allowed.
+
 }}}
 {{{ Optimizations
 

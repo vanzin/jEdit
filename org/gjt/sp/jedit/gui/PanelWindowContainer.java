@@ -44,7 +44,8 @@ import org.gjt.sp.jedit.*;
 public class PanelWindowContainer implements DockableWindowContainer
 {
 	//{{{ PanelWindowContainer constructor
-	public PanelWindowContainer(DockableWindowManager wm, String position)
+	public PanelWindowContainer(DockableWindowManager wm, String position,
+		int dimension)
 	{
 		this.wm = wm;
 		this.position = position;
@@ -86,8 +87,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		dockables = new Vector();
 		dockablePanel = new DockablePanel();
 
-		dimension = jEdit.getIntegerProperty(
-			"view.dock." + position + ".dimension",0);
+		this.dimension = dimension;
 	} //}}}
 
 	//{{{ register() method
@@ -228,12 +228,27 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ getCurrent() method
+	/**
+	 * Returns the name of the dockable in this container.
+	 * @since jEdit 4.2pre1
+	 */
 	public String getCurrent()
 	{
 		if(current == null)
 			return null;
 		else
 			return current.factory.name;
+	} //}}}
+
+	//{{{ getDimension() method
+	/**
+	 * Returns the width or height (depending on position) of the dockable
+	 * window container.
+	 * @since jEdit 4.2pre1
+	 */
+	public int getDimension()
+	{
+		return dimension;
 	} //}}}
 
 	//{{{ getDockables() method

@@ -1679,6 +1679,9 @@ public class jEdit
 	 */
 	public static Buffer getBuffer(String path)
 	{
+		if(!MiscUtilities.isURL(path))
+			path = MiscUtilities.resolveSymlinks(path);
+
 		boolean caseInsensitiveFilesystem = (File.separatorChar == '\\'
 			|| File.separatorChar == ':' /* Windows or MacOS */);
 
@@ -1687,7 +1690,7 @@ public class jEdit
 			Buffer buffer = buffersFirst;
 			while(buffer != null)
 			{
-				String _path = buffer.getPath();
+				String _path = buffer.getSymlinkPath();
 				if(caseInsensitiveFilesystem)
 				{
 					if(_path.equalsIgnoreCase(path))
@@ -1800,45 +1803,10 @@ public class jEdit
 	 */
 	public static View newView(View view, Buffer buffer, boolean plainView)
 	{
-		if(view != null)
-		{
-			view.showWaitCursor();
-			view.getEditPane().saveCaretInfo();
-		}
-
-		View newView = new View(buffer,null,plainView);
-
-		if(view != null)
-			newView.setBounds(view.getBounds());
-		else
-			newView.setLocationRelativeTo(null);
-
-		addViewToList(newView);
-		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
-
-		newView.show();
-
-		if(view != null)
-			view.hideWaitCursor();
-
-		// show tip of the day
-		if(newView == viewsFirst)
-		{
-			newView.getTextArea().requestFocus();
-
-			// Don't show the welcome message if jEdit was started
-			// with the -nosettings switch
-			if(settingsDirectory != null && getBooleanProperty("firstTime"))
-				new HelpViewer();
-			else if(jEdit.getBooleanProperty("tip.show"))
-				new TipOfTheDay(newView);
-
-			setBooleanProperty("firstTime",false);
-		}
-		else
-			GUIUtilities.requestFocus(newView,newView.getTextArea());
-
-		return newView;
+		View.ViewConfig config = (view == null ? new View.ViewConfig()
+			: view.getViewConfig());
+		config.plainView = plainView;
+		return newView(view,buffer,config);
 	} //}}}
 
 	//{{{ newView() method
@@ -1851,18 +1819,19 @@ public class jEdit
 	{
 		View.ViewConfig config = view.getViewConfig();
 		config.plainView = false;
-		return newView(view,config);
+		return newView(view,null,config);
 	} //}}}
 
 	//{{{ newView() method
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
+	 * @param buffer A buffer to display, or null
 	 * @param config Encapsulates the view geometry, split configuration
 	 * and if the view is a plain view
 	 * @since jEdit 4.2pre1
 	 */
-	public static View newView(View view, View.ViewConfig config)
+	public static View newView(View view, Buffer buffer, View.ViewConfig config)
 	{
 		if(view != null)
 		{
@@ -1870,10 +1839,14 @@ public class jEdit
 			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(null,config.splitConfig,config.plainView);
+		View newView = new View(buffer,config);
 
-		GUIUtilities.setWindowBounds(newView,config.x,config.y,
-			config.width,config.height,config.extState);
+		if(config.width != 0 && config.height != 0)
+		{
+			GUIUtilities.setWindowBounds(newView,config.x,config.y,
+				config.width,config.height,config.extState);
+		}
+			else newView.setLocationRelativeTo(view);
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
@@ -2152,7 +2125,7 @@ public class jEdit
 		// if background mode is off
 		reallyExit |= !background;
 
-		PerspectiveManager.savePerspective();
+		PerspectiveManager.savePerspective(false);
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))
