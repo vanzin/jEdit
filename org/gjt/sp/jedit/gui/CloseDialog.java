@@ -159,6 +159,7 @@ public class CloseDialog extends EnhancedDialog
 
 					bufferList.setSelectionInterval(0,
 						bufferModel.getSize());
+					System.err.println("hello");
 				}
 				finally
 				{

@@ -49,6 +49,105 @@ public class View extends JFrame implements EBComponent
 {
 	//{{{ User interface
 
+	//{{{ ToolBar-related constants
+
+	//{{{ Groups
+	/**
+	 * The group of tool bars above the DockableWindowManager
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int TOP_GROUP = 0;
+
+	/**
+	 * The group of tool bars below the DockableWindowManager
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int BOTTOM_GROUP = 1;
+	public static final int DEFAULT_GROUP = TOP_GROUP;
+	//}}}
+
+	//{{{ Layers
+
+	// Common layers
+	/**
+	 * The highest possible layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int TOP_LAYER = Integer.MAX_VALUE;
+
+	/**
+	 * The default layer for tool bars with no preference.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int DEFAULT_LAYER = 0;
+
+	/**
+	 * The lowest possible layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int BOTTOM_LAYER = Integer.MIN_VALUE;
+
+	// Layers for top group
+	/**
+	 * Above system tool bar layer.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int ABOVE_SYSTEM_BAR_LAYER = 150;
+
+	/**
+	 * System tool bar layer. jEdit uses this for the main tool bar.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int SYSTEM_BAR_LAYER = 100;
+
+	/**
+	 * Search bar layer. jEdit uses this for the search bar.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int SEARCH_BAR_LAYER = 75;
+
+	/**
+	 * Below search bar layer. This is above the default layer for the
+	 * top group.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int BELOW_SEARCH_BAR_LAYER = 50;
+
+	// Layers for bottom group
+	/**
+	 * Above status bar layer. This is above the status bar and below the
+	 * default layer for the bottom group. Vimulator will use this.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int ABOVE_STATUS_BAR_LAYER = -50;
+
+	/**
+	 * Status bar layer. jEdit uses this for the status bar.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int STATUS_BAR_LAYER = -100;
+
+	/**
+	 * Below status bar layer. BufferSelector will use this.
+	 * @see #addToolBar(int,int,java.awt.Component)
+	 * @since jEdit 4.0pre7
+	 */
+	public static final int BELOW_STATUS_BAR_LAYER = -150;
+	//}}}
+
+	//}}}
+
 	//{{{ getDockableWindowManager() method
 	/**
 	 * Returns the dockable window manager associated with this view.
@@ -76,7 +175,34 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void addToolBar(Component toolBar)
 	{
-		toolBars.add(toolBar);
+		addToolBar(DEFAULT_GROUP, DEFAULT_LAYER, toolBar);
+	} //}}}
+
+	//{{{ addToolBar() method
+	/**
+	 * Adds a tool bar to this view.
+	 * @param group The tool bar group to add to
+	 * @param toolBar The tool bar
+	 * @see org.gjt.sp.jedit.gui.ToolBarManager
+	 * @since jEdit 4.0pre7
+	 */
+	public void addToolBar(int group, Component toolBar)
+	{
+		addToolBar(group, DEFAULT_LAYER, toolBar);
+	} //}}}
+
+	//{{{ addToolBar() method
+	/**
+	 * Adds a tool bar to this view.
+	 * @param group The tool bar group to add to
+	 * @param layer The layer of the group to add to
+	 * @param toolBar The tool bar
+	 * @see org.gjt.sp.jedit.gui.ToolBarManager
+	 * @since jEdit 4.0pre7
+	 */
+	public void addToolBar(int group, int layer, Component toolBar)
+	{
+		toolBarManager.addToolBar(group, layer, toolBar);
 		getRootPane().revalidate();
 	} //}}}
 
@@ -87,7 +213,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void removeToolBar(Component toolBar)
 	{
-		toolBars.remove(toolBar);
+		toolBarManager.removeToolBar(toolBar);
 		getRootPane().revalidate();
 	} //}}}
 
@@ -779,14 +905,21 @@ public class View extends JFrame implements EBComponent
 
 		dockableWindowManager = new DockableWindowManager(this);
 
-		toolBars = new JPanel(new VariableGridLayout(
+		JPanel topToolBars = new JPanel(new VariableGridLayout(
+			VariableGridLayout.FIXED_NUM_COLUMNS,
+			1));
+		JPanel bottomToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
 
-		getContentPane().add(BorderLayout.NORTH,toolBars);
-		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
+		toolBarManager = new ToolBarManager(topToolBars, bottomToolBars);
 
-		getContentPane().add(BorderLayout.SOUTH,status = new StatusBar(this));
+		getContentPane().add(BorderLayout.NORTH,topToolBars);
+		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
+		getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
+
+		status = new StatusBar(this);
+		addToolBar(BOTTOM_GROUP, STATUS_BAR_LAYER, status);
 
 		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
 
@@ -827,7 +960,7 @@ public class View extends JFrame implements EBComponent
 
 		// null some variables so that retaining references
 		// to closed views won't hurt as much.
-		toolBars = null;
+		toolBarManager = null;
 		toolBar = null;
 		searchBar = null;
 		splitPane = null;
@@ -874,7 +1007,8 @@ public class View extends JFrame implements EBComponent
 
 	private DockableWindowManager dockableWindowManager;
 
-	private JPanel toolBars;
+	private ToolBarManager toolBarManager;
+
 	private JToolBar toolBar;
 	private SearchBar searchBar;
 
@@ -1009,12 +1143,11 @@ public class View extends JFrame implements EBComponent
 		if(jEdit.getBooleanProperty("view.showToolbar"))
 		{
 			if(toolBar != null)
-				toolBars.remove(toolBar);
+				toolBarManager.removeToolBar(toolBar);
 
 			toolBar = GUIUtilities.loadToolBar("view.toolbar");
 
-			toolBars.add(toolBar,0);
-			getRootPane().revalidate();
+			addToolBar(TOP_GROUP, SYSTEM_BAR_LAYER, toolBar);
 		}
 		else if(toolBar != null)
 		{
@@ -1027,7 +1160,7 @@ public class View extends JFrame implements EBComponent
 			if(searchBar == null)
 			{
 				searchBar = new SearchBar(this);
-				addToolBar(searchBar);
+				addToolBar(TOP_GROUP, SEARCH_BAR_LAYER, searchBar);
 			}
 		}
 		else if(searchBar != null)

@@ -156,13 +156,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		// UI hack because BoxLayout does not give all components the
 		// same height
 		dim = memory.getPreferredSize();
-		dim.width += fm.stringWidth("99Mb/999Mb");
+		dim.width += fm.stringWidth("999Mb/999Mb");
 		dim.height = multiSelect.getPreferredSize().height;
 		memory.setPreferredSize(dim);
-
-		// Leave some room for OS X grow box
-		if(OperatingSystem.isMacOS())
-			box.add(Box.createHorizontalStrut(18));
 
 		add(BorderLayout.EAST,box);
 	} //}}}

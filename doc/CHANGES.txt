@@ -29,6 +29,19 @@ JEDIT 4.0 VERSION HISTORY
   line of a blank new file
 - Fixed repaint slowdown that would happen when switching menus on some
   JDKs
+- If the file system browser was set to show hidden files by default,
+  the state of the 'show hidden files' menu item in the browser's
+  "Commands" menu would be reversed
+- Fixed dockable panel layout bug
+
++ API Changes
+
+- View.addToolBar(int group, int layer, Component comp) method
+  (Mike Dillon)
+  - group: one of View.TOP or View.BOTTOM
+  - layer: any integer, some predefined constants are in View.java. This
+    lets you define the approximate position, from the top or bottom of
+    the view, of the tool bar
 
 * Version 4.0pre6
 

@@ -1142,7 +1142,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			CommandsMenuButton.this.addMouseListener(new MouseHandler());
 		} //}}}
 
-		JPopupMenu popup;
+		BrowserCommandsMenu popup;
 
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
@@ -1151,6 +1151,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				if(!popup.isVisible())
 				{
+					// Update 'show hidden files' check box
+					popup.update();
+
 					GUIUtilities.showPopupMenu(
 						popup,CommandsMenuButton.this,0,
 						CommandsMenuButton.this.getHeight());
