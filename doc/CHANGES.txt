@@ -7,6 +7,11 @@ JEDIT 4.1 VERSION HISTORY
 - Added AppleScript syntax highlighting (Kris Kopicki)
 - Improved Informix-4GL syntax highlighting (Stefan Jozsa)
 
++ User Interface Changes:
+
+- TAB key can now be used to insert completions in the 'Complete Word'
+  popup.
+
 + Bug Fixes
 
 - Macro listing code was completely broken in 4.1pre3; only the first

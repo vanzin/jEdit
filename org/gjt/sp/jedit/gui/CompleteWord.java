@@ -93,6 +93,26 @@ public class CompleteWord extends JWindow
 	{
 		super(view);
 
+		setContentPane(new JPanel(BorderLayout())
+		{
+			/**
+			 * Returns if this component can be traversed by pressing the
+			 * Tab key. This returns false.
+			 */
+			public boolean isManagingFocus()
+			{
+				return false;
+			}
+
+			/**
+			 * Makes the tab key work in Java 1.4.
+			 */
+			public boolean getFocusTraversalKeysEnabled()
+			{
+				return false;
+			}
+		});
+
 		this.view = view;
 		this.textArea = view.getTextArea();
 		this.buffer = view.getBuffer();
@@ -337,8 +357,7 @@ public class CompleteWord extends JWindow
 		{
 			switch(evt.getKeyCode())
 			{
-			// doesn't work in 1.4?
-			//case KeyEvent.VK_TAB:
+			case KeyEvent.VK_TAB:
 			case KeyEvent.VK_ENTER:
 				insertSelected();
 				evt.consume();
