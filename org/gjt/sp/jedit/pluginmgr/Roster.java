@@ -1,6 +1,9 @@
 /*
  * Roster.java - A list of things to do, used in various places
- * Copyright (C) 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,7 +22,9 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
 import java.net.*;
@@ -28,14 +33,17 @@ import java.util.*;
 import org.gjt.sp.jedit.io.VFSManager; // we use VFSManager.error() method
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 class Roster
 {
+	//{{{ Roster constructor
 	Roster()
 	{
 		operations = new Vector();
-	}
+	} //}}}
 
+	//{{{ addOperation() method
 	void addOperation(Operation op)
 	{
 		for(int i = 0; i < operations.size(); i++)
@@ -45,18 +53,21 @@ class Roster
 		}
 
 		operations.addElement(op);
-	}
+	} //}}}
 
+	//{{{ getOperationCount() method
 	int getOperationCount()
 	{
 		return operations.size();
-	}
+	} //}}}
 
+	//{{{ isEmpty() method
 	boolean isEmpty()
 	{
 		return operations.size() == 0;
-	}
+	} //}}}
 
+	//{{{ performOperations() method
 	boolean performOperations(PluginManagerProgress progress)
 	{
 		for(int i = 0; i < operations.size(); i++)
@@ -75,17 +86,18 @@ class Roster
 		}
 
 		return true;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private Vector operations;
 
 	static interface Operation
 	{
 		boolean perform(PluginManagerProgress progress);
 		boolean equals(Object o);
-	}
+	} //}}}
 
+	//{{{ Remove class
 	static class Remove implements Operation
 	{
 		Remove(String plugin)
@@ -150,8 +162,9 @@ class Roster
 
 			return ok;
 		}
-	}
+	} //}}}
 
+	//{{{ Install class
 	static class Install implements Operation
 	{
 		Install(String url, String installDirectory)
@@ -164,7 +177,7 @@ class Roster
 			this.installDirectory = installDirectory;
 		}
 
-		public boolean perform(PluginManagerProgress progress)
+		public boolean perform(final PluginManagerProgress progress)
 		{
 			try
 			{
@@ -187,12 +200,18 @@ class Roster
 				// do nothing, user clicked 'Stop'
 				return false;
 			}
-			catch(IOException io)
+			catch(final IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
 
-				String[] args = { io.getMessage() };
-				VFSManager.error(progress,"ioerror",args);
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						String[] args = { io.getMessage() };
+						GUIUtilities.error(null,"ioerror",args);
+					}
+				});
 
 				return false;
 			}
@@ -315,5 +334,5 @@ loop:			for(;;)
 
 			return downloadDir.getPath();
 		}
-	}
+	} //}}}
 }

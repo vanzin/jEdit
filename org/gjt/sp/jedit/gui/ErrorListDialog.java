@@ -95,7 +95,11 @@ public class ErrorListDialog extends EnhancedDialog
 		errors.setCellRenderer(new ErrorListCellRenderer());
 		errors.setVisibleRowCount(Math.min(messages.size(),4));
 
-		JScrollPane scrollPane = new JScrollPane(errors);
+		// need this bullshit scroll bar policy for the preferred size
+		// hack to work
+		JScrollPane scrollPane = new JScrollPane(errors,
+			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+			JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		Dimension size = scrollPane.getPreferredSize();
 		size.width = Math.min(size.width,400);
 		scrollPane.setPreferredSize(size);

@@ -1,13 +1,7 @@
 TO DO
 
-- rename MacOS.jar
-- $ doesn't find last -- gnu.regexp bug
-- hypersearch for .* doesn't list blank lines
-- save to X:filename on Windows
-- motif l&f: shortcuts in menu items
 - fix stylesheet problem
-
-- plugin manager needs overhauled error reporting
+- $ doesn't find last -- gnu.regexp bug
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
@@ -93,7 +87,6 @@ TO DO
 - how to handle S+0-9?
 - formatting problems in user's guide in table cells
 - finish persistent splits code
-- failed saves should not clear the dirty flag
 - aborts not always fired
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
@@ -108,3 +101,7 @@ TO DO
 - tab/s+tab: use tabSize; a+left/right: use indentSize
 - toggle shift: expand all; no mod: expand one level behavior in gutter
 - triple-click drag down
+- motif l&f: shortcuts in menu items
+- hypersearch for .* doesn't list blank lines
+- clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
+- sorting buffer list by edit mode!
