@@ -148,8 +148,6 @@
 	</RULES>
 
 	<RULES SET="JAVADOC" DEFAULT="COMMENT3" IGNORE_CASE="TRUE">
-		<!-- so that @link{...} is highlighted -->
-		<SEQ TYPE="COMMENT3">{</SEQ>
 
 		<!-- so that *@param is highlighted -->
 		<SEQ TYPE="COMMENT3">*</SEQ>
@@ -178,49 +176,97 @@
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-
+		
+		<!-- so that @link{...} is highlighted -->
+		<!-- XXX: this is wrong, {@link ..} is correct, see below -->
+		<!--<SEQ TYPE="COMMENT3">{</SEQ>-->
+		
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+			<BEGIN>{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
+		
+		<!-- for the common usage of the cvs keyword $Id$ -->
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+			<BEGIN>@version\s+\$</BEGIN>
+			<END>$</END>
+		</SPAN_REGEXP>
+		
+		<!-- This works only when you use the same whitespace before and after the param's name,
+			 eg. a tab before and after, but mixing space and tab won't work.
+			 The reason is that you can't enter a regexp in END, except for the backreference operator $n -->
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+			<BEGIN>@(?:param|throws|exception|serialField)(\s)</BEGIN>
+			<END>$1</END>
+		</SPAN_REGEXP>
+		
 		<KEYWORDS>
+		<!-- Note: the labels in comments are handled by SPANs above -->
+		
+		<!-- Official javadoc tags:
+			 http://java.sun.com/j2se/1.5/docs/tooldocs/windows/javadoc.html#javadoctags -->
 			<LABEL>@author</LABEL>
-			<LABEL>@beaninfo</LABEL>
-			<LABEL>@history</LABEL>
-			<LABEL>@bug</LABEL>
-			<LABEL>@review</LABEL>
-			<LABEL>@todo</LABEL>
-			<LABEL>@idea</LABEL>
-			<LABEL>@pre</LABEL>
-			<LABEL>@requires</LABEL>
-			<LABEL>@post</LABEL>
-			<LABEL>@ensures</LABEL>
-			<LABEL>@generates</LABEL>
-			<LABEL>@modifies</LABEL>
-			<LABEL>@invariant</LABEL>
-			<LABEL>@exception</LABEL>
-			<LABEL>@hides</LABEL>
-			<LABEL>@overrides</LABEL>
-			<LABEL>@equivalent</LABEL>
-			<LABEL>@bon</LABEL>
-			<LABEL>@access</LABEL>
-			<LABEL>@example</LABEL>
-			<LABEL>@design</LABEL>
-			<LABEL>@serial</LABEL>
-			<LABEL>@references</LABEL>
-			<LABEL>@uses</LABEL>
-			<LABEL>@guard</LABEL>
-			<LABEL>@values</LABEL>
-			<LABEL>@complexity</LABEL>
 			<LABEL>@deprecated</LABEL>
-			<LABEL>@docRoot</LABEL>
-			<LABEL>@exception</LABEL>
-			<LABEL>@link</LABEL>
-			<LABEL>@param</LABEL>
+		<!--<LABEL>@docRoot</LABEL>-->
+		<!--<LABEL>@exception</LABEL>-->
+			<LABEL>{@inheritDoc}</LABEL>
+		<!--<LABEL>@link</LABEL>-->
+		<!--<LABEL>@linkplain</LABEL>-->
+		<!--<LABEL>@param</LABEL>-->
 			<LABEL>@return</LABEL>
 			<LABEL>@see</LABEL>
+			<LABEL>@serial</LABEL>
 			<LABEL>@serialData</LABEL>
-			<LABEL>@serialField</LABEL>
+		<!--<LABEL>@serialField</LABEL>-->
 			<LABEL>@since</LABEL>
-			<LABEL>@throws</LABEL>
+		<!--<LABEL>@throws</LABEL>-->
+			<LABEL>{@value}</LABEL>
 			<LABEL>@version</LABEL>
-			<LABEL>@spec</LABEL>
+			
+		<!-- new in 1.5 -->
+		<!--<LABEL>@code</LABEL>-->
+		<!--<LABEL>@literal</LABEL>-->
+			
+		<!-- SUNs proposed tags:
+			 http://java.sun.com/j2se/javadoc/proposed-tags.html -->
+			<KEYWORD2>@category</KEYWORD2>
+			<KEYWORD2>@example</KEYWORD2>
+			<KEYWORD2>@exclude</KEYWORD2>
+			<KEYWORD2>@index</KEYWORD2>
+			<KEYWORD2>@internal</KEYWORD2>
+			<KEYWORD2>@obsolete</KEYWORD2>
+			<KEYWORD2>@threadsafety</KEYWORD2>
+			<KEYWORD2>@tutorial</KEYWORD2>
+			<KEYWORD2>@todo</KEYWORD2>
+		
+		<!-- Custom tags -->
+			<KEYWORD4>@access</KEYWORD4>
+			<KEYWORD4>@beaninfo</KEYWORD4>
+			<KEYWORD4>@bon</KEYWORD4>
+			<KEYWORD4>@bug</KEYWORD4>
+			<KEYWORD4>@complexity</KEYWORD4>
+			<KEYWORD4>@design</KEYWORD4>
+			<KEYWORD4>@ensures</KEYWORD4>
+			<KEYWORD4>@equivalent</KEYWORD4>
+			<KEYWORD4>@generates</KEYWORD4>
+			<KEYWORD4>@guard</KEYWORD4>
+			<KEYWORD4>@hides</KEYWORD4>
+			<KEYWORD4>@history</KEYWORD4>
+			<KEYWORD4>@idea</KEYWORD4>
+			<KEYWORD4>@invariant</KEYWORD4>
+			<KEYWORD4>@modifies</KEYWORD4>
+			<KEYWORD4>@overrides</KEYWORD4>
+			<KEYWORD4>@post</KEYWORD4>
+			<KEYWORD4>@pre</KEYWORD4>
+			<KEYWORD4>@references</KEYWORD4>
+			<KEYWORD4>@requires</KEYWORD4>
+			<KEYWORD4>@review</KEYWORD4>
+			<KEYWORD4>@spec</KEYWORD4>
+			<KEYWORD4>@uses</KEYWORD4>
+			<KEYWORD4>@values</KEYWORD4>
 		</KEYWORDS>
 	</RULES>
+
+	<!-- just a dummy which makes use of the default token type COMMENT4 for highlighting the word after @param in javadoc -->	
+	<RULES SET="JAVADOC_PARAM" DEFAULT="COMMENT4" IGNORE_CASE="TRUE" />
 </MODE>

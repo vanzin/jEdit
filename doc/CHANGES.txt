@@ -2,14 +2,18 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to Loren Charnley and Matthieu Casanova for contributing to this
-release.
+Thanks to James Turk, Loren Charnley and Matthieu Casanova for
+contributing to this release.
 
 {{{ Syntax Highlighting
 
 - Gnuplot syntax highlighting (Loren Charnley).
 
 - Updated PHP syntax highlighting (Matthieu Casanova).
+
+- Updated MIPS R2000 assembly syntax highlighting (James Turk).
+
+- Updated Java and LaTeX syntax highlighting (Alexander Klimetschek).
 
 }}}
 {{{ Bug Fixes

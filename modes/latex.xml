@@ -497,6 +497,8 @@
 
     <!--  % comments.  -->
     <EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
+    <SEQ TYPE="KEYWORD1">}</SEQ>
+    <SEQ TYPE="KEYWORD1">{</SEQ>
     <SEQ TYPE="OPERATOR">_</SEQ>
     <SEQ TYPE="OPERATOR">^</SEQ>
     <SEQ TYPE="KEYWORD2">\zeta</SEQ>
@@ -1026,6 +1028,8 @@
 
     <!--  % comments.  -->
     <EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
+    <SEQ TYPE="KEYWORD1">}</SEQ>
+    <SEQ TYPE="KEYWORD1">{</SEQ>
     <SEQ TYPE="OPERATOR">_</SEQ>
     <SEQ TYPE="OPERATOR">^</SEQ>
     <SEQ TYPE="KEYWORD2">\zeta</SEQ>

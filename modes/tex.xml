@@ -5,8 +5,9 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="%" />
+		<PROPERTY NAME="wordBreakChars" VALUE="{}" />
 	</PROPS>
-	<RULES>
+	<RULES IGNORE_CASE="FALSE">
 		<!-- $$...$$ -->
 		<SPAN TYPE="MARKUP" DELEGATE="MATH">
 			<BEGIN>$$</BEGIN>
