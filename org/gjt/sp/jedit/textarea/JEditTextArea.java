@@ -261,9 +261,7 @@ public class JEditTextArea extends JComponent
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
-			physLastLine = virtualToPhysical(Math.min(
-				getVirtualLineCount() - 1,
-				firstLine + visibleLines));
+			recalculateLastPhysicalLine();
 
 			propertiesChanged();
 
@@ -342,9 +340,7 @@ public class JEditTextArea extends JComponent
 
 		physFirstLine = virtualToPhysical(firstLine);
 
-		physLastLine = virtualToPhysical(Math.min(
-			getVirtualLineCount() - 1,
-			firstLine + visibleLines));
+		recalculateLastPhysicalLine();
 
 		maxHorizontalScrollWidth = 0;
 
@@ -636,9 +632,7 @@ public class JEditTextArea extends JComponent
 				firstLine = 0;
 
 			physFirstLine = virtualToPhysical(firstLine);
-			physLastLine = virtualToPhysical(Math.min(
-				getVirtualLineCount() - 1,
-				firstLine + visibleLines));
+			recalculateLastPhysicalLine();
 
 			chunkCache.setFirstLine(firstLine);
 
@@ -716,19 +710,10 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getScreenLineEndOffset(int line)
 	{
-		if(line == visibleLines)
-			return buffer.getLineEndOffset(physLastLine);
-
-		chunkCache.updateChunksUpTo(line + 1);
-		ChunkCache.LineInfo curr = chunkCache.getLineInfo(line);
-		ChunkCache.LineInfo next = chunkCache.getLineInfo(line + 1);
-		if(next.subregion == 0)
-			return buffer.getLineEndOffset(curr.physicalLine);
-		else
-		{
-			return buffer.getLineStartOffset(curr.physicalLine)
-				+ next.offset;
-		}
+		chunkCache.updateChunksUpTo(line);
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		return buffer.getLineStartOffset(lineInfo.physicalLine)
+			+ lineInfo.offset + lineInfo.length + 1;
 	} //}}}
 
 	//{{{ xyToOffset() method
@@ -830,12 +815,6 @@ public class JEditTextArea extends JComponent
 		if(!info.chunksValid)
 			System.err.println("offset to xy: not valid");
 
-		if(line == buffer.getLineCount() - 1)
-		{
-			System.err.println("last line: " + offset);
-			System.err.println(info.length);
-		}
-
 		retVal.x = (int)(horizontalOffset + TextUtilities.offsetToX(
 			info.chunks,offset));
 
@@ -857,7 +836,7 @@ public class JEditTextArea extends JComponent
 	{
 		FontMetrics fm = painter.getFontMetrics();
 		int y = start * fm.getHeight();
-		int height = (end + 1) * fm.getHeight();
+		int height = (end - start + 1) * fm.getHeight();
 		painter.repaint(0,y,painter.getWidth(),height);
 		gutter.repaint(0,y,gutter.getWidth(),height);
 	} //}}}
@@ -884,12 +863,14 @@ public class JEditTextArea extends JComponent
 				if(startLine == -1)
 					startLine = i;
 			}
-			else if(info.physicalLine == line + 1)
+			else if(info.physicalLine > line
+				|| info.physicalLine == -1)
 			{
 				if(endLine == -1)
+				{
 					endLine = i - 1;
-				else
 					break;
+				}
 			}
 		}
 
@@ -929,12 +910,14 @@ public class JEditTextArea extends JComponent
 				if(startScreenLine == -1)
 					startScreenLine = i;
 			}
-			else if(info.physicalLine == endScreenLine + 1)
+			else if(info.physicalLine > end
+				|| info.physicalLine == -1)
 			{
 				if(endScreenLine == -1)
+				{
 					endScreenLine = i - 1;
-				else
 					break;
+				}
 			}
 		}
 
@@ -4664,9 +4647,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(foldVisibilityManager != null)
 		{
-			physLastLine = virtualToPhysical(Math.min(
-				getVirtualLineCount() - 1,
-				firstLine + visibleLines));
+			recalculateLastPhysicalLine();
 		}
 
 		propertiesChanged();
@@ -5042,6 +5023,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			"view.status.bracket",new String[] { text }));
 	} //}}}
 
+	//{{{ recalculateLastPhysicalLine() method
+	private void recalculateLastPhysicalLine()
+	{
+		physLastLine = virtualToPhysical(Math.min(
+			getVirtualLineCount() - 1,
+			firstLine + visibleLines));
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -5289,10 +5278,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	class BufferChangeHandler implements BufferChangeListener
 	{
 		//{{{ foldLevelChanged() method
-		public void foldLevelChanged(Buffer buffer, int line, int level)
+		public void foldLevelChanged(Buffer buffer, int start, int end)
 		{
-			if(!bufferChanging && line != 0)
-				invalidateLine(line - 1);
+			if(!bufferChanging && end != 0 && buffer.isLoaded())
+			{
+				invalidateLineRange(start - 1,end - 1);
+			}
 		} //}}}
 
 		//{{{ contentInserted() method
@@ -5301,6 +5292,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(!buffer.isLoaded())
 				return;
+
+			if(buffer.getLineCount() - numLines - 1 <= physLastLine)
+				recalculateLastPhysicalLine();
 
 			repaintAndScroll(startLine,numLines);
 
@@ -5343,6 +5337,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(!buffer.isLoaded())
 				return;
+
+			if(buffer.getLineCount() - numLines - 1 <= physLastLine)
+				recalculateLastPhysicalLine();
 
 			// -lineCount because they are removed
 			repaintAndScroll(startLine,-numLines);

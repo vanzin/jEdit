@@ -11,11 +11,14 @@ defaults.
 
 + New Features
 
+- Soft wrap: enable it in Global Options, or Buffer Options. Some
+  plugins will need to be updated; see below
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
   borders using Swing look & feel'. Both are disabled by default.
 - New 'Keyboard Tester' command in Utilities->Troubleshooting menu; it
   displays a 'grab key' dialog and dumps key events into a new buffer
+- Option to split file dialogs vertically (Ollie Rutherfurd)
 
 + Enhancements
 
@@ -64,6 +67,9 @@ defaults.
   wheel mouse to scroll
 - Shift-double click and shift-middle mouse button clicks in the file
   system browser now open files in a new view
+- Minor search and replace dialog box usability improvements:
+  - Keep dialog on by default
+  - Somewhat confusing 'Replace' button removed
 
 + Bug Fixes
 
@@ -103,6 +109,9 @@ defaults.
   option pane
 - Fixed ArrayIndexOutOfBoundsException when scrolling a one-line buffer
   with the WheelMouse plugin
+- "Insert File" was broken since 4.0pre1
+- Text area syntax highlighting would not always be updated properly
+  when switching modes
 
 + API Changes
 
@@ -130,6 +139,11 @@ defaults.
   yToLine(), lineToY()) deprecated; you must now use xyToOffset() and
   offsetToXY() instead. Also note that xyToOffset() will return -1 if
   the y co-ordinate is not visible in the text area.
+- The BufferChangeListener API was inconsistent. foldLevelChanged() was
+  called with the last two parameters being a start and end line,
+  respectively, but the documentation claimed that the first parameter
+  was a single line index, and the second was a fold level. This was an
+  error on the part of the documentation, and has since been fixed.
 
 * Version 4.0pre3
 

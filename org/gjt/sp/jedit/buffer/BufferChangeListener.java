@@ -42,13 +42,13 @@ public interface BufferChangeListener
 {
 	//{{{ foldLevelChanged() method
 	/**
-	 * Called when the fold level of a line changes.
+	 * Called when line fold levels change.
 	 * @param buffer The buffer in question
-	 * @param line The line number
-	 * @param level The fold level
+	 * @param start The start line number
+	 * @param end The end line number
 	 * @since jEdit 4.0pre1
 	 */
-	void foldLevelChanged(Buffer buffer, int line, int level);
+	void foldLevelChanged(Buffer buffer, int startLine, int endLine);
 	//}}}
 
 	//{{{ contentInserted() method

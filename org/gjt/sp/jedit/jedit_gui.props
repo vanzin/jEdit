@@ -373,7 +373,6 @@ search=find \
        - \
        replace-in-selection \
        replace-and-find-next \
-       replace-all \
        - \
        quick-search \
        hypersearch \
@@ -387,7 +386,6 @@ search-in-open-buffers.label=Search in Open $Buffers...
 search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
-replace-all.label=Replace $All
 quick-search.label=$Incremental Search
 hypersearch.label=Quick $HyperSearch
 quick-search-word.label=Incremental Search for $Word
@@ -1544,6 +1542,8 @@ options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
 options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
+options.browser.general.splitHorizontally=Hierarchy and browsing panes \
+	side-by-side in file dialog
 
 options.browser.colors.label=Colors
 options.browser.colors.glob=File name glob

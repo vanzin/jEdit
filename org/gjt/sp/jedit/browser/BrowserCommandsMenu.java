@@ -212,7 +212,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			else if(actionCommand.equals("insert"))
 				view.getBuffer().insertFile(view,file.path);
 			else if(actionCommand.equals("choose"))
-				browser.filesActivated();
+				browser.filesActivated(false);
 			else if(actionCommand.equals("close"))
 			{
 				Buffer buffer = jEdit.getBuffer(file.path);
