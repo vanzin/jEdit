@@ -344,19 +344,6 @@ class ChunkCache
 		return info;
 	} //}}}
 
-	//{{{ getScreenLineCount() method
-	int getScreenLineCount(int physicalLine)
-	{
-		int screenLines = buffer.getScreenLineCount(physicalLine);
-		if(screenLines == 0)
-		{
-			LineInfo[] infos = getLineInfosForPhysicalLine(physicalLine);
-			screenLines = infos.length;
-			buffer.setScreenLineCount(physicalLine,screenLines);
-		}
-		return screenLines;
-	} //}}}
-
 	//{{{ getSubregionOfOffset() method
 	/**
 	 * Returns the subregion containing the specified offset. A subregion

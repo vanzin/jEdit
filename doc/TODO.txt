@@ -11,6 +11,8 @@ and quirks that I need to fix eventually.
 - switching between soft wrap and not needs to update anchors, etc
 - disable bracket match: gutter highlight not hidden
 - display:
+  - scrollTo() with 0 visibleLines
+  - use isLastLinePartial business
   - last physical line cleanup
   - text area: buffer scroll to
   - synchro scroll needs a rewrite & folding
@@ -20,6 +22,7 @@ and quirks that I need to fix eventually.
     scroll up/down line
     setFirstPhysicalLine(int,int)
     getFirstSubregion()
+    scrollTo()
 - help:
   - titles in search are fucked
   - title adds more to the relevance

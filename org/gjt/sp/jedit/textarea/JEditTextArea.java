@@ -392,18 +392,19 @@ public class JEditTextArea extends JComponent
 	{
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		int screenLineCount = 0;
-		int physicalLine = buffer.getLineCount() - 1;
+		int physicalLine = displayManager.getLastVisibleLine();
 		for(;;)
 		{
 			screenLineCount += displayManager.getScreenLineCount(physicalLine);
 			if(screenLineCount >= visibleLines)
 				break;
-			physicalLine = displayManager.getPrevVisibleLine(physicalLine);
-			if(physicalLine == -1)
+			int prevLine = displayManager.getPrevVisibleLine(physicalLine);
+			if(prevLine == -1)
 				break;
+			physicalLine = prevLine;
 		}
 
-		if(physFirstLine > physicalLine && physicalLine != -1)
+		if(physFirstLine > physicalLine)
 			physFirstLine = physicalLine;
 		//}}}
 
@@ -459,6 +460,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void setHorizontalOffset(int horizontalOffset)
 	{
+		if(horizontalOffset < 0)
+			horizontalOffset = 0;
+
 		if(horizontalOffset == this.horizontalOffset)
 			return;
 
@@ -532,7 +536,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		/* int extraEndVirt;
+		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
 		if(offset > lineLength)
 		{
@@ -551,127 +555,56 @@ public class JEditTextArea extends JComponent
 		// this hack...
 		if(visibleLines == 0)
 		{
-			setFirstLine(physicalToVirtual(
-				Math.max(0,line - _electricScroll)));
+			System.err.println("should not be done");
+			//setFirstLine(physicalToVirtual(
+			//	Math.max(0,line - _electricScroll)));
 			return;
 		}
 
+		int firstLine = getFirstLine();
+
 		//{{{ STAGE 1 -- determine if the caret is visible.
-		int screenLine = getScreenLineOfOffset(buffer.getLineStartOffset(line) + offset);
-		Point point;
-		if(screenLine != -1)
+		Point point = offsetToXY(line,offset,returnValue);
+
+		int height = painter.getFontMetrics().getHeight();
+
+		int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
+		int y2 = (firstLine + visibleLines
+			== displayManager.getScrollLineCount()
+			? 0 : height * _electricScroll);
+
+		Rectangle rect = new Rectangle(0,y1,
+			painter.getWidth() - 5,visibleLines * height
+			- y1 - y2);
+
+		point = offsetToXY(line,offset,returnValue);
+		if(point != null)
 		{
-			// It's visible, but is it too close to the borders?
-			int height = painter.getFontMetrics().getHeight();
-
-			int y1 = (firstLine == 0 ? 0 : height * _electricScroll);
-			int y2 = (visibleLines + firstLine == getVirtualLineCount()
-				? 0 : height * _electricScroll);
-
-			Rectangle rect = new Rectangle(0,y1,
-				painter.getWidth() - 5,visibleLines * height
-				- y1 - y2);
-
-			point = offsetToXY(line,offset,returnValue);
 			point.x += extraEndVirt;
 			if(rect.contains(point))
 				return;
-		}
-		else
-			point = null;
-		//}}}
+		} //}}}
+
+		point = null;
 
 		//{{{ STAGE 2 -- scroll vertically
-		if(line == physLastLine + 1)
+		int physFirstLine = line;
+		int screenLine = visibleLines / 2;
+		for(int i = line - 1; i >= 0; i--)
 		{
-			int count = chunkCache.getScreenLineCount(physLastLine)
-				+ chunkCache.getScreenLineCount(physLastLine + 1)
-				+ _electricScroll;
-			while(count > 0)
-			{
-				count -= chunkCache.getScreenLineCount(physFirstLine);
-				firstLine++;
-				physFirstLine = displayManager.getNextVisibleLine(physFirstLine);
-			}
-		}
-		else if(screenLine == -1)
-		{
-			if(line == physLastLine)
-			{
-				int count = chunkCache.getScreenLineCount(physLastLine)
-					+ _electricScroll;
-				while(count > 0)
-				{
-					count -= chunkCache.getScreenLineCount(physFirstLine);
-					firstLine++;
-					int nextLine = displayManager.getNextVisibleLine(physFirstLine);
-					if(nextLine == -1)
-						break;
-					else
-						physFirstLine = nextLine;
-				}
-			}
-
-			int virtualLine = foldVisibilityManager.physicalToVirtual(line);
-			if(virtualLine == firstLine - 1)
-			{
-				firstLine = Math.max(0,firstLine - _electricScroll - 1);
-				physFirstLine = foldVisibilityManager.virtualToPhysical(firstLine);
-			}
-			else
-			{
-				// keep chunking lines until we have visibleLines / 2
-				physFirstLine = line;
-
-				int count = 0;
-
-				for(;;)
-				{
-					if(displayManager.isLineVisible(physFirstLine))
-					{
-						int incr = chunkCache.getScreenLineCount(physFirstLine);
-						if(count + incr > visibleLines / 2)
-							break;
-						else
-							count += incr;
-					}
-
-					int prevLine = displayManager
-						.getPrevVisibleLine(physFirstLine);
-					if(prevLine == -1)
-						break;
-					else
-						physFirstLine = prevLine;
-				}
-
-				firstLine = physicalToVirtual(physFirstLine);
-			}
-		}
-		else if(screenLine < _electricScroll && firstLine != 0)
-		{
-			int count = _electricScroll - screenLine;
-			while(count > 0 && firstLine > 0)
-			{
-				count -= chunkCache.getScreenLineCount(physFirstLine);
-				firstLine--;
-				physFirstLine = displayManager.getPrevVisibleLine(physFirstLine);
-			}
-		}
-		else if(screenLine >= visibleLines - _electricScroll)
-		{
-			int count = _electricScroll - visibleLines + screenLine + 1;
-			while(count > 0 && firstLine <= getVirtualLineCount())
-			{
-				count -= chunkCache.getScreenLineCount(physFirstLine);
-				firstLine++;
-				physFirstLine = displayManager.getNextVisibleLine(physFirstLine);
-			}
+			screenLine -= displayManager.getScreenLineCount(physFirstLine);
+			if(screenLine <= 0)
+				break;
+			int prevLine = displayManager.getPrevVisibleLine(physFirstLine);
+			if(prevLine == -1)
+				break;
+			physFirstLine = prevLine;
 		}
 
-		chunkCache.setFirstLine(firstLine,physFirstLine);
+		setFirstPhysicalLine(physFirstLine);
+		//}}}
 
-		recalculateLastPhysicalLine();
-
+		//{{{ STAGE 3 -- scroll horizontally
 		if(point == null)
 		{
 			point = offsetToXY(line,offset,returnValue);
@@ -683,33 +616,19 @@ public class JEditTextArea extends JComponent
 			}
 			else
 				point.x += extraEndVirt;
-		} //}}}
+		}
 
-		//{{{ STAGE 3 -- scroll horizontally
 		if(point.x < 0)
 		{
-			horizontalOffset = Math.min(0,horizontalOffset
+			setHorizontalOffset(horizontalOffset
 				- point.x + charWidth + 5);
 		}
 		else if(point.x >= painter.getWidth() - charWidth - 5)
 		{
-			horizontalOffset = horizontalOffset +
+			setHorizontalOffset(horizontalOffset +
 				(painter.getWidth() - point.x)
-				- charWidth - 5;
+				- charWidth - 5);
 		} //}}}
-
-		//{{{ STAGE 4 -- update some stuff
-		updateScrollBars();
-		painter.repaint();
-		gutter.repaint();
-
-		view.synchroScrollVertical(this,firstLine);
-		view.synchroScrollHorizontal(this,horizontalOffset);
-
-		// fire events for both a horizontal and vertical scroll
-		fireScrollEvent(true);
-		fireScrollEvent(false);
-		//}}} */
 	} //}}}
 
 	//{{{ addScrollListener() method
@@ -4573,16 +4492,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(maxLineLen <= 0)
 		{
-			if(softWrap)
-			{
-				wrapToWidth = true;
-				wrapMargin = painter.getWidth() - charWidth * 3;
-			}
-			else
-			{
-				wrapToWidth = false;
-				wrapMargin = 0;
-			}
+			softWrap = hardWrap = false;
+			wrapMargin = 0;
 		}
 		else
 		{
@@ -4592,7 +4503,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				foo[i] = ' ';
 			}
-			wrapToWidth = false;
 			wrapMargin = (int)painter.getFont().getStringBounds(
 				foo,0,maxLineLen,painter.getFontRenderContext())
 				.getWidth();
@@ -4808,7 +4718,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean hardWrap;
 	float tabSize;
 	int wrapMargin;
-	boolean wrapToWidth;
 	int charWidth;
 
 	boolean scrollBarsInitialized;
@@ -4882,8 +4791,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		lastLinePartial = (height % lineHeight != 0);
 
 		chunkCache.recalculateVisibleLines();
-		if(softWrap && wrapToWidth)
-			wrapMargin = painter.getWidth() - charWidth * 3;
 		maxHorizontalScrollWidth = 0;
 		updateScrollBars();
 	} //}}}

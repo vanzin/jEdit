@@ -36,6 +36,9 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   bracketed expression. Now, a Shift-click selects the expression and a
   Control-click narrows to the expression.
 
+- Previously setting the wrap margin to zero with soft wrap on would
+  wrap to the width of the text area. This is no longer supported.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -181,7 +184,7 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   happends.
 
 }}}
-{{{ Platform-Specific Changes:
+{{{ Platform-Specific Changes
 
 - MacOS plugin version 3.0 now requires Java 1.4.1. All native calls now
   use the Cocoa API, and a dock menu has been added. The dock menu
