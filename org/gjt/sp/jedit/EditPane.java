@@ -210,7 +210,7 @@ public class EditPane extends JPanel implements EBComponent
 			buffer.setProperty(Buffer.SELECTION,selection);*/
 
 		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
-			textArea.virtualToPhysical(textArea.getFirstLine()));
+			textArea.getFirstPhysicalLine());
 		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
 			textArea.getHorizontalOffset());
 	} //}}}
@@ -281,8 +281,6 @@ public class EditPane extends JPanel implements EBComponent
 		textArea = new JEditTextArea(view);
 
 		add(BorderLayout.CENTER,textArea);
-		markerHighlight = new MarkerHighlight(textArea);
-		textArea.getGutter().addExtension(markerHighlight);
 
 		propertiesChanged();
 
@@ -315,7 +313,6 @@ public class EditPane extends JPanel implements EBComponent
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
 	private JEditTextArea textArea;
-	private MarkerHighlight markerHighlight;
 	//}}}
 
 	//{{{ propertiesChanged() method
@@ -380,9 +377,9 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getColorProperty("view.gutter.highlightColor"));
 		gutter.setFoldColor(
 			jEdit.getColorProperty("view.gutter.foldColor"));
-		markerHighlight.setMarkerHighlightColor(
+		gutter.setMarkerHighlightColor(
 			jEdit.getColorProperty("view.gutter.markerColor"));
-		markerHighlight.setHighlightEnabled(jEdit.getBooleanProperty(
+		gutter.setMarkerHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.markerHighlight"));
 		gutter.setCurrentLineForeground(
 			jEdit.getColorProperty("view.gutter.currentLineColor"));

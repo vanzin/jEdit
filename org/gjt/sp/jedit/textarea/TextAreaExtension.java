@@ -1,5 +1,8 @@
 /*
  * TextAreaExtension.java - Custom painter and tool tip handler
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +40,7 @@ import java.awt.Graphics2D;
  */
 public abstract class TextAreaExtension
 {
+	//{{{ paintValidLine() method
 	/**
 	 * Called by the text area when the extension is to paint a
 	 * screen line which has an associated physical line number in
@@ -45,6 +49,7 @@ public abstract class TextAreaExtension
 	 * offsets of the screen line are passed in as well.
 	 *
 	 * @param gfx The graphics context
+	 * @param screenLine The screen line number
 	 * @param physicalLine The physical line number
 	 * @param start The offset where the screen line begins, from
 	 * the start of the buffer
@@ -54,9 +59,10 @@ public abstract class TextAreaExtension
 	 * bounding box
 	 * @since jEdit 4.0pre4
 	 */
-	public void paintValidLine(Graphics2D gfx, int physicalLine,
-		int start, int end, int y) {}
+	public void paintValidLine(Graphics2D gfx, int screenLine,
+		int physicalLine, int start, int end, int y) {} //}}}
 
+	//{{{ paintInvalidLine() method
 	/**
 	 * Called by the text area when the extension is to paint a
 	 * screen line which is not part of the buffer. This can happen
@@ -70,8 +76,9 @@ public abstract class TextAreaExtension
 	 * @since jEdit 4.0pre4
 	 */
 	public void paintInvalidLine(Graphics2D gfx, int screenLine,
-		int y) {}
+		int y) {} //}}}
 
+	//{{{ getToolTipText() method
 	/**
 	 * Called by the text area when the mouse hovers over the
 	 * location specified in the mouse event.
@@ -83,5 +90,5 @@ public abstract class TextAreaExtension
 	public String getToolTipText(int x, int y)
 	{
 		return null;
-	}
+	} //}}}
 }

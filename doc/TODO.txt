@@ -1,12 +1,15 @@
 TO DO
 
-- soft wrap and syntax highlighted files
-- display 'freezes' when opening a new file
-- one-time selection problem
+- chunk cache problems after collapsing a fold
+- binding stuff to SPACE doesn't work, allegedly
 - removing a plugin should offer to remove the ones that depend on it too
 - installing source for already installed plugins is not possible: 'hide
   already installed' checkbox in install plugins dialog box
 - soft wrap to do:
+  - syntax highlighted files
+  - delete last line problem
+  - when typing and line gets wrapped, not repainted
+  - vertical scroll bar if last line is wrapped
   - fix scrollToCaret()
   - use new offset conversion API throughout
   - document soft wrap

@@ -41,6 +41,7 @@ import org.gjt.sp.util.Log;
  * text area extensions.
  *
  * @see #addExtension(TextAreaExtension)
+ * @see #addExtension(int,TextAreaExtension)
  * @see #removeExtension(TextAreaExtension)
  * @see TextAreaExtension
  * @see JEditTextArea
@@ -56,11 +57,13 @@ public class Gutter extends JComponent implements SwingConstants
 		this.view = view;
 		this.textArea = textArea;
 
-		extensions = new ArrayList();
+		extensionMgr = new ExtensionManager();
 
 		MouseHandler ml = new MouseHandler();
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
+
+		addExtension(new MarkerHighlight());
 	} //}}}
 
 	//{{{ paintComponent() method
@@ -107,35 +110,16 @@ public class Gutter extends JComponent implements SwingConstants
 			int physicalLine = info.physicalLine;
 
 			//{{{ Paint text area extensions
-			if(extensions.size() != 0)
+			if(physicalLine != -1)
 			{
-				for(int i = 0; i < extensions.size(); i++)
-				{
-					TextAreaExtension ext = (TextAreaExtension)
-						extensions.get(i);
-					try
-					{
-						if(physicalLine != -1)
-						{
-							int start = textArea.getScreenLineStartOffset(line);
-							int end = textArea.getScreenLineEndOffset(line);
+				int start = textArea.getScreenLineStartOffset(line);
+				int end = textArea.getScreenLineEndOffset(line);
 
-							ext.paintValidLine(gfx,physicalLine,start,end,y);
-						}
-						else
-							ext.paintInvalidLine(gfx,line,y);
-					}
-					catch(Throwable t)
-					{
-						Log.log(Log.ERROR,this,t);
-
-						// remove it so editor can continue
-						// functioning
-						extensions.remove(i);
-						i--;
-					}
-				}
-			} //}}}
+				extensionMgr.paintValidLine(gfx,line,physicalLine,start,end,y);
+			}
+			else
+				extensionMgr.paintInvalidLine(gfx,line,y);
+			//}}}
 
 			// Skip lines beyond EOF
 			if(physicalLine == -1)
@@ -280,13 +264,28 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ addExtension() method
 	/**
 	 * Adds a text area extension, which can perform custom painting and
-	 * tool tip handling in the gutter.
+	 * tool tip handling.
 	 * @param extension The extension
 	 * @since jEdit 4.0pre4
 	 */
 	public void addExtension(TextAreaExtension extension)
 	{
-		extensions.add(extension);
+		extensionMgr.addExtension(DEFAULT_LAYER,extension);
+		repaint();
+	} //}}}
+
+	//{{{ addExtension() method
+	/**
+	 * Adds a text area extension, which can perform custom painting and
+	 * tool tip handling.
+	 * @param layer The layer to add the extension to. Note that more than
+	 * extension can share the same layer.
+	 * @param extension The extension
+	 * @since jEdit 4.0pre4
+	 */
+	public void addExtension(int layer, TextAreaExtension extension)
+	{
+		extensionMgr.addExtension(layer,extension);
 		repaint();
 	} //}}}
 
@@ -299,8 +298,21 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void removeExtension(TextAreaExtension extension)
 	{
-		extensions.remove(extension);
+		extensionMgr.remove(extension);
 		repaint();
+	} //}}}
+
+	//{{{ getToolTipText() method
+	/**
+	 * Returns the tool tip to display at the specified location.
+	 * @param evt The mouse event
+	 */
+	public String getToolTipText(MouseEvent evt)
+	{
+		if(!textArea.getBuffer().isLoaded())
+			return null;
+
+		return extensionMgr.getToolTipText(evt.getX(),evt.getY());
 	} //}}}
 
 	//{{{ setBorder() method
@@ -460,20 +472,6 @@ public class Gutter extends JComponent implements SwingConstants
 		return getPreferredSize();
 	} //}}}
 
-	//{{{ getToolTipText() method
-	public String getToolTipText(MouseEvent evt)
-	{
-		for(int i = 0; i < extensions.size(); i++)
-		{
-			TextAreaExtension ext = (TextAreaExtension)extensions.get(i);
-			String toolTip = ext.getToolTipText(evt.getX(),evt.getY());
-			if(toolTip != null)
-				return toolTip;
-		}
-
-		return null;
-	} //}}}
-
 	//{{{ getLineNumberAlignment() method
 	/**
 	 * Identifies whether the horizontal alignment of the line numbers.
@@ -621,6 +619,30 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	} //}}}
 
+	//{{{ getMarkerHighlightColor() method
+	public Color getMarkerHighlightColor()
+	{
+		return markerHighlightColor;
+	} //}}}
+
+	//{{{ setMarkerHighlightColor() method
+	public void setMarkerHighlightColor(Color markerHighlightColor)
+	{
+		this.markerHighlightColor = markerHighlightColor;
+	} //}}}
+
+	//{{{ isMarkerHighlightEnabled() method
+	public boolean isMarkerHighlightEnabled()
+	{
+		return markerHighlight;
+	} //}}}
+
+	//{{{ isMarkerHighlightEnabled()
+	public void setMarkerHighlightEnabled(boolean markerHighlight)
+	{
+		this.markerHighlight = markerHighlight;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -629,7 +651,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private View view;
 	private JEditTextArea textArea;
 
-	private ArrayList extensions;
+	private ExtensionManager extensionMgr;
 
 	private int baseline;
 
@@ -650,6 +672,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 	private boolean bracketHighlight;
 	private Color bracketHighlightColor;
+
+	private boolean markerHighlight;
+	private Color markerHighlightColor;
 
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
@@ -777,6 +802,56 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 
 			drag = false;
+		} //}}}
+	} //}}}
+
+	//{{{ MarkerHighlight class
+	class MarkerHighlight extends TextAreaExtension
+	{
+		//{{{ paintValidLine() method
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			if(isMarkerHighlightEnabled())
+			{
+				Buffer buffer = textArea.getBuffer();
+				if(buffer.getMarkerInRange(start,end) != null)
+				{
+					gfx.setColor(getMarkerHighlightColor());
+					FontMetrics fm = textArea.getPainter().getFontMetrics();
+					gfx.fillRect(0,y,textArea.getGutter()
+						.getWidth(),fm.getHeight());
+				}
+			}
+		} //}}}
+
+		//{{{ getToolTipText() method
+		public String getToolTipText(int x, int y)
+		{
+			if(isMarkerHighlightEnabled())
+			{
+				int start = textArea.xyToOffset(0,y);
+				if(start == -1)
+					return null;
+
+				int end = textArea.getScreenLineEndOffset(
+					textArea.getScreenLineOfOffset(start));
+
+				Marker marker = textArea.getBuffer().getMarkerInRange(start,end);
+				if(marker != null)
+				{
+					char shortcut = marker.getShortcut();
+					if(shortcut == '\0')
+						return jEdit.getProperty("view.gutter.marker.no-name");
+					else
+					{
+						String[] args = { String.valueOf(shortcut) };
+						return jEdit.getProperty("view.gutter.marker",args);
+					}
+				}
+			}
+
+			return null;
 		} //}}}
 	} //}}}
 }
