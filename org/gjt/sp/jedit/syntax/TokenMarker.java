@@ -47,11 +47,11 @@ public class TokenMarker
 {
 	//{{{ Major actions (total: 8)
 	public static final int MAJOR_ACTIONS = 0x000000FF;
-	public static final int WHITESPACE = 1 << 0;
-	public static final int SPAN = 1 << 1;
-	public static final int MARK_PREVIOUS = 1 << 2;
-	public static final int MARK_FOLLOWING = 1 << 3;
-	public static final int EOL_SPAN = 1 << 4;
+	public static final int SPAN = 1 << 0;
+	public static final int MARK_PREVIOUS = 1 << 1;
+	public static final int MARK_FOLLOWING = 1 << 2;
+	public static final int EOL_SPAN = 1 << 3;
+//	public static final int MAJOR_ACTION_5 = 1 << 4;
 //	public static final int MAJOR_ACTION_5 = 1 << 5;
 //	public static final int MAJOR_ACTION_6 = 1 << 6;
 //	public static final int MAJOR_ACTION_7 = 1 << 7;
@@ -64,7 +64,7 @@ public class TokenMarker
 	public static final int NO_LINE_BREAK = 1 << 10;
 	public static final int NO_WORD_BREAK = 1 << 11;
 	public static final int IS_ESCAPE = 1 << 12;
-	public static final int DELEGATE = 1 << 13;
+//	public static final int ACTION_HINT_13 = 1 << 13;
 //	public static final int ACTION_HINT_14 = 1 << 14;
 //	public static final int ACTION_HINT_15 = 1 << 15;
 	//}}}
@@ -104,20 +104,27 @@ public class TokenMarker
 		if (rules == null && !setName.startsWith(rulePfx))
 		{
 			int delim = setName.indexOf("::");
-
-			String modeName = setName.substring(0, delim);
-
-			Mode mode = jEdit.getMode(modeName);
-			if(mode == null)
+			if(delim == -1)
 			{
-				Log.log(Log.ERROR,TokenMarker.class,
-					"Unknown edit mode: " + modeName);
-				rules = null;
+				byte id = Token.stringToToken(setName);
+				rules = ParserRuleSet.getStandardRuleSet(id);
 			}
 			else
 			{
-				TokenMarker marker = mode.getTokenMarker();
-				rules = marker.getRuleSet(setName);
+				String modeName = setName.substring(0, delim);
+
+				Mode mode = jEdit.getMode(modeName);
+				if(mode == null)
+				{
+					Log.log(Log.ERROR,TokenMarker.class,
+						"Unknown edit mode: " + modeName);
+					rules = null;
+				}
+				else
+				{
+					TokenMarker marker = mode.getTokenMarker();
+					rules = marker.getRuleSet(setName);
+				}
 			}
 
 			// store external ParserRuleSet in the local hashtable for
@@ -128,9 +135,10 @@ public class TokenMarker
 		if (rules == null)
 		{
 			Log.log(Log.ERROR,this,"Unresolved delegate target: " + setName);
+			return ParserRuleSet.getStandardRuleSet(Token.INVALID);
 		}
-
-		return rules;
+		else
+			return rules;
 	} //}}}
 
 	//{{{ getName() method
@@ -368,11 +376,11 @@ public class TokenMarker
 
 	//{{{ Private members
 	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
+	private static Hashtable ruleSets;
 
 	//{{{ Instance variables
 	private String name;
 	private String rulePfx;
-	private Hashtable ruleSets;
 	private ParserRuleSet mainRuleSet;
 
 	private LineContext context;
@@ -498,49 +506,30 @@ public class TokenMarker
 			case SPAN:
 				context.inRule = checkRule;
 
-				//{{{ Non-delegated
-				if ((checkRule.action & DELEGATE) != DELEGATE)
+				String setName = new String(checkRule.searchChars,
+					checkRule.sequenceLengths[0] + checkRule.sequenceLengths[1],
+					checkRule.sequenceLengths[2]);
+
+				ParserRuleSet delegateSet = getRuleSet(setName);
+
+				if (delegateSet != null)
 				{
 					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 					{
 						tokenHandler.handleToken(pattern.count,
 							context.rules.getDefault(),
 							context.rules);
-						lastOffset = pos + pattern.count;
 					}
 					else
 					{
-						lastOffset = pos;
+						tokenHandler.handleToken(pattern.count,
+							checkRule.token,
+							context.rules);
 					}
-				} //}}}
-				//{{{ Delegated
-				else
-				{
-					String setName = new String(checkRule.searchChars,
-						checkRule.sequenceLengths[0] + checkRule.sequenceLengths[1],
-						checkRule.sequenceLengths[2]);
+					lastOffset = pos + pattern.count;
 
-					ParserRuleSet delegateSet = getRuleSet(setName);
-
-					if (delegateSet != null)
-					{
-						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-						{
-							tokenHandler.handleToken(pattern.count,
-								context.rules.getDefault(),
-								context.rules);
-						}
-						else
-						{
-							tokenHandler.handleToken(pattern.count,
-								checkRule.token,
-								context.rules);
-						}
-						lastOffset = pos + pattern.count;
-
-						context = new LineContext(delegateSet, context);
-					}
-				} //}}}
+					context = new LineContext(delegateSet, context);
+				}
 
 				break;
 			//}}}
@@ -622,27 +611,6 @@ public class TokenMarker
 		//{{{ inside a SPAN
 		else if ((checkRule.action & SPAN) == SPAN)
 		{
-			if ((checkRule.action & DELEGATE) != DELEGATE)
-			{
-				context.inRule = null;
-				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-				{
-					tokenHandler.handleToken(pos - lastOffset,
-						checkRule.token,context.rules);
-					tokenHandler.handleToken(pattern.count,
-						context.rules.getDefault(),
-						context.rules);
-				}
-				else
-				{
-					tokenHandler.handleToken((pos + pattern.count) - lastOffset,
-						checkRule.token,context.rules);
-				}
-				lastKeyword = lastOffset = pos + pattern.count;
-
-				pos += (pattern.count - 1); // move pos to last character of match sequence
-			}
-
 			return false; // break out of inner for loop to check next char
 		}//}}}
 

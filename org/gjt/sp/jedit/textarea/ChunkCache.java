@@ -43,404 +43,14 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class ChunkCache
+class ChunkCache
 {
-	//{{{ lineToChunkList() method
-	/**
-	 * Converts a line of text into one or more chunk lists. There will be
-	 * one chunk list if soft wrap is disabled, more than one otherwise.
-	 * @param seg The segment containing line text
-	 * @param tokens The line's syntax tokens
-	 * @param styles The styles to highlight the line with
-	 * @param fontRenderContext Text transform, anti-alias, fractional font
-	 * metrics
-	 * @param e Used for calculating tab offsets
-	 * @param wrapMargin The wrap margin width, in pixels. 0 disables
-	 * @param out All resulting chunk lists will be appended to this list
-	 * @since jEdit 4.0pre4
-	 */
-	public static void lineToChunkList(Segment seg, Token tokens,
-		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
-		TabExpander e, float wrapMargin, java.util.List out)
-	{
-		// SILLY: allow for anti-aliased characters' "fuzz"
-		if(wrapMargin != 0.0f)
-			wrapMargin += 2.0f;
-
-		float x = 0.0f;
-		float endX = 0.0f;
-		boolean seenNonWhiteSpace = false;
-		boolean addedNonWhiteSpace = false;
-		boolean lastWasSpace = false;
-		float firstNonWhiteSpace = 0.0f;
-
-		Chunk first = null;
-		Chunk current = null;
-		Chunk end = null;
-
-		int tokenListOffset = 0;
-
-		while(tokens.id != Token.END)
-		{
-			int flushIndex = tokenListOffset;
-
-			for(int i = tokenListOffset; i < tokenListOffset + tokens.length; i++)
-			{
-				char ch = seg.array[seg.offset + i];
-
-				if(ch == '\t' || (ch == ' ' && wrapMargin != 0.0f))
-				{
-					/* Create chunk with all text from
-					 * last position up to here, and wrap
-					 * if necessary. */
-					//{{{
-					if(i != flushIndex)
-					{
-						Chunk newChunk = new Chunk(
-							tokens.id,seg,flushIndex,
-							i,styles,fontRenderContext);
-						if(current != null)
-							current.next = newChunk;
-						current = newChunk;
-
-						x += newChunk.width;
-						lastWasSpace = false;
-						seenNonWhiteSpace = true;
-					}
-
-					if(end != null
-						&& !lastWasSpace
-						&& addedNonWhiteSpace
-						&& wrapMargin != 0
-						&& x > wrapMargin)
-					{
-						if(first != null)
-							out.add(first);
-						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
-						first.next = end.next;
-						end.next = null;
-
-						x = x + firstNonWhiteSpace - endX;
-					}
-
-					if(first == null)
-						first = current;
-					//}}}
-
-					//{{{ Create ' ' chunk
-					if(ch == ' ')
-					{
-						Chunk newChunk = new Chunk(
-							tokens.id,seg,i,i + 1,
-							styles,fontRenderContext);
-						if(first == null)
-							first = current = newChunk;
-						else
-						{
-							current.next = newChunk;
-							current = newChunk;
-						}
-
-						x += current.width;
-					} //}}}
-					//{{{ Create '\t' chunk
-					else if(ch == '\t')
-					{
-						Chunk newChunk = new Chunk(
-							tokens.id,seg,i,i,
-							styles,fontRenderContext);
-						if(first == null)
-							first = current = newChunk;
-						else
-						{
-							current.next = newChunk;
-							current = newChunk;
-						}
-
-						float newX = e.nextTabStop(x,i + tokenListOffset);
-						current.width = newX - x;
-						x = newX;
-						current.length = 1;
-					} //}}}
-
-					if(first == null)
-						first = current;
-
-					end = current;
-					endX = x;
-
-					if(flushIndex != i + 1)
-						flushIndex = i + 1;
-
-					lastWasSpace = true;
-					addedNonWhiteSpace = seenNonWhiteSpace;
-
-					if(!seenNonWhiteSpace)
-						firstNonWhiteSpace = x;
-				}
-				else if(i == tokenListOffset + tokens.length - 1)
-				{
-					if(flushIndex != i + 1)
-					{
-						Chunk newChunk = new Chunk(
-							tokens.id,seg,flushIndex,
-							i + 1,styles,fontRenderContext);
-						if(current != null)
-							current.next = newChunk;
-						current = newChunk;
-
-						x += newChunk.width;
-						seenNonWhiteSpace = true;
-						lastWasSpace = false;
-					}
-
-					if(i == seg.count - 1 && wrapMargin != 0
-						&& x > wrapMargin
-						&& addedNonWhiteSpace
-						&& end != null)
-					{
-						if(first != null)
-							out.add(first);
-						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
-						first.next = end.next;
-						end.next = null;
-
-						x = x + firstNonWhiteSpace - endX;
-					}
-
-					if(first == null)
-						first = current;
-
-					addedNonWhiteSpace = seenNonWhiteSpace;
-				}
-			}
-
-			tokenListOffset += tokens.length;
-			tokens = tokens.next;
-		}
-
-		if(first != null)
-			out.add(first);
-	} //}}}
-
-	//{{{ paintChunkList() method
-	/**
-	 * Paints a chunk list.
-	 * @param chunks The chunk list
-	 * @param gfx The graphics context
-	 * @param x The x co-ordinate
-	 * @param y The y co-ordinate
-	 * @param width The width of the painting area, used for a token
-	 * background color hack
-	 * @param background The background color of the painting area,
-	 * used for background color hack
-	 * @return The width of the painted text
-	 * @since jEdit 4.0pre6
-	 */
-	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
-		float x, float y, Color background, boolean glyphVector)
-	{
-		FontMetrics forBackground = gfx.getFontMetrics();
-
-		float _x = 0.0f;
-
-		Chunk first = chunks;
-
-		Font lastFont = null;
-		Color lastColor = null;
-
-		while(chunks != null)
-		{
-			if(!chunks.inaccessable)
-			{
-				Font font = chunks.style.getFont();
-				Color bgColor = chunks.style.getBackgroundColor();
-				if(bgColor != null)
-				{
-					float x2 = _x + chunks.width;
-
-					// Workaround for bug in Graphics2D in
-					// JDK1.4 under Windows; calling
-					// setPaintMode() does not reset
-					// graphics mode.
-					Graphics2D xorGfx = (Graphics2D)gfx.create();
-					xorGfx.setXORMode(background);
-					xorGfx.setColor(bgColor);
-
-					xorGfx.fill(new Rectangle2D.Float(
-						x + _x,y - forBackground.getAscent(),
-						x2 - _x,forBackground.getHeight()));
-
-					xorGfx.dispose();
-				}
-
-				if(chunks.str != null)
-				{
-					gfx.setFont(font);
-					gfx.setColor(chunks.style.getForegroundColor());
-
-					if(glyphVector)
-						gfx.drawGlyphVector(chunks.text,x + _x,y);
-					else
-						gfx.drawString(chunks.str,x + _x,y);
-
-					// Useful for debugging purposes
-					//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
-					//	chunks.width,10));
-				}
-			}
-
-			_x += chunks.width;
-			chunks = chunks.next;
-		}
-
-		return _x;
-	} //}}}
-
-	//{{{ offsetToX() method
-	/**
-	 * Converts an offset in a chunk list into an x co-ordinate.
-	 * @param chunks The chunk list
-	 * @param offset The offset
-	 * @since jEdit 4.0pre4
-	 */
-	public static float offsetToX(Chunk chunks, int offset)
-	{
-		if(chunks != null && offset < chunks.offset)
-		{
-			throw new ArrayIndexOutOfBoundsException(offset + " < "
-				+ chunks.offset);
-		}
-
-		float x = 0.0f;
-
-		while(chunks != null)
-		{
-			if(!chunks.inaccessable && offset < chunks.offset + chunks.length)
-			{
-				if(chunks.text == null)
-					break;
-				else
-				{
-					return x + chunks.positions[
-						(offset - chunks.offset) * 2];
-				}
-			}
-
-			x += chunks.width;
-			chunks = chunks.next;
-		}
-
-		return x;
-	} //}}}
-
-	//{{{ xToOffset() method
-	/**
-	 * Converts an x co-ordinate in a chunk list into an offset.
-	 * @param chunks The chunk list
-	 * @param x The x co-ordinate
-	 * @param round Round up to next letter if past the middle of a letter?
-	 * @return The offset within the line, or -1 if the x co-ordinate is too
-	 * far to the right
-	 * @since jEdit 4.0pre4
-	 */
-	public static int xToOffset(Chunk chunks, float x, boolean round)
-	{
-		float _x = 0.0f;
-
-		while(chunks != null)
-		{
-			if(!chunks.inaccessable && x < _x + chunks.width)
-			{
-				if(chunks.text == null)
-				{
-					if(round && _x + chunks.width - x < x - _x)
-						return chunks.offset + chunks.length;
-					else
-						return chunks.offset;
-				}
-				else
-				{
-					float xInChunk = x - _x;
-
-					for(int i = 0; i < chunks.length; i++)
-					{
-						float glyphX = chunks.positions[i*2];
-						float nextX = (i == chunks.length - 1
-							? chunks.width
-							: chunks.positions[i*2+2]);
-
-						if(nextX > xInChunk)
-						{
-							if(!round || nextX - xInChunk > xInChunk - glyphX)
-								return chunks.offset + i;
-							else
-								return chunks.offset + i + 1;
-						}
-					}
-				}
-			}
-
-			_x += chunks.width;
-			chunks = chunks.next;
-		}
-
-		return -1;
-	} //}}}
-
-	//{{{ Chunk class
-	/**
-	 * A linked-list useful for painting syntax highlighted text and
-	 * calculating offsets.
-	 * @since jEdit 4.0pre4
-	 */
-	public static class Chunk
-	{
-		// should xToOffset() ignore this chunk?
-		public boolean inaccessable;
-
-		public float width;
-		public SyntaxStyle style;
-		public int offset;
-		public int length;
-		public String str;
-		public GlyphVector text;
-		public float[] positions;
-
-		public Chunk next;
-
-		Chunk(float width, int offset)
-		{
-			inaccessable = true;
-			this.width = width;
-			this.offset = offset;
-		}
-
-		Chunk(int tokenType, Segment seg, int offset, int end,
-			SyntaxStyle[] styles, FontRenderContext fontRenderContext)
-		{
-			style = styles[tokenType];
-
-			if(offset != end)
-			{
-				length = end - offset;
-				str = new String(seg.array,seg.offset + offset,length);
-
-				text = style.getFont().createGlyphVector(
-					fontRenderContext,str);
-				width = (float)text.getLogicalBounds().getWidth();
-				positions = text.getGlyphPositions(0,length,null);
-			}
-
-			this.offset = offset;
-		}
-	} //}}}
-
 	//{{{ ChunkCache constructor
 	ChunkCache(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
 		out = new ArrayList();
+		noWrap = new NoWrapTokenHandler();
 	} //}}}
 
 	//{{{ getMaxHorizontalScrollWidth() method
@@ -613,17 +223,30 @@ public class ChunkCache
 	//{{{ lineToChunkList() method
 	void lineToChunkList(int physicalLine, ArrayList out)
 	{
+		/* if(textArea.softWrap)
+		{
+			
+		}
+		else */
+		{
+			Chunk chunks = lineToChunkList(physicalLine);
+			if(chunks != null)
+				out.add(chunks);
+		}
+	} //}}}
+
+	//{{{ lineToChunkList() method
+	Chunk lineToChunkList(int physicalLine)
+	{
 		TextAreaPainter painter = textArea.getPainter();
 		Buffer buffer = textArea.getBuffer();
 
 		buffer.getLineText(physicalLine,textArea.lineSegment);
-
-		lineToChunkList(textArea.lineSegment,
-			buffer.markTokens(physicalLine).getFirstToken(),
-			painter.getStyles(),painter.getFontRenderContext(),
-			painter,textArea.softWrap
-			? textArea.wrapMargin
-			: 0.0f,out);
+		noWrap.init(textArea.lineSegment,painter.getStyles(),
+				painter.getFontRenderContext(),
+				painter);
+		buffer.markTokens(physicalLine,noWrap);
+		return noWrap.getFirstChunk();
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
@@ -793,17 +416,14 @@ public class ChunkCache
 					info.physicalLine = textArea.getFoldVisibilityManager()
 						.virtualToPhysical(virtLine);
 
-					out.clear();
 
-					lineToChunkList(info.physicalLine,out);
+					info.chunks = lineToChunkList(info.physicalLine);
+					info.chunksValid = true;
 
 					info.firstSubregion = true;
 					info.lastSubregion = true;
 					info.offset = 0;
 					info.length = textArea.getLineLength(info.physicalLine) + 1;
-					info.chunks = (out.size() == 0 ? null :
-						(Chunk)out.get(0));
-					info.chunksValid = true;
 				}
 			}
 
@@ -868,32 +488,6 @@ public class ChunkCache
 		return retVal;
 	} //}}}
 
-	//{{{ getLineInfoBackwardsCompatibility() method
-	LineInfo getLineInfoBackwardsCompatibility(int physicalLineIndex)
-	{
-		LineInfo info = new LineInfo();
-
-		out.clear();
-		Buffer buffer = textArea.getBuffer();
-		buffer.getLineText(physicalLineIndex,textArea.lineSegment);
-
-		TextAreaPainter painter = textArea.getPainter();
-		lineToChunkList(textArea.lineSegment,
-			buffer.markTokens(physicalLineIndex).getFirstToken(),
-			painter.getStyles(),painter.getFontRenderContext(),
-			painter,0.0f,out);
-
-		if(out.size() == 0)
-			info.chunks = null;
-		else
-			info.chunks = (Chunk)out.get(0);
-
-		info.physicalLine = physicalLineIndex;
-		info.chunksValid = true;
-
-		return info;
-	} //}}}
-
 	//{{{ Private members
 	private JEditTextArea textArea;
 	private int firstLine;
@@ -904,6 +498,8 @@ public class ChunkCache
 	private int lastScreenLine;
 
 	private boolean needFullRepaint;
+
+	private NoWrapTokenHandler noWrap;
 	//}}}
 
 	//{{{ LineInfo class

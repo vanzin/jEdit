@@ -1,5 +1,8 @@
 /*
  * ParserRuleFactory.java - Factory object for creating ParserRules
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -26,33 +29,13 @@ package org.gjt.sp.jedit.syntax;
  */
 public class ParserRuleFactory
 {
-	// public members
+	//{{{ createSpanRule() method
 	public static final ParserRule createSpanRule(String begin, String end,
-		byte id, boolean noLineBreak, boolean atLineStart,
-		boolean excludeMatch, boolean noWordBreak)
+		String delegateSet, byte id, boolean noLineBreak,
+		boolean atLineStart, boolean excludeMatch,
+		boolean noWordBreak)
 	{
 		int ruleAction = TokenMarker.SPAN |
-			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? TokenMarker.NO_WORD_BREAK : 0);
-
-		String[] strings = new String[2];
-		strings[0] = begin;
-		strings[1] = end;
-
-		int[] ruleSeqLengths = getStringLengthArray(strings);
-		char[] ruleChars = getCharArray(strings, ruleSeqLengths);
-
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
-
-	public static final ParserRule createDelegateSpanRule(String begin, String end,
-		String delegateSet, byte id, boolean noLineBreak, boolean atLineStart,
-		boolean excludeMatch, boolean noWordBreak)
-	{
-		int ruleAction = TokenMarker.SPAN |
-			TokenMarker.DELEGATE |
 			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
 			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
 			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
@@ -67,8 +50,9 @@ public class ParserRuleFactory
 		char[] ruleChars = getCharArray(strings, ruleSeqLengths);
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
+	} //}}}
 
+	//{{{ createEOLSpanRule() method
 	public static final ParserRule createEOLSpanRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
@@ -92,8 +76,9 @@ public class ParserRuleFactory
 		}
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
+	} //}}}
 
+	//{{{ createMarkPreviousRule() method
 	public static final ParserRule createMarkPreviousRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
@@ -117,8 +102,9 @@ public class ParserRuleFactory
 		}
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
+	} //}}}
 
+	//{{{ createMarkFollowingRule() method
 	public static final ParserRule createMarkFollowingRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
@@ -142,8 +128,9 @@ public class ParserRuleFactory
 		}
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
+	} //}}}
 
+	//{{{ createSequenceRule() method
 	public static final ParserRule createSequenceRule(String seq, byte id, boolean atLineStart)
 	{
 		int ruleAction = ((atLineStart) ? TokenMarker.AT_LINE_START : 0);
@@ -164,8 +151,9 @@ public class ParserRuleFactory
 		}
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, id);
-	}
+	} //}}}
 
+	//{{{ createEscapeRule() method
 	public static final ParserRule createEscapeRule(String seq)
 	{
 		int ruleAction = TokenMarker.IS_ESCAPE;
@@ -186,9 +174,11 @@ public class ParserRuleFactory
 		}
 
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, Token.NULL);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ getCharArray() method
 	private static char[] getCharArray(String[] strings, int[] lengthArray)
 	{
 		if (lengthArray == null || lengthArray.length == 0) return new char[0];
@@ -216,8 +206,9 @@ public class ParserRuleFactory
 		}
 
 		return chars;
-	}
+	} //}}}
 
+	//{{{ getStringLengthArray() method
 	private static int[] getStringLengthArray(String[] strings)
 	{
 		int[] stringLengthArray;
@@ -235,5 +226,7 @@ public class ParserRuleFactory
 		}
 
 		return stringLengthArray;
-	}
+	} //}}}
+
+	//}}}
 }

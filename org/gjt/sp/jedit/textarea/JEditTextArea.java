@@ -585,6 +585,8 @@ public class JEditTextArea extends JComponent
 			point = offsetToXY(line,offset,returnValue);
 			if(rect.contains(point))
 				return;
+
+			System.err.println("not in rect: " + rect + " (" + point + ")");
 		}
 		else
 			point = null;
@@ -863,7 +865,7 @@ public class JEditTextArea extends JComponent
 		}
 		else
 		{
-			int offset = chunkCache.xToOffset(lineInfo.chunks,
+			int offset = Chunk.xToOffset(lineInfo.chunks,
 				x - horizontalOffset,round);
 			if(offset == -1 || offset == lineInfo.offset + lineInfo.length)
 				offset = lineInfo.offset + lineInfo.length - 1;
@@ -930,7 +932,7 @@ public class JEditTextArea extends JComponent
 		if(!info.chunksValid)
 			System.err.println("offset to xy: not valid");
 
-		retVal.x = (int)(horizontalOffset + chunkCache.offsetToX(
+		retVal.x = (int)(horizontalOffset + Chunk.offsetToX(
 			info.chunks,offset));
 
 		return retVal;
@@ -4711,8 +4713,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		return (int)(horizontalOffset + chunkCache.offsetToX(chunks,offset));
+		Chunk chunks = chunkCache.lineToChunkList(line);
+		return (int)(horizontalOffset + Chunk.offsetToX(chunks,offset));
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -4726,8 +4728,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public int xToOffset(int line, int x)
 	{
 		x -= horizontalOffset;
-		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		int offset = chunkCache.xToOffset(chunks,x,true);
+		Chunk chunks = chunkCache.lineToChunkList(line);
+		int offset = Chunk.xToOffset(chunks,x,true);
 		if(offset == -1)
 			offset = getLineLength(line);
 		return offset;
@@ -4746,8 +4748,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public int xToOffset(int line, int x, boolean round)
 	{
 		x -= horizontalOffset;
-		ChunkCache.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
-		int offset = chunkCache.xToOffset(chunks,x,round);
+		Chunk chunks = chunkCache.lineToChunkList(line);
+		int offset = Chunk.xToOffset(chunks,x,round);
 		if(offset == -1)
 			offset = getLineLength(line);
 		return offset;
@@ -5075,7 +5077,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	/* public */ int xToSubregionOffset(ChunkCache.LineInfo info, float x,
 		boolean round)
 	{
-		int offset = chunkCache.xToOffset(info.chunks,
+		int offset = Chunk.xToOffset(info.chunks,
 			x - horizontalOffset,round);
 		if(offset == -1 || offset == info.offset + info.length)
 			offset = info.offset + info.length - 1;
@@ -5093,7 +5095,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	// not public yet
 	/* public */ int subregionOffsetToX(ChunkCache.LineInfo info, int offset)
 	{
-		return (int)(horizontalOffset + chunkCache.offsetToX(
+		return (int)(horizontalOffset + Chunk.offsetToX(
 			info.chunks,offset));
 	} //}}}
 

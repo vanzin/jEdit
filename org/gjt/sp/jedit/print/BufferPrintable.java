@@ -34,7 +34,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.ChunkCache;
+import org.gjt.sp.jedit.textarea.Chunk;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -204,7 +204,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 			//{{{ get line text
 			if(lineList.size()==0)
 			{
-				buffer.getLineText(currentPhysicalLine,seg);
+				/* buffer.getLineText(currentPhysicalLine,seg);
 				lm = font.getLineMetrics(seg.array,
 				                         seg.offset,seg.count,frc);
 
@@ -217,7 +217,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 				                           e,(float)(pageWidth - lineNumberWidth),
 				                           lineList);
 				if(lineList.size() == 1)
-					lineList.add(null);
+					lineList.add(null); */
 			} //}}}
 			y += lm.getHeight();
 			Object obj = lineList.get(0);
@@ -243,12 +243,12 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 			//{{{ paint the line
 			if(obj != null && ! justCounting)
 			{
-				ChunkCache.Chunk line = (ChunkCache.Chunk)obj;
+				/* ChunkCache.Chunk line = (ChunkCache.Chunk)obj;
 
 				ChunkCache.paintChunkList(line,gfx,
 				                          (float)(pageX + lineNumberWidth),
 				                          (float)(pageY + y),
-				                          Color.white,glyphVector);
+				                          Color.white,glyphVector); */
 			}
 			//}}}
 
@@ -371,4 +371,3 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 		} //}}}
 	} //}}}
 }
-
