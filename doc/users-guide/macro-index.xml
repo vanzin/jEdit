@@ -437,6 +437,14 @@
 </listitem>
 
 <listitem>
+  <para><filename>Display_Character_Code.bsh</filename></para>
+  <para>
+    Display int and hex values for the character at the caret, 
+    in the status bar.
+  </para>
+</listitem>
+
+<listitem>
     <para><filename>Display_Shortcuts.bsh</filename></para>
     <para>
         Displays a sorted list of the keyboard shortcuts currently in effect.
