@@ -1,5 +1,8 @@
 /*
  * OpenWithEncodingMenu.java - 'Open With Encoding' menu
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,29 +22,33 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.Component;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class OpenWithEncodingMenu extends EnhancedMenu
 {
+	//{{{ OpenWithEncodingMenu constructor
 	public OpenWithEncodingMenu()
 	{
 		super("open-encoding");
 
+		//{{{ Action listener...
 		ActionListener listener = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
 				Hashtable props = new Hashtable();
 				props.put("encoding",evt.getActionCommand());
-				jEdit.showOpenFileDialog(EditAction.getView(
+				jEdit.showOpenFileDialog(GUIUtilities.getView(
 					(Component)evt.getSource()),props);
 			}
-		};
+		}; //}}}
 
 		// used twice...
 		String systemEncoding = System.getProperty("file.encoding");
@@ -69,5 +76,5 @@ public class OpenWithEncodingMenu extends EnhancedMenu
 		addSeparator();
 
 		add(GUIUtilities.loadMenuItem("other-encoding"));
-	}
+	} //}}}
 }

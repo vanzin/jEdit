@@ -1266,6 +1266,7 @@ options.loadsave.restore.cli=... even if file names were specified on the \
 	command line
 options.loadsave.newView=Client instances open files in new view
 options.loadsave.persistentMarkers=Save marker positions
+options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
 options.loadsave.parseFully=More accurate syntax highlighting (slows file loading)
 #}}}
 
