@@ -2123,7 +2123,7 @@ forward_scan:		do
 			if(scrollMode == NORMAL_SCROLL)
 				finishCaretUpdate(false,false);
 			else if(scrollMode == ELECTRIC_SCROLL)
-				finishCaretUpdate(true,true);
+				finishCaretUpdate(true,false);
 		}
 		else
 		{
@@ -2176,7 +2176,7 @@ forward_scan:		do
 			caretLine = newCaretLine;
 
 			if(scrollMode == NORMAL_SCROLL)
-				finishCaretUpdate(false,false);
+				finishCaretUpdate(false,true);
 			else if(scrollMode == ELECTRIC_SCROLL)
 				finishCaretUpdate(true,true);
 		}
@@ -5300,11 +5300,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private void finishCaretUpdate(boolean doElectricScroll,
 		boolean fireCaretEvent)
 	{
-		if(queuedScrollTo)
-			return;
-
 		this.queuedScrollToElectric |= doElectricScroll;
 		this.queuedFireCaretEvent |= fireCaretEvent;
+
+		if(queuedScrollTo)
+			return;
 
 		Runnable r = new Runnable()
 		{
