@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2004 Slava Pestov
+ * Copyright (C) 1999, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,6 +162,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.propertiesChanged();
 		textArea.updateMaxHorizontalScrollWidth();
 		textArea.scrollBarsInitialized = true;
+
+		repaintMgr.updateGraphics();
 	} //}}}
 
 	//{{{ getFocusTraversalKeysEnabled() method
@@ -665,36 +667,42 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
-		Graphics2D gfx = (Graphics2D)_gfx;
+		Graphics2D gfx = repaintMgr.getGraphics();
+
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
 
-		Rectangle clipRect = gfx.getClipBounds();
-
-		gfx.setColor(getBackground());
-		gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+		Rectangle clipRect = _gfx.getClipBounds();
 
 		Buffer buffer = textArea.getBuffer();
-		if(!buffer.isLoaded())
-			return;
-
 		int height = fm.getHeight();
-		if(height == 0)
-			return;
+		if(height != 0 && buffer.isLoaded())
+		{
+			FastRepaintManager.RepaintLines lines
+				= repaintMgr.prepareGraphics(clipRect,
+				textArea.getFirstLine());
 
-		int firstInvalid = clipRect.y / height;
-		// Because the clipRect's height is usually an even multiple
-		// of the font height, we subtract 1 from it, otherwise one
-		// too many lines will always be painted.
-		int lastInvalid = (clipRect.y + clipRect.height - 1) / height;
+			int numLines = (lines.last - lines.first + 1);
+			if(Debug.PAINT_TIMER && numLines >= 1)
+				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines");
 
-		if(Debug.PAINT_TIMER && lastInvalid - firstInvalid >= 1)
-			Log.log(Log.DEBUG,this,"repainting " + (lastInvalid - firstInvalid) + " lines");
+			int y = lines.first * height;
+			gfx.fillRect(0,y,getWidth(),numLines * height);
 
-		int y = (clipRect.y - clipRect.y % height);
+			extensionMgr.paintScreenLineRange(textArea,gfx,
+				lines.first,lines.last,y,height);
 
-		extensionMgr.paintScreenLineRange(textArea,gfx,
-			firstInvalid,lastInvalid,y,height);
+			repaintMgr.setFullRepaint(
+				clipRect.equals(new Rectangle(0,0,
+				getWidth(),getHeight())));
+
+			repaintMgr.paint(_gfx);
+		}
+		else
+		{
+			_gfx.setColor(getBackground());
+			_gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+		}
 
 		textArea.updateMaxHorizontalScrollWidth();
 	} //}}}
@@ -781,12 +789,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		this.textArea = textArea;
 
+		repaintMgr = new FastRepaintManager(textArea,this);
 		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 
 		setAutoscrolls(true);
 		setOpaque(true);
 		setRequestFocusEnabled(false);
+		setDoubleBuffered(false);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
@@ -806,6 +816,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private FastRepaintManager repaintMgr;
 	private ExtensionManager extensionMgr;
 	private PaintCaret caretExtension;
 	private RenderingHints renderingHints;
