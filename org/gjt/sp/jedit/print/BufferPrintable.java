@@ -198,6 +198,7 @@ class BufferPrintable implements Printable
 
 		FontRenderContext frc = gfx.getFontRenderContext();
 
+		boolean glyphVector = jEdit.getBooleanProperty("print.glyphVector");
 		double lineNumberWidth;
 
 		//{{{ determine line number width
@@ -272,7 +273,7 @@ print_loop:	for(;;)
 						(float)(pageY + y));
 					Chunk.paintChunkList(chunks,gfx,
 						(float)(pageX + lineNumberWidth),
-						(float)(pageY + y),false);
+						(float)(pageY + y),glyphVector);
 				}
 			}
 

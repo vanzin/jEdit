@@ -2502,7 +2502,11 @@ public class jEdit
 
 			public TokenMarker getTokenMarker(String modeName)
 			{
-				return getMode(modeName).getTokenMarker();
+				Mode mode = getMode(modeName);
+				if(mode == null)
+					return null;
+				else
+					return mode.getTokenMarker();
 			}
 		};
 

@@ -2,12 +2,19 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre3
 
-Thanks to Ken Turner for contributing to this release.
+Thanks to Brad Mace and Ken Turner for contributing to this release.
 
 {{{ Editing
 
 - The kill ring no longer shows duplicate entries, or entries that
   consist entirely of whitespace.
+
+- Added emacs-like "deep indent" which can be enabled using the
+  deepIndent buffer-local property:
+
+  fooBar(baz,
+         moreParameters,
+	 ...); (Brad Mace)
 
 }}}
 {{{ Syntax Highlighting
@@ -166,6 +173,18 @@ Thanks to Ken Turner for contributing to this release.
 
 - jEdit didn't compile with Java 2 version 1.3.
 
+- Invalid delegates in syntax mode files could throw exceptions.
+
+- "Spaces to Tabs" was broken.
+
+- Added a workaround for the print spacing problem on some Java
+  versions. Note that this results in much larger spool files. Enable in
+  Utilities->Global Options->Printing.
+
+- Added a workaround for buggy/incomplete implementations of JDK 1.4
+  printing API. Now you can force use of the JDK 1.3 API when running on
+  1.4. Enable in Utilities->Global Options->Printing.
+
 }}}
 {{{ API Changes
 
@@ -178,6 +197,8 @@ Thanks to Ken Turner for contributing to this release.
 
 - Buffer.setReadOnly() can be used to make a buffer read only even if
   the file is writable on disk.
+
+- Added JEditTextArea.addTopComponent() method (Brad Mace).
 
 }}}
 

@@ -851,6 +851,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Glazer\n\
 	Ben Sarsgard\n\
 	Bill McMilleon\n\
+	Brad Mace\n\
 	Brett Smith\n\
 	Bruno Tatibouet\n\
 	Calvin Yu\n\
@@ -1606,6 +1607,10 @@ options.print.footer=Print a footer with the date, time and page number
 options.print.lineNumbers=Print line numbers
 options.print.color=Color printing
 options.print.tabSize=Tab width when printing:
+options.print.workarounds=Workarounds for Java bugs
+options.print.glyphVector=Print spacing workaround (increases spool file size)
+options.print.force13=Use old printing API (enable this if jEdit hangs when \
+	printing)
 #}}}
 
 #{{{ Proxy pane

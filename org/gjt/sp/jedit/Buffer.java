@@ -2527,6 +2527,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		                                    //
 		                                    //     }
 		                                    // So we know to indent the next line under the 1st if.
+		int prevLineUnclosedParenIndex = -1; // Index of the last unclosed parenthesis
+		Stack openParens = new Stack();
 
 		for(int i = 0; i < prevLine.length(); i++)
 		{
@@ -2543,6 +2545,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 					indent += (tabSize
 						- (indent
 						% tabSize));
+				}
+				break;
+			case '(':
+				openParens.push(new Integer(i));
+				break;
+			case ')':
+				if(openParens.size() > 0)
+				{
+					openParens.pop();
 				}
 				break;
 			default:
@@ -2575,6 +2586,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 				break;
 			}
+		}
+
+		if(openParens.size() > 0)
+		{
+			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
 		} //}}}
 
 		//{{{ Get indent attributes for current line
@@ -2611,7 +2627,36 @@ loop:		for(int i = 0; i < seg.count; i++)
 				else if(lineBrackets >= 0)
 					lineBrackets++;
 			}
+		}
+
+		if(openParens.size() > 0)
+		{
+			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
 		} //}}}
+
+		//{{{ Deep indenting
+		if(getBooleanProperty("deepIndent"))
+		{
+			if(prevLineUnclosedParenIndex != -1)
+			{
+				indent = prevLineUnclosedParenIndex;
+				for(int i = 0; i < prevLine.length(); i++)
+				{
+					if(prevLine.charAt(i) == '\t')
+					{
+						indent += tabSize-1;
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				indent++;
+				return indent;
+			}
+		}
+		//}}}
 
 		//{{{ Handle brackets
 		if(prevLineBrackets > 0)
