@@ -256,6 +256,7 @@ public class HistoryText
 	 */
 	public void setText(String text)
 	{
+		this.index = -1;
 		this.text.setText(text);
 	} //}}}
 
