@@ -717,6 +717,7 @@ about.text=jEdit is brought to you by\n\
 	Francesc Roses\n\
 	George Hovey\n\
 	George Latkiewicz\n\
+	Gerd Knops\n\
 	Gili Tzabari\n\
 	Giulio Piancastelli\n\
 	Greg Cooper\n\
@@ -1314,7 +1315,9 @@ options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.smartHome="Smart" home key
 options.textarea.smartEnd="Smart" end key
-options.textarea.stdNextPrevWord=Standard "Go to next/previous word" behaviour
+options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
+options.textarea.joinNonWordChars=Double-click drag joins consecutive non-alphanumeric \
+	characters
 options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
