@@ -7,7 +7,8 @@
   troubleshooting problems, and helps when developing plugins.
  </para>
  <para>
-  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Activity Log</guimenuitem> displays
+  <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity
+  Log</guimenuitem> displays
   the last 500 lines of the activity log. By default, the activity is shown in
   a floating window. It can be set to dock into the view in the
   <guibutton>Docking</guibutton> pane of the

@@ -673,6 +673,30 @@ public class DockableWindowManager extends JPanel
 			return (entry.position != FLOATING);
 	} //}}}
 
+	//{{{ closeCurrentArea() method
+	/**
+	 * Closes the currently focused docking area.
+	 * @since jEdit 4.1pre3
+	 */
+	public void closeCurrentArea()
+	{
+		Component comp = view.getFocusOwner();
+		while(comp != null)
+		{
+			if(comp instanceof PanelWindowContainer
+				.DockablePanel)
+			{
+				PanelWindowContainer container =
+					((PanelWindowContainer.DockablePanel)
+					comp).getWindowContainer();
+				container.show(null);
+				return;
+			}
+		}
+
+		getToolkit().beep();
+	}
+
 	//{{{ close() method
 	/**
 	 * Called when the view is being closed.

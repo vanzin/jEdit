@@ -52,6 +52,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="bottom-docking-area">
+	<CODE>
+		view.getDockableWindowManager().getBottomDockingArea().showMostRecent();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="buffer-options">
 	<CODE>
 		new BufferOptions(view,buffer);
@@ -70,33 +76,15 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="close-bottom-docking-area">
-	<CODE>
-		view.getDockableWindowManager().getBottomDockingArea().show(null);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="close-buffer">
 	<CODE>
 		jEdit.closeBuffer(view,buffer);
 	</CODE>
 </ACTION>
 
-<ACTION NAME="close-left-docking-area">
+<ACTION NAME="close-docking-area">
 	<CODE>
-		view.getDockableWindowManager().getLeftDockingArea().show(null);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="close-right-docking-area">
-	<CODE>
-		view.getDockableWindowManager().getRightDockingArea().show(null);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="close-top-docking-area">
-	<CODE>
-		view.getDockableWindowManager().getTopDockingArea().show(null);
+		view.getDockableWindowManager().closeCurrentArea();
 	</CODE>
 </ACTION>
 
@@ -338,6 +326,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="goto-textarea">
+	<CODE>
+		textArea.requestFocus();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="help">
 	<CODE>
 		new HelpViewer();
@@ -397,6 +391,12 @@
 <ACTION NAME="keyboard-tester">
 	<CODE>
 		GrabKeyDialog.keyboardTest(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="left-docking-area">
+	<CODE>
+		view.getDockableWindowManager().getLeftDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 
@@ -760,6 +760,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="right-docking-area">
+	<CODE>
+		view.getDockableWindowManager().getRightDockingArea().showMostRecent();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="run-last-macro" NO_RECORD="TRUE">
 	<CODE>
 		Macros.runLastMacro(view);
@@ -1111,6 +1117,12 @@
 <ACTION NAME="to-upper">
 	<CODE>
 		textArea.toUpperCase();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="top-docking-area">
+	<CODE>
+		view.getDockableWindowManager().getTopDockingArea().showMostRecent();
 	</CODE>
 </ACTION>
 

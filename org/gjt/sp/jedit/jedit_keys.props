@@ -45,11 +45,12 @@ delete-end-line.shortcut=CS+DELETE
 #}}}
 
 #{{{ C+e C+X
-# Unused: e, f, h, n, q, x, y
+# Unused: f, h, n, q, x, y
 copy-append.shortcut=C+e C+a
 search-in-open-buffers.shortcut=C+e C+b
 range-comment.shortcut=C+e C+c
 search-in-directory.shortcut=C+e C+d
+goto-textarea.shortcut=C+e C+e
 replace-and-find-next.shortcut=C+e C+g
 center-caret.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j
@@ -69,14 +70,11 @@ prev-marker.shortcut=C+e C+COMMA
 next-marker.shortcut=C+e C+PERIOD
 prev-bracket.shortcut=C+e C+OPEN_BRACKET
 next-bracket.shortcut=C+e C+CLOSE_BRACKET
+close-docking-area.shortcut=C+e C+BACK_QUOTE
 #}}}
 
 #{{{ C+e X
 # Unused: b e g h j k m o q t y z
-close-left-docking-area.shortcut=C+e 1
-close-top-docking-area.shortcut=C+e 2
-close-right-docking-area.shortcut=C+e 3
-close-bottom-docking-area.shortcut=C+e 4
 add-explicit-fold.shortcut=C+e a
 collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
@@ -93,6 +91,10 @@ select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
 expand-folds.shortcut=C+e ENTER
+left-docking-area.shortcut=C+e LEFT
+top-docking-area.shortcut=C+e UP
+right-docking-area.shortcut=C+e RIGHT
+bottom-docking-area.shortcut=C+e DOWN
 #}}}
 
 #{{{ C+m C+X
