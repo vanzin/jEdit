@@ -1321,42 +1321,42 @@ public class JEditTextArea extends JComponent
 	//{{{ selectToMatchingBracket() method
 	/**
 	 * Selects from the bracket at the specified position to the 
-	 * corresponding bracket. Returns <code>true</code> if successful (i.e.
-	 * there's a bracket at the specified position and there's a matching 
-	 * bracket for it), <code>false</code> otherwise.
+	 * corresponding bracket.
 	 * @since jEdit 4.2pre1
 	 */
-	public Selection selectToMatchingBracket(int position, boolean quickCopy)
+	public Selection selectToMatchingBracket(int position,
+		boolean quickCopy)
 	{
 		int positionLine = buffer.getLineOfOffset(position);
 		int lineOffset = position - buffer.getLineStartOffset(positionLine);
-		if(lineOffset == getLineLength(positionLine))
-			position--;
-
-		int bracket = TextUtilities.findMatchingBracket(buffer,positionLine,lineOffset);
-
-		if(bracket != -1)
+		if(getLineLength(positionLine) != 0)
 		{
-			Selection s;
+			int bracket = TextUtilities.findMatchingBracket(buffer,
+				positionLine,Math.max(0,lineOffset - 1));
 
-			if(bracket < position)
+			if(bracket != -1)
 			{
-				if(!quickCopy)
-					moveCaretPosition(position,false);
-				s = new Selection.Range(++bracket,position);
-			}
-			else
-			{
-				if(!quickCopy)
-					moveCaretPosition(position + 1,false);
-				s = new Selection.Range(position + 1,bracket);
-			}
+				Selection s;
 
-			if(!multi && !quickCopy)
-				selectNone();
+				if(bracket < position)
+				{
+					if(!quickCopy)
+						moveCaretPosition(position,false);
+					s = new Selection.Range(bracket,position);
+				}
+				else
+				{
+					if(!quickCopy)
+						moveCaretPosition(bracket + 1,false);
+					s = new Selection.Range(position - 1,bracket + 1);
+				}
 
-			addToSelection(s);
-			return s;
+				if(!multi && !quickCopy)
+					selectNone();
+
+				addToSelection(s);
+				return s;
+			}
 		}
 
 		return null;
@@ -1393,16 +1393,20 @@ public class JEditTextArea extends JComponent
 	public void narrowToMatchingBracket(int position)
 	{
 		int line = buffer.getLineOfOffset(position);
-		int offset = position - buffer.getLineStartOffset(position);
+		int offset = position - buffer.getLineStartOffset(line);
 
-		int bracket = TextUtilities.findMatchingBracket(buffer,line,offset);
-
-		if(bracket != -1)
+		if(getLineLength(line) != 0)
 		{
-			int start = Math.min(bracketLine,line);
-			int end = Math.max(bracketLine,line);
+			int bracket = TextUtilities.findMatchingBracket(buffer,
+				line,Math.max(0,offset - 1));
 
-			displayManager.narrow(start,end);
+			if(bracket != -1)
+			{
+				int start = Math.min(bracketLine,line);
+				int end = Math.max(bracketLine,line);
+
+				displayManager.narrow(start,end);
+			}
 		}
 	} //}}}
 
@@ -4750,9 +4754,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		// Ignore
+		/* // Ignore
 		if(view.isClosed())
-			return;
+			return; */
 
 		view.processKeyEvent(evt,true);
 
@@ -6167,14 +6171,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// as pressing Home twice in a row
 			view.getInputHandler().resetLastActionCount();
 
-			grabFocus();
-			focusedComponent = JEditTextArea.this;
+			quickCopyDrag = (isQuickCopyEnabled() &&
+				GUIUtilities.isMiddleButton(evt.getModifiers()));
+
+			if(!quickCopyDrag)
+			{
+				grabFocus();
+				focusedComponent = JEditTextArea.this;
+			}
 
 			if(!buffer.isLoaded())
 				return;
 
-			quickCopyDrag = (isQuickCopyEnabled()
-				&& GUIUtilities.isMiddleButton(evt.getModifiers()));
 			int x = evt.getX();
 			int y = evt.getY();
 
@@ -6557,52 +6565,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseReleased() method
 		public void mouseReleased(MouseEvent evt)
 		{
-			Selection sel = null;
-
-			if(control && !dragged)
-			{
-				int offset = xyToOffset(evt.getX(),evt.getY(),false);
-				if(offset != buffer.getLength())
-				{
-					buffer.getText(offset,1,lineSegment);
-					switch(lineSegment.array[lineSegment.offset])
-					{
-					case '(': case '[': case '{':
-					case ')': case ']': case '}':
-						if(evt.isShiftDown())
-						{
-							moveCaretPosition(offset,false);
-							narrowToMatchingBracket(offset);
-						}
-						else
-						{
-							if(!quickCopyDrag)
-								moveCaretPosition(offset,false);
-							sel = selectToMatchingBracket(offset,true);
-							dragged = true;
-						}
-						break;
-					}
-				}
-			}
-
 			// middle mouse button drag inserts selection
 			// at caret position
-			if(sel == null)
-				sel = getSelectionAtOffset(dragStart);
+			Selection sel = getSelectionAtOffset(dragStart);
 			if(dragged && sel != null)
 			{
 				Registers.setRegister('%',getSelectedText(sel));
 				if(quickCopyDrag)
 				{
 					removeFromSelection(sel);
-					Registers.paste(JEditTextArea.this,'%',
-						sel instanceof Selection.Rect);
+					Registers.paste(focusedComponent,
+						'%',sel instanceof Selection.Rect);
+
+					focusedComponent.grabFocus();
 				}
 			}
 			else if(isQuickCopyEnabled()
 				&& GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
+				JEditTextArea.this.grabFocus();
+				focusedComponent = JEditTextArea.this;
+
 				setCaretPosition(dragStart,false);
 				if(!isEditable())
 					getToolkit().beep();

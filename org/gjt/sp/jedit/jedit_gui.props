@@ -1254,6 +1254,7 @@ remote-dir-search.message=You have elected to search a non-local directory.\n\
 #}}}
 
 #{{{ Paste previous and paste deleted dialogs
+paste-from-list.whitespace=<whitespace>
 paste-previous.title=Paste Previous
 paste-previous.caption=Recently copied and pasted text:
 paste-deleted.title=Paste Deleted
@@ -1567,13 +1568,10 @@ options.gutter.foldColor=Fold markers:
 options.gutter.focusBorderColor=Focused gutter border:
 options.gutter.noFocusBorderColor=Unfocused gutter border:
 options.gutter.actions=Mouse actions
-options.gutter.gutterClick=Click in gutter:
-options.gutter.gutterShiftClick=Shift-click in gutter:
-options.gutter.gutterControlClick=Control-click in gutter:
-options.gutter.gutterAltClick=Alt-click in gutter:
-options.gutter.toggleFold=Collapse/expand fold
-options.gutter.toggleFoldFully=Collapse/expand fold fully
-options.gutter.selectFold=Select fold
+options.gutter.foldClick=Click in gutter:
+options.gutter.SfoldClick=Shift-click in gutter:
+options.gutter.toggle-fold=Collapse/expand fold
+options.gutter.toggle-fold-fully=Collapse/expand fold fully
 #}}}
 
 #{{{ Plugin Manager pane

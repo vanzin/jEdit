@@ -713,6 +713,7 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter
 	{
+		MouseActions mouseActions = new MouseActions("gutter");
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
 
@@ -759,48 +760,52 @@ public class Gutter extends JComponent implements SwingConstants
 				if(line == -1)
 					return;
 
-				//{{{ Clicking on folds does various things
+				//{{{ Determine action
+				String defaultAction;
+				String variant;
 				if(buffer.isFoldStart(line))
 				{
-					StringBuffer property = new StringBuffer(
-						"view.gutter.gutter");
-					if(e.isShiftDown())
-						property.append("Shift");
-					if(e.isControlDown())
-						property.append("Control");
-					if(e.isAltDown())
-						property.append("Alt");
-					property.append("Click");
+					defaultAction = "toggle-fold";
+					variant = "fold";
+				}
+				else if(bracketHighlight
+					&& textArea.isBracketHighlightVisible()
+					&& textArea.lineInBracketScope(line))
+				{
+					defaultAction = "match-bracket";
+					variant = "bracket";
+				}
+				else
+					return;
 
-					String action = jEdit.getProperty(property
-						.toString());
-					if(action == null)
-					{
-						action = jEdit.getProperty(
-							"view.gutter.gutterClick");
-					}
+				String action = mouseActions.getActionForEvent(
+					e,variant);
 
-					if(action == null)
-						action = "toggleFold";
+				if(action == null)
+					action = defaultAction;
+				//}}}
 
-					if(action.equals("selectFold"))
-					{
-						textArea.displayManager.expandFold(line,true);
-						textArea.selectFold(line);
-					}
-					else if(action.equals("narrowToFold"))
-					{
-						int[] lines = buffer.getFoldAtLine(line);
-						textArea.displayManager.narrow(lines[0],lines[1]);
-					}
-					else if(textArea.displayManager.isLineVisible(line + 1))
+				//{{{ Handle actions
+				if(action.equals("select-fold"))
+				{
+					textArea.displayManager.expandFold(line,true);
+					textArea.selectFold(line);
+				}
+				else if(action.equals("narrow-fold"))
+				{
+					int[] lines = buffer.getFoldAtLine(line);
+					textArea.displayManager.narrow(lines[0],lines[1]);
+				}
+				else if(action.startsWith("toggle-fold"))
+				{
+					if(textArea.displayManager
+						.isLineVisible(line + 1))
 					{
 						textArea.displayManager.collapseFold(line);
 					}
 					else
 					{
-						if(action.equals(
-							"toggleFoldFully"))
+						if(action.endsWith("-fully"))
 						{
 							textArea.displayManager
 								.expandFold(line,
@@ -813,21 +818,14 @@ public class Gutter extends JComponent implements SwingConstants
 								false);
 						}
 					}
-				} //}}}
-				//{{{ Clicking in bracket scope locates matching bracket
-				else if(bracketHighlight)
-				{
-					if(textArea.isBracketHighlightVisible()
-						&& textArea.lineInBracketScope(line))
-					{
-						if(e.isShiftDown())
-							textArea.selectToMatchingBracket();
-						else if(e.isControlDown())
-							textArea.narrowToMatchingBracket();
-						else
-							textArea.goToMatchingBracket();
-					}
-				} //}}}
+				}
+				else if(action.equals("match-bracket"))
+					textArea.goToMatchingBracket();
+				else if(action.equals("select-bracket"))
+					textArea.selectToMatchingBracket();
+				else if(action.equals("narrow-bracket"))
+					textArea.narrowToMatchingBracket();
+				//}}}
 			}
 		} //}}}
 

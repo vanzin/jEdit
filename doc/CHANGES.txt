@@ -28,6 +28,8 @@ contributing to this release.
 - Added Edit->More Clipboard->Paste Deleted (C+e C+y) command. Similar
   to Paste Previous, it lists recently deleted strings.
 
+- Quick copy now works between text areas.
+
 }}}
 {{{ File System Browser
 
@@ -70,6 +72,14 @@ contributing to this release.
 - The block caret is now drawn as a hollow box. Previously it was drawn
   as a filled box using XOR paint mode, but the XOR paint mode caused
   problems on some Java versions and was slightly slower.
+
+- New gutter mouse behavior for brackets:
+
+  C-click on a bracket scope selects the scope.
+  A-click on a bracket scope narrows to the scope.
+
+  These were changed to be consistent with the behavior when clicking on
+  a fold.
 
 }}}
 {{{ Plugin Loader
@@ -178,6 +188,9 @@ contributing to this release.
 - Plugins which provided a dockables.xml file but no actions.xml could
   not be invoked, since the action set was only added if the actions.xml
   file was present.
+
+- Disabled CS+click to narrow to a bracket scope since it didn't
+  actually work.
 
 }}}
 {{{ API Changes

@@ -447,14 +447,16 @@ public class View extends JFrame implements EBComponent
 			{
 				if(keyEventInterceptor != null)
 					keyEventInterceptor.keyTyped(evt);
-				else if(!inputHandler.isPrefixActive())
+				else //if(!inputHandler.isPrefixActive())
 					inputHandler.keyTyped(evt);
 			}
 			else
 			{
 				if(keyEventInterceptor == null
 					&& inputHandler.isPrefixActive())
+				{
 					inputHandler.keyTyped(evt);
+				}
 			}
 
 			// we might have been closed as a result of

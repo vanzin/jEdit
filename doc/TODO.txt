@@ -8,7 +8,6 @@ and quirks that I need to fix eventually.
   { <-- wrong
 
 - SERIOUS PROBLEMS
-  - control-shift-click broken in text area
   - finish vfs browser extended attributes
   - new file: horiz scroll wrong
   - scroll to with invisible caret
@@ -187,14 +186,12 @@ and quirks that I need to fix eventually.
 - AT_WORD_END match
 - history text field tweak
 - abbrevs need an overhaul
-- quick copy between text areas
 - hypersearch: "open in..." right click menu
 - hypersearch: remember search settings & "refresh" command
 - search dialog: auto-focus fields show last values
 - eval, eval-selection, etc: do array to string override
 - beanshell: unloading commands when a plugin is unloaded
 - generic matching API used for brackets, tags, etc.
-- persistent floating dockables
 
 + performance:
 
