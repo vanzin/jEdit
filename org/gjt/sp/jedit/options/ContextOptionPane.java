@@ -232,7 +232,7 @@ class ContextAddDialog extends EnhancedDialog
 {
 	public ContextAddDialog(Component comp)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
+		super(GUIUtilities.getParentDialog(comp),
 			jEdit.getProperty("options.context.add.title"),
 			true);
 
@@ -303,7 +303,7 @@ class ContextAddDialog extends EnhancedDialog
 		updateList();
 
 		pack();
-		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
+		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
 		show();
 	}
 

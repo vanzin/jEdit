@@ -313,6 +313,16 @@
   </para>
   <sect2><title>Navigating the File System</title>
    <para>
+    To browse a listed directory, double-click it (or if you have a three-button
+    mouse, you can click the middle mouse button as well). Alternatively, click
+    the disclosure
+    widget next to a directory to list its contents in place.
+   </para>
+   <para>
+    To browse higher up in the directory hierarchy, double-click one of the parent
+    directories in the parent directory list.
+   </para>
+   <para>
     The directory to browse is specified in the <guibutton>Path</guibutton> text
     field. Clicking the mouse in the text field automatically selects its
     contents allowing a new path to be quickly typed in. If a relative path is
@@ -321,10 +331,6 @@
     Previously browsed directories are also listed in the
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Recent Directories</guisubmenu>
     menu; selecting one opens it in the file system browser.
-   </para>
-   <para>
-    To browse higher up in the directory hierarchy, click one of the parent
-    directories in the parent directory list.
    </para>
    <para>
     Files and directories in the file list are shown in different colors
@@ -336,32 +342,26 @@
     dialog box.
    </para>
    <para>
-    To browse a listed directory, double-click it (or if you have a three-button
-    mouse, you can click the middle mouse button as well). Alternatively, click
-    the disclosure
-    widget next to a directory to list its contents in place.
-   </para>
-   <para>
-    Open files in the file list are shown with their file names underlined.
-    Single-clicking an open file will select the appropriate buffer in the current
-    view. Unopened files can be opened for editing by double-clicking (or by
-    clicking the middle mouse button). If you hold down <keycap>Shift</keycap>
-    while double-clicking (or middle-clicking), the file will be opened in a new
-    view.
-   </para>
-   <para>
-    Clicking a file or directory with the right mouse button displays a popup
-    menu containing file manipulation commands. Note that attempting to delete
-    a directory containing files will give an error;
-    only empty directories can be deleted.
-   </para>
-   <para>
     If you only want to see a specific set of files (for example,
     those whose names end with <filename>.java</filename>), enter a glob pattern
     in the <guibutton>Filter</guibutton> text field.
     See <xref linkend="globs" /> for information about glob patterns.
     This text fields remembers previously entered strings;
     see <xref linkend="history" />.
+   </para>
+   <para>
+    Unopened files can be opened for editing by double-clicking (or by
+    clicking the middle mouse button). Open buffers have their names underlined,
+    and can be selected by single-clicking.
+    Holding down <keycap>Shift</keycap>
+    while double-clicking (or middle-clicking) opens files in new
+    views.
+   </para>
+   <para>
+    Clicking a file or directory with the right mouse button displays a popup
+    menu containing file manipulation commands. Note that attempting to delete
+    a directory containing files will give an error;
+    only empty directories can be deleted.
    </para>
    <tip>
     <para>

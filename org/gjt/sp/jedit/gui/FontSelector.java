@@ -30,7 +30,7 @@ import java.util.Vector;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.*;
 //}}}
 
 //{{{ FontSelector class
@@ -85,8 +85,22 @@ public class FontSelector extends JButton
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			Font font = new FontSelectorDialog(FontSelector.this,getFont())
-				.getSelectedFont();
+			Font font;
+
+			JDialog dialog = GUIUtilities.getParentDialog(FontSelector.this);
+			if(dialog == null)
+			{
+				font = new FontSelectorDialog(
+					JOptionPane.getFrameForComponent(
+					FontSelector.this),getFont())
+					.getSelectedFont();
+			}
+			else
+			{
+				font = new FontSelectorDialog(dialog,getFont())
+					.getSelectedFont();
+			}
+
 			if(font != null)
 			{
 				setFont(font);
@@ -100,11 +114,79 @@ public class FontSelector extends JButton
 class FontSelectorDialog extends EnhancedDialog
 {
 	//{{{ FontSelectorDialog constructor
-	public FontSelectorDialog(Component comp, Font font)
+	public FontSelectorDialog(Frame parent, Font font)
 	{
-		super(JOptionPane.getFrameForComponent(comp),
-			jEdit.getProperty("font-selector.title"),true);
+		super(parent,jEdit.getProperty("font-selector.title"),true);
+		init(font);
+	} //}}}
 
+	//{{{ FontSelectorDialog constructor
+	public FontSelectorDialog(Dialog parent, Font font)
+	{
+		super(parent,jEdit.getProperty("font-selector.title"),true);
+		init(font);
+	} //}}}
+
+	//{{{ ok() method
+	public void ok()
+	{
+		isOK = true;
+		dispose();
+	} //}}}
+
+	//{{{ cancel() method
+	public void cancel()
+	{
+		dispose();
+	} //}}}
+
+	//{{{ getSelectedFont() method
+	public Font getSelectedFont()
+	{
+		if(!isOK)
+			return null;
+
+		int size;
+		try
+		{
+			size = Integer.parseInt(sizeField.getText());
+		}
+		catch(Exception e)
+		{
+			size = 12;
+		}
+
+		return new Font(familyField.getText(),styleList
+			.getSelectedIndex(),size);
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private boolean isOK;
+	private JTextField familyField;
+	private JList familyList;
+	private JTextField sizeField;
+	private JList sizeList;
+	private JTextField styleField;
+	private JList styleList;
+	private JLabel preview;
+	private JButton ok;
+	private JButton cancel;
+	//}}}
+
+	/**
+	 * For some reason the default Java fonts show up in the
+	 * list with .bold, .bolditalic, and .italic extensions.
+	 */
+	private static final String[] HIDEFONTS = {
+		".bold",
+		".italic"
+	};
+
+	//{{{ init() method
+	private void init(Font font)
+	{
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -185,66 +267,9 @@ class FontSelectorDialog extends EnhancedDialog
 		content.add(BorderLayout.SOUTH,buttons);
 
 		pack();
-		setLocationRelativeTo(JOptionPane.getFrameForComponent(comp));
+		setLocationRelativeTo(getParent());
 		show();
 	} //}}}
-
-	//{{{ ok() method
-	public void ok()
-	{
-		isOK = true;
-		dispose();
-	} //}}}
-
-	//{{{ cancel() method
-	public void cancel()
-	{
-		dispose();
-	} //}}}
-
-	//{{{ getSelectedFont() method
-	public Font getSelectedFont()
-	{
-		if(!isOK)
-			return null;
-
-		int size;
-		try
-		{
-			size = Integer.parseInt(sizeField.getText());
-		}
-		catch(Exception e)
-		{
-			size = 12;
-		}
-
-		return new Font(familyField.getText(),styleList
-			.getSelectedIndex(),size);
-	} //}}}
-
-	//{{{ Private members
-
-	//{{{ Instance variables
-	private boolean isOK;
-	private JTextField familyField;
-	private JList familyList;
-	private JTextField sizeField;
-	private JList sizeList;
-	private JTextField styleField;
-	private JList styleList;
-	private JLabel preview;
-	private JButton ok;
-	private JButton cancel;
-	//}}}
-
-	/**
-	 * For some reason the default Java fonts show up in the
-	 * list with .bold, .bolditalic, and .italic extensions.
-	 */
-	private static final String[] HIDEFONTS = {
-		".bold",
-		".italic"
-	};
 
 	//{{{ getFontList() method
 	private String[] getFontList()

@@ -2,17 +2,46 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre7
 
-Thanks to Jonathan Revusky for contributing to this release.
+Thanks to Jonathan Revusky and Marcelo Vanzin for contributing to this
+release.
+
 + Syntax Highlighting Changes:
 
 - Freemaker syntax highlighting (Jonathan Revusky).
 
++ Miscellaneous Changes:
+
+- The parent directory list in the file system browser now requires a
+  double-click (or middle mouse button click) to open a directory. This
+  makes it consistent with the behavior of the file tree below it, which
+  also requires double-clicks.
+
+- If the user and system macro directories have a subdirectory with the
+  same name, the contents of the subdirectories are merged in the
+  "Macros" menu. Previously, one could end up with two "Text" menus, for
+  instance.
+
+- The plugin list in the "Install Plugins" and "Update Plugins" dialog
+  boxes is now categorized.
+
 + Bug Fixes:
 
 - The action "Insert Tab and Indent" was broken.
+
 - Backed out Rex Young's ReadWriteLock.java fix since it caused
   deadlocks.
+
 - Fixed some long-standing bugs in the reverse search code.
+
+- Dialogs that are shown by other dialogs have been updated to have the
+  invoking dialog as their parent, instead of the containing frame. This
+  should fix problems with some windows obscuring others, etc.
+
+- Fixed a possible ClassCastException that could occur if macro
+  directories were nested.
+
+- "Rectangular selection mode" status message was not being shown on
+  MacOS X.
 
 * Version 4.1pre6
 

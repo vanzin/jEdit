@@ -414,7 +414,7 @@
 
 <ACTION NAME="keyboard-tester">
 	<CODE>
-		GrabKeyDialog.keyboardTest(view);
+		new GrabKeyDialog(view,null,null,jEdit.newFile(view));
 	</CODE>
 </ACTION>
 

@@ -557,8 +557,8 @@ class BrowserView extends JPanel
 
 		public void mouseReleased(MouseEvent evt)
 		{
-			// ignore double clicks
-			if(evt.getClickCount() % 2 == 0)
+			if(evt.getClickCount() % 2 != 0 &&
+				(evt.getModifiers() & InputEvent.BUTTON2_MASK) == 0)
 				return;
 
 			int row = parentDirectories.locationToIndex(evt.getPoint());

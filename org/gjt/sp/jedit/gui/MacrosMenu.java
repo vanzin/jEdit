@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Collections;
 import java.util.Vector;
 import org.gjt.sp.jedit.msg.MacrosChanged;
 import org.gjt.sp.jedit.*;
@@ -75,13 +76,15 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
+		Vector menuItems = new Vector();
+
 		for(int i = start; i < vector.size(); i++)
 		{
 			Object obj = vector.elementAt(i);
 			if(obj instanceof Macros.Macro)
 			{
 				Macros.Macro macro = (Macros.Macro)obj;
-				menu.add(new EnhancedMenuItem(macro.getLabel(),macro));
+				menuItems.add(new EnhancedMenuItem(macro.getLabel(),macro));
 			}
 			else if(obj instanceof Vector)
 			{
@@ -89,13 +92,15 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 				String name = (String)subvector.elementAt(0);
 				JMenu submenu = new JMenu(name);
 				createMacrosMenu(submenu,subvector,1);
-				if(submenu.getMenuComponentCount() == 0)
-				{
-					submenu.add(GUIUtilities.loadMenuItem(
-						"no-macros"));
-				}
-				menu.add(submenu);
+				if(submenu.getMenuComponentCount() != 0)
+					menuItems.add(submenu);
 			}
+		}
+
+		Collections.sort(menuItems,new MiscUtilities.MenuItemCompare());
+		for(int i = 0; i < menuItems.size(); i++)
+		{
+			menu.add((JMenuItem)menuItems.get(i));
 		}
 	}
 }
