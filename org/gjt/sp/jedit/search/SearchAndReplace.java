@@ -257,29 +257,16 @@ public class SearchAndReplace
 	//{{{ getSearchMatcher() method
 	/**
 	 * Returns the current search string matcher.
-	 * @exception IllegalArgumentException if regular expression search
-	 * is enabled, the search string or replacement string is invalid
-	 */
-	public static SearchMatcher getSearchMatcher()
-		throws Exception
-	{
-		return getSearchMatcher(true);
-	} //}}}
-
-	//{{{ getSearchMatcher() method
-	/**
-	 * Returns the current search string matcher.
 	 * @param reverseOK Replacement commands need a non-reversed matcher,
 	 * so they set this to false
 	 * @exception IllegalArgumentException if regular expression search
 	 * is enabled, the search string or replacement string is invalid
+	 * @since jEdit 4.1pre7
 	 */
-	public static SearchMatcher getSearchMatcher(boolean reverseOK)
+	public static SearchMatcher getSearchMatcher()
 		throws Exception
 	{
-		reverseOK &= (fileset instanceof CurrentBufferSet);
-
-		if(matcher != null && (reverseOK || !reverse))
+		if(matcher != null)
 			return matcher;
 
 		if(search == null || "".equals(search))
@@ -303,8 +290,7 @@ public class SearchAndReplace
 		else
 		{
 			matcher = new BoyerMooreSearchMatcher(search,replace,
-				ignoreCase,reverse && reverseOK,beanshell,
-				replaceMethod);
+				ignoreCase,beanshell,replaceMethod);
 		}
 
 		return matcher;
@@ -369,7 +355,7 @@ public class SearchAndReplace
 
 		try
 		{
-			SearchMatcher matcher = getSearchMatcher(false);
+			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 			{
 				view.getToolkit().beep();
@@ -422,7 +408,7 @@ public class SearchAndReplace
 
 		try
 		{
-			SearchMatcher matcher = getSearchMatcher(true);
+			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 			{
 				view.getToolkit().beep();
@@ -572,7 +558,7 @@ loop:			for(;;)
 	public static boolean find(View view, Buffer buffer, int start,
 		boolean firstTime) throws Exception
 	{
-		SearchMatcher matcher = getSearchMatcher(true);
+		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
 		{
 			view.getToolkit().beep();
@@ -591,7 +577,8 @@ loop:			for(;;)
 		//
 		// REMIND: fix flags when adding reverse regexp search.
 		int[] match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
-			start == 0,true,firstTime);
+			start == 0,true,firstTime,
+			reverse && fileset instanceof CurrentBufferSet);
 
 		if(match != null)
 		{
@@ -657,7 +644,7 @@ loop:			for(;;)
 		{
 			buffer.beginCompoundEdit();
 
-			SearchMatcher matcher = getSearchMatcher(false);
+			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 				return false;
 
@@ -758,7 +745,7 @@ loop:			for(;;)
 		{
 			buffer.beginCompoundEdit();
 
-			SearchMatcher matcher = getSearchMatcher(false);
+			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 				return false;
 
@@ -813,7 +800,7 @@ loop:			for(;;)
 
 		try
 		{
-			SearchMatcher matcher = getSearchMatcher(false);
+			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
 				return false;
 
@@ -1021,7 +1008,8 @@ loop:		for(int counter = 0; ; counter++)
 
 			int[] occur = matcher.nextMatch(
 				new CharIndexedSegment(text,false),
-				startOfLine,endOfLine,counter == 0);
+				startOfLine,endOfLine,counter == 0,
+				false);
 			if(occur == null)
 				break loop;
 			int _start = occur[0];
