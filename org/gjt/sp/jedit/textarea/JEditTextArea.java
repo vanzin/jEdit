@@ -6369,23 +6369,22 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseReleased() method
 		public void mouseReleased(MouseEvent evt)
 		{
-			if(dragged)
+			// middle mouse button drag inserts selection
+			// at caret position
+			Selection sel = getSelectionAtOffset(dragStart);
+			if(sel != null)
+				Registers.setRegister('%',getSelectedText(sel));
+
+			if(dragged && sel != null)
 			{
-				// middle mouse button drag inserts selection
-				// at caret position
-				Selection sel = getSelectionAtOffset(dragStart);
-				if(sel != null)
+				if(quickCopyDrag)
 				{
-					if(quickCopyDrag)
-					{
-						Registers.setRegister('%',getSelectedText(sel));
-						removeFromSelection(sel);
-						Registers.paste(JEditTextArea.this,'%',
-							sel instanceof Selection.Rect);
-					}
-					else
-						Registers.setRegister('%',getSelectedText());
+					removeFromSelection(sel);
+					Registers.paste(JEditTextArea.this,'%',
+						sel instanceof Selection.Rect);
 				}
+				else
+					Registers.setRegister('%',getSelectedText());
 			}
 			else if(isQuickCopyEnabled()
 				&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
