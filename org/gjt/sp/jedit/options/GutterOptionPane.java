@@ -40,7 +40,41 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.lineNumbers"));
 		addComponent(lineNumbersEnabled);
 
-		/* Font */
+		int c = clickActionKeys.length;
+		String[] clickActionNames = new String[c];
+		for(int i = 0; i < c; i++)
+		{
+			clickActionNames[i] = jEdit.getProperty(
+				"options.gutter."+clickActionKeys[i]);
+		}
+
+		c = clickModifierKeys.length;
+		String[] clickModifierNames = new String[c];
+		for(int i = 0; i < c; i++)
+		{
+			clickModifierNames[i] = jEdit.getProperty(
+				"options.gutter."+clickModifierKeys[i]);
+		}
+
+		gutterClickActions = new JComboBox[c];
+
+		for(int i = 0; i < c; i++)
+		{
+			JComboBox cb = new JComboBox(clickActionNames);
+			gutterClickActions[i] = cb;
+
+			String val = jEdit.getProperty("view.gutter."+clickModifierKeys[i]);
+			for(int j = 0; j < clickActionKeys.length; j++)
+			{
+				if(val.equals(clickActionKeys[j]))
+				{
+					cb.setSelectedIndex(j);
+				}
+			}
+
+			addComponent(clickModifierNames[i],cb);
+		}
+
 		gutterFont = new FontSelector(
 			jEdit.getFontProperty("view.gutter.font",
 			new Font("Monospaced",Font.PLAIN,10)));
@@ -119,6 +153,14 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterBracketHighlightEnabled.isSelected());
 		jEdit.setBooleanProperty("view.gutter.markerHighlight",
 			gutterMarkerHighlightEnabled.isSelected());
+		
+		int c = clickModifierKeys.length;
+		for(int i = 0; i < c; i++)
+		{
+			int idx = gutterClickActions[i].getSelectedIndex();
+			jEdit.setProperty("view.gutter."+clickModifierKeys[i],
+				clickActionKeys[idx]);
+		}
 	}
 
 	// private members
@@ -130,4 +172,18 @@ public class GutterOptionPane extends AbstractOptionPane
 	private JCheckBox gutterCurrentLineHighlightEnabled;
 	private JCheckBox gutterBracketHighlightEnabled;
 	private JCheckBox gutterMarkerHighlightEnabled;
+	private JComboBox[] gutterClickActions;
+	
+	private static final String[] clickActionKeys = new String[] {
+		"toggleFold",
+		"toggleFoldFully",
+		"selectFold"
+	};
+	
+	private static final String[] clickModifierKeys = new String[] {
+		"gutterClick",
+		"gutterShiftClick",
+		"gutterControlClick",
+		"gutterAltClick"
+	};
 }

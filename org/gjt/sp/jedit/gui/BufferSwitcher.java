@@ -35,7 +35,7 @@ public class BufferSwitcher extends JComboBox
 
 		//setFont(new Font("Dialog",Font.BOLD,10));
 		setRenderer(new BufferCellRenderer());
-		setMaximumRowCount(10);
+		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
 		addActionListener(new ActionHandler());
 	}
 
@@ -47,6 +47,7 @@ public class BufferSwitcher extends JComboBox
 			return;
 
 		updating = true;
+		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
 		setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
 		setSelectedItem(editPane.getBuffer());
 		updating = false;

@@ -2824,7 +2824,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void smartHome(boolean select)
 	{
-		if(!jEdit.getBooleanProperty("view.homeEnd"))
+		if(!jEdit.getBooleanProperty("view.smartHome"))
 			goToStartOfLine(select);
 		else
 		{
@@ -2852,7 +2852,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void smartEnd(boolean select)
 	{
-		if(!jEdit.getBooleanProperty("view.homeEnd"))
+		if(!jEdit.getBooleanProperty("view.smartEnd"))
 			goToEndOfLine(select);
 		else
 		{

@@ -2,6 +2,15 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre2
 
+Thanks to Gerd Knops for contributing to this release.
+
++ Editing Changes:
+
+- The 'Smart Home/End' setting has been split into two separate
+  settings, one for Home and one for End.
+
+- Made behavior of mouse in gutter more customizable. (Gerd Knops)
+
 + Miscellaneous Changes:
 
 - 'scriptPath' BeanShell variable is set to the macro file path while a
