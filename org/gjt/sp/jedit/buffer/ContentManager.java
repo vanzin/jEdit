@@ -159,7 +159,7 @@ public class ContentManager
 	//{{{ ensureCapacity() method
 	private void ensureCapacity(int capacity)
 	{
-		if(capacity > text.length)
+		if(capacity >= text.length)
 		{
 			char[] textN = new char[capacity * 2];
 			System.arraycopy(text,0,textN,0,length);

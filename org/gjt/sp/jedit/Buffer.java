@@ -50,7 +50,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer implements EBComponent, Document
+public class Buffer implements EBComponent
 {
 	//{{{ Some constants
 	/**
@@ -385,14 +385,29 @@ public class Buffer implements EBComponent, Document
 		{
 			public void run()
 			{
-				StringBuffer sbuf = (StringBuffer)getProperty(
+				Segment seg = (Segment)getProperty(
 					BufferIORequest.LOAD_DATA);
+				IntegerArray endOffsets = (IntegerArray)
+					getProperty(BufferIORequest.END_OFFSETS);
 
-				if(sbuf != null)
+				if(seg != null && endOffsets != null)
 				{
 					// For `reload' command
 					remove(0,getLength());
-					insert(0,sbuf.toString());
+
+					// This is faster than Buffer.insert()
+					try
+					{
+						writeLock();
+
+						contentMgr.insert(0,seg.toString());
+						contentInserted(0,seg.count,
+							endOffsets);
+					}
+					finally
+					{
+						writeUnlock();
+					}
 				}
 
 				// reload maxLineLen and tabSize
@@ -401,6 +416,7 @@ public class Buffer implements EBComponent, Document
 				unsetProperty("indentSize");
 				unsetProperty("maxLineLen");
 				unsetProperty(BufferIORequest.LOAD_DATA);
+				unsetProperty(BufferIORequest.END_OFFSETS);
 
 				//undo = new MyUndoManager();
 				//undo.setLimit(jEdit.getIntegerProperty(
@@ -2466,16 +2482,6 @@ public class Buffer implements EBComponent, Document
 
 	//{{{ Deprecated methods
 
-	//{{{ render() method
-	/**
-	 * @deprecated
-	 */
-	public void render(Runnable r)
-	{
-		// no-one should ever call this method
-		r.run();
-	} //}}}
-
 	//{{{ addDocumentListener() method
 	/**
 	 * @deprecated Write a <code>BufferChangeListener</code> instead
@@ -2493,26 +2499,6 @@ public class Buffer implements EBComponent, Document
 	public void removeDocumentListener(DocumentListener l)
 	{
 		Log.log(Log.WARNING,this,"Document listeners not supported: "
-			+ l.getClass().getName());
-	} //}}}
-
-	//{{{ addUndoableEditListener() method
-	/**
-	 * @deprecated
-	 */
-	public void addUndoableEditListener(UndoableEditListener l)
-	{
-		Log.log(Log.WARNING,this,"Undo listeners not supported: "
-			+ l.getClass().getName());
-	} //}}}
-
-	//{{{ removeUndoableEditListener() method
-	/**
-	 * @deprecated
-	 */
-	public void removeUndoableEditListener(UndoableEditListener l)
-	{
-		Log.log(Log.WARNING,this,"Undo listeners not supported: "
 			+ l.getClass().getName());
 	} //}}}
 
@@ -2836,26 +2822,6 @@ public class Buffer implements EBComponent, Document
 	//}}}
 
 	//{{{ Position methods
-
-	//{{{ getStartPosition() method
-	/**
-	 * Returns a position that tracks the beginning of the buffer.
-	 * Equivalent to calling <code>createPosition(0)</code>.
-	 */
-	public Position getStartPosition()
-	{
-		return createPosition(0);
-	} //}}}
-
-	//{{{ getEndPosition() method
-	/**
-	 * Returns a position that tracks the end of the buffer.
-	 * Equivalent to calling <code>createPosition(getLength())</code>.
-	 */
-	public Position getEndPosition()
-	{
-		return createPosition(getLength());
-	} //}}}
 
 	//{{{ createPosition() method
 	/**
@@ -3486,7 +3452,7 @@ public class Buffer implements EBComponent, Document
 	private void contentInserted(int offset, int length, IntegerArray endOffsets)
 	{
 		int startLine = offsetMgr.getLineOfOffset(offset);
-		int numLines = integerArray.size();
+		int numLines = endOffsets.size();
 
 		offsetMgr.contentInserted(startLine,offset,numLines,length,
 			endOffsets);
