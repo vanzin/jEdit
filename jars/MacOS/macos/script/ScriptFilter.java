@@ -23,15 +23,7 @@
 package macos.script;
 
 //{{{ Imports
-import com.apple.mrj.*;
-//import java.awt.event.*;
 import java.io.*;
-//import javax.swing.*;
-//import javax.swing.event.*;
-//import javax.swing.filechooser.FileView;
-//import org.gjt.sp.jedit.*;
-//import org.gjt.sp.jedit.browser.*;
-//import macos.*;
 //}}}
 
 public class ScriptFilter implements FileFilter
@@ -44,7 +36,8 @@ public class ScriptFilter implements FileFilter
 		if (pathname.getName().endsWith(".applescript"))
 			return true;
 		
-		try
+		// Replace this is Cocoa API calls later
+		/*try
 		{
 			MRJOSType type = MRJFileUtils.getFileType(pathname);
 			MRJOSType creator = MRJFileUtils.getFileCreator(pathname);
@@ -56,7 +49,7 @@ public class ScriptFilter implements FileFilter
 		catch (Exception e)
 		{
 			return false;
-		}
+		}*/
 		
 		return false;
 	} //}}}

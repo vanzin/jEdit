@@ -10,6 +10,7 @@
 
 	<path id="project.class.path">
 		<pathelement location="${jedit.install.dir}/jedit.jar"/>
+		<pathelement location="/System/Library/Java"/>
 		<pathelement location="."/>
 	</path>
 

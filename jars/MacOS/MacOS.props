@@ -3,14 +3,14 @@
 #
 plugin.macos.MacOSPlugin.name=Mac OS Plugin
 plugin.macos.MacOSPlugin.author=Kris Kopicki
-plugin.macos.MacOSPlugin.version=2.0.4
+plugin.macos.MacOSPlugin.version=3.0a
 plugin.macos.MacOSPlugin.docs=MacOS.html
 
 #
 # Dependencies
 #
 plugin.macos.MacOSPlugin.depend.0=jedit 04.00.06.00
-plugin.macos.MacOSPlugin.depend.1=jdk 1.3
+plugin.macos.MacOSPlugin.depend.1=jdk 1.4.1
 
 MacOSPlugin.depend.os.name=Mac OS X
 MacOSPlugin.depend.mrj.version=3.2
@@ -18,7 +18,6 @@ MacOSPlugin.depend.mrj.version=3.2
 #
 # Default settings
 #
-MacOSPlugin.default.scriptsFolder=scripts
 MacOSPlugin.default.type=TEXT
 MacOSPlugin.default.creator=JESP
 MacOSPlugin.default.useScreenMenuBar=false
