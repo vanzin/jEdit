@@ -7,9 +7,10 @@ JEDIT 4.0 VERSION HISTORY
 - The plugin manager now downloads the plugin list in GZipped format
   from the server. This should especially be noticable for dial-up users
 - Minor search bar layout tweak
-- The roots: filesystem should now show extra information when running on
-  Windows with JDK 1.4 (eg, you should able to see the UNC paths of
+- The roots: filesystem should now show extra information when running
+  on Windows with JDK 1.4 (eg, you should able to see the UNC paths of
   network drive mappings)
+- Documentation updates
 
 + Bug Fixes
 
@@ -31,6 +32,10 @@ JEDIT 4.0 VERSION HISTORY
   java.util.Collections.sort())
 - Fixed a few more possible ClassCastExceptions due to use of
   non-typesafe buffer property accessors
+- If a search matcher cannot be created (eg, invalid regexp) the
+  HyperSearch results window will no longer be stuck with a
+  'Searching...' message
+- Fixed gutter autoscroll
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 

@@ -364,7 +364,7 @@ The DockableWindowManager and the EditBus</title>
   views and editing panes, changes in the set of properties maintained
   by the application, and the closing of the application.  A full list
   of message classes used by the EditBus are summarized beginning with
-  <xref linkend="class-EBMessage"/>.
+  <xref linkend="class-ebmessage"/>.
 </para>
 
 <para>
