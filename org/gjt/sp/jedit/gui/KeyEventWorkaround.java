@@ -1,5 +1,8 @@
 /*
  * KeyEventWorkaround.java - Works around bugs in Java event handling
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,14 +22,17 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import java.awt.event.*;
 import java.awt.*;
+//}}}
 
 public class KeyEventWorkaround
 {
 	// from JDK 1.2 InputEvent.java
 	public static final int ALT_GRAPH_MASK = 1 << 5;
 
+	//{{{ processKeyEvent() method
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
 		int keyCode = evt.getKeyCode();
@@ -34,18 +40,22 @@ public class KeyEventWorkaround
 
 		switch(evt.getID())
 		{
-			case KeyEvent.KEY_PRESSED:
-				// get rid of keys we never need to handle
-				if(keyCode == KeyEvent.VK_CONTROL ||
-					keyCode == KeyEvent.VK_SHIFT ||
-					keyCode == KeyEvent.VK_ALT ||
-					keyCode == KeyEvent.VK_META ||
-					keyCode == '\0')
-					return null;
+		//{{{ KEY_PRESSED...
+		case KeyEvent.KEY_PRESSED:
+			// get rid of keys we never need to handle
+			if(keyCode == KeyEvent.VK_CONTROL ||
+				keyCode == KeyEvent.VK_SHIFT ||
+				keyCode == KeyEvent.VK_ALT ||
+				keyCode == KeyEvent.VK_META ||
+				keyCode == '\0')
+				return null;
 
-			handleBrokenKeys(evt,keyCode);
+			if(!mac)
+				handleBrokenKeys(evt,keyCode);
 
 			return evt;
+		//}}}
+		//{{{ KEY_TYPED...
 		case KeyEvent.KEY_TYPED:
 			// need to let \b through so that backspace will work
 			// in HistoryTextFields
@@ -64,31 +74,34 @@ public class KeyEventWorkaround
 				if((evt.isControlDown() ^ evt.isAltDown())
 					|| evt.isMetaDown())
 					return null;
-			}
 
-			// if the last key was a broken key, filter
-			// out all except 'a'-'z' that occur 750 ms after.
-			if(last == LAST_BROKEN && System.currentTimeMillis()
-				- lastKeyTime < 750 && !Character.isLetter(ch))
-			{
-				last = LAST_NOTHING;
-				return null;
-			}
-			// otherwise, if it was ALT, filter out everything.
-			else if(last == LAST_ALT && System.currentTimeMillis()
-				- lastKeyTime < 750)
-			{
-				last = LAST_NOTHING;
-				return null;
+				// if the last key was a broken key, filter
+				// out all except 'a'-'z' that occur 750 ms after.
+				if(last == LAST_BROKEN && System.currentTimeMillis()
+					- lastKeyTime < 750 && !Character.isLetter(ch))
+				{
+					last = LAST_NOTHING;
+					return null;
+				}
+				// otherwise, if it was ALT, filter out everything.
+				else if(last == LAST_ALT && System.currentTimeMillis()
+					- lastKeyTime < 750)
+				{
+					last = LAST_NOTHING;
+					return null;
+				}
 			}
 
 			return evt;
+		//}}}
 		default:
 			return evt;
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Static variables
 	private static boolean mac;
 	private static long lastKeyTime;
 
@@ -97,12 +110,15 @@ public class KeyEventWorkaround
 	private static final int LAST_ALTGR = 1;
 	private static final int LAST_ALT = 2;
 	private static final int LAST_BROKEN = 3;
+	//}}}
 
+	//{{{ Class initializer
 	static
 	{
 		mac = (System.getProperty("os.name").indexOf("Mac OS") != -1);
-	}
+	} //}}}
 
+	//{{{ handleBrokenKeys() method
 	private static void handleBrokenKeys(KeyEvent evt, int keyCode)
 	{
 		if(evt.isAltDown() && evt.isControlDown()
@@ -129,5 +145,7 @@ public class KeyEventWorkaround
 			last = LAST_NOTHING;
 
 		lastKeyTime = System.currentTimeMillis();
-	}
+	} //}}}
+
+	//}}}
 }

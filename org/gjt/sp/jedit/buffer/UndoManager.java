@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.buffer;
 import java.util.Vector;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class UndoManager
@@ -53,6 +54,9 @@ public class UndoManager
 	//{{{ undo() method
 	public boolean undo(JEditTextArea textArea)
 	{
+		if(insideCompoundEdit())
+			throw new InternalError("Unbalanced begin/endCompoundEdit()");
+
 		if(undoPos == 0)
 			return false;
 		else
@@ -68,6 +72,9 @@ public class UndoManager
 	//{{{ redo() method
 	public boolean redo(JEditTextArea textArea)
 	{
+		if(insideCompoundEdit())
+			throw new InternalError("Unbalanced begin/endCompoundEdit()");
+
 		if(undoPos == undoCount)
 			return false;
 		else
@@ -97,6 +104,11 @@ public class UndoManager
 			if(compoundEdit.getSize() != 0)
 				addEdit(compoundEdit);
 			compoundEdit = null;
+		}
+		else if(compoundEditCount == 0)
+		{
+			Log.log(Log.WARNING,this,new Exception("Unbalanced begin/endCompoundEdit()"));
+			return;
 		}
 
 		compoundEditCount--;
@@ -320,7 +332,7 @@ public class UndoManager
 		public int undo()
 		{
 			int retVal = -1;
-			for(int i = 0; i < undos.size(); i++)
+			for(int i = undos.size() - 1; i >= 0; i--)
 			{
 				retVal = ((Edit)undos.elementAt(i)).undo();
 			}

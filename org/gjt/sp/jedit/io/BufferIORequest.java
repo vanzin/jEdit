@@ -185,8 +185,7 @@ public class BufferIORequest extends WorkRequest
 				if(path.endsWith(".gz"))
 					in = new GZIPInputStream(in);
 
-				String lineSeparator = read(buffer,in,length);
-				buffer.setProperty(Buffer.LINESEP,lineSeparator);
+				read(buffer,in,length);
 				buffer.setNewFile(false);
 			}
 			catch(CharConversionException ch)
@@ -303,7 +302,7 @@ public class BufferIORequest extends WorkRequest
 	 * 
 	 * </ul>
 	 */
-	private String read(Buffer buffer, InputStream _in, long length)
+	private void read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
 		IntegerArray endOffsets = new IntegerArray();
@@ -325,6 +324,7 @@ public class BufferIORequest extends WorkRequest
 		InputStreamReader in = new InputStreamReader(_in,
 			(String)buffer.getProperty(Buffer.ENCODING));
 		char[] buf = new char[IOBUFSIZE];
+
 		// Number of characters in 'buf' array.
 		// InputStream.read() doesn't always fill the
 		// array (eg, the file size is not a multiple of
@@ -469,6 +469,7 @@ public class BufferIORequest extends WorkRequest
 				seg.count--;
 		}
 
+		buffer.setBooleanProperty(Buffer.TRAILING_EOL,false);
 		if(bufferLength != 0)
 		{
 			char ch = seg.array[bufferLength - 1];
@@ -486,8 +487,7 @@ public class BufferIORequest extends WorkRequest
 		buffer.setProperty(LOAD_DATA,seg);
 		buffer.setProperty(END_OFFSETS,endOffsets);
 		buffer.setProperty(NEW_PATH,path);
-
-		return lineSeparator;
+		buffer.setProperty(Buffer.LINESEP,lineSeparator);
 	} //}}}
 
 	//{{{ readMarkers() method

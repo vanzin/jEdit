@@ -49,7 +49,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		{
 			this.file = file;
 
-			VFS vfs = VFSManager.getVFSForPath(file.path);
+			VFS vfs = VFSManager.getVFSForPath(file.deletePath);
 
 			boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
 			boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;

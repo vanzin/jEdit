@@ -126,7 +126,8 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
-			favorites.addElement(path);
+			if(!favorites.contains(path))
+				favorites.addElement(path);
 
 			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
 		}

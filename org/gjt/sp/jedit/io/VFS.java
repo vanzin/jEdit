@@ -143,15 +143,20 @@ public abstract class VFS
 
 	//{{{ getFileName() method
 	/**
-	 * Returns the file name component of the specified path. The
-	 * default implementation calls
-	 * <code>MiscUtilities.getFileName()</code>
+	 * Returns the file name component of the specified path.
 	 * @param path The path
 	 * @since jEdit 3.1pre4
 	 */
 	public String getFileName(String path)
 	{
-		return MiscUtilities.getFileName(path);
+		if(path.equals("/"))
+			return path;
+
+		int count = Math.max(0,path.length() - 2);
+		int index1 = path.lastIndexOf(File.separatorChar,count);
+		int index2 = path.lastIndexOf('/',count);
+
+		return path.substring(Math.max(index1,index2) + 1);
 	} //}}}
 
 	//{{{ getParentOfPath() method
@@ -164,7 +169,20 @@ public abstract class VFS
 	 */
 	public String getParentOfPath(String path)
 	{
-		return null;
+		// ignore last character of path to properly handle
+		// paths like /foo/bar/
+		int count = Math.max(0,path.length() - 2);
+		int index = path.lastIndexOf(File.separatorChar,count);
+		if(index == -1)
+			index = path.lastIndexOf('/',count);
+		if(index == -1)
+		{
+			// this ensures that getFileParent("protocol:"), for
+			// example, is "protocol:" and not "".
+			index = path.lastIndexOf(':');
+		}
+
+		return path.substring(0,index + 1);
 	} //}}}
 
 	//{{{ constructPath() method

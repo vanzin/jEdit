@@ -39,6 +39,11 @@ JEDIT 4.0 VERSION HISTORY
 - '~' in buffer and directory path names is now automatically expanded
   to the home directory
 - Improved undo
+- Pressing Tab while there is a selection will now only shift the line's
+  leading indent if the selection spans more than one line
+- If indent on tab is enabled, a line will only be indented if Tab is
+  pressed inside the leading whitespace of that line. Indent on tab is
+  now enabled by default
 - File system browser improvements:
   - File->Recent Directories menu lists directories that were recently
     visted in the file system browser
@@ -78,6 +83,14 @@ JEDIT 4.0 VERSION HISTORY
   without any modifiers
 - The file system browser's notion of the current directory is not
   changed until the directory is actually loaded successfully
+- Some directories could not be deleted from the favorites
+- It is no longer possible to add the same directory to the favorites
+  twice
+- File->Current Directory menu now shows 'No Files' if there are no
+  files in the current directory
+- Fixed a few bugs in the File System Browser->Colors option pane
+- Compound edits were rather buggy
+- 'Trailing EOL' setting did not work
 
 + API Changes
 
@@ -85,6 +98,8 @@ JEDIT 4.0 VERSION HISTORY
 - VFS.DirectoryEntry constructor accepting a 'color' parameter removed.
   Instead, write a VFS.DirectoryEntry subclass that overrides the
   getColor() method
+- MiscUtilities.constructPath(), .getFileName(), .getParentOfPath()
+  methods are now VFS-aware
 
 * Version 4.0pre1
 

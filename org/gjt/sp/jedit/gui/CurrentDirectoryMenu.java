@@ -80,7 +80,14 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 			String backupSuffix = jEdit.getProperty("backup.suffix");
 
 			String[] list = dir.list();
-			if(list != null)
+			if(list == null || list.length == 0)
+			{
+				mi = new JMenuItem(jEdit.getProperty(
+					"current-directory.no-files"));
+				mi.setEnabled(false);
+				add(mi);
+			}
+			else
 			{
 				MiscUtilities.quicksort(list,
 					new MiscUtilities.StringICaseCompare());
