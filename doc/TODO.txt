@@ -5,15 +5,14 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- right-click on parent directories in fsb
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - better trailing EOL handling
 - minor quicknotepad changes -- update docs
 - add documentation for pre1 features
-- middle click: do not replace selection
 
 + later:
 
+- right-click on parent directories in fsb
 - do something 'bout tip 33
 - add dockable window state change msg
 - action system overhaul
