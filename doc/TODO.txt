@@ -1,5 +1,7 @@
 TO DO
 
+- backup dir feature and FTP plugin
+- changing fold handler on save causes problems
 - lots of spaces then one word; word should not be wrapped
 - numpad problems
 - scroll to caret _still_ jumps around
