@@ -12,6 +12,12 @@
 	<DOCKABLE NAME="hypersearch-results">
 		new HyperSearchResults(view);
 	</DOCKABLE>
+	<DOCKABLE NAME="view-registers">
+		new RegisterViewer(view,position);
+	</DOCKABLE>
+	<DOCKABLE NAME="view-markers">
+		new MarkerViewer(view);
+	</DOCKABLE>
 	<DOCKABLE NAME="io-progress-monitor">
 		new IOProgressMonitor();
 	</DOCKABLE>

@@ -2,6 +2,9 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.3pre1
 
+Thanks to Marcelo Vanzin, Nicholas O'Leary and Trevor Harmon for
+contributing to this release.
+
 {{{ Miscellaneous
 
 - jEdit no longer runs with Java 2 version 1.3. Java 2 version 1.4 or
@@ -12,6 +15,8 @@ JEDIT 4.2 VERSION HISTORY
 
 - Added Ant target for building a MacOS X .app package (Trevor Harmon).
 
+- Added Register and Marker dockables (Nicholas O'Leary).
+
 }}}
 {{{ Bug Fixes
 
@@ -20,6 +25,11 @@ JEDIT 4.2 VERSION HISTORY
 
 - Don't use two-stage save if the file's parent directory is not
   writeable (Marcelo Vanzin).
+
+}}}
+{{{ API Changes
+
+- Removed EditPlugin.JAR, deprecated since 4.2.
 
 }}}
 

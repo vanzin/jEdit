@@ -407,6 +407,8 @@ markers=add-marker \
 	  - \
 	  prev-marker \
 	  next-marker \
+	  - \
+	  view-markers \
 	  -
 markers.code=new MarkersProvider();
 markers.label=$Markers
@@ -1981,6 +1983,11 @@ log-viewer.title=Activity Log
 log-viewer.caption=Full text of log is stored in {0}.
 log-viewer.copy=Copy
 log-viewer.tail.label=Tail
+#}}}
+
+#{{{ Marker Viewer
+view-markers.label=Vie$w Markers...
+view-markers.title=Markers
 #}}}
 
 #{{{ I/O progress monitor

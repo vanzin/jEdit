@@ -28,6 +28,7 @@ import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -76,6 +77,8 @@ public class Registers
 
 		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);
+		EditBus.send(new RegisterChanged(null,register));
+	
 	} //}}}
 
 	//{{{ cut() method
@@ -99,6 +102,7 @@ public class Registers
 			HistoryModel.getModel("clipboard").addItem(selection);
 
 			textArea.setSelectedText("");
+			EditBus.send(new RegisterChanged(null,register));
 		}
 		else
 			textArea.getToolkit().beep();
@@ -312,6 +316,7 @@ public class Registers
 		}
 
 		registers[name] = newRegister;
+		EditBus.send(new RegisterChanged(null,name));
 	} //}}}
 
 	//{{{ setRegister() method

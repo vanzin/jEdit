@@ -453,7 +453,7 @@ public class PluginJAR
 			}
 
 			plugin = (EditPlugin)clazz.newInstance();
-			plugin.jar = (EditPlugin.JAR)this;
+			plugin.jar = this;
 		}
 		catch(Throwable t)
 		{
@@ -586,9 +586,8 @@ public class PluginJAR
 				Log.log(Log.ERROR,this,t);
 			}
 
-			plugin = new EditPlugin.Deferred(
+			plugin = new EditPlugin.Deferred(this,
 				plugin.getClassName());
-			plugin.jar = (EditPlugin.JAR)this;
 
 			EditBus.send(new PluginUpdate(this,
 				PluginUpdate.DEACTIVATED,exit));
@@ -941,9 +940,8 @@ public class PluginJAR
 				actions.setLabel(jEdit.getProperty(
 					"action-set.plugin",
 					new String[] { label }));
-				plugin = new EditPlugin.Deferred(
+				plugin = new EditPlugin.Deferred(this,
 					cache.pluginClass);
-				plugin.jar = (EditPlugin.JAR)this;
 			}
 		}
 		else
@@ -1049,9 +1047,8 @@ public class PluginJAR
 				}
 				else
 				{
-					plugin = new EditPlugin.Deferred(
+					plugin = new EditPlugin.Deferred(this,
 						className);
-					plugin.jar = (EditPlugin.JAR)this;
 					label = _label;
 				}
 
@@ -1197,8 +1194,7 @@ public class PluginJAR
 	//{{{ breakPlugin() method
 	private void breakPlugin()
 	{
-		plugin = new EditPlugin.Broken(plugin.getClassName());
-		plugin.jar = (EditPlugin.JAR)this;
+		plugin = new EditPlugin.Broken(this,plugin.getClassName());
 
 		// remove action sets, dockables, etc so that user doesn't
 		// see the broken plugin
