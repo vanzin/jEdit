@@ -83,6 +83,12 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			jEdit.getColorProperty("view.selectionColor")),
 			GridBagConstraints.VERTICAL);
 
+		/* Multiple selection color */
+		addComponent(jEdit.getProperty("options.textarea.multipleSelection"),
+			multipleSelectionColor = new ColorWellButton(
+			jEdit.getColorProperty("view.multipleSelectionColor")),
+			GridBagConstraints.VERTICAL);
+
 		/* Line highlight */
 		lineHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".lineHighlight"));
@@ -166,6 +172,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.getSelectedColor());
 		jEdit.setColorProperty("view.selectionColor",selectionColor
 			.getSelectedColor());
+		jEdit.setColorProperty("view.multipleSelectionColor",multipleSelectionColor
+			.getSelectedColor());
 		jEdit.setBooleanProperty("view.lineHighlight",lineHighlight
 			.isSelected());
 		jEdit.setColorProperty("view.lineHighlightColor",
@@ -199,6 +207,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox blockCaret;
 	private ColorWellButton caretColor;
 	private ColorWellButton selectionColor;
+	private ColorWellButton multipleSelectionColor;
 	private JCheckBox lineHighlight;
 	private ColorWellButton lineHighlightColor;
 	private JCheckBox bracketHighlight;

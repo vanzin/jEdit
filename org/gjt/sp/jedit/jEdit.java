@@ -2819,7 +2819,7 @@ public class jEdit
 			}
 			catch(FileNotFoundException fnf)
 			{
-				Log.log(Log.DEBUG,jEdit.class,fnf);
+				//Log.log(Log.DEBUG,jEdit.class,fnf);
 			}
 			catch(IOException e)
 			{
