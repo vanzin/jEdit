@@ -5235,10 +5235,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			return;
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
-		visibleLines = height / lineHeight;
-		lastLinePartial = (height % lineHeight != 0);
-		if(lastLinePartial)
-			visibleLines++;
+		if(lineHeight == 0)
+			visibleLines = 0;
+		else
+		{
+			visibleLines = height / lineHeight;
+			lastLinePartial = (height % lineHeight != 0);
+			if(lastLinePartial)
+				visibleLines++;
+		}
 
 		chunkCache.recalculateVisibleLines();
 

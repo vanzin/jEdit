@@ -568,11 +568,13 @@ public class BufferIORequest extends WorkRequest
 		setAbortable(false);
 
 		String lineSeparator;
-		if(length == 0)
+		if(seg.count == 0)
 		{
 			// fix for "[ 865589 ] 0-byte files should open using
 			// the default line seperator"
-			lineSeparator = null;
+			lineSeparator = jEdit.getProperty(
+				"buffer.lineSeparator",
+				System.getProperty("line.separator"));
 		}
 		else if(CRLF)
 			lineSeparator = "\r\n";

@@ -103,6 +103,17 @@ contributing to this release.
 - Workaround for A+PAGE_UP/PAGE_DOWN inserting garbage in the text area
   on Windows.
 
+- Fix ClassCastException when changing edit mode in Buffer Options
+  dialog box.
+
+- A zero-length file did not open with the default line separator, but
+  rather the Unix line separator.
+
+- jEdit did not start if the font size was set to zero.
+
+- Changing the font size did not update the font in open activity log
+  windows.
+
 }}}
 
 }}}
