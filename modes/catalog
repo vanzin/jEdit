@@ -114,6 +114,9 @@
 <MODE NAME="gettext"		FILE="gettext.xml"
 				FILE_NAME_GLOB="*.{po,pot}" />
 
+<MODE NAME="groovy"			FILE="groovy.xml"
+				FILE_NAME_GLOB="*.{groovy,grv}"/>
+
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 
@@ -261,6 +264,9 @@
 
 <MODE NAME="psp"		FILE="psp.xml"
 				FILE_NAME_GLOB="*.psp" />
+
+<MODE NAME="ptl"		FILE="ptl.xml"
+				FILE_NAME_GLOB="*.ptl"/>
 
 <MODE NAME="pvwave"		FILE="pvwave.xml"
 				FILE_NAME_GLOB="*.jou" />
