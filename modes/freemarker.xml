@@ -67,27 +67,27 @@
     </SPAN_REGEXP>
     
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|import|stop|escape|macro|function|transform|call)(\s|/|$)</BEGIN>
+      <BEGIN>&lt;#?(if|elseif|switch|foreach|list|case|assign|local|global|setting|include|import|stop|escape|macro|function|transform|call|visit|recurse)(\s|/|$)</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;/#?(if|switch|foreach|list|escape|macro|function|transform|compress|noescape)\&gt;</BEGIN>
+      <BEGIN>&lt;/#?(assign|local|global|if|switch|foreach|list|escape|macro|function|transform|compress|noescape)\&gt;</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|t|rt|lt|return)\&gt;</BEGIN>
+      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|t|rt|lt|return|recurse)\&gt;</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;/@(([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*)?</BEGIN>
+      <BEGIN>&lt;/@(([_@[:alpha:]][_@[:alnum:]]*)(\.[_@[:alpha:]][_@[:alnum:]]*)*)?</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;@([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*</BEGIN>
+      <BEGIN>&lt;@([_@[:alpha:]][_@[:alnum:]]*)(\.[_@[:alpha:]][_@[:alnum:]]*)*</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
     
@@ -165,6 +165,7 @@
       <KEYWORD1>false</KEYWORD1>
       <KEYWORD1>as</KEYWORD1>
       <KEYWORD1>in</KEYWORD1>
+      <KEYWORD1>using</KEYWORD1>
       <OPERATOR>gt</OPERATOR>
       <OPERATOR>gte</OPERATOR>
       <OPERATOR>lt</OPERATOR>

@@ -91,23 +91,23 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ doTypeSelect() method
-	public void doTypeSelect(String str, boolean ignoreCase)
+	public void doTypeSelect(String str, boolean dirsOnly)
 	{
 		if(str.length() == 0)
 			clearSelection();
 		else if(getSelectedRow() == -1)
-			doTypeSelect(str,0,getRowCount(),ignoreCase);
+			doTypeSelect(str,0,getRowCount(),dirsOnly);
 		else
 		{
 			int start = getSelectionModel().getMaxSelectionIndex();
 			boolean retVal = doTypeSelect(str,start,getRowCount(),
-				ignoreCase);
+				dirsOnly);
 
 			if(!retVal)
 			{
 				// scan from selection to end failed, so
 				// scan from start to selection
-				doTypeSelect(str,0,start,ignoreCase);
+				doTypeSelect(str,0,start,dirsOnly);
 			}
 		}
 	} //}}}
@@ -349,7 +349,9 @@ public class VFSDirectoryEntryTable extends JTable
 				break;
 			default:
 				typeSelectBuffer.append(evt.getKeyChar());
-				doTypeSelect(typeSelectBuffer.toString(),true);
+				doTypeSelect(typeSelectBuffer.toString(),
+					browser.getMode() == VFSBrowser
+					.CHOOSE_DIRECTORY_DIALOG);
 
 				timer.stop();
 				timer.setInitialDelay(750);
@@ -378,15 +380,21 @@ public class VFSDirectoryEntryTable extends JTable
 
 	//{{{ doTypeSelect() method
 	private boolean doTypeSelect(String str, int start, int end,
-		boolean ignoreCase)
+		boolean dirsOnly)
 	{
 		for(int i = start; i < end; i++)
 		{
 			VFSDirectoryEntryTableModel.Entry entry =
 				(VFSDirectoryEntryTableModel.Entry)getValueAt(i,1);
+			if(dirsOnly && entry.dirEntry.type
+				== VFS.DirectoryEntry.FILE)
+			{
+				continue;
+			}
+
 			String matchAgainst = (MiscUtilities.isAbsolutePath(str)
 				? entry.dirEntry.path : entry.dirEntry.name);
-			if(matchAgainst.regionMatches(ignoreCase,
+			if(matchAgainst.regionMatches(true,
 				0,str,0,str.length()))
 			{
 				setSelectedRow(i);

@@ -3,7 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre3
 
 Thanks to Brad Mace, Brant Langer Gurganus, Christoph Daniel Schulze,
-Ken Turner and Ollie Rutherfurd for contributing to this release.
+Jonathan Revusky, Ken Turner and Ollie Rutherfurd for contributing to
+this release.
 
 {{{ Editing
 
@@ -43,6 +44,8 @@ Ken Turner and Ollie Rutherfurd for contributing to this release.
 
 - Added UnrealScript syntax highlighting (Christoph Daniel Schulze)
 
+- Updated FreeMaker syntax highlighting (Jonathan Revusky)
+
 }}}
 {{{ User Interface
 
@@ -59,6 +62,11 @@ Ken Turner and Ollie Rutherfurd for contributing to this release.
 - On Windows, entering X:\ or X:/ where X is a drive letter will
   automatically list that drive so that further paths can be completed.
   This is similar to how on Unix entering / opens the root directory.
+
+- Improved 'Choose Directory' dialog box.
+
+- A warning dialog box is now shown if nothing is selected in the text
+  area and the "search in selection" setting is activated.
 
 }}}
 {{{ Plugin Manager

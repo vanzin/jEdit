@@ -154,7 +154,7 @@ view.context=insert-file reload - paste-previous view-registers - \
 	unsplit split-horizontal - buffer-options global-options
 view.context.customize=Customize This Menu...
 #}}}
-,
+
 #{{{ Menu bar
 view.mbar=file edit search markers folds view utils macros plugins help-menu
 
@@ -1256,6 +1256,12 @@ remote-dir-search.title=Non-Local Directory Chosen
 remote-dir-search.message=You have elected to search a non-local directory.\n\
 	This can be very slow due to network latency and so on.\n\
 	Are you sure you want to continue?
+#}}}
+
+#{{{ "Search in selection" active but nothing selected in text area
+search-no-selection.title=Nothing Selected
+search-no-selection.message=Please select some text or deactivate the\n\
+	"search in selection" option first.
 #}}}
 
 #{{{ Paste previous and paste deleted dialogs

@@ -216,7 +216,7 @@ public class PositionManager
 				boolean oldXRed = x.red;
 				PosBottomHalf b = z.restructure();
 				b.left.red = false;
-				bright.red = false;
+				b.right.red = false;
 				b.red = oldXRed;
 				r.red = false;
 			}

@@ -159,6 +159,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			if(!save(false))
 				return;
 
+			if(searchSelection.isSelected()
+				&& view.getTextArea().getSelectionCount() == 0)
+			{
+				GUIUtilities.error(view,"search-no-selection",null);
+				return;
+			}
+
 			if(hyperSearch.isSelected() || searchSelection.isSelected())
 			{
 				if(SearchAndReplace.hyperSearch(view,
@@ -860,6 +867,14 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			}
 			else if(source == replaceAllBtn)
 			{
+				if(searchSelection.isSelected() &&
+					view.getTextArea().getSelectionCount()
+					== 0)
+				{
+					GUIUtilities.error(view,"search-no-selection",null);
+					return;
+				}
+
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 				save(false);
