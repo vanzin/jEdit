@@ -1,5 +1,5 @@
 /*
- * VFSDirectoryEntryCellRenderer.java - renders table cells for the VFS browser
+ * FileCellRenderer.java - renders table cells for the VFS browser
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class VFSDirectoryEntryCellRenderer extends DefaultTableCellRenderer
+public class FileCellRenderer extends DefaultTableCellRenderer
 {
 	public static Icon fileIcon = GUIUtilities.loadIcon("File.png");
 	public static Icon openFileIcon = GUIUtilities.loadIcon("OpenFile.png");
@@ -41,8 +41,8 @@ public class VFSDirectoryEntryCellRenderer extends DefaultTableCellRenderer
 	public static Icon filesystemIcon = GUIUtilities.loadIcon("DriveSmall.png");
 	public static Icon loadingIcon = GUIUtilities.loadIcon("ReloadSmall.png");
 
-	//{{{ VFSDirectoryEntryCellRenderer constructor
-	public VFSDirectoryEntryCellRenderer()
+	//{{{ FileCellRenderer constructor
+	public FileCellRenderer()
 	{
 		plainFont = UIManager.getFont("Tree.font");
 		if(plainFont == null)
