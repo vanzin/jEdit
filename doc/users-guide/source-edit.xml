@@ -434,36 +434,62 @@ With text inside it.
     while clicking.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
     Fold</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo>)
     collapses the fold
     containing the caret position.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     Fold One Level</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Alt</keycap><keycap>Enter</keycap></keycombo>) expands the
     fold containing the caret position. Nested folds will remain collapsed.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     Fold Fully</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>)
     expands the fold
     containing the caret position, also expanding any nested folds.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
+    All Folds</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>C</keycap>) collapses all folds in the buffer.
+   </para>
+   <para>
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     All Folds</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>X</keycap>)
     expands all folds, thus making all lines in the buffer visible.
    </para>
   </sect2>
+  <sect2><title>Navigating Around With Folds</title>
+   <para>
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Parent
+    Fold</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    the caret to the fold containing the one at the caret position.
+   </para>
+   <para>
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Previous
+    Fold</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    the caret to the fold immediately before the caret position.
+   </para>
+   <para>
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Next
+    Fold</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    the caret to the fold immediately after the caret position.
+   </para>
+  </sect2>
   <sect2><title>Miscellaneous Folding Features</title>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Add
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Add
     Explicit Fold</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>A</keycap>) is a convenience command that surrounds the
@@ -473,7 +499,7 @@ With text inside it.
     automatically be commented out as well.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Select
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Select
     Fold</guimenuitem>
     (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -483,8 +509,8 @@ With text inside it.
     in the gutter on the left of the text area has the same effect.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    All Folds</guimenuitem> (keyboard shortcut:
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    Folds With Level</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>)
     reads the next character entered at the keyboard, and
@@ -518,15 +544,23 @@ With text inside it.
     narrowing are implemented using the same code internally.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
-    Buffer to Selection</guimenuitem> (keyboard shortcut:
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
+    Buffer to Fold</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>N</keycap>) hides all lines the buffer except those in the
-    selection. When this command is invoked, a message is shown in the
+    <keycap>N</keycap> <keycap>N</keycap>) hides all lines the buffer except
+    those in the fold containing the caret.
+    When this command is invoked, a message is shown in the
     status bar explaining how to make the entire buffer visible again.
    </para>
    <para>
-    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
+    Buffer to Selection</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>N</keycap> <keycap>S</keycap>) hides all lines the buffer
+    except those in the selection.
+   </para>
+   <para>
+    <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
     All Folds</guimenuitem> (keyboard shortcut:
     <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
     <keycap>X</keycap>) will make visible any lines hidden by narrowing.

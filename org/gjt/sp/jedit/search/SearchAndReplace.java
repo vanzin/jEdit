@@ -430,7 +430,7 @@ loop:			for(;;)
 					 * it inside the buffer == null, or add
 					 * a 'finally' clause. you decide which one's
 					 * worse. */
-					 path = fileset.getNextFile(view,path);
+					path = fileset.getNextFile(view,path);
 
 					if(buffer == null)
 						continue loop;
@@ -460,8 +460,6 @@ loop:			for(;;)
 
 					if(find(view,buffer,start))
 						return true;
-
-					path = fileset.getNextFile(view,path);
 				}
 
 				if(repeat)

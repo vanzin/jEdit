@@ -178,14 +178,14 @@ view.search.find=Search for:
 #}}}
 
 #{{{ Context menu
-view.context=undo redo - cut copy paste paste-previous - select-all \
-	select-none - view-registers - to-upper to-lower - \
-	hypersearch hypersearch-word - unsplit split-horizontal - \
-	buffer-options global-options
+view.context=insert-file reload - paste-previous view-registers - \
+	invert-selection select-block to-upper to-lower - hypersearch-word - \
+	add-marker - narrow-to-fold - \
+	unsplit split-horizontal - buffer-options global-options
 #}}}
 
 #{{{ Menu bar
-view.mbar=file edit search markers view utils macros plugins help-menu
+view.mbar=file edit search markers folds view utils macros plugins help-menu
 
 #{{{ File menu
 file=new-file \
@@ -416,6 +416,41 @@ no-markers.label=No Markers
 markers.blank-line=[Blank line]
 #}}}
 
+#{{{ Folding menu
+folds=collapse-fold \
+      expand-one-level \
+      expand-fold \
+      - \
+      collapse-all-folds \
+      expand-folds \
+      expand-all-folds \
+      - \
+      select-fold \
+      - \
+      add-explicit-fold \
+      - \
+      narrow-to-fold \
+      narrow-to-selection \
+      - \
+      parent-fold \
+      prev-fold \
+      next-fold
+folds.label=F$olding
+collapse-fold.label=$Collapse Fold
+expand-one-level.label=$Expand Fold One Level
+expand-fold.label=Expand $Fold Fully
+collapse-all-folds.label=Collapse $All Folds
+expand-folds.label=Expand Fo$lds With Level
+expand-all-folds.label=E$xpand All Folds
+select-fold.label=$Select Fold
+add-explicit-fold.label=A$dd Explicit Fold
+narrow-to-fold.label=Na$rrow to Fold
+narrow-to-selection.label=Narro$w to Selection
+parent-fold.label=$Go to Parent Fold
+prev-fold.label=Go to $Previous Fold
+next-fold.label=Go to $Next Fold
+#}}}
+
 #{{{ View menu
 view=new-view \
      close-view \
@@ -424,11 +459,15 @@ view=new-view \
      next-buffer \
      recent-buffer \
      - \
+     unsplit \
+     split-horizontal \
+     split-vertical \
+     prev-textarea \
+     next-textarea \
+     - \
      toggle-line-numbers \
      - \
      %scrolling \
-     %folding \
-     %splitting \
      %docking
 view.label=$View
 new-view.label=New $View
@@ -437,6 +476,11 @@ prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
 toggle-line-numbers.label=$Line Numbers
+split-horizontal.label=Split $Horizontally
+split-vertical.label=Spli$t Vertically
+unsplit.label=$Unsplit
+prev-textarea.label=$Go to Previous Text Area
+next-textarea.label=G$o to Next Text Area
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
@@ -457,46 +501,6 @@ scroll-down-line.label=Line Scroll Down
 scroll-up-page.label=Page Scroll Up
 scroll-down-page.label=Page Scroll Down
 toggle-synchro-scroll.label=Synchronized Scrolling
-#}}}
-
-#{{{ Folding menu
-folding=collapse-fold \
-	expand-one-level \
-	expand-fold \
-	- \
-	collapse-all-folds \
-	expand-folds \
-	expand-all-folds \
-	- \
-	select-fold \
-	- \
-	add-explicit-fold \
-	- \
-	narrow
-folding.label=Folding
-collapse-fold.label=Collapse Fold
-expand-one-level.label=Expand Fold One Level
-expand-fold.label=Expand Fold Fully
-collapse-all-folds.label=Collapse All Folds
-expand-folds.label=Expand Folds With Level
-expand-all-folds.label=Expand All Folds
-select-fold.label=Select Fold
-add-explicit-fold.label=Add Explicit Fold
-narrow.label=Narrow Buffer to Selection
-#}}}
-
-#{{{ Splitting menu
-splitting=unsplit \
-	  split-horizontal \
-	  split-vertical \
-	  prev-textarea \
-	  next-textarea
-splitting.label=Splitting
-split-horizontal.label=Split Horizontally
-split-vertical.label=Split Vertically
-unsplit.label=Unsplit
-prev-textarea.label=Go to Previous Text Area
-next-textarea.label=Go to Next Text Area
 #}}}
 
 #{{{ Docking menu
@@ -673,7 +677,7 @@ view.status.swap-marker=Enter shortcut of marker to swap caret position with
 view.status.expand-folds=Press 1-9 to specify fold level
 view.status.insert-literal=Press key to insert literally
 view.status.auto-wrap=Search string not found; wrapping around
-view.status.not-found=Search string not found
+view.status.search-not-found=Search string not found
 view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.io=I/O: {0} operations in progress
 view.status.io-1=I/O: 1 operation in progress
@@ -1562,7 +1566,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=70
+tip.count=71
 #}}}
 
 #{{{ Activity log

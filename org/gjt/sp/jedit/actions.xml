@@ -126,7 +126,7 @@
 
 <ACTION NAME="collapse-fold">
 	<CODE>
-		textArea.getFoldVisibilityManager().collapseFold(textArea.getCaretLine());
+		textArea.collapseFold();
 	</CODE>
 </ACTION>
 
@@ -284,13 +284,13 @@
 
 <ACTION NAME="expand-fold">
 	<CODE>
-		textArea.getFoldVisibilityManager().expandFold(textArea.getCaretLine(),true);
+		textArea.expandFold(true);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="expand-one-level">
 	<CODE>
-		textArea.getFoldVisibilityManager().expandFold(textArea.getCaretLine(),false);
+		textArea.expandFold(false);
 	</CODE>
 </ACTION>
 
@@ -428,7 +428,13 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="narrow">
+<ACTION NAME="narrow-to-fold">
+	<CODE>
+		textArea.narrowToFold();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="narrow-to-selection">
 	<CODE>
 		textArea.narrowToSelection();
 	</CODE>
@@ -461,6 +467,12 @@
 <ACTION NAME="next-char">
 	<CODE>
 		textArea.goToNextCharacter(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-fold">
+	<CODE>
+		textArea.goToNextFold(false);
 	</CODE>
 </ACTION>
 
@@ -518,6 +530,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="parent-fold">
+	<CODE>
+		textArea.goToParentFold();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="paste">
 	<CODE>
 		Registers.paste(textArea,'$');
@@ -559,6 +577,12 @@
 <ACTION NAME="prev-char">
 	<CODE>
 		textArea.goToPrevCharacter(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-fold">
+	<CODE>
+		textArea.goToPrevFold(false);
 	</CODE>
 </ACTION>
 

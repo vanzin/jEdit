@@ -204,6 +204,7 @@ public class DefaultInputHandler extends InputHandler
 
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
 			modifiers);
+
 		Object o = currentBindings.get(keyStroke);
 		if(o == null)
 		{
@@ -238,9 +239,7 @@ public class DefaultInputHandler extends InputHandler
 		if(o instanceof EditAction)
 		{
 			currentBindings = bindings;
-
 			invokeAction((EditAction)o);
-
 			evt.consume();
 		}
 		else if(o instanceof Hashtable)
@@ -291,26 +290,26 @@ public class DefaultInputHandler extends InputHandler
 		if(o instanceof Hashtable)
 		{
 			currentBindings = (Hashtable)o;
-			return;
 		}
 		else if(o instanceof EditAction)
 		{
 			currentBindings = bindings;
 			invokeAction((EditAction)o);
-			return;
-		}
-
-		// otherwise, reset to default map and do user input
-		currentBindings = bindings;
-
-		if(repeat && Character.isDigit(c))
-		{
-			repeatCount *= 10;
-			repeatCount += (c - '0');
-			view.getStatus().setMessage(null);
 		}
 		else
-			userInput(c);
+		{
+			// otherwise, reset to default map and do user input
+			currentBindings = bindings;
+
+			if(repeat && Character.isDigit(c))
+			{
+				repeatCount *= 10;
+				repeatCount += (c - '0');
+				view.getStatus().setMessage(null);
+			}
+			else
+				userInput(c);
+		}
 	} //}}}
 
 	//{{{ parseKeyStroke() method
