@@ -119,7 +119,7 @@ public class BeanShell
 					{
 						global.setVariable("line",new Integer(j));
 						global.setVariable("index",new Integer(
-							j - s.getStartLine() + 1));
+							j - s.getStartLine()));
 						int start = s.getStart(buffer,j);
 						int end = s.getEnd(buffer,j);
 						String text = buffer.getText(start,

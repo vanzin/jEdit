@@ -1,6 +1,7 @@
 TO DO
 
-- cvs add FloatingWindowContainer.java, PanelWindowContainer.java
+- framse.setState(Frame.NORMAL);
+- plugin size reporting
 - broken bracket matching
 - reload doesn't scroll to caret properly
 - update tool bar, context option panes for action set API
@@ -16,7 +17,7 @@ TO DO
 - installer: show GPL
 - write custom stylesheet
 - ant build file: pdf output target
-- about dialog box
+- version, wrap around in about dialog box
 - JComponent.requestDefaultFocus(): new 1.4 method
 - eval-for-selected-lines doesn't work with rectangular selection
 - colors not loaded initially

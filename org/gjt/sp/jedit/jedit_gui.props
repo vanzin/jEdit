@@ -401,8 +401,7 @@ view=new-view \
      - \
      %scrolling \
      %folding \
-     %splitting \
-     %docking
+     %splitting
 view.label=$View
 new-view.label=New $View
 close-view.label=$Close View
@@ -463,16 +462,6 @@ split-vertical.label=Split Vertically
 unsplit.label=Unsplit
 prev-textarea.label=Go to Previous Text Area
 next-textarea.label=Go to Next Text Area
-
-docking=docking-top-expanded \
-	docking-bottom-expanded \
-	docking-left-expanded \
-	docking-right-expanded
-docking.label=Docking Areas
-docking-top-expanded.label=Top Area Expanded
-docking-bottom-expanded.label=Bottom Area Expanded
-docking-left-expanded.label=Left Area Expanded
-docking-right-expanded.label=Right Area Expanded
 
 ### Utilities menu
 utils=vfs-browser \
@@ -649,7 +638,60 @@ print.page=Page {0}
 # About dialog
 about.title=About jEdit
 about.version=jEdit version {0}
-about.caption=jEdit web site: <http://www.jedit.org>
+
+# This text scrolls by in the about dialog box.
+# Hack: Since StringTokenizer treats two consequent \n as one token, we
+# insert a space by itself in the text to create blank lines.
+about.text=jEdit was brought to you by:\n\
+	\ \n\
+	Slava Pestov\n\
+	Alwyn Barry\n\
+	Andre Kaplan\n\
+	Artur Biesiadowski\n\
+	Bruno Tatibouet\n\
+	Dante Fabrizio\n\
+	Denis Lambot\n\
+	Dirk Moebius\n\
+	Dominic Stolerman\n\
+	Ed Stewart\n\
+	Francesc Roses\n\
+	Gili Tzabari\n\
+	Ian Maclean\n\
+	Jason Ginchereau\n\
+	Jerry McBride\n\
+	John Gellene\n\
+	Jonathan Revusky\n\
+	Juha Lindfors\n\
+	Kris Kopicki\n\
+	Kristian Ovaska\n\
+	Lionel Fiol\n\
+	Marc Rummel\n\
+	Matt Albrecht\n\
+	Matt Price\n\
+	Matthias Schneider\n\
+	Michael Jacobson\n\
+	Mike Dillon\n\
+	Nils Krahnstoever\n\
+	Nitsan Vardi\n\
+	Ollie Rutherfurd\n\
+	Patrick Tingen\n\
+	Peter Graves\n\
+	Ralf Engels\n\
+	Richard Ashwell\n\
+	Rick Owen\n\
+	Romain Guy\n\
+	Richard Beton\n\
+	Saimon Moore\n\
+	Tal Davidson\n\
+	Thomas Bock\n\
+	Tom Locke\n\
+	Will Sargent\n\
+	Wojciech Stryjewski\n\
+	\ \n\
+	I'd also like to thank all the users for their\n\
+	comments, feedback and bug reports.\n\
+	\ \n\
+	Message to Sun: Open Source Java!
 
 # IO Error dialog, {0}=the error message
 ioerror.title=I/O Error

@@ -55,25 +55,38 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			: BoxLayout.Y_AXIS
 		);
 
+		// the close box must be the same size as the other buttons to look good.
+		// there are two ways to achieve this:
+		// a) write a custom layout manager
+		// b) when the first button is added, give the close box the proper size
+		// I'm lazy so I chose "b". See register() for details.
+
 		closeBox = new JButton(CLOSE_BOX);
 		closeBox.setMargin(new Insets(0,0,0,0));
-		closeBox.setBorderPainted(false);
-		closeBox.addActionListener(new ActionHandler());
-		closeBox.addMouseListener(new ButtonMouseHandler());
 		closeBox.setRequestFocusEnabled(false);
 		buttons.add(closeBox);
+
+		closeBox.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				show(null);
+			}
+		});
 
 		if(position.equals(DockableWindowManager.TOP))
 			add(BorderLayout.NORTH,buttons);
 		else if(position.equals(DockableWindowManager.LEFT))
-			add(BorderLayout.EAST,buttons);
+			add(BorderLayout.WEST,buttons);
 		else if(position.equals(DockableWindowManager.BOTTOM))
 			add(BorderLayout.SOUTH,buttons);
 		else if(position.equals(DockableWindowManager.RIGHT))
-			add(BorderLayout.WEST,buttons);
+			add(BorderLayout.EAST,buttons);
 
 		buttonGroup = new ButtonGroup();
 		dockables = new Vector();
+		dockablePanel = new JPanel(dockableLayout = new CardLayout());
+		add(BorderLayout.CENTER,dockablePanel);
 
 		dimension = jEdit.getIntegerProperty(
 			"view.dock." + position + ".dimension",0);
@@ -103,15 +116,20 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			{
 				if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
-					dim.height += dimension + SPLITTER_WIDTH;
+				{
+					return new Dimension(dim.width,
+						dim.height + dimension + SPLITTER_WIDTH + 3);
+				}
 				else
-					dim.width += dimension + SPLITTER_WIDTH;
-				return dim;
+				{
+					return new Dimension(dim.width + dimension + SPLITTER_WIDTH + 3,
+						dim.height);
+				}
 			}
 		}
 	}
 
-	public void add(DockableWindowManager.Entry entry)
+	public void register(final DockableWindowManager.Entry entry)
 	{
 		dockables.addElement(entry);
 
@@ -127,14 +145,36 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			throw new InternalError("Invalid position: " + position);
 
 		CustomButton button = new CustomButton(rotation,entry.title);
-		button.addMouseListener(new ButtonMouseHandler());
+		button.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				wm.showDockableWindow(entry.name);
+			}
+		});
+
+		// this is a hack so that the first button added gives the close box
+		// it's proper size
+		if(buttons.getComponentCount() == 1)
+		{
+			Dimension size = button.getPreferredSize();
+			Dimension dim = new Dimension(
+				Math.min(size.width,size.height),
+				Math.min(size.width,size.height));
+			closeBox.setPreferredSize(dim);
+			System.err.println(dim);
+		}
+
 		buttonGroup.add(button);
 		buttons.add(button);
 
 		revalidate();
 	}
 
-	public void save(DockableWindowManager.Entry entry) {}
+	public void add(DockableWindowManager.Entry entry)
+	{
+		dockablePanel.add(entry.name,entry.win.getComponent());
+	}
 
 	public void remove(DockableWindowManager.Entry entry)
 	{
@@ -142,22 +182,25 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 		buttons.remove(index + 1);
 
 		dockables.removeElement(entry);
-		remove(entry.win.getComponent());
+		dockablePanel.remove(entry.win.getComponent());
 
 		if(current == entry)
 		{
 			current = null;
-			show(entry);
+			show(null);
 		}
 		else
 			revalidate();
 	}
 
+	public void save(DockableWindowManager.Entry entry) {}
+
 	public void show(DockableWindowManager.Entry entry)
 	{
-		if(current != null)
-			remove(current.win.getComponent());
-		else
+		if(current == entry)
+			return;
+
+		if(current == null)
 		{
 			// we didn't have a component previously, so create a border
 			setBorder(new DockBorder(position));
@@ -165,27 +208,35 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 
 		if(entry != null)
 		{
-			add(entry.win.getComponent(),BorderLayout.CENTER);
 			this.current = entry;
+
+			dockableLayout.show(dockablePanel,entry.name);
 
 			int index = dockables.indexOf(entry);
 			((JToggleButton)buttons.getComponent(index + 1)).setSelected(true);
 
 			entry.win.getComponent().requestFocus();
-
-			revalidate();
 		}
 		else
 		{
+			current = null;
 			buttonGroup.setSelected(null,true);
 			// removing last component, so remove border
 			setBorder(null);
 		}
+
+		revalidate();
+		repaint();
 	}
 
 	public boolean isVisible(DockableWindowManager.Entry entry)
 	{
 		return current == entry;
+	}
+
+	public DockableWindowManager.Entry getCurrent()
+	{
+		return current;
 	}
 
 	// private members
@@ -200,6 +251,8 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 	private ButtonGroup buttonGroup;
 	private int dimension;
 	private Vector dockables;
+	private JPanel dockablePanel;
+	private CardLayout dockableLayout;
 	private DockableWindowManager.Entry current;
 
 	static class DockBorder implements Border
@@ -314,20 +367,11 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 		static final int CW = 1;
 		static final int CCW = 2;
 
-		Color background = UIManager.getColor("Button.background");
-		Color lighter = background.brighter();
-
 		public CustomButton(int rotate, String text)
 		{
-			this();
-			setIcon(new RotatedTextIcon(rotate,text));
-		}
-
-		public CustomButton()
-		{
-			setBorderPainted(false);
 			setMargin(new Insets(0,0,0,0));
 			setRequestFocusEnabled(false);
+			setIcon(new RotatedTextIcon(rotate,text));
 		}
 
 		static int maxWidth = 0;
@@ -350,7 +394,7 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				width = fm.stringWidth(text);
 				height = fm.getHeight();
 
-				/* if(rotate == CW || rotate == CCW)
+				if(rotate == CW || rotate == CCW)
 				{
 					if(width > maxWidth
 						|| height > maxHeight)
@@ -364,7 +408,7 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 					int tmp = width;
 					width = height;
 					height = tmp;
-				} */
+				}
 			}
 
 			public int getIconWidth()
@@ -381,14 +425,14 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			{
 				FontMetrics fm = g.getFontMetrics();
 
-				//if(rotate == NONE)
+				if(rotate == NONE)
 				{
 					g.setColor(c.getForeground());
 					g.drawString(text,x,y + fm.getAscent());
 					return;
 				}
 
-				/*if(rotImg == null)
+				if(rotImg == null)
 				{
 					rotImg = c.createImage(maxWidth,maxHeight);
 					rotGfx = rotImg.getGraphics();
@@ -400,11 +444,11 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 
 				rotGfx.drawString(text,0,fm.getAscent());
 
-				ImageFilter filter = new RotationFilter(rotate,width,height);
-				Image rotated = createImage(new FilteredImageSource(
-					rotImg.getSource(),filter));
+				//ImageFilter filter = new RotationFilter(rotate,width,height);
+				//Image rotated = createImage(new FilteredImageSource(
+				//	rotImg.getSource(),filter));
 
-				g.drawImage(rotated,x,y,c);*/
+				//g.drawImage(rotated,x,y,c);
 			}
 		}
 
@@ -472,24 +516,6 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 
 				super.setPixels(x,y,w,h,model,pixels,off,scansize);
 			}
-		}
-	}
-
-	class ButtonMouseHandler extends MouseAdapter
-	{
-		Color background = UIManager.getColor("Button.background");
-		Color lighter = background.brighter();
-
-		public void mouseEntered(MouseEvent evt)
-		{
-			Component comp = (Component)evt.getSource();
-			comp.setBackground(lighter);
-		}
-
-		public void mouseExited(MouseEvent evt)
-		{
-			Component comp = (Component)evt.getSource();
-			comp.setBackground(background);
 		}
 	}
 
@@ -564,22 +590,23 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				return;
 
 			if(position.equals(DockableWindowManager.TOP))
-				dimension = evt.getY() + dragStart.y;
+				dimension = evt.getY() + dragStart.y
+					- buttons.getSize().height - SPLITTER_WIDTH;
 			else if(position.equals(DockableWindowManager.LEFT))
-				dimension = evt.getX() + dragStart.x;
+				dimension = evt.getX() + dragStart.x
+					- buttons.getSize().width - SPLITTER_WIDTH;
 			else if(position.equals(DockableWindowManager.BOTTOM))
 			{
-				dimension = getHeight() - (/* dragStart.y
-					- */ evt.getY());
+				dimension = getHeight() - evt.getY()
+					- buttons.getSize().height - SPLITTER_WIDTH;
 			}
 			else if(position.equals(DockableWindowManager.RIGHT))
 			{
-				dimension = getWidth() - (/* dragStart.x
-					- */ evt.getX());
+				dimension = getWidth() - evt.getX()
+					- buttons.getSize().width - SPLITTER_WIDTH;
 			}
 
-			dimension = Math.max(SPLITTER_WIDTH,dimension);
-			if(dimension == SPLITTER_WIDTH)
+			if(dimension <= 0)
 				dimension = dragStartDimension;
 
 			revalidate();
@@ -589,15 +616,6 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 		{
 			setCursor(Cursor.getPredefinedCursor(
 				Cursor.DEFAULT_CURSOR));
-		}
-	}
-
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == closeBox)
-				show(null);
 		}
 	}
 }

@@ -195,42 +195,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="docking-bottom-expanded">
-	<CODE>
-		view.getDockableWindowManager().getBottomDockingArea().toggleCollapsed();
-	</CODE>
-	<IS_SELECTED>
-		return !view.getDockableWindowManager().getBottomDockingArea().isCollapsed();
-	</IS_SELECTED>
-</ACTION>
-
-<ACTION NAME="docking-left-expanded">
-	<CODE>
-		view.getDockableWindowManager().getLeftDockingArea().toggleCollapsed();
-	</CODE>
-	<IS_SELECTED>
-		return !view.getDockableWindowManager().getLeftDockingArea().isCollapsed();
-	</IS_SELECTED>
-</ACTION>
-
-<ACTION NAME="docking-right-expanded">
-	<CODE>
-		view.getDockableWindowManager().getRightDockingArea().toggleCollapsed();
-	</CODE>
-	<IS_SELECTED>
-		return !view.getDockableWindowManager().getRightDockingArea().isCollapsed();
-	</IS_SELECTED>
-</ACTION>
-
-<ACTION NAME="docking-top-expanded">
-	<CODE>
-		view.getDockableWindowManager().getTopDockingArea().toggleCollapsed();
-	</CODE>
-	<IS_SELECTED>
-		return !view.getDockableWindowManager().getTopDockingArea().isCollapsed();
-	</IS_SELECTED>
-</ACTION>
-
 <ACTION NAME="document-end">
 	<CODE>
 		if(textArea.isMultipleSelectionEnabled())
