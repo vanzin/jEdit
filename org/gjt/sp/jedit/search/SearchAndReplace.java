@@ -373,7 +373,7 @@ public class SearchAndReplace
 			if(matcher == null)
 			{
 				view.getToolkit().beep();
-				results.searchDone(0,0);
+				results.searchFailed();
 				return false;
 			}
 
@@ -383,7 +383,7 @@ public class SearchAndReplace
 				s = view.getTextArea().getSelection();
 				if(s == null)
 				{
-					results.searchDone(0,0);
+					results.searchFailed();
 					return false;
 				}
 			}

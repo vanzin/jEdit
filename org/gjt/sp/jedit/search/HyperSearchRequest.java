@@ -45,9 +45,8 @@ public class HyperSearchRequest extends WorkRequest
 		this.matcher = matcher;
 
 		this.results = results;
-		this.resultTreeModel = results.getTreeModel();
-		this.resultTreeRoot = (DefaultMutableTreeNode)resultTreeModel
-			.getRoot();
+		this.searchString = SearchAndReplace.getSearchString();
+		this.rootSearchNode = new DefaultMutableTreeNode(searchString);
 
 		this.selection = selection;
 	} //}}}
@@ -73,15 +72,11 @@ public class HyperSearchRequest extends WorkRequest
 
 		setProgressMaximum(fileset.getFileCount(view));
 
-		int resultCount = 0;
-		int bufferCount = 0;
-
 		// to minimise synchronization and stuff like that, we only
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
 		long lastStatusTime = 0;
-
 
 		try
 		{
@@ -89,8 +84,7 @@ public class HyperSearchRequest extends WorkRequest
 			{
 				Buffer buffer = view.getBuffer();
 
-				bufferCount = 1;
-				resultCount = searchInSelection(buffer);
+				searchInSelection(buffer);
 			}
 			else
 			{
@@ -114,13 +108,7 @@ loop:				for(int i = 0; i < files.length; i++)
 					if(buffer == null)
 						continue loop;
 
-					int thisResultCount = doHyperSearch(buffer,
-						0,buffer.getLength());
-					if(thisResultCount != 0)
-					{
-						bufferCount++;
-						resultCount += thisResultCount;
-					}
+					doHyperSearch(buffer);
 				};
 			}
 		}
@@ -141,13 +129,11 @@ loop:				for(int i = 0; i < files.length; i++)
 		}
 		finally
 		{
-			final int _resultCount = resultCount;
-			final int _bufferCount = bufferCount;
 			VFSManager.runInAWTThread(new Runnable()
 			{
 				public void run()
 				{
-					results.searchDone(_resultCount,_bufferCount);
+					results.searchDone(rootSearchNode);
 				}
 			});
 		}
@@ -159,9 +145,9 @@ loop:				for(int i = 0; i < files.length; i++)
 	private View view;
 	private SearchMatcher matcher;
 	private HyperSearchResults results;
-	private DefaultTreeModel resultTreeModel;
-	private DefaultMutableTreeNode resultTreeRoot;
+	private DefaultMutableTreeNode rootSearchNode;
 	private Selection[] selection;
+	private String searchString;
 	//}}}
 
 	//{{{ searchInSelection() method
@@ -209,6 +195,13 @@ loop:				for(int i = 0; i < files.length; i++)
 	} //}}}
 
 	//{{{ doHyperSearch() method
+	private int doHyperSearch(Buffer buffer)
+		throws Exception
+	{
+		return doHyperSearch(buffer, 0, buffer.getLength());
+	} //}}}
+
+	//{{{ doHyperSearch() method
 	private int doHyperSearch(Buffer buffer, int start, int end)
 		throws Exception
 	{
@@ -221,15 +214,7 @@ loop:				for(int i = 0; i < files.length; i++)
 
 		if(resultCount != 0)
 		{
-			resultTreeRoot.insert(bufferNode,resultTreeRoot.getChildCount());
-
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					resultTreeModel.reload(resultTreeRoot);
-				}
-			});
+			rootSearchNode.insert(bufferNode,rootSearchNode.getChildCount());
 		}
 
 		setAbortable(true);
