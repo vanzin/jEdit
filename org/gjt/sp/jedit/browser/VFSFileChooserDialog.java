@@ -28,7 +28,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -183,6 +183,16 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					getToolkit().beep();
 					return;
 				}
+				else if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+				{
+					Hashtable props = new Hashtable();
+					props.put(Buffer.ENCODING,browser.currentEncoding);
+					jEdit.openFile(browser.getView(),
+						browser.getDirectory(),
+						filename,false,props);
+					dispose();
+					return;
+				}
 			}
 		}
 		else
@@ -212,6 +222,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				if(doFileExistsWarning(filename))
 					return;
 			}
+		}
+		else if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+		{
+			browser.filesActivated(VFSBrowser.M_OPEN,false);
 		}
 
 		isOK = true;
@@ -304,10 +318,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					browser.getDirectoryField().getText()))
 				{
 					browser.setDirectory(browser.getDirectoryField().getText());
-					return;
 				}
-
-				ok();
+				else
+					ok();
 			}
 			else if(evt.getSource() == cancel)
 				cancel();
@@ -419,7 +432,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				}
 			}
 		} //}}}
-	
+
 		//{{{ progressUpdate() method
 		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
 		{
