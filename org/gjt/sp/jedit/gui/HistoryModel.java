@@ -62,6 +62,8 @@ public class HistoryModel
 		if(text == null || text.length() == 0)
 			return;
 
+		modified = true;
+
 		int index = data.indexOf(text);
 		if(index != -1)
 			data.removeElementAt(index);
@@ -109,6 +111,9 @@ public class HistoryModel
 	 */
 	public static HistoryModel getModel(String name)
 	{
+		if(!loaded)
+			loadHistory();
+
 		if(models == null)
 			models = new Hashtable();
 
@@ -122,6 +127,57 @@ public class HistoryModel
 		return model;
 	} //}}}
 
+	//{{{ saveHistory() method
+	public static void saveHistory()
+	{
+		if(loaded && modified)
+		{
+			Log.log(Log.MESSAGE,HistoryModel.class,"Saving " + history);
+			File file1 = new File(MiscUtilities.constructPath(
+				jEdit.getSettingsDirectory(), "#history#save#"));
+			File file2 = new File(MiscUtilities.constructPath(
+				jEdit.getSettingsDirectory(), "history"));
+			if(file2.exists() && file2.lastModified() != historyModTime)
+			{
+				Log.log(Log.WARNING,HistoryModel.class,file2 + " changed"
+					+ " on disk; will not save history");
+			}
+			else
+			{
+				jEdit.backupSettingsFile(file2);
+				saveHistory(file1);
+				file2.delete();
+				file1.renameTo(file2);
+			}
+			historyModTime = file2.lastModified();
+			modified = false;
+		}
+	} //}}}
+
+	//{{{ Private members
+	private static final String TO_ESCAPE = "\n\t\\\"'[]";
+	private String name;
+	private int max;
+	private Vector data;
+	private static Hashtable models;
+
+	private static boolean loaded;
+	private static boolean modified;
+	private static File history;
+	private static long historyModTime;
+
+	//{{{ loadHistory() method
+	private static void loadHistory()
+	{
+		history = new File(MiscUtilities.constructPath(
+			jEdit.getSettingsDirectory(),"history"));
+		Log.log(Log.MESSAGE,HistoryModel.class,"Loading " + history);
+		if(history.exists())
+			historyModTime = history.lastModified();
+		loadHistory(history);
+		loaded = true;
+	} //}}}
+
 	//{{{ loadHistory() method
 	/**
 	 * Loads the history from the specified file.
@@ -129,7 +185,7 @@ public class HistoryModel
 	 * jEdit calls this method on startup.
 	 * @param The file
 	 */
-	public static void loadHistory(File file)
+	private static void loadHistory(File file)
 	{
 		if(models == null)
 			models = new Hashtable();
@@ -189,7 +245,7 @@ public class HistoryModel
 	 * jEdit calls this method when it is exiting.
 	 * @param file The file
 	 */
-	public static void saveHistory(File file)
+	private static void saveHistory(File file)
 	{
 		String lineSep = System.getProperty("line.separator");
 		try
@@ -231,11 +287,5 @@ public class HistoryModel
 		}
 	} //}}}
 
-	//{{{ Private members
-	private static final String TO_ESCAPE = "\n\t\\\"'[]";
-	private String name;
-	private int max;
-	private Vector data;
-	private static Hashtable models;
 	//}}}
 }

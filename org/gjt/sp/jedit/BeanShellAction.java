@@ -1,5 +1,8 @@
 /*
  * BeanShellAction.java - BeanShell action
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +33,7 @@ import org.gjt.sp.util.Log;
  */
 public class BeanShellAction extends EditAction
 {
+	//{{{ BeanShellAction constructor
 	public BeanShellAction(String name, String code, String isSelected,
 		boolean noRepeat, boolean noRecord)
 	{
@@ -43,26 +47,9 @@ public class BeanShellAction extends EditAction
 		/* Some characters that we like to use in action names
 		 * ('.', '-') are not allowed in BeanShell identifiers. */
 		sanitizedName = name.replace('.','_').replace('-','_');
+	} //}}}
 
-		// evaluate isSelected now so that menus don't take a long
-		// time to first come up
-		if(isSelected != null)
-		{
-			String cachedIsSelectedName = "selected_" + sanitizedName;
-			try
-			{
-				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-					isSelected,false);
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-
-				new BeanShellErrorDialog(null,e);
-			}
-		}
-	}
-
+	//{{{ invoke() method
 	public void invoke(View view)
 	{
 		try
@@ -81,13 +68,15 @@ public class BeanShellAction extends EditAction
 
 			new BeanShellErrorDialog(view,e);
 		}
-	}
+	} //}}}
 
+	//{{{ isToggle() method
 	public boolean isToggle()
 	{
 		return isSelected != null;
-	}
+	} //}}}
 
+	//{{{ isSelected() method
 	public boolean isSelected(View view)
 	{
 		if(isSelected == null)
@@ -95,6 +84,12 @@ public class BeanShellAction extends EditAction
 
 		try
 		{
+			if(cachedIsSelected == null)
+			{
+				String cachedIsSelectedName = "selected_" + sanitizedName;
+				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
+					isSelected,false);
+			}
 			return Boolean.TRUE.equals(BeanShell.runCachedBlock(
 				cachedIsSelected,view,null));
 		}
@@ -106,24 +101,27 @@ public class BeanShellAction extends EditAction
 
 			return false;
 		}
-	}
+	} //}}}
 
+	//{{{ noRepeat() method
 	public boolean noRepeat()
 	{
 		return noRepeat;
-	}
+	} //}}}
 
+	//{{{ noRecord() method
 	public boolean noRecord()
 	{
 		return noRecord;
-	}
+	} //}}}
 
+	//{{{ getCode() method
 	public String getCode()
 	{
 		return code.trim();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private boolean noRepeat;
 	private boolean noRecord;
 	private String code;
@@ -131,4 +129,5 @@ public class BeanShellAction extends EditAction
 	private BshMethod cachedCode;
 	private BshMethod cachedIsSelected;
 	private String sanitizedName;
+	//}}}
 }

@@ -340,12 +340,6 @@ public class jEdit
 
 		if(settingsDirectory != null)
 		{
-			File history = new File(MiscUtilities.constructPath(
-				settingsDirectory,"history"));
-			if(history.exists())
-				historyModTime = history.lastModified();
-			HistoryModel.loadHistory(history);
-
 			File recent = new File(MiscUtilities.constructPath(
 				settingsDirectory,"recent.xml"));
 			if(recent.exists())
@@ -360,10 +354,6 @@ public class jEdit
 		sortByName = getBooleanProperty("sortByName");
 
 		reloadModes();
-
-		GUIUtilities.advanceSplashProgress();
-
-		SearchAndReplace.load();
 
 		GUIUtilities.advanceSplashProgress();
 		//}}}
@@ -2177,24 +2167,7 @@ public class jEdit
 			}
 			recentModTime = file2.lastModified();
 
-			file1 = new File(MiscUtilities.constructPath(
-				settingsDirectory, "#history#save#"));
-			file2 = new File(MiscUtilities.constructPath(
-				settingsDirectory, "history"));
-			if(file2.exists() && file2.lastModified() != historyModTime)
-			{
-				Log.log(Log.WARNING,jEdit.class,file2 + " changed"
-					+ " on disk; will not save history");
-			}
-			else
-			{
-				backupSettingsFile(file2);
-				HistoryModel.saveHistory(file1);
-				file2.delete();
-				file1.renameTo(file2);
-			}
-			historyModTime = file2.lastModified();
-
+			HistoryModel.saveHistory();
 			SearchAndReplace.save();
 			Abbrevs.save();
 			FavoritesVFS.saveFavorites();
@@ -2480,7 +2453,7 @@ public class jEdit
 	//{{{ Static variables
 	private static String jEditHome;
 	private static String settingsDirectory;
-	private static long propsModTime, historyModTime, recentModTime;
+	private static long propsModTime, recentModTime;
 	private static Properties defaultProps;
 	private static Properties props;
 	private static EditServer server;
