@@ -122,13 +122,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		defaultNoTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
 		addComponent(defaultNoTabs);
 		//}}}
-
-		//{{{ Indent on tab
-		defaultIndentOnTab = new JCheckBox(jEdit.getProperty("options.editing"
-			+ ".indentOnTab"));
-		defaultIndentOnTab.setSelected(jEdit.getBooleanProperty("buffer.indentOnTab"));
-		addComponent(defaultIndentOnTab);
-		//}}}
 	} //}}}
 
 	//{{{ _save() method
@@ -147,8 +140,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
 			.getSelectedItem());
 		jEdit.setBooleanProperty("buffer.noTabs",defaultNoTabs.isSelected());
-		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
-			.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -162,6 +153,5 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox defaultTabSize;
 	private JComboBox defaultIndentSize;
 	private JCheckBox defaultNoTabs;
-	private JCheckBox defaultIndentOnTab;
 	//}}}
 }

@@ -178,6 +178,7 @@ next-buffer.shortcut=C+PAGE_DOWN
 prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
 insert-newline-indent.shortcut=ENTER
+insert-tab-indent.shortcut=TAB
 #}}}
 
 #{{{ Alternative shortcuts for frequently-used commands

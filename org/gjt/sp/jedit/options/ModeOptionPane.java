@@ -99,9 +99,6 @@ public class ModeOptionPane extends AbstractOptionPane
 		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs")));
 
-		addComponent(indentOnTab = new JCheckBox(jEdit.getProperty(
-			"options.editing.indentOnTab")));
-
 		selectMode();
 	} //}}}
 
@@ -133,7 +130,6 @@ public class ModeOptionPane extends AbstractOptionPane
 	private JComboBox tabSize;
 	private JComboBox indentSize;
 	private JCheckBox noTabs;
-	private JCheckBox indentOnTab;
 	//}}}
 
 	//{{{ saveMode() method
@@ -150,7 +146,6 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.tabSize = (String)tabSize.getSelectedItem();
 		current.indentSize = (String)indentSize.getSelectedItem();
 		current.noTabs = noTabs.isSelected();
-		current.indentOnTab = indentOnTab.isSelected();
 	} //}}}
 
 	//{{{ selectMode() method
@@ -171,7 +166,6 @@ public class ModeOptionPane extends AbstractOptionPane
 		tabSize.setSelectedItem(current.tabSize);
 		indentSize.setSelectedItem(current.indentSize);
 		noTabs.setSelected(current.noTabs);
-		indentOnTab.setSelected(current.indentOnTab);
 
 		updateEnabled();
 	} //}}}
@@ -190,7 +184,6 @@ public class ModeOptionPane extends AbstractOptionPane
 		tabSize.setEnabled(enabled);
 		indentSize.setEnabled(enabled);
 		noTabs.setEnabled(enabled);
-		indentOnTab.setEnabled(enabled);
 	} //}}}
 
 	//}}}
@@ -233,7 +226,6 @@ public class ModeOptionPane extends AbstractOptionPane
 		String tabSize;
 		String indentSize;
 		boolean noTabs;
-		boolean indentOnTab;
 		//}}}
 
 		//{{{ ModeProperties constructor
@@ -264,7 +256,6 @@ public class ModeOptionPane extends AbstractOptionPane
 			tabSize = mode.getProperty("tabSize").toString();
 			indentSize = mode.getProperty("indentSize").toString();
 			noTabs = mode.getBooleanProperty("noTabs");
-			indentOnTab = mode.getBooleanProperty("indentOnTab");
 		} //}}}
 
 		//{{{ save() method
@@ -294,7 +285,6 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "tabSize");
 				jEdit.resetProperty(prefix + "indentSize");
 				jEdit.resetProperty(prefix + "noTabs");
-				jEdit.resetProperty(prefix + "indentOnTab");
 
 				if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
 					(String)mode.getProperty("filenameGlob"))
@@ -316,7 +306,6 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.setProperty(prefix + "tabSize",tabSize);
 				jEdit.setProperty(prefix + "indentSize",indentSize);
 				jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
-				jEdit.setBooleanProperty(prefix + "indentOnTab",indentOnTab);
 
 				if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
 					filenameGlob)
