@@ -49,41 +49,6 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_META:
 			case '\0':
 				return null;
-
-			case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
-			case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
-			case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
-			case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
-			case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
-				// if NumLock is on, then ignore the numeric
-				// keypad codes; if NumLock off, ignore the
-				// resulting KeyTyped
-				if(Toolkit.getDefaultToolkit()
-					.getLockingKeyState(
-					KeyEvent.VK_NUM_LOCK))
-				{
-					return null;
-				}
-				else
-				{
-					last = LAST_NUMKEYPAD;
-					return null;
-				}
-			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
-			/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
-			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
-				if(Toolkit.getDefaultToolkit()
-					.getLockingKeyState(
-					KeyEvent.VK_NUM_LOCK))
-				{
-					return null;
-				}
-				else
-				{
-					last = LAST_NUMKEYPAD;
-					lastKeyTime = System.currentTimeMillis();
-					break;
-				}
 			default:
 				if(!OperatingSystem.isMacOS())
 					handleBrokenKeys(evt,keyCode);
@@ -150,6 +115,17 @@ public class KeyEventWorkaround
 		}
 	} //}}}
 
+	//{{{ numericKeypadKey() method
+	/**
+	 * A workaround for non-working NumLock status in some Java versions.
+	 * @since jEdit 4.0pre8
+	 */
+	public static void numericKeypadKey()
+	{
+		last = LAST_NUMKEYPAD;
+		lastKeyTime = System.currentTimeMillis();
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Static variables
@@ -180,14 +156,28 @@ public class KeyEventWorkaround
 
 		if(evt.isAltDown())
 			last = LAST_ALT;
-		else if((keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
-			&& keyCode != KeyEvent.VK_LEFT && keyCode != KeyEvent.VK_RIGHT
-			&& keyCode != KeyEvent.VK_UP && keyCode != KeyEvent.VK_DOWN
-			&& keyCode != KeyEvent.VK_DELETE && keyCode != KeyEvent.VK_BACK_SPACE
-			 && keyCode != KeyEvent.VK_TAB && keyCode != KeyEvent.VK_ENTER)
-			last = LAST_BROKEN;
-		else
-			last = LAST_NOTHING;
+
+		switch(keyCode)
+		{
+			case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
+			case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
+			case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
+			case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
+			case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
+			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
+			/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
+			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
+			case KeyEvent.VK_LEFT:      case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_UP:        case KeyEvent.VK_DOWN:
+			case KeyEvent.VK_DELETE:    case KeyEvent.VK_BACK_SPACE:
+			case KeyEvent.VK_TAB:       case KeyEvent.VK_ENTER:
+				last = LAST_NOTHING;
+				break;
+			default:
+				if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
+					last = LAST_BROKEN;
+				break;
+		}
 
 		lastKeyTime = System.currentTimeMillis();
 	} //}}}
