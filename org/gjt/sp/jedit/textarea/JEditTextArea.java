@@ -6463,8 +6463,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int x = evt.getX();
 			int dot = xyToOffset(x,
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
-				!(painter.isBlockCaretEnabled()
-				|| isOverwriteEnabled()));
+				(!painter.isBlockCaretEnabled()
+				&& !isOverwriteEnabled())
+				|| quickCopyDrag);
 			int dotLine = buffer.getLineOfOffset(dot);
 			int extraEndVirt = 0;
 

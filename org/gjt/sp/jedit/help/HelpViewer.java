@@ -44,7 +44,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends JFrame implements EBComponent
+public class HelpViewer extends JFrame //implements EBComponent
 {
 	//{{{ HelpViewer constructor
 	/**
@@ -147,7 +147,7 @@ public class HelpViewer extends JFrame implements EBComponent
 		pack();
 		GUIUtilities.loadGeometry(this,"helpviewer");
 
-		EditBus.addToBus(this);
+		//EditBus.addToBus(this);
 
 		show();
 
@@ -250,7 +250,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	//{{{ dispose() method
 	public void dispose()
 	{
-		EditBus.removeFromBus(this);
+		//EditBus.removeFromBus(this);
 		jEdit.setIntegerProperty("helpviewer.splitter",
 			splitter.getDividerLocation());
 		GUIUtilities.saveGeometry(this,"helpviewer");
@@ -258,11 +258,11 @@ public class HelpViewer extends JFrame implements EBComponent
 	} //}}}
 
 	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	/* public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof PropertiesChanged)
 			SwingUtilities.updateComponentTreeUI(getRootPane());
-	} //}}}
+	} */ //}}}
 
 	//{{{ getBaseURL() method
 	public String getBaseURL()

@@ -32,7 +32,7 @@ Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
 
 - jEdit.exit() no longer throws an exception if no views are open. This
   fixes the problem of not being able to exit jEdit when running on
-  MacOS X with the -background command line switch.
+  MacOS X with the -background command line switch (Kris Kopicki).
 
 - Narrowing to one set of lines and then immediately to another such
   that the intersection of the two sets is empty would cause problems.
