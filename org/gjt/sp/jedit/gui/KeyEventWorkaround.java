@@ -88,6 +88,23 @@ public class KeyEventWorkaround
 						return evt;
 				}
 
+				if(!(evt.isControlDown()
+					|| evt.isAltDown()
+					|| evt.isMetaDown()))
+				{
+					if(keyCode >= KeyEvent.VK_0
+						&& keyCode <= KeyEvent.VK_9)
+					{
+						return null;
+					}
+
+					if(keyCode >= KeyEvent.VK_A
+						&& keyCode <= KeyEvent.VK_Z)
+					{
+						return null;
+					}
+				}
+
 				if(!OperatingSystem.isMacOS())
 					handleBrokenKeys(evt,keyCode);
 				else

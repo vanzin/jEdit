@@ -234,30 +234,27 @@ public class ActionBar extends JPanel
 	private void complete(boolean insertLongestPrefix)
 	{
 		String text = action.getText().trim();
-		if(text.length() != 0)
+		String[] completions = getCompletions(text);
+		if(completions.length == 1)
 		{
-			String[] completions = getCompletions(text);
-			if(completions.length == 1)
+			if(insertLongestPrefix)
+				action.setText(completions[0]);
+		}
+		else if(completions.length != 0)
+		{
+			if(insertLongestPrefix)
 			{
-				if(insertLongestPrefix)
-					action.setText(completions[0]);
+				String prefix = MiscUtilities.getLongestPrefix(
+					completions);
+				if(prefix.indexOf(text) != -1)
+					action.setText(prefix);
 			}
-			else if(completions.length != 0)
-			{
-				if(insertLongestPrefix)
-				{
-					String prefix = MiscUtilities.getLongestPrefix(
-						completions);
-					if(prefix.indexOf(text) != -1)
-						action.setText(prefix);
-				}
 
-				if(popup != null)
-					popup.setModel(completions);
-				else
-					popup = new CompletionPopup(completions);
-				return;
-			}
+			if(popup != null)
+				popup.setModel(completions);
+			else
+				popup = new CompletionPopup(completions);
+			return;
 		}
 
 		if(popup != null)

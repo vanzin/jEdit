@@ -30,8 +30,7 @@ import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class EnhancedMenu extends JMenu implements MenuListener,
-	EBComponent
+public class EnhancedMenu extends JMenu implements MenuListener
 {
 	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name)
@@ -49,7 +48,6 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 	//{{{ EnhancedMenu constructor
 	public EnhancedMenu(String name, String label, ActionContext context)
 	{
-		this._name = name;
 		this.context = context;
 		if(label == null)
 			label = name;
@@ -68,9 +66,31 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 		if(!OperatingSystem.isMacOS())
 			setMnemonic(mnemonic);
 
+		String menuItems = jEdit.getProperty(name);
+		if(menuItems != null)
+		{
+			StringTokenizer st = new StringTokenizer(menuItems);
+			while(st.hasMoreTokens())
+			{
+				String menuItemName = st.nextToken();
+				if(menuItemName.equals("-"))
+					addSeparator();
+				else
+					add(GUIUtilities.loadMenuItem(context,menuItemName,true));
+			}
+		}
+
+		initialComponentCount = getMenuComponentCount();
+
 		providerCode = jEdit.getProperty(name + ".code");
-		menuOutOfDate = true;
+
+		ebStub = new EditBusStub(name);
+		ebStub.menuOutOfDate = true;
+
 		addMenuListener(this);
+
+		if(providerCode != null)
+			EditBus.addToBus(ebStub);
 	} //}}}
 
 	//{{{ menuSelected() method
@@ -86,7 +106,10 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 	//{{{ init() method
 	public void init()
 	{
-		if(providerCode != null && provider == null)
+		if(providerCode == null)
+			return;
+
+		if(provider == null)
 		{
 			Object obj = BeanShell.eval(null,
 				BeanShell.getNameSpace(),
@@ -94,65 +117,65 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 			provider = (DynamicMenuProvider)obj;
 		}
 
-		if(menuOutOfDate || (provider != null
-			&& provider.updateEveryTime()))
+		if(provider == null)
 		{
-			menuOutOfDate = false;
+			// error
+			return;
+		}
 
-			removeAll();
+		if(ebStub.menuOutOfDate || provider.updateEveryTime())
+		{
+			ebStub.menuOutOfDate = false;
 
-			String menuItems = jEdit.getProperty(_name);
-			if(menuItems != null)
-			{
-				StringTokenizer st = new StringTokenizer(menuItems);
-				while(st.hasMoreTokens())
-				{
-					String menuItemName = st.nextToken();
-					if(menuItemName.equals("-"))
-						addSeparator();
-					else
-						add(GUIUtilities.loadMenuItem(context,menuItemName,true));
-				}
-			}
+			while(getMenuComponentCount() != initialComponentCount)
+				remove(getMenuComponentCount() - 1);
 
 			if(provider != null)
 				provider.update(this);
 		}
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
-	{
-		if(msg instanceof DynamicMenuChanged
-			&& _name.equals(((DynamicMenuChanged)msg)
-			.getMenuName()))
-		{
-			menuOutOfDate = true;
-		}
-	} //}}}
-
-	//{{{ addNotify() method
-	public void addNotify()
-	{
-		super.addNotify();
-		if(providerCode != null)
-			EditBus.addToBus(this);
-	} //}}}
-
-	//{{{ removeNotify() method
-	public void removeNotify()
-	{
-		super.removeNotify();
-		if(providerCode != null)
-			EditBus.removeFromBus(this);
-	} //}}}
-
 	//{{{ Protected members
-	protected String _name;
+	protected int initialComponentCount;
 	protected ActionContext context;
 
 	protected String providerCode;
 	protected DynamicMenuProvider provider;
-	protected boolean menuOutOfDate;
+
+	protected EditBusStub ebStub;
+
+	//{{{ finalize() method
+	protected void finalize() throws Exception
+	{
+		if(ebStub != null)
+			EditBus.removeFromBus(ebStub);
+	} //}}}
+
 	//}}}
+
+	//{{{ EditBusStub class
+	/* EnhancedMenu has a reference to EditBusStub, but not the other
+	 * way around. So when the EnhancedMenu is being garbage collected
+	 * its finalize() method removes the EditBusStub from the edit bus. */
+	static class EditBusStub implements EBComponent
+	{
+		String name;
+		boolean menuOutOfDate;
+
+		EditBusStub(String name)
+		{
+			this.name = name;
+			menuOutOfDate = true;
+		}
+
+		public void handleMessage(EBMessage msg)
+		{
+			if(msg instanceof DynamicMenuChanged
+				&& name.equals(((DynamicMenuChanged)msg)
+				.getMenuName()))
+			{
+				menuOutOfDate = true;
+			}
+		}
+	}
 }

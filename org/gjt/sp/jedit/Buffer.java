@@ -1246,7 +1246,8 @@ public class Buffer
 
 			/* nothing can go here since we re-use the 'seg'! */
 
-			if(!getFlag(UNDO_IN_PROGRESS))
+			if(!getFlag(UNDO_IN_PROGRESS)
+				&& !getFlag(LOADING))
 			{
 				undoMgr.contentRemoved(offset,length,
 					seg.toString(),!getFlag(DIRTY));

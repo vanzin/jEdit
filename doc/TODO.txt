@@ -3,53 +3,48 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+pre2 on thursday!!!
+
+- auto indent: don't de-indent on enter if no leading indent at all?
+- soft wrap: one line file, editing at end
+- bind key to C+e F2 F3: status bar
 - if(...)
   
   { <-- wrong
 
-- C+e n n in search bar breaks
-- SERIOUS PROBLEMS
-  - finish vfs browser extended attributes
-  - new file: horiz scroll wrong
-  - scroll to with invisible caret
-  - files in favorites: selection is broken
-  - bad wrap:
+- finish vfs browser extended attributes
+- new file: horiz scroll wrong
+- scroll to with invisible caret
+- bad wrap:
   						MiscUtilities.quicksort(favorites,
   							new VFS.DirectoryEntryCompare());
-  - isn't fsb dir search supposed to use selected file's extension?
-  - bizarre dockable window manager button layout problem
-  - while loading --> scroll bar
+- isn't fsb dir search supposed to use selected file's extension?
+- bizarre dockable window manager button layout problem
+- while loading --> scroll bar
+- update docs
+- review tips
+
   - auto reload - save caret info first
   - shortcuts: stale shortcuts remain?
   - narrow: scrolls one down
   - eval-for-selected-lines doesn't work with rectangular selection
   - recording 'evaluate for selected lines'
   - evalutate for selected lines: > 1 selection per line
-
-- tips:
-  - persistent registers
-  - tall caret
-  - virtual space
-  - quick copy shift click
-  - various action bar hacks
-  - persistent views
-- actions/dockables eval: should use own namespace?
-- dir search: no progress msg!
 - quicknotepad: use a box not a tool bar
+- update quicknotepad docs
+- quicknotepad: handle no settings dir more gracefully
+- synchro scroll needs a rewrite & folding
+
+- actions/dockables eval: should use own namespace?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - note about dependencies
 - split view line insert: repainted twice, selection problems
-- update quicknotepad docs
-- quicknotepad: handle no settings dir more gracefully
-- browser's default size
 - F2 doesn't work in JTree/JTable, maybe others
 - path shown twice in tree: maybeReloadDirectory()
 - vfs browser: open in new view: doesn't focus the new view
-- searching in a buffer w/ narrowed fold
 - macro record: doesn't respect overwrite
 - rect select and trailing whitespace
-- synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked
   - FAQ: better titles
@@ -194,6 +189,7 @@ and quirks that I need to fix eventually.
 - beanshell: unloading commands when a plugin is unloaded
 - generic matching API used for brackets, tags, etc.
 - persistent kill ring
+- don't put all-whitespace strings in kill ring
 
 + performance:
 

@@ -561,7 +561,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			VFSManager.runInWorkThread(new BrowserIORequest(
 				BrowserIORequest.DELETE,this,
 				session,vfs,files[i].deletePath,
-				null,null));
+				null,null,null));
 		}
 	} //}}}
 
@@ -588,7 +588,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
+			session,vfs,from,to,null,null));
 	} //}}}
 
 	//{{{ mkdir() method
@@ -627,7 +627,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null,null));
+			session,vfs,newDirectory,null,null,null));
 	} //}}}
 
 	//{{{ newFile() method
@@ -883,11 +883,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	void directoryLoaded(Object node, String path,
-		VFS.DirectoryEntry[] list)
+	void directoryLoaded(Object node, Object[] loadInfo)
 	{
 		VFSManager.runInAWTThread(new DirectoryLoadedAWTRequest(
-			node,path,list));
+			node,loadInfo));
 	} //}}}
 
 	//{{{ filesSelected() method
@@ -1501,19 +1500,20 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	class DirectoryLoadedAWTRequest implements Runnable
 	{
 		Object node;
-		String path;
-		VFS.DirectoryEntry[] list;
+		Object[] loadInfo;
 
-		DirectoryLoadedAWTRequest(Object node, String path,
-			VFS.DirectoryEntry[] list)
+		DirectoryLoadedAWTRequest(Object node, Object[] loadInfo)
 		{
 			this.node = node;
-			this.path = path;
-			this.list = list;
+			this.loadInfo = loadInfo;
 		}
 
 		public void run()
 		{
+			String path = (String)loadInfo[0];
+			VFS.DirectoryEntry[] list = (VFS.DirectoryEntry[])
+				loadInfo[1];
+
 			if(node == null)
 			{
 				// This is the new, canonical path
@@ -1592,6 +1592,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			if(mode == CHOOSE_DIRECTORY_DIALOG)
 				filesSelected();
 		}
-	}
+
+		public String toString()
+		{
+			return (String)loadInfo[0];
+		}
+	} //}}}
+
 	//}}}
 }

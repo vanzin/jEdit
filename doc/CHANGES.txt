@@ -192,6 +192,11 @@ contributing to this release.
 - Disabled CS+click to narrow to a bracket scope since it didn't
   actually work.
 
+- DynamicMenuUpdate messages only worked for top-level menus.
+
+- TAB didn't work in the action bar if there was nothing entered (it is
+  supposed to list all actions.)
+
 }}}
 {{{ API Changes
 

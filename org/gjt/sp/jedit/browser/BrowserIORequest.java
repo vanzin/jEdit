@@ -66,10 +66,12 @@ class BrowserIORequest extends WorkRequest
 	 * @param path1 The first path name to operate on
 	 * @param path2 The second path name to operate on
 	 * @param node Only used for type == LIST_DIRECTORY
+	 * @param loadInfo A two-element array filled out by the request;
+	 * element 1 is the canonical path, element 2 is the file list.
 	 */
-	public BrowserIORequest(int type, VFSBrowser browser,
+	BrowserIORequest(int type, VFSBrowser browser,
 		Object session, VFS vfs, String path1, String path2,
-		Object node)
+		Object node, Object[] loadInfo)
 	{
 		this.type = type;
 		this.browser = browser;
@@ -78,6 +80,7 @@ class BrowserIORequest extends WorkRequest
 		this.path1 = path1;
 		this.path2 = path2;
 		this.node = node;
+		this.loadInfo = loadInfo;
 	} //}}}
 
 	//{{{ run() method
@@ -141,7 +144,7 @@ class BrowserIORequest extends WorkRequest
 	private String path1;
 	private String path2;
 	private Object node;
-	private boolean loadingRoot;
+	private Object[] loadInfo;
 	//}}}
 
 	//{{{ listDirectory() method
@@ -188,7 +191,8 @@ class BrowserIORequest extends WorkRequest
 
 		setAbortable(false);
 
-		browser.directoryLoaded(node,canonPath,directory);
+		loadInfo[0] = canonPath;
+		loadInfo[1] = directory;
 	} //}}}
 
 	//{{{ delete() method

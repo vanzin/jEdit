@@ -371,15 +371,17 @@ public class WorkThreadPool
 	//}}}
 
 	//{{{ doAWTRequests() method
+	/** Must always be called with the lock held. */
 	private void doAWTRequests()
 	{
-		while(firstAWTRequest != null)
+		while(requestCount == 0 && firstAWTRequest != null)
 		{
 			doAWTRequest(getNextAWTRequest());
 		}
 	} //}}}
 
 	//{{{ doAWTRequest() method
+	/** Must always be called with the lock held. */
 	private void doAWTRequest(Request request)
 	{
 //		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
@@ -399,6 +401,7 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ queueAWTRunner() method
+	/** Must always be called with the lock held. */
 	private void queueAWTRunner()
 	{
 		if(!awtRunnerQueued)
