@@ -670,8 +670,10 @@ macro.header=// This is a recorded macro. First, check over the\n\
 
 #{{{ Commands that don't appear in menus
 backspace-word.label=Delete Previous Word
+backspace-word-std.label=Delete Previous Word (Eat Whitespace)
 backspace.label=Delete Previous Character
 delete-word.label=Delete Next Word
+delete-word-std.label=Delete Next Word (Eat Whitespace)
 delete.label=Delete Next Character
 document-end.label=Go to End of Buffer
 document-home.label=Go to Start of Buffer

@@ -2639,7 +2639,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ goToNextWord() method
 	/**
 	 * Moves the caret to the start of the next word.
-	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
+	 * Note that if the "view.eatWhitespace" boolean propery is false,
 	 * this method moves the caret to the end of the current word instead.
 	 * @since jEdit 2.7pre2
 	 */
@@ -2653,7 +2653,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * Moves the caret to the start of the next word.
 	 * @since jEdit 4.1pre5
 	 */
-	public void goToNextWord(boolean select, boolean stdNextPrevWord)
+	public void goToNextWord(boolean select, boolean eatWhitespace)
 	{
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
@@ -2673,14 +2673,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
-				noWordSep);
-			if(stdNextPrevWord)
-			{
-				while((newCaret < lineText.length()) && Character.isWhitespace(lineText.charAt(newCaret)))
-					newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
-						noWordSep);
-			}
+			newCaret = TextUtilities.findWordEnd(lineText,
+				newCaret + 1,noWordSep,true,eatWhitespace);
 
 			newCaret += lineStart;
 		}
@@ -2973,7 +2967,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * Moves the caret to the start of the previous word.
 	 * @since jEdit 4.1pre5
 	 */
-	public void goToPrevWord(boolean select, boolean stdNextPrevWord)
+	public void goToPrevWord(boolean select, boolean eatWhitespace)
 	{
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
@@ -3001,15 +2995,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
-				noWordSep);
-			if(stdNextPrevWord)
-			{
-				while((newCaret > 0) && Character.isWhitespace(lineText.charAt(newCaret)))
-					newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
-						noWordSep);
-			}
-			
+			newCaret = TextUtilities.findWordStart(lineText,
+				newCaret - 1,noWordSep,true,eatWhitespace);
+
 			newCaret += lineStart;
 		}
 
@@ -3532,6 +3520,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void backspaceWord()
 	{
+		backspaceWord(false);
+	} //}}}
+
+	//{{{ backspaceWord() method
+	/**
+	 * Deletes the word before the caret.
+	 * @param eatWhitespace If true, will eat whitespace
+	 * @since jEdit 4.2pre5
+	 */
+	public void backspaceWord(boolean eatWhitespace)
+	{
 		if(!buffer.isEditable())
 		{
 			getToolkit().beep();
@@ -3561,7 +3560,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep);
+			_caret = TextUtilities.findWordStart(lineText,_caret-1,
+				noWordSep,true,eatWhitespace);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3750,6 +3750,17 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void deleteWord()
 	{
+		deleteWord(false);
+	} //}}}
+
+	//{{{ deleteWord() method
+	/**
+	 * Deletes the word in front of the caret
+.	 * @param eatWhitespace If true, will eat whitespace
+	 * @since jEdit 4.2pre5
+	 */
+	public void deleteWord(boolean eatWhitespace)
+	{
 		if(!buffer.isEditable())
 		{
 			getToolkit().beep();
@@ -3780,7 +3791,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep);
+				_caret+1,noWordSep,true,eatWhitespace);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);

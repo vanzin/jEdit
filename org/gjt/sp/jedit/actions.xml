@@ -70,6 +70,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="backspace-word-std">
+	<CODE>
+		textArea.backspaceWord(true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="bottom-docking-area">
 	<CODE>
 		wm.getBottomDockingArea().showMostRecent();
@@ -219,6 +225,12 @@
 <ACTION NAME="delete-word">
 	<CODE>
 		textArea.deleteWord();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-word-std">
+	<CODE>
+		textArea.deleteWord(true);
 	</CODE>
 </ACTION>
 

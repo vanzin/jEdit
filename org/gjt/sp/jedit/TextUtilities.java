@@ -1,6 +1,6 @@
 /*
  * TextUtilities.java - Various text functions
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 2003 Slava Pestov
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -233,7 +233,7 @@ public class TextUtilities
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep)
 	{
-		return findWordStart(line, pos, noWordSep, true);
+		return findWordStart(line, pos, noWordSep, true, false);
 	} //}}}
 
 	//{{{ findWordStart() method
@@ -245,10 +245,28 @@ public class TextUtilities
 	 * should be treated as word characters anyway
 	 * @param joinNonWordChars Treat consecutive non-alphanumeric
 	 * characters as one word
+	 * @since jEdit 4.2pre5
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep,
+		boolean joinNonWordChars)
+	{
+		return findWordStart(line,pos,noWordSep,joinNonWordChars,false);
+	} //}}}
+
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param eatWhitespace Include whitespace at start of word
 	 * @since jEdit 4.1pre2
 	 */
 	public static int findWordStart(String line, int pos, String noWordSep,
-					boolean joinNonWordChars)
+		boolean joinNonWordChars, boolean eatWhitespace)
 	{
 		char ch = line.charAt(pos);
 
@@ -266,7 +284,6 @@ public class TextUtilities
 			type = SYMBOL;
 		//}}}
 
-		int whiteSpaceEnd = 0;
 loop:		for(int i = pos; i >= 0; i--)
 		{
 			ch = line.charAt(i);
@@ -277,24 +294,41 @@ loop:		for(int i = pos; i >= 0; i--)
 				// only select other whitespace in this case
 				if(Character.isWhitespace(ch))
 					break;
+				// word char or symbol; stop
 				else
 					return i + 1; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
+				// word char; keep going
 				if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 				{
+					break;
+				}
+				// whitespace; include in word if eating
+				else if(Character.isWhitespace(ch)
+					&& eatWhitespace)
+				{
+					type = WHITESPACE;
 					break;
 				}
 				else
 					return i + 1; //}}}
 			//{{{ Symbol...
 			case SYMBOL:
-				if(!joinNonWordChars && pos!=i) return i + 1;
-				// if we see whitespace, set flag.
+				if(!joinNonWordChars && pos != i)
+					return i + 1;
+
+				// whitespace; include in word if eating
 				if(Character.isWhitespace(ch))
 				{
-					return i + 1;
+					if(eatWhitespace)
+					{
+						type = WHITESPACE;
+						break;
+					}
+					else
+						return i + 1;
 				}
 				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
@@ -308,7 +342,7 @@ loop:		for(int i = pos; i >= 0; i--)
 			}
 		}
 
-		return whiteSpaceEnd;
+		return 0;
 	} //}}}
 
 	//{{{ findWordEnd() method
@@ -336,7 +370,25 @@ loop:		for(int i = pos; i >= 0; i--)
 	 * @since jEdit 4.1pre2
 	 */
 	public static int findWordEnd(String line, int pos, String noWordSep,
-					boolean joinNonWordChars)
+		boolean joinNonWordChars)
+	{
+		return findWordEnd(line,pos,noWordSep,joinNonWordChars,false);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param eatWhitespace Include whitespace at end of word
+	 * @since jEdit 4.2pre5
+	 */
+	public static int findWordEnd(String line, int pos, String noWordSep,
+		boolean joinNonWordChars, boolean eatWhitespace)
 	{
 		if(pos != 0)
 			pos--;
@@ -376,19 +428,36 @@ loop:		for(int i = pos; i < line.length(); i++)
 				{
 					break;
 				}
+				// whitespace; include in word if eating
+				else if(Character.isWhitespace(ch)
+					&& eatWhitespace)
+				{
+					type = WHITESPACE;
+					break;
+				}
 				else
 					return i; //}}}
 			//{{{ Symbol...
 			case SYMBOL:
-				if(!joinNonWordChars && i!=pos) return i;
+				if(!joinNonWordChars && i != pos)
+					return i;
+
 				// if we see whitespace, set flag.
 				if(Character.isWhitespace(ch))
 				{
-					return i;
+					if(eatWhitespace)
+					{
+						type = WHITESPACE;
+						break;
+					}
+					else
+						return i;
 				}
 				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
+				{
 					return i;
+				}
 				else
 				{
 					break;
