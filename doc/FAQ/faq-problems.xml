@@ -256,6 +256,14 @@
 				operations. These include XML, SpeedJava and CodeAid. If performance is important to you, installing
 				a whole batch of plugins in one go is probably not a very good idea. Install them one at a time,
 				so you can evaluate the effects of each.
+				
+				<note>
+					<para>
+					If you are experiencing slow downs when switching and saving buffers (up to 20 second delays) and you
+					have the TaskList plugin installed, check that the version is greater than 0.4. Versions after 0.4 fix
+					the problem.
+					</para>
+				</note>
 			</para>
 		</answer>
     </qandaentry>
