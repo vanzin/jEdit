@@ -4385,9 +4385,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(caret - start <= whiteSpace
 				&& buffer.indentLine(caretLine,true,false))
 				return;
-			else
-				userInput('\t');
 		}
+		else
+			userInput('\t');
 	} //}}}
 
 	//{{{ indentSelectedLines() method
