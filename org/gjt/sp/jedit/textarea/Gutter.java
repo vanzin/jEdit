@@ -51,6 +51,28 @@ import org.gjt.sp.util.Log;
  */
 public class Gutter extends JComponent implements SwingConstants
 {
+	//{{{ Layers
+	/**
+	 * The lowest possible layer.
+	 * @see #addExtension(int,TextAreaExtension)
+	 * @since jEdit 4.0pre4
+	 */
+	public static final int LOWEST_LAYER = Integer.MIN_VALUE;
+
+	/**
+	 * Default extension layer. This is above the wrap guide but below the
+	 * bracket highlight.
+	 * @since jEdit 4.0pre4
+	 */
+	public static final int DEFAULT_LAYER = 0;
+
+	/**
+	 * Highest possible layer.
+	 * @since jEdit 4.0pre4
+	 */
+	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
+	//}}}
+
 	//{{{ Gutter constructor
 	public Gutter(View view, JEditTextArea textArea)
 	{
@@ -298,7 +320,7 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void removeExtension(TextAreaExtension extension)
 	{
-		extensionMgr.remove(extension);
+		extensionMgr.removeExtension(extension);
 		repaint();
 	} //}}}
 

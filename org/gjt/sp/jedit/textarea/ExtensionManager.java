@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import org.gjt.sp.util.Log;
 
 class ExtensionManager
 {
@@ -37,7 +38,7 @@ class ExtensionManager
 			int _layer = ((Entry)extensions.get(i)).layer;
 			if(layer < _layer)
 			{
-				extensions.insert(entry,i);
+				extensions.add(i,entry);
 				return;
 			}
 		}
@@ -45,7 +46,7 @@ class ExtensionManager
 		extensions.add(entry);
 	} //}}}
 
-	//{{{ removeExtension(TextAreaExtension ext)
+	//{{{ removeExtension() method
 	void removeExtension(TextAreaExtension ext)
 	{
 		for(int i = 0; i < extensions.size(); i++)
