@@ -412,6 +412,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			int start = textArea.getLineStartOffset(currLine);
 			int dot = textArea.getCaretPosition() - start;
+
+			// see above
+			if(dot < 0)
+				return;
+
 			buffer.getText(start,dot,seg);
 			int virtualPosition = MiscUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
