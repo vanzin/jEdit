@@ -230,7 +230,7 @@ public class GutterOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.gutter.highlightInterval",
 			gutterHighlightInterval.getText());
 		jEdit.setColorProperty("view.gutter.highlightColor",
-			gutterHighlight.getSelectedColor());
+			gutterHighlightColor.getSelectedColor());
 
 		jEdit.setBooleanProperty("view.gutter.bracketHighlight",
 			gutterBracketHighlightEnabled.isSelected());
