@@ -675,18 +675,6 @@
 
 </listitem>
 
-<listitem>
-    <para><filename>Show_Free_Memory.bsh</filename></para>
-    <abstract><para>
-        Runs the Java garbage collection routine to free unneeded memory.
-    </para></abstract>
-    <para>
-        After running garbage collection, the macro displays a message box
-        with text and graphic displays of jEdit's memory usage after garbage
-        collection.
-    </para>
-</listitem>
-
 </itemizedlist>
 
 </sect1>
