@@ -32,7 +32,7 @@
    (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo>)
    switches to the buffer that was being edited prior to the current one.
   </para>
-  <sidebar><title>Memory usage</title>
+  <sect2><title>Memory Usage</title>
    <para>
     The maximum number of open buffers depends on available <firstterm>Java
     heap memory</firstterm>. When stored in the Java heap, each buffer requires
@@ -55,7 +55,24 @@
     fail, even if you have a lot of system memory free. The solution is to
     change the Java heap size.
    </para>
-  </sidebar>
+   <para>
+    To change the heap size on Windows, run <quote>Set jEdit Parameters</quote>
+    from the <quote>jEdit</quote> group in the
+    Programs menu. Then, in the resulting dialog box, under <quote>Command
+    line options for Java executable</quote>, change the option that looks like
+    so:
+   </para>
+   <screen>-mx32m</screen>
+   <para>
+    On Unix, edit the <filename>jedit</filename> shell script and change the
+    line that looks like so:
+   </para>
+   <screen>JAVA_HEAP_SIZE=32</screen>
+   <para>
+    In both cases, replace <quote>32</quote> with the desired heap size, in
+    megabytes.
+   </para>
+  </sect2>
  </sect1>
  <sect1 id="views"><title>Views</title>
   <para>
@@ -138,8 +155,8 @@
   </sect2>
   <sect2 id="status-bar"><title>The Status Bar</title>
    <para>
-    A <firstterm>status bar</firstterm> at the bottom of the view displays the
-    following information, from left to right:
+    The <firstterm>status bar</firstterm> at the bottom of the view consists
+    of the following components, from left to right:
    </para>
    <itemizedlist>
     <listitem><para>The line number containing the caret</para></listitem>
@@ -155,8 +172,7 @@
      Double-clicking on the caret location indicator displays the
      <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line</guimenuitem> dialog
      box; see <xref linkend="lines" />.
-    </para>
-    </listitem>
+    </para></listitem>
     <listitem><para>Prompts displayed by commands such as those dealing with
     registers and markers (see <xref linkend="text-transfer" /> and <xref
     linkend="markers" />), also I/O progress messages (see
