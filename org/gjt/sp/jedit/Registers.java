@@ -77,7 +77,6 @@ public class Registers
 
 		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);
-		EditBus.send(new RegisterChanged(null,register));
 	
 	} //}}}
 
@@ -102,7 +101,6 @@ public class Registers
 			HistoryModel.getModel("clipboard").addItem(selection);
 
 			textArea.setSelectedText("");
-			EditBus.send(new RegisterChanged(null,register));
 		}
 		else
 			textArea.getToolkit().beep();
@@ -309,7 +307,6 @@ public class Registers
 		}
 
 		registers[name] = newRegister;
-		EditBus.send(new RegisterChanged(null,name));
 	} //}}}
 
 	//{{{ setRegister() method
@@ -323,7 +320,10 @@ public class Registers
 		touchRegister(name);
 		Register register = getRegister(name);
 		if(register != null)
+		{
 			register.setValue(value);
+			EditBus.send(new RegisterChanged(null,name));
+		}
 		else
 			setRegister(name,new StringRegister(value));
 	} //}}}

@@ -71,6 +71,12 @@ Simon Ruggier for contributing to this release.
   they were given to tokenize -- in some cases, this line segment could
   hang around for a while, and was huge.
 
+- Fix performance regression when deleting text; too many lines were
+  being repainted.
+
+- 'Cut Append' and 'Copy Append' commands did not update the Registers
+  dockable.
+
 }}}
 {{{ API Changes
 
