@@ -290,6 +290,12 @@ class BrowserView extends JPanel
 		splitPane.setBorder(null);
 	} //}}}
 
+	//{{{ getTree() method
+	public BrowserJTree getTree()
+	{
+		return tree;
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -298,7 +304,7 @@ class BrowserView extends JPanel
 	private JSplitPane splitPane;
 	private JList parentDirectories;
 	private DefaultListModel parentModel;
-	private JTree tree;
+	private BrowserJTree tree;
 	private Hashtable tmpExpanded;
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode rootNode;
@@ -536,7 +542,7 @@ class BrowserView extends JPanel
 		} //}}}
 
 		//{{{ processKeyEvent() method
-		protected void processKeyEvent(KeyEvent evt)
+		public void processKeyEvent(KeyEvent evt)
 		{
 			// could make things somewhat easier...
 			// ... but KeyEventWorkaround 'output contract' will
@@ -549,6 +555,11 @@ class BrowserView extends JPanel
 			{
 				switch(evt.getKeyCode())
 				{
+				case KeyEvent.VK_UP:
+				case KeyEvent.VK_DOWN:
+					super.processKeyEvent(evt);
+					browser.filesSelected();
+					break;
 				case KeyEvent.VK_ENTER:
 					browser.filesActivated((evt.isShiftDown()
 						? VFSBrowser.M_OPEN_NEW_VIEW
@@ -736,7 +747,7 @@ class BrowserView extends JPanel
 		} //}}}
 
 		//{{{ doTypeSelect() method
-		private void doTypeSelect(String str)
+		void doTypeSelect(String str)
 		{
 			if(getSelectionCount() == 0)
 				doTypeSelect(str,0,getRowCount());
