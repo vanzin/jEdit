@@ -51,15 +51,35 @@ public class KeyEventWorkaround
 			// get rid of keys we never need to handle
 			switch(keyCode)
 			{
+			case KeyEvent.VK_ALT:
 			case KeyEvent.VK_CONTROL:
 			case KeyEvent.VK_SHIFT:
-			case KeyEvent.VK_ALT:
 			case KeyEvent.VK_META:
 			case '\0':
 				return null;
 			default:
-				if(!OperatingSystem.isMacOS())
+				switch(keyCode)
+				{
+					case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
+					case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
+					case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
+					case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
+					case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
+					case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
+					/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
+					case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
+						last = LAST_NUMKEYPAD;
+						lastKeyTime = System.currentTimeMillis();
+						return evt;
+				}
+
+				if(!OperatingSystem.isMacOS()
+					&& !OperatingSystem.hasJava14())
+				{
 					handleBrokenKeys(evt,keyCode);
+				}
+				else
+					last = LAST_NOTHING;
 				break;
 			}
 
@@ -84,6 +104,24 @@ public class KeyEventWorkaround
 				if((evt.isControlDown() ^ evt.isAltDown())
 					|| evt.isMetaDown())
 					return null;
+			}
+
+			// On JDK 1.4 with Windows, some Alt-key sequences send
+			// bullshit in a KEY_TYPED afterwards. We filter it out
+			// here
+			if(last == LAST_MOD)
+			{
+				switch(ch)
+				{
+				case 'B':
+				case 'X':
+				case 'c':
+				case '!':
+				case ',':
+				case '?':
+					last = LAST_NOTHING;
+					return null;
+				}
 			}
 
 			// if the last key was a numeric keypad key
@@ -117,6 +155,17 @@ public class KeyEventWorkaround
 
 			return evt;
 		//}}}
+		//{{{ KEY_RELEASED...
+		case KeyEvent.KEY_RELEASED:
+			if(keyCode == KeyEvent.VK_ALT)
+			{
+				// bad workaround... on Windows JDK 1.4, some
+				// Alt-sequences generate random crap afterwards
+				if(OperatingSystem.isWindows()
+					&& OperatingSystem.hasJava14())
+					last = LAST_MOD;
+			}
+			return evt;
 		default:
 			return evt;
 		}
@@ -139,34 +188,19 @@ public class KeyEventWorkaround
 
 	private static int last;
 	private static final int LAST_NOTHING = 0;
-	private static final int LAST_ALTGR = 1;
-	private static final int LAST_ALT = 2;
-	private static final int LAST_BROKEN = 3;
+	private static final int LAST_ALT = 1;
+	private static final int LAST_BROKEN = 2;
 	private static final int LAST_NUMKEYPAD = 3;
+	private static final int LAST_MOD = 4;
 	//}}}
 
 	//{{{ handleBrokenKeys() method
 	private static void handleBrokenKeys(KeyEvent evt, int keyCode)
 	{
-		switch(keyCode)
-		{
-			case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
-			case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
-			case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
-			case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
-			case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
-			case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
-			/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
-			case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
-				last = LAST_NUMKEYPAD;
-				lastKeyTime = System.currentTimeMillis();
-				return;
-		}
-
 		if(evt.isAltDown() && evt.isControlDown()
 			&& !evt.isMetaDown())
 		{
-			last = LAST_ALTGR;
+			last = LAST_NOTHING;
 			return;
 		}
 		else if(!(evt.isAltDown() || evt.isControlDown() || evt.isMetaDown()))
@@ -185,6 +219,7 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_DELETE:    case KeyEvent.VK_BACK_SPACE:
 			case KeyEvent.VK_TAB:       case KeyEvent.VK_ENTER:
 				last = LAST_NOTHING;
+				break;
 			default:
 				if(keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z)
 					last = LAST_BROKEN;

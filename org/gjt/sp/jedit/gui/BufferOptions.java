@@ -322,7 +322,7 @@ public class BufferOptions extends EnhancedDialog
 		}
 
 		buffer.setBooleanProperty("noTabs",noTabs.isSelected());
-		buffer.setBooleanProperty("indentOnTab",indentOnTab.isSelected());
+		buffer.setBooleanProperty("indentOnTajb",indentOnTab.isSelected());
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 
 		buffer.propertiesChanged();

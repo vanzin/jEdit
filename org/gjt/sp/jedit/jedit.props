@@ -350,7 +350,7 @@ vfs.browser.defaultPath=buffer
 # File list coloring
 vfs.browser.colorize=true
 
-vfs.browser.colors.0.glob={CVS,#*,*~}
+vfs.browser.colors.0.glob={CVS,#*,*~,\\.*}
 vfs.browser.colors.0.color=#a0a0a0
 vfs.browser.colors.1.glob=*.class
 vfs.browser.colors.1.color=#660066

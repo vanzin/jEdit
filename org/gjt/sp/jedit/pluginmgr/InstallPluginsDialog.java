@@ -66,6 +66,8 @@ class InstallPluginsDialog extends EnhancedDialog
 		panel.setBorder(new TitledBorder(jEdit.getProperty("install-plugins"
 			+ ".plugin-info")));
 
+		JPanel labelAndValueBox = new JPanel(new BorderLayout());
+
 		JPanel labelBox = new JPanel(new GridLayout(
 			(mode == UPDATE ? 7 : 6),1,0,3));
 		labelBox.setBorder(new EmptyBorder(0,0,3,12));
@@ -86,7 +88,7 @@ class InstallPluginsDialog extends EnhancedDialog
 			+ ".info.updated"),SwingConstants.RIGHT));
 		labelBox.add(new JLabel(jEdit.getProperty("install-plugins"
 			+ ".info.description"),SwingConstants.RIGHT));
-		panel.add(BorderLayout.WEST,labelBox);
+		labelAndValueBox.add(BorderLayout.WEST,labelBox);
 
 		JPanel valueBox = new JPanel(new GridLayout(
 			(mode == UPDATE ? 7 : 6),1,0,3));
@@ -99,14 +101,16 @@ class InstallPluginsDialog extends EnhancedDialog
 			valueBox.add(installedVersion = new JLabel());
 		valueBox.add(updated = new JLabel());
 		valueBox.add(Box.createGlue());
-		panel.add(BorderLayout.CENTER,valueBox);
+		labelAndValueBox.add(BorderLayout.CENTER,valueBox);
+
+		panel.add(BorderLayout.NORTH,labelAndValueBox);
 
 		description = new JTextArea(6,50);
 		description.setEditable(false);
 		description.setLineWrap(true);
 		description.setWrapStyleWord(true);
 
-		panel.add(BorderLayout.SOUTH,new JScrollPane(description));
+		panel.add(BorderLayout.CENTER,new JScrollPane(description));
 
 		content.add(BorderLayout.CENTER,panel);
 

@@ -41,6 +41,7 @@ JEDIT 4.0 VERSION HISTORY
   last line of the buffer
 - The file system browser's divider position would not be remembered if
   it was collapsed all the way
+- Layout of 'Install Plugins' dialog box was a bit broken
 
 + API Changes
 
