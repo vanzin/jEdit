@@ -116,13 +116,13 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		memory.addMouseListener(mouseHandler);
 		box.add(memory);
 
-		// Leave some room for OS X grow box
-		if(OperatingSystem.isMacOS())
-			box.add(Box.createHorizontalStrut(18));
-
 		panel.add(BorderLayout.EAST,box);
 
 		add(BorderLayout.CENTER,panel);
+
+		// Leave some room for OS X grow box
+		if(OperatingSystem.isMacOS())
+			add(BorderLayout.WEST,Box.createHorizontalStrut(18));
 	} //}}}
 
 	//{{{ propertiesChanged() method
