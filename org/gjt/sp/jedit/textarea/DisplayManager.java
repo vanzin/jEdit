@@ -1391,9 +1391,25 @@ loop:		for(;;)
 	} //}}}
 
 	//{{{ BufferChangeHandler class
+	/**
+	 * Note that in this class we take great care to defer complicated
+	 * calculations to the end of the current transaction if the buffer
+	 * informs us a compound edit is in progress
+	 * (<code>isTransactionInProgress()</code>).
+	 *
+	 * This greatly speeds up replace all for example, by only doing certain
+	 * things once, particularly in <code>moveCaretPosition()</code>.
+	 *
+	 * Try doing a replace all in a large file, for example. It is very slow
+	 * in 3.2, faster in 4.0 (where the transaction optimization was
+	 * introduced) and faster still in 4.1 (where it was further improved).
+	 *
+	 * There is still work to do; see TODO.txt.
+	 */
 	class BufferChangeHandler extends BufferChangeAdapter
 	{
 		boolean delayedUpdate;
+		boolean delayedMultilineUpdate;
 		int delayedUpdateStart;
 		int delayedUpdateEnd;
 
@@ -1413,6 +1429,17 @@ loop:		for(;;)
 			_notifyScreenLineChanges();
 		} //}}}
 
+		//{{{ foldLevelChanged() method
+		public void foldLevelChanged(Buffer buffer, int start, int end)
+		{
+			if(textArea.getDisplayManager() == DisplayManager.this
+				&& end != 0 && buffer.isLoaded())
+			{
+				textArea.invalidateLineRange(start - 1,
+					textArea.getLastPhysicalLine());
+			}
+		} //}}}
+
 		//{{{ wrapModeChanged() method
 		public void wrapModeChanged(Buffer buffer)
 		{
@@ -1427,10 +1454,13 @@ loop:		for(;;)
 			if(!buffer.isLoaded())
 				return;
 
-			delayedUpdate(startLine,startLine + numLines);
+			int endLine = startLine + numLines;
+
+			delayedUpdate(startLine,endLine);
 
 			if(numLines != 0)
 			{
+				delayedMultilineUpdate = true;
 				contentInserted(firstLine,startLine,numLines);
 				contentInserted(scrollLineCount,startLine,numLines);
 
@@ -1473,6 +1503,40 @@ loop:		for(;;)
 				lastfvmget = -1;
 				fvmdump();
 			}
+
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				//{{{ resize selections if necessary
+				for(int i = 0; i < textArea.selection.size(); i++)
+				{
+					Selection s = (Selection)textArea
+						.selection.elementAt(i);
+	
+					if(s.contentInserted(buffer,startLine,offset,
+						numLines,length))
+					{
+						delayedUpdate(s.startLine,s.endLine);
+					}
+				} //}}}
+
+				int caret = textArea.getCaretPosition();
+				if(caret >= offset)
+				{
+					int scrollMode = (caretAutoScroll()
+						? JEditTextArea.ELECTRIC_SCROLL
+						: JEditTextArea.NO_SCROLL);
+					textArea.moveCaretPosition(
+						caret + length,scrollMode);
+				}
+				else
+				{
+					int scrollMode = (caretAutoScroll()
+						? JEditTextArea.NORMAL_SCROLL
+						: JEditTextArea.NO_SCROLL);
+					textArea.moveCaretPosition(
+						caret,scrollMode);
+				}
+			}
 		} //}}}
 
 		//{{{ preContentRemoved() method
@@ -1484,6 +1548,7 @@ loop:		for(;;)
 
 			if(numLines != 0)
 			{
+				delayedMultilineUpdate = true;
 				preContentRemoved(firstLine,startLine,numLines);
 				preContentRemoved(scrollLineCount,startLine,numLines);
 
@@ -1539,16 +1604,83 @@ loop:		for(;;)
 			delayedUpdate(startLine,startLine);
 		} //}}}
 
+		//{{{ contentRemoved() method
+		public void contentRemoved(Buffer buffer, int startLine,
+			int start, int numLines, int length)
+		{
+			if(!buffer.isLoaded())
+				return;
+
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				int endLine = startLine + numLines;
+
+				//{{{ resize selections if necessary
+				for(int i = 0; i < textArea.selection.size(); i++)
+				{
+					Selection s = (Selection)textArea
+						.selection.elementAt(i);
+	
+					if(s.contentInserted(buffer,startLine,
+						start,numLines,length))
+					{
+						delayedUpdate(s.startLine,s.endLine);
+					}
+				} //}}}
+
+				int caret = textArea.getCaretPosition();
+
+				if(caret >= start + length)
+				{
+					int scrollMode = (caretAutoScroll()
+						? JEditTextArea.ELECTRIC_SCROLL
+						: JEditTextArea.NO_SCROLL);
+					textArea.moveCaretPosition(
+						caret - length,
+						scrollMode);
+				}
+				else if(caret >= start)
+				{
+					int scrollMode = (caretAutoScroll()
+						? JEditTextArea.ELECTRIC_SCROLL
+						: JEditTextArea.NO_SCROLL);
+					textArea.moveCaretPosition(
+						start,scrollMode);
+				}
+				else
+				{
+					int scrollMode = (caretAutoScroll()
+						? JEditTextArea.NORMAL_SCROLL
+						: JEditTextArea.NO_SCROLL);
+					textArea.moveCaretPosition(caret,scrollMode);
+				}
+			}
+		}
+		//}}}
+
 		//{{{ transactionComplete() method
 		public void transactionComplete(Buffer buffer)
 		{
-			if(delayedUpdate)
+			if(textArea.getDisplayManager() == DisplayManager.this)
 			{
-				textArea.chunkCache.invalidateChunksFromPhys(
-					delayedUpdateStart);
-
-				if(textArea.getDisplayManager() == DisplayManager.this)
+				if(delayedUpdate)
 				{
+					if(delayedMultilineUpdate)
+					{
+						textArea.invalidateScreenLineRange(
+							textArea.chunkCache
+							.getScreenLineOfOffset(
+							delayedUpdateStart,0),
+							textArea.getVisibleLines());
+						delayedMultilineUpdate = false;
+					}
+					else
+					{
+						textArea.invalidateLineRange(
+							delayedUpdateStart,
+							delayedUpdateEnd);
+					}
+
 					int firstLine = textArea.getFirstPhysicalLine();
 					int lastLine = textArea.getLastPhysicalLine();
 
@@ -1564,11 +1696,14 @@ loop:		for(;;)
 						}
 						line = getNextVisibleLine(line);
 					}
-				}
-				_notifyScreenLineChanges();
 
-				delayedUpdate = false;
+					_notifyScreenLineChanges();
+				}
+
+				textArea._finishCaretUpdate();
 			}
+
+			delayedUpdate = false;
 		} //}}}
 
 		//{{{ contentInserted() method
@@ -1630,6 +1765,17 @@ loop:		for(;;)
 					delayedUpdateEnd,
 					endLine);
 			}
+		} //}}}
+
+		//{{{ caretAutoScroll() method
+		/**
+		 * Return if change in buffer should scroll this text area.
+		 */
+		private boolean caretAutoScroll()
+		{
+			View view = textArea.getView();
+			return view == jEdit.getActiveView()
+				&& view.getTextArea() == textArea;
 		} //}}}
 	} //}}}
 }

@@ -76,13 +76,11 @@ public class JEditTextArea extends JComponent
 		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
-		bufferHandler = new BufferChangeHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		blink = true;
 		lineSegment = new Segment();
 		returnValue = new Point();
-		runnables = new LinkedList();
 		structureMatchers = new LinkedList();
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
@@ -147,6 +145,16 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//{{{ Getters and setters
+
+	//{{{ getView() method
+	/**
+	 * Returns this text area's view.
+	 * @since jEdit 4.2pre5
+	 */
+	public View getView()
+	{
+		return view;
+	} //}}}
 
 	//{{{ getPainter() method
 	/**
@@ -278,13 +286,8 @@ public class JEditTextArea extends JComponent
 				selectNone();
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
-
-				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
 			this.buffer = buffer;
-
-			buffer.addBufferChangeListener(bufferHandler);
-			bufferHandlerInstalled = true;
 
 			chunkCache.setBuffer(buffer);
 			propertiesChanged();
@@ -4770,12 +4773,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		ToolTipManager.sharedInstance().registerComponent(painter);
 		ToolTipManager.sharedInstance().registerComponent(gutter);
 
-		if(!bufferHandlerInstalled)
-		{
-			bufferHandlerInstalled = true;
-			buffer.addBufferChangeListener(bufferHandler);
-		}
-
 		recalculateVisibleLines();
 		if(buffer.isLoaded())
 			recalculateLastPhysicalLine();
@@ -4797,12 +4794,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(focusedComponent == this)
 			focusedComponent = null;
-
-		if(bufferHandlerInstalled)
-		{
-			buffer.removeBufferChangeListener(bufferHandler);
-			bufferHandlerInstalled = false;
-		}
 	} //}}}
 
 	//{{{ getFocusTraversalKeysEnabled() method
@@ -5102,17 +5093,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean scrollBarsInitialized;
 
-	// not private so that inner classes can use without access$ methods.
-	// see moveCaretPosition() and BufferChangeHandler.content{Inserted,Removed}()
-	// for details of how these are used.
-	//
-	// maybe should do it some other way since in fact the only runnable that
-	// ever goes here is from finishCaretUpdate().
-	boolean queuedScrollTo;
-	boolean queuedScrollToElectric;
-	boolean queuedFireCaretEvent;
-	List runnables;
-
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
 	Vector selection;
@@ -5235,6 +5215,48 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
+	//{{{ _finishCaretUpdate() method
+	/* called by DisplayManager.BufferChangeHandler.transactionComplete() */
+	void _finishCaretUpdate()
+	{
+		if(queuedCaretUpdate)
+		{
+			// When the user is typing, etc, we don't want the caret
+			// to blink
+			blink = true;
+			caretTimer.restart();
+
+			/* avoid generating an access$ */
+			int caretLine = getCaretLine();
+
+			if(!displayManager.isLineVisible(caretLine))
+			{
+				if(caretLine < displayManager.getFirstVisibleLine()
+					|| caretLine > displayManager.getLastVisibleLine())
+				{
+					int collapseFolds = buffer.getIntegerProperty(
+						"collapseFolds",0);
+					if(collapseFolds != 0)
+					{
+						displayManager.expandFolds(collapseFolds);
+						displayManager.expandFold(caretLine,false);
+					}
+					else
+						displayManager.expandAllFolds();
+				}
+				else
+					displayManager.expandFold(caretLine,false);
+			}
+
+			scrollToCaret(queuedScrollToElectric);
+			updateBracketHighlightWithDelay();
+			if(queuedFireCaretEvent)
+				fireCaretEvent();
+			queuedCaretUpdate = queuedScrollToElectric
+				= queuedFireCaretEvent = false;
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -5280,8 +5302,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private JScrollBar horizontal;
 
 	private Buffer buffer;
-	private BufferChangeHandler bufferHandler;
-	private boolean bufferHandlerInstalled;
 
 	private int caret;
 	private int caretLine;
@@ -5296,8 +5316,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean overwrite;
 	private boolean rectangularSelectionMode;
 
-	private boolean delayedScrollTo;
-
 	/* on JDK 1.4, this is set to a method by Java14. The method must take
 	* these parameters:
 	* - a JEditTextArea
@@ -5307,6 +5325,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean dndEnabled;
 	private Method dndCallback;
 	private boolean dndInProgress;
+
+	// see finishCaretUpdate() & _finishCaretUpdate()
+	private boolean queuedCaretUpdate;
+	private boolean queuedScrollToElectric;
+	private boolean queuedFireCaretEvent;
+
 	//}}}
 
 	//{{{ startDragAndDrop() method
@@ -5391,56 +5415,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		this.queuedScrollToElectric |= doElectricScroll;
 		this.queuedFireCaretEvent |= fireCaretEvent;
 
-		if(queuedScrollTo)
+		if(queuedCaretUpdate)
 			return;
 
-		Runnable r = new Runnable()
-		{
-			public void run()
-			{
-				// When the user is typing, etc, we don't want the caret
-				// to blink
-				blink = true;
-				caretTimer.restart();
-
-				/* avoid generating an access$ */
-				int caretLine = getCaretLine();
-
-				if(!displayManager.isLineVisible(caretLine))
-				{
-					if(caretLine < displayManager.getFirstVisibleLine()
-						|| caretLine > displayManager.getLastVisibleLine())
-					{
-						int collapseFolds = buffer.getIntegerProperty(
-							"collapseFolds",0);
-						if(collapseFolds != 0)
-						{
-							displayManager.expandFolds(collapseFolds);
-							displayManager.expandFold(caretLine,false);
-						}
-						else
-							displayManager.expandAllFolds();
-					}
-					else
-						displayManager.expandFold(caretLine,false);
-				}
-
-				scrollToCaret(queuedScrollToElectric);
-				updateBracketHighlightWithDelay();
-				if(queuedFireCaretEvent)
-					fireCaretEvent();
-				queuedScrollTo = queuedScrollToElectric
-					= queuedFireCaretEvent = false;
-			}
-		};
-
 		if(buffer.isTransactionInProgress())
-		{
-			queuedScrollTo = true;
-			runnables.add(r);
-		}
+			queuedCaretUpdate = true;
 		else
-			r.run();
+			_finishCaretUpdate();
 	} //}}}
 
 	//{{{ fireCaretEvent() method
@@ -6081,194 +6062,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(vertical.getValue());
 			else
 				setHorizontalOffset(-horizontal.getValue());
-		} //}}}
-	} //}}}
-
-	//{{{ BufferChangeHandler class
-	/**
-	 * Note that in this class we take great care to defer complicated
-	 * calculations to the end of the current transaction if the buffer
-	 * informs us a compound edit is in progress
-	 * (<code>isTransactionInProgress()</code>).
-	 *
-	 * This greatly speeds up replace all for example, by only doing certain
-	 * things once, particularly in <code>moveCaretPosition()</code>.
-	 *
-	 * Try doing a replace all in a large file, for example. It is very slow
-	 * in 3.2, faster in 4.0 (where the transaction optimization was
-	 * introduced) and faster still in 4.1 (where it was further improved).
-	 *
-	 * There is still work to do; see TODO.txt.
-	 */
-	class BufferChangeHandler extends BufferChangeAdapter
-	{
-		boolean delayedUpdate;
-		boolean delayedMultilineUpdate;
-		int delayedRepaintStart;
-		int delayedRepaintEnd;
-
-		//{{{ foldLevelChanged() method
-		public void foldLevelChanged(Buffer buffer, int start, int end)
-		{
-			if(!bufferChanging && end != 0
-				&& buffer.isLoaded())
-			{
-				invalidateLineRange(start - 1,
-					getLastPhysicalLine());
-			}
-		} //}}}
-
-		//{{{ contentInserted() method
-		public void contentInserted(Buffer buffer, int startLine, int start,
-			int numLines, int length)
-		{
-			if(!buffer.isLoaded())
-				return;
-
-			if(numLines != 0)
-				delayedMultilineUpdate = true;
-
-			int endLine = startLine + numLines;
-
-			delayedRepaint(startLine,endLine);
-
-			//{{{ resize selections if necessary
-			for(int i = 0; i < selection.size(); i++)
-			{
-				Selection s = (Selection)selection.elementAt(i);
-
-				if(s.contentInserted(buffer,startLine,start,
-					numLines,length))
-				{
-					delayedRepaint(s.startLine,s.endLine);
-				}
-			} //}}}
-
-			if(caret >= start)
-			{
-				int scrollMode = (caretAutoScroll()
-					? ELECTRIC_SCROLL : NO_SCROLL);
-				moveCaretPosition(caret + length,scrollMode);
-			}
-			else
-			{
-				int scrollMode = (caretAutoScroll()
-					? NORMAL_SCROLL : NO_SCROLL);
-				moveCaretPosition(caret,scrollMode);
-			}
-		}
-		//}}}
-
-		//{{{ contentRemoved() method
-		public void contentRemoved(Buffer buffer, int startLine, int start,
-			int numLines, int length)
-		{
-			if(!buffer.isLoaded())
-				return;
-
-			if(numLines != 0)
-				delayedMultilineUpdate = true;
-
-			delayedRepaint(startLine,startLine);
-
-			//{{{ resize selections if necessary
-			for(int i = 0; i < selection.size(); i++)
-			{
-				Selection s = (Selection)selection.elementAt(i);
-
-				int oldStartLine = s.startLine;
-				int oldEndLine = s.endLine;
-				boolean changed = s.contentRemoved(buffer,
-					startLine,start,numLines,length);
-
-				if(s.start == s.end)
-				{
-					selection.removeElement(s);
-					delayedRepaint(oldStartLine,oldEndLine);
-					i--;
-				}
-				else if(changed)
-				{
-					delayedRepaint(s.startLine,s.endLine);
-				}
-			} //}}}
-
-			int scrollMode = (caretAutoScroll()
-				? NORMAL_SCROLL : NO_SCROLL);
-
-			if(caret > start)
-			{
-				if(caret <= start + length)
-					moveCaretPosition(start,scrollMode);
-				else
-					moveCaretPosition(caret - length,scrollMode);
-			}
-			else
-			{
-				// will update bracket highlight
-				moveCaretPosition(caret,scrollMode);
-			}
-		}
-		//}}}
-
-		//{{{ transactionComplete() method
-		public void transactionComplete(Buffer buffer)
-		{
-			if(delayedUpdate)
-			{
-				if(delayedMultilineUpdate)
-				{
-					invalidateScreenLineRange(chunkCache
-						.getScreenLineOfOffset(
-						delayedRepaintStart,0),
-						visibleLines);
-					delayedMultilineUpdate = false;
-				}
-				else
-				{
-					invalidateLineRange(delayedRepaintStart,
-						delayedRepaintEnd);
-				}
-
-				delayedUpdate = false;
-			}
-
-			Iterator iter = runnables.iterator();
-			while(iter.hasNext())
-				((Runnable)iter.next()).run();
-			runnables.clear();
-		} //}}}
-
-		//{{{ caretAutoScroll() method
-		/**
-		 * Return if change in buffer should scroll this text area.
-		 */
-		private boolean caretAutoScroll()
-		{
-			return view == jEdit.getActiveView()
-				&& view.getTextArea() == JEditTextArea.this;
-		} //}}}
-
-		//{{{ delayedRepaint() method
-		private void delayedRepaint(int startLine, int endLine)
-		{
-			chunkCache.invalidateChunksFromPhys(startLine);
-
-			if(!delayedUpdate)
-			{
-				delayedRepaintStart = startLine;
-				delayedRepaintEnd = endLine;
-				delayedUpdate = true;
-			}
-			else
-			{
-				delayedRepaintStart = Math.min(
-					delayedRepaintStart,
-					startLine);
-				delayedRepaintEnd = Math.max(
-					delayedRepaintEnd,
-					endLine);
-			}
 		} //}}}
 	} //}}}
 
