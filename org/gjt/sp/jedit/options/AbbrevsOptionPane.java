@@ -30,7 +30,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import org.gjt.sp.jedit.gui.EditAbbrevDialog;
+import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -109,18 +109,18 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		buttons.setBorder(new EmptyBorder(6,0,0,0));
 
-		buttons.add(Box.createGlue());
-		add = new JButton(jEdit.getProperty("options.abbrevs.add"));
+		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+		add.setToolTipText(jEdit.getProperty("options.abbrevs.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
-		buttons.add(Box.createHorizontalStrut(6));
-		edit = new JButton(jEdit.getProperty("options.abbrevs.edit"));
-		edit.addActionListener(actionHandler);
-		buttons.add(edit);
-		buttons.add(Box.createHorizontalStrut(6));
-		remove = new JButton(jEdit.getProperty("options.abbrevs.remove"));
+		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
+		remove.setToolTipText(jEdit.getProperty("options.abbrevs.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
+		edit = new RolloverButton(GUIUtilities.loadIcon("ButtonProperties.png"));
+		edit.setToolTipText(jEdit.getProperty("options.abbrevs.edit"));
+		edit.addActionListener(actionHandler);
+		buttons.add(edit);
 		buttons.add(Box.createGlue());
 
 		add(BorderLayout.SOUTH,buttons);

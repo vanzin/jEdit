@@ -1,5 +1,5 @@
 /* 
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * MacOSPlugin.java - Main class Mac OS Plugin
@@ -20,47 +20,57 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+package macos;
+
 //{{{ Imports
 import com.apple.mrj.*;
+import java.util.Vector;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+import macos.menu.*;
 //}}}
 
 public class MacOSPlugin extends EBPlugin
 {
-	
-//{{{ Variables
+	//{{{ Variables
 	private boolean started = false;
 	private boolean osok;
 	private Handler handler;
-//}}}
+	//}}}
 	
 	//{{{ start() method
 	public void start()
-    {
+	{
 		if(osok = osok())
-        {	
+		{	
 			handler = new MacOSHandler();
 			// Register handlers
 			MRJApplicationUtils.registerQuitHandler((MRJQuitHandler)handler);
-    		MRJApplicationUtils.registerAboutHandler((MRJAboutHandler)handler);
+			MRJApplicationUtils.registerAboutHandler((MRJAboutHandler)handler);
 			MRJApplicationUtils.registerPrefsHandler((MRJPrefsHandler)handler);
 			MRJApplicationUtils.registerOpenDocumentHandler((MRJOpenDocumentHandler)handler);
-        }
+		}
 	}//}}}
 	
 	//{{{ createOptionPanes() method
 	public void createOptionPanes(OptionsDialog od) {
 		if (osok)
 			od.addOptionPane(new MacOSOptionPane());
-    }//}}}
+	}//}}}
 
+	//{{{ createMenuItems() method
+	public void createMenuItems(Vector menuItems)
+	{
+		if (osok)
+			menuItems.addElement(new MacOSMenu());
+	} //}}}
+	
 	//{{{ handleMessage() method
-    public void handleMessage(EBMessage message)
-    {
+	public void handleMessage(EBMessage message)
+	{
 		if (osok)
 		{
 			// This is necessary to have a file opened from the Finder
@@ -76,7 +86,7 @@ public class MacOSPlugin extends EBPlugin
 				handler.handleFileCodes((BufferUpdate)message);
 			}
 		}
-    }//}}}
+	}//}}}
 	
 	//{{{ started() method
 	/**
@@ -115,5 +125,4 @@ public class MacOSPlugin extends EBPlugin
 
 		return true;
 	}//}}}
-	
 }

@@ -1,5 +1,5 @@
 /* 
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * MacOSHandler.java - Various handlers for Mac OS Plugin
@@ -20,6 +20,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
  
+package macos;
+
 //{{{ Imports
 import com.apple.mrj.*;
 import java.io.*;
@@ -33,14 +35,13 @@ import org.gjt.sp.util.Log;
 public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 	MRJOpenDocumentHandler, MRJPrefsHandler, Handler
 {
-	
-//{{{ Variables
-    private String		lastOpenFile;
+	//{{{ Variables
+	private String		lastOpenFile;
 	private ExitThread	et = new ExitThread();
 	
 	private final MRJOSType defaultType = new MRJOSType(jEdit.getProperty("MacOSPlugin.default.type"));
 	private final MRJOSType defaultCreator = new MRJOSType(jEdit.getProperty("MacOSPlugin.default.creator"));
-//}}}
+	//}}}
 	
 	//{{{ Constructor
 	public MacOSHandler()
@@ -58,11 +59,11 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			System.setProperty("com.apple.mrj.application.live-resize","true");
 		else
 			System.setProperty("com.apple.mrj.application.live-resize","false");
-	}//}}}
+	} //}}}
 	
 	//{{{ handleQuit() method
 	public void handleQuit()
-    {
+	{
 		// Need this to get around the double call bug
 		// in MRJ.
 		if (!et.isAlive())
@@ -73,43 +74,41 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			Log.log(Log.DEBUG,this,"ExitThread still alive.");
 		
 		throw new IllegalStateException("Exiting: aborting default exit");
-	}//}}}
+	} //}}}
 	
 	//{{{ handleAbout() method
 	public void handleAbout()
-    {
+	{
 		new AboutDialog(jEdit.getLastView());
-	}//}}}
+	} //}}}
 
 	//{{{ handlePrefs() method
 	public void handlePrefs()
 	{
 		new GlobalOptions(jEdit.getLastView());
-	}//}}}
+	} //}}}
 	
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(File file)
-    {
+	{
 		if (jEdit.openFile(jEdit.getLastView(),file.getPath()) != null)
-        {
-            lastOpenFile = file.getPath();
-        } else {
-            Log.log(Log.ERROR,this,"Error opening file.");
-        }
-	}//}}}
+			lastOpenFile = file.getPath();
+		else
+			Log.log(Log.ERROR,this,"Error opening file.");
+	} //}}}
 
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(ViewUpdate msg)
-    {
+	{
 		if(msg.getWhat() == ViewUpdate.CREATED)
 		{
 			if(lastOpenFile != null)
 			{
 				jEdit.getLastView().setBuffer(jEdit.getBuffer(lastOpenFile));
 			}
-			((MacOSPlugin)jEdit.getPlugin("MacOSPlugin")).started(true);
+			((MacOSPlugin)jEdit.getPlugin("macos.MacOSPlugin")).started(true);
 		}
-	}//}}}
+	} //}}}
 	
 	//{{{ handleFileCodes() method
 	public void handleFileCodes(BufferUpdate msg)
@@ -143,8 +142,8 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			{
 				try
 				{
-					MRJOSType	type	= MRJFileUtils.getFileType(bufFile);
-					MRJOSType	creator	= MRJFileUtils.getFileCreator(bufFile);
+					MRJOSType type = MRJFileUtils.getFileType(bufFile);
+					MRJOSType creator = MRJFileUtils.getFileCreator(bufFile);
 					
 					if (!type.equals(new MRJOSType("")))
 						buffer.setProperty("MacOSPlugin.type",type);
@@ -156,9 +155,9 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			Log.log(Log.DEBUG,this,"Assigned MRJOSTypes " + buffer.getProperty("MacOSPlugin.type")
 			+ "/" + buffer.getProperty("MacOSPlugin.creator") + " to " + bufFile.getPath());
 		}
-	}//}}}
+	} //}}}
 	
-//{{{ ExitThread class
+	//{{{ ExitThread class
 	class ExitThread extends Thread
 	{
 		public void run()
@@ -166,7 +165,5 @@ public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
 			jEdit.exit(jEdit.getLastView(),false);
 			et = new ExitThread();
 		}
-	}
-//}}}
-
+	} //}}}
 }

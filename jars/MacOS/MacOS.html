@@ -6,7 +6,7 @@
 <body bgcolor="#FFFFFF">
 <table
     summary="Header"
-    bgcolor="#CCCCFF"
+    bgcolor="#99CCCC"
     cellspacing="0"
     border="0"
     width="100%"
@@ -14,8 +14,8 @@
 >
   <tr width="100%"> 
     <td valign="TOP"><strong><font size="+2">Mac OS Plugin</font></strong></td>
-    <td valign="TOP" align="RIGHT"><font size="-1"> <strong>Version 1.2.3 (Sep. 
-      30, 2002)</strong> <br>
+    <td valign="TOP" align="RIGHT"><font size="-1"> <strong>Version 2.0.1 (Oct. 
+      12, 2002)</strong> <br>
       By Kris Kopicki &lt;kris_k@iprimus.com.au&gt; </font></td>
   </tr>
 </table>
@@ -35,11 +35,18 @@
   <li>The menu's can be placed in the Mac OS X menu bar. This is not recommended, 
     as there are problems with Java on Mac OS X.</li>
   <li>You can enable live resizing of windows.</li>
+  <li>You can show current and recent buffers in the finder.</li>
+  <li>You can run AppleScripts (compiled, uncompiled and standalone). Your scripts 
+    must be located in the scripts folder in the jEdit folder. They can be either 
+    plain text or compiled scripts. Scripts must have their type and creator set 
+    correctly, have a .scpt (for compiled scripts) or .applescript (for uncompiled 
+    scripts) extension, or both.</li>
 </ul>
 <h3>Known Issues:</h3>
 <ul>
   <li>Files opened in the Finder before jEdit is running are not opened in jEdit 
-    (Apple Java bug).</li>
+    (10.0.x - 10.1.x).</li>
+  <li>Scripts that require user interaction are not supported.</li>
 </ul>
 <p>&nbsp;</p>
 </body>

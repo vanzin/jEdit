@@ -1,16 +1,16 @@
 #
 # Plugin info
 #
-plugin.MacOSPlugin.name=Mac OS Plugin
-plugin.MacOSPlugin.author=Kris Kopicki
-plugin.MacOSPlugin.version=1.2.3
-plugin.MacOSPlugin.docs=MacOS.html
+plugin.macos.MacOSPlugin.name=Mac OS Plugin
+plugin.macos.MacOSPlugin.author=Kris Kopicki
+plugin.macos.MacOSPlugin.version=2.0.1
+plugin.macos.MacOSPlugin.docs=MacOS.html
 
 #
 # Dependencies
 #
-plugin.MacOSPlugin.depend.0=jedit 04.00.05.00
-plugin.MacOSPlugin.depend.1=jdk 1.3
+plugin.macos.MacOSPlugin.depend.0=jedit 04.00.05.00
+plugin.macos.MacOSPlugin.depend.1=jdk 1.3
 
 MacOSPlugin.depend.os.name=Mac OS X
 MacOSPlugin.depend.mrj.version=3.2
@@ -32,6 +32,7 @@ options.MacOSPlugin.label=Mac OS Settings
 options.MacOSPlugin.menubar.label=Enable Mac OS style menubar (not recommended)
 options.MacOSPlugin.preserve.label=Preserve existing file/creator codes on save
 options.MacOSPlugin.liveResize.label=Enable live resizing of windows
+options.MacOSPlugin.scripts.label=Script folder search depth:
 
 #
 # Error dialogs
@@ -39,3 +40,19 @@ options.MacOSPlugin.liveResize.label=Enable live resizing of windows
 MacOSPlugin.dialog.osname.message=Mac OS Plugin can only be used with Mac OS X.
 MacOSPlugin.dialog.mrjversion.title=error
 MacOSPlugin.dialog.mrjversion.message=Mac OS Plugin requires a newer version of Java (MRJ {0}).
+
+#
+# Menus
+#
+MacOSPlugin.menu.label=Mac OS
+MacOSPlugin.menu.showCurrent=Show Current Buffer In Finder
+MacOSPlugin.menu.showCurrentDir=Show Current Folder In Finder
+MacOSPlugin.menu.buffers.label=Show Buffer In Finder
+MacOSPlugin.menu.buffers.none=No Saved Buffers
+MacOSPlugin.menu.recent.label=Show Recent In Finder
+MacOSPlugin.menu.recent.none=No Recent Items
+MacOSPlugin.menu.recentDir.label=Show Recent Folder In Finder
+MacOSPlugin.menu.recentDir.none=No Recent Folders
+MacOSPlugin.menu.scripts.label=Run AppleScript
+MacOSPlugin.menu.scripts.none=No Scripts Available
+MacOSPlugin.menu.scripts.depth=1;
