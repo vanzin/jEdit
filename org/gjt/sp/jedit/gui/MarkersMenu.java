@@ -31,18 +31,18 @@ import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class MarkersMenu extends EnhancedMenu implements MenuListener
+public class MarkersMenu extends EnhancedMenu
 {
 	//{{{ MarkersMenu constructor
 	public MarkersMenu()
 	{
 		super("markers");
-		addMenuListener(this);
 	} //}}}
 
 	//{{{ menuSelected() method
 	public void menuSelected(MenuEvent evt)
 	{
+		super.menuSelected(evt);
 		final View view = GUIUtilities.getView(this);
 
 		if(getMenuComponentCount() != 0)

@@ -33,18 +33,18 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class RecentDirectoriesMenu extends EnhancedMenu implements MenuListener
+public class RecentDirectoriesMenu extends EnhancedMenu
 {
 	//{{{ RecentDirectoriesMenu constructor
 	public RecentDirectoriesMenu()
 	{
 		super("recent-directories");
-		addMenuListener(this);
 	} //}}}
 
 	//{{{ menuSelected() method
 	public void menuSelected(MenuEvent evt)
 	{
+		super.menuSelected(evt);
 		final View view = GUIUtilities.getView(this);
 
 		if(getMenuComponentCount() != 0)

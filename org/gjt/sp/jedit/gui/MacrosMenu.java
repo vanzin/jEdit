@@ -51,8 +51,17 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 			updateMacrosMenu();
 	}
 
+	protected void init()
+	{
+		super.init();
+		updateMacrosMenu();
+	}
+
 	private void updateMacrosMenu()
 	{
+		if(!initialized)
+			return;
+
 		// Because the macros menu contains normal items as
 		// well as dynamically-generated stuff, we are careful
 		// to only remove the dynamic crap here...

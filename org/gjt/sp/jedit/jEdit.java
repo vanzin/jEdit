@@ -1823,6 +1823,18 @@ public class jEdit
 		return inputHandler;
 	} //}}}
 
+	public static void newViewTest()
+	{
+		long time = System.currentTimeMillis();
+		for(int i = 0; i < 30; i++)
+		{
+			Buffer b = newFile(null);
+			b.insert(0,"x");
+			new View(b,null,false);
+		}
+		System.err.println(System.currentTimeMillis() - time);
+	}
+
 	//{{{ newView() method
 	/**
 	 * Creates a new view of a buffer.
