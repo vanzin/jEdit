@@ -223,55 +223,50 @@ org.gjt.sp.util</programlisting>
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-         <funcprototype>
-           <funcdef>public static void <function>message</function></funcdef>
-           <paramdef>Component <parameter>comp</parameter></paramdef>
-           <paramdef>String <parameter>message</parameter></paramdef>
-         </funcprototype>
-       </funcsynopsis>
+      <methodsynopsis>
+         <modifier>public</modifier><modifier>static</modifier><void/>
+         <methodname>message</methodname>
+         <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+         <methodparam><type>String</type><parameter>message</parameter></methodparam>
+       </methodsynopsis>
      </listitem>
 
      <listitem>
-       <funcsynopsis>
-         <funcprototype>
-          <funcdef>public static void <function>error</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>String <parameter>message</parameter></paramdef>
-         </funcprototype>
-       </funcsynopsis>
+       <methodsynopsis>
+         <modifier>public</modifier><modifier>static</modifier><void/>
+         <methodname>error</methodname>
+         <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+         <methodparam><type>String</type><parameter>message</parameter></methodparam>
+       </methodsynopsis>
      </listitem>
 
      <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public static String <function>input</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>String <parameter>prompt</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><modifier>static</modifier><type>String</type>
+        <methodname>input</methodname>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
+      </methodsynopsis>
      </listitem>
 
      <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public static String <function>input</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>String <parameter>prompt</parameter></paramdef>
-          <paramdef>String <parameter>defaultValue</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><modifier>static</modifier><type>String</type>
+        <methodname>input</methodname>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
+        <methodparam><type>String</type><parameter>defaultValue</parameter></methodparam>
+      </methodsynopsis>
      </listitem>
 
      <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public static int <function>confirm</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>String <parameter>prompt</parameter></paramdef>
-          <paramdef>int <parameter>buttons</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><modifier>static</modifier><type>int</type>
+        <methodname>confirm</methodname>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+        <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
+        <methodparam><type>int</type><parameter>buttons</parameter></methodparam>
+      </methodsynopsis>
      </listitem>
 
   </itemizedlist>
@@ -332,7 +327,7 @@ org.gjt.sp.util</programlisting>
    <constant>JOptionPane.YES_NO_OPTION</constant>,
    <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>, or
    <constant>JOptionPane.OK_CANCEL_OPTION</constant>. The return
-   value of the method is also an <type>int</type>, and should be tested
+   value of the method is also an <classname>int</classname>, and should be tested
    against the value of other predefined constants:
    <constant>JOptionPane.YES_OPTION</constant>,
    <constant>JOptionPane.NO_OPTION</constant>,
@@ -362,7 +357,7 @@ int result = Macros.confirm("Do you really want to learn"
 
   <para>
     In the last three examples, placing the word <classname>String</classname>
-    or <type>int</type>
+    or <classname>int</classname>
     before the variable name <varname>result</varname> tells BeanShell that
     the variable refers to an integer or a <classname>String</classname> object, even
     before a particular value is assigned to the variable.
@@ -587,7 +582,7 @@ String result = df.format(d);
 	   <para>
        <function>getLineCount()</function> is a method in jEdit's
        <classname>JEditTextArea</classname> class. It returns an
-       <type>int</type> representing the number of lines in the
+       <classname>int</classname> representing the number of lines in the
        current text buffer. We call it on <varname>textArea</varname>, the
        pre-defined, current <classname>JEditTextArea</classname> object.
       </para>

@@ -2975,24 +2975,6 @@ public class Buffer implements EBComponent
 
 	//{{{ Methods that really shouldn't be public...
 
-	//{{{ _getScreenLineCount() method
-	/**
-	 * Plugins should not call this method.
-	 */
-	public int _getScreenLineCount(int line)
-	{
-		return offsetMgr.getScreenLineCount(line);
-	} //}}}
-
-	//{{{ _setScreenLineCount() method
-	/**
-	 * Plugins should not call this method.
-	 */
-	public void _setScreenLineCount(int line, int count)
-	{
-		offsetMgr.setScreenLineCount(line,count);
-	} //}}}
-
 	//{{{ _getFoldVisibilityManager() method
 	/**
 	 * Plugins and macros should call

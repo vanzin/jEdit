@@ -124,52 +124,6 @@ public class OffsetManager
 		return (int)(lineInfo[line] & END_MASK);
 	} //}}}
 
-	//{{{ getScrollOverhang() method
-	/**
-	 * If you don't understand this, don't worry. It is just a crude
-	 * workaround. In jEdit 4.1 the relevant source will be reworked and
-	 * this will no longer be necessary.
-	 */
-	public final int getScrollOverhang(int physFirstLine, int visibleLines,
-		int index)
-	{
-		int screenLineTally = 0;
-		int overhang = 0;
-
-		int virtualLineCount = virtualLineCounts[index];
-
-		for(int i = physFirstLine; i < lineCount; i++)
-		{
-			if(isLineVisible(i,index))
-			{
-				screenLineTally += getScreenLineCount(i);
-				if(screenLineTally >= visibleLines)
-				{
-					if(i == lineCount - 1)
-						overhang += getScreenLineCount(lineCount - 1);
-					else
-						overhang++;
-				}
-			}
-		}
-
-		return overhang;
-	} //}}}
-
-	//{{{ getScreenLineCount() method
-	public final int getScreenLineCount(int line)
-	{
-		return (int)((lineInfo[line] & SCREEN_LINES_MASK)
-			>> SCREEN_LINES_SHIFT);
-	} //}}}
-
-	//{{{ setScreenLineCount() method
-	public final void setScreenLineCount(int line, int count)
-	{
-		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
-			| ((long)count << SCREEN_LINES_SHIFT));
-	} //}}}
-
 	//{{{ isFoldLevelValid() method
 	public final boolean isFoldLevelValid(int line)
 	{
@@ -207,6 +161,20 @@ public class OffsetManager
 			lineInfo[line] = (lineInfo[line] | mask);
 		else
 			lineInfo[line] = (lineInfo[line] & ~mask);
+	} //}}}
+
+	//{{{ getScreenLineCount() method
+	public final int getScreenLineCount(int line)
+	{
+		return (int)((lineInfo[line] & SCREEN_LINES_MASK)
+			>> SCREEN_LINES_SHIFT);
+	} //}}}
+
+	//{{{ setScreenLineCount() method
+	public final void setScreenLineCount(int line, int count)
+	{
+		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
+			| ((long)count << SCREEN_LINES_SHIFT));
 	} //}}}
 
 	//{{{ isLineContextValid() method
@@ -360,8 +328,7 @@ public class OffsetManager
 				// for following fold level calculations
 				lineInfo[startLine + i] = (((offset + endOffsets.get(i) + 1)
 					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK))
-					| visible
-					| (1L << SCREEN_LINES_SHIFT));
+					| visible);
 			}
 
 			//{{{ Unrolled
@@ -458,7 +425,7 @@ public class OffsetManager
 	 * 48-55: visibility bit flags
 	 * 56: fold level valid flag
 	 * 57: context valid flag
-	 * 58-62: number of screen lines
+	 * 58-62: number of screen lines (currently unused, reserved for 4.1)
 	 * 63: reserved
 	 *
 	 * Having all the info packed into a long is not very OO and makes the

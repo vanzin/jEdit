@@ -433,6 +433,11 @@ public class JEditTextArea extends JComponent
 			// don't display stuff past the end of the buffer if
 			// we can help it
 			int lineCount = getVirtualLineCount();
+
+			// very stupid but proper fix will go into 4.1
+			if(softWrap)
+				lineCount += visibleLines - 1;
+
 			if(lineCount < firstLine + visibleLines)
 			{
 				// this will call updateScrollBars(), so
@@ -445,10 +450,7 @@ public class JEditTextArea extends JComponent
 				}
 			}
 
-			vertical.setValues(firstLine,visibleLines,0,
-				(softWrap ? lineCount
-				+ foldVisibilityManager.getScrollOverhang()
-				: lineCount));
+			vertical.setValues(firstLine,visibleLines,0,lineCount);
 			vertical.setUnitIncrement(2);
 			vertical.setBlockIncrement(visibleLines);
 		}
@@ -473,7 +475,7 @@ public class JEditTextArea extends JComponent
 	public void scrollUpLine()
 	{
 		if(firstLine > 0)
-			setFirstLine(firstLine-1);
+			setFirstLine(firstLine - 1);
 		else
 			getToolkit().beep();
 	} //}}}
@@ -505,7 +507,8 @@ public class JEditTextArea extends JComponent
 	{
 		int numLines = getVirtualLineCount();
 
-		if(firstLine + visibleLines < numLines)
+		if((softWrap && firstLine < numLines) ||
+			(firstLine + visibleLines < numLines))
 			setFirstLine(firstLine + 1);
 		else
 			getToolkit().beep();
@@ -595,7 +598,13 @@ public class JEditTextArea extends JComponent
 				firstLine = Math.max(0,firstLine - _electricScroll - 1);
 				physFirstLine = foldVisibilityManager.virtualToPhysical(firstLine);
 			}
-			else if(virtualLine == firstLine + visibleLines + 1)
+			// This can happen if soft wrap is on and the
+			// line in question is only partially visible
+			else if(line == physLastLine)
+			{
+				
+			}
+			else if(line == physLastLine + 1)
 			{
 				firstLine = Math.max(0,
 					Math.min(
@@ -606,7 +615,7 @@ public class JEditTextArea extends JComponent
 			else
 			{
 				// keep chunking lines until we have visibleLines / 2
-				if(virtualLine >= foldVisibilityManager.getVirtualLineCount()
+				if(!softWrap && virtualLine >= foldVisibilityManager.getVirtualLineCount()
 					- visibleLines / 2)
 				{
 					firstLine = foldVisibilityManager.getVirtualLineCount()
@@ -620,10 +629,16 @@ public class JEditTextArea extends JComponent
 
 					int count = 0;
 	
-					while(count <= visibleLines / 2)
+					for(;;)
 					{
 						if(foldVisibilityManager.isLineVisible(physFirstLine))
-							count += chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+						{
+							int incr = chunkCache.getLineInfosForPhysicalLine(physFirstLine).length;
+							if(count + incr > visibleLines / 2)
+								break;
+							else
+								count += incr;
+						}
 
 						if(physFirstLine == 0)
 							break;
@@ -641,14 +656,14 @@ public class JEditTextArea extends JComponent
 		else if(screenLine < _electricScroll)
 		{
 			firstLine = Math.max(0,firstLine - _electricScroll + screenLine);
-			physFirstLine = virtualToPhysical(firstLine);
+			physFirstLine = foldVisibilityManager.virtualToPhysical(firstLine);
 		}
 		else if(screenLine >= visibleLines - _electricScroll)
 		{
-			firstLine = Math.min(
-				Math.max(0,foldVisibilityManager.getVirtualLineCount() - visibleLines),
-				firstLine + screenLine - visibleLines + _electricScroll + 1);
-			physFirstLine = virtualToPhysical(firstLine);
+			physFirstLine = getPhysicalLineOfScreenLine(Math.min(
+				visibleLines,
+				screenLine - visibleLines + _electricScroll + 1));
+			firstLine = foldVisibilityManager.physicalToVirtual(physFirstLine);
 		}
 
 		chunkCache.setFirstLine(firstLine);
@@ -860,10 +875,22 @@ public class JEditTextArea extends JComponent
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		if(screenLine == -1)
 		{
-			if(line < firstLine)
+			if(line < physFirstLine)
 				screenLine = 0;
-			else if(line > physLastLine)
+			// must have >= here because the last physical line
+			// might only be partially visible (some offsets would
+			// have a screen line, others would return -1 and hence
+			// this code would be executed)
+			else if(line >= physLastLine)
 				screenLine = visibleLines;
+			else
+			{
+				throw new InternalError("line=" + line
+					+ ",offset=" + offset
+					+ ",screenLine=" + screenLine
+					+ ",physFirstLine=" + physFirstLine
+					+ ",physLastLine=" + physLastLine);
+			}
 			chunkCache.updateChunksUpTo(screenLine);
 		}
 

@@ -311,10 +311,10 @@
         <function>OpenFiles</function> - this method takes a array of file names
         (with or without wild card characters) as a parameter. The form of the
         array is that which is used for arrays in the scripting environment. In
-        JScript, for example the data type of the <type>VARIANT</type> holding
-        the array is <type>VT_DISPATCH</type>; in VBScript, it is <type>VT_ARRAY
-        | VT_VARIANT</type>, with array members having data type
-        <type>VT_BSTR</type>.
+        JScript, for example the data type of the <classname>VARIANT</classname> holding
+        the array is <classname>VT_DISPATCH</classname>; in VBScript, it is <classname>VT_ARRAY
+        | VT_VARIANT</classname>, with array members having data type
+        <classname>VT_BSTR</classname>.
       </para>
     </listitem>
 

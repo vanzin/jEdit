@@ -220,7 +220,7 @@ dialog.setContentPane(content);</programlisting></informalexample>
     keyword and call a <glossterm>constructor</glossterm> function. The
     constructor we use takes three parameters: the owner of the new dialog,
     the title to be displayed in the dialog frame, and a
-    <type>boolean</type> parameter (<constant>true</constant> or
+    <classname>boolean</classname> parameter (<constant>true</constant> or
     <constant>false</constant>) that specifies whether the dialog will be
     modal or non-modal. We define the variable <varname>title</varname>
     using a string literal, then use it immediately in the
@@ -391,12 +391,11 @@ suffixField.addActionListener(this);</programlisting></informalexample>
     be implemented:
   </para>
 
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>actionPerformed</function></funcdef>
-  <paramdef>ActionEvent <parameter>e</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>actionPerformed</methodname>
+ <methodparam><type>ActionEvent</type><parameter>e</parameter></methodparam>
+</methodsynopsis>
 
   <para>
     BeanShell does not permit a script to create derived classes.

@@ -25,12 +25,10 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>print</function></funcdef>
-          <paramdef><parameter>arg</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>print</methodname>
+      </methodsynopsis>
       <para>
         Writes the string value of the argument to the activity log,
         or if run from the <application>Console</application> plugin,
@@ -42,12 +40,11 @@
 
     <!-- one day jEdit will provide its own error() implementation -->
     <!-- <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>error</function></funcdef>
-          <paramdef>String <parameter>errorMsg</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>error</methodname>
+        <methodparam><type>String</type><parameter>errorMsg</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Writes the string represented by <parameter>errorMsg</parameter>
         to the error stream of the current process.
@@ -55,12 +52,11 @@
     </listitem> -->
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>cat</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>cat</methodname>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Writes the contents of <parameter>filename</parameter>
         to the activity log.
@@ -68,12 +64,10 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>javap</function></funcdef>
-          <paramdef>String | Object | Class <parameter>target</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>javap</methodname>
+      </methodsynopsis>
       <para>
         Writes the public fields and methods of the specified class to
         the output stream of the current process.  Requires Java 2
@@ -90,12 +84,11 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>dir</function></funcdef>
-          <paramdef>String <parameter>dirname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>dir</methodname>
+        <methodparam><type>String</type><parameter>dirname</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Displays the contents of directory <parameter>dirname</parameter>.
         The format of the display is similar to the Unix
@@ -104,12 +97,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>File <function>pathToFile</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>File</type>
+        <methodname>pathToFile</methodname>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Create a <classname>File</classname> object corresponding to
         <function>filename</function>.  Relative paths are resolved with
@@ -119,12 +111,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>cd</function></funcdef>
-          <paramdef>String <parameter>dirname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>cd</methodname>
+        <methodparam><type>String</type><parameter>dirname</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Changes the working directory of the BeanShell interpreter
         to <parameter>dirname</parameter>.
@@ -132,12 +123,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>pwd</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>pwd</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Writes the current working directory of the BeanShell interpreter
         to the output stream of the current process.
@@ -145,13 +135,10 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>mv</function></funcdef>
-          <paramdef>String <parameter>fromFile</parameter></paramdef>
-          <paramdef>String <parameter>toFile</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <methodparam><type>String</type><parameter>fromFile</parameter></methodparam>
+        <methodparam><type>String</type><parameter>toFile</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Moves the file named by <parameter>fromFile</parameter> to
         <parameter>toFile</parameter>.
@@ -159,12 +146,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>rm</function></funcdef>
-          <paramdef>String <parameter>pathname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>rm</methodname>
+        <methodparam><type>String</type><parameter>pathname</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Deletes the file name by <parameter>pathname</parameter>.
       </para>
@@ -178,12 +164,11 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Object <function>load</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>Object</type>
+        <methodname>load</methodname>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Loads and returns a serialized Java object from
         <parameter>filename</parameter>.
@@ -191,13 +176,12 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>save</function></funcdef>
-          <paramdef>Component <parameter>component</parameter></paramdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>save</methodname>
+        <methodparam><type>Component</type><parameter>component</parameter></methodparam>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Saves <parameter>component</parameter> in serialized form
         to <parameter>filename</parameter>.
@@ -205,12 +189,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>JFrame <function>frame</function></funcdef>
-          <paramdef>Component <parameter>frame</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>JFrame</type>
+        <methodname>frame</methodname>
+        <methodparam><type>Component</type><parameter>frame</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Displays the component in a top-level <classname>JFrame</classname>,
         centered and packed.  Returns the <classname>JFrame</classname> object.
@@ -218,13 +201,12 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Font <function>setFont</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>int <parameter>ptsize</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>Font</type>
+        <methodname>setFont</methodname>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+        <methodparam><type>int</type><parameter>ptsize</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Set the font size of <parameter>component</parameter> to
         <parameter>ptsize</parameter> and returns the new
@@ -243,12 +225,11 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>URL <function>getResource</function></funcdef>
-          <paramdef>String <parameter>path</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>URL</type>
+        <methodname>getResource</methodname>
+        <methodparam><type>String</type><parameter>path</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Returns the resource specified by <parameter>path</parameter>.
         A absolute path must be used to return any resource available in
@@ -259,21 +240,19 @@
     <!-- bsh.classpath not supported in jEdit -->
     <!--
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>addClassPath</function></funcdef>
-          <paramdef>String <parameter>path</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>addClassPath</methodname>
+        <methodparam><type>String</type><parameter>path</parameter></methodparam>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>addClassPath</function></funcdef>
-          <paramdef>URL <parameter>path</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>addClassPath</methodname>
+        <methodparam><type>URL</type><parameter>path</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Adds the directory or jar archive file specified by
         <parameter>path</parameter> to the classpath used by the
@@ -282,12 +261,10 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>setClassPath</function></funcdef>
-          <paramdef>URL[] <parameter>paths</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>setClassPath</methodname>
+      </methodsynopsis>
       <para>
         Changes the classpath for the BeanShell interpreter to the specified
         array of directories and/or archives.
@@ -295,33 +272,30 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>URL[] <function>getClassPath</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>URL[]</type>
+        <methodname>getClassPath</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Retruns an array containing the current classpath.
       </para>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>reloadClasses</function></funcdef>
-          <paramdef>String <parameter>packagename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>reloadClasses</methodname>
+        <methodparam><type>String</type><parameter>packagename</parameter></methodparam>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>reloadClasses</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>reloadClasses</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Reloads the class or package specified by
         <parameter>packagename</parameter> in the BeanShell interpreter.
@@ -331,12 +305,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Class <function>getClass</function></funcdef>
-          <paramdef>String <parameter>classname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>Class</type>
+        <methodname>getClass</methodname>
+        <methodparam><type>String</type><parameter>classname</parameter></methodparam>
+      </methodsynopsis>
       <para>
         This method is similar to the <function>Class.forName()</function>
         method of the Java platform, but it uses the classpath of the
@@ -354,12 +327,9 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>exec</function></funcdef>
-          <paramdef>String <parameter>cmdline</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <methodparam><type>String</type><parameter>cmdline</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Start the external process by calling
         <function>Runtime.exec()</function> on
@@ -369,12 +339,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>source</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>source</methodname>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Evaluates the contents of <parameter>filename</parameter>
         as a BeanShell script in the interpreter's current namespace.
@@ -382,12 +351,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Object <function>eval</function></funcdef>
-          <paramdef>String <parameter>expression</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>Object</type>
+        <methodname>eval</methodname>
+        <methodparam><type>String</type><parameter>expression</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Evaluates the string <parameter>expression</parameter> as
         a BeanShell script in the interpreter's current namespace.
@@ -396,12 +364,9 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>run</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Run the BeanShell script named by <parameter>filename</parameter>
         in a copy of the existing namespace.  The return value represent
@@ -411,12 +376,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Thread <function>bg</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <type>Thread</type>
+        <methodname>bg</methodname>
+        <methodparam><type>String</type><parameter>filename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Run the BeanShell script named by <parameter>filename</parameter>
         in a copy of the existing namespace and in a separate thread.  Returns
@@ -425,12 +389,11 @@
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>server</function></funcdef>
-          <paramdef>int <parameter>port</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>server</methodname>
+        <methodparam><type>int</type><parameter>port</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Createes a <quote>server</quote> version of the BeanShell
         interpreter that shares the same namespace as the current
@@ -459,12 +422,9 @@
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>object</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+      </methodsynopsis>
       <para>
         Creates a new BeanShell <classname>This</classname> scripted object which
         can hold data members. You can use this to create an object for
@@ -477,12 +437,8 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>extend</function></funcdef>
-          <paramdef>bsh.This <parameter>object</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+      </methodsynopsis>
       <para>
         Creates a new BeanShell <classname>This</classname> scripted object
         that is a child of the parameter <parameter>object</parameter>.
@@ -490,12 +446,9 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>super</function></funcdef>
-          <paramdef>String <parameter>scopename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <methodparam><type>String</type><parameter>scopename</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Returns a refernece to the BeanShell <classname>This</classname>
         object representing the enclosing method scope specified
@@ -506,13 +459,8 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>bind</function></funcdef>
-          <paramdef>bsh.This <parameter>ths</parameter></paramdef>
-          <paramdef>bsh.Namespace <parameter>namespace</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+      </methodsynopsis>
       <para>
         Binds the scripted object <parameter>ths</parameter> to
         <parameter>namespace</parameter>.
@@ -520,12 +468,11 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>unset</function></funcdef>
-          <paramdef>String <parameter>name</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>unset</methodname>
+        <methodparam><type>String</type><parameter>name</parameter></methodparam>
+      </methodsynopsis>
       <para>
         Removes the variable named by <parameter>name</parameter> from
         the current interpreter namespace.  This has the effect of
@@ -534,12 +481,8 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>setNameSpace</function></funcdef>
-          <paramdef>bsh.Namespace <parameter>namespace</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+      </methodsynopsis>
       <para>
         Set the namespace of the current scope to
         <parameter>namespace</parameter>.
@@ -554,12 +497,11 @@ crufties.counter = 5;
 
   <itemizedlist>
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>exit</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>exit</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Calls <function>System.exit(0)</function>.
       </para>
@@ -571,12 +513,11 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>debug</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+        <methodname>debug</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Toggles BeanShell's internal debug reporting to the
         output stream of the current process.
@@ -584,12 +525,9 @@ crufties.counter = 5;
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>getSourceFileInfo</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <void/>
+      </methodsynopsis>
       <para>
         Returns the name of the file or other source from which the
         BeanShell interpreter is reading.

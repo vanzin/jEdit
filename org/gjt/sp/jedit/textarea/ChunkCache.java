@@ -450,20 +450,6 @@ public class ChunkCache
 	//{{{ getScreenLineOfOffset() method
 	int getScreenLineOfOffset(int line, int offset)
 	{
-		int screenLine;
-
-		if(line == lastScreenLineP)
-		{
-			LineInfo last = lineInfo[lastScreenLine];
-
-			if(offset >= last.offset
-				&& offset < last.offset + last.length)
-			{
-				updateChunksUpTo(lastScreenLine);
-				return lastScreenLine;
-			}
-		}
-
 		if(line < textArea.getFirstPhysicalLine())
 		{
 			return -1;
@@ -472,12 +458,31 @@ public class ChunkCache
 		{
 			return -1;
 		}
+		else if(!textArea.softWrap)
+		{
+			return textArea.physicalToVirtual(line)
+				- textArea.getFirstLine();
+		}
 		else
 		{
+			int screenLine;
+
+			if(line == lastScreenLineP)
+			{
+				LineInfo last = lineInfo[lastScreenLine];
+
+				if(offset >= last.offset
+					&& offset < last.offset + last.length)
+				{
+					updateChunksUpTo(lastScreenLine);
+					return lastScreenLine;
+				}
+			}
+
 			screenLine = -1;
 
 			// Find the screen line containing this offset
-			for(int i = 0; i < lineInfo.length - 1; i++)
+			for(int i = 0; i < lineInfo.length; i++)
 			{
 				updateChunksUpTo(i);
 
@@ -503,13 +508,15 @@ public class ChunkCache
 			}
 
 			if(screenLine == -1)
-				screenLine = lineInfo.length - 1;
+				return -1;
+			else
+			{
+				lastScreenLineP = line;
+				lastScreenLine = screenLine;
+
+				return screenLine;
+			}
 		}
-
-		lastScreenLineP = line;
-		lastScreenLine = screenLine;
-
-		return screenLine;
 	} //}}}
 
 	//{{{ recalculateVisibleLines() method
@@ -608,8 +615,6 @@ public class ChunkCache
 			painter,textArea.softWrap
 			? textArea.wrapMargin
 			: 0.0f,out);
-
-		buffer._setScreenLineCount(physicalLine,Math.max(1,out.size()));
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
@@ -738,13 +743,9 @@ public class ChunkCache
 				{
 					lastScreenLine++;
 					needFullRepaint = true;
-					textArea.updateScrollBars();
 				}
 				else if(out.size() != 0)
-				{
 					lastScreenLine++;
-					textArea.updateScrollBars();
-				}
 			}
 
 			info.physicalLine = physicalLine;

@@ -38,12 +38,10 @@
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>start</function></funcdef>
-        <paramdef></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>start</methodname>
+    </methodsynopsis>
     <para>
       The jEdit startup routine calls this method for each loaded
       plugin.  Plugins typically use this method to register information
@@ -52,12 +50,10 @@
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>stop</function></funcdef>
-        <paramdef></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>stop</methodname>
+    </methodsynopsis>
     <para>
       When jEdit is exiting, it calls this method on each plugin. If a
       plugin uses or creates state information or other persistent data
@@ -73,12 +69,11 @@
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>createMenuItems</function></funcdef>
-        <paramdef>Vector <parameter>menuItems</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>createMenuItems</methodname>
+      <methodparam><type>Vector</type><parameter>menuItems</parameter></methodparam>
+    </methodsynopsis>
     <para>
       When a <classname>View</classname> object is created, it calls this
       method on each plugin core class to obtain entries to be displayed
@@ -122,12 +117,11 @@
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>createOptionPanes</function></funcdef>
-        <paramdef>OptionsDialog <parameter>dialog</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>createOptionPanes</methodname>
+      <methodparam><type>OptionsDialog</type><parameter>dialog</parameter></methodparam>
+    </methodsynopsis>
     <para>
       This method is called for each plugin during the creation of
       the <guilabel>Global Options</guilabel> dialog box.
@@ -155,24 +149,20 @@
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getClassName</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>String</type>
+      <methodname>getClassName</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       This shortcut method returns <function>getClass().getName()</function>.
     </para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public EditPlugin.JAR <function>getJAR</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <void/>
+    </methodsynopsis>
     <para>
       This method returns the <classname>EditPlugin.JAR</classname> data
       object associated with the plugin.
@@ -201,12 +191,11 @@
 
 <itemizedlist>
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>handleMessage</function></funcdef>
-        <paramdef>EBMessage <parameter>message</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>handleMessage</methodname>
+      <methodparam><type>EBMessage</type><parameter>message</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 </itemizedlist>
 
@@ -215,8 +204,8 @@
   abstract class which establishes the core elements of any message that
   is published to the EditBus. It has two attributes: an
   <classname>EBComponent</classname> that is the source of the message
-  (the source will be <type>null</type> in some cases),
-  and a <type>boolean</type> data member, <varname>vetoed</varname>. This
+  (the source will be <classname>null</classname> in some cases),
+  and a <classname>boolean</classname> data member, <varname>vetoed</varname>. This
   flag indicates whether a prior recipient of the message has determined
   that the message has been handled and need not be passed on to other
   subscribers. The flag is set by a call
@@ -304,12 +293,10 @@ else if(msg instanceof ViewUpdate) {
 <itemizedlist>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>String <function>getName</function></funcdef>
-      <paramdef></paramdef>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <type>String</type>
+    <methodname>getName</methodname>
+  </methodsynopsis>
   <para>
     This method should return the internal working name of the
     plugin window, used to key various properties.
@@ -317,12 +304,10 @@ else if(msg instanceof ViewUpdate) {
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>Component <function>getComponent</function></funcdef>
-      <paramdef></paramdef>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <type>Component</type>
+    <methodname>getComponent</methodname>
+  </methodsynopsis>
   <para>
     This method should return the top-level visible component of the
     plugin.
@@ -417,12 +402,10 @@ else if(msg instanceof ViewUpdate) {
 
 <itemizedlist>
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>protected void <function>_init</function></funcdef>
-        <paramdef></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>protected</modifier><void/>
+      <methodname>_init</methodname>
+    </methodsynopsis>
     <para>
       This method should create and arrange the components of the option pane
       and initialize the option data displayed to the user. This method
@@ -432,12 +415,10 @@ else if(msg instanceof ViewUpdate) {
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>protected void <function>_save</function></funcdef>
-        <paramdef></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>protected</modifier><void/>
+      <methodname>_save</methodname>
+    </methodsynopsis>
     <para>
       This method should save any settings, to the jEdit properties or
       other data store.
@@ -454,22 +435,20 @@ else if(msg instanceof ViewUpdate) {
 
 <itemizedlist>
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>protected void <function>addComponent</function></funcdef>
-          <paramdef>String <parameter>label</parameter></paramdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>protected</modifier><void/>
+        <methodname>addComponent</methodname>
+        <methodparam><type>String</type><parameter>label</parameter></methodparam>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>protected void <function>addComponent</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>protected</modifier><void/>
+        <methodname>addComponent</methodname>
+        <methodparam><type>Component</type><parameter>comp</parameter></methodparam>
+      </methodsynopsis>
       <para>
         These shortcut methods add components to the option pane in a
         single vertical column, running top to bottom.  The first
@@ -480,12 +459,11 @@ else if(msg instanceof ViewUpdate) {
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>protected void <function>addSeparator</function></funcdef>
-          <paramdef>String <parameter>label</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>protected</modifier><void/>
+        <methodname>addSeparator</methodname>
+        <methodparam><type>String</type><parameter>label</parameter></methodparam>
+      </methodsynopsis>
       <para>
         This is another shortcut method that adds a text label between
         two horizontal separators to the option pane.
@@ -514,12 +492,11 @@ else if(msg instanceof ViewUpdate) {
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public <function>OptionGroup</function></funcdef>
-        <paramdef>String <parameter>name</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <type>public</type>
+      <methodname>OptionGroup</methodname>
+      <methodparam><type>String</type><parameter>name</parameter></methodparam>
+    </methodsynopsis>
     <para>
       The constructor's single parameter represents the internal
       name of the option group. The internal name is used to key a
@@ -529,21 +506,19 @@ else if(msg instanceof ViewUpdate) {
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>addOptionPane</function></funcdef>
-        <paramdef>OptionPane <parameter>pane</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>addOptionPane</methodname>
+      <methodparam><type>OptionPane</type><parameter>pane</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>addOptionGroup</function></funcdef>
-        <paramdef>OptionGroup <parameter>group</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>addOptionGroup</methodname>
+      <methodparam><type>OptionGroup</type><parameter>group</parameter></methodparam>
+    </methodsynopsis>
     <para>
       This pair of methods adds members to the option group.  The second
       method enables option groups to be nested, for plugins with a

@@ -843,18 +843,6 @@ public class FoldVisibilityManager
 			jEdit.getProperty("view.status.narrow"));
 	} //}}}
 
-	//{{{ getScrollOverhang() method
-	/**
-	 * Dirty hack.
-	 */
-	int getScrollOverhang()
-	{
-		int visibleLines = textArea.getVisibleLines();
-		int firstPhysLine = virtualToPhysical(Math.max(0,
-			getVirtualLineCount() - visibleLines));
-		return offsetMgr.getScrollOverhang(firstPhysLine,visibleLines,index);
-	} //}}}
-
 	//{{{ Methods for Buffer class to call
 
 	//{{{ _grab() method
