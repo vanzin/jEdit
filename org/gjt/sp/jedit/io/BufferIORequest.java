@@ -601,9 +601,10 @@ public class BufferIORequest extends WorkRequest
 					&& jEdit.getBooleanProperty("twoStageSave");
 				if(twoStageSave)
 				{
-					savePath = vfs.getParentOfPath(path)
-						+ '#' + vfs.getFileName(path)
-						+ "#save#";
+					savePath = MiscUtilities.constructPath(
+						vfs.getParentOfPath(path),
+						'#' + vfs.getFileName(path)
+						+ "#save#");
 				}
 				else
 					savePath = path;

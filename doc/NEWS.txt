@@ -2,7 +2,8 @@ OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
 
 jEdit 4.0 is a significant upgrade to 3.2; the major version number has
 been increased as several parts of the editor have been rewritten for
-improved performance and reduced memory footprint.
+improved performance, reduced memory footprint, and greater possibility
+for future extension.
 
 * Incompatible changes
 

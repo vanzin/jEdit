@@ -41,7 +41,7 @@ import org.gjt.sp.util.Log;
  */
 public class MiscUtilities
 {
-	//{{{ Path name methods. Mostly for local files only
+	//{{{ Path name methods
 
 	//{{{ canonPath() method
 	/**
@@ -91,11 +91,16 @@ public class MiscUtilities
 		else
 		{
 			// have to handle these cases specially on windows.
-			if(OperatingSystem.isDOSDerived()
-				&& path.length() == 2
-				&& path.charAt(1) == ':')
+			if(OperatingSystem.isDOSDerived())
 			{
-				return path;
+				if(path.length() == 2 && path.charAt(1) == ':')
+					return path;
+				else if(path.length() > 2 && path.charAt(1) == ':'
+					&& path.charAt(2) != '\\')
+				{
+					return path.substring(0,2) + '\\'
+						+ path.substring(2);
+				}
 			}
 
 			File file = new File(path);
@@ -115,6 +120,9 @@ public class MiscUtilities
 		if(parent == null)
 			parent = System.getProperty("user.dir");
 
+		if(OperatingSystem.isDOSDerived() && path.startsWith("\\"))
+			parent = parent.substring(0,2);
+		
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		return vfs.constructPath(parent,path);
 	} //}}}
