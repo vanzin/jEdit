@@ -1018,30 +1018,34 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public final int getLineOfOffset(int offset)
 	{
-		return getDefaultRootElement().getElementIndex(offset);
+		if(offset < 0 || offset > getLength())
+			throw new ArrayIndexOutOfBoundsException(offset);
+
+		return offsetMgr.getLineOfOffset(offset);
 	} //}}}
 
 	//{{{ getLineStartOffset() method
 	/**
 	 * Returns the start offset of the specified line.
 	 * @param line The line
-	 * @return The start offset of the specified line, or -1 if the line is
-	 * invalid
+	 * @return The start offset of the specified line
 	 * @since jEdit 4.0pre1
 	 */
 	public int getLineStartOffset(int line)
 	{
 		if(line < 0 || line >= offsetMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
+		else if(line == 0)
+			return 0;
 
-		return offsetMgr.getLineStartOffset(line);
+		return offsetMgr.getLineEndOffset(line - 1);
 	} //}}}
 
 	//{{{ getLineEndOffset() method
 	/**
 	 * Returns the end offset of the specified line.
 	 * @param line The line
-	 * @return The end offset of the specified line, or -1 if the line is
+	 * @return The end offset of the specified line
 	 * invalid.
 	 * @since jEdit 4.0pre1
 	 */
@@ -1050,10 +1054,7 @@ public class Buffer extends PlainDocument implements EBComponent
 		if(line < 0 || line >= offsetMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
 
-		if(line == offsetMgr.getLineCount() - 1)
-			return getLength() + 1;
-		else
-			return offsetMgr.getLineStartOffset(line + 1);
+		return offsetMgr.getLineEndOffset(line);
 	} //}}}
 
 	//{{{ getLineLength() method
@@ -2184,6 +2185,35 @@ public class Buffer extends PlainDocument implements EBComponent
 		return lineNo;
 	} //}}}
 
+	//{{{ getRootElements() method
+	/**
+	 * @deprecated
+	 */
+	public Element[] getRootElements()
+	{
+		return new Element[] { getDefaultRootElement() };
+	} //}}}
+
+	//{{{ getParagraphElement() method
+	/**
+	 * @deprecated
+	 */
+	public Element getParagraphElement(int offset)
+	{
+		return new LineElement(this,getLineOfOffset(offset));
+	} //}}}
+
+	//{{{ getDefaultRootElement() method
+	/**
+	 * @deprecated Use <code>getLineOfOffset()</code>,
+	 * <code>getLineStartOffset()</code>, and
+	 * <code>getLineEndOffset()</code> instead.
+	 */
+	public Element getDefaultRootElement()
+	{
+		return new RootElement(this);
+	} //}}}
+
 	//}}}
 
 	//{{{ Folding methods
@@ -2581,6 +2611,7 @@ public class Buffer extends PlainDocument implements EBComponent
 	{
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
+		integerArray = new IntegerArray();
 
 		seg = new Segment();
 		lastTokenizedLine = -1;
@@ -2684,11 +2715,18 @@ public class Buffer extends PlainDocument implements EBComponent
 			Log.log(Log.ERROR,this,bl);
 		}
 
-		int[] newlines = parseForNewlines(seg);
-		int numLines = newlines.length;
+		integerArray.clear();
+
+		for(int i = 0; i < seg.count; i++)
+		{
+			if(seg.array[seg.offset + i] == '\n')
+				integerArray.add(i);
+		}
+
+		int numLines = integerArray.size();
 
 		offsetMgr.contentInserted(startLine,offset,numLines,length,
-			newlines);
+			integerArray);
 
 		if(numLines > 0)
 		{
@@ -2818,6 +2856,7 @@ public class Buffer extends PlainDocument implements EBComponent
 
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
+	private IntegerArray integerArray;
 
 	private Vector markers;
 
@@ -3040,21 +3079,6 @@ public class Buffer extends PlainDocument implements EBComponent
 			EditBus.send(new BufferUpdate(this,null,
 				BufferUpdate.FOLD_HANDLER_CHANGED));
 		}
-	} //}}}
-
-	//{{{ parseForNewlines() method
-	private int[] parseForNewlines(Segment seg)
-	{
-		IntegerArray array = new IntegerArray();
-		array.add(0);
-
-		for(int i = 0; i < seg.count; i++)
-		{
-			if(seg.array[seg.offset + i] == '\n')
-				array.add(i + 1);
-		}
-
-		return array.toArray();
 	} //}}}
 
 	//{{{ Event firing methods

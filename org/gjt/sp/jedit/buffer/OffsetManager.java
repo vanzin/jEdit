@@ -48,7 +48,7 @@ public class OffsetManager
 
 		lineInfo = new long[1];
 		// make first line visible by default
-		lineInfo[0] = (0xffL << VISIBLE_SHIFT);
+		lineInfo[0] = 1L | (0xffL << VISIBLE_SHIFT);
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
 	} //}}}
@@ -59,10 +59,49 @@ public class OffsetManager
 		return lineCount;
 	} //}}}
 
-	//{{{ getLineStartOffset() method
-	public final int getLineStartOffset(int line)
+	//{{{ getLineOfOffset() method
+	public int getLineOfOffset(int offset)
 	{
-		return (int)(lineInfo[line] & START_MASK);
+		int start = 0;
+		int end = lineCount - 1;
+
+		for(;;)
+		{
+			switch(end - start)
+			{
+			case 0:
+				if(getLineEndOffset(start) < offset)
+					return start + 1;
+				else
+					return start;
+			case 1:
+				if(getLineEndOffset(start) < offset)
+				{
+					if(getLineEndOffset(end) < offset)
+						return end + 1;
+					else
+						return end;
+				}
+				else
+					return start;
+			default:
+				int pivot = (end + start) / 2;
+				int value = getLineEndOffset(pivot);
+				if(value == offset)
+					return pivot;
+				else if(value < offset)
+					start = pivot + 1;
+				else
+					end = pivot - 1;
+				break;
+			}
+		}
+	} //}}}
+
+	//{{{ getLineEndOffset() method
+	public final int getLineEndOffset(int line)
+	{
+		return (int)(lineInfo[line] & END_MASK);
 	} //}}}
 
 	//{{{ isFoldLevelValid() method
@@ -126,15 +165,14 @@ public class OffsetManager
 
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
-		int numLines, int length, int[] startOffsets)
+		int numLines, int length, IntegerArray endOffsets)
 	{
+		lineCount += numLines;
+		int endLine = startLine + numLines;
+
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			int endLine = startLine + numLines;
-
-			lineCount += numLines;
-
 			if(lineInfo.length <= lineCount)
 			{
 				long[] lineInfoN = new long[(lineCount + 1) * 2];
@@ -149,22 +187,24 @@ public class OffsetManager
 				lineContext = lineContextN;
 			}
 
-			System.arraycopy(lineInfo,startLine,lineInfo,endLine,
-				lineInfo.length - endLine);
-			System.arraycopy(lineContext,startLine,lineContext,endLine,
-				lineContext.length - endLine);
+			System.arraycopy(lineInfo,startLine,lineInfo,
+				endLine,lineCount - endLine);
+			System.arraycopy(lineContext,startLine,lineContext,
+				endLine,lineCount - endLine);
 
 			for(int i = 0; i < numLines; i++)
 			{
-				lineInfo[startLine + i] = ((offset + startOffsets[i])
+				lineInfo[startLine + i] =
+					((offset + endOffsets.get(i) + 1)
 					| (0xffL << VISIBLE_SHIFT));
 			}
 		} //}}}
 
 		//{{{ Update remaining line start offsets
-		for(int i = startLine + numLines; i < lineCount; i++)
+		for(int i = endLine; i < lineCount; i++)
 		{
-			setLineStartOffset(i,getLineStartOffset(i) + length);
+			lineInfo[i] = ((getLineEndOffset(i) + length)
+				| (0xffL << VISIBLE_SHIFT));
 		} //}}}
 
 		// TODO: positions
@@ -181,15 +221,15 @@ public class OffsetManager
 		{
 			lineCount -= numLines;
 			System.arraycopy(lineInfo,startLine + numLines,lineInfo,
-				startLine,lineInfo.length - startLine - numLines);
+				startLine,lineCount - startLine);
 			System.arraycopy(lineContext,startLine + numLines,lineContext,
-				startLine,lineContext.length - startLine - numLines);
+				startLine,lineCount - startLine);
 		} //}}}
 
 		//{{{ Update remaining line start offsets
-		for(int i = startLine + 1; i < lineCount; i++)
+		for(int i = startLine; i < lineCount; i++)
 		{
-			setLineStartOffset(i,getLineStartOffset(i) - length);
+			setLineEndOffset(i,getLineEndOffset(i) - length);
 		} //}}}
 
 		// TODO: positions
@@ -210,7 +250,7 @@ public class OffsetManager
 	//{{{ Private members
 
 	/* {{{ Format of entires in line info array:
-	 * 0-31: start
+	 * 0-31: end offset
 	 * 32-47: fold level
 	 * 48-55: visibility bit flags
 	 * 56: fold level valid flag
@@ -228,7 +268,7 @@ public class OffsetManager
 	 * total of about 100 bytes, plus a cached token list, which used
 	 * another 100 or so bytes.
 	 * }}}*/
-	private static final long START_MASK = 0x00000000ffffffffL;
+	private static final long END_MASK = 0x00000000ffffffffL;
 	private static final long FOLD_LEVEL_MASK = 0x0000ffff00000000L;
 	private static final int FOLD_LEVEL_SHIFT = 32;
 	private static final long VISIBLE_MASK = 0x00ff000000000000L;
@@ -244,10 +284,10 @@ public class OffsetManager
 	private int lineCount;
 	//}}}
 
-	//{{{ setLineStartOffset() method
-	private final void setLineStartOffset(int line, int start)
+	//{{{ setLineEndOffset() method
+	private final void setLineEndOffset(int line, int end)
 	{
-		lineInfo[line] = ((lineInfo[line] & ~START_MASK) | start);
+		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
 	} //}}}
 
 	//}}}

@@ -78,6 +78,9 @@ public class FoldVisibilityManager
 	 */
 	public int getNextVisibleLine(int line)
 	{
+		if(line == buffer.getLineCount() - 1)
+			return -1;
+
 		for(int i = line + 1; i < buffer.getLineCount(); i++)
 		{
 			if(buffer._isLineVisible(i,index))
@@ -94,6 +97,9 @@ public class FoldVisibilityManager
 	 */
 	public int getPrevVisibleLine(int line)
 	{
+		if(line == 0)
+			return -1;
+
 		for(int i = line - 1; i >= 0; i--)
 		{
 			if(buffer._isLineVisible(i,index))
