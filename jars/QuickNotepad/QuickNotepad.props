@@ -10,19 +10,18 @@ plugin.QuickNotepadPlugin.depend.0=jdk 1.2
 plugin.QuickNotepadPlugin.depend.1=jedit 04.00.00.00
 plugin.QuickNotepadPlugin.depend.2=plugin EditBusPlugin 1.0
 
-# dockable window name
-quicknotepad.title=QuickNotepad
+# action labels for actions supplied by dockables.xml
+quicknotepad.label=QuickNotepad
+quicknotepad-toggle.label=QuickNotepad
 
-# action labels
-quicknotepad.toggle.label=QuickNotepad
-quicknotepad-to-front.label=Bring QuickNotepad to front
+# action labels for actions supplied by actions.xml
 quicknotepad.choose-file.label=Choose notepad file
 quicknotepad.save-file.label=Save notepad file
 quicknotepad.copy-to-buffer.label=Copy notepad to buffer
 
 # application menu items
 quicknotepad.menu.label=QuickNotepad
-quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
+quicknotepad.menu=quicknotepad-toggle - quicknotepad.choose-file \
 	quicknotepad.save-file quicknotepad.copy-to-buffer
 
 # plugin toolbar buttons
