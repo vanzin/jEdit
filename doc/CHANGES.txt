@@ -16,6 +16,8 @@ JEDIT 4.2 VERSION HISTORY
 
 - Minor fix to Perl heredoc syntax highlighting (Chris Petersen).
 
+- Updated ADPL syntax highlighting (Randolf Mock)
+
 }}}
 {{{ Bug Fixes
 
@@ -48,9 +50,16 @@ JEDIT 4.2 VERSION HISTORY
   NullPointerException if EditPane.setBuffer() was called twice in a row
   with buffers that were not yet loaded.
 
+- Loading and unloading plugins that added menu items to the file system
+  browser did not update the file system browser's "Plugins" menu.
+
+- History lists were not being saved at all unless the history file
+  existed in the first place!
+
 }}}
 
 }}}
+
 {{{ Version 4.2pre6
 
 Thanks to Magnus Henriksson, Mirco Bova, Ollie Rutherfurd, and

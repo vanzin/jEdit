@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Set;
 import org.gjt.sp.jedit.syntax.*;
@@ -238,7 +239,7 @@ public class CompleteWord extends JWindow
 		// build a list of unique words in all visible buffers
 		Set completions = new TreeSet(new MiscUtilities
 			.StringICaseCompare());
-		Set buffers = new TreeSet();
+		Set buffers = new HashSet();
 
 		View views = jEdit.getFirstView();
 		while(views != null)
@@ -299,7 +300,6 @@ public class CompleteWord extends JWindow
 					Completion keyword = new Completion(_keyword,true);
 					if(!completions.contains(keyword))
 					{
-						System.err.println(completions);
 						completions.add(keyword);
 					}
 				}
@@ -322,7 +322,6 @@ public class CompleteWord extends JWindow
 				// remove duplicates
 				if(!completions.contains(comp))
 				{
-					System.err.println(completions);
 					completions.add(comp);
 				}
 			}
@@ -343,7 +342,6 @@ public class CompleteWord extends JWindow
 						// remove duplicates
 						if(!completions.contains(comp))
 						{
-							System.err.println(completions);
 							completions.add(comp);
 						}
 					}

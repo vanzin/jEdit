@@ -47,7 +47,7 @@ public class Debug
 	 * Display an error if the scrolling code detects an inconsistency.
 	 * This kills performance!
 	 */
-	public static boolean VERIFY_FIRST_LINE = false;
+	public static boolean SCROLL_VERIFY = false;
 
 	/**
 	 * Print messages when screen line counts change.
