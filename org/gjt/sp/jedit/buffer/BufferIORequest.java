@@ -211,7 +211,7 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				read(buffer,autodetect(in),length,false);
+				read(autodetect(in),length,false);
 				buffer.setNewFile(false);
 			}
 			catch(CharConversionException ch)
@@ -322,7 +322,28 @@ public class BufferIORequest extends WorkRequest
 			int b2 = in.read();
 			int b3 = in.read();
 
-			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+			if(encoding.equals(MiscUtilities.UTF_8_Y))
+			{
+				// Java does not support this encoding so
+				// we have to handle it manually.
+				if(b1 != UTF8_MAGIC_1 || b2 != UTF8_MAGIC_2
+					|| b3 != UTF8_MAGIC_3)
+				{
+					// file does not begin with UTF-8-Y
+					// signature. reset stream, read as
+					// UTF-8.
+					in.reset();
+				}
+				else
+				{
+					// file begins with UTF-8-Y signature.
+					// discard the signature, and read
+					// the remainder as UTF-8.
+				}
+
+				encoding = "UTF-8";
+			}
+			else if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 			{
 				in.reset();
 				in = new GZIPInputStream(in);
@@ -396,7 +417,7 @@ public class BufferIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ read() method
-	private SegmentBuffer read(Buffer buffer, Reader in, long length,
+	private SegmentBuffer read(Reader in, long length,
 		boolean insert) throws IOException
 	{
 		/* we guess an initial size for the array */
@@ -917,7 +938,7 @@ public class BufferIORequest extends WorkRequest
 				if(in == null)
 					return;
 
-				final SegmentBuffer seg = read(buffer,
+				final SegmentBuffer seg = read(
 					autodetect(in),length,true);
 
 				/* we don't do this in Buffer.insert() so that
