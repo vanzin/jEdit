@@ -85,8 +85,8 @@ public class BrowserView extends JPanel
 			public void run()
 			{
 				String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
-				int loc = jEdit.getIntegerProperty(prop,0);
-				if(loc == 0)
+				int loc = jEdit.getIntegerProperty(prop,-1);
+				if(loc == -1)
 					loc = parentScroller.getPreferredSize().height;
 
 				splitPane.setDividerLocation(loc);

@@ -1,26 +1,31 @@
 TO DO
 
-- multi-select bug
-- backspace doesn't merge edits
+- proofread documentation one more time
+- make sure plugin guide is up to date
 - lots of spaces then one word; word should not be wrapped
 - scroll to caret _still_ jumps around
 - rename MacOS.jar
 - fix stylesheet problem
-- $ doesn't find last -- gnu.regexp bug
+- regexp search problems:
+  - hypersearch for .*$: only finds random lines
+  - hypersearch for .*: only finds non-empty lines
+  - search for $: doesn't find last line
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
     possible.
   - setLocationRelativeTo(): ok
   - loadGeometry(): bad
   - dockable windows
+  - getCenterPoint()
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
-- plugin guide: mention fully qualified class names
 - appendix in plugin guide on contributing plugins
+- maybe fix GUIUtilities.java to store maximisation state
+
+- plugin guide: mention fully qualified class names
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class
-- getCenterPoint()
 - rollover toolbar buttons option
 - fix page up/page down
 - jdk 1.4: popups in wrong location
@@ -45,7 +50,6 @@ TO DO
 - stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
-- maybe fix GUIUtilities.java to store maximisation state
 - idea to make things go faster: token marker splits on ' ', '\t'
   then lineToChunkList() has much less work to do, and could even be
   eliminated completely.
@@ -109,6 +113,5 @@ TO DO
 - toggle shift: expand all; no mod: expand one level behavior in gutter
 - triple-click drag down
 - motif l&f: shortcuts in menu items
-- hypersearch for .* doesn't list blank lines
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
 - sorting buffer list by edit mode!
