@@ -38,7 +38,7 @@
   latest version of jEdit.
 </para>
 
-<qandaset>
+<qandaset defaultlabel="qanda">
 
   <qandadiv id="about">
     <title>About jEdit</title>
@@ -473,7 +473,7 @@
   documentation does not address, how you can report problems with jEdit
   or its plugins, and how best to communicate with the jEdit developer team.
 </para>
-<qandaset>
+<qandaset defaultlabel="qanda">
 
   <qandadiv id="get-answers-div">
     <title>Getting answers</title>
@@ -590,6 +590,22 @@
         bug report form.
      </para></answer>
    </qandaentry>
+
+<qandaentry>
+<question id="bug-track">
+<para>
+How do I track the status of a jEdit bug report?
+</para>
+</question>
+<answer>
+<para>
+If you know the bug report number, go to this web address:
+<userinput>http://sourceforge.net/tracker/index.php?func=detail&amp;aid=######&amp;group_id=588&amp;atid=100588</userinput>,
+where <userinput>######</userinput> is the bug report number.
+</para>
+</answer>
+</qandaentry>
+
 
   </qandadiv>
 

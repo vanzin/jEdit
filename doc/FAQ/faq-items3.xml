@@ -12,7 +12,7 @@
   This section deals with creating, opening, closing and changing
   the properties of files using jEdit.
 </para>
-<qandaset>
+<qandaset defaultlabel="qanda">
     <qandadiv id="file-manage"><title>File Management</title>
 
     <qandaentry>
@@ -207,7 +207,7 @@
     This section deals with indenting and other formatting of text,
     abbreviations and the clipboard and related features.
   </para>
-  <qandaset>
+  <qandaset defaultlabel="qanda">
 
     <qandadiv id="text-format"><title>Formatting text</title>
 
@@ -227,8 +227,9 @@
 <qandaentry>
 	<question id="smart-quote">
 		<para>
-			Does jEdit know smart quotes? I would like that in .tex files I get `` or ´´
-			instead of \".
+			Does jEdit know smart quotes? In .tex files I would like to use
+      <userinput>&#147;</userinput> or <userinput>&#148;´</userinput>
+			instead of <userinput>&quot;</userinput>.
 		</para>
 	</question>
 	<answer>
@@ -241,7 +242,93 @@
 	</answer>
 </qandaentry>
 
+<qandaentry>
+	<question id="text-softwrap">
+		<para>
+			Does jEdit have a <quote>soft</quote> wrap text mode?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Beginning with version 4.0pre4, jEdit has soft wrap capability.  In prior
+			versions, both the text wrap feature and the <guimenuitem>Edit&gt;Textgt;Format
+			Paragraph</guimenuitem> command insert <quote>hard</quote> end of line
+			characters.
+		</para>
+	</answer>
+</qandaentry>
 
+<qandaentry>
+<question id="text-display-spaces">
+<para>
+The display of spaces as a character in the editor is annoying. How can I
+disable those small square boxes?
+</para>
+</question>
+<answer>
+<para>
+This is controlled by the WhiteSpace plugin. To change your settings to disable
+display of whitespace characters, select <guimenuitem>Utilities&gt;Global
+Options</guimenuitem>, then select <guimenuitem>Plugin
+options&gt;WhiteSpace</guimenuitem>. You can separately configure the display
+of spaces, tabs, and other whitespace characters.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="text-i18n">
+		<para>
+			Does jEdit support i18n?
+		</para>
+	</question>
+	<answer>
+		<para>
+			When editing text documents, jEdit supports any available encoding scheme, and
+			can open files with a specified encoding other than the default encoding of your
+			operating system using the <guimenu>File</guimenu>&gt;<guimenuitem>Open
+			with Encoding</guimenuitem> command.
+		</para>
+		<para>
+			With respect to menu labels, message strings and other GUI elements, the jEdit
+			project team currently does not have the resources to maintain multiple property
+			sets in languages other than English, particularly since the development effort
+			is continuing at a rapid pace. There has not been great demand for this in any
+			event. This may be because jEdit is primarily a tool for programmers, and the
+			use of English as a common first or second language is widespread in the global
+			programming community. This decision may be reconsidered when the application
+			has further matured and if more individuals express a willingness to be involved
+			in translation work.
+		</para>
+	</answer>
+</qandaentry>
+
+    </qandadiv>
+
+    <qandadiv id="text-print"><title>Printing text</title>
+
+<qandaentry>
+	<question id="text-print-improve">
+		<para>
+			What can I do to improve printing performance?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Printing is one of the weak areas of the Java platform. One simple way to
+			improve performance is to use the InfoViewer plugin to display and print a text
+			file in your favorite Web browser. You can also write a macro that saves a
+			buffer and then passes the buffer's file name (using the method
+			<filename>buffer.getPath()</filename>) to an external print utility. The file
+			<filename>prettyprint.bat</filename> in the
+			Downloads section of <ulink url="http://community.jedit.org">jEdit
+			Community</ulink> is an example of this approach using a
+			Windows batch file and Ghostscript. You can then change the
+			<keycombo action="simul"><keycap>CTRL</keycap><keycap>P</keycap></keycombo>
+			keyboard shortcut to point to your printing macro.
+		</para>
+	</answer>
+</qandaentry>
 
     </qandadiv>
 
@@ -319,7 +406,7 @@
   This section deals with features that work with source code.
 </para>
 
-<qandaset>
+<qandaset defaultlabel="qanda">
 
 <qandadiv id="source-compile"><title>Compiling source code</title>
 <qandaentry>
@@ -342,6 +429,42 @@
 			<application>AntFarm</application> plugin to run complex builds on a project of
 			source code files, using a <filename>build.xml</filename> file to specify build
 			commands and dependencies.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="source-new-editmode">
+		<para>
+			How do I create a new edit mode?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Take a look at the <quote>Writing Edit Modes</quote> section of the User's Guide.
+			Basically, you have to write an XML file containing data on the mode's file
+			extensions and buffer and syntax highlighting properties, then add information
+			about the new mode file to a second XML file containing a catalog of modes.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="source-docbook">
+		<para>
+			Does jEdit support DocBook tags?
+		</para>
+	</question>
+	<answer>
+		<para>
+			The application contains editing modes for both SGML and XML, and there are a
+			number of abbreviations in the SGML mode that create pairs of DocBook tags on
+			the fly. You can auto-complete closing tags with the XML plugin, and with the
+			XInsert or Template plugin you can create multi-layered DocBook elements. The
+			installation macro <filename>Insert_Tag.bsh</filename> is useful for creating
+			or inserting tag pairs in existing text, and there are other macros targeting
+			DocBook available from the <ulink url="http://community.jedit.org">jEdit
+			Community</ulink> web site that you can use or adapt for your own purposes.
 		</para>
 	</answer>
 </qandaentry>

@@ -15,7 +15,7 @@
   encountered in starting up jEdit.
 </para>
 
-<qandaset>
+<qandaset defaultlabel="qanda">
 
   <qandadiv id="install-general">
     <title>General installation questions</title>
@@ -76,13 +76,12 @@
     <qandaentry>
       <question id="install-no-such-file"><para>
         What should I do when the installer displays the message,
-        <quote>No such file or directory</quote>?
+        <screen>No such file or directory</screen>?
       </para></question>
       <answer><para>
         The full message that you may receive from the Java application launcher
         begins as follows:
-        <screen>Exception in thread "main" java.util.zip.ZipException:
-No such file or directory
+        <screen>Exception in thread "main" java.util.zip.ZipException: No such file or directory
 ...</screen>
         This means that the Java application launcher cannot read the
         jar archive file that you specified on the command line. If your Java
@@ -100,8 +99,7 @@ No such file or directory
 		<para>
 			After downloading <filename>jedit322install.jar</filename>, I tried to run
 			<userinput>java jedit322install.jar</userinput>, but got the error message,
-			<screen>Exception in main(), NoClassDefFoundError:
-			jedit322install/jar.</screen> What am I doing wrong?
+			<screen>Exception in main(), NoClassDefFoundError: jedit322install/jar.</screen> What am I doing wrong?
 		</para>
 	</question>
 	<answer>
@@ -118,12 +116,75 @@ No such file or directory
 
 
   </qandadiv>
-<!--
-  <qandadiv>
-    <title>Installing jEdit on RedHat Linux systems</title>
 
-  </qandadiv>
- -->
+  <qandadiv id="install-linux">
+    <title>Installing jEdit on Linux systems</title>
+
+<qandaentry>
+	<question id="install-jedit-home">
+		<para>
+			After installing jEdit on Linux, running the <userinput>jedit</userinput>
+			command causes the error message:
+			<screen>Warning: JAVA_HOME environment variable not set</screen>
+			How can I fix this?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Your <filename>jedit</filename> shell script should
+			be modified to have the <userinput>JAVA_HOME</userinput> variable
+			defined as the directory containing	the executables of
+			your desired Java runtime environment (JRE).
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="install-mandrake-kaffe">
+		<para>
+			How can I get jEdit to run on Mandrake Linux 8.1? When I try to start the
+			program, I keep getting an error which begins as follows:
+			<screen>java/lang/NoClassDefFoundError: Ljavax/swing/text/Document; at
+			java.lang.reflect.Method.invoke(Method.java:native) at
+			kaffe.jar.ExecJarName.main</screen>
+		</para>
+	</question>
+	<answer>
+	  	<para>
+			This version of Mandrake Linux uses the Open Source Kaffe package as its default
+			Java virtual machine. The jEdit application requires Sun's Swing package, which
+			is not included with Kaffe. However, the developers of Kaffe claim that Kaffe
+			and Swing are fully compatible. You therefore have two choices. You can obtain a
+			copy of Sun's Swing package (version 1.1.1 is known to work with Kaffe) and
+			place it on the classpath used by Kaffe. Alternatively, you can install Sun's
+			JDK for Linux and modify the script used to launch jEdit to point to Sun's
+			application loader instead of Kaffe. This is likely to be a simpler operation.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="install-linux-keyboard">
+		<para>
+			I installed jEdit 3.2.2 from the RPM on Mandrake 8.1 and I am unable to send any
+			keyboard inputs to jEdit. But the mouse interacts with the program just fine. I
+			have tried running it on Sun's JDK 1.3.1 and Blackdown's latest JDK (Dec. 2001)
+			without any luck.
+		</para>
+	</question>
+	<answer>
+		<para>
+			This problem has been reported with various combinations of window managers and
+			desktop environments. The IBM JDK has not been reported to have this problem. In
+			addition, there have not been reported problems with the Sun and Blackdown JDK's
+			when running under the Sawfish window manager.
+		</para>
+	</answer>
+</qandaentry>
+
+
+
+</qandadiv>
 
 
   <qandadiv id="install-windows">
