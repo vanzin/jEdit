@@ -138,7 +138,8 @@ public class EditServer extends Thread
 			}
 			catch(Exception e)
 			{
-				Log.log(Log.ERROR,this,e);
+				if(!abort)
+					Log.log(Log.ERROR,this,e);
 				abort = true;
 			}
 			finally
