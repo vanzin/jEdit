@@ -340,8 +340,6 @@ public class OffsetManager
 		for(int i = endLine; i < lineCount; i++)
 		{
 			setLineEndOffset(i,getLineEndOffset(i) + length);
-			lineInfo[i] &= ~(FOLD_LEVEL_VALID_MASK
-				| CONTEXT_VALID_MASK);
 		} //}}}
 
 		updatePositionsForInsert(offset,length);
@@ -389,8 +387,6 @@ public class OffsetManager
 		for(int i = startLine; i < lineCount; i++)
 		{
 			setLineEndOffset(i,getLineEndOffset(i) - length);
-			lineInfo[i] &= ~(FOLD_LEVEL_VALID_MASK
-				| CONTEXT_VALID_MASK);
 		} //}}}
 
 		updatePositionsForRemove(offset,length);
@@ -452,7 +448,8 @@ public class OffsetManager
 	//{{{ setLineEndOffset() method
 	private final void setLineEndOffset(int line, int end)
 	{
-		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
+		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
+			| FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)) | end);
 	} //}}}
 
 	//{{{ growPositionArray() method

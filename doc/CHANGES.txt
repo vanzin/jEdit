@@ -5,12 +5,11 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - Enhanced quick copy feature:
-  - Rectangular selections are now created by dragging with the middle
-    mouse button
-  - Control-dragging now creates a selection without moving the caret,
-    when the mouse button is released the selected text is inserted at
-    the caret position and the selection is deactivated
-  - A status bar message is shown while Control-dragging to avoid
+  - Dragging with the middle mouse button now creates a selection
+    without moving the caret, when the mouse button is released the
+    selected text is inserted at the caret position and the selection is
+    deactivated
+  - A status bar message is shown while middle-dragging to avoid
     confusion
   - This is disabled by default -- enable in Text Area option pane
 - Modula-3 syntax highlighting (Marcio Marchini)
@@ -39,6 +38,11 @@ JEDIT 4.0 VERSION HISTORY
   the browser's location to that path
 - Home/end commands are now soft-wrap-aware
 - Documentation is now built using DocBook-XSL stylesheets 1.48
+- jEdit's build.xml now automatically detects if it is running on Java
+  version 1.4, and doesn't build the Java14.java otherwise
+- Optimized text area's buffer event handler -- this should result in
+  much faster 'Replace All'; more than 40 times faster in the worst
+  case!
 
 + Bug Fixes
 
@@ -86,6 +90,11 @@ JEDIT 4.0 VERSION HISTORY
 - Triple-clicking and dragging would scroll the text area in weird ways
 - Scrolling would not be performed when text was inserted sometimes, due
   to the last physical line index not being updated properly
+- If tokens had background colors defined, scrolling horizontally would
+  draw the backgrounds as if no scrolling had taken place
+- When closing the last buffer, the edit pane would retain a reference
+  to it in the 'recent buffer' field, and using the 'Go to Recent
+  Buffer' command would result in weird things happening
 
 + API Additions
 

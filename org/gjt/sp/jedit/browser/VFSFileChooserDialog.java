@@ -294,13 +294,10 @@ implements WorkThreadProgressListener
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
-		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
 			{
-				System.err.println(browser.getDirectory());
-				System.err.println(browser.getDirectoryField().getText());
 				if(!browser.getDirectory().equals(
 					browser.getDirectoryField().getText()))
 				{
@@ -312,7 +309,7 @@ implements WorkThreadProgressListener
 			}
 			else if(evt.getSource() == cancel)
 				cancel();
-		} //}}}
+		}
 	} //}}}
 
 	//{{{ BrowserHandler class

@@ -257,7 +257,7 @@ public class ChunkCache
 					gfx.setColor(bgColor);
 
 					gfx.fill(new Rectangle2D.Float(
-						_x,y - forBackground.getAscent(),
+						x + _x,y - forBackground.getAscent(),
 						x2 - _x,forBackground.getHeight()));
 
 					gfx.setPaintMode();
