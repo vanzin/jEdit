@@ -675,7 +675,8 @@ whitespace-home.label=Go to Start of White Space
 #{{{ View stuff
 
 # Title
-view.title=jEdit - 
+view.title=jEdit -
+view.title.dirty=\ (modified)
 
 view.docking.close-tooltip=Hides the current docked window
 view.docking.menu-tooltip=Shows a menu of docking options
@@ -685,6 +686,7 @@ view.docking.menu-left=Dock at Left
 view.docking.menu-bottom=Dock at Bottom
 view.docking.menu-right=Dock at Right
 view.docking.menu-clone=Clone
+view.docking.menu-undock=Undock
 
 view.docking.toggle.label={0} (Toggle)
 view.docking.float.label={0} (New Floating Instance)

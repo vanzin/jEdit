@@ -3,25 +3,33 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- perl: q{}, etc.
+- bracket matching with split view -- not updated properly on switching
+- position hold still doesn't work
+- don't show 'new directory' in favorites:
+- jedit -background -nogui && jedit -norestore opens "Untitled 2"
+- plugin error dialog -- if > 1 error per plugin
+- C+ENTER 1 ...
+- undo: redo doesn't clear dirty flag if necessary
+- A+# on OS X, need better modifier mapping on OS X
+- first focus: show all files that were modified on disk, in a list
+- how to handle S+0-9?
+- C+e , and . insert , and . in the buffer, ditto for [ and ]
+- split pane position hold is still broken
+- bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
-- docking:
-  wrap around layout
 - hypersearch refresh
-- fsb parents right-click: wrong dir
 - activity log: log viewer needs copy, tabs in log entries need to be
   replaced
 - better chunk merging
 - split long lines
-- perl: q{}, etc.
-- bracket matching with split view -- not updated properly on switching
+- rect select and trailing whitespace
+- return after collapsed fold: insert line after end of fold
 
 - delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work
-- don't show 'new directory' in favorites:
-- jedit -background -nogui && jedit -norestore opens "Untitled 2"
 - need a new jEditLauncher
-- plugin error dialog -- if > 1 error per plugin
 - plugin tutorial:
   - plugin build environment docs
   - auto-created actions
@@ -30,6 +38,7 @@ and quirks that I need to fix eventually.
   - functions - links to API docs
   - quicknotepad docs
 - plugin tips and techniques:
+  - common. properties, using properties for UI strings
   - cutting down on startup time
   - canned dialog boxes in GUIUtilities
   - tools.jar
@@ -70,8 +79,6 @@ and quirks that I need to fix eventually.
     - is Log described elsewhere? move to API guide and link from 15.5.2
       (using activity log as a tracing tool).
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
-- rect select and trailing whitespace
-- final optimization for OffsetManager: scan to zero or scan to end
 - auto indent:
   if(foo)
     while(bar)
@@ -83,48 +90,33 @@ and quirks that I need to fix eventually.
 - respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
   know mod status
 - some JLists do not auto-scroll on keystroke
-- line 2112 -- isNarrowed() check of moveCaretPosition()
 - format -- instead of \n\n, what if it has \n   \n?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- A+# on OS X, need better modifier mapping on OS X
-- change indentPrevLine to indentOneLine and indentSubsequentLines
 - scrolling horizontally when dragging into virtual space: a bit quirky
 - eval-for-selected-lines doesn't work with rectangular selection
 - focus problem with hypersearch in floating window
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
-- first focus: show all files that were modified on disk, in a list
-- support multi-screen systems properly
-  - windows need to be created on the same screen as their parent if
-    possible.
-  - setLocationRelativeTo(): ok
-  - loadGeometry(): bad
-  - dockable windows
-  - getCenterPoint()
-  - popup menus
 - maximisation state bug: open window, resize to size X. close window,
   open window again, resize to size Y. maximise. close window, open
   window again, it has size X not size Y.
-- C+ENTER 1 ...
 - fs browser: scroll to visible after setting divider location
 - expand fold: try to expand even if already expanded
 - openFile(): can open two copies of the same buffer if a) remote b)
   canonPath != path
 - recording 'evaluate for selected lines'
-- how to handle S+0-9?
 - aborts not always fired
 - globalColors setting:
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
 - evalutate for selected lines: > 1 selection per line
-- undo: redo doesn't clear dirty flag if necessary
-- C+e , and . insert , and . in the buffer, ditto for [ and ]
 - motif l&f: shortcuts in menu items
 - fix pg up/down with soft wrap
 
 + verify:
 
+- line 2112 -- isNarrowed() check of moveCaretPosition()
 - status bar still fooling around
 - popups still positioned poorly
 - mouse pressed ignored sometimes?
@@ -154,8 +146,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   keeping INVALID? report errors in some other manner?
 - clean up the way macro hierarchy is stored
 - dialog parenting for fsb colors pane, vfs browser dialog
-- move text utility methods to TextUtilities
-- minor quicknotepad changes -- update docs
 - requestDefaultFocus() is bad
 
 + features:
@@ -168,6 +158,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
+- final optimization for OffsetManager: scan to zero or scan to end
 - insert/remove lines with a lot of folds below is slow for two reasons:
   - getNext/PrevVisibleLine() is a linear scan
   - markTokens(x) tokenizes all lines y < x s.t. line context of y is

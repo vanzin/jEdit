@@ -300,15 +300,7 @@ public class BeanShell
 				}
 			}
 
-			if(view != null)
-			{
-				interp.set("view",view);
-				EditPane editPane = view.getEditPane();
-				interp.set("editPane",editPane);
-				interp.set("buffer",editPane.getBuffer());
-				interp.set("textArea",editPane.getTextArea());
-			}
-
+			setupDefaultVariables(interp,view);
 			interp.set("scriptPath",path);
 
 			running = true;
@@ -342,14 +334,7 @@ public class BeanShell
 				// no need to do this for macros!
 				if(!ownNamespace)
 				{
-					if(view != null)
-					{
-						interp.unset("view");
-						interp.unset("editPane");
-						interp.unset("buffer");
-						interp.unset("textArea");
-					}
-
+					resetDefaultVariables(interp);
 					interp.unset("scriptPath");
 				}
 			}
@@ -408,15 +393,7 @@ public class BeanShell
 
 		try
 		{
-			if(view != null)
-			{
-				EditPane editPane = view.getEditPane();
-				interp.set("view",view);
-				interp.set("editPane",editPane);
-				interp.set("buffer",editPane.getBuffer());
-				interp.set("textArea",editPane.getTextArea());
-			}
-
+			setupDefaultVariables(interp,view);
 			return interp.eval(command);
 		}
 		catch(Exception e)
@@ -429,13 +406,7 @@ public class BeanShell
 		{
 			try
 			{
-				if(view != null)
-				{
-					interp.unset("view");
-					interp.unset("editPane");
-					interp.unset("buffer");
-					interp.unset("textArea");
-				}
+				resetDefaultVariables(interp);
 			}
 			catch(EvalError e)
 			{
@@ -655,6 +626,32 @@ public class BeanShell
 	private static NameSpace global;
 	private static boolean running;
 	//}}}
+
+	//{{{ setupDefaultVariables() method
+	private static void setupDefaultVariables(Interpreter interp, View view)
+		throws EvalError
+	{
+		if(view != null)
+		{
+			EditPane editPane = view.getEditPane();
+			interp.set("view",view);
+			interp.set("editPane",editPane);
+			interp.set("buffer",editPane.getBuffer());
+			interp.set("textArea",editPane.getTextArea());
+			interp.set("wm",view.getDockableWindowManager());
+		}
+	} //}}}
+
+	//{{{ resetDefaultVariables() method
+	private static void resetDefaultVariables(Interpreter interp)
+		throws EvalError
+	{
+		interp.unset("view");
+		interp.unset("editPane");
+		interp.unset("buffer");
+		interp.unset("textArea");
+		interp.unset("wm");
+	} //}}}
 
 	//{{{ unwrapException() method
 	/**
