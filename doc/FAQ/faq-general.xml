@@ -503,23 +503,23 @@
      </para></answer>
    </qandaentry>
 
-<qandaentry>
-<question id="bug-track">
-<para>
-How do I track the status of a jEdit bug report?
-</para>
-</question>
-<answer>
-<para>
-If you know the bug report number, go to this web address:
-<userinput>http://sourceforge.net/tracker/index.php?func=detail&amp;aid=######&amp;group_id=588&amp;atid=100588</userinput>,
-where <userinput>######</userinput> is the bug report number. If you don't know the bug report number,
-you can browse and search the <ulink
-url="http://sourceforge.net/tracker/index.php?group_id=588&amp;atid=100588">
-bug database</ulink> to find the problem in which you are interested.
-</para>
-</answer>
-</qandaentry>
+	<qandaentry>
+		<question id="bug-track">
+			<para>
+				How do I track the status of a jEdit bug report?
+			</para>
+		</question>
+		<answer>
+			<para>
+				If you know the bug report number, go to this web address:
+				<userinput>http://sourceforge.net/tracker/index.php?func=detail&amp;aid=######&amp;group_id=588&amp;atid=100588</userinput>,
+				where <userinput>######</userinput> is the bug report number. If you don't know the bug report number,
+				you can browse and search the <ulink
+				url="http://sourceforge.net/tracker/index.php?group_id=588&amp;atid=100588">
+				bug database</ulink> to find the problem in which you are interested.
+			</para>
+		</answer>
+	</qandaentry>
 
 
   </qandadiv>
