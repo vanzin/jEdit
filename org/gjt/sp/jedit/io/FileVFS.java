@@ -381,10 +381,11 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _saveComplete() method
-	public void _saveComplete(Object session, Buffer buffer, Component comp)
+	public void _saveComplete(Object session, Buffer buffer, String path,
+		Component comp)
 	{
 		int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
-		setPermissions(buffer.getPath(),permissions);
+		setPermissions(path,permissions);
 	} //}}}
 
 	//{{{ Permission preservation code
