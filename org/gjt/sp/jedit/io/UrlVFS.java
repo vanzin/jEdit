@@ -50,11 +50,6 @@ public class UrlVFS extends VFS
 			return parent + '/' + path;
 	}
 
-	public String getParentOfPath(String path)
-	{
-		return MiscUtilities.getParentOfPath(path);
-	}
-
 	public InputStream _createInputStream(Object session,
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
