@@ -1882,6 +1882,7 @@ public class Buffer implements EBComponent
 			"view.status.linesep-changed",new String[] {
 			jEdit.getProperty("lineSep." + status) }));
 		setProperty("lineSeparator",lineSep);
+		setDirty(true);
 		propertiesChanged();
 	} //}}}
 
