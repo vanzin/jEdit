@@ -229,10 +229,7 @@ public class BufferOptions extends EnhancedDialog
 	//{{{ ok() method
 	public void ok()
 	{
-		int index = mode.getSelectedIndex();
-		buffer.setMode(modes[index]);
-
-		index = lineSeparator.getSelectedIndex();
+		int index = lineSeparator.getSelectedIndex();
 		String lineSep;
 		if(index == 0)
 			lineSep = "\n";
@@ -304,7 +301,8 @@ public class BufferOptions extends EnhancedDialog
 		buffer.setBooleanProperty("indentOnTajb",indentOnTab.isSelected());
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 
-		buffer.propertiesChanged();
+		index = mode.getSelectedIndex();
+		buffer.setMode(modes[index]);
 
 		dispose();
 	} //}}}
