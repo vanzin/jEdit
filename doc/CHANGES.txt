@@ -97,8 +97,8 @@ this release.
 
 - Heredocs in PHP are <<< not <<.
 
-- Position code was incorrectly balancing the tree, and this caused
-  various problems such as hangs and various exceptions.
+- Position tree update code had several problems, and this caused hangs
+  and various exceptions.
 
 - jEdit would do a two-stage save for settings files, but it would still
   delete the old file if the save failed, thus settings could be lost of
