@@ -266,12 +266,14 @@ public class BeanShell
 
 			if(view != null)
 			{
-				EditPane editPane = view.getEditPane();
 				interp.set("view",view);
+				EditPane editPane = view.getEditPane();
 				interp.set("editPane",editPane);
 				interp.set("buffer",editPane.getBuffer());
 				interp.set("textArea",editPane.getTextArea());
 			}
+
+			interp.set("scriptPath",path);
 
 			running = true;
 
@@ -297,6 +299,23 @@ public class BeanShell
 					GUIUtilities.error(view,"read-error",
 						new String[] { path, io.toString() });
 				}
+			}
+
+			try
+			{
+				if(view != null)
+				{
+					interp.unset("view");
+					interp.unset("editPane");
+					interp.unset("buffer");
+					interp.unset("textArea");
+				}
+
+				interp.unset("scriptPath");
+			}
+			catch(EvalError e)
+			{
+				// do nothing
 			}
 		}
 	} //}}}
@@ -361,6 +380,23 @@ public class BeanShell
 			unwrapException(e);
 			// never called
 			return null;
+		}
+		finally
+		{
+			try
+			{
+				if(view != null)
+				{
+					interp.unset("view");
+					interp.unset("editPane");
+					interp.unset("buffer");
+					interp.unset("textArea");
+				}
+			}
+			catch(EvalError e)
+			{
+				// do nothing
+			}
 		}
 	} //}}}
 

@@ -1,5 +1,18 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre2
+
++ Miscellaneous Changes:
+
+- 'scriptPath' BeanShell variable is set to the macro file path while a
+  macro or startup script is executing.
+
++ Bug Fixes:
+
+- When evaluating BeanShell expressions, the standard
+  view/buffer/editPane/textArea variables would not be unset when the
+  expression finishes executing.
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,
