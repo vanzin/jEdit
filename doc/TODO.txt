@@ -1,15 +1,9 @@
 TO DO
 
-- soft wrap buggy
-- bracket matching and soft wrap
-- C+END: no scroll horiz
 - drag and up and down should not need setFirstLine() stupidity
-- home/end should not need scrollToCaret()
 - C+ENTER 1 ...
 - rect select and soft wrap
-- horizontal scroll jerkiness
 - still problem with last phys line repainting
-- still problem with incr search and scrollToCaret()
 - search dialog does not get focus when 'find' invoked while its open
 - source for existing plugins
 - idea for fixing buffer property issues: BufferProp class
@@ -21,17 +15,12 @@ TO DO
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
-- try to make caret movement faster
-- alt-tab: text area focus not lost
 - next/prev word: if whitespace at start of word, don't eat trailing
 - vertical scrollbar w/ soft wrap wrong
-- fix up/down arrow keys
 - fix page up/page down
 - save to X:filename on Windows
 - jdk 1.4: popups in wrong location
 - updateChunksUpTo() called too many times
-- sort mode list and put xml near the start so that xhtml files with the
-  .html extension are opened in xml mode
 - plugin manager's progress bar: max value is download size
 - removing a plugin should offer to remove the ones that depend on it too
 - installing source for already installed plugins is not possible: 'hide

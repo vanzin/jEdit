@@ -831,6 +831,8 @@ ioerror.encoding-error=Cannot load with "{0}" encoding:\n\
 	File->Open With Encoding menu.\n\
 	If you are really stuck and do not know which encoding\n\
 	to use, try "8859_1".
+ioerror.read-error=Read error: {0}
+ioerror.write-error=Write error: {0}
 ioerror.open-directory=Cannot open directory as a buffer.
 ioerror.save-directory=Cannot save buffer over a directory.
 ioerror.no-read=Insufficent permissions to load file.

@@ -477,7 +477,7 @@ public class ChunkCache
 			{
 				updateChunksUpTo(i);
 
-				LineInfo info = lineInfo[i];
+				LineInfo info = getLineInfo(i);
 				if(info.physicalLine > line)
 				{
 					// line is invisible?
@@ -591,9 +591,10 @@ public class ChunkCache
 	} //}}}
 
 	//{{{ lineToChunkList() method
-	void lineToChunkList(Buffer buffer, int physicalLine, ArrayList out)
+	void lineToChunkList(int physicalLine, ArrayList out)
 	{
 		TextAreaPainter painter = textArea.getPainter();
+		Buffer buffer = textArea.getBuffer();
 
 		buffer.getLineText(physicalLine,textArea.lineSegment);
 
@@ -651,8 +652,6 @@ public class ChunkCache
 		// invalidated as well. See below comment for code that tries
 		// to uphold this assumption.
 
-		Buffer buffer = textArea.getBuffer();
-
 		out.clear();
 
 		int offset = 0;
@@ -680,7 +679,7 @@ public class ChunkCache
 					continue;
 				}
 
-				lineToChunkList(buffer,physicalLine,out);
+				lineToChunkList(physicalLine,out);
 
 				info.firstSubregion = true;
 
@@ -698,7 +697,7 @@ public class ChunkCache
 					if(out.size() != 0)
 						length = ((Chunk)out.get(0)).offset - offset;
 					else
-						length = buffer.getLineLength(physicalLine) - offset + 1;
+						length = textArea.getLineLength(physicalLine) - offset + 1;
 				}
 			}
 			else
@@ -711,7 +710,7 @@ public class ChunkCache
 				if(out.size() != 0)
 					length = ((Chunk)out.get(0)).offset - offset;
 				else
-					length = buffer.getLineLength(physicalLine) - offset + 1;
+					length = textArea.getLineLength(physicalLine) - offset + 1;
 			}
 
 			boolean lastSubregion = (out.size() == 0);
@@ -778,8 +777,7 @@ public class ChunkCache
 
 					out.clear();
 
-					lineToChunkList(textArea.getBuffer(),
-						info.physicalLine,out);
+					lineToChunkList(info.physicalLine,out);
 
 					info.firstSubregion = true;
 					info.lastSubregion = true;
@@ -793,6 +791,51 @@ public class ChunkCache
 
 			return info;
 		}
+	} //}}}
+
+	//{{{ getLineInfosForPhysicalLine() method
+	public LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
+	{
+		out.clear();
+		lineToChunkList(physicalLine,out);
+
+		if(out.size() == 0)
+			out.add(null);
+
+		LineInfo[] returnValue = new LineInfo[out.size()];
+
+		for(int i = 0; i < out.size(); i++)
+		{
+			Chunk chunks = (Chunk)out.get(i);
+			LineInfo info = new LineInfo();
+			info.physicalLine = physicalLine;
+			if(i == 0)
+			{
+				info.firstSubregion = true;
+				info.offset = 0;
+			}
+			else
+				info.offset = chunks.offset;
+
+			if(i == out.size() - 1)
+			{
+				info.lastSubregion = true;
+				info.length = textArea.getLineLength(physicalLine)
+					- info.offset + 1;
+			}
+			else
+			{
+				info.length = ((Chunk)out.get(i + 1)).offset
+					- info.offset;
+			}
+
+			info.chunksValid = true;
+			info.chunks = chunks;
+
+			returnValue[i] = info;
+		}
+
+		return returnValue;
 	} //}}}
 
 	//{{{ needFullRepaint() method

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import java.util.Vector;
+import java.util.ArrayList;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
@@ -35,7 +35,7 @@ public class UndoManager
 	public UndoManager(Buffer buffer)
 	{
 		this.buffer = buffer;
-		undos = new Vector(100);
+		undos = new ArrayList(100);
 	} //}}}
 
 	//{{{ setLimit() method
@@ -47,7 +47,7 @@ public class UndoManager
 	//{{{ clear() method
 	public void clear()
 	{
-		undos.removeAllElements();
+		undos.clear();
 		undoPos = undoCount = 0;
 	} //}}}
 
@@ -61,7 +61,7 @@ public class UndoManager
 			return false;
 		else
 		{
-			Edit edit = (Edit)undos.elementAt(--undoPos);
+			Edit edit = (Edit)undos.get(--undoPos);
 			int caret = edit.undo();
 			if(caret != -1)
 				textArea.setCaretPosition(caret);
@@ -79,7 +79,7 @@ public class UndoManager
 			return false;
 		else
 		{
-			Edit edit = (Edit)undos.elementAt(undoPos++);
+			Edit edit = (Edit)undos.get(undoPos++);
 			int caret = edit.redo();
 			if(caret != -1)
 				textArea.setCaretPosition(caret);
@@ -99,16 +99,26 @@ public class UndoManager
 	//{{{ endCompoundEdit() method
 	public void endCompoundEdit()
 	{
-		if(compoundEditCount == 1)
-		{
-			if(compoundEdit.getSize() != 0)
-				addEdit(compoundEdit);
-			compoundEdit = null;
-		}
-		else if(compoundEditCount == 0)
+		if(compoundEditCount == 0)
 		{
 			Log.log(Log.WARNING,this,new Exception("Unbalanced begin/endCompoundEdit()"));
 			return;
+		}
+		else if(compoundEditCount == 1)
+		{
+			switch(compoundEdit.undos.size())
+			{
+			case 0:
+				/* nothing done between begin/end calls */;
+				break;
+			case 1:
+				addEdit((Edit)compoundEdit.undos.get(0));
+				break;
+			default:
+				addEdit(compoundEdit);
+			}
+
+			compoundEdit = null;
 		}
 
 		compoundEditCount--;
@@ -126,14 +136,14 @@ public class UndoManager
 		Edit toMerge = null;
 		if(compoundEdit != null)
 		{
-			int size = compoundEdit.getSize();
+			int size = compoundEdit.undos.size();
 			if(size != 0)
-				toMerge = (Edit)compoundEdit.undos.elementAt(size - 1);
+				toMerge = (Edit)compoundEdit.undos.get(size - 1);
 		}
 		else
 		{
 			if(undoPos != 0)
-				toMerge = (Edit)undos.elementAt(undoPos - 1);
+				toMerge = (Edit)undos.get(undoPos - 1);
 		}
 
 		if(!clearDirty && toMerge instanceof Insert)
@@ -162,7 +172,7 @@ public class UndoManager
 		}
 
 		if(compoundEdit != null)
-			compoundEdit.addEdit(ins);
+			compoundEdit.undos.add(ins);
 		else
 			addEdit(ins);
 	} //}}}
@@ -173,14 +183,14 @@ public class UndoManager
 		Edit toMerge = null;
 		if(compoundEdit != null)
 		{
-			int size = compoundEdit.getSize();
+			int size = compoundEdit.undos.size();
 			if(size != 0)
-				toMerge = (Edit)compoundEdit.undos.elementAt(size - 1);
+				toMerge = (Edit)compoundEdit.undos.get(size - 1);
 		}
 		else
 		{
 			if(undoPos != 0)
-				toMerge = (Edit)undos.elementAt(undoPos - 1);
+				toMerge = (Edit)undos.get(undoPos - 1);
 		}
 
 		if(!clearDirty && toMerge instanceof Remove)
@@ -209,7 +219,7 @@ public class UndoManager
 		}
 
 		if(compoundEdit != null)
-			compoundEdit.addEdit(rem);
+			compoundEdit.undos.add(rem);
 		else
 			addEdit(rem);
 	} //}}}
@@ -228,7 +238,7 @@ public class UndoManager
 
 	//{{{ Instance variables
 	private Buffer buffer;
-	private Vector undos;
+	private ArrayList undos;
 	private int limit;
 	private int undoPos;
 	private int undoCount;
@@ -240,11 +250,11 @@ public class UndoManager
 	//{{{ addEdit() method
 	private void addEdit(Edit edit)
 	{
-		undos.insertElementAt(edit,undoPos++);
+		undos.add(undoPos++,edit);
 
 		if(undos.size() > limit)
 		{
-			undos.removeElementAt(0);
+			undos.remove(0);
 			undoPos--;
 		}
 
@@ -344,7 +354,7 @@ public class UndoManager
 			int retVal = -1;
 			for(int i = undos.size() - 1; i >= 0; i--)
 			{
-				retVal = ((Edit)undos.elementAt(i)).undo();
+				retVal = ((Edit)undos.get(i)).undo();
 			}
 			return retVal;
 		} //}}}
@@ -355,24 +365,12 @@ public class UndoManager
 			int retVal = -1;
 			for(int i = 0; i < undos.size(); i++)
 			{
-				retVal = ((Edit)undos.elementAt(i)).redo();
+				retVal = ((Edit)undos.get(i)).redo();
 			}
 			return retVal;
 		} //}}}
 
-		//{{{ addEdit() method
-		public void addEdit(Edit edit)
-		{
-			undos.addElement(edit);
-		} //}}}
-
-		//{{{ getSize() method
-		public int getSize()
-		{
-			return undos.size();
-		} //}}}
-
-		Vector undos = new Vector();
+		ArrayList undos = new ArrayList();
 	} //}}}
 
 	//}}}
