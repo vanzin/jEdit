@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre6
 
-Thanks to John Perry, Joshua Miller and Marcelo Vanzin for contributing
-to this release.
+Thanks to John Perry, Joshua Miller, Kris Kopicki, Marcelo Vanzin and
+Rex Young for contributing to this release.
 
 + Editing Changes:
 
@@ -47,6 +47,9 @@ to this release.
   false.
 - Fixed highlighting of digits in C, C++, Java and similar modes; now
   hex digits are only highlighted if the number begins with "0x".
+- Print output would be clipped if the "print header" option was
+  switched off.
+- Fixed obscure deadlock condition in ReadWriteLock.java (Rex Young).
 
 * Version 4.1pre5
 
