@@ -767,6 +767,33 @@ public class jEdit
 		setProperty(name,String.valueOf(value));
 	} //}}}
 
+	//{{{ setDoubleProperty() method
+	public static final void setDoubleProperty(String name, double value)
+	{
+		setProperty(name,String.valueOf(value));
+	}
+	//}}}
+
+	//{{{ getDoubleProperty() method
+	public static double getDoubleProperty(String name, double def)
+	{
+		String value = getProperty(name);
+		if(value == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Double.parseDouble(value);
+			}
+			catch(NumberFormatException nf)
+			{
+				return def;
+			}
+		}
+	}
+	//}}}
+
 	//{{{ setFontProperty() method
 	/**
 	 * Sets the value of a font property. The family is stored

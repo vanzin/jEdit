@@ -142,15 +142,38 @@ loop:				for(int i = 0; i < files.length; i++)
 	{
 		setAbortable(false);
 
-		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
-			buffer.getPath());
-
 		int resultCount = 0;
 
-		for(int i = 0; i < selection.length; i++)
+		try
 		{
-			Selection s = selection[i];
-			resultCount += doHyperSearch(buffer,s.getStart(),s.getEnd());
+			buffer.readLock();
+
+			final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
+				buffer.getPath());
+
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+				if(s instanceof Selection.Rect)
+				{
+					for(int j = s.getStartLine();
+						j <= s.getEndLine(); j++)
+					{
+						resultCount += doHyperSearch(buffer,
+							s.getStart(buffer,j),
+							s.getEnd(buffer,j));
+					}
+				}
+				else
+				{
+					resultCount += doHyperSearch(buffer,
+						s.getStart(),s.getEnd());
+				}
+			}
+		}
+		finally
+		{
+			buffer.readUnlock();
 		}
 
 		setAbortable(true);
