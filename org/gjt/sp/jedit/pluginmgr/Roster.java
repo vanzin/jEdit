@@ -122,7 +122,7 @@ class Roster
 			// close JAR file
 			EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
-				jar.getClassLoader().closeZipFile();
+				jar.closeZipFile();
 
 			// move JAR first
 			File jarFile = new File(plugin);

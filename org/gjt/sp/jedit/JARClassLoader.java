@@ -61,34 +61,20 @@ public class JARClassLoader extends ClassLoader
 	{
 		long time = System.currentTimeMillis();
 
-		this.path = path;
-		zipFile = new JarFile(path);
-		definePackages();
+		//definePackages();
 
-		jar = new EditPlugin.JAR(path,this,zipFile);
-
-		Enumeration entires = zipFile.entries();
-		while(entires.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entires.nextElement();
-			String name = entry.getName();
-			String lname = name.toLowerCase();
-			if(lname.equals("actions.xml"))
-				pluginResources.add(entry);
-			if(lname.equals("dockables.xml"))
-				pluginResources.add(entry);
-			else if(lname.endsWith(".props"))
-				jEdit.loadProps(zipFile.getInputStream(entry),true);
-			else if(name.endsWith(".class"))
-			{
-				classHash.put(MiscUtilities.fileToClass(name),this);
-
-				if(name.endsWith("Plugin.class"))
-					pluginClasses.add(name);
-			}
-		}
-
+		//XXX: push this up
+		jar = new EditPlugin.JAR(path,this);
 		jEdit.addPluginJAR(jar);
+
+		//XXX: move these to ResourceCache eventually
+		ResourceCache.PluginCacheEntry e = jar.generateCache();
+		Iterator iter = e.classes.iterator();
+		while(iter.hasNext())
+		{
+			String clazz = (String)iter.next();
+			classHash.put(clazz,this);
+		}
 
 		scanTime += (System.currentTimeMillis() - time);
 	} //}}}
@@ -109,7 +95,7 @@ public class JARClassLoader extends ClassLoader
 			// <imported prefix>.<class name> combinations
 			throw new ClassNotFoundException(clazz);
 		}
-		else if(obj instanceof ClassLoader)
+		else if(obj instanceof JARClassLoader)
 		{
 			JARClassLoader classLoader = (JARClassLoader)obj;
 			return classLoader._loadClass(clazz,resolveIt);
@@ -144,11 +130,12 @@ public class JARClassLoader extends ClassLoader
 	//{{{ getResourceAsStream() method
 	public InputStream getResourceAsStream(String name)
 	{
-		if(zipFile == null)
+		if(jar == null)
 			return null;
 
 		try
 		{
+			ZipFile zipFile = jar.getZipFile();
 			ZipEntry entry = zipFile.getEntry(name);
 			if(entry == null)
 				return getSystemResourceAsStream(name);
@@ -166,20 +153,21 @@ public class JARClassLoader extends ClassLoader
 	//{{{ getResource() method
 	public URL getResource(String name)
 	{
-		if(zipFile == null)
+		if(jar == null)
 			return null;
-
-		ZipEntry entry = zipFile.getEntry(name);
-		if(entry == null)
-			return getSystemResource(name);
 
 		try
 		{
-			return new URL(getResourceAsPath(name));
+			ZipFile zipFile = jar.getZipFile();
+			ZipEntry entry = zipFile.getEntry(name);
+			if(entry == null)
+				return getSystemResource(name);
+			else
+				return new URL(getResourceAsPath(name));
 		}
-		catch(MalformedURLException mu)
+		catch(IOException io)
 		{
-			Log.log(Log.ERROR,this,mu);
+			Log.log(Log.ERROR,this,io);
 			return null;
 		}
 	} //}}}
@@ -187,7 +175,7 @@ public class JARClassLoader extends ClassLoader
 	//{{{ getResourceAsPath() method
 	public String getResourceAsPath(String name)
 	{
-		if(zipFile == null)
+		if(jar == null)
 			return null;
 
 		if(!name.startsWith("/"))
@@ -197,37 +185,21 @@ public class JARClassLoader extends ClassLoader
 			jar.getPath()) + "!" + name;
 	} //}}}
 
-	//{{{ closeZipFile() method
+	//{{{ getZipFile() method
 	/**
-	 * Closes the ZIP file. This plugin will no longer be usable
-	 * after this.
-	 * @since jEdit 2.6pre1
+	 * @deprecated Call <code>EditPlugin.JAR.getZipFile()</code> instead.
 	 */
-	public void closeZipFile()
+	public ZipFile getZipFile()
 	{
-		if(zipFile == null)
-			return;
-
 		try
 		{
-			zipFile.close();
+			return jar.getZipFile();
 		}
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,this,io);
+			return null;
 		}
-
-		zipFile = null;
-	} //}}}
-
-	//{{{ getZipFile() method
-	/**
-	 * Returns the ZIP file associated with this class loader.
-	 * @since jEdit 3.0final
-	 */
-	public ZipFile getZipFile()
-	{
-		return zipFile;
 	} //}}}
 
 	//{{{ startAllPlugins() method
@@ -261,46 +233,6 @@ public class JARClassLoader extends ClassLoader
 		}
 
 		startTime += (System.currentTimeMillis() - time);
-		time = System.currentTimeMillis();
-
-		if(!ok)
-		{
-			// don't load actions and dockables if plugin didn't load.
-			return;
-		}
-
-		try
-		{
-			for(int i = 0; i < pluginResources.size(); i++)
-			{
-				ZipEntry entry = (ZipEntry)pluginResources.get(i);
-				String name = entry.getName();
-				if(name.equalsIgnoreCase("actions.xml"))
-				{
-					jEdit.loadActions(
-						path + "!actions.xml",
-						new BufferedReader(new InputStreamReader(
-						zipFile.getInputStream(entry))),
-						jar.getActionSet());
-				}
-				else if(name.equalsIgnoreCase("dockables.xml"))
-				{
-					DockableWindowManager.loadDockableWindows(jar,
-						getResource(name));
-				}
-			}
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,jEdit.class,"Cannot load"
-				+ " plugin " + MiscUtilities.getFileName(path));
-			Log.log(Log.ERROR,jEdit.class,io);
-
-			String[] args = { io.toString() };
-			jEdit.pluginError(path,"plugin-error.load-error",args);
-		}
-
-		scanTime += (System.currentTimeMillis() - time);
 	} //}}}
 
 	//{{{ Private members
@@ -310,12 +242,8 @@ public class JARClassLoader extends ClassLoader
 
 	private static Hashtable classHash = new Hashtable();
 
-	private String path;
-
 	private EditPlugin.JAR jar;
-	private ArrayList pluginResources = new ArrayList();
-	private ArrayList pluginClasses = new ArrayList();
-	private JarFile zipFile;
+	/* private */ ArrayList pluginClasses = new ArrayList();
 
 	//{{{ loadPluginClass() method
 	private boolean loadPluginClass(String name)
@@ -527,6 +455,7 @@ public class JARClassLoader extends ClassLoader
 
 		try
 		{
+			ZipFile zipFile = jar.getZipFile();
 			ZipEntry entry = zipFile.getEntry(name);
 
 			if(entry == null)
@@ -572,7 +501,7 @@ public class JARClassLoader extends ClassLoader
 	 * attributes contained in the specified Manifest will be used to obtain
 	 * package version and sealing information.
 	 */
-	private void definePackages()
+	/* private void definePackages()
 	{
 		try
 		{
@@ -607,7 +536,7 @@ public class JARClassLoader extends ClassLoader
 				+ "for file " + zipFile);
 			Log.log(Log.ERROR, this, ex);
 		}
-	} //}}}
+	} */ //}}}
 
 	//{{{ definePackage() method
 	/**
@@ -616,7 +545,7 @@ public class JARClassLoader extends ClassLoader
 	 * version and sealing information. For sealed packages, the additional
 	 * URL specifies the code source URL from which the package was loaded.
 	 */
-	private Package definePackage(String path, String name, Manifest man,
+	/* private Package definePackage(String path, String name, Manifest man,
 		URL url) throws IllegalArgumentException
 	{
 		String specTitle = null;
@@ -699,7 +628,7 @@ public class JARClassLoader extends ClassLoader
 		return super.definePackage(name, specTitle, specVersion, specVendor,
 			implTitle, implVersion, implVendor,
 			sealBase);
-	} //}}}
+	} */ //}}}
 
 	//}}}
 }

@@ -387,6 +387,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			this.handler = handler;
 			this.label = label;
 			this.path = path;
+
+			jEdit.setTemporaryProperty(getName() + ".label",label);
 		} //}}}
 
 		//{{{ getHandler() method
@@ -395,12 +397,6 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			return handler;
 		}
 		//}}}
-
-		//{{{ getLabel() method
-		public String getLabel()
-		{
-			return label;
-		} //}}}
 
 		//{{{ getMouseOverText() method
 		public String getMouseOverText()
@@ -668,7 +664,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				{
 					Macro newMacro = handler.createMacro(
 						path + fileName, file.getPath());
-					vector.addElement(newMacro);
+					vector.addElement(newMacro.getName());
 					macroActionSet.addAction(newMacro);
 					macroHash.put(newMacro.getName(),newMacro);
 				}

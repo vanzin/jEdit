@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.browser;
 
 import javax.swing.table.*;
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.*;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 
@@ -48,7 +48,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ setRoot() method
 	public void setRoot(ArrayList list)
 	{
-		if(files != null)
+		if(files != null && files.length != 0)
 			fireTableRowsDeleted(0,files.length - 1);
 
 		files = new Entry[list.size()];
@@ -57,11 +57,12 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			files[i] = new Entry((VFS.DirectoryEntry)list.get(i),0);
 		}
 
-		fireTableRowsInserted(0,files.length - 1);
+		if(files.length != 0)
+			fireTableRowsInserted(0,files.length - 1);
 	} //}}}
 
 	//{{{ expand() method
-	public void expand(Entry entry, ArrayList list)
+	public int expand(Entry entry, ArrayList list)
 	{
 		int startIndex = -1;
 		for(int i = 0; i < files.length; i++)
@@ -92,6 +93,10 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			fireTableRowsInserted(startIndex + 1,
 				startIndex + list.size() + 1);
 		}
+
+		fireTableRowsUpdated(startIndex,startIndex);
+
+		return startIndex;
 	} //}}}
 
 	//{{{ collapse() method
@@ -113,13 +118,14 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 				lastIndex++;
 		}
 
-		Entry[] newFiles = new Entry[files.length - (lastIndex - index)];
+		Entry[] newFiles = new Entry[files.length - lastIndex + index + 1];
 		System.arraycopy(files,0,newFiles,0,index + 1);
 		System.arraycopy(files,lastIndex,newFiles,index + 1,
-			files.length - lastIndex - 1);
+			files.length - lastIndex);
 
 		files = newFiles;
 
+		fireTableRowsUpdated(index,index);
 		fireTableRowsDeleted(index + 1,lastIndex);
 	} //}}}
 

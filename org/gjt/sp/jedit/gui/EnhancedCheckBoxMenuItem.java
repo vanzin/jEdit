@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
 public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 {
 	//{{{ EnhancedCheckBoxMenuItem constructor
-	public EnhancedCheckBoxMenuItem(String label, EditAction action)
+	public EnhancedCheckBoxMenuItem(String label, String action)
 	{
 		this.action = action;
 		this.shortcut = getShortcut();
@@ -99,7 +99,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 	//{{{ Instance variables
 	private String shortcut;
-	private EditAction action;
+	private String action;
 	//}}}
 
 	//{{{ getShortcut() method
@@ -109,8 +109,8 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			return null;
 		else
 		{
-			String shortcut1 = jEdit.getProperty(action.getName() + ".shortcut");
-			String shortcut2 = jEdit.getProperty(action.getName() + ".shortcut2");
+			String shortcut1 = jEdit.getProperty(action + ".shortcut");
+			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
 
 			if(shortcut1 == null || shortcut1.length() == 0)
 			{
@@ -139,9 +139,11 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			if(!isShowing())
 				return false;
 
+			EditAction a = jEdit.getAction(action);
+
 			try
 			{
-				return action.isSelected(GUIUtilities.getView(
+				return a.isSelected(GUIUtilities.getView(
 					EnhancedCheckBoxMenuItem.this));
 			}
 			catch(Throwable t)
@@ -161,33 +163,33 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 		public void mouseReleased(MouseEvent evt)
 		{
-			if(msgSet)
+			/* if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			}
+			} */
 		}
 
 		public void mouseEntered(MouseEvent evt)
 		{
-			String msg = action.getMouseOverText();
+			/* String msg = action.getMouseOverText();
 			if(msg != null)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(msg);
 				msgSet = true;
-			}
+			} */
 		}
 
 		public void mouseExited(MouseEvent evt)
 		{
-			if(msgSet)
+			/* if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			}
+			} */
 		}
 	} //}}}
 }

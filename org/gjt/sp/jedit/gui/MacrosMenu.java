@@ -89,10 +89,11 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 		for(int i = start; i < vector.size(); i++)
 		{
 			Object obj = vector.elementAt(i);
-			if(obj instanceof Macros.Macro)
+			if(obj instanceof String)
 			{
-				Macros.Macro macro = (Macros.Macro)obj;
-				menuItems.add(new EnhancedMenuItem(macro.getLabel(),macro));
+				menuItems.add(new EnhancedMenuItem(
+					jEdit.getProperty(obj + ".label"),
+					(String)obj));
 			}
 			else if(obj instanceof Vector)
 			{

@@ -125,6 +125,12 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		super.dispose();
 	} //}}}
 
+	//{{{ getDockableWindowManager() method
+	public DockableWindowManager getDockableWindowManager()
+	{
+		return dockableWindowManager;
+	} //}}}
+
 	//{{{ getMinimumSize() method
 	public Dimension getMinimumSize()
 	{

@@ -5,8 +5,8 @@
 
 <!-- Entities for attributes shared by multiple rules -->
 <!ENTITY % att-bool '( TRUE | FALSE )' >
-<!ENTITY % att-standard-mix 'TYPE %tokens; "NULL"
-	AT_LINE_START %att-bool; "FALSE"
+<!ENTITY % att-type 'TYPE %tokens; "NULL"' >
+<!ENTITY % att-position-mix 'AT_LINE_START %att-bool; "FALSE"
 	AT_WHITESPACE_END %att-bool; "FALSE"
 	AT_WORD_START %att-bool; "FALSE"' >
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
@@ -52,7 +52,8 @@
 
 <!-- SEQ attributes -->
 <!ATTLIST SEQ
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-delegate; >
 
 <!-- SEQ_REGEXP element -->
@@ -61,7 +62,8 @@
 <!-- SEQ_REGEXP attributes -->
 <!ATTLIST SEQ_REGEXP
 	%att-hash-char;
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-delegate; >
 
 <!-- SPAN element -->
@@ -69,7 +71,8 @@
 
 <!-- SPAN attributes -->
 <!ATTLIST SPAN
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-span-mix;
 	%att-exclude-match;
 	%att-delegate; >
@@ -80,21 +83,25 @@
 <!-- SPAN_REGEXP attributes -->
 <!ATTLIST SPAN_REGEXP
 	%att-hash-char;
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-span-mix;
 	%att-exclude-match;
 	%att-delegate; >
 
 <!-- SPAN and SPAN_REGEXP children -->
 <!ELEMENT BEGIN ( #PCDATA ) >
+<!ATTLIST BEGIN %att-position-mix; >
 <!ELEMENT END ( #PCDATA ) >
+<!ATTLIST END %att-position-mix; >
 
 <!-- EOL_SPAN element -->
 <!ELEMENT EOL_SPAN ( #PCDATA ) >
 
 <!-- EOL_SPAN attributes -->
 <!ATTLIST EOL_SPAN
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-exclude-match;
 	%att-delegate; >
 
@@ -104,7 +111,8 @@
 <!-- EOL_SPAN_REGEXP attributes -->
 <!ATTLIST EOL_SPAN_REGEXP
 	%att-hash-char;
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-exclude-match;
 	%att-delegate; >
 
@@ -113,7 +121,8 @@
 
 <!-- MARK_FOLLOWING attributes -->
 <!ATTLIST MARK_FOLLOWING
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-exclude-match; >
 
 <!-- MARK_PREVIOUS element -->
@@ -121,7 +130,8 @@
 
 <!-- MARK_PREVIOUS attributes -->
 <!ATTLIST MARK_PREVIOUS
-	%att-standard-mix;
+	%att-type;
+	%att-position-mix;
 	%att-exclude-match; >
 
 <!-- KEYWORDS element -->

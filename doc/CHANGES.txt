@@ -41,6 +41,9 @@ release.
   selection mode is enabled) moves the caret to the clicked line before
   displaying the popup menu (Rudi Widmann).
 
+- Control-clicking beyond the end of a line inserts the appropriate
+  amount of white space and moves the caret there (Rudi Widmann).
+
 }}}
 {{{ Rectangular Selection
 
@@ -49,9 +52,6 @@ release.
 
   - Dragging with the mouse or using keyboard selection commands creates
     rectangular selections.
-
-  - Clicking beyond the end of a line inserts the appropriate amount of
-    white space and moves the caret there (Rudi Widmann).
 
   - A status bar indicator has been added for this mode.
 

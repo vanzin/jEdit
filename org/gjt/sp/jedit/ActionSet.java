@@ -104,17 +104,15 @@ public class ActionSet
 	//{{{ ActionSet constructor
 	/**
 	 * Creates a new action set.
-	 * @param jar The plugin
+	 * @param plugin The plugin
 	 * @param uri The actions.xml URI
 	 * @param cachedActionNames The list of cached action names
 	 * @since jEdit 4.2pre1
 	 */
-	public ActionSet(EditPlugin.JAR jar, URL uri,
-		String[] cachedActionNames)
+	public ActionSet(EditPlugin.JAR plugin, String[] cachedActionNames)
 	{
 		this();
-		this.jar = jar;
-		this.uri = uri;
+		this.plugin = plugin;
 		if(cachedActionNames != null)
 		{
 			for(int i = 0; i < cachedActionNames.length; i++)
@@ -263,6 +261,33 @@ public class ActionSet
 		return retVal;
 	} //}}}
 
+	//{{{ getCacheableActionNames() method
+	/**
+	 * Returns an array of all action names in this action set that should
+	 * be cached; namely, <code>BeanShellAction</code>s.
+	 * @since jEdit 4.2pre1
+	 */
+	public String[] getCacheableActionNames()
+	{
+		LinkedList retVal = new LinkedList();
+		Enumeration enum = actions.elements();
+		int i = 0;
+		while(enum.hasMoreElements())
+		{
+			Object obj = enum.nextElement();
+			if(obj == placeholder)
+			{
+				// ??? this should only be called with
+				// fully loaded action set
+				Log.log(Log.WARNING,this,"Action set not up "
+					+ "to date");
+			}
+			else if(obj instanceof BeanShellAction)
+				retVal.add(((BeanShellAction)obj).getName());
+		}
+		return (String[])retVal.toArray(new String[retVal.size()]);
+	} //}}}
+
 	//{{{ getActions() method
 	/**
 	 * Returns an array of all actions in this action set.<p>
@@ -343,6 +368,21 @@ public class ActionSet
 		loaded = true;
 		actions.clear();
 
+		load(plugin.getActionsURI());
+	} //}}}
+
+	//{{{ load() method
+	/**
+	 * Forces the action set to be loaded. Plugins and macros should not
+	 * call this method.
+	 * @param uri URI to load from
+	 * @since jEdit 4.2pre1
+	 */
+	public void load(URL uri)
+	{
+		loaded = true;
+		actions.clear();
+
 		try
 		{
 			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + uri);
@@ -393,8 +433,7 @@ public class ActionSet
 	//{{{ Private members
 	private String label;
 	private Hashtable actions;
-	private EditPlugin.JAR jar;
-	private URL uri;
+	private EditPlugin.JAR plugin;
 	private boolean loaded;
 
 	private static final Object placeholder = new Object();

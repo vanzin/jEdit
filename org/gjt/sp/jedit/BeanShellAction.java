@@ -48,6 +48,9 @@ public class BeanShellAction extends EditAction
 		/* Some characters that we like to use in action names
 		 * ('.', '-') are not allowed in BeanShell identifiers. */
 		sanitizedName = name.replace('.','_').replace('-','_');
+
+		jEdit.setTemporaryProperty(name + ".toggle",
+			isSelected != null ? "true" : "false");
 	} //}}}
 
 	//{{{ invoke() method
@@ -69,12 +72,6 @@ public class BeanShellAction extends EditAction
 
 			new BeanShellErrorDialog(view,e);
 		}
-	} //}}}
-
-	//{{{ isToggle() method
-	public boolean isToggle()
-	{
-		return isSelected != null;
 	} //}}}
 
 	//{{{ isSelected() method

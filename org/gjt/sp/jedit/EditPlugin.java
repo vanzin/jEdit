@@ -252,6 +252,10 @@ public abstract class EditPlugin
 		return null;
 	} //}}}
 
+	//{{{ Private members
+	private EditPlugin.JAR jar;
+	//}}}
+
 	//{{{ Broken class
 	/**
 	 * A placeholder for a plugin that didn't load.
@@ -273,6 +277,32 @@ public abstract class EditPlugin
 		private String clazz;
 	} //}}}
 
+	//{{{ Deferred class
+	/**
+	 * A placeholder for a plugin that hasn't been loaded yet.
+	 */
+	public static class Deferred extends EditPlugin
+	{
+		public String getClassName()
+		{
+			return clazz;
+		}
+
+		// package-private members
+		Deferred(String clazz)
+		{
+			this.clazz = clazz;
+		}
+
+		EditPlugin loadPluginClass()
+		{
+			return null;
+		}
+
+		// private members
+		private String clazz;
+	} //}}}
+
 	//{{{ JAR class
 	/**
 	 * A JAR file.
@@ -286,14 +316,24 @@ public abstract class EditPlugin
 		} //}}}
 
 		//{{{ getClassLoader() method
+		/**
+		 * Returns the plugin's class loader.
+		 * @since jEdit 4.2pre1
+		 */
 		public JARClassLoader getClassLoader()
 		{
 			return classLoader;
 		} //}}}
 
 		//{{{ getZipFile() method
-		public ZipFile getZipFile()
+		/**
+		 * Returns the plugin's JAR file, opening it first if necessary.
+		 * @since jEdit 4.2pre1
+		 */
+		public ZipFile getZipFile() throws IOException
 		{
+			if(zipFile == null)
+				zipFile = new ZipFile(path);
 			return zipFile;
 		} //}}}
 
@@ -305,7 +345,7 @@ public abstract class EditPlugin
 		{
 			return getActionSet();
 		} //}}}
-	
+
 		//{{{ getActionSet() method
 		/**
 		 * @since jEdit 4.2pre1
@@ -313,6 +353,12 @@ public abstract class EditPlugin
 		public ActionSet getActionSet()
 		{
 			return actions;
+		} //}}}
+
+		//{{{ getPlugins() method
+		public EditPlugin[] getPlugins()
+		{
+			return (EditPlugin[])plugins.toArray(new EditPlugin[plugins.size()]);
 		} //}}}
 
 		//{{{ addPlugin() method
@@ -342,33 +388,57 @@ public abstract class EditPlugin
 			plugins.add(plugin);
 		} //}}}
 
-		//{{{ getPlugins() method
-		public EditPlugin[] getPlugins()
+		//{{{ getActionsURI() method
+		/**
+		 * Returns the location of the plugin's <code>actions.xml</code>
+		 * file.
+		 * @since jEdit 4.2pre1
+		 */
+		public URL getActionsURI()
 		{
-			return (EditPlugin[])plugins.toArray(new EditPlugin[plugins.size()]);
+			return actionsURI;
+		} //}}}
+
+		//{{{ getDockablesURI() method
+		/**
+		 * Returns the location of the plugin's
+		 * <code>dockables.xml</code> file.
+		 * @since jEdit 4.2pre1
+		 */
+		public URL getDockablesURI()
+		{
+			return dockablesURI;
+		} //}}}
+
+		//{{{ getServicesURI() method
+		/**
+		 * Returns the location of the plugin's
+		 * <code>services.xml</code> file.
+		 * @since jEdit 4.2pre1
+		 */
+		public URL getServicesURI()
+		{
+			return servicesURI;
 		} //}}}
 
 		//{{{ Package-private members
 
 		//{{{ JAR constructor
-		JAR(String path, JARClassLoader classLoader, ZipFile zipFile)
+		JAR(String path, JARClassLoader classLoader)
 		{
 			this.path = path;
 			this.classLoader = classLoader;
-			this.zipFile = zipFile;
 			plugins = new ArrayList();
 			actions = new ActionSet();
 		} //}}}
 
 		//{{{ JAR constructor
-		JAR(String path, JARClassLoader classLoader, ZipFile zipFile,
+		JAR(String path, JARClassLoader classLoader,
 			ResourceCache.PluginCacheEntry cache)
 		{
-			this(path,classLoader,zipFile);
+			this(path,classLoader);
 			if(cache != null)
-			{
-				
-			}
+				loadCache(cache);
 		} //}}}
 
 		//{{{ getPlugins() method
@@ -383,18 +453,29 @@ public abstract class EditPlugin
 		//{{{ loadCache() method
 		void loadCache(ResourceCache.PluginCacheEntry cache)
 		{
+			properties = cache.properties;
+			classes = cache.classes;
+
 			if(cache.actionsURI != null)
 			{
 				actions = new ActionSet(this,
-					cache.actionsURI,
 					cache.cachedActionNames);
 			}
 			if(cache.dockablesURI != null)
 			{
 				DockableWindowManager.cacheDockableWindows(this,
-					cache.dockablesURI,
 					cache.cachedDockableNames,
 					cache.cachedDockableActionFlags);
+			}
+			if(cache.servicesURI != null)
+			{
+				for(int i = 0; i < cache.cachedServices.length;
+					i++)
+				{
+					ServiceManager.Descriptor d
+					 	= cache.cachedServices[i];
+					ServiceManager.registerService(d);
+				}
 			}
 		} //}}}
 
@@ -402,6 +483,13 @@ public abstract class EditPlugin
 		ResourceCache.PluginCacheEntry generateCache()
 			throws IOException
 		{
+			properties = new ArrayList();
+			classes = new HashSet();
+
+			//XXX: need to unload action set, dockables, services
+			// if plugin core class didn't load.
+			ZipFile zipFile = getZipFile();
+
 			ResourceCache.PluginCacheEntry cache
 				= new ResourceCache.PluginCacheEntry();
 
@@ -414,41 +502,79 @@ public abstract class EditPlugin
 				String lname = name.toLowerCase();
 				if(lname.equals("actions.xml"))
 				{
-					URL actionsURI = classLoader.getResource(name);
-					actions = new ActionSet(
-						this,
-						actionsURI,
-						null);
-					actions.load();
-					jEdit.addActionSet(actions);
-
+					actionsURI = classLoader.getResource(name);
 					cache.actionsURI = actionsURI;
-					cache.cachedActionNames = actions.getActionNames();
-					//XXX: dockable actions
 				}
 				else if(lname.equals("dockables.xml"))
 				{
-					URL dockablesURI = classLoader.getResource(name);
-					DockableWindowManager.loadDockableWindows(this,
-						dockablesURI);
-
+					dockablesURI = classLoader.getResource(name);
 					cache.dockablesURI = dockablesURI;
-					//cache.cachedDockableNames = 
-					//cache.cachedDockableActionFlags =
 				}
 				else if(lname.equals("services.xml"))
 				{
-					URL servicesURI = classLoader.getResource(name);
-					ServiceManager.loadServices(this,servicesURI);
-					//XXX: cache
+					servicesURI = classLoader.getResource(name);
+					cache.servicesURI = servicesURI;
 				}
 				else if(lname.endsWith(".props"))
 					properties.add(classLoader.getResource(name));
 				else if(name.endsWith(".class"))
-					classes.add(MiscUtilities.fileToClass(name));
+				{
+					String className = MiscUtilities
+						.fileToClass(name);
+					if(className.endsWith("Plugin"))
+					{
+						classLoader.pluginClasses.add(name);
+						generateCacheForPluginCoreClass(className,cache);
+					}
+					classes.add(className);
+				}
+			}
+
+			cache.properties = properties;
+			cache.classes = classes;
+
+			loadProperties();
+
+			if(actionsURI != null)
+			{
+				actions = new ActionSet(this,null);
+				actions.load();
+				jEdit.addActionSet(actions);
+				cache.cachedActionNames =
+					actions.getCacheableActionNames();
+			}
+
+			if(dockablesURI != null)
+			{
+				DockableWindowManager.loadDockableWindows(this,
+					dockablesURI);
+				//XXX: filling out cache fields
+			}
+
+			if(servicesURI != null)
+			{
+				ServiceManager.loadServices(this,servicesURI);
 			}
 
 			return cache;
+		} //}}}
+
+		//{{{ loadProperties() method
+		void loadProperties() throws IOException
+		{
+			if(propertiesLoaded)
+				return;
+
+			propertiesLoaded = true;
+
+			Iterator iter = properties.iterator();
+			while(iter.hasNext())
+			{
+				URL propFile = (URL)iter.next();
+				jEdit.loadProps(
+					propFile.openStream(),
+					true);
+			}
 		} //}}}
 
 		//{{{ getPropertyFiles() method
@@ -463,9 +589,34 @@ public abstract class EditPlugin
 			return classes;
 		} //}}}
 
+		//{{{ closeZipFile() method
+		/**
+		 * Closes the ZIP file. This plugin will no longer be usable
+		 * after this.
+		 * @since jEdit 4.2pre1
+		 */
+		public void closeZipFile()
+		{
+			if(zipFile == null)
+				return;
+
+			try
+			{
+				zipFile.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+			}
+
+			zipFile = null;
+		} //}}}
+
 		//}}}
 
 		//{{{ Private members
+
+		//{{{ Instance variables
 		private String path;
 		private JARClassLoader classLoader;
 		private ZipFile zipFile;
@@ -473,10 +624,83 @@ public abstract class EditPlugin
 		private List properties;
 		private Set classes;
 		private ActionSet actions;
+
+		private URL actionsURI;
+		private URL dockablesURI;
+		private URL servicesURI;
+
+		private boolean propertiesLoaded;
+		//}}}
+
+		//{{{ generateCacheForPluginCoreClass() method
+		private void generateCacheForPluginCoreClass(String name,
+			ResourceCache.PluginCacheEntry cache)
+		{
+			// Check if a plugin with the same name is already loaded
+			/* EditPlugin[] plugins = jEdit.getPlugins();
+	
+			for(int i = 0; i < plugins.length; i++)
+			{
+				if(plugins[i].getClass().getName().equals(name))
+				{
+					jEdit.pluginError(path,
+						"plugin-error.already-loaded",null);
+					return;
+				}
+			} */
+
+			/* This is a bit silly... but WheelMouse seems to be
+			 * unmaintained so the best solution is to add a hack here.
+			 */
+			/* if(name.equals("WheelMousePlugin")
+				&& OperatingSystem.hasJava14())
+			{
+				plugins.add(new EditPlugin.Broken(name));
+				cache.addBrokenPlugin(name);
+				jEdit.pluginError(path,"plugin-error.obsolete",null);
+				return;
+			} */
+
+			// XXX: this should not be part of the cache stage,
+			// full stop!
+
+			// XXX: what if failed dependencies fuck this up
+			// XXX: right way is to do full dep check in cache
+			// creation, and add dependent plugins to another
+			// collection in the cache object
+			/* Class clazz = classLoader.loadClass(name,false);
+			int modifiers = clazz.getModifiers();
+			if(Modifier.isInterface(modifiers)
+				|| Modifier.isAbstract(modifiers)
+				|| !EditPlugin.class.isAssignableFrom(clazz))
+			{
+				// not a real plugin core class
+				return;
+			}
+
+			//XXX: store these in instance vars
+			String label = jEdit.getProperty("plugin."
+				+ name + ".name");
+			String version = jEdit.getProperty("plugin."
+				+ name + ".version");
+
+			if(name == null || version == null)
+			{
+				Log.log(Log.ERROR,this,"Plugin " +
+					name + " needs"
+					+ " 'name' and 'version' properties.");
+				plugins.add(new EditPlugin.Broken(name));
+				return;
+			}
+
+			// XXX: this is no good
+			actionSet.setLabel(jEdit.getProperty(
+				"action-set.plugin",
+				new String[] { label }));
+
+			plugins.add(new EditPlugin.Deferred(name)); */
+		} //}}}
+
 		//}}}
 	} //}}}
-
-	//{{{ Private members
-	private EditPlugin.JAR jar;
-	//}}}
 }

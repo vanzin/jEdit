@@ -109,21 +109,19 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ getExpandedDirectories() method
-	public Set getExpandedDirectories()
+	public void getExpandedDirectories(Set set)
 	{
 		VFSDirectoryEntryTableModel model
 			= (VFSDirectoryEntryTableModel)getModel();
 
-		HashSet returnValue = new HashSet();
 		if(model.files != null)
 		{
 			for(int i = 0; i < model.files.length; i++)
 			{
 				if(model.files[i].expanded)
-					returnValue.add(model.files[i].dirEntry.path);
+					set.add(model.files[i].dirEntry.path);
 			}
 		}
-		return returnValue;
 	} //}}}
 
 	//{{{ toggleExpanded() method
@@ -143,18 +141,37 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ setDirectory() method
-	public void setDirectory(Object node, ArrayList list)
+	public void setDirectory(Object node, ArrayList list, Set tmpExpanded)
 	{
 		timer.stop();
 		typeSelectBuffer.setLength(0);
 
+		VFSDirectoryEntryTableModel model = ((VFSDirectoryEntryTableModel)getModel());
+		int startIndex;
 		if(node == null)
-			((VFSDirectoryEntryTableModel)getModel()).setRoot(list);
+		{
+			startIndex = 0;
+			model.setRoot(list);
+		}
 		else
 		{
-			((VFSDirectoryEntryTableModel)getModel()).expand(
+			startIndex =
+				model.expand(
 				(VFSDirectoryEntryTableModel.Entry)node,
 				list);
+			startIndex++;
+		}
+
+		for(int i = 0; i < list.size(); i++)
+		{
+			VFSDirectoryEntryTableModel.Entry e
+				= model.files[startIndex + i];
+			String path = e.dirEntry.path;
+			if(tmpExpanded.contains(path))
+			{
+				browserView.loadDirectory(e,path);
+				tmpExpanded.remove(path);
+			}
 		}
 
 		resizeColumnsAppropriately();

@@ -193,27 +193,27 @@ public class DockableWindowManager extends JPanel
 	/**
 	 * @since jEdit 4.2pre1
 	 */
-	public static void cacheDockableWindows(EditPlugin.JAR plugin, URL uri,
+	public static void cacheDockableWindows(EditPlugin.JAR plugin,
 		String[] name, boolean[] actions)
 	{
 		for(int i = 0; i < name.length; i++)
 		{
 			Factory factory = new Factory(plugin,
-				name[i],uri,null,actions[i]);
+				name[i],null,actions[i]);
 			dockableWindowFactories.put(name,factory);
 		}
 	} //}}}
 
 	//{{{ registerDockableWindow() method
 	public static void registerDockableWindow(EditPlugin.JAR plugin,
-		URL uri, String name, String code, boolean actions)
+		String name, String code, boolean actions)
 	{
 		Factory factory = (Factory)dockableWindowFactories.get(name);
 		if(factory != null)
 			factory.code = code;
 		else
 		{
-			factory = new Factory(plugin,name,uri,code,actions);
+			factory = new Factory(plugin,name,code,actions);
 			dockableWindowFactories.put(name,factory);
 		}
 	} //}}}
@@ -324,7 +324,7 @@ public class DockableWindowManager extends JPanel
 			{
 				if(tag == "DOCKABLE")
 				{
-					registerDockableWindow(plugin,uri,
+					registerDockableWindow(plugin,
 						dockableName,code,actions);
 					// make default be true for the next
 					// action
@@ -401,17 +401,15 @@ public class DockableWindowManager extends JPanel
 
 		EditPlugin.JAR plugin;
 		String name;
-		URL uri;
 		String code;
 		boolean loaded;
 
 		//{{{ Factory constructor
-		Factory(EditPlugin.JAR plugin, String name, URL uri,
-			String code, boolean actions)
+		Factory(EditPlugin.JAR plugin, String name, String code,
+			boolean actions)
 		{
 			this.plugin = plugin;
 			this.name = name;
-			this.uri = uri;
 			this.code = code;
 
 			if(code != null)
@@ -425,6 +423,26 @@ public class DockableWindowManager extends JPanel
 				actionSet.addAction(new OpenAction(name));
 				actionSet.addAction(new ToggleAction(name));
 				actionSet.addAction(new FloatAction(name));
+
+				String label = jEdit.getProperty(name
+					+ ".label");
+				if(label == null)
+					label = "NO LABEL PROPERTY: " + name;
+
+				String[] args = { label };
+				jEdit.setTemporaryProperty(name + ".label",
+					label);
+				jEdit.setTemporaryProperty(name
+					+ "-toggle.label",
+					jEdit.getProperty(
+					"view.docking.toggle.label",args));
+				jEdit.setTemporaryProperty(name
+					+ "-toggle.toggle","true");
+				jEdit.setTemporaryProperty(name
+					+ "-float.label",
+					jEdit.getProperty(
+					"view.docking.float.label",args));
+				
 			}
 		} //}}}
 
@@ -434,7 +452,7 @@ public class DockableWindowManager extends JPanel
 			if(loaded)
 				return;
 
-			loadDockableWindows(plugin,uri);
+			loadDockableWindows(plugin,plugin.getDockablesURI());
 		} //}}}
 
 		//{{{ createDockableWindow() method
@@ -508,12 +526,6 @@ public class DockableWindowManager extends JPanel
 					.toggleDockableWindow(dockable);
 			} //}}}
 
-			//{{{ isToggle() method
-			public boolean isToggle()
-			{
-				return true;
-			} //}}}
-
 			//{{{ isSelected() method
 			public boolean isSelected(View view)
 			{
@@ -526,13 +538,6 @@ public class DockableWindowManager extends JPanel
 			{
 				return "view.getDockableWindowManager()"
 					+ ".toggleDockableWindow(\"" + dockable + "\");";
-			} //}}}
-
-			//{{{ getLabel() method
-			public String getLabel()
-			{
-				String[] args = { jEdit.getProperty(dockable + ".label") };
-				return jEdit.getProperty("view.docking.toggle.label",args);
 			} //}}}
 		} //}}}
 
@@ -560,13 +565,6 @@ public class DockableWindowManager extends JPanel
 			{
 				return "view.getDockableWindowManager()"
 					+ ".floatDockableWindow(\"" + dockable + "\");";
-			} //}}}
-
-			//{{{ getLabel() method
-			public String getLabel()
-			{
-				String[] args = { jEdit.getProperty(dockable + ".label") };
-				return jEdit.getProperty("view.docking.float.label",args);
 			} //}}}
 		} //}}}
 	} //}}}

@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 public class EnhancedButton extends RolloverButton
 {
 	//{{{ EnhancedButton constructor
-	public EnhancedButton(Icon icon, String toolTip, EditAction action)
+	public EnhancedButton(Icon icon, String toolTip, String action)
 	{
 		super(icon);
 
@@ -58,7 +58,7 @@ public class EnhancedButton extends RolloverButton
 	} //}}}
 
 	//{{{ Private members
-	private EditAction action;
+	private String action;
 	//}}}
 
 	//{{{ MouseHandler class
@@ -66,18 +66,18 @@ public class EnhancedButton extends RolloverButton
 	{
 		public void mouseEntered(MouseEvent evt)
 		{
-			String msg = action.getMouseOverText();
+			/* String msg = action.getMouseOverText();
 			if(msg != null)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(msg);
-			}
+			} */
 		}
 
 		public void mouseExited(MouseEvent evt)
 		{
-			GUIUtilities.getView((Component)evt.getSource())
-				.getStatus().setMessage(null);
+			/* GUIUtilities.getView((Component)evt.getSource())
+				.getStatus().setMessage(null); */
 		}
 	} //}}}
 }
