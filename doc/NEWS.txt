@@ -8,9 +8,10 @@ for future extension.
 * Incompatible changes
 
 - jEdit now requires Java 2 version 1.3 or later. It will no longer work
-  with Java 1.1 or Java 2 version 1.2. Also, some aspects of the plugin
-  API have changed; make sure your installed plugins are their latest
-  versions.
+  with Java 1.1 or Java 2 version 1.2.
+
+- Some aspects of the plugin API have changed; make sure your installed
+  plugins are their latest versions.
 
 - If you added macros to the context menu or tool bar, or assigned
   shortcuts to macros using jEdit 3.2.2 or earlier, you will need to
@@ -28,8 +29,8 @@ for future extension.
 
 * Major user-visible changes
 
-- Rewritten buffer code: this results in decreased footprint, faster
-  file loading, _much_ faster directory search, and more.
+- Rewritten buffer code: this results in decreased memory footprint,
+  faster file loading, _much_ faster directory search, and more.
 
 - Rewritten folding code. Fold visibility can now be changed on a
   per-text area basis, and "explicit" folding (where the buffer is

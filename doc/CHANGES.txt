@@ -29,6 +29,8 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed typo in General option pane
 - Fixed race condition in work thread pool that could result in blank
   files on startup
+- Fixed typo in css.xml
+- Fixed minor problem in HTML version of user's guide
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
