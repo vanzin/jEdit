@@ -93,26 +93,22 @@ public class PositionManager
 
 		if(gapStartsAt != null)
 		{
-			if(gapStartsAt.offset < offset)
+			if(gapStartsAt.getOffset() < offset)
 			{
-				System.err.println("case 1");
 				root.contentInserted(gapStartsAt.getOffset(),
 					offset - 1,gapWidth);
 			}
 			else
 			{
-				System.err.println("case 2");
 				root.contentInserted(offset + 1,
 					gapStartsAt.getOffset() - 1,-gapWidth);
 			}
 		}
 
-		System.err.println("lowest=" + lowest);
 		gapStartsAt = lowest;
 		gapWidth += length;
 		if(gapWidth == 0)
 			gapStartsAt = null;
-		System.err.println("gapWidth=" + gapWidth);
 	} //}}}
 
 	//{{{ contentRemoved() method
@@ -128,30 +124,24 @@ public class PositionManager
 		if(lowest == null)
 			return;
 
-		if(gapStartsAt != null)
+		if(gapStartsAt != null && gapStartsAt.getOffset() < offset)
 		{
-			if(gapStartsAt.offset < offset)
-			{
-				System.err.println("case 1");
-				root.contentRemoved(gapStartsAt.getOffset(),
-					offset,offset + length,gapWidth,true);
-			}
-			else if(gapStartsAt.offset > offset + length)
-			{
-				System.err.println("case 2");
-				root.contentRemoved(offset,offset + length,
-					gapStartsAt.getOffset() - 1,
-					gapWidth,false);
-			}
-			else
-			{
-				System.err.println("case 3");
-				root.contentRemoved(offset,offset + length,
-					offset + length,gapWidth,false);
-			}
+			root.contentRemoved(gapStartsAt.getOffset(),
+				offset,offset + length,length,true);
+		}
+		else if(gapStartsAt != null && gapStartsAt.getOffset()
+			> offset + length)
+		{
+			root.contentRemoved(offset,offset + length,
+				gapStartsAt.getOffset() - 1,
+				length,false);
+		}
+		else
+		{
+			root.contentRemoved(offset,offset + length,
+				offset + length,length,false);
 		}
 
-		System.err.println("lowest=" + lowest);
 		gapStartsAt = lowest;
 		gapWidth -= length;
 		if(gapWidth == 0)
@@ -575,20 +565,19 @@ public class PositionManager
 			}
 			else
 			{
-				System.err.println(this);
 				if(bias)
 				{
 					if(getOffset() >= p2)
-						offset = p2 - length;
+						offset = p2 - gapWidth + length;
 					else
-						offset += length;
+						offset += gapWidth;
 				}
 				else
 				{
 					if(getOffset() <= p2)
-						offset = p2 - length;
+						offset = p1 - gapWidth + length;
 					else
-						offset -= length;
+						offset -= gapWidth;
 				}
 
 				if(left != null)

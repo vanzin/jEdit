@@ -89,6 +89,9 @@ contributing to this release.
 - Triple clicking to select a line did not place the line in the %
   register.
 
+- Various combinations of insertions and removes could mess up floating
+  positions.
+
 }}}
 {{{ API Additions
 
