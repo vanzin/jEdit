@@ -6,26 +6,6 @@ and quirks that I need to fix eventually.
 wrap guide doesn't always appear, and new files have incorrect wrap
 setting.
 
-[error] EditBus: java.lang.NullPointerException
-[error] EditBus:  at org.gjt.sp.jedit.textarea.ScreenLineManager.isScreenLineCountValid(ScreenLineManager.java:51)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager.updateScreenLineCount(DisplayManager.java:1136)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager.access$100(DisplayManager.java:39)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager$FirstLine.reset(DisplayManager.java:1332)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager.notifyScreenLineChanges(DisplayManager.java:648)
-[error] EditBus:  at org.gjt.sp.jedit.textarea.JEditTextArea.propertiesChanged(JEditTextArea.java:4902)
-
-[error] JEditTextArea: BUG: screenLine=-1,visibleLines=60,physicalLine=0,firstPhysicalLine=7,lastPhysicalLine=66
-[error] AWT-EventQueue-0: java.lang.NullPointerException
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollTo(JEditTextArea.java:755)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollToCaret(JEditTextArea.java:612)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea._finishCaretUpdate(JEditTextArea.java:5271)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.finishCaretUpdate(JEditTextArea.java:5386)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2114)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2077)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.setCaretPosition(JEditTextArea.java:2044)
-
-- even with no edits, scrolling got screwed
-
 - blank space at end
 - word wrap at wrong place
 
