@@ -7,22 +7,22 @@
 <ACTIONS>
 	<ACTION NAME="quicknotepad.choose-file">
 		<CODE>
-			view.getDockableWindowManager()
-				.getDockable(QuickNotepadPlugin.NAME).chooseFile();
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="quicknotepad.save-file">
 		<CODE>
-			view.getDockableWindowManager()
-				.getDockable(QuickNotepadPlugin.NAME).saveFile();
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
 		</CODE>
 	</ACTION>
 
 	<ACTION NAME="quicknotepad.copy-to-buffer">
 		<CODE>
-			view.getDockableWindowManager()
-				.getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
 		</CODE>
 	</ACTION>
 </ACTIONS>

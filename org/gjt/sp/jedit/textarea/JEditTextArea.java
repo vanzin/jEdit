@@ -1904,7 +1904,10 @@ forward_scan:		do
 	 */
 	public void setSelectedText(String selectedText)
 	{
-		setSelectedText(selectedText,true);
+		int newCaret = replaceSelection(selectedText);
+		if(newCaret != -1)
+			moveCaretPosition(newCaret);
+		selectNone();
 	} //}}}
 
 	//{{{ setSelectedText() method
@@ -1918,14 +1921,31 @@ forward_scan:		do
 	 */
 	public void setSelectedText(String selectedText, boolean moveCaret)
 	{
-		if(!isEditable())
-		{
-			throw new InternalError("Text component"
-				+ " read only");
-		}
+		int newCaret = replaceSelection(selectedText);
+		if(moveCaret && newCaret != -1)
+			moveCaretPosition(newCaret);
+		selectNone();
+	} //}}}
 
-		Selection[] selection = getSelection();
-		if(selection.length == 0)
+	//{{{ replaceSelection() method
+	/**
+	 * Set the selection, but does not deactivate it, and does not move the
+	 * caret.
+	 *
+	 * Please use {@link #setSelectedText(String)} instead.
+	 *
+	 * @param selectedText The new selection
+	 * @return The new caret position
+	 * @since 4.3pre1
+	 */
+	public int replaceSelection(String selectedText)
+	{
+		if(!isEditable())
+			throw new RuntimeException("Text component read only");
+
+		int newCaret = -1;
+
+		if(getSelectionCount() == 0)
 		{
 			// for compatibility with older jEdit versions
 			buffer.insert(caret,selectedText);
@@ -1934,25 +1954,20 @@ forward_scan:		do
 		{
 			try
 			{
-				int newCaret = -1;
 
 				buffer.beginCompoundEdit();
 
+				Selection[] selection = getSelection();
 				for(int i = 0; i < selection.length; i++)
-				{
 					newCaret = selection[i].setText(buffer,selectedText);
-				}
-
-				if(moveCaret)
-					moveCaretPosition(newCaret);
 			}
 			finally
 			{
 				buffer.endCompoundEdit();
 			}
 		}
-
-		selectNone();
+		
+		return newCaret;
 	} //}}}
 
 	//{{{ getSelectedLines() method
@@ -3268,97 +3283,39 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(ch == ' ' && Abbrevs.getExpandOnInput()
 			&& Abbrevs.expandAbbrev(view,false))
 			return;
-		else if(ch == '\t')
+
+		if(ch == '\t')
 		{
-			if(getSelectionCount() == 1)
-			{
-				Selection sel = getSelection(0);
-				if(sel instanceof Selection.Rect ||
-					(sel.startLine == sel.endLine
-					&& (sel.start != buffer.getLineStartOffset(sel.startLine)
-					|| sel.end != buffer.getLineEndOffset(sel.startLine) - 1)))
-				{
-					insertTab();
-				}
-				else
-					shiftIndentRight();
-			}
-			else if(getSelectionCount() != 0)
-				shiftIndentRight();
-			else
-				insertTab();
-			return;
+			userInputTab();
 		}
 		else
 		{
-			boolean indent;
-
 			// check if the user entered a bracket
 			String indentOpenBrackets = (String)buffer
 				.getProperty("indentOpenBrackets");
 			String indentCloseBrackets = (String)buffer
 				.getProperty("indentCloseBrackets");
-			if((indentCloseBrackets != null
+			boolean indent = ((indentCloseBrackets != null
 				&& indentCloseBrackets.indexOf(ch) != -1)
 				|| (indentOpenBrackets != null
-				&& indentOpenBrackets.indexOf(ch) != -1))
-			{
-				indent = true;
-			}
-			else
-			{
-				indent = false;
-			}
+				&& indentOpenBrackets.indexOf(ch) != -1));
 
 			String str = String.valueOf(ch);
-			Selection[] selection = getSelection();
-			if(selection.length != 0)
+			if(getSelectionCount() == 0)
 			{
-				for(int i = 0; i < selection.length; i++)
+				if(ch == ' ')
 				{
-					Selection s = selection[i];
-					setSelectedText(s,str);
-					/* if(s instanceof Selection.Rect)
-					{
-						addToSelection(new Selection.Rect(
-							s.start + 1,s.end + 1));
-					} */
+					if(!doWordWrap(true))
+						insert(str,indent);
 				}
-				return;
-			}
-
-			if(ch == ' ')
-			{
-				if(doWordWrap(true))
-					return;
+				else
+				{
+					doWordWrap(false);
+					insert(str,indent);
+				}
 			}
 			else
-				doWordWrap(false);
-
-			try
-			{
-				// Don't overstrike if we're on the end of
-				// the line
-				if(overwrite || indent)
-					buffer.beginCompoundEdit();
-
-				if(overwrite)
-				{
-					int caretLineEnd = getLineEndOffset(caretLine);
-					if(caretLineEnd - caret > 1)
-						buffer.remove(caret,1);
-				}
-
-				buffer.insert(caret,str);
-
-				if(indent)
-					buffer.indentLine(caretLine,true);
-			}
-			finally
-			{
-				if(overwrite || indent)
-					buffer.endCompoundEdit();
-			}
+				replaceSelection(str);
 		}
 	} //}}}
 
@@ -5429,6 +5386,35 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
+	//{{{ insert() method
+	private void insert(String str, boolean indent)
+	{
+		try
+		{
+			// Don't overstrike if we're on the end of
+			// the line
+			if(overwrite || indent)
+				buffer.beginCompoundEdit();
+
+			if(overwrite)
+			{
+				int caretLineEnd = getLineEndOffset(caretLine);
+				if(caretLineEnd - caret > 1)
+					buffer.remove(caret,1);
+			}
+
+			buffer.insert(caret,str);
+
+			if(indent)
+				buffer.indentLine(caretLine,true);
+		}
+		finally
+		{
+			if(overwrite || indent)
+				buffer.endCompoundEdit();
+		}
+	} //}}}
+
 	//{{{ insertTab() method
 	private void insertTab()
 	{
@@ -5455,13 +5441,35 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			}
 
-			setSelectedText(MiscUtilities.createWhiteSpace(
+			replaceSelection(MiscUtilities.createWhiteSpace(
 				tabSize - pos,0));
 		}
 		else
-			setSelectedText("\t");
+			replaceSelection("\t");
 	} //}}}
 
+	//{{{ userInputTab() method
+	private void userInputTab()
+	{
+		if(getSelectionCount() == 1)
+		{
+			Selection sel = getSelection(0);
+			if(sel instanceof Selection.Rect ||
+				(sel.startLine == sel.endLine
+				&& (sel.start != buffer.getLineStartOffset(sel.startLine)
+				|| sel.end != buffer.getLineEndOffset(sel.startLine) - 1)))
+			{
+				insertTab();
+			}
+			else
+				shiftIndentRight();
+		}
+		else if(getSelectionCount() != 0)
+			shiftIndentRight();
+		else
+			insertTab();
+	} //}}}
+	
 	//{{{ doWordWrap() method
 	/**
 	 * Does hard wrap.

@@ -50,6 +50,11 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 - When closing jEdit, open buffers are not added to the "Recent Files"
   list if the "Restore previously open files on startup" option is on.
 
+- View.goToBuffer() will try to find a non-zero height text area if
+  possible.
+
+- Pressing TAB now preserves the tall caret, if there is one.
+
 }}}
 {{{ Bug Fixes
 
@@ -74,6 +79,12 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
   containing unmatched brackets.
 
 - Macros written in the UTF-8Y and UTF-16 encodings are auto-detected.
+
+- The "deselecting this plugin will deselect dependencies" message did
+  not give the actual list of dependencies.
+
+- Fixed NullPointerException when selecting QuickNotepad menu items
+  before opening QuickNotepad first.
 
 }}}
 {{{ API Changes
