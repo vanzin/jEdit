@@ -1677,7 +1677,7 @@ loop:		for(;;)
 			if(!buffer.isLoaded())
 				return;
 
-			screenLineMgr.contentRemoved(startLine,numLines);
+			delayedMultilineUpdate = true;
 
 			if(textArea.getDisplayManager() == DisplayManager.this)
 			{
@@ -1700,7 +1700,7 @@ loop:		for(;;)
 			if(numLines == 0)
 				return;
 
-			delayedMultilineUpdate = true;
+			screenLineMgr.contentRemoved(startLine,numLines);
 
 			int endLine = startLine + numLines;
 
