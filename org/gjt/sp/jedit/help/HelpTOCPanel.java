@@ -449,8 +449,8 @@ class HelpTOCPanel extends JPanel
 			EditPlugin p1 = (EditPlugin)o1;
 			EditPlugin p2 = (EditPlugin)o2;
 			return MiscUtilities.compareStrings(
-				jEdit.getProperty("plugin." + p1 + ".name"),
-				jEdit.getProperty("plugin." + p2 + ".name"),
+				jEdit.getProperty("plugin." + p1.getClassName() + ".name"),
+				jEdit.getProperty("plugin." + p2.getClassName() + ".name"),
 				true);
 		}
 	} //}}}
