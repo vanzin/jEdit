@@ -689,6 +689,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		int x = textArea.getHorizontalOffset();
 
 		int height = fm.getHeight();
+		if(height == 0)
+			return;
+
 		int firstInvalid = clipRect.y / height;
 		// Because the clipRect's height is usually an even multiple
 		// of the font height, we subtract 1 from it, otherwise one

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2003 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,10 +29,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class LogViewer extends JPanel implements DefaultFocusComponent
+public class LogViewer extends JPanel implements DefaultFocusComponent,
+	EBComponent
 {
 	//{{{ LogViewer constructor
 	public LogViewer()
@@ -79,6 +81,15 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		dim.width = Math.min(600,dim.width);
 		scroller.setPreferredSize(dim);
 		add(BorderLayout.CENTER,scroller);
+
+		propertiesChanged();
+	} //}}}
+
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof PropertiesChanged)
+			propertiesChanged();
 	} //}}}
 
 	//{{{ addNotify() method
@@ -90,6 +101,16 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			int index = list.getModel().getSize() - 1;
 			list.ensureIndexIsVisible(index);
 		}
+
+		EditBus.addToBus(this);
+	} //}}}
+
+	//{{{ removeNotify() method
+	public void removeNotify()
+	{
+		super.removeNotify();
+
+		EditBus.removeFromBus(this);
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
@@ -103,6 +124,13 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	private JButton copy;
 	private JCheckBox tail;
 	private boolean tailIsOn;
+
+	//{{{ propertiesChanged() method
+	private void propertiesChanged()
+	{
+		list.setFont(jEdit.getFontProperty("view.font"));
+	} //}}}
+
 	//}}}
 
 	//{{{ ActionHandler class
@@ -186,7 +214,6 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		{
 			super(model);
 			setVisibleRowCount(24);
-			setFont(jEdit.getFontProperty("view.font"));
 			getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			setAutoscrolls(true);

@@ -303,8 +303,7 @@ public class BufferOptions extends EnhancedDialog
 				cancel();
 			else if(source == mode)
 			{
-				Mode _mode = jEdit.getMode((String)
-					mode.getSelectedItem());
+				Mode _mode = (Mode)mode.getSelectedItem();
 				folding.setSelectedItem(_mode.getProperty(
 					"folding"));
 				wrap.setSelectedItem(_mode.getProperty(
