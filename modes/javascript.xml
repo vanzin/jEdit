@@ -40,7 +40,7 @@
 
 		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 
-		<SEQ TYPE="NULL">&lt;!--</SEQ>
+		<SEQ TYPE="COMMENT1">&lt;!--</SEQ>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>

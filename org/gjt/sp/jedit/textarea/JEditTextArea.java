@@ -1731,18 +1731,24 @@ forward_scan:		do
 			selection.removeElement(s);
 		}
 
+		boolean reversed = false;
 		if(end < offset)
 		{
 			int tmp = offset;
 			offset = end;
 			end = tmp;
+			reversed = true;
 		}
 
 		Selection newSel;
 		if(rect)
 		{
-			newSel = new Selection.Rect(offset,end);
-			((Selection.Rect)newSel).extraEndVirt = extraEndVirt;
+			Selection.Rect rectSel = new Selection.Rect(offset,end);
+			if(reversed)
+				rectSel.extraStartVirt = extraEndVirt;
+			else
+				rectSel.extraEndVirt = extraEndVirt;
+			newSel = rectSel;
 		}
 		else
 			newSel = new Selection.Range(offset,end);
@@ -1801,7 +1807,7 @@ forward_scan:		do
 	public String getSelectedText(Selection s)
 	{
 		StringBuffer buf = new StringBuffer();
-		getSelectedText(s,buf);
+		s.getText(buffer,buf);
 		return buf.toString();
 	} //}}}
 
@@ -1823,7 +1829,7 @@ forward_scan:		do
 			if(i != 0)
 				buf.append(separator);
 
-			getSelectedText((Selection)selection.elementAt(i),buf);
+			((Selection)selection.elementAt(i)).getText(buffer,buf);
 		}
 
 		return buf.toString();
@@ -1858,121 +1864,7 @@ forward_scan:		do
 		{
 			buffer.beginCompoundEdit();
 
-			if(s instanceof Selection.Rect)
-			{
-				Selection.Rect rect = (Selection.Rect)s;
-				int start = rect.getStartColumn(buffer);
-				int end = rect.getEndColumn(buffer);
-
-				int[] total = new int[1];
-
-				int tabSize = buffer.getTabSize();
-
-				int maxWidth = 0;
-				int totalLines = 0;
-				ArrayList lines = new ArrayList();
-				if(selectedText != null)
-				{
-					int lastNewline = 0;
-					int currentWidth = start;
-					for(int i = 0; i < selectedText.length(); i++)
-					{
-						char ch = selectedText.charAt(i);
-						if(ch == '\n')
-						{
-							totalLines++;
-							lines.add(selectedText.substring(
-								lastNewline,i));
-							lastNewline = i + 1;
-							maxWidth = Math.max(maxWidth,currentWidth);
-							lines.add(new Integer(currentWidth));
-							currentWidth = start;
-						}
-						else if(ch == '\t')
-							currentWidth += tabSize - (currentWidth % tabSize);
-						else
-							currentWidth++;
-					}
-
-					if(lastNewline != selectedText.length())
-					{
-						totalLines++;
-						lines.add(selectedText.substring(lastNewline));
-						lines.add(new Integer(currentWidth));
-						maxWidth = Math.max(maxWidth,currentWidth);
-					}
-				}
-
-				int lastLine = Math.max(s.startLine + totalLines - 1,s.endLine);
-				for(int i = s.startLine; i <= lastLine; i++)
-				{
-					if(i == buffer.getLineCount())
-						buffer.insert(buffer.getLength(),"\n");
-
-					int lineStart = buffer.getLineStartOffset(i);
-					int lineLen = buffer.getLineLength(i);
-
-					int rectStart = buffer.getOffsetOfVirtualColumn(
-						i,start,total);
-					int startWhitespace;
-					if(rectStart == -1)
-					{
-						startWhitespace = (start - total[0]);
-						rectStart = lineLen;
-					}
-					else
-						startWhitespace = 0;
-
-					int rectEnd = buffer.getOffsetOfVirtualColumn(
-						i,end,null);
-					if(rectEnd == -1)
-						rectEnd = lineLen;
-
-					buffer.remove(rectStart + lineStart,rectEnd - rectStart);
-
-					int index = 2 * (i - s.startLine);
-
-					int endWhitespace;
-					if(rectEnd == lineLen)
-						endWhitespace = 0;
-					else if(i - s.startLine >= totalLines)
-						endWhitespace = maxWidth - start;
-					else
-					{
-						endWhitespace = maxWidth
-							- ((Integer)lines.get(index+1))
-							.intValue();
-					}
-
-					String str = (i - s.startLine >= totalLines
-						? "" : (String)lines.get(index));
-					if(str.length() != 0)
-					{
-						if(startWhitespace != 0)
-						{
-							buffer.insert(rectStart + lineStart,
-								MiscUtilities.createWhiteSpace(startWhitespace,0));
-						}
-
-						buffer.insert(rectStart + lineStart + startWhitespace,str);
-
-						if(endWhitespace != 0)
-						{
-							buffer.insert(rectStart + lineStart
-								+ startWhitespace + str.length(),
-								MiscUtilities.createWhiteSpace(endWhitespace,0));
-						}
-					}
-				}
-			}
-			else
-			{
-				buffer.remove(s.start,s.end - s.start);
-				if(selectedText != null && selectedText.length() != 0)
-				{
-					buffer.insert(s.start,selectedText);
-				}
-			}
+			moveCaretPosition(s.setText(buffer,selectedText));
 		}
 		// No matter what happends... stops us from leaving buffer
 		// in a bad state
@@ -2009,12 +1901,16 @@ forward_scan:		do
 		{
 			try
 			{
+				int newCaret = -1;
+
 				buffer.beginCompoundEdit();
 
 				for(int i = 0; i < selection.length; i++)
 				{
-					setSelectedText(selection[i],selectedText);
+					newCaret = selection[i].setText(buffer,selectedText);
 				}
+
+				moveCaretPosition(newCaret);
 			}
 			finally
 			{
@@ -4747,47 +4643,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ Deprecated methods
 
-	//{{{ setOrigin() method
-	/**
-	 * @deprecated Use setFirstLine() and setHorizontalOffset() instead
-	 */
-	public boolean setOrigin(int firstLine, int horizontalOffset)
-	{
-		setFirstLine(firstLine);
-		setHorizontalOffset(horizontalOffset);
-		return true;
-	} //}}}
-
-	//{{{ lineToY() method
-	/**
-	 * @deprecated Use <code>offsetToXY</code> instead.
-	 *
-	 * Converts a line index to a y co-ordinate. This must be a virtual,
-	 * not a physical, line number.
-	 * @param line The line
-	 */
-	public int lineToY(int line)
-	{
-		FontMetrics fm = painter.getFontMetrics();
-		return (line - firstLine) * fm.getHeight()
-			- (fm.getLeading() + fm.getDescent());
-	} //}}}
-
-	//{{{ yToLine() method
-	/**
-	 * @deprecated Use <code>xyToOffset</code> instead.
-	 *
-	 * Converts a y co-ordinate to a virtual line index.
-	 * @param y The y co-ordinate
-	 */
-	public int yToLine(int y)
-	{
-		FontMetrics fm = painter.getFontMetrics();
-		int height = fm.getHeight();
-		return Math.max(0,Math.min(getVirtualLineCount() - 1,
-			y / height + firstLine));
-	} //}}}
-
 	//{{{ offsetToX() method
 	/**
 	 * @deprecated Call <code>offsetToXY()</code> instead.
@@ -5290,27 +5145,28 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ _addToSelection() method
 	private void _addToSelection(Selection addMe)
 	{
-		// this is stupid but it makes things much simpler for
-		// the EditPane class
-		if(addMe.start < 0)
-			addMe.start = 0;
-		else if(addMe.end > buffer.getLength())
-			addMe.end = buffer.getLength();
-
 		if(addMe.start > addMe.end)
 		{
 			throw new IllegalArgumentException(addMe.start
 				+ " > " + addMe.end);
 		}
 		else if(addMe.start == addMe.end)
-			return;
+		{
+			if(addMe instanceof Selection.Range)
+				return;
+			else if(addMe instanceof Selection.Rect)
+			{
+				if(((Selection.Rect)addMe).extraEndVirt == 0)
+					return;
+			}
+		}
 
 		for(int i = 0; i < selection.size(); i++)
 		{
 			// try and merge existing selections one by
 			// one with the new selection
 			Selection s = (Selection)selection.elementAt(i);
-			if(_selectionsOverlap(s,addMe))
+			if(s.overlaps(addMe))
 			{
 				addMe.start = Math.min(s.start,addMe.start);
 				addMe.end = Math.max(s.end,addMe.end);
@@ -5340,60 +5196,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			selection.addElement(addMe);
 
 		invalidateLineRange(addMe.startLine,addMe.endLine);
-	} //}}}
-
-	//{{{ _selectionsOverlap() method
-	private boolean _selectionsOverlap(Selection s1, Selection s2)
-	{
-		if((s1.start >= s2.start && s1.start <= s2.end)
-			|| (s1.end >= s2.start && s1.end <= s2.end))
-			return true;
-		else
-			return false;
-	} //}}}
-
-	//{{{ getSelectedText() method
-	private void getSelectedText(Selection s, StringBuffer buf)
-	{
-		if(s instanceof Selection.Rect)
-		{
-			Selection.Rect rect = (Selection.Rect)s;
-			int start = rect.getStartColumn(buffer);
-			int end = rect.getEndColumn(buffer);
-
-			for(int i = s.startLine; i <= s.endLine; i++)
-			{
-				int lineStart = buffer.getLineStartOffset(i);
-				int lineLen = buffer.getLineLength(i);
-
-				int rectStart = buffer.getOffsetOfVirtualColumn(
-					i,start,null);
-				if(rectStart < 0)
-					rectStart = lineLen;
-
-				int rectEnd = buffer.getOffsetOfVirtualColumn(
-					i,end,null);
-				if(rectEnd < 0)
-					rectEnd = lineLen;
-
-				getText(lineStart + rectStart,rectEnd - rectStart,
-					lineSegment);
-				buf.append(lineSegment.array,
-					lineSegment.offset,
-					lineSegment.count);
-
-				if(i != s.endLine)
-					buf.append('\n');
-			}
-
-		}
-		else
-		{
-			getText(s.start,s.end - s.start,lineSegment);
-			buf.append(lineSegment.array,
-				lineSegment.offset,
-				lineSegment.count);
-		}
 	} //}}}
 
 	//{{{ finishCaretUpdate() method
@@ -6312,13 +6114,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				float dragStartLineWidth = offsetToXY(dragStartLine,
 					getLineLength(dragStartLine),returnValue).x;
 				int extraEndVirt;
-				if(evt.getX() > dragStartLineWidth)
+				int x = evt.getX();
+				if(x > dragStartLineWidth)
 				{
-					extraEndVirt = (int)((evt.getX()
-						- dragStartLineWidth) / charWidth);
+					extraEndVirt = (int)((x - dragStartLineWidth)
+						/ charWidth);
+					if(x % charWidth  > charWidth / 2)
+						extraEndVirt++;
 				}
 				else
 					extraEndVirt = 0;
+
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
 
@@ -6335,14 +6141,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(control)
 				{
 					int offset = xyToOffset(evt.getX(),evt.getY(),false);
-					buffer.getText(offset,1,lineSegment);
-					switch(lineSegment.array[lineSegment.offset])
+					if(offset != buffer.getLength())
 					{
-					case '(': case '[': case '{':
-					case ')': case ']': case '}':
-						moveCaretPosition(offset,false);
-						selectToMatchingBracket();
-						return;
+						buffer.getText(offset,1,lineSegment);
+						switch(lineSegment.array[lineSegment.offset])
+						{
+						case '(': case '[': case '{':
+						case ')': case ']': case '}':
+							moveCaretPosition(offset,false);
+							selectToMatchingBracket();
+							return;
+						}
 					}
 				}
 
@@ -6460,7 +6269,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				returnValue).x;
 			int extraEndVirt;
 			if(x > dotLineWidth)
+			{
 				extraEndVirt = (int)((x - dotLineWidth) / charWidth);
+				if(x % charWidth  > charWidth / 2)
+					extraEndVirt++;
+			}
 			else
 				extraEndVirt = 0;
 

@@ -207,21 +207,6 @@ public class Registers
 				Selection.Rect rect = new Selection.Rect(
 					caretLine,caret,caretLine,caret);
 				textArea.setSelectedText(rect,selection);
-
-				// move the caret down a line
-				if(!selection.endsWith("\n"))
-				{
-					Buffer buffer = textArea.getBuffer();
-					int col = rect.getStartColumn(buffer);
-					if(caretLine != buffer.getLineCount() - 1)
-					{
-						int offset = buffer.getOffsetOfVirtualColumn(
-							caretLine + 1,col,null);
-						textArea.moveCaretPosition(
-							buffer.getLineStartOffset(
-							caretLine + 1) + offset);
-					}
-				}
 			}
 			else
 				textArea.setSelectedText(selection);

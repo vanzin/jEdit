@@ -451,7 +451,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ RotatedTextIcon class
-	class RotatedTextIcon implements Icon
+	public static class RotatedTextIcon implements Icon
 	{
 		static final int NONE = 0;
 		static final int CW = 1;
@@ -459,6 +459,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		int rotate;
 		Font font;
+		String text;
 		GlyphVector glyphs;
 		float width;
 		float height;
@@ -473,6 +474,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 			FontRenderContext fontRenderContext
 				= new FontRenderContext(null,true,true);
+			this.text = text;
 			glyphs = font.createGlyphVector(fontRenderContext,text);
 			width = (int)glyphs.getLogicalBounds().getWidth() + 4;
 			//height = (int)glyphs.getLogicalBounds().getHeight();
@@ -538,6 +540,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ Counterclockwise rotation
 			else if(rotate == RotatedTextIcon.CCW)
 			{
+				System.err.println("painting " + text);
+				System.err.println("ascent = " + ascent + ", height = "
+					+ height + ", width = " + width);
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
 				trans.translate(x,y - 2);

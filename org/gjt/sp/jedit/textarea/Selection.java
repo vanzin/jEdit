@@ -22,9 +22,12 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import javax.swing.text.Segment;
+import java.util.ArrayList;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
+//}}}
 
 /**
  * An interface representing a portion of the current selection.
@@ -92,6 +95,21 @@ public abstract class Selection implements Cloneable
 		return endLine;
 	} //}}}
 
+	//{{{ overlaps() method
+	/**
+	 * Returns if this selection and the specified selection overlap.
+	 * @param s The other selection
+	 * @since jEdit 4.1pre1
+	 */
+	public boolean overlaps(Selection s)
+	{
+		if((start >= s.start && start <= s.end)
+			|| (end >= s.start && end <= s.end))
+			return true;
+		else
+			return false;
+	} //}}}
+
 	//{{{ toString() method
 	public String toString()
 	{
@@ -138,6 +156,9 @@ public abstract class Selection implements Cloneable
 		this.end = end;
 	} //}}}
 
+	// should the next two be public, maybe?
+	abstract void getText(Buffer buffer, StringBuffer buf);
+	abstract int setText(Buffer buffer, String text);
 	//}}}
 
 	//{{{ Range class
@@ -180,6 +201,25 @@ public abstract class Selection implements Cloneable
 				return end;
 			else
 				return buffer.getLineEndOffset(line) - 1;
+		} //}}}
+
+		//{{{ getText() method
+		void getText(Buffer buffer, StringBuffer buf)
+		{
+			buf.append(buffer.getText(start,end - start));
+		} //}}}
+
+		//{{{ setText() method
+		int setText(Buffer buffer, String text)
+		{
+			buffer.remove(start,end - start);
+			if(text != null && text.length() != 0)
+			{
+				buffer.insert(start,text);
+				return start + text.length();
+			}
+			else
+				return start;
 		} //}}}
 	} //}}}
 
@@ -251,20 +291,20 @@ public abstract class Selection implements Cloneable
 		public int getStartColumn(Buffer buffer)
 		{
 			int virtColStart = buffer.getVirtualWidth(startLine,
-				start - buffer.getLineStartOffset(startLine));
+				start - buffer.getLineStartOffset(startLine)) + extraStartVirt;
 			int virtColEnd = buffer.getVirtualWidth(endLine,
-				end - buffer.getLineStartOffset(endLine));
-			return Math.min(virtColStart,virtColEnd) + extraStartVirt;
+				end - buffer.getLineStartOffset(endLine)) + extraEndVirt;
+			return Math.min(virtColStart,virtColEnd);
 		} //}}}
 
 		//{{{ getEndColumn() method
 		public int getEndColumn(Buffer buffer)
 		{
 			int virtColStart = buffer.getVirtualWidth(startLine,
-				start - buffer.getLineStartOffset(startLine));
+				start - buffer.getLineStartOffset(startLine)) + extraStartVirt;
 			int virtColEnd = buffer.getVirtualWidth(endLine,
-				end - buffer.getLineStartOffset(endLine));
-			return Math.max(virtColStart,virtColEnd) + extraEndVirt;
+				end - buffer.getLineStartOffset(endLine)) + extraEndVirt;
+			return Math.max(virtColStart,virtColEnd);
 		} //}}}
 
 		//{{{ getStart() method
@@ -284,6 +324,161 @@ public abstract class Selection implements Cloneable
 		//{{{ Package-private members
 		int extraStartVirt;
 		int extraEndVirt;
+
+		//{{{ getText() method
+		void getText(Buffer buffer, StringBuffer buf)
+		{
+			int start = getStartColumn(buffer);
+			int end = getEndColumn(buffer);
+
+			for(int i = startLine; i <= endLine; i++)
+			{
+				int lineStart = buffer.getLineStartOffset(i);
+				int lineLen = buffer.getLineLength(i);
+
+				int rectStart = buffer.getOffsetOfVirtualColumn(
+					i,start,null);
+				if(rectStart == -1)
+					rectStart = lineLen;
+
+				int rectEnd = buffer.getOffsetOfVirtualColumn(
+					i,end,null);
+				if(rectEnd == -1)
+					rectEnd = lineLen;
+
+				buf.append(buffer.getText(lineStart + rectStart,
+					rectEnd - rectStart));
+
+				if(i != endLine)
+					buf.append('\n');
+			}
+		} //}}}
+
+		//{{{ setText() method
+		int setText(Buffer buffer, String text)
+		{
+			int startColumn = getStartColumn(buffer);
+			int endColumn = getEndColumn(buffer);
+
+			int[] total = new int[1];
+
+			int tabSize = buffer.getTabSize();
+
+			int maxWidth = 0;
+			int totalLines = 0;
+			ArrayList lines = new ArrayList();
+
+			//{{{ Split the text into lines
+			if(text != null)
+			{
+				int lastNewline = 0;
+				int currentWidth = startColumn;
+				for(int i = 0; i < text.length(); i++)
+				{
+					char ch = text.charAt(i);
+					if(ch == '\n')
+					{
+						totalLines++;
+						lines.add(text.substring(
+							lastNewline,i));
+						lastNewline = i + 1;
+						maxWidth = Math.max(maxWidth,currentWidth);
+						lines.add(new Integer(currentWidth));
+						currentWidth = startColumn;
+					}
+					else if(ch == '\t')
+						currentWidth += tabSize - (currentWidth % tabSize);
+					else
+						currentWidth++;
+				}
+
+				if(lastNewline != text.length())
+				{
+					totalLines++;
+					lines.add(text.substring(lastNewline));
+					lines.add(new Integer(currentWidth));
+					maxWidth = Math.max(maxWidth,currentWidth);
+				}
+			} //}}}
+
+			//{{{ Insert the lines into the buffer
+			int endOffset = 0;
+			int lastLine = Math.max(startLine + totalLines - 1,endLine);
+			for(int i = startLine; i <= lastLine; i++)
+			{
+				if(i == buffer.getLineCount())
+					buffer.insert(buffer.getLength(),"\n");
+
+				int lineStart = buffer.getLineStartOffset(i);
+				int lineLen = buffer.getLineLength(i);
+
+				int rectStart = buffer.getOffsetOfVirtualColumn(
+					i,startColumn,total);
+				int startWhitespace;
+				if(rectStart == -1)
+				{
+					startWhitespace = (startColumn - total[0]);
+					rectStart = lineLen;
+				}
+				else
+					startWhitespace = 0;
+
+				int rectEnd = buffer.getOffsetOfVirtualColumn(
+					i,endColumn,null);
+				if(rectEnd == -1)
+					rectEnd = lineLen;
+
+				buffer.remove(rectStart + lineStart,rectEnd - rectStart);
+
+				int index = 2 * (i - startLine);
+
+				int endWhitespace;
+				if(rectEnd == lineLen)
+					endWhitespace = 0;
+				else if(i - startLine >= totalLines)
+					endWhitespace = maxWidth - startColumn;
+				else
+				{
+					endWhitespace = maxWidth
+						- ((Integer)lines.get(index+1))
+						.intValue();
+				}
+
+				String str = (i - startLine >= totalLines
+					? "" : (String)lines.get(index));
+				if(startWhitespace != 0)
+				{
+					buffer.insert(rectStart + lineStart,
+						MiscUtilities.createWhiteSpace(startWhitespace,0));
+				}
+
+				buffer.insert(rectStart + lineStart + startWhitespace,str);
+
+				if(endWhitespace != 0)
+				{
+					buffer.insert(rectStart + lineStart
+						+ startWhitespace + str.length(),
+						MiscUtilities.createWhiteSpace(endWhitespace,0));
+				}
+
+				endOffset = rectStart + lineStart
+					+ startWhitespace
+					+ endWhitespace
+					+ str.length();
+			} //}}}
+
+			//{{{ Move the caret down a line
+			if(lastLine != buffer.getLineCount() - 1)
+			{
+				int offset = buffer.getOffsetOfVirtualColumn(
+					lastLine + 1,startColumn,null);
+				return buffer.getLineStartOffset(lastLine + 1) + offset;
+			}
+			else
+				return endOffset;
+			//}}}
+		} //}}}
+
 		//}}}
 
 		//{{{ Private members

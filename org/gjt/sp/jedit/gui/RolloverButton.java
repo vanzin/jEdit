@@ -22,11 +22,12 @@
 
 package org.gjt.sp.jedit.gui;
 
-//{{{ imports
+//{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import org.gjt.sp.jedit.OperatingSystem;
 //}}}
 
 /**
@@ -47,24 +48,23 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
-		setBorder(new EtchedBorder());
+		if(OperatingSystem.isMacOS())
+			setBorder(new EtchedBorder());
+
 		setBorderPainted(false);
 
 		addMouseListener(new MouseOverHandler());
 	} //}}}
-	
+
 	//{{{ RolloverButton constructor
 	/**
 	 * Setup the border (invisible initially)
 	 */
 	public RolloverButton(Icon icon)
 	{
-		super(icon);
+		this();
 
-		setBorder(new EtchedBorder());
-		setBorderPainted(false);
-
-		addMouseListener(new MouseOverHandler());
+		setIcon(icon);
 	} //}}}
 
 	//{{{ MouseHandler class
