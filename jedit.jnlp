@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<jnlp spec="1.0+" codebase="file:///home/slava/"
-  href="file:///home/slava/jEdit/jedit.jnlp">
+<jnlp spec="1.0+" codebase="http://prdownloads.sourceforge.net/jedit"
+  href="http://www.jedit.org/jedit_devel.jnlp">
   <information>
     <title>jEdit</title>
 
@@ -14,13 +14,14 @@
     editor.</description>
     <description kind="tooltip">jEdit text editor</description>
 
+    <icon href="jedit_icon1.gif" width="32" height="32" />
+
     <offline-allowed />
   </information>
 
   <resources>
-    <j2se version="1.2+" />
-    <jar href="jedit40pre2webstart.jar" />
-    <jar href="jedit40pre2webstart_aux1.jar" />
+    <j2se version="1.3+" />
+    <jar href="jedit40pre3webstart.jar" />
   </resources>
 
   <security>

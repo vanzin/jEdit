@@ -1,3 +1,0 @@
-Dirk Moebius <dmoebius@gmx.net> - wrote the plugin
-Slava Pestov <slava@jedit.org> - made a few changes to the plugin and bundled
-it with the jEdit core

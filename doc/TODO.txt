@@ -1,5 +1,6 @@
 TO DO
 
+- metal theme and web start
 - control clicks on closing brackets suck
 - jdk 1.4: fs browser text fields
 - jdk 1.4: still addToSelection() bug
@@ -80,7 +81,7 @@ TO DO
   - keyboard select file should activate open files -- or Enter press
 - drop LatestVersion plugin
 - roll Firewall plugin into core
-- web start version & submit to http://java.sun.com/getjava/showcase.html
+- submit to http://java.sun.com/getjava/showcase.html
 - <file>?line= or ?marker=
 - fold navigator to browse fold tree in explicit fold mode
 - reintroduce -bshclient command line switch
