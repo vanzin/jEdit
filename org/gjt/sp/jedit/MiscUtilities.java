@@ -799,6 +799,27 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return char1.length - char2.length;
 	} //}}}
 
+	//{{{ stringsEqual() method
+	/**
+	 * Returns if two strings are equal. This correctly handles null pointers,
+	 * as opposed to calling <code>s1.equals(s2)</code>.
+	 * @since jEdit 4.1pre5
+	 */
+	public static boolean stringsEqual(String s1, String s2)
+	{
+		if(s1 == null)
+		{
+			if(s2 == null)
+				return true;
+			else
+				return false;
+		}
+		else if(s2 == null)
+			return false;
+		else
+			return s1.equals(s2);
+	} //}}}
+
 	//}}}
 
 	//{{{ Sorting methods

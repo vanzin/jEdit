@@ -290,7 +290,8 @@ public class XModeHandler extends HandlerBase
 			//{{{ MODE
 			if (tag == "MODE")
 			{
-				mode.init();
+				// no need for this anymore
+				//mode.init();
 				mode.setTokenMarker(marker);
 			} //}}}
 			//{{{ PROPERTY

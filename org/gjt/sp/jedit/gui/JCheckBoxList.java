@@ -95,7 +95,7 @@ public class JCheckBoxList extends JTable
 			entry.checked = true;
 		}
 
-		model.fireTableStructureChanged();
+		model.fireTableRowsUpdated(0,model.getRowCount());
 	}
 
 	public Entry[] getValues()

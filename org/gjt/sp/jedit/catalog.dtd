@@ -1,5 +1,5 @@
 <!-- MODES element -->
-<!ELEMENT MODES ( MODE+ ) >
+<!ELEMENT MODES ( MODE* ) >
 
 <!-- MODE element -->
 <!ELEMENT MODE EMPTY >

@@ -491,13 +491,13 @@ public class VFSBrowser extends JPanel implements EBComponent
 			strippedPath = path;
 
 		pathField.setText(strippedPath);
-		this.path = strippedPath;
 
 		if(!startRequest())
 			return;
 
 		updateFilenameFilter();
 		browserView.loadDirectory(path);
+		this.path = strippedPath;
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
