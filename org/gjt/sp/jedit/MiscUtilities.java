@@ -104,6 +104,32 @@ public class MiscUtilities
 			return path;
 	} //}}}
 
+	//{{{ isPathAbsolute() method
+	/**
+	 * Returns if the specified path name is an absolute path or URL.
+	 * @since jEdit 4.1pre11
+	 */
+	public static boolean isAbsolutePath(String path)
+	{
+		if(isURL(path))
+			return true;
+		else if(OperatingSystem.isDOSDerived())
+		{
+			if(path.length() >= 2 && path.charAt(1) == ':')
+				return true;
+			if(path.startsWith("\\\\"))
+				return true;
+		}
+		else if(OperatingSystem.isUnix())
+		{
+			// nice and simple
+			if(path.length() > 0 && path.charAt(0) == '/')
+				return true;
+		}
+
+		return false;
+	} //}}}
+
 	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from a directory and another
@@ -150,7 +176,7 @@ public class MiscUtilities
 
 		if(OperatingSystem.isDOSDerived() && path.startsWith("\\"))
 			parent = parent.substring(0,2);
-		
+
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		return vfs.constructPath(parent,path);
 	} //}}}

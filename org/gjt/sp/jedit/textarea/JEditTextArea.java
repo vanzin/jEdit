@@ -5093,11 +5093,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		chunkCache.invalidateAll();
 
-		// physFirstLine should not be invisible
+		/* // physFirstLine should not be invisible
 		while(!foldVisibilityManager.isLineVisible(physFirstLine)
 			&& physFirstLine != 0)
+		{
 			physFirstLine--;
+		} */
 
+		physFirstLine = virtualToPhysical(firstLine);
 		setFirstLine(physicalToVirtual(physFirstLine));
 
 		// update scroll bars because the number of virtual lines might
