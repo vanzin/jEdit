@@ -1,6 +1,5 @@
-<!-- jEdit buffer-local properties:                              -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
-<!-- :collapseFolds=0:                                           -->
+<!-- jEdit buffer-local properties:                               -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 
 <chapter id="using-macros"><title>Using Macros</title>
   <para>
@@ -10,10 +9,9 @@
     as well as access to the objects and methods created by
     jEdit. Macros
     also provide a powerful facility for customizing jEdit and automating
-    complex text processing and programming tasks. In this section we
-    describe how to record and run macros. A detailed guide on
-    writing macros appears later in a separate part of the user's
-    guide; see <xref linkend="writing-macros-part"/>.
+    complex text processing and programming tasks. This section
+    describes how to record and run macros. A detailed guide on
+    writing macros appears later; see <xref linkend="writing-macros-part"/>.
   </para>
 
 <sect1 id="recording-macros"><title>Recording Macros</title>
@@ -49,9 +47,8 @@
   </itemizedlist>
 
   <para>
-   Mouse clicks in the text area are <emphasis>not</emphasis> recorded; to
-   record the equivalent of mouse operations, use the text selection commands
-   or arrow keys.
+   Mouse clicks in the text area are <emphasis>not</emphasis> recorded;
+   use text selection commands or arrow keys instead.
   </para>
 
   <para>
@@ -60,16 +57,18 @@
    <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) stops
    recording. It also switches to the buffer containing the recorded macro,
    giving you a chance to check over the recorded commands and make any
-   necessary changes. The file name extension <filename>.bsh</filename> is
-   automatically appended to the macro name, and all spaces are converted
-   to underscore characters, in order to make the macro name a valid file
-   name. These two operations are reversed when macros are displayed in the
-   <guimenu>Macros</guimenu> menu. See <xref linkend="organizing-macros"/>
-   for details. When you are happy with the macro, save the buffer and it
+   necessary changes. When you are happy with the macro, save the buffer and it
    will appear in the <guimenu>Macros</guimenu> menu. To discard the macro,
    close the buffer without saving it.
   </para>
-
+  <para>
+   The file name extension <filename>.bsh</filename> is
+   automatically appended to the macro name, and all spaces are converted
+   to underscore characters, in order to make the macro name a valid file
+   name. These two operations are reversed when macros are displayed in the
+   <guimenu>Macros</guimenu> menu; see <xref linkend="organizing-macros"/>
+   for details.
+  </para>
   <para>
    If a complicated operation only needs to be repeated a few
    times, using the temporary macro feature is quicker than saving a new
@@ -145,16 +144,6 @@
     <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>)
     runs the last macro run by jEdit again.
   </para>
-
-  <sidebar><title>Contributed macros</title>
-  <para>
-    A very large collection of macros contributed users of jEdit is available
-    in the <quote>Downloads</quote> section of the
-    <ulink url="http://community.jedit.org">jEdit
-    community</ulink> web site. There are detailed descriptions for
-    each macro as well as a search facility.
-  </para>
-  </sidebar>
 
 </sect1>
 

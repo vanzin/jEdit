@@ -42,7 +42,7 @@ CDATA DSSSL> ]>
 
 (element (listitem abstract) (process-children))
 
-(element (ulink) (process-children))
+(element (ulink) ($mono-seq$))
 
 </style-specification-body>
 </style-specification>

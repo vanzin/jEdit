@@ -1027,7 +1027,11 @@
 
 <ACTION NAME="select-none">
 	<CODE>
-		textArea.removeFromSelection(textArea.getCaretPosition());
+		s = textArea.getSelectionAtOffset(textArea.getCaretPosition());
+		if(s == null)
+			textArea.selectNone();
+		else
+			textArea.removeFromSelection(s);
 	</CODE>
 </ACTION>
 

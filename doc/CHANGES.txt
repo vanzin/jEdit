@@ -11,10 +11,23 @@ release.
 
 - Minor improvement to Python auto indent (Oliver Rutherfurd).
 
+- Invocations of 'Delete Line' are now undone one at a time.
+
+- Documentation updates.
+
 - FAQ updates (Kris Kopicki).
 
 - API documentation generated with javadoc is now included. A custom
   doclet is used to generate a tree view for the help viewer.
+
+- The installer now packs .tar.bz2 archives instead of storing files in
+  the JAR directly. Now that javadocs have been added to the core
+  distribution, the old installer balooned to 2.7Mb; the new installer
+  is only 1.4Mb.
+
+  To implement this the installer uses the com.aftexsw.util.bzip and
+  com.ice.tar libraries. Licensing info and home page links can be found
+  in README.txt.
 
 + Bug Fixes:
 
@@ -66,6 +79,9 @@ release.
   this time if the second split was narrowed.
 
 - Fixed obscure file system browser selection bug.
+
+- Fixed unnecessary repainting in text area, this should improve
+  performance.
 
 * Version 4.1pre9
 

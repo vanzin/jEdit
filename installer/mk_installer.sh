@@ -11,10 +11,9 @@ fi
 # By default, put it in your home directory
 DESTDIR=$HOME
 
-jar cfm $DESTDIR/jedit${1}install.jar installer/install.mf \
+jar cf0m $DESTDIR/jedit${1}install.jar installer/install.mf \
 	installer/install.props \
 	installer/*.html \
 	installer/*.class \
-	`cat installer/jedit-*` \
-	installer/jedit-* \
+	installer/jedit-*.tar.bz2 \
 	jedit.1

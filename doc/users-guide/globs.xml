@@ -14,7 +14,7 @@
   <listitem><para><literal>?</literal> matches any one character</para></listitem>
   <listitem><para><literal>*</literal> matches any number of characters</para></listitem>
   <listitem><para><literal>{!<replaceable>glob</replaceable>}</literal>
-  Matches anything that <emphasis>does not</emphasis> match
+  Matches anything that does <emphasis>not</emphasis> match
   <replaceable>glob</replaceable></para></listitem>
   <listitem><para><literal>{<replaceable>a</replaceable>,<replaceable>b</replaceable>,<replaceable>c</replaceable>}</literal>
   matches any one of <replaceable>a</replaceable>, <replaceable>b</replaceable> or
@@ -45,7 +45,7 @@
   <listitem><para><literal>[[:digit:]]</literal> matches a decimal digit</para></listitem>
   <listitem><para><literal>[[:graph:]]</literal> matches a non-space, non-control character</para></listitem>
   <listitem><para><literal>[[:lower:]]</literal> matches a lowercase letter</para></listitem>
-  <listitem><para><literal>[[:print:]]</literal> same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
+  <listitem><para><literal>[[:print:]]</literal> same as <literal>[[:graph:]]</literal>, but also space and tab</para></listitem>
   <listitem><para><literal>[[:punct:]]</literal> matches a punctuation character</para></listitem>
   <listitem><para><literal>[[:space:]]</literal> matches any whitespace character, including newlines</para></listitem>
   <listitem><para><literal>[[:upper:]]</literal> matches an uppercase letter</para></listitem>

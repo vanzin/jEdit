@@ -60,8 +60,10 @@ print_size jedit-os2
 
 #print_size jedit-source
 
+rm installer/jedit-*.tar.bz2
+
 for file in installer/jedit-*
 do
-	sort $file > $file.tmp
-	mv $file.tmp $file
+	tar cfj $file.tar.bz2 `cat $file`
+	rm $file
 done

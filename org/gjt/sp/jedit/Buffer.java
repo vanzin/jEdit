@@ -2050,6 +2050,7 @@ public class Buffer implements EBComponent
 				}
 			}
 
+			//System.err.println("tokenize from " + start + " to " + lineIndex);
 			for(int i = start; i <= lineIndex; i++)
 			{
 				getLineText(i,seg);
@@ -2062,6 +2063,7 @@ public class Buffer implements EBComponent
 				ParserRuleSet oldRules;
 				if(context == null)
 				{
+					//System.err.println(i + ": null context");
 					oldRule = null;
 					oldRules = null;
 				}
@@ -2080,9 +2082,15 @@ public class Buffer implements EBComponent
 				// recursive delegates, where the chaining might
 				// have changed but not the rule set in question (?)
 				if(oldRule != context.inRule)
+				{
+					//System.err.println(i + ": rules don't match" + oldRule + "," + context.inRule);
 					nextLineRequested = true;
+				}
 				else if(oldRules != context.rules)
+				{
+					//System.err.println(i + ": rule sets don't match: " + oldRules + "," + context.rules);
 					nextLineRequested = true;
+				}
 				//else if(i != lastTokenizedLine)
 				//	nextLineRequested = false;
 			}

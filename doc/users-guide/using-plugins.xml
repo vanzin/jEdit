@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 
 <chapter id="using-plugins"><title>Installing and Using Plugins</title>
  <para>
@@ -76,8 +76,8 @@
   </para>
   <sidebar><title>Proxy Servers and Firewalls</title>
    <para>
-    If you are connected to the Internet through an HTTP proxy or SOCKS firewall
-    or proxy, you will need to specify some details in the
+    If you are connected to the Internet through an HTTP proxy or SOCKS firewall,
+    you will need to specify the relevant details in the
     <guibutton>Proxy Servers</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box.

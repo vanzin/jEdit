@@ -199,7 +199,7 @@ How Plugins are Loaded</title>
   The resulting plugin core class is lightweight and straightforward to implement:
 </para>
 
-<itemizedlist><listitem><para>
+<itemizedlist><listitem>
 
 <informalexample><programlisting>public class QuickNotepadPlugin extends EditPlugin {
     public static final String NAME = "quicknotepad";
@@ -216,9 +216,9 @@ How Plugins are Loaded</title>
   for the name of properties we will use throughout the plugin.
 </para>
 
-</para></listitem>
+</listitem>
 
-<listitem><para>
+<listitem>
 
 <informalexample><programlisting>
     public void createMenuItems(Vector menuItems) {
@@ -244,9 +244,9 @@ How Plugins are Loaded</title>
   <function>GUIUtilities.loadMenu()</function></ulink>.
 </para>
 
-</para></listitem>
+</listitem>
 
-<listitem><para>
+<listitem>
 
 <informalexample><programlisting>public void createOptionPanes(OptionsDialog od) {
         od.addOptionPane(new QuickNotepadOptionPane());
@@ -265,7 +265,7 @@ How Plugins are Loaded</title>
   dialog box.
 </para>
 
-</para></listitem>
+</listitem>
 
 </itemizedlist>
 

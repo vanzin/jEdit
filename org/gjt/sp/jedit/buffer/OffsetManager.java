@@ -498,7 +498,8 @@ public class OffsetManager
 	{
 		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
 			| FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)) | end);
-		lineContext[line] = null;
+		// what is the point of this
+		//lineContext[line] = null;
 	} //}}}
 
 	//{{{ moveGap() method
