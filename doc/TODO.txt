@@ -16,6 +16,7 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- new file: explicit folding: type {{{: fold marker doesn't appear
 - finish code to hide caret on user input; enter is a problem
   maybe listen for KeyTyped instead
 - join lines with selection
