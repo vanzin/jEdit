@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- remember to remove undo debug code before release
 - user's guide:
   - vertical paste & rect select insertion
   - part III
