@@ -29,6 +29,10 @@ Thanks to Oliver Rutherfurd for contributing to this release.
 
 - Installer didn't work on OS/2.
 
+- "Toggle Line Separator" command now sets buffer dirty status.
+
+- Splitting the view more than once could break.
+
 * Version 4.1pre9
 
 Thanks to Chris Petersen, Iain Hewson, Kris Kopicki, Randolf Mock and
