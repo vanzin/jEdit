@@ -262,7 +262,7 @@ L2:			for (int j=0; j < gc.length; j++)
 			String result = System.getProperty("apple.laf.useScreenMenuBar");
 			if (result == null)
 				result = System.getProperty("com.apple.macos.useScreenMenuBar");
-			hasScreenMenuBar = (result.equals("true")) ? 1 : 0;
+			hasScreenMenuBar = ("true".equals(result)) ? 1 : 0;
 		}
 
 		return (hasScreenMenuBar == 1);

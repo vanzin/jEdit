@@ -506,6 +506,9 @@ public class PluginJAR
 
 			if(plugin != null)
 			{
+				if(plugin instanceof EBPlugin)
+					EditBus.removeFromBus((EBPlugin)plugin);
+
 				try
 				{
 					plugin.stop();

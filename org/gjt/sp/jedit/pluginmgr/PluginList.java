@@ -140,12 +140,12 @@ class PluginList
 		String description;
 		String author;
 		Vector branches = new Vector();
-		String installed;
-		String installedVersion;
+		//String installed;
+		//String installedVersion;
 	
 		void checkIfInstalled()
 		{
-			// check if the plugin is already installed.
+			/* // check if the plugin is already installed.
 			// this is a bit of hack
 			PluginJAR[] jars = jEdit.getPluginJARs();
 			for(int i = 0; i < jars.length; i++)
@@ -179,9 +179,47 @@ class PluginList
 					installed = path;
 					break;
 				}
-			}
+			} */
 		}
-	
+
+		String getInstalledVersion()
+		{
+			PluginJAR[] jars = jEdit.getPluginJARs();
+			for(int i = 0; i < jars.length; i++)
+			{
+				String path = jars[i].getPath();
+
+				if(MiscUtilities.getFileName(path).equals(jar))
+				{
+					EditPlugin plugin = jars[i].getPlugin();
+					if(plugin != null)
+					{
+						return jEdit.getProperty(
+							"plugin." + plugin.getClassName()
+							+ ".version");
+					}
+					else
+						return null;
+				}
+			}
+
+			return null;
+		}
+
+		String getInstalledPath()
+		{
+			PluginJAR[] jars = jEdit.getPluginJARs();
+			for(int i = 0; i < jars.length; i++)
+			{
+				String path = jars[i].getPath();
+
+				if(MiscUtilities.getFileName(path).equals(jar))
+					return path;
+			}
+
+			return null;
+		}
+
 		/**
 		 * Find the first branch compatible with the running jEdit release.
 		 */
@@ -206,6 +244,7 @@ class PluginList
 	
 		void install(Roster roster, String installDirectory, boolean downloadSource)
 		{
+			String installed = getInstalledPath();
 			if(installed != null)
 				roster.addRemove(installed);
 	
@@ -298,13 +337,14 @@ class PluginList
 			{
 				for(int i = 0; i < plugin.branches.size(); i++)
 				{
-					if(plugin.installedVersion != null
+					String installedVersion = plugin.getInstalledVersion();
+					if(installedVersion != null
 						&&
 					(from == null || MiscUtilities.compareStrings(
-						plugin.installedVersion,from,false) >= 0)
+						installedVersion,from,false) >= 0)
 						&&
 					   (to == null || MiscUtilities.compareStrings(
-					   	plugin.installedVersion,to,false) <= 0))
+					   	installedVersion,to,false) <= 0))
 					{
 						return true;
 					}
@@ -362,14 +402,15 @@ class PluginList
 		{
 			if(what.equals("plugin"))
 			{
+				String installedVersion = plugin.getInstalledVersion();
 				for(int i = 0; i < plugin.branches.size(); i++)
 				{
 					Branch branch = (Branch)plugin.branches
 						.elementAt(i);
-					if((plugin.installedVersion == null
+					if((installedVersion == null
 						||
 					MiscUtilities.compareStrings(
-						plugin.installedVersion,branch.version,false) < 0)
+						installedVersion,branch.version,false) < 0)
 						&&
 					(from == null || MiscUtilities.compareStrings(
 						branch.version,from,false) >= 0)
