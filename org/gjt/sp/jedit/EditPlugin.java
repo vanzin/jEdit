@@ -70,13 +70,6 @@ public abstract class EditPlugin
 	public void createMenuItems(Vector menuItems) {}
 
 	/**
-	 * @deprecated Override createMenuItems(Vector) instead
-	 *
-	 * @since jEdit 2.1pre1
-	 */
-	public void createMenuItems(View view, Vector menus, Vector menuItems) {}
-
-	/**
 	 * Method called every time the plugin options dialog box is
 	 * displayed. Any option panes created by the plugin should be
 	 * added here.

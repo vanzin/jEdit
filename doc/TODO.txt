@@ -1,5 +1,6 @@
 TO DO
 
+- cvs add closebox.gif
 - option to sort recents by file name
 - broken bracket matching
 - reload doesn't scroll to caret properly
@@ -32,7 +33,6 @@ TO DO
 - after a VFSUpdate for a mode file is received, reload that mode automatically
 - after a VFSUpdate for a mode catalog is received, reload all modes
 - improved window docking:
-  - close boxes
   - docking option pane changes take effect immediately
   - action shown in menu bar is not a toggle action
   - '<name>-toggle' and '<name>-to-front' actions, not in menus

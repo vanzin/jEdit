@@ -46,14 +46,18 @@ public interface DockableWindowContainer
 	 */
 	class TabbedPane extends JTabbedPane implements DockableWindowContainer
 	{
+		public static final Icon CLOSE_BOX
+			 = GUIUtilities.loadIcon("closebox.gif");
 		public static final int SPLITTER_WIDTH = 10;
 
+		DockableWindowManager wm;
 		String position;
 		int dimension;
 		boolean collapsed;
 
-		public TabbedPane(String position)
+		public TabbedPane(DockableWindowManager wm, String position)
 		{
+			this.wm = wm;
 			this.position = position;
 
 			dimension = jEdit.getIntegerProperty(
@@ -159,7 +163,8 @@ public interface DockableWindowContainer
 		public void addDockableWindow(DockableWindow win)
 		{
 			addTab(jEdit.getProperty(win.getName()
-				+ ".title"),win.getComponent());
+				+ ".title"),CLOSE_BOX,
+				win.getComponent());
 			setSelectedComponent(win.getComponent());
 
 			collapsed = false;
@@ -203,6 +208,19 @@ public interface DockableWindowContainer
 				dragStart = evt.getPoint();
 				dragStart.x = (getWidth() - dragStart.x);
 				dragStart.y = (getHeight() - dragStart.y);
+
+				int tab = getUI().tabForCoordinate(
+					TabbedPane.this,evt.getX(),evt.getY());
+				if(tab == -1)
+					return;
+
+				Rectangle rect = getUI().getTabBounds(
+					TabbedPane.this,tab);
+
+				FontMetrics fm = getFontMetrics(getFont());
+				int width = fm.stringWidth(getTitleAt(tab));
+				if(evt.getX() - rect.x <= rect.width - width)
+					wm.removeDockableWindow(getComponentAt(tab));
 			}
 
 			public void mouseClicked(MouseEvent evt)

@@ -927,55 +927,6 @@ public class GUIUtilities
 		return loadMenu(name);
 	}
 
-	/**
-	 * @deprecated Use loadMenuItem(name) instead
-	 * @param view Unused
-	 * @param name The menu item name
-	 */
-	public static JMenuItem loadMenuItem(View view, String name)
-	{
-		return loadMenuItem(name,true);
-	}
-
-	/**
-	 * @deprecated Use loadToolBarIcon() instead
-	 */
-	public static Icon loadToolBarIcon(String iconName)
-	{
-		return loadIcon(iconName);
-	}
-
-	/**
-	 * @deprecated Use showVFSFileDialog()
-	 */
-	public static String showFileDialog(View view, String file, int type)
-	{
-		if(file == null)
-			file = System.getProperty("user.dir");
-		File _file = new File(file);
-
-		JFileChooser chooser = new JFileChooser();
-
-		chooser.setCurrentDirectory(_file);
-		if(_file.isDirectory())
-			chooser.setSelectedFile(null);
-		else
-			chooser.setSelectedFile(_file);
-
-		chooser.setDialogType(type);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-		int retVal = chooser.showDialog(view,null);
-		if(retVal == JFileChooser.APPROVE_OPTION)
-		{
-			File selectedFile = chooser.getSelectedFile();
-			if(selectedFile != null)
-				return selectedFile.getAbsolutePath();
-		}
-
-		return null;
-	}
-
 	// package-private members
 	static void showSplashScreen()
 	{
