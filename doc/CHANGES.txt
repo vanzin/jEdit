@@ -161,7 +161,12 @@ and Rudolf Widmann for contributing to this release.
   move the caret! What a silly bug...
 
 - If a mode file did not contain well-formed XML, the resulting error
-  dialog box would be empty. This has been fixed.
+  dialog box would be empty.
+
+- Due to an oversight when implementing the ability to have startup
+  scripts written in any language, scripts were being run in their
+  own namespace in 4.1pre2; as a result functions and variables defined
+  at startup were not available to other macros.
 
 + API Changes:
 

@@ -90,26 +90,20 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	public static void runScript(View view, String path, boolean ignoreUnknown)
 	{
 		String fileName = MiscUtilities.getFileName(path);
-		for (int i = 0; i < macroHandlers.size(); i++)
+		Handler handler = getHandlerForFileName(fileName);
+		if(handler != null)
 		{
-			Handler handler = (Handler)macroHandlers.get(i);
 			try
 			{
-				if (handler.accept(fileName))
-				{
-					Macro newMacro = handler.createMacro(
-						fileName, path);
-					newMacro.invoke(view);
-					return;
-				}
+				Macro newMacro = handler.createMacro(fileName, path);
+				newMacro.invoke(view);
 			}
 			catch (Exception e)
 			{
 				Log.log(Log.ERROR, Macros.class, e);
-				macroHandlers.remove(handler);
-				i--;
-				continue;
+				return;
 			}
+			return;
 		}
 
 		// only executed if above loop falls
@@ -292,6 +286,24 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	{
 		Handler[] handlers = new Handler[macroHandlers.size()];
 		return (Handler[])macroHandlers.toArray(handlers);
+	} //}}}
+
+	//{{{ getHandlerForFileName() method
+	/**
+	 * Returns the macro handler suitable for running the specified file
+	 * name, or null if there is no suitable handler.
+	 * @since jEdit 4.1pre3
+	 */
+	public static Handler getHandlerForFileName(String fileName)
+	{
+		for (int i = 0; i < macroHandlers.size(); i++)
+		{
+			Handler handler = (Handler)macroHandlers.get(i);
+			if (handler.accept(fileName))
+				return handler;
+		}
+
+		return null;
 	} //}}}
 
 	//{{{ getHandler() method
@@ -635,29 +647,26 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 			else
 			{
-				for (int j = 0; j < macroHandlers.size(); j++)
+				Handler handler = getHandlerForFileName(fileName);
+
+				if(handler == null)
+					continue;
+
+				try
 				{
-					Handler handler = (Handler)macroHandlers.get(j);
-					try
-					{
-						if (handler.accept(fileName))
-						{
-							Macro newMacro = handler.createMacro(
-								path + fileName, file.getPath());
-							vector.addElement(newMacro);
-							macroActionSet.addAction(newMacro);
-							macroHash.put(newMacro.getName(),newMacro);
-							break;
-						}
-					}
-					catch (Exception e)
-					{
-						Log.log(Log.ERROR, Macros.class, e);
-						macroHandlers.remove(handler);
-						j--;
-						continue;
-					}
+					Macro newMacro = handler.createMacro(
+						path + fileName, file.getPath());
+					vector.addElement(newMacro);
+					macroActionSet.addAction(newMacro);
+					macroHash.put(newMacro.getName(),newMacro);
 				}
+				catch (Exception e)
+				{
+					Log.log(Log.ERROR, Macros.class, e);
+					macroHandlers.remove(handler);
+				}
+
+				break;
 			}
 		}
 	} //}}}
@@ -828,8 +837,32 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//}}}
 
 		//{{{ runMacro() method
+		/**
+		 * Runs the specified macro.
+		 * @param view The view - may be null.
+		 * @param macro The macro.
+		 */
 		public abstract void runMacro(View view, Macro macro);
 		//}}}
+
+		//{{{ runMacro() method
+		/**
+		 * Runs the specified macro. This method is optional; it is
+		 * called if the specified macro is a startup script. The
+		 * default behavior is to simply call the other form of
+		 * <code>runMacro()</code>.
+		 * @param view The view - may be null.
+		 * @param macro The macro.
+		 * @param ownNamespace  A hint indicating whenever functions and
+		 * variables defined in the script are to be self-contained, or
+		 * made available to other scripts. The macro handler may ignore
+		 * this parameter.
+		 * @since jEdit 4.1pre3
+		 */
+		public void runMacro(View view, Macro macro, boolean ownNamespace)
+		{
+			runMacro(view,macro);
+		} //}}}
 
 		//{{{ Handler constructor
 		protected Handler(String name)
@@ -879,6 +912,12 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		public void runMacro(View view, Macro macro)
 		{
 			BeanShell.runScript(view,macro.getPath(),null,true);
+		} //}}}
+
+		//{{{ runMacro() method
+		public void runMacro(View view, Macro macro, boolean ownNamespace)
+		{
+			BeanShell.runScript(view,macro.getPath(),null,ownNamespace);
 		} //}}}
 	} //}}}
 }
