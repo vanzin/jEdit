@@ -77,24 +77,38 @@
     </qandaentry>
 
 <qandaentry>
-        <question id="java-web-start">
-                <para>
-                        Why is there no Java Web Start version of jEdit?
-                </para>
-        </question>
-        <answer>
-                <para>
-                        In Java Web Start, dynamically-loaded classes (ie, plugins) run in a sandbox
-                        unless they are explicitly signed. Also, the protocol handler API prevents
-                        protocol handlers from being added if they are not loaded via the system
-                        class loader (i.e via the Java Web Start class loader). So the lack of plugin
-                        support and jeditresource protocol makes it useless.
-
-                </para>
-        </answer>
+	<question id="java-web-start">
+		<para>
+			Why is there no Java Web Start version of jEdit?
+		</para>
+	</question>
+	<answer>
+		<para>
+			In Java Web Start, dynamically-loaded classes (ie, plugins) run in a sandbox
+			unless they are explicitly signed. Also, the protocol handler API prevents
+			protocol handlers from being added if they are not loaded via the system
+			class loader (i.e via the Java Web Start class loader). So the lack of plugin
+			support and jeditresource protocol makes it useless.
+		</para>
+	</answer>
 </qandaentry>
 
-  </qandadiv>
+<qandaentry>
+	<question id="install-upgrade">
+		<para>
+			How do I upgrade from one release of jEdit to another?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Simply delete the existing jEdit directory and run the installer (if any) to
+			install the new version. Settings are kept in <filename>~/.jedit</filename>, and
+			will not be affected.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
 
 <qandadiv id="install-mac">
   <title>Install jEdit on MacOS</title>

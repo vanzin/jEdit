@@ -418,7 +418,20 @@ of spaces, tabs, and other whitespace characters.
 	</answer>
 </qandaentry>
 
-    </qandadiv>
+<qandaentry>
+	<question id="text-wrap">
+		<para>
+			When using soft wrap, why does it scroll per physical line and not screen line?
+		</para>
+	</question>
+	<answer>
+		<para>
+			This will change in jEdit 4.2.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
 
 <!--******************************************************* Printing -->
 	
@@ -560,7 +573,32 @@ of spaces, tabs, and other whitespace characters.
 	</answer>
 </qandaentry>
 
+<qandaentry>
+	<question id="settings-emacstab">
+		<para>
+			Can I have an emacs style tab key (tab anywhere in a line re-indents it)?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Yes. You can do this by rebinding the <keycode>tab</keycode> key to
+			<command>Indent Selected Lines</command> in the <guimenuitem>Global Options</guimenuitem>.
+		</para>
+	</answer>
+</qandaentry>
 
+<qandaentry>
+	<question id="settings-unlisted">
+		<para>
+			Are there any hidden features?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Yes. You can access them by binding a shortcut to the action in question.
+		</para>
+	</answer>
+</qandaentry>
 
 </qandadiv>
 
