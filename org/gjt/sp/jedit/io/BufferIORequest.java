@@ -582,6 +582,9 @@ public class BufferIORequest extends WorkRequest
 				out = vfs._createOutputStream(session,savePath,view);
 				if(out != null)
 				{
+					if(buffer.getName().endsWith(".gz"))
+						buffer.setBooleanProperty(Buffer.GZIPPED,true);
+
 					if(buffer.getBooleanProperty(Buffer.GZIPPED))
 						out = new GZIPOutputStream(out);
 

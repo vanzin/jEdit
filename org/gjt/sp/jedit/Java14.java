@@ -28,6 +28,7 @@ import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.util.Log;
 //}}}
@@ -93,8 +94,11 @@ public class Java14
 						((View)comp).processKeyEvent(evt);
 						return true;
 					}
-					else if(comp == null || comp instanceof Window)
+					else if(comp == null || comp instanceof Window
+						|| comp instanceof JEditTextArea)
+					{
 						break;
+					}
 					else
 						comp = comp.getParent();
 				}

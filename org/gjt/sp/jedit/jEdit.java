@@ -191,13 +191,13 @@ public class jEdit
 				in.close();
 
 				Socket socket = new Socket(InetAddress.getByName("127.0.0.1"),port);
-				Writer out = new OutputStreamWriter(socket.getOutputStream(),"UTF8");
-				out.write(String.valueOf(key));
-				out.write('\n');
+				DataOutputStream out = new DataOutputStream(
+					socket.getOutputStream());
+				out.writeInt(key);
 
 				String script = makeServerScript(restore,args,scriptFile);
 
-				out.write(script);
+				out.writeUTF(script);
 
 				out.close();
 

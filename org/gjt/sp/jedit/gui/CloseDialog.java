@@ -181,13 +181,15 @@ public class CloseDialog extends EnhancedDialog
 					bufferModel.removeElement(path);
 				}
 
-				updateButtons();
-				bufferList.requestFocus();
-
 				if(bufferModel.getSize() == 0)
 				{
 					ok = true;
 					dispose();
+				}
+				else
+				{
+					bufferList.setSelectedIndex(0);
+					bufferList.requestFocus();
 				}
 			}
 			else if(source == discard)
@@ -202,13 +204,15 @@ public class CloseDialog extends EnhancedDialog
 					bufferModel.removeElement(path);
 				}
 
-				updateButtons();
-				bufferList.requestFocus();
-
 				if(bufferModel.getSize() == 0)
 				{
 					ok = true;
 					dispose();
+				}
+				else
+				{
+					bufferList.setSelectedIndex(0);
+					bufferList.requestFocus();
 				}
 			}
 			else if(source == cancel)

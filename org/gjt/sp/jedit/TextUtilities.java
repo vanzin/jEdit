@@ -258,9 +258,16 @@ public class TextUtilities
 					//	chunks.text,gfx.getFontRenderContext());
 					FontMetrics fm = gfx.getFontMetrics();
 					gfx.setColor(bgColor);
+
+					Composite com = gfx.getComposite();
+					gfx.setComposite(AlphaComposite.getInstance(
+						AlphaComposite.SRC_OVER,0.8f));
+
 					gfx.fill(new Rectangle2D.Float(
 						x1,y - fm.getAscent(),
-						x2 - x1,fm.getAscent()));
+						x2 - x1,fm.getHeight()));
+
+					gfx.setComposite(com);
 				}
 
 				gfx.setFont(font);

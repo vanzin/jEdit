@@ -1,12 +1,8 @@
 TO DO
 
-before soft wrap, must fix all the document bugs:
-
-- narrow: insert line after first fucked
-- when loading a file with collapsedFolds property, last line always
-  visible
 - nextLineRequested still fucked
 
+- narrowed hack in expand fold considered harmful
 - textArea.getLastVisibleLine() method
 - print should not use so much memory
 - background color for tokens
@@ -15,16 +11,13 @@ before soft wrap, must fix all the document bugs:
   - format becomes 'wrap paragraph'
   - 'wrap line'
   - 'unwrap paragraph'
-- DoS in edit server
 - idea for fixing buffer property issues: BufferProp class
 - getCenterPoint()
 - support multi-screen systems properly
 - fs browser: scroll to visible after setting divider location
-- aiob in getVirtualLineCount()?
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
-- C+e , and . insert , and . in the buffer
 - docking buttons not always hidden
 - definately repaint problems
 - keyboard navigation of current directory, recent dirs, etc broken
@@ -32,10 +25,9 @@ before soft wrap, must fix all the document bugs:
 - JDK 1.3 focus bugs
 - allegedly redo doesn't redo everything?
 - dwm: not always focused correctly
-- still collapseFolds behavior problems
 - stylesheet: keycap inside keycombo
 - openFile(): can open two copies of the same buffer if a) remote b)
-  canonPath != path
+  canonPath != path; ditto for save as
 - maybe fix GUIUtilities.java to store maximisation state
 - idea to make things go faster: token marker splits on ' ', '\t'
   then lineToChunkList() has much less work to do, and could even be
@@ -48,7 +40,6 @@ before soft wrap, must fix all the document bugs:
 - soft wrap
 - finish 'troubleshooting' menu:
   - about cmd
-  - make bug report cmd
   - docs in user's guide
 - faster hypersearch
 - OK_CANCEL_OPTION in confirm() docs
@@ -112,7 +103,6 @@ before soft wrap, must fix all the document bugs:
   - keymaps are XML files with <bind>, <unbind> tags
   - jEdit, emacs, keymaps included, maybe others
   - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
-- use java2d to draw block caret (instead of XOR)
 - resizing doesn't update horizontal scroll bar
 - find next with $ or ^
 - custom stylesheet: no xmlns
@@ -141,3 +131,4 @@ before soft wrap, must fix all the document bugs:
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - lower case all user's guide ids
+- C+e , and . insert , and . in the buffer

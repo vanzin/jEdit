@@ -228,6 +228,40 @@ public class OffsetManager
 		return new PosTopHalf(bh);
 	} //}}}
 
+	//{{{ expandFolds() method
+	/**
+	 * Like <code>FoldVisibilityManager.expandFolds()</code>, but does
+	 * it for all fold visibility managers viewing this buffer. Should
+	 * only be called after loading.
+	 */
+	public void expandFolds(int foldLevel)
+	{
+		int newVirtualLineCount = 0;
+		foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+
+		/* this ensures that the first line is always visible */
+		boolean seenVisibleLine = false;
+
+		for(int i = 0; i < getLineCount(); i++)
+		{
+			if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+			{
+				seenVisibleLine = true;
+				// Since only called on load, it already has
+				// the VISIBLE_MASK set
+				//lineInfo[i] |= VISIBLE_MASK;
+				newVirtualLineCount++;
+			}
+			else
+				lineInfo[i] &= ~VISIBLE_MASK;
+		}
+
+		for(int i = 0; i < virtualLineCounts.length; i++)
+		{
+			virtualLineCounts[i] = newVirtualLineCount;
+		}
+	} //}}}
+
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
 		int numLines, int length, IntegerArray endOffsets)
@@ -277,62 +311,28 @@ public class OffsetManager
 			{
 				// need the line end offset to be in place
 				// for following fold level calculations
-				lineInfo[startLine + i] = (offset + endOffsets.get(i) + 1)
-					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK);
+				lineInfo[startLine + i] = ((offset + endOffsets.get(i) + 1)
+					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)
+					| visible);
 			}
 
-			//{{{ Hide lines
-			int[] newVirtualLineCounts = new int[8];
-			System.arraycopy(virtualLineCounts,0,newVirtualLineCounts,0,8);
-
-			int collapseFolds = buffer.getIntegerProperty("collapseFolds",0);
-			if(collapseFolds != 0)
-				collapseFolds = (collapseFolds - 1) * buffer.getIndentSize() + 1;
-
-			int threshold = Math.max(foldLevel + 1,collapseFolds);
-			boolean seenVisibleLine = (startLine != 0);
-
-			for(int i = 0; i < numLines; i++)
-			{
-				long _visible;
-				if(collapseFolds == 0)
-					_visible = visible;
-				else if(buffer.getFoldLevel(startLine + i)
-					>= threshold)
-					_visible = 0L;
-				else
-					_visible = visible;
-
-				if(!seenVisibleLine && _visible == 0L)
-					_visible = (0xffL << VISIBLE_SHIFT);
-
-				if(_visible != 0L)
-				{
-					seenVisibleLine = true;
-
-					// Unrolled for max efficency
-					if((_visible & (1L << (VISIBLE_SHIFT + 0))) != 0)
-						newVirtualLineCounts[0]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 1))) != 0)
-						newVirtualLineCounts[1]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 2))) != 0)
-						newVirtualLineCounts[2]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 3))) != 0)
-						newVirtualLineCounts[3]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 4))) != 0)
-						newVirtualLineCounts[4]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 5))) != 0)
-						newVirtualLineCounts[5]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 6))) != 0)
-						newVirtualLineCounts[6]++;
-					if((_visible & (1L << (VISIBLE_SHIFT + 7))) != 0)
-						newVirtualLineCounts[7]++;
-				}
-
-				lineInfo[startLine + i] |= _visible;
-			}
-
-			virtualLineCounts = newVirtualLineCounts;
+			//{{{ Unrolled
+			if((visible & (1L << (VISIBLE_SHIFT + 0))) != 0)
+				virtualLineCounts[0] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 1))) != 0)
+				virtualLineCounts[1] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 2))) != 0)
+				virtualLineCounts[2] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 3))) != 0)
+				virtualLineCounts[3] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 4))) != 0)
+				virtualLineCounts[4] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 5))) != 0)
+				virtualLineCounts[5] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 6))) != 0)
+				virtualLineCounts[6] += numLines;
+			if((visible & (1L << (VISIBLE_SHIFT + 7))) != 0)
+				virtualLineCounts[7] += numLines;
 			//}}}
 		} //}}}
 		//{{{ Update remaining line start offsets

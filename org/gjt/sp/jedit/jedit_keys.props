@@ -62,9 +62,8 @@ cut-append.shortcut=C+e C+u
 paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
-expand-folds.shortcut=C+e ENTER
-prev-bracket.shortcut=C+e [
-next-bracket.shortcut=C+e ]
+prev-marker.shortcut=C+e C+COMMA
+next-marker.shortcut=C+e C+PERIOD
 #}}}
 
 #{{{ C+e X
@@ -88,8 +87,9 @@ insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
-prev-marker.shortcut=C+e ,
-next-marker.shortcut=C+e .
+expand-folds.shortcut=C+e ENTER
+prev-bracket.shortcut=C+e [
+next-bracket.shortcut=C+e ]
 #}}}
 
 #{{{ C+m C+X
