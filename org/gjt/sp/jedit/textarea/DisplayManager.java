@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.*;

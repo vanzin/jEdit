@@ -334,7 +334,8 @@ public class DefaultInputHandler extends InputHandler
 	private void handleKey(KeyEventTranslator.Key keyStroke)
 	{
 		char input = '\0';
-		if(keyStroke.modifiers == null)
+		if(keyStroke.modifiers == null
+			|| keyStroke.modifiers.equals("S"))
 		{
 			switch(keyStroke.key)
 			{
