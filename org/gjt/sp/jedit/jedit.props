@@ -207,6 +207,9 @@ view.joinNonWordChars=true
 # Middle mouse button pastes % register
 view.middleMousePaste=false
 
+# Drag and drop of text
+view.dragAndDrop=true
+
 #{{{ Gutter
 
 # Gutter background color

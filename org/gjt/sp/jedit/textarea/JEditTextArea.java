@@ -368,7 +368,7 @@ public class JEditTextArea extends JComponent
 		dndCallback = meth;
 	} //}}}
 
-	//{{{ getDragInProgress() method
+	//{{{ isDragInProgress() method
 	/**
 	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
 	 * however since jEdit must run with Java 1.3, this class only has the
@@ -377,7 +377,7 @@ public class JEditTextArea extends JComponent
 	 * a drag is in progress.
 	 * @since jEdit 4.2pre5
 	 */
-	public boolean getDragInProgress()
+	public boolean isDragInProgress()
 	{
 		return dndInProgress;
 	} //}}}
@@ -394,6 +394,26 @@ public class JEditTextArea extends JComponent
 	public void setDragInProgress(boolean dndInProgress)
 	{
 		this.dndInProgress = dndInProgress;
+	} //}}}
+
+	//{{{ isDragEnabled() method
+	/**
+	 * Returns if drag and drop of text is enabled.
+	 * @since jEdit 4.2pre5
+	 */
+	public boolean isDragEnabled()
+	{
+		return dndEnabled;
+	} //}}}
+
+	//{{{ setDragEnabled() method
+	/**
+	 * Sets if drag and drop of text is enabled.
+	 * @since jEdit 4.2pre5
+	 */
+	public void setDragEnabled(boolean dndEnabled)
+	{
+		this.dndEnabled = dndEnabled;
 	} //}}}
 
 	//}}}
@@ -5277,6 +5297,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	* - an InputEvent
 	* - a boolean (copy text or move, depending on modifier user held down)
 	*/
+	private boolean dndEnabled;
 	private Method dndCallback;
 	private boolean dndInProgress;
 	//}}}
@@ -6334,7 +6355,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			clickCount = evt.getClickCount();
 
-			if(getSelectionAtOffset(dragStart) != null)
+			if(isDragEnabled() && getDragAndDropCallback() != null
+				&& getSelectionAtOffset(dragStart) != null)
 			{
 				if(evt.getModifiers() == InputEvent.BUTTON1_MASK)
 					startDragAndDrop(evt,false);

@@ -507,6 +507,9 @@ public class EditPane extends JPanel implements EBComponent
 		textArea.setQuickCopyEnabled(jEdit.getBooleanProperty(
 			"view.middleMousePaste"));
 
+		textArea.setDragEnabled(jEdit.getBooleanProperty(
+			"view.dragAndDrop"));
+
 		textArea.propertiesChanged();
 	} //}}}
 
