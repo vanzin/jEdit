@@ -13,6 +13,7 @@ JEDIT 4.0 VERSION HISTORY
 - "Plastic" UI widget theme available in Utilities->Global
   Options->Appearance (this is the color scheme part of the Kunststoff
   look and feel, and it is enabled by default)
+- 'Vertical Paste' macro (Andre Kaplan)
 
 + Enhancements
 
@@ -35,6 +36,8 @@ JEDIT 4.0 VERSION HISTORY
 
 - 'Recent Files' menu behaved in a strange manner if there were no
   recent files
+- Fixed a NullPointerException if the 'Narrow to Selection' command
+  was invoked with no selection
 
 + API Changes
 

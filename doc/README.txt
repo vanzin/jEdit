@@ -1,4 +1,4 @@
-JEDIT 3.2 README
+JEDIT 4.0 README
 
 * Contents
 
@@ -195,6 +195,7 @@ The following people contributed to the jEdit core:
 Alwyn Barry:        - Ada95 edit mode
 Andre Kaplan:       - ASP, JavaScript, VBScript, BCEL edit modes
                     - Syntax token background highlighting
+                    - 'Vertical Paste' macro
 Artur Biesiadowski: - Eiffel edit mode
 Bruno Tatibouet:    - B formal method edit mode
 Dante Fabrizio:     - VHDL edit mode

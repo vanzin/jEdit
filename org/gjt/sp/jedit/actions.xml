@@ -439,7 +439,7 @@
 
 <ACTION NAME="narrow">
 	<CODE>
-		buffer.narrow(textArea.getSelectionStartLine(),textArea.getSelectionEndLine());
+		textArea.narrowToSelection();
 	</CODE>
 </ACTION>
 
