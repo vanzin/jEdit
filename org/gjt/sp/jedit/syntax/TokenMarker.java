@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  * Copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -24,8 +24,10 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import gnu.regexp.RE;
 import javax.swing.text.Segment;
 import java.util.*;
+import org.gjt.sp.jedit.search.CharIndexedSegment;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -658,92 +660,46 @@ public class TokenMarker
 		int len = end - start;
 
 		//{{{ do digits.
-
-		/* right now, this is hardcoded to handle these cases:
-		 * 1234
-		 * 0x1234abcf
-		 * 1234l
-		 * 12.34f
-		 * 12.34d
-		 *
-		 * in the future, we need some sort of regexp mechanism. */
 		if(context.rules.getHighlightDigits())
 		{
-			boolean digit = true;
-			char[] array = line.array;
-			boolean octal = false;
-			boolean hex = false;
-			boolean seenSomeDigits = false;
-loop:			for(int i = 0; i < len; i++)
+			boolean digit = false;
+			boolean mixed = false;
+
+			for(int i = 0; i < len; i++)
 			{
-				char ch = array[start+i];
-				switch(ch)
-				{
-				case '0':
-					if(i == 0)
-						octal = true;
-					seenSomeDigits = true;
-					continue loop;
-				case '1': case '2': case '3':
-				case '4': case '5': case '6':
-				case '7': case '8': case '9':
-					seenSomeDigits = true;
-					continue loop;
-				case 'x': case 'X':
-					if(octal && i == 1)
-					{
-						hex = true;
-						continue loop;
-					}
-					else
-						break;
-				case 'd': case 'D':
-				case 'f': case 'F':
-					if(hex)
-						continue loop;
-					else if(i == len -1 && seenSomeDigits)
-						continue loop;
-					else
-						break;
-				case 'l': case 'L':
-					if(i == len -1 && seenSomeDigits)
-						continue loop;
-					else
-						break;
-				case 'e': case 'E':
-					if(seenSomeDigits)
-						continue loop;
-					else
-						break;
-				case 'a': case 'A': case 'b': case 'B':
-				case 'c': case 'C':
-					if(hex)
-						continue loop;
-					else
-						break;
-				case '.': case '-':
-					// normally, this shouldn't be
-					// necessary, because most modes
-					// define '.' and '-' SEQs. However,
-					// in props mode, we can't define
-					// such a SEQ because it would
-					// break the AT_LINE_START
-					// MARK_PREVIOUS rule.
-
-					continue loop;
-				default:
-					break;
-				}
-
-				// if we ended up here, then we have found a
-				// non-digit character.
-				digit = false;
-				break loop;
+				char ch = line.array[start + i];
+				if(Character.isDigit(ch))
+					digit = true;
+				else
+					mixed = true;
 			}
 
-			// if we got this far with digit = true, then the keyword
-			// consists of all digits. Add it as such.
-			if(digit && seenSomeDigits)
+			if(mixed)
+			{
+				RE digitRE = context.rules.getDigitRegexp();
+
+				// only match against regexp if its not all
+				// digits; if all digits, no point matching
+				if(digit)
+				{
+					if(digitRE == null)
+					{
+						// mixed digit/alpha keyword,
+						// and no regexp... don't
+						// highlight as DIGIT
+						digit = false;
+					}
+					else
+					{
+						CharIndexedSegment seg = new CharIndexedSegment(
+							line,false);
+						if(!digitRE.isMatch(seg))
+							digit = false;
+					}
+				}
+			}
+
+			if(digit)
 			{
 				if(start != lastOffset)
 				{

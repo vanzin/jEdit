@@ -11,12 +11,9 @@ JEDIT 4.1 VERSION HISTORY
 
 + Enhancements
 
-- Updated printing code (Thomas Dilts)
-  - Adds a print preview function
-  - Uses Java 2 version 1.4 print dialogs when running on that Java
-    version
-  - Performs printing in a background thread
-  - Fixes a few bugs
+- Updated printing code; uses Java 2 version 1.4 print dialogs when
+  running on that Java version, and performs printing in a background
+  thread (Thomas Dilts)
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
   some bug fixes and cleanups (Kris Kopicki)
 - On Unix, the installer now defaults to installing in the user's home
@@ -34,14 +31,14 @@ JEDIT 4.1 VERSION HISTORY
 - Bracket matching tweak (Alexander Maryanovsky)
 - Plugin manager window can be closed by pressing Escape now
 - Fixed indentation of constructs like:
-
   if(foo)
     bar();
   baz();
-
   in Java/C/C++/etc modes (Alexander Maryanovsky)
 - Improved loading time of plain text files if 'more accurate syntax
   highlighting' is on
+- Open buffers are shown with a different icon in the file system
+  browser
 
 + Bug Fixes
 
@@ -67,6 +64,9 @@ JEDIT 4.1 VERSION HISTORY
   immediate double click again on a directory (or a file) at the same
   physical location, because the 2nd double click is reported with a
   click count of 3 and 4 (Alexander Maryanovsky)
+- The 'initially collapse folds with level' setting is how honored when
+  reloading files
+- A few printing bugs fixed (Thomas Dilts)
 
 + API Changes
 

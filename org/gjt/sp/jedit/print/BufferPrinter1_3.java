@@ -90,24 +90,6 @@ public class BufferPrinter1_3
 
 	}//}}}
 
-	//{{{ printPreview() method
-	public static void printPreview(View view,Buffer buffer, boolean selection)
-	{
-		boolean header = jEdit.getBooleanProperty("print.header");
-		boolean footer = jEdit.getBooleanProperty("print.footer");
-		boolean lineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
-		boolean color = jEdit.getBooleanProperty("print.color");
-		Font font = jEdit.getFontProperty("print.font");
-		PrinterJob prnJob=getPrintJob();
-		prnJob.setJobName(buffer.getPath());
-		PrintPreview frame = new PrintPreview( view, buffer,
-		                                       selection,new BufferPrintable(view,buffer,font,header,footer,
-		                                                                     lineNumbers,color), prnJob,
-										     format);
-		frame.setVisible(true);
-	}
-	//}}}
-
 	//{{{ pageSetup() method
 	public static void pageSetup(View view)
 	{

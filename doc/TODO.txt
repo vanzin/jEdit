@@ -1,10 +1,8 @@
 TO DO
 
-- reload: doesn't respect collapseFolds
+- first focus: show all files that were modified on disk, in a list
 - first run on windows -- why is help viewer hidden
 - idea for fixing buffer property issues: BufferProp class
-
-- make print preview look better
 
 [error] AWT-EventQueue-0: Exception occurred during event dispatching:
 [error] AWT-EventQueue-0: java.lang.ClassCastException: javax.swing.JButton
@@ -25,7 +23,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - getCenterPoint()
 - less overhead for plain text files
 - more flexible definition of a paragraph, paragraph folding
-- fsb: indicate current buffer
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity

@@ -35,6 +35,7 @@ import org.gjt.sp.jedit.*;
 public class FileCellRenderer extends DefaultTreeCellRenderer
 {
 	public static Icon fileIcon = GUIUtilities.loadIcon("file.gif");
+	public static Icon openFileIcon = GUIUtilities.loadIcon("open_file.gif");
 	public static Icon dirIcon = GUIUtilities.loadIcon("closed_folder.gif");
 	public static Icon openDirIcon = GUIUtilities.loadIcon("open_folder.gif");
 	public static Icon filesystemIcon = GUIUtilities.loadIcon("drive.gif");
@@ -151,6 +152,8 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 			return (expanded ? openDirIcon : dirIcon);
 		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
 			return filesystemIcon;
+		else if(jEdit.getBuffer(file.path) != null)
+			return openFileIcon;
 		else
 			return fileIcon;
 	} //}}}
