@@ -1,39 +1,11 @@
-<!-- jEdit buffer-local properties:                     -->
-<!-- :indentSize=1:noTabs=true:maxLineLen=72:tab Size=2: -->
-<!-- :xml.root=faq.xml: -->
+<!-- jEdit buffer-local properties:                      -->
+<!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+<!-- :xml.root=faq.xml:                                  -->
 
-<!-- jEdit FAQ									        -->
-<!-- Copyright (C) 2002 John Gellene                    -->
+<!-- jEdit FAQ                                           -->
+<!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
 
-<!-- $Id$
--->
-
-<sect1 id="faq-intro"><title>Introduction</title>
-<para>
-  This document explains many of the basic features of jEdit and provides
-  solutions for commonly encountered problems. It is not the principal
-  resource for learning how to use and customize jEdit. The application
-  includes an extensive User's Guide available from within jEdit by
-  selecting <guimenuitem>jEdit Help</guimenuitem> on the
-  <guimenu>Help</guimenu> menu.
-</para>
-<para>
-  The User's Guide includes tutorials on writing macros and plugins as
-  well as an annotated guide to jEdit's Application Programming Interface
-  (API). It is worth browsing through the User's Guide to get a full sense
-  of what jEdit has to offer. This document is intended to supplement the
-  User's Guide by focusing on specific, relatively narrow topics in the
-  traditional question-and-answer format.
-</para>
-<para>
-  Each section of this document deals with a different category of topics,
-  and each begins with a listing of the questions covered. This should
-  allow you to find the information you are seeking quickly.
-</para>
-
-</sect1>
-
-<sect1 id="getting-jedit"><title>General Information and Availability</title>
+<sect1 id="general"><title>General</title>
 <para>
   This section deals with some background information and how to obtain the
   latest version of jEdit.
@@ -205,9 +177,8 @@
       </para>
       <para>
         Additional questions and answers regarding plugins may be found
-        in the section of this document entitled
-        <link linkend="plugins"><quote>Working with
-        Plugins</quote></link>.
+        in the section of this document entitled <quote>Working with
+        Plugins</quote>.
       </para></answer>
     </qandaentry>
 
@@ -414,114 +385,7 @@
 
   </qandadiv>
 
-  <qandadiv id="latest-version">
-    <title>Getting the latest version</title>
-    <qandaentry>
-      <question id="get-latest-version"><para>
-        How do I obtain the latest version of jEdit?
-      </para></question>
-      <answer><para>
-        The program is in a continuing state of evolution. It is usually
-        available in two versions, a <quote>stable</quote> version and a
-        <quote>development</quote> version. A stable version represents a
-        release of jEdit that is considered to be free of serious bugs or
-        performance problems and suitable for general use. A
-        <quote>development</quote> version includes new features or new elements
-        of program design that require testing and possible further refinement.
-        A development version contains the token <quote>pre</quote> in its
-        version number, as in <literal>4.0pre5</literal>.
-      </para>
-      <para>
-        The latest stable and development versions of jEdit are always
-        available from the <ulink url="http://www.jedit.org">jEdit
-        web site</ulink> and from the <ulink url="http://sourceforge.net/
-        projects/jedit">jEdit project page</ulink> of the
-        <ulink url="http://sourceforge.net">SourceForge web site</ulink>,
-        which hosts jEdit's development resources.
-      </para>
-      <para>
-        In addition, a plugin named <application>Check jEdit
-        Version</application> can be run from within jEdit by selecting
-        <guimenuitem>Check jEdit Version</guimenuitem> from the application's
-        <guimenu>Plugins</guimenu> menu. It queries the jEdit web site, compares
-        version information with the version of the currently running
-        instance of jEdit, and reports the result to the user in a message box.
-        It will tell you if you do not have the latest version of jEdit, regardless
-        of whether that version is in <quote>stable</quote> or
-        <quote>development</quote> form.
-      </para>
-      <para>
-        Finally, if you subscribe to the <ulink
-        url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
-        jedit-announce</ulink> or <ulink
-        url="http://lists.sourceforge.net/lists/listinfo/jedit-users">
-        jedit-users</ulink> mailing lists, you will receive a email whenever
-        a new release of jEdit becomes available.
-      </para></answer>
-    </qandaentry>
-    <qandaentry>
-      <question id="get-source"><para>
-        How do I obtain a copy of the jEdit source code?
-      </para></question>
-      <answer><para>
-        The latest version of jEdit's source code is available from the
-        <ulink url="http://www.jedit.org/index.php?page=download&amp;platform=source">
-        jEdit web site</ulink> or the <ulink url=
-        "http://sourceforge.net/project/showfiles.php?group_id=588">
-        SourceForge web site</ulink>. The web site provides the source code for the
-        latest stable and development version, while the SourceForge site has
-        a more extensive archive covering earlier versions.
-      </para>
-      <para>
-        If you are interested in testing the absolutely latest changes to jEdit,
-        and you are familiar with compiling your own Java programs and working
-        with CVS, you can download the current code maintained in the <ulink
-        url="http://sourceforge.net/cvs/?group_id=588">SourceForge
-        CVS repository</ulink>.
-      </para></answer>
-    </qandaentry>
-    <qandaentry>
-	    <question id="get-latest-faq"><para>
-        Where can I get the latest version of this document?</para>
-      </question><answer>
-        <para>
-          The latest release of this document is available at the
-          <ulink
-          url="http://jedit-community.sourceforge.net/modules.php?op=modload&amp;name=Include_Pages&amp;file=index&amp;req=viewarticle&amp;artid=5">
-          jEdit Community web site</ulink>.
-        </para>
-      </answer>
-    </qandaentry>
-
-
-<qandaentry>
-	<question id="jedit-compile">
-		<para>
-			How do you set the classpath and compile the Java files in jEdit?
-		</para>
-	</question>
-	<answer>
-		<para>
-			Consult an article on the <ulink url="http://community.jedit.org">jEdit
-			Community</ulink> web site entitled <quote>Build jEdit yourself: the 'Open'
-			in Open Source</quote>.
-		</para>
-	</answer>
-</qandaentry>
-
-  </qandadiv>
-
-</qandaset>
-
-</sect1>
-
-<sect1 id="problems"><title>Getting Answers and Reporting Problems</title>
-<para>
-  This section deals with how to get answers to questions that the
-  documentation does not address, how you can report problems with jEdit
-  or its plugins, and how best to communicate with the jEdit developer team.
-</para>
-<qandaset defaultlabel="qanda">
+<!--******************************************************** Answers -->
 
   <qandadiv id="get-answers-div">
     <title>Getting answers</title>
@@ -681,7 +545,103 @@ bug database</ulink> to find the problem in which you are interested.
     </qandaentry>
   </qandadiv>
 
+  <qandadiv id="latest-version">
+    <title>Getting the latest version</title>
+    <qandaentry>
+      <question id="get-latest-version"><para>
+        How do I obtain the latest version of jEdit?
+      </para></question>
+      <answer><para>
+        The program is in a continuing state of evolution. It is usually
+        available in two versions, a <quote>stable</quote> version and a
+        <quote>development</quote> version. A stable version represents a
+        release of jEdit that is considered to be free of serious bugs or
+        performance problems and suitable for general use. A
+        <quote>development</quote> version includes new features or new elements
+        of program design that require testing and possible further refinement.
+        A development version contains the token <quote>pre</quote> in its
+        version number, as in <literal>4.0pre5</literal>.
+      </para>
+      <para>
+        The latest stable and development versions of jEdit are always
+        available from the <ulink url="http://www.jedit.org">jEdit
+        web site</ulink> and from the <ulink url="http://sourceforge.net/
+        projects/jedit">jEdit project page</ulink> of the
+        <ulink url="http://sourceforge.net">SourceForge web site</ulink>,
+        which hosts jEdit's development resources.
+      </para>
+      <para>
+        In addition, a plugin named <application>Check jEdit
+        Version</application> can be run from within jEdit by selecting
+        <guimenuitem>Check jEdit Version</guimenuitem> from the application's
+        <guimenu>Plugins</guimenu> menu. It queries the jEdit web site, compares
+        version information with the version of the currently running
+        instance of jEdit, and reports the result to the user in a message box.
+        It will tell you if you do not have the latest version of jEdit, regardless
+        of whether that version is in <quote>stable</quote> or
+        <quote>development</quote> form.
+      </para>
+      <para>
+        Finally, if you subscribe to the <ulink
+        url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
+        jedit-announce</ulink> or <ulink
+        url="http://lists.sourceforge.net/lists/listinfo/jedit-users">
+        jedit-users</ulink> mailing lists, you will receive a email whenever
+        a new release of jEdit becomes available.
+      </para></answer>
+    </qandaentry>
+    <qandaentry>
+      <question id="get-source"><para>
+        How do I obtain a copy of the jEdit source code?
+      </para></question>
+      <answer><para>
+        The latest version of jEdit's source code is available from the
+        <ulink url="http://www.jedit.org/index.php?page=download&amp;platform=source">
+        jEdit web site</ulink> or the <ulink url=
+        "http://sourceforge.net/project/showfiles.php?group_id=588">
+        SourceForge web site</ulink>. The web site provides the source code for the
+        latest stable and development version, while the SourceForge site has
+        a more extensive archive covering earlier versions.
+      </para>
+      <para>
+        If you are interested in testing the absolutely latest changes to jEdit,
+        and you are familiar with compiling your own Java programs and working
+        with CVS, you can download the current code maintained in the <ulink
+        url="http://sourceforge.net/cvs/?group_id=588">SourceForge
+        CVS repository</ulink>.
+      </para></answer>
+    </qandaentry>
+    <qandaentry>
+	    <question id="get-latest-faq"><para>
+        Where can I get the latest version of this document?</para>
+      </question><answer>
+        <para>
+          The latest release of this document is available at the
+          <ulink
+          url="http://jedit-community.sourceforge.net/modules.php?op=modload&amp;name=Include_Pages&amp;file=index&amp;req=viewarticle&amp;artid=5">
+          jEdit Community web site</ulink>.
+        </para>
+      </answer>
+    </qandaentry>
+
+
+<qandaentry>
+	<question id="jedit-compile">
+		<para>
+			How do you set the classpath and compile the Java files in jEdit?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Consult an article on the <ulink url="http://community.jedit.org">jEdit
+			Community</ulink> web site entitled <quote>Build jEdit yourself: the 'Open'
+			in Open Source</quote>.
+		</para>
+	</answer>
+</qandaentry>
+
+  </qandadiv>
+
 </qandaset>
 
 </sect1>
-
