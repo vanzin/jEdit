@@ -29,15 +29,11 @@ class FirstLine extends Anchor
 {
 	int skew;
 
-	private DisplayManager displayManager;
-	private JEditTextArea textArea;
-
 	//{{{ FirstLine constructor
 	FirstLine(DisplayManager displayManager,
 		JEditTextArea textArea)
 	{
-		this.displayManager = displayManager;
-		this.textArea = textArea;
+		super(displayManager,textArea);
 	} //}}}
 
 	//{{{ changed() method

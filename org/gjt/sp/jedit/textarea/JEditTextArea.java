@@ -1976,6 +1976,17 @@ forward_scan:		do
 
 	//{{{ Caret
 
+	//{{{ caretAutoScroll() method
+	/**
+	 * Return if change in buffer should scroll this text area.
+	 * @since jEdit 4.3pre2
+	 */
+	public boolean caretAutoScroll()
+	{
+		return view == jEdit.getActiveView()
+			&& view.getTextArea() == this;
+	} //}}}
+
 	//{{{ addStructureMatcher() method
 	/**
 	 * Adds a structure matcher.

@@ -61,6 +61,8 @@ class MouseHandler extends MouseInputAdapter
 	//{{{ mousePressed() method
 	public void mousePressed(MouseEvent evt)
 	{
+		showCursor();
+
 		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
 			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
@@ -278,8 +280,7 @@ class MouseHandler extends MouseInputAdapter
 	//{{{ mouseMoved() method
 	public void mouseMoved(MouseEvent evt)
 	{
-		textArea.getPainter().setCursor(
-			Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		showCursor();
 	} //}}}
 
 	//{{{ mouseDragged() method
@@ -569,5 +570,13 @@ class MouseHandler extends MouseInputAdapter
 	/* with drag and drop on, a mouse down in a selection does not
 	immediately deselect */
 	private boolean maybeDragAndDrop;
+	
+	//{{{ showCursor() method
+	private void showCursor()
+	{
+		textArea.getPainter().setCursor(
+			Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+	} //}}}
+
 	//}}}
 }
