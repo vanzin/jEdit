@@ -112,7 +112,7 @@ public class ChunkCache
 					{
 						if(first != null)
 							out.add(first);
-						first = new Chunk(firstNonWhiteSpace,flushIndex);
+						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
 						first.next = end.next;
 						end.next = null;
 

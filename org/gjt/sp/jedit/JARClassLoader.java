@@ -288,7 +288,7 @@ public class JARClassLoader extends ClassLoader
 		 */
 		if(name.equals("WheelMousePlugin")
 			&& jEdit.getProperty("plugin.WheelMousePlugin.version").equals("0.5")
-			&& OperatingSystem.isJava14())
+			&& OperatingSystem.hasJava14())
 		{
 			jar.addPlugin(new EditPlugin.Broken(name));
 			jEdit.pluginError(jar.getPath(),"plugin-error.update",null);

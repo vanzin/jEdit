@@ -1,13 +1,12 @@
 TO DO
 
+- rename MacOS.jar
 - soft wrap: adding lots of spaces: fucks up wrapping
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
   ^.* with foo only replaces every second line
   replace all ^ with something does not replace after blank line
 - scrollToCaret() still "jumps around"
-- if first chunk if a line is a syntax chunk, start offset of screen
-  line wrong
 - rect select and soft wrap
 - vertical scrollbar w/ soft wrap wrong
 - save to X:filename on Windows
