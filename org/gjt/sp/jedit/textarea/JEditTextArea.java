@@ -5873,7 +5873,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			bottom.setBounds(
 				ileft,
 				itop + centerHeight,
-				Math.max(0,size.width - rightWidth - ileft - iright),
+				/* silly that we reference the vertical
+				   scroll bar here directly. we do this so
+				   that the horizontal scroll bar is flush
+				   with the vertical scroll bar */
+				Math.max(0,size.width - vertical.getWidth()
+					- ileft - iright),
 				bottomHeight);
 		} //}}}
 
