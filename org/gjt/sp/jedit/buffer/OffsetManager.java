@@ -307,6 +307,20 @@ public class OffsetManager
 		}
 	} //}}}
 
+	//{{{ _contentInserted() method
+	public void _contentInserted(LongArray endOffsets)
+	{
+		gapLine = -1;
+		gapWidth = 0;
+		lineCount = endOffsets.getSize();
+		lineInfo = endOffsets.getArray();
+		if(lineContext.length <= lineCount)
+			lineContext = new TokenMarker.LineContext[lineCount];
+
+		for(int i = 0; i < positionCount; i++)
+			positions[i].offset = 0;
+	} //}}}
+
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
 		int numLines, int length, LongArray endOffsets)
