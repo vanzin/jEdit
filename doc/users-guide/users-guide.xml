@@ -30,6 +30,7 @@
 <!ENTITY installing-modes SYSTEM "installing-modes.xml">
 
 <!ENTITY macro-basics SYSTEM "macro-basics.xml">
+<!ENTITY simple-macros SYSTEM "simple-macros.xml">
 <!ENTITY dialog-macro SYSTEM "dialog-macro.xml">
 <!ENTITY macro-tips SYSTEM "macro-tips.xml">
 
@@ -136,6 +137,7 @@
  </partintro>
 
  &macro-basics;
+ &simple-macros;
  &dialog-macro;
  &macro-tips;
 </part>

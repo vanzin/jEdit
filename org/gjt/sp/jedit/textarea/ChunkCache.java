@@ -738,10 +738,12 @@ public class ChunkCache
 				{
 					lastScreenLine++;
 					needFullRepaint = true;
+					textArea.updateScrollBars();
 				}
 				else if(out.size() != 0)
 				{
 					lastScreenLine++;
+					textArea.updateScrollBars();
 				}
 			}
 
@@ -753,17 +755,6 @@ public class ChunkCache
 			info.chunksValid = true;
 		}
 	} //}}}
-
-	public void dump(int line)
-	{
-		LineInfo info = getLineInfo(line);
-		Chunk chunk = info.chunks;
-		while(chunk != null)
-		{
-			System.err.println(chunk.offset + "::" + chunk.length);
-			chunk = chunk.next;
-		}
-	}
 
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)

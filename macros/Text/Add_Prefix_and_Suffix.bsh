@@ -119,7 +119,7 @@ void prefixSuffixDialog()
 
         // text manipulation begins here using calls
         // to jEdit methods
-		buffer.beginCompoundEdit();
+        buffer.beginCompoundEdit();
         selectedLines = textArea.getSelectedLines();
         for(i = 0; i < selectedLines.length; ++i)
         {
@@ -131,7 +131,7 @@ void prefixSuffixDialog()
             if(text == null) text = "";
             textArea.setSelectedText(prefix + text + suffix);
         }
-		buffer.endCompoundEdit();
+        buffer.endCompoundEdit();
     }
 }
 

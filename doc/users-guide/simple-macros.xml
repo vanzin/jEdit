@@ -298,7 +298,7 @@ org.gjt.sp.util</programlisting>
    <function>message()</function> but displays an error icon in the message
    box. The <function>input()</function> method furnishes a text field for
    input, an <guilabel>OK</guilabel> button and a
-   <guilabel>Cancel</guilabel> button. If <quote>Cancel</quote> is pressed,
+   <guilabel>Cancel</guilabel> button. If <guilabel>Cancel</guilabel> is pressed,
    the method returns <constant>null</constant>. If <guilabel>OK</guilabel>
    is pressed, a <classname>String</classname> containing the contents of
    the text field is returned. Note that there are two forms of the
@@ -324,8 +324,8 @@ org.gjt.sp.util</programlisting>
 
   <para>
    The <function>confirm()</function> method in the
-   <classname>Macros</classname> class is a ;ittle more complex. The
-   <varname>buttons</varname> parameter has an <type>int</type>
+   <classname>Macros</classname> class is a little more complex. The
+   <varname>buttons</varname> parameter has an <classname>int</classname>
    type, and the usual way to supply a value is to use one of
    the predefined values taken from Java's
    <classname>JOptionPane</classname> class. You can choose among
@@ -355,8 +355,8 @@ String result = Macros.input(view, "Type something here.");
 String result = Macros.input(view, "When were you born?",
     "I don't remember, I was very young at the time");
 
-int result = Macros.confirm("Do you really want to learn about BeanShell?",
-    JOptionPane.YES_NO_OPTION);
+int result = Macros.confirm("Do you really want to learn"
+    + " about BeanShell?",JOptionPane.YES_NO_OPTION);
     </programlisting>
   </informalexample>
 
@@ -704,9 +704,12 @@ String result = df.format(d);
     in the buffer, select it, and choose
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate
     Selection</guimenuitem>. The selected text will be replaced by the
-    answer, <userinput>3205794</userinput>. Since this is a text file
+    answer, <userinput>3205794</userinput>.
+
+    <!-- Irrelevant? -->
+    <!-- Since this is a text file
     and not a spreadsheet, the original values that BeanShell evaluated are
-    not retained or saved as part of the buffer's contents.
+    not retained or saved as part of the buffer's contents. -->
    </para>
   </informalexample>
 

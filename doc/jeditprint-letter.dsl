@@ -25,7 +25,7 @@ CDATA DSSSL> ]>
 
 (element funcsynopsis (process-children))
 
-(element void (process-children))
+(element void (empty-sosofo))
 
 (define %funcsynopsis-style% 'ansi)
 

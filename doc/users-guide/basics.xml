@@ -36,7 +36,7 @@
    <para>
     The maximum number of open buffers depends on available <firstterm>Java
     heap memory</firstterm>. When stored in the Java heap, each buffer requires
-    approximately two and a half it's size on disk. This overhead is caused
+    approximately two and a half times it's size on disk. This overhead is caused
     by the file being stored internally as Unicode (see
     <xref linkend="encodings" />), and the fact that additional information,
     such as line numbers, also needs to be stored.
@@ -63,6 +63,10 @@
     so:
    </para>
    <screen>-mx32m</screen>
+   <para>
+    (See <xref linkend="launcher-starting"/> for more information about the
+    <quote>Set jEdit Parameters</quote> dialog box.)
+   </para>
    <para>
     On Unix, edit the <filename>jedit</filename> shell script and change the
     line that looks like so:

@@ -64,6 +64,8 @@ close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 prev-marker.shortcut=C+e C+COMMA
 next-marker.shortcut=C+e C+PERIOD
+prev-bracket.shortcut=C+e C+OPEN_BRACKET
+next-bracket.shortcut=C+e C+CLOSE_BRACKET
 #}}}
 
 #{{{ C+e X
@@ -88,8 +90,6 @@ select-word.shortcut=C+e w
 parent-fold.shortcut=C+e u
 expand-all-folds.shortcut=C+e x
 expand-folds.shortcut=C+e ENTER
-prev-bracket.shortcut=C+e [
-next-bracket.shortcut=C+e ]
 #}}}
 
 #{{{ C+m C+X

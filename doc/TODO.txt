@@ -1,19 +1,20 @@
 TO DO
 
+- handle ANY content of element
 - rename MacOS.jar
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
   ^.* with foo only replaces every second line
   replace all ^ with something does not replace after blank line
+  hypersearch for .* doesn't list blank lines
 - scrollToCaret() still "jumps around"
 - rect select and soft wrap
 - vertical scrollbar w/ soft wrap wrong
 - save to X:filename on Windows
-- plugin manager needs overhauled error reporting
 - motif l&f: shortcuts in menu items
-- still problem with last phys line repainting
 - replace in selection with rectangular selections
 
+- plugin manager needs overhauled error reporting
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names

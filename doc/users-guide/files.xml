@@ -143,7 +143,7 @@
     The backup feature can also be configured in
     the <guibutton>Loading and Saving</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box. The following settings can be changed:
+    dialog box. It can be customized to do any of the following:
    </para>
    <itemizedlist>
     <listitem><para>
@@ -154,7 +154,7 @@
      Add a prefix to the backed-up file name
     </para></listitem>
     <listitem><para>
-     Adds a suffix, other than <quote>~</quote>, to the backed-up file name
+     Adds a suffix to the backed-up file name (the default is <quote>~</quote>)
     </para></listitem>
     <listitem><para>
      Backups can optionally be saved in a specified backup directory, instead of
@@ -195,24 +195,16 @@
  </sect1>
  <sect1 id="encodings"><title>Character Encodings</title>
   <para>
-   Internally, Java programs like jEdit store text as a stream of
-   16-bit numerical values, with each value a character in the Unicode character
-   set. Unicode is a
-   standardized character set that can represent characters in almost all human
-   languages.
+   If you edit files in different human languages, you will most likely be
+   familiar with the concept of a <quote>character encoding</quote>. The simplest
+   explanation of this is that there are several ways in which a character can
+   be stored on disk; different programs must be set to the same encoding to be
+   able to exchange text. The current buffer's encoding is shown in the status
+   bar.
   </para>
   <para>
-   Unfortunately, most other computer programs use far less flexible methods of
-   storing
-   text; therefore, if jEdit loaded and saved all files as raw Unicode, it would
-   be useless.
-  </para>
-  <para>
-   To get around this, jEdit converts Unicode text to other character
-   encodings and vice versa when loading and saving files. jEdit can use any
+   jEdit can use any
    encoding supported by the Java platform.
-  </para>
-  <para>
    The default encoding, used to load and save files for which no
    other encoding is specified, can be set in the <guibutton>Loading and
    Saving</guibutton> pane of the
@@ -231,7 +223,7 @@
   </para>
   <para>
    Unless you change the default encoding, jEdit will use your operating
-   system's native encoding; <literal>MacRoman</literal> on the MacOS,
+   system's native default; <literal>MacRoman</literal> on the MacOS,
    <literal>Cp1252</literal> on Windows, and <literal>8859_1</literal> on
    Unix.
   </para>
@@ -254,10 +246,10 @@
    Options</guimenuitem> dialog box.
   </para>
   <para>
-   The current buffer's encoding is shown in the status bar. If a file is opened
-   without an explicit encoding specified, jEdit will use the encoding last used
-   when working with that file, if the file is in the recent file list.
-   Otherwise, the default encoding will be used.
+   If a file is opened
+   without an explicit encoding specified and it appears in the recent file list,
+   jEdit will use the encoding last used
+   when working with that file; otherwise the default encoding will be used.
   </para>
   <sect2><title>Commonly Used Encodings</title>
    <para>
@@ -265,10 +257,10 @@
     Standard Code for Information Interchange</quote>. ASCII encodes Latin
     letters used in English, in addition to numbers and a range of punctuation
     characters.
-    The ASCII character set consists of 127 characters only, and it is unsuitable
+    The ASCII character set consists of 127 characters, and it is unsuitable
     for anything but English text (and other file types which only use English
     characters, like most program source). jEdit will load and save files as
-    7-bit ASCII if the <literal>ASCII</literal> encoding is used.
+    ASCII if the <literal>ASCII</literal> encoding is used.
    </para>
    <para>
     Because ASCII is unsuitable for international use, most operating
@@ -280,7 +272,8 @@
     Macintosh programs can be read using the <literal>MacRoman</literal>
     encoding; Windows text files are usually stored as
     <literal>Cp1252</literal>. In the Unix world, the <literal>8859_1</literal>
-    (otherwise known as Latin1) character encoding has found widespread usage.
+    (otherwise known as <literal>Latin1</literal>) character encoding has found
+    widespread usage.
    </para>
    <para>
     Windows users are accustomized to dealing with files in a wide range of
@@ -396,8 +389,8 @@
     containing the following items:
    </para>
    <itemizedlist>
-    <listitem><para><guimenuitem>Parent Directory</guimenuitem> - displays the
-    directory containing the one currently being viewed.</para></listitem>
+    <listitem><para><guimenuitem>Parent Directory</guimenuitem> - moves up in
+    the directory hierarchy.</para></listitem>
     <listitem><para><guimenuitem>Reload Directory</guimenuitem> - reloads the
     file list from disk.</para></listitem>
     <listitem><para><guimenuitem>Local Drives</guimenuitem> - displays all
@@ -477,7 +470,7 @@
    If an open buffer is modified on disk by another application, a warning
    dialog box is displayed, offering to either continue editing
    (and lose changes made by the other application)
-   or reload the buffer from disk (and lose any usaved changes). This
+   or reload the buffer from disk (and lose any unsaved changes in jEdit). This
    feature can be disabled in the <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.

@@ -95,7 +95,7 @@
    <literal>MODE</literal> tag does not have any defined attributes.
    Here is an example:
   </para>
-  <programlisting><![CDATA[[<MODE>
+  <programlisting><![CDATA[<MODE>
     <replaceable>... mode definition goes here ...</replaceable>
 </MODE>]]></programlisting>
  </sect1>

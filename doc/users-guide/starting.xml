@@ -99,6 +99,10 @@
   <para>
    For more information about command line switches that control the
    server feature, see <xref linkend="cli-usage" />.
+   Note that if you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, this switch cannot be specified on the
+   MS-DOS prompt command line when starting jEdit; it must be set as described
+   in <xref linkend="launcher-starting" />.
   </para>
   <para>
    Unlike other applications, jEdit automatically loads any files that were
@@ -248,12 +252,11 @@
      </row>
      <row>
       <entry><command>-settings=<replaceable>dir</replaceable></command></entry>
-      <entry>Loads and saves the user-specific settings from
+      <entry>Loads and saves the user-specific settings in
       the directory named <replaceable>dir</replaceable>, instead of the
       default <filename><replaceable>user.home</replaceable>/.jedit</filename>.
-      <replaceable>dir</replaceable> will
-      be created if it does not exist. Has no effect
-      when connecting to another instance via the edit server.</entry>
+      The directory will be created automatically if it does not exist. Has no
+      effect when connecting to another instance via the edit server.</entry>
      </row>
      <row>
       <entry><command>-nosettings</command></entry>
