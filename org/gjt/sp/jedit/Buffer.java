@@ -2326,74 +2326,6 @@ public class Buffer
 		}
 	} //}}}
 
-	//{{{ indentLine() method
-	/**
-	 * @deprecated Use {@link #indentLine(int)} instead.
-	 */
-	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
-		boolean canDecreaseIndent)
-	{
-		return indentLine(lineIndex);
-	} //}}}
-
-	//{{{ indentLine() method
-	/**
-	 * Indents the specified line.
-	 * @param line The line number to indent
-	 * @return true If indentation took place, false otherwise.
-	 * @since jEdit 4.2pre2
-	 */
-	public boolean indentLine(int lineIndex)
-	{
-		getLineText(lineIndex,seg);
-
-		int tabSize = getTabSize();
-
-		int whitespaceChars = 0;
-		int currentIndent = 0;
-loop:		for(int i = 0; i < seg.count; i++)
-		{
-			char c = seg.array[seg.offset + i];
-			switch(c)
-			{
-			case ' ':
-				currentIndent++;
-				whitespaceChars++;
-				break;
-			case '\t':
-				currentIndent += (tabSize - (currentIndent
-					% tabSize));
-				whitespaceChars++;
-				break;
-			default:
-				break loop;
-			}
-		}
-
-		int idealIndent = getIndentForLine(lineIndex);
-		if(idealIndent == -1 || idealIndent == currentIndent)
-			return false;
-
-		// Do it
-		try
-		{
-			beginCompoundEdit();
-
-			int start = getLineStartOffset(lineIndex);
-
-			remove(start,whitespaceChars);
-			insert(start,MiscUtilities.createWhiteSpace(
-				idealIndent,(getBooleanProperty("noTabs")
-				? 0 : tabSize)));
-		}
-		finally
-		{
-			endCompoundEdit();
-		}
-
-		return true;
-	} //}}}
-
 	//{{{ indentLines() method
 	/**
 	 * Indents all specified lines.
@@ -2407,7 +2339,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			beginCompoundEdit();
 			for(int i = start; i <= end; i++)
-				indentLine(i);
+				indentLine(i,true);
 		}
 		finally
 		{
@@ -2427,7 +2359,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			beginCompoundEdit();
 			for(int i = 0; i < lines.length; i++)
-				indentLine(lines[i]);
+				indentLine(lines[i],true);
 		}
 		finally
 		{
@@ -2435,13 +2367,100 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ getIndentForLine() method
+	//{{{ indentLine() method
+	/**
+	 * @deprecated Use {@link #indentLine(int,boolean)} instead.
+	 */
+	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
+		boolean canDecreaseIndent)
+	{
+		return indentLine(lineIndex,canDecreaseIndent);
+	} //}}}
+
+	//{{{ indentLine() method
+	/**
+	 * Indents the specified line.
+	 * @param line The line number to indent
+	 * @param canDecreaseIndent If true, the indent can be decreased as a
+	 * result of this. Set this to false for Tab key.
+	 * @return true If indentation took place, false otherwise.
+	 * @since jEdit 4.2pre2
+	 */
+	public boolean indentLine(int lineIndex, boolean canDecreaseIndent)
+	{
+		int[] whitespaceChars = new int[1];
+		int currentIndent = getCurrentIdentForLine(lineIndex,
+			whitespaceChars);
+		int idealIndent = getIdealIndentForLine(lineIndex);
+
+		if(idealIndent == -1 || idealIndent == currentIndent
+			|| (!canDecreaseIndent && idealIndent < currentIndent))
+			return false;
+
+		// Do it
+		try
+		{
+			beginCompoundEdit();
+
+			int start = getLineStartOffset(lineIndex);
+
+			remove(start,whitespaceChars[0]);
+			insert(start,MiscUtilities.createWhiteSpace(
+				idealIndent,(getBooleanProperty("noTabs")
+				? 0 : getTabSize())));
+		}
+		finally
+		{
+			endCompoundEdit();
+		}
+
+		return true;
+	} //}}}
+
+	//{{{ getCurrentIdentForLine() method
+	/**
+	 * Returns the line's current leading indent.
+	 * @param lineIndex The line number
+	 * @param whitespaceChars If this is non-null, the number of whitespace
+	 * characters is stored at the 0 index
+	 * @since jEdit 4.2pre2
+	 */
+	public int getCurrentIdentForLine(int lineIndex, int[] whitespaceChars)
+	{
+		getLineText(lineIndex,seg);
+
+		int tabSize = getTabSize();
+
+		int currentIndent = 0;
+loop:		for(int i = 0; i < seg.count; i++)
+		{
+			char c = seg.array[seg.offset + i];
+			switch(c)
+			{
+			case ' ':
+				currentIndent++;
+				whitespaceChars[0]++;
+				break;
+			case '\t':
+				currentIndent += (tabSize - (currentIndent
+					% tabSize));
+				whitespaceChars[0]++;
+				break;
+			default:
+				break loop;
+			}
+		}
+
+		return currentIndent;
+	} //}}}
+
+	//{{{ getIdealIndentForLine() method
 	/**
 	 * Returns the ideal leading indent for the specified line.
 	 * This will apply the various auto-indent rules.
 	 * @param lineIndex The line number
 	 */
-	public int getIndentForLine(int lineIndex)
+	public int getIdealIndentForLine(int lineIndex)
 	{
 		final String EXPLICIT_START = "{{{";
 		final String EXPLICIT_END = "}}}";
@@ -2563,12 +2582,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 				break;
 			}
-		}
-
-		String line = getLineText(lineIndex);
-		//}}}
+		} //}}}
 
 		//{{{ Get indent attributes for current line
+		String line = getLineText(lineIndex);
+
 		/*
 		 * On the current line,
 		 * } --> -1
@@ -2640,15 +2658,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}//}}}
 
 		//{{{ Handle regexps
-		if(lineBrackets == 0 || (doubleBracketIndent && lineBrackets > 0))
+		if(lineBrackets >= 0)
 		{
 			// If the previous line matches indentNextLine or indentNextLines,
 			// add a level of indent
-			if(indentNextLinesRE != null && indentNextLinesRE.isMatch(prevLine))
+			if((lineBrackets == 0 || doubleBracketIndent)
+				&& indentNextLinesRE != null
+				&& indentNextLinesRE.isMatch(prevLine))
+			{
 				indent += indentSize;
+			}
 			else if(indentNextLineRE != null)
 			{
-				if(indentNextLineRE.isMatch(prevLine))
+				if((lineBrackets == 0 || doubleBracketIndent)
+					&& indentNextLineRE.isMatch(prevLine))
 					indent += indentSize;
 
 				// we don't want

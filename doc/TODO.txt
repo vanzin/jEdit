@@ -8,27 +8,22 @@ pre2 on thursday!!!
 - change of AT_WORD_START semantics to fix perl highlighting?
 - still file reload problems
 - auto indent: don't de-indent on enter if no leading indent at all?
-- if(...)
-  
-  { <-- wrong
-
 - new file: horiz scroll wrong
 - scroll to with invisible caret
-- bad wrap:
-  						MiscUtilities.quicksort(favorites,
-  							new VFS.DirectoryEntryCompare());
 - bizarre dockable window manager button layout problem
 - while loading --> scroll bar
+- review tips
 
 - fsb default size
 - bind key to C+e F2 F3: status bar
 - update docs
-- review tips
 - auto reload - save caret info first
 - shortcuts: stale shortcuts remain?
 - narrow: scrolls one down
 - synchro scroll needs a rewrite & folding
-
+- bad wrap:
+  						MiscUtilities.quicksort(favorites,
+  							new VFS.DirectoryEntryCompare());
 - perm to string for FTP plugin
 - update quicknotepad docs
 - actions/dockables eval: should use own namespace?
