@@ -149,10 +149,8 @@ void prefixSuffixDialog()
         suffix = suffixField.getText();
         if(prefix.length() == 0 &amp;&amp; suffix.length() == 0)
             return;
-        if(prefix.length() != 0)
-            prefixField.addCurrentToHistory();
-        if(suffix.length() != 0)
-            suffixField.addCurrentToHistory();
+        prefixField.addCurrentToHistory();
+        suffixField.addCurrentToHistory();
 
 <anchor id="jEdit-calls"/>        // text manipulation begins here using calls
         // to jEdit methods  (see <xref linkend="explain-jedit-calls"/>)
@@ -492,10 +490,8 @@ void processText()
     suffix = suffixField.getText();
     if(prefix.length() == 0 &amp;&amp; suffix.length() == 0)
         return;
-    if(prefix.length() != 0)
-        prefixField.addCurrentToHistory();
-    if(suffix.length() != 0)
-        suffixField.addCurrentToHistory();</programlisting></informalexample>
+    prefixField.addCurrentToHistory();
+    suffixField.addCurrentToHistory();</programlisting></informalexample>
 
   <para>
     The method <function>processText()</function> does the work of our
@@ -504,6 +500,10 @@ void processText()
     empty, there is nothing to do, so the method returns. If there is
     input, any text in the field is added to that field's stored
     history list by calling <function>addCurrentToHistory()</function>.
+    We do not need to test the <varname>prefixField</varname> or
+    <varname>suffixField</varname> controls for <constant>null</constant>
+    or empty values because <function>addCurrentToHistory()</function>
+    does that internally.
   </para>
 
 </sect2>
