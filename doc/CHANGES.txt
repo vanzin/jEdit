@@ -42,6 +42,7 @@ Java 1.1 can no longer be used to run jEdit.
     'Narrow to Selection'
   - Narrow to Selection (C+e n s): this command is the same as before,
     but has a new shortcut
+- ActionScript syntax highlighting (Ben Glazer)
 
 + Enhancements
 
