@@ -33,6 +33,11 @@
 		</SPAN>
 
 		<!-- JavaScript -->
+		<SPAN_REGEXP HASH_CHAR="<" TYPE="MARKUP" DELEGATE="PHP">
+			<BEGIN>&lt;SCRIPT\s+LANGUAGE="?PHP"?&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
+		</SPAN_REGEXP>
+
 		<SPAN TYPE="MARKUP" DELEGATE="JAVASCRIPT">
 			<BEGIN>&lt;SCRIPT</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>

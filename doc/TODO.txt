@@ -5,6 +5,8 @@ and quirks that I need to fix eventually.
 
 synchro scroll tip: remove
 
+JavaInsight problem
+
 [error] EditBus: java.lang.ArrayIndexOutOfBoundsException: 1
 [error] EditBus:  at org.gjt.sp.jedit.buffer.LineManager.isScreenLineCountValid(LineManager.java:145)
 [error] EditBus:  at org.gjt.sp.jedit.textarea.DisplayManager.getScreenLineCount(DisplayManager.java:223)
