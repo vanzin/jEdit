@@ -1715,7 +1715,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				topToolbars.setBounds(
 					leftButtonWidth + leftWidth,
 					topButtonHeight + topHeight,
-					_width - leftWidth - rightWidth
+					size.width - leftWidth - rightWidth
 					- leftButtonWidth - rightButtonWidth,
 					_topToolbars.height);
 			}
@@ -1724,12 +1724,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			{
 				bottomToolbars.setBounds(
 					leftButtonWidth + leftWidth,
-					_height - bottomHeight
+					size.height - bottomHeight
 					- bottomButtonHeight
 					- _bottomToolbars.height
 					+ topButtonHeight
 					+ topHeight,
-					_width - leftWidth - rightWidth
+					size.width - leftWidth - rightWidth
 					- leftButtonWidth - rightButtonWidth,
 					_bottomToolbars.height);
 			} //}}}
