@@ -24,7 +24,8 @@ JEDIT 4.1 VERSION HISTORY
 - HyperSearch now respects rectangular selections
 - Search bar no longer takes up the full width of the view. This saves
   some screen space
-- Status bar looks somewhat better now
+- Status bar looks somewhat better now, and now shows the word wrap mode
+  and line separator status
 - The text color and style used to show the "[n lines]" string can now
   be set independently of the EOL marker color
 

@@ -137,7 +137,7 @@ public class DockingOptionPane extends AbstractOptionPane
 				DockableWindowManager.BOTTOM,
 				DockableWindowManager.RIGHT
 			});
-			setRequestFocusEnabled(false);
+			DockPositionCellRenderer.this.setRequestFocusEnabled(false);
 		}
 
 		public Component getTableCellRendererComponent(JTable table,

@@ -97,8 +97,6 @@ public class EditBus
 			try
 			{
 				comps[i].handleMessage(message);
-				if(message.isVetoed())
-					break;
 			}
 			catch(Throwable t)
 			{

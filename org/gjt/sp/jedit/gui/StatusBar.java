@@ -86,6 +86,14 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(4));
 
+
+		wrap = new ToolTipLabel();
+		wrap.setHorizontalAlignment(SwingConstants.CENTER);
+		wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip"));
+		wrap.addMouseListener(mouseHandler);
+
+		box.add(wrap);
+
 		multiSelect = new ToolTipLabel();
 		multiSelect.setHorizontalAlignment(SwingConstants.CENTER);
 		multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
@@ -99,6 +107,13 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		overwrite.addMouseListener(mouseHandler);
 
 		box.add(overwrite);
+
+		lineSep = new ToolTipLabel();
+		lineSep.setHorizontalAlignment(SwingConstants.CENTER);
+		lineSep.setToolTipText(jEdit.getProperty("view.status.linesep-tooltip"));
+		lineSep.addMouseListener(mouseHandler);
+
+		box.add(lineSep);
 		box.add(Box.createHorizontalStrut(4));
 
 		memory = new MemoryStatus();
@@ -136,16 +151,26 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			(int)bounds.getHeight());
 		caretStatus.setPreferredSize(dim);
 
+		dim = wrap.getPreferredSize();
+		wrap.setPreferredSize(new Dimension(Math.max(
+			Math.max(fm.charWidth('-'),fm.charWidth('H')),
+			fm.charWidth('S')),dim.height));
+
 		dim = multiSelect.getPreferredSize();
-		multiSelect.setPreferredSize(new Dimension(Math.max(
-			(int)font.getStringBounds("-",frc).getWidth(),
-			(int)font.getStringBounds("M",frc).getWidth()),
+		multiSelect.setPreferredSize(new Dimension(
+			Math.max(fm.charWidth('-'),fm.charWidth('M')),
 			dim.height));
 
 		dim = overwrite.getPreferredSize();
-		overwrite.setPreferredSize(new Dimension(Math.max(
-			(int)font.getStringBounds("-",frc).getWidth(),
-			(int)font.getStringBounds("O",frc).getWidth()),
+		overwrite.setPreferredSize(new Dimension(
+			Math.max(fm.charWidth('-'),fm.charWidth('O')),
+			dim.height));
+
+		dim = lineSep.getPreferredSize();
+		lineSep.setPreferredSize(new Dimension(Math.max(
+			Math.max((int)font.getStringBounds("U",frc).getWidth(),
+			(int)font.getStringBounds("W",frc).getWidth()),
+			(int)font.getStringBounds("M",frc).getWidth()),
 			dim.height));
 
 		// UI hack because BoxLayout does not give all components the
@@ -295,6 +320,23 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public void updateBufferStatus()
 	{
 		Buffer buffer = view.getBuffer();
+
+		String wrap = buffer.getStringProperty("wrap");
+		if(wrap.equals("none"))
+			this.wrap.setText("-");
+		else if(wrap.equals("hard"))
+			this.wrap.setText("H");
+		else if(wrap.equals("soft"))
+			this.wrap.setText("S");
+
+		String lineSep = buffer.getStringProperty("lineSeparator");
+		if("\n".equals(lineSep))
+			this.lineSep.setText("U");
+		else if("\r\n".equals(lineSep))
+			this.lineSep.setText("W");
+		else if("\r".equals(lineSep))
+			this.lineSep.setText("M");
+
 		mode.setText("(" + buffer.getMode().getName() + ","
 			+ (String)view.getBuffer().getProperty("folding") + ","
 			+ buffer.getStringProperty("encoding") + ")");
@@ -318,8 +360,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private Component messageComp;
 	private JLabel message;
 	private JLabel mode;
+	private JLabel wrap;
 	private JLabel multiSelect;
 	private JLabel overwrite;
+	private JLabel lineSep;
 	private MemoryStatus memory;
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
@@ -333,6 +377,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
+			Buffer buffer = view.getBuffer();
+
 			Object source = evt.getSource();
 			if(source == caretStatus)
 			{
@@ -344,10 +390,32 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				if(evt.getClickCount() == 2)
 					new BufferOptions(view,view.getBuffer());
 			}
+			else if(source == wrap)
+			{
+				String wrap = buffer.getStringProperty("wrap");
+				if(wrap.equals("none"))
+					buffer.setStringProperty("wrap","soft");
+				else if(wrap.equals("soft"))
+					buffer.setStringProperty("wrap","hard");
+				else if(wrap.equals("hard"))
+					buffer.setStringProperty("wrap","none");
+				buffer.propertiesChanged();
+			}
 			else if(source == multiSelect)
 				view.getTextArea().toggleMultipleSelectionEnabled();
 			else if(source == overwrite)
 				view.getTextArea().toggleOverwriteEnabled();
+			else if(source == lineSep)
+			{
+				String lineSep = buffer.getStringProperty("lineSeparator");
+				if("\n".equals(lineSep))
+					buffer.setStringProperty("lineSeparator","\r\n");
+				else if("\r\n".equals(lineSep))
+					buffer.setStringProperty("lineSeparator","\r");
+				else if("\r".equals(lineSep))
+					buffer.setStringProperty("lineSeparator","\n");
+				buffer.propertiesChanged();
+			}
 			else if(source == memory)
 			{
 				if(evt.getClickCount() == 2)
