@@ -185,7 +185,7 @@
   <para>
    Note that changes to certain settings such as the Swing look and feel require a restart of jEdit to take effect.
   </para>
-  </sect2><sect2 id="autosave-backups-pane"><title>The Autosave and Backups Pane</title>
+  </sect2><sect2 id="autosave-backups-pane"><title>The Autosave and Backup Pane</title>
   <para>
    The <guibutton>Autosave</guibutton> option pane contains settings for the autosave and backup features. See <xref linkend="autosave" /> and
    <xref linkend="backups"/>.
@@ -194,6 +194,11 @@
   <para>
    The <guibutton>Context Menu</guibutton> option pane edits the text
    area's right-click context menu. See <xref linkend="views"/>.
+  </para>
+  </sect2>
+  <sect2 id="docking-pane"><title>The Docking Pane</title>
+  <para>
+   The <guibutton>Docking</guibutton> option pane specifies docking location for various dockable windows. Another way to specify docking locations is to use the popup menus associated with each dockable window; see <xref linkend="docking"/>.
   </para>
   </sect2>
   <sect2 id="editing-pane"><title>The Editing Pane</title>
@@ -224,14 +229,18 @@
   </sect2><sect2 id="gutter-pane"><title>The Gutter Pane</title>
   <para>
    The <guibutton>Gutter</guibutton> option pane contains settings to
-   customize the appearance of the gutter. See <xref linkend="textarea"/>.
+   customize the appearance of the gutter. See <xref linkend="overview"/>.
+  </para>
+  </sect2><sect2 id="mouse-pane"><title>The Mouse Pane</title>
+  <para>
+   The <guibutton>Mouse</guibutton> option pane contains settings for toggling drag and drop of text, as well as gutter mouse click behavior.
   </para>
   </sect2><sect2 id="printing-pane"><title>The Printing Pane</title>
   <para>
    The <guibutton>Printing</guibutton> option pane contains settings to
    control the appearance of printed output. Workarounds that might be needed for your Java version to print correctly can also be enabled here. See <xref linkend="printing"/>.
   </para>
-  </sect2><sect2 id="plugin-mgr-pane"><title>The Plugin Manager Pane</title>
+  </sect2><sect2 id="pluginmgr-pane"><title>The Plugin Manager Pane</title>
   <para>
    The <guibutton>Plugin Manager</guibutton> pane contains a chooser for the desired download mirror, as well as various settings such as the directory where plugins are to be installed. See <xref linkend="using-plugins"/>.
   </para>
@@ -268,7 +277,7 @@
   </sect2><sect2 id="text-area-pane"><title>The Text Area Pane</title>
   <para>
    The <guibutton>Text Area</guibutton> pane contains settings to customize
-   the appearance of the text area. See <xref linkend="textarea"/>.
+   the appearance of the text area. See <xref linkend="overview"/>.
   </para>
   </sect2><sect2 id="toolbar-pane"><title>The Tool Bar Pane</title>
   <para>
@@ -345,6 +354,7 @@
    plugins. See <xref linkend="using-plugins" />.</para></listitem>
    <listitem><para><filename>jars-cache</filename> - this directory contains
    plugin cache files which decrease the time to start jEdit. They are automatically updated when plugins are installed or updated.</para></listitem>
+   <listitem><para><filename>killring.xml</filename> - stores recently deleted text. See <xref linkend="text-transfer" />.</para></listitem>
    <listitem><para><filename>macros</filename> - this directory contains
    macros. See <xref linkend="using-macros" />.</para></listitem>
    <listitem><para><filename>modes</filename> - this directory contains custom
@@ -373,11 +383,8 @@
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.
    </para></listitem>
-   <listitem><para><filename>settings-backups</filename> - this directory
-   contains numbered backups of all automatically-written settings files
-   (<filename>abbrevs</filename>, <filename>activity.log</filename>,
-   <filename>history</filename>, <filename>properties</filename>,
-   <filename>recent.xml</filename>, and <filename>perspective.xml</filename>).
+   <listitem><para><filename>settings-backup</filename> - this directory
+   contains numbered backups of all automatically-written settings files.
    </para></listitem>
   </itemizedlist>
  </sect1>

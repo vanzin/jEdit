@@ -30,7 +30,7 @@ decreaseFontSize();
 <listitem>
 	<para><filename>Decrease_Font_Size.bsh</filename></para>
 	<abstract><para>
-		Decreases the font size in the editor & gutter by 1.
+		Decreases the font size in the gutter and text area by 1 point.
 	</para></abstract>
 </listitem>
 

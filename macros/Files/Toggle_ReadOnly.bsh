@@ -78,12 +78,8 @@ ToggleReadOnly(view);
 <listitem>
 	<para><filename>Toggle_ReadOnly.bsh</filename></para>
 	<abstract><para>
-	Toggles a local file's read-only flag.
+	Toggles a local file's read-only flag. Uses platform-specific commands, so it only works on Windows, Unix and MacOS X.
 	</para></abstract>
-	<para>
-	Toggles the Read-Only flag for the current Buffer's file, and
-	updates the Buffer's Read-Only flag.  Only works for local files.
-	</para>
 </listitem>
 
 */

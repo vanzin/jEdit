@@ -7,18 +7,17 @@
   The text fields in the search and replace dialog box
   and the file system browser remember the last 20 entered strings by
   default. The number of strings to remember can be changed in the
-  <guibutton>General</guibutton> pane of the
+  <guibutton>Appearance</guibutton> pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
   dialog box; see <xref linkend="appearance-pane" />.
  </para>
  <para>
-  Pressing <keycap>Up</keycap> recalls previous strings.
-  Pressing <keycap>Down</keycap> after recalling previous strings
+  Pressing <keycap>UP</keycap> recalls previous strings.
+  Pressing <keycap>DOWN</keycap> after recalling previous strings
   recalls later strings.
  </para>
  <para>
-  Pressing <keycombo><keycap>Shift</keycap><keycap>Up</keycap></keycombo>
-  or <keycombo><keycap>Shift</keycap><keycap>Down</keycap></keycombo>
+  Pressing <keycap>S+UP</keycap> or <keycap>S+DOWN</keycap>
   will search backwards or forwards, respectively, for strings
   beginning with the text already entered in the text field.
  </para>

@@ -1351,7 +1351,9 @@ files-changed.changed=Changed on disk:
 files-changed.changed-dirty-auto=Buffer dirty; not reloaded:
 files-changed.changed-dirty=Buffer dirty, and file changed on disk:
 files-changed.select-all=Select All
+files-changed.select-all.mnemonic=a
 files-changed.reload=Reload
+files-changed.reload.mnemonic=r
 #}}}
 
 #{{{ Abbrev dialogs

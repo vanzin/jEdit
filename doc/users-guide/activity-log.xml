@@ -10,7 +10,9 @@
  <para>
   <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Activity
   Log</guimenuitem> displays
-  the last 500 lines of the activity log. By default, the activity log is shown in a floating window. It can be docked using the commands shown when clicking the popup menu button in the top-left corner; see <xref linkend="docking" />.
+  the last 500 lines of the activity log. By default, the activity log is shown in a floating window. This window can be docked using the commands in its top-left corner popup menu; see <xref linkend="docking" />.
+ </para>
+ <para>
   The complete
   log can be found in the <filename>activity.log</filename> file inside the
   jEdit settings directory, the path of which is shown inside the activity

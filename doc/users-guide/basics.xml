@@ -3,97 +3,85 @@
 <!-- :xml.root=users-guide.xml: -->
 
 <chapter id="basics"><title>jEdit Basics</title>
- <sect1 id="buffers"><title>Buffers</title>
+ <sect1 id="overview"><title>Interface Overview</title>
   <para>
-   A <firstterm>buffer</firstterm> is the jEdit term for an open file.
-   Several buffers can be opened and edited at once;
-   the combo box above the text area selects the buffer to edit.
-   Different emblems are displayed next to buffer names in the list,
+   A <firstterm>view</firstterm> is the jEdit term for an editor window.
+   It is possible to have multiple views open at once, and each view can
+   be split into multiple panes. jEdit remembers the state of open views between editing sessions.
+  </para>
+  <para>
+   An open file is referred to as a <firstterm>buffer</firstterm>.
+   Unlike some editors where each buffer gets its own view, jEdit completely separates the two concepts. A buffer might be visible in several views, or none at all.
+  </para>
+  <para>
+   The popup menu at the top of the view lists all open buffers; selecting one will make it visible in the view's text area. Different emblems are displayed next to buffer names in the list,
    depending the buffer's state;
    a red disk is shown for buffers with unsaved changes,
    a lock is shown for read-only buffers,
    and a spark is shown for new buffers which don't yet exist on disk.
   </para>
   <para>
-   In addition to the buffer combo box, various commands can also be
-   used to select the buffer to edit.
+   As with most other graphical applications, there is a tool bar at the top of the view which provides quick access to frequently-used commands. Also, clicking the text area with the right mouse button displays a popup menu which also facilitates quick access to various commands.
+   Both the tool bar and the right-click menu can be completely customized to suit your tastes in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box; see <xref linkend="context-pane" />
+   and <xref linkend="toolbar-pane"/>.
+  </para>
+  <para>
+   Most of the view is taken up by the text area. If you've ever used a graphical user interface before, the text area will be instantly familiar. Text can be inserted simply by typing. More details on text insertion and deletion can be found in <xref linkend="entering-text"/>.
+  </para>
+  <para>
+   The strip on the left of the text area is called a <firstterm>gutter</firstterm>.
+   The gutter displays marker and register locations; it will also display
+   line numbers if the 
+   <guimenu>View</guimenu>&gt;<guimenuitem>Line Numbers</guimenuitem> (shortcut: <keycap>C+e C+t</keycap>) command is invoked.
+  </para>
+ </sect1>
+
+ <sect1 id="buffers"><title>Switching Buffers</title>
+  <para>
+   In addition to using the popup menu at the top of the view, as documented in the previous section, the current buffer can also be switched using menu item commands and their keyboard shortcuts.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Buffer</guimenuitem>
-   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>Page Up</keycap>
-   </keycombo>) switches to the previous buffer in the list.
+   (keyboard shortcut: <keycap>C+PAGE_UP</keycap>) switches to the previous buffer in the list.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Buffer</guimenuitem>
-   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>Page Down</keycap>
-   </keycombo>) switches to the next buffer in the list.
+   (keyboard shortcut: <keycap>C+PAGE_DOWN</keycap>) switches to the next buffer in the list.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to Recent Buffer</guimenuitem>
-   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo>)
-   switches to the buffer that was being edited prior to the current one.
+   (keyboard shortcut: <keycap>C+BACK_QUOTE</keycap>)
+   flips between the two most recently edited buffers.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Show Buffer Switcher</guimenuitem>
-   (keyboard shortcut: <keycombo><keycap>Alt</keycap><keycap>`</keycap></keycombo>)
+   (keyboard shortcut: <keycap>A+BACK_QUOTE</keycap>)
    has the same effect as clicking on the buffer switcher combo box.
   </para>
-  <sidebar><title>Plugins</title>
-   <para>
-    Plugins are available to implement various alternative buffer switching interfaces. Check out <application>BufferList</application>,
-    <application>BufferSelector</application>, <application>BufferTabs</application>, and <application>SwitchBuffer</application>.
-   </para>
-  </sidebar>
-  <sect2><title>Memory Usage</title>
-   <para>
-    The maximum number of open buffers depends on available <firstterm>Java
-    heap memory</firstterm>. When in the Java heap, a buffer uses
-    approximately two and a half times it's size on disk. This overhead is caused
-    by the file being stored internally in Unicode (see
-    <xref linkend="encodings" />), and various meta-data such as line numbers.
-   </para>
-   <para>
-    The status bar at the bottom of the view displays used and total Java
-    heap memory; see <xref linkend="status-bar" /> for details. This can give
-    you a rough idea of how much memory the currently opened files are using.
-    The Java heap grows if it runs out of room, but it only grows to a certain
-    maximum size, and attempts to allocate Java objects that would grow the
-    heap beyond this size fail with out-of-memory errors.
-   </para>
-   <para>
-    As a result, if the maximum heap size is set too low,
-    opening large files or performing other memory-intensive operations can
-    fail, even if you have a lot of free
-    system memory.
-   </para>
-   <para>
-    To change the heap size on Windows, run <quote>Set jEdit Parameters</quote>
-    from the <quote>jEdit</quote> group in the
-    Programs menu. Then, in the resulting dialog box, under <quote>Command
-    line options for Java executable</quote>, change the option that looks like
-    so:
-   </para>
-   <screen>-mx32m</screen>
-   <para>
-    (See <xref linkend="launcher-starting"/> for more information about the
-    <quote>Set jEdit Parameters</quote> dialog box.)
-   </para>
-   <para>
-    On Unix, edit the <filename>jedit</filename> shell script and change the
-    line that looks like so:
-   </para>
-   <screen>JAVA_HEAP_SIZE=32</screen>
-   <para>
-    In both cases, replace <quote>32</quote> with the desired heap size, in
-    megabytes.
-   </para>
-  </sect2>
- </sect1>
- <sect1 id="views"><title>Views</title>
   <para>
-   A <firstterm>view</firstterm> is the jEdit term for an editor window.
-   It is possible to have multiple views open at once, and each view can
-   be split into multiple panes. jEdit remembers the state of open views between editing sessions.
+   If you prefer an alternative graphical paradigm for switching buffers, take a look at one of these plugins:
+  </para>
+  <itemizedlist>
+   <listitem><para><application>BufferList</application></para></listitem>
+   <listitem><para><application>BufferSelector</application></para></listitem>
+   <listitem><para><application>BufferTabs</application></para></listitem>
+  </itemizedlist>
+  <para>
+   If you decide to use one of these plugins, you can hide the popup menu buffer switcher in the <guilabel>View</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+  </para>
+  <para>
+   A number of plugins that implement fast keyboard-based buffer switching are available as well:
+  </para>
+  <itemizedlist>
+   <listitem><para><application>FastOpen</application></para></listitem>
+   <listitem><para><application>OpenIt</application></para></listitem>
+   <listitem><para><application>SwitchBuffer</application></para></listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="views"><title>Multiple Views</title>
+  <para>
+   As documented at the beginning of this chapter, multiple views can be opened at once, and views can be split into multiple panes.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem> creates a new view.
@@ -112,23 +100,23 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Horizontally</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo>)
+   (shortcut: <keycap>C+2</keycap>)
    splits the view into two text areas, placed above each other.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Vertically</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo>)
+   (shortcut: <keycap>C+3</keycap>)
    splits the view into two text areas, placed next to each other.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit Current</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>0</keycap></keycombo>)
+   (shortcut: <keycap>C+0</keycap>)
    removes the split containing the current text area only.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit All</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo>)
+   (shortcut: <keycap>C+1</keycap>)
    removes all splits from the view.
   </para>
   <para>
@@ -139,25 +127,17 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to
    Previous Text Area</guimenuitem>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo>)
+   (shortcut: <keycap>A+PAGE_UP</keycap>)
    shifts keyboard focus to the previous text area.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to
    Next Text Area</guimenuitem>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo>)
+   (shortcut: <keycap>A+PAGE_DOWN</keycap>)
    shifts keyboard focus to the next text area.
   </para>
-  <para>
-   Clicking the text area with the right mouse button displays a popup menu.
-   Both this menu and the tool bar at the top of the view offer quick
-   mouse-based access to frequently-used commands.
-   The contents of the tool bar and right-click menu can be
-   changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box; see <xref linkend="context-pane" />
-   and <xref linkend="toolbar-pane"/>.
-  </para>
-  <sect2 id="docking"><title>Window Docking</title>
+ </sect1>
+  <sect1 id="docking"><title>Window Docking</title>
    <para>
     Various jEdit and plugin
     windows can be docked into the view for convenience. Dockable windows
@@ -169,6 +149,9 @@
    <para>
     The commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
     menu move keyboard focus between docking areas.
+   </para>
+   <para>
+    Dockable windows can also be configured in the <guilabel>Docking</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
    </para>
    <sidebar><title>For power users</title>
     <para>
@@ -195,8 +178,8 @@
      see <xref linkend="global-opts" />.
     </para>
    </sidebar>
-  </sect2>
-  <sect2 id="status-bar"><title>The Status Bar</title>
+  </sect1>
+  <sect1 id="status-bar"><title>The Status Bar</title>
    <para>
     The <firstterm>status bar</firstterm> at the bottom of the view consists
     of the following components, from left to right:
@@ -240,12 +223,12 @@
     <listitem><para>Rectangular selection - see <xref linkend="rect-select" />.</para></listitem>
     <listitem><para>Overwrite mode - see <xref linkend="entering-text" />.</para></listitem>
     <listitem><para>Line separator - see <xref linkend="line-separators" />.</para></listitem>
+    </itemizedlist>
+    </listitem>
     <listitem><para>A Java heap memory usage indicator, that shows used and
     total heap memory, in megabytes. Double-clicking this indicator opens the
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Memory Status</guimenuitem>
     dialog box.</para></listitem>
-    </itemizedlist>
-    </listitem>
    </itemizedlist>
    <para>
     The visibility of each of the above items can be controlled in the
@@ -253,119 +236,5 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="status-bar-pane"/>.
    </para>
-   <sidebar><title>For power users</title>
-    <para>
-     To quickly toggle the line
-     separator or word wrap settings without having to use the mouse,
-     assign keyboard shortcuts to the <guimenuitem>Toggle Line Separator</guimenuitem>
-     and <guimenuitem>Toggle Word Wrap</guimenuitem> commands in the
-     <guibutton>Shortcuts</guibutton> pane of the
-     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-     dialog box.
-    </para>
-   </sidebar>
-  </sect2>
- </sect1>
- <sect1 id="textarea"><title>The Text Area and Gutter</title>
-  <para>
-   Text editing takes place in the text area. It behaves in a similar
-   manner to many Windows and MacOS editors; the few
-   unique features will be described in this section.
-  </para>
-  <para>
-   The text area will automatically scroll up or down if text editing is performed
-   closer than three lines from the top or bottom of the text area. This
-   feature is called <firstterm>electric scrolling</firstterm>.
-  </para>
-  <para>
-   To aid in locating the caret, the current line is drawn with a
-   different background color. To make it clear which lines end w,ith
-   white space, end of line markers are drawn at the end of each line.
-  </para>
-  <para>
-   The strip on the left of the text area is called a <firstterm>gutter</firstterm>.
-   The gutter displays marker and register locations; it will also display
-   line numbers if the 
-   <guimenu>View</guimenu>&gt;<guimenuitem>Line Numbers</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>) command is invoked.
-  </para>
-  <para>
-   Many text area and gutter settings can be customized to suit your taste in
-   the  <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes
-   of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="text-area-pane" /> and <xref linkend="gutter-pane" />.
-  </para>
- </sect1>
- <sect1 id="action-bar"><title>The Action Bar</title>
-  <para>
-   The action bar allows almost any editor feature to be accessed from the keyboard.
-  </para>
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Action Bar</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Enter</keycap></keycombo>) displays the action bar at the bottom of the view and gives it keyboard focus. The action bar remembers previously entered strings; see <xref linkend="history" /> for details.
-  </para>
-  <para>
-   To use the action bar, input a command and press <keycap>Enter</keycap>.
-   The following commands are supported:
-  </para>
-  <itemizedlist>
-   <listitem><formalpara><title>Action invocations</title>
-   <para>
-    Each menu item and tool bar button is bound to an <firstterm>action</firstterm>. To find out the name of an action, invoke the menu item or click the tool bar button, and look in the action bar's history.
-   </para>
-   <para>
-    If a substring or an action name is entered, pressing <keycap>Tab</keycap> shows a popup listing matching actions. An action can be selected using the
-    <keycap>Up</keycap> and <keycap>Down</keycap> arrow keys, or by entering more characters of its name.
-   </para>
-   <para>
-    Pressing <keycap>Enter</keycap> with an incomplete substring invokes the action that would be first in the completion popup's list.
-   </para>
-   <para>
-    For example, entering <userinput>l-o</userinput> will most likely match <userinput>global-options</userinput>, which has the same effect as invoking <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>.
-   </para>
-   </formalpara>
-   </listitem>
-   <listitem>
-   <formalpara><title>Buffer-local properties</title>
-   <para>
-    Entering <userinput>buffer.<replaceable>property</replaceable>=<replaceable>value</replaceable> sets the value of the buffer-local property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
-    </userinput>
-    Buffer-local properties are documented in <xref linkend="buffer-local"/>.
-   </para>
-   <para>
-    For example, entering <userinput>buffer.tabSize=4</userinput> changes the current buffer's tab size to 4.
-   </para>
-   </formalpara>
-   </listitem>
-   <listitem><formalpara><title>Global properties</title>
-   <para>
-    Entering <userinput><replaceable>property</replaceable>=<replaceable>value</replaceable> sets the value of the global property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
-    </userinput> This feature is primarily intended to help plugin develpers, since the properties jEdit uses to store its settings are not currently documented.
-   </para>
-   </formalpara>
-   </listitem>
-   <listitem>
-   <formalpara><title>Command repetition</title>
-   <para>
-   To repeat a command multiple times, enter a number in the action bar, then invoke the command. For example,
-   <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-   <keycap>1</keycap> <keycap>4</keycap>
-   <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></quote> will delete
-   14 lines; <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-   <keycap>9</keycap>
-   <keycap>#</keycap></quote>
-   will insert <quote>#########</quote> in the buffer.
-  </para>
-  <para>
-   If you specify a repeat count greater than 20, a confirmation dialog box will
-   be displayed, asking if you really want to perform the action. This prevents
-   you from hanging jEdit by executing a command too many times.
-  </para>
-  </formalpara></listitem>
- </itemizedlist>
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Last Action</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap> <keycap>Space</keycap></keycombo>) repeats the most recently invoked editor command.
-  </para>
  </sect1>
 </chapter>
