@@ -237,7 +237,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				escaped = false;
 			}
-			else
+			else if(keywords != null || context.rules.getRuleCount() != 0)
 			{
 				String noWordSep2 = (keywords == null
 					? "" : keywords.getNonAlphaNumericChars());
@@ -261,7 +261,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				}
 
 				escaped = false;
-			} //}}}
+			}
+			else
+				escaped = false;
+			//}}}
 		} //}}}
 
 		//{{{ Mark all remaining characters

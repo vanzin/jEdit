@@ -815,7 +815,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(lineInfo.chunks != null)
 			{
-				x += Chunk.paintChunkList(
+				buffer.getLineText(physicalLine,textArea.lineSegment);
+				x += Chunk.paintChunkList(textArea.lineSegment,
 					lineInfo.chunks,gfx,x,baseLine,
 					lineBackground.bgColor,true);
 			}
