@@ -27,7 +27,7 @@ import javax.swing.text.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.util.LongArray;
+import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -46,7 +46,7 @@ public class OffsetManager
 {
 	public static final long MAX_DISPLAY_COUNT = 8;
 
-	/* Having all the info packed into a long is not very OO and makes the
+	/* Having all the info packed into an int is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
 	 *
 	 * The new document model has just 12 bytes of overhead per line.
@@ -56,14 +56,12 @@ public class OffsetManager
 	 * In the old document model there were 5 objects per line, for a
 	 * total of about 100 bytes, plus a cached token list, which used
 	 * another 100 or so bytes. */
-	public static final long END_MASK                = 0x00000000ffffffffL;
-	public static final long FOLD_LEVEL_MASK         = 0x000000ff00000000L;
-	public static final int FOLD_LEVEL_SHIFT         = 32;
-	public static final long VISIBLE_MASK            = 0x0000ff0000000000L;
-	public static final int VISIBLE_SHIFT            = 40;
-	public static final long SCREEN_LINES_MASK       = 0x00ff000000000000L;
-	public static final long SCREEN_LINES_SHIFT      = 48;
-	public static final long SCREEN_LINES_VALID_MASK = (1L<<60);
+	public static final int FOLD_LEVEL_MASK         = 0x000000ff;
+	public static final int VISIBLE_MASK            = 0x0000ff00;
+	public static final int VISIBLE_SHIFT           = 8;
+	public static final int SCREEN_LINES_MASK       = 0x00ff0000;
+	public static final int SCREEN_LINES_SHIFT      = 16;
+	public static final int SCREEN_LINES_VALID_MASK = (1<<25);
 
 	//{{{ OffsetManager constructor
 	public OffsetManager(Buffer buffer)
@@ -121,18 +119,16 @@ public class OffsetManager
 	//{{{ getLineEndOffset() method
 	public final int getLineEndOffset(int line)
 	{
-		int end = (int)(lineInfo[line] & END_MASK);
 		if(gapLine != -1 && line >= gapLine)
-			return end + gapWidth;
+			return endOffsets[line] + gapWidth;
 		else
-			return end;
+			return endOffsets[line];
 	} //}}}
 
 	//{{{ getFoldLevel() method
 	public final int getFoldLevel(int line)
 	{
-		return (int)((lineInfo[line] & FOLD_LEVEL_MASK)
-			>> FOLD_LEVEL_SHIFT);
+		return (lineInfo[line] & FOLD_LEVEL_MASK);
 	} //}}}
 
 	//{{{ setFoldLevel() method
@@ -145,11 +141,7 @@ public class OffsetManager
 			level = 0xff;
 		}
 
-		if(gapLine != -1 && line >= gapLine)
-			moveGap(line + 1,0,"setFoldLevel");
-
-		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK)
-			| ((long)level << FOLD_LEVEL_SHIFT));
+		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
 	} //}}}
 
 	//{{{ setFirstInvalidFoldLevel() method
@@ -167,15 +159,15 @@ public class OffsetManager
 	//{{{ isLineVisible() method
 	public final boolean isLineVisible(int line, int index)
 	{
-		long mask = 1L << (index + VISIBLE_SHIFT);
+		int mask = 1 << (index + VISIBLE_SHIFT);
 		return (lineInfo[line] & mask) != 0;
 	} //}}}
 
 	//{{{ setLineVisible() method
 	public final void setLineVisible(int line, int index, boolean visible)
 	{
-		long info = lineInfo[line];
-		long mask = 1L << (index + VISIBLE_SHIFT);
+		int info = lineInfo[line];
+		int mask = 1 << (index + VISIBLE_SHIFT);
 		boolean oldVisible = ((info & mask) != 0);
 		if(visible)
 		{
@@ -236,7 +228,7 @@ public class OffsetManager
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
 	{
-		return (int)((lineInfo[line] & SCREEN_LINES_MASK)
+		return ((lineInfo[line] & SCREEN_LINES_MASK)
 			>> SCREEN_LINES_SHIFT);
 	} //}}}
 
@@ -245,8 +237,9 @@ public class OffsetManager
 	{
 		if(Debug.SCREEN_LINES_DEBUG)
 			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
-		long info = lineInfo[line];
-		int oldCount = (int)((info & SCREEN_LINES_MASK) >> SCREEN_LINES_SHIFT);
+		int info = lineInfo[line];
+		int oldCount = ((info & SCREEN_LINES_MASK)
+			>> SCREEN_LINES_SHIFT);
 		if(oldCount != count)
 		{
 			Anchor anchor = anchors;
@@ -271,7 +264,7 @@ public class OffsetManager
 					anchor.callChanged = true;
 				else
 				{
-					long anchorVisibilityMask = (1L << (anchor.index + VISIBLE_SHIFT));
+					int anchorVisibilityMask = (1 << (anchor.index + VISIBLE_SHIFT));
 					if((info & anchorVisibilityMask) != 0)
 					{
 						//System.err.println("anchor screen shift from "
@@ -285,7 +278,7 @@ public class OffsetManager
 			}
 		}
 		lineInfo[line] = ((info & ~SCREEN_LINES_MASK)
-			| ((long)count << SCREEN_LINES_SHIFT)
+			| (count << SCREEN_LINES_SHIFT)
 			| SCREEN_LINES_VALID_MASK);
 	} //}}}
 
@@ -366,12 +359,8 @@ public class OffsetManager
 	 */
 	public void expandFolds(int foldLevel)
 	{
-		int newVirtualLineCount = 0;
-
 		if(foldLevel == 0)
 		{
-			newVirtualLineCount = lineCount;
-
 			for(int i = 0; i < lineCount; i++)
 				lineInfo[i] |= VISIBLE_MASK;
 		}
@@ -389,7 +378,6 @@ public class OffsetManager
 				{
 					seenVisibleLine = true;
 					lineInfo[i] |= VISIBLE_MASK;
-					newVirtualLineCount++;
 				}
 				else
 					lineInfo[i] &= ~VISIBLE_MASK;
@@ -413,27 +401,23 @@ public class OffsetManager
 	//{{{ invalidateScreenLineCounts() method
 	public void invalidateScreenLineCounts()
 	{
-		System.err.println(buffer + ": islc: here is a scan for you");
 		for(int i = 0; i < lineCount; i++)
 			lineInfo[i] &= ~SCREEN_LINES_VALID_MASK;
 	} //}}}
 
-	//{{{ addLineEndOffset() method
-	public static void addLineEndOffset(LongArray endOffsets, int offset)
-	{
-		endOffsets.add(offset | (0xffL << VISIBLE_SHIFT)
-			| (1L << SCREEN_LINES_SHIFT));
-	} //}}}
-
 	//{{{ _contentInserted() method
-	public void _contentInserted(LongArray endOffsets)
+	public void _contentInserted(IntegerArray endOffsets)
 	{
-		gapLine = firstInvalidLineContext = -1;
+		gapLine = -1;
 		gapWidth = 0;
+		firstInvalidLineContext = firstInvalidFoldLevel = 0;
 		lineCount = endOffsets.getSize();
-		lineInfo = endOffsets.getArray();
-		if(lineContext == null || lineContext.length <= lineCount)
-			lineContext = new TokenMarker.LineContext[lineCount];
+		this.endOffsets = endOffsets.getArray();
+		lineInfo = new int[lineCount];
+		for(int i = 0; i < lineInfo.length; i++)
+			lineInfo[i] = VISIBLE_MASK;
+
+		lineContext = new TokenMarker.LineContext[lineCount];
 
 		for(int i = 0; i < positionCount; i++)
 			positions[i].offset = 0;
@@ -441,7 +425,7 @@ public class OffsetManager
 
 	//{{{ contentInserted() method
 	public void contentInserted(int startLine, int offset,
-		int numLines, int length, LongArray endOffsets)
+		int numLines, int length, IntegerArray endOffsets)
 	{
 		int endLine = startLine + numLines;
 		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
@@ -453,9 +437,17 @@ public class OffsetManager
 
 			lineCount += numLines;
 
+			if(this.endOffsets.length <= lineCount)
+			{
+				int[] endOffsetsN = new int[(lineCount + 1) * 2];
+				System.arraycopy(this.endOffsets,0,endOffsetsN,0,
+						 this.endOffsets.length);
+				this.endOffsets = endOffsetsN;
+			}
+
 			if(lineInfo.length <= lineCount)
 			{
-				long[] lineInfoN = new long[(lineCount + 1) * 2];
+				int[] lineInfoN = new int[(lineCount + 1) * 2];
 				System.arraycopy(lineInfo,0,lineInfoN,0,
 						 lineInfo.length);
 				lineInfo = lineInfoN;
@@ -470,6 +462,8 @@ public class OffsetManager
 				lineContext = lineContextN;
 			}
 
+			System.arraycopy(this.endOffsets,startLine,
+				this.endOffsets,endLine,lineCount - endLine);
 			System.arraycopy(lineInfo,startLine,lineInfo,
 				endLine,lineCount - endLine);
 			System.arraycopy(lineContext,startLine,lineContext,
@@ -483,11 +477,12 @@ public class OffsetManager
 			if(startLine < firstInvalidLineContext)
 				firstInvalidLineContext += numLines;
 
-			long visible = (lineInfo[startLine] & VISIBLE_MASK);
+			int visible = (lineInfo[startLine] & VISIBLE_MASK);
 
 			for(int i = 0; i < numLines; i++)
 			{
-				lineInfo[startLine + i] = (offset + endOffsets.get(i)) | visible;
+				this.endOffsets[startLine + i] = (offset + endOffsets.get(i));
+				lineInfo[startLine + i] = visible;
 			}
 
 
@@ -566,6 +561,8 @@ public class OffsetManager
 				anchor = anchor.next;
 			}
 
+			System.arraycopy(endOffsets,endLine,endOffsets,
+				startLine,lineCount - startLine);
 			System.arraycopy(lineInfo,endLine,lineInfo,
 				startLine,lineCount - startLine);
 			System.arraycopy(lineContext,endLine,lineContext,
@@ -651,7 +648,8 @@ public class OffsetManager
 
 	//{{{ Instance variables
 	private Buffer buffer;
-	private long[] lineInfo;
+	private int[] endOffsets;
+	private int[] lineInfo;
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;
@@ -685,10 +683,7 @@ public class OffsetManager
 	//{{{ setLineEndOffset() method
 	private final void setLineEndOffset(int line, int end)
 	{
-		lineInfo[line] = ((lineInfo[line] & ~END_MASK) | end);
-		// what is the point of this -- DO NOT UNCOMMENT THIS IT
-		// CAUSES A PERFORMANCE LOSS; nextLineRequested becomes true
-		//lineContext[line] = null;
+		endOffsets[line] = end;
 	} //}}}
 
 	//{{{ moveGap() method
@@ -701,7 +696,7 @@ public class OffsetManager
 			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && gapLine != lineCount)
-					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + lineCount);
+					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + lineCount + " width " + gapWidth);
 				for(int i = gapLine; i < lineCount; i++)
 					setLineEndOffset(i,getLineEndOffset(i));
 			}
@@ -713,7 +708,7 @@ public class OffsetManager
 			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && newGapLine != gapLine)
-					Log.log(Log.DEBUG,this,method + ": update from " + newGapLine + " to " + gapLine);
+					Log.log(Log.DEBUG,this,method + ": update from " + newGapLine + " to " + gapLine + " width " + gapWidth);
 				for(int i = newGapLine; i < gapLine; i++)
 					setLineEndOffset(i,getLineEndOffset(i) - gapWidth);
 			}
@@ -724,7 +719,7 @@ public class OffsetManager
 			if(gapWidth != 0)
 			{
 				if(Debug.OFFSET_DEBUG && gapLine != newGapLine)
-					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + newGapLine);
+					Log.log(Log.DEBUG,this,method + ": update from " + gapLine + " to " + newGapLine + " width " + gapWidth);
 				for(int i = gapLine; i < newGapLine; i++)
 					setLineEndOffset(i,getLineEndOffset(i));
 			}

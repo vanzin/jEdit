@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- refactor out FileVFS.save()
+- shortcut editor: restore default button
 - fsb plugins menu: plugin options
 - browser's default size
 - path shown twice in tree: maybeReloadDirectory()
@@ -203,10 +205,12 @@ of bounds, etc.
 - autosave recent file list?
 - hypersearch refresh
 - option to disable floating window dock bar
+- MARK_PREVIOUS delegate like SEQ; update mail.xml
 
 + performance:
 
-- MARK_PREVIOUS delegate like SEQ; update mail.xml
+- don't tokenize lines twice
+- line delete: gap optimization
 - jEdit.getBuffer(): use a hashtable, not a linear scan. have the
   buffer notify jEdit of path changes though.
 - menu drag: slow
