@@ -1085,7 +1085,9 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, String str)
 	{
-		if(str == null || str.length() == 0)
+		int len = str.length();
+
+		if(str == null || len == 0)
 			return;
 
 		if(isReadOnly())
@@ -1102,7 +1104,7 @@ public class Buffer implements EBComponent
 
 			integerArray.clear();
 
-			for(int i = 0; i < str.length(); i++)
+			for(int i = 0; i < len; i++)
 			{
 				if(str.charAt(i) == '\n')
 					integerArray.add(i);
@@ -1110,11 +1112,11 @@ public class Buffer implements EBComponent
 
 			if(!getFlag(UNDO_IN_PROGRESS))
 			{
-				undoMgr.contentInserted(offset,str.length(),str,
+				undoMgr.contentInserted(offset,len,str,
 					!getFlag(DIRTY));
 			}
 
-			contentInserted(offset,str.length(),integerArray);
+			contentInserted(offset,len,integerArray);
 		}
 		finally
 		{

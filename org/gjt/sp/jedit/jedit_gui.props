@@ -3,7 +3,7 @@
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
 ###
-### Copyright (C) 1998, 2002 Slava Pestov
+### Copyright (C) 1998, 2003 Slava Pestov
 ###
 
 #{{{ Default user catalog file
@@ -820,6 +820,8 @@ about.text=jEdit is brought to you by\n\
 	Juha Lindfors\n\
 	Kenrick Drew\n\
 	Kevin Burton\n\
+	Kevin McWhirter\n\
+	Ken Gentry\n\
 	Klaus Hartlage\n\
 	Kris Kopicki\n\
 	Kristian Ovaska\n\

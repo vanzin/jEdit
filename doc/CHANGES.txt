@@ -74,6 +74,11 @@ release.
   on a remote server using, say, the FTP plugin and the plugin displayed
   a modal dialog box.
 
+- A "Save As" didn't update the file system browser if "two stage save"
+  was disabled.
+
+- Fixed minor XSLT syntax highlighting glitch.
+
 + API Additions:
 
 - Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).
