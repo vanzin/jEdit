@@ -32,7 +32,7 @@
 				FILE_NAME_GLOB="*.{imp,ref,mch}" />
 
 <MODE NAME="batch"		FILE="batch.xml"
-				FILE_NAME_GLOB="*.bat" />
+				FILE_NAME_GLOB="*.{bat,cmd}" />
 
 <MODE NAME="bbj"		FILE="bbj.xml"
 				FILE_NAME_GLOB="*.bbj" />
@@ -207,6 +207,9 @@
 
 <MODE NAME="rebol"		FILE="rebol.xml"
 				FILE_NAME_GLOB="*.r" />
+
+<MODE NAME="redcode"		FILE="redcode.xml"
+				FILE_NAME_GLOB="*.{red,rc}" />
 
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />

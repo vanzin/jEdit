@@ -16,6 +16,10 @@ and quirks that I need to fix eventually.
   - mention whitespace eating word actions
   - ESCAPE hides search bar
   - wheel mouse modifiers
+  - part II
+  - part III
+  - part IV
+  - part V
 
 - respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
   know mod status

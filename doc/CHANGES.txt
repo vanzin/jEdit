@@ -3,15 +3,20 @@ JEDIT 4.1 VERSION HISTORY
 * Version 4.1pre8
 
 Thanks to Carmine Lucarelli, Chris Petersen, Jonathan Revusky,
-Kris Kopicki and Silas Smith for contributing to this release.
+Kris Kopicki, Silas Smith and Will Varfar for contributing to this
+release.
 
-+ Miscellaneous Changes:
++ Syntax Highlighting Changes:
 
 - Icon syntax highlighting (Silas Smith).
+
+- Redcode syntax highlighting (Will Varfar).
 
 - Minor updates to JavaScript and PHP modes (Chris Petersen).
 
 - Updated Freemaker syntax highlighting (Jonathan Revusky).
+
++ Miscellaneous Changes:
 
 - Plugin manager progress window now only has one progress bar.
 
