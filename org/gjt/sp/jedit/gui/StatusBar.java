@@ -168,9 +168,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		dim = lineSep.getPreferredSize();
 		lineSep.setPreferredSize(new Dimension(Math.max(
-			Math.max((int)font.getStringBounds("U",frc).getWidth(),
-			(int)font.getStringBounds("W",frc).getWidth()),
-			(int)font.getStringBounds("M",frc).getWidth()),
+			Math.max(fm.charWidth('U'),
+			fm.charWidth('W')),
+			fm.charWidth('M')),
 			dim.height));
 
 		// UI hack because BoxLayout does not give all components the
