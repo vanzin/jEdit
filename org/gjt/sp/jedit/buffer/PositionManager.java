@@ -203,7 +203,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					left = pos;
-					//pos.ibalance();
+					pos.ibalance();
 				}
 				else
 					left.insert(pos);
@@ -214,7 +214,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					right = pos;
-					//pos.ibalance();
+					pos.ibalance();
 				}
 				else
 					right.insert(pos);
@@ -334,6 +334,7 @@ public class PositionManager
 					w = u.left;
 				if(w != null && w.red)
 				{
+					System.err.println("case 2");
 					parent.red = false;
 					w.red = false;
 					if(u.parent == null)
@@ -346,6 +347,7 @@ public class PositionManager
 				}
 				else
 				{
+					System.err.println("case 1");
 					irestructure();
 				}
 			}
@@ -378,6 +380,12 @@ public class PositionManager
 			{
 				if(parent.left == this)
 				{
+					//     u
+					//    /
+					//   v
+					//  /
+					// z
+					System.err.println("irestructure 1");
 					// zl, z, zr, v, vr, u, ur
 					nodes = new PosBottomHalf[] {
 						left, this, right,
@@ -387,6 +395,12 @@ public class PositionManager
 				}
 				else
 				{
+					//   u
+					//  /
+					// v
+					//  \
+					//   z
+					System.err.println("irestructure 2");
 					// vl, v, zl, z, zr, u, ur
 					nodes = new PosBottomHalf[] {
 						parent.left, parent, left,
@@ -398,6 +412,12 @@ public class PositionManager
 			{
 				if(parent.right == this)
 				{
+					// u
+					//  \
+					//   v
+					//    \
+					//     z
+					System.err.println("irestructure 3");
 					// ul, u, vl, v, zl, z, zr
 					nodes = new PosBottomHalf[] {
 						u.left, u, parent.left,
@@ -406,6 +426,12 @@ public class PositionManager
 				}
 				else
 				{
+					// u
+					//  \
+					//   v
+					//  /
+					// z
+					System.err.println("irestructure 4");
 					// ul, u, zl, z, zr, v, vr
 					nodes = new PosBottomHalf[] {
 						u.left, u, left, this, right,
@@ -414,12 +440,13 @@ public class PositionManager
 				}
 			}
 
-			if(u.parent != null)
+			PosBottomHalf t = u.parent;
+			if(t != null)
 			{
-				if(u.parent.left == u)
-					u.parent.left = nodes[3];
+				if(t.left == u)
+					t.left = nodes[3];
 				else
-					u.parent.right = nodes[3];
+					t.right = nodes[3];
 			}
 			else
 				root = nodes[3];
@@ -430,7 +457,8 @@ public class PositionManager
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
 
-			nodes[3].parent = u.parent;
+			System.err.println("setting parent to " + t);
+			nodes[3].parent = t;
 			nodes[3].red    = false;
 			nodes[3].left   = nodes[1];
 			nodes[3].right  = nodes[5];
@@ -440,6 +468,12 @@ public class PositionManager
 			nodes[5].left   = nodes[4];
 			nodes[5].right  = nodes[6];
 		} //}}}
+
+		//{{{ toString() method
+		public String toString()
+		{
+			return red + ":" + offset;
+		}
 	} //}}}
 
 	//}}}

@@ -156,6 +156,13 @@ contributing to this release.
 
 - Fixed NullPointerException when clicking in text area in a soft
   wrapped line that was but off at the bottom.
+options {
+
+aa
+helloaa
+
+}
+aaaaa
 
 - Fixed NullPointerException when scrolling to a line that was longer
   than the visible area.
@@ -238,6 +245,9 @@ contributing to this release.
 
 - Refactored key dispatching code should make alternative keyboard
   layouts work better on MacOS X.
+
+- gnu.regexp has rather strange substitution behavior, which caused
+  problems with some SPAN_REGEXP's.
 
 }}}
 {{{ API Changes
