@@ -635,7 +635,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 					g2d.setTransform(trans);
 					g2d.drawString(text,(height - width) / 2,
 						(width - height) / 2
-						+ fm.getDescent());
+						+ fm.getAscent());
 				} //}}}
 
 				g2d.setTransform(oldTransform);
