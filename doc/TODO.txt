@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- make sure that FileVFS._getDirectoryEntry() doesn't bomb on drive letters on
+  Windows
 - finish file system browser autocomplete: doesn't work with expanded tree,
   and differing paths! need to prefix!
 - mention on web page: http://www.sys-con.com/java/articlea.cfm?id=1559

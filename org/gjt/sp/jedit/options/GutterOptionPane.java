@@ -58,12 +58,14 @@ public class GutterOptionPane extends AbstractOptionPane
 		/* Text color */
 		addComponent(jEdit.getProperty("options.gutter.foreground"),
 			gutterForeground = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.fgColor")));
+			jEdit.getColorProperty("view.gutter.fgColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Background color */
 		addComponent(jEdit.getProperty("options.gutter.background"),
 			gutterBackground = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.bgColor")));
+			jEdit.getColorProperty("view.gutter.bgColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Border width */
 		/* gutterBorderWidth = new JTextField(jEdit.getProperty(
@@ -93,7 +95,8 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.highlightCurrentLine"));
 		addComponent(gutterCurrentLineHighlightEnabled,
 			gutterCurrentLineHighlight = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.currentLineColor")));
+			jEdit.getColorProperty("view.gutter.currentLineColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Highlight interval and color */
 		gutterHighlightInterval = new JTextField(jEdit.getProperty(
@@ -111,7 +114,8 @@ public class GutterOptionPane extends AbstractOptionPane
 
 		addComponent(gutterHighlightBox,gutterHighlightColor
 			= new ColorWellButton(jEdit.getColorProperty(
-			"view.gutter.highlightColor")));
+			"view.gutter.highlightColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Bracket highlight */
 		gutterBracketHighlightEnabled = new JCheckBox(jEdit.getProperty(
@@ -120,7 +124,8 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.bracketHighlight"));
 		addComponent(gutterBracketHighlightEnabled,
 			gutterBracketHighlight = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.bracketColor")));
+			jEdit.getColorProperty("view.gutter.bracketColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Marker highlight */
 		gutterMarkerHighlightEnabled = new JCheckBox(jEdit.getProperty(
@@ -129,22 +134,26 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.markerHighlight"));
 		addComponent(gutterMarkerHighlightEnabled,
 			gutterMarkerHighlight = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.markerColor")));
+			jEdit.getColorProperty("view.gutter.markerColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Fold marker color */
 		addComponent(jEdit.getProperty("options.gutter.foldColor"),
 			gutterFoldMarkers = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.foldColor")));
+			jEdit.getColorProperty("view.gutter.foldColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Focused border color */
 		addComponent(jEdit.getProperty("options.gutter.focusBorderColor"),
 			gutterFocusBorder = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.focusBorderColor")));
+			jEdit.getColorProperty("view.gutter.focusBorderColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* unfocused border color */
 		addComponent(jEdit.getProperty("options.gutter.noFocusBorderColor"),
 			gutterNoFocusBorder = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.noFocusBorderColor")));
+			jEdit.getColorProperty("view.gutter.noFocusBorderColor")),
+			GridBagConstraints.VERTICAL);
 
 		/* Mouse actions */
 		addSeparator("options.gutter.actions");

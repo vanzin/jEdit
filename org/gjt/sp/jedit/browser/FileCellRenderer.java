@@ -131,6 +131,19 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 		super.paintComponent(g);
 	} //}}}
 
+	//{{{ getIconForFile() method
+	public static Icon getIconForFile(VFS.DirectoryEntry file, boolean expanded)
+	{
+		if(file.type == VFS.DirectoryEntry.DIRECTORY)
+			return (expanded ? openDirIcon : dirIcon);
+		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
+			return filesystemIcon;
+		else if(jEdit.getBuffer(file.path) != null)
+			return openFileIcon;
+		else
+			return fileIcon;
+	} //}}}
+
 	//{{{ Package-private members
 	boolean showIcons;
 
@@ -143,26 +156,9 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 	//}}}
 
 	//{{{ Private members
-
-	//{{{ Instance members
 	private Font plainFont;
 	private Font boldFont;
 
 	private boolean underlined;
-	//}}}
-
-	//{{{ getIconForFile() method
-	private Icon getIconForFile(VFS.DirectoryEntry file, boolean expanded)
-	{
-		if(file.type == VFS.DirectoryEntry.DIRECTORY)
-			return (expanded ? openDirIcon : dirIcon);
-		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
-			return filesystemIcon;
-		else if(jEdit.getBuffer(file.path) != null)
-			return openFileIcon;
-		else
-			return fileIcon;
-	} //}}}
-
 	//}}}
 }
