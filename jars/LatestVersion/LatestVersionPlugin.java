@@ -37,27 +37,21 @@ public class LatestVersionPlugin extends EditPlugin
 				new InputStreamReader(in));
 
 			String line;
-			String version = null;
-			String build = null;
+			String develBuild = null;
+			String stableBuild = null;
 			while((line = bin.readLine()) != null)
 			{
-				if(line.startsWith(".version"))
-					version = line.substring(8).trim();
-				else if(line.startsWith(".build"))
-					build = line.substring(6).trim();
+				if(line.startsWith(".build"))
+					develBuild = line.substring(6).trim();
+				else if(line.startsWith(".stablebuild"))
+					stableBuild = line.substring(12).trim();
 			}
 
 			bin.close();
 
-			if(version != null && build != null)
+			if(develBuild != null && stableBuild != null)
 			{
-				if(jEdit.getBuild().compareTo(build) < 0)
-					newVersionAvailable(view,version,url);
-				else
-				{
-					GUIUtilities.message(view,"version-check"
-						+ ".up-to-date",new String[0]);
-				}
+				doVersionCheck(view,stableBuild,develBuild);
 			}
 		}
 		catch(IOException e)
@@ -70,14 +64,36 @@ public class LatestVersionPlugin extends EditPlugin
 		view.hideWaitCursor();
 	}
 
-	public static void newVersionAvailable(View view, String version, URL url)
+	public static void doVersionCheck(View view, String stableBuild,
+		String develBuild)
 	{
-		String[] args = { version };
+		String myBuild = jEdit.getBuild();
+		String pre = myBuild.substring(6,7);
+		String variant;
+		String build;
 
-		int result = GUIUtilities.confirm(view,"version-check.new-version",
-			args,JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+		if(pre.equals("99"))
+		{
+			variant = "stable";
+			build = stableBuild;
+		}
+		else
+		{
+			variant = "devel";
+			build = develBuild;
+		}
 
-		if(result == JOptionPane.YES_OPTION)
-			jEdit.openFile(view,url.toString());
+		// special case: no current development version
+		if(develBuild.compareTo(stableBuild) < 0)
+			variant += "-nodevel";
+
+		int retVal = GUIUtilities.confirm(view,"version-check." + variant,
+			new String[] { MiscUtilities.buildToVersion(myBuild),
+				MiscUtilities.buildToVersion(stableBuild),
+				MiscUtilities.buildToVersion(develBuild) },
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
+		if(retVal == JOptionPane.YES_OPTION)
+			jEdit.openFile(view,jEdit.getProperty("version-check.url"));
 	}
 }
