@@ -408,6 +408,9 @@ public class FileVFS extends VFS
 	{
 		int permissions = 0;
 
+		if(jEdit.getBooleanProperty("chmodDisabled"))
+			return permissions;
+
 		if(OperatingSystem.isUnix())
 		{
 			String[] cmdarray = { "ls", "-ld", path };
@@ -448,6 +451,9 @@ public class FileVFS extends VFS
 	 */
 	public static void setPermissions(String path, int permissions)
 	{
+		if(jEdit.getBooleanProperty("chmodDisabled"))
+			return;
+
 		if(permissions != 0)
 		{
 			if(OperatingSystem.isUnix())

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+		<parsererror xmlns="http://www.mozilla.org/newlayout/xml/parsererror.xml">XML Parsing Error: not well-formed
+Location: http://www.rutherfurd.net/jEdit/apacheconf.xml
+Line Number 18, Column 27:<sourcetext>		&lt;SPAN_REGEXP HASH_CHAR="&lt;" TYPE="MARKUP" DELEGATE="VHOST"&gt;
+--------------------------^</sourcetext></parsererror>

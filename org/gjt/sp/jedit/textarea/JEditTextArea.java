@@ -6175,7 +6175,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(isDragEnabled() && getDragAndDropCallback() != null
 				&& getSelectionAtOffset(dragStart) != null
-				&& clickCount == 1)
+				&& clickCount == 1 && !evt.isShiftDown())
 			{
 				maybeDragAndDrop = true;
 				moveCaretPosition(dragStart,false);

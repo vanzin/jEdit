@@ -90,6 +90,9 @@ JEDIT 4.2 VERSION HISTORY
 
 - Fixed a problem with inserting text at the beginning of a fold line.
 
+- The behaviour of shift-clicking inside an existing selection did not
+  work in 4.2pre5.
+
 }}}
 
 }}}
