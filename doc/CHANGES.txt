@@ -8,6 +8,13 @@ JEDIT 4.2 VERSION HISTORY
   structure spans more than one screen line (for example, this can
   happen with the tag matcher in the XML plugin).
 
+- If 'Complete Word' was bound to TAB, pressing TAB would show the popup
+  and immediately hide it.
+
+- File drag and drop actually works now (so you should now remove the
+  DragAndDrop plugin. Having it installed causes all dropped text to be
+  copied, instead of moved.)
+
 }}}
 
 }}}

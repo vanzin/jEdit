@@ -258,25 +258,62 @@ public class Java14
 
 			try
 			{
-				String str = (String)t.getTransferData(
-					DataFlavor.stringFlavor);
+				if(t.isDataFlavorSupported(
+					DataFlavor.javaFileListFlavor))
+				{
+					Log.log(Log.DEBUG,this,"=> File list");
+					EditPane editPane = (EditPane)
+						GUIUtilities.getComponentParent(
+						c,EditPane.class);
 
-				JEditTextArea textArea = (JEditTextArea)c;
+					Buffer buffer = null;
 
-				int caret = textArea.getCaretPosition();
-				Selection s = textArea.getSelectionAtOffset(caret);
+					Object data = t.getTransferData(
+						DataFlavor.javaFileListFlavor);
 
-				/* if user drops into a selection,
-				replace selection */
-				if(s != null)
-					textArea.setSelectedText(s,str);
-				/* otherwise just insert the text */
+					Iterator iterator = ((List)data)
+						.iterator();
+
+					while(iterator.hasNext())
+					{
+						File file = (File)
+							iterator.next();
+						Buffer _buffer = jEdit.openFile(null,
+							file.getPath());
+						if(_buffer != null)
+							buffer = buffer;
+					}
+
+					if(buffer != null)
+						editPane.setBuffer(buffer);
+					editPane.getView().toFront();
+					editPane.getView().requestFocus();
+					editPane.requestFocus();
+				}
 				else
-					textArea.getBuffer().insert(caret,str);
-				textArea.scrollToCaret(true);
+				{
+					Log.log(Log.DEBUG,this,"=> String");
+					String str = (String)t.getTransferData(
+						DataFlavor.stringFlavor);
+
+					JEditTextArea textArea = (JEditTextArea)c;
+
+					int caret = textArea.getCaretPosition();
+					Selection s = textArea.getSelectionAtOffset(caret);
+
+					/* if user drops into a selection,
+					replace selection */
+					if(s != null)
+						textArea.setSelectedText(s,str);
+					/* otherwise just insert the text */
+					else
+						textArea.getBuffer().insert(caret,str);
+					textArea.scrollToCaret(true);
+				}
 			}
 			catch(Exception e)
 			{
+				Log.log(Log.ERROR,this,e);
 			}
 
 			GUIUtilities.getView(c).toFront();
@@ -297,43 +334,8 @@ public class Java14
 				JEditTextArea textArea = (JEditTextArea)c;
 				textArea.selectNone();
 			}
-			else if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
-			{
-				Log.log(Log.DEBUG,this,"=> File list");
-				EditPane editPane = (EditPane)GUIUtilities
-					.getComponentParent(c,EditPane.class);
-
-				Buffer buffer = null;
-
-				Object data = null;
-				try
-				{
-					data = t.getTransferData(
-						DataFlavor.javaFileListFlavor);
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,e);
-				}
-
-				Iterator iterator = ((List)data).iterator();
-
-				while(iterator.hasNext())
-				{
-					File file = (File)iterator.next();
-					Buffer _buffer = jEdit.openFile(null,
-						file.getPath());
-					if(_buffer != null)
-						buffer = buffer;
-				}
-
-				if(buffer != null)
-					editPane.setBuffer(buffer);
-				editPane.getView().toFront();
-				editPane.getView().requestFocus();
-				editPane.requestFocus();
-			}
-			else if(t.isDataFlavorSupported(DataFlavor.stringFlavor))
+			else if(t.isDataFlavorSupported(
+				DataFlavor.stringFlavor))
 			{
 				Log.log(Log.DEBUG,this,"=> String");
 				JEditTextArea textArea = (JEditTextArea)c;

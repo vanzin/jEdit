@@ -484,7 +484,8 @@ public class CompleteWord extends JWindow
 					/* fall through */;
 			}
 
-			if(ch != '\b')
+			// \t handled above
+			if(ch != '\b' && ch != '\t')
 			{
 				/* eg, foo<C+b>, will insert foobar, */
 				if(!Character.isLetter(ch) && noWordSep.indexOf(ch) == -1)
