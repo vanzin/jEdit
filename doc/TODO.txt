@@ -5,20 +5,34 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
-  The elements of the <varname>args</varname> array are substituted
-  into the value of the message property in place of strings of the
-  form <literal>{<replaceable>n</replaceable>}</literal>, where
-  <replaceable>n</replaceable> is an index in the array.
-  You can find out more about this feature by reading the documentation
-  for the <function>format</function> method of the
-  <classname>java.text.MessageFormat</classname> class.
-  
-- buffer: say exactly which methods are thread-safe
-- loadMenu() properties used
-- dockable .title property
-- action .label property
-- plugin guide: shorten host-design a little
-- remove part V of the user's guide
+- fsb: at roots:; select something; path not prepended
+- plugin guide: shorten host-design a little:
+  - replace class-editplugin with link to API docs
+  - replace plugin info prop/dep description with link to API docs
+  - host design's actions.xml/dockables.xml description; move meat
+    to other sections
+    - link to DockableWindowManager and ActionSet which have formal
+      descriptions
+  - shorten editbus section
+- plugin tutorial:
+  - writing a plugin core class
+    - choosing a base class
+    - implementing the base class
+  - defining actions
+    - actions.xml
+  - defining dockables
+    - dockables.xml
+    - class quicknotepad
+    - class quicknotepadtoolbar
+  - option pane
+  - properties
+  - building
+    - link to jEdit devel page
+- javadocs:
+  - dockable .title property
+  - action .label property
+  - formal actions.xml description
+  - formal dockables.xml description
 - links to API docs in plugin guide, macro guide
 - section xrefs are broken
 - review user's guide
