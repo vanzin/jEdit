@@ -1,0 +1,488 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="source-edit"><title>Editing Source Code</title>
+ <sect1 id="modes"><title>Edit Modes</title>
+  <para>
+   An <firstterm>edit mode</firstterm> specifies syntax highlighting
+   rules, auto indent behavior, and various other customizations for editing
+   a certain file type. This section
+   only covers using and selecting edit modes; information about writing your
+   own can be found in <xref linkend="writing-modes-part" />.
+  </para>
+  <sect2 id="mode-selection"><title>Mode Selection</title>
+   <para>
+    When a file is opened, jEdit first checks the file name against a list
+    of known patterns. For example, files whose names end with <quote>.c</quote>
+    are edited in C mode, and files named <filename>Makefile</filename> are
+    edited in Makefile mode. If a suitable match based on file name cannot be
+    found, jEdit checks the first line of the file. For example, files whose
+    first line is <quote>#!/bin/sh</quote> are edited in shell script mode.
+   </para>
+   <para>
+    If automatic mode selection is not appropriate, the edit mode can
+    be specified manually. The current buffer's edit mode can be set
+    on a one-time basis in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box; see <xref linkend="buffer-opts" />. To set a buffer's edit mode
+    for future editing sessions,
+    place the following in one of the first 10 lines of the buffer,
+    where <replaceable>edit mode</replaceable> is the name of the desired edit
+    mode:
+   </para>
+   <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
+  </sect2>
+  <sect2 id="syntax-hilite"><title>Syntax Highlighting</title>
+   <para>
+    Syntax highlighting is the display of programming language
+    tokens using different fonts and colors. This makes code
+    easier to follow and errors such as misplaced quotes easier to spot.
+    All edit modes except for
+    the plain text mode perform syntax highlighting.
+   </para>
+   <para>
+    The colors and styles used to highlight syntax tokens can be changed
+    in the <guibutton>Styles</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="global-opts" />.
+   </para>
+   <para>
+    Syntax highlighting can be enabled or disabled in one of
+    several ways:
+   </para>
+   <itemizedlist>
+    <listitem><para>On a global or mode-specific
+    basis in the
+    <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
+    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+    Options</guimenuitem> dialog box.</para></listitem>
+    <listitem><para>In the current buffer
+    for the duration of the editing session in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>In the current buffer for future editing sessions, by placing
+    the following in one of the first 10 lines of the buffer, where
+    <replaceable>flag</replaceable> is either <quote>true</quote> or
+    <quote>false</quote>:
+    </para>
+    <screen>:syntax=<replaceable>flag</replaceable>:</screen>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+ </sect1>
+ <sect1 id="abbrevs"><title>Abbreviations</title>
+  <para>
+   Using abbreviations reduces the time spent typing long but commonly used
+   strings. For example, in Java mode, the abbreviation <quote>sout</quote> is
+   defined to expand to <quote>System.out.println()</quote>, so to insert
+   <quote>System.out.println()</quote> in a Java buffer, you only need to type
+   <quote>sout</quote> followed by
+   <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>.
+   Each abbreviation can either be global, in which case it will expand in all
+   edit modes, or mode-specific. Abbreviations can be edited
+   in the <guibutton>Abbreviations</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. The Java, SGML and VHDL edit
+   modes include some pre-defined
+   abbreviations you might find useful.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guimenuitem>Expand Abbreviation</guimenuitem>
+   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>)
+   attempts to expand the word before the caret. If no expansion could
+   be found, it will offer to define one.
+  </para>
+  <para>
+   Automatic abbreviation expansion can be enabled in the
+   <guibutton>Abbreviations</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. If enabled, pressing the
+   space bar after entering an
+   abbreviation will automatically expand it.
+  </para>
+  <para>
+   If automatic expansion
+   is enabled, a space can be inserted without expanding the word before
+   the caret by pressing
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>V</keycap> <keycap>Space</keycap>.
+  </para>
+  <sect2 id="positional-params"><title>Positional Parameters</title>
+   <para>
+    Positional parameters are an advanced feature that make abbreviations much
+    more useful. The best way to describe them is with an example.
+   </para>
+   <para>
+    Suppose you have an abbreviation <quote>F</quote> that is set to expand to
+    the following:
+   </para>
+   <programlisting>for(int $1 = 0; $1 &lt; $2; $1++)</programlisting>
+   <para>
+    Now, simply entering <quote>F</quote> in the buffer and expanding it will
+    insert the above text as-is. However, if you expand
+    <literal>F#j#array.length#</literal>,
+    the following will be inserted:
+   </para>
+   <programlisting>for(int j = 0; j &lt; array.length; j++)</programlisting>
+   <para>
+    Expansions can contain up to nine positional parameters. Note that a
+    trailing hash character (<quote>#</quote>) must be entered when expanding an
+    abbreviation with parameters.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 id="bracket-matching"><title>Bracket Matching</title>
+  <para>
+   Misplaced and unmatched brackets are one of the most common syntax
+   errors encountered when writing code. jEdit has several features
+   to make brackets easier to deal with.
+  </para>
+  <para>
+   If the character immediately before the caret position is a bracket, the
+   matching one will be highlighted (assuming it is visible on the
+   screen). Bracket highlighting can be disabled in the
+   <guibutton>Text Area</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Go to Matching
+   Bracket</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo>)
+   goes to the bracket matching the one before the caret.
+  </para>
+  <para>
+   Double-clicking on a bracket in the text area will select all text
+   between the bracket and the one matching it.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Select Code Block</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo>)
+   selects all text between the two brackets nearest to the caret.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Go to Previous
+   Bracket</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>[</keycap>) moves the caret to the previous opening bracket.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Go to Next Bracket</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>]</keycap>)
+   moves the caret to the next closing bracket.
+  </para>
+  <note>
+   <para>
+    jEdit's bracket matching algorithm only checks syntax tokens with the same
+    type as the original bracket for matches. So brackets inside string
+    literals and comments will not cause problems, as they will
+    be skipped.
+   </para>
+  </note>
+ </sect1>
+ <sect1 id="indent"><title>Tabbing and Indentation</title>
+  <para>
+   jEdit makes a distinction between the <firstterm>tab width</firstterm>,
+   which is is used when displaying tab characters, and the <firstterm>indent
+   width</firstterm>, which is used when a level of indent is to be added or
+   removed, for example by mode-specific smart indent routines. Both can be
+   changed in one of several ways:
+  </para>
+  <itemizedlist>
+   <listitem><para>On a global or mode-specific basis in
+   <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
+   of the the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box.
+   </para></listitem>
+   <listitem><para>In the current buffer
+   for the duration of the editing session in the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+   dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
+   <listitem><para>In the current buffer
+   for future editing sessions by placing the
+   following in one of the first 10 lines of the buffer, where
+   <replaceable>n</replaceable> is the desired tab width, and
+   <replaceable>m</replaceable> is the desired indent width:
+   </para>
+   <screen>:tabSize=<replaceable>n</replaceable>:indentSize=<replaceable>m</replaceable>:</screen>
+   </listitem>
+  </itemizedlist>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guisubmenu>Shift Indent Left</guisubmenu>
+   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo>)
+   adds one level of indent to each selected line, or the current line
+   if there is no selection.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guisubmenu>Shift Indent Right</guisubmenu>
+   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
+   removes one level of indent from each selected line, or the current line
+   if there is no selection.
+  </para>
+  <sect2 id="soft-tabs"><title>Soft Tabs</title>
+   <para>
+    Because files indented using tab characters may look less than ideal when
+    viewed on a system with a different default tab size, it is sometimes
+    desirable to use multiple spaces, known as <firstterm>soft tabs</firstterm>,
+    instead of real tab characters, to indent code.
+   </para>
+   <para>
+    Soft tabs can be enabled or disabled in one of several ways:
+   </para>
+   <itemizedlist>
+    <listitem><para>On a global or edit mode-specific basis in the
+    <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton>
+    panes of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+    Options</guimenuitem> dialog box.</para></listitem>
+    <listitem><para>In the current buffer for
+    the duration of the editing session in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>In the current buffer for
+    future editing sessions by placing the following in one of the first
+    10 lines of the buffer, where <replaceable>flag</replaceable> is either
+    <quote>true</quote> or <quote>false</quote>:
+    </para>
+    <screen>:noTabs=<replaceable>flag</replaceable>:</screen>
+    </listitem>
+   </itemizedlist>
+   <para>
+    Changing the soft tabs setting has no effect on existing tab characters;
+    it only affects subsequently-inserted tabs.
+   </para>
+   <para>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+    Code</guisubmenu>&gt;<guimenuitem>Spaces to Tabs</guimenuitem>
+    converts soft tabs to hard tabs in the current selection.
+   </para>
+   <para>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+    Code</guisubmenu>&gt;<guimenuitem>Tabs to Spaces</guimenuitem>
+    converts hard tabs to soft tabs in the current selection.
+   </para>
+  </sect2>
+  <sect2 id="autoindent"><title>Automatic Indent</title>
+   <para>
+    The auto indent feature inserts the appropriate number of tabs or
+    spaces at the beginning of a line.
+   </para>
+   <para>
+    If indent on enter is enabled, pressing <keycap>Enter</keycap>
+    will create a new line with the appropriate amount of
+    indent automatically.  If indent on tab is enabled, pressing
+    <keycap>Tab</keycap> on
+    an unindented line will insert the appropriate amount of
+    indentation. Pressing it again will insert a tab character.
+   </para>
+   <para>
+    By default, indent on enter is enabled and indent on tab is
+    disabled. This can be changed in one of several ways:
+   </para>
+   <itemizedlist>
+    <listitem><para>On a global or mode-specific
+    basis in the <guibutton>Editing</guibutton> and
+    <guibutton>Mode-Specific</guibutton> panes
+    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+    Options</guimenuitem> dialog box.</para></listitem>
+    <listitem><para>In the current buffer for the duration of the editing
+    session in the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+    dialog box; see <xref linkend="buffer-opts" />. </para></listitem>
+    <listitem><para>In the current buffer for future editing sessions
+    by placing the following in the first 10 lines of a buffer,
+    where <replaceable>flag</replaceable> is either <quote>true</quote> or
+    <quote>false</quote>:
+    </para>
+    <screen>:indentOnEnter=<replaceable>flag</replaceable>:indentOnTab=<replaceable>flag</replaceable>:</screen>
+    </listitem>
+   </itemizedlist>
+   <para>
+    Auto indent behavior is mode-specific. In most edit modes,
+    the indent of the previous line is simply copied over.
+    However, in C-like languages (C, C++, Java, JavaScript), curly
+    brackets and language statements are taken into account and indent
+    is added and removed as necessary.
+   </para>
+   <para>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+    Code</guisubmenu>&gt;<guisubmenu>Indent Selected Lines</guisubmenu>
+    (shortcut: <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo>)
+    indents all selected lines, or the current line if there is no
+    selection.
+   </para>
+   <para>
+    To insert a literal tab or newline without performing
+    indentation, prefix the tab or newline with
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>V</keycap>. For example,
+    to create a new line without any indentation, type
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>V</keycap> <keycap>Enter</keycap>.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 id="commenting"><title>Commenting Out Code</title>
+  <para>
+   Most programming and markup languages support <quote>comments</quote>, or
+   regions of  code which are ignored by the compiler/interpreter. jEdit
+   has commands which make inserting comments more convenient.
+  </para>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Range Comment</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>) encloses the
+   selection with comment start and end strings, for example <literal>/*</literal>
+   and <literal>*/</literal> in Java mode.
+  </para>
+  <para>
+   Comment start and end strings can be changed on a mode-specific
+   basis in the
+   <guibutton>Mode-Specific</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box, or on a buffer-specific basis using buffer-local
+   properties. For example, placing the following in one of the first 10 lines
+   of a buffer will change the range comment strings to <literal>(*</literal> and
+   <literal>*)</literal>:
+  </para>
+  <screen>:commentStart=(*:commentEnd=*):</screen>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
+   Code</guisubmenu>&gt;<guimenuitem>Line Comment</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>K</keycap></keycombo>) inserts the
+   line comment string, for example <literal>//</literal> in Java mode,
+   at the start of each selected line.
+  </para>
+  <para>
+   The line comment string can be changed on a mode-specific
+   basis in the <guibutton>Mode-Specific</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box, or on a buffer-specific basis using buffer-local
+   properties. For example, placing the following in one of the first 10 lines
+   of a buffer will change the line comment string to <literal>#</literal>:
+  </para>
+  <screen>:lineComment=#:</screen>
+ </sect1>
+ <sect1 id="folding"><title>Folding</title>
+  <para>
+   The folding feature allows lines to be hidden or shown depending on their
+   indent level. Since most programming languages use indentation to nest
+   code, folding away lines with a lot of indent has the effect of displaying
+   an <quote>overview</quote> of the file only, while displaying
+   higher indent levels <quote>zooms in</quote> on the contents
+   and shows more <quote>detail</quote>.
+  </para>
+  <para>
+   A set of consecutive lines with the same leading indent is referred to as
+   a <firstterm>fold</firstterm>. The visibility of each fold can be set
+   independently. A fold that is hidden is said to be <quote>collapsed</quote>;
+   a visible fold is <quote>expanded</quote>.
+   Text hidden by folding is still present in the buffer, and can be made
+   visible again using the appropriate commands. Cursor movement commands
+   skip over the hidden text, but text manipulation commands act on it.
+  </para>
+  <para>
+   The initial fold visibility level, in multiples of the indent width,
+   can be specified on a mode-specific or global basis in the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. Folds
+   with a level higher than this will be automatically collapsed after a buffer
+   is loaded. Setting this value to zero makes all folds expanded initially
+   (this is the default).
+  </para>
+  <para>
+   The simplest way to expand and collapse folds is to click the fold markers
+   in the gutter to the left of the text area; a fold marker is drawn next to
+   the first line of each fold. An empty square is drawn next to an
+   expanded fold; a filled square next to a collapsed fold. Unless the
+   <keycap>Shift</keycap> key is held down, clicking a filled square will expand
+   the fold by one level only; nested folds will remain collapsed. Holding down
+   <keycap>Shift</keycap> while clicking will fully expand the fold and all nested
+   folds.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
+   Fold</guimenuitem> (keyboard shortcut:
+   <keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo>)
+   collapses the fold
+   containing the caret.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+   Fold One Level</guimenuitem> (keyboard shortcut:
+   <keycombo><keycap>Alt</keycap><keycap>Enter</keycap></keycombo>) expands the
+   fold containing the caret. Nested folds will remain collapsed.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+   Fold Fully</guimenuitem> (keyboard shortcut:
+   <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>)
+   expands the fold
+   containing the caret, also expanding any nested folds.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+   All Folds</guimenuitem> (keyboard shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>)
+   reads the next character entered at the keyboard, and
+   expands all folds in the buffer
+   with a fold level less than that specified, and collapsed all others.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+   All Folds</guimenuitem> (keyboard shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>X</keycap>)
+   expands all folds in the buffer.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Select
+   Fold</guimenuitem>
+   (keyboard shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycap>S</keycap>)
+   selects all lines in the fold containing the caret. Control-clicking on a
+   fold marker in the gutter on the left of the text area has the same effect.
+  </para>
+  <para>
+   Because folding is based on indent levels, changing the leading indent of a
+   line while folds are collapsed may result in portions of the buffer becoming
+   temporarily inaccessable. In such a case, simply invoke <guimenuitem>Expand
+   All Folds</guimenuitem> to restore the visibility of the hidden lines.
+  </para>
+  <para>
+   The text <literal>fold</literal> is shown in black
+   the status bar if portions of
+   the buffer are invisible due to folding. Otherwise, it is grayed out.
+  </para>
+  <sect2 id="narrowing"><title>Narrowing</title>
+   <para>
+    The narrowing feature hides all parts of the buffer except for one
+    specified region. While that region appears to be all there is, the
+    rest of the text is still in the buffer; just not visible.
+    While it may seem unrelated to folding, both folding and
+    narrowing are implemented using the same code internally.
+   </para>
+   <para>
+    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
+    Buffer to Selection</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>N</keycap>) hides all lines the buffer except those in the selection.
+   </para>
+   <para>
+    <guimenu>View</guimenu>&gt;<guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
+    All Folds</guimenuitem> (keyboard shortcut:
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>X</keycap>) will make visible any lines hidden by narrowing.
+   </para>
+  </sect2>
+ </sect1>
+</chapter>

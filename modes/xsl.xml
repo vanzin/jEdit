@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="noWordSep" VALUE="-" />
+		<PROPERTY NAME="wordBreakChars" VALUE="@:|.[]{},+=&lt;&gt;/?^&amp;*" />
+	</PROPS>
+	<RULES IGNORE_CASE="TRUE">
+		<!-- WHITE SPACE ( SPACE, TAB ) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<!-- JavaScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;xsl:script</BEGIN>
+			<END>&lt;/xsl:script&gt;</END>
+		</SPAN>
+		
+		<!-- JavaScript -->
+		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;xsl:eval&gt;</BEGIN>
+			<END>&lt;/xsl:eval&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
+		</SPAN>
+		
+		<SPAN TYPE="COMMENT2">
+			<BEGIN>&lt;xsl:comment&gt;</BEGIN>
+			<END>&lt;/xsl:comment&gt;</END>
+		</SPAN>
+
+		<!-- DTD instructions -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
+			<BEGIN>&lt;!</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- PI directives -->
+		<SPAN TYPE="KEYWORD3">
+			<BEGIN>&lt;?</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+		
+		<!-- XSL TAGS -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
+			<BEGIN>&lt;xsl</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+		
+		<!-- XSL TAGS -->
+		<SPAN TYPE="KEYWORD2" DELEGATE="XSLTAGS">
+			<BEGIN>&lt;/xsl</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- JavaScript -->
+		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
+			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+			<END>&lt;/SCRIPT&gt;</END>
+		</SPAN>
+
+		<!-- stylesheet -->
+		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
+			<BEGIN>&lt;STYLE&gt;</BEGIN>
+			<END>&lt;/STYLE&gt;</END>
+		</SPAN>
+
+		<!-- HTML TAGS -->
+		<SPAN TYPE="MARKUP" DELEGATE="HTMLTAGS">
+			<BEGIN>&lt;</BEGIN>
+			<END>&gt;</END>
+		</SPAN>
+
+		<!-- ENTITY REFERENCES -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+		
+	</RULES>
+	
+	<!-- HTML TAGS -->
+	<RULES SET="HTMLTAGS" DEFAULT="MARKUP">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<SEQ TYPE="NULL">=</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
+	
+	<!-- XSL TAGS -->
+	<RULES SET="XSLTAGS" DEFAULT="KEYWORD2">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+		
+		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		
+		<SPAN TYPE="LITERAL1" DELEGATE="XPATH">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+		
+		<SEQ TYPE="NULL">=</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
+
+	<RULES SET="XPATH" DEFAULT="LITERAL1">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- entity refs -->
+		<SPAN TYPE="LITERAL2" NO_WORD_BREAK="TRUE">
+			<BEGIN>&amp;</BEGIN>
+			<END>;</END>
+		</SPAN>
+
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">@</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+
+		<!-- axis specifiers (needs '-' as noWordSep) -->
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">::</MARK_PREVIOUS>
+		<!-- functions -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+		<!-- variables -->
+		<MARK_FOLLOWING TYPE="LITERAL2">$</MARK_FOLLOWING>
+
+		<!-- after axis specifyer, so it doesn't interfere -->
+		<SEQ TYPE="OPERATOR">:</SEQ>
+
+	</RULES>
+
+</MODE>

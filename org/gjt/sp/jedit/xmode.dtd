@@ -1,0 +1,121 @@
+<!-- Syntax tokens -->
+<!ENTITY % tokens "( NULL | COMMENT1 | COMMENT2 | LITERAL1 | LITERAL2
+	| LABEL | KEYWORD1 | KEYWORD2 | KEYWORD3 | FUNCTION
+	| MARKUP | OPERATOR | DIGIT | INVALID )" >
+
+<!-- Entities for attributes shared by multiple rules -->
+<!ENTITY % att-bool '( TRUE | FALSE )' >
+<!ENTITY % att-type 'TYPE %tokens; "NULL"' >
+<!ENTITY % att-at-line-start 'AT_LINE_START %att-bool; "FALSE"' >
+<!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
+
+<!-- MODE element -->
+<!ELEMENT MODE ( PROPS?, RULES* ) >
+
+<!-- MODE children -->
+<!-- PROPS element -->
+<!ELEMENT PROPS ( PROPERTY+ ) >
+
+<!-- PROPS children -->
+<!ELEMENT PROPERTY EMPTY >
+<!ATTLIST PROPERTY
+	NAME CDATA #REQUIRED
+	VALUE CDATA #REQUIRED >
+
+<!-- RULES element -->
+<!ELEMENT RULES ( ( TERMINATE | WHITESPACE | SPAN | EOL_SPAN | MARK_PREVIOUS
+	| MARK_FOLLOWING | SEQ )*, KEYWORDS? ) >
+
+<!-- RULES attributes -->
+<!ATTLIST RULES
+	IGNORE_CASE %att-bool; "FALSE"
+	HIGHLIGHT_DIGITS %att-bool; "FALSE"
+	SET CDATA "MAIN"
+	ESCAPE CDATA #IMPLIED
+	DEFAULT %tokens; "NULL" >
+
+<!-- RULES children -->
+<!-- TERMINATE element -->
+<!ELEMENT TERMINATE EMPTY >
+
+<!-- TERMINATE attributes -->
+<!ATTLIST TERMINATE AT_CHAR CDATA #REQUIRED >
+
+<!-- WHITESPACE element -->
+<!ELEMENT WHITESPACE ( #PCDATA ) >
+
+<!-- SPAN element -->
+<!ELEMENT SPAN ( BEGIN, END ) >
+
+<!-- SPAN attributes -->
+<!ATTLIST SPAN
+	%att-type;
+	%att-at-line-start;
+	%att-exclude-match;
+	NO_LINE_BREAK %att-bool; "FALSE"
+	NO_WORD_BREAK %att-bool; "FALSE"
+	DELEGATE CDATA #IMPLIED >
+
+<!-- SPAN children -->
+<!ELEMENT BEGIN ( #PCDATA ) >
+<!ELEMENT END ( #PCDATA ) >
+
+<!-- EOL_SPAN element -->
+<!ELEMENT EOL_SPAN ( #PCDATA ) >
+
+<!-- EOL_SPAN attributes -->
+<!ATTLIST EOL_SPAN
+	%att-type;
+	%att-at-line-start;
+	%att-exclude-match; >
+
+<!-- MARK_PREVIOUS element -->
+<!ELEMENT MARK_PREVIOUS ( #PCDATA ) >
+
+<!-- MARK_PREVIOUS attributes -->
+<!ATTLIST MARK_PREVIOUS
+	%att-type;
+	%att-at-line-start;
+	%att-exclude-match; >
+
+<!-- MARK_FOLLOWING element -->
+<!ELEMENT MARK_FOLLOWING ( #PCDATA ) >
+
+<!-- MARK_FOLLOWING attributes -->
+<!ATTLIST MARK_FOLLOWING
+	%att-type;
+	%att-at-line-start;
+	%att-exclude-match; >
+
+<!-- SEQ element -->
+<!ELEMENT SEQ ( #PCDATA ) >
+
+<!-- SEQ attributes -->
+<!ATTLIST SEQ
+	%att-type;
+	%att-at-line-start; >
+
+<!-- KEYWORDS element -->
+<!ELEMENT KEYWORDS ( NULL | COMMENT1 | COMMENT2 | LITERAL1 | LITERAL2
+	| LABEL | KEYWORD1 | KEYWORD2 | KEYWORD3 | FUNCTION | MARKUP
+	| OPERATOR | DIGIT | INVALID )+ >
+
+<!-- KEYWORDS attributes -->
+<!ATTLIST KEYWORDS
+	IGNORE_CASE %att-bool; "FALSE" >
+
+<!-- KEYWORDS children -->
+<!ELEMENT NULL ( #PCDATA ) >
+<!ELEMENT COMMENT1 ( #PCDATA ) >
+<!ELEMENT COMMENT2 ( #PCDATA ) >
+<!ELEMENT LITERAL1 ( #PCDATA ) >
+<!ELEMENT LITERAL2 ( #PCDATA ) >
+<!ELEMENT LABEL ( #PCDATA ) >
+<!ELEMENT KEYWORD1 ( #PCDATA ) >
+<!ELEMENT KEYWORD2 ( #PCDATA ) >
+<!ELEMENT KEYWORD3 ( #PCDATA ) >
+<!ELEMENT FUNCTION ( #PCDATA ) >
+<!ELEMENT MARKUP ( #PCDATA ) >
+<!ELEMENT OPERATOR ( #PCDATA ) >
+<!ELEMENT DIGIT ( #PCDATA ) >
+<!ELEMENT INVALID ( #PCDATA ) >

@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!-- Povray mode, by Slava Pestov
+     based on PovrayTokenMarker, by Romain Guy -->
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- C style comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<!-- Function calls -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
+		<KEYWORDS IGNORE_CASE="FALSE">
+			<KEYWORD1>adaptive</KEYWORD1>
+			<KEYWORD1>agate</KEYWORD1>
+			<KEYWORD1>agate_turb</KEYWORD1>
+			<KEYWORD1>all</KEYWORD1>
+			<KEYWORD1>alpha</KEYWORD1>
+			<KEYWORD1>ambient</KEYWORD1>
+			<KEYWORD1>angle</KEYWORD1>
+			<KEYWORD1>arc_angle</KEYWORD1>
+			<KEYWORD3>area_light</KEYWORD3>
+			<KEYWORD3>atmosphere</KEYWORD3>
+			<KEYWORD1>atmospheric_attenuation</KEYWORD1>
+			<KEYWORD3>background</KEYWORD3>
+			<KEYWORD3>bicubic_patch</KEYWORD3>
+			<KEYWORD3>blob</KEYWORD3>
+			<LITERAL2>blue</LITERAL2>
+			<KEYWORD1>bounded_by</KEYWORD1>
+			<KEYWORD3>box</KEYWORD3>
+			<KEYWORD1>bozo</KEYWORD1>
+			<KEYWORD1>brilliance</KEYWORD1>
+			<KEYWORD1>bumps</KEYWORD1>
+			<KEYWORD3>bump_map</KEYWORD3>
+			<KEYWORD1>bump_size</KEYWORD1>
+			<KEYWORD3>camera</KEYWORD3>
+			<KEYWORD1>checker</KEYWORD1>
+			<KEYWORD1>clipped_by</KEYWORD1>
+			<LITERAL2>clock</LITERAL2>
+			<KEYWORD1>color</KEYWORD1>
+			<KEYWORD3>color_map</KEYWORD3>
+			<KEYWORD1>colour</KEYWORD1>
+			<KEYWORD3>colour_map</KEYWORD3>
+			<KEYWORD1>component</KEYWORD1>
+			<KEYWORD1>composite</KEYWORD1>
+			<KEYWORD3>cone</KEYWORD3>
+			<KEYWORD1>crand</KEYWORD1>
+			<KEYWORD3>cubic</KEYWORD3>
+			<KEYWORD3>cylinder</KEYWORD3>
+			<KEYWORD1>cylindrical_mapping</KEYWORD1>
+			<LITERAL2>declare</LITERAL2>
+			<LITERAL2>default</LITERAL2>
+			<KEYWORD1>dents</KEYWORD1>
+			<KEYWORD1>difference</KEYWORD1>
+			<KEYWORD1>diffuse</KEYWORD1>
+			<KEYWORD1>direction</KEYWORD1>
+			<KEYWORD3>disc</KEYWORD3>
+			<KEYWORD1>distance</KEYWORD1>
+			<KEYWORD1>dump</KEYWORD1>
+			<KEYWORD1>emitting</KEYWORD1>
+			<KEYWORD1>falloff</KEYWORD1>
+			<KEYWORD1>falloff_angle</KEYWORD1>
+			<KEYWORD1>filter</KEYWORD1>
+			<KEYWORD3>finish</KEYWORD3>
+			<KEYWORD1>flatness</KEYWORD1>
+			<KEYWORD3>fog</KEYWORD3>
+			<KEYWORD1>fog_alt</KEYWORD1>
+			<KEYWORD1>fog_offset</KEYWORD1>
+			<KEYWORD1>fog_type</KEYWORD1>
+			<KEYWORD1>frequency</KEYWORD1>
+			<LITERAL2>gif</LITERAL2>
+			<KEYWORD3>gradient</KEYWORD3>
+			<KEYWORD1>granite</KEYWORD1>
+			<LITERAL2>green</LITERAL2>
+			<KEYWORD3>height_field</KEYWORD3>
+			<KEYWORD1>hexagon</KEYWORD1>
+			<LITERAL2>iff</LITERAL2>
+			<KEYWORD3>image_map</KEYWORD3>
+			<LITERAL2>include</LITERAL2>
+			<KEYWORD1>interpolate</KEYWORD1>
+			<KEYWORD1>intersection</KEYWORD1>
+			<KEYWORD1>inverse</KEYWORD1>
+			<KEYWORD1>ior</KEYWORD1>
+			<KEYWORD3>halo</KEYWORD3>
+			<KEYWORD1>jitter</KEYWORD1>
+			<KEYWORD1>lambda</KEYWORD1>
+			<KEYWORD1>leopard</KEYWORD1>
+			<KEYWORD3>light_source</KEYWORD3>
+			<KEYWORD1>linear</KEYWORD1>
+			<KEYWORD1>linear_spline</KEYWORD1>
+			<KEYWORD1>location</KEYWORD1>
+			<KEYWORD1>looks_like</KEYWORD1>
+			<KEYWORD1>look_at</KEYWORD1>
+			<KEYWORD1>mandel</KEYWORD1>
+			<KEYWORD1>map_type</KEYWORD1>
+			<KEYWORD1>marble</KEYWORD1>
+			<KEYWORD3>material_map</KEYWORD3>
+			<LABEL>max_intersections</LABEL>
+			<LABEL>max_trace_level</LABEL>
+			<KEYWORD1>merge</KEYWORD1>
+			<KEYWORD1>metallic</KEYWORD1>
+			<KEYWORD3>normal</KEYWORD3>
+			<KEYWORD1>no_shadow</KEYWORD1>
+			<KEYWORD3>object</KEYWORD3>
+			<LITERAL2>off</LITERAL2>
+			<LITERAL2>on</LITERAL2>
+			<KEYWORD1>octaves</KEYWORD1>
+			<KEYWORD1>omega</KEYWORD1>
+			<KEYWORD1>once</KEYWORD1>
+			<KEYWORD1>onion</KEYWORD1>
+			<KEYWORD1>open</KEYWORD1>
+			<KEYWORD1>phase</KEYWORD1>
+			<KEYWORD1>phong</KEYWORD1>
+			<KEYWORD1>phong_size</KEYWORD1>
+			<KEYWORD3>pigment</KEYWORD3>
+			<KEYWORD3>plane</KEYWORD3>
+			<KEYWORD1>point_at</KEYWORD1>
+			<KEYWORD3>poly</KEYWORD3>
+			<LITERAL2>pot</LITERAL2>
+			<KEYWORD3>prism</KEYWORD3>
+			<KEYWORD3>quadric</KEYWORD3>
+			<KEYWORD3>quartic</KEYWORD3>
+			<KEYWORD1>quick_color</KEYWORD1>
+			<KEYWORD1>quick_colour</KEYWORD1>
+			<KEYWORD1>radial</KEYWORD1>
+			<KEYWORD1>radius</KEYWORD1>
+			<KEYWORD3>rainbow</KEYWORD3>
+			<KEYWORD1>raw</KEYWORD1>
+			<LITERAL2>red</LITERAL2>
+			<KEYWORD1>reflection</KEYWORD1>
+			<KEYWORD1>refraction</KEYWORD1>
+			<KEYWORD1>rgb</KEYWORD1>
+			<KEYWORD1>rgbf</KEYWORD1>
+			<KEYWORD1>rgbt</KEYWORD1>
+			<KEYWORD1>right</KEYWORD1>
+			<KEYWORD1>ripples</KEYWORD1>
+			<KEYWORD1>rotate</KEYWORD1>
+			<KEYWORD1>roughness</KEYWORD1>
+			<KEYWORD1>samples</KEYWORD1>
+			<KEYWORD1>scale</KEYWORD1>
+			<KEYWORD1>scattering</KEYWORD1>
+			<KEYWORD1>shadowless</KEYWORD1>
+			<KEYWORD3>sky</KEYWORD3>
+			<KEYWORD3>sky_sphere</KEYWORD3>
+			<KEYWORD3>smooth</KEYWORD3>
+			<KEYWORD3>smooth_triangle</KEYWORD3>
+			<KEYWORD3>sor</KEYWORD3>
+			<KEYWORD1>specular</KEYWORD1>
+			<KEYWORD3>sphere</KEYWORD3>
+			<KEYWORD1>spherical_mapping</KEYWORD1>
+			<KEYWORD1>spiral1</KEYWORD1>
+			<KEYWORD1>spotlight</KEYWORD1>
+			<KEYWORD1>spotted</KEYWORD1>
+			<KEYWORD1>sturm</KEYWORD1>
+			<KEYWORD3>text</KEYWORD3>
+			<KEYWORD3>texture</KEYWORD3>
+			<LITERAL2>tga</LITERAL2>
+			<KEYWORD1>threshold</KEYWORD1>
+			<KEYWORD1>tightness</KEYWORD1>
+			<KEYWORD1>tile0</KEYWORD1>
+			<KEYWORD1>tiles</KEYWORD1>
+			<KEYWORD3>torus</KEYWORD3>
+			<KEYWORD1>translate</KEYWORD1>
+			<KEYWORD1>transmit</KEYWORD1>
+			<KEYWORD3>triangle</KEYWORD3>
+			<LITERAL2>ttf</LITERAL2>
+			<KEYWORD1>turb_depth</KEYWORD1>
+			<KEYWORD1>turbulence</KEYWORD1>
+			<KEYWORD1>type</KEYWORD1>
+			<KEYWORD1>union</KEYWORD1>
+			<KEYWORD1>up</KEYWORD1>
+			<KEYWORD1>use_color</KEYWORD1>
+			<KEYWORD1>use_colour</KEYWORD1>
+			<KEYWORD1>use_index</KEYWORD1>
+			<KEYWORD1>u_steps</KEYWORD1>
+			<LABEL>version</LABEL>
+			<KEYWORD1>v_steps</KEYWORD1>
+			<KEYWORD1>water_level</KEYWORD1>
+			<KEYWORD1>waves</KEYWORD1>
+			<KEYWORD1>width</KEYWORD1>
+			<KEYWORD1>wood</KEYWORD1>
+			<KEYWORD1>wrinkles</KEYWORD1>
+			<LITERAL2>x</LITERAL2>
+			<LITERAL2>y</LITERAL2>
+			<LITERAL2>z</LITERAL2>
+		</KEYWORDS>
+	</RULES>
+</MODE>

@@ -1,0 +1,256 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="starting"><title>Starting jEdit</title>
+ <sect1 id="conventions"><title>Conventions</title>
+  <para>
+   Several conventions are used throughout the manual. They will be
+   described here.
+  </para>
+  <para>
+   When a menu item selection is being described, the
+   top level menu is listed first, followed by successive levels of submenus,
+   finally followed by the menu item itself. All menu components are separated
+   by greater-than symbols (<quote>&gt;</quote>). For example,
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll
+   to Current Line</guimenuitem> refers to the <guimenuitem>Scroll to Current
+   Line</guimenuitem> command contained in the
+   <guisubmenu>Scrolling</guisubmenu> submenu of the <guimenu>View</guimenu> menu.
+  </para>
+  <para>
+   As with many other applications, menu items that end with
+   ellipsis (...) display dialog boxes or windows when invoked.
+  </para>
+  <para>
+   Many jEdit commands can be also be invoked using keystrokes. This speeds
+   up editing by letting you keep your hands on the keyboard. Not all
+   commands with keyboard shortcuts
+   are accessible with one key stroke; for example, the
+   keyboard shortcut for <guimenuitem>Scroll to Current Line</guimenuitem> is
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>. That is, you
+   must first
+   press <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>, followed by
+   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>.
+  </para>
+  <sidebar><title>MacOS</title>
+   <para>
+    When running on MacOS, the primary modifier key is <keycap>Command</keycap>,
+    not <keycap>Control</keycap>. If you are a Mac user, mentally substitute
+    <keycap>Command</keycap> whenever you see <keycap>Control</keycap> in this
+    guide.
+   </para>
+  </sidebar>
+ </sect1>
+ <sect1 id="starting-any-os"><title>Platform-Independent Instructions</title>
+  <para>
+   Exactly how jEdit is started depends on the operating system;
+   on Unix systems, usually you would
+   run the <quote>jedit</quote> command at the command line,
+   or select jEdit from a menu; on Windows, you might
+   use the jEditLauncher package, which is documented in
+   <xref linkend="starting-windows" />.
+  </para>
+  <para>
+   If jEdit is started while another copy is already running, control is
+   transferred to the running copy, and a second instance is not loaded.
+   This saves time and memory if jEdit is started multiple times.
+   Communication between instances of jEdit is implemented using
+   TCP/IP sockets; the initial instance is known as the
+   <firstterm>server</firstterm>, and subsequent invocations are
+   <firstterm>clients</firstterm>.
+  </para>
+  <para>
+   If the <command>-background</command> command line switch is specified,
+   jEdit will continue running and waiting for client requests even
+   after all editor windows are closed. The advantage of background mode
+   is that you can open and close jEdit any number of times, only having
+   to wait for it to start the first time. The downside of background
+   mode is that jEdit will continue to consume memory when no windows
+   are open.
+  </para>
+  <para>
+   For more information about command line switches that control the
+   server feature, see <xref linkend="cli-usage" />.
+  </para>
+  <para>
+   Unlike other applications, jEdit automatically loads any files that were
+   open last time in was used, so you can get back to work immediately, without
+   having to find the files you are working on first. This feature can be
+   disabled in the <guibutton>Loading and Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <sidebar><title>The edit server and security</title>
+   <para>
+    Not only does the server pick a random TCP port number on startup,
+    it also requires that clients provide an <firstterm>authorization
+    key</firstterm>; a randomly-generated number only accessable to
+    processes running on the local machine.
+    So not only will <quote>bad guys</quote> have to guess a 64-bit integer,
+    they will need to get it right on the first try; the edit server
+    shuts itself off upon receiving an invalid packet.
+   </para>
+   <para>
+    In environments that demand absolute security, the edit server can be
+    disabled by specifying the <command>-noserver</command> command line switch.
+   </para>
+  </sidebar>
+ </sect1>
+ <sect1 id="starting-windows"><title>Starting jEdit on Windows</title>
+  <para>
+   On Windows, jEdit comes with <emphasis>jEditLauncher</emphasis> - an optional
+   package of components that make it easy to start jEdit, manage its command
+   line settings, and launch files and macro scripts.
+  </para>
+
+  <para>
+   The jEditLauncher package provides three shortcuts for running jEdit:  one in
+   the desktop's <guilabel>Start</guilabel> menu, a entry in the Programs menu, and
+   a second shortcut on your desktop.  Any of these may be deleted or moved without
+   affecting jEdit's operation.  To launch jEdit, simply select one of these shortcuts
+   as you would for any Windows application.
+  </para>
+
+  <para>
+   The jEditLauncher package includes a utility for changing the command line
+   parameters that are stored with jEditLauncher and used everytime it runs jEdit.
+   You can change the Java interpreter used to launch jEdit, the amount of heap memory,
+   the working directory and other command line parameters.  To make these changes,
+   select <guilabel>Set jEdit Parameters</guilabel> from the jEdit group in
+   the Programs menu, or run <userinput>jedit /p</userinput> from a command
+   line that has jEdit's installation directory in its search path.  A dialog
+   will appear that allows you to change and save a new set of command line
+   parameters.
+  </para>
+
+  <para>
+   The package also add menu items to the context or <quote>right-click</quote>
+   menu displayed by the Windows shell when you click on a file item in the
+   desktop window, a Windows Explorer window or a standard file selection dialog.
+   The menu entries allow  you to open selected files in jEdit, starting the
+   aplication if necessary. It will also allow you to open all files in a
+   directory with a given extension with a single menu selection. If a BeanShell
+   macro script with a <filename>.bsh</filename> extension is selected, the menu
+   includes the option of running that script within jEdit. If you have the
+   <application>JDiff</application> plugin installed with jEdit, you can also
+   select two files and have jEdit compare them in a side-by-side graphical display.
+  </para>
+
+  <para>
+   For a more detailed description of all features found in
+   the jEditLauncher package, see <xref linkend="launcher-guide"/>.
+  </para>
+ </sect1>
+
+ <sect1 id="cli-usage"><title>Command Line Usage</title>
+  <para>
+   On operating systems that support a command line, jEdit can be passed
+   various arguments to control its behavior.
+  </para>
+  <para>
+   When opening files from the command line, a line number or marker to
+   position the caret on can be specified like so:
+  </para>
+  <screen><prompt>$ </prompt><userinput>jedit MyApplet.java +line:10</userinput>
+<prompt>$ </prompt><userinput>jedit thesis.tex +marker:c</userinput></screen>
+  <para>
+   A number of options can also be specified to control several obscure features.
+   They are listed in the following table.
+  </para>
+  <para>
+   If you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, only file names and marker and line number
+   specifications can be specified on the command line; other parameters
+   must be set as described in <xref
+   linkend="launcher-starting" />.
+  </para>
+  <informaltable>
+   <tgroup cols="2">
+    <colspec colnum="1" colwidth="1.5in" />
+    <thead>
+     <row><entry>Option</entry><entry>Description</entry></row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>-background</entry>
+      <entry>Runs jEdit in background mode. In background mode,
+      the edit server will continue listening for
+      client connections even after all views are closed.
+      See <xref linkend="starting" />.</entry>
+     </row>
+     <row>
+      <entry>-norestore</entry>
+      <entry>jEdit will not attempt to restore previously open files on
+      startup. This feature can also be set permanently in the
+      <guibutton>Loading and Saving</guibutton> pane of the
+      <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+      dialog box; see <xref linkend="global-opts" />.
+      </entry>
+     </row>
+     <row>
+      <entry>-run=<replaceable>script</replaceable></entry>
+      <entry>Runs the specified BeanShell script. There can only be one
+      of these parameters on the command line. See
+      <xref linkend="scripts-command-line" /> for details.</entry>
+     </row>
+     <row>
+      <entry>-server</entry>
+      <entry>Stores the server port info in the file named <filename>server</filename>
+      inside the settings directory.</entry>
+     </row>
+     <row>
+      <entry>-server=<replaceable>name</replaceable></entry>
+      <entry>Stores the server port info in the file named
+      <replaceable>name</replaceable>. File names for this
+      parameter are relative to the settings directory.</entry>
+     </row>
+     <row>
+      <entry>-noserver</entry>
+      <entry>Does not attempt to
+      connect to a running edit server, and does not start one either. For
+      information about the edit server, see <xref linkend="starting" />.</entry>
+     </row>
+     <row>
+      <entry>-settings=<replaceable>dir</replaceable></entry>
+      <entry>Loads and saves the user-specific settings from
+      the directory named <replaceable>dir</replaceable>, instead of the
+      default <filename><replaceable>user.home</replaceable>/.jedit</filename>.
+      <replaceable>dir</replaceable> will
+      be created if it does not exist. Has no effect
+      when connecting to another instance via the edit server.</entry>
+     </row>
+     <row>
+      <entry>-nosettings</entry>
+      <entry>Starts jEdit without loading user-specific settings.
+      See <xref linkend="settings-directory" />.</entry>
+     </row>
+     <row>
+      <entry>-nostartupscripts</entry>
+      <entry>Causes jEdit to not run any startup scripts.
+      See <xref linkend="startup-scripts" />.
+      Has no effect
+      when connecting to another instance via the edit server.</entry>
+     </row>
+     <row>
+      <entry>-usage</entry>
+      <entry>Shows a brief command line usage message without starting
+      jEdit.
+      This message is also shown if an invalid switch was specified.</entry>
+     </row>
+     <row>
+      <entry>-version</entry>
+      <entry>Shows the version number without starting jEdit.</entry>
+     </row>
+     <row>
+      <entry>- -</entry>
+      <entry>Specifies the end of the command line switches. Further
+      parameters are treated as file names, even if they begin with
+      a dash. Can be used to open files whose names start with a
+      dash, and so on.</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </informaltable>
+ </sect1>
+</chapter>

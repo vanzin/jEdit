@@ -1,0 +1,82 @@
+/*
+ * Return_From_Find.bsh  - a BeanShell macro script
+ * for the jEdit text editor - returns the editing caret to
+ * a earlier buffer and position
+ * Copyright (C) 2001 John Gellene
+ * jgellene@nyc.rr.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with the jEdit program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Notes on usage:
+ *
+ * This macro works with Find_occurrence.bsh to restore
+ * the buffer and caret position to the state as of the last
+ * execution of Find_occurrence.bsh.
+ *
+ * To prevent confusion, only a single return is permitted;
+ * to change this, see comment at the end of this listing.
+ *
+ * $Id$
+ */
+
+boolean doIt()
+{
+	bufferName = jEdit.getProperty("temp.findXXX.bufferName");
+	if(bufferName == null || bufferName.length() == 0)
+	{
+		Macros.error(view, "Cannot return: no file name is stored.");
+		return false;
+	}
+	// using jEdit.openFile(view, bufferName) will open
+	// a new, empty buffer if the file cannot be found;
+	// this is not what we want, so we take a two-step approach
+	buffer = jEdit.getBuffer(bufferName);
+	if(buffer == null)
+	{
+		Macros.error(view, "Could not open stored buffer name:\n"
+			+ bufferName);
+		return false;
+	}
+	view.setBuffer(buffer);
+	posString = jEdit.getProperty("temp.findXXX.caretPosition");
+	try
+	{
+		if(posString == null || posString.length() == 0)
+		{
+			throw new IllegalArgumentException();
+		}
+		pos = Integer.parseInt(posString);
+		textArea.setCaretPosition(pos);
+	}
+	catch(IllegalArgumentException e)
+	{
+		Macros.error(view, "No valid caret position is stored.");
+		textArea.setCaretPosition(0);
+		return false;
+	}
+	return true;
+}
+
+doIt();
+/*
+ * if you want to keep the buffer name and caret position
+ * available until the next time you run Find_first_occurrence.bsh,
+ * execute the next two lines only when doIt() returns false
+ */
+jEdit.setTemporaryProperty("temp.findXXX.bufferName", "");
+jEdit.setTemporaryProperty("temp.findXXX.caretPosition", "");
+
+// end Return_From_Find.bsh
+

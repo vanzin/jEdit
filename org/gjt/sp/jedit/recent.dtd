@@ -1,0 +1,11 @@
+<!-- RECENT element -->
+<!ELEMENT RECENT ( ENTRY+ ) >
+
+<!-- ENTRY element -->
+<!ELEMENT ENTRY ( PATH | CARET | SELECTION | ENCODING ) >
+
+<!-- ENTRY child elements -->
+<!ELEMENT PATH ( #PCDATA ) >
+<!ELEMENT CARET ( #PCDATA ) >
+<!ELEMENT SELECTION ( #PCDATA ) >
+<!ELEMENT ENCODING ( #PCDATA ) >

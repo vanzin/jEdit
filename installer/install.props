@@ -1,0 +1,47 @@
+###
+### Installation settings
+###
+
+# Program name
+app.name=jEdit
+
+# Program version
+app.version=4.0pre1
+
+# Info to display on first page of installer
+app.readme=readme.html
+
+# Main class of program. Used when creating a shortcut
+app.main.class=org.gjt.sp.jedit.jEdit
+
+# Each component must have a name, a size, and a 'fileset'. The fileset is the
+# name of a resource, relative to the root of the JAR, where the list of files
+# is stored, newline delimited
+comp.count=5
+
+comp.0.name=jEdit text editor
+comp.0.disk-size=2136
+comp.0.real-size=1999
+comp.0.fileset=jedit-program
+
+comp.1.name=Default set of macros (highly recommended)
+comp.1.disk-size=228
+comp.1.real-size=130
+comp.1.fileset=jedit-macros
+
+comp.2.name=HTTP firewall support (Java 2 only)
+comp.2.disk-size=16
+comp.2.real-size=13
+comp.2.fileset=jedit-firewall
+
+comp.3.name=Windows launcher and context menu addition (Windows only)
+comp.3.disk-size=260
+comp.3.real-size=260
+comp.3.fileset=jedit-windows
+comp.3.os=Windows
+
+comp.4.name=OS/2 start script (OS/2 only)
+comp.4.disk-size=4
+comp.4.real-size=2
+comp.4.fileset=jedit-os2
+comp.4.os=HalfAnOS

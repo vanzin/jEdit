@@ -1,0 +1,62 @@
+/* This script is run on jEdit startup. It should be short and simple for
+ * performance reasons. */
+
+// We use the '__cruft' scripted object to store various junk.
+__cruft = object();
+
+/* By default, BeanShell imports the following packages:
+
+   - javax.swing.event
+   - javax.swing
+   - java.awt.event
+   - java.awt
+   - java.net
+   - java.util
+   - java.io
+   - java.lang
+
+   In addition to the above, we import jEdit's packages for convinience. */
+
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.msg.*; // not useful in macros?
+import org.gjt.sp.jedit.options.*; // ditto?
+import org.gjt.sp.jedit.pluginmgr.*;
+import org.gjt.sp.jedit.search.*;
+import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.*;
+
+/* This function prints the specified object to the current console if one
+ * exists; otherwise, to the activity log. */
+print(arg)
+{
+	if(arg == null)
+		arg = "null";
+
+	if(arg instanceof Object[])
+	{
+		len = arg.length;
+		print("Array: "+arg +" {");
+		for(int i=0; i< len; i++ )
+		{
+			print(arg[i]);
+		}
+		print("}");
+	}
+	else
+	{
+		if(output != null)
+			output.print(null,String.valueOf(arg));
+		else
+			Log.log(Log.WARNING,BeanShell.class,String.valueOf(arg));
+	}
+}
+
+bsh.help.print = "usage: print ( arg )";
+
+// Print a message once BeanShell initialization is complete
+Log.log(Log.DEBUG,BeanShell.class,"BeanShell interpreter version "
+	+ this.interpreter.VERSION);

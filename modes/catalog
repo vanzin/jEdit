@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+
+<!-- This is a mode catalog. Edit modes must be listed here, -->
+<!-- otherwise they will not be available to jEdit. -->
+
+<!DOCTYPE MODES SYSTEM "catalog.dtd">
+
+<MODES>
+
+<MODE NAME="ada95"		FILE="ada95.xml"
+				FILE_NAME_GLOB="*.{ada,adb,ads}" />
+
+<MODE NAME="asp"		FILE="asp.xml"
+				FILE_NAME_GLOB="*.{asp,asa}" />
+
+<MODE NAME="assembly-r2000"	FILE="assembly-r2000.xml"
+				FILE_NAME_GLOB="*.mips" />
+
+<MODE NAME="assembly-x86"	FILE="assembly-x86.xml"
+				FILE_NAME_GLOB="*.asm" />
+
+<MODE NAME="awk"		FILE="awk.xml"
+				FILE_NAME_GLOB="*.awk" />
+
+<MODE NAME="b"			FILE="b.xml"
+				FILE_NAME_GLOB="*.{imp,ref,mch}" />
+
+<MODE NAME="batch"		FILE="batch.xml"
+				FILE_NAME_GLOB="*.bat" />
+
+<MODE NAME="beanshell"		FILE="beanshell.xml"
+				FILE_NAME_GLOB="*.bsh" />
+
+<!-- if anyone knows a file name glob that can be used with this mode,
+     please let me know -->
+<MODE NAME="bcel"		FILE="bcel.xml" />
+
+<!--  We let Objective C mode highlight .h files -->
+<MODE NAME="c"			FILE="c.xml"
+				FILE_NAME_GLOB="*.c" />
+
+<MODE NAME="cobol"		FILE="cobol.xml"
+				FILE_NAME_GLOB="*.cbl" />
+
+<MODE NAME="coldfusion"		FILE="coldfusion.xml"
+				FILE_NAME_GLOB="*.{cfm,dbm}" />
+
+<MODE NAME="c++"		FILE="cplusplus.xml"
+				FILE_NAME_GLOB="*.{cc,cpp,hh,hpp,cxx}" />
+
+<MODE NAME="c#"			FILE="csharp.xml"
+				FILE_NAME_GLOB="*.cs" />
+
+<MODE NAME="css"		FILE="css.xml"
+				FILE_NAME_GLOB="*.css" />
+
+<MODE NAME="dsssl"		FILE="dsssl.xml"
+				FILE_NAME_GLOB="*.dsl" />
+
+<MODE NAME="eiffel"		FILE="eiffel.xml"
+				FILE_NAME_GLOB="*.e" />
+
+<MODE NAME="foxpro"		FILE="foxpro.xml"
+				FILE_NAME_GLOB="*.prg" />
+
+<MODE NAME="haskell"		FILE="haskell.xml"
+				FILE_NAME_GLOB="*.hs" />
+
+<MODE NAME="html"		FILE="html.xml"
+				FILE_NAME_GLOB="*.{html,htm}" />
+
+<MODE NAME="idl"		FILE="idl.xml"
+				FILE_NAME_GLOB="*.idl" />
+
+<MODE NAME="ini"		FILE="ini.xml"
+				FILE_NAME_GLOB="*.{ini,reg}" />
+
+<MODE NAME="java"		FILE="java.xml"
+				FILE_NAME_GLOB="*.java" />
+
+<MODE NAME="javascript"		FILE="javascript.xml"
+				FILE_NAME_GLOB="*.js" />
+
+<MODE NAME="jhtml"		FILE="jhtml.xml"
+				FILE_NAME_GLOB="*.jhtml" />
+
+<MODE NAME="jmk"		FILE="jmk.xml"
+				FILE_NAME_GLOB="*.jmk" />
+
+<MODE NAME="jsp"		FILE="jsp.xml"
+				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
+
+<MODE NAME="lisp"		FILE="lisp.xml"
+				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
+
+<MODE NAME="makefile"		FILE="makefile.xml"
+				FILE_NAME_GLOB="*{makefile,.mak}" />
+
+<MODE NAME="ml"			FILE="ml.xml"
+				FILE_NAME_GLOB="*.ml" />
+
+<MODE NAME="netrexx"		FILE="netrexx.xml"
+				FILE_NAME_GLOB="*.nrx" />
+
+<MODE NAME="objective-c"	FILE="objective-c.xml"
+				FILE_NAME_GLOB="*.[mh]" />
+
+<MODE NAME="occam"		FILE="occam.xml"
+				FILE_NAME_GLOB="*.icc" />
+
+<MODE NAME="omnimark"		FILE="omnimark.xml"
+				FILE_NAME_GLOB="*.x{om,in}" />
+
+<MODE NAME="pascal"		FILE="pascal.xml"
+				FILE_NAME_GLOB="*.pas" />
+
+<MODE NAME="patch"		FILE="patch.xml"
+				FILE_NAME_GLOB="*.{diff,patch}" />
+
+<MODE NAME="perl"		FILE="perl.xml"
+				FILE_NAME_GLOB="*.p[lm]"
+				FIRST_LINE_GLOB="#!/*perl*" />
+
+<MODE NAME="php"		FILE="php.xml"
+				FILE_NAME_GLOB="*.{php3,php,phtml}"
+				FIRST_LINE_GLOB="&lt;?php" />
+
+<MODE NAME="pl-sql"		FILE="pl-sql.xml"
+				FILE_NAME_GLOB="*.pls" />
+
+<MODE NAME="postscript"		FILE="postscript.xml"
+				FILE_NAME_GLOB="*.{ps,eps}" />
+
+<MODE NAME="povray"		FILE="povray.xml"
+				FILE_NAME_GLOB="*.{pov,povray}" />
+
+<MODE NAME="progress"           FILE="progress.xml"
+                                FILE_NAME_GLOB="*.{p,i,w,f}" />
+
+<MODE NAME="properties"		FILE="props.xml"
+				FILE_NAME_GLOB="*{properties,props}" />
+
+<MODE NAME="pvwave"		FILE="pvwave.xml"
+				FILE_NAME_GLOB="*.{pro,jou}" />
+
+<MODE NAME="python"		FILE="python.xml"
+				FILE_NAME_GLOB="*.py" />
+
+<MODE NAME="rpm-spec"		FILE="rpmspec.xml"
+				FILE_NAME_GLOB="*.spec" />
+
+<MODE NAME="ruby"		FILE="ruby.xml"
+				FILE_NAME_GLOB="*.rb" />
+
+<!-- Note: same XML file as LISP mode -->
+<MODE NAME="scheme"		FILE="lisp.xml"
+				FILE_NAME_GLOB="*.scm" />
+
+<MODE NAME="sgml"		FILE="sgml.xml"
+				FILE_NAME_GLOB="*.{sgml,sgm,dtd}" />
+
+<MODE NAME="shellscript"	FILE="shellscript.xml"
+				FILE_NAME_GLOB="*.{csh,sh}"
+				FIRST_LINE_GLOB="#!/*sh*" />
+
+<MODE NAME="shtml"		FILE="shtml.xml"
+				FILE_NAME_GLOB="*.{shtml,shtm}" />
+
+<MODE NAME="sqr"                FILE="sqr.xml"
+                                FILE_NAME_GLOB="*.{sqr,sqc}" />
+
+<MODE NAME="tcl"		FILE="tcl.xml"
+				FILE_NAME_GLOB="*.{tcl,tsh}" />
+
+<MODE NAME="tex"		FILE="tex.xml"
+				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
+
+<MODE NAME="texinfo"		FILE="texinfo.xml"
+				FILE_NAME_GLOB="*.texi" />
+
+<MODE NAME="text"		FILE="text.xml"
+				FILE_NAME_GLOB="*.txt" />
+
+<MODE NAME="transact-sql"	FILE="tsql.xml"
+				FILE_NAME_GLOB="*.sql" />
+
+<MODE NAME="vbscript"		FILE="vbscript.xml"
+				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
+
+<MODE NAME="velocity"		FILE="velocity.xml"
+				FILE_NAME_GLOB="*.vw" />
+
+<MODE NAME="verilog"		FILE="verilog.xml"
+				FILE_NAME_GLOB="*.{ver,v}" />
+
+<MODE NAME="vhdl"		FILE="vhdl.xml"
+				FILE_NAME_GLOB="*.vh*" />
+
+<!-- XML mode must be after XSL mode, otherwise all XSL files
+     will be opened as XML because they start with <?xml... -->
+<MODE NAME="xsl"		FILE="xsl.xml"
+				FILE_NAME_GLOB="*.xsl" />
+
+<!-- Great. AElfred doesn't support entities in attribute values,
+     but all other XML parsers complain if < appears. -->
+<MODE NAME="xml"		FILE="xml.xml"
+				FILE_NAME_GLOB="*.xml"
+				FIRST_LINE_GLOB="<\?xml*" />
+
+</MODES>

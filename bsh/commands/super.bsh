@@ -1,0 +1,18 @@
+
+bsh.help.super = "usage: super( methodname )";
+
+/**
+	This implementation of this is fragile... 
+*/
+bsh.This super( String scope ) {
+	n=this.caller.namespace;
+	while ( n != global ) {
+		if ( n.namespace.getName().equals( "Method NameSpace: "+ scope ) )
+			return n;
+		else
+			n=n.super;
+	}
+	if ( n == global)
+		throw new EvalError("Enclosing scope not found: "+scope);
+}
+
