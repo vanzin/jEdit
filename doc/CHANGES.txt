@@ -12,6 +12,13 @@ JEDIT 4.2 VERSION HISTORY
   is selected.
 
 }}}
+{{{ Syntax Highlighting
+
+- Updated Inform syntax highlighting (Matt Albrecht).
+
+- Added S+ syntax highlighting (Matt Albrecht).
+
+}}}
 {{{ Plugin Loader
 
 - The plugin manager now loads plugins immediately after they are
@@ -76,6 +83,8 @@ JEDIT 4.2 VERSION HISTORY
 
 - Fixed possible NullPointerException on MacOS X in the OperatingSystem
   class.
+
+- Various fixes for dynamic plugin loading.
 
 }}}
 {{{ API Changes
