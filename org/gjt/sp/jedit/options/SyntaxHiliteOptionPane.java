@@ -1,5 +1,5 @@
 /*
- * StyleOptionPane.java - Style option pane
+ * SyntaxHiliteOptionPane.java - Syntax highlighting option pane
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -37,20 +37,20 @@ import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
 //}}}
 
-//{{{ StyleOptionPane class
+//{{{ SyntaxHiliteOptionPane class
 /**
  * Style option pane.
  * @author Slava Pestov
  * @version $Id$
  */
-public class StyleOptionPane extends AbstractOptionPane
+public class SyntaxHiliteOptionPane extends AbstractOptionPane
 {
 	public static final EmptyBorder noFocusBorder = new EmptyBorder(1,1,1,1);
 
 	//{{{ StyleOptionPane constructor
-	public StyleOptionPane()
+	public SyntaxHiliteOptionPane()
 	{
-		super("style");
+		super("syntax");
 	}
 	//}}}
 
@@ -59,19 +59,28 @@ public class StyleOptionPane extends AbstractOptionPane
 	//{{{ _init() method
 	protected void _init()
 	{
-		setLayout(new BorderLayout());
+		setLayout(new BorderLayout(6,6));
+
+		/* Parse fully */
+		parseFully = new JCheckBox(jEdit.getProperty(
+			"options.syntax.parseFully"));
+		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
+
+		add(BorderLayout.NORTH,parseFully);
 		add(BorderLayout.CENTER,createStyleTableScroller());
 	} //}}}
 
 	//{{{ _save() method
 	protected void _save()
 	{
+		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
 		styleModel.save();
 	} //}}}
 
 	//}}}
 
 	//{{{ Private members
+	private JCheckBox parseFully;
 	private StyleTableModel styleModel;
 	private JTable styleTable;
 
@@ -113,7 +122,7 @@ public class StyleOptionPane extends AbstractOptionPane
 				return;
 
 			SyntaxStyle style = new StyleEditor(
-				StyleOptionPane.this,
+				SyntaxHiliteOptionPane.this,
 				(SyntaxStyle)styleModel.getValueAt(
 				row,1)).getStyle();
 			if(style != null)
@@ -131,20 +140,20 @@ class StyleTableModel extends AbstractTableModel
 	StyleTableModel()
 	{
 		styleChoices = new Vector(13);
-		addStyleChoice("options.style.comment1Style","view.style.comment1");
-		addStyleChoice("options.style.comment2Style","view.style.comment2");
-		addStyleChoice("options.style.literal1Style","view.style.literal1");
-		addStyleChoice("options.style.literal2Style","view.style.literal2");
-		addStyleChoice("options.style.labelStyle","view.style.label");
-		addStyleChoice("options.style.keyword1Style","view.style.keyword1");
-		addStyleChoice("options.style.keyword2Style","view.style.keyword2");
-		addStyleChoice("options.style.keyword3Style","view.style.keyword3");
-		addStyleChoice("options.style.functionStyle","view.style.function");
-		addStyleChoice("options.style.markupStyle","view.style.markup");
-		addStyleChoice("options.style.operatorStyle","view.style.operator");
-		addStyleChoice("options.style.digitStyle","view.style.digit");
-		addStyleChoice("options.style.invalidStyle","view.style.invalid");
-		addStyleChoice("options.style.foldLine","view.style.foldLine");
+		addStyleChoice("options.syntax.comment1Style","view.style.comment1");
+		addStyleChoice("options.syntax.comment2Style","view.style.comment2");
+		addStyleChoice("options.syntax.literal1Style","view.style.literal1");
+		addStyleChoice("options.syntax.literal2Style","view.style.literal2");
+		addStyleChoice("options.syntax.labelStyle","view.style.label");
+		addStyleChoice("options.syntax.keyword1Style","view.style.keyword1");
+		addStyleChoice("options.syntax.keyword2Style","view.style.keyword2");
+		addStyleChoice("options.syntax.keyword3Style","view.style.keyword3");
+		addStyleChoice("options.syntax.functionStyle","view.style.function");
+		addStyleChoice("options.syntax.markupStyle","view.style.markup");
+		addStyleChoice("options.syntax.operatorStyle","view.style.operator");
+		addStyleChoice("options.syntax.digitStyle","view.style.digit");
+		addStyleChoice("options.syntax.invalidStyle","view.style.invalid");
+		addStyleChoice("options.syntax.foldLine","view.style.foldLine");
 		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringCompare());
 	} //}}}
 
@@ -190,9 +199,9 @@ class StyleTableModel extends AbstractTableModel
 		switch(index)
 		{
 		case 0:
-			return jEdit.getProperty("options.style.object");
+			return jEdit.getProperty("options.syntax.object");
 		case 1:
-			return jEdit.getProperty("options.style.style");
+			return jEdit.getProperty("options.syntax.style");
 		default:
 			return null;
 		}
@@ -248,7 +257,7 @@ class StyleTableModel extends AbstractTableModel
 		public StyleRenderer()
 		{
 			setOpaque(true);
-			setBorder(StyleOptionPane.noFocusBorder);
+			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
 			setText("Hello World");
 		} //}}}
 
@@ -278,7 +287,7 @@ class StyleTableModel extends AbstractTableModel
 
 			setBorder((cellHasFocus) ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
-				: StyleOptionPane.noFocusBorder);
+				: SyntaxHiliteOptionPane.noFocusBorder);
 			return this;
 		} //}}}
 	} //}}}

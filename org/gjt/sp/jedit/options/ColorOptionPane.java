@@ -265,7 +265,7 @@ class ColorTableModel extends AbstractTableModel
 		public ColorRenderer()
 		{
 			setOpaque(true);
-			setBorder(StyleOptionPane.noFocusBorder);
+			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
 		} //}}}
 
 		//{{{ getTableCellRendererComponent() method
@@ -293,7 +293,7 @@ class ColorTableModel extends AbstractTableModel
 
 			setBorder((cellHasFocus) ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
-				: StyleOptionPane.noFocusBorder);
+				: SyntaxHiliteOptionPane.noFocusBorder);
 			return this;
 		} //}}}
 	} //}}}
