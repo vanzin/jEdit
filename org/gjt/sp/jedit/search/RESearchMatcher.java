@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.MiscUtilities;
  * @author Slava Pestov
  * @version $Id$
  */
-public class RESearchMatcher implements SearchMatcher
+public class RESearchMatcher extends SearchMatcher
 {
 	/**
 	 * Perl5 syntax with character classes enabled.
@@ -95,7 +95,7 @@ public class RESearchMatcher implements SearchMatcher
 			return null;
 
 		returnValue.substitutions = new String[
-			re.getNumSubs()];
+			re.getNumSubs() + 1];
 		for(int i = 0; i < returnValue.substitutions.length; i++)
 		{
 			returnValue.substitutions[i] = match.toString(i);
@@ -134,6 +134,5 @@ public class RESearchMatcher implements SearchMatcher
 
 	//{{{ Private members
 	private RE re;
-	private Match returnValue;
 	//}}}
 }

@@ -96,6 +96,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					actionSet.getActionNames()));
 			}
 		}
+		Collections.sort(models,new MiscUtilities.StringICaseCompare());
 		currentModel = (ShortcutsModel)models.elementAt(0);
 	}
 

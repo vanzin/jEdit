@@ -9,6 +9,39 @@ Thanks to Ryan Grove for contributing to this release.
 - Updated NSIS2 syntax highlighting (Ryan Grove).
 
 }}}
+{{{ Scripting
+
+- BeanShell 1.3b2 is now included. Improvements since 1.3a1 (which was
+  included with jEdit 4.2pre3) include:
+
+  - Properties style auto-allocation of variables.
+
+    // foo is initially undefined
+    foo.bar.gee = 42; 
+    print( foo.bar.gee ); // 42
+
+  - Scripted class support (with class keyword). Limitations:
+
+    - Scripted classes may only extend other scripted classes
+    - implement clauses are currently ignored
+    - All Scripted classes appear as type bsh.This - they are
+      effectively the same type of object.
+
+  - The bsh.system object which is shared across Interpreter instances
+    has been renamed "bsh.shared".  For backwards compatability it is
+    still referenced as bsh.system as well.
+
+  - All scripted objects now implement the standard object protocol of
+    toString(), hashcode() and equals().
+
+  - Various bug fixes and optimizations.
+
+}}}
+{{{ Optimizations
+
+- Faster regular expression search and replace.
+
+}}}
 {{{ Bug Fixes
 
 - Changing the no modifier click action for the gutter didn't work.
@@ -16,6 +49,9 @@ Thanks to Ryan Grove for contributing to this release.
 - The 'jedit' script was not being created on Unix.
 
 - Fixed AltGR key on certain JVMs that send it as Control+Alt.
+
+- Regular expression replace didn't work with certain regular
+  expressions.
 
 }}}
 {{{ API Changes

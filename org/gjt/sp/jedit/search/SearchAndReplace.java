@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import bsh.BshMethod;
+import bsh.*;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.text.Segment;
@@ -984,6 +984,10 @@ loop:			while(path != null)
 	private static String search;
 	private static String replace;
 	private static BshMethod replaceMethod;
+	private static NameSpace replaceNS = new NameSpace(
+		BeanShell.getNameSpace(),
+		BeanShell.getNameSpace().getClassManager(),
+		"search and replace");
 	private static boolean regexp;
 	private static boolean ignoreCase;
 	private static boolean reverse;
@@ -1105,17 +1109,17 @@ loop:		for(int counter = 0; ; counter++)
 	} //}}}
 
 	//{{{ _replace() method
-	private String _replace(SearchMatcher.Match occur, String found)
+	private static String _replace(SearchMatcher.Match occur, String found)
 		throws Exception
 	{
 		if(regexp)
 		{
 			if(replaceMethod != null)
 			{
-				for(int i = 0; i <= occur.substitution.length; i++)
+				for(int i = 0; i <= occur.substitutions.length; i++)
 				{
 					replaceNS.setVariable("_" + i,
-						occur.substitution[i]);
+						occur.substitutions[i]);
 				}
 
 				Object obj = BeanShell.runCachedBlock(
@@ -1127,14 +1131,72 @@ loop:		for(int counter = 0; ; counter++)
 			}
 			else
 			{
-				
+				StringBuffer buf = new StringBuffer();
+
+				for(int i = 0; i < replace.length(); i++)
+				{
+					char ch = replace.charAt(i);
+					switch(ch)
+					{
+					case '$':
+						if(i == replace.length() - 1)
+						{
+							buf.append(ch);
+							break;
+						}
+
+						ch = replace.charAt(++i);
+						if(ch == '$')
+							buf.append('$');
+						else if(ch == '0')
+							buf.append(found);
+						else if(Character.isDigit(ch))
+						{
+							int n = ch - '0';
+							if(n < occur
+								.substitutions
+								.length)
+							{
+								buf.append(
+									occur
+									.substitutions
+									[n]
+								);
+							}
+						}
+						break;
+					case '\\':
+						if(i == replace.length() - 1)
+						{
+							buf.append('\\');
+							break;
+						}
+						ch = replace.charAt(++i);
+						switch(ch)
+						{
+						case 'n':
+							buf.append('\n');
+							break;
+						case 't':
+							buf.append('\t');
+							break;
+						default:
+							/* fall through */
+						}
+					default:
+						buf.append(ch);
+						break;
+					}
+				}
+
+				return buf.toString();
 			}
 		}
 		else
 		{
 			if(replaceMethod != null)
 			{
-				replaceNS.setVariable("_0",text);
+				replaceNS.setVariable("_0",found);
 				Object obj = BeanShell.runCachedBlock(
 					replaceMethod,
 					null,replaceNS);

@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.BeanShell;
 /**
  * Implements literal search using the Boyer-Moore algorithm.
  */
-public class BoyerMooreSearchMatcher implements SearchMatcher
+public class BoyerMooreSearchMatcher extends SearchMatcher
 {
 	//{{{ BoyerMooreSearchMatcher constructor
 	/**
@@ -57,8 +57,6 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		this.ignoreCase = ignoreCase;
 
 		pattern_end = this.pattern.length - 1;
-
-		returnValue = new Match();
 	} //}}}
 
 	//{{{ nextMatch() method
@@ -210,8 +208,6 @@ SEARCH:
 	private int[] fwd_suffix;
 	private int[] back_skip;
 	private int[] back_suffix;
-
-	private Match returnValue;
 	//}}}
 
 	// Boyer-Moore helper methods

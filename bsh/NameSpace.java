@@ -188,6 +188,11 @@ public class NameSpace
 		return getNameResolver( name ).toObject( callstack, interpreter );
 	}
 
+	public void setVariable(String name, Object value) throws UtilEvalError
+	{
+		setVariable(name,value,false);
+	}
+
 	/**
 		Set the variable through this namespace.
 		This method obeys the LOCALSCOPING property to determine how variables
