@@ -117,6 +117,9 @@ autoReload=true
 # The OS default will be used if this is not specified
 #buffer.encoding=ISO8859_1
 
+# Auto-detect GZIP, UTF16, UTF8 and XML encodings?
+buffer.encodingAutodetect=true
+
 # Tab width
 buffer.tabSize=8
 

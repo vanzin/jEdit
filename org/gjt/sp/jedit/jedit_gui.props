@@ -1628,6 +1628,7 @@ options.general.label=General
 options.general.code=new GeneralOptionPane();
 options.general.lineSeparator=Default line separator:
 options.general.encoding=Default character encoding:
+options.general.encodingAutodetect=Auto-detect file encoding when possible
 options.general.checkModStatus=If open files are changed on disk:
 options.general.checkModStatus.nothing=do nothing
 options.general.checkModStatus.prompt=prompt
@@ -2043,6 +2044,7 @@ vfs.browser.toolbar-dialog=vfs.browser.up \
 #{{{ Commands menu
 vfs.browser.commands.label=Commands
 vfs.browser.commands.encoding.label=Encoding
+vfs.browser.commands.encoding.auto-detect=Auto-detect
 
 vfs.browser.open-in.label=Open in
 vfs.browser.open-in=vfs.browser.open-view \

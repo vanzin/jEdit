@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- fresh instance; empty fields in search dialog
 - test gzip
 - "downloading plugin list" label in plugin manager
 - delete word: horizontal scroll not updated
@@ -16,7 +15,6 @@ and quirks that I need to fix eventually.
 [error] Buffer:  at org.gjt.sp.jedit.Buffer.fireTransactionComplete(Unknown Source)
 [error] Buffer:  at org.gjt.sp.jedit.Buffer.endCompoundEdit(Unknown Source)
 
-- xml encoding load with invalid encoding
 - choose dir dialog: entering dir name in filename field
 - column reference counting broken
 - gzip & unicode, or gzip & <?xml encoding...
@@ -27,7 +25,6 @@ and quirks that I need to fix eventually.
 - shortcuts: stale shortcuts remain?
 - if a plugin's stop() throws an exception, infinite loop?
 - no need to wait for requests after newFile()
-- test inserts with fold vis map
 - plugin mgr install doesn't update existing plugins
 - class loading problems
 - motif l&f: shortcuts in menu items
@@ -94,6 +91,7 @@ and quirks that I need to fix eventually.
 
 + features:
 
+- hide caret while typing
 - unindentCurrentLine property
 - need timeouts for plugin manager list download.
 - encoding menu with "More"

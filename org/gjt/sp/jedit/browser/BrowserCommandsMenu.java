@@ -168,6 +168,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 	//{{{ Private members
 	private VFSBrowser browser;
 	private HashMap encodingMenuItems;
+	private JCheckBoxMenuItem autoDetect;
 	private JRadioButtonMenuItem defaultEncoding;
 	private JRadioButtonMenuItem otherEncoding;
 
@@ -187,18 +188,38 @@ public class BrowserCommandsMenu extends JPopupMenu
 		JMenu encodingMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.commands.encoding.label"));
 
+		JMenu menu = encodingMenu;
+
+		autoDetect = new JCheckBoxMenuItem(
+			jEdit.getProperty(
+			"vfs.browser.commands.encoding.auto-detect"));
+		autoDetect.setSelected(browser.autoDetectEncoding);
+		autoDetect.setActionCommand("auto-detect");
+		autoDetect.addActionListener(actionHandler);
+		menu.add(autoDetect);
+		menu.addSeparator();
+
 		ButtonGroup grp = new ButtonGroup();
 
 		String[] encodings = MiscUtilities.getEncodings();
 		for(int i = 0; i < encodings.length; i++)
 		{
-			 String encoding = encodings[i];
+			String encoding = encodings[i];
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(encoding);
 			mi.setActionCommand("encoding@" + encoding);
 			mi.addActionListener(actionHandler);
 			grp.add(mi);
 			encodingMenuItems.put(encoding,mi);
-			encodingMenu.add(mi);
+
+			if(menu.getMenuComponentCount() > 20)
+			{
+				JMenu newMenu = new JMenu(
+					jEdit.getProperty("common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
+
+			menu.add(mi);
 		}
 
 		String systemEncoding = System.getProperty("file.encoding");
@@ -210,16 +231,25 @@ public class BrowserCommandsMenu extends JPopupMenu
 			mi.addActionListener(actionHandler);
 			grp.add(mi);
 			encodingMenuItems.put(systemEncoding,mi);
-			encodingMenu.add(mi);
+
+			if(menu.getMenuComponentCount() > 20)
+			{
+				JMenu newMenu = new JMenu(
+					jEdit.getProperty("common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
+
+			menu.add(mi);
 		}
 
-		encodingMenu.addSeparator();
+		menu.addSeparator();
 
 		otherEncoding = new JRadioButtonMenuItem();
 		otherEncoding.setActionCommand("other-encoding");
 		otherEncoding.addActionListener(actionHandler);
 		grp.add(otherEncoding);
-		encodingMenu.add(otherEncoding);
+		menu.add(otherEncoding);
 
 		return encodingMenu;
 	} //}}}
@@ -234,7 +264,12 @@ public class BrowserCommandsMenu extends JPopupMenu
 			View view = browser.getView();
 			String actionCommand = evt.getActionCommand();
 
-			if(actionCommand.equals("other-encoding"))
+			if(actionCommand.equals("auto-detect"))
+			{
+				browser.autoDetectEncoding
+					= autoDetect.isSelected();
+			}
+			else if(actionCommand.equals("other-encoding"))
 			{
 				String encoding = GUIUtilities.input(browser,
 					"encoding-prompt",null,

@@ -796,9 +796,17 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		HistoryModel model = filter.getModel();
 		if(model.getSize() != 0)
 			filter.setText(model.getItem(0));
+		else
+		{
+			filter.setText("*" + MiscUtilities
+				.getFileExtension(view.getBuffer()
+				.getName()));
+		}
 		model = directory.getModel();
 		if(model.getSize() != 0)
 			directory.setText(model.getItem(0));
+		else
+			directory.setText(view.getBuffer().getDirectory());
 
 		if(fileset instanceof DirectoryListSet)
 		{

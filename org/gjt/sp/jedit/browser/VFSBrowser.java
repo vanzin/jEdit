@@ -168,6 +168,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		currentEncoding = jEdit.getProperty("buffer.encoding",
 			System.getProperty("file.encoding"));
+		autoDetectEncoding = jEdit.getBooleanProperty(
+			"buffer.encodingAutodetect");
 
 		ActionHandler actionHandler = new ActionHandler();
 
@@ -817,8 +819,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					Hashtable props = new Hashtable();
 					props.put(Buffer.ENCODING,currentEncoding);
-					_buffer = jEdit.openFile(null,null,file.path,
-						false,props);
+					props.put(Buffer.ENCODING_AUTODETECT,
+						Boolean.valueOf(autoDetectEncoding));
+					_buffer = jEdit.openFile(null,null,
+						file.path,false,props);
 				}
 				else if(doubleClickClose && canDoubleClickClose
 					&& this.mode != BROWSER_DIALOG
@@ -880,6 +884,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	//{{{ Package-private members
 	String currentEncoding;
+	boolean autoDetectEncoding;
 
 	//{{{ pathsEqual() method
 	/**
