@@ -375,11 +375,7 @@ public class OptionsDialog extends EnhancedDialog
 
 				if (label == null)
 				{
-					// hahaha, suckers!!!
-					Log.log(Log.WARNING,this,
-						"options." + name + ".label"
-						+ " property not defined");
-					setText(name);
+					setText("NO LABEL PROPERTY: " + name);
 				}
 				else
 				{

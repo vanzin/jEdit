@@ -3497,9 +3497,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		FoldHandler oldFoldHandler = this.foldHandler;
 
-		//XXX: Will break with possible future plugin fold handlers
-		if(oldFoldHandler != null
-			&& oldFoldHandler.getClass() == foldHandler.getClass())
+		if(foldHandler.equals(oldFoldHandler))
 			return;
 
 		this.foldHandler = foldHandler;

@@ -28,7 +28,7 @@
 
 <!-- RULES attributes -->
 <!ATTLIST RULES
-	IGNORE_CASE %att-bool; "FALSE"
+	IGNORE_CASE %att-bool; "TRUE"
 	HIGHLIGHT_DIGITS %att-bool; "FALSE"
 	DIGIT_RE CDATA #IMPLIED
 	SET CDATA "MAIN"

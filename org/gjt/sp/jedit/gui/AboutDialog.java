@@ -165,27 +165,35 @@ public class AboutDialog extends EnhancedDialog
 
 			public void run()
 			{
+				FontMetrics fm = getFontMetrics(getFont());
+				int max = text.size() * fm.getHeight();
+
 				for(;;)
 				{
 					long start = System.currentTimeMillis();
 
 					scrollPosition++;
 
-					FontMetrics fm = getFontMetrics(getFont());
-					int max = text.size() * fm.getHeight();
 					if(scrollPosition > max)
 						scrollPosition = -300;
 
 					try
 					{
-						Thread.sleep(Math.max(0,25 -
-							(System.currentTimeMillis() - start)));
+						int delay = (int)Math.max(0,30 -
+							(System.currentTimeMillis() - start));
+						Thread.sleep(delay);
+
+						SwingUtilities.invokeAndWait(new Runnable()
+						{
+							public void run()
+							{
+								repaint();
+							}
+						});
 					}
-					catch(InterruptedException ie)
+					catch(Exception e)
 					{
 					}
-
-					repaint();
 				}
 			}
 		}

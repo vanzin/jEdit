@@ -585,6 +585,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		{
 			timer.stop();
 			ToolTipManager.sharedInstance().unregisterComponent(this);
+			super.removeNotify();
 		} //}}}
 
 		//{{{ getToolTipText() method

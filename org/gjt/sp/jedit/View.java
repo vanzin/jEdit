@@ -970,7 +970,7 @@ public class View extends JFrame implements EBComponent
 		inputHandler = null;
 		recorder = null;
 
-		setContentPane(new JPanel());
+		getContentPane().removeAll();
 
 		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
 	} //}}}
