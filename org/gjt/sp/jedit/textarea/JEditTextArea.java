@@ -5146,7 +5146,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			return;
 
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"updateScrollBars()");
+			Log.log(Log.DEBUG,this,"updateScrollBars(), slc="
+				+ displayManager.getScrollLineCount());
 
 		if(vertical != null && visibleLines != 0)
 		{
