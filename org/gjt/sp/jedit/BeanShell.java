@@ -573,6 +573,7 @@ public class BeanShell
 		global.importPackage("org.gjt.sp.jedit");
 		global.importPackage("org.gjt.sp.jedit.browser");
 		global.importPackage("org.gjt.sp.jedit.gui");
+		global.importPackage("org.gjt.sp.jedit.help");
 		global.importPackage("org.gjt.sp.jedit.io");
 		global.importPackage("org.gjt.sp.jedit.msg");
 		global.importPackage("org.gjt.sp.jedit.options");
