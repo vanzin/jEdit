@@ -12,8 +12,11 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
   characters in the selection are automatically escaped.
 
 - Find dialog box now has fields that accept multi-line input. Pressing
-  ENTER activates the "Find" button; press S+ENTER to insert lines in
+  ENTER activates the "Find" button; press C+ENTER to insert lines in
   the field.
+
+- Variables such as "view", "buffer" and "textArea" can now be used from
+  BeanShell replace expressions.
 
 }}}
 {{{ Syntax Highlighting
