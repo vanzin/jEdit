@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 2002 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -44,87 +44,17 @@ public abstract class OptionsDialog extends EnhancedDialog
 	implements ActionListener, TreeSelectionListener
 {
 	//{{{ OptionsDialog constructor
-	public OptionsDialog(View view, String name, String pane)
+	public OptionsDialog(Frame frame, String name, String pane)
 	{
-		super(view, jEdit.getProperty(name + ".title"), true);
+		super(frame, jEdit.getProperty(name + ".title"), true);
+		init(name,pane);
+	} //}}}
 
-		view.showWaitCursor();
-
-		this.name = name;
-
-		JPanel content = new JPanel(new BorderLayout(12,12));
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
-
-		JPanel stage = new JPanel(new BorderLayout(6,6));
-
-		// currentLabel displays the path of the currently selected
-		// OptionPane at the top of the stage area
-		currentLabel = new JLabel();
-		currentLabel.setHorizontalAlignment(JLabel.LEFT);
-		stage.add(currentLabel, BorderLayout.NORTH);
-
-		cardPanel = new JPanel(new CardLayout());
-		stage.add(cardPanel, BorderLayout.CENTER);
-
-		paneTree = new JTree(createOptionTreeModel());
-		paneTree.setVisibleRowCount(1);
-		paneTree.setCellRenderer(new PaneNameRenderer());
-
-		// looks bad with the OS X L&F, apparently...
-		if(!OperatingSystem.isMacOSLF())
-			paneTree.putClientProperty("JTree.lineStyle", "Angled");
-
-		paneTree.setShowsRootHandles(true);
-		paneTree.setRootVisible(false);
-
-		JScrollPane scroller = new JScrollPane(paneTree,
-			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			scroller,stage);
-		content.add(splitter, BorderLayout.CENTER);
-
-		Box buttons = new Box(BoxLayout.X_AXIS);
-		buttons.add(Box.createGlue());
-
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(this);
-		buttons.add(ok);
-		buttons.add(Box.createHorizontalStrut(6));
-		getRootPane().setDefaultButton(ok);
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		cancel.addActionListener(this);
-		buttons.add(cancel);
-		buttons.add(Box.createHorizontalStrut(6));
-		apply = new JButton(jEdit.getProperty("common.apply"));
-		apply.addActionListener(this);
-		buttons.add(apply);
-
-		buttons.add(Box.createGlue());
-
-		content.add(buttons, BorderLayout.SOUTH);
-
-		// register the Options dialog as a TreeSelectionListener.
-		// this is done before the initial selection to ensure that the
-		// first selected OptionPane is displayed on startup.
-		paneTree.getSelectionModel().addTreeSelectionListener(this);
-
-		OptionGroup rootNode = (OptionGroup)paneTree.getModel().getRoot();
-		for(int i = 0; i < rootNode.getMemberCount(); i++)
-		{
-			paneTree.expandPath(new TreePath(
-			new Object[] { rootNode, rootNode.getMember(i) }));
-		}
-
-		if(pane == null || !selectPane(rootNode,pane))
-			selectPane(rootNode,firstPane);
-
-		view.hideWaitCursor();
-
-		pack();
-		setLocationRelativeTo(view);
-		show();
+	//{{{ OptionsDialog constructor
+	public OptionsDialog(Dialog dialog, String name, String pane)
+	{
+		super(dialog, jEdit.getProperty(name + ".title"), true);
+		init(name,pane);
 	} //}}}
 
 	//{{{ addOptionGroup() method
@@ -304,6 +234,84 @@ public abstract class OptionsDialog extends EnhancedDialog
 	private String currentPane;
 	private String firstPane;
 	//}}}
+
+	//{{{ init() method
+	private void init(String name, String pane)
+	{
+		this.name = name;
+
+		JPanel content = new JPanel(new BorderLayout(12,12));
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		JPanel stage = new JPanel(new BorderLayout(6,6));
+
+		// currentLabel displays the path of the currently selected
+		// OptionPane at the top of the stage area
+		currentLabel = new JLabel();
+		currentLabel.setHorizontalAlignment(JLabel.LEFT);
+		stage.add(currentLabel, BorderLayout.NORTH);
+
+		cardPanel = new JPanel(new CardLayout());
+		stage.add(cardPanel, BorderLayout.CENTER);
+
+		paneTree = new JTree(createOptionTreeModel());
+		paneTree.setVisibleRowCount(1);
+		paneTree.setCellRenderer(new PaneNameRenderer());
+
+		// looks bad with the OS X L&F, apparently...
+		if(!OperatingSystem.isMacOSLF())
+			paneTree.putClientProperty("JTree.lineStyle", "Angled");
+
+		paneTree.setShowsRootHandles(true);
+		paneTree.setRootVisible(false);
+
+		JScrollPane scroller = new JScrollPane(paneTree,
+			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+			scroller,stage);
+		content.add(splitter, BorderLayout.CENTER);
+
+		Box buttons = new Box(BoxLayout.X_AXIS);
+		buttons.add(Box.createGlue());
+
+		ok = new JButton(jEdit.getProperty("common.ok"));
+		ok.addActionListener(this);
+		buttons.add(ok);
+		buttons.add(Box.createHorizontalStrut(6));
+		getRootPane().setDefaultButton(ok);
+		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.addActionListener(this);
+		buttons.add(cancel);
+		buttons.add(Box.createHorizontalStrut(6));
+		apply = new JButton(jEdit.getProperty("common.apply"));
+		apply.addActionListener(this);
+		buttons.add(apply);
+
+		buttons.add(Box.createGlue());
+
+		content.add(buttons, BorderLayout.SOUTH);
+
+		// register the Options dialog as a TreeSelectionListener.
+		// this is done before the initial selection to ensure that the
+		// first selected OptionPane is displayed on startup.
+		paneTree.getSelectionModel().addTreeSelectionListener(this);
+
+		OptionGroup rootNode = (OptionGroup)paneTree.getModel().getRoot();
+		for(int i = 0; i < rootNode.getMemberCount(); i++)
+		{
+			paneTree.expandPath(new TreePath(
+			new Object[] { rootNode, rootNode.getMember(i) }));
+		}
+
+		if(pane == null || !selectPane(rootNode,pane))
+			selectPane(rootNode,firstPane);
+
+		pack();
+		setLocationRelativeTo(getParent());
+		show();
+	} //}}}
 
 	//{{{ selectPane() method
 	private boolean selectPane(OptionGroup node, String name)

@@ -891,6 +891,27 @@ public class GUIUtilities
 		// }
 		// else
 			win.setBounds(desired);
+
+		if((win instanceof Frame) && OperatingSystem.hasJava14()
+				&& System.getProperty("jedit.nojava14") == null)
+		{
+			int extState = jEdit.getIntegerProperty(name +
+				".extendedState", Frame.NORMAL);
+
+			try
+			{
+				java.lang.reflect.Method meth =
+					Frame.class.getMethod("setExtendedState",
+					new Class[] {int.class});
+
+				meth.invoke(win, new Object[] {
+					new Integer(extState)});
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,e);
+			}
+		}
 	} //}}}
 
 	//{{{ UnixWorkaround class
@@ -1004,6 +1025,30 @@ public class GUIUtilities
 	 */
 	public static void saveGeometry(Window win, String name)
 	{
+		if((win instanceof Frame) && OperatingSystem.hasJava14()
+				&& System.getProperty("jedit.nojava14") == null)
+		{
+			try
+			{
+				java.lang.reflect.Method meth =
+					Frame.class.getMethod("getExtendedState",
+					new Class[0]);
+
+				Integer extState = (Integer)meth.invoke(win,
+					new Object[0]);
+
+				jEdit.setIntegerProperty(name + ".extendedState",
+					extState.intValue());
+
+				if(extState.intValue() != Frame.NORMAL)
+					return;
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,e);
+			}
+		}
+
 		Rectangle bounds = win.getBounds();
 		jEdit.setIntegerProperty(name + ".x",bounds.x);
 		jEdit.setIntegerProperty(name + ".y",bounds.y);
