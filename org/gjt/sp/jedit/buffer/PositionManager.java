@@ -200,15 +200,38 @@ public class PositionManager
 				else
 				{
 					System.err.println("case 3");
+					if(x.left == y)
+						z = y.right;
+					else
+						z = y.left;
+					PosBottomHalf b = z.restructure();
+					y.red = false;
+					x.red = true;
+					//XXX: need to do case 1 or 2 again
 					return;
 				}
 
 				System.err.println("case 1");
+
+				boolean oldXRed = x.red;
+				PosBottomHalf b = z.restructure();
+				b.left.red = false;
+				bright.red = false;
+				b.red = oldXRed;
+				r.red = false;
 			}
 			else if((y.left == null || !y.left.red)
 				&& (y.right != null && y.right.red))
 			{
 				System.err.println("case 2");
+				r.red = false;
+				y.red = true;
+				if(x.red)
+					x.red = false;
+				else
+				{
+					//XXX propogate up
+				}
 			}
 		}
 	} //}}}
@@ -285,7 +308,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					left = pos;
-					//pos.ibalance();
+					pos.ibalance();
 				}
 				else
 					left.insert(pos);
@@ -296,7 +319,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					right = pos;
-					//pos.ibalance();
+					pos.ibalance();
 				}
 				else
 					right.insert(pos);
@@ -335,7 +358,7 @@ public class PositionManager
 				if(right != null)
 					right.contentInserted(offset,length);
 			}
-			else if(right != null) 
+			else if(right != null)
 				right.contentInserted(offset,length);
 		} //}}}
 
@@ -351,17 +374,17 @@ public class PositionManager
 			{
 				this.offset -= length;
 				if(left != null)
-					left.contentInserted(offset,length);
+					left.contentRemoved(offset,length);
 				if(right != null)
-					right.contentInserted(offset,length);
+					right.contentRemoved(offset,length);
 			}
 			else
 			{
 				this.offset = offset;
 				if(left != null)
-					left.contentInserted(offset,length);
+					left.contentRemoved(offset,length);
 				if(right != null)
-					right.contentInserted(offset,length);
+					right.contentRemoved(offset,length);
 			}
 		} //}}}
 
@@ -405,13 +428,16 @@ public class PositionManager
 				else
 				{
 					System.err.println("case 1");
-					irestructure();
+					PosBottomHalf b = restructure();
+					b.red = false;
+					b.left.red = true;
+					b.right.red = true;
 				}
 			}
 		} //}}}
 
-		//{{{ irestructure() method
-		private void irestructure()
+		//{{{ restructure() method
+		private PosBottomHalf restructure()
 		{
 			// this method looks incomprehensible but really
 			// its quite simple. this node, its parent and its
@@ -442,7 +468,7 @@ public class PositionManager
 					//   v
 					//  /
 					// z
-					System.err.println("irestructure 1");
+					System.err.println("restructure 1");
 					// zl, z, zr, v, vr, u, ur
 					nodes = new PosBottomHalf[] {
 						left, this, right,
@@ -457,7 +483,7 @@ public class PositionManager
 					// v
 					//  \
 					//   z
-					System.err.println("irestructure 2");
+					System.err.println("restructure 2");
 					// vl, v, zl, z, zr, u, ur
 					nodes = new PosBottomHalf[] {
 						parent.left, parent, left,
@@ -474,7 +500,7 @@ public class PositionManager
 					//   v
 					//    \
 					//     z
-					System.err.println("irestructure 3");
+					System.err.println("restructure 3");
 					// ul, u, vl, v, zl, z, zr
 					nodes = new PosBottomHalf[] {
 						u.left, u, parent.left,
@@ -488,7 +514,7 @@ public class PositionManager
 					//   v
 					//  /
 					// z
-					System.err.println("irestructure 4");
+					System.err.println("restructure 4");
 					// ul, u, zl, z, zr, v, vr
 					nodes = new PosBottomHalf[] {
 						u.left, u, left, this, right,
@@ -510,20 +536,19 @@ public class PositionManager
 
 			// Write-only code for constructing a meaningful tree
 			nodes[1].parent = nodes[3];
-			nodes[1].red    = true;
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
 
 			System.err.println("setting parent to " + t);
 			nodes[3].parent = t;
-			nodes[3].red    = false;
 			nodes[3].left   = nodes[1];
 			nodes[3].right  = nodes[5];
 
 			nodes[5].parent = nodes[3];
-			nodes[5].red    = true;
 			nodes[5].left   = nodes[4];
 			nodes[5].right  = nodes[6];
+
+			return nodes[3];
 		} //}}}
 
 		//{{{ toString() method
