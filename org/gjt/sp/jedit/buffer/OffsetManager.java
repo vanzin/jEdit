@@ -175,7 +175,7 @@ public class OffsetManager
 			lineInfo[line] = (lineInfo[line] & ~mask);
 	} //}}}
 
-	// the next two methods are not used!
+	/* the next two methods are not used!
 
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
@@ -190,6 +190,8 @@ public class OffsetManager
 		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
 			| ((long)count << SCREEN_LINES_SHIFT));
 	} //}}}
+
+	*/
 
 	//{{{ isLineContextValid() method
 	public final boolean isLineContextValid(int line)
@@ -379,12 +381,7 @@ public class OffsetManager
 			//}}}
 		} //}}}
 
-		//{{{ Update remaining line start offsets
 		moveGap(endLine,length);
-		/* for(int i = endLine; i < lineCount; i++)
-		{
-			setLineEndOffset(i,getLineEndOffset(i) + length);
-		} */ //}}}
 
 		updatePositionsForInsert(offset,length);
 	} //}}}
@@ -429,12 +426,7 @@ public class OffsetManager
 				startLine,lineCount - startLine);
 		} //}}}
 
-		//{{{ Update remaining line start offsets
 		moveGap(startLine,-length);
-		/* for(int i = startLine; i < lineCount; i++)
-		{
-			setLineEndOffset(i,getLineEndOffset(i) - length);
-		} */ //}}}
 
 		updatePositionsForRemove(offset,length);
 	} //}}}
@@ -503,6 +495,7 @@ public class OffsetManager
 	{
 		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
 			| FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)) | end);
+		lineContext[line] = null;
 	} //}}}
 
 	//{{{ moveGap() method
