@@ -2699,6 +2699,17 @@ public class jEdit
 		// Add an EditBus component that will reload edit modes and
 		// macros if they are changed from within the editor
 		EditBus.addToBus(new SettingsReloader());
+
+		// Perhaps if Xerces wasn't slightly brain-damaged, we would
+		// not need this
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				Thread.currentThread().setContextClassLoader(
+					new JARClassLoader());
+			}
+		});
 	} //}}}
 
 	//{{{ initSystemProperties() method

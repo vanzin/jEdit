@@ -1041,6 +1041,12 @@ public class DockableWindowManager extends JPanel
 			this.position = jEdit.getProperty(name + ".dock-position",
 				FLOATING);
 			title = jEdit.getProperty(name + ".title");
+			if(title == null)
+			{
+				Log.log(Log.WARNING,this,name + ".title property"
+					+ " not defined");
+				title = name;
+			}
 
 			if(position == null)
 				position = FLOATING;
