@@ -544,9 +544,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ Counterclockwise rotation
 			else if(rotate == RotatedTextIcon.CCW)
 			{
-				System.err.println("painting " + text);
-				System.err.println("ascent = " + ascent + ", height = "
-					+ height + ", width = " + width);
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
 				trans.translate(x,y - 2);

@@ -20,6 +20,9 @@ Thanks to Gerd Knops for contributing to this release.
   Now, instead of checking for a user name of "root", it checks if the
   appropriate subdirectories of /usr/local are writable.
 
+- The HyperSearch feature no longer blocks the GUI while listing a
+  directory (which could take some time).
+
 + Bug Fixes:
 
 - When evaluating BeanShell expressions, the standard
@@ -29,6 +32,8 @@ Thanks to Gerd Knops for contributing to this release.
 - The text area did not get initial focus if there is a window docked
   in the left or top part of the view, and the 'tip of the day' was
   switched on.
+
+- Removed debugging messages from PanelWindowContainer.java.
 
 * Version 4.1pre1
 

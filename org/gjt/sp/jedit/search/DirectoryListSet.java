@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import gnu.regexp.RE;
+import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
 import java.util.Vector;
@@ -74,10 +75,36 @@ public class DirectoryListSet extends BufferListSet
 	} //}}}
 
 	//{{{ _getFiles() method
-	protected String[] _getFiles(Component comp)
+	protected String[] _getFiles(final Component comp)
 	{
-		VFS vfs = VFSManager.getVFSForPath(directory);
-		Object session = vfs.createVFSSession(directory,comp);
+		final VFS vfs = VFSManager.getVFSForPath(directory);
+		Object session;
+		if(SwingUtilities.isEventDispatchThread())
+		{
+			session = vfs.createVFSSession(directory,comp);
+		}
+		else
+		{
+			final Object[] returnValue = new Object[1];
+
+			try
+			{
+				SwingUtilities.invokeAndWait(new Runnable()
+				{
+					public void run()
+					{
+						returnValue[0] = vfs.createVFSSession(directory,comp);
+					}
+				});
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+			}
+
+			session = returnValue[0];
+		}
+
 		if(session == null)
 			return null;
 
