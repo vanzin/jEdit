@@ -95,6 +95,9 @@ this release.
 
 - Unloading a plugin did not remove the buttons for its docked windows.
 
+- The "Rescan Macros" command did not update the actions list in the
+  action bar.
+
 }}}
 {{{ API Changes
 

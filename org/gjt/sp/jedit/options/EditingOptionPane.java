@@ -43,17 +43,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		Mode[] modes = jEdit.getModes();
 		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
 
-		defaultMode = new JComboBox(modes);
-		defaultMode.setSelectedItem(jEdit.getMode(
-			jEdit.getProperty("buffer.defaultMode")));
-		addComponent(jEdit.getProperty("options.editing.defaultMode"),
-			defaultMode);
-
-		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
-		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
-
-		addSeparator();
-
 		global = new ModeProperties();
 		modeProps = new ModeProperties[modes.length];
 
@@ -123,6 +112,17 @@ public class EditingOptionPane extends AbstractOptionPane
 			firstlineGlob = new JTextField());
 
 		selectMode();
+
+		addSeparator();
+
+		defaultMode = new JComboBox(modes);
+		defaultMode.setSelectedItem(jEdit.getMode(
+			jEdit.getProperty("buffer.defaultMode")));
+		addComponent(jEdit.getProperty("options.editing.defaultMode"),
+			defaultMode);
+
+		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
+		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
 	} //}}}
 
 	//{{{ _save() method

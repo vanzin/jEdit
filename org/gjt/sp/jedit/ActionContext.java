@@ -56,6 +56,7 @@ public abstract class ActionContext
 	 */
 	public void addActionSet(ActionSet actionSet)
 	{
+		actionNames = null;
 		actionSets.addElement(actionSet);
 		actionSet.context = this;
 		String[] actions = actionSet.getActionNames();
@@ -72,6 +73,7 @@ public abstract class ActionContext
 	 */
 	public void removeActionSet(ActionSet actionSet)
 	{
+		actionNames = null;
 		actionSets.removeElement(actionSet);
 		actionSet.context = null;
 		String[] actions = actionSet.getActionNames();
@@ -126,14 +128,23 @@ public abstract class ActionContext
 	 */
 	public String[] getActionNames()
 	{
-		ArrayList vec = new ArrayList();
-		for(int i = 0; i < actionSets.size(); i++)
-			((ActionSet)actionSets.elementAt(i)).getActionNames(vec);
+		if(actionNames == null)
+		{
+			List vec = new LinkedList();
+			for(int i = 0; i < actionSets.size(); i++)
+				((ActionSet)actionSets.elementAt(i)).getActionNames(vec);
 
-		return (String[])vec.toArray(new String[vec.size()]);
+			actionNames = (String[])vec.toArray(
+				new String[vec.size()]);
+			Arrays.sort(actionNames,
+				new MiscUtilities.StringICaseCompare());
+		}
+
+		return actionNames;
 	} //}}}
 
 	//{{{ Package-private members
+	String[] actionNames;
 	Hashtable actionHash = new Hashtable();
 	//}}}
 

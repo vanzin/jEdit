@@ -226,7 +226,10 @@ public class ActionSet
 	{
 		actions.put(action.getName(),action);
 		if(context != null)
+		{
+			context.actionNames = null;
 			context.actionHash.put(action.getName(),this);
+		}
 	} //}}}
 
 	//{{{ removeAction() method
@@ -239,7 +242,10 @@ public class ActionSet
 	{
 		actions.remove(name);
 		if(context != null)
+		{
+			context.actionNames = null;
 			context.actionHash.remove(name);
+		}
 	} //}}}
 
 	//{{{ removeAllActions() method
@@ -251,6 +257,7 @@ public class ActionSet
 	{
 		if(context != null)
 		{
+			context.actionNames = null;
 			String[] actions = getActionNames();
 			for(int i = 0; i < actions.length; i++)
 			{
@@ -476,7 +483,7 @@ public class ActionSet
 	ActionContext context;
 
 	//{{{ getActionNames() method
-	void getActionNames(ArrayList vec)
+	void getActionNames(List vec)
 	{
 		Enumeration e = actions.keys();
 		while(e.hasMoreElements())

@@ -23,6 +23,38 @@
   each macro as well as a search facility.
 </para>
 
+<sect1 id="macros-editing"><title>Editing Macros</title>
+<para>
+    Description.
+</para>
+
+<itemizedlist>
+
+<para><filename>Copy_Visible_Lines.bsh</filename></para>        <abstract><para>Copies the visible lines from the current                buffer to the Clipboard.  Lines that are not visible                becuase they are folded are not copied.        </para></abstract>
+
+
+<listitem>
+   <para><filename>Emacs_Next_Line.bsh</filename></para>
+   <abstract><para>
+     Moves the cursor to the next line, centering 
+     the current line in the middle of the text area
+     if the cursor is at the bottom of the text area.
+   </para></abstract>
+</listitem>
+
+<listitem>
+   <para><filename>Emacs_Previous_Line.bsh</filename></para>
+   <abstract><para>
+     Moves the cursor to the previous line, centering 
+     the current line in the middle of the text area
+     if the cursor is at the top of the text area.
+   </para></abstract>
+ </listitem>
+
+</itemizedlist>
+
+</sect1>
+
 <sect1 id="macros-files"><title>File Management Macros</title>
 <para>
     These macros automate the opening and closing of files.
@@ -39,6 +71,17 @@
 </listitem>
 
 <listitem>
+  <para><filename>Buffer_Switcher.bsh</filename></para>
+  <abstract><para>
+    Displays a modal dialog listing all open buffers,
+    allowing one to switch to and/or close buffers.
+    <keycap>ENTER</keycap> switches to a buffer and closes the dialog, 
+    <keycap>DELETE</keycap> closes a buffer, <keycap>SPACE</keycap> 
+    switches to a buffer but does not close the dialog.
+  </para></abstract>
+</listitem>
+
+<listitem>
     <para><filename>Close_All_Except_Active.bsh</filename></para>
     <abstract><para>
         Closes all files except the current buffer.
@@ -46,6 +89,57 @@
     <para>
         Prompts the user to save any buffer containing unsaved changes.
     </para>
+</listitem>
+
+<listitem>        <para><filename>Copy_Path_to_Clipboad.bsh</filename></para>        <abstract><para>Copies the current buffer's path                to the clipboard.        </para></abstract></listitem>
+
+<listitem>        <para><filename>Copy_Name_to_Clipboad.bsh</filename></para>        <abstract><para>Copies the current buffer's filename                to the clipboard.        </para></abstract></listitem>
+
+<listitem>
+	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
+	<abstract><para>
+		If no text is selected, the current line is copied to 
+		the clipboard, otherwise the selected text is copied 
+		to the clipboard. Some editors have this has the default copy behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para></abstract>
+</listitem>
+
+<listitem>
+	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
+	<abstract><para>
+		If no text is selected, the current line is cut to the clipboard,
+		otherwise the selected text is cut to the clipboard. Some editors have this has the default cut behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para></abstract>
+</listitem>
+
+<listitem>
+   <para><filename>Delete_Current.bsh</filename></para>
+   <abstract><para>
+    Deletes the current buffer's file on disk, but 
+    doesn't close the buffer.
+   </para></abstract>
+</listitem>
+
+<listitem>
+	<para><filename>Glob_Close.bsh</filename></para>
+	<abstract><para>
+		Closes all open buffers matching a given glob pattern.
+	</para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Go_to_Column.bsh</filename></para>
+    <abstract><para>
+		Prompts the user for a column position on the 
+		current line, then moves the caret there.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
+    <abstract><para>
+        Converts all keywords in the current buffer to upper case.
+    </para></abstract>
 </listitem>
 
 <listitem>
@@ -80,17 +174,6 @@
 </para>
 
 <itemizedlist>
-
-<listitem>
-    <para><filename>Cascade_jEdit_Windows.bsh</filename></para>
-    <abstract><para>
-        Rearranges view and floating plugin windows.
-    </para></abstract>
-    <para>
-        The windows are arranged in an overlapping <quote>cascade</quote>
-        pattern beginning near the upper left corner of the display.
-    </para>
-</listitem>
 
 <listitem>
 	<para><filename>Decrease_Font_Size.bsh</filename></para>
@@ -327,13 +410,6 @@
 </listitem>
 
 <listitem>
-    <para><filename>Keywords_to_Upper_Case.bsh</filename></para>
-    <abstract><para>
-        Converts all keywords in the current buffer to upper case.
-    </para></abstract>
-</listitem>
-
-<listitem>
     <para><filename>Make_Bug_Report.bsh</filename></para>
     <abstract><para>
       Creates a new buffer with installation and error information
@@ -446,35 +522,10 @@
 </listitem>
 
 <listitem>
-	<para><filename>Copy_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
-		If no text is selected, the current line is copied to 
-		the clipboard, otherwise the selected text is copied 
-		to the clipboard. Some editors have this has the default copy behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+c</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
-</listitem>
-
-<listitem>
-	<para><filename>Cut_Selection_or_Line.bsh</filename></para>
-	<abstract><para>
-		If no text is selected, the current line is cut to the clipboard,
-		otherwise the selected text is cut to the clipboard. Some editors have this has the default cut behavior. To achieve the same effect in jEdit, bind this macro to <keycap>C+x</keycap> in the <guibutton>Shortcuts</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
-	</para></abstract>
-</listitem>
-
-<listitem>
     <para><filename>Duplicate_Line.bsh</filename></para>
     <abstract><para>
         Duplicates the line on which the caret lies immediately
         beneath it and moves the caret to the new line.
-    </para></abstract>
-</listitem>
-
-<listitem>
-    <para><filename>Go_to_Column.bsh</filename></para>
-    <abstract><para>
-		Prompts the user for a column position on the 
-		current line, then moves the caret there.
     </para></abstract>
 </listitem>
 
@@ -514,6 +565,22 @@
         obtaining user input. See <xref linkend="macro-tips-single-char"
         />.
     </para>
+</listitem>
+
+<listitem>
+  <para><filename>Reverse_Lines.bsh</filename></para>
+  <abstract><para>
+    Reverses the selected lines or the entire buffer if no
+    lines are selected.  Does not support Rectangular
+    Selections.
+  </para></abstract>
+</listitem>
+
+<listitem>
+  <para><filename>Single_Space_Buffer.bsh</filename></para>
+  <abstract><para>
+    Removes every second line, if they are all blank.
+  </para></abstract>
 </listitem>
 
 </itemizedlist>
