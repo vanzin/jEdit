@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
@@ -185,7 +186,19 @@ public abstract class EditAction
 		public void actionPerformed(ActionEvent evt)
 		{
 			// Let input handler do recording, repeating, etc
-			jEdit.getActiveView().getInputHandler().invokeAction(action);
+			//XXX - fixes problem if menu bar is at the top of the screen
+			if(OperatingSystem.isMacOS())
+			{
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						jEdit.getActiveView().getInputHandler().invokeAction(action);
+					}
+				});
+			}
+			else
+				jEdit.getActiveView().getInputHandler().invokeAction(action);
 		}
 
 		private EditAction action;

@@ -89,13 +89,13 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	public static void runScript(View view, String path, boolean ignoreUnknown)
 	{
-		String fileName = MiscUtilities.getFileName(path);
-		Handler handler = getHandlerForFileName(fileName);
+		Handler handler = getHandlerForPathName(path);
 		if(handler != null)
 		{
 			try
 			{
-				Macro newMacro = handler.createMacro(fileName, path);
+				Macro newMacro = handler.createMacro(
+					MiscUtilities.getFileName(path), path);
 				newMacro.invoke(view);
 			}
 			catch (Exception e)
@@ -294,12 +294,12 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * name, or null if there is no suitable handler.
 	 * @since jEdit 4.1pre3
 	 */
-	public static Handler getHandlerForFileName(String fileName)
+	public static Handler getHandlerForPathName(String pathName)
 	{
 		for (int i = 0; i < macroHandlers.size(); i++)
 		{
 			Handler handler = (Handler)macroHandlers.get(i);
-			if (handler.accept(fileName))
+			if (handler.accept(pathName))
 				return handler;
 		}
 
@@ -650,7 +650,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 			else
 			{
-				Handler handler = getHandlerForFileName(fileName);
+				Handler handler = getHandlerForPathName(file.getPath());
 
 				if(handler == null)
 					continue;
@@ -828,9 +828,9 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		} //}}}
 
 		//{{{ accept() method
-		public boolean accept(String name)
+		public boolean accept(String path)
 		{
-			return filter.isMatch(name);
+			return filter.isMatch(MiscUtilities.getFileName(path));
 		} //}}}
 
 		//{{{ createMacro() method
