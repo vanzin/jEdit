@@ -77,6 +77,10 @@ JEDIT 4.1 VERSION HISTORY
   EOL_SPAN_REGEXP syntax highlighting rule matched a tab.
 - Added a workaround for a Java problem were very wide rectangles were
   not painted properly in the selection painting code.
+- The TERMINATE_AT rule was broken; the number of characters to
+  terminate at was taken to be from the start of the file, not from the
+  start of the current line. This broke FORTRAN syntax highlighting, for
+  example.
 
 * Version 4.1pre4
 
