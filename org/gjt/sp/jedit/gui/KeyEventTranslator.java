@@ -267,15 +267,48 @@ public class KeyEventTranslator
 	 * (<code>C</code>, <code>A</code>, <code>M</code>, <code>S</code>) and
 	 * Java modifier flags.
 	 *
-	 * @param c The modifier to map the <code>C</code> modifier to
-	 * @param a The modifier to map the <code>A</code> modifier to
-	 * @param m The modifier to map the <code>M</code> modifier to
-	 * @param s The modifier to map the <code>S</code> modifier to
+	 * You can map more than one Java modifier to a symobolic modifier, for 
+	 * example :
+	 * <p><code><pre>
+	 *	setModifierMapping(
+	 *		InputEvent.CTRL_MASK,
+	 *		InputEvent.ALT_MASK | InputEvent.META_MASK,
+	 *		0,
+	 *		InputEvent.SHIFT_MASK);
+	 *<pre></code></p>
+	 *
+	 * You cannot map a Java modifer to more than one symbolic modifier.
+	 *
+	 * @param c The modifier(s) to map the <code>C</code> modifier to
+	 * @param a The modifier(s) to map the <code>A</code> modifier to
+	 * @param m The modifier(s) to map the <code>M</code> modifier to
+	 * @param s The modifier(s) to map the <code>S</code> modifier to
 	 *
 	 * @since jEdit 4.2pre3
 	 */
 	public static void setModifierMapping(int c, int a, int m, int s)
 	{
+	
+		int duplicateMapping = 
+			((c & a) | (c & m) | (c & s) | (a & m) | (a & s) | (m & s)); 
+		
+		if((duplicateMapping & InputEvent.CTRL_MASK) != 0) {
+			throw new IllegalArgumentException(
+				"CTRL is mapped to more than one modifier");
+		}
+		if((duplicateMapping & InputEvent.ALT_MASK) != 0) {
+			throw new IllegalArgumentException(
+				"ALT is mapped to more than one modifier");
+		}
+		if((duplicateMapping & InputEvent.META_MASK) != 0) {
+			throw new IllegalArgumentException(
+				"META is mapped to more than one modifier");
+		}
+		if((duplicateMapping & InputEvent.SHIFT_MASK) != 0) {
+			throw new IllegalArgumentException(
+				"SHIFT is mapped to more than one modifier");
+		}
+			
 		KeyEventTranslator.c = c;
 		KeyEventTranslator.a = a;
 		KeyEventTranslator.m = m;
@@ -293,15 +326,13 @@ public class KeyEventTranslator
 	 */
 	public static char getSymbolicModifierName(int mod)
 	{
-		// this relies on the fact that if C is mapped to M, then
-		// M will be mapped to C.
-		if(mod == c)
+		if((mod & c) != 0)
 			return 'C';
-		else if(mod == a)
+		else if((mod & a) != 0)
 			return 'A';
-		else if(mod == m)
+		else if((mod & m) != 0)
 			return 'M';
-		else if(mod == s)
+		else if((mod & s) != 0)
 			return 'S';
 		else
 			return '\0';
