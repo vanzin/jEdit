@@ -217,14 +217,16 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				if(lastOffset != pos)
 				{
-					tokenHandler.handleToken(pos - lastOffset,
+					tokenHandler.handleToken(
 						context.rules.getDefault(),
+						lastOffset - line.offset,
+						pos - lastOffset,
 						context);
 				}
 
-				tokenHandler.handleToken(1,
+				tokenHandler.handleToken(
 					(ch == '\t' ? Token.TAB
-					: Token.WHITESPACE),
+					: Token.WHITESPACE),pos - line.offset,1,
 					context);
 				lastOffset = pos + 1;
 			}
@@ -238,8 +240,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				{
 					markKeyword(true);
 	
-					tokenHandler.handleToken(1,
+					tokenHandler.handleToken(
 						context.rules.getDefault(),
+						lastOffset - line.offset,1,
 						context);
 					lastOffset = pos + 1;
 				}
@@ -267,7 +270,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 		} //}}}
 
-		tokenHandler.handleToken(0,Token.END,context);
+		tokenHandler.handleToken(Token.END,pos - line.offset,0,context);
 
 		return context.intern();
 	} //}}}
@@ -308,12 +311,12 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		{
 			markKeyword(true);
 
-			tokenHandler.handleToken(pattern.count,
+			tokenHandler.handleToken(
 				(context.parent.inRule.action & ParserRule.EXCLUDE_MATCH)
 				== ParserRule.EXCLUDE_MATCH
 				? context.parent.rules.getDefault()
 				: context.parent.inRule.token,
-				context);
+				pos - line.offset,pattern.count,context);
 
 			context = (LineContext)context.parent.clone();
 			keywords = context.rules.getKeywords();
@@ -387,8 +390,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 			//{{{ SEQ
 			case ParserRule.SEQ:
-				tokenHandler.handleToken(pattern.count,
-					checkRule.token,context);
+				tokenHandler.handleToken(checkRule.token,
+					pos - line.offset,pattern.count,context);
 				break;
 			//}}}
 			//{{{ SPAN, EOL_SPAN, MARK_FOLLOWING
@@ -399,11 +402,11 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				ParserRuleSet delegateSet = checkRule.getDelegateRuleSet(this);
 
-				tokenHandler.handleToken(pattern.count,
+				tokenHandler.handleToken(
 					((checkRule.action & ParserRule.EXCLUDE_MATCH)
 					== ParserRule.EXCLUDE_MATCH
 					? context.rules.getDefault() : checkRule.token),
-					context);
+					pos - line.offset,pattern.count,context);
 
 				context = new LineContext(delegateSet, context);
 				keywords = context.rules.getKeywords();
@@ -417,18 +420,24 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				{
 					if(pos != lastOffset)
 					{
-						tokenHandler.handleToken(pos - lastOffset,
-							checkRule.token,context);
+						tokenHandler.handleToken(
+							checkRule.token,
+							lastOffset - line.offset,
+							pos - lastOffset,
+							context);
 					}
 
-					tokenHandler.handleToken(pattern.count,
+					tokenHandler.handleToken(
 						context.rules.getDefault(),
+						pos - line.offset,pattern.count,
 						context);
 				}
 				else
 				{
-					tokenHandler.handleToken(pos - lastOffset + pattern.count,
-						checkRule.token,context);
+					tokenHandler.handleToken(checkRule.token,
+						lastOffset - line.offset,
+						pos - lastOffset + pattern.count,
+						context);
 				}
 
 				break;
@@ -457,20 +466,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				& (ParserRule.NO_WORD_BREAK
 				| ParserRule.MARK_FOLLOWING)) != 0)
 			{
-				/* commented out for now... so token marker
-				will never spit out INVALID tokens. need to
-				sort this out before 4.1pre1. */
-
-				/* if ((context.parent.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
-				{
-					tokenHandler.handleToken(pos - lastOffset,
-						Token.INVALID,
-						context);
-				}
-				else */
-
-				tokenHandler.handleToken(pos - lastOffset,
-					rule.token,context);
+				tokenHandler.handleToken(rule.token,
+					lastOffset - line.offset,
+					pos - lastOffset,context);
 
 				lastOffset = pos;
 				context = context.parent;
@@ -538,7 +536,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			if(digit)
 			{
-				tokenHandler.handleToken(len,Token.DIGIT,context);
+				tokenHandler.handleToken(Token.DIGIT,
+					lastOffset - line.offset,
+					len,context);
 				lastOffset = pos;
 
 				return;
@@ -552,7 +552,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			if(id != Token.NULL)
 			{
-				tokenHandler.handleToken(len,id,context);
+				tokenHandler.handleToken(id,
+					lastOffset - line.offset,
+					len,context);
 				lastOffset = pos;
 				return;
 			}
@@ -561,8 +563,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Handle any remaining crud
 		if(addRemaining)
 		{
-			tokenHandler.handleToken(pos - lastOffset,
-				context.rules.getDefault(),context);
+			tokenHandler.handleToken(context.rules.getDefault(),
+				lastOffset - line.offset,len,context);
 			lastOffset = pos;
 		} //}}}
 	} //}}}

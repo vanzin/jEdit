@@ -1,12 +1,12 @@
 TO DO
 
+- context.rules -vs- getParserRuleSet(context)
 - add some tips of the day about pre1 features
 - soft wrap
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
 - background tokens are slow
 
-- S+ENTER in fsb: fucked
 - focus problem with hypersearch in floating window?
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class

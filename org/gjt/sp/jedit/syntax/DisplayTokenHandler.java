@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import javax.swing.text.*;
@@ -31,15 +31,15 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-abstract class DisplayTokenHandler implements TokenHandler
+public abstract class DisplayTokenHandler extends DefaultTokenHandler
 {
 	//{{{ init() method
 	public void init(Segment seg, SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
 		TabExpander expander)
 	{
-		lastChunk = firstChunk = null;
-		totalLength = 0;
+		super.init();
+
 		x = 0.0f;
 
 		this.seg = seg;
@@ -49,68 +49,50 @@ abstract class DisplayTokenHandler implements TokenHandler
 	} //}}}
 
 	//{{{ Protected members
-	protected Chunk firstChunk, lastChunk;
 	protected Segment seg;
 	protected SyntaxStyle[] styles;
 	protected FontRenderContext fontRenderContext;
 	protected TabExpander expander;
-	protected int totalLength;
 	protected float x;
 
-	//{{{ createChunk() method
-	protected Chunk createChunk(int length, byte id, byte defaultID)
+	//{{{ createToken() method
+	protected Token createToken(byte id, int offset, int length,
+		ParserRuleSet rules)
 	{
 		if(id == Token.END)
 		{
-			if(lastChunk != null)
+			if(lastToken != null)
 			{
+				Chunk lastChunk = (Chunk)lastToken;
 				lastChunk.init(seg,expander,x,styles,
-					fontRenderContext,defaultID);
+					fontRenderContext,rules.getDefault());
 				x += lastChunk.width;
+				seg = null;
 			}
 
 			return null;
 		}
 		else
 		{
-			return new Chunk(id,totalLength,length);
+			return new Chunk(id,offset,length,rules);
 		}
 	} //}}}
 
-	public static long merge;
-	public static long add;
-
-	//{{{ addChunk() method
-	protected void addChunk(Chunk chunk, byte defaultID)
+	//{{{ addToken() method
+	protected boolean addToken(Token token, ParserRuleSet rules)
 	{
-		totalLength += chunk.length;
-
-		if(firstChunk == null)
+		Token oldLastToken = lastToken;
+		if(super.addToken(token,rules))
 		{
-			firstChunk = chunk;
-			lastChunk = firstChunk;
+			Chunk oldLastChunk = (Chunk)oldLastToken;
+			oldLastChunk.init(seg,expander,x,styles,
+				fontRenderContext,rules.getDefault());
+			x += oldLastChunk.width;
+			return true;
 		}
 		else
-		{
-			if((lastChunk.id == defaultID
-				&& chunk.id == Token.WHITESPACE)
-				|| lastChunk.id == chunk.id)
-			{
-				if(chunk.id != Token.TAB)
-				{
-					merge++;
-					lastChunk.length += chunk.length;
-					return;
-				}
-			}
-
-			add++;
-			lastChunk.init(seg,expander,x,styles,
-				fontRenderContext,defaultID);
-			x += lastChunk.width;
-
-			lastChunk.next = chunk;
-			lastChunk = lastChunk.next;
-		}
+			return false;
 	} //}}}
+
+	//}}}
 }

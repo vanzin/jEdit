@@ -36,12 +36,12 @@ public class DefaultTokenHandler implements TokenHandler
 	/**
 	 * Clears the list of tokens.
 	 */
-	public void reset()
+	public void init()
 	{
-		lastToken = null;
+		lastToken = firstToken = null;
 	} //}}}
 
-	//{{{ getFirstToken() method
+	//{{{ getTokens() method
 	/**
 	 * Returns the first syntax token.
 	 * @since jEdit 4.1pre1
@@ -51,87 +51,81 @@ public class DefaultTokenHandler implements TokenHandler
 		return firstToken;
 	} //}}}
 
-	//{{{ getLastToken() method
-	/**
-	 * Returns the last syntax token.
-	 * @since jEdit 4.1pre1
-	 */
-	public Token getLastToken()
-	{
-		return lastToken;
-	} //}}}
-
 	//{{{ handleToken() method
 	/**
 	 * Called by the token marker when a syntax token has been parsed.
-	 * @param length The number of characters in the token
 	 * @param id The token type (one of the constants in the
 	 * <code>Token</code> class).
+	 * @param offset The start offset of the token
+	 * @param length The number of characters in the token
 	 * @param context The line context
 	 * @since jEdit 4.1pre1
 	 */
-	public void handleToken(int length, byte id, TokenMarker.LineContext context)
+	public void handleToken(byte id, int offset, int length,
+		TokenMarker.LineContext context)
 	{
-		ParserRuleSet rules = null;
+		ParserRuleSet rules = getParserRuleSet(context);
+
+		Token token = createToken(id,offset,length,rules);
+		if(token != null)
+			addToken(token,rules);
+	} //}}}
+
+	//{{{ Protected members
+	protected Token firstToken, lastToken;
+
+	//{{{ getParserRuleSet() method
+	protected ParserRuleSet getParserRuleSet(TokenMarker.LineContext context)
+	{
 		while(context != null)
 		{
 			if(context.rules.getMode() != null)
-			{
-				rules = context.rules;
-				break;
-			}
+				return context.rules;
 
 			context = context.parent;
 		}
 
-		if(length == 0 && id != Token.END)
-		{
-			System.err.println("zero length token -- can't happen");
-			return;
-		}
-		else if(id == Token.WHITESPACE)
-		{
-			if(lastToken == null)
-				id = Token.NULL;
-			else if(lastToken.rules == rules)
-			{
-				lastToken.length += length;
-				return;
-			}
-		}
+		return null;
+	} //}}}
 
+	//{{{ createToken() method
+	protected Token createToken(byte id, int offset, int length,
+		ParserRuleSet rules)
+	{
+		return new Token(id,offset,length,rules);
+	} //}}}
+
+	//{{{ addToken() method
+	/**
+	 * @return False if the new token was merged with the last one; true
+	 * otherwise.
+	 */
+	protected boolean addToken(Token token, ParserRuleSet rules)
+	{
 		if(firstToken == null)
 		{
-			firstToken = new Token(length,id,rules);
-			lastToken = firstToken;
-		}
-		else if(lastToken == null)
-		{
-			lastToken = firstToken;
-			firstToken.length = length;
-			firstToken.id = id;
-			firstToken.rules = rules;
-		}
-		else if(lastToken.id == id && lastToken.rules == rules)
-		{
-			lastToken.length += length;
-		}
-		else if(lastToken.next == null)
-		{
-			lastToken.next = new Token(length,id,rules);
-			lastToken.next.prev = lastToken;
-			lastToken = lastToken.next;
+			firstToken = lastToken = token;
+			return false;
 		}
 		else
 		{
+			if((lastToken.id == rules.getDefault()
+				&& token.id == Token.WHITESPACE)
+				|| (lastToken.id == token.id
+				&& lastToken.rules == token.rules))
+			{
+				if(token.id != Token.TAB)
+				{
+					lastToken.length += token.length;
+					return false;
+				}
+			}
+
+			lastToken.next = token;
 			lastToken = lastToken.next;
-			lastToken.length = length;
-			lastToken.id = id;
-			lastToken.rules = rules;
+			return true;
 		}
 	} //}}}
 
-	//{{{ Private members
-	private Token firstToken, lastToken;
 	//}}}
 }

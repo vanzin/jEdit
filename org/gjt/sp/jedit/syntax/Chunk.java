@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.textarea;
+package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
 import javax.swing.text.*;
@@ -39,7 +39,7 @@ import org.gjt.sp.util.Log;
  * on screen.
  * @since jEdit 4.1pre1
  */
-public class Chunk
+public class Chunk extends Token
 {
 	//{{{ paintChunkList() method
 	/**
@@ -109,7 +109,7 @@ public class Chunk
 			}
 
 			_x += chunks.width;
-			chunks = chunks.next;
+			chunks = (Chunk)chunks.next;
 		}
 
 		return _x;
@@ -146,7 +146,7 @@ public class Chunk
 			}
 
 			x += chunks.width;
-			chunks = chunks.next;
+			chunks = (Chunk)chunks.next;
 		}
 
 		return x;
@@ -200,7 +200,7 @@ public class Chunk
 			}
 
 			_x += chunks.width;
-			chunks = chunks.next;
+			chunks = (Chunk)chunks.next;
 		}
 
 		return -1;
@@ -211,35 +211,28 @@ public class Chunk
 	// should xToOffset() ignore this chunk?
 	public boolean inaccessable;
 
-	public byte id;
 	public SyntaxStyle style;
-	public int offset;
-	public int length;
 
 	// set up after init()
 	public float width;
 	public String str;
 	public GlyphVector gv;
 	public float[] positions;
-
-	public Chunk next;
 	//}}}
 
 	//{{{ Chunk constructor
-	public Chunk(float width, int offset)
+	public Chunk(float width, int offset, ParserRuleSet rules)
 	{
+		super(Token.NULL,offset,0,rules);
+
 		inaccessable = true;
 		this.width = width;
-		this.offset = offset;
 	} //}}}
 
 	//{{{ Chunk constructor
-	public Chunk(byte id, int offset, int length)
+	public Chunk(byte id, int offset, int length, ParserRuleSet rules)
 	{
-		this.id = id;
-
-		this.offset = offset;
-		this.length = length;
+		super(id,offset,length,rules);
 	} //}}}
 
 	//{{{ init() method
