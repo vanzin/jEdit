@@ -7,9 +7,6 @@
 
 <MODES>
 
-<MODE NAME="4gl"		FILE="4gl.xml"
-				FILE_NAME_GLOB="*.4gl" />
-
 <MODE NAME="actionscript"	FILE="actionscript.xml"
 				FILE_NAME_GLOB="*.as" />
 
@@ -89,6 +86,9 @@
 
 <MODE NAME="html"		FILE="html.xml"
 				FILE_NAME_GLOB="*.{html,htm}" />
+
+<MODE NAME="i4gl"		FILE="i4gl.xml"
+				FILE_NAME_GLOB="*.4gl" />
 
 <MODE NAME="idl"		FILE="idl.xml"
 				FILE_NAME_GLOB="*.idl" />

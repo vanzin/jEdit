@@ -153,7 +153,8 @@ public class HelpViewer extends JFrame implements EBComponent
 			nodes.get("users-guide/using-jedit-part.html");
 		if(node != null)
 			toc.expandPath(new TreePath(node.getPath()));
-		toc.expandPath(new TreePath(pluginTree.getPath()));
+		if(pluginTree != null)
+			toc.expandPath(new TreePath(pluginTree.getPath()));
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
@@ -170,7 +171,7 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-		getRootPane().setPreferredSize(new Dimension(800,500));
+		getRootPane().setPreferredSize(new Dimension(800,400));
 
 		pack();
 		GUIUtilities.loadGeometry(this,"helpviewer");
