@@ -162,7 +162,7 @@ public class ActionSet
 	{
 		actions.remove(name);
 		if(added)
-			jEdit.actionHash.remove(action.getName());
+			jEdit.actionHash.remove(name);
 	} //}}}
 
 	//{{{ removeAllActions() method
@@ -177,7 +177,7 @@ public class ActionSet
 		{
 			jEdit.actionHash.remove(actions[i].getName());
 		}
-		actions.clear();
+		this.actions.clear();
 	} //}}}
 
 	//{{{ getAction() method

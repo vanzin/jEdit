@@ -3,9 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- inserting lines repaints twice
+- global tab size overrides buffer local prop
 - redo/undo dirty restore is broken.
 - consistent formatting for mode files
-- foo = bar does not work
 - bufferResponseDockable API?
   - buffer not loaded stage
   - buffer mode change
@@ -16,9 +17,7 @@ and quirks that I need to fix eventually.
 - context option pane: "smart options"?
 - gutter options: add option to completely hide gutter
 - each view needs to store its own docking area divider locations
-- buffer tab size property broken
 - scroll jump on click is a real problem
-- store anchors in sorted order for factor of two improvement
 - expand: scroll to end of fold if possible
 - docking panels: better rubber band resize
 - action bar: S+TAB/TAB selects completions
@@ -63,7 +62,6 @@ and quirks that I need to fix eventually.
 - option to not follow symbolic links
 - C+e C+c long block of text
   - soft wrap display provides fix: need nextLineRequested event
-- buffer.mode=foo in action bar does not work
 - new bsh and bsh command path
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
