@@ -40,6 +40,9 @@ Patrick Tingen for contributing to this release.
 
 - PropertyManager.getProperties() did not include site properties.
 
+- When creating a new file, the horizontal scroll bar was not updated
+  correctly.
+
 }}}
 {{{ API Changes
 
