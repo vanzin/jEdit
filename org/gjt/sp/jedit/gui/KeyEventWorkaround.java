@@ -73,11 +73,8 @@ public class KeyEventWorkaround
 						return evt;
 				}
 
-				if(!OperatingSystem.isMacOS()
-					&& !OperatingSystem.hasJava14())
-				{
+				if(!OperatingSystem.isMacOS())
 					handleBrokenKeys(evt,keyCode);
-				}
 				else
 					last = LAST_NOTHING;
 				break;
