@@ -28,3 +28,5 @@ interface QuickNotepadActions
 	void copyToBuffer();
 }
 
+
+

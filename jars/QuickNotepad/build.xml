@@ -25,7 +25,7 @@
 
 <project name="QuickNotepad" default="dist" basedir=".">
 
-	<property name="jedit.install.dir"  value="/home/slava/jEdit"/>
+	<property name="jedit.install.dir"  value="G:\\Program Files\\jEdit 4.0pre1"/>
 	<property name="jar.name"  value="QuickNotepad.jar"/>
 
 	<property name="src.dir" value="."/>
@@ -62,6 +62,7 @@
 			<fileset dir="${build.dir}"/>
 			<fileset dir="${src.dir}">
 				<include name="actions.xml"/>
+				<include name="dockables.xml"/>
 				<include name="**/*.props"/>
 				<include name="**/*.html"/>
 				<include name="**/*.gif"/>
