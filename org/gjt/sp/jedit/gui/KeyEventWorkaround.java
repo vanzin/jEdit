@@ -36,6 +36,22 @@ import org.gjt.sp.jedit.Debug;
  */
 public class KeyEventWorkaround
 {
+	//{{{ isModifier() method
+	public static boolean isModifier(KeyEvent evt)
+	{
+		switch(evt.getKeyCode())
+		{
+		case KeyEvent.VK_ALT:
+		case KeyEvent.VK_ALT_GRAPH:
+		case KeyEvent.VK_CONTROL:
+		case KeyEvent.VK_SHIFT:
+		case KeyEvent.VK_META:
+			return true;
+		default:
+			return false;
+		}
+	} //}}}
+	
 	//{{{ processKeyEvent() method
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
@@ -70,19 +86,19 @@ public class KeyEventWorkaround
 				return null;
 			case KeyEvent.VK_ALT:
 				modifiers |= InputEvent.ALT_MASK;
-				return null;
+				return evt;
 			case KeyEvent.VK_ALT_GRAPH:
 				modifiers |= InputEvent.ALT_GRAPH_MASK;
-				return null;
+				return evt;
 			case KeyEvent.VK_CONTROL:
 				modifiers |= InputEvent.CTRL_MASK;
-				return null;
+				return evt;
 			case KeyEvent.VK_SHIFT:
 				modifiers |= InputEvent.SHIFT_MASK;
-				return null;
+				return evt;
 			case KeyEvent.VK_META:
 				modifiers |= InputEvent.META_MASK;
-				return null;
+				return evt;
 			default:
 				if(!evt.isMetaDown())
 				{

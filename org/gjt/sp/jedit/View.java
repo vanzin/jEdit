@@ -650,7 +650,7 @@ public class View extends JFrame implements EBComponent
 		case KeyEvent.KEY_PRESSED:
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyPressed(evt);
-			else
+			else if(!KeyEventWorkaround.isModifier(evt))
 			{
 				/* boolean */ focusOnTextArea = false;
 				if(prefixFocusOwner != null)

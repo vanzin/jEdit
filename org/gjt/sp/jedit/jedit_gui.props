@@ -1918,7 +1918,7 @@ font-selector.bold=Bold
 font-selector.italic=Italic
 font-selector.bolditalic=Bold italic
 font-selector.preview=Preview
-font-selector.long-text=The quick brown fox jumped over the lazy dog.
+font-selector.long-text=The quick brown fox jumps over the lazy dog.
 #}}}
 
 #{{{ Color chooser, used by options.syntaxs
