@@ -86,6 +86,9 @@
 <MODE NAME="css"		FILE="css.xml"
 				FILE_NAME_GLOB="*.css" />
 
+<MODE NAME="cvs-commit"		FILE="cvs-commit.xml"
+				FILE_NAME_GLOB="cvs*.tmp"/>
+
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />
 
@@ -317,6 +320,8 @@
 
 <MODE NAME="squidconf"		FILE="squidconf.xml"
 				FILE_NAME_GLOB="squid.conf" />
+
+<MODE NAME="svn-commit"         FILE="svn-commit.xml"/>
 
 <MODE NAME="swig"		FILE="swig.xml"
 				FILE_NAME_GLOB="*.{i,swg}" />

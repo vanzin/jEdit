@@ -101,9 +101,9 @@
    </para>
    <para>
     However, in some situations, this behavior is undesirable. For example,
-    on Unix saving files this way will result in the owner and group of the
-    file being reset. If this bothers you, you can disable this so-called
-    <quote>two-stage save</quote> in the <guibutton>General</guibutton>
+    on Unix this creates a new i-node so while jEdit retains file permissions, the owner and group of the
+    file are reset, and if it is a hard link the link is broken. The
+    <quote>two-stage save</quote> feature can be disabled in the <guibutton>General</guibutton>
     pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="general-pane"/>.
