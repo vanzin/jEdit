@@ -357,6 +357,9 @@ public class FileVFS extends VFS
 		int backupTimeDistance = jEdit.getIntegerProperty("backup.minTime",0);
 		File file = new File(path);
 
+		if (!file.exists())
+			return;
+
 		// Check for backup.directory, and create that
 		// directory if it doesn't exist
 		if(backupDirectory == null || backupDirectory.length() == 0)

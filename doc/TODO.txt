@@ -3,6 +3,24 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- more flexible mirror list
+- S+INS, etc in swing controls
+
+typing stuff, soft wrap not updated until save
+
+[error] JEditTextArea: BUG: screenLine=-1,visibleLines=60,physicalLine=0,firstPhysicalLine=7,lastPhysicalLine=66
+[error] AWT-EventQueue-0: java.lang.NullPointerException
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollTo(JEditTextArea.java:755)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollToCaret(JEditTextArea.java:612)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea._finishCaretUpdate(JEditTextArea.java:5271)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.finishCaretUpdate(JEditTextArea.java:5386)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2114)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2077)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.setCaretPosition(JEditTextArea.java:2044)
+
+- even with no edits, scrolling got screwed
+
+- tall caret and tab
 - vfs: a way of running awt requests not all at end
 - CA+PLUS +: bad
 - quicknotepad NPEs

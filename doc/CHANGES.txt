@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.3pre1
 
-Thanks to Marcelo Vanzin, Nicholas O'Leary and Trevor Harmon for
-contributing to this release.
+Thanks to Cameron Morrison, Jim Lawton, Marcelo Vanzin, Nicholas O'Leary
+and Trevor Harmon for contributing to this release.
 
 {{{ Search and Replace
 
@@ -14,6 +14,13 @@ contributing to this release.
 - Find dialog box now has fields that accept multi-line input. Pressing
   ENTER activates the "Find" button; press S+ENTER to insert lines in
   the field.
+
+}}}
+{{{ Syntax Highlighting
+
+- Literate Haskell syntax highlighting (Cameron Morrison).
+
+- Updated D syntax highlighting (Jim Lawton).
 
 }}}
 {{{ Miscellaneous
@@ -34,6 +41,8 @@ contributing to this release.
 - "Rectangular Selection" command now changes the state of the current
   selection to match the flag.
 
+- "Select All" preserves current scroll position.
+
 }}}
 {{{ Bug Fixes
 
@@ -45,6 +54,17 @@ contributing to this release.
 
 - Minor fix for handling of the recent buffer when the current buffer
   was closed.
+
+- Fix StringIndexOutOfBoundsException when opening files with a
+  malformed XML PI.
+
+- Removing open files from the favorites list didn't work.
+
+- calling readNextChar() no longer clears the status bar after the
+  script returns.
+
+- Fix potential ArrayIndexOutOfBoundsException when indenting lines
+  containing unmatched brackets.
 
 }}}
 {{{ API Changes

@@ -552,7 +552,7 @@ String result = Macros.input(view, "Type something here.");
 String result = Macros.input(view, "When were you born?",
     "I don't remember, I was very young at the time");
 
-int result = Macros.confirm("Do you really want to learn"
+int result = Macros.confirm(view, "Do you really want to learn"
     + " about BeanShell?",JOptionPane.YES_NO_OPTION);
     </programlisting>
   </informalexample>

@@ -241,15 +241,18 @@ public class Buffer
 					writeLock();
 
 					// For `reload' command
-					firePreContentRemoved(0,0,getLineCount()
-						- 1,getLength());
+					// contentMgr.remove() changes this!
+					int length = getLength();
 
-					contentMgr.remove(0,getLength());
+					firePreContentRemoved(0,0,getLineCount()
+						- 1,length);
+
+					contentMgr.remove(0,length);
 					lineMgr.contentRemoved(0,0,getLineCount()
-						- 1,getLength());
-					positionMgr.contentRemoved(0,getLength());
+						- 1,length);
+					positionMgr.contentRemoved(0,length);
 					fireContentRemoved(0,0,getLineCount()
-						- 1,getLength());
+						- 1,length);
 
 					// theoretically a segment could
 					// have seg.offset != 0 but
@@ -2632,6 +2635,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 					{
 						openBracketIndex = TextUtilities.findMatchingBracket(this,openLineIndex,openLine.indexOf(")"));
 						Log.log(Log.DEBUG,this,"openBracketIndex: "+openBracketIndex);
+						if(openBracketIndex == -1)
+							return -1;
 					}
 					openLine = getLineText(getLineOfOffset(openBracketIndex));
 					Log.log(Log.DEBUG,this,"openLine: "+openLine);
@@ -3548,7 +3553,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		propertyLock = new Object();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
-		positionMgr = new PositionManager();
+		positionMgr = new PositionManager(this);
 		integerArray = new IntegerArray();
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();

@@ -189,6 +189,9 @@
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 
+<MODE NAME="literate-haskell"	FILE="literate-haskell.xml"
+				FILE_NAME_GLOB="*.lhs" />
+
 <MODE NAME="lotos"		FILE="lotos.xml"
 				FILE_NAME_GLOB="*.{lot,lotos}"/>
 
