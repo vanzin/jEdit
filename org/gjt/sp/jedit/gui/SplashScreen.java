@@ -1,6 +1,6 @@
 /*
  * SplashScreen.java - Splash screen
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,17 +19,15 @@
 
 package org.gjt.sp.jedit.gui;
 
+import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
 /**
- * The splash screen displayed on startup.<p>
- *
- * This file only uses AWT APIs so that it can be displayed as soon as possible
- * after jEdit is launched.
+ * The splash screen displayed on startup.
  */
-public class SplashScreen extends Canvas
+public class SplashScreen extends JComponent
 {
 	public SplashScreen()
 	{
@@ -54,15 +52,14 @@ public class SplashScreen extends Canvas
 			Log.log(Log.ERROR,this,e);
 		}
 
-		win = new Window(new Frame());
+		win = new JWindow();
 
 		Dimension screen = getToolkit().getScreenSize();
 		Dimension size = new Dimension(image.getWidth(this) + 2,
 			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
 		win.setSize(size);
 
-		win.setLayout(new BorderLayout());
-		win.add(BorderLayout.CENTER,this);
+		win.getContentPane().add(BorderLayout.CENTER,this);
 
 		win.setLocation((screen.width - size.width) / 2,
 			(screen.height - size.height) / 2);
@@ -104,52 +101,36 @@ public class SplashScreen extends Canvas
 		}
 	}
 
-	public void update(Graphics g)
-	{
-		paint(g);
-	}
-
-	public synchronized void paint(Graphics g)
+	public synchronized void paintComponent(Graphics g)
 	{
 		Dimension size = getSize();
 
-		if(offscreenImg == null)
-		{
-			offscreenImg = createImage(size.width,size.height);
-			offscreenGfx = offscreenImg.getGraphics();
-			offscreenGfx.setFont(getFont());
-		}
+		g.setColor(Color.black);
+		g.drawRect(0,0,size.width - 1,size.height - 1);
 
-		offscreenGfx.setColor(Color.black);
-		offscreenGfx.drawRect(0,0,size.width - 1,size.height - 1);
-
-		offscreenGfx.drawImage(image,1,1,this);
+		g.drawImage(image,1,1,this);
 
 		// XXX: This should not be hardcoded
-		offscreenGfx.setColor(new Color(168,173,189));
-		offscreenGfx.fillRect(1,image.getHeight(this) + 1,
+		g.setColor(Color.black);
+		g.fillRect(1,image.getHeight(this) + 1,
 			((win.getWidth() - 2) * progress) / 5,PROGRESS_HEIGHT);
 
-		offscreenGfx.setColor(Color.gray);
+		g.setColor(Color.lightGray);
 
 		String str = "VERSION " + jEdit.getVersion();
 
-		offscreenGfx.drawString(str,
+		g.drawString(str,
 			(getWidth() - fm.stringWidth(str)) / 2,
 			image.getHeight(this) + (PROGRESS_HEIGHT
 			+ fm.getAscent() + fm.getDescent()) / 2);
-
-		g.drawImage(offscreenImg,0,0,this);
 
 		notify();
 	}
 
 	// private members
 	private FontMetrics fm;
-	private Window win;
+	private JWindow win;
 	private Image image;
-	private Image offscreenImg;
-	private Graphics offscreenGfx;
 	private int progress;
 	private static final int PROGRESS_HEIGHT = 20;
 }

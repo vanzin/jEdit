@@ -2806,6 +2806,8 @@ public class jEdit
 		System.out.println("	-nostartupscripts: Don't run startup scripts");
 		System.out.println("	-usage: Print this message and exit");
 		System.out.println("	-version: Print jEdit version and exit");
+		System.out.println("	-wait: Wait until the user closes the specified buffer in the server");
+		System.out.println("	 instance. Does nothing if passed to the initial jEdit instance.");
 		System.out.println();
 		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
 	} //}}}
@@ -3186,6 +3188,16 @@ public class jEdit
 			String lf = getProperty("lookAndFeel");
 			if(lf != null && lf.length() != 0)
 				UIManager.setLookAndFeel(lf);
+			else if(OperatingSystem.isMacOS())
+			{
+				UIManager.setLookAndFeel(UIManager
+					.getSystemLookAndFeelClassName());
+			}
+			else
+			{
+				UIManager.setLookAndFeel(UIManager
+					.getCrossPlatformLookAndFeelClassName());
+			}
 		}
 		catch(Exception e)
 		{

@@ -3,20 +3,9 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-[error] AWT-EventQueue-0: java.lang.ArrayIndexOutOfBoundsException: Array index 
-out of range: -1
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.Buffer.getLineOfOffset(Buffer.jav
-a:882)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.Buffer.getIdealIndentForLine(Buff
-er.java:2635)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.Buffer.indentLine(Buffer.java:233
-1)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.userInput(
-JEditTextArea.java:3499)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.gui.InputHandler.userInput(InputH
-andler.java:320)
-
-- -wait in -usage
+- VFS browser pathsEqual(): case sensitivity!
+- fix revalidate OS X
+- first line problem solved by reset()
 - latest sftp: permissions not saved!
 - DnD still dosn't work as expected when draging from the same buffer,
 but differen text area (for example droping at the position where drag
@@ -27,7 +16,6 @@ dragOver() method)
 - not an error, but it would be nice to select text that was dropped as
 it is done in most text editors
 - C+d & killring
-- EOL in server file
 - delete & tall caret
 - rect select response to buffer events
 [warning] Roster: Already loaded: /usr/home/slava/.jedit/jars/bcel.jar

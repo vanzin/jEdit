@@ -57,7 +57,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	//{{{ getSearchDialog() method
 	public static SearchDialog getSearchDialog(View view)
 	{
-		return (SearchDialog)viewHash.get(view);
+		if(Debug.DISABLE_SEARCH_DIALOG_POOL)
+			return new SearchDialog(view);
+		else
+			return (SearchDialog)viewHash.get(view);
 	} //}}}
 
 	//{{{ preloadSearchDialog() method
@@ -68,6 +71,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	public static void preloadSearchDialog(View view)
 	{
+		if(OperatingSystem.isMacOS())
+			return;
+
 		SearchDialog dialog = new SearchDialog(view);
 		viewHash.put(view,dialog);
 	} //}}}
@@ -84,7 +90,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public static void showSearchDialog(View view, String searchString,
 		int searchIn)
 	{
-		SearchDialog dialog = (SearchDialog)viewHash.get(view);
+		SearchDialog dialog = getSearchDialog(view);
 
 		dialog.setSearchString(searchString,searchIn);
 		GUIUtilities.requestFocus(dialog,dialog.find);

@@ -2,10 +2,15 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre10
 
+Thanks to Barry Carr, Brad Mace, Trevor Harmon and Thomas Galvin for
+contributing to this release.
+
 {{{ Miscellaneous
 
 - Added "Create Constructor" macro, updated "Make Get and Set Methods"
   and "Get Class Name" macros (Thomas Galvin).
+
+- Updated Pascal syntax highlighting (Barry Carr).
 
 }}}
 {{{ Bug Fixes
@@ -17,6 +22,13 @@ JEDIT 4.2 VERSION HISTORY
 
 - Fix status bar problem with GTK look and feel if memory indicator is
   enabled.
+
+- Fixed exception with auto indent (Brad Mace).
+
+- jEdit didn't compile with Sun's JDK 1.5 beta (Trevor Harmon).
+
+- "Find Next" didn't work with directory searches where the paths
+  contained symbolic links.
 
 }}}
 

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import java.awt.Component;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.io.*;
 //}}}
 
 /**
@@ -57,12 +58,18 @@ public abstract class BufferListSet implements SearchFileSet
 
 		if(file == null)
 		{
-			file = view.getBuffer().getPath();
+			file = view.getBuffer().getSymlinkPath();
+			VFS vfs = VFSManager.getVFSForPath(file);
+			boolean ignoreCase = ((vfs.getCapabilities()
+				& VFS.CASE_INSENSITIVE_CAP) != 0);
 
 			for(int i = 0; i < files.length; i++)
 			{
-				if(files[i].equals(file))
+				if(MiscUtilities.compareStrings(
+					files[i],file,ignoreCase) == 0)
+				{
 					return file;
+				}
 			}
 
 			return getFirstFile(view);
@@ -70,10 +77,17 @@ public abstract class BufferListSet implements SearchFileSet
 		else
 		{
 			// -1 so that the last isn't checked
+			VFS vfs = VFSManager.getVFSForPath(file);
+			boolean ignoreCase = ((vfs.getCapabilities()
+				& VFS.CASE_INSENSITIVE_CAP) != 0);
+
 			for(int i = 0; i < files.length - 1; i++)
 			{
-				if(files[i].equals(file))
+				if(MiscUtilities.compareStrings(
+					files[i],file,ignoreCase) == 0)
+				{
 					return files[i+1];
+				}
 			}
 
 			return null;
@@ -112,11 +126,15 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ invalidateCachedList() method
-	public void invalidateCachedList()
+	public synchronized void invalidateCachedList()
 	{
 		files = null;
 	} //}}}
 
+	/**
+	 * Note that the paths in the returned list must be
+	 * fully canonicalized.
+	 */
 	protected abstract String[] _getFiles(Component comp);
 
 	private String[] files;
