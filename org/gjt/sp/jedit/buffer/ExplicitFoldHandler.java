@@ -66,7 +66,7 @@ public class ExplicitFoldHandler extends FoldHandler
 			int count = seg.count;
 
 			int openingBrackets = 0, closingBrackets = 0;
-loop:			for(int i = 0; i < count; i++)
+			for(int i = 0; i < count; i++)
 			{
 				switch(seg.array[offset + i])
 				{
@@ -76,10 +76,9 @@ loop:			for(int i = 0; i < count; i++)
 					if(openingBrackets == 3)
 					{
 						foldLevel += tabSize;
-						break loop;
+						openingBrackets = 0;
 					}
-					else
-						break;
+					break;
 				case '}':
 					openingBrackets = 0;
 					closingBrackets++;
@@ -87,10 +86,9 @@ loop:			for(int i = 0; i < count; i++)
 					{
 						if(foldLevel >= tabSize)
 							foldLevel -= tabSize;
-						break loop;
+						closingBrackets = 0;
 					}
-					else
-						break;
+					break;
 				default:
 					closingBrackets = openingBrackets = 0;
 					break;

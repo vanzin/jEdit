@@ -306,6 +306,7 @@ public class PluginManager extends JDialog
 					PluginList.Branch branch = plugin.getCompatibleBranch();
 
 					if(branch != null
+						&& branch.canSatisfyDependencies()
 						&& plugin.installedVersion != null
 						&& MiscUtilities.compareStrings(branch.version,
 						plugin.installedVersion,false) > 0)

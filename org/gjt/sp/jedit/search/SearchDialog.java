@@ -737,9 +737,15 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			// Windows bug workaround in case a YES/NO confirm
 			// was shown
-			toFront();
-			requestFocus();
-			find.requestFocus();
+
+			// ... but if HyperSearch results window is floating,
+			// the workaround causes problems!
+			if(!hyperSearch.isSelected())
+			{
+				toFront();
+				requestFocus();
+				find.requestFocus();
+			}
 			return;
 		}
 		else

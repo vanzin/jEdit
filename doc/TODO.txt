@@ -2,6 +2,8 @@ TO DO
 
 + before 4.0final (or pre9?):
 
+- filter out ALT_GRAPH, DEAD_ACUTE, ...
+- tips: don't mention old wheelmouse
 - escape in panel window container -> focus back to text area?
 - fix stylesheet problem
 - investigate I/O threads
