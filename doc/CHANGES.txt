@@ -75,6 +75,8 @@ JEDIT 4.1 VERSION HISTORY
   namespaces.
 - Fixed a display problem if a SEQ_REGEXP, SPAN_REGEXP or
   EOL_SPAN_REGEXP syntax highlighting rule matched a tab.
+- Added a workaround for a Java problem were very wide rectangles were
+  not painted properly in the selection painting code.
 
 * Version 4.1pre4
 
