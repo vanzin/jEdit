@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
 import java.awt.*;
+import java.awt.font.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -174,10 +175,11 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 	//{{{ getEntryWidth() method
 	int getEntryWidth(VFSDirectoryEntryTableModel.Entry entry,
-		FontMetrics fm)
+		Font font, FontRenderContext fontRenderContext)
 	{
 		String name = entry.dirEntry.name;
-		int width = fm.stringWidth(name);
+		int width = (int)font.getStringBounds(name,fontRenderContext)
+			.getWidth();
 		width += ExpansionToggleBorder.ICON_WIDTH
 			+ entry.level * ExpansionToggleBorder.LEVEL_WIDTH
 			+ 3;

@@ -70,7 +70,7 @@ public class PositionManager
 			{
 				bh = new PosBottomHalf(offset);
 				bh.red = true;
-				root.insert(bh);
+				//root.insert(bh);
 			}
 			else
 				bh.ref++;

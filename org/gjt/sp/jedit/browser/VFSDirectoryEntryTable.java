@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.browser;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.font.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -157,6 +158,7 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			model.collapse(VFSManager.getVFSForPath(
 				entry.dirEntry.path),row);
+			resizeColumnsAppropriately();
 		}
 		else
 		{
@@ -401,13 +403,18 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSDirectoryEntryTableModel model
 		= (VFSDirectoryEntryTableModel)getModel();
 
-		FontMetrics fm = getFontMetrics(getFont());
+		FontRenderContext fontRenderContext = new FontRenderContext(
+			null,false,false);
 		int[] widths = new int[model.getColumnCount()];
 		for(int i = 0; i < widths.length; i++)
 		{
 			String columnName = model.getColumnName(i);
 			if(columnName != null)
-				widths[i] = fm.stringWidth(columnName);
+			{
+				widths[i] = (int)renderer.plainFont
+					.getStringBounds(columnName,
+					fontRenderContext).getWidth();
+			}
 		}
 
 		for(int i = 0; i < model.files.length; i++)
@@ -417,21 +424,23 @@ public class VFSDirectoryEntryTable extends JTable
 			Font font = (entry.dirEntry.type
 				== VFS.DirectoryEntry.FILE
 				? renderer.plainFont : renderer.boldFont);
-			fm = getFontMetrics(font);
 
-			widths[0] = Math.max(widths[0],
-				renderer.getEntryWidth(
-				entry,fm));
+			widths[0] = Math.max(widths[0],renderer.getEntryWidth(
+				entry,font,fontRenderContext));
 
 			for(int j = 1; j < widths.length; j++)
 			{
 				String extAttr = model.getExtendedAttribute(
 					j - 1);
-				String attr = entry.dirEntry.getExtendedAttribute(extAttr);
+				String attr = entry.dirEntry
+					.getExtendedAttribute(
+					extAttr);
 				if(attr != null)
 				{
 					widths[j] = Math.max(widths[j],
-						fm.stringWidth(attr) + 2);
+						(int)font.getStringBounds(
+						attr,fontRenderContext)
+						.getWidth());
 				}
 			}
 		}
@@ -439,9 +448,14 @@ public class VFSDirectoryEntryTable extends JTable
 		for(int i = 0; i < widths.length; i++)
 		{
 			int width = widths[i];
-			if(i != 0 && i != widths.length - 1 && width != 0)
+			if(i != widths.length - 1 && width != 0)
 				width += 10;
+			else
+				width += 2;
 			getColumnModel().getColumn(i).setPreferredWidth(width);
+			getColumnModel().getColumn(i).setMinWidth(width);
+			getColumnModel().getColumn(i).setMaxWidth(width);
+			getColumnModel().getColumn(i).setWidth(width);
 		}
 
 		doLayout();

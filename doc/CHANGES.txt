@@ -186,7 +186,7 @@ aaaaa
   extension being removed from the text area.
 
 - Printing is no longer done in a background thread, and now blocks the
-  UI. due to various thread-safety problems.
+  UI, due to various thread-safety problems.
 
 - Printing a range of pages would always print starting from the first
   page.
@@ -239,7 +239,7 @@ aaaaa
 - Docking areas can no longer be resized beyond visible bounds if the
   "alternate tool bar layout" setting is off.
 
-- Fixed a problem where the status bar would fire errors about negative
+- Fixed a problem where the status bar would throw errors about negative
   array offsets if a buffer change resulted in the text area being
   scrolled.
 
@@ -265,6 +265,9 @@ aaaaa
 
 - Fixed exception when reloading a buffer if a marker was set beyond the
   location where the buffer ends on disk.
+
+- Fixed problem with table columns in the file system browser resizing
+  incorrectly when a node was collapsed.
 
 }}}
 {{{ API Changes

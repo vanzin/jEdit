@@ -159,12 +159,6 @@ public class KeyEventWorkaround
 						^ (modifiers & InputEvent.ALT_MASK) != 0
 						|| (modifiers & InputEvent.META_MASK) != 0)
 						return null;
-					System.err.println(evt.getModifiers()
-						+ "::" + modifiers);
-					if((modifiers & InputEvent.SHIFT_MASK) != 0)
-					{
-						System.err.println("do i know");
-					}
 				}
 
 				// if the last key was a numeric keypad key
@@ -192,7 +186,6 @@ public class KeyEventWorkaround
 						return null;
 					}
 				}
-				System.err.println("too long");
 				modifiers = 0;
 			}
 
