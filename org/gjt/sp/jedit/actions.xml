@@ -510,19 +510,13 @@
 
 <ACTION NAME="open-file">
 	<CODE>
-		jEdit.showOpenFileDialog(view);
+		GUIUtilities.showVFSFileDialog(view,null,VFSBrowser.BROWSER_DIALOG,true);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="overwrite">
 	<CODE>
 		textArea.toggleOverwriteEnabled();
-	</CODE>
-</ACTION>
-
-<ACTION NAME="other-encoding">
-	<CODE>
-		jEdit.showOpenFileWithOtherEncodingDialog(view);
 	</CODE>
 </ACTION>
 

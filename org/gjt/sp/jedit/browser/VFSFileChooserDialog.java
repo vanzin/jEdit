@@ -122,6 +122,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		switch(mode)
 		{
 		case VFSBrowser.OPEN_DIALOG:
+		case VFSBrowser.BROWSER_DIALOG:
 			ok.setText(jEdit.getProperty("vfs.browser.dialog.open"));
 			break;
 		case VFSBrowser.CHOOSE_DIRECTORY_DIALOG:
@@ -378,7 +379,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				}
 			}
 
-			ok();
+			if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+				dispose();
+			else
+				ok();
 		} //}}}
 	} //}}}
 

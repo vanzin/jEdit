@@ -138,7 +138,6 @@ view.mbar=file edit search markers folds view utils macros plugins help-menu
 #{{{ File menu
 file=new-file \
      open-file \
-     %open-encoding \
      %recent-files \
      %recent-directories \
      %current-directory \
@@ -162,10 +161,6 @@ file=new-file \
 file.label=$File
 new-file.label=$New
 open-file.label=$Open...
-open-encoding.label=Open With Encoding
-jedit-encoding=jEdit Default
-os-encoding=System Default
-other-encoding.label=Open With Other Encoding...
 recent-files.label=Recent Files
 recent-directories.label=Recent Directories
 current-directory.label=Current Directory
@@ -428,15 +423,15 @@ view=new-view \
      new-plain-view \
      close-view \
      - \
-     prev-buffer \
-     next-buffer \
-     recent-buffer \
-     - \
      unsplit \
      split-horizontal \
      split-vertical \
      prev-textarea \
      next-textarea \
+     - \
+     prev-buffer \
+     next-buffer \
+     recent-buffer \
      - \
      toggle-line-numbers \
      - \
@@ -1669,9 +1664,13 @@ vfs.browser.tree.loading=Loading...
 #{{{ Context menu
 vfs.browser.commands.close.label=Close
 vfs.browser.commands.open.label=Open
-vfs.browser.commands.open-view.label=Open in New View
+vfs.browser.commands.open-in.label=Open in
+vfs.browser.commands.open-view.label=New View
+vfs.browser.commands.open-plain-view.label=New Plain View
+vfs.browser.commands.open-split.label=New Split
 vfs.browser.commands.insert.label=Insert
 vfs.browser.commands.browse.label=Browse
+vfs.browser.commands.browse-window.label=Browse in New Window
 vfs.browser.commands.choose.label=Choose
 vfs.browser.commands.delete.label=Delete...
 vfs.browser.commands.rename.label=Rename...
@@ -1726,13 +1725,13 @@ vfs.browser.recurse-favorites.title=Cannot Add Favorites to Itself
 vfs.browser.recurse-favorites.message=The favorites list cannot be added to itself.
 
 vfs.browser.delete-confirm.title=Delete File Confirmation
-vfs.browser.delete-confirm.message=Are you sure you want to delete\n\
-	{0}?
+vfs.browser.delete-confirm.message=Are you sure you want to delete the following files?\n\n\
+	{0}
 
 vfs.browser.delete-favorites.title=Delete From Favorites
-vfs.browser.delete-favorites.message=Are you sure you want to remove\n\
-	{0}\n\
-	from the favorites?
+vfs.browser.delete-favorites.message=Are you sure you want to remove the following files \
+	from the favorites?\n\n\
+	{0}
 
 vfs.browser.rename.title=Rename File
 vfs.browser.rename.message=Enter a new name for {0}:

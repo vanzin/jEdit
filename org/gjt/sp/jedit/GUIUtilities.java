@@ -173,9 +173,7 @@ public class GUIUtilities
 	 */
 	public static JMenu loadMenu(String name)
 	{
-		if(name.equals("open-encoding"))
-			return new OpenWithEncodingMenu();
-		else if(name.equals("recent-files"))
+		if(name.equals("recent-files"))
 			return new RecentFilesMenu();
 		else if(name.equals("recent-directories"))
 			return new RecentDirectoriesMenu();

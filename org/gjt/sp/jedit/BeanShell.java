@@ -409,7 +409,7 @@ public class BeanShell
 		// evaluate a method declaration
 		if(namespace)
 		{
-			_eval(null,global,name + "(ns) {\this.callstack.set(0,ns);\n" + code + "\n}");
+			_eval(null,global,name + "(ns) {\nthis.callstack.set(0,ns);\n" + code + "\n}");
 			return global.getMethod(name,new Class[] { NameSpace.class });
 		}
 		else

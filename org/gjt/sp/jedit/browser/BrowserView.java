@@ -411,9 +411,9 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ showFilePopup() method
-	private void showFilePopup(VFS.DirectoryEntry file, Point point)
+	private void showFilePopup(VFS.DirectoryEntry[] files, Point point)
 	{
-		popup = new BrowserCommandsMenu(browser,file);
+		popup = new BrowserCommandsMenu(browser,files);
 		GUIUtilities.showPopupMenu(popup,tree,point.x,point.y);
 	} //}}}
 
@@ -550,7 +550,9 @@ class BrowserView extends JPanel
 				switch(evt.getKeyCode())
 				{
 				case KeyEvent.VK_ENTER:
-					browser.filesActivated(evt.isShiftDown(),false);
+					browser.filesActivated((evt.isShiftDown()
+						? VFSBrowser.M_OPEN_NEW_VIEW
+						: VFSBrowser.M_OPEN),false);
 					evt.consume();
 					break;
 				case KeyEvent.VK_LEFT:
@@ -610,6 +612,8 @@ class BrowserView extends JPanel
 		{
 			ToolTipManager ttm = ToolTipManager.sharedInstance();
 
+			TreePath path = getPathForLocation(evt.getX(),evt.getY());
+
 			switch(evt.getID())
 			{
 			//{{{ MOUSE_ENTERED...
@@ -628,54 +632,44 @@ class BrowserView extends JPanel
 				break; //}}}
 			//{{{ MOUSE_CLICKED...
 			case MouseEvent.MOUSE_CLICKED:
-				if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
+				if(path != null)
 				{
-					TreePath path = getPathForLocation(evt.getX(),evt.getY());
-					if(path == null)
+					if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 					{
-						super.processMouseEvent(evt);
-						break;
+						// A double click is not only when clickCount == 2
+						// because every other click can open a new directory
+						if(evt.getClickCount() % 2 == 0)
+						{
+							setSelectionPath(path);
+
+							// don't pass double-clicks to tree, otherwise
+							// directory nodes will be expanded and we don't
+							// want that
+							browser.filesActivated((evt.isShiftDown()
+								? VFSBrowser.M_OPEN_NEW_VIEW
+								: VFSBrowser.M_OPEN),true);
+							break;
+						}
+						else
+						{
+							if(!isPathSelected(path))
+								setSelectionPath(path);
+						}
+					}
+					if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
+					{
+						setSelectionPath(path);
+						browser.filesActivated((evt.isShiftDown()
+							? VFSBrowser.M_OPEN_NEW_VIEW
+							: VFSBrowser.M_OPEN),true);
 					}
 
-					if(!isPathSelected(path))
-						setSelectionPath(path);
-
-					browser.filesActivated(evt.isShiftDown(),true);
+					super.processMouseEvent(evt);
 					break;
 				}
-				else if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
-				{
-					TreePath path = getPathForLocation(evt.getX(),evt.getY());
-					if(path == null)
-					{
-						super.processMouseEvent(evt);
-						break;
-					}
-
-					if(!isPathSelected(path))
-						setSelectionPath(path);
-
-					if(evt.getClickCount() == 1)
-					{
-						browser.filesSelected();
-						super.processMouseEvent(evt);
-					}
-					// A double click is not only when clickCount == 2
-					// because every other click can open a new directory
-					if(evt.getClickCount() % 2 == 0)
-					{
-						// don't pass double-clicks to tree, otherwise
-						// directory nodes will be expanded and we don't
-						// want that
-						browser.filesActivated(evt.isShiftDown(),true);
-						break;
-					}
-				}
 				else if(GUIUtilities.isPopupTrigger(evt))
-					; // do nothing
-
-				super.processMouseEvent(evt);
-				break; //}}}
+					break;
+			//}}}
 			//{{{ MOUSE_PRESSED...
 			case MouseEvent.MOUSE_PRESSED:
 				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
@@ -694,36 +688,34 @@ class BrowserView extends JPanel
 						break;
 					}
 
-					TreePath path = getPathForLocation(evt.getX(),evt.getY());
 					if(path == null)
 						showFilePopup(null,evt.getPoint());
 					else
 					{
-						setSelectionPath(path);
-						browser.filesSelected();
+						if(!isPathSelected(path))
+							setSelectionPath(path);
 
-						Object userObject = ((DefaultMutableTreeNode)path
-							.getLastPathComponent()).getUserObject();
-						if(userObject instanceof VFS.DirectoryEntry)
-						{
-							VFS.DirectoryEntry file = (VFS.DirectoryEntry)
-								userObject;
-							showFilePopup(file,evt.getPoint());
-						}
-						else
-							showFilePopup(null,evt.getPoint());
+						showFilePopup(getSelectedFiles(),evt.getPoint());
 					}
 
 					break;
 				}
 
 				super.processMouseEvent(evt);
-				break; //}}}
+				break;
+			//}}}
 			//{{{ MOUSE_RELEASED...
 			case MouseEvent.MOUSE_RELEASED:
+				if(!GUIUtilities.isPopupTrigger(evt)
+					&& path != null)
+				{
+					browser.filesSelected();
+				}
+
 				if(evt.getClickCount() % 2 != 0)
 					super.processMouseEvent(evt);
-				break; //}}}
+				break;
+			//}}}
 			default:
 				super.processMouseEvent(evt);
 				break;

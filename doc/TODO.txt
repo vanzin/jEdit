@@ -3,38 +3,31 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- open in new split
-- great usability enhancement: have a new dialog type
-  OPEN_DIALOG
-  SAVE_DIALOG
-  BROWSER
-  BROWSER_DIALOG -- open button and commands in right click menu apply
-  that action to the selected files and close the dialog box.
-  - depends on: right-click working for multiple selections
-  - browser multiple selections
-  - get rid of 'open with encoding' menu
-  - fsb: rename in place
-  - NO -- FSB: Commands -> Encoding -> [ ] Default
-				       ---
-				       [ ] ...
-				       [ ] ...
-				       [ ] ...
-				       [ ] ...
-				       -- system encoding part of list
-- fix paste previous bug
-- eliminate redundant scans and events when loading buffer
++ pre2:
+
+- tip of the day about new plain view
+- tips of the day about new fsb features
+- insertion of { takes 2 steps to undo
+- NO -- FSB: Commands -> Encoding -> [ ] Default
+				     ---
+				     [ ] ...
+				     [ ] ...
+				     [ ] ...
+				     [ ] ...
+				     -- system encoding part of list
 - try typing foo), put cursor after foo, type some more -- slowdown
+- change indentPrevLine to indentOneLine and indentSubsequentLines
+
+- fsb: rename in place
+- eliminate redundant scans and events when loading buffer
 - make vfs listing faster
 - fsb tooltip does not accept mouse clicks
-- shift left/right moves caret in odd ways
-- change indentPrevLine to indentOneLine and indentSubsequentLines
 - minor quicknotepad changes -- update docs -- use stock icons instead
   of private copies
 - add documentation for pre1 features
 - right-click on parent directories in fsb
 - add dockable window state change msg
 - rect select and whitespace
-- option to silence beeps
 - scroll horizontally when dragging into virtual space
 - support start in virtual space too
 - eval-for-selected-lines doesn't work with rectangular selection
@@ -50,13 +43,11 @@ and quirks that I need to fix eventually.
 - offset manager: backwards gap movement
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
-- silly bug that creates selections on click -- how is this even possible?
 - scroll to caret _still_ jumps around?
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
-- v2p/p2v: implement from end backward scan
 - add an option to not remove files from PluginManager.download?
 - background tokens are slow
 
@@ -74,6 +65,7 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
+  - popup menus
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity

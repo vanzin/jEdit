@@ -25,7 +25,18 @@ Thanks to Gerd Knops for contributing to this release.
 
 - Fixed minor highlighting problem with properties mode.
 
-+ Miscellaneous Changes:
++ File System Browser Changes:
+
+- Multiple files can now be selected in the stand-alone browser;
+  right-clicking no longer deselects all but the clicked file.
+
+- Added 'Open in New Split' command to the right-click menu that splits
+  the view and opens the selected file in the newly created text area.
+
+- Right-click menus in the 'Open File' dialog box now contain menu items
+  for opening files in new views and new splits.
+
++ Scripting Changes:
 
 - 'scriptPath' BeanShell variable is set to the macro file path while a
   macro or startup script is executing.
@@ -34,6 +45,10 @@ Thanks to Gerd Knops for contributing to this release.
   registered macro handler; so you can put Python scripts in the
   'startup' directory if you have the JythonInterpreter plugin
   installed, for example.
+
+- Slight performance improvement when invoking editor actions.
+
++ Miscellaneous Changes:
 
 - The HyperSearch feature no longer blocks the GUI while listing a
   directory (which could take some time).
