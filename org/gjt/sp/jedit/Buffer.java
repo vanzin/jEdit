@@ -2611,6 +2611,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
 		} //}}}
 
+		if(Debug.INDENT_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"Determined previous line");
+			Log.log(Log.DEBUG,this,"indent=" + indent
+				+ ",prevLineBrackets=" + prevLineBrackets
+				+ ",prevLineCloseBracketIndex="
+				+ prevLineCloseBracketIndex);
+		}
+
 		//{{{ Get indent attributes for current line
 		String line = getLineText(lineIndex);
 
@@ -2651,6 +2660,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
 		} //}}}
+
+		if(Debug.INDENT_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"Determined current line");
+			Log.log(Log.DEBUG,this,"lineBrackets=" + lineBrackets
+				+ ",closeBracketIndex=" + closeBracketIndex);
+		}
 
 		//{{{ Deep indenting
 		if(getBooleanProperty("deepIndent"))
@@ -2722,6 +2738,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 				&& indentNextLinesRE != null
 				&& indentNextLinesRE.isMatch(prevLine))
 			{
+				if(Debug.INDENT_DEBUG)
+				{
+					Log.log(Log.DEBUG,this,"Matches indentNextLines");
+				}
 				indent += indentSize;
 			}
 			else if(indentNextLineRE != null)
@@ -2760,6 +2780,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 							indent = getCurrentIdentForLine(prevPrevLineIndex,null);
 						else
 							break;
+
+						if(Debug.INDENT_DEBUG)
+						{
+							Log.log(Log.DEBUG,this,
+								prevPrevLineIndex
+								+ " matches " +
+								"indentNextLine");
+						}
 
 						prevPrevLineIndex = getPriorNonEmptyLine(prevPrevLineIndex);
 					}
@@ -4075,7 +4103,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				returnValue = i;
 			for(int j = 0; j < seg.count; j++)
 			{
-				char ch = seg.array[j];
+				char ch = seg.array[seg.offset + j];
 				if(!Character.isWhitespace(ch))
 					return i;
 			}

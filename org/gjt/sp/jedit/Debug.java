@@ -127,4 +127,9 @@ public class Debug
 	 * Dump key events received by text area?
 	 */
 	public static boolean DUMP_KEY_EVENTS = false;
+
+	/**
+	 * Indent debug.
+	 */
+	public static boolean INDENT_DEBUG = false;
 }

@@ -74,10 +74,6 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		multi.addActionListener(ah);
 		toolBar.add(multi);
 
-		multiStatus = jEdit.getBooleanProperty(
-			"hypersearch-results.multi");
-		updateMultiStatus();
-
 		add(BorderLayout.NORTH, toolBar);
 
 		resultTreeRoot = new DefaultMutableTreeNode();
@@ -115,7 +111,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		super.addNotify();
 		EditBus.addToBus(this);
-		multi.setSelected(jEdit.getBooleanProperty("hypersearch-results.multi-toggle"));
+		multiStatus = jEdit.getBooleanProperty(
+			"hypersearch-results.multi");
+		updateMultiStatus();
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -123,7 +121,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		super.removeNotify();
 		EditBus.removeFromBus(this);
-		jEdit.setBooleanProperty("hypersearch-results.multi-toggle",multi.isSelected());
+		jEdit.setBooleanProperty("hypersearch-results.multi",multiStatus);
 	} //}}}
 
 	//{{{ handleMessage() method

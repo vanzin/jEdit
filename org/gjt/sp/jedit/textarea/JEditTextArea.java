@@ -3360,9 +3360,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			if(selection.size() == 1)
 			{
 				Selection sel = (Selection)selection.elementAt(0);
-				if(sel.startLine == sel.endLine
+				if(sel instanceof Selection.Rect ||
+					(sel.startLine == sel.endLine
 					&& (sel.start != buffer.getLineStartOffset(sel.startLine)
-					|| sel.end != buffer.getLineEndOffset(sel.startLine) - 1))
+					|| sel.end != buffer.getLineEndOffset(sel.startLine) - 1)))
 				{
 					insertTab();
 				}
