@@ -1181,8 +1181,10 @@ loop:		for(int counter = 0; ; counter++)
 							buf.append('\t');
 							break;
 						default:
-							/* fall through */
+							buf.append(ch);
+							break;
 						}
+						break;
 					default:
 						buf.append(ch);
 						break;

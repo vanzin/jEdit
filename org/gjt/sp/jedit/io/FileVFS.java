@@ -285,8 +285,7 @@ public class FileVFS extends VFS
 		String backupPrefix = jEdit.getProperty("backup.prefix");
 		String backupSuffix = jEdit.getProperty("backup.suffix");
 
-		String backupDirectory = MiscUtilities.canonPath(
-			jEdit.getProperty("backup.directory"));
+		String backupDirectory = jEdit.getProperty("backup.directory");
 
 		File file = new File(path);
 
