@@ -3,7 +3,21 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- shift+enter in search bar, show same reverse search warning
+- style editor dialog box needs ui work
+- dockables for unloaded plugins
+- 'remove plugins' dialog: use a text area
+- auto indent: don't de-indent on enter if no leading indent at all?
+- update quicknotepad docs
+- actions/dockables eval: should use own namespace?
+- note about dependencies
+- help:
+  - titles in search are fucked
+  - FAQ: better titles
+- format should show an error if the line len is 0, not beep
+- new macro handler api
+- new bracket matching; use interface to determine match
+
+- shift+enter jams translator
 - A+`: inserts in text area
 - fsb tab: insert longest prefix!
 - sidebars: need a border or some sort
@@ -46,22 +60,23 @@ and quirks that I need to fix eventually.
   - text area caret & scroll listeners
   - status bar messages & readNextChar()
 - vfs javadoc: invokeAndWait() example for createVFSSession()
-
 - scroll line count problems
 - auto indent:
   if(foo
      bar)
   <--- wrong
 - add config flag for deep indent
-- some search dialog problems
 - choose directory dialog needs some work
-- kill ring obviously broken
 - tall caret and tab
 - tall caret and backspace
+- positions on reload
+- change of AT_WORD_START semantics to fix perl highlighting?
+
+- kill ring obviously broken
+- some search dialog problems
 - broken activity log autoscroll
 - undo caret pos wrong
 - bizarre dockable window manager button layout problem
-- change of AT_WORD_START semantics to fix perl highlighting?
 - new file: horiz scroll wrong
 - while loading --> scroll bar
 - fsb default size
@@ -125,21 +140,10 @@ and quirks that I need to fix eventually.
 + features:
 
 - do all modifier handling through the modifier mapping
-- style editor dialog box needs ui work
-- dockables for unloaded plugins
-- 'remove plugins' dialog: use a text area
-- auto indent: don't de-indent on enter if no leading indent at all?
-- update docs
 - perm to string for FTP plugin
-- update quicknotepad docs
-- actions/dockables eval: should use own namespace?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- note about dependencies
 - rect select and trailing whitespace
-- help:
-  - titles in search are fucked
-  - FAQ: better titles
 - expand fold: try to expand even if already expanded
 - bsh = { 2 + 2; }
 - eval-for-selected-lines doesn't work with rectangular selection
@@ -152,9 +156,7 @@ and quirks that I need to fix eventually.
 - vfs dialogs: only one field?
 - vfs.isValidPath()
 - make gutter fully painted by extensions just like text area
-- format should show an error if the line len is 0, not beep
 - shortcut editor: restore default button
-- new macro handler api
 - can do perl q|...| etc. using begin/end substitution!
 - perl: q{}, etc.
 - do help search in a thread
@@ -162,7 +164,6 @@ and quirks that I need to fix eventually.
 - <edit pane,buffer> --> <caret info> map
 - vfs browser right click menu: plugins & favorites
 - don't show 'new directory' in favorites:
-- new bracket matching; use interface to determine match
 - add option for confirm.save-all
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter

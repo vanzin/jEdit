@@ -135,10 +135,9 @@ public class KeyEventWorkaround
 					/* they're too troublesome */
 					if((modifiers & InputEvent.ALT_MASK) != 0)
 						return null;
-
-					last = LAST_NOTHING;
 				}
 
+				last = LAST_NOTHING;
 				break;
 			}
 
@@ -165,7 +164,6 @@ public class KeyEventWorkaround
 					if((modifiers & InputEvent.SHIFT_MASK) != 0)
 					{
 						System.err.println("do i know");
-						
 					}
 				}
 

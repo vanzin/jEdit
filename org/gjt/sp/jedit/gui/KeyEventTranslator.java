@@ -23,11 +23,9 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.KeyStroke;
 import java.awt.event.*;
 import java.awt.Toolkit;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -41,6 +39,18 @@ import org.gjt.sp.util.Log;
  */
 public class KeyEventTranslator
 {
+	//{{{ addTranslation() method
+	/**
+	 * Adds a keyboard translation.
+	 * @param key1 Translate this key
+	 * @param key2 Into this key
+	 * @since jEdit 4.2pre3
+	 */
+	public static void addTranslation(Key key1, Key key2)
+	{
+		transMap.put(key1,key2);
+	} //}}}
+
 	//{{{ translateKeyEvent() method
 	/**
 	 * Pass this an event from {@link
@@ -51,6 +61,8 @@ public class KeyEventTranslator
 	{
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
+		Key returnValue = null;
+
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_PRESSED:
@@ -63,16 +75,18 @@ public class KeyEventTranslator
 					return null;
 				else
 				{
-					return new Key(getModifierString(evt),
+					returnValue = new Key(
+						getModifierString(evt),
 						'\0',Character.toLowerCase(
 						(char)keyCode));
 				}
 			}
 			else
 			{
-				return new Key(getModifierString(evt),
+				returnValue = new Key(getModifierString(evt),
 					keyCode,'\0');
 			}
+			break;
 		case KeyEvent.KEY_TYPED:
 			if(evt.getKeyChar() == '\b')
 				return null;
@@ -87,16 +101,25 @@ public class KeyEventTranslator
 			{
 				if(Debug.ALTERNATIVE_DISPATCHER)
 				{
-					return new Key(
+					returnValue = new Key(
 						modifiersToString(modifiers),
 						0,evt.getKeyChar());
 				}
+				else
+					return null;
 			}
 			else
-				return new Key(null,0,evt.getKeyChar());
+				returnValue = new Key(null,0,evt.getKeyChar());
+			break;
+		default:
+			return null;
 		}
 
-		return null;
+		Key trans = transMap.get(returnValue);
+		if(trans == null)
+			return returnValue;
+		else
+			return trans;
 	} //}}}
 
 	//{{{ parseKey() method
@@ -262,6 +285,8 @@ public class KeyEventTranslator
 	static int c, a, m, s;
 
 	//{{{ Private members
+	private Map transMap = new HashMap();
+
 	static
 	{
 		if(OperatingSystem.isMacOS())
@@ -316,6 +341,15 @@ public class KeyEventTranslator
 			}
 
 			return false;
+		}
+
+		public String toString()
+		{
+			return modifiers + "<"
+				+ Integer.toString(key,16)
+				+ ","
+				+ Integer.toString(input,16)
+				+ ">";
 		}
 	} //}}}
 }
