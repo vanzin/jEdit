@@ -10,7 +10,7 @@
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="indentPrevLine"
-			VALUE="\s*(((if|while)\s*\(|else\s*(\{|$)|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 	</PROPS>
 	<RULES ESCAPE="\"

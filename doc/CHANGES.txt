@@ -70,6 +70,12 @@ Thanks to Gerd Knops for contributing to this release.
 
 - File system browser color regexps are now case-insensitive.
 
+- Each dockable window now has a <name>-float action that opens a new
+  instance of that dockable in a few floating window (regardless of the
+  docking status of the window). These commands do not appear in the
+  menu bar, however they can be added to the context menu and tool bar,
+  or bound to keystrokes.
+
 + Bug Fixes:
 
 - Fixed default install path settings in installer when running on Unix.
@@ -113,6 +119,8 @@ Thanks to Gerd Knops for contributing to this release.
   expressions correctly on the first or last line of the selection.
 
 - Insertion of { and } in C-like modes can now be undone in one step.
+
+- Another indentPrevLine regexp fix. (Alexander Maryanovsky)
 
 + API Changes:
 
