@@ -27,7 +27,7 @@ import java.awt.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.msg.CreateDockableWindow;
+//import org.gjt.sp.jedit.msg.CreateDockableWindow;
 
 
 /**
@@ -44,7 +44,7 @@ public class QuickNotepadPlugin extends EBPlugin
 
     public void start()
 	{
-        EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);
+//      EditBus.addToNamedList(DockableWindow.DOCKABLE_WINDOW_LIST, NAME);
     }
 
 
@@ -64,7 +64,7 @@ public class QuickNotepadPlugin extends EBPlugin
         od.addOptionPane(new QuickNotepadOptionPane());
     }
 
-
+/*
     public void handleMessage(EBMessage message)
 	{
         if(message instanceof CreateDockableWindow)
@@ -81,6 +81,6 @@ public class QuickNotepadPlugin extends EBPlugin
             }
         }
     }
-
+*/
 }
 

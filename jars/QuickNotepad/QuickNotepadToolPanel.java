@@ -103,3 +103,4 @@ public class QuickNotepadToolPanel extends JPanel
     }
 
 }
+

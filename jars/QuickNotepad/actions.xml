@@ -15,31 +15,28 @@
     <ACTION NAME="quicknotepad-to-front">
 		<CODE>
 			view.getDockableWindowManager()
-                .addDockableWindow(QuickNotepadPlugin.NAME);
+                .getDockable(QuickNotepadPlugin.NAME);
         </CODE>
     </ACTION>
 
     <ACTION NAME="quicknotepad.choose-file">
         <CODE>
-          wm = view.getDockableWindowManager();
-          wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
+          wm = view.getDockableWindowManager()
+		  		   .getDockable(QuickNotepadPlugin.NAME).chooseFile();
         </CODE>
     </ACTION>
 
     <ACTION NAME="quicknotepad.save-file">
         <CODE>
-          wm = view.getDockableWindowManager();
-          wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
+          wm = view.getDockableWindowManager()
+		  		   .getDockable(QuickNotepadPlugin.NAME).saveFile();
         </CODE>
     </ACTION>
 
     <ACTION NAME="quicknotepad.copy-to-buffer">
         <CODE>
-          wm = view.getDockableWindowManager();
-          wm.addDockableWindow(QuickNotepadPlugin.NAME);
-          wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
+          wm = view.getDockableWindowManager()
+		  		   .getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
         </CODE>
     </ACTION>
 </ACTIONS>
