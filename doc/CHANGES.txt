@@ -3,7 +3,8 @@ JEDIT 4.2 VERSION HISTORY
 {{{ Version 4.2pre9
 
 Thanks to Brad Mace, David Hardin,  Matthew J. Price, Ollie Rutherfurd,
-Thomas Galvin and Wiktor Adamski for contributing to this release.
+Patrick Tingen, Thomas Galvin and Wiktor Adamski for contributing to
+this release.
 
 {{{ Miscellaneous
 
@@ -11,12 +12,17 @@ Thomas Galvin and Wiktor Adamski for contributing to this release.
 
 - Minor improvements to "Deep Indent" feature (Brad Mace).
 
+- "Reload All Buffers" command now only asks for confirmation if there
+  are buffers with unsaved changes (Ollie Rutherfurd).
+
+}}}
+{{{ Syntax Highlighting
+
 - Updated Visual FoxPro syntax highlighting (Matthew J. Price).
 
 - Updated Lisp syntax highlighting (David Hardin).
 
-- "Reload All Buffers" command now only asks for confirmation if there
-  are buffers with unsaved changes (Ollie Rutherfurd).
+- Updated Progress syntax highlighting (Patrick Tingen)
 
 }}}
 {{{ Bug Fixes
