@@ -600,8 +600,6 @@ public class DisplayManager
 		if(count == oldCount)
 			return;
 
-		screenLineMgr.setScreenLineCount(line,count);
-
 		if(!isLineVisible(line))
 			return;
 
@@ -1857,7 +1855,7 @@ loop:		for(;;)
 			delayedUpdate = false;
 
 			//{{{ Debug code
-			/* if(Debug.SCROLL_VERIFY)
+			if(Debug.SCROLL_VERIFY)
 			{
 				int scrollLineCount = 0;
 				int line = delayedUpdateStart;
@@ -1876,7 +1874,7 @@ loop:		for(;;)
 						+ " != "
 						+ getScrollLineCount());
 				}
-			} */ //}}}
+			} //}}}
 		} //}}}
 
 		//{{{ doDelayedUpdate() method
