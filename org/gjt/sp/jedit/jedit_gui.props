@@ -1292,10 +1292,8 @@ macro-confirm.title=Macro Confirmation
 #}}}
 
 #{{{ BeanShell stuff
-beanshell-error.title=BeanShell Execution Error
-beanshell-error.message.1=A BeanShell execution error occurred. More details can \
-	be found
-beanshell-error.message.2=in Utilities->Troubleshooting->Activity Log.
+beanshell-error.title=BeanShell Error
+beanshell-error.message=A BeanShell error occurred.
 
 beanshell-eval-input.title=Evaluate BeanShell Expression
 beanshell-eval-input.message=BeanShell expression:\n\

@@ -27,13 +27,15 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.gjt.sp.jedit.*;
 //}}}
 
 public class BeanShellErrorDialog extends EnhancedDialog
 {
 	//{{{ BeanShellErrorDialog constructor
-	public BeanShellErrorDialog(View view, String message)
+	public BeanShellErrorDialog(View view, Throwable t)
 	{
 		super(view,jEdit.getProperty("beanshell-error.title"),true);
 
@@ -46,18 +48,19 @@ public class BeanShellErrorDialog extends EnhancedDialog
 		iconBox.add(Box.createGlue());
 		content.add(BorderLayout.WEST,iconBox);
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
+		JPanel centerPanel = new JPanel(new BorderLayout(6,6));
 
-		JPanel caption = new JPanel(new GridLayout(2,1,3,3));
-		caption.setBorder(new EmptyBorder(0,0,6,0));
-		caption.add(new JLabel(jEdit.getProperty("beanshell-error.message.1")));
-		caption.add(new JLabel(jEdit.getProperty("beanshell-error.message.2")));
-		centerPanel.add(BorderLayout.NORTH,caption);
+		centerPanel.add(BorderLayout.NORTH,new JLabel(
+			jEdit.getProperty("beanshell-error.message")));
 
-		JTextArea textArea = new JTextArea(10,60);
-		textArea.setText(message);
+		JTextArea textArea = new JTextArea(10,80);
+
+		StringWriter s = new StringWriter();
+		t.printStackTrace(new PrintWriter(s));
+
+		textArea.setText(s.toString());
 		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
+		textArea.setCaretPosition(0);
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(textArea));
 
 		content.add(BorderLayout.CENTER,centerPanel);

@@ -4,6 +4,11 @@ JEDIT 4.1 VERSION HISTORY
 
 Thanks to Stefan Kost for contributing to this release.
 
++ Enhancements:
+
+- "BeanShell Error" dialog box now shows the full traceback, not just
+  the exception message.
+
 + Bug Fixes:
 
 - Minor fix to BibTeX syntax highlighting (Stefan Kost).
