@@ -3,8 +3,8 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999 Jason Ginchereau
- * Portions copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Portions copyright (C) 1999 Jason Ginchereau
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,6 +189,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 	//{{{ createEncodingMenu() method
 	private JMenu createEncodingMenu()
 	{
+		ActionHandler actionHandler = new ActionHandler();
+
 		encodingMenuItems = new HashMap();
 		JMenu encodingMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.commands.encoding.label"));
@@ -202,6 +204,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			String encoding = st.nextToken();
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(encoding);
 			mi.setActionCommand("encoding@" + encoding);
+			mi.addActionListener(actionHandler);
 			grp.add(mi);
 			encodingMenuItems.put(encoding,mi);
 			encodingMenu.add(mi);
@@ -212,6 +215,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
 				browser.currentEncoding);
 			mi.setActionCommand("encoding@" + browser.currentEncoding);
+			mi.addActionListener(actionHandler);
 			grp.add(mi);
 			encodingMenuItems.put(browser.currentEncoding,mi);
 			encodingMenu.add(mi);
@@ -223,6 +227,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
 				systemEncoding);
 			mi.setActionCommand("encoding@" + systemEncoding);
+			mi.addActionListener(actionHandler);
 			grp.add(mi);
 			encodingMenuItems.put(systemEncoding,mi);
 			encodingMenu.add(mi);
@@ -233,7 +238,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		otherEncoding = new JRadioButtonMenuItem(jEdit.getProperty(
 			"vfs.browser.commands.other-encoding.label"));
 		otherEncoding.setActionCommand("other-encoding");
-		otherEncoding.addActionListener(new ActionHandler());
+		otherEncoding.addActionListener(actionHandler);
 		grp.add(otherEncoding);
 		encodingMenu.add(otherEncoding);
 

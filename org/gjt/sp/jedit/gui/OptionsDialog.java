@@ -50,7 +50,6 @@ public class OptionsDialog extends EnhancedDialog
 		setContentPane(content);
 
 		JPanel stage = new JPanel(new BorderLayout(6,6));
-		content.add(stage, BorderLayout.CENTER);
 
 		// currentLabel displays the path of the currently selected
 		// OptionPane at the top of the stage area
@@ -71,10 +70,13 @@ public class OptionsDialog extends EnhancedDialog
 
 		paneTree.setShowsRootHandles(true);
 		paneTree.setRootVisible(false);
-		content.add(new JScrollPane(paneTree,
+
+		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+			new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
-			BorderLayout.WEST);
+			stage);
+		content.add(splitter, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
@@ -103,6 +105,8 @@ public class OptionsDialog extends EnhancedDialog
 
 		paneTree.expandPath(new TreePath(
 			new Object[] { paneTree.getModel().getRoot(), jEditGroup }));
+		paneTree.expandPath(new TreePath(
+			new Object[] { paneTree.getModel().getRoot(), pluginsGroup }));
 		paneTree.setSelectionRow(0);
 
 		view.hideWaitCursor();

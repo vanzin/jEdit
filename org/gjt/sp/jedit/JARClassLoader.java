@@ -5,6 +5,7 @@
  *
  * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
+ * Portions copyright (C) 2002 Marco Hunsicker
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
