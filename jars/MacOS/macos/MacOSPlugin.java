@@ -99,7 +99,7 @@ public class MacOSPlugin extends EBPlugin
 			return false;
 		}
 		if (MiscUtilities.compareStrings(
-			System.getProperty("mrj.version"),mrjversion) < 0)
+			System.getProperty("mrj.version"),mrjversion,false) < 0)
 		{
 			SwingUtilities.invokeLater( new Runnable() { public void run() {
 				GUIUtilities.error(null,"MacOSPlugin.dialog.mrjversion",new Object[] {mrjversion});
