@@ -102,12 +102,16 @@ jEdit bundles the following libraries:
   The AElfred web site is <http://www.microstar.com>.
 
 - BeanShell scripting language, by Pat Niemeyer. jEdit bundles BeanShell
-  version 1.2b7 with the bsh.util and bsh.classpath packages removed.
+  version 2.0b1 with the bsh.util and bsh.classpath packages removed.
 
   BeanShell is released under a dual Sun Public License/GNU LGPL
   license. See the BeanShell homepage for details.
 
   The BeanShell web site is <http://www.beanshell.org>.
+
+- ASM bytecode generation library from Objectweb. This class library is
+  released under a BSD-style license. The ASM homepage can be found at
+  <http://asm.objectweb.org/>.
 
 The jEdit installer bundles the following libraries:
 

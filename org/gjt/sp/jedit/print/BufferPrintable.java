@@ -106,28 +106,47 @@ class BufferPrintable implements Printable
 	public int print(Graphics _gfx, PageFormat pageFormat, int pageIndex)
 		throws PrinterException
 	{
+		// we keep the first non-null frc we get, since sometimes
+		// we get invalid ones on subsequent pages on Windows
+		if(frc == null)
+		{
+			frc = ((Graphics2D)_gfx).getFontRenderContext();
+			Log.log(Log.DEBUG,this,"Font render context is " + frc);
+		}
+
+		Log.log(Log.DEBUG,this,"Asked to print page " + pageIndex);
+		Log.log(Log.DEBUG,this,"Current page is " + currentPage);
+
 		if(pageIndex > currentPage)
 		{
 			for(int i = currentPage; i < pageIndex; i++)
 			{
+				Log.log(Log.DEBUG,this,"Current physical line is now " + currentPageStart);
 				currentPhysicalLine = currentPageStart;
 				printPage(_gfx,pageFormat,i,true);
 			}
 
 			currentPage = pageIndex - 1;
+			Log.log(Log.DEBUG,this,"Current page is now " + currentPage);
 		}
 
 		if(pageIndex == currentPage + 1)
 		{
 			if(end)
+			{
+				Log.log(Log.DEBUG,this,"The end");
 				return NO_SUCH_PAGE;
+			}
 
 			currentPageStart = currentPhysicalLine;
+			Log.log(Log.DEBUG,this,"#2 - Current physical line is now " + currentPageStart);
 			currentPage = pageIndex;
+			Log.log(Log.DEBUG,this,"#2 - Current page is now " + currentPage);
 		}
 		else if(pageIndex == currentPage)
 		{
 			currentPhysicalLine = currentPageStart;
+			Log.log(Log.DEBUG,this,"#3 - Current physical line is now " + currentPageStart);
 		}
 
 		printPage(_gfx,pageFormat,pageIndex,true);
@@ -166,6 +185,8 @@ class BufferPrintable implements Printable
 	private LineMetrics lm;
 	private ArrayList lineList;
 
+	private FontRenderContext frc;
+
 	private DisplayTokenHandler tokenHandler;
 	//}}}
 
@@ -173,6 +194,7 @@ class BufferPrintable implements Printable
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex,
 		boolean actuallyPaint)
 	{
+		Log.log(Log.DEBUG,this,"printPage(" + pageIndex + "," + actuallyPaint + ")");
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 
@@ -180,6 +202,9 @@ class BufferPrintable implements Printable
 		double pageY = pageFormat.getImageableY();
 		double pageWidth = pageFormat.getImageableWidth();
 		double pageHeight = pageFormat.getImageableHeight();
+
+		Log.log(Log.DEBUG,this,"#1 - Page dimensions: " + pageWidth
+			+ "x" + pageHeight);
 
 		if(header)
 		{
@@ -195,8 +220,6 @@ class BufferPrintable implements Printable
 				pageHeight,pageIndex,actuallyPaint);
 			pageHeight -= footerHeight;
 		}
-
-		FontRenderContext frc = gfx.getFontRenderContext();
 
 		boolean glyphVector = jEdit.getBooleanProperty("print.glyphVector");
 		double lineNumberWidth;
@@ -220,6 +243,10 @@ class BufferPrintable implements Printable
 			lineNumberWidth = 0.0;
 		//}}}
 
+		Log.log(Log.DEBUG,this,"#2 - Page dimensions: "
+			+ (pageWidth - lineNumberWidth)
+			+ "x" + pageHeight);
+
 		//{{{ calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
 		char[] chars = new char[tabSize];
@@ -233,11 +260,13 @@ class BufferPrintable implements Printable
 		double y = 0.0;
 
 		lm = font.getLineMetrics("gGyYX",frc);
+		Log.log(Log.DEBUG,this,"Line height is " + lm.getHeight());
 
 print_loop:	for(;;)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
 			{
+				Log.log(Log.DEBUG,this,"Finished buffer");
 				end = true;
 				break print_loop;
 			}
@@ -252,7 +281,10 @@ print_loop:	for(;;)
 				lineList.add(null);
 
 			if(y + (lm.getHeight() * lineList.size()) >= pageHeight)
+			{
+				Log.log(Log.DEBUG,this,"Finished page before line " + currentPhysicalLine);
 				break print_loop;
+			}
 
 			if(lineNumbers && actuallyPaint)
 			{

@@ -94,7 +94,12 @@ class VFSFileNameField extends HistoryTextField
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:
 			case KeyEvent.VK_ENTER:
-				browser.getBrowserView().getTable().processKeyEvent(evt);
+				browser.filesActivated(
+					(evt.isShiftDown()
+					? VFSBrowser.M_OPEN_NEW_VIEW
+					: VFSBrowser.M_OPEN),false);
+				setText(null);
+				evt.consume();
 				break;
 			default:
 				super.processKeyEvent(evt);

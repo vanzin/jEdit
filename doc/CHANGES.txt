@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre8
 
-Thanks to David Moss, Kris Kopicki, Ollie Rutherfurd, Philipp Janda,
-and Scott Allen for contributing to this release.
+Thanks to David Moss, Justin Dieters, Kris Kopicki, Ollie Rutherfurd,
+Philipp Janda, and Scott Allen for contributing to this release.
 
 {{{ Miscellaneous
 
@@ -23,6 +23,31 @@ and Scott Allen for contributing to this release.
   date for jEdit 4.2.
 
 - Fixed various mistakes in the documentation (Justin Dieters).
+
+}}}
+{{{ Scripting
+
+- BeanShell 2.0b1 imported. It has the following improvements over the
+  previously-bundled release (1.3.1):
+
+  - Full support for scripted classes that behave exactly the same as
+    compiled classes.
+
+  - Java 1.5-style static imports (this does not require Java 1.5). For
+    example:
+
+    static import java.lang.Math.*;
+    sqrt(4.0);
+
+  - Instance object imports (mix-ins) with the importObject() command.
+    For example:
+
+    importObject( new HashMap() );
+    put("foo", "bar");
+    print( get("foo") ); // prints "bar"
+
+- The ASM bytecode generation library is now bundled with jEdit since it
+  is required by BeanShell 2.0.
 
 }}}
 {{{ Syntax Highlighting
@@ -81,6 +106,25 @@ and Scott Allen for contributing to this release.
 
 - Fixed possible deadlock in VFSFileChooserDialog when changing the
   cursor.
+
+- 0-byte files are now opened with the default line separator, not the
+  Unix line separator.
+
+- Fixed some minor inconsistencies in the behavior of the directory
+  chooser dialog box.
+
+- On some Windows systems, the last few lines of each page would not
+  be printed. This was due to a Java bug; the incorrect
+  FontRenderContext was being returned. There is now a workaround for
+  this bug.
+
+- BeanShell 2.0b1 fixes a problem with variable scoping in macros.
+
+- Added a workaround for a Java bug where switching between windows
+  using A+TAB would focus the menu bar.
+
+- Removed debugging message from VFSBrowser class ("request already in
+  progress").
 
 }}}
 
