@@ -765,14 +765,14 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		//{{{ Clock constructor
 		public Clock()
 		{
-			FontRenderContext frc = new FontRenderContext(
+			/* FontRenderContext frc = new FontRenderContext(
 				null,false,false);
 			Rectangle2D bounds = getFont()
 				.getStringBounds(getTime(),frc);
 			Dimension dim = new Dimension((int)bounds.getWidth(),
 				(int)bounds.getHeight());
 			setPreferredSize(dim);
-			setMaximumSize(dim);
+			setMaximumSize(dim); */
 
 			setForeground(jEdit.getColorProperty("view.status.foreground"));
 			setBackground(jEdit.getColorProperty("view.status.background"));

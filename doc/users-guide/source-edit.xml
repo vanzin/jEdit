@@ -21,10 +21,13 @@
   </para>
   <sect2 id="mode-selection"><title>Mode Selection</title>
    <para>
-    File name and first line globs used to associate files with edit modes can be changed in the
+    File name and first line matching is done using glob patterns similar to those used in Unix shells. Glob patterns associated with edit modes can be changed in the
     <guibutton>Editing</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box. See <xref linkend="globs"/> for information about glob patterns.
+    dialog box. Note that the glob patterns must match the file name or first line exactly; so to match files whose first line contains <literal>begin</literal>, you must use a first line glob of <literal>*begin*</literal>.
+    See <xref linkend="globs"/> for a description of glob pattern syntax.
+   </para>
+   <para>
     The default edit mode for files which do not match any pattern can be set in the <guibutton>Editing</guibutton> pane as well.
    </para>
    <para>

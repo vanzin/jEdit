@@ -86,7 +86,8 @@ void byteToString(String target)
 }
 
 String target = Macros.input(view,"Byte to String:");
-byteToString(target);
+if(target != null)
+	byteToString(target);
 
 
 /*

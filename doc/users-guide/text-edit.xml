@@ -611,7 +611,7 @@
     dialog box.
    </para>
    <para>
-    The quick copy feature enables the following behavior:
+    The quick copy feature is accessed using the middle mouse button. If you do not have a three-button mouse, then either <keycap>Alt</keycap>-click (on Windows and Unix) or <keycap>Option</keycap>-click (on MacOS X). The quick copy feature enables the following behavior:
    </para>
    <itemizedlist>
     <listitem><para>

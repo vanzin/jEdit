@@ -86,17 +86,6 @@ public class ActionBar extends JPanel
 		action.requestFocus();
 	} //}}}
 
-	//{{{ actionListChanged()
-	/**
-	 * Called when plugins are added or removed to notify the action bar
-	 * that the action list has changed.
-	 * @since jEdit 4.2pre2
-	 */
-	public void actionListChanged()
-	{
-		actions = null;
-	} //}}}
-
 	//{{{ Private members
 
 	private static NameSpace namespace = new NameSpace(
@@ -109,18 +98,7 @@ public class ActionBar extends JPanel
 	private HistoryTextField action;
 	private CompletionPopup popup;
 	private RolloverButton close;
-	private String[] actions;
 	//}}}
-
-	//{{{ initActions() method
-	private void initActions()
-	{
-		if(actions != null)
-			return;
-
-		actions = jEdit.getActionNames();
-		Arrays.sort(actions,new MiscUtilities.StringICaseCompare());
-	} //}}}
 
 	//{{{ invoke() method
 	private void invoke()
@@ -235,9 +213,8 @@ public class ActionBar extends JPanel
 	//{{{ getCompletions() method
 	private String[] getCompletions(String str)
 	{
-		initActions();
-
 		str = str.toLowerCase();
+		String[] actions = jEdit.getActionNames();
 		ArrayList returnValue = new ArrayList(actions.length);
 		for(int i = 0; i < actions.length; i++)
 		{
