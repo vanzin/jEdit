@@ -1,5 +1,6 @@
 TO DO
 
+- losing focus: caret not hidden
 - XModeHandler: better error reporting
 - documentation to do
   - rule set property docs in part II

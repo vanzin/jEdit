@@ -2370,7 +2370,7 @@ public class jEdit
 
 			// give it an empty token marker to avoid problems
 			TokenMarker marker = new TokenMarker();
-			marker.addRuleSet("MAIN",new ParserRuleSet());
+			marker.addRuleSet("MAIN",new ParserRuleSet(mode));
 			mode.setTokenMarker(marker);
 		}
 	} //}}}
