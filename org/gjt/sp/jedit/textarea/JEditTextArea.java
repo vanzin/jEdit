@@ -31,6 +31,7 @@ import javax.swing.text.Segment;
 import javax.swing.undo.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.font.*;
 import java.awt.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -62,7 +63,6 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Initialize some misc. stuff
 		selection = new Vector();
-		renderer = new TextRenderer();
 		painter = new TextAreaPainter(this);
 		gutter = new Gutter(view,this);
 		bufferHandler = new BufferChangeHandler();
@@ -136,16 +136,6 @@ public class JEditTextArea extends JComponent
 	public final Gutter getGutter()
 	{
 		return gutter;
-	} //}}}
-
-	//{{{ getTextRenderer() method
-	/**
-	 * Returns the text renderer instance.
-	 * @since jEdit 3.2pre6
-	 */
-	public TextRenderer getTextRenderer()
-	{
-		return renderer;
 	} //}}}
 
 	//{{{ getFoldVisibilityManager() method
@@ -712,48 +702,34 @@ public class JEditTextArea extends JComponent
 	 */
 	public int offsetToX(int line, int offset)
 	{
-		Token tokens = buffer.markTokens(line).getFirstToken();
-
 		getLineText(line,lineSegment);
 
-		char[] text = lineSegment.array;
-		int off = lineSegment.offset;
+		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
+			buffer.markTokens(line).getFirstToken());
 
-		float x = (float)horizontalOffset;
+		int length = 0;
+		float x = 0.0f;
 
-		Toolkit toolkit = painter.getToolkit();
-		Font defaultFont = painter.getFont();
-		SyntaxStyle[] styles = painter.getStyles();
-
-		for(;;)
+		while(chunks != null)
 		{
-			byte id = tokens.id;
-			if(id == Token.END)
-				return (int)x;
-
-			Font font;
-			if(id == Token.NULL)
-				font = defaultFont;
-			else
-				font = styles[id].getFont();
-
-			int len = tokens.length;
-
-			if(offset < len)
+			if(offset < length + chunks.length)
 			{
-				return (int)(x + renderer.charsWidth(
-					text,off,offset,font,x,painter));
-			}
-			else
-			{
-				x += renderer.charsWidth(
-					text,off,len,font,x,painter);
-				off += len;
-				offset -= len;
+				if(chunks.text == null)
+					return (int)chunks.x;
+				else
+				{
+					TextHitInfo textHit = TextHitInfo.leading(offset - length);
+					float[] caretInfo = chunks.text.getCaretInfo(textHit);
+					return (int)(chunks.x + caretInfo[0] + horizontalOffset);
+				}
 			}
 
-			tokens = tokens.next;
+			length = chunks.offset + chunks.length;
+			x = chunks.x + chunks.width;
+			chunks = chunks.next;
 		}
+
+		return (int)(x + horizontalOffset);
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -777,42 +753,34 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x, boolean round)
 	{
-		Token tokens = buffer.markTokens(line).getFirstToken();
+		x -= horizontalOffset;
 
 		getLineText(line,lineSegment);
 
-		char[] text = lineSegment.array;
-		int off = lineSegment.offset;
+		TextAreaPainter.Chunk chunks = painter.lineToChunkList(lineSegment,
+			buffer.markTokens(line).getFirstToken());
 
-		Toolkit toolkit = painter.getToolkit();
-		Font defaultFont = painter.getFont();
-		SyntaxStyle[] styles = painter.getStyles();
+		int length = 0;
 
-		float[] widthArray = new float[] { horizontalOffset };
-
-		for(;;)
+		while(chunks != null)
 		{
-			byte id = tokens.id;
-			if(id == Token.END)
-				return lineSegment.count;
+			if(x < chunks.x + chunks.width)
+			{
+				if(chunks.text == null)
+					return length;
+				else
+				{
+					TextHitInfo textHit = chunks.text.hitTestChar(x,0);
+					return (round ? textHit.getInsertionIndex()
+						: textHit.getCharIndex());
+				}
+			}
 
-			Font font;
-			if(id == Token.NULL)
-				font = defaultFont;
-			else
-				font = styles[id].getFont();
-
-			int len = tokens.length;
-
-			int offset = renderer.xToOffset(text,off,len,font,x,
-				painter,round,widthArray);
-
-			if(offset != -1)
-				return offset - lineSegment.offset;
-
-			off += len;
-			tokens = tokens.next;
+			length = chunks.offset + chunks.length;
+			chunks = chunks.next;
 		}
+
+		return length;
 	} //}}}
 
 	//{{{ xyToOffset() method
@@ -4616,8 +4584,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private static boolean multi;
 	private boolean overwrite;
-
-	private TextRenderer renderer;
 	//}}}
 
 	//{{{ quicksort() method

@@ -26,9 +26,12 @@ package org.gjt.sp.jedit.textarea;
 import javax.swing.text.*;
 import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
+import java.awt.font.*;
+import java.awt.geom.*;
 import java.awt.*;
 import java.lang.reflect.Method;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
@@ -56,13 +59,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		this.textArea = textArea;
 
-		highlights = new Vector();
+		highlights = new ArrayList();
 
 		setAutoscrolls(true);
 		setDoubleBuffered(true);
 		setOpaque(true);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+
+		fontRenderContext = new FontRenderContext(null,false,false);
 	} //}}}
 
 	//{{{ isManagingFocus() method
@@ -108,6 +113,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setStyles(SyntaxStyle[] styles)
 	{
 		this.styles = styles;
+		styles[0] = new SyntaxStyle(getForeground(),
+			null,getFont());
+
 		repaint();
 	} //}}}
 
@@ -374,7 +382,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void setAntiAliasEnabled(boolean antiAlias)
 	{
 		this.antiAlias = antiAlias;
-		textArea.getTextRenderer().configure(antiAlias,fracFontMetrics);
+		updateRenderingHints();
 	} //}}}
 
 	//{{{ isAntiAliasEnabled() method
@@ -396,7 +404,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public void setFractionalFontMetricsEnabled(boolean fracFontMetrics)
 	{
 		this.fracFontMetrics = fracFontMetrics;
-		textArea.getTextRenderer().configure(antiAlias,fracFontMetrics);
+		updateRenderingHints();
 	} //}}}
 
 	//{{{ isFractionalFontMetricsEnabled() method
@@ -418,7 +426,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void addCustomHighlight(TextAreaHighlight highlight)
 	{
-		highlights.addElement(highlight);
+		highlights.add(highlight);
 
 		// handle old highlighters
 		Class clazz = highlight.getClass();
@@ -450,7 +458,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void removeCustomHighlight(TextAreaHighlight highlight)
 	{
-		highlights.removeElement(highlight);
+		highlights.remove(highlight);
 		repaint();
 	} //}}}
 
@@ -475,7 +483,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			TextAreaHighlight highlight =
 				(TextAreaHighlight)
-				highlights.elementAt(i);
+				highlights.get(i);
 			String toolTip = highlight.getToolTipText(evt);
 			if(toolTip != null)
 				return toolTip;
@@ -513,11 +521,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Repaints the text.
 	 * @param g The graphics context
 	 */
-	public void paintComponent(Graphics gfx)
+	public void paintComponent(Graphics _gfx)
 	{
 		updateTabSize();
 
-		textArea.getTextRenderer().setupGraphics(gfx);
+		Graphics2D gfx = (Graphics2D)_gfx;
+		gfx.setRenderingHints(renderingHints);
 
 		Buffer buffer = textArea.getBuffer();
 
@@ -664,6 +673,60 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			maxLineLen = fm.charWidth(' ') * _maxLineLen;
 	} //}}}
 
+	//{{{ lineToChunkList() method
+	Chunk lineToChunkList(Segment seg, Token tokens)
+	{
+		float x = 0.0f;
+
+		Chunk first = null;
+		Chunk current = null;
+
+		int flushLen = 0;
+		int flushIndex = seg.offset;
+
+		int end = seg.offset + seg.count;
+
+		for(int i = seg.offset; i < end; i++)
+		{
+			if(seg.array[i] == '\t')
+			{
+				Chunk newChunk = new Chunk(x,
+					seg.array,flushIndex,flushLen,seg.offset,
+					tokens);
+				if(current == null)
+					current = first = newChunk;
+				else
+				{
+					current.next = newChunk;
+					current = newChunk;
+				}
+
+				flushLen = 0;
+
+				x += newChunk.width;
+
+				flushIndex = i + 1;
+
+				x = nextTabStop(x,i - seg.offset);
+			}
+			else
+				flushLen++;
+		}
+
+		Chunk newChunk = new Chunk(x,
+			seg.array,flushIndex,flushLen,seg.offset,
+			tokens);
+		if(current == null)
+			current = first = newChunk;
+		else
+		{
+			current.next = newChunk;
+			current = newChunk;
+		}
+
+		return first;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -692,11 +755,54 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private int maxLineLen;
 	private FontMetrics fm;
 
-	private Vector highlights;
+	private ArrayList highlights;
+
+	private RenderingHints renderingHints;
+	private FontRenderContext fontRenderContext;
 	//}}}
 
+	//{{{ updateRenderingHints() method
+	private void updateRenderingHints()
+	{
+		HashMap hints = new HashMap();
+
+		if(antiAlias)
+		{
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+		else
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+
+		hints.put(RenderingHints.KEY_FRACTIONALMETRICS,
+			fracFontMetrics ?
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON
+				: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+
+		renderingHints = new RenderingHints(hints);
+		fontRenderContext = new FontRenderContext(null,antiAlias,
+			fracFontMetrics);
+	} //}}}
+
+	//{{{ paintChunkList() method
+	private float paintChunkList(Graphics2D gfx, float x, float y, Chunk chunks)
+	{
+		float width = 0.0f;
+
+		while(chunks != null)
+		{
+			if(chunks.text != null)
+				chunks.text.draw(gfx,x + chunks.x,y);
+			width = chunks.x + chunks.width;
+			chunks = chunks.next;
+		}
+
+		return x + width;
+	} //}}}
+
 	//{{{ paintLine() method
-	private int paintLine(Graphics gfx, Buffer buffer, boolean valid,
+	private int paintLine(Graphics2D gfx, Buffer buffer, boolean valid,
 		int virtualLine, int physicalLine, int x, int y,
 		boolean collapsedFold)
 	{
@@ -720,14 +826,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int baseLine = y + fm.getHeight()
 				- fm.getLeading() - fm.getDescent();
 
-			x = buffer.paintSyntaxLine(physicalLine,gfx,x,baseLine,
-				this,true,true,defaultFont,defaultColor,
-				(lineHighlight
-				&& textArea.getSelectionCount() == 0
-				&& physicalLine == textArea.getCaretLine()
-				? lineHighlightColor
-				: getBackground()),styles,
-				textArea.getTextRenderer());
+			Segment seg = new Segment();
+			buffer.getLineText(physicalLine,seg);
+			Chunk chunks = lineToChunkList(seg,buffer.markTokens(physicalLine)
+				.getFirstToken());
+			x += paintChunkList(gfx,x,baseLine,chunks);
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);
@@ -759,7 +862,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintHighlight() method
-	private void paintHighlight(Graphics gfx, int virtualLine,
+	private void paintHighlight(Graphics2D gfx, int virtualLine,
 		int physicalLine, int y, boolean valid,
 		boolean collapsedFold)
 	{
@@ -807,7 +910,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			for(int i = 0; i < highlights.size(); i++)
 			{
 				TextAreaHighlight highlight = (TextAreaHighlight)
-					highlights.elementAt(i);
+					highlights.get(i);
 				try
 				{
 					highlight.paintHighlight(gfx,virtualLine,
@@ -819,7 +922,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 					// remove it so editor can continue
 					// functioning
-					highlights.removeElementAt(i);
+					highlights.remove(i);
 					i--;
 				}
 			}
@@ -827,7 +930,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintBracketHighlight() method
-	private void paintBracketHighlight(Graphics gfx, int physicalLine, int y)
+	private void paintBracketHighlight(Graphics2D gfx, int physicalLine, int y)
 	{
 		int position = textArea.getBracketPosition();
 		if(position == -1)
@@ -843,7 +946,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintCaret() method
-	private void paintCaret(Graphics gfx, int physicalLine, int y,
+	private void paintCaret(Graphics2D gfx, int physicalLine, int y,
 		boolean collapsedFold)
 	{
 		int offset = textArea.getCaretPosition()
@@ -877,7 +980,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintSelection() method
-	private void paintSelection(Graphics gfx, int physicalLine, int y,
+	private void paintSelection(Graphics2D gfx, int physicalLine, int y,
 		Selection s)
 	{
 		if(physicalLine < s.startLine || physicalLine > s.endLine)
@@ -935,4 +1038,32 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//}}}
+
+	//{{{ Chunk class
+	class Chunk
+	{
+		TextLayout text;
+		float x;
+		float width;
+		int offset;
+		int length;
+		Chunk next;
+
+		Chunk(float x,
+			char[] text, int offset, int count, int lineStartOffset,
+			Token tokens)
+		{
+			this.x = x;
+			this.offset = offset;
+			length = count;
+
+			if(count != 0)
+			{
+				SyntaxCharacterIterator iter = new SyntaxCharacterIterator(
+					text,offset,count,lineStartOffset,styles,tokens);
+				this.text = new TextLayout(iter,fontRenderContext);
+				this.width = (float)this.text.getBounds().getWidth();
+			}
+		}
+	} //}}}
 }

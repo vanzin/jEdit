@@ -3654,7 +3654,7 @@ public class Buffer implements EBComponent
 			offset--;
 
 		TokenList tokens = markTokens(line);
-		Token token = TextUtilities.getTokenAtOffset(tokens,offset);
+		Token token = TextUtilities.getTokenAtOffset(tokens.getFirstToken(),offset);
 		return token.rules;
 	} //}}}
 
