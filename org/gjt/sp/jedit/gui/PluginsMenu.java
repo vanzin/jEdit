@@ -63,7 +63,8 @@ public class PluginsMenu extends EnhancedMenu
 		JMenu menu = this;
 		for(int i = 0; i < pluginMenuItems.size(); i++)
 		{
-			if(menu.getItemCount() >= 20)
+			// We don't want to have a 'More' menu with only one item
+			if(menu.getItemCount() >= 20 && i != pluginMenuItems.size() - 1)
 			{
 				menu.addSeparator();
 				JMenu newMenu = new JMenu(jEdit.getProperty(

@@ -81,7 +81,7 @@ public class MarkersMenu extends EnhancedMenu
 				final Marker marker = (Marker)markers.elementAt(i);
 				int lineNo = buffer.getLineOfOffset(marker.getPosition());
 
-				if(current.getItemCount() >= 20)
+				if(current.getItemCount() >= 20 && i != markers.size() - 1)
 				{
 					//current.addSeparator();
 					JMenu newCurrent = new JMenu(
