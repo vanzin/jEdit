@@ -709,28 +709,7 @@ public class JEditTextArea extends JComponent
 		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
-		float x = 0.0f;
-
-		while(chunks != null)
-		{
-			if(offset < chunks.offset + chunks.length)
-			{
-				if(chunks.text == null)
-					return (int)chunks.x;
-				else
-				{
-					Point2D pos = chunks.text.getGlyphPosition(
-						offset - chunks.offset);
-					return (int)(chunks.x + pos.getX()
-						+ horizontalOffset);
-				}
-			}
-
-			x = chunks.x + chunks.width;
-			chunks = chunks.next;
-		}
-
-		return (int)(x + horizontalOffset);
+		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -741,7 +720,14 @@ public class JEditTextArea extends JComponent
 	 */
 	public int xToOffset(int line, int x)
 	{
-		return xToOffset(line,x,true);
+		x -= horizontalOffset;
+
+		getLineText(line,lineSegment);
+
+		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
+			buffer.markTokens(line).getFirstToken());
+
+		return TextUtilities.xToOffset(chunks,x,true);
 	} //}}}
 
 	//{{{ xToOffset() method
@@ -761,53 +747,7 @@ public class JEditTextArea extends JComponent
 		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
 			buffer.markTokens(line).getFirstToken());
 
-		while(chunks != null)
-		{
-			if(x < chunks.x + chunks.width)
-			{
-				if(chunks.text == null)
-				{
-					if(chunks.next != null
-						&& round
-						&& chunks.next.x - x < x - chunks.x)
-					{
-						return chunks.next.offset;
-					}
-					else
-						return chunks.offset;
-				}
-				else
-				{
-					float _x = x - chunks.x;
-
-					int count = chunks.text.getNumGlyphs();
-					float[] glyphPos = chunks.text.getGlyphPositions(0,
-						count,null);
-
-					for(int i = 0; i < count; i++)
-					{
-						float glyphX = glyphPos[i*2];
-						float nextX = (i == count - 1
-							? chunks.width
-							: glyphPos[i*2+2]);
-
-						if(nextX > _x)
-						{
-							if(round && nextX - _x > _x - glyphX)
-								return chunks.offset + i;
-							else
-							{
-								return chunks.offset + i + 1;
-							}
-						}
-					}
-				}
-			}
-
-			chunks = chunks.next;
-		}
-
-		return lineSegment.count;
+		return (int)TextUtilities.xToOffset(chunks,x,round);
 	} //}}}
 
 	//{{{ xyToOffset() method

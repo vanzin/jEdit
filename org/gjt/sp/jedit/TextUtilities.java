@@ -23,6 +23,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.awt.font.*;
+import java.awt.geom.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.text.Segment;
@@ -85,115 +86,123 @@ public class TextUtilities
 	{
 		float x = 0.0f;
 
-		float spaceWidth = (float)styles[Token.NULL].getFont()
-			.getStringBounds(" ",fontRenderContext).getWidth();
-
 		Chunk first = null;
 		Chunk current = null;
 
 		int tokenListOffset = 0;
 
-		//{{{ Split on token boundaries, tabs and spaces
 		while(tokens.id != Token.END)
 		{
-			int flushLen = 0;
 			int flushIndex = tokenListOffset;
 
-			for(int i = 0; i < tokens.length; i++)
+			for(int i = tokenListOffset; i < tokenListOffset + tokens.length; i++)
 			{
-				char ch = seg.array[seg.offset + tokenListOffset + i];
+				char ch = seg.array[seg.offset + i];
 
-				if(ch == ' ')
+				if(ch == ' ' || ch == '\t')
 				{
-					if(i + tokenListOffset == seg.count - 1)
-						flushLen++;
+					if(i != flushIndex)
+					{
+						Chunk newChunk = new Chunk(
+							tokens.id,seg,flushIndex,
+							i,styles,fontRenderContext);
+						if(wrapMargin != 0
+							&& x + newChunk.width
+							> wrapMargin)
+						{
+							if(first != null)
+								out.add(first);
+							first = null;
+							x = newChunk.width;
+						}
+						else
+						{
+							newChunk.x = x;
+							x += newChunk.width;
+						}
+
+						if(first == null)
+							first = current = newChunk;
+						else
+						{
+							current.next = newChunk;
+							current = newChunk;
+						}
+					}
+
+					if(ch == ' ')
+					{
+						Chunk newChunk = new Chunk(
+							tokens.id,seg,i,i + 1,
+							styles,fontRenderContext);
+						newChunk.x = x;
+						if(first == null)
+							first = current = newChunk;
+						else
+						{
+							current.next = newChunk;
+							current = newChunk;
+						}
+
+						x += current.width;
+					}
+					else if(ch == '\t')
+					{
+						Chunk newChunk = new Chunk(
+							tokens.id,seg,i,i,
+							styles,fontRenderContext);
+						newChunk.x = x;
+						if(first == null)
+							first = current = newChunk;
+						else
+						{
+							current.next = newChunk;
+							current = newChunk;
+						}
+
+						x = e.nextTabStop(x,i + tokenListOffset);
+						current.width = x - current.x;
+						current.length = 1;
+					}
+
+					if(first == null)
+						first = current;
+
+					flushIndex = i + 1;
 				}
-				else if(ch != '\t')
+				else if(i == tokenListOffset + tokens.length - 1)
 				{
-					flushLen++;
-					if(i != tokens.length - 1)
-						continue;
-				}
+					Chunk newChunk = new Chunk(
+						tokens.id,seg,flushIndex,
+						i + 1,styles,fontRenderContext);
 
-				// inefficent, but GlyphVector API sucks
-				char[] text;
-				if(flushLen == 0)
-					text = null;
-				else
-				{
-					text = new char[flushLen];
-					System.arraycopy(seg.array,seg.offset
-						+ flushIndex,text,0,flushLen);
-				}
+					if(i == seg.count - 1 && wrapMargin != 0
+						&& x + newChunk.width > wrapMargin)
+					{
+						if(first != null)
+							out.add(first);
+						first = null;
+						x = newChunk.width;
+					}
+					else
+					{
+						newChunk.x = x;
+						x += newChunk.width;
+					}
 
-				Chunk newChunk = new Chunk(x,tokens.id,text,
-					flushIndex,styles,fontRenderContext);
-				if(current == null)
-					current = first = newChunk;
-				else
-				{
-					current.next = newChunk;
-					current = newChunk;
-				}
-
-				flushLen = 0;
-
-				x += newChunk.width;
-
-				flushIndex = tokenListOffset + i + 1;
-
-				if(ch == '\t')
-				{
-					current.length++;
-					x = e.nextTabStop(x,i - seg.offset);
-					current.width = x - current.x;
-					current.canWrap = true;
-				}
-				else if(ch == ' ')
-				{
-					current.length++;
-					x += spaceWidth;
-					current.canWrap = true;
+					if(first == null)
+						first = current = newChunk;
+					else
+					{
+						current.next = newChunk;
+						current = newChunk;
+					}
 				}
 			}
 
 			tokenListOffset += tokens.length;
 			tokens = tokens.next;
-		} //}}}
-
-		//{{{ Word wrap
-		if(wrapMargin != 0)
-		{
-			Chunk iter = first;
-			Chunk prev = null;
-			float width = 0.0f;
-			while(iter != null)
-			{
-				if(iter.x + iter.width - width > wrapMargin)
-				{
-					out.add(first);
-					// fixed with crappy mungeX param to
-					// paintChunkList() instead
-					/* Chunk i2 = first;
-					do
-					{
-						i2.x -= width;
-						i2 = i2.next;
-					}
-					while(i2 != iter); */
-
-					first = iter;
-					if(prev != null)
-						prev.next = null;
-
-					if(iter.next != null)
-						width = iter.x;
-				}
-
-				prev = iter;
-				iter = iter.next;
-			}
-		} //}}}
+		}
 
 		if(first != null)
 			out.add(first);
@@ -206,38 +215,139 @@ public class TextUtilities
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
-	 * @param mungeX When painting soft-wrapped text, you must set this
-	 * for subsequent lines in a wrapped set. This is needed because when
-	 * breaking lines, <code>lineToChunkList</code> doesn't reset the
-	 * <code>x</code> ordinate of the first chunk of each "virtual" line,
-	 * so painting without munging this ordinate would result in a
-	 * "stair-step" effect.
-	 *
+	 * @param width The width of the painting area, used for a token
+	 * background color hack
 	 * @return The width of the painted text
 	 * @since jEdit 4.0pre4
 	 */
 	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
-		float x, float y, boolean mungeX)
+		float x, float y, float width)
 	{
 		float _x = 0.0f;
 
-		float xOffset = (mungeX ? chunks.x : 0.0f);
+		Font lastFont = null;
+		Color lastColor = null;
 
 		while(chunks != null)
 		{
 			if(chunks.text != null)
 			{
-				gfx.setFont(chunks.style.getFont());
+				Font font = chunks.style.getFont();
+				Color bgColor = chunks.style.getBackgroundColor();
+				if(bgColor != null)
+				{
+					float x1 = (_x == 0.0f ? x : x + chunks.x);
+					float x2 = (chunks.next == null
+						? width
+						: x + chunks.x + chunks.width);
+
+					//LineMetrics lm = font.getLineMetrics(
+					//	chunks.text,gfx.getFontRenderContext());
+					FontMetrics fm = gfx.getFontMetrics();
+					gfx.setColor(bgColor);
+					gfx.fill(new Rectangle2D.Float(
+						x1,y - fm.getAscent(),
+						x2 - x1,fm.getAscent()));
+				}
+
+				gfx.setFont(font);
 				gfx.setColor(chunks.style.getForegroundColor());
-				gfx.drawGlyphVector(chunks.text,
-					x + chunks.x - xOffset,y);
+
+				gfx.drawString(chunks.text,x + chunks.x,y);
+
+				// Useful for debugging purposes
+				//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
+				//	chunks.width,10));
 			}
 
 			_x = chunks.x + chunks.width;
 			chunks = chunks.next;
 		}
 
-		return _x - xOffset;
+		return _x;
+	} //}}}
+
+	//{{{ offsetToX() method
+	/**
+	 * Converts an offset in a chunk list into an x co-ordinate.
+	 * @param chunks The chunk list
+	 * @param offset The offset
+	 * @since jEdit 4.0pre4
+	 */
+	public static float offsetToX(Chunk chunks, int offset)
+	{
+		float x = 0.0f;
+
+		while(chunks != null)
+		{
+			if(offset < chunks.offset + chunks.length)
+			{
+				if(chunks.text == null)
+					return chunks.x;
+				else
+				{
+					return chunks.x + chunks.positions[
+						(offset - chunks.offset) * 2];
+				}
+			}
+
+			x = chunks.x + chunks.width;
+			chunks = chunks.next;
+		}
+
+		return x;
+	} //}}}
+
+	//{{{ xToOffset() method
+	/**
+	 * Converts an x co-ordinate in a chunk list into an offset.
+	 * @param chunks The chunk list
+	 * @param x The x co-ordinate
+	 * @param round Round up to next letter if past the middle of a letter?
+	 * @since jEdit 4.0pre4
+	 */
+	public static int xToOffset(Chunk chunks, float x, boolean round)
+	{
+		int length = 0;
+
+		while(chunks != null)
+		{
+			if(x < chunks.x + chunks.width)
+			{
+				if(chunks.text == null)
+				{
+					if(round && chunks.x + chunks.width - x < x - chunks.x)
+						return chunks.offset + chunks.length;
+					else
+						return chunks.offset;
+				}
+				else
+				{
+					float _x = x - chunks.x;
+
+					for(int i = 0; i < chunks.length; i++)
+					{
+						float glyphX = chunks.positions[i*2];
+						float nextX = (i == chunks.length - 1
+							? chunks.width
+							: chunks.positions[i*2+2]);
+
+						if(nextX > _x)
+						{
+							if(round && nextX - _x > _x - glyphX)
+								return chunks.offset + i;
+							else
+								return chunks.offset + i + 1;
+						}
+					}
+				}
+			}
+
+			length = chunks.offset + chunks.length;
+			chunks = chunks.next;
+		}
+
+		return length;
 	} //}}}
 
 	//{{{ Chunk class
@@ -253,23 +363,27 @@ public class TextUtilities
 		public SyntaxStyle style;
 		public int offset;
 		public int length;
-		public GlyphVector text;
-
-		public boolean canWrap;
+		public String text;
+		public float[] positions;
 
 		public Chunk next;
 
-		Chunk(float x, int tokenType, char[] text, int offset,
+		Chunk(int tokenType, Segment seg, int offset, int end,
 			SyntaxStyle[] styles, FontRenderContext fontRenderContext)
 		{
-			this.x = x;
 			style = styles[tokenType];
-			if(text != null)
+
+			if(offset != end)
 			{
-				this.text = style.getFont().createGlyphVector(fontRenderContext,text);
-				this.width = (float)this.text.getLogicalBounds().getWidth();
-				this.length = text.length;
+				length = end - offset;
+				text = new String(seg.array,seg.offset + offset,length);
+
+				GlyphVector vector = style.getFont().createGlyphVector(
+					fontRenderContext,text);
+				width = (float)vector.getLogicalBounds().getWidth();
+				positions = vector.getGlyphPositions(0,length,null);
 			}
+
 			this.offset = offset;
 		}
 	} //}}}

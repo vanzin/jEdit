@@ -692,7 +692,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			int l = Math.abs(r.nextInt() % textArea.getBuffer()
 				.getLineCount());
-			
+
 			buffer.getLineText(l,seg);
 			lineToChunkList(seg,buffer.markTokens(l).getFirstToken());
 		}
@@ -801,7 +801,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				physicalLine).getFirstToken());
 
 			if(chunks != null)
-				x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine,false);
+				x += TextUtilities.paintChunkList(chunks,gfx,x,baseLine,getWidth());
 
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);

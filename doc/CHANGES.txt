@@ -2,6 +2,13 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre4
 
+Note that jEdit now has a source file, Java14.java, that only compiles
+under Java 2 version 1.4. Two new targets have been added to the
+build.xml file, "compile-13" and "dist-13". These will compile jEdit
+while skipping this source file. If you're compiling from the source
+yourself and running JDK 1.3, you must use these targets instead of the
+defaults.
+
 + New Features
 
 - Two JDK 1.4-specific options added to 'Appearance' option pane:

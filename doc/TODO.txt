@@ -2,19 +2,20 @@ TO DO
 
 short term plan:
 
+- narrow: insert line after first fucked
 - soft tabs bugs
 - maybe fix GUIUtilities.java to store maximisation state
 - 1-page files don't print
-- java: 0.0f highlighting
 - print should not use so much memory
-- xToOffset() needs a rewrite
-- xToOffset(): fucked with //\t
 - narrow/collapse fold/expand fold: exceptions
 - horizontal scrolling is fucked
 - when loading a file with collapsedFolds property, last line always
   visible
 - nextLineRequested still fucked
 - background color for tokens
+- idea to make things go faster: token marker splits on ' ', '\t'
+  then lineToChunkList() has much less work to do, and could even be
+  eliminated completely.
 
 + bugs:
 
