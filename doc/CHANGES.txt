@@ -1,5 +1,25 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.3pre1
+
+{{{ Miscellaneous
+
+- Rename Autosave & Backup option pane to Save & Backup, move some
+  options from General pane there (Marcelo Vanzin).
+
+}}}
+{{{ Bug Fixes
+
+- "Backup directory" feature now works if the file being edited is on a
+  different filesystem than the backup directory (Marcelo Vanzin).
+
+- Don't use two-stage save if the file's parent directory is not
+  writeable (Marcelo Vanzin).
+
+}}}
+
+}}}
+
 {{{ Version 4.2final
 
 Thanks to Brant Gurganus, Justin Dieters, Ollie Rutherfurd and Thomas

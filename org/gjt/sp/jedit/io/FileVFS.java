@@ -85,6 +85,24 @@ public class FileVFS extends VFS
 		return File.separatorChar;
 	} //}}}
 
+	//{{{ getTwoStageSaveName() method
+	/**
+	 * Returns a temporary file name based on the given path.
+	 *
+	 * <p>If the directory where the file would be created cannot be
+	 * written (i.e., no new files can be created in that directory),
+	 * this method returns <code>null</code>.</p>
+	 *
+	 * @param path The path name
+	 */
+	public String getTwoStageSaveName(String path)
+	{
+		File parent = new File(getParentOfPath(path));
+		return (parent.canWrite())
+			? super.getTwoStageSaveName(path)
+			: null;
+	} //}}}
+
 	//{{{ save() method
 	public boolean save(View view, Buffer buffer, String path)
 	{

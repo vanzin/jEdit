@@ -783,7 +783,7 @@ view.status.linesep-changed=Line separator set to {0}
 view.status.linesep-tooltip=Line separator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.mode-tooltip=Current edit mode, fold mode, and encoding
-view.st,atus.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
+view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
 view.status.multi-tooltip=Multiple selection mode (click to change)
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
 view.status.no-markers=no markers set
@@ -1572,7 +1572,7 @@ options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
 options.appearance.history=History text field entries to remember:
-options.appearance.menuSpillover=Number of items before menus spill over:    
+options.appearance.menuSpillover=Number of items before menus spill over:
 options.appearance.startup.label=Startup options
 options.appearance.showSplash=Show splash screen on startup
 options.appearance.showTips=Show tips on startup
@@ -1585,17 +1585,6 @@ options.appearance.textColors=Use jEdit text area colors in all text \
 	components
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
-#}}}
-
-#{{{ Autosave & Backup pane
-options.auto-back.label=Autosave & Backup
-options.auto-back.code=new AutosaveBackupOptionPane();
-options.auto-back.autosave=Autosave frequency (secs):
-options.auto-back.backups=Max number of backups:
-options.auto-back.backupDirectory=Backup directory:
-options.auto-back.backupPrefix=Backup filename prefix:
-options.auto-back.backupSuffix=Backup filename suffix:
-options.auto-back.backupEverySave=Backup on every save
 #}}}
 
 #{{{ Context Menu pane
@@ -1667,9 +1656,6 @@ options.general.restore.cli=... even if file names were specified on the \
 	command line
 options.general.sortBuffers=Sort buffer list (takes effect after restart)
 options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.twoStageSave=Two-stage save (safer but resets file owner on Unix)
-options.general.confirmSaveAll="Save All Buffers" asks for confirmation
-options.general.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Gutter pane
@@ -1749,6 +1735,19 @@ options.firewall.socks.host=SOCKS proxy host:
 options.firewall.socks.port=SOCKS proxy port:
 #}}}
 
+#{{{ Save & Backup pane
+options.save-back.label=Saving & Backup
+options.save-back.code=new SaveBackupOptionPane();
+options.save-back.autosave=Autosave frequency (secs):
+options.save-back.backups=Max number of backups:
+options.save-back.backupDirectory=Backup directory:
+options.save-back.backupPrefix=Backup filename prefix:
+options.save-back.backupSuffix=Backup filename suffix:
+options.save-back.backupEverySave=Backup on every save
+options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Unix)
+options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
+#}}}
+
 #{{{ Shortcuts pane
 options.shortcuts.label=Shortcuts
 options.shortcuts.code=new ShortcutsOptionPane();
@@ -1782,7 +1781,7 @@ grab-key.duplicate-shortcut.message=\
 	"{0}".\n\
 	\n\
 	Do you want to override this assignment?
-	
+
 grab-key.prefix-shortcut.title=Invalid Shortcut
 grab-key.prefix-shortcut.message=\
 	You cannot use this shortcut, because\n\
@@ -1842,6 +1841,7 @@ options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespac
 options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
+options.textArea.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Tool Bar pane
@@ -2162,7 +2162,7 @@ install-plugins.depend.title=Dependency Required
 install-plugins.depend.message=One or more of the plugins you are installing\n\
 	require additional plugins. They will be automatically\n\
 	installed if you continue.
-	
+
 plugin-manager.status.loaded=Loaded
 plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error

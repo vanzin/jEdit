@@ -155,6 +155,13 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		fracFontMetrics.setSelected(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 		addComponent(fracFontMetrics);
+
+		/* Strip trailing EOL */
+		stripTrailingEOL = new JCheckBox(jEdit.getProperty(
+			"options.general.stripTrailingEOL"));
+		stripTrailingEOL.setSelected(jEdit.getBooleanProperty("stripTrailingEOL"));
+		addComponent(stripTrailingEOL);
+
 	} //}}}
 
 	//{{{ _save() method
@@ -194,6 +201,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected() ? 3 : 0);
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
+		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -216,5 +224,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox electricBorders;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
+	private JCheckBox stripTrailingEOL;
 	//}}}
 }

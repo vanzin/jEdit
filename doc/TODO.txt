@@ -3,14 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-4.2final to do:
----------------
-
 goToBuffer() and 0-height edit panes
 check tips of the day
-proofread docs
 - document optional dependencies
-- news: deep indent, action bar, new cli options
 - help:
   - titles in search are fucked
 - sidebars: need a border or some sort
@@ -50,8 +45,6 @@ proofread docs
 - SLASH -vs- / shortcut issue
 - wrapped dock buttons broken
 - VFS browser pathsEqual(): case sensitivity!
-- first line problem solved by reset()
-- latest sftp: permissions not saved!
 - DnD still dosn't work as expected when draging from the same buffer,
 but differen text area (for example droping at the position where drag
 was started erases text)- no support for vertical pasting

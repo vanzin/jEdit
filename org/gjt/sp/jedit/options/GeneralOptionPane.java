@@ -153,26 +153,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
 
-		/* Two-stage save */
-		twoStageSave = new JCheckBox(jEdit.getProperty(
-			"options.general.twoStageSave"));
-		twoStageSave.setSelected(jEdit.getBooleanProperty(
-			"twoStageSave"));
-		addComponent(twoStageSave);
-
-		/* Confirm save all */
-		confirmSaveAll = new JCheckBox(jEdit.getProperty(
-			"options.general.confirmSaveAll"));
-		confirmSaveAll.setSelected(jEdit.getBooleanProperty(
-			"confirmSaveAll"));
-		addComponent(confirmSaveAll);
-
-		/* Strip trailing EOL */
-		stripTrailingEOL = new JCheckBox(jEdit.getProperty(
-			"options.general.stripTrailingEOL"));
-		stripTrailingEOL.setSelected(jEdit.getBooleanProperty("stripTrailingEOL"));
-		addComponent(stripTrailingEOL);
-
 	} //}}}
 
 	//{{{ _save() method
@@ -220,9 +200,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
-		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
-		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
-		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -238,8 +215,5 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
-	private JCheckBox twoStageSave;
-	private JCheckBox confirmSaveAll;
-	private JCheckBox stripTrailingEOL;
 	//}}}
 }

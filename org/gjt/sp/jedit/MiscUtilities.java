@@ -49,7 +49,7 @@ import org.gjt.sp.util.Log;
  * <li>{@link #constructPath(String,String)}</li>
  * </ul>
  * <b>String comparison:</b><p>
- 
+
  * A {@link #compareStrings(String,String,boolean)} method that unlike
  * <function>String.compareTo()</function>, correctly recognizes and handles
  * embedded numbers.<p>
@@ -485,7 +485,8 @@ public class MiscUtilities
 				>= backupTimeDistance)
 			{
 				backupFile.delete();
-				file.renameTo(backupFile);
+				if (!file.renameTo(backupFile))
+					moveFile(file, backupFile);
 			}
 		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
@@ -520,11 +521,73 @@ public class MiscUtilities
 						+ backupSuffix));
 				}
 
-				file.renameTo(new File(backupDirectory,
+				File backupFile = new File(backupDirectory,
 					backupPrefix + name + backupSuffix
-					+ "1" + backupSuffix));
+					+ "1" + backupSuffix);
+				if (!file.renameTo(backupFile))
+					moveFile(file, backupFile);
 			}
 		}
+	} //}}}
+
+	//{{{ moveFile() method
+	/**
+	 * Moves the source file to the destination.
+	 *
+	 * If the destination cannot be created or is a read-only file, the
+	 * method returns <code>false</code>. Otherwise, the contents of the
+	 * source are copied to the destination, the source is deleted,
+	 * and <code>true</code> is returned.
+	 *
+	 * @param source The source file to move.
+	 * @param dest   The destination where to move the file.
+	 * @return true on success, false otherwise.
+	 *
+	 * @since jEdit 4.3pre1
+	 */
+	public static boolean moveFile(File source, File dest)
+	{
+		boolean ok = false;
+
+		if ((dest.exists() && dest.canWrite())
+			|| (!dest.exists() && dest.getParentFile().canWrite()))
+		{
+			OutputStream fos = null;
+			InputStream fis = null;
+			try
+			{
+				fos = new FileOutputStream(dest);
+				fis = new FileInputStream(source);
+				byte[] buf = new byte[32768];
+				int read;
+				while ((read = fis.read(buf, 0, buf.length)) != -1)
+					fos.write(buf, 0, read);
+				ok = true;
+			}
+			catch (IOException ioe)
+			{
+				Log.log(Log.WARNING, MiscUtilities.class,
+					"Error moving file: " + ioe + " : " + ioe.getMessage());
+			}
+			finally
+			{
+				try
+				{
+					if(fos != null)
+						fos.close();
+					if(fis != null)
+						fis.close();
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,MiscUtilities.class,e);
+				}
+			}
+
+			if(ok)
+				source.delete();
+		}
+		return ok;
 	} //}}}
 
 	//{{{ fileToClass() method
