@@ -302,6 +302,16 @@ view.docking.alternateLayout=false
 view.toolbar.alternateLayout=false
 
 # Status bar
+view.status.visible=true
+view.status.show-caret-status=true
+view.status.show-edit-mode=true
+view.status.show-fold-mode=true
+view.status.show-encoding=true
+view.status.show-wrap=true
+view.status.show-multi-select=true
+view.status.show-overwrite=true
+view.status.show-line-seperator=true
+view.status.show-memory=true
 view.status.memory.foreground=#cccccc
 view.status.memory.background=#666699a
 

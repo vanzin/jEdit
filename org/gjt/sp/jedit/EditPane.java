@@ -520,7 +520,7 @@ public class EditPane extends JPanel implements EBComponent
 				if(view.getEditPane() == this)
 				{
 					StatusBar status = view.getStatus();
-					status.repaintCaretStatus();
+					status.updateCaretStatus();
 					status.updateBufferStatus();
 					status.updateMiscStatus();
 				}

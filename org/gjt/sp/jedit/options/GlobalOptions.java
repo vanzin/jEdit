@@ -1,5 +1,7 @@
 /*
  * GlobalOptions.java - Global options dialog
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  * Copyright (C) 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -54,6 +56,7 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new DockingOptionPane(), jEditGroup);
 		addOptionPane(new ContextOptionPane(), jEditGroup);
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
+		addOptionPane(new StatusBarOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new FirewallOptionPane(), jEditGroup);
 
