@@ -335,7 +335,12 @@ class PluginList
 		{
 			// new plugins can always be downloaded (assuming Mike
 			// maintains plugin central properly)
-			return (what.equals("plugin") || isSatisfied());
+			if(isSatisfied())
+				return true;
+			else if(what.equals("plugin"))
+				return plugin.canBeInstalled();
+			else
+				return false;
 		}
 
 		void satisfy(Roster roster, String installDirectory,

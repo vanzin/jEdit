@@ -80,6 +80,9 @@ sortByName=true
 # Sort recent file list
 sortRecent=false
 
+# Default firewall properties
+firewall.enabled=false
+
 #}}}
 
 #{{{ Buffer settings

@@ -252,6 +252,8 @@ public class OptionsDialog extends EnhancedDialog
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
 
+		addOptionPane(new OverviewOptionPane(), rootGroup);
+
 		// initialize the jEdit branch of the options tree
 		jEditGroup = new OptionGroup("jedit");
 
@@ -270,6 +272,7 @@ public class OptionsDialog extends EnhancedDialog
 		addOptionPane(new ToolBarOptionPane(), jEditGroup);
 		addOptionPane(new AbbrevsOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
+		addOptionPane(new FirewallOptionPane(), jEditGroup);
 
 		OptionGroup browserGroup = new OptionGroup("browser");
 		addOptionPane(new BrowserOptionPane(), browserGroup);

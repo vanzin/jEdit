@@ -68,7 +68,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.00.03.00";
+		return "04.00.04.00";
 	} //}}}
 
 	//{{{ main() method
@@ -839,6 +839,8 @@ public class jEdit
 		//defaults.put("TextField.font",font);
 		defaults.put("TextArea.font",font);
 		defaults.put("TextPane.font",font);
+
+		initProxy();
 
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
@@ -2578,7 +2580,7 @@ public class jEdit
 	private static void initMisc()
 	{
 		// Add our protocols to java.net.URL's list
-		System.getProperties().put("java.protocol.handler.pkgs",
+		System.getProperties().put("java.protocol.handler|.pkgs",
 			"org.gjt.sp.jedit.proto|" +
 			System.getProperty("java.protocol.handler.pkgs",""));
 
@@ -2605,11 +2607,11 @@ public class jEdit
 			int start = classpath.lastIndexOf(File
 				.pathSeparator,index) + 1;
 			// if started with java -jar jedit.jar
-			/* if(classpath.equalsIgnoreCase("jedit.jar"))
+			 if(classpath.equalsIgnoreCase("jedit.jar"))
 			{
 				jEditHome = System.getProperty("user.dir");
 			}
-			else */ if(index > start)
+			else if(index > start)
 			{
 				jEditHome = classpath.substring(start,
 					index - 1);
@@ -2617,15 +2619,21 @@ public class jEdit
 			else
 			{
 				// check if web start
-				/* if(jEdit.class.getResource("/modes/catalog") != null)
+				if(jEdit.class.getResource("/modes/catalog") != null)
 				{
 					// modes bundled in; hence web start
 					jEditHome = null;
 				}
-				else */
+				else
 				{
 					// use user.dir as last resort
 					jEditHome = System.getProperty("user.dir");
+
+					Log.log(Log.WARNING,jEdit.class,"jedit.jar not in class path!");
+					Log.log(Log.WARNING,jEdit.class,"Assuming jEdit is installed in "
+						+ jEditHome + ".");
+					Log.log(Log.WARNING,jEdit.class,"Override with jedit.home "
+						+ "system property.");
 				}
 			}
 		}
@@ -2849,6 +2857,72 @@ public class jEdit
 			String path = new File(directory,snippet).getPath();
 
 			BeanShell.runScript(null,path,false,false);
+		}
+	} //}}}
+
+	//{{{ initProxy() method
+	private static void initProxy()
+	{
+		boolean enabled = jEdit.getBooleanProperty("firewall.enabled");
+		if (!enabled) {
+			Log.log(Log.DEBUG, jEdit.class, "HTTP proxy disabled");
+			System.getProperties().remove("proxySet");
+			System.getProperties().remove("proxyHost");
+			System.getProperties().remove("proxyPort");
+			System.getProperties().remove("http.proxyHost");
+			System.getProperties().remove("http.proxyPort");
+			System.getProperties().remove("http.nonProxyHosts");
+			Authenticator.setDefault(null);
+		} else {
+			// set proxy host
+			String host = jEdit.getProperty("firewall.host");
+			if (host == null)
+				return;
+
+			System.setProperty("http.proxyHost", host);
+			Log.log(Log.DEBUG, this, "HTTP proxy enabled: " + host);
+			// set proxy port
+			String port = jEdit.getProperty("firewall.port");
+			if (port != null)
+				System.setProperty("http.proxyPort", port);
+
+			// set non proxy hosts list
+			String nonProxyHosts = jEdit.getProperty("firewall.nonProxyHosts");
+			if (nonProxyHosts != null)
+				System.setProperty("http.nonProxyHosts", nonProxyHosts);
+
+			// set proxy authentication
+			String username = jEdit.getProperty("firewall.user");
+			if (username == null || username.length()==0)
+			{
+				Log.log(Log.DEBUG, this, "HTTP proxy without user");
+				Authenticator.setDefault(new FirewallAuthenticator(null));
+			}
+			else
+			{
+				Log.log(Log.DEBUG, this, "HTTP proxy user: " + username);
+				PasswordAuthentication pw = new PasswordAuthentication(
+					username,
+					jEdit.getProperty("firewall.password").toCharArray()
+				);
+				Authenticator.setDefault(new FirewallAuthenticator(pw));
+			}
+		}
+	} //}}}
+
+	//{{{ FirewallAuthenticator class
+	class FirewallAuthenticator extends Authenticator
+	{
+		PasswordAuthentication pw;
+
+		public FirewallAuthenticator(PasswordAuthentication pw)
+		{
+			this.pw = pw;
+		}
+
+		protected PasswordAuthentication getPasswordAuthentication()
+		{
+			return pw;
 		}
 	} //}}}
 

@@ -1503,6 +1503,16 @@ grab-key.prefix-shortcut.message=\
 	Please choose another.
 #}}}
 
+#{{{ HTTP Proxy pane
+options.firewall.label=HTTP Proxy
+options.firewall.enabled=Enable HTTP proxy/firewall authentication
+options.firewall.host=Host:
+options.firewall.port=Port:
+options.firewall.user=Username:
+options.firewall.password=Password:
+options.firewall.nonProxy=No proxy for:
+#}}}
+
 #{{{ File System Browser panes
 options.browser.label=File System Browser
 options.browser.general.label=General
