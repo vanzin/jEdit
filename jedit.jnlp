@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<jnlp spec="1.0+" codebase="file:///home/slava/"
+  href="file:///home/slava/jEdit/jedit.jnlp">
+  <information>
+    <title>jEdit</title>
+
+    <vendor>Slava Pestov</vendor>
+    <homepage href="http://www.jedit.org" />
+
+    <description>jEdit is a programmer's text editor that can be made into a
+    rather powerful IDE by installing various plugins.</description>
+    <description kind="short">jEdit is a powerful programmer's text
+    editor.</description>
+    <description kind="tooltip">jEdit text editor</description>
+
+    <offline-allowed />
+  </information>
+
+  <resources>
+    <j2se version="1.2+" />
+    <jar href="jedit32webstart.jar" />
+    <jar href="jedit32webstart_aux1.jar" />
+  </resources>
+
+  <security>
+    <all-permissions />
+  </security>
+
+  <application-desc main-class="org.gjt.sp.jedit.jEdit" />
+</jnlp>
