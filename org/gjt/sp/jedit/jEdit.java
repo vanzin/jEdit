@@ -2251,7 +2251,13 @@ public class jEdit
 	 */
 	public static View getActiveView()
 	{
-		return activeView;
+		if(activeView == null)
+		{
+			// eg user just closed a view and didn't focus another
+			return viewsFirst;
+		}
+		else
+			return activeView;
 	} //}}}
 
 	//}}}

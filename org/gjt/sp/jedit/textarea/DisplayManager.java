@@ -567,9 +567,12 @@ public class DisplayManager
 		else
 		{
 			updateWrapSettings();
-			_notifyScreenLineChanges();
-			textArea.updateScrollBars();
-			textArea.recalculateLastPhysicalLine();
+			if(buffer.isLoaded())
+			{
+				_notifyScreenLineChanges();
+				textArea.updateScrollBars();
+				textArea.recalculateLastPhysicalLine();
+			}
 		}
 	} //}}}
 
