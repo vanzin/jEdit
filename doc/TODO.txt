@@ -13,9 +13,7 @@ and quirks that I need to fix eventually.
 - entering ../.. inside archive
 - remove a plugin with a key binding: null pointer exception
 - vfs updates still broken
-- vfs browser insert with multiple files
 - history text field tweak
-- search in subdirs always off
 - "downloading plugin list" label in plugin manager
 - delete word: horizontal scroll not updated
 - choose dir dialog: entering dir name in filename field
