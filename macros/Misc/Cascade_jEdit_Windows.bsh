@@ -4,6 +4,7 @@
  * windows from the upper-left corner of the desktop
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,8 @@
  * size or resolution has changed since the last editing session.  It will also
  * rearrange multiple view and their associated floating plugin windows
  * during an editing session.  It will not rearrange modeless dialog windows.
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -65,7 +68,7 @@ void cascadeJEditWindows(int startOffset, int incrOffset, int maxWindows)
 		dockableWindowNames = EditBus.getNamedList("DOCKABLE_WINDOWS");
 		for(j = 0; j < dockableWindowNames.length; ++j)
 		{
-			win = manager.getDockableWindow(dockableWindowNames[j]);
+			win = manager.getDockable(dockableWindowNames[j]);
 			if(win == null) continue;
 			c = win.getComponent().getParent();
 			// check if it's floating
@@ -89,6 +92,22 @@ void cascadeJEditWindows(int startOffset, int incrOffset, int maxWindows)
 
 // here are some reasonable values for window offsets
 cascadeJEditWindows(20, 20, 10);
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Cascade_jEdit_Windows.bsh</filename></para>
+    <abstract><para>
+        Rearranges view and floating plugin windows.
+    </para></abstract>
+    <para>
+        The windows are arranged in an overlapping <quote>cascade</quote>
+        pattern beginning near the upper left corner of the display.
+    </para>
+</listitem>
+
+*/
 
 // end of Cascade_jEdit_Windows.bsh
 

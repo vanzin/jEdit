@@ -5,6 +5,7 @@
  * once per compilation unit
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +45,9 @@
  * directories with the same name.  In that case, change the conflicting
  * guard names manually.
  *
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 void includeGuard()
@@ -66,6 +70,27 @@ void includeGuard()
 }
 
 includeGuard();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Include_Guard.bsh</filename></para>
+    <abstract><para>
+		Intended for C/C++ header files, this macro inserts a preprocessor
+		directive in the current buffer to ensure that the header is
+		included only once per compilation unit.
+    </para></abstract>
+    <para>
+        To use the macro, first place the caret at the beginning of the
+		header file before any uncommented text.  The macro will return to
+		this position upon completion.  The defined term that triggers the
+		<quote>include guard</quote> is taken from the buffer's name.
+    </para>
+</listitem>
+
+*/
+
 
 // end Include_Guard.bsh
 

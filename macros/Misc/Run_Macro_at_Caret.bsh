@@ -5,6 +5,7 @@
  * editing caret
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +43,9 @@
  * abbreviated name, pressing SPACE to trigger abbreviation
  * substitution, then C-SPACE to run this macro and invoke
  * the unabbreviated macro.
+ *
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -144,7 +148,8 @@ void selectMacroWord()
 		offset--;
 	int wordStart = TextUtilities.findWordStart(lineText, offset, noWordSep);
 	int wordEnd = TextUtilities.findWordEnd(lineText, offset + 1, noWordSep);
-	textArea.select(lineStart + wordStart, lineStart + wordEnd);
+	textArea.setSelection(new Selection.Range(lineStart + wordStart,
+		lineStart + wordEnd));
 }
 
 
@@ -196,4 +201,65 @@ noWordSep = "_/";
 pos = textArea.getCaretPosition();
 if( !doIt())
 	textArea.setCaretPosition(pos);
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Run_Macro_at_Caret.bsh</filename></para>
+    <abstract><para>
+        Executes the macro whose name appears at the editing caret.
+    </para></abstract>
+    <para>
+        When used with abbreviations for macro name, this macro allows the user to
+        execute any macro script from the keyboard by typing its name, without
+        the <filename>.bsh</filename> extension.
+        It will search for the requested script in both the system and user
+        macro directories, in each case using the caret text as a relative
+        path.
+    </para>
+
+    <para>
+        The full utility of this macro can be acheived when it is combined
+        with abbreviations for commonly used macros. To try it out, follow these
+        steps:
+    </para>
+
+    <procedure>
+        <step><para>In the <quote>Macro Shortcuts</quote> option pane, Associate
+        <filename>Run_Macro_at_Caret</filename> with the shortcut
+        <keycombo><keycap>Control</keycap><keycap>Space</keycap>
+        </keycombo>.</para></step>
+
+        <step><para>In the <quote>global</quote> abbreviation group, associate the
+        abbreviation <quote>dtt</quote> with the text <quote>/Text/Insert_Date</quote>.
+        The leading forward slash character is necessary and should be used
+        regardless of one's operating system.  Make sure that the abbreviation
+        option pane has the checkbox <guilabel>Space bar expands
+        abbrevs</guilabel> selected.</para></step>
+
+        <step><para>To activate the macro from the keyboard, type
+        <userinput>dtt</userinput> in a text buffer.</para></step>
+
+        <step><para>Press the space bar to expand <userinput>ddt</userinput> to
+        <userinput>/Text/Insert_Date</userinput></para></step>
+
+        <step><para>Press <keycombo><keycap>Control</keycap>
+        <keycap>Space</keycap></keycombo> to
+        run the macro. The text <userinput>/Text/Insert_Date</userinput> will
+        be replaced by the output of the <filename>Insert_Date</filename>
+        macro.</para></step>
+    </procedure>
+
+    <para>
+        Repeating this procedure allows the user to execute macros from the
+        keyboard using shortcut names instead of keystrokes.
+    </para>
+
+</listitem>
+
+*/
+
+
+// end Run_Macro_at_Caret.bsh
 

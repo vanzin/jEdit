@@ -3,6 +3,7 @@
  * jEdit text editor - displays all defined abbreviations
  * Copyright (C) 2001 John Gellene
  * email: jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +45,9 @@
  * the abbreviation set in the "Global Options" dialog.  If EXCLUDE_EMPTY_SETS
  * is set to true, the drop-down list will not by updated.  Clsoing the dialog
  * and running the macro again will obtain current data.
+ *
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -354,4 +358,28 @@ abbrevSets = getActiveSets();
 currentSet = null;
 Vector data = new Vector(20, 5);
 showAbbrevs();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Display_Abbreviations.bsh</filename></para>
+    <abstract><para>
+        Displays the abbreviations registered for each of jEdit's
+        editing modes.
+    </para></abstract>
+    <para>
+        The macro provides a read-only view of the abbreviations
+        contained in the <quote>Abbreviations</quote> option pane.  Pressing
+        a letter key will scroll the table to the first entry beginning with
+        that letter.  A further option is provided to write a selected mode's
+        abbreviations or all abbreviations in a text buffer for printing as a
+        reference. Notes in the source code listing point out some display options
+        that are configured by modifying global variables.
+    </para>
+</listitem>
+
+*/
+
+// end Display_Abbreviations.bsh
 

@@ -3,6 +3,7 @@
  * jEdit text editor - lists installed plugins by internal working name
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 void listPluginNames()
@@ -48,5 +52,26 @@ void listPluginNames()
 
 listPluginNames();
 
-// end of List_Plugin_Internal_Names.bsh
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>List_Plugin_Internal_Names.bsh</filename></para>
+    <abstract><para>
+        Writes a sorted list of installed plugins to the current buffer.
+    </para></abstract>
+    <para>
+        The form of each name is that used by
+        <function>jEdit.getPlugin()</function>.
+    </para>
+    <tip><para>
+        The name can be used in a macro to test for the presence of a
+        particular plugin.
+    </para></tip>
+</listitem>
+
+*/
+
+
+// end List_Plugin_Internal_Names.bsh
 
