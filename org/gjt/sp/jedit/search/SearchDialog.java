@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2003 Slava Pestov
+ * Copyright (C) 1998, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +252,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	private View view;
 
 	// fields
-	private HistoryTextField find, replace;
+	private HistoryTextArea find, replace;
 
 	private JRadioButton stringReplace, beanShellReplace;
 
@@ -286,6 +286,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	{
 		super(view,jEdit.getProperty("search.title"),false);
 
+		setEnterEnabled(false);
+		
 		this.view = view;
 
 		JPanel content = new JPanel(new BorderLayout());
@@ -293,8 +295,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		setContentPane(content);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(BorderLayout.NORTH,createFieldPanel());
-		centerPanel.add(BorderLayout.CENTER,createSearchSettingsPanel());
+		centerPanel.add(BorderLayout.CENTER,createFieldPanel());
+		centerPanel.add(BorderLayout.SOUTH,createSearchSettingsPanel());
 		content.add(BorderLayout.CENTER,centerPanel);
 		content.add(BorderLayout.SOUTH,createMultiFilePanel());
 
@@ -312,32 +314,44 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		EditBus.addToBus(this);
 	} //}}}
 
-	//{{{ createFieldPanel() method
-	private JPanel createFieldPanel()
+	//{{{ createFindLabelAndField() method
+	private void createFindLabelAndField(JPanel fieldPanel,
+		GridBagConstraints cons)
 	{
-		ButtonActionHandler actionHandler = new ButtonActionHandler();
-
-		JPanel fieldPanel = new JPanel(new VariableGridLayout(
-			VariableGridLayout.FIXED_NUM_COLUMNS,1));
-		fieldPanel.setBorder(new EmptyBorder(0,0,12,12));
-
 		JLabel label = new JLabel(jEdit.getProperty("search.find"));
 		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
 			.charAt(0));
-		find = new HistoryTextField("find");
+		find = new HistoryTextArea("find");
 		find.setColumns(25);
 
-		find.addActionListener(actionHandler);
 		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));
-		fieldPanel.add(label);
-		fieldPanel.add(find);
+		
+		cons.gridx = 0;
+		cons.weightx = 0.0f;
+		cons.weighty = 0.0f;
+		fieldPanel.add(label,cons);
+		cons.gridy++;
+		cons.weightx = 1.0f;
+		cons.weighty = 1.0f;
+		fieldPanel.add(new JScrollPane(find),cons);
+		cons.gridy++;
+	} //}}}
 
-		label = new JLabel(jEdit.getProperty("search.replace"));
+	//{{{ createReplaceLabelAndField() method
+	private void createReplaceLabelAndField(JPanel fieldPanel,
+		GridBagConstraints cons)
+	{
+		JLabel label = new JLabel(jEdit.getProperty("search.replace"));
 		label.setDisplayedMnemonic(jEdit.getProperty("search.replace.mnemonic")
 			.charAt(0));
 		label.setBorder(new EmptyBorder(12,0,0,0));
-		fieldPanel.add(label);
+
+		cons.gridx = 0;
+		cons.weightx = 0.0f;
+		cons.weighty = 0.0f;
+		fieldPanel.add(label,cons);
+		cons.gridy++;
 
 		ButtonGroup grp = new ButtonGroup();
 		ReplaceActionHandler replaceActionHandler = new ReplaceActionHandler();
@@ -347,29 +361,48 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		// tab from the search field to the replace field with
 		// one keystroke
 
-		Box replaceModeBox = new Box(BoxLayout.X_AXIS);
 		stringReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.string-replace-btn"));
 		stringReplace.addActionListener(replaceActionHandler);
 		grp.add(stringReplace);
-		replaceModeBox.add(stringReplace);
-
-		replaceModeBox.add(Box.createHorizontalStrut(12));
+		cons.gridwidth = 1;
+		fieldPanel.add(stringReplace,cons);
+		cons.gridx++;
+		cons.insets = new Insets(0,12,0,0);
 
 		beanShellReplace = new MyJRadioButton(jEdit.getProperty(
 			"search.beanshell-replace-btn"));
 		beanShellReplace.addActionListener(replaceActionHandler);
 		grp.add(beanShellReplace);
-		replaceModeBox.add(beanShellReplace);
+		fieldPanel.add(beanShellReplace,cons);
+		cons.gridx = 0;
+		cons.gridwidth = 2;
+		cons.insets = new Insets(0,0,0,0);
 
-		fieldPanel.add(replaceModeBox);
-
-		fieldPanel.add(Box.createVerticalStrut(3));
-
-		replace = new HistoryTextField("replace");
-		replace.addActionListener(actionHandler);
+		replace = new HistoryTextArea("replace");
 		label.setLabelFor(replace);
-		fieldPanel.add(replace);
+
+		cons.gridx = 0;
+		cons.gridy++;
+		cons.weightx = 1.0f;
+		cons.weighty = 1.0f;
+		fieldPanel.add(new JScrollPane(replace),cons);
+		cons.gridy++;
+	} //}}}
+
+	//{{{ createFieldPanel() method
+	private JPanel createFieldPanel()
+	{
+		JPanel fieldPanel = new JPanel(new GridBagLayout());
+		fieldPanel.setBorder(new EmptyBorder(0,0,12,12));
+
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.fill = GridBagConstraints.BOTH;
+		cons.gridy = 0;
+		cons.gridwidth = 2;
+
+		createFindLabelAndField(fieldPanel,cons);
+		createReplaceLabelAndField(fieldPanel,cons);
 
 		return fieldPanel;
 	} //}}}
@@ -572,6 +605,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		JPanel grid = new JPanel(new GridLayout(5,1,0,12));
 
 		findBtn = new JButton(jEdit.getProperty("search.findBtn"));
+		findBtn.setMnemonic(jEdit.getProperty("search.findBtn.mnemonic")
+			.charAt(0));
 		getRootPane().setDefaultButton(findBtn);
 		grid.add(findBtn);
 		findBtn.addActionListener(actionHandler);
