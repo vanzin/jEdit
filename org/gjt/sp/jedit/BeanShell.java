@@ -216,12 +216,12 @@ public class BeanShell
 	 * be read from the VFS corresponding to its path.
 	 * @param ownNamespace Macros are run in their own namespace, startup
 	 * scripts are run on the global namespace
-	 * @exception Throwable instances are thrown when various BeanShell errors
+	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 * @since jEdit 4.0pre7
 	 */
 	public static void _runScript(View view, String path, Reader in,
-		boolean ownNamespace) throws Throwable
+		boolean ownNamespace) throws Exception
 	{
 		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
 
@@ -279,15 +279,9 @@ public class BeanShell
 
 			interp.eval(in,namespace,path);
 		}
-		catch(Throwable e)
+		catch(Exception e)
 		{
-			if(e instanceof TargetError)
-				throw ((TargetError)e).getTarget();
-
-			if(e instanceof InvocationTargetException)
-				throw ((InvocationTargetException)e).getTargetException();
-
-			throw e;
+			handleException(e);
 		}
 		finally
 		{
@@ -342,12 +336,12 @@ public class BeanShell
 	 * @param view The view (may be null)
 	 * @param namespace The namespace
 	 * @param command The expression
-	 * @exception Throwable instances are thrown when various BeanShell
+	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
 	 * @since jEdit 3.2pre7
 	 */
 	public static Object _eval(View view, NameSpace namespace, String command)
-		throws Throwable
+		throws Exception
 	{
 		Interpreter interp = createInterpreter(namespace);
 
@@ -364,15 +358,11 @@ public class BeanShell
 
 			return interp.eval(command);
 		}
-		catch(Throwable e)
+		catch(Exception e)
 		{
-			if(e instanceof TargetError)
-				throw ((TargetError)e).getTarget();
-
-			if(e instanceof InvocationTargetException)
-				throw ((InvocationTargetException)e).getTargetException();
-
-			throw e;
+			handleException(e);
+			// never called
+			return null;
 		}
 	} //}}}
 
@@ -385,12 +375,12 @@ public class BeanShell
 	 * @param childNamespace If the method body should be run in a new
 	 * namespace (slightly faster). Note that you must pass a null namespace
 	 * to the runCachedBlock() method if you do this
-	 * @exception Throwable instances are thrown when various BeanShell errors
+	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 * @since jEdit 3.2pre5
 	 */
 	public static String cacheBlock(String id, String code,
-		boolean childNamespace) throws Throwable
+		boolean childNamespace) throws Exception
 	{
 		String name;
 		if(id == null)
@@ -418,12 +408,12 @@ public class BeanShell
 	 * @param view The view
 	 * @param namespace The namespace to run the code in. Can only be null if
 	 * childNamespace parameter was true in cacheBlock() call
-	 * @exception Throwable instances are thrown when various BeanShell errors
+	 * @exception Exception instances are thrown when various BeanShell errors
 	 * occur
 	 * @since jEdit 3.2pre5
 	 */
 	public static Object runCachedBlock(String id, View view, NameSpace namespace)
-		throws Throwable
+		throws Exception
 	{
 		if(namespace == null)
 			namespace = global;
@@ -452,15 +442,11 @@ public class BeanShell
 			else
 				return retVal;
 		}
-		catch(Throwable e)
+		catch(Exception e)
 		{
-			if(e instanceof TargetError)
-				throw ((TargetError)e).getTarget();
-
-			if(e instanceof InvocationTargetException)
-				throw ((InvocationTargetException)e).getTargetException();
-
-			throw e;
+			handleException(e);
+			// never called
+			return null;
 		}
 		finally
 		{
@@ -589,6 +575,29 @@ public class BeanShell
 	private static int cachedBlockCounter;
 	//}}}
 
+	//{{{ handleException() method
+	private static void handleException(Exception e) throws Exception
+	{
+		if(e instanceof TargetError)
+		{
+			Throwable t = ((TargetError)e).getTarget();
+			if(t instanceof Exception)
+				throw (Exception)t;
+			else if(t instanceof Error)
+				throw (Error)t;
+		}
+
+		if(e instanceof InvocationTargetException)
+		{
+			Throwable t = ((InvocationTargetException)e).getTargetException();
+			if(t instanceof Exception)
+				throw (Exception)t;
+			else if(t instanceof Error)
+				throw (Error)t;
+		}
+
+		throw e;
+	}
 	//{{{ createInterpreter() method
 	private static Interpreter createInterpreter(NameSpace nameSpace)
 	{

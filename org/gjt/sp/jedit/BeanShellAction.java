@@ -45,21 +45,30 @@ public class BeanShellAction extends EditAction
 		if(isSelected != null)
 		{
 			String cachedIsSelectedName = "selected_" + sanitizedName;
-			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-				isSelected,true);
+			try
+			{
+				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
+					isSelected,true);
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,this,e);
+
+				new BeanShellErrorDialog(null,e.toString());
+			}
 		}
 	}
 
 	public void invoke(View view)
 	{
-		if(cachedCode == null)
-		{
-			String cachedCodeName = "action_" + sanitizedName;
-			cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
-		}
-
 		try
 		{
+			if(cachedCode == null)
+			{
+				String cachedCodeName = "action_" + sanitizedName;
+				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
+			}
+
 			BeanShell.runCachedBlock(cachedCode,view,null);
 		}
 		catch(Throwable e)

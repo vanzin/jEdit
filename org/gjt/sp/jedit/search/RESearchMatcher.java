@@ -138,7 +138,7 @@ public class RESearchMatcher implements SearchMatcher
 	 * within this matcher performed.
 	 * @param text The text
 	 */
-	public String substitute(String text) throws Throwable
+	public String substitute(String text) throws Exception
 	{
 		REMatch match = re.getMatch(text);
 		if(match == null)
