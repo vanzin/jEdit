@@ -7,10 +7,8 @@ and quirks that I need to fix eventually.
 
 I'm releasing 4.2pre1 ASAP.
 
+- finish plugin api updating guide
 - browser: enter with table active
-- save file --> collapse to < visibleLines -- click beyond last line
-  --> exception
-- while loading --> scroll bar
 - box in io progress
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
@@ -24,6 +22,9 @@ I'm releasing 4.2pre1 ASAP.
 
 ================================
 
+- save file --> collapse to < visibleLines -- click beyond last line
+  --> exception
+- while loading --> scroll bar
 - load help toc in a thread, do help search in a thread
 - update quicknotepad docs
 - don't need property cache if activate=startup
