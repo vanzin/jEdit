@@ -25,7 +25,6 @@ dragOver() method)
 - not an error, but it would be nice to select text that was dropped as
 it is done in most text editors
 - C+d & killring
-- rect select response to buffer events
 - jEdit.checkBufferStatus() fucks with split panes
 - nop filec
 - complete word not wide enough

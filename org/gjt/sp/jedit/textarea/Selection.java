@@ -581,6 +581,8 @@ public abstract class Selection implements Cloneable
 				{
 					this.startLine = buffer.getLineOfOffset(
 						this.start);
+					this.endLine = buffer.getLineOfOffset(
+						this.end);
 				}
 				return true;
 			}
