@@ -829,7 +829,16 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 				// to notify listeners that any existing
 				// selection has been deactivated
-				filesSelected();
+
+				// turns out under some circumstances this
+				// method can switch the current buffer in
+				// BROWSER mode.
+
+				// in any case, this is only needed for the
+				// directory chooser (why?), so we add a
+				// check. otherwise poor Rick will go insane.
+				if(mode == CHOOSE_DIRECTORY_DIALOG)
+					filesSelected();
 			}
 		});
 	} //}}}
