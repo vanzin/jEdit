@@ -112,12 +112,13 @@ public class TextUtilities
 		// 1 because we've already 'seen' the first bracket
 		int count = 1;
 
-		Buffer.TokenList tokenList = buffer.markTokens(line);
+		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+		buffer.markTokens(line,tokenHandler);
 
 		// Get the syntax token at 'offset'
 		// only tokens with the same type will be checked for
 		// the corresponding bracket
-		byte idOfBracket = getTokenAtOffset(tokenList.getFirstToken(),offset).id;
+		byte idOfBracket = getTokenAtOffset(tokenHandler.getFirstToken(),offset).id;
 
 		boolean haveTokens = true;
 
@@ -135,20 +136,22 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenList = buffer.markTokens(line);
+							tokenHandler.reset();
+							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList.getFirstToken(),i).id == idOfBracket)
+						if(getTokenAtOffset(tokenHandler.getFirstToken(),i).id == idOfBracket)
 							count++;
 					}
 					else if(ch == cprime)
 					{
 						if(!haveTokens)
 						{
-							tokenList = buffer.markTokens(line);
+							tokenHandler.reset();
+							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList.getFirstToken(),i).id == idOfBracket)
+						if(getTokenAtOffset(tokenHandler.getFirstToken(),i).id == idOfBracket)
 						{
 							count--;
 							if(count == 0)
@@ -181,20 +184,22 @@ public class TextUtilities
 					{
 						if(!haveTokens)
 						{
-							tokenList = buffer.markTokens(line);
+							tokenHandler.reset();
+							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList.getFirstToken(),i).id == idOfBracket)
+						if(getTokenAtOffset(tokenHandler.getFirstToken(),i).id == idOfBracket)
 							count++;
 					}
 					else if(ch == cprime)
 					{
 						if(!haveTokens)
 						{
-							tokenList = buffer.markTokens(line);
+							tokenHandler.reset();
+							buffer.markTokens(line,tokenHandler);
 							haveTokens = true;
 						}
-						if(getTokenAtOffset(tokenList.getFirstToken(),i).id == idOfBracket)
+						if(getTokenAtOffset(tokenHandler.getFirstToken(),i).id == idOfBracket)
 						{
 							count--;
 							if(count == 0)

@@ -41,6 +41,7 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  *
  * @see org.gjt.sp.jedit.syntax.Token
+ * @see org.gjt.sp.jedit.syntax.TokenHandler
  */
 public class TokenMarker
 {
@@ -152,7 +153,7 @@ public class TokenMarker
 	 * Do not call this method directly; call Buffer.markTokens() instead.
 	 */
 	public LineContext markTokens(LineContext prevContext,
-		Buffer.TokenList tokenList, Segment line)
+		TokenHandler tokenHandler, Segment line)
 	{
 		this.context = new LineContext();
 
@@ -194,7 +195,7 @@ public class TokenMarker
 				pattern.count = context.inRule.sequenceLengths[1];
 				pattern.offset = context.inRule.sequenceLengths[0];
 
-				b = handleRule(tokenList, line, context.inRule);
+				b = handleRule(tokenHandler, line, context.inRule);
 
 				context = tempContext;
 
@@ -210,21 +211,21 @@ public class TokenMarker
 						{
 							if (context.inRule == null)
 							{
-								markKeyword(tokenList,line,lastKeyword,pos);
+								markKeyword(tokenHandler,line,lastKeyword,pos);
 
-								tokenList.addToken(pos - lastOffset,
+								tokenHandler.handleToken(pos - lastOffset,
 									context.rules.getDefault(),
 									context.rules);
 							}
 							else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
 							{
-								tokenList.addToken(pos - lastOffset,
+								tokenHandler.handleToken(pos - lastOffset,
 									context.inRule.token,
 									context.rules);
 							}
 							else
 							{
-								tokenList.addToken(pos - lastOffset, Token.INVALID,
+								tokenHandler.handleToken(pos - lastOffset, Token.INVALID,
 									context.rules);
 							}
 						}
@@ -233,13 +234,13 @@ public class TokenMarker
 
 						if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
-							tokenList.addToken(pattern.count,
+							tokenHandler.handleToken(pattern.count,
 								context.rules.getDefault(),
 								context.rules);
 						}
 						else
 						{
-							tokenList.addToken(pattern.count,
+							tokenHandler.handleToken(pattern.count,
 								context.inRule.token,
 								context.rules);
 						}
@@ -266,7 +267,7 @@ public class TokenMarker
 
 				tempEscaped = escaped;
 
-				b = handleRule(tokenList, line, rule);
+				b = handleRule(tokenHandler, line, rule);
 
 				// swap back the buffer pattern
 				pattern = tempPattern;
@@ -289,7 +290,7 @@ public class TokenMarker
 				// if we match the end of the span, or if this is a "hard" span,
 				// we continue to the next character; otherwise, we check all
 				// applicable rules below
-				if (!handleRule(tokenList,line,rule)
+				if (!handleRule(tokenHandler,line,rule)
 					|| (rule.action & SOFT_SPAN) == 0)
 				{
 					escaped = false;
@@ -315,7 +316,7 @@ public class TokenMarker
 				}
 
 				// stop checking rules if there was a match and go to next pos
-				if (!handleRule(tokenList,line,rule))
+				if (!handleRule(tokenHandler,line,rule))
 					break;
 
 				rule = rule.next;
@@ -326,7 +327,7 @@ public class TokenMarker
 
 		//{{{ check for keywords at the line's end
 		if(context.inRule == null)
-			markKeyword(tokenList, line, lastKeyword, lineLength);
+			markKeyword(tokenHandler, line, lastKeyword, lineLength);
 		//}}}
 
 		//{{{ mark all remaining characters
@@ -334,7 +335,7 @@ public class TokenMarker
 		{
 			if (context.inRule == null)
 			{
-				tokenList.addToken(lineLength - lastOffset,
+				tokenHandler.handleToken(lineLength - lastOffset,
 					context.rules.getDefault(),
 					context.rules);
 			}
@@ -343,13 +344,13 @@ public class TokenMarker
 				(context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) != 0
 			)
 			{
-				tokenList.addToken(lineLength - lastOffset,Token.INVALID,
+				tokenHandler.handleToken(lineLength - lastOffset,Token.INVALID,
 					context.rules);
 				context.inRule = null;
 			}
 			else
 			{
-				tokenList.addToken(lineLength - lastOffset,
+				tokenHandler.handleToken(lineLength - lastOffset,
 					context.inRule.token,
 					context.rules);
 
@@ -360,7 +361,7 @@ public class TokenMarker
 			}
 		} //}}}
 
-		tokenList.addToken(0,Token.END,context.rules);
+		tokenHandler.handleToken(0,Token.END,context.rules);
 
 		return context.intern();
 	} //}}}
@@ -387,12 +388,8 @@ public class TokenMarker
 	/**
 	 * Checks if the rule matches the line at the current position
 	 * and handles the rule if it does match
-	 * @param line Segment to check rule against
-	 * @param checkRule ParserRule to check against line
-	 * @return true,  keep checking other rules
-	 *     <br>false, stop checking other rules
 	 */
-	private boolean handleRule(Buffer.TokenList tokenList, Segment line,
+	private boolean handleRule(TokenHandler tokenHandler, Segment line,
 		ParserRule checkRule)
 	{
 		if (pattern.count == 0) return true;
@@ -437,12 +434,12 @@ public class TokenMarker
 		{
 			if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
 			{
-				tokenList.addToken(pos - lastOffset, Token.INVALID,
+				tokenHandler.handleToken(pos - lastOffset, Token.INVALID,
 					context.rules);
 			}
 			else
 			{
-				tokenList.addToken(pos - lastOffset,
+				tokenHandler.handleToken(pos - lastOffset,
 					context.inRule.token,
 					context.rules);
 			}
@@ -465,7 +462,7 @@ public class TokenMarker
 				}
 			}
 
-			markKeyword(tokenList, line, lastKeyword, pos);
+			markKeyword(tokenHandler, line, lastKeyword, pos);
 
 			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
 			{
@@ -479,7 +476,7 @@ public class TokenMarker
 				// mark previous sequence as NULL (plain text)
 				if (lastOffset < pos)
 				{
-					tokenList.addToken(pos - lastOffset,
+					tokenHandler.handleToken(pos - lastOffset,
 						context.rules.getDefault(),
 						context.rules);
 				}
@@ -490,7 +487,7 @@ public class TokenMarker
 			//{{{ SEQ
 			case 0:
 				// this is a plain sequence rule
-				tokenList.addToken(pattern.count,checkRule.token,
+				tokenHandler.handleToken(pattern.count,checkRule.token,
 					context.rules);
 				lastOffset = pos + pattern.count;
 
@@ -505,7 +502,7 @@ public class TokenMarker
 				{
 					if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 					{
-						tokenList.addToken(pattern.count,
+						tokenHandler.handleToken(pattern.count,
 							context.rules.getDefault(),
 							context.rules);
 						lastOffset = pos + pattern.count;
@@ -528,13 +525,13 @@ public class TokenMarker
 					{
 						if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 						{
-							tokenList.addToken(pattern.count,
+							tokenHandler.handleToken(pattern.count,
 								context.rules.getDefault(),
 								context.rules);
 						}
 						else
 						{
-							tokenList.addToken(pattern.count,
+							tokenHandler.handleToken(pattern.count,
 								checkRule.token,
 								context.rules);
 						}
@@ -550,15 +547,15 @@ public class TokenMarker
 			case EOL_SPAN:
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pattern.count,
+					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
-					tokenList.addToken(lineLength - (pos + pattern.count),
+					tokenHandler.handleToken(lineLength - (pos + pattern.count),
 						checkRule.token,context.rules);
 				}
 				else
 				{
-					tokenList.addToken(lineLength - pos,
+					tokenHandler.handleToken(lineLength - pos,
 						checkRule.token,context.rules);
 				}
 				lastOffset = lineLength;
@@ -571,7 +568,7 @@ public class TokenMarker
 			case MARK_PREVIOUS:
 				if (lastKeyword > lastOffset)
 				{
-					tokenList.addToken(lastKeyword - lastOffset,
+					tokenHandler.handleToken(lastKeyword - lastOffset,
 						context.rules.getDefault(),
 						context.rules);
 					lastOffset = lastKeyword;
@@ -579,15 +576,15 @@ public class TokenMarker
 
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pos - lastOffset,
+					tokenHandler.handleToken(pos - lastOffset,
 						checkRule.token,context.rules);
-					tokenList.addToken(pattern.count,
+					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
 				}
 				else
 				{
-					tokenList.addToken(pos - lastOffset + pattern.count,
+					tokenHandler.handleToken(pos - lastOffset + pattern.count,
 						checkRule.token,context.rules);
 				}
 				lastOffset = pos + pattern.count;
@@ -599,7 +596,7 @@ public class TokenMarker
 				context.inRule = checkRule;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pattern.count,
+					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
 					lastOffset = pos + pattern.count;
@@ -629,15 +626,15 @@ public class TokenMarker
 				context.inRule = null;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenList.addToken(pos - lastOffset,
+					tokenHandler.handleToken(pos - lastOffset,
 						checkRule.token,context.rules);
-					tokenList.addToken(pattern.count,
+					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
 				}
 				else
 				{
-					tokenList.addToken((pos + pattern.count) - lastOffset,
+					tokenHandler.handleToken((pos + pattern.count) - lastOffset,
 						checkRule.token,context.rules);
 				}
 				lastKeyword = lastOffset = pos + pattern.count;
@@ -652,7 +649,7 @@ public class TokenMarker
 	} //}}}
 
 	//{{{ markKeyword() method
-	private void markKeyword(Buffer.TokenList tokenList, Segment line,
+	private void markKeyword(TokenHandler tokenHandler, Segment line,
 		int start, int end)
 	{
 		KeywordMap keywords = context.rules.getKeywords();
@@ -709,11 +706,11 @@ public class TokenMarker
 			{
 				if(start != lastOffset)
 				{
-					tokenList.addToken(start - lastOffset,
+					tokenHandler.handleToken(start - lastOffset,
 						context.rules.getDefault(),
 						context.rules);
 				}
-				tokenList.addToken(len,Token.DIGIT,context.rules);
+				tokenHandler.handleToken(len,Token.DIGIT,context.rules);
 				lastKeyword = lastOffset = end;
 
 				return;
@@ -728,11 +725,11 @@ public class TokenMarker
 			{
 				if(start != lastOffset)
 				{
-					tokenList.addToken(start - lastOffset,
+					tokenHandler.handleToken(start - lastOffset,
 						context.rules.getDefault(),
 						context.rules);
 				}
-				tokenList.addToken(len,id,context.rules);
+				tokenHandler.handleToken(len,id,context.rules);
 				lastKeyword = lastOffset = end;
 			}
 		}
