@@ -29,6 +29,7 @@ JEDIT 4.0 VERSION HISTORY
   adds that file's directory to the favorites, instead of showing an
   error message
 - The edit server now un-iconifies the view, if necessary
+- Updated ML mode (Ingmar Stein)
 
 + Bug Fixes
 

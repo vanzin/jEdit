@@ -21,6 +21,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*; // not useful in macros?
 import org.gjt.sp.jedit.options.*; // ditto?
 import org.gjt.sp.jedit.pluginmgr.*;
+import org.gjt.sp.jedit.print.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;

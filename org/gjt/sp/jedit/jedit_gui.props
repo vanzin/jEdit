@@ -207,7 +207,9 @@ file=new-file \
      save-a-copy-as \
      save-all \
      - \
+     page-setup \
      print \
+     print-selection \
      - \
      exit
 file.label=$File
@@ -233,7 +235,9 @@ save.label=$Save
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll...
+page-setup.label=Pa$ge Setup...
 print.label=$Print...
+print-selection.label=Prin$t Selection...
 exit.label=E$xit
 #}}}
 

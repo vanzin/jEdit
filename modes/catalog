@@ -106,7 +106,7 @@
 				FILE_NAME_GLOB="*{makefile,.mak}" />
 
 <MODE NAME="ml"			FILE="ml.xml"
-				FILE_NAME_GLOB="*.ml" />
+				FILE_NAME_GLOB="*.{sml,ml}" />
 
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
