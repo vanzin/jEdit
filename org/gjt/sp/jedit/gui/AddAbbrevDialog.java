@@ -64,7 +64,12 @@ public class AddAbbrevDialog extends JDialog
 		editor.getAfterCaretTextArea().addKeyListener(listener);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		GUIUtilities.requestFocus(this,editor.getBeforeCaretTextArea());
+
+		if(abbrev == null)
+			GUIUtilities.requestFocus(this,editor.getAbbrevField());
+		else
+			GUIUtilities.requestFocus(this,editor.getBeforeCaretTextArea());
+
 		pack();
 		setLocationRelativeTo(view);
 		show();

@@ -1,5 +1,8 @@
 /*
  * AbbrevEditor.java - Panel for editing abbreviations
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,14 +22,17 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class AbbrevEditor extends JPanel
 {
+	//{{{ AbbrevEditor constructor
 	public AbbrevEditor()
 	{
 		GridBagLayout layout = new GridBagLayout();
@@ -80,18 +86,21 @@ public class AbbrevEditor extends JPanel
 		scroller = new JScrollPane(afterCaret);
 		layout.setConstraints(scroller,cons);
 		add(scroller);
-	}
+	} //}}}
 
+	//{{{ getAbbrev() method
 	public String getAbbrev()
 	{
 		return abbrev.getText();
-	}
+	} //}}}
 
+	//{{{ setAbbrev() method
 	public void setAbbrev(String abbrev)
 	{
 		this.abbrev.setText(abbrev);
-	}
+	} //}}}
 
+	//{{{ getExpansion() method
 	public String getExpansion()
 	{
 		StringBuffer buf = new StringBuffer();
@@ -145,8 +154,9 @@ public class AbbrevEditor extends JPanel
 		}
 
 		return buf.toString();
-	}
+	} //}}}
 
+	//{{{ setExpansion() method
 	public void setExpansion(String expansion)
 	{
 		if(expansion == null)
@@ -195,19 +205,28 @@ public class AbbrevEditor extends JPanel
 
 		beforeCaret.setText(beforeCaretText);
 		afterCaret.setText(afterCaretText);
-	}
+	} //}}}
 
+	//{{{ getAbbrevField() method
+	public JTextField getAbbrevField()
+	{
+		return abbrev;
+	} //}}}
+
+	//{{{ getBeforeCaretTextArea() method
 	public JTextArea getBeforeCaretTextArea()
 	{
 		return beforeCaret;
-	}
+	} //}}}
 
+	//{{{ getAfterCaretTextArea() method
 	public JTextArea getAfterCaretTextArea()
 	{
 		return afterCaret;
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private JTextField abbrev;
 	private JTextArea beforeCaret, afterCaret;
+	//}}}
 }

@@ -42,6 +42,7 @@ JEDIT 4.0 VERSION HISTORY
 - Tool bar tooltips were broken
 - With the Windows look and feel, file names were invisible in the file
   system browser
+- In the help viewer, the top-level user's guide link was broken
 
 * Version 4.0pre1
 
