@@ -53,7 +53,7 @@ public class BrowserView extends JPanel
 		tree.setCellRenderer(renderer);
 		tree.setEditable(false);
 		tree.addTreeExpansionListener(new TreeHandler());
-		tree.putClientProperty("JTree.lineStyle", "Horizontal");
+		tree.putClientProperty("JTree.lineStyle", "Angled");
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
 

@@ -17,8 +17,6 @@ JEDIT 4.0 VERSION HISTORY
   - A+q, A+a: page up, page down
   - A+z, A+x: home, end
   - A+d: delete next character
-- File->Recent Directories menu lists directories that were recently
-  visted in the file system browser
 - A new View->Docking menu; contains commands for closing the left, top,
   right and bottom docking areas (shortcuts: C+e 1,2,3,4)
 
@@ -41,12 +39,18 @@ JEDIT 4.0 VERSION HISTORY
 - '~' in buffer and directory path names is now automatically expanded
   to the home directory
 - Improved undo
-- File selection dialog boxes now have a status bar that shows the
-  number of pending I/O requests
-- Middle mouse button click in file system browser now has the same
-  effect as double-clicking
-- You can now enter relative paths in the file system browser's path
-  field
+- File system browser improvements:
+  - File->Recent Directories menu lists directories that were recently
+    visted in the file system browser
+  - File selection dialog boxes now have a status bar that shows the
+    number of pending I/O requests
+  - Middle mouse button click in file system browser now has the same
+    effect as double-clicking
+  - You can now enter relative paths in the file system browser's path
+    field
+  - 'More' menu split into 'Commands' and 'Plugins' menus
+  - 'Commands' menu and tool bar now have the same set of commands
+  - 'Favorites' menu added for quicker access to favorites
 
 + Bug Fixes
 

@@ -48,7 +48,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 		if(file != null)
 		{
 			this.file = file;
-			this.vfs = VFSManager.getVFSForPath(file.path);
+
+			VFS vfs = VFSManager.getVFSForPath(file.path);
 
 			boolean delete = (vfs.getCapabilities() & VFS.DELETE_CAP) != 0;
 			boolean rename = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
@@ -91,8 +92,6 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 			addSeparator();
 		}
-		else
-			vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
 		add(createMenuItem("up"));
 		add(createMenuItem("reload"));
@@ -106,10 +105,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 		add(createMenuItem("new-directory"));
 
-		// note that we don't display the search in directory command
-		// in open and save dialog boxes
-		if(browser.getMode() == VFSBrowser.BROWSER
-			&& vfs instanceof FileVFS)
+		if(browser.getMode() == VFSBrowser.BROWSER)
 		{
 			addSeparator();
 			add(createMenuItem("search-in-directory"));
