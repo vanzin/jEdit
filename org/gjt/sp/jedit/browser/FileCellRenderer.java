@@ -34,10 +34,11 @@ import org.gjt.sp.jedit.*;
 
 public class FileCellRenderer extends JLabel implements TreeCellRenderer
 {
-	public static Icon fileIcon;
-	public static Icon dirIcon;
-	public static Icon filesystemIcon;
-	public static Icon loadingIcon;
+	public static Icon fileIcon = GUIUtilities.loadIcon("file.gif");
+	public static Icon dirIcon = GUIUtilities.loadIcon("closed_folder.gif");
+	public static Icon openDirIcon = GUIUtilities.loadIcon("open_folder.gif");
+	public static Icon filesystemIcon = GUIUtilities.loadIcon("drive.gif");
+	public static Icon loadingIcon = GUIUtilities.loadIcon("drive.gif");
 
 	//{{{ FileCellRenderer constructor
 	public FileCellRenderer()
@@ -75,7 +76,7 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 			setBorder(opened ? openBorder : closedBorder);
 
 			setIcon(showIcons
-				? getIconForFile(file)
+				? getIconForFile(file,expanded)
 				: null);
 			setFont(file.type == VFS.DirectoryEntry.FILE
 				? plainFont : boldFont);
@@ -118,10 +119,10 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 	//{{{ Protected members
 
 	//{{{ getIconForFile() method
-	protected Icon getIconForFile(VFS.DirectoryEntry file)
+	protected Icon getIconForFile(VFS.DirectoryEntry file, boolean expanded)
 	{
 		if(file.type == VFS.DirectoryEntry.DIRECTORY)
-			return dirIcon;
+			return (expanded ? openDirIcon : dirIcon);
 		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
 			return filesystemIcon;
 		else
@@ -140,20 +141,10 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 		setBackground(UIManager.getColor("Tree.textBackground"));
 
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
-		if(showIcons)
-		{
-			closedBorder = new EmptyBorder(0,3,0,0);
-			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,
-				UIManager.getColor("Tree.textForeground")),
-				new EmptyBorder(0,1,0,0));
-		}
-		else
-		{
-			closedBorder = new EmptyBorder(1,4,1,1);
-			openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,
-				UIManager.getColor("Tree.textForeground")),
-				new EmptyBorder(1,2,1,1));
-		}
+		closedBorder = new EmptyBorder(1,4,1,1);
+		openBorder = new CompoundBorder(new MatteBorder(0,2,0,0,
+			UIManager.getColor("Tree.textForeground")),
+			new EmptyBorder(1,2,1,1));
 
 		treeSelectionForeground = UIManager.getColor("Tree.selectionForeground");
 		treeNoSelectionForeground = UIManager.getColor("Tree.textForeground");
@@ -164,8 +155,6 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 	//}}}
 
 	//{{{ Private members
-
-	//{{{ Instance variables
 	private Border closedBorder;
 	private Border openBorder;
 
@@ -176,29 +165,5 @@ public class FileCellRenderer extends JLabel implements TreeCellRenderer
 
 	private Font plainFont;
 	private Font boldFont;
-	//}}}
-
-	//{{{ Class intializer
-	static
-	{
-		// use metal icons because not all looks and feels define these.
-		// note that metal is guaranteed to exist, so this shouldn't
-		// cause problems in the future.
-		UIDefaults metalDefaults = new javax.swing.plaf.metal.MetalLookAndFeel()
-			.getDefaults();
-		fileIcon = UIManager.getIcon("FileView.fileIcon");
-		if(fileIcon == null)
-			fileIcon = metalDefaults.getIcon("FileView.fileIcon");
-		dirIcon = UIManager.getIcon("FileView.directoryIcon");
-		if(dirIcon == null)
-			dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
-		filesystemIcon = UIManager.getIcon("FileView.hardDriveIcon");
-		if(filesystemIcon == null)
-			filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-		loadingIcon = UIManager.getIcon("FileView.hardDriveIcon");
-		if(loadingIcon == null)
-			loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-	} //}}}
-
 	//}}}
 }

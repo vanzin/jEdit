@@ -585,7 +585,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * @deprecated Call <code>compareStrings()</code> instead
 	 */
-	public int compareVersions(String v1, String v2)
+	public static int compareVersions(String v1, String v2)
 	{
 		return compareStrings(v1,v2,false);
 	} //}}}

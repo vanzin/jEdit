@@ -145,6 +145,13 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			"options.loadsave.parseFully"));
 		parseFully.setSelected(jEdit.getBooleanProperty("parseFully"));
 		addComponent(parseFully);
+
+		/* Backup on every save */
+		backupEverySave = new JCheckBox(jEdit.getProperty(
+			"options.loadsave.backupEverySave"));
+		backupEverySave.setSelected(jEdit.getBooleanProperty("backupEverySave"));
+		addComponent(backupEverySave);
+
 	} //}}}
 
 	//{{{ _save() method
@@ -179,6 +186,7 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 			persistentMarkers.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("parseFully",parseFully.isSelected());
+		jEdit.setBooleanProperty("backupEverySave", backupEverySave.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -196,5 +204,6 @@ public class LoadSaveOptionPane extends AbstractOptionPane
 	private JCheckBox persistentMarkers;
 	private JCheckBox twoStageSave;
 	private JCheckBox parseFully;
+	private JCheckBox backupEverySave;
 	//}}}
 }

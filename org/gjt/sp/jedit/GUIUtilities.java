@@ -65,8 +65,7 @@ public class GUIUtilities
 	public static final Icon DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
 	public static final Icon READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
 	public static final Icon NORMAL_BUFFER_ICON = loadIcon("normal.gif");
-	public static final Icon EDITOR_WINDOW_ICON = loadIcon("jedit_icon1.gif");
-	public static final Icon PLUGIN_WINDOW_ICON = loadIcon("jedit_icon2.gif");
+	public static final Icon WINDOW_ICON = loadIcon("jedit_icon.jpg");
 	//}}}
 
 	//{{{ Icon methods
@@ -116,7 +115,7 @@ public class GUIUtilities
 	 */
 	public static Image getEditorIcon()
 	{
-		return ((ImageIcon)EDITOR_WINDOW_ICON).getImage();
+		return ((ImageIcon)WINDOW_ICON).getImage();
 	} //}}}
 
 	//{{{ getPluginIcon() method
@@ -125,7 +124,7 @@ public class GUIUtilities
 	 */
 	public static Image getPluginIcon()
 	{
-		return ((ImageIcon)PLUGIN_WINDOW_ICON).getImage();
+		return ((ImageIcon)WINDOW_ICON).getImage();
 	} //}}}
 
 	//}}}
