@@ -149,3 +149,14 @@ repeat.shortcut=C+ENTER
 collapse-fold.shortcut=A+BACK_SPACE
 expand-fold.shortcut=AS+ENTER
 expand-one-level.shortcut=A+ENTER
+
+# Alternative shortcuts for frequently-used commands
+next-page.shortcut2=A+a
+delete.shortcut2=A+d
+prev-line.shortcut2=A+i
+prev-char.shortcut2=A+j
+next-line.shortcut2=A+k
+next-char.shortcut2=A+l
+prev-page.shortcut2=A+q
+end.shortcut2=A+x
+home.shortcut2=A+z

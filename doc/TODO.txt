@@ -1,17 +1,12 @@
 TO DO
 
+- compound edit buggyness
 - investigate alleged MacOS X keyboard problems
-- saving: show with indent fold, with explicit fold changes not take
-  effect?
 - might still need brutal undo code to avoid lumping everything together
 - still fold at end expand bug
 - investigate nextLineRequested() -- replace with a buffer event.
-- gutter scope bracket repaint problems
-- geometry workaround from j
 - test normal keys bound to actions
 - investigate wrap around in macros
-- Alt-key alternatives for arrow keys and home and end
-
 - stylesheet: keycap inside keycombo
 - help viewer: two tabs, contents and index. index browser
 - documentation to do
@@ -27,7 +22,6 @@ TO DO
   - 'evaluate for selected lines'
   - Macros.confirm(); other method sig changes
   - bracket matching: scope indicator
-  - indent shifting: Tab/S+Tab
   - better window docking
   - smart case insens replace
   - API guide: compareStrings(), showPopupMenu()
@@ -137,7 +131,6 @@ TO DO
 - when loading plugins and such, check for settingsDir == jEditHome
 - some means of redirecting double-clicks on a file to a VFS
 - improve next/prev-word commands
-- delete line: leave cursor in same column
 - option on JDK 1.4 to have the LnF decorate windows and dialogs
 - search and replace: scroll text area so selection is visible despite
   dialog position

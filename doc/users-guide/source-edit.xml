@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>
@@ -214,14 +214,16 @@
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guisubmenu>Shift Indent Left</guisubmenu>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo>)
+   (shortcut: <keycombo><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>
+   or <keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo>)
    adds one level of indent to each selected line, or the current line
    if there is no selection.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guisubmenu>Shift Indent Right</guisubmenu>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
+   (shortcut: <keycap>Tab</keycap> if there is a selection,
+   or <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
    removes one level of indent from each selected line, or the current line
    if there is no selection.
   </para>

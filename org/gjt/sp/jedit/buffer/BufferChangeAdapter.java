@@ -41,7 +41,7 @@ public abstract class BufferChangeAdapter implements BufferChangeListener
 	 * @param level The fold level
 	 * @since jEdit 4.0pre1
 	 */
-	public void foldLevelChanged(Buffer buffer, int line)
+	public void foldLevelChanged(Buffer buffer, int line, int level)
 	{
 	} //}}}
 
