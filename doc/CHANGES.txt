@@ -113,6 +113,11 @@ contributing to this release.
   cause problems since Swing automatically tries to display such strings
   as HTML. A workaround has now been added.
 
+- If a virtual file system displayed a dialog box upon creating a VFS
+  session (for example, an FTP login dialog box), cancelling the dialog
+  would leave the file system browser stuck with a 'Loading' message.
+  This has now been fixed.
+
 + API Changes:
 
 - Buffer.getFile() method deprecated. Use Buffer.getPath() and the VFS

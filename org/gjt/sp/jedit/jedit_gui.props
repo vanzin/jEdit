@@ -1213,7 +1213,8 @@ plugin-error.dep-jdk=Requires Java {0} or later, but you only have version {1}.
 plugin-error.dep-jedit=Requires jEdit {0} or later, but you only have version {1}.\n\
 	Download new jEdit versions from <http://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Requires version {0} \
-	or later of {1}, but {1} is not installed.
+	or later of {1},\n\
+	but {1} is not installed.
 plugin-error.dep-plugin.broken=Requires {0}, but {0}\n\
 	could not be loaded.
 plugin-error.dep-plugin=Requires version {0} or later of {1}, \

@@ -169,13 +169,44 @@ class BrowserView extends JPanel
 
 	//{{{ directoryLoaded() method
 	public void directoryLoaded(DefaultMutableTreeNode node,
-		String path, VFS.DirectoryEntry[] parents,
-		Vector directory)
+		String path, Vector directory)
 	{
 		if(node == rootNode)
 		{
-			setListModel(parentDirectories,parents);
-			int index = parentDirectories.getModel().getSize() - 1;
+			DefaultListModel parentList = new DefaultListModel();
+
+			String parent = path;
+
+			if(parent.length() != 1 && (parent.endsWith("/")
+				|| parent.endsWith(File.separator)))
+				parent = parent.substring(0,parent.length() - 1);
+
+			for(;;)
+			{
+				VFS _vfs = VFSManager.getVFSForPath(
+					parent);
+				// create a DirectoryEntry manually
+				// instead of using _vfs._getDirectoryEntry()
+				// since so many VFS's have broken
+				// implementations of this method
+				parentList.insertElementAt(new VFS.DirectoryEntry(
+					_vfs.getFileName(parent),
+					parent,parent,
+					VFS.DirectoryEntry.DIRECTORY,
+					0L,false),0);
+				String newParent = _vfs.getParentOfPath(parent);
+				if(newParent.length() != 1 && (newParent.endsWith("/")
+					|| newParent.endsWith(File.separator)))
+					newParent = newParent.substring(0,newParent.length() - 1);
+
+				if(newParent == null || parent.equals(newParent))
+					break;
+				else
+					parent = newParent;
+			}
+
+			parentDirectories.setModel(parentList);
+			int index = parentList.getSize() - 1;
 			parentDirectories.setSelectedIndex(index);
 			parentDirectories.ensureIndexIsVisible(index);
 		}
@@ -347,6 +378,13 @@ class BrowserView extends JPanel
 	{
 		saveExpansionState(node);
 
+		path = MiscUtilities.constructPath(browser.getDirectory(),path);
+		VFS vfs = VFSManager.getVFSForPath(path);
+
+		Object session = vfs.createVFSSession(path,this);
+		if(session == null)
+			return;
+
 		if(node == rootNode)
 		{
 			setListModel(parentDirectories,new Object[] {
@@ -359,13 +397,6 @@ class BrowserView extends JPanel
 			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 			model.reload(node);
 		}
-
-		path = MiscUtilities.constructPath(browser.getDirectory(),path);
-		VFS vfs = VFSManager.getVFSForPath(path);
-
-		Object session = vfs.createVFSSession(path,this);
-		if(session == null)
-			return;
 
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,browser,
@@ -524,7 +555,7 @@ class BrowserView extends JPanel
 			}
 		}
 
-		public void mouseClicked(MouseEvent evt)
+		public void mouseReleased(MouseEvent evt)
 		{
 			// ignore double clicks
 			if(evt.getClickCount() % 2 == 0)

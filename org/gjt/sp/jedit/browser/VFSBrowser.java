@@ -762,7 +762,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 	//{{{ directoryLoaded() method
 	void directoryLoaded(final DefaultMutableTreeNode node,
 		final boolean loadingRoot, final String path,
-		final VFS.DirectoryEntry[] parents,
 		final VFS.DirectoryEntry[] list)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -826,7 +825,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				}
 
 				browserView.directoryLoaded(node,path,
-					parents,directoryVector);
+					directoryVector);
 
 				// to notify listeners that any existing
 				// selection has been deactivated
