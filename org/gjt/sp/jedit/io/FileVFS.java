@@ -45,7 +45,10 @@ public class FileVFS extends VFS
 	public FileVFS()
 	{
 		super("file",READ_CAP | WRITE_CAP | DELETE_CAP
-			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP,
+			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP
+			| ((OperatingSystem.isMacOS()
+			|| OperatingSystem.isDOSDerived())
+			? CASE_INSENSITIVE_CAP : 0),
 			new String[] { EA_TYPE, EA_SIZE, EA_STATUS,
 			EA_MODIFIED });
 	} //}}}

@@ -1847,11 +1847,11 @@ public class jEdit
 		if(!MiscUtilities.isURL(path))
 			path = MiscUtilities.resolveSymlinks(path);
 
-		boolean caseInsensitiveFilesystem =
-			OperatingSystem.isDOSDerived()
-			|| OperatingSystem.isMacOS();
-		if(caseInsensitiveFilesystem)
+		if((VFSManager.getVFSForPath(path).getCapabilities()
+			& VFS.CASE_INSENSITIVE_CAP) != 0)
+		{
 			path = path.toLowerCase();
+		}
 
 		synchronized(bufferListLock)
 		{
@@ -2441,17 +2441,20 @@ public class jEdit
 	 */
 	static void updatePosition(String oldPath, Buffer buffer)
 	{
-		boolean caseInsensitiveFilesystem =
-			OperatingSystem.isDOSDerived()
-			|| OperatingSystem.isMacOS();
-		if(caseInsensitiveFilesystem)
+		if((VFSManager.getVFSForPath(oldPath).getCapabilities()
+			& VFS.CASE_INSENSITIVE_CAP) != 0)
+		{
 			oldPath = oldPath.toLowerCase();
+		}
 
 		bufferHash.remove(oldPath);
 
 		String path = buffer.getPath();
-		if(caseInsensitiveFilesystem)
+		if((VFSManager.getVFSForPath(path).getCapabilities()
+			& VFS.CASE_INSENSITIVE_CAP) != 0)
+		{
 			path = path.toLowerCase();
+		}
 
 		bufferHash.put(path,buffer);
 
@@ -3416,8 +3419,11 @@ loop:		for(int i = 0; i < list.length; i++)
 				OperatingSystem.isDOSDerived()
 				|| OperatingSystem.isMacOS();
 			String path = buffer.getPath();
-			if(caseInsensitiveFilesystem)
+			if((VFSManager.getVFSForPath(path).getCapabilities()
+				& VFS.CASE_INSENSITIVE_CAP) != 0)
+			{
 				path = path.toLowerCase();
+			}
 
 			// if only one, clean, 'untitled' buffer is open, we
 			// replace it
@@ -3429,10 +3435,11 @@ loop:		for(int i = 0; i < list.length; i++)
 				Buffer oldBuffersFirst = buffersFirst;
 				buffersFirst = buffersLast = buffer;
 				DisplayManager.bufferClosed(oldBuffersFirst);
-				EditBus.send(new BufferUpdate(oldBuffersFirst,null,
-					BufferUpdate.CLOSED));
+				EditBus.send(new BufferUpdate(oldBuffersFirst,
+					null,BufferUpdate.CLOSED));
 
 				bufferHash.clear();
+
 				bufferHash.put(path,buffer);
 				return;
 			}

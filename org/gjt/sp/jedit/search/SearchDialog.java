@@ -86,7 +86,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	{
 		SearchDialog dialog = (SearchDialog)viewHash.get(view);
 
-		dialog.load();
 		dialog.setSearchString(searchString,searchIn);
 		GUIUtilities.requestFocus(dialog,dialog.find);
 
@@ -197,8 +196,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	{
 		if(msg instanceof SearchSettingsChanged)
 		{
-			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
-			regexp.setSelected(SearchAndReplace.getRegexp());
+			load();
 		}
 	} //}}}
 
@@ -269,6 +267,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		jEdit.unsetProperty("search.height");
 		jEdit.unsetProperty("search.d-height");
 		GUIUtilities.loadGeometry(this,"search");
+
+		load();
 
 		EditBus.addToBus(this);
 	} //}}}

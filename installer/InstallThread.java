@@ -54,7 +54,7 @@ public class InstallThread extends Thread
 			{
 				System.err.println("Performing task " +
 					osTasks[i].getName());
-				osTasks[i].perform(installDir);
+				osTasks[i].perform(installDir,components);
 			}
 		}
 		catch(FileNotFoundException fnf)

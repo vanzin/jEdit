@@ -431,7 +431,7 @@ public class VFSDirectoryEntryTable extends JTable
 				if(attr != null)
 				{
 					widths[j] = Math.max(widths[j],
-						fm.stringWidth(attr));
+						fm.stringWidth(attr) + 2);
 				}
 			}
 		}
