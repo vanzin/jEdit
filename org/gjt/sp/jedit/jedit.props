@@ -44,7 +44,7 @@ recentFiles=50
 restore=true
 
 # Restore even if file names specified on command line?
-restore.cli=false
+restore.cli=true
 
 # Client instances open new views?
 client.newView=false

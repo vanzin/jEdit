@@ -43,7 +43,7 @@ import org.gjt.sp.util.Log;
  */
 public class OffsetManager
 {
-	/* {{{ Format of entires in line info array:
+	/* {{{ Format of entries in line info array:
 	 * 0-31: end offset
 	 * 32-47: fold level
 	 * 48-55: visibility bit flags
@@ -69,7 +69,7 @@ public class OffsetManager
 	public static final long VISIBLE_MASK = 0x00ff000000000000L;
 	public static final int VISIBLE_SHIFT = 48;
 	public static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
-	public static final long CONTEXT_VALID_MASK = (1L<<57);
+	public static final long LINE_CONTEXT_VALID_MASK = (1L<<57);
 	public static final long SCREEN_LINES_MASK = 0x7c00000000000000L;
 	public static final long SCREEN_LINES_SHIFT = 58;
 
@@ -215,10 +215,8 @@ public class OffsetManager
 	//{{{ isLineContextValid() method
 	public final boolean isLineContextValid(int line)
 	{
-		if(gapLine != -1 && line >= gapLine)
-			return false;
-
-		return (lineInfo[line] & CONTEXT_VALID_MASK) != 0;
+		return line <= lastValidLineContext
+			&& (lineInfo[line] & LINE_CONTEXT_VALID_MASK) != 0;
 	} //}}}
 
 	//{{{ getLineContext() method
@@ -231,11 +229,11 @@ public class OffsetManager
 	// Also sets 'context valid' to true
 	public final void setLineContext(int line, TokenMarker.LineContext context)
 	{
-		if(gapLine != -1 && line >= gapLine)
-			moveGap(line + 1,0,"setLineContext");
+		if(line > lastValidLineContext)
+			lastValidLineContext = line;
 
 		lineContext[line] = context;
-		lineInfo[line] |= CONTEXT_VALID_MASK;
+		lineInfo[line] |= LINE_CONTEXT_VALID_MASK;
 	} //}}}
 
 	//{{{ createPosition() method
@@ -329,7 +327,7 @@ public class OffsetManager
 	//{{{ _contentInserted() method
 	public void _contentInserted(LongArray endOffsets)
 	{
-		gapLine = -1;
+		gapLine = lastValidLineContext = -1;
 		gapWidth = 0;
 		lineCount = endOffsets.getSize();
 		lineInfo = endOffsets.getArray();
@@ -355,6 +353,8 @@ public class OffsetManager
 			moveGap(-1,0,"contentInserted");
 
 			lineCount += numLines;
+			if(startLine < lastValidLineContext)
+				lastValidLineContext += numLines;
 
 			if(lineInfo.length <= lineCount)
 			{
@@ -462,6 +462,12 @@ public class OffsetManager
 			moveGap(-1,0,"contentRemoved");
 
 			lineCount -= numLines;
+			if(startLine < lastValidLineContext)
+				lastValidLineContext -= numLines;
+			else if(startLine >= lastValidLineContext
+				&& startLine + numLines < lastValidLineContext)
+				lastValidLineContext = startLine - 1;
+
 			System.arraycopy(lineInfo,startLine + numLines,lineInfo,
 				startLine,lineCount - startLine);
 			System.arraycopy(lineContext,startLine + numLines,lineContext,
@@ -477,6 +483,12 @@ public class OffsetManager
 	public void lineInfoChangedFrom(int startLine)
 	{
 		moveGap(startLine,0,"lineInfoChangedFrom");
+	} //}}}
+
+	//{{{ lineContextInvalidFrom() method
+	public void lineContextInvalidFrom(int startLine)
+	{
+		lastValidLineContext = Math.min(lastValidLineContext,startLine);
 	} //}}}
 
 	//{{{ Private members
@@ -500,13 +512,19 @@ public class OffsetManager
 	 */
 	private int gapLine;
 	private int gapWidth;
+
+	/**
+	 * If -1, all contexts are valid. Otherwise, all lines after this have
+	 * an invalid context.
+	 */
+	private int lastValidLineContext;
 	//}}}
 
 	//{{{ setLineEndOffset() method
 	private final void setLineEndOffset(int line, int end)
 	{
 		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
-			| FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)) | end);
+			| FOLD_LEVEL_VALID_MASK)) | end);
 		// what is the point of this -- DO NOT UNCOMMENT THIS IT
 		// CAUSES A PERFORMANCE LOSS; nextLineRequested becomes true
 		//lineContext[line] = null;

@@ -177,7 +177,11 @@ public class ActionBar extends JPanel
 			}
 		}
 
-		view.getEditPane().focusOnTextArea();
+		if(hasFocus())
+		{
+			// if action didn't move focus out of action bar
+			view.getEditPane().focusOnTextArea();
+		}
 	} //}}}
 
 	//{{{ getCompletions() method
@@ -303,7 +307,11 @@ public class ActionBar extends JPanel
 			if(temp)
 				view.removeToolBar(ActionBar.this);
 			view.getTextArea().processKeyEvent(evt);
-			view.getEditPane().focusOnTextArea();
+			if(hasFocus())
+			{
+				// if action didn't move focus out of action bar
+				view.getEditPane().focusOnTextArea();
+			}
 		}
 
 		public void addNotify()

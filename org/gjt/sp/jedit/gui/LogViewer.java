@@ -24,9 +24,9 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -39,7 +39,9 @@ public class LogViewer extends JPanel
 	{
 		super(new BorderLayout());
 
-		Box captionBox = Box.createHorizontalBox();
+		JPanel caption = new JPanel();
+		caption.setLayout(new BoxLayout(caption,BoxLayout.X_AXIS));
+		caption.setBorder(new EmptyBorder(12,12,12,12));
 
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
@@ -48,24 +50,30 @@ public class LogViewer extends JPanel
 				settingsDirectory, "activity.log") };
 			JLabel label = new JLabel(jEdit.getProperty(
 				"log-viewer.caption",args));
-			captionBox.add(label);
+			caption.add(label);
 		}
 
-		captionBox.add(Box.createHorizontalGlue());
+		caption.add(Box.createHorizontalGlue());
 
 		tailIsOn = jEdit.getBooleanProperty("log-viewer.tail", false);
 		tail = new JCheckBox(
 			jEdit.getProperty("log-viewer.tail.label"),tailIsOn);
 		tail.addActionListener(new ActionHandler());
-		captionBox.add(tail);
+		caption.add(tail);
+
+		caption.add(Box.createHorizontalStrut(12));
+
+		copy = new JButton(jEdit.getProperty("log-viewer.copy"));
+		copy.addActionListener(new ActionHandler());
+		caption.add(copy);
 
 		ListModel model = Log.getLogListModel();
 		model.addListDataListener(new ListHandler());
-		list = new JList(model);
+		list = new LogList(model);
 		list.setVisibleRowCount(24);
 		list.setFont(jEdit.getFontProperty("view.font"));
 
-		add(BorderLayout.NORTH,captionBox);
+		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
 		Dimension dim = scroller.getPreferredSize();
 		dim.width = Math.min(300,dim.width);
@@ -82,6 +90,7 @@ public class LogViewer extends JPanel
 
 	//{{{ Private members
 	private JList list;
+	private JButton copy;
 	private JCheckBox tail;
 	private boolean tailIsOn;
 	//}}}
@@ -91,13 +100,28 @@ public class LogViewer extends JPanel
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			tailIsOn = !tailIsOn;
-			jEdit.setBooleanProperty("log-viewer.tail",tailIsOn);
-			if(tailIsOn)
+			Object src = e.getSource();
+			if(src == tail)
 			{
-				int index = list.getModel().getSize();
-				list.setSelectedIndex(index);
-				list.ensureIndexIsVisible(index);
+				tailIsOn = !tailIsOn;
+				jEdit.setBooleanProperty("log-viewer.tail",tailIsOn);
+				if(tailIsOn)
+				{
+					int index = list.getModel().getSize();
+					list.setSelectedIndex(index);
+					list.ensureIndexIsVisible(index);
+				}
+			}
+			else if(src == copy)
+			{
+				Object[] selected = list.getSelectedValues();
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < selected.length; i++)
+				{
+					buf.append(selected[i]);
+					buf.append('\n');
+				}
+				Registers.setRegister('$',buf.toString());
 			}
 		}
 	} //}}}
@@ -122,6 +146,30 @@ public class LogViewer extends JPanel
 				int index = list.getModel().getSize() - 1;
 				list.ensureIndexIsVisible(index);
 			}
+		}
+	} //}}}
+
+	//{{{ LogList class
+	class LogList extends JList
+	{
+		LogList(ListModel model)
+		{
+			super(model);
+		}
+
+		public void processMouseMotionEvent(MouseEvent evt)
+		{
+			if(evt.getID() == MouseEvent.MOUSE_DRAGGED)
+			{
+				int row = list.locationToIndex(evt.getPoint());
+				if(row != -1)
+				{
+					list.addSelectionInterval(row,row);
+					evt.consume();
+				}
+			}
+			else
+				super.processMouseMotionEvent(evt);
 		}
 	} //}}}
 }

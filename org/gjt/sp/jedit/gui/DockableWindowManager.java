@@ -528,6 +528,7 @@ public class DockableWindowManager extends JPanel
 		setLayout(new DockableLayout());
 		this.view = view;
 		windows = new Hashtable();
+		clones = new ArrayList();
 
 		top = new PanelWindowContainer(this,TOP);
 		left = new PanelWindowContainer(this,LEFT);
@@ -622,6 +623,7 @@ public class DockableWindowManager extends JPanel
 		newEntry.open();
 		if(newEntry.win != null)
 			newEntry.container.show(newEntry);
+		clones.add(newEntry);
 		return newEntry.win;
 	} //}}}
 
@@ -827,10 +829,18 @@ public class DockableWindowManager extends JPanel
 			right.save();
 		}
 
-		Enumeration enum = windows.elements();
-		while(enum.hasMoreElements())
+		Iterator iter = windows.values().iterator();
+		while(iter.hasNext())
 		{
-			Entry entry = (Entry)enum.nextElement();
+			Entry entry = (Entry)iter.next();
+			if(entry.win != null)
+				entry.remove();
+		}
+
+		iter = clones.iterator();
+		while(iter.hasNext())
+		{
+			Entry entry = (Entry)iter.next();
 			if(entry.win != null)
 				entry.remove();
 		}
@@ -995,6 +1005,7 @@ public class DockableWindowManager extends JPanel
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
+	private ArrayList clones;
 	//}}}
 
 	//}}}

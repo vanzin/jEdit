@@ -2137,7 +2137,7 @@ public class Buffer implements EBComponent
 			int lineCount = offsetMgr.getLineCount();
 			if(nextLineRequested && lineCount - lineIndex > 1)
 			{
-				offsetMgr.lineInfoChangedFrom(lineIndex + 1);
+				offsetMgr.lineContextInvalidFrom(lineIndex);
 			}
 		}
 		finally
@@ -3803,7 +3803,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		// don't do this on initial token marker
 		if(oldTokenMarker != null && tokenMarker != oldTokenMarker)
 		{
-			offsetMgr.lineInfoChangedFrom(0);
+			offsetMgr.lineContextInvalidFrom(-1);
 		}
 	} //}}}
 

@@ -1752,6 +1752,7 @@ tip.show=true
 #{{{ Activity log
 log-viewer.title=Activity Log
 log-viewer.caption=Full text of log is stored in {0}.
+log-viewer.copy=Copy
 log-viewer.tail.label=Tail
 #}}}
 

@@ -523,6 +523,12 @@ public class View extends JFrame implements EBComponent
 		newSplitPane.setBorder(null);
 		newSplitPane.setMinimumSize(new Dimension(0,0));
 
+		int parentSize = (orientation == JSplitPane.VERTICAL_SPLIT
+			? oldEditPane.getHeight() : oldEditPane.getWidth());
+		final int dividerPosition = (int)((double)(parentSize
+			- newSplitPane.getDividerSize()) * 0.5);
+		newSplitPane.setDividerLocation(dividerPosition);
+
 		if(oldParent instanceof JSplitPane)
 		{
 			JSplitPane oldSplitPane = (JSplitPane)oldParent;
@@ -555,7 +561,7 @@ public class View extends JFrame implements EBComponent
 		{
 			public void run()
 			{
-				newSplitPane.setDividerLocation(0.5);
+				newSplitPane.setDividerLocation(dividerPosition);
 			}
 		});
 

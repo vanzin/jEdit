@@ -694,7 +694,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		if(textArea.timing)
 		{
-			textArea.timing = false;
 			System.err.println(System.currentTimeMillis() - textArea.time);
 		}
 	} //}}}
