@@ -71,6 +71,7 @@ public class RecentFilesMenu extends EnhancedMenu
 			if(recentVector.size() == 0)
 			{
 				add(GUIUtilities.loadMenuItem("no-recent"));
+				super.setMenuPopupVisible(b);
 				return;
 			}
 

@@ -1,6 +1,6 @@
 /*
  * SplashScreen.java - Splash screen
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,67 +19,105 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.border.*;
-import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
-import java.util.Random;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
-public class SplashScreen extends JWindow
+/**
+ * This file only uses AWT APIs so that it is displayed faster on startup.
+ */
+public class SplashScreen extends Canvas
 {
 	public SplashScreen()
 	{
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		JPanel splash = new JPanel(new BorderLayout(12,12));
-		splash.setBorder(new CompoundBorder(
-			new MatteBorder(1,1,1,1,Color.black),
-			new EmptyBorder(12,12,12,12)));
-		splash.setBackground(Color.white);
-		URL url = getClass().getResource("/org/gjt/sp/jedit/jedit_logo.gif");
-		if(url != null)
-		{
-			JLabel label = new JLabel(new ImageIcon(url));
-			//label.setBorder(new MatteBorder(1,1,1,1,Color.black));
-			splash.add(label,BorderLayout.CENTER);
-		}
+		image = getToolkit().getImage(
+			getClass().getResource("/org/gjt/sp/jedit/icons/splash.gif"));
+		MediaTracker tracker = new MediaTracker(this);
+		tracker.addImage(image,0);
 
-		progress = new JProgressBar(0,6);
-		progress.setStringPainted(true);
-		//progress.setBorderPainted(false);
-		progress.setString("jEdit version: " + jEdit.getVersion());
-		//progress.setBackground(Color.white);
-		splash.add(BorderLayout.SOUTH,progress);
-
-		setContentPane(splash);
-
-		Dimension screen = getToolkit().getScreenSize();
-		pack();
-		setLocation((screen.width - getSize().width) / 2,
-			(screen.height - getSize().height) / 2);
-		show();
-	}
-
-	public void advance()
-	{
 		try
 		{
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run()
-				{
-					progress.setValue(progress.getValue() + 1);
-				}
-			});
-			Thread.yield();
+			tracker.waitForAll();
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
 		}
+
+		win = new Window(new Frame());
+
+		Dimension screen = getToolkit().getScreenSize();
+		Dimension size = new Dimension(image.getWidth(this) + 2,
+			image.getHeight(this) + 2);
+		win.setSize(size);
+
+		win.setLayout(new BorderLayout());
+		win.add(BorderLayout.CENTER,this);
+
+		win.setLocation((screen.width - size.width) / 2,
+			(screen.height - size.height) / 2);
+		win.validate();
+		win.show();
+
+		synchronized(this)
+		{
+			try
+			{
+				wait();
+			}
+			catch(InterruptedException ie)
+			{
+				Log.log(Log.ERROR,this,ie);
+			}
+		}
+	}
+
+	public void dispose()
+	{
+		win.dispose();
+	}
+
+	public synchronized void advance()
+	{
+		progress++;
+		repaint();
+
+		// wait for it to be painted to ensure progress is updated
+		// continuously
+		try
+		{
+			wait();
+		}
+		catch(InterruptedException ie)
+		{
+			Log.log(Log.ERROR,this,ie);
+		}
+	}
+
+	public void update(Graphics g)
+	{
+		paint(g);
+	}
+
+	public synchronized void paint(Graphics g)
+	{
+		g.setColor(Color.black);
+		g.drawRect(0,0,getSize().width - 1,getSize().height - 1);
+
+		g.drawImage(image,1,1,this);
+
+		// XXX: This should not be hardcoded
+		g.setColor(new Color(87,87,114));
+		g.fillRect(8,198,(436 * progress) / 7,16);
+
+		notify();
 	}
 
 	// private members
-	private JProgressBar progress;
+	private Window win;
+	private Image image;
+	private int progress;
 }

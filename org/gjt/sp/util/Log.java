@@ -243,7 +243,7 @@ public class Log
 	// private members
 	private static Object LOCK = new Object();
 	private static Document logDocument;
-	private static int level;
+	private static int level = WARNING;
 	private static Writer stream;
 	private static String lineSep;
 	private static PrintStream realOut;

@@ -222,6 +222,7 @@ Jonathan Revusky:   - Python edit mode
 Juha Lindfors:      - IDL edit mode
 Kris Kopicki:       - MacOS X downloads
                     - Objective C syntax highlighting
+                    - New splash screen
 Kristian Ovaska:    - Intel x86 Assembly, Haskell, Pascal edit modes
 Lionel Fiol:        - Omnimark edit mode
 Marc Rummel:        - MIPS R2000 Assembly edit mode

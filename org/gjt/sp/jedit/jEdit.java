@@ -149,8 +149,6 @@ public class jEdit
 			}
 		}
 
-		Log.init(true,level);
-
 		if(settingsDirectory != null && portFile != null)
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
@@ -196,12 +194,6 @@ public class jEdit
 			}
 		}
 
-		// don't show splash screen if there is a file named
-		// 'nosplash' in the settings directory
-		boolean showSplash = true;
-		if(new File(settingsDirectory,"nosplash").exists())
-			showSplash = false;
-
 		// MacOS X GUI hacks
 		if(System.getProperty("os.name").indexOf("Mac") != -1)
 		{
@@ -210,9 +202,12 @@ public class jEdit
 			System.getProperties().put("com.apple.macos.useScreenMenuBar","true");
 		}
 
-		// Show the kool splash screen
-		if(showSplash)
+		// don't show splash screen if there is a file named
+		// 'nosplash' in the settings directory
+		if(!new File(settingsDirectory,"nosplash").exists())
 			GUIUtilities.showSplashScreen();
+
+		Log.init(true,level);
 
 		// Initialize activity log and settings directory
 		Writer stream;
@@ -279,6 +274,9 @@ public class jEdit
 		initPLAF();
 
 		initActions();
+
+		GUIUtilities.advanceSplashProgress();
+
 		initPlugins();
 
 		if(settingsDirectory != null)
@@ -522,6 +520,24 @@ public class jEdit
 	 * <code>view.gutter.fontstyle</code>.
 	 *
 	 * @param name The property
+	 * @since jEdit 4.0pre1
+	 */
+	public static final Font getFontProperty(String name)
+	{
+		return getFontProperty(name,null);
+	}
+	
+	/**
+	 * Returns the value of a font property. The family is stored
+	 * in the <code><i>name</i></code> property, the font size is stored
+	 * in the <code><i>name</i>size</code> property, and the font style is
+	 * stored in <code><i>name</i>style</code>. For example, if
+	 * <code><i>name</i></code> is <code>view.gutter.font</code>, the
+	 * properties will be named <code>view.gutter.font</code>,
+	 * <code>view.gutter.fontsize</code>, and
+	 * <code>view.gutter.fontstyle</code>.
+	 *
+	 * @param name The property
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
@@ -725,9 +741,9 @@ public class jEdit
 
 		saveCaret = getBooleanProperty("saveCaret");
 
-		theme = new JEditMetalTheme();
-		theme.propertiesChanged();
-		MetalLookAndFeel.setCurrentTheme(theme);
+		//theme = new JEditMetalTheme();
+		//theme.propertiesChanged();
+		//MetalLookAndFeel.setCurrentTheme(theme);
 
 		UIDefaults defaults = UIManager.getDefaults();
 
@@ -766,8 +782,7 @@ public class jEdit
 		}
 
 		// give all text areas the same font
-		Font font = getFontProperty("view.font",
-			new Font("Monospaced",Font.PLAIN,12));
+		Font font = getFontProperty("view.font");
 
 		//defaults.put("TextField.font",font);
 		defaults.put("TextArea.font",font);
@@ -2534,19 +2549,37 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		theme = new JEditMetalTheme();
-		theme.propertiesChanged();
-		MetalLookAndFeel.setCurrentTheme(theme);
+		if(System.getProperty("java.version").compareTo("1.2") >= 0)
+		{
+			Log.log(Log.DEBUG,jEdit.class,"Installing Kunststoff look and feel");
+			UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(
+				"Kunststoff","com.incors.plaf.kunststoff.KunststoffLookAndFeel"));
+		}
 
 		String lf = getProperty("lookAndFeel");
 		try
 		{
+			if(lf == null
+				&& System.getProperty("java.version").compareTo("1.2") >= 0
+				&& System.getProperty("os.name").indexOf("Mac OS") == -1)
+			{
+					lf = "com.incors.plaf.kunststoff.KunststoffLookAndFeel";
+			}
+
 			if(lf != null && lf.length() != 0)
 				UIManager.setLookAndFeel(lf);
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
+		}
+
+		if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+		{
+			theme = new JEditMetalTheme();
+			theme.propertiesChanged();
+			((MetalLookAndFeel)UIManager.getLookAndFeel())
+				.setCurrentTheme(theme);
 		}
 	}
 

@@ -1,21 +1,19 @@
 TO DO
 
+- com/incors/plaf/kunststoff
+- credit kunststoff l&f in README.txt
 - find btn no work
 - new goodies need to be documented
-- changing plastic setting doesn't take effect until restart
-- better gutter border colors
 - better fold marker color and appearance (draw triangle)
+- plastic theme for installer
+- installer: show GPL
+- write custom stylesheet
+- ant build file: pdf output target
 
 + features:
 
-- plastic theme for installer
-- installer: show GPL
 - improve next/prev-word commands
 - ant targets to replace installer/mk_installer/mk_source scripts
-- plugins and javahelp
-- mention javahelp in README.txt
-- hackish jhindex target
-- ant build file: pdf output target
 - QuickNotepad XSL docs
 - option on JDK 1.4 to have the LnF decorate windows and dialogs
 - different prompts on setting/going to markers

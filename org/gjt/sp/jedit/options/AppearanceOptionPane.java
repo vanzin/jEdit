@@ -66,13 +66,13 @@ public class AppearanceOptionPane extends AbstractOptionPane
 
 		/* Primary Metal L&F font */
 		primaryFont = new FontSelector(jEdit.getFontProperty(
-			"metal.primary.font",new Font("Dialog",Font.BOLD,12)));
+			"metal.primary.font"));
 		addComponent(jEdit.getProperty("options.appearance.primaryFont"),
 			primaryFont);
 
 		/* Secondary Metal L&F font */
 		secondaryFont = new FontSelector(jEdit.getFontProperty(
-			"metal.secondary.font",new Font("Dialog",Font.BOLD,12)));
+			"metal.secondary.font"));
 		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
 			secondaryFont);
 
