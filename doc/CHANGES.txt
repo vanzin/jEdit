@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre3
 
-Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker and Rudolf Widmann
-for contributing to this release.
+Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker, Matthias Schneider
+and Rudolf Widmann for contributing to this release.
 
 + Editing Changes:
 
@@ -33,6 +33,8 @@ for contributing to this release.
   (Rudolf Widmann)
 
 - Updated CSS syntax highlighting for CSS2 spec. (Ivan Herman)
+
+- Updated AWK and COBOL syntax highlighting. (Matthias Schneider)
 
 + Global Options Dialog Changes:
 
