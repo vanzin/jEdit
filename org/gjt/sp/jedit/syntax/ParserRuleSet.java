@@ -79,6 +79,7 @@ public class ParserRuleSet
 	public void setProperties(Hashtable props)
 	{
 		this.props = props;
+		noWordSep = null;
 	} //}}}
 
 	//{{{ addRule() method
@@ -145,6 +146,7 @@ public class ParserRuleSet
 	public void setKeywords(KeywordMap km)
 	{
 		keywords = km;
+		noWordSep = null;
 	} //}}}
 
 	//{{{ getHighlightDigits() method
@@ -196,6 +198,20 @@ public class ParserRuleSet
 		defaultToken = def;
 	} //}}}
 
+	//{{{ getNoWordSep() method
+	public String getNoWordSep()
+	{
+		if(_noWordSep == null)
+		{
+			_noWordSep = noWordSep;
+			if(noWordSep == null)
+				noWordSep = "";
+			if(keywords != null)
+				noWordSep += keywords.getNonAlphaNumericChars();
+		}
+		return noWordSep;
+	} //}}}
+
 	//{{{ toString() method
 	public String toString()
 	{
@@ -236,5 +252,8 @@ public class ParserRuleSet
 
 	private boolean highlightDigits;
 	private RE digitRE;
+
+	private String _noWordSep;
+	private String noWordSep;
 	//}}}
 }

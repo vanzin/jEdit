@@ -241,7 +241,7 @@ class ChunkCache
 			softWrap.init(textArea.lineSegment,painter.getStyles(),
 				painter.getFontRenderContext(),
 				painter,out,textArea.wrapMargin);
-			softWrap.setMonospacedCharWidth(textArea.charWidth);
+			//softWrap.setMonospacedCharWidth(textArea.charWidth);
 			buffer.markTokens(physicalLine,softWrap);
 		}
 		else

@@ -121,7 +121,7 @@ public class AboutDialog extends EnhancedDialog
 					fm.stringWidth(line) + 10);
 			}
 
-			scrollPosition = -300;
+			scrollPosition = -250;
 
 			thread = new AnimationThread();
 		}
@@ -132,51 +132,32 @@ public class AboutDialog extends EnhancedDialog
 			image.paintIcon(this,g,1,1);
 
 			FontMetrics fm = g.getFontMetrics();
-			int height = fm.getHeight();
-			int firstLine = scrollPosition / height;
-
-			int firstLineOffset = height - scrollPosition % height;
-			int lastLine = (scrollPosition + getHeight()
-				- TOP - BOTTOM) / height - 3;
-
-			int y = TOP + firstLineOffset + fm.getHeight();
-
-			for(int i = firstLine; i <= lastLine; i++)
-			{
-				if(i >= 0 && i < (text.size() / 2))
-				{
-					String line2 = " ";
-					if(2 * i + 1 != text.size())
-					{
-						line2 = (String)text.elementAt(2 * i + 1);
-						if (!line2.equals(" "))
-						{
-							int width2 = fm.stringWidth(line2);
-							g.drawString(line2,(getWidth() / 2
-								+ 10),y);
-						}
-					}
-
-					if (line2.equals(" "))
-					{
-						String line1 = (String)text.elementAt(2 * i);
-						g.drawString(line1,(getWidth() - fm.stringWidth(line1))/2,y);
-					}
-					else
-					{
-						String line1 = (String)text.elementAt(2 * i);
-						int width1 = fm.stringWidth(line1);
-						g.drawString(line1,(getWidth() / 2
-							- width1 - 10),y);
-					}
-				}
-				y += fm.getHeight();
-			}
 
 			String[] args = { jEdit.getVersion() };
 			String version = jEdit.getProperty("about.version",args);
 			g.drawString(version,(getWidth() - fm.stringWidth(version)) / 2,
-				getHeight() - 10);
+				getHeight() - 5);
+
+			g = g.create((getWidth() - maxWidth) / 2,TOP,maxWidth,
+				getHeight() - TOP - BOTTOM);
+
+			int height = fm.getHeight();
+			int firstLine = scrollPosition / height;
+
+			int firstLineOffset = height - scrollPosition % height;
+			int lines = (getHeight() - TOP - BOTTOM) / height;
+
+			int y = firstLineOffset;
+
+			for(int i = 0; i <= lines; i++)
+			{
+				if(i + firstLine >= 0 && i + firstLine < text.size())
+				{
+					String line = (String)text.get(i + firstLine);
+					g.drawString(line,(maxWidth - fm.stringWidth(line))/2,y);
+				}
+				y += fm.getHeight();
+			}
 		}
 
 		public Dimension getPreferredSize()
@@ -215,7 +196,7 @@ public class AboutDialog extends EnhancedDialog
 			public void run()
 			{
 				FontMetrics fm = getFontMetrics(getFont());
-				int max = text.size() * fm.getHeight();
+				int max = (text.size() * fm.getHeight());
 
 				while (running)
 				{
@@ -224,7 +205,7 @@ public class AboutDialog extends EnhancedDialog
 					scrollPosition += 2;
 
 					if(scrollPosition > max)
-						scrollPosition = -300;
+						scrollPosition = -250;
 
 					try
 					{
