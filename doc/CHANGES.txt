@@ -163,13 +163,6 @@ contributing to this release.
 
 - Fixed NullPointerException when clicking in text area in a soft
   wrapped line that was but off at the bottom.
-options {
-
-aa
-helloaa
-
-}
-aaaaa
 
 - Fixed NullPointerException when scrolling to a line that was longer
   than the visible area.
@@ -268,6 +261,9 @@ aaaaa
 
 - Fixed problem with table columns in the file system browser resizing
   incorrectly when a node was collapsed.
+
+- Redoing a remove did not clear the buffer's modified flag if
+  necessary.
 
 }}}
 {{{ API Changes

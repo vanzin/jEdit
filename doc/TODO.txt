@@ -3,7 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- undo still broken
 - auto indent: don't de-indent on enter if no leading indent at all?
 - update quicknotepad docs
 - actions/dockables eval: should use own namespace?
@@ -16,7 +15,6 @@ and quirks that I need to fix eventually.
 
 - shift+enter jams translator
 - A+`: inserts in text area
-- fsb tab: insert longest prefix!
 - sidebars: need a border or some sort
 - user's guide:
   - part III

@@ -71,7 +71,6 @@ public class UndoManager
 		{
 			undoCount--;
 
-			boolean dirty = buffer.isDirty();
 			int caret = undosLast.undo();
 			redosFirst = undosLast;
 			undosLast = undosLast.prev;
@@ -367,9 +366,9 @@ public class UndoManager
 		//{{{ redo() method
 		int redo()
 		{
+			buffer.remove(offset,length);
 			if(redoClearDirty == this)
 				buffer.setDirty(false);
-			buffer.remove(offset,length);
 			return offset;
 		} //}}}
 
