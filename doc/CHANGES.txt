@@ -21,6 +21,9 @@ release.
 
 - Documentation updates (me and Kris Kopicki).
 
+- API documentation generated with javadoc is now included. A custom
+  doclet is used to generate a tree view for the help viewer.
+
 + Bug Fixes:
 
 - The Format Paragraph command was once again broken on Java 1.3.

@@ -22,6 +22,7 @@ package doclet;
 import com.sun.javadoc.*;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * This is very much of a hack.
@@ -70,23 +71,29 @@ public class GenerateTocXML
 		out.write("</TITLE>\n");
 
 		ClassDoc[] classes = pkg.allClasses();
+		String[] classNames = new String[classes.length];
+		for(int i = 0; i < classes.length; i++)
+		{
+			classNames[i] = classes[i].name();
+		}
+		Arrays.sort(classNames);
 
 		for(int i = 0; i < classes.length; i++)
 		{
-			processClass(out,pkgPath,classes[i]);
+			processClass(out,pkgPath,classNames[i]);
 		}
 
 		out.write("</ENTRY>");
 	}
 
-	private static void processClass(Writer out, String pkgPath, ClassDoc clazz)
+	private static void processClass(Writer out, String pkgPath, String clazz)
 		throws IOException
 	{
 		out.write("<ENTRY HREF='");
 		out.write(pkgPath);
-		out.write(clazz.name());
+		out.write(clazz);
 		out.write(".html'><TITLE>");
-		out.write(clazz.name());
+		out.write(clazz);
 		out.write("</TITLE>\n");
 		out.write("</ENTRY>");
 	}

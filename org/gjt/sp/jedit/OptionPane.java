@@ -30,6 +30,12 @@ import java.awt.Component;
  *
  * Note that in most cases it is much easier to extend
  * {@link AbstractOptionPane} instead.
+ *
+ * @see OptionGroup
+ * @see org.gjt.sp.jedit.gui.OptionsDialog#addOptionPane(OptionPane)
+ *
+ * @author Slava Pestov
+ * @version $Id$
  */
 public interface OptionPane
 {
@@ -37,6 +43,7 @@ public interface OptionPane
 	 * Returns the internal name of this option pane. The option pane's label
 	 * is set to the value of the property named
 	 * <code>options.<i>name</i>.label</code>.
+	 * @see jEdit#getProperty(String)
 	 */
 	String getName();
 

@@ -39,8 +39,6 @@ and performance.
 - The contents of the status bar can be customized in the Status Bar
   pane of the Utilities->Global Options dialog box.
 
-- The online help is now fully searchable.
-
 * Text editing
 
 - Rectangular selection now respects hard tabs, inserting text into
@@ -136,6 +134,13 @@ and performance.
 
 - The "Install Plugins" and "Update Plugins" dialog boxes now categorize
   the plugin list.
+
+* Documentation
+
+- The online help is now fully searchable.
+
+- For macro and plugin developers, API documentation generated with
+  javadoc is now included.
 
 * Incompatible changes
 

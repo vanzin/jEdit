@@ -1,0 +1,11 @@
+fileDialogReturnValue = GUIUtilities.showVFSFileDialog(view,null,
+	VFSBrowser.CHOOSE_DIRECTORY,false);
+if(fileDialogReturnValue != null)
+{
+	SearchAndReplace.setSearchString("<SCRIPT>(.|\n)*?</SCRIPT>");
+	SearchAndReplace.setReplaceString("");
+	SearchAndReplace.setRegexp(true);
+	SearchAndReplace.setSearchFileSet(new DirectoryListSet(
+		fileDialogReturnValue[0],"*.html",true));
+	SearchAndReplace.replaceAll(view);
+}

@@ -81,7 +81,9 @@ public abstract class FoldHandler
 
 	//{{{ registerFoldHandler() method
 	/**
-	 * Adds a fold handler to the list of registered handlers
+	 * Adds a fold handler to the list of registered handlers.
+	 * Typically this will be called from a plugin's
+	 * {@link org.gjt.sp.jedit.EditPlugin#start()} method.
 	 * @param handler The fold handler to add
 	 * @since jEdit 4.0pre6
 	 */
@@ -99,7 +101,9 @@ public abstract class FoldHandler
 
 	//{{{ unregisterFoldHandler() method
 	/**
-	 * Removes a fold handler from the list of registered handlers
+	 * Removes a fold handler from the list of registered handlers.
+	 * Typically this will be called from a plugin's
+	 * {@link org.gjt.sp.jedit.EditPlugin#stop()} method.
 	 * @param handler The fold handler to add
 	 * @since jEdit 4.1pre2
 	 */

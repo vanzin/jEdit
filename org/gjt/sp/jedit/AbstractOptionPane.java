@@ -50,6 +50,9 @@ import java.awt.*;
  * <li>{@link #addSeparator(String)}</li>
  * </ul>
  *
+ * @see OptionGroup
+ * @see org.gjt.sp.jedit.gui.OptionsDialog#addOptionPane(OptionPane)
+ *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
  * @version $Id$
