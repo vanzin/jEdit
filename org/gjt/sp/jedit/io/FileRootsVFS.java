@@ -3,8 +3,9 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2002 Slava Pestov
+ * Copyright (C) 2000, 2003 Slava Pestov
  * Portions copyright (C) 2002 Kris Kopicki
+ * Portions copyright (C) 2002 Carmine Lucarelli
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +62,10 @@ public class FileRootsVFS extends VFS
 					new Class[0]);
 				isFileSystemRoot = FileSystemView.class.getMethod("isFileSystemRoot",
 					new Class[] { java.io.File.class });
+				isFloppyDrive = FileSystemView.class.getMethod("isFloppyDrive",
+					new Class[] { java.io.File.class });
+				isDrive = FileSystemView.class.getMethod("isDrive",
+					new Class[] { java.io.File.class });
 				fsView = FileSystemView.getFileSystemView();
 				Log.log(Log.DEBUG,this,"Java 1.4 FileSystemView detected");
 			}
@@ -100,13 +105,47 @@ public class FileRootsVFS extends VFS
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 	{
-
 		File file = new File(path);
 
 		int type;
 
-		if(!path.startsWith("A:") && !path.startsWith("B:")
-			&& file.isDirectory())
+		boolean isFloppy;
+		boolean isDirectory;
+
+		// to prevent windows looking for a disk in the floppy drive
+		if(isFloppyDrive != null)
+		{
+			try
+			{
+				isFloppy = Boolean.TRUE.equals(isFloppyDrive.
+					invoke(fsView, new Object[] { file }));
+			}
+			catch(Exception e)
+			{
+				isFloppy = false;
+			}
+		}
+		else
+			isFloppy = path.startsWith("A:") || path.startsWith("B:");
+
+		// so an empty cd drive is not reported as a file
+		if(isDrive != null)
+		{
+			try
+			{
+				isDirectory = Boolean.TRUE.equals(isDrive.
+					invoke(fsView, new Object[] { file }))
+					|| file.isDirectory();
+			}
+			catch(Exception e)
+			{
+				isDirectory = file.isDirectory();
+			}
+		}
+		else
+			isDirectory = file.isDirectory();
+
+		if(isFloppy || isDirectory)
 		{
 			type = VFS.DirectoryEntry.FILESYSTEM;
 
@@ -128,8 +167,7 @@ public class FileRootsVFS extends VFS
 
 		String name;
 
-		if(getSystemDisplayName != null && !path.startsWith("A:")
-			&& !path.startsWith("B:"))
+		if(getSystemDisplayName != null && !isFloppy)
 		{
 			try
 			{
@@ -154,25 +192,13 @@ public class FileRootsVFS extends VFS
 	private static Method getSystemDisplayName;
 	private static Method getRoots;
 	private static Method isFileSystemRoot;
+	private static Method isFloppyDrive;
+	private static Method isDrive;
 
 	//{{{ listRoots() method
 	private static File[] listRoots()
 	{
-		// will finish this later
-		/* if(getRoots != null)
-		{
-			try
-			{
-				File[] roots = (File[])getRoots.invoke(fsView,
-					new Object[0]);
-				return roots;
-			}
-			catch(Exception e)
-			{
-				return null;
-			}
-		}
-		else */ if (OperatingSystem.isMacOS())
+		if (OperatingSystem.isMacOS())
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
@@ -190,7 +216,32 @@ public class FileRootsVFS extends VFS
 			return (File[])roots.toArray(new File[0]);
 		}
 		else
-			return File.listRoots();
+		{
+			File[] roots = File.listRoots();
+			File[] desktop = null;
+
+			if(getRoots != null)
+			{
+				try
+				{
+					desktop = (File[])getRoots.invoke(fsView,
+						new Object[0]);
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR, FileRootsVFS.class, "Error getting Desktop: " + e.getMessage());
+					desktop = null;
+				}
+			}
+
+			if(desktop == null)
+				return roots;
+
+			File[] rootsPlus = new File[roots.length + desktop.length];
+			System.arraycopy(desktop, 0, rootsPlus, 0, desktop.length);
+			System.arraycopy(roots, 0, rootsPlus, 1, roots.length);
+			return rootsPlus;
+		}
 	} //}}}
 
 	//}}}

@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre8
 
-Thanks to Chris Petersen, Jonathan Revusky, Kris Kopicki and Silas Smith
-for contributing to this release.
+Thanks to Carmine Lucarelli, Chris Petersen, Jonathan Revusky,
+Kris Kopicki and Silas Smith for contributing to this release.
 
 + Miscellaneous Changes:
 
@@ -39,8 +39,7 @@ for contributing to this release.
 
 - Fixed a few help viewer quirks.
 
-- Fixed an obscure bug in the text area scrolling code that could
-  manifest when the same buffer was viewed in multiple text areas.
+- Fixed several bugs in the text area scrolling code.
 
 - Fixed Global Options dialog box resizing problems.
 
@@ -54,6 +53,13 @@ for contributing to this release.
   pane.
 
 - Highlighting of m{...} and s{...}{...} in Perl mode was broken.
+
+- The 4.1pre7 changelog claimed that roots: now listed the desktop. This
+  was broken and has now been fixed (Carmine Lucarelli).
+
+- Fixed NPE when a client instance of jEdit requested an already opened
+  buffer to be shown in a new view if that buffer had been changed on
+  disk.
 
 + API Additions:
 
