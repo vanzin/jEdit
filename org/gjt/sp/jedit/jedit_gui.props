@@ -1417,6 +1417,7 @@ options.print.header=Print a header with the file name
 options.print.footer=Print a footer with the date, time and page number
 options.print.lineNumbers=Print line numbers
 options.print.color=Color printing
+options.print.tabSize=Tab width when printing:
 #}}}
 
 #{{{ Docking pane

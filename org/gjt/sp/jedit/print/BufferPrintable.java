@@ -28,7 +28,7 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.print.*;
 import java.awt.*;
-import java.util.Date;
+import java.util.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -47,6 +47,9 @@ class BufferPrintable implements Printable
 
 		styles = GUIUtilities.loadStyles(jEdit.getProperty("print.font"),
 			jEdit.getIntegerProperty("print.fontsize",10),color);
+		styles[Token.NULL] = new SyntaxStyle(textColor,null,font);
+
+		lineList = new ArrayList();
 	} //}}}
 
 	//{{{ print() method
@@ -55,6 +58,16 @@ class BufferPrintable implements Printable
 	{
 		if(end)
 			return NO_SUCH_PAGE;
+
+		if(pageIndex == currentPage)
+		{
+			currentLine = currentPageStart;
+		}
+		else
+		{
+			currentPageStart = currentLine;
+			currentPage = pageIndex;
+		}
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -81,42 +94,78 @@ class BufferPrintable implements Printable
 
 		FontRenderContext frc = gfx.getFontRenderContext();
 
-		// as anyone with any maths knowledge knows, this computes log_2(x)
-		int lineNumberDigits = (int)(Math.log(buffer.getLineCount())
-			/ Math.log(2) + 1);
+		// the +1's ensure that 99 gets 3 digits, 103 gets 4 digits,
+		// and so on.
+		int lineNumberDigits = (int)Math.ceil(Math.log(buffer.getLineCount() + 1)
+			/ Math.log(10)) + 1;
 
-		// now that we know how many chars there are, get the width.
-		char[] chars = new char[lineNumberDigits];
+		//{{{ now that we know how many chars there are, get the width.
+		double spaceWidth = font.getStringBounds(" ",frc).getWidth();
+		double lineNumberWidth = lineNumberDigits * spaceWidth;
+		//}}}
+
+		//{{{ calculate tab size
+		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
+		char[] chars = new char[tabSize];
 		for(int i = 0; i < chars.length; i++)
 			chars[i] = ' ';
-		double lineNumberWidth = font.getStringBounds(chars,
-			0,lineNumberDigits,frc).getWidth();
+		double tabWidth = font.getStringBounds(chars,
+			0,tabSize,frc).getWidth();
+		System.err.println(tabWidth + ":::" + (spaceWidth*tabSize));
+		PrintTabExpander e = new PrintTabExpander(pageX,tabWidth);
+		//}}}
 
 		Segment seg = new Segment();
 		double y = 0.0;
 
 print_loop:	for(;;)
 		{
-			buffer.getLineText(currentLine,seg);
-			LineMetrics lm = font.getLineMetrics(seg.array,seg.offset,seg.count,
-				frc);
-			Token tokens = buffer.markTokens(currentLine).getFirstToken();
+			//{{{ get line text
+			if(currentLine == lineList.size())
+			{
+				buffer.getLineText(currentPhysicalLine,seg);
+				LineMetrics lm = font.getLineMetrics(seg.array,
+					seg.offset,seg.count,frc);
+
+				Token tokens = buffer.markTokens(currentPhysicalLine)
+					.getFirstToken();
+
+				lineList.add(new Integer(++currentPhysicalLine));
+
+				TextUtilities.lineToChunkList(seg,tokens,styles,frc,
+					e,(float)(pageWidth - lineNumberWidth),
+					lineList);
+				if(lineList.size() == currentLine + 1)
+					lineList.add(null);
+			} //}}}
 
 			y += lm.getHeight();
 			if(y >= pageHeight)
 				break print_loop;
 
-			if(lineNumbers)
+			Object obj = lineList.get(currentLine++);
+			if(obj instanceof Integer)
 			{
-				gfx.setColor(lineNumberColor);
-				String lineNumberString = String.valueOf(currentLine + 1);
-				gfx.drawString(lineNumberString,
-					(float)(pageX + lineNumberWidth - font.getStringBounds(
-					lineNumberString,frc).getWidth()),(float)(pageY + y));
+				//{{{ paint line number
+				if(lineNumbers)
+				{
+					gfx.setFont(font);
+					gfx.setColor(lineNumberColor);
+					String lineNumberString = String.valueOf(obj);
+					gfx.drawString(lineNumberString,
+						(float)pageX,(float)(pageY + y));
+				} //}}}
+
+				obj = lineList.get(currentLine++);
 			}
 
-			currentLine++;
-			if(currentLine == buffer.getLineCount())
+			TextUtilities.Chunk line = (TextUtilities.Chunk)obj;
+
+			TextUtilities.paintChunkList(line,gfx,
+				(float)(pageX + lineNumberWidth),
+				(float)(pageY + y));
+
+			if(currentPhysicalLine == buffer.getLineCount())
 			{
 				end = true;
 				break print_loop;
@@ -128,14 +177,14 @@ print_loop:	for(;;)
 
 	//{{{ Private members
 
+	//{{{ Static variables
 	private static Color headerColor = Color.lightGray;
 	private static Color headerTextColor = Color.black;
 	private static Color footerColor = Color.lightGray;
 	private static Color footerTextColor = Color.black;
-	private static Color lineNumberColor = Color.black;
+	private static Color lineNumberColor = Color.gray;
 	private static Color textColor = Color.black;
-
-	private static int lineNumberPadding = 10;
+	//}}}
 
 	//{{{ Instance variables
 	private Buffer buffer;
@@ -145,8 +194,14 @@ print_loop:	for(;;)
 	private boolean footer;
 	private boolean lineNumbers;
 
+	private int currentPage;
+	private int currentPageStart;
 	private int currentLine;
+	private int currentPhysicalLine;
 	private boolean end;
+
+	private LineMetrics lm;
+	private ArrayList lineList;
 	//}}}
 
 	//{{{ paintHeader() method
@@ -166,7 +221,7 @@ print_loop:	for(;;)
 
 		gfx.setColor(headerTextColor);
 
-		LineMetrics lm = font.getLineMetrics(headerText,frc);
+		lm = font.getLineMetrics(headerText,frc);
 		gfx.drawString(headerText,
 			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
 			(float)(pageY + lm.getAscent()));
@@ -193,13 +248,35 @@ print_loop:	for(;;)
 
 		gfx.setColor(footerTextColor);
 
-		LineMetrics lm = font.getLineMetrics(footerText,frc);
+		lm = font.getLineMetrics(footerText,frc);
 		gfx.drawString(footerText,
 			(float)(pageX + (pageWidth - bounds.getWidth()) / 2),
 			(float)(pageY + pageHeight - bounds.getHeight()
 			+ lm.getAscent()));
 
 		return footerBounds.getHeight();
-	}
+	} //}}}
+
 	//}}}
+
+	//{{{ PrintTabExpander class
+	static class PrintTabExpander implements TabExpander
+	{
+		private double pageX;
+		private double tabWidth;
+
+		//{{{ PrintTabExpander constructor
+		public PrintTabExpander(double pageX, double tabWidth)
+		{
+			this.pageX = pageX;
+			this.tabWidth = tabWidth;
+		} //}}}
+
+		//{{{ nextTabStop() method
+		public float nextTabStop(float x, int tabOffset)
+		{
+			int ntabs = (int)((x - pageX) / tabWidth);
+			return (float)((ntabs + 1) * tabWidth + pageX);
+		} //}}}
+	} //}}}
 }

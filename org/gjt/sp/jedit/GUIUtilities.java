@@ -741,10 +741,6 @@ public class GUIUtilities
 
 		try
 		{
-			styles[Token.NULL] = new SyntaxStyle(
-				jEdit.getColorProperty("view.fgColor"),
-				jEdit.getColorProperty("view.bgColor"),
-				jEdit.getFontProperty("view.font"));
 			styles[Token.COMMENT1] = GUIUtilities.parseStyle(
 				jEdit.getProperty("view.style.comment1"),
 				family,size,color);
