@@ -40,50 +40,7 @@ import java.io.*;
 	The BeanShell script interpreter.
 
 	An instance of Interpreter can be used to source scripts and evaluate 
-	statements or expressions.  
-	<p>
-	Here are some examples:
-
-	<p><blockquote><pre>
-		Interpeter bsh = new Interpreter();
-
-		// Evaluate statements and expressions
-		bsh.eval("foo=Math.sin(0.5)");
-		bsh.eval("bar=foo*5; bar=Math.cos(bar);");
-		bsh.eval("for(i=0; i<10; i++) { print(\"hello\"); }");
-		// same as above using java syntax and apis only
-		bsh.eval("for(int i=0; i<10; i++) { System.out.println(\"hello\"); }");
-
-		// Source from files or streams
-		bsh.source("myscript.bsh");  // or bsh.eval("source(\"myscript.bsh\")");
-
-		// Use set() and get() to pass objects in and out of variables
-		bsh.set( "date", new Date() );
-		Date date = (Date)bsh.get( "date" );
-		// This would also work:
-		Date date = (Date)bsh.eval( "date" );
-
-		bsh.eval("year = date.getYear()");
-		Integer year = (Integer)bsh.get("year");  // primitives use wrappers
-
-		// With Java1.3+ scripts can implement arbitrary interfaces...
-		// Script an awt event handler (or source it from a file, more likely)
-		bsh.eval( "actionPerformed( e ) { print( e ); }");
-		// Get a reference to the script object (implementing the interface)
-		ActionListener scriptedHandler = 
-			(ActionListener)bsh.eval("return (ActionListener)this");
-		// Use the scripted event handler normally...
-		new JButton.addActionListener( script );
-	</pre></blockquote>
-	<p>
-
-	In the above examples we showed a single interpreter instance, however 
-	you may wish to use many instances, depending on the application and how
-	you structure your scripts.  Interpreter instances are very light weight
-	to create, however if you are going to execute the same script repeatedly
-	and require maximum performance you should consider scripting the code as 
-	a method and invoking the scripted method each time on the same interpreter
-	instance (using eval()). 
+	statements or expressions.
 	<p>
 
 	See the BeanShell User's Manual for more information.
