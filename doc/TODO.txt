@@ -1,6 +1,5 @@
 TO DO
 
-- MARK_FOLLOWING is broken
 - context.rules -vs- getParserRuleSet(context)
 - add some tips of the day about pre1 features
 - soft wrap

@@ -212,6 +212,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			//{{{ check if current character is a word separator
 			if(Character.isWhitespace(ch))
 			{
+				handleSoftSpan();
+
 				if(keywords != null)
 					markKeyword(false);
 
@@ -368,12 +370,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Not inside a rule
 		else if (context.inRule == null)
 		{
-			if(checkRule.token == Token.WHITESPACE)
-			{
-				if(handleSoftSpan())
-					return true;
-			}
-			else if((checkRule.action & ParserRule.AT_LINE_START)
+			if((checkRule.action & ParserRule.AT_LINE_START)
 				== ParserRule.AT_LINE_START)
 			{
 				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
