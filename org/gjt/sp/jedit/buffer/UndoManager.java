@@ -290,7 +290,7 @@ public class UndoManager
 
 	//{{{ Inner classes
 
-	//{{{ Edit interface
+	//{{{ Edit class
 	abstract class Edit
 	{
 		//{{{ undo() method

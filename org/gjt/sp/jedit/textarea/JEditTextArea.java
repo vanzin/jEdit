@@ -2121,7 +2121,10 @@ forward_scan:		do
 					int collapseFolds = buffer.getIntegerProperty(
 						"collapseFolds",0);
 					if(collapseFolds != 0)
+					{
 						foldVisibilityManager.expandFolds(collapseFolds);
+						foldVisibilityManager.expandFold(newCaretLine,false);
+					}
 					else
 						foldVisibilityManager.expandAllFolds();
 				}

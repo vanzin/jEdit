@@ -3,28 +3,27 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- undo: clears dirty, does not delete autosave
+- javadocs:
+  - gui: better descriptions
 - user's guide:
   - vertical paste & rect select insertion
   - part III
     - non-beanshell languages
-    - "running this one line script" -- link to part saying how
-    - over 800 classes, not 500
-    - requires import statement at the -- should be statements at the
-    - auto-imported packages list probably out of date
-    - put explicit type declaration stuff in its own section
     - after canned dialog description: sidebar about full-blown GUIs -- mention
       upcoming dialog macro
     - describe alternative ways to obtain buffers, edit panes, text areas,
       in a sidebar about changing them
-    - chapter 13 is poorly organized
-    - getting multiple data items -- labels having black text color, bullshit
-    - a vertical struct --> strut
     - plugin devel -- mention readNextChar() somewhere
-    - runScript(View view, String path, Reader in, boolean ownNamespace)
-    - The better solution --> The solution
     - is Log described elsewhere? move to API guide and link from 15.5.2
       (using activity log as a tracing tool).
+    - section on jEdit's various UI controls;
+      - GUIUtilities stuff
+      - HistoryTextField
+      - ColorWellButton
+      - FontSelector
+      - JCheckBoxList
+      - RolloverButton
+      - VariableGridLayout
   - part IV
   - part V
   - macro index might need updating
