@@ -2,6 +2,7 @@
  * MiscUtilities.java - Various miscallaneous utility functions
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
+ * Portions copyright (C) 2001 Dirk Moebius
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +25,7 @@ import javax.swing.JMenuItem;
 import java.io.*;
 import java.util.Vector;
 import java.util.StringTokenizer;
+import org.gjt.sp.util.Log;
 
 /**
  * Class with several useful miscellaneous functions.<p>
@@ -557,14 +559,14 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	/**
 	 * Compares two version strings formatted like 'xxx.xx.xxx'.
-	 * The version string are tokenized at '.' and the substrings
-	 * of both strings are compared with one after another.
-	 * For each substring at first they are compared as Integers
+	 * The versions string are tokenized at '.' and the tokens
+	 * are compared with each other one by one.
+	 * For each substring they are compared as Integers first
 	 * and if that fails, as Strings. The comparison ends with
 	 * the first difference.
-	 * Note, that "1.2.0" < "1.2.0pre1", because "0" < "0pre1".
+	 * Note, that "1.2.0" &lt; "1.2.0pre1", because "0" &lt; "0pre1".
 	 * Therefore you should avoid mixing numbers and text.
-	 * Case is <i>not</i> ignored.
+	 * All string comparisons are case sensitive.
 	 */
 	public static class VersionCompare implements Compare
 	{
@@ -642,6 +644,135 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return "" + major + "." + minor
 			+ (beta != 99 ? "pre" + beta :
 			(bugfix != 0 ? "." + bugfix : "final"));
+	}
+
+	/**
+	 * If on JDK 1.2 or higher, make sure that tools.jar is available.
+	 * This method should be called by plugins requiring the classes
+	 * in this library.
+	 * <p>
+	 * tools.jar is searched for in the following places:
+	 * <ol>
+	 *   <li>the classpath that was used when jEdit was started,
+	 *   <li>jEdit's jars folder in the user's home,
+	 *   <li>jEdit's system jars folder,
+	 *   <li><i>java.home</i>/lib/. In this case, tools.jar is added to
+	 *       jEdit's list of known jars using jEdit.addPluginJAR(),
+	 *       so that it gets loaded through JARClassLoader.
+	 * </ol><p>
+	 *
+	 * On older JDK's this method does not perform any checks, and returns
+	 * <code>true</code> (even though there is no tools.jar).
+	 *
+	 * @return <code>false</code> if and only if on JDK 1.2 and tools.jar
+	 *    could not be found. In this case it prints some warnings on Log,
+	 *    too, about the places where it was searched for.
+	 * @since jEdit 3.2.2
+	 */
+	public static boolean isToolsJarAvailable()
+	{
+		String javaVersion = System.getProperty("java.version");
+		if(compareVersions(javaVersion, "1.2") < 0)
+			return true;
+
+		Log.log(Log.DEBUG, MiscUtilities.class, "JDK 1.2 or higher "
+			+ "detected, searching for tools.jar...");
+
+		Vector paths = new Vector();
+
+		// 1. Check whether tools.jar is in the system classpath:
+		paths.addElement("System classpath: "
+			+ System.getProperty("java.class.path"));
+
+		try
+		{
+			// Either class sun.tools.javac.Main or
+			// com.sun.tools.javac.Main must be there:
+			try
+			{
+				Class.forName("sun.tools.javac.Main");
+			}
+			catch(ClassNotFoundException e1)
+			{
+				Class.forName("com.sun.tools.javac.Main");
+			}
+			Log.log(Log.DEBUG, MiscUtilities.class,
+				"- is in classpath. Fine.");
+			return true;
+		}
+		catch(ClassNotFoundException e)
+		{
+			//Log.log(Log.DEBUG, MiscUtilities.class,
+			//	"- is not in system classpath.");
+		}
+
+		// 2. Check whether it is in the jEdit user settings jars folder:
+		String settingsDir = jEdit.getSettingsDirectory();
+		if(settingsDir != null)
+		{
+			String toolsPath = constructPath(settingsDir, "jars",
+				"tools.jar");
+			paths.addElement(toolsPath);
+			if(new File(toolsPath).exists())
+			{
+				Log.log(Log.DEBUG, MiscUtilities.class,
+					"- is in the user's jars folder. Fine.");
+				// jEdit will load it automatically
+				return true;
+			}
+		}
+
+		// 3. Check whether it is in jEdit's system jars folder:
+		String jEditDir = jEdit.getJEditHome();
+		String toolsPath = constructPath(jEditDir, "jars", "tools.jar");
+		paths.addElement(toolsPath);
+		if(new File(toolsPath).exists())
+		{
+			Log.log(Log.DEBUG, MiscUtilities.class,
+				"- is in jEdit's system jars folder. Fine.");
+			// jEdit will load it automatically
+			return true;
+		}
+
+		// 4. Check whether it is in <java.home>/lib:
+		toolsPath = System.getProperty("java.home");
+		if(toolsPath.toLowerCase().endsWith(File.separator + "jre"))
+			toolsPath = toolsPath.substring(0, toolsPath.length() - 4);
+		toolsPath = constructPath(toolsPath, "lib", "tools.jar");
+		paths.addElement(toolsPath);
+
+		if(!(new File(toolsPath).exists()))
+		{
+			Log.log(Log.WARNING, MiscUtilities.class,
+				"Could not find tools.jar.\n"
+				+ "I checked the following locations:\n"
+				+ paths.toString());
+			return false;
+		}
+
+		// Load it, if not yet done:
+		EditPlugin.JAR jar = jEdit.getPluginJAR(toolsPath);
+		if(jar == null)
+		{
+			Log.log(Log.DEBUG, MiscUtilities.class,
+				"- adding " + toolsPath + " to jEdit plugins.");
+			try
+			{
+				jEdit.addPluginJAR(new EditPlugin.JAR(toolsPath,
+					new JARClassLoader(toolsPath)));
+			}
+			catch(IOException ioex)
+			{
+				Log.log(Log.ERROR, MiscUtilities.class,
+					"- I/O error loading " + toolsPath);
+				Log.log(Log.ERROR, MiscUtilities.class, ioex);
+				return false;
+			}
+		}
+		else
+			Log.log(Log.DEBUG, MiscUtilities.class,
+				"- has been loaded before.");
+		return true;
 	}
 
 	// private members

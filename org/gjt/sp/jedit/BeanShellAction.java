@@ -37,6 +37,15 @@ public class BeanShellAction extends EditAction
 		/* Some characters that we like to use in action names
 		 * ('.', '-') are not allowed in BeanShell identifiers. */
 		sanitizedName = name.replace('.','_').replace('-','_');
+
+		// evaluate isSelected now so that menus don't take a long
+		// time to first come up
+		if(isSelected != null)
+		{
+			String cachedIsSelectedName = "selected_" + sanitizedName;
+			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
+				isSelected,true);
+		}
 	}
 
 	public void invoke(View view)
@@ -58,13 +67,6 @@ public class BeanShellAction extends EditAction
 	{
 		if(isSelected == null)
 			return false;
-
-		if(cachedIsSelected == null)
-		{
-			String cachedIsSelectedName = "selected_" + sanitizedName;
-			cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-				isSelected,true);
-		}
 
 		return Boolean.TRUE.equals(BeanShell.runCachedBlock(cachedIsSelected,
 			view,null));

@@ -1,7 +1,5 @@
 TO DO
 
-- 'Stop' button in plugin list download progress
-- eval IS_SELECTED
 - wait for John to release an updated get_package_name macro
 
 + features:
@@ -20,7 +18,6 @@ TO DO
 - saving a read-only file: show a confirmation dialog box
 - when loading plugins and such, check for settingsDir == jEditHome
 - collapse-all-folds action that calls expandFolds(1)
-- command to reset edit server
 - memory display in status bar, click opens memory display dialog;
   replaces 'show free memory' macro
 - changing read-only flag in buffer options
@@ -31,7 +28,6 @@ TO DO
   saving, only write a trailing newline if property is set
 - if last token of a line has a background color, remainder of line will
   be drawn with that color
-- 'Invert Selection' command
 - after a VFSUpdate for a mode file is received, reload that mode automatically
 - after a VFSUpdate for a mode catalog is received, reload all modes
 - when loading a file: if the stream supports a mark, read first 16 bytes,
@@ -47,14 +43,15 @@ TO DO
 - new document model
 - docking:
   - each tab has a close box
-  - registerDockableWindow(name,multi) instead of named lists
+  - multiple instances of a dockable
   - <name>-to-front action for multi dockables
   - toggle-<name> action for toggling
   - <name> action calls addDockableWindow(), no longer a toggle
+  - remove auto-open setting from option pane; instead, save and restore
+    which dockables are open automatically
 - hypersearch:
   - in selection option
   - new search results window for each search
-  - keyboard navigation of search results
   - file names in bold, show number of results in that file
   - expand all branches
   - remove 'hypersearch results' menu item
@@ -172,3 +169,4 @@ TO DO
   - updateUI doesn't update tree colors
   - restart should not be necessary for 'globalColors' to take effect
 - editing on last line shouldn't cause scrolling
+- 'Stop' in plugin manager needs to be handled more gracefully
