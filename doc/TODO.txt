@@ -1,16 +1,12 @@
 TO DO
 
 - fold vis manager: check for out of bounds line numbers
-- finish text area painter's use of chunk cache
-- new offset conversion and highlighter API
+- new highlighter API
 - soft wrap landing
-
+- gutter and text area mouse handlers
 - plugin size reporting, new install plugins dialog UI layout
 - nextLineRequested still fucked
-
-- textArea.getLastVisibleLine() method
 - print should not use so much memory
-
 - better formatting commands:
   - format becomes 'wrap paragraph'
   - 'wrap line'

@@ -43,25 +43,98 @@ class ChunkCache
 		out = new ArrayList();
 	} //}}}
 
+	//{{{ getMaxHorizontalScrollWidth() method
+	int getMaxHorizontalScrollWidth()
+	{
+		int max = 0;
+		for(int i = 0; i < lineInfo.length; i++)
+		{
+			LineInfo info = lineInfo[i];
+			if(info.chunksValid && info.width > max)
+				max = info.width;
+		}
+		return max;
+	} //}}}
+
+	//{{{ getScreenLineForOffset() method
+	int getScreenLineForOffset(int line, int offset)
+	{
+		int screenLine;
+		if(line == lastScreenLineP)
+			screenLine = lastScreenLine;
+		else if(line < textArea.getFirstPhysicalLine())
+		{
+			updateChunksUpTo(0);
+			screenLine = 0;
+		}
+		else if(line > textArea.getLastPhysicalLine())
+		{
+			updateChunksUpTo(lineInfo.length - 1);
+			screenLine = lineInfo.length - 1;
+		}
+		else
+		{
+			screenLine = -1;
+
+			// Find the screen line containing this offset
+			for(int i = 0; i < lineInfo.length - 1; i++)
+			{
+				updateChunksUpTo(i + 1);
+
+				LineInfo info = lineInfo[i];
+				if(info.physicalLine > line)
+				{
+					// line is invisible?
+					if(i == 0)
+						screenLine = 0;
+					else
+						screenLine = i - 1;
+					break;
+				}
+				else if(info.physicalLine == line)
+				{
+					if(offset >= info.offset
+						&& offset < lineInfo[i + 1].offset)
+					{
+						screenLine = i;
+						break;
+					}
+				}
+			}
+
+			if(screenLine == -1)
+				screenLine = lineInfo.length - 1;
+		}
+
+		lastScreenLineP = line;
+		lastScreenLine = screenLine;
+
+		return screenLine;
+	} //}}}
+
 	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
 		lineInfo = new LineInfo[textArea.getVisibleLines() + 1];
 		for(int i = 0; i < lineInfo.length; i++)
 			lineInfo[i] = new LineInfo();
+
+		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ setFirstLine() method
 	void setFirstLine(int firstLine)
 	{
-	//	if(Math.abs(firstLine - this.firstLine) >= lineInfo.length)
-	//	{
+		// TODO: assuming one-to-one virtual to screen mapping
+
+		//if(Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+		{
 			for(int i = 0; i < lineInfo.length; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
-	/*	}
-		else if(firstLine > this.firstLine)
+		}
+		/*else if(firstLine > this.firstLine)
 		{
 			System.arraycopy(lineInfo,firstLine - this.firstLine,
 				lineInfo,0,lineInfo.length - firstLine
@@ -85,6 +158,8 @@ class ChunkCache
 		}*/
 
 		this.firstLine = firstLine;
+
+		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateAll() method
@@ -93,35 +168,50 @@ class ChunkCache
 		for(int i = 0; i < lineInfo.length; i++)
 		{
 			lineInfo[i].chunksValid = false;
-			lineInfo[i].chunks = null;
+		}
+
+		lastScreenLine = lastScreenLineP = -1;
+	} //}}}
+
+	//{{{ invalidateChunksFrom() method
+	void invalidateChunksFrom(int screenLine)
+	{
+		for(int i = screenLine; i < lineInfo.length; i++)
+		{
+			lineInfo[i].chunksValid = false;
 		}
 	} //}}}
 
-	//{{{ invalidateLineRange() method
-	void invalidateLineRange(int startLine, int endLine)
+	//{{{ invalidateChunksFromPhys() method
+	void invalidateChunksFromPhys(int physicalLine)
 	{
-		startLine -= firstLine;
-		startLine = Math.min(lineInfo.length - 1,Math.max(0,startLine));
-		endLine -= firstLine;
-		endLine = Math.min(lineInfo.length - 1,Math.max(0,endLine));
-
-		for(int i = startLine; i <= endLine; i++)
+		for(int i = 0; i < lineInfo.length; i++)
 		{
-			lineInfo[i].chunksValid = false;
-			lineInfo[i].chunks = null;
+			if(lineInfo[i].physicalLine >= physicalLine)
+			{
+				invalidateChunksFrom(i);
+				break;
+			}
 		}
+
+		if(lastScreenLineP >= physicalLine)
+			lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
 	void updateChunksUpTo(int lastScreenLine)
 	{
+		// TODO
+		if(lastScreenLine >= lineInfo.length)
+			textArea.recalculateVisibleLines();
+
 		LineInfo info = null;
 
 		int firstScreenLine = 0;
 
 		for(int i = lastScreenLine; i >= 0; i--)
 		{
-			info = lineInfo[firstScreenLine];
+			info = lineInfo[i];
 			if(info.chunksValid)
 			{
 				if(i == lastScreenLine)
@@ -159,6 +249,7 @@ class ChunkCache
 		out.clear();
 
 		int subregion = 0;
+		int offset = 0;
 
 		for(int i = firstScreenLine; i <= lastScreenLine; i++)
 		{
@@ -192,11 +283,15 @@ class ChunkCache
 					painter,0.0f,out);
 
 				if(out.size() == 0)
+				{
 					chunks = null;
+					offset = 0;
+				}
 				else
 				{
 					chunks = (TextUtilities.Chunk)out.get(0);
 					out.remove(0);
+					offset = 0;
 				}
 			}
 			else
@@ -205,24 +300,27 @@ class ChunkCache
 
 				chunks = (TextUtilities.Chunk)out.get(0);
 				out.remove(0);
+				offset = chunks.offset;
 			}
 
 			info.physicalLine = physicalLine;
 			info.subregion = subregion;
+			info.offset = offset;
 			info.chunks = chunks;
 			info.chunksValid = true;
 		}
 	} //}}}
 
-	//{{{ getLineInfoForScreenLine() method
-	LineInfo getLineInfoForScreenLine(int screenLine)
+	//{{{ getLineInfo() method
+	LineInfo getLineInfo(int screenLine)
 	{
 		return lineInfo[screenLine];
 	} //}}}
 
-	//{{{ getLineInfo() method
-	LineInfo getLineInfo(int physicalLineIndex)
+	//{{{ getLineInfoBackwardsCompatibility() method
+	LineInfo getLineInfoBackwardsCompatibility(int physicalLineIndex)
 	{
+		// TODO: assuming one-to-one virtual to screen mapping
 		int firstPhysLine = textArea.getFirstPhysicalLine();
 		int lastPhysLine = textArea.getLastPhysicalLine();
 		if(physicalLineIndex >= firstPhysLine
@@ -268,12 +366,16 @@ class ChunkCache
 	private int firstLine;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
+
+	private int lastScreenLineP;
+	private int lastScreenLine;
 	//}}}
 
 	//{{{ LineInfo class
 	static class LineInfo
 	{
 		int physicalLine;
+		int offset;
 		int subregion;
 		boolean chunksValid;
 		TextUtilities.Chunk chunks;

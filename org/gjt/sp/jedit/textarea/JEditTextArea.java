@@ -253,6 +253,7 @@ public class JEditTextArea extends JComponent
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
+			chunkCache.invalidateAll();
 			setCaretPosition(0);
 
 			// just in case, maybe not necessary?...
@@ -261,7 +262,6 @@ public class JEditTextArea extends JComponent
 			painter.propertiesChanged();
 
 			updateScrollBars();
-			chunkCache.invalidateAll();
 			painter.repaint();
 			gutter.repaint();
 		}
@@ -424,17 +424,6 @@ public class JEditTextArea extends JComponent
 		painter.repaint();
 
 		fireScrollEvent(false);
-	} //}}}
-
-	//{{{ setOrigin() method
-	/**
-	 * @deprecated Use setFirstLine() and setHorizontalOffset() instead
-	 */
-	public boolean setOrigin(int firstLine, int horizontalOffset)
-	{
-		setFirstLine(firstLine);
-		setHorizontalOffset(horizontalOffset);
-		return true;
 	} //}}}
 
 	//{{{ updateScrollBars() method
@@ -693,75 +682,12 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Offset conversion
 
-	//{{{ lineToY() method
-	/**
-	 * Converts a line index to a y co-ordinate. This must be a virtual,
-	 * not a physical, line number.
-	 * @param line The line
-	 */
-	public int lineToY(int line)
-	{
-		FontMetrics fm = painter.getFontMetrics();
-		return (line - firstLine) * fm.getHeight()
-			- (fm.getLeading() + fm.getDescent());
-	} //}}}
-
-	//{{{ yToLine() method
-	/**
-	 * Converts a y co-ordinate to a virtual line index.
-	 * @param y The y co-ordinate
-	 */
-	public int yToLine(int y)
-	{
-		FontMetrics fm = painter.getFontMetrics();
-		int height = fm.getHeight();
-		return Math.max(0,Math.min(getVirtualLineCount() - 1,
-			y / height + firstLine));
-	} //}}}
-
-	//{{{ offsetToX() method
-	/**
-	 * Converts an offset in a line into an x co-ordinate.
-	 * @param line The line
-	 * @param offset The offset, from the start of the line
-	 */
-	public int offsetToX(int line, int offset)
-	{
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
-		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
-	} //}}}
-
-	//{{{ xToOffset() method
-	/**
-	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The physical line index
-	 * @param x The x co-ordinate
-	 */
-	public int xToOffset(int line, int x)
-	{
-		x -= horizontalOffset;
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
-		return TextUtilities.xToOffset(chunks,x,true);
-	} //}}}
-
-	//{{{ xToOffset() method
-	/**
-	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The physical line index
-	 * @param x The x co-ordinate
-	 * @param round Round up to next letter if past the middle of a letter?
-	 * @since jEdit 3.2pre6
-	 */
-	public int xToOffset(int line, int x, boolean round)
-	{
-		x -= horizontalOffset;
-		TextUtilities.Chunk chunks = chunkCache.getLineInfo(line).chunks;
-		return (int)TextUtilities.xToOffset(chunks,x,round);
-	} //}}}
-
 	//{{{ xyToOffset() method
 	/**
-	 * Converts a point to an offset, from the start of the text.
+	 * Converts a point to an offset.
+	 * Note that unlike in previous jEdit versions, this method now returns
+	 * -1 if the y co-ordinate is out of bounds.
+	 *
 	 * @param x The x co-ordinate of the point
 	 * @param y The y co-ordinate of the point
 	 */
@@ -772,7 +698,10 @@ public class JEditTextArea extends JComponent
 
 	//{{{ xyToOffset() method
 	/**
-	 * Converts a point to an offset, from the start of the text.
+	 * Converts a point to an offset.
+	 * Note that unlike in previous jEdit versions, this method now returns
+	 * -1 if the y co-ordinate is out of bounds.
+	 *
 	 * @param x The x co-ordinate of the point
 	 * @param y The y co-ordinate of the point
 	 * @param round Round up to next letter if past the middle of a letter?
@@ -782,22 +711,69 @@ public class JEditTextArea extends JComponent
 	{
 		FontMetrics fm = painter.getFontMetrics();
 		int height = fm.getHeight();
-		int line = y / height + firstLine;
+		int line = y / height;
 
-		if(line < 0)
-			return 0;
-		else if(line >= getVirtualLineCount())
+		if(line < 0 || line > visibleLines)
+			return -1;
+
+		chunkCache.updateChunksUpTo(line);
+
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		if(!lineInfo.chunksValid)
+			System.err.println("xy to offset: not valid");
+
+		if(lineInfo.physicalLine == -1)
 		{
-			// WRONG!!!
-			// return getBufferLength();
 			return getLineEndOffset(virtualToPhysical(
 				getVirtualLineCount() - 1)) - 1;
 		}
 		else
 		{
-			line = virtualToPhysical(line);
-			return getLineStartOffset(line) + xToOffset(line,x);
+			return getLineStartOffset(lineInfo.physicalLine)
+				+ lineInfo.offset
+				+ (int)TextUtilities.xToOffset(lineInfo.chunks,
+				x - horizontalOffset,round);
 		}
+	} //}}}
+
+	//{{{ offsetToXY() method
+	/**
+	 * Converts an offset into a point in the text area painter's
+	 * co-ordinate space.
+	 * @param offset The offset
+	 */
+	public Point offsetToXY(int offset)
+	{
+		int line = buffer.getLineOfOffset(offset);
+		offset -= buffer.getLineStartOffset(offset);
+		Point retVal = new Point();
+		return offsetToXY(line,offset,retVal);
+	} //}}}
+
+	//{{{ offsetToXY() method
+	/**
+	 * Converts an offset into a point in the text area painter's
+	 * co-ordinate space.
+	 * @param line The physical line number
+	 * @param offset The offset, from the start of the line
+	 * @param retVal The point to store the return value in
+	 * @return <code>retVal</code> for convenience
+	 * @since jEdit 4.0pre4
+	 */
+	public Point offsetToXY(int line, int offset, Point retVal)
+	{
+		int screenLine = chunkCache.getScreenLineForOffset(line,offset);
+
+		retVal.y = screenLine * painter.getFontMetrics().getHeight();
+
+		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
+		if(!info.chunksValid)
+			System.err.println("offset to xy: not valid");
+
+		retVal.x = (int)(horizontalOffset + TextUtilities.offsetToX(
+			info.chunks,offset));
+
+		return retVal;
 	} //}}}
 
 	//}}}
@@ -900,7 +876,6 @@ public class JEditTextArea extends JComponent
 		painter.repaint(0,y,painter.getWidth(),height);
 		gutter.repaint(0,y,gutter.getWidth(),height);
 	} //}}}
-
 
 	//}}}
 
@@ -1792,193 +1767,6 @@ forward_scan:		do
 	public void showSelectLineRangeDialog()
 	{
 		new SelectLineRange(view);
-	} //}}}
-
-	//}}}
-
-	//{{{ Old selection API
-
-	//{{{ getSelectionStart() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStart()</code> method
-	 */
-	public final int getSelectionStart()
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getStart();
-	} //}}}
-
-	//{{{ getSelectionStart() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStart(int)</code> method
-	 */
-	public int getSelectionStart(int line)
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getStart(
-			buffer,line);
-	} //}}}
-
-	//{{{ getSelectionStartLine() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStartLine()</code> method
-	 */
-	public final int getSelectionStartLine()
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getStartLine();
-	} //}}}
-
-	//{{{ setSelectionStart() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final void setSelectionStart(int selectionStart)
-	{
-		select(selectionStart,getSelectionEnd(),true);
-	} //}}}
-
-	//{{{ getSelectionEnd() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEnd()</code> method
-	 */
-	public final int getSelectionEnd()
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getEnd();
-	} //}}}
-
-	//{{{ getSelectionEnd() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEnd(int)</code> method
-	 */
-	public int getSelectionEnd(int line)
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getEnd(
-			buffer,line);
-	} //}}}
-
-	//{{{ getSelectionEndLine() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEndLine()</code> method
-	 */
-	public final int getSelectionEndLine()
-	{
-		if(selection.size() != 1)
-			return caret;
-
-		return ((Selection)selection.elementAt(0)).getEndLine();
-	} //}}}
-
-	//{{{ setSelectionEnd() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final void setSelectionEnd(int selectionEnd)
-	{
-		select(getSelectionStart(),selectionEnd,true);
-	} //}}}
-
-	//{{{ getMarkPosition() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final int getMarkPosition()
-	{
-		Selection s = getSelectionAtOffset(caret);
-		if(s == null)
-			return caret;
-
-		if(s.start == caret)
-			return s.end;
-		else if(s.end == caret)
-			return s.start;
-		else
-			return caret;
-	} //}}}
-
-	//{{{ getMarkLine() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final int getMarkLine()
-	{
-		if(selection.size() != 1)
-			return caretLine;
-
-		Selection s = (Selection)selection.elementAt(0);
-		if(s.start == caret)
-			return s.endLine;
-		else if(s.end == caret)
-			return s.startLine;
-		else
-			return caretLine;
-	} //}}}
-
-	//{{{ select() method
-	/**
-	 * @deprecated Instead, call either <code>addToSelection()</code>,
-	 * or <code>setSelection()</code> with a new Selection instance.
-	 */
-	public void select(int start, int end)
-	{
-		select(start,end,true);
-	} //}}}
-
-	//{{{ select() method
-	/**
-	 * @deprecated Instead, call either <code>addToSelection()</code>,
-	 * or <code>setSelection()</code> with a new Selection instance.
-	 */
-	public void select(int start, int end, boolean doElectricScroll)
-	{
-		selectNone();
-
-		int newStart, newEnd;
-		if(start < end)
-		{
-			newStart = start;
-			newEnd = end;
-		}
-		else
-		{
-			newStart = end;
-			newEnd = start;
-		}
-
-		setSelection(new Selection.Range(newStart,newEnd));
-		moveCaretPosition(end,doElectricScroll);
-	} //}}}
-
-	//{{{ isSelectionRectangular() method
-	/**
-	 * @deprecated Instead, check if the appropriate Selection
-	 * is an instance of the Selection.Rect class.
-	 */
-	public boolean isSelectionRectangular()
-	{
-		Selection s = getSelectionAtOffset(caret);
-		if(s == null)
-			return false;
-		else
-			return (s instanceof Selection.Rect);
 	} //}}}
 
 	//}}}
@@ -4436,6 +4224,280 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//}}}
 
+	//{{{ Deprecated methods
+
+	//{{{ setOrigin() method
+	/**
+	 * @deprecated Use setFirstLine() and setHorizontalOffset() instead
+	 */
+	public boolean setOrigin(int firstLine, int horizontalOffset)
+	{
+		setFirstLine(firstLine);
+		setHorizontalOffset(horizontalOffset);
+		return true;
+	} //}}}
+
+	//{{{ lineToY() method
+	/**
+	 * @deprecated Use <code>offsetToXY</code> instead.
+	 *
+	 * Converts a line index to a y co-ordinate. This must be a virtual,
+	 * not a physical, line number.
+	 * @param line The line
+	 */
+	public int lineToY(int line)
+	{
+		FontMetrics fm = painter.getFontMetrics();
+		return (line - firstLine) * fm.getHeight()
+			- (fm.getLeading() + fm.getDescent());
+	} //}}}
+
+	//{{{ yToLine() method
+	/**
+	 * @deprecated Use <code>xyToOffset</code> instead.
+	 *
+	 * Converts a y co-ordinate to a virtual line index.
+	 * @param y The y co-ordinate
+	 */
+	public int yToLine(int y)
+	{
+		FontMetrics fm = painter.getFontMetrics();
+		int height = fm.getHeight();
+		return Math.max(0,Math.min(getVirtualLineCount() - 1,
+			y / height + firstLine));
+	} //}}}
+
+	//{{{ offsetToX() method
+	/**
+	 * @deprecated Call <code>offsetToXY()</code> instead.
+	 *
+	 * Converts an offset in a line into an x co-ordinate.
+	 * @param line The line
+	 * @param offset The offset, from the start of the line
+	 */
+	public int offsetToX(int line, int offset)
+	{
+		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
+	} //}}}
+
+	//{{{ xToOffset() method
+	/**
+	 * @deprecated Call <code>xyToOffset()</code> instead.
+	 *
+	 * Converts an x co-ordinate to an offset within a line.
+	 * @param line The physical line index
+	 * @param x The x co-ordinate
+	 */
+	public int xToOffset(int line, int x)
+	{
+		x -= horizontalOffset;
+		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		return TextUtilities.xToOffset(chunks,x,true);
+	} //}}}
+
+	//{{{ xToOffset() method
+	/**
+	 * @deprecated Call <code>xyToOffset()</code> instead.
+	 *
+	 * Converts an x co-ordinate to an offset within a line.
+	 * @param line The physical line index
+	 * @param x The x co-ordinate
+	 * @param round Round up to next letter if past the middle of a letter?
+	 * @since jEdit 3.2pre6
+	 */
+	public int xToOffset(int line, int x, boolean round)
+	{
+		x -= horizontalOffset;
+		TextUtilities.Chunk chunks = chunkCache.getLineInfoBackwardsCompatibility(line).chunks;
+		return TextUtilities.xToOffset(chunks,x,round);
+	} //}}}
+
+	//{{{ getSelectionStart() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStart()</code> method
+	 */
+	public final int getSelectionStart()
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getStart();
+	} //}}}
+
+	//{{{ getSelectionStart() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStart(int)</code> method
+	 */
+	public int getSelectionStart(int line)
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getStart(
+			buffer,line);
+	} //}}}
+
+	//{{{ getSelectionStartLine() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStartLine()</code> method
+	 */
+	public final int getSelectionStartLine()
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getStartLine();
+	} //}}}
+
+	//{{{ setSelectionStart() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	public final void setSelectionStart(int selectionStart)
+	{
+		select(selectionStart,getSelectionEnd(),true);
+	} //}}}
+
+	//{{{ getSelectionEnd() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEnd()</code> method
+	 */
+	public final int getSelectionEnd()
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getEnd();
+	} //}}}
+
+	//{{{ getSelectionEnd() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEnd(int)</code> method
+	 */
+	public int getSelectionEnd(int line)
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getEnd(
+			buffer,line);
+	} //}}}
+
+	//{{{ getSelectionEndLine() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEndLine()</code> method
+	 */
+	public final int getSelectionEndLine()
+	{
+		if(selection.size() != 1)
+			return caret;
+
+		return ((Selection)selection.elementAt(0)).getEndLine();
+	} //}}}
+
+	//{{{ setSelectionEnd() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	public final void setSelectionEnd(int selectionEnd)
+	{
+		select(getSelectionStart(),selectionEnd,true);
+	} //}}}
+
+	//{{{ getMarkPosition() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	public final int getMarkPosition()
+	{
+		Selection s = getSelectionAtOffset(caret);
+		if(s == null)
+			return caret;
+
+		if(s.start == caret)
+			return s.end;
+		else if(s.end == caret)
+			return s.start;
+		else
+			return caret;
+	} //}}}
+
+	//{{{ getMarkLine() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	public final int getMarkLine()
+	{
+		if(selection.size() != 1)
+			return caretLine;
+
+		Selection s = (Selection)selection.elementAt(0);
+		if(s.start == caret)
+			return s.endLine;
+		else if(s.end == caret)
+			return s.startLine;
+		else
+			return caretLine;
+	} //}}}
+
+	//{{{ select() method
+	/**
+	 * @deprecated Instead, call either <code>addToSelection()</code>,
+	 * or <code>setSelection()</code> with a new Selection instance.
+	 */
+	public void select(int start, int end)
+	{
+		select(start,end,true);
+	} //}}}
+
+	//{{{ select() method
+	/**
+	 * @deprecated Instead, call either <code>addToSelection()</code>,
+	 * or <code>setSelection()</code> with a new Selection instance.
+	 */
+	public void select(int start, int end, boolean doElectricScroll)
+	{
+		selectNone();
+
+		int newStart, newEnd;
+		if(start < end)
+		{
+			newStart = start;
+			newEnd = end;
+		}
+		else
+		{
+			newStart = end;
+			newEnd = start;
+		}
+
+		setSelection(new Selection.Range(newStart,newEnd));
+		moveCaretPosition(end,doElectricScroll);
+	} //}}}
+
+	//{{{ isSelectionRectangular() method
+	/**
+	 * @deprecated Instead, check if the appropriate Selection
+	 * is an instance of the Selection.Rect class.
+	 */
+	public boolean isSelectionRectangular()
+	{
+		Selection s = getSelectionAtOffset(caret);
+		if(s == null)
+			return false;
+		else
+			return (s instanceof Selection.Rect);
+	} //}}}
+
+	//}}}
+
 	//{{{ Package-private members
 	Segment lineSegment;
 	MouseHandler mouseHandler;
@@ -4485,13 +4547,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ updateMaxHorizontalScrollWidth() method
 	void updateMaxHorizontalScrollWidth()
 	{
-		int max = 0;
-		for(int i = 0; i < visibleLines; i++)
-		{
-			int width = chunkCache.getLineInfoForScreenLine(i).width;
-			if(width > max)
-				max = width;
-		}
+		int max = chunkCache.getMaxHorizontalScrollWidth();
 
 		if(max != maxHorizontalScrollWidth)
 		{
@@ -5326,9 +5382,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
-			int virtualStartLine = physicalToVirtual(startLine);
-			chunkCache.invalidateLineRange(virtualStartLine,
-				getVirtualLineCount() - 1);
+			chunkCache.invalidateChunksFromPhys(startLine);
 
 			if(numLines == 0)
 				invalidateLine(startLine);
@@ -5344,7 +5398,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				updateScrollBars();
 
 				invalidateVirtualLineRange(
-					virtualStartLine,
+					physicalToVirtual(startLine),
 					firstLine + visibleLines);
 			}
 		} //}}}
@@ -5539,7 +5593,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleDrag() method
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
-			int dot = xyToOffset(evt.getX(),evt.getY(),
+			if(evt.getY() < 0)
+			{
+				setFirstLine(firstLine - 2);
+			}
+			else if(evt.getY() >= getHeight())
+			{
+				setFirstLine(firstLine + 2);
+			}
+
+			int dot = xyToOffset(evt.getX(),
+				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
 				!painter.isBlockCaretEnabled());
 			if(dot == caret)
 				return;
