@@ -1,19 +1,17 @@
 TO DO
 
+- next/prev word: if whitespace at start of word, don't eat trailing
+
 - rect select and soft wrap
 - still problem with last phys line repainting
-- search dialog does not get focus when 'find' invoked while its open
-- source for existing plugins
-
+- vertical scrollbar w/ soft wrap wrong
+- save to X:filename on Windows
+- plugin manager needs overhauled error reporting
 - motif l&f: shortcuts in menu items
-
-- documentation:
-
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
 - appendix in plugin guide on contributing plugins
-
 - drag and up and down should not need setFirstLine() stupidity
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class
@@ -21,10 +19,7 @@ TO DO
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
-- next/prev word: if whitespace at start of word, don't eat trailing
-- vertical scrollbar w/ soft wrap wrong
 - fix page up/page down
-- save to X:filename on Windows
 - jdk 1.4: popups in wrong location
 - updateChunksUpTo() called too many times
 - plugin manager's progress bar: max value is download size
@@ -58,7 +53,6 @@ TO DO
 - last focused dockable cmd
 - XModeHandler: better error reporting
 - add index terms throughout user's guide!
-- plugin manager needs overhauled error reporting
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 - loading and saving opt pane: 'choose' button for backup directory
