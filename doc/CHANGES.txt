@@ -11,6 +11,9 @@ JEDIT 4.0 VERSION HISTORY
 
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
   some bug fixes and cleanups (Kris Kopicki)
+- On Unix, the installer now defaults to installing in the user's home
+  directory when running as a non-root user
+- Updated PL-SQL mode (Steve Snider)
 
 + Bug Fixes
 

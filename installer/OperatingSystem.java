@@ -74,13 +74,29 @@ public abstract class OperatingSystem
 	{
 		public String getInstallDirectory(String name, String version)
 		{
-			return "/usr/local/share/" + name.toLowerCase()
-				+ "/" + version;
+			if("root".equals(System.getProperty("user.name")))
+			{
+				return "/usr/local/share/" + name.toLowerCase()
+					+ "/" + version;
+			}
+			else
+			{
+				return new File(System.getProperty(
+					"user.home"),"bin").getPath()
+					+ "/" + name.toLowerCase()
+					+ "/" + version;
+			}
 		}
 
 		public String getShortcutDirectory(String name, String version)
 		{
-			return "/usr/local/bin";
+			if("root".equals(System.getProperty("user.name")))
+				return "/usr/local/bin";
+			else
+			{
+				return new File(System.getProperty(
+					"user.home"),"bin").getPath();
+			}
 		}
 
 		public void createScript(Install installer,
