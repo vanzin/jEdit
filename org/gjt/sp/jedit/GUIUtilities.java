@@ -834,7 +834,12 @@ public class GUIUtilities
 		int x, y, width, height;
 
 		Dimension size = win.getSize();
-		Dimension screen = win.getToolkit().getScreenSize();
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		Rectangle gcbounds = gd.getDefaultConfiguration().getBounds();
+		
+		x = gcbounds.x;
+		y = gcbounds.y;
+		Dimension screen = new Dimension(gcbounds.width,gcbounds.height);
 
 		width = jEdit.getIntegerProperty(name + ".width",size.width);
 		height = jEdit.getIntegerProperty(name + ".height",size.height);
@@ -842,14 +847,14 @@ public class GUIUtilities
 		Component parent = win.getParent();
 		if(parent == null)
 		{
-			x = (screen.width - width) / 2;
-			y = (screen.height - height) / 2;
+			x += (screen.width - width) / 2;
+			y += (screen.height - height) / 2;
 		}
 		else
 		{
 			Rectangle bounds = parent.getBounds();
-			x = bounds.x + (bounds.width - width) / 2;
-			y = bounds.y + (bounds.height - height) / 2;
+			x += bounds.x + (bounds.width - width) / 2;
+			y += bounds.y + (bounds.height - height) / 2;
 		}
 
 		x = jEdit.getIntegerProperty(name + ".x",x);

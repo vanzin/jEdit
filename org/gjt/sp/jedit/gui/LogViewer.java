@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,11 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -60,25 +59,29 @@ public class LogViewer extends JPanel
 		tail.addActionListener(new ActionHandler());
 		captionBox.add(tail);
 
-		textArea = new JTextArea(24,80);
-		textArea.setDocument(Log.getLogDocument());
-		textArea.getDocument().addDocumentListener(
-			new DocumentHandler());
-		//textArea.setEditable(false);
+		ListModel model = Log.getLogListModel();
+		model.addListDataListener(new ListHandler());
+		list = new JList(model);
+		list.setVisibleRowCount(24);
+		list.setFont(jEdit.getFontProperty("view.font"));
 
 		add(BorderLayout.NORTH,captionBox);
-		add(BorderLayout.CENTER,new JScrollPane(textArea));
+		JScrollPane scroller = new JScrollPane(list);
+		Dimension dim = scroller.getPreferredSize();
+		dim.width = Math.min(300,dim.width);
+		scroller.setPreferredSize(dim);
+		add(BorderLayout.CENTER,scroller);
 	} //}}}
 
 	//{{{ requestDefaultFocus() method
 	public boolean requestDefaultFocus()
 	{
-		textArea.requestFocus();
+		list.requestFocus();
 		return true;
 	} //}}}
 
 	//{{{ Private members
-	private JTextArea textArea;
+	private JList list;
 	private JCheckBox tail;
 	private boolean tailIsOn;
 	//}}}
@@ -91,22 +94,34 @@ public class LogViewer extends JPanel
 			tailIsOn = !tailIsOn;
 			jEdit.setBooleanProperty("log-viewer.tail",tailIsOn);
 			if(tailIsOn)
-				textArea.setCaretPosition(
-					textArea.getDocument().getLength());
+			{
+				int index = list.getModel().getSize();
+				list.setSelectedIndex(index);
+				list.ensureIndexIsVisible(index);
+			}
 		}
 	} //}}}
 
-	//{{{ DocumentHandler class
-	class DocumentHandler implements DocumentListener
+	//{{{ ListHandler class
+	class ListHandler implements ListDataListener
 	{
-		public void insertUpdate(DocumentEvent e)
+		public void intervalAdded(ListDataEvent e)
 		{
-			if(tailIsOn)
-				textArea.setCaretPosition(
-					textArea.getDocument().getLength());
+			contentsChanged(e);
 		}
 
-		public void changedUpdate(DocumentEvent e) {}
-		public void removeUpdate(DocumentEvent e) {}
+		public void intervalRemoved(ListDataEvent e)
+		{
+			contentsChanged(e);
+		}
+
+		public void contentsChanged(ListDataEvent e)
+		{
+			if(tailIsOn)
+			{
+				int index = list.getModel().getSize() - 1;
+				list.ensureIndexIsVisible(index);
+			}
+		}
 	} //}}}
 }

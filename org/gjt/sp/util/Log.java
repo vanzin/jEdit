@@ -1,6 +1,9 @@
 /*
  * Log.java - A class for logging events
- * Copyright (C) 1999, 2000 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +23,9 @@
 package org.gjt.sp.util;
 
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.*;
 
 /**
  * This class provides methods for logging events. In terms of functionality,
@@ -38,6 +43,7 @@ import java.util.StringTokenizer;
  */
 public class Log
 {
+	//{{{ Constants
 	/**
 	 * The maximum number of log messages that will be kept in memory.
 	 * @since jEdit 2.6pre5
@@ -78,7 +84,9 @@ public class Log
 	 * @since jEdit 2.2pre2
 	 */
 	public static final int ERROR = 9;
+	//}}}
 
+	//{{{ init() method
 	/**
 	 * Initializes the log.
 	 * @param stdio If true, standard output and error will be
@@ -115,8 +123,9 @@ public class Log
 			log(MESSAGE,Log.class,
 				props[i] + "=" + System.getProperty(props[i]));
 		}
-	}
+	} //}}}
 
+	//{{{ setLogWriter() method
 	/**
 	 * Writes all currently logged messages to this stream if there was no
 	 * stream set previously, and sets the stream to write future log
@@ -153,8 +162,9 @@ public class Log
 		}
 
 		Log.stream = stream;
-	}
+	} //}}}
 
+	//{{{ flushStream() method
 	/**
 	 * Flushes the log stream.
 	 * @since jEdit 2.6pre5
@@ -172,8 +182,9 @@ public class Log
 				io.printStackTrace(realErr);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ closeStream() method
 	/**
 	 * Closes the log stream. Should be done before your program exits.
 	 * @since jEdit 2.6pre5
@@ -192,8 +203,19 @@ public class Log
 				io.printStackTrace(realErr);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ getLogListModel() method
+	/**
+	 * Returns the list model for viewing the log contents.
+	 * @since jEdit 4.2pre1
+	 */
+	public static ListModel getLogListModel()
+	{
+		return listModel;
+	} //}}}
+
+	//{{{ log() method
 	/**
 	 * Logs a message. This method is thread-safe.<p>
 	 *
@@ -251,11 +273,14 @@ public class Log
 				{
 					_log(urgency,_source,st.nextToken());
 				}
+				listModel.fireChanged();
 			}
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private static Object LOCK = new Object();
 	private static String[] log;
 	private static int logLineCount;
@@ -265,7 +290,10 @@ public class Log
 	private static String lineSep;
 	private static PrintStream realOut;
 	private static PrintStream realErr;
+	private static LogListModel listModel;
+	//}}}
 
+	//{{{ Class initializer
 	static
 	{
 		level = WARNING;
@@ -275,8 +303,10 @@ public class Log
 
 		log = new String[MAXLINES];
 		lineSep = System.getProperty("line.separator");
-	}
+		listModel = new LogListModel();
+	} //}}}
 
+	//{{{ createPrintStream() method
 	private static PrintStream createPrintStream(final int urgency,
 		final Object source)
 	{
@@ -293,8 +323,9 @@ public class Log
 				log(urgency,source,str);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ _logException() method
 	private static void _logException(final int urgency,
 		final Object source,
 		final Throwable message)
@@ -305,8 +336,9 @@ public class Log
 		{
 			message.printStackTrace(out);
 		}
-	}
+	} //}}}
 
+	//{{{ _log() method
 	private static void _log(int urgency, String source, String message)
 	{
 		String fullMessage = "[" + urgencyToString(urgency) + "] " + source
@@ -339,8 +371,9 @@ public class Log
 			else
 				realOut.println(fullMessage);
 		}
-	}
+	} //}}}
 
+	//{{{ urgencyToString() method
 	private static String urgencyToString(int urgency)
 	{
 		switch(urgency)
@@ -358,5 +391,56 @@ public class Log
 		}
 
 		throw new IllegalArgumentException("Invalid urgency: " + urgency);
-	}
+	} //}}}
+
+	//}}}
+
+	//{{{ LogListModel class
+	static class LogListModel implements ListModel
+	{
+		Vector listeners = new Vector();
+
+		void fireChanged()
+		{
+			for(int i = 0; i < listeners.size(); i++)
+			{
+				ListDataListener listener = (ListDataListener)
+					listeners.elementAt(i);
+				listener.contentsChanged(new ListDataEvent(this,
+					ListDataEvent.CONTENTS_CHANGED,
+					0,getSize()));
+			}
+		}
+
+		public void addListDataListener(ListDataListener listener)
+		{
+			listeners.addElement(listener);
+		}
+
+		public void removeListDataListener(ListDataListener listener)
+		{
+			listeners.removeElement(listener);
+		}
+
+		public Object getElementAt(int index)
+		{
+			if(wrap)
+			{
+				if(index < MAXLINES - logLineCount)
+					return log[index + logLineCount];
+				else
+					return log[index - MAXLINES + logLineCount];
+			}
+			else
+				return log[index];
+		}
+
+		public int getSize()
+		{
+			if(wrap)
+				return MAXLINES;
+			else
+				return logLineCount;
+		}
+	} //}}}
 }
