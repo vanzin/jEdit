@@ -4374,8 +4374,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public void insertTabAndIndent()
 	{
 		if(!isEditable())
+		{
 			getToolkit().beep();
-		else if(selection.size() == 0)
+			return;
+		}
+
+		if(selection.size() == 0)
 		{
 			// if caret is inside leading whitespace, indent.
 			String text = buffer.getLineText(caretLine);
@@ -4386,8 +4390,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				&& buffer.indentLine(caretLine,true,false))
 				return;
 		}
-		else
-			userInput('\t');
+
+		userInput('\t');
 	} //}}}
 
 	//{{{ indentSelectedLines() method

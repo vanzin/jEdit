@@ -1,5 +1,11 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre7
+
++ Bug Fixes
+
+- The action "Insert Tab and Indent" was broken.
+
 * Version 4.1pre6
 
 Thanks to Cullen Linn, Giulio Piancastelli, John Perry, Joshua Miller,
