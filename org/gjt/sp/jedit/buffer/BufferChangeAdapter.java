@@ -113,14 +113,4 @@ public abstract class BufferChangeAdapter implements BufferChangeListener
 	 */
 	public void foldHandlerChanged(Buffer buffer) {}
 	//}}}
-
-	//{{{ wrapModeChanged() method
-	/**
-	 * Called to notify the text area that the word wrap mode has changed.
-	 *
-	 * @param buffer The buffer in question
-	 * @since jEdit 4.2pre2
-	 */
-	public void wrapModeChanged(Buffer buffer) {}
-	//}}}
 }

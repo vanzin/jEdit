@@ -1048,8 +1048,6 @@ loop:		for(;;)
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"reset()");
 
-			updateWrapSettings();
-
 			physicalLine = getFirstVisibleLine();
 			scrollLine = 0;
 			while(physicalLine != -1)
@@ -1444,13 +1442,6 @@ loop:		for(;;)
 				textArea.invalidateLineRange(start - 1,
 					textArea.getLastPhysicalLine());
 			}
-		} //}}}
-
-		//{{{ wrapModeChanged() method
-		public void wrapModeChanged(Buffer buffer)
-		{
-			firstLine.reset();
-			scrollLineCount.reset();
 		} //}}}
 
 		//{{{ contentInserted() method

@@ -44,6 +44,11 @@ public class Debug
 	public static boolean SCROLL_DEBUG = false;
 
 	/**
+	 * Print messages when text area tries to make the caret visible.
+	 */
+	public static boolean SCROLL_TO_DEBUG = false;
+
+	/**
 	 * Display an error if the scrolling code detects an inconsistency.
 	 * This kills performance!
 	 */

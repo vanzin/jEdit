@@ -3,7 +3,11 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- test gzip
+- history text field tweak
+- search in subdirs always off
+- exceptions in display manager with zero-height text area
+- odd scrolling flaw: if a line is wrapped, first subregion invisible,
+  move caret up
 - "downloading plugin list" label in plugin manager
 - delete word: horizontal scroll not updated
 
@@ -94,11 +98,9 @@ and quirks that I need to fix eventually.
 - hide caret while typing
 - unindentCurrentLine property
 - need timeouts for plugin manager list download.
-- encoding menu with "More"
 - backup time distance setting
 - fsb date
 - preserve 2 spaces after . w/ format
-- preserve caret pos w/ format
 - toggle caret scroll to when not in vis region?
 - print selection
 - adding to icons prop
@@ -111,7 +113,6 @@ and quirks that I need to fix eventually.
 - optional dependencies
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - format -- instead of \n\n, what if it has \n   \n?
-- history text field tweak
 - do all modifier handling through the modifier mapping
 - perm to string for FTP plugin
 - if A depends on B but A is loaded before B and B breaks, A ends up
