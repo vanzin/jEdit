@@ -8,6 +8,13 @@ JEDIT 4.2 VERSION HISTORY
   appropriate column, instead of shifting indent to the right.
 
 }}}
+{{{ Miscellaneous
+
+- Added Up/Down arrows to the file system browser's colors option pane.
+  This lets you change the order that file names are matched against the
+  patterns in the list.
+
+}}}
 {{{ Bug Fixes
 
 - Fixed problems with structure matching when soft wrap is on, if the
@@ -60,6 +67,9 @@ JEDIT 4.2 VERSION HISTORY
 
 - The Plugin Options dialog box can still be opened if initialization of
   an option pane fails.
+
+- The key event workaround would ignore a KEY_TYPED event with the AltGR
+  modifier that followed a KEY_PRESSED with a keyCode of \0.
 
 }}}
 

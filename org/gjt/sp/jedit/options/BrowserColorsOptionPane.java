@@ -75,14 +75,24 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		ActionHandler actionHandler = new ActionHandler();
 		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
-		add.setToolTipText(jEdit.getProperty("options.browser.colors.add"));
+		add.setToolTipText(jEdit.getProperty("common.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
 		buttons.add(Box.createHorizontalStrut(6));
 		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
-		remove.setToolTipText(jEdit.getProperty("options.browser.colors.remove"));
+		remove.setToolTipText(jEdit.getProperty("common.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
+		buttons.add(Box.createHorizontalStrut(6));
+		moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
+		moveUp.setToolTipText(jEdit.getProperty("common.moveUp"));
+		moveUp.addActionListener(actionHandler);
+		buttons.add(moveUp);
+		buttons.add(Box.createHorizontalStrut(6));
+		moveDown = new RolloverButton(GUIUtilities.loadIcon("ArrowD.png"));
+		moveDown.setToolTipText(jEdit.getProperty("common.moveDown"));
+		moveDown.addActionListener(actionHandler);
+		buttons.add(moveDown);
 		buttons.add(Box.createGlue());
 
 		add(BorderLayout.SOUTH,buttons);
@@ -103,12 +113,24 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 	private JTable colorsTable;
 	private JButton add;
 	private JButton remove;
+	private JButton moveUp;
+	private JButton moveDown;
 
 	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
 		int selectedRow = colorsTable.getSelectedRow();
 		remove.setEnabled(selectedRow != -1);
+		moveUp.setEnabled(selectedRow > 0);
+		moveUp.setEnabled(selectedRow != -1 && selectedRow !=
+			colorsModel.getRowCount());
+	} //}}}
+
+	//{{{ setSelectedRow() method
+	private void setSelectedRow(int row)
+	{
+		colorsTable.getSelectionModel().setSelectionInterval(row,row);
+		colorsTable.scrollRectToVisible(colorsTable.getCellRect(row,0,true));
 	} //}}}
 
 	//}}}
@@ -138,6 +160,26 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 				colorsModel.remove(selectedRow);
 				updateEnabled();
 			}
+			else if(source == moveUp)
+			{
+				int selectedRow = colorsTable.getSelectedRow();
+				if(selectedRow != 0)
+				{
+					colorsModel.moveUp(selectedRow);
+					setSelectedRow(selectedRow - 1);
+				}
+				updateEnabled();
+			}
+			else if(source == moveDown)
+			{
+				int selectedRow = colorsTable.getSelectedRow();
+				if(selectedRow != colorsTable.getRowCount() - 1)
+				{
+					colorsModel.moveDown(selectedRow);
+					setSelectedRow(selectedRow + 1);
+				}
+				updateEnabled();
+			}
 		}
 	} //}}}
 
@@ -165,18 +207,16 @@ public class BrowserColorsOptionPane extends AbstractOptionPane
 //{{{ BrowserColorsModel class
 class BrowserColorsModel extends AbstractTableModel
 {
-	Vector entries;
-
 	//{{{ BrowserColorsModel constructor
 	BrowserColorsModel()
 	{
-		entries = new Vector();
+		entries = new ArrayList();
 
 		int i = 0;
 		String glob;
 		while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
 		{
-			entries.addElement(new Entry(glob,
+			entries.add(new Entry(glob,
 				jEdit.getColorProperty(
 				"vfs.browser.colors." + i + ".color",
 				Color.black)));
@@ -187,15 +227,33 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ add() method
 	void add()
 	{
-		entries.addElement(new Entry("",UIManager.getColor("Tree.foreground")));
+		entries.add(new Entry("",UIManager.getColor("Tree.foreground")));
 		fireTableRowsInserted(entries.size() - 1,entries.size() - 1);
 	} //}}}
 
 	//{{{ remove() method
 	void remove(int index)
 	{
-		entries.removeElementAt(index);
+		entries.remove(index);
 		fireTableRowsDeleted(entries.size(),entries.size());
+	} //}}}
+
+	//{{{ moveUp() method
+	public void moveUp(int index)
+	{
+		Object obj = entries.get(index);
+		entries.remove(index);
+		entries.add(index - 1,obj);
+		fireTableRowsUpdated(index - 1,index);
+	} //}}}
+
+	//{{{ moveDown() method
+	public void moveDown(int index)
+	{
+		Object obj = entries.get(index);
+		entries.remove(index);
+		entries.add(index + 1,obj);
+		fireTableRowsUpdated(index,index + 1);
 	} //}}}
 
 	//{{{ save() method
@@ -204,7 +262,7 @@ class BrowserColorsModel extends AbstractTableModel
 		int i;
 		for(i = 0; i < entries.size(); i++)
 		{
-			Entry entry = (Entry)entries.elementAt(i);
+			Entry entry = (Entry)entries.get(i);
 			jEdit.setProperty("vfs.browser.colors." + i + ".glob",
 				entry.glob);
 			jEdit.setColorProperty("vfs.browser.colors." + i + ".color",
@@ -229,7 +287,7 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
-		Entry entry = (Entry)entries.elementAt(row);
+		Entry entry = (Entry)entries.get(row);
 
 		switch(col)
 		{
@@ -251,7 +309,7 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
-		Entry entry = (Entry)entries.elementAt(row);
+		Entry entry = (Entry)entries.get(row);
 
 		if(col == 0)
 			entry.glob = (String)value;
@@ -288,6 +346,8 @@ class BrowserColorsModel extends AbstractTableModel
 			throw new InternalError();
 		}
 	} //}}}
+
+	private ArrayList entries;
 
 	//{{{ Entry class
 	static class Entry

@@ -145,7 +145,7 @@ public class KeyEventTranslator
 			}
 
 			boolean mod;
-			if((modifiers & InputEvent.ALT_GRAPH_MASK) != 0
+			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
 				&& System.currentTimeMillis()
 				-  KeyEventWorkaround.lastKeyTime < 750
 				&& (KeyEventWorkaround.modifiers & ~ignoreMods)
