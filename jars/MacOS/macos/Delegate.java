@@ -26,7 +26,7 @@ package macos;
 import com.apple.eawt.*;
 import com.apple.cocoa.application.*;
 import com.apple.cocoa.foundation.*;
-import java.util.Vector;
+import java.util.*;
 import java.io.File;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
@@ -349,7 +349,7 @@ public class Delegate extends ApplicationAdapter
 		
 		public void updateMenu()
 		{
-			Vector recent = BufferHistory.getBufferHistory();
+			List recent = BufferHistory.getHistory();
 			NSMenuItem item;
 			File file;
 			int max = recent.size();

@@ -32,6 +32,7 @@ MacOSPlugin.default.useSelection=false
 #
 # Options dialog
 #
+options.MacOSPlugin.code=new macos.MacOSOptionPane();
 options.MacOSPlugin.label=Mac OS Settings
 options.MacOSPlugin.menubar.label=Enable Mac OS style menubar (not recommended)
 options.MacOSPlugin.preserve.label=Preserve existing file/creator codes on save
