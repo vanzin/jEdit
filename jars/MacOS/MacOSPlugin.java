@@ -1,11 +1,14 @@
-/*
+/* 
+ * :tabSize=4:indentSize=4:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * MacOSPlugin.java - Main class Mac OS Plugin
- * Copyright (C) 2001 Kris Kopicki
+ * Copyright (C) 2001, 2002 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
- * of the License, or any prior version.
+ * of the License, or any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import com.apple.cocoa.application.*;
+//{{{ Imports
 import com.apple.mrj.*;
 import java.io.*;
 import java.lang.*;
@@ -26,18 +29,23 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 , MRJAboutHandler, MRJOpenDocumentHandler
 {
-    private boolean onStartup = true;
+    //{{{ Instance variables
+	private boolean onStartup = true;
     private String lastFilePath;
 	private ExitThread exitThread = new ExitThread();
 	
 	private final MRJOSType defaultType = new MRJOSType(jEdit.getProperty("MacOS.default.type"));
 	private final MRJOSType defaultCreator = new MRJOSType(jEdit.getProperty("MacOS.default.creator"));
+	//}}}
     
-/* ------------------------------------------------------------ */
+	//{{{ Methods
+	
+	//{{{ start() method
 	public void start()
     {		
 		if(System.getProperty("os.name").indexOf("Mac OS") != -1)
@@ -49,9 +57,9 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
     	} else {
             Log.log(Log.ERROR,this,"This plugin requires Mac OS.");
         }
-	}
+	}//}}}
 	
-/* ------------------------------------------------------------ */
+	//{{{ handleQuit() method
 	public void handleQuit()
     {
 		// Need this to get around the double call bug
@@ -62,15 +70,15 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 			exitThread.start();
 		else
 			Log.log(Log.DEBUG,this,"exitThread still alive.");
-	}
+	}//}}}
 	
-/* ------------------------------------------------------------ */
+	//{{{ handleAbout() method
 	public void handleAbout()
     {
 		new AboutDialog(jEdit.getLastView());
-	}
+	}//}}}
 
-/* ------------------------------------------------------------ */	
+	//{{{ handleOpenFile() method
 	public void handleOpenFile(File file)
     {
 		if (jEdit.openFile(jEdit.getLastView(),file.getPath()) != null)
@@ -79,9 +87,9 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
         } else {
             Log.log(Log.ERROR,this,"Error opening file.");
         }
-	}
+	}//}}}
 
-/* ------------------------------------------------------------ */    
+	//{{{ handleMessage() method
     public void handleMessage(EBMessage message)
     {
         // This is necessary to have a file opened from the Finder
@@ -135,8 +143,11 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 				+ "/" + buffer.getProperty("MacOS.creator") + " to " + buffer.getName());
 			}
         }
-    }
+    }//}}}
 	
+	//}}}
+	
+	//{{{ ExitThread class
 	class ExitThread extends Thread
 	{
 		public void run()
@@ -144,5 +155,5 @@ public class MacOSPlugin extends EBPlugin implements MRJQuitHandler
 			jEdit.exit(jEdit.getLastView(),false);
 			exitThread = new ExitThread();
 		}
-	}
+	}//}}}
 }
