@@ -2,6 +2,10 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre5
 
++ New Features
+
+- ObjectRexx syntax highlighting (George Hovey)
+
 + Enhancements
 
 - If jEdit runs out of memory while loading a file, it now reports the
@@ -10,6 +14,12 @@ JEDIT 4.0 VERSION HISTORY
 - If indent folding is enabled, lines consisting of white space only no
   longer inherit the fold level of the previous line
 - QuickNotepad plugin compiled by default
+- FAQ updates (John Gellene)
+- The "Open in New View" command has been re-added to the file system
+  browser right-click menu
+- Pressing ENTER in the file system browser no longer closes the
+  selected file if 'double click close' is enabled; now, only double-
+  and middle-clicks can close open files
 
 + Bug Fixes
 
@@ -42,6 +52,9 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed several bugs when painting tokens with a background color
 - File system browser would throw NullPointerExceptions when loading
   directories under some circumstances
+- Fixed ArrayIndexOutOfBoundsException when loading a file with saved
+  markers
+- Running "jedit -usage" and "jedit -version" produced no output
 
 * Version 4.0pre4
 

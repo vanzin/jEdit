@@ -37,24 +37,30 @@ per-text area basis.
 Note that folding is now disabled by default; you must enable it either
 in the Global Options or Buffer Options dialog boxes.
 
+* File system browser
+
+The file system browser has been enhanced:
+
+- File listings are now colorized by matching file names against a set
+  of patterns
+- Tree expansion state is preserved when reloading directories
+- If you have a three button mouse, you can middle-click to open files,
+  instead of double clicking
+- File names containing numbers are now sorted in natural order, for
+  example "File 10" will be placed after "File 2"
+- Additional keyboard shortcuts have been added
+
 - FAQ
 - more reliable setting saving
-- better sorting
 - search and replace usability improved/word search commands
 - global options usability improved/ui font can be changed
-- file system browser:
-  - new shortcuts
-  - colorized file listings
-  - ~ is now home dir
-  - new ui
-  - mmb click + shift click
 - saving modes automatically reloads
 - better window docking
 - tab/s+tab to shift selection
 - last empty line of selection
 - better status
 - better bracket matching
-- syntax highlighting added for: BibTeX; BBj; ActionScript
+- syntax highlighting added for: BibTeX; BBj; ActionScript, ObjectRexx
 - macos plugin
 - context-sensitive editing commands
 - complete word: completes keywords, updated on the fly

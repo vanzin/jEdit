@@ -2725,8 +2725,6 @@ public class Buffer implements EBComponent
 		Marker markerN = new Marker(this,shortcut,pos);
 		boolean added = false;
 
-		int line = getLineOfOffset(pos);
-
 		// don't sort markers while buffer is being loaded
 		if(!getFlag(LOADING))
 		{
@@ -3268,8 +3266,11 @@ public class Buffer implements EBComponent
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
 		{
-			((Marker)markers.elementAt(i))
-				.createPosition();
+			Marker marker = (Marker)markers.elementAt(i);
+			int pos = marker.getPosition();
+			if(pos > getLength())
+				marker.setPosition(getLength());
+			marker.createPosition();
 		}
 	} //}}}
 

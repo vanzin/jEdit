@@ -309,12 +309,13 @@ org.gjt.sp.util</programlisting>
   <para>
    The <function>confirm()</function> method is the trickiest. The
    <varname>buttons</varname> parameter should either be
-   <constant>JOptionPane.YES_NO_OPTION</constant> or
-   <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>. The return
-   value of the method is either
+   <constant>JOptionPane.YES_NO_OPTION</constant>,
+   <constant>JOptionPane.YES_NO_CANCEL_OPTION</constant>, or
+   <constant>JOptionPane.OK_CANCEL_OPTION</constant>. The return
+   value of the method is one of
    <constant>JOptionPane.YES_OPTION</constant>,
    <constant>JOptionPane.NO_OPTION</constant> or
-   <constant>JOptionPane.CANCEL_OPTION</constant>
+   <constant>JOptionPane.CANCEL_OPTION</constant>.
   </para>
 
   <para>
