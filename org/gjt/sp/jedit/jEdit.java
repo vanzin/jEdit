@@ -26,7 +26,10 @@ package org.gjt.sp.jedit;
 import com.microstar.xml.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.plaf.FontUIResource;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.Keymap;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -1991,7 +1994,7 @@ public class jEdit
 			// Don't show the welcome message if jEdit was started
 			// with the -nosettings switch
 			if(settingsDirectory != null && getBooleanProperty("firstTime"))
-				new HelpViewer("jeditresource:/doc/welcome.html");
+				new HelpViewer();
 			else if(jEdit.getBooleanProperty("tip.show"))
 				new TipOfTheDay(newView);
 

@@ -171,7 +171,7 @@
 				FILE_NAME_GLOB="*.spec" />
 
 <MODE NAME="ruby"		FILE="ruby.xml"
-				FILE_NAME_GLOB="*.rb" />
+				FILE_NAME_GLOB="*.{rb,rbw}" />
 
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />

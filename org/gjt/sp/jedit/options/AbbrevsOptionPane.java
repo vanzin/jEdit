@@ -1,6 +1,9 @@
 /*
  * AbbrevsOptionPane.java - Abbrevs options panel
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -28,7 +32,9 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.EditAbbrevDialog;
 import org.gjt.sp.jedit.*;
+//}}}
 
+//{{{ AbbrevsOptionPane class
 /**
  * Abbrev editor.
  * @author Slava Pestov
@@ -36,12 +42,13 @@ import org.gjt.sp.jedit.*;
  */
 public class AbbrevsOptionPane extends AbstractOptionPane
 {
+	//{{{ AbbrevsOptionPane constructor
 	public AbbrevsOptionPane()
 	{
 		super("abbrevs");
-	}
+	} //}}}
 
-	// protected members
+	//{{{ _init() method
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -98,6 +105,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		abbrevsTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
 		abbrevsTable.getSelectionModel().addListSelectionListener(
 			new SelectionHandler());
+		abbrevsTable.addMouseListener(new TableMouseHandler());
 		Dimension d = abbrevsTable.getPreferredSize();
 		d.height = Math.min(d.height,200);
 		JScrollPane scroller = new JScrollPane(abbrevsTable);
@@ -125,8 +133,9 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,buttons);
 
 		updateEnabled();
-	}
+	} //}}}
 
+	//{{{ _save() method
 	protected void _save()
 	{
 		if(abbrevsTable.getCellEditor() != null)
@@ -145,9 +154,11 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				.toHashtable());
 		}
 		Abbrevs.setModeAbbrevs(modeHash);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private JComboBox setsComboBox;
 	private JCheckBox expandOnInput;
 	private JTable abbrevsTable;
@@ -156,14 +167,39 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	private JButton add;
 	private JButton edit;
 	private JButton remove;
+	//}}}
 
+	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
 		int selectedRow = abbrevsTable.getSelectedRow();
 		edit.setEnabled(selectedRow != -1);
 		remove.setEnabled(selectedRow != -1);
-	}
+	} //}}}
 
+	//{{{ edit() method
+	private void edit()
+	{
+		AbbrevsModel abbrevsModel = (AbbrevsModel)abbrevsTable.getModel();
+
+		int row = abbrevsTable.getSelectedRow();
+
+		String abbrev = (String)abbrevsModel.getValueAt(row,0);
+		String expansion = (String)abbrevsModel.getValueAt(row,1);
+	
+		EditAbbrevDialog dialog = new EditAbbrevDialog(
+			AbbrevsOptionPane.this,
+			abbrev,expansion);
+		abbrev = dialog.getAbbrev();
+		expansion = dialog.getExpansion();
+		if(abbrev != null && expansion != null)
+		{
+			abbrevsModel.setValueAt(abbrev,row,0);
+			abbrevsModel.setValueAt(expansion,row,1);
+		}
+	} //}}}
+
+	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
@@ -178,16 +214,28 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				break;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ TableMouseHandler class
+	class TableMouseHandler extends MouseAdapter
+	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			if(evt.getClickCount() == 2)
+				edit();
+		}
+	} //}}}
+
+	//{{{ SelectionHandler class
 	class SelectionHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
 			updateEnabled();
 		}
-	}
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -232,21 +280,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			}
 			else if(source == edit)
 			{
-				int row = abbrevsTable.getSelectedRow();
-
-				String abbrev = (String)abbrevsModel.getValueAt(row,0);
-				String expansion = (String)abbrevsModel.getValueAt(row,1);
-
-				EditAbbrevDialog dialog = new EditAbbrevDialog(
-					AbbrevsOptionPane.this,
-					abbrev,expansion);
-				abbrev = dialog.getAbbrev();
-				expansion = dialog.getExpansion();
-				if(abbrev != null && expansion != null)
-				{
-					abbrevsModel.setValueAt(abbrev,row,0);
-					abbrevsModel.setValueAt(expansion,row,1);
-				}
+				edit();
 			}
 			else if(source == remove)
 			{
@@ -255,18 +289,21 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				updateEnabled();
 			}
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ AbbrevsModel class
 class AbbrevsModel extends AbstractTableModel
 {
 	Vector abbrevs;
 
+	//{{{ AbbrevsModel constructor
 	AbbrevsModel()
 	{
 		abbrevs = new Vector();
-	}
+	} //}}}
 
+	//{{{ AbbrevsModel constructor
 	AbbrevsModel(Hashtable abbrevHash)
 	{
 		this();
@@ -284,26 +321,30 @@ class AbbrevsModel extends AbstractTableModel
 
 			sort(0);
 		}
-	}
+	} //}}}
 
+	//{{{ sort() method
 	void sort(int col)
 	{
 		MiscUtilities.quicksort(abbrevs,new AbbrevCompare(col));
 		fireTableDataChanged();
-	}
+	} //}}}
 
+	//{{{ add() method
 	void add(String abbrev, String expansion)
 	{
 		abbrevs.addElement(new Abbrev(abbrev,expansion));
 		fireTableStructureChanged();
-	}
+	} //}}}
 
+	//{{{ remove() method
 	void remove(int index)
 	{
 		abbrevs.removeElementAt(index);
 		fireTableStructureChanged();
-	}
+	} //}}}
 
+	//{{{ toHashtable() method
 	public Hashtable toHashtable()
 	{
 		Hashtable hash = new Hashtable();
@@ -317,18 +358,21 @@ class AbbrevsModel extends AbstractTableModel
 			}
 		}
 		return hash;
-	}
+	} //}}}
 
+	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
 		return 2;
-	}
+	} //}}}
 
+	//{{{ getRowCount() method
 	public int getRowCount()
 	{
 		return abbrevs.size();
-	}
+	} //}}}
 
+	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
 		Abbrev abbrev = (Abbrev)abbrevs.elementAt(row);
@@ -341,13 +385,15 @@ class AbbrevsModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ isCellEditable() method
 	public boolean isCellEditable(int row, int col)
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(value == null)
@@ -361,8 +407,9 @@ class AbbrevsModel extends AbstractTableModel
 			abbrev.expand = (String)value;
 
 		fireTableRowsUpdated(row,row);
-	}
+	} //}}}
 
+	//{{{ getColumnName() method
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -374,8 +421,9 @@ class AbbrevsModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ AbbrevCompare class
 	class AbbrevCompare implements MiscUtilities.Compare
 	{
 		int col;
@@ -407,9 +455,10 @@ class AbbrevsModel extends AbstractTableModel
 					expand1,expand2,true);
 			}
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ Abbrev class
 class Abbrev
 {
 	Abbrev() {}
@@ -422,4 +471,4 @@ class Abbrev
 
 	String abbrev;
 	String expand;
-}
+} //}}}

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,5 +77,18 @@ public interface BufferChangeListener
 	 */
 	void contentRemoved(Buffer buffer, int startLine, int offset,
 		int numLines, int length);
+	//}}}
+
+	//{{{ transactionComplete() method
+	/**
+	 * Called after an undo or compound edit has finished. The text area
+	 * uses this event to queue up and collapse cleanup operations so they
+	 * are only run once during a long transaction (such as a "Replace All"
+	 * operation.)
+	 *
+	 * @param buffer The buffer in question
+	 * @since jEdit 4.0pre6
+	 */
+	void transactionComplete(Buffer buffer);
 	//}}}
 }

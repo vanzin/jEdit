@@ -1407,6 +1407,8 @@ public class Buffer implements EBComponent
 			setFlag(UNDO_IN_PROGRESS,true);
 			if(!undoMgr.undo(textArea))
 				textArea.getToolkit().beep();
+
+			fireTransactionComplete();
 		}
 		finally
 		{
@@ -1441,6 +1443,8 @@ public class Buffer implements EBComponent
 			setFlag(UNDO_IN_PROGRESS,true);
 			if(!undoMgr.redo(textArea))
 				textArea.getToolkit().beep();
+
+			fireTransactionComplete();
 		}
 		finally
 		{
@@ -1450,14 +1454,16 @@ public class Buffer implements EBComponent
 		}
 	} //}}}
 
-	//{{{ isUndoInProgress() method
+	//{{{ isTransactionInProgress() method
 	/**
-	 * Returns if an undo or redo is currently in progress.
+	 * Returns if an undo or compound edit is currently in progress. If this
+	 * method returns true, then eventually a
+	 * <code>transactionComplete()</code> buffer event will get fired.
 	 * @since jEdit 4.0pre6
 	 */
-	public boolean isUndoInProgress()
+	public boolean isTransactionInProgress()
 	{
-		return getFlag(UNDO_IN_PROGRESS);
+		return getFlag(UNDO_IN_PROGRESS) || insideCompoundEdit();
 	} //}}}
 
 	//{{{ beginCompoundEdit() method
@@ -1505,6 +1511,8 @@ public class Buffer implements EBComponent
 			writeLock();
 
 			undoMgr.endCompoundEdit();
+
+			fireTransactionComplete();
 		}
 		finally
 		{
@@ -3296,6 +3304,12 @@ public class Buffer implements EBComponent
 					escape = false;
 					break;
 				}
+			case 'r':
+				if(escape)
+				{	buf.append('\r');
+					escape = false;
+					break;
+				}
 			case 't':
 				if(escape)
 				{
@@ -3448,6 +3462,24 @@ public class Buffer implements EBComponent
 				((BufferChangeListener)bufferListeners.elementAt(i))
 					.contentRemoved(this,startLine,offset,
 					numLines,length);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireTransactionComplete() method
+	private void fireTransactionComplete()
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.transactionComplete(this);
 			}
 			catch(Throwable t)
 			{

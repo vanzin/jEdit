@@ -54,23 +54,6 @@ import org.gjt.sp.util.Log;
  */
 public class JEditTextArea extends JComponent
 {
-	//{{{ Undocumented features
-	/**
-	 * Undocumented feature - set to false in a BeanShell script to make
-	 * prev/next-word not eat whitespace.
-	 * @since jEdit 4.0pre5
-	 */
-	public static final boolean wordCommandsEatWhiteSpace = true;
-
-	/**
-	 * Undocumented feature - set to false in a BeanShell script to make
-	 * home/end with selection not move to start/end of first/last selected
-	 * line.
-	 * @since jEdit 4.0pre5
-	 */
-	public static final boolean homeEndSelectionHack = true;
-	//}}}
-
 	//{{{ JEditTextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
@@ -93,6 +76,7 @@ public class JEditTextArea extends JComponent
 		blink = true;
 		lineSegment = new Segment();
 		returnValue = new Point();
+		runnables = new ArrayList();
 		//}}}
 
 		//{{{ Initialize the GUI
@@ -124,7 +108,6 @@ public class JEditTextArea extends JComponent
 		//{{{ Add some event listeners
 		vertical.addAdjustmentListener(new AdjustHandler());
 		horizontal.addAdjustmentListener(new AdjustHandler());
-		painter.addComponentListener(new ComponentHandler());
 
 		mouseHandler = new MouseHandler();
 		painter.addMouseListener(mouseHandler);
@@ -2418,8 +2401,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep,
-				wordCommandsEatWhiteSpace)
-				+ lineStart;
+				!select) + lineStart;
 		}
 
 		if(select)
@@ -2691,7 +2673,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep,
-				wordCommandsEatWhiteSpace)
+				!select)
 				+ lineStart;
 		}
 
@@ -2772,7 +2754,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		Selection s = getSelectionAtOffset(caret);
 		int line = (select || s == null
-			|| !homeEndSelectionHack
 			? caretLine : s.startLine);
 		int newCaret = getLineStartOffset(line);
 		if(select)
@@ -2796,7 +2777,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		Selection s = getSelectionAtOffset(caret);
 		int line = (select || s == null
-			|| !homeEndSelectionHack
 			? caretLine : s.endLine);
 		int newCaret = getLineEndOffset(line) - 1;
 		if(select)
@@ -2825,7 +2805,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
-		if(select || s == null || !homeEndSelectionHack)
+		if(select || s == null)
 		{
 			line = caretLine;
 			offset = caret;
@@ -2877,7 +2857,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
-		if(select || s == null || !homeEndSelectionHack)
+		if(select || s == null)
 		{
 			line = caretLine;
 			offset = caret;
@@ -3277,8 +3257,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
-			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,
-				wordCommandsEatWhiteSpace);
+			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep,true);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3483,7 +3462,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep,wordCommandsEatWhiteSpace);
+				_caret+1,noWordSep,true);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);
@@ -3737,11 +3716,11 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		if(foldVisibilityManager.isLineVisible(caretLine))
 			return;
 
-		int line = foldVisibilityManager.getNextVisibleLine(caretLine);
+		int line = foldVisibilityManager.getPrevVisibleLine(caretLine);
 
 		if(!multi)
 			selectNone();
-		moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));
+		moveCaretPosition(buffer.getLineStartOffset(line) + xToOffset(line,x));
 	} //}}}
 
 	//{{{ expandFold() method
@@ -3849,17 +3828,17 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		String start, end;
 		if(lineComment != null)
 		{
-			start = lineComment + "{{{\n";
+			start = lineComment + "{{{ \n";
 			end = " " + lineComment + "}}}";
 		}
 		else if(commentStart != null && commentEnd != null)
 		{
-			start = commentStart + "{{{" + commentEnd + "\n";
+			start = commentStart + "{{{  " + commentEnd + "\n";
 			end = " " + commentStart + "}}}" + commentEnd;
 		}
 		else
 		{
-			start = "{{{\n";
+			start = "{{{ \n";
 			end = " }}}";
 		}
 
@@ -3874,7 +3853,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					MiscUtilities.getLeadingWhiteSpace(line));
 				start = start + whitespace;
 				buffer.insert(caret,start);
-				int loc = caret;
+				int loc = caret - 1;
 				// stupid: caret will automatically be incremented
 				buffer.insert(caret,end);
 				moveCaretPosition(loc,false);
@@ -3889,7 +3868,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					String line = buffer.getLineText(s.startLine);
 					String whitespace = line.substring(0,
 						MiscUtilities.getLeadingWhiteSpace(line));
-					loc = s.start + start.length() + whitespace.length();
+					loc = s.start + start.length() - 1;
 					buffer.insert(s.start,start + whitespace);
 					buffer.insert(s.end,end);
 				}
@@ -4821,6 +4800,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean wrapToWidth;
 	int charWidth;
 
+	boolean scrollBarsInitialized;
+
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
 	Vector selection;
@@ -4945,7 +4926,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
-	private boolean scrollBarsInitialized;
 
 	private boolean bufferChanging;
 	private Buffer buffer;
@@ -4967,8 +4947,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private int maxLineLen;
 
-	// see moveCaretPosition()
+	// see moveCaretPosition() and BufferChangeHandler.content{Inserted,Removed}()
+	private boolean queuedRecalcLastPhys;
 	private boolean queuedScrollTo;
+	private ArrayList runnables;
 	//}}}
 
 	//{{{ _addToSelection() method
@@ -5101,13 +5083,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		};
 
-		if(queuedScrollTo)
-			/* do nothing */;
-		else if(buffer.insideCompoundEdit()
-			|| buffer.isUndoInProgress())
+		if(buffer.isTransactionInProgress())
 		{
-			queuedScrollTo = true;
-			SwingUtilities.invokeLater(r);
+			if(!queuedScrollTo)
+			{
+				queuedScrollTo = true;
+				runnables.add(r);
+			}
 		}
 		else
 			r.run();
@@ -5644,10 +5626,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ componentResized() method
 		public void componentResized(ComponentEvent evt)
 		{
-			recalculateVisibleLines();
-			recalculateLastPhysicalLine();
-			propertiesChanged();
-			scrollBarsInitialized = true;
+			
 		} //}}}
 	} //}}}
 
@@ -5738,10 +5717,28 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				&& foldVisibilityManager.getLastVisibleLine()
 				+ numLines <= physLastLine))
 			{
-				int oldScreenLastLine = screenLastLine;
-				recalculateLastPhysicalLine();
-				invalidateScreenLineRange(oldScreenLastLine,
-					screenLastLine);
+				Runnable r = new Runnable()
+				{
+					public void run()
+					{
+						queuedRecalcLastPhys = false;
+						int oldScreenLastLine = screenLastLine;
+						recalculateLastPhysicalLine();
+						invalidateScreenLineRange(oldScreenLastLine,
+							screenLastLine);
+					}
+				};
+
+				if(buffer.isTransactionInProgress())
+				{
+					if(!queuedRecalcLastPhys)
+					{
+						queuedRecalcLastPhys = true;
+						runnables.add(r);
+					}
+				}
+				else
+					r.run();
 			}
 
 			int end = start + length;
@@ -5801,6 +5798,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 		//}}}
+
+		//{{{ transactionComplete() method
+		public void transactionComplete(Buffer buffer)
+		{
+			for(int i = 0; i < runnables.size(); i++)
+			{
+				((Runnable)runnables.get(i)).run();
+			}
+			runnables.clear();
+		} //}}}
 
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
@@ -5963,8 +5970,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleClick() method
 		private void doSingleClick(MouseEvent evt)
 		{
-			if(buffer.insideCompoundEdit())
-				buffer.endCompoundEdit();
+			/* if(buffer.insideCompoundEdit())
+				buffer.endCompoundEdit(); */
 
 			if(evt.isShiftDown())
 			{

@@ -608,10 +608,6 @@ public class ChunkCache
 	//{{{ updateChunksUpTo() method
 	void updateChunksUpTo(int lastScreenLine)
 	{
-		// TODO
-		if(lastScreenLine >= lineInfo.length)
-			textArea.recalculateVisibleLines();
-
 		if(!textArea.softWrap)
 			return;
 
@@ -718,6 +714,8 @@ public class ChunkCache
 					length = buffer.getLineLength(physicalLine) - offset + 1;
 			}
 
+			boolean lastSubregion = (out.size() == 0);
+
 			if(i == lastScreenLine
 				&& lastScreenLine != lineInfo.length - 1)
 			{
@@ -730,7 +728,8 @@ public class ChunkCache
 				 * lastScreenLine, we need to keep updating the
 				 * chunk list to ensure proper alignment of
 				 * invalidation flags (see start of method) */
-				if(info.physicalLine != physicalLine)
+				if(info.physicalLine != physicalLine
+					|| info.lastSubregion != lastSubregion)
 				{
 					lastScreenLine++;
 					needFullRepaint = true;
@@ -742,7 +741,7 @@ public class ChunkCache
 			}
 
 			info.physicalLine = physicalLine;
-			info.lastSubregion = (out.size() == 0);
+			info.lastSubregion = lastSubregion;
 			info.offset = offset;
 			info.length = length;
 			info.chunks = chunks;
