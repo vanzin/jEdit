@@ -229,10 +229,18 @@ public class UndoManager
 	//{{{ addEdit() method
 	private void addEdit(Edit edit)
 	{
+		System.err.println("adding undo with position " + undoPos);
 		undos.add(undoPos++,edit);
 
-		if(undos.size() > limit)
+		for(int i = undoCount - 1; i >= undoPos; i--)
 		{
+			System.err.println("removing undo with position " + i);
+			undos.remove(i);
+		}
+
+		if(undoPos > limit)
+		{
+			System.err.println("removing undo 0");
 			undos.remove(0);
 			undoPos--;
 		}

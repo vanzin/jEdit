@@ -4,9 +4,9 @@
 <chapter id="basics"><title>jEdit Basics</title>
  <sect1 id="buffers"><title>Buffers</title>
   <para>
-   Several files can be opened and edited at once.
-   Each open file is referred to as a <firstterm>buffer</firstterm>.
-   The combo box above the text area selects the buffer to edit.
+   A <firstterm>buffer</firstterm> is the jEdit term for an open file.
+   Several buffers can be opened and edited at once;
+   the combo box above the text area selects the buffer to edit.
    Different emblems are displayed next to buffer names in the list,
    depending the buffer's state;
    a red disk is shown for buffers with unsaved changes,
@@ -40,24 +40,23 @@
   <sect2><title>Memory Usage</title>
    <para>
     The maximum number of open buffers depends on available <firstterm>Java
-    heap memory</firstterm>. When stored in the Java heap, each buffer requires
+    heap memory</firstterm>. When in the Java heap, a buffer uses
     approximately two and a half times it's size on disk. This overhead is caused
-    by the file being stored internally as Unicode (see
-    <xref linkend="encodings" />), and the fact that additional information,
-    such as line numbers, also needs to be stored.
+    by the file being stored internally in Unicode (see
+    <xref linkend="encodings" />), and various meta-data such as line numbers.
    </para>
    <para>
     The status bar at the bottom of the view displays used and total Java
     heap memory; see <xref linkend="status-bar" /> for details. This can give
     you a rough idea of how much memory the currently opened files are using.
-    The Java heap grows if it runs out of room; but it only grows to a certain
+    The Java heap grows if it runs out of room, but it only grows to a certain
     maximum size, and attempts to allocate Java objects that would grow the
     heap beyond this size fail with out-of-memory errors.
    </para>
    <para>
     As a result, if the maximum heap size is set too low,
     opening large files or performing other memory-intensive operations can
-    fail unless you increase the Java heap size, even if you have a lot of free
+    fail, even if you have a lot of free
     system memory.
    </para>
    <para>
@@ -85,7 +84,7 @@
  </sect1>
  <sect1 id="views"><title>Views</title>
   <para>
-   Each editor window is known as a <firstterm>view</firstterm>.
+   A <firstterm>view</firstterm> is the jEdit term for an editor window.
    It is possible to have multiple views open at once, and each view can
    be split into multiple panes.
   </para>
@@ -175,20 +174,23 @@
      menu bar and opens the dockable. The other two commands are:
     </para>
     <itemizedlist>
-     <listitem><para><guimenuitem><replaceable>Window name</replaceable>
+     <listitem><para><guimenuitem>Window Name
      (Toggle)</guimenuitem> - opens the dockable window if it is hidden, and
      hide it if its already open.</para></listitem>
-     <listitem><para><guimenuitem><replaceable>Window name</replaceable>
+     <listitem><para><guimenuitem>Window Name
      (New Floating Instance)</guimenuitem> - opens a new instance of the
      dockable in a floating window, regardless of the docking
-     configuration. This can be used to view two
-     different directories side-by-side in two file system browser windows,
-     for example.</para>
+     configuration.</para>
      <para>
      Another way to open a new floating instance of a window that is already
      docked is to right-click on the appropriate strip of buttons; this shows
      a menu from which you can choose to open a new floating instance.
-    </para>
+     </para>
+     <para>
+     This can be used to view two
+     different directories side-by-side in two file system browser windows,
+     for example.
+     </para>
     </listitem>
     </itemizedlist>
     <para>

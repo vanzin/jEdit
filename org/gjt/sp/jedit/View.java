@@ -467,14 +467,17 @@ public class View extends JFrame implements EBComponent
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
+		final JSplitPane newSplitPane = new JSplitPane(orientation,
+			oldEditPane,editPane);
+		newSplitPane.setOneTouchExpandable(true);
+			newSplitPane.setBorder(null);
+
 		if(oldParent instanceof JSplitPane)
 		{
 			JSplitPane oldSplitPane = (JSplitPane)oldParent;
 			int dividerPos = oldSplitPane.getDividerLocation();
 
 			Component left = oldSplitPane.getLeftComponent();
-			final JSplitPane newSplitPane = new JSplitPane(orientation,
-				oldEditPane,editPane);
 
 			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
@@ -494,9 +497,6 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			JSplitPane newSplitPane = splitPane = new JSplitPane(orientation,
-				oldEditPane,editPane);
-			newSplitPane.setBorder(null);
 			oldParent.add(splitPane);
 			oldParent.revalidate();
 

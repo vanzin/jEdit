@@ -3,17 +3,17 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- status bar still fooling around
-- wheel mouse -- option: jEdit mods -vs- system-wide mods
-- rect select and trailing whitespace
+- remember to remove undo debug code before release
 - user's guide:
   - vertical paste & rect select insertion
-  - mention word splitting mechanism
-  - updating-modes.xml - see above
   - part III
   - part IV
   - part V
-- examples of SPAN_REGEXP, EOL_SPAN_REGEXP matching in docs
+  - macro index might need updating
+- need a new jEditLauncher before the 4.0final release
+- status bar still fooling around
+- wheel mouse -- option: jEdit mods -vs- system-wide mods
+- rect select and trailing whitespace
 - final optimization for OffsetManager: scan to zero or scan to end
 - auto indent:
   if(foo)
@@ -22,6 +22,7 @@ and quirks that I need to fix eventually.
       //
     }
   <--- cursor here
+- examples of EOL_SPAN_REGEXP matching in docs
 - respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
   know mod status
 - some JLists do not auto-scroll on keystroke

@@ -9,6 +9,12 @@
  <itemizedlist>
   <listitem>
    <para>
+    Defining <literal>&lt;WHITESPACE&gt;</literal> rules is no longer necessary
+    and doing so will print warnings to the activity logs.
+   </para>
+  </listitem>
+  <listitem>
+   <para>
     The <literal>&lt;KEYWORDS&gt;</literal> tag no longer accepts an
     <literal>IGNORE_CASE</literal> attribute.
     Set the <literal>IGNORE_CASE</literal> attribute of the
@@ -28,6 +34,10 @@
   </listitem>
   <listitem>
    <para>
+    Defining <literal>&lt;SEQ TYPE="NULL"&gt;</literal> rules for word separators
+    is no longer necessary. Now, any non-alphanumeric character not appearing in
+    a keyword definition or the ruleset's <literal>NO_WORD_SEP</literal> attribute
+    is considered a word separator.
    </para>
   </listitem>
  </itemizedlist>

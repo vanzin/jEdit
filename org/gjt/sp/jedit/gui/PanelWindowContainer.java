@@ -389,6 +389,18 @@ public class PanelWindowContainer implements DockableWindowContainer
 			popup.addSeparator();
 			popup.add(floatMenu);
 
+			popup.addSeparator();
+			JMenuItem config = new JMenuItem(jEdit.getProperty("view.docking.menu-config"));
+			config.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					new org.gjt.sp.jedit.options.GlobalOptions(
+						wm.getView(),"docking");
+				}
+			});
+			popup.add(config);
+
 			return popup;
 		}
 	} //}}}

@@ -593,7 +593,7 @@ public class BufferIORequest extends WorkRequest
 					if(twoStageSave)
 					{
 						if(!vfs._rename(session,savePath,path,view))
-							throw new IOException(path);
+							throw new IOException(savePath);
 					}
 
 					// We only save markers to VFS's that support deletion.
