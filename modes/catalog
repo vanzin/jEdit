@@ -224,6 +224,9 @@
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"
 				FILE_NAME_GLOB="*.pls" />
 
+<MODE NAME="pop11"		FILE="pop11.xml" 
+				FILE_NAME_GLOB="*.{p,pop11,p11}" />
+
 <MODE NAME="postscript"		FILE="postscript.xml"
 				FILE_NAME_GLOB="*.{ps,eps}" />
 
