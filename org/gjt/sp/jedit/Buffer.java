@@ -2298,6 +2298,8 @@ public class Buffer extends PlainDocument implements EBComponent
 		mgr._release();
 	} //}}}
 
+	//}}}
+
 	//{{{ Marker methods
 
 	//{{{ getMarkers() method

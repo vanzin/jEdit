@@ -1,6 +1,8 @@
 /*
  * PanelWindowContainer.java - holds dockable windows
  * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +21,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
@@ -28,6 +31,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * A container for dockable windows. This class should never be used
@@ -38,11 +42,13 @@ import org.gjt.sp.jedit.*;
  */
 public class PanelWindowContainer implements DockableWindowContainer
 {
+	//{{{ PanelWindowContainer constructor
 	public PanelWindowContainer(DockableWindowManager wm, String position)
 	{
 		this.wm = wm;
 		this.position = position;
 
+		//{{{ Button box setup
 		buttons = new ButtonBox();
 
 		// the close box must be the same size as the other buttons to look good.
@@ -56,26 +62,31 @@ public class PanelWindowContainer implements DockableWindowContainer
 		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
 		buttons.add(closeBox);
 
+		//{{{ closeBox action listener
 		closeBox.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
 				show(null);
 			}
-		});
+		}); //}}}
 
 		buttonGroup = new ButtonGroup();
+		//}}}
+
 		dockables = new Vector();
 		dockablePanel = new DockablePanel();
 
 		dimension = jEdit.getIntegerProperty(
 			"view.dock." + position + ".dimension",0);
-	}
+	} //}}}
 
+	//{{{ register() method
 	public void register(final DockableWindowManager.Entry entry)
 	{
 		dockables.addElement(entry);
 
+		//{{{ Create button
 		int rotation;
 		if(position.equals(DockableWindowManager.TOP)
 			|| position.equals(DockableWindowManager.BOTTOM))
@@ -92,12 +103,14 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				wm.showDockableWindow(entry.name);
+				if(current == entry)
+					show(null);
+				else
+					wm.showDockableWindow(entry.name);
 			}
-		});
+		}); //}}}
 
-		// this is a hack so that the first button added gives the close box
-		// it's proper size
+		//{{{ this is a hack to give the close box it's proper size
 		if(buttons.getComponentCount() == 1)
 		{
 			Dimension size = button.getPreferredSize();
@@ -107,19 +120,21 @@ public class PanelWindowContainer implements DockableWindowContainer
 			closeBox.setMinimumSize(dim);
 			closeBox.setPreferredSize(dim);
 			closeBox.setMaximumSize(dim);
-		}
+		} //}}}
 
 		buttonGroup.add(button);
 		buttons.add(button);
 
 		wm.revalidate();
-	}
+	} //}}}
 
+	//{{{ add() method
 	public void add(DockableWindowManager.Entry entry)
 	{
 		dockablePanel.add(entry.name,entry.win);
-	}
+	} //}}}
 
+	//{{{ remove() method
 	public void remove(DockableWindowManager.Entry entry)
 	{
 		int index = dockables.indexOf(entry);
@@ -136,10 +151,13 @@ public class PanelWindowContainer implements DockableWindowContainer
 		}
 		else
 			wm.revalidate();
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save(DockableWindowManager.Entry entry) {}
+	//}}}
 
+	//{{{ show() method
 	public void show(DockableWindowManager.Entry entry)
 	{
 		if(current == entry)
@@ -176,19 +194,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		wm.revalidate();
 		dockablePanel.repaint();
-	}
+	} //}}}
 
+	//{{{ isVisible() method
 	public boolean isVisible(DockableWindowManager.Entry entry)
 	{
 		return current == entry;
-	}
+	} //}}}
 
+	//{{{ getCurrent() method
 	public DockableWindowManager.Entry getCurrent()
 	{
 		return current;
-	}
+	} //}}}
 
-	// package-private members
+	//{{{ Package-private members
+
+	//{{{ save() method
 	void save()
 	{
 		jEdit.setIntegerProperty("view.dock." + position + ".dimension",
@@ -200,19 +222,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 			jEdit.setProperty("view.dock." + position + ".last",
 				current.name);
 		}
-	}
+	} //}}}
 
+	//{{{ getButtonBox() method
 	ButtonBox getButtonBox()
 	{
 		return buttons;
-	}
+	} //}}}
 
+	//{{{ getDockablePanel() method
 	DockablePanel getDockablePanel()
 	{
 		return dockablePanel;
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{[ Private members
 	private static final Icon CLOSE_BOX
 		 = GUIUtilities.loadIcon("closebox.gif");
 	private static final int SPLITTER_WIDTH = 10;
@@ -227,6 +253,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private DockablePanel dockablePanel;
 	private DockableWindowManager.Entry current;
 
+	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ DockBorder class
 	static class DockBorder implements Border
 	{
 		String position;
@@ -235,6 +266,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		Color color2;
 		Color color3;
 
+		//{{{ DockBorder constructor
 		DockBorder(String position)
 		{
 			if(UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
@@ -254,8 +286,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 					? SPLITTER_WIDTH : 0,
 				position.equals(DockableWindowManager.LEFT)
 					? SPLITTER_WIDTH : 0);
-		}
+		} //}}}
 
+		//{{{ paintBorder() method
 		public void paintBorder(Component c, Graphics g,
 			int x, int y, int width, int height)
 		{
@@ -276,18 +309,21 @@ public class PanelWindowContainer implements DockableWindowContainer
 				paintVertBorder(g,x + width
 					- SPLITTER_WIDTH,y,height);
 			}
-		}
+		} //}}}
 
+		//{{{ getBorderInsets() method
 		public Insets getBorderInsets(Component c)
 		{
 			return insets;
-		}
+		} //}}}
 
+		//{{{ isBorderOpaque() method
 		public boolean isBorderOpaque()
 		{
 			return false;
-		}
+		} //}}}
 
+		//{{{ paintHorizBorder() method
 		private void paintHorizBorder(Graphics g, int x, int y, int width)
 		{
 			g.setColor(color3);
@@ -308,8 +344,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 				g.drawLine(x + i * 4 + 5,y + 6,
 					x + i * 4 + 5,y + 6);
 			}
-		}
+		} //}}}
 
+		//{{{ paintVertBorder() method
 		private void paintVertBorder(Graphics g, int x, int y, int height)
 		{
 			g.setColor(color3);
@@ -330,15 +367,17 @@ public class PanelWindowContainer implements DockableWindowContainer
 				g.drawLine(x + 6,y + i * 4 + 5,
 					x + 6,y + i * 4 + 5);
 			}
-		}
-	}
+		} //}}}
+	} //}}}
 
+	//{{{ CustomButton class
 	static class CustomButton extends JToggleButton
 	{
 		static final int NONE = 0;
 		static final int CW = 1;
 		static final int CCW = 2;
 
+		//{{{ CustomButton constructor
 		public CustomButton(int rotate, String text)
 		{
 			setMargin(new Insets(0,0,0,0));
@@ -353,8 +392,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				setIcon(new RotatedTextIcon(rotate,text));
 			}
-		}
+		} //}}}
 
+		//{{{ RotatedTextIcon class
 		class RotatedTextIcon implements Icon
 		{
 			int rotate;
@@ -363,6 +403,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int height;
 			Image rotated;
 
+			//{{{ RotatedTextIcon constructor
 			RotatedTextIcon(int rotate, String text)
 			{
 				this.rotate = rotate;
@@ -370,20 +411,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 				FontMetrics fm = getFontMetrics(getFont());
 				width = fm.stringWidth(text);
 				height = fm.getHeight();
-			}
+			} //}}}
 
+			//{{{ getIconWidth() method
 			public int getIconWidth()
 			{
 				return (rotate == CW || rotate == CCW
 					? height : width);
-			}
+			} //}}}
 
+			//{{{ getIconHeight() method
 			public int getIconHeight()
 			{
 				return (rotate == CW || rotate == CCW
 					? width : height);
-			}
+			} //}}}
 
+			//{{{ paintIcon() method
 			public void paintIcon(Component c, Graphics g, int x, int y)
 			{
 				FontMetrics fm = g.getFontMetrics();
@@ -411,9 +455,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 				}
 
 				g.drawImage(rotated,x,y,c);
-			}
-		}
+			} //}}}
+		} //}}}
 
+		//{{{ RotationFilter class
 		static class RotationFilter extends ImageFilter
 		{
 			int rotation;
@@ -421,6 +466,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int height;
 			IndexColorModel indexModel;
 
+			//{{{ RotationFilter constructor
 			RotationFilter(int rotation)
 			{
 				this.rotation = rotation;
@@ -429,23 +475,26 @@ public class PanelWindowContainer implements DockableWindowContainer
 					new byte[] { 0, 0 },
 					new byte[] { 0, 0 },
 					1);
-			}
+			} //}}}
 
+			//{{{ setDimensions() method
 			public void setDimensions(int width, int height)
 			{
 				this.width = height;
 				this.height = width;
 				super.setDimensions(height,width);
-			}
+			} //}}}
 
+			//{{{ setColorModel() method
 			public void setColorModel(ColorModel model)
 			{
 				super.setColorModel(indexModel);
-			}
+			} //}}}
 
 			// Fuck all the retards at Sun who made it impossible to
 			// write polymorphic array-access code.
 
+			//{{{ setPixels() method
 			public void setPixels(int x, int y, int w, int h,
 				ColorModel model, byte pixels[], int off,
 				int scansize)
@@ -468,8 +517,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 				super.setPixels((rotation == CCW
 					? y : width - y - 1),
 					x,h,w,indexModel,retVal,0,h);
-			}
+			} //}}}
 
+			//{{{ setPixels() method
 			public void setPixels(int x, int y, int w, int h,
 				ColorModel model, int pixels[], int off,
 				int scansize)
@@ -494,9 +544,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 					(rotation == CW
 					? x : height - x - w),h,w,
 					indexModel,retVal,0,h);
-			}
-		}
+			} //}}}
+		} //}}}
 
+		//{{{ RotatedTextIcon2D class
 		class RotatedTextIcon2D implements Icon
 		{
 			int rotate;
@@ -504,6 +555,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int width;
 			int height;
 
+			//{{{ RotatedTextIcon2D constructor
 			RotatedTextIcon2D(int rotate, String text)
 			{
 				this.rotate = rotate;
@@ -511,20 +563,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 				FontMetrics fm = getFontMetrics(getFont());
 				width = fm.stringWidth(text);
 				height = fm.getHeight();
-			}
+			} //}}}
 
+			//{{{ getIconWidth() method
 			public int getIconWidth()
 			{
 				return (rotate == CW || rotate == CCW
 					? height : width);
-			}
+			} //}}}
 
+			//{{{ getIconHeight() method
 			public int getIconHeight()
 			{
 				return (rotate == CW || rotate == CCW
 					? width : height);
-			}
+			} //}}}
 
+			//{{{ paintIcon() method
 			public void paintIcon(Component c, Graphics g, int x, int y)
 			{
 				FontMetrics fm = g.getFontMetrics();
@@ -534,55 +589,65 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 				g2d.setColor(getForeground());
 
+				//{{{ No rotation
 				if(rotate == NONE)
 				{
-					g2d.setTransform(AffineTransform
-						.getRotateInstance(
-						0,x,y));
 					g2d.drawString(text,x,y + fm.getAscent());
-				}
+				} //}}}
+				//{{{ Clockwise rotation
 				else if(rotate == CW)
 				{
-					g2d.setTransform(AffineTransform
-						.getRotateInstance(
-						Math.PI / 3,x,y));
-					g2d.fillRect(0,0,1000,1000);
-					g2d.drawString(text,y,x + fm.getAscent());
-				}
+					AffineTransform trans = new AffineTransform();
+					trans.concatenate(oldTransform);
+					trans.translate(x,y);
+					trans.rotate(Math.PI / 2,
+						height / 2, height / 2);
+					g2d.setTransform(trans);
+					g2d.drawString(text,0,fm.getAscent());
+				} //}}}
+				//{{{ Counterclockwise rotation
 				else if(rotate == CCW)
 				{
-					g2d.setTransform(AffineTransform
-						.getRotateInstance(
-						-Math.PI / 3,x,y));
-					g2d.drawString(text,y,x + fm.getAscent());
-				}
+					AffineTransform trans = new AffineTransform();
+					trans.concatenate(oldTransform);
+					trans.translate(x,y);
+					trans.rotate(-Math.PI / 2,
+						height / 2, height / 2);
+					g2d.setTransform(trans);
+					g2d.drawString(text,0,fm.getAscent());
+				} //}}}
 
 				g2d.setTransform(oldTransform);
-			}
-		}
-	}
+			} //}}}
+		} //}}}
+	} //}}}
 
+	//{{{ ButtonBox class
 	class ButtonBox extends Box
 	{
+		//{{{ ButtonBox constructor
 		ButtonBox()
 		{
 			super((position.equals(DockableWindowManager.TOP)
 				|| position.equals(DockableWindowManager.BOTTOM))
 				? BoxLayout.X_AXIS
 				: BoxLayout.Y_AXIS);
-		}
+		} //}}}
 
+		//{{{ getPreferredSize() method
 		public Dimension getPreferredSize()
 		{
 			if(dockables.size() == 0)
 				return new Dimension(0,0);
 			else
 				return super.getPreferredSize();
-		}
-	}
+		} //}}}
+	} //}}}
 
+	//{{{ DockablePanel class
 	class DockablePanel extends JPanel
 	{
+		//{{{ DockablePanel constructor
 		DockablePanel()
 		{
 			super(new CardLayout());
@@ -590,18 +655,21 @@ public class PanelWindowContainer implements DockableWindowContainer
 			ResizeMouseHandler resizeMouseHandler = new ResizeMouseHandler();
 			addMouseListener(resizeMouseHandler);
 			addMouseMotionListener(resizeMouseHandler);
-		}
+		} //}}}
 
+		//{{{ showDockable() method
 		void showDockable(String name)
 		{
 			((CardLayout)getLayout()).show(this,name);
-		}
+		} //}}}
 
+		//{{{ getMinimumSize() method
 		public Dimension getMinimumSize()
 		{
 			return new Dimension(0,0);
-		}
+		} //}}}
 
+		//{{{ getPreferredSize() method
 		public Dimension getPreferredSize()
 		{
 			if(current == null)
@@ -620,20 +688,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 						0);
 				}
 			}
-		}
+		} //}}}
 
+		//{{{ ResizeMouseHandler class
 		class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
 		{
 			boolean canDrag;
 			int dragStartDimension;
 			Point dragStart;
 
+			//{{{ mousePressed() method
 			public void mousePressed(MouseEvent evt)
 			{
 				dragStartDimension = dimension;
 				dragStart = evt.getPoint();
-			}
+			} //}}}
 
+			//{{{ mouseMoved() method
 			public void mouseMoved(MouseEvent evt)
 			{
 				Border border = getBorder();
@@ -646,6 +717,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				Insets insets = border.getBorderInsets(DockablePanel.this);
 				int cursor = Cursor.DEFAULT_CURSOR;
 				canDrag = false;
+				//{{{ Top...
 				if(position.equals(DockableWindowManager.TOP))
 				{
 					if(evt.getY() >= getHeight() - insets.bottom)
@@ -653,7 +725,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 						cursor = Cursor.N_RESIZE_CURSOR;
 						canDrag = true;
 					}
-				}
+				} //}}}
+				//{{{ Left...
 				else if(position.equals(DockableWindowManager.LEFT))
 				{
 					if(evt.getX() >= getWidth() - insets.right)
@@ -661,7 +734,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 						cursor = Cursor.W_RESIZE_CURSOR;
 						canDrag = true;
 					}
-				}
+				} //}}}
+				//{{{ Bottom...
 				else if(position.equals(DockableWindowManager.BOTTOM))
 				{
 					if(evt.getY() <= insets.top)
@@ -669,7 +743,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 						cursor = Cursor.S_RESIZE_CURSOR;
 						canDrag = true;
 					}
-				}
+				} //}}}
+				//{{{ Right...
 				else if(position.equals(DockableWindowManager.RIGHT))
 				{
 					if(evt.getX() <= insets.left)
@@ -677,11 +752,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 						cursor = Cursor.E_RESIZE_CURSOR;
 						canDrag = true;
 					}
-				}
+				} //}}}
 
 				setCursor(Cursor.getPredefinedCursor(cursor));
-			}
+			} //}}}
 
+			//{{{ mouseDragged() method
 			public void mouseDragged(MouseEvent evt)
 			{
 				if(!canDrag)
@@ -690,39 +766,46 @@ public class PanelWindowContainer implements DockableWindowContainer
 				if(dragStart == null) // can't happen?
 					return;
 
+				//{{{ Top...
 				if(position.equals(DockableWindowManager.TOP))
 				{
 					dimension = evt.getY()
 						+ dragStartDimension
 						- dragStart.y;
-				}
+				} //}}}
+				//{{{ Left...
 				else if(position.equals(DockableWindowManager.LEFT))
 				{
 					dimension = evt.getX()
 						+ dragStartDimension
 						- dragStart.x;
-				}
+				} //}}}
+				//{{{ Bottom...
 				else if(position.equals(DockableWindowManager.BOTTOM))
 				{
 					dimension += (dragStart.y - evt.getY());
-				}
+				} //}}}
+				//{{{ Right...
 				else if(position.equals(DockableWindowManager.RIGHT))
 				{
 					dimension += (dragStart.x - evt.getX());
-				}
+				} //}}}
 
 				if(dimension <= 0)
 					dimension = dragStartDimension;
 
 				wm.invalidate();
 				wm.validate();
-			}
+			} //}}}
 
+			//{{{ mouseExited() method
 			public void mouseExited(MouseEvent evt)
 			{
 				setCursor(Cursor.getPredefinedCursor(
 					Cursor.DEFAULT_CURSOR));
-			}
-		}
-	}
+			} //}}}
+		} //}}}
+	} //}}}
+
+	//}}}
 }
