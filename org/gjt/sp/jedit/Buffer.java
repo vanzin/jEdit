@@ -1400,6 +1400,19 @@ public class Buffer implements EBComponent
 		bufferListeners.removeElement(listener);
 	} //}}}
 
+	//{{{ getBufferChangeListeners() method
+	/**
+	 * Returns an array of registered buffer change listeners.
+	 * @param listener The listener
+	 * @since jEdit 4.1pre3
+	 */
+	public BufferChangeListener[] getBufferChangeListeners()
+	{
+		return (BufferChangeListener[])bufferListeners
+			.toArray(new BufferChangeListener[
+			bufferListeners.size()]);
+	} //}}}
+
 	//}}}
 
 	//{{{ Property methods

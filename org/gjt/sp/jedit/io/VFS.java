@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
 import java.util.*;
+import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;

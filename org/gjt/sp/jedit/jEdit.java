@@ -38,6 +38,7 @@ import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
@@ -2970,14 +2971,14 @@ public class jEdit
 
 	//{{{ runStartupScripts() method
 	/**
-	 * Runs scripts in the site startup directory, and user startup directory.
+	 * Runs scripts in a directory.
 	 */
 	private static void runStartupScripts(File directory)
 	{
 		if (!directory.isDirectory())
 			return;
 
-		String[] snippets = directory.list();
+		File[] snippets = directory.listFiles();
 		if (snippets == null)
 			return;
 
@@ -2986,8 +2987,24 @@ public class jEdit
 
 		for(int i = 0; i < snippets.length; ++i)
 		{
-			Macros.runScript(null,new File(
-				directory,snippets[i]).getPath(),true);
+			File snippet = snippets[i];
+
+			Macros.Handler handler = Macros.getHandlerForFileName(
+				snippet.getName());
+			if(handler == null)
+				continue;
+
+			try
+			{
+				Macros.Macro newMacro = handler.createMacro(
+					snippet.getName(),
+					snippet.getPath());
+				handler.runMacro(null,newMacro,false);
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,jEdit.class,e);
+			}
 		}
 	} //}}}
 
