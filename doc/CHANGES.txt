@@ -61,9 +61,9 @@ contributing to this release.
     "(0x[[:xdigit:]]+|[[:digit:]]+)[lLdDfF]?".
 
 - Improved loading time of plain text files if 'more accurate syntax
-  highlighting' is on
+  highlighting' is on.
 
-- WHITESPACE rule no longer necessary in mode definitions
+- WHITESPACE rule no longer necessary in mode definitions.
 
 - Added FORTRAN syntax highlighting (Joseph Schroer)
   Added Interilis syntax highlighting (Claude Eisenhut)
@@ -73,30 +73,30 @@ contributing to this release.
 + User Interface Changes:
 
 - Search bar no longer takes up the full width of the view. This saves
-  some screen space
+  some screen space.
 
 - Status bar looks somewhat different now, and shows the word wrap mode
-  and line separator status
+  and line separator status.
 
 - The text color and style used to show the "[n lines]" string can now
-  be set independently of the EOL marker color
+  be set independently of the EOL marker color.
 
-- Plugin manager window can be closed by pressing Escape
+- Plugin manager window can be closed by pressing Escape.
 
 - Open buffers are shown with a different icon in the file system
-  browser
+  browser.
 
-- New splash screen (Kris Kopicki)
+- New splash screen. (Kris Kopicki)
 
-+ OS-specific Changes
++ OS-specific Changes:
 
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
-  some bug fixes and cleanups (Kris Kopicki)
+  some bug fixes and cleanups. (Kris Kopicki)
 
 - On Unix, the installer now defaults to installing in the user's home
-  directory when running as a non-root user
+  directory when running as a non-root user.
 
-+ Bug Fixes
++ Bug Fixes:
 
 - A single invalid file system browser coloring regular expression no
   longer stops the remaining expressions from being loaded.
@@ -154,7 +154,7 @@ contributing to this release.
   animation might be visible for a brief period of time. However,
   there is no other way of fixing this. (Alexander Maryanovsky)
 
-+ API Changes
++ API Changes:
 
 - Two methods added to jEdit class:
   getDoubleProperty()
