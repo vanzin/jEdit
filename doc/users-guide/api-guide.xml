@@ -3041,14 +3041,15 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
   To create and display the search and replace
   dialog, first assign desired values to the search settings using the methods
   described above.  Then create a new <classname>SearchDialog</classname> object
-  using the following constructor:
+  using the following static method in the <classname>SearchDialog</classname>
+  class:
 </para>
 
 <itemizedlist>
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public <function>SearchDialog</function></funcdef>
+        <funcdef>public static void <function>showSearchDialog</function></funcdef>
         <paramdef>View <parameter>view</parameter></paramdef>
         <paramdef>String <parameter>searchString</parameter></paramdef>
         <paramdef>int <parameter>searchIn</parameter></paramdef>

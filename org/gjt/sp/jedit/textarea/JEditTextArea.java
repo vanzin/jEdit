@@ -909,7 +909,12 @@ public class JEditTextArea extends JComponent
 			}
 		}
 
-		if(endLine == -1 || chunkCache.needFullRepaint())
+		if(chunkCache.needFullRepaint())
+		{
+			recalculateLastPhysicalLine();
+			endLine = visibleLines;
+		}
+		else if(endLine == -1)
 			endLine = visibleLines;
 
 		//if(startLine != endLine)
@@ -960,7 +965,13 @@ public class JEditTextArea extends JComponent
 
 		if(startScreenLine == -1)
 			startScreenLine = 0;
-		if(endScreenLine == -1 || chunkCache.needFullRepaint())
+
+		if(chunkCache.needFullRepaint())
+		{
+			recalculateLastPhysicalLine();
+			endScreenLine = visibleLines;
+		}
+		else if(endScreenLine == -1)
 			endScreenLine = visibleLines;
 
 		invalidateScreenLineRange(startScreenLine,endScreenLine);
@@ -2189,14 +2200,25 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		int nextLine = foldVisibilityManager.getNextVisibleLine(line);
 
+		int newCaret;
+
 		if(nextLine == -1)
 		{
-			getToolkit().beep();
-			return;
+			int end = getLineEndOffset(caretLine) - 1;
+			if(caret == end)
+			{
+				getToolkit().beep();
+				return;
+			}
+			else
+				newCaret = end;
+		}
+		else
+		{
+			newCaret = getLineStartOffset(nextLine)
+				+ xToOffset(nextLine,magic + 1);
 		}
 
-		int newCaret = getLineStartOffset(nextLine)
-			+ xToOffset(nextLine,magic + 1);
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -2450,13 +2472,22 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		int magic = getMagicCaretPosition();
 
 		int prevLine = foldVisibilityManager.getPrevVisibleLine(caretLine);
+
+		int newCaret;
+
 		if(prevLine == -1)
 		{
-			getToolkit().beep();
-			return;
+			int start = getLineStartOffset(caretLine);
+			if(caret == start)
+			{
+				getToolkit().beep();
+				return;
+			}
+			else
+				newCaret = start;
 		}
-
-		int newCaret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
+		else
+			newCaret = getLineStartOffset(prevLine) + xToOffset(prevLine,magic + 1);
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
@@ -3012,11 +3043,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 			if(ch == ' ')
 			{
-				if(doWordWrap(caretLine,true))
+				if(doWordWrap(true))
 					return;
 			}
 			else
-				doWordWrap(caretLine,false);
+				doWordWrap(false);
 
 			try
 			{
@@ -3527,23 +3558,11 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int line = caretLine;
 
-		while(line != 0 && !buffer.isFoldStart(line))
-			line--;
-
-		int level;
-		if(line == 0)
-		{
-			// so that it always just finds the first fold
-			level = Integer.MAX_VALUE;
-		}
-		else
-			level = buffer.getFoldLevel(line);
-
 		int nextFold = -1;
 		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
 		{
-			if(buffer.getFoldLevel(i) <= level
-				&& buffer.isFoldStart(i))
+			if(buffer.isFoldStart(i)
+				&& foldVisibilityManager.isLineVisible(i))
 			{
 				nextFold = i;
 				break;
@@ -3578,23 +3597,11 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	{
 		int line = caretLine;
 
-		while(!buffer.isFoldStart(line))
-		{
-			if(line == 0)
-			{
-				getToolkit().beep();
-				return;
-			}
-			else
-				line--;
-		}
-
-		int level = buffer.getFoldLevel(line);
 		int prevFold = -1;
 		for(int i = caretLine - 1; i >= 0; i--)
 		{
-			if(buffer.getFoldLevel(i) <= level
-				&& buffer.isFoldStart(i))
+			if(buffer.isFoldStart(i)
+				&& foldVisibilityManager.isLineVisible(i))
 			{
 				prevFold = i;
 				break;
@@ -4703,6 +4710,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//}}}
 
 	//{{{ Package-private members
+
+	//{{{ Instance variables
 	Segment lineSegment;
 	MouseHandler mouseHandler;
 	ChunkCache chunkCache;
@@ -4722,6 +4731,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	// used to store offsetToXY() results
 	Point returnValue;
+	//}}}
 
 	//{{{ isCaretVisible() method
 	/**
@@ -4742,19 +4752,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			&& hasFocus()
 			&& foldVisibilityManager.isLineVisible(bracketLine)
 			&& foldVisibilityManager.isLineVisible(caretLine);
-	} //}}}
-
-	//{{{ recalculateVisibleLines() method
-	void recalculateVisibleLines()
-	{
-		if(painter == null)
-			return;
-		int height = painter.getHeight();
-		int lineHeight = painter.getFontMetrics().getHeight();
-		visibleLines = height / lineHeight;
-
-		chunkCache.recalculateVisibleLines();
-		propertiesChanged();
 	} //}}}
 
 	//{{{ updateMaxHorizontalScrollWidth() method
@@ -4791,6 +4788,19 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		// repaint gutter and painter
 		gutter.repaint();
 		painter.repaint();
+	} //}}}
+
+		//{{{ recalculateVisibleLines() method
+	void recalculateVisibleLines()
+	{
+		if(painter == null)
+			return;
+		int height = painter.getHeight();
+		int lineHeight = painter.getFontMetrics().getHeight();
+		visibleLines = height / lineHeight;
+
+		chunkCache.recalculateVisibleLines();
+		propertiesChanged();
 	} //}}}
 
 	//}}}
@@ -5029,18 +5039,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ doWordWrap() method
-	private boolean doWordWrap(int line, boolean spaceInserted)
+	private boolean doWordWrap(boolean spaceInserted)
 	{
 		if(!hardWrap || maxLineLen <= 0)
 			return false;
 
-		int start = getLineStartOffset(line);
-		int end = getLineEndOffset(line);
+		buffer.getLineText(caretLine,lineSegment);
+
+		int start = getLineStartOffset(caretLine);
+		int end = getLineEndOffset(caretLine);
 		int len = end - start - 1;
 
-		// don't wrap unless we're at the end of the line
-		if(getCaretPosition() != end - 1)
-			return false;
+		int caretPos = caret - start;
+
+		// only wrap if we're at the end of a line, or the rest of the
+		// line text is whitespace
+		for(int i = caretPos; i < len; i++)
+		{
+			char ch = lineSegment.array[lineSegment.offset + i];
+			if(ch != ' ' && ch != '\t')
+				return false;
+		}
 
 		boolean returnValue = false;
 
@@ -5048,17 +5067,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		String wordBreakChars = buffer.getStringProperty("wordBreakChars");
 
-		buffer.getLineText(line,lineSegment);
-
-		int lineStart = lineSegment.offset;
 		int logicalLength = 0; // length with tabs expanded
 		int lastWordOffset = -1;
 		boolean lastWasSpace = true;
 		boolean initialWhiteSpace = true;
 		int initialWhiteSpaceLength = 0;
-		for(int i = 0; i < len; i++)
+		for(int i = 0; i < caretPos; i++)
 		{
-			char ch = lineSegment.array[lineStart + i];
+			char ch = lineSegment.array[lineSegment.offset + i];
 			if(ch == '\t')
 			{
 				if(initialWhiteSpace)
@@ -5100,9 +5116,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			int insertNewLineAt;
 			if(spaceInserted && logicalLength == maxLineLen
-				&& i == len - 1)
+				&& i == caretPos - 1)
 			{
-				insertNewLineAt = end - 1;
+				insertNewLineAt = caretPos;
 				returnValue = true;
 			}
 			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
@@ -5114,7 +5130,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				buffer.beginCompoundEdit();
 				buffer.insert(insertNewLineAt,"\n");
-				buffer.indentLine(line + 1,true,true);
+				// caretLine would have been incremented
+				// since insertNewLineAt <= caretPos
+				buffer.indentLine(caretLine,true,true);
 			}
 			finally
 			{
@@ -5223,7 +5241,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ recalculateLastPhysicalLine() method
-	private void recalculateLastPhysicalLine()
+	void recalculateLastPhysicalLine()
 	{
 		chunkCache.updateChunksUpTo(visibleLines);
 		for(int i = visibleLines; i >= 0; i--)
@@ -5499,6 +5517,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void contentInserted(Buffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
+			chunkCache.invalidateChunksFromPhys(startLine);
+
 			if(/* numLines != 0 && */ foldVisibilityManager.getLastVisibleLine()
 				- numLines <= physLastLine)
 			{
@@ -5552,6 +5572,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(!buffer.isLoaded())
 				return;
+
+			chunkCache.invalidateChunksFromPhys(startLine);
 
 			// -lineCount because they are removed.
 			repaintAndScroll(startLine,-numLines);
@@ -5630,8 +5652,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
-			chunkCache.invalidateChunksFromPhys(startLine);
-
 			if(numLines == 0)
 				invalidateLine(startLine);
 			// do magic stuff

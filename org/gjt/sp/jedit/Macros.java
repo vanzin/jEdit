@@ -244,7 +244,7 @@ public class Macros
 		return (Handler[])macroHandlers.toArray(handlers);
 	} //}}}
 
-	//{{{
+	//{{{ getHandler() method
 	/**
 	 * Returns the macro handler with the specified name, or null if
 	 * there is no registered handler with that name.
@@ -325,6 +325,12 @@ public class Macros
 		public String getLabel()
 		{
 			return label;
+		} //}}}
+
+		//{{{ getMouseOverText() method
+		public String getMouseOverText()
+		{
+			return handler.getLabel() + " - " + path;
 		} //}}}
 
 		//{{{ getPath() method

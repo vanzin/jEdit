@@ -29,9 +29,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.HashMap;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
+import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -53,7 +55,32 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public static final int DIRECTORY = 2;
 	//}}}
 
-	//{{{ showSearchDialog
+	//{{{ showSearchDialog() method
+	/**
+	 * Displays a search and replace dialog box, reusing an existing one
+	 * if necessary.
+	 * @param view The view
+	 * @param searchString The search string
+	 * @param searchIn One of CURRENT_BUFFER, ALL_BUFFERS, or DIRECTORY
+	 * @since jEdit 4.0pre6
+	 */
+	public static void showSearchDialog(View view, String searchString,
+		int searchIn)
+	{
+		SearchDialog dialog = (SearchDialog)viewHash.get(view);
+		if(dialog != null)
+		{
+			dialog.setSearchString(searchString,searchIn);
+			dialog.toFront();
+			dialog.requestFocus();
+		}
+		else
+		{
+			dialog = new SearchDialog(view,searchString,searchIn);
+			viewHash.put(view,dialog);
+		}
+	} //}}}
+
 	//{{{ SearchDialog constructor
 	/**
 	 * Creates a new search and replace dialog box.
@@ -262,6 +289,15 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 			regexp.setSelected(SearchAndReplace.getRegexp());
 		}
+		else if(msg instanceof ViewUpdate)
+		{
+			ViewUpdate vmsg = (ViewUpdate)msg;
+			if(vmsg.getView() == view
+				&& vmsg.getWhat() == ViewUpdate.CLOSED)
+			{
+				viewHash.remove(view);
+			}
+		}
 	} //}}}
 
 	//{{{ dispose() method
@@ -272,6 +308,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	} //}}}
 
 	//{{{ Private members
+
+	private static HashMap viewHash = new HashMap();
 
 	//{{{ Instance variables
 	private View view;

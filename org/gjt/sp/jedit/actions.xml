@@ -304,7 +304,7 @@
 
 <ACTION NAME="find" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,textArea.getSelectedText(),SearchDialog.CURRENT_BUFFER);
+		SearchDialog.showSearchDialog(view,textArea.getSelectedText(),SearchDialog.CURRENT_BUFFER);
 	</CODE>
 </ACTION>
 
@@ -833,14 +833,14 @@
 
 <ACTION NAME="search-in-open-buffers" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,textArea.getSelectedText(),
+		SearchDialog.showSearchDialog(view,textArea.getSelectedText(),
 			SearchDialog.ALL_BUFFERS);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="search-in-directory" NO_RECORD="TRUE">
 	<CODE>
-		new SearchDialog(view,textArea.getSelectedText(),
+		SearchDialog.showSearchDialog(view,textArea.getSelectedText(),
 			SearchDialog.DIRECTORY);
 	</CODE>
 </ACTION>
