@@ -644,7 +644,7 @@ view.status.expand-folds=Press 1-9 to specify fold level
 view.status.insert-literal=Press key to insert literally
 view.status.auto-wrap=Search string not found; wrapping around
 view.status.search-not-found=Search string not found
-view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s) ({2} milliseconds)
+view.status.replace-all=Replaced {0} occurrence(s) in {1} file(s)
 view.status.io=I/O: {0} operations in progress
 view.status.io-1=I/O: 1 operation in progress
 view.status.io.done=Input/output complete
@@ -689,10 +689,7 @@ about.version=jEdit version {0}
 # insert a space by itself in the text to create blank lines.
 about.text=jEdit is brought to you by\n\
 	\ \n\
-	\ \n\
-	\ \n\
 	Slava Pestov\n\
-	\ \n\
 	Alexander Maryanovsky\n\
 	Alfonso Garcia\n\
 	Alwyn Barry\n\
@@ -720,12 +717,14 @@ about.text=jEdit is brought to you by\n\
 	George Latkiewicz\n\
 	Gili Tzabari\n\
 	Giulio Piancastelli\n\
+	Greg Cooper\n\
 	Greg Merrill\n\
 	Ian Maclean\n\
 	Israel Olalla\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jerry McBride\n\
+	Jiger Patel\n\
 	Jim Wissner\n\
 	John Gellene\n\
 	Jonathan Revusky\n\
@@ -740,12 +739,14 @@ about.text=jEdit is brought to you by\n\
 	Maik Schreiber\n\
 	Marc Rummel\n\
 	Marcio Marchini\n\
+	Marco Hunsicker\n\
 	Marcus Jonason\n\
 	Matija Kejzar\n\
 	Matt Albrecht\n\
 	Matt Price\n\
 	Matthias Schneider\n\
 	Michael Jacobson\n\
+	Michael Taft\n\
 	Mike Dillon\n\
 	Mike Hansen\n\
 	Nils Krahnstoever\n\
@@ -777,13 +778,8 @@ about.text=jEdit is brought to you by\n\
 	Will Sargent\n\
 	Wojciech Stryjewski\n\
 	\ \n\
-	\ \n\
-	\ \n\
-	\ \n\
 	I'd also like to thank the users for their\n\
-	\ \n\
-	comments, feedback and bug reports.\n\
-	\ 
+	comments, feedback and bug reports.
 #}}}
 
 #{{{ Error list dialog, used to report I/O and plugin load errors

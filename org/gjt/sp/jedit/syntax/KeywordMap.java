@@ -130,10 +130,7 @@ loop:		for(int i = 0; i < chars.length; i++)
 	 */
 	public String getNonAlphaNumericChars()
 	{
-		if(noWordSepStr == null)
-			noWordSepStr = noWordSep.toString();
-
-		return noWordSepStr;
+		return noWordSep.toString();
 	} //}}}
 
 	//{{{ getKeywords() method

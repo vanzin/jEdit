@@ -776,8 +776,6 @@ loop:			for(;;)
 	 */
 	public static boolean replaceAll(View view)
 	{
-		long start = System.currentTimeMillis();
-
 		int fileCount = 0;
 		int occurCount = 0;
 
@@ -858,13 +856,11 @@ loop:			while(path != null)
 			view.hideWaitCursor();
 		}
 
-		long time = (System.currentTimeMillis() - start);
 		/* Don't do this when playing a macro, cos it's annoying */
 		if(!BeanShell.isScriptRunning())
 		{
 			Object[] args = { new Integer(occurCount),
-				new Integer(fileCount),
-				new Long(time) };
+				new Integer(fileCount) };
 			view.getStatus().setMessageAndClear(jEdit.getProperty(
 				"view.status.replace-all",args));
 			if(occurCount == 0)

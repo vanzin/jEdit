@@ -140,8 +140,7 @@ public class TokenMarker
 	 * Do not call this method directly; call Buffer.markTokens() instead.
 	 */
 	public LineContext markTokens(LineContext prevContext,
-		TokenHandler tokenHandler, Segment line,
-		String noWordSep)
+		TokenHandler tokenHandler, Segment line)
 	{
 		//{{{ Set up some instance variables
 		// this is to avoid having to pass around lots and lots of
@@ -239,12 +238,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			}
 			else if(keywords != null || context.rules.getRuleCount() != 0)
 			{
-				String noWordSep2 = (keywords == null
-					? "" : keywords.getNonAlphaNumericChars());
+				String noWordSep = context.rules.getNoWordSep();
 
 				if(!Character.isLetterOrDigit(ch)
-					&& noWordSep.indexOf(ch) == -1
-					&& noWordSep2.indexOf(ch) == -1)
+					&& noWordSep.indexOf(ch) == -1)
 				{
 					if(context.inRule != null)
 						handleRule(context.inRule,true);

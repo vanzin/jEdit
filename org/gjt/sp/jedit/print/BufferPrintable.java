@@ -108,17 +108,17 @@ class BufferPrintable extends WorkRequest implements Printable
 		throws PrinterException
 	{
 
-		if(end)
-		{
-			view.getStatus().setMessage(null);
-			return NO_SUCH_PAGE;
-		}
-
 		lineList.clear();
 		currentLine = 0;
 
 		if(pageIndex != currentPage)
 		{
+			if(end)
+			{
+				view.getStatus().setMessage(null);
+				return NO_SUCH_PAGE;
+			}
+
 			currentPageStart = currentPhysicalLine;
 			currentPage = pageIndex;
 		}
@@ -201,6 +201,7 @@ print_loop:	for(;;)
 			{
 				lineList.add(new Integer(currentPhysicalLine + 1));
 
+				buffer.getLineText(currentPhysicalLine,seg);
 				softWrap.init(seg,styles,frc,e,lineList,
 					(float)(pageWidth - lineNumberWidth));
 
@@ -235,7 +236,6 @@ print_loop:	for(;;)
 			{
 				Chunk line = (Chunk)obj;
 
-				buffer.getLineText(currentPhysicalLine,seg);
 				Chunk.paintChunkList(seg,line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),

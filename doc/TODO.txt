@@ -3,19 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- RE tester:
-  - show up-to-date syntax info
-  - support jEdit syntax
-  - dockable window
-
 + before 4.1pre1:
 
-- about dialog
-- finish monospaced hack
-- hypersearch: show total time
 - searching in a buffer w/ narrowed fold
 - syntax: separate noWordSep
-- document edit menu rearrangements
 - better rectangular editing:
   - range-comment & rect select
   - eval-for-selected-lines doesn't work with rectangular selection
@@ -35,6 +26,7 @@ and quirks that I need to fix eventually.
 
 + later:
 
+- finish monospaced hack
 - action system overhaul
 - move text utility methods to TextUtilities
 - focus problem with hypersearch in floating window?
