@@ -53,6 +53,11 @@ public class KillRing
 			count = newCount;
 			wrap = false;
 		}
+		else if(count == ring.length)
+		{
+			count = 0;
+			wrap = true;
+		}
 	} //}}}
 
 	//{{{ getListModel() method
@@ -115,6 +120,7 @@ public class KillRing
 
 		ring = (UndoManager.Remove[])handler.list.toArray(
 			new UndoManager.Remove[handler.list.size()]);
+		count = ring.length;
 	} //}}}
 
 	//{{{ save() method
@@ -155,7 +161,8 @@ public class KillRing
 			out.write(lineSep);
 
 			ListModel model = getListModel();
-			for(int i = 0; i < model.getSize(); i++)
+			int size = model.getSize();
+			for(int i = size - 1; i >=0; i--)
 			{
 				out.write("<ENTRY>");
 				out.write(MiscUtilities.charsToEntities(
@@ -374,6 +381,7 @@ public class KillRing
 		{
 			if(name.equals("ENTRY"))
 			{
+				System.err.println(charData);
 				list.add(new UndoManager.Remove(null,0,0,charData));
 			}
 		}

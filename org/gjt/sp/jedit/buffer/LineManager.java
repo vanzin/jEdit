@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2003 Slava Pestov
+ * Copyright (C) 2001, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,8 @@ public class LineManager
 	{
 		endOffsets = new int[1];
 		endOffsets[0] = 1;
-		lineInfo = new short[1];
-		lineInfo[0] = (short)(1 << SCREEN_LINES_SHIFT);
+		lineInfo = new int[1];
+		lineInfo[0] = (1 << SCREEN_LINES_SHIFT);
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
 	} //}}}
@@ -118,13 +118,13 @@ public class LineManager
 	// Also sets 'fold level valid' flag
 	public final void setFoldLevel(int line, int level)
 	{
-		if(level > 0xff)
+		if(level > 0xffff)
 		{
 			// limitations...
-			level = 0xff;
+			level = 0xffff;
 		}
 
-		lineInfo[line] = (short)((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
+		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
 	} //}}}
 
 	//{{{ setFirstInvalidFoldLevel() method
@@ -155,19 +155,18 @@ public class LineManager
 	//{{{ setScreenLineCount() method
 	public final void setScreenLineCount(int line, int count)
 	{
-		if(count > 0x7f)
+		if(count > 0x7fff)
 		{
 			// limitations...
-			count = 0x7f;
+			count = 0x7fff;
 		}
 
 		if(Debug.SCREEN_LINES_DEBUG)
 			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
-		lineInfo[line] = (short)(
+		lineInfo[line] =
 			((lineInfo[line] & ~SCREEN_LINES_MASK)
 			| (count << SCREEN_LINES_SHIFT)
-			| SCREEN_LINES_VALID_MASK)
-		);
+			| SCREEN_LINES_VALID_MASK);
 	} //}}}
 
 	//{{{ getLineContext() method
@@ -209,9 +208,9 @@ public class LineManager
 		firstInvalidLineContext = firstInvalidFoldLevel = 0;
 		lineCount = endOffsets.getSize();
 		this.endOffsets = endOffsets.getArray();
-		lineInfo = new short[lineCount];
+		lineInfo = new int[lineCount];
 		for(int i = 0; i < lineInfo.length; i++)
-			lineInfo[i] = (short)(1 << SCREEN_LINES_SHIFT);
+			lineInfo[i] = 1 << SCREEN_LINES_SHIFT;
 
 		lineContext = new TokenMarker.LineContext[lineCount];
 	} //}}}
@@ -240,7 +239,7 @@ public class LineManager
 
 			if(lineInfo.length <= lineCount)
 			{
-				short[] lineInfoN = new short[(lineCount + 1) * 2];
+				int[] lineInfoN = new int[(lineCount + 1) * 2];
 				System.arraycopy(lineInfo,0,lineInfoN,0,
 						 lineInfo.length);
 				lineInfo = lineInfoN;
@@ -273,7 +272,7 @@ public class LineManager
 			for(int i = 0; i < numLines; i++)
 			{
 				this.endOffsets[startLine + i] = (offset + endOffsets.get(i));
-				lineInfo[startLine + i] = (short)0;
+				lineInfo[startLine + i] = 0;
 			}
 		} //}}}
 
@@ -325,20 +324,20 @@ public class LineManager
 	/* Having all the info packed into an int is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
 	 *
-	 * The new document model has just 10 bytes of overhead per line.
+	 * The new document model has just 12 bytes of overhead per line.
 	 * LineContext instances are now internalized, so only a few should
 	 * actually be in the heap.
 	 *
 	 * In the old document model there were 5 objects per line, for a
 	 * total of about 100 bytes, plus a cached token list, which used
 	 * another 100 or so bytes. */
-	private static final short FOLD_LEVEL_MASK         = 0x00ff;
-	private static final short SCREEN_LINES_MASK       = 0x7f00;
-	private static final short SCREEN_LINES_SHIFT      = 8;
-	private static final short SCREEN_LINES_VALID_MASK = (short)(1<<15);
+	private static final int FOLD_LEVEL_MASK         = 0x00ffff;
+	private static final int SCREEN_LINES_MASK       = 0x7fff00;
+	private static final int SCREEN_LINES_SHIFT      = 16;
+	private static final int SCREEN_LINES_VALID_MASK = 1<<31;
 
 	private int[] endOffsets;
-	private short[] lineInfo;
+	private int[] lineInfo;
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;
