@@ -25,12 +25,17 @@ package org.gjt.sp.jedit.search;
 import gnu.regexp.CharIndexed;
 
 /**
- * An abstract interface for matching strings.
+ * An abstract class for matching strings.
  * @author Slava Pestov
  * @version $Id$
  */
-public interface SearchMatcher
+public abstract class SearchMatcher
 {
+	public SearchMatcher()
+	{
+		returnValue = new Match();
+	}
+
 	/**
 	 * Returns the offset of the first match of the specified text
 	 * within this matcher.
@@ -47,8 +52,10 @@ public interface SearchMatcher
 	 * the match
 	 * @since jEdit 4.2pre4
 	 */
-	Match nextMatch(CharIndexed text, boolean start, boolean end,
-		boolean firstTime, boolean reverse);
+	public abstract Match nextMatch(CharIndexed text, boolean start,
+		boolean end, boolean firstTime, boolean reverse);
+
+	protected Match returnValue;
 
 	//{{{ Match class
 	public static class Match

@@ -156,8 +156,8 @@ public class KeyEventWorkaround
 			{
 				if(!Debug.ALTERNATIVE_DISPATCHER)
 				{
-					if((modifiers & InputEvent.CTRL_MASK) != 0
-						|| (modifiers & InputEvent.ALT_MASK) != 0
+					if(((modifiers & InputEvent.CTRL_MASK) != 0
+						^ (modifiers & InputEvent.ALT_MASK) != 0)
 						|| (modifiers & InputEvent.META_MASK) != 0)
 					{
 						return null;
@@ -173,6 +173,23 @@ public class KeyEventWorkaround
 						|| ch == '/' || ch == '*'
 						|| ch == '-' || ch == '+')
 					{
+						return null;
+					}
+				}
+
+				// Windows JDK workaround
+				if(last == LAST_ALT)
+				{
+					last = LAST_NOTHING;
+					switch(ch)
+					{
+					case 'B':
+					case 'M':
+					case 'X':
+					case 'c':
+					case '!':
+					case ',':
+					case '?':
 						return null;
 					}
 				}
@@ -200,6 +217,8 @@ public class KeyEventWorkaround
 			{
 			case KeyEvent.VK_ALT:
 				modifiers &= ~InputEvent.ALT_MASK;
+				last = LAST_ALT;
+				lastKeyTime = System.currentTimeMillis();
 				return null;
 			case KeyEvent.VK_ALT_GRAPH:
 				modifiers &= ~InputEvent.ALT_GRAPH_MASK;
@@ -240,5 +259,6 @@ public class KeyEventWorkaround
 	private static int last;
 	private static final int LAST_NOTHING = 0;
 	private static final int LAST_NUMKEYPAD = 1;
+	private static final int LAST_ALT = 2;
 	//}}}
 }

@@ -1,5 +1,4 @@
-<!DOCTYPE style-sheet PUBLIC "-//James Clark//DTD DSSSL Style Sheet//EN" [
-<!ENTITY jeditprint-letter SYSTEM "jeditprint-letter.dsl" CDATA DSSSL> ]>
+<!DOCTYPE style-sheet PUBLIC "-//OpenJade//DTD DSSSL Style Sheet//EN" "file:///foo">
 
 <style-sheet>
 <style-specification use="jeditprint-letter">
@@ -9,5 +8,5 @@
 
 </style-specification-body>
 </style-specification>
-<external-specification id="jeditprint-letter" document="jeditprint-letter">
+<external-specification id="jeditprint-letter" document="jeditprint-letter"/>
 </style-sheet>

@@ -89,19 +89,11 @@ class HelpTOCPanel extends JPanel
 		toc.setModel(empty);
 		toc.setRootVisible(true);
 
-		final EditPlugin[] plugins = jEdit.getPlugins();
 		VFSManager.runInWorkThread(new Runnable()
 		{
 			public void run()
 			{
-				createTOC(plugins);
-			}
-		});
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
+				createTOC();
 				tocModel.reload(tocRoot);
 				toc.setModel(tocModel);
 				toc.setRootVisible(false);
@@ -136,8 +128,10 @@ class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ createTOC() method
-	private void createTOC(EditPlugin[] plugins)
+	private void createTOC()
 	{
+		EditPlugin[] plugins = jEdit.getPlugins();
+		Arrays.sort(plugins,new PluginCompare());
 		tocRoot = new DefaultMutableTreeNode();
 
 		tocRoot.add(createNode("welcome.html",
@@ -444,6 +438,20 @@ class HelpTOCPanel extends JPanel
 			setBorder(border);
 
 			return this;
+		}
+	} //}}}
+
+	//{{{ PluginCompare class
+	static class PluginCompare implements Comparator
+	{
+		public int compare(Object o1, Object o2)
+		{
+			EditPlugin p1 = (EditPlugin)o1;
+			EditPlugin p2 = (EditPlugin)o2;
+			return MiscUtilities.compareStrings(
+				jEdit.getProperty("plugin." + p1 + ".name"),
+				jEdit.getProperty("plugin." + p2 + ".name"),
+				true);
 		}
 	} //}}}
 }
