@@ -48,8 +48,7 @@ public class LineManager
 	{
 		endOffsets = new int[1];
 		endOffsets[0] = 1;
-		lineInfo = new int[1];
-		lineInfo[0] = (1 << SCREEN_LINES_SHIFT);
+		foldLevels = new short[1];
 		lineContext = new TokenMarker.LineContext[1];
 		lineCount = 1;
 	} //}}}
@@ -111,7 +110,7 @@ public class LineManager
 	//{{{ getFoldLevel() method
 	public final int getFoldLevel(int line)
 	{
-		return (lineInfo[line] & FOLD_LEVEL_MASK);
+		return foldLevels[line];
 	} //}}}
 
 	//{{{ setFoldLevel() method
@@ -124,7 +123,7 @@ public class LineManager
 			level = 0xffff;
 		}
 
-		lineInfo[line] = ((lineInfo[line] & ~FOLD_LEVEL_MASK) | level);
+		foldLevels[line] = (short)level;
 	} //}}}
 
 	//{{{ setFirstInvalidFoldLevel() method
@@ -137,36 +136,6 @@ public class LineManager
 	public int getFirstInvalidFoldLevel()
 	{
 		return firstInvalidFoldLevel;
-	} //}}}
-
-	//{{{ isScreenLineCountValid() method
-	public final boolean isScreenLineCountValid(int line)
-	{
-		return (lineInfo[line] & SCREEN_LINES_VALID_MASK) != 0;
-	} //}}}
-
-	//{{{ getScreenLineCount() method
-	public final int getScreenLineCount(int line)
-	{
-		return ((lineInfo[line] & SCREEN_LINES_MASK)
-			>> SCREEN_LINES_SHIFT);
-	} //}}}
-
-	//{{{ setScreenLineCount() method
-	public final void setScreenLineCount(int line, int count)
-	{
-		if(count > 0x7fff)
-		{
-			// limitations...
-			count = 0x7fff;
-		}
-
-		if(Debug.SCREEN_LINES_DEBUG)
-			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
-		lineInfo[line] =
-			((lineInfo[line] & ~SCREEN_LINES_MASK)
-			| (count << SCREEN_LINES_SHIFT)
-			| SCREEN_LINES_VALID_MASK);
 	} //}}}
 
 	//{{{ getLineContext() method
@@ -193,13 +162,6 @@ public class LineManager
 		return firstInvalidLineContext;
 	} //}}}
 
-	//{{{ invalidateScreenLineCounts() method
-	public void invalidateScreenLineCounts()
-	{
-		for(int i = 0; i < lineCount; i++)
-			lineInfo[i] &= ~SCREEN_LINES_VALID_MASK;
-	} //}}}
-
 	//{{{ _contentInserted() method
 	public void _contentInserted(IntegerArray endOffsets)
 	{
@@ -208,9 +170,7 @@ public class LineManager
 		firstInvalidLineContext = firstInvalidFoldLevel = 0;
 		lineCount = endOffsets.getSize();
 		this.endOffsets = endOffsets.getArray();
-		lineInfo = new int[lineCount];
-		for(int i = 0; i < lineInfo.length; i++)
-			lineInfo[i] = 1 << SCREEN_LINES_SHIFT;
+		foldLevels = new short[lineCount];
 
 		lineContext = new TokenMarker.LineContext[lineCount];
 	} //}}}
@@ -220,7 +180,6 @@ public class LineManager
 		int numLines, int length, IntegerArray endOffsets)
 	{
 		int endLine = startLine + numLines;
-		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
 
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
@@ -237,12 +196,12 @@ public class LineManager
 				this.endOffsets = endOffsetsN;
 			}
 
-			if(lineInfo.length <= lineCount)
+			if(foldLevels.length <= lineCount)
 			{
-				int[] lineInfoN = new int[(lineCount + 1) * 2];
-				System.arraycopy(lineInfo,0,lineInfoN,0,
-						 lineInfo.length);
-				lineInfo = lineInfoN;
+				short[] foldLevelsN = new short[(lineCount + 1) * 2];
+				System.arraycopy(foldLevels,0,foldLevelsN,0,
+						 foldLevels.length);
+				foldLevels = foldLevelsN;
 			}
 
 			if(lineContext.length <= lineCount)
@@ -256,7 +215,7 @@ public class LineManager
 
 			System.arraycopy(this.endOffsets,startLine,
 				this.endOffsets,endLine,lineCount - endLine);
-			System.arraycopy(lineInfo,startLine,lineInfo,
+			System.arraycopy(foldLevels,startLine,foldLevels,
 				endLine,lineCount - endLine);
 			System.arraycopy(lineContext,startLine,lineContext,
 				endLine,lineCount - endLine);
@@ -272,7 +231,7 @@ public class LineManager
 			for(int i = 0; i < numLines; i++)
 			{
 				this.endOffsets[startLine + i] = (offset + endOffsets.get(i));
-				lineInfo[startLine + i] = 0;
+				foldLevels[startLine + i] = 0;
 			}
 		} //}}}
 
@@ -286,7 +245,6 @@ public class LineManager
 		int numLines, int length)
 	{
 		int endLine = startLine + numLines;
-		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
 
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
@@ -307,7 +265,7 @@ public class LineManager
 
 			System.arraycopy(endOffsets,endLine,endOffsets,
 				startLine,lineCount - startLine);
-			System.arraycopy(lineInfo,endLine,lineInfo,
+			System.arraycopy(foldLevels,endLine,foldLevels,
 				startLine,lineCount - startLine);
 			System.arraycopy(lineContext,endLine,lineContext,
 				startLine,lineCount - startLine);
@@ -321,23 +279,8 @@ public class LineManager
 	//{{{ Private members
 
 	//{{{ Instance variables
-	/* Having all the info packed into an int is not very OO and makes the
-	 * code somewhat more complicated, but it saves a lot of memory.
-	 *
-	 * The new document model has just 12 bytes of overhead per line.
-	 * LineContext instances are now internalized, so only a few should
-	 * actually be in the heap.
-	 *
-	 * In the old document model there were 5 objects per line, for a
-	 * total of about 100 bytes, plus a cached token list, which used
-	 * another 100 or so bytes. */
-	private static final int FOLD_LEVEL_MASK         = 0x0000ffff;
-	private static final int SCREEN_LINES_MASK       = 0x7fff0000;
-	private static final int SCREEN_LINES_SHIFT      = 16;
-	private static final int SCREEN_LINES_VALID_MASK = 1<<31;
-
 	private int[] endOffsets;
-	private int[] lineInfo;
+	private short[] foldLevels;
 	private TokenMarker.LineContext[] lineContext;
 
 	private int lineCount;

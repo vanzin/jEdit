@@ -4923,7 +4923,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			painter.getFont().getStringBounds(foo,0,1,
 			painter.getFontRenderContext()).getWidth());
 
-		boolean invalidateCachedScreenLineCounts = false;
+		boolean invalidateScreenLineCounts = false;
 
 		String wrap = buffer.getStringProperty("wrap");
 		if(!wrap.equals(this.wrap))
@@ -4935,7 +4935,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				displayManager.firstLine.callReset = true;
 				displayManager.scrollLineCount.callReset = true;
 			}
-			invalidateCachedScreenLineCounts = true;
+			invalidateScreenLineCounts = true;
 		}
 
 		int maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
@@ -4947,11 +4947,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				displayManager.firstLine.callReset = true;
 				displayManager.scrollLineCount.callReset = true;
 			}
-			invalidateCachedScreenLineCounts = true;
+			invalidateScreenLineCounts = true;
 		}
 
-		if(invalidateCachedScreenLineCounts)
-			buffer.invalidateCachedScreenLineCounts();
+		if(invalidateScreenLineCounts && displayManager != null)
+			displayManager.invalidateScreenLineCounts();
 
 		chunkCache.invalidateAll();
 
