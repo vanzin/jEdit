@@ -43,24 +43,43 @@ import org.gjt.sp.util.Log;
  */
 public class OffsetManager
 {
+	/* {{{ Format of entires in line info array:
+	 * 0-31: end offset
+	 * 32-47: fold level
+	 * 48-55: visibility bit flags
+	 * 56: fold level valid flag
+	 * 57: context valid flag
+	 * 58-62: number of screen lines (currently unused, reserved for jEdit 4.1)
+	 * 63: reserved
+	 *
+	 * Having all the info packed into a long is not very OO and makes the
+	 * code somewhat more complicated, but it saves a lot of memory.
+	 *
+	 * The new document model has just 12 bytes of overhead per line.
+	 * LineContext instances are now internalized, so only a few should
+	 * actually be in the heap.
+	 *
+	 * In the old document model there were 5 objects per line, for a
+	 * total of about 100 bytes, plus a cached token list, which used
+	 * another 100 or so bytes.
+	 * }}}*/
+	public static final long END_MASK = 0x00000000ffffffffL;
+	public static final long FOLD_LEVEL_MASK = 0x0000ffff00000000L;
+	public static final int FOLD_LEVEL_SHIFT = 32;
+	public static final long VISIBLE_MASK = 0x00ff000000000000L;
+	public static final int VISIBLE_SHIFT = 48;
+	public static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
+	public static final long CONTEXT_VALID_MASK = (1L<<57);
+	public static final long SCREEN_LINES_MASK = 0x7c00000000000000L;
+	public static final long SCREEN_LINES_SHIFT = 58;
+
 	//{{{ OffsetManager constructor
 	public OffsetManager(Buffer buffer)
 	{
 		this.buffer = buffer;
 
-		lineInfo = new long[1];
-		// make first line visible by default
-		lineInfo[0] = 1L | (0xffL << VISIBLE_SHIFT);
-		lineContext = new TokenMarker.LineContext[1];
-		lineCount = 1;
-
 		positions = new PosBottomHalf[100];
-
 		virtualLineCounts = new int[8];
-		for(int i = 0; i < 8; i++)
-			virtualLineCounts[i] = 1;
-
-		gapLine = -1;
 	} //}}}
 
 	//{{{ getLineCount() method
@@ -314,11 +333,14 @@ public class OffsetManager
 		gapWidth = 0;
 		lineCount = endOffsets.getSize();
 		lineInfo = endOffsets.getArray();
-		if(lineContext.length <= lineCount)
+		if(lineContext == null || lineContext.length <= lineCount)
 			lineContext = new TokenMarker.LineContext[lineCount];
 
 		for(int i = 0; i < positionCount; i++)
 			positions[i].offset = 0;
+
+		for(int i = 0; i < virtualLineCounts.length; i++)
+			virtualLineCounts[i] = lineCount;
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -340,7 +362,10 @@ public class OffsetManager
 				System.arraycopy(lineInfo,0,lineInfoN,0,
 						 lineInfo.length);
 				lineInfo = lineInfoN;
+			}
 
+			if(lineContext.length <= lineCount)
+			{
 				TokenMarker.LineContext[] lineContextN
 					= new TokenMarker.LineContext[(lineCount + 1) * 2];
 				System.arraycopy(lineContext,0,lineContextN,0,
@@ -455,36 +480,6 @@ public class OffsetManager
 	} //}}}
 
 	//{{{ Private members
-
-	/* {{{ Format of entires in line info array:
-	 * 0-31: end offset
-	 * 32-47: fold level
-	 * 48-55: visibility bit flags
-	 * 56: fold level valid flag
-	 * 57: context valid flag
-	 * 58-62: number of screen lines (currently unused, reserved for jEdit 4.1)
-	 * 63: reserved
-	 *
-	 * Having all the info packed into a long is not very OO and makes the
-	 * code somewhat more complicated, but it saves a lot of memory.
-	 *
-	 * The new document model has just 12 bytes of overhead per line.
-	 * LineContext instances are now internalized, so only a few should
-	 * actually be in the heap.
-	 *
-	 * In the old document model there were 5 objects per line, for a
-	 * total of about 100 bytes, plus a cached token list, which used
-	 * another 100 or so bytes.
-	 * }}}*/
-	private static final long END_MASK = 0x00000000ffffffffL;
-	private static final long FOLD_LEVEL_MASK = 0x0000ffff00000000L;
-	private static final int FOLD_LEVEL_SHIFT = 32;
-	private static final long VISIBLE_MASK = 0x00ff000000000000L;
-	private static final int VISIBLE_SHIFT = 48;
-	private static final long FOLD_LEVEL_VALID_MASK = (1L<<56);
-	private static final long CONTEXT_VALID_MASK = (1L<<57);
-	private static final long SCREEN_LINES_MASK = 0x7c00000000000000L;
-	private static final long SCREEN_LINES_SHIFT = 58;
 
 	//{{{ Instance variables
 	private Buffer buffer;

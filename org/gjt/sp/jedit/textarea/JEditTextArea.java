@@ -1036,7 +1036,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLine(int line)
 	{
-		if(line < physFirstLine || line > physLastLine
+		if(!buffer.isLoaded()
+			|| line < physFirstLine || line > physLastLine
 			|| !foldVisibilityManager.isLineVisible(line))
 			return;
 
@@ -1084,6 +1085,9 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLineRange(int start, int end)
 	{
+		if(!buffer.isLoaded())
+			return;
+
 		if(end < start)
 		{
 			int tmp = end;
@@ -5640,6 +5644,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
+		if(!buffer.isLoaded())
+			return;
+
 		if(softWrap)
 		{
 			chunkCache.updateChunksUpTo(visibleLines);
