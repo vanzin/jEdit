@@ -244,7 +244,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			}
 			else if(evt.getSource() == useDefaults)
 			{
-				modeProps[mode.getSelectedIndex()].useDefaults =
+				modeProps[mode.getSelectedIndex() - 1].useDefaults =
 					useDefaults.isSelected();
 				updateEnabled();
 			}
