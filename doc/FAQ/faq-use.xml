@@ -90,7 +90,7 @@
             <quote>dirty</quote> after I undo all changes made to the buffer?
         </para></question>
         <answer><para>
-            This is a problem in jEdit 3.2.2 that has been fixed in version 4.0.
+            This is a problem in jEdit 3.2.2 that has been fixed in version 4.0 or newer.
             You should upgrade.
          </para></answer>
      </qandaentry>
@@ -142,8 +142,9 @@
         </para>
         <para>
             There are a few features that can help you navigate through encoding
-            issues. By selecting <guimenu>File</guimenu>&gt;<guimenuitem>Open With
-            Encoding</guimenuitem>, you can open a file with a specified encoding.
+            issues. You can select the encoding you wish to use from <guisubmenu>
+            Encoding</guisubmenu> in the <guimenu>Commands</guimenu> menu of the
+			File System Browser.
             You can also designate a default encoding in the <guimenuitem>Loading
             &amp; Saving</guimenuitem> pane of the Global Options dialog; if you do
             not, jEdit adopts your operating system's default encoding as its own
@@ -169,8 +170,9 @@
         You need to use instead the iso-8859-15 character set, which is a modification
         of iso-8859-1 that includes the Euro sign and some Finnish and French characters.
         The Euro sign represents character value 0xA4 in this 8-bit set. To open a file
-        manually using this encoding, select <guimenu>File</guimenu>&gt;<guimenuitem>Open
-        With Encoding</guimenuitem>, and select <guimenuitem>ISO8859_15</guimenuitem>.
+        manually using this encoding, select <guimenu>File</guimenu>&gt;<guimenuitem>Open...
+        </guimenuitem>, and select <guimenuitem>ISO8859_15</guimenuitem> from <guimenu>
+		Commands</guimenu>&gt;<guisubmenu>Enconding</guisubmenu> before opening the file.
         </para>
         <para>
           There is a startup script in the <quote>Downloads</quote> area of
@@ -365,7 +367,7 @@
 		<para>
 			Beginning with version 4.0pre4, jEdit has soft wrap capability which can be activated
       for a specific buffer, specific editing modes, or for all documents by default.
-      In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Textgt;Format
+      In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Text&gt;Format
 			Paragraph</guimenuitem> command insert <quote>hard</quote> end of line
 			characters.  This <quote>hard wrap</quote> feature remains available as an option
       for buffers and editing modes.
@@ -401,8 +403,8 @@ of spaces, tabs, and other whitespace characters.
 		<para>
 			When editing text documents, jEdit supports any available encoding scheme, and
 			can open files with a specified encoding other than the default encoding of your
-			operating system using the <guimenu>File</guimenu>&gt;<guimenuitem>Open
-			With Encoding</guimenuitem> command.
+			operating system using the <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding
+			</guisubmenu> from the File System Browser.
 		</para>
 		<para>
 			With respect to menu labels, message strings and other GUI elements, the jEdit

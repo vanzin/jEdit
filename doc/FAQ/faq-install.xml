@@ -120,7 +120,7 @@
     </question>
     <answer>
       <para>
-        The latest version of jEdit, version 4.0, requires MacOS X, because the
+        The latest version of jEdit, version 4.1, requires MacOS X, because the
         Java platforms of earlier MacOS version out outdated.
       </para>
       <para>
@@ -243,7 +243,7 @@
         </para></question>
         <answer>
            <para>
-                The latest version of jEdit, version 4.0, requires at least
+                The latest version of jEdit, version 4.1, requires at least
                 version 1.3 of the Java 2 platform, and therefore will not
                 be compatible with Microsoft's virtual machine.
            </para>
