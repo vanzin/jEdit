@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=4.0
+app.version=4.0.1
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -21,8 +21,8 @@ app.license=gpl.html
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=3624
-comp.0.real-size=2869
+comp.0.disk-size=3676
+comp.0.real-size=2908
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
