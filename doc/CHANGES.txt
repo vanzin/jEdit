@@ -7,6 +7,12 @@ JEDIT 4.2 VERSION HISTORY
 - Added Factor syntax highlighting.
 
 }}}
+{{{ Bug Fixes
+
+- Fix a roundoff error in the monospaced font optimization that would
+  result in zero-width tabs using some fonts.
+
+}}}
 
 }}}
 {{{ Version 4.2pre15
