@@ -75,6 +75,8 @@ release.
   they would be overriden by plugin properties, which is not intended
   behavior.
 
+- QuickNotepad was not saving files with the correct encoding.
+
 }}}
 
 }}}

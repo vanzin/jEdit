@@ -166,9 +166,8 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		if(filename == null || filename.length() == 0) return;
 		try
 		{
-			DataOutputStream dos = new DataOutputStream(
-			new FileOutputStream(filename));
-			dos.writeBytes(textArea.getText());
+			FileWriter out = new FileWriter(filename);
+			dos.write(textArea.getText());
 			dos.close();
 		}
 		catch (IOException ioe)
@@ -206,12 +205,10 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	{
 		if(filename == null || filename.length() == 0) return;
 
-		FileInputStream fis = null;
 		BufferedReader bf = null;
 		try
 		{
-			fis = new FileInputStream(filename);
-			bf = new BufferedReader(new InputStreamReader(fis));
+			bf = new BufferedReader(new FileReader(filename));
 			StringBuffer sb = new StringBuffer(2048);
 			String str;
 			while((str = bf.readLine()) != null)
@@ -219,7 +216,6 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 				sb.append(str).append('\n');
 			}
 			bf.close();
-			fis.close();
 			textArea.setText(sb.toString());
 		}
 		catch (FileNotFoundException fnf)
