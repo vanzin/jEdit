@@ -1399,7 +1399,6 @@ options.gutter.selectFold=Select fold
 
 #{{{ Syntax Highlighting pane
 options.syntax.label=Syntax Highlighting
-options.syntax.parseFully=More accurate (and slower) syntax highlighting
 options.syntax.object=Token type
 options.syntax.style=Text style
 options.syntax.comment1Style=Comment 1

@@ -64,9 +64,6 @@ buffer.trailingEOL=true
 # Caret saving toggle
 saveCaret=true
 
-# Parse files fully when loading for syntax info
-parseFully=false
-
 # Backup on every save
 backupEverySave=false
 
