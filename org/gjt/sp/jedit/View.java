@@ -99,7 +99,8 @@ public class View extends JFrame implements EBComponent
 	public static final int ABOVE_SYSTEM_BAR_LAYER = 150;
 
 	/**
-	 * System tool bar layer. jEdit uses this for the main tool bar.
+	 * System tool bar layer.
+	 * jEdit uses this for the main tool bar.
 	 * @see #addToolBar(int,int,java.awt.Component)
 	 * @since jEdit 4.0pre7
 	 */

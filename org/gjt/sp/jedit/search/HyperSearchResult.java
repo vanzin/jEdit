@@ -28,6 +28,9 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
 //}}}
 
+/**
+ * An occurrence of the search string.
+ */
 public class HyperSearchResult
 {
 	public String path;

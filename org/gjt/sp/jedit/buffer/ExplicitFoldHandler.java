@@ -26,9 +26,9 @@ import javax.swing.text.Segment;
 import org.gjt.sp.jedit.Buffer;
 
 /**
- * A fold handler that folds lines based markers embedded in the text.
- * ("{{{"
- * and "}}}").
+ * A fold handler that folds lines based on markers ("{{{" and "}}}")
+ * embedded in the text.
+ *
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

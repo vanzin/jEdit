@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class HelpSearchPanel extends JPanel
+class HelpSearchPanel extends JPanel
 {
 	//{{{ HelpSearchPanel constructor
 	public HelpSearchPanel(HelpViewer helpViewer)

@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * Class with several useful GUI functions.<p>
+ * Various GUI functions.<p>
  *
  * It provides methods for:
  * <ul>

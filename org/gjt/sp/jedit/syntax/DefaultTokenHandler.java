@@ -23,8 +23,7 @@
 package org.gjt.sp.jedit.syntax;
 
 /**
- * An implementation of the <code>TokenHandler</code> interface that
- * builds a linked list of tokens.
+ * Builds a linked list of tokens without any additional processing.
  *
  * @author Slava Pestov
  * @version $Id$

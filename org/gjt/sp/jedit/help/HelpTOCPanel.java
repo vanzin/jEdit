@@ -37,7 +37,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class HelpTOCPanel extends JPanel
+class HelpTOCPanel extends JPanel
 {
 	//{{{ HelpTOCPanel constructor
 	public HelpTOCPanel(HelpViewer helpViewer)

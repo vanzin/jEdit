@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.search;
 import org.gjt.sp.jedit.*;
 
 /**
- * An abstract interface for matching files.
+ * An abstract interface representing a set of files.
  * @author Slava Pestov
  * @version $Id$
  */

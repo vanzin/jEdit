@@ -25,6 +25,11 @@ import java.util.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
+/**
+ * Recent file list.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class BufferHistory
 {
 	public static Entry getEntry(String path)

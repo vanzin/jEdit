@@ -3893,7 +3893,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	/**
 	 * Like <code>FoldVisibilityManager.expandFold()</code>, but
 	 * also moves the caret to the first sub-fold.
-	 * @see FoldVisibilityManager#expandFold(int)
+	 * @see FoldVisibilityManager#expandFold(int,boolean)
 	 * @since jEdit 4.0pre3
 	 */
 	public void expandFold(boolean fully)

@@ -33,6 +33,9 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * Incremental search tool bar.
+ */
 public class SearchBar extends JPanel
 {
 	//{{{ SearchBar constructor

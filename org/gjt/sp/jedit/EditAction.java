@@ -29,6 +29,8 @@ import java.awt.Component;
 //}}}
 
 /**
+ * An action.<p>
+ *
  * Instead of subclassing EditAction directly, you should now write an
  * actions.xml file.
  *

@@ -35,6 +35,11 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
+/**
+ * The plugin manager dialog box.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class PluginManager extends EnhancedDialog
 {
 	//{{{ PluginManager constructor

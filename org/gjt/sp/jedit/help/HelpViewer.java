@@ -39,7 +39,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * jEdit's HTML viewer. It uses a Swing JEditorPane to display the HTML,
+ * jEdit's searchable help viewer. It uses a Swing JEditorPane to display the HTML,
  * and implements a URL history.
  * @author Slava Pestov
  * @version $Id$

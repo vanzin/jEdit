@@ -74,11 +74,6 @@ public class RolloverButton extends JButton
 	} //}}}
 
 	//{{{ setEnabled() method
-	/**
-	 * @overrides javax.swing.AbstractButton.setEnabled()
-	 * @since jEdit 4.0pre3
-	 * @param b true to enable the button, otherwise false
-	 */
 	public void setEnabled(boolean b)
 	{
 		super.setEnabled(b);
@@ -87,13 +82,6 @@ public class RolloverButton extends JButton
 	} //}}}
 
 	//{{{ paint() method
-	/**
-	 * Custom paint method for fading the button when
-	 * it is disabled
-	 * @overrides javax.swing.JComponent.paint()
-	 * @since jEdit 4.0pre3
-	 * @param g the graphics context
-	 */
 	public void paint(Graphics g)
 	{
 		if (isEnabled())

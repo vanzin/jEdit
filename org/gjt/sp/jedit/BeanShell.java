@@ -32,6 +32,11 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * Convenience methods for evaluating BeanShell code.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class BeanShell
 {
 	//{{{ evalSelection() method

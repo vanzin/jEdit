@@ -707,6 +707,9 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	//}}}
 
 	//{{{ Recorder class
+	/**
+	 * Handles macro recording.
+	 */
 	public static class Recorder implements EBComponent
 	{
 		View view;

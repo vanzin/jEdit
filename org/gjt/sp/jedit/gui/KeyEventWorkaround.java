@@ -28,9 +28,8 @@ import org.gjt.sp.jedit.OperatingSystem;
 //}}}
 
 /**
- * This class contains various hacks to get keyboard event handling to behave in
- * a consistent manner across Java implementations, many of which are
- * hopelessly broken in this regard.
+ * Various hacks to get keyboard event handling to behave in a consistent manner
+ * across Java implementations.
  *
  * @author Slava Pestov
  * @version $Id$

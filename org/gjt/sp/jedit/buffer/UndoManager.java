@@ -29,6 +29,17 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * A class internal to jEdit's document model. You should not use it
+ * directly. To improve performance, none of the methods in this class
+ * check for out of bounds access, nor are they thread-safe. The
+ * <code>Buffer</code> class, through which these methods must be
+ * called through, implements such protection.
+ *
+ * @author Slava Pestov
+ * @version $Id$
+ * @since jEdit 4.0pre1
+ */
 public class UndoManager
 {
 	//{{{ UndoManager constructor

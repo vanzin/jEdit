@@ -124,8 +124,9 @@ public class HistoryModel
 
 	//{{{ loadHistory() method
 	/**
-	 * Loads the history from the specified file. jEdit calls this
-	 * on startup.
+	 * Loads the history from the specified file.
+	 *
+	 * jEdit calls this method on startup.
 	 * @param The file
 	 */
 	public static void loadHistory(File file)
@@ -183,8 +184,9 @@ public class HistoryModel
 
 	//{{{ saveHistory() method
 	/**
-	 * Saves the history to the specified file. jEdit calls this when
-	 * it is exiting.
+	 * Saves the history to the specified file.
+	 *
+	 * jEdit calls this method when it is exiting.
 	 * @param file The file
 	 */
 	public static void saveHistory(File file)

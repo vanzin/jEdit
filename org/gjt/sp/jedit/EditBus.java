@@ -26,9 +26,10 @@ import java.util.*;
 import org.gjt.sp.util.Log;
 
 /**
- * The EditBus is jEdit's global event notification mechanism. A number of
- * messages are sent by jEdit; they are all instances of the classes found
- * in the <code>org.gjt.sp.jedit.msg</code> package. Plugins can also send
+ * jEdit's global event notification mechanism.<p>
+ *
+ * A number of messages are sent by jEdit; they are all instances of the classes
+ * found in the <code>org.gjt.sp.jedit.msg</code> package. Plugins can also send
  * their own messages.
  *
  * @author Slava Pestov

@@ -24,7 +24,10 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
 /**
- * This file only uses AWT APIs so that it is displayed faster on startup.
+ * The splash screen displayed on startup.<p>
+ *
+ * This file only uses AWT APIs so that it can be displayed as soon as possible
+ * after jEdit is launched.
  */
 public class SplashScreen extends Canvas
 {

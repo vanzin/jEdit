@@ -22,7 +22,7 @@ package org.gjt.sp.jedit;
 import java.util.*;
 
 /**
- * A set of actions..
+ * A set of actions.
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

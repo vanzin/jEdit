@@ -29,6 +29,9 @@ import java.util.List;
 import org.gjt.sp.jedit.syntax.*;
 //}}}
 
+/**
+ * Splits token lists to fit within a specified margin.
+ */
 public class SoftWrapTokenHandler extends DisplayTokenHandler
 {
 	//{{{ init() method
