@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- unloading fold handlers should update buffers
 - switching syntax modes does not invalidate line contexts
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem

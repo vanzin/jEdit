@@ -75,6 +75,7 @@ class Reflect
 				// Check to see if we've resolve this method before
 				Class clas = object.getClass();
 				BshClassManager bcm = callstack.top().getClassManager();
+
 				Method method = bcm.getResolvedMethod( clas, methodName, args );
 
 				if ( method == null )
@@ -84,6 +85,7 @@ class Reflect
 				// Succeeded.  Cache the resolved method.
 				bcm.cacheResolvedMethod( clas, methodName, args, method );
 
+				unwrapPrimitives(args,methodName);
 				return invokeOnMethod( method, object, args );
 			} catch ( UtilEvalError e ) {
 				throw e.toEvalError( callerInfo, callstack );
@@ -101,7 +103,8 @@ class Reflect
         throws ReflectError, UtilEvalError, InvocationTargetException
     {
         Interpreter.debug("invoke static Method");
-        Method method = resolveJavaMethod( clas, null, methodName, args, true );
+		Method method = resolveJavaMethod( clas, null, methodName, args, true );
+        unwrapPrimitives(args,methodName);
 		return invokeOnMethod( method, null, args );
     }
 
@@ -350,15 +353,7 @@ class Reflect
         if (args == null)
             args = new Object[] { };
 
-        // Simple sanity check for voids
-        // (maybe this should have been caught further up?)
-        for(int i=0; i<args.length; i++)
-            if(args[i] == Primitive.VOID)
-                throw new ReflectError("Attempt to pass void argument " +
-                    "(position " + i + ") to method: " + name);
-
         Class[] types = getTypes(args);
-        unwrapPrimitives(args);
 
 		// Begin -This used to be wrapped in a try/catch for IllegalAccess
 
@@ -586,10 +581,21 @@ System.out.println("findAcc: "
         an exception on void arg to force the rest of the code to clean up.
         There are places where we don't check right now... (constructors, index)
     */
-    private static void unwrapPrimitives(Object[] args)
+    private static void unwrapPrimitives(Object[] args, String name)
+		throws ReflectError
     {
+		if(args == null)
+			return;
+
         for(int i=0; i<args.length; i++)
-            args[i] = unwrapPrimitive(args[i]);
+		{
+			// Simple sanity check for voids
+            if(args[i] == Primitive.VOID) {
+                throw new ReflectError("Attempt to pass void argument " +
+                    "(position " + i + ") to method: " + name);
+			} else
+				args[i] = unwrapPrimitive(args[i]);
+		}
     }
 
     private static Object unwrapPrimitive(Object arg)
@@ -618,19 +624,13 @@ System.out.println("findAcc: "
     static Object constructObject(Class clas, Object[] args)
         throws ReflectError, InvocationTargetException
     {
-        // simple sanity check for arguments
-        for(int i=0; i<args.length; i++)
-            if(args[i] == Primitive.VOID)
-                throw new ReflectError("Attempt to pass void argument " +
-                    "(position " + i + ") to constructor for: " + clas);
-
-		if ( clas.isInterface() )
+        if ( clas.isInterface() )
 			throw new ReflectError(
 				"Can't create instance of an interface: "+clas);
 
         Object obj = null;
         Class[] types = getTypes(args);
-        unwrapPrimitives(args);
+        unwrapPrimitives(args,clas.getName());
         Constructor con = null;
 
 		/* 
@@ -918,8 +918,10 @@ System.out.println("findAcc: "
                 return true;
         }
         else
+		{
             if(lhs.isAssignableFrom(rhs))
                 return true;
+		}
 
         return false;
     }
@@ -962,7 +964,8 @@ System.out.println("findAcc: "
         throws ReflectError
     {
         String accessorName = accessorName( "get", propName );
-        Object[] args = new Object[] { };
+
+		Object[] args = new Object[] { };
 
         Interpreter.debug("property access: ");
         try {
@@ -987,7 +990,9 @@ System.out.println("findAcc: "
         throws ReflectError, UtilEvalError
     {
         String accessorName = accessorName( "set", propName );
-        Object[] args = new Object[] { value };
+
+		value = unwrapPrimitive(value);
+		Object[] args = new Object[] { value };
 
         Interpreter.debug("property access: ");
         try {

@@ -350,7 +350,7 @@ public class PluginJAR
 	 * Loads the plugin core class. Does nothing if the plugin core class
 	 * has already been loaded. This method might be called on startup,
 	 * depending on what properties are set. See {@link EditPlugin#start()}.
-	 * This method can only be called from the AWT event dispatch thread!
+	 * This method is thread-safe.
 	 *
 	 * @since jEdit 4.2pre1
 	 */
@@ -368,65 +368,76 @@ public class PluginJAR
 
 			if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
 				return;
-		}
 
-		String className = plugin.getClassName();
+			String className = plugin.getClassName();
 
-		try
-		{
-			Class clazz = classLoader.loadClass(className,false);
-			int modifiers = clazz.getModifiers();
-			if(Modifier.isInterface(modifiers)
-				|| Modifier.isAbstract(modifiers)
-				|| !EditPlugin.class.isAssignableFrom(clazz))
+			try
 			{
-				Log.log(Log.ERROR,this,"Plugin has properties but does not extend EditPlugin: "
-					+ className);
+				Class clazz = classLoader.loadClass(className,false);
+				int modifiers = clazz.getModifiers();
+				if(Modifier.isInterface(modifiers)
+					|| Modifier.isAbstract(modifiers)
+					|| !EditPlugin.class.isAssignableFrom(clazz))
+				{
+					Log.log(Log.ERROR,this,"Plugin has properties but does not extend EditPlugin: "
+						+ className);
+					plugin = new EditPlugin.Broken(className);
+					plugin.jar = (EditPlugin.JAR)this;
+					return;
+				}
+
+				plugin = (EditPlugin)clazz.newInstance();
+				plugin.jar = (EditPlugin.JAR)this;
+			}
+			catch(Throwable t)
+			{
 				plugin = new EditPlugin.Broken(className);
 				plugin.jar = (EditPlugin.JAR)this;
+	
+				Log.log(Log.ERROR,this,"Error while starting plugin " + className);
+				Log.log(Log.ERROR,this,t);
+				String[] args = { t.toString() };
+				jEdit.pluginError(path,"plugin-error.start-error",args);
+
 				return;
 			}
-
-			plugin = (EditPlugin)clazz.newInstance();
-			plugin.jar = (EditPlugin.JAR)this;
-
-			if(jEdit.isMainThread()
-				|| SwingUtilities.isEventDispatchThread())
-			{
-				plugin.start();
-			}
-			else
-			{
-				// for thread safety
-				startPluginLater();
-			}
-
-			if(plugin instanceof EBPlugin)
-			{
-				if(jEdit.getProperty("plugin."
-					+ className + ".activate")
-					== null)
-				{
-					// old plugins expected jEdit 4.1-style
-					// behavior, where a PropertiesChanged
-					// was sent after plugins were started
-					((EBComponent)plugin).handleMessage(
-						new org.gjt.sp.jedit.msg.PropertiesChanged(null));
-				}
-				EditBus.addToBus((EBPlugin)plugin);
-			}
-
-			EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
 		}
-		catch(Throwable t)
-		{
-			plugin = new EditPlugin.Broken(className);
-			plugin.jar = (EditPlugin.JAR)this;
 
-			Log.log(Log.ERROR,this,"Error while starting plugin " + className);
-			Log.log(Log.ERROR,this,t);
-			String[] args = { t.toString() };
-			jEdit.pluginError(path,"plugin-error.start-error",args);
+		if(jEdit.isMainThread()
+			|| SwingUtilities.isEventDispatchThread())
+		{
+			startPlugin();
+		}
+		else
+		{
+			// for thread safety
+			startPluginLater();
+		}
+
+		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED));
+	} //}}}
+
+	//{{{ deactivatePlugin() method
+	/**
+	 * Unloads the plugin core class. Does nothing if the plugin core class
+	 * has not been loaded.
+	 * This method can only be called from the AWT event dispatch thread!
+	 * @see EditPlugin#stop()
+	 *
+	 * @since jEdit 4.2pre2
+	 */
+	public void deactivatePlugin()
+	{
+		synchronized(this)
+		{
+			if(!activated)
+				return;
+
+			activated = false;
+
+			plugin.stop();
+			plugin = new EditPlugin.Deferred(plugin.getClassName());
+			plugin.jar = (EditPlugin.JAR)this;
 		}
 	} //}}}
 
@@ -620,6 +631,7 @@ public class PluginJAR
 		if(!exit)
 		{
 			classLoader.deactivate();
+			BeanShell.resetClassManager();
 
 			if(actions != null)
 				jEdit.getActionContext().removeActionSet(actions);
@@ -914,6 +926,43 @@ public class PluginJAR
 		return cache;
 	} //}}}
 
+	//{{{ startPlugin() method
+	private void startPlugin()
+	{
+		try
+		{
+			plugin.start();
+		}
+		catch(Throwable t)
+		{
+			plugin = new EditPlugin.Broken(
+				plugin.getClassName());
+			plugin.jar = (EditPlugin.JAR)
+				PluginJAR.this;
+
+			Log.log(Log.ERROR,PluginJAR.this,
+				"Error while starting plugin " + plugin.getClassName());
+			Log.log(Log.ERROR,PluginJAR.this,t);
+			String[] args = { t.toString() };
+			jEdit.pluginError(path,"plugin-error.start-error",args);
+		}
+
+		if(plugin instanceof EBPlugin)
+		{
+			if(jEdit.getProperty("plugin."
+				+ className + ".activate")
+				== null)
+			{
+				// old plugins expected jEdit 4.1-style
+				// behavior, where a PropertiesChanged
+				// was sent after plugins were started
+				((EBComponent)plugin).handleMessage(
+					new org.gjt.sp.jedit.msg.PropertiesChanged(null));
+			}
+			EditBus.addToBus((EBPlugin)plugin);
+		}
+	} //}}}
+
 	//{{{ startPluginLater() method
 	private void startPluginLater()
 	{
@@ -921,23 +970,10 @@ public class PluginJAR
 		{
 			public void run()
 			{
-				try
-				{
-					plugin.start();
-				}
-				catch(Throwable t)
-				{
-					plugin = new EditPlugin.Broken(
-						plugin.getClassName());
-					plugin.jar = (EditPlugin.JAR)
-						PluginJAR.this;
+				if(!activated)
+					return;
 
-					Log.log(Log.ERROR,PluginJAR.this,
-						"Error while starting plugin " + plugin.getClassName());
-					Log.log(Log.ERROR,PluginJAR.this,t);
-					String[] args = { t.toString() };
-					jEdit.pluginError(path,"plugin-error.start-error",args);
-				}
+				startPlugin();
 			}
 		});
 	} //}}}

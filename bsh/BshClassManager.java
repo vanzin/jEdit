@@ -426,17 +426,23 @@ public class BshClassManager
 
 		public boolean equals( Object o ) { 
 			SignatureKey target = (SignatureKey)o;
-			if ( types == null )
-				return target.types == null;
+			if ( types == null || target.types == null )
+				return types == target.types;
 			if ( clas != target.clas )
 				return false;
 			if ( !methodName.equals( target.methodName ) )
 				return false;
 			if ( types.length != target.types.length )
 				return false;
-			for( int i =0; i< types.length; i++ )
-				if ( ! types[i].equals( target.types[i] ) )
+			for( int i =0; i< types.length; i++ ) {
+				Class type = types[i];
+				Class targetType = target.types[i];
+				if( type == null || targetType == null) {
+					if ( type != targetType )
+						return false;
+				} else if ( ! type.equals( targetType ) )
 					return false;
+			}
 			return true;
 		}
 	}
