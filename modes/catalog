@@ -90,6 +90,9 @@
 <MODE NAME="ini"		FILE="ini.xml"
 				FILE_NAME_GLOB="*.{ini,reg}" />
 
+<MODE NAME="interlis"		FILE="interlis.xml"
+				FILE_NAME_GLOB="*.ili" />
+
 <MODE NAME="java"		FILE="java.xml"
 				FILE_NAME_GLOB="*.java" />
 

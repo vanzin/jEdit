@@ -1,5 +1,11 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0.1
+
++ New Features
+
+- Interilis syntax highlighting (Claude Eisenhut)
+
 * Version 4.0final
 
 + Enhancements
@@ -8,6 +14,7 @@ JEDIT 4.0 VERSION HISTORY
 - Hidden files are no longer listed in the 'Macros' menu
 - Minor improvements to RPM Spec syntax highlighting
 - Updated Python mode (Ollie Rutherfurd)
+- Documentation updates
 
 + Bug Fixes
 
