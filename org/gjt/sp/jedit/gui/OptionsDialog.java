@@ -178,6 +178,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
 
+		// workaround...
+		addNotify();
+
 		Dimension currentSize = getSize();
 		Dimension requestedSize = getPreferredSize();
 		Dimension newSize = new Dimension(

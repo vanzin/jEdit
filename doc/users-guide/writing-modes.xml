@@ -1,7 +1,7 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<chapter id="writing-modes"><title>Writing Edit Modes</title>
+<chapter id="writing-modes"><title>Mode Definition Syntax</title>
  <para>
   Edit modes are defined using XML, the <firstterm>extensible markup
   language</firstterm>; mode files have the extension
@@ -11,18 +11,15 @@
   each supported tag and highlighting rule.
  </para>
  <para>
-  Note that changes to mode files take effect immediately;
-  editing a mode or a mode catalog file within jEdit will cause the
-  file to be re-parsed as soon it is saved.
- </para>
- <para>
-  The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-  command can be used to reload edit modes after changes to mode files are made
-  outside jEdit.
+  Editing a mode or a mode catalog file within jEdit will cause the
+  changes to take effect immediately. If you edit modes using another
+  application, the changes will take effect after the
+  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
+  command is invoked.
  </para>
  <sect1 id="xml-primer"><title>An XML Primer</title>
   <para>
-   A very simple edit mode looks like so:
+   A very simple XML file (which also happends to be an edit mode) looks like so:
   </para>
   <programlisting><![CDATA[<?xml version="1.0"?>
 
@@ -194,11 +191,6 @@
    <listitem><para><literal>SET</literal> - the name of this ruleset.
    All rulesets other than the first must have a name.
    </para></listitem>
-   <listitem><para><literal>HIGHLIGHT_DIGITS</literal> - if set to
-   <literal>TRUE</literal>, digits (0-9, as well as hexadecimal literals
-   prefixed with <quote>0x</quote>) will be highlighted with the
-   <classname>DIGIT</classname> token type. Default is <literal>FALSE</literal>.
-   </para></listitem>
    <listitem><para><literal>IGNORE_CASE</literal> - if set to
    <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
    will not matter. Default is <literal>TRUE</literal>.
@@ -208,6 +200,10 @@
    any specific rule. Default is <literal>NULL</literal>. See
    <xref linkend="mode-syntax-tokens" /> for a list of token types.
    </para></listitem>
+   <listitem><para><literal>HIGHLIGHT_DIGITS</literal>
+   </para></listitem>
+   <listitem><para><literal>DIGIT_RE</literal> - see below for information
+   about these two attributes.</para></listitem>
   </itemizedlist>
   <para>
    Here is an example <literal>RULES</literal> tag:
@@ -215,6 +211,34 @@
   <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
     <replaceable>... parser rules go here ...</replaceable>
 &lt;/RULES&gt;</programlisting>
+
+  <sect2><title>Highlighting Numbers</title>
+   <para>
+    If the <literal>HIGHLIGHT_DIGITS</literal> attribute is set to
+    <literal>TRUE</literal>, jEdit will attempt to highlight numbers in this
+    edit mode.
+   </para>
+   <para>
+    Any word consisting entirely of digits (0-9) will be highlighted with the
+    <literal>DIGIT</literal> token type.
+    A word that contains other letters in addition to digits will be
+    highlighted with the
+    <literal>DIGIT</literal> token type only if it matches the regular
+    expression specified in the <literal>DIGIT_RE</literal> attribute.
+    If this attribute is not specified, it will not be highlighted.
+   </para>
+   <para>
+    Here is an example <literal>DIGIT_RE</literal> regular expression that highlights
+    Java-style numeric literals (normal numbers, hexadecimals
+    prefixed with <literal>0x</literal>, numbers suffixed with various
+    type indicators, and floating point literals containing an exponent):
+   </para>
+   <programlisting>DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+(e[[:digit:]]*)?)[lLdDfF]?"</programlisting>
+   <para>
+    Regular expression syntax is described in <xref linkend="regexp" />.
+   </para>
+  </sect2>
+  
   <sect2><title>Rule Ordering Requirements</title>
    <para>
     You might encounter this very common pitfall when writing your own modes.
@@ -267,7 +291,7 @@
    <para>
     The <literal>PROPS</literal> tag (described in <xref linkend="mode-tag-props"/>)
     can also be placed inside the <literal>RULES</literal> tag to define
-    ruleset-specific properties. Only the following properties can
+    ruleset-specific properties. The following properties can
     be set on a per-ruleset basis:
    </para>
    <itemizedlist>
@@ -282,240 +306,336 @@
     </para></listitem>
    </itemizedlist>
    <para>
-    These properties are used by the commenting commands to implement
-    context-sensitive comments; see <xref linkend="commenting"/>.
+    This allows different parts of a file to have different comment strings
+    (in the case of HTML, for example, in HTML text and inline JavaScript).
+    For information about the commenting commands,
+    see <xref linkend="commenting"/>.
    </para>
   </sect2>
-  <sect2 id="mode-rule-terminate"><title>The TERMINATE Rule</title>
-   <para>
-    The <literal>TERMINATE</literal> rule specifies that parsing should stop
-    after the specified number of characters have been read from a line. The
-    number of characters to terminate after should be specified with the
-    <literal>AT_CHAR</literal> attribute. Here is an example:
-   </para>
-   <programlisting>&lt;TERMINATE AT_CHAR="1" /&gt;</programlisting>
-   <para>
-    This rule is used in Patch mode, for example, because only the first
-    character of each line affects highlighting. 
-   </para>
-  </sect2>
-  <sect2 id="mode-rule-span"><title>The SPAN Rule</title>
-   <para>
-    The <literal>SPAN</literal> rule highlights text between a start
-    and end string. The start and end strings are specified inside
-    child elements of the <literal>SPAN</literal> tag.
-    The following attributes are supported:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>TYPE</literal> - The token type to highlight the
-    span with. See <xref linkend="mode-syntax-tokens" /> for a list of token
-    types</para></listitem>
-    <listitem><para><literal>AT_LINE_START</literal> - If set to
-    <literal>TRUE</literal>, the span will only be highlighted if the start
-    sequence occurs at the beginning of a line</para></listitem>
-    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-    <literal>TRUE</literal>, the start and end sequences will not be highlighted,
-    only the text between them will</para></listitem>
-    <listitem><para><literal>NO_LINE_BREAK</literal> - If set to
-    <literal>TRUE</literal>, the span will be highlighted with the
-    <classname>INVALID</classname> token type if it spans more than one
-    line</para></listitem>
-    <listitem><para><literal>NO_WORD_BREAK</literal> - If set to
-    <literal>TRUE</literal>, the span will be highlighted with the
-    <classname>INVALID</classname> token type if it includes
-    whitespace</para></listitem>
-    <listitem><para><literal>DELEGATE</literal> - text inside the span will be
-    highlighted with the specified ruleset. To delegate to a ruleset defined
-    in the current mode, just specify its name. To delegate to a ruleset
-    defined in another mode, specify a name of the form
-    <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
-    Note that the first (unnamed) ruleset in a mode is called
-    <quote>MAIN</quote>.</para></listitem>
-   </itemizedlist>
-   <para>
-    Here is a <literal>SPAN</literal> that highlights Java string literals,
-    which cannot include line breaks:
-   </para>
-   <programlisting>&lt;SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE"&gt;
-   &lt;BEGIN&gt;"&lt;/BEGIN&gt;
-   &lt;END&gt;"&lt;/END&gt;
+ </sect1>
+  <sect1 id="mode-rule-terminate"><title>The TERMINATE Tag</title>
+  <para>
+   The <literal>TERMINATE</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, specifies that parsing should stop
+   after the specified number of characters have been read from a line. The
+   number of characters to terminate after should be specified with the
+   <literal>AT_CHAR</literal> attribute. Here is an example:
+  </para>
+  <programlisting>&lt;TERMINATE AT_CHAR="1" /&gt;</programlisting>
+  <para>
+   This rule is used in Patch mode, for example, because only the first
+   character of each line affects highlighting.
+  </para>
+ </sect1>
+  <sect1 id="mode-rule-span"><title>The SPAN Tag</title>
+  <para>
+   The <literal>SPAN</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, highlights text between a start
+   and end string. The start and end strings are specified inside
+   child elements of the <literal>SPAN</literal> tag.
+   The following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>TYPE</literal> - The token type to highlight the
+   span with. See <xref linkend="mode-syntax-tokens" /> for a list of token
+   types.</para></listitem>
+   <listitem><para><literal>AT_LINE_START</literal> - If set to
+   <literal>TRUE</literal>, the span will only be highlighted if the start
+   sequence occurs at the beginning of a line.</para></listitem>
+   <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
+   <literal>TRUE</literal>, the span will only be highlighted if the
+   start sequence is the first non-whitespace text of the line</para>
+   </listitem>
+   <listitem><para><literal>AT_WORD_START</literal> - If set to
+   <literal>TRUE</literal>, the span will only be highlighted if the start
+   sequence occurs at the beginning of a word.</para></listitem>
+   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+   <literal>TRUE</literal>, the start and end sequences will not be highlighted,
+   only the text between them will.</para></listitem>
+   <listitem><para><literal>DELEGATE</literal> - text inside the span will be
+   highlighted with the specified ruleset. To delegate to a ruleset defined
+   in the current mode, just specify its name. To delegate to a ruleset
+   defined in another mode, specify a name of the form
+   <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
+   Note that the first (unnamed) ruleset in a mode is called
+   <quote>MAIN</quote>.</para></listitem>
+   <listitem><para><literal>NO_LINE_BREAK</literal> - If set to
+   <literal>TRUE</literal>, the span will not cross line breaks.</para></listitem>
+   <listitem><para><literal>NO_WORD_BREAK</literal> - If set to
+   <literal>TRUE</literal>, the span will not cross word breaks.</para></listitem>
+  </itemizedlist>
+  <para>
+   Here is a <literal>SPAN</literal> that highlights Java string literals,
+   which cannot include line breaks:
+  </para>
+  <programlisting>&lt;SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE"&gt;
+  &lt;BEGIN&gt;"&lt;/BEGIN&gt;
+  &lt;END&gt;"&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
-   <para>
-    Here is a <literal>SPAN</literal> that highlights Java documentation
-    comments by delegating to the <quote>JAVADOC</quote> ruleset defined
-    elsewhere in the current mode:
-   </para>
-   <programlisting>&lt;SPAN TYPE="COMMENT2" DELEGATE="JAVADOC"&gt;
-   &lt;BEGIN&gt;/**&lt;/BEGIN&gt;
-   &lt;END&gt;*/&lt;/END&gt;
+  <para>
+   Here is a <literal>SPAN</literal> that highlights Java documentation
+   comments by delegating to the <quote>JAVADOC</quote> ruleset defined
+   elsewhere in the current mode:
+  </para>
+  <programlisting>&lt;SPAN TYPE="COMMENT2" DELEGATE="JAVADOC"&gt;
+  &lt;BEGIN&gt;/**&lt;/BEGIN&gt;
+  &lt;END&gt;*/&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
-   <para>
-    Here is a <literal>SPAN</literal> that highlights HTML cascading stylesheets
-    inside <literal>&lt;STYLE&gt;</literal> tags by delegating to the main
-    ruleset in the CSS edit mode:
-   </para>
-   <programlisting>&lt;SPAN TYPE="MARKUP" DELEGATE="css::MAIN"&gt;
-   &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;
-   &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
+  <para>
+   Here is a <literal>SPAN</literal> that highlights HTML cascading stylesheets
+   inside <literal>&lt;STYLE&gt;</literal> tags by delegating to the main
+   ruleset in the CSS edit mode:
+  </para>
+  <programlisting>&lt;SPAN TYPE="MARKUP" DELEGATE="css::MAIN"&gt;
+  &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;
+  &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-rule-eol-span"><title>The EOL_SPAN Rule</title>
-   <para>
-    An <literal>EOL_SPAN</literal> is similar to a <literal>SPAN</literal>
-    except that highlighting stops at the end of the line, not after the end
-    sequence is found. The text to match is specified between the opening and
-    closing <literal>EOL_SPAN</literal> tags.
-    The following attributes are supported:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>TYPE</literal> - The token type to highlight the span
-    with. See <xref linkend="mode-syntax-tokens" /> for a list of token
-    types</para></listitem>
-    <listitem><para><literal>AT_LINE_START</literal> - If set to
-    <literal>TRUE</literal>, the span will only be highlighted if the start
-    sequence occurs at the beginning of a line</para></listitem>
-    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-    <literal>TRUE</literal>, the start sequence will not be highlighted,
-    only the text after it will</para></listitem>
-   </itemizedlist>
-   <para>
-    Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
-   </para>
-   <programlisting>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Rule</title>
-   <para>
-    The <literal>MARK_PREVIOUS</literal> rule highlights from the end of the
-    previous syntax token to the matched text. The text to match
-    is specified between opening and closing <literal>MARK_PREVIOUS</literal>
-    tags. The following attributes are supported:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>TYPE</literal> - The token type to highlight the
-    text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
-    types</para></listitem>
-    <listitem><para><literal>AT_LINE_START</literal> - If set to
-    <literal>TRUE</literal>,
-    the text will only be highlighted if it occurs at the beginning of
-    the line</para></listitem>
-    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-    <literal>TRUE</literal>, the match will not be highlighted,
-    only the text before it will</para></listitem>
-   </itemizedlist>
-   <para>
-    Here is a rule that highlights labels in Java mode (for example,
-    <quote>XXX:</quote>):
-   </para>
-   <programlisting>&lt;MARK_PREVIOUS AT_LINE_START="TRUE"
-    EXCLUDE_MATCH="TRUE"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-rule-mark-following"><title>The MARK_FOLLOWING Rule</title>
-   <para>
-    The <literal>MARK_FOLLOWING</literal> rule highlights from the start of the
-    match to the next syntax token. The text to match
-    is specified between opening and closing <literal>MARK_FOLLOWING</literal>
-    tags. The following attributes are supported:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>TYPE</literal> - The token type to highlight the
-    text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
-    types</para></listitem>
-    <listitem><para><literal>AT_LINE_START</literal> - If set to
-    <literal>TRUE</literal>, the text will only be highlighted if the start
-    sequence occurs at the beginning of a line</para></listitem>
-    <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-    <literal>TRUE</literal>, the match will not be highlighted,
-    only the text after it will</para></listitem>
-   </itemizedlist>
-   <para>
-    Here is a rule that highlights variables in Unix shell scripts
-    (<quote>$CLASSPATH</quote>, <quote>$IFS</quote>, etc):
-   </para>
-   <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-rule-seq"><title>The SEQ Rule</title>
-   <para>
-    The <literal>SEQ</literal> rule highlights fixed sequences of text. The text
-    to highlight is specified between opening and closing <literal>SEQ</literal>
-    tags. The following attributes are supported:
-   </para>
-   <itemizedlist>
-    <listitem><para><literal>TYPE</literal> - the token type to highlight the
-    sequence with. See <xref linkend="mode-syntax-tokens" /> for a list of token
-    types</para></listitem>
-    <listitem><para><literal>AT_LINE_START</literal> - If set to
-    <literal>TRUE</literal>, the sequence will only be highlighted if it occurs
-    at the beginning of a line</para></listitem>
-   </itemizedlist>
-   <para>
-    The following rules highlight a few Java operators:
-   </para>
-   <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;+&lt;/SEQ&gt;
+ </sect1>
+ <sect1 id="mode-rule-span-regexp"><title>The SPAN_REGEXP Tag</title>
+  <para>
+   The <literal>SPAN_REGEXP</literal> rule is similar to the
+   <literal>SPAN</literal> rule except the start sequence is taken to be
+   a regular expression. In addition to the attributes supported by
+   the <literal>SPAN</literal> tag, there is one more, required, attribute
+   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the regular expression matches. Note that this disallows regular expressions
+   which can match more than one character at the start position.
+  </para>
+  <para>
+   Regular expression syntax is described in <xref linkend="regexp" />.
+  </para>
+ </sect1>
+ <sect1 id="mode-rule-eol-span"><title>The EOL_SPAN Tag</title>
+  <para>
+   An <literal>EOL_SPAN</literal> is similar to a <literal>SPAN</literal>
+   except that highlighting stops at the end of the line, and no end sequence
+   needs to be specified. The text to match is specified between the opening and
+   closing <literal>EOL_SPAN</literal> tags.
+   The following attributes are supported:
+  </para>
+  <itemizedlist>
+  <listitem><para><literal>TYPE</literal> - The token type to highlight the
+  span with. See <xref linkend="mode-syntax-tokens" /> for a list of token
+  types.</para></listitem>
+  <listitem><para><literal>AT_LINE_START</literal> - If set to
+  <literal>TRUE</literal>, the span will only be highlighted if the start
+  sequence occurs at the beginning of a line.</para></listitem>
+  <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
+  <literal>TRUE</literal>, the span will only be highlighted if the
+   sequence is the first non-whitespace text of the line</para>
+  </listitem>
+  <listitem><para><literal>AT_WORD_START</literal> - If set to
+  <literal>TRUE</literal>, the span will only be highlighted if the start
+  sequence occurs at the beginning of a word.</para></listitem>
+  <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+  <literal>TRUE</literal>, the start and end sequences will not be highlighted,
+  only the text between them will.</para></listitem>
+  <listitem><para><literal>DELEGATE</literal> - text inside the span will be
+  highlighted with the specified ruleset. To delegate to a ruleset defined
+  in the current mode, just specify its name. To delegate to a ruleset
+  defined in another mode, specify a name of the form
+  <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
+  Note that the first (unnamed) ruleset in a mode is called
+  <quote>MAIN</quote>.</para></listitem>
+  </itemizedlist>
+  <para>
+   Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
+  </para>
+  <programlisting>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</programlisting>
+ </sect1>
+ <sect1 id="mode-rule-eol-span-regexp"><title>The EOL_SPAN_REGEXP Tag</title>
+  <para>
+   The <literal>EOL_SPAN_REGEXP</literal> rule is similar to the
+   <literal>EOL_SPAN</literal> rule except the match sequence is taken to be
+   a regular expression. In addition to the attributes supported by
+   the <literal>EOL_SPAN</literal> tag, there is one more, required, attribute
+   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the regular expression matches. Note that this disallows regular expressions
+   which can match more than one character at the start position.
+  </para>
+  <para>
+   Regular expression syntax is described in <xref linkend="regexp" />.
+  </para>
+ </sect1>
+ <sect1 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Tag</title>
+  <para>
+   The <literal>MARK_PREVIOUS</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, highlights from the end of the
+   previous syntax token to the matched text. The text to match
+   is specified between opening and closing <literal>MARK_PREVIOUS</literal>
+   tags. The following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>TYPE</literal> - The token type to highlight the
+   text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
+   types.</para></listitem>
+   <listitem><para><literal>AT_LINE_START</literal> - If set to
+   <literal>TRUE</literal>,
+   the text will only be highlighted if it occurs at the beginning of
+   the line.</para></listitem>
+   <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
+   <literal>TRUE</literal>, the text will only be highlighted if the
+   sequence is the first non-whitespace text of the line.</para>
+   </listitem>
+   <listitem><para><literal>AT_WORD_START</literal> - If set to
+   <literal>TRUE</literal>, the text will only be highlighted if the
+   sequence occurs at the beginning of a word.</para></listitem>
+   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+   <literal>TRUE</literal>, the match will not be highlighted,
+   only the text before it will.</para></listitem>
+  </itemizedlist>
+  <para>
+   Here is a rule that highlights labels in Java mode (for example,
+   <quote>XXX:</quote>):
+  </para>
+  <programlisting>&lt;MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
+   EXCLUDE_MATCH="TRUE"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
+ </sect1>
+ <sect1 id="mode-rule-mark-following"><title>The MARK_FOLLOWING Tag</title>
+  <para>
+   The <literal>MARK_FOLLOWING</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, highlights from the start of the
+   match to the next syntax token. The text to match
+   is specified between opening and closing <literal>MARK_FOLLOWING</literal>
+   tags. The following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>TYPE</literal> - The token type to highlight the
+   text with. See <xref linkend="mode-syntax-tokens" /> for a list of token
+   types.</para></listitem>
+   <listitem><para><literal>AT_LINE_START</literal> - If set to
+   <literal>TRUE</literal>, the text will only be highlighted if the start
+   sequence occurs at the beginning of a line</para></listitem>
+   <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
+   <literal>TRUE</literal>, the text will only be highlighted if the
+   sequence is the first non-whitespace text of the line</para>
+   </listitem>
+   <listitem><para><literal>AT_WORD_START</literal> - If set to
+   <literal>TRUE</literal>, the text will only be highlighted if the
+   sequence occurs at the beginning of a word.</para></listitem>
+   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
+   <literal>TRUE</literal>, the match will not be highlighted,
+   only the text after it will.</para></listitem>
+  </itemizedlist>
+  <para>
+   Here is a rule that highlights variables in Unix shell scripts
+   (<quote>$CLASSPATH</quote>, <quote>$IFS</quote>, etc):
+  </para>
+  <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</programlisting>
+ </sect1>
+  <sect1 id="mode-rule-seq"><title>The SEQ Tag</title>
+  <para>
+   The <literal>SEQ</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, highlights fixed sequences of text. The text
+   to highlight is specified between opening and closing <literal>SEQ</literal>
+   tags. The following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>TYPE</literal> - the token type to highlight the
+   sequence with. See <xref linkend="mode-syntax-tokens" /> for a list of token
+   types.</para></listitem>
+   <listitem><para><literal>AT_LINE_START</literal> - If set to
+   <literal>TRUE</literal>, the sequence will only be highlighted if it occurs
+   at the beginning of a line.</para></listitem>
+   <listitem><para><literal>AT_WHITESPACE_END</literal> - If set to
+   <literal>TRUE</literal>, the sequence will only be highlighted if it is
+   the first non-whitespace text of the line.</para>
+   </listitem>
+   <listitem><para><literal>AT_WORD_START</literal> - If set to
+   <literal>TRUE</literal>, the sequence will only be highlighted if
+   it occurs at the beginning of a word.</para></listitem>
+   <listitem><para><literal>DELEGATE</literal> - if this attribute is specified,
+   all text after the sequence will be highlighted using this ruleset.
+   To delegate to a ruleset defined
+   in the current mode, just specify its name. To delegate to a ruleset
+   defined in another mode, specify a name of the form
+   <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
+   Note that the first (unnamed) ruleset in a mode is called
+   <quote>MAIN</quote>.</para></listitem>
+  </itemizedlist>
+  <para>
+   The following rules highlight a few Java operators:
+  </para>
+  <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;+&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;-&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;*&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;/&lt;/SEQ&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-rule-keywords"><title>The KEYWORDS Rule</title>
-   <para>
-    There can only be one <literal>KEYWORDS</literal> tag per ruleset.
-    The <literal>KEYWORDS</literal> rule defines keywords to highlight.
-    Keywords are similar to <literal>SEQ</literal>s, except that
-    <literal>SEQ</literal>s match anywhere in the text, whereas keywords only
-    match whole words.
-   </para>
-   <para>
-    The <literal>KEYWORDS</literal> tag does not define any attributes.
-   </para>
-   <para>
-    Each child element of the <literal>KEYWORDS</literal> tag should be named
-    after the desired token type, with the keyword text between the start and
-    end tags. For example, the following rule highlights the most common Java
-    keywords:
-   </para>
-   <programlisting>&lt;KEYWORDS&gt;
-   &lt;KEYWORD1&gt;if&lt;/KEYWORD1&gt;
-   &lt;KEYWORD1&gt;else&lt;/KEYWORD1&gt;
-   &lt;KEYWORD3&gt;int&lt;/KEYWORD3&gt;
-   &lt;KEYWORD3&gt;void&lt;/KEYWORD3&gt;
+ </sect1>
+ <sect1 id="mode-rule-seq-regexp"><title>The SEQ_REGEXP Tag</title>
+  <para>
+   The <literal>SEQ_REGEXP</literal> rule is similar to the
+   <literal>SEQ</literal> rule except the match sequence is taken to be
+   a regular expression. In addition to the attributes supported by
+   the <literal>SEQ</literal> tag, there is one more, required, attribute
+   named <literal>HASH_CHAR</literal>. It must be set to the first character that
+   the regular expression matches. Note that this disallows regular expressions
+   which can match more than one character at the start position.
+  </para>
+  <para>
+   Regular expression syntax is described in <xref linkend="regexp" />.
+  </para>
+ </sect1>
+ <sect1 id="mode-rule-keywords"><title>The KEYWORDS Tag</title>
+  <para>
+   There can only be one <literal>KEYWORDS</literal> tag per ruleset.
+   The <literal>KEYWORDS</literal> rule, which must be placed inside a
+   <literal>RULES</literal> tag, defines keywords to highlight.
+   Keywords are similar to <literal>SEQ</literal>s, except that
+   <literal>SEQ</literal>s match anywhere in the text, whereas keywords only
+   match whole words.
+  </para>
+  <para>
+   The <literal>KEYWORDS</literal> tag does not define any attributes.
+  </para>
+  <para>
+   Each child element of the <literal>KEYWORDS</literal> tag is an element
+   whose name is a token type, and whose content is the keyword to
+   highlight. For example, the following rule highlights the most common Java
+   keywords:
+  </para>
+  <programlisting>&lt;KEYWORDS&gt;
+  &lt;KEYWORD1&gt;if&lt;/KEYWORD1&gt;
+  &lt;KEYWORD1&gt;else&lt;/KEYWORD1&gt;
+  &lt;KEYWORD3&gt;int&lt;/KEYWORD3&gt;
+  &lt;KEYWORD3&gt;void&lt;/KEYWORD3&gt;
 &lt;/KEYWORDS&gt;</programlisting>
-  </sect2>
-  <sect2 id="mode-syntax-tokens"><title>Token Types</title>
-   <para>
-    Parser rules can highlight tokens using any of the following token
-    types:
-   </para>
-   <itemizedlist>
-   <listitem><para><literal>NULL</literal> - no special
-   highlighting is performed on tokens of type <literal>NULL</literal>
-   </para></listitem>
-   <listitem><para><literal>COMMENT1</literal>
-   </para></listitem>
-   <listitem><para><literal>COMMENT2</literal>
-   </para></listitem>
-   <listitem><para><literal>FUNCTION</literal>
-   </para></listitem>
-   <listitem><para><literal>INVALID</literal> - tokens of this type are
-   automatically added if a <literal>NO_WORD_BREAK</literal> or
-   <literal>NO_LINE_BREAK</literal> <literal>SPAN</literal> spans more than
-   one word or line, respectively.
-   </para></listitem>
-   <listitem><para><literal>KEYWORD1</literal>
-   </para></listitem>
-   <listitem><para><literal>KEYWORD2</literal>
-   </para></listitem>
-   <listitem><para><literal>KEYWORD3</literal>
-   </para></listitem>
-   <listitem><para><literal>LABEL</literal>
-   </para></listitem>
-   <listitem><para><literal>LITERAL1</literal>
-   </para></listitem>
-   <listitem><para><literal>LITERAL2</literal>
-   </para></listitem>
-   <listitem><para><literal>MARKUP</literal>
-   </para></listitem>
-   <listitem><para><literal>OPERATOR</literal>
-   </para></listitem>
-   </itemizedlist>
-  </sect2>
+ </sect1>
+  <sect1 id="mode-syntax-tokens"><title>Token Types</title>
+  <para>
+   Parser rules can highlight tokens using any of the following token
+   types:
+  </para>
+  <itemizedlist>
+  <listitem><para><literal>NULL</literal> - no special
+  highlighting is performed on tokens of type <literal>NULL</literal>
+  </para></listitem>
+  <listitem><para><literal>COMMENT1</literal>
+  </para></listitem>
+  <listitem><para><literal>COMMENT2</literal>
+  </para></listitem>
+  <listitem><para><literal>FUNCTION</literal>
+  </para></listitem>
+  <listitem><para><literal>INVALID</literal> - tokens of this type are
+  automatically added if a <literal>NO_WORD_BREAK</literal> or
+  <literal>NO_LINE_BREAK</literal> <literal>SPAN</literal> spans more than
+  one word or line, respectively.
+  </para></listitem>
+  <listitem><para><literal>KEYWORD1</literal>
+  </para></listitem>
+  <listitem><para><literal>KEYWORD2</literal>
+  </para></listitem>
+  <listitem><para><literal>KEYWORD3</literal>
+  </para></listitem>
+  <listitem><para><literal>LABEL</literal>
+  </para></listitem>
+  <listitem><para><literal>LITERAL1</literal>
+  </para></listitem>
+  <listitem><para><literal>LITERAL2</literal>
+  </para></listitem>
+  <listitem><para><literal>MARKUP</literal>
+  </para></listitem>
+  <listitem><para><literal>OPERATOR</literal>
+  </para></listitem>
+  </itemizedlist>
  </sect1>
 </chapter>

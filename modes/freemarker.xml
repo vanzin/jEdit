@@ -51,6 +51,10 @@
 
     <!-- FTL markup starts here. -->
 
+    <SEQ TYPE="COMMENT2">_$_</SEQ>
+    <SEQ TYPE="COMMENT2">$_</SEQ>
+    <SEQ TYPE="COMMENT2">_$</SEQ>
+
     <SPAN TYPE="KEYWORD1" DELEGATE="EXPRESSION">
       <BEGIN>${</BEGIN>
       <END>}</END>
@@ -75,18 +79,19 @@
       <BEGIN>&lt;/#?(if|switch|foreach|list|escape|macro|function|transform|compress|noescape)\&gt;</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
+
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|return)\&gt;</BEGIN>
+      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|return)\&gt;</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;/\$(([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*)?</BEGIN>
+      <BEGIN>&lt;/@(([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*)?</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
-      <BEGIN>&lt;\$([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*</BEGIN>
+      <BEGIN>&lt;@([_a-zA-Z@][_a-zA-Z0-9]*)(\.[_a-zA-Z@][_a-zA-Z0-9]*)*</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
     
@@ -114,14 +119,22 @@
     <BEGIN>&lt;</BEGIN>
     <END>&gt;</END>
     </SPAN>
-
-
   </RULES>
+
   <RULES SET="EXPRESSION"
       DEFAULT="KEYWORD2"
       HIGHLIGHT_DIGITS="TRUE"
       ESCAPE="\"
     >
+    <SPAN TYPE="COMMENT1">
+      <BEGIN>&lt;#--</BEGIN>
+      <END>--&gt;</END>
+    </SPAN>
+    <SPAN TYPE="COMMENT1">
+      <BEGIN>&lt;!--</BEGIN>
+      <END>--&gt;</END>
+    </SPAN>
+
     <SPAN TYPE="LITERAL1">
     <BEGIN>"</BEGIN>
     <END>"</END>

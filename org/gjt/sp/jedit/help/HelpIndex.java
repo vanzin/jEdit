@@ -129,7 +129,7 @@ public class HelpIndex
 			ZipEntry entry = (ZipEntry)enum.nextElement();
 			String name = entry.getName();
 			String lname = name.toLowerCase();
-			if(lname.endsWith(".html") || lname.endsWith(".txt"))
+			if(lname.endsWith(".html")/*  || lname.endsWith(".txt") */)
 			{
 				// only works for jEdit plugins
 				String url = "jeditresource:/" +

@@ -40,9 +40,10 @@ public class AnimatedIcon extends ImageIcon
 	 * @param rate The frame rate of the animation, in frames per second
 	 * @param host The container that the animation is used in
 	 */
-	public AnimatedIcon(Image[] frames, int rate, Component host)
+	public AnimatedIcon(Image icon ,Image[] frames, int rate, Component host)
 	{
-		super(frames[0]);
+		super(icon);
+		this.icon = icon;
 		this.frames = frames;
 		delay = 1000/rate;
 		this.host = host;
@@ -52,6 +53,12 @@ public class AnimatedIcon extends ImageIcon
 	public Image[] getFrames()
 	{
 		return frames;
+	} //}}}
+
+	//{{{ getIcon() method
+	public Image getIcon()
+	{
+		return icon;
 	} //}}}
 
 	//{{{ getRate() method
@@ -66,6 +73,12 @@ public class AnimatedIcon extends ImageIcon
 		this.frames = frames;
 	} //}}}
 
+	//{{{ setIcon() method
+	public void setIcon(Image icon)
+	{
+		this.icon = icon;
+	} //}}}
+
 	//{{{ setRate() method
 	public void setRate(int rate)
 	{
@@ -78,6 +91,9 @@ public class AnimatedIcon extends ImageIcon
 	 */
 	public void start()
 	{
+		if(timer != null)
+			return;
+
 		timer = new Timer(delay,new Animator());
 		timer.start();
 	} //}}}
@@ -90,8 +106,12 @@ public class AnimatedIcon extends ImageIcon
 	{
 		current = 0;
 		if(timer != null)
+		{
 			timer.stop();
-		setImage(frames[0]);
+			timer = null;
+		}
+
+		setImage(icon);
 	} //}}}
 
 	//{{{ Private members
@@ -100,6 +120,7 @@ public class AnimatedIcon extends ImageIcon
 	private int delay;
 	private Timer timer;
 	private Component host;
+	private Image icon;
 	//}}}
 
 	//{{{ Animator class

@@ -9,6 +9,10 @@ and performance.
 - Older versions of some plugins might be incompatible with jEdit 4.1.
   Ensure you are running the latest set.
 
+- Custom edit modes might need some minor updates to work with jEdit
+  4.1. See the "Updating Edit Modes" section of the user's guide for
+  details.
+
 - Wheel mouse scrolling support for Java 1.4 is now built-in; if you
   previously installed the WheelMouse plugin, remove it.
 
