@@ -19,6 +19,9 @@
  *
  * $Id$
  *
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 selection = textArea.getSelectedText();
@@ -31,6 +34,19 @@ color = JColorChooser.showDialog(view, "Color Picker", color);
 
 if (color != null)
     textArea.setSelectedText(GUIUtilities.getColorHexString(color));
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Color_Picker.bsh</filename></para>
+    <abstract><para>
+        Displays a color picker and inserts the selected color in
+        hexadecimal format, prefixed with a <quote>#</quote>.
+    </para></abstract>
+</listitem>
+
+*/
 
 // end Color_Picker.bsh
 

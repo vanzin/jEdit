@@ -4,6 +4,7 @@
  * around selected text
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
  */
 
 
@@ -41,5 +44,18 @@ void insertTag()
 }
 
 insertTag();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Insert_Tag.bsh</filename></para>
+    <abstract><para>
+        Inserts a balanced pair of markup tags as supplied in a i
+		nput dialog.
+    </para></abstract>
+</listitem>
+
+*/
 
 // end Insert_Tag.bsh
