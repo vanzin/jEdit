@@ -2120,7 +2120,7 @@ public class Buffer
 			TokenMarker.LineContext context = lineMgr.getLineContext(i);
 			ParserRule oldRule;
 			ParserRuleSet oldRules;
-			String oldSpanEndSubst;
+			char[] oldSpanEndSubst;
 			if(context == null)
 			{
 				//System.err.println(i + ": null context");

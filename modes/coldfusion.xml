@@ -7,20 +7,20 @@
 		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 	</PROPS>
-	
+
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- CFML comment -->
 		<SPAN TYPE="COMMENT4">
 			<BEGIN>&lt;!---</BEGIN>
 			<END>---&gt;</END>
 		</SPAN>
-		
+
 		<!-- CFSCRIPT multi-line comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
 		</SPAN>
-		
+
 		<!-- CFSCRIPT single-line comment -->
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
@@ -29,19 +29,19 @@
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
-		
+
 		<!-- CFScript -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="CFSCRIPT">
 			<BEGIN>&lt;CFSCRIPT</BEGIN>
 			<END>&lt;/CFSCRIPT&gt;</END>
 		</SPAN>
-		
+
 		<!-- CFML markup start tags -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="CFTAGS">
 			<BEGIN>&lt;CF</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-		
+
 		<!-- CFML markup end tags -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="CFTAGS">
 			<BEGIN>&lt;/CF</BEGIN>
@@ -96,25 +96,25 @@
 			<BEGIN>&lt;/CF</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-		
+
 		<!-- CFML markup start tags -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="CFSCRIPT">
 			<BEGIN>&lt;CFSCRIPT</BEGIN>
 			<END>&lt;/CFSCRIPT&gt;</END>
 		</SPAN>
 	</RULES>
-	
+
 	<RULES SET="CFSCRIPT" DEFAULT="KEYWORD1" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-	
+
 		<!-- CFSCRIPT multi-line comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
 		</SPAN>
-		
-		<!--- CFSCRIPT single-line comment --->
+
+		<!-- CFSCRIPT single-line comment -->
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
-	
+
 		<SPAN TYPE="LABEL">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
@@ -123,10 +123,10 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<SEQ TYPE="LITERAL2">(</SEQ>
 		<SEQ TYPE="LITERAL2">)</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
@@ -137,7 +137,7 @@
 		<SEQ TYPE="OPERATOR">*</SEQ>
 		<SEQ TYPE="OPERATOR">!!</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;&amp;</SEQ>
-		
+
 		<OPERATOR>IS</OPERATOR>
 		<OPERATOR>EQ</OPERATOR>
 		<OPERATOR>NEQ</OPERATOR>
@@ -154,7 +154,7 @@
 		<OPERATOR>OR</OPERATOR>
 		<OPERATOR>NOT</OPERATOR>
 		<OPERATOR>XOR</OPERATOR>
-		
+
 		<KEYWORDS>
 			<FUNCTION>{</FUNCTION>
 			<FUNCTION>}</FUNCTION>
@@ -166,7 +166,7 @@
 			<FUNCTION>if(</FUNCTION>
 			<FUNCTION>else</FUNCTION>
 			<FUNCTION>break</FUNCTION>
-			
+
 			<FUNCTION>ArrayAppend</FUNCTION>
 			<FUNCTION>ArrayAvg</FUNCTION>
 			<FUNCTION>ArrayClear</FUNCTION>

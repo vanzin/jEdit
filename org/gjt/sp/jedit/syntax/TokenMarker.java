@@ -369,6 +369,7 @@ unwind:		while(context.parent != null)
 
 		int matchedChars = 1;
 		CharIndexedSegment charIndexed = null;
+		REMatch match = null;
 
 		//{{{ See if the rule's start or end sequence matches here
 		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
@@ -379,7 +380,7 @@ unwind:		while(context.parent != null)
 				if(end)
 				{
 					if(context.spanEndSubst != null)
-						pattern.array = context.spanEndSubst.toCharArray();
+						pattern.array = context.spanEndSubst;
 					else
 						pattern.array = checkRule.end;
 				}
@@ -401,7 +402,7 @@ unwind:		while(context.parent != null)
 				// match the start of the string
 				int matchStart = pos - line.offset;
 				charIndexed = new CharIndexedSegment(line,matchStart);
-				REMatch match = checkRule.startRegexp.getMatch(
+				match = checkRule.startRegexp.getMatch(
 					charIndexed,0,RE.REG_ANCHORINDEX);
 				if(match == null)
 					return false;
@@ -499,7 +500,7 @@ unwind:		while(context.parent != null)
 						matchedChars,context);
 				}
 
-				String spanEndSubst = null;
+				char[] spanEndSubst = null;
 				/* substitute result of matching the rule start
 				 * into the end string.
 				 *
@@ -511,8 +512,8 @@ unwind:		while(context.parent != null)
 				 */
 				if(charIndexed != null && checkRule.end != null)
 				{
-					spanEndSubst = checkRule.startRegexp.substitute(
-						charIndexed,new String(checkRule.end));
+					spanEndSubst = substitute(match,
+						checkRule.end);
 				}
 
 				context.spanEndSubst = spanEndSubst;
@@ -737,6 +738,39 @@ unwind:		while(context.parent != null)
 		} //}}}
 	} //}}}
 
+	//{{{ substitute() method
+	private char[] substitute(REMatch match, char[] end)
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < end.length; i++)
+		{
+			char ch = end[i];
+			if(ch == '$')
+			{
+				if(i == end.length - 1)
+					buf.append(ch);
+				else
+				{
+					char digit = end[i + 1];
+					if(!Character.isDigit(digit))
+						buf.append(ch);
+					else
+					{
+						buf.append(match.toString(
+							digit - '0'));
+						i++;
+					}
+				}
+			}
+			else
+				buf.append(ch);
+		}
+
+		char[] returnValue = new char[buf.length()];
+		buf.getChars(0,buf.length(),returnValue,0);
+		return returnValue;
+	} //}}}
+
 	//}}}
 
 	//{{{ LineContext class
@@ -751,7 +785,7 @@ unwind:		while(context.parent != null)
 		public ParserRule inRule;
 		public ParserRuleSet rules;
 		// used for SPAN_REGEXP rules; otherwise null
-		public String spanEndSubst;
+		public char[] spanEndSubst;
 
 		//{{{ LineContext constructor
 		public LineContext(ParserRuleSet rs, LineContext lc)
@@ -797,7 +831,7 @@ unwind:		while(context.parent != null)
 				LineContext lc = (LineContext)obj;
 				return lc.inRule == inRule && lc.rules == rules
 					&& MiscUtilities.objectsEqual(parent,lc.parent)
-					&& MiscUtilities.objectsEqual(spanEndSubst,lc.spanEndSubst);
+					&& charArraysEqual(spanEndSubst,lc.spanEndSubst);
 			}
 			else
 				return false;
@@ -813,6 +847,26 @@ unwind:		while(context.parent != null)
 			lc.spanEndSubst = spanEndSubst;
 
 			return lc;
+		} //}}}
+
+		//{{{ charArraysEqual() method
+		private boolean charArraysEqual(char[] c1, char[] c2)
+		{
+			if(c1 == null)
+				return (c2 == null);
+			else if(c2 == null)
+				return (c1 == null);
+
+			if(c1.length != c2.length)
+				return false;
+
+			for(int i = 0; i < c1.length; i++)
+			{
+				if(c1[i] != c2[i])
+					return false;
+			}
+
+			return true;
 		} //}}}
 	} //}}}
 }
