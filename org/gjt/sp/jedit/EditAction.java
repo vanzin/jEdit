@@ -82,7 +82,7 @@ public abstract class EditAction
 	 */
 	public String getMouseOverText()
 	{
-		return null;
+		return jEdit.getProperty("action.caption",new String[] { getName() });
 	} //}}}
 
 	//{{{ invoke() method

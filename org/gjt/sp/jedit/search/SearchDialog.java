@@ -693,6 +693,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			String directory = this.directory.getText();
 			this.directory.addCurrentToHistory();
+			directory = MiscUtilities.constructPath(
+				view.getBuffer().getDirectory(),directory);
 
 			if((VFSManager.getVFSForPath(directory).getCapabilities()
 				& VFS.LOW_LATENCY_CAP) == 0)

@@ -203,6 +203,7 @@ public abstract class InputHandler extends KeyAdapter
 		// remember the last executed action
 		if(!action.noRememberLast())
 		{
+			HistoryModel.getModel("action").addItem(action.getName());
 			if(lastAction == action)
 				lastActionCount++;
 			else

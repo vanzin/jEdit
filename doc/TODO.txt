@@ -38,7 +38,6 @@ and quirks that I need to fix eventually.
   - mirror change: refresh download locations
 - canonPath: get rid of ..
 - update horizontal scroll width immediately on buffer switch
-- update man page
 - enter with browser view focused; hides dialog
 - options for confirmation of:
   save all
@@ -46,15 +45,11 @@ and quirks that I need to fix eventually.
 - need distinct default styles for new token types
 - HTML mode: use new token types
 - synchro scroll & folding
-- document view.goToBuffer()
 - hypersearch: open in new split
 - option to not follow symbolic links
 - C+e C+c long block of text
   - soft wrap display provides fix: need nextLineRequested event
 - buffer.mode=foo in action bar does not work
-- changing fileset parameters should modify the file set not create a
-  new one
-- dir search: resolve path relative to current buffer's path
 - new bsh and bsh command path
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something

@@ -53,6 +53,7 @@ public class ActionBar extends JPanel
 		add(label);
 		add(Box.createHorizontalStrut(12));
 		add(action = new ActionTextField());
+		action.setEnterAddsToHistory(false);
 		Dimension max = action.getPreferredSize();
 		max.width = Integer.MAX_VALUE;
 		action.setMaximumSize(max);
@@ -123,6 +124,7 @@ public class ActionBar extends JPanel
 			int index = cmd.indexOf('=');
 			if(index != -1)
 			{
+				action.addCurrentToHistory();
 				String propName = cmd.substring(0,index).trim();
 				String propValue = cmd.substring(index + 1);
 				String code;
