@@ -408,7 +408,7 @@ public class GrabKeyDialog extends JDialog
 			{
 				String modifiers = DefaultInputHandler
 					.getModifierString(evt);
-				if(modifiers.length() != 0)
+				if(modifiers != null && modifiers.length() != 0)
 				{
 					keyString.append(modifiers);
 					keyString.append('+');

@@ -236,6 +236,9 @@ contributing to this release.
 
 - The install directory setting of the plugin manager didn't work.
 
+- Refactored key dispatching code should make alternative keyboard
+  layouts work better on MacOS X.
+
 }}}
 {{{ API Changes
 
