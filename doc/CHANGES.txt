@@ -23,6 +23,10 @@ JEDIT 4.2 VERSION HISTORY
 - Fixed NullPointerException sometimes thrown when scrolling to the line
   after the last visible line with electric scrolling switched off.
 
+- Fixed problems such as ArrayIndexOutOfBoundsExceptions or the
+  beginning of the buffer becoming inaccessible when expanding the last
+  fold in a buffer.
+
 }}}
 
 }}}
