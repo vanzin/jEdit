@@ -30,15 +30,18 @@ public class GlobalOptions extends OptionsDialog
 {
 	public GlobalOptions(View view)
 	{
-		super(view,"options");
+		super(view,"options",jEdit.getProperty("options.last"));
+	}
+
+	public GlobalOptions(View view, String pane)
+	{
+		super(view,"options",pane);
 	}
 
 	protected OptionTreeModel createOptionTreeModel()
 	{
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
-
-		addOptionPane(new OverviewOptionPane(), rootGroup);
 
 		// initialize the jEdit branch of the options tree
 		jEditGroup = new OptionGroup("jedit");
@@ -59,13 +62,12 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new StatusBarOptionPane(), jEditGroup);
 		addOptionPane(new PrintOptionPane(), jEditGroup);
 		addOptionPane(new FirewallOptionPane(), jEditGroup);
+		addOptionGroup(jEditGroup, rootGroup);
 
-		OptionGroup browserGroup = new OptionGroup("browser");
+		browserGroup = new OptionGroup("browser");
 		addOptionPane(new BrowserOptionPane(), browserGroup);
 		addOptionPane(new BrowserColorsOptionPane(), browserGroup);
-		addOptionGroup(browserGroup, jEditGroup);
-
-		addOptionGroup(jEditGroup, rootGroup);
+		addOptionGroup(browserGroup, rootGroup);
 
 		// initialize the Plugins branch of the options tree
 		pluginsGroup = new OptionGroup("plugins");
@@ -102,5 +104,6 @@ public class GlobalOptions extends OptionsDialog
 	}
 
 	private OptionGroup jEditGroup;
+	private OptionGroup browserGroup;
 	private OptionGroup pluginsGroup;
 }
