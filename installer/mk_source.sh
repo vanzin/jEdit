@@ -8,12 +8,12 @@ if [ "$1" = "" ]; then
 fi
 
 ant clean
-rm -f doc/users-guide/*.html
-rm -f doc/users-guide/toc.xml
+rm -f doc/{FAQ,users-guide}/{toc.xml,word-index.xml,*.html}
 
 cd
 tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
 	-o -name Root -o -name Entries.Static -o -name Repository \
+	-o -name Baserev \
 	-o -name \*.class -o -name \*.jar -o -name .\*.marks -o -name .xvpics \
 	-o -name \*.exe -o -name \*.dll -o -name \*.dl_ \
 	-o -name \*.spec -o -name .cvsignore -o -name tags \)`

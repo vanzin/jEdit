@@ -350,7 +350,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		new HelpViewer("jeditresource:/doc/welcome.html");
+		new HelpViewer();
 	</CODE>
 </ACTION>
 

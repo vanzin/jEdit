@@ -83,6 +83,11 @@ in build.xml.
   - Somewhat confusing 'Replace' button removed
 - Faster HyperSearch
 - Updated Foxpro mode (Matthew J. Price)
+- jEditLauncher version 4.0 (John Gellene)
+  - Revised installer module
+  - Logging feature for easier troubleshooting of installation problems
+  - Updated for 4.0pre4 EditServer changes (but backwards compatible
+    with older jEdit versions)
 
 + Neutral
 
