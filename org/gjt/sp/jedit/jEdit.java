@@ -248,6 +248,22 @@ public class jEdit
 			try
 			{
 				stream = new BufferedWriter(new FileWriter(logPath));
+
+				// Write a warning message:
+				String lineSep = System.getProperty("line.separator");
+				stream.write("Log file created on " + new Date());
+				stream.write(lineSep);
+				stream.write("IMPORTANT:");
+				stream.write(lineSep);
+				stream.write("Because updating this file after "
+					+ "every log message would kill");
+				stream.write(lineSep);
+				stream.write("performance, it will be *incomplete* "
+					+ "unless you invoke the");
+				stream.write(lineSep);
+				stream.write("Utilities->Troubleshooting->Update "
+					+ "Activity Log on Disk command!");
+				stream.write(lineSep);
 			}
 			catch(Exception e)
 			{
