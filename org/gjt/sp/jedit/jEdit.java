@@ -1276,9 +1276,6 @@ public class jEdit
 
 		path = MiscUtilities.constructPath(parent,path);
 
-		if(!MiscUtilities.isURL(path))
-			path = MiscUtilities.canonPath(path);
-
 		synchronized(bufferListLock)
 		{
 			Buffer buffer = getBuffer(path);

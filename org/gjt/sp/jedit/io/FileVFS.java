@@ -80,7 +80,7 @@ public class FileVFS extends VFS
 	//{{{ load() method
 	public boolean load(View view, Buffer buffer, String path)
 	{
-		File file = new File(MiscUtilities.canonPath(path));
+		File file = new File(path);
 
 		//{{{ Check if file is valid
 		if(!file.exists())
