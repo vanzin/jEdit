@@ -73,6 +73,9 @@ this release.
 
 - Fixed backspace key in file name field of file dialogs on Java 1.5.
 
+- Fixed exception when control-clicking beyond the end of a line in a
+  read-only buffer.
+
 }}}
 {{{ API Changes
 

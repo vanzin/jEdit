@@ -6567,6 +6567,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 				if(info.lastSubregion)
 				{
+					if(!isEditable())
+					{
+						getToolkit().beep();
+						return;
+					}
+
 					// control-click in virtual space inserts
 					// whitespace and moves caret
 					String whitespace = MiscUtilities

@@ -261,7 +261,13 @@ public class EditServer extends Thread
 		return ok;
 	} //}}}
 
-	// stopServer() method
+	//{{{ getPort method
+	public int getPort()
+	{
+		return socket.getLocalPort();
+	} //}}}
+
+	//{{{ stopServer() method
 	void stopServer()
 	{
 		abort = true;
