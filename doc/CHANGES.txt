@@ -10,6 +10,10 @@ Thanks to Scott Allen for contributing to this release.
 
 - SMI-MIB syntax highlighting (Scott Allen).
 
+- Updated Lisp syntax highlighting (Ollie Rutherfurd).
+
+- Added Swig and PSP syntax highlighting (Ollie Rutherfurd).
+
 }}}
 {{{ Bug Fixes
 
