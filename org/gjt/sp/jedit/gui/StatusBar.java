@@ -288,7 +288,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	{
 		Buffer buffer = view.getBuffer();
 		mode.setText(buffer.getMode().getName());
-		encoding.setText(buffer.getProperty("encoding").toString());
+		encoding.setText(buffer.getStringProperty("encoding"));
 	} //}}}
 
 	//{{{ updateMiscStatus() method

@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.io;
 
-import javax.swing.text.Element;
 import javax.swing.text.Segment;
 import java.io.*;
 import java.util.zip.*;
@@ -177,7 +176,7 @@ public class BufferIORequest extends WorkRequest
 					in = new GZIPInputStream(in);
 
 				String lineSeparator = read(buffer,in,length);
-				buffer.putProperty(Buffer.LINESEP,lineSeparator);
+				buffer.setProperty(Buffer.LINESEP,lineSeparator);
 				buffer.setNewFile(false);
 			}
 			catch(CharConversionException ch)
@@ -464,16 +463,17 @@ public class BufferIORequest extends WorkRequest
 			char ch = seg.array[bufferLength - 1];
 			if(ch == '\n')
 			{
-				buffer.putBooleanProperty(Buffer.TRAILING_EOL,true);
+				buffer.setBooleanProperty(Buffer.TRAILING_EOL,true);
 				seg.count--;
+				endOffsets.setSize(endOffsets.getSize() - 1);
 			}
 		}
 
 		// to avoid having to deal with read/write locks and such,
 		// we insert the loaded data into the buffer in the
 		// post-load cleanup runnable, which runs in the AWT thread.
-		buffer.putProperty(LOAD_DATA,seg);
-		buffer.putProperty(END_OFFSETS,endOffsets);
+		buffer.setProperty(LOAD_DATA,seg);
+		buffer.setProperty(END_OFFSETS,endOffsets);
 
 		return lineSeparator;
 	}
@@ -547,7 +547,7 @@ public class BufferIORequest extends WorkRequest
 				if(buffer.getProperty(Buffer.BACKED_UP) == null)
 				{
 					vfs._backup(session,path,view);
-					buffer.putProperty(Buffer.BACKED_UP,Boolean.TRUE);
+					buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 				}
 
 				if((vfs.getCapabilities() & VFS.RENAME_CAP) != 0)
@@ -679,22 +679,18 @@ public class BufferIORequest extends WorkRequest
 		String newline = (String)buffer.getProperty(Buffer.LINESEP);
 		if(newline == null)
 			newline = System.getProperty("line.separator");
-		Element map = buffer.getDefaultRootElement();
 
-		setProgressMaximum(map.getElementCount() / PROGRESS_INTERVAL);
+		setProgressMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
 		setProgressValue(0);
 
 		int i = 0;
-		while(i < map.getElementCount())
+		while(i < buffer.getLineCount())
 		{
-			Element line = map.getElement(i);
-			int start = line.getStartOffset();
-			buffer.getText(start,line.getEndOffset() - start - 1,
-				lineSegment);
+			buffer.getLineText(i,lineSegment);
 			out.write(lineSegment.array,lineSegment.offset,
 				lineSegment.count);
 
-			if(i != map.getElementCount()
+			if(i != buffer.getLineCount() - 1
 				|| buffer.getBooleanProperty(Buffer.TRAILING_EOL))
 			{
 				out.write(newline);

@@ -410,11 +410,6 @@ public class Buffer implements EBComponent
 					}
 				}
 
-				// reload maxLineLen and tabSize
-				// from the global/mode properties
-				unsetProperty("tabSize");
-				unsetProperty("indentSize");
-				unsetProperty("maxLineLen");
 				unsetProperty(BufferIORequest.LOAD_DATA);
 				unsetProperty(BufferIORequest.END_OFFSETS);
 
@@ -422,6 +417,7 @@ public class Buffer implements EBComponent
 				//undo.setLimit(jEdit.getIntegerProperty(
 				//	"buffer.undoCount",100));
 
+				parseBufferLocalProperties();
 				setMode();
 
 				setFlag(LOADING,false);
@@ -679,6 +675,8 @@ public class Buffer implements EBComponent
 					if(!getPath().equals(oldPath))
 					{
 						jEdit.updatePosition(Buffer.this);
+
+						parseBufferLocalProperties();
 						setMode();
 					}
 
@@ -1063,6 +1061,14 @@ public class Buffer implements EBComponent
 				break;
 			}
 		}
+
+		for(int i = 0; i < getLineCount(); i++)
+		{
+			int start = getLineStartOffset(i);
+			int end = getLineEndOffset(i);
+			if(start >= end)
+				System.err.println(i + ":" + start + ":" + end);
+		}
 	} //}}}
 
 	//{{{ getLineOfOffset() method
@@ -1295,7 +1301,7 @@ public class Buffer implements EBComponent
 		}
 		finally
 		{
-			readUnlock();
+			writeUnlock();
 		}
 	} //}}}
 
@@ -1332,7 +1338,7 @@ public class Buffer implements EBComponent
 		}
 		finally
 		{
-			readUnlock();
+			writeUnlock();
 		}
 	} //}}}
 
@@ -1730,8 +1736,8 @@ public class Buffer implements EBComponent
 	//{{{ propertiesChanged() method
 	/**
 	 * Reloads settings from the properties. This should be called
-	 * after the <code>syntax</code> buffer-local property is
-	 * changed.
+	 * after the <code>syntax</code> or <code>folding</code>
+	 * buffer-local properties are changed.
 	 */
 	public void propertiesChanged()
 	{
@@ -1753,9 +1759,6 @@ public class Buffer implements EBComponent
 			undo.setLimit(jEdit.getIntegerProperty(
 				"buffer.undoCount",100));
 		} */
-
-		// cache these for improved performance
-		putProperty("tabSize",getProperty("tabSize"));
 		putProperty("maxLineLen",getProperty("maxLineLen"));
 	} //}}}
 
@@ -1966,9 +1969,29 @@ public class Buffer implements EBComponent
 		//if(this.mode == mode)
 		//	return;
 
+		//{{{ Reset cached properties
+		if(getProperty("tabSize")
+			.equals(mode.getProperty("tabSize")))
+			unsetProperty("tabSize");
+
+		if(getProperty("indentSize")
+			.equals(mode.getProperty("indentSize")))
+			unsetProperty("indentSize");
+
+		if(getProperty("maxLineLen")
+			.equals(mode.getProperty("maxLineLen")))
+			unsetProperty("maxLineLen");
+		//}}}
+
 		Mode oldMode = this.mode;
 
 		this.mode = mode;
+
+		//{{{ Cache these for improved performance
+		putProperty("tabSize",getProperty("tabSize"));
+		putProperty("indentSize",getProperty("indentSize"));
+		putProperty("maxLineLen",getProperty("maxLineLen"));
+		//}}}
 
 		propertiesChanged(); // sets up token marker
 
@@ -1987,12 +2010,6 @@ public class Buffer implements EBComponent
 	 */
 	public void setMode()
 	{
-		// don't do this while loading, otherwise we will
-		// blow away caret location properties
-		if(!getFlag(LOADING))
-			clearProperties();
-		parseBufferLocalProperties();
-
 		String userMode = (String)getProperty("mode");
 		if(userMode != null)
 		{
@@ -2781,42 +2798,23 @@ public class Buffer implements EBComponent
 	 */
 	public final boolean _isLineVisible(int line, int index)
 	{
-		try
-		{
-			readLock();
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
 
-			if(line < 0 || line >= offsetMgr.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(line);
-
-			return offsetMgr.isLineVisible(line,index);
-		}
-		finally
-		{
-			readUnlock();
-		}
+		return offsetMgr.isLineVisible(line,index);
 	} //}}}
 
 	//{{{ _setLineVisible() method
 	/**
 	 * Plugins and macros should not call this method.
-	 * @param mgr The fold visibility manager
 	 * @since jEdit 4.0pre1
 	 */
 	public final void _setLineVisible(int line, int index, boolean visible)
 	{
-		try
-		{
-			writeLock();
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
 
-			if(line < 0 || line >= offsetMgr.getLineCount())
-				throw new ArrayIndexOutOfBoundsException(line);
-
-			offsetMgr.setLineVisible(line,index,visible);
-		}
-		finally
-		{
-			writeUnlock();
-		}
+		offsetMgr.setLineVisible(line,index,visible);
 	} //}}}
 
 	//}}}
@@ -3114,6 +3112,13 @@ public class Buffer implements EBComponent
 		Hashtable props)
 	{
 		properties = ((Hashtable)props.clone());
+
+		// fill in defaults for these from system properties.
+		if(properties.get(ENCODING) == null)
+			properties.put(ENCODING,System.getProperty("file.encoding"));
+		if(properties.get(LINESEP) == null)
+			properties.put(LINESEP,System.getProperty("line.separator"));
+
 		lock = new ReadWriteLock();
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
@@ -3312,23 +3317,23 @@ public class Buffer implements EBComponent
 			return false;
 	} //}}}
 
-	//{{{ clearProperties() method
-	private void clearProperties()
-	{
-		Object lineSeparator = getProperty(LINESEP);
-		Object encoding = getProperty(ENCODING);
-		properties.clear();
-		if(lineSeparator != null)
-			putProperty(LINESEP,lineSeparator);
-		if(encoding != null)
-			putProperty(ENCODING,encoding);
-		else
-			putProperty(ENCODING,System.getProperty("file.encoding"));
-	} //}}}
-
 	//{{{ parseBufferLocalProperties() method
 	private void parseBufferLocalProperties()
 	{
+		//{{{ Reset cached properties
+		if(getProperty("tabSize")
+			.equals(mode.getProperty("tabSize")))
+			unsetProperty("tabSize");
+
+		if(getProperty("indentSize")
+			.equals(mode.getProperty("indentSize")))
+			unsetProperty("indentSize");
+
+		if(getProperty("maxLineLen")
+			.equals(mode.getProperty("maxLineLen")))
+			unsetProperty("maxLineLen");
+		//}}}
+
 		Element map = getDefaultRootElement();
 		for(int i = 0; i < Math.min(10,map.getElementCount()); i++)
 		{
@@ -3344,6 +3349,8 @@ public class Buffer implements EBComponent
 			((Marker)markers.elementAt(i))
 				.createPosition();
 		}
+
+		setMode();
 	} //}}}
 
 	//{{{ parseBufferLocalProperty() method
@@ -3452,7 +3459,7 @@ public class Buffer implements EBComponent
 	private void contentInserted(int offset, int length, IntegerArray endOffsets)
 	{
 		int startLine = offsetMgr.getLineOfOffset(offset);
-		int numLines = endOffsets.size();
+		int numLines = endOffsets.getSize();
 
 		offsetMgr.contentInserted(startLine,offset,numLines,length,
 			endOffsets);
@@ -3485,8 +3492,16 @@ public class Buffer implements EBComponent
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((BufferChangeListener)bufferListeners.elementAt(i))
-				.foldLevelChanged(this,line,level);
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.foldLevelChanged(this,line,level);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
 		}
 	} //}}}
 
@@ -3496,9 +3511,17 @@ public class Buffer implements EBComponent
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((BufferChangeListener)bufferListeners.elementAt(i))
-				.contentInserted(this,startLine,offset,
-				numLines,length);
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.contentInserted(this,startLine,offset,
+					numLines,length);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
 		}
 	} //}}}
 
@@ -3508,9 +3531,17 @@ public class Buffer implements EBComponent
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			((BufferChangeListener)bufferListeners.elementAt(i))
-				.contentRemoved(this,startLine,offset,
-				numLines,length);
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.contentRemoved(this,startLine,offset,
+					numLines,length);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
 		}
 	} //}}}
 
