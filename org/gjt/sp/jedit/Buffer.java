@@ -1545,6 +1545,8 @@ public class Buffer implements EBComponent
 	 */
 	public void propertiesChanged()
 	{
+		parseFully = jEdit.getBooleanProperty("parseFully");
+
 		setTokenMarker(mode.getTokenMarker());
 
 		String folding = getStringProperty("folding");
@@ -1554,18 +1556,6 @@ public class Buffer implements EBComponent
 			setFoldHandler(new IndentFoldHandler());
 		else
 			setFoldHandler(new DummyFoldHandler());
-
-		View[] views = jEdit.getViews();
-		for(int i = 0; i < views.length; i++)
-		{
-			EditPane[] editPanes = views[i].getEditPanes();
-			for(int j = 0; j < editPanes.length; j++)
-			{
-				EditPane pane = editPanes[j];
-				if(pane.getBuffer() == this)
-					pane.getTextArea().propertiesChanged();
-			}
-		}
 	} //}}}
 
 	//{{{ getTabSize() method
@@ -2208,11 +2198,20 @@ public class Buffer implements EBComponent
 				return tokenList;
 
 			/*
-			 * Else, go up to 100 lines back, looking for a line with
+			 * Else, go up back, looking for a line with
 			 * a valid line context.
 			 */
-			int start = Math.max(0,lineIndex - 100) - 1;
-			int end = Math.max(0,lineIndex - 100);
+			int start, end;
+			if(parseFully)
+			{
+				start = -1;
+				end = 0;
+			}
+			else
+			{
+				start = Math.max(0,lineIndex - 100) - 1;
+				end = Math.max(0,lineIndex - 100);
+			}
 
 			for(int i = lineIndex - 1; i > end; i--)
 			{
@@ -3093,6 +3092,7 @@ public class Buffer implements EBComponent
 	private Vector markers;
 
 	// Syntax highlighting
+	private boolean parseFully;
 	private TokenMarker tokenMarker;
 	private Segment seg;
 	private int lastTokenizedLine;
@@ -3170,7 +3170,7 @@ public class Buffer implements EBComponent
 		if(collapseFolds != 0)
 			offsetMgr.expandFolds(collapseFolds);
 
-		if(jEdit.getBooleanProperty("parseFully"))
+		if(parseFully)
 		{
 			for(int i = 0; i < offsetMgr.getLineCount(); i++)
 				markTokens(i);

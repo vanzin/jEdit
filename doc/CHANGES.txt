@@ -22,6 +22,12 @@ JEDIT 4.0 VERSION HISTORY
   and middle-clicks can close open files
 - NEWS.txt written
 - Updated Pascal syntax highlighting (Barry Carr)
+- 'Spaces to Tabs' and 'Tabs to Spaces' now operate on the entire buffer
+  if there is no selection (Ollie Rutherfurd)
+- 'More accurate syntax highlighting' option is now even more accurate;
+  when editing PHP files with very long embedded scripts, you should
+  never see the highlighting mess up
+- Documentation updates
 
 + Bug Fixes
 
@@ -71,6 +77,9 @@ JEDIT 4.0 VERSION HISTORY
   incorrectly.
 - Sometimes the scroll bar would not be updated correctly when opening a
   file
+- Disabling anti-aliasing might work now on MacOS X
+- Macros that switch buffers should no longer result in an error being
+  printed to the activity log when they finish executing
 
 * Version 4.0pre4
 

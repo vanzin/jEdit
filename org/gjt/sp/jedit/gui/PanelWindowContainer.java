@@ -601,7 +601,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 							closeBoxSizeSet = true;
 						}
 
-						if(pos + size.width > parentSize.width)
+						if(pos + size.width > parentSize.width - closeBox.getWidth())
 						{
 							popupButton.setBounds(
 								parentSize.width - size.height,
@@ -626,7 +626,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 							closeBoxSizeSet = true;
 						}
 
-						if(pos + size.height > parentSize.height)
+						if(pos + size.height > parentSize.height - closeBox.getWidth())
 						{
 							popupButton.setBounds(
 								0,parentSize.height - size.width,

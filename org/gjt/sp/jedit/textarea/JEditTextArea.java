@@ -4004,19 +4004,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		Selection[] selection = getSelection();
 
-		if(!buffer.isEditable() || selection.length == 0)
-                {
-                	getToolkit().beep();
-                	return;
-                }
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
 
 		buffer.beginCompoundEdit();
 
-		for(int i = 0; i < selection.length; i++)
+		if(selection.length == 0)
 		{
-			Selection s = selection[i];
-			setSelectedText(s,TextUtilities.spacesToTabs(
-				getSelectedText(s),buffer.getTabSize()));
+			setText(TextUtilities.spacesToTabs(
+				getText(), buffer.getTabSize()));
+		}
+		else
+		{
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+				setSelectedText(s,TextUtilities.spacesToTabs(
+					getSelectedText(s),buffer.getTabSize()));
+			}
 		}
 
 		buffer.endCompoundEdit();
@@ -4031,19 +4039,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		Selection[] selection = getSelection();
 
-		if(!buffer.isEditable() || selection.length == 0)
-                {
-                	getToolkit().beep();
-                	return;
-                }
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
 
 		buffer.beginCompoundEdit();
 
-		for(int i = 0; i < selection.length; i++)
+		if(selection.length == 0)
 		{
-			Selection s = selection[i];
-			setSelectedText(s,TextUtilities.tabsToSpaces(
-				getSelectedText(s),buffer.getTabSize()));
+			setText(TextUtilities.tabsToSpaces(
+				getText(), buffer.getTabSize()));
+		}
+		else
+		{
+			for(int i = 0; i < selection.length; i++)
+			{
+				Selection s = selection[i];
+				setSelectedText(s,TextUtilities.tabsToSpaces(
+					getSelectedText(s),buffer.getTabSize()));
+			}
 		}
 
 		buffer.endCompoundEdit();

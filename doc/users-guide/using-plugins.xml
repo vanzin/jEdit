@@ -41,20 +41,19 @@
    To install plugins from the plugin manager, make sure you are connected to
    the Internet and click the <guibutton>Install Plugins</guibutton> button in
    the plugin manager window. The plugin manager will then download information
-   about available plugins from the jEdit web
-   site<footnote><para>The list of plugins is downloaded from
-   http://plugins.jedit.org/export/new_plugin_manager.php, in XML
-   format.</para></footnote>
-   and list those not already installed in the <guilabel>Install Plugins</guilabel>
-   dialog box. Only plugins compatible with your jEdit release will be shown,
-   and installing
-   a plugin will also automatically install any other plugins it depends on. As
-   a result of this, if you use the plugin manager to install plugins, it is
-   very hard to end up with a non-working set of plugins.
+   about available plugins from the jEdit web site, and present a list of
+   plugins compatible with your jEdit release which may be installed.
   </para>
   <para>
    Click on a plugin in the list to see some information about it. To select
-   plugins to be installed, click the check box next to their names in the list.
+   plugins for installation, click the check box next to their names in the list.
+  </para>
+  <para>
+   The <guibutton>Total download size</guibutton> field shows the total size
+   of all plugins chosen for installation, along with any plugins that will be
+   automatically downloaded in order to fulfil dependencies. The
+   <guibutton>Download size</guibutton> field in the plugin information area
+   only shows the size of the currently selected plugin.
   </para>
   <para>
    The <guibutton>Install source code</guibutton> check box controls if source
@@ -78,15 +77,10 @@
   <sidebar><title>Firewalls</title>
    <para>
     If you are connected to the Internet through a firewall or proxy, you will
-    need to configure firewall settings in the <guibutton>Plugin
-    Options</guibutton>&gt;<guibutton>Firewall</guibutton> pane of the
+    need to enter the proxy host (and username and password, if necessary)
+    in the <guibutton>Firewall</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box, otherwise the plugin manager might not be able to connect to the
-    jEdit web site.
-   </para>
-   <para>
-    This assumes you chose to install the <application>Firewall</application>
-    plugin when installing jEdit. This plugin requires Java 2.
+    dialog box.
    </para>
   </sidebar>
  </sect1>

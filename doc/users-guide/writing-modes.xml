@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
+<!-- :indentSize=1:noTabs=true: -->
 
 <chapter id="writing-modes"><title>Writing Edit Modes</title>
  <para>
@@ -10,17 +10,16 @@
   start with a short XML primer, followed by detailed information about
   each supported tag and highlighting rule.
  </para>
- <sidebar><title>Changes to modes take effect immediately</title>
-  <para>
-   Editing a mode file, or a mode catalog file within jEdit will cause the
-   edit modes to be reloaded automatically as soon as the file is saved.
-  </para>
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-   can be used to reload edit modes after changes to mode files are made
-   outside jEdit.
-  </para>
- </sidebar>
+ <para>
+  Note that changes to mode files take effect immediately;
+  editing a mode or a mode catalog file within jEdit will cause the
+  file to be re-parsed as soon it is saved.
+ </para>
+ <para>
+  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
+  can be used to reload edit modes after changes to mode files are made
+  outside jEdit.
+ </para>
  <sect1 id="xml-primer"><title>An XML Primer</title>
   <para>
    A very simple edit mode looks like so:
@@ -92,8 +91,13 @@
   <para>
    Each mode definition must also contain exactly one <literal>MODE</literal>
    tag. All other tags (<literal>PROPS</literal>, <literal>RULES</literal>)
-   must be placed inside the <literal>MODE</literal> tag.
+   must be placed inside the <literal>MODE</literal> tag. The
+   <literal>MODE</literal> tag does not have any defined attributes.
+   Here is an example:
   </para>
+  <programlisting><![CDATA[[<MODE>
+    <replaceable>... mode definition goes here ...</replaceable>
+</MODE>]]></programlisting>
  </sect1>
  <sect1 id="mode-tag-props"><title>The PROPS Tag</title>
   <para>
