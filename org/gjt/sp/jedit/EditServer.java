@@ -167,7 +167,9 @@ public class EditServer extends Thread
 
 			if(restore)
 			{
-				if(jEdit.getFirstBuffer() == null)
+				if(jEdit.getFirstBuffer() == null
+					|| (jEdit.getFirstBuffer().isUntitled()
+					&& jEdit.getBufferCount() == 1))
 					splitConfig = jEdit.restoreOpenFiles();
 				else if(jEdit.getBooleanProperty("restore.cli"))
 				{
@@ -178,7 +180,9 @@ public class EditServer extends Thread
 
 			// if session file is empty or -norestore specified,
 			// we need an initial buffer
-			if(jEdit.getFirstBuffer() == null)
+			if(jEdit.getFirstBuffer() == null
+					|| (jEdit.getFirstBuffer().isUntitled()
+                                        && jEdit.getBufferCount() == 1))
 				buffer = jEdit.newFile(null);
 
 			if(splitConfig != null)
