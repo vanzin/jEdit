@@ -127,4 +127,9 @@ public class Debug
 	 * Position tree debugging.
 	 */
 	public static boolean POSITION_DEBUG = false;
+
+	/**
+	 * Dump key events received by text area?
+	 */
+	public static boolean DUMP_KEY_EVENTS = false;
 }
