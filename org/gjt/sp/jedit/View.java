@@ -335,6 +335,16 @@ public class View extends JFrame implements EBComponent
 		return searchBar;
 	} //}}}
 
+	//{{{ getActionBar() method
+	/**
+	 * Returns the action bar.
+	 * @since jEdit 4.2pre3
+	 */
+	public final ActionBar getActionBar()
+	{
+		return actionBar;
+	} //}}}
+
 	//{{{ getStatus() method
 	/**
 	 * Returns the status bar. The
