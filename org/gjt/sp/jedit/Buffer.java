@@ -1568,13 +1568,15 @@ public class Buffer implements EBComponent
 	public int getIntegerProperty(String name, int defaultValue)
 	{
 		Object obj = getProperty(name);
+		if(obj == null)
+			return defaultValue;
 		if(obj instanceof Number)
 			return ((Number)obj).intValue();
 		else
 		{
 			try
 			{
-				int value = Integer.parseInt(getStringProperty(name));
+				int value = Integer.parseInt(getStringProperty(name).trim());
 				properties.put(name,new Integer(value));
 				return value;
 			}
