@@ -61,7 +61,6 @@ JEDIT 4.0 VERSION HISTORY
   commands that open directories in the file system browser now work a
   little better
 - The list of open files is now saved by the autosave task
-- The 'Shift Indent Right' command now ignores blank lines
 - Smoother incremental search
 - When HOME is pressed while there is a selection, the caret is moved to
   the beginning of the first selected line. END moves the caret to the
@@ -75,6 +74,8 @@ JEDIT 4.0 VERSION HISTORY
   been aborted. Any errors will be listed in a dialog box after the
   search is complete.
 - Commands in View->Splitting menu moved to top level of View menu
+- Updated PL-SQL mode (Steve Snider)
+- Updated MS-DOS batch mode (Mirco Bova)
 
 + Neutral
 
@@ -120,6 +121,7 @@ JEDIT 4.0 VERSION HISTORY
 - Trying to do a directory search inside a directory which contained a
   symlink loop would hang jEdit
 - The 'Auto Wrap' search option did not take effect in macros
+- Bug fix in MacOS plugin (Kris Kopicki)
 
 + API Changes
 
