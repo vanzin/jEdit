@@ -109,3 +109,5 @@ TO DO
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - lower case all user's guide ids
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
+- tab/s+tab: use tabSize; a+left/right: use indentSize
+- toggle shift: expand all; no mod: expand one level behavior in gutter

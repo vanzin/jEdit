@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,16 +120,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 		button.setRequestFocusEnabled(false);
 		button.setIcon(new RotatedTextIcon(rotation,button.getFont(),
 			entry.title));
-		button.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				if(current == entry)
-					show(null);
-				else
-					wm.showDockableWindow(entry.name);
-			}
-		}); //}}}
+		button.setActionCommand(entry.name);
+		button.addActionListener(new ActionHandler());
+		//}}}
 
 		buttonGroup.add(button);
 		buttons.add(button);
@@ -294,7 +287,10 @@ public class PanelWindowContainer implements DockableWindowContainer
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			show(null);
+			if(evt.getSource() == closeBox)
+				show(null);
+			else
+				wm.showDockableWindow(evt.getActionCommand());
 		}
 	} //}}}
 
@@ -597,6 +593,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			if(comp.length != 2)
 			{
 				boolean closeBoxSizeSet = false;
+				boolean noMore = false;
 				popupButton.setVisible(false);
 
 				Dimension parentSize = parent.getSize();
@@ -614,21 +611,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 							closeBoxSizeSet = true;
 						}
 
-						if(pos + size.width > parentSize.width - closeBox.getWidth())
+						if(noMore || pos + size.width > parentSize.width
+							- (i == comp.length - 1
+							? 0 : closeBox.getWidth()))
 						{
 							popupButton.setBounds(
 								parentSize.width - size.height,
 								0,size.height,size.height);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
+							noMore = true;
 						}
 						else
 						{
 							comp[i].setBounds(pos,0,size.width,size.height);
 							comp[i].setVisible(true);
+							pos += size.width;
 						}
-
-						pos += size.width;
 					}
 					else
 					{
@@ -639,21 +638,23 @@ public class PanelWindowContainer implements DockableWindowContainer
 							closeBoxSizeSet = true;
 						}
 
-						if(pos + size.height > parentSize.height - closeBox.getWidth())
+						if(noMore || pos + size.height > parentSize.height
+							- (i == comp.length - 1
+							? 0 : closeBox.getHeight()))
 						{
 							popupButton.setBounds(
 								0,parentSize.height - size.width,
 								size.width,size.width);
 							popupButton.setVisible(true);
 							comp[i].setVisible(false);
+							noMore = true;
 						}
 						else
 						{
 							comp[i].setBounds(0,pos,size.width,size.height);
 							comp[i].setVisible(true);
+							pos += size.height;
 						}
-
-						pos += size.height;
 					}
 				}
 			}
