@@ -52,6 +52,10 @@ public class ManagePanel extends JPanel
 
 		setBorder(new EmptyBorder(12,12,12,12));
 
+		Box topBox = new Box(BoxLayout.X_AXIS);
+		topBox.add(hideLibraries = new HideLibrariesButton());
+		add(BorderLayout.NORTH,topBox);
+
 		/* Create the plugin table */
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
@@ -101,6 +105,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
+	private JCheckBox hideLibraries;
 	private JTable table;
 	private PluginTableModel pluginModel;
 	private JButton remove;
@@ -315,13 +320,23 @@ public class ManagePanel extends JPanel
 			PluginJAR[] plugins = jEdit.getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{
-				entries.add(new Entry(plugins[i]));
+				Entry e = new Entry(plugins[i]);
+				if(!hideLibraries.isSelected()
+					|| e.clazz != null)
+				{
+					entries.add(e);
+				}
 			}
 
 			String[] newPlugins = jEdit.getNotLoadedPluginJARs();
 			for(int i = 0; i < newPlugins.length; i++)
 			{
-				entries.add(new Entry(newPlugins[i]));
+				Entry e = new Entry(newPlugins[i]);
+				if(!hideLibraries.isSelected()
+					|| e.clazz != null)
+				{
+					entries.add(e);
+				}
 			}
 
 			sort(sortType);
@@ -367,6 +382,26 @@ public class ManagePanel extends JPanel
 			else
 				tcr.setForeground(UIManager.getColor("Table.foreground"));
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
+		}
+	} //}}}
+
+	//{{{ HideLibrariesButton class
+	class HideLibrariesButton extends JCheckBox implements ActionListener
+	{
+		HideLibrariesButton()
+		{
+			super(jEdit.getProperty("plugin-manager.hide-libraries"));
+			setSelected(jEdit.getBooleanProperty(
+				"plugin-manager.hide-libraries.toggle"));
+			addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			jEdit.setBooleanProperty(
+				"plugin-manager.hide-libraries.toggle",
+				isSelected());
+			ManagePanel.this.update();
 		}
 	} //}}}
 
