@@ -9,9 +9,7 @@
 ;   not building from source directory.
 ; * change AppVerName
 ;
-; TODO: add file association, so one gets context menu -- 'Open with jEdit'
 ; TODO: create htmlhelp file?
-; TODO: check that Java version >= 1.3
 ; TODO: read version number from source
 ; TODO: figure out how to generate "jedit.bat" in source dir
 
@@ -34,6 +32,12 @@ SolidCompression=yes
 SetupIconFile={#JEDIT_HOME}\jedit.ico
 LicenseFile={#JEDIT_HOME}\doc\COPYING.txt
 UninstallIconFile={#JEDIT_HOME}\jedit.ico
+ChangesAssociations=yes
+
+[Registry]
+Root: HKCR; Subkey: "*\Shell"; flags: uninsdeletekeyifempty
+Root: HKCR; Subkey: "*\Shell\Open with jEdit"; flags: uninsdeletekey
+Root: HKCR; Subkey: "*\Shell\Open with jEdit\command"; ValueType: string; ValueData: """{code:GetJavaPath}"" -jar ""{app}\jedit.jar"" -reuseview ""%1"""; flags: uninsdeletekey
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
@@ -72,6 +76,9 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\jEdit"; IconFilena
 Filename: "{code:GetJavaPath}"; WorkingDir: "{app}"; Parameters: "-jar ""{app}\jedit.jar"""; Description: "{cm:LaunchProgram,jEdit}"; Flags: shellexec postinstall skipifsilent
 
 [Code]
+var
+	javawExePath: String;
+
 (* looks for JRE version, in Registry *)
 function getJREVersion(): String;
 var
@@ -104,24 +111,69 @@ var
 	path: String;
 begin
 	path := '';
+	if Length(javawExePath) > 0 then begin
+		Result := javawExePath;
+		path := javawExePath;
+	end;
+
+	// try to find JDK "javaw.exe"
 	javaVersion := getJDKVersion();
-	if (Length(javaVersion) > 0) and ((javaVersion) >= '1.3.0') then begin
+	if (Length(path) = 0) and (Length(javaVersion) > 0) and ((javaVersion) >= '1.3.0') then begin
 		RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion, 'JavaHome', javaHome);
 		path := javaHome + '\bin\' + 'javaw.exe';
 		if FileExists(path) then begin
+			Log('(JDK) found javaw.exe: ' + path);
 			Result := path;
 		end;
 	end;
+
 	// if we didn't find a JDK "javaw.exe", try for a JRE one
 	if Length(path) = 0 then begin
+		Log('(JRE) JDK not found, looking for JRE');
 		javaVersion := getJDKVersion();
-	if (Length(javaVersion) > 0) and ((javaVersion) >= '1.3.0') then begin
-		RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion, 'JavaHome', javaHome);
-		path := javaHome + '\bin\' + 'javaw.exe';
-		if FileExists(path) then
+		if (Length(javaVersion) > 0) and ((javaVersion) >= '1.3.0') then begin
+			RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion, 'JavaHome', javaHome);
+			path := javaHome + '\bin\' + 'javaw.exe';
+			if FileExists(path) then begin
+				Log('(JRE) found javaw.exe: ' + path);
+				Result := path;
+			end
+		end;
+	end;
+
+	(*
+	// if unable to find Java path in registry, try %JAVA_HOME%
+	// (maybe not a good idea)
+	if Length(path) = 0 then begin
+		javaHome := GetEnv('JAVA_HOME');
+		if Length(javaHome) > 0 then begin
+			path := javaHome + '\bin\' + 'javaw.exe';
+			if FileExists(path) then begin
+				Log('(JAVA_HOME) found java.exe: ' + path);
+				Result := path;
+			end;
+		end;
+	end;
+	*)
+
+	(*
+	// let user browse for Java -- maybe not a good idea
+	if Length(path) = 0 then begin
+		MsgBox('Setup was unable to automatically find "javaw.exe".' + #13  
+			    + #13 +
+			   'If you have a JDK or JRE, version 1.3 or greater, installed' + #13
+			   'please locate "javaw.exe".  If you don''t have a JDK or JRE' + #13
+			   'installed, download and install from http://java.sun.com/ and' + #13
+			   'restart setup.', mbError, MB_OK);
+		Log('unable to find javaw.exe, prompting for path');
+		if GetOpenFileName('Browse for javaw.exe', path, '.', 'EXE files (*.exe)|*.exe', '.exe') then begin
+			Log('(BROWSE): user selected: ' + path);
 			Result := path;
 		end;
 	end;
+	*)
+
+	javawExePath := Result;	// save found value as global
 end;
 
 (* generates a batch file for command-line usage *)
@@ -138,7 +190,7 @@ begin
 	javaPath := GetJavaPath('');
 	batchFile := winDir + '\' + 'jedit.bat';
 	jarPath := appDir + '\' + 'jedit.jar';
-	SaveStringToFile(batchFile, javaPath + ' -jar "' + jarPath + '" %1 %2 %3 %4 %5 %6 %7 %8 %9', False);
+	SaveStringToFile(batchFile, javaPath + ' -jar "' + jarPath + '" -reuseview %1 %2 %3 %4 %5 %6 %7 %8 %9', False);
 end;
 
 (* Called on setup startup *)
