@@ -26,6 +26,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import gnu.regexp.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.io.File;
@@ -49,7 +50,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Buffer implements EBComponent
+public class Buffer implements EBComponent, Document
 {
 	//{{{ Some constants
 	/**
@@ -1254,7 +1255,7 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, String str)
 	{
-		if(!isReadOnly())
+		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
 		try
@@ -1291,7 +1292,7 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, Segment seg)
 	{
-		if(!isReadOnly())
+		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
 		try
@@ -1327,7 +1328,7 @@ public class Buffer implements EBComponent
 	 */
 	public void remove(int offset, int length)
 	{
-		if(!isReadOnly())
+		if(isReadOnly())
 			throw new RuntimeException("buffer read-only");
 
 		try
@@ -1338,9 +1339,9 @@ public class Buffer implements EBComponent
 				|| offset + length > contentMgr.getLength())
 				throw new ArrayIndexOutOfBoundsException(offset + ":" + length);
 
-			int startLine = getLineOfOffset(offset);
+			int startLine = offsetMgr.getLineOfOffset(offset);
 
-			getText(offset,length,seg);
+			contentMgr.getText(offset,length,seg);
 			int numLines = 0;
 			for(int i = 0; i < seg.count; i++)
 			{
@@ -2465,6 +2466,56 @@ public class Buffer implements EBComponent
 
 	//{{{ Deprecated methods
 
+	//{{{ render() method
+	/**
+	 * @deprecated
+	 */
+	public void render(Runnable r)
+	{
+		// no-one should ever call this method
+		r.run();
+	} //}}}
+
+	//{{{ addDocumentListener() method
+	/**
+	 * @deprecated Write a <code>BufferChangeListener</code> instead
+	 */
+	public void addDocumentListener(DocumentListener l)
+	{
+		Log.log(Log.WARNING,this,"Document listeners not supported: "
+			+ l.getClass().getName());
+	} //}}}
+
+	//{{{ removeDocumentListener() method
+	/**
+	 * @deprecated Write a <code>BufferChangeListener</code> instead
+	 */
+	public void removeDocumentListener(DocumentListener l)
+	{
+		Log.log(Log.WARNING,this,"Document listeners not supported: "
+			+ l.getClass().getName());
+	} //}}}
+
+	//{{{ addUndoableEditListener() method
+	/**
+	 * @deprecated
+	 */
+	public void addUndoableEditListener(UndoableEditListener l)
+	{
+		Log.log(Log.WARNING,this,"Undo listeners not supported: "
+			+ l.getClass().getName());
+	} //}}}
+
+	//{{{ removeUndoableEditListener() method
+	/**
+	 * @deprecated
+	 */
+	public void removeUndoableEditListener(UndoableEditListener l)
+	{
+		Log.log(Log.WARNING,this,"Undo listeners not supported: "
+			+ l.getClass().getName());
+	} //}}}
+
 	//{{{ putProperty() method
 	/**
 	 * @deprecated Call <code>setProperty()</code> instead.
@@ -2785,6 +2836,28 @@ public class Buffer implements EBComponent
 	//}}}
 
 	//{{{ Position methods
+
+	//{{{ getStartPosition() method
+	/**
+	 * Returns a position that tracks the beginning of the buffer.
+	 * Equivalent to calling <code>createPosition(0)</code>.
+	 */
+	public Position getStartPosition()
+	{
+		return createPosition(0);
+	} //}}}
+
+	//{{{ getEndPosition() method
+	/**
+	 * Returns a position that tracks the end of the buffer.
+	 * Equivalent to calling <code>createPosition(getLength())</code>.
+	 */
+	public Position getEndPosition()
+	{
+		return createPosition(getLength());
+	} //}}}
+
+	//{{{ createPosition() method
 	/**
 	 * Creates a floating position.
 	 * @param offset The offset
@@ -2805,6 +2878,8 @@ public class Buffer implements EBComponent
 			writeUnlock();
 		}
 	} //}}}
+
+	//}}}
 
 	//{{{ Marker methods
 
@@ -3410,7 +3485,7 @@ public class Buffer implements EBComponent
 	//{{{ contentInserted() method
 	private void contentInserted(int offset, int length, IntegerArray endOffsets)
 	{
-		int startLine = getLineOfOffset(offset);
+		int startLine = offsetMgr.getLineOfOffset(offset);
 		int numLines = integerArray.size();
 
 		offsetMgr.contentInserted(startLine,offset,numLines,length,

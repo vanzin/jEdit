@@ -225,7 +225,7 @@ public class BrowserPopupMenu extends JPopupMenu
 			else if(actionCommand.equals("open"))
 				jEdit.openFile(view,file.path);
 			else if(actionCommand.equals("insert"))
-				view.getBuffer().insert(view,file.path);
+				view.getBuffer().insertFile(view,file.path);
 			else if(actionCommand.equals("choose"))
 				browser.filesActivated();
 			else if(actionCommand.equals("close"))

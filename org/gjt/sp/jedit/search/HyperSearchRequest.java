@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.search;
 
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
 import javax.swing.tree.*;

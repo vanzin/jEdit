@@ -54,18 +54,10 @@ public class HyperSearchResult
 	{
 		if(elem == null)
 			return "";
-		try
-		{
-			return buffer.getText(elem.getStartOffset(),
-				elem.getEndOffset() -
-				elem.getStartOffset() - 1)
-				.replace('\t',' ');
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-			return "";
-		}
+		return buffer.getText(elem.getStartOffset(),
+			elem.getEndOffset() -
+			elem.getStartOffset() - 1)
+			.replace('\t',' ');
 	}
 
 	public void bufferOpened(Buffer buffer)
@@ -75,15 +67,8 @@ public class HyperSearchResult
 		Element elem = map.getElement(line);
 		if(elem == null)
 			elem = map.getElement(map.getElementCount()-1);
-		try
-		{
-			startPos = buffer.createPosition(start);
-			endPos = buffer.createPosition(end);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,this,bl);
-		}
+		startPos = buffer.createPosition(start);
+		endPos = buffer.createPosition(end);
 	}
 
 	public void bufferClosed()

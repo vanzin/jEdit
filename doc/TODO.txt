@@ -2,7 +2,7 @@ TO DO
 
 + before 4.0pre1:
 
-- fucking hell... have to reintroduce BadLocationException
+- read write lock hangs
 - optimize ContentManager.close()
 - v2p/p2v: implement from end backward scan
 - stupid rest visible hack in offset manager

@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.*;
 import java.io.*;
@@ -191,11 +190,10 @@ public class Abbrevs
 						whiteSpace,null);
 				}
 			}
-			catch(BadLocationException bl)
+			finally
 			{
-				Log.log(Log.ERROR,Abbrevs.class,bl);
+				buffer.endCompoundEdit();
 			}
-			buffer.endCompoundEdit();
 
 			return true;
 		} //}}}

@@ -39,12 +39,9 @@ public class TextUtilities
 	 * @param buffer The buffer
 	 * @param line The line
 	 * @param offset The offset within that line
-	 * @exception BadLocationException If an out-of-bounds access
-	 * was attempted on the buffer's text
 	 * @since jEdit 2.6pre1
 	 */
 	public static int findMatchingBracket(Buffer buffer, int line, int offset)
-		throws BadLocationException
 	{
 		return findMatchingBracket(buffer,line,offset,0,
 			buffer.getDefaultRootElement().getElementCount() - 1);
@@ -64,12 +61,10 @@ public class TextUtilities
 	 * @param endLine The last line to scan. This is used to speed up
 	 * on-screen bracket matching because only visible lines need to be
 	 * scanned
-	 * @exception BadLocationException If an out-of-bounds access
-	 * was attempted on the buffer's text
 	 * @since jEdit 2.7pre3
 	 */
 	public static int findMatchingBracket(Buffer buffer, int line, int offset,
-		int startLine, int endLine) throws BadLocationException
+		int startLine, int endLine)
 	{
 		if(buffer.getLength() == 0)
 			return -1;

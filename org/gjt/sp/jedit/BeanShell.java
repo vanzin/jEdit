@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit;
 
 import bsh.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Segment;
 import javax.swing.JFileChooser;
 import java.lang.reflect.InvocationTargetException;
@@ -142,10 +141,6 @@ public class BeanShell
 					}
 				}
 			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,BeanShell.class,bl);
-			}
 			catch(Throwable e)
 			{
 				// BeanShell error occurred, abort execution
@@ -213,16 +208,7 @@ public class BeanShell
 			if(buffer != null && buffer.isLoaded())
 			{
 				StringBuffer buf = new StringBuffer();
-				try
-				{
-					buf.append(buffer.getText(0,buffer.getLength()));
-				}
-				catch(BadLocationException e)
-				{
-					// XXX
-					throw new InternalError();
-				}
-
+				buf.append(buffer.getText(0,buffer.getLength()));
 				// Ugly workaround for a BeanShell bug
 				buf.append("\n");
 

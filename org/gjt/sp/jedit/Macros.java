@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
@@ -319,15 +318,8 @@ public class Macros
 		if(buffer == null)
 			return;
 
-		try
-		{
-			buffer.remove(0,buffer.getLength());
-			buffer.insertString(0,jEdit.getProperty("macro.temp.header"),null);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,Macros.class,bl);
-		}
+		buffer.remove(0,buffer.getLength());
+		buffer.insert(0,jEdit.getProperty("macro.temp.header"));
 
 		recordMacro(view,buffer,true);
 	}
@@ -366,15 +358,8 @@ public class Macros
 		if(buffer == null)
 			return;
 
-		try
-		{
-			buffer.remove(0,buffer.getLength());
-			buffer.insertString(0,jEdit.getProperty("macro.header"),null);
-		}
-		catch(BadLocationException bl)
-		{
-			Log.log(Log.ERROR,Macros.class,bl);
-		}
+		buffer.remove(0,buffer.getLength());
+		buffer.insert(0,jEdit.getProperty("macro.header"));
 
 		recordMacro(view,buffer,false);
 	}
@@ -592,14 +577,7 @@ public class Macros
 
 		private void append(String str)
 		{
-			try
-			{
-				buffer.insertString(buffer.getLength(),str,null);
-			}
-			catch(BadLocationException bl)
-			{
-				Log.log(Log.ERROR,this,bl);
-			}
+			buffer.insert(buffer.getLength(),str);
 		}
 
 		private void dispose()

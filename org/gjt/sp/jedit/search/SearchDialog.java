@@ -21,7 +21,6 @@ package org.gjt.sp.jedit.search;
 
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
