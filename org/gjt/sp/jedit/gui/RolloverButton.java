@@ -29,6 +29,7 @@ import java.awt.event.*;
 import java.lang.reflect.Method;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.plaf.basic.BasicButtonUI;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
 //}}}
@@ -67,12 +68,6 @@ public class RolloverButton extends JButton
 		}
 		else
 		{
-			setBorder(new EtchedBorder());
-			setBorderPainted(false);
-			setMargin(new Insets(1,1,1,1));
-
-			setRequestFocusEnabled(false);
-
 			addMouseListener(new MouseOverHandler());
 		}
 	} //}}}
@@ -86,6 +81,24 @@ public class RolloverButton extends JButton
 		this();
 
 		setIcon(icon);
+	} //}}}
+
+	//{{{ updateUI() method
+	public void updateUI()
+	{
+		if(OperatingSystem.isWindows())
+		{
+			/* Workaround for uncooperative Windows L&F */
+			setUI(new BasicButtonUI());
+		}
+		else
+			super.updateUI();
+
+		setBorder(new EtchedBorder());
+		setBorderPainted(false);
+		setMargin(new Insets(1,1,1,1));
+
+		setRequestFocusEnabled(false);
 	} //}}}
 
 	//{{{ isOpaque() method

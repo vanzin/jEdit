@@ -42,6 +42,8 @@ Bock for contributing to this release.
   the search bar, since people didn't like it and it didn't work
   properly anyway.
 
+- Fix appearance of rollover toolbar buttons on Windows.
+
 }}}
 
 }}}
