@@ -13,7 +13,7 @@
     of how the EditBus works.
 </para>
 
-<sect1 id="class-EditBus"><title>Class EditBus</title>
+<sect1 id="class-editbus"><title>Class EditBus</title>
 
   <para>
     This class provides a messaging system for all components that implement
@@ -73,7 +73,7 @@
 
 </sect1>
 
-<sect1 id="class-EBComponent"><title>Interface EBComponent</title>
+<sect1 id="class-ebcomponent"><title>Interface EBComponent</title>
 <para>
   This interface is required for any class that subscribes to messages
   published on the EditBus. It contains a single method.
@@ -92,7 +92,7 @@
 
 </sect1>
 
-<sect1 id="class-EBMessage"><title>Class EBMessage</title>
+<sect1 id="class-ebmessage"><title>Class EBMessage</title>
 <para>
     This abstract class defines a message that can be sent on the EditBus to
     subscribing components.  It contains two attributes that can be obtained
@@ -103,7 +103,7 @@
   <listitem>
     <funcsynopsis>
       <funcprototype>
-        <funcdef>public Component <function>getSource</function></funcdef>
+        <funcdef>public EBComponent <function>getSource</function></funcdef>
         <void/>
       </funcprototype>
     </funcsynopsis>
@@ -145,7 +145,7 @@
 
 </sect1>
 
-<sect1 id="class-BufferUpdate"><title>Class BufferUpdate</title>
+<sect1 id="class-bufferupdate"><title>Class BufferUpdate</title>
 <para>
     This message is sent when the status of a buffer changes.  It may
     not be vetoed by a subscriber, so that all subscribers are
@@ -190,8 +190,7 @@
     <itemizedlist>
       <listitem><para><varname>CREATED</varname></para></listitem>
       <listitem><para><varname>LOAD_STARTED</varname></para></listitem>
-      <listitem><para><varname>DIRTY_CHANGED</varname> - a change in the buffer's
-        <quote>dirty</quote> status</para></listitem>
+      <listitem><para><varname>DIRTY_CHANGED</varname></para></listitem>
       <listitem><para><varname>MARKERS_CHANGED</varname></para></listitem>
       <listitem><para><varname>MODE_CHANGED</varname></para></listitem>
       <listitem><para><varname>ENCODING_CHANGED</varname></para></listitem>
@@ -203,79 +202,7 @@
 
 </sect1>
 
-<sect1 id="class-CreateDockableWindow">
-<title>Class CreateDockableWindow</title>
-
-<para>
-  This message is sent by the <function>addDockableWindow()</function>
-  method of the <classname>DockableWindowManager</classname> class; see
-  <xref linkend="host-display-message" />.
-</para>
-
-<itemizedlist>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public View <function>getView</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getDockableWindowName</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Returns the internal name of the requested dockable window. Your plugin
-      should check if this is the name of one of the dockables it provides,
-      and if so, call <function>setDockableWindow()</function> with the new
-      dockable window instance.
-    </para>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getPosition</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Returns one of the following constants defined in the
-      <classname>DockableWindowManager</classname> class:
-    </para>
-    <itemizedlist>
-     <listitem><para><varname>FLOATING</varname></para></listitem>
-     <listitem><para><varname>TOP</varname></para></listitem>
-     <listitem><para><varname>BOTTOM</varname></para></listitem>
-     <listitem><para><varname>LEFT</varname></para></listitem>
-     <listitem><para><varname>RIGHT</varname></para></listitem>
-    </itemizedlist>
-  </listitem>
-
-  <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>setDockableWindow</function></funcdef>
-        <paramdef>DockableWindow <parameter>window</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
-    <para>
-      Attaches a dockable window to the message. This prevents the
-      message from being passed on to further subscribers.
-    </para>
-  </listitem>
-
-</itemizedlist>
-
-</sect1>
-
-<sect1 id="class-EditorExiting"><title>Class EditorExiting</title>
+<sect1 id="class-editorexiting"><title>Class EditorExiting</title>
 
 <para>
   This message signifies that the host application is about to exit.
@@ -284,7 +211,7 @@
 
 </sect1>
 
-<sect1 id="class-EditorExitRequested"><title>Class EditorExitRequested</title>
+<sect1 id="class-editorexitrequested"><title>Class EditorExitRequested</title>
 
 <para>
   This message signifies that a request has been made for the host application
@@ -307,7 +234,7 @@
 
 </sect1>
 
-<sect1 id="class-EditorStarted"><title>Class EditorStarted</title>
+<sect1 id="class-editorstarted"><title>Class EditorStarted</title>
 
 <para>
   This message signifies that the host application has started. The
@@ -317,7 +244,7 @@
 
 </sect1>
 
-<sect1 id="class-EditPaneUpdate"><title>Class EditPaneUpdate</title>
+<sect1 id="class-editpaneupdate"><title>Class EditPaneUpdate</title>
 <para>
     This message is sent when the status of a edit pane changes.  It may
     not be vetoed.
@@ -358,7 +285,7 @@
 
 </sect1>
 
-<sect1 id="class-MacrosChanged"><title>Class MacrosChanged</title>
+<sect1 id="class-macroschanged"><title>Class MacrosChanged</title>
 
 <para>
   This message signifies that the list of available macros have changed.
@@ -367,7 +294,7 @@
 
 </sect1>
 
-<sect1 id="class-PropertiesChanged"><title>Class PropertiesChanged</title>
+<sect1 id="class-propertieschanged"><title>Class PropertiesChanged</title>
 
 <para>
   This message is sent when configuration settings have been changed through
@@ -377,7 +304,7 @@
 
 </sect1>
 
-<sect1 id="class-SearchSettingsChanged">
+<sect1 id="class-searchsettingschanged">
 <title>Class SearchSettingsChanged</title>
 
 <para>
@@ -388,7 +315,7 @@
 
 </sect1>
 
-<sect1 id="class-VFSUpdate"><title>Class VFSUpdate</title>
+<sect1 id="class-vfsupdate"><title>Class VFSUpdate</title>
 <para>
     This message is sent when the status of a file or directory changes.
     This allows subscribers that display or operate upon files an
@@ -411,7 +338,7 @@
 
 </sect1>
 
-<sect1 id="class-ViewUpdate"><title>Class ViewUpdate</title>
+<sect1 id="class-viewupdate"><title>Class ViewUpdate</title>
 <para>
     This message is sent when the status of a view changes. It may
     not be vetoed.

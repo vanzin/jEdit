@@ -79,6 +79,9 @@ public class Gutter extends JComponent implements SwingConstants
 		this.view = view;
 		this.textArea = textArea;
 
+		setAutoscrolls(true);
+		setOpaque(true);
+
 		extensionMgr = new ExtensionManager();
 
 		MouseHandler ml = new MouseHandler();

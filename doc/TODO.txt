@@ -1,13 +1,12 @@
 TO DO
 
-+ before 4.0pre9:
++ before 4.0final:
 
 - investigate I/O threads
 - scroll to caret _still_ jumps around
 - proofread documentation one more time
 - make sure plugin guide is up to date
-- make sure API guide is up to date
-- API guide: compareStrings(), showPopupMenu()
+- API guide: need to mention GUIUtilities.{message,input,...}
 - appendix in plugin guide on contributing plugins
 
 + in 4.1:
@@ -108,7 +107,6 @@ TO DO
 - evalutate for selected lines: > 1 selection per line
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
-- lower case all user's guide ids
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
 - tab/s+tab: use tabSize; a+left/right: use indentSize
 - toggle shift: expand all; no mod: expand one level behavior in gutter
