@@ -98,14 +98,17 @@ public class EnhancedMenuItem extends JMenuItem
 		}
 	} //}}}
 
+	//{{{ Package-private members
+	static Font acceleratorFont;
+	static Color acceleratorForeground;
+	static Color acceleratorSelectionForeground;
+	//}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
 	private String shortcut;
 	private EditAction action;
-	private static Font acceleratorFont;
-	private static Color acceleratorForeground;
-	private static Color acceleratorSelectionForeground;
 	//}}}
 
 	//{{{ getShortcut() method
@@ -145,13 +148,23 @@ public class EnhancedMenuItem extends JMenuItem
 			shortcutFont = "Monospaced";
 		
 		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
-		acceleratorFont = new Font(shortcutFont,
-			acceleratorFont.getStyle(),
-			acceleratorFont.getSize());
+		if(acceleratorFont == null)
+			acceleratorFont = new Font(shortcutFont,Font.PLAIN,12);
+		else
+		{
+			acceleratorFont = new Font(shortcutFont,
+				acceleratorFont.getStyle(),
+				acceleratorFont.getSize());
+		}
 		acceleratorForeground = UIManager
 			.getColor("MenuItem.acceleratorForeground");
+		if(acceleratorForeground == null)
+			acceleratorForeground = Color.black;
+
 		acceleratorSelectionForeground = UIManager
 			.getColor("MenuItem.acceleratorSelectionForeground");
+		if(acceleratorSelectionForeground == null)
+			acceleratorSelectionForeground = Color.black;
 	} //}}}
 
 	//}}}

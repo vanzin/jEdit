@@ -5406,7 +5406,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
-		System.err.println("recalculateLastPhysicalLine()");
 		int oldScreenLastLine = screenLastLine;
 		for(int i = visibleLines - 1; i >= 0; i--)
 		{

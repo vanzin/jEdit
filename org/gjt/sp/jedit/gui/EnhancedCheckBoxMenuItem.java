@@ -68,7 +68,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 		if(shortcut != null)
 		{
-			d.width += (getFontMetrics(acceleratorFont)
+			d.width += (getFontMetrics(EnhancedMenuItem.acceleratorFont)
 				.stringWidth(shortcut) + 15);
 		}
 		return d;
@@ -81,10 +81,10 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 		if(shortcut != null)
 		{
-			g.setFont(acceleratorFont);
+			g.setFont(EnhancedMenuItem.acceleratorFont);
 			g.setColor(getModel().isArmed() ?
-				acceleratorSelectionForeground :
-				acceleratorForeground);
+				EnhancedMenuItem.acceleratorSelectionForeground :
+				EnhancedMenuItem.acceleratorForeground);
 			FontMetrics fm = g.getFontMetrics();
 			Insets insets = getInsets();
 			g.drawString(shortcut,getWidth() - (fm.stringWidth(
@@ -100,9 +100,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	//{{{ Instance variables
 	private String shortcut;
 	private EditAction action;
-	private static Font acceleratorFont;
-	private static Color acceleratorForeground;
-	private static Color acceleratorSelectionForeground;
 	//}}}
 
 	//{{{ getShortcut() method
@@ -131,21 +128,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 			}
 		}
 	} //}}}
-
-	//{{{ Class initializer
-	static
-	{
-		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
-		acceleratorFont = new Font("Monospaced",
-			acceleratorFont.getStyle(),
-			acceleratorFont.getSize());
-		acceleratorForeground = UIManager
-			.getColor("MenuItem.acceleratorForeground");
-		acceleratorSelectionForeground = UIManager
-			.getColor("MenuItem.acceleratorSelectionForeground");
-	} //}}}
-
-	//}}}
 
 	//{{{ Model class
 	class Model extends DefaultButtonModel

@@ -149,7 +149,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		memory.setBackground(painter.getBackground());
 		memory.setForeground(painter.getForeground());
 
-		Font font = UIManager.getFont("Label.font");
+		Font font = wrap.getFont();
 		FontMetrics fm = getFontMetrics(font);
 		Dimension dim = null;
 
