@@ -74,7 +74,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		recentFiles = new JTextField(jEdit.getProperty(
 			"options.general.recentFiles"));
 		recentFiles.setText(jEdit.getProperty("recentFiles"));
-		addComponent(recentFiles);
+		addComponent(jEdit.getProperty("options.general.recentFiles"),
+			recentFiles);
 
 		/* Sort recent file list */
 		sortRecent = new JCheckBox(jEdit.getProperty(
