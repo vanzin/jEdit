@@ -32,6 +32,7 @@ import java.awt.*;
 import java.text.NumberFormat;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -109,7 +110,15 @@ class InstallPanel extends JPanel
 	//{{{ updateModel() method
 	public void updateModel()
 	{
-		pluginModel.update();
+		pluginModel.showLoadingMessage();
+
+		VFSManager.runInAWTThread(new Runnable()
+		{
+			public void run()
+			{
+				pluginModel.update();
+			}
+		});
 	} //}}}
 
 	//{{{ Private members
@@ -180,12 +189,6 @@ class InstallPanel extends JPanel
 			}
 		} //}}}
 
-		//{{{ getEntry() method
-		public Entry getEntry(int rowIndex)
-		{
-			return (Entry)entries.get(rowIndex);
-		} //}}}
-
 		//{{{ getRowCount() method
 		public int getRowCount()
 		{
@@ -195,16 +198,34 @@ class InstallPanel extends JPanel
 		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
-			Entry entry = (Entry)entries.get(rowIndex);
-
-			switch (columnIndex)
+			Object obj = entries.get(rowIndex);
+			if(obj instanceof String)
 			{
-				case 0: return new Boolean(entry.install);
-				case 1: return entry.name;
-				case 2: return entry.set;
-				case 3: return entry.version;
-				case 4: return formatSize(entry.size);
-				default: throw new Error("Column out of range");
+				if(columnIndex == 1)
+					return obj;
+				else
+					return null;
+			}
+			else
+			{
+				Entry entry = (Entry)obj;
+
+				switch (columnIndex)
+				{
+					case 0:
+						return new Boolean(
+							entry.install);
+					case 1:
+						return entry.name;
+					case 2:
+						return entry.set;
+					case 3:
+						return entry.version;
+					case 4:
+						return formatSize(entry.size);
+					default:
+						throw new Error("Column out of range");
+				}
 			}
 		} //}}}
 
@@ -217,6 +238,9 @@ class InstallPanel extends JPanel
 		//{{{ setSelectAll() method
 		public void setSelectAll(boolean b)
 		{
+			if(isDownloadingList())
+				return;
+
 			int length = getRowCount();
 			for (int i = 0; i < length; i++)
 			{
@@ -224,7 +248,7 @@ class InstallPanel extends JPanel
 					setValueAt(new Boolean(true),i,0);
 				else
 				{
-					Entry entry = getEntry(i);
+					Entry entry = (Entry)entries.get(i);
 					entry.parents = new LinkedList();
 					entry.install = false;
 				}
@@ -244,7 +268,11 @@ class InstallPanel extends JPanel
 		{
 			if (column != 0) return;
 
-			Entry entry = getEntry(row);
+			Object obj = entries.get(row);
+			if(obj instanceof String)
+				return;
+
+			Entry entry = (Entry)obj;
 			Vector deps = entry.plugin.getCompatibleBranch().deps;
 			boolean value = ((Boolean)aValue).booleanValue();
 			if (!value)
@@ -300,10 +328,27 @@ class InstallPanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
+			if(isDownloadingList())
+				return;
+
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
 		}
 		//}}}
+
+		//{{{ isDownloadingList() method
+		private boolean isDownloadingList()
+		{
+			return (entries.size() == 1 && entries.get(0) instanceof String);
+		} //}}}
+
+		//{{{ showLoadingMessage() method
+		public void showLoadingMessage()
+		{
+			entries = new ArrayList();
+			entries.add(jEdit.getProperty("plugin-manager.list-download"));
+			fireTableChanged(new TableModelEvent(this));
+		} //}}}
 
 		//{{{ update() method
 		public void update()
@@ -407,7 +452,8 @@ class InstallPanel extends JPanel
 			String text = "";
 			if (table.getSelectedRowCount() == 1)
 			{
-				Entry entry = pluginModel.getEntry(table.getSelectedRow());
+				Entry entry = (Entry)pluginModel.entries
+					.get(table.getSelectedRow());
 				text = jEdit.getProperty("install-plugins.info",
 					new String[] {entry.author,entry.date,entry.description});
 			}
@@ -432,11 +478,15 @@ class InstallPanel extends JPanel
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
+				if(pluginModel.isDownloadingList())
+					return;
+
 				size = 0;
 				int length = pluginModel.getRowCount();
 				for (int i = 0; i < length; i++)
 				{
-					Entry entry = pluginModel.getEntry(i);
+					Entry entry = (Entry)pluginModel
+						.entries.get(i);
 					if (entry.install)
 						size += entry.size;
 				}
@@ -463,6 +513,9 @@ class InstallPanel extends JPanel
 
 		public void tableChanged(TableModelEvent e)
 		{
+			if(pluginModel.isDownloadingList())
+				return;
+
 			setEnabled(pluginModel.getRowCount() != 0);
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
@@ -492,6 +545,9 @@ class InstallPanel extends JPanel
 
 		public void actionPerformed(ActionEvent evt)
 		{
+			if(pluginModel.isDownloadingList())
+				return;
+
 			boolean downloadSource = jEdit.getBooleanProperty(
 				"plugin-manager.downloadSource");
 			boolean installUser = jEdit.getBooleanProperty(
@@ -513,7 +569,7 @@ class InstallPanel extends JPanel
 			int instcount = 0;
 			for (int i = 0; i < length; i++)
 			{
-				Entry entry = pluginModel.getEntry(i);
+				Entry entry = (Entry)pluginModel.entries.get(i);
 				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);
@@ -527,7 +583,6 @@ class InstallPanel extends JPanel
 			if(roster.isEmpty())
 				return;
 
-			
 			boolean cancel = false;
 			if (updates && roster.getOperationCount() > instcount)
 				if (GUIUtilities.confirm(window,
@@ -548,6 +603,9 @@ class InstallPanel extends JPanel
 
 		public void tableChanged(TableModelEvent e)
 		{
+			if(pluginModel.isDownloadingList())
+				return;
+
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
 				int length = pluginModel.getRowCount();

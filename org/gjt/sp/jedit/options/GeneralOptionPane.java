@@ -62,6 +62,22 @@ public class GeneralOptionPane extends AbstractOptionPane
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
 
+		/* Check mod status on focus */
+		String[] modCheckOptions = {
+			jEdit.getProperty("options.general.checkModStatus.nothing"),
+			jEdit.getProperty("options.general.checkModStatus.prompt"),
+			jEdit.getProperty("options.general.checkModStatus.reload")
+		};
+		checkModStatus = new JComboBox(modCheckOptions);
+		if(jEdit.getBooleanProperty("autoReload"))
+			checkModStatus.setSelectedIndex(2);
+		else if(jEdit.getBooleanProperty("autoReloadDialog"))
+			checkModStatus.setSelectedIndex(1);
+		else
+			checkModStatus.setSelectedIndex(0);
+		addComponent(jEdit.getProperty("options.general.checkModStatus"),
+			checkModStatus);
+
 		/* Recent file list size */
 		recentFiles = new JTextField(jEdit.getProperty(
 			"options.general.recentFiles"));
@@ -128,13 +144,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
 
-		/* Check mod status on focus */
-		checkModStatus = new JCheckBox(jEdit.getProperty(
-			"options.general.checkModStatus"));
-		checkModStatus.setSelected(jEdit.getBooleanProperty(
-			"view.checkModStatus"));
-		addComponent(checkModStatus);
-
 		/* Two-stage save */
 		twoStageSave = new JCheckBox(jEdit.getProperty(
 			"options.general.twoStageSave"));
@@ -176,6 +185,21 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
+		switch(checkModStatus.getSelectedIndex())
+		{
+		case 0:
+			jEdit.setBooleanProperty("autoReloadDialog",false);
+			jEdit.setBooleanProperty("autoReload",false);
+			break;
+		case 1:
+			jEdit.setBooleanProperty("autoReloadDialog",true);
+			jEdit.setBooleanProperty("autoReload",false);
+			break;
+		case 2:
+			jEdit.setBooleanProperty("autoReloadDialog",true);
+			jEdit.setBooleanProperty("autoReload",true);
+			break;
+		}
 		jEdit.setProperty("recentFiles",recentFiles.getText());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
@@ -185,7 +209,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
-		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
@@ -194,6 +217,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JComboBox checkModStatus;
 	private JTextField recentFiles;
 	private JCheckBox saveCaret;
 	private JCheckBox sortRecent;
@@ -202,7 +226,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
-	private JCheckBox checkModStatus;
 	private JCheckBox twoStageSave;
 	private JCheckBox confirmSaveAll;
 	private JCheckBox stripTrailingEOL;

@@ -92,6 +92,15 @@ search.keepDialog.toggle=true
 
 # Confirm dialogs
 confirmSaveAll=true
+
+# Check modification status on focus?
+
+# If this is true, show a dialog; if false, do nothing
+autoReloadDialog=true
+
+# If this is true, auto reload; if false, 'reload' button in dialog
+autoReload=true
+
 #}}}
 
 #{{{ Buffer settings
@@ -158,9 +167,6 @@ view.showBufferSwitcher=true
 
 # Show full path in title bar?
 view.showFullPath=false
-
-# Check modification status on focus?
-view.checkModStatus=true
 
 # Font
 view.font=Monospaced

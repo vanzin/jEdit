@@ -1960,9 +1960,15 @@ public class jEdit
 	 */
 	public static void checkBufferStatus(View view)
 	{
-		// still need to call the status check even if the option is off,
-		// so that the write protection is updated if it changes on disk
-		boolean showDialogSetting = getBooleanProperty("view.checkModStatus");
+		// still need to call the status check even if the option is
+		// off, so that the write protection is updated if it changes
+		// on disk
+		boolean showDialogSetting = getBooleanProperty(
+			"autoReloadDialog");
+
+		// auto reload changed buffers?
+		boolean autoReloadSetting = getBooleanProperty(
+			"autoReload");
 
 		// the problem with this is that if we have two edit panes
 		// looking at the same buffer and the file is reloaded both
@@ -1989,8 +1995,12 @@ public class jEdit
 			switch(states[i])
 			{
 			case Buffer.FILE_CHANGED:
-				if(showDialogSetting && !buffer.isDirty())
+				if(autoReloadSetting
+					&& showDialogSetting
+					&& !buffer.isDirty())
+				{
 					buffer.load(view,true);
+				}
 				/* fall through */
 			case Buffer.FILE_DELETED:
 				show = true;
@@ -2002,7 +2012,7 @@ public class jEdit
 		}
 
 		if(show && showDialogSetting)
-			new FilesChangedDialog(view,states);
+			new FilesChangedDialog(view,states,autoReloadSetting);
 	} //}}}
 
 	//}}}

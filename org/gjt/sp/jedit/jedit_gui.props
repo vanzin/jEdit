@@ -1341,8 +1341,12 @@ close.discard.mnemonic=d
 files-changed.title=Files Changed on Disk
 files-changed.caption=The following files were changed on disk by another program:
 files-changed.deleted=Deleted on disk; save to recreate:
-files-changed.changed=Automatically reloaded:
-files-changed.changed-dirty=Buffer dirty; not reloaded:
+files-changed.changed-auto=Automatically reloaded:
+files-changed.changed=Changed on disk:
+files-changed.changed-dirty-auto=Buffer dirty; not reloaded:
+files-changed.changed-dirty=Buffer dirty, and file changed on disk:
+files-changed.select-all=Select All
+files-changed.reload=Reload
 #}}}
 
 #{{{ Abbrev dialogs
@@ -1614,8 +1618,12 @@ options.editing.deepIndent=Deep indent
 #{{{ General pane
 options.general.label=General
 options.general.code=new GeneralOptionPane();
-options.general.encoding=Default character encoding:
 options.general.lineSeparator=Default line separator:
+options.general.encoding=Default character encoding:
+options.general.checkModStatus=If open files are changed on disk:
+options.general.checkModStatus.nothing=do nothing
+options.general.checkModStatus.prompt=prompt
+options.general.checkModStatus.reload=automatically reload
 options.general.recentFiles=Recent files to remember:
 options.general.sortRecent=Sort recent file list
 options.general.saveCaret=Save caret positions in recent file list
@@ -1625,7 +1633,6 @@ options.general.restore.cli=... even if file names were specified on the \
 	command line
 options.general.sortBuffers=Sort buffer list (takes effect after restart)
 options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.checkModStatus=Warn if file is modified on disk by another program
 options.general.twoStageSave=Two-stage save (safer but resets file owner on Unix)
 options.general.confirmSaveAll="Save All Buffers" asks for confirmation
 options.general.stripTrailingEOL=Hide final end of line (if any)
@@ -2121,12 +2128,7 @@ plugin-manager.status.loaded=Loaded
 plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error
 
-#{{{ Plugin list download progress
-plugin-list.progress.title=Downloading Plugin List
-plugin-list.progress.caption=Downloading list of available plugins from \
-	plugins.jedit.org...
-plugin-list.progress.stop=Cancel
-#}}}
+plugin-manager.list-download=Downloading plugin list from plugins.jedit.org
 
 #{{{ Error while loading plugin list
 plugin-list.ioerror.title=I/O Error

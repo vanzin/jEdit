@@ -305,6 +305,9 @@ public class JEditTextArea extends JComponent
 
 			maxHorizontalScrollWidth = 0;
 
+			if(!buffer.isLoaded())
+				updateScrollBars();
+
 			repaint();
 
 			fireScrollEvent(true);
@@ -4255,7 +4258,15 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 						MiscUtilities.getLeadingWhiteSpace(line));
 					loc = s.start + start.length() - 1;
 					buffer.insert(s.start,start + whitespace);
-					buffer.insert(s.end," " + end);
+					if(s.end == buffer.getLineStartOffset(
+						s.endLine))
+					{
+						buffer.insert(s.end,end);
+					}
+					else
+					{
+						buffer.insert(s.end," " + end);
+					}
 				}
 
 				setCaretPosition(loc,false);

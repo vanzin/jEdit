@@ -42,7 +42,8 @@ import org.gjt.sp.jedit.*;
 public class FilesChangedDialog extends EnhancedDialog
 {
 	//{{{ FilesChangedDialog constructor
-	public FilesChangedDialog(View view, int[] states)
+	public FilesChangedDialog(View view, int[] states,
+		boolean alreadyReloaded)
 	{
 		super(view,jEdit.getProperty("files-changed.title"),false);
 
@@ -66,9 +67,11 @@ public class FilesChangedDialog extends EnhancedDialog
 		DefaultMutableTreeNode deleted = new DefaultMutableTreeNode(
 			jEdit.getProperty("files-changed.deleted"),true);
 		DefaultMutableTreeNode changed = new DefaultMutableTreeNode(
-			jEdit.getProperty("files-changed.changed"),true);
+			jEdit.getProperty("files-changed.changed"
+			+ (alreadyReloaded ? "-auto" : "")),true);
 		DefaultMutableTreeNode changedDirty = new DefaultMutableTreeNode(
-			jEdit.getProperty("files-changed.changed-dirty"),true);
+			jEdit.getProperty("files-changed.changed-dirty"
+			+ (alreadyReloaded ? "-auto" : "")),true);
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < states.length; i++)
 		{
@@ -88,10 +91,13 @@ public class FilesChangedDialog extends EnhancedDialog
 			}
 
 			if(addTo != null)
-				addTo.add(new DefaultMutableTreeNode(buffer));
+			{
+				addTo.add(new DefaultMutableTreeNode(
+					buffer.getPath()));
+			}
 		}
 
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("",true);
+		root = new DefaultMutableTreeNode("",true);
 		if(deleted.getChildCount() != 0)
 			root.add(deleted);
 		if(changed.getChildCount() != 0)
@@ -99,13 +105,14 @@ public class FilesChangedDialog extends EnhancedDialog
 		if(changedDirty.getChildCount() != 0)
 			root.add(changedDirty);
 
-		bufferTree = new JTree(new DefaultTreeModel(root));
+		bufferTreeModel = new DefaultTreeModel(root);
+		bufferTree = new JTree(bufferTreeModel);
 		bufferTree.setRootVisible(false);
 		bufferTree.setVisibleRowCount(10);
 		bufferTree.setCellRenderer(new Renderer());
 		bufferTree.getSelectionModel().addTreeSelectionListener(new TreeHandler());
 		bufferTree.getSelectionModel().setSelectionMode(
-			ListSelectionModel.SINGLE_SELECTION);
+			TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferTree));
 
@@ -113,10 +120,29 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
-		JButton close = new JButton(jEdit.getProperty("common.close"));
+
+		if(!alreadyReloaded)
+		{
+			selectAll = new JButton(jEdit.getProperty(
+				"files-changed.select-all"));
+			buttons.add(selectAll);
+			selectAll.addActionListener(new ActionHandler());
+
+			buttons.add(Box.createHorizontalStrut(12));
+
+			reload = new JButton(jEdit.getProperty(
+				"files-changed.reload"));
+			buttons.add(reload);
+			reload.addActionListener(new ActionHandler());
+
+			buttons.add(Box.createHorizontalStrut(12));
+		}
+
+		close = new JButton(jEdit.getProperty("common.close"));
 		getRootPane().setDefaultButton(close);
 		buttons.add(close);
 		close.addActionListener(new ActionHandler());
+
 		buttons.add(Box.createGlue());
 
 		content.add(BorderLayout.SOUTH,buttons);
@@ -159,6 +185,15 @@ public class FilesChangedDialog extends EnhancedDialog
 	//{{{ Private members
 	private View view;
 	private JTree bufferTree;
+	private DefaultTreeModel bufferTreeModel;
+	private DefaultMutableTreeNode root;
+	private JButton selectAll;
+
+	// hack so that 'select all' does not change current buffer
+	private boolean selectAllInProgress;
+
+	private JButton reload;
+	private JButton close;
 	//}}}
 
 	//{{{ ActionHandler class
@@ -166,7 +201,83 @@ public class FilesChangedDialog extends EnhancedDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			dispose();
+			Object source = evt.getSource();
+			if(source == selectAll)
+			{
+				selectAllInProgress = true;
+
+				TreeNode[] path = new TreeNode[3];
+				path[0] = root;
+				for(int i = 0; i < root.getChildCount(); i++)
+				{
+					DefaultMutableTreeNode node =
+						(DefaultMutableTreeNode)
+						root.getChildAt(i);
+					path[1] = node;
+					for(int j = 0; j < node.getChildCount(); j++)
+					{
+						DefaultMutableTreeNode node2 =
+							(DefaultMutableTreeNode)
+							node.getChildAt(j);
+						path[2] = node2;
+						bufferTree.getSelectionModel()
+							.addSelectionPath(
+							new TreePath(path));
+					}
+				}
+
+				selectAllInProgress = false;
+			}
+			else if(source == reload)
+			{
+				TreePath[] paths = bufferTree
+					.getSelectionPaths();
+				if(paths == null)
+					return;
+
+				for(int i = 0; i < paths.length; i++)
+				{
+					 TreePath path = paths[i];
+					 DefaultMutableTreeNode node
+					 	= (DefaultMutableTreeNode)
+						path.getLastPathComponent();
+					if(!(node.getUserObject() instanceof
+						String))
+					{
+						return;
+					}
+
+					Buffer buffer = jEdit.getBuffer(
+						(String)node.getUserObject());
+					if(buffer == null)
+						return;
+
+					buffer.reload(view);
+					((DefaultMutableTreeNode)node.getParent())
+						.remove(node);
+
+					// remove empty category branches
+					for(int j = 0; j < root.getChildCount();
+						j++)
+					{
+						node = (DefaultMutableTreeNode)
+							root.getChildAt(j);
+						if(root.getChildAt(j)
+							.getChildCount() == 0)
+						{
+							root.remove(j);
+							j--;
+						}
+					}
+
+					if(root.getChildCount() == 0)
+						dispose();
+
+					bufferTreeModel.reload(root);
+				}
+			}
+			else if(source == close)
+				dispose();
 		}
 	} //}}}
 
@@ -175,12 +286,22 @@ public class FilesChangedDialog extends EnhancedDialog
 	{
 		public void valueChanged(TreeSelectionEvent evt)
 		{
-			TreePath path = bufferTree.getSelectionPath();
-			if(path != null)
+			if(selectAllInProgress)
+				return;
+
+			TreePath[] paths = bufferTree
+				.getSelectionPaths();
+			if(paths == null || paths.length == 0)
+				return;
+			TreePath path = paths[paths.length - 1];
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+				path.getLastPathComponent();
+			if(node.getUserObject() instanceof String)
 			{
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
-				if(node.getUserObject() instanceof Buffer)
-					view.goToBuffer((Buffer)node.getUserObject());
+				Buffer buffer = jEdit.getBuffer(
+					(String)node.getUserObject());
+				if(buffer != null)
+					view.goToBuffer(buffer);
 			}
 		}
 	} //}}}
@@ -205,7 +326,7 @@ public class FilesChangedDialog extends EnhancedDialog
 
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
 
-			if (node.getUserObject() instanceof String)
+			if(node.getParent() == tree.getModel().getRoot())
 				this.setFont(groupFont);
 			else
 				this.setFont(entryFont);
