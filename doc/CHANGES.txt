@@ -61,8 +61,6 @@ Reinout van Schouwen for contributing to this release.
 
 - Plugin properties would override site properties.
 
-- Fixed split pane divider positioning.
-
 - Various modes were missing a "lineUpClosingBracket" property.
 
 - Editing option pane's "Use default settings" check box was broken.
