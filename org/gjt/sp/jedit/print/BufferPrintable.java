@@ -58,6 +58,10 @@ class BufferPrintable implements Printable
 
 		lineList = new ArrayList();
 		LastPagelineList = new ArrayList();
+
+		// On some JDKs, we have to paint a glyph vector instead of a
+		// string, otherwise the string will 
+		glyphVector = jEdit.getBooleanProperty("print.workaround");
 	} //}}}
 
 	//{{{ print() method
@@ -244,7 +248,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 				ChunkCache.paintChunkList(line,gfx,
 				                          (float)(pageX + lineNumberWidth),
 				                          (float)(pageY + y),
-				                          Color.white,false);
+				                          Color.white,glyphVector);
 			}
 			//}}}
 
@@ -286,6 +290,8 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 	private LineMetrics lm;
 	private ArrayList lineList;
 	private ArrayList LastPagelineList;
+
+	private boolean glyphVector;
 	//}}}
 
 	//{{{ paintHeader() method
