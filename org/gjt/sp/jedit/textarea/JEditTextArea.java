@@ -723,7 +723,8 @@ public class JEditTextArea extends JComponent
 			{
 				setFirstPhysicalLine(nextLine,
 					subregion + electricScroll
-					- visibleLines - 1);
+					- visibleLines
+					+ (lastLinePartial ? 2 : 1));
 			}
 			else
 			{
