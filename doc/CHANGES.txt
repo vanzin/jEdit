@@ -82,6 +82,8 @@ Simon Ruggier for contributing to this release.
 
 - Fix Control key on Mac OS X.
 
+- Changing the font size did not update the vertical scrollbar.
+
 }}}
 {{{ API Changes
 

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,7 +119,7 @@ public class KeyEventTranslator
 			char ch = evt.getKeyChar();
 
 			if(KeyEventWorkaround.isMacControl(evt))
-				ch |= 0x40;
+				ch |= 0x60;
 
 			switch(ch)
 			{
