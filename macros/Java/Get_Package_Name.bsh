@@ -4,6 +4,7 @@
  * of current buffer
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +23,9 @@
  * Based on code contributed by Richard Wan
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 boolean testClassPath()
@@ -102,3 +106,26 @@ else
 	}
 	else textArea.setSelectedText(result);
 }
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Get_Package_Name.bsh</filename></para>
+    <abstract><para>
+        Inserts a plausible Java package name for the current buffer.
+    </para></abstract>
+    <para>
+        The macro compares the buffer's path name with the elements of the
+        classpath being used by the jEdit session.  An error message will be
+        displayed if no suitable package name is found. This macro will not
+        work if jEdit is being run as a JAR file without specifying a
+        classpath.  In that case the classpath seen by the macro consists
+        solely of the JAR file.
+    </para>
+</listitem>
+
+*/
+
+// end Get_Package_Name.bsh
+

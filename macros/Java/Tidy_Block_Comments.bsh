@@ -4,7 +4,7 @@
  * location on each line of the current buffer
  * Copyright (C) 2001 John Gellene
  * email: jgellene@nyc.rr.com
- *
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,9 @@
  * the line. The DEFAULT_COLUMN will be displayed in the text field, and USE_TABS
  * determines whether the "Use tabs" checkbox is initially selected.  Each of
  * these parameters can be changed in the input dialog.
+ *
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -278,4 +281,33 @@ mode = buffer.getMode();
 blockComment = mode.getProperty("blockComment");
 endComment = mode.getProperty("commentEnd");
 tidyBlockComments(DEFAULT_COLUMN, USE_TABS, IGNORE_FIRST_COLUMN);
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Tidy_Block_Comments.bsh</filename></para>
+    <abstract><para>
+    Formats all end-of-line <quote>block</quote> comments to begin at a fixed
+    column.
+    </para></abstract>
+    <para>
+    This macro uses jEdit's syntax parsing routines to identify block comments
+    and place them in a column specified by the user.  If uncommented text
+    extends beyond the specified column, the block comment will be placed two
+    columns after the end of the uncommented text with an intervening
+    whitespace.
+    </para>
+    <para>
+    An input dialog allows the user to specify the display column for block
+    comments or to accept a default value.  The user can also select whether
+    tabs will be substituted for spaces and whether comments at the beginning
+    of a line will be ignored.  The macro will complain if the current
+    buffer's editing mode does not support block comments.
+    </para>
+</listitem>
+
+*/
+
+// end Tidy_Block_Comments.bsh
 

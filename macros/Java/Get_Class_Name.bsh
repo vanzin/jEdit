@@ -3,6 +3,7 @@
  * jEdit text editor -  gets class name from buffer name
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 
@@ -32,5 +36,18 @@ void getClassName()
 
 getClassName();
 
-// end of Get_Class_Name.bsh
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Get_Class_Name.bsh</filename></para>
+    <abstract><para>
+        Inserts a Java class name based upon the buffer's file name.
+    </para></abstract>
+</listitem>
+
+*/
+
+
+// end Get_Class_Name.bsh
 
