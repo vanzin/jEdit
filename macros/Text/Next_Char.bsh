@@ -32,7 +32,7 @@ void nextChar()
 	script.append( "start = textArea.getCaretPosition();"        );
 	script.append( "line = textArea.getCaretLine();"             );
 	script.append( "end = textArea.getLineEndOffset(line) + 1;"  );
-	script.append( "text = buffer.getText(start, end - start)"   );
+	script.append( "text = buffer.getText(start, end - start);"  );
 	script.append( "match = text.indexOf(__char__, 1);"          );
 	script.append( "if(match != -1) {"                           );
 	script.append( "if(__char__ != '\\n') ++match;"              );

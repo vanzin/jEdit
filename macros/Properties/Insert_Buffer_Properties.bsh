@@ -128,7 +128,7 @@ BufferLocalPropertiesDialog(View view){
 
 		if(buffer.isReadOnly())
 		{
-			Macros.error(view,"Buffer is Read-Only");
+			Macros.error(view,"Buffer is read-only");
 			dialog.dispose();
 		}
 
@@ -225,7 +225,10 @@ BufferLocalPropertiesDialog(View view){
 	dialog.setVisible(true);
 }
 
-BufferLocalPropertiesDialog(view);
+if(buffer.isReadOnly())
+	Macros.error(view, "Buffer is read-only.");
+else
+	BufferLocalPropertiesDialog(view);
 
 /*
 	Macro index data (in DocBook format)

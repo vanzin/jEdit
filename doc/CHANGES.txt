@@ -21,6 +21,9 @@ this release.
 - File system browser now uses locale's short date format, not a
   hard-coded DD/MM/YYYY hh:mm (Ollie Rutherfurd).
 
+- Many macros updated, new Keywords_to_Uppercase.bsh macro added
+  (Ollie Rutherfurd).
+
 }}}
 {{{ Syntax Highlighting
 

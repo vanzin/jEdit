@@ -41,8 +41,8 @@ it is done in most text editors
 
 + docs:
 
+- API thread safety
 - document optional dependencies
-- 2-stage save and hardlinks
 - add note that regexp matching does not cross newlines in token marker
 - add note to documentation about exponential-time regexps
 - news: deep indent, action bar, new cli options

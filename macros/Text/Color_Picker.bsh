@@ -18,10 +18,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
- *
- *
- * Checked for jEdit 4.0 API
- *
  */
 
 selection = textArea.getSelectedText();
@@ -32,8 +28,12 @@ else
 
 color = JColorChooser.showDialog(view, "Color Picker", color);
 
-if (color != null)
-    textArea.setSelectedText(GUIUtilities.getColorHexString(color));
+if (color != null){
+	if(buffer.isReadOnly())
+		Macros.error(view, "Buffer is read-only.");
+	else
+		textArea.setSelectedText(GUIUtilities.getColorHexString(color));
+}
 
 /*
 	Macro index data (in DocBook format)
