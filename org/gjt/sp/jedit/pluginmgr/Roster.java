@@ -144,6 +144,8 @@ class Roster
 	//{{{ finishOperations() method
 	private void finishOperations()
 	{
+		System.err.println(toLoad);
+
 		// add the JARs before checking deps since dep check might
 		// require all JARs to be present
 		for(int i = 0; i < toLoad.size(); i++)

@@ -2034,15 +2034,38 @@ public class jEdit
 			}
 
 			View newView = new View(buffer,config);
+			addViewToList(newView);
+
+			if(!config.plainView)
+			{
+				DockableWindowManager wm = newView.getDockableWindowManager();
+				if(config.top != null
+					&& config.top.length() != 0)
+					wm.showDockableWindow(config.top);
+	
+				if(config.left != null
+					&& config.left.length() != 0)
+					wm.showDockableWindow(config.left);
+	
+				if(config.bottom != null
+					&& config.bottom.length() != 0)
+					wm.showDockableWindow(config.bottom);
+	
+				if(config.right != null
+					&& config.right.length() != 0)
+					wm.showDockableWindow(config.right);
+			}
+
+			newView.pack();
 
 			if(config.width != 0 && config.height != 0)
 			{
 				GUIUtilities.setWindowBounds(newView,config.x,config.y,
 					config.width,config.height,config.extState);
 			}
-				else newView.setLocationRelativeTo(view);
+			else
+				newView.setLocationRelativeTo(view);
 
-			addViewToList(newView);
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 			newView.show();
