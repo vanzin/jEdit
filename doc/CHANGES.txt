@@ -34,6 +34,20 @@ JEDIT 4.2 VERSION HISTORY
 - Buffer.getPriorNonEmptyLine() did not access segments properly. This
   caused obscure problems with auto-indent.
 
+- Fixed more problems with symbolic link handling in the file system
+  browser.
+
+- Fixed long-standing race condition in file system browser that could
+  prevent a directory listing from being updated after a file was
+  created, removed or renamed.
+
+- Changes made in the Docking option pane only took effect after a
+  restart.
+
+- Fixed minor problem with digit handling in the Complete Word popup.
+
+- Fixed problem with repeating user input in the action bar.
+
 }}}
 
 }}}

@@ -29,6 +29,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -52,6 +53,9 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _save()
 	{
 		windowModel.save();
+		EditBus.send(new DockableWindowUpdate(null,
+			DockableWindowUpdate.PROPERTIES_CHANGED,
+			null));
 	} //}}}
 
 	//{{{ Private members
