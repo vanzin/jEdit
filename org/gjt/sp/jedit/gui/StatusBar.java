@@ -554,7 +554,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				- insets.left - insets.right;
 
 			Color text = MemoryStatus.this.getForeground();
-			Color status = UIManager.getColor("ProgressBar.foreground");
+			Color status = text.darker();//UIManager.getColor("ProgressBar.foreground");
 
 			float fraction = ((float)usedMemory) / totalMemory;
 
