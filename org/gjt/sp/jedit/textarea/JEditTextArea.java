@@ -4828,13 +4828,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
 
 		if(displayManager != null && !bufferChanging
-			&&  buffer.isLoaded())
+			&& buffer.isLoaded())
 		{
 			displayManager.invalidateScreenLineCounts();
-			chunkCache.invalidateAll();
 			displayManager.notifyScreenLineChanges();
 		}
 
+		chunkCache.invalidateAll();
 		gutter.repaint();
 		painter.repaint();
 	} //}}}

@@ -263,7 +263,7 @@ public class VFSFile implements Serializable
 					return jEdit.getProperty("vfs.browser.status.no");
 			}
 		}
-		else if(getName().equals(VFS.EA_SIZE))
+		else if(name.equals(VFS.EA_SIZE))
 		{
 			if(getType() != FILE)
 				return null;
