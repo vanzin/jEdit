@@ -349,7 +349,10 @@ public class PositionManager
 		void contentRemoved(int offset, int length)
 		{
 			if(offset >= this.offset)
-				right.contentRemoved(offset,length);
+			{
+				if(right != null)
+					right.contentRemoved(offset,length);
+			}
 			else if(offset + length <= this.offset)
 			{
 				this.offset -= length;
