@@ -203,7 +203,8 @@ class BrowserView extends JPanel
 			parentDirectories.ensureIndexIsVisible(index);
 		} //}}}
 
-		table.setDirectory(node,directory,tmpExpanded);
+		table.setDirectory(VFSManager.getVFSForPath(path),
+			node,directory,tmpExpanded);
 	} //}}}
 
 	//{{{ updateFileView() method
@@ -479,7 +480,7 @@ class BrowserView extends JPanel
 
 			int row = table.rowAtPoint(p);
 			int column = table.columnAtPoint(p);
-			if(column == 0)
+			if(column == 0 && row != -1)
 			{
 				VFSDirectoryEntryTableModel.Entry entry
 					= (VFSDirectoryEntryTableModel.Entry)

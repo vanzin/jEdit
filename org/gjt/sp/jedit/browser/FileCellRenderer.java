@@ -94,7 +94,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			else
 			{
 				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
-				String extAttr = model.getExtendedAttribute(column);
+				String extAttr = model.getExtendedAttribute(column - 1);
 
 				underlined = false;
 				setIcon(null);
@@ -252,5 +252,5 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			ICON_WIDTH = Math.max(COLLAPSED_ICON.getIconWidth(),
 				EXPANDED_ICON.getIconWidth());
 		} //}}}
-	}
+	} //}}}
 }

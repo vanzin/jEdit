@@ -45,9 +45,8 @@ public class FavoritesVFS extends VFS
 	//{{{ FavoritesVFS constructor
 	public FavoritesVFS()
 	{
-		// BROWSE_CAP not set because we don't want the VFS browser
-		// to create an item for this VFS in its 'Plugins' menu
-		super("favorites",DELETE_CAP | LOW_LATENCY_CAP);
+		super("favorites",DELETE_CAP | LOW_LATENCY_CAP,
+			new String[] { EA_TYPE });
 
 		/* addToFavorites(), which is a static method
 		 * (for convinience) needs an instance of the
@@ -197,6 +196,18 @@ public class FavoritesVFS extends VFS
 		{
 			super(MiscUtilities.getFileName(path),path,
 				PROTOCOL + ":" + path,type,0,false);
+		}
+
+		public String getExtendedAttribute(String name)
+		{
+			if(name.equals(EA_TYPE))
+				return super.getExtendedAttribute(name);
+			else
+			{
+				// don't want it to show "0 bytes" for size,
+				// etc.
+				return null;
+			}
 		}
 	} //}}}
 }

@@ -26,7 +26,9 @@ import javax.swing.table.*;
 import javax.swing.*;
 import java.util.*;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * @author Slava Pestov
@@ -38,18 +40,17 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ VFSDirectoryEntryTableModel constructor
 	public VFSDirectoryEntryTableModel()
 	{
-		extAttrs = new String[] {
-			VFS.EA_SIZE_OR_TYPE,
-			VFS.EA_STATUS,
-			VFS.EA_MODIFIED
-		};
+		extAttrs = new ArrayList();
 	} //}}}
 
 	//{{{ setRoot() method
-	public void setRoot(ArrayList list)
+	public void setRoot(VFS vfs, ArrayList list)
 	{
-		if(files != null && files.length != 0)
-			fireTableRowsDeleted(0,files.length - 1);
+		extAttrs.clear();
+		addExtendedAttributes(vfs);
+
+		/* if(files != null && files.length != 0)
+			fireTableRowsDeleted(0,files.length - 1); */
 
 		files = new Entry[list.size()];
 		for(int i = 0; i < files.length; i++)
@@ -57,12 +58,14 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			files[i] = new Entry((VFS.DirectoryEntry)list.get(i),0);
 		}
 
-		if(files.length != 0)
-			fireTableRowsInserted(0,files.length - 1);
+		/* if(files.length != 0)
+			fireTableRowsInserted(0,files.length - 1); */
+
+		fireTableStructureChanged();
 	} //}}}
 
 	//{{{ expand() method
-	public int expand(Entry entry, ArrayList list)
+	public int expand(VFS vfs, Entry entry, ArrayList list)
 	{
 		int startIndex = -1;
 		for(int i = 0; i < files.length; i++)
@@ -71,8 +74,9 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 				startIndex = i;
 		}
 
-		collapse(startIndex);
+		collapse(vfs,startIndex);
 
+		addExtendedAttributes(vfs);
 		entry.expanded = true;
 
 		if(list != null)
@@ -90,17 +94,19 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 				files.length - startIndex - 1);
 			this.files = newFiles;
 
-			fireTableRowsInserted(startIndex + 1,
-				startIndex + list.size() + 1);
+			/* fireTableRowsInserted(startIndex + 1,
+				startIndex + list.size() + 1); */
 		}
 
-		fireTableRowsUpdated(startIndex,startIndex);
+		/* fireTableRowsUpdated(startIndex,startIndex); */
+
+		fireTableStructureChanged();
 
 		return startIndex;
 	} //}}}
 
 	//{{{ collapse() method
-	public void collapse(int index)
+	public void collapse(VFS vfs, int index)
 	{
 		Entry entry = files[index];
 		if(!entry.expanded)
@@ -112,11 +118,20 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		while(lastIndex < files.length)
 		{
 			Entry e = files[lastIndex];
+
+			if(e.expanded)
+			{
+				removeExtendedAttributes(VFSManager.getVFSForPath(
+					e.dirEntry.path));
+			}
+
 			if(e.level <= entry.level)
 				break;
 			else
 				lastIndex++;
 		}
+
+		removeExtendedAttributes(vfs);
 
 		Entry[] newFiles = new Entry[files.length - lastIndex + index + 1];
 		System.arraycopy(files,0,newFiles,0,index + 1);
@@ -125,14 +140,16 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 		files = newFiles;
 
-		fireTableRowsUpdated(index,index);
-		fireTableRowsDeleted(index + 1,lastIndex);
+		/* fireTableRowsUpdated(index,index);
+		fireTableRowsDeleted(index + 1,lastIndex); */
+
+		fireTableStructureChanged();
 	} //}}}
 
 	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
-		return 1 + extAttrs.length;
+		return 1 + extAttrs.size();
 	} //}}}
 
 	//{{{ getRowCount() method
@@ -150,7 +167,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		if(col == 0)
 			return jEdit.getProperty("vfs.browser.name");
 		else
-			return jEdit.getProperty("vfs.browser." + getExtendedAttribute(col));
+			return jEdit.getProperty("vfs.browser." + getExtendedAttribute(col - 1));
 	} //}}}
 
 	//{{{ getColumnClass() method
@@ -171,7 +188,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getExtendedAttribute() method
 	public String getExtendedAttribute(int index)
 	{
-		return extAttrs[index - 1];
+		return ((ExtendedAttribute)extAttrs.get(index)).name;
 	} //}}}
 
 	//{{{ Package-private members
@@ -179,7 +196,66 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//}}}
 
 	//{{{ Private members
-	private String[] extAttrs;
+	private List extAttrs;
+
+	//{{{ addExtendedAttributes() method
+	private void addExtendedAttributes(VFS vfs)
+	{
+		System.err.println("adding " + vfs);
+		String[] attrs = vfs.getExtendedAttributes();
+vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
+		{
+			Iterator iter = extAttrs.iterator();
+			while(iter.hasNext())
+			{
+				ExtendedAttribute attr = (ExtendedAttribute)
+					iter.next();
+				if(attrs[i].equals(attr.name))
+				{
+					attr.ref++;
+					continue vfs_attr_loop;
+				}
+			}
+
+			// this vfs has an extended attribute which is not
+			// in the list. add it to the end with a ref count
+			// of 1
+			extAttrs.add(new ExtendedAttribute(attrs[i]));
+		}
+	} //}}}
+
+	//{{{ removeExtendedAttributes() method
+	private void removeExtendedAttributes(VFS vfs)
+	{
+		System.err.println("removing " + vfs);
+		String[] attrs = vfs.getExtendedAttributes();
+vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
+		{
+			Iterator iter = extAttrs.iterator();
+			while(iter.hasNext())
+			{
+				ExtendedAttribute attr = (ExtendedAttribute)
+					iter.next();
+				if(attrs[i].equals(attr.name))
+				{
+					if(--attr.ref == 0)
+					{
+						// we no longer have any
+						// dirs using this extended
+						// attribute
+						iter.remove();
+					}
+
+					continue vfs_attr_loop;
+				}
+			}
+
+			// this vfs has an extended attribute which is not
+			// in the list ???
+			Log.log(Log.WARNING,this,"We forgot about " + attrs[i]);
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Entry class
@@ -194,6 +270,23 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		{
 			this.dirEntry = dirEntry;
 			this.level = level;
+		}
+	} //}}}
+
+	//{{{ ExtendedAttribute class
+	static class ExtendedAttribute
+	{
+		/* reference counter allows us to remove a column from
+		 * the table when no directory using this column is
+		 * visible */
+		int ref;
+
+		String name;
+
+		ExtendedAttribute(String name)
+		{
+			this.name = name;
+			ref = 1;
 		}
 	} //}}}
 }

@@ -201,6 +201,9 @@ Sebastien Pierre for contributing to this release.
 - TAB didn't work in the action bar if there was nothing entered (it is
   supposed to list all actions.)
 
+- Fixed obscure problem with work thread code where an AWT request added
+  from another AWT request could be executed before I/O is complete.
+
 }}}
 {{{ API Changes
 
