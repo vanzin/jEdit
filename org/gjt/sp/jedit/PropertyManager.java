@@ -35,6 +35,7 @@ class PropertyManager
 		Iterator iter = plugins.iterator();
 		while(iter.hasNext())
 			total.putAll((Properties)iter.next());
+		total.putAll(site);
 		total.putAll(user);
 		return total;
 	} //}}}

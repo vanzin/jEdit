@@ -38,6 +38,8 @@ Patrick Tingen for contributing to this release.
 - Fix a problem where sometimes after loading, only the first line of a
   file would be visible.
 
+- PropertyManager.getProperties() did not include site properties.
+
 }}}
 {{{ API Changes
 
@@ -46,6 +48,8 @@ Patrick Tingen for contributing to this release.
   isRightClickPopupEnabled()
   setRightClickPopupEnabled(boolean)
   handlePopupTrigger(MouseEvent)
+
+}}}
 
 }}}
 
