@@ -1,5 +1,15 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre6
+
++ Bug Fixes
+
+- Malformed URL errors were not being reported correctly
+- Fixed exception when double- or triple-click dragging (this was meant
+  to be fixed in pre5 but I didn't get the fix quite right)
+- Fixed NullPointerException when opening a new view
+- Out of memory errors were not always reported
+
 * Version 4.0pre5
 
 + New Features

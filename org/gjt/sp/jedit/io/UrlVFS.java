@@ -71,7 +71,7 @@ public class UrlVFS extends VFS
 		{
 			Log.log(Log.ERROR,this,mu);
 			String[] args = { mu.getMessage() };
-			VFSManager.error(comp,path,"badurl",args);
+			VFSManager.error(comp,path,"ioerror.badurl",args);
 			return null;
 		}
 	} //}}}
@@ -89,7 +89,7 @@ public class UrlVFS extends VFS
 		{
 			Log.log(Log.ERROR,this,mu);
 			String[] args = { mu.getMessage() };
-			VFSManager.error(comp,path,"badurl",args);
+			VFSManager.error(comp,path,"ioerror.badurl",args);
 			return null;
 		}
 	} //}}}

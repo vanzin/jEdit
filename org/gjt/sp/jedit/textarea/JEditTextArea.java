@@ -5864,7 +5864,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int markLineLength = getLineLength(dragStartLine);
 			int mark = dragStartOffset;
 
-			int pos = xyToOffset(evt.getX(),evt.getY(),
+			int pos = xyToOffset(evt.getX(),
+				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
 				!painter.isBlockCaretEnabled());
 			int line = getLineOfOffset(pos);
 			int lineStart = getLineStartOffset(line);
@@ -5914,7 +5915,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doTripleDrag() method
 		private void doTripleDrag(MouseEvent evt, boolean rect)
 		{
-			int offset = xyToOffset(evt.getX(),evt.getY(),false);
+			int offset = xyToOffset(evt.getX(),
+				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
+				false);
 			int mouseLine = getLineOfOffset(offset);
 			int mark;
 			int mouse;
@@ -5931,7 +5934,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				mark = getLineStartOffset(dragStartLine);
 				if(offset == getLineStartOffset(mouseLine))
 					mouse = offset;
-				else if(offset == getLineEndOffset(mouseLine) - 1)
+				else if(offset == getLineEndOffset(mouseLine) - 1
+					&& mouseLine != buffer.getLineCount() - 1)
 					mouse = getLineEndOffset(mouseLine);
 				else
 					mouse = getLineEndOffset(mouseLine) - 1;

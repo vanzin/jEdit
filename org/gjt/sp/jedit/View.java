@@ -788,6 +788,11 @@ public class View extends JFrame implements EBComponent
 
 		getContentPane().add(BorderLayout.SOUTH,status = new StatusBar(this));
 
+		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
+
+		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
+			jEdit.getInputHandler());
+
 		Component comp = restoreSplitConfig(buffer,splitConfig);
 		dockableWindowManager.add(comp);
 
@@ -795,11 +800,6 @@ public class View extends JFrame implements EBComponent
 		status.updateMiscStatus();
 
 		EditBus.addToBus(this);
-
-		setJMenuBar(GUIUtilities.loadMenuBar("view.mbar"));
-
-		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
-			jEdit.getInputHandler());
 
 		propertiesChanged();
 

@@ -227,6 +227,11 @@ public class Buffer implements EBComponent
 
 						contentInserted(0,seg.count,endOffsets);
 					}
+					catch(OutOfMemoryError oom)
+					{
+						Log.log(Log.ERROR,this,oom);
+						VFSManager.error(view,path,"out-of-memory-error",null);
+					}
 					finally
 					{
 						writeUnlock();
