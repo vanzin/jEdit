@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.*;
  *
  * @since jEdit 2.5pre1
  */
-public class EditPaneUpdate extends EBMessage.NonVetoable
+public class EditPaneUpdate extends EBMessage
 {
 	/**
 	 * Edit pane created.

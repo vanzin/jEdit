@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.*;
  *
  * @since jEdit 2.2pre6
  */
-public class BufferUpdate extends EBMessage.NonVetoable
+public class BufferUpdate extends EBMessage
 {
 	//{{{ Message types
 	/**

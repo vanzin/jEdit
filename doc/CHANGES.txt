@@ -46,12 +46,11 @@ JEDIT 4.1 VERSION HISTORY
 + API Changes
 
 - Two methods added to jEdit class:
-
   getDoubleProperty()
   setDoubleProperty()
-
 - Removed unused TextUtilities.findMatchingBracket(Buffer buffer,
     int line, int offset, int startLine, int endLine) method
-
 - New ViewUpdate.EDIT_PANE_CHANGED message, sent when a different edit
   pane receives focus
+- EBMessage.veto(), isVetoable() methods and EBMessage.NonVetoable class
+  deprecated

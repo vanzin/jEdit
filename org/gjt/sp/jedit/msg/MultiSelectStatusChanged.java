@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.EBMessage;
  *
  * @since jEdit 2.3pre1
  */
-public class MultiSelectStatusChanged extends EBMessage.NonVetoable
+public class MultiSelectStatusChanged extends EBMessage
 {
 	/**
 	 * Creates a new multiple selection status changed message.

@@ -29,7 +29,7 @@ import org.gjt.sp.jedit.EBMessage;
  *
  * @since jEdit 2.3pre1
  */
-public class SearchSettingsChanged extends EBMessage.NonVetoable
+public class SearchSettingsChanged extends EBMessage
 {
 	/**
 	 * Creates a new search and replace settings changed message.
