@@ -49,7 +49,7 @@ view.docking.menu-tooltip=Shows a list of docked windows
 #}}}
 
 #{{{ Tool bar
-view.toolbar=new-file open-file save print - \
+view.toolbar=new-file open-file save - print print-preview page-setup - \
 	undo redo cut copy paste - find find-next - new-view unsplit \
 	split-horizontal split-vertical - buffer-options global-options - \
 	plugin-manager - help
@@ -58,6 +58,8 @@ new-file.icon=New24.gif
 open-file.icon=Open24.gif
 save.icon=Save24.gif
 print.icon=Print24.gif
+print-preview.icon=PrintPreview24.gif
+page-setup.icon=PageSetup24.gif
 undo.icon=Undo24.gif
 redo.icon=Redo24.gif
 cut.icon=Cut24.gif
@@ -206,6 +208,8 @@ file=new-file \
      save-all \
      - \
      print \
+     print-preview \
+     page-setup \
      - \
      exit
 file.label=$File
@@ -231,9 +235,9 @@ save.label=$Save
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll...
-# Page setup disabled for now, since the settings don't seem to be persistent
-#page-setup.label=Pa$ge Setup...
 print.label=$Print...
+print-preview.label=Print Previe$w...
+page-setup.label=Pa$ge Setup...
 # Print selection not yet implemented
 #print-selection.label=Prin$t Selection...
 exit.label=E$xit
@@ -800,6 +804,7 @@ about.text=jEdit is brought to you by:\n\
 	Stuart Barlow\n\
 	Tal Davidson\n\
 	Thomas Bock\n\
+	Thomas Dilts\n\
 	Todd Papaioannou\n\
 	Tom Locke\n\
 	Vicente Salvador\n\

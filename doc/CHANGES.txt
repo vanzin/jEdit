@@ -9,6 +9,11 @@ JEDIT 4.1 VERSION HISTORY
 
 + Enhancements
 
+- Updated printing code (Thomas Dilts)
+  - Adds a print preview function
+  - Uses Java 2 version 1.4 print dialogs when running on that Java
+    version
+  - Fixes a few bugs
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
   some bug fixes and cleanups (Kris Kopicki)
 - On Unix, the installer now defaults to installing in the user's home
@@ -16,6 +21,7 @@ JEDIT 4.1 VERSION HISTORY
 - Updated PL-SQL mode (Steve Snider)
 - A single invalid file system browser coloring regular expression no
   longer stops the remaining expressions from working
+- HyperSearch now respects rectangular selections
 
 + Bug Fixes
 
@@ -31,3 +37,10 @@ JEDIT 4.1 VERSION HISTORY
 - When closing a file with unsaved changes, the file will stay open if
   the save failed. Previously it would be closed and the unsaved changes
   would be lost forever
+
++ API Changes
+
+- Two methods added to jEdit class:
+
+  getDoubleProperty()
+  setDoubleProperty()
