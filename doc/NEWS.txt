@@ -25,7 +25,7 @@ improved performance and reduced memory footprint.
   selected text by default. This can be enabled in the 'Text Area' pane
   of the Utilities->Global Options dialog box.
 
-* Major changes
+* Major user-visible changes
 
 - Rewritten buffer code: this results in decreased footprint, faster
   file loading, _much_ faster directory search, and more.
@@ -33,7 +33,7 @@ improved performance and reduced memory footprint.
 - Rewritten folding code. Fold visibility can now be changed on a
   per-text area basis, and "explicit" folding (where the buffer is
   parsed for "{{{" and "}}}") is now supported, in addition to the old
-  "indent" folding.
+  "indent" folding. Plugins can add their own folding modes as well.
 
 - Soft wrap has been added. The old "hard" wrap is still present as a
   configurable option.
@@ -62,7 +62,7 @@ improved performance and reduced memory footprint.
   - Prolog
   - SmallTalk
 
-* Other improvements
+* Other user-visible improvements
 
 There are many smaller improvements as well, too many to list here, but
 some of the more noteworthy ones are:

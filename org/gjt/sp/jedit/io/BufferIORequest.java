@@ -685,7 +685,7 @@ public class BufferIORequest extends WorkRequest
 
 			try
 			{
-				buffer.readLock();
+				//buffer.readLock();
 
 				if(!buffer.isDirty())
 				{
@@ -700,12 +700,12 @@ public class BufferIORequest extends WorkRequest
 
 				write(buffer,out);
 			}
-			catch(IOException io)
+			catch(Exception e)
 			{
 			}
 			finally
 			{
-				buffer.readUnlock();
+				//buffer.readUnlock();
 			}
 		}
 		catch(WorkThread.Abort a)
