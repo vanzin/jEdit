@@ -364,6 +364,28 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				Buffer buffer = view.getBuffer();
 				buffer.setStringProperty("folding",text);
 				buffer.propertiesChanged();
+
+				// this must be called after
+				// buffer.propertiesChanged() so that
+				// we have the new fold handler set up
+				FoldVisibilityManager foldVisibilityManager
+					= view.getTextArea().getFoldVisibilityManager();
+				int collapseFolds = buffer.getIntegerProperty(
+					"collapseFolds",0);
+				if(collapseFolds != 0)
+					foldVisibilityManager.expandFolds(collapseFolds);
+				else
+					foldVisibilityManager.expandAllFolds();
+
+				View[] views = jEdit.getViews();
+				for(int i = 0; i < views.length; i++)
+				{
+					EditPane[] panes = views[i].getEditPanes();
+					for(int j = 0; j < panes.length; j++)
+					{
+						panes[j].getTextArea().propertiesChanged();
+					}
+				}
 			}
 			else if(source == multiSelect)
 				view.getTextArea().toggleMultipleSelectionEnabled();
@@ -546,8 +568,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			Insets insets = MemoryStatus.this.getBorder().getBorderInsets(this);
 
 			Runtime runtime = Runtime.getRuntime();
-			int freeMemory = (int)(runtime.freeMemory() / 1024 / 1024);
-			int totalMemory = (int)(runtime.totalMemory() / 1024 / 1024);
+			int freeMemory = (int)(runtime.freeMemory() / 1024);
+			int totalMemory = (int)(runtime.totalMemory() / 1024);
 			int usedMemory = (totalMemory - freeMemory);
 
 			int width = MemoryStatus.this.getWidth()
@@ -555,22 +577,46 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			float fraction = ((float)usedMemory) / totalMemory;
 
+			g.setColor(UIManager.getColor("ProgressBar.selectionBackground"));
+
 			g.fillRect(insets.left,insets.top,
 				(int)(width * fraction),
 				MemoryStatus.this.getHeight()
 				- insets.top - insets.bottom);
 
-			g.setXORMode(MemoryStatus.this.getBackground());
-
-			String str = "" + usedMemory + "Mb/"
-				+ totalMemory + "Mb";
+			String str = (usedMemory / 1024) + "Mb/"
+				+ (totalMemory / 1024) + "Mb";
 			FontMetrics fm = g.getFontMetrics();
 
-			g.drawString(str,
+			Graphics g2 = g.create();
+			g2.setClip(insets.left,insets.top,
+				(int)(width * fraction),
+				MemoryStatus.this.getHeight()
+				- insets.top - insets.bottom);
+
+			g2.setColor(UIManager.getColor("ProgressBar.selectionForeground"));
+
+			g2.drawString(str,
 				insets.left + (width - fm.stringWidth(str)) / 2,
 				insets.top + fm.getAscent());
 
-			g.setPaintMode();
+			g2.dispose();
+
+			g2 = g.create();
+
+			g2.setClip(insets.left + (int)(width * fraction),
+				insets.top,MemoryStatus.this.getWidth()
+				- insets.left - (int)(width * fraction),
+				MemoryStatus.this.getHeight()
+				- insets.top - insets.bottom);
+
+			g2.setColor(MemoryStatus.this.getForeground());
+
+			g2.drawString(str,
+				insets.left + (width - fm.stringWidth(str)) / 2,
+				insets.top + fm.getAscent());
+
+			g2.dispose();
 		} //}}}
 
 		private Timer timer;

@@ -17,6 +17,10 @@ JEDIT 4.0 VERSION HISTORY
   transition to the new document model, new files would always have the
   system default line separator and encoding, instead of the defaults
   that were specified in the 'Loading and Saving' option pane
+- Changing the fold mode by clicking in the status bar did not expand
+  currently collapsed folds, which could result in portions of the
+  buffer becoming inaccessable
+- Fixed ugly memory usage indicator on MacOS X
 
 * Version 4.0pre6
 
