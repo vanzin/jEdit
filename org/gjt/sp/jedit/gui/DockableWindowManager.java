@@ -897,7 +897,7 @@ public class DockableWindowManager extends JPanel
 					public void actionPerformed(ActionEvent evt)
 					{
 						jEdit.setProperty(dockable + ".dock-position",pos);
-						propertiesChanged();
+						jEdit.propertiesChanged();
 						showDockableWindow(dockable);
 					}
 				});
@@ -927,7 +927,7 @@ public class DockableWindowManager extends JPanel
 				public void actionPerformed(ActionEvent evt)
 				{
 					jEdit.setProperty(dockable + ".dock-position",FLOATING);
-					propertiesChanged();
+					jEdit.propertiesChanged();
 				}
 			});
 			popup.add(undockMenuItem);

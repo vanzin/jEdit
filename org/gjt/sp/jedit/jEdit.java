@@ -343,8 +343,10 @@ public class jEdit
 			File recent = new File(MiscUtilities.constructPath(
 				settingsDirectory,"recent.xml"));
 			if(recent.exists())
+			{
 				recentModTime = recent.lastModified();
-			BufferHistory.load(recent);
+				BufferHistory.load(recent);
+			}
 		}
 
 		GUIUtilities.advanceSplashProgress();
@@ -1098,98 +1100,6 @@ public class jEdit
 
 	//{{{ Buffer creation methods
 
-	//{{{ restoreOpenFiles() method
-	/**
-	 * Opens files that were open last time.
-	 * @since jEdit 3.2pre2
-	 */
-	public static String restoreOpenFiles()
-	{
-		if(settingsDirectory == null)
-			return null;
-
-		File session = new File(MiscUtilities.constructPath(
-			settingsDirectory,"session"));
-
-		if(!session.exists())
-			return null;
-
-		String splitConfig = null;
-
-		try
-		{
-			BufferedReader in = new BufferedReader(new FileReader(
-				session));
-
-			String line;
-			while((line = in.readLine()) != null)
-			{
-				if(line.startsWith("splits\t"))
-					splitConfig = line.substring(7);
-				else
-					openFile(null,line);
-			}
-
-			in.close();
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,jEdit.class,"Error while loading " + session);
-			Log.log(Log.ERROR,jEdit.class,io);
-		}
-
-		return splitConfig;
-	} //}}}
-
-	//{{{ saveOpenFiles() method
-	/**
-	 * Saves the list of open files.
-	 * @since jEdit 3.1pre5
-	 */
-	public static void saveOpenFiles(View view)
-	{
-		if(settingsDirectory == null)
-			return;
-
-		view.getEditPane().saveCaretInfo();
-
-		File session = new File(MiscUtilities.constructPath(
-			settingsDirectory,"session"));
-
-		// maybe not, since it's autosaved now
-		//backupSettingsFile(session);
-
-		try
-		{
-			String lineSep = System.getProperty("line.separator");
-
-			BufferedWriter out = new BufferedWriter(new FileWriter(
-				session));
-			Buffer buffer = buffersFirst;
-			while(buffer != null)
-			{
-				if(!buffer.isUntitled())
-				{
-					out.write(buffer.getPath());
-					out.write(lineSep);
-				}
-
-				buffer = buffer.next;
-			}
-
-			out.write("splits\t");
-			out.write(view.getSplitConfig());
-			out.write(lineSep);
-
-			out.close();
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,jEdit.class,"Error while saving " + session);
-			Log.log(Log.ERROR,jEdit.class,io);
-		}
-	} //}}}
-
 	//{{{ openFiles() method
 	/**
 	 * Opens the file names specified in the argument array. This
@@ -1854,27 +1764,18 @@ public class jEdit
 
 		View newView = new View(buffer,null,plainView);
 
-		// Do this crap here so that the view is created
-		// and added to the list before it is shown
-		// (for the sake of plugins that add stuff to views)
-		newView.pack();
-
-		// newView.setSize(view.getSize()) creates incorrectly
-		// sized views, for some reason...
 		if(view != null)
-		{
-			GUIUtilities.saveGeometry(view,(view.isPlainView()
-				? "plain-view" : "view"));
-			view.hideWaitCursor();
-		}
-
-		GUIUtilities.loadGeometry(newView,(plainView
-				? "plain-view" : "view"));
+			newView.setBounds(view.getBounds());
+		else
+			newView.setLocationRelativeTo(null);
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 		newView.show();
+
+		if(view != null)
+			view.hideWaitCursor();
 
 		// show tip of the day
 		if(newView == viewsFirst)
@@ -1904,31 +1805,20 @@ public class jEdit
 	 */
 	public static View newView(View view)
 	{
-		return newView(view,view.getSplitConfig(),false);
+		View.ViewConfig config = view.getViewConfig();
+		config.plainView = false;
+		return newView(view,config);
 	} //}}}
 
 	//{{{ newView() method
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
-	 * @param splitConfig The split configuration
-	 * @since jEdit 3.2pre2
+	 * @param config Encapsulates the view geometry, split configuration
+	 * and if the view is a plain view
+	 * @since jEdit 4.2pre1
 	 */
-	public static View newView(View view, String splitConfig)
-	{
-		return newView(view,splitConfig,false);
-	} //}}}
-
-	//{{{ newView() method
-	/**
-	 * Creates a new view.
-	 * @param view An existing view
-	 * @param splitConfig The split configuration
-	 * @param plainView If true, the view will not have dockable windows or
-	 * tool bars.
-	 * @since jEdit 4.1pre2
-	 */
-	public static View newView(View view, String splitConfig, boolean plainView)
+	public static View newView(View view, View.ViewConfig config)
 	{
 		if(view != null)
 		{
@@ -1936,29 +1826,18 @@ public class jEdit
 			view.getEditPane().saveCaretInfo();
 		}
 
-		View newView = new View(null,splitConfig,plainView);
+		View newView = new View(null,config.splitConfig,config.plainView);
 
-		// Do this crap here so that the view is created
-		// and added to the list before it is shown
-		// (for the sake of plugins that add stuff to views)
-		newView.pack();
-
-		// newView.setSize(view.getSize()) creates incorrectly
-		// sized views, for some reason...
-		if(view != null)
-		{
-			GUIUtilities.saveGeometry(view,(view.isPlainView()
-				? "plain-view" : "view"));
-			view.hideWaitCursor();
-		}
-
-		GUIUtilities.loadGeometry(newView,(plainView ? "plain-view"
-				: "view"));
+		GUIUtilities.setWindowBounds(newView,config.x,config.y,
+			config.width,config.height,config.extState);
 
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 		newView.show();
+
+		if(view != null)
+			view.hideWaitCursor();
 
 		// show tip of the day
 		if(newView == viewsFirst)
@@ -2225,8 +2104,7 @@ public class jEdit
 		// if background mode is off
 		reallyExit |= !background;
 
-		if (view != null)
-			saveOpenFiles(view);
+		PerspectiveManager.savePerspective();
 
 		// Close all buffers
 		if(!closeAllBuffers(view,reallyExit))
@@ -3033,29 +2911,29 @@ public class jEdit
 			{
 				Buffer buffer = openFiles(null,userDir,args);
 
-				String splitConfig = null;
+				View view = null;
 
-				if(restore && settingsDirectory != null
+				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
-					&& (bufferCount == 0 || jEdit.getBooleanProperty("restore.cli")))
+					&& (getBufferCount() == 0
+					|| jEdit.getBooleanProperty("restore.cli"));
+
+				if(gui || getBufferCount() != 0)
 				{
-					splitConfig = restoreOpenFiles();
-				}
+					view = PerspectiveManager.loadPerspective(restoreFiles);
 
-				if(bufferCount == 0 && gui)
-					newFile(null);
+					if(getBufferCount() == 0)
+						buffer = newFile(null);
 
-				EditBus.send(new EditorStarted(null));
-
-				if(gui || buffer != null)
-				{
-					if(buffer != null)
-						newView(null,buffer);
-					else
-						newView(null,splitConfig);
+					if(view == null)
+						view = newView(null,buffer);
+					else if(buffer != null)
+						view.setBuffer(buffer);
 				}
 
 				// Start I/O threads
+				EditBus.send(new EditorStarted(null));
+
 				VFSManager.start();
 
 				// Start edit server

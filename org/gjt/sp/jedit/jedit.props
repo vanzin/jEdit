@@ -180,7 +180,7 @@ view.bracketHighlightColor=#000000
 
 # EOL markers
 view.eolMarkers=true
-view.eolMarkerColor=#009999
+view.eolMarkerColor=#ff6633
 
 # Wrap guide
 view.wrapGuide=true
@@ -211,16 +211,16 @@ view.middleMousePaste=false
 #{{{ Gutter
 
 # Gutter background color
-view.gutter.bgColor=#ffffff
+view.gutter.bgColor=#dbdbdb
 
 # Gutter foreground color
 view.gutter.fgColor=#000000
 
 # Gutter highlight color
-view.gutter.highlightColor=#000066
+view.gutter.highlightColor=#990066
 
 # Gutter current line highlight color
-view.gutter.currentLineColor=#d04040
+view.gutter.currentLineColor=#ff0033
 
 # Gutter bracket highlighting
 view.gutter.bracketHighlight=true
@@ -230,11 +230,11 @@ view.gutter.bracketHighlightColor=#666699
 view.gutter.markerColor=#ccffcc
 
 # Gutter border colors
-view.gutter.focusBorderColor=#666699
-view.gutter.noFocusBorderColor=#a0a0b4
+view.gutter.focusBorderColor=#990099
+view.gutter.noFocusBorderColor=#ffffff
 
 # Fold triangle color
-view.gutter.foldColor=#666699
+view.gutter.foldColor=#838383
 
 # Gutter font name
 view.gutter.font=Monospaced
@@ -275,20 +275,24 @@ view.gutter.gutterAltClick=toggleFold
 view.expandOnInput=false
 
 #{{{ Syntax styles
-view.style.comment1=color:#006666 style:i
-view.style.comment2=color:#990033 style:i
-view.style.digit=color:#666600
-view.style.function=color:#000066
-view.style.invalid=color:#ff0000
-view.style.keyword1=color:#000000 style:b
-view.style.keyword2=color:#660066 style:b
-view.style.keyword3=color:#000066 style:b
-view.style.label=color:#990033 style:ib
-view.style.literal1=color:#404040
-view.style.literal2=color:#404040
-view.style.markup=color:#5e5e5e style:b
-view.style.operator=style:b
-view.style.foldLine=bgColor:#e8e8e8 color:#009999 style:b
+view.style.comment1=color:#990033
+view.style.comment2=color:#6600cc
+view.style.digit=color:#ff0000
+view.style.function=color:#9966ff
+view.style.invalid=color:#ff0066 bgColor:#ffffcc
+view.style.keyword1=color:#006699 style:b
+view.style.keyword2=color:#009966 style:b
+view.style.keyword3=color:#cc6600 style:b
+view.style.label=color:#006666
+view.style.literal1=color:#cd8f8f
+view.style.literal2=color:#cc6600
+view.style.markup=color:#7b7b7b
+view.style.operator=color:#990099 style:b
+view.style.foldLine.1=bgColor:#fff0cc style:b
+view.style.foldLine.2=bgColor:#fff0f0 style:b
+view.style.foldLine.3=bgColor:#ffe0f0 style:b
+view.style.foldLine.0=bgColor:#f0f0f0 style:b
+
 #}}}
 
 # Fancy Java2D stuff

@@ -41,7 +41,7 @@ public class LogViewer extends JPanel
 
 		JPanel caption = new JPanel();
 		caption.setLayout(new BoxLayout(caption,BoxLayout.X_AXIS));
-		caption.setBorder(new EmptyBorder(12,12,12,12));
+		caption.setBorder(new EmptyBorder(6,6,6,6));
 
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
@@ -79,6 +79,17 @@ public class LogViewer extends JPanel
 		dim.width = Math.min(300,dim.width);
 		scroller.setPreferredSize(dim);
 		add(BorderLayout.CENTER,scroller);
+	} //}}}
+
+	//{{{ addNotify() method
+	public void addNotify()
+	{
+		super.addNotify();
+		if(tailIsOn)
+		{
+			int index = list.getModel().getSize() - 1;
+			list.ensureIndexIsVisible(index);
+		}
 	} //}}}
 
 	//{{{ requestDefaultFocus() method

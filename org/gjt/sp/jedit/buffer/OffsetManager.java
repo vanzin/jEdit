@@ -300,7 +300,8 @@ public class OffsetManager
 		}
 		else
 		{
-			foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
+			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
 			/* this ensures that the first line is always visible */
 			boolean seenVisibleLine = false;

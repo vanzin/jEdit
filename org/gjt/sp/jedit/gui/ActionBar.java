@@ -73,21 +73,12 @@ public class ActionBar extends JPanel
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				String text = action.getText();
-				if(text == null)
-					return;
-				text = text.trim();
-				if(text.length() == 0)
-					return;
-				EditAction[] completions = getCompletions(text);
-				for(int i = 0; i < completions.length; i++)
-				{
-					System.err.println(completions[i]);
-				}
+				complete();
 			}
-		}); //}}}
-
-		timerComplete();
+		});
+		timer.setRepeats(false);
+		timer.setInitialDelay(300);
+		//}}}
 
 		// if 'temp' is true, hide search bar after user is done with it
 		this.temp = temp;
@@ -99,91 +90,122 @@ public class ActionBar extends JPanel
 		return action;
 	} //}}}
 
+	//{{{ goToActionBar() method
+	public void goToActionBar()
+	{
+		repeatCount = view.getInputHandler().getRepeatCount();
+		System.err.println("go to action bar " + repeatCount);
+		action.setText(null);
+		action.grabFocus();
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
 	private View view;
 	private boolean temp;
+	private int repeatCount;
 	private HistoryTextField action;
+	private CompletionPopup popup;
 	private Timer timer;
 	private RolloverButton close;
 	private EditAction[] actions;
 	//}}}
 
-	//{{{ timerComplete() method
-	private void timerComplete()
-	{
-		timer.stop();
-		timer.setRepeats(false);
-		timer.setInitialDelay(300);
-		timer.start();
-	} //}}}
-
 	//{{{ invoke() method
 	private void invoke()
 	{
-		if(temp)
-			view.removeToolBar(ActionBar.this);
-
-		String cmd = action.getText();
-		if(cmd != null)
+		String cmd;
+		if(popup != null)
+			cmd = popup.list.getSelectedValue().toString();
+		else
 		{
-			cmd = cmd.trim();
-			if(cmd.length() != 0)
+			cmd = action.getText().trim();
+			int index = cmd.indexOf('=');
+			if(index != -1)
 			{
-				int index = cmd.indexOf('=');
-				if(index == -1)
+				String propName = cmd.substring(0,index).trim();
+				String propValue = cmd.substring(index + 1);
+				String code;
+				/* construct a BeanShell snippet instead of
+				 * invoking directly so that user can record
+				 * property changes in macros. */
+				if(propName.startsWith("buffer."))
 				{
-					EditAction[] completions = getCompletions(cmd);
-					if(completions.length != 0)
-					{
-						EditAction act = completions[0];
-						String label = act.getLabel();
-						if(label == null)
-							label = act.getName();
-						else
-							label = GUIUtilities.prettifyMenuLabel(label);
-						view.getStatus().setMessageAndClear(label);
-						view.getInputHandler().invokeAction(act);
-					}
-					else
-					{
-						view.getStatus().setMessageAndClear(
-							jEdit.getProperty(
-							"view.action.no-completions"));
-					}
+					code = "buffer.setStringProperty(\""
+						+ MiscUtilities.charsToEscapes(
+						propName.substring("buffer.".length())
+						) + "\",\""
+						+ MiscUtilities.charsToEscapes(
+						propValue) + "\");\n"
+						+ "buffer.propertiesChanged();";
+				}
+				else if(propName.startsWith("!buffer."))
+				{
+					code = "jEdit.setProperty(\""
+						+ MiscUtilities.charsToEscapes(
+						propName.substring(1)) + "\",\""
+						+ MiscUtilities.charsToEscapes(
+						propValue) + "\");\n"
+						+ "jEdit.propertiesChanged();";
 				}
 				else
 				{
-					String propName = cmd.substring(0,index).trim();
-					String propValue = cmd.substring(index + 1);
-					if(propName.startsWith("buffer."))
-					{
-						Buffer buffer = view.getBuffer();
-						buffer.setStringProperty(
-							propName.substring("buffer.".length()),
-							propValue);
-						buffer.propertiesChanged();
-					}
-					else if(propName.startsWith("!buffer."))
-					{
-						jEdit.setProperty(propName.substring(1),propValue);
-						jEdit.propertiesChanged();
-					}
-					else
-					{
-						jEdit.setProperty(propName,propValue);
-						jEdit.propertiesChanged();
-					}
+					code = "jEdit.setProperty(\""
+						+ MiscUtilities.charsToEscapes(
+						propName) + "\",\""
+						+ MiscUtilities.charsToEscapes(
+						propValue) + "\");\n"
+						+ "jEdit.propertiesChanged();";
+				}
+
+				Macros.Recorder recorder = view.getMacroRecorder();
+				if(recorder != null)
+					recorder.record(code);
+				BeanShell.eval(view,BeanShell.getNameSpace(),code);
+				cmd = null;
+			}
+			else if(cmd.length() != 0)
+			{
+				EditAction[] completions = getCompletions(cmd);
+				if(completions.length != 0)
+				{
+					cmd = completions[0].getName();
 				}
 			}
+			else
+				cmd = null;
 		}
 
-		if(hasFocus())
+		if(popup != null)
 		{
-			// if action didn't move focus out of action bar
-			view.getEditPane().focusOnTextArea();
+			popup.dispose();
+			popup = null;
 		}
+
+
+		final EditAction act = (cmd == null ? null : jEdit.getAction(cmd));
+		if(temp)
+			view.removeToolBar(ActionBar.this);
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				view.getTextArea().grabFocus();
+				if(act == null)
+				{
+					view.getStatus().setMessageAndClear(
+						jEdit.getProperty(
+						"view.action.no-completions"));
+				}
+				else
+				{
+					view.getInputHandler().setRepeatCount(repeatCount);
+					view.getInputHandler().invokeAction(act);
+				}
+			}
+		});
 	} //}}}
 
 	//{{{ getCompletions() method
@@ -197,6 +219,46 @@ public class ActionBar extends JPanel
 		}
 
 		return (EditAction[])returnValue.toArray(new EditAction[returnValue.size()]);
+	} //}}}
+
+	//{{{ complete() method
+	private void complete()
+	{
+		String text = action.getText().trim();
+		if(text.length() != 0)
+		{
+			EditAction[] completions = getCompletions(text);
+			if(completions.length == 1 && completions[0].getName().equals(text))
+			{
+				// do nothing
+			}
+			else if(completions.length != 0)
+			{
+				if(popup != null)
+					popup.setModel(completions);
+				else
+					popup = new CompletionPopup(completions);
+				return;
+			}
+		}
+
+		if(popup != null)
+		{
+			popup.dispose();
+			popup = null;
+		}
+	} //}}}
+
+	//{{{ timerComplete() method
+	private void timerComplete()
+	{
+		if(popup == null)
+		{
+			timer.stop();
+			timer.start();
+		}
+		else
+			complete();
 	} //}}}
 
 	//}}}
@@ -262,8 +324,7 @@ public class ActionBar extends JPanel
 					super.processKeyEvent(evt);
 					repeat = true;
 					timer.stop();
-					view.getInputHandler().setRepeatCount(
-						Integer.parseInt(action.getText()));
+					repeatCount = Integer.parseInt(action.getText());
 				}
 				else
 				{
@@ -280,6 +341,7 @@ public class ActionBar extends JPanel
 					|| evt.isControlDown()
 					|| evt.isAltDown()
 					|| evt.isMetaDown()
+					|| keyCode == KeyEvent.VK_BACK_SPACE
 					|| keyCode == KeyEvent.VK_ENTER
 					|| keyCode == KeyEvent.VK_TAB
 					|| keyCode == KeyEvent.VK_ESCAPE)
@@ -295,7 +357,19 @@ public class ActionBar extends JPanel
 						evt.consume();
 						if(temp)
 							view.removeToolBar(ActionBar.this);
+						if(popup != null)
+						{
+							popup.dispose();
+							popup = null;
+						}
 						view.getEditPane().focusOnTextArea();
+						break;
+					}
+					else if((keyCode == KeyEvent.VK_UP
+						|| keyCode == KeyEvent.VK_DOWN)
+						&& popup != null)
+					{
+						popup.list.processKeyEvent(evt);
 						break;
 					}
 				}
@@ -304,16 +378,19 @@ public class ActionBar extends JPanel
 			}
 		}
 
-		private void passToView(KeyEvent evt)
+		private void passToView(final KeyEvent evt)
 		{
 			if(temp)
 				view.removeToolBar(ActionBar.this);
-			view.getTextArea().processKeyEvent(evt);
-			if(hasFocus())
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				// if action didn't move focus out of action bar
-				view.getEditPane().focusOnTextArea();
-			}
+				public void run()
+				{
+					view.getTextArea().grabFocus();
+					view.getInputHandler().setRepeatCount(repeatCount);
+					view.getInputHandler().processKeyEvent(evt);
+				}
+			});
 		}
 
 		public void addNotify()
@@ -321,6 +398,113 @@ public class ActionBar extends JPanel
 			super.addNotify();
 			repeat = nonDigit = false;
 		}
+	} //}}}
+
+	//{{{ CompletionPopup class
+	class CompletionPopup extends JWindow
+	{
+		CompletionList list;
+
+		//{{{ CompletionPopup constructor
+		CompletionPopup(EditAction[] actions)
+		{
+			super(view);
+
+			setContentPane(new JPanel(new BorderLayout())
+			{
+				/**
+				 * Returns if this component can be traversed by pressing the
+				 * Tab key. This returns false.
+				 */
+				public boolean isManagingFocus()
+				{
+					return false;
+				}
+
+				/**
+				 * Makes the tab key work in Java 1.4.
+				 */
+				public boolean getFocusTraversalKeysEnabled()
+				{
+					return false;
+				}
+			});
+
+			list = new CompletionList(actions);
+			list.setVisibleRowCount(8);
+			list.addMouseListener(new MouseHandler());
+			list.setSelectedIndex(0);
+			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+			// stupid scrollbar policy is an attempt to work around
+			// bugs people have been seeing with IBM's JDK -- 7 Sep 2000
+			JScrollPane scroller = new JScrollPane(list,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+			getContentPane().add(scroller, BorderLayout.CENTER);
+
+			GUIUtilities.requestFocus(this,list);
+
+			pack();
+			Point p = new Point(0,-getHeight());
+			SwingUtilities.convertPointToScreen(p,action);
+			setLocation(p);
+			show();
+
+			KeyHandler keyHandler = new KeyHandler();
+			addKeyListener(keyHandler);
+			list.addKeyListener(keyHandler);
+		} //}}}
+
+		//{{{ setModel() method
+		void setModel(EditAction[] actions)
+		{
+			list.setListData(actions);
+			list.setSelectedIndex(0);
+		} //}}}
+
+		//{{{ MouseHandler class
+		class MouseHandler extends MouseAdapter
+		{
+			public void mouseClicked(MouseEvent evt)
+			{
+				invoke();
+			}
+		} //}}}
+
+		//{{{ CompletionList class
+		class CompletionList extends JList
+		{
+			CompletionList(Object[] data)
+			{
+				super(data);
+			}
+
+			// we need this public not protected
+			public void processKeyEvent(KeyEvent evt)
+			{
+				super.processKeyEvent(evt);
+			}
+		} //}}}
+
+		//{{{ KeyHandler class
+		class KeyHandler extends KeyAdapter
+		{
+			public void keyTyped(KeyEvent evt)
+			{
+				action.processKeyEvent(evt);
+			}
+
+			public void keyPressed(KeyEvent evt)
+			{
+				int keyCode = evt.getKeyCode();
+				if(keyCode == KeyEvent.VK_ESCAPE)
+					action.processKeyEvent(evt);
+				else if(keyCode == KeyEvent.VK_ENTER)
+					invoke();
+			}
+		} //}}}
 	} //}}}
 
 	//}}}

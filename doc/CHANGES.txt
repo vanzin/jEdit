@@ -21,8 +21,12 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - Complete Word popup now has keyboard shortcuts (1 - 0) for inserting
   the first 10 elements in the list.
 
-}}}
-{{{ Input
+- Changed vertical paste behavior. Now if the rectangle we are inserting
+  into has more lines than the pasted text, the pasted text cycles
+  through the rectangle. Previously, it would be inserted at the top
+  with the remaining lines blank. The new behavior is very convinient;
+  for example, you can select a zero-width rectangle and paste "final"
+  to mark a set of variables in Java source as being final.
 
 - Entering a prefix while a JTextComponent has focus will move focus to
   the text area. This allows shortcuts like C+e n n to be used from the
@@ -49,6 +53,13 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   into any positional parameters in the END sequence. This allows
   read-ins to be properly handled in languages like Shell Script, PHP,
   and Perl.
+
+}}}
+{{{ Folding
+
+- Different syntax styles are used for collapsed fold lines with
+  different fold levels. Fold levels 1, 2 and 3 have distinct styles,
+  and all higher levels are assigned another style.
 
 }}}
 {{{ User Interface
@@ -81,6 +92,7 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   keyboard.
 
   - Enter an action name (or a substring) to invoke that action.
+    Completion popups are shown after a brief delay.
 
   - Enter a repeat count then invoke an action using any means to repeat
     that action.
@@ -98,6 +110,9 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
   - Note that property names are undocumented. You can get a list using
     the Misc->Properties->jEdit Properties macro.
+
+- jEdit now remembers if more than one view was open, and if the view
+  was split.
 
 }}}
 {{{ Scripting
@@ -153,9 +168,10 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - jEdit no longer minimizes and then restores windows when files are
   opened through the edit server on windows. This was done to work
   around an apparent bug in the Windows JRE. If you still experience the
-  problem, execute this BeanShell code:
+  problem, there is a hidden property that can be set with the action
+  bar:
 
-  jEdit.setBooleanProperty("server.brokenToFront",true);
+  C+ENTER server.brokenToFront=true
 
 - Some HTTP proxies decompress GZip streams for whatever reason. The
   plugin manager now checks if the stream starts with the GZip magic

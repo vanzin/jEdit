@@ -3,16 +3,14 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- no line break broken
+- option to not follow symbolic links
+- C+e C+c long block of text
+- bracket highlight not cleared sometimes?
 - buffer.mode=foo in action bar does not work
-- fold handlers should not have to multiply levels by the tab size
-- different colors for collapsed fold lines of different levels
-- action bar: only move focus to text area if it is still in the text
-  field after the action invocation
-- action bar completion popup
 - changing fileset parameters should modify the file set not create a
   new one
 - dir search: resolve path relative to current buffer's path
-
 - new bsh and bsh command path
 - C+ENTER 3 menu command - bar not hidden - need input handler action
   listeners or something
@@ -23,7 +21,6 @@ and quirks that I need to fix eventually.
 - perl: q{}, etc.
 - position hold still doesn't work
 - don't show 'new directory' in favorites:
-- jedit -background -nogui && jedit -norestore opens "Untitled 2"
 - plugin error dialog -- if > 1 error per plugin
 - A+# on OS X, need better modifier mapping on OS X
 - how to handle S+0-9?
@@ -35,8 +32,6 @@ and quirks that I need to fix eventually.
 - return after collapsed fold: insert line after end of fold
 - global options: don't use card layout
 
-- delete line magic caret w/ block caret
-- replace with lookahead/lookbehind doesn't work
 - need a new jEditLauncher
 - plugin tutorial:
   - plugin build environment docs
@@ -127,8 +122,6 @@ and quirks that I need to fix eventually.
 - line 2112 -- isNarrowed() check of moveCaretPosition()
 - status bar still fooling around
 - popups still positioned poorly
-- mouse pressed ignored sometimes?
-- poor performance sometimes
 - searching in a buffer w/ narrowed fold
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
@@ -194,6 +187,8 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - could make non-soft wrap chunk merge even faster!
 - could make long lines even faster
 - syntax SPAN::END substitution: String --> char[] --> String
+- delete line magic caret w/ block caret
+- replace with lookahead/lookbehind doesn't work
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

@@ -144,7 +144,10 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice("options.syntax.operatorStyle","view.style.operator");
 		addStyleChoice("options.syntax.digitStyle","view.style.digit");
 		addStyleChoice("options.syntax.invalidStyle","view.style.invalid");
-		addStyleChoice("options.syntax.foldLine","view.style.foldLine");
+		addStyleChoice("options.syntax.foldLine.1","view.style.foldLine.1");
+		addStyleChoice("options.syntax.foldLine.2","view.style.foldLine.2");
+		addStyleChoice("options.syntax.foldLine.3","view.style.foldLine.3");
+		addStyleChoice("options.syntax.foldLine.0","view.style.foldLine.0");
 		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringCompare());
 	} //}}}
 

@@ -895,6 +895,38 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return o1.equals(o2);
 	} //}}}
 
+	//{{{ charsToEntities() method
+	/**
+	 * Converts &lt;, &gt;, &amp; in the string to their HTML entity
+	 * equivalents.
+	 * @param str The string
+	 * @since jEdit 4.2pre1
+	 */
+	public static String charsToEntities(String str)
+	{
+		StringBuffer buf = new StringBuffer(str.length());
+		for(int i = 0; i < str.length(); i++)
+		{
+			char ch = str.charAt(i);
+			switch(ch)
+			{
+			case '<':
+				buf.append("&lt;");
+				break;
+			case '>':
+				buf.append("&gt;");
+				break;
+			case '&':
+				buf.append("&amp;");
+				break;
+			default:
+				buf.append(ch);
+				break;
+			}
+		}
+		return buf.toString();
+	} //}}}
+
 	//}}}
 
 	//{{{ Sorting methods

@@ -562,25 +562,8 @@ public class Registers
 					out.write((char)i);
 				out.write("\">");
 
-				String text = register.toString();
-				for(int j = 0; j < text.length(); j++)
-				{
-					char ch = text.charAt(j);
-					switch(ch)
-					{
-					case '&':
-						out.write("&amp;");
-						break;
-					case '<':
-						out.write("&lt;");
-						break;
-					case '>':
-						out.write("&gt;");
-						break;
-					default:
-						out.write(ch);
-					}
-				}
+				out.write(MiscUtilities.charsToEntities(
+					register.toString()));
 
 				out.write("</REGISTER>");
 				out.write(lineSep);

@@ -836,10 +836,9 @@ public class GUIUtilities
 		Dimension size = win.getSize();
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		Rectangle gcbounds = gd.getDefaultConfiguration().getBounds();
-		
+
 		x = gcbounds.x;
 		y = gcbounds.y;
-		Dimension screen = new Dimension(gcbounds.width,gcbounds.height);
 
 		width = jEdit.getIntegerProperty(name + ".width",size.width);
 		height = jEdit.getIntegerProperty(name + ".height",size.height);
@@ -847,8 +846,8 @@ public class GUIUtilities
 		Component parent = win.getParent();
 		if(parent == null)
 		{
-			x += (screen.width - width) / 2;
-			y += (screen.height - height) / 2;
+			x += (gcbounds.width - width) / 2;
+			y += (gcbounds.height - height) / 2;
 		}
 		else
 		{
@@ -860,9 +859,22 @@ public class GUIUtilities
 		x = jEdit.getIntegerProperty(name + ".x",x);
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
+		int extState = jEdit.getIntegerProperty(name + ".extendedState", 0);
+		setWindowBounds(win,x,y,width,height,extState);
+	} //}}}
+
+	//{{{ setWindowBounds() method
+	/**
+	 * Gives a window the specified bounds, ensuring it is within the
+	 * screen bounds.
+	 * @since jEdit 4.2pre1
+	 */
+	public static void setWindowBounds(Window win, int x, int y,
+		int width, int height, int extState)
+	{
 		// Make sure the window is displayed in visible region
 		Rectangle osbounds = OperatingSystem.getScreenBounds(new Rectangle(x,y,width,height));
-		
+
 		if(x < osbounds.x || x+width > osbounds.width)
 		{
 			if (width > osbounds.width)
@@ -879,25 +891,8 @@ public class GUIUtilities
 		Rectangle desired = new Rectangle(x,y,width,height);
 		win.setBounds(desired);
 
-		if((win instanceof Frame) && OperatingSystem.hasJava14())
-		{
-			int extState = jEdit.getIntegerProperty(name +
-				".extendedState", Frame.NORMAL);
-
-			try
-			{
-				java.lang.reflect.Method meth =
-					Frame.class.getMethod("setExtendedState",
-					new Class[] {int.class});
-
-				meth.invoke(win, new Object[] {
-					new Integer(extState)});
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,e);
-			}
-		}
+		if(win instanceof Frame)
+			setExtendedState((Frame)win,extState);
 	} //}}}
 
 	//{{{ saveGeometry() method
@@ -911,27 +906,10 @@ public class GUIUtilities
 	 */
 	public static void saveGeometry(Window win, String name)
 	{
-		if((win instanceof Frame) && OperatingSystem.hasJava14())
+		if(win instanceof Frame)
 		{
-			try
-			{
-				java.lang.reflect.Method meth =
-					Frame.class.getMethod("getExtendedState",
-					new Class[0]);
-
-				Integer extState = (Integer)meth.invoke(win,
-					new Object[0]);
-
-				jEdit.setIntegerProperty(name + ".extendedState",
-					extState.intValue());
-
-				if(extState.intValue() != Frame.NORMAL)
-					return;
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,e);
-			}
+			jEdit.setIntegerProperty(name + ".extendedState",
+				getExtendedState((Frame)win));
 		}
 
 		Rectangle bounds = win.getBounds();
@@ -939,6 +917,62 @@ public class GUIUtilities
 		jEdit.setIntegerProperty(name + ".y",bounds.y);
 		jEdit.setIntegerProperty(name + ".width",bounds.width);
 		jEdit.setIntegerProperty(name + ".height",bounds.height);
+	} //}}}
+
+	//{{{ getExtendedState() method
+	/**
+	 * On Java 1.4, calls <code>Frame.getExtendedState()</code>.
+	 * On Java 1.3, returns 0.
+	 * @since jEdit 4.2pre1
+	 */
+	public static int getExtendedState(Frame frame)
+	{
+		if(OperatingSystem.hasJava14())
+		{
+			try
+			{
+				java.lang.reflect.Method meth =
+					Frame.class.getMethod("getExtendedState",
+					new Class[0]);
+
+				Integer extState = (Integer)meth.invoke(frame,
+					new Object[0]);
+
+				return extState.intValue();
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,e);
+			}
+		}
+
+		return 0;
+	} //}}}
+
+	//{{{ setExtendedState() method
+	/**
+	 * On Java 1.4, calls <code>Frame.setExtendedState()</code>.
+	 * On Java 1.3, does nothing.
+	 * @since jEdit 4.2pre1
+	 */
+	public static void setExtendedState(Frame frame, int extState)
+	{
+		if(OperatingSystem.hasJava14())
+		{
+			try
+			{
+				java.lang.reflect.Method meth =
+					Frame.class.getMethod("setExtendedState",
+					new Class[] {int.class});
+
+				meth.invoke(frame, new Object[] {
+					new Integer(extState)});
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,GUIUtilities.class,e);
+			}
+		}
 	} //}}}
 
 	//}}}

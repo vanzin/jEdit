@@ -121,7 +121,6 @@ public class CompleteWord extends JWindow
 		this.word = word;
 
 		words = new JList(completions);
-		words.setFont(UIManager.getFont("TextArea.font"));
 
 		words.setVisibleRowCount(Math.min(completions.size(),8));
 
