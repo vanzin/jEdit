@@ -12,15 +12,14 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 3.2.2
+Version: 4.0pre1
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 22
+Serial: 23
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit322source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre1source.tar.gz
 Source1: jedit.sh.in
-Patch0: jedit32-javac.patch
 URL: http://www.jedit.org
 Vendor: Slava Pestov <slava@jedit.org>
 Packager: Slava Pestov <slava@jedit.org>
@@ -37,22 +36,21 @@ jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
 
 %prep
 %setup -n jEdit
-%patch0 -p1 -b .javac
 
 %build
 export CLASSPATH="."
 
 # Build docs
-(cd doc/users-guide/ && jmk htmldocs)
+ant docs-html-xsltproc
 
 # Build jedit.jar
-jmk
+ant
 
 # Build LatestVersion.jar
-(cd jars/LatestVersion && jmk)
+(cd jars/LatestVersion && ant)
 
-# Build LatestVersion.jar
-(cd jars/Firewall && jmk)
+# Build Firewall.jar
+(cd jars/Firewall && ant)
 
 # Create installer filelists
 sh installer/mk_filelist.sh

@@ -2261,7 +2261,16 @@ public class jEdit
 		EditPlugin[] plugins = getPlugins();
 		for(int i = 0; i < plugins.length; i++)
 		{
-			plugins[i].stop();
+			try
+			{
+				plugins[i].stop();
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,jEdit.class,"Error while "
+					+ "stopping plugin:");
+				Log.log(Log.ERROR,jEdit.class,t);
+			}
 		}
 
 		// Send EditorExiting

@@ -347,7 +347,6 @@ public class Buffer implements EBComponent
 		// data available yet.
 		EditBus.send(new BufferUpdate(this,view,BufferUpdate.LOAD_STARTED));
 
-		//undo = null;
 		final boolean loadAutosave;
 
 		if(reload || !getFlag(NEW_FILE))
@@ -380,7 +379,7 @@ public class Buffer implements EBComponent
 		else
 			loadAutosave = false;
 
-		// Do some stuff once loading is finished
+		//{{{ Do some stuff once loading is finished
 		Runnable runnable = new Runnable()
 		{
 			public void run()
@@ -400,8 +399,6 @@ public class Buffer implements EBComponent
 					{
 						writeLock();
 
-						undoMgr.clear();
-
 						contentMgr.insert(0,seg.toString());
 
 						contentInserted(0,seg.count,
@@ -416,9 +413,9 @@ public class Buffer implements EBComponent
 				unsetProperty(BufferIORequest.LOAD_DATA);
 				unsetProperty(BufferIORequest.END_OFFSETS);
 
-				//undo = new MyUndoManager();
-				//undo.setLimit(jEdit.getIntegerProperty(
-				//	"buffer.undoCount",100));
+				undoMgr.clear();
+				undoMgr.setLimit(jEdit.getIntegerProperty(
+					"buffer.undoCount",100));
 
 				parseBufferLocalProperties();
 				setMode();
@@ -465,9 +462,9 @@ public class Buffer implements EBComponent
 						view,BufferUpdate.LOADED));
 					EditBus.send(new BufferUpdate(Buffer.this,
 						view,BufferUpdate.MARKERS_CHANGED));
-				}
+		}
 			}
-		};
+		}; //}}}
 
 		if(getFlag(TEMPORARY))
 			runnable.run();
@@ -1315,7 +1312,11 @@ public class Buffer implements EBComponent
 			}
 
 			if(!getFlag(UNDO_IN_PROGRESS))
-				undoMgr.contentInserted(offset,str.length(),str);
+			{
+				undoMgr.contentInserted(offset,str.length(),str,
+					!getFlag(DIRTY));
+			}
+
 			contentInserted(offset,str.length(),integerArray);
 		}
 		finally
@@ -1357,7 +1358,11 @@ public class Buffer implements EBComponent
 			}
 
 			if(!getFlag(UNDO_IN_PROGRESS))
-				undoMgr.contentInserted(offset,seg.count,seg.toString());
+			{
+				undoMgr.contentInserted(offset,seg.count,
+					seg.toString(),!getFlag(DIRTY));
+			}
+
 			contentInserted(offset,seg.count,integerArray);
 		}
 		finally
@@ -1415,7 +1420,10 @@ public class Buffer implements EBComponent
 			}
 
 			if(!getFlag(UNDO_IN_PROGRESS))
-				undoMgr.contentRemoved(offset,length,seg.toString());
+			{
+				undoMgr.contentRemoved(offset,length,
+					seg.toString(),!getFlag(DIRTY));
+			}
 
 			contentMgr.remove(offset,length);
 

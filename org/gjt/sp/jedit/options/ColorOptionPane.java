@@ -47,7 +47,7 @@ public class ColorOptionPane extends AbstractOptionPane
 {
 	public static final EmptyBorder noFocusBorder = new EmptyBorder(1,1,1,1);
 
-	//{{{ ColorOptionPane const
+	//{{{ ColorOptionPane constructor
 	public ColorOptionPane()
 	{
 		super("color");
@@ -100,6 +100,8 @@ public class ColorOptionPane extends AbstractOptionPane
 		return new ColorTableModel();
 	} //}}}
 
+	//}}}
+
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
@@ -117,8 +119,6 @@ public class ColorOptionPane extends AbstractOptionPane
 				colorModel.setValueAt(color,row,1);
 		}
 	} //}}}
-
-	//}}}
 } //}}}
 
 //{{{ ColorTableModel class
@@ -135,8 +135,8 @@ class ColorTableModel extends AbstractTableModel
 		addColorChoice("options.color.caretColor","view.caretColor");
 		addColorChoice("options.color.selectionColor",
 			"view.selectionColor");
-		addColorChoice("options.color.foldLineColor",
-			"view.foldLineColor");
+		addColorChoice("options.color.foldedLineColor",
+			"view.foldedLineColor");
 		addColorChoice("options.color.lineHighlightColor",
 			"view.lineHighlightColor");
 		addColorChoice("options.color.bracketHighlightColor",

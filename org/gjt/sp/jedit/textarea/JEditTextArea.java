@@ -562,11 +562,8 @@ public class JEditTextArea extends JComponent
 		boolean changed = false;
 
 		int _firstLine = (firstLine == 0 ? 0 : firstLine + electricScroll);
-		if(_lastLine >= lineCount - 1)
-			_lastLine = lineCount - 1;
-		else
-			_lastLine -= electricScroll;
-		if(virtualCaretLine > _firstLine && virtualCaretLine < _lastLine)
+		if(virtualCaretLine > _firstLine && (virtualCaretLine < _lastLine
+			|| firstLine + visibleLines >= lineCount))
 		{
 			// vertical scroll position is correct already
 		}

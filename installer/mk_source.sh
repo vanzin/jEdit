@@ -7,7 +7,7 @@ if [ "$1" = "" ]; then
   exit 1
 fi
 
-sh clean.sh
+ant clean
 rm -f doc/users-guide/*.html
 rm -f doc/users-guide/toc.xml
 
@@ -16,4 +16,4 @@ tar cvfz jedit${1}source.tar.gz `find jEdit -type f \! \( -name Entries \
 	-o -name Root -o -name Entries.Static -o -name Repository \
 	-o -name \*.class -o -name \*.jar -o -name .\*.marks -o -name .xvpics \
 	-o -name \*.exe -o -name \*.dll -o -name \*.dl_ \
-	-o -name \*.spec \)`
+	-o -name \*.spec -o -name .cvsignore -o -name tags \)`

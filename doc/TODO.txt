@@ -2,16 +2,16 @@ TO DO
 
 + before 4.0pre1:
 
-- undo
 - recompile Firewall.jar before releasing
 
 + pre2:
 
-- various random p2v/v2p bugs, and folding problems
+- fuckup if last phys line invisible
 - CCW rotated text not drawn correctly
 - test normal keys bound to actions
-- help viewer: default size a little taller. more informative welcome screen
-  with quick links to some parts of the user's guide.
+- help viewer: more informative welcome screen with quick links to some
+  parts of the user's guide. always shown initially when help viewer
+  opened.
 - alt-key mnemonics for fields in vfs file dialog
 - investigate wrap around in macros
 - tab: if indent-on-tab on, only indent if in leading whitespace; make
@@ -209,7 +209,6 @@ TO DO
 - when a new text area is created, if caret is on a bracket, not matched
   initially
 - resizing doesn't update horizontal scroll bar
-- editing on last line shouldn't cause scrolling
 - JDK 1.3: about box broken
 - find next with $ or ^
 - Shift+TAB on Java 1.1
@@ -244,3 +243,4 @@ TO DO
 - evalutate for selected lines: > 1 selection per line
 - folding paint up bug
 - prev line fold gutter bug
+- undo: redo doesn't clear dirty flag if necessary

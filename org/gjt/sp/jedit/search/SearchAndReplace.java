@@ -883,7 +883,7 @@ loop:		for(;;)
 			if(subst != null)
 			{
 				buffer.remove(offset + _start,_length);
-				buffer.insertString(offset + _start,subst,null);
+				buffer.insert(offset + _start,subst);
 				occurCount++;
 				offset += _start + subst.length();
 				if(subst.length() == 0 && _length == 0)
