@@ -14,17 +14,18 @@
   <sect2 id="mode-selection"><title>Mode Selection</title>
    <para>
     When a file is opened, jEdit first checks the file name against a list
-    of known patterns. For example, files whose names end with <quote>.c</quote>
+    of known patterns. For example, files whose names end with <filename>.c</filename>
     are opened with C mode, and files named <filename>Makefile</filename> are
     opened with Makefile mode. If a suitable match based on file name cannot be
     found, jEdit checks the first line of the file. For example, files whose
-    first line is <quote>#!/bin/sh</quote> are opened with shell script mode.
+    first line is <filename>#!/bin/sh</filename> are opened with shell script mode.
    </para>
    <para>
     File name and first line globs can be changed in the
     <guibutton>Editing</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box. See <xref linkend="globs"/> for information about glob patterns.
+    The default edit mode for files which do not match any pattern can also be set in the <guibutton>Editing</guibutton> pane.
    </para>
    <para>
     The edit mode can be specified manually as well. The current buffer's edit
@@ -37,11 +38,6 @@
     mode:
    </para>
    <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
-   <para>
-    A list of edit modes can be found in the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box.
-   </para>
   </sect2>
   <sect2 id="syntax-hilite"><title>Syntax Highlighting</title>
    <para>
@@ -55,7 +51,7 @@
     The colors and styles used to highlight syntax tokens can be changed
     in the <guibutton>Syntax Highlighting</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />.
+    dialog box; see <xref linkend="syntax-hilite-pane" />.
    </para>
   </sect2>
  </sect1>
@@ -71,12 +67,12 @@
    <listitem><para>On a global or mode-specific basis in the
    <guibutton>Editing</guibutton> pane
    of the the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
+   Options</guimenuitem> dialog box. See <xref linkend="editing-pane"/>.
    </para></listitem>
    <listitem><para>In the current buffer
    for the duration of the editing session in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box.</para></listitem>
+   dialog box. See <xref linkend="buffer-opts"/>.</para></listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing the
    following in one of the first or last 10 lines of the buffer, where
@@ -123,11 +119,11 @@
     <listitem><para>On a global or mode-specific basis in the
     <guibutton>Editing</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-    Options</guimenuitem> dialog box.</para></listitem>
+    Options</guimenuitem> dialog box. See <xref linkend="editing-pane"/>.</para></listitem>
     <listitem><para>In the current buffer for
     the duration of the editing session in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-    dialog box.</para></listitem>
+    dialog box. See <xref linkend="buffer-opts"/>.</para></listitem>
     <listitem><para>In the current buffer for
     future editing sessions by placing the following in one of the first
     or last 10 lines of the buffer, where <replaceable>flag</replaceable> is either
@@ -189,7 +185,7 @@
     <listitem><para><guimenuitem>Indent Selected Lines</guimenuitem>.</para></listitem>
    </itemizedlist>
    <para>
-    See <xref linkend="global-opts"/> for details.
+    See <xref linkend="shortcuts-pane"/> for details.
    </para>
    <para>
     Auto indent behavior is mode-specific. In most edit modes,
@@ -333,7 +329,7 @@
   <para>
    Abbreviations can be edited in the <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />. The Java, VHDL. XML and XSL edit
+   dialog box; see <xref linkend="abbrevs-pane" />. The Java, VHDL. XML and XSL edit
    modes include some pre-defined abbreviations you might find useful. Other
    modes do not have any abbreviations defined by default.
   </para>
@@ -347,7 +343,7 @@
    Automatic abbreviation expansion can be enabled in the
    <guibutton>Abbreviations</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />. If enabled, pressing the
+   dialog box. If enabled, pressing the
    space bar after entering an
    abbreviation will automatically expand it.
   </para>
@@ -394,10 +390,11 @@
    The folding feature lets you selectively hide and show these sections,
    replacing hidden ones with a single line that serves as an
    <quote>overview</quote> of that section.
+   Folding is disabled by default. To enable it, you must choose one of the
+   available folding modes.
   </para>
   <para>
-   Folding is disabled by default. To enable it, you must choose one of the
-   available folding modes. <quote>Indent</quote>
+  <quote>Indent</quote>
    mode creates folds based on a line's leading whitespace; the more
    leading whitespace a block of text has, the further down it is
    in the hierarchy. For example:
@@ -441,11 +438,11 @@ With text inside it.
    <listitem><para>On a global or mode-specific
    basis in the <guibutton>Editing</guibutton> pane
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.</para></listitem>
+   Options</guimenuitem> dialog box. See <xref linkend="editing-pane"/>.</para></listitem>
    <listitem><para>In the current buffer for the duration of the editing
    session in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box.</para></listitem>
+   dialog box. See <xref linkend="buffer-opts"/>.</para></listitem>
    <listitem><para>In the current buffer for future editing sessions
    by placing the following in the first or last 10 lines of a buffer,
    where <replaceable>mode</replaceable> is either <quote>indent</quote>,
@@ -522,8 +519,8 @@ With text inside it.
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Parent
     Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>e</keycap></keycombo>
-    <keycap>u</keycap>) moves
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>U</keycap>) moves
     the caret to the fold containing the one at the caret position.
    </para>
    <para>
@@ -577,7 +574,7 @@ With text inside it.
     <listitem><para>On a global or mode-specific
     basis in the <guibutton>Editing</guibutton> pane
     of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-    Options</guimenuitem> dialog box.</para></listitem>
+    Options</guimenuitem> dialog box. See <xref linkend="editing-pane"/>.</para></listitem>
     <listitem><para>In the current buffer for future editing sessions
     by placing the following in the first or last 10 lines of a buffer,
     where <replaceable>level</replaceable> is the desired fold level:
@@ -595,7 +592,7 @@ With text inside it.
    </para>
    <para>
     Holding down <keycap>Alt</keycap> while clicking a fold expansion triangle in the gutter will hide all lines the buffer except
-    those in the fold in question.
+    those contained in the clicked fold.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow

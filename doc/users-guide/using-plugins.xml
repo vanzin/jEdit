@@ -26,8 +26,14 @@
    holding down <keycap>Control</keycap>) and click <guibutton>Remove</guibutton>.
    This will display a confirmation dialog box first.
   </para>
+  <para>
+   To view plugin documentation, select a plugin and click <guibutton>Help</guibutton>. Note that plugin documentation can also be accessed by invoking <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit Help</guimenuitem>.
+  </para>
+  <para>
+   <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Options</guimenuitem> displays a dialog box for changing plugin settings.
+  </para>
  </sect1>
- <sect1 id="installing-plugins"><title>Installing Plugins</title>
+ <sect1 id="installing-plugins"><title>Installing and Updating Plugins</title>
   <para>
    Plugins can be installed in two ways; manually, and from the plugin manager.
    In most cases, plugins should be installed from the plugin manager. It is
@@ -61,7 +67,13 @@
    By default, the plugin manager does not download plugin source code, and installs the downloaded plugins in the <filename>jars</filename>
    subdirectory of the user-specific settings directory. These settings can be changed in <guilabel>Plugin Manager</guilabel> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box.
+   dialog box; see <xref linkend="pluginmgr-pane" />.
+  </para>
+  <para>
+   The <guibutton>Update</guibutton> tab of the plugin manager 
+   is very similar to the <guibutton>Install</guibutton> tab. It
+   lists plugins for which updated versions are available. It will also offer to
+   delete any obsolete plugins.
   </para>
   <sidebar><title>Proxy Servers and Firewalls</title>
    <para>
@@ -69,16 +81,8 @@
     you will need to specify the relevant details in the
     <guibutton>Proxy Servers</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="firewall-pane"/>.
    </para>
   </sidebar>
- </sect1>
- <sect1 id="updating-plugins"><title>Updating Plugins</title>
-  <para>
-   The <guibutton>Update</guibutton> tab of the plugin manager 
-   is very similar to the one for installing plugins. It will
-   list plugins for which updated versions are available. It will also offer to
-   delete any obsolete plugins.
-  </para>
  </sect1>
 </chapter>

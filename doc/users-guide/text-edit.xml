@@ -1,4 +1,4 @@
-<!-- jEdit buffer-local properties: -->
+,<!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
 <!-- :xml.root=users-guide.xml: -->
 
@@ -49,7 +49,7 @@
     <keycap>Home</keycap> and <keycap>End</keycap> keys, you can reassign
     the respective keyboard shortcuts in the <guibutton>Shortcuts</guibutton>
     pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>.
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>; see <xref linkend="shortcuts-pane"/>.
    </para>
    <para>
     By default, the shortcuts are assigned as follows:
@@ -71,23 +71,17 @@
     combinations of the following, or indeed any other command or macro:
    </para>
    <itemizedlist>
-    <listitem><para><guimenuitem>Go to Start/End of White Space
-    </guimenuitem>,</para> </listitem>
-    <listitem><para><guimenuitem>Go to Start/End of Line</guimenuitem>,</para>
-    </listitem>
-    <listitem><para><guimenuitem>Go to Start/End of Buffer</guimenuitem>,</para>
+    <listitem><para><guimenuitem>Go to Start/End of White Space</guimenuitem>.</para></listitem>
+    <listitem><para><guimenuitem>Go to Start/End of Line</guimenuitem>.</para></listitem>
+    <listitem><para><guimenuitem>Go to Start/End of Buffer</guimenuitem>.</para>
     </listitem>
     <listitem><para><guimenuitem>Select to Start/End of White Space
-    </guimenuitem>,</para> </listitem>
-    <listitem><para><guimenuitem>Select to Start/End of Line</guimenuitem>,</para>
+    </guimenuitem>.</para></listitem>
+    <listitem><para><guimenuitem>Select to Start/End of Line</guimenuitem>.</para>
     </listitem>
-    <listitem><para><guimenuitem>Select to Start/End of Buffer</guimenuitem>,</para>
+    <listitem><para><guimenuitem>Select to Start/End of Buffer</guimenuitem>.</para>
     </listitem>
    </itemizedlist>
-   <para>
-    For information about changing keyboard shortcuts, see
-    <xref linkend="global-opts"/>.
-   </para>
   </sidebar>
  </sect1>
  <sect1 id="selection"><title>Selecting Text</title>
@@ -115,8 +109,7 @@
    entire buffer.
   </para>
   <para>
-   <guimenu>Edit</guimenu>&gt;<guisubmenu>Select
-   None</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem> (shortcut:
+   <guimenu>Edit</guimenu>&gt;<guisubmenu>More Selection</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem> (shortcut:
    <keycap>Escape</keycap>) deactivates the selection.
   </para>
   </sect2>
@@ -277,7 +270,7 @@
    about the last 100 edits is retained; older edits cannot be undone.
    The maximum number of undos can be changed in the <guibutton>Editing</guibutton> pane
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
+   Options</guimenuitem> dialog box; see <xref linkend="editing-pane"/>.
   </para>
   <para>
    If you undo too many changes,
@@ -352,7 +345,7 @@
     with <guimenuitem>(Eat Whitespace)</guimenuitem> in the
     <guibutton>Shortcuts</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="shortcuts-pane"/>.
    </para>
   </sidebar>
  </sect1>
@@ -472,7 +465,7 @@
    basis in the
    <guibutton>Editing</guibutton> pane
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box. See <xref linkend="global-opts" />.</para></listitem>
+   dialog box. See <xref linkend="editing-pane" />.</para></listitem>
    <listitem><para>In the current buffer
    for the duration of the editing session in the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
@@ -497,7 +490,7 @@
    <para>
     If end of line markers are enabled in the <guibutton>Text Area</guibutton>
     pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box, a colon (<quote>:</quote>) is painted at the end of wrapped lines.
+    dialog box, a colon (<quote>:</quote>) is painted at the end of wrapped lines. See <xref linkend="text-area-pane"/>.
    </para>
   </sect2>
   <sect2><title>Hard Wrap</title>
@@ -639,7 +632,7 @@
     remove the selection from the buffer.
    </para>
   </sect2>
-  <sect2><title>Quick Copy</title>
+  <sect2 id="quick-copy"><title>Quick Copy</title>
    <para>
     Quick copy is disabled by default, but it can be enabled in the
     <guibutton>Text Area</guibutton> pane of the
@@ -762,6 +755,13 @@
     dialog box; see <xref linkend="global-opts" />.
    </para>
    <para>
+    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste Deleted</guimenuitem>
+    (shortcut:
+    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>) is not really a register command; it
+    displays a dialog box listing recently deleted text. As with the <guimenuitem>Paste Previous</guimenuitem> dialog box, the last 20 strings are listed by default.
+   </para>
+   <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>View
     Registers</guimenuitem> displays a dialog box for
     viewing the contents of registers (including the clipboard).
@@ -778,9 +778,9 @@
    buffer. (The dot prefix
    makes the markers file hidden on Unix systems.) Marker
    saving can be
-   disabled in the <guibutton>Loading and Saving</guibutton> pane of the
+   disabled in the <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   dialog box; see <xref linkend="general-pane" />.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Add/Remove Marker</guimenuitem>
@@ -1133,9 +1133,9 @@
    <para>
     By default, the search bar remains hidden until one of the quick search
     commands (described below) is invoked; however you can choose to have it
-    always visible in the <guibutton>General</guibutton> pane of the
+    always visible in the <guibutton>View</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box.
+    dialog box; see <xref linkend="view-pane"/>.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search Bar</guimenuitem>

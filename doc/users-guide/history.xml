@@ -9,7 +9,7 @@
   default. The number of strings to remember can be changed in the
   <guibutton>General</guibutton> pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-  dialog box; see <xref linkend="global-opts" />.
+  dialog box; see <xref linkend="appearance-pane" />.
  </para>
  <para>
   Pressing <keycap>Up</keycap> recalls previous strings.
