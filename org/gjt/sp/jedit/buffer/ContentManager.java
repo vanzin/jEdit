@@ -37,12 +37,6 @@ import javax.swing.text.Segment;
  */
 public class ContentManager
 {
-	//{{{ ContentManager constructor
-	public ContentManager()
-	{
-		text = new char[1024];
-	} //}}}
-
 	//{{{ getLength() method
 	public final int getLength()
 	{
