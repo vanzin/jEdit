@@ -5537,7 +5537,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(offset != 0)
 		{
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,caretLine,offset - 1,0,buffer.getLineCount() - 1);
+				buffer,caretLine,offset - 1);
 			if(bracketOffset != -1)
 			{
 				bracketLine = getLineOfOffset(bracketOffset);

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1190,6 +1190,8 @@ public class View extends JFrame implements EBComponent
 		status.repaintCaretStatus();
 		status.updateBufferStatus();
 		status.updateMiscStatus();
+
+		EditBus.send(new ViewUpdate(this,ViewUpdate.EDIT_PANE_CHANGED));
 	} //}}}
 
 	//{{{ handleBufferUpdate() method
@@ -1256,7 +1258,8 @@ public class View extends JFrame implements EBComponent
 				comp = comp.getParent();
 			}
 
-			setEditPane((EditPane)comp);
+			if(comp != editPane)
+				setEditPane((EditPane)comp);
 		}
 	} //}}}
 

@@ -268,7 +268,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			if(hyperSearch.isSelected() || searchSelection.isSelected())
 			{
 				if(SearchAndReplace.hyperSearch(view,
-					searchSelection.isSelected()));
+					searchSelection.isSelected()))
 					closeOrKeepDialog();
 			}
 			else

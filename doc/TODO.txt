@@ -2,8 +2,9 @@ TO DO
 
 - first run on windows -- why is help viewer hidden
 
-- printer output spacing problem
-- clean up print code from Tom
+- printer output spacing problem - turn this into a configuration option?
+- make print preview look better
+- paginate in background thread
 
 - status: changing folding mode doesn't expand folds? or...?
 
@@ -34,7 +35,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - idea for fixing buffer property issues: BufferProp class
 - fix page up/page down
 - don't repaint whole selection when resizing
-- print should not use so much memory
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?
 - expand fold: try to expand even if already expanded

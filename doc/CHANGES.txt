@@ -37,6 +37,11 @@ JEDIT 4.1 VERSION HISTORY
 - When closing a file with unsaved changes, the file will stay open if
   the save failed. Previously it would be closed and the unsaved changes
   would be lost forever
+- If 'Keep Dialog' was off, the search dialog would close, even after an
+  unsuccessful HyperSearch. This was inconsistent with the bahavior for
+  normal searches, where an unsuccessful match did not close the dialog
+  (so you could correct the search string easier)
+- One of the tips of the day referred to an invalid URL
 
 + API Changes
 
@@ -44,3 +49,9 @@ JEDIT 4.1 VERSION HISTORY
 
   getDoubleProperty()
   setDoubleProperty()
+
+- Removed unused TextUtilities.findMatchingBracket(Buffer buffer,
+    int line, int offset, int startLine, int endLine) method
+
+- New ViewUpdate.EDIT_PANE_CHANGED message, sent when a different edit
+  pane receives focus
