@@ -12,7 +12,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="boxComment" VALUE="*" />
 		<PROPERTY NAME="lineComment" VALUE="//" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\">
 		<!-- whitespace: (space and tab) -->

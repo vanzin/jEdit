@@ -375,7 +375,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 				if(rotate == NONE)
 				{
-					g.setColor(c.getForeground());
+					g.setColor(getForeground());
 					g.drawString(text,x,y + fm.getAscent());
 					return;
 				}
@@ -384,7 +384,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 				{
 					Image rotImg = c.createImage(width,height);
 					Graphics rotGfx = rotImg.getGraphics();
-					rotGfx.setColor(c.getForeground());
+					rotGfx.setColor(getBackground());
+					rotGfx.fillRect(0,0,getWidth(),getHeight());
+					rotGfx.setColor(Color.black);
 
 					rotGfx.drawString(text,0,fm.getAscent());
 
@@ -402,10 +404,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 			int rotation;
 			int width;
 			int height;
+			IndexColorModel indexModel;
 
 			RotationFilter(int rotation)
 			{
 				this.rotation = rotation;
+				indexModel = new IndexColorModel(32,2,
+					new byte[] { 0, 0 },
+					new byte[] { 0, 0 },
+					new byte[] { 0, 0 },
+					1);
 			}
 
 			public void setDimensions(int width, int height)
@@ -433,20 +441,20 @@ public class PanelWindowContainer implements DockableWindowContainer
 							? i : scansize - i - 1) + off];
 
 						retVal[i * h + (h - j - 1)]
-							= value;
+							= (byte)(value == 0 ? 0 : 1);
 					}
 				}
 
 				super.setPixels((rotation == CCW
 					? y : width - y - 1),
-					x,h,w,model,retVal,0,h);
+					x,h,w,indexModel,retVal,0,h);
 			}
 
 			public void setPixels(int x, int y, int w, int h,
 				ColorModel model, int pixels[], int off,
 				int scansize)
 			{
-				int[] retVal = new int[h * w];
+				byte[] retVal = new byte[h * w];
 
 				for(int i = 0; i < w; i++)
 				{
@@ -457,14 +465,15 @@ public class PanelWindowContainer implements DockableWindowContainer
 							? i : scansize - i - 1) + off];
 
 						retVal[i * h + (h - j - 1)]
-							= value;
+							= (byte)(value == 0 ? 0 : 1);
 					}
 				}
 
 				super.setPixels((rotation == CCW
 					? y : width - y - h),
 					(rotation == CW
-					? x : height - x - w),h,w,model,retVal,0,h);
+					? x : height - x - w),h,w,
+					indexModel,retVal,0,h);
 			}
 		}
 	}

@@ -6,7 +6,6 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="!" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">

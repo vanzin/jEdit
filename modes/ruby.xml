@@ -10,7 +10,6 @@
 		<PROPERTY NAME="commentStart" VALUE="=begin" />
 		<PROPERTY NAME="commentEnd" VALUE="=end" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- whitespace: (space and tab) -->

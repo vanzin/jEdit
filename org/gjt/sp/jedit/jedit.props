@@ -116,7 +116,7 @@ buffer.maxLineLen=80
 buffer.wordBreakChars=
 
 # Non-alphanumeric word characters
-buffer.noWordSep=
+buffer.noWordSep=_
 
 # Folds with a level equal to or higher than this will be collapsed
 buffer.collapseFolds=0
@@ -204,6 +204,10 @@ view.gutter.highlightColor=#000066
 
 # Gutter current line highlight color
 view.gutter.currentLineColor=#d04040
+
+# Gutter bracket highlighting
+view.gutter.bracketHighlight=true
+view.gutter.bracketHighlightColor=#666699
 
 # Gutter marker highlight color
 view.gutter.markerColor=#ccffcc

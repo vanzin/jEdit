@@ -6,7 +6,6 @@
      based on Java mode by Mike Dillon and IDLTokenMarker by Juha Lindfors -->
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="lineComment" VALUE=";" />
 	</PROPS>
 	<RULES HIGHLIGHT_DIGITS="TRUE">

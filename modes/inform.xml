@@ -12,7 +12,6 @@
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="filenameGlob" VALUE="*.inf" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">

@@ -100,12 +100,14 @@ public class ContextOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,buttons);
 	}
 
-	class MenuItemCompare implements MiscUtilities.Compare
+	static class MenuItemCompare implements MiscUtilities.Compare
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return ((MenuItem)obj1).label.compareTo(
-				((MenuItem)obj2).label);
+			return MiscUtilities.compareStrings(
+				((MenuItem)obj1).label,
+				((MenuItem)obj2).label,
+				true);
 		}
 	}
 
@@ -144,12 +146,12 @@ public class ContextOptionPane extends AbstractOptionPane
 		MenuItem(String actionName, String label)
 		{
 			this.actionName = actionName;
-			this.label = label;
+			this.label = GUIUtilities.prettifyMenuLabel(label);
 		}
 
 		public String toString()
 		{
-			return GUIUtilities.prettifyMenuLabel(label);
+			return label;
 		}
 	}
 
@@ -336,12 +338,12 @@ class ContextAddDialog extends EnhancedDialog
 	private void updateList()
 	{
 		ActionSet actionSet = (ActionSet)combo.getSelectedItem();
-		DefaultListModel listModel = new DefaultListModel();
 		EditAction[] actions = actionSet.getActions();
+		Vector listModel = new Vector(actions.length);
 
-		for(int j = 0; j < actions.length; j++)
+		for(int i = 0; i < actions.length; i++)
 		{
-			EditAction action = actions[j];
+			EditAction action = actions[i];
 			String label = action.getLabel();
 			if(label == null)
 				continue;
@@ -350,7 +352,9 @@ class ContextAddDialog extends EnhancedDialog
 				action.getName(),label));
 		}
 
-		list.setModel(listModel);
+		MiscUtilities.quicksort(listModel,new ContextOptionPane.MenuItemCompare());
+
+		list.setListData(listModel);
 	}
 
 	class ActionHandler implements ActionListener

@@ -238,6 +238,7 @@ Mike Dillon:        - Syntax highlighting engine ("XMode")
                       PHP, SHTML, TSQL, XML, XSL edit modes
                     - http://plugins.jedit.org web master
                     - ... and more
+Mike Hansen:        - REBOL edit mode
 Nils Krahnstoever:  - BibTeX edit mode
 Nitsan Vardi:       - VHDL edit mode
 Ollie Rutherfurd:   - C# edit mode

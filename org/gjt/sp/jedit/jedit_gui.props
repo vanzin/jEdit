@@ -646,7 +646,7 @@ about.version=jEdit version {0}
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
-about.text=jEdit was brought to you by:\n\
+about.text=jEdit is brought to you by:\n\
 	\ \n\
 	Slava Pestov\n\
 	Alwyn Barry\n\
@@ -688,6 +688,7 @@ about.text=jEdit was brought to you by:\n\
 	Matthias Schneider\n\
 	Michael Jacobson\n\
 	Mike Dillon\n\
+	Mike Hansen\n\
 	Nils Krahnstoever\n\
 	Nitsan Vardi\n\
 	Ollie Rutherfurd\n\
@@ -1121,13 +1122,8 @@ buffer-options.title=Buffer Options
 buffer-options.mode=Edit mode:
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
-buffer-options.readOnly=Read only
 buffer-options.trailingEOL=Trailing end-of-line at end of file
 buffer-options.props=Corresponding buffer-local properties: (C+c copies)
-
-buffer-options.readOnly.title=Cannot Make Read Only
-buffer-options.readOnly.message=This buffer has unsaved changes. It cannot be\n\
-	made read only.
 
 # Global options dialog
 options.title=Global Options
@@ -1202,14 +1198,15 @@ options.color.bgColor=Text background
 options.color.fgColor=Text foreground
 options.color.caretColor=Caret
 options.color.selectionColor=Selection
-options.color.lineHighlightColor=Line highlight
-options.color.bracketHighlightColor=Bracket highlight
+options.color.lineHighlightColor=Current line highlight
+options.color.bracketHighlightColor=Bracket highlight in text area
 options.color.eolMarkerColor=EOL markers
 options.color.wrapGuideColor=Wrap guide
 options.color.gutterBgColor=Gutter background
 options.color.gutterFgColor=Gutter foreground
 options.color.gutterHighlightColor=Gutter highlight
 options.color.gutterCurrentLineColor=Current line in gutter
+options.color.gutterBracketHighlightColor=Bracket highlight in gutter
 options.color.gutterMarkerColor=Markers in gutter
 options.color.gutterFoldColor=Fold markers in gutter
 options.color.gutterFocusBorderColor=Focused gutter border

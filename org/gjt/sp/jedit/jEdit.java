@@ -55,7 +55,7 @@ public class jEdit
 	}
 
 	/**
-	 * Returns the internal version. String.compareTo() can be used
+	 * Returns the internal version. MiscUtilities.compareStrings() can be used
 	 * to compare different internal versions.
 	 */
 	public static String getBuild()
@@ -2115,12 +2115,6 @@ public class jEdit
 		// Save settings
 		saveSettings();
 
-		System.err.println("Allocator statistics:");
-		System.err.println("LineContext: " + TokenMarker.LineContext.COUNT_GC
-			+ " / " + TokenMarker.LineContext.COUNT);
-		System.err.println("Token: " + Token.COUNT_GC
-			+ " / " + Token.COUNT);
-
 		// Close activity log stream
 		Log.closeStream();
 
@@ -2775,14 +2769,14 @@ loop:		for(int i = 0; i < list.length; i++)
 		else if(sortBuffers)
 		{
 			String name1 = (sortByName ? buffer.getName()
-				: buffer.getPath()).toLowerCase();
+				: buffer.getPath());
 
 			Buffer _buffer = buffersFirst;
 			while(_buffer != null)
 			{
 				String name2 = (sortByName ? _buffer.getName()
-					: _buffer.getPath()).toLowerCase();
-				if(name1.compareTo(name2) <= 0)
+					: _buffer.getPath());
+				if(MiscUtilities.compareStrings(name1,name2,true) <= 0)
 				{
 					buffer.next = _buffer;
 					buffer.prev = _buffer.prev;

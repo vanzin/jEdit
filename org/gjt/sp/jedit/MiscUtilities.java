@@ -491,6 +491,79 @@ loop:		for(int i = 0; i < str.length(); i++)
 	}
 
 	/**
+	 * A more intelligent version of String.compareTo() that handles
+	 * numbers specially. For example, it places "My file 2" before
+	 * "My file 10".
+	 * @param str1 The first string
+	 * @param str2 The second string
+	 * @param ignoreCase If true, case will be ignored
+	 * @return negative If str1 &lt; str2, 0 if both are the same,
+	 * positive if str1 &gt; str2
+	 * @since jEdit 4.0pre1
+	 */
+	public static int compareStrings(String str1, String str2, boolean ignoreCase)
+	{
+		char[] char1 = str1.toCharArray();
+		char[] char2 = str2.toCharArray();
+
+		int len = Math.min(char1.length,char2.length);
+
+		for(int i = 0, j = 0; i < len && j < len; i++, j++)
+		{
+			char ch1 = char1[i];
+			char ch2 = char2[j];
+			if(Character.isDigit(ch1) && Character.isDigit(ch2)
+				&& ch1 != '0' && ch2 != '0')
+			{
+				int _i = i + 1;
+				int _j = j + 1;
+
+				for(; _i < char1.length; _i++)
+				{
+					if(!Character.isDigit(char1[_i]))
+					{
+						//_i--;
+						break;
+					}
+				}
+
+				for(; _j < char2.length; _j++)
+				{
+					if(!Character.isDigit(char2[_j]))
+					{
+						//_j--;
+						break;
+					}
+				}
+
+				int num1 = Integer.parseInt(new String(char1,
+					i,_i - i));
+				int num2 = Integer.parseInt(new String(char2,
+					j,_j - j));
+
+				if(num1 != num2)
+					return num1 - num2;
+
+				i = _i - 1;
+				j = _j - 1;
+			}
+			else
+			{
+				if(ignoreCase)
+				{
+					ch1 = Character.toLowerCase(ch1);
+					ch2 = Character.toLowerCase(ch2);
+				}
+
+				if(ch1 != ch2)
+					return ch1 - ch2;
+			}
+		}
+
+		return char1.length - char2.length;
+	}
+
+	/**
 	 * Sorts the specified array.
 	 * @param obj The array
 	 * @param compare Compares the objects
@@ -531,7 +604,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return obj1.toString().compareTo(obj2.toString());
+			return compareStrings(obj1.toString(),
+				obj2.toString(),false);
 		}
 	}
 
@@ -542,9 +616,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return obj1.toString().toLowerCase()
-				.compareTo(obj2.toString()
-				.toLowerCase());
+			return compareStrings(obj1.toString(),
+				obj2.toString(),true);
 		}
 	}
 
@@ -552,77 +625,11 @@ loop:		for(int i = 0; i < str.length(); i++)
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return ((JMenuItem)obj1).getText().compareTo(
-				((JMenuItem)obj2).getText());
+			return compareStrings(((JMenuItem)obj1).getText(),
+				((JMenuItem)obj2).getText(),true);
 		}
 	}
 
-	/**
-	 * Compares two version strings formatted like 'xxx.xx.xxx'.
-	 * The versions string are tokenized at '.' and the tokens
-	 * are compared with each other one by one.
-	 * For each substring they are compared as Integers first
-	 * and if that fails, as Strings. The comparison ends with
-	 * the first difference.
-	 * Note, that "1.2.0" &lt; "1.2.0pre1", because "0" &lt; "0pre1".
-	 * Therefore you should avoid mixing numbers and text.
-	 * All string comparisons are case sensitive.
-	 */
-	public static class VersionCompare implements Compare
-	{
-		/**
-		 * compare two version strings 
-		 * @param obj1 first version. Should be a String.
-		 * @param obj2 secons version. Should be a String.
-		 * @return a negative value, if <code>obj1 < obj2</code>, 
-		 *         a positive value, if <code>obj1 > obj2</code>,
-		 *         0, if <code>obj1.equals(obj2)</code>.
-		 */
-		public int compare(Object obj1, Object obj2)
-		{
-			String v1 = obj1.toString();
-			String v2 = obj2.toString();
-			StringTokenizer vt1 = new StringTokenizer(v1,".");
-			StringTokenizer vt2 = new StringTokenizer(v2,".");
-			int comp = 0;
-			
-			while(vt1.hasMoreTokens() && vt2.hasMoreTokens()) {
-				String vt1tok = vt1.nextToken();
-				String vt2tok = vt2.nextToken();
-				try
-				{
-					int i1 = Integer.parseInt(vt1tok);
-					int i2 = Integer.parseInt(vt2tok);
-					comp = i1 < i2 ? -1 : i1 > i2 ? 1 : 0;
-				}
-				catch(NumberFormatException e)
-				{	
-					comp = vt1tok.compareTo(vt2tok);
-				}
-				if(comp != 0)
-					return comp;
-			}
-			
-			return vt1.hasMoreTokens() ? 1 
-				: vt2.hasMoreTokens() ? -1 : 0;
-		}
-	}
-
-	/**
-	 * Helper function to compare two version strings, using the 
-	 * VersionCompare class.
-	 * @param version1 the first version string
-	 * @param version2 the second version string
-	 * @return a negative value, if <code>version1 &lt; version2</code>, 
-	 *         a positive value, if <code>version1 &gt; version2</code>,
-	 *         0, if <code>version1.equals(version2)</code>.
-	 */
-	public static int compareVersions(String version1, String version2)
-	{
-		VersionCompare comparator = new VersionCompare();
-		return comparator.compare(version1,version2);
-	}
-	
 	/**
 	 * Converts an internal version number (build) into a
 	 * `human-readable' form.
@@ -672,7 +679,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	public static boolean isToolsJarAvailable()
 	{
 		String javaVersion = System.getProperty("java.version");
-		if(compareVersions(javaVersion, "1.2") < 0)
+		if(compareStrings(javaVersion,"1.2",false) < 0)
 			return true;
 
 		Log.log(Log.DEBUG, MiscUtilities.class, "JDK 1.2 or higher "

@@ -36,6 +36,9 @@ JEDIT 4.0 VERSION HISTORY
 - -nogui switch is back. If specified when jEdit is being run in
   background mode, the initial view will not be opened
 - Edit->Invert Selection command added
+- Improved bracket matching:
+  - The gutter now displays a scope bracket when the caret and bracket
+    are not on the same line
 
 + Enhancements
 
@@ -82,8 +85,6 @@ JEDIT 4.0 VERSION HISTORY
 - GNU General Public License now shown in installer
 - Editing and saving a mode file, or mode catalog file within jEdit will
   automatically reload that mode, or all edit modes
-- Read only status of a buffer can be changed in 'Buffer Options' dialog
-  box
 - A few keyboard shortcuts added to file system browser:
   ~ - goes to home directory
   / - goes to file system roots list
@@ -102,8 +103,20 @@ JEDIT 4.0 VERSION HISTORY
     selected, in which case that text becomes the search string
   - Because of the above, the 'Find Selection' command is no longer
     necessary
+  - 'All buffers' and 'Directory' radio buttons now pre-select the
+    'HyperSearch' check box (it is still possible to do a normal search
+    over a set of buffers, by deselecting the check box)
 - Multiple selections are now stored in the order they appear in the
   buffer, not the order they were added
+- New MiscUtilities.compareStrings() method compares two strings,
+  treating numbers specially. So, for example, it will say that
+  "my file 10" comes after "my file 2", and that "2.9" comes before
+  "2.10"
+- MiscUtilities.StringCompare and StringICaseCompare classes use this
+  method by default
+- The buffer-local noWordSep property now has a default value of "_".
+  Previously, there was no default, but most modes specified a value of
+  "_".
 
 + Bug Fixes
 
@@ -180,7 +193,13 @@ JEDIT 4.0 VERSION HISTORY
   dockables and ErrorList's error sources. To register dockables, use
   the new dockables.xml API. To register error sources, use the relevant
   APIs in the ErrorList plugin.
+- DockableWindowManager.getDockableWindow() method (that returns a
+  DockableWindow instance) has been deprecated in favor of the new
+  DockableWindowManager.getDockable() (which returns a Component
+  instance)
 - TextAreaHighlight.init() method removed. If it exists, it will be
   called via reflection so that old plugins can continue to work, but
   new plugins should pass a text area instance to the constructor of the
   highlighter.
+- MiscUtilities.VersionCompare class and MiscUtilities.compareVersions()
+  method removed. Use compareStrings() instead

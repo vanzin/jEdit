@@ -342,6 +342,10 @@ public class EditPane extends JPanel implements EBComponent
 		gutter.setHighlightInterval(interval);
 		gutter.setCurrentLineHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.highlightCurrentLine"));
+		gutter.setBracketHighlightEnabled(jEdit.getBooleanProperty(
+			"view.gutter.bracketHighlight"));
+		gutter.setBracketHighlightColor(
+			jEdit.getColorProperty("view.gutter.bracketHighlightColor"));
 		gutter.setBackground(
 			jEdit.getColorProperty("view.gutter.bgColor"));
 		gutter.setForeground(

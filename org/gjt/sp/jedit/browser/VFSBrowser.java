@@ -549,15 +549,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 					return file2.type - file1.type;
 			}
 
-			if(sortIgnoreCase)
-			{
-				return file1.name.toLowerCase().compareTo(
-					file2.name.toLowerCase());
-			}
-			else
-			{
-				return file1.name.compareTo(file2.name);
-			}
+			return MiscUtilities.compareStrings(file1.name,
+				file2.name,sortIgnoreCase);
 		}
 	}
 

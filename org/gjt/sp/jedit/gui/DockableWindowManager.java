@@ -332,6 +332,12 @@ public class DockableWindowManager extends JPanel
 				view.getDockableWindowManager()
 					.showDockableWindow(name);
 			}
+
+			public String getCode()
+			{
+				return "view.getDockableWindowManager()"
+					+ ".showDockableWindow(\"" + name + "\");";
+			}
 		}
 
 		class ToggleAction extends EditAction
@@ -356,6 +362,12 @@ public class DockableWindowManager extends JPanel
 			{
 				return view.getDockableWindowManager()
 					.isDockableWindowVisible(name);
+			}
+
+			public String getCode()
+			{
+				return "view.getDockableWindowManager()"
+					+ ".toggleDockableWindow(\"" + name + "\");";
 			}
 		}
 	}
@@ -499,30 +511,37 @@ public class DockableWindowManager extends JPanel
 	}
 
 	/**
-	 * @deprecated Call getDockable(String) instead
+	 * @deprecated The DockableWindow interface is deprecated, as is this
+	 * method. Use <code>getDockable()</code> instead.
 	 */
 	public DockableWindow getDockableWindow(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
-		if(entry == null || entry.win == null)
-			return null;
-		else if(entry.win instanceof DockableWindow)
-			return (DockableWindow)entry.win;
+		/* this is broken, so you should switch to getDockable() ASAP.
+		 * first of all, if the dockable in question returns something
+		 * other than itself from the getComponent() method, it won't
+		 * work. it will also fail with dockables using the new API,
+		 * which don't implement the DockableWindow interface (in
+		 * which case, this method will return null). */
+		Component comp = getDockable(name);
+		if(comp instanceof DockableWindow)
+			return (DockableWindow)comp;
 		else
-			return entry;
+			return null;
 	}
 
 	/**
-	 * This method returns a Component instance, unlike the
-	 * deprecated <code>getDockableWindow()</code> method,
-	 * which returns an instance of the DockableWindow interface.
-	 * That interface should no longer be used.
+	 * Returns the specified dockable window. Use this method instead of
+	 * the deprecated <code>getDockableWindow()</code> method.
 	 * @param name The name of the dockable window
 	 * @since jEdit 4.0pre1
 	 */
 	public Component getDockable(String name)
 	{
-		return getDockableWindow(name).getComponent();
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null || entry.win == null)
+			return null;
+		else
+			return entry.win;
 	}
 
 	/**
@@ -594,7 +613,7 @@ public class DockableWindowManager extends JPanel
 			String newPosition = jEdit.getProperty(entry.name
 				+ ".dock-position");
 			if(newPosition != null /* ??? */
-				&& !position.equals(newPosition))
+				&& !newPosition.equals(position))
 			{
 				entry.position = newPosition;
 				if(entry.container != null)
@@ -604,7 +623,7 @@ public class DockableWindowManager extends JPanel
 					entry.win = null;
 				}
 
-				if(position.equals(FLOATING))
+				if(newPosition.equals(FLOATING))
 					/* do nothing */;
 				else
 				{
@@ -617,7 +636,7 @@ public class DockableWindowManager extends JPanel
 					else if(newPosition.equals(RIGHT))
 						entry.container = right;
 					else
-						throw new InternalError("Unknown position: " + position);
+						throw new InternalError("Unknown position: " + newPosition);
 
 					entry.container.register(entry);
 				}
@@ -884,7 +903,7 @@ public class DockableWindowManager extends JPanel
 		public void invalidateLayout(Container target) {}
 	}
 
-	class Entry implements DockableWindow
+	class Entry
 	{
 		Factory factory;
 		String name;
@@ -895,16 +914,6 @@ public class DockableWindowManager extends JPanel
 
 		// only set if open
 		Component win;
-
-		public String getName()
-		{
-			return name;
-		}
-
-		public Component getComponent()
-		{
-			return win;
-		}
 
 		Entry(Factory factory)
 		{

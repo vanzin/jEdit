@@ -514,4 +514,76 @@ public class TextUtilities
 		buf.append(word);
 		return buf.toString();
 	}
+
+	public static final int MIXED = 0;
+	public static final int LOWER_CASE = 1;
+	public static final int UPPER_CASE = 2;
+	public static final int TITLE_CASE = 3;
+
+	/**
+	 * Returns if the specified string is all upper case, all lower case,
+	 * or title case (first letter upper case, rest lower case).
+	 * @param str The string
+	 * @since jEdit 4.0pre1
+	 */
+	public static int getStringCase(String str)
+	{
+		if(str.length() == 0)
+			return MIXED;
+
+		int state = -1;
+
+		char ch = str.charAt(0);
+		if(Character.isLetter(ch))
+		{
+			if(Character.isUpperCase(ch))
+				state = UPPER_CASE;
+			else
+				state = LOWER_CASE;
+		}
+
+		for(int i = 1; i < str.length(); i++)
+		{
+			ch = str.charAt(i);
+			if(!Character.isLetter(ch))
+				continue;
+
+			switch(state)
+			{
+			case UPPER_CASE:
+				if(Character.isLowerCase(ch))
+				{
+					if(i == 1)
+						state = TITLE_CASE;
+					else
+						return MIXED;
+				}
+				break;
+			case LOWER_CASE:
+			case TITLE_CASE:
+				if(Character.isUpperCase(ch))
+					return MIXED;
+				break;
+			}
+		}
+
+		return state;
+	}
+
+	/**
+	 * Converts the specified string to title case, by capitalizing the
+	 * first letter.
+	 * @param str The string
+	 * @since jEdit 4.0pre1
+	 */
+	public static String toTitleCase(String str)
+	{
+		if(str.length() == 0)
+			return str;
+		else
+		{
+			return Character.toUpperCase(str.charAt(0))
+				+ str.substring(1).toLowerCase();
+		}
+	}
 }

@@ -162,6 +162,7 @@ public class WorkThread extends Thread
 			}
 		}
 
+		pool.fireStatusChanged(this);
 
 		synchronized(pool.waitForAllLock)
 		{

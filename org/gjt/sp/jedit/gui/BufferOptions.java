@@ -205,20 +205,6 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(encoding,cons);
 		panel.add(encoding);
 
-		// Read only setting
-		cons.gridx = 0;
-		cons.gridy++;
-		cons.weightx = 0.0f;
-		cons.gridwidth = cons.REMAINDER;
-		cons.fill = GridBagConstraints.NONE;
-		cons.anchor = GridBagConstraints.WEST;
-		readOnly = new JCheckBox(jEdit.getProperty(
-			"buffer-options.readOnly"));
-		readOnly.setSelected(buffer.isReadOnly());
-		readOnly.addActionListener(actionListener);
-		layout.setConstraints(readOnly,cons);
-		panel.add(readOnly);
-
 		// Trailing EOL setting
 		cons.gridx = 0;
 		cons.gridy++;
@@ -373,7 +359,6 @@ public class BufferOptions extends EnhancedDialog
 			EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.ENCODING_CHANGED));
 		}
 
-		buffer.setReadOnly(readOnly.isSelected());
 		buffer.putBooleanProperty(Buffer.TRAILING_EOL,trailingEOL.isSelected());
 		buffer.putBooleanProperty("syntax",syntax.isSelected());
 		buffer.putBooleanProperty("indentOnTab",indentOnTab.isSelected());
@@ -403,7 +388,6 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox mode;
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
-	private JCheckBox readOnly;
 	private JCheckBox trailingEOL;
 	private JCheckBox syntax;
 	private JCheckBox indentOnTab;
@@ -429,8 +413,6 @@ public class BufferOptions extends EnhancedDialog
 
 	class ActionHandler implements ActionListener
 	{
-		boolean doNotShowDialog = false;
-
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -457,18 +439,6 @@ public class BufferOptions extends EnhancedDialog
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
 				updatePropsField();
-			}
-			else if(!doNotShowDialog && source == readOnly)
-			{
-				if(readOnly.isSelected()
-					&& buffer.isDirty())
-				{
-					doNotShowDialog = true;
-					readOnly.setSelected(false);
-					doNotShowDialog = false;
-					GUIUtilities.error(BufferOptions.this,
-						"buffer-options.readOnly",null);
-				}
 			}
 			else
 				updatePropsField();

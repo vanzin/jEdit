@@ -469,17 +469,20 @@ public abstract class VFS
 	 */
 	public static Color getDefaultColorFor(String name)
 	{
-		if(colors == null)
-			loadColors();
-
-		for(int i = 0; i < colors.size(); i++)
+		synchronized(lock)
 		{
-			ColorEntry entry = (ColorEntry)colors.elementAt(i);
-			if(entry.re.isMatch(name))
-				return entry.color;
-		}
+			if(colors == null)
+				loadColors();
 
-		return null;
+			for(int i = 0; i < colors.size(); i++)
+			{
+				ColorEntry entry = (ColorEntry)colors.elementAt(i);
+				if(entry.re.isMatch(name))
+					return entry.color;
+			}
+
+			return null;
+		}
 	}
 
 	// private members

@@ -15,7 +15,6 @@
 
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE=";" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 
 	<RULES HIGHLIGHT_DIGITS="TRUE">

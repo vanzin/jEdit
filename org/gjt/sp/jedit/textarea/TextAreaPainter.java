@@ -498,7 +498,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 				if(valid)
 				{
-					textArea.lineWidths[line - textArea.getFirstLine()] = width;
+					// it seems we are repainted before a
+					// component event is received
+					// (read: recalculateVisibleLines()
+					// called)
+					int screenLine = line - textArea.getFirstLine();
+					if(screenLine < textArea.lineWidths.length)
+						textArea.lineWidths[line - textArea.getFirstLine()] = width;
 					if(width > textArea.maxHorizontalScrollWidth)
 						updateMaxHorizontalScrollWidth = true;
 				}

@@ -13,7 +13,6 @@
 		<PROPERTY NAME="commentStart" VALUE="{-" />
 		<PROPERTY NAME="commentEnd" VALUE="-}" />
 		<PROPERTY NAME="lineComment" VALUE="--" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 		<!-- apparently, this is required... -->
 		<PROPERTY NAME="tabSize" VALUE="8" />
 		<PROPERTY NAME="indentSize" VALUE="8" />

@@ -77,6 +77,12 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.highlightCurrentLine"));
 		addComponent(gutterCurrentLineHighlightEnabled);
 
+		gutterBracketHighlightEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.bracketHighlight"));
+		gutterBracketHighlightEnabled.setSelected(jEdit.getBooleanProperty(
+			"view.gutter.bracketHighlight"));
+		addComponent(gutterBracketHighlightEnabled);
+
 		gutterMarkerHighlightEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.markerHighlight"));
 		gutterMarkerHighlightEnabled.setSelected(jEdit.getBooleanProperty(
@@ -109,6 +115,8 @@ public class GutterOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.gutter.highlightCurrentLine",
 			gutterCurrentLineHighlightEnabled.isSelected());
+		jEdit.setBooleanProperty("view.gutter.bracketHighlight",
+			gutterBracketHighlightEnabled.isSelected());
 		jEdit.setBooleanProperty("view.gutter.markerHighlight",
 			gutterMarkerHighlightEnabled.isSelected());
 	}
@@ -120,5 +128,6 @@ public class GutterOptionPane extends AbstractOptionPane
 	private JComboBox gutterNumberAlignment;
 	private JCheckBox lineNumbersEnabled;
 	private JCheckBox gutterCurrentLineHighlightEnabled;
+	private JCheckBox gutterBracketHighlightEnabled;
 	private JCheckBox gutterMarkerHighlightEnabled;
 }

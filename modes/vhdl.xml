@@ -8,7 +8,6 @@
 	<PROPS>
 		<PROPERTY NAME="label" VALUE="VHDL" />
 		<PROPERTY NAME="lineComment" VALUE="--" />
-		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\">
 		<!-- whitespace: (space and tab) -->

@@ -596,7 +596,16 @@ public class TokenMarker
 
 		int len = end - start;
 
-		// do digits
+		// do digits.
+		
+		/* right now, this is hardcoded to handle these cases:
+		 * 1234
+		 * 0x1234abcf
+		 * 1234l
+		 * 12.34f
+		 * 12.34d
+		 *
+		 * in the future, we need some sort of regexp mechanism. */
 		if(context.rules.getHighlightDigits())
 		{
 			boolean digit = true;
@@ -630,15 +639,17 @@ loop:			for(int i = 0; i < len; i++)
 				case 'd': case 'D':
 					if(hex)
 						continue loop;
-					else
-						break;
-				case 'f': case 'F':
-					if(hex || seenSomeDigits)
+					else if(i == len -1 && seenSomeDigits)
 						continue loop;
 					else
 						break;
+				case 'f': case 'F':
+					if(hex)
+						continue loop;
+					else if(i == len -1 && seenSomeDigits)
+						break;
 				case 'l': case 'L':
-					if(seenSomeDigits)
+					if(i == len -1 && seenSomeDigits)
 						continue loop;
 					else
 						break;

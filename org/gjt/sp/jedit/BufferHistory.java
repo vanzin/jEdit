@@ -228,6 +228,14 @@ public class BufferHistory
 			String type = st.nextToken();
 			int start = Integer.parseInt(st.nextToken());
 			int end = Integer.parseInt(st.nextToken());
+			if(end < start)
+			{
+				// I'm not sure when this can happen,
+				// but it does sometimes, witness the
+				// jEdit bug tracker.
+				continue;
+			}
+
 			Selection sel;
 			if(type.equals("range"))
 				sel = new Selection.Range(start,end);
