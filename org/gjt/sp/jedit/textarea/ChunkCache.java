@@ -152,11 +152,12 @@ class ChunkCache
 	 * scrolling doesn't cause all visible lines, only newly exposed
 	 * ones, to be retokenized.
 	 */
-	void setFirstLine(int firstLine, int physFirstLine)
+	void setFirstLine(int firstLine, int physFirstLine, boolean bufferSwitch)
 	{
 		int visibleLines = lineInfo.length;
 		// rely on the fact that when we're called physLastLine not updated yet
-		if((!textArea.softWrap && Math.abs(firstLine - this.firstLine) >= visibleLines)
+		if(bufferSwitch
+			|| (!textArea.softWrap && Math.abs(firstLine - this.firstLine) >= visibleLines)
 			|| (textArea.softWrap && physFirstLine > textArea.getLastPhysicalLine()))
 		{
 			//System.err.println("too far");

@@ -270,7 +270,7 @@ public class JEditTextArea extends JComponent
 			maxHorizontalScrollWidth = 0;
 			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
 			chunkCache.invalidateAll();
-			chunkCache.setFirstLine(0,physFirstLine);
+			chunkCache.setFirstLine(0,physFirstLine,true);
 
 			painter.repaint();
 			gutter.repaint();
@@ -355,7 +355,7 @@ public class JEditTextArea extends JComponent
 
 		maxHorizontalScrollWidth = 0;
 
-		chunkCache.setFirstLine(firstLine,physFirstLine);
+		chunkCache.setFirstLine(firstLine,physFirstLine,false);
 
 		recalculateLastPhysicalLine();
 
@@ -733,7 +733,7 @@ public class JEditTextArea extends JComponent
 			}
 		}
 
-		chunkCache.setFirstLine(firstLine,physFirstLine);
+		chunkCache.setFirstLine(firstLine,physFirstLine,false);
 
 		recalculateLastPhysicalLine();
 
