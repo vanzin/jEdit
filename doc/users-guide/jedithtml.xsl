@@ -35,6 +35,10 @@
   <xsl:call-template name="inline.boldseq"/>
 </xsl:template>
 
+<xsl:template match="keycombo/keycap">
+  <xsl:call-template name="inline.boldseq"/>
+</xsl:template>
+
 <xsl:variable name="use.id.as.filename">1</xsl:variable>
 
 <xsl:variable name="shade.verbatim">1</xsl:variable>
@@ -49,10 +53,23 @@
 <!-- Swing HTML control doesn't support &ldquo; and &rdquo; -->
 <i18n xmlns="http://docbook.sourceforge.net/xmlns/l10n/1.0">
 <l10n language="en">
+
 <dingbat key="startquote" text="&quot;"/>
 <dingbat key="endquote" text="&quot;"/>
-<dingbat key="nestedstartquote" text="&apos;"/>
-<dingbat key="nestedendquote" text="&apos;"/>
+<dingbat key="nestedstartquote" text="&quot;"/>
+<dingbat key="nestedendquote" text="&quot;"/>
+
+<context name="section-xref">
+   <template name="bridgehead" text="the section called &quot;%t&quot;"/>
+   <template name="sect1" text="the section called &quot;%t&quot;"/>
+   <template name="sect2" text="the section called &quot;%t&quot;"/>
+   <template name="sect3" text="the section called &quot;%t&quot;"/>
+   <template name="sect4" text="the section called &quot;%t&quot;"/>
+   <template name="sect5" text="the section called &quot;%t&quot;"/>
+   <template name="section" text="the section called &quot;%t&quot;"/>
+   <template name="simplesect" text="the section called &quot;%t&quot;"/>
+</context>
+
 </l10n>
 </i18n>
 
@@ -87,8 +104,10 @@
 
 <xsl:template match="set" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+   <xsl:attribute name="HREF">
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -99,8 +118,10 @@
 
 <xsl:template match="book" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+   <xsl:attribute name="HREF">
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -114,7 +135,9 @@
               mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -127,8 +150,10 @@
 
 <xsl:template match="section" mode="my.toc">
   <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+   <xsl:attribute name="HREF">
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -140,7 +165,9 @@
 <xsl:template match="sect1" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -152,7 +179,9 @@
 <xsl:template match="sect2" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -164,7 +193,9 @@
 <xsl:template match="sect3" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -176,7 +207,9 @@
 <xsl:template match="sect4" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>
@@ -188,7 +221,9 @@
 <xsl:template match="sect5|colophon" mode="my.toc">
   <ENTRY>
    <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
+      <xsl:call-template name="href.target">
+        <xsl:with-param name="object" select="."/>
+      </xsl:call-template>
    </xsl:attribute>
    <TITLE>
     <xsl:apply-templates mode="title.markup" select="."/>

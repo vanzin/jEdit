@@ -12,17 +12,14 @@ TO DO
 - investigate wrap around in macros
 - Alt-key alternatives for arrow keys and home and end
 
-- user's guide and help viewer problems:
-  - toc.xml: for sect2, etc anchor not included in href
-  - xref labels are fucked
-  - <quote>: inserts '...'
+- stylesheet: keycap inside keycombo
 - help viewer: two tabs, contents and index. index browser
-- new goodies need to be documented
+- documentation to do
   - add index terms throughout user's guide!
   - changing heap memory docs
   - new folding
   - global options changes: appearance pane, changing mental font,
-    shortcuts option pane, abbrevs option pane, styles option pane
+    styles option pane, fs browser option pane
   - fs browser: colors
   - fs browser: extra shortcuts
   - tip about compareStrings()
@@ -32,15 +29,8 @@ TO DO
   - bracket matching: scope indicator
   - indent shifting: Tab/S+Tab
   - better window docking
-  - search and replace:
-    - HyperSearch in selection
-    - hypersearch results: match selected
-    - Search in Selection
-    - find selection axed
-    - all/dir: pre-selecting hypersearch
-    - smart case insens replace
+  - smart case insens replace
   - API guide: compareStrings(), showPopupMenu()
-  - settings backups
 - improved window docking:
   - do something about there being more buttons than can fit
   - DockableLayout: handle too large

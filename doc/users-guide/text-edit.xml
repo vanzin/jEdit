@@ -704,7 +704,17 @@
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find</guimenuitem> (shortcut:
     <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo>) displays
-    the search and replace dialog box.
+    the search and replace dialog box. If text is selected and the selection
+    does not span a line break, the selected text becomes the default search
+    string.
+   </para>
+   <para>
+    If the selection does span one or more line breaks, the default
+    search string is empty, and the <guibutton>Search in Selection</guibutton>
+    and <guibutton>HyperSearch</guibutton>
+    buttons are pre-selected. Note that finding the next or previous
+    ocurrence cannot be constrained to a selected range; only
+    replacement and HyperSearch can be (see <xref linkend="hypersearch" />).
    </para>
    <para>
     The search string can be entered in the <guibutton>Search for</guibutton>
@@ -747,14 +757,6 @@
     (shortcut: <keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo>)
     locates the previous occurrence of the most recent search string without
     displaying the search and replace dialog box.
-   </para>
-   <para>
-    <guimenu>Search</guimenu>&gt;<guimenuitem>Find Selection</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo>) displays
-    the search and replace dialog box with the currently selected text
-    entered in the <guibutton>Search for</guibutton> text field.
    </para>
   </sect2>
   <sect2><title>Replacing Text</title>
@@ -824,7 +826,7 @@
     These two examples only scratch the surface; the possibilities are endless.
    </para>
   </sect2>
-  <sect2><title>HyperSearch</title>
+  <sect2 id="hypersearch"><title>HyperSearch</title>
    <para>
     If the <guibutton>HyperSearch</guibutton> check box in the search and
     replace dialog box is selected, clicking <guibutton>Find</guibutton> will
@@ -871,6 +873,12 @@
     The <guibutton>Directory</guibutton> and <guibutton>Filter</guibutton>
     text fields remember previously entered strings; see <xref linkend="history" />
     for details.
+   </para>
+   <para>
+    Note that selecting the <guibutton>All Buffers</guibuttons> or
+    <guibutton>Directory</guibutton> radio buttons also selects the
+    <guibutton>HyperSearch</guibutton> check box. This is merely for
+    convinience, however; normal searching is supported as well.
    </para>
    <para>
     Two convinience commands are provided for performing multiple file searches.

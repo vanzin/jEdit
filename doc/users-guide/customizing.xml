@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
  <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
@@ -225,7 +225,7 @@
    The <guibutton>Docking</guibutton> option pane lets you specify which
    dockable windows should be floating, and which should be docked in the view.
   </para>
-   <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
+  <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
   <para>
    The <guibutton>Context Menu</guibutton> option pane lets you edit the text
    area's right-click context menu.
@@ -263,13 +263,15 @@
    entries contain mode-specific abbreviations.
   </para>
   <para>
-   To change an abbreviation expansion, click the appropriate table entry,
-   which will display a dialog box for doing so.
+   To change an abbreviation or its expansion, either double-click the appropriate
+   table entry, or click a table entry and then click the
+   <guibutton>Edit</guibutton> button. This will display a dialog box for
+   modifying the abbreviation.
   </para>
   <para>
-   To add an abbreviation, enter it in the last line of the list, which
-   is always blank. When the last line is changed, a new, blank, line
-   is added.
+   The <guibutton>Add</guibutton> button displays a dialog box where you can
+   define a new abbreviation. The <guibutton>Remove</guibutton> button removes
+   the currently selected abbreviation from the list.
   </para>
   <para>
    See <xref linkend="positional-params" /> for information about positional
@@ -326,19 +328,6 @@
    inside the settings directory; plugins may add more:
   </para>
   <itemizedlist>
-   <listitem><para><filename>jars</filename> - this directory contains
-   plugins. See <xref linkend="using-plugins" />.</para></listitem>
-   <listitem><para><filename>macros</filename> - this directory contains
-   macros. See <xref linkend="using-macros" />.</para></listitem>
-   <listitem><para><filename>modes</filename> - this directory contains custom
-   edit modes. See <xref linkend="writing-modes-part" />.
-   </para></listitem>
-   <listitem><para><filename>PluginManager.download</filename> - this directory
-   is usually empty. It only contains files while the plugin manager is
-   downloading a plugin. For information about the plugin manager,
-   see <xref linkend="using-plugins" />.</para></listitem>
-   <listitem><para><filename>session</filename> - a list of files, used when
-   restoring previously open files on startup.</para></listitem>
    <listitem><para><filename>abbrevs</filename> - a plain text file which
    stores all defined abbreviations. See <xref linkend="abbrevs" />.
    </para></listitem>
@@ -350,6 +339,17 @@
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste Previous</guimenuitem> command.
    See <xref linkend="text-transfer" /> and <xref linkend="history" />.
    </para></listitem>
+   <listitem><para><filename>jars</filename> - this directory contains
+   plugins. See <xref linkend="using-plugins" />.</para></listitem>
+   <listitem><para><filename>macros</filename> - this directory contains
+   macros. See <xref linkend="using-macros" />.</para></listitem>
+   <listitem><para><filename>modes</filename> - this directory contains custom
+   edit modes. See <xref linkend="writing-modes-part" />.
+   </para></listitem>
+   <listitem><para><filename>PluginManager.download</filename> - this directory
+   is usually empty. It only contains files while the plugin manager is
+   downloading a plugin. For information about the plugin manager,
+   see <xref linkend="using-plugins" />.</para></listitem>
    <listitem><para><filename>properties</filename> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent.xml</filename> - an XML file which stores
@@ -360,6 +360,14 @@
    <listitem><para><filename>server</filename> - a plain text file that only
    exists while jEdit is running. The edit server's port number and
    authorization key is stored here. See <xref linkend="starting" />.
+   </para></listitem>
+   <listitem><para><filename>session</filename> - a list of files, used when
+   restoring previously open files on startup.</para></listitem>
+   <listitem><para><filename>settings-backups</filename> - this directory
+   contains numbered backups of all automatically-written settings files
+   (<filename>abbrevs</filename>, <filename>activity.log</filename>,
+   <filename>history</filename>, <filename>properties</filename>,
+   <filename>recent.xml</filename>, and <filename>session</filename>).
    </para></listitem>
   </itemizedlist>
  </sect1>

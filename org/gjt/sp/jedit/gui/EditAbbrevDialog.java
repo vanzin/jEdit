@@ -1,5 +1,8 @@
 /*
  * EditAbbrevDialog.java - Displayed when editing abbrevs
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,14 +22,17 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class EditAbbrevDialog extends JDialog
 {
+	//{{{ EditAbbrevDialog constructor
 	public EditAbbrevDialog(Component comp, String abbrev, String expansion)
 	{
 		super(JOptionPane.getFrameForComponent(comp),
@@ -63,35 +69,38 @@ public class EditAbbrevDialog extends JDialog
 		editor.getAfterCaretTextArea().addKeyListener(listener);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		GUIUtilities.requestFocus(this,editor.getBeforeCaretTextArea());
 		pack();
 		setLocationRelativeTo(comp);
 		show();
-	}
+	} //}}}
 
+	//{{{ getAbbrev() method
 	public String getAbbrev()
 	{
 		if(!isOK)
 			return null;
 
 		return editor.getAbbrev();
-	}
+	} //}}}
 
+	//{{{ getExpansion() method
 	public String getExpansion()
 	{
 		if(!isOK)
 			return null;
 
 		return editor.getExpansion();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private Component comp;
 	private AbbrevEditor editor;
 	private JButton ok;
 	private JButton cancel;
 	private boolean isOK;
+	//}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -110,8 +119,9 @@ public class EditAbbrevDialog extends JDialog
 
 			dispose();
 		}
-	}
+	} //}}}
 
+	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
 		public void keyPressed(KeyEvent evt)
@@ -119,5 +129,5 @@ public class EditAbbrevDialog extends JDialog
 			if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
 				dispose();
 		}
-	}
+	} //}}}
 }
