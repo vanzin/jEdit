@@ -675,6 +675,7 @@ view.status.fold-tooltip=Fold mode (click to change)
 view.status.multi-tooltip=Multiple selection indicator (click to change)
 view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
+view.status.narrow=Invoke "Expand All Folds" to make all text visible again.
 #}}}
 
 #}}}
@@ -1070,6 +1071,8 @@ view-registers.contents=Contents:
 #{{{ Close all buffers dialog
 close.title=Unsaved Changes
 close.caption=The following buffers have unsaved changes:
+close.selectAll=Select All
+close.selectAll.mnemonic=a
 close.save=Save Selected
 close.save.mnemonic=s
 close.discard=Discard Selected

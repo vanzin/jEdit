@@ -1,5 +1,8 @@
 /*
  * CloseDialog.java - Close all buffers dialog
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -26,22 +30,31 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class CloseDialog extends EnhancedDialog
 {
+	//{{{ CloseDialog constructor
 	public CloseDialog(View view)
 	{
 		super(view,jEdit.getProperty("close.title"),true);
 
 		this.view = view;
 
-		JPanel content = new JPanel(new BorderLayout());
+		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
+		Box iconBox = new Box(BoxLayout.Y_AXIS);
+		iconBox.add(new JLabel(UIManager.getIcon("OptionPane.warningIcon")));
+		iconBox.add(Box.createGlue());
+		content.add(BorderLayout.WEST,iconBox);
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+
 		JLabel label = new JLabel(jEdit.getProperty("close.caption"));
 		label.setBorder(new EmptyBorder(0,0,6,0));
-		content.add(BorderLayout.NORTH,label);
+		centerPanel.add(BorderLayout.NORTH,label);
 
 		bufferList = new JList(bufferModel = new DefaultListModel());
 		bufferList.setVisibleRowCount(10);
@@ -57,14 +70,18 @@ public class CloseDialog extends EnhancedDialog
 			}
 		}
 
-		content.add(BorderLayout.CENTER,new JScrollPane(bufferList));
+		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferList));
+
+		content.add(BorderLayout.CENTER,centerPanel);
 
 		ActionHandler actionListener = new ActionHandler();
 
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(12,0,0,0));
+		Box buttons = new Box(BoxLayout.X_AXIS);
 		buttons.add(Box.createGlue());
+		buttons.add(selectAll = new JButton(jEdit.getProperty("close.selectAll")));
+		selectAll.setMnemonic(jEdit.getProperty("close.selectAll.mnemonic").charAt(0));
+		selectAll.addActionListener(actionListener);
+		buttons.add(Box.createHorizontalStrut(6));
 		buttons.add(save = new JButton(jEdit.getProperty("close.save")));
 		save.setMnemonic(jEdit.getProperty("close.save.mnemonic").charAt(0));
 		save.addActionListener(actionListener);
@@ -86,48 +103,69 @@ public class CloseDialog extends EnhancedDialog
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
+	} //}}}
 
+	//{{{ isOK() method
 	public boolean isOK()
 	{
 		return ok;
-	}
+	} //}}}
 
-	// EnhancedDialog implementation
+	//{{{ ok() method
 	public void ok()
 	{
 		// do nothing
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
-	// end EnhancedDialog implementation
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private View view;
 	private JList bufferList;
 	private DefaultListModel bufferModel;
+	private JButton selectAll;
 	private JButton save;
 	private JButton discard;
 	private JButton cancel;
 
 	private boolean ok; // only set if all buffers saved/closed
 
+	boolean selectAllFlag;
+
 	private void updateButtons()
 	{
 		int index = bufferList.getSelectedIndex();
 		save.getModel().setEnabled(index != -1);
 		discard.getModel().setEnabled(index != -1);
-	}
+	} //}}}
 
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == save)
+			if(source == selectAll)
+			{
+				// I'm too tired to think of a better way
+				// to handle this right now.
+				try
+				{
+					selectAllFlag = true;
+
+					bufferList.setSelectionInterval(0,
+						bufferModel.getSize());
+				}
+				finally
+				{
+					selectAllFlag = false;
+				}
+			}
+			else if(source == save)
 			{
 				Object[] paths = bufferList.getSelectedValues();
 
@@ -173,12 +211,16 @@ public class CloseDialog extends EnhancedDialog
 			else if(source == cancel)
 				cancel();
 		}
-	}
+	} //}}}
 
+	//{{{ ListHandler class
 	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
+			if(selectAllFlag)
+				return;
+
 			int index = bufferList.getSelectedIndex();
 			if(index != -1)
 				view.setBuffer(jEdit.getBuffer((String)
@@ -186,5 +228,5 @@ public class CloseDialog extends EnhancedDialog
 
 			updateButtons();
 		}
-	}
+	} //}}}
 }

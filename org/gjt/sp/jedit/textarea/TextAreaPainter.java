@@ -559,6 +559,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				{
 					physicalLine = textArea.virtualToPhysical(line);
 					collapsedFold = (physicalLine < buffer.getLineCount() - 1
+						&& buffer.isFoldStart(physicalLine)
 						&& !foldVisibilityManager
 						.isLineVisible(physicalLine + 1));
 				}
