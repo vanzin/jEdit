@@ -856,7 +856,7 @@ public class GUIUtilities
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
 		// Make sure the window is displayed in visible region
-		Rectangle osbounds = OperatingSystem.getScreenBounds();
+		Rectangle osbounds = OperatingSystem.getScreenBounds(new Rectangle(x,y,width,height));
 		
 		if(x < osbounds.x || x+width > osbounds.width)
 		{
