@@ -70,13 +70,6 @@ public class FileVFS extends VFS
 	//{{{ constructPath() method
 	public String constructPath(String parent, String path)
 	{
-		// have to handle this cas specially on windows.
-		if(OperatingSystem.isDOSDerived())
-		{
-			if(path.startsWith("\\"))
-				parent = parent.substring(0,2);
-		}
-
 		if(parent.endsWith(File.separator))
 			path = parent + path;
 		else

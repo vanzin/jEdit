@@ -326,8 +326,8 @@
       <entry>Delete line; paragraph.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>;
-      <keycombo><keycap>Shift</keycap><keycap>Delete</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>;
+      <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Delete</keycap></keycombo></entry>
       <entry>Delete from caret to beginning; end of line.</entry>
      </row>
      <row>

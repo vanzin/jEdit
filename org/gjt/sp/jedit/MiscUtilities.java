@@ -95,25 +95,22 @@ public class MiscUtilities
 			{
 				if(path.length() == 2 && path.charAt(1) == ':')
 					return path;
-				else if(path.length() > 2 && path.charAt(1) == ':'
-					&& path.charAt(2) != '\\')
+				else if(path.length() > 2 && path.charAt(1) == ':')
 				{
-					return path.substring(0,2) + '\\'
-						+ path.substring(2);
+					if(path.charAt(2) != '\\')
+					{
+						path = path.substring(0,2) + '\\'
+							+ path.substring(2);
+					}
+
+					return resolveSymlinks(path);
 				}
 			}
-
-			File file = new File(path);
-			if(file.isAbsolute())
+			else if(OperatingSystem.isUnix())
 			{
-				try
-				{
-					return file.getCanonicalPath();
-				}
-				catch(IOException io)
-				{
-					return path;
-				}
+				// nice and simple
+				if(path.length() > 0 && path.charAt(0) == '/')
+					return resolveSymlinks(path);
 			}
 		}
 
@@ -217,13 +214,7 @@ public class MiscUtilities
 	 */
 	public static String getParentOfPath(String path)
 	{
-		if(isURL(path))
-		{
-			VFS vfs = VFSManager.getVFSForPath(path);
-			return vfs.getParentOfPath(path);
-		}
-		else
-			return VFSManager.getFileVFS().getParentOfPath(path);
+		return VFSManager.getVFSForPath(path).getParentOfPath(path);
 	} //}}}
 
 	//{{{ getFileProtocol() method
@@ -1130,6 +1121,19 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 				files.addElement(path);
 			}
+		}
+	} //}}}
+
+	//{{{ resolveSymlinks() method
+	private static String resolveSymlinks(String path)
+	{
+		try
+		{
+			return new File(path).getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			return path;
 		}
 	} //}}}
 

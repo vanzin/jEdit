@@ -309,14 +309,14 @@
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
    to Start Of Line</guimenuitem>
    (shortcut:
-   <keycombo><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>)
+   <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>)
    deletes all text from the start of the current line to the caret.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
    to End Of Line</guimenuitem>
    (shortcut:
-   <keycombo><keycap>Shift</keycap><keycap>Delete</keycap></keycombo>) deletes
+   <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Delete</keycap></keycombo>) deletes
    all text from the caret to the end of the current line.
   </para>
   <para>
