@@ -324,6 +324,43 @@ public class Registers
 		return registers;
 	} //}}}
 
+	//{{{ getRegisterStatusPrompt() method
+	/**
+	 * Returns the status prompt for the given register action. Only
+	 * intended to be called from <code>actions.xml</code>.
+	 * @since jEdit 4.2pre2
+	 */
+	public static String getRegisterStatusPrompt(String action)
+	{
+		return jEdit.getProperty("view.status." + action,
+			new String[] { getRegisterNameString() });
+	} //}}}
+
+	//{{{ getRegisterNameString() method
+	/**
+	 * Returns a string of all defined registers, used by the status bar
+	 * (eg, "a b $ % ^").
+	 * @since jEdit 4.2pre2
+	 */
+	public static String getRegisterNameString()
+	{
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < registers.length; i++)
+		{
+			if(registers[i] != null)
+			{
+				if(buf.length() != 0)
+					buf.append(' ');
+				buf.append((char)i);
+			}
+		}
+
+		if(buf.length() == 0)
+			return jEdit.getProperty("view.status.no-registers");
+		else
+			return buf.toString();
+	} //}}}
+
 	//{{{ saveRegisters() method
 	public static void saveRegisters()
 	{
@@ -349,126 +386,6 @@ public class Registers
 			registersModTime = file2.lastModified();
 			modified = false;
 		}
-	} //}}}
-
-	//{{{ Register interface
-	/**
-	 * A register.
-	 */
-	public interface Register
-	{
-		/**
-		 * Converts to a string.
-		 */
-		String toString();
-
-		/**
-		 * Sets the register contents.
-		 */
-		void setValue(String value);
-	} //}}}
-
-	//{{{ ClipboardRegister class
-	/**
-	 * A clipboard register. Register "$" should always be an
-	 * instance of this.
-	 */
-	public static class ClipboardRegister implements Register
-	{
-		Clipboard clipboard;
-
-		public ClipboardRegister(Clipboard clipboard)
-		{
-			this.clipboard = clipboard;
-		}
-
-		/**
-		 * Sets the clipboard contents.
-		 */
-		public void setValue(String value)
-		{
-			StringSelection selection = new StringSelection(value);
-			clipboard.setContents(selection,null);
-		}
-
-		/**
-		 * Returns the clipboard contents.
-		 */
-		public String toString()
-		{
-			try
-			{
-				String selection = (String)(clipboard
-					.getContents(this).getTransferData(
-					DataFlavor.stringFlavor));
-
-				boolean trailingEOL = (selection.endsWith("\n")
-					|| selection.endsWith(System.getProperty(
-					"line.separator")));
-
-				// Some Java versions return the clipboard
-				// contents using the native line separator,
-				// so have to convert it here
-				BufferedReader in = new BufferedReader(
-					new StringReader(selection));
-				StringBuffer buf = new StringBuffer();
-				String line;
-				while((line = in.readLine()) != null)
-				{
-					buf.append(line);
-					buf.append('\n');
-				}
-				// remove trailing \n
-				if(!trailingEOL && buf.length() != 0)
-					buf.setLength(buf.length() - 1);
-				return buf.toString();
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.NOTICE,this,e);
-				return null;
-			}
-		}
-	} //}}}
-
-	//{{{ StringRegister class
-	/**
-	 * Register that stores a string.
-	 */
-	public static class StringRegister implements Register
-	{
-		private String value;
-
-		/**
-		 * Creates a new string register.
-		 * @param value The contents
-		 */
-		public StringRegister(String value)
-		{
-			this.value = value;
-		}
-
-		/**
-		 * Sets the register contents.
-		 */
-		public void setValue(String value)
-		{
-			this.value = value;
-		}
-
-		/**
-		 * Converts to a string.
-		 */
-		public String toString()
-		{
-			return value;
-		}
-
-		/**
-		 * Called when this register is no longer available. This
-		 * implementation does nothing.
-		 */
-		public void dispose() {}
 	} //}}}
 
 	//{{{ Private members
@@ -592,6 +509,128 @@ public class Registers
 
 	//}}}
 
+	//{{{ Inner classes
+
+	//{{{ Register interface
+	/**
+	 * A register.
+	 */
+	public interface Register
+	{
+		/**
+		 * Converts to a string.
+		 */
+		String toString();
+
+		/**
+		 * Sets the register contents.
+		 */
+		void setValue(String value);
+	} //}}}
+
+	//{{{ ClipboardRegister class
+	/**
+	 * A clipboard register. Register "$" should always be an
+	 * instance of this.
+	 */
+	public static class ClipboardRegister implements Register
+	{
+		Clipboard clipboard;
+
+		public ClipboardRegister(Clipboard clipboard)
+		{
+			this.clipboard = clipboard;
+		}
+
+		/**
+		 * Sets the clipboard contents.
+		 */
+		public void setValue(String value)
+		{
+			StringSelection selection = new StringSelection(value);
+			clipboard.setContents(selection,null);
+		}
+
+		/**
+		 * Returns the clipboard contents.
+		 */
+		public String toString()
+		{
+			try
+			{
+				String selection = (String)(clipboard
+					.getContents(this).getTransferData(
+					DataFlavor.stringFlavor));
+
+				boolean trailingEOL = (selection.endsWith("\n")
+					|| selection.endsWith(System.getProperty(
+					"line.separator")));
+
+				// Some Java versions return the clipboard
+				// contents using the native line separator,
+				// so have to convert it here
+				BufferedReader in = new BufferedReader(
+					new StringReader(selection));
+				StringBuffer buf = new StringBuffer();
+				String line;
+				while((line = in.readLine()) != null)
+				{
+					buf.append(line);
+					buf.append('\n');
+				}
+				// remove trailing \n
+				if(!trailingEOL && buf.length() != 0)
+					buf.setLength(buf.length() - 1);
+				return buf.toString();
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.NOTICE,this,e);
+				return null;
+			}
+		}
+	} //}}}
+
+	//{{{ StringRegister class
+	/**
+	 * Register that stores a string.
+	 */
+	public static class StringRegister implements Register
+	{
+		private String value;
+
+		/**
+		 * Creates a new string register.
+		 * @param value The contents
+		 */
+		public StringRegister(String value)
+		{
+			this.value = value;
+		}
+
+		/**
+		 * Sets the register contents.
+		 */
+		public void setValue(String value)
+		{
+			this.value = value;
+		}
+
+		/**
+		 * Converts to a string.
+		 */
+		public String toString()
+		{
+			return value;
+		}
+
+		/**
+		 * Called when this register is no longer available. This
+		 * implementation does nothing.
+		 */
+		public void dispose() {}
+	} //}}}
+
 	//{{{ RegistersHandler class
 	static class RegistersHandler extends HandlerBase
 	{
@@ -661,4 +700,6 @@ public class Registers
 		private String charData;
 		//}}}
 	} //}}}
+
+	//}}}
 }

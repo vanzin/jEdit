@@ -53,7 +53,7 @@
 <ACTION NAME="add-marker-shortcut" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.add-marker"),
+			buffer.getMarkerStatusPrompt("add-marker"),
 			"buffer.addMarker(__char__,textArea.getCaretPosition());");
 	</CODE>
 </ACTION>
@@ -145,7 +145,7 @@
 <ACTION NAME="copy-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.copy-append-string-register"),
+			Registers.getRegisterStatusPrompt("copy-append-string-register"),
 			"Registers.append(textArea,__char__,\"\\n\",false);");
 	</CODE>
 </ACTION>
@@ -153,7 +153,7 @@
 <ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.copy-string-register"),
+			Registers.getRegisterStatusPrompt("copy-string-register"),
 			"Registers.copy(textArea,__char__);");
 	</CODE>
 </ACTION>
@@ -173,7 +173,7 @@
 <ACTION NAME="cut-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.cut-append-string-register"),
+			Registers.getRegisterStatusPrompt("cut-append-string-register"),
 			"Registers.append(textArea,__char__,\"\\n\",true);");
 	</CODE>
 </ACTION>
@@ -181,7 +181,7 @@
 <ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.cut-string-register"),
+			Registers.getRegisterStatusPrompt("cut-string-register"),
 			"Registers.cut(textArea,__char__);");
 	</CODE>
 </ACTION>
@@ -345,7 +345,7 @@
 <ACTION NAME="goto-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.goto-marker"),
+			buffer.getMarkerStatusPrompt("goto-marker"),
 			"textArea.goToMarker(__char__,false);");
 	</CODE>
 </ACTION>
@@ -628,7 +628,7 @@
 <ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.paste-string-register"),
+			Registers.getRegisterStatusPrompt("paste-string-register"),
 			"Registers.paste(textArea,__char__,false);");
 	</CODE>
 </ACTION>
@@ -1015,7 +1015,7 @@
 <ACTION NAME="select-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.select-marker"),
+			buffer.getMarkerStatusPrompt("select-marker"),
 			"textArea.goToMarker(__char__,true);");
 	</CODE>
 </ACTION>
@@ -1195,7 +1195,7 @@
 <ACTION NAME="swap-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.swap-marker"),
+			buffer.getMarkerStatusPrompt("swap-marker"),
 			"textArea.swapMarkerAndCaret(__char__);");
 	</CODE>
 </ACTION>
@@ -1311,7 +1311,7 @@
 <ACTION NAME="vertical-paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			jEdit.getProperty("view.status.vertical-paste-string-register"),
+			Registers.getRegisterStatusPrompt("vertical-paste-string-register"),
 			"Registers.paste(textArea,__char__,true);");
 	</CODE>
 </ACTION>

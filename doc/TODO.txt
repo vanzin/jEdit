@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- C+b -- click -- keys don't wokr
+- 1-9 broken in C+b
+- C+e C+c broken in php
 - closing view prints processKeyEvent() npe
 - control-shift-click broken in text area
 
@@ -190,10 +193,8 @@ and quirks that I need to fix eventually.
 - kill ring
 - AT_WORD_END match
 - history text field tweak
-- better register and marker status prompts
 - abbrevs need an overhaul
 - quick copy between text areas
-- fsb: copy location command
 - hypersearch: "open in..." right click menu
 - hypersearch: remember search settings & "refresh" command
 - search dialog: auto-focus fields show last values

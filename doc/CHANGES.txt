@@ -22,6 +22,9 @@ contributing to this release.
   "Insert Enter and Indent", and "Indent Selected Lines" commands is
   more consistent.
 
+- Register commands now list registers, and marker commands now list
+  markers with shortcuts in the status bar.
+
 }}}
 {{{ File System Browser
 
@@ -31,6 +34,9 @@ contributing to this release.
 
 - The expansion triangles are now flush with the icon. Previously they
   were vertically aligned which was inconsistent with Swing JTrees.
+
+- Added "Copy Path Name" command to file system browser's right-click
+  menu.
 
 }}}
 {{{ Syntax Highlighting
