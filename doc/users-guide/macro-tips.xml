@@ -940,7 +940,7 @@ bottom</screen>
   </para>
 
     <informalexample><programlisting>Log.log(Log.DEBUG, BeanShell.class,
-    "counter = " + String.valueOf(counter));</programlisting></informalexample>
+    "counter = " + counter);</programlisting></informalexample>
 
   <para>
     The corresponding activity log entry might read as follows:

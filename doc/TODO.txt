@@ -5,15 +5,23 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
+  The elements of the <varname>args</varname> array are substituted
+  into the value of the message property in place of strings of the
+  form <literal>{<replaceable>n</replaceable>}</literal>, where
+  <replaceable>n</replaceable> is an index in the array.
+  You can find out more about this feature by reading the documentation
+  for the <function>format</function> method of the
+  <classname>java.text.MessageFormat</classname> class.
+  
 - buffer: say exactly which methods are thread-safe
 - loadMenu() properties used
 - dockable .title property
 - action .label property
-
+- plugin guide: shorten host-design a little
+- remove part V of the user's guide
+- links to API docs in plugin guide, macro guide
 - section xrefs are broken
 - review user's guide
-- part IV
-- part V
 - need a new jEditLauncher before the 4.1final release
 - review FAQ
 
