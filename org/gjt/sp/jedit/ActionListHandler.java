@@ -27,10 +27,10 @@ import org.gjt.sp.util.Log;
 
 class ActionListHandler extends HandlerBase
 {
-	ActionListHandler(String path, boolean plugin)
+	ActionListHandler(String path, ActionSet actionSet)
 	{
 		this.path = path;
-		this.plugin = plugin;
+		this.actionSet = actionSet;
 		stateStack = new Stack();
 	}
 
@@ -113,8 +113,8 @@ class ActionListHandler extends HandlerBase
 		{
 			if(tag == "ACTION")
 			{
-				jEdit.addAction(new BeanShellAction(actionName,
-					plugin,code,isSelected,noRepeat,noRecord));
+				actionSet.addAction(new BeanShellAction(actionName,
+					code,isSelected,noRepeat,noRecord));
 			}
 
 			popElement();
@@ -141,7 +141,7 @@ class ActionListHandler extends HandlerBase
 
 	// private members
 	private String path;
-	private boolean plugin;
+	private ActionSet actionSet;
 
 	private String actionName;
 	private String code;

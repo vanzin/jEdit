@@ -1,60 +1,46 @@
 TO DO
 
+- Shift+TAB on Java 1.1
+- (String)buffer.getProperty(): bad
+  buffer.getIntegerProperty(),
+  buffer.getStringProperty()?
 - macro guide entry for Andre's Vertical Paste macro
 - line-uncomment command
-- jdk1,4: use 1.1 key event workaround code
-- com/incors/plaf/kunststoff
-- credit kunststoff l&f in README.txt
 - find btn no work
 - new goodies need to be documented
 - better fold marker color and appearance (draw triangle)
-- plastic theme for installer
 - installer: show GPL
 - write custom stylesheet
 - ant build file: pdf output target
+- about dialog box
+- JComponent.requestDefaultFocus(): new 1.4 method
+- eval-for-selected-lines doesn't work with rectangular selection
 
 + features:
 
-- improve next/prev-word commands
-- ant targets to replace installer/mk_installer/mk_source scripts
-- QuickNotepad XSL docs
-- option on JDK 1.4 to have the LnF decorate windows and dialogs
-- different prompts on setting/going to markers
-- different prompts for different register commands
-- search and replace: scroll text area so selection is visible despite
-  dialog position
-- better auto indent
-- improve folding:
-  - explicit folding with {{{ and }}} markers in text
-  - fold navigator
-- HyperSearch should highlight search results
-- caret beyond end of line
-- ScrollBarHighlight interface:
-  Color getColor()
-  int[] getHighlightedLines()
-  String getToolTipText(int line)
-- Used by ErrorList, HyperSearch, markers
-- new document model that uses less memory than the Swing document
+- recording 'evaluate for selected lines'
+- rollover toolbar buttons option
+- select-* actions: add to selection in multi-select mode
+- Macros.confirm()
+- saving a read-only file: show a confirmation dialog box
+- when loading plugins and such, check for settingsDir == jEditHome
+- changing read-only flag in buffer options
+- after a VFSUpdate for a mode file is received, reload that mode automatically
+- after a VFSUpdate for a mode catalog is received, reload all modes
 - improved window docking:
   - close boxes
   - docking option pane changes take effect immediately
-  - instead of an auto-open flag, remember which dockables were open and
-    restore them on startup
   - action shown in menu bar is not a toggle action
   - '<name>-toggle' and '<name>-to-front' actions, not in menus
-- S+TAB and TAB to shift indent left and right
-- A+LEFT and A+RIGHT bound to prev/next-bracket
-- getSelectedLines(): if selection ends on the start of a line, don't
-  include that line
-- directory chooser dialog box
+  - maybe dockables.xml, a la actions.xml
+
 - file system browser:
-  - colorize file lists
+  - option pane for changing colorization settings
   - new UI layout:
-    [Commands V] [Favorites V]
-    [Up][Reload][Drives][Home][Curr Buf Dir]
-    Path:       [__________________________]
-    [ ] Filter: [__________________________]
-    [ <combo of parent directories>        ]
+    [Up][V][Commands V][Favorites V]
+    [Reload][Drives][Home][Curr Buf]
+    Path:       [__________________]
+    [ ] Filter: [__________________]
   - Two-pane 'file system commander' window, with copy/move buttons
   - recursive directory delete
   - right-click menu: show all toolbar options
@@ -68,21 +54,23 @@ TO DO
     int getUnixPermissions()
     void setUnixPermissions()
   - UNIX_PERMISSIONS_CAP capability
-  - VFS.DirectoryEntry: icon and color fields
+- 'evaluate for each line' command
+- improve next/prev-word commands
+- ant targets to replace installer/mk_installer/mk_source scripts
+- QuickNotepad XSL docs
+- option on JDK 1.4 to have the LnF decorate windows and dialogs
+- search and replace: scroll text area so selection is visible despite
+  dialog position
+- better auto indent
+- improve folding:
+  - explicit folding with {{{ and }}} markers in text
+  - fold navigator
+- HyperSearch should highlight search results
+- caret beyond end of line
+- new document model that uses less memory than the Swing document
+- directory chooser dialog box
 - graphical regular expression editor
-- scroll to newly added tool bar button or context menu item in option
-  panes
-- select-* actions: add to selection in multi-select mode
 - appendix in plugin guide on contributing plugins
-- Macros.confirm()
-- saving a read-only file: show a confirmation dialog box
-- when loading plugins and such, check for settingsDir == jEditHome
-- collapse-all-folds action that calls expandFolds(1)
-- changing read-only flag in buffer options
-- trailingEOL property, set on load if file has a trailing newline, when
-  saving, only write a trailing newline if property is set
-- after a VFSUpdate for a mode file is received, reload that mode automatically
-- after a VFSUpdate for a mode catalog is received, reload all modes
 - when loading a file: if the stream supports a mark, read first 16 bytes,
   check for unicode byte order mark, push back, if one is found, set
   encoding to Unicode automatically
@@ -91,13 +79,10 @@ TO DO
 - removing a plugin should offer to remove the ones that depend on it too
 - use VariableGridLayout to lay out tool bars, not a BoxLayout
 - hypersearch:
-  - file names in bold, show number of results in that file
-  - expand all branches
   - show replace results in search results window
   - new search results window for each search, no 'search results' menu
     item
 - smarter/better userInput() that accepts strings, not just characters
-- changing key bindings for ENTER, TAB, C+TAB, S+TAB, etc.
 - shortcuts option pane: one category for each plugin, to avoid
   lumping all plugin actions in one list
 - style editor: check boxes next to fg, bg; if off, use default
@@ -133,6 +118,13 @@ TO DO
 - they should be overridable on a global basis too
 - if last token of a line has a background color, remainder of line will
   be drawn with that color
+- improve rectangular selection:
+  - shift-left/shift-right: behave differently with rectangular selection
+  - 'fill' command
+  - 'vertical paste' command
+  - selection past end of line
+  - treat a tab like n spaces, not one character
+  - replace in selection with rectangular selections
 
 + bugs:
 
@@ -160,7 +152,6 @@ TO DO
 - fix dragStart handling in DockableWindowContainer.TabbedPane
 - folding paint up bug
 - expand-fold too aggressive
-- replace in sel doesn't work if rect
 - macro guide: JOptionPane not a good idea for getting user input?
 - globalColors setting:
   - tree controls, file system browser icons, tool bar icons look a bit
@@ -172,7 +163,7 @@ TO DO
 - editing on last line shouldn't cause scrolling
 - 'Stop' in plugin manager needs to be handled more gracefully
 - binding an action to ` doesn't work
-- don't call propertiesChanged() twice on metal theme
+- evalutate for selected lines: > 1 selection per line
 
 + later:
 
@@ -182,9 +173,13 @@ TO DO
   - keymaps are XML files with <bind>, <unbind> tags
   - jEdit, emacs, keymaps included, maybe others
   - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
-- shift-left/shift-right: behave differently with rectangular selection
 - dockable view registers window
   - RegisterChanged message added
   - update display when shown register changes
   - use a timer to update display of $ register every 5 seconds or so
   - use a timer to update display of % register if it is a ClipboardRegister
+- ScrollBarHighlight interface:
+  Color getColor()
+  int[] getHighlightedLines()
+  String getToolTipText(int line)
+- Used by ErrorList, HyperSearch, markers

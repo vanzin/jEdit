@@ -76,12 +76,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
 			secondaryFont);
 
-		/* "Plastic" color scheme */
-		plasticColors = new JCheckBox(jEdit.getProperty(
-			"options.appearance.plasticColors"));
-		plasticColors.setSelected(jEdit.getBooleanProperty("plasticColors"));
-		addComponent(plasticColors);
-
 		updateEnabled();
 
 		/* Use jEdit colors in all text components */
@@ -97,7 +91,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
 		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
-		jEdit.setBooleanProperty("plasticColors",plasticColors.isSelected());
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 	}
 
@@ -106,7 +99,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JComboBox lookAndFeel;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
-	private JCheckBox plasticColors;
 	private JCheckBox textColors;
 
 	private void updateEnabled()
@@ -119,13 +111,11 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		{
 			primaryFont.setEnabled(true);
 			secondaryFont.setEnabled(true);
-			plasticColors.setEnabled(true);
 		}
 		else
 		{
 			primaryFont.setEnabled(false);
 			secondaryFont.setEnabled(false);
-			plasticColors.setEnabled(false);
 		}
 	}
 }

@@ -105,6 +105,7 @@ public class HistoryTextField extends JTextField
 		else
 			historyModel = HistoryModel.getModel(name);
 		index = -1;
+		repaint();
 	}
 
 	/**

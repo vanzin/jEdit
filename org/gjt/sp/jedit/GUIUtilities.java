@@ -181,7 +181,7 @@ public class GUIUtilities
 		{
 			action = jEdit.getAction(name);
 
-			label = jEdit.getProperty(name.concat(".label"));
+			label = action.getLabel();
 			if(label == null)
 				label = name;
 		}
@@ -275,7 +275,7 @@ public class GUIUtilities
 		{
 			action = jEdit.getAction(name);
 
-			label = jEdit.getProperty(name.concat(".label"));
+			label = action.getLabel();
 			if(label == null)
 				label = name;
 			else

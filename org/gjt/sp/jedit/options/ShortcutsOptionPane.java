@@ -98,11 +98,11 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		for(int i = 0; i < actions.length; i++)
 		{
 			EditAction action = actions[i];
-			if(action.isPluginAction() != pluginActions)
-				continue;
+			//if(action.isPluginAction() != pluginActions)
+			//	continue;
 
 			String name = action.getName();
-			String label = jEdit.getProperty(name + ".label");
+			String label = action.getLabel();
 			// Skip certain actions this way (ENTER, TAB)
 			if(label == null)
 				continue;

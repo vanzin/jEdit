@@ -56,36 +56,6 @@ public class JEditMetalTheme extends DefaultMetalTheme
 		return primaryFont;
 	}
 
-	public ColorUIResource getPrimary1()
-	{
-		return primary1;
-	}
-
-	public ColorUIResource getPrimary2()
-	{
-		return primary2;
-	}
-
-	public ColorUIResource getPrimary3()
-	{
-		return primary3;
-	}
-
-	public ColorUIResource getSecondary1()
-	{
-		return secondary1;
-	}
-
-	public ColorUIResource getSecondary2()
-	{
-		return secondary2;
-	}
-
-	public ColorUIResource getSecondary3()
-	{
-		return secondary3;
-	}
-
 	public void propertiesChanged()
 	{
 		primaryFont = new FontUIResource(
@@ -94,34 +64,9 @@ public class JEditMetalTheme extends DefaultMetalTheme
 		secondaryFont = new FontUIResource(
 			jEdit.getFontProperty("metal.secondary.font",
 			super.getSystemTextFont()));
-
-		if(jEdit.getBooleanProperty("plasticColors"))
-		{
-			primary1 = new ColorUIResource(32, 32, 64);
-			primary2 = new ColorUIResource(160, 160, 180);
-			primary3 = new ColorUIResource(200, 200, 224);
-			secondary1 = new ColorUIResource(130, 130, 130);
-			secondary2 = new ColorUIResource(180, 180, 180);
-			secondary3 = new ColorUIResource(224, 224, 224);
-		}
-		else
-		{
-			primary1 = new ColorUIResource(102, 102, 153);
-			primary2 = new ColorUIResource(153, 153, 204);
-			primary3 = new ColorUIResource(204, 204, 255);
-			secondary1 = new ColorUIResource(102, 102, 102);
-			secondary2 = new ColorUIResource(153, 153, 153);
-			secondary3 = new ColorUIResource(204, 204, 204);
-		}
 	}
 
 	// private members
 	private FontUIResource primaryFont;
 	private FontUIResource secondaryFont;
-	private ColorUIResource primary1;
-	private ColorUIResource primary2;
-	private ColorUIResource primary3;
-	private ColorUIResource secondary1;
-	private ColorUIResource secondary2;
-	private ColorUIResource secondary3;
 }

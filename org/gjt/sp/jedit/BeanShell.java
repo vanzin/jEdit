@@ -27,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 
 public class BeanShell
@@ -50,7 +50,7 @@ public class BeanShell
 	}
 
 	/**
-	 * Prompts for a BeanShell expression to evaluate;
+	 * Prompts for a BeanShell expression to evaluate.
 	 * @since jEdit 2.7pre2
 	 */
 	public static void showEvaluateDialog(View view)
@@ -76,7 +76,7 @@ public class BeanShell
 					returnValue = eval(view,command,true);
 				}
 			}
-			catch(Error t)
+			catch(Throwable t)
 			{
 				// BeanShell error occured, abort execution
 			}
@@ -86,6 +86,71 @@ public class BeanShell
 				String[] args = { returnValue.toString() };
 				GUIUtilities.message(view,"beanshell-eval",args);
 			}
+		}
+	}
+
+	/**
+	 * Evaluates the specified script for each selected line.
+	 * @since jEdit 4.0pre1
+	 */
+	public static void showEvaluateLinesDialog(View view)
+	{
+		String command = GUIUtilities.input(view,"beanshell-eval-line",null);
+		if(command != null)
+		{
+			if(!command.endsWith(";"))
+				command = command + ";";
+
+			if(view.getMacroRecorder() != null)
+				view.getMacroRecorder().record(1,command);
+
+			JEditTextArea textArea = view.getTextArea();
+			Buffer buffer = view.getBuffer();
+
+			try
+			{
+				buffer.beginCompoundEdit();
+
+				Selection[] selection = textArea.getSelection();
+				for(int i = 0; i < selection.length; i++)
+				{
+					Selection s = selection[i];
+					for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
+					{
+						global.setVariable("line",new Integer(j));
+						global.setVariable("index",new Integer(
+							j - s.getStartLine() + 1));
+						int start = s.getStart(buffer,j);
+						int end = s.getEnd(buffer,j);
+						String text = buffer.getText(start,
+							end - start);
+						global.setVariable("text",text);
+
+						Object returnValue = eval(view,command,true);
+						if(returnValue != null)
+						{
+							buffer.remove(start,end - start);
+							buffer.insertString(start,
+								returnValue.toString(),
+								null);
+						}
+					}
+				}
+			}
+			catch(BadLocationException bl)
+			{
+				Log.log(Log.ERROR,BeanShell.class,bl);
+			}
+			catch(Throwable e)
+			{
+				// BeanShell error occured, abort execution
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+
+			textArea.selectNone();
 		}
 	}
 

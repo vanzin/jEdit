@@ -31,8 +31,8 @@ gta|getTextArea()
 gb|getBuffer()
 gp|jEdit.getProperty(\|)
 gbp|jEdit.getBooleanProperty(\|)
-sp|jEdit.setProperty(\|)
-sbp|jEdit.setBooleanProperty(\|)
+sp|jEdit.setProperty(\|);
+sbp|jEdit.setBooleanProperty(\|);
 ogs|import org.gjt.sp.
 ogsj|import org.gjt.sp.jedit.
 ogsu|import org.gjt.sp.util.

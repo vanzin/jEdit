@@ -208,9 +208,23 @@ public class BufferOptions extends EnhancedDialog
 		layout.setConstraints(encoding,cons);
 		panel.add(encoding);
 
-		// Syntax highlighting
+		// Trailing EOL setting
 		cons.gridx = 0;
 		cons.gridy = 6;
+		cons.weightx = 0.0f;
+		cons.gridwidth = cons.REMAINDER;
+		cons.fill = GridBagConstraints.NONE;
+		cons.anchor = GridBagConstraints.WEST;
+		trailingEOL = new JCheckBox(jEdit.getProperty(
+			"buffer-options.trailingEOL"));
+		trailingEOL.setSelected(buffer.getBooleanProperty(Buffer.TRAILING_EOL));
+		trailingEOL.addActionListener(actionListener);
+		layout.setConstraints(trailingEOL,cons);
+		panel.add(trailingEOL);
+
+		// Syntax highlighting
+		cons.gridx = 0;
+		cons.gridy = 7;
 		cons.weightx = 0.0f;
 		cons.gridwidth = cons.REMAINDER;
 		cons.fill = GridBagConstraints.NONE;
@@ -223,7 +237,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(syntax);
 
 		// Indent on tab
-		cons.gridy = 7;
+		cons.gridy = 8;
 		indentOnTab = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnTab"));
 		indentOnTab.setSelected(buffer.getBooleanProperty("indentOnTab"));
@@ -232,7 +246,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnTab);
 
 		// Indent on enter
-		cons.gridy = 8;
+		cons.gridy = 9;
 		indentOnEnter = new JCheckBox(jEdit.getProperty(
 			"options.editing.indentOnEnter"));
 		indentOnEnter.setSelected(buffer.getBooleanProperty("indentOnEnter"));
@@ -241,7 +255,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(indentOnEnter);
 
 		// Soft tabs
-		cons.gridy = 9;
+		cons.gridy = 10;
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
@@ -250,7 +264,7 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(noTabs);
 
 		// Props label
-		cons.gridy = 10;
+		cons.gridy = 11;
 		cons.insets = new Insets(6,0,6,0);
 		label = new JLabel(jEdit.getProperty("buffer-options.props"));
 		layout.setConstraints(label,cons);
@@ -348,6 +362,7 @@ public class BufferOptions extends EnhancedDialog
 			EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.ENCODING_CHANGED));
 		}
 
+		buffer.putBooleanProperty(Buffer.TRAILING_EOL,trailingEOL.isSelected());
 		buffer.putBooleanProperty("syntax",syntax.isSelected());
 		buffer.putBooleanProperty("indentOnTab",indentOnTab.isSelected());
 		buffer.putBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
@@ -376,9 +391,10 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox mode;
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JCheckBox trailingEOL;
+	private JCheckBox syntax;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;
-	private JCheckBox syntax;
 	private JCheckBox noTabs;
 	private JTextArea props;
 	private JButton ok;
@@ -389,11 +405,12 @@ public class BufferOptions extends EnhancedDialog
 		props.setText(":mode=" + modes[mode.getSelectedIndex()].getName()
 			+ ":tabSize=" + tabSize.getSelectedItem()
 			+ ":indentSize=" + indentSize.getSelectedItem()
+			+ ":maxLineLen=" + maxLineLen.getSelectedItem()
+			+ ":trailingEOL=" + trailingEOL.isSelected()
+			+ ":syntax=" + syntax.isSelected()
 			+ ":noTabs=" + noTabs.isSelected()
 			+ ":indentOnTab=" + indentOnTab.isSelected()
 			+ ":indentOnEnter=" + indentOnEnter.isSelected()
-			+ ":syntax=" + syntax.isSelected()
-			+ ":maxLineLen=" + maxLineLen.getSelectedItem()
 			+ ":");
 	}
 

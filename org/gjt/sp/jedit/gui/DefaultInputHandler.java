@@ -167,17 +167,8 @@ public class DefaultInputHandler extends InputHandler
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
-		if(modifiers == 0
-			&& bindings == currentBindings
-			&& (keyCode == KeyEvent.VK_ENTER
-			|| keyCode == KeyEvent.VK_TAB))
-		{
-			userInput((char)keyCode);
-			evt.consume();
-			return;
-		}
-
-		if((modifiers & ~KeyEvent.SHIFT_MASK) == 0)
+		if(!((evt.isControlDown() ^ evt.isAltDown())
+			|| evt.isMetaDown()))
 		{
 			// if modifier active, handle all keys, otherwise
 			// only some
@@ -186,8 +177,8 @@ public class DefaultInputHandler extends InputHandler
 			case KeyEvent.VK_BACK_SPACE:
 			case KeyEvent.VK_DELETE:
 			case KeyEvent.VK_ESCAPE:
-			case KeyEvent.VK_ENTER:
 			case KeyEvent.VK_TAB:
+			case KeyEvent.VK_ENTER:
 				break;
 			default:
 				if(!evt.isActionKey())
@@ -221,6 +212,14 @@ public class DefaultInputHandler extends InputHandler
 				repeat = false;
 				evt.consume();
 			}
+			else if(modifiers == 0 && (keyCode == KeyEvent.VK_ENTER
+				|| keyCode == KeyEvent.VK_TAB))
+			{
+				userInput((char)keyCode);
+				evt.consume();
+				return;
+			}
+
 			currentBindings = bindings;
 			return;
 		}
@@ -257,10 +256,24 @@ public class DefaultInputHandler extends InputHandler
 		// this is a hack. a literal space is impossible to
 		// insert in a key binding string, but you can write
 		// SPACE.
-		if(c == ' ')
-			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0);
-		else
+		switch(c)
+		{
+		case ' ':
+			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,
+				evt.getModifiers());
+			break;
+		case '\t':
+			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
+				evt.getModifiers());
+			break;
+		case '\n':
+			keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
+				evt.getModifiers());
+			break;
+		default:
 			keyStroke = KeyStroke.getKeyStroke(c);
+			break;
+		}
 
 		Object o = currentBindings.get(keyStroke);
 

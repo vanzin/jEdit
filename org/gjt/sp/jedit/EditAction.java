@@ -34,31 +34,14 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  */
 public abstract class EditAction
-// no longer implements ActionListener
 {
 	/**
-	 * @deprecated Create an actions.xml file instead of writing
-	 * EditAction implementations!
+	 * Creates a new edit action with the specified name.
+	 * @param name The action name
 	 */
 	public EditAction(String name)
 	{
-		// The only people who use this constructor are
-		// plugins written for the old action API, so
-		// we can safely assume that 'plugin' should be
-		// true.
-		this(name,true);
-	}
-
-	/**
-	 * Creates a new <code>EditAction</code>.
-	 * @param name The name of the action
-	 * @param plugin True if this is a plugin action
-	 * @since jEdit 3.1pre1
-	 */
-	/* package-private */ EditAction(String name, boolean plugin)
-	{
 		this.name = name;
-		this.plugin = plugin;
 	}
 
 	/**
@@ -70,13 +53,13 @@ public abstract class EditAction
 	}
 
 	/**
-	 * Returns true if this action was loaded from a plugin, false
-	 * if it was loaded from the core.
-	 * @since jEdit 3.1pre1
+	 * Returns the action's label. The default implementation returns the
+	 * value of the property named by the action's internal name suffixed
+	 * with <code>.label</code>.
 	 */
-	public boolean isPluginAction()
+	public final String getLabel()
 	{
-		return plugin;
+		return jEdit.getProperty(name + ".label");
 	}
 
 	/**
@@ -211,7 +194,6 @@ public abstract class EditAction
 
 	// private members
 	private String name;
-	private boolean plugin;
 
 	/**
 	 * 'Wrap' EditActions in this class to turn them into AWT

@@ -19,9 +19,14 @@
 
 package org.gjt.sp.jedit.io;
 
+import gnu.regexp.*;
+import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
+import java.util.Vector;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * A virtual filesystem implementation. Note tha methods whose names are
@@ -307,9 +312,20 @@ public abstract class VFS
 		public int type;
 		public long length;
 		public boolean hidden;
+		public Color color;
 
 		public DirectoryEntry(String name, String path, String deletePath,
 			int type, long length, boolean hidden)
+		{
+			this(name,path,deletePath,type,length,hidden,
+				getDefaultColorFor(name));
+		}
+
+		/**
+		 * @since jEdit 4.0pre1
+		 */
+		public DirectoryEntry(String name, String path, String deletePath,
+			int type, long length, boolean hidden, Color color)
 		{
 			this.name = name;
 			this.path = path;
@@ -317,6 +333,7 @@ public abstract class VFS
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;
+			this.color = color;
 		}
 
 		public String toString()
@@ -445,6 +462,83 @@ public abstract class VFS
 	{
 	}
 
+	/**
+	 * Returns color of the specified file name, by matching it against
+	 * user-specified regular expressions.
+	 * @since jEdit 4.0pre1
+	 */
+	public static Color getDefaultColorFor(String name)
+	{
+		if(colors == null)
+			loadColors();
+
+		for(int i = 0; i < colors.size(); i++)
+		{
+			ColorEntry entry = (ColorEntry)colors.elementAt(i);
+			if(entry.re.isMatch(name))
+				return entry.color;
+		}
+
+		return null;
+	}
+
 	// private members
 	private String name;
+	private static Vector colors;
+	private static Object lock = new Object();
+
+	static
+	{
+		EditBus.addToBus(new EBComponent()
+		{
+			public void handleMessage(EBMessage msg)
+			{
+				if(msg instanceof PropertiesChanged)
+					colors = null;
+			}
+		});
+	}
+
+	private static void loadColors()
+	{
+		synchronized(lock)
+		{
+			colors = new Vector();
+
+			if(!jEdit.getBooleanProperty("vfs.browser.colorize"))
+				return;
+
+			try
+			{
+				String glob;
+				int i = 0;
+				while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
+				{
+					colors.addElement(new ColorEntry(
+						new RE(MiscUtilities.globToRE(glob)),
+						jEdit.getColorProperty(
+						"vfs.browser.colors." + i + ".color",
+						Color.black)));
+					i++;
+				}
+			}
+			catch(REException e)
+			{
+				Log.log(Log.ERROR,VFS.class,"Error loading file list colors:");
+				Log.log(Log.ERROR,VFS.class,e);
+			}
+		}
+	}
+
+	static class ColorEntry
+	{
+		RE re;
+		Color color;
+
+		ColorEntry(RE re, Color color)
+		{
+			this.re = re;
+			this.color = color;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 /*
  * JARClassLoader.java - Loads classes from JAR files
- * Copyright (C) 1999, 2000 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -45,6 +45,7 @@ public class JARClassLoader extends ClassLoader
 		throws IOException
 	{
 		zipFile = new ZipFile(path);
+		jar = new EditPlugin.JAR(path,this);
 
 		Enumeration entires = zipFile.entries();
 		while(entires.hasMoreElements())
@@ -54,9 +55,10 @@ public class JARClassLoader extends ClassLoader
 			String lname = name.toLowerCase();
 			if(lname.equals("actions.xml"))
 			{
-				jEdit.loadActions(path + "!actions.xml",
+				jar.actions = jEdit.loadActions(
+					path + "!actions.xml",
 					new BufferedReader(new InputStreamReader(
-					zipFile.getInputStream(entry))),true);
+					zipFile.getInputStream(entry))));
 			}
 			else if(lname.endsWith(".props"))
 				jEdit.loadProps(zipFile.getInputStream(entry),true);
@@ -69,7 +71,6 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
-		jar = new EditPlugin.JAR(path,this);
 		jEdit.addPluginJAR(jar);
 	}
 
@@ -270,21 +271,25 @@ public class JARClassLoader extends ClassLoader
 			&& !Modifier.isAbstract(modifiers)
 			&& EditPlugin.class.isAssignableFrom(clazz))
 		{
+			String label = jEdit.getProperty("plugin."
+				+ name + ".name");
 			String version = jEdit.getProperty("plugin."
 				+ name + ".version");
 
 			if(version == null)
 			{
-				Log.log(Log.WARNING,this,"Plugin " +
-					name + " doesn't"
-					+ " have a 'version' property.");
-				version = "";
+				Log.log(Log.ERROR,this,"Plugin " +
+					name + " needs"
+					+ " 'name' and 'version' properties.");
+				jar.addPlugin(new EditPlugin.Broken(name));
+				return;
 			}
-			else
-				version = " (version " + version + ")";
 
-			Log.log(Log.NOTICE,this,"Starting plugin " + name
-					+ version);
+			if(jar.getActions() != null)
+				jar.getActions().setLabel(label);
+
+			Log.log(Log.NOTICE,this,"Starting plugin " + label
+					+ " (version " + version + ")");
 
 			jar.addPlugin((EditPlugin)clazz.newInstance());
 		}

@@ -852,7 +852,6 @@ public class jEdit
 		{
 			((EditPlugin.JAR)jars.elementAt(i)).getPlugins(vector);
 		}
-		plugins.getPlugins(vector);
 
 		EditPlugin[] array = new EditPlugin[vector.size()];
 		vector.copyInto(array);
@@ -898,20 +897,41 @@ public class jEdit
 	}
 
 	/**
-	 * Plugins should not be calling this method.
+	 * Adds a new action set to jEdit's list. Plugins probably won't
+	 * need to call this method.
+	 * @since jEdit 4.0pre1
 	 */
-	public static void addAction(EditAction action)
+	public static void addActionSet(ActionSet actionSet)
 	{
-		actionHash.put(action.getName(),action);
+		actionSets.addElement(actionSet);
 	}
 
 	/**
-	 * Returns a named action.
-	 * @param action The action
+	 * Returns all registered action sets.
+	 * @since jEdit 4.0pre1
 	 */
-	public static EditAction getAction(String action)
+	public static ActionSet[] getActionSets()
 	{
-		return (EditAction)actionHash.get(action);
+		ActionSet[] retVal = new ActionSet[actionSets.size()];
+		actionSets.copyInto(retVal);
+		return retVal;
+	}
+
+	/**
+	 * Returns the specified action.
+	 * @param name The action name
+	 */
+	public static EditAction getAction(String name)
+	{
+		for(int i = 0; i < actionSets.size(); i++)
+		{
+			EditAction action = ((ActionSet)actionSets.elementAt(i))
+				.getAction(name);
+			if(action != null)
+				return action;
+		}
+
+		return null;
 	}
 
 	/**
@@ -919,14 +939,13 @@ public class jEdit
 	 */
 	public static EditAction[] getActions()
 	{
-		EditAction[] actions = new EditAction[actionHash.size()];
-		Enumeration enum = actionHash.elements();
-		int i = 0;
-		while(enum.hasMoreElements())
-		{
-			actions[i++] = (EditAction)enum.nextElement();
-		}
-		return actions;
+		Vector vec = new Vector();
+		for(int i = 0; i < actionSets.size(); i++)
+			((ActionSet)actionSets.elementAt(i)).getActions(vec);
+
+		EditAction[] retVal = new EditAction[vec.size()];
+		vec.copyInto(retVal);
+		return retVal;
 	}
 
 	/**
@@ -2155,30 +2174,22 @@ public class jEdit
 	}
 
 	/**
-	 * Adds a plugin to the editor.
-	 * @param plugin The plugin
-	 */
-	/* package-private */ static void addPlugin(EditPlugin plugin)
-	{
-		plugins.addPlugin(plugin);
-	}
-
-	/**
 	 * Loads the specified action list.
-	 * @since jEdit 3.1pre1
 	 */
-	/* package-private */ static boolean loadActions(String path, Reader in,
-		boolean plugin)
+	static ActionSet loadActions(String path, Reader in)
 	{
-		Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
-
-		ActionListHandler ah = new ActionListHandler(path,plugin);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(ah);
 		try
 		{
+			Log.log(Log.DEBUG,jEdit.class,"Loading actions from " + path);
+
+			ActionSet actionSet = new ActionSet();
+			ActionListHandler ah = new ActionListHandler(path,actionSet);
+			XmlParser parser = new XmlParser();
+			parser.setHandler(ah);
 			parser.parse(null, null, in);
-			return true;
+
+			addActionSet(actionSet);
+			return actionSet;
 		}
 		catch(XmlException xe)
 		{
@@ -2192,7 +2203,7 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
 
-		return false;
+		return null;
 	}
 
 	// private members
@@ -2203,9 +2214,8 @@ public class jEdit
 	private static Properties props;
 	private static EditServer server;
 	private static boolean background;
-	private static Hashtable actionHash;
+	private static Vector actionSets;
 	private static Vector jars;
-	private static EditPlugin.JAR plugins; /* plugins without a JAR */
 	private static Vector modes;
 	private static Vector recent;
 	private static boolean saveCaret;
@@ -2369,9 +2379,6 @@ public class jEdit
 		//if(jEditHome == null)
 		//	Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
-		actionHash = new Hashtable();
-
-		plugins = new EditPlugin.JAR(null,null);
 		jars = new Vector();
 	}
 
@@ -2461,10 +2468,15 @@ public class jEdit
 	 */
 	private static void initActions()
 	{
+		actionSets = new Vector();
+
 		Reader in = new BufferedReader(new InputStreamReader(
 			jEdit.class.getResourceAsStream("actions.xml")));
-		if(!loadActions("actions.xml",in,false))
+		ActionSet actionSet = loadActions("actions.xml",in);
+		if(actionSet == null)
 			System.exit(1);
+
+		actionSet.setLabel(jEdit.getProperty("action-set.jEdit"));
 	}
 
 	/**
@@ -2474,7 +2486,7 @@ public class jEdit
 	{
 		if(jEditHome != null)
 			loadPlugins(MiscUtilities.constructPath(jEditHome,"jars"));
-		else
+		/*else
 		{
 			// load firewall plugin 'manually' in web start version
 
@@ -2505,7 +2517,7 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,"Could not load firewall plugin:");
 				Log.log(Log.ERROR,jEdit.class,t);
 			}
-		}
+		}*/
 
 		if(settingsDirectory != null)
 		{
@@ -2549,42 +2561,19 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		if(System.getProperty("java.version").compareTo("1.2") >= 0)
-		{
-			Log.log(Log.DEBUG,jEdit.class,"Installing Kunststoff look and feel");
-			UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(
-				"Kunststoff","com.incors.plaf.kunststoff.KunststoffLookAndFeel"));
-		}
+		theme = new JEditMetalTheme();
+		theme.propertiesChanged();
+		MetalLookAndFeel.setCurrentTheme(theme);
 
-		String lf = getProperty("lookAndFeel");
-		LookAndFeel lookAndFeel;
 		try
 		{
-			if(lf == null
-				&& System.getProperty("java.version").compareTo("1.2") >= 0
-				&& System.getProperty("os.name").indexOf("Mac OS") == -1)
-			{
-					lf = "com.incors.plaf.kunststoff.KunststoffLookAndFeel";
-			}
-
+			String lf = getProperty("lookAndFeel");
 			if(lf != null && lf.length() != 0)
-				lookAndFeel = (LookAndFeel)Class.forName(lf).newInstance();
-
-			UIManager.setLookAndFeel(lookAndFeel);
+				UIManager.setLookAndFeel(lf);
 		}
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
-		}
-
-		if(lookAndFeel == null)
-			lookAndFeel = UIManager.getLookAndFeel();
-
-		if(lookAndFeel instanceof MetalLookAndFeel)
-		{
-			theme = new JEditMetalTheme();
-			theme.propertiesChanged();
-			((MetalLookAndFeel)lookAndFeel).setCurrentTheme(theme);
 		}
 	}
 

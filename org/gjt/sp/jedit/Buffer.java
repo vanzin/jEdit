@@ -74,6 +74,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	public static final String ENCODING = "encoding";
 
 	/**
+	 * This property is set to 'true' if the file has a trailing newline.
+	 * @since jEdit 4.0pre1
+	 */
+	public static final String TRAILING_EOL = "trailingEOL";
+
+	/**
 	 * Reloads settings from the properties. This should be called
 	 * after the <code>syntax</code> buffer-local property is
 	 * changed.

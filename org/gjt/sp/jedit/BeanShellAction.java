@@ -24,10 +24,10 @@ import java.awt.*;
 
 public class BeanShellAction extends EditAction
 {
-	public BeanShellAction(String name, boolean plugin, String code,
-		String isSelected, boolean noRepeat, boolean noRecord)
+	public BeanShellAction(String name, String code, String isSelected,
+		boolean noRepeat, boolean noRecord)
 	{
-		super(name,plugin);
+		super(name);
 
 		this.code = code;
 		this.isSelected = isSelected;

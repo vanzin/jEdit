@@ -1776,22 +1776,25 @@ public class JEditTextArea extends JComponent
 	 */
 	public int[] getSelectedLines()
 	{
+		if(selection.size() == 0)
+			return new int[] { caretLine };
+
 		Integer line;
 
-		// this algorithm sucks
 		Hashtable hash = new Hashtable();
 		for(int i = 0; i < selection.size(); i++)
 		{
 			Selection s = (Selection)selection.elementAt(i);
-			for(int j = s.startLine; j <= s.endLine; j++)
+			int endLine = (s.end == getLineStartOffset(s.endLine)
+				? s.endLine - 1
+				: s.endLine);
+
+			for(int j = s.startLine; j <= endLine; j++)
 			{
 				line = new Integer(j);
 				hash.put(line,line);
 			}
 		}
-
-		line = new Integer(caretLine);
-		hash.put(line,line);
 
 		int[] returnValue = new int[hash.size()];
 		int i = 0;
@@ -1875,8 +1878,9 @@ public class JEditTextArea extends JComponent
 			return;
 		else if(ch == '\t')
 		{
-			if(buffer.getBooleanProperty("indentOnTab")
-				&& selection.size() == 0
+			if(selection.size() != 0)
+				shiftIndentRight();
+			else if(buffer.getBooleanProperty("indentOnTab")
 				&& buffer.indentLine(caretLine,true,false))
 				return;
 			else if(buffer.getBooleanProperty("noTabs"))

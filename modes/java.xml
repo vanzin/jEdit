@@ -166,10 +166,12 @@
 		</SPAN>
 
 		<!-- HTML tags -->
-		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
+		<!-- Commented out, since people like to use
+		     < and > in their Javadocs -->
+		<!-- SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
-		</SPAN>
+		</SPAN -->
 
 		<KEYWORDS>
 			<LABEL>@author</LABEL>

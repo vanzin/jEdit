@@ -69,11 +69,14 @@ paste-previous.shortcut=C+e C+v
 close-all.shortcut=C+e C+w
 redo.shortcut=C+e C+z
 expand-folds.shortcut=C+e ENTER
+prev-bracket.shortcut=C+e [
+next-bracket.shortcut=C+e ]
 
 docking-top-expanded.shortcut=C+e 1
 docking-bottom-expanded.shortcut=C+e 2
 docking-left-expanded.shortcut=C+e 3
 docking-right-expanded.shortcut=C+e 4
+collapse-all-folds.shortcut=C+e c
 delete-paragraph.shortcut=C+e d
 format-paragraph.shortcut=C+e f
 select-line.shortcut=C+e l
@@ -84,8 +87,6 @@ select-fold.shortcut=C+e s
 insert-literal.shortcut=C+e v
 select-word.shortcut=C+e w
 expand-all-folds.shortcut=C+e x
-prev-bracket.shortcut=C+e [
-next-bracket.shortcut=C+e ]
 
 # C+m
 run-last-macro.shortcut=C+m C+l
@@ -109,10 +110,11 @@ prev-paragraph.shortcut=C+UP
 next-paragraph.shortcut=C+DOWN
 select-prev-paragraph.shortcut=CS+UP
 select-next-paragraph.shortcut=CS+DOWN
-shift-left.shortcut=A+LEFT
-shift-right.shortcut=A+RIGHT
+shift-left.shortcut2=S+TAB
 prev-marker.shortcut=A+UP
 next-marker.shortcut=A+DOWN
+shift-left.shortcut=A+LEFT
+shift-right.shortcut=A+RIGHT
 select-none.shortcut=ESCAPE
 delete-start-line.shortcut=S+BACK_SPACE
 delete-end-line.shortcut=S+DELETE
