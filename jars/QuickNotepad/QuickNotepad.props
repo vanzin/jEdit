@@ -1,10 +1,10 @@
 # general plugin information
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
-plugin.QuickNotepadPlugin.version=1.0
+plugin.QuickNotepadPlugin.version=2.0
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-plugin.QuickNotepadPlugin.depend.0=jdk 1.1
-plugin.QuickNotepadPlugin.depend.1=jedit 03.01.99.00
+plugin.QuickNotepadPlugin.depend.0=jdk 1.2
+plugin.QuickNotepadPlugin.depend.1=jedit 04.00.00.00
 plugin.QuickNotepadPlugin.depend.2=plugin EditBusPlugin 1.0
 
 # dockable window name
