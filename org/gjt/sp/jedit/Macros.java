@@ -258,8 +258,7 @@ public class Macros
 		//{{{ Macro constructor
 		public Macro(String name, String path)
 		{
-			// stupid name for backwards compatibility
-			super("play-macro@" + name);
+			super(name);
 			this.path = path;
 
 			int index = name.lastIndexOf('/');
@@ -271,6 +270,12 @@ public class Macros
 		public String getLabel()
 		{
 			return label;
+		} //}}}
+
+		//{{{ getPath() method
+		public String getPath()
+		{
+			return path;
 		} //}}}
 
 		//{{{ invoke() method
@@ -295,9 +300,7 @@ public class Macros
 		//{{{ getCode() method
 		public String getCode()
 		{
-			return "Macros.getMacro(\""
-				+ getName().substring("play-macro@".length())
-				+ "\").invoke(view);";
+			return "Macros.getMacro(\"" + getName() + "\").invoke(view);";
 		} //}}}
 
 		//{{{ Private members

@@ -35,7 +35,7 @@
   <sidebar><title>Memory usage</title>
    <para>
     The maximum number of open buffers depends on available <firstterm>Java
-    heap memory</firstterm>. Each buffer requires the memory of
+    heap memory</firstterm>. When stored in the Java heap, each buffer requires
     approximately two and a half it's size on disk. This overhead is caused
     by the file being stored internally as Unicode (see
     <xref linkend="encodings" />), and the fact that additional information,
@@ -76,13 +76,13 @@
    <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Horizontally</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo>)
-   splits the view into two text areas, above each other.
+   splits the view into two text areas, placed above each other.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Split
    Vertically</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo>)
-   splits the view into two text areas, next to each other.
+   splits the view into two text areas, placed next to each other.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit</guimenuitem>
@@ -174,12 +174,12 @@
     Clicking here toggles between the three modes. See <xref linkend="folding" />.
     </para></listitem>
     <listitem><para>If multiple selection is enabled, the string
-    <guilabel>multi</guilabel>; otherwise <guilabel>single</guilabel> is shown.
+    <guilabel>multi</guilabel>; otherwise <guilabel>single</guilabel>.
     Clicking here or pressing <keycombo><keycap>Control</keycap>
     <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
     linkend="multi-select" />.</para></listitem>
     <listitem><para>If overwrite mode is enabled, the string
-    <guilabel>ovr</guilabel>; otherwise <guilabel>ins</guilabel> is shown.
+    <guilabel>ovr</guilabel>; otherwise <guilabel>ins</guilabel>.
     Clicking here or pressing
     <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
     linkend="entering-text" />.</para></listitem>
@@ -197,8 +197,8 @@
    unique features will be described in this section.
   </para>
   <para>
-   The text area will automatically scroll up or down if the caret is moved
-   closer than three lines to the first or last visible line. This
+   The text area will automatically scroll up or down if text editing is performed
+   closer than three lines from the top or bottom of the text area. This
    feature is called <firstterm>electric scrolling</firstterm> and can be disabled
    in the <guibutton>Text Area</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
@@ -223,6 +223,8 @@
  </sect1>
  <sect1 id="repeat"><title>Command Repetition</title>
   <para>
+   There is one other jEdit feature that needs to be discussed before we
+   continue further.
    To repeat a command any number of times, invoke
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Next Command</guimenuitem>
    (shortcut:

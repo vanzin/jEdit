@@ -117,12 +117,7 @@
    </para>
    <itemizedlist>
     <listitem><para>Commands that copy text place the contents of
-    each selection, separated by line breaks, in the specified register. Note
-    that the selections are appended in the order they were created, not the
-    order they appear in the buffer. For example, if you select a chunk of
-    text near the end of the buffer, another near the beginning, then invoke
-    <guimenuitem>Copy</guimenuitem>, the clipboard will contain the later chunk,
-    followed by a line break, followed by the earlier chunk.
+    each selection, separated by line breaks, in the specified register.
     </para></listitem>
     <listitem><para>Commands that insert (or paste) text replace each selection
     with the entire text that is being inserted.</para></listitem>
@@ -133,7 +128,7 @@
     <listitem><para>Line-based commands (such as <guimenuitem>Shift Indent
     Left</guimenuitem>, <guimenuitem>Shift Indent Right</guimenuitem>, and
     <guimenuitem>Line Comment</guimenuitem>) operate on each line that contains
-    at least one selection, in addition to the line containing the caret.
+    at least one selection.
     </para></listitem>
     <listitem><para>Caret movement commands that would normally deactivate the
     selection (such as the arrow keys, while <keycap>Shift</keycap> is not being
@@ -238,10 +233,9 @@
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) searches the
-   current buffer for possible completions of the current word.
-   This feature be used to avoid retyping
-   previously entered identifiers in program source, for example.
+   <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) locates
+   possible completions for the word at the caret, first by looking in the
+   current edit mode's keyword list, and then searching the current buffer.
   </para>
   <para>
    If there is only one completion, it will be inserted into the buffer
@@ -251,7 +245,13 @@
    with the mouse,
    or select it using the <keycap>Up</keycap> and <keycap>Down</keycap> keys and
    press <keycap>Enter</keycap>. To close the popup without inserting a
-   completion, press <keycap>Escape</keycap>.
+   completion, press <keycap>Escape</keycap>. Typing while the popup is
+   visible will automatically update the popup and narrow the set of
+   completions as necessary.
+  </para>
+  <para>
+   This feature be used to avoid retyping
+   previously entered identifiers in program source, for example.
   </para>
  </sect1>
  <sect1 id="lines"><title>Working With Lines</title>
@@ -360,11 +360,13 @@
  </sect1>
  <sect1 id="word-wrap"><title>Word Wrap</title>
   <para>
-   The <quote>Word wrap</quote> splits lines of text at word boundaries in
-   order for the text to fit within a specified wrap margin. The wrap margin
-   position is indicated in the text are as a faint blue vertical line.
+   The <firstterm>word wrap</firstterm> feature splits lines of text at word
+   boundaries in
+   order for the text to fit inside a specified wrap margin.
    Two wrap modes are available; "soft" and "hard". These two modes are
-   described below. The wrap mode and wrap
+   described below. The wrap margin
+   position is indicated in the text are as a faint blue vertical line.
+   The wrap mode and wrap
    column location can be changed in one of several ways:
   </para>
   <itemizedlist>
@@ -698,13 +700,13 @@
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Previous
    Marker</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycap>,</keycap>) goes
+   <keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo>) goes
    to the marker immediately before the caret position.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Next Marker</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycap>.</keycap>)
+   <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo>)
    goes to the marker immediately after the caret position.
   </para>
   <para>
@@ -733,7 +735,8 @@
     If the selection consists of multiple lines, the
     <guibutton>Search in Selection</guibutton>
     and <guibutton>HyperSearch</guibutton>
-    buttons will be pre-selected instead. <!-- Note that finding the next or previous
+    buttons will be pre-selected, and the search string field will be blank.
+    <!-- Note that finding the next or previous
     occurrence cannot be constrained to a selected range; only
     replacement and HyperSearch can be (see <xref linkend="hypersearch" />). -->
    </para>
@@ -780,12 +783,6 @@
   </sect2>
   <sect2><title>Replacing Text</title>
    <para>
-    Occurrences of the search string can be replaced with either a replacement
-    string or the result of a BeanShell script snippet. Two radio buttons in
-    the search and replace dialog box can be used to choose between these two
-    behaviors.
-   </para>
-   <para>
     The replace string text field remembers previously entered strings;
     see <xref linkend="history" /> for details.
    </para>
@@ -797,11 +794,26 @@
     search scope (which is either the selection, the current buffer, or a set of
     buffers, as specified in the search and replace dialog box).
    </para>
+   <para>
+    Occurrences of the search string can be replaced with either a replacement
+    string, or the result of a BeanShell script snippet. Two radio buttons in
+    the search and replace dialog box can be used to choose between these
+    behaviors, which are described below in more detail.
+   </para>
    <sect3><title>Text Replace</title>
     <para>
      If the <guibutton>Text</guibutton> radio button is selected,
      the search string is replaced with the replacement
-     string. If the search is case-insensitive, jEdit attempts to modify the
+     string.
+    </para>
+    <para>
+     If regular expressions are enabled, positional parameters
+     (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
+     on) can be used to insert the contents of matched subexpressions in the
+     replacement string; see <xref linkend="regexps" /> for more information.
+    </para>
+    <para>
+     If the search is case-insensitive, jEdit attempts to modify the
      case of the replacement string to match that of the particular instance
      of the search string being replaced. For example, if you are searching
      for <quote>label</quote> and replacing it with <quote>text</quote>, then
@@ -815,12 +827,6 @@
      <listitem><para><quote>DEFAULT_LABEL</quote> would become <quote>DEFAULT_TEXT</quote>
      </para></listitem>
     </itemizedlist>
-    <para>
-     If regular expressions are enabled, positional parameters
-     (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
-     on) can be used to insert the contents of matched subexpressions in the
-     replacement string; see <xref linkend="regexps" /> for more information.
-    </para>
    </sect3>
    <sect3><title>BeanShell Replace</title>
     <para>
@@ -952,7 +958,7 @@
     Unless the <guibutton>HyperSearch</guibutton> check box is selected, the
     search bar will perform an <firstterm>incremental search</firstterm>.
     In incremental search mode, the first occurrence of the search
-    string is located in the current buffer as is it is being typed.
+    string is located in the current buffer as it is being typed.
     Pressing <keycap>Enter</keycap>
     and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
     searches for the next and previous occurrence, respectively.
@@ -962,7 +968,7 @@
    <para>
     If the <guibutton>HyperSearch</guibutton> check box is selected, entering a
     search string and pressing <keycap>Enter</keycap> will perform a
-    HyperSearch.
+    HyperSearch in the current buffer.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search</guimenuitem>

@@ -239,6 +239,8 @@ public class BrowserView extends JPanel
 	//{{{ maybeReloadDirectory() method
 	public void maybeReloadDirectory(String path)
 	{
+		tmpExpanded.clear();
+
 		// because this method is called for *every* VFS update,
 		// we don't want to scan the tree all the time. So we
 		// use the following algorithm to determine if the path
@@ -352,19 +354,6 @@ public class BrowserView extends JPanel
 	private void loadDirectory(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
-		if(node == rootNode)
-		{
-			parentModel.removeAllElements();
-			parentModel.addElement(new LoadingPlaceholder());
-		}
-
-		if(showLoading)
-		{
-			node.removeAllChildren();
-			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
-			model.reload(node);
-		}
-
 		int rowCount = tree.getRowCount();
 		for(int i = 0; i < rowCount; i++)
 		{
@@ -378,6 +367,19 @@ public class BrowserView extends JPanel
 
 				tmpExpanded.put(file.path,file.path);
 			}
+		}
+
+		if(node == rootNode)
+		{
+			parentModel.removeAllElements();
+			parentModel.addElement(new LoadingPlaceholder());
+		}
+
+		if(showLoading)
+		{
+			node.removeAllChildren();
+			node.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
+			model.reload(node);
 		}
 
 		browser.loadDirectory(node,path,node == rootNode);

@@ -13,26 +13,25 @@
    The following settings may be changed here:
   </para>
   <itemizedlist>
-   <listitem><para>The edit mode (see <xref linkend="modes" />)</para></listitem>
-   <listitem><para>The tab width (see <xref linkend="indent" />)</para></listitem>
-   <listitem><para>The indent width</para></listitem>
-   <listitem><para>The wrap column (see <xref linkend="entering-text" />)
-   </para></listitem>
-   <listitem><para>The folding mode (see <xref linkend="folding" />)
-   </para></listitem>
    <listitem><para>The line separator (see <xref linkend="line-separators" />)
    </para></listitem>
    <listitem><para>The character encoding (see <xref linkend="encodings" />)
    </para></listitem>
+   <listitem><para>If the file should be GZipped on disk
+   (see <xref linkend="opening" />)
+   </para></listitem>
+   <listitem><para>If the file should be saved with a trailing line break
+   </para></listitem>
+   <listitem><para>The edit mode (see <xref linkend="modes" />)</para></listitem>
+   <listitem><para>The fold mode (see <xref linkend="folding" />)</para></listitem>
+   <listitem><para>The wrap mode and margin (see <xref linkend="word-wrap" />)
+   </para></listitem>
+   <listitem><para>The tab width (see <xref linkend="indent" />)</para></listitem>
+   <listitem><para>The indent width</para></listitem>
    <listitem><para>If auto indent and soft tabs should be enabled
    (see <xref linkend="indent" />)
    </para></listitem>
   </itemizedlist>
-  <para>
-   The <quote>Corresponding buffer-local
-   properties</quote> text field displays buffer-local properties that
-   duplicate the current settings in the dialog box.
-  </para>
  </sect1>
  <sect1 id="buffer-local"><title>Buffer-Local Properties</title>
   <para>
@@ -71,6 +70,11 @@
       <entry>Folds with a level of this or higher will be collapsed when the
       buffer is opened. If set to zero, all folds will be expanded initially.
       See <xref linkend="folding" />.</entry>
+     </row>
+     <row>
+      <entry>folding</entry>
+      <entry>The fold mode; one of <quote>none</quote>, <quote>indent</quote>,
+      or <quote>explicit</quote>. See <xref linkend="folding" />.</entry>
      </row>
      <row>
       <entry>indentOnEnter</entry>
@@ -124,6 +128,11 @@
       <entry>Characters, in addition to spaces and tabs, at which lines may be
       split when word wrapping.
       See <xref linkend="entering-text" />.</entry>
+     </row>
+     <row>
+      <entry>wrap</entry>
+      <entry>The word wrap mode; one of <quote>none</quote>, <quote>soft</quote>,
+      or <quote>hard</quote>. See <xref linkend="word-wrap" />.</entry>
      </row>
     </tbody>
    </tgroup>

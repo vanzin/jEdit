@@ -6,9 +6,8 @@
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
-		<!-- the ; hack is there so that stuff like if(bob) fred();
-		     does not indent the next line -->
-		<PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)\s*\(|else|case|default:)[^;]*|for\s*\(.*)" />
+		<PROPERTY NAME="indentPrevLine"
+			VALUE="\s*(((if|while)\s*\(|else\s*(\{|$)|else\s+if\s*\(|case\s+.+:|default:)[^;]*|for\s*\(.*)" />
 		<!-- set this to 'true' if you want to use GNU coding style -->
 		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
 		<PROPERTY NAME="commentStart" VALUE="/*" />

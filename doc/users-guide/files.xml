@@ -20,6 +20,10 @@
    <keycap>Control</keycap> while clicking on them in the file system browser.
   </para>
   <para>
+   Files that you do not have write access to are opened in read-only
+   mode, and editing will not be permitted.
+  </para>
+  <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Insert</guimenuitem> displays
    a file selector dialog box and inserts the specified file into the current
    buffer.
@@ -37,14 +41,10 @@
    the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
   </para>
-  <para>
-   Files that you do not have write access to are opened in read-only
-   mode, and editing will not be permitted.
-  </para>
   <tip>
    <para>
     jEdit supports transparent editing of GZipped files; if a file begins with
-    the GZip <quote>magic number</quote>, it is automaticlaly decompressed
+    the GZip <quote>magic number</quote>, it is automatically decompressed
     before loading, and compressed when saving. To compress an existing file,
     you need to change a setting in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
@@ -136,7 +136,10 @@
     <filename>paper.tex~</filename>.
    </para>
    <para>
-    The backup feature can also be configured to do any of the following:
+    The backup feature can also be configured in
+    the <guibutton>Loading and Saving</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box. The following settings can be changed:
    </para>
    <itemizedlist>
     <listitem><para>
@@ -159,12 +162,6 @@
      time a buffer is saved after being opened.
     </para></listitem>
    </itemizedlist>
-   <para>
-    The above features can be configured
-    in the <guibutton>Loading and Saving</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />.
-   </para>
   </sect2>
  </sect1>
  <sect1 id="line-separators"><title>Line Separators</title>
@@ -302,10 +299,6 @@
     <literal>KOI8_R</literal> for Russian text, <literal>Big5</literal> and
     <literal>GBK</literal> for Chinese, and <literal>SJIS</literal> for
     Japanese.
-   </para>
-   <para>
-    Java even supports a few downright obscure encodings, such as the
-    <literal>EBCDIC</literal> character encoding used on IBM mainframes.
    </para>
   </sect2>
  </sect1>
@@ -486,7 +479,7 @@
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Reload</guimenuitem> can be used to
-   discard unsaved changes and reload the current buffer from disk at any other
+   reload the current buffer from disk at any other
    time; a confirmation dialog box will be displayed first if the buffer
    has unsaved changes.
   </para>
@@ -501,8 +494,7 @@
    To improve responsiveness and perceived performance,
    jEdit executes all input/output operations asynchronously.
    While I/O is in progress, the status bar displays the number of
-   remaining I/O operations. When I/O is complete, the status bar shows a message
-   to this effect.
+   remaining I/O operations.
    The <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O Progress
    Monitor</guimenuitem> command displays a window with more detailed status
    information and progress meters. Requests can also be aborted in this window.
@@ -533,16 +525,16 @@
   <itemizedlist>
    <listitem><para>The font to use when printing</para></listitem>
    <listitem><para>If a header with the file name should be printed on each
-   page</para></listitem>
+   page.</para></listitem>
    <listitem><para>If a footer with the page number and current date should be
-   printed on each page</para></listitem>
-   <listitem><para>If line numbers should be printed</para></listitem>
-   <listitem><para>If the output should be styled according to the current
-   mode's syntax highlighting rules</para></listitem>
+   printed on each page.</para></listitem>
+   <listitem><para>If line numbers should be printed.</para></listitem>
    <listitem><para>If the output should be colored according to the current
    mode's syntax highlighting rules (might look bad on grayscale
-   printers)</para></listitem>
-   <listitem><para>The page margins</para></listitem>
+   printers); otherwise, only syntax styles will be applied.</para></listitem>
+   <listitem><para>The tab size to use when printing - this will usually be
+   less than the text area tab size, to conserve space in the printed output.
+   </para></listitem>
   </itemizedlist>
  </sect1>
  <sect1 id="closing-exiting"><title>Closing Files and Exiting jEdit</title>

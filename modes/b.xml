@@ -2,7 +2,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<MODE NAME="b">
+<MODE>
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="THEN|BEGIN" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="END" />

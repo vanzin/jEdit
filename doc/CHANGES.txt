@@ -20,6 +20,8 @@ JEDIT 4.0 VERSION HISTORY
 - Pressing ENTER in the file system browser no longer closes the
   selected file if 'double click close' is enabled; now, only double-
   and middle-clicks can close open files
+- NEWS.txt written
+- Updated Pascal syntax highlighting (Barry Carr)
 
 + Bug Fixes
 
@@ -55,6 +57,20 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed ArrayIndexOutOfBoundsException when loading a file with saved
   markers
 - Running "jedit -usage" and "jedit -version" produced no output
+- Floating window positions were not saved
+- Fixed arrow keys in HyperSearch Results window (again...)
+- Fixed Java, C, C++, and similar mode's auto indent bug
+- Fixed minor problem when indenting a line containing "{{{"
+- When I overhauled the action system in jEdit 4.0pre1, I tried to
+  preserve compatibility with macro shortcuts set in previous versions,
+  but I did it incorrectly. This has been fixed; if you set macro
+  shortcuts with 4.0pre1-pre4, you will need to set them again, but
+  shortcuts set in 3.2.2 should work without any trouble.
+- If the 'BeanShell replace' radio button was selected, the search and
+  replace dialog box would open with the replace field's history set up
+  incorrectly.
+- Sometimes the scroll bar would not be updated correctly when opening a
+  file
 
 * Version 4.0pre4
 

@@ -1,68 +1,61 @@
 OVERVIEW OF CHANGES BETWEEN JEDIT 3.2 AND 4.0
 
-*********** This file is not yet finished.
-
-* Incompatible changes
+jEdit 4.0 is a significant upgrade to 3.2; the major version number has
+been increased as several parts of the editor have been rewritten for
+improved performance and reduced memory footprint.
 
 jEdit now requires Java 2 version 1.3 or later. It will no longer work
 with Java 1.1 or Java 2 version 1.2. Also, some aspects of the plugin
 API have changed; make sure your installed plugins are their latest
 versions.
 
-* Rewritten document model
+The major changes in this release are:
 
-Buffers are now stored in memory in a different manner; the Java
-Document class is no longer used. This results in faster loading of
-files, reduced memory consumption, and faster directory search.
+- Rewritten buffer code: this results in decreased footprint, faster
+  file loading, _much_ faster directory search, and more.
 
-* Soft wrap
+- Rewritten folding code. Fold visibility can now be changed on a
+  per-text area basis, and "explicit" folding (where the buffer is
+  parsed for "{{{" and "}}}") is now supported, in addition to the old
+  "indent" folding.
 
-Soft word wrapping is now available, where lines are automatically
-wrapped as they are displayed without newlines being inserted. The old
-"hard wrap" that would insert newlines is still available as a
-configurable option.
+- Soft wrap has been added. The old "hard" wrap is still present as a
+  configurable option.
 
-Note that word wrap is now disabled by default; you must enable it
-either in the Global Options or Buffer Options dialog boxes.
+- Bracket matching now indicates the bracket scope in the gutter.
 
-* Improved folding
+- Many improvements in the file system browser, among them coloring of
+  the file list based on file name patterns, and persistent tree
+  expansion state when a directory is reloaded.
 
-The folding feature has been rewritten from scratch. The most important
-change is that in addition to indent-based folding, there is also an
-"explicit" fold mode that parses buffers for "{{{" and "}}}" sequences.
+- A framework is in place for context-sensitive editing features;
+  currently, the commenting commands use it to behave differently
+  depending on where the caret is positioned in a buffer, for example,
+  in HTML text or inline JavaScript.
 
-Another important change is that fold visibility can now be set on a
-per-text area basis.
+- The window docking feature has been improved in terms of functionality
+  and appearance.
 
-Note that folding is now disabled by default; you must enable it either
-in the Global Options or Buffer Options dialog boxes.
+There are many smaller improvements as well, too many to list here, but
+some of the more noteworthy ones are:
 
-* File system browser
+- 'Complete Word' command now completes mode-specific keywords, in
+  addition to previously typed text.
 
-The file system browser has been enhanced:
+- Search and Replace usability improvements.
 
-- File listings are now colorized by matching file names against a set
-  of patterns
-- Tree expansion state is preserved when reloading directories
-- If you have a three button mouse, you can middle-click to open files,
-  instead of double clicking
-- File names containing numbers are now sorted in natural order, for
-  example "File 10" will be placed after "File 2"
-- Additional keyboard shortcuts have been added
+- Better integration with MacOS X; jEdit now knows about type and
+  creator codes.
 
-- FAQ
-- more reliable setting saving
-- search and replace usability improved/word search commands
-- global options usability improved/ui font can be changed
-- saving modes automatically reloads
-- better window docking
-- tab/s+tab to shift selection
-- last empty line of selection
-- better status
-- better bracket matching
-- syntax highlighting added for: BibTeX; BBj; ActionScript, ObjectRexx
-- macos plugin
-- context-sensitive editing commands
-- complete word: completes keywords, updated on the fly
-- auto detect gzip, unicode files
-- better jdk 1.4 support
+- Unicode files are automatically detected and opened as such.
+
+- The font used to display user interface elements can now be changed in
+  the new 'Appearance' pane of the Utilities->Global Options dialog box.
+
+- jEdit Frequently Asked Questions document, by John Gellene, is now
+  included as part of the online help.
+
+- jEdit now has better support for Java 2 version 1.4.
+
+And of course, there is much, much more; see the CHANGES.txt file for a
+full list.
