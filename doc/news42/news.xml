@@ -1,0 +1,299 @@
+<?xml version="1.0" ?>
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+		"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<article>
+	<articleinfo>
+		<author>
+			<firstname>Slava</firstname><surname>Slava</surname>
+		</author>
+		<copyright><year>2003</year><holder>Slava Pestov</holder></copyright>
+		<legalnotice><title>Legal Notice</title>
+			<para>
+				Permission is granted to copy, distribute and/or modify this document
+				under the terms of the GNU Free Documentation License, Version 1.1 or
+				any later version published by the Free Software Foundation; with no
+				<quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
+				<quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
+				the license is included in the file <filename>COPYING.DOC.txt</filename>
+				included with the jEdit distribution.
+			</para>
+		</legalnotice>
+		<title>What's New in jEdit 4.2</title>
+	</articleinfo>
+
+	<sect1 id="user-changes"><title>User-Visible Changes</title>
+	
+	<para>
+		Not yet written.
+	</para>
+	
+	</sect1>
+	
+	<sect1 id="scripting-api-changes"><title>BeanShell Scripting API</title>
+	
+	<para>
+		This section outlines a few enhancements to jEdit's integrated
+		BeanShell interpreter. Also see <xref linkend="common-api-changes"/>.
+	</para>
+
+	<para>
+		A new preset BeanShell variable, <varname>wm</varname> is set to the
+		<function>view.getDockableWindowManager()</function>.
+	</para>
+
+	</sect1>
+
+	<sect1 id="plugin-api-changes"><title>Plugin API</title>
+	
+	<para>
+		This section outlines the new deferred loading plugin API.
+		Also see <xref linkend="common-api-changes"/>.
+	</para>
+
+	<sect2><title>Actions</title>
+	
+	<para>
+		A few methods of the <classname>EditAction</classname> class were made
+		final, since these three values must be known even if the action
+		instance in question has not been loaded:
+	</para>
+	
+	<itemizedlist>
+		<listitem><para><function>getLabel()</function></para></listitem>
+		<listitem><para><function>isToggle()</function></para></listitem>
+		<listitem><para><function>getMouseOverText()</function></para></listitem>
+	</itemizedlist>
+	
+	<para>
+		This change does not affect plugins that define actions using an
+		<filename>actions.xml</filename> file. However, if your plugin creates
+		action instances dynamically, you will need to make calls like the
+		following instead of overriding these methods:
+	</para>
+
+	<programlisting>jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.label",
+    "<replaceable>Hello World</replaceable>");
+jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.toggle",
+    "<replaceable>true or false</replaceable>");
+jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
+    "<replaceable>some string</replaceable>");</programlisting>
+
+	<para>
+		Make sure to use <function>jEdit.setTemporaryProperty()</function> and
+		not <function>jEdit.setProperty()</function> since the latter will save
+		the values to the user properties file, which is probably not what you
+		want.
+	</para>
+
+	<para>
+		The <function>jEdit.getActions()</function> method has been
+		deprecated, since it must load all plugin <filename>actions.xml</filename>
+		files in order to return an array of <classname>EditAction</classname>
+		instances. Use <function>jEdit.getActionNames()</function> instead,
+		which returns an array of strings.
+	</para>
+
+	<para>
+		A new abstract method was added to the <classname>InputHandler</classname>
+		class:
+	</para>
+	
+	<para>
+		<funcsynopsis>
+		<funcprototype>
+		<funcdef>void <function>addKeyBinding</function></funcdef>
+		<paramdef>String <parameter>keyBinding</parameter></paramdef>
+		<paramdef>String <parameter>action</parameter></paramdef>
+		</funcprototype>
+		</funcsynopsis>
+	</para>
+
+	</sect2>
+
+	<sect2><title>Dockable Windows</title>
+	
+	<para>
+		Instead of overriding the deprecated
+		<function>JComponent.requestDefaultFocus()</function> method,
+		dockable windows can now implement the new
+		<classname>DefaultFocusComponent</classname> interface and its
+		<function>focusOnDefaultComponent()</function> method.
+	</para>
+
+	</sect2>
+
+	<sect2><title>Virtual File Systems</title>
+	
+	<para>
+		A new <classname>VFS.DirectoryEntryCompare</classname> class was added,
+		for sorting lists of VFS directory entries.
+	</para>
+
+	<para>
+		Fields named <varname>canRead</varname> and <varname>canWrite</varname>
+		were added to the <classname>VFS.DirectoryEntry</classname> class.
+	</para>
+
+	<para>
+		There is a new extended attribute API to go with the details view in the
+		file system browser. Pass an array of extended attribute names to the
+		<classname>VFS</classname> constructor, then provide an implementation
+		of the <function>getExtendedAttribute()</function> method in your
+		subclass of <classname>VFS.DirectoryEntry</classname>.
+	</para>
+
+	<para>
+		The following two methods in the <classname>VFSManager</classname>
+		class have been deprecated since they can no longer be implemented for
+		file systems using the deferred loading API
+	</para>
+
+	<itemizedlist>
+		<listitem><para><function>getVFSByName()</function> - use
+		<function>getVFSForProtocol()</function>
+		instead.</para></listitem>
+		<listitem><para><function>getFilesystems()</function> - use
+		<function>getVFSs()</function>, which returns a string array,
+		instead.</para></listitem>
+	</itemizedlist>
+
+	</sect2>
+
+	</sect1>
+	
+	<sect1 id="common-api-changes"><title>Common API</title>
+	
+	<para>
+		This section outlines API changes and enhancements
+		which may affect both plugins and
+		macros.
+	</para>
+
+	<sect2><title>Syntax Highlighting</title>
+	
+	<para>
+		The <classname>org.gjt.sp.jedit.syntax</classname> package can now
+		be used in other programs.
+		All you need to provide is error handling and logic for locating
+		the XML mode files. See the
+		<ulink url="../api/org/gjt/sp/jedit/syntax/index.html">package
+		documentation</ulink> for details.
+	</para>
+
+	</sect2>
+
+	<sect2><title>Text Area and Folding</title>
+
+	<para>
+		A new <function>JEditTextArea.addToLeftOfScrollBar()</function> method
+		adds a component to the left of the scroll bar. Previously plugins like
+		JDiff had to resort to undocumented hacks to do this.
+	</para>
+
+	<para>
+		The code that displays lines of text on screen has been overhauled for
+		improved performance and correctness. As a result, two methods that have
+		already been deprecated since jEdit 4.0 were removed:
+	</para>
+
+	<itemizedlist>
+		<listitem><para><function>JEditTextArea.xToOffset()</function></para>
+		</listitem>
+		<listitem><para><function>JEditTextArea.offsetToX()</function></para>
+		</listitem>
+	</itemizedlist>
+
+	<para>
+		As in jEdit 4.0 and 4.1, the <function>xyToOffset()</function> and
+		<function>offseToXY()</function> methods replace these two.
+	</para>
+
+	<para>
+		Also, the way folds are handled has changed. The
+		<classname>FoldVisibilityManager</classname> class has been removed,
+		and a number of methods in the <classname>JEditTextArea</classname>
+		class have been removed also:
+	</para>
+
+	<itemizedlist>
+		<listitem><para><function>JEditTextArea.virtualToPhysical()</function></para>
+		</listitem>
+		<listitem><para><function>JEditTextArea.physicalToVirtual()</function></para>
+		</listitem>
+		<listitem><para><function>JEditTextArea.getVirtualLineCount()</function></para>
+		</listitem>
+	</itemizedlist>
+
+	<para>
+		The replacement for the <classname>FoldVisibilityManager</classname>
+		class is a class named <classname>DisplayManager</classname>, with
+		pretty much the same API, in addition to a few methods for dealing with
+		soft wrap display details.
+	</para>
+
+	<para>
+		Previously, a <quote>virtual line number</quote> was a line number such
+		that each physical line (delimited by <literal>\n</literal>) counted
+		as 1 if it was visible, and 0 if it was not. They did not take into
+		account lines that were split on screen as a result of soft wrap, and
+		this made the soft wrap scrolling code rather complicated.
+	</para>
+
+	<para>
+		In jEdit 4.2, virtual line numbers are no longer used internally; now,
+		similar <quote>scroll line numbers</quote> are used. Scroll line numbers
+		take both hidden lines and soft wrap into account. The
+		<function>JEditTextArea.getFirstLine()</function> and
+		<function>JEditTextArea.setFirstLine()</function> methods now work with
+		scroll line numbers.
+	</para>
+
+	<para>
+		An internal API for converting between scroll line numbers and physical
+		line numbers exists, but it is rather complicated and it will not be
+		made public. Instead, if you want the text area to scroll to a given
+		physical line number, use the new
+		<function>JEditTextArea.setFirstPhysicalLine()</function> method.
+	</para>
+
+	</sect2>
+
+	<sect2 id="misc-api-changes"><title>Miscellaneous API Changes</title>
+	
+	<para>
+		A new <function>View.goToBuffer()</function> method has been added.
+		If the specified buffer is already
+		visible in one of the view's edit panes, it sends focus to that edit
+		pane. Otherwise, it calls <function>setBuffer()</function>
+		on the current edit pane.
+	</para>
+
+	<para>
+		The constructor of the <classname>EBMessage</classname> class now takes
+		an <classname>Object</classname>, as opposed to a
+		<classname>EBComponent</classname>. Plugins that provide custom message
+		types will need to be recompiled.
+	</para>
+	
+	<para>
+		The following deprecated method was removed from the
+		<classname>GUIUtilities</classname> class:
+	</para>
+	
+	<para>
+		<funcsynopsis>
+		<funcprototype>
+		<funcdef>void <function>loadMenu</function></funcdef>
+		<paramdef>View <parameter>view</parameter></paramdef>
+		<paramdef>String <parameter>name</parameter></paramdef>
+		</funcprototype>
+		</funcsynopsis>
+	</para>
+
+	</sect2>
+
+	</sect1>
+	
+</article>

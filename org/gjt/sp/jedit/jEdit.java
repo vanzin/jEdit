@@ -3161,7 +3161,7 @@ public class jEdit
 	} //}}}
 
 	//{{{ showPluginErrorDialog() method
-	private void showPluginErrorDialog()
+	private static void showPluginErrorDialog()
 	{
 		String caption = jEdit.getProperty(
 			"plugin-error.caption" + (pluginErrors.size() == 1

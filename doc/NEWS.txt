@@ -1,6 +1,0 @@
-OVERVIEW OF CHANGES BETWEEN JEDIT 4.1 AND 4.2
-
-Not yet written.
-
-jEdit buffer local properties:
-:wrap=hard:maxLineLen=72:indentSize=2:

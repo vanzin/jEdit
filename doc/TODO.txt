@@ -15,21 +15,22 @@ I'm releasing 4.2pre1 ASAP.
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
 - control-drag: rect select back
-- update quicknotepad docs
+- action bar: changing buffer props should update status
+- changing global props should send a dockable props changed
+- plugin unload:
+  - update dockables
+  - dependencies
+  - plugin mgr
 
 ================================
 
+- load help toc in a thread, do help search in a thread
+- update quicknotepad docs
 - don't need property cache if activate=startup
-- action bar: changing buffer props should update status
-- changing global props should send a dockable props changed
 - quicknotepad: handle no settings dir more gracefully
 - save caret info first
 - caret saving needs to be more flexible w.r.t. split panes
 - <edit pane,buffer> --> <caret info> map
-
-- plugin unload:
-  - update dockables
-  - dependencies
 
 - shortcuts: stale shortcuts remain?
 

@@ -26,9 +26,7 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.ActionContext;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.*;
 //}}}
 
 public class EnhancedButton extends RolloverButton

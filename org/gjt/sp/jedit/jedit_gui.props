@@ -1780,7 +1780,6 @@ helpviewer.forward.icon=ArrowR.png
 helpviewer.toc.label=Contents
 helpviewer.toc.welcome=Welcome to jEdit
 helpviewer.toc.readme=General Information
-helpviewer.toc.news=Brief Change Log
 helpviewer.toc.changes=Detailed Change Log
 helpviewer.toc.todo=To Do List and Known Bugs
 helpviewer.toc.copying=GNU General Public License
