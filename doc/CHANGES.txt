@@ -1,5 +1,12 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre3
+
++ Bug Fixes
+
+- JEditTextArea now uses type-safe buffer property accessors, so there
+  shouldn't be any more ClassCastExceptions
+
 * Version 4.0pre2
 
 + New Features

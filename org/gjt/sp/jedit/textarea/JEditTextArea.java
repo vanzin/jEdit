@@ -1211,7 +1211,7 @@ public class JEditTextArea extends JComponent
 			return;
 
 		String lineText = getLineText(line);
-		String noWordSep = (String)buffer.getProperty("noWordSep");
+		String noWordSep = buffer.getStringProperty("noWordSep");
 
 		if(offset == getLineLength(line))
 			offset--;
@@ -2544,7 +2544,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 		else
 		{
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,noWordSep)
 				+ lineStart;
 		}
@@ -2803,7 +2803,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,noWordSep)
 				+ lineStart;
 		}
@@ -3309,7 +3309,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordStart(lineText,_caret-1,noWordSep);
 		}
 
@@ -3513,7 +3513,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 		else
 		{
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 			_caret = TextUtilities.findWordEnd(lineText,
 				_caret+1,noWordSep);
 		}
@@ -3646,7 +3646,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void lineComment()
 	{
-		String comment = (String)buffer.getProperty("lineComment");
+		String comment = buffer.getStringProperty("lineComment");
 		if(!buffer.isEditable() || comment == null || comment.length() == 0)
 		{
 			getToolkit().beep();
@@ -3685,8 +3685,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void rangeComment()
 	{
-		String commentStart = (String)buffer.getProperty("commentStart");
-		String commentEnd = (String)buffer.getProperty("commentEnd");
+		String commentStart = buffer.getStringProperty("commentStart");
+		String commentEnd = buffer.getStringProperty("commentEnd");
 		if(!buffer.isEditable() || commentStart == null || commentEnd == null
 			|| commentStart.length() == 0 || commentEnd.length() == 0)
 		{
@@ -4055,7 +4055,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void completeWord()
 	{
-		String noWordSep = (String)buffer.getProperty("noWordSep");
+		String noWordSep = buffer.getStringProperty("noWordSep");
 		if(noWordSep == null)
 			noWordSep = "";
 		if(!buffer.isEditable())
@@ -4672,7 +4672,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		int tabSize = buffer.getTabSize();
 
-		String wordBreakChars = (String)buffer.getProperty("wordBreakChars");
+		String wordBreakChars = buffer.getStringProperty("wordBreakChars");
 
 		buffer.getLineText(line,lineSegment);
 
@@ -5392,7 +5392,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 
 			String lineText = getLineText(dragStartLine);
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 			if(dragStartOffset == getLineLength(dragStartLine))
 				dragStartOffset--;
 
@@ -5466,7 +5466,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			String lineText = getLineText(line);
 			String markLineText = getLineText(dragStartLine);
-			String noWordSep = (String)buffer.getProperty("noWordSep");
+			String noWordSep = buffer.getStringProperty("noWordSep");
 
 			if(markLineStart + dragStartOffset > lineStart + offset)
 			{
