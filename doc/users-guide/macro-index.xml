@@ -14,7 +14,9 @@
 </para>
 
 <para>
-  Macros from earlier versions of jEdit can be found in the Downloads
+  Macros from earlier versions of jEdit can be found, as well as
+  a large number of macros contributed by users, can be found in the
+  <quote>Downloads</quote>
   section of the <ulink url="http://community.jedit.org">jEdit
   Community</ulink> web site.
 </para>
@@ -113,7 +115,7 @@
     <para><filename>Insert_Tag.bsh</filename></para>
     <abstract><para>
         Inserts a balanced pair of HTML/SGML/XML markup tags as supplied
-        in a input dialog.
+        in a input dialog.  The tags will surround any selected text.
     </para></abstract>
 </listitem>
 
@@ -140,10 +142,16 @@
   <para><filename>Toggle_Line_Comment.bsh</filename></para>
   <abstract><para>
 	  Toggles line comments, alternately inserting and deleting them
-    at the beginning of each selected line.
+    at the beginning of each selected line. If there is no selection,
+    the macro operates on the current line.
   </para></abstract>
 	<para>
-		If there is no selection, the macro operates on the current line.
+		 A <quote>line comment</quote> is a token that designates the entire
+     contents of a line as commented text; it does not use or require
+     a closing token. If the editing mode does not provide for line
+     comments (for example, text or XML modes), the macro will
+     display an error message.
+     be dsi
 	</para>
 </listitem>
 
@@ -379,14 +387,17 @@
   <para><filename>Run_Script.bsh</filename></para>
   <abstract><para>
     Runs script using interpreter based upon buffer's editing mode
-    (by default, determined using file extension).
+    (by default, determined using file extension). You must have the
+    appropriate interpreter (such as Perl, Python, or Windows Script Host)
+    installed on your system.
   </para></abstract>
 </listitem>
 
 <listitem>
     <para><filename>Show_Threads.bsh</filename></para>
     <abstract><para>
-      Displays all running Java threads in a tree.
+      Displays in a tree format all running Java threads of the current
+      Java Virtual Machine.
     </para></abstract>
 </listitem>
 
