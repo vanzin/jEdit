@@ -683,6 +683,7 @@ public class DockableWindowManager extends JPanel
 		Component comp = view.getFocusOwner();
 		while(comp != null)
 		{
+			System.err.println(comp.getClass());
 			if(comp instanceof PanelWindowContainer
 				.DockablePanel)
 			{

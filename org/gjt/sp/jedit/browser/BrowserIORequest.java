@@ -154,7 +154,6 @@ class BrowserIORequest extends WorkRequest
 	private void listDirectory()
 	{
 		VFS.DirectoryEntry[] directory = null;
-		VFS.DirectoryEntry[] parents = null;
 
 		String[] args = { path1 };
 		setStatus(jEdit.getProperty("vfs.status.listing-directory",args));
@@ -167,44 +166,6 @@ class BrowserIORequest extends WorkRequest
 
 			canonPath = vfs._canonPath(session,path1,browser);
 			directory = vfs._listDirectory(session,canonPath,browser);
-
-			if(loadingRoot)
-			{
-				ArrayList parentList = new ArrayList();
-
-				String parent = path1;
-
-				if(parent.length() != 1 && (parent.endsWith("/")
-					|| parent.endsWith(File.separator)))
-					parent = parent.substring(0,parent.length() - 1);
-
-				for(;;)
-				{
-					VFS _vfs = VFSManager.getVFSForPath(
-						parent);
-					// create a DirectoryEntry manually
-					// instead of using _vfs._getDirectoryEntry()
-					// since so many VFS's have broken
-					// implementations of this method
-					parentList.add(0,new VFS.DirectoryEntry(
-						_vfs.getFileName(parent),
-						parent,parent,
-						VFS.DirectoryEntry.DIRECTORY,
-						0L,false));
-					String newParent = _vfs.getParentOfPath(parent);
-					if(newParent.length() != 1 && (newParent.endsWith("/")
-						|| newParent.endsWith(File.separator)))
-						newParent = newParent.substring(0,newParent.length() - 1);
-
-					if(newParent == null || parent.equals(newParent))
-						break;
-					else
-						parent = newParent;
-				}
-
-				parents = (VFS.DirectoryEntry[])parentList.toArray(
-					new VFS.DirectoryEntry[parentList.size()]);
-			}
 		}
 		catch(IOException io)
 		{
@@ -231,8 +192,7 @@ class BrowserIORequest extends WorkRequest
 
 		setAbortable(false);
 
-		browser.directoryLoaded(node,loadingRoot,canonPath,
-			parents,directory);
+		browser.directoryLoaded(node,loadingRoot,canonPath,directory);
 	} //}}}
 
 	//{{{ delete() method

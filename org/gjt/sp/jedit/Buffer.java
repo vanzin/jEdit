@@ -510,10 +510,8 @@ public class Buffer implements EBComponent
 	 */
 	public int checkFileStatus()
 	{
-		VFSManager.waitForRequests();
-
 		// only supported on local file system
-		if(file != null)
+		if(!getFlag(IO) && !getFlag(LOADING) && file != null)
 		{
 			boolean newReadOnly = (file.exists() && !file.canWrite());
 			if(newReadOnly != getFlag(READ_ONLY))
