@@ -20,6 +20,9 @@ JEDIT 4.2 VERSION HISTORY
 - Fixed handling of space bar which could result in extra spaces being
   inserted when using dead keys.
 
+- Fixed NullPointerException sometimes thrown when scrolling to the line
+  after the last visible line with electric scrolling switched off.
+
 }}}
 
 }}}
