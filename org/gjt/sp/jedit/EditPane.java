@@ -573,11 +573,15 @@ public class EditPane extends JPanel implements EBComponent
 				Buffer newBuffer = (recentBuffer != null ?
 					recentBuffer : _buffer.getPrev());
 				if(newBuffer != null && !newBuffer.isClosed())
+				{
 					setBuffer(newBuffer);
+					recentBuffer = newBuffer.getPrev();
+				}
 				else if(jEdit.getBufferCount() != 0)
+				{
 					setBuffer(jEdit.getFirstBuffer());
-
-				recentBuffer = null;
+					recentBuffer = null;
+				}
 			}
 			else if(_buffer == recentBuffer)
 				recentBuffer = null;

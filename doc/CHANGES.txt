@@ -43,6 +43,9 @@ contributing to this release.
 - Don't use two-stage save if the file's parent directory is not
   writeable (Marcelo Vanzin).
 
+- Minor fix for handling of the recent buffer when the current buffer
+  was closed.
+
 }}}
 {{{ API Changes
 

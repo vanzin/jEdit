@@ -121,6 +121,9 @@
 			<PROPERTY NAME="lineComment" VALUE="//" />
 		</PROPS>
 		
+		<!-- Silly comment -->
+		<SEQ TYPE="COMMENT1">/**/</SEQ>
+
 		<!-- PHPdoc comment -->
 		<SPAN TYPE="COMMENT3" DELEGATE="PHPDOC">
 			<BEGIN>/**</BEGIN>

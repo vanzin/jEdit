@@ -7,6 +7,9 @@ and quirks that I need to fix eventually.
 - CA+PLUS +: bad
 - quicknotepad NPEs
 
+- scrolling up updates some screen lines
+- blank space at end
+- open soft wrap file in new display manager: not wrapping
 - word wrap at wrong place
 
 goToBuffer() and 0-height edit panes

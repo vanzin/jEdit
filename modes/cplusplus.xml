@@ -23,7 +23,10 @@
         HIGHLIGHT_DIGITS="TRUE"
         DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
 
-        <!-- Doxygen comment, Javadoc style -->
+        <!-- Silly comment -->
+	<SEQ TYPE="COMMENT1">/**/</SEQ>
+
+	<!-- Doxygen comment, Javadoc style -->
         <SPAN TYPE="COMMENT3" DELEGATE="doxygen::DOXYGEN">
             <BEGIN>/**</BEGIN>
             <END>*/</END>
