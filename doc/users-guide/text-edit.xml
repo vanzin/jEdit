@@ -957,11 +957,11 @@
       To convert all HTML tags to lower case, search
       for the following regular expression:
      </para>
-     <programlisting><![CDATA[<(.*?)>]]></programlisting>
+     <programlisting><![CDATA[<\S+]]></programlisting>
      <para>
       Replacing it with the following BeanShell snippet:
      </para>
-     <programlisting><![CDATA["<" + _1.toLowerCase() + ">"]]></programlisting>
+     <programlisting><![CDATA[_0.toLowerCase()]]></programlisting>
     </informalexample>
     <informalexample>
      <para>

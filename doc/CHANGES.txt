@@ -25,6 +25,8 @@ release.
 - Pressing A+DOWN in a history text field now shows the field's popup
   menu (Joerg Spieler).
 
+- PHP mode now recognizes <script language="PHP">...</script>.
+
 }}}
 {{{ Bug Fixes
 
@@ -82,6 +84,8 @@ release.
 
 - Filename completion on backspace was not disabled in the "Save As"
   dialog box, as intended.
+
+- Minor fix to VHDL syntax highlighting.
 
 }}}
 
