@@ -1,5 +1,8 @@
 /*
  * RESearchMatcher.java - Regular expression matcher
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,11 +22,13 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import bsh.NameSpace;
 import gnu.regexp.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.BeanShell;
 import org.gjt.sp.jedit.MiscUtilities;
+//}}}
 
 /**
  * A regular expression string matcher.
@@ -41,6 +46,7 @@ public class RESearchMatcher implements SearchMatcher
 		.set(RESyntax.RE_CHAR_CLASSES)
 		.setLineSeparator("\n");
 
+	//{{{ RESearchMatcher constructor
 	/**
 	 * Creates a new regular expression string matcher.
 	 */
@@ -61,8 +67,9 @@ public class RESearchMatcher implements SearchMatcher
 
 		re = new RE(search,(ignoreCase ? RE.REG_ICASE : 0)
 			| RE.REG_MULTILINE,RE_SYNTAX_JEDIT);
-	}
+	} //}}}
 
+	//{{{ nextMatch() method
 	/**
 	 * Returns the offset of the first match of the specified text
 	 * within this matcher.
@@ -73,9 +80,9 @@ public class RESearchMatcher implements SearchMatcher
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.0pre3
 	 */
-	public int[] nextMatch(Segment text, boolean start, boolean end)
+	public int[] nextMatch(CharIndexed text, boolean start, boolean end)
 	{
 		int flags = 0;
 
@@ -88,15 +95,15 @@ public class RESearchMatcher implements SearchMatcher
 		if(!end)
 			flags |= RE.REG_NOTEOL;
 
-		REMatch match = re.getMatch(new CharIndexedSegment(text,0),0,
-			flags);
+		REMatch match = re.getMatch(text,0,flags);
 		if(match == null)
 			return null;
 
 		int[] result = { match.getStartIndex(), match.getEndIndex() };
 		return result;
-	}
+	} //}}}
 
+	//{{{ substitute() method
 	/**
 	 * Returns the specified text, with any substitution specified
 	 * within this matcher performed.
@@ -123,12 +130,13 @@ public class RESearchMatcher implements SearchMatcher
 		}
 		else
 			return match.substituteInto(replace);
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private String replace;
 	private RE re;
 	private boolean beanshell;
 	private String replaceMethod;
 	private NameSpace replaceNS;
+	//}}}
 }

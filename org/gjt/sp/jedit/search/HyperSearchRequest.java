@@ -22,7 +22,7 @@
 
 package org.gjt.sp.jedit.search;
 
-//{{{ Importa
+//{{{ Imports
 import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.SwingUtilities;
@@ -228,8 +228,9 @@ loop:				for(int i = 0; i < files.length; i++)
 loop:			for(;;)
 			{
 				buffer.getText(offset,length - offset,text);
-				int[] match = matcher.nextMatch(text,offset == 0,
-					length == buffer.getLength());
+				int[] match = matcher.nextMatch(
+					new CharIndexedSegment(text,false),
+					offset == 0,length == buffer.getLength());
 				if(match == null)
 					break loop;
 

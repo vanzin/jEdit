@@ -2,10 +2,14 @@ TO DO
 
 + before pre3:
 
+- expand fold: try to expand even if already expanded
 - when loading a file with collapsedFolds property, last line always
   visible
 - faster hypersearch
+- C+e , and . insert , and . in the buffer
 
+- narrow: expand a fold
+- after plugin installation is complete, show dialog with some random info
 - Toggle line comment macro needs to become context-sensitive
 - put package.html everywhere
 - OK_CANCEL_OPTION in confirm() docs
@@ -45,7 +49,6 @@ TO DO
   save (?) -- removing doesn't work, but setting to none works
 - read up on JDK 1.4 focus API
 - dwm: not always focused correctly
-- investigate wrap around in macros
 - still collapseFolds behavior problems
 - stylesheet: keycap inside keycombo
 - getFoldLevel(): should not call linesChanged() all the time

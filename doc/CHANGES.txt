@@ -32,7 +32,7 @@ JEDIT 4.0 VERSION HISTORY
     fold markers ({{{ and }}})
   - Go to Previous/Next Fold (A+UP, A+DOWN): self-explanatory. Go to
     Previous/Next Marker, which were formely bound to A+UP/DOWN, are now
-    bound to C+e COMMA and C+e PERIOD.
+    bound to C+e , and C+e ..
   - Go to Parent Fold (C+e u): moves caret to fold with a higher level
     than the one containing the caret
   - Narrow to Fold (C+e n n): equivalent to invoking 'Select Fold', then
@@ -119,6 +119,7 @@ JEDIT 4.0 VERSION HISTORY
   expanded to your home directory path) didn't work
 - Trying to do a directory search inside a directory which contained a
   symlink loop would hang jEdit
+- The 'Auto Wrap' search option did not take effect in macros
 
 + API Changes
 
