@@ -1281,6 +1281,8 @@ public class View extends JFrame implements EBComponent
 	{
 		public void windowActivated(WindowEvent evt)
 		{
+			jEdit.setActiveView(View.this);
+
 			final Vector buffers = new Vector();
 			EditPane[] editPanes = getEditPanes();
 			for(int i = 0; i < editPanes.length; i++)

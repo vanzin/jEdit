@@ -133,18 +133,7 @@ public class UndoManager
 	//{{{ contentInserted() method
 	public void contentInserted(int offset, int length, String text, boolean clearDirty)
 	{
-		Edit toMerge = null;
-		if(compoundEdit != null)
-		{
-			int size = compoundEdit.undos.size();
-			if(size != 0)
-				toMerge = (Edit)compoundEdit.undos.get(size - 1);
-		}
-		else
-		{
-			if(undoPos != 0)
-				toMerge = (Edit)undos.get(undoPos - 1);
-		}
+		Edit toMerge = getLastEdit();
 
 		if(!clearDirty && toMerge instanceof Insert)
 		{
@@ -180,18 +169,7 @@ public class UndoManager
 	//{{{ contentRemoved() method
 	public void contentRemoved(int offset, int length, String text, boolean clearDirty)
 	{
-		Edit toMerge = null;
-		if(compoundEdit != null)
-		{
-			int size = compoundEdit.undos.size();
-			if(size != 0)
-				toMerge = (Edit)compoundEdit.undos.get(size - 1);
-		}
-		else
-		{
-			if(undoPos != 0)
-				toMerge = (Edit)undos.get(undoPos - 1);
-		}
+		Edit toMerge = getLastEdit();
 
 		if(!clearDirty && toMerge instanceof Remove)
 		{
@@ -260,6 +238,33 @@ public class UndoManager
 		}
 
 		undoCount = undoPos;
+	} //}}}
+
+	//{{{ getLastEdit() method
+	private Edit getLastEdit()
+	{
+		if(compoundEdit != null)
+		{
+			int size = compoundEdit.undos.size();
+			if(size != 0)
+				return (Edit)compoundEdit.undos.get(size - 1);
+			else
+				return null;
+		}
+		else if(undoCount != 0 && undoPos != 0)
+		{
+			Edit e = (Edit)undos.get(undoPos - 1);
+			if(e instanceof CompoundEdit)
+			{
+				CompoundEdit c = (CompoundEdit)e;
+				return (Edit)c.undos.get(c.undos.size() - 1);
+			}
+		}
+
+		if(undoPos != 0)
+			return (Edit)undos.get(undoPos - 1);
+		else
+			return null;
 	} //}}}
 
 	//}}}

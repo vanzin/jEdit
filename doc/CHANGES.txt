@@ -77,10 +77,10 @@ contributing to this release.
 
 - Delegates to rule sets with TERMINATE rules should work now.
 
-- WHITESPACE rule no longer necessary in mode definitions.
-
 - IGNORE_CASE attribute of KEYWORDS rule removed. This value is now the
   same as the IGNORE_CASE attribute of the parent RULES tag.
+
+- WHITESPACE rule no longer necessary in mode definitions.
 
 - It is no longer necessary to define <SEQ TYPE="NULL"> rules for
   keyword separator characters. Now, any non-alphanumeric character,
@@ -133,6 +133,9 @@ contributing to this release.
 - Fixed a bug in the undo request merging code that would occur
   sometimes when multiple consecutive pieces of text were removed one
   after the other.
+
+- Fixed a bug in the undo request merging code that would occur when
+  a selection was replaced with some text.
 
 - If the splash screen was disabled, running jEdit with the -nogui and
   -nobackground command line arguments didn't work, because the AWT
@@ -206,6 +209,8 @@ contributing to this release.
   Buffer.markTokens(int lineIndex, TokenHandler tokenHandler) instead,
   with one of the available TokenHandler implementations from
   org.gjt.sp.jedit.syntax.
+
+- Added new jEdit.getActiveView() method.
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

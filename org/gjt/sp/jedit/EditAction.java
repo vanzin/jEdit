@@ -185,8 +185,7 @@ public abstract class EditAction
 		public void actionPerformed(ActionEvent evt)
 		{
 			// Let input handler do recording, repeating, etc
-			GUIUtilities.getView((Component)evt.getSource())
-				.getInputHandler().invokeAction(action);
+			jEdit.getActiveView().getInputHandler().invokeAction(action);
 		}
 
 		private EditAction action;
