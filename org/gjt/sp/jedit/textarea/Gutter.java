@@ -764,8 +764,7 @@ public class Gutter extends JComponent implements SwingConstants
 				if(line == -1)
 					return;
 
-				FoldVisibilityManager foldVisibilityManager
-					= textArea.getFoldVisibilityManager();
+				DisplayManager displayManager = textArea.getDisplayManager();
 
 				//{{{ Clicking on folds does various things
 				if(buffer.isFoldStart(line))
@@ -793,33 +792,30 @@ public class Gutter extends JComponent implements SwingConstants
 
 					if(action.equals("selectFold"))
 					{
-						foldVisibilityManager
-							.expandFold(line,true);
+						displayManager.expandFold(line,true);
 						textArea.selectFold(line);
 					}
 					else if(action.equals("narrowToFold"))
 					{
 						int[] lines = buffer.getFoldAtLine(line);
-						foldVisibilityManager.narrow(lines[0],lines[1]);
+						displayManager.narrow(lines[0],lines[1]);
 					}
-					else if(foldVisibilityManager
-						.isLineVisible(line + 1))
+					else if(displayManager.isLineVisible(line + 1))
 					{
-						foldVisibilityManager
-							.collapseFold(line);
+						displayManager.collapseFold(line);
 					}
 					else
 					{
 						if(action.equals(
 							"toggleFoldFully"))
 						{
-							foldVisibilityManager
+							displayManager
 								.expandFold(line,
 								true);
 						}
 						else
 						{
-							foldVisibilityManager
+							displayManager
 								.expandFold(line,
 								false);
 						}
@@ -848,7 +844,7 @@ public class Gutter extends JComponent implements SwingConstants
 									textArea.selectToMatchingBracket();
 								else if(e.isControlDown())
 								{
-									foldVisibilityManager.narrow(
+									displayManager.narrow(
 										caretLine,bracketLine);
 								}
 								else

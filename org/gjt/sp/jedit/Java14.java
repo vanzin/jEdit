@@ -169,7 +169,8 @@ class Java14
 		{
 			int newpos = textArea.getFirstLine() + amt;
 			newpos = Math.max(newpos, 0);
-			newpos = Math.min(newpos, textArea.getVirtualLineCount());
+			newpos = Math.min(newpos, textArea.getDisplayManager()
+				.getScrollLineCount());
 			textArea.setFirstLine(newpos);
 		}
 

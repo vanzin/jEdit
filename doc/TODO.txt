@@ -3,8 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- to paint collapsed lines counter: use chunk cached value if possible
-- menu drag: slow
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
@@ -13,11 +11,10 @@ and quirks that I need to fix eventually.
 - scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
-  - end anchor:
-    updates scroll bars.
-    foldStructureChanged(), etc. doesn't need this.
-  - first line anchor:
-    updates scroll bars, doesn't repaint.
+  - offset manager's expandFolds()
+  - edit pane properties changed
+  - edit pane first line preserve
+  - foldStructureChanged(), etc. doesn't need scroll bar update call
   - scrolling up and down:
     scroll bar handler stores old position; uses scroll methods in chunk
     cache
@@ -199,6 +196,9 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
+- display manager should not be O(n^2) with text areas
+- to paint collapsed lines counter: use chunk cached value if possible
+- menu drag: slow
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
 - getNext/PrevVisibleLine() is a linear scan
@@ -215,7 +215,8 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - don't repaint whole selection when resizing
 - backward virtual line scan
 - do not call foldVisibilityManager.getLastVisibleLine() on every change
-  w/ soft wrap. kills performance if also narrowed.
+  w/ soft wrap. kills performance if also narrowed. or, just make
+  getLastVisibleLine() faster.
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.

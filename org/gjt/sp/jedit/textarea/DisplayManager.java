@@ -35,43 +35,6 @@ import org.gjt.sp.jedit.*;
  */
 public class DisplayManager
 {
-	//{{{ DisplayManager constructor
-	DisplayManager(Buffer buffer, JEditTextArea textArea)
-	{
-		this.buffer = buffer;
-		this.offsetMgr = buffer._getOffsetManager();
-		this.textArea = textArea;
-		this.index = buffer._displayLock();
-
-		int physicalLines = offsetMgr.getLineCount();
-		int scrollLines = 0;
-		for(int i = 0; i < physicalLines; i++)
-		{
-			if(offsetMgr.isLineVisible(i,index))
-				scrollLines += getScreenLineCount(i);
-		}
-
-		scrollLineCount = new OffsetManager.Anchor(physicalLines,scrollLines,index)
-		{
-			public void changed()
-			{
-				System.err.println("screen line count changed: "
-					+ scrollLineCount.scrollLine);
-			}
-		};
-		offsetMgr.addAnchor(scrollLineCount);
-		bufferChangeHandler = new BufferChangeHandler();
-		buffer.addBufferChangeListener(bufferChangeHandler);
-	} //}}}
-
-	//{{{ dispose() method
-	void dispose()
-	{
-		offsetMgr.removeAnchor(scrollLineCount);
-		buffer.removeBufferChangeListener(bufferChangeHandler);
-		buffer._displayUnlock(index);
-	} //}}}
-
 	//{{{ isNarrowed() method
 	/**
 	 * Returns if the buffer has been narrowed.
@@ -556,57 +519,63 @@ public class DisplayManager
 
 	//{{{ Package-private members
 
-	//{{{ ScrollParameters class
-	static class ScrollParameters
+	//{{{ DisplayManager constructor
+	DisplayManager(Buffer buffer, JEditTextArea textArea)
 	{
-		int physicalLine;
-		int subregion;
-		int scrollLine;
-		int amount;
+		this.buffer = buffer;
+		this.offsetMgr = buffer._getOffsetManager();
+		this.textArea = textArea;
+		this.index = buffer._displayLock();
+
+		scrollLineCount = new ScrollLineCount(index);
+		scrollLineCount.reset();
+		offsetMgr.addAnchor(scrollLineCount);
+		firstLine = new FirstLine(index);
+		firstLine.reset();
+		offsetMgr.addAnchor(firstLine);
+
+		bufferChangeHandler = new BufferChangeHandler();
+		buffer.addBufferChangeListener(bufferChangeHandler);
 	} //}}}
 
-	//{{{ scrollUp() method
-	void scrollUp(ScrollParameters params)
+	//{{{ getFirstLine() method
+	int getFirstLine()
 	{
-		while(params.amount > 0)
-		{
-			int screenLines = getScreenLineCount(params.physicalLine);
-			if(params.amount < screenLines)
-			{
-				return;
-			}
-			else
-			{
-				int nextLine = getNextVisibleLine(params.physicalLine);
-				if(nextLine == -1)
-					return;
-				params.physicalLine = nextLine;
-				params.amount -= screenLines;
-				params.scrollLine += screenLines;
-			}
-		}
+		return firstLine.scrollLine;
 	} //}}}
 
-	//{{{ scrollDown() method
-	void scrollDown(ScrollParameters params)
+	//{{{ setFirstLine() method
+	void setFirstLine(int firstLine)
 	{
-		while(params.amount > 0)
-		{
-			int screenLines = getScreenLineCount(params.physicalLine);
-			if(params.amount < screenLines)
-			{
-				return;
-			}
-			else
-			{
-				int prevLine = getPrevVisibleLine(params.physicalLine);
-				if(prevLine == -1)
-					return;
-				params.physicalLine = prevLine;
-				params.amount -= screenLines;
-				params.scrollLine += screenLines;
-			}
-		}
+		int amount = (firstLine - this.firstLine.scrollLine);
+		if(amount > 0)
+			this.firstLine.scrollDown(amount);
+		else if(amount < 0)
+			this.firstLine.scrollUp(-amount);
+	} //}}}
+
+	//{{{ getFirstPhysicalLine() method
+	int getFirstPhysicalLine()
+	{
+		return firstLine.physicalLine;
+	} //}}}
+
+	//{{{ setFirstPhysicalLine() method
+	void setFirstPhysicalLine(int firstPhysLine)
+	{
+		int amount = (firstPhysLine - firstLine.physicalLine);
+		if(amount > 0)
+			firstLine.physDown(amount);
+		else if(amount < 0)
+			firstLine.physUp(-amount);
+	} //}}}
+
+	//{{{ dispose() method
+	void dispose()
+	{
+		offsetMgr.removeAnchor(scrollLineCount);
+		buffer.removeBufferChangeListener(bufferChangeHandler);
+		buffer._displayUnlock(index);
 	} //}}}
 
 	//}}}
@@ -617,7 +586,8 @@ public class DisplayManager
 	private JEditTextArea textArea;
 	private int index;
 	private boolean narrowed;
-	private OffsetManager.Anchor scrollLineCount;
+	private FirstLine firstLine;
+	private ScrollLineCount scrollLineCount;
 	private BufferChangeHandler bufferChangeHandler;
 
 	//{{{ setLineVisible() method
@@ -628,11 +598,163 @@ public class DisplayManager
 
 	//}}}
 
-	//{{{ BufferChangeHandler method
+	//{{{ ScrollLineCount class
+	class ScrollLineCount extends OffsetManager.Anchor
+	{
+		//{{{ ScrollLineCount constructor
+		ScrollLineCount(int index)
+		{
+			super(index);
+		} //}}}
+
+		//{{{ reset() method
+		public void reset()
+		{
+			System.err.println(this);
+			System.err.println(DisplayManager.this);
+			System.err.println(offsetMgr);
+			physicalLine = offsetMgr.getLineCount();
+			scrollLine = 0;
+			for(int i = 0; i < physicalLine; i++)
+			{
+				if(isLineVisible(i))
+					scrollLine += getScreenLineCount(i);
+			}
+		} //}}}
+
+		//{{{ changed() method
+		public void changed()
+		{
+			textArea.updateScrollBars();
+		} //}}}
+	} //}}}
+
+	//{{{ FirstLine class
+	class FirstLine extends OffsetManager.Anchor
+	{
+		//{{{ FirstLine constructor
+		FirstLine(int index)
+		{
+			super(index);
+		} //}}}
+
+		//{{{ changed() method
+		public void changed()
+		{
+			textArea.updateScrollBars();
+		} //}}}
+
+		//{{{ reset() method
+		public void reset()
+		{
+			physicalLine = getFirstVisibleLine();
+			scrollLine = 0;
+		} //}}}
+
+		//{{{ physDown() method
+		// scroll down by physical line amount
+		void physDown(int amount)
+		{
+			for(int i = 0; i < amount; i++)
+			{
+				if(physicalLine + i >= offsetMgr.getLineCount())
+				{
+					amount = i;
+					break;
+				}
+				scrollLine += getScreenLineCount(physicalLine + i);
+			}
+			physicalLine += amount;
+
+			changed();
+		} //}}}
+
+		//{{{ physUp() method
+		// scroll up by physical line amount
+		void physUp(int amount)
+		{
+			for(int i = 0; i < amount; i++)
+			{
+				if(physicalLine - i == 0)
+				{
+					amount = i;
+					break;
+				}
+				scrollLine -= getScreenLineCount(physicalLine - i - 1);
+			}
+			physicalLine -= amount;
+
+			changed();
+		} //}}}
+
+		//{{{ scrollDown() method
+		// scroll down by screen line amount
+		void scrollDown(int amount)
+		{
+			while(amount > 0)
+			{
+				int screenLines = getScreenLineCount(physicalLine);
+				if(amount < screenLines)
+				{
+					return;
+				}
+				else
+				{
+					int prevLine = getPrevVisibleLine(physicalLine);
+					if(prevLine == -1)
+						return;
+					physicalLine = prevLine;
+					amount -= screenLines;
+					scrollLine += screenLines;
+				}
+			}
+
+			changed();
+		} //}}}
+
+		//{{{ scrollUp() method
+		// scroll up by screen line amount
+		void scrollUp(int amount)
+		{
+			while(amount > 0)
+			{
+				int screenLines = getScreenLineCount(physicalLine);
+				if(amount < screenLines)
+				{
+					return;
+				}
+				else
+				{
+					int nextLine = getNextVisibleLine(physicalLine);
+					if(nextLine == -1)
+						return;
+					physicalLine = nextLine;
+					amount -= screenLines;
+					scrollLine += screenLines;
+				}
+			}
+
+			changed();
+		} //}}}
+	} //}}}
+
+	//{{{ BufferChangeHandler class
 	class BufferChangeHandler extends BufferChangeAdapter
 	{
 		boolean queuedNotifyScreenLineChanges;
 
+		//{{{ foldLevelChanged() method
+		public void foldLevelChanged(Buffer buffer, int start, int end)
+		{
+			if(!textArea.bufferChanging && end != 0
+				&& buffer.isLoaded())
+			{
+				textArea.invalidateLineRange(start - 1,
+					textArea.getLastPhysicalLine());
+			}
+		} //}}}
+
+		//{{{ contentInserted() method
 		public void contentInserted(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
@@ -644,19 +766,21 @@ public class DisplayManager
 			queuedNotifyScreenLineChanges = true;
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
-		}
+		} //}}}
 
+		//{{{ contentRemoved() method
 		public void contentRemoved(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
 			queuedNotifyScreenLineChanges = true;
 			if(!buffer.isTransactionInProgress())
 				transactionComplete(buffer);
-		}
+		} //}}}
 
+		//{{{ transactionComplete() method
 		public void transactionComplete(Buffer buffer)
 		{
 			offsetMgr.notifyScreenLineChanges();
-		}
+		} //}}}
 	} //}}}
 }
