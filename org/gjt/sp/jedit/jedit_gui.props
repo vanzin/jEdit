@@ -92,10 +92,13 @@ icons=AdjustWidth.png \
 	ArrowU.png \
 	BrokenImage.png \
 	ButtonProperties.png \
+	Cancel.png \
+	Clear.png \
 	Copy.png \
 	CopyToBuffer.png \
 	CurrentDir.png \
 	Cut.png \
+	Delete.png \
 	Drive.png \
 	FindAgain.png \
 	FindInDir.png \
@@ -103,6 +106,7 @@ icons=AdjustWidth.png \
 	Help.png \
 	Home.png \
 	Minus.png \
+	MultipleResults.png \
 	NewDir.png \
 	New.png \
 	NewView.png \
@@ -121,9 +125,11 @@ icons=AdjustWidth.png \
 	Redo.png \
 	Reload.png \
 	Run.png \
+	RunToBuffer.png \
 	Save.png \
 	SaveAll.png \
 	SaveAs.png \
+	SingleResult.png \
 	SplitHorizontal.png \
 	SplitVertical.png \
 	Stop.png \
