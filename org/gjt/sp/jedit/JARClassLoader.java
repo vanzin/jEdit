@@ -283,15 +283,14 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
-		/* This is a bit silly... but WheelMouse 0.5 seems to be
+		/* This is a bit silly... but WheelMouse seems to be
 		 * unmaintained so the best solution is to add a hack here.
 		 */
 		if(name.equals("WheelMousePlugin")
-			&& jEdit.getProperty("plugin.WheelMousePlugin.version").equals("0.5")
 			&& OperatingSystem.hasJava14())
 		{
 			jar.addPlugin(new EditPlugin.Broken(name));
-			jEdit.pluginError(jar.getPath(),"plugin-error.update",null);
+			jEdit.pluginError(jar.getPath(),"plugin-error.obsolete",null);
 			return;
 		}
 

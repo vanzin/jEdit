@@ -154,23 +154,23 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		dim = wrap.getPreferredSize();
 		wrap.setPreferredSize(new Dimension(Math.max(
 			Math.max(fm.charWidth('-'),fm.charWidth('H')),
-			fm.charWidth('S')),dim.height));
+			fm.charWidth('S')) + 1,dim.height));
 
 		dim = multiSelect.getPreferredSize();
 		multiSelect.setPreferredSize(new Dimension(
-			Math.max(fm.charWidth('-'),fm.charWidth('M')),
+			Math.max(fm.charWidth('-'),fm.charWidth('M')) + 1,
 			dim.height));
 
 		dim = overwrite.getPreferredSize();
 		overwrite.setPreferredSize(new Dimension(
-			Math.max(fm.charWidth('-'),fm.charWidth('O')),
+			Math.max(fm.charWidth('-'),fm.charWidth('O')) + 1,
 			dim.height));
 
 		dim = lineSep.getPreferredSize();
 		lineSep.setPreferredSize(new Dimension(Math.max(
 			Math.max(fm.charWidth('U'),
 			fm.charWidth('W')),
-			fm.charWidth('M')),
+			fm.charWidth('M')) + 1,
 			dim.height));
 
 		// UI hack because BoxLayout does not give all components the
