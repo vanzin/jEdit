@@ -2,8 +2,10 @@ TO DO
 
 + before 4.0pre8:
 
-- if bsh replace returns null, it just beeps
-
+- non-jeditresource: and file: links in help viewer
+- investigate I/O threads
+- aiob in findMatchingBracket() -- offset >= seg.offset+seg.count? or
+  offset == -1?
 - rename MacOS.jar
 - scroll to caret _still_ jumps around
 
@@ -20,7 +22,7 @@ TO DO
 - regexp search problems:
   - hypersearch for .*$: only finds random lines
   - hypersearch for .*: only finds non-empty lines
-  - search for $: doesn't find last line
+  - hypersearch for $: doesn't work
 - support multi-screen systems properly
   - windows need to be created on the same screen as their parent if
     possible.

@@ -153,7 +153,7 @@ public class RESearchMatcher implements SearchMatcher
 			Object obj = BeanShell.runCachedBlock(replaceMethod,
 				null,replaceNS);
 			if(obj == null)
-				return null;
+				return "";
 			else
 				return obj.toString();
 		}

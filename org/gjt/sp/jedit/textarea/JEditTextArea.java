@@ -5139,6 +5139,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean queuedRecalcLastPhys;
 	private boolean queuedScrollTo;
 	private boolean queuedScrollToElectric;
+	private boolean queuedFireCaretEvent;
 	private ArrayList runnables;
 	//}}}
 
@@ -5258,9 +5259,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * greatly speeds up replace-all.
 	 */
 	private void finishCaretUpdate(boolean doElectricScroll,
-		final boolean fireCaretEvent)
+		boolean fireCaretEvent)
 	{
 		this.queuedScrollToElectric |= doElectricScroll;
+		this.queuedFireCaretEvent |= fireCaretEvent;
 
 		Runnable r = new Runnable()
 		{
@@ -5268,9 +5270,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				scrollToCaret(queuedScrollToElectric);
 				updateBracketHighlight();
-				if(fireCaretEvent)
+				if(queuedFireCaretEvent)
 					fireCaretEvent();
-				queuedScrollTo = queuedScrollToElectric = false;
+				queuedScrollTo = queuedScrollToElectric
+					= queuedFireCaretEvent = false;
 			}
 		};
 
