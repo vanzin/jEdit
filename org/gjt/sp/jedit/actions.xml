@@ -1224,8 +1224,8 @@
 			textArea.addToSelection(new Selection.Range(s.getStart(),s.getEnd()));
 		else if(s instanceof Selection.Range)
 			textArea.addToSelection(new Selection.Rect(s.getStart(),s.getEnd()));
-		else
-			textArea.toggleRectangularSelectionEnabled();
+
+		textArea.toggleRectangularSelectionEnabled();
 	</CODE>
 	<IS_SELECTED>
 		s = textArea.getSelectionAtOffset(textArea.getCaretPosition());

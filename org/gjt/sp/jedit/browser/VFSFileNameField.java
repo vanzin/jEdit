@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2002 Slava Pestov
+ * Copyright (C) 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,16 @@ import java.io.File;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
-class VFSFileNameField extends JTextField
+class VFSFileNameField extends HistoryTextField
 {
 	//{{{ VFSFileNameField constructor
-	VFSFileNameField(VFSBrowser browser)
+	VFSFileNameField(VFSBrowser browser, String model)
 	{
+		super(model);
+		setEnterAddsToHistory(false);
+
 		this.browser = browser;
+
 		Dimension dim = getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		setMaximumSize(dim);
@@ -55,10 +59,10 @@ class VFSFileNameField extends JTextField
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		String path = getText();
-
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
 		{
+			String path = getText();
+
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_TAB:
@@ -81,12 +85,18 @@ class VFSFileNameField extends JTextField
 		}
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
-			super.processKeyEvent(evt);
-
 			char ch = evt.getKeyChar();
 			if(ch == '/')
 			{
-				if(!MiscUtilities.isAbsolutePath(path))
+				super.processKeyEvent(evt);
+				String path = getText();
+
+				if(path.equals("-/"))
+				{
+					path = browser.getView().getBuffer()
+						.getDirectory();
+				}
+				else if(!MiscUtilities.isAbsolutePath(path))
 				{
 					VFS.DirectoryEntry[] files = browser
 						.getBrowserView().getSelectedFiles();
@@ -106,13 +116,49 @@ class VFSFileNameField extends JTextField
 					browser.setDirectory(path);
 					VFSManager.waitForRequests();
 				}
+				else
+				{
+					if(path.endsWith("/") || path.endsWith(File.separator))
+						setText(path);
+					else
+						setText(path + vfs.getFileSeparator());
+				}
+			}
+			else if(ch == '\b')
+			{
+				if(getCaretPosition() == 0)
+				{
+					String parent = MiscUtilities.getParentOfPath(
+						browser.getDirectory());
+					if(parent.endsWith("/") || parent.endsWith(File.separator))
+						parent = parent.substring(0,
+							parent.length() - 1);
+					browser.setDirectory(parent);
+					setText(parent);
+
+					VFS vfs = VFSManager.getVFSForPath(parent);
+					if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
+					{
+						VFSManager.waitForRequests();
+						browser.getBrowserView().getTree().doTypeSelect(
+							MiscUtilities.getFileName(parent),
+							true);
+					}
+
+					return;
+				}
 			}
 			else if(ch > 0x20 && ch != 0x7f && ch != 0xff)
 			{
+				super.processKeyEvent(evt);
+				String path = getText();
+
 				BrowserView view = browser.getBrowserView();
 				view.selectNone();
-				view.getTree().doTypeSelect(path,false);
+				view.getTree().doTypeSelect(path,true);
 			}
+			else
+				super.processKeyEvent(evt);
 		}
 	} //}}}
 

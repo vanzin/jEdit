@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- vfs.isValidPath()
+- need to get rid of endsWith("/") || endsWith(File.separator) bullshit
 - searching in a buffer w/ narrowed fold
 - expand collapse lose sync
 - scrollTo() after expand folds still npe's
@@ -15,7 +17,6 @@ and quirks that I need to fix eventually.
 - wm drag: sometimes cursor gets stuck, need to check for resizePos out
 of bounds, etc.
 - log viewer scrolling
-- magic up/down is broken with select
 - closing lots of files is slow
 - autoscroll down is slower than up if !lastLinePartial
 - propertiesChanged() closes dockables
