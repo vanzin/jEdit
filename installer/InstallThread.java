@@ -66,6 +66,13 @@ public class InstallThread extends Thread
 				installer,installDir,binDir,
 				installer.getProperty("app.name"));
 		}
+		catch(FileNotFoundException fnf)
+		{
+			progress.error("The installer could not create the "
+				+ "destination directory.\n"
+				+ "Maybe you do not have write permission?");
+			return;
+		}
 		catch(IOException io)
 		{
 			progress.error(io.toString());

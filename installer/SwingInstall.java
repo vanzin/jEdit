@@ -1,6 +1,6 @@
 /*
  * SwingInstall.java
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,13 +65,18 @@ public class SwingInstall extends JFrame
 		content.add(prevButton);
 		content.add(nextButton);
 
+		String clazz = OperatingSystem.getOperatingSystem()
+				.getClass().getName();
+		String completedInfo = "done-" + clazz.substring(
+			clazz.indexOf('$') + 1) + ".html";
+
 		pages = new Component[] {
-			new TextPanel("app.readme"),
-			new TextPanel("app.license"),
+			new TextPanel(installer.getProperty("app.readme")),
+			new TextPanel(installer.getProperty("app.license")),
 			chooseDirectory = new ChooseDirectory(),
 			selectComponents = new SelectComponents(),
 			progress = new SwingProgress(),
-			new Complete()
+			new TextPanel(completedInfo)
 		};
 
 		for(int i = 0; i < pages.length; i++)
@@ -314,13 +319,11 @@ public class SwingInstall extends JFrame
 
 	class TextPanel extends JPanel
 	{
-		TextPanel(String prop)
+		TextPanel(String file)
 		{
 			super(new BorderLayout());
 
 			JEditorPane text = new JEditorPane();
-
-			String file = installer.getProperty(prop);
 
 			try
 			{
@@ -591,38 +594,6 @@ public class SwingInstall extends JFrame
 		public void setThread(InstallThread thread)
 		{
 			this.thread = thread;
-		}
-	}
-
-	class Complete extends JPanel
-	{
-		Complete()
-		{
-			super(new BorderLayout());
-
-			JEditorPane text = new JEditorPane();
-
-			String clazz = OperatingSystem.getOperatingSystem()
-				.getClass().getName();
-			String readme = "done-" + clazz.substring(clazz.indexOf('$') + 1) + ".html";
-
-			try
-			{
-				text.setPage(Complete.this.getClass().getResource(readme));
-			}
-			catch(Exception e)
-			{
-				text.setText("Error loading '" + readme + "'");
-				e.printStackTrace();
-			}
-
-			text.setEditable(false);
-
-			JScrollPane scrollPane = new JScrollPane(text);
-			Dimension dim = new Dimension();
-			dim.height = 200;
-			scrollPane.setPreferredSize(dim);
-			Complete.this.add(BorderLayout.CENTER,scrollPane);
 		}
 	}
 }
