@@ -78,10 +78,10 @@ public class DockableWindowManager extends JPanel
 		this.view = view;
 		windows = new Hashtable();
 
-		top = new DockableWindowContainer.TabbedPane(this,TOP);
-		left = new DockableWindowContainer.TabbedPane(this,LEFT);
-		bottom = new DockableWindowContainer.TabbedPane(this,BOTTOM);
-		right = new DockableWindowContainer.TabbedPane(this,RIGHT);
+		top = new PanelWindowContainer(this,TOP);
+		left = new PanelWindowContainer(this,LEFT);
+		bottom = new PanelWindowContainer(this,BOTTOM);
+		right = new PanelWindowContainer(this,RIGHT);
 
 		add(BorderLayout.NORTH,top);
 		add(BorderLayout.WEST,left);
@@ -102,21 +102,14 @@ public class DockableWindowManager extends JPanel
 			for(int i = 0; i < dockables.length; i++)
 			{
 				String name = (String)dockables[i];
-				if(jEdit.getBooleanProperty(name + ".auto-open"))
-					addDockableWindow(name);
+				Entry entry = new Entry(name);
+				windows.put(name,entry);
 			}
 		}
-
-		// do this after adding dockables because addDockableWindow()
-		// sets 'collapsed' to false
-		top.setCollapsed(jEdit.getBooleanProperty("view.dock.top.collapsed"));
-		left.setCollapsed(jEdit.getBooleanProperty("view.dock.left.collapsed"));
-		bottom.setCollapsed(jEdit.getBooleanProperty("view.dock.bottom.collapsed"));
-		right.setCollapsed(jEdit.getBooleanProperty("view.dock.right.collapsed"));
 	}
 
 	/**
-	 * Focuses the specified dockable window.
+	 * Opens the specified dockable window.
 	 * @param name The dockable window name
 	 * @since jEdit 2.6pre3
 	 */
@@ -129,93 +122,21 @@ public class DockableWindowManager extends JPanel
 			return;
 		}
 
-		entry.container.showDockableWindow(entry.win);
+		if(entry.win == null)
+			entry.open();
+		else
+			entry.container.show(entry);
 	}
 
 	/**
-	 * Adds the dockable window with the specified name to this dockable
-	 * window manager.
+	 * Opens the specified dockable window. As of version 4.0pre1, has the same
+	 * effect as calling showDockableWindow().
 	 * @param name The dockable window name
 	 * @since jEdit 2.6pre3
 	 */
 	public void addDockableWindow(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
-		if(entry != null)
-		{
-			entry.container.showDockableWindow(entry.win);
-			return;
-		}
-
-		String position = jEdit.getProperty(name + ".dock-position",
-			FLOATING);
-
-		CreateDockableWindow msg = new CreateDockableWindow(view,name,
-			position);
-		EditBus.send(msg);
-
-		DockableWindow win = msg.getDockableWindow();
-		if(win == null)
-		{
-			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
-			return;
-		}
-
-		addDockableWindow(win,position);
-	}
-
-	/**
-	 * Adds the specified dockable window to this dockable window manager.
-	 * The position will be loaded from the properties.
-	 * @param win The dockable window
-	 * @since jEdit 2.6pre3
-	 */
-	public void addDockableWindow(DockableWindow win)
-	{
-		String name = win.getName();
-		String position = jEdit.getProperty(name + ".dock-position",
-			FLOATING);
-
-		addDockableWindow(win,position);
-	}
-
-	/**
-	 * Adds the specified dockable window to this dockable window manager.
-	 * @param win The dockable window
-	 * @param pos The window position
-	 * @since jEdit 2.6pre3
-	 */
-	public void addDockableWindow(DockableWindow win, String position)
-	{
-		String name = win.getName();
-		if(windows.get(name) != null)
-		{
-			throw new IllegalArgumentException("This DockableWindowManager"
-				+ " already has a window named " + name);
-		}
-
-		DockableWindowContainer container;
-		if(position.equals(FLOATING))
-			container = new DockableWindowContainer.Floating(this);
-		else
-		{
-			if(position.equals(TOP))
-				container = top;
-			else if(position.equals(LEFT))
-				container = left;
-			else if(position.equals(BOTTOM))
-				container = bottom;
-			else if(position.equals(RIGHT))
-				container = right;
-			else
-				throw new InternalError("Unknown position: " + position);
-		}
-
-		Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
-
-		container.addDockableWindow(win);
-		Entry entry = new Entry(win,position,container);
-		windows.put(name,entry);
+		showDockableWindow(name);
 	}
 
 	/**
@@ -233,12 +154,10 @@ public class DockableWindowManager extends JPanel
 			return;
 		}
 
-		Log.log(Log.DEBUG,this,"Removing " + name + " from "
-			+ entry.container);
+		if(entry.win == null)
+			return;
 
-		jEdit.setBooleanProperty(name + ".auto-open",false);
-		entry.container.saveDockableWindow(entry.win);
-		entry.container.removeDockableWindow(entry.win);
+		entry.remove();
 		windows.remove(name);
 	}
 
@@ -259,9 +178,7 @@ public class DockableWindowManager extends JPanel
 				Log.log(Log.DEBUG,this,"Removing " + name + " from "
 					+ entry.container);
 
-				jEdit.setBooleanProperty(name + ".auto-open",false);
-				entry.container.saveDockableWindow(entry.win);
-				entry.container.removeDockableWindow(entry.win);
+				entry.remove();
 				windows.remove(name);
 				return;
 			}
@@ -290,7 +207,7 @@ public class DockableWindowManager extends JPanel
 	public DockableWindow getDockableWindow(String name)
 	{
 		Entry entry = (Entry)windows.get(name);
-		if(entry == null)
+		if(entry == null || entry.win == null)
 			return null;
 		else
 			return entry.win;
@@ -303,10 +220,10 @@ public class DockableWindowManager extends JPanel
 	public boolean isDockableWindowVisible(String name)
 	{
 		Entry entry = (Entry)windows.get(name);
-		if(entry == null)
+		if(entry == null || entry.win == null)
 			return false;
 		else
-			return entry.container.isDockableWindowVisible(entry.win);
+			return entry.container.isVisible(entry);
 	}
 
 	/**
@@ -315,38 +232,38 @@ public class DockableWindowManager extends JPanel
 	 */
 	public void close()
 	{
-		Enumeration enum = windows.keys();
+		Enumeration enum = windows.elements();
 		while(enum.hasMoreElements())
 		{
-			String name = (String)enum.nextElement();
-			Entry entry = (Entry)windows.get(name);
-			jEdit.setBooleanProperty(name + ".auto-open",true);
-			entry.container.saveDockableWindow(entry.win);
-			entry.container.removeDockableWindow(entry.win);
+			Entry entry = (Entry)enum.nextElement();
+			entry.remove();
 		}
 
 		top.saveDimension();
 		left.saveDimension();
 		bottom.saveDimension();
 		right.saveDimension();
+
+		windows = null;
+		top = left = bottom = right = null;
 	}
 
-	public DockableWindowContainer.TabbedPane getTopDockingArea()
+	public PanelWindowContainer getTopDockingArea()
 	{
 		return top;
 	}
 
-	public DockableWindowContainer.TabbedPane getLeftDockingArea()
+	public PanelWindowContainer getLeftDockingArea()
 	{
 		return left;
 	}
 
-	public DockableWindowContainer.TabbedPane getBottomDockingArea()
+	public PanelWindowContainer getBottomDockingArea()
 	{
 		return bottom;
 	}
 
-	public DockableWindowContainer.TabbedPane getRightDockingArea()
+	public PanelWindowContainer getRightDockingArea()
 	{
 		return right;
 	}
@@ -359,16 +276,11 @@ public class DockableWindowManager extends JPanel
 	{
 		alternateLayout = jEdit.getBooleanProperty("view.docking.alternateLayout");
 
-		left.propertiesChanged();
-		right.propertiesChanged();
-		top.propertiesChanged();
-		bottom.propertiesChanged();
-
 		Enumeration enum = windows.elements();
 		while(enum.hasMoreElements())
 		{
 			Entry entry = (Entry)enum.nextElement();
-			if(entry.container instanceof DockableWindowContainer.Floating)
+			if(entry.container instanceof FloatingWindowContainer)
 			{
 				SwingUtilities.updateComponentTreeUI(((JFrame)entry.container)
 					.getRootPane());
@@ -382,10 +294,10 @@ public class DockableWindowManager extends JPanel
 	private View view;
 	private Hashtable windows;
 	private boolean alternateLayout;
-	private DockableWindowContainer.TabbedPane left;
-	private DockableWindowContainer.TabbedPane right;
-	private DockableWindowContainer.TabbedPane top;
-	private DockableWindowContainer.TabbedPane bottom;
+	private PanelWindowContainer left;
+	private PanelWindowContainer right;
+	private PanelWindowContainer top;
+	private PanelWindowContainer bottom;
 
 	static
 	{
@@ -397,8 +309,6 @@ public class DockableWindowManager extends JPanel
 
 	class DockableLayout implements LayoutManager2
 	{
-		// these are Containers so that we can call getComponentCount()
-		Container top, left, bottom, right;
 		Component center;
 
 		public void addLayoutComponent(String name, Component comp)
@@ -408,29 +318,13 @@ public class DockableWindowManager extends JPanel
 
 		public void addLayoutComponent(Component comp, Object cons)
 		{
-			if(BorderLayout.NORTH.equals(cons))
-				top = (Container)comp;
-			else if(BorderLayout.WEST.equals(cons))
-				left = (Container)comp;
-			else if(BorderLayout.SOUTH.equals(cons))
-				bottom = (Container)comp;
-			else if(BorderLayout.EAST.equals(cons))
-				right = (Container)comp;
-			else
+			if(cons == null || BorderLayout.CENTER.equals(cons))
 				center = comp;
 		}
 
 		public void removeLayoutComponent(Component comp)
 		{
-			if(top == comp)
-				top = null;
-			else if(left == comp)
-				left = null;
-			else if(bottom == comp)
-				bottom = null;
-			else if(right == comp)
-				right = null;
-			else if(center == comp)
+			if(center == comp)
 				center = null;
 		}
 
@@ -476,40 +370,18 @@ public class DockableWindowManager extends JPanel
 
 			if(_left.width + _right.width > size.width)
 			{
-				if(left.getComponentCount() == 0)
-					_left.width = 0;
-				else
-				{
-					_left.width = DockableWindowContainer
-						.TabbedPane.SPLITTER_WIDTH;
-				}
-
-				if(right.getComponentCount() == 0)
-					_right.width = 0;
-				else
-				{
-					_right.width = DockableWindowContainer
-						.TabbedPane.SPLITTER_WIDTH;
-				}
+				left.show(null);
+				right.show(null);
+				_left = left.getPreferredSize();
+				_right = right.getPreferredSize();
 			}
 
 			if(_top.height + _bottom.height > size.height)
 			{
-				if(top.getComponentCount() == 0)
-					_top.height = 0;
-				else
-				{
-					_top.height = DockableWindowContainer
-						.TabbedPane.SPLITTER_WIDTH;
-				}
-
-				if(bottom.getComponentCount() == 0)
-					_bottom.height = 0;
-				else
-				{
-					_bottom.height = DockableWindowContainer
-						.TabbedPane.SPLITTER_WIDTH;
-				}
+				top.show(null);
+				bottom.show(null);
+				_top = top.getPreferredSize();
+				_bottom = bottom.getPreferredSize();
 			}
 
 			int _width = size.width - _left.width - _right.width;
@@ -553,18 +425,79 @@ public class DockableWindowManager extends JPanel
 		public void invalidateLayout(Container target) {}
 	}
 
-	static class Entry
+	public class Entry
 	{
-		DockableWindow win;
+		String name;
 		String position;
+		String title;
 		DockableWindowContainer container;
 
-		Entry(DockableWindow win, String position,
-			DockableWindowContainer container)
+		// only set if open
+		DockableWindow win;
+
+		Entry(String name)
 		{
-			this.win = win;
-			this.position = position;
-			this.container = container;
+			this.name = name;
+			this.position = jEdit.getProperty(name + ".dock-position",
+				FLOATING);
+			title = jEdit.getProperty(name + ".title");
+
+			if(position.equals(FLOATING))
+				/* do nothing */;
+			else
+			{
+				if(position.equals(TOP))
+					container = top;
+				else if(position.equals(LEFT))
+					container = left;
+				else if(position.equals(BOTTOM))
+					container = bottom;
+				else if(position.equals(RIGHT))
+					container = right;
+				else
+					throw new InternalError("Unknown position: " + position);
+
+				container.add(this);
+			}
+		}
+
+		void open()
+		{
+			CreateDockableWindow msg = new CreateDockableWindow(view,name,
+				position);
+			EditBus.send(msg);
+
+			win = msg.getDockableWindow();
+			if(win == null)
+			{
+				Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+				return;
+			}
+
+			Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
+
+			if(position.equals(FLOATING))
+			{
+				container = new FloatingWindowContainer(
+					DockableWindowManager.this);
+				container.add(this);
+			}
+
+			container.show(this);
+		}
+
+		void remove()
+		{
+			Log.log(Log.DEBUG,this,"Removing " + name + " from "
+				+ container);
+
+			container.save(this);
+			container.remove(this);
+
+			if(container instanceof FloatingWindowContainer)
+				container = null;
+
+			win = null;
 		}
 	}
 

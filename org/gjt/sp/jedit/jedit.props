@@ -68,6 +68,9 @@ backup.suffix=~
 sortBuffers=true
 sortByName=true
 
+# Sort recent file list
+sortRecent=false
+
 ###
 ### BUFFER SETTINGS
 ### These can also be specified as buffer-local properties
@@ -262,11 +265,6 @@ view.fracFontMetrics=false
 # Docking
 view.docking.alternateLayout=false
 view.docking.tabsPos=0
-
-# Dock these in by default
-hypersearch-results.dock-position=top
-vfs.browser.dock-position=right
-vfs.browser.auto-open=true
 
 ###
 ### PRINTING

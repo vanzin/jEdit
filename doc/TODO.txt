@@ -1,7 +1,6 @@
 TO DO
 
-- cvs add closebox.gif
-- option to sort recents by file name
+- cvs add FloatingWindowContainer.java, PanelWindowContainer.java
 - broken bracket matching
 - reload doesn't scroll to caret properly
 - update tool bar, context option panes for action set API
@@ -20,9 +19,11 @@ TO DO
 - about dialog box
 - JComponent.requestDefaultFocus(): new 1.4 method
 - eval-for-selected-lines doesn't work with rectangular selection
+- colors not loaded initially
 
 + features:
 
+- search and replace of specific token types only
 - complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option

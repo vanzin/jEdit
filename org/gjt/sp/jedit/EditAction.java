@@ -67,47 +67,7 @@ public abstract class EditAction
 	 * @param view The view
 	 * @since jEdit 2.7pre2
 	 */
-	public void invoke(View view)
-	{
-		// default implementation
-		ActionEvent evt = new ActionEvent(view,
-			ActionEvent.ACTION_PERFORMED,
-			null);
-
-		actionPerformed(evt);
-	}
-
-	/**
-	 * @deprecated Create an actions.xml file instead of writing
-	 * EditAction implementations!
-	 */
-	public void actionPerformed(ActionEvent evt) {}
-
-	/**
-	 * @deprecated No longer necessary.
-	 */
-	public static View getView(EventObject evt)
-	{
-		if(evt != null)
-		{
-			Object o = evt.getSource();
-			if(o instanceof Component)
-				return getView((Component)o);
-		}
-		// this shouldn't happen
-		return null;
-	}
-
-	/**
-	 * @deprecated No longer necessary.
-	 */
-	public static Buffer getBuffer(EventObject evt)
-	{
-		View view = getView(evt);
-		if(view != null)
-			return view.getBuffer();
-		return null;
-	}
+	public abstract void invoke(View view);
 
 	/**
 	 * Finds the view parent of the specified component.
@@ -145,14 +105,6 @@ public abstract class EditAction
 	 * @since jEdit 3.2pre5
 	 */
 	public boolean isSelected(View view)
-	{
-		return isSelected((Component)view);
-	}
-
-	/**
-	 * @deprecated Override the form that accepts a view instead
-	 */
-	public boolean isSelected(Component comp)
 	{
 		return false;
 	}
@@ -218,8 +170,8 @@ public abstract class EditAction
 		public void actionPerformed(ActionEvent evt)
 		{
 			// Let input handler do recording, repeating, etc
-			EditAction.getView(evt).getInputHandler()
-				.invokeAction(action);
+			EditAction.getView((Component)evt.getSource())
+				.getInputHandler().invokeAction(action);
 		}
 
 		// private members
