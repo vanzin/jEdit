@@ -412,12 +412,27 @@ public class VFSDirectoryEntryTable extends JTable
 
 		for(int i = 0; i < model.files.length; i++)
 		{
-			for(int j = 0; j < widths.length; j++)
+			VFSDirectoryEntryTableModel.Entry entry
+				= model.files[i];
+			Font font = (entry.dirEntry.type
+				== VFS.DirectoryEntry.FILE
+				? renderer.plainFont : renderer.boldFont);
+			fm = getFontMetrics(font);
+
+			widths[0] = Math.max(widths[0],
+				renderer.getEntryWidth(
+				entry,fm));
+
+			for(int j = 1; j < widths.length; j++)
 			{
-				int width = renderer.getTableCellRendererComponent(
-					this,model.files[i],false,false,i,j)
-					.getPreferredSize().width;
-				widths[j] = Math.max(widths[j],width);
+				String extAttr = model.getExtendedAttribute(
+					j - 1);
+				String attr = entry.dirEntry.getExtendedAttribute(extAttr);
+				if(attr != null)
+				{
+					widths[j] = Math.max(widths[j],
+						fm.stringWidth(attr));
+				}
 			}
 		}
 
