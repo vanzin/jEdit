@@ -1,5 +1,12 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1pre5
+
++ Syntax Highlighting Changes:
+
+- Added Ruby-HTML syntax highlighting (Eric Benoit)
+- Updated C-Sharp mode (Ollie Rutherfurd)
+
 * Version 4.1pre4
 
 Thanks to Kris Kopicki and Stefan Jozsa for contributing to this
