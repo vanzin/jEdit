@@ -394,6 +394,11 @@ public class BufferHistory
 			this.selection = selection;
 			this.encoding = encoding;
 		}
+
+		public String toString()
+		{
+			return path + ": " + caret;
+		}
 	} //}}}
 
 	//{{{ RecentHandler class

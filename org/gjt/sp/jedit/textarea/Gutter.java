@@ -30,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -115,6 +116,18 @@ public class Gutter extends JComponent implements SwingConstants
 		int firstLine = clip.y / lineHeight;
 		int lastLine = (clip.y + clip.height - 1) / lineHeight;
 
+		if(lastLine - firstLine > textArea.getVisibleLines())
+		{
+			Log.log(Log.ERROR,this,"BUG: firstLine=" + firstLine);
+			Log.log(Log.ERROR,this,"     lastLine=" + lastLine);
+			Log.log(Log.ERROR,this,"     visibleLines=" + textArea.getVisibleLines());
+			Log.log(Log.ERROR,this,"     height=" + getHeight());
+			Log.log(Log.ERROR,this,"     painter.height=" + textArea.getPainter().getHeight());
+			Log.log(Log.ERROR,this,"     clip.y=" + clip.y);
+			Log.log(Log.ERROR,this,"     clip.height=" + clip.height);
+			Log.log(Log.ERROR,this,"     lineHeight=" + lineHeight);
+		}
+	
 		int y = (clip.y - clip.y % lineHeight);
 
 		extensionMgr.paintScreenLineRange(textArea,gfx,

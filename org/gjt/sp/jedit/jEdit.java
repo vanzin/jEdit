@@ -1736,6 +1736,9 @@ public class jEdit
 	 */
 	public static boolean closeAllBuffers(View view, boolean isExiting)
 	{
+		if(view != null)
+			view.getEditPane().saveCaretInfo();
+
 		boolean dirty = false;
 
 		Buffer buffer = buffersFirst;

@@ -248,8 +248,7 @@
    To use the action bar, input a command and press <keycap>Enter</keycap>.
    The following commands are supported:
   </para>
-  <itemizedlist>
-   <listitem><bridgehead renderas="sect3">Action invocations</bridgehead>
+   <bridgehead renderas="sect3">Action invocations</bridgehead>
    <para>
     Each menu item and tool bar button is bound to an <firstterm>action</firstterm>. To find out the name of an action, invoke the menu item or click the tool bar button, and look in the action bar's history.
    </para>
@@ -263,11 +262,9 @@
    <para>
     For example, entering <userinput>l-o</userinput> will match <userinput>global-options</userinput>, which has the same effect as invoking <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>.
    </para>
-   </listitem>
-   <listitem>
    <bridgehead renderas="sect3">Buffer-local properties</bridgehead>
    <para>
-    Entering <userinput>buffer.<replaceable>property</replaceable>=<replaceable>value</replaceable></userinput> sets the value of the buffer-local property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
+    Entering <userinput>buffer.property=value</userinput> sets the value of the buffer-local property named <userinput>property</userinput> to <userinput>value</userinput>.
     Buffer-local properties are documented in <xref linkend="buffer-local"/>.
    </para>
    <para>
@@ -276,15 +273,11 @@
    <para>
     See <xref linkend="buffer-local"/> for information about buffer-local properties.
    </para>
-   </listitem>
-   <listitem>
    <bridgehead renderas="sect3">Global properties</bridgehead>
    <para>
-    Entering <userinput><replaceable>property</replaceable>=<replaceable>value</replaceable> sets the value of the global property named <userinput><replaceable>property</replaceable></userinput> to <userinput><replaceable>value</replaceable></userinput>.
-    </userinput> This feature is primarily intended to help plugin develpers, since the properties jEdit uses to store its settings are not currently documented.
+    Entering <userinput>property=value</userinput> sets the value of the global property named <userinput>property</userinput> to <userinput>value</userinput>.
+    This feature is primarily intended to help plugin develpers, since the properties jEdit uses to store its settings are not currently documented.
    </para>
-   </listitem>
-   <listitem>
    <bridgehead renderas="sect3">Command repetition</bridgehead>
    <para>
    To repeat a command multiple times, enter a number in the action bar, then invoke the command. For example,
@@ -298,11 +291,6 @@
    If you specify a repeat count greater than 20, a confirmation dialog box will
    be displayed, asking if you really want to perform the action. This prevents
    you from hanging jEdit by executing a command too many times.
-  </para>
-  </listitem>
- </itemizedlist>
-  <para>
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Last Action</guimenuitem> (shortcut: <keycap>C+SPACE</keycap>) repeats the most recently invoked editor command.
   </para>
  </sect1>
 </chapter>
