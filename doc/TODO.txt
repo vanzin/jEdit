@@ -5,7 +5,10 @@ and quirks that I need to fix eventually.
 
 + before pre10:
 
-- change <code> in javadocs to proper links
+- loadMenu() properties used
+- dockable .title property
+- action .label property
+
 - section xrefs are broken
 - review user's guide
 - part IV

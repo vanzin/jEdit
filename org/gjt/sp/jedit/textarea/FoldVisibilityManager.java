@@ -29,9 +29,9 @@ import org.gjt.sp.jedit.*;
 //}}}
 
 /**
- * Manages fold visibility.
+ * Manages fold visibility.<p>
  *
- * This class defines methods for translating between physical and virtual
+ * This class contains methods for translating between physical and virtual
  * line numbers, for determining which lines are visible and which aren't,
  * and for expanding and collapsing folds.<p>
  *
@@ -40,8 +40,8 @@ import org.gjt.sp.jedit.*;
  * lines after a collapsed fold have a virtual line number that is less
  * than their physical line number, for example.<p>
  *
- * You can use the <code>physicalToVirtual()</code> and
- * <code>virtualToPhysical()</code> methods to convert one type of line
+ * You can use the {@link #physicalToVirtual(int)} and
+ * {@link #virtualToPhysical(int)} methods to convert one type of line
  * number to another.
  *
  * @author Slava Pestov

@@ -655,7 +655,7 @@ public class Buffer implements EBComponent
 	//{{{ isClosed() method
 	/**
 	 * Returns true if this buffer has been closed with
-	 * <code>jEdit.closeBuffer()</code>.
+	 * {@link org.gjt.sp.jedit.jEdit#closeBuffer(View,Buffer)}.
 	 */
 	public final boolean isClosed()
 	{
@@ -823,7 +823,7 @@ public class Buffer implements EBComponent
 	//{{{ readLock() method
 	/**
 	 * The buffer is guaranteed not to change between calls to
-	 * <code>readLock()</code> and <code>readUnlock()</code>.
+	 * {@link #readLock()} and {@link #readUnlock()}.
 	 */
 	public final void readLock()
 	{
@@ -833,7 +833,7 @@ public class Buffer implements EBComponent
 	//{{{ readUnlock() method
 	/**
 	 * The buffer is guaranteed not to change between calls to
-	 * <code>readLock()</code> and <code>readUnlock()</code>.
+	 * {@link #readLock()} and {@link #readUnlock()}.
 	 */
 	public final void readUnlock()
 	{
@@ -842,9 +842,8 @@ public class Buffer implements EBComponent
 
 	//{{{ writeLock() method
 	/**
-	 * The buffer cintents are guaranteed not to be read or written
-	 * by other threads between calls to <code>writeLock()</code>
-	 * and <code>writeUnlock()</code>.
+	 * Attempting to obtain read lock will block between calls to
+	 * {@link #writeLock()} and {@link #writeUnlock()}.
 	 */
 	public final void writeLock()
 	{
@@ -853,9 +852,8 @@ public class Buffer implements EBComponent
 
 	//{{{ writeUnlock() method
 	/**
-	 * The buffer cintents are guaranteed not to be read or written
-	 * by other threads between calls to <code>writeLock()</code>
-	 * and <code>writeUnlock()</code>.
+	 * Attempting to obtain read lock will block between calls to
+	 * {@link #writeLock()} and {@link #writeUnlock()}.
 	 */
 	public final void writeUnlock()
 	{
@@ -1322,7 +1320,8 @@ public class Buffer implements EBComponent
 	/**
 	 * Returns if an undo or compound edit is currently in progress. If this
 	 * method returns true, then eventually a
-	 * <code>transactionComplete()</code> buffer event will get fired.
+	 * {@link org.gjt.sp.jedit.buffer.BufferChangeListener#transactionComplete(Buffer)}
+	 * buffer event will get fired.
 	 * @since jEdit 4.0pre6
 	 */
 	public boolean isTransactionInProgress()
@@ -1333,11 +1332,11 @@ public class Buffer implements EBComponent
 	//{{{ beginCompoundEdit() method
 	/**
 	 * Starts a compound edit. All edits from now on until
-	 * <code>endCompoundEdit()</code> are called will be merged
+	 * {@link #endCompoundEdit()} are called will be merged
 	 * into one. This can be used to make a complex operation
 	 * undoable in one step. Nested calls to
-	 * <code>beginCompoundEdit()</code> behave as expected,
-	 * requiring the same number of <code>endCompoundEdit()</code>
+	 * {@link #beginCompoundEdit()} behave as expected,
+	 * requiring the same number of {@link #endCompoundEdit()}
 	 * calls to end the edit.
 	 * @see #endCompoundEdit()
 	 */
@@ -1362,8 +1361,8 @@ public class Buffer implements EBComponent
 	//{{{ endCompoundEdit() method
 	/**
 	 * Ends a compound edit. All edits performed since
-	 * <code>beginCompoundEdit()</code> was called can now
-	 * be undone in one step by calling <code>undo()</code>.
+	 * {@link #beginCompoundEdit()} was called can now
+	 * be undone in one step by calling {@link #undo(JEditTextArea)}.
 	 * @see #beginCompoundEdit()
 	 */
 	public void endCompoundEdit()
@@ -2642,7 +2641,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ insertAtColumn()
 	/**
-	 * Like the <code>insert()</code> method, but inserts the string at
+	 * Like the {@link #insert(int,String)} method, but inserts the string at
 	 * the specified virtual column. Inserts spaces as appropriate if
 	 * the line is shorter than the column.
 	 * @param line The line number
@@ -3205,7 +3204,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ _getFoldVisibilityManager() method
 	/**
 	 * Plugins and macros should call
-	 * <code>textArea.getFoldVisibilityManager()</code>
+	 * {@link org.gjt.sp.jedit.textarea.JEditTextArea#getFoldVisibilityManager()}
 	 * instead of this method.
 	 * @param textArea The text area
 	 * @since jEdit 4.0pre1

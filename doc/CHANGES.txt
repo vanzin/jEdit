@@ -17,6 +17,10 @@ release.
 - Saving a file within jEdit will refresh the directory search file list
   if necessary.
 
+- Minor improvement to Python auto indent (Oliver Rutherfurd).
+
+- Documentation updates (me and Kris Kopicki).
+
 + Bug Fixes:
 
 - The Format Paragraph command was once again broken on Java 1.3.

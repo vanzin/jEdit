@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.MiscUtilities;
 //}}}
 
 /**
- * A regular expression string matcher using <code>gnu.regexp</code>.
+ * A regular expression string matcher using {@link gnu.regexp}.
  * @author Slava Pestov
  * @version $Id$
  */

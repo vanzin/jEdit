@@ -38,7 +38,7 @@
 		</SPAN>
 		
 		<!-- List literals -->
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" DELEGATE="LIST">
 			<BEGIN>[</BEGIN>
 			<END>]</END>
 		</SPAN>
@@ -51,44 +51,44 @@
 		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">,</SEQ>
 		<SEQ TYPE="OPERATOR">\+</SEQ> <!-- ISO Prolog uses it instead of 'not' -->
-		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">\=</SEQ>
 		<SEQ TYPE="OPERATOR">==</SEQ>
 		<SEQ TYPE="OPERATOR">\==</SEQ>
+		<SEQ TYPE="OPERATOR">\=</SEQ>
 		<SEQ TYPE="OPERATOR">@&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">@=&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">@&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">@&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">@&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">=..</SEQ>
 		<SEQ TYPE="OPERATOR">=:=</SEQ>
 		<SEQ TYPE="OPERATOR">=\=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">=&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/\</SEQ>
 		<SEQ TYPE="OPERATOR">\/</SEQ>
-		<SEQ TYPE="OPERATOR">*</SEQ>
-		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">//</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">**</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">\</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
 		
 		<!-- The '.' at the end of each clause -->
 		<SEQ TYPE="OPERATOR">.</SEQ>
 		
 		<!-- Parentheses -->
-		<SEQ TYPE="NULL">(</SEQ>
-		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="MARKUP">(</SEQ>
+		<SEQ TYPE="MARKUP">)</SEQ>
 		<SEQ TYPE="NULL">{</SEQ>
 		<SEQ TYPE="NULL">}</SEQ>
 		
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 		
 			<!-- Keywords that are 0 arity built-in predicates -->
 			<KEYWORD1>true</KEYWORD1>
@@ -184,5 +184,12 @@
 			
 		</KEYWORDS>
 		
+	</RULES>
+
+	<RULES SET="LIST" DEFAULT="LITERAL2">
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" DELEGATE="LIST">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
 	</RULES>
 </MODE>

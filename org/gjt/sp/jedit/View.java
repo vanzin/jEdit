@@ -41,8 +41,9 @@ import org.gjt.sp.jedit.textarea.*;
  * In a BeanShell script, you can obtain the current view instance from the
  * <code>view</code> variable.<p>
  *
- * The largest component it contains is an <code>EditPane</code> that in turn
- * contains a <code>JEditTextArea</code> that displays a <code>Buffer</code>.
+ * The largest component it contains is an {@link EditPane} that in turn
+ * contains a {@link org.gjt.sp.jedit.textarea.JEditTextArea} that displays a
+ * {@link Buffer}.
  * A view can have more than one edit pane in a split window configuration.
  * A view also contains a menu bar, an optional toolbar and other window
  * decorations, as well as docked windows.<p>
@@ -54,9 +55,10 @@ import org.gjt.sp.jedit.textarea.*;
  * <ul>
  * <li>When a view is being created, its initialization routine
  * iterates through the collection of loaded plugins and calls
- * the <code>createMenuItems()</code> method of
+ * the {@link EditPlugin#createMenuItems(Vector)} method of
  * each plugin core class.</li>
- * <li>The view also creates and initializes a <code>DockableWindowManager</code>
+ * <li>The view also creates and initializes a
+ * {@link org.gjt.sp.jedit.gui.DockableWindowManager}
  * object.  This object is
  * responsible for creating, closing and managing dockable windows.</li>
  * </ul>
@@ -65,11 +67,6 @@ import org.gjt.sp.jedit.textarea.*;
  * Views can be opened and closed using methods in the <code>jEdit</code>
  * class.
  *
- * @see org.gjt.sp.jedit.EditPane
- * @see org.gjt.sp.jedit.textarea.JEditTextArea
- * @see org.gjt.sp.jedit.Buffer
- * @see org.gjt.sp.jedit.gui.DockableWindowManager
- * @see org.gjt.sp.jedit.EditPlugin#createMenuItems(Vector)
  * @see org.gjt.sp.jedit.jEdit#newView(View)
  * @see org.gjt.sp.jedit.jEdit#newView(View,Buffer)
  * @see org.gjt.sp.jedit.jEdit#newView(View,Buffer,boolean)
@@ -949,7 +946,7 @@ public class View extends JFrame implements EBComponent
 	//{{{ isClosed() method
 	/**
 	 * Returns true if this view has been closed with
-	 * <code>jEdit.closeView()</code>.
+	 * {@link jEdit#closeView(View)}.
 	 */
 	public boolean isClosed()
 	{

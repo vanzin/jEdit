@@ -71,8 +71,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	//{{{ runScript() method
 	/**
 	 * Runs the specified script.
-	 * Unlike the <code>runScript()</code> method of the
-	 * <code>BeanShell</code> class, this method can run scripts supported
+	 * Unlike the {@link BeanShell#runScript(View,String,Reader,boolean)}
+	 * method, this method can run scripts supported
 	 * by any registered macro handler.
 	 * @param view The view
 	 * @param path The VFS path of the script
@@ -864,8 +864,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		/**
 		 * Runs the specified macro. This method is optional; it is
 		 * called if the specified macro is a startup script. The
-		 * default behavior is to simply call the other form of
-		 * <code>runMacro()</code>.
+		 * default behavior is to simply call {@link #runMacro(View,Macro)}.
+		 *
 		 * @param view The view - may be null.
 		 * @param macro The macro.
 		 * @param ownNamespace  A hint indicating whenever functions and

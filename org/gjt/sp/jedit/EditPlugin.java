@@ -59,8 +59,8 @@ import org.gjt.sp.util.Log;
  * <ul>
  * <li><code>jdk <i>minimum Java version</i></code></li>
  * <li><code>jedit <i>minimum jEdit version</i></code> - note that this must be a
- * version number in the form returned by <code>jEdit.getBuild()</code>,
- * not <code>jEdit.getVersion()</code>.</li>
+ * version number in the form returned by {@link jEdit#getBuild()},
+ * not {@link jEdit#getVersion()}.</li>
  * <li><code>plugin <i>plugin</i> <i>version</i></code> - the fully quailified
  * plugin class name must be specified.</li>
  * </ul>
@@ -77,13 +77,12 @@ import org.gjt.sp.util.Log;
  * qualified class name, including the package name, if any, must be used.<p>
  *
  * Alternatively, instead of extending this class, a plugin core class can
- * extend <code>EBPlugin</code> to automatically receive EditBus messages.
+ * extend {@link EBPlugin} to automatically receive EditBus messages.
  *
- * @see org.gjt.sp.jedit.EBPlugin
  * @see org.gjt.sp.jedit.jEdit#getProperty(String)
- * @see org.gjt.sp.jedit.jEdit#getPlugin()
+ * @see org.gjt.sp.jedit.jEdit#getPlugin(String)
  * @see org.gjt.sp.jedit.jEdit#getPlugins()
- * @see org.gjt.sp.jedit.jEdit#getPluginJAR()
+ * @see org.gjt.sp.jedit.jEdit#getPluginJAR(String)
  * @see org.gjt.sp.jedit.jEdit#getPluginJARs()
  *
  * @author Slava Pestov
@@ -126,7 +125,7 @@ public abstract class EditPlugin
 
 	//{{{ createMenuItems() method
 	/**
-	 * When a <code>View</code> object is created, it calls this
+	 * When a {@link View} object is created, it calls this
 	 * method on each plugin class to obtain entries to be displayed
 	 * in the view's <b>Plugins</b> menu.
 	 *
@@ -136,13 +135,16 @@ public abstract class EditPlugin
 	 * The easiest way to provide menu items is to
 	 * package them as entries in the plugin's property
 	 * file and implement <code>createMenuItems()</code> with a
-	 * call to the <code>GUIUtilities.loadMenu()</code>
+	 * call to the {@link GUIUtilities#loadMenu(String)}
 	 * method:
 	 * <pre>public void createMenuItems(Vector menuItems)
 	 * {
 	 *     menuItems.addElement(GUIUtilities.loadMenu(
 	 *         "myplugin.menu"));
 	 * }</pre>
+	 *
+	 * Alternatively, {@link GUIUtilities#loadMenuItem(String)} can
+	 * be used if your plugin only defines one menu item.<p>
 	 *
 	 * The default implementation does nothing.
 	 *
@@ -170,7 +172,7 @@ public abstract class EditPlugin
 	 * }</pre>
 	 *
 	 * Plugins can also define more than one option pane, grouped in an
-	 * "option group". See the documentation for the <code>OptionGroup</code>
+	 * "option group". See the documentation for the {@link OptionGroup}
 	 * class for information.<p>
 	 *
 	 * The default implementation does nothing.

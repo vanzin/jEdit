@@ -142,7 +142,7 @@ public class MiscUtilities
 
 	//{{{ concatPath() method
 	/**
-	 * Like constructPath(), except <code>path</code> will be
+	 * Like {@link #constructPath}, except <code>path</code> will be
 	 * appended to <code>parent</code> even if it is absolute.
 	 * @param path
 	 * @param parent

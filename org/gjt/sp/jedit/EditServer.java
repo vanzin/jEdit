@@ -49,7 +49,7 @@ import org.gjt.sp.util.Log;
  * figure things out by itself.<p>
  *
  * In most cases, the script will call the static
- * <code>EditServer.handleClient()</code> method, but of course more
+ * {@link #handleClient(boolean,String,String[])} method, but of course more
  * complicated stuff can be done too.
  *
  * @author Slava Pestov
@@ -108,12 +108,6 @@ public class EditServer extends Thread
 			 * as NOTICE, not ERROR */
 			Log.log(Log.NOTICE,this,io);
 		}
-	} //}}}
-
-	//{{{ isOK() method
-	public boolean isOK()
-	{
-		return ok;
 	} //}}}
 
 	//{{{ run() method
@@ -238,6 +232,12 @@ public class EditServer extends Thread
 			// do not create a new view
 			return;
 		}
+	} //}}}
+
+	//{{{ isOK() method
+	boolean isOK()
+	{
+		return ok;
 	} //}}}
 
 	// stopServer() method

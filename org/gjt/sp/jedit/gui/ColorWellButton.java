@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.OperatingSystem;
  * A button that, when clicked, shows a color chooser.
  *
  * You can get and set the currently selected color using
- * <code>getSelectedColor()</code> and <code>setSelectedColor().
+ * {@link #getSelectedColor()} and {@link #setSelectedColor(Color)}.
  * @author Slava Pestov
  * @version $Id$
  */

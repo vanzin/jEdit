@@ -19,9 +19,11 @@
 
 package org.gjt.sp.jedit;
 
+import org.gjt.sp.util.Log;
+
 /**
  * Plugins extending this class are automatically added to the EditBus.
- * Otherwise, this class is identical to the <code>EditPlugin</code>
+ * Otherwise, this class is identical to the {@link EditPlugin}
  * class.
  *
  * @see org.gjt.sp.jedit.EditBus

@@ -203,15 +203,15 @@ public abstract class VFS
 
 	//{{{ constructPath() method
 	/**
-	 * This method should not be called directly.<p>
-	 *
-	 * To ensure correct behavior, you <b>must</b> call
-	 * <code>MiscUtilities.constructPath()</code> instead.<p>
-	 *
 	 * Constructs a path from the specified directory and
 	 * file name component. This must be overridden to return a
 	 * non-null value, otherwise browsing this filesystem will
-	 * not work.
+	 * not work.<p>
+	 *
+	 * Unless you are writing a VFS, this method should not be called
+	 * directly. To ensure correct behavior, you <b>must</b> call
+	 * {@link MiscUtilities#constructPath()} instead.
+	 *
 	 * @param parent The parent directory
 	 * @param path The path
 	 * @since jEdit 2.6pre2
@@ -627,7 +627,7 @@ public abstract class VFS
 	 * @param session The VFS session
 	 * @param buffer The buffer
 	 * @param path The path the buffer was saved to (can be different from
-	 * <code>buffer.getPath()</code> if the user invoked the
+	 * {@link org.gjt.sp.jedit.Buffer#getPath()} if the user invoked the
 	 * <b>Save a Copy As</b> command, for example).
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException If an I/O error occurs
