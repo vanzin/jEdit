@@ -3182,12 +3182,8 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
-		if(!OperatingSystem.hasJava15())
+		if(OperatingSystem.hasJava15())
 		{
-			theme = new JEditMetalTheme();
-			theme.propertiesChanged();
-			MetalLookAndFeel.setCurrentTheme(theme);
-
 			Font primaryFont = jEdit.getFontProperty(
 				"metal.primary.font");
 			if(primaryFont != null)
@@ -3227,6 +3223,12 @@ public class jEdit
 					"swing.plaf.metal.userFont",
 					secondaryFontString);
 			}
+		}
+		else
+		{
+			theme = new JEditMetalTheme();
+			theme.propertiesChanged();
+			MetalLookAndFeel.setCurrentTheme(theme);
 		}
 
 		try
