@@ -29,17 +29,11 @@ import org.gjt.sp.util.Log;
 /**
  * A set of option panes shown in one branch in the options dialog.<p>
  *
- * In those cases where a single option pane is inadequate to present all
- * of a plugin's configuration options, this class can be used to create a
- * group of options panes. The group will appear as a single node in the
- * options dialog tree. The member option panes will appear as
- * leaf nodes under the group's node.
- *
- * @see OptionPane
- * @see org.gjt.sp.jedit.gui.OptionsDialog#addOptionGroup(OptionGroup)
+ * Plugins should not create instances of this class anymore. See
+ * {@link EditPlugin} for information on how jEdit obtains and constructs
+ * option pane instances.
  *
  * @author Mike Dillon
- * @author John Gellene (API documentation)
  * @version $Id$
  */
 public class OptionGroup

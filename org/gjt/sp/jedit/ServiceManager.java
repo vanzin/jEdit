@@ -30,6 +30,55 @@ import java.util.*;
 import org.gjt.sp.util.Log;
 
 /**
+ * A generic way for plugins to provide various API extensions.<p>
+ * 
+ * Services are loaded from files named <code>services.xml</code> inside the
+ * plugin JAR. A service definition file has the following form:
+ *
+ * <pre>&lt;?xml version="1.0"?&gt;
+ *&lt;!DOCTYPE SERVICES SYSTEM "services.dtd"&gt;
+ *&lt;SERVICES&gt;
+ *    &lt;SERVICE NAME="service name" CLASS="fully qualified class name"&gt;
+ *        // BeanShell code evaluated when the sevice is first activated
+ *    &lt;/SERVICE&gt;
+ *&lt;/SERVICES&gt;</pre>
+ *
+ * The following elements are valid:
+ *
+ * <ul>
+ * <li>
+ * <code>SERVICES</code> is the top-level element and refers
+ * to the set of services offered by the plugin.
+ * </li>
+ * <li>
+ * A <code>SERVICE</code> contains the data for a particular service
+ * activation.
+ * It has two attributes, both required: <code>NAME</code> and
+ * <code>CLASS</code>. The <code>CLASS</code> attribute must be the name of
+ * a known sevice type; see below.
+ * </li>
+ * <li>
+ * A <code>SERVICE</code> element should the BeanShell code that returns a
+ * new instance of the named class. Note that this code can return
+ * <code>null</code>.
+ * </li>
+ * </ul>
+ *
+ * The jEdit core defines the following service types:
+ * <ul>
+ * <li>{@link org.gjt.sp.jedit.buffer.FoldHandler}</li>
+ * <li>{@link org.gjt.sp.jedit.io.VFS}</li>
+ * </ul>
+ *
+ * Plugins may provide more.<p>
+ *
+ * To have your plugin accept services, no extra steps are needed other than
+ * a piece of code somewhere that calls {@link #getServiceNames(String)} and
+ * {@link #getService(String,String)}.
+ *
+ * @see BeanShell
+ * @see PluginJAR
+ *
  * @since jEdit 4.2pre1
  * @author Slava Pestov
  * @version $Id$
@@ -171,7 +220,10 @@ public class ServiceManager
 
 	//{{{ getService() method
 	/**
-	 * Returns an instance of the given service.
+	 * Returns an instance of the given service. The first time this is
+	 * called for a given service, the BeanShell code is evaluated. The
+	 * result is cached for future invocations, so in effect services are
+	 * singletons.
 	 *
 	 * @param clazz The service class
 	 * @param name The service name

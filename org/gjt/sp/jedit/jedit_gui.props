@@ -622,6 +622,7 @@ no-macros.label=No Macros
 #{{{ Plugins menu
 plugins=plugin-manager plugin-options -
 plugins.label=$Plugins
+plugins.custom-menu=new PluginsMenu();
 plugin-manager.label=Plugin $Manager...
 plugin-options.label=Plugin $Options...
 no-plugins.label=No Plugins Installed

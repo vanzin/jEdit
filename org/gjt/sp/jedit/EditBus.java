@@ -138,9 +138,11 @@ public class EditBus
 				{
 					long start = System.currentTimeMillis();
 					comp.handleMessage(message);
-					Log.log(Log.DEBUG,EditBus.class,comp + ": " +
-						(System.currentTimeMillis() - start)
-						+ " ms");
+					long time = (System.currentTimeMillis() - start);
+					if(time != 0)
+					{
+						Log.log(Log.DEBUG,EditBus.class,comp + ": " + time + " ms");
+					}
 				}
 				else
 					comps[i].handleMessage(message);

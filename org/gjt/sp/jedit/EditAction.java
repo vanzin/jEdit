@@ -31,13 +31,10 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * An action.<p>
- *
- * Instead of subclassing EditAction directly, you should now write an
- * <code>actions.xml</code> file.
+ * An action that can be bound to a menu item, tool bar button or keystroke.
  *
  * @see jEdit#getAction(String)
- * @see jEdit#getActions()
+ * @see jEdit#getActionNames()
  * @see ActionSet
  *
  * @author Slava Pestov
@@ -73,18 +70,6 @@ public abstract class EditAction
 	public final String getLabel()
 	{
 		return jEdit.getProperty(name + ".label");
-	} //}}}
-
-	//{{{ getMouseOverText() method
-	/**
-	 * Returns the text that should be shown when the mouse is placed over
-	 * this action's menu item or tool bar button. Currently only used by
-	 * the macro system.
-	 * @since jEdit 4.0pre5
-	 */
-	public String getMouseOverText()
-	{
-		return null;
 	} //}}}
 
 	//{{{ invoke() method

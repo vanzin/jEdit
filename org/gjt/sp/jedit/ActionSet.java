@@ -30,26 +30,35 @@ import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.util.Log;
 
 /**
- * A set of actions.<p>
+ * A set of actions, either loaded from an XML file, or constructed at runtime
+ * by a plugin.<p>
  *
- * Action sets are read from <code>actions.xml</code> files
- * contained inside plugin JARs. An action definition file has the following
- * form:
+ * <h3>Action sets loaded from XML files</h3>
+ *
+ * Action sets are read from these files inside the plugin JAR:
+ * <ul>
+ * <li><code>actions.xml</code> - actions made available for use in jEdit views,
+ * including the view's <b>Plugins</b> menu, the tool bar, etc.</li>
+ * <li><code>browser.actions.xml</code> - actions for the file system browser's
+ * <b>Plugins</b> menu.</li>
+ * </ul>
+ *
+ * An action definition file has the following form:
  *
  * <pre>&lt;?xml version="1.0"?&gt;
  *&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
  *&lt;ACTIONS&gt;
  *    &lt;ACTION NAME="some-action"&gt;
  *        &lt;CODE&gt;
- *            // Action code
+ *            // BeanShell code evaluated when the action is invoked
  *        &lt;/CODE&gt;
  *    &lt;/ACTION&gt;
  *    &lt;ACTION NAME="some-toggle-action"&gt;
  *        &lt;CODE&gt;
- *            // Action code
+ *            // BeanShell code evaluated when the action is invoked
  *        &lt;/CODE&gt;
  *        &lt;IS_SELECTED&gt;
- *            // Returns true or false
+ *            // BeanShell code that should evaluate to true or false
  *        &lt;/IS_SELECTED&gt;
  *    &lt;/ACTION&gt;
  *&lt;/ACTIONS&gt;</pre>
@@ -88,11 +97,43 @@ import org.gjt.sp.util.Log;
  * </ul>
  *
  * Each action must have a property <code><i>name</i>.label</code> containing
- * the action's menu item label. The action code may use any predefined
+ * the action's menu item label.
+ *
+ * <h3>View actions</h3>
+ *
+ * Actions defined in <code>actions.xml</code> can be added to the view's
+ * <b>Plugins</b> menu; see {@link EditPlugin}.
+ * The action code may use any standard predefined
  * BeanShell variable; see {@link BeanShell}.
  *
- * @see jEdit#getActionSets()
+ * <h3>File system browser actions</h3>
+ *
+ * Actions defined in <code>actions.xml</code> can be added to the file
+ * system browser's <b>Plugins</b> menu; see {@link EditPlugin}.
+ * The action code may use any standard predefined
+ * BeanShell variable, in addition to a variable <code>browser</code> which
+ * contains a reference to the current
+ * {@link org.gjt.sp.jedit.browser.VFSBrowser} instance.<p>
+ *
+ * File system browser actions should not define
+ * <code>&lt;IS_SELECTED&gt;</code> blocks.
+ *
+ * <h3>Custom action sets</h3>
+ *
+ * Call {@link jEdit#addActionSet(ActionSet)} to add a custom action set to
+ * jEdit's action context. You must also call {@link #initKeyBindings()} for new
+ * action sets. Don't forget to call {@link jEdit#removeActionSet(ActionSet)}
+ * before your plugin is unloaded, too.
+ *
+ * @see jEdit#getActionContext()
+ * @see org.gjt.sp.jedit.browser.VFSBrowser#getActionContext()
+ * @see ActionContext#getActionNames()
+ * @see ActionContext#getAction(String)
  * @see jEdit#addActionSet(ActionSet)
+ * @see jEdit#removeActionSet(ActionSet)
+ * @see PluginJAR#getActionSet()
+ * @see BeanShell
+ * @see View
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
@@ -334,9 +375,13 @@ public class ActionSet
 
 	//{{{ initKeyBindings() method
 	/**
-	 * Initializes the action set's key bindings. Plugins and macros do not
-	 * need to call this method, since jEdit calls it automatically for
-	 * known action sets.
+	 * Initializes the action set's key bindings.
+	 * jEdit calls this method for all registered action sets when the
+	 * user changes key bindings in the <b>Global Options</b> dialog box.<p>
+	 *
+	 * Note if your plugin adds a custom action set to jEdit's collection,
+	 * it must also call this method on the action set after adding it.
+	 *
 	 * @since jEdit 4.2pre1
 	 */
 	public void initKeyBindings()
@@ -417,10 +462,10 @@ public class ActionSet
 			String name = (String)enum.nextElement();
 			jEdit.putProperty(cachedProperties,
 				name + ".label");
-			jEdit.putProperty(cachedProperties,
+			/*jEdit.putProperty(cachedProperties,
 				name + ".shortcut");
 			jEdit.putProperty(cachedProperties,
-				name + ".shortcut2");
+				name + ".shortcut2");*/
 			jEdit.putProperty(cachedProperties,
 				name + ".toggle");
 		}

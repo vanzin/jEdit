@@ -179,33 +179,33 @@ public class EnhancedMenuItem extends JMenuItem
 
 		public void mouseReleased(MouseEvent evt)
 		{
-			/* if(msgSet)
+			if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			} */
+			}
 		}
 
 		public void mouseEntered(MouseEvent evt)
 		{
-			/* String msg = action.getMouseOverText();
+			String msg = jEdit.getProperty(action + ".mouse-over");
 			if(msg != null)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(msg);
 				msgSet = true;
-			} */
+			}
 		}
 
 		public void mouseExited(MouseEvent evt)
 		{
-			/* if(msgSet)
+			if(msgSet)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
 					.getStatus().setMessage(null);
 				msgSet = false;
-			} */
+			}
 		}
 	} //}}}
 }

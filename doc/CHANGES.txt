@@ -352,9 +352,10 @@ release.
 }}}
 {{{ API Changes
 
-- Deprecated some methods:
+- Deprecated some action methods:
 
-  jEdit.getActions() -- use jEdit.getActionNames() instead
+  jEdit.getActions() -- use jEdit.getActionNames() instead. getActions()
+  forces all actions.xml files to be loaded, which is a Bad Thing.
   jEdit.getActionSetForAction() -- use form that takes a String
 
 - Removed some methods which do not make any sense at all with the new
@@ -397,6 +398,9 @@ release.
   EditAction.getLabel()
   EditAction.isToggle()
 
+- The EditAction.getMouseOverText() method no longer exists. I am not
+  aware of any plugins using this method.
+
 - The following plugins are known to be broken:
 
   Background
@@ -408,6 +412,11 @@ release.
   Templates
   Vimulator
   XML
+
+- Also, a lot of plugins that depend on ErrorList and Console will fail
+  to load, even if they are not broken themselves. So don't panic if you
+  see a huge list of plugin errors on startup; most of them won't need
+  fixing.
 
 }}}
 {{{ API Enhancements

@@ -31,6 +31,9 @@ import java.awt.*;
 /**
  * The default implementation of the option pane interface.<p>
  *
+ * See {@link EditPlugin} for information on how jEdit obtains and constructs
+ * option pane instances.<p>
+ *
  * Most option panes extend this implementation of {@link OptionPane}, instead
  * of implementing {@link OptionPane} directly. This class provides a convenient
  * default framework for laying out configuration options.<p>
@@ -49,9 +52,6 @@ import java.awt.*;
  * <li>{@link #addSeparator()}</li>
  * <li>{@link #addSeparator(String)}</li>
  * </ul>
- *
- * @see OptionGroup
- * @see org.gjt.sp.jedit.gui.OptionsDialog#addOptionPane(OptionPane)
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)

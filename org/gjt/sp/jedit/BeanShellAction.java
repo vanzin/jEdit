@@ -30,7 +30,15 @@ import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;
 
 /**
- * An action that evaluates BeanShell code when invoked.
+ * An action that evaluates BeanShell code when invoked. BeanShell actions are
+ * usually loaded from <code>actions.xml</code> and
+ * <code>browser.actions.xml</code> files; see {@link ActionSet} for syntax
+ * information.
+ *
+ * @see jEdit#getAction(String)
+ * @see jEdit#getActionNames()
+ * @see ActionSet
+ *
  * @author Slava Pestov
  * @version $Id$
  */

@@ -24,15 +24,11 @@ import java.awt.Component;
 /**
  * The interface all option panes must implement.<p>
  *
- * The <i>name</i> of an option pane is returned by the <code>getName()</code>
- * method. The label displayed in the option pane's tab is obtained from the
- * <code>options.<i>name</i>.label</code> property.<p>
+ * See {@link EditPlugin} for information on how jEdit obtains and constructs
+ * option pane instances.<p>
  *
  * Note that in most cases it is much easier to extend
  * {@link AbstractOptionPane} instead.
- *
- * @see OptionGroup
- * @see org.gjt.sp.jedit.gui.OptionsDialog#addOptionPane(OptionPane)
  *
  * @author Slava Pestov
  * @version $Id$

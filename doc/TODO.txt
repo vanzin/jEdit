@@ -7,14 +7,10 @@ and quirks that I need to fix eventually.
 
 I'm releasing 4.2pre1 ASAP.
 
-- verify with empty actions.xml, browser.actions.xml, dockables.xml
 - browser: enter with table active
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
 - while loading --> scroll bar
-- plugin api:
-  - plugin errors after startup
-  - mouse over text for actions
 - box in io progress
 - split view line insert: repainted twice, selection problems
 - bizarre dockable window manager button layout problem
@@ -33,7 +29,7 @@ I'm releasing 4.2pre1 ASAP.
 
 - plugin unload:
   - update dockables
-  - update plugin menu
+  - dependencies
 
 - shortcuts: stale shortcuts remain?
 
@@ -50,7 +46,6 @@ I'm releasing 4.2pre1 ASAP.
 - file dialog: handle - ENTER
 
 - F2 doesn't work in JTree/JTable, maybe others
-- servicemanager javadocs
 - narrow: scrolls one down
 - update man page
 - make gutter fully painted by extensions just like text area
