@@ -734,7 +734,14 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	private void closeOrKeepDialog()
 	{
 		if(keepDialog.isSelected())
+		{
+			// Windows bug workaround in case a YES/NO confirm
+			// was shown
+			toFront();
+			requestFocus();
+			find.requestFocus();
 			return;
+		}
 		else
 		{
 			GUIUtilities.saveGeometry(this,"search");

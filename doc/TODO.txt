@@ -1,8 +1,14 @@
 TO DO
 
-- consider using NameSpace.clear() sometimes
+- rename MacOS.jar
 - fix stylesheet problem
 - $ doesn't find last -- gnu.regexp bug
+- support multi-screen systems properly
+  - windows need to be created on the same screen as their parent if
+    possible.
+  - setLocationRelativeTo(): ok
+  - loadGeometry(): bad
+  - dockable windows
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names
@@ -11,7 +17,6 @@ TO DO
 - C+ENTER 1 ...
 - idea for fixing buffer property issues: BufferProp class
 - getCenterPoint()
-- support multi-screen systems properly
 - rollover toolbar buttons option
 - fix page up/page down
 - jdk 1.4: popups in wrong location
@@ -84,7 +89,6 @@ TO DO
 - custom stylesheet: no xmlns
 - eval-for-selected-lines doesn't work with rectangular selection
 - how to handle S+0-9?
-- formatting problems in user's guide in table cells
 - finish persistent splits code
 - aborts not always fired
 - globalColors setting:
