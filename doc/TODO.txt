@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- document lack of C+e C+e
 - control drag doesn't kill existing selection
 - drag and drop: start drag and cancel, caret can be left in a strange
   place

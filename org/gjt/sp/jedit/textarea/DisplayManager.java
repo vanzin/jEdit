@@ -1485,7 +1485,6 @@ loop:		for(;;)
 				/* update fold visibility map. */
 				int starti = fvmget(startLine);
 				int endi = fvmget(startLine + numLines);
-				System.err.println(starti + "," + endi);
 
 				/* both have same visibility; just remove
 				 * anything in between. */
