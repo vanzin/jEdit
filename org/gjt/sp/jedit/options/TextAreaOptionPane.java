@@ -97,13 +97,13 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			jEdit.getColorProperty("view.lineHighlightColor")),
 			GridBagConstraints.VERTICAL);
 
-		/* Bracket highlight */
-		bracketHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".bracketHighlight"));
-		bracketHighlight.setSelected(jEdit.getBooleanProperty(
-			"view.bracketHighlight"));
-		addComponent(bracketHighlight,bracketHighlightColor = new ColorWellButton(
-			jEdit.getColorProperty("view.bracketHighlightColor")),
+		/* Structure highlight */
+		structureHighlight = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".structureHighlight"));
+		structureHighlight.setSelected(jEdit.getBooleanProperty(
+			"view.structureHighlight"));
+		addComponent(structureHighlight,structureHighlightColor = new ColorWellButton(
+			jEdit.getColorProperty("view.structureHighlightColor")),
 			GridBagConstraints.VERTICAL);
 
 		/* EOL markers */
@@ -178,10 +178,10 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setColorProperty("view.lineHighlightColor",
 			lineHighlightColor.getSelectedColor());
-		jEdit.setBooleanProperty("view.bracketHighlight",bracketHighlight
+		jEdit.setBooleanProperty("view.structureHighlight",structureHighlight
 			.isSelected());
-		jEdit.setColorProperty("view.bracketHighlightColor",
-			bracketHighlightColor.getSelectedColor());
+		jEdit.setColorProperty("view.structureHighlightColor",
+			structureHighlightColor.getSelectedColor());
 		jEdit.setBooleanProperty("view.eolMarkers",eolMarkers
 			.isSelected());
 		jEdit.setColorProperty("view.eolMarkerColor",
@@ -210,8 +210,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private ColorWellButton multipleSelectionColor;
 	private JCheckBox lineHighlight;
 	private ColorWellButton lineHighlightColor;
-	private JCheckBox bracketHighlight;
-	private ColorWellButton bracketHighlightColor;
+	private JCheckBox structureHighlight;
+	private ColorWellButton structureHighlightColor;
 	private JCheckBox eolMarkers;
 	private ColorWellButton eolMarkerColor;
 	private JCheckBox wrapGuide;

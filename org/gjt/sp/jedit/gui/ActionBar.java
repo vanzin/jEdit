@@ -391,6 +391,7 @@ public class ActionBar extends JPanel
 					else if(keyCode == KeyEvent.VK_TAB)
 					{
 						complete(true);
+						evt.consume();
 					}
 					else if(keyCode == KeyEvent.VK_ESCAPE)
 					{

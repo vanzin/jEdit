@@ -276,6 +276,9 @@ Ken Turner and Ollie Rutherfurd for contributing to this release.
 
 - Fixed status bar display for prefixes longer than three keys.
 
+- Pressing TAB in the action bar on JDK 1.3 would cause it to lose
+  focus.
+
 }}}
 {{{ API Changes
 
@@ -294,6 +297,13 @@ Ken Turner and Ollie Rutherfurd for contributing to this release.
 - Case-sensitivity is now determined on a per-filesystem basis, instead
   of always being on when running on Windows or MacOS X. To have your
   VFS be case-insensitive, define the CASE_INSENSITIVE_CAP.
+
+- Added generic structure matching API for presenting the user a
+  consistent interface for bracket matching, XML tag matching, BEGIN/END
+  matching, etc.
+
+  Simply write an implementation of StructureMatcher and add it to the
+  text area with JEditTextArea.addStructureMatcher().
 
 }}}
 

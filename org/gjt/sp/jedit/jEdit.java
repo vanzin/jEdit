@@ -1934,6 +1934,7 @@ public class jEdit
 			{
 				editPanes[i].saveCaretInfo();
 			}
+			_view = _view.next;
 		}
 
 		Buffer buffer = buffersFirst;
