@@ -3,12 +3,11 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- drop client.newView setting
+- inseting lines broken
+- insert-literal broken with \n and \t
 - magic up/down is broken
-- finish rect select keyboard extend
-- nextLineRequested broken -- needs refactoring
 - closing lots of files is slow
-- protect all uses of show/hideWaitCursor() in try/finally
-- document all uses of show/hideWaitCursor() in try/finally
 - autoscroll down is slower than up if !lastLinePartial
 - propertiesChanged() closes dockables
 - left-bias rects broken with up/down
