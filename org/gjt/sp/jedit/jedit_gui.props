@@ -82,7 +82,10 @@ plugin-manager.icon=Plugins.png
 help.icon=Help.png
 
 #{{{ Icon list for tool bar editor
-icons=Copy.png \
+icons=ArrowL.png \
+	ArrowR.png \
+	Copy.png \
+	CopyToBuffer.png \
 	CurrentDir.png \
 	Cut.png \
 	Drive.png \
@@ -1651,8 +1654,10 @@ style-editor.bgColor=Background color:
 #{{{ Help viewer
 helpviewer.title=jEdit Help
 helpviewer.url=Location:
-helpviewer.back=Back
-helpviewer.forward=Forward
+helpviewer.back.label=Back
+helpviewer.back.icon=ArrowL.png
+helpviewer.forward.label=Forward
+helpviewer.forward.icon=ArrowR.png
 
 helpviewer.toc.welcome=Welcome to jEdit
 helpviewer.toc.misc=Miscellaneous Documentation
