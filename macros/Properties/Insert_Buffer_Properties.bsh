@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.gui.JCheckBoxList;
 
 BufferLocalPropertiesDialog(View view){
 
+	this.view = view;
 	buffer = view.getTextArea().getBuffer();
 	mode = buffer.getMode().name;
 
