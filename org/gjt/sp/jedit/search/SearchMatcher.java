@@ -1,6 +1,6 @@
 /*
  * SearchMatcher.java - Abstract string matcher interface
- * Copyright (C) 1999, 2001 Slava Pestov
+ * Copyright (C) 1999, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,13 +38,15 @@ public interface SearchMatcher
 	 * @param end True if the end of the segment is the end of the buffer
 	 * @param firstTime If false and the search string matched at the start
 	 * offset with length zero, automatically find next match
+	 * @param reverse If true, searching will be performed in a backward
+	 * direction.
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.0pre3
+	 * @since jEdit 4.1pre7
 	 */
 	int[] nextMatch(CharIndexed text, boolean start, boolean end,
-		boolean firstTime);
+		boolean firstTime, boolean reverse);
 
 	/**
 	 * Returns the specified text, with any substitution specified

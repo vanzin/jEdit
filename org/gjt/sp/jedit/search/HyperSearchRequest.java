@@ -247,7 +247,8 @@ loop:			for(int counter = 0; ; counter++)
 				buffer.getText(offset,end - offset,text);
 				int[] match = matcher.nextMatch(
 					new CharIndexedSegment(text,false),
-					startOfLine,endOfLine,counter == 0);
+					startOfLine,endOfLine,counter == 0,
+					false);
 				if(match == null)
 					break loop;
 

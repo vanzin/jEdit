@@ -41,27 +41,15 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * Creates a new string literal matcher.
 	 */
 	public BoyerMooreSearchMatcher(String pattern, String replace,
-		boolean ignoreCase, boolean reverseSearch,
-		boolean beanshell, BshMethod replaceMethod)
+		boolean ignoreCase, boolean beanshell, BshMethod replaceMethod)
 	{
 		if (ignoreCase)
 			this.pattern = pattern.toUpperCase().toCharArray();
 		else
 			this.pattern = pattern.toCharArray();
 
-		if (reverseSearch)
-		{
-			char[] tmp = new char[this.pattern.length];
-			for (int i = 0; i < tmp.length; i++)
-			{
-				tmp[i] = this.pattern[this.pattern.length - (i + 1)];
-			}
-			this.pattern = tmp;
-		}
-
 		this.replace = replace;
 		this.ignoreCase = ignoreCase;
-		this.reverseSearch = reverseSearch;
 
 		if(beanshell && replaceMethod != null && replace.length() != 0)
 		{
@@ -87,15 +75,17 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 * @param end True if the end of the segment is the end of the buffer
 	 * @param firstTime If false and the search string matched at the start
 	 * offset with length zero, automatically find next match
+	 * @param reverse If true, searching will be performed in a backward
+	 * direction.
 	 * @return an array where the first element is the start offset
 	 * of the match, and the second element is the end offset of
 	 * the match
-	 * @since jEdit 4.0pre3
+	 * @since jEdit 4.1pre7
 	 */
 	public int[] nextMatch(CharIndexed text, boolean start, boolean end,
-		boolean firstTime)
+		boolean firstTime, boolean reverse)
 	{
-		int pos = match(text);
+		int pos = match(text,reverse);
 
 		if (pos == -1)
 		{
@@ -139,7 +129,7 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 	 *   http://www.cs.utexas.edu/users/moore/best-ideas/string-searching/
 	 *
 	 */
-	public int match(CharIndexed text)
+	public int match(CharIndexed text, boolean reverse)
 	{
 		// position variable for pattern test position
 		int pos;
@@ -183,7 +173,8 @@ SEARCH:
 					ch = Character.toUpperCase(ch);
 
 				// pattern test
-				if (ch != pattern[pos])
+				if ((reverse ? ch != pattern[pattern_end - pos]
+					: ch != pattern[pos]))
 				{
 					// character mismatch, determine how many characters to skip
 
@@ -216,7 +207,6 @@ SEARCH:
 	private char[] pattern;
 	private String replace;
 	private boolean ignoreCase;
-	private boolean reverseSearch;
 	private boolean beanshell;
 	private BshMethod replaceMethod;
 	private NameSpace replaceNS;
