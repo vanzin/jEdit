@@ -113,13 +113,19 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 			Font font = getFont();
 
 			FontMetrics fm = getFontMetrics(getFont());
-			int x = (getIcon() == null ? 0
-				: getIcon().getIconWidth()
-				+ getIconTextGap());
+			int x, y;
+			if(getIcon() == null)
+			{
+				x = 0;
+				y = fm.getAscent() + 2;
+			}
+			else
+			{
+				x = getIcon().getIconWidth() + getIconTextGap();
+				y = Math.max(fm.getAscent() + 2,16);
+			}
 			g.setColor(getForeground());
-			g.drawLine(x,fm.getAscent() + 2,
-				x + fm.stringWidth(getText()),
-				fm.getAscent() + 2);
+			g.drawLine(x,y,x + fm.stringWidth(getText()),y);
 		}
 
 		super.paintComponent(g);

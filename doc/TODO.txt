@@ -6,8 +6,6 @@ and quirks that I need to fix eventually.
 + before 4.1pre1:
 
 - fix fsb infinite requests problem
-- easier way of inserting newlines in replacement string -- or just
-  document this?
 - silly bug that creates selections on click -- how is this even possible?
 - scroll to caret _still_ jumps around?
 - plugin manager: install plugins, no restart, install another: deps bad
@@ -19,7 +17,6 @@ and quirks that I need to fix eventually.
 - focus problem with hypersearch in floating window?
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
-- getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
 
 + later:
@@ -41,7 +38,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
-- more flexible definition of a paragraph, paragraph folding
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity
