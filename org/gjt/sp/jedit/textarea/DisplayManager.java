@@ -1503,7 +1503,7 @@ loop:		for(;;)
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
 		{
-			System.err.println("Invalidate " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
+			//System.err.println("Invalidate " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
 
 			if(textArea.getDisplayManager() == DisplayManager.this
 				&& end != 0 && buffer.isLoaded())
