@@ -650,7 +650,7 @@ public class View extends JFrame implements EBComponent
 		case KeyEvent.KEY_PRESSED:
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyPressed(evt);
-			else if(!KeyEventWorkaround.isModifier(evt.getKeyCode()))
+			else if(KeyEventWorkaround.isBindable(evt.getKeyCode()))
 			{
 				/* boolean */ focusOnTextArea = false;
 				if(prefixFocusOwner != null)
@@ -1290,7 +1290,15 @@ public class View extends JFrame implements EBComponent
 				buffers.addElement(buffer);
 		}
 
-		StringBuffer title = new StringBuffer(jEdit.getProperty("view.title"));
+		StringBuffer title = new StringBuffer();
+
+		/* On Mac OS X, apps are not supposed to show their name in the
+		title bar. */
+		if(!OperatingSystem.isMacOS())
+			title.append(jEdit.getProperty("view.title"));
+
+		boolean unsavedChanges = false;
+
 		for(int i = 0; i < buffers.size(); i++)
 		{
 			if(i != 0)
@@ -1300,9 +1308,19 @@ public class View extends JFrame implements EBComponent
 			title.append((showFullPath && !buffer.isNewFile())
 				? buffer.getPath() : buffer.getName());
 			if(buffer.isDirty())
+			{
+				unsavedChanges = true;
 				title.append(jEdit.getProperty("view.title.dirty"));
+			}
 		}
+
 		setTitle(title.toString());
+
+		/* On MacOS X, the close box is shown in a different color if
+		an app has unsaved changes. For details, see
+		http://developer.apple.com/qa/qa2001/qa1146.html */
+		final String WINDOW_MODIFIED = "windowModified";
+		getRootPane().putClientProperty(WINDOW_MODIFIED,unsavedChanges);
 	} //}}}
 
 	//}}}

@@ -41,7 +41,10 @@ class TextAreaTransferHandler extends TransferHandler
 	/* I assume that there can be only one drag operation at the time */
 	private static JEditTextArea dragSource;
 	private static boolean compoundEdit;
+	private static boolean sameTextArea;
+	private static int insertPos;
 
+	//{{{ createTransferable
 	protected Transferable createTransferable(JComponent c)
 	{
 		Log.log(Log.DEBUG,this,"createTransferable()");
@@ -53,13 +56,15 @@ class TextAreaTransferHandler extends TransferHandler
 			dragSource = textArea;
 			return new TextAreaSelection(textArea);
 		}
-	}
+	} //}}}
 
+	//{{{ getSourceActions
 	public int getSourceActions(JComponent c)
 	{
 		return COPY_OR_MOVE;
-	}
+	} //}}}
 
+	//{{{ importData
 	public boolean importData(JComponent c, Transferable t)
 	{
 		Log.log(Log.DEBUG,this,"Import data");
@@ -91,8 +96,9 @@ class TextAreaTransferHandler extends TransferHandler
 		c.requestFocus();
 
 		return returnValue;
-	}
+	} //}}}
 
+	//{{{ importFile
 	private boolean importFile(JComponent c, Transferable t)
 		throws Exception
 	{
@@ -126,8 +132,9 @@ class TextAreaTransferHandler extends TransferHandler
 		editPane.requestFocus();
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ importText
 	private boolean importText(JComponent c, Transferable t)
 		throws Exception
 	{
@@ -145,6 +152,8 @@ class TextAreaTransferHandler extends TransferHandler
 			textArea.getBuffer().beginCompoundEdit();
 		}
 
+		sameTextArea = (textArea == dragSource);
+
 		int caret = textArea.getCaretPosition();
 		Selection s = textArea.getSelectionAtOffset(caret);
 
@@ -153,20 +162,39 @@ class TextAreaTransferHandler extends TransferHandler
 		nothing. */
 		if(s != null)
 		{
-			if(textArea == dragSource)
+			if(sameTextArea)
 				return false;
 			/* if user drops into a selection,
 			replace selection */
+			int startPos = s.start;
 			textArea.setSelectedText(s,str);
+			textArea.setSelection(new Selection.Range(startPos,startPos+str.length()));
 		}
 		/* otherwise just insert the text */
 		else
-			textArea.getBuffer().insert(caret,str);
+		{
+			if (sameTextArea)
+			{
+				insertPos = caret;
+				Selection[] selections = textArea.getSelection();
+				for (int i=0;i<selections.length;i++)
+				{
+					if (selections[i].end<insertPos)
+						insertPos-=(selections[i].end-selections[i].start);
+				}
+			}
+			else
+			{
+				textArea.getBuffer().insert(caret,str);
+				textArea.setSelection(new Selection.Range(caret,caret+str.length()));
+			}
+		}
 		textArea.scrollToCaret(true);
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ exportDone
 	protected void exportDone(JComponent c, Transferable t,
 		int action)
 	{
@@ -185,10 +213,30 @@ class TextAreaTransferHandler extends TransferHandler
 				DataFlavor.stringFlavor))
 			{
 				Log.log(Log.DEBUG,this,"=> String");
-				if(action == MOVE)
-					textArea.setSelectedText(null,false);
+				if (sameTextArea)
+				{
+					if(action == MOVE)
+						textArea.setSelectedText(null,false);
+
+					try
+					{
+						String str = (String)t.getTransferData(DataFlavor.stringFlavor);
+						textArea.getBuffer().insert(insertPos,str);
+						textArea.setSelection(new Selection.Range(insertPos,insertPos+str.length()));
+					}
+					catch(Exception e)
+					{
+						Log.log(Log.DEBUG,this,"exportDone in sameTextArea");
+						Log.log(Log.DEBUG,this,e);
+					}
+				}
 				else
-					textArea.selectNone();
+				{
+					if(action == MOVE)
+						textArea.setSelectedText(null,false);
+					else
+						textArea.selectNone();
+				}
 			}
 		}
 		finally
@@ -201,8 +249,9 @@ class TextAreaTransferHandler extends TransferHandler
 		}
 
 		dragSource = null;
-	}
+	} //}}}
 
+	//{{{ canImport
 	public boolean canImport(JComponent c, DataFlavor[] flavors)
 	{
 		JEditTextArea textArea = (JEditTextArea)c;
@@ -229,7 +278,7 @@ class TextAreaTransferHandler extends TransferHandler
 		Log.log(Log.DEBUG,this,"canImport() returning "
 			+ returnValue);
 		return returnValue;
-	}
+	} //}}}
 
 	//{{{ TextAreaSelection class
 	static class TextAreaSelection extends StringSelection

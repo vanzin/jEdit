@@ -2,11 +2,16 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre2
 
+Thanks to Bertalan Fodor, Jarek Tuszynski, Nicholas O'Leary, and
+Simon Ruggier for contributing to this release.
+
 {{{ Syntax Highlighting
 
 - Updated LilyPond syntax highlighting (Bertalan Fodor).
 
 - Rd syntax highlighting (Jarek Tuszynski).
+
+- Updated ASP syntax highlighting (Simon Ruggier).
 
 }}}
 {{{ Miscellaneous
@@ -26,6 +31,11 @@ JEDIT 4.3 VERSION HISTORY
   - Open in New View
   - Open in New Plain View
   - Open in New Split
+
+- On Mac OS X, the close box is shown with a different appearance if a
+  visible buffer has unsaved changes.
+
+- Dropping text into the text area now selects it (Nicholas O'Leary).
 
 }}}
 {{{ Bug Fixes
