@@ -629,7 +629,7 @@ public class DisplayManager
 
 		notifyScreenLineChanges();
 	} //}}}
-	
+
 	//{{{ setFirstPhysicalLine() method
 	void setFirstPhysicalLine(int amount, int skew)
 	{
@@ -1862,9 +1862,6 @@ loop:		for(;;)
 			// must update screen line counts before we call
 			// notifyScreenLineChanges() since that calls
 			// updateScrollBars() which needs valid info
-			int _firstLine = textArea.getFirstPhysicalLine();
-			int _lastLine = textArea.getLastPhysicalLine();
-
 			int line = delayedUpdateStart;
 			if(!isLineVisible(line))
 				line = getNextVisibleLine(line);

@@ -178,7 +178,7 @@ public class JEditTextArea extends JComponent
 	{
 		return view.getInputHandler();
 	} //}}}
-	
+
 	//{{{ getPainter() method
 	/**
 	 * Returns the object responsible for painting this text area.
@@ -217,7 +217,7 @@ public class JEditTextArea extends JComponent
 	{
 		view.getStatus().setMessageAndClear(msg);
 	} //}}}
-	
+
 	//{{{ isCaretBlinkEnabled() method
 	/**
 	 * Returns true if the caret is blinking, false otherwise.
@@ -1369,7 +1369,7 @@ public class JEditTextArea extends JComponent
 
 	//{{{ selectToMatchingBracket() method
 	/**
-	 * Selects from the bracket at the specified position to the 
+	 * Selects from the bracket at the specified position to the
 	 * corresponding bracket.
 	 * @since jEdit 4.2pre1
 	 */
@@ -1932,7 +1932,7 @@ forward_scan:		do
 				buffer.endCompoundEdit();
 			}
 		}
-		
+
 		return newCaret;
 	} //}}}
 
@@ -4754,7 +4754,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		boolean invalidateScreenLineCounts = false;
 
-		String oldWrap = wrap;
 		int oldWrapMargin = wrapMargin;
 
 		wrap = buffer.getStringProperty("wrap");
@@ -5152,7 +5151,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			caretScreenLine = newCaretScreenLine;
 
 			invalidateSelectedLines();
-			
+
 			// When the user is typing, etc, we don't want the caret
 			// to blink
 			blink = true;
@@ -5201,7 +5200,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(match != null)
 			invalidateLineRange(match.startLine,match.endLine);
 	} //}}}
-	
+
 	//{{{ startDragAndDrop() method
 	void startDragAndDrop(InputEvent evt, boolean copy)
 	{
@@ -5445,7 +5444,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 			insertTab();
 	} //}}}
-	
+
 	//{{{ doWordWrap() method
 	/**
 	 * Does hard wrap.
@@ -5659,7 +5658,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		text = text.replace('\t',' ');
 
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
-			"view.status.bracket",new Object[] { 
+			"view.status.bracket",new Object[] {
 			new Integer(match.startLine + 1), text }));
 	} //}}}
 

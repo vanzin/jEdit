@@ -688,12 +688,12 @@ class ChunkCache
 						length = textArea.getLineLength(physicalLine) - offset + 1;
 				}
 
-				int expected = textArea.displayManager
+				/*int expected = textArea.displayManager
 					.getScreenLineCount(physicalLine);
 				if(screenLines != expected)
 				{
 					Log.log(Log.ERROR,this,"Inconsistent screen line counts: " + screenLines + ", " + expected);
-				}
+				}*/
 			}
 			else
 			{

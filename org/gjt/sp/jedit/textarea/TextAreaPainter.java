@@ -1004,7 +1004,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int lastLine, int[] physicalLines, int[] start,
 			int[] end, int y, int lineHeight)
 		{
-			DisplayManager displayManager = textArea.displayManager;
 			if(textArea.wrapMargin != 0
 				&& !textArea.wrapToWidth
 				&& isWrapGuidePainted())
@@ -1019,7 +1018,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public String getToolTipText(int x, int y)
 		{
-			DisplayManager displayManager = textArea.displayManager;
 			if(textArea.wrapMargin != 0
 				&& !textArea.wrapToWidth
 				&& isWrapGuidePainted())
