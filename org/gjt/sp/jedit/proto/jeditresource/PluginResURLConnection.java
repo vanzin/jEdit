@@ -1,5 +1,8 @@
 /*
  * PluginResURLConnection.java - jEdit plugin resource URL connection
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,9 +22,11 @@
 
 package org.gjt.sp.jedit.proto.jeditresource;
 
+//{{{ Imports
 import java.io.*;
 import java.net.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class PluginResURLConnection extends URLConnection
 {
@@ -100,16 +105,17 @@ public class PluginResURLConnection extends URLConnection
 	{
 		if(name.equals("content-type"))
 		{
-			if(resource.endsWith(".html"))
+			String lcResource = resource.toLowerCase();
+			if(lcResource.endsWith(".html"))
 				return "text/html";
-			else if(resource.endsWith(".txt"))
+			else if(lcResource.endsWith(".txt"))
 				return "text/plain";
-			else if(resource.endsWith(".rtf"))
+			else if(lcResource.endsWith(".rtf"))
 				return "text/rtf";
-			else if(resource.endsWith(".gif"))
+			else if(lcResource.endsWith(".gif"))
 				return "image/gif";
-			else if(resource.endsWith(".jpg")
-				|| resource.endsWith(".jpeg"))
+			else if(lcResource.endsWith(".jpg")
+				|| lcResource.endsWith(".jpeg"))
 				return "image/jpeg";
 			else
 				return null;

@@ -290,6 +290,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				listModel.removeElementAt(index);
 				listModel.insertElementAt(selected,index-1);
 				list.setSelectedIndex(index-1);
+				list.ensureIndexIsVisible(index-1);
 			}
 			else if(source == moveDown)
 			{
@@ -298,6 +299,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				listModel.removeElementAt(index);
 				listModel.insertElementAt(selected,index+1);
 				list.setSelectedIndex(index+1);
+				list.ensureIndexIsVisible(index+1);
 			}
 		}
 	}

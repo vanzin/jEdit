@@ -52,6 +52,12 @@ class SettingsReloader implements EBComponent
 			path = path.substring(jEditHome.length());
 		else if(settingsDirectory != null && path.startsWith(settingsDirectory))
 			path = path.substring(settingsDirectory.length());
+		else
+		{
+			// not in settings directory or jEdit home directory.
+			// no need to reload anything.
+			return;
+		}
 
 		if(path.startsWith(File.separator) || path.startsWith("/"))
 			path = path.substring(1);

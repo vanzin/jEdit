@@ -2,9 +2,6 @@ TO DO
 
 + before 4.0pre1:
 
-- fold level breakage
-- context and tool bar option panes: move up and move down: scroll to
-  item
 - switching from narrowed buffer, to one with caret at already zero might
   cause problems, since physFirstLine won't be updated?
 - inserting line after closed fold issues -- fix in OffsetManager
