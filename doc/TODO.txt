@@ -1,5 +1,10 @@
 TO DO
 
+- lastKeyword variable probably not needed?
+- MARK_FOLLOWING, MARK_PREVIOUS need attention
+- S+ENTER: fucked
+- focus problem with hypersearch in floating window?
+- test that 'save as' updates browser
 - INVALID is broken
 - escapes don't work
 - background tokens are probably broken

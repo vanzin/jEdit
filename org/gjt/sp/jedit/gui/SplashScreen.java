@@ -115,6 +115,7 @@ public class SplashScreen extends Canvas
 		{
 			offscreenImg = createImage(size.width,size.height);
 			offscreenGfx = offscreenImg.getGraphics();
+			offscreenGfx.setFont(getFont());
 		}
 
 		offscreenGfx.setColor(Color.gray);

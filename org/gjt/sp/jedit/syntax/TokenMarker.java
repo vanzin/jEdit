@@ -75,12 +75,30 @@ public class TokenMarker
 		ruleSets = new Hashtable(64);
 	} //}}}
 
+	//{{{ getName() method
+	public String getName()
+	{
+		return name;
+	} //}}}
+
+	//{{{ setName() method
+	public void setName(String name)
+	{
+		if (name == null)
+			throw new NullPointerException();
+
+		this.name = name;
+		rulePfx = name.concat("::");
+	} //}}}
+
 	//{{{ addRuleSet() method
 	public void addRuleSet(String setName, ParserRuleSet rules)
 	{
-		if (rules == null) return;
+		if (rules == null)
+			return;
 
-		if (setName == null) setName = "MAIN";
+		if (setName == null)
+			setName = "MAIN";
 
 		ruleSets.put(rulePfx.concat(setName), rules);
 
@@ -127,8 +145,8 @@ public class TokenMarker
 				}
 			}
 
-			// store external ParserRuleSet in the local hashtable for
-			// faster lookups later
+			// store external ParserRuleSet in the local hashtable
+			// for faster lookups later
 			ruleSets.put(setName, rules);
 		}
 
@@ -141,21 +159,6 @@ public class TokenMarker
 			return rules;
 	} //}}}
 
-	//{{{ getName() method
-	public String getName()
-	{
-		return name;
-	} //}}}
-
-	//{{{ setName() method
-	public void setName(String name)
-	{
-		if (name == null) throw new NullPointerException();
-
-		this.name = name;
-		rulePfx = name.concat("::");
-	} //}}}
-
 	//{{{ markTokens() method
 	/**
 	 * Do not call this method directly; call Buffer.markTokens() instead.
@@ -163,11 +166,17 @@ public class TokenMarker
 	public LineContext markTokens(LineContext prevContext,
 		TokenHandler tokenHandler, Segment line)
 	{
+		//{{{ Set up some instance variables
+		// this is to avoid having to pass around lots and lots of
+		// parameters.
 		this.tokenHandler = tokenHandler;
 		this.line = line;
+
+		lastOffset = lastKeyword = line.offset;
+		lineLength = line.count + line.offset;
+
 		context = new LineContext();
 
-		//{{{ Set up context
 		if(prevContext == null)
 			context.rules = getMainRuleSet();
 		else
@@ -177,23 +186,53 @@ public class TokenMarker
 			context.rules = prevContext.rules;
 		} //}}}
 
-		lastOffset = lastKeyword = line.offset;
-		lineLength = line.count + line.offset;
-
+		//{{{ Main parser loop
 		int terminateChar = context.rules.getTerminateChar();
 		int searchLimit = (terminateChar >= 0
 			&& terminateChar < line.count)
 			? terminateChar + line.offset
 			: line.count + line.offset;
 
-		mainLoop(line.offset,searchLimit);
+main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
+		{
+			// check for end of delegate
+			if(context.parent != null)
+			{
+				if(checkDelegateEnd())
+					continue main_loop;
+			}
 
-		//{{{ check for keywords at the line's end
+			if(context.inRule != null)
+			{
+				System.err.println("in rule--can't happen?");
+				System.err.println(context.inRule.action
+					& MAJOR_ACTIONS);
+			} 
+
+			// Check every rule
+			ParserRule rule = context.rules.getRules(line.array[pos]);
+			while(rule != null)
+			{
+				// stop checking rules if there was a match
+				if (handleRule(rule,false))
+					continue main_loop;
+
+				rule = rule.next;
+			}
+
+			escaped = false;
+		} //}}}
+
+		//{{{ Mark all remaining characters
 		if(context.inRule == null)
 			markKeyword(lastKeyword, lineLength);
-		//}}}
+		if(context.parent != null && (context.parent.inRule.action
+			& EOL_SPAN) == EOL_SPAN)
+		{
+			context = context.parent;
+			context.inRule = null;
+		}
 
-		//{{{ mark all remaining characters
 		if(lastOffset != lineLength)
 		{
 			if (context.inRule == null)
@@ -201,15 +240,6 @@ public class TokenMarker
 				tokenHandler.handleToken(lineLength - lastOffset,
 					context.rules.getDefault(),
 					context.rules);
-			}
-			else if (
-				(context.inRule.action & SPAN) == SPAN &&
-				(context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) != 0
-			)
-			{
-				tokenHandler.handleToken(lineLength - lastOffset,Token.INVALID,
-					context.rules);
-				context.inRule = null;
 			}
 			else
 			{
@@ -230,7 +260,6 @@ public class TokenMarker
 	} //}}}
 
 	//{{{ Private members
-	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
 
 	//{{{ Instance variables
 	private Hashtable ruleSets;
@@ -251,94 +280,43 @@ public class TokenMarker
 	private boolean escaped;
 	//}}}
 
-	//{{{ mainLoop() method
-	private void mainLoop(int offset, int searchLimit)
-	{
-main_loop:	for(pos = offset; pos < searchLimit; pos++)
-		{
-			// check for end of delegate
-			if(context.parent != null)
-			{
-				if(checkDelegateEnd())
-					continue main_loop;
-			}
-
-			//{{{ now check every rule
-			ParserRule rule = context.rules.getRules(line.array[pos]);
-			while(rule != null)
-			{
-				// stop checking rules if there was a match and go to next pos
-				if (handleRule(rule,false))
-				{
-					continue main_loop;
-				}
-
-				rule = rule.next;
-			} //}}}
-
-			escaped = false;
-		}
-	} //}}}
-
 	//{{{ checkDelegateEnd() method
 	private boolean checkDelegateEnd()
 	{
 		LineContext tempContext = context;
 		context = context.parent;
 		boolean b = handleRule(context.inRule,true);
+		
 		context = tempContext;
 
 		if (b)
 		{
-			if (escaped)
+			if (pos > lastOffset)
 			{
-				escaped = false;
+				markKeyword(lastKeyword,pos);
+
+				tokenHandler.handleToken(pos - lastOffset,
+					context.rules.getDefault(),
+					context.rules);
+			}
+
+			context = (LineContext)context.parent.clone();
+
+			if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+			{
+				tokenHandler.handleToken(pattern.count,
+					context.rules.getDefault(),
+					context.rules);
 			}
 			else
 			{
-				if (pos != lastOffset)
-				{
-					if (context.inRule == null)
-					{
-						markKeyword(lastKeyword,pos);
-
-						tokenHandler.handleToken(pos - lastOffset,
-							context.rules.getDefault(),
-							context.rules);
-					}
-					else if ((context.inRule.action & (NO_LINE_BREAK | NO_WORD_BREAK)) == 0)
-					{
-						tokenHandler.handleToken(pos - lastOffset,
-							context.inRule.token,
-							context.rules);
-					}
-					else
-					{
-						tokenHandler.handleToken(pos - lastOffset,
-							Token.INVALID,
-							context.rules);
-					}
-				}
-
-				context = (LineContext)context.parent.clone();
-
-				if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
-				{
-					tokenHandler.handleToken(pattern.count,
-						context.rules.getDefault(),
-						context.rules);
-				}
-				else
-				{
-					tokenHandler.handleToken(pattern.count,
-						context.inRule.token,
-						context.rules);
-				}
-
-				context.inRule = null;
-
-				lastKeyword = lastOffset = pos + pattern.count;
+				tokenHandler.handleToken(pattern.count,
+					context.inRule.token,
+					context.rules);
 			}
+
+			context.inRule = null;
+			lastKeyword = lastOffset = pos + pattern.count;
 
 			// move pos to last character of match sequence
 			pos += (pattern.count - 1);
@@ -391,11 +369,10 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 		if (lineLength - pos < pattern.count)
 			return false;
 
-		char a, b;
 		for (int k = 0; k < pattern.count; k++)
 		{
-			a = pattern.array[pattern.offset + k];
-			b = line.array[pos + k];
+			char a = pattern.array[pattern.offset + k];
+			char b = line.array[pos + k];
 
 			// break out and check the next rule if there is a mismatch
 			if (
@@ -410,41 +387,44 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 			) return false;
 		}
 
+		//{{{ Check for an escape sequence
 		if ((checkRule.action & IS_ESCAPE) == IS_ESCAPE)
 		{
 			escaped = !escaped;
 			pos += pattern.count - 1;
-			return true;
 		}
 		else if (escaped)
 		{
 			escaped = false;
 			pos += pattern.count - 1;
-			return true;
-		}
-
-		//{{{ handle soft spans
-		if (context.inRule != checkRule && context.inRule != null
-			&& (context.inRule.action & SOFT_SPAN) != 0)
-		{
-			if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
-			{
-				tokenHandler.handleToken(pos - lastOffset, Token.INVALID,
-					context.rules);
-			}
-			else
-			{
-				tokenHandler.handleToken(pos - lastOffset,
-					context.inRule.token,
-					context.rules);
-			}
-			lastOffset = lastKeyword = pos;
-			context.inRule = null;
 		} //}}}
-
-		//{{{ not inside a rule
-		if (context.inRule == null)
+		//{{{ Not inside a rule
+		else if (context.inRule == null)
 		{
+			//{{{ handle soft spans
+			if (context.parent != null
+				&& (context.parent.inRule.action
+				& (NO_WORD_BREAK | MARK_FOLLOWING)) != 0
+				&& checkRule.token == Token.WHITESPACE)
+			{
+				if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
+				{
+					tokenHandler.handleToken(pos - lastOffset,
+						Token.INVALID,
+						context.rules);
+				}
+				else
+				{
+					tokenHandler.handleToken(pos - lastOffset,
+						context.inRule.token,
+						context.rules);
+				}
+				lastOffset = lastKeyword = pos;
+				context = context.parent;
+				context.inRule = null;
+				return true;
+			} //}}}
+
 			if ((checkRule.action & AT_LINE_START) == AT_LINE_START)
 			{
 				if (
@@ -463,12 +443,6 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 			{
 				lastKeyword = pos + pattern.count;
 
-				// XXX: deal with this
-				/* if ((checkRule.action & WHITESPACE) == WHITESPACE)
-				{
-					return false; // break out of inner for loop to check next char
-				} */
-
 				// mark previous sequence as NULL (plain text)
 				if (lastOffset < pos)
 				{
@@ -486,7 +460,6 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 				tokenHandler.handleToken(pattern.count,checkRule.token,
 					context.rules);
 				lastOffset = pos + pattern.count;
-
 				break;
 			//}}}
 			//{{{ SPAN
@@ -585,27 +558,18 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 			lastKeyword = lastOffset;
 
 			pos += (pattern.count - 1); // move pos to last character of match sequence
-			return true; // break out of inner for loop to check next char
-		}
-		//}}}
-		//{{{ inside a SPAN
-		else if ((checkRule.action & SPAN) == SPAN)
-		{
-			System.err.println("can't happen?");
-			return true; // break out of inner for loop to check next char
-		}//}}}
+			 // break out of inner for loop to check next char
+		} //}}}
 
-		return false;
+		return true;
 	} //}}}
 
 	//{{{ markKeyword() method
 	private void markKeyword(int start, int end)
 	{
-		KeywordMap keywords = context.rules.getKeywords();
-
 		int len = end - start;
 
-		//{{{ do digits.
+		//{{{ Do digits.
 		if(context.rules.getHighlightDigits())
 		{
 			boolean digit = false;
@@ -666,6 +630,9 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 			}
 		} //}}}
 
+		//{{{ Do keywords
+		KeywordMap keywords = context.rules.getKeywords();
+
 		if(keywords != null)
 		{
 			byte id = keywords.lookup(line, start, len);
@@ -680,8 +647,12 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 				}
 				tokenHandler.handleToken(len,id,context.rules);
 				lastKeyword = lastOffset = end;
+				return;
 			}
-		}
+		} //}}}
+
+		// XXX: put plain 'insertion of default token' here to
+		// avoid duplication
 	} //}}}
 
 	//}}}
@@ -700,7 +671,7 @@ main_loop:	for(pos = offset; pos < searchLimit; pos++)
 				+ ", interned: " + intern.size();
 		} //}}}
 
-		static Hashtable intern = new Hashtable();
+		private static Hashtable intern = new Hashtable();
 
 		public LineContext parent;
 		public ParserRule inRule;

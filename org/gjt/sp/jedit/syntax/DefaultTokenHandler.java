@@ -78,7 +78,7 @@ public class DefaultTokenHandler implements TokenHandler
 		{
 			if(lastToken == null)
 				id = Token.NULL;
-			else
+			else if(lastToken.rules == rules)
 			{
 				lastToken.length += length;
 				return;
