@@ -104,14 +104,24 @@ public class SplashScreen extends Canvas
 
 	public synchronized void paint(Graphics g)
 	{
-		g.setColor(Color.black);
-		g.drawRect(0,0,getSize().width - 1,getSize().height - 1);
+		Dimension size = getSize();
 
-		g.drawImage(image,1,1,this);
+		if(offscreenImg == null)
+		{
+			offscreenImg = createImage(size.width,size.height);
+			offscreenGfx = offscreenImg.getGraphics();
+		}
+
+		offscreenGfx.setColor(Color.black);
+		offscreenGfx.drawRect(0,0,size.width - 1,size.height - 1);
+
+		offscreenGfx.drawImage(image,1,1,this);
 
 		// XXX: This should not be hardcoded
-		g.setColor(new Color(87,87,114));
-		g.fillRect(8,198,(436 * progress) / 7,16);
+		offscreenGfx.setColor(new Color(87,87,114));
+		offscreenGfx.fillRect(8,198,(436 * progress) / 7,16);
+
+		g.drawImage(offscreenImg,0,0,this);
 
 		notify();
 	}
@@ -119,5 +129,7 @@ public class SplashScreen extends Canvas
 	// private members
 	private Window win;
 	private Image image;
+	private Image offscreenImg;
+	private Graphics offscreenGfx;
 	private int progress;
 }
