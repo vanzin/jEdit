@@ -12,6 +12,9 @@ contributing to this release.
 
 - Updated Pascal syntax highlighting (Barry Carr).
 
+- It is now possible to customize the metal look and feel fonts under
+  JDK 1.5.
+
 }}}
 {{{ Bug Fixes
 

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2003 Slava Pestov
+ * Copyright (C) 2001, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,20 +70,17 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
 
-		if(!OperatingSystem.hasJava15())
-		{
-			/* Primary Metal L&F font */
-			primaryFont = new FontSelector(jEdit.getFontProperty(
-				"metal.primary.font"));
-			addComponent(jEdit.getProperty("options.appearance.primaryFont"),
-				primaryFont);
+		/* Primary Metal L&F font */
+		primaryFont = new FontSelector(jEdit.getFontProperty(
+			"metal.primary.font"));
+		addComponent(jEdit.getProperty("options.appearance.primaryFont"),
+			primaryFont);
 
-			/* Secondary Metal L&F font */
-			secondaryFont = new FontSelector(jEdit.getFontProperty(
-				"metal.secondary.font"));
-			addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
-				secondaryFont);
-		}
+		/* Secondary Metal L&F font */
+		secondaryFont = new FontSelector(jEdit.getFontProperty(
+			"metal.secondary.font"));
+		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
+			secondaryFont);
 
 		updateEnabled();
 
@@ -145,11 +142,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		if(!OperatingSystem.hasJava15())
-		{
-			jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
-			jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
-		}
+		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
+		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
@@ -201,9 +195,6 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
-		if(OperatingSystem.hasJava15())
-			return;
-
 		String className = lfs[lookAndFeel.getSelectedIndex()]
 			.getClassName();
 

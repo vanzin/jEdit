@@ -3173,7 +3173,9 @@ public class jEdit
 	//{{{ fontStyleToString() method
 	private static String fontStyleToString(int style)
 	{
-		if(style == Font.BOLD)
+		if(style == 0)
+			return "PLAIN";
+		else if(style == Font.BOLD)
 			return "BOLD";
 		else if(style == Font.ITALIC)
 			return "ITALIC";
