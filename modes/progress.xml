@@ -2,20 +2,30 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- Progress v8 mode by Patrick Tingen -->
+<!-- Progress v9.1d mode by Patrick Tingen          -->
+<!-- ---------------------------------------------- -->
+<!-- 2002-10-08 Gerben Wieringa added some keywords -->
+<!-- 2003-02-18 Patrick Tingen  added some keywords -->
+<!-- ---------------------------------------------- -->
+
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="boxComment" VALUE="**" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
 		<!-- Normal comments. -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
 		</SPAN>
 
+		<!-- Literal values -->
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
@@ -26,25 +36,35 @@
 			<END>"</END>
 		</SPAN>
 
-        <!-- Include files parameters -->
+      <!-- Include files parameters -->
 		<MARK_FOLLOWING TYPE="LABEL">&amp;</MARK_FOLLOWING>
 
-
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">(</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">^</SEQ>
+		<SEQ TYPE="NULL">@</SEQ>
+		<SEQ TYPE="NULL">:</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
 
-		<KEYWORDS>
-		    <LITERAL2>false</LITERAL2>
-		    <LITERAL2>no</LITERAL2>
-		    <LITERAL2>true</LITERAL2>
-		    <LITERAL2>yes</LITERAL2>
+		<KEYWORDS IGNORE_CASE="TRUE">
+		    <!-- Logicals. -->
+            <LITERAL2>false</LITERAL2>
+            <LITERAL2>no</LITERAL2>
+            <LITERAL2>true</LITERAL2>
+            <LITERAL2>yes</LITERAL2>
 
 		    <!-- Preprocessor keywords. -->
             <COMMENT2>&amp;GLOB</COMMENT2>
@@ -461,7 +481,7 @@
             <KEYWORD1>WORKFILE</KEYWORD1>
             <KEYWORD1>WRITE</KEYWORD1>
 
-            <!-- Progress Attributes & Properties. -->
+          <!-- Progress Attributes & Properties. -->
             <KEYWORD2>ACCELERATOR</KEYWORD2>
             <KEYWORD2>ADM-DATA</KEYWORD2>
             <KEYWORD2>APPL-ALERT-BOXES</KEYWORD2>
@@ -764,7 +784,6 @@
             <KEYWORD2>WORD-WRAP</KEYWORD2>
             <KEYWORD2>YEAR-OFFSET</KEYWORD2>
 
-
 		    <!-- Progress Methods. -->
             <KEYWORD3>ADD-EVENTS-PROCEDURE</KEYWORD3>
             <KEYWORD3>ADD-FIRST</KEYWORD3>
@@ -859,7 +878,6 @@
             <KEYWORD3>SET-WAIT-STATE</KEYWORD3>
             <KEYWORD3>VALIDATE</KEYWORD3>
 
-
 		    <!-- Progress Functions. -->
             <FUNCTION>ABSOLUTE</FUNCTION>
             <FUNCTION>ACCUM</FUNCTION>
@@ -932,6 +950,7 @@
             <FUNCTION>GET-UNSIGNED-SHORT</FUNCTION>
             <FUNCTION>GO-PENDING</FUNCTION>
             <FUNCTION>GT</FUNCTION>
+            <FUNCTION>HEADER</FUNCTION>
             <FUNCTION>INDEX</FUNCTION>
             <FUNCTION>INPUT</FUNCTION>
             <FUNCTION>INTEGER</FUNCTION>
@@ -1037,3 +1056,4 @@
 
 	</RULES>
 </MODE>
+

@@ -498,7 +498,8 @@ public class OffsetManager
 	{
 		lineInfo[line] = ((lineInfo[line] & ~(END_MASK
 			| FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK)) | end);
-		// what is the point of this
+		// what is the point of this -- DO NOT UNCOMMENT THIS IT
+		// CAUSES A PERFORMANCE LOSS; nextLineRequested becomes true
 		//lineContext[line] = null;
 	} //}}}
 

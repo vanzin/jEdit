@@ -221,7 +221,8 @@ public class ParserRuleSet
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + mode.getName() + "::"
+		return getClass().getName() + "[" + (mode == null ? ""
+			: mode.getName()) + "::"
 			+ name + "]";
 	} //}}}
 

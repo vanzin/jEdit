@@ -1,5 +1,20 @@
 JEDIT 4.1 VERSION HISTORY
 
+* Version 4.1final
+
++ Enhancements:
+
+- Updated Progress syntax highlighting (Patrick Tingen).
+
++ Bug Fixes:
+
+- Fixed possible ArrayIndexOutOfBoundsException when using
+  "Collapse All Folds" or "Expand Folds With Level" due to a regression
+  from pre11.
+
+- Cached token marker state was not properly cleared when switching
+  modes due to a regression from pre10.
+
 * Version 4.1pre11
 
 Thanks to Kris Kopicki and Stefan Kost for contributing to this release.
