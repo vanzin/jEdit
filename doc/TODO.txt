@@ -2,6 +2,7 @@ TO DO
 
 + 4.0.1:
 
+- make fs color regexp error more intuitive
 - need to investigate:
   - scroll to caret _still_ jumps around?
   - mouse clicks not working?
