@@ -361,11 +361,7 @@ public class ManagePanel extends JPanel
 			for(int i = 0; i < newPlugins.length; i++)
 			{
 				Entry e = new Entry(newPlugins[i]);
-				if(!hideLibraries.isSelected()
-					|| e.clazz != null)
-				{
-					entries.add(e);
-				}
+				entries.add(e);
 			}
 
 			sort(sortType);

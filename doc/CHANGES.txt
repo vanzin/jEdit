@@ -64,6 +64,9 @@ KeyEventTranslator.setModifierMapping(
 - Fix a possible ArrayIndexOutOfBoundsException with zero-height text
   areas.
 
+- Fix some problems when deleting all visible lines with folding or
+  narrowing active.
+
 }}}
 
 }}}

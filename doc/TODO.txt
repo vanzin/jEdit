@@ -7,15 +7,6 @@ and quirks that I need to fix eventually.
 
 - metal fonts in jdk 1.5.0beta2
 - drag and drop, not at caret position?
-[error] AWT-EventQueue-0: java.lang.ArrayIndexOutOfBoundsException: -1
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.fvmget(DisplayManager.java:739)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.getNextVisibleLine(DisplayManager.java:164)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager$ScrollLineCount.reset(DisplayManager.java:1115)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager._notifyScreenLineChanges(DisplayManager.java:656)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.DisplayManager.init(DisplayManager.java:578)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.setBuffer(JEditTextArea.java:304)
-[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.EditPane.setBuffer(EditPane.java:105)
-
 - sidekick out of memory error!
 [error] ChunkCache: BUG: skew=1,out.size()=0
 [error] ChunkCache: BUG: skew=1,out.size()=1
