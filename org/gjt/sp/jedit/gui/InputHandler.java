@@ -184,7 +184,6 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void resetLastActionCount()
 	{
-		lastAction = null;
 		lastActionCount = 0;
 	} //}}}
 
@@ -193,7 +192,6 @@ public abstract class InputHandler extends KeyAdapter
 	 * Invokes the specified action, repeating and recording it as
 	 * necessary.
 	 * @param action The action
-	 * @param source The event source
 	 */
 	public void invokeAction(EditAction action)
 	{
@@ -203,12 +201,15 @@ public abstract class InputHandler extends KeyAdapter
 			buffer.endCompoundEdit(); */
 
 		// remember the last executed action
-		if(lastAction == action)
-			lastActionCount++;
-		else
+		if(!action.noRememberLast())
 		{
-			lastAction = action;
-			lastActionCount = 1;
+			if(lastAction == action)
+				lastActionCount++;
+			else
+			{
+				lastAction = action;
+				lastActionCount = 1;
+			}
 		}
 
 		// remember old values, in case action changes them
@@ -273,6 +274,15 @@ public abstract class InputHandler extends KeyAdapter
 		}
 	} //}}}
 
+	//{{{ invokeLastAction() method
+	public void invokeLastAction()
+	{
+		if(lastAction == null)
+			view.getToolkit().beep();
+		else
+			invokeAction(lastAction);
+	} //}}}
+
 	//{{{ Protected members
 	private static final int REPEAT_COUNT_THRESHOLD = 20;
 
@@ -289,7 +299,7 @@ public abstract class InputHandler extends KeyAdapter
 	//{{{ userInput() method
 	protected void userInput(char ch)
 	{
-		lastAction = null;
+		lastActionCount = 0;
 
 		if(readNextChar != null)
 			invokeReadNextChar(ch);

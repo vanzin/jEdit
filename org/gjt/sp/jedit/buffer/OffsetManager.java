@@ -43,6 +43,8 @@ import org.gjt.sp.util.Log;
  */
 public class OffsetManager
 {
+	public static final long MAX_DISPLAY_COUNT = 8;
+
 	/* Having all the info packed into a long is not very OO and makes the
 	 * code somewhat more complicated, but it saves a lot of memory.
 	 *
@@ -378,6 +380,13 @@ public class OffsetManager
 		}
 	} //}}}
 
+	//{{{ invalidateScreenLineCounts() method
+	public void invalidateScreenLineCounts()
+	{
+		for(int i = 0; i < lineCount; i++)
+			lineInfo[i] &= ~SCREEN_LINES_VALID_MASK;
+	} //}}}
+
 	//{{{ addLineEndOffset() method
 	public static void addLineEndOffset(LongArray endOffsets, int offset)
 	{
@@ -470,18 +479,16 @@ public class OffsetManager
 				// for following fold level calculations
 				lineInfo[startLine + i] = (offset
 					+ endOffsets.get(i))
-					| visible
-					| (1L << SCREEN_LINES_SHIFT);
+					| visible;
 			}
 
 			Anchor anchor = anchors;
 			while(anchor != null)
 			{
-				if(anchor.physicalLine > startLine
+				if(anchor.physicalLine >= startLine
 					&& (visible & (1L << anchor.index)) != 0)
 				{
 					anchor.physicalLine += numLines;
-					anchor.scrollLine += numLines;
 				}
 				anchor = anchor.next;
 			}
@@ -897,6 +904,13 @@ loop:		for(;;)
 	 */
 	public static abstract class Anchor
 	{
+		public Anchor(int physicalLine, int scrollLine, int index)
+		{
+			this.physicalLine = physicalLine;
+			this.scrollLine = scrollLine;
+			this.index = index;
+		}
+
 		public Anchor next;
 
 		public int physicalLine;

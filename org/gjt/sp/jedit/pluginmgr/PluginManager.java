@@ -57,9 +57,10 @@ public class PluginManager extends JFrame implements EBComponent
 			updater = new InstallPanel(this,true));
 		tabPane.addTab(jEdit.getProperty("install-plugins.title"),
 			installer = new InstallPanel(this,false));
-		tabPane.addChangeListener(new ListUpdater());
 
 		content.add(BorderLayout.CENTER,tabPane);
+
+		tabPane.addChangeListener(new ListUpdater());
 
 		/* Create the buttons */
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -136,24 +137,12 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ getPluginList() method
 	public PluginList getPluginList()
 	{
-		if(jEdit.getSettingsDirectory() == null
-			&& jEdit.getJEditHome() == null)
-		{
-			GUIUtilities.error(this,"no-settings",null);
-			return null;
-		}
-
-		if(pluginList == null)
-		{
-			pluginList = new PluginListDownloadProgress(this)
-				.getPluginList();
-
-		}
-
 		return pluginList;
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Variables
 	private JTabbedPane tabPane;
 	private JButton done;
 	private JButton cancel;
@@ -164,6 +153,23 @@ public class PluginManager extends JFrame implements EBComponent
 	private PluginList pluginList;
 
 	private static PluginManager instance;
+	//}}}
+
+	//{{{ updatePluginList() method
+	private void updatePluginList()
+	{
+		if(jEdit.getSettingsDirectory() == null
+			&& jEdit.getJEditHome() == null)
+		{
+			GUIUtilities.error(this,"no-settings",null);
+		}
+		else if(pluginList == null)
+		{
+			pluginList = new PluginListDownloadProgress(this)
+				.getPluginList();
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -195,6 +201,7 @@ public class PluginManager extends JFrame implements EBComponent
 				{
 					public void run()
 					{
+						updatePluginList();
 						installer.updateModel();
 						updater.updateModel();
 					}

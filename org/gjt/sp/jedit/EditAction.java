@@ -148,6 +148,17 @@ public abstract class EditAction
 		return false;
 	} //}}}
 
+	//{{{ noRememberLast() method
+	/**
+	 * Returns if this edit action should not be remembered as the most
+	 * recently invoked action.
+	 * @since jEdit 4.2pre1
+	 */
+	public boolean noRememberLast()
+	{
+		return false;
+	} //}}}
+
 	//{{{ getCode() method
 	/**
 	 * Returns the BeanShell code that will replay this action.

@@ -228,8 +228,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addSeparator()
 	{
-		if(y != 0)
-			addComponent(Box.createVerticalStrut(6));
+		addComponent(Box.createVerticalStrut(6));
 
 		JSeparator sep = new JSeparator(JSeparator.HORIZONTAL);
 
@@ -240,10 +239,12 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		cons.fill = GridBagConstraints.BOTH;
 		cons.anchor = GridBagConstraints.WEST;
 		cons.weightx = 1.0f;
-		cons.insets = new Insets(1,0,1,0);
+		//cons.insets = new Insets(1,0,1,0);
 
 		gridBag.setConstraints(sep,cons);
 		add(sep);
+
+		addComponent(Box.createVerticalStrut(6));
 	} //}}}
 
 	//{{{ addSeparator() method

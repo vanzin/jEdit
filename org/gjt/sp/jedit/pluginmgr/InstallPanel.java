@@ -94,7 +94,7 @@ class InstallPanel extends JPanel
 		add(BorderLayout.CENTER,split);
 
 		/* Create buttons */
-		Box buttons = new Box(BoxLayout.Y_AXIS);
+		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		buttons.add(new InstallButton());
 		buttons.add(Box.createHorizontalStrut(12));
@@ -144,12 +144,6 @@ class InstallPanel extends JPanel
 	{
 		private ArrayList entries = new ArrayList();
 		private int sortType = EntryCompare.CATEGORY;
-
-		//{{{ Constructor
-		public PluginTableModel()
-		{
-			update();
-		} //}}}
 
 		//{{{ getColumnClass() method
 		public Class getColumnClass(int columnIndex)
@@ -421,22 +415,6 @@ class InstallPanel extends JPanel
 				}
 				setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
 			}
-		}
-	} //}}}
-
-	//{{{ UpdatesButton class
-	class UpdatesButton extends JCheckBox implements ActionListener
-	{
-		public UpdatesButton()
-		{
-			super(jEdit.getProperty("install-plugins.show-updates"));
-			addActionListener(this);
-		}
-
-		public void actionPerformed(ActionEvent evt)
-		{
-			jEdit.setBooleanProperty("plugin-manager.showAll",!isSelected());
-			pluginModel.update();
 		}
 	} //}}}
 

@@ -3,11 +3,13 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- goToBuffer(): need to focus edit pane in question
 - after new display: optimize & match old performance
 - switching between soft wrap and not needs to update anchors, etc
 - scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
+  - display manager: handle buffer not visible case
   - OffsetMgr.beginScreenLineOperations();
   - OffsetMgr.endScreenLineOperations(); // notifies anchors of changes.
   - end anchor:
@@ -33,8 +35,6 @@ and quirks that I need to fix eventually.
 - new plugin mgr:
   - human readable strings in source.... entry.status
   - ask before selecting dependencies & 'don't show again'
-  - component spacing off in install dialog
-  - option pane: use a combo box
   - mirror change: refresh download locations
 - canonPath: get rid of ..
 - update horizontal scroll width immediately on buffer switch
@@ -50,6 +50,7 @@ and quirks that I need to fix eventually.
 - hypersearch: open in new split
 - option to not follow symbolic links
 - C+e C+c long block of text
+  - soft wrap display provides fix: need nextLineRequested event
 - buffer.mode=foo in action bar does not work
 - changing fileset parameters should modify the file set not create a
   new one
@@ -60,7 +61,6 @@ and quirks that I need to fix eventually.
 - C+ENTER 3 C+2
 - tab in action bar
 - beanshell: invokeAction() function
-- global options: split pane position suboptimal
 - perl: q{}, etc.
 - position hold still doesn't work
 - changes above a narrow cause display anamolies
@@ -74,7 +74,6 @@ and quirks that I need to fix eventually.
   Appearance, Loading and Saving, General panes a bit confusing
 - rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold
-- global options: don't use card layout
 
 - need a new jEditLauncher
 - plugin tutorial:

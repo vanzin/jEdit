@@ -519,6 +519,7 @@ utils=vfs.browser \
       %troubleshooting \
       - \
       action-bar \
+      last-action \
       - \
       buffer-options \
       global-options
@@ -530,6 +531,7 @@ no-recent-dirs.label=No Recent Directories
 jedit-directory.label=$jEdit Home Directory
 settings-directory.label=$Settings Directory
 action-bar.label=$Action Bar
+last-action.label=Re$peat Last Action
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 

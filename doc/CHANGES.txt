@@ -122,6 +122,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   - Note that property names are undocumented. You can get a list using
     the Misc->Properties->jEdit Properties macro.
 
+- Added Utilities->Repeat Last Action command, bound to C+SPACE.
+
 - jEdit now remembers if more than one view was open, and if the view
   was split.
 
@@ -207,6 +209,8 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 
 - Fixed I/O thread deadlock that could manifest when using the FTP
   plugin.
+
+- Fixed initial position of options dialog box divider.
 
 }}}
 {{{ API Changes

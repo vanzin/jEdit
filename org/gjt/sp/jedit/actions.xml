@@ -424,6 +424,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="last-action" NO_RECORD="TRUE" NO_REMEMBER_LAST="TRUE">
+	<CODE>
+		view.getInputHandler().invokeLastAction();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="left-docking-area">
 	<CODE>
 		wm.getLeftDockingArea().showMostRecent();

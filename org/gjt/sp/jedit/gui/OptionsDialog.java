@@ -71,14 +71,14 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ ok() method
 	public void ok()
 	{
-		jEdit.setProperty(name + ".last",currentPane);
+		jEdit.setProperty(name + ".last",currentPane.getName());
 		ok(true);
 	} //}}}
 
 	//{{{ cancel() method
 	public void cancel()
 	{
-		jEdit.setProperty(name + ".last",currentPane);
+		jEdit.setProperty(name + ".last",currentPane.getName());
 		dispose();
 	} //}}}
 
@@ -185,14 +185,19 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		optionPane.init();
 
-		((CardLayout)cardPanel.getLayout()).show(cardPanel, name);
+		if(currentPane != null)
+			stage.remove(currentPane.getComponent());
+		currentPane = optionPane;
+		stage.add(BorderLayout.CENTER,currentPane.getComponent());
+		stage.revalidate();
+		stage.repaint();
 
-		// workaround...
-		addNotify();
+		if(!isShowing())
+			addNotify();
 
 		updateSize();
 
-		currentPane = name;
+		currentPane = optionPane;
 	} //}}}
 
 	//{{{ Protected members
@@ -228,8 +233,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 		if(firstPane == null)
 			firstPane = name;
 
-		cardPanel.add(pane.getComponent(), name);
-
 		parent.addOptionPane(pane);
 	} //}}}
 
@@ -241,11 +244,11 @@ public abstract class OptionsDialog extends EnhancedDialog
 	private String name;
 	private JSplitPane splitter;
 	private JTree paneTree;
-	private JPanel cardPanel;
+	private JPanel stage;
 	private JButton ok;
 	private JButton cancel;
 	private JButton apply;
-	private String currentPane;
+	private OptionPane currentPane;
 	private String firstPane;
 	//}}}
 
@@ -258,7 +261,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		cardPanel = new JPanel(new CardLayout());
+		stage = new JPanel(new BorderLayout());
 
 		paneTree = new JTree(createOptionTreeModel());
 		paneTree.setVisibleRowCount(1);
@@ -275,7 +278,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			scroller,cardPanel);
+			scroller,stage);
 		content.add(splitter, BorderLayout.CENTER);
 
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -313,7 +316,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 		if(pane == null || !selectPane(rootNode,pane))
 			selectPane(rootNode,firstPane);
 
-		splitter.setDividerLocation(paneTree.getPreferredSize().width);
+		splitter.setDividerLocation(paneTree.getPreferredSize().width
+			+ scroller.getVerticalScrollBar().getPreferredSize()
+			.width);
 
 		GUIUtilities.loadGeometry(this,name);
 		int dividerLocation = jEdit.getIntegerProperty(name + ".splitter",-1);

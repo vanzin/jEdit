@@ -307,7 +307,7 @@ public class ManagePanel extends JPanel
 		} //}}}
 	} //}}}
 
-	//{{{ TextRenderer
+	//{{{ TextRenderer class
 	class TextRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
@@ -455,7 +455,7 @@ public class ManagePanel extends JPanel
 		}
 	} //}}}
 
-	//{{{ HeaderMouseHandler()
+	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)

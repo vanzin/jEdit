@@ -35,7 +35,7 @@ public class BeanShellAction extends EditAction
 {
 	//{{{ BeanShellAction constructor
 	public BeanShellAction(String name, String code, String isSelected,
-		boolean noRepeat, boolean noRecord)
+		boolean noRepeat, boolean noRecord, boolean noRememberLast)
 	{
 		super(name);
 
@@ -43,6 +43,7 @@ public class BeanShellAction extends EditAction
 		this.isSelected = isSelected;
 		this.noRepeat = noRepeat;
 		this.noRecord = noRecord;
+		this.noRememberLast = noRememberLast;
 
 		/* Some characters that we like to use in action names
 		 * ('.', '-') are not allowed in BeanShell identifiers. */
@@ -115,6 +116,17 @@ public class BeanShellAction extends EditAction
 		return noRecord;
 	} //}}}
 
+	//{{{ noRememberLast() method
+	/**
+	 * Returns if this edit action should not be remembered as the most
+	 * recently invoked action.
+	 * @since jEdit 4.2pre1
+	 */
+	public boolean noRememberLast()
+	{
+		return noRememberLast;
+	} //}}}
+
 	//{{{ getCode() method
 	public String getCode()
 	{
@@ -124,6 +136,7 @@ public class BeanShellAction extends EditAction
 	//{{{ Private members
 	private boolean noRepeat;
 	private boolean noRecord;
+	private boolean noRememberLast;
 	private String code;
 	private String isSelected;
 	private BshMethod cachedCode;
