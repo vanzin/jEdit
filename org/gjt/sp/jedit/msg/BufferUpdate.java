@@ -86,6 +86,12 @@ public class BufferUpdate extends EBMessage.NonVetoable
 	 * Buffer saving.
 	 */
 	public static final Object SAVING = "SAVING";
+
+	/**
+	 * Buffer saved.
+	 * @since jEdit 4.0pre4
+	 */
+	public static final Object SAVED = "SAVED";
 	//}}}
 
 	//{{{ BufferUpdate constructor

@@ -34,6 +34,7 @@ import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -1828,7 +1829,7 @@ forward_scan:		do
 			returnValue[i++] = line.intValue();
 		}
 
-		quicksort(returnValue,0,returnValue.length - 1);
+		Arrays.sort(returnValue);
 
 		return returnValue;
 	} //}}}
@@ -4614,43 +4615,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private static boolean multi;
 	private boolean overwrite;
 	//}}}
-
-	//{{{ quicksort() method
-	private static void quicksort(int[] obj, int _start, int _end)
-	{
-		int start = _start;
-		int end = _end;
-
-		int mid = obj[(_start + _end) / 2];
-
-		if(_start > _end)
-			return;
-
-		while(start <= end)
-		{
-			while(start < _end && obj[start] < mid)
-				start++;
-
-			while(end > _start && obj[end] > mid)
-				end--;
-
-			if(start <= end)
-			{
-				int tmp = obj[start];
-				obj[start] = obj[end];
-				obj[end] = tmp;
-
-				start++;
-				end--;
-			}
-		}
-
-		if(_start < end)
-			quicksort(obj,_start,end);
-
-		if(start < _end)
-			quicksort(obj,start,_end);
-	} //}}}
 
 	//{{{ _addToSelection() method
 	private void _addToSelection(Selection addMe)

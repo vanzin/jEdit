@@ -35,6 +35,22 @@ JEDIT 4.0 VERSION HISTORY
   so it should be correct now. Previously, it could be drawn in the
   wrong place if anti-aliasing was enabled
 
++ API Changes
+
+- BufferUpdate.SAVED message type added. Previously, DIRTY_CHANGED could
+  be used for this purpose, but since jEdit now clears the dirty flag
+  when all changes up to a save are undone, doing on-save actions when a
+  DIRTY_CHANGED is received can have unexpected consequences.
+- New method: MiscUtilities.quicksort(List a, Compare a)
+- MiscUtilities.Compare now extends java.util.Comparator (which has the
+  same API)
+- MiscUtilities.quicksort(Object[],Compare) now calls
+  java.util.Arrays.sort()
+- MiscUtilities.quicksort(Object[],Comparator),
+  MiscUtilities.quicksort(List,Comparator) methods added
+- The above changes are completely binary compatible, and they make
+  jEdit's sorting API more consistent with the Java collections API.
+
 * Version 4.0pre3
 
 jEdit now requires Java 2 version 1.3 or later! Java 2 version 1.2 and

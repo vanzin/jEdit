@@ -529,6 +529,10 @@ public class Buffer implements EBComponent
 
 					EditBus.send(new BufferUpdate(Buffer.this,
 						view,BufferUpdate.DIRTY_CHANGED));
+
+					// new message type introduced in 4.0pre4
+					EditBus.send(new BufferUpdate(Buffer.this,
+						view,BufferUpdate.SAVED));
 				}
 			}
 		});
