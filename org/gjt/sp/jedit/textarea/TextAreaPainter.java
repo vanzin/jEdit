@@ -877,7 +877,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				.getWidth();
 			double width2 = str.length() * maxWidth;
 			if(minWidth == maxWidth
-				&& width1 == width2)
+				&& (int)width1 == (int)width2)
 			{
 				Log.log(Log.DEBUG,this,"Using monospaced font optimization: " + font);
 				returnValue = new Integer(maxWidth);
