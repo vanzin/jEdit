@@ -346,6 +346,9 @@
    is usually empty. It only contains files while the plugin manager is
    downloading a plugin. For information about the plugin manager,
    see <xref linkend="using-plugins" />.</para></listitem>
+   <listitem><para><filename>printspec</filename> - a binary file which
+   stores printing settings when running under Java 2 version 1.4.
+   </para></listitem>
    <listitem><para><filename>properties</filename> - a plain text file which
    stores the majority of jEdit's settings.</para></listitem>
    <listitem><para><filename>recent.xml</filename> - an XML file which stores
