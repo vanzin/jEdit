@@ -68,6 +68,21 @@ Thanks to Gerd Knops for contributing to this release.
 
 - 'Expand Fold Fully' command didn't work.
 
++ API Changes:
+
+- It is no longer necessary to define labels for dockable window
+  -toggle actions. The label is now automatically created by appending
+  "(Toggle)" to the non-toggle action's label.
+
+- Old-style dockable window API no longer supported; the following
+  symbols have been removed:
+
+  EditBus.addToNamedList() method
+  EditBus.removeFromNamedList() method
+  EditBus.getNamedLists() method
+  CreateDockableWindow class
+  DockableWindow interface
+
 * Version 4.1pre1
 
 Thanks to Alexander Maryanovsky, Alfonso Garcia, Claude Eisenhut,

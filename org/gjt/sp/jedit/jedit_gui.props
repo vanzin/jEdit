@@ -47,6 +47,9 @@ action-set.plugin=Plugin: {0}
 view.docking.close-tooltip=Hides the current docked window
 view.docking.menu-tooltip=Shows a list of docked windows
 
+view.docking.toggle.label={0} (Toggle)
+view.docking.float.label={0} (New Floating Instance)
+
 directory.not-local=Cannot list directories on remote filesystems
 directory.no-files=No Files
 
@@ -324,6 +327,8 @@ select-block.label=$Select Code Block
 match-bracket.label=Go to $Matching Bracket
 prev-bracket.label=Go to $Previous Bracket
 next-bracket.label=Go to $Next Bracket
+#}}}
+
 #}}}
 
 #{{{ Search menu
@@ -613,10 +618,6 @@ select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
 hypersearch-results.label=HyperSearch Results
-log-viewer-toggle.label=Activity Log Toggle
-vfs.browser-toggle.label=File System Browser Toggle
-hypersearch-results-toggle.label=HyperSearch Results Toggle
-io-progress-monitor-toggle.label=I/O Progress Monitor Toggle
 #}}}
 
 #{{{ View stuff

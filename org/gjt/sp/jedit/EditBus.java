@@ -1,5 +1,8 @@
 /*
  * EditBus.java - The EditBus
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -35,6 +38,7 @@ import org.gjt.sp.util.Log;
  */
 public class EditBus
 {
+	//{{{ addToBus() method
 	/**
 	 * Adds a component to the bus. It will receive all messages sent
 	 * on the bus.
@@ -44,11 +48,12 @@ public class EditBus
 	{
 		synchronized(components)
 		{
-			components.addElement(comp);
+			components.add(comp);
 			copyComponents = null;
 		}
-	}
+	} //}}}
 
+	//{{{ removeFromBus() method
 	/**
 	 * Removes a component from the bus.
 	 * @param comp The component to remove
@@ -57,11 +62,12 @@ public class EditBus
 	{
 		synchronized(components)
 		{
-			components.removeElement(comp);
+			components.remove(comp);
 			copyComponents = null;
 		}
-	}
+	} //}}}
 
+	//{{{ getComponents() method
 	/**
 	 * Returns an array of all components connected to the bus.
 	 */
@@ -71,13 +77,14 @@ public class EditBus
 		{
 			if (copyComponents == null)
 			{
-				copyComponents = new EBComponent[components.size()];
-				components.copyInto(copyComponents);
+				copyComponents = (EBComponent[])components.toArray(
+					new EBComponent[components.size()]);
 			}
 			return copyComponents;
 		}
-	}
+	} //}}}
 
+	//{{{ send() method
 	/**
 	 * Sends a message to all components on the bus.
 	 * The message will be sent to all components in turn, with the
@@ -105,84 +112,13 @@ public class EditBus
 				Log.log(Log.ERROR,EditBus.class,t);
 			}
 		}
-	}
+	} //}}}
 
-	/**
-	 * @deprecated Do not use
-	 */
-	public static Object[] getNamedList(Object tag)
-	{
-		Object[] list = (Object[])listArrays.get(tag);
-		if(list != null)
-			return list;
-
-		Vector listVector = (Vector)listVectors.get(tag);
-		if(listVector != null)
-		{
-			list = new Object[listVector.size()];
-			listVector.copyInto(list);
-			listArrays.put(tag,list);
-			return list;
-		}
-
-		return null;
-	}
-
-	/**
-	 * @deprecated Do not use
-	 */
-	public static Enumeration getNamedLists()
-	{
-		return listVectors.keys();
-	}
-
-	/**
-	 * @deprecated For dockable windows, write a <code>dockables.xml</code>
-	 * file instead. For ErrorList error sources, use the appropriate
-	 * ErrorList APIs.
-	 */
-	public static void addToNamedList(Object tag, Object entry)
-	{
-		if(tag.equals(org.gjt.sp.jedit.gui.DockableWindow.DOCKABLE_WINDOW_LIST))
-		{
-			// clumsy backwards compatibility hack
-			org.gjt.sp.jedit.gui.DockableWindowManager
-				.registerDockableWindow((String)entry,
-				null,false,jEdit.getActionSets()[0]);
-		}
-		else
-		{
-			Vector listVector = (Vector)listVectors.get(tag);
-			if(listVector == null)
-			{
-				listVector = new Vector();
-				listVectors.put(tag,listVector);
-			}
-
-			listVector.addElement(entry);
-			listArrays.remove(tag);
-		}
-	}
-
-	/**
-	 * @deprecated Do not use.
-	 */
-	public static void removeFromNamedList(Object tag, Object entry)
-	{
-		Vector listVector = (Vector)listVectors.get(tag);
-		if(listVector == null)
-			return;
-
-		listVector.removeElement(entry);
-		listArrays.remove(tag);
-	}
-
-	// private members
-	private static Vector components = new Vector();
+	//{{{ Private members
+	private static ArrayList components = new ArrayList();
 	private static EBComponent[] copyComponents;
-	private static Hashtable listVectors = new Hashtable();
-	private static Hashtable listArrays = new Hashtable();
 
 	// can't create new instances
 	private EditBus() {}
+	//}}}
 }

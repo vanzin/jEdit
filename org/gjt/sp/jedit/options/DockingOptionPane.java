@@ -160,17 +160,6 @@ class WindowTableModel extends AbstractTableModel
 	{
 		windows = new Vector();
 
-		// old dockable window API compatibility code
-		Object[] list = EditBus.getNamedList(DockableWindow.DOCKABLE_WINDOW_LIST);
-		if(list != null)
-		{
-			for(int i = 0; i < list.length; i++)
-			{
-				windows.addElement(new Entry((String)list[i]));
-			}
-		}
-		// end compatibility code
-
 		String[] dockables = DockableWindowManager.getRegisteredDockableWindows();
 		for(int i = 0; i < dockables.length; i++)
 		{
