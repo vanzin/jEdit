@@ -22,28 +22,21 @@ CDATA DSSSL> ]>
 
 (define %visual-acuity% "presbyopic")
 
-
-(element funcsynopsis (process-children))
-
-(element void (empty-sosofo))
-
 (define %funcsynopsis-style% 'ansi)
 (element void (literal "();"))
 
-(element funcprototype
+(element (listitem funcsynopsis funcprototype)
   (let ((paramdefs (select-elements (children (current-node))
-                                    (normalize "paramdef"))))
+				    (normalize "paramdef"))))
     (make sequence
-      (make paragraph
-        start-indent: (if (equal? (gi (parent)) (normalize "listitem"))
-                          0
-                          (inherited-start-indent))
-        font-family-name: %mono-font-family%
-        (process-children))
+	font-family-name: %mono-font-family%
+        font-size: (* (inherited-font-size)
+		%verbatim-size-factor%)
+	(process-children)
       (if (equal? %funcsynopsis-style% 'kr)
-          (with-mode kr-funcsynopsis-mode
-            (process-node-list paramdefs))
-          (empty-sosofo)))))
+	  (with-mode kr-funcsynopsis-mode
+	    (process-node-list paramdefs))
+	  (empty-sosofo)))))
 
 (define %verbatim-size-factor% 0.85)
 

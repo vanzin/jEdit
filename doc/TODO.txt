@@ -2,10 +2,7 @@ TO DO
 
 + before 4.0final (or pre9?):
 
-- filter out ALT_GRAPH, DEAD_ACUTE, ...
 - tips: don't mention old wheelmouse
-- escape in panel window container -> focus back to text area?
-- fix stylesheet problem
 - investigate I/O threads
 - aiob in findMatchingBracket() -- offset >= seg.offset+seg.count? or
   offset == -1?
@@ -18,6 +15,7 @@ TO DO
 
 + in 4.1:
 
+- escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - regexp search problems:
   - hypersearch for .*$: only finds random lines

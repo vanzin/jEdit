@@ -16,6 +16,7 @@ JEDIT 4.0 VERSION HISTORY
 - If a plugin depended on a plugin whose jEdit version requirement was
   higher than the installed jEdit version, the 'Update Plugins' command
   would throw a NullPointerException
+- Fixed stylesheet problem in the PDF output
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 
