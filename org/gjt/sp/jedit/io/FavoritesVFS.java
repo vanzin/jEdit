@@ -194,8 +194,7 @@ public class FavoritesVFS extends VFS
 	{
 		FavoritesEntry(String path, int type)
 		{
-			super(MiscUtilities.getFileName(path),path,
-				PROTOCOL + ":" + path,type,0,false);
+			super(path,path,PROTOCOL + ":" + path,type,0,false);
 		}
 
 		public String getExtendedAttribute(String name)

@@ -445,11 +445,12 @@ public class View extends JFrame implements EBComponent
 	{
 		if(Debug.DUMP_KEY_EVENTS && calledFromTextArea)
 			Log.log(Log.DEBUG,this,"Key event: " + evt);
-		evt = _preprocessKeyEvent(evt);
-		if(evt == null)
-			return;
 
 		if(getTextArea().hasFocus() && !calledFromTextArea)
+			return;
+
+		evt = _preprocessKeyEvent(evt);
+		if(evt == null)
 			return;
 
 		switch(evt.getID())

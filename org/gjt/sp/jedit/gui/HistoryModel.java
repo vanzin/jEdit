@@ -257,6 +257,8 @@ public class HistoryModel extends AbstractListModel
 
 		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history.xml");
 
+		loaded = true;
+
 		if(models == null)
 			models = new Hashtable();
 

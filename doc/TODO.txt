@@ -3,9 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- (foo<ENTER>
 - if a plugin's stop() throws an exception, infinite loop?
-- \n in replace string
 - option for b&w print
 - document deep indent
 - tall caret and tab
@@ -21,7 +19,6 @@ and quirks that I need to fix eventually.
 - macro record: doesn't respect overwrite
 - C+ENTER 3 C+2
 - class loading problems
-- numeric keypad with jdk 1.3
 - optional dependencies
 - broken activity log autoscroll
 - bizarre dockable window manager button layout problem

@@ -749,6 +749,7 @@ public class JEditTextArea extends JComponent
 		if(point == null)
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
 				+ ",visibleLines=" + visibleLines
+				+ ",physicalLine=" + line
 				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
 				+ ",lastPhysicalLine=" + getLastPhysicalLine());
 		point.x += extraEndVirt;

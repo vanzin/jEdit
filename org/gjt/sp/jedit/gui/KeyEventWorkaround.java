@@ -99,6 +99,7 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_SUBTRACT:
 			case KeyEvent.VK_DECIMAL:
 			case KeyEvent.VK_DIVIDE:
+			System.err.println(evt);
 				System.err.println("foo");
 				last = LAST_NUMKEYPAD;
 				return evt;
