@@ -19,7 +19,6 @@
 
 package org.gjt.sp.util;
 
-import javax.swing.text.*;
 import java.io.*;
 import java.util.StringTokenizer;
 
@@ -131,8 +130,19 @@ public class Log
 		{
 			try
 			{
-				stream.write(logDocument.getText(0,
-					logDocument.getLength()));
+				if(wrap)
+				{
+					for(int i = logLineCount; i < log.length; i++)
+					{
+						stream.write(log[i]);
+						stream.write(lineSep);
+					}
+				}
+				for(int i = 0; i < logLineCount; i++)
+				{
+					stream.write(log[i]);
+					stream.write(lineSep);
+				}
 
 				stream.flush();
 			}
@@ -143,17 +153,6 @@ public class Log
 		}
 
 		Log.stream = stream;
-	}
-
-	/**
-	 * Returns the document where the most recent messages are stored.
-	 * The document of a Swing text area can be set to this to graphically
-	 * view log messages.
-	 * @since jEdit 2.2pre2
-	 */
-	public static Document getLogDocument()
-	{
-		return logDocument;
 	}
 
 	/**
@@ -258,7 +257,9 @@ public class Log
 
 	// private members
 	private static Object LOCK = new Object();
-	private static Document logDocument;
+	private static String[] log;
+	private static int logLineCount;
+	private static boolean wrap;
 	private static int level = WARNING;
 	private static Writer stream;
 	private static String lineSep;
@@ -272,7 +273,7 @@ public class Log
 		realOut = System.out;
 		realErr = System.err;
 
-		logDocument = new PlainDocument();
+		log = new String[MAXLINES];
 		lineSep = System.getProperty("line.separator");
 	}
 
@@ -308,25 +309,16 @@ public class Log
 
 	private static void _log(int urgency, String source, String message)
 	{
-		String urgencyString = "[" + urgencyToString(urgency) + "] ";
-
-		String fullMessage = urgencyString + source + ": " + message;
+		String fullMessage = "[" + urgencyToString(urgency) + "] " + source
+			+ ": " + message;
 
 		try
 		{
-			logDocument.insertString(logDocument.getLength(),
-				fullMessage,null);
-			logDocument.insertString(logDocument.getLength(),
-				"\n",null);
-
-			Element map = logDocument.getDefaultRootElement();
-			int lines = map.getElementCount();
-			if(lines > MAXLINES)
+			log[logLineCount] = fullMessage;
+			if(++logLineCount >= log.length)
 			{
-				Element first = map.getElement(0);
-				Element last = map.getElement(lines - MAXLINES);
-				logDocument.remove(first.getStartOffset(),
-					last.getEndOffset());
+				wrap = true;
+				logLineCount = 0;
 			}
 
 			if(stream != null)
@@ -340,14 +332,12 @@ public class Log
 			e.printStackTrace(realErr);
 		}
 
-		message = urgencyString +  message + '\n';
-
 		if(urgency >= level)
 		{
 			if(urgency == ERROR)
-				realErr.print(message);
+				realErr.println(fullMessage);
 			else
-				realOut.print(message);
+				realOut.println(fullMessage);
 		}
 	}
 

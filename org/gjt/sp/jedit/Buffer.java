@@ -3584,6 +3584,17 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int collapseFolds = getIntegerProperty("collapseFolds",0);
 			offsetMgr.expandFolds(collapseFolds);
 		}
+
+		// Create marker positions
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			int pos = marker.getPosition();
+			if(pos > getLength())
+				marker.setPosition(getLength());
+			marker.removePosition();
+			marker.createPosition();
+		}
 	} //}}}
 
 	//{{{ finishSaving() method
@@ -3685,20 +3696,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ parseBufferLocalProperties() method
 	private void parseBufferLocalProperties()
 	{
-		//{{{ Reset cached properties
-		if(getProperty("tabSize")
-			.equals(mode.getProperty("tabSize")))
-			unsetProperty("tabSize");
-
-		if(getProperty("indentSize")
-			.equals(mode.getProperty("indentSize")))
-			unsetProperty("indentSize");
-
-		if(getProperty("maxLineLen")
-			.equals(mode.getProperty("maxLineLen")))
-			unsetProperty("maxLineLen");
-		//}}}
-
 		int lastLine = Math.min(9,getLineCount() - 1);
 		parseBufferLocalProperties(getText(0,getLineEndOffset(lastLine) - 1));
 
@@ -3710,19 +3707,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int length = getLineEndOffset(getLineCount() - 1) 
 				- (getLineStartOffset(firstLine) + 1);
 			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
-		}
-
-		//XXX: Why the fuck is this here???
-
-		// Create marker positions
-		for(int i = 0; i < markers.size(); i++)
-		{
-			Marker marker = (Marker)markers.elementAt(i);
-			int pos = marker.getPosition();
-			if(pos > getLength())
-				marker.setPosition(getLength());
-			marker.removePosition();
-			marker.createPosition();
 		}
 	} //}}}
 
