@@ -106,6 +106,8 @@ public class PasteFromListDialog extends EnhancedDialog
 			return;
 		}
 
+		String text = getSelectedClipText();
+
 		/**
 		 * For each selected clip, we remove it, then add it back
 		 * to the model. This has the effect of moving it to the
@@ -117,7 +119,7 @@ public class PasteFromListDialog extends EnhancedDialog
 			listModel.insertElementAt(selected[i],0);
 		}
 
-		view.getTextArea().setSelectedText(getSelectedClipText());
+		view.getTextArea().setSelectedText(text);
 
 		dispose();
 	} //}}}
