@@ -98,11 +98,13 @@ public class ContentManager
 	public void insert(int start, String str)
 	{
 		int len = str.length();
-		if(gapStart != start || gapEnd - gapStart < len)
+		moveGapStart(start);
+		if(gapEnd - gapStart < len)
 		{
-			ensureCapacity(length + len + 200);
-			close(start,start + len + 200);
+			ensureCapacity(length + len + 1024);
+			moveGapEnd(start + len + 1024);
 		}
+
 		str.getChars(0,len,text,start);
 		gapStart += len;
 		length += len;
@@ -111,11 +113,13 @@ public class ContentManager
 	//{{{ insert() method
 	public void insert(int start, Segment seg)
 	{
-		if(gapStart != start || gapEnd - gapStart < seg.count)
+		moveGapStart(start);
+		if(gapEnd - gapStart < seg.count)
 		{
-			ensureCapacity(length + seg.count + 200);
-			close(start,start + seg.count + 200);
+			ensureCapacity(length + seg.count + 1024);
+			moveGapEnd(start + seg.count + 1024);
 		}
+
 		System.arraycopy(seg.array,seg.offset,text,start,seg.count);
 		gapStart += seg.count;
 		length += seg.count;
@@ -132,21 +136,8 @@ public class ContentManager
 	//{{{ remove() method
 	public void remove(int start, int len)
 	{
-		if(start == gapStart)
-			gapEnd += len;
-		else if(start + len == gapStart)
-			gapStart = start;
-		else if(gapStart != gapEnd)
-		{
-			close(start,start);
-			gapEnd += len;
-		}
-		else
-		{
-			gapStart = start;
-			gapEnd = start + len;
-		}
-
+		moveGapStart(start);
+		gapEnd += len;
 		length -= len;
 	} //}}}
 
@@ -156,30 +147,34 @@ public class ContentManager
 	private int gapEnd;
 	private int length;
 
-	//{{{ close() method
-	private void close(int newStart, int newEnd)
+	//{{{ moveGapStart() method
+	private void moveGapStart(int newStart)
 	{
-		// Optimization
+		int newEnd = gapEnd + (newStart - gapStart);
+
 		if(newStart == gapStart)
 		{
-			System.arraycopy(text,gapEnd,text,newEnd,length - gapStart);
+			// nothing to do
 		}
-		else
+		else if(newStart > gapStart)
 		{
-			if(gapStart != gapEnd && gapStart != length)
-			{
-				System.arraycopy(text,gapEnd,text,gapStart,
-					length - gapStart);
-			}
-
-			if(newStart != newEnd && newStart != length)
-			{
-				System.arraycopy(text,newStart,text,newEnd,
-					length - newStart);
-			}
+			System.arraycopy(text,gapEnd,text,gapStart,
+				newStart - gapStart);
+		}
+		else if(newStart < gapStart)
+		{
+			System.arraycopy(text,newStart,text,newEnd,
+				gapStart - newStart);
 		}
 
 		gapStart = newStart;
+		gapEnd = newEnd;
+	} //}}}
+
+	//{{{ moveGapEnd() method
+	private void moveGapEnd(int newEnd)
+	{
+		System.arraycopy(text,gapEnd,text,newEnd,length - gapStart);
 		gapEnd = newEnd;
 	} //}}}
 

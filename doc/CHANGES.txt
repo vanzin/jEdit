@@ -226,7 +226,8 @@ contributing to this release.
 - The 'initially collapse folds with level' setting is how honored when
   reloading files.
 
-- A few printing bugs fixed. (me and Thomas Dilts)
+- A few printing bugs fixed, including the notorious print output
+  spacing problem. (me and Thomas Dilts)
 
 - The help viewer should no longer open behind the view when jEdit is
   run for the first time on some Java implementations.
