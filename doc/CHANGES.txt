@@ -126,6 +126,11 @@ contributing to this release.
   other commands might not have put the caret in the right place if
   horizontal scrolling was involved.
 
+- AElred (the XML parser used by jEdit) would bomb if an XML element
+  contained more than twice the text of the current I/O buffer size.
+  When it ran out of the room, the I/O buffer was always doubled even if
+  the text to be inserted was more than this length.
+
 }}}
 {{{ API Additions
 
