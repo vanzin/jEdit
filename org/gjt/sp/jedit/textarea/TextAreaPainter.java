@@ -656,6 +656,16 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	} //}}}
 
+	//{{{ update() method
+	/**
+	 * Repaints the text.
+	 * @param _gfx The graphics context
+	 */
+	public void update(Graphics _gfx)
+	{
+		paint(_gfx);
+	} //}}}
+	
 	//{{{ paint() method
 	/**
 	 * Repaints the text.

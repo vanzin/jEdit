@@ -30,8 +30,12 @@ import org.gjt.sp.jedit.Buffer;
 public class RegexpIndentRule implements IndentRule
 {
 	//{{{ RegexpIndentRule constructor
+	/**
+	 * @param collapse If true, then if the next indent rule is
+	 * an opening bracket, this rule will not increase indent.
+	 */
 	public RegexpIndentRule(String regexp, IndentAction prevPrev,
-		IndentAction prev, IndentAction thisLine)
+		IndentAction prev, IndentAction thisLine, boolean collapse)
 		throws REException
 	{
 		this.prevPrevAction = prevPrev;
@@ -39,6 +43,7 @@ public class RegexpIndentRule implements IndentRule
 		this.thisAction = thisLine;
 		this.regexp = new RE(regexp,RE.REG_ICASE,
 			RESearchMatcher.RE_SYNTAX_JEDIT);
+		this.collapse = collapse;
 	} //}}}
 
 	//{{{ apply() method
@@ -46,26 +51,32 @@ public class RegexpIndentRule implements IndentRule
 		int prevLineIndex, int prevPrevLineIndex,
 		List indentActions)
 	{
+		boolean match = false;
+		
 		if(thisAction != null
 			&& isMatch(buffer.getLineText(thisLineIndex)))
 		{
 			indentActions.add(thisAction);
-			indentActions.add(new IndentAction.Collapse());
+			match = true;
 		}
 		if(prevAction != null
 			&& prevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevLineIndex)))
 		{
 			indentActions.add(prevAction);
-			indentActions.add(new IndentAction.Collapse());
+			match = true;
 		}
 		if(prevPrevAction != null
 			&& prevPrevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevPrevLineIndex)))
 		{
 			indentActions.add(prevPrevAction);
-			indentActions.add(new IndentAction.Collapse());
+			match = true;
 		}
+		
+		if(match && collapse)
+			indentActions.add(new IndentAction.Collapse());
+
 	} //}}}
 
 	//{{{ isMatch() method
@@ -82,4 +93,5 @@ public class RegexpIndentRule implements IndentRule
 
 	private IndentAction prevPrevAction, prevAction, thisAction;
 	private RE regexp;
+	private boolean collapse;
 }
