@@ -13,7 +13,7 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- JSP comment -->
-		<SPAN TYPE="COMMENT1">
+		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;%--</BEGIN>
 			<END>--%&gt;</END>
 		</SPAN>
@@ -43,7 +43,7 @@
 		</SPAN>
 
 		<!-- SGML comment -->
-		<SPAN TYPE="COMMENT2" DELEGATE="COMMENT">
+		<SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
@@ -77,9 +77,9 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-	<RULES SET="COMMENT" IGNORE_CASE="TRUE">
+	<RULES SET="COMMENT" DEFAULT="COMMENT1" IGNORE_CASE="TRUE">
 		<!-- JSP comment -->
-		<SPAN TYPE="COMMENT1">
+		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;%--</BEGIN>
 			<END>--%&gt;</END>
 		</SPAN>
@@ -162,7 +162,7 @@
 		<WHITESPACE>	</WHITESPACE>
 
 		<!-- JSP comment -->
-		<SPAN TYPE="COMMENT1">
+		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;%--</BEGIN>
 			<END>--%&gt;</END>
 		</SPAN>
