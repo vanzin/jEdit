@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with the jEdit program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 
@@ -32,5 +35,17 @@ void doReverse()
 }
 
 doReverse();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Reverse.bsh</filename></para>
+    <abstract><para>
+        Reverses the selected text in the current buffer.
+    </para></abstract>
+</listitem>
+
+*/
 
 // end Reverse.bsh

@@ -5,6 +5,7 @@
  * in the current text buffer
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +24,8 @@
  * This version requires jEdit3.2pre1 or greater
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -78,6 +81,33 @@ void makeDoubleBoxComment()
 }
 
 makeDoubleBoxComment();
+
+/*
+
+	Macro index data (in DocBook format)
+<!-- NOTE:  change pairs of ?* *? to comment delimiters when using
+ 	 in DocBook
+-->
+
+<listitem>
+    <para><filename>Make_Double_Box_Comments.bsh</filename></para>
+    <abstract><para>
+        Makes a individual wing style comment of equal width for each
+        selected line in the current buffer.
+    </para></abstract>
+
+   <informalexample>
+   <programlisting>?*  This is an example of the kind                *?
+?*  of comment (for Java or C/C++) produced       *?
+?*  by this macro. It has uniform width           *?
+?*  regardless of the width of the several lines. *?
+
+&lt;!-- HTML or SGML code                         --&gt;
+&lt;!-- will look like this when the macro is run --&gt;</programlisting>
+    </informalexample>
+</listitem>
+
+*/
 
 // end of Make_Double_Box_Comment.bsh
 
