@@ -360,19 +360,10 @@ public abstract class EditPlugin
 	 */
 	public void createOptionPanes(OptionsDialog optionsDialog) {} //}}}
 
-	//{{{ getJAR() method
-	/**
-	 * @deprecated Call <code>getPluginJAR()</code> instead.
-	 */
-	public EditPlugin.JAR getJAR()
-	{
-		return jar;
-	} //}}}
-
 	//}}}
 
 	//{{{ Package-private members
-	EditPlugin.JAR jar;
+	PluginJAR jar;
 	//}}}
 
 	//{{{ Broken class
@@ -390,8 +381,9 @@ public abstract class EditPlugin
 		}
 
 		// package-private members
-		Broken(String clazz)
+		Broken(PluginJAR jar, String clazz)
 		{
+			this.jar = jar;
 			this.clazz = clazz;
 		}
 
@@ -414,8 +406,9 @@ public abstract class EditPlugin
 		}
 
 		// package-private members
-		Deferred(String clazz)
+		Deferred(PluginJAR jar, String clazz)
 		{
+			this.jar = jar;
 			this.clazz = clazz;
 		}
 
@@ -432,17 +425,4 @@ public abstract class EditPlugin
 		// private members
 		private String clazz;
 	} //}}}
-
-	//{{{ JAR class
-	/**
-	 * @deprecated Use <code>PluginJAR</code> instead.
-	 */
-	public static class JAR extends PluginJAR
-	{
-		JAR(java.io.File file)
-		{
-			super(file);
-		}
-	}
-	//}}}
 }

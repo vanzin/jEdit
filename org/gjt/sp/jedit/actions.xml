@@ -1322,12 +1322,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="view-registers">
-	<CODE>
-		new ViewRegisters(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="visible-end">
 	<CODE>
 		textArea.goToLastVisibleLine(false);
