@@ -89,6 +89,10 @@ public class Buffer
 	 * @since jEdit 3.2pre1
 	 */
 	public static final String CARET = "Buffer__caret";
+	
+	/**
+	 * Stores a List of {@link Selection} instances.
+	 */
 	public static final String SELECTION = "Buffer__selection";
 
 	/**

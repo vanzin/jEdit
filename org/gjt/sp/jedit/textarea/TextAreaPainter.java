@@ -869,6 +869,25 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintLineBackground class
 	class PaintLineBackground extends TextAreaExtension
 	{
+		//{{{ shouldPaintLineHighlight() method
+		private boolean shouldPaintLineHighlight(int caret, int start, int end)
+		{
+			if(!isLineHighlightEnabled()
+				|| caret < start || caret >= end)
+			{
+				return false;
+			}
+
+			int count = textArea.getSelectionCount();
+			if(count == 1)
+			{
+				Selection s = textArea.getSelection(0);
+				return s.getStartLine() == s.getEndLine();
+			}
+			else
+				return (count == 0);
+		} //}}}
+		
 		//{{{ paintValidLine() method
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
@@ -896,9 +915,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 
 			int caret = textArea.getCaretPosition();
-			boolean paintLineHighlight = isLineHighlightEnabled()
-				&& caret >= start && caret < end
-				&& textArea.getSelectionCount() == 0;
+			boolean paintLineHighlight = shouldPaintLineHighlight(
+				caret,start,end);
 
 			Color bgColor;
 			if(paintLineHighlight)

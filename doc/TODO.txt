@@ -19,7 +19,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - backspace with virtual caret: needs tweaks
   - independent text area component
     - gutter: has a depenency on View to do focus highlight, and Marker
-    - display manager: has a dependency on View for currently focused
     - text area: depends on view for input handling,
       smart home/end macro record, showing dialog boxes, abbrevs
     - mouse handler: registers
@@ -30,7 +29,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - indent folding: fold marker not always updated
   - format: preserve comment chars at start
   - tabs to spaces with rect select
-  - single line selection should not hide line highlight
   - input methods
   - remove-marker, select-next/prev-marker/bracket
   - C+b -- click -- keys don't work
@@ -58,6 +56,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   <--- cursor here
   - option to disable electric keys
   - unindentThisAndFollowing
+  - indent & syntax tokens
 
 + vfs browser:
 
@@ -88,7 +87,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - CA+PLUS +: bad
   - jedit -encoding
   - goToBuffer() -- if any parent has zero height or zero width...
-  - save selection between buffer switch
   - deferred loading API for macro handlers
   - S+INS, etc in swing controls
   - vfs: a way of running awt requests not all at end
@@ -101,6 +99,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + docs:
 
+- auto indent
 - save help index
 - document optional dependencies
 - deferred loading mention.
@@ -144,7 +143,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - status bar messages & readNextChar()
 - vfs javadoc: invokeAndWait() example for createVFSSession()
 
-
 check tips of the day
 - help:
   - titles in search are fucked
@@ -166,7 +164,6 @@ check tips of the day
 - C+d & killring
 - plugin mgr inspection of not-loaded plugins
 - history text field tweak
-- printing: check default printer setting
 
 + obscure:
 
@@ -179,7 +176,6 @@ check tips of the day
 - backup time distance setting
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- C+ENTER 3 C+2
 
 + performance:
 

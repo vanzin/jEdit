@@ -495,8 +495,6 @@ public class DisplayManager
 			&& !isLineVisible(start + 1))
 			expandFold(start,false);
 
-		// Hack... need a more direct way of obtaining a view?
-		// JEditTextArea.getView() method?
 		textArea.fireNarrowActive();
 
 		notifyScreenLineChanges();
