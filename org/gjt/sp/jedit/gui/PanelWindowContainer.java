@@ -126,6 +126,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 			entry.title));
 		button.setActionCommand(entry.factory.name);
 		button.addActionListener(new ActionHandler());
+		if(OperatingSystem.isMacOSLF())
+			button.putClientProperty("JButton.buttonType","toolbar");
 		//}}}
 
 		buttonGroup.add(button);
