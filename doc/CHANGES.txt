@@ -36,6 +36,9 @@ contributing to this release.
 - Fixed ArrayIndexOutOfBoundsException when selecting the last edit mode
   in the list.
 
+- Fixed possible ArrayIndexOutOfBoundsException while scrolling in a
+  text area that was narrowed to a specific region in the buffer.
+
 + API Changes:
 
 - VFS._saveComplete(Object session, Buffer buffer, Component comp) is

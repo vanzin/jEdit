@@ -694,13 +694,12 @@ public class JEditTextArea extends JComponent
 								count += incr;
 						}
 
-						if(physFirstLine == 0)
+						int prevLine = foldVisibilityManager
+							.getPrevVisibleLine(physFirstLine);
+						if(prevLine == -1)
 							break;
 						else
-						{
-							physFirstLine = foldVisibilityManager
-								.getPrevVisibleLine(physFirstLine);
-						}
+							physFirstLine = prevLine;
 					}
 
 					firstLine = physicalToVirtual(physFirstLine);
