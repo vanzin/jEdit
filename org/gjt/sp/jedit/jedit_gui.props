@@ -46,6 +46,9 @@ action-set.plugin=Plugin: {0}
 
 view.docking.close-tooltip=Hides the current docked window
 view.docking.menu-tooltip=Shows a list of docked windows
+
+directory.not-local=Cannot list directories on remote filesystems
+directory.no-files=No Files
 #}}}
 
 #{{{ Tool bar
@@ -220,8 +223,6 @@ other-encoding.label=Open With Other Encoding...
 recent-files.label=Recent Files
 recent-directories.label=Recent Directories
 current-directory.label=Current Directory
-current-directory.not-local=Cannot list directories on remote filesystems
-current-directory.no-files=No Files
 insert-file.label=$Insert...
 no-recent-files.label=No Recent Files
 no-recent-dirs.label=No Recent Directories
@@ -534,10 +535,13 @@ utils=vfs.browser \
       - \
       memory-status \
       - \
+      keyboard-tester \
+      - \
       log-viewer \
       update-log \
       - \
-      keyboard-tester \
+      %jedit-directory \
+      %settings-directory \
       - \
       buffer-options \
       global-options
@@ -549,9 +553,11 @@ eval-for-selected-lines.label=Evaluate For Selected $Lines...
 eval-selection.label=E$valuate Selection
 reload-modes.label=$Reload Edit Modes
 memory-status.label=$Memory Status...
+keyboard-tester.label=Keyboard Tester...
 log-viewer.label=Activity Log
 update-log.label=Update Activity Log on Disk
-keyboard-tester.label=Keyboard Tester...
+jedit-directory.label=jEdit Home Directory
+settings-directory.label=Settings Directory
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
 #}}}
@@ -565,9 +571,6 @@ macros=record-macro \
        run-last-macro \
        run-other-macro \
        - \
-       browse-system-macros \
-       browse-user-macros \
-       - \
        rescan-macros \
        -
 macros.label=Ma$cros
@@ -577,8 +580,6 @@ stop-recording.label=$Stop Recording
 run-temp-macro.label=Run Tem$porary Macro
 run-last-macro.label=Run $Last Macro
 run-other-macro.label=Run $Other Macro...
-browse-system-macros.label=Browse S$ystem Macros
-browse-user-macros.label=Browse $User Macros
 rescan-macros.label=Resca$n Macros
 no-macros.label=No Macros
 #}}}
@@ -1203,8 +1204,8 @@ plugin-error.dep-jedit=Requires jEdit {0} or later, but you only have version {1
 	Download new jEdit versions from <http://www.jedit.org>.
 plugin-error.dep-plugin.no-version=Requires version {0} \
 	or later of {1}, but {1} is not installed.
-plugin-error.dep-plugin.broken=Requires {0}, but {0} could not be loaded.
-	but an error prevented {0} from being loaded.
+plugin-error.dep-plugin.broken=Requires {0}, but {0}\n\
+	could not be loaded.
 plugin-error.dep-plugin=Requires version {0} or later of {1}, \
 	but you only have {1} version {2}.
 plugin-error.dep-class=Requires the class {0}.\n\

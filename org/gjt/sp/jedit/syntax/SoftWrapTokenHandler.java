@@ -59,7 +59,6 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	} //}}}
 
 	//{{{ handleToken() method
-	//{{{ handleToken() method
 	/**
 	 * Called by the token marker when a syntax token has been parsed.
 	 * @param id The token type (one of the constants in the
@@ -72,20 +71,20 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	public void handleToken(byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
-		ParserRuleSet rules = getParserRuleSet(context);
-
-		if(id == Token.END)
+		/* if(id == Token.END)
 		{
 			if(firstToken != null)
 			{
 				out.add(firstToken);
-				firstToken = end.next;
-				end.next = null;
-				x = x - endX;
+				Chunk lastChunk = (Chunk)lastToken;
+				lastChunk.init(seg,expander,x,styles,
+					fontRenderContext,
+					context.rules.getDefault());
 			}
 		}
 		else if(id == Token.WHITESPACE || id == Token.TAB)
 		{
+			System.err.println("hello: " + x + "::" + wrapMargin);
 			if(x > wrapMargin && firstToken != null)
 			{
 				out.add(firstToken);
@@ -98,11 +97,25 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 				end = lastToken;
 				endX = x;
 			}
-		}
+		} */
 
-		Token token = createToken(id,offset,length,rules);
-		if(token != null)
-			addToken(token,rules);
+		Chunk chunk = (Chunk)createToken(id,offset,length,context);
+		if(chunk != null)
+		{
+			chunk.init(seg,expander,x,styles,
+				fontRenderContext,
+				context.rules.getDefault());
+			if(x + chunk.width > wrapMargin)
+			{
+				out.add(chunk);
+				firstToken = lastToken = chunk;
+				x = 0.0f;
+			}
+			else
+				addToken(chunk,context);
+		}
+		//if(token != null)
+		//	addToken(token,context);
 	} //}}}
 
 	//{{{ Private members

@@ -1,9 +1,9 @@
 /*
- * CurrentDirectoryMenu.java - File list menu
+ * DirectoryMenu.java - File list menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001 Slava Pestov
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,22 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
+//}}}
 
-public class CurrentDirectoryMenu extends EnhancedMenu
+public class DirectoryMenu extends EnhancedMenu
 {
-	//{{{ CurrentDirectoryMenu constructor
-	public CurrentDirectoryMenu()
+	//{{{ DirectoryMenu constructor
+	public DirectoryMenu(String name, String dir)
 	{
-		super("current-directory");
+		super(name);
+		this.dir = dir;
 	} //}}}
 
 	//{{{ setPopupMenuVisible() method
@@ -47,55 +50,65 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 			if(getMenuComponentCount() != 0)
 				removeAll();
 
-			final String path = MiscUtilities.getParentOfPath(
-				view.getBuffer().getPath());
-			JMenuItem mi = new JMenuItem(path);
+			final String path;
+			if(dir == null)
+			{
+				path = MiscUtilities.getParentOfPath(
+					view.getBuffer().getPath());
+			}
+			else
+				path = dir;
+
+			JMenuItem mi = new JMenuItem(path + ":");
+			mi.setActionCommand(path);
 			mi.setIcon(FileCellRenderer.openDirIcon);
 
-			//{{{ Directory action listener...
-			mi.addActionListener(new ActionListener()
+			//{{{ ActionListeners
+			ActionListener fileListener = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
-					VFSBrowser.browseDirectory(view,path);
+					jEdit.openFile(view,evt.getActionCommand());
 				}
-			}); //}}}
+			};
+
+			ActionListener dirListener = new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					VFSBrowser.browseDirectory(view,
+						evt.getActionCommand());
+				}
+			}; //}}}
+
+			mi.addActionListener(dirListener);
 
 			add(mi);
 			addSeparator();
 
-			if(view.getBuffer().getFile() == null)
+			if(dir == null && view.getBuffer().getFile() == null)
 			{
 				mi = new JMenuItem(jEdit.getProperty(
-					"current-directory.not-local"));
+					"directory.not-local"));
 				mi.setEnabled(false);
 				add(mi);
 				super.setPopupMenuVisible(b);
 				return;
 			}
 
-			File dir = new File(path);
+			File directory = new File(path);
 
 			JMenu current = this;
-
-			//{{{ ActionListener class
-			ActionListener listener = new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					jEdit.openFile(view,evt.getActionCommand());
-				}
-			}; //}}}
 
 			// for filtering out backups
 			String backupPrefix = jEdit.getProperty("backup.prefix");
 			String backupSuffix = jEdit.getProperty("backup.suffix");
 
-			String[] list = dir.list();
+			File[] list = directory.listFiles();
 			if(list == null || list.length == 0)
 			{
 				mi = new JMenuItem(jEdit.getProperty(
-					"current-directory.no-files"));
+					"directory.no-files"));
 				mi.setEnabled(false);
 				add(mi);
 			}
@@ -105,7 +118,9 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 					new MiscUtilities.StringICaseCompare());
 				for(int i = 0; i < list.length; i++)
 				{
-					String name = list[i];
+					File file = list[i];
+
+					String name = file.getName();
 
 					// skip marker files
 					if(name.endsWith(".marks"))
@@ -123,14 +138,17 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 						continue;
 
 					// skip directories
-					File file = new File(path,name);
-					if(file.isDirectory())
-						continue;
+					//if(file.isDirectory())
+					//	continue;
 
 					mi = new JMenuItem(name);
 					mi.setActionCommand(file.getPath());
-					mi.addActionListener(listener);
-					mi.setIcon(FileCellRenderer.fileIcon);
+					mi.addActionListener(file.isDirectory()
+						? dirListener
+						: fileListener);
+					mi.setIcon(file.isDirectory()
+						? FileCellRenderer.dirIcon
+						: FileCellRenderer.fileIcon);
 
 					if(current.getItemCount() >= 20 && i != list.length - 1)
 					{
@@ -149,4 +167,8 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 
 		super.setPopupMenuVisible(b);
 	} //}}}
+
+	//{{{ Private members
+	private String dir;
+	//}}}
 }

@@ -57,7 +57,7 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 
 	//{{{ createToken() method
 	protected Token createToken(byte id, int offset, int length,
-		ParserRuleSet rules)
+		TokenMarker.LineContext context)
 	{
 		if(id == Token.END)
 		{
@@ -65,28 +65,28 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 			{
 				Chunk lastChunk = (Chunk)lastToken;
 				lastChunk.init(seg,expander,x,styles,
-					fontRenderContext,rules.getDefault());
-				x += lastChunk.width;
-				seg = null;
+					fontRenderContext,
+					context.rules.getDefault());
 			}
 
 			return null;
 		}
 		else
 		{
-			return new Chunk(id,offset,length,rules);
+			return new Chunk(id,offset,length,
+				getParserRuleSet(context));
 		}
 	} //}}}
 
 	//{{{ addToken() method
-	protected boolean addToken(Token token, ParserRuleSet rules)
+	protected boolean addToken(Token token, TokenMarker.LineContext context)
 	{
 		Token oldLastToken = lastToken;
-		if(super.addToken(token,rules))
+		if(super.addToken(token,context))
 		{
 			Chunk oldLastChunk = (Chunk)oldLastToken;
 			oldLastChunk.init(seg,expander,x,styles,
-				fontRenderContext,rules.getDefault());
+				fontRenderContext,context.rules.getDefault());
 			x += oldLastChunk.width;
 			return true;
 		}

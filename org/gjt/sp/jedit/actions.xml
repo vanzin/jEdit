@@ -52,18 +52,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="browse-system-macros">
-	<CODE>
-		Macros.browseSystemMacros(view);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="browse-user-macros">
-	<CODE>
-		Macros.browseUserMacros(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="buffer-options">
 	<CODE>
 		new BufferOptions(view,buffer);
