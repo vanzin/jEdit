@@ -86,7 +86,14 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "TYPE")
 		{
-			lastTokenID = stringToToken(value);
+			lastTokenID = Token.stringToToken(value);
+			if(lastTokenID == -1)
+			{
+				error("token-invalid",value);
+				lastTokenIDString = "NULL";
+			}
+			else
+				lastTokenIDString = value;
 		}
 		else if (aname == "AT_LINE_START")
 		{
@@ -149,7 +156,12 @@ public class XModeHandler extends HandlerBase
 		}
 		else if (aname == "DEFAULT")
 		{
-			lastDefaultID = stringToToken(value);
+			lastDefaultID = Token.stringToToken(value);
+			if(lastDefaultID == -1)
+			{
+				error("token-invalid",value);
+				lastDefaultID = Token.NULL;
+			}
 		}
 	} //}}}
 
@@ -378,7 +390,8 @@ public class XModeHandler extends HandlerBase
 				{
 					rules.addRule(ParserRuleFactory
 						.createSpanRule(lastStart,
-						lastEnd,lastTokenID,
+						lastEnd,lastTokenIDString,
+						lastTokenID,
 						lastNoLineBreak,
 						lastAtLineStart,
 						lastExcludeMatch,
@@ -392,7 +405,7 @@ public class XModeHandler extends HandlerBase
 					}
 
 					rules.addRule(ParserRuleFactory
-						.createDelegateSpanRule(
+						.createSpanRule(
 						lastStart,lastEnd,
 						lastDelegateSet,
 						lastTokenID,lastNoLineBreak,
@@ -503,6 +516,7 @@ public class XModeHandler extends HandlerBase
 	private ParserRuleSet rules;
 	private byte lastDefaultID = Token.NULL;
 	private byte lastTokenID;
+	private String lastTokenIDString;
 	private int termChar = -1;
 	private boolean lastNoLineBreak;
 	private boolean lastNoWordBreak;
@@ -512,74 +526,6 @@ public class XModeHandler extends HandlerBase
 	private boolean lastHighlightDigits;
 	private String lastDigitRE;
 	//}}}
-
-	//{{{ stringToToken() method
-	private byte stringToToken(String value)
-	{
-		value = value.intern();
-
-		if (value == "NULL")
-		{
-			return Token.NULL;
-		}
-		else if (value == "COMMENT1")
-		{
-			return Token.COMMENT1;
-		}
-		else if (value == "COMMENT2")
-		{
-			return Token.COMMENT2;
-		}
-		else if (value == "LITERAL1")
-		{
-			return Token.LITERAL1;
-		}
-		else if (value == "LITERAL2")
-		{
-			return Token.LITERAL2;
-		}
-		else if (value == "LABEL")
-		{
-			return Token.LABEL;
-		}
-		else if (value == "KEYWORD1")
-		{
-			return Token.KEYWORD1;
-		}
-		else if (value == "KEYWORD2")
-		{
-			return Token.KEYWORD2;
-		}
-		else if (value == "KEYWORD3")
-		{
-			return Token.KEYWORD3;
-		}
-		else if (value == "FUNCTION")
-		{
-			return Token.FUNCTION;
-		}
-		else if (value == "MARKUP")
-		{
-			return Token.MARKUP;
-		}
-		else if (value == "OPERATOR")
-		{
-			return Token.OPERATOR;
-		}
-		else if (value == "DIGIT")
-		{
-			return Token.DIGIT;
-		}
-		else if (value == "INVALID")
-		{
-			return Token.INVALID;
-		}
-		else
-		{
-			error("token-invalid",value);
-			return Token.NULL;
-		}
-	} //}}}
 
 	//{{{ addKeyword() method
 	private void addKeyword(String k, byte id)

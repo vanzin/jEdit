@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.util.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -940,9 +940,6 @@ public class View extends JFrame implements EBComponent
 		addWindowListener(new WindowHandler());
 
 		dockableWindowManager.init();
-
-		VFSManager.getIOThreadPool().addProgressListener(
-			workThreadHandler = new WorkThreadHandler());
 	} //}}}
 
 	//{{{ close() method
@@ -971,8 +968,6 @@ public class View extends JFrame implements EBComponent
 		recorder = null;
 
 		getContentPane().removeAll();
-
-		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
 	} //}}}
 
 	//{{{ updateTitle() method
@@ -1031,8 +1026,6 @@ public class View extends JFrame implements EBComponent
 	private int waitCount;
 
 	private boolean showFullPath;
-
-	private WorkThreadHandler workThreadHandler;
 	//}}}
 
 	//{{{ getEditPanes() method
@@ -1320,35 +1313,6 @@ public class View extends JFrame implements EBComponent
 		{
 			jEdit.closeView(View.this);
 		}
-	} //}}}
-
-	//{{{ WorkThreadListener implementation
-	class WorkThreadHandler implements WorkThreadProgressListener
-	{
-		//{{{ statusUpdate() method
-		public void statusUpdate(WorkThreadPool threadPool, int threadIndex)
-		{
-			// synchronize with hide/showWaitCursor()
-			synchronized(View.this)
-			{
-				int requestCount = threadPool.getRequestCount();
-				if(requestCount == 0)
-				{
-					if(waitCount >= 1)
-						hideWaitCursor();
-				}
-				else if(requestCount >= 1)
-				{
-					if(waitCount == 0)
-						showWaitCursor();
-				}
-			}
-		} //}}}
-	
-		//{{{ progressUpdate() method
-		public void progressUpdate(WorkThreadPool threadPool, int threadIndex)
-		{
-		} //}}}
 	} //}}}
 
 	//}}}

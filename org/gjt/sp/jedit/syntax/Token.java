@@ -29,6 +29,48 @@ package org.gjt.sp.jedit.syntax;
  */
 public class Token
 {
+	//{{{ stringToToken() method
+	/**
+	 * Converts a token type string to a token type constant.
+	 * @param value The token type
+	 * @since jEdit 4.1pre1
+	 */
+	public static byte stringToToken(String value)
+	{
+		value = value.intern();
+
+		if (value == "NULL")
+			return Token.NULL;
+		else if (value == "COMMENT1")
+			return Token.COMMENT1;
+		else if (value == "COMMENT2")
+			return Token.COMMENT2;
+		else if (value == "LITERAL1")
+			return Token.LITERAL1;
+		else if (value == "LITERAL2")
+			return Token.LITERAL2;
+		else if (value == "LABEL")
+			return Token.LABEL;
+		else if (value == "KEYWORD1")
+			return Token.KEYWORD1;
+		else if (value == "KEYWORD2")
+			return Token.KEYWORD2;
+		else if (value == "KEYWORD3")
+			return Token.KEYWORD3;
+		else if (value == "FUNCTION")
+			return Token.FUNCTION;
+		else if (value == "MARKUP")
+			return Token.MARKUP;
+		else if (value == "OPERATOR")
+			return Token.OPERATOR;
+		else if (value == "DIGIT")
+			return Token.DIGIT;
+		else if (value == "INVALID")
+			return Token.INVALID;
+		else
+			return -1;
+	} //}}}
+
 	//{{{ Token types
 	public static final byte NULL = 0;
 	public static final byte COMMENT1 = 1;

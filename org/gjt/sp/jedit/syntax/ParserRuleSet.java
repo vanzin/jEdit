@@ -37,6 +37,17 @@ import javax.swing.text.Segment;
  */
 public class ParserRuleSet
 {
+	//{{{ getStandardRuleSet() method
+	/**
+	 * Returns a parser rule set that highlights everything with the
+	 * specified token type.
+	 * @param id The token type
+	 */
+	public static ParserRuleSet getStandardRuleSet(byte id)
+	{
+		return standard[id];
+	} //}}}
+
 	//{{{ ParserRuleSet constructor
 	public ParserRuleSet(String name, Mode mode)
 	{
@@ -200,6 +211,18 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ Private members
+	private static ParserRuleSet[] standard;
+
+	static
+	{
+		standard = new ParserRuleSet[Token.ID_COUNT];
+		for(byte i = 0; i < standard.length; i++)
+		{
+			standard[i] = new ParserRuleSet(null,null);
+			standard[i].setDefault(i);
+		}
+	}
+
 	private static final int RULE_BUCKET_COUNT = 32;
 
 	private String name;
