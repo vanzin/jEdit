@@ -105,7 +105,8 @@ public class FileRootsVFS extends VFS
 
 		int type;
 
-		if(file.isDirectory())
+		if(!path.startsWith("A:") && !path.startsWith("B:")
+			&& file.isDirectory())
 		{
 			type = VFS.DirectoryEntry.FILESYSTEM;
 

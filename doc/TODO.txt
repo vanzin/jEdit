@@ -3,24 +3,23 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- popups still positioned poorly
+- broken auto-indent
+- messed up scroll bars when switching buffers
 - final optimization for OffsetManager: scan to zero or scan to end
   might be more economical
-- popup menu display & history text field
 - do some profiling
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
 - changelog claims roots: lists desktop...
 - wheel mouse page scroll w/ soft wrap
 - rect select and trailing whitespace
-- line 2112 -- isNarrowed() check of moveCaretPosition()
 - user's guide:
   - vertical paste & rect select insertion
   - mention whitespace eating word actions
-  - alternative tool bar placement
   - ESCAPE hides search bar
   - wheel mouse modifiers
-  - indentOnTab/Enter changes
-  - update shortcuts.xml
 
+- line 2112 -- isNarrowed() check of moveCaretPosition()
 - format -- instead of \n\n, what if it has \n   \n?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?

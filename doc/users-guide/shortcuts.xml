@@ -61,6 +61,10 @@
       <entry>Go to recent buffer.</entry>
      </row>
      <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>`</keycap></keycombo></entry>
+      <entry>Show buffer switcher.</entry>
+     </row>
+     <row>
       <entry><keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo></entry>
       <entry>Exit jEdit.</entry>
      </row>
@@ -289,7 +293,7 @@
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></keycombo></entry>
-      <entry>Center current line on screen.</entry>
+      <entry>Ensure current line is visible.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
@@ -409,7 +413,7 @@
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo></entry>
-      <entry>Vertical paste clipboard contents.</entry>
+      <entry>Vertically paste clipboard contents.</entry>
      </row>
      <row>
       <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
@@ -558,11 +562,11 @@
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo></entry>
-      <entry>Incremental search.</entry>
+      <entry>Incremental search bar.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
-      <entry>Quick HyperSearch.</entry>
+      <entry>HyperSearch bar.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>,</keycap></keycombo></entry>
@@ -570,7 +574,7 @@
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo></entry>
-      <entry>Quick HyperSearch for word under the caret.</entry>
+      <entry>HyperSearch for word under the caret.</entry>
      </row>
     </tbody>
    </tgroup>

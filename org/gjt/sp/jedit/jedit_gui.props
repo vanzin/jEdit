@@ -449,6 +449,7 @@ view=new-view \
      prev-buffer \
      next-buffer \
      recent-buffer \
+     show-buffer-switcher \
      - \
      toggle-line-numbers \
      - \
@@ -461,6 +462,7 @@ close-view.label=$Close View
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
+show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
 split-horizontal.label=Split $Horizontally
 split-vertical.label=Spli$t Vertically
@@ -480,14 +482,14 @@ scrolling=scroll-to-current-line \
 	  scroll-down-page \
 	  - \
 	  toggle-synchro-scroll
-scrolling.label=Scrolling
-scroll-to-current-line.label=Scroll to Current Line
-center-caret.label=Center Caret on Screen
-scroll-up-line.label=Line Scroll Up
-scroll-down-line.label=Line Scroll Down
-scroll-up-page.label=Page Scroll Up
-scroll-down-page.label=Page Scroll Down
-toggle-synchro-scroll.label=Synchronized Scrolling
+scrolling.label=$Scrolling
+scroll-to-current-line.label=Scroll $to Current Line
+center-caret.label=$Center Caret on Screen
+scroll-up-line.label=Line Scroll $Up
+scroll-down-line.label=Line Scroll $Down
+scroll-up-page.label=Page Scroll U$p
+scroll-down-page.label=Page Scroll D$own
+toggle-synchro-scroll.label=Sy$nchronized Scrolling
 #}}}
 
 #{{{ Docking menu
@@ -499,13 +501,13 @@ docking=left-docking-area \
 	close-docking-area \
 	- \
 	goto-textarea
-docking.label=Docking
-left-docking-area.label=Go to Left Docking Area
-top-docking-area.label=Go to Top Docking Area
-right-docking-area.label=Go to Right Docking Area
-bottom-docking-area.label=Go to Bottom Docking Area
-close-docking-area.label=Close Current Docking Area
-goto-textarea.label=Go to Text Area
+docking.label=$Docking
+left-docking-area.label=Go to $Left Docking Area
+top-docking-area.label=Go to $Top Docking Area
+right-docking-area.label=Go to $Right Docking Area
+bottom-docking-area.label=Go to $Bottom Docking Area
+close-docking-area.label=$Close Current Docking Area
+goto-textarea.label=$Go to Text Area
 #}}}
 
 #}}}
