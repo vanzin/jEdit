@@ -3,17 +3,53 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- gutter clicks should focus the text area
-- gutter bracket select: shift-click not control-click?
+- after new display: optimize & match old performance
+- switching between soft wrap and not needs to update anchors, etc
+- scrolling bug happened without even using mouse!
+- disable bracket match: gutter highlight not hidden
+- display:
+  - OffsetMgr.beginScreenLineOperations();
+  - OffsetMgr.endScreenLineOperations(); // notifies anchors of changes.
+  - end anchor:
+    updates scroll bars.
+    foldStructureChanged(), etc. doesn't need this.
+  - first line anchor:
+    updates scroll bars, doesn't repaint.
+  - scrolling up and down:
+    scroll bar handler stores old position; uses scroll methods in chunk
+    cache
+  - chunk cache first line: can be much better
+  - text area: buffer scroll to, set first line, position hold
+  - scroll up page, scroll down page
+  - display manager: store first line
+    edit pane no need to store first line between buffer switches
+    still store horizontal scroll?
+- help:
+  - titles in search are fucked
+  - title adds more to the relevance
+  - FAQ: better titles
+- quicknotepad needs requestDefaultFocus() -- NO -- JUST GET RID OF THE
+  DEPRECATED API
+- new plugin mgr:
+  - human readable strings in source.... entry.status
+  - ask before selecting dependencies & 'don't show again'
+  - component spacing off in install dialog
+  - option pane: use a combo box
+  - mirror change: refresh download locations
+- canonPath: get rid of ..
+- update horizontal scroll width immediately on buffer switch
+- update man page
+- enter with browser view focused; hides dialog
+- options for confirmation of:
+  save all
+  close all (w/ no unsaved changes)
 - need distinct default styles for new token types
 - HTML mode: use new token types
 - synchro scroll & folding
-- view.setBuffer(); if already in one edit pane focus there
-  - maybe view.gotoBuffer()?
+- document view.goToBuffer()
 - hypersearch: open in new split
 - option to not follow symbolic links
 - C+e C+c long block of text
-- bracket highlight not cleared sometimes?
 - buffer.mode=foo in action bar does not work
 - changing fileset parameters should modify the file set not create a
   new one

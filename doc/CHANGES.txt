@@ -32,6 +32,10 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   the text area. This allows shortcuts like C+e n n to be used from the
   search bar and such without having to prefix them with C+e C+e first.
 
+- Previously, a Control-click on a bracket scope would select the
+  bracketed expression. Now, a Shift-click selects the expression and a
+  Control-click narrows to the expression.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -201,11 +205,19 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
 - Page Up/Page Down commands now scroll by the correct amount when soft
   wrap is on.
 
+- Fixed I/O thread deadlock that could manifest when using the FTP
+  plugin.
+
 }}}
 {{{ API Changes
 
 - Removed deprecated xToOffset() and offsetToX() methods from
   JEditTextArea.
+
+}}}
+{{{ API Enhancements
+
+- Added public VFS.DirectoryEntryCompare class.
 
 }}}
 

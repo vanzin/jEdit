@@ -239,12 +239,21 @@ public class Buffer implements EBComponent
 				if(endOffsets == null)
 				{
 					endOffsets = new LongArray();
-					endOffsets.add(1);
+					OffsetManager.addLineEndOffset(endOffsets,1);
 				}
 
 				try
 				{
 					writeLock();
+
+					int lines = offsetMgr.getLineCount();
+					if(lines != 0)
+					{
+						firePreContentRemoved(0,0,lines,
+							contentMgr.getLength());
+						fireContentRemoved(0,0,lines,
+							contentMgr.getLength());
+					}
 
 					// theoretically a segment could
 					// have seg.offset != 0 but
@@ -252,10 +261,14 @@ public class Buffer implements EBComponent
 					contentMgr._setContent(seg.array,seg.count);
 
 					offsetMgr._contentInserted(endOffsets);
+
+					fireContentInserted(0,0,
+						endOffsets.getSize(),
+						seg.count);
 				}
 				catch(OutOfMemoryError oom)
 				{
-					Log.log(Log.ERROR,this,oom);
+					Log.log(Log.ERROR,Buffer.this,oom);
 					VFSManager.error(view,path,"out-of-memory-error",null);
 				}
 				finally
@@ -1297,6 +1310,8 @@ public class Buffer implements EBComponent
 				if(seg.array[seg.offset + i] == '\n')
 					numLines++;
 			}
+
+			firePreContentRemoved(startLine,offset,numLines,length);
 
 			if(!getFlag(UNDO_IN_PROGRESS))
 			{
@@ -3971,6 +3986,26 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				((BufferChangeListener)bufferListeners.elementAt(i))
 					.contentRemoved(this,startLine,offset,
+					numLines,length);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ firePreContentRemoved() method
+	private void firePreContentRemoved(int startLine, int offset,
+		int numLines, int length)
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.preContentRemoved(this,startLine,offset,
 					numLines,length);
 			}
 			catch(Throwable t)

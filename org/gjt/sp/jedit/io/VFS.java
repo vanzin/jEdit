@@ -718,6 +718,45 @@ public abstract class VFS
 		}
 	} //}}}
 
+	//{{{ DirectoryEntryCompare class
+	/**
+	 * Implementation of {@link MiscUtilities.Compare} interface that
+	 * compares {@link VFS.DirectoryEntry} instances.
+	 * @since jEdit 4.2pre1
+	 */
+	public static class DirectoryEntryCompare implements MiscUtilities.Compare
+	{
+		private boolean sortIgnoreCase, sortMixFilesAndDirs;
+
+		/**
+		 * Creates a new <code>DirectoryEntryCompare</code>.
+		 * @param sortMixFilesAndDirs If false, directories are
+		 * put at the top of the listing.
+		 * @param sortIgnoreCase If false, upper case comes before
+		 * lower case.
+		 */
+		public DirectoryEntryCompare(boolean sortMixFilesAndDirs,
+			boolean sortIgnoreCase)
+		{
+			this.sortMixFilesAndDirs = sortMixFilesAndDirs;
+			this.sortIgnoreCase = sortIgnoreCase;
+		}
+
+		public int compare(Object obj1, Object obj2)
+		{
+			VFS.DirectoryEntry file1 = (VFS.DirectoryEntry)obj1;
+			VFS.DirectoryEntry file2 = (VFS.DirectoryEntry)obj2;
+
+			if(!sortMixFilesAndDirs)
+			{
+				if(file1.type != file2.type)
+					return file2.type - file1.type;
+			}
+
+			return MiscUtilities.compareStrings(file1.name,
+				file2.name,sortIgnoreCase);
+		}
+	} //}}}
 	//{{{ Private members
 	private String name;
 	private int caps;

@@ -272,7 +272,7 @@ public class JEditTextArea extends JComponent
 			firstLine = 0;
 			maxHorizontalScrollWidth = 0;
 			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
-			chunkCache.setFirstLine(0,physFirstLine,true);
+			chunkCache.setBuffer(buffer);
 
 			propertiesChanged();
 
@@ -361,7 +361,7 @@ public class JEditTextArea extends JComponent
 
 		maxHorizontalScrollWidth = 0;
 
-		chunkCache.setFirstLine(firstLine,physFirstLine,false);
+		chunkCache.setFirstLine(firstLine,physFirstLine);
 
 		if(buffer.isLoaded())
 			recalculateLastPhysicalLine();
@@ -718,7 +718,7 @@ public class JEditTextArea extends JComponent
 			}
 		}
 
-		chunkCache.setFirstLine(firstLine,physFirstLine,false);
+		chunkCache.setFirstLine(firstLine,physFirstLine);
 
 		recalculateLastPhysicalLine();
 
@@ -2112,6 +2112,12 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
+			if(bracketLine != -1)
+			{
+				invalidateLineRange(bracketLine,caretLine);
+				bracketLine = bracketPosition = -1;
+			}
+
 			if(focusedComponent == this)
 				finishCaretUpdate(doElectricScroll,false);
 		}
@@ -3107,7 +3113,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			int dot = caret - getLineStartOffset(caretLine);
 
-			int bracket = TextUtilities.findMatchingBracketFuzzy(
+			int bracket = TextUtilities.findMatchingBracket(
 				buffer,caretLine,Math.max(0,dot - 1));
 			if(bracket != -1)
 			{
@@ -5377,7 +5383,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(offset != 0)
 		{
-			int bracketOffset = TextUtilities.findMatchingBracketFuzzy(
+			int bracketOffset = TextUtilities.findMatchingBracket(
 				buffer,caretLine,offset - 1);
 			if(bracketOffset != -1)
 			{
@@ -5702,7 +5708,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(!bufferChanging && end != 0 && buffer.isLoaded())
 			{
-				invalidateLineRange(start - 1,end - 1);
+				invalidateLineRange(start - 1,getLastPhysicalLine());
 			}
 		} //}}}
 
@@ -5771,6 +5777,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 		//}}}
+
+		//{{{ preContentRemoved() method
+		public void preContentRemoved(Buffer buffer, int startLine, int start,
+			int numLines, int length)
+		{} //}}}
 
 		//{{{ contentRemoved() method
 		public void contentRemoved(Buffer buffer, int startLine, int start,

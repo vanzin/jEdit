@@ -742,6 +742,8 @@ public class Gutter extends JComponent implements SwingConstants
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent e)
 		{
+			textArea.grabFocus();
+
 			if(GUIUtilities.isPopupTrigger(e)
 				|| e.getX() >= getWidth() - borderWidth * 2)
 			{
@@ -842,8 +844,13 @@ public class Gutter extends JComponent implements SwingConstants
 							if(line >= caretLine
 								&& line <= bracketLine)
 							{
-								if(e.isControlDown())
+								if(e.isShiftDown())
 									textArea.selectToMatchingBracket();
+								else if(e.isControlDown())
+								{
+									foldVisibilityManager.narrow(
+										caretLine,bracketLine);
+								}
 								else
 									textArea.goToMatchingBracket();
 								return;

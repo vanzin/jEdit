@@ -1384,20 +1384,15 @@ options.jedit.label=jEdit
 # Option pane to show by default
 options.last=editing
 
-#{{{ General pane
-options.general.label=General
-options.general.history=History entries to remember:
-options.general.saveCaret=Save caret positions in recent file list
-options.general.sortBuffers=Sort buffer list (takes effect after restart)
-options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.sortRecent=Sort recent file list
-options.general.checkModStatus=Warn if file is modified on disk by another program
-options.general.showFullPath=Show full path of buffer in title bar
-options.general.showSearchbar=Always show search bar
-options.general.beepOnSearchAutoWrap=Beep when searching automatically wraps
-options.general.showBufferSwitcher=Show buffer switcher
-options.general.showTips=Show tips on startup
-options.general.showSplash=Show splash screen on startup
+#{{{ Abbreviations pane
+options.abbrevs.label=Abbreviations
+options.abbrevs.set=Abbrev set:
+options.abbrevs.expandOnInput=Space bar expands abbrevs
+options.abbrevs.abbrev=Abbrev
+options.abbrevs.expand=Expansion
+options.abbrevs.add=Add...
+options.abbrevs.edit=Edit...
+options.abbrevs.remove=Remove
 #}}}
 
 #{{{ Appearance pane
@@ -1421,28 +1416,52 @@ options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 #}}}
 
-#{{{ Text Area pane
-options.textarea.label=Text Area
-options.textarea.font=Text font:
-options.textarea.foreground=Text color:
-options.textarea.background=Background color:
-options.textarea.caret=Caret:
-options.textarea.blinkCaret=blinking
-options.textarea.blockCaret=block
-options.textarea.selection=Single selection:
-options.textarea.multipleSelection=Multiple selection:
-options.textarea.lineHighlight=Highlight current line:
-options.textarea.bracketHighlight=Highlight matching brackets:
-options.textarea.eolMarkers=End of line markers:
-options.textarea.wrapGuide=Wrap guide:
-options.textarea.electricBorders=Electric (auto scroll) borders
-options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
-options.textarea.joinNonWordChars=Double-click drag joins non-alphanumeric \
-	characters
-options.textarea.middleMousePaste=Quick copy using middle mouse button
-options.textarea.antiAlias=Smooth text (slow on some systems)
-options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
-	text display)
+#{{{ Context Menu pane
+options.context.label=Context Menu
+options.context.caption=Items in text area right click menu:
+options.context.add=Add...
+options.context.remove=Remove
+options.context.moveUp=Move Up
+options.context.moveDown=Move Down
+options.context.add.title=Add to Context Menu
+options.context.add.caption=Add to context menu:
+options.context.add.separator=Separator
+options.context.add.action=Command or macro:
+#}}}
+
+#{{{ Editing pane
+options.editing.label=Editing
+options.editing.defaultMode=Default edit mode:
+options.editing.undoCount=Number of undos:
+options.editing.mode=Change settings for mode:
+options.editing.global=<global defaults>
+options.editing.useDefaults=Use default settings
+options.editing.filenameGlob=File name glob:
+options.editing.firstlineGlob=First line glob:
+options.editing.folding=Folding mode:
+options.editing.collapseFolds=Initially collapse folds with level:
+options.editing.wrap=Word wrap:
+options.editing.maxLineLen=Wrap margin:
+options.editing.tabSize=Tab width:
+options.editing.indentSize=Indent width:
+options.editing.noWordSep=Extra word characters:
+options.editing.noTabs=Soft (emulated with spaces) tabs
+#}}}
+
+#{{{ General pane
+options.general.label=General
+options.general.history=History entries to remember:
+options.general.saveCaret=Save caret positions in recent file list
+options.general.sortBuffers=Sort buffer list (takes effect after restart)
+options.general.sortByName=Sort buffer list by file name, instead of path name
+options.general.sortRecent=Sort recent file list
+options.general.checkModStatus=Warn if file is modified on disk by another program
+options.general.showFullPath=Show full path of buffer in title bar
+options.general.showSearchbar=Always show search bar
+options.general.beepOnSearchAutoWrap=Beep when searching automatically wraps
+options.general.showBufferSwitcher=Show buffer switcher
+options.general.showTips=Show tips on startup
+options.general.showSplash=Show splash screen on startup
 #}}}
 
 #{{{ Gutter pane
@@ -1471,32 +1490,6 @@ options.gutter.toggleFoldFully=Collapse/expand fold fully
 options.gutter.selectFold=Select fold
 #}}}
 
-#{{{ Status bar pane
-options.status.label=Status Bar
-options.status.visible=Show status bar
-options.status.show-caret-status=Show caret status
-options.status.show-encoding=Show buffer encoding
-options.status.show-edit-mode=Show edit mode
-options.status.show-fold-mode=Show fold mode
-options.status.show-wrap=Show wrap mode
-options.status.show-multi-select=Show multiple selection status
-options.status.show-overwrite=Show overwrite status
-options.status.show-line-seperator=Show buffer line seperator
-options.status.show-memory=Show memory indicator
-options.status.memory.foreground=Memory indicator foreground:
-options.status.memory.background=Memory indicator background:
-#}}}
-
-#{{{ Syntax Highlighting pane
-options.syntax.label=Syntax Highlighting
-options.syntax.object=Token type
-options.syntax.style=Text style
-options.syntax.foldLine.1=Collapsed fold line, level 1
-options.syntax.foldLine.2=Collapsed fold line, level 2
-options.syntax.foldLine.3=Collapsed fold line, level 3
-options.syntax.foldLine.0=Collapsed fold line, level > 3
-#}}}
-
 #{{{ Loading and Saving pane
 options.loadsave.label=Loading & Saving
 options.loadsave.encoding=Default character encoding:
@@ -1516,34 +1509,39 @@ options.loadsave.backupEverySave=Backup on every save
 options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
-#{{{ Editing pane
-options.editing.label=Editing
-options.editing.defaultMode=Default edit mode:
-options.editing.undoCount=Number of undos:
-options.editing.mode=Change settings for mode:
-options.editing.global=<global defaults>
-options.editing.useDefaults=Use default settings
-options.editing.filenameGlob=File name glob:
-options.editing.firstlineGlob=First line glob:
-options.editing.folding=Folding mode:
-options.editing.collapseFolds=Initially collapse folds with level:
-options.editing.wrap=Word wrap:
-options.editing.maxLineLen=Wrap margin:
-options.editing.tabSize=Tab width:
-options.editing.indentSize=Indent width:
-options.editing.noWordSep=Extra word characters:
-options.editing.noTabs=Soft (emulated with spaces) tabs
+#{{{ Printing pane
+options.print.label=Printing
+options.print.font=Print font:
+options.print.fontstyle=Print font style:
+options.print.fontsize=Print font size:
+options.print.header=Print a header with the file name
+options.print.footer=Print a footer with the date, time and page number
+options.print.lineNumbers=Print line numbers
+options.print.color=Color printing
+options.print.tabSize=Tab width when printing:
 #}}}
 
-#{{{ Abbreviations pane
-options.abbrevs.label=Abbreviations
-options.abbrevs.set=Abbrev set:
-options.abbrevs.expandOnInput=Space bar expands abbrevs
-options.abbrevs.abbrev=Abbrev
-options.abbrevs.expand=Expansion
-options.abbrevs.add=Add...
-options.abbrevs.edit=Edit...
-options.abbrevs.remove=Remove
+#{{{ Plugin Manager pane
+options.plugin-manager.label=Plugin Manager
+options.plugin-manager.downloadSource=Download plugin source code
+options.plugin-manager.mirror=Preferred download mirror:
+options.plugin-manager.location=Install plugins in:
+options.plugin-manager.settings-dir=jEdit settings directory
+options.plugin-manager.app-dir=jEdit application directory
+options.plugin-manager.none=Plugin Central default
+#}}}
+
+#{{{ Proxy pane
+options.firewall.label=Proxy Servers
+options.firewall.http.enabled=Use HTTP proxy server
+options.firewall.http.host=HTTP proxy host:
+options.firewall.http.port=HTTP proxy port:
+options.firewall.http.user=Username:
+options.firewall.http.password=Password:
+options.firewall.http.nonProxy=Connect directly to:
+options.firewall.socks.enabled=Use SOCKS proxy server
+options.firewall.socks.host=SOCKS proxy host:
+options.firewall.socks.port=SOCKS proxy port:
 #}}}
 
 #{{{ Shortcuts pane
@@ -1586,17 +1584,54 @@ grab-key.prefix-shortcut.message=\
 	Please choose another.
 #}}}
 
-#{{{ Context Menu pane
-options.context.label=Context Menu
-options.context.caption=Items in text area right click menu:
-options.context.add=Add...
-options.context.remove=Remove
-options.context.moveUp=Move Up
-options.context.moveDown=Move Down
-options.context.add.title=Add to Context Menu
-options.context.add.caption=Add to context menu:
-options.context.add.separator=Separator
-options.context.add.action=Command or macro:
+#{{{ Status bar pane
+options.status.label=Status Bar
+options.status.visible=Show status bar
+options.status.show-caret-status=Show caret status
+options.status.show-encoding=Show buffer encoding
+options.status.show-edit-mode=Show edit mode
+options.status.show-fold-mode=Show fold mode
+options.status.show-wrap=Show wrap mode
+options.status.show-multi-select=Show multiple selection status
+options.status.show-overwrite=Show overwrite status
+options.status.show-line-seperator=Show buffer line seperator
+options.status.show-memory=Show memory indicator
+options.status.memory.foreground=Memory indicator foreground:
+options.status.memory.background=Memory indicator background:
+#}}}
+
+#{{{ Syntax Highlighting pane
+options.syntax.label=Syntax Highlighting
+options.syntax.object=Token type
+options.syntax.style=Text style
+options.syntax.foldLine.1=Collapsed fold line, level 1
+options.syntax.foldLine.2=Collapsed fold line, level 2
+options.syntax.foldLine.3=Collapsed fold line, level 3
+options.syntax.foldLine.0=Collapsed fold line, level > 3
+#}}}
+
+#{{{ Text Area pane
+options.textarea.label=Text Area
+options.textarea.font=Text font:
+options.textarea.foreground=Text color:
+options.textarea.background=Background color:
+options.textarea.caret=Caret:
+options.textarea.blinkCaret=blinking
+options.textarea.blockCaret=block
+options.textarea.selection=Single selection:
+options.textarea.multipleSelection=Multiple selection:
+options.textarea.lineHighlight=Highlight current line:
+options.textarea.bracketHighlight=Highlight matching brackets:
+options.textarea.eolMarkers=End of line markers:
+options.textarea.wrapGuide=Wrap guide:
+options.textarea.electricBorders=Electric (auto scroll) borders
+options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
+options.textarea.joinNonWordChars=Double-click drag joins non-alphanumeric \
+	characters
+options.textarea.middleMousePaste=Quick copy using middle mouse button
+options.textarea.antiAlias=Smooth text (slow on some systems)
+options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
+	text display)
 #}}}
 
 #{{{ Tool Bar pane
@@ -1617,41 +1652,6 @@ options.toolbar.edit.builtin=Use built-in icon:
 options.toolbar.edit.file=Load icon from file:
 options.toolbar.edit.choose=Choose
 options.toolbar.edit.no-icon=No icon selected
-#}}}
-
-#{{{ Printing pane
-options.print.label=Printing
-options.print.font=Print font:
-options.print.fontstyle=Print font style:
-options.print.fontsize=Print font size:
-options.print.header=Print a header with the file name
-options.print.footer=Print a footer with the date, time and page number
-options.print.lineNumbers=Print line numbers
-options.print.color=Color printing
-options.print.tabSize=Tab width when printing:
-#}}}
-
-#{{{ Proxy pane
-options.firewall.label=Proxy Servers
-options.firewall.http.enabled=Use HTTP proxy server
-options.firewall.http.host=HTTP proxy host:
-options.firewall.http.port=HTTP proxy port:
-options.firewall.http.user=Username:
-options.firewall.http.password=Password:
-options.firewall.http.nonProxy=Connect directly to:
-options.firewall.socks.enabled=Use SOCKS proxy server
-options.firewall.socks.host=SOCKS proxy host:
-options.firewall.socks.port=SOCKS proxy port:
-#}}}
-
-#{{{ Plugin Manager pane
-options.plugin-manager.label=Plugin Manager
-options.plugin-manager.downloadSource=Download plugin source code
-options.plugin-manager.mirror=Preferred download mirror:
-options.plugin-manager.location=Install plugins in:
-options.plugin-manager.settings-dir=jEdit settings directory
-options.plugin-manager.app-dir=jEdit application directory
-options.plugin-manager.none=Plugin Central default
 #}}}
 
 #{{{ File System Browser panes
@@ -1900,7 +1900,7 @@ vfs.status.renaming=Renaming {0} to {1}
 
 plugin-manager.title=Plugin Manager
 
-plugin-manager.url=http://plugins.jedit.org/export/gzip_plugin_manager.php
+plugin-manager.export-url=http://plugins.jedit.org/export/gzip_plugin_manager.php
 plugin-manager.mirror-url=http://plugins.jedit.org/export/mirror_list.php
 
 plugin-manager.options=Options...
@@ -1912,13 +1912,14 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 	\n\
 	{0}
 
-plugin-manager.dependency.title=Plugin Depenency	
+plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message=One or more plugins you are installing \
 	depend on this plugin.\nAre you sure you don't want to install it?
 
 #{{{ Plugin list download progress
 plugin-list.progress.title=Downloading Plugin List
-plugin-list.progress.caption=Downloading list of available plugins...
+plugin-list.progress.caption=Downloading list of available plugins from \
+	plugins.jedit.org...
 plugin-list.progress.stop=Cancel
 #}}}
 
@@ -1941,9 +1942,9 @@ plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
 manage-plugins.title=Manage
 
 manage-plugins.info.enabled=
-manage-plugins.info.name= Name
-manage-plugins.info.version= Version
-manage-plugins.info.status= Status
+manage-plugins.info.name=Name
+manage-plugins.info.version=Version
+manage-plugins.info.status=Status
 
 manage-plugins.remove=Remove...
 manage-plugins.help=Help...
@@ -1958,18 +1959,14 @@ install-plugins.info.version=Version
 install-plugins.info.install=Install
 install-plugins.info.category=Category
 
-install-plugins.totalSize=Total Size: 
+install-plugins.totalSize=Total Size:\ 
 install-plugins.select-all=Select All
 install-plugins.install=Install
 install-plugins.show-updates=Show Updates
 
-install-plugins.info.html=<html>\n\
-	<body>\n\
-	<em><font size=\"2\" face=\"Arial, Helvetica, sans-serif\">Author: {0}<br>\n\
-	Released: {1}</em><br></font><br>\n\
-	<font size=\"2\" face=\"Arial, Helvetica, sans-serif\">{2}</font>\n
-	</body>\n\
-	</html>
+install-plugins.info=Author: {0}\n\
+	Released: {1}\n\
+	{2}
 
 update-plugins.title=Update
 #}}}

@@ -59,6 +59,21 @@ public abstract class BufferChangeAdapter implements BufferChangeListener
 		int numLines, int length) {}
 	//}}}
 
+	//{{{ preContentRemoved() method
+	/**
+	 * Called when text is about to be removed from the buffer, but is
+	 * still present.
+	 * @param buffer The buffer in question
+	 * @param startLine The first line
+	 * @param offset The start offset, from the beginning of the buffer
+	 * @param numLines The number of lines to be removed
+	 * @param length The number of characters to be removed
+	 * @since jEdit 4.2pre1
+	 */
+	public void preContentRemoved(Buffer buffer, int startLine, int offset,
+		int numLines, int length) {}
+	//}}}
+
 	//{{{ contentRemoved() method
 	/**
 	 * Called when text is removed from the buffer.

@@ -79,6 +79,8 @@ public class OffsetManager
 		return lineCount;
 	} //}}}
 
+	//{{{ OBSOLETE
+
 	//{{{ getVirtualLineCount() method
 	public final int getVirtualLineCount(int index)
 	{
@@ -90,6 +92,8 @@ public class OffsetManager
 	{
 		virtualLineCounts[index] = lineCount;
 	} //}}}
+
+	//}}}
 
 	//{{{ getLineOfOffset() method
 	public int getLineOfOffset(int offset)
@@ -184,11 +188,45 @@ public class OffsetManager
 	//{{{ setLineVisible() method
 	public final void setLineVisible(int line, int index, boolean visible)
 	{
+		long info = lineInfo[line];
 		long mask = 1L << (index + VISIBLE_SHIFT);
+		boolean oldVisible = ((lineInfo[line] & mask) != 0);
 		if(visible)
-			lineInfo[line] = (lineInfo[line] | mask);
+		{
+			if(!oldVisible)
+			{
+				int screenLines = getScreenLineCount(line);
+				Anchor anchor = anchors;
+				while(anchor != null)
+				{
+					if(anchor.physicalLine > line)
+						anchor.scrollLine += screenLines;
+					anchor = anchor.next;
+				}
+			}
+			lineInfo[line] = (info | mask);
+		}
 		else
-			lineInfo[line] = (lineInfo[line] & ~mask);
+		{
+			if(!oldVisible)
+			{
+				int screenLines = getScreenLineCount(line);
+				Anchor anchor = anchors;
+				while(anchor != null)
+				{
+					if(anchor.physicalLine > line && anchor.index == index)
+						anchor.scrollLine -= screenLines;
+					anchor = anchor.next;
+				}
+			}
+			lineInfo[line] = (info & ~mask);
+		}
+	} //}}}
+
+	//{{{ isScreenLineCountValid() method
+	public final boolean isScreenLineCountValid(int line)
+	{
+		return (lineInfo[line] & SCREEN_LINES_VALID_MASK) != 0;
 	} //}}}
 
 	//{{{ getScreenLineCount() method
@@ -201,7 +239,20 @@ public class OffsetManager
 	//{{{ setScreenLineCount() method
 	public final void setScreenLineCount(int line, int count)
 	{
-		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
+		long info = lineInfo[line];
+		int oldCount = (int)((info & SCREEN_LINES_MASK) >> SCREEN_LINES_SHIFT);
+		if(oldCount != count)
+		{
+			Anchor anchor = anchors;
+			while(anchor != null)
+			{
+				if(anchor.physicalLine > line
+					&& (info & (1L << (VISIBLE_SHIFT + anchor.index))) != 0)
+					anchor.scrollLine += (count - oldCount);
+				anchor = anchor.next;
+			}
+		}
+		lineInfo[line] = ((info & ~SCREEN_LINES_MASK)
 			| ((long)count << SCREEN_LINES_SHIFT)
 			| SCREEN_LINES_VALID_MASK);
 	} //}}}
@@ -327,6 +378,13 @@ public class OffsetManager
 		}
 	} //}}}
 
+	//{{{ addLineEndOffset() method
+	public static void addLineEndOffset(LongArray endOffsets, int offset)
+	{
+		endOffsets.add(offset | (0xffL << VISIBLE_SHIFT)
+			| (1L << SCREEN_LINES_SHIFT));
+	} //}}}
+
 	//{{{ _contentInserted() method
 	public void _contentInserted(LongArray endOffsets)
 	{
@@ -340,8 +398,16 @@ public class OffsetManager
 		for(int i = 0; i < positionCount; i++)
 			positions[i].offset = 0;
 
+		//{{{ OBSOLETE
 		for(int i = 0; i < virtualLineCounts.length; i++)
-			virtualLineCounts[i] = lineCount;
+			virtualLineCounts[i] = lineCount; //}}}
+
+		Anchor anchor = anchors;
+		while(anchor != null)
+		{
+			anchor.physicalLine = anchor.scrollLine = lineCount;
+			anchor = anchor.next;
+		}
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -404,10 +470,23 @@ public class OffsetManager
 				// for following fold level calculations
 				lineInfo[startLine + i] = (offset
 					+ endOffsets.get(i))
-					| visible;
+					| visible
+					| (1L << SCREEN_LINES_SHIFT);
 			}
 
-			//{{{ Unrolled
+			Anchor anchor = anchors;
+			while(anchor != null)
+			{
+				if(anchor.physicalLine > startLine
+					&& (visible & (1L << anchor.index)) != 0)
+				{
+					anchor.physicalLine += numLines;
+					anchor.scrollLine += numLines;
+				}
+				anchor = anchor.next;
+			}
+
+			//{{{ OBSOLETE
 			if((visible & (1L << (VISIBLE_SHIFT + 0))) != 0)
 				virtualLineCounts[0] += numLines;
 			if((visible & (1L << (VISIBLE_SHIFT + 1))) != 0)
@@ -436,9 +515,10 @@ public class OffsetManager
 	public void contentRemoved(int startLine, int offset,
 		int numLines, int length)
 	{
+		int endLine = startLine + numLines;
 		lineInfo[startLine] &= ~SCREEN_LINES_VALID_MASK;
 
-		//{{{ Update virtual line counts
+		//{{{ OBSOLETE
 		for(int i = 0; i < numLines; i++)
 		{
 			long info = lineInfo[startLine + i];
@@ -474,9 +554,30 @@ public class OffsetManager
 				&& startLine + numLines < lastValidLineContext)
 				lastValidLineContext = startLine - 1;
 
-			System.arraycopy(lineInfo,startLine + numLines,lineInfo,
+			// if anchor's physical line > startLine,
+			// count screen lines from startLine to Math.min(startLine + numLines,line)
+			Anchor anchor = anchors;
+			while(anchor != null)
+			{
+				if(anchor.physicalLine > startLine)
+				{
+					int end = Math.min(endLine,anchor.physicalLine);
+					for(int i = startLine; i < end; i++)
+					{
+						if(isLineVisible(i,anchor.index))
+						{
+							anchor.physicalLine--;
+							anchor.scrollLine -= getScreenLineCount(i);
+						}
+					}
+				}
+
+				anchor = anchor.next;
+			}
+
+			System.arraycopy(lineInfo,endLine,lineInfo,
 				startLine,lineCount - startLine);
-			System.arraycopy(lineContext,startLine + numLines,lineContext,
+			System.arraycopy(lineContext,endLine,lineContext,
 				startLine,lineCount - startLine);
 		} //}}}
 
@@ -503,6 +604,33 @@ public class OffsetManager
 		return lastValidLineContext;
 	} //}}}
 
+	//{{{ addAnchor() method
+	public void addAnchor(Anchor anchor)
+	{
+		anchor.next = anchors;
+		anchors = anchor;
+	} //}}}
+
+	//{{{ removeAnchor() method
+	public void removeAnchor(Anchor anchor)
+	{
+		Anchor current = anchors;
+		Anchor prev = null;
+		while(current != null)
+		{
+			if(current == anchor)
+			{
+				if(prev != null)
+					prev.next = current.next;
+				else
+					anchors = current.next;
+				return;
+			}
+			prev = current;
+			current = current.next;
+		}
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -515,7 +643,11 @@ public class OffsetManager
 	private PosBottomHalf[] positions;
 	private int positionCount;
 
+	//{{{ OBSOLETE
 	private int[] virtualLineCounts;
+	//}}}
+
+	private Anchor anchors;
 
 	/**
 	 * If -1, then there is no gap.
@@ -757,6 +889,21 @@ loop:		for(;;)
 			if(--ref == 0)
 				removePosition(this);
 		} //}}}
+	} //}}}
+
+	//{{{ Anchor class
+	/**
+	 * An anchor is a floating position retaining a scroll line number.
+	 */
+	public static abstract class Anchor
+	{
+		public Anchor next;
+
+		public int physicalLine;
+		public int scrollLine;
+		public int index;
+
+		public abstract void changed();
 	} //}}}
 
 	//}}}

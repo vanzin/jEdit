@@ -104,6 +104,25 @@ public class MiscUtilities
 			return path;
 	} //}}}
 
+	//{{{ resolveSymlinks() method
+	/**
+	 * Resolves any symbolic links in the path name specified
+	 * using <code>File.getCanonicalPath()</code>. <b>For local path
+	 * names only.</b>
+	 * @since jEdit 4.2pre1
+	 */
+	public static String resolveSymlinks(String path)
+	{
+		try
+		{
+			return new File(path).getCanonicalPath();
+		}
+		catch(IOException io)
+		{
+			return path;
+		}
+	} //}}}
+
 	//{{{ isPathAbsolute() method
 	/**
 	 * Returns if the specified path name is an absolute path or URL.
@@ -115,7 +134,10 @@ public class MiscUtilities
 			return true;
 		else if(OperatingSystem.isDOSDerived())
 		{
-			if(path.length() >= 2 && path.charAt(1) == ':')
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return true;
+			if(path.length() > 2 && path.charAt(1) == ':'
+				&& path.charAt(2) == '\\')
 				return true;
 			if(path.startsWith("\\\\"))
 				return true;
@@ -139,35 +161,23 @@ public class MiscUtilities
 	 */
 	public static String constructPath(String parent, String path)
 	{
-		if(MiscUtilities.isURL(path))
-			return path;
-		else if(path.startsWith("~"))
+		if(isAbsolutePath(path))
 			return path;
 		else
 		{
-			// have to handle these cases specially on windows.
+			// have to handle this case specially on windows.
+			// insert \ between, eg A: and myfile.txt.
 			if(OperatingSystem.isDOSDerived())
 			{
 				if(path.length() == 2 && path.charAt(1) == ':')
 					return path;
-				else if(path.length() > 2 && path.charAt(1) == ':')
+				else if(path.length() > 2 && path.charAt(1) == ':'
+					&& path.charAt(2) != '\\')
 				{
-					if(path.charAt(2) != '\\')
-					{
-						path = path.substring(0,2) + '\\'
-							+ path.substring(2);
-					}
-
-					return resolveSymlinks(path);
+					path = path.substring(0,2) + '\\'
+						+ path.substring(2);
+					return path;
 				}
-				else if(path.startsWith("\\\\"))
-					return resolveSymlinks(path);
-			}
-			else if(OperatingSystem.isUnix())
-			{
-				// nice and simple
-				if(path.length() > 0 && path.charAt(0) == '/')
-					return resolveSymlinks(path);
 			}
 		}
 
@@ -199,6 +209,8 @@ public class MiscUtilities
 	/**
 	 * Like {@link #constructPath}, except <code>path</code> will be
 	 * appended to <code>parent</code> even if it is absolute.
+	 * <b>For local path names only.</b>.
+	 *
 	 * @param path
 	 * @param parent
 	 */
@@ -1247,19 +1259,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ Private members
 	private MiscUtilities() {}
-
-	//{{{ resolveSymlinks() method
-	private static String resolveSymlinks(String path)
-	{
-		try
-		{
-			return new File(path).getCanonicalPath();
-		}
-		catch(IOException io)
-		{
-			return path;
-		}
-	} //}}}
 
 	//}}}
 }
