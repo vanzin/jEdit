@@ -412,6 +412,12 @@
     pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box, a colon (<quote>:</quote>) is painted at the end of wrapped lines.
    </para>
+   <para>
+    Note that since jEdit only scrolls one whole <quote>physical</quote>
+    (newline-delimited) line
+    at a time, having lines wrapped into more sections than visible in the
+    text area will render portions of the buffer inaccessable.
+   </para>
   </sect2>
   <sect2><title>Hard Wrap</title>
    <para>

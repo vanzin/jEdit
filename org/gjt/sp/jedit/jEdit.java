@@ -2114,6 +2114,16 @@ public class jEdit
 		return viewsLast;
 	} //}}}
 
+	//{{{ getActiveView() method
+	/**
+	 * Returns the currently focused view.
+	 * @since jEdit 4.1pre1
+	 */
+	public static View getActiveView()
+	{
+		return activeView;
+	} //}}}
+
 	//}}}
 
 	//{{{ Miscellaneous methods
@@ -2520,6 +2530,12 @@ public class jEdit
 			path,messageProp,args));
 	} //}}}
 
+	//{{{ setActiveView() method
+	static void setActiveView(View view)
+	{
+		jEdit.activeView = view;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -2556,6 +2572,7 @@ public class jEdit
 	private static int viewCount;
 	private static View viewsFirst;
 	private static View viewsLast;
+	private static View activeView;
 	//}}}
 
 	private jEdit() {}

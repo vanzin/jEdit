@@ -1,6 +1,5 @@
 TO DO
 
-- select & type fucked
 - add some tips of the day about pre1 features
 - soft wrap
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
