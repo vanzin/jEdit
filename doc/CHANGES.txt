@@ -79,6 +79,8 @@ Thanks to Ken Turner for contributing to this release.
   invalidate all contexts from that line onwards. This did not happen if
   for example all but one context was valid.
 
+- Faster directory listing in the file system browser.
+
 }}}
 {{{ Bug Fixes
 

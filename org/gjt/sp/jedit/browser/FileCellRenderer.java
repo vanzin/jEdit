@@ -162,6 +162,8 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	} //}}}
 
 	//{{{ Package-private members
+	Font plainFont;
+	Font boldFont;
 	boolean showIcons;
 
 	//{{{ propertiesChanged() method
@@ -170,12 +172,26 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 	} //}}}
 
+	//{{{ getEntryWidth() method
+	int getEntryWidth(VFSDirectoryEntryTableModel.Entry entry,
+		FontMetrics fm)
+	{
+		String name = entry.dirEntry.name;
+		int width = fm.stringWidth(name);
+		width += ExpansionToggleBorder.ICON_WIDTH
+			+ entry.level * ExpansionToggleBorder.LEVEL_WIDTH
+			+ 3;
+		if(showIcons)
+		{
+			width += fileIcon.getIconWidth();
+			width += getIconTextGap();
+		}
+		return width;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
-	private Font plainFont;
-	private Font boldFont;
-
 	private boolean underlined;
 	private boolean colorDetermined;
 	private boolean isSelected;
