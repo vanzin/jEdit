@@ -136,16 +136,10 @@ public class EvalError extends Exception
 			NameSpace ns = stack.pop();
 			SimpleNode node = ns.getNode();
 			if ( ns.isMethod )
-			{
-				if(node == null)
-					trace = trace + "\nCalled from method: " + ns.getName()
-						+ " <Java code>";
-				else
-					trace = trace + "\nCalled from method: " + ns.getName()
-						+ " : at Line: "+ node.getLineNumber() 
-						+ " : in file: "+ node.getSourceFile()
-						+ " : "+node.getText();
-			}
+				trace = trace + "\nCalled from method: " + ns.getName()
+				+ " : at Line: "+ node.getLineNumber() 
+				+ " : in file: "+ node.getSourceFile()
+				+ " : "+node.getText();
 		}
 
 		return trace;

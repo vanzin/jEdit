@@ -36,7 +36,7 @@ package bsh;
 
 class BSHTypedVariableDeclaration extends SimpleNode
 {
-    public boolean isFinal;
+	public Modifiers modifiers;
 	
     BSHTypedVariableDeclaration(int id) { super(id); }
 
@@ -64,9 +64,11 @@ class BSHTypedVariableDeclaration extends SimpleNode
 				Object value = dec.eval( typeNode, callstack, interpreter);
 
 				// simple declaration with no value, e.g. int a;
-				// null in value will prompt defaulting in setTypedVariable
-				if ( value == Primitive.VOID ) 
-					value = null;
+				if ( value == null ) 
+				{
+					// Leave the value as null.
+					// This will prompt defaulting in setTypedVariable
+				}
 				else 
 				// true null value being assigned
 				if ( value == Primitive.NULL ) {
@@ -85,7 +87,8 @@ class BSHTypedVariableDeclaration extends SimpleNode
 				}
 
 				try {
-					namespace.setTypedVariable( dec.name, type, value, isFinal);
+					namespace.setTypedVariable( 
+						dec.name, type, value, modifiers );
 				} catch ( UtilEvalError e ) { 
 					throw e.toEvalError( this, callstack ); 
 				}

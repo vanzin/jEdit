@@ -3,7 +3,7 @@
 	The format is similar to the Unix ls -l
 	<em>This is an example of a bsh command written in Java for speed.</em>
 	
-	@method void dir( String dirname )
+	@method void dir( [ String dirname ] )
 */
 package bsh.commands;
 
@@ -23,14 +23,20 @@ public class dir
 		return "usage: dir( String dir )\n       dir()";
 	}
 
-	public static void invoke( Interpreter env, NameSpace namespace ) {
-		//String dir = getCWD( namespace );
+	/**
+		Implement dir() command.
+	*/
+	public static void invoke( Interpreter env, CallStack callstack ) 
+	{
 		String dir = ".";
-		invoke( env, namespace, dir );
+		invoke( env, callstack, dir );
 	}
 
+	/**
+		Implement dir( String directory ) command.
+	*/
 	public static void invoke( 
-		Interpreter env, NameSpace namespace, String dir ) 
+		Interpreter env, CallStack callstack, String dir ) 
 	{
 		File file;
 		try {
@@ -49,7 +55,7 @@ public class dir
 		}
 
 		String [] files = file.list();
-		files = bubbleSort(files);
+		files = StringUtil.bubbleSort(files);
 
 		for( int i=0; i< files.length; i++ ) {
 			File f = new File( dir + File.separator + files[i] );
@@ -92,30 +98,6 @@ public class dir
 
 			env.println( sb.toString() );
 		}
-	}
-
-	public static String [] bubbleSort( String [] in ) {
-		Vector v = new Vector();
-		for(int i=0; i<in.length; i++)
-			v.addElement(in[i]);
-
-		int n = v.size();
-		boolean swap = true;
-		while ( swap ) {
-			swap = false;
-			for(int i=0; i<(n-1); i++)
-				if ( ((String)v.elementAt(i)).compareTo(
-						((String)v.elementAt(i+1)) ) > 0 ) {
-					String tmp = (String)v.elementAt(i+1);
-					v.removeElementAt( i+1 );
-					v.insertElementAt( tmp, i );
-					swap = true;
-				}
-		}
-
-		String [] out = new String [ n ];
-		v.copyInto(out);
-		return out;
 	}
 }
 

@@ -1,32 +1,38 @@
 /**
-	Open a new workspace (JConsole) in the GUI desktop.
-*/
-import javax.swing.*;
+ * Creates a JConsole in a JInternalFrame and adds it to the desktop 
+ *
+ * @return this (the workspace scripted object for allowing access to the 
+ *          frame, interpreter, etc.)
+ *
+ * @author Pat Niemeyer
+ * @author Daniel Leuck (bug fixes)
+ */
 
+import javax.swing.*;
 import bsh.Interpreter;
 import bsh.BshClassManager;
 import bsh.util.JConsole;
 import bsh.util.NameCompletionTable;
 
-makeWorkspace( String name ) {
-
+makeWorkspace( String name ) 
+{
 	if ( bsh.system.desktop == void ) {
 		print("No desktop...");
 		return;
 	}
 
-	console	= new JConsole();
-	name="Bsh Workspace: "+name;
+	this.console = new JConsole();
+	this.name="Bsh Workspace: "+name;
 
-	interpreter = new Interpreter( console );
+	this.interpreter = new Interpreter( console );
 
 	// provide name completion for console, name source is global namespace
 	// move this into JConsole?
 
-	nct = new NameCompletionTable();
+	this.nct = new NameCompletionTable();
 	nct.add( interpreter.getNameSpace() );
 	try {
-		bcm = this.caller.namespace.getClassManager();
+		this.bcm = this.caller.namespace.getClassManager();
 		if ( bcm != null ) {
 			classNamesSource = bcm.getClassPath();
 			nct.add( classNamesSource );
@@ -40,16 +46,18 @@ makeWorkspace( String name ) {
 	// for convenience and backwards compatability
 	interpreter.set( "bsh.desktop",  bsh.system.desktop );
 
-	frame = bsh.system.desktop.makeInternalFrame( name );
+	this.frame = bsh.system.desktop.makeInternalFrame( name );
+	frame.frameIcon=bsh.system.icons.workspace;
 	frame.setDefaultCloseOperation( frame.DO_NOTHING_ON_CLOSE );
-
+	
 	internalFrameClosing( e ) {
 		close();
 	}
 	frame.addInternalFrameListener(this);
 
-	actionPerformed( e ) {
-		com = e.getActionCommand();
+	actionPerformed( e ) 
+	{
+		this.com = e.getActionCommand();
 		if ( com.equals("Workspace Editor") )
 			workspaceEditor( interpreter, name );
 		else if ( com.equals("Capture System in/out/err") )
@@ -58,7 +66,14 @@ makeWorkspace( String name ) {
 			close();
 		}
 	}
-
+	
+	internalFrameActivated(ife) {}
+	internalFrameDeactivated(ife) {}
+	internalFrameClosed(ife) {}
+	internalFrameOpened(ife) {}
+	internalFrameIconified(ife) {}
+	internalFrameDeiconified(ife) {}
+	
 	/*
 		Notes: Careful not to print anything before returning sys io...
 		console is now gone.
@@ -69,9 +84,9 @@ makeWorkspace( String name ) {
 			returnSysIO();
 	}
 
-	menubar	= new JMenuBar();
-	menu=new JMenu("File");
-	mi=new JMenuItem("Workspace Editor");
+	this.menubar = new JMenuBar();
+	this.menu=new JMenu("File");
+	this.mi=new JMenuItem("Workspace Editor");
 	mi.addActionListener(this);
 	menu.add(mi);
 	mi=new JMenuItem("Capture System in/out/err");
@@ -82,14 +97,14 @@ makeWorkspace( String name ) {
 	menu.add(mi);
 	menubar.add(menu);
 
-	menu = bsh.system.desktop.makeFontMenu( console );
+	menu = fontMenu(console);
 	menubar.add(menu);
 
 	frame.setMenuBar(menubar);
 
 	frame.getContentPane().add("Center", console);
 	//frame.pack();
-	thread = new Thread( interpreter );
+	this.thread = new Thread( interpreter );
 	thread.start();
 
 	frame.setBounds(5,5,600,300);
@@ -101,29 +116,25 @@ makeWorkspace( String name ) {
 	frame.toFront();
 	frame.setSelected(true);
 
-	haveSysIO=false;
-	sysIn = System.in;
-	sysOut = System.out;
-	sysErr = System.err;
+	this.haveSysIO=false;
+	this.sysIn = System.in;
+	this.sysOut = System.out;
+	this.sysErr = System.err;
 
 	captureSysIO() {
-		super.haveSysIO = true;
+		super.haveSysIO = true; // old scoping rules
 		System.setIn( console.getInputStream() );
 		System.setOut( console.getOut() );
 		System.setErr( console.getErr() );
 	}
 
 	returnSysIO() {
-		super.haveSysIO = false;
+		super.haveSysIO = false; // old scoping rules
 		System.setIn( sysIn );
 		System.setOut( sysOut );
 		System.setErr( sysErr );
 	}
 
-	return interpreter;
+	return this;
 }
-
-
-
-
 

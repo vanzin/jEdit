@@ -104,7 +104,10 @@ public class This implements java.io.Serializable, Runnable {
     }
 
 	/**
-		Get a version of the interface.
+		Get a version of this scripted object implementing the specified 
+		interface.
+	*/
+	/*
 		If this type of This implements it directly return this,
 		else try complain that we don't have the proxy mechanism.
 	*/
@@ -116,6 +119,22 @@ public class This implements java.io.Serializable, Runnable {
 		else
 			throw new UtilEvalError( "Dynamic proxy mechanism not available. "
 			+ "Cannot construct interface type: "+clas );
+	}
+
+	/**
+		Get a version of this scripted object implementing the specified
+		interfaces.
+	*/
+	public Object getInterface( Class [] ca ) 
+		throws UtilEvalError
+	{
+		for(int i=0; i<ca.length; i++)
+			if ( !(ca[i].isInstance( this )) )
+				throw new UtilEvalError( 
+					"Dynamic proxy mechanism not available. " 
+					+ "Cannot construct interface type: "+ca[i] );
+
+		return this;
 	}
 
 	/*
@@ -134,7 +153,7 @@ public class This implements java.io.Serializable, Runnable {
 	}
 
 	public String toString() {
-		return "'this' reference to Bsh object: " + namespace.name;
+		return "'this' reference to Bsh object: " + namespace;
 	}
 
 	public void run() {
@@ -201,7 +220,11 @@ public class This implements java.io.Serializable, Runnable {
 
 		// Find the bsh method
 		Class [] types = Reflect.getTypes( args );
-		BshMethod bshMethod = namespace.getMethod( methodName, types );
+		BshMethod bshMethod = null;
+		try {
+			bshMethod = namespace.getMethod( methodName, types );
+		} catch ( UtilEvalError e ) {
+		}
 
 		if ( bshMethod != null )
 			return bshMethod.invoke( 
@@ -231,8 +254,12 @@ public class This implements java.io.Serializable, Runnable {
 		}
 
 		// Look for a default invoke() handler method in the namespace
-		bshMethod = namespace.getMethod( 
-			"invoke", new Class [] { null, null } );
+		// Note: this code duplicates that in NameSpace getCommand()
+		// is that ok?
+		try {
+			bshMethod = namespace.getMethod( 
+				"invoke", new Class [] { null, null } );
+		} catch ( UtilEvalError e ) { /*leave null*/ }
 
 		// Call script "invoke( String methodName, Object [] args );
 		if ( bshMethod != null )

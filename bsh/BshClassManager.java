@@ -38,6 +38,7 @@ import java.util.*;
 import java.io.IOException;
 import java.io.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
 	BshClassManager manages all classloading in BeanShell.
@@ -60,13 +61,12 @@ import java.lang.reflect.Method;
 
 	Note: we may need some synchronization in here
 
-	Note on jdk1.2 dependency:
-	<p>
-
-	We are forced to use weak references in the full featured implementation
-	(bsh.classpath package) to accomodate all of the fleeting namespace 
-	listeners as they fall out of scope.  (NameSpaces must be informed if the 
-	class space changes so that they can un-cache names).  
+	Note on version dependency:  This base class is JDK 1.1 compatible,
+	however we are forced to use weak references in the full featured
+	implementation (the optional bsh.classpath package) to accomodate all of
+	the fleeting namespace listeners as they fall out of scope.  (NameSpaces
+	must be informed if the class space changes so that they can un-cache
+	names).  
 	<p>
 
 	Perhaps a simpler idea would be to have entities that reference cached
@@ -101,8 +101,12 @@ public class BshClassManager
     protected transient Hashtable absoluteNonClasses = new Hashtable();
 
 	/**
+		Caches for resolved object and static methods.
+		We keep these maps separate to support fast lookup in the general case
+		where the method may be either.
 	*/
-	protected transient Hashtable resolvedMethods = new Hashtable();
+	protected transient Hashtable resolvedObjectMethods = new Hashtable();
+	protected transient Hashtable resolvedStaticMethods = new Hashtable();
 
 	/**
 		Create a new instance of the class manager.  
@@ -113,11 +117,9 @@ public class BshClassManager
 	*/
 	public static BshClassManager createClassManager() 
 	{
-//System.out.println("creating class manager");
-
 		BshClassManager manager;
 
-		// Do we have the necessary jdk1.2 packages?
+		// Do we have the necessary jdk1.2 packages and optional package?
 		if ( Capabilities.classExists("java.lang.ref.WeakReference") 
 			&& Capabilities.classExists("java.util.HashMap") 
 			&& Capabilities.classExists("bsh.classpath.ClassManagerImpl") 
@@ -198,6 +200,33 @@ public class BshClassManager
 	}
 
 	/**
+		Get a resource URL using the BeanShell classpath
+		@param path should be an absolute path
+	*/
+	public URL getResource( String path ) 
+	{
+		if ( externalClassLoader != null )
+		{
+			// classloader wants no leading slash
+			return externalClassLoader.getResource( path.substring(1) );
+		} else
+			return Interpreter.class.getResource( path );
+	}
+	/**
+		Get a resource stream using the BeanShell classpath
+		@param path should be an absolute path
+	*/
+	public InputStream getResourceAsStream( String path ) 
+	{
+		if ( externalClassLoader != null )
+		{
+			// classloader wants no leading slash
+			return externalClassLoader.getResourceAsStream( path.substring(1) );
+		} else
+			return Interpreter.class.getResourceAsStream( path );
+	}
+
+	/**
 		Cache info about whether name is a class or not.
 		@param value 
 			if value is non-null, cache the class
@@ -214,34 +243,61 @@ public class BshClassManager
 	/**
 		Cache a resolved (possibly overloaded) method based on the 
 		argument types used to invoke it, subject to classloader change.
+		Static and Object methods are cached separately to support fast lookup
+		in the general case where either will do.
 	*/
 	public void cacheResolvedMethod( 
-		Class clas, String methodName, Object [] args, Method method ) 
+		Class clas, Object [] args, Method method ) 
 	{
-		resolvedMethods.put( 
-			new SignatureKey( clas, methodName, args ), method );
+		if ( Interpreter.DEBUG )
+			Interpreter.debug(
+				"cacheResolvedMethod putting: " + clas +" "+ method );
+		
+		SignatureKey sk = new SignatureKey( clas, method.getName(), args );
+		if ( Modifier.isStatic( method.getModifiers() ) )
+			resolvedStaticMethods.put( sk, method );
+		else
+			resolvedObjectMethods.put( sk, method );
 	}
 
 	/**
+		Return a previously cached resolved method.
+		@param onlyStatic specifies that only a static method may be returned.
+		@return the Method or null
 	*/
 	public Method getResolvedMethod( 
-		Class clas, String methodName, Object [] args ) 
+		Class clas, String methodName, Object [] args, boolean onlyStatic  ) 
 	{
-		Method m = (Method)resolvedMethods.get( 
-			new SignatureKey( clas, methodName, args ) );
-		//if ( m == null )
-		//	System.out.println("method cache miss: " + clas +" - "+methodName );
-		return m;
+		SignatureKey sk = new SignatureKey( clas, methodName, args );
+
+		// Try static and then object, if allowed
+		// Note that the Java compiler should not allow both.
+		Method method = (Method)resolvedStaticMethods.get( sk );
+		if ( method == null && !onlyStatic)
+			method = (Method)resolvedObjectMethods.get( sk );
+
+		if ( Interpreter.DEBUG )
+		{
+			if ( method == null )
+				Interpreter.debug(
+					"getResolvedMethod cache MISS: " + clas +" - "+methodName );
+			else
+				Interpreter.debug(
+					"getResolvedMethod cache HIT: " + clas +" - " +method );
+		}
+		return method;
 	}
 
 	/**
 		Clear the caches in BshClassManager
 		@see public void #reset() for external usage
 	*/
-	protected void clearCaches() {
+	protected void clearCaches() 
+	{
     	absoluteNonClasses = new Hashtable();
     	absoluteClassCache = new Hashtable();
-    	resolvedMethods = new Hashtable();
+    	resolvedObjectMethods = new Hashtable();
+    	resolvedStaticMethods = new Hashtable();
 	}
 
 	/**
@@ -426,23 +482,25 @@ public class BshClassManager
 
 		public boolean equals( Object o ) { 
 			SignatureKey target = (SignatureKey)o;
-			if ( types == null || target.types == null )
-				return types == target.types;
+			if ( types == null )
+				return target.types == null;
 			if ( clas != target.clas )
 				return false;
 			if ( !methodName.equals( target.methodName ) )
 				return false;
 			if ( types.length != target.types.length )
 				return false;
-			for( int i =0; i< types.length; i++ ) {
-				Class type = types[i];
-				Class targetType = target.types[i];
-				if( type == null || targetType == null) {
-					if ( type != targetType )
+			for( int i =0; i< types.length; i++ )
+			{
+				if ( types[i]==null ) 
+				{
+					if ( !(target.types[i]==null) )
 						return false;
-				} else if ( ! type.equals( targetType ) )
-					return false;
+				} else 
+					if ( !types[i].equals( target.types[i] ) )
+						return false;
 			}
+
 			return true;
 		}
 	}

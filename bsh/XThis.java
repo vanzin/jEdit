@@ -72,34 +72,43 @@ class XThis extends This
 	}
 
 	public String toString() {
-		return "'this' reference (XThis) to Bsh object: " + namespace.name;
+		return "'this' reference (XThis) to Bsh object: " + namespace;
 	}
 
 	/**
 		Get dynamic proxy for interface, caching those it creates.
 	*/
-	public Object getInterface( Class clas ) {
-		if ( interfaces == null )
-			interfaces = new Hashtable();
-
-		Object interf = interfaces.get( clas );
-		if ( interf == null ) {
-			interf = Proxy.newProxyInstance( clas.getClassLoader(), 
-				new Class[] { clas }, invocationHandler );
-			interfaces.put( clas, interf );
-		}
-		return interf;
+	public Object getInterface( Class clas ) 
+	{
+		return getInterface( new Class[] { clas } );
 	}
 
 	/**
-		Get a proxy interface for the specified XThis reference.
-		This is a static utility method because the interpreter doesn't 
-		currently allow access to direct methods of This objects.
-		
-	public static Object getInterface( XThis ths, Class interf ) { 
-		return ths.getInterface( interf ); 
-	}
+		Get dynamic proxy for interface, caching those it creates.
 	*/
+	public Object getInterface( Class [] ca ) 
+	{
+		if ( interfaces == null )
+			interfaces = new Hashtable();
+
+		// Make a hash of the interface hashcodes in order to cache them
+		int hash = 21;
+		for(int i=0; i<ca.length; i++)
+			hash *= ca[i].hashCode() + 3;
+		Object hashKey = new Integer(hash);
+
+		Object interf = interfaces.get( hashKey );
+
+		if ( interf == null ) 
+		{
+			ClassLoader classLoader = ca[0].getClassLoader(); // ?
+			interf = Proxy.newProxyInstance( 
+				classLoader, ca, invocationHandler );
+			interfaces.put( hashKey, interf );
+		}
+
+		return interf;
+	}
 
 	/**
 		This is the invocation handler for the dynamic proxy.
@@ -149,9 +158,12 @@ class XThis extends This
 				otherwise callers from outside in Java will not see a the 
 				proxy object as equal to itself.
 			*/
-			if ( methodName.equals("equals" ) 
-				&& namespace.getMethod( 
-					"equals", new Class [] { Object.class } ) == null ) {
+			BshMethod equalsMethod = null;
+			try {
+				equalsMethod = namespace.getMethod( 
+					"equals", new Class [] { Object.class } );
+			} catch ( UtilEvalError e ) {/*leave null*/ }
+			if ( methodName.equals("equals" ) && equalsMethod == null ) {
 				Object obj = args[0];
 				return new Boolean( proxy == obj );
 			}
@@ -160,8 +172,13 @@ class XThis extends This
 				If toString() is not explicitly defined override the default 
 				to show the proxy interfaces.
 			*/
-			if ( methodName.equals("toString" ) 
-				&& namespace.getMethod( "toString", new Class [] { } ) == null)
+			BshMethod toStringMethod = null;
+			try {
+				toStringMethod = 
+					namespace.getMethod( "toString", new Class [] { } );
+			} catch ( UtilEvalError e ) {/*leave null*/ }
+
+			if ( methodName.equals("toString" ) && toStringMethod == null)
 			{
 				Class [] ints = proxy.getClass().getInterfaces();
 				// XThis.this refers to the enclosing class instance

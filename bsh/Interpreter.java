@@ -50,9 +50,9 @@ import java.io.*;
 		// Evaluate statements and expressions
 		bsh.eval("foo=Math.sin(0.5)");
 		bsh.eval("bar=foo*5; bar=Math.cos(bar);");
-		bsh.eval("for(i=0; i&lt;10; i++) { print(\"hello\"); }");
+		bsh.eval("for(i=0; i<10; i++) { print(\"hello\"); }");
 		// same as above using java syntax and apis only
-		bsh.eval("for(int i=0; i&lt;10; i++) { System.out.println(\"hello\"); }");
+		bsh.eval("for(int i=0; i<10; i++) { System.out.println(\"hello\"); }");
 
 		// Source from files or streams
 		bsh.source("myscript.bsh");  // or bsh.eval("source(\"myscript.bsh\")");
@@ -93,19 +93,20 @@ public class Interpreter
 {
 	/* --- Begin static members --- */
 
-	public static final String VERSION = "1.3a1-jedit1";
-	/* 
+	public static final String VERSION = "1.3b2";
+	/*
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).
 		In the future we may want to allow debug/trace to be turned on on
 		a per interpreter basis, in which case we'll need to use the parent 
 		reference in some way to determine the scope of the command that 
-		turns it on or off...
+		turns it on or off.
 	*/
-    public static boolean DEBUG, TRACE;
+    public static boolean DEBUG, TRACE, LOCALSCOPING;
 
 	// This should be per instance
     transient static PrintStream debug;
+	static String systemLineSeparator = "\n"; // default
 
 	static { 
 		staticInit();
@@ -137,13 +138,10 @@ public class Interpreter
 	/** The name of the file or other source that this interpreter is reading */
 	String sourceFileInfo;
 
-	/** 
-		Specify whether we override exit on EOF as normally done in 
-		iteractive mode.  (e.g. as used by Sessiond)
-	*/
-	public boolean noExitOnEOF;
+	/** by default in interactive mode System.exit() on EOF */
+	private boolean exitOnEOF = true;
 
-    private boolean 
+    protected boolean 
 		evalOnly, 		// Interpreter has no input stream, use eval() only
 		interactive;	// Interpreter has a user, print prompts, etc.
 
@@ -391,7 +389,8 @@ public class Interpreter
 	/**
 		Run interactively.  (printing prompts, etc.)
 	*/
-    public void run() {
+    public void run() 
+	{
         if(evalOnly)
             throw new RuntimeException("bsh Interpreter: No stream");
 
@@ -408,12 +407,11 @@ public class Interpreter
 					"BeanShell "+VERSION+" - by Pat Niemeyer (pat@pat.net)");
 			}
 
-        boolean eof = false;
-
 		// init the callstack.  
 		CallStack callstack = new CallStack( globalNameSpace );
 
-        while(!eof)
+        boolean eof = false;
+        while( !eof )
         {
             try
             {
@@ -421,12 +419,13 @@ public class Interpreter
                 System.out.flush();
                 System.err.flush();
                 Thread.yield();  // this helps a little
-                if(interactive)
-                    print("bsh % ");
+
+                if ( interactive )
+                    print( getBshPrompt() );
 
                 eof = Line();
 
-                if(get_jjtree().nodeArity() > 0)  // number of child nodes 
+                if( get_jjtree().nodeArity() > 0 )  // number of child nodes 
                 {
                     SimpleNode node = (SimpleNode)(get_jjtree().rootNode());
 
@@ -524,7 +523,7 @@ public class Interpreter
             }
         }
 
-		if ( interactive && !noExitOnEOF )
+		if ( interactive && exitOnEOF )
 			System.exit(0);
     }
 
@@ -580,7 +579,8 @@ public class Interpreter
 	*/
 
     public Object eval( 
-		Reader in, NameSpace nameSpace, String sourceFileInfo ) 
+		Reader in, NameSpace nameSpace, String sourceFileInfo
+			/*, CallStack callstack */ ) 
 		throws EvalError 
 	{
 		Object retVal = null;
@@ -690,21 +690,31 @@ public class Interpreter
 	/**
 		Evaluate the string in this interpreter's global namespace.
 	*/
-    public Object eval( String statement ) throws EvalError {
-		if ( Interpreter.DEBUG ) debug("eval(String): "+statement);
-		return eval(statement, globalNameSpace);
+    public Object eval( String statements ) throws EvalError {
+		if ( Interpreter.DEBUG ) debug("eval(String): "+statements);
+		return eval(statements, globalNameSpace);
 	}
 
 	/**
 		Evaluate the string in the specified namespace.
 	*/
-    public Object eval( String statement, NameSpace nameSpace ) 
-		throws EvalError {
+    public Object eval( String statements, NameSpace nameSpace ) 
+		throws EvalError 
+	{
 
-		String s = ( statement.endsWith(";") ? statement : statement+";" );
+		String s = ( statements.endsWith(";") ? statements : statements+";" );
         return eval( 
-			new StringReader(s), nameSpace, "<Inline eval of: "+s+" >" );
+			new StringReader(s), nameSpace, 
+			"inline evaluation of: ``"+ showEvalString(s)+"''" );
     }
+
+	private String showEvalString( String s ) {
+		s = s.replace('\n', ' ');
+		s = s.replace('\r', ' ');
+		if ( s.length() > 80 )
+			s = s.substring( 0, 80 ) + " . . . ";
+		return s;
+	}
 
 	// end source and eval
 
@@ -747,7 +757,8 @@ public class Interpreter
 
     public final void println(String s)
     {
-        print(s + "\n");
+        //print(s + "\n");
+        print( s + systemLineSeparator );
     }
 
     public final void print(String s)
@@ -860,18 +871,21 @@ public class Interpreter
     public void unset( String name ) 
 		throws EvalError 
 	{
+		/*
+			We jump through some hoops here to handle arbitrary cases like
+			unset("bsh.foo");
+		*/
 		CallStack callstack = new CallStack();
-		LHS lhs;
 		try {
-			lhs = globalNameSpace.getNameResolver( name ).toLHS( 
+			LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
 				callstack, this );
 
 			if ( lhs.type != LHS.VARIABLE )
 				throw new EvalError("Can't unset, not a variable: "+name, 
 					SimpleNode.JAVACODE, new CallStack() );
 
-			// null means remove it
-			lhs.assign( null, false );
+			//lhs.assign( null, false );
+			lhs.nameSpace.unsetVariable( name );
 		} catch ( UtilEvalError e ) {
 			throw new EvalError( e.getMessage(), 
 				SimpleNode.JAVACODE, new CallStack() );
@@ -945,7 +959,7 @@ public class Interpreter
 		return parser.jjtree;
 	}
 
-  	private ASCII_UCodeESC_CharStream get_jj_input_stream() {
+  	private JavaCharStream get_jj_input_stream() {
 		return parser.jj_input_stream;
 	}
 
@@ -1070,9 +1084,11 @@ public class Interpreter
 		around 
 	*/
 		try {
+			systemLineSeparator = System.getProperty("line.separator");
     		debug = System.err;
     		DEBUG = Boolean.getBoolean("debug");
     		TRACE = Boolean.getBoolean("trace");
+    		LOCALSCOPING = Boolean.getBoolean("localscoping");
 			String outfilename = System.getProperty("outfile");
 			if ( outfilename != null )
 				redirectOutputToFile( outfilename );
@@ -1139,5 +1155,34 @@ public class Interpreter
 		}
 	}
 
+	/**
+		Get the prompt string defined by the getBshPrompt() method in the
+		global namespace.  This may be from the getBshPrompt() command or may
+		be defined by the user as with any other method.
+		Defaults to "bsh % " if the method is not defined or there is an error.
+	*/
+	private String getBshPrompt() 
+	{
+		try {
+			return (String)eval("getBshPrompt()");
+		} catch ( Exception e ) {
+			return "bsh % ";
+		}
+	}
+
+	/**
+		Specify whether, in interactive mode, the interpreter exits Java upon
+		end of input.  If true, when in interactive mode the interpreter will
+		issue a System.exit(0) upon eof.  If false the interpreter no
+		System.exit() will be done.
+		<p/>
+		Note: if you wish to cause an EOF externally you can try closing the
+		input stream.  This is not guaranteed to work in older versions of Java
+		due to Java limitations, but should work in newer JDK/JREs.  (That was
+		the motivation for the Java NIO package).
+	*/
+	public void setExitOnEOF( boolean value ) {
+		exitOnEOF = value; // ug
+	}
 }
 

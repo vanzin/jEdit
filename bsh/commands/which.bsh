@@ -26,11 +26,13 @@
 
 bsh.help.which= "usage: which( classIdentifier | string | class )";
 
-import bsh.Name;
+import bsh.ClassIdentifier;
 
-which( clas ) { 
+which( clas ) 
+{
 	// make the class into a name
-	if ( clas instanceof Name.ClassIdentifier )
+	Class clas;
+	if ( clas instanceof ClassIdentifier )
 		clas = this.namespace.identifierToClass( clas );
 	if ( clas instanceof Class )
 		clas = clas.getName();
