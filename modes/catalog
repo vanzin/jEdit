@@ -332,7 +332,10 @@
 <MODE NAME="tcl"		FILE="tcl.xml"
 				FILE_NAME_GLOB="*.{tcl,tsh}" />
 
-<MODE NAME="tex"		FILE="tex.xml"
+<!-- Note that a generic 'tex.xml' is included as well, for minimal
+     plain TeX/AMSTeX highlighting. -->
+
+<MODE NAME="tex"		FILE="latex.xml"
 				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
 
 <MODE NAME="texinfo"		FILE="texinfo.xml"

@@ -1,11 +1,19 @@
-﻿TO DO
+TO DO
 
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[error] JEditTextArea: BUG: screenLine=0,visibleLines=1,physicalLine=0,firstPhysicalLine=1,lastPhysicalLine=1
+[error] AWT-EventQueue-0: java.lang.NullPointerException
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollTo(JEditTextArea.java:872)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.scrollToCaret(JEditTextArea.java:727)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea._finishCaretUpdate(JEditTextArea.java:5391)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.finishCaretUpdate(JEditTextArea.java:5704)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2328)
+[error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2263)
+
 - macro override
 -bsh replace error: use bsh error dialog
-- soft wrap + control click beyond EOL
 
 wrapped dock buttons broken
 
