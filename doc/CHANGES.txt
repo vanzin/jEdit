@@ -90,6 +90,8 @@ JEDIT 4.0 VERSION HISTORY
 - Made sure that all XML mode files now validate against the xmode.dtd
 - Print jobs would be named 'true' (or 'false' if you were lucky)
 - Fixed unprintable characters in the help table of contents
+- Added minor hack to jEdit.initMisc() so that plugins wishing to use
+  the JAXP API to access the XML plugin's Xerces parser can work
 
 * Version 4.0pre4
 
