@@ -36,6 +36,9 @@ Thanks to Gerd Knops for contributing to this release.
 - Right-click menus in the 'Open File' dialog box now contain menu items
   for opening files in new views and new splits.
 
+- File->Open With Encoding menu replaced with an 'Encoding' menu in the
+  file system browser's 'Commands' menu.
+
 + Scripting Changes:
 
 - 'scriptPath' BeanShell variable is set to the macro file path while a
@@ -108,6 +111,8 @@ Thanks to Gerd Knops for contributing to this release.
 
 - HyperSearch inside a selection did not handle ^ and $ in regular
   expressions correctly on the first or last line of the selection.
+
+- Insertion of { and } in C-like modes can now be undone in one step.
 
 + API Changes:
 

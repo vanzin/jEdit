@@ -139,15 +139,32 @@ public class BrowserCommandsMenu extends JPopupMenu
 		showHiddenFiles = new JCheckBoxMenuItem(
 			jEdit.getProperty("vfs.browser.commands.show-hidden-files.label"));
 		showHiddenFiles.setActionCommand("show-hidden-files");
-		showHiddenFiles.setSelected(browser.getShowHiddenFiles());
 		showHiddenFiles.addActionListener(new ActionHandler());
 		add(showHiddenFiles);
+
+		if(browser.getMode() == VFSBrowser.BROWSER
+			|| browser.getMode() == VFSBrowser.BROWSER_DIALOG)
+		{
+			addSeparator();
+			add(createEncodingMenu());
+		}
+
+		update();
 	} //}}}
 
 	//{{{ update() method
 	public void update()
 	{
 		showHiddenFiles.setSelected(browser.getShowHiddenFiles());
+		if(encodingMenuItems != null)
+		{
+			JRadioButtonMenuItem mi = (JRadioButtonMenuItem)
+				encodingMenuItems.get(browser.currentEncoding);
+			if(mi != null)
+				mi.setSelected(true);
+			else
+				otherEncoding.setSelected(true);
+		}
 	} //}}}
 
 	//{{{ Private members
@@ -155,6 +172,9 @@ public class BrowserCommandsMenu extends JPopupMenu
 	private VFS.DirectoryEntry[] files;
 	private VFS vfs;
 	private JCheckBoxMenuItem showHiddenFiles;
+	private HashMap encodingMenuItems;
+	private JRadioButtonMenuItem defaultEncoding;
+	private JRadioButtonMenuItem otherEncoding;
 
 	//{{{ createMenuItem() method
 	private JMenuItem createMenuItem(String name)
@@ -164,6 +184,58 @@ public class BrowserCommandsMenu extends JPopupMenu
 		mi.setActionCommand(name);
 		mi.addActionListener(new ActionHandler());
 		return mi;
+	} //}}}
+
+	//{{{ createEncodingMenu() method
+	private JMenu createEncodingMenu()
+	{
+		encodingMenuItems = new HashMap();
+		JMenu encodingMenu = new JMenu(jEdit.getProperty(
+			"vfs.browser.commands.encoding.label"));
+
+		ButtonGroup grp = new ButtonGroup();
+
+		StringTokenizer st = new StringTokenizer(
+			jEdit.getProperty("encodings"));
+		while(st.hasMoreTokens())
+		{
+			String encoding = st.nextToken();
+			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(encoding);
+			mi.setActionCommand("encoding@" + encoding);
+			grp.add(mi);
+			encodingMenuItems.put(encoding,mi);
+			encodingMenu.add(mi);
+		}
+
+		if(encodingMenuItems.get(browser.currentEncoding) == null)
+		{
+			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
+				browser.currentEncoding);
+			mi.setActionCommand("encoding@" + browser.currentEncoding);
+			grp.add(mi);
+			encodingMenuItems.put(browser.currentEncoding,mi);
+		}
+
+		String systemEncoding = System.getProperty("file.encoding")
+		if(encodingMenuItems.get(systemEncoding) == null)
+		{
+			JRadioButtonMenuItem mi = new JRadioButtonMenuItem(
+				systemEncoding);
+			mi.setActionCommand("encoding@" + systemEncoding);
+			grp.add(mi);
+			encodingMenuItems.put(systemEncoding,mi);
+		}
+
+		encodingMenu.addSeparator();
+
+		otherEncoding = new JRadioButtonMenuItem(jEdit.getProperty(
+			"vfs.browser.commands.other-encoding.label"));
+		otherEncoding.setActionCommand("other-encoding");
+		otherEncoding.addActionListener(new ActionHandler());
+		grp.add(otherEncoding);
+		encodingMenu.add(otherEncoding);
+
+		return;
 	} //}}}
 
 	//}}}
@@ -184,9 +256,11 @@ public class BrowserCommandsMenu extends JPopupMenu
 					System.getProperty("file.encoding")));
 				if(encoding == null)
 					return;
-				Hashtable props = new Hashtable();
-				props.put(Buffer.ENCODING,encoding);
-				jEdit.openFile(view,null,files[0].path,false,props);
+				browser.currentEncoding = encoding;
+			}
+			else if(actionCommand.startsWith("encoding@"))
+			{
+				browser.currentEncoding = actionCommand.substring(9);
 			}
 			else if(actionCommand.equals("open"))
 				browser.filesActivated(VFSBrowser.M_OPEN,false);
