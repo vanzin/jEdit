@@ -883,8 +883,23 @@ public class JEditTextArea extends JComponent
 		if(line < 0 || line > visibleLines)
 			return -1;
 
-		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		return xToScreenLineOffset(line,x,round);
+	} //}}}
 
+	//{{{ xToScreenLineOffset() method
+	/**
+	 * Converts a point in a given screen line to an offset.
+	 * Note that unlike in previous jEdit versions, this method now returns
+	 * -1 if the y co-ordinate is out of bounds.
+	 *
+	 * @param x The x co-ordinate of the point
+	 * @param screenLine The screen line
+	 * @param round Round up to next letter if past the middle of a letter?
+	 * @since jEdit 3.2pre6
+	 */
+	public int xToScreenLineOffset(int screenLine, int x, boolean round)
+	{
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
 		if(lineInfo.physicalLine == -1)
 		{
 			return getLineEndOffset(foldVisibilityManager
@@ -2178,7 +2193,7 @@ forward_scan:		do
 	 * column while moving around lines of varying lengths.
 	 * @since jEdit 4.2pre1
 	 */
-	public float getMagicCaretPosition()
+	public int getMagicCaretPosition()
 	{
 		if(magicCaret == -1)
 		{
@@ -2196,7 +2211,7 @@ forward_scan:		do
 	 * @param magicCaret The magic caret position
 	 * @since jEdit 4.2pre1
 	 */
-	public void setMagicCaretPosition(float magicCaret)
+	public void setMagicCaretPosition(int magicCaret)
 	{
 		this.magicCaret = magicCaret;
 	} //}}}
@@ -2336,44 +2351,19 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextLine(boolean select)
 	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(caretLine);
-
-		int caretFromStartOfLine = caret - buffer.getLineStartOffset(caretLine);
-		int subregion = chunkCache.getSubregionOfOffset(caretFromStartOfLine,
-			lineInfos);
-
-		float magic = getMagicCaretPosition();
-
-		int newCaret;
-
-		if(subregion != lineInfos.length - 1)
+		int magic = getMagicCaretPosition();
+		int newCaret = chunkCache.getBelowPosition(caretLine,
+			caret - buffer.getLineStartOffset(caretLine),magic + 1);
+		if(newCaret == -1)
 		{
-			newCaret = buffer.getLineStartOffset(caretLine)
-				+ chunkCache.xToSubregionOffset(lineInfos[subregion + 1],
-				magic,true);
-		}
-		else
-		{
-			int nextLine = foldVisibilityManager.getNextVisibleLine(caretLine);
-
-			if(nextLine == -1)
+			int end = getLineEndOffset(caretLine) - 1;
+			if(caret == end)
 			{
-				int end = getLineEndOffset(caretLine) - 1;
-				if(caret == end)
-				{
-					getToolkit().beep();
-					return;
-				}
-				else
-					newCaret = end;
+				getToolkit().beep();
+				return;
 			}
 			else
-			{
-				lineInfos = chunkCache.getLineInfosForPhysicalLine(nextLine);
-				newCaret = getLineStartOffset(nextLine)
-					+ chunkCache.xToSubregionOffset(lineInfos[0],
-					magic + 1,true);
-			}
+				newCaret = end;
 		}
 
 		if(select)
@@ -2429,25 +2419,19 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextPage(boolean select)
 	{
-		int lineCount = getVirtualLineCount();
+		scrollToCaret(false);
+		int magic = getMagicCaretPosition();
+		int caretScreenLine = getScreenLineOfOffset(caret);
 
-		int magic = (int)getMagicCaretPosition(); //XXX
+		scrollDownPage();
 
-		if(firstLine + visibleLines * 2 >= lineCount - 1)
-			setFirstLine(lineCount - visibleLines);
-		else
-			setFirstLine(firstLine + visibleLines);
-
-		int newLine = virtualToPhysical(Math.min(lineCount - 1,
-			physicalToVirtual(caretLine) + visibleLines));
-		int newCaret = getLineStartOffset(newLine)
-			+ xToOffset(newLine,magic + 1); //XXX
+		int newCaret = xToScreenLineOffset(caretScreenLine,magic,true);
 
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
 			selectNone();
-		moveCaretPosition(newCaret);
+		moveCaretPosition(newCaret,false);
 
 		setMagicCaretPosition(magic);
 	} //}}}
@@ -2646,45 +2630,20 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevLine(boolean select)
 	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(caretLine);
+		int magic = getMagicCaretPosition();
 
-		int caretFromStartOfLine = caret - buffer.getLineStartOffset(caretLine);
-		int subregion = chunkCache.getSubregionOfOffset(caretFromStartOfLine,
-			lineInfos);
-
-		float magic = getMagicCaretPosition();
-
-		int newCaret;
-
-		if(subregion != 0)
+		int newCaret = chunkCache.getAbovePosition(caretLine,
+			caret - buffer.getLineStartOffset(caretLine),magic + 1);
+		if(newCaret == -1)
 		{
-			newCaret = buffer.getLineStartOffset(caretLine)
-				+ chunkCache.xToSubregionOffset(lineInfos[subregion - 1],
-				magic,true);
-		}
-		else
-		{
-			int prevLine = foldVisibilityManager.getPrevVisibleLine(caretLine);
-
-			if(prevLine == -1)
+			int start = getLineStartOffset(caretLine);
+			if(caret == start)
 			{
-				int start = getLineStartOffset(caretLine);
-				if(caret == start)
-				{
-					getToolkit().beep();
-					return;
-				}
-				else
-					newCaret = start;
+				getToolkit().beep();
+				return;
 			}
 			else
-			{
-				lineInfos = chunkCache.getLineInfosForPhysicalLine(prevLine);
-				newCaret = getLineStartOffset(prevLine)
-					+ chunkCache.xToSubregionOffset(lineInfos[
-					lineInfos.length - 1],magic + 1,
-					true);
-			}
+				newCaret = start;
 		}
 
 		if(select)
@@ -2739,24 +2698,20 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevPage(boolean select)
 	{
-		if(firstLine < visibleLines)
-			setFirstLine(0);
-		else
-			setFirstLine(firstLine - visibleLines);
+		scrollToCaret(false);
+		int magic = getMagicCaretPosition();
+		int caretScreenLine = getScreenLineOfOffset(caret);
 
-		int magic = (int)getMagicCaretPosition(); //XXX
+		scrollUpPage();
 
-		int newLine = virtualToPhysical(Math.max(0,
-			physicalToVirtual(caretLine) - visibleLines));
-		int newCaret = getLineStartOffset(newLine)
-			+ xToOffset(newLine,magic + 1); //XXX
+		int newCaret = xToScreenLineOffset(caretScreenLine,magic,true);
 
 		if(select)
 			extendSelection(caret,newCaret);
 		else if(!multi)
 			selectNone();
+		moveCaretPosition(newCaret,false);
 
-		moveCaretPosition(newCaret);
 		setMagicCaretPosition(magic);
 	} //}}}
 
@@ -2997,21 +2952,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			offset = s.start - buffer.getLineStartOffset(line);
 		}
 
-		int firstIndent;
-
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		int subregion = chunkCache.getSubregionOfOffset(offset,lineInfos);
-		if(subregion == 0)
+		int firstIndent = chunkCache.getSubregionStartOffset(line,offset);
+		if(firstIndent == getLineStartOffset(line))
 		{
 			firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
 			if(firstIndent == getLineLength(line))
 				firstIndent = 0;
 			firstIndent += getLineStartOffset(line);
-		}
-		else
-		{
-			firstIndent = getLineStartOffset(line)
-				+ lineInfos[subregion].offset;
 		}
 
 		if(select)
@@ -3042,11 +2989,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			offset = s.end - getLineStartOffset(line);
 		}
 
-		int lastIndent;
+		int lastIndent = chunkCache.getSubregionEndOffset(line,offset);
 
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		int subregion = chunkCache.getSubregionOfOffset(offset,lineInfos);
-		if(subregion == lineInfos.length - 1)
+		if(lastIndent == getLineEndOffset(line))
 		{
 			lastIndent = getLineLength(line) - MiscUtilities.getTrailingWhiteSpace(getLineText(line));
 			if(lastIndent == 0)
@@ -3055,9 +3000,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 		else
 		{
-			lastIndent = getLineStartOffset(line)
-				+ lineInfos[subregion].offset
-				+ lineInfos[subregion].length - 1;
+			lastIndent--;
 		}
 
 		if(select)
@@ -3489,7 +3432,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int start = getLineStartOffset(caretLine);
 		int end = getLineEndOffset(caretLine);
 
-		float x = chunkCache.subregionOffsetToX(caretLine,caret - start);
+		int x = chunkCache.subregionOffsetToX(caretLine,caret - start);
 
 		// otherwise a bunch of consecutive C+d's would be merged
 		// into one edit
@@ -3799,7 +3742,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		float magic = getMagicCaretPosition();
+		int magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(line)
 			+ chunkCache.xToSubregionOffset(line,0,magic + 1,true);
@@ -3834,7 +3777,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		float magic = getMagicCaretPosition();
+		int magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(nextFold)
 			+ chunkCache.xToSubregionOffset(nextFold,0,magic + 1,true);
@@ -3871,7 +3814,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		float magic = getMagicCaretPosition();
+		int magic = getMagicCaretPosition();
 
 		int newCaret = buffer.getLineStartOffset(prevFold)
 			+ chunkCache.xToSubregionOffset(prevFold,0,magic + 1,true);
@@ -3892,7 +3835,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void collapseFold()
 	{
-		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine)); //XXX
+		int x = chunkCache.subregionOffsetToX(caretLine,
+			caret - getLineStartOffset(caretLine));
 
 		foldVisibilityManager.collapseFold(caretLine);
 
@@ -3903,7 +3847,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 		if(!multi)
 			selectNone();
-		moveCaretPosition(buffer.getLineStartOffset(line) + xToOffset(line,x)); //XXX
+		moveCaretPosition(buffer.getLineStartOffset(line)
+			+ chunkCache.xToSubregionOffset(line,0,x,true));
 	} //}}}
 
 	//{{{ expandFold() method
@@ -3914,7 +3859,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void expandFold(boolean fully)
 	{
-		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine)); //XXX
+		int x = chunkCache.subregionOffsetToX(caretLine,
+			caret - getLineStartOffset(caretLine));
 
 		int line = foldVisibilityManager.expandFold(caretLine,fully);
 
@@ -3922,7 +3868,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			if(!multi)
 				selectNone();
-			moveCaretPosition(getLineStartOffset(line) + xToOffset(line,x));//XXX
+			moveCaretPosition(getLineStartOffset(line)
+				+ chunkCache.xToSubregionOffset(line,0,x,true));
 		}
 	} //}}}
 
@@ -4736,58 +4683,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ Deprecated methods
 
-	//{{{ offsetToX() method
-	/**
-	 * @deprecated Call <code>offsetToXY()</code> instead.
-	 *
-	 * Converts an offset in a line into an x co-ordinate.
-	 * @param line The line
-	 * @param offset The offset, from the start of the line
-	 */
-	public int offsetToX(int line, int offset)
-	{
-		Chunk chunks = chunkCache.lineToChunkList(line);
-		return (int)(horizontalOffset + Chunk.offsetToX(chunks,offset));
-	} //}}}
-
-	//{{{ xToOffset() method
-	/**
-	 * @deprecated Call <code>xyToOffset()</code> instead.
-	 *
-	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The physical line index
-	 * @param x The x co-ordinate
-	 */
-	public int xToOffset(int line, int x)
-	{
-		x -= horizontalOffset;
-		Chunk chunks = chunkCache.lineToChunkList(line);
-		int offset = Chunk.xToOffset(chunks,x,true);
-		if(offset == -1)
-			offset = getLineLength(line);
-		return offset;
-	} //}}}
-
-	//{{{ xToOffset() method
-	/**
-	 * @deprecated Call <code>xyToOffset()</code> instead.
-	 *
-	 * Converts an x co-ordinate to an offset within a line.
-	 * @param line The physical line index
-	 * @param x The x co-ordinate
-	 * @param round Round up to next letter if past the middle of a letter?
-	 * @since jEdit 3.2pre6
-	 */
-	public int xToOffset(int line, int x, boolean round)
-	{
-		x -= horizontalOffset;
-		Chunk chunks = chunkCache.lineToChunkList(line);
-		int offset = Chunk.xToOffset(chunks,x,round);
-		if(offset == -1)
-			offset = getLineLength(line);
-		return offset;
-	} //}}}
-
 	//{{{ getSelectionStart() method
 	/**
 	 * @deprecated Instead, obtain a Selection instance using
@@ -5148,7 +5043,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private int bracketPosition;
 	private int bracketLine;
 
-	private float magicCaret;
+	private int magicCaret;
 
 	private boolean multi;
 	private boolean overwrite;

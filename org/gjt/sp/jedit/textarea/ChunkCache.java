@@ -327,27 +327,6 @@ class ChunkCache
 		}
 	} //}}}
 
-	//{{{ lineToChunkList() method
-	// This will be removed eventually.
-	Chunk lineToChunkList(int physicalLine)
-	{
-		out.clear();
-
-		TextAreaPainter painter = textArea.getPainter();
-		Buffer buffer = textArea.getBuffer();
-
-		buffer.getLineText(physicalLine,textArea.lineSegment);
-		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
-			painter.getFontRenderContext(),
-			painter,out,0.0f);
-		buffer.markTokens(physicalLine,tokenHandler);
-
-		if(out.size() == 0)
-			return null;
-		else
-			return (Chunk)out.get(0);
-	} //}}}
-
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
 	{
@@ -372,20 +351,6 @@ class ChunkCache
 		return screenLines;
 	} //}}}
 
-	//{{{ getLineInfosForPhysicalLine() method
-	public LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
-	{
-		out.clear();
-		lineToChunkList(physicalLine,out);
-
-		if(out.size() == 0)
-			out.add(null);
-
-		ArrayList returnValue = new ArrayList(out.size());
-		getLineInfosForPhysicalLine(physicalLine,returnValue);
-		return (LineInfo[])returnValue.toArray(new LineInfo[out.size()]);
-	} //}}}
-
 	//{{{ getSubregionOfOffset() method
 	/**
 	 * Returns the subregion containing the specified offset. A subregion
@@ -393,8 +358,7 @@ class ChunkCache
 	 * subregion. Unlike the {@link #getScreenLineOfOffset()} method,
 	 * this method works with non-visible lines too.
 	 */
-	// not public yet
-	/* public */ int getSubregionOfOffset(int offset, LineInfo[] lineInfos)
+	int getSubregionOfOffset(int offset, LineInfo[] lineInfos)
 	{
 		for(int i = 0; i < lineInfos.length; i++)
 		{
@@ -411,15 +375,18 @@ class ChunkCache
 	 * Converts an x co-ordinate within a subregion into an offset from the
 	 * start of that subregion.
 	 * @param physicalLine The physical line number
-	 * @param subregion The subregion
+	 * @param subregion The subregion; if -1, then this is the last
+	 * subregion.
 	 * @param x The x co-ordinate
 	 * @param round Round up to next character if x is past the middle of a
 	 * character?
 	 */
-	int xToSubregionOffset(int physicalLine, int subregion, float x,
+	int xToSubregionOffset(int physicalLine, int subregion, int x,
 		boolean round)
 	{
 		LineInfo[] infos = getLineInfosForPhysicalLine(physicalLine);
+		if(subregion == -1)
+			subregion += infos.length;
 		return xToSubregionOffset(infos[subregion],x,round);
 	} //}}}
 
@@ -432,7 +399,7 @@ class ChunkCache
 	 * @param round Round up to next character if x is past the middle of a
 	 * character?
 	 */
-	int xToSubregionOffset(LineInfo info, float x,
+	int xToSubregionOffset(LineInfo info, int x,
 		boolean round)
 	{
 		int offset = Chunk.xToOffset(info.chunks,
@@ -449,7 +416,7 @@ class ChunkCache
 	 * @param physicalLine The physical line
 	 * @param offset The offset
 	 */
-	float subregionOffsetToX(int physicalLine, int offset)
+	int subregionOffsetToX(int physicalLine, int offset)
 	{
 		LineInfo[] infos = getLineInfosForPhysicalLine(physicalLine);
 		LineInfo info = infos[getSubregionOfOffset(offset,infos)];
@@ -462,10 +429,10 @@ class ChunkCache
 	 * @param info The line info object
 	 * @param offset The offset
 	 */
-	float subregionOffsetToX(LineInfo info, int offset)
+	int subregionOffsetToX(LineInfo info, int offset)
 	{
-		return textArea.getHorizontalOffset() + Chunk.offsetToX(
-			info.chunks,offset);
+		return (int)(textArea.getHorizontalOffset() + Chunk.offsetToX(
+			info.chunks,offset));
 	} //}}}
 
 	//{{{ getSubregionStartOffset() method
@@ -473,31 +440,98 @@ class ChunkCache
 	 * Returns the start offset of the specified subregion of the specified
 	 * physical line.
 	 * @param line The physical line number
-	 * @param subregion The subregion
+	 * @param offset An offset
 	 */
-	// not public yet
-	/* public int getSubregionStartOffset(int line, int subregion)
+	int getSubregionStartOffset(int line, int offset)
 	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		return buffer.getLineStartOffset(lineInfos[subregion].physicalLine)
-			+ lineInfos[subregion].offset;
-	} */ //}}}
+		LineInfo[] lineInfos = getLineInfosForPhysicalLine(line);
+		LineInfo info = lineInfos[getSubregionOfOffset(offset,lineInfos)];
+		return textArea.getLineStartOffset(info.physicalLine)
+			+ info.offset;
+	} //}}}
 
 	//{{{ getSubregionEndOffset() method
 	/**
 	 * Returns the end offset of the specified subregion of the specified
 	 * physical line.
 	 * @param line The physical line number
-	 * @param subregion The subregion
+	 * @param offset An offset
 	 */
-	// not public yet
-	/* public int getSubregionEndOffset(int line, int subregion)
+	int getSubregionEndOffset(int line, int offset)
 	{
-		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
-		ChunkCache.LineInfo info = lineInfos[subregion];
-		return buffer.getLineStartOffset(info.physicalLine)
+		LineInfo[] lineInfos = getLineInfosForPhysicalLine(line);
+		LineInfo info = lineInfos[getSubregionOfOffset(offset,lineInfos)];
+		return textArea.getLineStartOffset(info.physicalLine)
 			+ info.offset + info.length;
-	} */ //}}}
+	} //}}}
+
+	//{{{ getBelowPosition() method
+	/**
+	 * @param physicalLine The physical line number
+	 * @param offset The offset
+	 * @param x The location
+	 */
+	int getBelowPosition(int physicalLine, int offset, int x)
+	{
+		LineInfo[] lineInfos = getLineInfosForPhysicalLine(physicalLine);
+
+		int subregion = getSubregionOfOffset(offset,lineInfos);
+
+		if(subregion != lineInfos.length - 1)
+		{
+			return textArea.getLineStartOffset(physicalLine)
+				+ xToSubregionOffset(lineInfos[subregion + 1],
+				x,true);
+		}
+		else
+		{
+			int nextLine = textArea.getFoldVisibilityManager()
+				.getNextVisibleLine(physicalLine);
+
+			if(nextLine == -1)
+				return -1;
+			else
+			{
+				return textArea.getLineStartOffset(nextLine)
+					+ xToSubregionOffset(nextLine,0,
+					x,true);
+			}
+		}
+	} //}}}
+
+	//{{{ getAbovePosition() method
+	/**
+	 * @param physicalLine The physical line number
+	 * @param offset The offset
+	 * @param x The location
+	 */
+	int getAbovePosition(int physicalLine, int offset, int x)
+	{
+		LineInfo[] lineInfos = getLineInfosForPhysicalLine(physicalLine);
+
+		int subregion = getSubregionOfOffset(offset,lineInfos);
+
+		if(subregion != 0)
+		{
+			return textArea.getLineStartOffset(physicalLine)
+				+ xToSubregionOffset(lineInfos[subregion - 1],
+				x,true);
+		}
+		else
+		{
+			int prevLine = textArea.getFoldVisibilityManager()
+				.getPrevVisibleLine(physicalLine);
+
+			if(prevLine == -1)
+				return -1;
+			else
+			{
+				return textArea.getLineStartOffset(prevLine)
+					+ xToSubregionOffset(prevLine,-1,
+					x,true);
+			}
+		}
+	} //}}}
 
 	//{{{ needFullRepaint() method
 	/**
@@ -526,6 +560,20 @@ class ChunkCache
 
 	private DisplayTokenHandler tokenHandler;
 	//}}}
+
+	//{{{ getLineInfosForPhysicalLine() method
+	private LineInfo[] getLineInfosForPhysicalLine(int physicalLine)
+	{
+		out.clear();
+		lineToChunkList(physicalLine,out);
+
+		if(out.size() == 0)
+			out.add(null);
+
+		ArrayList returnValue = new ArrayList(out.size());
+		getLineInfosForPhysicalLine(physicalLine,returnValue);
+		return (LineInfo[])returnValue.toArray(new LineInfo[out.size()]);
+	} //}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
 	private void getLineInfosForPhysicalLine(int physicalLine, List list)
