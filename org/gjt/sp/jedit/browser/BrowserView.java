@@ -214,7 +214,7 @@ class BrowserView extends JPanel
 	{
 		String browserDir = browser.getDirectory();
 
-		if(path.equals(browserDir))
+		if(VFSBrowser.pathsEqual(path,browserDir))
 		{
 			saveExpansionState();
 			loadDirectory(null,path);
