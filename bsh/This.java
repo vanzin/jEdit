@@ -65,8 +65,6 @@ public class This implements java.io.Serializable, Runnable {
 		so we make a default one starting with the special JAVACODE namespace
 		and our namespace as the next.
 	*/
-// not thread safe... trying workaround
-	//transient CallStack callstack;
 
 	/**
 		getThis() is a factory for bsh.This type references.  The capabilities
@@ -89,18 +87,20 @@ public class This implements java.io.Serializable, Runnable {
 		NameSpace namespace, Interpreter declaringInterpreter ) 
 	{
 		try {
+			Class c;
 			if ( Capabilities.canGenerateInterfaces() )
-				return (This)Reflect.constructObject( "bsh.XThis",
-					new Object [] { namespace, declaringInterpreter } );
+				c = Class.forName( "bsh.XThis" );
 			else if ( Capabilities.haveSwing() )
-				return (This)Reflect.constructObject( "bsh.JThis",
-					new Object [] { namespace, declaringInterpreter } );
+				c = Class.forName( "bsh.JThis" );
 			else
 				return new This( namespace, declaringInterpreter );
 
+			return (This)Reflect.constructObject( c,
+				new Object [] { namespace, declaringInterpreter } );
+
 		} catch ( Exception e ) {
 			throw new InterpreterError("internal error 1 in This: "+e);
-		} 
+		}
     }
 
 	/**
@@ -109,12 +109,12 @@ public class This implements java.io.Serializable, Runnable {
 		else try complain that we don't have the proxy mechanism.
 	*/
 	public Object getInterface( Class clas ) 
-		throws EvalError
+		throws UtilEvalError
 	{
 		if ( clas.isInstance( this ) )
 			return this;
 		else
-			throw new EvalError( "Dynamic proxy mechanism not available. "
+			throw new UtilEvalError( "Dynamic proxy mechanism not available. "
 			+ "Cannot construct interface type: "+clas );
 	}
 
@@ -147,31 +147,102 @@ public class This implements java.io.Serializable, Runnable {
 	}
 
 	/**
-		Invoke specified method from outside java code, using the declaring 
-		interpreter and current namespace.
-
-		The call stack will appear as if the method is being invoked from
+		Invoke specified method as from outside java code, using the 
+		declaring interpreter and current namespace.
+		The call stack will indicate that the method is being invoked from
 		outside of bsh in native java code.
+		Note: you must still wrap/unwrap args/return values using 
+		Primitive/Primitive.unwrap() for use outside of BeanShell.
+		@see bsh.Primitive
 	*/
 	public Object invokeMethod( String name, Object [] args ) 
 		throws EvalError
 	{
-		// null callstack, one will be created for us in namespace.invokMethod
-		// null callerInfo is legal
-		return invokeMethod( name, args, declaringInterpreter, null, null );
+		// null callstack, one will be created for us 
+		return invokeMethod( 
+			name, args, declaringInterpreter, null, SimpleNode.JAVACODE );
 	}
 
 	/**
-		Invoke specified method with specified interpreter.
-		This is simply a convenience method.
+		Invoke a method in this namespace with the specified args,
+		interpreter reference, callstack, and caller info.
+		<p>
+
+		Note: If you use this method outside of the bsh package and wish to 
+		use variables with primitive values you will have to wrap them using 
+		bsh.Primitive.  Consider using This getInterface() to make a true Java
+		interface for invoking your scripted methods.
+		<p>
+
+		This method also implements the default object protocol of toString(), 
+		hashCode() and equals() and the invoke() meta-method handling as a 
+		last resort.
+		<p>
+
+		Note: the invoke() method will not catch the object method 
+		(toString, ...).  If you want to override them you have to script
+		them directly.
+		<p>
+
+		@see bsh.This.invokeMethod( 
+			String methodName, Object [] args, Interpreter interpreter, 
+			CallStack callstack, SimpleNode callerInfo )
+		@param if callStack is null a new CallStack will be created and
+			initialized with this namespace.
+		@see bsh.Primitive
 	*/
 	public Object invokeMethod( 
-		String name, Object [] args, Interpreter interpreter, 
+		String methodName, Object [] args, Interpreter interpreter, 
 			CallStack callstack, SimpleNode callerInfo  ) 
 		throws EvalError
 	{
-		return namespace.invokeMethod( 
-			name, args, interpreter, callstack, callerInfo );
+		if ( callstack == null )
+			callstack = new CallStack( namespace );
+
+		// Find the bsh method
+		Class [] types = Reflect.getTypes( args );
+		BshMethod bshMethod = namespace.getMethod( methodName, types );
+
+		if ( bshMethod != null )
+			return bshMethod.invoke( 
+				args, interpreter, callstack, callerInfo );
+
+		/*
+			No scripted method of that name.
+			Implement the required part of the Object protocol:
+				public int hashCode();
+				public boolean equals(java.lang.Object);
+				public java.lang.String toString();
+			if these were not handled by scripted methods we must provide
+			a default impl.
+		*/
+		// a default toString() that shows the interfaces we implement
+		if ( methodName.equals("toString" ) )
+			return toString();
+
+		// a default hashCode()
+		if ( methodName.equals("hashCode" ) )
+			return new Integer(this.hashCode());
+
+		// a default equals() testing for equality with the This reference
+		if ( methodName.equals("equals" ) ) {
+			Object obj = args[0];
+			return new Boolean( this == obj );
+		}
+
+		// Look for a default invoke() handler method in the namespace
+		bshMethod = namespace.getMethod( 
+			"invoke", new Class [] { null, null } );
+
+		// Call script "invoke( String methodName, Object [] args );
+		if ( bshMethod != null )
+			return bshMethod.invoke( new Object [] { methodName, args }, 
+				interpreter, callstack, callerInfo );
+
+		throw new EvalError("Method " + 
+			StringUtil.methodString( methodName, types ) +
+			" not found in bsh scripted object: "+ namespace.getName(), 
+			callerInfo, callstack );
 	}
 
 
@@ -191,33 +262,6 @@ public class This implements java.io.Serializable, Runnable {
 	{ 
 		ths.namespace.setParent( namespace ); 
 		ths.declaringInterpreter = declaringInterpreter;
-		//ths.initCallStack( namespace );
-	}
-
-	/**
-		Remove a This reference from a parent's namespace.
-		It's necessary to unbind a This reference before serialization if
-		you don't want serialization to save the entire interpreter and all
-		enclosing namespaces.  This is used by the bsh save() command.
-		<p>
-
-		This is a static utility method because it's used by a bsh command
-		bind() and the interpreter doesn't currently allow access to direct 
-		methods of This objects (small hack)
-	public static void unbind( This ths ) {
-	}
-*/
-
-/*
-	private final void initCallStack( NameSpace namespace ) {
-		callstack = new CallStack();
-		callstack.push( namespace );
-	}
-*/
-	CallStack newCallStack() {
-		CallStack callstack = new CallStack();
-		callstack.push( namespace );
-		return callstack;
 	}
 }
 

@@ -55,7 +55,6 @@ package	bsh;
 		toString()
 
 	added sourceFile attribute
-
 	modified constructors to use EvalError
 */
 
@@ -68,7 +67,7 @@ package	bsh;
  * You can modify this class to	customize your error reporting
  * mechanisms so long as you retain the	public fields.
  */
-class ParseException extends EvalError {
+public class ParseException extends EvalError {
 	String sourceFile = "<unknown>";
 
   /**
@@ -111,7 +110,9 @@ class ParseException extends EvalError {
   }
 
   public ParseException(String message)	{
-		super(message);
+		// bsh: null node, null callstack
+		// ParseException knows where the error is.
+		super( message, null, null );
     	specialConstructor = false;
   }
 

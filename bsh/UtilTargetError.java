@@ -34,33 +34,40 @@
 
 package bsh;
 
-class BSHImportDeclaration extends SimpleNode
+/**
+	UtilTargetError is an error corresponding to a TargetError but thrown by a 
+	utility or other class that does not have the caller context (Node) 
+	available to it.  See UtilEvalError for an explanation of the difference
+	between UtilEvalError and EvalError.
+	<p>
+
+	@see UtilEvalError
+*/
+public class UtilTargetError extends UtilEvalError
 {
-	public boolean importPackage;
-	public boolean superImport;
+	public Throwable t;
 
-	BSHImportDeclaration(int id) { super(id); }
+	public UtilTargetError( String message, Throwable t ) {
+		super( message );
+		this.t = t;
+	}
 
-	public Object eval( CallStack callstack, Interpreter interpreter) 
-		throws EvalError
+	public UtilTargetError( Throwable t ) {
+		this( null, t );
+	}
+
+	/**
+		Override toEvalError to throw TargetError type.
+	*/
+	public EvalError toEvalError( 
+		String msg, SimpleNode node, CallStack callstack  ) 
 	{
-		NameSpace namespace = callstack.top();
-		if ( superImport )
-			try {
-				namespace.doSuperImport();
-			} catch ( UtilEvalError e ) {
-				throw e.toEvalError( this, callstack  );
-			}
-		else {
-			String name = ((BSHAmbiguousName)jjtGetChild(0)).text;
+		if ( msg == null )
+			msg = getMessage();
+		else
+			msg = msg + ": " + getMessage();
 
-			if ( importPackage )
-				namespace.importPackage(name);
-			else
-				namespace.importClass(name);
-		}
-
-        return Primitive.VOID;
+		return new TargetError( msg, t, node, callstack, false );
 	}
 }
 

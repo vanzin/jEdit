@@ -1,5 +1,5 @@
 /**
-	Open a new workspace (shell) in the GUI.
+	Open a new workspace (JConsole) in the GUI desktop.
 */
 import javax.swing.*;
 
@@ -26,7 +26,7 @@ makeWorkspace( String name ) {
 	nct = new NameCompletionTable();
 	nct.add( interpreter.getNameSpace() );
 	try {
-		bcm = BshClassManager.getClassManager();
+		bcm = this.caller.namespace.getClassManager();
 		if ( bcm != null ) {
 			classNamesSource = bcm.getClassPath();
 			nct.add( classNamesSource );
