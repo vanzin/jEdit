@@ -31,41 +31,16 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-class NoWrapTokenHandler implements TokenHandler
+class NoWrapTokenHandler extends DisplayTokenHandler
 {
-	//{{{ init() method
-	public void init(Segment seg, SyntaxStyle[] styles,
-		FontRenderContext fontRenderContext,
-		TabExpander expander)
-	{
-		lastChunk = firstChunk = null;
-		totalLength = 0;
-		x = 0.0f;
-
-		this.seg = seg;
-		this.styles = styles;
-		this.fontRenderContext = fontRenderContext;
-		this.expander = expander;
-	} //}}}
-
-	//{{{ getFirstChunk() method
+	//{{{ getChunks() method
 	/**
 	 * Returns the first chunk.
 	 * @since jEdit 4.1pre1
 	 */
-	public Chunk getFirstChunk()
+	public Chunk getChunks()
 	{
 		return firstChunk;
-	} //}}}
-
-	//{{{ getLastChunk() method
-	/**
-	 * Returns the last chunk.
-	 * @since jEdit 4.1pre1
-	 */
-	public Chunk getLastChunk()
-	{
-		return lastChunk;
 	} //}}}
 
 	//{{{ handleToken() method
@@ -74,88 +49,14 @@ class NoWrapTokenHandler implements TokenHandler
 	 * @param length The number of characters in the token
 	 * @param id The token type (one of the constants in the
 	 * <code>Token</code> class).
-	 * @param rules The parser rule set that generated this token
+	 * @param context The line context
 	 * @since jEdit 4.1pre1
 	 */
-	public void handleToken(int length, byte id, ParserRuleSet rules)
+	public void handleToken(int length, byte id, TokenMarker.LineContext context)
 	{
-		if(id == Token.END)
-			return;
-
-		if(length == 0)
-		{
-			System.err.println("zero length token -- can't happen");
-			return;
-		}
-
-		if(firstChunk == null)
-		{
-			firstChunk = createChunk(length,id);
-			lastChunk = firstChunk;
-		}
-		else
-		{
-			lastChunk.next = createChunk(length,id);
-			lastChunk = lastChunk.next;
-		}
+		byte defaultID = context.rules.getDefault();
+		Chunk chunk = createChunk(length,id,defaultID);
+		if(chunk != null)
+			addChunk(chunk,defaultID);
 	} //}}}
-
-	//{{{ Protected members
-	protected Chunk firstChunk, lastChunk;
-	protected Segment seg;
-	protected SyntaxStyle[] styles;
-	protected FontRenderContext fontRenderContext;
-	protected TabExpander expander;
-	protected int totalLength;
-	protected float x;
-
-	//{{{ createChunk() method
-	protected Chunk createChunk(int length, byte id)
-	{
-		Chunk newChunk;
-
-		if(id == Token.WHITESPACE)
-		{
-			char ch = seg.array[seg.offset + totalLength];
-			//{{{ Create ' ' chunk
-			if(ch == ' ')
-			{
-				newChunk = new Chunk(Token.WHITESPACE,
-					seg,totalLength,length,styles,
-					fontRenderContext);
-			} //}}}
-			//{{{ Create '\t' chunk
-			else if(ch == '\t')
-			{
-				// XXX: why here {offset,offset}, and up
-				// there {offset,offset + 1}? this is a
-				// bit silly, especially considering the
-				// below 'current.length = 1'.
-				newChunk = new Chunk(Token.WHITESPACE,
-					seg,totalLength,0,styles,fontRenderContext);
-				newChunk.length = length;
-
-				float newX = expander.nextTabStop(x,totalLength);
-				newChunk.width = newX - x;
-			} //}}}
-			else
-			{
-				// Can't happen
-				throw new InternalError("Token.WHITESPACE not"
-					+ " space or tab, but " + ch);
-			}
-		}
-		//{{{ Create text chunk
-		else
-		{
-			newChunk = new Chunk(id,seg,totalLength,length,
-				styles,fontRenderContext);
-		} //}}}
-
-		totalLength += length;
-		x += newChunk.width;
-		return newChunk;
-	} //}}}
-
-	//}}}
 }

@@ -147,27 +147,28 @@ public class BufferPrinter1_4
 	//{{{ savePrintSpec() method
 	private static void savePrintSpec()
 	{
+		String settings = jEdit.getSettingsDirectory();
+		if(settings == null)
+			return;
+
 		String printSpecPath = MiscUtilities.constructPath(
-		                               jEdit.getSettingsDirectory(), "printspec");
+			settings, "printspec");
 		File filePrintSpec = new File(printSpecPath);
-		
-		if ( filePrintSpec!=null && !filePrintSpec.isDirectory())
+
+		try
 		{
-			try
-			{
-				FileOutputStream fileOut=new FileOutputStream(filePrintSpec);
-				ObjectOutputStream obOut=new ObjectOutputStream(fileOut);
-				obOut.writeObject(format);
-				//for backwards compatibility, the color variable is stored also as a property
-				Chromaticity cc=(Chromaticity)format.get(Chromaticity.class);
-				if (cc!=null)
-					jEdit.setBooleanProperty("print.color",
-						cc.getValue()==Chromaticity.COLOR.getValue());
-			}
-			catch(Exception ee)
-			{
-				Log.log(Log.ERROR,format,"Couldnt write to file="+filePrintSpec+"; error="+ ee);
-			}
+			FileOutputStream fileOut=new FileOutputStream(filePrintSpec);
+			ObjectOutputStream obOut=new ObjectOutputStream(fileOut);
+			obOut.writeObject(format);
+			//for backwards compatibility, the color variable is stored also as a property
+			Chromaticity cc=(Chromaticity)format.get(Chromaticity.class);
+			if (cc!=null)
+				jEdit.setBooleanProperty("print.color",
+					cc.getValue()==Chromaticity.COLOR.getValue());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	//}}}
@@ -177,33 +178,38 @@ public class BufferPrinter1_4
 	{
 		job = PrinterJob.getPrinterJob();
 
-		String printSpecPath = MiscUtilities.constructPath(
-		                               jEdit.getSettingsDirectory(), "printspec");
-		File filePrintSpec = new File(printSpecPath);
-
 		format = new HashPrintRequestAttributeSet();
-		if (filePrintSpec!=null && filePrintSpec.exists() && !filePrintSpec.isDirectory()){
 
-			try
+		String settings = jEdit.getSettingsDirectory();
+		if(settings != null)
+		{
+			String printSpecPath = MiscUtilities.constructPath(
+				settings, "printspec");
+			File filePrintSpec = new File(printSpecPath);
+
+			if (filePrintSpec.exists())
 			{
-				FileInputStream fileIn=new FileInputStream(filePrintSpec);
-				ObjectInputStream obIn=new ObjectInputStream(fileIn);
-				format=(HashPrintRequestAttributeSet)obIn.readObject();
-			}
-			catch(Exception ee)
-			{
-				Log.log(Log.ERROR,job,"Couldnt read file="+filePrintSpec+"; error="+ ee);
-			}
-			//for backwards compatibility, the color variable is stored also as a property
-			if(jEdit.getBooleanProperty("print.color"))
-				format.add(Chromaticity.COLOR);
-			else
-				format.add(Chromaticity.MONOCHROME);
+				try
+				{
+					FileInputStream fileIn=new FileInputStream(filePrintSpec);
+					ObjectInputStream obIn=new ObjectInputStream(fileIn);
+					format=(HashPrintRequestAttributeSet)obIn.readObject();
+				}
+				catch(Exception e)
+				{
+					Log.log(Log.ERROR,job,e);
+				}
+				//for backwards compatibility, the color variable is stored also as a property
+				if(jEdit.getBooleanProperty("print.color"))
+					format.add(Chromaticity.COLOR);
+				else
+					format.add(Chromaticity.MONOCHROME);
 
-			//no need to always keep the same job name for every printout.
-			format.add(new JobName(jobName, null));
-
+				//no need to always keep the same job name for every printout.
+				format.add(new JobName(jobName, null));
+			}
 		}
+
 		return job;
 
 	}

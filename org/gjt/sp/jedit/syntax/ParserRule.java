@@ -30,6 +30,32 @@ package org.gjt.sp.jedit.syntax;
  */
 public class ParserRule
 {
+	//{{{ Major actions (total: 8)
+	public static final int MAJOR_ACTIONS = 0x000000FF;
+	public static final int SEQ = 0;
+	public static final int SPAN = 1 << 0;
+	public static final int MARK_PREVIOUS = 1 << 1;
+	public static final int MARK_FOLLOWING = 1 << 2;
+	public static final int EOL_SPAN = 1 << 3;
+//	public static final int MAJOR_ACTION_5 = 1 << 4;
+//	public static final int MAJOR_ACTION_5 = 1 << 5;
+//	public static final int MAJOR_ACTION_6 = 1 << 6;
+//	public static final int MAJOR_ACTION_7 = 1 << 7;
+	//}}}
+
+	//{{{ Action hints (total: 8)
+	public static final int ACTION_HINTS = 0x0000FF00;
+	public static final int EXCLUDE_MATCH = 1 << 8;
+	public static final int AT_LINE_START = 1 << 9;
+	public static final int NO_LINE_BREAK = 1 << 10;
+	public static final int NO_WORD_BREAK = 1 << 11;
+	public static final int IS_ESCAPE = 1 << 12;
+//	public static final int ACTION_HINT_13 = 1 << 13;
+//	public static final int ACTION_HINT_14 = 1 << 14;
+//	public static final int ACTION_HINT_15 = 1 << 15;
+	//}}}
+
+	//{{{ Instance variables
 	public final char[] start;
 	public final char[] end;
 
@@ -37,6 +63,7 @@ public class ParserRule
 	public final byte token;
 
 	public ParserRule next;
+	//}}}
 
 	//{{{ ParserRule constructor
 	ParserRule(int action, char[] start, char[] end,
@@ -49,7 +76,7 @@ public class ParserRule
 		this.token = token;
 	} //}}}
 
-	//{{{ getRuleSet() method
+	//{{{ getDelegateRuleSet() method
 	/**
 	 * Returns the parser rule set used to highlight text matched by this
 	 * rule. Only applicable for <code>SEQ</code>, <code>SPAN</code>,
@@ -82,8 +109,8 @@ public class ParserRule
 	public static final ParserRule createSequenceRule(String seq,
 		String delegate, byte id, boolean atLineStart)
 	{
-		int ruleAction = TokenMarker.SEQ
-			| ((atLineStart) ? TokenMarker.AT_LINE_START : 0);
+		int ruleAction = SEQ
+			| ((atLineStart) ? AT_LINE_START : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			delegate, id);
@@ -95,11 +122,11 @@ public class ParserRule
 		boolean atLineStart, boolean excludeMatch,
 		boolean noWordBreak)
 	{
-		int ruleAction = TokenMarker.SPAN |
-			((noLineBreak) ? TokenMarker.NO_LINE_BREAK : 0) |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? TokenMarker.NO_WORD_BREAK : 0);
+		int ruleAction = SPAN |
+			((noLineBreak) ? NO_LINE_BREAK : 0) |
+			((atLineStart) ? AT_LINE_START : 0) |
+			((excludeMatch) ? EXCLUDE_MATCH : 0) |
+			((noWordBreak) ? NO_WORD_BREAK : 0);
 
 		return new ParserRule(ruleAction, begin.toCharArray(),
 			end.toCharArray(), delegate, id);
@@ -110,10 +137,10 @@ public class ParserRule
 		String delegate, byte id, boolean atLineStart,
 		boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.EOL_SPAN |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0)
-			| TokenMarker.NO_LINE_BREAK;
+		int ruleAction = EOL_SPAN |
+			((atLineStart) ? AT_LINE_START : 0) |
+			((excludeMatch) ? EXCLUDE_MATCH : 0)
+			| NO_LINE_BREAK;
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			delegate, id);
@@ -123,9 +150,9 @@ public class ParserRule
 	public static final ParserRule createMarkFollowingRule(String seq,
 		byte id, boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.MARK_FOLLOWING |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
+		int ruleAction = MARK_FOLLOWING |
+			((atLineStart) ? AT_LINE_START : 0) |
+			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			null, id);
@@ -135,9 +162,9 @@ public class ParserRule
 	public static final ParserRule createMarkPreviousRule(String seq, byte id,
 		boolean atLineStart, boolean excludeMatch)
 	{
-		int ruleAction = TokenMarker.MARK_PREVIOUS |
-			((atLineStart) ? TokenMarker.AT_LINE_START : 0) |
-			((excludeMatch) ? TokenMarker.EXCLUDE_MATCH : 0);
+		int ruleAction = MARK_PREVIOUS |
+			((atLineStart) ? AT_LINE_START : 0) |
+			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			null, id);
@@ -146,7 +173,7 @@ public class ParserRule
 	//{{{ createEscapeRule() method
 	public static final ParserRule createEscapeRule(String seq)
 	{
-		int ruleAction = TokenMarker.IS_ESCAPE;
+		int ruleAction = IS_ESCAPE;
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			null, Token.NULL);

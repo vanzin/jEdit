@@ -1,16 +1,13 @@
 TO DO
 
+- select & type fucked
 - add some tips of the day about pre1 features
-- check printspec & -nosettings
 - soft wrap
-- COBOL, ASP modes!
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
-- background tokens are probably broken
-- standard rule sets & mode field
-- optimizations
+- background tokens are slow
 
-- S+ENTER: fucked
+- S+ENTER in fsb: fucked
 - focus problem with hypersearch in floating window?
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class

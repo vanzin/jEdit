@@ -67,11 +67,23 @@ public class DefaultTokenHandler implements TokenHandler
 	 * @param length The number of characters in the token
 	 * @param id The token type (one of the constants in the
 	 * <code>Token</code> class).
-	 * @param rules The parser rule set that generated this token
+	 * @param context The line context
 	 * @since jEdit 4.1pre1
 	 */
-	public void handleToken(int length, byte id, ParserRuleSet rules)
+	public void handleToken(int length, byte id, TokenMarker.LineContext context)
 	{
+		ParserRuleSet rules = null;
+		while(context != null)
+		{
+			if(context.rules.getMode() != null)
+			{
+				rules = context.rules;
+				break;
+			}
+
+			context = context.parent;
+		}
+
 		if(length == 0 && id != Token.END)
 		{
 			System.err.println("zero length token -- can't happen");
