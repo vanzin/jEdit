@@ -12,6 +12,8 @@ release.
 
 - Stricter checks for windows being out-of-bounds.
 
+- Divider position in Global Options dialog box is now saved.
+
 + Bug Fixes:
 
 - The Format Paragraph command was once again broken on Java 1.3.

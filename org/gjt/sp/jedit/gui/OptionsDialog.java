@@ -104,6 +104,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,name);
+		jEdit.setIntegerProperty(name + ".splitter",splitter.getDividerLocation());
 		super.dispose();
 	} //}}}
 
@@ -236,6 +237,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 	//{{{ Instance variables
 	private String name;
+	private JSplitPane splitter;
 	private JTree paneTree;
 	private JPanel cardPanel;
 	private JLabel currentLabel;
@@ -280,7 +282,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		JScrollPane scroller = new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			scroller,stage);
 		splitter.setDividerLocation(scroller.getPreferredSize().width);
 		content.add(splitter, BorderLayout.CENTER);
@@ -321,6 +323,9 @@ public abstract class OptionsDialog extends EnhancedDialog
 			selectPane(rootNode,firstPane);
 
 		GUIUtilities.loadGeometry(this,name);
+		int dividerLocation = jEdit.getIntegerProperty(name + ".splitter",-1);
+		if(dividerLocation != -1)
+			splitter.setDividerLocation(dividerLocation);
 
 		// in case saved geometry is too small
 		updateSize();
