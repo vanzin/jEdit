@@ -4,6 +4,8 @@ JEDIT 4.0 VERSION HISTORY
 
 + New Features
 
+- New document model uses less memory, loads files faster, and has a
+  simpler API for developers
 - New folding features:
   - Three fold modes: none, indent, explicit. 'none' is the default now.
     'indent' is the indent-based folding mode, that behaves the same as
@@ -222,3 +224,9 @@ JEDIT 4.0 VERSION HISTORY
   was opened
 - Buffer.markTokens() now returns instance of Buffer.TokenList class
 - New BufferUpdate message type: FOLD_HANDLER_CHANGED
+- Buffer.insertString() deprecated; call Buffer.insert() instead
+- Buffer.remove(), Buffer.getText() and Buffer.createPosition() no longer
+  throw BadLocationExceptions
+- Buffer.getDefaultRootElement() deprecated; call
+  Buffer.getLineStartOffset(), Buffer.getLineEndOffset(),
+  Buffer.getLineLength() and Buffer.getLineOfOffset() instead

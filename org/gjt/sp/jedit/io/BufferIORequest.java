@@ -50,6 +50,11 @@ public class BufferIORequest extends WorkRequest
 	public static final String LOAD_DATA = "IORequest__loadData";
 
 	/**
+	 * Property line end offsets are stored in.
+	 */
+	public static final String END_OFFSETS = "IORequest__endOffsets";
+
+	/**
 	 * A file load request.
 	 */
 	public static final int LOAD = 0;
@@ -291,6 +296,8 @@ public class BufferIORequest extends WorkRequest
 	private String read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
+		IntegerArray endOffsets = new IntegerArray();
+
 		// only true if the file size is known
 		boolean trackProgress = (length != 0);
 		File file = buffer.getFile();
@@ -303,7 +310,7 @@ public class BufferIORequest extends WorkRequest
 		if(length == 0)
 			length = IOBUFSIZE;
 
-		StringBuffer sbuf = new StringBuffer((int)length);
+		SegmentBuffer seg = new SegmentBuffer((int)length);
 
 		InputStreamReader in = new InputStreamReader(_in,
 			(String)buffer.getProperty(Buffer.ENCODING));
@@ -361,11 +368,12 @@ public class BufferIORequest extends WorkRequest
 					}
 
 					// Insert a line
-					sbuf.append(buf,lastLine,i -
+					seg.append(buf,lastLine,i -
 						lastLine);
-					sbuf.append('\n');
+					endOffsets.add(seg.count);
+					seg.append('\n');
 					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
-						setProgressValue(sbuf.length());
+						setProgressValue(seg.count);
 
 					// This is i+1 to take the
 					// trailing \n into account
@@ -398,11 +406,12 @@ public class BufferIORequest extends WorkRequest
 					{
 						CROnly = false;
 						CRLF = false;
-						sbuf.append(buf,lastLine,
+						seg.append(buf,lastLine,
 							i - lastLine);
-						sbuf.append('\n');
+						endOffsets.add(seg.count);
+						seg.append('\n');
 						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
-							setProgressValue(sbuf.length());
+							setProgressValue(seg.count);
 						lastLine = i + 1;
 					}
 					break;
@@ -423,49 +432,50 @@ public class BufferIORequest extends WorkRequest
 			}
 
 			if(trackProgress)
-				setProgressValue(sbuf.length());
+				setProgressValue(seg.count);
 
 			// Add remaining stuff from buffer
-			sbuf.append(buf,lastLine,len - lastLine);
+			seg.append(buf,lastLine,len - lastLine);
 		}
 
 		setAbortable(false);
 
-		String returnValue;
+		String lineSeparator;
 		if(CRLF)
-			returnValue = "\r\n";
+			lineSeparator = "\r\n";
 		else if(CROnly)
-			returnValue = "\r";
+			lineSeparator = "\r";
 		else
-			returnValue = "\n";
+			lineSeparator = "\n";
 
 		in.close();
 
 		// Chop trailing newline and/or ^Z (if any)
-		int bufferLength = sbuf.length();
+		int bufferLength = seg.count;
 		if(bufferLength != 0)
 		{
-			char ch = sbuf.charAt(bufferLength - 1);
+			char ch = seg.array[bufferLength - 1];
 			if(ch == 0x1a /* DOS ^Z */)
-				sbuf.setLength(bufferLength - 1);
+				seg.count--;
 		}
 
 		if(bufferLength != 0)
 		{
-			char ch = sbuf.charAt(bufferLength - 1);
+			char ch = seg.array[bufferLength - 1];
 			if(ch == '\n')
 			{
 				buffer.putBooleanProperty(Buffer.TRAILING_EOL,true);
-				sbuf.setLength(bufferLength - 1);
+				seg.count--;
 			}
 		}
 
 		// to avoid having to deal with read/write locks and such,
 		// we insert the loaded data into the buffer in the
 		// post-load cleanup runnable, which runs in the AWT thread.
-		buffer.putProperty(LOAD_DATA,sbuf);
+		buffer.putProperty(LOAD_DATA,seg);
+		buffer.putProperty(END_OFFSETS,endOffsets);
 
-		return returnValue;
+		return lineSeparator;
 	}
 
 	private void readMarkers(Buffer buffer, InputStream _in)
