@@ -3,9 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- style editor dialog box needs ui work
-- dockables for unloaded plugins
-- 'remove plugins' dialog: use a text area
 - auto indent: don't de-indent on enter if no leading indent at all?
 - update quicknotepad docs
 - actions/dockables eval: should use own namespace?
@@ -13,7 +10,6 @@ and quirks that I need to fix eventually.
 - help:
   - titles in search are fucked
   - FAQ: better titles
-- format should show an error if the line len is 0, not beep
 - new macro handler api
 - new bracket matching; use interface to determine match
 
@@ -69,7 +65,6 @@ and quirks that I need to fix eventually.
 - choose directory dialog needs some work
 - tall caret and tab
 - tall caret and backspace
-- positions on reload
 - change of AT_WORD_START semantics to fix perl highlighting?
 
 - kill ring obviously broken

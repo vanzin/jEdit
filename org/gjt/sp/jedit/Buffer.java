@@ -3823,10 +3823,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 		for(int i = 0; i < markers.size(); i++)
 		{
 			Marker marker = (Marker)markers.elementAt(i);
+			marker.removePosition();
 			int pos = marker.getPosition();
 			if(pos > getLength())
 				marker.setPosition(getLength());
-			marker.removePosition();
 			marker.createPosition();
 		}
 	} //}}}

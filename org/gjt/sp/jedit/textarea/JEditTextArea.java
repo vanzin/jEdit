@@ -4328,7 +4328,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 		if(maxLineLen <= 0)
 		{
-			getToolkit().beep();
+			GUIUtilities.error(view,"format-maxlinelen",null);
 			return;
 		}
 

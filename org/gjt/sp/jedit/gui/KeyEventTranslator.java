@@ -59,13 +59,13 @@ public class KeyEventTranslator
 	 */
 	public static Key translateKeyEvent(KeyEvent evt)
 	{
-		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 		Key returnValue = null;
 
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_PRESSED:
+			int keyCode = evt.getKeyCode();
 			if((keyCode >= KeyEvent.VK_0
 				&& keyCode <= KeyEvent.VK_9)
 				|| (keyCode >= KeyEvent.VK_A
@@ -83,12 +83,22 @@ public class KeyEventTranslator
 			}
 			else
 			{
-				returnValue = new Key(getModifierString(evt),
-					keyCode,'\0');
+				String mods = getModifierString(evt);
+				switch(keyCode)
+				{
+				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_SPACE:
+					if(mods == null)
+						return null;
+				}
+
+				returnValue = new Key(mods,keyCode,'\0');
 			}
 			break;
 		case KeyEvent.KEY_TYPED:
-			if(evt.getKeyChar() == '\b')
+			char ch = evt.getKeyChar();
+			if(ch == '\b')
 				return null;
 
 			boolean mod = (System.currentTimeMillis() -
@@ -99,17 +109,25 @@ public class KeyEventTranslator
 
 			if(mod)
 			{
+				switch(ch)
+				{
+				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_SPACE:
+					return null;
+				}
+
 				if(Debug.ALTERNATIVE_DISPATCHER)
 				{
 					returnValue = new Key(
 						modifiersToString(modifiers),
-						0,evt.getKeyChar());
+						0,ch);
 				}
 				else
 					return null;
 			}
 			else
-				returnValue = new Key(null,0,evt.getKeyChar());
+				returnValue = new Key(null,0,ch);
 			break;
 		default:
 			return null;

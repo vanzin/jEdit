@@ -299,56 +299,37 @@ class StyleEditor extends EnhancedDialog implements ActionListener
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		GridBagLayout layout = new GridBagLayout();
-		JPanel panel = new JPanel(layout);
-
-		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridx = cons.gridy = 0;
-		cons.gridwidth = cons.gridheight = 1;
-		cons.fill = GridBagConstraints.BOTH;
-		cons.weightx = 0.0f;
+		JPanel panel = new JPanel(new GridLayout(4,2,12,12));
 
 		italics = new JCheckBox(jEdit.getProperty("style-editor.italics"));
 		italics.setSelected(style.getFont().isItalic());
-		layout.setConstraints(italics,cons);
 		panel.add(italics);
+		panel.add(new JLabel());
 
-		cons.gridy++;
 		bold = new JCheckBox(jEdit.getProperty("style-editor.bold"));
 		bold.setSelected(style.getFont().isBold());
-		layout.setConstraints(bold,cons);
 		panel.add(bold);
+		panel.add(new JLabel());
 
-		cons.gridy++;
 		Color fg = style.getForegroundColor();
 
 		fgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.fgColor"));
 		fgColorCheckBox.setSelected(fg != null);
 		fgColorCheckBox.addActionListener(this);
-		fgColorCheckBox.setBorder(new EmptyBorder(0,0,0,12));
-		layout.setConstraints(fgColorCheckBox,cons);
 		panel.add(fgColorCheckBox);
 
-		cons.gridx++;
 		fgColor = new ColorWellButton(fg);
 		fgColor.setEnabled(fg != null);
-		layout.setConstraints(fgColor,cons);
 		panel.add(fgColor);
 
-		cons.gridx = 0;
-		cons.gridy++;
 		Color bg = style.getBackgroundColor();
 		bgColorCheckBox = new JCheckBox(jEdit.getProperty("style-editor.bgColor"));
 		bgColorCheckBox.setSelected(bg != null);
 		bgColorCheckBox.addActionListener(this);
-		bgColorCheckBox.setBorder(new EmptyBorder(0,0,0,12));
-		layout.setConstraints(bgColorCheckBox,cons);
 		panel.add(bgColorCheckBox);
 
-		cons.gridx++;
 		bgColor = new ColorWellButton(bg);
 		bgColor.setEnabled(bg != null);
-		layout.setConstraints(bgColor,cons);
 		panel.add(bgColor);
 
 		content.add(BorderLayout.CENTER,panel);

@@ -201,155 +201,20 @@ public class DefaultInputHandler extends InputHandler
 	public void keyPressed(KeyEvent evt)
 	{
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
-		if(keyStroke == null)
-			return;
-
-		if(keyStroke.modifiers != null)
-		{
-			if(readNextChar != null)
-			{
-				if(keyStroke.key == KeyEvent.VK_ESCAPE)
-				{
-					readNextChar = null;
-					view.getStatus().setMessage(null);
-				}
-				else if(keyStroke.key == KeyEvent.VK_TAB
-					|| keyStroke.key == KeyEvent.VK_ENTER)
-				{
-					setCurrentBindings(bindings);
-					invokeReadNextChar((char)keyStroke.key);
-					repeatCount = 1;
-					return;
-				}
-			}
-			else
-			{
-				// ok even with no modifiers
-			}
-		}
-		else
-		{
-			// no modifiers, so ditch certain events handled in
-			// keyTyped
-			if(keyStroke.key == KeyEvent.VK_SPACE
-				|| keyStroke.key == KeyEvent.VK_ENTER
-				|| keyStroke.key == KeyEvent.VK_TAB)
-			{
-				return;
-			}
-		}
-
-		Object o = currentBindings.get(keyStroke);
-		if(o == null)
-		{
-			// Don't beep if the user presses some
-			// key we don't know about unless a
-			// prefix is active. Otherwise it will
-			// beep when caps lock is pressed, etc.
-			if(currentBindings != bindings)
-			{
-				Toolkit.getDefaultToolkit().beep();
-				// F10 should be passed on, but C+e F10
-				// shouldn't
-				repeatCount = 1;
-				evt.consume();
-				setCurrentBindings(bindings);
-			}
-		}
-
-		if(readNextChar != null)
-		{
-			readNextChar = null;
-			view.getStatus().setMessage(null);
-		}
-
-		if(o instanceof String)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((String)o);
-			evt.consume();
-		}
-		else if(o instanceof EditAction)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((EditAction)o);
-			evt.consume();
-		}
-		else if(o instanceof Hashtable)
-		{
-			setCurrentBindings((Hashtable)o);
-			evt.consume();
-		}
-
-		if(o == null)
-		{
-			switch(evt.getKeyCode())
-			{
-				case KeyEvent.VK_NUMPAD0:   case KeyEvent.VK_NUMPAD1:
-				case KeyEvent.VK_NUMPAD2:   case KeyEvent.VK_NUMPAD3:
-				case KeyEvent.VK_NUMPAD4:   case KeyEvent.VK_NUMPAD5:
-				case KeyEvent.VK_NUMPAD6:   case KeyEvent.VK_NUMPAD7:
-				case KeyEvent.VK_NUMPAD8:   case KeyEvent.VK_NUMPAD9:
-				case KeyEvent.VK_MULTIPLY:  case KeyEvent.VK_ADD:
-				/* case KeyEvent.VK_SEPARATOR: */ case KeyEvent.VK_SUBTRACT:
-				case KeyEvent.VK_DECIMAL:   case KeyEvent.VK_DIVIDE:
-					KeyEventWorkaround.numericKeypadKey();
-					break;
-			}
-		}
+		if(keyStroke != null)
+			handleKey(keyStroke);
 	} //}}}
 
 	//{{{ keyTyped() method
 	/**
-	 * Handle a key typed event. This inserts the key into the text area.
+	 * Handle a key typed event. This will look up the binding for
+	 * the key stroke and execute it.
 	 */
 	public void keyTyped(KeyEvent evt)
 	{
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
-		if(keyStroke == null)
-			return;
-
-		if(readNextChar != null)
-		{
-			setCurrentBindings(bindings);
-			invokeReadNextChar(keyStroke.input);
-			repeatCount = 1;
-			return;
-		}
-
-		char input = keyStroke.input;
-
-		switch(keyStroke.input)
-		{
-		case KeyEvent.VK_SPACE: /* == ' '  */
-		case KeyEvent.VK_ENTER: /* == '\n' */
-		case KeyEvent.VK_TAB:   /* == '\t' */
-		System.err.println("special");
-			keyStroke.key = keyStroke.input;
-			keyStroke.input = '\0';
-		}
-
-		Object o = currentBindings.get(keyStroke);
-
-		if(o instanceof Hashtable)
-		{
-			setCurrentBindings((Hashtable)o);
-		}
-		else if(o instanceof String)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((String)o);
-		}
-		else if(o instanceof EditAction)
-		{
-			setCurrentBindings(bindings);
-			invokeAction((EditAction)o);
-		}
-		else
-		{
-			setCurrentBindings(bindings);
-			userInput(input);
-		}
+		if(keyStroke != null)
+			handleKey(keyStroke);
 	} //}}}
 
 	//{{{ getSymbolicModifierName() method
@@ -464,6 +329,63 @@ public class DefaultInputHandler extends InputHandler
 
 	private Hashtable bindings;
 	private Hashtable currentBindings;
+
+	//{{{ handleKey() method
+	private void handleKey(KeyEventTranslator.Key keyStroke)
+	{
+		boolean input = (keyStroke.modifiers == null
+			&& keyStroke.input != '\0');
+
+		if(readNextChar != null)
+		{
+			if(input)
+			{
+				setCurrentBindings(bindings);
+				invokeReadNextChar(keyStroke.input);
+				repeatCount = 1;
+				return;
+			}
+			else
+			{
+				readNextChar = null;
+				view.getStatus().setMessage(null);
+			}
+		}
+
+		Object o = currentBindings.get(keyStroke);
+		if(o == null)
+		{
+			// Don't beep if the user presses some
+			// key we don't know about unless a
+			// prefix is active. Otherwise it will
+			// beep when caps lock is pressed, etc.
+			if(currentBindings != bindings)
+			{
+				Toolkit.getDefaultToolkit().beep();
+				// F10 should be passed on, but C+e F10
+				// shouldn't
+				repeatCount = 1;
+				setCurrentBindings(bindings);
+			}
+
+			if(input)
+				userInput(keyStroke.input);
+		}
+		else if(o instanceof Hashtable)
+		{
+			setCurrentBindings((Hashtable)o);
+		}
+		else if(o instanceof String)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((String)o);
+		}
+		else if(o instanceof EditAction)
+		{
+			setCurrentBindings(bindings);
+			invokeAction((EditAction)o);
+		}
+	} //}}}
 
 	//{{{ setCurrentBindings() method
 	private void setCurrentBindings(Hashtable bindings)

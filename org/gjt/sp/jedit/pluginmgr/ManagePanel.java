@@ -387,7 +387,7 @@ public class ManagePanel extends JPanel
 		{
 			int[] selected = table.getSelectedRows();
 
-			StringBuffer buf = new StringBuffer();
+			DefaultListModel listModel = new DefaultListModel();
 			Roster roster = new Roster();
 			for(int i = 0; i < selected.length; i++)
 			{
@@ -396,19 +396,25 @@ public class ManagePanel extends JPanel
 				while(iter.hasNext())
 				{
 					String jar = (String)iter.next();
-					if(buf.length() != 0)
-						buf.append('\n');
-					buf.append(jar);
+					listModel.addElement(jar);
 					roster.addRemove(jar);
 				}
 			}
 
-			String[] args = { buf.toString() };
-			if(GUIUtilities.confirm(window,
-				"plugin-manager.remove-confirm",args,
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE)
-				== JOptionPane.YES_OPTION)
+			JList list = new JList(listModel);
+			list.setVisibleRowCount(8);
+
+			Object[] message = {
+				jEdit.getProperty("plugin-manager.remove-confirm.message"),
+				new JScrollPane(list)
+			};
+
+			int returnValue = JOptionPane.showConfirmDialog(window,
+				message,
+				jEdit.getProperty("plugin-manager.remove-confirm.title"),
+				JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+			if(returnValue == JOptionPane.YES_OPTION)
 			{
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
