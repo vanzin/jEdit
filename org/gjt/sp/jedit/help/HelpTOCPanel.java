@@ -110,8 +110,6 @@ class HelpTOCPanel extends JPanel
 
 		tocRoot.add(createNode("README.txt",
 			jEdit.getProperty("helpviewer.toc.readme")));
-		tocRoot.add(createNode("NEWS.txt",
-			jEdit.getProperty("helpviewer.toc.news")));
 		tocRoot.add(createNode("CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
 		tocRoot.add(createNode("TODO.txt",
@@ -121,6 +119,7 @@ class HelpTOCPanel extends JPanel
 		tocRoot.add(createNode("COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 
+		loadTOC(tocRoot,"news42/toc.xml");
 		loadTOC(tocRoot,"users-guide/toc.xml");
 		loadTOC(tocRoot,"FAQ/toc.xml");
 		loadTOC(tocRoot,"api/toc.xml");
@@ -132,7 +131,7 @@ class HelpTOCPanel extends JPanel
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin plugin = plugins[i];
-			PluginJAR jar = plugin.getJAR();
+			PluginJAR jar = plugin.getPluginJAR();
 			if(jar == null)
 				continue;
 

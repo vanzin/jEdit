@@ -89,6 +89,7 @@ class HelpIndex
 		{
 			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","users-guide"));
 			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
+			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","news42"));
 		}
 
 		PluginJAR[] jars = jEdit.getPluginJARs();

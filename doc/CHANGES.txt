@@ -194,12 +194,6 @@ release.
   was split.
 
 }}}
-{{{ Scripting
-
-- BeanShell scripts now preset the 'wm' variable to
-  view.getDockableWindowManager(). Useful for actions.xml.
-
-}}}
 {{{ Miscellaneous
 
 - Symbolic links are no longer resolved in buffer path names. Opening
@@ -229,6 +223,12 @@ release.
 }}}
 {{{ Optimizations
 
+- New "deferred loading" plugin API. Plugins must be updated for this,
+  however existing plugins continue to work (with no performance
+  improvement). jEdit's startup time remains constant (+/- some
+  milliseconds) regardless of how many plugins using the new API are
+  installed.
+
 - Faster buffer loading.
 
 - Faster activity log.
@@ -251,7 +251,11 @@ release.
 
 - A funky little display optimization with monospaced fonts is now
   performed. In jEdit 4.1 this could be enabled with a hidden property,
-  but now we detect if a monospaced font is actually in use.
+  but now we detect if a monospaced font is actually in use. If this
+  causes display problems, please let me know about put this in a
+  startup script:
+
+  Debug.DISABLE_MONOSPACE_HACK = true;
 
 - Faster line insertion and removal when there are collapsed folds below
   the insertion point.
@@ -352,54 +356,8 @@ release.
 }}}
 {{{ API Changes
 
-- Deprecated some action methods:
-
-  jEdit.getActions() -- use jEdit.getActionNames() instead. getActions()
-  forces all actions.xml files to be loaded, which is a Bad Thing.
-  jEdit.getActionSetForAction() -- use form that takes a String
-
-- Removed some methods which do not make any sense at all with the new
-  display engine:
-
-  JEditTextArea.virtualToPhysical()
-  JEditTextArea.physicalToVirtual()
-  JEditTextArea.getVirtualLineCount()
-  JEditTextArea.xToOffset() (was already deprecated)
-  JEditTextArea.offsetToX() (was already deprecated)
-
-- The FoldVisibilityManager class has been replaced with a
-  DisplayManager class; obtain an instance by calling
-  JEditTextArea.getDisplayManager().
-
-- The concept of "virtual line numbers" is gone.
-  JEditTextArea.get/setFirstLine() now takes a vertical scroll bar
-  position that takes hidden lines as well as lines split by soft wrap
-  into account. Currently, no public API exists to covert between
-  scroll line numbers and physical line numbers, however there is a new
-  JEditTextArea.setFirstPhysicalLine() method.
-
-- Constructor of EBMessage class now takes an Object, not an
-  EBComponent, and getSource() now returns an Object, not an
-  EBComponent. This could break any plugins that provide custom message
-  types.
-
-- Added a new abstract method to the InputHandler class:
-
-  addKeyBinding(String keyBinding, String action);
-
-- Removed some deprecated GUIUtilities methods:
-
-  loadMenu(View,String)
-
-- These two methods are now final and must be specified using
-  "<name>.label" and "<name>.toggle" properties (use
-  jEdit.setTemporaryProperty() for dynamic actions):
-
-  EditAction.getLabel()
-  EditAction.isToggle()
-
-- The EditAction.getMouseOverText() method no longer exists. I am not
-  aware of any plugins using this method.
+- You can a detailed guide on what has been broken, and what has been
+  added, in doc/news42/index.html.
 
 - The following plugins are known to be broken:
 
@@ -417,31 +375,6 @@ release.
   to load, even if they are not broken themselves. So don't panic if you
   see a huge list of plugin errors on startup; most of them won't need
   fixing.
-
-}}}
-{{{ API Enhancements
-
-- Added VFS.DirectoryEntryCompare class.
-
-- Added View.goToBuffer() method. If the specified buffer is already
-  visible in one of the view's edit panes, sends focus to that edit
-  pane. Otherwise, calls setBuffer() on the current edit pane.
-
-- Added JEditTextArea.addToLeftOfScrollBar() method.
-
-- Instead of overriding the deprecated requestDefaultFocus() method,
-  dockable windows can now implement DefaultFocusComponent and its
-  focusOnDefaultComponent() method.
-
-- Added canRead and canWrite fields to VFS.DirectoryEntry class.
-
-- Added VFS extended attribute API. VFS.getExtendedAttributes() returns
-  an array of extended attribute names. Override getExtendedAttribute()
-  method of VFS.DirectoryEntry to return attribute values.
-
-- The org.gjt.sp.jedit.syntax package can now be used from other
-  applications. All you need to provide is error handling and locating
-  the XML mode files. See the package javadoc for details.
 
 }}}
 
