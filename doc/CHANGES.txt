@@ -10,6 +10,13 @@ JEDIT 4.0 VERSION HISTORY
     Finder by double-clicking on them, or dragging them to the jEdit
     icon
   - jEdit is assigned as the creator of new files
+- A few Alt-key shortcuts added for commonly-used commands to help keep
+  your fingers on the home row:
+  - A+i, A+k: prev, next line
+  - A+j, A+l: prev, next character
+  - A+q, A+a: page up, page down
+  - A+z, A+x: home, end
+  - A+d: delete next character
 
 + Enhancements
 
@@ -26,6 +33,7 @@ JEDIT 4.0 VERSION HISTORY
 - Improved help viewer welcome screen
 - Updated QuickNotepad sample plugin for jEdit 4.0 API changes (John
   Gellene)
+- 'Delete Line' now leaves the caret in the same column
 
 + Bug Fixes
 
@@ -43,6 +51,10 @@ JEDIT 4.0 VERSION HISTORY
 - With the Windows look and feel, file names were invisible in the file
   system browser
 - In the help viewer, the top-level user's guide link was broken
+- BufferChangeAdapter didn't properly implement BufferChangeListener
+  interface (Maik Schreiber)
+- When the text area lost focus, the bracket scope indicator in the
+  gutter was not repainted
 
 * Version 4.0pre1
 

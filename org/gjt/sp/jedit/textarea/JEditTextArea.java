@@ -3291,7 +3291,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				start--;
 			end--;
 		}
+		int x = offsetToX(caretLine,caret - start));
 		buffer.remove(start,end - start);
+		setCaretPosition(start + xToOffset(caretLine,x));
 	} //}}}
 
 	//{{{ deleteParagraph() method
@@ -5149,6 +5151,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ focusLost() method
 		public void focusLost(FocusEvent evt)
 		{
+			if(bracketLine != -1)
+				invalidateLine(bracketLine);
+
 			invalidateLine(caretLine);
 		} //}}}
 	} //}}}

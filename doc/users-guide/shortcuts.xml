@@ -1,10 +1,11 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true: -->
+<!-- :indentSize=1:noTabs=true:folding=indent:collapseFolds=1: -->
 
 <appendix id="shortcuts"><title>Keyboard Shortcuts</title>
  <para>
   This appendix documents the default set of keyboard shortcuts. They can
-  be customized to suit your taste in the
+  be customized to suit your taste in the <guibutton>Shortcuts</guibuttons>
+  pane of the
   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
   dialog box; see <xref linkend="global-opts" />.
  </para>
@@ -558,6 +559,14 @@
       </entry>
      </row>
      <row>
+      <entry><keycombo><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>;
+      <keycap>Tab</keycap></entry>
+      <entry>Shift selected lines left; right. Note that pressing
+      <keycap>Tab</keycap> with no selection active will insert a tab
+      character at the caret position.
+      </entry>
+     </row>
+     <row>
       <entry><keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></entry>
       <entry>Indent current line (or all
       selected lines).</entry>
@@ -663,6 +672,43 @@
       <entry><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
       <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></entry>
       <entry>Run most recently played or recorded macro.</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </informaltable>
+ <bridgehead renderas="sect1">Alternative Shortcuts</bridgehead>
+  <para>
+   A few frequently-used commands have alternative shortcuts intended to
+   help you keep your fingers on the home row.
+  </para>
+  <informaltable frame="none">
+   <tgroup cols="2">
+    <colspec colnum="1" colwidth="2.2in" />
+    <tbody>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>J</keycap></keycombo>;
+      <keycombo><keycap>Alt</keycap><keycap>L</keycap></keycombo></entry>
+      <entry>Move caret to previous, next character.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>I</keycap></keycombo>;
+      <keycombo><keycap>Alt</keycap><keycap>K</keycap></keycombo></entry>
+      <entry>Move caret up, down one line.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Q</keycap></keycombo>;
+      <keycombo><keycap>Alt</keycap><keycap>A</keycap></keycombo></entry>
+      <entry>Move caret up, down one screenful.</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Z</keycap></keycombo></entry>
+      <entry>First non-whitespace character of line, beginning of line,
+      first visible line (repeated presses).</entry>
+     </row>
+     <row>
+      <entry><keycombo><keycap>Alt</keycap><keycap>X</keycap></keycombo></entry>
+      <entry>Last non-whitespace character of line, end of line,
+      last visible line (repeated presses).</entry>
      </row>
     </tbody>
    </tgroup>
