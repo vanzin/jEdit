@@ -32,7 +32,6 @@ and quirks that I need to fix eventually.
 - save help index
 - C+j SPACE: space not registered
 - indent folding: fold marker not always updated
-switching wrap status in status bar doens't update vertical scroll
 - hypersearch results & folds
 - format: preserve comment chars at start
 - token values negative?
