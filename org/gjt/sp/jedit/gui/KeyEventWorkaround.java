@@ -46,6 +46,7 @@ public class KeyEventWorkaround
 		{
 		//{{{ KEY_PRESSED...
 		case KeyEvent.KEY_PRESSED:
+			lastKeyTime = System.currentTimeMillis();
 			// get rid of keys we never need to handle
 			switch(keyCode)
 			{
@@ -82,34 +83,39 @@ public class KeyEventWorkaround
 			case KeyEvent.VK_META:
 				modifiers |= InputEvent.META_MASK;
 				return null;
+			case KeyEvent.VK_NUMPAD0:
+			case KeyEvent.VK_NUMPAD1:
+			case KeyEvent.VK_NUMPAD2:
+			case KeyEvent.VK_NUMPAD3:
+			case KeyEvent.VK_NUMPAD4:
+			case KeyEvent.VK_NUMPAD5:
+			case KeyEvent.VK_NUMPAD6:
+			case KeyEvent.VK_NUMPAD7:
+			case KeyEvent.VK_NUMPAD8:
+			case KeyEvent.VK_NUMPAD9:
+			case KeyEvent.VK_MULTIPLY:
+			case KeyEvent.VK_ADD:
+			/* case KeyEvent.VK_SEPARATOR: */
+			case KeyEvent.VK_SUBTRACT:
+			case KeyEvent.VK_DECIMAL:
+			case KeyEvent.VK_DIVIDE:
+				last = LAST_NUMKEYPAD;
+				return evt;
 			default:
-				switch(keyCode)
+				if(!evt.isControlDown()
+					&& !evt.isAltDown()
+					&& !evt.isMetaDown())
+				// if((modifiers & (InputEvent.CTRL_MASK
+					// | InputEvent.ALT_MASK
+					// | InputEvent.META_MASK)) == 0)
 				{
-					case KeyEvent.VK_NUMPAD0:
-					case KeyEvent.VK_NUMPAD1:
-					case KeyEvent.VK_NUMPAD2:
-					case KeyEvent.VK_NUMPAD3:
-					case KeyEvent.VK_NUMPAD4:
-					case KeyEvent.VK_NUMPAD5:
-					case KeyEvent.VK_NUMPAD6:
-					case KeyEvent.VK_NUMPAD7:
-					case KeyEvent.VK_NUMPAD8:
-					case KeyEvent.VK_NUMPAD9:
-					case KeyEvent.VK_MULTIPLY:
-					case KeyEvent.VK_ADD:
-					/* case KeyEvent.VK_SEPARATOR: */
-					case KeyEvent.VK_SUBTRACT:
-					case KeyEvent.VK_DECIMAL:
-					case KeyEvent.VK_DIVIDE:
-						last = LAST_NUMKEYPAD;
-						lastKeyTime = System.currentTimeMillis();
-						return evt;
-				}
+					// key pressed with no modifiers does
+					// not seem to happen. note, if you
+					// run jEdit with your clock set to
+					// the 70's you'll get broken keyboard
+					// handling.
+					lastKeyTime = 0L;
 
-				if((modifiers & (InputEvent.CTRL_MASK
-					| InputEvent.ALT_MASK
-					| InputEvent.META_MASK)) == 0)
-				{
 					if(keyCode >= KeyEvent.VK_0
 						&& keyCode <= KeyEvent.VK_9)
 					{
@@ -145,35 +151,39 @@ public class KeyEventWorkaround
 			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
 				return null;
 
-			// "Alt" is the option key on MacOS, and it can generate
-			// user input
-			if(OperatingSystem.isMacOS())
+			if(System.currentTimeMillis() - lastKeyTime < 750)
 			{
-				if((modifiers & (InputEvent.CTRL_MASK
-					| InputEvent.META_MASK)) != 0)
-					return null;
-			}
-			else
-			{
-				if((modifiers & InputEvent.CTRL_MASK) != 0
-					^ (modifiers & InputEvent.ALT_MASK) != 0
-					|| (modifiers & InputEvent.META_MASK) != 0)
-					return null;
-			}
-
-			// if the last key was a numeric keypad key
-			// and NumLock is off, filter it out
-			if(last == LAST_NUMKEYPAD && System.currentTimeMillis()
-				- lastKeyTime < 750)
-			{
-				last = LAST_NOTHING;
-				if((ch >= '0' && ch <= '9') || ch == '.'
-					|| ch == '/' || ch == '*'
-					|| ch == '-' || ch == '+')
+				// "Alt" is the option key on MacOS, and it can generate
+				// user input
+				if(OperatingSystem.isMacOS())
 				{
-					return null;
+					/* if((modifiers & (InputEvent.CTRL_MASK
+						| InputEvent.META_MASK)) != 0)
+						return null; */
+				}
+				else
+				{
+					if((modifiers & InputEvent.CTRL_MASK) != 0
+						^ (modifiers & InputEvent.ALT_MASK) != 0
+						|| (modifiers & InputEvent.META_MASK) != 0)
+						return null;
+				}
+
+				// if the last key was a numeric keypad key
+				// and NumLock is off, filter it out
+				if(last == LAST_NUMKEYPAD)
+				{
+					last = LAST_NOTHING;
+					if((ch >= '0' && ch <= '9') || ch == '.'
+						|| ch == '/' || ch == '*'
+						|| ch == '-' || ch == '+')
+					{
+						return null;
+					}
 				}
 			}
+			else
+				modifiers = 0;
 
 			return evt;
 		//}}}
@@ -214,16 +224,14 @@ public class KeyEventWorkaround
 		last = LAST_NOTHING;
 	} //}}}
 
+	//{{{ Package-private members
+	static long lastKeyTime;
+	static int modifiers;
+	//}}}
+
 	//{{{ Private members
-	private static long lastKeyTime;
-
-	private static int modifiers;
-
 	private static int last;
 	private static final int LAST_NOTHING = 0;
-	private static final int LAST_ALT = 1;
-	private static final int LAST_BROKEN = 2;
-	private static final int LAST_NUMKEYPAD = 3;
-	private static final int LAST_MOD = 4;
+	private static final int LAST_NUMKEYPAD = 1;
 	//}}}
 }
