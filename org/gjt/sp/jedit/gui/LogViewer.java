@@ -19,12 +19,14 @@
 
 package org.gjt.sp.jedit.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import org.gjt.sp.jedit.gui.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.gjt.sp.jedit.gui.DockableWindow;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 
@@ -34,6 +36,8 @@ public class LogViewer extends JPanel implements DockableWindow
 	{
 		super(new BorderLayout());
 
+		Box captionBox = Box.createHorizontalBox();
+
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
 		{
@@ -41,13 +45,24 @@ public class LogViewer extends JPanel implements DockableWindow
 				settingsDirectory, "activity.log") };
 			JLabel label = new JLabel(jEdit.getProperty(
 				"log-viewer.caption",args));
-			add(BorderLayout.NORTH,label);
+			captionBox.add(label);
 		}
 
-		JTextArea textArea = new JTextArea(24,80);
+		captionBox.add(Box.createHorizontalGlue());
+
+		tailIsOn = jEdit.getBooleanProperty("log-viewer.tail", false);
+		tail = new JCheckBox(
+			jEdit.getProperty("log-viewer.tail.label"),tailIsOn);
+		tail.addActionListener(new ActionHandler());
+		captionBox.add(tail);
+
+		textArea = new JTextArea(24,80);
 		textArea.setDocument(Log.getLogDocument());
+		textArea.getDocument().addDocumentListener(
+			new DocumentHandler());
 		//textArea.setEditable(false);
 
+		add(BorderLayout.NORTH,captionBox);
 		add(BorderLayout.CENTER,new JScrollPane(textArea));
 	}
 
@@ -59,5 +74,34 @@ public class LogViewer extends JPanel implements DockableWindow
 	public Component getComponent()
 	{
 		return this;
+	}
+
+	private JTextArea textArea;
+	private JCheckBox tail;
+	private boolean tailIsOn;
+
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			tailIsOn = !tailIsOn;
+			jEdit.setBooleanProperty("log-viewer.tail",tailIsOn);
+			if(tailIsOn)
+				textArea.setCaretPosition(
+					textArea.getDocument().getLength());
+		}
+	}
+
+	class DocumentHandler implements DocumentListener
+	{
+		public void insertUpdate(DocumentEvent e)
+		{
+			if(tailIsOn)
+				textArea.setCaretPosition(
+					textArea.getDocument().getLength());
+		}
+
+		public void changedUpdate(DocumentEvent e) {}
+		public void removeUpdate(DocumentEvent e) {}
 	}
 }

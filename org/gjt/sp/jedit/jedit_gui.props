@@ -1288,6 +1288,8 @@ tip.count=54
 # Activity log
 log-viewer.title=Activity Log
 log-viewer.caption=Full text of log is stored in {0}.
+log-viewer.tail.label=Tail
+
 
 ###
 ### VFS STRINGS
