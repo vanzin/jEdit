@@ -73,7 +73,10 @@ public class DefaultTokenHandler implements TokenHandler
 	public void handleToken(int length, byte id, ParserRuleSet rules)
 	{
 		if(length == 0 && id != Token.END)
+		{
+			System.err.println("zero length token -- can't happen");
 			return;
+		}
 		else if(id == Token.WHITESPACE)
 		{
 			if(lastToken == null)

@@ -1,16 +1,15 @@
 TO DO
 
+- soft wrap
 - COBOL mode!
-- lastKeyword variable probably not needed?
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
+- background tokens are probably broken
+- standard rule sets & mode field
+- optimizations
+
 - S+ENTER: fucked
 - focus problem with hypersearch in floating window?
-- test that 'save as' updates browser
-- background tokens are probably broken
-- zero-length tokens: should the token marker be spitting them out at all?
-- standard rule sets & mode field
-
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
 

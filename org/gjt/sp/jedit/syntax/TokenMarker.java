@@ -173,7 +173,7 @@ public class TokenMarker
 		this.tokenHandler = tokenHandler;
 		this.line = line;
 
-		lastOffset = lastKeyword = line.offset;
+		lastOffset = line.offset;
 		lineLength = line.count + line.offset;
 
 		context = new LineContext();
@@ -230,8 +230,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		} //}}}
 
 		//{{{ Mark all remaining characters
+		pos = lineLength;
+
 		handleSoftSpan();
-		markKeyword(lastKeyword, lineLength);
+		markKeyword(true);
 
 		if(context.parent != null)
 		{
@@ -264,7 +266,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	private LineContext context;
 	private Segment pattern = new Segment();
 	private int lastOffset;
-	private int lastKeyword;
 	private int lineLength;
 	private int pos;
 	private boolean escaped;
@@ -281,7 +282,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 		if(b && !tempEscaped)
 		{
-			markKeyword(lastKeyword,pos);
+			markKeyword(true);
 
 			context = (LineContext)context.parent.clone();
 
@@ -291,7 +292,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				context.rules);
 
 			context.inRule = null;
-			lastKeyword = lastOffset = pos + pattern.count;
+			lastOffset = pos + pattern.count;
 
 			// move pos to last character of match sequence
 			pos += (pattern.count - 1);
@@ -346,25 +347,21 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			else if((checkRule.action & AT_LINE_START) == AT_LINE_START)
 			{
 				if((((checkRule.action & MARK_PREVIOUS) != 0) ?
-					lastKeyword : pos) != line.offset)
+					lastOffset : pos) != line.offset)
 				{
 					return false;
 				}
 			}
 
-
-			if ((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS)
-			{
-				markKeyword(lastKeyword, pos);
-				lastKeyword = pos + pattern.count;
-			}
+			markKeyword((checkRule.action & MARK_PREVIOUS) != MARK_PREVIOUS);
 
 			switch(checkRule.action & MAJOR_ACTIONS)
 			{
 			//{{{ SEQ
 			case SEQ:
 				// this is a plain sequence rule
-				tokenHandler.handleToken(pattern.count,checkRule.token,
+				tokenHandler.handleToken(pattern.count,
+					checkRule.token,
 					context.rules);
 				lastOffset = pos + pattern.count;
 				break;
@@ -388,18 +385,14 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			//}}}
 			//{{{ MARK_PREVIOUS
 			case MARK_PREVIOUS:
-				if (lastKeyword > lastOffset)
-				{
-					tokenHandler.handleToken(lastKeyword - lastOffset,
-						context.rules.getDefault(),
-						context.rules);
-					lastOffset = lastKeyword;
-				}
-
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
-					tokenHandler.handleToken(pos - lastOffset,
-						checkRule.token,context.rules);
+					if(pos != lastOffset)
+					{
+						tokenHandler.handleToken(pos - lastOffset,
+							checkRule.token,context.rules);
+					}
+
 					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
@@ -416,8 +409,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			default:
 				throw new InternalError("Unhandled major action");
 			}
-
-			lastKeyword = lastOffset;
 
 			// move pos to last character of match sequence
 			pos += (pattern.count - 1); 
@@ -451,7 +442,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				tokenHandler.handleToken(pos - lastOffset,
 					rule.token,context.rules);
 
-				lastOffset = lastKeyword = pos;
+				lastOffset = pos;
 				context = context.parent;
 				context.inRule = null;
 				return true;
@@ -462,9 +453,11 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	} //}}}
 
 	//{{{ markKeyword() method
-	private void markKeyword(int start, int end)
+	private void markKeyword(boolean addRemaining)
 	{
-		int len = end - start;
+		int len = pos - lastOffset;
+		if(len == 0)
+			return;
 
 		//{{{ Do digits
 		if(context.rules.getHighlightDigits())
@@ -472,7 +465,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			boolean digit = false;
 			boolean mixed = false;
 
-			for(int i = start; i < end; i++)
+			for(int i = lastOffset; i < pos; i++)
 			{
 				char ch = line.array[i];
 				if(Character.isDigit(ch))
@@ -502,7 +495,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 							line,false);
 						int oldCount = line.count;
 						int oldOffset = line.offset;
-						line.offset = start;
+						line.offset = lastOffset;
 						line.count = len;
 						if(!digitRE.isMatch(seg))
 							digit = false;
@@ -514,14 +507,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			if(digit)
 			{
-				if(start != lastOffset)
-				{
-					tokenHandler.handleToken(start - lastOffset,
-						context.rules.getDefault(),
-						context.rules);
-				}
 				tokenHandler.handleToken(len,Token.DIGIT,context.rules);
-				lastKeyword = lastOffset = end;
+				lastOffset = pos;
 
 				return;
 			}
@@ -532,26 +519,24 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 		if(keywords != null)
 		{
-			byte id = keywords.lookup(line, start, len);
+			byte id = keywords.lookup(line, lastOffset, len);
 
 			if(id != Token.NULL)
 			{
-				if(start != lastOffset)
-				{
-					tokenHandler.handleToken(start - lastOffset,
-						context.rules.getDefault(),
-						context.rules);
-				}
 				tokenHandler.handleToken(len,id,context.rules);
-				lastKeyword = lastOffset = end;
+				lastOffset = pos;
 				return;
 			}
 		} //}}}
 
-		// Handle any remaining crud
-		tokenHandler.handleToken(pos - lastOffset,
-			context.rules.getDefault(),
-			context.rules);
+		//{{{ Handle any remaining crud
+		if(addRemaining)
+		{
+			tokenHandler.handleToken(pos - lastOffset,
+				context.rules.getDefault(),
+				context.rules);
+			lastOffset = pos;
+		} //}}}
 	} //}}}
 
 	//}}}

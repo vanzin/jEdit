@@ -82,6 +82,12 @@ class NoWrapTokenHandler implements TokenHandler
 		if(id == Token.END)
 			return;
 
+		if(length == 0)
+		{
+			System.err.println("zero length token -- can't happen");
+			return;
+		}
+
 		if(firstChunk == null)
 		{
 			firstChunk = createChunk(length,id);
