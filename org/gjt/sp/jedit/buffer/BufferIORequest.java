@@ -318,7 +318,8 @@ public class BufferIORequest extends WorkRequest
 	private void read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
-		IntegerArray endOffsets = new IntegerArray();
+		/* we guess an initial size for the array */
+		IntegerArray endOffsets = new IntegerArray((int)(length / 50));
 
 		// only true if the file size is known
 		boolean trackProgress = (!buffer.isTemporary() && length != 0);

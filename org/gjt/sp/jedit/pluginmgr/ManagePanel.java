@@ -378,7 +378,7 @@ public class ManagePanel extends JPanel
 			if (entry.status.equals(Entry.ERROR))
 				tcr.setForeground(Color.red);
 			else
-				tcr.setForeground(Color.black);
+				tcr.setForeground(UIManager.getColor("Table.foreground"));
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
 		}
 	} //}}}

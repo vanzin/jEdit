@@ -243,6 +243,9 @@ class ChunkCache
 	//{{{ getLineSubregionCount() method
 	int getLineSubregionCount(int physicalLine)
 	{
+		if(!textArea.displayManager.softWrap)
+			return 1;
+
 		out.clear();
 		lineToChunkList(physicalLine,out);
 
@@ -622,7 +625,7 @@ class ChunkCache
 				// if the line has no text, out.size() == 0
 				if(out.size() == 0)
 				{
-					textArea.getDisplayManager()
+					textArea.displayManager
 						.setScreenLineCount(
 						physicalLine,1);
 					if(i == 0)
@@ -642,7 +645,7 @@ class ChunkCache
 				// otherwise, the number of subregions
 				else
 				{
-					textArea.getDisplayManager()
+					textArea.displayManager
 						.setScreenLineCount(
 						physicalLine,out.size());
 					if(i == 0)
@@ -727,8 +730,8 @@ class ChunkCache
 		tokenHandler.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter,out,
-			(textArea.getDisplayManager().softWrap
-			? textArea.getDisplayManager().wrapMargin : 0.0f));
+			(textArea.displayManager.softWrap
+			? textArea.displayManager.wrapMargin : 0.0f));
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 

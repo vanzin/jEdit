@@ -120,6 +120,7 @@ public class EnhancedMenu extends JMenu implements MenuListener
 		if(provider == null)
 		{
 			// error
+			providerCode = null;
 			return;
 		}
 

@@ -488,7 +488,7 @@ unwind:		while(context.parent != null)
 				 * ...
 				 * EOF
 				 */
-				if(charIndexed != null)
+				if(charIndexed != null && checkRule.end != null)
 				{
 					spanEndSubst = checkRule.startRegexp.substitute(
 						charIndexed,new String(checkRule.end));

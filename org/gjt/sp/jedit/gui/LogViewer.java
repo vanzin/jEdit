@@ -70,8 +70,6 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		ListModel model = Log.getLogListModel();
 		model.addListDataListener(new ListHandler());
 		list = new LogList(model);
-		list.setVisibleRowCount(24);
-		list.setFont(jEdit.getFontProperty("view.font"));
 
 		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
@@ -185,6 +183,21 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		LogList(ListModel model)
 		{
 			super(model);
+			setVisibleRowCount(24);
+			setFont(jEdit.getFontProperty("view.font"));
+			getSelectionModel().setSelectionMode(
+				ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			setAutoscrolls(true);
+		}
+
+		public void processMouseEvent(MouseEvent evt)
+		{
+			if(evt.getID() == MouseEvent.MOUSE_PRESSED)
+			{
+				startIndex = list.locationToIndex(
+					evt.getPoint());
+			}
+			super.processMouseEvent(evt);
 		}
 
 		public void processMouseMotionEvent(MouseEvent evt)
@@ -194,12 +207,21 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 				int row = list.locationToIndex(evt.getPoint());
 				if(row != -1)
 				{
-					list.addSelectionInterval(row,row);
+					if(startIndex == -1)
+					{
+						list.setSelectionInterval(row,row);
+						startIndex = row;
+					}
+					else
+						list.setSelectionInterval(startIndex,row);
+					list.ensureIndexIsVisible(row);
 					evt.consume();
 				}
 			}
 			else
 				super.processMouseMotionEvent(evt);
 		}
+
+		private int startIndex;
 	} //}}}
 }

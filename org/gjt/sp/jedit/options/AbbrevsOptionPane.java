@@ -98,6 +98,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		abbrevsTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
 		abbrevsTable.getSelectionModel().addListSelectionListener(
 			new SelectionHandler());
+		abbrevsTable.getSelectionModel().setSelectionMode(
+			ListSelectionModel.SINGLE_SELECTION);
 		abbrevsTable.addMouseListener(new TableMouseHandler());
 		Dimension d = abbrevsTable.getPreferredSize();
 		d.height = Math.min(d.height,200);

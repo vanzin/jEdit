@@ -1,5 +1,51 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre3
+
+{{{ User Interface
+
+- Activity Log now autoscrolls when dragging the mouse outside the log
+  area bounds.
+
+- Docked window menu buttons should now look better on MacOS X.
+
+}}}
+{{{ Optimizations
+
+- Fixed a performance regression from pre2. Opening large files with
+  soft wrap off should now be as fast (or faster) than 4.1.
+
+}}}
+{{{ Bug Fixes
+
+- Fixed NullPointerException when loading plugins if opened buffers
+  contained an invalid 'folding' property.
+
+- Fixed NullPointerException when invoking Complete Word in an edit mode
+  that did not define a keyword map.
+
+- Selecting 'Close' from a cloned dockable's popup menu closed the wrong
+  window.
+
+- Plugin manager window did not have the same icon as all other jEdit
+  windows.
+
+- "What's new in jEdit 4.2" document was missing from the download due
+  to a packaging error.
+
+- "Highlight every n lines" color setting in Gutter option pane didn't
+  work properly.
+
+- Plugin manager hardcoded the table foreground color to black, this
+  could make the table unreadable if the text area background was dark
+  and "use jEdit text area colors in all text controls" was on.
+
+- EOL_SPAN_REGEXP rules threw NullPointerExceptions.
+
+}}}
+
+}}}
+
 {{{ Version 4.2pre2
 
 Thanks to Carmine Lucarelli, Matt Albrecht, Ollie Rutherfurd and
