@@ -57,6 +57,11 @@ JEDIT 4.2 VERSION HISTORY
   existed in the first place!
 
 }}}
+{{{ API Changes
+
+- MiscUtilities.getFileExtension() now works with path names too.
+
+}}}
 
 }}}
 

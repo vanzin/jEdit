@@ -51,8 +51,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	 */
 	public static final int CURRENT_BUFFER = 0;
 	public static final int ALL_BUFFERS = 1;
-	public static final int DIRECTORY_CURRENT = 2;
-	public static final int DIRECTORY_LAST = 3;
+	public static final int DIRECTORY = 2;
 	//}}}
 
 	//{{{ getSearchDialog() method
@@ -145,7 +144,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			searchAllBuffers.setSelected(true);
 			hyperSearch.setSelected(true);
 		}
-		else if(searchIn == DIRECTORY_LAST)
+		else if(searchIn == DIRECTORY)
 		{
 			SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 
@@ -493,6 +492,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		cons.gridwidth = 1;
 		cons.weightx = 0.0f;
+		cons.insets = new Insets(0,0,3,0);
 
 		synchronize = new JButton(jEdit.getProperty(
 			"search.synchronize"));
