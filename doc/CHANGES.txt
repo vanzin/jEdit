@@ -35,6 +35,13 @@ contributing to this release.
 - Abbreviations are now loaded/saved using the UTF8 encoding, making
   them more friendly towards international characters.
 
+- Fix a few problems (mainly not closing streams after exceptions, and
+  unused fields/methods) found by the FindBugs tool.
+
+- Fix possible ArrayIndexOutOfBoundsException in
+  DisplayManager.hideLineRange() when narrowing to folds in
+  indent-folded buffers.
+
 }}}
 
 }}}
