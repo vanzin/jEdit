@@ -164,7 +164,8 @@ contributing to this release.
 
 - Moved BeanShell evaluation commands from 'Utilities' to 'Macros' menu.
 
-- New splash screen and about box. (Kris Kopicki)
+- New splash screen, about box, and file system browser icons.
+  (Kris Kopicki)
 
 + OS-specific Changes:
 
