@@ -147,6 +147,7 @@ class ChunkCache
 	} //}}}
 
 	//{{{ setFirstLine() method
+	public static boolean DEBUG = false;
 	/**
 	 * This method takes care of shifting the cached tokens so that
 	 * scrolling doesn't cause all visible lines, only newly exposed
@@ -154,13 +155,20 @@ class ChunkCache
 	 */
 	void setFirstLine(int firstLine, int physFirstLine, boolean bufferSwitch)
 	{
+		if(DEBUG)
+		{
+			System.err.println("old: " + this.firstLine + ",new: " +
+				firstLine + ",phys: " + physFirstLine + ",bs: " + bufferSwitch);
+		}
+
 		int visibleLines = lineInfo.length;
 		// rely on the fact that when we're called physLastLine not updated yet
 		if(bufferSwitch
 			|| (!textArea.softWrap && Math.abs(firstLine - this.firstLine) >= visibleLines)
 			|| (textArea.softWrap && physFirstLine > textArea.getLastPhysicalLine()))
 		{
-			//System.err.println("too far");
+			if(DEBUG)
+				System.err.println("too far");
 			for(int i = 0; i < visibleLines; i++)
 			{
 				lineInfo[i].chunksValid = false;
@@ -168,9 +176,20 @@ class ChunkCache
 		}
 		else if(firstLine > this.firstLine)
 		{
+			boolean invalidateAll = false;
+
 			int firstScreenLine = 0;
 			for(int i = 0; i < visibleLines; i++)
 			{
+				// can't do much if the physical line we are
+				// looking for isn't in the cache... so in
+				// that case just invalidate everything.
+				if(!lineInfo[i].chunksValid)
+				{
+					invalidateAll = true;
+					break;
+				}
+
 				if(lineInfo[i].physicalLine == physFirstLine)
 				{
 					firstScreenLine = i;
@@ -178,18 +197,29 @@ class ChunkCache
 				}
 			}
 
-			if(firstScreenLine != visibleLines)
+			if(invalidateAll)
 			{
-				System.arraycopy(lineInfo,firstScreenLine,
-					lineInfo,0,visibleLines - firstScreenLine);
+				invalidateAll();
+			}
+			else
+			{
+				if(firstScreenLine != visibleLines)
+				{
+					System.arraycopy(lineInfo,firstScreenLine,
+						lineInfo,0,visibleLines - firstScreenLine);
+				}
+
+				for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
+				{
+					lineInfo[i] = new LineInfo();
+				}
 			}
 
-			for(int i = visibleLines - firstScreenLine; i < visibleLines; i++)
+			if(DEBUG)
 			{
-				lineInfo[i] = new LineInfo();
+				System.err.println("f > t.f: only " + firstScreenLine
+					+ " need updates");
 			}
-			//System.err.println("only " + firstScreenLine
-			//	+ " need updates");
 		}
 		else if(this.firstLine > firstLine)
 		{
@@ -219,8 +249,12 @@ class ChunkCache
 			{
 				lineInfo[i] = (LineInfo)iter.next();
 			}
-			//System.err.println("only " + firstScreenLine
-			//	+ " need updates");
+
+			if(DEBUG)
+			{
+				System.err.println("t.f > f: only " + firstScreenLine
+					+ " need updates");
+			}
 		}
 
 		lastScreenLine = lastScreenLineP = -1;
@@ -232,6 +266,11 @@ class ChunkCache
 	{
 		for(int i = 0; i < lineInfo.length; i++)
 		{
+			if(!lineInfo[i].chunksValid)
+			{
+				// remainder are also invalid
+				break;
+			}
 			lineInfo[i].chunksValid = false;
 		}
 
