@@ -647,6 +647,7 @@ public class DisplayManager
 				foo[i] = ' ';
 			}
 			TextAreaPainter painter = textArea.getPainter();
+			wrapToWidth = false;
 			wrapMargin = (int)painter.getFont().getStringBounds(
 				foo,0,foo.length,
 				painter.getFontRenderContext())

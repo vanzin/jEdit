@@ -11,12 +11,12 @@
 		<PROPERTY NAME="commentStart" VALUE="("/>
 		<PROPERTY NAME="commentEnd" VALUE=")"/>
 		<PROPERTY NAME="lineComment" VALUE="!"/>
-		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,"/>
+		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,_"/>
 	</PROPS>
-	<RULES IGNORE_CASE="FALSE" ESCAPE="\" NO_WORD_SEP="+-*=&gt;&lt;;.?/'()%,"
+	<RULES IGNORE_CASE="FALSE" ESCAPE="\" NO_WORD_SEP="+-*=&gt;&lt;;.?/'()%,_"
 		HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="-?\d+([./]\d+)?">
-		<EOL_SPAN TYPE="COMMENT2">#!</EOL_SPAN>
-		<EOL_SPAN TYPE="COMMENT1">!</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT2" AT_WORD_START="TRUE">#!</EOL_SPAN>
+		<EOL_SPAN TYPE="COMMENT1" AT_WORD_START="TRUE">!</EOL_SPAN>
 
 		<!-- parsing words -->
 		<SEQ_REGEXP TYPE="MARKUP"

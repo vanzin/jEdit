@@ -164,7 +164,7 @@ class InstallPanel extends JPanel
 	class PluginTableModel extends AbstractTableModel
 	{
 		private ArrayList entries = new ArrayList();
-		private int sortType = EntryCompare.CATEGORY;
+		private int sortType = EntryCompare.NAME;
 
 		//{{{ getColumnClass() method
 		public Class getColumnClass(int columnIndex)

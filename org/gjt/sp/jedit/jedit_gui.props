@@ -2120,7 +2120,7 @@ vfs.browser.delete-confirm.message=Are you sure you want to delete the following
 	{0}
 
 vfs.browser.delete-favorites.title=Delete From Favorites
-vfs.browser.delete-favorites.message=Are you sure you want to remove the following directories \
+vfs.browser.delete-favorites.message=Are you sure you want to remove the following files \
 	from the favorites?\n\n\
 	{0}
 

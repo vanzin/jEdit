@@ -304,6 +304,36 @@ public class BufferIORequest extends WorkRequest
 		}
 	} //}}}
 
+	//{{{ getXMLEncoding() method
+	/**
+	 * Extract XML encoding name from PI.
+	 */
+	private String getXMLEncoding(String xmlPI)
+	{
+		if(!xmlPI.startsWith("<?xml"))
+			return null;
+
+		int index = xmlPI.indexOf("encoding=");
+		if(index == -1 || index + 9 == xmlPI.length())
+			return null;
+
+		char ch = xmlPI.charAt(index + 9);
+		int endIndex = xmlPI.indexOf(ch,index + 10);
+		if(endIndex == -1)
+			return null;
+
+		String encoding = xmlPI.substring(index + 10,endIndex);
+
+		if(Charset.isSupported(encoding))
+			return encoding;
+		else
+		{
+			Log.log(Log.WARNING,this,"XML PI specifies "
+				+ "unsupported encoding: " + encoding);
+			return null;
+		}
+	} //}}}
+
 	//{{{ autodetect() method
 	/**
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
@@ -386,30 +416,12 @@ public class BufferIORequest extends WorkRequest
 						break;
 				}
 
-				String xmlPI = new String(_xmlPI,0,offset,
-				"ASCII");
-				if(xmlPI.startsWith("<?xml"))
+				String xmlEncoding = getXMLEncoding(new String(
+					_xmlPI,0,offset,"ASCII"));
+				if(xmlEncoding != null)
 				{
-					int index = xmlPI.indexOf("encoding=");
-					if(index != -1
-						&& index + 9 != xmlPI.length())
-					{
-						char ch = xmlPI.charAt(index
-						+ 9);
-						int endIndex = xmlPI.indexOf(ch,
-							index + 10);
-						encoding = xmlPI.substring(
-							index + 10,endIndex);
-
-						if(Charset.isSupported(encoding))
-						{
-							buffer.setProperty(Buffer.ENCODING,encoding);
-						}
-						else
-						{
-							Log.log(Log.WARNING,this,"XML PI specifies unsupported encoding: " + encoding);
-						}
-					}
+					encoding = xmlEncoding;
+					buffer.setProperty(Buffer.ENCODING,encoding);
 				}
 
 				in.reset();

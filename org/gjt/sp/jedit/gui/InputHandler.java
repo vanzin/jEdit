@@ -387,6 +387,8 @@ public abstract class InputHandler
 		if(recorder != null)
 			recorder.record(getRepeatCount(),readNextChar);
 
+		view.getStatus().setMessage(null);
+
 		if(getRepeatCount() != 1)
 		{
 			try
@@ -407,8 +409,6 @@ public abstract class InputHandler
 			BeanShell.eval(view,BeanShell.getNameSpace(),readNextChar);
 
 		readNextChar = null;
-
-		view.getStatus().setMessage(null);
 	} //}}}
 
 	//}}}

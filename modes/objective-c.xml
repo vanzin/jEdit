@@ -19,7 +19,10 @@
         <PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
     </PROPS>
     <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-        <!-- Doxygen comment, Javadoc style -->
+        <!-- Silly comment -->
+	<SEQ TYPE="COMMENT1">/**/</SEQ>
+
+	<!-- Doxygen comment, Javadoc style -->
         <SPAN TYPE="COMMENT3" DELEGATE="doxygen::DOXYGEN">
             <BEGIN>/**</BEGIN>
             <END>*/</END>

@@ -2927,7 +2927,7 @@ public class jEdit
 			int start = classpath.lastIndexOf(File
 				.pathSeparator,index) + 1;
 			// if started with java -jar jedit.jar
-			 if(classpath.equalsIgnoreCase("jedit.jar"))
+			if(start == index)
 			{
 				jEditHome = System.getProperty("user.dir");
 			}
