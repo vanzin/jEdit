@@ -376,9 +376,9 @@ public class TokenMarker
 
 	//{{{ Private members
 	private static final int SOFT_SPAN = MARK_FOLLOWING | NO_WORD_BREAK;
-	private static Hashtable ruleSets;
 
 	//{{{ Instance variables
+	private Hashtable ruleSets;
 	private String name;
 	private String rulePfx;
 	private ParserRuleSet mainRuleSet;
