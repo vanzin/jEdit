@@ -68,7 +68,7 @@ class PluginManagerProgress extends JDialog
 
 		pack();
 		setLocationRelativeTo(dialog);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ setValue() method

@@ -146,7 +146,7 @@ public class ErrorListDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(frame);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ ok() method

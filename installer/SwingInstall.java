@@ -84,7 +84,7 @@ public class SwingInstall extends JFrame
 		pack();
 		setLocation((screen.width - getSize().width) / 2,
 			(screen.height - getSize().height) / 2);
-		show();
+		setVisible(true);
 	}
 
 	// package-private members

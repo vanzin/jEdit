@@ -1673,8 +1673,10 @@ public class jEdit
 	//{{{ _closeBuffer() method
 	/**
 	 * Closes the buffer, even if it has unsaved changes.
-	 * @param view The view
+	 * @param view The view, may be null
 	 * @param buffer The buffer
+	 *
+	 * @exception NullPointerException if the buffer is null
 	 *
 	 * @since jEdit 2.2pre1
 	 */
@@ -1691,7 +1693,8 @@ public class jEdit
 
 		if(!buffer.isNewFile())
 		{
-			view.getEditPane().saveCaretInfo();
+			if(view != null)
+				view.getEditPane().saveCaretInfo();
 			Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
 			int caret = (_caret == null ? 0 : _caret.intValue());
 
@@ -2183,7 +2186,7 @@ public class jEdit
 
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
-			newView.show();
+			newView.setVisible(true);
 
 			// show tip of the day
 			if(newView == viewsFirst)

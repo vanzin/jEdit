@@ -64,7 +64,7 @@ public class SplashScreen extends JComponent
 		win.setLocation((screen.width - size.width) / 2,
 			(screen.height - size.height) / 2);
 		win.validate();
-		win.show();
+		win.setVisible(true);
 
 		/*synchronized(this)
 		{

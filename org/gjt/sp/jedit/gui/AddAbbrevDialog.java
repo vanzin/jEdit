@@ -72,7 +72,7 @@ public class AddAbbrevDialog extends JDialog
 
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	}
 
 	// private members

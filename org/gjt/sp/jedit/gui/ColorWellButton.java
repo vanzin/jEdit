@@ -120,7 +120,7 @@ public class ColorWellButton extends JButton
 					true);
 			}
 			dialog.pack();
-			dialog.show();
+			dialog.setVisible(true);
 		}
 	} //}}}
 

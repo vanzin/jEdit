@@ -68,7 +68,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 
 		pack();
 		GUIUtilities.loadGeometry(this,entry.factory.name);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ remove() method

@@ -135,7 +135,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ dispose() method

@@ -164,7 +164,7 @@ public class CompleteWord extends JWindow
 
 		pack();
 		setLocation(location);
-		show();
+		setVisible(true);
 
 		KeyHandler keyHandler = new KeyHandler();
 		addKeyListener(keyHandler);

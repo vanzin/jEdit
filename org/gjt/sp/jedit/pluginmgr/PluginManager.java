@@ -192,7 +192,7 @@ public class PluginManager extends JFrame implements EBComponent
 
 		pack();
 		GUIUtilities.loadGeometry(this,"plugin-manager");
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ updatePluginList() method

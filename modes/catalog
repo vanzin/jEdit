@@ -162,6 +162,9 @@
 <MODE NAME="jsp"		FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
 
+<MODE NAME="lilypond"		FILE="lilypond.xml"
+				FILE_NAME_GLOB="*.ly" />
+
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 

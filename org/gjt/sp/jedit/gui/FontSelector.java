@@ -362,7 +362,7 @@ class FontSelectorDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(getParent());
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ getFontList() method

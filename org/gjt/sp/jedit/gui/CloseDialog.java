@@ -103,7 +103,7 @@ public class CloseDialog extends EnhancedDialog
 
 		pack();
 		setLocationRelativeTo(view);
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ isOK() method

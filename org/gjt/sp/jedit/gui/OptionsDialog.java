@@ -346,7 +346,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		// in case saved geometry is too small
 		updateSize();
 
-		show();
+		setVisible(true);
 	} //}}}
 
 	//{{{ selectPane() method
