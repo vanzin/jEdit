@@ -256,7 +256,7 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return Boolean.valueOf(
+					return new Boolean(
 						!entry.status.equals(
 						Entry.NOT_LOADED));
 				case 1:

@@ -224,7 +224,7 @@ class InstallPanel extends JPanel
 				switch (columnIndex)
 				{
 					case 0:
-						return Boolean.valueOf(
+						return new Boolean(
 							entry.install);
 					case 1:
 						return entry.name;

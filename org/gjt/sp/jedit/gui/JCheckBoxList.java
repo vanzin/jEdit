@@ -292,7 +292,7 @@ class CheckBoxListModel extends AbstractTableModel
 		switch(col)
 		{
 		case 0:
-			return Boolean.valueOf(entry.checked);
+			return new Boolean(entry.checked);
 		case 1:
 			return entry.value;
 		default:
