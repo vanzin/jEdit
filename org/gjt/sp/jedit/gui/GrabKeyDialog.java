@@ -211,6 +211,9 @@ public class GrabKeyDialog extends JDialog
 		Box input = Box.createHorizontalBox();
 
 		shortcut = new InputPane();
+		Dimension size = shortcut.getPreferredSize();
+		size.width = Integer.MAX_VALUE;
+		shortcut.setMaximumSize(size);
 		input.add(shortcut);
 		input.add(Box.createHorizontalStrut(12));
 
@@ -398,6 +401,9 @@ public class GrabKeyDialog extends JDialog
 		protected void processKeyEvent(KeyEvent _evt)
 		{
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
+			if(KeyEventWorkaround.isModifier(_evt))
+				evt = null;
+
 			if(debugBuffer != null)
 			{
 				debugBuffer.insert(debugBuffer.getLength(),
