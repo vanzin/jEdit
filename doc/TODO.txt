@@ -19,6 +19,9 @@ and quirks that I need to fix eventually.
   - ESCAPE hides search bar
   - wheel mouse modifiers
 
+- respond to shortcuts on KeyTyped only, track KeyPressed/KeyReleased to
+  know mod status
+- some JLists do not auto-scroll on keystroke
 - line 2112 -- isNarrowed() check of moveCaretPosition()
 - format -- instead of \n\n, what if it has \n   \n?
 - if A depends on B but A is loaded before B and B breaks, A ends up

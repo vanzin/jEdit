@@ -126,21 +126,22 @@
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="m"
                         AT_WORD_START="TRUE"
-                >m([[:punct:]])(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>
+                >m\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
+
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="m"
                         AT_WORD_START="TRUE"
-                >m{(?:.*?[^\\])*?}[sgiexom]*</SEQ_REGEXP>
+                >m([[:punct:]])(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="s"
-                        AT_WORD_START="TRUE"
-		>s([[:punct:]])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="s"
                         AT_WORD_START="TRUE"
-                >s\s*{(?:.*?[^\\])*?}\s*{(?:.*?[^\\])*?}[sgiexom]*</SEQ_REGEXP>
+                >s\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
 
+		<SEQ_REGEXP TYPE="MARKUP"
+                        HASH_CHAR="s"
+                        AT_WORD_START="TRUE"
+		>s([[:punct:]])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>
 		<!-- // -->
 		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR="/"
@@ -151,12 +152,12 @@
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
-		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>

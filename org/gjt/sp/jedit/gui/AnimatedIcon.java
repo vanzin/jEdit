@@ -24,12 +24,13 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 //}}}
 
 /**
- * A animated version of ImageIcon. It can be used anywhere and ImageIcon can be.
+ * A animated version of ImageIcon. It can be used anywhere an ImageIcon can be.
  */
 public class AnimatedIcon extends ImageIcon
 {
@@ -77,7 +78,7 @@ public class AnimatedIcon extends ImageIcon
 	 */
 	public void start()
 	{
-		timer = new Timer(new Animator(),delay);
+		timer = new Timer(delay,new Animator());
 		timer.start();
 	} //}}}
 
@@ -97,17 +98,17 @@ public class AnimatedIcon extends ImageIcon
 	private Image[] frames;
 	private int current;
 	private int delay;
-	private Timer animator;
+	private Timer timer;
 	private Component host;
 	//}}}
 
 	//{{{ Animator class
-	class Animator implements Runnable
+	class Animator implements ActionListener
 	{
-		public void run()
+		public void actionPerformed(ActionEvent evt)
 		{
 			current = (current + 1) % frames.length;
-			setImage(frames[i]);
+			setImage(frames[current]);
 			host.repaint();
 		}
 	} //}}}

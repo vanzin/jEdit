@@ -50,6 +50,11 @@ for contributing to this release.
 
 - Fixed some popup menu display bugs.
 
+- Fixed possible NullPointerException in Syntax Highlighting option
+  pane.
+
+- Highlighting of m{...} and s{...}{...} in Perl mode was broken.
+
 + API Additions:
 
 - Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).
