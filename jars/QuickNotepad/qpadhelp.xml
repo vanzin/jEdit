@@ -1,10 +1,7 @@
-<!-- jEdit buffer-local properties:                     -->
-<!-- :indentSize=1:noTabs=true:maxLineLen=72:tabSize=2: -->
-
-<!-- QuickNotepad 2.0 help documentation                -->
-<!-- Contains text of documentation;                    -->
+<!-- QuickNotepad 2.0 help documentation		-->
+<!-- Contains text of documentation;		-->
 <!-- DocBook header contained in QuickNotepad.xml       -->
-<!-- Copyright (C) 2001 John Gellene                    -->
+<!-- Copyright (C) 2001 John Gellene		-->
 <!-- $Id$
 -->
 
@@ -12,30 +9,30 @@
 <indexterm><primary>QuickNotepad</primary></indexterm>
 <para>
 	This plugin provides a dockable <quote>scratch pad</quote> for writing
-  and displaying notes, to do lists or similar items as unformatted text.
-  The text is automatically saved upon closing the plugin or exiting
-  jEdit. It can also be saved manually. The user can change the file
-  to be displayed during the current editing session. The path of the default
-  notepad file can be changed as a user option. Finally, the
-  text file can be copied to a new, untitled jEdit buffer so that it can
-  be edited by the main program.
+	and displaying notes, to do lists or similar items as unformatted text.
+	The text is automatically saved upon closing the plugin or exiting
+	jEdit. It can also be saved manually. The user can change the file to be
+	displayed during the current editing session. The path of the default
+	notepad file can be changed as a user option. Finally, the text file can
+	be copied to a new, untitled jEdit buffer so that it can be edited by the
+	main program.
 </para>
 
 <para>
-  The <citetitle>jEdit Plugin Guide</citetitle> details the development
-  and design of QuickNotepad. It is a simple but functional dockable plugin
-  that incorporates the basic elements of the jEdit plugin architecture.
+	The <citetitle>jEdit Plugin Guide</citetitle> details the development
+	and design of QuickNotepad. It is a simple but functional dockable plugin
+	that incorporates the basic elements of the jEdit plugin architecture.
 </para>
 
 <para>
-  QuickNotepad 2.0 is designed to operate with JDK 1.2 or greater and
-  jEdit 4.0 or greater.  The EditBus plugin is also required.
+	QuickNotepad 2.0 is designed to operate with JDK 1.2 or greater and
+	jEdit 4.0 or greater.  The EditBus plugin is also required.
 </para>
 
 <para>
-  The file <filename>changes40.txt</filename> in the plugin's source
-  code details the changes that were made to the plugin to conform to
-  the new plugin API for jEdit version 4.0.
+	The file <filename>changes40.txt</filename> in the plugin's source
+	code details the changes that were made to the plugin to conform to
+	the new plugin API for jEdit version 4.0.
 </para>
 </simplesect>
 
@@ -43,53 +40,53 @@
 
 <para>
 <indexterm>
-  <primary>QuickNotepad</primary>
-  <secondary>shortcut keys</secondary>
+	<primary>QuickNotepad</primary>
+	<secondary>shortcut keys</secondary>
 </indexterm>
-  When QuickNotepad is activated, it loads and displays the file stored in
-  its properties as unformatted text. The text can be edited using the
-  keyboard and mouse. The text area component recognizes the following
-  basic editing shortcuts:
+	When QuickNotepad is activated, it loads and displays the file stored in
+	its properties as unformatted text. The text can be edited using the
+	keyboard and mouse. The text area component recognizes the following
+	basic editing shortcuts:
 </para>
 <!-- Limitations on xsltproc's capabilities require a blank column between -->
-<!-- the two columns of data to provide spacing for the table.             -->
+<!-- the two columns of data to provide spacing for the table.       -->
 <informaltable align="center" frame="none">
-  <tgroup cols="4" align="left">
-    <colspec colnum="1"/> <!-- blank column -->
-    <colspec colnum="2"/>
-    <colspec colnum="3"/> <!-- blank column -->
-    <colspec colnum="4"/>
-    <tbody>
-      <row>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry>Cut</entry>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>x</keysym></keycombo></entry>
-      </row>
-      <row>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry>Copy</entry>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>c</keysym></keycombo></entry>
-      </row>
-      <row>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry>Paste</entry>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>v</keysym></keycombo></entry>
-      </row>
-      <row>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry>Select All</entry>
-        <entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
-        <entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>a</keysym></keycombo></entry>
-      </row>
-    </tbody>
-  </tgroup>
+	<tgroup cols="4" align="left">
+		<colspec colnum="1"/> <!-- blank column -->
+		<colspec colnum="2"/>
+		<colspec colnum="3"/> <!-- blank column -->
+		<colspec colnum="4"/>
+		<tbody>
+			<row>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>Cut</entry>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>x</keysym></keycombo></entry>
+			</row>
+			<row>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>Copy</entry>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>c</keysym></keycombo></entry>
+			</row>
+			<row>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>Paste</entry>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>v</keysym></keycombo></entry>
+			</row>
+			<row>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>Select All</entry>
+				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>a</keysym></keycombo></entry>
+			</row>
+		</tbody>
+	</tgroup>
 </informaltable>
 
 <para>
-  QuickNotepad ignores function keys and other combination key presses.
+	QuickNotepad ignores function keys and other combination key presses.
 </para>
 
 </simplesect>
@@ -97,51 +94,51 @@
 <simplesect><title>Toolbar buttons</title>
 
 <para>
-  Three buttons above the text area provide file management operations:
+	Three buttons above the text area provide file management operations:
 </para>
 
 <itemizedlist>
-  <listitem>
-    <para>
-        <guilabel>Choose notepad file</guilabel> - this button opens a file selection
-        dialog permitting the user to select a different file to view in the
-        text area. If a new file is selected, the old file is
-        auomatically saved. The selection is valid only for the current
-        editing session; to change the default QuickNotepad file for future
-        sessions, use the <link linkend="options">options dialog</link>.
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <guilabel>Save notepad file</guilabel> - this button causes QuickNotepad to
-      write the contents of the text area to the designated notepad file. To
-      save the text to another file name, use the <guilabel>Copy notepad to
-      buffer</guilabel> operation.
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <guilabel>Copy notepad to buffer</guilabel> - this button causes the
-      contents of the text to be written to a newly created,
-      untitled buffer in the main text editing area.  This operation
-      does not alter the QuickNotepad text area or write its text to
-      storage.  Further changes to either the QuickNotepad text area or
-      the new buffer will not affect the other.
-    </para>
-  </listitem>
+	<listitem>
+		<para>
+			<guilabel>Choose notepad file</guilabel> - this button opens a file selection
+			dialog permitting the user to select a different file to view in the
+			text area. If a new file is selected, the old file is
+			auomatically saved. The selection is valid only for the current
+			editing session; to change the default QuickNotepad file for future
+			sessions, use the <link linkend="options">options dialog</link>.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<guilabel>Save notepad file</guilabel> - this button causes QuickNotepad to
+			write the contents of the text area to the designated notepad file. To
+			save the text to another file name, use the <guilabel>Copy notepad to
+			buffer</guilabel> operation.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			<guilabel>Copy notepad to buffer</guilabel> - this button causes the
+			contents of the text to be written to a newly created,
+			untitled buffer in the main text editing area.  This operation
+			does not alter the QuickNotepad text area or write its text to
+			storage.  Further changes to either the QuickNotepad text area or
+			the new buffer will not affect the other.
+		</para>
+	</listitem>
 </itemizedlist>
 
 <para>
-  These operations are listed in the menu which appears for
-  QuickNotepad under the <guimenu>Plugins</guimenu> heading.  They can
-  also be made the subject of keyboard shortcuts in the
-  <guilabel>Plugin Shortcuts</guilabel> pane of jEdit's options dialog.
+	These operations are listed in the menu which appears for
+	QuickNotepad under the <guimenu>Plugins</guimenu> heading.  They can
+	also be made the subject of keyboard shortcuts in the
+	<guilabel>Plugin Shortcuts</guilabel> pane of jEdit's options dialog.
 </para>
 
 <para>
-  One other operation is available as a keyboard shortcut. <guilabel>Bring
-  QuickNotepad to front</guilabel> activates the plugin and makes visible
-  if it is currently hidden in a docking window.
+	One other operation is available as a keyboard shortcut. <guilabel>Bring
+	QuickNotepad to front</guilabel> activates the plugin and makes visible
+	if it is currently hidden in a docking window.
 </para>
 
 </simplesect>
@@ -153,69 +150,69 @@
 </indexterm>
 
 <para>
-  There are three options which can be set
-  using the pane for QuickNotepad in the <guilabel>Plugin
-  Shortcuts</guilabel> section of the general options dialog:
+	There are three options which can be set
+	using the pane for QuickNotepad in the <guilabel>Plugin
+	Shortcuts</guilabel> section of the general options dialog:
 </para>
-  <itemizedlist>
-    <listitem>
-      <para>
-        A checkbox governs whether the name of the notepad file will be
-        displayed in the toolbar panel above the text area. Even if the file
-        name display is enabled, if the plugin is displayed to the left or right
-        of the main editing area, the notepad file name will likely be partially
-        or completely hidden.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        A text field and adjacent button allow the user to choose the path of
-        the default notepad file by typing its name or opening a file chooser
-        dialog. This file will be loaded (and the old file saved) once the
-        plugin's options settings are committed.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        A third button shows the name, size and style of the font used by the
-        QuickNotepad text area.  Pressing the button summons a font chooser
-        dialog for making a new selection.  The text area will be
-        redrawn with the new font once the change is committed.
-      </para>
-    </listitem>
-  </itemizedlist>
+<itemizedlist>
+	<listitem>
+		<para>
+			A checkbox governs whether the name of the notepad file will be
+			displayed in the toolbar panel above the text area. Even if the file
+			name display is enabled, if the plugin is displayed to the left or right
+			of the main editing area, the notepad file name will likely be partially
+			or completely hidden.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			A text field and adjacent button allow the user to choose the path of
+			the default notepad file by typing its name or opening a file chooser
+			dialog. This file will be loaded (and the old file saved) once the
+			plugin's options settings are committed.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+			A third button shows the name, size and style of the font used by the
+			QuickNotepad text area.  Pressing the button summons a font chooser
+			dialog for making a new selection.  The text area will be
+			redrawn with the new font once the change is committed.
+		</para>
+	</listitem>
+</itemizedlist>
 
 </simplesect>
 
 <simplesect><title>Legal notices</title>
 
 <para>
-  The toolbar button icons are taken from the Sun Java Look and Feel
-  icon collection. The license for these items may be found
-  in the <filename>ICONS.LICENSE.txt</filename> file in the jEdit
-  distribution.
+	The toolbar button icons are taken from the Sun Java Look and Feel
+	icon collection. The license for these items may be found
+	in the <filename>ICONS.LICENSE.txt</filename> file in the jEdit
+	distribution.
 </para>
 
 <para>
-  The QuickNotepad plugin is released under the GNU General Public License
-  (either version 2 or any later version, at the user's option). A copy
-  of the GPL is available in the <filename>COPYING.txt</filename> file
-  in the jEdit distribution.
+	The QuickNotepad plugin is released under the GNU General Public License
+	(either version 2 or any later version, at the user's option). A copy
+	of the GPL is available in the <filename>COPYING.txt</filename> file
+	in the jEdit distribution.
 </para>
 
 <para>
-  The QuickNotepad plugin comes with ABSOLUTELY NO WARRANTY OF ANY KIND;
-  see section 11 and 12 of the GPL for details.
+	The QuickNotepad plugin comes with ABSOLUTELY NO WARRANTY OF ANY KIND;
+	see section 11 and 12 of the GPL for details.
 </para>
 
 <para>
-  Permission is granted to copy, distribute and/or modify this document
-  under the terms of the GNU Free Documentation License, Version 1.1 or
-  any later version published by the Free Software Foundation; with no
-  <quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
-  <quote>Back-Cover Texts</quote>, each as defined in the license. A copy
-  of the license is included in the file
-  <filename>COPYING.DOC.txt</filename> included with the jEdit distribution.
+	Permission is granted to copy, distribute and/or modify this document
+	under the terms of the GNU Free Documentation License, Version 1.1 or
+	any later version published by the Free Software Foundation; with no
+	<quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
+	<quote>Back-Cover Texts</quote>, each as defined in the license. A copy
+	of the license is included in the file
+	<filename>COPYING.DOC.txt</filename> included with the jEdit distribution.
 </para>
 
 </simplesect>
@@ -223,9 +220,9 @@
 <simplesect><title>Feedback</title>
 
 <para>
-  Comments, bug reports and other feedback may be sent to the
-  <ulink url="mailto:jgellene@nyc.rr.com">author</ulink> or the
-  jEdit-users mailing list.
+	Comments, bug reports and other feedback may be sent to the
+	<ulink url="mailto:jgellene@nyc.rr.com">author</ulink> or the
+	jEdit-users mailing list.
 </para>
 
 </simplesect>

@@ -47,38 +47,38 @@ public class QuickNotepadOptionPane extends AbstractOptionPane
 	private JTextField pathName;
 	private FontSelector font;
 
-    public QuickNotepadOptionPane()
+	public QuickNotepadOptionPane()
 	{
 		super(QuickNotepadPlugin.NAME);
-    }
+	}
 
-    public void _init()
-    {
+	public void _init()
+	{
 		showPath = new JCheckBox(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "show-filepath.title"),
+			QuickNotepadPlugin.OPTION_PREFIX + "show-filepath.title"),
 			jEdit.getProperty(QuickNotepadPlugin.OPTION_PREFIX +
 				"show-filepath").equals("true"));
 		addComponent(showPath);
 
-        pathName = new JTextField(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "filepath"));
-        JButton pickPath = new JButton(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "choose-file"));
-        pickPath.addActionListener(this);
+		pathName = new JTextField(jEdit.getProperty(
+			QuickNotepadPlugin.OPTION_PREFIX + "filepath"));
+		JButton pickPath = new JButton(jEdit.getProperty(
+			QuickNotepadPlugin.OPTION_PREFIX + "choose-file"));
+		pickPath.addActionListener(this);
 
-        JPanel pathPanel = new JPanel(new BorderLayout(0, 0));
-        pathPanel.add(pathName, BorderLayout.CENTER);
-        pathPanel.add(pickPath, BorderLayout.EAST);
+		JPanel pathPanel = new JPanel(new BorderLayout(0, 0));
+		pathPanel.add(pathName, BorderLayout.CENTER);
+		pathPanel.add(pickPath, BorderLayout.EAST);
 
-        addComponent(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "file"),
-            pathPanel);
+		addComponent(jEdit.getProperty(
+			QuickNotepadPlugin.OPTION_PREFIX + "file"),
+			pathPanel);
 
-        font = new FontSelector(makeFont());
-        addComponent(jEdit.getProperty(
-            QuickNotepadPlugin.OPTION_PREFIX + "choose-font"),
-            font);
-    }
+		font = new FontSelector(makeFont());
+		addComponent(jEdit.getProperty(
+			QuickNotepadPlugin.OPTION_PREFIX + "choose-font"),
+			font);
+	}
 
 	public void _save()
 	{
@@ -111,7 +111,7 @@ public class QuickNotepadOptionPane extends AbstractOptionPane
 	static public Font makeFont()
 	{
 		int style, size;
- 		String family = jEdit.getProperty(
+		String family = jEdit.getProperty(
 			QuickNotepadPlugin.OPTION_PREFIX + "font");
 		try
 		{

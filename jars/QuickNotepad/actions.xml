@@ -5,25 +5,25 @@
 <!DOCTYPE ACTIONS SYSTEM "actions.dtd">
 
 <ACTIONS>
-    <ACTION NAME="quicknotepad.choose-file">
-        <CODE>
-          view.getDockableWindowManager()
-		  		   .getDockable(QuickNotepadPlugin.NAME).chooseFile();
-        </CODE>
+	<ACTION NAME="quicknotepad.choose-file">
+		<CODE>
+			view.getDockableWindowManager()
+				.getDockable(QuickNotepadPlugin.NAME).chooseFile();
+		</CODE>
     </ACTION>
 
-    <ACTION NAME="quicknotepad.save-file">
-        <CODE>
-          view.getDockableWindowManager()
-		  		   .getDockable(QuickNotepadPlugin.NAME).saveFile();
-        </CODE>
-    </ACTION>
+    	<ACTION NAME="quicknotepad.save-file">
+		<CODE>
+			view.getDockableWindowManager()
+				.getDockable(QuickNotepadPlugin.NAME).saveFile();
+		</CODE>
+		</ACTION>
 
     <ACTION NAME="quicknotepad.copy-to-buffer">
-        <CODE>
-          view.getDockableWindowManager()
-		  		   .getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
-        </CODE>
+		<CODE>
+			view.getDockableWindowManager()
+				.getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
+		</CODE>
     </ACTION>
 </ACTIONS>
 
