@@ -19,8 +19,8 @@ and quirks that I need to fix eventually.
 - auto indent:
   - deep indent
   - investigate CL indent
-  - electric keys property
   - anon inner classes
+  - explicit folds
   - update existing modes for new auto indent properties
 - some fastrepaint bugs
 - option to disable buffer local properties

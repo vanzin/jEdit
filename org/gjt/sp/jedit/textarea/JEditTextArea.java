@@ -3241,7 +3241,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-
 		/* Null before addNotify() */
 		if(hiddenCursor != null)
 			getPainter().setCursor(hiddenCursor);
@@ -3251,34 +3250,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 
 		if(ch == '\t')
-		{
 			userInputTab();
-		}
 		else
 		{
-			// check if the user entered a bracket
-			String indentOpenBrackets = (String)buffer
-				.getProperty("indentOpenBrackets");
-			String indentCloseBrackets = (String)buffer
-				.getProperty("indentCloseBrackets");
-			boolean indent = ((indentCloseBrackets != null
-				&& indentCloseBrackets.indexOf(ch) != -1)
-				|| (indentOpenBrackets != null
-				&& indentOpenBrackets.indexOf(ch) != -1));
-
+			boolean indent = buffer.isElectricKey(ch);
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
-				if(ch == ' ')
-				{
-					if(!doWordWrap(true))
-						insert(str,indent);
-				}
-				else
-				{
-					doWordWrap(false);
+				if(!doWordWrap(ch == ' '))
 					insert(str,indent);
-				}
 			}
 			else
 				replaceSelection(str);
