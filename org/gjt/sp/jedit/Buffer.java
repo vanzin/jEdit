@@ -2463,7 +2463,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(offset == -1)
 			{
 				offset = getLineEndOffset(line) - 1;
-				str = MiscUtilities.createWhiteSpace(total[0],0) + str;
+				str = MiscUtilities.createWhiteSpace(col - total[0],0) + str;
 			}
 			else
 				offset += getLineStartOffset(line);
