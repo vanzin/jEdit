@@ -1,10 +1,12 @@
-<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene             -->
+<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene       -->
 <!-- Wed Jun 20 16:56:26 EDT 2001 @914 /Internet Time/        -->
 <!--                                                          -->
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:        -->
 <!--                                                          -->
 <!-- This file covers the chapter "Macro tips and techniques" -->
+<!-- $Id$
+ -->
 
 <chapter id="macro-tips"><title>Macro Tips and Techniques</title>
 
@@ -235,6 +237,9 @@ if( JOptionPane.OK_OPTION !=
       <para>
         Finally, the call to <function>showConfirmDialog()</function> uses
         defined constants for the option type and the message type.  The
+        constants are the same as those used with the
+        <function>Macros.confirm()</function> method; see
+        <xref linkend="helpful-methods"/>. The
         option type signifies the use of <guilabel>OK</guilabel>
         and <guilabel>Cancel</guilabel> buttons. The
         <constant>QUERY_MESSAGE</constant> message type causes the message box
@@ -247,7 +252,7 @@ if( JOptionPane.OK_OPTION !=
         <guilabel>Cancel</guilabel> button was pressed or because the
         message box window was closed without a button press), a
         <constant>null</constant> value is returned to a calling function,
-        signalling that the user cancelled macro execution.  If the return
+        signaling that the user cancelled macro execution.  If the return
         value is <constant>OK_OPTION</constant>, each of the input components
         can yield their contents for further processing by calls to
         <function>JTextField.getText()</function> (or, in the case of
@@ -504,9 +509,9 @@ view.getInputHandler().readNextChar("Enter a character",
   </para>
 
   <para>
-    Startup scripts have an additonal feature that can help you further
-    customize jEdit. Unlike with macros, variables and methods defined in a
-    startup script are available in all instances of the BeanShell
+    Startup scripts have an additional feature lacking in ordinary macros
+    that can help you further customize jEdit. Variables and methods
+    defined in a startup script are available in all instances of the BeanShell
     interpreter created in jEdit. This allows you to create a personal
     library of methods and objects that can be accessed at any time during
     the editing session in another macro, the BeanShell shell of the Console
@@ -563,7 +568,8 @@ view.getInputHandler().readNextChar("Enter a character",
 
   <sidebar><title>Reloading startup scripts without restarting</title>
    <para>
-    It is actually possible to reload startup scripts without restarting
+    It is actually possible to reload startup scripts or load other scripts
+    without restarting
     jEdit, using a BeanShell statement like the following:
    </para>
    <programlisting>BeanShell.runScript(view,<replaceable>path</replaceable>,false,false);</programlisting>
@@ -601,7 +607,7 @@ Line</title>
 
 <para>
   If your script needs a view instance to operate on, you can use the
-  following code snippet to obtain one, no matter how the script is
+  following code pattern to obtain one, no matter how or when the script is
   being run:
 </para>
 
@@ -624,21 +630,35 @@ doSomethingUseful();</programlisting>
 
 <para>
   If the script is being run in a loaded
-  instance, the <function>run()</function> method can be invoked
-  directly. If the script is running on startup, a bit of magic has to
-  be performed first. The method that does the script's work must
-  be named <function>run()</function> so that the closure can implement
-  the <classname>Runnable</classname> interface; this closure is then
-  passed to the <function>runInAWTThread()</function> method.
+  instance, it can be invoked to perform its work immediately.
+  However, if
+  the script is running at startup, before an initial view exists, its
+  operation must be delayed to allow the view object first to be created
+  and displayed.
+  In order to queue the macro's operation, the scripted <quote>closure</quote>
+  named <function>doSomethingUseful()</function> implements the
+  <classname>Runnable</classname> interface of the Java platform.
+  That interface contains only
+  a single <function>run()</function> method that takes no parameters
+  and has no return value. The macro's implementation of the
+  <function>run()</function> method contains the <quote>working</quote>
+  portion of the macro.  Then the scripted object, represented by a
+  reference to <varname>this</varname>, is passed to the
+  <function>runInAWTThread()</function> method. This schedules the
+  macro's operations for execution after the startup routine is complete.
 </para>
 
 <para>
-  When the <function>runInAWTThread()</function> method is
-  invoked during startup, it schedules the specified
-  <classname>Runnable</classname> to be run after startup is complete.
-  If invoked when jEdit is fully loaded, the runnable will be run after
+  As this example illustrates, the <function>runInAWTThread()</function>
+  method can be used to ensure that a macro will perform operations
+  after other operations have
+  completed. If it is invoked during startup, it schedules the specified
+  <classname>Runnable</classname> object to run after startup is complete.
+  If invoked when jEdit is fully loaded, the <classname>Runnable</classname>
+  object will execute after
   all pending input/output is complete, or immediately if there are no
-  pending I/O operations. Only the former behavior is useful in macros.
+  pending I/O operations. This will delay operations on a new buffer,
+  for example, until after the buffer is loaded and displayed.
 </para>
 
 </sect1>
@@ -771,20 +791,19 @@ bottom</screen>
   Java 1.1 or 1.2, BeanShell objects can only implement the AWT or
   Swing event listener interfaces contained in the
   <literal>java.awt.event</literal> and <literal>javax.swing.event</literal>
-  packages, and the <classname>java.lang.Runnable</classname> interface.
-  If running under Java 1.3 or 1.4, any interface can be implemented.
+  packages, along with the <classname>java.lang.Runnable</classname> interface.
+  If BeanShell is running under Java 1.3 or 1.4, which jEdit 4.0 requires, any
+  interface can be implemented.
 </para>
 
 <para>
   Frequently it will not be necessary to implement all of the methods of
   a particular interface in order to specify the behavior of a scripted
-  object. Under Java 1.2 and below, BeanShell will automatically
-  ignore calls on unimplemented members of an interface.  Under Java 1.3
-  and above,
-  however, the reflection mechanism will throw an exception for any
-  missing interface methods, which will result in an error dialog box
-  being shown when your macro runs; not a pretty sight.
-  The solution is to implement the <function>invoke()</function> method,
+  object. Under Java 1.3 and above, the virtual machine's reflection
+  mechanism will throw an exception for any
+  missing interface methods.  This will bring macro execution to a
+  halt unless the exception is trapped and handled.  The better solution
+  is to implement the <function>invoke()</function> method,
   which is called when an undefined method is invoked on a scripted
   object. Typically, the implementation of this method will do nothing,
   as in the following example:
@@ -792,22 +811,6 @@ bottom</screen>
 
 <informalexample><programlisting>invoke(method, args) {}</programlisting>
 </informalexample>
-
-<!-- I don't know... implementing all methods in an interface is
-     annoying in scripts, and if you care about performance, you will
-     be using JDK 1.3 or later anyway :-)
-<para>
-  To avoid exceptions being thrown under JDK 1.2 and below and optimize
-  macro performance, you can provide empty, <quote>no-op</quote>
-  implementation of each method in the relevant interface.  If you are writing
-  a macro script that may be run in either a JDK 1.2 or 1.3 environment,
-  including the <function>invoke()</function> methods will not create a problem,
-  but to avoid throwing exceptions during script execution, the
-  JDK 1.2 aproach of provding <quote>no-op</quote>
-  implementations of missing interface methods should be used.
-</para>
-
--->
 
 </sect2>
 
@@ -970,7 +973,9 @@ bottom</screen>
 
     <para>
       Execution of the macro is halted until the message dialog box is
-      closed.
+      closed. When you have finished debugging the macro, you should
+      delete or comment out the debugging calls to
+      <function>Macros.message()</function> in your final source code.
     </para>
   </sidebar>
 
