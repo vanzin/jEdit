@@ -95,3 +95,40 @@ if(jEdit.getPlugin("console.ConsolePlugin") != null)
 //Debug.ALTERNATIVE_DISPATCHER = false;
 
 /*}}}*/
+
+/*{{{ Workaround for buggy international key handling */
+
+/* If international keys do not work in the text area, sometimes it is possible
+ * to workaround the problem by adding translation mappings: */
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("CS",KeyEvent.VK_COMMA,'\0'),
+//	new KeyEventTranslator.Key("C",KeyEvent.VK_SEMICOLON,'\0')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key(null,KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,'"')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("S",KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,(char)0x5e)
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("C",KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,'~')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key(null,KeyEvent.VK_EQUALS,'\0'),
+//	new KeyEventTranslator.Key(null,0,'\'')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("S",KeyEvent.VK_EQUALS,'\0'),
+//	new KeyEventTranslator.Key(null,0,'`')
+// );
+
+/*}}}*/
