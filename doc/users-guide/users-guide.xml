@@ -7,9 +7,10 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 
+<!ENTITY conventions SYSTEM "conventions.xml">
 <!ENTITY starting SYSTEM "starting.xml">
 <!ENTITY basics SYSTEM "basics.xml">
 <!ENTITY files SYSTEM "files.xml">
@@ -74,6 +75,7 @@
   </para>
  </partintro>
 
+ &conventions;
  &starting;
  &basics;
  &files;

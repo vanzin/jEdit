@@ -2,12 +2,19 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre8
 
-Thanks to Kris Kopicki, Ollie Rutherfurd, Philipp Janda, Scott Allen for
-contributing to this release.
+Thanks to David Moss, Kris Kopicki, Ollie Rutherfurd, Philipp Janda,
+and Scott Allen for contributing to this release.
 
 {{{ Miscellaneous
 
 - New splash screen (Kris Kopicki).
+
+- "Files Changed on Disk" dialog box now selects the first buffer in the
+  list automatically, and clicking "Reload" selects the next buffer.
+  This improves usability.
+
+- Added Alt-key mnemonics to "Files Changed" dialog box
+  (Ollie Rutherfurd).
 
 }}}
 {{{ Syntax Highlighting
@@ -19,6 +26,8 @@ contributing to this release.
 - Updated Lisp syntax highlighting (Ollie Rutherfurd).
 
 - Added Swig and PSP syntax highlighting (Ollie Rutherfurd).
+
+- Added Poplog-11 syntax highlighting (David Moss).
 
 }}}
 {{{ Bug Fixes

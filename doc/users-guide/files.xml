@@ -6,7 +6,7 @@
  <sect1 id="creating"><title>Creating New Files</title>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>New</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new,
+   <keycap>C+n</keycap>) opens a new,
    empty, buffer.
    Another way to create a new file is to specify a non-existent file
    name when starting jEdit on the command line.
@@ -16,8 +16,7 @@
  </sect1>
  <sect1 id="opening"><title>Opening Files</title>
   <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Open</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo>) displays
+   <guimenu>File</guimenu>&gt;<guimenuitem>Open</guimenuitem> (shortcut: <keycap>C+o</keycap>) displays
    a file system browser dialog box and loads the specified file into a new
    buffer.
   </para>
@@ -31,11 +30,6 @@
   <para>
    More advanced features of the file system browser are described in
    <xref linkend="vfs-browser"/>.
-  </para>
-  <para>
-   <guimenu>File</guimenu>&gt;<guimenuitem>Insert</guimenuitem> displays
-   a file system browser dialog box and inserts the contents of
-   the specified file at the caret position.
   </para>
   <para>
    The <guimenu>File</guimenu>&gt;<guimenuitem>Recent Files</guimenuitem> menu
@@ -76,7 +70,7 @@
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>)
+   <keycap>C+s</keycap>)
    saves the current buffer to disk.
   </para>
   <para>
@@ -94,11 +88,10 @@
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Save All</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) saves all
-   open buffers to disk, asking for confirmation first.
+   (shortcut: <keycap>C+e C+s</keycap>) saves all
+   open buffers to disk, asking for confirmation first. The confirmation dialog can be disabled in the <guilabel>General</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
   </para>
-  <sidebar><title>Two-stage save</title>
+  <sect2><title>Two-Stage Save</title>
    <para>
     To prevent data loss in the unlikely case that jEdit should crash in the
     middle of saving a file, files are first saved to a temporary file named
@@ -115,7 +108,7 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="general-pane"/>.
    </para>
-  </sidebar>
+  </sect2>
   <sect2 id="autosave"><title>Autosave and Crash Recovery</title>
    <para>
     The autosave feature protects your work from computer crashes and
@@ -137,7 +130,7 @@
    </para>
    <para>
     The autosave interval can be changed
-    in the <guibutton>Autosave and Backups</guibutton> pane of the
+    in the <guibutton>Autosave and Backup</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="autosave-backups-pane" />.
    </para>
@@ -150,7 +143,7 @@
     <quote>backed up</quote> under a different file name.
    </para>
    <para>
-    The behavior of the backup feature is specified in the <guibutton>Autosave and Backups</guibutton> pane of the
+    The behavior of the backup feature is specified in the <guibutton>Autosave and Backup</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="autosave-backups-pane"/>.`
    </para>
@@ -210,10 +203,22 @@
    newline characters for the in-memory representation.
    When the buffer is consequently saved, the value of the property replaces
    newline characters when the buffer is saved to disk.
-   The line separator used by a buffer can be changed in
-   the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-   Options</guimenuitem> dialog box. See <xref linkend="buffer-opts" />.
   </para>
+  <para>
+   There are several ways to change a buffer's line separator:
+  </para>
+  <itemizedlist>
+   <listitem><para>In
+   the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box. See <xref linkend="buffer-opts" />.</para>
+   </listitem>
+   <listitem><para>By clicking the line separator indicator in the status bar. See <xref linkend="status-bar"/>.</para></listitem>
+   <listitem><para>
+    From the keyboard, if a keyboard shortcut has been assigned to the <guimenuitem>Toggle Line Separator</guimenuitem> command in the <guibutton>Shortcuts</guibutton> pane of the
+     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+     dialog box. By default, this command does not have a keyboard shortcut.
+    </para></listitem>
+   </itemizedlist>
   <para>
    By default, new files are saved with your operating system's native line
    separator. This can be changed in the
@@ -225,33 +230,37 @@
  </sect1>
  <sect1 id="encodings"><title>Character Encodings</title>
   <para>
-   An encoding specifies a way of storing characters on disk.
-   jEdit can use any encoding supported by the Java platform.
-   The current buffer's encoding is shown in the status
-   bar.
+   A character encoding is a mapping from a set of characters to their on-disk representation. jEdit can use any encoding supported by the Java platform.
   </para>
   <para>
-   The default encoding, used to load and save files for which no
+   Buffers in memory are always stored in <literal>UTF-16</literal> encoding, which means each character is mapped to an integer between 0 and 65535. <literal>UTF-16</literal> is the native encoding supported by Java, and has a large enough range of characters to support most human languages.
+  </para>
+  <para>
+   When a buffer is loaded, it is converted from its on-disk representation to <literal>UTF-16</literal> using a specified encoding.
+  </para>
+  <para>
+   The default encoding, used to load files for which no
    other encoding is specified, can be set in the <guibutton>General</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="general-pane"/>.
-  </para>
-  <para>
-   Unless you change the default encoding, jEdit will use your operating
-   system's native default; <literal>MacRoman</literal> on the MacOS,
-   <literal>Cp1252</literal> on Windows, and <literal>8859_1</literal> on
+   dialog box; see <xref linkend="general-pane"/>. Unless you change this setting, it will be your operating system's native encoding, for example <literal>MacRoman</literal> on the MacOS,
+   <literal>windows-1252</literal> on Windows, and <literal>ISO-8859-1</literal> on
    Unix.
   </para>
   <para>
-   To open a file stored using an encoding other than the default, select the
-   encoding from the
-   <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu> menu of
-   the file system browser before opening the file.
+   An encoding can be explicitly set when opening a file in the file system browser's <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu> menu.
   </para>
   <para>
-   The encoding to use when saving a specific buffer
-   can be set in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-   Options</guimenuitem> dialog box.
+   Note that there is no general way to auto-detect the encoding used by a file, however in a few cases it is possible:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>UTF-16</literal> and <literal>UTF-8Y</literal> files are auto-detected, because they begin with a certain fixed character sequence. Note that plain UTF-8 does not mandate a specific header, and thus cannot be auto-detected, unless the file in question is an XML file.</para></listitem>
+   <listitem><para>Encodings used in XML files with an XML PI like the following are auto-detected:</para>
+   <programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8">]]></programlisting>
+   </listitem>
+  </itemizedlist>
+  <para>
+   The encoding that will be used to save the current buffer is shown in the status bar, and can be changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box. Note that changing this setting has no effect on the buffer's contents; if you opened a file with the wrong encoding and got garbage, you will need to reload it.
   </para>
   <para>
    If a file is opened
@@ -259,41 +268,35 @@
    jEdit will use the encoding last used
    when working with that file; otherwise the default encoding will be used.
   </para>
-  <para>
-   Unfortunately, there
-   is no way to obtain a list of all supported encodings using the Java APIs,
-   so jEdit only lists a few of
-   the most common encodings; however, any other supported encoding name can be
-   typed in.
-  </para>
   <sect2><title>Commonly Used Encodings</title>
    <para>
-    The most frequently-used character encoding is ASCII, or <quote>American 
+    While the world is slowly converging on UTF-8 and UTF-16 encodings for storing text, a wide range of older encodings are still in widespread use and Java supports most of them.
+   </para>
+   <para>
+    The simplest character encoding still in use is ASCII, or <quote>American 
     Standard Code for Information Interchange</quote>. ASCII encodes Latin
     letters used in English, in addition to numbers and a range of punctuation
     characters.
-    The ASCII character set consists of 127 characters, and it is unsuitable
-    for anything but English text (and other file types which only use English
-    characters, like most program source). jEdit will load and save files as
-    ASCII if the <literal>ASCII</literal> encoding is used.
+    Each each ASCII character consists of 7 bits, there is a limit of 128 distinct characters, which makes it unsuitable for anything other than English text. jEdit will load and save files as
+    ASCII if the <literal>US-ASCII</literal> encoding is used.
    </para>
    <para>
     Because ASCII is unsuitable for international use, most operating
-    systems use an 8-bit extension of ASCII, with the first 127 characters
-    remaining the same, and the rest used to encode accents, umlauts, and
-    various less frequently used typographical marks. The three
+    systems use an 8-bit extension of ASCII, with the first 128 values
+    mapped to the ASCII characters, and the rest used to encode accents, umlauts, and
+    various more esoteric used typographical marks. The three
     major
     operating systems all extend ASCII in a different way. Files written by
     Macintosh programs can be read using the <literal>MacRoman</literal>
     encoding; Windows text files are usually stored as
-    <literal>Cp1252</literal>. In the Unix world, the <literal>8859_1</literal>
+    <literal>windows-1252</literal>. In the Unix world, the <literal>8859_1</literal>
     character encoding has found widespread usage.
    </para>
    <para>
-    On Windows, various other encodings, which are known as <firstterm>code
-    pages</firstterm> and are identified by number, are used to
+    On Windows, various other encodings, referred to as <firstterm>code
+    pages</firstterm> and identified by number, are used to
     store non-English text. The corresponding Java encoding name is
-    <literal>Cp</literal> followed by the code page number.
+    <literal>windows-</literal> followed by the code page number, for example <literal>windows-850</literal>.
    </para>
    <para>
     Many common cross-platform international character sets are also supported;
@@ -301,19 +304,13 @@
     <literal>GBK</literal> for Chinese, and <literal>SJIS</literal> for
     Japanese.
    </para>
-   <para>
-    16-bit Unicode files are automatically detected as such when opened, regardless of
-    the encoding specified by the user. The closely-related
-    <literal>UTF8</literal> encoding, which uses variable-length characters, is
-    also supported, however UTF8 files are <emphasis>not</emphasis> auto-detected.
-   </para>
   </sect2>
  </sect1>
  <sect1 id="vfs-browser"><title>The File System Browser</title>
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
    Browser</guimenuitem> displays the file system browser.
-   By default, the file system browser is shown in a floating window. It can be docked using the commands shown when clicking the popup menu button in the top-left corner; see <xref linkend="docking" />.
+   By default, the file system browser is shown in a floating window. This window can be docked using the commands in its top-left corner popup menu; see <xref linkend="docking" />.
   </para>
   <para>
    The file system browser can be customized in the
@@ -458,8 +455,8 @@
  </sect1>
  <sect1 id="reloading"><title>Reloading From Disk</title>
   <para>
-   When a view is brought to the foreground, jEdit checks if any open buffers were modified on disk by another application. All affected buffers are listed in a dialog box. Buffers without unsaved changes are automatically reloaded.
-   This feature can be disabled in the <guibutton>General</guibutton>
+   When a view is brought to the foreground, jEdit checks if any open buffers were modified on disk by another application. All affected buffers are listed in a dialog box. By default, buffers without unsaved changes are automatically reloaded.
+   This feature can be disabled, or changed to prompt if files should be reloaded first, in the <guibutton>General</guibutton>
    pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
@@ -482,10 +479,12 @@
    jEdit executes all buffer input/output operations asynchronously.
    While I/O is in progress, the status bar displays the number of
    remaining I/O operations.
+  </para>
+  <para>
    The <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
    Progress
    Monitor</guimenuitem> command displays a window with more detailed status
-   information and progress meters. By default, the <guimenuitem>I/O Progress Monitor</guimenuitem> is shown in a floating window. It can be docked using the commands shown when clicking the popup menu button in the top-left corner; see <xref linkend="docking" />. I/O requests can also be aborted in
+   information and progress meters. By default, the <guimenuitem>I/O Progress Monitor</guimenuitem> is shown in a floating window. This window can be docked using the commands in its top-left corner popup menu; see <xref linkend="docking" />. I/O requests can also be aborted in
    this window, however note that aborting a buffer save can result in data loss.
   </para>
   <!-- <para>
@@ -501,7 +500,7 @@
  <sect1 id="printing"><title>Printing</title>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>)
+   (shortcut: <keycap>C+p</keycap>)
    prints the current buffer.
   </para>
   <para>
@@ -531,14 +530,13 @@
  <sect1 id="closing-exiting"><title>Closing Files and Exiting jEdit</title>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Close</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
+   (shortcut: <keycap>C+w</keycap>)
    closes the current buffer. If it has unsaved changes, jEdit
    will ask if they should be saved first.
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Close All</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
+   (shortcut: <keycap>C+e C+w</keycap>)
    closes all buffers. If any buffers have unsaved
    changes, they will be listed in a dialog box where they can be saved
    or discarded. In the dialog box, multiple buffers to operate on at
@@ -548,7 +546,7 @@
   </para>
   <para>
    <guimenu>File</guimenu>&gt;<guimenuitem>Exit</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo>)
+   (shortcut: <keycap>C+q</keycap>)
    will completely exit jEdit, prompting if unsaved buffers should be saved
    first.
   </para>

@@ -36,11 +36,7 @@
 </xsl:template>
 
 <xsl:template match="keycap">
-  <xsl:call-template name="inline.boldseq"/>
-</xsl:template>
-
-<xsl:template match="keycombo/keycap">
-  <xsl:call-template name="inline.boldseq"/>
+  <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
 <xsl:template match="property">

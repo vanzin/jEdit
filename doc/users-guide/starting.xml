@@ -3,116 +3,6 @@
 <!-- :xml.root=users-guide.xml: -->
 
 <chapter id="starting"><title>Starting jEdit</title>
- <sect1 id="conventions"><title>Conventions</title>
-  <para>
-   Several conventions are used throughout jEdit's user interface and
-   this manual. They will be described here. Macintosh users should note how their modifier keys map to the terms used in the manual.
-  </para>
-  <informaltable>
-   <tgroup cols="2">
-   <tbody>
-   <row>
-   <entry>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll
-   to Current Line</guimenuitem>
-   </entry>
-   <entry>
-   The <guimenuitem>Scroll to Current
-   Line</guimenuitem> command contained in the
-   <guisubmenu>Scrolling</guisubmenu> submenu of the <guimenu>View</guimenu> menu.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line...</guimenuitem>
-   </entry>
-   <entry>
-   Menu items that end with
-   ellipsis (...) display dialog boxes.
-   </entry>
-   </row>
-   <row>
-   <entry><keycap>Control</keycap> or <keycap>C</keycap></entry>
-   <entry>
-    The primary modifier key in jEdit. On MacOS X, this is actually the
-    key known as <quote>Command</quote>. On most other keyboards, this key is
-    labelled <quote>Control</quote>.
-   </entry>
-   </row>
-   <row>
-   <entry><keycap>Alt</keycap> or <keycap>A</keycap></entry>
-   <entry>
-    The secondary modifier key in jEdit. On MacOS X, this is actually the
-    key labelled <quote>Control</quote>. On most other keyboards, this key is
-    labelled <quote>Alt</quote>.
-   </entry>
-   </row>
-   <row>
-   <entry><keycap>Shift</keycap> or <keycap>S</keycap></entry>
-   <entry>The standard <quote>Shift</quote> key.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   <keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo>
-   </entry>
-   <entry>
-   Refers to pressing and holding the <keycap>Control</keycap> key, pressing and releasing <keycap>O</keycap>, and finally releasing the <keycap>Control</keycap> key again.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>
-   </entry>
-   <entry>
-   Command shortcuts can consist of more than one keypress. To invoke the command with the example shortcut above,
-   press <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>, and follow it with
-   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   Default buttons
-   </entry>
-   <entry>
-   In many dialog boxes, the default button (it has a heavy outline, or a
-   special border, depending on the current Swing look and feel) can be activated by
-   pressing <keycap>Enter</keycap>. Similarly, pressing
-   <keycap>Escape</keycap> will usually close a dialog box.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   <keycap>Alt</keycap>-key mnemonics
-   </entry>
-   <entry>
-   Some user interface elements (menus, menu items, buttons) have a
-   certain letter in their label underlined. Pressing this letter in combination
-   with the <keycap>Alt</keycap> key activates the associated user interface
-   widget. Note that this functionality is not available on MacOS X with the <quote>MacOS Adaptive</quote> look and feel. See <xref linkend="appearance-pane" /> for information on chang,ing the look and feel.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   Right mouse button
-   </entry>
-   <entry>
-   Used in jEdit to show context-sensitive menus. If you have a one button Macintosh mouse, a <keycap>Control</keycap>-click has the same effect.
-   </entry>
-   </row>
-   <row>
-   <entry>
-   Middle mouse button
-   </entry>
-   <entry>
-   Used by the quick copy feature (see <xref linkend="quick-copy"/>). On a Macintosh with a one or two button mouse, <keycap>Option</keycap>-click. On other platforms with a one or two button mouse, <keycap>Alt</keycap>-click.
-   </entry>
-   </row>
-   </tbody>
-   </tgroup>
-  </informaltable>
- </sect1>
  <sect1 id="starting-any-os"><title>Platform-Independent Instructions</title>
   <para>
    Exactly how jEdit is started depends on the operating system. For example, on Unix you can run <quote>jedit</quote> at the command line,
@@ -130,13 +20,13 @@
    <firstterm>clients</firstterm>.
   </para>
   <para>
+   If you find yourself launching and exiting jEdit a lot, the startup time can get a bit bothersome.
    If the <userinput>-background</userinput> command line switch is specified,
    jEdit will continue running and waiting for client requests even
    after all editor windows are closed. When run in background mode,
    you can open and close jEdit any number of times, only having
    to wait for it to start the first time. The downside of this
-   is that jEdit will continue to consume memory when no windows
-   are open.
+   is increased memory usage.
   </para>
   <para>
    When running on MacOS X, the <userinput>-background</userinput> command-line switch is active by default, so that jEdit conforms to the platform convention that programs should stay open until the <guimenuitem>Quit</guimenuitem> command is explicitly invoked by the user, even if all windows are closed. To disable background mode on MacOS X, use the <userinput>-nobackground</userinput> switch.
@@ -157,7 +47,10 @@
   </para>
   <sidebar><title>The edit server and security</title>
    <para>
-    Not only does the server pick a random TCP port number on startup,
+    Since Java does not provide any interprocess communication facility other than TCP/IP, jEdit takes extra precautions to prevent remote attacks.
+   </para>
+   <para>
+    Not only does the edit server pick a random TCP port number on startup,
     it also requires that clients provide an <firstterm>authorization
     key</firstterm>; a randomly-generated number only accessible to
     processes running on the local machine.
@@ -173,8 +66,7 @@
  </sect1>
  <sect1 id="starting-windows"><title>Starting jEdit on Windows</title>
   <para>
-   On Windows, jEdit comes with <emphasis>jEditLauncher</emphasis> - an optional
-   package of components that make it easy to start jEdit, manage its command
+   jEdit bundles the <emphasis>jEditLauncher</emphasis> package and automatically installs it on Windows. jEditLauncher is a set of components that make it easy to start jEdit, manage its command
    line settings, and launch files and macro scripts.
   </para>
 
@@ -264,7 +156,7 @@
       <entry>Show the version number without starting jEdit.</entry>
      </row>
      <row>
-      <entry><userinput>- -</userinput></entry>
+      <entry><userinput>--</userinput></entry>
       <entry>Specifies the end of command-line processing. Further parameters are treated
       as file names, even if they begin with a dash.
       </entry>
@@ -343,7 +235,9 @@
    </informaltable>
   </sect2>
   <sect2><title>Edit Server Options</title>
+   <para>
    See <xref linkend="starting-any-os" /> for a brief description of the edit server.
+   </para>
    <informaltable>
    <tgroup cols="2">
     <colspec colnum="1" colwidth="1.5in" />
@@ -380,6 +274,22 @@
       example. Has no effect when connecting to 
       another instance via the edit server.
       </entry>
+     </row>
+     <row>
+      <entry><userinput>-newplainview</userinput></entry>
+      <entry>Opens the specified files in a new plain view. For more information about views, see <xref linkend="views"/>.</entry>
+     </row>
+     <row>
+      <entry><userinput>-newview</userinput></entry>
+      <entry>Opens the specified files in a new view.</entry>
+     </row>
+     <row>
+      <entry><userinput>-reuseview</userinput></entry>
+      <entry>Opens the specified files in an existing view.</entry>
+     </row>
+     <row>
+      <entry><userinput>-quit</userinput></entry>
+      <entry>Exits the currently running editor instance.</entry>
      </row>
      <row>
       <entry><userinput>-server</userinput></entry>

@@ -11,21 +11,21 @@
    only covers using existing edit modes; information about writing your
    own can be found in <xref linkend="writing-modes-part" />.
   </para>
+  <para>
+   When a file is opened, jEdit first checks the file name against a list
+   of known patterns. For example, files whose names end with <filename>.c</filename>
+   are opened with C mode, and files named <filename>Makefile</filename> are
+   opened with Makefile mode. If a suitable match based on file name cannot be
+   found, jEdit checks the first line of the file. For example, files whose
+   first line is <filename>#!/bin/sh</filename> are opened with shell script mode.
+  </para>
   <sect2 id="mode-selection"><title>Mode Selection</title>
    <para>
-    When a file is opened, jEdit first checks the file name against a list
-    of known patterns. For example, files whose names end with <filename>.c</filename>
-    are opened with C mode, and files named <filename>Makefile</filename> are
-    opened with Makefile mode. If a suitable match based on file name cannot be
-    found, jEdit checks the first line of the file. For example, files whose
-    first line is <filename>#!/bin/sh</filename> are opened with shell script mode.
-   </para>
-   <para>
-    File name and first line globs can be changed in the
+    File name and first line globs used to associate files with edit modes can be changed in the
     <guibutton>Editing</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box. See <xref linkend="globs"/> for information about glob patterns.
-    The default edit mode for files which do not match any pattern can also be set in the <guibutton>Editing</guibutton> pane.
+    The default edit mode for files which do not match any pattern can be set in the <guibutton>Editing</guibutton> pane as well.
    </para>
    <para>
     The edit mode can be specified manually as well. The current buffer's edit
@@ -85,15 +85,14 @@
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Shift
    Indent Left</guisubmenu>
-   (shortcut: <keycombo><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>
-   or <keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo>)
+   (shortcut: <keycap>S+TAB</keycap> or <keycap>A+LEFT</keycap>)
    adds one level of indent to each selected line, or the current line
    if there is no selection.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Shift
    Indent Right</guisubmenu>
-   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo>)
+   (shortcut: <keycap>A+RIGHT</keycap>)
    removes one level of indent from each selected line, or the current line
    if there is no selection. Pressing <keycap>Tab</keycap> while a multi-line
    selection is active has the same effect.
@@ -101,8 +100,7 @@
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guimenuitem>Remove
    Trailing Whitespace</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycap>R</keycap>) removes all whitespace from the end of each selected line, or
+   (shortcut: <keycap>C+e r</keycap>) removes all whitespace from the end of each selected line, or
    the current line if there is no selection.
   </para>
   <sect2 id="soft-tabs"><title>Soft Tabs</title>
@@ -155,18 +153,18 @@
     spaces at the beginning of a line by looking at program structure.
    </para>
    <para>
-    In the default configuration, pressing <keycap>Enter</keycap>
+    In the default configuration, pressing <keycap>ENTER</keycap>
     will create a new line with the appropriate amount of
     indent automatically, and pressing
-    <keycap>Tab</keycap> at the beginning of, or inside the leading
+    <keycap>TAB</keycap> at the beginning of, or inside the leading
     whitespace of a line will insert the appropriate amount of
     indentation. Pressing it again will insert a tab character.
    </para>
    <para>
-    The behavior of the <keycap>Enter</keycap> and <keycap>Tab</keycap> keys can
+    The behavior of the <keycap>ENTER</keycap> and <keycap>TAB</keycap> keys can
     be configured in the <guibutton>Shortcuts</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog. box, just as with any other key. The <keycap>Enter</keycap> key can be bound
+    dialog. box, just as with any other key. The <keycap>ENTER</keycap> key can be bound
     to one of the following, or indeed any other command or macro:
    </para>
    <itemizedlist>
@@ -175,7 +173,7 @@
     is the default.</para></listitem>
    </itemizedlist>
    <para>
-    The <keycap>Tab</keycap> can be bound to one of the following, or again,
+    The <keycap>TAB</keycap> can be bound to one of the following, or again,
     any other command or macro:
    </para>
    <itemizedlist>
@@ -197,18 +195,15 @@
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guisubmenu>Indent
     Selected Lines</guisubmenu>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo>)
+    (shortcut: <keycap>C+i</keycap>)
     indents all selected lines, or the current line if there is no
     selection.
    </para>
    <para>
     To insert a literal tab or newline without performing
-    indentation, prefix the tab or newline with
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>V</keycap>. For example,
-    to create a new line without any indentation, type
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>V</keycap> <keycap>Enter</keycap>.
+    indentation, prefix the tab or newline with <keycap>C+e v</keycap>.
+    For example,
+    to create a new line without any indentation, type <keycap>C+e v ENTER</keycap>.
    </para>
   </sect2>
  </sect1>
@@ -228,16 +223,14 @@
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guimenuitem>Range Comment</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>) encloses the
+   (shortcut: <keycap>C+e C+c</keycap>) encloses the
    selection with comment start and end strings, for example <literal>/*</literal>
    and <literal>*/</literal> in Java mode.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source
    Code</guisubmenu>&gt;<guimenuitem>Line Comment</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>K</keycap></keycombo>) inserts the
+   (shortcut: <keycap>C+e C+k</keycap>) inserts the
    line comment string, for example <literal>//</literal> in Java mode,
    at the start of each selected line.
   </para>
@@ -249,7 +242,7 @@
    to make brackets easier to deal with.
   </para>
   <para>
-   Positioning the caret immediately before or after a bracket will highlight the
+   Positioning the caret immediately after a bracket will highlight the
    corresponding closing or opening bracket (assuming it is visible),
    and draw a scope indicator in the gutter. If the highlighted bracket is
    not visible, the text of the matching line will be shown in the status
@@ -269,15 +262,14 @@
    Invoking
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Go
    to Matching
-   Bracket</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo>) or
+   Bracket</guimenuitem> (shortcut: <keycap>C+]</keycap>) or
    clicking the scope indicator in the gutter moves the caret to the
    matching bracket.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Select
    Code Block</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo>)
+   (shortcut: <keycap>C+[</keycap>)
    selects all text between the closest two brackets surrounding the caret.
   </para>
   <para>
@@ -287,16 +279,13 @@
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Go
-   to Previous Bracket</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo>) moves the
+   to Previous Bracket</guimenuitem> (shortcut: <keycap>C+e C+[</keycap>)
+   moves the
    caret to the previous opening bracket.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guimenuitem>Go
-   to Next Bracket</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo>)
+   to Next Bracket</guimenuitem> (shortcut: <keycap>C+e C+]</keycap>)
    moves the caret to the next closing bracket.
   </para>
   <para>
@@ -306,14 +295,14 @@
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
   </para>
-  <note>
+  <tip>
    <para>
     jEdit's bracket matching algorithm only checks syntax tokens with the same
     type as the original bracket, so for example unmatched brackets inside string
     literals and comments will be skipped when matching brackets that are part of
     program syntax.
    </para>
-  </note>
+  </tip>
  </sect1>
  <sect1 id="abbrevs"><title>Abbreviations</title>
   <para>
@@ -321,8 +310,7 @@
    strings. For example, in Java mode, the abbreviation <quote>sout</quote> is
    defined to expand to <quote>System.out.println()</quote>, so to insert
    <quote>System.out.println()</quote> in a Java buffer, you only need to type
-   <quote>sout</quote> followed by
-   <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>.
+   <quote>sout</quote> followed by <keycap>C+;</keycap>.
    An abbreviation can either be global, in which case it can be used in all
    edit modes, or specific to a single mode.
   </para>
@@ -335,7 +323,7 @@
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Expand Abbreviation</guimenuitem>
-   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo>)
+   (keyboard shortcut: <keycap>C+;</keycap>)
    attempts to expand the abbreviation named by the word before the caret.
    If no expansion could be found, it will offer to define one.
   </para>
@@ -463,7 +451,7 @@ With text inside it.
   <sect2><title>Collapsing and Expanding Folds</title>
    <para>
     The first line of each fold has a triangle
-    drawn next to it in the gutter (see <xref linkend="textarea"/> for
+    drawn next to it in the gutter (see <xref linkend="overview"/> for
     more information about the gutter). The triangle points toward the
     line when the fold is collapsed, and downward when the fold is
     expanded.
@@ -482,66 +470,56 @@ With text inside it.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
-    Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo>)
+    Fold</guimenuitem> (shortcut: <keycap>A+BACK_SPACE</keycap>)
     collapses the fold
-    containing the caret position.
+    containing the caret.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    Fold One Level</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Enter</keycap></keycombo>) expands the
-    fold containing the caret position. Nested folds will remain collapsed,
-    and the caret is positioned on the first nested fold (if any).
+    Fold One Level</guimenuitem> (shortcut: <keycap>A+ENTER</keycap>)
+    expands the
+    fold containing the caret. Nested folds will remain collapsed,
+    and the caret will be positioned on the first nested fold (if any).
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    Fold Fully</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>)
+    Fold Fully</guimenuitem> (shortcut: <keycap>AS+ENTER</keycap>)
     expands the fold
-    containing the caret position, also expanding any nested folds.
+    containing the caret, also expanding any nested folds.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Collapse
-    All Folds</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>C</keycap>) collapses all folds in the buffer.
+    All Folds</guimenuitem> (shortcut: <keycap>C+e c</keycap>)
+    collapses all folds in the buffer.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    All Folds</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>X</keycap>)
+    All Folds</guimenuitem> (shortcut: <keycap>C+e x</keycap>)
     expands all folds in the buffer.
    </para>
   </sect2>
   <sect2><title>Navigating Around With Folds</title>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Parent
-    Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>U</keycap>) moves
+    Fold</guimenuitem> (shortcut: <keycap>C+e u</keycap>) moves
     the caret to the fold containing the one at the caret position.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Previous
-    Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>) moves
+    Fold</guimenuitem> (shortcut: <keycap>A+UP</keycap>) moves
     the caret to the fold immediately before the caret position.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Next
-    Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>) moves
+    Fold</guimenuitem> (shortcut: <keycap>A+DOWN</keycap>) moves
     the caret to the fold immediately after the caret position.
    </para>
   </sect2>
   <sect2><title>Miscellaneous Folding Commands</title>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Add
-    Explicit Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>A</keycap>) is a convenience command that surrounds the
+    Explicit Fold</guimenuitem> (shortcut: <keycap>C+e a</keycap>)
+    surrounds the
     selection with <quote>{{{</quote> and <quote>}}}</quote>. If the
     current buffer's edit mode defines comment strings (see
     <xref linkend="commenting" />) the explicit fold markers will
@@ -550,18 +528,15 @@ With text inside it.
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Select
     Fold</guimenuitem>
-    (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>S</keycap>)
-    selects all lines within the fold containing the caret position.
+    (shortcut: <keycap>C+e s</keycap>)
+    selects all lines within the fold containing the caret.
     <keycap>Control</keycap>-clicking a fold expansion triangle
     in the gutter has the same effect.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    Folds With Level</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap>)
+    Folds With Level</guimenuitem> (shortcut:
+    <keycap>C+e ENTER <replaceable>key</replaceable></keycap>)
     reads the next character entered at the keyboard, and
     expands folds in the buffer
     with a fold level less than that specified, while collapsing all others.
@@ -596,9 +571,8 @@ With text inside it.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
-    Buffer to Fold</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>N</keycap> <keycap>N</keycap>) hides all lines the buffer except
+    Buffer to Fold</guimenuitem> (shortcut: <keycap>C+e n n</keycap>)
+    hides all lines the buffer except
     those in the fold containing the caret.
     <!-- When this command is invoked, a message is shown in the
     status bar reminding you that you need to invoke
@@ -607,16 +581,14 @@ With text inside it.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
-    Buffer to Selection</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>N</keycap> <keycap>S</keycap>) hides all lines the buffer
+    Buffer to Selection</guimenuitem> (shortcut: <keycap>C+e n s</keycap>)
+    hides all lines the buffer
     except those in the selection.
    </para>
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand
-    All Folds</guimenuitem> (keyboard shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>X</keycap>) shows lines that were hidden as a result of narrowing.
+    All Folds</guimenuitem> (shortcut: <keycap>C+e x</keycap>)
+    shows lines that were hidden as a result of narrowing.
    </para>
   </sect2>
  </sect1>

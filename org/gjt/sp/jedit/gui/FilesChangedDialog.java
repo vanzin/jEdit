@@ -97,13 +97,26 @@ public class FilesChangedDialog extends EnhancedDialog
 			}
 		}
 
+		TreeNode selection = null;
+
 		root = new DefaultMutableTreeNode("",true);
 		if(deleted.getChildCount() != 0)
+		{
 			root.add(deleted);
+			selection = deleted.getChildAt(0);
+		}
 		if(changed.getChildCount() != 0)
+		{
 			root.add(changed);
+			if(selection == null)
+				selection = changed.getChildAt(0);
+		}
 		if(changedDirty.getChildCount() != 0)
+		{
 			root.add(changedDirty);
+			if(selection == null)
+				selection = changedDirty.getChildAt(0);
+		}
 
 		bufferTreeModel = new DefaultTreeModel(root);
 		bufferTree = new JTree(bufferTreeModel);
@@ -113,6 +126,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		bufferTree.getSelectionModel().addTreeSelectionListener(new TreeHandler());
 		bufferTree.getSelectionModel().setSelectionMode(
 			TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		bufferTree.setSelectionPath(new TreePath(
+			((DefaultMutableTreeNode)selection).getPath()));
 
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferTree));
 
@@ -125,6 +140,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		{
 			selectAll = new JButton(jEdit.getProperty(
 				"files-changed.select-all"));
+			selectAll.setMnemonic(jEdit.getProperty(
+				"files-changed.select-all.mnemonic").charAt(0));
 			buttons.add(selectAll);
 			selectAll.addActionListener(new ActionHandler());
 
@@ -132,6 +149,8 @@ public class FilesChangedDialog extends EnhancedDialog
 
 			reload = new JButton(jEdit.getProperty(
 				"files-changed.reload"));
+			reload.setMnemonic(jEdit.getProperty(
+				"files-changed.reload.mnemonic").charAt(0));
 			buttons.add(reload);
 			reload.addActionListener(new ActionHandler());
 
@@ -194,6 +213,112 @@ public class FilesChangedDialog extends EnhancedDialog
 
 	private JButton reload;
 	private JButton close;
+
+	//{{{ selectAll() method
+	private void selectAll()
+	{
+		selectAllInProgress = true;
+
+		TreeNode[] path = new TreeNode[3];
+		path[0] = root;
+		for(int i = 0; i < root.getChildCount(); i++)
+		{
+			DefaultMutableTreeNode node =
+				(DefaultMutableTreeNode)
+				root.getChildAt(i);
+			path[1] = node;
+			for(int j = 0; j < node.getChildCount(); j++)
+			{
+				DefaultMutableTreeNode node2 =
+					(DefaultMutableTreeNode)
+					node.getChildAt(j);
+				path[2] = node2;
+				bufferTree.getSelectionModel()
+					.addSelectionPath(
+					new TreePath(path));
+			}
+		}
+
+		selectAllInProgress = false;
+	} //}}}
+
+	//{{{ reload() method
+	private void reload()
+	{
+		TreePath[] paths = bufferTree
+			.getSelectionPaths();
+		if(paths == null || paths.length == 0)
+			return;
+
+		int row = bufferTree.getRowForPath(paths[0]);
+
+		for(int i = 0; i < paths.length; i++)
+		{
+			 TreePath path = paths[i];
+			 DefaultMutableTreeNode node
+				= (DefaultMutableTreeNode)
+				path.getLastPathComponent();
+			if(!(node.getUserObject() instanceof
+				String))
+			{
+				return;
+			}
+
+			Buffer buffer = jEdit.getBuffer(
+				(String)node.getUserObject());
+			if(buffer == null)
+				return;
+
+			buffer.reload(view);
+			DefaultMutableTreeNode parent =
+				(DefaultMutableTreeNode)
+				node.getParent();
+			parent.remove(node);
+		}
+
+		bufferTreeModel.reload(root);
+
+		// we expand those that are non-empty, and
+		// remove those that are empty
+		TreeNode[] nodes = { root, null };
+
+		// remove empty category branches
+		for(int j = 0; j < root.getChildCount(); j++)
+		{
+			DefaultMutableTreeNode node
+				= (DefaultMutableTreeNode)
+				root.getChildAt(j);
+			if(root.getChildAt(j)
+				.getChildCount() == 0)
+			{
+				root.remove(j);
+				j--;
+			}
+			else
+			{
+				nodes[1] = node;
+				bufferTree.expandPath(
+					new TreePath(nodes));
+			}
+		}
+
+		if(root.getChildCount() == 0)
+			dispose();
+		else
+		{
+			if(row >= bufferTree.getRowCount())
+				row = bufferTree.getRowCount() - 1;
+			TreePath path = bufferTree.getPathForRow(row);
+			if(path.getPathCount() == 2)
+			{
+				// selected a header; skip to the next row
+				bufferTree.setSelectionRow(row + 1);
+			}
+			else
+				bufferTree.setSelectionPath(path);
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ ActionHandler class
@@ -203,91 +328,9 @@ public class FilesChangedDialog extends EnhancedDialog
 		{
 			Object source = evt.getSource();
 			if(source == selectAll)
-			{
-				selectAllInProgress = true;
-
-				TreeNode[] path = new TreeNode[3];
-				path[0] = root;
-				for(int i = 0; i < root.getChildCount(); i++)
-				{
-					DefaultMutableTreeNode node =
-						(DefaultMutableTreeNode)
-						root.getChildAt(i);
-					path[1] = node;
-					for(int j = 0; j < node.getChildCount(); j++)
-					{
-						DefaultMutableTreeNode node2 =
-							(DefaultMutableTreeNode)
-							node.getChildAt(j);
-						path[2] = node2;
-						bufferTree.getSelectionModel()
-							.addSelectionPath(
-							new TreePath(path));
-					}
-				}
-
-				selectAllInProgress = false;
-			}
+				selectAll();
 			else if(source == reload)
-			{
-				TreePath[] paths = bufferTree
-					.getSelectionPaths();
-				if(paths == null)
-					return;
-
-				for(int i = 0; i < paths.length; i++)
-				{
-					 TreePath path = paths[i];
-					 DefaultMutableTreeNode node
-					 	= (DefaultMutableTreeNode)
-						path.getLastPathComponent();
-					if(!(node.getUserObject() instanceof
-						String))
-					{
-						return;
-					}
-
-					Buffer buffer = jEdit.getBuffer(
-						(String)node.getUserObject());
-					if(buffer == null)
-						return;
-
-					buffer.reload(view);
-					DefaultMutableTreeNode parent =
-						(DefaultMutableTreeNode)
-						node.getParent();
-					parent.remove(node);
-				}
-
-				bufferTreeModel.reload(root);
-
-				// we expand those that are non-empty, and
-				// remove those that are empty
-				TreeNode[] nodes = { root, null };
-
-				// remove empty category branches
-				for(int j = 0; j < root.getChildCount(); j++)
-				{
-					DefaultMutableTreeNode node
-						= (DefaultMutableTreeNode)
-						root.getChildAt(j);
-					if(root.getChildAt(j)
-						.getChildCount() == 0)
-					{
-						root.remove(j);
-						j--;
-					}
-					else
-					{
-						nodes[1] = node;
-						bufferTree.expandPath(
-							new TreePath(nodes));
-					}
-				}
-
-				if(root.getChildCount() == 0)
-					dispose();
-			}
+				reload();
 			else if(source == close)
 				dispose();
 		}

@@ -20,53 +20,51 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo></entry>
+      <entry><keycap>C+n</keycap></entry>
       <entry>New file.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo></entry>
+      <entry><keycap>C+o</keycap></entry>
       <entry>Open file.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></entry>
+      <entry><keycap>C+w</keycap></entry>
       <entry>Close buffer.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+w</keycap></entry>
       <entry>Close all buffers.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></entry>
+      <entry><keycap>C+s</keycap></entry>
       <entry>Save buffer.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+s</keycap></entry>
       <entry>Save all buffers.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></entry>
+      <entry><keycap>C+p</keycap></entry>
       <entry>Print buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Page Up</keycap></keycombo></entry>
+      <entry><keycap>C+PAGE_UP</keycap></entry>
       <entry>Go to previous buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Page Down</keycap></keycombo></entry>
+      <entry><keycap>C+PAGE_DOWN</keycap></entry>
       <entry>Go to next buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo></entry>
+      <entry><keycap>C+`</keycap></entry>
       <entry>Go to recent buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>`</keycap></keycombo></entry>
+      <entry><keycap>A+`</keycap></entry>
       <entry>Show buffer switcher.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo></entry>
+      <entry><keycap>C+q</keycap></entry>
       <entry>Exit jEdit.</entry>
      </row>
     </tbody>
@@ -82,53 +80,40 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+t</keycap></entry>
       <entry>Turn gutter (line numbering) on and off.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>0</keycap></keycombo></entry>
+      <entry><keycap>C+0</keycap></entry>
       <entry>Remove split containing current text area only.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo></entry>
+      <entry><keycap>C+1</keycap></entry>
       <entry>Remove all splits.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo></entry>
+      <entry><keycap>C+2</keycap></entry>
       <entry>Split view horizontally.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo></entry>
+      <entry><keycap>C+3</keycap></entry>
       <entry>Split view vertically.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo></entry>
+      <entry><keycap>A+PAGE_UP</keycap></entry>
       <entry>Send keyboard focus to previous text area.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo></entry>
+      <entry><keycap>A+PAGE_DOWN</keycap></entry>
       <entry>Send keyboard focus to next text area.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap> <keycap>Up</keycap></keycombo></keycombo>;
-      <keycombo><keycap>Control</keycap> <keycap>Left</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap> <keycap>Down</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap> <keycap>Right</keycap></keycombo></entry>
+      <entry><keycap>C+e UP</keycap>; <keycap>LEFT</keycap>; <keycap>DOWN</keycap>; <keycap>RIGHT</keycap></entry>
       <entry>Send keyboard focus to top; bottom; left; right docking area.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo></keycombo>
-      </entry>
+      <entry><keycap>C+e C+`</keycap></entry>
       <entry>Close currently focused docking area.</entry>
-     </row>
-     <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo></keycombo>
-      </entry>
-      <entry>Send keyboard focus back to current text area.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -143,13 +128,13 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+      <entry><keycap>C+ENTER</keycap>
       </entry>
       <entry>Display the action bar and give it keyboard focus.
       </entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Space</keycap></keycombo>
+      <entry><keycap>C+SPACE</keycap>
       </entry>
       <entry>Repeat last editor action.
       </entry>
@@ -173,44 +158,41 @@
       <entry>Move caret one character or line.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap>
-      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+<replaceable>Arrow</replaceable></keycap></entry>
       <entry>Move caret one word or paragraph.</entry>
      </row>
      <row>
-      <entry><keycap>Page Up</keycap>; <keycap>Page Down</keycap></entry>
+      <entry><keycap>PAGE_UP</keycap>; <keycap>PAGE_DOWN</keycap></entry>
       <entry>Move caret one screenful.</entry>
      </row>
      <row>
-      <entry><keycap>Home</keycap></entry>
+      <entry><keycap>HOME</keycap></entry>
       <entry>First non-whitespace character of line, beginning of line,
       first visible line (repeated presses).</entry>
      </row>
      <row>
-      <entry><keycap>End</keycap></entry>
+      <entry><keycap>END</keycap></entry>
       <entry>Last non-whitespace character of line, end of line,
       last visible line (repeated presses).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Home</keycap></keycombo></entry>
+      <entry><keycap>C+HOME</keycap></entry>
       <entry>Beginning of buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>End</keycap></keycombo></entry>
+      <entry><keycap>C+END</keycap></entry>
       <entry>End of buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo></entry>
+      <entry><keycap>C+]</keycap></entry>
       <entry>Go to matching bracket.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>]</keycap></keycombo></entry>
+      <entry><keycap>C+e [</keycap>; <keycap>]</keycap></entry>
       <entry>Go to previous; next bracket.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></entry>
+      <entry><keycap>C+l</keycap></entry>
       <entry>Go to line.</entry>
      </row>
     </tbody>
@@ -228,65 +210,70 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Shift</keycap>
-      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
+      <entry><keycap>S+<replaceable>Arrow</replaceable></keycap></entry>
       <entry>Extend selection by one character or line.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap> <keycap>Shift</keycap>
-      <keycap><replaceable>Arrow</replaceable></keycap></keycombo></entry>
+      <entry><keycap>CS+<replaceable>Arrow</replaceable></keycap></entry>
       <entry>Extend selection by one word or paragraph.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Shift</keycap><keycap>Page Up</keycap></keycombo>;
-      <keycombo><keycap>Shift</keycap><keycap>Page Down</keycap></keycombo></entry>
+      <entry><keycap>S+PAGE_UP</keycap>; <keycap>S+PAGE_DOWN</keycap></entry>
       <entry>Extend selection by one screenful.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry>
+      <entry><keycap>S+HOME</keycap></entry>
       <entry>Extend selection to first non-whitespace character of line,
       beginning of line,
       first visible line (repeated presses).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry>
+      <entry><keycap>S+END</keycap></entry>
       <entry>Extend selection to last non-whitespace character of line,
       end of line,
       last visible line (repeated presses).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Shift</keycap>
-      <keycap>Home</keycap></keycombo></entry>
+      <entry><keycap>CS+HOME</keycap></entry>
       <entry>Extend selection to beginning of buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Shift</keycap>
-      <keycap>End</keycap></keycombo></entry>
+      <entry><keycap>CS+END</keycap></entry>
       <entry>Extend selection to end of buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>[</keycap></keycombo></entry>
+      <entry><keycap>C+[</keycap></entry>
       <entry>Select code block.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>W</keycap></keycombo>; <keycap>L</keycap>; <keycap>P</keycap></entry>
+      <entry><keycap>C+e w</keycap>; <keycap>l</keycap>; <keycap>p</keycap></entry>
       <entry>Select word; line; paragraph.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+l</keycap></entry>
       <entry>Select line range.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>\</keycap></keycombo>
+      <entry><keycap>C+a</keycap></entry>
+      <entry>Select all.</entry>
+     </row>
+     <row>
+      <entry><keycap>ESCAPE</keycap></entry>
+      <entry>Select none.</entry>
+     </row>
+     <row>
+      <entry><keycap>A+\</keycap>
       </entry>
       <entry>Switch between range and rectangular selection mode.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>\</keycap></keycombo>
+      <entry><keycap>C+\</keycap>
       </entry>
       <entry>Switch between single and multiple selection mode.</entry>
+     </row>
+     <row>
+      <entry><keycap>C+e i</keycap></entry>
+      <entry>Invert selection.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -301,23 +288,19 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+j</keycap></entry>
       <entry>Ensure current line is visible, and send focus to the text area.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+n</keycap></entry>
       <entry>Center caret on screen.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>'</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>/</keycap></keycombo></entry>
+      <entry><keycap>C+'</keycap>; <keycap>C+/</keycap></entry>
       <entry>Scroll up; down one line.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>'</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>/</keycap></keycombo></entry>
+      <entry><keycap>A+'</keycap>; <keycap>A+/</keycap></entry>
       <entry>Scroll up; down one page.</entry>
      </row>
     </tbody>
@@ -334,51 +317,44 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Z</keycap></keycombo></entry>
+      <entry><keycap>C+z</keycap></entry>
       <entry>Undo.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>Z</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+z</keycap></entry>
       <entry>Redo.</entry>
      </row>
      <row>
-      <entry><keycap>Backspace</keycap>; <keycap>Delete</keycap></entry>
+      <entry><keycap>BACK_SPACE</keycap>; <keycap>DELETE</keycap></entry>
       <entry>Delete character before; after caret.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Backspace</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>Delete</keycap></keycombo></entry>
+      <entry><keycap>C+BACK_SPACE</keycap>; <keycap>C+DELETE</keycap></entry>
       <entry>Delete word before; after caret.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo>;
-      <keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>D</keycap>
-      </keycombo></entry>
+      <entry><keycap>C+d</keycap>; <keycap>C+e d</keycap></entry>
       <entry>Delete line; paragraph.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Delete</keycap></keycombo></entry>
+      <entry><keycap>CS+BACK_SPACE</keycap>; <keycap>CS+DELETE</keycap></entry>
       <entry>Delete from caret to beginning; end of line.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>R</keycap></keycombo></entry>
+      <entry><keycap>C+e r</keycap></entry>
       <entry>Remove trailing whitespace from the current line (or all
       selected lines).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo></entry>
+      <entry><keycap>C+j</keycap></entry>
       <entry>Join lines.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></entry>
+      <entry><keycap>C+b</keycap></entry>
       <entry>Complete word.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>F</keycap></keycombo></entry>
+      <entry><keycap>C+e f</keycap></entry>
       <entry>Format paragraph (or selection).</entry>
      </row>
     </tbody>
@@ -394,91 +370,63 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
-      or <keycombo><keycap>Shift</keycap><keycap>Delete</keycap></keycombo></entry>
+      <entry><keycap>C+x</keycap> or <keycap>S+DELETE</keycap></entry>
       <entry>Cut selected text to clipboard.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
-      or <keycombo><keycap>Control</keycap><keycap>Insert</keycap></keycombo></entry>
+      <entry><keycap>C+c</keycap> or <keycap>C+INSERT</keycap></entry>
       <entry>Copy selected text to clipboard.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+u</keycap></entry>
       <entry>Append selected text to clipboard, removing it from the
       buffer.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+a</keycap></entry>
       <entry>Append selected text to clipboard, leaving it in the
       buffer.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
-      or <keycombo><keycap>Shift</keycap><keycap>Insert</keycap></keycombo></entry>
+      <entry><keycap>C+v</keycap> or <keycap>S+INSERT</keycap></entry>
       <entry>Paste clipboard contents.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+p</keycap></entry>
       <entry>Vertically paste clipboard contents.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>X</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+x <replaceable>key</replaceable></keycap></entry>
       <entry>Cut selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>C</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+c <replaceable>key</replaceable></keycap></entry>
       <entry>Copy selected text to register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>U</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+u <replaceable>key</replaceable></keycap></entry>
       <entry>Append selected text to register <replaceable>key</replaceable>,
       removing it from the buffer.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>A</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+a <replaceable>key</replaceable></keycap></entry>
       <entry>Append selected text to register <replaceable>key</replaceable>,
       leaving it in the buffer.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>V</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+v <replaceable>key</replaceable></keycap></entry>
       <entry>Paste contents of register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>P</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+r C+p <replaceable>key</replaceable></keycap></entry>
       <entry>Vertically paste contents of register <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>V</keycap>
-      </keycombo></keycombo></entry>
+      <entry><keycap>C+e C+v</keycap></entry>
       <entry>Paste previous.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>Y</keycap>
-      </keycombo></keycombo></entry>
+      <entry><keycap>C+e C+y</keycap></entry>
       <entry>Paste deleted.</entry>
      </row>
     </tbody>
@@ -494,42 +442,31 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+m</keycap></entry>
       <entry>If current line doesn't contain a marker, one will be added.
       Otherwise, the existing marker will be removed.
       Use the <guimenu>Markers</guimenu> menu to return to markers added
       in this manner.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>T</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+t <replaceable>key</replaceable></keycap></entry>
       <entry>Add marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>Y</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+y <replaceable>key</replaceable></keycap></entry>
       <entry>Go to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>U</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+u <replaceable>key</replaceable></keycap></entry>
       <entry>Select to marker with shortcut <replaceable>key</replaceable>.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>K</keycap>
-      </keycombo>
-      <keycap><replaceable>key</replaceable></keycap></keycombo></entry>
+      <entry><keycap>C+k <replaceable>key</replaceable></keycap></entry>
       <entry>Go to marker with shortcut <replaceable>key</replaceable>, and
       move the marker to the previous caret position.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap> <keycap>,</keycap></keycombo></keycombo>;
-      <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
+      <entry><keycap>C+e C+,</keycap>; <keycap>C+e C+.</keycap></entry>
       <entry>Move caret to previous; next marker.</entry>
      </row>
     </tbody>
@@ -545,61 +482,55 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo></entry>
+      <entry><keycap>C+f</keycap></entry>
       <entry>Open search and replace dialog box.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></entry>
+      <entry><keycap>C+g</keycap></entry>
       <entry>Find next.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo></entry>
+      <entry><keycap>C+h</keycap></entry>
       <entry>Find previous.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+b</keycap></entry>
       <entry>Search in open buffers.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+d</keycap></entry>
       <entry>Search in directory.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+r</keycap></entry>
       <entry>Replace in selection.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+g</keycap></entry>
       <entry>Replace in selection and find next.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo></entry>
+      <entry><keycap>C+,</keycap></entry>
       <entry>Incremental search bar.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo></entry>
+      <entry><keycap>A+,</keycap></entry>
       <entry>HyperSearch bar.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>,</keycap></keycombo></entry>
+      <entry><keycap>C+.</keycap></entry>
       <entry>Incremental search for word under the caret.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo></entry>
+      <entry><keycap>A+.</keycap></entry>
       <entry>HyperSearch for word under the caret.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></entry>
+      <entry><keycap>C+e C+i</keycap></entry>
       <entry>Toggle ignore case.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo></entry>
+      <entry><keycap>C+e C+x</keycap></entry>
       <entry>Toggle regular expressions.</entry>
      </row>
     </tbody>
@@ -616,37 +547,34 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>;</keycap></keycombo></entry>
+      <entry><keycap>C+;</keycap></entry>
       <entry>Expand abbreviation.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Left</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>Right</keycap></keycombo></entry>
+      <entry><keycap>A+LEFT</keycap>; <keycap>A+RIGHT</keycap></entry>
       <entry>Shift current line (or all
       selected lines) left; right.
       </entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>;
-      <keycap>Tab</keycap></entry>
+      <entry><keycap>S+TAB</keycap>;
+      <keycap>TAB</keycap></entry>
       <entry>Shift selected lines left; right. Note that pressing
-      <keycap>Tab</keycap> with no selection active will insert a tab
+      <keycap>TAB</keycap> with no selection active will insert a tab
       character at the caret position.
       </entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo></entry>
+      <entry><keycap>C+i</keycap></entry>
       <entry>Indent current line (or all
       selected lines).</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+c</keycap></entry>
       <entry>Range comment selection.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>K</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+e C+k</keycap></entry>
       <entry>Line comment selection.</entry>
      </row>
     </tbody>
@@ -662,64 +590,56 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry>
+      <entry><keycap>A+BACK_SPACE</keycap></entry>
       <entry>Collapse fold containing caret.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Enter</keycap></keycombo></entry>
+      <entry><keycap>A+ENTER</keycap></entry>
       <entry>Expand fold containing caret one level only.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Enter</keycap></keycombo></entry>
+      <entry><keycap>AS+ENTER</keycap></entry>
       <entry>Expand fold containing caret fully.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>X</keycap></keycombo></entry>
+      <entry><keycap>C+e x</keycap></entry>
       <entry>Expand all folds.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>A</keycap></keycombo></entry>
+      <entry><keycap>C+e a</keycap></entry>
       <entry>Add explicit fold.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>S</keycap></keycombo></entry>
+      <entry><keycap>C+e s</keycap></entry>
       <entry>Select fold.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>Enter</keycap> <keycap><replaceable>key</replaceable></keycap></keycombo>
+      <entry><keycap>C+e ENTER <replaceable>key</replaceable></keycap>
       </entry>
       <entry>Expand folds with level less than <replaceable>key</replaceable>,
       collapse all others.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>N</keycap> <keycap>N</keycap></keycombo></entry>
+      <entry><keycap>C+e n n</keycap></entry>
       <entry>Narrow to fold.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>N</keycap> <keycap>S</keycap></keycombo></entry>
+      <entry><keycap>C+e n s</keycap></entry>
       <entry>Narrow to selection.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>
-      <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></keycombo></entry>
+      <entry><keycap>A+UP</keycap>; <keycap>A+DOWN</keycap></entry>
       <entry>Moves caret to previous; next fold.
       </entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-      <keycap>U</keycap></keycombo></entry>
+      <entry><keycap>C+e u</keycap></entry>
       <entry>Moves caret to the parent fold of the one containing the caret.
       </entry>
      </row>
@@ -736,29 +656,20 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+m C+r</keycap></entry>
       <entry>Record macro.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+m C+m</keycap></entry>
       <entry>Record temporary macro.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+m C+s</keycap></entry>
       <entry>Stop recording.</entry>
      </row>
      <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo></keycombo></entry>
+      <entry><keycap>C+m C+p</keycap></entry>
       <entry>Run temporary macro.</entry>
-     </row>
-     <row>
-      <entry><keycombo action="seq"><keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-      <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo></keycombo></entry>
-      <entry>Run most recently played or recorded macro.</entry>
      </row>
     </tbody>
    </tgroup>
@@ -773,27 +684,24 @@
     <colspec colnum="1" colwidth="2.2in" />
     <tbody>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>J</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>L</keycap></keycombo></entry>
+      <entry><keycap>A+j</keycap>; <keycap>A+l</keycap></entry>
       <entry>Move caret to previous, next character.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>I</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>K</keycap></keycombo></entry>
+      <entry><keycap>A+i</keycap>; <keycap>A+k</keycap></entry>
       <entry>Move caret up, down one line.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Q</keycap></keycombo>;
-      <keycombo><keycap>Alt</keycap><keycap>A</keycap></keycombo></entry>
+      <entry><keycap>A+q</keycap>; <keycap>A+a</keycap></entry>
       <entry>Move caret up, down one screenful.</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>Z</keycap></keycombo></entry>
+      <entry><keycap>A+z</keycap></entry>
       <entry>First non-whitespace character of line, beginning of line,
       first visible line (repeated presses).</entry>
      </row>
      <row>
-      <entry><keycombo><keycap>Alt</keycap><keycap>X</keycap></keycombo></entry>
+      <entry><keycap>A+x</keycap></entry>
       <entry>Last non-whitespace character of line, end of line,
       last visible line (repeated presses).</entry>
      </row>

@@ -1,4 +1,4 @@
-<!DOCTYPE style-sheet PUBLIC "-//OpenJade//DTD DSSSL Style Sheet//EN" "file:///foo">
+<!DOCTYPE style-sheet PUBLIC "-//OpenJade//DTD DSSSL Style Sheet//EN">
 
 <style-sheet>
 <style-specification use="jeditprint-letter">

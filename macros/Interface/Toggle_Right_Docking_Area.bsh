@@ -27,7 +27,7 @@ toggleRightDockingArea();
 <listitem>
 	<para><filename>Toggle_Right_Docking_Area.bsh</filename></para>
 	<abstract><para>
-		Expands or collapses the tight docking area, 
+		Expands or collapses the right docking area, 
 		depending on it's current state.
 	</para></abstract>
 </listitem>

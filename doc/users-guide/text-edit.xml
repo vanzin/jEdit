@@ -10,19 +10,19 @@
    using the keyboard.
   </para>
   <para>
-   The <keycap>Left</keycap>, <keycap>Right</keycap>, <keycap>Up</keycap> and
-   <keycap>Down</keycap> keys move the caret in the respective direction, and
-   the <keycap>Page Up</keycap> and <keycap>Page Down</keycap> keys move the
+   The <keycap>LEFT</keycap>, <keycap>RIGHT</keycap>, <keycap>UP</keycap> and
+   <keycap>DOWN</keycap> keys move the caret in the respective direction, and
+   the <keycap>PAGE_UP</keycap> and <keycap>PAGE_DOWN</keycap> keys move the
    caret up and down one screenful, respectively.
   </para>
   <para>
-   When pressed once, the <keycap>Home</keycap> key moves the caret to the first
+   When pressed once, the <keycap>HOME</keycap> key moves the caret to the first
    non-whitespace character of the current screen line. Pressing it a second
    time moves the caret to the beginning of the current buffer line. Pressing it
    a third time moves the caret to the first visible line.
   </para>
   <para>
-   The <keycap>End</keycap> key behaves in a
+   The <keycap>END</keycap> key behaves in a
    similar manner, going to the last non-whitespace character of the current
    screen line, the end of
    the current buffer line, and finally to the last visible line.
@@ -34,8 +34,8 @@
    within the wrap margin width. See <xref linkend="word-wrap"/>.
   </para>
   <para>
-   <keycombo><keycap>Control</keycap><keycap>Home</keycap></keycombo> and
-   <keycombo><keycap>Control</keycap><keycap>End</keycap></keycombo> move the
+   <keycap>C+HOME</keycap> and
+   <keycap>C+END</keycap> move the
    caret to the beginning and end of the buffer, respectively.
   </para>
   <para>
@@ -46,7 +46,7 @@
   <sidebar><title>The Home and End keys</title>
    <para>
     If you prefer more traditional behavior for the
-    <keycap>Home</keycap> and <keycap>End</keycap> keys, you can reassign
+    <keycap>HOME</keycap> and <keycap>END</keycap> keys, you can reassign
     the respective keyboard shortcuts in the <guibutton>Shortcuts</guibutton>
     pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>; see <xref linkend="shortcuts-pane"/>.
@@ -55,15 +55,13 @@
     By default, the shortcuts are assigned as follows:
    </para>
    <itemizedlist>
-    <listitem><para><keycap>Home</keycap> is bound to <guimenuitem>Smart
+    <listitem><para><keycap>HOME</keycap> is bound to <guimenuitem>Smart
     Home</guimenuitem>.</para></listitem>
-    <listitem><para><keycap>End</keycap> is bound to <guimenuitem>Smart
+    <listitem><para><keycap>END</keycap> is bound to <guimenuitem>Smart
     End</guimenuitem>.</para></listitem>
-    <listitem><para><keycombo><keycap>Shift</keycap> <keycap>Home</keycap>
-    </keycombo> is bound to <guimenuitem>Select to Smart
+    <listitem><para><keycap>S+HOME</keycap> is bound to <guimenuitem>Select to Smart
     Home Position</guimenuitem>.</para></listitem>
-    <listitem><para><keycombo><keycap>Shift</keycap> <keycap>End</keycap>
-    </keycombo> is bound to <guimenuitem>Select to Smart
+    <listitem><para><keycap>S+END</keycap> is bound to <guimenuitem>Select to Smart
     End Position</guimenuitem>.</para></listitem>
    </itemizedlist>
    <para>
@@ -87,8 +85,8 @@
  <sect1 id="selection"><title>Selecting Text</title>
   <para>
    A <firstterm>selection</firstterm> is a a block of text marked for further
-   manipulation. Range selections cover text between two points in a buffer, and rectangular selections cover a rectangular area. Several chunks of text can be
-   selected simultaneously.
+   manipulation. Range selections are equivalent to selections in most other text editors; they cover text between two points in a buffer. jEdit also allows rectangular selections that cover a rectangular area. Furthermore, several chunks of text can be
+   selected and operated on simultaneously.
   </para>
   <sect2><title>Range Selection</title>
   <para>
@@ -100,17 +98,17 @@
   </para>
   <para>
    Holding down <keycap>Shift</keycap> in addition to a caret movement key
-   (<keycap>Left</keycap>, <keycap>Up</keycap>, <keycap>Home</keycap>, etc) will
+   (<keycap>LEFT</keycap>, <keycap>UP</keycap>, <keycap>HOME</keycap>, etc) will
    extend a selection in the specified direction.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Select All</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>) selects the
+   <keycap>C+a</keycap>) selects the
    entire buffer.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Selection</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem> (shortcut:
-   <keycap>Escape</keycap>) deactivates the selection.
+   <keycap>ESCAPE</keycap>) deactivates the selection.
   </para>
   </sect2>
   <sect2 id="rect-select"><title>Rectangular Selection</title>
@@ -122,14 +120,12 @@
     position to the clicked location.
    </para>
    <para>
+    Alternatively, invoking
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More
     Selection</guisubmenu>&gt;<guimenuitem>Rectangular Selection</guimenuitem>
-    toggles keyboard rectangular selection mode. In this mode, commands that
-    normally create range selections will create rectangular selections.
+    (shortcut: <keycap>A+\</keycap>)
+    toggles rectangular selection mode. In rectangular selection mode, dragging the mouse always creates a rectangular selection, and keyboard commands that would normally create a range selection create a rectangular selection instead.
     A status bar indicator is shown when this mode is enabled.
-   </para>
-   <para>
-    Rectangular selections behave differently than range selections when text is inserted. If the text has more lines than the rectangular selection, the text insertion proceeds as if the rectangular selection was automatically resized to the appropriate height. If the text to insert has less lines than the rectangular selection, the lines are repeated as many times as necessary to fill the selection.
    </para>
    <para>
     It is possible to select a rectangle with zero width but non-zero height.
@@ -138,8 +134,7 @@
     vertical line.
    </para>
    <para>
-    Range selections and non-zero-width rectangular selections are deactivated after text is inserted, while zero-width rectangular selections are shifted horizontally. This makes them behave like a <quote>tall caret</quote>. For example, to insert a string at a specific column on a number of lines,
-    select a zero width rectangle at that column, and type the desired string.
+    Inserting text into a rectangular selection repeats the text going down as many times as necessary, and shifts the selection to the right. This makes it behave like a <quote>tall</quote> caret.
    </para>
    <para>
     Rectangles can be deleted, copied, pasted, and operated on using ordinary
@@ -170,8 +165,7 @@
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More
     Selection</guisubmenu>&gt;<guimenuitem>Multiple Selection</guimenuitem>
-    (keyboard shortcut: <keycombo><keycap>Control</keycap>
-    <keycap>\</keycap></keycombo>)
+    (keyboard shortcut: <keycap>C+\</keycap>)
     turns multiple selection mode on and
     off. In multiple selection mode, multiple fragments of text can be selected
     and operated on simultaneously, and the caret can be moved independently
@@ -206,14 +200,13 @@
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More
     Selection</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem>
-    (shortcut: <keycap>Escape</keycap>) deactivates the selection containing the
+    (shortcut: <keycap>ESCAPE</keycap>) deactivates the selection containing the
     caret, if there is one. Otherwise it deactivates all active selections.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More
     Selection</guisubmenu>&gt;<guimenuitem>Invert Selection</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>I</keycap>) selects a set of text chunks such that all text
+    (shortcut: <keycap>C+e C+i</keycap>) selects a set of text chunks such that all text
     that was formerly part of a selection is now unselected, and all text that
     wasn't, is selected.
    </para>
@@ -229,12 +222,10 @@
  </sect1>
  <sect1 id="entering-text"><title>Inserting and Deleting Text</title>
   <para>
-   Text entered at the keyboard is inserted into the buffer. If
-   overwrite mode is on, one character is deleted from in
-   front of the caret position for every character that is inserted.
-   To activate overwrite mode, press <keycap>Insert</keycap>. The caret is
-   drawn as horizontal line while in overwrite
-   mode. The status bar also indicates if overwrite mode is active; see
+   Text entered at the keyboard is inserted into the buffer. In overwrite mode, which can be toggled by pressing <keycap>INSERT</keycap>, one character is deleted from in
+   front of the caret position for every character that is inserted. The caret is
+   drawn as horizontal line while overwrite
+   mode is active. The status bar also indicates if overwrite mode is active; see
    <xref linkend="status-bar"/> for details.
   </para>
   <para>
@@ -242,14 +233,14 @@
    with the inserted text.
   </para>
   <para>
-   When inserting text, keep in mind that the <keycap>Tab</keycap> and
-   <keycap>Enter</keycap> keys might
+   When inserting text, the <keycap>TAB</keycap> and
+   <keycap>ENTER</keycap> keys might
    not behave entirely like you expect because  of various indentation
    features; see <xref linkend="indent" /> for details.
   </para>
   <para>
    The simplest way to delete text is with the
-   <keycap>Backspace</keycap> and <keycap>Delete</keycap> keys. If nothing is
+   <keycap>BACKSPACE</keycap> and <keycap>DELETE</keycap> keys. If nothing is
    selected, they delete the character before or after the caret,
    respectively. If a selection exists, both delete the
    selection.
@@ -262,31 +253,30 @@
  </sect1>
  <sect1 id="undo-redo"><title>Undo and Redo</title>
   <para>
-   <guimenu>Edit</guimenu>&gt;<guimenuitem>Undo</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>Z</keycap></keycombo>) reverses the
+   <guimenu>Edit</guimenu>&gt;<guimenuitem>Undo</guimenuitem> (shortcut: <keycap>C+z</keycap>) reverses the
    most recent editing command. For example, this can be
    used to restore unintentionally deleted text. More complicated operations,
-   such as a search and replace, can also be undone. By default, information
-   about the last 100 edits is retained; older edits cannot be undone.
-   The maximum number of undos can be changed in the <guibutton>Editing</guibutton> pane
-   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box; see <xref linkend="editing-pane"/>.
+   such as a search and replace, can also be undone.
   </para>
   <para>
    If you undo too many changes,
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Redo</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>) can restore
+   <keycap>C+e C+z</keycap>) can restore
    the changes again. For example, if some
    text was inserted, <guimenuitem>Undo</guimenuitem> will remove it from the
    buffer. <guimenuitem>Redo</guimenuitem> will insert it again.
   </para>
+  <para>
+   By default, the last 100 edits is retained; older edits cannot be undone.
+   The maximum number of undos can be changed in the <guibutton>Editing</guibutton> pane
+   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box; see <xref linkend="editing-pane"/>.
+  </para>
  </sect1>
  <sect1 id="words"><title>Working With Words</title>
   <para>
-   <keycombo><keycap>Control</keycap><keycap>Left</keycap></keycombo>
-   and
-   <keycombo><keycap>Control</keycap><keycap>Right</keycap></keycombo>
-   moves the caret a word at
+   <keycap>C+LEFT</keycap> and <keycap>C+RIGHT</keycap>
+   move the caret a word at
    a time. Holding down <keycap>Shift</keycap> in addition to the above
    extends the selection a word at a time.
   </para>
@@ -295,25 +285,17 @@
    or using the
    <guimenu>Edit</guimenu>&gt;<guisubmenu>More
    Selection</guisubmenu>&gt;<guimenuitem>Select
-   Word</guimenuitem> command (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>W</keycap>).
+   Word</guimenuitem> command (shortcut: <keycap>C+e w</keycap>).
    A selection that begins and ends on word boundaries can be created by
    double-clicking and dragging.
   </para>
   <para>
-   <keycombo><keycap>Control</keycap><keycap>Backspace</keycap></keycombo>
-   and <keycombo><keycap>Control</keycap><keycap>Delete</keycap></keycombo>
-   deletes the word
+   <keycap>C+BACKSPACE</keycap> and <keycap>C+DELETE</keycap>
+   delete the word
    before or after the caret, respectively.
   </para>
   <para>
-   <guimenu>Edit</guimenu>&gt;<guimenuitem>Word Count</guimenuitem>
-   displays a dialog box with the number of characters,
-   words and lines in the current buffer.
-  </para>
-  <para>
-   <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) locates
+   <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> (shortcut: <keycap>C+b</keycap>) locates
    possible completions for the word at the caret, first by looking in the
    current edit mode's syntax highlighting
    keyword list, and then in the current buffer for words that begin with the
@@ -322,24 +304,34 @@
   <para>
    If there is only one completion, it will be inserted into the buffer
    immediately.
-   If multiple completions were found, they will be listed in a popup below
-   the caret position. To insert a completion from the list, either click it
-   with the mouse,
-   or select it using the <keycap>Up</keycap> and <keycap>Down</keycap> keys and
-   press <keycap>Enter</keycap>, or press a digit to insert one of the first
-   ten completions (1 is the first completion; 9 is the 9th; 0 is the 10th).
   </para>
-  <para>Typing while the popup is
+  <para>
+   If multiple completions were found, the longest common prefix is inserted into the buffer, and a popup is shown below
+   the caret position listing the completions.
+  </para>
+  <para>
+   To insert a completion from the list, either select it using the <keycap>UP</keycap> and <keycap>DOWN</keycap> keys and
+   press <keycap>ENTER</keycap>, press a digit to insert one of the first
+   ten completions (1 is the first completion; 9 is the 9th; 0 is the 10th),
+   or click the desired completion with the mouse. To close the popup without inserting a
+   completion, press <keycap>ESCAPE</keycap>.
+  </para>
+  <para>
+   Typing while the popup is
    visible will automatically update the popup and narrow the set of
    completions as necessary.
-   To close the popup without inserting a
-   completion, press <keycap>Escape</keycap>.
   </para>
-  <sidebar><title>For power users</title>
+  <para>
+   <guimenu>Edit</guimenu>&gt;<guimenuitem>Word Count</guimenuitem>
+   displays a dialog box with the number of characters,
+   words and lines in the current buffer.
+  </para>
+  <sect2><title>What's a Word?</title>
    <para>
     The default behavior of the
-    <keycombo><keycap>Control</keycap><keycap>Left</keycap></keycombo> and
-    <keycombo><keycap>Control</keycap><keycap>Right</keycap></keycombo> commands is to
+    <keycap>C+LEFT</keycap>,
+    <keycap>C+RIGHT</keycap>,
+    <keycap>C+BACKSPACE</keycap> and <keycap>C+DELETE</keycap> commands is to
     stop both at the beginning and the end of each word. However this can be
     changed by remapping these keystrokes to alternative actions whose names end
     with <guimenuitem>(Eat Whitespace)</guimenuitem> in the
@@ -347,7 +339,7 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
     dialog box; see <xref linkend="shortcuts-pane"/>.
    </para>
-  </sidebar>
+  </sect2>
  </sect1>
  <sect1 id="lines"><title>Working With Lines</title>
   <para>
@@ -355,48 +347,42 @@
    or using the
    <guimenu>Edit</guimenu>&gt;<guisubmenu>More
    Selection</guisubmenu>&gt;<guimenuitem>Select
-   Line</guimenuitem> command (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycap>L</keycap>).
+   Line</guimenuitem> command (shortcut: <keycap>C+e l</keycap>).
    A selection that begins and ends on line boundaries can be created
    by triple-clicking and dragging.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guimenuitem>Go to Line</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>) prompts
+   <keycap>C+l</keycap>) prompts
    for a line number and moves the caret there.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>More
    Selection</guisubmenu>&gt;<guimenuitem>Select Line Range</guimenuitem>
-   (shortcut
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>)
+   (shortcut: <keycap>C+e C+l</keycap>)
    prompts for two line numbers and selects all text between them.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
    Line</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo>)
+   (shortcut: <keycap>C+d</keycap>)
    deletes the current line.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
    to Start Of Line</guimenuitem>
-   (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Backspace</keycap></keycombo>)
+   (shortcut: <keycap>CS+BACK_SPACE</keycap>)
    deletes all text from the start of the current line to the caret.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
    to End Of Line</guimenuitem>
-   (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>Shift</keycap><keycap>Delete</keycap></keycombo>) deletes
+   (shortcut: <keycap>CS+DELETE</keycap>) deletes
    all text from the caret to the end of the current line.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Join
-   Lines</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>)
+   Lines</guimenuitem> (shortcut: <keycap>C+j</keycap>)
    removes any whitespace from the start of the next line and joins it with
    the current line.
    The caret is moved to the position where the two lines were joined.
@@ -419,33 +405,26 @@
    by a leading indent.
   </para>
   <para>
-   <keycombo><keycap>Control</keycap><keycap>Up</keycap></keycombo> and
-   <keycombo><keycap>Control</keycap><keycap>Down</keycap></keycombo>
+   <keycap>C+UP</keycap> and <keycap>C+DOWN</keycap>
    move the caret to the previous and next paragraph, respectively.
    Holding down <keycap>Shift</keycap> in addition to the above
    extends the selection a paragraph at a time.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>More Selection</guisubmenu>&gt;<guimenuitem>Select
-   Paragraph</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycap>P</keycap>)
+   Paragraph</guimenuitem> (shortcut: <keycap>C+e p</keycap>)
    selects the paragraph containing the caret.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Format
-   Paragraph</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap>
-   </keycombo> <keycap>F</keycap>) splits and joins lines in the current
-   paragraph to make it fit within the wrap column position. See
+   Paragraph</guimenuitem> (shortcut: <keycap>C+e f</keycap>) splits and joins lines in the current
+   selection to make it fit within the wrap column position. If nothing is selected, the paragraph containing the caret is formatted instead. See
    <xref linkend="word-wrap" /> for information and word wrap and
    changing the wrap column.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
-   Paragraph</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap>
-   </keycombo> <keycap>D</keycap>)
+   Paragraph</guimenuitem> (shortcut: <keycap>C+e d</keycap>)
    deletes the paragraph containing the caret.
   </para>
  </sect1>
@@ -457,7 +436,7 @@
    The wrap margin
    position is indicated in the text are as a faint blue vertical line.
    There are two <quote>wrap modes</quote>, <quote>soft</quote> and
-   <quote>hard</quote>; they are described below. The wrap mode can be
+   <quote>hard</quote>; they are described below. The current wrap mode is shown in the status bar; see <xref linkend="status-bar"/>. The wrap mode can be
    changed in one of the following ways:
   </para>
   <itemizedlist>
@@ -467,10 +446,17 @@
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box. See <xref linkend="editing-pane" />.</para></listitem>
    <listitem><para>In the current buffer
-   for the duration of the editing session in the
+   for the duration of the editing session,</para>
+   <itemizedlist>
+    <listitem><para>By clicking the status bar indicator.</para></listitem>
+    <listitem><para>In the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box. See <xref linkend="buffer-opts" />.
-   </para></listitem>
+   dialog box. See <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>From the keyboard, if a keyboard shortcut has been assigned to the <guimenuitem>Toggle Word Wrap</guimenuitem> command in the <guibutton>Shortcuts</guibutton> pane of the
+     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+     dialog box. By default, this command does not have a keyboard shortcut.</para></listitem>
+    </itemizedlist>
+   </listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing
    the following in one of the first or last 10 lines of the buffer, where
@@ -514,58 +500,6 @@
  </sect1>
  <sect1 id="scrolling"><title>Scrolling</title>
   <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll to
-   Current Line</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>J</keycap></keycombo>) scrolls the
-   text area in order to make the caret visible, if necessary. It does nothing if the
-   caret is already visible.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Center Caret
-   on Screen</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo>)
-   moves the caret to the
-   line in the middle of the screen.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Line
-   Scroll Up</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>'</keycap></keycombo>)
-   scrolls the text area up by one line.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Line
-   Scroll Down</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>/</keycap></keycombo>) scrolls the
-   text area down by one line.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Page
-   Scroll Up</guimenuitem> (shortcut:
-   <keycombo><keycap>Alt</keycap><keycap>'</keycap></keycombo>) scrolls the text
-   area up by one screenful.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Page
-   Scroll Down</guimenuitem> (shortcut:
-   <keycombo><keycap>Alt</keycap><keycap>/</keycap></keycombo>) scrolls the text
-   area down by one screenful.
-  </para>
-  <para>
-   The above scrolling commands differ from the caret movement commands
-   in that they don't actually move the caret; they just change the
-   scroll bar position.
-  </para>
-  <para>
-   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Synchronized
-   Scrolling</guimenuitem> is a check box menu item. If it is selected,
-   scrolling one text area in a split view will scroll all other text areas
-   in the view. Has no effect if the view is not split.
-  </para>
-  <sidebar><title>Mouse Wheel Scrolling</title>
-   <para>
     If you have a mouse with a scroll wheel and are running Java 2
     version 1.4, you can use the
     wheel to scroll up and down in the text area. Various modifier keys
@@ -579,33 +513,71 @@
     <listitem><para><keycombo><keycap>Alt</keycap><keycap>Shift</keycap></keycombo>
      - extends the selection up and down instead of scrolling.</para></listitem>
    </itemizedlist>
-  </sidebar>
+  <para>
+   Keyboard commands for scrolling the text area are also available.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll to
+   Current Line</guimenuitem> (shortcut: <keycap>C+e C+j</keycap>) scrolls the
+   text area in order to make the caret visible, if necessary. It does nothing if the
+   caret is already visible.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Center Caret
+   on Screen</guimenuitem> (shortcut: <keycap>C+e C+n</keycap>)
+   moves the caret to the
+   line in the middle of the screen.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Line
+   Scroll Up</guimenuitem> (shortcut: <keycap>C+QUOTE</keycap>)
+   scrolls the text area up by one line.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Line
+   Scroll Down</guimenuitem> (shortcut: <keycap>C+SLASH</keycap>) scrolls the
+   text area down by one line.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Page
+   Scroll Up</guimenuitem> (shortcut: <keycap>A+QUOTE</keycap>) scrolls the text
+   area up by one screenful.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Page
+   Scroll Down</guimenuitem> (shortcut: <keycap>A+SLASH</keycap>) scrolls the text
+   area down by one screenful.
+  </para>
+  <para>
+   The above scrolling commands differ from the caret movement commands
+   in that they don't actually move the caret; they just change the
+   scroll bar position.
+  </para>
  </sect1>
  <sect1 id="text-transfer"><title>Transferring Text</title>
   <para>
    jEdit provides a rich set of commands for moving and copying text. Commands
    are provided for moving chunks of text from buffers to
    <firstterm>registers</firstterm> and vice-versa. A register is a holding area
-   for an arbitrary length of text, with a single-character name.
-   The system clipboard is mapped to the register named <filename>$</filename>.
-   jEdit offers clipboard-manipulation commands similar
-   to those found in other applications, in addition to a more flexible
-   set of commands for working with registers directly.
+   for an arbitrary length of text, with a single-character name. Most other programs can only transfer text to and from the system clipboard; in jEdit, the system clipboard is just another register, with the special name <filename>$</filename>.
   </para>
   <sect2><title>The Clipboard</title>
    <para>
+    jEdit offers the usual text transfer operations, that operate on the <filename>$</filename> register.
+   </para>
+   <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Cut</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>)
+    (shortcut: <keycap>C+x</keycap>)
     places the selected text in the clipboard and removes it from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Copy</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>)
+    (shortcut: <keycap>C+c</keycap>)
     places the selected text in the clipboard and leaves it in the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>)
+    (shortcut: <keycap>C+v</keycap>)
     inserts the clipboard contents in place of the selection (or at the
     caret position, if there is no selection).
    </para>
@@ -617,8 +589,7 @@
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut Append</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>)
+    (shortcut: <keycap>C+e C+u</keycap>)
     appends the selected text to the clipboard, then removes it from the
     buffer. After this command has been invoked, the clipboard will consist of
     the former clipboard contents, followed by a newline, followed by the
@@ -626,14 +597,14 @@
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy Append</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>)
+    (shortcut: <keycap>C+e C+a</keycap>)
     is the same as <guimenuitem>Cut Append</guimenuitem> except it does not
     remove the selection from the buffer.
    </para>
   </sect2>
   <sect2 id="quick-copy"><title>Quick Copy</title>
    <para>
+    The quick copy feature is usually found in Unix text editors.
     Quick copy is disabled by default, but it can be enabled in the
     <guibutton>Text Area</guibutton> pane of the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
@@ -668,8 +639,7 @@
    </para></listitem>
    </itemizedlist>
    <para>
-    Quick copy is implemented by storing the most recently selected text
-    in the register named <filename>%</filename>.
+    The most recently selected text is stored in the <filename>%</filename> register.
    </para>
    <para>
     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
@@ -687,84 +657,67 @@
    <para>
     Each command prompts for a single-character register name to be entered
     after being invoked.
-    Pressing <keycap>Escape</keycap> instead of specifying a register name
-    will cancel the operation.
+    Pressing <keycap>ESCAPE</keycap> instead of specifying a register name
+    cancels the operation.
    </para>
    <para>
     Note that the content of registers other than the clipboard and
-    quick copy text are automatically saved between jEdit sessions.
+    quick copy register are automatically saved between jEdit sessions.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut
     to Register</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>
-    <keycap><replaceable>key</replaceable></keycap>)
+    (shortcut: <keycap>C+r C+x <replaceable>key</replaceable></keycap>)
     stores the selected text in the specified
     register, removing it from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy
     to Register</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>C</keycap></keycombo>
-    <keycap><replaceable>key</replaceable></keycap>)
+    (shortcut: <keycap>C+r C+c <replaceable>key</replaceable></keycap>)
     stores the selected text in the specified
     register, leaving it in the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Cut
     Append to Register</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
-    <keycap><replaceable>key</replaceable></keycap>)
+    (shortcut: <keycap>C+r C+u <replaceable>key</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, and removes it from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Copy
     Append to Register</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>A</keycap></keycombo>
-    <keycap><replaceable>key</replaceable></keycap>)
+    (shortcut: <keycap>C+r C+a <replaceable>key</replaceable></keycap>)
     adds the selected text to the existing contents of the specified
     register, without removing it from the buffer.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste
     from Register</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>
-    <keycap><replaceable>key</replaceable></keycap>) 
+    (shortcut: <keycap>C+r C+v <replaceable>key</replaceable></keycap>) 
     replaces the selection with the
     contents of the specified register.
    </para>
    <para>
-    The last two commands display dialog boxes instead of prompting for a
+    The following two commands display dialog boxes instead of prompting for a
     register name.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste Previous</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>V</keycap></keycombo>)
-    displays a dialog box listing recently copied and
-    pasted text. By default, the last 20 strings are remembered; this can be
-    changed in the <guibutton>General</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="global-opts" />.
+    (shortcut: <keycap>C+e C+v</keycap>)
+    displays a dialog box listing the 20 most recently copied and
+    pasted text strings.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>Paste Deleted</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>) is not really a register command; it
-    displays a dialog box listing recently deleted text. As with the <guimenuitem>Paste Previous</guimenuitem> dialog box, the last 20 strings are listed by default.
+    (shortcut: <keycap>C+e C+y</keycap>) is not really a register command; it
+    displays a dialog box listing the 20 most recently deleted text strings.
    </para>
    <para>
     <guimenu>Edit</guimenu>&gt;<guisubmenu>More Clipboard</guisubmenu>&gt;<guimenuitem>View
     Registers</guimenuitem> displays a dialog box for
-    viewing the contents of registers (including the clipboard).
+    viewing register contents, including the clipboard and the quick copy.
    </para>
   </sect2>
  </sect1>
@@ -784,17 +737,11 @@
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Add/Remove Marker</guimenuitem>
-   (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) adds a
+   (shortcut: <keycap>C+e C+m</keycap>) adds a
    marker without a shortcut pointing to the current line. If a marker is
    already set on the current line, the marker is removed instead.
    If text is selected,
    markers are added to the first and last line of each selection.
-  </para>
-  <para>
-   <guimenu>Markers</guimenu>&gt;<guimenuitem>Remove All Markers</guimenuitem>
-   removes all markers set in the current buffer.
   </para>
   <para>
    Markers are listed in the <guimenu>Markers</guimenu> menu; selecting a marker
@@ -803,54 +750,51 @@
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Previous
    Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo>) goes
+   (shortcut: <keycap>C+e C+COMMA</keycap>) goes
    to the marker immediately before the caret position.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Next Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo>)
+   (shortcut: <keycap>C+e C+PERIOD</keycap>)
    goes to the marker immediately after the caret position.
+  </para>
+  <para>
+   <guimenu>Markers</guimenu>&gt;<guimenuitem>Remove All Markers</guimenuitem>
+   removes all markers set in the current buffer.
   </para>
   <para>Markers with shortcuts allow for quicker keyboard-based navigation.
    The following commands all prompt for a single-character shortcut when
-   invoked. Pressing <keycap>Escape</keycap>
+   invoked. Pressing <keycap>ESCAPE</keycap>
    instead of specifying a shortcut will cancel the operation.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Add Marker With
    Shortcut</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>
-   <keycap><replaceable>key</replaceable></keycap>) adds a marker with the
+   (shortcut: <keycap>C+t <replaceable>key</replaceable></keycap>) adds a marker with the
    specified shortcut. If marker with that shortcut
    already exists, it will remain in the buffer but lose its shortcut.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Go to Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>Y</keycap></keycombo>
-   <keycap><replaceable>key</replaceable></keycap>) moves the caret to
+   (shortcut: <keycap>C+y <replaceable>key</replaceable></keycap>) moves the caret to
    the location of the marker with the specified shortcut.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Select to Marker</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
-   <keycap><replaceable>key</replaceable></keycap>) creates a selection from
+   (shortcut: <keycap>C+u <replaceable>key</replaceable></keycap>) creates a selection from
    the caret location to the marker with the specified shortcut.
   </para>
   <para>
    <guimenu>Markers</guimenu>&gt;<guimenuitem>Swap Caret and
-   Marker</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>U</keycap></keycombo>
-   <keycap><replaceable>key</replaceable></keycap>)
+   Marker</guimenuitem> (shortcut: <keycap>C+k <replaceable>key</replaceable></keycap>)
    moves the caret to the location of the marker with the specified shortcut,
-   and reassigns the marker to point to the former caret location. Invoke
+   and moves the marker to the former caret position. Invoke
    this command multiple times to flip between two locations in the buffer.
   </para>
   <para>
    Lines which contain markers are indicated in the gutter with a highlight.
    Moving the mouse over the highlight displays a tool tip showing the marker's
-   shortcut, if it has one. See <xref linkend="textarea" /> for information
+   shortcut, if it has one. See <xref linkend="overview" /> for information
    about the gutter.
   </para>
  </sect1>
@@ -858,7 +802,7 @@
   <sect2><title>Searching For Text</title>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find</guimenuitem> (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>F</keycap></keycombo>) displays
+    <keycap>C+f</keycap>) displays
     the search and replace dialog box.
    </para>
    <para>
@@ -921,13 +865,13 @@
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find Next</guimenuitem> (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>G</keycap></keycombo>) locates the
+    <keycap>C+g</keycap>) locates the
     next occurrence of the most recent search string without displaying the
     search and replace dialog box.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Find Previous</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>H</keycap></keycombo>)
+    (shortcut: <keycap>C+h</keycap>)
     locates the previous occurrence of the most recent search string without
     displaying the search and replace dialog box.
    </para>
@@ -1044,11 +988,7 @@
     match.
    </para>
    <para>
-    HyperSearch results are shown in a new window;
-    the window can be set to dock into the view
-    in the <guibutton>Docking</guibutton> pane of the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-    dialog box; see <xref linkend="docking" />.
+    By default, HyperSearch results are shown in a floating window. This window can be docked using the commands in its top-left corner popup menu; see <xref linkend="docking" />.
    </para>
    <para>
     If the <guibutton>Multiple results</guibutton> check box is selected in
@@ -1095,29 +1035,27 @@
     for details.
    </para>
    <para>
+    When the search and replace dialog box is opened, the directory and file name filter fields are set to their previous values. They can be set to match the current buffer's directory and file name extension by clicking <guibutton>Synchronize</guibutton>.
+   </para>
+   <para>
     Note that clicking the <guibutton>All Buffers</guibutton> or
     <guibutton>Directory</guibutton> radio buttons also selects the
     <guibutton>HyperSearch</guibutton> check box
     since that is what you would want, most of the time.
-    However, normal match-by-match searching is supported for multiple files as
-    well.
+    However, the <guibutton>HyperSearch</guibutton> check box can be unchecked, for stepping through search results in multiple files one at a time.
    </para>
    <para>
     Two convenience commands are provided for performing multiple file searches.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Search in Open
-    Buffers</guimenuitem> (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) displays
+    Buffers</guimenuitem> (shortcut: <keycap>C+e C+b</keycap>) displays
     the search dialog box and selects the <guibutton>All
     buffers</guibutton> button.
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Search in Directory</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo>) displays
+    (shortcut: <keycap>C+e C+d</keycap>) displays
     the search dialog box and selects the
     <guibutton>Directory</guibutton> button.
    </para>
@@ -1126,7 +1064,7 @@
    <para>
     The search bar feature provides a convenient way to search in the current
     buffer without
-    opening the search dialog box. The search bar does not support replacement or multiple file. Previously entered strings can be recalled in the
+    opening the search dialog box. The search bar does not support replacement or multiple file search. Previously entered strings can be recalled in the
     search bar with the <keycap>Up</keycap> and <keycap>Down</keycap> arrow
     keys; see <xref linkend="history" />.
    </para>
@@ -1139,7 +1077,7 @@
    </para>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search Bar</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>,</keycap></keycombo>)
+    (shortcut: <keycap>C+COMMA</keycap>)
     displays the search bar if necessary, and gives it keyboard focus.
     If this command is invoked while there is a selection, the selection is
     placed in the search string field.
@@ -1147,7 +1085,7 @@
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search
     for Word</guimenuitem>
-    (shortcut: <keycombo><keycap>Alt</keycap><keycap>,</keycap></keycombo>)
+    (shortcut: <keycap>A+COMMA</keycap>)
     behaves like the above command except it places the word at the caret in
     the search string field.
    </para>
@@ -1156,12 +1094,11 @@
     search bar will perform an <firstterm>incremental search</firstterm>.
     In incremental search mode, the first occurrence of the search
     string is located in the current buffer as it is being typed.
-    Pressing <keycap>Enter</keycap>
-    and <keycombo><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+    Pressing <keycap>ENTER</keycap> and <keycap>S+ENTER</keycap>
     searches for the next and previous occurrence, respectively.
-    Once the desired occurrence has been located, pressing <keycap>Escape</keycap>
+    Once the desired occurrence has been located, pressing <keycap>ESCAPE</keycap>
     returns keyboard focus to the text area. Unless the search bar is set to be
-    always visible (see above), pressing <keycap>Escape</keycap> will also hide
+    always visible (see above), pressing <keycap>ESCAPE</keycap> will also hide
     the search bar.
    </para>
    <note>
@@ -1174,7 +1111,7 @@
    </note>
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>HyperSearch Bar</guimenuitem>
-    (shortcut: <keycombo><keycap>Control</keycap><keycap>.</keycap></keycombo>)
+    (shortcut: <keycap>C+PERIOD</keycap>)
     displays the search bar if necessary, gives it keyboard focus,
     and selects the <guibutton>HyperSearch</guibutton> check box.
     If this command is invoked while there is a selection, the selected text
@@ -1188,7 +1125,7 @@
    <para>
     <guimenu>Search</guimenu>&gt;<guimenuitem>HyperSearch
     for Word</guimenuitem>
-    (shortcut: <keycombo><keycap>Alt</keycap><keycap>.</keycap></keycombo>)
+    (shortcut: <keycap>A+PERIOD</keycap>)
     performs a HyperSearch for the word at the caret. This command does not
     show the search bar or give it keyboard focus.
    </para>

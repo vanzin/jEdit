@@ -232,12 +232,11 @@ BufferLocalPropertiesDialog(view);
 <listitem>
 	<para><filename>Insert_Buffer_Properties.bsh</filename></para>
 	<abstract><para>
-	GUI for inserting Buffer Local properties into the current Buffer.
+	Inserts buffer-local properties into the current buffer.
 	</para></abstract>
 	<para>
-	A macro that provides a GUI for inserting Buffer Local properties 
-	for the current buffer into the current buffer.  If the buffer's 
-	mode as a line comment defined, or comment start and end properties
+	If the buffer's 
+	mode has a line comment defined, or comment start and end
 	defined, the inserted properties will be commented out.
 	</para>
 </listitem>

@@ -25,8 +25,8 @@ openContextMenu();
 <listitem>
     <para><filename>Open_Context_Menu.bsh</filename></para>
     <abstract><para>
-        Opens the editor context menu just below and to 
-		the right of the cursor.
+        Opens the text area context menu just below and to 
+		the right of the caret.
     </para></abstract>
 </listitem>
 

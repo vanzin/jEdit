@@ -33,9 +33,7 @@
 
   <para>
     <guimenu>Macros</guimenu>&gt;<guimenuitem>Record Macro</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>R</keycap></keycombo>) prompts
+    (shortcut: <keycap>C+m C+r</keycap>) prompts
     for a macro name and begins recording.
   </para>
 
@@ -60,8 +58,7 @@
 
   <para>
    <guimenu>Macros</guimenu>&gt;<guimenuitem>Stop Recording</guimenuitem>
-   (shortcut: <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) stops
+   (shortcut: <keycap>C+m C+s</keycap>) stops
    recording. It also switches to the buffer containing the recorded macro,
    giving you a chance to check over the recorded commands and make any
    necessary changes. When you are happy with the macro, save the buffer and it
@@ -83,9 +80,7 @@
   </para>
   <para>
    <guimenu>Macros</guimenu>&gt;<guimenuitem>Record Temporary
-   Macro</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>) begins
+   Macro</guimenuitem> (shortcut: <keycap>C+m C+m</keycap>) begins
    recording to a buffer named <filename>Temporary_Macro.bsh</filename>.
    Once recording of a temporary macro is complete, jEdit does not display
    the buffer containing the recorded commands, but the name
@@ -98,9 +93,7 @@
 
   <para>
    <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Temporary
-   Macro</guimenuitem> (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-   <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) plays
+   Macro</guimenuitem> (shortcut: <keycap>C+m C+p</keycap>) plays
    the macro recorded to the <filename>Temporary_Macro.bsh</filename> buffer.
   </para>
 
@@ -146,9 +139,7 @@
 
   <para>
     <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Last Macro</guimenuitem>
-    (shortcut:
-    <keycombo><keycap>Control</keycap><keycap>M</keycap></keycombo>
-    <keycombo><keycap>Control</keycap><keycap>L</keycap></keycombo>)
+    (shortcut: <keycap>C+m C+l</keycap>)
     runs the last macro run by jEdit again.
   </para>
 
