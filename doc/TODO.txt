@@ -34,9 +34,7 @@ it is done in most text editors
 - history text field tweak
 - optional dependencies
 - tall caret and tab
-- need timeouts for plugin manager list download.
 - printing: check default printer setting
-- vfs updates still broken
 - "downloading plugin list" label in plugin manager
 - new file: horiz scroll wrong
 - enter after a fold broken *AGAIN*
