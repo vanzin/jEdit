@@ -267,7 +267,10 @@ public class FileVFS extends VFS
 		} //}}}
 
 		File directory = new File(path);
-		File[] list = fsView.getFiles(directory,false);
+		File[] list = null;
+		if(directory.exists())
+			fsView.getFiles(directory,false);
+
 		if(list == null)
 		{
 			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);

@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to James Turk, Loren Charnley and Matthieu Casanova for
-contributing to this release.
+Thanks to James Turk, Loren Charnley, Matthieu Casanova and
+Nicholas O'Leary for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -31,6 +31,10 @@ contributing to this release.
 
 - Screen line management had an off-by-one error, so in some situations
   the vertical scroll bar state would become inconsistent.
+
+- Registers dockable window had a few problems (Nicholas O'Leary).
+
+- Word count would show -1 for an empty buffer
 
 }}}
 

@@ -137,9 +137,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 		if(entry.factory.name.equals(mostRecent))
 			mostRecent = null;
 
-		buttonPanel.remove(entry.btn);
-		buttons.remove(entry.btn);
-		entry.btn = null;
+		if(entry.btn != null)
+		{
+			buttonPanel.remove(entry.btn);
+			buttons.remove(entry.btn);
+			entry.btn = null;
+		}
 
 		dockables.remove(entry);
 		if(entry.win != null)

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2004 Nicholas O'Leary
+ * Copyright (C) 2004, 2005 Nicholas O'Leary
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,8 @@ public class RegisterViewer extends JPanel implements EBComponent
 
 		contentTextArea = new JTextArea(10,20);
 		contentTextArea.setEditable(true);
-		contentTextArea.getDocument().addDocumentListener(
-			new DocumentHandler());
+		documentHandler = new DocumentHandler();
+		contentTextArea.getDocument().addDocumentListener(documentHandler);
 
 		int orientation = JSplitPane.HORIZONTAL_SPLIT;
 		if (position.equals(DockableWindowManager.LEFT) ||
@@ -100,6 +100,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 	//{{{ Instance variables
 	private JList registerList;
 	private JTextArea contentTextArea;
+	private DocumentHandler documentHandler;
 	private View view;
 	private boolean editing;
 	//}}}
@@ -141,7 +142,9 @@ public class RegisterViewer extends JPanel implements EBComponent
 		else
 			registerList.setEnabled(true);
 
+		contentTextArea.getDocument().removeDocumentListener(documentHandler);
 		registerList.setSelectedIndex(index);
+		contentTextArea.getDocument().addDocumentListener(documentHandler);
 	} //}}}
 
 	//{{{ updateSelected
