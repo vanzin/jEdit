@@ -119,15 +119,19 @@ public class HelpViewer extends JFrame implements EBComponent
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		buttons.setBorder(new EmptyBorder(0,12,0,0));
-		back = new JButton(GUIUtilities.loadIcon("Back24.gif"));
-		back.setToolTipText(jEdit.getProperty("helpviewer.back"));
+		back = new JButton(GUIUtilities.loadIcon(
+			jEdit.getProperty("helpviewer.back.icon")));
+		back.setToolTipText(jEdit.getProperty("helpviewer.back.label"));
 		back.addActionListener(actionListener);
 		back.setRequestFocusEnabled(false);
+		back.setMargin(new Insets(0,0,0,0));
 		toolBar.add(back);
-		forward = new JButton(GUIUtilities.loadIcon("Forward24.gif"));
+		forward = new JButton(GUIUtilities.loadIcon(
+			jEdit.getProperty("helpviewer.forward.icon")));
 		forward.addActionListener(actionListener);
-		forward.setToolTipText(jEdit.getProperty("helpviewer.forward"));
+		forward.setToolTipText(jEdit.getProperty("helpviewer.forward.label"));
 		forward.setRequestFocusEnabled(false);
+		forward.setMargin(new Insets(0,0,0,0));
 		toolBar.add(forward);
 		back.setPreferredSize(forward.getPreferredSize());
 

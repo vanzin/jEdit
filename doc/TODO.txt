@@ -5,10 +5,12 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- minor quicknotepad changes -- update docs
 - fix fsb infinite requests problem
 - add documentation for pre1 features
 - focus problem with hypersearch in floating window?
 - problem with MARK_FOLLOWING
+- MARK_PREVIOUS at start of line
 
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
