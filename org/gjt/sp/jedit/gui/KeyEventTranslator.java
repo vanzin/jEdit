@@ -76,7 +76,7 @@ public class KeyEventTranslator
 				else
 				{
 					returnValue = new Key(
-						getModifierString(evt),
+						modifiersToString(modifiers),
 						'\0',Character.toLowerCase(
 						(char)keyCode));
 				}
@@ -87,7 +87,7 @@ public class KeyEventTranslator
 				{
 					evt.consume();
 					returnValue = new Key(
-						getModifierString(evt),
+						modifiersToString(modifiers),
 						keyCode,'\0');
 				}
 				else if(keyCode == KeyEvent.VK_SPACE)
@@ -103,14 +103,14 @@ public class KeyEventTranslator
 					else
 					{
 						returnValue = new Key(
-							getModifierString(evt),
+							modifiersToString(modifiers),
 							0,' ');
 					}
 				}
 				else
 				{
 					returnValue = new Key(
-						getModifierString(evt),
+						modifiersToString(modifiers),
 						keyCode,'\0');
 				}
 			}
@@ -129,34 +129,27 @@ public class KeyEventTranslator
 					return null;
 			}
 
-			boolean mod;
-			if(System.currentTimeMillis() -  KeyEventWorkaround
-				.lastKeyTime < 750)
+			int ignoreMods;
+			if(Debug.ALT_KEY_PRESSED_DISABLED)
 			{
-				int ignoreMods;
-				if(Debug.ALT_KEY_PRESSED_DISABLED)
-				{
-					/* on MacOS, A+ can be user input */
-					ignoreMods = (InputEvent.SHIFT_MASK
-						| InputEvent.ALT_GRAPH_MASK
-						| InputEvent.ALT_MASK);
-				}
-				else
-				{
-					/* on MacOS, A+ can be user input */
-					ignoreMods = (InputEvent.SHIFT_MASK
-						| InputEvent.ALT_GRAPH_MASK);
-				}
-
-				mod = ((KeyEventWorkaround.modifiers
-					& ~ignoreMods) != 0);
+				/* on MacOS, A+ can be user input */
+				ignoreMods = (InputEvent.SHIFT_MASK
+					| InputEvent.ALT_GRAPH_MASK
+					| InputEvent.ALT_MASK);
 			}
 			else
 			{
-				mod = false;
+				/* on MacOS, A+ can be user input */
+				ignoreMods = (InputEvent.SHIFT_MASK
+					| InputEvent.ALT_GRAPH_MASK);
 			}
 
-			if(mod)
+			boolean mod;
+			if((modifiers & InputEvent.ALT_GRAPH_MASK) != 0
+				&& System.currentTimeMillis()
+				-  KeyEventWorkaround.lastKeyTime < 750
+				&& (KeyEventWorkaround.modifiers & ~ignoreMods)
+				!= 0)
 			{
 				if(Debug.ALTERNATIVE_DISPATCHER)
 				{

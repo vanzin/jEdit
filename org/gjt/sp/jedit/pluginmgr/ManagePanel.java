@@ -111,6 +111,26 @@ public class ManagePanel extends JPanel
 	private JButton remove;
 	private JButton help;
 	private PluginManager window;
+
+	//{{{ showListConfirm() method
+	private int showListConfirm(String name, String[] args,
+		ListModel listModel)
+	{
+		JList list = new JList(listModel);
+		list.setVisibleRowCount(8);
+
+		Object[] message = {
+			jEdit.getProperty(name + ".message",args),
+			new JScrollPane(list)
+		};
+
+		return JOptionPane.showConfirmDialog(window,
+			message,
+			jEdit.getProperty(name + ".title"),
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE);
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -274,7 +294,7 @@ public class ManagePanel extends JPanel
 				PluginJAR jar = jEdit.getPluginJAR(entry.jar);
 				if(jar == null)
 				{
-					if(!value.equals(Boolean.TRUE))
+					if(value.equals(Boolean.FALSE))
 						return;
 
 					jEdit.addPluginJAR(entry.jar);
@@ -287,10 +307,25 @@ public class ManagePanel extends JPanel
 				}
 				else
 				{
-					if(!value.equals(Boolean.FALSE))
+					if(value.equals(Boolean.TRUE))
 						return;
 
-					unloadPluginJAR(jar);
+					String[] dependents = jar.getDependentPlugins();
+					DefaultListModel listModel = new DefaultListModel();
+
+					for(int i = 0;
+						i < dependents.length;
+						i++)
+					{
+						listModel.addElement(dependents[i]);
+					}
+
+					int button = showListConfirm(
+						"plugin-manager.dependency",
+						new String[] { jar.getFile()
+						.getName() },listModel);
+					if(button == JOptionPane.YES_OPTION)
+						unloadPluginJAR(jar);
 				}
 			}
 
@@ -434,20 +469,10 @@ public class ManagePanel extends JPanel
 				}
 			}
 
-			JList list = new JList(listModel);
-			list.setVisibleRowCount(8);
-
-			Object[] message = {
-				jEdit.getProperty("plugin-manager.remove-confirm.message"),
-				new JScrollPane(list)
-			};
-
-			int returnValue = JOptionPane.showConfirmDialog(window,
-				message,
-				jEdit.getProperty("plugin-manager.remove-confirm.title"),
-				JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-
-			if(returnValue == JOptionPane.YES_OPTION)
+			int button = showListConfirm(
+				"plugin-manager.remove-confirm",
+				null,listModel);
+			if(button == JOptionPane.YES_OPTION)
 			{
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();

@@ -2,6 +2,12 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre6
 
+{{{ Text Editing
+
+- Pressing TAB with a rectangular selection now inserts a tab at the
+  appropriate column, instead of shifting indent to the right.
+
+}}}
 {{{ Bug Fixes
 
 - Fixed problems with structure matching when soft wrap is on, if the
@@ -19,9 +25,19 @@ JEDIT 4.2 VERSION HISTORY
 
 - Batch mode didn't recognize @rem as a comment.
 
+- The multiple results toggle in the HyperSearch results window was not
+  being saved.
+
+- International keys should once again work on JVMs that send AltGR
+  sequences as Control+Alt (which is completely broken).
+
+- Buffer.getPriorNonEmptyLine() did not access segments properly. This
+  caused obscure problems with auto-indent.
+
 }}}
 
 }}}
+
 {{{ Version 4.2pre5
 
 Thanks to Ollie Rutherfurd, Peter Lundqvist and Silas Smith for
