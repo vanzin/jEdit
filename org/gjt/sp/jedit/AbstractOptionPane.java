@@ -147,7 +147,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
 		cons.gridheight = 1;
-		cons.gridwidth = 2;
+		cons.gridwidth = 1;
 		cons.weightx = 0.0f;
 		cons.insets = new Insets(1,0,1,0);
 		cons.fill = GridBagConstraints.BOTH;
@@ -155,7 +155,7 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		gridBag.setConstraints(comp1,cons);
 		add(comp1);
 
-		cons.gridx = 2;
+		cons.gridx = 1;
 		cons.weightx = 1.0f;
 		gridBag.setConstraints(comp2,cons);
 		add(comp2);
@@ -190,6 +190,9 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addSeparator(String label)
 	{
+		if(y != 0)
+			addComponent(Box.createVerticalStrut(6));
+
 		Box box = new Box(BoxLayout.X_AXIS);
 		Box box2 = new Box(BoxLayout.Y_AXIS);
 		box2.add(Box.createGlue());

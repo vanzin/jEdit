@@ -122,6 +122,7 @@ icons=AdjustWidth.png \
 	SaveAs.png \
 	SplitHorizontal.png \
 	SplitVertical.png \
+	Stop.png \
 	Undo.png \
 	UnSplit.png \
 	ZoomIn.png \
@@ -603,10 +604,13 @@ backspace.label=Delete Previous Character
 delete-word.label=Delete Next Word
 delete.label=Delete Next Character
 document-end.label=Go to End of Buffer
-document-home.label=Go to Beginning of Buffer
-end.label=End of Line
-home.label=Beginning of Line
+document-home.label=Go to Start of Buffer
+end.label=Smart End
+home.label=Smart Home
+hypersearch-results.label=HyperSearch Results
 insert-literal.label=Insert Next Character Literally
+line-end.label=Go to End of Line
+line-home.label=Go to Start of Line
 next-char.label=Go to Next Character
 next-line.label=Go to Next Line
 next-page.label=Go to Next Page
@@ -620,9 +624,11 @@ prev-paragraph.label=Go to Previous Paragraph
 prev-word.label=Go to Previous Word
 repeat.label=Repeat Next Command
 select-document-end.label=Select to End of Buffer
-select-document-home.label=Select to Beginning of Buffer
-select-end.label=Select to End of Line
-select-home.label=Select to Beginning of Line
+select-document-home.label=Select to Start of Buffer
+select-end.label=Select to Smart End Position
+select-home.label=Select to Smart Home Position
+select-line-end.label=Select to End of Line
+select-line-home.label=Select to Start of Line
 select-next-char.label=Select Next Character
 select-next-line.label=Select Next Line
 select-next-page.label=Select Next Page
@@ -633,7 +639,14 @@ select-prev-line.label=Select Previous Line
 select-prev-page.label=Select Previous Page
 select-prev-paragraph.label=Select Previous Paragraph
 select-prev-word.label=Select Previous Word
-hypersearch-results.label=HyperSearch Results
+select-visible-end.label=Select to Last Visible Line
+select-visible-home.label=Select to First Visible Line
+select-whitespace-end.label=Select to End of White Space
+select-whitespace-home.label=Select to Start of White Space
+visible-end.label=Go to Last Visible Line
+visible-home.label=Go to First Visible Line
+whitespace-end.label=Go to End of White Space
+whitespace-home.label=Go to Start of White Space
 #}}}
 
 #{{{ View stuff
@@ -1297,9 +1310,9 @@ options.general.showSplash=Show splash screen on startup
 options.appearance.label=Appearance
 options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
-options.appearance.primaryFont=Button, menu, label font:
-options.appearance.secondaryFont=List, tree, table, text field font:
-options.appearance.textColors=Use jEdit text area color scheme in all text \
+options.appearance.primaryFont=Button, menu and label font:
+options.appearance.secondaryFont=List and text field font:
+options.appearance.textColors=Use jEdit text area colors in all text \
 	components (experimental)
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
@@ -1308,17 +1321,19 @@ options.appearance.decorateDialogs=Draw dialog box borders using Swing look & fe
 #{{{ Text Area pane
 options.textarea.label=Text Area
 options.textarea.font=Text font:
-options.textarea.lineHighlight=Current line highlighting
-options.textarea.bracketHighlight=Bracket highlighting
-options.textarea.eolMarkers=End of line markers
-options.textarea.wrapGuide=Wrap guide
-options.textarea.blinkCaret=Blinking caret
-options.textarea.blockCaret=Block caret
+options.textarea.foreground=Text color:
+options.textarea.background=Background color:
+options.textarea.caret=Caret:
+options.textarea.blinkCaret=blinking
+options.textarea.blockCaret=block
+options.textarea.selection=Selection:
+options.textarea.lineHighlight=Highlight current line:
+options.textarea.bracketHighlight=Highlight matching bracket:
+options.textarea.eolMarkers=End of line markers:
+options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
-options.textarea.smartHome="Smart" home key
-options.textarea.smartEnd="Smart" end key
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
-options.textarea.joinNonWordChars=Double-click drag joins consecutive non-alphanumeric \
+options.textarea.joinNonWordChars=Double-click drag joins non-alphanumeric \
 	characters
 options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text (slow on some systems)
@@ -1328,14 +1343,21 @@ options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 
 #{{{ Gutter pane
 options.gutter.label=Gutter
+options.gutter.lineNumbers=Line numbering
 options.gutter.font=Gutter font:
+options.gutter.foreground=Line number color:
+options.gutter.background=Background color:
 options.gutter.borderWidth=Gutter border width:
 options.gutter.numberAlignment=Line number alignment:
-options.gutter.interval=Line highlight interval:
-options.gutter.lineNumbers=Line numbering
-options.gutter.currentLineHighlight=Current line highlighting
-options.gutter.bracketHighlight=Show bracket scope
-options.gutter.markerHighlight=Indicate marker positions
+options.gutter.interval-1=Highlight every\ 
+options.gutter.interval-2=lines:
+options.gutter.currentLineHighlight=Highlight current line:
+options.gutter.bracketHighlight=Show bracket scope:
+options.gutter.markerHighlight=Show marker positions:
+options.gutter.foldColor=Fold markers:
+options.gutter.focusBorderColor=Focused gutter border:
+options.gutter.noFocusBorderColor=Unfocused gutter border:
+options.gutter.actions=Mouse actions
 options.gutter.gutterClick=Click in gutter:
 options.gutter.gutterShiftClick=Shift-click in gutter:
 options.gutter.gutterControlClick=Control-click in gutter:
@@ -1343,31 +1365,6 @@ options.gutter.gutterAltClick=Alt-click in gutter:
 options.gutter.toggleFold=Collapse/expand fold
 options.gutter.toggleFoldFully=Collapse/expand fold fully
 options.gutter.selectFold=Select fold
-#}}}
-
-#{{{ Colors pane
-options.color.label=Colors
-options.color.object=Object
-options.color.color=Color
-options.color.bgColor=Text background
-options.color.fgColor=Text foreground
-options.color.caretColor=Caret
-options.color.selectionColor=Selection
-options.color.lineHighlightColor=Current line highlight
-options.color.bracketHighlightColor=Bracket highlight in text area
-options.color.eolMarkerColor=EOL markers
-options.color.wrapGuideColor=Wrap guide
-options.color.gutterBgColor=Gutter background
-options.color.gutterFgColor=Gutter foreground
-options.color.gutterHighlightColor=Gutter highlight
-options.color.gutterCurrentLineColor=Current line in gutter
-options.color.gutterBracketHighlightColor=Bracket highlight in gutter
-options.color.gutterMarkerColor=Markers in gutter
-options.color.gutterFoldColor=Fold markers in gutter
-options.color.gutterFocusBorderColor=Focused gutter border
-options.color.gutterNoFocusBorderColor=Unfocused gutter border
-options.color.memoryForegroundColor=Memory indicator foreground
-options.color.memoryBackgroundColor=Memory indicator background
 #}}}
 
 #{{{ Syntax Highlighting pane
@@ -1614,14 +1611,13 @@ helpviewer.forward.label=Forward
 helpviewer.forward.icon=ArrowR.png
 
 helpviewer.toc.welcome=Welcome to jEdit
-helpviewer.toc.misc=Miscellaneous Documentation
 helpviewer.toc.readme=Release Notes
 helpviewer.toc.news=What's New in jEdit 4.1
 helpviewer.toc.todo=To Do List and Known Bugs
 helpviewer.toc.changes=Version History
 helpviewer.toc.copying=GNU General Public License
 helpviewer.toc.copying-doc=GNU Free Documentation License
-helpviewer.toc.plugins=Plugin Documentation
+helpviewer.toc.plugins=Plugins
 #}}}
 
 #{{{ Tip of the day window
