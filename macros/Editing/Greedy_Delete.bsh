@@ -51,8 +51,11 @@ void greedyDelete(View view, boolean onlyFullTabs)
 			{
 				int toTabStop = (((col+tabSize)-1) % tabSize) + 1;
 				// don't wrap to next line
-				if(caret+toTabStop > lineEnd)
+				if(caret+toTabStop > lineEnd){
 					textArea.delete();
+					return;
+				}
+
 				int count = 0;
 				for(int i=0; i < toTabStop; i++)
 				{
