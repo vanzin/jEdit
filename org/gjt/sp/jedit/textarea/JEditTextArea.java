@@ -2021,7 +2021,7 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
-			finishCaretUpdate(doElectricScroll);
+			finishCaretUpdate(doElectricScroll,false);
 			return;
 		}
 
@@ -2060,7 +2060,7 @@ forward_scan:		do
 		caretLine = newCaretLine;
 
 		if(focusedComponent == this)
-			finishCaretUpdate(doElectricScroll);
+			finishCaretUpdate(doElectricScroll,true);
 	} //}}}
 
 	//{{{ getCaretPosition() method
@@ -5086,7 +5086,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * the collapsing of scrolling/event firing inside compound edits
 	 * greatly speeds up replace-all.
 	 */
-	private void finishCaretUpdate(final boolean doElectricScroll)
+	private void finishCaretUpdate(final boolean doElectricScroll,
+		final boolean fireCaretEvent)
 	{
 		Runnable r = new Runnable()
 		{
@@ -5095,7 +5096,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				queuedScrollTo = false;
 				scrollToCaret(doElectricScroll);
 				updateBracketHighlight();
-				fireCaretEvent();
+				if(fireCaretEvent)
+					fireCaretEvent();
 			}
 		};
 

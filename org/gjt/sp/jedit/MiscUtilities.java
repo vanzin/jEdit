@@ -422,6 +422,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		StringBuffer buf = new StringBuffer();
 		boolean backslash = false;
 		boolean insideGroup = false;
+		boolean insideNegativeLookahead = false;
 
 		for(int i = 0; i < glob.length(); i++)
 		{
@@ -450,17 +451,40 @@ loop:		for(int i = 0; i < str.length(); i++)
 				break;
 			case '{':
 				buf.append('(');
-				insideGroup = true;
+				if(i + 1 != glob.length() && glob.charAt(i + 1) == '!')
+				{
+					buf.append('?');
+					insideNegativeLookahead = true;
+				}
+				else
+					insideGroup = true;
 				break;
 			case ',':
 				if(insideGroup)
+				{
+					if(insideNegativeLookahead)
+					{
+						buf.append(").*");
+						insideNegativeLookahead = false;
+					}
 					buf.append('|');
+				}
 				else
 					buf.append(',');
 				break;
 			case '}':
-				buf.append(')');
-				insideGroup = false;
+				if(insideNegativeLookahead)
+				{
+					buf.append(").*");
+					insideNegativeLookahead = false;
+				}
+				else if(insideGroup)
+				{
+					buf.append(')');
+					insideGroup = false;
+				}
+				else
+					buf.append('}');
 				break;
 			default:
 				buf.append(c);
