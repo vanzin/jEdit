@@ -2,6 +2,11 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre9
 
+{{{ Scripting
+
+- Includes new "Create Get/Set Methods" macro (Thomas Galvin).
+
+}}}
 {{{ Bug Fixes
 
 - Horizontal scroll bar was not updated sometimes.
@@ -19,6 +24,16 @@ JEDIT 4.2 VERSION HISTORY
 - startup.bsh file was not included in installer bundle.
 
 - Fixed a performance problem with rollover buttons.
+
+- Pressing a shortcut that reads the next character from the keyboard
+  while a control other than the text area is focused will now shift
+  focus to the text area, and back again to the original control when
+  the key is pressed. This allows you to use commands like "Go to
+  marker" from the search bar, and so on.
+
+- Collapsing a folder node in the file system browser that is
+  immediately followed by an expanded folder node would remove all
+  columns from the view.
 
 }}}
 

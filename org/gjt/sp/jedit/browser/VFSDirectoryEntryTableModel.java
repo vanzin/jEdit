@@ -119,16 +119,16 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		{
 			Entry e = files[lastIndex];
 
+			if(e.level <= entry.level)
+				break;
+			else
+				lastIndex++;
+
 			if(e.expanded)
 			{
 				removeExtendedAttributes(VFSManager.getVFSForPath(
 					e.dirEntry.path));
 			}
-
-			if(e.level <= entry.level)
-				break;
-			else
-				lastIndex++;
 		}
 
 		removeExtendedAttributes(vfs);

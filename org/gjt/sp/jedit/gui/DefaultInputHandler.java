@@ -191,7 +191,8 @@ public class DefaultInputHandler extends InputHandler
 	 */
 	public boolean isPrefixActive()
 	{
-		return bindings != currentBindings;
+		return bindings != currentBindings
+			|| super.isPrefixActive();
 	} //}}}
 
 	//{{{ handleKey() method
