@@ -62,6 +62,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
 
+		/* Auto detect encoding */
+		encodingAutodetect = new JCheckBox(jEdit.getProperty(
+			"options.general.encodingAutodetect"));
+		encodingAutodetect.setSelected(jEdit.getBooleanProperty("buffer.encodingAutodetect"));
+		addComponent(encodingAutodetect);
+
 		/* Check mod status on focus */
 		String[] modCheckOptions = {
 			jEdit.getProperty("options.general.checkModStatus.nothing"),
@@ -185,6 +191,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.lineSeparator",lineSep);
 		jEdit.setProperty("buffer.encoding",(String)
 			encoding.getSelectedItem());
+		jEdit.setBooleanProperty("buffer.encodingAutodetect",(String)
+			encodingAutodetect.isSelected());
 		switch(checkModStatus.getSelectedIndex())
 		{
 		case 0:
@@ -217,6 +225,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JCheckBox encodingAutodetect;
 	private JComboBox checkModStatus;
 	private JTextField recentFiles;
 	private JCheckBox saveCaret;

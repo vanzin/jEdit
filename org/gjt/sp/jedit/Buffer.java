@@ -104,6 +104,12 @@ public class Buffer
 	public static final String ENCODING = "encoding";
 
 	/**
+	 * Should jEdit try to set the encoding based on a UTF8, UTF16 or
+	 * XML signature at the beginning of the file?
+	 */
+	public static final String ENCODING_AUTODETECT = "encodingAutodetect";
+
+	/**
 	 * This property is set to 'true' if the file has a trailing newline.
 	 * @since jEdit 4.0pre1
 	 */

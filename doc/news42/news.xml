@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!-- :folding=sidekick: -->
+
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
@@ -32,18 +34,13 @@
 
 		plugin options dialog
 		
-		text area scrolls by screen lines, fold end in gutter, 
+		text area scrolls by screen lines, 
 		
 		deep indent
 		
-		new token types; better background colors for delegates; SPAN_REGEXP substitution, NO_ESCAPE spans, 15 new modes!
-
-		better docking, better status, action bar, repeat last action,
-		persistent splits
+		better status, action bar
 		
 		fs browser table, better completion, favorite files, utilities->favorites, symlink behavior change
-		
-		beanshell 1.3, more macros
 		
 		new cli options
 		
@@ -53,10 +50,27 @@
 		better control over file reload, 
 	</para>
 	
+	<sect2><title>User Interface</title>
+	
+	<para>
+	 jEdit now saves the configuration of open views between sessions; this includes including their position, size and any splits. This information is stored in the <filename>perspective.xml</filename> file in the settings directory.
+	</para>
+
+	<para>
+	 Dockable windows can now be moved between panes without having to open the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box. Just right-click on the dockable window's button, or for floating windows, click the small triangle in the top left corner of the window. In both cases this displays a menu where you can pick a new docking location for the window.
+	</para>
+
+	<para>
+	 A new <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Last Action</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>Space</keycap></keycombo>) repeats the most recently invoked command.
+	</para>
+
+	</sect2>
+	
 	<sect2><title>Text Editing</title>
 	
 	<para>
 	 Drag and drop of text is now supported in the text area; it can be disabled in the <guimenuitem>Mouse</guimenuitem> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
+	</para>
 
 	<para>
 	 The <guimenu>Edit</guimenu>&gt;<guimenuitem>Complete Word</guimenuitem> command (shortcut:  <keycombo><keycap>Control</keycap><keycap>B</keycap></keycombo>) now looks in all visible buffers for completions.
@@ -64,7 +78,7 @@
 
 	<para>
 	 <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Vertical Paste</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering chracters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection caw now act like a <quote>tall caret</quote>.
+	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering characters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection caw now act like a <quote>tall caret</quote>.
 	</para>
 	
 	<para>
@@ -81,15 +95,42 @@
 	</para>
 
 	<para>
-	 The limit of 8 text areas editing a single buffer has been lifted.
+	 The limit of 8 text areas editing a single buffer has been removed.
 	</para>
 
 	<para>
 	 Fold start lines are now colored according to their nesting level in the text area. The colors can be customized in the <guilabel>Syntax Highlighting</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box. <keycap>Alt</keycap>-clicking on a fold in the gutter (or clicking with the middle mouse button) now narrows to that fold.
 	</para>
 
-	<para>
-	 
+	</sect2>
+
+	<sect2><title>Syntax Highlighting</title>
+	 <para>
+	  19 new syntax highlighting modes were added, and many existing ones were enhanced.
+	 </para>
+	 <para>
+	  The following new token types were added:
+	 </para>
+	 <itemizedlist>
+	 <listitem><para>COMMENT3</para></listitem>
+	 <listitem><para>COMMENT4</para></listitem>
+	 <listitem><para>LITERAL3</para></listitem>
+	 <listitem><para>LITERAL4</para></listitem>
+	 <listitem><para>KEYWORD4</para></listitem>
+	 </itemizedlist>
+	 <para>
+	  Any capture groups defined in the <literal>SPAN_REGEXP</literal>
+	  element's <literal>BEGIN</literal> child are now substituted into the <literal>END</literal> child for matching purposes. This allows here-docs in langauges such as Perl to be highlighted correctly.
+	 </para>
+	 <para>
+	  A new <literal>NO_ESCAPE</literal> attribute has been added to the <literal>SPAN</literal> and <literal>SPAN_REGEXP</literal> elements.
+	 </para>
+	 <para>
+	  A new <literal>IMPORT</literal> rule causes the current ruleset to inherit the rules from the given ruleset.
+	 </para>
+	 <para>
+	  A background color defined for a ruleset's default token type now takes effect on tokens that appear inside this ruleset for which no explicit background color is defined.
+	 </para>
 	</sect2>
 
 	<sect2><title>File Encodings</title>
@@ -102,20 +143,15 @@
 
 	</sect1>
 	
-	<sect1 id="scripting-api-changes"><title>BeanShell Scripting API</title>
+	<sect1 id="scripting-api-changes"><title>BeanShell Scripting</title>
 	
 	<para>
-		This section outlines a few enhancements to jEdit's integrated
-		BeanShell interpreter. Also see <xref linkend="common-api-changes"/>.
-	</para>
-	<para>
-		A new preset BeanShell variable, <varname>wm</varname> is set to the
-		<function>view.getDockableWindowManager()</function>.
+		Some new macros are included in the distribution.
 	</para>
 
 	<para>
-		BeanShell has been updated from version 1.2b7 to 1.3a1. The
-		changes in stock BeanShell 1.3a1 from 1.2b7 include improved
+		BeanShell has been updated from version 1.2b7 to 1.3.1. The
+		new release of BeanShell brings better
 		error reporting, improved performance, and various fixes.
 	</para>
 
@@ -124,6 +160,12 @@
 		BeanShell version; they will eventually be merged back into
 		the main BeanShell source tree.
 	</para>
+
+	<para>
+		A new preset BeanShell variable, <varname>wm</varname> is set to the
+		<function>view.getDockableWindowManager()</function>.
+	</para>
+
 
 	<para>
 		Previously plugins that wanted to provide BeanShell scripting

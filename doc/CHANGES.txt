@@ -98,6 +98,13 @@ JEDIT 4.2 VERSION HISTORY
   prematurely so the invisible line would be visible, and trying to
   move the caret to it would throw exceptions.
 
+- GZipped files were not being loaded correctly.
+
+- Opening an XML file that specified an invalid encoding name in the
+  <?xml?> processing instruction would throw an exception. Now, XML
+  files that specify an invalid encoding are opened with the default
+  encoding.
+
 }}}
 {{{ API Changes
 
