@@ -327,6 +327,18 @@ public class BufferOptions extends EnhancedDialog
 
 		buffer.propertiesChanged();
 
+		View[] views = jEdit.getViews();
+		for(int i = 0; i < views.length; i++)
+		{
+			EditPane[] panes = views[i].getEditPanes();
+			for(int j = 0; j < panes.length; j++)
+			{
+				EditPane pane = panes[j];
+				if(pane.getBuffer() == buffer)
+					pane.getTextArea().propertiesChanged();
+			}
+		}
+
 		dispose();
 	} //}}}
 
