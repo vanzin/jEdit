@@ -1134,6 +1134,11 @@ already-recording.title=Already Recording
 already-recording.message=A macro recording is already in progress.
 #}}}
 
+#{{{ No temporary macro dialog
+no-temp-macro.title=No Temporary Macro
+no-temp-macro.message=No temporary macro has been recorded.
+#}}}
+
 #{{{ Record macro dialog
 record.title=Record Macro
 record.message=Macro name:

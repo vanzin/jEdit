@@ -6130,11 +6130,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			} //}}}
 
-			// ... otherwise,buffer will call transactionComplete()
-			// later on
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
-
 			if(caret >= start)
 			{
 				int scrollMode = (caretAutoScroll()
@@ -6199,10 +6194,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				// will update bracket highlight
 				moveCaretPosition(caret,scrollMode);
 			}
-
-			// ... otherwise, it will be called by the buffer
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
 		}
 		//}}}
 

@@ -1235,6 +1235,7 @@ public class Buffer
 
 		try
 		{
+			setFlag(TRANSACTION,true);
 			writeLock();
 
 			if(offset < 0 || length < 0
@@ -1261,10 +1262,15 @@ public class Buffer
 
 			fireContentRemoved(startLine,offset,numLines,length);
 
+			/* otherwise it will be delivered later */
+			if(!getFlag(UNDO_IN_PROGRESS) && !insideCompoundEdit())
+				fireTransactionComplete();
+
 			setDirty(true);
 		}
 		finally
 		{
+			setFlag(TRANSACTION,false);
 			writeUnlock();
 		}
 	} //}}}
@@ -1360,7 +1366,9 @@ public class Buffer
 	 */
 	public boolean isTransactionInProgress()
 	{
-		return getFlag(UNDO_IN_PROGRESS) || insideCompoundEdit();
+		return getFlag(TRANSACTION)
+			|| getFlag(UNDO_IN_PROGRESS)
+			|| insideCompoundEdit();
 	} //}}}
 
 	//{{{ beginCompoundEdit() method
@@ -3027,7 +3035,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			else
 				lineMgr.setFirstInvalidFoldLevel(line + 1);
 
-			if(changed && !getFlag(INSIDE_INSERT))
+			if(changed && !getFlag(TRANSACTION))
 			{
 				//System.err.println("fold level changed: " + start + ":" + line);
 				fireFoldLevelChanged(firstInvalidFoldLevel,line);
@@ -3597,7 +3605,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private static final int READ_ONLY_OVERRIDE = 8;
 	private static final int UNDO_IN_PROGRESS = 9;
 	private static final int TEMPORARY = 10;
-	private static final int INSIDE_INSERT = 11;
+	private static final int TRANSACTION = 11;
 	//}}}
 
 	private int flags;
@@ -4084,7 +4092,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		try
 		{
-			setFlag(INSIDE_INSERT,true);
+			setFlag(TRANSACTION,true);
 
 			int startLine = lineMgr.getLineOfOffset(offset);
 			int numLines = endOffsets.getSize();
@@ -4096,11 +4104,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 			setDirty(true);
 
 			if(!getFlag(LOADING))
+			{
 				fireContentInserted(startLine,offset,numLines,length);
+
+				if(!getFlag(UNDO_IN_PROGRESS)
+					&& !insideCompoundEdit())
+				{
+					fireTransactionComplete();
+				}
+			}
+
 		}
 		finally
 		{
-			setFlag(INSIDE_INSERT,false);
+			setFlag(TRANSACTION,false);
 		}
 	} //}}}
 

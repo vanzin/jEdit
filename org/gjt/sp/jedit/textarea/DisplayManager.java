@@ -1465,9 +1465,6 @@ loop:		for(;;)
 
 				lastfvmget = -1;
 			}
-
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
 		} //}}}
 
 		//{{{ preContentRemoved() method
@@ -1524,19 +1521,8 @@ loop:		for(;;)
 				lastfvmget = -1;
 				fvmdump();
 			}
-		} //}}}
-
-		//{{{ contentRemoved() method
-		public void contentRemoved(Buffer buffer, int startLine,
-			int offset, int numLines, int length)
-		{
-			if(!buffer.isLoaded())
-				return;
 
 			delayedUpdate(startLine,startLine);
-
-			if(!buffer.isTransactionInProgress())
-				transactionComplete(buffer);
 		} //}}}
 
 		//{{{ transactionComplete() method
