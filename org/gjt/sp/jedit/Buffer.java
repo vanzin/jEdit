@@ -135,7 +135,7 @@ public class Buffer
 	{
 		if(getFlag(DIRTY))
 		{
-			String[] args = { name };
+			String[] args = { path };
 			int result = GUIUtilities.confirm(view,"changedreload",
 				args,JOptionPane.YES_NO_OPTION,
 				JOptionPane.WARNING_MESSAGE);

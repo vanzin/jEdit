@@ -36,18 +36,18 @@ echo doc/api/resources/inherit.gif >> installer/jedit-api
 print_size jedit-api
 
 # jedit-windows fileset
-echo jeshlstb.dl_ > installer/jedit-windows
-echo ltslog.dll >> installer/jedit-windows
-echo jeditsrv.exe >> installer/jedit-windows
-echo jedit.exe >> installer/jedit-windows
-echo jedinit.exe >> installer/jedit-windows
-echo unlaunch.exe >> installer/jedit-windows
-echo jedinstl.dll >> installer/jedit-windows
-echo jeservps.dll >> installer/jedit-windows
-echo jedidiff.exe >> installer/jedit-windows
-echo jEdit_IE.reg.txt >> installer/jedit-windows
-
-print_size jedit-windows
+#echo jeshlstb.dl_ > installer/jedit-windows
+#echo ltslog.dll >> installer/jedit-windows
+#echo jeditsrv.exe >> installer/jedit-windows
+#echo jedit.exe >> installer/jedit-windows
+#echo jedinit.exe >> installer/jedit-windows
+#echo unlaunch.exe >> installer/jedit-windows
+#echo jedinstl.dll >> installer/jedit-windows
+#echo jeservps.dll >> installer/jedit-windows
+#echo jedidiff.exe >> installer/jedit-windows
+#echo jEdit_IE.reg.txt >> installer/jedit-windows
+#
+#print_size jedit-windows
 
 # jedit-mac fileset
 echo jars/MacOS.jar > installer/jedit-mac

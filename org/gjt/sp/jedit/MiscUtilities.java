@@ -810,7 +810,10 @@ loop:		for(int i = 0; i < str.length(); i++)
 				buf.append(".*");
 				break;
 			case '|':
-				buf.append("\\|");
+				if(backslash)
+					buf.append("\\|");
+				else
+					buf.append('|');
 				break;
 			case '{':
 				buf.append('(');

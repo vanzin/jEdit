@@ -40,20 +40,20 @@ comp.2.disk-size=9704
 comp.2.real-size=8958
 comp.2.fileset=jedit-api
 
-comp.3.name=Windows desktop integration (jEditLauncher)
-comp.3.disk-size=400
-comp.3.real-size=361
-comp.3.fileset=jedit-windows
-comp.3.os=Windows
+#comp.3.name=Windows desktop integration (jEditLauncher)
+#comp.3.disk-size=400
+#comp.3.real-size=361
+#comp.3.fileset=jedit-windows
+#comp.3.os=Windows
 
-comp.4.name=MacOS desktop integration
-comp.4.disk-size=36
-comp.4.real-size=32
-comp.4.fileset=jedit-mac
-comp.4.os=MacOS
+comp.3.name=MacOS desktop integration
+comp.3.disk-size=36
+comp.3.real-size=32
+comp.3.fileset=jedit-mac
+comp.3.os=MacOS
 
-comp.5.name=OS/2 start script
-comp.5.disk-size=4
-comp.5.real-size=2
-comp.5.fileset=jedit-os2
-comp.5.os=HalfAnOS
+comp.4.name=OS/2 start script
+comp.4.disk-size=4
+comp.4.real-size=2
+comp.4.fileset=jedit-os2
+comp.4.os=HalfAnOS

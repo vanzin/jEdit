@@ -2,11 +2,31 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre14
 
-Thanks to Rob Watson for contributing to this release.
+Thanks to Ollie Rutherfurd and Rob Watson for contributing to this
+release.
 
+{{{ Platform-Specific Changes
+
+- jEditLauncher no longer included due to a large number of bugs, and
+  the fact that it is unmaintained.
+
+}}}
 {{{ Syntax Highlighting
 
 - PL/I syntax highlighting (Rob Watson).
+
+- Embperl syntax highlighting (Ollie Rutherfurd).
+
+- reStructuredText syntax highligting (Ollie Rutherfurd).
+
+}}}
+{{{ Bug Fixes
+
+- Fix exceptions being thrown if the text area has a negative height.
+
+- "File Changed Since Save" warning on Reload now has the buffer name,
+  to make it clear which buffer is being reloaded.
+
 }}}
 
 }}}
