@@ -1599,6 +1599,17 @@ public class jEdit
 	/**
 	 * Saves all open buffers.
 	 * @param view The view
+	 * @since jEdit 4.2pre1
+	 */
+	public static void saveAllBuffers(View view)
+	{
+		saveAllBuffers(view,jEdit.getBooleanProperty("confirm.save-all"));
+	} //}}}
+
+	//{{{ saveAllBuffers() method
+	/**
+	 * Saves all open buffers.
+	 * @param view The view
 	 * @param confirm If true, a confirmation dialog will be shown first
 	 * @since jEdit 2.7pre2
 	 */

@@ -90,6 +90,8 @@ firewall.enabled=false
 # Keep dialog on by default
 search.keepDialog.toggle=true
 
+# Confirm dialogs
+confirm.save-all=true
 #}}}
 
 #{{{ Buffer settings
@@ -316,6 +318,7 @@ view.status.show-fold-mode=true
 view.status.show-encoding=true
 view.status.show-wrap=true
 view.status.show-multi-select=true
+view.status.show-rect-select=true
 view.status.show-overwrite=true
 view.status.show-line-seperator=true
 view.status.show-memory=true

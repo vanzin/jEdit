@@ -90,6 +90,13 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			"view.status.show-multi-select"));
 		addComponent(showMultiSelect);
 
+		/* Rect select */
+		showRectSelect = new JCheckBox(jEdit.getProperty(
+			"options.status.show-rect-select"));
+		showRectSelect.setSelected(jEdit.getBooleanProperty(
+			"view.status.show-rect-select"));
+		addComponent(showRectSelect);
+
 		/* Overwrite */
 		showOverwrite = new JCheckBox(jEdit.getProperty(
 			"options.status.show-overwrite"));
@@ -144,6 +151,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			showWrap.isSelected());
 		jEdit.setBooleanProperty("view.status.show-multi-select",
 			showMultiSelect.isSelected());
+		jEdit.setBooleanProperty("view.status.show-rect-select",
+			showRectSelect.isSelected());
 		jEdit.setBooleanProperty("view.status.show-overwrite",
 			showOverwrite.isSelected());
 		jEdit.setBooleanProperty("view.status.show-line-seperator",
@@ -164,6 +173,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private JCheckBox showEncoding;
 	private JCheckBox showWrap;
 	private JCheckBox showMultiSelect;
+	private JCheckBox showRectSelect;
 	private JCheckBox showOverwrite;
 	private JCheckBox showLineSeperator;
 	private JCheckBox showMemory;
@@ -179,6 +189,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		showEncoding.setEnabled(enabled);
 		showWrap.setEnabled(enabled);
 		showMultiSelect.setEnabled(enabled);
+		showRectSelect.setEnabled(enabled);
 		showOverwrite.setEnabled(enabled);
 		showLineSeperator.setEnabled(enabled);
 		showMemory.setEnabled(enabled);

@@ -360,6 +360,8 @@ public class JEditTextArea extends JComponent
 		if(firstLine == displayManager.getFirstLine())
 			return;
 
+		trace = new Exception();
+
 		displayManager.setFirstLine(firstLine);
 
 		maxHorizontalScrollWidth = 0;
@@ -3498,7 +3500,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		if(view.getStatus() != null)
 		{
 			view.getStatus().setMessageAndClear(
-				jEdit.getProperty("view.status.rect-select",
+				jEdit.getProperty("view.status.rect-select-changed",
 				new Integer[] { new Integer(rectangularSelectionMode ? 1 : 0) }));
 		}
 	} //}}}
@@ -5268,7 +5270,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ updateBracketHighlight() method
 	private void updateBracketHighlight()
 	{
-		if(!painter.isBracketHighlightEnabled())
+		if(!painter.isBracketHighlightEnabled()
+			&& !gutter.isBracketHighlightEnabled())
 			return;
 
 		int offset = caret - getLineStartOffset(caretLine);
