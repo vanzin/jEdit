@@ -1,11 +1,9 @@
 TO DO
 
-- wait for John to release an updated get_package_name macro
-- wait for John to import jEditLauncher
-- send out JARClassLoader, NameSpace, Interpreter changes
-
 + features:
 
+- different prompts on setting/going to markers
+- different prompts for different register commands
 - search and replace: scroll text area so selection is visible despite
   dialog position
 - maybe use JavaHelp for help, because it has some nice features, like

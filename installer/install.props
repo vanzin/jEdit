@@ -20,8 +20,8 @@ app.main.class=org.gjt.sp.jedit.jEdit
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=2136
-comp.0.real-size=1999
+comp.0.disk-size=2164
+comp.0.real-size=2025
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
@@ -35,8 +35,8 @@ comp.2.real-size=13
 comp.2.fileset=jedit-firewall
 
 comp.3.name=Windows launcher and context menu addition (Windows only)
-comp.3.disk-size=260
-comp.3.real-size=260
+comp.3.disk-size=264
+comp.3.real-size=264
 comp.3.fileset=jedit-windows
 comp.3.os=Windows
 
