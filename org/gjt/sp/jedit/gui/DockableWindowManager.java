@@ -1520,8 +1520,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			int leftWidth = _left.width;
 			int rightWidth = _right.width;
 
-			Dimension closeBoxSize = ((Container)topButtons)
-				.getComponent(0).getPreferredSize();
+			Dimension closeBoxSize;
+			if(((Container)topButtons).getComponentCount() == 0)
+				closeBoxSize = new Dimension(0,0);
+			else
+			{
+				closeBoxSize = ((Container)topButtons)
+					.getComponent(0).getPreferredSize();
+			}
+
 			int closeBoxWidth = Math.max(closeBoxSize.width,
 				closeBoxSize.height) + 1;
 

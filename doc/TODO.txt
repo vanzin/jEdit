@@ -3,6 +3,13 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+java.lang.StringIndexOutOfBoundsException: String index out of range: -7
+	at java.lang.String.substring(String.java:1444)
+	at java.lang.String.substring(String.java:1411)
+	at org.gjt.sp.jedit.gui.CompleteWord.completeWord(CompleteWord.java:81)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.
+
 - in search bar, C+y a doesn't work
 - printing: check default printer setting
 - still broken: https://sourceforge.net/tracker/?func=detail&atid=100588&aid=831264&group_id=588

@@ -45,6 +45,8 @@ contributing to this release.
 - Fixed a performance regression -- the entire text area was being
   repainted on every edit.
 
+- apacheconf.xml in 4.2pre7 distribution was corrupted.
+
 }}}
 
 }}}

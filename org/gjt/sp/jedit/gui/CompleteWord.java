@@ -52,7 +52,7 @@ public class CompleteWord extends JWindow
 
 		KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
 		String noWordSep = getNonAlphaNumericWordChars(
-			buffer,keywordMap,caret);
+			buffer,keywordMap);
 		String word = getWordToComplete(buffer,caretLine,
 			caret,noWordSep);
 		if(word == null)
@@ -190,7 +190,7 @@ public class CompleteWord extends JWindow
 
 	//{{{ getNonAlphaNumericWordChars() method
 	private static String getNonAlphaNumericWordChars(Buffer buffer,
-		KeywordMap keywordMap, int caret)
+		KeywordMap keywordMap)
 	{
 		// figure out what constitutes a word character and what
 		// doesn't
@@ -241,6 +241,11 @@ public class CompleteWord extends JWindow
 			.StringICaseCompare());
 		Set buffers = new HashSet();
 
+		// only complete current buffer's keyword map
+		KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
+		String noWordSep = getNonAlphaNumericWordChars(
+			buffer,keywordMap);
+
 		View views = jEdit.getFirstView();
 		while(views != null)
 		{
@@ -254,18 +259,13 @@ public class CompleteWord extends JWindow
 				buffers.add(b);
 
 				// only complete current buffer's keyword map
-				KeywordMap keywordMap;
+				KeywordMap _keywordMap;
 				if(b == buffer)
-				{
-					keywordMap = b.getKeywordMapAtOffset(
-						caret);
-				}
+					_keywordMap = keywordMap;
 				else
-					keywordMap = null;
+					_keywordMap = null;
 
 				int offset = (b == buffer ? caret : 0);
-				String noWordSep = getNonAlphaNumericWordChars(
-					b,keywordMap,offset);
 
 				getCompletions(b,word,keywordMap,noWordSep,
 					offset,completions);
