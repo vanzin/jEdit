@@ -1,5 +1,8 @@
 TO DO
 
+- space-saving gutter
+- soft wrap buggy
+- bracket matching and soft wrap
 - C+END: no scroll horiz
 - drag and up and down should not need setFirstLine() stupidity
 - home/end should not need scrollToCaret()

@@ -41,8 +41,9 @@ JEDIT 4.0 VERSION HISTORY
 - jEdit's build.xml now automatically detects if it is running on Java
   version 1.4, and doesn't build the Java14.java otherwise
 - Optimized text area's buffer event handler -- this should result in
-  much faster 'Replace All'; more than 40 times faster in the worst
-  case!
+  faster 'Replace All'
+- Addition to jEdit's glob syntax: "{!glob}" is converted to the
+  regular expression "(?!glob).*"
 
 + Bug Fixes
 

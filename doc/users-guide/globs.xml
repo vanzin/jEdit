@@ -13,6 +13,9 @@
  <itemizedlist>
   <listitem><para><literal>?</literal> matches any one character</para></listitem>
   <listitem><para><literal>*</literal> matches any number of characters</para></listitem>
+  <listitem><para><literal>{!<replaceable>glob</replaceable>}</literal>
+  Matches anything that <emphasis>does not</emphasis> match
+  <replaceable>glob</replaceable></para></listitem>
   <listitem><para><literal>{<replaceable>a</replaceable>,<replaceable>b</replaceable>,<replaceable>c</replaceable>}</literal>
   matches any one of <replaceable>a</replaceable>, <replaceable>b</replaceable> or
   <replaceable>c</replaceable></para></listitem>
