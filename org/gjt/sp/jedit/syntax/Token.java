@@ -1,6 +1,9 @@
 /*
- * Token.java - Generic token
- * Copyright (C) 1998, 1999, 2000 Slava Pestov
+ * Token.java - Syntax token
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,17 +22,14 @@
 package org.gjt.sp.jedit.syntax;
 
 /**
- * A linked list of tokens. Each token has four fields - a token
- * identifier, which can be mapped to a color or font style for
- * painting, a length value which is the length of the token in the
- * text, and pointers to the previous and next tokens in the list,
- * respectively.
+ * A linked list of syntax tokens.
  *
  * @author Slava Pestov
  * @version $Id$
  */
 public class Token
 {
+	//{{{ Token types
 	public static final byte NULL = 0;
 	public static final byte COMMENT1 = 1;
 	public static final byte COMMENT2 = 2;
@@ -43,12 +43,13 @@ public class Token
 	public static final byte MARKUP = 10;
 	public static final byte OPERATOR = 11;
 	public static final byte DIGIT = 12;
-	public static final byte INVALID = 13;
+	public static final byte INVALID = 13; //}}}
 
 	public static final byte ID_COUNT = 14;
 
 	public static final byte END = 127;
 
+	//{{{ Instance variables
 	/**
 	 * The length of this token.
 	 */
@@ -60,6 +61,11 @@ public class Token
 	public byte id;
 
 	/**
+	 * The rule set of this token.
+	 */
+	public ParserRuleSet rules;
+
+	/**
 	 * The previous token in the linked list.
 	 * @since jEdit 2.6pre1
 	 */
@@ -69,23 +75,28 @@ public class Token
 	 * The next token in the linked list.
 	 */
 	public Token next;
+	//}}}
 
+	//{{{ Token constructor
 	/**
 	 * Creates a new token.
 	 * @param length The length of the token
 	 * @param id The id of the token
+	 * @param rules The parser rule set that generated this token
 	 */
-	public Token(int length, byte id)
+	public Token(int length, byte id, ParserRuleSet rules)
 	{
 		this.length = length;
 		this.id = id;
-	}
+		this.rules = rules;
+	} //}}}
 
+	//{{{ toString() method
 	/**
 	 * Returns a string representation of this token.
 	 */
 	public String toString()
 	{
 		return "[id=" + id + ",length=" + length + "]";
-	}
+	} //}}}
 }

@@ -44,6 +44,8 @@ public class ErrorListDialog extends EnhancedDialog
 			this.path = path;
 
 			String message = jEdit.getProperty(messageProp,args);
+			if(message == null)
+				message = "Undefined property: " + messageProp;
 
 			Vector tokenizedMessage = new Vector();
 			int lastIndex = -1;

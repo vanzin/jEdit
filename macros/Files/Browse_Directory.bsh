@@ -28,12 +28,7 @@ void browseDirectory()
 {
 	path = Macros.input(view,"Directory to browse:");
 	if(path != null)
-	{
-		manager = view.getDockableWindowManager();
-		manager.addDockableWindow("vfs.browser");
-		browser = manager.getDockable("vfs.browser");
-		browser.setDirectory(path);
-	}
+		VFSBrowser.browseDirectory(view,path);
 }
 
 browseDirectory();

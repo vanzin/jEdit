@@ -57,18 +57,7 @@ public class CurrentDirectoryMenu extends EnhancedMenu
 			{
 				public void actionPerformed(ActionEvent evt)
 				{
-					DockableWindowManager wm = view.getDockableWindowManager();
-					wm.addDockableWindow(VFSBrowser.NAME);
-
-					final VFSBrowser browser = (VFSBrowser)wm.getDockable(VFSBrowser.NAME);
-					VFSManager.runInAWTThread(new Runnable()
-					{
-						public void run()
-						{
-							if(!browser.getDirectory().equals(path))
-								browser.setDirectory(path);
-						}
-					});
+					VFSBrowser.browseDirectory(view,path);
 				}
 			}); //}}}
 

@@ -150,6 +150,11 @@
      Backups can optionally be saved in a specified backup directory, instead of
      the directory of the original file. This can reduce clutter
     </para></listitem>
+    <listitem><para>
+     Backups can also optionally be created every time a buffer is saved;
+     as mentioned above, the default is to only create a backup the first
+     time a buffer is saved after being opened.
+    </para></listitem>
    </itemizedlist>
    <para>
     The above features can be configured
@@ -364,6 +369,15 @@
     This text fields remembers previously entered strings;
     see <xref linkend="history" />.
    </para>
+   <tip>
+    <para>
+     The file list sorting algorithm used in jEdit handles numbers in file names
+     in an intelligent manner. For example, a file named
+     <filename>section10.xml</filename> will be placed after a file named
+     <filename>section5.xml</filename>. A conventional letter-by-letter
+     sort would have placed these two files in the wrong order.
+    </para>
+   </tip>
   </sect2>
   <sect2><title>The Commands Menu</title>
    <para>

@@ -1,5 +1,8 @@
 /*
  * DefaultInputHandler.java - Default implementation of an input handler
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.KeyStroke;
 import java.awt.event.*;
 import java.awt.Toolkit;
@@ -26,6 +30,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * The default input handler. It maps sequences of keystrokes into actions
@@ -35,6 +40,7 @@ import org.gjt.sp.util.Log;
  */
 public class DefaultInputHandler extends InputHandler
 {
+	//{{{ DefaultInputHandler constructor
 	/**
 	 * Creates a new input handler with no key bindings defined.
 	 * @param view The view
@@ -44,8 +50,9 @@ public class DefaultInputHandler extends InputHandler
 		super(view);
 
 		bindings = currentBindings = new Hashtable();
-	}
+	} //}}}
 
+	//{{{ DefaultInputHandler constructor
 	/**
 	 * Creates a new input handler with the same set of key bindings
 	 * as the one specified. Note that both input handlers share
@@ -59,8 +66,9 @@ public class DefaultInputHandler extends InputHandler
 		super(view);
 
 		bindings = currentBindings = copy.bindings;
-	}
+	} //}}}
 
+	//{{{ addKeyBinding() method
 	/**
 	 * Adds a key binding to this input handler. The key binding is
 	 * a list of white space separated key strokes of the form
@@ -96,8 +104,9 @@ public class DefaultInputHandler extends InputHandler
 			else
 				current.put(keyStroke,action);
 		}
-	}
+	} //}}}
 
+	//{{{ removeKeyBinding() method
 	/**
 	 * Removes a key binding from this input handler. This is not yet
 	 * implemented.
@@ -106,16 +115,18 @@ public class DefaultInputHandler extends InputHandler
 	public void removeKeyBinding(String keyBinding)
 	{
 		throw new InternalError("Not yet implemented");
-	}
+	} //}}}
 
+	//{{{ removeAllKeyBindings() method
 	/**
 	 * Removes all key bindings from this input handler.
 	 */
 	public void removeAllKeyBindings()
 	{
 		bindings.clear();
-	}
+	} //}}}
 
+	//{{{ getKeyBinding() method
 	/**
 	 * Returns either an edit action, or a hashtable if the specified key
 	 * is a prefix.
@@ -148,16 +159,18 @@ public class DefaultInputHandler extends InputHandler
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ isPrefixActive() method
 	/**
 	 * Returns if a prefix key has been pressed.
 	 */
 	public boolean isPrefixActive()
 	{
 		return bindings != currentBindings;
-	}
+	} //}}}
 
+	//{{{ keyPressed() method
 	/**
 	 * Handle a key pressed event. This will look up the binding for
 	 * the key stroke and execute it.
@@ -177,16 +190,16 @@ public class DefaultInputHandler extends InputHandler
 			{
 				return;
 			}
+			else if(readNextChar != null && !evt.isActionKey()
+				&& keyCode != KeyEvent.VK_TAB
+				&& keyCode != KeyEvent.VK_ENTER)
+			{
+				return;
+			}
 			else
 			{
 				// ok even with no modifiers
 			}
-		}
-
-		if(readNextChar != null)
-		{
-			readNextChar = null;
-			view.getStatus().setMessage(null);
 		}
 
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode,
@@ -206,35 +219,38 @@ public class DefaultInputHandler extends InputHandler
 				repeatCount = 0;
 				repeat = false;
 				evt.consume();
+				currentBindings = bindings;
 			}
 			else if(modifiers == 0 && (keyCode == KeyEvent.VK_ENTER
 				|| keyCode == KeyEvent.VK_TAB))
 			{
 				userInput((char)keyCode);
 				evt.consume();
-				return;
 			}
-
-			currentBindings = bindings;
-			return;
 		}
-		else if(o instanceof EditAction)
+
+		if(readNextChar != null)
+		{
+			readNextChar = null;
+			view.getStatus().setMessage(null);
+		}
+
+		if(o instanceof EditAction)
 		{
 			currentBindings = bindings;
 
 			invokeAction((EditAction)o);
 
 			evt.consume();
-			return;
 		}
 		else if(o instanceof Hashtable)
 		{
 			currentBindings = (Hashtable)o;
 			evt.consume();
-			return;
 		}
-	}
+	} //}}}
 
+	//{{{ keyTyped() method
 	/**
 	 * Handle a key typed event. This inserts the key into the text area.
 	 */
@@ -295,8 +311,9 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else
 			userInput(c);
-	}
+	} //}}}
 
+	//{{{ parseKeyStroke() method
 	/**
 	 * Converts a string to a keystroke. The string should be of the
 	 * form <i>modifiers</i>+<i>shortcut</i> where <i>modifiers</i>
@@ -377,9 +394,9 @@ public class DefaultInputHandler extends InputHandler
 
 			return KeyStroke.getKeyStroke(ch,modifiers);
 		}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private Hashtable bindings;
 	private Hashtable currentBindings;
 
@@ -388,5 +405,5 @@ public class DefaultInputHandler extends InputHandler
 	static
 	{
 		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
-	}
+	} //}}}
 }

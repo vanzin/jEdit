@@ -121,6 +121,11 @@
 	</RULES>
 
 	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE">
+		<PROPS>
+			<PROPERTY NAME="commentStart" VALUE="/*" />
+			<PROPERTY NAME="lineComment" VALUE="//" />
+		</PROPS>
+
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>

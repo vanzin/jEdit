@@ -262,7 +262,7 @@ public class JARClassLoader extends ClassLoader
 			if(plugins[i].getClass().getName().equals(name))
 			{
 				jEdit.pluginError(jar.getPath(),
-					"plugin.already-loaded",null);
+					"plugin-error.already-loaded",null);
 				return;
 			}
 		}

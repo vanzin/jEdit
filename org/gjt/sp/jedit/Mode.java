@@ -1,5 +1,8 @@
 /*
  * Mode.java - jEdit editing mode
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  * Copyright (C) 1999 mike dillon
  *
@@ -20,10 +23,12 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import gnu.regexp.*;
 import java.util.Hashtable;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * An edit mode defines specific settings for editing some type of file.
@@ -34,6 +39,7 @@ import org.gjt.sp.util.Log;
  */
 public class Mode
 {
+	//{{{ Mode constructor
 	/**
 	 * Creates a new edit mode.
 	 *
@@ -45,8 +51,9 @@ public class Mode
 	{
 		this.name = name;
 		props = new Hashtable();
-	}
+	} //}}}
 
+	//{{{ init()
 	/**
 	 * Initializes the edit mode. Should be called after all properties
 	 * are loaded and set.
@@ -75,8 +82,9 @@ public class Mode
 				+ " globs in mode " + name);
 			Log.log(Log.ERROR,this,re);
 		}
-	}
+	} //}}}
 
+	//{{{ getTokenMarker() method
 	/**
 	 * Returns the token marker specified with
 	 * <code>setTokenMarker()</code>. Should only be called by
@@ -86,8 +94,9 @@ public class Mode
 	{
 		loadIfNecessary();
 		return marker;
-	}
+	} //}}}
 
+	//{{{ setTokenMarker() method
 	/**
 	 * Sets the token marker for this mode. This token marker will be
 	 * cloned to obtain new instances.
@@ -96,8 +105,9 @@ public class Mode
 	public void setTokenMarker(TokenMarker marker)
 	{
 		this.marker = marker;
-	}
+	} //}}}
 
+	//{{{ loadIfNecessary() method
 	/**
 	 * Loads the mode from disk if it hasn't been loaded already.
 	 * @since jEdit 2.5pre3
@@ -106,8 +116,9 @@ public class Mode
 	{
 		if(marker == null)
 			jEdit.loadMode(this);
-	}
+	} //}}}
 
+	//{{{ getProperty() method
 	/**
 	 * Returns a mode property.
 	 * @param key The property name
@@ -154,8 +165,9 @@ public class Mode
 		}
 		else
 			return null;
-	}
+	} //}}}
 
+	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property.
 	 * @param key The property name
@@ -169,8 +181,9 @@ public class Mode
 			return true;
 		else
 			return false;
-	}
+	} //}}}
 
+	//{{{ setProperty() method
 	/**
 	 * Sets a mode property.
 	 * @param key The property name
@@ -179,8 +192,9 @@ public class Mode
 	public void setProperty(String key, Object value)
 	{
 		props.put(key,value);
-	}
+	} //}}}
 
+	//{{{ unsetProperty() method
 	/**
 	 * Unsets a mode property.
 	 * @param key The property name
@@ -189,8 +203,19 @@ public class Mode
 	public void unsetProperty(String key)
 	{
 		props.remove(key);
-	}
+	} //}}}
 
+	//{{{ setProperties() method
+	/**
+	 * Should only be called by <code>XModeHandler</code>.
+	 * @since jEdit 4.0pre3
+	 */
+	public void setProperties(Hashtable props)
+	{
+		this.props = props;
+	} //}}}
+
+	//{{{ accept() method
 	/**
 	 * Returns if the edit mode is suitable for editing the specified
 	 * file. The buffer name and first line is checked against the
@@ -209,28 +234,31 @@ public class Mode
 			return true;
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ getName() method
 	/**
 	 * Returns the internal name of this edit mode.
 	 */
 	public String getName()
 	{
 		return name;
-	}
+	} //}}}
 
+	//{{{ toString() method
 	/**
 	 * Returns a string representation of this edit mode.
 	 */
 	public String toString()
 	{
 		return getClass().getName() + "[" + getName() + "]";
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private String name;
 	private Hashtable props;
 	private RE firstlineRE;
 	private RE filenameRE;
 	private TokenMarker marker;
+	//}}}
 }

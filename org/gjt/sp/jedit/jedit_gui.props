@@ -1140,7 +1140,7 @@ plugin-error.start-error=Cannot start: {0}\n\
 	- there is a bug in this plugin. If you suspect this is the case,\n\
 	e-mail the stack trace printed in the activity log to the plugin\n\
 	author.
-plugin-error.already-loaded=Two copies involved. Please remove one of the\n\
+plugin-error.already-loaded=Two copies loaded. Please remove one of the\n\
 	two copies.
 plugin-error.dep-jdk=This plugin requires Java {0} or later,\n\
 	but you only have version {1}.
@@ -1357,6 +1357,7 @@ options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.maxLineLen=Wrap lines at column:
 options.editing.wordBreakChars=Break lines at these characters:
+options.editing.noWordSep=Extra word characters:
 options.editing.folding=Folding mode:
 options.editing.collapseFolds=Initially collapse folds with level:
 options.editing.undoCount=Number of undos:
@@ -1372,7 +1373,6 @@ options.mode.mode=Edit mode:
 options.mode.useDefaults=Use default settings
 options.mode.filenameGlob=File name glob:
 options.mode.firstlineGlob=First line glob:
-options.mode.noWordSep=Extra word characters:
 #}}}
 
 #{{{ Printing pane
@@ -1564,7 +1564,7 @@ tip.next-tip=Next Tip
 tip.show=true
 
 # Number of tips
-tip.count=67
+tip.count=68
 #}}}
 
 #{{{ Activity log
