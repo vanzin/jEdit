@@ -19,17 +19,8 @@ and quirks that I need to fix eventually.
 - "downloading plugin list" label in plugin manager
 - column reference counting broken
 - new file: horiz scroll wrong
-
-- unloading VFS plugins with active requests
 - enter after a fold broken *AGAIN*
-- removing property from mode does not take effect until restart
-- if a plugin's stop() throws an exception, infinite loop?
-- no need to wait for requests after newFile()
-- class loading problems
-- motif l&f: shortcuts in menu items
-- some JLists do not auto-scroll on keystroke
-- C+b -- click -- keys don't work
-- how to handle S+0-9?
+- fsb default size
 
 + docs:
 
@@ -83,58 +74,28 @@ and quirks that I need to fix eventually.
   - status bar messages & readNextChar()
 - vfs javadoc: invokeAndWait() example for createVFSSession()
 
-+ features:
++ obscure:
 
+- no need to wait for requests after newFile()
+- class loading problems
+- motif l&f: shortcuts in menu items
+- some JLists do not auto-scroll on keystroke
+- C+b -- click -- keys don't work
+- how to handle S+0-9?
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
-- NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
-  keeping INVALID? report errors in some other manner?
 - auto indent: don't de-indent on enter if no leading indent at all?
 - remove-marker, select-next/prev-marker/bracket
 - gzip & unicode, or gzip & <?xml encoding...
 - new macro handler api
 - invoking action bar command twice
-- hide caret while typing
-- unindentCurrentLine property
 - backup time distance setting
-- fsb date
-- preserve 2 spaces after . w/ format
-- toggle caret scroll to when not in vis region?
-- print selection
-- adding to icons prop
-- tall caret and tab
-- fsb default size
-- C+ENTER 3 C+2
-- wheel mouse -- option: jEdit mods -vs- system-wide mods
-- format -- instead of \n\n, what if it has \n   \n?
-- do all modifier handling through the modifier mapping
-- perm to string for FTP plugin
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- rect select and trailing whitespace
 - expand fold: try to expand even if already expanded
-- bsh = { 2 + 2; }
-- eval-for-selected-lines doesn't work with rectangular selection
-- customizable vfs browser extended attributes
-- new plugin mgr: ask before selecting dependencies & 'don't show again'
-- need to get rid of endsWith("/") || endsWith(File.separator) bullshit
-- don't rely on browser view for completion
-- adapt vfs filename field for the path display at the top
-- vfs dialogs: only one field?
-- vfs.isValidPath()
-- make gutter fully painted by extensions just like text area
-- shortcut editor: restore default button
-- can do perl q|...| etc. using begin/end substitution!
-- perl: q{}, etc.
-- do help search in a thread
-- caret saving needs to be more flexible w.r.t. split panes
-- <edit pane,buffer> --> <caret info> map
-- vfs browser right click menu: plugins & favorites
+- format -- instead of \n\n, what if it has \n   \n?
+- C+ENTER 3 C+2
+- tall caret and tab
 - don't show 'new directory' in favorites:
-- consistent formatting for mode files
-- gutter options: add option to completely hide gutter
-- expand: scroll to end of fold if possible
-- need a new jEditLauncher
-- <script> in javadoc
 - auto indent:
   if(foo)
     while(bar)
@@ -142,20 +103,6 @@ and quirks that I need to fix eventually.
       //
     }
   <--- cursor here
-- remember floating & cloned dockables in perspective
-- add dockable window state change msg
-- range-comment & rect select
-- autosave recent file list?
-- option to disable floating window dock bar
-- MARK_PREVIOUS delegate like SEQ; update mail.xml
-- INLINE token type
-- AT_WORD_END match
-- abbrevs need an overhaul
-- hypersearch: "open in..." right click menu
-- hypersearch: remember search settings & "refresh" command
-- eval, eval-selection, etc: do array to string override
-- beanshell: unloading commands when a plugin is unloaded
-- check isLookAndFeelAvailable()
 
 + performance:
 
