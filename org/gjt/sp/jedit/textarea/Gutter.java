@@ -127,8 +127,8 @@ public class Gutter extends JComponent implements SwingConstants
 			line++, y += lineHeight)
 		{
 			ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
-			if(!info.chunksValid)
-				System.err.println("gutter paint: not valid");
+			//if(!info.chunksValid)
+			//	System.err.println("gutter paint: not valid");
 			int physicalLine = info.physicalLine;
 
 			//{{{ Paint text area extensions

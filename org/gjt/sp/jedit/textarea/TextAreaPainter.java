@@ -666,8 +666,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			Log.log(Log.ERROR,this,e);
 		}
 
-		System.err.println((lastInvalid - firstInvalid) + ":"
-			+ (System.currentTimeMillis()-start));
+		System.err.println((lastInvalid - firstInvalid)
+			+ ":" + (System.currentTimeMillis() - start));
 	} //}}}
 
 	//{{{ nextTabStop() method

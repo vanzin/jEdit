@@ -2,6 +2,9 @@ TO DO
 
 - pre4:
 
+- scroll gutter not up to date
+- sort out print/glyph vector
+- slower?
 - syntax highlighted files and soft wrap
 
 - chunk cache problems after collapsing a fold

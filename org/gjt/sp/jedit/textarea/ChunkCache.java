@@ -265,7 +265,8 @@ public class ChunkCache
 				gfx.setFont(font);
 				gfx.setColor(chunks.style.getForegroundColor());
 
-				gfx.drawString(chunks.text,x + chunks.x,y);
+				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
+				//gfx.drawString(chunks.str,x + chunks.x,y);
 
 				// Useful for debugging purposes
 				//gfx.draw(new Rectangle2D.Float(x + chunks.x,y - 10,
@@ -377,7 +378,8 @@ public class ChunkCache
 		public SyntaxStyle style;
 		public int offset;
 		public int length;
-		public String text;
+		public String str;
+		public GlyphVector text;
 		public float[] positions;
 
 		public Chunk next;
@@ -390,12 +392,12 @@ public class ChunkCache
 			if(offset != end)
 			{
 				length = end - offset;
-				text = new String(seg.array,seg.offset + offset,length);
+				str = new String(seg.array,seg.offset + offset,length);
 
-				GlyphVector vector = style.getFont().createGlyphVector(
-					fontRenderContext,text);
-				width = (float)vector.getLogicalBounds().getWidth();
-				positions = vector.getGlyphPositions(0,length,null);
+				text = style.getFont().createGlyphVector(
+					fontRenderContext,str);
+				width = (float)text.getLogicalBounds().getWidth();
+				positions = text.getGlyphPositions(0,length,null);
 			}
 
 			this.offset = offset;
@@ -500,7 +502,37 @@ public class ChunkCache
 	//{{{ setFirstLine() method
 	void setFirstLine(int firstLine)
 	{
-		invalidateAll();
+		if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+		{
+			for(int i = 0; i < lineInfo.length; i++)
+			{
+				lineInfo[i].chunksValid = false;
+			}
+		}
+		else if(firstLine > this.firstLine)
+		{
+			System.arraycopy(lineInfo,firstLine - this.firstLine,
+				lineInfo,0,lineInfo.length - firstLine
+				+ this.firstLine);
+
+			for(int i = lineInfo.length - firstLine
+				+ this.firstLine; i < lineInfo.length; i++)
+			{
+				lineInfo[i] = new LineInfo();
+			}
+		}
+		else if(this.firstLine > firstLine)
+		{
+			System.arraycopy(lineInfo,0,lineInfo,this.firstLine - firstLine,
+				lineInfo.length - this.firstLine + firstLine);
+
+			for(int i = 0; i < this.firstLine - firstLine; i++)
+			{
+				lineInfo[i] = new LineInfo();
+			}
+		}
+
+		lastScreenLine = lastScreenLineP = -1;
 		this.firstLine = firstLine;
 	} //}}}
 
@@ -690,8 +722,8 @@ public class ChunkCache
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
 	{
-		if(!lineInfo[screenLine].chunksValid)
-			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
+		//if(!lineInfo[screenLine].chunksValid)
+		//	Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
 		return lineInfo[screenLine];
 	} //}}}
 
