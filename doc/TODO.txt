@@ -1,9 +1,5 @@
 TO DO
 
-+ before 4.0pre1:
-
-- recompile Firewall.jar before releasing
-
 + pre2:
 
 - fuckup if last phys line invisible
