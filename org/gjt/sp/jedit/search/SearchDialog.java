@@ -53,6 +53,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public static final int DIRECTORY = 2;
 	//}}}
 
+	//{{{ showSearchDialog
 	//{{{ SearchDialog constructor
 	/**
 	 * Creates a new search and replace dialog box.
@@ -90,20 +91,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		content.add(BorderLayout.EAST,createButtonsPanel());
 
-		if(searchString != null)
-		{
-			if(searchString.indexOf('\n') == -1)
-			{
-				find.setText(searchString);
-				find.selectAll();
-			}
-			else if(searchIn == CURRENT_BUFFER)
-			{
-				searchSelection.setSelected(true);
-				hyperSearch.setSelected(true);
-			}
-		}
-
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
 		wrap.setSelected(SearchAndReplace.getAutoWrapAround());
@@ -122,31 +109,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			replace.setModel("replace");
 			stringReplace.setSelected(true);
-		}
-
-		if(searchIn == CURRENT_BUFFER)
-		{
-			if(!searchSelection.isSelected())
-			{
-				// might be already selected, see above.
-				searchCurrentBuffer.setSelected(true);
-
-				/* this property is only loaded and saved if
-				 * the 'current buffer' file set is selected.
-				 * otherwise, it defaults to on. */
-				hyperSearch.setSelected(jEdit.getBooleanProperty(
-					"search.hypersearch.toggle"));
-			}
-		}
-		else if(searchIn == ALL_BUFFERS)
-		{
-			searchAllBuffers.setSelected(true);
-			hyperSearch.setSelected(true);
-		}
-		else if(searchIn == DIRECTORY)
-		{
-			hyperSearch.setSelected(true);
-			searchDirectory.setSelected(true);
 		}
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
@@ -190,7 +152,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		keepDialog.setSelected(jEdit.getBooleanProperty(
 			"search.keepDialog.toggle"));
 
-		updateEnabled();
+		setSearchString(searchString,searchIn);
 
 		pack();
 		jEdit.unsetProperty("search.width");
@@ -203,6 +165,57 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		EditBus.addToBus(this);
 
 		GUIUtilities.requestFocus(this,find);
+	} //}}}
+
+	//{{{ setSearchString() method
+	/**
+	 * Sets the search string.
+	 * @since jEdit 4.0pre5
+	 */
+	public void setSearchString(String searchString, int searchIn)
+	{
+		if(searchString == null)
+			find.setText(null);
+		else
+		{
+			if(searchString.indexOf('\n') == -1)
+			{
+				find.setText(searchString);
+				find.selectAll();
+			}
+			else if(searchIn == CURRENT_BUFFER)
+			{
+				searchSelection.setSelected(true);
+				hyperSearch.setSelected(true);
+			}
+		}
+
+		if(searchIn == CURRENT_BUFFER)
+		{
+			if(!searchSelection.isSelected())
+			{
+				// might be already selected, see above.
+				searchCurrentBuffer.setSelected(true);
+
+				/* this property is only loaded and saved if
+				 * the 'current buffer' file set is selected.
+				 * otherwise, it defaults to on. */
+				hyperSearch.setSelected(jEdit.getBooleanProperty(
+					"search.hypersearch.toggle"));
+			}
+		}
+		else if(searchIn == ALL_BUFFERS)
+		{
+			searchAllBuffers.setSelected(true);
+			hyperSearch.setSelected(true);
+		}
+		else if(searchIn == DIRECTORY)
+		{
+			hyperSearch.setSelected(true);
+			searchDirectory.setSelected(true);
+		}
+
+		updateEnabled();
 	} //}}}
 
 	//{{{ ok() method

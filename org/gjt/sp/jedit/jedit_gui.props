@@ -373,6 +373,7 @@ search=find \
        - \
        replace-in-selection \
        replace-and-find-next \
+       replace-all \
        - \
        quick-search \
        hypersearch \
@@ -386,6 +387,7 @@ search-in-open-buffers.label=Search in Open $Buffers...
 search-in-directory.label=Search in $Directory...
 replace-in-selection.label=$Replace in Selection
 replace-and-find-next.label=Re$place and Find Next
+replace-all.label=Replace $All
 quick-search.label=$Incremental Search
 hypersearch.label=Quick $HyperSearch
 quick-search-word.label=Incremental Search for $Word

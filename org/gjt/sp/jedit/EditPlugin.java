@@ -135,12 +135,12 @@ public abstract class EditPlugin
 		{
 			plugin.jar = JAR.this;
 
-			plugin.start();
-
 			if(plugin instanceof EBPlugin)
 				EditBus.addToBus((EBPlugin)plugin);
 
 			plugins.addElement(plugin);
+
+			plugin.start();
 		}
 
 		public EditPlugin[] getPlugins()

@@ -279,7 +279,7 @@ public class JEditTextArea extends JComponent
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
 			chunkCache.setFirstLine(0);
-			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
+			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
 
 			propertiesChanged();
 
@@ -356,11 +356,11 @@ public class JEditTextArea extends JComponent
 
 		physFirstLine = virtualToPhysical(firstLine);
 
-		recalculateLastPhysicalLine();
-
 		maxHorizontalScrollWidth = 0;
 
 		chunkCache.setFirstLine(firstLine);
+
+		recalculateLastPhysicalLine();
 
 		if(this.firstLine != vertical.getValue())
 			updateScrollBars();
@@ -635,9 +635,9 @@ public class JEditTextArea extends JComponent
 			physFirstLine = virtualToPhysical(firstLine);
 		}
 
-		recalculateLastPhysicalLine();
-
 		chunkCache.setFirstLine(firstLine);
+
+		recalculateLastPhysicalLine();
 
 		if(point == null)
 			point = offsetToXY(caretLine,offset,returnValue);
@@ -3632,9 +3632,11 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		int x = offsetToX(caretLine,caret - getLineStartOffset(caretLine));
 
 		foldVisibilityManager.collapseFold(caretLine);
-		int line = virtualToPhysical(physicalToVirtual(caretLine));
-		if(line == caretLine)
+
+		if(foldVisibilityManager.isLineVisible(caretLine))
 			return;
+
+		int line = foldVisibilityManager.getNextVisibleLine(caretLine);
 
 		if(!multi)
 			selectNone();
@@ -4245,6 +4247,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		recalculateVisibleLines();
+		recalculateLastPhysicalLine();
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -4750,11 +4753,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
 
-		if(foldVisibilityManager != null)
-		{
-			recalculateLastPhysicalLine();
-		}
-
 		chunkCache.recalculateVisibleLines();
 		propertiesChanged();
 	} //}}}
@@ -5227,12 +5225,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	private void recalculateLastPhysicalLine()
 	{
-		physLastLine = virtualToPhysical(Math.min(
-			getVirtualLineCount() - 1,
-			firstLine + visibleLines));
-
-		screenLastLine = chunkCache.getScreenLineOfOffset(physLastLine,
-			buffer.getLineLength(physLastLine));
+		chunkCache.updateChunksUpTo(visibleLines);
+		for(int i = visibleLines; i >= 0; i--)
+		{
+			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
+			if(info.physicalLine != -1)
+			{
+				physLastLine = info.physicalLine;
+				screenLastLine = i;
+				break;
+			}
+		}
 	} //}}}
 
 	//}}}
@@ -5474,6 +5477,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		public void componentResized(ComponentEvent evt)
 		{
 			recalculateVisibleLines();
+			recalculateLastPhysicalLine();
 			propertiesChanged();
 			scrollBarsInitialized = true;
 		} //}}}

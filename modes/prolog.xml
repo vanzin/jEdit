@@ -6,8 +6,9 @@
 	based on the INRIA ISO Prolog web page @ http://pauillac.inria.fr/~hodgson/prolog
 
 	written by	Giulio Piancastelli
+	version		1.0
 	created on	31st December 2001
-	last revised	20th January 2002
+	last revised	6th February 2002
 -->
 
 <MODE>
@@ -53,22 +54,22 @@
 		<SEQ TYPE="OPERATOR">\==</SEQ>
 		<SEQ TYPE="OPERATOR">@&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">@=&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">@&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">@&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">@&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">=..</SEQ>
 		<SEQ TYPE="OPERATOR">=:=</SEQ>
 		<SEQ TYPE="OPERATOR">=\=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">=&lt;</SEQ>
-		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/\</SEQ>
 		<SEQ TYPE="OPERATOR">\/</SEQ>
 		<SEQ TYPE="OPERATOR">*</SEQ>
-		<SEQ TYPE="OPERATOR">//</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">//</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">**</SEQ>
@@ -81,6 +82,8 @@
 		<!-- Parentheses -->
 		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="NULL">{</SEQ>
+		<SEQ TYPE="NULL">}</SEQ>
 		
 		<KEYWORDS IGNORE_CASE="FALSE">
 		
