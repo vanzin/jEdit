@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.3pre1
 
-Thanks to Cameron Morrison, Jim Lawton, Marcelo Vanzin, Nicholas O'Leary
-and Trevor Harmon for contributing to this release.
+Thanks to Cameron Morrison, Igor Lesik, Jim Lawton, Marcelo Vanzin,
+Nicholas O'Leary and Trevor Harmon for contributing to this release.
 
 {{{ Search and Replace
 
@@ -23,6 +23,8 @@ and Trevor Harmon for contributing to this release.
 - Updated D syntax highlighting (Jim Lawton).
 
 - Forth syntax highlighting.
+
+- Motorola 68000 assembler syntax highlighting (Igor Lesik).
 
 }}}
 {{{ Miscellaneous
