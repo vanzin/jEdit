@@ -175,6 +175,10 @@ contributing to this release.
 
 - PHP mode's inline script ruleset was missing a commentEnd property.
 
+- Plugins which provided a dockables.xml file but no actions.xml could
+  not be invoked, since the action set was only added if the actions.xml
+  file was present.
+
 }}}
 {{{ API Changes
 
