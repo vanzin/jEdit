@@ -74,17 +74,16 @@ public class ModeOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.wordBreakChars"),
 			wordBreakChars = new JTextField());
 
-		addComponent(jEdit.getProperty("options.mode.commentStart"),
-			commentStart = new JTextField());
-
-		addComponent(jEdit.getProperty("options.mode.commentEnd"),
-			commentEnd = new JTextField());
-
-		addComponent(jEdit.getProperty("options.mode.lineComment"),
-			lineComment = new JTextField());
-
 		addComponent(jEdit.getProperty("options.mode.noWordSep"),
 			noWordSep = new JTextField());
+
+		String[] foldModes = {
+			jEdit.getProperty("options.editing.folding.none"),
+			jEdit.getProperty("options.editing.folding.indent"),
+			jEdit.getProperty("options.editing.folding.explicit")
+		};
+		addComponent(jEdit.getProperty("options.editing.folding"),
+			folding = new JComboBox(foldModes));
 
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),
 			collapseFolds = new JTextField());
@@ -125,10 +124,8 @@ public class ModeOptionPane extends AbstractOptionPane
 	private JComboBox indentSize;
 	private JComboBox maxLineLen;
 	private JTextField wordBreakChars;
-	private JTextField commentStart;
-	private JTextField commentEnd;
-	private JTextField lineComment;
 	private JTextField noWordSep;
+	private JComboBox folding;
 	private JTextField collapseFolds;
 	private JCheckBox noTabs;
 	private JCheckBox indentOnTab;
@@ -144,10 +141,22 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.indentSize = (String)indentSize.getSelectedItem();
 		current.maxLineLen = (String)maxLineLen.getSelectedItem();
 		current.wordBreakChars = wordBreakChars.getText();
-		current.commentStart = commentStart.getText();
-		current.commentEnd = commentEnd.getText();
-		current.lineComment = lineComment.getText();
 		current.noWordSep = noWordSep.getText();
+
+		int index = folding.getSelectedIndex();
+		switch(index)
+		{
+		case 0:
+			current.folding = "none";
+			break;
+		case 1:
+			current.folding = "indent";
+			break;
+		case 2:
+			current.folding = "explicit";
+			break;
+		}
+
 		current.collapseFolds = collapseFolds.getText();
 		current.noTabs = noTabs.isSelected();
 		current.indentOnEnter = indentOnEnter.isSelected();
@@ -168,10 +177,15 @@ public class ModeOptionPane extends AbstractOptionPane
 		indentSize.setSelectedItem(current.indentSize);
 		maxLineLen.setSelectedItem(current.maxLineLen);
 		wordBreakChars.setText(current.wordBreakChars);
-		commentStart.setText(current.commentStart);
-		commentEnd.setText(current.commentEnd);
-		lineComment.setText(current.lineComment);
 		noWordSep.setText(current.noWordSep);
+
+		if("indent".equals(current.folding))
+			folding.setSelectedIndex(1);
+		else if("explicit".equals(current.folding))
+			folding.setSelectedIndex(2);
+		else
+			folding.setSelectedIndex(0);
+
 		collapseFolds.setText(current.collapseFolds);
 		noTabs.setSelected(current.noTabs);
 		indentOnTab.setSelected(current.indentOnTab);
@@ -190,10 +204,8 @@ public class ModeOptionPane extends AbstractOptionPane
 		indentSize.setEnabled(enabled);
 		maxLineLen.setEnabled(enabled);
 		wordBreakChars.setEnabled(enabled);
-		commentStart.setEnabled(enabled);
-		commentEnd.setEnabled(enabled);
-		lineComment.setEnabled(enabled);
 		noWordSep.setEnabled(enabled);
+		folding.setEnabled(enabled);
 		collapseFolds.setEnabled(enabled);
 		noTabs.setEnabled(enabled);
 		indentOnTab.setEnabled(enabled);
@@ -232,10 +244,8 @@ public class ModeOptionPane extends AbstractOptionPane
 		String indentSize;
 		String maxLineLen;
 		String wordBreakChars;
-		String commentStart;
-		String commentEnd;
-		String lineComment;
 		String noWordSep;
+		String folding;
 		String collapseFolds;
 		boolean noTabs;
 		boolean indentOnTab;
@@ -264,10 +274,8 @@ public class ModeOptionPane extends AbstractOptionPane
 			indentSize = mode.getProperty("indentSize").toString();
 			maxLineLen = mode.getProperty("maxLineLen").toString();
 			wordBreakChars = (String)mode.getProperty("wordBreakChars");
-			commentStart = (String)mode.getProperty("commentStart");
-			commentEnd = (String)mode.getProperty("commentEnd");
-			lineComment = (String)mode.getProperty("lineComment");
 			noWordSep = (String)mode.getProperty("noWordSep");
+			folding = mode.getProperty("folding").toString();
 			collapseFolds = mode.getProperty("collapseFolds").toString();
 			noTabs = mode.getBooleanProperty("noTabs");
 			indentOnTab = mode.getBooleanProperty("indentOnTab");
@@ -293,10 +301,8 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "indentSize");
 				jEdit.resetProperty(prefix + "maxLineLen");
 				jEdit.resetProperty(prefix + "wordBreakChars");
-				jEdit.resetProperty(prefix + "commentStart");
-				jEdit.resetProperty(prefix + "commentEnd");
-				jEdit.resetProperty(prefix + "lineComment");
 				jEdit.resetProperty(prefix + "noWordSep");
+				jEdit.resetProperty(prefix + "folding");
 				jEdit.resetProperty(prefix + "collapseFolds");
 				jEdit.resetProperty(prefix + "noTabs");
 				jEdit.resetProperty(prefix + "indentOnTab");
@@ -311,10 +317,8 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.setProperty(prefix + "indentSize",indentSize);
 				jEdit.setProperty(prefix + "maxLineLen",maxLineLen);
 				jEdit.setProperty(prefix + "wordBreakChars",wordBreakChars);
-				jEdit.setProperty(prefix + "commentStart",commentStart);
-				jEdit.setProperty(prefix + "commentEnd",commentEnd);
-				jEdit.setProperty(prefix + "lineComment",lineComment);
 				jEdit.setProperty(prefix + "noWordSep",noWordSep);
+				jEdit.setProperty(prefix + "folding",folding);
 				jEdit.setProperty(prefix + "collapseFolds",collapseFolds);
 				jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
 				jEdit.setBooleanProperty(prefix + "indentOnTab",indentOnTab);

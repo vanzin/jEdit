@@ -139,7 +139,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowser.NAME);
+			.getDockable(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{
@@ -168,7 +168,7 @@ public class Macros
 
 		dockableWindowManager.addDockableWindow(VFSBrowser.NAME);
 		final VFSBrowser browser = (VFSBrowser)dockableWindowManager
-			.getDockableWindow(VFSBrowser.NAME);
+			.getDockable(VFSBrowser.NAME);
 
 		VFSManager.runInAWTThread(new Runnable()
 		{

@@ -719,8 +719,6 @@ loop:			for(int i = 0; i < len; i++)
 
 	public static class LineContext
 	{
-		public static int COUNT;
-		public static int COUNT_GC;
 		public LineContext parent;
 		public ParserRule inRule;
 		public ParserRuleSet rules;
@@ -747,13 +745,6 @@ loop:			for(int i = 0; i < len; i++)
 
 		public LineContext()
 		{
-			COUNT++;
-			COUNT_GC++;
-		}
-
-		public void finalize()
-		{
-			COUNT_GC--;
 		}
 
 		public Object clone()
