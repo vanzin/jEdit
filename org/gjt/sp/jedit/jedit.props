@@ -275,8 +275,8 @@ view.expandOnInput=false
 
 #{{{ Syntax styles
 view.style.comment1=color:#cc0000
-view.style.comment2=color:#6600cc
-view.style.comment3=color:#ff8400
+view.style.comment2=color:#ff8400
+view.style.comment3=color:#6600cc
 view.style.comment4=color:#cc6600
 view.style.digit=color:#ff0000
 view.style.foldLine.0=color:#000000 bgColor:#dafeda style:b

@@ -58,7 +58,8 @@ public class ParserRule
 	public static final int NO_LINE_BREAK = 1 << 9;
 	public static final int NO_WORD_BREAK = 1 << 10;
 	public static final int IS_ESCAPE = 1 << 11;
-	public static final int REGEXP = 1 << 12;
+	public static final int NO_ESCAPE = 1 << 12;
+	public static final int REGEXP = 1 << 13;
 	//}}}
 
 	//{{{ Position match hints
@@ -110,13 +111,14 @@ public class ParserRule
 	//{{{ createSpanRule() method
 	public static final ParserRule createSpanRule(
 		int startPosMatch, String start, int endPosMatch, String end,
-		ParserRuleSet delegate, byte id, boolean excludeMatch, boolean noLineBreak,
-		boolean noWordBreak)
+		ParserRuleSet delegate, byte id, boolean excludeMatch,
+		boolean noLineBreak, boolean noWordBreak, boolean noEscape)
 	{
 		int ruleAction = SPAN |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? NO_WORD_BREAK : 0);
+			((noWordBreak) ? NO_WORD_BREAK : 0) |
+			((noEscape) ? NO_ESCAPE : 0);
 
 		return new ParserRule(ruleAction, start.charAt(0), startPosMatch,
 			start.toCharArray(), null,
@@ -129,13 +131,14 @@ public class ParserRule
 		char hashChar, int startPosMatch, String start,
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		boolean excludeMatch, boolean noLineBreak, boolean noWordBreak,
-		boolean ignoreCase)
+		boolean ignoreCase, boolean noEscape)
 		throws REException
 	{
 		int ruleAction = SPAN | REGEXP |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0) |
-			((noWordBreak) ? NO_WORD_BREAK : 0);
+			((noWordBreak) ? NO_WORD_BREAK : 0) |
+			((noEscape) ? NO_ESCAPE : 0);
 
 		return new ParserRule(ruleAction, hashChar, startPosMatch, null,
 			new RE("\\A" + start,(ignoreCase ? RE.REG_ICASE : 0),

@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.browser;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.Dimension;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -207,6 +207,14 @@ public class VFSDirectoryEntryTable extends JTable
 		Dimension prefSize = getPreferredSize();
 		setPreferredScrollableViewportSize(new Dimension(prefSize.width,
 			getRowHeight() * 12));
+	} //}}}
+
+	//{{{ scrollRectToVisible() method
+	public void scrollRectToVisible(Rectangle rect)
+	{
+		// avoid scrolling to the right
+		rect.width = 0;
+		super.scrollRectToVisible(rect);
 	} //}}}
 
 	//{{{ processKeyEvent() method
