@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  * Portions copyright (C) 2000 Richard S. Hall
  * Portions copyright (C) 2001 Dirk Moebius
  *
@@ -196,7 +196,9 @@ public class MiscUtilities
 
 		for(;;)
 		{
-			if(path.startsWith(dd) || path.startsWith("../"))
+			if(path.equals(".."))
+				return getParentOfPath(parent);
+			else if(path.startsWith(dd) || path.startsWith("../"))
 			{
 				parent = getParentOfPath(parent);
 				path = path.substring(3);

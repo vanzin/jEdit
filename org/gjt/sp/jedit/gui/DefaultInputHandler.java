@@ -287,6 +287,7 @@ public class DefaultInputHandler extends InputHandler
 
 		if(readNextChar != null)
 		{
+			setCurrentBindings(bindings);
 			invokeReadNextChar(c);
 			repeatCount = -1;
 			return;

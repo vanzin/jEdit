@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class LogViewer extends JPanel
+public class LogViewer extends JPanel implements DefaultFocusComponent
 {
 	//{{{ LogViewer constructor
 	public LogViewer()
@@ -92,11 +92,10 @@ public class LogViewer extends JPanel
 		}
 	} //}}}
 
-	//{{{ requestDefaultFocus() method
-	public boolean requestDefaultFocus()
+	//{{{ focusOnDefaultComponent() method
+	public void focusOnDefaultComponent()
 	{
 		list.requestFocus();
-		return true;
 	} //}}}
 
 	//{{{ Private members

@@ -2071,8 +2071,6 @@ public class Buffer
 				}
 			}
 
-			boolean nextLineRequested = false;
-
 			if(Debug.TOKEN_MARKER_DEBUG)
 				Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
 			for(int i = start; i <= lineIndex; i++)
@@ -2134,10 +2132,7 @@ public class Buffer
 
 			int lineCount = offsetMgr.getLineCount();
 			if(nextLineRequested && lineCount - lineIndex > 1)
-			{
 				offsetMgr.lineContextInvalidFrom(lineIndex);
-				fireNextLineRequested(lineIndex);
-			}
 		}
 		finally
 		{
@@ -3966,24 +3961,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				((BufferChangeListener)bufferListeners.elementAt(i))
 					.transactionComplete(this);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
-				Log.log(Log.ERROR,this,t);
-			}
-		}
-	} //}}}
-
-	//{{{ fireNextLineRequested() method
-	private void fireNextLineRequested(int line)
-	{
-		for(int i = 0; i < bufferListeners.size(); i++)
-		{
-			try
-			{
-				((BufferChangeListener)bufferListeners.elementAt(i))
-					.nextLineRequested(this,line);
 			}
 			catch(Throwable t)
 			{

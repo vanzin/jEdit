@@ -388,6 +388,7 @@ markers=add-marker \
 	  prev-marker \
 	  next-marker \
 	  -
+markers.custom-menu=new MarkersMenu()
 markers.label=$Markers
 add-marker.label=$Add/Remove Marker
 add-marker-shortcut.label=Add Marker $With Shortcut

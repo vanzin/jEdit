@@ -41,7 +41,7 @@ import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.util.Log;
 
 
-public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadActions
+public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadActions, DefaultFocusComponent
 {
 	private String filename;
 	private String defaultFilename;
@@ -89,6 +89,11 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		add(BorderLayout.CENTER, pane);
 
 		readFile();
+	}
+
+	public void focusOnDefaultComponent()
+	{
+		textArea.requestFocus();
 	}
 
 	//
