@@ -211,10 +211,15 @@ public class Buffer
 					return false;
 				}
 
-				if(!vfs.load(view,this,path))
+				// have to check again since above might set
+				// NEW_FILE flag
+				if(reload || !getFlag(NEW_FILE))
 				{
-					setFlag(LOADING,false);
-					return false;
+					if(!vfs.load(view,this,path))
+					{
+						setFlag(LOADING,false);
+						return false;
+					}
 				}
 			}
 		}

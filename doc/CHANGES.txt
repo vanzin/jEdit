@@ -136,6 +136,9 @@ contributing to this release.
   the file system browser would refuse to perform further operations
   with an "I/O already in progress" message.
 
+- Fixed Perl syntax highlighting for variable names that began with
+  s, m, q or tr followed by a non-alphanumeric character.
+
 }}}
 {{{ API Changes
 
