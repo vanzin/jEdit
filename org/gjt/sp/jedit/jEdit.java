@@ -1014,13 +1014,11 @@ public class jEdit
 	{
 		if(exit)
 		{
-			EditPlugin plugin = jar.getPlugin();
-			if(plugin != null)
-				plugin.stop();
+			jar.uninit(true);
 		}
 		else
 		{
-			jar.uninit();
+			jar.uninit(false);
 			jar.getClassLoader().deactivate();
 			jars.removeElement(jar);
 		}

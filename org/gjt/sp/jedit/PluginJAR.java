@@ -241,7 +241,7 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ uninit() method
-	void uninit()
+	void uninit(boolean exit)
 	{
 		if(plugin != null)
 		{
@@ -256,6 +256,9 @@ public class PluginJAR
 				Log.log(Log.ERROR,this,t);
 			}
 		}
+
+		if(exit)
+			return;
 
 		if(actions != null)
 			jEdit.getActionContext().removeActionSet(actions);

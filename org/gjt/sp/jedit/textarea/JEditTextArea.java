@@ -6233,16 +6233,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			/* if(buffer.insideCompoundEdit())
 				buffer.endCompoundEdit(); */
+			int x = evt.getX();
 
 			float dragStartLineWidth = offsetToXY(dragStartLine,
 				getLineLength(dragStartLine),returnValue).x;
 			int extraEndVirt;
-			int x = evt.getX();
 			if(x > dragStartLineWidth)
 			{
 				extraEndVirt = (int)((x - dragStartLineWidth)
 					/ charWidth);
-				if((x - getHorizontalOffset()) % charWidth > charWidth / 2)
+				if(!getPainter().isBlockCaretEnabled()
+					&& !isOverwriteEnabled()
+					&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
 						extraEndVirt++;
 			}
 			else
@@ -6420,7 +6422,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(x > dotLineWidth)
 				{
 					extraEndVirt = (int)((x - dotLineWidth) / charWidth);
-					if((x - getHorizontalOffset()) % charWidth > charWidth / 2)
+					if(!getPainter().isBlockCaretEnabled()
+						&& !isOverwriteEnabled()
+						&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
 						extraEndVirt++;
 				}
 			}
