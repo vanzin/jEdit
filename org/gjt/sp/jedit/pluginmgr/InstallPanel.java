@@ -339,6 +339,8 @@ class InstallPanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
+			this.sortType = type;
+
 			if(isDownloadingList())
 				return;
 

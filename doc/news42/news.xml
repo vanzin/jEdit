@@ -140,8 +140,7 @@
 
 	<sect1 id="syntax"><title>Syntax Highlighting</title>
 	 <para>
-	 <!-- as of pre15, -->
-	  34 new syntax highlighting modes were added, and many existing ones were enhanced. jEdit now supports syntax highlighting for 122 languages.
+	  Many new syntax highlighting modes were added, and many existing ones were enhanced. jEdit now supports syntax highlighting for 133 languages.
 	 </para>
 	 <para>
 	  The following new token types were added:

@@ -1148,6 +1148,7 @@ loop:		for(;;)
 			//{{{ Debug code
 			if(Debug.SCROLL_VERIFY)
 			{
+				System.err.println("SCROLL_VERIFY");
 				int verifyScrollLine = 0;
 
 				for(int i = 0; i < buffer.getLineCount(); i++)
@@ -1503,7 +1504,7 @@ loop:		for(;;)
 		//{{{ foldLevelChanged() method
 		public void foldLevelChanged(Buffer buffer, int start, int end)
 		{
-			//System.err.println("Invalidate " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
+			//System.err.println("foldLevelChanged " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
 
 			if(textArea.getDisplayManager() == DisplayManager.this
 				&& end != 0 && buffer.isLoaded())
@@ -1640,88 +1641,88 @@ loop:		for(;;)
 				scrollLineCount.callReset = true;
 			}
 
-			if(numLines != 0)
+			if(numLines == 0)
+				return;
+
+			delayedMultilineUpdate = true;
+
+			int endLine = startLine + numLines;
+
+			/* update fold visibility map. */
+			int starti = fvmget(startLine);
+			int endi = fvmget(endLine);
+
+			/* both have same visibility; just remove
+			 * anything in between. */
+			if(Math.abs(starti % 2) == Math.abs(endi % 2))
 			{
-				delayedMultilineUpdate = true;
-
-				int endLine = startLine + numLines;
-
-				/* update fold visibility map. */
-				int starti = fvmget(startLine);
-				int endi = fvmget(endLine);
-
-				/* both have same visibility; just remove
-				 * anything in between. */
-				if(Math.abs(starti % 2) == Math.abs(endi % 2))
+				if(endi - starti == fvmcount)
 				{
-					if(endi - starti == fvmcount)
-					{
-						// we're removing from before
-						// the first visible to after
-						// the last visible
-						fvmreset();
-						firstLine.callReset = true;
-						scrollLineCount.callReset = true;
-						starti = 1;
-					}
-					else
-					{
-						fvmput(starti + 1,endi + 1,null);
-						starti++;
-					}
+					// we're removing from before
+					// the first visible to after
+					// the last visible
+					fvmreset();
+					firstLine.callReset = true;
+					scrollLineCount.callReset = true;
+					starti = 1;
 				}
-				/* collapse 2 */
-				else if(starti != -1 && fvm[starti] == startLine)
-				{
-					if(endi - starti == fvmcount - 1)
-					{
-						// we're removing from
-						// the first visible to after
-						// the last visible
-						fvmreset();
-						firstLine.callReset = true;
-						scrollLineCount.callReset = true;
-						starti = 1;
-					}
-					else
-						fvmput(starti,endi + 1,null);
-				}
-				/* shift */
 				else
 				{
-					fvmput(starti + 1,endi,null);
-					fvm[starti + 1] = startLine;
-					starti += 2;
+					fvmput(starti + 1,endi + 1,null);
+					starti++;
 				}
-
-				/* update */
-				for(int i = starti; i < fvmcount; i++)
-					fvm[i] -= numLines;
-
-				if(firstLine.physicalLine
-					> getLastVisibleLine()
-					|| firstLine.physicalLine
-					< getFirstVisibleLine())
-				{
-					// will be handled later.
-					// see comments at the end of
-					// transactionComplete().
-				}
-				// very subtle... if we leave this for
-				// ensurePhysicalLineIsVisible(), an
-				// extra line will be added to the
-				// scroll line count.
-				else if(!isLineVisible(
-					firstLine.physicalLine))
-				{
-					firstLine.physicalLine =
-						getNextVisibleLine(
-						firstLine.physicalLine);
-				}
-
-				lastfvmget = -1;
-				fvmdump();
 			}
+			/* collapse 2 */
+			else if(starti != -1 && fvm[starti] == startLine)
+			{
+				if(endi - starti == fvmcount - 1)
+				{
+					// we're removing from
+					// the first visible to after
+					// the last visible
+					fvmreset();
+					firstLine.callReset = true;
+					scrollLineCount.callReset = true;
+					starti = 1;
+				}
+				else
+					fvmput(starti,endi + 1,null);
+			}
+			/* shift */
+			else
+			{
+				fvmput(starti + 1,endi,null);
+				fvm[starti + 1] = startLine;
+				starti += 2;
+			}
+
+			/* update */
+			for(int i = starti; i < fvmcount; i++)
+				fvm[i] -= numLines;
+
+			if(firstLine.physicalLine
+				> getLastVisibleLine()
+				|| firstLine.physicalLine
+				< getFirstVisibleLine())
+			{
+				// will be handled later.
+				// see comments at the end of
+				// transactionComplete().
+			}
+			// very subtle... if we leave this for
+			// ensurePhysicalLineIsVisible(), an
+			// extra line will be added to the
+			// scroll line count.
+			else if(!isLineVisible(
+				firstLine.physicalLine))
+			{
+				firstLine.physicalLine =
+					getNextVisibleLine(
+					firstLine.physicalLine);
+			}
+
+			lastfvmget = -1;
+			fvmdump();
 		} //}}}
 
 		//{{{ contentRemoved() method
@@ -1784,94 +1785,104 @@ loop:		for(;;)
 		//{{{ transactionComplete() method
 		public void transactionComplete(Buffer buffer)
 		{
-			if(textArea.getDisplayManager() == DisplayManager.this)
+			if(textArea.getDisplayManager() != DisplayManager.this)
 			{
-				if(delayedUpdate)
-				{
-					// must be before the below call
-					// so that the chunk cache is not
-					// updated with an invisible first
-					// line (see above)
-					_notifyScreenLineChanges();
-
-					if(delayedMultilineUpdate)
-					{
-						textArea.invalidateScreenLineRange(
-							textArea.chunkCache
-							.getScreenLineOfOffset(
-							delayedUpdateStart,0),
-							textArea.getVisibleLines());
-						delayedMultilineUpdate = false;
-					}
-					else
-					{
-						textArea.invalidateLineRange(
-							delayedUpdateStart,
-							delayedUpdateEnd);
-					}
-
-					int _firstLine = textArea.getFirstPhysicalLine();
-					int _lastLine = textArea.getLastPhysicalLine();
-
-					int line = delayedUpdateStart;
-					if(!isLineVisible(line))
-						line = getNextVisibleLine(line);
-					while(line != -1 && line <= delayedUpdateEnd)
-					{
-						if(line < _firstLine
-							|| line > _lastLine)
-						{
-							getScreenLineCount(line);
-						}
-						line = getNextVisibleLine(line);
-					}
-
-					// update visible lines
-					int visibleLines = textArea
-						.getVisibleLines();
-					if(visibleLines != 0)
-					{
-						textArea.chunkCache.getLineInfo(
-							visibleLines - 1);
-					}
-
-					// force the fold levels to be
-					// updated.
-
-					// when painting the last line of
-					// a buffer, Buffer.isFoldStart()
-					// doesn't call getFoldLevel(),
-					// hence the foldLevelChanged()
-					// event might not be sent for the
-					// previous line.
-
-					buffer.getFoldLevel(delayedUpdateEnd);
-				}
-
-				textArea._finishCaretUpdate();
+				delayedUpdate = false;
+				return;
 			}
 
+			if(delayedUpdate)
+				doDelayedUpdate();
+
+			textArea._finishCaretUpdate();
+
+			delayedUpdate = false;
+
 			//{{{ Debug code
-			if(Debug.SCROLL_VERIFY)
+			/* if(Debug.SCROLL_VERIFY)
 			{
 				int scrollLineCount = 0;
-				for(int i = 0; i < textArea.getLineCount(); i++)
+				int line = delayedUpdateStart;
+				if(!isLineVisible(line))
+					line = getNextVisibleLine(line);
+				System.err.println(delayedUpdateStart + ":" + delayedUpdateEnd + ":" + textArea.getLineCount());
+				while(line != -1 && line <= delayedUpdateEnd)
 				{
-					if(isLineVisible(i))
-					{
-						scrollLineCount +=
-							getScreenLineCount(i);
-					}
+					scrollLineCount += getScreenLineCount(line);
+					line = getNextVisibleLine(line);
 				}
+
 				if(scrollLineCount != getScrollLineCount())
 				{
 					throw new InternalError(scrollLineCount
 						+ " != "
 						+ getScrollLineCount());
 				}
-			} //}}}
+			} */ //}}}
+		} //}}}
 
-			delayedUpdate = false;
+		//{{{ doDelayedUpdate() method
+		private void doDelayedUpdate()
+		{
+			// must update screen line counts before we call
+			// _notifyScreenLineChanges() since that calls
+			// updateScrollBars() which needs valid info
+			int _firstLine = textArea.getFirstPhysicalLine();
+			int _lastLine = textArea.getLastPhysicalLine();
+
+			int line = delayedUpdateStart;
+			if(!isLineVisible(line))
+				line = getNextVisibleLine(line);
+			while(line != -1 && line <= delayedUpdateEnd)
+			{
+				if(line < _firstLine || line > _lastLine)
+				{
+					getScreenLineCount(line);
+				}
+				line = getNextVisibleLine(line);
+			}
+
+			// must be before the below call
+			// so that the chunk cache is not
+			// updated with an invisible first
+			// line (see above)
+			_notifyScreenLineChanges();
+
+			if(delayedMultilineUpdate)
+			{
+				textArea.invalidateScreenLineRange(
+					textArea.chunkCache
+					.getScreenLineOfOffset(
+					delayedUpdateStart,0),
+					textArea.getVisibleLines());
+				delayedMultilineUpdate = false;
+			}
+			else
+			{
+				textArea.invalidateLineRange(
+					delayedUpdateStart,
+					delayedUpdateEnd);
+			}
+
+			// update visible lines
+			int visibleLines = textArea.getVisibleLines();
+			if(visibleLines != 0)
+			{
+				textArea.chunkCache.getLineInfo(
+					visibleLines - 1);
+			}
+
+			// force the fold levels to be
+			// updated.
+
+			// when painting the last line of
+			// a buffer, Buffer.isFoldStart()
+			// doesn't call getFoldLevel(),
+			// hence the foldLevelChanged()
+			// event might not be sent for the
+			// previous line.
+
+			buffer.getFoldLevel(delayedUpdateEnd);
 		} //}}}
 
 		//{{{ contentInserted() method

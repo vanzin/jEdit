@@ -8,13 +8,13 @@
 <!-- NOTE: the following element must point to the location of onechunk.xsl -->
 <!-- (for a single html page) or chunk.xsl (for multiple pages) in your     -->
 <!-- installation of the DocBook XSL stylesheets.                           -->
-<xsl:import href="I:/sgml/docbook-xsl-1.45/html/onechunk.xsl"/>
+<xsl:import href="docbook-wrapper.xsl"/>
 
-<xsl:param name="use.id.as.filename" select="'1'" doc:type="boolean"/>
+<xsl:param name="use.id.as.filename" select="'1'"/>
 
 <!-- Change these variables to '1' when using xalan -->
-<xsl:param name="use.extensions" select="'0'" doc:type="boolean"/>
-<xsl:param name="tablecolumns.extension" select="'0'" doc:type="boolean"/>
+<xsl:param name="use.extensions" select="'0'"/>
+<xsl:param name="tablecolumns.extension" select="'0'"/>
 
 <xsl:template match="guibutton">
   <xsl:call-template name="inline.sansserifseq"/>
@@ -97,187 +97,10 @@
 </l10n>
 </i18n>
 
-<xsl:template match="/">
-  <xsl:call-template name="toc"/>
-  <xsl:call-template name="index"/>
-</xsl:template>
-
 <xsl:template name="header.navigation">
 </xsl:template>
 
 <xsl:template name="footer.navigation">
-</xsl:template>
-
-<xsl:template name="toc">
-  <xsl:apply-templates/>
-  <xsl:call-template name="write.chunk">
-    <xsl:with-param name="filename" select="'toc.xml'"/>
-    <xsl:with-param name="method" select="'xml'"/>
-    <xsl:with-param name="indent" select="'yes'"/>
-    <xsl:with-param name="content">
-      <xsl:call-template name="toc.content"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="toc.content">
-  <TOC>
-    <xsl:apply-templates select="." mode="my.toc"/>
-  </TOC>
-</xsl:template>
-
-<xsl:template match="set" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="book" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="book" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="part|reference|preface|chapter|appendix|article|colophon"
-                         mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="part|reference|preface|chapter|appendix|article"
-              mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates
-      select="preface|chapter|appendix|refentry|section|sect1"
-      mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="section" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="href">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="section" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="sect1" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="sect2" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="sect2" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="sect3" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="sect3" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="sect4" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="sect4" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-   <xsl:apply-templates select="sect5" mode="my.toc"/>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template match="sect5|colophon" mode="my.toc">
-  <ENTRY>
-   <xsl:attribute name="HREF">
-      <xsl:apply-templates mode="chunk-filename" select="."/>
-   </xsl:attribute>
-   <TITLE>
-    <xsl:apply-templates mode="title.markup" select="."/>
-   </TITLE>
-  </ENTRY>
-</xsl:template>
-
-<xsl:template name="index">
-  <xsl:call-template name="write.chunk">
-    <xsl:with-param name="filename" select="'word-index.xml'"/>
-    <xsl:with-param name="method" select="'xml'"/>
-    <xsl:with-param name="indent" select="'yes'"/>
-    <xsl:with-param name="content">
-      <xsl:call-template name="index.content"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<xsl:template name="index.content">
-  <INDEX>
-    <xsl:apply-templates select="//indexterm" mode="index"/>
-  </INDEX>
-</xsl:template>
-
-<xsl:template match="indexterm" mode="index">
-  <xsl:variable name="text">
-    <xsl:value-of select="primary"/>
-    <xsl:if test="secondary">
-      <xsl:text>, </xsl:text>
-      <xsl:value-of select="secondary"/>
-    </xsl:if>
-    <xsl:if test="tertiary">
-      <xsl:text>, </xsl:text>
-      <xsl:value-of select="tertiary"/>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="see">
-      <xsl:variable name="see"><xsl:value-of select="see"/></xsl:variable>
-      <INDEXTERM TEXT="{$text} see '{$see}'"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <INDEXTERM TEXT="{$text}">
-         <xsl:apply-templates mode="chunk-filename" select="."/>
-      </INDEXTERM>
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
