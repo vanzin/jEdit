@@ -142,4 +142,9 @@ public class Debug
 	 * Printing debug.
 	 */
 	public static boolean PRINT_DEBUG = false;
+
+	/**
+	 * Create new search dialogs instead of reusing instances.
+	 */
+	public static boolean DISABLE_SEARCH_DIALOG_POOL = false;
 }

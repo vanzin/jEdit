@@ -6,6 +6,8 @@
      Delphi 3 was used as reference.
      Modified by Barry Carr (Ixian Software Components Ltd)
      Delphi 6 was used as reference.
+     Modified by Barry Carr (Ixian Software Components Ltd) Feb '04
+     Delphi 8 (for .NET) was used as reference
      Keywords   = KEYWORD1
      Directives = KEYWORD2.
      Everything else as is-->
@@ -73,6 +75,7 @@
             <KEYWORD1>and</KEYWORD1>
             <KEYWORD1>array</KEYWORD1>
             <KEYWORD1>as</KEYWORD1>
+            <KEYWORD1>at</KEYWORD1>
             <KEYWORD1>asm</KEYWORD1>
             <KEYWORD1>begin</KEYWORD1>
             <KEYWORD1>case</KEYWORD1>
@@ -89,6 +92,7 @@
             <KEYWORD1>except</KEYWORD1>
             <KEYWORD1>exports</KEYWORD1>
             <KEYWORD1>file</KEYWORD1>
+            <KEYWORD1>final</KEYWORD1>
             <KEYWORD1>finalization</KEYWORD1>
             <KEYWORD1>finally</KEYWORD1>
             <KEYWORD1>for</KEYWORD1>
@@ -103,7 +107,6 @@
             <KEYWORD1>interface</KEYWORD1>
             <KEYWORD1>is</KEYWORD1>
             <KEYWORD1>label</KEYWORD1>
-            <KEYWORD1>library</KEYWORD1>
             <KEYWORD1>mod</KEYWORD1>
             <KEYWORD1>not</KEYWORD1>
             <KEYWORD1>object</KEYWORD1>
@@ -120,8 +123,10 @@
             <KEYWORD1>repeat</KEYWORD1>
             <KEYWORD1>resourcestring</KEYWORD1>
             <KEYWORD1>set</KEYWORD1>
+            <KEYWORD1>sealed</KEYWORD1>
             <KEYWORD1>shl</KEYWORD1>
             <KEYWORD1>shr</KEYWORD1>
+            <KEYWORD1>static</KEYWORD1>
             <KEYWORD1>string</KEYWORD1>
             <KEYWORD1>then</KEYWORD1>
             <KEYWORD1>threadvar</KEYWORD1>
@@ -129,6 +134,7 @@
             <KEYWORD1>try</KEYWORD1>
             <KEYWORD1>type</KEYWORD1>
             <KEYWORD1>unit</KEYWORD1>
+            <KEYWORD1>unsafe</KEYWORD1>
             <KEYWORD1>until</KEYWORD1>
             <KEYWORD1>uses</KEYWORD1>
             <KEYWORD1>var</KEYWORD1>
@@ -138,6 +144,7 @@
 
             <KEYWORD2>absolute</KEYWORD2>
             <KEYWORD2>abstract</KEYWORD2>
+            <KEYWORD2>assembler</KEYWORD2>
             <KEYWORD2>automated</KEYWORD2>
             <KEYWORD2>cdecl</KEYWORD2>
             <KEYWORD2>contains</KEYWORD2>
@@ -151,8 +158,11 @@
             <KEYWORD2>forward</KEYWORD2>
             <KEYWORD2>implements</KEYWORD2>
             <KEYWORD2>index</KEYWORD2>
+            <KEYWORD2>library</KEYWORD2>
+            <KEYWORD2>local</KEYWORD2>
             <KEYWORD2>message</KEYWORD2>
             <KEYWORD2>name</KEYWORD2>
+            <KEYWORD2>namespaces</KEYWORD2>
             <KEYWORD2>near</KEYWORD2>
             <KEYWORD2>nodefault</KEYWORD2>
             <KEYWORD2>overload</KEYWORD2>
@@ -173,6 +183,7 @@
             <KEYWORD2>safecall</KEYWORD2>
             <KEYWORD2>stdcall</KEYWORD2>
             <KEYWORD2>stored</KEYWORD2>
+            <KEYWORD2>varargs</KEYWORD2>
             <KEYWORD2>virtual</KEYWORD2>
             <KEYWORD2>write</KEYWORD2>
             <KEYWORD2>writeonly</KEYWORD2>

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,8 @@ import org.gjt.sp.util.Log;
  */
 public class BeanShell
 {
+	private static final String REQUIRED_VERSION = "2.0b1.1-jedit-1";
+
 	//{{{ evalSelection() method
 	/**
 	 * Evaluates the text selected in the specified text area.
@@ -619,6 +621,18 @@ public class BeanShell
 	//{{{ init() method
 	static void init()
 	{
+		try
+		{
+			NameSpace.class.getMethod("addCommandPath",
+				new Class[] { String.class, Class.class });
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,BeanShell.class,"You have BeanShell version " + Interpreter.VERSION + " in your CLASSPATH.");
+			Log.log(Log.ERROR,BeanShell.class,"Please remove it from the CLASSPATH since jEdit can only run with the bundled BeanShell version " + REQUIRED_VERSION);
+			System.exit(1);
+		}
+
 		classManager = new CustomClassManager();
 		classManager.setClassLoader(new JARClassLoader());
 

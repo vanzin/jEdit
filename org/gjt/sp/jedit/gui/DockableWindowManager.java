@@ -820,6 +820,11 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	//{{{ getDockableWindow() method
 	/**
 	 * Returns the specified dockable window.
+	 *
+	 * Note that this method
+	 * will return null if the dockable has not been added yet.
+	 * Make sure you call {@link #addDockableWindow(String)} first.
+	 *
 	 * @param name The name of the dockable window
 	 * @since jEdit 4.1pre2
 	 */
@@ -830,8 +835,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//{{{ getDockable() method
 	/**
-	 * Returns the specified dockable window. For historical reasons, this
+	 * Returns the specified dockable window.
+	 *
+	 * Note that this method
+	 * will return null if the dockable has not been added yet.
+	 * Make sure you call {@link #addDockableWindow(String)} first.
+	 *
+	 * For historical reasons, this
 	 * does the same thing as {@link #getDockableWindow(String)}.
+	 *
 	 * @param name The name of the dockable window
 	 * @since jEdit 4.0pre1
 	 */

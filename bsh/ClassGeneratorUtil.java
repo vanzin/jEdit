@@ -33,8 +33,14 @@
 
 package bsh;
 
-import org.objectweb.asm.*;
-import java.lang.reflect.*;
+import org.objectweb.asm.Constants;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.CodeVisitor;
+import org.objectweb.asm.Type;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 

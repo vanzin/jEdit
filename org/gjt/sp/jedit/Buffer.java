@@ -2632,9 +2632,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				int openBracketIndex = TextUtilities.findMatchingBracket(
 					this,lineIndex,closeBracketIndex);
-				int openLineIndex = getLineOfOffset(openBracketIndex);
 				if(openBracketIndex != -1)
 				{
+					int openLineIndex = getLineOfOffset(openBracketIndex);
 					String openLine = getLineText(openLineIndex);
 					if (getLineParenWeight(openLineIndex) < 0)
 					{

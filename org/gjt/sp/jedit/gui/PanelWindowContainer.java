@@ -858,13 +858,13 @@ public class PanelWindowContainer implements DockableWindowContainer
 					x += btnWidth;
 				}
 
-				if(y + rowHeight != parent.getHeight())
+				/* if(y + rowHeight != parent.getHeight())
 				{
 					parent.setSize(
 						parent.getWidth(),
 						y + rowHeight);
 					((JComponent)parent).revalidate();
-				}
+				} */
 			}
 			else
 			{
@@ -887,12 +887,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 					y += btnHeight;
 				}
 
-				if(x + colWidth != parent.getWidth())
+				/* if(x + colWidth != parent.getWidth())
 				{
 					parent.setSize(x + colWidth,
 						parent.getHeight());
 					((JComponent)parent).revalidate();
-				}
+				} */
 			}
 		} //}}}
 	} //}}}
