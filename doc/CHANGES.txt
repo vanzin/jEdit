@@ -218,6 +218,9 @@ and Ryan Grove for contributing to this release.
 
 - Faster buffer transactions if both soft wrap and narrowing is active.
 
+- Faster search and replace where the search or replace string matches
+  on multiple lines.
+
 }}}
 {{{ Platform-Specific
 

@@ -444,11 +444,15 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			moveGap(-1,0,"contentInserted");
+			//moveGap(-1,0,"contentInserted");
 
-			lineCount += numLines;
+			if(startLine < gapLine)
+				gapLine += numLines;
+
 			if(startLine < lastValidLineContext)
 				lastValidLineContext += numLines;
+
+			lineCount += numLines;
 
 			if(lineInfo.length <= lineCount)
 			{
@@ -490,11 +494,10 @@ public class OffsetManager
 
 			for(int i = 0; i < numLines; i++)
 			{
-				// need the line end offset to be in place
-				// for following fold level calculations
-				lineInfo[startLine + i] = (offset
-					+ endOffsets.get(i))
-					| visible;
+				long off = offset + endOffsets.get(i);
+				if(i >= gapLine)
+					off -= gapWidth;
+				lineInfo[startLine + i] = off | visible;
 			}
 
 			Anchor anchor = anchors;
@@ -524,14 +527,17 @@ public class OffsetManager
 		//{{{ Update line info and line context arrays
 		if(numLines > 0)
 		{
-			moveGap(-1,0,"contentRemoved");
+			if(startLine + numLines < gapLine)
+				gapLine -= numLines;
+			else if(startLine < gapLine)
+				gapLine = startLine;
+
+			if(startLine + numLines < lastValidLineContext)
+				lastValidLineContext -= numLines;
+			else if(startLine < lastValidLineContext)
+				lastValidLineContext = startLine - 1;
 
 			lineCount -= numLines;
-			if(startLine < lastValidLineContext)
-				lastValidLineContext -= numLines;
-			else if(startLine >= lastValidLineContext
-				&& startLine + numLines < lastValidLineContext)
-				lastValidLineContext = startLine - 1;
 
 			// if anchor's physical line > startLine,
 			// count screen lines from startLine to Math.min(startLine + numLines,line)

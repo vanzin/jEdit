@@ -3735,7 +3735,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 					setMode();
 				}
 				else
-					propertiesChanged();
+				{
+					// if user adds mode buffer-local property
+					String newMode = getStringProperty("mode");
+					if(!newMode.equals(getMode().getName()))
+						setMode();
+					else
+						propertiesChanged();
+				}
 
 				EditBus.send(new BufferUpdate(Buffer.this,
 					view,BufferUpdate.DIRTY_CHANGED));
@@ -3859,15 +3866,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		this.foldHandler = foldHandler;
 
-		// don't do this on initial fold handler creation
-		if(oldFoldHandler != null)
-		{
-			offsetMgr.lineInfoChangedFrom(0);
+		offsetMgr.lineInfoChangedFrom(0);
 
-			int collapseFolds = getIntegerProperty("collapseFolds",0);
-			offsetMgr.expandFolds(collapseFolds);
-			offsetMgr.resetAnchors();
-		}
+		int collapseFolds = getIntegerProperty("collapseFolds",0);
+		offsetMgr.expandFolds(collapseFolds);
+		offsetMgr.resetAnchors();
 	} //}}}
 
 	//{{{ getPriorNonEmptyLine() method
