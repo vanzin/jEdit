@@ -373,7 +373,15 @@
 	  written to the activity log.  The new text buffer can be saved and
 	  attached to an email message or a bug report made on SourceForge.
 	</para>
-  </listitem>
+</listitem>
+
+<listitem>
+  <para><filename>Run_Script.bsh</filename></para>
+  <abstract><para>
+    Runs script using interpreter based upon buffer's editing mode
+    (by default, determined using file extension).
+  </para></abstract>
+</listitem>
 
 <listitem>
     <para><filename>Write_HyperSearch_Results.bsh</filename></para>
