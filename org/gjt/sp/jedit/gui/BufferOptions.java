@@ -291,17 +291,6 @@ public class BufferOptions extends EnhancedDialog
 		String foldMode = (String)folding.getSelectedItem();
 		String oldFoldMode = buffer.getStringProperty("folding");
 		buffer.setStringProperty("folding",foldMode);
-		if(!oldFoldMode.equals(foldMode))
-		{
-			FoldVisibilityManager foldVisibilityManager
-				 = view.getTextArea().getFoldVisibilityManager();
-			int collapseFolds = buffer.getIntegerProperty(
-				"collapseFolds",0);
-			if(collapseFolds != 0)
-				foldVisibilityManager.expandFolds(collapseFolds);
-			else
-				foldVisibilityManager.expandAllFolds();
-		}
 
 		buffer.setStringProperty("wrap",(String)wrap.getSelectedItem());
 
@@ -337,6 +326,21 @@ public class BufferOptions extends EnhancedDialog
 		buffer.setBooleanProperty("indentOnEnter",indentOnEnter.isSelected());
 
 		buffer.propertiesChanged();
+
+		// this must be called after buffer.propertiesChanged() so that
+		// we have the new fold handler set up
+		if(!oldFoldMode.equals(foldMode))
+		{
+			FoldVisibilityManager foldVisibilityManager
+				 = view.getTextArea().getFoldVisibilityManager();
+			int collapseFolds = buffer.getIntegerProperty(
+				"collapseFolds",0);
+			if(collapseFolds != 0)
+				foldVisibilityManager.expandFolds(collapseFolds);
+			else
+				foldVisibilityManager.expandAllFolds();
+		}
+
 		View[] views = jEdit.getViews();
 		for(int i = 0; i < views.length; i++)
 		{

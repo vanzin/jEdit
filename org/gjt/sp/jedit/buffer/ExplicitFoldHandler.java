@@ -35,10 +35,11 @@ import org.gjt.sp.jedit.Buffer;
  */
 public class ExplicitFoldHandler extends FoldHandler
 {
+	//{{{ ExplicitFoldHandler constructor
 	public ExplicitFoldHandler()
 	{
 		super("explicit");
-	}
+	} //}}}
 
 	//{{{ getFoldLevel() method
 	/**

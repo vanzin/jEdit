@@ -48,7 +48,12 @@ public class XModeHandler extends HandlerBase
 	{
 		if("xmode.dtd".equals(systemId))
 		{
-			try
+			// this will result in a slight speed up, since we
+			// don't need to read the DTD anyway, as AElfred is
+			// non-validating
+			return new StringReader("<!-- -->");
+
+			/* try
 			{
 				return new BufferedReader(new InputStreamReader(
 					getClass().getResourceAsStream(
@@ -57,7 +62,7 @@ public class XModeHandler extends HandlerBase
 			catch(Exception e)
 			{
 				error("dtd",e);
-			}
+			} */
 		}
 
 		return null;

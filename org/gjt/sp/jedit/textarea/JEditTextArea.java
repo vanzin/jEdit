@@ -5243,16 +5243,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ recalculateLastPhysicalLine() method
 	void recalculateLastPhysicalLine()
 	{
-		chunkCache.updateChunksUpTo(visibleLines);
-		for(int i = visibleLines; i >= 0; i--)
+		if(softWrap)
 		{
-			ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
-			if(info.physicalLine != -1)
+			chunkCache.updateChunksUpTo(visibleLines);
+			for(int i = visibleLines; i >= 0; i--)
 			{
-				physLastLine = info.physicalLine;
-				screenLastLine = i;
-				break;
+				ChunkCache.LineInfo info = chunkCache.getLineInfo(i);
+				if(info.physicalLine != -1)
+				{
+					physLastLine = info.physicalLine;
+					screenLastLine = i;
+					break;
+				}
 			}
+		}
+		else
+		{
+			// this is faster
+			int virtLastLine = Math.min(foldVisibilityManager
+				.getVirtualLineCount() - 1,
+				firstLine + visibleLines);
+			screenLastLine = virtLastLine - firstLine;
+			physLastLine = foldVisibilityManager.virtualToPhysical(
+				virtLastLine);
 		}
 	} //}}}
 
