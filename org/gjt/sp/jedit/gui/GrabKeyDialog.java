@@ -375,7 +375,7 @@ public class GrabKeyDialog extends JDialog
 				if(debugBuffer != null)
 				{
 					debugBuffer.insert(debugBuffer.getLength(),
-						"Event " + _evt + " filtered\n");
+						"Event " + toString(_evt) + " filtered\n");
 				}
 				return;
 			}
@@ -384,7 +384,8 @@ public class GrabKeyDialog extends JDialog
 				if(debugBuffer != null)
 				{
 					debugBuffer.insert(debugBuffer.getLength(),
-						"Event " + _evt + " passed\n");
+						"Event " + toString(_evt)
+						+ " passed\n");
 				}
 			}
 
@@ -437,6 +438,34 @@ public class GrabKeyDialog extends JDialog
 			if(debugBuffer == null)
 				updateAssignedTo(keyString.toString());
 		} //}}}
+
+		//{{{ toString() method
+		private String toString(KeyEvent evt)
+		{
+			String id;
+			switch(evt.getID())
+			{
+			case KeyEvent.KEY_PRESSED:
+				id = "KEY_PRESSED";
+				break;
+			case KeyEvent.KEY_RELEASED:
+				id = "KEY_RELEASED";
+				break;
+			case KeyEvent.KEY_TYPED:
+				id = "KEY_TYPED";
+				break;
+			default:
+				id = "unknown type";
+				break;
+			}
+
+			return id + ",keyCode=0x"
+				+ Integer.toString(evt.getKeyCode(),16)
+				+ ",keyChar=0x"
+				+ Integer.toString(evt.getKeyChar(),16)
+				+ ",modifiers=0x"
+				+ Integer.toString(evt.getModifiers(),16);
+		}
 	} //}}}
 
 	//{{{ ActionHandler class

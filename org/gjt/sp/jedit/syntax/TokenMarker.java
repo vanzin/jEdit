@@ -72,6 +72,15 @@ public class TokenMarker
 		return (ParserRuleSet) ruleSets.get(setName);
 	} //}}}
 
+	//{{{ getRuleSets() method
+	/**
+	 * @since jEdit 4.2pre3
+	 */
+	public ParserRuleSet[] getRuleSets()
+	{
+		return (ParserRuleSet[])ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
+	} //}}}
+
 	//{{{ markTokens() method
 	/**
 	 * Do not call this method directly; call Buffer.markTokens() instead.

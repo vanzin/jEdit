@@ -96,15 +96,25 @@ public class KeywordMap
 	 */
 	public void add(String keyword, byte id)
 	{
-		int key = getStringMapKey(keyword);
+		add(keyword.toCharArray(),id);
+	} //}}}
 
-		char[] chars = keyword.toCharArray();
+	//{{{ add() method
+	/**
+	 * Adds a key-value mapping.
+	 * @param keyword The key
+	 * @param id The value
+	 * @since jEdit 4.2pre3
+	 */
+	public void add(char[] keyword, byte id)
+	{
+		int key = getStringMapKey(keyword);
 
 		// complete-word command needs a list of all non-alphanumeric
 		// characters used in a keyword map.
-loop:		for(int i = 0; i < chars.length; i++)
+loop:		for(int i = 0; i < keyword.length; i++)
 		{
-			char ch = chars[i];
+			char ch = keyword[i];
 			if(!Character.isLetterOrDigit(ch))
 			{
 				for(int j = 0; j < noWordSep.length(); j++)
@@ -118,7 +128,7 @@ loop:		for(int i = 0; i < chars.length; i++)
 		}
 
 		noWordSepStr = null;
-		map[key] = new Keyword(chars,id,map[key]);
+		map[key] = new Keyword(keyword,id,map[key]);
 	} //}}}
 
 	//{{{ getNonAlphaNumericChars() method
@@ -175,6 +185,24 @@ loop:		for(int i = 0; i < chars.length; i++)
 		this.ignoreCase = ignoreCase;
 	} //}}}
 
+	//{{{ add() method
+	/**
+	 * Adds the content of another keyword map to this one.
+	 * @since jEdit 4.2pre3
+	 */
+	public void add(KeywordMap map)
+	{
+		for(int i = 0; i < map.map.length; i++)
+		{
+			Keyword k = map.map[i];
+			while(k != null)
+			{
+				add(k.keyword,k.id);
+				k = k.next;
+			}
+		}
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -190,6 +218,14 @@ loop:		for(int i = 0; i < chars.length; i++)
 	{
 		return (Character.toUpperCase(s.charAt(0)) +
 				Character.toUpperCase(s.charAt(s.length()-1)))
+				% mapLength;
+	} //}}}
+
+	//{{{ getStringMapKey() method
+	private int getStringMapKey(char[] s)
+	{
+		return (Character.toUpperCase(s[0]) +
+				Character.toUpperCase(s[s.length-1]))
 				% mapLength;
 	} //}}}
 

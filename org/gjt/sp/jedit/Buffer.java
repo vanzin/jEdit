@@ -238,14 +238,6 @@ public class Buffer
 				IntegerArray endOffsets = (IntegerArray)
 					getProperty(BufferIORequest.END_OFFSETS);
 
-				// below remove() call only works if read only
-				// is false. this is a slightly silly workaround.
-				boolean readOnly = isReadOnly();
-				setFlag(READ_ONLY,false);
-
-				// For `reload' command
-				remove(0,getLength());
-
 				if(seg == null)
 					seg = new Segment(new char[1024],0,0);
 				if(endOffsets == null)
@@ -257,6 +249,16 @@ public class Buffer
 				try
 				{
 					writeLock();
+
+					// For `reload' command
+					firePreContentRemoved(0,0,getLineCount()
+						- 1,getLength());
+
+					contentMgr.remove(0,getLength());
+					offsetMgr.contentRemoved(0,0,getLineCount()
+						- 1,getLength());
+					fireContentRemoved(0,0,getLineCount()
+						- 1,getLength());
 
 					// theoretically a segment could
 					// have seg.offset != 0 but
@@ -273,8 +275,6 @@ public class Buffer
 				{
 					writeUnlock();
 				}
-
-				setFlag(READ_ONLY,readOnly);
 
 				unsetProperty(BufferIORequest.LOAD_DATA);
 				unsetProperty(BufferIORequest.END_OFFSETS);
@@ -730,18 +730,20 @@ public class Buffer
 	 */
 	public boolean isReadOnly()
 	{
-		return getFlag(READ_ONLY);
+		return getFlag(READ_ONLY) || getFlag(READ_ONLY_OVERRIDE);
 	} //}}}
 
 	//{{{ isEditable() method
 	/**
-	 * Returns true if this file is editable, false otherwise.
+	 * Returns true if this file is editable, false otherwise. A file may
+	 * become uneditable if it is read only, or if I/O is in progress.
 	 * This method is thread-safe.
 	 * @since jEdit 2.7pre1
 	 */
 	public boolean isEditable()
 	{
-		return !(getFlag(READ_ONLY) || getFlag(IO) || getFlag(LOADING));
+		return !(getFlag(READ_ONLY) || getFlag(READ_ONLY_OVERRIDE)
+			|| getFlag(IO) || getFlag(LOADING));
 	} //}}}
 
 	//{{{ isReadOnly() method
@@ -751,7 +753,7 @@ public class Buffer
 	 */
 	public void setReadOnly(boolean readOnly)
 	{
-		setFlag(READ_ONLY,readOnly);
+		setFlag(READ_ONLY_OVERRIDE,readOnly);
 	} //}}}
 
 	//{{{ setDirty() method
@@ -764,12 +766,11 @@ public class Buffer
 
 		if(d)
 		{
-			if(getFlag(LOADING) || getFlag(READ_ONLY))
-				return;
-			if(getFlag(DIRTY) && getFlag(AUTOSAVE_DIRTY))
-				return;
-			setFlag(DIRTY,true);
-			setFlag(AUTOSAVE_DIRTY,true);
+			if(isEditable())
+			{
+				setFlag(DIRTY,true);
+				setFlag(AUTOSAVE_DIRTY,true);
+			}
 		}
 		else
 		{
@@ -817,7 +818,7 @@ public class Buffer
 	{
 		if(getFlag(DIRTY))
 			return GUIUtilities.DIRTY_BUFFER_ICON;
-		else if(getFlag(READ_ONLY))
+		else if(getFlag(READ_ONLY) || getFlag(READ_ONLY_OVERRIDE))
 			return GUIUtilities.READ_ONLY_BUFFER_ICON;
 		else if(getFlag(NEW_FILE))
 			return GUIUtilities.NEW_BUFFER_ICON;
@@ -1237,28 +1238,20 @@ public class Buffer
 				throw new ArrayIndexOutOfBoundsException(offset + ":" + length);
 
 			int startLine = offsetMgr.getLineOfOffset(offset);
+			int endLine = offsetMgr.getLineOfOffset(offset + length);
 
-			contentMgr.getText(offset,length,seg);
-			int numLines = 0;
-			for(int i = 0; i < seg.count; i++)
-			{
-				if(seg.array[seg.offset + i] == '\n')
-					numLines++;
-			}
+			int numLines = endLine - startLine;
 
-			/* nothing can go here since we re-use the 'seg'! */
-
-			if(!getFlag(UNDO_IN_PROGRESS)
-				&& !getFlag(LOADING))
+			if(!getFlag(UNDO_IN_PROGRESS) && !getFlag(LOADING))
 			{
 				undoMgr.contentRemoved(offset,length,
-					seg.toString(),!getFlag(DIRTY));
+					getText(offset,length),
+					!getFlag(DIRTY));
 			}
 
 			firePreContentRemoved(startLine,offset,numLines,length);
 
 			contentMgr.remove(offset,length);
-
 			offsetMgr.contentRemoved(startLine,offset,numLines,length);
 
 			fireContentRemoved(startLine,offset,numLines,length);
@@ -3170,7 +3163,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void addMarker(char shortcut, int pos)
 	{
-		if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
+		if(jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
 
 		Marker markerN = new Marker(this,shortcut,pos);
@@ -3268,7 +3261,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			Marker marker = (Marker)markers.elementAt(i);
 			if(getLineOfOffset(marker.getPosition()) == line)
 			{
-				if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
+				if(jEdit.getBooleanProperty("persistentMarkers"))
 					setDirty(true);
 
 				marker.removePosition();
@@ -3288,7 +3281,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void removeAllMarkers()
 	{
-		if(!getFlag(READ_ONLY) && jEdit.getBooleanProperty("persistentMarkers"))
+		if(jEdit.getBooleanProperty("persistentMarkers"))
 			setDirty(true);
 
 		for(int i = 0; i < markers.size(); i++)
@@ -3534,9 +3527,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private static final int AUTOSAVE_DIRTY = 5;
 	private static final int DIRTY = 6;
 	private static final int READ_ONLY = 7;
-	private static final int UNDO_IN_PROGRESS = 8;
-	private static final int TEMPORARY = 9;
-	private static final int INSIDE_INSERT = 10;
+	private static final int READ_ONLY_OVERRIDE = 8;
+	private static final int UNDO_IN_PROGRESS = 9;
+	private static final int TEMPORARY = 10;
+	private static final int INSIDE_INSERT = 11;
 	//}}}
 
 	private int flags;
@@ -3587,7 +3581,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		this.symlinkPath = path;
 		VFS vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
-			setReadOnly(true);
+			setFlag(READ_ONLY,true);
 		this.name = vfs.getFileName(path);
 		this.directory = vfs.getParentOfPath(path);
 
@@ -3676,7 +3670,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 					return false;
 				}
 
-				setReadOnly(!file.canWrite);
+				setFlag(READ_ONLY,!file.canWrite);
 
 				if(file.type != VFS.DirectoryEntry.FILE)
 				{

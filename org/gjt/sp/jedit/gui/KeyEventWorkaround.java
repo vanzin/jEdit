@@ -108,7 +108,14 @@ public class KeyEventWorkaround
 				if(!OperatingSystem.isMacOS())
 					handleBrokenKeys(evt,keyCode);
 				else
+				{
+					/* we don't handle key pressed A+ */
+					/* they're too troublesome */
+					if(evt.isAltDown())
+						return null;
+
 					last = LAST_NOTHING;
+				}
 				break;
 			}
 

@@ -364,6 +364,12 @@ public abstract class XModeHandler extends HandlerBase
 				lastNoWordSep = "_";
 				rules = null;
 			} //}}}
+			//{{{ IMPORT
+			else if (tag == "IMPORT")
+			{
+				rules.addRuleSet(lastDelegateSet);
+				lastDelegateSet = null;
+			} //}}}
 			//{{{ TERMINATE
 			else if (tag == "TERMINATE")
 			{
@@ -561,6 +567,16 @@ public abstract class XModeHandler extends HandlerBase
 		props = new Hashtable();
 
 		pushElement(null);
+	} //}}}
+
+	//{{{ endDocument() method
+	public void endDocument()
+	{
+		ParserRuleSet[] rulesets = marker.getRuleSets();
+		for(int i = 0; i < rulesets.length; i++)
+		{
+			rulesets[i].resolveImports();
+		}
 	} //}}}
 
 	//{{{ getTokenMarker() method

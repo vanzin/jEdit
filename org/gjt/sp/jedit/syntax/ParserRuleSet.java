@@ -53,6 +53,7 @@ public class ParserRuleSet
 		this.setName = setName;
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
+		imports = new LinkedList();
 	} //}}}
 
 	//{{{ getModeName() method
@@ -84,6 +85,48 @@ public class ParserRuleSet
 	{
 		this.props = props;
 		_noWordSep = null;
+	} //}}}
+
+	//{{{ resolveImports() method
+	/**
+	 * Resolves all rulesets added with {@link #addRuleSet(ParserRuleSet)}.
+	 * @since jEdit 4.2pre3
+	 */
+	public void resolveImports()
+	{
+		Iterator iter = imports.iterator();
+		while(iter.hasNext())
+		{
+			ParserRuleSet ruleset = (ParserRuleSet)iter.next();
+			for(int i = 0; i < ruleset.ruleMapFirst.length; i++)
+			{
+				ParserRule rule = ruleset.ruleMapFirst[i];
+				while(rule != null)
+				{
+					addRule(rule);
+					rule = rule.next;
+				}
+			}
+
+			if(ruleset.keywords != null)
+			{
+				if(keywords == null)
+					keywords = new KeywordMap(ignoreCase);
+				keywords.add(ruleset.keywords);
+			}
+		}
+		imports.clear();
+	} //}}}
+
+	//{{{ addRuleSet() method
+	/**
+	 * Adds all rules contained in the given ruleset.
+	 * @param ruleset The ruleset
+	 * @since jEdit 4.2pre3
+	 */
+	public void addRuleSet(ParserRuleSet ruleset)
+	{
+		imports.add(ruleset);
 	} //}}}
 
 	//{{{ addRule() method
@@ -264,6 +307,8 @@ public class ParserRuleSet
 
 	private ParserRule[] ruleMapFirst;
 	private ParserRule[] ruleMapLast;
+
+	private LinkedList imports;
 
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;

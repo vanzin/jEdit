@@ -522,10 +522,11 @@ public class DefaultInputHandler extends InputHandler
 		if(OperatingSystem.isMacOS())
 		{
 			setModifierMapping(
-				InputEvent.META_MASK,
-				InputEvent.ALT_MASK,
-				InputEvent.CTRL_MASK,
-				InputEvent.SHIFT_MASK);
+				InputEvent.META_MASK,  /* == C+ */
+				InputEvent.CTRL_MASK,  /* == A+ */
+				/* M+ discarded by key event workaround! */
+				InputEvent.ALT_MASK,   /* == M+ */
+				InputEvent.SHIFT_MASK  /* == S+ */);
 		}
 		else
 		{
