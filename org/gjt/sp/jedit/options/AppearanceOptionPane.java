@@ -84,6 +84,10 @@ public class AppearanceOptionPane extends AbstractOptionPane
 
 		updateEnabled();
 
+		addSeparator("options.appearance.experimental.label");
+		addComponent(GUIUtilities.createMultilineLabel(
+			jEdit.getProperty("options.appearance.experimental.caption")));
+
 		/* Use jEdit colors in all text components */
 		textColors = new JCheckBox(jEdit.getProperty(
 			"options.appearance.textColors"));

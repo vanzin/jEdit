@@ -53,7 +53,7 @@ public class OverviewOptionPane extends AbstractOptionPane
 		}
 		ep.setEditable(false);
 		JScrollPane scroller = new JScrollPane(ep);
-		scroller.setPreferredSize(new Dimension(400,0));
+		scroller.setPreferredSize(new Dimension(300,0));
 		add(BorderLayout.CENTER,scroller);
 	} //}}}
 

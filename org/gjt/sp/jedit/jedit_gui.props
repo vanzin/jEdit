@@ -1342,8 +1342,13 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
+options.appearance.experimental.label=Experimental options
+options.appearance.experimental.caption=The below three options might not work \
+	correctly with some\n\
+	Java versions. If you experience problems, switch them off.
+
 options.appearance.textColors=Use jEdit text area colors in all text \
-	components (experimental)
+	components
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
 #}}}

@@ -36,7 +36,21 @@ public abstract class EnhancedDialog extends JDialog
 	public EnhancedDialog(Frame parent, String title, boolean modal)
 	{
 		super(parent,title,modal);
+		_init();
+	}
+	
+	public EnhancedDialog(Dialog parent, String title, boolean modal)
+	{
+		super(parent,title,modal);
+		_init();
+	}
 
+	public abstract void ok();
+	public abstract void cancel();
+
+	//{{{ Private members
+	
+	private void _init() {
 		((Container)getLayeredPane()).addContainerListener(
 			new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
@@ -48,9 +62,8 @@ public abstract class EnhancedDialog extends JDialog
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 
-	public abstract void ok();
-	public abstract void cancel();
-
+	//}}}
+	
 	// protected members
 	protected KeyHandler keyHandler;
 
