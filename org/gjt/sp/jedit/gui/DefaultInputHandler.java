@@ -193,10 +193,12 @@ public class DefaultInputHandler extends InputHandler
 					readNextChar = null;
 					view.getStatus().setMessage(null);
 				}
-				else if(!evt.isActionKey()
-					&& keyCode != KeyEvent.VK_TAB
-					&& keyCode != KeyEvent.VK_ENTER)
+				else if(keyCode == KeyEvent.VK_TAB
+					|| keyCode == KeyEvent.VK_ENTER)
 				{
+					setCurrentBindings(bindings);
+					invokeReadNextChar((char)keyCode);
+					repeatCount = 1;
 					return;
 				}
 			}

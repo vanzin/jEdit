@@ -906,6 +906,12 @@ loop:		for(;;)
 	//{{{ showLineRange() method
 	private void showLineRange(int start, int end)
 	{
+		if(Debug.FOLD_VIS_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"showLineRange(" + start
+				+ "," + end + ")");
+		}
+
 		for(int i = start; i <= end; i++)
 		{
 			if(!isLineVisible(i))
@@ -922,8 +928,6 @@ loop:		for(;;)
 			}
 		}
 
-		lastfvmget = -1;
-
 		/* update fold visibility map. */
 		int starti = fvmget(start);
 		int endi = fvmget(end);
@@ -942,17 +946,30 @@ loop:		for(;;)
 		{
 			if(endi % 2 == 0)
 			{
-				fvmput(starti + 1,endi,null);
-				fvm[starti + 1] = start;
+				if(fvm[starti] == start)
+					fvmput(starti,endi + 1,null);
+				else
+				{
+					fvmput(starti + 1,endi,null);
+					fvm[starti + 1] = start;
+				}
 			}
 			else
 				fvmput2(starti,endi,start,end);
 		}
+
+		lastfvmget = -1;
 	} //}}}
 
 	//{{{ hideLineRange() method
 	private void hideLineRange(int start, int end)
 	{
+		if(Debug.FOLD_VIS_DEBUG)
+		{
+			Log.log(Log.DEBUG,this,"hideLineRange(" + start
+				+ "," + end + ")");
+		}
+
 		for(int i = start; i <= end; i++)
 		{
 			if(isLineVisible(i))
@@ -969,8 +986,6 @@ loop:		for(;;)
 			}
 		}
 
-		lastfvmget = -1;
-
 		/* update fold visibility map. */
 		int starti = fvmget(start);
 		int endi = fvmget(end);
@@ -995,6 +1010,8 @@ loop:		for(;;)
 			else
 				fvmput(starti + 1,endi + 1,null);
 		}
+
+		lastfvmget = -1;
 	} //}}}
 
 	//{{{ _setScreenLineCount() method
@@ -1449,6 +1466,8 @@ loop:		for(;;)
 				int index = fvmget(startLine);
 				for(int i = index + 1; i < fvmcount; i++)
 					fvm[i] += numLines;
+
+				lastfvmget = -1;
 			}
 
 			if(!buffer.isTransactionInProgress())
@@ -1489,18 +1508,28 @@ loop:		for(;;)
 						scrollLineCount.callReset = true;
 					}
 					else
-						fvmput(starti,endi,null);
+					{
+						fvmput(starti + 1,endi + 1,null);
+						starti++;
+					}
 				}
 				/* start is visible, end is invisible. */
 				/* start is invisible, end is visible */
+				else if(fvm[endi] == startLine + numLines)
+				{
+					fvmput(starti,endi + 1,null);
+				}
 				else
 				{
 					fvmput(starti + 1,endi,null);
 					fvm[starti + 1] = startLine;
+					starti += 2;
 				}
 
-				for(int i = starti + 1; i < fvmcount; i++)
+				for(int i = starti; i < fvmcount; i++)
 					fvm[i] -= numLines;
+
+				lastfvmget = -1;
 			}
 
 			if(!buffer.isTransactionInProgress())
