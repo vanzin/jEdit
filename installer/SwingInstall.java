@@ -138,7 +138,7 @@ public class SwingInstall extends JFrame
 			String dir = ((JTextField)osTaskDirs.get(osTask)).getText();
 			if(dir != null && dir.length() != 0)
 			{
-				osTask.setEnabled(false);
+				osTask.setEnabled(true);
 				osTask.setDirectory(dir);
 			}
 			else

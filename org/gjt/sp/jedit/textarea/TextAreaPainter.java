@@ -645,8 +645,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// too many lines will always be painted.
 		int lastInvalid = (clipRect.y + clipRect.height - 1) / height;
 
-		if(lastInvalid - firstInvalid > 1)
-			System.err.println("repainting " + (lastInvalid - firstInvalid) + " lines");
+		//if(lastInvalid - firstInvalid > 1)
+		//	System.err.println("repainting " + (lastInvalid - firstInvalid) + " lines");
 		textArea.chunkCache.updateChunksUpTo(lastInvalid);
 
 		int y = (clipRect.y - clipRect.y % height);

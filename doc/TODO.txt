@@ -5,9 +5,6 @@ and quirks that I need to fix eventually.
 
 - need a new jEditLauncher before the 4.1final release
 - spell-check docs
-
-+ before pre10:
-
 - fsb: at roots:; select something; path not prepended
 
 + later:
