@@ -108,8 +108,12 @@ public class FileRootsVFS extends VFS
 			.FILESYSTEM,0L,false);
 	} //}}}
 
+	//{{{ Private members
+	private FileSystemView fsView;
+	private Method method;
+
 	//{{{ listRoots() method
-	public static File[] listRoots()
+	private static File[] listRoots()
 	{
 		if (OperatingSystem.isMacOS())
 		{
@@ -131,9 +135,6 @@ public class FileRootsVFS extends VFS
 		else
 			return File.listRoots();
 	} //}}}
-
-	//{{{ Private members
-	private FileSystemView fsView;
-	private Method method;
+	
 	//}}}
 }
