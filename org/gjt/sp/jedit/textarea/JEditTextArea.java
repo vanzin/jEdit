@@ -5029,6 +5029,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean bufferChanging;
 
 	int maxHorizontalScrollWidth;
+	boolean updateMaxHorizontalScrollWidth;
 
 	boolean hardWrap;
 	float tabSize;

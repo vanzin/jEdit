@@ -112,6 +112,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public static final int DEFAULT_LAYER = 0;
 
 	/**
+	 * Block caret layer. Most extensions will be below this layer.
+	 * @since jEdit 4.2pre1
+	 */
+	public static final int BLOCK_CARET_LAYER = 50;
+
+	/**
 	 * Bracket highlight layer. Most extensions will be below this layer.
 	 * @since jEdit 4.0pre4
 	 */
@@ -387,6 +393,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setBlockCaretEnabled(boolean blockCaret)
 	{
 		this.blockCaret = blockCaret;
+		extensionMgr.removeExtension(caretExtension);
+		if(blockCaret)
+			addExtension(BLOCK_CARET_LAYER,caretExtension);
+		else
+			addExtension(CARET_LAYER,caretExtension);
 		if(textArea.getBuffer() != null)
 			textArea.invalidateLine(textArea.getCaretLine());
 	} //}}}
@@ -641,7 +652,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ paintComponent() method
-	boolean PAINT_DEBUG = false;
 	/**
 	 * Repaints the text.
 	 * @param g The graphics context
@@ -675,50 +685,19 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		int y = (clipRect.y - clipRect.y % height);
 
-		try
+		textArea.updateMaxHorizontalScrollWidth = false;
+
+		extensionMgr.paintScreenLineRange(textArea,gfx,
+			firstInvalid,lastInvalid,y,height);
+
+		if(textArea.updateMaxHorizontalScrollWidth)
+			textArea.updateMaxHorizontalScrollWidth();
+
+		if(buffer.isNextLineRequested())
 		{
-			boolean updateMaxHorizontalScrollWidth = false;
-
-			for(int screenLine = firstInvalid;
-				screenLine <= lastInvalid;
-				screenLine++)
-			{
-				ChunkCache.LineInfo lineInfo = textArea
-					.chunkCache.getLineInfo(screenLine);
-
-				if(lineInfo.physicalLine == -1)
-					extensionMgr.paintInvalidLine(gfx,screenLine,y);
-				else
-				{
-					extensionMgr.paintValidLine(gfx,screenLine,
-						lineInfo.physicalLine,
-						textArea.getScreenLineStartOffset(screenLine),
-						textArea.getScreenLineEndOffset(screenLine),
-						y);
-				}
-
-				if(lineInfo.width > textArea.maxHorizontalScrollWidth)
-					updateMaxHorizontalScrollWidth = true;
-
-				y += height;
-			}
-
-			if(buffer.isNextLineRequested())
-			{
-				int h = clipRect.y + clipRect.height;
-				textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
-				repaint(0,h,getWidth(),getHeight() - h);
-			}
-
-			if(updateMaxHorizontalScrollWidth)
-				textArea.updateMaxHorizontalScrollWidth();
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,"Error repainting line"
-				+ " range {" + firstInvalid + ","
-				+ lastInvalid + "}:");
-			Log.log(Log.ERROR,this,e);
+			int h = clipRect.y + clipRect.height;
+			textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
+			repaint(0,h,getWidth(),getHeight() - h);
 		}
 
 		if(Debug.KEY_DELAY_TIMER && textArea.time != 0L)
@@ -823,13 +802,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		fontRenderContext = new FontRenderContext(null,false,false);
 
-		addExtension(LINE_BACKGROUND_LAYER,lineBackground
-			= new PaintLineBackground());
+		addExtension(LINE_BACKGROUND_LAYER,new PaintLineBackground());
 		addExtension(SELECTION_LAYER,new PaintSelection());
 		addExtension(WRAP_GUIDE_LAYER,new PaintWrapGuide());
 		addExtension(BRACKET_HIGHLIGHT_LAYER,new PaintBracketHighlight());
 		addExtension(TEXT_LAYER,new PaintText());
-		addExtension(CARET_LAYER,new PaintCaret());
+		caretExtension = new PaintCaret();
 	} //}}}
 
 	//}}}
@@ -838,14 +816,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ Instance variables
 	private ExtensionManager extensionMgr;
-
-	// we keep a reference to this to obtain the background color and
-	// collapsed fold state of the last painted line
-	private PaintLineBackground lineBackground;
-
+	private PaintCaret caretExtension;
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
-
 	private HashMap fonts;
 	//}}}
 
@@ -926,10 +899,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintLineBackground class
 	class PaintLineBackground extends TextAreaExtension
 	{
-		boolean collapsedFold;
-		SyntaxStyle foldLineStyle;
-		Color bgColor;
-
 		//{{{ paintValidLine() method
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
@@ -939,11 +908,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			Buffer buffer = textArea.getBuffer();
 
 			//{{{ Paint line highlight and collapsed fold highlight
-			collapsedFold = (physicalLine < buffer.getLineCount() - 1
+			boolean collapsedFold =
+				(physicalLine < buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine)
 				&& !textArea.displayManager
 				.isLineVisible(physicalLine + 1));
 
+			SyntaxStyle foldLineStyle = null;
 			if(collapsedFold)
 			{
 				int level = buffer.getFoldLevel(physicalLine + 1);
@@ -959,6 +930,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& caret >= start && caret < end
 				&& textArea.selection.size() == 0;
 
+			Color bgColor;
 			if(paintLineHighlight)
 				bgColor = lineHighlightColor;
 			else if(collapsedFold)
@@ -1204,6 +1176,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					baseLine,!Debug.DISABLE_GLYPH_VECTOR);
 			}
 
+			Buffer buffer = textArea.getBuffer();
+
 			if(!lineInfo.lastSubregion)
 			{
 				gfx.setFont(defaultFont);
@@ -1214,11 +1188,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					baseLine);
 				x += textArea.charWidth;
 			}
-			else if(lineBackground.collapsedFold)
+			else if(physicalLine < buffer.getLineCount() - 1
+				&& buffer.isFoldStart(physicalLine)
+				&& !textArea.displayManager
+				.isLineVisible(physicalLine + 1))
 			{
-				Font font = lineBackground.foldLineStyle.getFont();
+				int level = buffer.getFoldLevel(physicalLine + 1);
+				if(buffer.getFoldHandler() instanceof IndentFoldHandler)
+					level = Math.max(1,level / buffer.getIndentSize());
+				if(level > 3)
+					level = 0;
+				SyntaxStyle foldLineStyle = TextAreaPainter.this.foldLineStyle[level];
+
+				Font font = foldLineStyle.getFont();
 				gfx.setFont(font);
-				gfx.setColor(lineBackground.foldLineStyle.getForegroundColor());
+				gfx.setColor(foldLineStyle.getForegroundColor());
 
 				int nextLine;
 				int nextScreenLine = screenLine + 1;
@@ -1254,6 +1238,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 
 			lineInfo.width = (x - originalX);
+			if(lineInfo.width > textArea.maxHorizontalScrollWidth)
+				textArea.updateMaxHorizontalScrollWidth = true;
 		}
 	} //}}}
 
@@ -1270,8 +1256,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(caret < start || caret >= end)
 				return;
 
-			Color bgColor = lineBackground.bgColor;
-
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
 			textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
 			int caretX = textArea.returnValue.x;
@@ -1279,40 +1263,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			gfx.setColor(caretColor);
 
-			if(blockCaret)
+			if(textArea.isOverwriteEnabled())
 			{
-				// Workaround for bug in Graphics2D in JDK1.4 under
-				// Windows; calling setPaintMode() does not reset
-				// graphics mode.
-				Graphics2D blockgfx =
-					(OperatingSystem.isWindows()
-					? (Graphics2D)gfx.create()
-					: gfx);
-				blockgfx.setXORMode(bgColor);
-
-				if(textArea.isOverwriteEnabled())
-				{
-					blockgfx.fillRect(caretX,y + height - height / 3,
-						textArea.charWidth,height / 3);
-				}
-				else
-					blockgfx.fillRect(caretX,y,textArea.charWidth,height);
-
-				if(blockgfx != gfx)
-					blockgfx.dispose();
-				else
-					gfx.setPaintMode();
+				gfx.drawLine(caretX,y + height - 1,
+					caretX + textArea.charWidth,y + height - 1);
 			}
+			else if(blockCaret)
+				gfx.fillRect(caretX,y,textArea.charWidth,height);
 			else
-			{
-				if(textArea.isOverwriteEnabled())
-				{
-					gfx.drawLine(caretX,y + height - 1,
-						caretX + textArea.charWidth,y + height - 1);
-				}
-				else
-					gfx.drawLine(caretX,y,caretX,y + height - 1);
-			}
+				gfx.drawLine(caretX,y,caretX,y + height - 1);
 		}
 	} //}}}
 
