@@ -366,6 +366,9 @@
 <MODE NAME="shtml"		FILE="shtml.xml"
 				FILE_NAME_GLOB="*.{shtml,shtm,ssi}" />
 
+<MODE NAME="slate"		FILE="slate.xml"
+				FILE_NAME_GLOB="*.slate" />
+
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />
 

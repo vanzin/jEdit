@@ -7,6 +7,8 @@
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
 	</PROPS>
 	<RULES ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 		<!-- Comments -->

@@ -2582,6 +2582,12 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		Selection s = getSelectionAtOffset(caret);
 
+		if(caret == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
 		if(!select && s instanceof Selection.Range)
 		{
 			if(multi)

@@ -33,7 +33,7 @@ public class IndentRuleFactory
 		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Increase(),
-			null);
+			null,false);
 	}
 
 	public static IndentRule indentNextLine(String regexp)
@@ -42,7 +42,7 @@ public class IndentRuleFactory
 		return new RegexpIndentRule(regexp,
 			new IndentAction.Decrease(),
 			new IndentAction.Increase(),
-			null);
+			null,true);
 	}
 
 	public static IndentRule unindentThisLine(String regexp)
@@ -51,7 +51,8 @@ public class IndentRuleFactory
 		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Increase(),
-			new IndentAction.Decrease());
+			new IndentAction.Decrease(),
+			false);
 	}
 
 	public static IndentRule unindentNextLines(String regexp)
@@ -60,7 +61,8 @@ public class IndentRuleFactory
 		return new RegexpIndentRule(regexp,
 			null,
 			new IndentAction.Decrease(),
-			null);
+			null,
+			false);
 	}
 
 	public static IndentRule indentOpenBracket(char bracket)

@@ -763,6 +763,7 @@ public class View extends JFrame implements EBComponent
 		newSplitPane.setOneTouchExpandable(true);
 		newSplitPane.setBorder(null);
 		newSplitPane.setMinimumSize(new Dimension(0,0));
+		newSplitPane.setResizeWeight(0.5);
 
 		int parentSize = (orientation == JSplitPane.VERTICAL_SPLIT
 			? oldEditPane.getHeight() : oldEditPane.getWidth());

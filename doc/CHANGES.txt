@@ -13,6 +13,8 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
 - Updated ASP syntax highlighting (Simon Ruggier).
 
+- Slate (http://slate.tunes.org) syntax highlighting.
+
 }}}
 {{{ Auto Indent
 
@@ -60,6 +62,7 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
       f swap [ pick eq? or ] each-slot nip ;
   ! Indent returns here
 
+}}}
 {{{ Miscellaneous
 
 - When an item from the "Paste Previous" or "Paste Deleted" dialog boxes
@@ -137,6 +140,9 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
 - Inserting a long line of text did not always scroll horizontally as
   required.
+
+- Split panes now have resize weight, ensuring more intuitive behavior
+  when a split view is resized.
 
 }}}
 {{{ API Changes
