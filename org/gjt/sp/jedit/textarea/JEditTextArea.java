@@ -2057,6 +2057,22 @@ public class JEditTextArea extends JComponent
 	}
 
 	/**
+	 * Hides all lines except those in the selection.
+	 * @since jEdit 4.0pre1
+	 */
+	public void narrowToSelection()
+	{
+		if(selection.size() != 1)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		Selection sel = (Selection)selection.elementAt(0);
+		buffer.narrow(sel.getStartLine(),sel.getEndLine());
+	}
+
+	/**
 	 * Deletes the character before the caret, or the selection, if one is
 	 * active.
 	 * @since jEdit 2.7pre2

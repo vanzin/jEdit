@@ -1,5 +1,8 @@
 TO DO
 
+- macro guide entry for Andre's Vertical Paste macro
+- line-uncomment command
+- jdk1,4: use 1.1 key event workaround code
 - com/incors/plaf/kunststoff
 - credit kunststoff l&f in README.txt
 - find btn no work
