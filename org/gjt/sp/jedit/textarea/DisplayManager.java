@@ -544,7 +544,8 @@ public class DisplayManager
 
 		scrollLineCount = new ScrollLineCount(index);
 		scrollLineCount.reset();
-		offsetMgr.addAnchor(scrollLineCount);
+		// reset() calls this
+		//offsetMgr.addAnchor(scrollLineCount);
 		firstLine = new FirstLine(index);
 		firstLine.reset();
 		offsetMgr.addAnchor(firstLine);
@@ -597,6 +598,15 @@ public class DisplayManager
 		buffer = null;
 	} //}}}
 
+	//{{{ propertiesChanged() method
+	/**
+	 * Update screen line count when user changes soft wrap setting.
+	 */
+	void propertiesChanged()
+	{
+		scrollLineCount.reset();
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -635,6 +645,8 @@ public class DisplayManager
 		//{{{ reset() method
 		public void reset()
 		{
+			offsetMgr.removeAnchor(this);
+			System.err.println(buffer + ": reset: here is a scan for you");
 			physicalLine = offsetMgr.getLineCount();
 			scrollLine = 0;
 			for(int i = 0; i < physicalLine; i++)
@@ -642,6 +654,7 @@ public class DisplayManager
 				if(isLineVisible(i))
 					scrollLine += getScreenLineCount(i);
 			}
+			offsetMgr.addAnchor(this);
 		} //}}}
 	} //}}}
 
@@ -666,6 +679,11 @@ public class DisplayManager
 				else
 					physicalLine = getNextVisibleLine(physicalLine);
 			}
+
+			int screenLines = getScreenLineCount(physicalLine);
+			if(skew >= screenLines)
+				skew = screenLines - 1;
+
 			textArea.updateScrollBars();
 			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,skew);
 		} //}}}

@@ -3,24 +3,40 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- vfs browser: re-add option to base filter on filename extension
+- today:
+  - finish rect select content inserted/content removed
+  - rect select and trailing whitespace
+  - docking panels: better rubber band resize, menu button
+    if no dockable selected, what does the menu show?
+  - action bar: S+TAB/TAB selects completions
+  - complete word: ditto
+  - new bracket matching:
+    - use interface to determine match
+    - show line number in match status msg
+  - text area: better scroll to
+
+[error] PluginListDownloadProgress$DownloadThread: java.lang.NullPointerException
+[error] PluginListDownloadProgress$DownloadThread:  at java.io.UnixFileSystem.getBooleanAttributes(UnixFileSystem.java:127)
+[error] PluginListDownloadProgress$DownloadThread:  at java.io.File.exists(File.java:679)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:3023)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.jEdit.getNotLoadedPluginJARs(jEdit.java:875)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList$Plugin.checkIfInstalled(PluginList.java:165)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginList.addPlugin(PluginList.java:78)
+[error] PluginListDownloadProgress$DownloadThread:  at org.gjt.sp.jedit.pluginmgr.PluginListHandler.endElement(PluginListHandler.java:180)
+
 - add option for confirm.save-all
 - redo/undo dirty restore is broken.
 - consistent formatting for mode files
 - gutter options: add option to completely hide gutter
 - scroll jump on click is a real problem
 - expand: scroll to end of fold if possible
-- docking panels: better rubber band resize
-- action bar: S+TAB/TAB selects completions
-- complete word: ditto
 - goToBuffer(): need to focus edit pane in question
-- switching between soft wrap and not needs to update anchors, etc
 - display:
   - last physical line cleanup
-  - text area: better scroll to
   - synchro scroll needs a rewrite & folding
 - help:
   - titles in search are fucked
-  - title adds more to the relevance
   - FAQ: better titles
 - quicknotepad needs requestDefaultFocus() -- NO -- JUST GET RID OF THE
   DEPRECATED API
@@ -52,7 +68,6 @@ and quirks that I need to fix eventually.
 - bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
-- rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold
 
 - need a new jEditLauncher

@@ -494,19 +494,23 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			 * components/strings
 			 */
 			buf.setLength(0);
-			if (showEditMode)
-				buf.append(buffer.getMode().getName());
-			if (showFoldMode)
+
+			if (buffer.isLoaded())
 			{
 				if (showEditMode)
-					buf.append(",");
-				buf.append((String)view.getBuffer().getProperty("folding"));
-			}
-			if (showEncoding)
-			{
-				if (showEditMode || showFoldMode)
-					buf.append(",");
-				buf.append(buffer.getStringProperty("encoding"));
+					buf.append(buffer.getMode().getName());
+				if (showFoldMode)
+				{
+					if (showEditMode)
+						buf.append(",");
+					buf.append((String)view.getBuffer().getProperty("folding"));
+				}
+				if (showEncoding)
+				{
+					if (showEditMode || showFoldMode)
+						buf.append(",");
+					buf.append(buffer.getStringProperty("encoding"));
+				}
 			}
 
 			mode.setText("(" + buf.toString() + ")");
