@@ -28,6 +28,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.lang.reflect.*;
 import java.io.File;
+import java.util.LinkedList;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
 //}}}
@@ -119,18 +120,18 @@ public class FileRootsVFS extends VFS
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
-			File[] roots = new File[volumes.length+1];
+			LinkedList roots = new LinkedList();
 			
-			roots[0] = new File("/");
+			roots.add(new File("/"));
 			
 			for (int i=0; i<volumes.length; i++)
 			{
 				// Make sure people don't do stupid things like putting files in /Volumes
 				if (volumes[i].isDirectory())
-					roots[i+1] = volumes[i];
+					roots.add(volumes[i]);
 			}
 			
-			return roots;
+			return (File[])roots.toArray(new File[0]);
 		}
 		else
 			return File.listRoots();

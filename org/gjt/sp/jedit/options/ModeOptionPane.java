@@ -287,6 +287,10 @@ public class ModeOptionPane extends AbstractOptionPane
 			String prefix = "mode." + mode.getName() + ".";
 			jEdit.setBooleanProperty(prefix + "customSettings",!useDefaults);
 
+			// need to call Mode.init() if the file name or first line
+			// globs change
+			String oldFilenameGlob = (String)mode.getProperty("filenameGlob");
+			String oldFirstlineGlob = (String)mode.getProperty("firstlineGlob");
 			if(useDefaults)
 			{
 				jEdit.resetProperty(prefix + "filenameGlob");
@@ -301,6 +305,14 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.resetProperty(prefix + "noTabs");
 				jEdit.resetProperty(prefix + "indentOnTab");
 				jEdit.resetProperty(prefix + "indentOnEnter");
+
+				if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
+					(String)mode.getProperty("filenameGlob"))
+					&& MiscUtilities.stringsEqual(oldFirstlineGlob,
+					(String)mode.getProperty("firstlineGlob"))))
+				{
+					mode.init();
+				}
 			}
 			else
 			{
@@ -316,6 +328,14 @@ public class ModeOptionPane extends AbstractOptionPane
 				jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
 				jEdit.setBooleanProperty(prefix + "indentOnTab",indentOnTab);
 				jEdit.setBooleanProperty(prefix + "indentOnEnter",indentOnEnter);
+
+				if(!(MiscUtilities.stringsEqual(oldFilenameGlob,
+					filenameGlob)
+					&& MiscUtilities.stringsEqual(oldFirstlineGlob,
+					firstlineGlob)))
+				{
+					mode.init();
+				}
 			}
 		} //}}}
 	} //}}}

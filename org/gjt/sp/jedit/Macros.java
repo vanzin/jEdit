@@ -370,7 +370,10 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ Macro constructor
 		public Macro(Handler handler, String name, String label, String path)
 		{
-			super(name);
+			// in case macro file name has a space in it.
+			// spaces break the view.toolBar property, for instance,
+			// since it uses spaces to delimit action names.
+			super(name.replace(' ','_'));
 			this.handler = handler;
 			this.label = label;
 			this.path = path;

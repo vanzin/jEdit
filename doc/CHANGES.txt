@@ -16,9 +16,21 @@ JEDIT 4.1 VERSION HISTORY
 
 + Bug Fixes:
 
-- Line numbers in the 'Markers' menu were off by one.
+- Line numbers in the 'Markers' menu were off by one
 - On some Java versions, the popup menu code would not work in frames
-  and dialog boxes and print a stream of exceptions.
+  and dialog boxes and print a stream of exceptions
+- Fixed exception thrown on MacOS X when attempting to list "Local
+  Drives" in the file system browser (Kris Kopicki)
+- Fixed problems if a macro file name had a space in it
+- Fixed a number of problems with mode property handling:
+  - It was not possible to override a mode's property with a blank
+    value; for example if you no longer wanted objective-c mode to open
+    *.m files (and instead use matlab mode for those files) you had to
+    enter a dummy filename glob in the objective-c settings.
+  - Changing the filename or first line glob in the "Mode Specific" pane
+    would not take effect until jEdit was restarted.
+- Entering a relative path in the file system browser's "Path" field
+  didn't work
 
 * Version 4.1pre4
 
