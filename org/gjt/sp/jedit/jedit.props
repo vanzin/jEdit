@@ -385,6 +385,13 @@ vfs.browser.colors.8.color=#666666
 
 #}}}
 
+#{{{ Plugin manager settings
+plugin-manager.downloadSource=false
+plugin-manager.installUser=true
+plugin-manager.showAll=true
+plugin-manager.mirror.id=NONE
+#}}}
+
 #{{{ Hidden settings
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
