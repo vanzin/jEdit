@@ -380,7 +380,7 @@ public class BeanShell
 		String name = "__internal_" + id;
 
 		// evaluate a method declaration
-		_eval(null,global,name + "(){" + code + "}");
+		_eval(null,global,name + "(ns) {\nsetNameSpace(ns);\n" + code + "\n}");
 
 		return global.getMethod(name,new Class[] { NameSpace.class });
 	} //}}}
@@ -402,9 +402,6 @@ public class BeanShell
 		if(namespace == null)
 			namespace = global;
 
-		CallStack callstack = new CallStack();
-		callstack.push(namespace);
-
 		try
 		{
 			if(view != null)
@@ -416,8 +413,8 @@ public class BeanShell
 				namespace.setVariable("textArea",editPane.getTextArea());
 			}
 
-			Object retVal = method.invoke(NO_ARGS,interpForMethods,
-				callstack);
+			Object retVal = method.invoke(new Object[] { namespace },
+				interpForMethods,new CallStack());
 			if(retVal instanceof Primitive)
 			{
 				if(retVal == Primitive.VOID)
@@ -436,16 +433,19 @@ public class BeanShell
 		}
 		finally
 		{
-			try
+			if(view != null)
 			{
-				namespace.setVariable("view",null);
-				namespace.setVariable("editPane",null);
-				namespace.setVariable("buffer",null);
-				namespace.setVariable("textArea",null);
-			}
-			catch(EvalError e)
-			{
-				// can't do much
+				try
+				{
+					namespace.setVariable("view",null);
+					namespace.setVariable("editPane",null);
+					namespace.setVariable("buffer",null);
+					namespace.setVariable("textArea",null);
+				}
+				catch(EvalError e)
+				{
+					// can't do much
+				}
 			}
 		}
 	} //}}}
@@ -552,11 +552,9 @@ public class BeanShell
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static Object[] NO_ARGS = new Object[0];
 	private static Interpreter interpForMethods;
 	private static NameSpace global;
 	private static boolean running;
-	private static int cachedBlockCounter;
 	//}}}
 
 	//{{{ unwrapException() method

@@ -1402,6 +1402,9 @@ public class JEditTextArea extends JComponent
 				s = new Selection.Range(position + 1,bracket);
 			}
 
+			if(!multi)
+				selectNone();
+
 			addToSelection(s);
 			return true;
 		}
@@ -6012,10 +6015,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		private boolean dragged;
 		private boolean quickCopyDrag;
 		private boolean clearStatus;
+		private boolean control;
 
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent evt)
 		{
+			control = (OperatingSystem.isMacOS() && evt.isMetaDown())
+				|| (!OperatingSystem.isMacOS() && evt.isControlDown());
+
 			// so that Home <mouse click> Home is not the same
 			// as pressing Home twice in a row
 			view.getInputHandler().resetLastActionCount();
@@ -6069,9 +6076,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			/* if(buffer.insideCompoundEdit())
 				buffer.endCompoundEdit(); */
-
-			boolean control = (OperatingSystem.isMacOS() && evt.isMetaDown())
-				|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
 			if(evt.isShiftDown())
 			{
@@ -6380,11 +6384,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else if(isQuickCopyEnabled()
 				&& (evt.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
 			{
-				moveCaretPosition(dragStart,false);
+				setCaretPosition(dragStart,false);
 				if(!isEditable())
 					getToolkit().beep();
 				else
-					Registers.paste(JEditTextArea.this,'%');
+					Registers.paste(JEditTextArea.this,'%',control);
 			}
 
 			dragged = false;

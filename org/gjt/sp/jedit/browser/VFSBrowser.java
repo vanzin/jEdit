@@ -135,7 +135,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		toolbarBox = new Box(mode == BROWSER
 			? BoxLayout.Y_AXIS
 			: BoxLayout.X_AXIS);
-		JToolBar menuBar = createMenuBar();
+		Box menuBar = createMenuBar();
 		if(mode == BROWSER)
 			menuBar.add(Box.createGlue());
 		toolbarBox.add(menuBar);
@@ -949,19 +949,17 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//}}}
 
 	//{{{ createMenuBar() method
-	private JToolBar createMenuBar()
+	private Box createMenuBar()
 	{
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
-		//toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
+		Box menuBar = new Box(BoxLayout.X_AXIS);
 
-		toolBar.add(new CommandsMenuButton());
-		toolBar.add(Box.createHorizontalStrut(3));
-		toolBar.add(new PluginsMenuButton());
-		toolBar.add(Box.createHorizontalStrut(3));
-		toolBar.add(new FavoritesMenuButton());
+		menuBar.add(new CommandsMenuButton());
+		menuBar.add(Box.createHorizontalStrut(3));
+		menuBar.add(new PluginsMenuButton());
+		menuBar.add(Box.createHorizontalStrut(3));
+		menuBar.add(new FavoritesMenuButton());
 
-		return toolBar;
+		return menuBar;
 	} //}}}
 
 	//{{{ createToolBar() method
