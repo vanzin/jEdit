@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- paste in new file
+- only scroll if focus has to go
 - fix double slash in path bug
 - thread safety problem in VFSManager.waitForRequests()
 - print qq{ $key="$attributes->{$key}"}; in perl
