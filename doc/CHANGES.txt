@@ -2,12 +2,18 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre9
 
-Thanks to Thomas Galvin and Wiktor Adamski for contributing to this
-release.
+Thanks to Brad Mace, David Hardin,  Matthew J. Price, Thomas Galvin and
+Wiktor Adamski for contributing to this release.
 
-{{{ Scripting
+{{{ Misacellaneous
 
 - Includes new "Create Get/Set Methods" macro (Thomas Galvin).
+
+- Minor improvements to "Deep Indent" feature (Brad Mace).
+
+- Updated Visual FoxPro syntax highlighting (Matthew J. Price).
+
+- Updated Lisp syntax highlighting (David Hardin).
 
 }}}
 {{{ Bug Fixes
@@ -66,6 +72,13 @@ release.
 
 - ChunkCache.getScreenLineOfOffset() didn't return the correct value -1
   if the given offset was before the first visible line.
+
+- "Confirm 'Save All Buffers' command" option didn't work.
+
+}}}
+{{{ API Changes
+
+- BufferUpdate.SAVING is now sent before the IO flag is set to true.
 
 }}}
 
