@@ -3173,7 +3173,14 @@ public class jEdit
 	//{{{ fontStyleToString() method
 	private static String fontStyleToString(int style)
 	{
-		return "ITALIC";
+		if(style == Font.BOLD)
+			return "BOLD";
+		else if(style == Font.ITALIC)
+			return "ITALIC";
+		else if(style == (Font.BOLD | Font.ITALIC))
+			return "BOLDITALIC";
+		else
+			throw new RuntimeException("Invalid style: " + style);
 	} //}}}
 
 	//{{{ initPLAF() method
