@@ -155,6 +155,12 @@ public class EnhancedMenuItem extends JMenuItem
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
+		public void mouseClicked(MouseEvent evt)
+		{
+			GUIUtilities.getView((Component)evt.getSource())
+				.getStatus().setMessage(null);
+		}
+
 		public void mouseEntered(MouseEvent evt)
 		{
 			String msg = action.getMouseOverText();
