@@ -44,6 +44,8 @@ JEDIT 4.0 VERSION HISTORY
   faster 'Replace All'
 - Addition to jEdit's glob syntax: "{!glob}" is converted to the
   regular expression "(?!glob).*"
+- You can double-click abbrevs in the 'Abbreviations' option pane to
+  edit them
 
 + Bug Fixes
 
@@ -60,8 +62,8 @@ JEDIT 4.0 VERSION HISTORY
   selection, the caret would move inside the selected range
 - On Windows, double-clicking on a drive letter in the drives list of
   the file system browser would open the wrong location
-- Fixed obscure focus manager bug under JDK 1.4 that would manifest when
-  splitting the view
+- Focus manager under JDK 1.4 used the wrong traversal policy, this
+  caused a few problems
 - The status bar message shown when a bracket is out of bounds was not
   always being displayed if soft wrap was in use
 - Fixed silly behavior in 'Install Plugins' dialog box
@@ -88,7 +90,6 @@ JEDIT 4.0 VERSION HISTORY
   collapsing folds near the end of the buffer
 - 'Add Explicit Fold' command did not work properly with multiple
   selections
-- Triple-clicking and dragging would scroll the text area in weird ways
 - Scrolling would not be performed when text was inserted sometimes, due
   to the last physical line index not being updated properly
 - If tokens had background colors defined, scrolling horizontally would
@@ -96,6 +97,15 @@ JEDIT 4.0 VERSION HISTORY
 - When closing the last buffer, the edit pane would retain a reference
   to it in the 'recent buffer' field, and using the 'Go to Recent
   Buffer' command would result in weird things happening
+- Setting the lineSeparator buffer property to override the line
+  separator for a specific file did not work
+- Fixed (harmless) missing resource exception when starting jEdit for
+  the first time
+- Fixed possible ArrayIndexOutOfBoundsException when using the
+  'Collapse Fold' command (clicking fold triangles in the gutter still
+  worked though)
+- Removing text from the middle of a line with soft wrap on might not
+  repaint the text area properly
 
 + API Additions
 

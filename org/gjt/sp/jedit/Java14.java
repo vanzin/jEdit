@@ -82,6 +82,11 @@ public class Java14
 	//{{{ MyFocusManager class
 	static class MyFocusManager extends DefaultKeyboardFocusManager
 	{
+		MyFocusManager()
+		{
+			setDefaultFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
+		}
+
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
 			if(!evt.isConsumed())

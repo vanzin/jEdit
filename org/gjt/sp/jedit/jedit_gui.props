@@ -1329,7 +1329,7 @@ options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end key behaviour
 options.textarea.middleMousePaste=Quick copy using middle mouse button
-options.textarea.antiAlias=Smooth text
+options.textarea.antiAlias=Smooth text (slow on some systems)
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 #}}}

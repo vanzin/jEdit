@@ -229,8 +229,8 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		Buffer buffer = view.getBuffer();
 
-		if(buffer.insideCompoundEdit())
-			buffer.endCompoundEdit();
+		/* if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit(); */
 
 		// remember the last executed action
 		if(lastAction == action)
@@ -332,8 +332,8 @@ public abstract class InputHandler extends KeyAdapter
 			JEditTextArea textArea = view.getTextArea();
 
 			Buffer buffer = view.getBuffer();
-			if(!buffer.insideCompoundEdit())
-				buffer.beginCompoundEdit();
+			/* if(!buffer.insideCompoundEdit())
+				buffer.beginCompoundEdit(); */
 
 			int _repeatCount = getRepeatCount();
 			if(_repeatCount == 1)
@@ -377,8 +377,8 @@ public abstract class InputHandler extends KeyAdapter
 	{
 		Buffer buffer = view.getBuffer();
 
-		if(buffer.insideCompoundEdit())
-			buffer.endCompoundEdit();
+		/* if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit(); */
 
 		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
 

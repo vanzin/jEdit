@@ -136,6 +136,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
 	} //}}}
 
+	//{{{ setBounds() method
+	/**
+	 * It is a bad idea to override this, but we need to get the component
+	 * event before the first repaint.
+	 */
+	public void setBounds(int x, int y, int width, int height)
+	{
+		super.setBounds(x,y,width,height);
+
+		textArea.recalculateVisibleLines();
+		textArea.recalculateLastPhysicalLine();
+		textArea.propertiesChanged();
+		textArea.scrollBarsInitialized = true;
+	} //}}}
+
 	//{{{ isManagingFocus() method
 	/**
 	 * Returns if this component can be traversed by pressing the
