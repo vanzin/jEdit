@@ -39,6 +39,7 @@ public class PluginManagerProgress extends JDialog
 			jEdit.getProperty("plugin-manager.progress."
 			+ type + "-task"),true);
 
+		this.dialog = dialog;
 		this.roster = roster;
 		this.type = type;
 
@@ -146,7 +147,7 @@ public class PluginManagerProgress extends JDialog
 						dispose();
 						if(ok)
 						{
-							GUIUtilities.message(PluginManagerProgress.this,
+							GUIUtilities.message(dialog,
 								"plugin-manager." + type
 								+ "-done",null);
 						}
@@ -186,6 +187,8 @@ public class PluginManagerProgress extends JDialog
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private JDialog dialog;
+
 	private Thread thread;
 
 	private String type;

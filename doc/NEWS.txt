@@ -36,6 +36,15 @@ The major changes in this release are:
 - The window docking feature has been improved in terms of functionality
   and appearance.
 
+- Syntax highlighting has been added for the following file types:
+
+  - ActionScript
+  - BBj
+  - BibTeX
+  - Modula-3
+  - ObjectRexx
+  - Prolog
+
 There are many smaller improvements as well, too many to list here, but
 some of the more noteworthy ones are:
 

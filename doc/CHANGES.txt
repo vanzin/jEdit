@@ -2,6 +2,15 @@ JEDIT 4.0 VERSION HISTORY
 
 * Version 4.0pre6
 
++ New Features
+
+- Modula-3 syntax highlighting (Marcio Marchini)
+
++ Enhancements
+
+- Minor tweaks to VFS path code, that should make things a bit smoother
+  for the FTP plugin
+
 + Bug Fixes
 
 - Malformed URL errors were not being reported correctly
@@ -9,6 +18,14 @@ JEDIT 4.0 VERSION HISTORY
   to be fixed in pre5 but I didn't get the fix quite right)
 - Fixed NullPointerException when opening a new view
 - Out of memory errors were not always reported
+- Fixed minor inconsistency in handling of words -vs- keywords in
+  'Complete Word' command
+- Properly fixed 'unprintable characters in table of contents' bug
+- Replace in selection would preserve the current selection, but not
+  the caret position, so if there was a match at the start of the
+  selection, the caret would move inside the selected range
+- On Windows, double-clicking on a drive letter in the drives list of
+  the file system browser would open the wrong location
 
 * Version 4.0pre5
 

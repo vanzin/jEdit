@@ -388,7 +388,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	private DefaultMutableTreeNode createNode(String href, String title)
 	{
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(
-			new HelpNode(href,title.trim()),true);
+			new HelpNode(href,title),true);
 		nodes.put(href,node);
 		return node;
 	} //}}}
@@ -440,7 +440,16 @@ public class HelpViewer extends JFrame implements EBComponent
 		public void charData(char[] c, int off, int len)
 		{
 			if(tag.equals("TITLE"))
-				title = new String(c, off, len);
+			{
+				StringBuffer buf = new StringBuffer();
+				for(int i = 0; i < len; i++)
+				{
+					char ch = c[off + i];
+					if(ch == ' ' || !Character.isWhitespace(ch))
+						buf.append(ch);
+				}
+				title = buf.toString();
+			}
 		} //}}}
 
 		//{{{ startElement() method

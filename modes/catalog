@@ -108,6 +108,9 @@
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
 
+<MODE NAME="modula3"		FILE="modula3.xml"
+				FILE_NAME_GLOB="*.[im]3" />
+
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
 

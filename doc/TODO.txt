@@ -1,8 +1,10 @@
 TO DO
 
+- selection extended when shift not down?
+- splitting is fucked
+- source for existing plugins
+- only one find dialog
 - triple-click-drag down
-- oom error incorrectly shown?
-- inconsistent complete word behavior: keywords -vs- words if all typed in
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
 - 'troubleshooting' menu: docs in user's guide
