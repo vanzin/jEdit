@@ -5,6 +5,7 @@
  * editing buffer
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +32,8 @@
  *
  * The use of HistoryTextField objects allows the macro to 'remember'
  * past entries for the prefix and suffix.
+ *
+ * Checked for jEdit 4.0 API
  *
  */
 
@@ -111,10 +114,8 @@ void prefixSuffixDialog()
         suffix = suffixField.getText();
         if(prefix.length() == 0 && suffix.length() == 0)
             return;
-        if(prefix.length() != 0)
-            prefixField.addCurrentToHistory();
-        if(suffix.length() != 0)
-            suffixField.addCurrentToHistory();
+        prefixField.addCurrentToHistory();
+        suffixField.addCurrentToHistory();
 
         // text manipulation begins here using calls
         // to jEdit methods
@@ -135,4 +136,23 @@ void prefixSuffixDialog()
 // this single line of code is the script's main routine
 // it calls the methods and exits
 prefixSuffixDialog();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
+    <abstract><para>
+        Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
+        text to each line in a group of selected lines.
+    </para></abstract>
+    <para>
+        Text is added after leading whitespace and before trailing whitespace.
+        A dialog window receives input and <quote>remembers</quote> past entries.
+    </para>
+</listitem>
+
+*/
+
+// end Add_Prefix_and_Suffix.bsh
 

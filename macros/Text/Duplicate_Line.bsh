@@ -20,10 +20,23 @@
  *
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 void duplicateLine()
 {
+	/*
+	 * Guard for readonly files becuase Buffer.insert()
+	 * ignores the flag
+	 *
+	 */
+	if(buffer.isReadOnly())
+	{
+		Macros.error(view, "This file is read only.");
+		return;
+	}
 	line = textArea.getCaretLine();
 	offset = textArea.getLineEndOffset(line);
 	// handle last line differently
@@ -34,7 +47,7 @@ void duplicateLine()
 	}
 	else
 		text = textArea.getLineText(line) + "\n";
-	buffer.insertString(offset, text, null);
+	buffer.insert(offset, text);
 	textArea.goToNextLine(false);
 }
 
