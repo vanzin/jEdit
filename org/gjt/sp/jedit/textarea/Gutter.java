@@ -148,7 +148,7 @@ public class Gutter extends JComponent implements SwingConstants
 				return;
 
 			//{{{ Paint fold triangles
-			if(info.subregion == 0
+			if(info.firstSubregion
 				&& physicalLine != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine))
 			{
@@ -226,7 +226,7 @@ public class Gutter extends JComponent implements SwingConstants
 			} //}}}
 
 			//{{{ Paint line numbers
-			if(info.subregion == 0 && expanded)
+			if(info.firstSubregion && expanded)
 			{
 				String number = Integer.toString(physicalLine + 1);
 

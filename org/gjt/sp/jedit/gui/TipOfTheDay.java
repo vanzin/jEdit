@@ -133,7 +133,7 @@ public class TipOfTheDay extends EnhancedDialog
 		// so that we don't see the same tip again if the user
 		// clicks 'Next Tip'
 		int tipToShow = currentTip;
-		while(tipToShow == currentTip)
+		while(tipToShow == currentTip || !tips[tipToShow].getName().endsWith(".html"))
 			tipToShow = Math.abs(new Random().nextInt()) % count;
 		try
 		{

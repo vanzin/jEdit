@@ -26,6 +26,8 @@ in build.xml.
 - Option to split file dialogs vertically (Ollie Rutherfurd)
 - Plugin manager's install plugins dialog box now shows plugin download
   sizes, and has a slightly improved look
+- jEdit Frequently Asked Questions is now included in the online help
+  (John Gellene)
 
 + Enhancements
 
@@ -81,7 +83,8 @@ in build.xml.
 
 + Neutral
 
-- Tips moved to doc/tips directory
+- Tips moved to doc/tips directory; documentation is no longer inside
+  the JAR
 
 + Bug Fixes
 
@@ -124,7 +127,8 @@ in build.xml.
 - "Insert File" was broken since 4.0pre1
 - Text area syntax highlighting would not always be updated properly
   when switching modes
--
+- Display_Shortcuts macro didn't work
+
 + API Additions
 
 - BufferUpdate.SAVED message type added. Previously, DIRTY_CHANGED could

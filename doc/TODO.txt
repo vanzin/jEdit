@@ -2,17 +2,18 @@ TO DO
 
 - pre4:
 
+- syntax highlighted files and soft wrap
+
+- chunk cache problems after collapsing a fold
+- colon at margin, not eol
 - vertical scrollbar w/ soft wrap wrong?
 - vertical scroll bar if last line is wrapped
-- open file: scroll bar fuckup
-- save to X:filename on Windows
-- chunk cache problems after collapsing a fold
-- nextLineRequested still fucked
-- syntax highlighted files and soft wrap
 - fix scrollToCaret()
 - use new offset conversion API throughout
+- save to X:filename on Windows
+- horizontal scroll bar not updated some times
 - chunk cache & scrolling optimization
-
+- jdk 1.4: popups in wrong location
 - FAQ: toc needs to include individual q and a's
 - updateChunksUpTo() called too many times
 - sort mode list and put xml near the start so that xhtml files with the

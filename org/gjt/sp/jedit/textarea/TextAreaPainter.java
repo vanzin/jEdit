@@ -778,7 +778,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& buffer.isFoldStart(physicalLine)
 				&& !textArea.getFoldVisibilityManager()
 				.isLineVisible(physicalLine + 1)
-				&& lineInfo.subregion == 0);
+				&& lineInfo.firstSubregion);
 			int start = textArea.getScreenLineStartOffset(screenLine);
 			int end = textArea.getScreenLineEndOffset(screenLine);
 
@@ -824,7 +824,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setFont(defaultFont);
 			gfx.setColor(eolMarkerColor);
 
-			if(end != buffer.getLineEndOffset(physicalLine))
+			if(!lineInfo.lastSubregion)
 			{
 				gfx.drawString(":",x,baseLine);
 				x += textArea.charWidth;
