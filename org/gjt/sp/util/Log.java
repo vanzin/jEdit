@@ -228,8 +228,9 @@ public class Log
 	 * <pre>[debug] JavaParser: counter = 15</pre>
 	 *
 	 * @param urgency The urgency; can be one of
-	 * <code>DEBUG</code>, <code>MESSAGE</code>, <code>NOTICE</code>,
-	 * <code>WARNING</code>, or <code>ERROR</code>.
+	 * <code>Log.DEBUG</code>, <code>Log.MESSAGE</code>,
+	 * <code>Log.NOTICE</code>, <code>Log.WARNING</code>, or
+	 * <code>Log.ERROR</code>.
 	 * @param source The source of the message, either an object or a
 	 * class instance. When writing log messages from macros, set
 	 * this parameter to <code>BeanShell.class</code> to make macro

@@ -15,6 +15,12 @@
     writing macros appears later; see <xref linkend="writing-macros-part"/>.
   </para>
 
+  <sidebar><title>Other scripting languages</title>
+  <para>
+   A number of jEdit plugins provide support for writing scripts in alternative programming languages, like Python and Prolog. Consult the documentation for the appropriate plugins for more information.
+  </para>
+  </sidebar>
+
 <sect1 id="recording-macros"><title>Recording Macros</title>
 
   <para>
