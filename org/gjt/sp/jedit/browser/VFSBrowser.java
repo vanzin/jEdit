@@ -689,13 +689,12 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 		else
 		{
-			VFS vfs = VFSManager.getVFSForPath(path);
-			path = vfs.getParentOfPath(path);
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
 			filter = (ext == null || ext.length() == 0
 				? getFilenameFilter()
 				: "*" + ext);
+			path = MiscUtilities.getParentOfPath(path);
 		}
 
 		SearchAndReplace.setSearchFileSet(new DirectoryListSet(

@@ -201,7 +201,6 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ addExtendedAttributes() method
 	private void addExtendedAttributes(VFS vfs)
 	{
-		System.err.println("adding " + vfs);
 		String[] attrs = vfs.getExtendedAttributes();
 vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{
@@ -227,7 +226,6 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 	//{{{ removeExtendedAttributes() method
 	private void removeExtendedAttributes(VFS vfs)
 	{
-		System.err.println("removing " + vfs);
 		String[] attrs = vfs.getExtendedAttributes();
 vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{

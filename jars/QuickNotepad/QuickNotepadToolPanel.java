@@ -40,38 +40,41 @@ public class QuickNotepadToolPanel extends JPanel
 
 	public QuickNotepadToolPanel(QuickNotepad qnpad)
 	{
+		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		pad = qnpad;
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
 
-		toolBar.putClientProperty("JToolBar.isRollover",Boolean.TRUE);
+		Box labelBox = new Box(BoxLayout.Y_AXIS);
+		labelBox.add(Box.createGlue());
 
-		toolBar.add(makeCustomButton("quicknotepad.choose-file",
+		label = new JLabel(pad.getFilename());
+		label.setVisible(jEdit.getProperty(
+			QuickNotepadPlugin.OPTION_PREFIX + "show-filepath").equals("true"));
+
+		labelBox.add(label);
+		labelBox.add(Box.createGlue());
+
+		add(labelBox);
+
+		add(Box.createGlue());
+
+		add(makeCustomButton("quicknotepad.choose-file",
 			new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					QuickNotepadToolPanel.this.pad.chooseFile();
 				}
 			}));
-		toolBar.add(makeCustomButton("quicknotepad.save-file",
+		add(makeCustomButton("quicknotepad.save-file",
 			new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					QuickNotepadToolPanel.this.pad.saveFile();
 				}
 			}));
-		toolBar.add(makeCustomButton("quicknotepad.copy-to-buffer",
+		add(makeCustomButton("quicknotepad.copy-to-buffer",
 			new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					QuickNotepadToolPanel.this.pad.copyToBuffer();
 				}
 			}));
-		label = new JLabel(pad.getFilename(), SwingConstants.RIGHT);
-		label.setForeground(Color.black);
-		label.setVisible(jEdit.getProperty(
-			QuickNotepadPlugin.OPTION_PREFIX + "show-filepath").equals("true"));
-		this.setLayout(new BorderLayout(10, 0));
-		this.add(BorderLayout.WEST, toolBar);
-		this.add(BorderLayout.CENTER, label);
-		this.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 10));
 	}
 
 
@@ -85,7 +88,7 @@ public class QuickNotepadToolPanel extends JPanel
 	private AbstractButton makeCustomButton(String name, ActionListener listener)
 	{
 		String toolTip = jEdit.getProperty(name.concat(".label"));
-		AbstractButton b = new JButton(GUIUtilities.loadIcon(
+		AbstractButton b = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty(name + ".icon")));
 		if(listener != null)
 		{
@@ -97,9 +100,6 @@ public class QuickNotepadToolPanel extends JPanel
 			b.setEnabled(false);
 		}
 		b.setToolTipText(toolTip);
-		b.setMargin(new Insets(0,0,0,0));
-		b.setAlignmentY(0.0f);
-		b.setRequestFocusEnabled(false);
 		return b;
 	}
 

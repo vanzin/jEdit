@@ -142,47 +142,30 @@ public class BeanShell
 		if(!command.endsWith(";"))
 			command = command + ";";
 
+		String script = "int[] lines = textArea.getSelectedLines();\n"
+			+ "for(int i = 0; i < lines.length; i++)\n"
+			+ "{\n"
+				+ "line = lines[i];\n"
+				+ "index = line - lines[0];\n"
+				+ "start = buffer.getLineStartOffset(line);\n"
+				+ "end = buffer.getLineEndOffset(line);\n"
+				+ "text = buffer.getText(start,end - start - 1);\n"
+				+ "newText = " + command + "\n"
+				+ "if(newText != null)\n"
+				+ "{\n"
+					+ "buffer.remove(start,end - start - 1);\n"
+					+ "buffer.insert(start,newText);\n"
+				+ "}\n"
+			+ "}\n";
+
 		if(view.getMacroRecorder() != null)
-			view.getMacroRecorder().record(1,command);
+			view.getMacroRecorder().record(1,script);
 
 		try
 		{
 			buffer.beginCompoundEdit();
 
-			for(int i = 0; i < selection.length; i++)
-			{
-				Selection s = selection[i];
-				for(int j = s.getStartLine(); j <= s.getEndLine(); j++)
-				{
-					// if selection ends on the start of a
-					// line, don't filter that line
-					if(s.getEnd() == textArea.getLineStartOffset(j))
-						break;
-
-					global.setVariable("line",new Integer(j));
-					global.setVariable("index",new Integer(
-						j - s.getStartLine()));
-					int start = s.getStart(buffer,j);
-					int end = s.getEnd(buffer,j);
-					String text = buffer.getText(start,
-						end - start);
-					global.setVariable("text",text);
-
-					Object returnValue = _eval(view,global,command);
-					if(returnValue != null)
-					{
-						buffer.remove(start,end - start);
-						buffer.insert(start,
-							returnValue.toString());
-					}
-				}
-			}
-		}
-		catch(Throwable e)
-		{
-			Log.log(Log.ERROR,BeanShell.class,e);
-
-			handleException(view,null,e);
+			BeanShell.eval(view,global,script);
 		}
 		finally
 		{

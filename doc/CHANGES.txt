@@ -204,8 +204,15 @@ Sebastien Pierre for contributing to this release.
 - Fixed obscure problem with work thread code where an AWT request added
   from another AWT request could be executed before I/O is complete.
 
+- Fixed repainting problem when removing text from the last line of a
+  buffer with soft wrap on.
+
+- Selecting "Search in Directory" from the file system browser's
+  Commands menu with a file selected was supposed to set the directory
+  search filter to that file's extension, however this didn't work.
+
 }}}
-{{{ API Changes
+{{{ API Additions
 
 - Added a new dynamic menu API, so that plugins using the 4.2 plugin API
   can provide dynamic menus. Simply write an implementation of
@@ -239,6 +246,18 @@ Sebastien Pierre for contributing to this release.
 
 - Added AbstractOptionPane.addComponent(Component comp, int fill)
   method.
+
+- Virtual file systems can now show arbitriary columns in the file
+  system browser.
+
+  - Use the VFS constructor that accepts a String[] of extended
+    attribute names. You can use the canned names (EA_TYPE, EA_STATUS,
+    EA_SIZE, EA_MODIFIED) or add your own. If you add your own, you
+    must also define properties "vfs.browser.<extended attribute name>".
+
+  - Then, write a VFS.DirectoryEntry subclass that overrides
+    getExtendedAttribute(). Return instances of this class in
+    _getDirectoryEntry() and _listDirectory().
 
 }}}
 
