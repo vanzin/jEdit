@@ -244,12 +244,12 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 			//{{{ paint the line
 			if(obj != null && ! justCounting)
 			{
-				/* ChunkCache.Chunk line = (ChunkCache.Chunk)obj;
+				Chunk line = (Chunk)obj;
 
-				ChunkCache.paintChunkList(line,gfx,
-				                          (float)(pageX + lineNumberWidth),
-				                          (float)(pageY + y),
-				                          Color.white,glyphVector); */
+				Chunk.paintChunkList(line,gfx,
+					(float)(pageX + lineNumberWidth),
+					(float)(pageY + y),
+					Color.white,glyphVector);
 			}
 			//}}}
 
@@ -302,7 +302,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 	                           double pageWidth)
 	{
 		String headerText = jEdit.getProperty("print.headerText",
-		                                      new String[] { buffer.getPath() });
+			new String[] { buffer.toString() });
 		FontRenderContext frc = gfx.getFontRenderContext();
 
 		gfx.setColor(headerColor);
@@ -310,7 +310,7 @@ print_loop:	for(int i = 0 ; i < linesPerPage ; i++ )
 		Rectangle2D bounds = font.getStringBounds(headerText,frc);
 
 		Rectangle2D headerBounds = new Rectangle2D.Double(
-		                                   pageX,pageY,pageWidth,bounds.getHeight());
+			pageX,pageY,pageWidth,bounds.getHeight());
 		gfx.fill(headerBounds);
 
 		gfx.setColor(headerTextColor);

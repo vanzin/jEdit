@@ -93,6 +93,16 @@ contributing to this release.
   Updated PL-SQL mode (Steve Snider)
   Updated NetRexx mode (Patric Bechtel)
 
+- HTML and related edit modes now correctly highlight sequences like:
+
+  <SCRIPT LANGUAGE="JavaScript">...</SCRIPT>
+  <SCRIPT ... whatever ...>...</SCRIPT>
+
+  Previously only JavaScript between <SCRIPT> and </SCRIPT> was
+  highlighted.
+
+  A similar change has been made for <STYLE> tags.
+
 - Improved loading time of plain text files if 'more accurate syntax
   highlighting' is on.
 
