@@ -765,6 +765,7 @@ public class PluginJAR
 		{
 			actions = new ActionSet(this,
 				cache.cachedActionNames,
+				cache.cachedActionToggleFlags,
 				cache.actionsURI);
 			jEdit.addActionSet(actions);
 		}
@@ -776,6 +777,7 @@ public class PluginJAR
 		{
 			browserActions = new ActionSet(this,
 				cache.cachedBrowserActionNames,
+				cache.cachedBrowserActionToggleFlags,
 				cache.browserActionsURI);
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 		}
@@ -923,7 +925,8 @@ public class PluginJAR
 
 		if(cache.actionsURI != null)
 		{
-			actions = new ActionSet(this,null,cache.actionsURI);
+			actions = new ActionSet(this,null,null,
+				cache.actionsURI);
 			actions.setLabel(jEdit.getProperty(
 				"action-set.plugin",
 				new String[] { label }));
@@ -931,16 +934,36 @@ public class PluginJAR
 			jEdit.addActionSet(actions);
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
+			cache.cachedActionToggleFlags = new boolean[
+				cache.cachedActionNames.length];
+			for(int i = 0; i < cache.cachedActionNames.length; i++)
+			{
+				 cache.cachedActionToggleFlags[i]
+				 	= jEdit.getBooleanProperty(
+					cache.cachedActionNames[i]
+					+ ".toggle");
+			}
 		}
 
 		if(cache.browserActionsURI != null)
 		{
-			browserActions = new ActionSet(this,null,
+			browserActions = new ActionSet(this,null,null,
 				cache.browserActionsURI);
 			browserActions.load();
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 			cache.cachedBrowserActionNames =
 				browserActions.getCacheableActionNames();
+			cache.cachedBrowserActionToggleFlags = new boolean[
+				cache.cachedBrowserActionNames.length];
+			for(int i = 0;
+				i < cache.cachedBrowserActionNames.length;
+				i++)
+			{
+				 cache.cachedBrowserActionNames[i]
+				 	= jEdit.getProperty(
+					cache.cachedBrowserActionNames[i]
+					+ ".toggle");
+			}
 		}
 
 		if(dockablesURI != null)
@@ -1027,7 +1050,7 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB1A2E420;
+		public static final int MAGIC = 0xB7A2E420;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
@@ -1036,8 +1059,10 @@ public class PluginJAR
 		public String[] classes;
 		public URL actionsURI;
 		public String[] cachedActionNames;
+		public boolean[] cachedActionToggleFlags;
 		public URL browserActionsURI;
 		public String[] cachedBrowserActionNames;
+		public boolean[] cachedBrowserActionToggleFlags;
 		public URL dockablesURI;
 		public String[] cachedDockableNames;
 		public boolean[] cachedDockableActionFlags;
@@ -1070,9 +1095,11 @@ public class PluginJAR
 
 			actionsURI = readURI(din);
 			cachedActionNames = readStringArray(din);
+			cachedActionToggleFlags = readBooleanArray(din);
 
 			browserActionsURI = readURI(din);
 			cachedBrowserActionNames = readStringArray(din);
+			cachedBrowserActionToggleFlags = readBooleanArray(din);
 
 			dockablesURI = readURI(din);
 			cachedDockableNames = readStringArray(din);
@@ -1116,9 +1143,11 @@ public class PluginJAR
 
 			writeString(dout,actionsURI);
 			writeStringArray(dout,cachedActionNames);
+			writeBooleanArray(dout,cachedActionToggleFlags);
 
 			writeString(dout,browserActionsURI);
 			writeStringArray(dout,cachedBrowserActionNames);
+			writeBooleanArray(dout,cachedBrowserActionToggleFlags);
 
 			writeString(dout,dockablesURI);
 			writeStringArray(dout,cachedDockableNames);

@@ -186,14 +186,15 @@ public class PanelWindowContainer implements DockableWindowContainer
 			return;
 		}
 
-		if(current == null)
-		{
-			// we didn't have a component previously, so create a border
-			dockablePanel.setBorder(new DockBorder(position));
-		}
-
 		if(entry != null)
 		{
+			if(current == null)
+			{
+				// we didn't have a component previously, so
+				// create a border
+				dockablePanel.setBorder(new DockBorder(position));
+			}
+
 			mostRecent = entry.factory.name;
 			this.current = entry;
 

@@ -40,6 +40,9 @@ JEDIT 4.2 VERSION HISTORY
 
 - The file system browser's "Open in" menu didn't work.
 
+- Toggle menu items did not show up as such when a plugin was
+  constructed from the summary cache.
+
 }}}
 {{{ API Changes
 

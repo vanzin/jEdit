@@ -229,21 +229,7 @@ class Roster
 			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
 			if(jar != null)
-			{
-				String[] dependents = jar.getDependentPlugins();
-				for(int i = 0; i < dependents.length; i++)
-				{
-					PluginJAR _jar = jEdit.getPluginJAR(
-						dependents[i]);
-					if(_jar != null)
-					{
-						toLoad.add(dependents[i]);
-						jEdit.removePluginJAR(_jar,false);
-					}
-				}
-
-				jEdit.removePluginJAR(jar,false);
-			}
+				unloadPluginJAR(jar);
 
 			toLoad.remove(plugin);
 
@@ -268,6 +254,27 @@ class Roster
 			if(!ok)
 				GUIUtilities.error(progress,"plugin-manager.remove-failed",args);
 			return ok;
+		} //}}}
+
+		//{{{ unloadPluginJAR() method
+		/**
+		 * This should go into a public method somewhere.
+		 */
+		private void unloadPluginJAR(PluginJAR jar)
+		{
+			String[] dependents = jar.getDependentPlugins();
+			for(int i = 0; i < dependents.length; i++)
+			{
+				PluginJAR _jar = jEdit.getPluginJAR(
+					dependents[i]);
+				if(_jar != null)
+				{
+					toLoad.add(dependents[i]);
+					unloadPluginJAR(_jar);
+				}
+			}
+
+			jEdit.removePluginJAR(jar,false);
 		} //}}}
 
 		//{{{ equals() method
