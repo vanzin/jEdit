@@ -86,8 +86,14 @@ public class ParserRule
 	 */
 	public ParserRuleSet getDelegateRuleSet(TokenMarker tokenMarker)
 	{
+		// don't worry
 		if(delegate == null)
-			return ParserRuleSet.getStandardRuleSet(token);
+		{
+			if((action & MAJOR_ACTIONS) == SEQ)
+				return null;
+			else
+				return ParserRuleSet.getStandardRuleSet(token);
+		}
 		else
 		{
 			ParserRuleSet delegateSet = tokenMarker.getRuleSet(delegate);

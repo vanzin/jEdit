@@ -392,6 +392,16 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			case ParserRule.SEQ:
 				tokenHandler.handleToken(checkRule.token,
 					pos - line.offset,pattern.count,context);
+
+				// a DELEGATE attribute on a SEQ changes the
+				// ruleset from the end of the SEQ onwards
+				ParserRuleSet delegateSet = checkRule.getDelegateRuleSet(this);
+				if(delegateSet != null)
+				{
+					context = new LineContext(delegateSet,
+						context.parent);
+					keywords = context.rules.getKeywords();
+				}
 				break;
 			//}}}
 			//{{{ SPAN, EOL_SPAN, MARK_FOLLOWING
@@ -400,7 +410,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			case ParserRule.MARK_FOLLOWING:
 				context.inRule = checkRule;
 
-				ParserRuleSet delegateSet = checkRule.getDelegateRuleSet(this);
+				delegateSet = checkRule.getDelegateRuleSet(this);
 
 				tokenHandler.handleToken(
 					((checkRule.action & ParserRule.EXCLUDE_MATCH)

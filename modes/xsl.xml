@@ -57,14 +57,14 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="LABEL" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+		<SPAN TYPE="MARKUP" DELEGATE="html::JAVASCRIPT">
+			<BEGIN>&lt;SCRIPT</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="LABEL" DELEGATE="css::MAIN">
-			<BEGIN>&lt;STYLE&gt;</BEGIN>
+		<SPAN TYPE="MARKUP" DELEGATE="html::CSS">
+			<BEGIN>&lt;STYLE</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 

@@ -15,14 +15,14 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;SCRIPT&gt;</BEGIN>
+		<SPAN TYPE="MARKUP" DELEGATE="JAVASCRIPT">
+			<BEGIN>&lt;SCRIPT</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
 
 		<!-- stylesheet -->
-		<SPAN TYPE="MARKUP" DELEGATE="css::MAIN">
-			<BEGIN>&lt;STYLE&gt;</BEGIN>
+		<SPAN TYPE="MARKUP" DELEGATE="CSS">
+			<BEGIN>&lt;STYLE</BEGIN>
 			<END>&lt;/STYLE&gt;</END>
 		</SPAN>
 
@@ -57,5 +57,13 @@
 		</SPAN>
 
 		<SEQ TYPE="OPERATOR">=</SEQ>
+	</RULES>
+
+	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="javascript::MAIN">&gt;</SEQ>
+	</RULES>
+
+	<RULES SET="CSS" DEFAULT="MARKUP">
+		<SEQ TYPE="MARKUP" DELEGATE="css::MAIN">&gt;</SEQ>
 	</RULES>
 </MODE>

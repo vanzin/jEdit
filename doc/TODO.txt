@@ -1,5 +1,6 @@
 TO DO
 
+- MARK_FOLLOWING is broken
 - context.rules -vs- getParserRuleSet(context)
 - add some tips of the day about pre1 features
 - soft wrap
@@ -28,7 +29,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
   - loadGeometry(): bad
   - dockable windows
   - getCenterPoint()
-- less overhead for plain text files
 - more flexible definition of a paragraph, paragraph folding
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
