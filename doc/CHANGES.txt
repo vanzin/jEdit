@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
-Thanks to Carmine Lucarelli and Matt Albrecht for contributing to this
-release.
+Thanks to Carmine Lucarelli, Matt Albrecht and Sebastien Pierre for
+contributing to this release.
 
 {{{ Editing
 
@@ -17,6 +17,10 @@ release.
   disregard the selection. Use Incremental Search for Word and
   HyperSearch for Word commands if you want to search for the selected
   text.
+
+- Made behavior of auto indent caused by "Insert Tab and Indent",
+  "Insert Enter and Indent", and "Indent Selected Lines" commands is
+  more consistent.
 
 }}}
 {{{ File System Browser
@@ -74,6 +78,11 @@ release.
 
 - BeanShell 1.3a1 included. This release features improved error
   reporting, code cleanups and minor bug fixes.
+
+- For some reason the search and replace code was hard-coded to auto
+  wrap around if it was run from a macro. I'm not sure what the original
+  rationale for this was, but it has been changed to always respect the
+  auto wrap flag.
 
 }}}
 {{{ Optimizations

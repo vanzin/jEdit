@@ -488,11 +488,8 @@
  </sect1>
  <sect1 id="reloading"><title>Reloading From Disk</title>
   <para>
-   If an open buffer is modified on disk by another application, a warning
-   dialog box is displayed, offering to either continue editing
-   and lose changes made by the other application,
-   or to reload the buffer from disk and lose any unsaved changes made in jEdit.
-   This warning dialog box can be disabled in the <guibutton>General</guibutton>
+   When a view is brought to the foreground, jEdit checks if any open buffers were modified on disk by another application. All affected buffers are listed in a dialog box. Buffers without unsaved changes are automatically reloaded.
+   This feature can be disabled in the <guibutton>General</guibutton>
    pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.

@@ -106,13 +106,16 @@
    in <xref linkend="launcher-starting" />.
   </para>
   <para>
-   Unlike other applications, jEdit automatically loads any files that were
-   open last time in was used, so you can get back to work immediately, without
-   having to find the files you are working on first. This feature can be
+   jEdit remembers open buffers, views and split window configurations between editing sessions, so you can get back to work immediately after starting jEdit. This feature can be
    disabled in the <guibutton>Loading and Saving</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="global-opts" />.
   </para>
+  <sidebar><title>MacOS</title>
+   <para>
+    When running on MacOS X, the <userinput>-background</userinput> command-line switch is active by default, so that jEdit conforms to the platform convention that programs should stay open until the <guimenuitem>Quit</guimenuitem> command is explicitly invoked by the user, even if all windows are closed.
+   </para>
+  </sidebar>
   <sidebar><title>The edit server and security</title>
    <para>
     Not only does the server pick a random TCP port number on startup,

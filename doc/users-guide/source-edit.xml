@@ -476,8 +476,8 @@ With text inside it.
    </para>
    <para>
     The first line of a collapsed fold is drawn
-    with a different background color, and the number of lines in the
-    fold is shown to the right of the line's text.
+    with a background color that depends on the fold level, and the number of
+    lines in the fold is shown to the right of the line's text.
    </para>
    <para>
     Folds can also be collapsed and expanded using menu item commands and
@@ -593,6 +593,9 @@ With text inside it.
     shown, but is still present in the buffer. <!-- Both folding and
     narrowing are implemented using the same code internally. -->
    </para>
+   <para>
+    Holding down <keycap>Alt</keycap> while clicking a fold expansion triangle in the gutter will hide all lines the buffer except
+    those in the fold in question.
    <para>
     <guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Narrow
     Buffer to Fold</guimenuitem> (keyboard shortcut:

@@ -23,8 +23,8 @@
   </para>
   <para>
    To remove plugins, select them (multiple plugins can be selected by
-   holding down <keycap>Control</keycap>) and click <guibutton>Remove
-   Plugins</guibutton>. This will display a confirmation dialog box first.
+   holding down <keycap>Control</keycap>) and click <guibutton>Remove</guibutton>.
+   This will display a confirmation dialog box first.
   </para>
  </sect1>
  <sect1 id="installing-plugins"><title>Installing Plugins</title>
@@ -40,40 +40,28 @@
   </para>
   <para>
    To install plugins from the plugin manager, make sure you are connected to
-   the Internet and click the <guibutton>Install Plugins</guibutton> button in
+   the Internet and click the <guibutton>Install</guibutton> tab in
    the plugin manager window. The plugin manager will then download information
    about available plugins from the jEdit web site, and present a list of
-   plugins compatible with your jEdit release which may be installed.
+   plugins compatible with your jEdit release.
   </para>
   <para>
    Click on a plugin in the list to see some information about it. To select
    plugins for installation, click the check box next to their names in the list.
   </para>
   <para>
-   The <guibutton>Total download size</guibutton> field shows the total size
+   The <guibutton>Total size</guibutton> field shows the total size
    of all plugins chosen for installation, along with any plugins that will be
-   automatically downloaded in order to fulfill dependencies. The
-   <guibutton>Download size</guibutton> field in the plugin information area
-   only shows the size of the currently selected plugin.
+   automatically downloaded in order to fulfill dependencies.
   </para>
   <para>
-   The <guibutton>Install source code</guibutton> check box controls if source
-   code for the plugins should be downloaded and installed. Unless you are a
-   developer, you probably don't need the source.
+   Once you have specified plugins to install, click <guibutton>Install</guibutton> to begin the download process.
   </para>
   <para>
-   The two radio buttons select the location
-   where the plugins are to be installed.
-   Plugins can be installed in either the <filename>jars</filename> subdirectory
-   of the jEdit installation directory, or the <filename>jars</filename>
-   subdirectory of the user-specific settings directory. For information about
-   the settings directory, <xref linkend="settings-directory" />.
-  </para>
-  <para>
-   Once you have specified plugins to install, click <guibutton>Install
-   Plugins</guibutton> to begin the download process. Once all plugins have been
-   downloaded and installed, a dialog box is shown advising that jEdit must be
-   restarted before plugins can be used.
+   By default, the plugin manager does not download plugin source code, and installs the downloaded plugins in the <filename>jars</filename>
+   subdirectory of the user-specific settings directory. These settings can be changed in <guilabel>Plugin Manager</guilabel> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box.
   </para>
   <sidebar><title>Proxy Servers and Firewalls</title>
    <para>
@@ -87,8 +75,8 @@
  </sect1>
  <sect1 id="updating-plugins"><title>Updating Plugins</title>
   <para>
-   Clicking <guibutton>Update Plugins</guibutton> in the plugin manager will
-   show a dialog box very similar to the one for installing plugins. It will
+   The <guibutton>Update</guibutton> tab of the plugin manager 
+   is very similar to the one for installing plugins. It will
    list plugins for which updated versions are available. It will also offer to
    delete any obsolete plugins.
   </para>

@@ -586,20 +586,27 @@ loop:			for(;;)
 
 				boolean restart;
 
-				if(BeanShell.isScriptRunning())
+				// if auto wrap is on, always restart search.
+				// if auto wrap is off, and we're called from
+				// a macro, stop search. If we're called
+				// interactively, ask the user what to do.
+				if(wrap)
 				{
-					restart = true;
-				}
-				else if(wrap)
-				{
-					view.getStatus().setMessageAndClear(
-						jEdit.getProperty("view.status.auto-wrap"));
-					// beep if beep property set
-					if(jEdit.getBooleanProperty("search.beepOnSearchAutoWrap"))
+					if(!BeanShell.isScriptRunning())
 					{
-						view.getToolkit().beep();
+						view.getStatus().setMessageAndClear(
+							jEdit.getProperty("view.status.auto-wrap"));
+						// beep if beep property set
+						if(jEdit.getBooleanProperty("search.beepOnSearchAutoWrap"))
+						{
+							view.getToolkit().beep();
+						}
 					}
 					restart = true;
+				}
+				else if(BeanShell.isScriptRunning())
+				{
+					restart = false;
 				}
 				else
 				{
