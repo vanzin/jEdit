@@ -1294,10 +1294,11 @@ public class Buffer
 
 			setFlag(UNDO_IN_PROGRESS,true);
 			int caret = undoMgr.undo();
-			if(caret == -1)
+
+			/* if(caret == -1)
 				textArea.getToolkit().beep();
 			else
-				textArea.setCaretPosition(caret);
+				textArea.setCaretPosition(caret); */
 
 			fireTransactionComplete();
 		}

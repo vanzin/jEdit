@@ -27,7 +27,6 @@ import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -402,46 +401,46 @@ public class DisplayManager
 		} //}}}
 
 		//{{{ Expand the fold...
-			if(fully)
-			{
-				showLineRange(start,end);
-			}
-			else
-			{
-				// we need a different value of initialFoldLevel here!
-				initialFoldLevel = buffer.getFoldLevel(start);
+		if(fully)
+		{
+			showLineRange(start,end);
+		}
+		else
+		{
+			// we need a different value of initialFoldLevel here!
+			initialFoldLevel = buffer.getFoldLevel(start);
 
-				int firstVisible = start;
+			int firstVisible = start;
 
-				for(int i = start; i <= end; i++)
+			for(int i = start; i <= end; i++)
+			{
+				if(buffer.getFoldLevel(i) > initialFoldLevel)
 				{
-					if(buffer.getFoldLevel(i) > initialFoldLevel)
+					if(returnValue == -1
+						&& i != 0
+						&& buffer.isFoldStart(i - 1))
 					{
-						if(returnValue == -1
-							&& i != 0
-							&& buffer.isFoldStart(i - 1))
-						{
-							returnValue = i - 1;
-						}
-
-						if(firstVisible != i)
-						{
-							showLineRange(firstVisible,i - 1);
-						}
-						firstVisible = i + 1;
+						returnValue = i - 1;
 					}
-				}
 
-				if(firstVisible != end + 1)
-					showLineRange(firstVisible,end);
-
-				if(!isLineVisible(line))
-				{
-					// this is a hack, and really needs to be done better.
-					expandFold(line,false);
-					return returnValue;
+					if(firstVisible != i)
+					{
+						showLineRange(firstVisible,i - 1);
+					}
+					firstVisible = i + 1;
 				}
-			} //}}}
+			}
+
+			if(firstVisible != end + 1)
+				showLineRange(firstVisible,end);
+
+			if(!isLineVisible(line))
+			{
+				// this is a hack, and really needs to be done better.
+				expandFold(line,false);
+				return returnValue;
+			}
+		} //}}}
 
 		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
@@ -621,7 +620,7 @@ public class DisplayManager
 		}
 	} //}}}
 
-		//{{{ _notifyScreenLineChanges() method
+	//{{{ _notifyScreenLineChanges() method
 	void _notifyScreenLineChanges()
 	{
 		if(Debug.SCROLL_DEBUG)
@@ -914,8 +913,8 @@ loop:		for(;;)
 			//XXX
 			if(!isLineVisible(i))
 			{
-				int screenLines = lineMgr
-					.getScreenLineCount(i);
+				// important: not lineMgr.getScreenLineCount()
+				int screenLines = getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
 					firstLine.scrollLine += screenLines;
