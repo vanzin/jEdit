@@ -116,8 +116,11 @@
 <MODE NAME="factor"		FILE="factor.xml"
 				FILE_NAME_GLOB="*.factor"/>
 
+<MODE NAME="forth"		FILE="forth.xml"
+				FILE_NAME_GLOB="*.f" />
+
 <MODE NAME="fortran"		FILE="fortran.xml"
-				FILE_NAME_GLOB="*.{f,for,fort,f77,f90}" />
+				FILE_NAME_GLOB="*.{for,fort,f77,f90}" />
 
 <MODE NAME="foxpro"		FILE="foxpro.xml"
 				FILE_NAME_GLOB="*.prg" />
