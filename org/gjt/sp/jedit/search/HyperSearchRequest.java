@@ -72,7 +72,8 @@ public class HyperSearchRequest extends WorkRequest
 				if(buffer == null)
 					return;
 
-				searchInSelection(buffer);
+				bufferCount = 1;
+				resultCount = searchInSelection(buffer);
 			}
 			else
 			{

@@ -9,6 +9,15 @@ JEDIT 4.0 VERSION HISTORY
 + Bug Fixes
 
 - roots: filesystem tweak didn't work (Carmine Lucarelli)
+- After doing a HyperSearch in a selection, the HyperSearch Results
+  window would always say 'found 0 occurrences in 0 files'
+- Using 'Save As' and entering a file name ending with .gz did not GZip
+  the resulting file
+- Fixed minor boo-boo when buffer sorting was on and several files with
+  the same name were open
+- Browser view didn't check key events for modifiers so if the browser
+  had focus and a shortcut key was pressed a semi-random item would be
+  selected in the file list
 
 * Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
