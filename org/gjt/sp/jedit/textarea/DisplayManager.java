@@ -1742,9 +1742,13 @@ loop:		for(;;)
 					}
 
 					// update visible lines
-					textArea.chunkCache.getLineInfo(
-						textArea.getVisibleLines()
-						- 1);
+					int visibleLines = textArea
+						.getVisibleLines();
+					if(visibleLines != 0)
+					{
+						textArea.chunkCache.getLineInfo(
+							visibleLines - 1);
+					}
 				}
 
 				textArea._finishCaretUpdate();

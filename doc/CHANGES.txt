@@ -141,6 +141,8 @@ Alessandro Falappa and Ben Williams for contributing to this release.
   manifest usually as incorrect scrolling behavior after switching
   buffers.
 
+- The Utilities->Action Bar command would only work once.
+
 }}}
 {{{ API Changes
 
