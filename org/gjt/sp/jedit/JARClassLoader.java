@@ -60,8 +60,13 @@ public class JARClassLoader extends ClassLoader
 			}
 			else if(lname.endsWith(".props"))
 				jEdit.loadProps(zipFile.getInputStream(entry),true);
-			else if(name.endsWith("Plugin.class"))
-				pluginClasses.addElement(name);
+			else if(name.endsWith(".class"))
+			{
+				classHash.put(MiscUtilities.fileToClass(name),this);
+
+				if(name.endsWith("Plugin.class"))
+					pluginClasses.addElement(name);
+			}
 		}
 
 		jar = new EditPlugin.JAR(path,this);
@@ -74,7 +79,45 @@ public class JARClassLoader extends ClassLoader
 	public Class loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
-		return loadClass(clazz,resolveIt,true);
+		// see what JARClassLoader this class is in
+		Object obj = classHash.get(clazz);
+		if(obj == NO_CLASS)
+		{
+			// we remember which classes we don't exist
+			// because BeanShell tries loading all possible
+			// <imported prefix>.<class name> combinations
+			throw new ClassNotFoundException(clazz);
+		}
+		else if(obj instanceof ClassLoader)
+		{
+			JARClassLoader classLoader = (JARClassLoader)obj;
+			return classLoader._loadClass(clazz,resolveIt);
+		}
+
+		// if it's not in the class hash, and not marked as
+		// non-existent, try loading it from the CLASSPATH
+		try
+		{
+			Class cls;
+
+			/* Defer to whoever loaded us (such as JShell,
+			 * Echidna, etc) */
+			ClassLoader parentLoader = getClass().getClassLoader();
+			if (parentLoader != null)
+				cls = parentLoader.loadClass(clazz);
+			else
+				cls = findSystemClass(clazz);
+
+			return cls;
+		}
+		catch(ClassNotFoundException cnf)
+		{
+			// remember that this class doesn't exist for
+			// future reference
+			classHash.put(clazz,NO_CLASS);
+
+			throw cnf;
+		}
 	}
 
 	public InputStream getResourceAsStream(String name)
@@ -186,6 +229,12 @@ public class JARClassLoader extends ClassLoader
 	}
 
 	// private members
+
+	// used to mark non-existent classes in class hash
+	private static final Object NO_CLASS = new Object();
+
+	private static Hashtable classHash = new Hashtable();
+
 	private EditPlugin.JAR jar;
 	private Vector pluginClasses = new Vector();
 	private ZipFile zipFile;
@@ -342,29 +391,8 @@ public class JARClassLoader extends ClassLoader
 		return true;
 	}
 
-	private Class findOtherClass(String clazz, boolean resolveIt)
-		throws ClassNotFoundException
-	{
-		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
-		for(int i = 0; i < jars.length; i++)
-		{
-			JARClassLoader loader = jars[i].getClassLoader();
-			Class cls = loader.loadClass(clazz,resolveIt,
-				false);
-			if(cls != null)
-				return cls;
-		}
-
-		/* Defer to whoever loaded us (such as JShell, Echidna, etc) */
-                ClassLoader loader = getClass().getClassLoader();
-		if (loader != null)
-			return loader.loadClass(clazz);
-
-		/* Doesn't exist in any other plugin, look in system classes */
-		return findSystemClass(clazz);
-	}
-
-	private Class loadClass(String clazz, boolean resolveIt, boolean doDepencies)
+	// Load class from this JAR only.
+	private Class _loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
 		Class cls = findLoadedClass(clazz);
@@ -375,14 +403,6 @@ public class JARClassLoader extends ClassLoader
 			return cls;
 		}
 
-		if(zipFile == null)
-		{
-			if(doDepencies)
-				return findOtherClass(clazz,resolveIt);
-			else
-				return null;
-		}
-
 		String name = MiscUtilities.classToFile(clazz);
 
 		try
@@ -390,12 +410,7 @@ public class JARClassLoader extends ClassLoader
 			ZipEntry entry = zipFile.getEntry(name);
 
 			if(entry == null)
-			{
-				if(doDepencies)
-					return findOtherClass(clazz,resolveIt);
-				else
-					return null;
-			}
+				throw new ClassNotFoundException(clazz);
 
 			InputStream in = zipFile.getInputStream(entry);
 

@@ -60,14 +60,3 @@ public class VFSUpdate extends EBMessage
 	// private members
 	private String path;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2001/09/02 05:37:34  spestov
- * Initial revision
- *
- * Revision 1.1  2000/08/20 07:29:31  sp
- * I/O and VFS browser improvements
- *
- */

@@ -101,14 +101,3 @@ public class CreateDockableWindow extends EBMessage
 	private String position;
 	private DockableWindow win;
 }
-
-/*
- * Change Log:
- * $Log$
- * Revision 1.1  2001/09/02 05:37:34  spestov
- * Initial revision
- *
- * Revision 1.1  2000/08/19 08:27:57  sp
- * Forgot to add CreateDockableWindow message
- *
- */

@@ -71,23 +71,3 @@ class Autosave implements ActionListener
 
 	private Autosave() {}
 }
-
-/*
- * ChangeLog:
- * $Log$
- * Revision 1.1  2001/09/02 05:37:01  spestov
- * Initial revision
- *
- * Revision 1.8  2000/08/03 07:43:41  sp
- * Favorites added to browser, lots of other stuff too
- *
- * Revision 1.7  2000/07/22 03:27:03  sp
- * threaded I/O improved, autosave rewrite started
- *
- * Revision 1.6  2000/06/12 02:43:29  sp
- * pre6 almost ready
- *
- * Revision 1.5  1999/10/01 07:31:39  sp
- * RMI server replaced with socket-based server, minor changes
- *
- */

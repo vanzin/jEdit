@@ -12,6 +12,13 @@ JEDIT 3.2 VERSION HISTORY
 + Enhancements
 
 - Eliminated delay when showing check box menu items for the first time
+- JARClassLoader is much faster now
+- BeanShell performance tweak: loaded classes are cached in the
+  namespace which contained the 'import' that resolved them
+- BeanShell performance tweak: default imports (java.lang, java.awt,
+  etc) are only loaded into the top-level namespace, and due to the
+  above change, classes found in the default imported packages are
+  cached and only ever have to be searched for once
 
 + Bug Fixes
 

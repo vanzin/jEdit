@@ -87,6 +87,11 @@ public class NameSpace
 		setParent(parent);
 		// Register for notification of classloader change
 		BshClassManager.addCMListener(this);
+
+		// if we don't have a parent, load default imports.
+		// if we do have a parent, default imports will be found there.
+		if(parent == null)
+			loadDefaultImports();
     }
 
 	public void setName( String name ) {
@@ -525,8 +530,6 @@ public class NameSpace
 		return packages;
     }
 
-    // temporary hack by Slava Pestov
-    private static final Object NO_CLASS = new Object();
 
 	/**
 		Load class through this namespace, taking into account imports.
@@ -539,25 +542,41 @@ public class NameSpace
     {
 		Class c	= null;
 
-		if(classCache != null)
-		{
-			Object obj = classCache.get(name);
-			if(obj == NO_CLASS)
-				return null;
+		// look for this class in the class cache of our parents
+		NameSpace nameSpace = this;
 
-			c =	(Class)obj;
+		while(nameSpace != null)
+		{
+			if(nameSpace.classCache != null)
+			{
+				c = (Class)nameSpace.classCache.get(name);
+				if(c != null)
+					return c;
+			}
+
+			nameSpace = nameSpace.parent;
 		}
 
-		if(c ==	null) {
-			c =	getClassImpl( name );
+		// now, try looking for this class in our parents,
+		// and here's the tricky part, if we found it using
+		// the imports in a given namespace, we cache it,
+		// _in that namespace_.
+		nameSpace = this;
 
-			if(classCache == null)
-				classCache = new Hashtable();
-
+		while(nameSpace != null)
+		{
+			c = nameSpace.getClassImpl( name );
 			if(c != null)
-				classCache.put(name, c);
-			else
-				classCache.put(name, NO_CLASS);
+			{
+				if(nameSpace.classCache == null)
+					nameSpace.classCache = new Hashtable();
+				nameSpace.classCache.put(name,c);
+				//System.err.println("cached " + name
+				//	+ " in " + nameSpace);
+				break;
+			}
+
+			nameSpace = nameSpace.parent;
 		}
 
 		return c;
@@ -614,14 +633,16 @@ public class NameSpace
 				in reverse order of import...
 				(give later imports precedence...)
 			*/
-			String[] packages =	getImportedPackages();
-			//for(int i=0; i<packages.length; i++)
-			for(int i=packages.length-1; i>=0; i--)
+			if(importedPackages != null)
 			{
-				String s = packages[i] + "." + name;
-				Class c=classForName(s);
-				if ( c != null )
-					return c;
+				for(int i=importedPackages.size()-1; i>=0; i--)
+				{
+					String s = (String)importedPackages.elementAt(i)
+						+ "." + name;
+					Class c=classForName(s);
+					if ( c != null )
+						return c;
+				}
 			}
 
 			/*

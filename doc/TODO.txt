@@ -2,11 +2,63 @@ TO DO
 
 - wait for John to release an updated get_package_name macro
 - wait for John to import jEditLauncher
+- send out JARClassLoader, NameSpace, Interpreter changes
 
 + features:
 
-+ minor:
-
+- search and replace: scroll text area so selection is visible despite
+  dialog position
+- maybe use JavaHelp for help, because it has some nice features, like
+  searching
+- better auto indent
+- improve folding:
+  - explicit folding with {{{ and }}} markers in text
+  - fold navigator
+- HyperSearch should highlight search results
+- caret beyond end of line
+- ScrollBarHighlight interface:
+  Color getColor()
+  int[] getHighlightedLines()
+  String getToolTipText(int line)
+- Used by ErrorList, HyperSearch, markers
+- new document model that uses less memory than the Swing document
+- better default color scheme
+- option to change Swing font
+- improved window docking:
+  - close boxes
+  - docking option pane changes take effect immediately
+  - instead of an auto-open flag, remember which dockables were open and
+    restore them on startup
+  - action shown in menu bar is not a toggle action
+  - '<name>-toggle' and '<name>-to-front' actions, not in menus
+- S+TAB and TAB to shift indent left and right
+- A+LEFT and A+RIGHT bound to prev/next-bracket
+- getSelectedLines(): if selection ends on the start of a line, don't
+  include that line
+- directory chooser dialog box
+- file system browser:
+  - colorize file lists
+  - new UI layout:
+    [Commands V] [Favorites V]
+    [Up][Reload][Drives][Home][Curr Buf Dir]
+    Path:       [__________________________]
+    [ ] Filter: [__________________________]
+    [ <combo of parent directories>        ]
+  - Two-pane 'file system commander' window, with copy/move buttons
+  - recursive directory delete
+  - right-click menu: show all toolbar options
+  - some additional keyboard shortcuts:
+    - ~ goes to home directory
+    - / goes to roots:
+    - - goes to buffer directory
+  - smaller 14x14 icons
+  - easier way for plugins to add right-click menu commands
+  - new VFS methods:
+    int getUnixPermissions()
+    void setUnixPermissions()
+  - UNIX_PERMISSIONS_CAP capability
+  - VFS.DirectoryEntry: icon and color fields
+- graphical regular expression editor
 - jEdit.get/setInteger/Color/FontProperty()
 - scroll to newly added tool bar button or context menu item in option
   panes
@@ -17,13 +69,8 @@ TO DO
 - when loading plugins and such, check for settingsDir == jEditHome
 - collapse-all-folds action that calls expandFolds(1)
 - changing read-only flag in buffer options
-- replace shift-left/shift-right actions with an overloaded TAB action,
-  and shift-left bound to S+TAB? Then A+LEFT and A+RIGHT can be used for
-  other purposes (prev/next-bracket?)
 - trailingEOL property, set on load if file has a trailing newline, when
   saving, only write a trailing newline if property is set
-- if last token of a line has a background color, remainder of line will
-  be drawn with that color
 - after a VFSUpdate for a mode file is received, reload that mode automatically
 - after a VFSUpdate for a mode catalog is received, reload all modes
 - when loading a file: if the stream supports a mark, read first 16 bytes,
@@ -42,84 +89,32 @@ TO DO
   - memory display in status bar, click opens memory display dialog;
     replaces 'show free memory' macro
   - double-click on line number opens go to line dialog box
-
-+ major:
-
 - use VariableGridLayout to lay out tool bars, not a BoxLayout
-- new document model
-- docking:
-  - each tab has a close box
-  - multiple instances of a dockable
-  - <name>-to-front action for multi dockables
-  - toggle-<name> action for toggling
-  - <name> action calls addDockableWindow(), no longer a toggle
-  - remove auto-open setting from option pane; instead, save and restore
-    which dockables are open automatically
 - hypersearch:
-  - in selection option
-  - new search results window for each search
   - file names in bold, show number of results in that file
   - expand all branches
-  - remove 'hypersearch results' menu item
-  - select lines with matches capability
+  - show replace results in search results window
+  - new search results window for each search, no 'search results' menu
+    item
 - smarter/better userInput() that accepts strings, not just characters
-- configurable metal font
 - changing key bindings for ENTER, TAB, C+TAB, S+TAB, etc.
-- keymaps replace .shortcut properties
-  - loaded from $HOME/.jedit/keymaps, and jedit.jar
-  - one keymap can 'extend' another
-  - keymaps are XML files with <bind>, <unbind> tags
-  - jEdit, emacs, keymaps included, maybe others
-  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
 - shortcuts option pane: one category for each plugin, to avoid
   lumping all plugin actions in one list
-- syntax styles:
-  - optional underline, color can be changed
-  - style editor: check boxes next to fg, bg, underline flags; if off,
-    use default
-  - better default color scheme
+- style editor: check boxes next to fg, bg; if off, use default
 - abbrevs option pane: add, remove, edit buttons, don't show abbrev
   expansion in table
-- file system browser:
-  - right-click menu: show all toolbar options
-  - parent directory, parent directories menu, reload, local drives, home,
-    go to buffer directory
-  - back, forward menu items
-  - some additional keyboard shortcuts:
-    - ~ goes to home directory
-    - / goes to roots:
-    - - goes to buffer directory
-  - smaller 14x14 icons
-  - easier way for plugins to add right-click menu commands
-  - custom colors for icons for file names matching specified globs
-  - two-pane "jEdit commander" window with support for moving and
-    copying files
-  - recursive remove of directories, with safety features for symlinks
-  - new VFS methods:
-    int getUnixPermissions()
-    void setUnixPermissions()
-  - UNIX_PERMISSIONS_CAP capability
-  - VFS.DirectoryEntry: icon and color fields
-- shift-left/shift-right: behave differently with rectangular selection
-- docking option pane: changes take effect immediately
 - option pane API changes:
   - boolean validate() method added; if returns false, user is not allowed
     to close dialog with 'OK' button, have to either fix values or cancel.
   - OptionsDialog handles selective initialization of option panes;
     AbstractOptionPane's _init() and _save() methods no longer necessary
     and deprecated.
-- dockable view registers window
-  - RegisterChanged message added
-  - update display when shown register changes
-  - use a timer to update display of $ register every 5 seconds or so
-  - use a timer to update display of % register if it is a ClipboardRegister
 - new token types:
   - MARKUP renamed MARKUP1
   - MARKUP2
   - MARKUP3
   - MARKUP4
   - KEYWORD4 (in addition to KEYWORD[123])
-  - LINK (highlighted with blue underline, for HTML mode and friends)
   - INLINE (for inline scripts)
 - HTML mode:
   - inside tags, delegate on*="..." to JavaScript mode,
@@ -136,12 +131,12 @@ TO DO
 - per-mode encodings and line separators, to optionally override those
   auto-detected when a buffer is loaded
 - they should be overridable on a global basis too
-- folding:
-  - needs to be improved, but I haven't thought about it yet
+- if last token of a line has a background color, remainder of line will
+  be drawn with that color
 
 + bugs:
 
-- how to record S+0-9?
+- how to handle S+0-9?
 - if start is at the end of a line, .* always matches an empty string
 - formatting problems in user's guide in table cells
 - finish persistent splits code
@@ -176,3 +171,20 @@ TO DO
   - restart should not be necessary for 'globalColors' to take effect
 - editing on last line shouldn't cause scrolling
 - 'Stop' in plugin manager needs to be handled more gracefully
+- Open File: focus on text field
+- binding an action to ` doesn't work
+
++ later:
+
+- keymaps replace .shortcut properties
+  - loaded from $HOME/.jedit/keymaps, and jedit.jar
+  - one keymap can 'extend' another
+  - keymaps are XML files with <bind>, <unbind> tags
+  - jEdit, emacs, keymaps included, maybe others
+  - instead of hard-coded modifier swapping on MacOS, have a MacOS keymap
+- shift-left/shift-right: behave differently with rectangular selection
+- dockable view registers window
+  - RegisterChanged message added
+  - update display when shown register changes
+  - use a timer to update display of $ register every 5 seconds or so
+  - use a timer to update display of % register if it is a ClipboardRegister

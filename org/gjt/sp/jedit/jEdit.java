@@ -447,10 +447,15 @@ public class jEdit
 		if(name == null)
 			return null;
 		if(args == null)
-			return props.getProperty(name,name);
+			return props.getProperty(name);
 		else
-			return MessageFormat.format(props.getProperty(name,
-				name),args);
+		{
+			String value = props.getProperty(name);
+			if(value == null)
+				return null;
+			else
+				return MessageFormat.format(value,args);
+		}
 	}
 
 	/**
