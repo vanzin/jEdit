@@ -31,6 +31,7 @@ public class MacOSOptionPane extends AbstractOptionPane
 //{{{ Variables
 	private JCheckBox menuBox;
 	private JCheckBox preserveBox;
+	private JCheckBox liveResizeBox;
 //}}}
 	
 	//{{{ Constructor
@@ -42,15 +43,22 @@ public class MacOSOptionPane extends AbstractOptionPane
 	//{{{ _init() method
     public void _init()
 	{
+		Dimension d = new Dimension(7,7);
+		
         menuBox = new JCheckBox(jEdit.getProperty("options.MacOSPlugin.menubar.label"));
         addComponent(menuBox);
 		addComponent(new JLabel("(Requires restart for changes to take effect)"));
 		
-		Dimension d = new Dimension(10,10);
 		addComponent(new Box.Filler(d,d,d));
 		
 		preserveBox = new JCheckBox(jEdit.getProperty("options.MacOSPlugin.preserve.label"));
 		addComponent(preserveBox);
+		
+		addComponent(new Box.Filler(d,d,d));
+		
+		liveResizeBox = new JCheckBox(jEdit.getProperty("options.MacOSPlugin.liveResize.label"));
+		addComponent(liveResizeBox);
+		addComponent(new JLabel("(Requires restart for changes to take effect)"));
 		
         getSettings();
     }//}}}
@@ -58,15 +66,20 @@ public class MacOSOptionPane extends AbstractOptionPane
 	//{{{ _save() method
     public void _save()
 	{
-        jEdit.setProperty("MacOSPlugin.useScreenMenuBar", menuBox.isSelected() ? "true" : "false");
-		jEdit.setProperty("MacOSPlugin.preserveCodes", preserveBox.isSelected() ? "true" : "false");
+        jEdit.setBooleanProperty("MacOSPlugin.useScreenMenuBar", menuBox.isSelected());
+		jEdit.setBooleanProperty("MacOSPlugin.preserveCodes", preserveBox.isSelected());
+		jEdit.setBooleanProperty("MacOSPlugin.liveResize", liveResizeBox.isSelected());
     }//}}}
 
 	//{{{ getSettings() method
     public void getSettings()
 	{
-        menuBox.setSelected((jEdit.getProperty("MacOSPlugin.useScreenMenuBar").equals("true")) ? true : false);
-		preserveBox.setSelected((jEdit.getProperty("MacOSPlugin.preserveCodes").equals("true")) ? true : false);
+        menuBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.useScreenMenuBar",
+			jEdit.getBooleanProperty("MacOSPlugin.default.useScreenMenuBar")));
+		preserveBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.preserveCodes",
+			jEdit.getBooleanProperty("MacOSPlugin.default.preserveCodes")));
+		liveResizeBox.setSelected(jEdit.getBooleanProperty("MacOSPlugin.liveResize",
+			jEdit.getBooleanProperty("MacOSPlugin.default.liveResize")));
     }//}}}
 
 }

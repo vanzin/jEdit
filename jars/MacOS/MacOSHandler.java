@@ -2,7 +2,7 @@
  * :tabSize=4:indentSize=4:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * MacOSHandler.java - Various actions for Mac OS Plugin
+ * MacOSHandler.java - Various handlers for Mac OS Plugin
  * Copyright (C) 2002 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
+ 
 //{{{ Imports
 import com.apple.mrj.*;
 import java.io.*;
@@ -29,8 +29,8 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class MacOSHandler implements MRJQuitHandler,
-	MRJAboutHandler, MRJOpenDocumentHandler, MRJPrefsHandler
+public class MacOSHandler implements MRJQuitHandler, MRJAboutHandler,
+	MRJOpenDocumentHandler, MRJPrefsHandler, Handler
 {
 	
 //{{{ Variables
@@ -44,13 +44,19 @@ public class MacOSHandler implements MRJQuitHandler,
 	//{{{ Constructor
 	public MacOSHandler()
 	{
-		if (jEdit.getProperty("MacOSPlugin.useScreenMenuBar") == null)
-			jEdit.setProperty("MacOSPlugin.useScreenMenuBar",jEdit.getProperty("MacOSPlugin.default.useScreenMenuBar"));
-		System.setProperty("com.apple.macos.useScreenMenuBar",jEdit.getProperty("MacOSPlugin.useScreenMenuBar"));
+		if (jEdit.getBooleanProperty("MacOSPlugin.useScreenMenuBar",
+			jEdit.getBooleanProperty("MacOSPlugin.default.useScreenMenuBar"))
+		)
+			System.setProperty("com.apple.macos.useScreenMenuBar","true");
+		else
+			System.setProperty("com.apple.macos.useScreenMenuBar","false");
 		
-		if (jEdit.getProperty("MacOSPlugin.preserveCodes") == null)
-			jEdit.setProperty("MacOSPlugin.preserveCodes",jEdit.getProperty("MacOSPlugin.default.preserveCodes"));
-		jEdit.getProperty("MacOSPlugin.preserveCodes",jEdit.getProperty("MacOSPlugin.preserveCodes"));
+		if (jEdit.getBooleanProperty("MacOSPlugin.liveResize",
+			jEdit.getBooleanProperty("MacOSPlugin.default.liveResize"))
+		)
+			System.setProperty("com.apple.mrj.application.live-resize","true");
+		else
+			System.setProperty("com.apple.mrj.application.live-resize","false");
 	}//}}}
 	
 	//{{{ handleQuit() method
@@ -63,7 +69,7 @@ public class MacOSHandler implements MRJQuitHandler,
 			// bug in Mac OS X 10.1's MRJToolkit
 			et.start();
 		else
-			Log.log(Log.DEBUG,jEdit.getPlugin("MacOSPlugin"),"ExitThread still alive.");
+			Log.log(Log.DEBUG,this,"ExitThread still alive.");
 	}//}}}
 	
 	//{{{ handleAbout() method
@@ -85,7 +91,7 @@ public class MacOSHandler implements MRJQuitHandler,
         {
             lastOpenFile = file.getPath();
         } else {
-            Log.log(Log.ERROR,jEdit.getPlugin("MacOSPlugin"),"Error opening file.");
+            Log.log(Log.ERROR,this,"Error opening file.");
         }
 	}//}}}
 
@@ -118,7 +124,7 @@ public class MacOSHandler implements MRJQuitHandler,
 			}
 			catch (Exception e)
 			{
-				Log.log(Log.ERROR,jEdit.getPlugin("MacOSPlugin"),"Error setting type/creator for "+
+				Log.log(Log.ERROR,this,"Error setting type/creator for "+
 					buffer.getFile().getPath());
 			}
 		}
@@ -129,7 +135,8 @@ public class MacOSHandler implements MRJQuitHandler,
 			buffer.setProperty("MacOSPlugin.type",defaultType);
 			buffer.setProperty("MacOSPlugin.creator",defaultCreator);
 			
-			if (jEdit.getProperty("MacOSPlugin.preserveCodes").equals("true"))
+			if (jEdit.getBooleanProperty("MacOSPlugin.preserveCodes",
+				jEdit.getBooleanProperty("MacOSPlugin.default.preserveCodes")))
 			{
 				try
 				{
@@ -143,7 +150,7 @@ public class MacOSHandler implements MRJQuitHandler,
 				}
 				catch (Exception e) {} // This will happen when a new file is created
 			}
-			Log.log(Log.DEBUG,jEdit.getPlugin("MacOSPlugin"),"Assigned MRJOSTypes " + buffer.getProperty("MacOSPlugin.type")
+			Log.log(Log.DEBUG,this,"Assigned MRJOSTypes " + buffer.getProperty("MacOSPlugin.type")
 			+ "/" + buffer.getProperty("MacOSPlugin.creator") + " to " + buffer.getPath());
 		}
 	}//}}}

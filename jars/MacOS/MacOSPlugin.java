@@ -35,7 +35,7 @@ public class MacOSPlugin extends EBPlugin
 //{{{ Variables
 	private boolean started = false;
 	private boolean osok;
-	private MacOSHandler handler;
+	private Handler handler;
 //}}}
 	
 	//{{{ start() method
@@ -45,10 +45,10 @@ public class MacOSPlugin extends EBPlugin
         {	
 			handler = new MacOSHandler();
 			// Register handlers
-			MRJApplicationUtils.registerQuitHandler(handler);
-    		MRJApplicationUtils.registerAboutHandler(handler);
-			MRJApplicationUtils.registerPrefsHandler(handler);
-			MRJApplicationUtils.registerOpenDocumentHandler(handler);
+			MRJApplicationUtils.registerQuitHandler((MRJQuitHandler)handler);
+    		MRJApplicationUtils.registerAboutHandler((MRJAboutHandler)handler);
+			MRJApplicationUtils.registerPrefsHandler((MRJPrefsHandler)handler);
+			MRJApplicationUtils.registerOpenDocumentHandler((MRJOpenDocumentHandler)handler);
         }
 	}//}}}
 	
@@ -97,22 +97,22 @@ public class MacOSPlugin extends EBPlugin
 	private boolean osok()
 	{
 		final String osname = jEdit.getProperty("MacOSPlugin.depend.os.name");
-		final String osversion = jEdit.getProperty("MacOSPlugin.depend.os.version");
+		final String mrjversion = jEdit.getProperty("MacOSPlugin.depend.mrj.version");
 		
 		if (!System.getProperty("os.name").equals(osname))
 		{
-			SwingUtilities.invokeLater( new Runnable() { public void run() {
-				GUIUtilities.error(null,"MacOSPlugin.dialog.osname",new Object[] {osname});
-			}});
+			// According to Slava this is better
+			Log.log(Log.ERROR,this,jEdit.getProperty("MacOSPlugin.dialog.osname.message"));
 			return false;
 		}
-		if (System.getProperty("os.version").compareTo(osversion) <= 0)
+		if (!System.getProperty("mrj.version").equals(mrjversion))
 		{
 			SwingUtilities.invokeLater( new Runnable() { public void run() {
-				GUIUtilities.error(null,"MacOSPlugin.dialog.osversion",new Object[] {osversion});
+				GUIUtilities.error(null,"MacOSPlugin.dialog.mrjversion",new Object[] {mrjversion});
 			}});
 			return false;
 		}
+
 		return true;
 	}//}}}
 	
