@@ -65,7 +65,7 @@ public abstract class EditAction
 	//{{{ getLabel() method
 	/**
 	 * Returns the action's label. The default implementation returns the
-	 * value of the property named by the action's internal name suffixed
+	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.label</code>.
 	 */
 	public String getLabel()

@@ -146,10 +146,11 @@
 		<SEQ TYPE="COMMENT2">*</SEQ>
 
 		<!-- Javadoc ignores tags inside <pre> -->
-		<SPAN TYPE="MARKUP" DELEGATE="JAVADOC_PRE">
+		<!-- XXX no it doesn't -->
+		<!-- SPAN TYPE="MARKUP" DELEGATE="JAVADOC_PRE">
 			<BEGIN>&lt;pre&gt;</BEGIN>
 			<END>&lt;/pre&gt;</END>
-		</SPAN>
+		</SPAN -->
 
 		<!-- HTML comments -->
 		<SPAN TYPE="COMMENT1">
@@ -213,5 +214,5 @@
 		</KEYWORDS>
 	</RULES>
 
-	<RULES SET="JAVADOC_PRE" DEFAULT="COMMENT2" />
+	<!-- RULES SET="JAVADOC_PRE" DEFAULT="COMMENT2" / -->
 </MODE>

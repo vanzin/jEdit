@@ -22,12 +22,72 @@ package org.gjt.sp.jedit;
 import java.util.*;
 
 /**
- * A set of actions.
+ * A set of actions.<p>
+ *
+ * Action sets are read from <code>actions.xml</code> files
+ * contained inside plugin JARs. An action definition file has the following
+ * form:
+ *
+ * <pre>&lt;?xml version="1.0"?&gt;
+ *&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
+ *&lt;ACTIONS&gt;
+ *    &lt;ACTION NAME="some-action"&gt;
+ *        &lt;CODE&gt;
+ *            // Action code
+ *        &lt;/CODE&gt;
+ *    &lt;/ACTION&gt;
+ *    &lt;ACTION NAME="some-toggle-action"&gt;
+ *        &lt;CODE&gt;
+ *            // Action code
+ *        &lt;/CODE&gt;
+ *        &lt;IS_SELECTED&gt;
+ *            // Returns true or false
+ *        &lt;/IS_SELECTED&gt;
+ *    &lt;/ACTION&gt;
+ *&lt;/ACTIONS&gt;</pre>
+ *
+ * The following elements are valid:
+ *
+ * <ul>
+ * <li>
+ * <code>ACTIONS</code> is the top-level element and refers
+ * to the set of actions used by the plugin.
+ * </li>
+ * <li>
+ * An <code>ACTION</code> contains the data for a particular action.
+ * It has three attributes: a required <code>NAME</code>;
+ * an optional <code>NO_REPEAT</code>, which is a flag
+ * indicating whether the action should not be repeated with the
+ * <b>C+ENTER</b> command; and an optional
+ * <code>NO_RECORD</code> which is a a flag indicating whether the
+ * action should be recorded if it is invoked while the user is recording a
+ * macro. The two flag attributes
+ * can have two possible values, "TRUE" or
+ * "FALSE". In both cases, "FALSE" is the
+ * default if the attribute is not specified.
+ * </li>
+ * <li>
+ * An <code>ACTION</code> can have two child elements
+ * within it: a required <code>CODE</code> element which
+ * specifies the
+ * BeanShell code that will be executed when the action is invoked,
+ * and an optional <code>IS_SELECTED</code> element, used for
+ * checkbox
+ * menu items.  The <code>IS_SELECTED</code> element contains
+ * BeanShell code that returns a boolean flag that will
+ * determine the state of the checkbox.
+ * </li>
+ * </ul>
+ *
+ * Each action must have a property <code><i>name</i>.label</code> containing
+ * the action's menu item label. The action code may use any predefined
+ * BeanShell variable; see {@link BeanShell}.
  *
  * @see jEdit#getActionSets()
- * @see jEdit#addActionSet()
+ * @see jEdit#addActionSet(ActionSet)
  *
  * @author Slava Pestov
+ * @author John Gellene (API documentation)
  * @version $Id$
  * @since jEdit 4.0pre1
  */

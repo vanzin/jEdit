@@ -50,22 +50,22 @@
 <xsl:variable name="toc.list.type">ul</xsl:variable>
 
 <xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
-<xsl:template match="void"><xsl:text>();</xsl:text></xsl:template>
+<!-- xsl:template match="void"><xsl:text>();</xsl:text></xsl:template -->
 
 <xsl:param name="chunk.first.sections">1</xsl:param>
 
-<xsl:template match="*" mode="object.title.markup.textonly">
+<!-- xsl:template match="*" mode="object.title.markup.textonly">
   <xsl:variable name="title">
     <xsl:apply-templates select="." mode="title.markup"/>
   </xsl:variable>
   <xsl:value-of select="$title"/>
-</xsl:template>
+</xsl:template -->
 
-<xsl:template name="header.navigation">
+<!-- xsl:template name="header.navigation">
 </xsl:template>
 
 <xsl:template name="footer.navigation">
-</xsl:template>
+</xsl:template -->
 
 <!-- }}} -->
 
@@ -74,12 +74,12 @@
 <xsl:param name="generate.qandaset.toc">1</xsl:param>
 <xsl:param name="generate.qandaset.div">1</xsl:param>
 
-<xsl:param name="local.l10n.xml" select="document('')"/>
+<!-- xsl:param name="local.l10n.xml" select="document('')"/ -->
 
 <!-- }}} -->
 
 <!-- {{{ Swing HTML control doesn't support &ldquo; and &rdquo; -->
-<i18n:i18n xmlns:i18n="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+<!-- i18n:i18n xmlns:i18n="http://docbook.sourceforge.net/xmlns/l10n/1.0">
 <i18n:l10n language="en">
 
 <i18n:dingbat key="startquote" text="&quot;"/>
@@ -99,7 +99,7 @@
 </i18n:context>
 
 </i18n:l10n>
-</i18n:i18n>
+</i18n:i18n -->
 <!-- }}} -->
 
 <!-- {{{ TOC generation -->

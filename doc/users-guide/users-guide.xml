@@ -36,7 +36,6 @@
 <!ENTITY bsh-commands SYSTEM "bsh-commands.xml">
 
 <!ENTITY plugin-intro SYSTEM "plugin-intro.xml">
-<!ENTITY host-design SYSTEM "host-design.xml">
 <!ENTITY plugin-implement SYSTEM "plugin-implement.xml">
 
 ]>
@@ -161,7 +160,6 @@
  </partintro>
 
  &plugin-intro;
- &host-design;
  &plugin-implement;
 </part>
 

@@ -8,57 +8,13 @@
 <!-- This chapter of the jEdit 3.2 Plugin Guide               -->
 <!-- discusses how to implement a plugin                      -->
 
-<chapter id="plugin-implement"><title>Writing a Plugin</title>
-
-<para>
-    One way to organize a plugin project is to design the software
-    as if it were a <quote>stand alone</quote> application, with three
-    exceptions:
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      The plugin can access the <classname>View</classname> object with
-      which it is associated, as well as static methods of the
-      <classname>jEdit</classname> class, to obtain and manipulate various
-      data and host application objects;
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      If the plugin has visible components, they are ultimately contained in a
-      <classname>JPanel</classname> object instead of a top-level frame
-      window; and
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      The plugin implements the necessary elements of the jEdit plugin API
-      that were outlined in the last chapter: a plugin core class,
-      perhaps a number of plugin
-      window classes, maybe a plugin option pane class, and a set of
-      required plugin resources.
-    </para>
-    <para>
-      Not every plugin has configurable options; some do not have a
-      visible window. However, all will need a plugin
-      core class and a minimum set of other resources.
-    </para>
-  </listitem>
-</itemizedlist>
-
-<para>
-  We will now illustrate this approach by introducing an example plugin.
-</para>
-
-<sect1 id="plugin-example"><title>QuickNotepad: An Example Plugin</title>
+<chapter id="plugin-implement"><title>Implementing a Simple Plugin</title>
 
 <para>
   There are many applications for the leading operating systems that
   provide a <quote>scratch-pad</quote> or <quote>sticky note</quote>
   facility for the desktop display. A similar type of facility operating
-  within the jEdit display would be a convenience. The use of docking
+  within the jEdit display would be a convenience. The use of dockable
   windows would allow the notepad to be displayed or hidden with a single
   mouse click or keypress (if a keyboard shortcut were defined). The
   contents of the notepad could be saved at program exit (or, if earlier,
@@ -87,88 +43,137 @@
   for your own plugin.
 </para>
 
-</sect1>
-
-<sect1 id="plugin-implement-class"><title>Writing a Plugin Core Class</title>
+<sect1 id="plugin-load"><title>
+<indexterm>
+	<primary>Plugin API</primary>
+	<secondary>loading at startup</secondary>
+</indexterm>
+How Plugins are Loaded</title>
 
 <para>
-    The major issues encountered when writing a plugin core class arise
-    from the developer's decisions on what features the plugin will make
-    available. These issues have implications for other plugin elements
-    as well.
+	We will
+  discuss the implementation of the <application>QuickNotepad</application>
+  plugin, along with the jEdit APIs
+  it makes use of. But first, we describe how plugins are loaded.
+</para>
+
+<para>
+  As part of its startup routine, jEdit's <function>main</function>
+  method calls various methods to load and initialize plugins.
+</para>
+
+<para>
+  Plugin loading occurs after jEdit has loaded application properties, any
+  user-supplied properties, and the application's set of actions that
+  will be available from jEdit's menu bar (as well as the toolbar and
+  keyboard shortcuts).
+</para>
+
+<para>
+  Plugin loading occurs before jEdit opens the initial view or loads any files
+  for editing. It also occurs before jEdit runs any startup scripts.
+</para>
+
+<para>
+  Plugins are loaded from files with the <filename>.jar</filename>
+  filename extension located in the <filename>jars</filename>
+  subdirectories of the jEdit installation and user settings directories
+  (see <xref linkend="settings-directory" />).
+</para>
+
+<para>
+  For each JAR archive file it finds, jEdit scans its entries and
+  performs the following tasks:
 </para>
 
 <itemizedlist>
-  <listitem><para>
-    Will the plugin provide for actions that the user can trigger using
-    jEdit's menu items, toolbar buttons and keyboard shortcuts?
+ <listitem><para>
+   Adds to a collection maintained by jEdit a new object of
+   type <ulink url="../api/org/gjt/sp/jedit/EditPlugin.JAR.html">
+   <classname>EditPlugin.JAR</classname></ulink>. This is a data structure
+   holding the name of the JAR archive file, a reference to the
+   <ulink url="../api/org/gjt/sp/jedit/JARClassLoader.html">
+   <classname>JARClassLoader</classname></ulink>, and a collection
+   of plugins found in the archive file.
   </para></listitem>
   <listitem><para>
-    Will the plugin have its own visible interface?
+    Loads any properties defined in files ending with
+    the extension <filename>.props</filename> that are contained
+    in the archive. See <xref linkend="plugin-implement-properties" />.
   </para></listitem>
   <listitem><para>
-    Will the plugin have settings that the user can configure?
+    Reads action definitions from any file named
+    <filename>actions.xml</filename> in the archive (the file need
+    not be at the top level). See <xref
+    linkend="plugin-implement-actions" />.
   </para></listitem>
   <listitem><para>
-    Will the plugin
-    respond to any EditBus messages reflecting changes in the host
-    application's state?
+    Parses and loads the contents of any file named
+    <filename>dockables.xml</filename> in the archive (the file need
+    not be at the top level). This file contains BeanShell code for
+    creating docking or floating windows that will contain the visible
+    components of the plugin.  Not all plugins define dockable
+    windows,
+    but those that do need a <filename>dockables.xml</filename> file.
+    See <xref linkend="plugin-implement-dockables" />.
   </para></listitem>
-
+  <listitem><para>
+    Checks for a class name with a name ending with
+    <filename>Plugin.class</filename>.
+  </para>
+  <para>
+    Such a class is known as a <firstterm>plugin core class</firstterm> and must
+    extend jEdit's abstract
+    <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+    <classname>EditPlugin</classname></ulink>
+    class. The initialization routine checks the plugin's
+    properties to see if it is subject to any dependencies. For example, a
+    plugin may require that the version of the Java runtime environment or
+    of jEdit itself be equal to or above some threshold version. A plugin
+    can also require the presence of another plugin.
+  </para>
+  <para>
+    If any dependency is
+    not satisfied, the loader marks the plugin as <quote>broken</quote> and
+    logs an error message.
+  </para>
+  </listitem>
 </itemizedlist>
 
-<sect2 id="implement-plugin-choose-base"><title>Choosing a Base Class</title>
+<para>
+  After scanning the plugin JAR file and loading any resources,
+  a new instance
+  of the plugin core class is created and added to the collection
+  maintained by the appropriate <ulink url="../api/org/gjt/sp/jedit/EditPlugin.JAR.html">
+  <classname>EditPlugin.JAR</classname></ulink>.
+  jEdit then calls the
+  <function>start()</function> method of the plugin core class.
+  The <function>start()</function> method can perform initialization of the
+  object's data members.
+  Because this method is defined as an empty <quote>no-op</quote> in the
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> abstract class, a plugin need not
+  provide an implementation if no unique initialization is required.
+</para>
+
+</sect1>
+
+<sect1 id="plugin-implement-quicknotepadplugin"><title>The QuickNotepadPlugin Class</title>
 
 <para>
-  If the plugin will respond to EditBus
-  messages, it must be derived from <classname>EBPlugin</classname>.
-  Otherwise, <classname>EditPlugin</classname> will suffice as a
-  base class.
+  Recall that the plugin core class must extend
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink>.
+  In QuickNotepad's plugin core class, there are no special
+  initialization or shutdown chores to perform, so we will not need
+  a <function>start()</function> or <function>stop()</function> method.
 </para>
 
 <para>
-  Knowing what types of messages are made available by the plugin API is
-  obviously helpful is determining both the base plugin class and the
-  contents of a <filename>handleMessage()</filename> method. The message
-  classes derived from <classname>EBMessage</classname> cover the opening
-  and closing of the application, changes in the status of text buffers
-  and their container and changes in user settings, as well as changes in
-  the state of other program features. XXX -- link to msg package ---
+  The resulting plugin core class is lightweight and straightforward to implement.
 </para>
 
-</sect2>
-
-<sect2 id="plugin-implement-base-methods">
-<title>Implementing Base Class Methods</title>
-
-<para>
-  Whether <classname>EditPlugin</classname> or <classname>EBPlugin</classname>
-  is selected as the base of the plugin core
-  class, the implementations of <function>start()</function> and
-  <function>stop()</function> in the plugin's derived class are likely to
-  be trivial, or not present at all (in which case they will be
-  <quote>no-ops</quote> inherited from <classname>EditPlugin</classname>).
-</para>
-
-<para>
-  We will derive the plugin core class for QuickNotepad from
-  <classname>EditPlugin</classname>, since there are no EditBus
-  messages to which the plugin core class need respond.  There are no special
-  initialization or shut down chores to perform, so we will not need
-  a <filename>start()</filename> or <filename>stop()</filename> method.
-  We will define a few static
-  <classname>String</classname> data members to enforce consistent syntax
-  for the name of properties we will use throughout the plugin.
-  Finally, we will use a standalone plugin
-  window class to separate the functions of that class from the visible
-  component class we will create.
-</para>
-
-<para>
-  The resulting plugin core class is lightweight and straightforward to implement:
-</para>
-
-
+<itemizedlist><listitem><para>
 
 <informalexample><programlisting>public class QuickNotepadPlugin extends EditPlugin {
     public static final String NAME = "quicknotepad";
@@ -177,49 +182,219 @@
         = "plugin.QuickNotepadPlugin.";
     public static final String OPTION_PREFIX
         = "options.quicknotepad.";
+</programlisting></informalexample>
 
+<para>
+  First we define a few static
+  <classname>String</classname> data members to enforce consistent syntax
+  for the name of properties we will use throughout the plugin.
+</para>
+
+</para></listitem>
+
+<listitem><para>
+
+<informalexample><programlisting>
     public void createMenuItems(Vector menuItems) {
         menuItems.addElement(GUIUtilities.loadMenu(MENU));
-    }
+    }</programlisting></informalexample>
 
-    public void createOptionPanes(OptionsDialog od) {
+<para>
+  This implementation of
+  the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html#createMenuItems(java.util.Vector)">
+  <classname>EditPlugin.createMenuItems()</classname></ulink> method
+  is very typical.
+  It uses a jEdit utility function to create the menu, taking the list
+  of actions from the <property>quicknotepad</property> property, and
+  the label from <property>quotenotepad.label</property>.
+</para>
+
+<para>
+  If the plugin only had a single menu item (for example, an item
+  activating a dockable window), we would call
+  <ulink url="../api/org/gjt/sp/jedit/GUIUtilities.html#loadMenuItem(java.lang.String)">
+  <function>GUIUtilities.loadMenuItem()</function></ulink> instead of
+  <ulink url="../api/org/gjt/sp/jedit/GUIUtilities.html#loadMenu(java.lang.String)">
+  <function>GUIUtilities.loadMenu()</function></ulink>.
+</para>
+
+</para></listitem>
+
+<listitem><para>
+
+<informalexample><programlisting>public void createOptionPanes(OptionsDialog od) {
         od.addOptionPane(new QuickNotepadOptionPane());
     }
 
 
 }</programlisting></informalexample>
 
-
 <para>
-  XXX -- links to loadMenu(), etc javadocs --
-  The implementations of <function>createMenuItems()</function> and
-  <function>createOptionPane()</function>
-  are typically trivial, because the real work will be done using other
-  plugin elements. Menu creation is performed by a utility function in
-  jEdit's API, using properties defined in the plugin's properties file.
-  The option pane is constructed in its own class.
+  This implementation of
+  the <ulink
+  url="../api/org/gjt/sp/jedit/EditPlugin.html#createOptionPanes(org.gjt.sp.jedit.gui.OptionsDialog)">
+  <classname>EditPlugin.createOptionPanes()</classname></ulink> method
+  adds a new instance of <classname>QuickNotepadOptionPane</classname>
+  to the given instance of the <guimenuitem>Global Options</guimenuitem>
+  dialog box.
 </para>
 
-<para>
-  If the plugin only had a single menu item (for example, an item
-  activating a dockable window), we would call
-  <function>GUIUtilities.loadMenuItem()</function> instead of
-  <function>loadMenu()</function>. We will explain the use of both methods
-  in the next section.
-</para>
+</para></listitem>
 
-</sect2>
+</itemizedlist>
 
 </sect1>
 
-<sect1 id="plugin-implement-actions"><title>Defining Plugin Actions</title>
+<sect1 id="plugin-implement-properties"><title>The Property File</title>
 
 <para>
-  The plugin's user action catalog, <filename>actions.xml</filename>, is
-  the resource used by the plugin API to get the names and definitions of
-  user actions. The following <filename>actions.xml</filename>
-  file from the <application>QuickNotepad</application> plugin can
-  provide a model:
+  jEdit maintains a list of <quote>properties</quote>, which are
+  name/value pairs used to store human-readable strings, user settings,
+  and various other forms of meta-data. During startup, jEdit loads the
+  default set of properties, followed by plugin properties stored in
+  plugin JAR files, finally followed by user properties.
+</para>
+
+<para>
+  Some properties are used by the plugin API itself. Others are
+  accessed by the plugin using methods in the
+  <ulink url="../api/org/gjt/sp/jedit/jEdit.html">
+  <classname>jEdit</classname></ulink>
+  class.
+</para>
+
+<para>
+  Property files contained in plugin JARs must end with the filename
+  extension <filename>.props</filename>, and have a very simple syntax,
+  which the following example illustrates:
+</para>
+
+<informalexample><programlisting># Lines starting with '#' are ignored.
+name=value
+another.name=another value
+long.property=Long property value, split over \
+    several lines
+escape.property=Newlines and tabs can be inserted \
+    using the \t and \n escapes
+backslash.property=A backslash can be inserted by writing \\.</programlisting>
+</informalexample>
+
+<para>
+  Now we look at the <filename>QuickNotepad.props</filename> file
+  which contains properties for the QuickNotepad plugin.
+  The first type of property data is information about the plugin itself;
+  these are the only properties that must be specified in order for the
+  plugin to load:
+</para>
+
+<informalexample><programlisting># general plugin information
+plugin.QuickNotepadPlugin.name=QuickNotepad
+plugin.QuickNotepadPlugin.author=John Gellene
+plugin.QuickNotepadPlugin.version=4.1
+plugin.QuickNotepadPlugin.docs=QuickNotepad.html
+plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00</programlisting></informalexample>
+<para>
+  These properties are described in detail in the documentation for the
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> class
+  and do not require further
+  discussion here.
+</para>
+
+<para>
+  Next in the file comes a property that sets the title of the
+  plugin's dockable window. Dockable windows are discussed in detail
+  in <xref linkend="plugin-implement-dockables"/>.
+</para>
+
+<informalexample><programlisting># dockable window name
+quicknotepad.title=QuickNotepad</programlisting></informalexample>
+
+<para>
+  Next, we see menu item labels for the plugin's actions.
+  Actions are discussed in detail
+  in <xref linkend="plugin-implement-actions"/>.
+</para>
+
+<informalexample><programlisting># action labels
+quicknotepad.label=QuickNotepad
+quicknotepad.choose-file.label=Choose notepad file
+quicknotepad.save-file.label=Save notepad file
+quicknotepad.copy-to-buffer.label=Copy notepad to buffer</programlisting></informalexample>
+
+<para>
+  Next, the plugin's menu is defined. See
+  <xref linkend="plugin-implement-quicknotepadplugin"/>.
+</para>
+
+<informalexample><programlisting># application menu items
+quicknotepad.menu.label=QuickNotepad
+quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
+  quicknotepad.save-file quicknotepad.copy-to-buffer</programlisting></informalexample>
+
+<para>
+  We have created a small toolbar as a component of QuickNotepad, so
+  file names for the button icons follow:
+</para>
+
+<informalexample><programlisting># plugin toolbar buttons
+quicknotepad.choose-file.icon=Open.png
+quicknotepad.save-file.icon=Save.png
+quicknotepad.copy-to-buffer.icon=Edit.png</programlisting></informalexample>
+
+<para>
+  The menu item labels corresponding to these icons will also serve as tooltip
+  text.
+</para>
+
+<para>
+  Finally, the properties file set forth the labels and settings
+  used by the option pane:
+</para>
+
+<informalexample><programlisting># Option pane labels
+options.quicknotepad.label=QuickNotepad
+options.quicknotepad.file=File:
+options.quicknotepad.choose-file=Choose
+options.quicknotepad.choose-file.title=Choose a notepad file
+options.quicknotepad.choose-font=Font:
+options.quicknotepad.show-filepath.title=Display notepad file path
+
+# Initial default font settings
+options.quicknotepad.show-filepath=true
+options.quicknotepad.font=Monospaced
+options.quicknotepad.fontstyle=0
+options.quicknotepad.fontsize=14
+
+# Setting not defined but supplied for completeness
+options.quicknotepad.filepath=</programlisting></informalexample>
+
+</sect1>
+
+<sect1 id="plugin-implement-actions"><title>The Action Catalog</title>
+
+<para>
+  Actions define procedures that can be bound to a menu
+  item, a toolbar button or a keyboard shortcut. Actions are short
+  scripts written in BeanShell, jEdit's macro scripting
+  language.  These scripts either direct the action themselves,
+  delegate to a method in one of the plugin's classes that
+  encapsulates the action, or do a little of both.  The scripts are
+  usually short; elaborate action protocols are usually contained in
+  compiled code, rather than an interpreted macro script, to speed
+  execution.
+</para>
+
+<para>
+  Actions are defined by creating an XML file entitled
+  <filename>actions.xml</filename> and placing it in the plugin JAR
+  file.
+</para>
+
+<para>
+  The <filename>actions.xml</filename>
+  file from the <application>QuickNotepad</application> plugin looks
+  as follows:
 </para>
 
 <informalexample><programlisting>&lt;?xml version="1.0"?&gt;
@@ -257,11 +432,7 @@
 </para>
 
 <para>
-  When an action is invoked, program control must pass to the
-  component responsible for executing the action. The use of an internal
-  table of BeanShell scripts that implement actions avoids the need for
-  plugins to implement <classname>ActionListener</classname> or similar
-  objects to respond to actions. Instead, the BeanShell scripts address
+  When an action is invoked, the BeanShell scripts address
   the plugin through static methods, or if instance data is needed, the
   current <classname>View</classname>, its
   <classname>DockableWindowManager</classname>, and the plugin
@@ -288,21 +459,27 @@
 </para>
 
 <para>
-  XXX -- link to ActionSet, or?
-  <!-- A formal description of each element of the
-  <filename>actions.xml</filename> file can be found in
-  <xref linkend="resources-action" />. -->
+  A formal description of each element of the
+  <filename>actions.xml</filename> file can be found in the
+  documentation of the
+  <ulink url="../api/org/gjt/sp/jedit/ActionSet.html">
+  <classname>ActionSet</classname></ulink> class.
 </para>
 
 </sect1>
 
-<sect1 id="plugin-implement-dockables"><title>Defining Plugin Dockables</title>
+<sect1 id="plugin-implement-dockables"><title>The Dockable Window Catalog</title>
 
 <para>
+  The jEdit plugin API uses BeanShell to create the top-level visible container
+  of a plugin's interface.  The BeanShell code is contained in a file named
+  <filename>dockables.xml</filename>.  It usually is quite short, providing only
+  a single BeanShell expression used to create a visible plugin window.
+</para>
 
-Just as a file named <filename>actions.xml</filename> contains action definitions,
-<filename>dockables.xml</filename> defines the plugin's dockable windows.
-
+<para>
+  The following example from the QuickNotepad plugin illustrates the
+  requirements of the data file:
 </para>
 
 <informalexample><programlisting><![CDATA[<?xml version="1.0"?>
@@ -334,7 +511,17 @@ and the docking position of the plugin.
 
 </para>
 
-<sect2 id="example-window-class"><title>Class QuickNotepad</title>
+<para>
+  A formal description of each element of the
+  <filename>dockables.xml</filename> file can be found in the
+  documentation of the
+  <ulink url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
+  <classname>DockableWindowManager</classname></ulink> class.
+</para>
+
+</sect1>
+
+<sect1 id="plugin-implement-quicknotepad"><title>The QuickNotepad Class</title>
 
 <para>
   Here is where most of the features of the plugin will be implemented.
@@ -519,9 +706,9 @@ and the docking position of the plugin.
   class will simply future modifications.
 </para>
 
-</sect2>
+</sect1>
 
-<sect2 id="example-window-toolbar"><title>Class QuickNotepadToolBar</title>
+<sect1 id="plugin-implement-quicknotepadtoolbar"><title>The QuickNotepadToolBar Class</title>
 
 <para>
   There is nothing remarkable about the toolbar panel that is placed
@@ -583,11 +770,9 @@ and the docking position of the plugin.
   sets the text and visibility of the label containing the notepad file path.
 </para>
 
-</sect2>
-
 </sect1>
 
-<sect1 id="plugin-implement-options"><title>Designing an Option Pane</title>
+<sect1 id="plugin-implement-options"><title>The QuickNotepadOptionPane Class</title>
 
 <para>
   Using the default implementation provided by
@@ -709,88 +894,60 @@ and the docking position of the plugin.
 
 </sect1>
 
-<sect1 id="plugin-implement-properties"><title>The Property File</title>
+<sect1 id="plugin-implement-docs"><title>Plugin Documentation</title>
 
 <para>
-  The first type of property data is information about the plugin itself.
-  The first few entries from the QuickNotepad plugin's properties file
-  fulfills this requirement:
+  While not required by the plugin API, a help file is an essential
+  element of any plugin written for public release. A single web page is
+  often all that is required. There are no specific requirements on
+  layout, but because of the design of jEdit's help viewer, the use of
+  frames should be avoided. Topics that would be useful include
+  the following:
 </para>
 
-<informalexample><programlisting># general plugin information
-plugin.QuickNotepadPlugin.name=QuickNotepad
-plugin.QuickNotepadPlugin.author=John Gellene
-plugin.QuickNotepadPlugin.version=4.1
-plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00</programlisting></informalexample>
-<para>
-  These properties are described in detail in <xref
-  linkend="resources-properties" /> and do not require further
-  discussion here.
-</para>
-
-<para>
-  Next in the file comes a property that sets the title of the
-  plugin in docked or frame windows.  The use of the suffix
-  <literal>.title</literal> in the property's key name is
-  required by the plugin API.
-</para>
-
-<informalexample><programlisting># dockable window name
-quicknotepad.title=QuickNotepad</programlisting></informalexample>
-
-<para>
-  The next sections, consisting of the action label and menu item
-  properties, have been discussed earlier in
-  <xref linkend="plugin-implement-menu" />.
-</para>
-
-<informalexample><programlisting># action labels
-quicknotepad.label=QuickNotepad
-quicknotepad.choose-file.label=Choose notepad file
-quicknotepad.save-file.label=Save notepad file
-quicknotepad.copy-to-buffer.label=Copy notepad to buffer
-
-# application menu items
-quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
-  quicknotepad.save-file quicknotepad.copy-to-buffer</programlisting></informalexample>
-
-<para>
-  We have created a small toolbar as a component of QuickNotepad, so
-  file names for the button icons follow:
-</para>
-
-<informalexample><programlisting># plugin toolbar buttons
-quicknotepad.choose-file.icon=Open.png
-quicknotepad.save-file.icon=Save.png
-quicknotepad.copy-to-buffer.icon=Edit.png</programlisting></informalexample>
+<itemizedlist>
+  <listitem>
+    <para>
+      a description of the purpose of the plugin;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      an explanation of the type of input the user can supply through its
+      visible interface (such as mouse action or text entry in controls);
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a listing of available user actions that can be taken when the
+      plugin does not have input focus;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      a summary of configuration options;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      information on development of the plugin (such as a change log,
+      a list of <quote>to do</quote> items, and contact information for
+      the plugin's author); and
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      licensing information, including acknowledgments for any library
+      software used by the plugin.
+    </para>
+  </listitem>
+</itemizedlist>
 
 <para>
-  The menu item labels corresponding to these icons will also serve as tooltip
-  text.
+ The location of the plugin's help file is stored in the
+ <literal>plugin.QuickNotepad.docs</literal>
+ property; see <xref linkend="plugin-implement-properties"/>.
 </para>
-
-<para>
-  Finally, the properties file set forth the labels and settings
-  used by the option pane:
-</para>
-
-<informalexample><programlisting># Option pane labels
-options.quicknotepad.label=QuickNotepad
-options.quicknotepad.file=File:
-options.quicknotepad.choose-file=Choose
-options.quicknotepad.choose-file.title=Choose a notepad file
-options.quicknotepad.choose-font=Font:
-options.quicknotepad.show-filepath.title=Display notepad file path
-
-# Initial default font settings
-options.quicknotepad.show-filepath=true
-options.quicknotepad.font=Monospaced
-options.quicknotepad.fontstyle=0
-options.quicknotepad.fontsize=14
-
-# Setting not defined but supplied for completeness
-options.quicknotepad.filepath=</programlisting></informalexample>
 
 </sect1>
 

@@ -21,12 +21,15 @@ Introducing the Plugin API</title>
   write a application that performs spell checking, displays a clock or
   plays chess and turn it into a jEdit plugin. There are currently over 50
   released plugins for jEdit. While none of them play chess,
-  they perform a wide variety of editing and file management tasks. A
-  detailed listing of available plugins is available at the jEdit
-  <ulink url="http://plugins.jedit.org">Plugin Central</ulink> web site.
+  they perform a wide variety of editing and file management tasks.
+</para>
+
+<para>
+  A detailed listing of available plugins is available at
+  <ulink url="http://plugins.jedit.org">plugins.jedit.org</ulink>.
   You can also find beta versions of new plugins in the
-  <quote>Downloads</quote> area of the <ulink
-  url="http://community.jedit.org">jEdit Community</ulink> site.
+  <quote>Downloads</quote> area of <ulink
+  url="http://community.jedit.org">community.jedit.org</ulink>.
 </para>
 
 <para>
@@ -37,8 +40,7 @@ Introducing the Plugin API</title>
 </para>
 
 <para>
-  In order to <quote>plug in</quote> to jEdit, a plugin must implement
-  interfaces or data that deal with the following matters:
+  Requirements for <quote>plugging in</quote> to jEdit are as follows:
 </para>
 
 <itemizedlist>
@@ -54,6 +56,25 @@ Introducing the Plugin API</title>
   </para></listitem>
 
   <listitem><para>
+    The plugin may define <firstterm>actions</firstterm>, both
+    explicitly with an action definition file, or implicitly
+    by providing dockable windows. 
+    Actions are small blocks of BeanShell code that
+    jEdit will perform on behalf of the plugin upon
+    user request. They provide the <quote>glue</quote> between user
+    input and specific plugin routines.
+  </para>
+
+  <para>
+    By convention, plugins display their available actions in submenus of
+    jEdit's <guimenu>Plugins</guimenu> menu; each menu item corresponds to
+    an action. The user can also assign actions to keyboard shortcuts,
+    toolbar buttons or entries in the text area's right-click menu.
+  </para>
+
+  </listitem>
+
+  <listitem><para>
     The plugin may, but need not, provide a user interface.
   </para>
   <para>
@@ -62,7 +83,7 @@ Introducing the Plugin API</title>
     <classname>JWindow</classname>, <classname>JDialog</classname>, or
     <classname>JFrame</classname>. jEdit also provides a dockable window
     API, which allows plugin windows derived from the
-    <classname>JComponent</classname>to be docked into views or shown in
+    <classname>JComponent</classname> class to be docked into views or shown in
     top-level frames, at the user's request.
   </para>
 
@@ -76,37 +97,23 @@ Introducing the Plugin API</title>
   </para>
   </listitem>
 
-  <listitem><para>
-    Plugins may (and typically do) define <firstterm>actions</firstterm>
-    that jEdit will perform on behalf of the plugin upon
-    user request. Actions are small blocks of BeanShell code that
-    provide the <quote>glue</quote> between user input and
-    specific plugin routines.
-  </para>
-
-  <para>
-    By convention, plugins display their available actions in submenus of
-    jEdit's <guimenu>Plugins</guimenu> menu; each menu item corresponds to
-    an action. The user can also assign actions to keyboard shortcuts,
-    toolbar buttons or entries in the text area's right-click menu.
-  </para>
-
-  </listitem>
-
 	<listitem><para>
     Plugins may provide a range of options that the user can modify to
-    alter its configuration.
+    alter their configuration.
   </para>
 
   <para>
     If a plugin provides configuration options in accordance with the plugin
     API, jEdit will make them available in the <guilabel>Global
-    Options</guilabel> dialog. Each plugin with options is listed in the
-    tree view in that dialog under <guilabel>Plugin Options</guilabel>.
-    Clicking on the tree node for a plugin causes the corresponding set
-    of options to be displayed.
+    Options</guilabel> dialog box.
   </para>
   </listitem>
+
+  <listitem><para>
+    While it is not required, plugins are encouraged to provide
+    documentation.
+  </para></listitem>
+
 </itemizedlist>
 
 <para>
@@ -115,33 +122,19 @@ Introducing the Plugin API</title>
   windows. The majority of plugins, however, provide most of these services.
 </para>
 
-<para>
-  In the following chapters, we will begin by briefly describing jEdit's
-  host capabilities, which includes the loading and display of plugins.
-  Next we will describe the principal classes and data structures that a
-  plugin must implement. Finally, we will outline the building of a modest
-  plugin, <quote>QuickNotepad</quote>, that illustrates the requirements and
-  some of the techniques of jEdit plugin design.
-</para>
-
 <sidebar><title>Plugins and different jEdit versions</title>
   <para>
-    As jEdit continues to evolve and improve, elements of the plugin API or
-    jEdit's general API may change with a new jEdit release. For example,
-    version 4.0 of jEdit has simplified the design of a plugin by
-    placing code for the activation of a plugin's docking window in an
-    XML file rather than in a Java class. The use of a Java interface for
-    docking windows has been deprecated. We will explain this and other changes
-    in the plugin API for jEdit 4.0 when discussing the model QuickNotepad plugin.
+    As jEdit continues to evolve and improve, elements of the plugin API
+    may change with a new jEdit release.
   </para>
   <para>
     On occasion an API change will break code used by plugins, although
     efforts are made to maintain or deprecate plugin-related code on a
-    transitional basis. possible. While the majority of plugins are
+    transitional basis. While the majority of plugins are
     unaffected by most changes and will continue working, it is a good idea
-    to monitor the jEdit change log, the mailing lists or <ulink
-    url="http://community.jedit.org">jEdit Community</ulink> for API changes
-    and update your plugin as necessary.
+    to monitor the jEdit change log, the mailing lists and <ulink
+    url="http://community.jedit.org">community.jedit.org</ulink> for API changes
+    so that you can update your plugin if necessary.
   </para>
 </sidebar>
 

@@ -61,18 +61,18 @@ import org.gjt.sp.util.Log;
  *
  * <ul>
  * <li>{@link #createVFSSession(String,Component)}</li>
- * <li>{@link #insert(View,Buffer,Path)}</li>
- * <li>{@link #load(View,Buffer,Path)}</li>
- * <li>{@link #save(View,Buffer,Path)}</li>
+ * <li>{@link #insert(View,Buffer,String)}</li>
+ * <li>{@link #load(View,Buffer,String)}</li>
+ * <li>{@link #save(View,Buffer,String)}</li>
  * <li>{@link #showBrowseDialog(Object[],Component)}</li>
  * </ul>
  *
  * All remaining methods are (required to be) thread-safe.
  *
- * @see VFSManager.registerVFS(String,VFS)
- * @see VFSManager.getVFSByName(String)
- * @see VFSManager.getVFSForPath(String)
- * @see VFSManager.getVFSForProtocol(String)
+ * @see VFSManager#registerVFS(String,VFS)
+ * @see VFSManager#getVFSByName(String)
+ * @see VFSManager#getVFSForPath(String)
+ * @see VFSManager#getVFSForProtocol(String)
  *
  * @author Slava Pestov
  * @author $Id$

@@ -67,11 +67,11 @@ import org.gjt.sp.util.Log;
  *
  * Here is an example set of plugin properties:
  *
- * <pre> plugin.QuickNotepadPlugin.name=QuickNotepad
- * plugin.QuickNotepadPlugin.author=John Gellene
- * plugin.QuickNotepadPlugin.version=4.1
- * plugin.QuickNotepadPlugin.docs=QuickNotepad.html
- * plugin.QuickNotepadPlugin.depend.0=jedit 04.01.01.00</pre>
+ * <pre>plugin.QuickNotepadPlugin.name=QuickNotepad
+ *plugin.QuickNotepadPlugin.author=John Gellene
+ *plugin.QuickNotepadPlugin.version=4.1
+ *plugin.QuickNotepadPlugin.docs=QuickNotepad.html
+ *plugin.QuickNotepadPlugin.depend.0=jedit 04.01.01.00</pre>
  *
  * Note that in all cases above where a class name is needed, the fully
  * qualified class name, including the package name, if any, must be used.<p>
@@ -137,11 +137,11 @@ public abstract class EditPlugin
 	 * file and implement <code>createMenuItems()</code> with a
 	 * call to the {@link GUIUtilities#loadMenu(String)}
 	 * method:
-	 * <pre> public void createMenuItems(Vector menuItems)
-	 * {
-	 *     menuItems.addElement(GUIUtilities.loadMenu(
-	 *         "myplugin.menu"));
-	 * }</pre>
+	 * <pre>public void createMenuItems(Vector menuItems)
+	 *{
+	 *    menuItems.addElement(GUIUtilities.loadMenu(
+	 *        "myplugin.menu"));
+	 *}</pre>
 	 *
 	 * Alternatively, {@link GUIUtilities#loadMenuItem(String)} can
 	 * be used if your plugin only defines one menu item.<p>
@@ -166,10 +166,10 @@ public abstract class EditPlugin
 	 * option pane class and implement <code>createOptionPane()</code>
 	 * as follows:
 	 *
-	 * <pre> public void createOptionPanes(OptionsDialog optionsDialog)
-	 * {
-	 *     dialog.addOptionPane(new MyPluginOptionPane());
-	 * }</pre>
+	 * <pre>public void createOptionPanes(OptionsDialog optionsDialog)
+	 *{
+	 *    dialog.addOptionPane(new MyPluginOptionPane());
+	 *}</pre>
 	 *
 	 * Plugins can also define more than one option pane, grouped in an
 	 * "option group". See the documentation for the {@link OptionGroup}
