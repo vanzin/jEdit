@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 2002 Kris Kopicki
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,110 +25,108 @@ package org.gjt.sp.jedit.pluginmgr;
 //{{{ Imports
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
+import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.*;
 //}}}
 
-/**
- * The plugin manager dialog box.
- * @author Slava Pestov
- * @version $Id$
- */
-public class PluginManager extends EnhancedDialog
+public class PluginManager extends JFrame implements EBComponent
 {
 	//{{{ PluginManager constructor
 	public PluginManager(Frame frame)
 	{
-		super(frame,jEdit.getProperty("plugin-manager.title"),true);
+		super(jEdit.getProperty("plugin-manager.title"));
 
+		EditBus.addToBus(this);
+		
+		/* Setup panes */
 		JPanel content = new JPanel(new BorderLayout());
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
-		JLabel caption = new JLabel(jEdit.getProperty(
-			"plugin-manager.caption"));
-		caption.setBorder(new EmptyBorder(0,0,6,0));
-		content.add(BorderLayout.NORTH,caption);
+		tabPane = new JTabbedPane();
+		tabPane.addChangeListener(new ListUpdater());
+		tabPane.addTab(jEdit.getProperty("manage-plugins.title")
+			,manager = new ManagePanel(this));
+		tabPane.addTab(jEdit.getProperty("update-plugins.title")
+			,updater = new InstallPanel(this,true));
+		tabPane.addTab(jEdit.getProperty("install-plugins.title")
+			,installer = new InstallPanel(this,false));
 
-		tree = new JTree();
-		tree.setCellRenderer(new Renderer());
-		tree.setRootVisible(false);
-		tree.setVisibleRowCount(16);
-		tree.addTreeSelectionListener(new TreeHandler());
+		content.add(BorderLayout.CENTER,tabPane);
 
-		JPanel panel = new JPanel(new BorderLayout());
-
-		panel.add(BorderLayout.CENTER,new JScrollPane(tree));
-
-		JPanel panel2 = new JPanel(new BorderLayout());
-		panel2.setBorder(new EmptyBorder(6,0,0,0));
-		JPanel labelBox = new JPanel(new GridLayout(3,1,0,3));
-		labelBox.setBorder(new EmptyBorder(0,0,0,12));
-		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
-			+ ".info.name"),SwingConstants.RIGHT));
-		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
-			+ ".info.author"),SwingConstants.RIGHT));
-		labelBox.add(new JLabel(jEdit.getProperty("plugin-manager"
-			+ ".info.version"),SwingConstants.RIGHT));
-		panel2.add(BorderLayout.WEST,labelBox);
-
-		JPanel valueBox = new JPanel(new GridLayout(3,1,0,3));
-		valueBox.add(name = new JLabel());
-		valueBox.add(author = new JLabel());
-		valueBox.add(version = new JLabel());
-		panel2.add(BorderLayout.CENTER,valueBox);
-
-		panel.add(BorderLayout.SOUTH,panel2);
-		content.add(BorderLayout.CENTER,panel);
-
+		/* Create the buttons */
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		buttons.setBorder(new EmptyBorder(12,0,0,0));
 
+		ActionListener al = new ActionHandler();
+		options = new JButton(jEdit.getProperty("plugin-manager.options"));
+		options.addActionListener(al);
+		done = new JButton(jEdit.getProperty("plugin-manager.done"));
+		done.addActionListener(al);
+		
 		buttons.add(Box.createGlue());
-		remove = new JButton(jEdit.getProperty("plugin-manager"
-			+ ".remove"));
-		remove.addActionListener(new ActionHandler());
-		buttons.add(remove);
+		buttons.add(options);
 		buttons.add(Box.createHorizontalStrut(6));
-		update = new JButton(jEdit.getProperty("plugin-manager"
-			+ ".update"));
-		update.addActionListener(new ActionHandler());
-		buttons.add(update);
-		buttons.add(Box.createHorizontalStrut(6));
-		install = new JButton(jEdit.getProperty("plugin-manager"
-			+ ".install"));
-		install.addActionListener(new ActionHandler());
-		buttons.add(install);
-		buttons.add(Box.createHorizontalStrut(6));
-		close = new JButton(jEdit.getProperty("common.close"));
-		close.addActionListener(new ActionHandler());
-		buttons.add(close);
+		buttons.add(done);
 		buttons.add(Box.createGlue());
+		
+		getRootPane().setDefaultButton(done);
 
 		content.add(BorderLayout.SOUTH,buttons);
-
-		updateTree();
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		pack();
-
-		setLocationRelativeTo(frame);
-
+		GUIUtilities.loadGeometry(this,"plugin-manager");
 		show();
 	} //}}}
 
+	//{{{ dispose() method
+	public void dispose()
+	{
+		GUIUtilities.saveGeometry(this,"plugin-manager");
+		instance = null;
+		EditBus.removeFromBus(this);
+		super.dispose();
+	} //}}}
+	
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage message)
+	{
+		// Force the install tab to refresh for possible
+		// change of mirror
+		if (message instanceof PropertiesChanged)
+		{
+			InstallPanel.pluginList = null;
+			installer.getPluginList();
+			updater.getPluginList();
+		}
+	} //}}}
+	
+	//{{{ showPluginManager() method
+	public static void showPluginManager(Frame frame)
+	{
+		if (instance == null)
+			instance = new PluginManager(frame);
+		else
+		{
+			instance.toFront();
+			return;
+		}
+	} //}}}
+	
 	//{{{ ok() method
 	public void ok()
 	{
-		// do nothing when Enter is pressed.
+		dispose();
 	} //}}}
 
 	//{{{ cancel() method
@@ -138,149 +136,20 @@ public class PluginManager extends EnhancedDialog
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Instance variables
-	private JTree tree;
-	private JLabel name;
-	private JLabel author;
-	private JLabel version;
-	private JButton remove;
-	private JButton update;
-	private JButton install;
-	private JButton close;
-	private PluginList pluginList;
+	
+	//{{{ Variables
+	private JTabbedPane tabPane;
+	private JButton done;
+	private JButton cancel;
+	private JButton options;
+	private InstallPanel installer;
+	private InstallPanel updater;
+	private ManagePanel manager;
+	
+	private static PluginManager instance;
 	//}}}
-
-	//{{{ getPluginList() method
-	private PluginList getPluginList()
-	{
-		if(pluginList == null)
-		{
-			pluginList = new PluginListDownloadProgress(PluginManager.this)
-				.getPluginList();
-		}
-
-		return pluginList;
-	}
-	//{{{ updateTree() method
-	private void updateTree()
-	{
-		DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode();
-		DefaultTreeModel treeModel = new DefaultTreeModel(treeRoot);
-
-		DefaultMutableTreeNode loadedTree = new DefaultMutableTreeNode(
-			jEdit.getProperty("plugin-manager.loaded"),true);
-		DefaultMutableTreeNode notLoadedTree = new DefaultMutableTreeNode(
-			jEdit.getProperty("plugin-manager.not-loaded"),true);
-		DefaultMutableTreeNode newTree = new DefaultMutableTreeNode(
-			jEdit.getProperty("plugin-manager.new"),true);
-
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			EditPlugin plugin = plugins[i];
-			String path = plugin.getJAR().getPath();
-			if(!new File(path).exists())
-			{
-				// plugin was deleted
-				continue;
-			}
-
-			if(plugin instanceof EditPlugin.Broken)
-			{
-				Entry entry = new Entry(path,plugin.getClassName(),true);
-				notLoadedTree.add(new DefaultMutableTreeNode(entry));
-			}
-			else
-			{
-				Entry entry = new Entry(path,plugin.getClassName(),false);
-				loadedTree.add(new DefaultMutableTreeNode(entry));
-			}
-		}
-
-		if(notLoadedTree.getChildCount() != 0)
-			treeRoot.add(notLoadedTree);
-
-		if(loadedTree.getChildCount() != 0)
-			treeRoot.add(loadedTree);
-
-		String[] newPlugins = jEdit.getNotLoadedPluginJARs();
-		for(int i = 0; i < newPlugins.length; i++)
-		{
-			Entry entry = new Entry(newPlugins[i],null,false);
-			newTree.add(new DefaultMutableTreeNode(entry));
-		}
-
-		if(newTree.getChildCount() != 0)
-			treeRoot.add(newTree);
-
-		tree.setModel(treeModel);
-		for(int i = 0; i < tree.getRowCount(); i++)
-			tree.expandRow(i);
-
-		remove.setEnabled(false);
-
-		name.setText(null);
-		author.setText(null);
-		version.setText(null);
-	} //}}}
-
-	//}}}
-
-	//}}}
-
-	//{{{ Entry class
-	class Entry
-	{
-		String clazz;
-		String name, version, author;
-		Vector jars;
-		boolean broken;
-
-		Entry(String path, String clazz, boolean broken)
-		{
-			Entry.this.clazz = clazz;
-			Entry.this.broken = broken;
-
-			jars = new Vector();
-			jars.addElement(path);
-
-			if(clazz == null)
-				Entry.this.name = path;
-			else
-			{
-				Entry.this.name = jEdit.getProperty("plugin." + clazz + ".name");
-				if(name == null)
-					name = clazz;
-
-				Entry.this.version = jEdit.getProperty("plugin." + clazz
-					+ ".version");
-
-				Entry.this.author = jEdit.getProperty("plugin." + clazz
-					+ ".author");
-
-				String jarsProp = jEdit.getProperty("plugin." + clazz
-					+ ".jars");
-
-				if(jarsProp != null)
-				{
-					String directory = MiscUtilities.getParentOfPath(path);
-
-					StringTokenizer st = new StringTokenizer(jarsProp);
-					while(st.hasMoreElements())
-					{
-						jars.addElement(MiscUtilities.constructPath(
-							directory,st.nextToken()));
-					}
-				}
-			}
-		}
-
-		public String toString()
-		{
-			return Entry.this.name;
-		}
-	} //}}}
+	
+	//{{{ Inner classes
 
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
@@ -288,218 +157,30 @@ public class PluginManager extends EnhancedDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == close)
-				dispose();
-			else if(source == remove)
-			{
-				TreePath[] selected = tree.getSelectionModel()
-					.getSelectionPaths();
-
-				StringBuffer buf = new StringBuffer();
-				Roster roster = new Roster();
-				for(int i = 0; i < selected.length; i++)
-				{
-					Object last = ((DefaultMutableTreeNode)
-						selected[i].getLastPathComponent())
-						.getUserObject();
-					if(last instanceof Entry)
-					{
-						Entry entry = (Entry)last;
-						for(int j = 0; j < entry.jars.size(); j++)
-						{
-							String jar = (String)entry.jars.elementAt(j);
-							if(buf.length() != 0)
-								buf.append('\n');
-							buf.append(jar);
-							roster.addOperation(new Roster.Remove(jar));
-						}
-					}
-				}
-
-				String[] args = { buf.toString() };
-				if(GUIUtilities.confirm(PluginManager.this,
-					"plugin-manager.remove-confirm",args,
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE)
-					== JOptionPane.YES_OPTION)
-				{
-					new PluginManagerProgress(PluginManager.this,
-						"remove",roster);
-					updateTree();
-				}
-			}
-			else if(source == update)
-			{
-				if(jEdit.getSettingsDirectory() == null)
-				{
-					GUIUtilities.error(PluginManager.this,
-						"no-settings",null);
-					return;
-				}
-
-				PluginList list = getPluginList();
-				if(list == null)
-					return;
-
-				Vector plugins = new Vector();
-				for(int i = 0; i < list.pluginSets.size(); i++)
-				{
-					PluginList.PluginSet set = (PluginList.PluginSet)
-						list.pluginSets.get(i);
-					boolean addedSetLabel = false;
-					for(int j = 0; j < set.plugins.size(); j++)
-					{
-						PluginList.Plugin plugin = (PluginList.Plugin)
-							list.pluginHash.get(set.plugins.get(j));
-						PluginList.Branch branch = plugin.getCompatibleBranch();
-
-						if(branch != null
-							&& branch.canSatisfyDependencies()
-							&& plugin.installedVersion != null
-							&& MiscUtilities.compareStrings(branch.version,
-							plugin.installedVersion,false) > 0)
-						{
-							// this ensures set name is only added if
-							// > 0 elements in set
-							if(!addedSetLabel)
-							{
-								plugins.add(new JCheckBoxList.Entry(set.name + ":"));
-								addedSetLabel = true;
-							}
-
-							plugins.addElement(plugin);
-						}
-					}
-				}
-
-				if(plugins.size() == 0)
-				{
-					GUIUtilities.message(PluginManager.this,
-						"plugin-manager.up-to-date",null);
-					return;
-				}
-
-				Roster roster = new Roster();
-				new InstallPluginsDialog(PluginManager.this,
-					plugins,InstallPluginsDialog.UPDATE)
-					.installPlugins(roster);
-
-				if(roster.isEmpty())
-					return;
-
-				new PluginManagerProgress(PluginManager.this,
-					"update",roster);
-
-				updateTree();
-			}
-			else if(source == install)
-			{
-				if(jEdit.getSettingsDirectory() == null
-					&& jEdit.getJEditHome() == null)
-				{
-					GUIUtilities.error(PluginManager.this,"no-settings",null);
-					return;
-				}
-
-				PluginList list = getPluginList();
-				if(list == null)
-					return;
-
-				Vector plugins = new Vector();
-				for(int i = 0; i < list.pluginSets.size(); i++)
-				{
-					PluginList.PluginSet set = (PluginList.PluginSet)
-						list.pluginSets.get(i);
-					boolean addedSetLabel = false;
-					for(int j = 0; j < set.plugins.size(); j++)
-					{
-						PluginList.Plugin plugin = (PluginList.Plugin)
-							list.pluginHash.get(set.plugins.get(j));
-						if(plugin.installed == null
-							&& plugin.canBeInstalled())
-						{
-							// this ensures set name is only added if
-							// > 0 elements in set
-							if(!addedSetLabel)
-							{
-								plugins.add(new JCheckBoxList.Entry(set.name + ":"));
-								addedSetLabel = true;
-							}
-
-							plugins.addElement(plugin);
-						}
-					}
-				}
-
-				Roster roster = new Roster();
-				new InstallPluginsDialog(PluginManager.this,
-					plugins,InstallPluginsDialog.INSTALL)
-					.installPlugins(roster);
-
-				if(roster.isEmpty())
-					return;
-
-				new PluginManagerProgress(PluginManager.this,
-					"install",roster);
-
-				updateTree();
-			}
+			if(source == done)
+				ok();
+			else if (source == cancel)
+				cancel();
+			else if (source == options)
+				new GlobalOptions(PluginManager.this,"plugin-manager");
 		}
 	} //}}}
-
-	//{{{ TreeHandler class
-	class TreeHandler implements TreeSelectionListener
+	
+	//{{{ ListUpdater class
+	class ListUpdater implements ChangeListener
 	{
-		public void valueChanged(TreeSelectionEvent evt)
+		public void stateChanged(ChangeEvent e)
 		{
-			TreePath selection = evt.getPath();
-			DefaultMutableTreeNode node;
-			if(selection == null)
-			{
-				node = null;
-			}
-			else
-			{
-				node = (DefaultMutableTreeNode)
-					selection.getLastPathComponent();
-			}
-
-			name.setText(null);
-			author.setText(null);
-			version.setText(null);
-
-			if(node != null && node.isLeaf()
-				&& node.getUserObject() instanceof Entry)
-			{
-				remove.setEnabled(true);
-
-				Entry entry = (Entry)node.getUserObject();
-
-				if(entry.clazz != null)
-				{
-					name.setText(entry.name);
-					author.setText(entry.author);
-					version.setText(entry.version);
-				}
-			}
-			else
-				remove.setEnabled(false);
+			if (tabPane.getSelectedComponent() == installer)
+				installer.getPluginList();
+			if (tabPane.getSelectedComponent() == updater)
+				updater.getPluginList();
+			if (tabPane.getSelectedComponent() == manager)
+				manager.update();
 		}
 	} //}}}
-
-	//{{{ Renderer class
-	class Renderer extends DefaultTreeCellRenderer
-	{
-		public Component getTreeCellRendererComponent(JTree tree,
-			Object value, boolean selected, boolean expanded,
-			boolean leaf, int row, boolean hasFocus)
-		{
-			super.getTreeCellRendererComponent(tree,value,
-				selected,expanded,leaf,row,hasFocus);
-
-			setIcon(null);
-
-			return this;
-		}
-	} //}}}
+	
+	//}}}
+	
+	//}}}
 }

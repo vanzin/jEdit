@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.*;
 class PluginManagerProgress extends JDialog
 {
 	//{{{ PluginManagerProgress constructor
-	public PluginManagerProgress(JDialog dialog, String type, Roster roster)
+	public PluginManagerProgress(PluginManager dialog, String type, Roster roster)
 	{
 		super(dialog,
 			jEdit.getProperty("plugin-manager.progress."
@@ -177,7 +177,7 @@ class PluginManagerProgress extends JDialog
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JDialog dialog;
+	private PluginManager dialog;
 
 	private Thread thread;
 
@@ -264,7 +264,6 @@ class PluginManagerProgress extends JDialog
 			roster.performOperations(PluginManagerProgress.this);
 		}
 	} //}}}
-
+	
 	//}}}
-
 }
