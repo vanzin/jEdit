@@ -674,22 +674,21 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			jEdit.setBooleanProperty("search.keepDialog.toggle",
 				keepDialog.isSelected());
 
-			boolean ok = true;
-
 			SearchAndReplace.setSearchFileSet(fileset);
 
-			if(find.getText().length() != 0)
+			if(find.getText().length() == 0)
 			{
-				find.addCurrentToHistory();
-				SearchAndReplace.setSearchString(find.getText());
-				replace.addCurrentToHistory();
-
-				SearchAndReplace.setReplaceString(replace.getText());
+				if(!cancel)
+					getToolkit().beep();
+				return false;
 			}
-			else
-				ok = false;
 
-			return ok;
+			find.addCurrentToHistory();
+			SearchAndReplace.setSearchString(find.getText());
+			replace.addCurrentToHistory();
+			SearchAndReplace.setReplaceString(replace.getText());
+
+			return true;
 		}
 		finally
 		{
@@ -892,7 +891,11 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-				save(false);
+				if(!save(false))
+				{
+					getToolkit().beep();
+					return;
+				}
 
 				if(searchSelection.isSelected())
 				{

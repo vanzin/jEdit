@@ -38,6 +38,34 @@ import org.gjt.sp.util.Log;
  */
 public class GrabKeyDialog extends JDialog
 {
+	//{{{ toString() method
+	public static String toString(KeyEvent evt)
+	{
+		String id;
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_PRESSED:
+			id = "KEY_PRESSED";
+			break;
+		case KeyEvent.KEY_RELEASED:
+			id = "KEY_RELEASED";
+			break;
+		case KeyEvent.KEY_TYPED:
+			id = "KEY_TYPED";
+			break;
+		default:
+			id = "unknown type";
+			break;
+		}
+
+		return id + ",keyCode=0x"
+			+ Integer.toString(evt.getKeyCode(),16)
+			+ ",keyChar=0x"
+			+ Integer.toString(evt.getKeyChar(),16)
+			+ ",modifiers=0x"
+			+ Integer.toString(evt.getModifiers(),16);
+	} //}}}
+
 	//{{{ GrabKeyDialog constructor
 	/**
 	 * Create and show a new modal dialog.
@@ -373,7 +401,7 @@ public class GrabKeyDialog extends JDialog
 			if(debugBuffer != null)
 			{
 				debugBuffer.insert(debugBuffer.getLength(),
-					"Event " + toString(_evt)
+					"Event " + GrabKeyDialog.toString(_evt)
 					+ (evt == null ? " filtered\n"
 					: " passed\n"));
 			}
@@ -420,34 +448,6 @@ public class GrabKeyDialog extends JDialog
 			if(debugBuffer == null)
 				updateAssignedTo(keyString.toString());
 		} //}}}
-
-		//{{{ toString() method
-		private String toString(KeyEvent evt)
-		{
-			String id;
-			switch(evt.getID())
-			{
-			case KeyEvent.KEY_PRESSED:
-				id = "KEY_PRESSED";
-				break;
-			case KeyEvent.KEY_RELEASED:
-				id = "KEY_RELEASED";
-				break;
-			case KeyEvent.KEY_TYPED:
-				id = "KEY_TYPED";
-				break;
-			default:
-				id = "unknown type";
-				break;
-			}
-
-			return id + ",keyCode=0x"
-				+ Integer.toString(evt.getKeyCode(),16)
-				+ ",keyChar=0x"
-				+ Integer.toString(evt.getKeyChar(),16)
-				+ ",modifiers=0x"
-				+ Integer.toString(evt.getModifiers(),16);
-		}//}}}
 	} //}}}
 
 	//{{{ ActionHandler class

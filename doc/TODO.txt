@@ -12,7 +12,6 @@ and quirks that I need to fix eventually.
 - document deep indent
 - tall caret and tab
 - tall caret and backspace
-- some search dialog problems
 - new file: horiz scroll wrong
 - while loading --> scroll bar
 - fsb default size
