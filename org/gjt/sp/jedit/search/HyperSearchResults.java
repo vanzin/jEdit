@@ -38,7 +38,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * HyperSearch results window.<b> hello </b>
+ * HyperSearch results window.
  * @author Slava Pestov
  * @version $Id$
  */
@@ -163,7 +163,7 @@ public class HyperSearchResults extends JPanel implements EBComponent
 	//{{{ searchStarted() method
 	public void searchStarted()
 	{
-		caption.setText(jEdit.getProperty("hypersearch-results..searching"));
+		caption.setText(jEdit.getProperty("hypersearch-results.searching"));
 	} //}}}
 
 	//{{{ searchFailed() method

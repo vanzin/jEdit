@@ -2990,8 +2990,8 @@ public class jEdit
 		{
 			File snippet = snippets[i];
 
-			Macros.Handler handler = Macros.getHandlerForFileName(
-				snippet.getName());
+			Macros.Handler handler = Macros.getHandlerForPathName(
+				snippet.getPath());
 			if(handler == null)
 				continue;
 

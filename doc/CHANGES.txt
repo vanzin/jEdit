@@ -71,6 +71,16 @@ Cox, Rex Young and Steve Snider for contributing to this release.
   foreground, not the text field foreground. This could look bad if text
   field colors were customized using the "Use jEdit text area colors in
   all text components".
+- Check box menu items should now work on MacOS X if the menu bar is set
+  to be at the top of the screen. Using this option is still not
+  recommended though, since it causes menu item shortcuts to not be
+  displayed.
+
++ API Changes
+
+- Macros.Handler.accept() now takes a path name, not a file name. This
+  should not affect existing plugins since none that I know of
+  override this method.
 
 * Version 4.1pre5
 
