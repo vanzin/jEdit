@@ -300,6 +300,9 @@ public class TextUtilities
 	 */
 	public static float offsetToX(Chunk chunks, int offset)
 	{
+		if(offset < 0)
+			throw new ArrayIndexOutOfBoundsException(offset + " < 0");
+
 		float x = 0.0f;
 
 		while(chunks != null)

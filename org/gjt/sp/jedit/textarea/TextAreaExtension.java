@@ -1,0 +1,87 @@
+/*
+ * TextAreaExtension.java - Custom painter and tool tip handler
+ * Copyright (C) 2002 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.jedit.textarea;
+
+import java.awt.Graphics2D;
+
+/**
+ * Subclasses of this class can perform custom painting and tool tip
+ * handling in the text area and gutter.
+ *
+ * @see TextAreaPainter.addExtension(TextAreaExtension)
+ * @see TextAreaPainter.removeExtension(TextAreaExtension)
+ * @see Gutter.addExtension(TextAreaExtension)
+ * @see Gutter.removeExtension(TextAreaExtension)
+ *
+ * @since jEdit 4.0pre4
+ *
+ * @author Slava Pestov
+ * @version $Id$
+ */
+public abstract class TextAreaExtension
+{
+	/**
+	 * Called by the text area when the extension is to paint a
+	 * screen line which has an associated physical line number in
+	 * the buffer. Note that since one physical line may consist of
+	 * several screen lines due to soft wrap, the start and end
+	 * offsets of the screen line are passed in as well.
+	 *
+	 * @param gfx The graphics context
+	 * @param physicalLine The physical line number
+	 * @param start The offset where the screen line begins, from
+	 * the start of the buffer
+	 * @param end The offset where the screen line ends, from the
+	 * start of the buffer
+	 * @param y The y co-ordinate of the top of the line's
+	 * bounding box
+	 * @since jEdit 4.0pre4
+	 */
+	public void paintValidLine(Graphics2D gfx, int physicalLine,
+		int start, int end, int y) {}
+
+	/**
+	 * Called by the text area when the extension is to paint a
+	 * screen line which is not part of the buffer. This can happen
+	 * if the buffer is shorter than the height of the text area,
+	 * for example.
+	 *
+	 * @param gfx The graphics context
+	 * @param screenLine The screen line number
+	 * @param y The y co-ordinate of the top of the line's
+	 * bounding box
+	 * @since jEdit 4.0pre4
+	 */
+	public void paintInvalidLine(Graphics2D gfx, int screenLine,
+		int y) {}
+
+	/**
+	 * Called by the text area when the mouse hovers over the
+	 * location specified in the mouse event.
+	 *
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @since jEdit 4.0pre4
+	 */
+	public String getToolTipText(int x, int y)
+	{
+		return null;
+	}
+}

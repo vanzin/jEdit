@@ -1,7 +1,13 @@
 TO DO
 
+- expand fold still broken
+- make jEdit.openTemporary() thread-safe
+- rect select and soft wrap
+- chunk cache & scrolling optimization
+- text area: do not use deprecated offset conversion methods
 - fold vis manager: check for out of bounds line numbers
 - new highlighter API
+- use new offset conversion API throughout
 - soft wrap landing
 - gutter and text area mouse handlers
 - plugin size reporting, new install plugins dialog UI layout

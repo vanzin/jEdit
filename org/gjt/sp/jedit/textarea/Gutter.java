@@ -4,7 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2000 mike dillon
- * Portions copyright (C) 2001 Slava Pestov
+ * Portions copyright (C) 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Method;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -35,6 +34,20 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * The gutter is the component that displays folding triangles and line
+ * numbers to the left of the text area. The only methods in this class
+ * that should be called by plugins are those for adding and removing
+ * text area extensions.
+ *
+ * @see #addExtension(TextAreaExtension)
+ * @see #removeExtension(TextAreaExtension)
+ * @see TextAreaExtension
+ * @see JEditTextArea
+ *
+ * @author Mike Dillon and Slava Pestov
+ * @version $Id$
+ */
 public class Gutter extends JComponent implements SwingConstants
 {
 	//{{{ Gutter constructor
@@ -43,9 +56,7 @@ public class Gutter extends JComponent implements SwingConstants
 		this.view = view;
 		this.textArea = textArea;
 
-		highlights = new Vector();
-
-		setDoubleBuffered(true);
+		extensions = new ArrayList();
 
 		MouseHandler ml = new MouseHandler();
 		addMouseListener(ml);
@@ -53,8 +64,10 @@ public class Gutter extends JComponent implements SwingConstants
 	} //}}}
 
 	//{{{ paintComponent() method
-	public void paintComponent(Graphics gfx)
+	public void paintComponent(Graphics _gfx)
 	{
+		Graphics2D gfx = (Graphics2D)_gfx;
+
 		// fill the background
 		Rectangle clip = gfx.getClipBounds();
 		gfx.setColor(getBackground());
@@ -88,17 +101,29 @@ public class Gutter extends JComponent implements SwingConstants
 		for (int line = firstLine; line <= lastLine;
 			line++, y += lineHeight)
 		{
-			/* //{{{ Paint plugin highlights
-			if(highlights.size() != 0)
+			ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
+			if(!info.chunksValid)
+				System.err.println("gutter paint: not valid");
+			int physicalLine = info.physicalLine;
+
+			//{{{ Paint text area extensions
+			if(extensions.size() != 0)
 			{
-				for(int i = 0; i < highlights.size(); i++)
+				for(int i = 0; i < extensions.size(); i++)
 				{
-					TextAreaHighlight highlight = (TextAreaHighlight)
-						highlights.elementAt(i);
+					TextAreaExtension ext = (TextAreaExtension)
+						extensions.get(i);
 					try
 					{
-						highlight.paintHighlight(gfx,line,
-							y - fm.getLeading() - fm.getDescent());
+						if(physicalLine != -1)
+						{
+							int start = textArea.getScreenLineStartOffset(line);
+							int end = textArea.getScreenLineEndOffset(line);
+
+							ext.paintValidLine(gfx,physicalLine,start,end,y);
+						}
+						else
+							ext.paintInvalidLine(gfx,line,y);
 					}
 					catch(Throwable t)
 					{
@@ -106,16 +131,11 @@ public class Gutter extends JComponent implements SwingConstants
 
 						// remove it so editor can continue
 						// functioning
-						highlights.removeElementAt(i);
+						extensions.remove(i);
 						i--;
 					}
 				}
-			} //}}} */
-
-			ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
-			if(!info.chunksValid)
-				System.err.println("gutter paint: not valid");
-			int physicalLine = info.physicalLine;
+			} //}}}
 
 			// Skip lines beyond EOF
 			if(physicalLine == -1)
@@ -239,44 +259,47 @@ public class Gutter extends JComponent implements SwingConstants
 
 	//{{{ addCustomHighlight() method
 	/**
-	 * Adds a custom highlight painter.
-	 * @param highlight The highlight
+	 * @deprecated Write a <code>TextAreaExtension</code> instead.
 	 */
 	public void addCustomHighlight(TextAreaHighlight highlight)
 	{
-		highlights.addElement(highlight);
-
-		// handle old highlighters
-		Class clazz = highlight.getClass();
-		try
-		{
-			Method method = clazz.getMethod("init",
-				new Class[] { JEditTextArea.class,
-				TextAreaHighlight.class });
-			if(method != null)
-			{
-				Log.log(Log.WARNING,this,clazz.getName()
-					+ " uses old highlighter API");
-				method.invoke(highlight,new Object[] { textArea, null });
-			}
-		}
-		catch(Exception e)
-		{
-			// ignore
-		}
-
-		repaint();
+		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
+			+ highlight);
 	} //}}}
 
 	//{{{ removeCustomHighlight() method
 	/**
-	 * Removes a custom highlight painter.
-	 * @param highlight The highlight
-	 * @since jEdit 4.0pre1
+	 * @deprecated Write a <code>TextAreaExtension</code> instead.
 	 */
 	public void removeCustomHighlight(TextAreaHighlight highlight)
 	{
-		highlights.removeElement(highlight);
+		Log.log(Log.WARNING,this,"Old highlighter API not supported: "
+			+ highlight);
+	} //}}}
+
+	//{{{ addExtension() method
+	/**
+	 * Adds a text area extension, which can perform custom painting and
+	 * tool tip handling in the gutter.
+	 * @param extension The extension
+	 * @since jEdit 4.0pre4
+	 */
+	public void addExtension(TextAreaExtension extension)
+	{
+		extensions.add(extension);
+		repaint();
+	} //}}}
+
+	//{{{ removeExtension() method
+	/**
+	 * Removes a text area extension. It will no longer be asked to
+	 * perform custom painting and tool tip handling.
+	 * @param extension The extension
+	 * @since jEdit 4.0pre4
+	 */
+	public void removeExtension(TextAreaExtension extension)
+	{
+		extensions.remove(extension);
 		repaint();
 	} //}}}
 
@@ -440,12 +463,10 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ getToolTipText() method
 	public String getToolTipText(MouseEvent evt)
 	{
-		for(int i = 0; i < highlights.size(); i++)
+		for(int i = 0; i < extensions.size(); i++)
 		{
-			TextAreaHighlight highlight =
-				(TextAreaHighlight)
-				highlights.elementAt(i);
-			String toolTip = highlight.getToolTipText(evt);
+			TextAreaExtension ext = (TextAreaExtension)extensions.get(i);
+			String toolTip = ext.getToolTipText(evt.getX(),evt.getY());
 			if(toolTip != null)
 				return toolTip;
 		}
@@ -608,7 +629,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private View view;
 	private JEditTextArea textArea;
 
-	private Vector highlights;
+	private ArrayList extensions;
 
 	private int baseline;
 
@@ -665,17 +686,19 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				Buffer buffer = textArea.getBuffer();
 
-				int line = e.getY() / textArea.getPainter()
-					.getFontMetrics().getHeight()
-					+ textArea.getFirstLine();
+				int screenLine = e.getY() / textArea.getPainter()
+					.getFontMetrics().getHeight();
+				textArea.chunkCache.updateChunksUpTo(screenLine);
+
+				int line = textArea.chunkCache.getLineInfo(screenLine)
+					.physicalLine;
+
+				if(line == -1)
+					return;
 
 				FoldVisibilityManager foldVisibilityManager
 					= textArea.getFoldVisibilityManager();
 
-				if(line > foldVisibilityManager.getVirtualLineCount() - 1)
-					return;
-
-				line = foldVisibilityManager.virtualToPhysical(line);
 				//{{{ Clicking on fold triangle does various things
 				if(buffer.isFoldStart(line))
 				{
@@ -737,7 +760,7 @@ public class Gutter extends JComponent implements SwingConstants
 		//{{{ mouseDragged() method
 		public void mouseDragged(MouseEvent e)
 		{
-			if(drag && e.getX() >= getWidth() - borderWidth * 2)
+			if(drag /* && e.getX() >= getWidth() - borderWidth * 2 */)
 			{
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseDragged(e);

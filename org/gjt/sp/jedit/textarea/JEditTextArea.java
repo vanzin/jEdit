@@ -259,7 +259,7 @@ public class JEditTextArea extends JComponent
 			// just in case, maybe not necessary?...
 			physFirstLine = foldVisibilityManager.virtualToPhysical(0);
 
-			painter.propertiesChanged();
+			propertiesChanged();
 
 			updateScrollBars();
 			painter.repaint();
@@ -331,23 +331,12 @@ public class JEditTextArea extends JComponent
 	//{{{ _setFirstLine() method
 	public void _setFirstLine(int firstLine)
 	{
-		firstLine = Math.max(0,firstLine);
+		firstLine = Math.max(0,Math.min(getVirtualLineCount() - 1,firstLine));
 		this.firstLine = firstLine;
 
 		physFirstLine = virtualToPhysical(firstLine);
 
 		maxHorizontalScrollWidth = 0;
-
-		// hack so that if we scroll and the matching bracket
-		// comes into view, it is highlighted
-
-		// 3.2pre9 update: I am commenting this out once again because
-		// I have changed the location of the repaintAndScroll() call
-		// in the BufferChangeHandler, so this is called before the caret
-		// position is updated, which can be potentially tricky.
-
-		//if(bracketPosition == -1)
-		//	updateBracketHighlight();
 
 		chunkCache.setFirstLine(firstLine);
 
@@ -682,6 +671,56 @@ public class JEditTextArea extends JComponent
 
 	//{{{ Offset conversion
 
+	//{{{ getScreenLineOfOffset() method
+	/**
+	 * Returns the screen (wrapped) line containing the specified offset.
+	 * @param offset The offset
+	 * @since jEdit 4.0pre4
+	 */
+	public int getScreenLineOfOffset(int offset)
+	{
+		int line = buffer.getLineOfOffset(offset);
+		offset -= buffer.getLineStartOffset(line);
+		return chunkCache.getScreenLineOfOffset(line,offset);
+	} //}}}
+
+	//{{{ getScreenLineStartOffset() method
+	/**
+	 * Returns the start offset of the specified screen (wrapped) line.
+	 * @param line The line
+	 * @since jEdit 4.0pre4
+	 */
+	public int getScreenLineStartOffset(int line)
+	{
+		chunkCache.updateChunksUpTo(line);
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(line);
+		return buffer.getLineStartOffset(lineInfo.physicalLine)
+			+ lineInfo.offset;
+	} //}}}
+
+	//{{{ getScreenLineEndOffset() method
+	/**
+	 * Returns the end offset of the specified screen (wrapped) line.
+	 * @param line The line
+	 * @since jEdit 4.0pre4
+	 */
+	public int getScreenLineEndOffset(int line)
+	{
+		if(line == visibleLines)
+			return buffer.getLineEndOffset(getLastPhysicalLine());
+
+		chunkCache.updateChunksUpTo(line + 1);
+		ChunkCache.LineInfo curr = chunkCache.getLineInfo(line);
+		ChunkCache.LineInfo next = chunkCache.getLineInfo(line + 1);
+		if(next.subregion == 0)
+			return buffer.getLineEndOffset(curr.physicalLine);
+		else
+		{
+			return buffer.getLineStartOffset(curr.physicalLine)
+				+ next.offset;
+		}
+	} //}}}
+
 	//{{{ xyToOffset() method
 	/**
 	 * Converts a point to an offset.
@@ -762,9 +801,20 @@ public class JEditTextArea extends JComponent
 	 */
 	public Point offsetToXY(int line, int offset, Point retVal)
 	{
-		int screenLine = chunkCache.getScreenLineForOffset(line,offset);
+		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
+		if(screenLine == -1)
+		{
+			if(line < firstLine)
+				screenLine = 0;
+			else if(line > getLastPhysicalLine())
+				screenLine = visibleLines;
+			chunkCache.updateChunksUpTo(screenLine);
+		}
 
-		retVal.y = screenLine * painter.getFontMetrics().getHeight();
+		FontMetrics fm = painter.getFontMetrics();
+
+		retVal.y = (screenLine * fm.getHeight())
+			- (fm.getLeading() + fm.getDescent());
 
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 		if(!info.chunksValid)
@@ -2899,14 +2949,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				return;
 			}
 
-			if(ch == ' ')
-			{
-				if(doWordWrap(caretLine,true))
-					return;
-			}
-			else
-				doWordWrap(caretLine,false);
-
 			try
 			{
 				// Don't overstrike if we're on the end of
@@ -4224,6 +4266,47 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//}}}
 
+	//{{{ propertiesChanged() method
+	/**
+	 * Called by the <code>Buffer</code> class when necessary. Plugins
+	 * should not call this method.
+	 */
+	public void propertiesChanged()
+	{
+		if(buffer == null)
+			return;
+
+		int _tabSize = buffer.getTabSize();
+		char[] foo = new char[_tabSize];
+		tabSize = (float)painter.getFont().getStringBounds(foo,0,_tabSize,
+			painter.getFontRenderContext()).getWidth();
+
+		charWidth = (int)Math.round(painter.getFont().getStringBounds(foo,0,1,
+			painter.getFontRenderContext()).getWidth());
+
+		int _maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
+
+		if(_maxLineLen <= 0)
+			maxLineLen = 0;
+		else
+		{
+			// stupidity
+			foo = new char[_maxLineLen];
+			for(int i = 0; i < foo.length; i++)
+			{
+				foo[i] = ' ';
+			}
+			maxLineLen = (int)painter.getFont().getStringBounds(
+				foo,0,_maxLineLen,painter.getFontRenderContext())
+				.getWidth();
+		}
+
+		softWrap = buffer.getBooleanProperty("softWrap");
+
+		chunkCache.invalidateAll();
+		painter.repaint();
+	} //}}}
+
 	//{{{ Deprecated methods
 
 	//{{{ setOrigin() method
@@ -4505,6 +4588,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	int maxHorizontalScrollWidth;
 
+	boolean softWrap;
+	float tabSize;
+	int maxLineLen;
+	int charWidth;
+
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
 	Vector selection;
@@ -4538,6 +4626,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int height = painter.getHeight();
 		int lineHeight = painter.getFontMetrics().getHeight();
 		visibleLines = height / lineHeight;
+
+		propertiesChanged();
 
 		chunkCache.recalculateVisibleLines();
 
@@ -4803,109 +4893,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 		else
 			setSelectedText("\t");
-	} //}}}
-
-	//{{{ doWordWrap() method
-	private boolean doWordWrap(int line, boolean spaceInserted)
-	{
-		int maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
-
-		if(maxLineLen <= 0)
-			return false;
-
-		int start = getLineStartOffset(line);
-		int end = getLineEndOffset(line);
-		int len = end - start - 1;
-
-		// don't wrap unless we're at the end of the line
-		if(getCaretPosition() != end - 1)
-			return false;
-
-		boolean returnValue = false;
-
-		int tabSize = buffer.getTabSize();
-
-		String wordBreakChars = buffer.getStringProperty("wordBreakChars");
-
-		buffer.getLineText(line,lineSegment);
-
-		int lineStart = lineSegment.offset;
-		int logicalLength = 0; // length with tabs expanded
-		int lastWordOffset = -1;
-		boolean lastWasSpace = true;
-		boolean initialWhiteSpace = true;
-		int initialWhiteSpaceLength = 0;
-		for(int i = 0; i < len; i++)
-		{
-			char ch = lineSegment.array[lineStart + i];
-			if(ch == '\t')
-			{
-				if(initialWhiteSpace)
-					initialWhiteSpaceLength = i + 1;
-				logicalLength += tabSize - (logicalLength % tabSize);
-				if(!lastWasSpace && logicalLength <= maxLineLen)
-				{
-					lastWordOffset = i;
-					lastWasSpace = true;
-				}
-			}
-			else if(ch == ' ')
-			{
-				if(initialWhiteSpace)
-					initialWhiteSpaceLength = i + 1;
-				logicalLength++;
-				if(!lastWasSpace && logicalLength <= maxLineLen)
-				{
-					lastWordOffset = i;
-					lastWasSpace = true;
-				}
-			}
-			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
-			{
-				initialWhiteSpace = false;
-				logicalLength++;
-				if(!lastWasSpace && logicalLength <= maxLineLen)
-				{
-					lastWordOffset = i;
-					lastWasSpace = true;
-				}
-			}
-			else
-			{
-				initialWhiteSpace = false;
-				logicalLength++;
-				lastWasSpace = false;
-			}
-
-			int insertNewLineAt;
-			if(spaceInserted && logicalLength == maxLineLen
-				&& i == len - 1)
-			{
-				insertNewLineAt = end - 1;
-				returnValue = true;
-			}
-			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
-				insertNewLineAt = lastWordOffset + start;
-			else
-				continue;
-
-			try
-			{
-				buffer.beginCompoundEdit();
-				buffer.insert(insertNewLineAt,"\n");
-				buffer.indentLine(line + 1,true,true);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-
-			/* only ever return true if space was pressed
-			 * with logicalLength == maxLineLen */
-			return returnValue;
-		}
-
-		return false;
 	} //}}}
 
 	//{{{ doWordCount() method

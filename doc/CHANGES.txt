@@ -58,6 +58,10 @@ defaults.
     other's home directories. jEdit now explicitly sets the server
     file's permissions to 0600 to work around this brain damage
 - Improved JSP syntax highlighting (Daiji Takamori)
+- Quick-copy (middle mouse button pasting most recent selection) is now
+  disabled by default, since people seem to get confused by it to no end
+  when they accidentally click the middle mouse button while using a
+  wheel mouse to scroll
 
 + Bug Fixes
 
@@ -92,9 +96,11 @@ defaults.
   necessary, because it had too many problems
 - Changed some tree cell renderers to work around problems experienced
   on MacOS X
-- Fixed possible ArrayIndexOutOfBounds exception when closing a view
+- Fixed possible ArrayIndexOutOfBoundsException when closing a view
 - File name and first line globs were not shown in the 'Mode specific'
   option pane
+- Fixed ArrayIndexOutOfBoundsException when scrolling a one-line buffer
+  with the WheelMouse plugin
 
 + API Changes
 
