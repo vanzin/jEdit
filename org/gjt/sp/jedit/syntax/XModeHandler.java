@@ -243,7 +243,7 @@ public class XModeHandler extends HandlerBase
 			}
 
 			if(lastEscape != null)
-				rules.addRule(ParserRuleFactory.createEscapeRule(lastEscape));
+				rules.setEscapeRule(ParserRuleFactory.createEscapeRule(lastEscape));
 			rules.setDefault(lastDefaultID);
 		}
 	} //}}}

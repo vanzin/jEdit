@@ -160,6 +160,19 @@ public class ParserRuleSet
 		this.digitRE = digitRE;
 	} //}}}
 
+	//{{{ getEscapeRule() method
+	public ParserRule getEscapeRule()
+	{
+		return escapeRule;
+	} //}}}
+
+	//{{{ setEscapeRule() method
+	public void setEscapeRule(ParserRule escapeRule)
+	{
+		addRule(escapeRule);
+		this.escapeRule = escapeRule;
+	} //}}}
+
 	//{{{ getDefault() method
 	public byte getDefault()
 	{
@@ -203,10 +216,10 @@ public class ParserRuleSet
 	private ParserRule[] ruleMapFirst;
 	private ParserRule[] ruleMapLast;
 
-	private ParserRule escapeRule;
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;
 	private byte defaultToken;
+	private ParserRule escapeRule;
 
 	private boolean highlightDigits;
 	private RE digitRE;
