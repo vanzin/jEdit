@@ -620,6 +620,10 @@ class ChunkCache
 				{
 					info.chunks = null;
 					info.physicalLine = -1;
+					// fix the bug where the horiz.
+					// scroll bar was not updated
+					// after creating a new file.
+					info.width = 0;
 					continue;
 				}
 

@@ -34,7 +34,6 @@ dragOver() method)
 it is done in most text editors
 - C+d & killring
 - jEdit.checkBufferStatus() fucks with split panes
-- nop filec
 - complete word not wide enough
 - test keyboard completion with expanded/collapsed tree
 - test keyboard completion with high latency VFS
@@ -43,8 +42,6 @@ it is done in most text editors
 - history text field tweak
 - tall caret and tab
 - printing: check default printer setting
-- new file: horiz scroll wrong
-- enter after a fold broken *AGAIN*
 - fsb default size
 
 + docs:
