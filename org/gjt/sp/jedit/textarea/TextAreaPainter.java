@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -1264,28 +1265,31 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if(!textArea.isCaretVisible())
 				return;
-	
+
 			int caret = textArea.getCaretPosition();
 			if(caret < start || caret >= end)
 				return;
-	
+
 			Color bgColor = lineBackground.bgColor;
-	
+
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
 			textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
 			int caretX = textArea.returnValue.x;
 			int height = fm.getHeight();
-	
+
 			gfx.setColor(caretColor);
-	
+
 			if(blockCaret)
 			{
 				// Workaround for bug in Graphics2D in JDK1.4 under
 				// Windows; calling setPaintMode() does not reset
 				// graphics mode.
-				Graphics2D blockgfx = (Graphics2D)gfx.create();
+				Graphics2D blockgfx =
+					(OperatingSystem.isWindows()
+					? (Graphics2D)gfx.create()
+					: gfx);
 				blockgfx.setXORMode(bgColor);
-	
+
 				if(textArea.isOverwriteEnabled())
 				{
 					blockgfx.fillRect(caretX,y + height - height / 3,
@@ -1293,8 +1297,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				}
 				else
 					blockgfx.fillRect(caretX,y,textArea.charWidth,height);
-	
-				blockgfx.dispose();
+
+				if(blockgfx != gfx)
+					blockgfx.dispose();
+				else
+					gfx.setPaintMode();
 			}
 			else
 			{

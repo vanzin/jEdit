@@ -46,7 +46,7 @@ public class ServiceManager
 	 *
 	 * @since jEdit 4.2pre1
 	 */
-	public static void loadServices(EditPlugin.JAR plugin, URL uri)
+	public static void loadServices(PluginJAR plugin, URL uri)
 	{
 		try
 		{
@@ -78,7 +78,7 @@ public class ServiceManager
 	 * @param plugin The plugin
 	 * @since jEdit 4.2pre1
 	 */
-	public static void unloadServices(EditPlugin.JAR plugin)
+	public static void unloadServices(PluginJAR plugin)
 	{
 		Iterator descriptors = serviceMap.keySet().iterator();
 		while(descriptors.hasNext())
@@ -102,7 +102,7 @@ public class ServiceManager
 	 * @since jEdit 4.2pre1
 	 */
 	public static void registerService(String clazz, String name,
-		String code, EditPlugin.JAR plugin)
+		String code, PluginJAR plugin)
 	{
 		Descriptor d = new Descriptor(clazz,name,code,plugin);
 		serviceMap.put(d,d);
@@ -226,7 +226,7 @@ public class ServiceManager
 		String clazz;
 		String name;
 		String code;
-		EditPlugin.JAR plugin;
+		PluginJAR plugin;
 		Object instance;
 		boolean instanceIsNull;
 
@@ -239,7 +239,7 @@ public class ServiceManager
 
 		// this constructor is the value of the hash table
 		Descriptor(String clazz, String name, String code,
-			EditPlugin.JAR plugin)
+			PluginJAR plugin)
 		{
 			this.clazz  = clazz;
 			this.name   = name;

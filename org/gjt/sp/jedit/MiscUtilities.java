@@ -1253,25 +1253,12 @@ loop:		for(int i = 0; i < str.length(); i++)
 		} //}}}
 
 		//{{{ Load it, if not yet done:
-		EditPlugin.JAR jar = jEdit.getPluginJAR(toolsPath);
+		PluginJAR jar = jEdit.getPluginJAR(toolsPath);
 		if(jar == null)
 		{
 			Log.log(Log.DEBUG, MiscUtilities.class,
 				"- adding " + toolsPath + " to jEdit plugins.");
-			try
-			{
-				//XXX
-				JARClassLoader classLoader = new JARClassLoader(toolsPath);
-				jEdit.addPluginJAR(new EditPlugin.JAR(toolsPath,
-					classLoader));
-			}
-			catch(IOException ioex)
-			{
-				Log.log(Log.ERROR, MiscUtilities.class,
-					"- I/O error loading " + toolsPath);
-				Log.log(Log.ERROR, MiscUtilities.class, ioex);
-				return false;
-			}
+			jEdit.addPluginJAR(toolsPath);
 		}
 		else
 			Log.log(Log.DEBUG, MiscUtilities.class,

@@ -66,7 +66,10 @@ public abstract class EBMessage
 	 */
 	public String toString()
 	{
-		return getClass().getName() + "[" + paramString() + "]";
+		String className = getClass().getName();
+		int index = className.lastIndexOf('.');
+		return className.substring(index + 1)
+			+ "[" + paramString() + "]";
 	} //}}}
 
 	//{{{ paramString() method

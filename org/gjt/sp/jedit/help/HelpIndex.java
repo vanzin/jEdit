@@ -91,7 +91,7 @@ class HelpIndex
 			indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
 		}
 
-		EditPlugin.JAR[] jars = jEdit.getPluginJARs();
+		PluginJAR[] jars = jEdit.getPluginJARs();
 		for(int i = 0; i < jars.length; i++)
 		{
 			indexJAR(jars[i].getZipFile());

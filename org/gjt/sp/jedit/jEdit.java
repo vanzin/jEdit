@@ -105,7 +105,6 @@ public class jEdit
 		boolean runStartupScripts = true;
 		boolean quit = false;
 		boolean wait = false;
-		boolean generateCache = false;
 		String userDir = System.getProperty("user.dir");
 
 		// script to run
@@ -187,8 +186,6 @@ public class jEdit
 					wait = true;
 				else if(arg.equals("-quit"))
 					quit = true;
-				else if(arg.equals("-generatecache"))
-					generateCache = true;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -387,11 +384,6 @@ public class jEdit
 		if(loadPlugins)
 			initPlugins();
 
-		if(generateCache)
-			ResourceCache.generateCache();
-		else if(!ResourceCache.loadCache())
-			ResourceCache.generateCache();
-
 		if(jEditHome != null)
 			initSiteProperties();
 
@@ -420,8 +412,7 @@ public class jEdit
 		//{{{ Start plugins
 		for(int i = 0; i < jars.size(); i++)
 		{
-			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
-				.startAllPlugins();
+			((PluginJAR)jars.elementAt(i)).activatePlugin();
 		} //}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
@@ -944,7 +935,10 @@ public class jEdit
 		Vector vector = new Vector();
 		for(int i = 0; i < jars.size(); i++)
 		{
-			((EditPlugin.JAR)jars.elementAt(i)).getPlugins(vector);
+			EditPlugin plugin = ((PluginJAR)jars.elementAt(i))
+				.getPlugin();
+			if(plugin != null)
+				vector.add(plugin);
 		}
 
 		EditPlugin[] array = new EditPlugin[vector.size()];
@@ -955,11 +949,11 @@ public class jEdit
 	//{{{ getPluginJARs() method
 	/**
 	 * Returns an array of installed plugins.
-	 * @since jEdit 2.5pre3
+	 * @since jEdit 4.2pre1
 	 */
-	public static EditPlugin.JAR[] getPluginJARs()
+	public static PluginJAR[] getPluginJARs()
 	{
-		EditPlugin.JAR[] array = new EditPlugin.JAR[jars.size()];
+		PluginJAR[] array = new PluginJAR[jars.size()];
 		jars.copyInto(array);
 		return array;
 	} //}}}
@@ -968,13 +962,13 @@ public class jEdit
 	/**
 	 * Returns the JAR with the specified path name.
 	 * @param path The path name
-	 * @since jEdit 2.6pre1
+	 * @since jEdit 4.2pre1
 	 */
-	public static EditPlugin.JAR getPluginJAR(String path)
+	public static PluginJAR getPluginJAR(String path)
 	{
 		for(int i = 0; i < jars.size(); i++)
 		{
-			EditPlugin.JAR jar = (EditPlugin.JAR)jars.elementAt(i);
+			PluginJAR jar = (PluginJAR)jars.elementAt(i);
 			if(jar.getPath().equals(path))
 				return jar;
 		}
@@ -984,15 +978,25 @@ public class jEdit
 
 	//{{{ addPluginJAR() method
 	/**
-	 * Adds a plugin JAR to the editor.
-	 * @param plugin The plugin
-	 * @since jEdit 3.2pre10
+	 * Loads the plugin JAR with the specified path. Note that calling this
+	 * at a time other than jEdit startup can have unpredictable results if
+	 * the plugin has not been updated for the jEdit 4.2 plugin API. Also,
+	 * you must make sure the plugin is not already loaded.
+	 *
+	 * @param path The JAR file path
+	 * @return The new <code>PluginJAR</code> instance
+	 * @since jEdit 4.2pre1
 	 */
-	public static void addPluginJAR(EditPlugin.JAR plugin)
+	public static PluginJAR addPluginJAR(String path)
 	{
-		if(plugin.getActionSet() != null)
-			addActionSet(plugin.getActionSet());
-		jars.addElement(plugin);
+		PluginJAR jar = new PluginJAR(path);
+		jars.addElement(jar);
+		jar.init();
+		if(jar.getActionSet() != null)
+			addActionSet(jar.getActionSet());
+		jar.getClassLoader().activate();
+
+		return jar;
 	} //}}}
 
 	//}}}
@@ -2510,7 +2514,6 @@ public class jEdit
 		System.out.println("	<file> +line:<line>: Positions caret"
 			+ " at line number <line>");
 		System.out.println("	--: End of options");
-		System.out.println("	-generatecache: Force plugin cache to be recreated");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-gui: Only if running in background mode; open initial view (default)");
 		System.out.println("	-nogui: Only if running in background mode; don't open initial view");
@@ -3121,7 +3124,7 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			for(int j = 0; j < jars.size(); j++)
 			{
-				EditPlugin.JAR jar = (EditPlugin.JAR)
+				PluginJAR jar = (PluginJAR)
 					jars.elementAt(j);
 				String jarPath = jar.getPath();
 				String jarName = MiscUtilities.getFileName(jarPath);
@@ -3437,21 +3440,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				continue;
 			}
 
-			try
-			{
-				Log.log(Log.DEBUG,jEdit.class,
-					"Scanning JAR file: " + path);
-				new JARClassLoader(path);
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,jEdit.class,"Cannot load"
-					+ " plugin " + plugin);
-				Log.log(Log.ERROR,jEdit.class,io);
-
-				String[] args = { io.toString() };
-				pluginError(path,"plugin-error.load-error",args);
-			}
+			addPluginJAR(path);
 		}
 	} //}}}
 

@@ -109,7 +109,7 @@ public class ActionSet
 	 * @param cachedActionNames The list of cached action names
 	 * @since jEdit 4.2pre1
 	 */
-	public ActionSet(EditPlugin.JAR plugin, String[] cachedActionNames)
+	public ActionSet(PluginJAR plugin, String[] cachedActionNames)
 	{
 		this();
 		this.plugin = plugin;
@@ -433,7 +433,7 @@ public class ActionSet
 	//{{{ Private members
 	private String label;
 	private Hashtable actions;
-	private EditPlugin.JAR plugin;
+	private PluginJAR plugin;
 	private boolean loaded;
 
 	private static final Object placeholder = new Object();

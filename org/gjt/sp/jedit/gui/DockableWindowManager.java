@@ -146,7 +146,7 @@ public class DockableWindowManager extends JPanel
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.2pre1
 	 */
-	public static void loadDockableWindows(EditPlugin.JAR plugin, URL uri)
+	public static void loadDockableWindows(PluginJAR plugin, URL uri)
 	{
 		try
 		{
@@ -177,7 +177,7 @@ public class DockableWindowManager extends JPanel
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.2pre1
 	 */
-	public static void unloadDockableWindows(EditPlugin.JAR plugin)
+	public static void unloadDockableWindows(PluginJAR plugin)
 	{
 		Iterator entries = dockableWindowFactories.entrySet().iterator();
 		while(entries.hasNext())
@@ -193,7 +193,7 @@ public class DockableWindowManager extends JPanel
 	/**
 	 * @since jEdit 4.2pre1
 	 */
-	public static void cacheDockableWindows(EditPlugin.JAR plugin,
+	public static void cacheDockableWindows(PluginJAR plugin,
 		String[] name, boolean[] actions)
 	{
 		for(int i = 0; i < name.length; i++)
@@ -205,7 +205,7 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ registerDockableWindow() method
-	public static void registerDockableWindow(EditPlugin.JAR plugin,
+	public static void registerDockableWindow(PluginJAR plugin,
 		String name, String code, boolean actions)
 	{
 		Factory factory = (Factory)dockableWindowFactories.get(name);
@@ -237,7 +237,7 @@ public class DockableWindowManager extends JPanel
 	static class DockableListHandler extends HandlerBase
 	{
 		//{{{ DockableListHandler constructor
-		DockableListHandler(URL uri, EditPlugin.JAR plugin)
+		DockableListHandler(URL uri, PluginJAR plugin)
 		{
 			this.uri = uri;
 			this.plugin = plugin;
@@ -357,7 +357,7 @@ public class DockableWindowManager extends JPanel
 
 		//{{{ Instance variables
 		private URL uri;
-		private EditPlugin.JAR plugin;
+		private PluginJAR plugin;
 
 		private String dockableName;
 		private String code;
@@ -399,13 +399,13 @@ public class DockableWindowManager extends JPanel
 		private static NameSpace nameSpace = new NameSpace(
 			BeanShell.getNameSpace(),"dockable window");
 
-		EditPlugin.JAR plugin;
+		PluginJAR plugin;
 		String name;
 		String code;
 		boolean loaded;
 
 		//{{{ Factory constructor
-		Factory(EditPlugin.JAR plugin, String name, String code,
+		Factory(PluginJAR plugin, String name, String code,
 			boolean actions)
 		{
 			this.plugin = plugin;

@@ -69,10 +69,10 @@ public class PluginResURLConnection extends URLConnection
 			}
 			else
 			{
-				EditPlugin.JAR[] plugins = jEdit.getPluginJARs();
+				PluginJAR[] plugins = jEdit.getPluginJARs();
 				for(int i = 0; i < plugins.length; i++)
 				{
-					EditPlugin.JAR jar = plugins[i];
+					PluginJAR jar = plugins[i];
 					if(MiscUtilities.getFileName(jar.getPath())
 						.equalsIgnoreCase(plugin))
 					{
