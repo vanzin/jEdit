@@ -103,10 +103,10 @@ public class BufferPrinter1_4
 			return;
 		savePrintSpec();
 
-		/* VFSManager.runInWorkThread(new Runnable()
+		VFSManager.runInWorkThread(new Runnable()
 		{
 			public void run()
-			{*/
+			{
 				try
 				{
 					 //buffer.readLock();
@@ -131,9 +131,9 @@ public class BufferPrinter1_4
 				finally
 				{
 					//buffer.readUnlock();
-				}/* 
+				}
 			}
-		}); */
+		});
 	} //}}}
 
 	//{{{ getPageFormat() method

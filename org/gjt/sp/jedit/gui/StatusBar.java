@@ -59,7 +59,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
-		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,0),
+		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,
+			(OperatingSystem.isMacOS() ? 18 : 0)),
 			UIManager.getBorder("TextField.border")));
 
 		this.view = view;
@@ -119,10 +120,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		panel.add(BorderLayout.EAST,box);
 
 		add(BorderLayout.CENTER,panel);
-
-		// Leave some room for OS X grow box
-		if(OperatingSystem.isMacOS())
-			add(BorderLayout.WEST,Box.createHorizontalStrut(18));
 	} //}}}
 
 	//{{{ propertiesChanged() method

@@ -64,17 +64,10 @@ contributing to this release.
   The fact that BshMethod is now public has facilitated optimizations
   which improve performance of BeanShell search and replace.
 
-+ Printing Changes:
-
 - Updated printing code (Thomas Dilts)
   - Uses Java 2 version 1.4 print dialogs when running on that Java
     version
   - Performs printing in a background thread
-  - On some Java versions, word spacing in the output would be wrong.
-    I added an option to enable a workaround, however this workaround
-    increases the spool file size; it makes jEdit send the actual
-    character shapes to the printer/spool file, instead of commands to
-    draw strings.
 
 + Syntax Highlighting Changes:
 
@@ -233,7 +226,7 @@ contributing to this release.
 - The 'initially collapse folds with level' setting is how honored when
   reloading files.
 
-- A few printing bugs fixed. (Thomas Dilts)
+- A few printing bugs fixed. (me and Thomas Dilts)
 
 - The help viewer should no longer open behind the view when jEdit is
   run for the first time on some Java implementations.
