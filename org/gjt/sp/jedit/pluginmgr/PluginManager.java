@@ -338,21 +338,6 @@ public class PluginManager extends EnhancedDialog
 					return;
 
 				Vector plugins = new Vector();
-				for(int i = 0; i < list.plugins.size(); i++)
-				{
-					PluginList.Plugin plugin = (PluginList.Plugin)list
-						.plugins.elementAt(i);
-					PluginList.Branch branch = plugin.getCompatibleBranch();
-
-					if(branch != null
-						&& branch.canSatisfyDependencies()
-						&& plugin.installedVersion != null
-						&& MiscUtilities.compareStrings(branch.version,
-						plugin.installedVersion,false) > 0)
-						plugins.addElement(plugin);
-				}
-
-				Vector plugins = new Vector();
 				for(int i = 0; i < list.pluginSets.size(); i++)
 				{
 					PluginList.PluginSet set = (PluginList.PluginSet)
