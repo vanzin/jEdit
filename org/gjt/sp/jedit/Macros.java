@@ -228,7 +228,7 @@ public class Macros
 			return;
 		}
 
-		Log.log(Log.DEBUG,this,"Registered " + handler.getName()
+		Log.log(Log.DEBUG,Macros.class,"Registered " + handler.getName()
 			+ " macro handler");
 		macroHandlers.add(handler);
 	} //}}}
