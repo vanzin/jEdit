@@ -45,7 +45,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 {
 	private String filename;
 	private String defaultFilename;
-    private View view;
+	private View view;
 	private boolean floating;
 
 	private QuickNotepadTextArea textArea;
@@ -55,11 +55,11 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// Constructor
 	//
 
-    public QuickNotepad(View view, String position)
+	public QuickNotepad(View view, String position)
 	{
 		super(new BorderLayout());
 
-        this.view = view;
+		this.view = view;
 		this.floating  = position.equals(DockableWindowManager.FLOATING);
 
 		this.filename = jEdit.getProperty(
@@ -85,11 +85,11 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		textArea.addKeyListener(new KeyHandler());
 		textArea.addAncestorListener(new AncestorHandler());
 
-        JScrollPane pane = new JScrollPane(textArea);
-        add(BorderLayout.CENTER, pane);
+		JScrollPane pane = new JScrollPane(textArea);
+		add(BorderLayout.CENTER, pane);
 
 		readFile();
-    }
+	}
 
 	//
 	// Attribute methods
@@ -105,16 +105,16 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// EBComponent implementation
 	//
 
-    public void handleMessage(EBMessage message)
+	public void handleMessage(EBMessage message)
 	{
-        if (message instanceof PropertiesChanged)
+		if (message instanceof PropertiesChanged)
 		{
-            propertiesChanged();
-        }
-    }
+			propertiesChanged();
+		}
+	}
 
 
-    private void propertiesChanged()
+	private void propertiesChanged()
 	{
 		String propertyFilename = jEdit.getProperty(
 			QuickNotepadPlugin.OPTION_PREFIX + "filepath");
@@ -171,7 +171,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 			Log.log(Log.ERROR, QuickNotepad.class,
 				"Could not write notepad text to " + filename);
 		}
-    }
+	}
 
 	public void chooseFile()
 	{
@@ -211,10 +211,10 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 			{
 				sb.append(str).append('\n');
 			}
-       		bf.close();
+			bf.close();
 			fis.close();
 			textArea.setText(sb.toString());
-   		}
+		}
 		catch (FileNotFoundException fnf)
 		{
 			Log.log(Log.ERROR, QuickNotepad.class,
@@ -222,7 +222,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		}
 		catch (IOException ioe)
 		{
-        	Log.log(Log.ERROR, QuickNotepad.class,
+			Log.log(Log.ERROR, QuickNotepad.class,
 				"could not read notepad file " + filename);
 		}
 	}
@@ -232,17 +232,17 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	//
 
 	// <Esc> closes a floating window
-    private class KeyHandler extends KeyAdapter {
-        public void keyPressed(KeyEvent evt) {
+	private class KeyHandler extends KeyAdapter {
+		public void keyPressed(KeyEvent evt) {
 			if(QuickNotepad.this.floating &&
-            	evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                evt.consume();
+				evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				evt.consume();
 				DockableWindowManager wm =
 					QuickNotepad.this.view.getDockableWindowManager();
-            	wm.removeDockableWindow(QuickNotepadPlugin.NAME);
-            }
-        }
-    }
+				wm.removeDockableWindow(QuickNotepadPlugin.NAME);
+			}
+		}
+	}
 
 	private class AncestorHandler implements AncestorListener
 	{

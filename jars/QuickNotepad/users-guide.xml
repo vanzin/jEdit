@@ -1,48 +1,46 @@
 <?xml version="1.0" standalone="no" ?>
 
-<!-- jEdit buffer-local properties: -->
-<!-- :indentSize=1:noTabs=true:maxLineLen=72:tabSize=2: -->
 
-<!-- QuickNotepad 1.0 help documentation        -->
-<!-- Copyright (C) 2001 John Gellene            -->
+<!-- QuickNotepad 2.0 help documentation -->
+<!-- Copyright (C) 2001 John Gellene	 -->
 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+		"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY qpadhelp SYSTEM "qpadhelp.xml">
 
 ]>
 
 <article id="QuickNotepad">
-  <articleinfo>
-    <author>
-      <firstname>John</firstname><surname>Gellene</surname>
-      <affiliation><address><email>jgellene@nyc.rr.com</email></address></affiliation>
-    </author>
-    <copyright><year>2001</year><holder>John Gellene</holder></copyright>
-    <legalnotice><title>Legal Notice</title>
-      <para>
-        Permission is granted to copy, distribute and/or modify this document
-        under the terms of the GNU Free Documentation License, Version 1.1 or
-        any later version published by the Free Software Foundation; with no
-        <quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
-        <quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
-        the license is included in the file <filename>COPYING.DOC.txt</filename>
-        included with the jEdit distribution.
-      </para>
-    </legalnotice>
-    <title>QuickNotepad 2.0</title>
-    <revhistory>
-      <revision>
-        <revnumber>1.0</revnumber>
-        <date>June 28, 2001</date>
-     </revision>
-      <revision>
-        <revnumber>2.0</revnumber>
-        <date>November 9, 2001</date>
-     </revision>
-    </revhistory>
-  </articleinfo>
+	<articleinfo>
+		<author>
+			<firstname>John</firstname><surname>Gellene</surname>
+			<affiliation><address><email>jgellene@nyc.rr.com</email></address></affiliation>
+		</author>
+		<copyright><year>2001</year><holder>John Gellene</holder></copyright>
+		<legalnotice><title>Legal Notice</title>
+			<para>
+				Permission is granted to copy, distribute and/or modify this document
+				under the terms of the GNU Free Documentation License, Version 1.1 or
+				any later version published by the Free Software Foundation; with no
+				<quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
+				<quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
+				the license is included in the file <filename>COPYING.DOC.txt</filename>
+				included with the jEdit distribution.
+			</para>
+		</legalnotice>
+		<title>QuickNotepad 2.0</title>
+		<revhistory>
+			<revision>
+				<revnumber>1.0</revnumber>
+				<date>June 28, 2001</date>
+		 </revision>
+			<revision>
+				<revnumber>2.0</revnumber>
+				<date>November 9, 2001</date>
+		 </revision>
+		</revhistory>
+	</articleinfo>
 
 &qpadhelp;
 
