@@ -4,6 +4,7 @@
  * to new text buffer
  * Copyright (C) 2001 John Gellene
  * jgellene@nyc.rr.com
+ * http://community.jedit.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  * $Id$
+ *
+ * Checked for jEdit 4.0 API
+ *
  */
 
 systemProperties()
@@ -33,6 +37,19 @@ systemProperties()
 }
 
 systemProperties();
+
+/*
+	Macro index data (in DocBook format)
+
+<listitem>
+    <para><filename>System_Properties.bsh</filename></para>
+    <abstract><para>
+        Writes an unsorted list of all Java system properties in a new
+        buffer.
+    </para></abstract>
+</listitem>
+
+*/
 
 // end System_Properties.bsh
 
