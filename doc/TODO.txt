@@ -3,9 +3,10 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- C+e a: no ' '}}} at end if no comments
+- replace all: doesnt hide wait cursor
 - encoding menu with "More"
 - nextLineRequested broken
-- s+click then s+click inside: deselect
 - no need to wait for requests after newFile()
 - C+` inserts ` again
 - removing property from mode does not take effect until restart
@@ -13,7 +14,6 @@ and quirks that I need to fix eventually.
 - control drag can leave cursor in odd place
 - plugin mgr install doesn't update existing plugins
 - backup time distance setting
-- {{{foo}}}\n{{{bar}}}; put cursor at start, enter
 - chunk cache state during a buffer event is too fragile, unnecessary
 invalidation being performed
 - quicknotepad help needs to be generated
@@ -24,7 +24,6 @@ invalidation being performed
 - preserve caret pos w/ format
 - toggle caret scroll to when not in vis region?
 - print selection
-- show context w/ S+F10
 - adding to icons prop
 - control auto reload
 - test inserts with fold vis map

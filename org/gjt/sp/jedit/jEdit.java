@@ -351,6 +351,21 @@ public class jEdit
 		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
 
+		//{{{ Get things rolling
+		initMisc();
+		initSystemProperties();
+
+		GUIUtilities.advanceSplashProgress();
+
+		GUIUtilities.init();
+		BeanShell.init();
+
+		if(jEditHome != null)
+			initSiteProperties();
+
+		initUserProperties();
+		//}}}
+
 		//{{{ Initialize server
 		if(portFile != null)
 		{
@@ -368,21 +383,7 @@ public class jEdit
 			}
 		} //}}}
 
-		//{{{ Get things rolling
-		initMisc();
-		initSystemProperties();
-
-		GUIUtilities.advanceSplashProgress();
-
-		GUIUtilities.init();
-		BeanShell.init();
-
-		if(jEditHome != null)
-			initSiteProperties();
-
-		initUserProperties();
-
-
+		//{{{ Do more stuff
 		initPLAF();
 
 		VFSManager.init();
