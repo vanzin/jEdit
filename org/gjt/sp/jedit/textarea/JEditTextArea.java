@@ -557,7 +557,8 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		int _electricScroll = (doElectricScroll ? electricScroll : 0);
+		int _electricScroll = (doElectricScroll && visibleLines > 6
+			? electricScroll : 0);
 
 		// visibleLines == 0 before the component is realized
 		// we can't do any proper scrolling then, so we have
@@ -2057,7 +2058,8 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
-			finishCaretUpdate(doElectricScroll,false);
+			if(focusedComponent == this)
+				finishCaretUpdate(doElectricScroll,false);
 			return;
 		}
 

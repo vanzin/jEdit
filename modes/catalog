@@ -162,7 +162,7 @@
 				FILE_NAME_GLOB="*.jou" />
 
 <MODE NAME="python"		FILE="python.xml"
-				FILE_NAME_GLOB="*.py" />
+				FILE_NAME_GLOB="*.{py,pyw}" />
 
 <MODE NAME="rebol"		FILE="rebol.xml"
 				FILE_NAME_GLOB="*.r" />
