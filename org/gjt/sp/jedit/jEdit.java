@@ -2866,7 +2866,8 @@ public class jEdit
 					(Component)evt.getSource());
 
 				boolean actionBarVisible;
-				if(view.getActionBar() == null)
+				if(view.getActionBar() == null
+					|| !view.getActionBar().isShowing())
 					actionBarVisible = false;
 				else
 				{

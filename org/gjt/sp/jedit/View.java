@@ -361,6 +361,95 @@ public class View extends JFrame implements EBComponent
 		return status;
 	} //}}}
 
+	//{{{ quickIncrementalSearch() method
+	/**
+	 * Quick search.
+	 * @since jEdit 4.0pre3
+	 */
+	public void quickIncrementalSearch(boolean word)
+	{
+		if(searchBar == null)
+			searchBar = new SearchBar(this,true);
+		if(searchBar.getParent() == null)
+			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
+
+		searchBar.setHyperSearch(false);
+
+		JEditTextArea textArea = getTextArea();
+
+		if(word)
+		{
+			String text = textArea.getSelectedText();
+			if(text == null)
+			{
+				textArea.selectWord();
+				text = textArea.getSelectedText();
+			}
+			else if(text.indexOf('\n') != -1)
+				text = null;
+
+			searchBar.getField().setText(text);
+		}
+
+		searchBar.getField().requestFocus();
+		searchBar.getField().selectAll();
+	} //}}}
+
+	//{{{ quickHyperSearch() method
+	/**
+	 * Quick HyperSearch.
+	 * @since jEdit 4.0pre3
+	 */
+	public void quickHyperSearch(boolean word)
+	{
+		JEditTextArea textArea = getTextArea();
+
+		if(word)
+		{
+			String text = textArea.getSelectedText();
+			if(text == null)
+			{
+				textArea.selectWord();
+				text = textArea.getSelectedText();
+			}
+
+			if(text != null && text.indexOf('\n') == -1)
+			{
+				HistoryModel.getModel("find").addItem(text);
+				SearchAndReplace.setSearchString(text);
+				SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+				SearchAndReplace.hyperSearch(this);
+
+				return;
+			}
+		}
+
+		if(searchBar == null)
+			searchBar = new SearchBar(this,true);
+		if(searchBar.getParent() == null)
+			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
+
+		searchBar.setHyperSearch(true);
+		searchBar.getField().setText(null);
+		searchBar.getField().requestFocus();
+		searchBar.getField().selectAll();
+	} //}}}
+
+	//{{{ actionBar() method
+	/**
+	 * Shows the action bar if needed, and sends keyboard focus there.
+	 * @since jEdit 4.2pre1
+	 */
+	public void actionBar()
+	{
+		if(actionBar == null)
+			actionBar = new ActionBar(this,true);
+		if(actionBar.getParent() == null)
+			addToolBar(BOTTOM_GROUP,ACTION_BAR_LAYER,actionBar);
+
+		actionBar.goToActionBar();
+	} //}}}
+
 	//}}}
 
 	//{{{ Input handling
@@ -872,7 +961,9 @@ public class View extends JFrame implements EBComponent
 		for(int i = 0; i < editPanes.length; i++)
 		{
 			EditPane ep = editPanes[i];
-			if(ep.getBuffer() == buffer)
+			if(ep.getBuffer() == buffer
+				/* ignore zero-height splits, etc */
+				&& ep.getTextArea().getVisibleLines() > 1)
 			{
 				setEditPane(ep);
 				ep.focusOnTextArea();
@@ -967,95 +1058,6 @@ public class View extends JFrame implements EBComponent
 	} //}}}
 
 	//}}}
-
-	//{{{ quickIncrementalSearch() method
-	/**
-	 * Quick search.
-	 * @since jEdit 4.0pre3
-	 */
-	public void quickIncrementalSearch(boolean word)
-	{
-		if(searchBar == null)
-			searchBar = new SearchBar(this,true);
-		if(searchBar.getParent() == null)
-			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
-
-		searchBar.setHyperSearch(false);
-
-		JEditTextArea textArea = getTextArea();
-
-		if(word)
-		{
-			String text = textArea.getSelectedText();
-			if(text == null)
-			{
-				textArea.selectWord();
-				text = textArea.getSelectedText();
-			}
-			else if(text.indexOf('\n') != -1)
-				text = null;
-
-			searchBar.getField().setText(text);
-		}
-
-		searchBar.getField().requestFocus();
-		searchBar.getField().selectAll();
-	} //}}}
-
-	//{{{ quickHyperSearch() method
-	/**
-	 * Quick HyperSearch.
-	 * @since jEdit 4.0pre3
-	 */
-	public void quickHyperSearch(boolean word)
-	{
-		JEditTextArea textArea = getTextArea();
-
-		if(word)
-		{
-			String text = textArea.getSelectedText();
-			if(text == null)
-			{
-				textArea.selectWord();
-				text = textArea.getSelectedText();
-			}
-
-			if(text != null && text.indexOf('\n') == -1)
-			{
-				HistoryModel.getModel("find").addItem(text);
-				SearchAndReplace.setSearchString(text);
-				SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-				SearchAndReplace.hyperSearch(this);
-
-				return;
-			}
-		}
-
-		if(searchBar == null)
-			searchBar = new SearchBar(this,true);
-		if(searchBar.getParent() == null)
-			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
-
-		searchBar.setHyperSearch(true);
-		searchBar.getField().setText(null);
-		searchBar.getField().requestFocus();
-		searchBar.getField().selectAll();
-	} //}}}
-
-	//{{{ actionBar() method
-	/**
-	 * Shows the action bar if needed, and sends keyboard focus there.
-	 * @since jEdit 4.2pre1
-	 */
-	public void actionBar()
-	{
-		if(actionBar == null)
-			actionBar = new ActionBar(this,true);
-		if(actionBar.getParent() == null)
-			addToolBar(BOTTOM_GROUP,ACTION_BAR_LAYER,actionBar);
-
-		actionBar.goToActionBar();
-	} //}}}
 
 	//{{{ isClosed() method
 	/**
@@ -1161,8 +1163,6 @@ public class View extends JFrame implements EBComponent
 		bottomToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
-		/* bottomToolBars.setLayout(new BoxLayout(bottomToolBars,
-			BoxLayout.X_AXIS)); */
 
 		toolBarManager = new ToolBarManager(topToolBars, bottomToolBars);
 
