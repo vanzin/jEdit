@@ -732,7 +732,10 @@
     The search can be made case insensitive (for example, searching for
     <quote>Hello</quote> will match <quote>hello</quote>, <quote>HELLO</quote>
     and <quote>HeLlO</quote>) by selecting the <guibutton>Ignore
-    case</guibutton> check box. Regular expressions may be used to match inexact
+    case</guibutton> check box.
+   </para>
+   <para>
+    Regular expressions may be used to match inexact
     sequences of text if the <guibutton>Regular expressions</guibutton> check
     box is selected; see <xref linkend="regexps" /> for more information about
     regular expressions. Note that regular expressions can only be used when
@@ -787,7 +790,22 @@
    </para>
    <para>
     In text replacement mode, the search string is replaced with the replacement
-    string. If regular expressions are enabled, positional parameters
+    string. If the search is case-insensitive, jEdit attempts to modify the
+    case of the replacement string to match that of the particular instance
+    of the search string being replaced. For example, if you are searching
+    for <quote>label</quote> and replacing it with <quote>text</quote>, then
+    the following replacements will be made:
+   </para>
+   <itemizedlist>
+    <listitem><para><quote>String label</quote> becomes <quote>String text</quote>
+    </para></listitem>
+    <listitem><para><quote>setLabel</quote> becomes <quote>setText</quote>
+    </para></listitem>
+    <listitem><para><quote>DEFAULT_LABEL</quote> becomes <quote>DEFAULT_TEXT</quote>
+    </para></listitem>
+   </itemizedlist>
+   <para>
+    If regular expressions are enabled, positional parameters
     (<literal>$0</literal>, <literal>$1</literal>, <literal>$2</literal>, and so
     on) can be used to insert the contents of matched subexpressions in the
     replacement text; see <xref linkend="regexps" /> for more information.

@@ -1,5 +1,8 @@
 /*
  * Registers.java - Register manager
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,8 +22,8 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import javax.swing.text.*;
-import java.lang.reflect.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
@@ -28,6 +31,7 @@ import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * jEdit's registers are an extension of the clipboard metaphor.
@@ -37,8 +41,9 @@ import org.gjt.sp.util.Log;
  */
 public class Registers
 {
+	//{{{ copy() method
 	/**
-	 * Convinience method that copies the text selected in the specified
+	 * Convenience method that copies the text selected in the specified
 	 * text area into the specified register.
 	 * @param textArea The text area
 	 * @param register The register
@@ -52,8 +57,9 @@ public class Registers
 
 		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);
-	}
+	} //}}}
 
+	//{{{ append() method
 	/**
 	 * Convinience method that appends the text selected in the specified
 	 * text area to the specified register, with a newline between the old
@@ -64,8 +70,9 @@ public class Registers
 	public static void append(JEditTextArea textArea, char register)
 	{
 		append(textArea,register,"\n",false);
-	}
+	} //}}}
 
+	//{{{ append() method
 	/**
 	 * Convinience method that appends the text selected in the specified
 	 * text area to the specified register.
@@ -77,8 +84,9 @@ public class Registers
 		String separator)
 	{
 		append(textArea,register,separator,false);
-	}
+	} //}}}
 
+	//{{{ append() method
 	/**
 	 * Convinience method that appends the text selected in the specified
 	 * text area to the specified register.
@@ -117,8 +125,9 @@ public class Registers
 
 		if(cut)
 			textArea.setSelectedText("");
-	}
+	} //}}}
 
+	//{{{ cut() method
 	/**
 	 * Convinience method that copies the text selected in the specified
 	 * text area into the specified register, and then removes it from the
@@ -142,8 +151,9 @@ public class Registers
 		}
 		else
 			textArea.getToolkit().beep();
-	}
+	} //}}}
 
+	//{{{ paste() method
 	/**
 	 * Convinience method that pastes the contents of the specified
 	 * register into the text area.
@@ -194,8 +204,9 @@ public class Registers
 
 			HistoryModel.getModel("clipboard").addItem(selection);
 		}
-	}
+	} //}}}
 
+	//{{{ getRegister() method
 	/**
 	 * Returns the specified register.
 	 * @param name The name
@@ -206,8 +217,9 @@ public class Registers
 			return null;
 		else
 			return registers[name];
-	}
+	} //}}}
 
+	//{{{ setRegister() method
 	/**
 	 * Sets the specified register.
 	 * @param name The name
@@ -225,8 +237,9 @@ public class Registers
 		}
 
 		registers[name] = newRegister;
-	}
+	} //}}}
 
+	//{{{ setRegister() method
 	/**
 	 * Sets the specified register.
 	 * @param name The name
@@ -252,8 +265,9 @@ public class Registers
 			else
 				registers[name] = new StringRegister(value);
 		}
-	}
+	} //}}}
 
+	//{{{ clearRegister() method
 	/**
 	 * Sets the value of the specified register to <code>null</code>.
 	 * @param name The register name
@@ -268,8 +282,9 @@ public class Registers
 			register.setValue("");
 		else
 			registers[name] = null;
-	}
+	} //}}}
 
+	//{{{ getRegister() method
 	/**
 	 * Returns an array of all available registers. Some of the elements
 	 * of this array might be null.
@@ -277,8 +292,9 @@ public class Registers
 	public static Register[] getRegisters()
 	{
 		return registers;
-	}
+	} //}}}
 
+	//{{{ Register interface
 	/**
 	 * A register.
 	 */
@@ -293,8 +309,9 @@ public class Registers
 		 * Sets the register contents.
 		 */
 		void setValue(String value);
-	}
+	} //}}}
 
+	//{{{ ClipboardRegister class
 	/**
 	 * A clipboard register. Register "$" should always be an
 	 * instance of this.
@@ -355,8 +372,9 @@ public class Registers
 				return null;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ StringRegister class
 	/**
 	 * Register that stores a string.
 	 */
@@ -394,9 +412,9 @@ public class Registers
 		 * implementation does nothing.
 		 */
 		public void dispose() {}
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private static Register[] registers;
 
 	private Registers() {}
@@ -406,37 +424,5 @@ public class Registers
 		registers = new Register[256];
 		registers['$'] = new ClipboardRegister(Toolkit
 			.getDefaultToolkit().getSystemClipboard());
-
-		// Check for Java 1.4 method that returns PRIMARY selection
-		// on X Windows
-		try
-		{
-			Method method = Toolkit.class.getMethod(
-				"getSystemSelection",new Class[0]);
-			Clipboard selection = (Clipboard)method.invoke(
-				Toolkit.getDefaultToolkit(),new Object[0]);
-			if(selection != null)
-			{
-				Log.log(Log.DEBUG,Registers.class,
-					"Toolkit.getSystemSelection() detected");
-				Log.log(Log.DEBUG,Registers.class,"% register is system selection");
-				registers['%'] = new ClipboardRegister(selection);
-			}
-			else
-			{
-				Log.log(Log.DEBUG,Registers.class,
-					"Toolkit.getSystemSelection() "
-					+ "detected, but returns null");
-				Log.log(Log.DEBUG,Registers.class,"% register is jEdit-specific");
-				registers['%'] = new StringRegister("");
-			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.DEBUG,Registers.class,
-				"Toolkit.getSystemSelection() not detected");
-			Log.log(Log.DEBUG,Registers.class,"% register is jEdit-specific");
-			registers['%'] = new StringRegister("");
-		}
-	}
+	} //}}}
 }

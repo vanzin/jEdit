@@ -607,11 +607,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				VFS vfs = VFSManager.getVFSForPath(file.path);
 				path = vfs.getParentOfPath(file.path);
-				String name = MiscUtilities.getFileName(path);
+				String name = MiscUtilities.getFileName(file.path);
 				String ext = MiscUtilities.getFileExtension(name);
 				filter = (ext == null || ext.length() == 0
 					? getFilenameFilter()
-					: "*." + ext);
+					: "*" + ext);
 			}
 		}
 		else

@@ -25,7 +25,7 @@ metal.secondary.fontstyle=0
 
 # Decorate frames and dialogs using Swing L&F? (JDK 1.4 only)
 decorate.frames=false
-decorate.dialogs=true
+decorate.dialogs=false
 
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
@@ -121,6 +121,9 @@ buffer.defaultMode=text
 
 # Undo queue size
 buffer.undoCount=100
+
+# Soft wrap?
+buffer.softWrap=false
 
 # Wrap column
 buffer.maxLineLen=0

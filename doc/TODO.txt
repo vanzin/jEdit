@@ -45,11 +45,9 @@ before soft wrap, must fix all the document bugs:
 - text area painter:
   - use line metrics
   - use float co-ordinates
-  - cache chunk lists
 - soft wrap
 - finish 'troubleshooting' menu:
   - about cmd
-  - keytest cmd
   - make bug report cmd
   - docs in user's guide
 - faster hypersearch
@@ -59,10 +57,7 @@ before soft wrap, must fix all the document bugs:
   some way of showing arbitriary message in VFS file chooser.
 - last focused dockable cmd
 - XModeHandler: better error reporting
-- documentation to do
-  - 'evaluate for selected lines'
-  - smart case insens replace
-  - context sensitive cmds tip
+- document 'evaluate for selected lines'
 - rule set property docs in part II
 - add index terms throughout user's guide!
 - changing heap memory docs

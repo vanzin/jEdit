@@ -13,8 +13,7 @@ defaults.
 
 - Two JDK 1.4-specific options added to 'Appearance' option pane:
   'Draw window borders using Swing look & feel', 'Draw dialog box
-  borders using Swing look & feel'. By default, the former is disabled,
-  the latter is enabled.
+  borders using Swing look & feel'. Both are disabled by default.
 
 + Enhancements
 

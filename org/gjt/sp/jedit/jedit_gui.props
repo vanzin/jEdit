@@ -723,6 +723,8 @@ print-error.title=Print Error
 print-error.message=An error occurred while trying to print:\n\
 	{0}
 
+#}}}
+
 #{{{ Various dialog boxes
 
 #{{{ About dialog
@@ -1485,6 +1487,7 @@ options.shortcuts.shortcut2=Alternative shortcut
 
 grab-key.title=Specify Shortcut
 grab-key.caption=Press the desired shortcut for "{0}", then click OK.
+grab-key.keyboard-test=Input the key strokes that are causing problems.
 grab-key.assigned-to=Currently assigned to: {0}
 grab-key.assigned-to.none=<none>
 grab-key.assigned-to.prefix={0} prefix

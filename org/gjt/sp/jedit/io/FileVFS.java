@@ -392,11 +392,8 @@ public class FileVFS extends VFS
 	//{{{ _saveComplete() method
 	public void _saveComplete(Object session, Buffer buffer, Component comp)
 	{
-		if(jEdit.getBooleanProperty("twoStageSave"))
-		{
-			int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
-			setPermissions(buffer.getPath(),permissions);
-		}
+		int permissions = buffer.getIntegerProperty(PERMISSIONS_PROPERTY,0);
+		setPermissions(buffer.getPath(),permissions);
 	} //}}}
 
 	//{{{ Permission preservation code
