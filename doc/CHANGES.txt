@@ -259,6 +259,12 @@ contributing to this release.
 - Text area would not automatically scroll to the caret location when
   working with multiple views under certain circumstances.
 
+- Dynamic menus (Recent Files, etc) did not work under MacOS X if the
+  menu bar was at the top of the screen. Note that this does not solve
+  the other problem with having the menu bar there, namely keyboard
+  shortcuts not being displayed. For now, leave the menu bar inside the
+  frame for best results. (Kris Kopicki)
+
 + API Changes:
 
 - Two methods added to jEdit class:

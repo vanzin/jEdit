@@ -120,6 +120,7 @@ public class DefaultTokenHandler implements TokenHandler
 				if(token1 == token2 && token.id != Token.TAB)
 				{
 					lastToken.length += token.length;
+					lastToken.id = token2;
 					return false;
 				}
 			}

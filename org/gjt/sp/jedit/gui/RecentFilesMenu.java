@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -32,7 +33,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class RecentFilesMenu extends EnhancedMenu
+public class RecentFilesMenu extends EnhancedMenu implements MenuListener
 {
 	//{{{ RecentFilesMenu constructor
 	public RecentFilesMenu()
@@ -40,92 +41,90 @@ public class RecentFilesMenu extends EnhancedMenu
 		super("recent-files");
 	} //}}}
 
-	//{{{ setPopupMenuVisible() method
-	public void setPopupMenuVisible(boolean b)
+	//{{{ menuSelected() method
+	public void menuSelected(MenuEvent evt)
 	{
-		if(b)
+		final View view = GUIUtilities.getView(this);
+
+		if(getMenuComponentCount() != 0)
+			removeAll();
+
+		//{{{ ActionListener...
+		ActionListener actionListener = new ActionListener()
 		{
-			final View view = GUIUtilities.getView(this);
-
-			if(getMenuComponentCount() != 0)
-				removeAll();
-
-			//{{{ ActionListener...
-			ActionListener actionListener = new ActionListener()
+			public void actionPerformed(ActionEvent evt)
 			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					jEdit.openFile(view,evt.getActionCommand());
-					view.getStatus().setMessage(null);
-				}
-			}; //}}}
+				jEdit.openFile(view,evt.getActionCommand());
+				view.getStatus().setMessage(null);
+			}
+		}; //}}}
 
-			//{{{ MouseListener...
-			MouseListener mouseListener = new MouseAdapter()
+		//{{{ MouseListener...
+		MouseListener mouseListener = new MouseAdapter()
+		{
+			public void mouseEntered(MouseEvent evt)
 			{
-				public void mouseEntered(MouseEvent evt)
-				{
-					view.getStatus().setMessage(
-						((JMenuItem)evt.getSource())
-						.getActionCommand());
-				}
-
-				public void mouseExited(MouseEvent evt)
-				{
-					view.getStatus().setMessage(null);
-				}
-			}; //}}}
-
-			Vector recentVector = BufferHistory.getBufferHistory();
-
-			if(recentVector.size() == 0)
-			{
-				add(GUIUtilities.loadMenuItem("no-recent-files"));
-				super.setPopupMenuVisible(b);
-				return;
+				view.getStatus().setMessage(
+					((JMenuItem)evt.getSource())
+					.getActionCommand());
 			}
 
-			Vector menuItems = new Vector();
-			boolean sort = jEdit.getBooleanProperty("sortRecent");
-
-			/*
-			 * While recentVector has 50 entries or so, we only display
-			 * a few of those in the menu (otherwise it will be way too
-			 * long)
-			 */
-			int recentFileCount = Math.min(recentVector.size(),
-				jEdit.getIntegerProperty("history",25));
-
-			for(int i = recentVector.size() - 1;
-				i >= recentVector.size() - recentFileCount;
-				i--)
+			public void mouseExited(MouseEvent evt)
 			{
-				String path = ((BufferHistory.Entry)recentVector
-					.elementAt(i)).path;
-				VFS vfs = VFSManager.getVFSForPath(path);
-				JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
-				menuItem.setActionCommand(path);
-				menuItem.addActionListener(actionListener);
-				menuItem.addMouseListener(mouseListener);
-				menuItem.setIcon(FileCellRenderer.fileIcon);
-
-				if(sort)
-					menuItems.addElement(menuItem);
-				else
-					add(menuItem);
+				view.getStatus().setMessage(null);
 			}
+		}; //}}}
 
-			if(sort)
-			{
-				MiscUtilities.quicksort(menuItems,
-					new MiscUtilities.MenuItemCompare());
-				for(int i = 0; i < menuItems.size(); i++)
-				{
-					add((JMenuItem)menuItems.elementAt(i));
-				}
-			}
+		Vector recentVector = BufferHistory.getBufferHistory();
+
+		if(recentVector.size() == 0)
+		{
+			add(GUIUtilities.loadMenuItem("no-recent-files"));
+			return;
 		}
 
-		super.setPopupMenuVisible(b);
+		Vector menuItems = new Vector();
+		boolean sort = jEdit.getBooleanProperty("sortRecent");
+
+		/*
+		 * While recentVector has 50 entries or so, we only display
+		 * a few of those in the menu (otherwise it will be way too
+		 * long)
+		 */
+		int recentFileCount = Math.min(recentVector.size(),
+			jEdit.getIntegerProperty("history",25));
+
+		for(int i = recentVector.size() - 1;
+			i >= recentVector.size() - recentFileCount;
+			i--)
+		{
+			String path = ((BufferHistory.Entry)recentVector
+				.elementAt(i)).path;
+			VFS vfs = VFSManager.getVFSForPath(path);
+			JMenuItem menuItem = new JMenuItem(vfs.getFileName(path));
+			menuItem.setActionCommand(path);
+			menuItem.addActionListener(actionListener);
+			menuItem.addMouseListener(mouseListener);
+			menuItem.setIcon(FileCellRenderer.fileIcon);
+
+			if(sort)
+				menuItems.addElement(menuItem);
+			else
+				add(menuItem);
+		}
+
+		if(sort)
+		{
+			MiscUtilities.quicksort(menuItems,
+				new MiscUtilities.MenuItemCompare());
+			for(int i = 0; i < menuItems.size(); i++)
+			{
+				add((JMenuItem)menuItems.elementAt(i));
+			}
+		}
 	} //}}}
+
+	public void menuDeselected(MenuEvent e) {}
+
+	public void menuCanceled(MenuEvent e) {}
 }
