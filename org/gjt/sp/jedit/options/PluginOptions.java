@@ -101,6 +101,7 @@ public class PluginOptions extends OptionsDialog
 					{
 						pluginsGroup.addOptionGroup(
 							new OptionGroup(
+							"plugin." + className,
 							jEdit.getProperty("plugin."
 							+ className + ".name"),
 							options)

@@ -69,7 +69,7 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 			setMnemonic(mnemonic);
 
 		providerCode = jEdit.getProperty(name + ".code");
-		dynamicMenuOutOfDate = true;
+		menuOutOfDate = true;
 		addMenuListener(this);
 	} //}}}
 
@@ -86,27 +86,6 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 	//{{{ init() method
 	public void init()
 	{
-		if(initialized)
-			return;
-
-		initialized = true;
-
-		String menuItems = jEdit.getProperty(_name);
-		if(menuItems != null)
-		{
-			StringTokenizer st = new StringTokenizer(menuItems);
-			while(st.hasMoreTokens())
-			{
-				String menuItemName = st.nextToken();
-				if(menuItemName.equals("-"))
-					addSeparator();
-				else
-					add(GUIUtilities.loadMenuItem(context,menuItemName,true));
-			}
-		}
-
-		initialMenuItemCount = getMenuComponentCount();
-
 		if(providerCode != null && provider == null)
 		{
 			Object obj = BeanShell.eval(null,
@@ -115,15 +94,29 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 			provider = (DynamicMenuProvider)obj;
 		}
 
-		if(provider != null && (dynamicMenuOutOfDate
-			|| provider.updateEveryTime()))
+		if(menuOutOfDate || (provider != null
+			&& provider.updateEveryTime()))
 		{
-			while(getMenuComponentCount() != initialMenuItemCount)
+			menuOutOfDate = false;
+
+			removeAll();
+
+			String menuItems = jEdit.getProperty(_name);
+			if(menuItems != null)
 			{
-				remove(getMenuComponentCount() - 1);
+				StringTokenizer st = new StringTokenizer(menuItems);
+				while(st.hasMoreTokens())
+				{
+					String menuItemName = st.nextToken();
+					if(menuItemName.equals("-"))
+						addSeparator();
+					else
+						add(GUIUtilities.loadMenuItem(context,menuItemName,true));
+				}
 			}
 
-			provider.update(this);
+			if(provider != null)
+				provider.update(this);
 		}
 	} //}}}
 
@@ -134,7 +127,7 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 			&& _name.equals(((DynamicMenuChanged)msg)
 			.getMenuName()))
 		{
-			dynamicMenuOutOfDate = true;
+			menuOutOfDate = true;
 		}
 	} //}}}
 
@@ -157,13 +150,9 @@ public class EnhancedMenu extends JMenu implements MenuListener,
 	//{{{ Protected members
 	protected String _name;
 	protected ActionContext context;
-	protected boolean initialized;
 
 	protected String providerCode;
 	protected DynamicMenuProvider provider;
-	protected boolean dynamicMenuOutOfDate;
-
-	// number of menu items before we call the dynamic menu item provider
-	protected int initialMenuItemCount;
+	protected boolean menuOutOfDate;
 	//}}}
 }

@@ -58,10 +58,11 @@ public class OptionGroup
 	 * Creates an option group.
 	 * @param label The label
 	 * @param options A whitespace-separated list of option pane names
-	 * @since jEdit 4.2pre1
+	 * @since jEdit 4.2pre2
 	 */
-	public OptionGroup(String label, String options)
+	public OptionGroup(String name, String label, String options)
 	{
+		this.name = name;
 		this.label = label;
 		members = new Vector();
 

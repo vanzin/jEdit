@@ -324,7 +324,7 @@ public class EditServer extends Thread
 						ns.setVariable("socket",client);
 						BeanShell.eval(null,ns,script);
 					}
-					catch(bsh.EvalError e)
+					catch(bsh.UtilEvalError e)
 					{
 						Log.log(Log.ERROR,this,e);
 					}
@@ -334,7 +334,7 @@ public class EditServer extends Thread
 						{
 							BeanShell.getNameSpace().setVariable("socket",null);
 						}
-						catch(bsh.EvalError e)
+						catch(bsh.UtilEvalError e)
 						{
 							Log.log(Log.ERROR,this,e);
 						}

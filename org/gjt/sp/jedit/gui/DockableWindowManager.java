@@ -23,8 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
- import bsh.EvalError;
- import bsh.NameSpace;
+ import bsh.*;
  import com.microstar.xml.*;
  import javax.swing.*;
  import java.awt.event.*;
@@ -514,7 +513,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				BeanShell.getNameSpace().setVariable(
 					"position",position);
 			}
-			catch(EvalError e)
+			catch(UtilEvalError e)
 			{
 				Log.log(Log.ERROR,this,e);
 			}
@@ -1120,12 +1119,26 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
 				Iterator iter = windows.values().iterator();
-
 				while(iter.hasNext())
 				{
 					Entry entry = (Entry)iter.next();
 					if(entry.factory.plugin == pmsg.getPluginJAR())
+					{
+						if(entry.container != null)
+							entry.container.unregister(entry);
 						iter.remove();
+					}
+				}
+
+				iter = clones.iterator();
+				while(iter.hasNext())
+				{
+					Entry entry = (Entry)iter.next();
+					if(entry.factory.plugin == pmsg.getPluginJAR())
+					{if(entry.container != null)
+							entry.container.unregister(entry);
+						iter.remove();
+					}
 				}
 			}
 		}
