@@ -806,6 +806,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public int getPhysicalLineOfScreenLine(int screenLine)
 	{
+		chunkCache.updateChunksUpTo(screenLine);
 		return chunkCache.getLineInfo(screenLine).physicalLine;
 	} //}}}
 

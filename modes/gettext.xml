@@ -5,6 +5,8 @@
 <MODE>
 <!--
 	** jEdit edit mode for gettext catalogs (.po/.pot extension)
+	** Use the ConfigurableFoldHandler plugin for optimal
+	** results. =)
 -->
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="# " />
@@ -21,7 +23,7 @@
 		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
 		<MARK_FOLLOWING TYPE="KEYWORD3">@</MARK_FOLLOWING>
 
-		<SPAN TYPE="LITERAL1" DELEGATE="QUOTED">
+		<SPAN TYPE="LITERAL1" DELEGATE="QUOTED" >
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
@@ -41,12 +43,8 @@
 
 	</RULES>
 
-<!-- 	** if anyone knows how to highlight a escaped quoted string
-	** within a quoted string (highlighted by the previous rule)
-	** I'd like to know! -->
-
 	<RULES SET="QUOTED" DEFAULT="LITERAL1">
-		<SPAN TYPE="LITERAL2" >
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 			<BEGIN>\"</BEGIN>
 			<END>\"</END>
 		</SPAN>
