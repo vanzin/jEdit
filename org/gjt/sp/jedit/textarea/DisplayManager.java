@@ -386,7 +386,9 @@ public class DisplayManager
 				}
 			}
 
-			if(firstVisible != end + 1)
+			if(firstVisible == end + 1)
+				returnValue = -1;
+			else
 				showLineRange(firstVisible,end);
 
 			if(!isLineVisible(line))
@@ -749,7 +751,7 @@ public class DisplayManager
 
 		if(copy != null)
 		{
-			folds = new RangeMap(folds);
+			folds = new RangeMap(copy.folds);
 			initialized = true;
 		}
 	} //}}}

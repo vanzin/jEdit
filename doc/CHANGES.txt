@@ -37,6 +37,8 @@ Simon Ruggier for contributing to this release.
 
 - Dropping text into the text area now selects it (Nicholas O'Leary).
 
+- The cursor is hidden when you start typing.
+
 }}}
 {{{ Bug Fixes
 
