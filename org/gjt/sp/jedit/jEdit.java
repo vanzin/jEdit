@@ -2095,7 +2095,11 @@ public class jEdit
 
 	//{{{ getSettingsDirectory() method
 	/**
-	 * Returns the user settings directory.
+	 * Returns the path of the directory where user-specific settings
+	 * are stored. This will be <code>null</code> if jEdit was
+	 * started with the <code>-nosettings</code> command-line switch; do not
+	 * blindly use this method without checking for a <code>null</code>
+	 * return value first.
 	 */
 	public static String getSettingsDirectory()
 	{
