@@ -86,7 +86,7 @@ public class SearchAndReplace
 		EditBus.send(new SearchSettingsChanged(null));
 	} //}}}
 
-	//{{{ getRepalceString() method
+	//{{{ getReplaceString() method
 	/**
 	 * Returns the current replacement string.
 	 */
@@ -419,6 +419,8 @@ public class SearchAndReplace
 
 			view.showWaitCursor();
 
+			boolean _reverse = reverse && fileset instanceof CurrentBufferSet;
+
 loop:			for(;;)
 			{
 				while(path != null)
@@ -452,17 +454,17 @@ loop:			for(;;)
 							textArea.getCaretPosition());
 						if(s == null)
 							start = textArea.getCaretPosition();
-						else if(reverse)
+						else if(_reverse)
 							start = s.getStart();
 						else
 							start = s.getEnd();
 					}
-					else if(reverse)
+					else if(_reverse)
 						start = buffer.getLength();
 					else
 						start = 0;
 
-					if(find(view,buffer,start,repeat))
+					if(find(view,buffer,start,repeat,_reverse))
 						return true;
 				}
 
@@ -497,7 +499,7 @@ loop:			for(;;)
 				}
 				else
 				{
-					Integer[] args = { new Integer(reverse ? 1 : 0) };
+					Integer[] args = { new Integer(_reverse ? 1 : 0) };
 					int result = GUIUtilities.confirm(view,
 						"keepsearching",args,
 						JOptionPane.YES_NO_OPTION,
@@ -542,7 +544,7 @@ loop:			for(;;)
 	public static boolean find(View view, Buffer buffer, int start)
 		throws Exception
 	{
-		return find(view,buffer,start,false);
+		return find(view,buffer,start,false,false);
 	} //}}}
 
 	//{{{ find() method
@@ -553,10 +555,10 @@ loop:			for(;;)
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
 	 * @param firstTime See <code>SearchMatcher.nextMatch()</code>
-	 * @since jEdit 4.0pre7
+	 * @since jEdit 4.1pre7
 	 */
 	public static boolean find(View view, Buffer buffer, int start,
-		boolean firstTime) throws Exception
+		boolean firstTime, boolean reverse) throws Exception
 	{
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
@@ -577,8 +579,7 @@ loop:			for(;;)
 		//
 		// REMIND: fix flags when adding reverse regexp search.
 		int[] match = matcher.nextMatch(new CharIndexedSegment(text,reverse),
-			start == 0,true,firstTime,
-			reverse && fileset instanceof CurrentBufferSet);
+			start == 0,true,firstTime,reverse);
 
 		if(match != null)
 		{

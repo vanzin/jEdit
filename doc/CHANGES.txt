@@ -2,6 +2,7 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre7
 
+Thanks to Jonathan Revusky for contributing to this release.
 + Syntax Highlighting Changes:
 
 - Freemaker syntax highlighting (Jonathan Revusky).
@@ -11,6 +12,7 @@ JEDIT 4.1 VERSION HISTORY
 - The action "Insert Tab and Indent" was broken.
 - Backed out Rex Young's ReadWriteLock.java fix since it caused
   deadlocks.
+- Fixed some long-standing bugs in the reverse search code.
 
 * Version 4.1pre6
 
