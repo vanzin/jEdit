@@ -727,6 +727,24 @@ public class DisplayManager
 			if(skew >= screenLines)
 				skew = screenLines - 1;
 
+			//XXX
+			int verifyScreenLine = 0;
+			int i = 0;
+
+			for(; i < buffer.getLineCount(); i++)
+			{
+				if(!isLineVisible(i))
+					continue;
+
+				if(i >= physicalLine)
+					break;
+
+				verifyScreenLine += getScreenLineCount(i);
+			}
+			if(verifyScreenLine != scrollLine)
+				new org.gjt.sp.jedit.gui.BeanShellErrorDialog(null,new Exception(scrollLine + ":" + verifyScreenLine));
+			//XXX
+
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
 		} //}}}
