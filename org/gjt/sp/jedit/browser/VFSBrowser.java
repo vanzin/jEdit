@@ -513,14 +513,15 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	//{{{ delete() method
 	/**
 	 * Note that all files must be on the same VFS.
+	 * @since jEdit 4.3pre2
 	 */
-	public void delete(VFS.DirectoryEntry[] files)
+	public void delete(VFSFile[] files)
 	{
 		String dialogType;
 
-		if(MiscUtilities.isURL(files[0].deletePath)
+		if(MiscUtilities.isURL(files[0].getDeletePath())
 			&& FavoritesVFS.PROTOCOL.equals(
-			MiscUtilities.getProtocolOfURL(files[0].deletePath)))
+			MiscUtilities.getProtocolOfURL(files[0].getDeletePath())))
 		{
 			dialogType = "vfs.browser.delete-favorites";
 		}
@@ -532,7 +533,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < files.length; i++)
 		{
-			buf.append(files[i].path);
+			buf.append(files[i].getPath());
 			buf.append('\n');
 		}
 
@@ -543,20 +544,20 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		if(result != JOptionPane.YES_OPTION)
 			return;
 
-		VFS vfs = VFSManager.getVFSForPath(files[0].deletePath);
+		VFS vfs = VFSManager.getVFSForPath(files[0].getDeletePath());
 
 		if(!startRequest())
 			return;
 
 		for(int i = 0; i < files.length; i++)
 		{
-			Object session = vfs.createVFSSession(files[i].deletePath,this);
+			Object session = vfs.createVFSSession(files[i].getDeletePath(),this);
 			if(session == null)
 				continue;
 
 			VFSManager.runInWorkThread(new BrowserIORequest(
 				BrowserIORequest.DELETE,this,
-				session,vfs,files[i].deletePath,
+				session,vfs,files[i].getDeletePath(),
 				null,null));
 		}
 
@@ -612,18 +613,18 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		// if a directory is selected, create new dir in there.
 		// if a file is selected, create new dir inside its parent.
-		VFS.DirectoryEntry[] selected = getSelectedFiles();
+		VFSFile[] selected = getSelectedFiles();
 		String parent;
 		if(selected.length == 0)
 			parent = path;
-		else if(selected[0].type == VFS.DirectoryEntry.FILE)
+		else if(selected[0].getType() == VFSFile.FILE)
 		{
-			parent = selected[0].path;
+			parent = selected[0].getPath();
 			parent = VFSManager.getVFSForPath(parent)
 				.getParentOfPath(parent);
 		}
 		else
-			parent = selected[0].path;
+			parent = selected[0].getPath();
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
 
@@ -657,16 +658,16 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void newFile()
 	{
-		VFS.DirectoryEntry[] selected = getSelectedFiles();
+		VFSFile[] selected = getSelectedFiles();
 		if(selected.length >= 1)
 		{
-			VFS.DirectoryEntry file = selected[0];
-			if(file.type == VFS.DirectoryEntry.DIRECTORY)
-				jEdit.newFile(view,file.path);
+			VFSFile file = selected[0];
+			if(file.getType() == VFSFile.DIRECTORY)
+				jEdit.newFile(view,file.getPath());
 			else
 			{
-				VFS vfs = VFSManager.getVFSForPath(file.path);
-				jEdit.newFile(view,vfs.getParentOfPath(file.path));
+				VFS vfs = VFSManager.getVFSForPath(file.getPath());
+				jEdit.newFile(view,vfs.getParentOfPath(file.getPath()));
 			}
 		}
 		else
@@ -680,11 +681,11 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void searchInDirectory()
 	{
-		VFS.DirectoryEntry[] selected = getSelectedFiles();
+		VFSFile[] selected = getSelectedFiles();
 		if(selected.length >= 1)
 		{
-			VFS.DirectoryEntry file = selected[0];
-			searchInDirectory(file.path,file.type != VFS.DirectoryEntry.FILE);
+			VFSFile file = selected[0];
+			searchInDirectory(file.getPath(),file.getType() != VFSFile.FILE);
 		}
 		else
 		{
@@ -729,7 +730,10 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	} //}}}
 
 	//{{{ getSelectedFiles() method
-	public VFS.DirectoryEntry[] getSelectedFiles()
+	/**
+	 * @since jEdit 4.3pre2
+	 */
+	public VFSFile[] getSelectedFiles()
 	{
 		return browserView.getSelectedFiles();
 	} //}}}
@@ -782,32 +786,32 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void filesActivated(int mode, boolean canDoubleClickClose)
 	{
-		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+		VFSFile[] selectedFiles = browserView.getSelectedFiles();
 
 		Buffer buffer = null;
 
 check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
-			VFS.DirectoryEntry file = selectedFiles[i];
+			VFSFile file = selectedFiles[i];
 
-			if(file.type == VFS.DirectoryEntry.DIRECTORY
-				|| file.type == VFS.DirectoryEntry.FILESYSTEM)
+			if(file.getType() == VFSFile.DIRECTORY
+				|| file.getType() == VFSFile.FILESYSTEM)
 			{
 				if(mode == M_OPEN_NEW_VIEW && this.mode == BROWSER)
-					browseDirectoryInNewWindow(view,file.path);
+					browseDirectoryInNewWindow(view,file.getPath());
 				else
-					setDirectory(file.path);
+					setDirectory(file.getPath());
 			}
 			else if(this.mode == BROWSER || this.mode == BROWSER_DIALOG)
 			{
 				if(mode == M_INSERT)
 				{
 					view.getBuffer().insertFile(view,
-						file.path);
+						file.getPath());
 					continue check_selected;
 				}
 
-				Buffer _buffer = jEdit.getBuffer(file.path);
+				Buffer _buffer = jEdit.getBuffer(file.getPath());
 				if(_buffer == null)
 				{
 					Hashtable props = new Hashtable();
@@ -815,7 +819,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					props.put(Buffer.ENCODING_AUTODETECT,
 						new Boolean(autoDetectEncoding));
 					_buffer = jEdit.openFile(null,null,
-						file.path,false,props);
+						file.getPath(),false,props);
 				}
 				else if(doubleClickClose && canDoubleClickClose
 					&& this.mode != BROWSER_DIALOG
@@ -923,14 +927,14 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ filesSelected() method
 	void filesSelected()
 	{
-		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
+		VFSFile[] selectedFiles = browserView.getSelectedFiles();
 
 		if(mode == BROWSER)
 		{
 			for(int i = 0; i < selectedFiles.length; i++)
 			{
-				VFS.DirectoryEntry file = selectedFiles[i];
-				Buffer buffer = jEdit.getBuffer(file.path);
+				VFSFile file = selectedFiles[i];
+				Buffer buffer = jEdit.getBuffer(file.getPath());
 				if(buffer != null && view != null)
 					view.setBuffer(buffer);
 			}
@@ -1381,8 +1385,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 			popup.addSeparator();
 
-			VFS.DirectoryEntry[] favorites
-				= FavoritesVFS.getFavorites();
+			VFSFile[] favorites = FavoritesVFS.getFavorites();
 			if(favorites.length == 0)
 			{
 				mi = new JMenuItem(
@@ -1400,16 +1403,15 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					sortIgnoreCase));
 				for(int i = 0; i < favorites.length; i++)
 				{
-					VFS.DirectoryEntry favorite
-						= favorites[i];
-					mi = new JMenuItem(favorite.path);
+					VFSFile favorite = favorites[i];
+					mi = new JMenuItem(favorite.getPath());
 					mi.setIcon(FileCellRenderer
 						.getIconForFile(
 						favorite,false));
-					String cmd = (favorite.type ==
-						VFS.DirectoryEntry.FILE
+					String cmd = (favorite.getType() ==
+						VFSFile.FILE
 						? "file@" : "dir@")
-						+ favorite.path;
+						+ favorite.getPath();
 					mi.setActionCommand(cmd);
 					mi.addActionListener(actionHandler);
 					popup.add(mi);
@@ -1427,7 +1429,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				{
 					// if any directories are selected, add
 					// them, otherwise add current directory
-					VFS.DirectoryEntry[] selected = getSelectedFiles();
+					VFSFile[] selected = getSelectedFiles();
 					if(selected == null || selected.length == 0)
 					{
 						if(path.equals(FavoritesVFS.PROTOCOL + ":"))
@@ -1439,16 +1441,16 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						else
 						{
 							FavoritesVFS.addToFavorites(path,
-								VFS.DirectoryEntry.DIRECTORY);
+								VFSFile.DIRECTORY);
 						}
 					}
 					else
 					{
 						for(int i = 0; i < selected.length; i++)
 						{
-							VFS.DirectoryEntry file
-								= selected[i];
-							FavoritesVFS.addToFavorites(file.path,file.type);
+							VFSFile file = selected[i];
+							FavoritesVFS.addToFavorites(file.getPath(),
+								file.getType());
 						}
 					}
 				}
@@ -1517,8 +1519,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				return;
 			}
 
-			VFS.DirectoryEntry[] list = (VFS.DirectoryEntry[])
-				loadInfo[1];
+			VFSFile[] list = (VFSFile[])loadInfo[1];
 
 			if(node == null)
 			{
@@ -1555,23 +1556,23 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			{
 				for(int i = 0; i < list.length; i++)
 				{
-					VFS.DirectoryEntry file = list[i];
-					if(file.hidden && !showHiddenFiles)
+					VFSFile file = list[i];
+					if(file.isHidden() && !showHiddenFiles)
 					{
 						invisible++;
 						continue;
 					}
 
-					if(file.type == VFS.DirectoryEntry.FILE
+					if(file.getType() == VFSFile.FILE
 						&& filterEnabled
 						&& filenameFilter != null
-						&& !filenameFilter.isMatch(file.name))
+						&& !filenameFilter.isMatch(file.getName()))
 					{
 						invisible++;
 						continue;
 					}
 
-					if(file.type == VFS.DirectoryEntry.FILE)
+					if(file.getType() == VFSFile.FILE)
 						files++;
 					else
 						directories++;
@@ -1616,7 +1617,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		 * this is the currently selected files there. Otherwise, this
 		 * is the currently selected item in the parent directory list.
 		 */
-		private VFS.DirectoryEntry[] getSelectedFiles(EventObject evt,
+		private VFSFile[] getSelectedFiles(EventObject evt,
 			VFSBrowser browser)
 		{
 			Component source = (Component)evt.getSource();
@@ -1627,8 +1628,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				Object[] selected = browser.getBrowserView()
 					.getParentDirectoryList()
 					.getSelectedValues();
-				VFS.DirectoryEntry[] returnValue
-					= new VFS.DirectoryEntry[
+				VFSFile[] returnValue = new VFSFile[
 					selected.length];
 				System.arraycopy(selected,0,returnValue,0,
 					selected.length);
@@ -1647,8 +1647,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				(Component)evt.getSource(),
 				VFSBrowser.class);
 
-			VFS.DirectoryEntry[] files = getSelectedFiles(evt,
-				browser);
+			VFSFile[] files = getSelectedFiles(evt,browser);
 
 			// in the future we will want something better,
 			// eg. having an 'evt' object passed to

@@ -30,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -63,9 +64,9 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		{
 			VFSDirectoryEntryTableModel.Entry entry =
 				(VFSDirectoryEntryTableModel.Entry)value;
-			VFS.DirectoryEntry file = entry.dirEntry;
+			VFSFile file = entry.dirEntry;
 
-			setFont(file.type == VFS.DirectoryEntry.FILE
+			setFont(file.getType() == VFSFile.FILE
 				? plainFont : boldFont);
 
 			this.isSelected = isSelected;
@@ -77,19 +78,19 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				// symlinkPath, some older plugins
 				// might...
 				String path;
-				if(file.symlinkPath == null)
-					path = file.path;
+				if(file.getSymlinkPath() == null)
+					path = file.getPath();
 				else
-					path = file.symlinkPath;
+					path = file.getSymlinkPath();
 				openBuffer = (jEdit._getBuffer(path) != null);
 
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded,
 					openBuffer) : null);
-				setText(file.name);
+				setText(file.getName());
 
 				int state;
-				if(file.type == VFS.DirectoryEntry.FILE)
+				if(file.getType() == VFSFile.FILE)
 					state = ExpansionToggleBorder.STATE_NONE;
 				else if(entry.expanded)
 					state = ExpansionToggleBorder.STATE_EXPANDED;
@@ -155,22 +156,22 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 	//{{{ getIconForFile() method
 	/**
-	 * @since jEdit 4.2pre7
+	 * @since jEdit 4.3pre2
 	 */
-	public static Icon getIconForFile(VFS.DirectoryEntry file,
+	public static Icon getIconForFile(VFSFile file,
 		boolean expanded)
 	{
 		return getIconForFile(file,expanded,
-			jEdit._getBuffer(file.symlinkPath) != null);
+			jEdit._getBuffer(file.getSymlinkPath()) != null);
 	} //}}}
 
 	//{{{ getIconForFile() method
-	public static Icon getIconForFile(VFS.DirectoryEntry file,
+	public static Icon getIconForFile(VFSFile file,
 		boolean expanded, boolean openBuffer)
 	{
-		if(file.type == VFS.DirectoryEntry.DIRECTORY)
+		if(file.getType() == VFSFile.DIRECTORY)
 			return (expanded ? openDirIcon : dirIcon);
-		else if(file.type == VFS.DirectoryEntry.FILESYSTEM)
+		else if(file.getType() == VFSFile.FILESYSTEM)
 			return filesystemIcon;
 		else if(openBuffer)
 			return openFileIcon;
@@ -193,7 +194,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	int getEntryWidth(VFSDirectoryEntryTableModel.Entry entry,
 		Font font, FontRenderContext fontRenderContext)
 	{
-		String name = entry.dirEntry.name;
+		String name = entry.dirEntry.getName();
 		int width = (int)font.getStringBounds(name,fontRenderContext)
 			.getWidth();
 		width += ExpansionToggleBorder.ICON_WIDTH
@@ -212,7 +213,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	//{{{ Private members
 	private boolean openBuffer;
 	private boolean isSelected;
-	private VFS.DirectoryEntry file;
+	private VFSFile file;
 	//}}}
 
 	//{{{ ExpansionToggleBorder class

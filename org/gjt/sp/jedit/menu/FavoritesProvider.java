@@ -62,8 +62,7 @@ public class FavoritesProvider implements DynamicMenuProvider
 			}
 		}; //}}}
 
-		VFS.DirectoryEntry[] favorites
-			= FavoritesVFS.getFavorites();
+		VFSFile[] favorites = FavoritesVFS.getFavorites();
 		if(favorites.length == 0)
 		{
 			JMenuItem mi = new JMenuItem(
@@ -81,14 +80,13 @@ public class FavoritesProvider implements DynamicMenuProvider
 				jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase")));
 			for(int i = 0; i < favorites.length; i++)
 			{
-				VFS.DirectoryEntry favorite
-					= favorites[i];
-				JMenuItem mi = new JMenuItem(favorite.path);
+				VFSFile favorite = favorites[i];
+				JMenuItem mi = new JMenuItem(
+					favorite.getPath());
 				mi.setIcon(FileCellRenderer
 					.getIconForFile(
 					favorite,false));
-				if(favorite.type ==
-					VFS.DirectoryEntry.FILE)
+				if(favorite.getType() == VFSFile.FILE)
 				{
 					mi.addActionListener(fileListener);
 				}

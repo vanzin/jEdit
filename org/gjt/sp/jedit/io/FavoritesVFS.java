@@ -61,19 +61,19 @@ public class FavoritesVFS extends VFS
 		return PROTOCOL + ":";
 	} //}}}
 
-	//{{{ _listDirectory() method
-	public VFS.DirectoryEntry[] _listDirectory(Object session, String url,
+	//{{{ _listFiles() method
+	public VFSFile[] _listFiles(Object session, String url,
 		Component comp)
 	{
 		return getFavorites();
 	} //}}}
 
-	//{{{ _getDirectoryEntry() method
-	public DirectoryEntry _getDirectoryEntry(Object session, String path,
+	//{{{ _getFile() method
+	public VFSFile _getFile(Object session, String path,
 		Component comp)
 	{
 		// does it matter that this doesn't set the type correctly?
-		return new FavoritesEntry(path,VFS.DirectoryEntry.DIRECTORY);
+		return new Favorite(path,VFSFile.DIRECTORY);
 	} //}}}
 
 	//{{{ _delete() method
@@ -86,7 +86,8 @@ public class FavoritesVFS extends VFS
 			Iterator iter = favorites.iterator();
 			while(iter.hasNext())
 			{
-				if(((FavoritesEntry)iter.next()).path.equals(path))
+				if(((Favorite)iter.next()).getPath()
+					.equals(path))
 				{
 					iter.remove();
 					VFSManager.sendVFSUpdate(this,PROTOCOL
@@ -112,10 +113,10 @@ public class FavoritesVFS extends VFS
 			int i = 0;
 			while((favorite = jEdit.getProperty("vfs.favorite." + i)) != null)
 			{
-				favorites.add(new FavoritesEntry(favorite,
+				favorites.add(new Favorite(favorite,
 					jEdit.getIntegerProperty("vfs.favorite."
 					+ i + ".type",
-					VFS.DirectoryEntry.DIRECTORY)));
+					VFSFile.DIRECTORY)));
 				i++;
 			}
 		}
@@ -132,11 +133,11 @@ public class FavoritesVFS extends VFS
 			Iterator iter = favorites.iterator();
 			while(iter.hasNext())
 			{
-				if(((FavoritesEntry)iter.next()).path.equals(path))
+				if(((Favorite)iter.next()).getPath().equals(path))
 					return;
 			}
 
-			favorites.add(new FavoritesEntry(path,type));
+			favorites.add(new Favorite(path,type));
 
 			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
 			EditBus.send(new DynamicMenuChanged("favorites"));
@@ -155,12 +156,11 @@ public class FavoritesVFS extends VFS
 			Iterator iter = favorites.iterator();
 			while(iter.hasNext())
 			{
-				FavoritesEntry e = ((FavoritesEntry)
-					iter.next());
+				Favorite e = ((Favorite)iter.next());
 				jEdit.setProperty("vfs.favorite." + i,
-					e.path);
+					e.getPath());
 				jEdit.setIntegerProperty("vfs.favorite." + i
-					+ ".type",e.type);
+					+ ".type",e.getType());
 
 				i++;
 			}
@@ -171,15 +171,15 @@ public class FavoritesVFS extends VFS
 	} //}}}
 
 	//{{{ getFavorites() method
-	public static VFS.DirectoryEntry[] getFavorites()
+	public static VFSFile[] getFavorites()
 	{
 		synchronized(lock)
 		{
 			if(favorites == null)
 				loadFavorites();
 
-			return (VFS.DirectoryEntry[])favorites.toArray(
-				new VFS.DirectoryEntry[favorites.size()]);
+			return (VFSFile[])favorites.toArray(
+				new VFSFile[favorites.size()]);
 		}
 	} //}}}
 
@@ -189,10 +189,10 @@ public class FavoritesVFS extends VFS
 	private static List favorites;
 	//}}}
 
-	//{{{ FavoritesEntry class
-	static class FavoritesEntry extends VFS.DirectoryEntry
+	//{{{ Favorite class
+	static class Favorite extends VFSFile
 	{
-		FavoritesEntry(String path, int type)
+		Favorite(String path, int type)
 		{
 			super(path,path,PROTOCOL + ":" + path,type,0,false);
 		}

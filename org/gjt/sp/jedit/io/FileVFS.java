@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1998, 2005 Slava Pestov
  * Portions copyright (C) 1998, 1999, 2000 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+import javax.swing.filechooser.FileSystemView;
 import java.awt.Component;
 import java.io.*;
 import java.text.*;
@@ -159,23 +160,32 @@ public class FileVFS extends VFS
 		return MiscUtilities.canonPath(path);
 	} //}}}
 
-	//{{{ LocalDirectoryEntry class
-	public static class LocalDirectoryEntry extends VFS.DirectoryEntry
+	//{{{ LocalFile class
+	public static class LocalFile extends VFSFile
 	{
+		private File file;
+
 		// use system default short format
 		public static DateFormat DATE_FORMAT
 			= DateFormat.getInstance();
 
+		/**
+		 * @deprecated Call getModified() instead.
+		 */
 		public long modified;
 
-		public LocalDirectoryEntry(File file)
+		public LocalFile(File file)
 		{
-			super(file.getName(),file.getPath(),
-				file.getPath(),file.isDirectory() ? DIRECTORY : FILE,file.length(),file.isHidden());
-			this.modified = file.lastModified();
-			this.canRead = file.canRead();
-			this.canWrite = file.canWrite();
-			this.symlinkPath = MiscUtilities.resolveSymlinks(path);
+			this.file = file;
+
+			/* These attributes are fetched relatively
+			quickly. The rest are lazily filled in. */
+			setName(file.getName());
+			setPath(file.getPath());
+			setHidden(file.isHidden());
+			setType(file.isDirectory()
+				? VFSFile.DIRECTORY
+				: VFSFile.FILE);
 		}
 
 		public String getExtendedAttribute(String name)
@@ -185,10 +195,59 @@ public class FileVFS extends VFS
 			else
 				return super.getExtendedAttribute(name);
 		}
+		
+		protected void fetchAttrs()
+		{
+			if(fetchedAttrs())
+				return;
+
+			super.fetchAttrs();
+
+			setSymlinkPath(MiscUtilities.resolveSymlinks(
+				file.getPath()));
+			setReadable(file.canRead());
+			setWriteable(file.canWrite());
+			setLength(file.length());
+			setModified(file.lastModified());
+		}
+		
+		public String getSymlinkPath()
+		{
+			fetchAttrs();
+			return super.getSymlinkPath();
+		}
+		
+		public long getLength()
+		{
+			fetchAttrs();
+			return super.getLength();
+		}
+		
+		public boolean isReadable()
+		{
+			fetchAttrs();
+			return super.isReadable();
+		}
+		
+		public boolean isWriteable()
+		{
+			fetchAttrs();
+			return super.isWriteable();
+		}
+
+		public long getModified()
+		{
+			return modified;
+		}
+
+		public void setModified(long modified)
+		{
+			this.modified = modified;
+		}
 	} //}}}
 
-	//{{{ _listDirectory() method
-	public VFS.DirectoryEntry[] _listDirectory(Object session, String path,
+	//{{{ _listFiles() method
+	public VFSFile[] _listFiles(Object session, String path,
 		Component comp)
 	{
 		//{{{ Windows work around
@@ -207,22 +266,22 @@ public class FileVFS extends VFS
 		} //}}}
 
 		File directory = new File(path);
-		File[] list = directory.listFiles();
+		File[] list = fsView.getFiles(directory,false);
 		if(list == null)
 		{
 			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);
 			return null;
 		}
 
-		VFS.DirectoryEntry[] list2 = new VFS.DirectoryEntry[list.length];
+		VFSFile[] list2 = new VFSFile[list.length];
 		for(int i = 0; i < list.length; i++)
-			list2[i] = new LocalDirectoryEntry(list[i]);
+			list2[i] = new LocalFile(list[i]);
 
 		return list2;
 	} //}}}
 
-	//{{{ _getDirectoryEntry() method
-	public DirectoryEntry _getDirectoryEntry(Object session, String path,
+	//{{{ _getFile() method
+	public VFSFile _getFile(Object session, String path,
 		Component comp)
 	{
 		if(path.equals("/") && OperatingSystem.isUnix())
@@ -235,7 +294,7 @@ public class FileVFS extends VFS
 		if(!file.exists())
 			return null;
 
-		return new LocalDirectoryEntry(file);
+		return new LocalFile(file);
 	} //}}}
 
 	//{{{ _delete() method
@@ -507,5 +566,9 @@ public class FileVFS extends VFS
 		}
 	} //}}}
 
+	//}}}
+
+	//{{{ Private members
+	private static FileSystemView fsView = FileSystemView.getFileSystemView();
 	//}}}
 }
