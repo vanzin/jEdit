@@ -2027,6 +2027,7 @@ plugin-manager.dependency.message=One or more plugins you are installing \
 	depend on this plugin.\nAre you sure you don't want to install it?
 
 plugin-manager.status.loaded=Loaded
+plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error
 
 #{{{ Plugin list download progress
@@ -2054,7 +2055,7 @@ plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
 #{{{ Plugin management
 manage-plugins.title=Manage
 
-manage-plugins.info.enabled=
+manage-plugins.info.enabled=Enabled
 manage-plugins.info.name=Name
 manage-plugins.info.version=Version
 manage-plugins.info.status=Status

@@ -58,7 +58,7 @@ public class DisplayManager
 		while(liter.hasNext())
 		{
 			dmgr = (DisplayManager)liter.next();
-			if(!dmgr.inUse)
+			if(!dmgr.inUse && dmgr.textArea == textArea)
 			{
 				dmgr.inUse = true;
 				return dmgr;

@@ -3,6 +3,9 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- merge C+e C+e & C+e C+j
+- vfs dialog: browser should send focus back to text field
+- dir search: no progress msg!
 - delete: no vfs update
 - close dockable fucks up because C+e sends focus to the text area
 - isn't fsb dir search supposed to use selected file's extension?

@@ -1198,11 +1198,10 @@ public class GUIUtilities
 			if(y + offsetY + size.height + win.getY() > screenSize.height
 				&& y + offsetY + win.getY() >= size.height)
 			{
-				//System.err.println("y overflow");
 				if(point)
 					y = (win.getHeight() - size.height - offsetY + extraOffset);
 				else
-					y = comp.getY() - size.height - 1;
+					y = -size.height - 1;
 			}
 			else
 			{
