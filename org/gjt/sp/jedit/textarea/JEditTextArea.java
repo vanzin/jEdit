@@ -550,7 +550,6 @@ public class JEditTextArea extends JComponent
 		}
 
 		int lineCount = getVirtualLineCount();
-		int _lastLine = firstLine + visibleLines;
 
 		int electricScroll;
 
@@ -562,7 +561,10 @@ public class JEditTextArea extends JComponent
 		boolean changed = false;
 
 		int _firstLine = (firstLine == 0 ? 0 : firstLine + electricScroll);
-		if(virtualCaretLine > _firstLine && (virtualCaretLine < _lastLine
+		int _lastLine = firstLine + visibleLines - electricScroll;
+
+		if(virtualCaretLine > _firstLine
+			&& (virtualCaretLine < _lastLine
 			|| firstLine + visibleLines >= lineCount))
 		{
 			// vertical scroll position is correct already
@@ -627,6 +629,7 @@ public class JEditTextArea extends JComponent
 
 		if(changed)
 		{
+			System.err.println("changed");
 			if(firstLine < 0)
 				firstLine = 0;
 

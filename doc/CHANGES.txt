@@ -15,10 +15,10 @@ JEDIT 4.0 VERSION HISTORY
 
 - Fixed a memory leak with the search and replace dialog box
 - Undo would be broken after a file was reloaded
-- Some files would appear with only the first line visible
 - Fixed exception thrown if a buffer contained definitions for integer
   properties (tab size, maximum line length, ...)
 - Changing the gutter font didn't update the gutter width
+- Fixed broken scrolling behavior
 
 * Version 4.0pre1
 
