@@ -1847,7 +1847,7 @@ vfs.browser.status.ro=Read only
 vfs.browser.status.append=Append only
 vfs.browser.status.rw=Read/write
 vfs.browser.size=Use EA_SIZE_OR_TYPE instead
-vfs.browser.size-type=Size
+vfs.browser.size-type=Size/Type
 vfs.browser.modified=Last modified
 
 #{{{ Commands menu

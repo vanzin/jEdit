@@ -228,22 +228,7 @@ public class DockableWindowManager extends JPanel
 			retVal[i++] = factory.name;
 		}
 
-		Arrays.sort(retVal,new DockableWindowCompare());
 		return retVal;
-	} //}}}
-
-	//{{{ DockableWindowCompare class
-	static class DockableWindowCompare implements Comparator
-	{
-		public int compare(Object o1, Object o2)
-		{
-			String name1 = (o1 instanceof Factory ? ((Factory)o1).name : (String)o1);
-			String name2 = (o2 instanceof Factory ? ((Factory)o2).name : (String)o2);
-			return MiscUtilities.compareStrings(
-				jEdit.getProperty(name1 + ".title",""),
-				jEdit.getProperty(name2 + ".title",""),
-				true);
-		}
 	} //}}}
 
 	//{{{ DockableListHandler class
@@ -624,15 +609,15 @@ public class DockableWindowManager extends JPanel
 		bottom = new PanelWindowContainer(this,BOTTOM,config.bottomPos);
 		right = new PanelWindowContainer(this,RIGHT,config.rightPos);
 
-		add(DockableLayout.TOP_BUTTONS,top.getButtonBox());
-		add(DockableLayout.LEFT_BUTTONS,left.getButtonBox());
-		add(DockableLayout.BOTTOM_BUTTONS,bottom.getButtonBox());
-		add(DockableLayout.RIGHT_BUTTONS,right.getButtonBox());
+		add(DockableLayout.TOP_BUTTONS,top.buttonPanel);
+		add(DockableLayout.LEFT_BUTTONS,left.buttonPanel);
+		add(DockableLayout.BOTTOM_BUTTONS,bottom.buttonPanel);
+		add(DockableLayout.RIGHT_BUTTONS,right.buttonPanel);
 
-		add(TOP,top.getDockablePanel());
-		add(LEFT,left.getDockablePanel());
-		add(BOTTOM,bottom.getDockablePanel());
-		add(RIGHT,right.getDockablePanel());
+		add(TOP,top.dockablePanel);
+		add(LEFT,left.dockablePanel);
+		add(BOTTOM,bottom.dockablePanel);
+		add(RIGHT,right.dockablePanel);
 	} //}}}
 
 	//{{{ init() method
@@ -653,7 +638,28 @@ public class DockableWindowManager extends JPanel
 				e = new Entry(factory,FLOATING,true);
 			}
 			else
+			{
 				e = new Entry(factory);
+				if(e.position.equals(FLOATING))
+					/* nothing to do */;
+				else if(e.position.equals(TOP))
+					e.container = top;
+				else if(e.position.equals(LEFT))
+					e.container = left;
+				else if(e.position.equals(BOTTOM))
+					e.container = bottom;
+				else if(e.position.equals(RIGHT))
+					e.container = right;
+				else
+				{
+					Log.log(Log.WARNING,this,
+						"Unknown position: "
+						+ e.position);
+				}
+
+				if(e.container != null)
+					e.container.register(e);
+			}
 			windows.put(factory.name,e);
 		}
 	} //}}}
@@ -720,8 +726,8 @@ public class DockableWindowManager extends JPanel
 
 	//{{{ addDockableWindow() method
 	/**
-	 * Opens the specified dockable window. As of version 4.0pre1, has the same
-	 * effect as calling showDockableWindow().
+	 * Opens the specified dockable window. As of jEdit 4.0pre1, has the
+	 * same effect as calling showDockableWindow().
 	 * @param name The dockable window name
 	 * @since jEdit 2.6pre3
 	 */
@@ -730,13 +736,13 @@ public class DockableWindowManager extends JPanel
 		showDockableWindow(name);
 	} //}}}
 
-	//{{{ removeDockableWindow() method
+	//{{{ hideDockableWindow() method
 	/**
-	 * Removes the specified dockable window.
+	 * Hides the specified dockable window.
 	 * @param name The dockable window name
 	 * @since jEdit 2.6pre3
 	 */
-	public void removeDockableWindow(String name)
+	public void hideDockableWindow(String name)
 	{
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
@@ -758,6 +764,18 @@ public class DockableWindowManager extends JPanel
 		}
 		else
 			entry.container.show(null);
+	} //}}}
+
+	//{{{ removeDockableWindow() method
+	/**
+	 * Hides the specified dockable window. As of jEdit 4.2pre1, has the
+	 * same effect as calling hideDockableWindow().
+	 * @param name The dockable window name
+	 * @since jEdit 4.2pre1
+	 */
+	public void removeDockableWindow(String name)
+	{
+		hideDockableWindow(name);
 	} //}}}
 
 	//{{{ toggleDockableWindow() method
@@ -1053,8 +1071,7 @@ public class DockableWindowManager extends JPanel
 
 			String newPosition = jEdit.getProperty(dockable
 				+ ".dock-position",FLOATING);
-			if(FLOATING.equals(newPosition)
-				&& FLOATING.equals(entry.position))
+			if(newPosition.equals(entry.position))
 			{
 				continue;
 			}
@@ -1080,11 +1097,21 @@ public class DockableWindowManager extends JPanel
 				else if(newPosition.equals(RIGHT))
 					entry.container = right;
 				else
-					throw new InternalError("Unknown position: " + newPosition);
+				{
+					Log.log(Log.WARNING,this,
+						"Unknown position: "
+						+ newPosition);
+					continue;
+				}
 
 				entry.container.register(entry);
 			}
 		}
+
+		top.sortDockables();
+		left.sortDockables();
+		bottom.sortDockables();
+		right.sortDockables();
 
 		revalidate();
 		repaint();
@@ -1104,36 +1131,60 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ Package-private members
+	int resizePos;
 	Rectangle resizeRect;
 
 	//{{{ setResizePos() method
-	void setResizePos(PanelWindowContainer resizing, int resizePos)
+	void setResizePos(PanelWindowContainer resizing)
 	{
+		if(resizePos < 0)
+			resizePos = 0;
+
 		Rectangle newResizeRect = new Rectangle(0,0,
 			PanelWindowContainer.SPLITTER_WIDTH - 2,
 			PanelWindowContainer.SPLITTER_WIDTH - 2);
 		if(resizing == top)
 		{
+			resizePos = Math.min(resizePos,getHeight()
+				- top.buttonPanel.getHeight()
+				- bottom.dockablePanel.getHeight()
+				- bottom.buttonPanel.getHeight()
+				- PanelWindowContainer.SPLITTER_WIDTH);
 			newResizeRect.x = top.dockablePanel.getX() + 1;
-			newResizeRect.y = resizePos + top.buttons.getHeight() + 1;
+			newResizeRect.y = resizePos + top.buttonPanel.getHeight() + 1;
 			newResizeRect.width = top.dockablePanel.getWidth() - 2;
 		}
 		else if(resizing == left)
 		{
-			newResizeRect.x = resizePos + left.buttons.getWidth() + 1;
+			resizePos = Math.min(resizePos,getWidth()
+				- left.buttonPanel.getWidth()
+				- right.dockablePanel.getWidth()
+				- right.buttonPanel.getWidth()
+				- PanelWindowContainer.SPLITTER_WIDTH);
+			newResizeRect.x = resizePos + left.buttonPanel.getWidth() + 1;
 			newResizeRect.y = left.dockablePanel.getY() + 1;
 			newResizeRect.height = left.dockablePanel.getHeight() - 2;
 		}
 		else if(resizing == bottom)
 		{
+			resizePos = Math.min(resizePos,getHeight()
+				- bottom.buttonPanel.getHeight()
+				- top.dockablePanel.getHeight()
+				- top.buttonPanel.getHeight()
+				- PanelWindowContainer.SPLITTER_WIDTH);
 			newResizeRect.x = bottom.dockablePanel.getX() + 1;
-			newResizeRect.y = getHeight() - bottom.buttons.getHeight() - resizePos
+			newResizeRect.y = getHeight() - bottom.buttonPanel.getHeight() - resizePos
 				- PanelWindowContainer.SPLITTER_WIDTH + 2;
 			newResizeRect.width = bottom.dockablePanel.getWidth() - 2;
 		}
 		else if(resizing == right)
 		{
-			newResizeRect.x = getWidth() - right.buttons.getWidth() - resizePos
+			resizePos = Math.min(resizePos,getWidth()
+				- right.buttonPanel.getWidth()
+				- left.dockablePanel.getWidth()
+				- left.buttonPanel.getWidth()
+				- PanelWindowContainer.SPLITTER_WIDTH);
+			newResizeRect.x = getWidth() - right.buttonPanel.getWidth() - resizePos
 				- PanelWindowContainer.SPLITTER_WIDTH + 1;
 			newResizeRect.y = right.dockablePanel.getY() + 1;
 			newResizeRect.height = right.dockablePanel.getHeight() - 2;
@@ -1481,6 +1532,9 @@ public class DockableWindowManager extends JPanel
 
 		// only set if open
 		JComponent win;
+
+		// only for docked
+		AbstractButton btn;
 
 		//{{{ Entry constructor
 		Entry(Factory factory)

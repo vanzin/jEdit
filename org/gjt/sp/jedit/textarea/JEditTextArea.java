@@ -1765,7 +1765,7 @@ forward_scan:		do
 	 */
 	public void extendSelection(int offset, int end)
 	{
-		extendSelection(offset,end,0);
+		extendSelection(offset,end,0,0);
 	} //}}}
 
 	//{{{ extendSelection() method
@@ -1776,16 +1776,16 @@ forward_scan:		do
 	 * selection in question, instead of replacing it.
 	 * @param offset The offset
 	 * @param end The new selection end
+	 * @param extraStartVirt Extra virtual space at the start
 	 * @param extraEndVirt Extra virtual space at the end
 	 * @since jEdit 4.2pre1
 	 */
-	public void extendSelection(int offset, int end, int extraEndVirt)
+	public void extendSelection(int offset, int end,
+		int extraStartVirt, int extraEndVirt)
 	{
-		boolean rect;
 		Selection s = getSelectionAtOffset(offset);
 		if(s != null)
 		{
-			rect = (s instanceof Selection.Rect);
 			invalidateLineRange(s.startLine,s.endLine);
 			selection.removeElement(s);
 
@@ -1799,8 +1799,6 @@ forward_scan:		do
 				offset = s.start;
 			}
 		}
-		else
-			rect = rectangularSelectionMode;
 
 		if(end < offset)
 		{
@@ -1809,17 +1807,19 @@ forward_scan:		do
 			offset = tmp;
 		}
 
-		if(rect)
+		if(rectangularSelectionMode)
 		{
 			s = new Selection.Rect(offset,end);
+			((Selection.Rect)s).extraStartVirt = extraStartVirt;
 			((Selection.Rect)s).extraEndVirt = extraEndVirt;
 		}
 		else
 			s = new Selection.Range(offset,end);
+
 		_addToSelection(s);
 		fireCaretEvent();
 
-		if(rect && extraEndVirt != 0)
+		if(rectangularSelectionMode && extraEndVirt != 0)
 		{
 			int line = getLineOfOffset(end);
 			scrollTo(line,getLineLength(line) + extraEndVirt,false);
@@ -2129,7 +2129,8 @@ forward_scan:		do
 
 			if(!displayManager.isLineVisible(newCaretLine))
 			{
-				if(displayManager.isNarrowed())
+				if(newCaretLine < displayManager.getFirstVisibleLine()
+					|| newCaretLine > displayManager.getLastVisibleLine())
 				{
 					int collapseFolds = buffer.getIntegerProperty(
 						"collapseFolds",0);
@@ -2323,18 +2324,29 @@ loop:		for(int i = 0; i < text.length(); i++)
 			}
 		}
 
-		int extraEndVirt;
+		int extraStartVirt, extraEndVirt;
 		if(s instanceof Selection.Rect)
+		{
+			extraStartVirt = ((Selection.Rect)s).extraStartVirt;
 			extraEndVirt = ((Selection.Rect)s).extraEndVirt;
+		}
 		else
+		{
+			extraStartVirt = 0;
 			extraEndVirt = 0;
+		}
 
 		int newCaret = caret;
 
 		if(select && caret == buffer.getLength())
 		{
 			if(rectangularSelectionMode || s instanceof Selection.Rect)
-				extraEndVirt++;
+			{
+				if(caret == s.start)
+					extraStartVirt++;
+				else
+					extraEndVirt++;
+			}
 			else
 			{
 				getToolkit().beep();
@@ -2344,7 +2356,12 @@ loop:		for(int i = 0; i < text.length(); i++)
 		else if(caret == getLineEndOffset(caretLine) - 1)
 		{
 			if(rectangularSelectionMode || s instanceof Selection.Rect)
-				extraEndVirt++;
+			{
+				if(caret == s.start)
+					extraStartVirt++;
+				else
+					extraEndVirt++;
+			}
 			else
 			{
 				int line = displayManager.getNextVisibleLine(caretLine);
@@ -2361,7 +2378,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 			newCaret = caret + 1;
 
 		if(select)
-			extendSelection(caret,newCaret,extraEndVirt);
+			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
 		else if(!multi)
 			selectNone();
 
@@ -2375,9 +2392,13 @@ loop:		for(int i = 0; i < text.length(); i++)
 	 */
 	public void goToNextLine(boolean select)
 	{
+		Selection s = getSelectionAtOffset(caret);
+		boolean rectSelect = (s == null ? rectangularSelectionMode
+			: s instanceof Selection.Rect);
 		int magic = getMagicCaretPosition();
 		int newCaret = chunkCache.getBelowPosition(caretLine,
-			caret - buffer.getLineStartOffset(caretLine),magic + 1);
+			caret - buffer.getLineStartOffset(caretLine),magic + 1,
+			rectSelect && select);
 		if(newCaret == -1)
 		{
 			int end = getLineEndOffset(caretLine) - 1;
@@ -2392,15 +2413,22 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(select)
 		{
-			int extraEndVirt = getExtraEndVirt(caret,newCaret);
-			if(extraEndVirt < 0)
+			System.err.println(caret + ":" + newCaret);
+			RectParams params = getRectParams(caret,newCaret);
+			int extraStartVirt;
+			int extraEndVirt;
+			if(params == null)
 			{
-				newCaret = getLineStartOffset(getLineOfOffset(newCaret)) - extraEndVirt;
+				extraStartVirt = 0;
 				extraEndVirt = 0;
 			}
-			else if(extraEndVirt > 0)
-				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - 1;
-			extendSelection(caret,newCaret,extraEndVirt);
+			else
+			{
+				extraStartVirt = params.extraStartVirt;
+				extraEndVirt = params.extraEndVirt;
+				newCaret = params.newCaret;
+			}
+			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
 		}
 		else if(!multi)
 			selectNone();
@@ -2633,6 +2661,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			}
 		}
 
+		int extraStartVirt = 0;
 		int extraEndVirt = 0;
 		int newCaret = caret;
 
@@ -2640,11 +2669,22 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		{
 			if(s instanceof Selection.Rect)
 			{
+				extraStartVirt = ((Selection.Rect)s).extraStartVirt;
 				extraEndVirt = ((Selection.Rect)s).extraEndVirt;
-				if(extraEndVirt == 0)
-					newCaret = caret - 1;
+				if(caret == s.start)
+				{
+					if(extraStartVirt == 0)
+						newCaret = caret - 1;
+					else
+						extraStartVirt--;
+				}
 				else
-					extraEndVirt--;
+				{
+					if(extraEndVirt == 0)
+						newCaret = caret - 1;
+					else
+						extraEndVirt--;
+				}
 			}
 			else
 				newCaret = caret - 1;
@@ -2663,7 +2703,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 			newCaret = caret - 1;
 
 		if(select)
-			extendSelection(caret,newCaret,extraEndVirt);
+			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
 		else if(!multi)
 			selectNone();
 		moveCaretPosition(newCaret);
@@ -2676,10 +2716,14 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	 */
 	public void goToPrevLine(boolean select)
 	{
+		Selection s = getSelectionAtOffset(caret);
+		boolean rectSelect = (s == null ? rectangularSelectionMode
+			: s instanceof Selection.Rect);
 		int magic = getMagicCaretPosition();
 
 		int newCaret = chunkCache.getAbovePosition(caretLine,
-			caret - buffer.getLineStartOffset(caretLine),magic + 1);
+			caret - buffer.getLineStartOffset(caretLine),magic + 1,
+			rectSelect && select);
 		if(newCaret == -1)
 		{
 			int start = getLineStartOffset(caretLine);
@@ -2694,15 +2738,21 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		if(select)
 		{
-			int extraEndVirt = getExtraEndVirt(caret,newCaret);
-			if(extraEndVirt < 0)
+			RectParams params = getRectParams(caret,newCaret);
+			int extraStartVirt;
+			int extraEndVirt;
+			if(params == null)
 			{
-				newCaret = getLineStartOffset(getLineOfOffset(newCaret)) - extraEndVirt;
+				extraStartVirt = 0;
 				extraEndVirt = 0;
 			}
-			else if(extraEndVirt > 0)
-				newCaret = getLineEndOffset(getLineOfOffset(newCaret)) - 1;
-			extendSelection(caret,newCaret,extraEndVirt);
+			else
+			{
+				extraStartVirt = params.extraStartVirt;
+				extraEndVirt = params.extraEndVirt;
+				newCaret = params.newCaret;
+			}
+			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
 		}
 		else if(!multi)
 			selectNone();
@@ -5569,16 +5619,42 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		invalidateScreenLineRange(oldScreenLastLine,screenLastLine);
 	} //}}}
 
-	//{{{ getExtraEndVirt() method
-	private int getExtraEndVirt(int caret, int newCaret)
+	//{{{ getRectParams() method
+	static class RectParams
 	{
-		int virtualWidth;
+		int extraStartVirt;
+		int extraEndVirt;
+		int newCaret;
+
+		RectParams(int extraStartVirt, int extraEndVirt, int newCaret)
+		{
+			this.extraStartVirt = extraStartVirt;
+			this.extraEndVirt = extraEndVirt;
+			this.newCaret = newCaret;
+		}
+	}
+
+	/**
+	 * Used when doing S+UP/DOWN to simplify dealing with virtual space.
+	 */
+	private RectParams getRectParams(int caret, int newCaret)
+	{
 		Selection s = getSelectionAtOffset(caret);
+		int virtualWidth;
 		if(s instanceof Selection.Rect)
 		{
-			virtualWidth = buffer.getVirtualWidth(
-				s.endLine,s.end - getLineStartOffset(
-				s.endLine)) + ((Selection.Rect)s).extraEndVirt;
+			if(caret == s.end)
+			{
+				virtualWidth = buffer.getVirtualWidth(
+					s.endLine,s.end - getLineStartOffset(
+					s.endLine)) + ((Selection.Rect)s).extraEndVirt;
+			}
+			else
+			{
+				virtualWidth = buffer.getVirtualWidth(
+					s.startLine,s.start - getLineStartOffset(
+					s.startLine)) + ((Selection.Rect)s).extraStartVirt;
+			}
 		}
 		else if(rectangularSelectionMode)
 		{
@@ -5586,16 +5662,39 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				caretLine,caret - buffer.getLineStartOffset(caretLine));
 		}
 		else
-			return 0;
+			return null;
 
 		int newLine = getLineOfOffset(newCaret);
 		int[] totalVirtualWidth = new int[1];
 		int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
 			virtualWidth,totalVirtualWidth);
 		if(newOffset == -1)
-			return virtualWidth - totalVirtualWidth[0];
+		{
+			int extraVirt = virtualWidth - totalVirtualWidth[0];
+			newCaret = getLineEndOffset(newLine) - 1;
+			RectParams returnValue;
+
+			boolean bias;
+			if(s == null)
+				bias = (newCaret < caret);
+			else if(s.start == caret)
+				bias = (newCaret <= s.end);
+			else if(s.end == caret)
+				bias = (newCaret <= s.start);
+			else
+				bias = false;
+
+			if(bias)
+				returnValue = new RectParams(extraVirt,0,newCaret);
+			else
+				returnValue = new RectParams(0,extraVirt,newCaret);
+			return returnValue;
+		}
 		else
-			return -newOffset;
+		{
+			return new RectParams(0,0,getLineStartOffset(newLine)
+				+ newOffset);
+		}
 	} //}}}
 
 	//}}}
@@ -6078,6 +6177,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			grabFocus();
 			focusedComponent = JEditTextArea.this;
 
+			if(!buffer.isLoaded())
+				return;
+
 			quickCopyDrag = (isQuickCopyEnabled()
 				&& GUIUtilities.isMiddleButton(evt.getModifiers()));
 			int x = evt.getX();
@@ -6143,7 +6245,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			else
 				extraEndVirt = 0;
 
-			if(control)
+			if(isRectangularSelectionEnabled())
 			{
 				int screenLine = (evt.getY() / getPainter()
 					.getFontMetrics().getHeight());
@@ -6161,7 +6263,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					dragStart += whitespace.length();
 				}
 			}
-			else if(evt.isShiftDown())
+
+			if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!
 				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
@@ -6245,38 +6348,39 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				|| (popup != null && popup.isVisible()))
 				return;
 
+			if(!buffer.isLoaded())
+				return;
+
 			if(evt.getY() < 0)
 			{
-				setFirstLine(getFirstLine() - 2);
+				int delta = Math.min(-1,evt.getY()
+					/ painter.getFontMetrics()
+					.getHeight());
+				setFirstLine(getFirstLine() + delta);
 			}
-			else if(evt.getY() >= getHeight())
+			else if(evt.getY() >= painter.getHeight())
 			{
-				setFirstLine(getFirstLine() + 1);
+				int delta = Math.max(1,(evt.getY()
+					- painter.getHeight()) /
+					painter.getFontMetrics()
+					.getHeight());
+				if(lastLinePartial)
+					delta--;
+				setFirstLine(getFirstLine() + delta);
 			}
 
-			if(control && quickCopyDrag)
+			if(quickCopyDrag)
 			{
 				view.getStatus().setMessage(jEdit.getProperty(
 					"view.status.rect-quick-copy"));
 				clearStatus = true;
 			}
-			else if(quickCopyDrag)
-			{
-				view.getStatus().setMessage(jEdit.getProperty(
-					"view.status.quick-copy"));
-				clearStatus = true;
-			}
-			else if(control)
-			{
-				view.getStatus().setMessage(jEdit.getProperty(
-					"view.status.rect-select"));
-				clearStatus = true;
-			}
+			else
 
 			switch(clickCount)
 			{
 			case 1:
-				doSingleDrag(evt,control);
+				doSingleDrag(evt);
 				break;
 			case 2:
 				doDoubleDrag(evt);
@@ -6288,7 +6392,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 
 		//{{{ doSingleDrag() method
-		private void doSingleDrag(MouseEvent evt, boolean rect)
+		private void doSingleDrag(MouseEvent evt)
 		{
 			dragged = true;
 
@@ -6318,7 +6422,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			}
 
-			resizeSelection(dragStart,dot,extraEndVirt,rect);
+			resizeSelection(dragStart,dot,extraEndVirt,
+				isRectangularSelectionEnabled());
 
 			if(quickCopyDrag)
 			{
@@ -6329,7 +6434,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				if(dot != caret)
 					moveCaretPosition(dot,false);
-				if(rect && extraEndVirt != 0)
+				if(isRectangularSelectionEnabled()
+					&& extraEndVirt != 0)
 				{
 					scrollTo(dotLine,dot - buffer.getLineStartOffset(dotLine)
 						+ extraEndVirt,false);

@@ -415,7 +415,7 @@ public class OffsetManager
 		this.endOffsets = endOffsets.getArray();
 		lineInfo = new int[lineCount];
 		for(int i = 0; i < lineInfo.length; i++)
-			lineInfo[i] = VISIBLE_MASK;
+			lineInfo[i] = ((1 << SCREEN_LINES_SHIFT) | VISIBLE_MASK);
 
 		lineContext = new TokenMarker.LineContext[lineCount];
 
