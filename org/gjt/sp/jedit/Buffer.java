@@ -2342,8 +2342,7 @@ public class Buffer
 	 * @return true If indentation took place, false otherwise.
 	 * @since jEdit 4.2pre2
 	 */
-	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
-		boolean canDecreaseIndent)
+	public boolean indentLine(int lineIndex)
 	{
 		getLineText(lineIndex,seg);
 
