@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
+ * Portions copyright (C) 2002 Thomas Dilts
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,8 +187,8 @@ class BufferPrintable implements Printable
 	{
 		Segment seg = new Segment();
 		double y = 0.0;
-		String messageText = jEdit.getProperty("print.status.message",
-		                                      new String[] {(new Integer(pageIndex+1)).toString()});
+		String messageText = jEdit.getProperty("view.status.print",
+			new Object[] { new Integer(pageIndex+1) });
 		view.getStatus().setMessageAndClear(messageText);
 
 		LastPagelineList=new ArrayList();
