@@ -6,6 +6,8 @@ JEDIT 4.0 VERSION HISTORY
 
 - JEditTextArea now uses type-safe buffer property accessors, so there
   shouldn't be any more ClassCastExceptions
+- Fixed stack overflow if attempting to use URL filesystem (to open an
+  http:// URL, for instance)
 
 * Version 4.0pre2
 
