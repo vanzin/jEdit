@@ -86,6 +86,9 @@ contributing to this release.
 - The labels of -toggle and -float actions for dockables were not being
   set correctly.
 
+- Triple clicking to select a line did not place the line in the %
+  register.
+
 }}}
 {{{ API Additions
 

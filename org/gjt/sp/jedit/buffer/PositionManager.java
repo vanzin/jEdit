@@ -94,15 +94,25 @@ public class PositionManager
 		if(gapStartsAt != null)
 		{
 			if(gapStartsAt.offset < offset)
-				root.contentInserted(gapStartsAt.offset,offset,gapWidth);
+			{
+				System.err.println("case 1");
+				root.contentInserted(gapStartsAt.getOffset(),
+					offset - 1,gapWidth);
+			}
 			else
-				root.contentInserted(offset,gapStartsAt.offset,-gapWidth);
+			{
+				System.err.println("case 2");
+				root.contentInserted(offset + 1,
+					gapStartsAt.getOffset() - 1,-gapWidth);
+			}
 		}
 
-		//offset==some pos offset XXX
-
+		System.err.println("lowest=" + lowest);
 		gapStartsAt = lowest;
 		gapWidth += length;
+		if(gapWidth == 0)
+			gapStartsAt = null;
+		System.err.println("gapWidth=" + gapWidth);
 	} //}}}
 
 	//{{{ contentRemoved() method
@@ -114,24 +124,38 @@ public class PositionManager
 			return;
 		}
 
-		/* if(gapWidth != 0 && gapOffset < offset)
+		PosBottomHalf lowest = root.findLowest(offset);
+		if(lowest == null)
+			return;
+
+		if(gapStartsAt != null)
 		{
-			root.contentRemoved(gapOffset,offset,offset + length,
-				gapWidth,true);
-		}
-		else if(gapWidth != 0 && gapOffset > offset + length)
-		{		if(gapWidth != 0 && gapOffset < offset)
-			root.contentRemoved(offset,offset + length,gapOffset,
-				gapWidth,false);
-		}
-		else
-		{
-			root.contentRemoved(offset,offset + length,
-				offset + length,gapWidth,false);
+			if(gapStartsAt.offset < offset)
+			{
+				System.err.println("case 1");
+				root.contentRemoved(gapStartsAt.getOffset(),
+					offset,offset + length,gapWidth,true);
+			}
+			else if(gapStartsAt.offset > offset + length)
+			{
+				System.err.println("case 2");
+				root.contentRemoved(offset,offset + length,
+					gapStartsAt.getOffset() - 1,
+					gapWidth,false);
+			}
+			else
+			{
+				System.err.println("case 3");
+				root.contentRemoved(offset,offset + length,
+					offset + length,gapWidth,false);
+			}
 		}
 
-		gapOffset = offset;
-		gapWidth -= length; */
+		System.err.println("lowest=" + lowest);
+		gapStartsAt = lowest;
+		gapWidth -= length;
+		if(gapWidth == 0)
+			gapStartsAt = null;
 
 	} //}}}
 
@@ -534,8 +558,8 @@ public class PositionManager
 		} //}}}
 
 		//{{{ contentRemoved() method
-		/* if bias: kill from p1 to p2, update from p2 to p3,
-		*  if !bias: update from p1 to p2, kill from p2 to p3 */
+		/* if !bias: kill from p1 to p2, update from p2 to p3,
+		*  if bias: update from p1 to p2, kill from p2 to p3 */
 		void contentRemoved(int p1, int p2, int p3, int length,
 			boolean bias)
 		{
@@ -551,6 +575,7 @@ public class PositionManager
 			}
 			else
 			{
+				System.err.println(this);
 				if(bias)
 				{
 					if(getOffset() >= p2)
