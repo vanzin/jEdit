@@ -13,7 +13,7 @@
 
 <chapter id="simple-macros"><title>A Few Simple Macros</title>
 
- <sect1 id="first-example"><title>The Mandatory First Example</title>
+ <sect1 id="first-example" ><title>The Mandatory First Example</title>
   <informalexample><!-- <title>A first one-line macro</title> -->
    <programlisting>Macros.message(view, "Hello world!");</programlisting>
   </informalexample>
