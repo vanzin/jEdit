@@ -855,6 +855,9 @@ loop:			for(;;)
 
 		int occurCount = 0;
 
+		boolean smartCaseReplace = (TextUtilities.getStringCase(replace)
+			== TextUtilities.LOWER_CASE);
+
 		Segment text = new Segment();
 		int offset = start;
 loop:		for(;;)
@@ -869,7 +872,7 @@ loop:		for(;;)
 
 			String found = new String(text.array,text.offset + _start,_length);
 			String subst = matcher.substitute(found);
-			if(ignoreCase)
+			if(smartCaseReplace && ignoreCase)
 			{
 				int strCase = TextUtilities.getStringCase(found);
 				if(strCase == TextUtilities.LOWER_CASE)
