@@ -569,7 +569,7 @@ view.getInputHandler().readNextChar("Enter a character",
    <programlisting>BeanShell.runScript(view,<replaceable>path</replaceable>,false,false);</programlisting>
    <para>
     For <replaceable>path</replaceable>, you can substitute any string,
-    or a method call such as <method>buffer.getPath()</method>.
+    or a method call such as <function>buffer.getPath()</function>.
    </para>
   </sidebar>
 </sect1>
