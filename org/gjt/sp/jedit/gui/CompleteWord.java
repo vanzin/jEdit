@@ -377,7 +377,7 @@ public class CompleteWord extends JWindow
 			case KeyEvent.VK_BACK_SPACE:
 				if(word.length() == 1)
 				{
-					textArea.backspace();
+					view.getTextArea().backspace();
 					dispose();
 				}
 				else

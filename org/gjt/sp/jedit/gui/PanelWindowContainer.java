@@ -427,6 +427,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		String text;
 		int width;
 		int height;
+		float ascent;
 		RenderingHints renderHints;
 
 		//{{{ RotatedTextIcon constructor
@@ -443,6 +444,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 				fontRenderContext,text);
 			width = (int)glyphs.getLogicalBounds().getWidth();
 			height = (int)glyphs.getLogicalBounds().getHeight();
+
+			LineMetrics lineMetrics = font.getLineMetrics(text,fontRenderContext);
+			ascent = lineMetrics.getAscent();
 
 			renderHints = new RenderingHints(
 				RenderingHints.KEY_ANTIALIASING,
@@ -472,8 +476,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		//{{{ paintIcon() method
 		public void paintIcon(Component c, Graphics g, int x, int y)
 		{
-			FontMetrics fm = c.getFontMetrics(font);
-
 			Graphics2D g2d = (Graphics2D)g;
 			g2d.setFont(font);
 			AffineTransform oldTransform = g2d.getTransform();
@@ -485,7 +487,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ No rotation
 			if(rotate == RotatedTextIcon.NONE)
 			{
-				g2d.drawString(text,x,y + fm.getAscent());
+				g2d.drawString(text,x,y + ascent);
 			} //}}}
 			//{{{ Clockwise rotation
 			else if(rotate == RotatedTextIcon.CW)
@@ -498,7 +500,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				g2d.setTransform(trans);
 				g2d.drawString(text,(height - width) / 2,
 					(width - height) / 2
-					+ fm.getAscent());
+					+ ascent);
 			} //}}}
 			//{{{ Counterclockwise rotation
 			else if(rotate == RotatedTextIcon.CCW)
@@ -511,7 +513,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				g2d.setTransform(trans);
 				g2d.drawString(text,(height - width) / 2,
 					(width - height) / 2
-					+ fm.getAscent());
+					+ ascent);
 			} //}}}
 
 			g2d.setTransform(oldTransform);
