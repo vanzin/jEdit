@@ -1161,8 +1161,13 @@ loop:		for(;;)
 			int scrollLine = 0;
 			while(physicalLine != -1)
 			{
+				int before = scrollLine;
 				updateScreenLineCount(physicalLine);
+				if(before != scrollLine)
+					throw new RuntimeException(this + " nudged");
 				scrollLine += getScreenLineCount(physicalLine);
+				if(getScreenLineCount(physicalLine) == 0)
+					System.err.println(physicalLine);
 				physicalLine = getNextVisibleLine(physicalLine);
 			}
 
@@ -1249,16 +1254,21 @@ loop:		for(;;)
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"reset()");
 
+			int oldPhysicalLine = physicalLine;
+			physicalLine = 0;
 			scrollLine = 0;
 
 			int i = getFirstVisibleLine();
 
 			for(;;)
 			{
-				if(i >= physicalLine)
+				if(i >= oldPhysicalLine)
 					break;
 
+				int before = scrollLine;
 				updateScreenLineCount(i);
+				if(before != scrollLine)
+					throw new RuntimeException(this + " nudged");
 				scrollLine += getScreenLineCount(i);
 
 				int nextLine = getNextVisibleLine(i);
