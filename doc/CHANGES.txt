@@ -69,6 +69,10 @@ release.
 - Contents of filename field in "Save As" dialog box now take precedence
   over the currently selected file in the file list.
 
+- Fixed possible deadlock on startup if jEdit was opening a file stored
+  on a remote server using, say, the FTP plugin and the plugin displayed
+  a modal dialog box.
+
 + API Additions:
 
 - Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).

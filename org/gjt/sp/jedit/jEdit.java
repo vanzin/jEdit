@@ -414,83 +414,8 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
-		//{{{ Open files
-		Buffer buffer = openFiles(null,userDir,args);
-		if(buffer != null)
-		{
-			// files specified on command line; force initial view
-			// to open
-			gui = true;
-		}
-
-		String splitConfig = null;
-
-		if(restore && settingsDirectory != null
-			&& jEdit.getBooleanProperty("restore")
-			&& (bufferCount == 0 || jEdit.getBooleanProperty("restore.cli")))
-		{
-			splitConfig = restoreOpenFiles();
-		}
-
-		if(bufferCount == 0 && gui)
-			newFile(null);
-		//}}}
-
-		//{{{ Create the view and hide the splash screen.
-		final Buffer _buffer = buffer;
-		final String _splitConfig = splitConfig;
-		final boolean _gui = gui;
-
-		GUIUtilities.advanceSplashProgress();
-
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
-				EditBus.send(new EditorStarted(null));
-
-				if(_gui)
-				{
-					View view;
-					if(_buffer != null)
-						view = newView(null,_buffer);
-					else
-						view = newView(null,_splitConfig);
-				}
-
-				// Start I/O threads
-				VFSManager.start();
-
-				// Start edit server
-				if(server != null)
-					server.start();
-
-				GUIUtilities.hideSplashScreen();
-
-				Log.log(Log.MESSAGE,jEdit.class,"Startup "
-					+ "complete");
-
-				//{{{ Report any plugin errors
-				if(pluginErrors != null)
-				{
-					String caption = jEdit.getProperty(
-						"plugin-error.caption" + (pluginErrors.size() == 1
-						? "-1" : ""),new Integer[] {
-						new Integer(pluginErrors.size()) });
-
-					new ErrorListDialog(
-						jEdit.getFirstView(),
-						jEdit.getProperty("plugin-error.title"),
-						caption,pluginErrors,true);
-					pluginErrors.removeAllElements();
-				} //}}}
-
-				// in one case not a single AWT class will
-				// have been touched (splash screen off +
-				// -nogui -nobackground switches on command
-				// line)
-				Toolkit.getDefaultToolkit();
-			}
-		}); //}}}
+		// Open files, create the view and hide the splash screen.
+		finishStartup(gui,restore,userDir,args);
 	} //}}}
 
 	//{{{ Property methods
@@ -1398,12 +1323,12 @@ public class jEdit
 			{
 				int caret = entry.caret;
 				props.put(Buffer.CARET,new Integer(entry.caret));
-				if(entry.selection != null)
+				/* if(entry.selection != null)
 				{
 					// getSelection() converts from string to
 					// Selection[]
 					props.put(Buffer.SELECTION,entry.getSelection());
-				}
+				} */
 			}
 
 			if(entry != null && props.get(Buffer.ENCODING) == null)
@@ -3102,6 +3027,73 @@ public class jEdit
 		{
 			return pw;
 		}
+	} //}}}
+
+	//{{{ finishStartup() method
+	private static void finishStartup(final boolean gui, final boolean restore,
+		final String userDir, final String[] args)
+	{
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				Buffer buffer = openFiles(null,userDir,args);
+
+				String splitConfig = null;
+
+				if(restore && settingsDirectory != null
+					&& jEdit.getBooleanProperty("restore")
+					&& (bufferCount == 0 || jEdit.getBooleanProperty("restore.cli")))
+				{
+					splitConfig = restoreOpenFiles();
+				}
+
+				if(bufferCount == 0 && gui)
+					newFile(null);
+
+				EditBus.send(new EditorStarted(null));
+
+				if(gui || buffer != null)
+				{
+					if(buffer != null)
+						newView(null,buffer);
+					else
+						newView(null,splitConfig);
+				}
+
+				// Start I/O threads
+				VFSManager.start();
+
+				// Start edit server
+				if(server != null)
+					server.start();
+
+				GUIUtilities.hideSplashScreen();
+
+				Log.log(Log.MESSAGE,jEdit.class,"Startup "
+					+ "complete");
+
+				//{{{ Report any plugin errors
+				if(pluginErrors != null)
+				{
+					String caption = jEdit.getProperty(
+						"plugin-error.caption" + (pluginErrors.size() == 1
+						? "-1" : ""),new Integer[] {
+						new Integer(pluginErrors.size()) });
+
+					new ErrorListDialog(
+						jEdit.getFirstView(),
+						jEdit.getProperty("plugin-error.title"),
+						caption,pluginErrors,true);
+					pluginErrors.removeAllElements();
+				} //}}}
+
+				// in one case not a single AWT class will
+				// have been touched (splash screen off +
+				// -nogui -nobackground switches on command
+				// line)
+				Toolkit.getDefaultToolkit();
+			}
+		});
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method

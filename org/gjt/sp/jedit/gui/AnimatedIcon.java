@@ -40,7 +40,7 @@ public class AnimatedIcon extends ImageIcon
 	 * @param rate The frame rate of the animation, in frames per second
 	 * @param host The container that the animation is used in
 	 */
-	public AnimatedIcon(Image icon ,Image[] frames, int rate, Component host)
+	public AnimatedIcon(Image icon, Image[] frames, int rate, Component host)
 	{
 		super(icon);
 		this.icon = icon;
@@ -112,6 +112,7 @@ public class AnimatedIcon extends ImageIcon
 		}
 
 		setImage(icon);
+		host.repaint();
 	} //}}}
 
 	//{{{ Private members
