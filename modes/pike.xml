@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
-<!-- Pike mode, contributed by Marco Götze, <gomar@gmx.net> -->
+<!-- Pike mode, contributed by 
+                      Marco G?tze, <gomar@gmx.net> -->
+<!-- Small fixes and autodoc support contributed by 
+                      Peter Lundqvist <peterl@update.uu.se> -->
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
@@ -19,7 +22,7 @@
     <PROPERTY NAME="doubleBracketIndent" VALUE="false"/>
     <PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
   </PROPS>
-  <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
+  <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
 
     <!-- comments -->
     <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
@@ -137,44 +140,102 @@
     </KEYWORDS>
   </RULES>
 
-	<RULES SET="AUTODOC" IGNORE_CASE="TRUE" DEFAULT="COMMENT2">
-		<!-- highlight @ref{...@} -->
-		<SEQ TYPE="COMMENT2">{</SEQ>
-		<!-- highlight !@param -->
-		<SEQ TYPE="COMMENT2">!</SEQ>
-
+  <RULES SET="AUTODOC" IGNORE_CASE="TRUE" DEFAULT="COMMENT1">
+		
+		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN" EXCLUDE_MATCH="TRUE">@decl</EOL_SPAN>
+		
 		<!-- XML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
-  		<BEGIN>@xml{</BEGIN>
+		  <BEGIN>@xml{</BEGIN>
 			<END>@}</END>
 		</SPAN>
+		<!-- Cross references -->
+		<SPAN TYPE="FUNCTION" NO_LINE_BREAK="TRUE">
+  		<BEGIN>@[</BEGIN>
+			<END>]</END>
+		</SPAN>
+			
+		<!-- Brace keywords -->
+		<SEQ_REGEXP TYPE="FUNCTION" HASH_CHAR="@">@(b|i|u|tt|url|pre|ref|code|expr|image)?(\{.*@\})</SEQ_REGEXP>
 				
 		<KEYWORDS>
-		  <LABEL>@b</LABEL>
-			<LABEL>@class</LABEL>
-			<LABEL>@endclass</LABEL>
-			<LABEL>@example</LABEL>
-			<LABEL>@decl</LABEL>
-			<LABEL>@dl</LABEL>
-			<LABEL>@enddl</LABEL>
-			<LABEL>@i</LABEL>
-			<LABEL>@ignore</LABEL>
-			<LABEL>@endignore</LABEL>
-			<LABEL>@item</LABEL>
-			<LABEL>@mapping</LABEL>
-			<LABEL>@endmapping</LABEL>
-			<LABEL>@member</LABEL>
-			<LABEL>@module</LABEL>
-			<LABEL>@endmodule</LABEL>
-			<LABEL>@note</LABEL>
-			<LABEL>@param</LABEL>
-			<LABEL>@ref</LABEL>
-			<LABEL>@returns</LABEL>
-			<LABEL>@tt</LABEL>
+		  <!-- Meta keywords -->
+		  <LABEL>@appears</LABEL>
+		  <LABEL>@belongs</LABEL>
+		  <LABEL>@class</LABEL>
+		  <LABEL>@endclass</LABEL>
+		  <LABEL>@example</LABEL>
+		  <LABEL>@module</LABEL>
+		  <LABEL>@endmodule</LABEL>
+		  <LABEL>@namespace</LABEL>
+		  <LABEL>@endnamespace</LABEL>
+		  <!-- <LABEL>@decl</LABEL> 
+		  -->
+		  
+		  <!-- Single keywords -->
+		  <LABEL>@deprecated</LABEL>
+		  
+		  <!-- Delimiter keywords -->
+		  <LABEL>@note</LABEL>
+		  <LABEL>@example</LABEL>
+		  <LABEL>@bugs</LABEL>
+		  <LABEL>@returns</LABEL>
+		  <LABEL>@throws</LABEL>
+		  <LABEL>@param</LABEL>
+		  <LABEL>@seealso</LABEL>
+		  <LABEL>@fixme</LABEL>
+		  <LABEL>@constant</LABEL>
+		  <LABEL>@member</LABEL>
+		  <LABEL>@index</LABEL>
+		  <LABEL>@elem</LABEL>
+		  <LABEL>@value</LABEL>
+		  <LABEL>@type</LABEL>
+		  <LABEL>@item</LABEL>
+		  
+		  <!-- Container keywords -->
+		  <LABEL>@section</LABEL>
+		  <LABEL>@mapping</LABEL>
+		  <LABEL>@endmapping</LABEL>
+		  <LABEL>@multiset</LABEL>
+		  <LABEL>@endmultiset</LABEL>
+		  <LABEL>@array</LABEL>
+		  <LABEL>@endarray</LABEL>
+		  <LABEL>@int</LABEL>
+		  <LABEL>@endint</LABEL>
+		  <LABEL>@string</LABEL>
+		  <LABEL>@endstring</LABEL>
+		  <LABEL>@mixed</LABEL>
+		  <LABEL>@endmixed</LABEL>
+		  <LABEL>@dl</LABEL>
+		  <LABEL>@enddl</LABEL>
+		  <LABEL>@ol</LABEL>
+		  <LABEL>@endol</LABEL>
+		  <LABEL>@ul</LABEL>
+		  <LABEL>@endol</LABEL>
+		  
+		  <!-- Special keywords -->
+		  <LABEL>@ignore</LABEL>
+		  <LABEL>@endignore</LABEL>
+		  
 		</KEYWORDS>
+		
+		<!-- Attempt to get syntax highlighting of @decl-ed functions 
+		     inside of the autodoc-rule. 
+				 
+		     It works - but jEdit 4.1 has problems keeping it highlighted 
+		     (the syntax highlighting works depending on how you travel
+		     past the @decl-ed region).
+		     Can't figure aout how to to proper coloring of the @decl
+		     keyword either.
+		     
+		     If there are problems with what regions are highlighted - 
+		     try to uncomment this first.
+		-->
+		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN">@decl</EOL_SPAN>
+		
 	</RULES>
 	
-  <RULES SET="STRING_LITERAL" IGNORE_CASE="TRUE" DEFAULT="LITERAL1">
+  <RULES SET="STRING_LITERAL" ESCAPE="\" IGNORE_CASE="TRUE" DEFAULT="LITERAL1">
     <SEQ_REGEXP TYPE="LITERAL2" HASH_CHAR="%">%([^ a-z]*[a-z]|\[[^\]]*\])</SEQ_REGEXP>
     <SEQ_REGEXP TYPE="COMMENT2" HASH_CHAR="D">DEBUG:</SEQ_REGEXP>
   </RULES>
